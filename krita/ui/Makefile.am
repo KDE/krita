@@ -1,7 +1,7 @@
 KDE_OPTIONS = nofinal
 
 INCLUDES = -I$(srcdir)/../core \
-  -I$(srcdir)/../core/compositeop \
+  -I$(srcdir)/../core/resources/ \
   -I$(srcdir)/../core/color_strategy \
   -I$(srcdir)/../core/tiles \
   $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)

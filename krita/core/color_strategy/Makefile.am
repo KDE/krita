@@ -1,5 +1,4 @@
 INCLUDES  = -I$(srcdir)/.. \
-	-I$(srcdir)/../compositeop \
 	-I$(srcdir)/../tiles \
 	$(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 

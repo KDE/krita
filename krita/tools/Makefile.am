@@ -1,7 +1,7 @@
 # all_includes must remain last!
 INCLUDES = -I$(srcdir)/../core \
 	-I$(srcdir)/../core/color_strategy/ \
-	-I$(srcdir)/../core/compositeop \
+	-I$(srcdir)/../core/resources/ \
 	-I$(srcdir)/../core/tiles \
 	-I$(srcdir)/../ui \
 	-I$(srcdir)/../ui/dialogs \

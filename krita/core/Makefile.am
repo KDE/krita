@@ -3,7 +3,7 @@ INCLUDES  = -I$(srcdir)/builder \
 	 -I$(srcdir)/visitors \
 	 -I$(srcdir)/helper/ \
 	-I$(srcdir)/tiles \
-	-I$(srcdir)/../ui \
+	-I$(srcdir)/../ui -I../ui \
 	-I$(srcdir)/../tools \
 	$(KOFFICE_INCLUDES) \
 	 -I$(interfacedir) \

@@ -46,6 +46,7 @@ libkisui_la_SOURCES = \
     kis_paint_box.cc \
     kis_filter_box.cc \
     kis_palette_widget.cc \
+    kis_selection_options.cc \
     wdgmatrix.ui \
     kis_previewwidgetbase.ui \
     wdgselectionoptions.ui \

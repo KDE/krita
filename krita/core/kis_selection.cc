@@ -128,6 +128,11 @@ void KisSelection::setMaskColor(QColor c)
 	m_maskColor = c;
 }
 
+void KisSelection::setInverted(bool i)
+{
+	m_alpha -> setInverted(i);
+}
+
 QRect KisSelection::selectedRect()
 {
 	return extent();

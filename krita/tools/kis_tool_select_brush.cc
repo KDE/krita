@@ -43,7 +43,7 @@
 #include "kis_tool_select_brush.h"
 #include "kis_types.h"
 #include "kis_view.h"
-#include "wdgselectionoptions.h"
+#include "kis_selection_options.h"
 
 KisToolSelectBrush::KisToolSelectBrush()
         : super(i18n("SelectBrush"))
@@ -121,7 +121,7 @@ void KisToolSelectBrush::setup(KActionCollection *collection)
 
 QWidget* KisToolSelectBrush::createOptionWidget(QWidget* parent)
 {
-	m_optWidget = new WdgSelectionOptions(parent);
+	m_optWidget = new KisSelectionOptions(parent, m_subject);
 	m_optWidget -> setCaption(i18n("Selection Brush"));
 	return m_optWidget;
 }

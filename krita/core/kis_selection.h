@@ -55,11 +55,11 @@ public:
 
 	void clear(QRect r);
 
-	// Keep the selection but set the mask to color c
-	// Note: it is intentional to deep-copy the color
-	// since the selection will want to own its own copy.
+	// Keep the selection but set the mask to color c.
 	void setMaskColor(const QColor c);
-
+	// Set the mask to inverted, do not invert the actual selection.
+	void setInverted(bool);
+	
 	QRect selectedRect();
 
 private:

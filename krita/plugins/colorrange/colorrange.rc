@@ -7,4 +7,7 @@
 	<Separator/>
     </Menu>
 </MenuBar>
+<ToolBar name="selection_tools" positiion="top"><Text>Selection Tools</Text>
+	<Action name="tool_selectpicker"/>
+</ToolBar>
 </kpartgui>

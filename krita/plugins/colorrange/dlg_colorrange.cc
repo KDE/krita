@@ -310,16 +310,33 @@ void DlgColorRange::slotSelectClicked()
  			Q_UINT8 match = matchColors(c, m_currentAction);
 
 			if (match) {
-				if (m_mode == ADD || m_mode == REPLACE) {
-					*(selIter.rawData()) =  match;
-				}
-				else if (m_mode == SUBTRACT) {
-					Q_UINT8 selectedness = *(selIter.rawData());
-					if (match < selectedness) {
-						*(selIter.rawData()) = selectedness - match;
+				// Personally, I think the invert option a bit silly. But it's possible I don't quite understand it. BSAR.
+				if (!m_invert) {
+					if (m_mode == ADD || m_mode == REPLACE) {
+						*(selIter.rawData()) =  match;
 					}
-					else {
-						*(selIter.rawData()) = 0;
+					else if (m_mode == SUBTRACT) {
+						Q_UINT8 selectedness = *(selIter.rawData());
+						if (match < selectedness) {
+							*(selIter.rawData()) = selectedness - match;
+						}
+						else {
+							*(selIter.rawData()) = 0;
+						}
+					}
+				}
+				else {
+					if (m_mode == ADD || m_mode == REPLACE) {
+						Q_UINT8 selectedness = *(selIter.rawData());
+						if (match < selectedness) {
+							*(selIter.rawData()) = selectedness - match;
+						}
+						else {
+							*(selIter.rawData()) = 0;
+						}
+					}
+					else if (m_mode == SUBTRACT) {
+						*(selIter.rawData()) =  match;
 					}
 				}
 			}
@@ -330,7 +347,5 @@ void DlgColorRange::slotSelectClicked()
 	}
 	updatePreview();
 }
-
-
 
 #include "dlg_colorrange.moc"

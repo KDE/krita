@@ -40,6 +40,7 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_selection.h"
+#include "kis_selection_options.h"
 
 namespace {
 	class RectSelectCmd : public KNamedCommand {

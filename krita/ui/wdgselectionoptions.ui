@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WdgSelectionOptions</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,116 +8,79 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>427</width>
-            <height>153</height>
+            <width>175</width>
+            <height>78</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>WdgSelectionOptions</string>
     </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>2</number>
+        </property>
+        <property name="spacing">
+            <number>2</number>
         </property>
         <widget class="QLabel" row="1" column="0">
             <property name="name">
                 <cstring>lblMaskColor</cstring>
             </property>
             <property name="text">
-                <string>&amp;Mask color:</string>
+                <string>Mask color</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>cmbMaskColor</cstring>
             </property>
         </widget>
-        <widget class="QLabel" row="0" column="0">
+        <widget class="QLabel" row="2" column="0">
             <property name="name">
-                <cstring>lblOpacity</cstring>
+                <cstring>lblAction</cstring>
             </property>
             <property name="text">
-                <string>&amp;Opacity:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>sldrOpacity</cstring>
+                <string>Action:</string>
             </property>
         </widget>
-        <widget class="KColorCombo" row="1" column="1" rowspan="1" colspan="3">
-            <property name="name">
-                <cstring>cmbMaskColor</cstring>
-            </property>
-        </widget>
-        <spacer row="3" column="2">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="4">
-            <property name="name">
-                <cstring>grpAction</cstring>
-            </property>
-            <property name="title">
-                <string>&amp;Action</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+        <widget class="QComboBox" row="2" column="1">
+            <item>
+                <property name="text">
+                    <string>Replace</string>
                 </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radioSelect</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Select</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radioDeselect</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Deselect</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QSlider" row="0" column="1">
+            </item>
+            <item>
+                <property name="text">
+                    <string>Add</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Subtract</string>
+                </property>
+            </item>
             <property name="name">
-                <cstring>sldrOpacity</cstring>
-            </property>
-            <property name="maxValue">
-                <number>256</number>
-            </property>
-            <property name="lineStep">
-                <number>25</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Below</enum>
-            </property>
-            <property name="tickInterval">
-                <number>25</number>
+                <cstring>cmbAction</cstring>
             </property>
         </widget>
-        <widget class="QRadioButton" row="0" column="3">
+        <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>radioInvert</cstring>
             </property>
             <property name="text">
-                <string>&amp;Invert mask</string>
+                <string>Invert mask</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="KColorButton" row="1" column="1">
+            <property name="name">
+                <cstring>bnMaskColor</cstring>
+            </property>
+            <property name="text">
+                <string></string>
             </property>
         </widget>
     </grid>
@@ -126,6 +89,6 @@
 </customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kcolorcombo.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
 </includehints>
 </UI>

@@ -42,7 +42,7 @@
 #include "kis_tool_select_eraser.h"
 #include "kis_types.h"
 #include "kis_view.h"
-#include "wdgselectionoptions.h"
+#include "kis_selection_options.h"
 
 KisToolSelectEraser::KisToolSelectEraser()
         : super(i18n("SelectEraser"))
@@ -107,7 +107,7 @@ void KisToolSelectEraser::setup(KActionCollection *collection)
 
 QWidget* KisToolSelectEraser::createOptionWidget(QWidget* parent)
 {
-	m_optWidget = new WdgSelectionOptions(parent);
+	m_optWidget = new KisSelectionOptions(parent, m_subject);
 	m_optWidget -> setCaption(i18n("Selection Eraser"));
 	return m_optWidget;
 }

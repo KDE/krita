@@ -44,9 +44,10 @@
 #include <kis_view.h>
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
-
+#include <kis_tool_registry.h>
 #include "colorrange.h"
 #include "dlg_colorrange.h"
+#include "kis_tool_selectpicker.h"
 
 typedef KGenericFactory<ColorRange> ColorRangeFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorrange, ColorRangeFactory( "krita" ) )
@@ -62,14 +63,16 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
  		  << parent -> className()
  		  << "\n";
 
-	KAction * a = new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange");
 
 	if ( !parent->inherits("KisView") )
 	{
 		m_view = 0;
 	} else {
-		m_view = (KisView*) parent;
-		m_view -> selectionManager() -> addSelectionAction(a);
+		m_view = dynamic_cast<KisView*>(parent);
+
+		m_view -> selectionManager() -> addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
+
+		m_view -> toolRegistry() -> add(new KisToolSelectPickerFactory(actionCollection()));
 	}
 }
 
@@ -82,7 +85,6 @@ void ColorRange::slotActivated()
 	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
 	if (!layer) return;
 
-	// XXX: Non-modal dialog, it must somehow be deleted when hidden.		
 	DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");
 
 	dlgColorRange -> exec();

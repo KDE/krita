@@ -467,7 +467,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 			if (cols <= 0 || rows <= 0) {
 				dsttile -> release();
 				srctile -> release();
-#if 0
+#if 1
 				printf("dx = %d.  sx = %d.  w = %d.  h = %d.\n", dx, sx, sw, sh);
 				printf("cols = %d.  rows = %d.\n", cols, rows);
 				printf("sxmod = %d.  dxmod = %d.  symod = %d.  dymod = %d.\n", sxmod, dxmod, symod, dymod);

@@ -769,14 +769,33 @@ void KisView::removeSelection()
 void KisView::imgUpdateGUI()
 {
 	const KisImageSP img = currentImg();
-	const vKisLayerSP& layers = img -> layers();
+	Q_INT32 n = 0;
+	Q_INT32 nvisible = 0;
+	Q_INT32 nlinked = 0;
 
 	m_imgRm -> setEnabled(img != 0);
 	m_imgDup -> setEnabled(img != 0);
 	m_imgExport -> setEnabled(img != 0);
-	m_imgMergeAll -> setEnabled(img && layers.size() > 1);
-	m_imgMergeVisible -> setEnabled(img && layers.size() > 1);
-	m_imgMergeLinked -> setEnabled(img && layers.size() > 1);
+
+	if (img) {
+		const vKisLayerSP& layers = img -> layers();
+
+		n = layers.size();
+
+		for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); it++) {
+			const KisLayerSP& layer = *it;
+
+			if (layer -> linked())
+				nlinked++;
+
+			if (layer -> visible())
+				nvisible++;
+		}
+	}
+
+	m_imgMergeAll -> setEnabled(n > 1);
+	m_imgMergeVisible -> setEnabled(nvisible > 1);
+	m_imgMergeLinked -> setEnabled(nlinked > 1);
 }
 
 void KisView::fillSelectionBg()
@@ -1309,6 +1328,7 @@ void KisView::merge_all_layers()
 		visitor(gc, layers);
 		img -> add(dst, -1);
 		layersUpdated();
+		updateCanvas();
 	}
 }
 
@@ -1325,6 +1345,7 @@ void KisView::merge_visible_layers()
 		visitor(gc, layers);
 		img -> add(dst, -1);
 		layersUpdated();
+		updateCanvas();
 	}
 }
 
@@ -1341,6 +1362,7 @@ void KisView::merge_linked_layers()
 		visitor(gc, layers);
 		img -> add(dst, -1);
 		layersUpdated();
+		updateCanvas();
 	}
 }
 

@@ -45,7 +45,8 @@ public:
 	virtual void tabletEvent(QTabletEvent *e);
 
 	virtual KDialog *options(QWidget * parent);
-	virtual QWidget* optionWidget(QWidget* parent);
+	virtual QWidget* createoptionWidget(QWidget* parent);
+	virtual QWidget* optionWidget();
 
 private:
 	virtual void paintLine(const QPoint & pos1,

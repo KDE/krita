@@ -97,7 +97,12 @@ KDialog *KisToolPaint::options(QWidget * /*parent*/)
 	return 0;
 }
 
-QWidget* KisToolPaint::optionWidget(QWidget* parent)
+QWidget* KisToolPaint::createoptionWidget(QWidget* parent)
+{
+	return 0;
+}
+
+QWidget* KisToolPaint::optionWidget()
 {
 	return 0;
 }

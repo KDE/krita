@@ -43,6 +43,7 @@ KisToolBrush::KisToolBrush()
 
         m_painter = 0;
 	m_currentImage = 0;
+	m_optWidget = 0;
 }
 
 KisToolBrush::~KisToolBrush()
@@ -209,12 +210,17 @@ KDialog *KisToolBrush::options(QWidget * parent)
 	return d;
 }
 
-QWidget* KisToolBrush::optionWidget(QWidget* parent)
+QWidget* KisToolBrush::createoptionWidget(QWidget* parent)
 {
 	//Put the Widget code here
 	m_optWidget = new QWidget(parent);
 	m_optWidget -> setCaption(i18n("Brush"));
-	QLabel *test = new QLabel(i18n("Properties"), m_optWidget);
+	QLabel *test = new QLabel(i18n("Property"), m_optWidget);
 
+	return m_optWidget;
+}
+
+QWidget* KisToolBrush::optionWidget()
+{
 	return m_optWidget;
 }

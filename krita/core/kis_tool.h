@@ -65,7 +65,8 @@ public:
 	virtual void setCursor(const QCursor& cursor) = 0;
 	virtual void cursor(QWidget *w) const = 0;
 	virtual KDialog *options(QWidget *parent) = 0;
-	virtual QWidget* optionWidget(QWidget* parent) = 0;
+	virtual QWidget* createoptionWidget(QWidget* parent) = 0;
+	virtual QWidget* optionWidget() = 0;
 
 private:
 	KisTool(const KisTool&);

@@ -588,14 +588,18 @@ void KisView::clearCanvas(const QRect& rc)
 void KisView::setCurrentTool(KisTool *tool)
 {
 	if (m_tool)
+	{
+		if(m_tool -> optionWidget())
+			m_toolcontroldocker -> unplug(m_tool -> optionWidget());
 		m_tool -> clear();
+	}
 
 	if (tool) {
 		m_tool = tool;
 		m_tool -> cursor(m_canvas);
 
-		if(tool -> optionWidget(m_toolcontroldocker))
-				m_toolcontroldocker -> plug(tool -> optionWidget(m_toolcontroldocker));
+		if(tool -> createoptionWidget(m_toolcontroldocker))
+			m_toolcontroldocker -> plug(tool -> optionWidget());
 		notify();
 	} else {
 		m_tool = 0;

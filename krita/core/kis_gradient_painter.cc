@@ -483,7 +483,11 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 				       enumGradientShape shape,
 				       enumGradientRepeat repeat,
 				       double antiAliasThreshold,
-				       bool reverseGradient)
+				       bool reverseGradient,
+				       Q_INT32 startx,
+				       Q_INT32 starty,
+				       Q_INT32 width,
+				       Q_INT32 height)
 {
 	m_cancelRequested = false;
 
@@ -528,25 +532,25 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
 	Q_ASSERT(repeatStrategy != 0);
 
-#if 0 //AUTOLAYER
-	KisLayerSP layer = new KisLayer(m_device -> width(), m_device -> height(), m_device -> colorStrategy(), "gradient");
+	KisLayerSP layer = new KisLayer( m_device -> colorStrategy(), "gradient");
 	KisPainter painter(layer.data());
 
-	int totalPixels = layer -> width() * layer -> height();
+	int totalPixels = width * height;
 
-	if (antiAliasThreshold < 1 - DBL_EPSILON) {
+/*	if (antiAliasThreshold < 1 - DBL_EPSILON) {
 		totalPixels *= 2;
-	}
+	}*/
 
 	int pixelsProcessed = 0;
 	int lastProgressPercent = 0;
 
 	emit notifyProgressStage(this, i18n("Rendering gradient..."), 0);
 
-	for (int x = 0; x < layer -> width(); x++) {
-		for (int y = 0; y < layer -> height(); y++) {
+	for (int y = starty; y < height; y++) {
+		KisHLineIterator iter = layer -> createHLineIterator( startx, width, y, true);
+		for (int x = 0; x < width; x++) {
 
-			double t = shapeStrategy -> valueAt(x, y);
+			double t = shapeStrategy -> valueAt( x, y);
 			t = repeatStrategy -> valueAt(t);
 
 			if (reverseGradient) {
@@ -557,7 +561,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 			QUANTUM opacity;
 
 			m_gradient -> colorAt(t, &color, &opacity);
-			layer ->setPixel(x, y, color, opacity);
+			layer -> colorStrategy() -> nativeColor( color, opacity, iter);
 
 			pixelsProcessed++;
 
@@ -571,13 +575,14 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 					break;
 				}
 			}
-		}
+			iter++;
 
-		if (m_cancelRequested) {
-			break;
+			if (m_cancelRequested) {
+				break;
+			}
 		}
 	}
-
+#if 0
 	if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
 
 		KisLayerSP antiAliasedLayer = new KisLayer(*layer);
@@ -696,28 +701,24 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 	}
 
 	//distanceImage.save("distance.png",  "PNG");
-
+#endif
 	if (!m_cancelRequested) {
-		KisLayer * l = dynamic_cast<KisLayer*>(m_device.data());
-		if( l != 0)
-		{
-			if (l -> hasSelection()) {
-				// apply mask...
-				KisSelectionSP selection = l -> selection();
-				for (int y = 0; y < layer -> height(); y++) {
-					for (int x = 0; x < layer -> width(); x++) {
-						QColor c;
-						QUANTUM opacity;
-						layer -> pixel(x, y, &c, &opacity);
-						opacity = ((OPACITY_OPAQUE - selection -> selected(x, y)) * opacity) / QUANTUM_MAX;
-						layer -> setPixel(x, y, c, opacity); // XXX: we need a setOpacity in KisPaintDevice!
+		if (m_device -> hasSelection()) {
+			// apply mask...
+			KisSelectionSP selection = m_device -> selection();
+			for (int y = 0; y < height; y++) {
+				KisHLineIterator iter = layer -> createHLineIterator( startx, width, starty, true);
+				for (int x = 0; x < width; x++) {
+					QColor c;
+					QUANTUM opacity;
+					layer -> colorStrategy() -> toQColor( (QUANTUM*)iter, &c, &opacity);
+					opacity = ((OPACITY_OPAQUE - selection -> selected(iter.x(), iter.x())) * opacity) / QUANTUM_MAX;
+					layer -> colorStrategy() -> nativeColor( c, opacity, (QUANTUM*)(iter)); // XXX: we need a setOpacity in KisPaintDevice!
 					}
 				}
 			}
-		}
-		bitBlt(0, 0, m_compositeOp, layer.data(), m_opacity, 0, 0, layer -> width(), layer -> height());
+		bitBlt(0, 0, m_compositeOp, layer.data(), m_opacity, 0, 0, width, height);
 	}
-#endif //AUTOLAYER
 	delete shapeStrategy;
 
 	emit notifyProgressDone(this);

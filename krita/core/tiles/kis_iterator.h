@@ -44,7 +44,7 @@ public:
 
 public:	
 	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-	operator Q_UINT8 * ();
+	operator Q_UINT8 * () { return ACTUAL_RECTITERATOR::operator Q_UINT8 *();};
 
 	/// Advances one pixel going to the beginning of the next line when it reaches the end of a line
 	KisRectIterator & operator++(int n) { ACTUAL_RECTITERATOR::operator++(n); return *this; };

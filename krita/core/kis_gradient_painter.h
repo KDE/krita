@@ -81,7 +81,11 @@ public:
 			   enumGradientShape shape,
 			   enumGradientRepeat repeat,
 			   double antiAliasThreshold,
-			   bool reverseGradient = false);
+			   bool reverseGradient,
+			   Q_INT32 startx,
+			   Q_INT32 starty,
+			   Q_INT32 width,
+			   Q_INT32 height);
 
 
 private:

@@ -33,9 +33,10 @@
 #include "kis_tool_factory.h"
 
 class KIntNumInput;
+class KDoubleNumInput;
+
 class KisCmbComposite;
 class KisPainter;
-class KisDoubleWidget;
 
 class QLabel;
 class QPoint;
@@ -107,7 +108,7 @@ private:
 	QComboBox *m_cmbShape;
 	QComboBox *m_cmbRepeat;
 	QLabel *m_lbAntiAliasThreshold;
-	KisDoubleWidget *m_slAntiAliasThreshold;
+	KDoubleNumInput *m_slAntiAliasThreshold;
 };
 
 class KisToolGradientFactory : public KisToolFactory {

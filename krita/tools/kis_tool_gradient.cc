@@ -157,7 +157,7 @@ void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
 				progress -> setSubject(&painter, true, true);
 			}
 
-			bool painted = painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse);
+			bool painted = painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, m_subject -> currentImg() -> width(), m_subject -> currentImg() -> height());
 
 			if (painted) {
 				// does whole thing at moment
@@ -285,9 +285,8 @@ QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
 
 	m_lbAntiAliasThreshold = new QLabel(i18n("Anti-alias threshold:"), m_optWidget);
 
-	m_slAntiAliasThreshold = new KisDoubleWidget(0, 1, m_optWidget, "threshold_slider");
-	m_slAntiAliasThreshold -> setTickmarks(QSlider::Below);
-	m_slAntiAliasThreshold -> setTickInterval(0.1);
+	m_slAntiAliasThreshold = new KDoubleNumInput(m_optWidget, "threshold_slider");
+	m_slAntiAliasThreshold -> setRange( 0, 1); 
 	m_slAntiAliasThreshold -> setValue(m_antiAliasThreshold);
 	connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(double)), this, SLOT(slotSetAntiAliasThreshold(double)));
 

@@ -334,7 +334,8 @@ namespace {
 }
 
 KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) :
-	super(parentWidget, widgetName, parent, name, singleViewMode)
+	super(parentWidget, widgetName, parent, name, singleViewMode),
+	m_pixmap(RENDER_WIDTH, RENDER_HEIGHT)
 {
 	kdDebug() << "KisDoc created for " << widgetName << "\n";
 
@@ -1107,7 +1108,6 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 	Q_INT32 y2;
 	Q_INT32 tileno;
 	KisFloatingSelectionSP floatingSelection;
-	KisStrategyColorSpaceSP colorStrategy;
 
 	// Only happens if there's actually only one image. As soon as
 	// a second image is created, or selected, m_currentImage is
@@ -1118,7 +1118,6 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 		m_currentImage = m_images[0];
 
 	if (m_currentImage) {
-		colorStrategy = m_currentImage -> colorStrategy();
 
 		x1 = CLAMP(rect.x(), 0, m_currentImage -> width());
 		y1 = CLAMP(rect.y(), 0, m_currentImage -> height());
@@ -1151,14 +1150,19 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 			}
 		}
 
-		// Render the current image onto a QPainter
+		// Render the current image's projection onto a QPainter, a block at a time.
 		for (y = y1; y < y2; y += RENDER_HEIGHT)
-			for (x = x1; x < x2; x += RENDER_WIDTH)
-				colorStrategy -> render(m_currentImage,
-							painter,
-							x, y,
-							QMIN(x2 - x, RENDER_WIDTH),
-							QMIN(y2 - y, RENDER_HEIGHT));
+			for (x = x1; x < x2; x += RENDER_WIDTH) {
+				Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
+				Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
+
+				QImage img = m_currentImage -> projection() -> convertToImage(x, y, w, h);
+
+				if (!img.isNull()) {
+					m_pixio.putImage(&m_pixmap, 0, 0, &img);
+					painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
+				}
+			}
 
 		// Draw rectangular floating selections.
 		if ((floatingSelection = m_currentImage -> floatingSelection())) {

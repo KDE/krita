@@ -20,7 +20,11 @@
 #if !defined KIS_DOC_H_
 #define KIS_DOC_H_
 
+#include <qpixmap.h>
+
+#include <kpixmapio.h>
 #include <koDocument.h>
+
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_image.h"
@@ -172,6 +176,8 @@ private:
 	Q_INT32 m_conversionDepth;
 	int m_ioProgressTotalSteps;
 	int m_ioProgressBase;
+	QPixmap m_pixmap;
+	KPixmapIO m_pixio;
 };
 
 #endif // KIS_DOC_H_

@@ -119,9 +119,9 @@ public:
 	void convertFromImage(const QImage& img);
 
 	/**
-	 * Create an RGBA QImage from the paint device.
+	 * Create an RGBA QImage from a rectangle in the paint device.
 	 */
-	QImage convertToImage();
+	QImage convertToImage(Q_INT32 x = 0, Q_INT32 y = 0, Q_INT32 w = -1, Q_INT32 h = -1);
 
         QString name() const;
         void setName(const QString& name);
@@ -308,11 +308,6 @@ inline Q_INT32 KisPaintDevice::depth() const
 inline KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
 {
         return m_colorStrategy;
-}
-
-inline QImage KisPaintDevice::convertToImage()
-{
-	return colorStrategy() -> convertToImage(data(), depth(), 0, 0, width(), height());
 }
 
 inline KisTileMgrSP KisPaintDevice::data()

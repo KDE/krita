@@ -22,8 +22,6 @@
 #include <stdlib.h>
 
 #include <qimage.h>
-#include <qpainter.h>
-#include <qpixmap.h>
 
 #include <kdebug.h>
 
@@ -40,15 +38,12 @@ namespace {
 ChannelInfo KisStrategyColorSpaceGrayscale::channelInfo[1] = { ChannelInfo("Gray", 0) };
 
 KisStrategyColorSpaceGrayscale::KisStrategyColorSpaceGrayscale() :
-	KisStrategyColorSpace("Grayscale + Alpha"),
-	m_pixmap(RENDER_WIDTH * 2, RENDER_HEIGHT * 2)
+	KisStrategyColorSpace("Grayscale + Alpha")
 {
-	m_buf = new QUANTUM[RENDER_WIDTH * RENDER_HEIGHT * MAX_CHANNEL_GRAYSCALEA];
 }
 
 KisStrategyColorSpaceGrayscale::~KisStrategyColorSpaceGrayscale()
 {
-	delete[] m_buf;
 }
 
 void KisStrategyColorSpaceGrayscale::nativeColor(const KoColor& c, QUANTUM *dst)
@@ -111,63 +106,27 @@ Q_INT32 KisStrategyColorSpaceGrayscale::depth() const
 	return MAX_CHANNEL_GRAYSCALEA;
 }
 
-void KisStrategyColorSpaceGrayscale::render(KisImageSP image, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
+QImage KisStrategyColorSpaceGrayscale::convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
 {
-	QImage img = convertToImage(image, x, y, width, height);
-	if (!img.isNull()) {
-		m_pixio.putImage(&m_pixmap, 0, 0, &img);
-		painter.drawPixmap(x, y, m_pixmap, 0, 0, width, height);	
-	}
-}
+	QImage img(width, height, 32, 0, QImage::LittleEndian);
 
-
-QImage KisStrategyColorSpaceGrayscale::convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const 
-{
-	if (!image) return QImage();
-
-	return convertToImage(image -> tiles(), image -> depth(), x, y, width, height);
-}
-
-QImage KisStrategyColorSpaceGrayscale::convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const 
-{
-	if (!tm) return QImage();
-
-	KisPixelDataSP pd = new KisPixelData;
-	QImage img;
-	
-	pd -> mgr = 0;
-	pd -> tile = 0;
-	pd -> mode = TILEMODE_READ;
-	pd -> x1 = x;
-	pd -> x2 = x + width - 1;
-	pd -> y1 = y;
-	pd -> y2 = y + height - 1;
-	pd -> width = pd -> x2 - pd -> x1 + 1;
-	pd -> height = pd -> y2 - pd -> y1 + 1;
-	pd -> depth = depth;
-	pd -> stride = pd -> depth * pd -> width;
-	pd -> owner = false;
-	pd -> data = m_buf;
-	tm -> readPixelData(pd);
-	img = QImage(pd->width,  pd->height, 32, 0, QImage::LittleEndian);
 	Q_INT32 i = 0;
-	
 	uchar *j = img.bits();
-	QString s;
-	while ( i < pd ->stride * pd -> height ) {
-		QUANTUM data = *( pd->data + i + PIXEL_GRAY );
 
-		*( j + PIXEL_ALPHA ) = *( pd->data + i + PIXEL_GRAY_ALPHA );
-		*( j + PIXEL_RED )   = data;
-		*( j + PIXEL_GREEN ) = data;
-		*( j + PIXEL_BLUE )  = data;
+	while ( i < stride * height ) {
+		QUANTUM q = *( data + i + PIXEL_GRAY );
+
+		*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_GRAY_ALPHA );
+		*( j + PIXEL_RED )   = q;
+		*( j + PIXEL_GREEN ) = q;
+		*( j + PIXEL_BLUE )  = q;
 		
 		i += MAX_CHANNEL_GRAYSCALEA;
 		j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
 		
 	}
-	return img;
 
+	return img;
 }
 
 

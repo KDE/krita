@@ -656,6 +656,76 @@ void KisPaintDevice::convertFromImage(const QImage& img)
 	}
 }
 
+QImage KisPaintDevice::convertToImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+	if (w < 0) {
+		w = width();
+	}
+
+	if (h < 0) {
+		h = height();
+	}
+
+	if (x < 0) {
+		x = 0;
+	}
+	else
+	if (x > width() - 1) {
+		x = width() - 1;
+	}
+
+	if (y < 0) {
+		y = 0;
+	}
+	else
+	if (y > height() - 1) {
+		y = height() - 1;
+	}
+
+	Q_INT32 x1 = x;
+	Q_INT32 y1 = y;
+
+	// These coordinates are inclusive.
+	Q_INT32 x2 = x1 + w - 1;
+	Q_INT32 y2 = y1 + h - 1;
+
+	if (x2 > width() - 1) {
+		x2 = width() - 1;
+	}
+
+	if (y2 > height() - 1) {
+		y2 = height() - 1;
+	}
+
+	QImage image;
+
+	if (x2 - x1 + 1 > 0 && y2 - y1 + 1 > 0 && data()) {
+		KisPixelDataSP pd = new KisPixelData;
+
+		pd -> mgr = 0;
+		pd -> tile = 0;
+		pd -> mode = TILEMODE_READ;
+		pd -> x1 = x1;
+		pd -> x2 = x2;
+		pd -> y1 = y1;
+		pd -> y2 = y2;
+		pd -> width = pd -> x2 - pd -> x1 + 1;
+		pd -> height = pd -> y2 - pd -> y1 + 1;
+		pd -> depth = depth();
+		pd -> stride = pd -> depth * pd -> width;
+
+		// XXX: The previous code used a statically allocated buffer
+		// of size RENDER_WIDTH * RENDER_HEIGHT * depth. We could do
+		// this too if profiling shows this is too slow...
+		pd -> owner = true;
+		pd -> data = new QUANTUM[pd -> depth * pd -> width * pd -> height];
+		data() -> readPixelData(pd);
+
+		image = colorStrategy() -> convertToImage(pd -> data, pd -> width, pd -> height, pd -> stride);
+	}
+
+	return image;
+}
 
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumBegin(KisTileCommand* command)
 {

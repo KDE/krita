@@ -1315,6 +1315,10 @@ KisStrategyColorSpaceSP KisImage::colorStrategy() const
 	return m_colorStrategy;
 }
 
+KisLayerSP KisImage::projection() const
+{
+	return m_projection;
+}
 
 #include "kis_image.moc"
 

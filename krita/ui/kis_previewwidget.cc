@@ -41,7 +41,8 @@
 #define SIZE 150
 
 KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
-    : PreviewWidgetBase( parent, name ), m_undo(0) /* seems to work nicely */
+    : PreviewWidgetBase( parent, name ), m_undo(0), /* seems to work nicely */
+      m_pixmap(RENDER_WIDTH, RENDER_HEIGHT)
 {
 	connect(pushButton1/*plus*/, SIGNAL(clicked()), this, SLOT(zoomIn()));
 	connect(pushButton2/*minus*/, SIGNAL(clicked()), this, SLOT(zoomOut()));
@@ -188,8 +189,6 @@ void KisPreviewWidget::render(QPainter &painter, KisImageSP image, double zoomX,
 	if (!image)
 		return;
 
-	KisStrategyColorSpaceSP colorstate = image->colorStrategy();
-		
 	if (zoomX != 1.0 || zoomY != 1.0)
 		painter.scale(zoomX, zoomY);
 
@@ -203,12 +202,17 @@ void KisPreviewWidget::render(QPainter &painter, KisImageSP image, double zoomX,
 	}
 
 	for (Q_INT32 y = y1; y < y2; y += RENDER_HEIGHT)
-		for (Q_INT32 x = x1; x < x2; x += RENDER_WIDTH)
-			colorstate -> render(	image,
-						painter,
-						x, y,
-						QMIN(x2 - x, RENDER_WIDTH),
-						QMIN(y2 - y, RENDER_HEIGHT));
+		for (Q_INT32 x = x1; x < x2; x += RENDER_WIDTH) {
+			Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
+			Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
+
+			QImage img = image -> projection() -> convertToImage(x, y, w, h);
+
+			if (!img.isNull()) {
+				m_pixio.putImage(&m_pixmap, 0, 0, &img);
+				painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
+			}
+		}
 }
 
 #include "kis_previewwidget.moc"

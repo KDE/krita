@@ -19,9 +19,9 @@
 #define KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_
 
 #include <qcolor.h>
-#include <qpixmap.h>
-#include <kpixmapio.h>
+
 #include <koColor.h>
+
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_pixel_representation.h"
@@ -54,10 +54,7 @@ public:
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
 	
-	virtual void render(KisImageSP image, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
-
-	virtual QImage convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const;
-	virtual QImage convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const;
+	virtual QImage convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const;
 
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst, 
@@ -81,10 +78,6 @@ public:
 	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst);
 
 private:
-	KPixmapIO m_pixio;
-	QPixmap m_pixmap;
-	QUANTUM *m_buf;
-
 	static ChannelInfo channelInfo[1];
 };
 

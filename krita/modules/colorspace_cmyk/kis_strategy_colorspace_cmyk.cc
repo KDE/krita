@@ -19,8 +19,6 @@
 #include <stdlib.h>
 
 #include <qimage.h>
-#include <qpainter.h>
-#include <qpixmap.h>
 
 #include <kdebug.h>
 
@@ -44,15 +42,12 @@ ChannelInfo KisStrategyColorSpaceCMYK::channelInfo[4] = { ChannelInfo("Cyan", 4)
 
 
 KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() : 
-	KisStrategyColorSpace("CMYKA"), m_pixmap(RENDER_WIDTH * 2,
-						 RENDER_HEIGHT * 2)
+	KisStrategyColorSpace("CMYKA")
 {
-	m_buf = new QUANTUM[RENDER_WIDTH * RENDER_HEIGHT * MAX_CHANNEL_CMYKA];
 }
 
 KisStrategyColorSpaceCMYK::~KisStrategyColorSpaceCMYK()
 {
-	delete[] m_buf;
 }
 
 void KisStrategyColorSpaceCMYK::nativeColor(const KoColor& c, QUANTUM *dst)
@@ -139,66 +134,21 @@ Q_INT32 KisStrategyColorSpaceCMYK::depth() const
 	return MAX_CHANNEL_CMYKA;
 }
 
-void KisStrategyColorSpaceCMYK::render(KisImageSP projection,
-                                       QPainter& painter,
-                                       Q_INT32 x,
-                                       Q_INT32 y,
-                                       Q_INT32 width,
-                                       Q_INT32 height)
+QImage KisStrategyColorSpaceCMYK::convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
 {
-	QImage img = convertToImage(projection, x, y, width, height);
-	if (!img.isNull()) {
-		m_pixio.putImage(&m_pixmap, 0, 0, &img);
-		painter.drawPixmap(x, y, m_pixmap, 0, 0, width, height);
-	}
-
-}
-
-QImage KisStrategyColorSpaceCMYK::convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const
-{
-	if (!image) return QImage();
-
-	return convertToImage(image -> tiles(), image -> depth(), x, y, width, height);
-}
-
-QImage KisStrategyColorSpaceCMYK::convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const 
-{
-	if (!tm) return QImage();
-
-	// XXX I still don't understand upscale/downscale, so very likely
-	// have introduced related bugs in this bit.
-	KisPixelDataSP pd = new KisPixelData;
-	QImage img;
-	
-	pd -> mgr = 0;
-	pd -> tile = 0;
-	pd -> mode = TILEMODE_READ;
-	pd -> x1 = x;
-	pd -> x2 = x + width - 1;
-	pd -> y1 = y;
-	pd -> y2 = y + height - 1;
-	pd -> width = pd -> x2 - pd -> x1 + 1;
-	pd -> height = pd -> y2 - pd -> y1 + 1;
-	pd -> depth = depth;
-	pd -> stride = pd -> depth * pd -> width;
-	pd -> owner = false;
-	pd -> data = m_buf;
-	tm -> readPixelData(pd);
-	
-	img = QImage(pd->width,  pd->height, 32, 0, QImage::LittleEndian);
+	QImage img(width, height, 32, 0, QImage::LittleEndian);
 	Q_INT32 i = 0;
-	
 	uchar *j = img.bits();
-	QString s;
-	while ( i < pd ->stride * pd -> height ) {
+
+	while ( i < stride * height ) {
 		
 		RGB r;
 		// Check in LUT whether k already exists; if so, grab it, else
 		CMYK c;
-		c.c = *( pd->data + i + PIXEL_CYAN );
-		c.m = *( pd->data + i + PIXEL_MAGENTA );
-		c.y = *( pd->data + i + PIXEL_YELLOW );
-		c.k = *( pd->data + i + PIXEL_BLACK );
+		c.c = *( data + i + PIXEL_CYAN );
+		c.m = *( data + i + PIXEL_MAGENTA );
+		c.y = *( data + i + PIXEL_YELLOW );
+		c.k = *( data + i + PIXEL_BLACK );
 		
 		if ( m_rgbLUT.contains ( c ) ) {
 			r =  m_rgbLUT[c];
@@ -218,15 +168,16 @@ QImage KisStrategyColorSpaceCMYK::convertToImage(KisTileMgrSP tm, Q_UINT32 depth
 		}
 		
 		// fix the pixel in QImage.
-		*( j + PIXEL_ALPHA ) = *( pd->data + i + PIXEL_CMYK_ALPHA );
-		*( j + PIXEL_CYAN )   = r.r;
-		*( j + PIXEL_MAGENTA ) =  r.g;
-		*( j + PIXEL_YELLOW )  =  r.b;
+		*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_CMYK_ALPHA );
+		*( j + PIXEL_RED )   = r.r;
+		*( j + PIXEL_GREEN ) =  r.g;
+		*( j + PIXEL_BLUE )  =  r.b;
 		
 		i += MAX_CHANNEL_CMYKA;
 		j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
 		
 	}
+
 	return img;
 }
 

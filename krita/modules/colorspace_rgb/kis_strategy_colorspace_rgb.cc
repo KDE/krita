@@ -21,8 +21,6 @@
 #include <stdlib.h>
 
 #include <qimage.h>
-#include <qpainter.h>
-#include <qpixmap.h>
 
 #include <kdebug.h>
 
@@ -41,16 +39,13 @@ ChannelInfo KisStrategyColorSpaceRGB::channelInfo[3] = { ChannelInfo("Red", 2), 
 
 
 KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
-	KisStrategyColorSpace("RGBA"),
-	m_pixmap(RENDER_WIDTH * 2, RENDER_HEIGHT * 2)
+	KisStrategyColorSpace("RGBA")
 {
-	m_buf = new QUANTUM[RENDER_WIDTH * RENDER_HEIGHT * MAX_CHANNEL_RGBA];
 }
 
 KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
 {
 	kdDebug() << "KisStrategyColorSpaceRGB has been destroyed" << endl;
-	delete[] m_buf;
 }
 
 void KisStrategyColorSpaceRGB::nativeColor(const KoColor& c, QUANTUM *dst)
@@ -124,58 +119,22 @@ Q_INT32 KisStrategyColorSpaceRGB::depth() const
 	return MAX_CHANNEL_RGBA;
 }
 
-
-void KisStrategyColorSpaceRGB::render(KisImageSP image, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
+QImage KisStrategyColorSpaceRGB::convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
 {
-	QImage img = convertToImage(image, x, y, width, height);
-	if (!img.isNull()) {
-		m_pixio.putImage(&m_pixmap, 0, 0, &img);
-		painter.drawPixmap(x, y, m_pixmap, 0, 0, width, height);	
-	}
-}
-
-
-QImage KisStrategyColorSpaceRGB::convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const 
-{
-	if (!image) return QImage();
-
-	return convertToImage(image -> tiles(), image -> depth(), x, y, width, height);
-}
-
-QImage KisStrategyColorSpaceRGB::convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const 
-{
-	if (!tm) return QImage();
-
-	KisPixelDataSP pd = new KisPixelData;
 	QImage img;
 	
-	pd -> mgr = 0;
-	pd -> tile = 0;
-	pd -> mode = TILEMODE_READ;
-	pd -> x1 = x;
-	pd -> x2 = x + width - 1;
-	pd -> y1 = y;
-	pd -> y2 = y + height - 1;
-	pd -> width = pd -> x2 - pd -> x1 + 1;
-	pd -> height = pd -> y2 - pd -> y1 + 1;
-	pd -> depth = depth;
-	pd -> stride = pd -> depth * pd -> width;
-	pd -> owner = false;
-	pd -> data = m_buf;
-	tm -> readPixelData(pd);
-	
 #ifdef __BIG_ENDIAN__
-	img = QImage(pd->width,  pd->height, 32, 0, QImage::LittleEndian);
+	img = QImage(width, height, 32, 0, QImage::LittleEndian);
 	Q_INT32 i = 0;
 	uchar *j = img.bits();
 	
-	while ( i < pd ->stride * pd -> height ) {
-		
+	while ( i < stride * height ) {
+
 		// Swap the bytes
-		*( j + 0)  = *( pd->data + i + PIXEL_ALPHA );
-		*( j + 1 ) = *( pd->data + i + PIXEL_RED );
-		*( j + 2 ) = *( pd->data + i + PIXEL_GREEN );
-		*( j + 3 ) = *( pd->data + i + PIXEL_BLUE );
+		*( j + 0)  = *( data + i + PIXEL_ALPHA );
+		*( j + 1 ) = *( data + i + PIXEL_RED );
+		*( j + 2 ) = *( data + i + PIXEL_GREEN );
+		*( j + 3 ) = *( data + i + PIXEL_BLUE );
 		
 		i += MAX_CHANNEL_RGBA;
 		j += MAX_CHANNEL_RGBA; // Because we're hard-coded 32 bits deep, 4 bytes
@@ -183,10 +142,16 @@ QImage KisStrategyColorSpaceRGB::convertToImage(KisTileMgrSP tm, Q_UINT32 depth,
 	}
 	
 #else
-	img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * QUANTUM_DEPTH, 0, 0, QImage::LittleEndian);
+	(void)stride; // Kill warning
+
+	img = QImage(const_cast<QUANTUM *>(data), width, height, 32, 0, 0, QImage::LittleEndian);
+
+	// XXX: The previous version of this code used the quantum data directly
+	// as an optimisation. We're introducing a copy overhead here which could
+	// be factored out again if needed.
+	img = img.copy();
 #endif
 	return img;
-
 }
 
 

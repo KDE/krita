@@ -54,11 +54,12 @@ public:
 public:
 	// Implement KisRenderInterface
 	virtual Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix) const;
+	virtual KisTileMgrSP tiles() const;
 
 	// Composite the specified tile onto the projection layer.
 	virtual void renderToProjection(Q_INT32 tileno);
 
-	virtual KisTileMgrSP tiles() const;
+	KisLayerSP projection() const;
 
 public:
 	QString name() const;

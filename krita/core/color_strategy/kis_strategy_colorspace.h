@@ -65,8 +65,6 @@ public:
 	virtual bool alpha() const = 0;
 	inline QString name() { return m_name; };
 
-	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
-
 	/**
 	 * This function is used to convert a KisPixelRepresentation to another color strategy.
 	 * When implementing a color space, there is no need to implement a conversion to all strategies,
@@ -87,8 +85,7 @@ public:
 	/** This function converts a pixel from RGBA */
 	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst) KDE_DEPRECATED = 0;
 	
-	virtual QImage convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const = 0;
-	virtual QImage convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const = 0;
+	virtual QImage convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const = 0;
 
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst, 

@@ -25,6 +25,8 @@
 #include <qwidget.h>
 #include <qpixmap.h>
 
+#include <kpixmapio.h>
+
 #include "kis_types.h"
 
 #include "dialogs/kis_previewwidgetbase.h"
@@ -100,6 +102,10 @@ private slots:
 
 	void zoomIn();
 	void zoomOut();
+
+private:
+	QPixmap m_pixmap;
+	KPixmapIO m_pixio;
 };
 
 #endif

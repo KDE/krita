@@ -28,5 +28,8 @@ rc_DATA = krita.rc krita_readonly.rc
 
 SUBDIRS = core ui tools . dtd plugins data pics 
 
+dummy.cc:
+	echo > dummy.cc
+
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc */*.cc core/kis_aboutdata.h -o $(podir)/krita.pot

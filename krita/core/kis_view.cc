@@ -24,7 +24,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-// qt includes
+// Qt
 #include <qbutton.h>
 #include <qclipboard.h>
 #include <qevent.h>
@@ -33,19 +33,20 @@
 #include <qstringlist.h>
 #include <qvaluelist.h>
 
-// kde includes
-#include <kmessagebox.h>
-#include <kruler.h>
-#include <kaction.h>
-#include <klocale.h>
-#include <khelpmenu.h>
+// KDE
 #include <kaboutdata.h>
-#include <kstdaction.h>
+#include <kaction.h>
+#include <kapplication.h>
+#include <kdebug.h>
 #include <kfiledialog.h>
+#include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kimageeffect.h>
-#include <kapplication.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <kmimetype.h>
+#include <kstdaction.h>
+#include <kruler.h>
 
 // Grmbl, X headers.....
 #ifdef GrayScale
@@ -57,6 +58,10 @@
 #define GrayScale 1
 #undef FooXGrayScale
 #endif
+
+// KOffice
+#include <koColor.h>
+#include <koView.h>
 
 // core classes
 #include "kis_view.h"
@@ -95,10 +100,6 @@
 #include "kis_tool_factory.h"
 #include "kis_tool_paste.h"	
 
-// debug
-#include <kdebug.h>
-#include "kis_timer.h"
-
 KisView::KisView(KisDoc* doc, QWidget* parent, const char* name) : super(doc, parent, name)
 {
 	m_doc = doc;
@@ -113,16 +114,17 @@ KisView::KisView(KisDoc* doc, QWidget* parent, const char* name) : super(doc, pa
 	QObject::connect(m_doc, SIGNAL(docUpdated(const QRect&)), this, SLOT(slotDocUpdated(const QRect&)));
 	QObject::connect(this, SIGNAL(embeddImage(const QString&)), this, SLOT(slotEmbeddImage(const QString&)));
 
-	m_fg = KisColor::black();
-	m_bg = KisColor::white();
+	m_fg = KoColor::black();
+	m_bg = KoColor::white();
 
 	m_xPaintOffset = 0;
 	m_yPaintOffset = 0;
 
-	m_pTool     = 0L;
-	m_pBrush    = 0L;
-	m_pPattern  = 0L;
-	m_pGradient = 0L;
+	m_pTool     = 0;
+	m_pBrush    = 0;
+	m_pPattern  = 0;
+	m_pGradient = 0;
+	m_pPatternChooser = 0;
 
 	setupPainter();
 	setupCanvas();
@@ -290,15 +292,15 @@ void KisView::setupSideBar()
     m_pSideBar->slotSetFGColor(m_fg);
     m_pSideBar->slotSetBGColor(m_bg);
 
-    connect(m_pSideBar, SIGNAL(fgColorChanged(const KisColor&)),
-        this, SLOT(slotSetFGColor(const KisColor&)));
-    connect(m_pSideBar, SIGNAL(bgColorChanged(const KisColor&)),
-        this, SLOT(slotSetBGColor(const KisColor&)));
+    connect(m_pSideBar, SIGNAL(fgColorChanged(const KoColor&)),
+        this, SLOT(slotSetFGColor(const KoColor&)));
+    connect(m_pSideBar, SIGNAL(bgColorChanged(const KoColor&)),
+        this, SLOT(slotSetBGColor(const KoColor&)));
 
-    connect(this, SIGNAL(fgColorChanged(const KisColor&)),
-        m_pSideBar, SLOT(slotSetFGColor(const KisColor&)));
-    connect(this, SIGNAL(bgColorChanged(const KisColor&)),
-        m_pSideBar, SLOT(slotSetBGColor(const KisColor&)));
+    connect(this, SIGNAL(fgColorChanged(const KoColor&)),
+        m_pSideBar, SLOT(slotSetFGColor(const KoColor&)));
+    connect(this, SIGNAL(bgColorChanged(const KoColor&)),
+        m_pSideBar, SLOT(slotSetBGColor(const KoColor&)));
 
     m_side_bar->setChecked(true);
 }
@@ -1781,30 +1783,27 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
     belongs in the doc, not the view and eventually needs to be
     moved from the doc to koffice/filters.
 */
+
 void KisView::save_layer_image(bool mergeLayers)
 {
-    KURL url = KFileDialog::getSaveURL(QString::null,
-        KisUtil::readFilters(), 0, i18n("Image file for layer"));
+	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::readFilters(), 0, i18n("Image file for layer"));
 
-    if(!url.isEmpty())
-    {
-        if(mergeLayers)
-        {
-            /* merge should not always remove layers -
-            merged into another but should have an option
-            for keeping old layers and merging into a new
-            one created for that purpose with a Yes/No dialog
-            to confirm, at least. */
-            merge_all_layers();
-        }
+	if (!url.isEmpty()) {
+		if (mergeLayers) {
+			/* merge should not always remove layers -
+			   merged into another but should have an option
+			   for keeping old layers and merging into a new
+			   one created for that purpose with a Yes/No dialog
+			   to confirm, at least. */
+			merge_all_layers();
+		}
 
-        //  save as standard image file (jpg, png, xpm, ppm,
-        //  bmp, tiff, but NO gif due to patent restrictions)
-        if(!m_doc->saveAsQtImage(url.path(), mergeLayers))
-            kdDebug(0) << "Can't save doc as image" << endl;
-    }
+		//  save as standard image file (jpg, png, xpm, ppm,
+		//  bmp, tiff, but NO gif due to patent restrictions)
+		if (!m_doc -> saveAsQtImage(url.path(), mergeLayers))
+			kdDebug(0) << "Can't save doc as image" << endl;
+	}
 }
-
 
 void KisView::layer_scale_smooth()
 {
@@ -2145,7 +2144,7 @@ void KisView::slotSetPattern(KisPattern* p)
     The new foreground color should show up in the color selector
     via signal sent to colorselector
 */
-void KisView::slotSetFGColor(const KisColor& c)
+void KisView::slotSetFGColor(const KoColor& c)
 {
 	m_fg = c;
 	emit fgColorChanged(c);
@@ -2155,7 +2154,7 @@ void KisView::slotSetFGColor(const KisColor& c)
     The new background color should show up in the color selector
     via signal sent to colorselector
 */
-void KisView::slotSetBGColor(const KisColor& c)
+void KisView::slotSetBGColor(const KoColor& c)
 {
 	m_bg = c;
 	emit bgColorChanged(c);
@@ -2218,16 +2217,16 @@ void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
 
 	// add background for layer - should this always be white?
 	bgMode bg = bm_White; // bm_Transparent, bm_ForegroundColor, bm_BackgroundColor
-	KisColor clr;
+	KoColor clr;
 
 	if (bg == bm_White)
-		clr = KisColor::white();
+		clr = KoColor::white();
 	else if (bg == bm_Transparent)
-		clr = KisColor::white();
+		clr = KoColor::white();
 	else if (bg == bm_ForegroundColor)
-		clr = KisColor::white();
+		clr = m_fg;
 	else if (bg == bm_BackgroundColor)
-		clr = KisColor::white();
+		clr = m_bg;
 
 	newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), clr, false, i18n("background"));
 	newimg -> markDirty(QRect(0, 0, newimg -> width(), newimg -> height()));
@@ -2252,12 +2251,12 @@ void KisView::addHasNewLayer(QImage& loadedImg, KURL& u)
 
 void KisView::setupTools()
 {
-	if (m_tools.size())
+	if (!m_tools.empty())
 		return;
 
 	m_tools = m_doc -> getTools();
 
-	if (!m_tools.size()) {
+	if (m_tools.empty()) {
 		m_tools = ::toolFactory(m_pCanvas, m_pBrush, m_pPattern, m_doc);
 		m_paste = new PasteTool(m_doc, m_pCanvas);
 		m_tools.push_back(m_paste);

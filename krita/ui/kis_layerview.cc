@@ -403,7 +403,7 @@ void LayerTable::slotAddLayer()
 
     QString name = i18n( "layer %1" ).arg( img->layerList().size() );
 
-    img->addLayer( img->imageExtents(), KisColor::white(), true, name );
+    img->addLayer( img->imageExtents(), KoColor::white(), true, name );
 
     QRect uR = img->layerList().at(img->layerList().size() - 1)->imageExtents();
     img->markDirty(uR);

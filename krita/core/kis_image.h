@@ -32,7 +32,8 @@
 
 #include <ksharedptr.h>
 
-#include "kis_color.h"
+#include <koColor.h>
+
 #include "kis_channel.h"
 #include "kis_layer.h"
 #include "kis_global.h"
@@ -68,8 +69,8 @@ public:
 
 	virtual DCOPObject* dcopObject();
 
-	KisPaintDevice* getCurrentPaintDevice();
-	KisChannel* getCurrentChannel();
+	KisPaintDeviceSP getCurrentPaintDevice();
+	KisChannelSP getCurrentChannel();
 	KisLayerSP getCurrentLayer();
 
 	void upperLayer(unsigned int layer);
@@ -77,7 +78,7 @@ public:
 	void setFrontLayer(unsigned int layer);
 	void setBackgroundLayer(unsigned int layer);
 
-	void addLayer(const QRect& r, const KisColor& c, bool transparent, const QString& name);
+	void addLayer(const QRect& r, const KoColor& c, bool transparent, const QString& name);
 	void addLayer(KisLayerSP layer);
 	void removeLayer(KisLayerSPLstIterator it);
 	void removeLayer(unsigned int layer);

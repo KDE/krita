@@ -26,8 +26,9 @@
 
 #include <kdualcolorbutton.h>
 
+#include <koColor.h>
+
 #include "kis_framebutton.h"
-#include "kis_color.h"
 #include "kis_global.h"
 #include "kfloatingdialog.h"
 
@@ -105,8 +106,8 @@ class ColorChooserFrame : public QFrame
     ColorChooserFrame( QWidget* parent = 0, const char* name = 0 );
 
  public slots:
-    void slotSetFGColor(const KisColor&);
-    void slotSetBGColor(const KisColor&);
+    void slotSetFGColor(const KoColor&);
+    void slotSetBGColor(const KoColor&);
     void slotSetActiveColor( ActiveColor );
 
     void slotShowGrey();
@@ -116,13 +117,13 @@ class ColorChooserFrame : public QFrame
     void slotShowLAB();
 
  signals:
-    void colorChanged(const KisColor&);
+    void colorChanged(const KoColor&);
 
  protected:
     virtual void resizeEvent ( QResizeEvent * );
 
  protected slots:
-    void slotColorSelected(const KisColor&);
+    void slotColorSelected(const KoColor&);
 
  private:
     KisColorChooser   *m_pColorChooser;
@@ -138,16 +139,16 @@ class ControlFrame : public QFrame
      ActiveColor activeColor();
 
  public slots:
-    void slotSetFGColor(const KisColor&);
-    void slotSetBGColor(const KisColor&);
+    void slotSetFGColor(const KoColor&);
+    void slotSetBGColor(const KoColor&);
 
     void slotSetKrayon(KisKrayon&);
     void slotSetBrush(KisBrush&);
     void slotSetPattern(KisPattern&);
 
  signals:
-    void fgColorChanged(const KisColor&);
-    void bgColorChanged(const KisColor&);
+    void fgColorChanged(const KoColor&);
+    void bgColorChanged(const KoColor&);
     void activeColorChanged(ActiveColor);
 
  protected:
@@ -203,8 +204,8 @@ class KisSideBar : public KFloatingDialog
     DockFrame *dockFrame() { return m_pDockFrame; }
     
  public slots:
-    void slotSetFGColor(const KisColor&);
-    void slotSetBGColor(const KisColor&);
+    void slotSetFGColor(const KoColor&);
+    void slotSetBGColor(const KoColor&);
 
     void slotSetKrayon(KisKrayon&);
     void slotSetBrush(KisBrush&);
@@ -214,17 +215,17 @@ class KisSideBar : public KFloatingDialog
     void slotHideChooserFrame();
     
  signals:
-    void fgColorChanged(const KisColor&);
-    void bgColorChanged(const KisColor&);
+    void fgColorChanged(const KoColor&);
+    void bgColorChanged(const KoColor&);
 
  protected:
     virtual void resizeEvent ( QResizeEvent * );
     virtual void closeEvent ( QCloseEvent * );
     
  protected slots:
-    void slotColorChooserColorSelected(const KisColor&);
-    void slotControlFGColorSelected(const KisColor&);
-    void slotControlBGColorSelected(const KisColor&);
+    void slotColorChooserColorSelected(const KoColor&);
+    void slotControlFGColorSelected(const KoColor&);
+    void slotControlBGColorSelected(const KoColor&);
     void slotControlActiveColorChanged(ActiveColor);
 
  private:

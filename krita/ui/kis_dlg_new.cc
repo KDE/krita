@@ -32,7 +32,6 @@ const int INITIALHEIGHT = 512;
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qspinbox.h>
-
 #include <klocale.h>
 
 NewDialog::NewDialog( QWidget *parent, const char *name )

@@ -42,8 +42,8 @@ const int lh = 18;
 KisColorChooser::KisColorChooser(QWidget *parent) : QWidget(parent)
 {
     // init with defaults
-    m_fg = KisColor::white();
-    m_bg = KisColor::black();
+    m_fg = KoColor::white();
+    m_bg = KoColor::black();
     m_active = ac_Foreground;
   
     // setup color frame
@@ -58,18 +58,18 @@ KisColorChooser::KisColorChooser(QWidget *parent) : QWidget(parent)
     m_pGreyWidget = new GreyWidget(this);
 
     // connect color widgets
-    connect(m_pRGBWidget, SIGNAL(colorChanged(const KisColor &)), this,
-		  SLOT(slotRGBWidgetChanged(const KisColor &)));
+    connect(m_pRGBWidget, SIGNAL(colorChanged(const KoColor &)), this,
+		  SLOT(slotRGBWidgetChanged(const KoColor &)));
 
-    //connect(m_pGreyWidget, SIGNAL(colorChanged(const KisColor &)), this,
-    //		  SLOT(slotGreyWidgetChanged(const KisColor &)));
+    //connect(m_pGreyWidget, SIGNAL(colorChanged(const KoColor &)), this,
+    //		  SLOT(slotGreyWidgetChanged(const KoColor &)));
 
     // show RGB as default 
     slotShowRGB();
 }
 
 
-void KisColorChooser::slotRGBWidgetChanged(const KisColor& c)
+void KisColorChooser::slotRGBWidgetChanged(const KoColor& c)
 {
     if( m_active == ac_Foreground )
 	    m_pColorFrame->slotSetColor1(c.color());
@@ -81,7 +81,7 @@ void KisColorChooser::slotRGBWidgetChanged(const KisColor& c)
 }
 
 
-void KisColorChooser::slotGreyWidgetChanged(const KisColor& c)
+void KisColorChooser::slotGreyWidgetChanged(const KoColor& c)
 {
     if( m_active == ac_Foreground )
 	    m_pColorFrame->slotSetColor1(c.color());
@@ -95,7 +95,7 @@ void KisColorChooser::slotGreyWidgetChanged(const KisColor& c)
 
 void KisColorChooser::slotColorFrameChanged(const QColor& qc)
 {
-    KisColor c(qc);
+    KoColor c(qc);
 
     emit colorChanged(c);
 
@@ -104,7 +104,7 @@ void KisColorChooser::slotColorFrameChanged(const QColor& qc)
 }
 
 
-void KisColorChooser::slotSetFGColor(const KisColor& c)
+void KisColorChooser::slotSetFGColor(const KoColor& c)
 {
     m_fg = c;
 
@@ -117,7 +117,7 @@ void KisColorChooser::slotSetFGColor(const KisColor& c)
 }
 
 
-void KisColorChooser::slotSetBGColor(const KisColor& c)
+void KisColorChooser::slotSetBGColor(const KoColor& c)
 {
     m_bg = c;
 
@@ -179,7 +179,7 @@ void KisColorChooser::resizeEvent(QResizeEvent *)
 RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
 {
     // init with defaults
-    m_c = KisColor::white();
+    m_c = KoColor::white();
 
     // setup RGB color sliders
     m_pRSlider = new ColorSlider(this);
@@ -344,7 +344,7 @@ void RGBWidget::resizeEvent(QResizeEvent *)
 /*
      set Color for both RGB and HSV widgets when color changes
 */    
-void RGBWidget::slotSetColor(const KisColor&c)
+void RGBWidget::slotSetColor(const KoColor&c)
 {
     // set color member
     m_c = c;
@@ -370,9 +370,9 @@ void RGBWidget::slotSetColor(const KisColor&c)
     m_pBIn->setValue( b );
     
     // HSV settings
-    int h = c.h();
-    int s = c.s();
-    int v = c.v();
+    int h = c.H();
+    int s = c.S();
+    int v = c.V();
     
     // hue slide has a constant pixmap - never changes
     m_pHSlider->slotSetValue( h );    
@@ -397,7 +397,7 @@ void RGBWidget::slotRSliderChanged(int r)
     int g = m_c.G();
     int b = m_c.B();
 
-    m_c = KisColor( r, g, b, cs_RGB );
+    m_c = KoColor( r, g, b, cs_RGB );
 
     m_pGSlider->slotSetColor1( QColor( r, 0, b ) );
     m_pGSlider->slotSetColor2( QColor( r, 255, b ) );
@@ -415,7 +415,7 @@ void RGBWidget::slotGSliderChanged(int g)
     int r = m_c.R();
     int b = m_c.B();
 
-    m_c = KisColor( r, g, b, cs_RGB );
+    m_c = KoColor( r, g, b, cs_RGB );
 
     m_pRSlider->slotSetColor1( QColor( 0, g, b ) );
     m_pRSlider->slotSetColor2( QColor( 255, g, b ) );
@@ -433,7 +433,7 @@ void RGBWidget::slotBSliderChanged(int b)
     int r = m_c.R();
     int g = m_c.G();
 
-    m_c = KisColor( r, g, b, cs_RGB );
+    m_c = KoColor( r, g, b, cs_RGB );
 
     m_pRSlider->slotSetColor1( QColor( 0, g, b ) );
     m_pRSlider->slotSetColor2( QColor( 255, g, b ) );
@@ -451,10 +451,10 @@ void RGBWidget::slotBSliderChanged(int b)
 
 void RGBWidget::slotHSliderChanged(int h)
 {
-    int s = m_c.s();
-    int v = m_c.v();
+    int s = m_c.S();
+    int v = m_c.V();
 
-    m_c = KisColor( h, s, v, cs_HSV );
+    m_c = KoColor( h, s, v, cs_HSV );
 
     kdDebug() << " slotHSliderChanged: hue is " << h << endl;
      
@@ -477,10 +477,10 @@ void RGBWidget::slotHSliderChanged(int h)
 */
 void RGBWidget::slotSSliderChanged(int s)
 {
-    int h = m_c.h();
-    int v = m_c.v();
+    int h = m_c.H();
+    int v = m_c.V();
 
-    m_c = KisColor( h, s, v, cs_HSV );
+    m_c = KoColor( h, s, v, cs_HSV );
 
     m_pSIn->setValue( s );
     emit colorChanged(m_c);
@@ -489,10 +489,10 @@ void RGBWidget::slotSSliderChanged(int s)
 
 void RGBWidget::slotVSliderChanged(int v)
 {
-    int h = m_c.h();
-    int s = m_c.s();
+    int h = m_c.H();
+    int s = m_c.S();
 
-    m_c = KisColor( h, s, v, cs_HSV );
+    m_c = KoColor( h, s, v, cs_HSV );
 
     m_pVIn->setValue( v );
     emit colorChanged(m_c);
@@ -504,7 +504,7 @@ void RGBWidget::slotRInChanged(int r)
     int g = m_c.G();
     int b = m_c.B();
 
-    m_c = KisColor( r, g, b, cs_RGB );
+    m_c = KoColor( r, g, b, cs_RGB );
 
     m_pGSlider->slotSetColor1( QColor( r, 0, b ) );
     m_pGSlider->slotSetColor2( QColor( r, 255, b ) );
@@ -522,7 +522,7 @@ void RGBWidget::slotGInChanged(int g)
     int r = m_c.R();
     int b = m_c.B();
 
-    m_c = KisColor( r, g, b, cs_RGB );
+    m_c = KoColor( r, g, b, cs_RGB );
 
     m_pRSlider->slotSetColor1( QColor( 0, g, b ) );
     m_pRSlider->slotSetColor2( QColor( 255, g, b ) );
@@ -540,7 +540,7 @@ void RGBWidget::slotBInChanged(int b)
     int r = m_c.R();
     int g = m_c.G();
 
-    m_c = KisColor( r, g, b, cs_RGB );
+    m_c = KoColor( r, g, b, cs_RGB );
 
     m_pRSlider->slotSetColor1( QColor( 0, g, b ) );
     m_pRSlider->slotSetColor2( QColor( 255, g, b ) );
@@ -559,10 +559,10 @@ void RGBWidget::slotBInChanged(int b)
 
 void RGBWidget::slotHInChanged(int h)
 {
-    int s = m_c.s();
-    int v = m_c.v();
+    int s = m_c.S();
+    int v = m_c.V();
 
-    m_c = KisColor( h, s, v, cs_HSV );
+    m_c = KoColor( h, s, v, cs_HSV );
 
     kdDebug() << " slotHInChanged: hue is " << h << endl;
 
@@ -587,10 +587,10 @@ void RGBWidget::slotHInChanged(int h)
 
 void RGBWidget::slotSInChanged(int s)
 {
-    int h = m_c.h();
-    int v = m_c.v();
+    int h = m_c.H();
+    int v = m_c.V();
 
-    m_c = KisColor( h, s, v, cs_HSV );
+    m_c = KoColor( h, s, v, cs_HSV );
 
     m_pSSlider->slotSetValue( s );
     emit colorChanged(m_c);
@@ -602,10 +602,10 @@ void RGBWidget::slotSInChanged(int s)
 
 void RGBWidget::slotVInChanged(int v)
 {
-    int h = m_c.h();
-    int s = m_c.s();
+    int h = m_c.H();
+    int s = m_c.S();
 
-    m_c = KisColor( h, s, v, cs_HSV );
+    m_c = KoColor( h, s, v, cs_HSV );
 
     m_pVSlider->slotSetValue( v );
     emit colorChanged(m_c);
@@ -616,7 +616,7 @@ void RGBWidget::slotVInChanged(int v)
 GreyWidget::GreyWidget(QWidget *parent) : QWidget(parent)
 {
     // init with defaults
-    m_c = KisColor::white();
+    m_c = KoColor::white();
 
     // setup slider
     m_pVSlider = new ColorSlider(this);
@@ -671,7 +671,7 @@ void GreyWidget::resizeEvent(QResizeEvent *)
     m_pVSlider->move(x1, y - m_pVSlider->height()/2);
 }
 
-void GreyWidget::slotSetColor(const KisColor&c)
+void GreyWidget::slotSetColor(const KoColor&c)
 {
     m_c = c;
   
@@ -686,14 +686,14 @@ void GreyWidget::slotVSliderChanged(int v)
 {
     m_pVIn->setValue(v);
     v = 255 - v;
-    emit colorChanged( KisColor(v, v, v, cs_RGB));
+    emit colorChanged( KoColor(v, v, v, cs_RGB));
 }
 
 void GreyWidget::slotVInChanged(int v)
 {
     m_pVSlider->slotSetValue(v);
     v = 255 - v;
-    emit colorChanged(KisColor(v, v, v, cs_RGB));
+    emit colorChanged(KoColor(v, v, v, cs_RGB));
 }
 
 #include "kis_colorchooser.moc"

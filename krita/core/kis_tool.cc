@@ -41,6 +41,7 @@ KisTool::KisTool(KisDoc *doc, const char * /*name*/) //: QObject(doc, name)
 
 KisTool::~KisTool() 
 {
+	QObject::disconnect(this);
 }
 
 void KisTool::optionsDialog()

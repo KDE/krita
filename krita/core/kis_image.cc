@@ -342,7 +342,7 @@ void KisImage::addLayer(KisLayerSP layer)
 	}
 }
 
-void KisImage::addLayer(const QRect& rect, const KisColor& c, bool tr, const QString& name)
+void KisImage::addLayer(const QRect& rect, const KoColor& c, bool tr, const QString& name)
 {
 	KisLayerSP lay;
 	QRgb defaultColor;
@@ -817,17 +817,18 @@ QRect KisImage::findBoundingTiles(const QRect& area)
 	return rc;
 }
 
-KisPaintDevice* KisImage::getCurrentPaintDevice()
+KisPaintDeviceSP KisImage::getCurrentPaintDevice()
 {
 	KisPaintDevice *device = 0;
 
 	if ((device = getCurrentChannel()))
 		return device;
 
-	return getCurrentLayer();
+	device = getCurrentLayer();
+	return device;
 }
 
-KisChannel* KisImage::getCurrentChannel()
+KisChannelSP KisImage::getCurrentChannel()
 {
 	return m_activeChannel;
 }

@@ -69,7 +69,7 @@ public:
     void setPatternToPixel(KisLayer *lay, int x, int y, uint value);
     
     void setGradientPaint(bool _gradientPaint, 
-        KisColor startColor, KisColor endColor);
+        KoColor startColor, KoColor endColor);
     void setGradientEffect(KImageEffect::GradientType effect)
         { mGradient.setEffect(effect); }     
     void setGradientToPixel(KisLayer *lay, int x, int y);

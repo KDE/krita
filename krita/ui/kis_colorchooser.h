@@ -21,7 +21,8 @@
 #ifndef __kis_colorchooser_h__
 #define __kis_colorchooser_h__
 
-#include "kis_color.h"
+#include <koColor.h>
+
 #include "kpixmap.h"
 #include "kpixmapeffect.h"
 #include "kis_util.h"
@@ -56,14 +57,14 @@ class KisColorChooser : public QWidget
     void slotShowCMYK();
     void slotShowLAB();
 
-    void slotSetFGColor(const KisColor&);
-    void slotSetBGColor(const KisColor&);
+    void slotSetFGColor(const KoColor&);
+    void slotSetBGColor(const KoColor&);
     void slotSetActiveColor( ActiveColor a) { m_active = a; }
 
  protected slots:
 
-    void slotRGBWidgetChanged(const KisColor&);
-    void slotGreyWidgetChanged(const KisColor&);
+    void slotRGBWidgetChanged(const KoColor&);
+    void slotGreyWidgetChanged(const KoColor&);
     void slotColorFrameChanged(const QColor&);
 
  protected:
@@ -72,7 +73,7 @@ class KisColorChooser : public QWidget
 
  signals:
 
-    void colorChanged(const KisColor&);
+    void colorChanged(const KoColor&);
     void hueChanged(int h);
     void satChanged(int s);
     void valChanged(int v);
@@ -85,7 +86,7 @@ class KisColorChooser : public QWidget
     CMYKWidget       *m_pCMYKWidget;
     LABWidget        *m_pLABWidget;
     GreyWidget       *m_pGreyWidget;
-    KisColor          m_fg, m_bg;
+    KoColor          m_fg, m_bg;
     ActiveColor       m_active;
 };
 
@@ -97,7 +98,7 @@ class RGBWidget : public QWidget
     RGBWidget(QWidget *parent = 0L);
 
  public slots:
-    void slotSetColor(const KisColor&);
+    void slotSetColor(const KoColor&);
 
  protected slots:
     void slotRSliderChanged(int);
@@ -117,7 +118,7 @@ class RGBWidget : public QWidget
     void slotVInChanged(int);
 
  signals:
-    void colorChanged(const KisColor&);
+    void colorChanged(const KoColor&);
     void hueChanged(int h);
     void satChanged(int s);
     void valChanged(int v);
@@ -135,7 +136,7 @@ class RGBWidget : public QWidget
     QSpinBox    *m_pRIn,     *m_pGIn,       *m_pBIn;
     QSpinBox    *m_pHIn,     *m_pSIn,       *m_pVIn;
 
-    KisColor    m_c;
+    KoColor    m_c;
 };
 
 class GreyWidget : public QWidget
@@ -146,14 +147,14 @@ class GreyWidget : public QWidget
     GreyWidget(QWidget *parent = 0L);
 
  public slots:
-    void slotSetColor(const KisColor&);
+    void slotSetColor(const KoColor&);
 
  protected slots:
     void slotVSliderChanged(int);
     void slotVInChanged(int);
 
  signals:
-    void colorChanged(const KisColor&);
+    void colorChanged(const KoColor&);
 
  protected:
     virtual void resizeEvent(QResizeEvent *);
@@ -162,7 +163,7 @@ class GreyWidget : public QWidget
     ColorSlider *m_pVSlider;
     QLabel      *m_pVLabel;
     QSpinBox    *m_pVIn;
-    KisColor     m_c;
+    KoColor     m_c;
 };
 
 #endif

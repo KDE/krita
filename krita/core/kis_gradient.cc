@@ -20,12 +20,16 @@
 
 #include <stdlib.h>
 #include <math.h>
+
 #include <qpixmap.h>
-#include <kimageeffect.h>
+
 #include <kdebug.h>
+#include <kimageeffect.h>
+
+#include <koColor.h>
+
 #include "kis_selection.h"
 #include "kis_gradient.h"
-#include "kis_color.h"
 
 //#define DEBUG_COLORS
 
@@ -65,7 +69,7 @@ void KisGradient::setNull()
 */
 
 void KisGradient::mapKdeGradient(QRect gradR,
-            KisColor startColor, KisColor endColor )
+            KoColor startColor, KoColor endColor )
 {
     mGradientWidth  = gradR.width();
     mGradientHeight = gradR.height();
@@ -89,7 +93,7 @@ void KisGradient::mapKdeGradient(QRect gradR,
 
 
 void KisGradient::mapVertGradient( QRect gradR,
-            KisColor startColor, KisColor endColor )
+            KoColor startColor, KoColor endColor )
 {
     mGradientWidth  = gradR.width();
     mGradientHeight = gradR.height();
@@ -146,8 +150,8 @@ void KisGradient::mapVertGradient( QRect gradR,
 
 
 void KisGradient::mapHorGradient( QRect gradR,
-                                  KisColor /*startColor*/,
-                                  KisColor /*endColor*/ )
+                                  KoColor /*startColor*/,
+                                  KoColor /*endColor*/ )
 {
     mGradientWidth  = gradR.width();
     mGradientHeight = gradR.height();

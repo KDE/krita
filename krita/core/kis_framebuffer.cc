@@ -561,7 +561,7 @@ void KisFrameBuffer::setPatternToPixel(KisLayer *lay, int _x, int _y, uint /*val
 }
 
 void KisFrameBuffer::setGradientPaint(bool _gradientPaint,
-    KisColor _startColor, KisColor _endColor)
+    KoColor _startColor, KoColor _endColor)
 {
     KisImage *img = pDoc->current();
     if (!img) return;

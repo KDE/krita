@@ -32,26 +32,26 @@ ColorPicker::ColorPicker(KisDoc *doc) : KisTool(doc)
 
 ColorPicker::~ColorPicker() {}
 
-KisColor ColorPicker::pick(int x, int y)
+KoColor ColorPicker::pick(int x, int y)
 {
 #if 0
     KisImage * img = m_doc->current();
     KisLayer *lay = img->getCurrentLayer();
     
-    if (!img) return KisColor::white();
-    if (!lay) return KisColor::white();
+    if (!img) return KoColor::white();
+    if (!lay) return KoColor::white();
 
     // FIXME: Implement this for non-RGB modes.
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	    return KisColor::white();
+	    return KoColor::white();
 
     int r = lay->pixel(0, x, y);
     int g = lay->pixel(1, x, y);
     int b = lay->pixel(2, x, y);
         
-    return KisColor(r, g,  b, cs_RGB);
+    return KoColor(r, g,  b, cs_RGB);
 #endif
-    return KisColor(0, 0, 0, cs_RGB);
+    return KoColor(0, 0, 0, cs_RGB);
 }
 
 void ColorPicker::mousePress(QMouseEvent *e)

@@ -6,14 +6,14 @@ libkritapart_la_SOURCES = dummy.cc
 
 libkritapart_la_LDFLAGS = $(KDE_PLUGIN)
 libkritapart_la_LIBADD = core/libkiscore.la ui/libkisui.la tools/libkistools.la \
-	../lib/kofficeui/libkofficeui.la
+	../lib/kofficeui/libkofficeui.la ../lib/kopainter/libkopainter.la
 METASOURCES = AUTO
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = krita.la
 krita_la_SOURCES = main.cc
 krita_la_LDFLAGS = $(all_libraries) -avoid-version -module
-krita_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+krita_la_LIBADD = ../lib/kofficecore/libkofficecore.la 
 
 ## The executable
 bin_PROGRAMS = krita

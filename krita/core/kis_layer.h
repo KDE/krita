@@ -26,7 +26,8 @@
 #include <qobject.h>
 #include <qptrlist.h>
 
-#include "kis_color.h"
+#include <koColor.h>
+
 #include "kis_channel.h"
 #include "kis_global.h"
 #include "kis_paint_device.h"
@@ -74,7 +75,7 @@ public:
 	bool    boundryTileY(int tile) const;
 	void    allocateRect(const QRect& r);
     
-	void    clear(const KisColor& c, bool transparent);
+	void    clear(const KoColor& c, bool transparent);
 
 #if 0
 	KisChannel* firstChannel();

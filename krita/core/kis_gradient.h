@@ -23,8 +23,10 @@
 
 #include <qimage.h>
 #include <qcolor.h>
+
 #include <kimageeffect.h>
-#include "kis_color.h"
+
+#include <koColor.h>
 
 class KisGradient 
 {
@@ -46,7 +48,7 @@ public:
     be redone for Gimp 2.0 anyway */
     
     void mapKdeGradient(QRect gradR, 
-        KisColor startColor, KisColor endColor);
+        KoColor startColor, KoColor endColor);
         	
     /*  these probably won't be used without copying kimageffect code
     and modifying for use with krayon - use what's above.  Eventually
@@ -54,9 +56,9 @@ public:
     gradients for better flexibility and 32 bit (or 64 bit) rendering */
     
     void mapVertGradient(QRect gradR, 
-        KisColor startColor, KisColor endColor);
+        KoColor startColor, KoColor endColor);
     void mapHorGradient(QRect gradR, 
-        KisColor startColor, KisColor endColor);
+        KoColor startColor, KoColor endColor);
      
     const int width()  { return mGradientWidth; }
     const int height() { return mGradientHeight; }

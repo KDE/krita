@@ -24,8 +24,6 @@
 
 #include <qpoint.h>
 
-#include "kis_tool.h"
-
 class KisDoc;
 class KisView;
 class KisCanvas;

@@ -21,6 +21,8 @@
 #include <kaction.h>
 #include <kdebug.h>
 
+#include <koColor.h>
+
 #include "kis_doc.h"
 #include "kis_view.h"
 #include "kis_canvas.h"
@@ -47,8 +49,8 @@ ColorChangerTool::ColorChangerTool(KisDoc *doc) : KisTool(doc)
 	layerAlpha = true;
     
 	// get current colors
-	KisColor startColor( m_view->fgColor().R(), m_view->fgColor().G(), m_view->fgColor().B() );
-	KisColor endColor( m_view->bgColor().R(), m_view->bgColor().G(), m_view->bgColor().B() );        
+	KoColor startColor( m_view->fgColor().R(), m_view->fgColor().G(), m_view->fgColor().B() );
+	KoColor endColor( m_view->bgColor().R(), m_view->bgColor().G(), m_view->bgColor().B() );        
     
 	// prepare for painting with pattern
 	if( m_usePattern )
@@ -109,9 +111,9 @@ bool ColorChangerTool::changeColors(int startX, int startY)
 
 	// prepare for painting with gradient
 	if (m_useGradient) {
-		KisColor startColor(m_view->fgColor().R(),
+		KoColor startColor(m_view->fgColor().R(),
 				m_view->fgColor().G(), m_view->fgColor().B());
-		KisColor endColor(m_view->bgColor().R(),
+		KoColor endColor(m_view->bgColor().R(),
 				m_view->bgColor().G(), m_view->bgColor().B());        
 
 		m_doc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
@@ -202,8 +204,8 @@ void ColorChangerTool::optionsDialog()
 		// particular tool, unlike the other options
 
 		// get current colors
-		KisColor startColor( m_view->fgColor().R(), m_view->fgColor().G(), m_view->fgColor().B() );
-		KisColor endColor( m_view->bgColor().R(), m_view->bgColor().G(), m_view->bgColor().B() );        
+		KoColor startColor( m_view->fgColor().R(), m_view->fgColor().G(), m_view->fgColor().B() );
+		KoColor endColor( m_view->bgColor().R(), m_view->bgColor().G(), m_view->bgColor().B() );        
 
 		// prepare for painting with pattern
 		if( m_usePattern )

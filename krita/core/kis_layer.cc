@@ -239,7 +239,7 @@ void KisLayer::allocateRect(const QRect& r)
 #endif
 }
 
-void KisLayer::clear(const KisColor& c, bool transparent )
+void KisLayer::clear(const KoColor& c, bool transparent )
 {
 #if 0
     if (!m_cMode == cm_RGB && !m_cMode == cm_RGBA)

@@ -145,7 +145,7 @@ public:
 	/*
 	 *  copy rectangular area of layer to Qt Image
 	 */
-	bool LayerToQtImage(QImage *qimage, KisView *pView, QRect& clipRect);
+	bool LayerToQtImage(QImage *qimage, const QRect& clipRect);
 
 	/*
 	 *  set selection or clip rectangle for the document

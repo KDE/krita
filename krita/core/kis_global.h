@@ -22,6 +22,7 @@
 #define __kis_global_h__
 
 #include <qvaluevector.h>
+#include <ksharedptr.h>
 
 class KisTool;
 
@@ -48,7 +49,8 @@ enum cId { ci_Indexed, ci_Alpha, ci_Red, ci_Green, ci_Blue, ci_Cyan,
 // background mode
 enum bgMode {bm_White, bm_Transparent, bm_BackgroundColor, bm_ForegroundColor };
 
-typedef QValueVector<KisTool*> ktvector;
+typedef KSharedPtr<KisTool> KisToolSP;
+typedef QValueVector<KisToolSP> ktvector;
 typedef ktvector::size_type ktvector_size_type;
 
 #endif

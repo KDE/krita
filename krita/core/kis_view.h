@@ -26,10 +26,10 @@
 #include <qscrollbar.h>
 #include <qwidget.h>
 
+#include <koColor.h>
 #include <koView.h>
 
 #include "kis_global.h"
-#include "kis_color.h"
 #include "kis_tool.h"
 
 class QButton;
@@ -91,8 +91,8 @@ public:
 	virtual void setupPrinter(KPrinter &printer);
 	virtual void print(KPrinter &printer);
 
-	KisColor& fgColor() { return m_fg; }
-	KisColor& bgColor() { return m_bg; }
+	KoColor& fgColor() { return m_fg; }
+	KoColor& bgColor() { return m_bg; }
 
 	KisCanvas   *kisCanvas()        { return m_pCanvas; }
 	KisPainter  *kisPainter()       { return m_pPainter; }
@@ -123,8 +123,8 @@ public:
 	void setZoomFactor(float zf);
 
 signals:
-	void bgColorChanged(const KisColor &);
-	void fgColorChanged(const KisColor &);     
+	void bgColorChanged(const KoColor &);
+	void fgColorChanged(const KoColor &);     
 
 public slots:
 	void slotRefreshPainter();
@@ -136,8 +136,8 @@ public slots:
 	void slotSetKrayon(KisKrayon *);
 	void slotSetBrush(KisBrush *);
 	void slotSetPattern(KisPattern *);
-	void slotSetFGColor(const KisColor&);
-	void slotSetBGColor(const KisColor&);
+	void slotSetFGColor(const KoColor&);
+	void slotSetBGColor(const KoColor&);
 	void slotSetPaintOffset();
 
 	void slotTabSelected(const QString& name);
@@ -243,8 +243,8 @@ protected:
 	KToggleAction *m_side_bar, *m_float_side_bar, *m_lsidebar;
 
 	KisDoc *m_doc;  // always needed
-	KisTool *m_pTool; // current active tool
-	KisTool *m_paste; // The special paste tool
+	KisToolSP m_pTool; // current active tool
+	KisToolSP m_paste; // The special paste tool
 
 	// krayon objects - all can be krayons
 	KisKrayon     *m_pKrayon;   // current krayon for this view   
@@ -269,10 +269,10 @@ protected:
 	KisSideBar          *m_pSideBar;
 	QScrollBar          *m_pHorz, *m_pVert;
 	KRuler              *m_pHRuler, *m_pVRuler;
-	KisColor            m_fg, m_bg;
+	KoColor            m_fg;
+	KoColor m_bg;
 	KisTabBar           *m_pTabBar;
-	QButton             *m_pTabFirst, *m_pTabLeft, 
-	*m_pTabRight, *m_pTabLast;
+	QButton             *m_pTabFirst, *m_pTabLeft, *m_pTabRight, *m_pTabLast;
 
 	// what's this doing here?
 	KHelpMenu            *m_helpMenu;
@@ -302,3 +302,4 @@ KisDoc* KisView::getKisDocument()
 }
 
 #endif
+

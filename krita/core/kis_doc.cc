@@ -159,7 +159,7 @@ bool KisDoc::initDoc()
 			return false;
 
 		// add background layer
-		img->addLayer(QRect(0, 0, 512, 512), KisColor::white(), false, i18n("background"));
+		img->addLayer(QRect(0, 0, 512, 512), KoColor::white(), false, i18n("background"));
 		img->markDirty(QRect(0, 0, 512, 512));
 
 		// list of images - mdi document
@@ -583,7 +583,7 @@ bool KisDoc::loadLayers( QDomElement &element, KisImage *img )
             int x = layer.attribute( "x" ).toInt();
             int y = layer.attribute( "y" ).toInt();
 
-            img->addLayer( QRect( x, y, w, h ), KisColor::white(), true, layerName );
+            img->addLayer( QRect( x, y, w, h ), KoColor::white(), true, layerName );
             img->markDirty( QRect( x, y, w, h ) );
 
             KisLayer *lay = img->getCurrentLayer();
@@ -894,71 +894,42 @@ KisImage* KisDoc::current() const
 
 bool KisDoc::saveAsQtImage(const QString& file, bool wholeImage)
 {
-    int x, y, w, h;
-    bool ok = false;
+	int x, y, w, h;
+	KisImage *img = current();
 
-    // current layer only
-    if(!wholeImage)
-    {
-        x = current()->getCurrentLayer()->layerExtents().left();
-        y = current()->getCurrentLayer()->layerExtents().top();
-        w = current()->getCurrentLayer()->layerExtents().width();
-        h = current()->getCurrentLayer()->layerExtents().height();
-    }
-    // all layers
-    else
-    {
-        x = current()->getCurrentLayer()->imageExtents().left();
-        y = current()->getCurrentLayer()->imageExtents().top();
-        w = current()->getCurrentLayer()->imageExtents().width();
-        h = current()->getCurrentLayer()->imageExtents().height();
-    }
+	if (!img) {
+		kdDebug() << "No Image\n";
+		return false;
+	}
 
-    QImage *qimg = new QImage(w, h, 32);
+	if (wholeImage) {
+		x = 0;
+		y = 0;
+		w = img -> width();
+		h = img -> height();
+	}
+	else {
+		KisLayerSP lay = img -> getCurrentLayer();
 
-    if(qimg)
-    {
-        qimg->setAlphaBuffer(current()->colorMode() == cm_RGBA ? true : false);
-        QRect saveRect = QRect(x, y, w, h);
-        LayerToQtImage(qimg, 0, saveRect);
-        ok = qimg->save(file, KImageIO::type(file).ascii());
-        delete qimg;
-    }
+		if (!lay) {
+			kdDebug() << "No layer\n";
+			return false;
+		}
 
-    return ok;
+		const QRect& rc = lay -> imageExtents();
 
-// old - this should be used for saving or capturing the view instead.
+		x = rc.left();
+		y = rc.top();
+		w = rc.width();
+		h = rc.height();
+	}
 
-#if 0
+	QImage qimg(w, h, 32);
 
-    // prepare a pixmap for drawing
-    QPixmap *pix = new QPixmap (w, h);
-    if (pix == 0L)
-    {
-        kdDebug(0) << "KisDoc::saveAsQtImage: can't create QPixmap" << endl;
-        return false;
-    }
-
-    QPainter p;
-    p.begin (pix);
-    p.setBackgroundColor (Qt::white);
-    p.eraseRect (x, y, w, h);
-    QRect saveRect = QRect(x, y, w, h);
-    paintContent(p, saveRect);
-    p.end ();
-
-    // now create an image
-    QImage qimg  = pix->convertToImage();
-    qimg.setAlphaBuffer(current()->colorMode() == cm_RGBA ? true : false);
-
-    // clean up pixmap
-    delete pix;
-
-    // save the image in requested format. file extension
-    // determines image format - best way
-    return qimg.save(file, KImageIO::type(file).ascii());
-
-#endif
+	qimg.setAlphaBuffer(current() -> colorMode() == cm_RGBA);
+	QRect saveRect = QRect(x, y, w, h);
+	LayerToQtImage(&qimg, saveRect);
+	return qimg.save(file, KImageIO::type(file).ascii());
 }
 
 
@@ -1071,13 +1042,19 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
     raster operations, and many other neat effects.
 */
 
-bool KisDoc::LayerToQtImage(QImage *qimg, KisView * /*pView*/, QRect & clipRect)
+bool KisDoc::LayerToQtImage(QImage *qimg, const QRect& clipRect)
 {
-	KisImage *img = current();
-	if (!img)  return false;
+	QRect clip;
 
-	KisLayer *lay = img->getCurrentLayer();
-	if (!lay)  return false;
+	KisImage *img = current();
+
+	if (!img)  
+		return false;
+
+	KisLayerSP lay = img -> getCurrentLayer();
+
+	if (!lay)  
+		return false;
 
 	// this may not always be zero, but for current
 	// uses it will be, as the entire layer is copied
@@ -1088,16 +1065,15 @@ bool KisDoc::LayerToQtImage(QImage *qimg, KisView * /*pView*/, QRect & clipRect)
 	// this insures getting the layer from its offset
 	// into the image, which may not be zero if the
 	// layer has been moved
-	if (!clipRect.intersects(lay->imageExtents()))
+	if (!clipRect.intersects(lay -> imageExtents()))
 		return false;
 
-	clipRect = clipRect.intersect(lay->imageExtents());
+	clip = clipRect.intersect(lay -> imageExtents());
 
-	int sx = clipRect.left();
-	int sy = clipRect.top();
-	int ex = clipRect.right();
-	int ey = clipRect.bottom();
-
+	int sx = clip.left();
+	int sy = clip.top();
+	int ex = clip.right();
+	int ey = clip.bottom();
 	uchar *sl;
 	uchar r, g, b;
 	uchar a = 255;
@@ -1110,13 +1086,6 @@ bool KisDoc::LayerToQtImage(QImage *qimg, KisView * /*pView*/, QRect & clipRect)
 
 		for (int x = sx; x <= ex; x++) {
 			lay -> pixel(startx + x, starty + y, &rgba);
-			// layer binary values by channel
-#if 0
-			r = lay->pixel(0, startx + x, starty + y);
-			g = lay->pixel(1, startx + x, starty + y);
-			b = lay->pixel(2, startx + x, starty + y);
-			if(alpha) a = lay->pixel(3, startx + x, starty + y);
-#endif
 			r = qRed(rgba);
 			g = qGreen(rgba);
 			b = qBlue(rgba);
@@ -1144,7 +1113,7 @@ void KisDoc::setSelection(const QRect& r)
 */
 void KisDoc::clearSelection()
 {
-    m_pSelection->setNull();
+	m_pSelection -> setNull();
 }
 
 
@@ -1153,7 +1122,7 @@ void KisDoc::clearSelection()
 */
 bool KisDoc::hasSelection()
 {
-    return (m_pSelection->getRectangle().isNull() ? false : true);
+	return !m_pSelection -> getRectangle().isNull();
 }
 
 /*
@@ -1161,11 +1130,8 @@ bool KisDoc::hasSelection()
 */
 void KisDoc::removeClipImage()
 {
-    if(m_pClipImage != 0L)
-    {
-        delete m_pClipImage;
-        m_pClipImage = 0L;
-    }
+	delete m_pClipImage;
+	m_pClipImage = 0L;
 }
 
 /*
@@ -1303,15 +1269,15 @@ bool KisDoc::slotNewImage()
 
 	// add background layer
 	if (bg == bm_White)
-		img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
+		img->addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
 	else if (bg == bm_Transparent)
-		img->addLayer(QRect(0, 0, w, h), KisColor::white(), true, i18n("background"));
+		img->addLayer(QRect(0, 0, w, h), KoColor::white(), true, i18n("background"));
 
 	else if (bg == bm_ForegroundColor)
-		img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
+		img->addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
 
 	else if (bg == bm_BackgroundColor)
-		img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
+		img->addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
 
 	img -> markDirty(QRect(0, 0, w, h));
 	setCurrentImage(img);
@@ -1400,34 +1366,31 @@ void KisDoc::slotImageUpdated()
     let document update specific area of view when image is changed
 */
 
-void KisDoc::slotImageUpdated( const QRect& rect )
+void KisDoc::slotImageUpdated(const QRect& rect)
 {
-    // signal to view to update contents - kis_view.cc
-    emit docUpdated(rect);
+	emit docUpdated(rect);
 }
-
 
 void KisDoc::slotLayersUpdated()
 {
-    // signal to image - kis_image.cc
-    emit layersUpdated();
+	emit layersUpdated();
 }
 
 QRect KisDoc::getImageRect()
 {
-    QRect imageRect( 0, 0, m_pCurrent->width(), m_pCurrent->height() );
-    return imageRect;
+	return QRect(0, 0, m_pCurrent -> width(), m_pCurrent -> height());
 }
 
 void KisDoc::setImage(const QString& imageName )
 {
-    KisImage *img;
-    for ( img = m_Images.first(); img != 0; img = m_Images.next() ) {
-        if ( img->name() == imageName ) {
-            m_pCurrent = img;
-            return;
-        }
-    }
+	KisImage *img;
+
+	for (img = m_Images.first(); img; img = m_Images.next()) {
+		if (img -> name() == imageName) {
+			m_pCurrent = img;
+			return;
+		}
+	}
 }
 
 ktvector KisDoc::getTools() const
@@ -1438,11 +1401,6 @@ ktvector KisDoc::getTools() const
 void KisDoc::setTools(const ktvector& tools)
 {
 	Q_ASSERT(tools.size());
-
-	for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
-		QObject::disconnect(m_tools[i]);
-		delete m_tools[i];
-	}
 
 	m_tools.erase(m_tools.begin(), m_tools.end());
 	m_tools.reserve(tools.size());

@@ -1,0 +1,67 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgShearImage</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgShearImage</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>377</width>
+            <height>314</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Shear Image</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QButtonGroup" row="1" column="0">
+            <property name="name">
+                <cstring>grpPixelDimensions</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Shear Image</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>lblAngle</cstring>
+                    </property>
+                    <property name="text">
+                        <string>x-Angle:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intWidth</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="2" column="1">
+                    <property name="name">
+                        <cstring>intAngle</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>90</number>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>intAngle</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

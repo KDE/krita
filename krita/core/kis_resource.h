@@ -22,6 +22,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include "kis_global.h"
+
 /**
  * The KisResource class provides a representation of Krita image resources.  This
  * includes, but not limited to, brushes and patterns.

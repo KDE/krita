@@ -87,30 +87,30 @@ namespace {
 
 	public:
 		KisCommandImageAdd(KisDoc *doc,
-			KisUndoAdapter *adapter,
-			KisImageSP img) : super(i18n("Add Image"), adapter)
-		{
-			m_doc = doc;
-			m_img = img;
-		}
+				   KisUndoAdapter *adapter,
+				   KisImageSP img) : super(i18n("Add Image"), adapter)
+			{
+				m_doc = doc;
+				m_img = img;
+			}
 
 		virtual ~KisCommandImageAdd()
-		{
-		}
+			{
+			}
 
 		virtual void execute()
-		{
-			adapter() -> setUndo(false);
-			m_doc -> addImage(m_img);
-			adapter() -> setUndo(true);
-		}
+			{
+				adapter() -> setUndo(false);
+				m_doc -> addImage(m_img);
+				adapter() -> setUndo(true);
+			}
 
 		virtual void unexecute()
-		{
-			adapter() -> setUndo(false);
-			m_doc -> removeImage(m_img);
-			adapter() -> setUndo(true);
-		}
+			{
+				adapter() -> setUndo(false);
+				m_doc -> removeImage(m_img);
+				adapter() -> setUndo(true);
+			}
 
 	private:
 		KisDoc *m_doc;
@@ -122,32 +122,32 @@ namespace {
 
 	public:
 		KisCommandImageMv(KisDoc *doc,
-				KisUndoAdapter *adapter,
-				const QString& name,
-				const QString& oldName) : super(i18n("Rename Image"), adapter)
-		{
-			m_doc = doc;
-			m_name = name;
-			m_oldName = oldName;
-		}
+				  KisUndoAdapter *adapter,
+				  const QString& name,
+				  const QString& oldName) : super(i18n("Rename Image"), adapter)
+			{
+				m_doc = doc;
+				m_name = name;
+				m_oldName = oldName;
+			}
 
 		virtual ~KisCommandImageMv()
-		{
-		}
+			{
+			}
 
 		virtual void execute()
-		{
-			adapter() -> setUndo(false);
-			m_doc -> renameImage(m_oldName, m_name);
-			adapter() -> setUndo(true);
-		}
+			{
+				adapter() -> setUndo(false);
+				m_doc -> renameImage(m_oldName, m_name);
+				adapter() -> setUndo(true);
+			}
 
 		virtual void unexecute()
-		{
-			adapter() -> setUndo(false);
-			m_doc -> renameImage(m_name, m_oldName);
-			adapter() -> setUndo(true);
-		}
+			{
+				adapter() -> setUndo(false);
+				m_doc -> renameImage(m_name, m_oldName);
+				adapter() -> setUndo(true);
+			}
 
 	private:
 		KisDoc *m_doc;
@@ -160,30 +160,30 @@ namespace {
 
 	public:
 		KisCommandImageRm(KisDoc *doc,
-				KisUndoAdapter *adapter,
-				KisImageSP img) : super(i18n("Remove Image"), adapter)
-		{
-			m_doc = doc;
-			m_img = img;
-		}
+				  KisUndoAdapter *adapter,
+				  KisImageSP img) : super(i18n("Remove Image"), adapter)
+			{
+				m_doc = doc;
+				m_img = img;
+			}
 
 		virtual ~KisCommandImageRm()
-		{
-		}
+			{
+			}
 
 		virtual void execute()
-		{
-			adapter() -> setUndo(false);
-			m_doc -> removeImage(m_img);
-			adapter() -> setUndo(true);
-		}
+			{
+				adapter() -> setUndo(false);
+				m_doc -> removeImage(m_img);
+				adapter() -> setUndo(true);
+			}
 
 		virtual void unexecute()
-		{
-			adapter() -> setUndo(false);
-			m_doc -> addImage(m_img);
-			adapter() -> setUndo(true);
-		}
+			{
+				adapter() -> setUndo(false);
+				m_doc -> addImage(m_img);
+				adapter() -> setUndo(true);
+			}
 
 	private:
 		KisDoc *m_doc;
@@ -195,33 +195,33 @@ namespace {
 
 	public:
 		LayerAddCmd(KisDoc *doc,
-				KisUndoAdapter *adapter,
-				KisImageSP img,
-				KisLayerSP layer) : super(i18n("Add Layer"), adapter)
-		{
-			m_doc = doc;
-			m_img = img;
-			m_layer = layer;
-			m_index = img -> index(layer);
-		}
+			    KisUndoAdapter *adapter,
+			    KisImageSP img,
+			    KisLayerSP layer) : super(i18n("Add Layer"), adapter)
+			{
+				m_doc = doc;
+				m_img = img;
+				m_layer = layer;
+				m_index = img -> index(layer);
+			}
 
 		virtual ~LayerAddCmd()
-		{
-		}
+			{
+			}
 
 		virtual void execute()
-		{
-			adapter() -> setUndo(false);
-			m_doc -> layerAdd(m_img, m_layer, m_index);
-			adapter() -> setUndo(true);
-		}
+			{
+				adapter() -> setUndo(false);
+				m_doc -> layerAdd(m_img, m_layer, m_index);
+				adapter() -> setUndo(true);
+			}
 
 		virtual void unexecute()
-		{
-			adapter() -> setUndo(false);
-			m_doc -> layerRemove(m_img, m_layer);
-			adapter() -> setUndo(true);
-		}
+			{
+				adapter() -> setUndo(false);
+				m_doc -> layerRemove(m_img, m_layer);
+				adapter() -> setUndo(true);
+			}
 
 	private:
 		KisDoc *m_doc;
@@ -235,34 +235,34 @@ namespace {
 
 	public:
 		LayerRmCmd(KisDoc *doc,
-				KisUndoAdapter *adapter,
-				KisImageSP img,
-				KisLayerSP layer) : super(i18n("Remove Layer"))
-		{
-			m_doc = doc;
-			m_adapter = adapter;
-			m_img = img;
-			m_layer = layer;
-			m_index = img -> index(layer);
-		}
+			   KisUndoAdapter *adapter,
+			   KisImageSP img,
+			   KisLayerSP layer) : super(i18n("Remove Layer"))
+			{
+				m_doc = doc;
+				m_adapter = adapter;
+				m_img = img;
+				m_layer = layer;
+				m_index = img -> index(layer);
+			}
 
 		virtual ~LayerRmCmd()
-		{
-		}
+			{
+			}
 
 		virtual void execute()
-		{
-			m_adapter -> setUndo(false);
-			m_doc -> layerRemove(m_img, m_layer);
-			m_adapter -> setUndo(true);
-		}
+			{
+				m_adapter -> setUndo(false);
+				m_doc -> layerRemove(m_img, m_layer);
+				m_adapter -> setUndo(true);
+			}
 
 		virtual void unexecute()
-		{
-			m_adapter -> setUndo(false);
-			m_doc -> layerAdd(m_img, m_layer, m_index);
-			m_adapter -> setUndo(true);
-		}
+			{
+				m_adapter -> setUndo(false);
+				m_doc -> layerAdd(m_img, m_layer, m_index);
+				m_adapter -> setUndo(true);
+			}
 
 	private:
 		KisDoc *m_doc;
@@ -283,44 +283,44 @@ namespace {
 			      const QString& name,
 			      Q_INT32 opacity,
 			      CompositeOp compositeOp) : super(i18n("Layer Property Changes"))
-		{
-			m_layer = layer;
-			m_img = img;
-			m_doc = doc;
-			m_adapter = adapter;
-			m_name = name;
-			m_opacity = opacity;
-			m_compositeOp = compositeOp;
-		}
+			{
+				m_layer = layer;
+				m_img = img;
+				m_doc = doc;
+				m_adapter = adapter;
+				m_name = name;
+				m_opacity = opacity;
+				m_compositeOp = compositeOp;
+			}
 
 		virtual ~LayerPropsCmd()
-		{
-		}
+			{
+			}
 
 	public:
 		virtual void execute()
-		{
-			QString name = m_layer -> name();
-			Q_INT32 opacity = m_layer -> opacity();
-			CompositeOp compositeOp = m_layer -> compositeOp();
+			{
+				QString name = m_layer -> name();
+				Q_INT32 opacity = m_layer -> opacity();
+				CompositeOp compositeOp = m_layer -> compositeOp();
 
-			m_adapter -> setUndo(false);
-			m_doc -> setLayerProperties(m_img,
-						    m_layer,
-						    m_opacity,
-						    m_compositeOp,
-						    m_name);
-			m_adapter -> setUndo(true);
-			m_name = name;
-			m_opacity = opacity;
-			m_compositeOp = compositeOp;
-			m_img -> notify();
-		}
+				m_adapter -> setUndo(false);
+				m_doc -> setLayerProperties(m_img,
+							    m_layer,
+							    m_opacity,
+							    m_compositeOp,
+							    m_name);
+				m_adapter -> setUndo(true);
+				m_name = name;
+				m_opacity = opacity;
+				m_compositeOp = compositeOp;
+				m_img -> notify();
+			}
 
 		virtual void unexecute()
-		{
-			execute();
-		}
+			{
+				execute();
+			}
 
 	private:
 		KisUndoAdapter *m_adapter;
@@ -387,9 +387,9 @@ bool KisDoc::initDoc()
 		dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
 	KoTemplateChooseDia::ReturnType ret =
-	    KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE,
-					"*.kra", i18n("Krita"),
-					dlgtype, "krita_template");
+		KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE,
+					    "*.kra", i18n("Krita"),
+					    dlgtype, "krita_template");
 	setUndo(false);
 
 	if (ret == KoTemplateChooseDia::Template) {
@@ -591,20 +591,20 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 				return 0;
 			switch(colorspace_int)
 			{
-					case IMAGE_TYPE_GREYA:
-					case IMAGE_TYPE_GREY:
-						colorspacename = "Grayscale + Alpha";
-						break;
-					case IMAGE_TYPE_RGB:
-					case IMAGE_TYPE_RGBA:
-						colorspacename = "RGBA";
-						break;
-					case IMAGE_TYPE_CMYK:
-					case IMAGE_TYPE_CMYKA:
-						colorspacename = "CMYKA";
-						break;
-					default:
-						return 0;
+			case IMAGE_TYPE_GREYA:
+			case IMAGE_TYPE_GREY:
+				colorspacename = "Grayscale + Alpha";
+				break;
+			case IMAGE_TYPE_RGB:
+			case IMAGE_TYPE_RGBA:
+				colorspacename = "RGBA";
+				break;
+			case IMAGE_TYPE_CMYK:
+			case IMAGE_TYPE_CMYKA:
+				colorspacename = "CMYKA";
+				break;
+			default:
+				return 0;
 			}
 		}
 		img = new KisImage(this, width, height, KisColorSpaceRegistry::singleton()->colorSpace(colorspacename), name);
@@ -1020,7 +1020,6 @@ void KisDoc::addImage(KisImageSP img)
 	if (m_undo)
 		addCommand(new KisCommandImageAdd(this, this, img));
 
-	img -> invalidate();
 	emit imageListUpdated();
 	emit layersUpdated(img);
 	emit docUpdated();
@@ -1088,6 +1087,9 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 
 void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
 {
+	kdDebug() << "paintContent: " << rect.x() << ", " << rect.y() << ", "
+		  << rect.width() << ", " << rect.height() << "\n";
+
 	Q_INT32 x;
 	Q_INT32 y;
 	Q_INT32 x1;
@@ -1096,18 +1098,23 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 	Q_INT32 y2;
 	Q_INT32 tileno;
 	KisFloatingSelectionSP selection;
-	KisStrategyColorSpaceSP colorstate;
+	KisStrategyColorSpaceSP colorStrategy;
 
-	if (!m_projection)
-		m_projection = m_images[0];
+	// Only happens if there's actually only one image. As soon as
+	// a second image is created, or selected, m_currentImage is
+	// set. Note that m_currentImage in KisDoc is a KisImage, while
+	// m_currentImage in KisImage is a KisPaintDevice.
 
-	if (m_projection) {
-		colorstate = m_projection -> colorStrategy();
+	if (!m_currentImage)
+		m_currentImage = m_images[0];
 
-		x1 = CLAMP(rect.x(), 0, m_projection -> width());
-		y1 = CLAMP(rect.y(), 0, m_projection -> height());
-		x2 = CLAMP(rect.x() + rect.width(), 0, m_projection -> width());
-		y2 = CLAMP(rect.y() + rect.height(), 0, m_projection -> height());
+	if (m_currentImage) {
+		colorStrategy = m_currentImage -> colorStrategy();
+
+		x1 = CLAMP(rect.x(), 0, m_currentImage -> width());
+		y1 = CLAMP(rect.y(), 0, m_currentImage -> height());
+		x2 = CLAMP(rect.x() + rect.width(), 0, m_currentImage -> width());
+		y2 = CLAMP(rect.y() + rect.height(), 0, m_currentImage -> height());
 
 		if (transparent)
 			painter.eraseRect(rect);
@@ -1119,31 +1126,47 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
  		QPaintDeviceMetrics m = QPaintDeviceMetrics(painter.device());
 
  		// XXX: also make dpi a config option?
- 		zoomX = (m.logicalDpiX() / m_projection -> xRes()) * zoomX;
- 		zoomY = (m.logicalDpiY() / m_projection -> yRes()) * zoomY;
+ 		zoomX = (m.logicalDpiX() / m_currentImage -> xRes()) * zoomX;
+ 		zoomY = (m.logicalDpiY() / m_currentImage -> yRes()) * zoomY;
 #endif
  		if (zoomX != 1.0 || zoomY != 1.0)
  			painter.scale(zoomX, zoomY);
 
+		// Flatten the layers onto the projection layer of the current image
 		for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
 			for (x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
-				if ((tileno = m_projection -> tileNum(x, y)) < 0)
+				if ((tileno = m_currentImage -> tileNum(x, y)) < 0)
 					continue;
 
-				m_projection -> validate(tileno);
+				m_currentImage -> renderToProjection(tileno);
 			}
 		}
 
+// 		// Render the non-contiguous selection, if present
+// 		// XXX: integrate this better with rendering pipeline. 
+// 		// It's presence here is a hack.
+// 		if (m_currentImage -> activeLayer() -> hasSelection()) {
+// 			for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
+// 				for (x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
+// 					if ((tileno = m_currentImage -> tileNum(x, y)) < 0)
+// 						continue;
+
+// 					//m_currentImage -> renderSelection(tileno);
+// 				}
+// 			}
+// 		}
+
+		// Render the current image onto a QPainter
 		for (y = y1; y < y2; y += RENDER_HEIGHT)
 			for (x = x1; x < x2; x += RENDER_WIDTH)
-				colorstate -> render(m_projection,
-                                                     painter,
-                                                     x, y,
-                                                     QMIN(x2 - x, RENDER_WIDTH),
-                                                     QMIN(y2 - y, RENDER_HEIGHT));
+				colorStrategy -> render(m_currentImage,
+							painter,
+							x, y,
+							QMIN(x2 - x, RENDER_WIDTH),
+							QMIN(y2 - y, RENDER_HEIGHT));
 
 		// Draw rectangular selections.
-		if ((selection = m_projection -> selection())) {
+		if ((selection = m_currentImage -> selection())) {
 			QPen pen(Qt::DotLine);
 			QRect rc = selection -> bounds();
 			QRect clip = selection -> clip();
@@ -1268,9 +1291,9 @@ void KisDoc::slotUpdate(KisImageSP, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32
 	emit docUpdated(rc);
 }
 
-void KisDoc::setProjection(KisImageSP img)
+void KisDoc::setCurrentImage(KisImageSP img)
 {
-	m_projection = img;
+	m_currentImage = img;
 }
 
 KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM devOpacity)
@@ -1295,7 +1318,6 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 
 				if (m_undo)
 					addCommand(new LayerAddCmd(this, this, img, layer));
-				img -> invalidate();
 				setModified(true);
 				layer -> setVisible(true);
 				emit layersUpdated(img);
@@ -1334,7 +1356,6 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img,
 
 				if (m_undo)
 					addCommand(new LayerAddCmd(this, this, img, layer));
-				img -> invalidate();
 				setModified(true);
 				layer -> setVisible(true);
 				emit layersUpdated(img);
@@ -1365,7 +1386,6 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisFloatingSele
 		if (m_undo)
 			addCommand(new LayerAddCmd(this, this, img, layer));
 
-		img -> invalidate(layer -> bounds());
 		layer -> move(selection -> x(), selection -> y());
 		layer -> setVisible(true);
 		emit layersUpdated(img);
@@ -1390,12 +1410,11 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, KisLayerSP l, Q_INT32 position)
 
 	if (m_undo)
 		addCommand(new LayerAddCmd(this, this, img, l));
-	img -> invalidate(l -> bounds());
 	l -> setVisible(true);
 	emit layersUpdated(img);
 
 	if (!m_undo)
-		emit projectionUpdated(img);
+		emit currentImageUpdated(img);
 
 	return l;
 }
@@ -1412,11 +1431,10 @@ void KisDoc::layerRemove(KisImageSP img, KisLayerSP layer)
 		if (m_undo)
 			addCommand(new LayerRmCmd(this, this, img, layer));
 
-		img -> invalidate(layer -> bounds());
 		emit layersUpdated(img);
 
 		if (!m_undo)
-			emit projectionUpdated(img);
+			emit currentImageUpdated(img);
 	}
 }
 
@@ -1475,7 +1493,6 @@ void KisDoc::layerNext(KisImageSP img, KisLayerSP layer)
 
 			if (layer) {
 				layer -> setVisible(false);
-				img -> invalidate(layer -> x(), layer -> y(), layer -> width(), layer -> height());
 			}
 		}
 
@@ -1515,7 +1532,6 @@ void KisDoc::layerPrev(KisImageSP img, KisLayerSP layer)
 
 			if (layer) {
 				layer -> setVisible(false);
-				img -> invalidate(layer -> x(), layer -> y(), layer -> width(), layer -> height());
 			}
 		}
 
@@ -1548,10 +1564,9 @@ void KisDoc::setLayerProperties(KisImageSP img,
 			layer -> setCompositeOp(compositeOp);
 		}
 
-		img -> invalidate();
 		setModified(true);
 		emit layersUpdated(img);
-		emit projectionUpdated(img);
+		emit currentImageUpdated(img);
 	}
 }
 
@@ -1581,8 +1596,8 @@ void KisDoc::clipboardDataChanged()
 
 		if (!qimg.isNull()) {
 			m_clipboard = new KisFloatingSelection(qimg.width(), qimg.height(),
-					KisColorSpaceRegistry::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
-					"KisDoc created clipboard selection");
+							       KisColorSpaceRegistry::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
+							       "KisDoc created clipboard selection");
 
 			m_clipboard -> fromImage(qimg);
 		}

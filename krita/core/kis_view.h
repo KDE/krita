@@ -303,7 +303,7 @@ private slots:
 	void mergeLinkedLayers();
 	void nBuilders(Q_INT32 size);
 	void saveLayerAsImage();
-	void projectionUpdated(KisImageSP img);
+	void currentImageUpdated(KisImageSP img);
 	void selectFGColor();
 	void selectBGColor();
 	void reverseFGAndBGColors();

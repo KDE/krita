@@ -46,7 +46,8 @@
 
 const int HEIGHT = 32;
 
-KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const char *name) : super(parent, name)
+KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const char *name)
+	: super(parent, name)
 {
         QVBoxLayout *vbox = new QVBoxLayout(this);
         KPopupMenu *mnu;

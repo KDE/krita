@@ -40,6 +40,13 @@
    tiles actually are in memory since it simply does not care. Here we
    would access tiles by their age, not by which layer etc.
 
+   KisTilemediator is a single that contains a reference to each and
+   every tile that Krita contains.
+
+   This is currently only productively used in the
+   KisTileMgr::tileCoord(const KisTileSP& tile, QPoint& coord)
+   method.
+
  */
 class KisTileMediator {
 public:

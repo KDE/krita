@@ -30,6 +30,8 @@
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
+#include "kis_layer.h"
+#include "kis_selection.h"
 #include "kis_view.h"
 #include "kis_tool_select_brush.h"
 #include "kis_brush.h"
@@ -48,7 +50,7 @@ KisToolSelectBrush::KisToolSelectBrush()
 	// important for this tool
 	setCursor(KisCursor::selectCursor());
 
-//         m_painter = 0;
+        m_painter = 0;
 	m_currentImage = 0;
 	m_optWidget = 0;
 }
@@ -74,11 +76,11 @@ void KisToolSelectBrush::buttonPress(KisButtonPressEvent *e)
 	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 
         if (e -> button() == QMouseEvent::LeftButton) {
-//                 m_mode = PAINT;
-//                 initPaint(e -> pos());
-//                 m_painter -> penAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
-//                 // XXX: get the rect that should be notified
-//                 m_currentImage -> notify( m_painter -> dirtyRect() );
+                m_mode = PAINT;
+                initPaint(e -> pos());
+                m_painter -> penAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
+                // XXX: get the rect that should be notified
+                m_currentImage -> notify( m_painter -> dirtyRect() );
          }
 }
 
@@ -99,39 +101,38 @@ void KisToolSelectBrush::move(KisMoveEvent *e)
 void KisToolSelectBrush::initPaint(const KisPoint & pos)
 {
 
-	if (!m_currentImage -> activeDevice()) return;
+	if (!m_currentImage -> activeLayer()) return;
 	m_dragStart = pos;
 	m_dragDist = 0;
 
-// 	// Create painter
-// 	KisPaintDeviceSP device;
-// 	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
-// 		if (m_painter)
-// 			delete m_painter;
-// 		m_painter = new KisPainter( device );
-// 		m_painter -> beginTransaction(i18n("pen"));
-// 	}
-
-// 	m_painter -> setPaintColor(m_subject -> fgColor());
-// 	m_painter -> setBrush(m_subject -> currentBrush());
-// 	m_painter -> setOpacity(m_opacity);
-// 	m_painter -> setCompositeOp(m_compositeOp);
-
+	// Create painter
+	KisLayerSP layer;
+	if (m_currentImage && (layer = m_currentImage -> activeLayer())) {
+		if (m_painter)
+			delete m_painter;
+		KisSelectionSP selection = layer -> selection();
+		m_painter = new KisPainter(selection.data());
+		m_painter -> beginTransaction(i18n("selectionbrush"));
+		m_painter -> setPaintColor(KoColor::white());
+		m_painter -> setBrush(m_subject -> currentBrush());
+		m_painter -> setOpacity(OPACITY_TRANSPARENT);
+		m_painter -> setCompositeOp(COMPOSITE_OVER);
+	}
 }
 
 void KisToolSelectBrush::endPaint() 
 {
 	m_mode = HOVER;
-	KisPaintDeviceSP device;
-	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
+	KisLayerSP layer;
+	if (m_currentImage && (layer = m_currentImage -> activeLayer())) {
 		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-// 		if (adapter && m_painter) {
-// 			// If painting in mouse release, make sure painter
-// 			// is destructed or end()ed
-// 			adapter -> addCommand(m_painter->endTransaction());
-// 		}
-// 		delete m_painter;
-// 		m_painter = 0;
+		if (adapter && m_painter) {
+			// If painting in mouse release, make sure painter
+			// is destructed or end()ed
+			adapter -> addCommand(m_painter->endTransaction());
+		}
+		delete m_painter;
+		m_painter = 0;
 
 	}
 }
@@ -142,10 +143,19 @@ void KisToolSelectBrush::paintLine(const KisPoint & pos1,
 				   const double xtilt,
 				   const double ytilt)
 {
-	if (!m_currentImage -> activeDevice()) return;
+	if (!m_currentImage -> activeLayer()) return;
 
-// 	m_dragDist = m_painter -> paintLine(PAINTOP_PEN, pos1, pos2, pressure, xtilt, ytilt, m_dragDist);
-// 	m_currentImage -> notify( m_painter -> dirtyRect() );
+	// XXX: make conform to latest version in kis_brush.cc
+
+
+	m_dragDist = m_painter -> paintLine(PAINTOP_PEN, 
+					    pos1, pressure, xtilt, ytilt,
+					    pos2, pressure, xtilt, ytilt,
+					    m_dragDist);
+
+
+
+	m_currentImage -> notify( m_painter -> dirtyRect() );
 	m_dragStart = pos2;
 }
 

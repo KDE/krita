@@ -91,7 +91,7 @@ void ColorRange::slotActivated()
 	dlgColorRange -> setSelection(selection);
 
 	if (dlgColorRange -> exec() == QDialog::Accepted) {
-		layer -> setActiveSelection(selection);
+		layer -> setSelection(selection);
 	}
 	delete dlgColorRange;
 }

@@ -83,7 +83,7 @@ namespace {
 		rc.setRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
 		m_device -> move(pos.x(), pos.y());
 		rc |= QRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
-		m_img -> invalidate(); //rc);
+//		m_img -> invalidate(); //rc);
 		m_controller -> updateCanvas(); //rc);
 	}
 }
@@ -159,7 +159,7 @@ void KisStrategyMove::drag(const QPoint& original)
 			rc = rc.unite(QRect(dev -> x(), dev -> y(), dev -> width(), dev -> height()));
 			rc.setX(QMAX(0, rc.x()));
 			rc.setY(QMAX(0, rc.y()));
-			img -> invalidate(rc);
+//			img -> invalidate(rc);
 			m_layerPosition = QPoint(dev -> x(), dev -> y());
  			m_dragStart = original;
 #if 0

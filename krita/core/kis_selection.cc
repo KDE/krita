@@ -21,13 +21,19 @@
 #include "kis_layer.h"
 #include "kis_selection.h"
 #include "kis_global.h"
+#include "kis_types.h"
+#include "kis_colorspace_registry.h"
+#include "kis_painter.h"
 
+// XXX: This needs to be a 8-bits one-channel color strategy that 
+// can compose with any other color strategy.
 KisSelection::KisSelection(KisLayerSP layer, const QString& name) 
-// 	: super(layer -> width(),
-// 		layer -> height(),
-// 		name)
+ 	: super(layer -> width(),
+		layer -> height(),
+		KisColorSpaceRegistry::singleton()->colorSpace("RGBA"),
+		name)
 {
-	m_layer = layer;
+	m_parentLayer = layer;
 }
 
 KisSelection::~KisSelection() 
@@ -67,4 +73,4 @@ void KisSelection::reset()
 // 	m_mask.fill(NOT_SELECTED);
 }
 
-// #include "kis_selection.moc"
+#include "kis_selection.moc"

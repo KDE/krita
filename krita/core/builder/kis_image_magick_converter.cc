@@ -257,7 +257,6 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 	DestroyImageList(images);
 	DestroyImageInfo(ii);
 	DestroyExceptionInfo(&ei);
-	m_img -> invalidate();
 	return KisImageBuilder_RESULT_OK;
 }
 

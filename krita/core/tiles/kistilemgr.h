@@ -124,26 +124,6 @@ public:
 	void tileMap(Q_INT32 tilenum, KisTileSP src);
 
         /**
-           XXX
-        */
-	KisTileSP invalidate(Q_INT32 tileno);
-
-        /**
-           XXX
-        */
-	KisTileSP invalidate(Q_INT32 xpix, Q_INT32 ypix);
-
-        /**
-           XXX
-        */
-	KisTileSP invalidate(KisTileSP tile, Q_INT32 xpix, Q_INT32 ypix);
-
-        /**
-           XXX
-        */
-	void invalidateTiles(KisTileSP tile);
-
-        /**
            Returns true if this KisTileMgr does not manage any
            tiles.
         */
@@ -186,12 +166,6 @@ public:
 	void tileCoord(const KisTileSP& tile, QPoint& coord);
 
         /**
-           Puts the x/y coordinates of the top left (?) corner
-           of tile in x and y.
-        */
-	void tileCoord(const KisTileSP& tile, Q_INT32 *x, Q_INT32 *y);
-
-        /**
            Returns the KisPixelData defined by the rectangle x1, y1,
            x2, y2. Depending on mode, this data is readable, writable
            or both.
@@ -200,10 +174,6 @@ public:
                                  Q_INT32 x2, Q_INT32 y2, 
                                  Q_INT32 mode);
 
-        /**
-           Not sure what this does... Perhaps write changed data if
-           owner, else mark something invalid. XXX
-        */
 	void releasePixelData(KisPixelDataSP pd);
 
 	void readPixelData(KisPixelDataSP pd);
@@ -222,7 +192,6 @@ private:
 	KisTileMgr& operator=(const KisTileMgr&);
 	void allocate(Q_INT32 ntiles);
 	void duplicate(Q_INT32 ntiles, KisTileMgr *tm);
-	KisTileSP invalidateTile(KisTileSP tile, Q_INT32 tilenum);
 
 private:
 

@@ -106,9 +106,6 @@ void KisTileMgr::attach(KisTileSP tile, Q_INT32 tilenum)
 	if (tile) {
 		KisScopedLock l(tile -> mutex());
 
-		if (tile -> shareCount() > 0 && !tile -> valid())
-			tile -> valid(true);
-
 		m_mediator -> attach(tile, this, tilenum);
 
 #if !defined(NDEBUG)
@@ -226,67 +223,6 @@ void KisTileMgr::tileMap(Q_INT32 tilenum, KisTileSP src)
 	attach(src, tilenum);
 }
 
-KisTileSP KisTileMgr::invalidate(Q_INT32 tileno)
-{
-	KisTileSP t;
-
-	if (tileno < 0)
-		return 0;
-
-	t = tile(tileno, TILEMODE_NONE);
-	return invalidateTile(t, tileno);
-}
-
-KisTileSP KisTileMgr::invalidate(Q_INT32 xpix, Q_INT32 ypix)
-{
-	KisTileSP t;
-	Q_INT32 tilenum = tileNum(xpix, ypix);
-
-	if (tilenum < 0)
-		return 0;
-
-	t = tile(tilenum, TILEMODE_NONE);
-	return invalidateTile(t, tilenum);
-}
-
-KisTileSP KisTileMgr::invalidate(KisTileSP tile, Q_INT32 xpix, Q_INT32 ypix)
-{
-	Q_INT32 tilenum;
-
-	if (!tile)
-		return tile;
-
-	tilenum = tileNum(xpix, ypix);
-
-	if (tilenum < 0)
-		return tile;
-
-	tile = invalidateTile(tile, tilenum);
-	return tile;
-}
-
-void KisTileMgr::invalidateTiles(KisTileSP top)
-{
-	double x;
-	double y;
-	Q_INT32 row;
-	Q_INT32 col;
-	Q_INT32 num;
-	Q_INT32 tilenum;
-
-	if (!top || m_tiles.empty())
-		return;
-
-	tilenum = m_mediator -> tileNum(top, this);
-	col = tilenum % m_ntileCols;
-	row = tilenum / m_ntileCols;
-	x = (col * TILE_WIDTH + top -> width() / 2.0) / static_cast<double>(width());
-	y = (row * TILE_HEIGHT + top -> height() / 2.0) / static_cast<double>(height());
-	col = static_cast<Q_INT32>(x * width() / TILE_WIDTH);
-	row = static_cast<Q_INT32>(y * height() / TILE_HEIGHT);
-	num = row * m_ntileCols + col;
-	m_tiles[num] = invalidateTile(m_tiles[num], num);
-}
 
 Q_UINT32 KisTileMgr::memSize()
 {
@@ -305,17 +241,6 @@ void KisTileMgr::tileCoord(const KisTileSP& tile, QPoint& coord)
 
 	coord.setX(TILE_WIDTH * (tilenum % m_ntileCols));
 	coord.setY(TILE_HEIGHT * (tilenum / m_ntileCols));
-}
-
-void KisTileMgr::tileCoord(const KisTileSP& tile, Q_INT32 *x, Q_INT32 *y)
-{
-	if (x && y) {
-		QPoint coord;
-
-		tileCoord(tile, coord);
-		*x = coord.x();
-		*y = coord.y();
-	}
 }
 
 KisPixelDataSP KisTileMgr::pixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q_INT32 mode)
@@ -377,9 +302,6 @@ void KisTileMgr::releasePixelData(KisPixelDataSP pd)
 		if (pd -> mode & TILEMODE_WRITE)
 			writePixelData(pd);
 	} else {
-		if (pd -> mode & TILEMODE_WRITE)
-			pd -> tile -> valid(false);
-
 		pd -> tile -> release();
 	}
 }
@@ -463,8 +385,6 @@ void KisTileMgr::writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, 
 				dst += dststride;
 				src += stride;
 			}
-
-			t -> valid(false);
 			t -> release();
 		}
 	}
@@ -553,8 +473,6 @@ void KisTileMgr::duplicate(Q_INT32 ntiles, KisTileMgr *tm)
 				memset(t -> data(), 0, t -> size());
 				t -> release();
 			}
-
-			t -> valid(false);
 			attach(t, k);
 		}
 	}
@@ -573,16 +491,5 @@ Q_INT32 KisTileMgr::tileNum(Q_UINT32 xpix, Q_UINT32 ypix) const
 	col = xpix / TILE_WIDTH;
 	num = row * m_ntileCols + col;
 	return num;
-}
-
-KisTileSP KisTileMgr::invalidateTile(KisTileSP tile, Q_INT32)
-{
-	KisScopedLock l(tile -> mutex());
-
-	if (!tile -> valid())
-		return 0;
-
-	tile -> valid(false);
-	return tile;
 }
 

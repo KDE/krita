@@ -53,7 +53,6 @@ KisTile::KisTile(KisTile& rhs) : super(rhs)
 		init(rhs.m_depth, rhs.m_cache, rhs.m_swap);
 		m_width = rhs.m_width;
 		m_height = rhs.m_height;
-		m_valid = rhs.valid();
 		m_hints = rhs.m_hints;
 		allocate();
 		rhs.shareRelease();
@@ -181,7 +180,6 @@ void KisTile::setRowHint(Q_INT32 row, KisTile::drawingHints hint)
 void KisTile::init(Q_INT32 depth, KisTileCacheInterface *cache, KisTileSwapInterface *swap)
 {
 	m_dirty = false;
-	m_valid = false;
 	m_width = TILE_WIDTH;
 	m_height = TILE_HEIGHT;
 	m_depth = depth;

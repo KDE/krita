@@ -220,7 +220,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         dcopObject();
         connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
         connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
-        connect(m_doc, SIGNAL(projectionUpdated(KisImageSP)), SLOT(projectionUpdated(KisImageSP)));
+        connect(m_doc, SIGNAL(currentImageUpdated(KisImageSP)), SLOT(currentImageUpdated(KisImageSP)));
         connect(this, SIGNAL(embeddImage(const QString&)), SLOT(slotEmbedImage(const QString&)));
         connect(m_imgBuilderMgr, SIGNAL(size(Q_INT32)), SLOT(nBuilders(Q_INT32)));
         setupTools();
@@ -865,9 +865,9 @@ void KisView::paintView(const KisRect& r)
 
                                 gc.translate((canvasXOffset() - horzValue()) / zoom(), (canvasYOffset() - vertValue()) / zoom());
 
-                                m_doc -> setProjection(img);
+                                m_doc -> setCurrentImage(img);
                                 m_doc -> paintContent(gc, wr, false, 1.0, 1.0);
-				m_doc -> setProjection(0);
+				m_doc -> setCurrentImage(0);
 
                                 if (currentTool())
                                         currentTool() -> paint(gc, wr);
@@ -1001,7 +1001,6 @@ void KisView::paste_into()
                 if (layer) {
                         layer -> setX(0);
                         layer -> setY(0);
-                        img -> invalidate(layer -> bounds());
                         updateCanvas(layer -> bounds());
                 }
         }
@@ -1034,7 +1033,6 @@ void KisView::removeSelection()
                                 m_adapter -> addCommand(gc.end());
                                 m_adapter -> endMacro();
                                 m_doc -> setModified(true);
-                                img -> invalidate(rc);
                                 updateCanvas(ur);
                         }
                 }
@@ -1125,7 +1123,6 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
                         gc.fillRect(rc, c, opacity);
                         m_adapter -> addCommand(gc.endTransaction());
                         gc.end();
-                        img -> invalidate(ur);
                         m_doc -> setModified(true);
                         updateCanvas(ur);
                 }
@@ -1563,7 +1560,6 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
                                 m_layerBox -> setCurrentItem(img -> index(layer));
                         }
 
-                        current -> invalidate();
                         resizeEvent(0);
                         updateCanvas();
                 } else {
@@ -1593,7 +1589,6 @@ void KisView::rotateLayer180()
 
         layersUpdated();
         resizeEvent(0);
-        currentImg() -> invalidate();
         updateCanvas();
 }
 
@@ -1610,7 +1605,6 @@ void KisView::rotateLayerLeft90()
 
         layersUpdated();
         resizeEvent(0);
-        currentImg() -> invalidate();
         updateCanvas();
 
 }
@@ -1629,7 +1623,6 @@ void KisView::rotateLayerRight90()
 
         layersUpdated();
         resizeEvent(0);
-        currentImg() -> invalidate();
         updateCanvas();
 
 }
@@ -1648,7 +1641,6 @@ void KisView::mirrorLayerX()
         layer->mirrorX();
 	m_doc -> setModified(true);
         layersUpdated();
-        currentImg() -> invalidate();
         updateCanvas();
 }
 
@@ -1661,7 +1653,6 @@ void KisView::mirrorLayerY()
         layer->mirrorY();
 	m_doc -> setModified(true);
         layersUpdated();
-        currentImg() -> invalidate();
         updateCanvas();
 }
 
@@ -1677,7 +1668,6 @@ void KisView::scaleLayer(double sx, double sy)
 	m_doc -> setModified(true);
 	layersUpdated();
 	resizeEvent(0);
-	currentImg() -> invalidate();
 	updateCanvas();
 }
 
@@ -1908,9 +1898,9 @@ void KisView::print(KPrinter& printer)
 			printer.newPage();
 		img = m_doc -> imageNum(*it - 1);
 		Q_ASSERT(img);
-		m_doc -> setProjection(img);
+		m_doc -> setCurrentImage(img);
 		m_doc -> paintContent(gc, img -> bounds());
-		m_doc -> setProjection(0);
+		m_doc -> setCurrentImage(0);
 	}
 }
 
@@ -2204,7 +2194,6 @@ void KisView::layerToggleVisible()
 
                 if (layer) {
                         layer -> setVisible(!layer -> visible());
-                        img -> invalidate();
                         m_doc -> setModified(true);
                         resizeEvent(0);
                         layersUpdated();
@@ -2536,7 +2525,7 @@ void KisView::setupCanvas()
 	QObject::connect(m_canvas, SIGNAL(gotDropEvent(QDropEvent*)), this, SLOT(canvasGotDropEvent(QDropEvent*)));
 }
 
-void KisView::projectionUpdated(KisImageSP img)
+void KisView::currentImageUpdated(KisImageSP img)
 {
         if (img == currentImg())
                 canvasRefresh();
@@ -2640,7 +2629,6 @@ void KisView::resizeLayer(Q_INT32 w, Q_INT32 h)
 		if (layer) {
 			layer -> resize(w, h);
 			m_doc -> setModified(true);
-			img -> invalidate();
 			layersUpdated();
 			resizeEvent(0);
 			canvasRefresh();
@@ -2661,7 +2649,6 @@ void KisView::layerResizeToImage()
 
                         layer -> resize(img -> width(), img -> height());
 			m_doc -> setModified(true);
-                        img -> invalidate();
                         layersUpdated();
                         resizeEvent(0);
                         canvasRefresh();
@@ -2722,7 +2709,6 @@ void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h)
 	currentImg() -> resize(w, h);
 	m_doc -> setModified(true);
 
-	currentImg() -> invalidate();
 	resizeEvent(0);
 	layersUpdated();
 	canvasRefresh();
@@ -2735,7 +2721,6 @@ void KisView::scaleCurrentImage(double sx, double sy)
 	currentImg() -> scale(sx, sy);
 	m_doc -> setModified(true);
 
-	currentImg() -> invalidate();
 	resizeEvent(0);
 	layersUpdated();
 	canvasRefresh();

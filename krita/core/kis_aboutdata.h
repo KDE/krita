@@ -49,6 +49,7 @@ KAboutData * newKritaAboutData()
 	aboutData->addAuthor("Roger Larsson", 0, "roger.larsson@norran.net");
 	aboutData->addAuthor("Bart Coppens", 0, "kde@bartcoppens.be");
 	aboutData->addAuthor("Casper Boemann", 0, "cbr@boemann.dk");
+	aboutData->addAuthor("Dirk Schoenberger", 0, "dirk.schoenberger@sz-online.de");
 	return aboutData;
 }
 

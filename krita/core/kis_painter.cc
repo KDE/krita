@@ -656,21 +656,21 @@ void KisPainter::paintPolyline (const enumPaintOp paintOp,
                                 const QValueVector <KisPoint> &points,
                                 int index, int numPoints)
 {
-    if (index >= (int) points.count ())
-        return;
+	if (index >= (int) points.count ())
+		return;
 
-    if (numPoints < 0)
-        numPoints = points.count ();
+	if (numPoints < 0)
+		numPoints = points.count ();
 
-    if (index + numPoints > (int) points.count ())
-        numPoints = points.count () - index;
+	if (index + numPoints > (int) points.count ())
+		numPoints = points.count () - index;
 
 
-    for (int i = index; i < index + numPoints - 1; i++)
-    {
-        paintLine (paintOp, points [index], 0/*pressure*/, 0, 0, points [index + 1],
-                   0/*pressure*/, 0, 0);
-    }
+	for (int i = index; i < index + numPoints - 1; i++)
+	{
+		paintLine (paintOp, points [index], 0/*pressure*/, 0, 0, points [index + 1],
+			   0/*pressure*/, 0, 0);
+	}
 }
 
 double KisPainter::paintBezierCurve(const enumPaintOp paintOp,
@@ -727,44 +727,44 @@ void KisPainter::paintRect (const enumPaintOp paintOp,
 			    const double xTilt,
 			    const double yTilt)
 {
-    KoRect normalizedRect = KisRect (startPoint, endPoint).normalize ();
+	KoRect normalizedRect = KisRect (startPoint, endPoint).normalize ();
 
-    paintLine (paintOp,
-               normalizedRect.topLeft (),
-	       pressure,
-	       xTilt,
-	       yTilt,
-               normalizedRect.topRight (),
-               pressure,
-               xTilt, 
-	       yTilt);
-    paintLine (paintOp,
-               normalizedRect.topRight (),
-	       pressure,
-	       xTilt,
-	       yTilt,
-               normalizedRect.bottomRight (),
-               pressure,
-               xTilt,
-	       yTilt);
-    paintLine (paintOp,
-               normalizedRect.bottomRight (),
-	       pressure,
-	       xTilt,
-	       yTilt,
-               normalizedRect.bottomLeft (),
-               pressure,
-               xTilt,
-	       yTilt);
-    paintLine (paintOp,
-               normalizedRect.bottomLeft (),
-	       pressure,
-	       xTilt,
-	       yTilt,
-               normalizedRect.topLeft (),
-               pressure,
-               xTilt,
-	       yTilt);
+	paintLine (paintOp,
+		   normalizedRect.topLeft (),
+		   pressure,
+		   xTilt,
+		   yTilt,
+		   normalizedRect.topRight (),
+		   pressure,
+		   xTilt, 
+		   yTilt);
+	paintLine (paintOp,
+		   normalizedRect.topRight (),
+		   pressure,
+		   xTilt,
+		   yTilt,
+		   normalizedRect.bottomRight (),
+		   pressure,
+		   xTilt,
+		   yTilt);
+	paintLine (paintOp,
+		   normalizedRect.bottomRight (),
+		   pressure,
+		   xTilt,
+		   yTilt,
+		   normalizedRect.bottomLeft (),
+		   pressure,
+		   xTilt,
+		   yTilt);
+	paintLine (paintOp,
+		   normalizedRect.bottomLeft (),
+		   pressure,
+		   xTilt,
+		   yTilt,
+		   normalizedRect.topLeft (),
+		   pressure,
+		   xTilt,
+		   yTilt);
 }
 
 
@@ -778,17 +778,17 @@ void KisPainter::paintEllipsePixel (const enumPaintOp paintOp,
                                     int xc, int yc, int x1, int y1, int x2, int y2,
                                     const double pressure)
 {
-    if (invert)
-    {
-        paintAt (QPoint (y1 + xc, x1 + yc), pressure, 0, 0);
-        paintAt (QPoint (y2 + xc, x2 + yc), pressure, 0, 0);
+	if (invert)
+	{
+		paintAt (QPoint (y1 + xc, x1 + yc), pressure, 0, 0);
+		paintAt (QPoint (y2 + xc, x2 + yc), pressure, 0, 0);
 
-    }
-    else
-    {
-        paintAt (QPoint (x1 + xc, y1 + yc), pressure, 0, 0);
-        paintAt (QPoint (x2 + xc, y2 + yc), pressure, 0, 0);
-    }
+	}
+	else
+	{
+		paintAt (QPoint (x1 + xc, y1 + yc), pressure, 0, 0);
+		paintAt (QPoint (x2 + xc, y2 + yc), pressure, 0, 0);
+	}
 }
 
 void KisPainter::paintEllipseSymmetry (const enumPaintOp paintOp,
@@ -796,25 +796,25 @@ void KisPainter::paintEllipseSymmetry (const enumPaintOp paintOp,
                                        int x, int y, int xc, int yc,
                                        const double pressure)
 {
-    int x_start, x_end, x_out;
-    int y_start, y_end, y_out;
+	int x_start, x_end, x_out;
+	int y_start, y_end, y_out;
 
-    x_start = (int) (x * ratio);
-    x_end = (int) ((x + 1) * ratio);
-    y_start = (int) (y * ratio);
-    y_end = (int) ((y + 1) * ratio);
+	x_start = (int) (x * ratio);
+	x_end = (int) ((x + 1) * ratio);
+	y_start = (int) (y * ratio);
+	y_end = (int) ((y + 1) * ratio);
 
-    for (x_out = x_start; x_out < x_end; x_out++)
-    {
-        paintEllipsePixel (paintOp, invert, xc, yc, -x_out, -y, x_out, -y, pressure);
-        paintEllipsePixel (paintOp, invert, xc, yc, -x_out, y, x_out, y, pressure);
-    }
+	for (x_out = x_start; x_out < x_end; x_out++)
+	{
+		paintEllipsePixel (paintOp, invert, xc, yc, -x_out, -y, x_out, -y, pressure);
+		paintEllipsePixel (paintOp, invert, xc, yc, -x_out, y, x_out, y, pressure);
+	}
 
-    for (y_out = y_start; y_out < y_end; y_out++)
-    {
-        paintEllipsePixel (paintOp, invert, xc, yc, -y_out, -x, y_out, -x, pressure);
-        paintEllipsePixel (paintOp, invert, xc, yc, -y_out, x, y_out, x, pressure);
-    }
+	for (y_out = y_start; y_out < y_end; y_out++)
+	{
+		paintEllipsePixel (paintOp, invert, xc, yc, -y_out, -x, y_out, -x, pressure);
+		paintEllipsePixel (paintOp, invert, xc, yc, -y_out, x, y_out, x, pressure);
+	}
 }
 
 void KisPainter::paintEllipseInternal (const enumPaintOp paintOp,
@@ -822,31 +822,31 @@ void KisPainter::paintEllipseInternal (const enumPaintOp paintOp,
                                        int xc, int yc, int radius,
                                        const double pressure)
 {
-    int x, y, d;
-    unsigned char mask, exist_color;
+	int x, y, d;
+	unsigned char mask, exist_color;
 
-    y = radius;
-    d = 3 - 2 * radius;
+	y = radius;
+	d = 3 - 2 * radius;
 
-    for (x = 0; x < y;)
-    {
-        paintEllipseSymmetry (paintOp, ratio, invert, x, y, xc, yc, pressure);
+	for (x = 0; x < y;)
+	{
+		paintEllipseSymmetry (paintOp, ratio, invert, x, y, xc, yc, pressure);
 
-        if  (d < 0)
-        {
-                d += (4 * x + 6);
-        }
-        else
-        {
-                d += (4 * (x - y) + 10);
-                y--;
-        }
+		if  (d < 0)
+		{
+			d += (4 * x + 6);
+		}
+		else
+		{
+			d += (4 * (x - y) + 10);
+			y--;
+		}
 
-        x++;
-    }
+		x++;
+	}
 
-    if (x == y)
-        paintEllipseSymmetry (paintOp, ratio, invert, x, y, xc, yc, pressure);
+	if (x == y)
+		paintEllipseSymmetry (paintOp, ratio, invert, x, y, xc, yc, pressure);
 }
 
 void KisPainter::paintEllipse (const enumPaintOp paintOp,
@@ -891,38 +891,38 @@ void KisPainter::paintEllipse (const enumPaintOp paintOp,
 
 	paintBezierCurve(paintOp, p9, pressure, xTilt, yTilt, p10, p11, p0, pressure, xTilt, yTilt, distance);
 #else
-    QRect normalizedRect = QRect (startPoint.floorQPoint(), endPoint.floorQPoint()).normalize ();
+	QRect normalizedRect = QRect (startPoint.floorQPoint(), endPoint.floorQPoint()).normalize ();
 
-    const int x1 = normalizedRect.left (),
-              x2 = normalizedRect.right (),
-              y1 = normalizedRect.top (),
-              y2 = normalizedRect.bottom ();
+	const int x1 = normalizedRect.left (),
+		x2 = normalizedRect.right (),
+		y1 = normalizedRect.top (),
+		y2 = normalizedRect.bottom ();
 
-    const double ratio = (double) (x2 - x1 + 1) / (y2 - y1 + 1);
-    bool invert = false;
+	const double ratio = (double) (x2 - x1 + 1) / (y2 - y1 + 1);
+	bool invert = false;
 
-    if (x1 == x2 || y1 == y2)
-    {
-        paintLine (paintOp,
-                   normalizedRect.topLeft (),
-		   pressure, 0, 0,
-		   normalizedRect.bottomLeft (),
-                   pressure, 0, 0);
-        return;
-    }
+	if (x1 == x2 || y1 == y2)
+	{
+		paintLine (paintOp,
+			   normalizedRect.topLeft (),
+			   pressure, 0, 0,
+			   normalizedRect.bottomLeft (),
+			   pressure, 0, 0);
+		return;
+	}
 
-    if (x2 - x1 < y2 - y1)
-    {
-        paintEllipseInternal (paintOp, 1 / ratio, true,
-                              (x1 + x2) / 2, (y1 + y2) / 2, (x2 - x1 + 1) / 2,
-                              pressure);
-    }
-    else
-    {
-        paintEllipseInternal (paintOp, ratio, false,
-                              (x1 + x2) / 2, (y1 + y2) / 2, (y2 - y1 + 1) / 2,
-                              pressure);
-    }
+	if (x2 - x1 < y2 - y1)
+	{
+		paintEllipseInternal (paintOp, 1 / ratio, true,
+				      (x1 + x2) / 2, (y1 + y2) / 2, (x2 - x1 + 1) / 2,
+				      pressure);
+	}
+	else
+	{
+		paintEllipseInternal (paintOp, ratio, false,
+				      (x1 + x2) / 2, (y1 + y2) / 2, (y2 - y1 + 1) / 2,
+				      pressure);
+	}
 #endif
 }
 
@@ -1068,9 +1068,9 @@ void KisPainter::duplicateAt(const KisPoint &pos, const double pressure, const d
 
 
 void KisPainter::penAt(const KisPoint & pos,
-			 const double pressure,
-                         const double /*xTilt*/,
-                         const double /*yTilt*/)
+		       const double pressure,
+		       const double /*xTilt*/,
+		       const double /*yTilt*/)
 {
 
 	if (!m_device) return;
@@ -1351,7 +1351,7 @@ void KisPainter::applyConvolutionColorTransformation(KisMatrix3x3* matrix)
 	{
 		KisIteratorPixel curIt = curLit.begin();
 		KisIteratorPixel afterIt = afterLit.begin();
-	// Corner : left top
+		// Corner : left top
 		KisPixelRepresentation currentPixel = curIt;
 		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldValue();
 		pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
@@ -1365,11 +1365,11 @@ void KisPainter::applyConvolutionColorTransformation(KisMatrix3x3* matrix)
 			int sum = matrix[i][1][1] + matrix[i][1][2] + matrix[i][2][1] + matrix[i][2][2];
 			sum = (sum == 0) ? 1 : sum;
 			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
-					+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
-					+ pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
-					+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] ) * matrix[i].sum() / matrix[i].factor() / sum + matrix[i].offset() ) );
+									  + pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
+									  + pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
+									  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] ) * matrix[i].sum() / matrix[i].factor() / sum + matrix[i].offset() ) );
 		}
-	// Border : top
+		// Border : top
 		int sums[depth];
 		for(int i = 0; i < depth; i++)
 		{
@@ -1388,113 +1388,113 @@ void KisPainter::applyConvolutionColorTransformation(KisMatrix3x3* matrix)
 			for(int i = 0; i < depth; i++)
 			{
 				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
-						+ pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
-						+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
-						+ pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ][i] * matrix[i][2][0]
-						+ pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
-						+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] ) * matrix[i].sum()
-						/ matrix[i].factor() / sums[i] + matrix[i].offset() ) );
+										  + pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
+										  + pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
+										  + pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ][i] * matrix[i][2][0]
+										  + pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
+										  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] ) * matrix[i].sum()
+								   / matrix[i].factor() / sums[i] + matrix[i].offset() ) );
 			}
 		}
-	// Corner : right top
+		// Corner : right top
 		currentPixel = curIt;
 		for(int i = 0; i < depth; i++)
 		{
 			int sum = matrix[i][1][1] + matrix[i][1][0] + matrix[i][2][0] + matrix[i][2][1];
 			sum = (sum == 0) ? 1 : sum;
 			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
-					+ pixels[ CONVOLUTION_PIXEL_RIGHT - 1 ][i] * matrix[i][1][0]
-					+ pixels[ CONVOLUTION_PIXEL_BOTTOM - 1 ][i] * matrix[i][2][0]
-					+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][2][1] ) * matrix[i].sum() / matrix[i].factor() / sum + matrix[i].offset() ) );
+									  + pixels[ CONVOLUTION_PIXEL_RIGHT - 1 ][i] * matrix[i][1][0]
+									  + pixels[ CONVOLUTION_PIXEL_BOTTOM - 1 ][i] * matrix[i][2][0]
+									  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][2][1] ) * matrix[i].sum() / matrix[i].factor() / sum + matrix[i].offset() ) );
 		}
 	}
 	// Body
-		int rightSums[depth];
-		int leftSums[depth];
-		for(int i = 0; i < depth; i++)
-		{
-			rightSums[i] = matrix[i][1][1] + matrix[i][0][1] + matrix[i][0][2] + matrix[i][1][2] + matrix[i][2][1] + matrix[i][2][2];
-			rightSums[i] = (rightSums[i] == 0) ? 1 : rightSums[i];
-			leftSums[i] = matrix[i][1][1] + matrix[i][0][0] + matrix[i][0][1] + matrix[i][1][0] + matrix[i][2][0] + matrix[i][2][1];
-			leftSums[i] = (leftSums[i] == 0) ? 1 : leftSums[i];
-		}
-		++curLit;
-		++afterLit;
-		KisIteratorLinePixel endLit = m_device->iteratorPixelSelectionEnd( m_transaction );
-		while( curLit < endLit )
-		{
-			KisIteratorPixel beforeIt = beforeLit.begin();
-			KisIteratorPixel curIt = curLit.begin();
-			KisIteratorPixel afterIt = afterLit.begin();
-			// Body : left border
-				pixels[ CONVOLUTION_PIXEL_TOP ] = beforeIt.oldValue();
-				++beforeIt;
-				pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
-				++beforeIt;
-				KisPixelRepresentation currentPixel = curIt;
-				pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldValue();
-				pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
-				++curIt;
-				pixels[ CONVOLUTION_PIXEL_BOTTOM ] = afterIt.oldValue();
-				++afterIt;
-				pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
-				++afterIt;
-				for(int i = 0; i < depth; i++)
-				{
-					currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
-							+ pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
-							+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
-							+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
-							+ pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
-							+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] )
-							* matrix[i].sum() / matrix[i].factor() / rightSums[i] + matrix[i].offset() ) );
-				}
-			// Body : body
-				KisIteratorPixel endIt = curLit.end();
-				while( curIt < endIt )
-				{
-					currentPixel = curIt;
-					++curIt;
-					memmove( pixels, pixels + 1, 9 * sizeof(KisPixelRepresentationReadOnly));
-					pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
-					++beforeIt;
-					pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
-					pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
-					++afterIt;
-					for(int i = 0; i < depth; i++)
-					{
-						currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
-								+ pixels[ CONVOLUTION_PIXEL_LEFTTOP ][i] * matrix[i][0][0]
-								+ pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
-								+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
-								+ pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
-								+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
-								+ pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ][i] * matrix[i][2][0]
-								+ pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
-								+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] ) / matrix[i].factor()
-								+ matrix[i].offset() ) );
-					}
-				}
-			// Body : right
-				currentPixel = curIt;
-				for(int i = 0; i < depth; i++)
-				{
-					currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
-							+ pixels[ CONVOLUTION_PIXEL_TOP - 1 ][i] * matrix[i][0][0]
-							+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP - 1 ][i] * matrix[i][0][1]
-							+ pixels[ CONVOLUTION_PIXEL_RIGHT - 1 ][i] * matrix[i][1][0]
-							+ pixels[ CONVOLUTION_PIXEL_BOTTOM - 1 ][i] * matrix[i][2][0]
-							+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][2][1] )
-							*  matrix[i].sum() / matrix[i].factor() / leftSums[i] + matrix[i].offset() ) );
-				}
-			++beforeLit;
-			++curLit;
-			++afterLit;
-		}
+	int rightSums[depth];
+	int leftSums[depth];
+	for(int i = 0; i < depth; i++)
+	{
+		rightSums[i] = matrix[i][1][1] + matrix[i][0][1] + matrix[i][0][2] + matrix[i][1][2] + matrix[i][2][1] + matrix[i][2][2];
+		rightSums[i] = (rightSums[i] == 0) ? 1 : rightSums[i];
+		leftSums[i] = matrix[i][1][1] + matrix[i][0][0] + matrix[i][0][1] + matrix[i][1][0] + matrix[i][2][0] + matrix[i][2][1];
+		leftSums[i] = (leftSums[i] == 0) ? 1 : leftSums[i];
+	}
+	++curLit;
+	++afterLit;
+	KisIteratorLinePixel endLit = m_device->iteratorPixelSelectionEnd( m_transaction );
+	while( curLit < endLit )
 	{
 		KisIteratorPixel beforeIt = beforeLit.begin();
 		KisIteratorPixel curIt = curLit.begin();
-	// Corner : left bottom
+		KisIteratorPixel afterIt = afterLit.begin();
+		// Body : left border
+		pixels[ CONVOLUTION_PIXEL_TOP ] = beforeIt.oldValue();
+		++beforeIt;
+		pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
+		++beforeIt;
+		KisPixelRepresentation currentPixel = curIt;
+		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
+		++curIt;
+		pixels[ CONVOLUTION_PIXEL_BOTTOM ] = afterIt.oldValue();
+		++afterIt;
+		pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
+		++afterIt;
+		for(int i = 0; i < depth; i++)
+		{
+			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
+									  + pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
+									  + pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
+									  + pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
+									  + pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
+									  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] )
+							   * matrix[i].sum() / matrix[i].factor() / rightSums[i] + matrix[i].offset() ) );
+		}
+		// Body : body
+		KisIteratorPixel endIt = curLit.end();
+		while( curIt < endIt )
+		{
+			currentPixel = curIt;
+			++curIt;
+			memmove( pixels, pixels + 1, 9 * sizeof(KisPixelRepresentationReadOnly));
+			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
+			++beforeIt;
+			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
+			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
+			++afterIt;
+			for(int i = 0; i < depth; i++)
+			{
+				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
+										  + pixels[ CONVOLUTION_PIXEL_LEFTTOP ][i] * matrix[i][0][0]
+										  + pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
+										  + pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
+										  + pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
+										  + pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
+										  + pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ][i] * matrix[i][2][0]
+										  + pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
+										  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] ) / matrix[i].factor()
+								   + matrix[i].offset() ) );
+			}
+		}
+		// Body : right
+		currentPixel = curIt;
+		for(int i = 0; i < depth; i++)
+		{
+			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
+									  + pixels[ CONVOLUTION_PIXEL_TOP - 1 ][i] * matrix[i][0][0]
+									  + pixels[ CONVOLUTION_PIXEL_RIGHTTOP - 1 ][i] * matrix[i][0][1]
+									  + pixels[ CONVOLUTION_PIXEL_RIGHT - 1 ][i] * matrix[i][1][0]
+									  + pixels[ CONVOLUTION_PIXEL_BOTTOM - 1 ][i] * matrix[i][2][0]
+									  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][2][1] )
+							   *  matrix[i].sum() / matrix[i].factor() / leftSums[i] + matrix[i].offset() ) );
+		}
+		++beforeLit;
+		++curLit;
+		++afterLit;
+	}
+	{
+		KisIteratorPixel beforeIt = beforeLit.begin();
+		KisIteratorPixel curIt = curLit.begin();
+		// Corner : left bottom
 		pixels[ CONVOLUTION_PIXEL_TOP ] = beforeIt.oldValue();
 		++beforeIt;
 		pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
@@ -1508,12 +1508,12 @@ void KisPainter::applyConvolutionColorTransformation(KisMatrix3x3* matrix)
 			int sum = matrix[i][1][1] + matrix[i][0][1] + matrix[i][0][2] + matrix[i][1][2];
 			sum = (sum == 0) ? 1 : sum;
 			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
-					+ pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
-					+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
-					+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2] ) * matrix[i].sum()
-					/ matrix[i].factor() / sum + matrix[i].offset() ) );
+									  + pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
+									  + pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
+									  + pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2] ) * matrix[i].sum()
+							   / matrix[i].factor() / sum + matrix[i].offset() ) );
 		}
-	// Border : bottom
+		// Border : bottom
 		int sums[depth];
 		for(int i = 0; i < depth; i++)
 		{
@@ -1532,25 +1532,25 @@ void KisPainter::applyConvolutionColorTransformation(KisMatrix3x3* matrix)
 			for(int i = 0; i < depth; i++)
 			{
 				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
-						+ pixels[ CONVOLUTION_PIXEL_LEFTTOP ][i] * matrix[i][0][0]
-						+ pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
-						+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
-						+ pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
-						+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2] ) * matrix[i].sum()
-						/ matrix[i].factor() / sums[i] + matrix[i].offset() ) );
+										  + pixels[ CONVOLUTION_PIXEL_LEFTTOP ][i] * matrix[i][0][0]
+										  + pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
+										  + pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
+										  + pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
+										  + pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2] ) * matrix[i].sum()
+								   / matrix[i].factor() / sums[i] + matrix[i].offset() ) );
 			}
 		}
-	// Corner : right top
+		// Corner : right top
 		currentPixel = curIt;
 		for(int i = 0; i < depth; i++)
 		{
 			int sum = matrix[i][1][1] + matrix[i][0][0] + matrix[i][0][1] + matrix[i][1][0];
 			sum = (sum == 0) ? 1 : sum;
 			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
-					+ pixels[ CONVOLUTION_PIXEL_BOTTOM - 1 ][i] * matrix[i][0][0]
-					+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][0][1]
-					+ pixels[ CONVOLUTION_PIXEL_RIGHT - 1 ][i] * matrix[i][1][0] ) * matrix[i].sum()
-					/ matrix[i].factor() / sum + matrix[i].offset() ) );
+									  + pixels[ CONVOLUTION_PIXEL_BOTTOM - 1 ][i] * matrix[i][0][0]
+									  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][0][1]
+									  + pixels[ CONVOLUTION_PIXEL_RIGHT - 1 ][i] * matrix[i][1][0] ) * matrix[i].sum()
+							   / matrix[i].factor() / sum + matrix[i].offset() ) );
 		}
 	}
 }

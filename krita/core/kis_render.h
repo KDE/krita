@@ -33,11 +33,6 @@ public:
 
 public:
 	virtual Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix) const = 0;
-	virtual void validate(Q_INT32 tileno) = 0;
-	virtual void invalidate(Q_INT32 tileno) = 0;
-	virtual void invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
-	virtual void invalidate(const QRect& rc) = 0;
-	virtual void invalidate() = 0;
 	virtual KisTileMgrSP tiles() const = 0;
 };
 

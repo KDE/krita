@@ -31,8 +31,8 @@ public:
 	virtual ~KisColorSpaceRegistry();
 
 public:
-	KisStrategyColorSpaceSP colorSpace(const QString& name) const KDE_DEPRECATED;
-	QStringList listColorSpaceNames() const KDE_DEPRECATED;
+	KisStrategyColorSpaceSP colorSpace(const QString& name) const;
+	QStringList listColorSpaceNames() const;
 public:
 	static KisColorSpaceRegistry* singleton();
 	

@@ -26,6 +26,7 @@
 #include "kis_channel.h"
 #include "kis_mask.h"
 #include "kis_selection.h"
+#include "kis_painter.h"
 
 #define DEBUG_LAYERS 0
 
@@ -122,7 +123,21 @@ KisMaskSP KisLayer::mask() const
 	return 0;
 }
 
-void KisLayer::setActiveSelection(KisSelectionSP selection)
+KisSelectionSP KisLayer::selection(){
+	if (!m_hasSelection) {
+		m_selection = new KisSelection(this, "layer selection for: " + name());
+		KisPainter gc(m_selection.data());
+		gc.fillRect(0, 0, width(), height(), KoColor::black(), OPACITY_OPAQUE / 2);
+		gc.end();
+		m_selection -> setVisible(true);
+		m_hasSelection = true;
+	}
+
+	return m_selection;
+ 
+}
+
+void KisLayer::setSelection(KisSelectionSP selection)
 {
 	m_selection = selection;
 	m_hasSelection = true;
@@ -130,12 +145,12 @@ void KisLayer::setActiveSelection(KisSelectionSP selection)
 
 void KisLayer::addSelection(KisSelectionSP /*selection*/)
 {
-// 	m_selection = m_selection - selection;
+// 	m_selection = m_selection + selection;
 }
 
 void KisLayer::subtractSelection(KisSelectionSP /*selection*/)
 {
-// 	m_selection = m_selection + selection;
+// 	m_selection = m_selection - selection;
 }
 
 

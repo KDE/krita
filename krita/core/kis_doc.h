@@ -111,7 +111,7 @@ public:
 	bool namePresent(const QString& name) const;
 
 	QString nextImageName() const;
-	void setProjection(KisImageSP img);
+	void setCurrentImage(KisImageSP img);
 
 	void setClipboardSelection(KisFloatingSelectionSP selection);
 	KisFloatingSelectionSP clipboardSelection();
@@ -130,7 +130,7 @@ signals:
 	void docUpdated(const QRect& rect);
 	void imageListUpdated();
 	void layersUpdated(KisImageSP img);
-	void projectionUpdated(KisImageSP img);
+	void currentImageUpdated(KisImageSP img);
 	void ioProgress(Q_INT8 percentage);
 	void ioSteps(Q_INT32 steps);
 	void ioCompletedStep();
@@ -160,7 +160,7 @@ private:
 	bool m_undo;
 	KoCommandHistory *m_cmdHistory;
 	vKisImageSP m_images;
-	KisImageSP m_projection;
+	KisImageSP m_currentImage;
 	KisFloatingSelectionSP m_clipboard;
 	bool m_pushedClipboard;
 	DCOPObject *m_dcop;

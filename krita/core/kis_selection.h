@@ -23,7 +23,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
-
+#include "kis_paint_device.h"
 
 /**
  * KisSelection contains a byte-map representation of a layer, where
@@ -32,14 +32,14 @@
  * possibly discontinuous selection. The points in the point array 'walk around'
  * the selected area clock-wise.
  *
- * Other types of selection could store a rect, a circle, a path -- whatever. Optimisation,
- * not implemented yet.
+ * Other types of selection could store a rect, a circle, a path --
+ * whatever. Optimisation, not implemented yet.
  *
  */
-class KisSelection : public KShared { //: public KisLayer {
+class KisSelection : public KisPaintDevice {
 
-	// Q_OBJECT
-	//typedef KisLayer super;
+	Q_OBJECT
+	typedef KisPaintDevice super;
 
 public:
 	KisSelection(KisLayerSP layer, const QString& name);
@@ -57,7 +57,7 @@ public:
 	void reset();
 
 private:
-	KisLayerSP m_layer;
+	KisLayerSP m_parentLayer;
 };
 
 #endif // KIS_SELECTION_H_

@@ -55,9 +55,10 @@ static int numImages = 0;
 #endif
 
 namespace {
+
 	// Whether to repaint the display every
 	// DISPLAY_UPDATE_FREQUENCY milliseconds
-	const bool DISPLAY_TIMER = false;
+	const bool DISPLAY_TIMER = true;
 	const int DISPLAY_UPDATE_FREQUENCY = 50; // in milliseconds
 
 	class KisResizeImageCmd : public KNamedCommand {
@@ -371,7 +372,6 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 		if (m_adapter && m_adapter -> undo()) {
 			m_adapter -> endMacro();
 		}
-		invalidate();
 	}
 }
 
@@ -400,7 +400,6 @@ void KisImage::scale(double sx, double sy)
 	m_projection -> scale(sx, sy);
 	undoAdapter()->endMacro();
 
-	invalidate();
 }
 
 void KisImage::convertTo( KisStrategyColorSpaceSP colorStrategy)
@@ -411,7 +410,6 @@ void KisImage::convertTo( KisStrategyColorSpaceSP colorStrategy)
 		(*it) -> convertTo(colorStrategy);
 	}
 	m_projection -> convertTo(colorStrategy);
-	invalidate();
 }
 
 KURL KisImage::uri() const
@@ -481,40 +479,40 @@ KisTileMgrSP KisImage::shadow() const
 	return m_shadow;
 }
 
-void KisImage::activeComponent(CHANNELTYPE type, bool value)
-{
-	PIXELTYPE i = pixelFromChannel(type);
+// void KisImage::activeComponent(CHANNELTYPE type, bool value)
+// {
+// 	PIXELTYPE i = pixelFromChannel(type);
 
-	if (i != PIXEL_UNDEF)
-		m_active[i] = value;
-}
+// 	if (i != PIXEL_UNDEF)
+// 		m_active[i] = value;
+// }
 
-bool KisImage::activeComponent(CHANNELTYPE type)
-{
-	PIXELTYPE i = pixelFromChannel(type);
+// bool KisImage::activeComponent(CHANNELTYPE type)
+// {
+// 	PIXELTYPE i = pixelFromChannel(type);
 
-	if (i != PIXEL_UNDEF)
-		return m_active[i];
+// 	if (i != PIXEL_UNDEF)
+// 		return m_active[i];
 
-	return false;
-}
+// 	return false;
+// }
 
-void KisImage::visibleComponent(CHANNELTYPE type, bool value)
-{
-	PIXELTYPE i = pixelFromChannel(type);
+// void KisImage::visibleComponent(CHANNELTYPE type, bool value)
+// {
+// 	PIXELTYPE i = pixelFromChannel(type);
 
-	if (i != PIXEL_UNDEF && value != m_visible[i]) {
-		m_visible[i] = value;
-		emit visibilityChanged(KisImageSP(this), type);
-	}
-}
+// 	if (i != PIXEL_UNDEF && value != m_visible[i]) {
+// 		m_visible[i] = value;
+// 		emit visibilityChanged(KisImageSP(this), type);
+// 	}
+// }
 
-bool KisImage::visibleComponent(CHANNELTYPE type) const
-{
-	PIXELTYPE i = pixelFromChannel(type);
+// bool KisImage::visibleComponent(CHANNELTYPE type) const
+// {
+// 	PIXELTYPE i = pixelFromChannel(type);
 
-	return i != PIXEL_UNDEF && m_visible[i];
-}
+// 	return i != PIXEL_UNDEF && m_visible[i];
+// }
 
 void KisImage::flush()
 {
@@ -551,7 +549,6 @@ KisPaintDeviceSP KisImage::activeDevice()
 	if (m_activeLayer) {
 		if (m_activeLayer -> mask())
 			return m_activeLayer -> mask().data();
-
 		return m_activeLayer.data();
 	}
 
@@ -712,7 +709,6 @@ void KisImage::rm(KisLayerSP layer)
 	}
 
 	rc = layer -> bounds();
-	invalidate(rc.x(), rc.y(), rc.width(), rc.height());
 
 	if (m_layers.size() == 1 && m_layers[0] -> alpha())
 		emit alphaChanged(KisImageSP(this));
@@ -815,7 +811,6 @@ bool KisImage::pos(KisLayerSP layer, Q_INT32 position)
 		m_layers.erase(m_layers.begin() + old);
 	}
 
-	invalidate();
 	return true;
 }
 
@@ -1135,47 +1130,47 @@ void KisImage::enableUndo(KoCommandHistory *history)
 	m_undoHistory = history;
 }
 
-PIXELTYPE KisImage::pixelFromChannel(CHANNELTYPE type) const
-{
-#if 0
-	PIXELTYPE i = PIXEL_UNDEF;
+// PIXELTYPE KisImage::pixelFromChannel(CHANNELTYPE type) const
+// {
+// #if 0
+// 	PIXELTYPE i = PIXEL_UNDEF;
 
-	switch (type) {
-	case REDCHANNEL:
-		i = PIXEL_RED;
-		break;
-	case GREENCHANNEL:
-		i = PIXEL_GREEN;
-		break;
-	case BLUECHANNEL:
-		i = PIXEL_BLUE;
-		break;
-	case GRAYCHANNEL:
-		i = PIXEL_GRAY;
-		break;
-	case INDEXEDCHANNEL:
-		i = PIXEL_INDEXED;
-		break;
-	case ALPHACHANNEL:
-		switch (imgType()) {
-		case IMAGE_TYPE_GREY:
-			i = PIXEL_GRAY_ALPHA;
-			break;
-		case IMAGE_TYPE_INDEXED:
-			i = PIXEL_INDEXED_ALPHA;
-			break;
-		default:
-			i = PIXEL_ALPHA;
-			break;
-		}
-		break;
-	default:
-		break;
-	}
+// 	switch (type) {
+// 	case REDCHANNEL:
+// 		i = PIXEL_RED;
+// 		break;
+// 	case GREENCHANNEL:
+// 		i = PIXEL_GREEN;
+// 		break;
+// 	case BLUECHANNEL:
+// 		i = PIXEL_BLUE;
+// 		break;
+// 	case GRAYCHANNEL:
+// 		i = PIXEL_GRAY;
+// 		break;
+// 	case INDEXEDCHANNEL:
+// 		i = PIXEL_INDEXED;
+// 		break;
+// 	case ALPHACHANNEL:
+// 		switch (imgType()) {
+// 		case IMAGE_TYPE_GREY:
+// 			i = PIXEL_GRAY_ALPHA;
+// 			break;
+// 		case IMAGE_TYPE_INDEXED:
+// 			i = PIXEL_INDEXED_ALPHA;
+// 			break;
+// 		default:
+// 			i = PIXEL_ALPHA;
+// 			break;
+// 		}
+// 		break;
+// 	default:
+// 		break;
+// 	}
 
-	return i;
-#endif
-}
+// 	return i;
+// #endif
+// }
 
 Q_INT32 KisImage::tileNum(Q_INT32 xpix, Q_INT32 ypix) const
 {
@@ -1192,28 +1187,12 @@ Q_INT32 KisImage::tileNum(Q_INT32 xpix, Q_INT32 ypix) const
 	return num;
 }
 
-void KisImage::invalidate(Q_INT32 tileno)
-{
-	m_projection -> invalidate(tileno);
-}
 
-void KisImage::invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+// Composite the specified tile onto the projection layer.
+void KisImage::renderToProjection(Q_INT32 tileno)
 {
-	m_projection -> invalidate(x, y, w, h);
-}
+	kdDebug() << "renderToProjection tile: " << tileno << "\n";
 
-void KisImage::invalidate(const QRect& rc)
-{
-	m_projection -> invalidate(rc);
-}
-
-void KisImage::invalidate()
-{
-	m_projection -> invalidate();
-}
-
-void KisImage::validate(Q_INT32 tileno)
-{
 	KisTileMgrSP tm = m_projection -> data();
 	KisTileSP dst;
 	KisPainter gc;
@@ -1235,10 +1214,11 @@ void KisImage::validate(Q_INT32 tileno)
 	dst = tm -> tile(tileno, TILEMODE_WRITE);
 	Q_ASSERT(dst);
 
-	if (!dst || dst -> valid())
+	if (!dst)
 		return;
 
 	gc.begin(m_projection.data());
+	// XXX: This uses the tile mediator. Is it truly necessary?
 	tm -> tileCoord(dst, pt);
 	gc.bitBlt(pt.x(), pt.y(), COMPOSITE_COPY, m_bkg.data(), pt.x(), pt.y(), dst -> width(), dst -> height());
 
@@ -1252,7 +1232,6 @@ void KisImage::validate(Q_INT32 tileno)
 	}
 
 	gc.end();
-	dst -> valid(true);
 }
 
 void KisImage::setSelection(KisFloatingSelectionSP selection)
@@ -1260,7 +1239,7 @@ void KisImage::setSelection(KisFloatingSelectionSP selection)
 	if (m_selection != selection) {
 		unsetSelection();
 		m_selection = selection;
-		invalidate(m_selection -> bounds());
+
 		emit selectionChanged(this);
 	}
 }
@@ -1283,7 +1262,7 @@ void KisImage::unsetSelection(bool commit)
 		}
 
 		m_selection = 0;
-		invalidate(rc);
+
 		emit selectionChanged(KisImageSP(this));
 	}
 }
@@ -1302,7 +1281,7 @@ void KisImage::expand(KisPaintDeviceSP dev)
 		w = QMAX(dev -> width(), width());
 		h = QMAX(dev -> height(), height());
 		resize(w, h);
-		invalidate();
+
 	}
 }
 
@@ -1328,7 +1307,7 @@ void KisImage::notify(const QRect& rc)
 		m_displayMutex.unlock();
 	} else {
 		if (rc.isValid()) {
-			invalidate(rc);
+
 			emit update(KisImageSP(this), rc);
 		}
 	}
@@ -1369,7 +1348,6 @@ void KisImage::slotUpdateDisplay()
 		m_dirtyRect = QRect();
 		m_displayMutex.unlock();
 
-		invalidate(rect);
 		emit update(KisImageSP(this), rect);
 	}
 }

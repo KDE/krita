@@ -54,11 +54,10 @@ public:
 public:
 	// Implement KisRenderInterface
 	virtual Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix) const;
-	virtual void validate(Q_INT32 tileno);
-	virtual void invalidate(Q_INT32 tileno);
-	virtual void invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-	virtual void invalidate(const QRect& rc);
-	virtual void invalidate();
+
+	// Composite the specified tile onto the projection layer.
+	virtual void renderToProjection(Q_INT32 tileno);
+
 	virtual KisTileMgrSP tiles() const;
 
 public:
@@ -92,11 +91,11 @@ public:
 	bool empty() const;
 	KisTileMgrSP shadow() const;
 
-	void activeComponent(CHANNELTYPE type, bool active);
-	bool activeComponent(CHANNELTYPE type);
+// 	void activeComponent(CHANNELTYPE type, bool active);
+// 	bool activeComponent(CHANNELTYPE type);
 
-	void visibleComponent(CHANNELTYPE pixel, bool active);
-	bool visibleComponent(CHANNELTYPE pixel) const;
+// 	void visibleComponent(CHANNELTYPE pixel, bool active);
+// 	bool visibleComponent(CHANNELTYPE pixel) const;
 
 	void flush();
 
@@ -105,6 +104,7 @@ public:
 	vKisChannelSP channels();
 	const vKisChannelSP& channels() const;
 
+	// Get the active painting device (layer, floating selection, mask)
 	KisPaintDeviceSP activeDevice();
 
 	KisLayerSP activeLayer();
@@ -178,7 +178,7 @@ private:
 	KisImage& operator=(const KisImage& rhs);
 	void expand(KisPaintDeviceSP dev);
 	void init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name);
-	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
+// 	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
 
 	void startUpdateTimer();
 

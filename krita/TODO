@@ -54,11 +54,11 @@ User Interface
 		    - Modify curves (nick from Perico)
 	* Add history docker
 	* Add auto-scroll to canvas while painting	  
-	* Full-screen mode (#Boudewijn -- this should work, but it doesn't. Don't know
+	X Full-screen mode (#Boudewijn -- this should work, but it doesn't. Don't know
           why :-(.)
 	* Add previews to all relevant dialogs. (XXX: let preview work 
 	  on rendered QImage, or on scaled image?)(#Bart) 
-	* Allow an active tool for every pointer present in X. (#Adrian -- no
+	X Allow an active tool for every pointer present in X. (#Adrian -- no
           support yet for Wacom tablets that have more than one stylus)
 	* File/Open should list all image types Krita can handle, and simply
           import non-native images, instead of forcing the user to use the import

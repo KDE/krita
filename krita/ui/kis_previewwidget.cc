@@ -110,7 +110,6 @@ KisLayerSP KisPreviewWidget::getLayer()
 
 void KisPreviewWidget::slotUpdate()
 {
-	m_preview->invalidate();
 	repaint();
 }
 
@@ -169,13 +168,11 @@ void KisPreviewWidget::updateWidgets(QPoint delta)
 	gc.begin(layerNew1.data());
 	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, -delta.x(), -delta.y(), -1, -1);
 	gc.end();
-	m_original->invalidate();
 
 	/* right */
 	gc.begin(layerNew2.data());
 	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, -delta.x(), -delta.y(), -1, -1);
 	gc.end();
-	m_preview->invalidate();
 }
 
 void KisPreviewWidget::render(QPainter &painter, KisImageSP image, double zoomX, double zoomY)
@@ -201,7 +198,7 @@ void KisPreviewWidget::render(QPainter &painter, KisImageSP image, double zoomX,
 			if ((tileno = image -> tileNum(x, y)) < 0)
 				continue;
 
-			image -> validate(tileno);
+			image -> renderToProjection(tileno);
 		}
 	}
 

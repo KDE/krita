@@ -154,7 +154,6 @@ void KisFloatingSelection::move(Q_INT32 x, Q_INT32 y)
 		gc.beginTransaction("clear the parent's background from KisFloatingSelection::move");
 		gc.eraseRect(this -> x() - m_parent -> x(), this -> y() - m_parent -> y(), width(), height());
 		m_firstMove = false;
-		m_parent -> invalidate(rc);
 		adapter -> addCommand(gc.endTransaction());
 		m_endMacroOnAnchor = true;
 	}

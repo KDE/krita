@@ -97,7 +97,6 @@ KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, KisStrategyColorSp
 	m_visible = true;
 	m_owner = 0;
 	m_name = name;
-	m_projectionValid = false;
 	m_compositeOp = COMPOSITE_OVER;
 	m_colorStrategy = colorStrategy;
 }
@@ -121,7 +120,6 @@ KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImage *img, const QString& na
         m_visible = true;
         m_owner = img;
         m_name = name;
-        m_projectionValid = false;
         m_compositeOp = COMPOSITE_OVER;
 }
 
@@ -144,7 +142,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs
                 m_offW = rhs.m_offW;
                 m_offH = rhs.m_offH;
                 m_quantumSize = rhs.m_quantumSize;
-                m_projectionValid = false;
                 m_name = rhs.m_name;
                 m_compositeOp = COMPOSITE_OVER;
 		m_colorStrategy = rhs.m_colorStrategy;
@@ -158,39 +155,6 @@ KisPaintDevice::~KisPaintDevice()
 Q_INT32 KisPaintDevice::tileNum(Q_INT32, Q_INT32) const
 {
         return 0;
-}
-
-void KisPaintDevice::validate(Q_INT32)
-{
-}
-
-void KisPaintDevice::invalidate(Q_INT32 tileno)
-{
-        data() -> invalidate(tileno);
-}
-
-void KisPaintDevice::invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
-{
-        Q_INT32 dx = x + w + 1;
-        Q_INT32 dy = y + h + 1;
-        Q_INT32 x1;
-        Q_INT32 y1;
-
-        m_projectionValid = false;
-
-        for (y1 = y; y1 < dy; y1 += TILE_HEIGHT - y1 % TILE_HEIGHT)
-                for (x1 = x; x1 < dx; x1 += TILE_WIDTH - x1 % TILE_WIDTH)
-                        data() -> invalidate(x1, y1);
-}
-
-void KisPaintDevice::invalidate(const QRect& rc)
-{
-        invalidate(rc.x(), rc.y(), rc.width(), rc.height());
-}
-
-void KisPaintDevice::invalidate()
-{
-        invalidate(0, 0, width(), height());
 }
 
 void KisPaintDevice::configure(KisImage *image,
@@ -212,8 +176,6 @@ void KisPaintDevice::configure(KisImage *image,
 	m_visible = true;
 	m_owner = image;
 	m_name = name;
-	m_projectionValid = false;
-	kdDebug() << "composite op: " << compositeOp << "\n";
 	m_compositeOp = compositeOp;
 	m_colorStrategy = colorStrategy;
 }
@@ -237,7 +199,6 @@ void KisPaintDevice::update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
         if (h > m_offH)
                 h = m_offH;
 
-        invalidate(x, y, w, h);
 }
 
 void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
@@ -305,7 +266,6 @@ void KisPaintDevice::init()
         m_offH = 0;
         m_x = 0;
         m_y = 0;
-        m_projectionValid = false;
 	m_colorStrategy = 0;
 }
 

@@ -44,10 +44,14 @@ public:
 	KisMaskSP mask() const;
 
 	// Selection stuff. XXX: is it necessary to make the actual
-	// selection object available outside the layer?
+	// selection object available outside the layer? YYY: yes, so
+	// selection tools can act on it.
+
+	/** Get the current selection or create one if this layers hasn't got a selection yet. */
+	KisSelectionSP selection();
 
 	/** Set the specified selection object as the active selection for this layer */
-	void setActiveSelection(KisSelectionSP selection);
+	void setSelection(KisSelectionSP selection);
 
 	/** Adds the specified selection to the currently active selection for this layer */
 	void addSelection(KisSelectionSP selection);
@@ -88,7 +92,9 @@ public:
 private:
 	QUANTUM m_opacity;
 	bool m_preserveTransparency;
+
 	KisMaskSP m_mask;
+
 	bool m_initial;
 	bool m_linked;
 	Q_INT32 m_dx;

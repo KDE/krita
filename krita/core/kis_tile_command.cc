@@ -59,7 +59,6 @@ void KisTileCommand::execute()
 	KisImageSP img = m_device -> image();
 
 	for (TileMap::iterator it = m_originals.begin(); it != m_originals.end(); it++) {
-		it -> second -> valid(false);
 		tm -> attach(it -> second, it -> first);
 	}
 
@@ -76,13 +75,11 @@ void KisTileCommand::unexecute()
 	if (m_originals.empty()) {
 		for (TileMap::iterator it = m_tiles.begin(); it != m_tiles.end(); it++) {
 			tmp = tm -> tile(it -> first, TILEMODE_NONE);
-			it -> second -> valid(false);
 			tm -> attach(it -> second, it -> first);
 			m_originals[it -> first] = tmp;
 		}
 	} else {
 		for (TileMap::iterator it = m_tiles.begin(); it != m_tiles.end(); it++) {
-			it -> second -> valid(false);
 			tm -> attach(it -> second, it -> first);
 		}
 	}

@@ -65,6 +65,8 @@ private:
 	virtual void initPaint(const KisPoint & pos);
 	virtual void endPaint();
 
+	KisPainter * m_painter;
+
 	enumBrushMode m_mode;
 
         KisPoint m_dragStart;

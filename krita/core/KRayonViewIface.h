@@ -56,7 +56,7 @@ public:
 	void imgResizeToActiveLayer();
 	void add_new_image_tab();
 	void remove_current_image_tab();
-	//void imageResize(); // XXX: made into a plugin, don't know yet how to export a plugin with DCOP.
+// 	void resizeCurrentImage();
 
 	// settings action slots
 	void preferences();

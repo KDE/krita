@@ -94,6 +94,8 @@ class KisAutogradient : public KisWdgAutogradient
 		void slotChangedColorInterpolation(int type);
 		void slotChangedLeftColor( const QColor& color);
 		void slotChangedRightColor( const QColor& color);
+		void slotChangedLeftOpacity( int value );
+		void slotChangedRightOpacity( int value );
 };
 
 #endif

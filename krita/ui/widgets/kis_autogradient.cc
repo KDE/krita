@@ -18,13 +18,16 @@
  */
  
 #include "kis_autogradient.h"
+
 #include <qfontmetrics.h>
 #include <qpainter.h>
-#include <kfontcombo.h>
+#include <qslider.h>
 #include <qspinbox.h>
 #include <qcheckbox.h> 
+
 #include <klineedit.h>
 #include <kcolorbutton.h>
+#include <kfontcombo.h>
 
 #include "kis_gradient_slider_widget.h"
 
@@ -40,9 +43,9 @@ const QValueVector<double> KisAutogradientResource::getHandlePositions() const
 {
 	QValueVector<double> handlePositions;
 
+	handlePositions.push_back(m_segments[0] -> startOffset());
 	for (uint i = 0; i < m_segments.count(); i++)
 	{
-		handlePositions.push_back(m_segments[i] -> startOffset());
 		handlePositions.push_back(m_segments[i] -> endOffset());
 	}
 	return handlePositions;
@@ -233,6 +236,10 @@ KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QStrin
 	connect(comboBoxInterpolationType, SIGNAL( activated(int) ), SLOT( slotChangedInterpolation(int) ));
 	connect(leftColorButton, SIGNAL( changed(const QColor&) ), SLOT( slotChangedLeftColor(const QColor&) ));
 	connect(rightColorButton, SIGNAL( changed(const QColor&) ), SLOT( slotChangedRightColor(const QColor&) ));
+	connect(spinBoxLeftOpacity, SIGNAL( valueChanged(int) ), SLOT( slotChangedLeftOpacity(int) ));
+	connect(spinBoxRightOpacity, SIGNAL( valueChanged(int) ), SLOT( slotChangedRightOpacity(int) ));
+	connect(sliderLeftOpacity, SIGNAL( valueChanged(int) ), SLOT( slotChangedLeftOpacity(int) ));
+	connect(sliderRightOpacity, SIGNAL( valueChanged(int) ), SLOT( slotChangedRightOpacity(int) ));
 }
 
 void KisAutogradient::slotSelectedSegment(KisGradientSegment* segment)
@@ -241,6 +248,16 @@ void KisAutogradient::slotSelectedSegment(KisGradientSegment* segment)
 	rightColorButton -> setColor( segment -> endColor().color() );
 	comboBoxColorInterpolationType -> setCurrentItem( segment -> colorInterpolation() );
 	comboBoxInterpolationType -> setCurrentItem( segment -> interpolation() );
+
+	blockSignals(true);
+	int leftOpacity = qRound(segment -> startColor().alpha() * 100);
+	spinBoxLeftOpacity -> setValue( leftOpacity );
+	sliderLeftOpacity -> setValue( leftOpacity );
+
+	int rightOpacity = qRound(segment -> endColor().alpha() * 100);
+	spinBoxRightOpacity -> setValue( rightOpacity );
+	sliderRightOpacity -> setValue( rightOpacity );
+	blockSignals(false);
 	emit activatedResource( m_autogradientResource );
 }
 
@@ -264,7 +281,7 @@ void KisAutogradient::slotChangedLeftColor( const QColor& color)
 {
 	KisGradientSegment* segment = gradientSlider -> selectedSegment();
 	if(segment)
-		segment -> setStartColor( Color( color, 1 ) );
+		segment -> setStartColor( Color( color, segment -> startColor().alpha() ) );
 	gradientSlider -> repaint();
 }
 
@@ -272,6 +289,32 @@ void KisAutogradient::slotChangedRightColor( const QColor& color)
 {
 	KisGradientSegment* segment = gradientSlider -> selectedSegment();
 	if(segment)
-		segment -> setEndColor( Color( color, 1 ) );
+		segment -> setEndColor( Color( color, segment -> endColor().alpha() ) );
 	gradientSlider -> repaint();
+}
+
+void KisAutogradient::slotChangedLeftOpacity( int value )
+{
+	blockSignals(true);
+	spinBoxLeftOpacity -> setValue( value );
+	sliderLeftOpacity -> setValue( value );
+	blockSignals(false);
+
+	KisGradientSegment* segment = gradientSlider -> selectedSegment();
+	if(segment)
+		segment -> setStartColor( Color( segment -> startColor().color(), (double)value / 100 ) );
+	gradientSlider -> repaint(false);
+}
+
+void KisAutogradient::slotChangedRightOpacity( int value )
+{
+	blockSignals(true);
+	spinBoxRightOpacity -> setValue( value );
+	sliderRightOpacity -> setValue( value );
+	blockSignals(false);
+
+	KisGradientSegment* segment = gradientSlider -> selectedSegment();
+	if(segment)
+		segment -> setEndColor( Color( segment -> endColor().color(), (double)value / 100 ) );
+	gradientSlider -> repaint(false);
 }

@@ -18,6 +18,7 @@
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qcheckbox.h>
 #include <kinstance.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -28,6 +29,7 @@
 #include "kis_global.h"
 #include "kis_cmb_composite.h"
 #include "kis_icon_item.h"
+#include "kis_brush.h"
 
 KisItemChooser::KisItemChooser(const vKoIconItem& items, bool spacing, QWidget *parent, const char *name) : super(parent, name)
 {
@@ -55,7 +57,7 @@ void KisItemChooser::initGUI(bool spacing)
 	mainLayout -> addWidget(m_frame, 10);
 
 	if (spacing) {
-		QGridLayout *spacingLayout = new QGridLayout( 3, 2);
+		QGridLayout *spacingLayout = new QGridLayout( 4, 2);
 
 		mainLayout -> addLayout(spacingLayout, 1);
 
@@ -68,6 +70,8 @@ void KisItemChooser::initGUI(bool spacing)
 		spacingLayout -> addWidget(m_lbComposite, 2, 0);
 		spacingLayout -> addWidget(m_cmbComposite, 2, 1);
 		
+		spacingLayout -> addMultiCellWidget(m_chkColorMask, 3, 3, 0, 1);
+		
 	}
 }
 
@@ -76,9 +80,12 @@ void KisItemChooser::setCurrent(KoIconItem *item)
 	m_chooser -> setCurrentItem(item);
 
 	if (m_doSpacing) {
-		m_slSpacing -> setValue(((dynamic_cast<KisIconItem*>(item)) -> spacing()) / 10 );
-		m_slOpacity -> setValue(((dynamic_cast<KisIconItem*>(item)) -> opacity() * 100) / OPACITY_OPAQUE);
-		m_cmbComposite -> setCurrentItem((dynamic_cast<KisIconItem*>(item)) -> compositeOp());
+		KisIconItem *kisItem = dynamic_cast<KisIconItem*>(item);
+		m_slSpacing -> setValue(kisItem -> spacing() / 10 );
+		m_slOpacity -> setValue((kisItem -> opacity() * 100) / OPACITY_OPAQUE);
+		m_cmbComposite -> setCurrentItem(kisItem -> compositeOp());
+		m_chkColorMask -> setChecked(kisItem -> useColorAsMask());
+		m_chkColorMask -> setEnabled(kisItem -> hasColor());
 	}
 }
 
@@ -90,9 +97,12 @@ KoIconItem* KisItemChooser::currentItem()
 void KisItemChooser::slotItemSelected(KoIconItem *item)
 {
 	if (m_doSpacing && item) {
-		m_slSpacing -> setValue(((dynamic_cast<KisIconItem*>(item)) -> spacing()) / 10 );
-		m_slOpacity -> setValue(((dynamic_cast<KisIconItem*>(item)) -> opacity() * 100) / OPACITY_OPAQUE);
-		m_cmbComposite -> setCurrentItem((dynamic_cast<KisIconItem*>(item)) -> compositeOp());
+		KisIconItem *kisItem = dynamic_cast<KisIconItem*>(item);
+		m_slSpacing -> setValue(kisItem -> spacing() / 10 );
+		m_slOpacity -> setValue((kisItem -> opacity() * 100) / OPACITY_OPAQUE);
+		m_cmbComposite -> setCurrentItem(kisItem -> compositeOp());
+		m_chkColorMask -> setChecked(kisItem -> useColorAsMask());
+		m_chkColorMask -> setEnabled(kisItem -> hasColor());
 	}
 	emit selected(item);
 }
@@ -121,6 +131,18 @@ void KisItemChooser::slotSetItemCompositeMode(int compositeOp)
 
  	if (item)
  		(dynamic_cast<KisIconItem*>(item)) -> setCompositeOp(compositeOp);
+}
+
+void KisItemChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
+{
+	KoIconItem *item = currentItem();
+
+ 	if (item) {
+ 		(dynamic_cast<KisIconItem*>(item)) -> setUseColorAsMask(useColorAsMask);
+		// The item's pixmaps may have changed so get observers to update
+		// their display.
+		emit selected(item);
+	}
 }
 
 
@@ -158,6 +180,9 @@ void KisItemChooser::init(bool spacing)
 		m_cmbComposite = new KisCmbComposite(this);
 		QObject::connect(m_cmbComposite, SIGNAL(activated(int)), this, SLOT(slotSetItemCompositeMode(int)));
 
+		m_chkColorMask = new QCheckBox(i18n("Use color as mask"), this);
+		QObject::connect(m_chkColorMask, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
+
 	} else {
 		m_lbSpacing = 0;
 		m_slSpacing = 0;
@@ -165,6 +190,7 @@ void KisItemChooser::init(bool spacing)
 		m_slOpacity = 0;
 		m_lbComposite= 0;
 		m_cmbComposite = 0;
+		m_chkColorMask = 0;
 	}
 
 	m_frame = new QHBox(this);

@@ -106,6 +106,7 @@ void KisResourceMediator::setActiveItem(KoIconItem *item)
 
 	if (kisitem) {
 		m_activeItem = kisitem;
+		m_chooser -> setCurrent(item);
 		emit activatedResource(kisitem ? kisitem -> resource() : 0);
 	}
 }

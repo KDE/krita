@@ -75,7 +75,9 @@ public:
 	QUANTUM opacity() const { return m_opacity; }
 	void setCompositeOp(CompositeOp op) { m_compositeOp = op; }
 	CompositeOp compositeOp() const { return m_compositeOp; }
-
+	virtual void setUseColorAsMask(bool) {}
+	virtual bool useColorAsMask() const { return false; }
+	virtual bool hasColor() const { return false; }
 
 protected:
 	void setWidth(Q_INT32 w);

@@ -26,6 +26,7 @@
 
 class QHBox;
 class QLabel;
+class QCheckBox;
 
 class KoIconChooser;
 class KoIconItem;
@@ -69,6 +70,7 @@ private slots:
 	void slotSetItemSpacing(int spacing);
 	void slotSetItemOpacity(int opacityPerCent);
 	void slotSetItemCompositeMode(int compositeOp);
+	void slotSetItemUseColorAsMask(bool);
 
 private:
 	QHBox *m_frame;
@@ -79,6 +81,7 @@ private:
 	IntegerWidget *m_slOpacity;
 	QLabel *m_lbComposite;
 	KisCmbComposite *m_cmbComposite;
+	QCheckBox *m_chkColorMask;
 	KoIconChooser *m_chooser;
 	bool m_doSpacing;
 };

@@ -56,6 +56,8 @@ KisBrush::KisBrush(const QString& filename) : super(filename)
 {
 	m_brushType = INVALID;
 	m_ownData = true;
+	m_useColorAsMask = false;
+	m_hasColor = false;
 }
 
 KisBrush::KisBrush(const QString& filename,
@@ -64,6 +66,8 @@ KisBrush::KisBrush(const QString& filename,
 {
 	m_brushType = INVALID;
 	m_ownData = false;
+	m_useColorAsMask = false;
+	m_hasColor = false;
 
 	m_data.setRawData(data.data() + dataPos, data.size() - dataPos);
 	ioResult(0);
@@ -154,8 +158,19 @@ QPoint KisBrush::hotSpot(Q_INT32 pressure) const
 	return p;
 }
 
-enumBrushType KisBrush::brushType() const {
-	return m_brushType;
+enumBrushType KisBrush::brushType() const
+{
+	if (m_brushType == IMAGE && useColorAsMask()) {
+		return MASK;
+	}
+	else {
+		return m_brushType;
+	}
+}
+
+bool KisBrush::hasColor() const
+{
+	return m_hasColor;
 }
 
 void KisBrush::ioData(KIO::Job * /*job*/, const QByteArray& data)
@@ -238,6 +253,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 	if (bh.bytes == 1) {
 		// Grayscale
 		m_brushType = MASK;
+		m_hasColor = false;
 
 		Q_INT32 val;
 		for (Q_UINT32 y = 0; y < bh.height; y++) {
@@ -255,6 +271,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		// Has alpha
 		m_brushType = IMAGE;
 		m_img.setAlphaBuffer(true);
+		m_hasColor = true;
 
 		for (Q_UINT32 y = 0; y < bh.height; y++) {
 			for (Q_UINT32 x = 0; x < bh.width; x++) {
@@ -262,7 +279,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 					emit ioFailed(this);
 					return;
 				}
-				m_img.setPixel(x, y, qRgba(m_data[k+0],
+				m_img.setPixel(x, y, qRgba(m_data[k],
 							   m_data[k+1],
 							   m_data[k+2],
 							   m_data[k+3]));

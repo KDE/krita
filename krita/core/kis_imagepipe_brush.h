@@ -56,6 +56,8 @@ public:
 	virtual KisAlphaMask *mask(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 	virtual KisLayerSP image(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 
+	virtual bool hasColor() const;
+
 	virtual enumBrushType brushType() const;
 
 private slots:

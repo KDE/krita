@@ -39,12 +39,21 @@ public:
 	virtual int compositeOp() const;
 	virtual void setCompositeOp(int compositeOp);
 
+	virtual bool useColorAsMask() const;
+	virtual void setUseColorAsMask(bool useColorAsMask);
+
+	virtual bool hasColor() const;
+
 	KisResource *resource() const;
+
+protected:
+	void updatePixmaps();
+	QImage createColorMaskImage(QImage srcImage);
 
 private:
 	KisResource *m_resource;
-	QPixmap *m_pixmap;
-	QPixmap *m_thumb;
+	QPixmap m_pixmap;
+	QPixmap m_thumb;
 };
 
 #endif // KIS_ICON_ITEM_H_

@@ -27,8 +27,17 @@ KisIconItem::KisIconItem(KisResource *resource)
 	m_resource = resource;
 	validPixmap = false;
 	validThumb = false;
-	m_thumb = 0;
-	m_pixmap = 0;
+	updatePixmaps();
+}
+
+KisIconItem::~KisIconItem()
+{
+}
+
+void KisIconItem::updatePixmaps()
+{
+	validPixmap = false;
+	validThumb = false;
 
 	if (m_resource && m_resource -> valid()) {
 		QImage img = m_resource -> img();
@@ -37,6 +46,10 @@ KisIconItem::KisIconItem(KisResource *resource)
 			m_resource -> setValid(false);
 			m_resource = 0;
 			return;
+		}
+
+		if (m_resource -> hasColor() && m_resource -> useColorAsMask()) {
+			img = createColorMaskImage(img);
 		}
 
 		if (img.width() > THUMB_SIZE || img.height() > THUMB_SIZE) {
@@ -65,31 +78,41 @@ KisIconItem::KisIconItem(KisResource *resource)
 			thumb = thumb.smoothScale(xsize, ysize);
 
 			if (!thumb.isNull()) {
-				m_thumb = new QPixmap(thumb);
-				validThumb = !m_thumb -> isNull();
+				m_thumb = QPixmap(thumb);
+				validThumb = !m_thumb.isNull();
 			}
 		}
 
 		img = img.convertDepth(32);
-		m_pixmap = new QPixmap(img);
+		m_pixmap = QPixmap(img);
 		validPixmap = true;
 	}
 }
 
-KisIconItem::~KisIconItem()
+QImage KisIconItem::createColorMaskImage(QImage srcImage)
 {
-	delete m_thumb;
-	delete m_pixmap;
+	QImage image = srcImage;
+	image.detach();
+
+	for (int x = 0; x < image.width(); x++) {
+		for (int y = 0; y < image.height(); y++) {
+			QRgb c = image.pixel(x, y);
+			int a = (qGray(c) * qAlpha(c)) / 255;
+			image.setPixel(x, y, qRgba(a, 0, a, a));
+		}
+	}
+
+	return image;
 }
 
 QPixmap& KisIconItem::pixmap() const
 {
-	return *m_pixmap;
+	return const_cast<QPixmap&>(m_pixmap);
 }
 
 QPixmap& KisIconItem::thumbPixmap() const
 {
-	return *m_thumb;
+	return const_cast<QPixmap&>(m_thumb);
 }
 
 KisResource *KisIconItem::resource() const
@@ -143,3 +166,30 @@ void KisIconItem::setCompositeOp(int compositeOp) {
 		m_resource -> setCompositeOp((CompositeOp)compositeOp);
 	}
 }
+
+bool KisIconItem::useColorAsMask() const {
+	if ( m_resource && m_resource -> valid() ) {
+		return m_resource -> useColorAsMask();
+	}
+	else {
+		return false;
+	}
+}
+
+void KisIconItem::setUseColorAsMask(bool useColorAsMask) {
+	if ( m_resource && m_resource -> valid() ) {
+		m_resource -> setUseColorAsMask(useColorAsMask);
+		updatePixmaps();
+	}
+}
+
+bool KisIconItem::hasColor() const
+{
+	if ( m_resource && m_resource -> valid() ) {
+		return m_resource -> hasColor();
+	}
+	else {
+		return false;
+	}
+}
+

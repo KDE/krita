@@ -74,6 +74,10 @@ public:
 	Q_INT32 xSpacing(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 	Q_INT32 ySpacing(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 
+	virtual void setUseColorAsMask(bool useColorAsMask) { m_useColorAsMask = useColorAsMask; }
+	virtual bool useColorAsMask() const { return m_useColorAsMask; }
+	virtual bool hasColor() const;
+
 	virtual enumBrushType brushType() const;
 
 
@@ -89,6 +93,8 @@ private:
 	bool m_ownData;
 	QPoint m_hotSpot;
 	Q_INT32 m_spacing;
+	bool m_useColorAsMask;
+	bool m_hasColor;
 	QImage m_img;
 	mutable QPtrList<KisAlphaMask> m_masks;
 	mutable QValueVector<KisLayerSP> m_images;

@@ -69,13 +69,12 @@ bool KisImagePipeBrush::saveAsync()
 
 QImage KisImagePipeBrush::img()
 {
-	if (m_brushes.isEmpty()) return 0;
-	// XXX: This does not follow the instructions in the 'parasite'
-	if (m_currentBrush == m_brushes.count()) {
-		m_currentBrush = 0;
+	if (m_brushes.isEmpty()) {
+		return 0;
 	}
-	m_currentBrush++;
-	return m_brushes.at(m_currentBrush - 1) -> img();
+	else {
+		return m_brushes.at(0) -> img();
+	}
 }
 
 KisAlphaMask *KisImagePipeBrush::mask(Q_INT32 pressure) const
@@ -106,8 +105,24 @@ void KisImagePipeBrush::setParasite(const QString& parasite)
 }
 
 
-enumBrushType KisImagePipeBrush::brushType() const {
-	return m_brushType;
+enumBrushType KisImagePipeBrush::brushType() const
+{
+	if (m_brushType == PIPE_IMAGE && useColorAsMask()) {
+		return PIPE_MASK;
+	}
+	else {
+		return m_brushType;
+	}
+}
+
+bool KisImagePipeBrush::hasColor() const
+{
+	if (m_brushes.count() > 0) {
+		return m_brushes.at(0) -> hasColor();
+	}
+	else {
+		return false;
+	}
 }
 
 void KisImagePipeBrush::ioData(KIO::Job * /*job*/, const QByteArray& data)

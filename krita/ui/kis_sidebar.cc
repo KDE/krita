@@ -153,7 +153,7 @@ DockFrameDocker::DockFrameDocker( QWidget* parent, const char* name ) : BaseDock
 
     setWidget( m_tabwidget = new QTabWidget( this ) );
     
-    m_tabwidget -> setFixedSize( 200, 175 );
+    m_tabwidget -> setFixedSize( 200, 200 );
     kdDebug() << "DockFrameDocker::DockFrameDocker leaving" << endl;
 }
 

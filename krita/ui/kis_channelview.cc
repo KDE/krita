@@ -146,7 +146,7 @@ void ChannelTable::init( KisDoc* doc )
     QString _icon = locate( "kis_pics", "visible.png", KisFactory::global() );
     mVisibleIcon = new QPixmap;
     if( !mVisibleIcon->load( _icon ) )
-	    KMessageBox::error( this, "Can't find visible.png", "Canvas" );
+	    KMessageBox::error( this, i18n("Can't find visible.png"), i18n("Canvas") );
     mVisibleRect = QRect( QPoint( 2,( CELLHEIGHT - mVisibleIcon->height() ) / 2 ),
         mVisibleIcon->size() );
 
@@ -154,19 +154,19 @@ void ChannelTable::init( KisDoc* doc )
         KisFactory::global() );
     mNovisibleIcon = new QPixmap;
     if( !mNovisibleIcon->load( _icon ) )
-	    KMessageBox::error( this, "Can't find novisible.png", "Canvas" );
+	    KMessageBox::error( this, i18n("Can't find novisible.png"), i18n("Canvas") );
 
     _icon = locate( "kis_pics", "linked.png", KisFactory::global() );
     mLinkedIcon = new QPixmap;
     if( !mLinkedIcon->load( _icon ) )
-	    KMessageBox::error( this, "Can't find linked.png", "Canvas" );
+	    KMessageBox::error( this, i18n("Can't find linked.png"), i18n("Canvas") );
     mLinkedRect = QRect( QPoint( 25,( CELLHEIGHT - mLinkedIcon->height() ) / 2 ),
         mLinkedIcon->size() );
 
     _icon = locate( "kis_pics", "unlinked.png", KisFactory::global() );
     mUnlinkedIcon = new QPixmap;
     if( !mUnlinkedIcon->load( _icon ) )
-	    KMessageBox::error( this, "Can't find unlinked.png", "Canvas" );
+	    KMessageBox::error( this, i18n("Can't find unlinked.png"), i18n("Canvas") );
 
     mPreviewRect
         = QRect( QPoint( 50, (CELLHEIGHT - mLinkedIcon->height() ) /2 ),

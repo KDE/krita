@@ -76,19 +76,19 @@ KisSideBar::~KisSideBar()
 {
 }
 
-void KisSideBar::plug (QWidget* w) 
-{ 
-	m_dockFrame -> plug(w); 
+void KisSideBar::plug (QWidget* w)
+{
+	m_dockFrame -> plug(w);
 }
 
-void KisSideBar::unplug(QWidget *w) 
-{ 
-	m_dockFrame -> unplug(w); 
+void KisSideBar::unplug(QWidget *w)
+{
+	m_dockFrame -> unplug(w);
 }
 
-QWidget *KisSideBar::dockFrame() 
-{ 
-	return m_dockFrame; 
+QWidget *KisSideBar::dockFrame()
+{
+	return m_dockFrame;
 }
 
 void KisSideBar::resizeEvent ( QResizeEvent * )
@@ -345,7 +345,7 @@ void DockFrame::plug(QWidget* w)
 
 		KoFrameButton* btn = new KoFrameButton(this);
 
-		btn -> setText(i18n(name.latin1()));
+		btn -> setText(i18n(name.utf8()));
 		btn -> setFixedHeight(18);
 		btn -> setToggleButton(true);
 

@@ -156,25 +156,25 @@ void LayerTable::init( KisDoc* doc)
     QString icon = locate( "kis_pics", "visible.png", KisFactory::global());
     mVisibleIcon = new QPixmap;
     if( !mVisibleIcon->load( icon ) )
-	    KMessageBox::error( this, "Can't find visible.png", "Canvas" );
+	    KMessageBox::error( this, i18n("Can't find visible.png"), i18n("Canvas") );
     mVisibleRect = QRect( QPoint( 3, (iheight - 24)/2), QSize(24,24));
 
     icon = locate( "kis_pics", "novisible.png",
         KisFactory::global() );
     mNovisibleIcon = new QPixmap;
     if( !mNovisibleIcon->load( icon ) )
-	    KMessageBox::error( this, "Can't find novisible.png", "Canvas" );
+	    KMessageBox::error( this, i18n("Can't find novisible.png"), i18n("Canvas") );
 
     icon = locate( "kis_pics", "linked.png", KisFactory::global() );
     mLinkedIcon = new QPixmap;
     if( !mLinkedIcon->load( icon ) )
-	    KMessageBox::error( this, "Can't find linked.png", "Canvas" );
+	    KMessageBox::error( this, i18n("Can't find linked.png"), i18n("Canvas") );
     mLinkedRect = QRect(QPoint(30, (iheight - 24)/2), QSize(24,24));
 
     icon = locate( "kis_pics", "unlinked.png", KisFactory::global() );
     mUnlinkedIcon = new QPixmap;
     if( !mUnlinkedIcon->load( icon ) )
-	    KMessageBox::error( this, "Can't find unlinked.png", "Canvas" );
+	    KMessageBox::error( this, i18n("Can't find unlinked.png"), i18n("Canvas") );
     mPreviewRect = QRect(QPoint(57, (iheight - 24)/2), QSize(24,24));
 
     updateTable();
@@ -218,7 +218,7 @@ void LayerTable::slotDocUpdated()
 	updateTable();
 	updateAllCells();
 
-	if(pLayerView) 
+	if(pLayerView)
 		pLayerView -> showScrollBars();
 }
 
@@ -273,7 +273,7 @@ void LayerTable::updateTable()
 
 	resize(sizeHint());
 
-	if (pLayerView) 
+	if (pLayerView)
 		pLayerView -> showScrollBars();
 
 	repaint();

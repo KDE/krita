@@ -34,6 +34,7 @@
 #include "kistilemgr.h"
 #include "kispixeldata.h"
 #include "kis_image_magick_converter.h"
+#include <qfile.h>
 
 namespace {
 	inline
@@ -90,7 +91,7 @@ namespace {
 	/*
 	 * ImageMagick progress monitor callback.  Unfortunately it doesn't support passing in some user
 	 * data which complicates things quite a bit.  The plan was to allow the user start multiple
-	 * import/scans if he/she so wished.  However, without passing user data it's not possible to tell 
+	 * import/scans if he/she so wished.  However, without passing user data it's not possible to tell
 	 * on which task we have made progress on.
 	 *
 	 * Additionally, ImageMagick is thread-safe, not re-entrant... i.e. IM does not relinquish held
@@ -144,7 +145,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		Q_ASSERT(uri.isEmpty());
 		images = BlobToImage(ii, &m_data[0], m_data.size(), &ei);
 	} else {
-		qstrncpy(ii -> filename, uri.path().latin1(), MaxTextExtent - 1);
+		qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
 
 		if (ii -> filename[MaxTextExtent - 1]) {
 			emit notify(this, KisImageBuilder_STEP_ERROR, 0);
@@ -215,7 +216,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 						return KisImageBuilder_RESULT_INTR;
 					}
 
-				} 
+				}
 
 				h = TILE_HEIGHT;
 			}
@@ -295,13 +296,13 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 
 	GetExceptionInfo(&ei);
 	ii = CloneImageInfo(0);
-	qstrncpy(ii -> filename, uri.path().latin1(), MaxTextExtent - 1);
+	qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
 
 	if (ii -> filename[MaxTextExtent - 1]) {
 		emit notify(this, KisImageBuilder_STEP_ERROR, 0);
 		return KisImageBuilder_RESULT_PATH;
 	}
-	
+
 	if (!layer -> width() || !layer -> height())
 		return KisImageBuilder_RESULT_EMPTY;
 
@@ -443,7 +444,7 @@ QString KisImageMagickConverter::readFilters()
 			if (!description.isEmpty() && !description.contains('/')) {
 				all += "*." + name.lower() + " *." + name + " ";
 				s += "*." + name.lower() + " *." + name + "|";
-				s += i18n(description.latin1());
+				s += i18n(description.utf8());
 				s += "\n";
 			}
 		}
@@ -481,7 +482,7 @@ QString KisImageMagickConverter::writeFilters()
 			if (!description.isEmpty() && !description.contains('/')) {
 				all += "*." + name.lower() + " *." + name + " ";
 				s += "*." + name.lower() + " *." + name + "|";
-				s += i18n(description.latin1());
+				s += i18n(description.utf8());
 				s += "\n";
 			}
 		}

@@ -130,7 +130,7 @@ void KisListBox::slotMenuAction(int mnuId)
 	}
 
 	p = dynamic_cast<KisListBoxItem*>(m_lst -> item(n));
-	
+
 	switch (mnuId) {
 		case VISIBLE:
 			emit itemToggleVisible();
@@ -147,25 +147,25 @@ void KisListBox::slotMenuAction(int mnuId)
 		case ADD:
 			emit itemAdd();
 			break;
-		case REMOVE: 
+		case REMOVE:
 			emit itemRemove();
 			break;
 		case ADDMASK:
 			emit itemAddMask(n);
 			break;
-		case REMOVEMASK: 
+		case REMOVEMASK:
 			emit itemRmMask(n);
 			break;
-		case RAISE: 
+		case RAISE:
 			emit itemRaise();
 			break;
-		case LOWER: 
+		case LOWER:
 			emit itemLower();
 			break;
-		case FRONT: 
+		case FRONT:
 			emit itemFront();
 			break;
-		case BACK: 
+		case BACK:
 			emit itemBack();
 			break;
 		case LEVEL:
@@ -231,7 +231,7 @@ void KisListBox::slotClicked(QListBoxItem *item, const QPoint& pos)
 		else if (p -> intersectLinkedRect(pos, m))
 			slotMenuAction(LINKING);
 	}
-	
+
 	m_btnRm -> setEnabled(item != 0);
 	m_btnRaise -> setEnabled(item && item != m_lst -> item(0));
 	m_btnLower -> setEnabled(item && n != -1 && static_cast<uint>(n) != m_lst -> count() - 1);
@@ -387,11 +387,8 @@ QPixmap KisListBoxItem::loadPixmap(const QString& filename, const KIconLoader& i
 {
 	QPixmap pixmap = il.loadIcon(filename, KIcon::NoGroup);
 
-	if (pixmap.isNull()) {
-		QString errmsg = "Can't find " + filename;
-
-		KMessageBox::error(0, i18n(errmsg.latin1()), i18n("Canvas"));
-	}
+	if (pixmap.isNull())
+		KMessageBox::error(0, i18n("Can't find %1").arg(filename), i18n("Canvas"));
 
 	return pixmap;
 }

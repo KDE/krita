@@ -75,6 +75,7 @@ class KisMoveEvent;
 class KisHSVWidget;
 class KisRGBWidget;
 class KisGrayWidget;
+class KisFilterRegistry;
 
 class KisView
 	: public KoView,
@@ -116,7 +117,8 @@ public: // KoView implementation
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, bool modal = false, const KURL& url = KURL());
 
-	
+	KisFilterRegistrySP filterRegistry() const;
+
 	virtual KisImageSP currentImg() const;
 
 signals:
@@ -443,6 +445,7 @@ private:
 
 	QTime m_tabletEventTimer;
 	QTabletEvent::TabletDevice m_lastTabletEventDevice;
+	KisFilterRegistrySP m_filterRegistry;
 
 
 private:

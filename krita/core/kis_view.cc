@@ -72,6 +72,7 @@
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_factory.h"
+#include "kis_filter_registry.h"
 #include "kis_guide.h"
 #include "kis_gradient.h"
 #include "kis_icon_item.h"
@@ -212,6 +213,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_imgBuilderMgr = new KisBuilderMonitor(this);
         m_progress = 0;
         m_statusBarZoomLabel = 0;
+	m_filterRegistry = new KisFilterRegistry();
 
         setInstance(KisFactory::global());
         setupActions();
@@ -3157,7 +3159,10 @@ KisProgressDisplayInterface *KisView::progressDisplay() const
 	return m_progress;
 }
 
+KisFilterRegistrySP KisView::filterRegistry() const
+{
+	return m_filterRegistry;
+}
+
+
 #include "kis_view.moc"
-
-
-

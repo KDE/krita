@@ -39,6 +39,9 @@ public:
 
     inline KisHLineIteratorPixel & operator ++() { KisHLineIterator::operator++(); advance(1); return *this;}
 
+    /// Advances a number of pixels until it reaches the end of the line
+    KisHLineIteratorPixel & operator+=(int n) { KisHLineIterator::operator+=(n); advance(n); return *this; };
+
     Q_INT32 x() const { return KisHLineIterator::x() + m_offsetx; }
     Q_INT32 y() const { return KisHLineIterator::y() + m_offsety; }
 protected:

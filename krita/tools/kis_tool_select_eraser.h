@@ -21,18 +21,20 @@
 #ifndef KIS_TOOL_SELECT_ERASER_H_
 #define KIS_TOOL_SELECT_ERASER_H_
 
+#include "kis_tool_factory.h"
 #include "kis_tool_freehand.h"
 
 class KisPoint;
+
 
 /**
  * The selection eraser makes a selection smaller by painting with the
  * current eraser shape. Not sure what kind of an icon could represent
  * this... Depends a bit on how we're going to visualize selections.
  */
-class KisToolSelectEraser : public KisToolFreeHand {
+class KisToolSelectEraser : public KisToolFreehand {
 	Q_OBJECT
-	typedef KisToolFreeHand super;
+	typedef KisToolFreehand super;
 
 public:
 	KisToolSelectEraser();
@@ -46,5 +48,19 @@ protected:
 
 	virtual void initPaint(KisEvent *e);
 };
+
+
+class KisToolSelectEraserFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolSelectEraserFactory() : super() {};
+	virtual ~KisToolSelectEraserFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolSelectEraser(); }
+	virtual QString name() { return i18n("Eraser select tool"); }
+};
+
+
+
 #endif // KIS_TOOL_SELECT_ERASER_H_
 

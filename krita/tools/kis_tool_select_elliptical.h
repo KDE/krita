@@ -27,6 +27,8 @@
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 
+#include "kis_tool_factory.h"
+
 class KisToolSelectElliptical : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;
@@ -56,6 +58,20 @@ private:
 	KisPoint m_endPos;
 	bool m_selecting;
 };
+
+class KisToolSelectEllipticalFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolSelectEllipticalFactory() : super() {};
+	virtual ~KisToolSelectEllipticalFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolSelectElliptical(); }
+	virtual QString name() { return i18n("Elliptical select tool"); }
+};
+
+
+
+
 
 #endif //__KIS_TOOL_SELECT_ELLIPTICAL_H__
 

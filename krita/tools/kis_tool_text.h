@@ -21,11 +21,15 @@
 
 #include "kis_tool_paint.h"
 
+#include "kis_tool_factory.h"
+
 class QFont;
 class QLabel;
 class QWidget;
 class QPushButton;
 class KSqueezedTextLabel;
+
+
 
 class KisToolText : public KisToolPaint {
 	typedef KisToolPaint super;
@@ -52,5 +56,17 @@ private:
 	QPushButton *m_btnMoreFonts;
 	QWidget *m_optWidget;
 };
+
+
+class KisToolTextFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolTextFactory() : super() {};
+	virtual ~KisToolTextFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolText(); }
+	virtual QString name() { return i18n("Text tool"); }
+};
+
 
 #endif // KIS_TOOL_TEXT_H_

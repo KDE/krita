@@ -23,6 +23,7 @@
 
 #include "kis_types.h"
 #include "kis_tool_paint.h"
+#include "kis_point.h"
 
 class QWidget;
 class QLabel;
@@ -30,19 +31,17 @@ class KisPainter;
 class IntegerWidget;
 class KisCmbComposite;
 class KisBrush;
-class KisPoint;
 class KisEvent;
-
 
 // XXX: rename this to KisToolFreehand -- Freehand is one word, so
 // 'hand' must not be capitalized.
-class KisToolFreeHand : public KisToolPaint {
+class KisToolFreehand : public KisToolPaint {
 	Q_OBJECT
 	typedef KisToolPaint super;
 
 public:
-	KisToolFreeHand(const QString transactionText);
-	virtual ~KisToolFreeHand();
+	KisToolFreehand(const QString transactionText);
+	virtual ~KisToolFreehand();
 
 	virtual void update(KisCanvasSubject *subject);
 
@@ -100,5 +99,8 @@ protected:
 	QLabel *m_lbComposite;
 	KisCmbComposite *m_cmbComposite;
 };
+
+
+
 #endif // KIS_TOOL_FREEHAND_H_
 

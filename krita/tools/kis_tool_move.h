@@ -23,6 +23,7 @@
 
 #include "kis_strategy_move.h"
 #include "kis_tool_non_paint.h"
+#include "kis_tool_factory.h"
 
 class KisToolMove : public KisToolNonPaint {
 
@@ -46,6 +47,19 @@ private:
 	KisCanvasSubject *m_subject;
 	KisStrategyMove m_strategy;
 };
+
+
+class KisToolMoveFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolMoveFactory() : super() {};
+	virtual ~KisToolMoveFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolMove(); }
+	virtual QString name() { return i18n("Move tool"); }
+};
+
+
 
 #endif // KIS_TOOL_MOVE_H_
 

@@ -29,6 +29,8 @@
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 
+#include "kis_tool_factory.h"
+
 // This is KisToolSelectBrush, but filled when the mouse 
 // button is released.
 class KisToolSelectFreehand : public KisToolNonPaint {
@@ -84,6 +86,18 @@ private:
 	bool dragFirst;
 	float m_dragdist;
 };
+
+class KisToolSelectFreehandFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolSelectFreehandFactory() : super() {};
+	virtual ~KisToolSelectFreehandFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolSelectFreehand(); }
+	virtual QString name() { return i18n("Freehand select tool"); }
+};
+
+
 
 #endif //__selecttoolfreehand_h__
 

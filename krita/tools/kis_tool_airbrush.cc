@@ -40,7 +40,7 @@ namespace {
 	Q_INT32 RATE = 100;
 }
 
-KisToolAirBrush::KisToolAirBrush()
+KisToolAirbrush::KisToolAirbrush()
 	: super(i18n("Airbrush"))
 {
 	setName("tool_airbrush");
@@ -50,13 +50,13 @@ KisToolAirBrush::KisToolAirBrush()
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
 }
 
-KisToolAirBrush::~KisToolAirBrush()
+KisToolAirbrush::~KisToolAirbrush()
 {
 	delete m_timer;
 	m_timer = 0;
 }
 
-void KisToolAirBrush::timeoutPaint()
+void KisToolAirbrush::timeoutPaint()
 {
 	if (currentImage() && painter()) {
 		painter() -> paintAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
@@ -64,7 +64,7 @@ void KisToolAirBrush::timeoutPaint()
 	}
 }
 
-void KisToolAirBrush::initPaint(KisEvent *e)
+void KisToolAirbrush::initPaint(KisEvent *e)
 {
 	super::initPaint(e);
 	m_timer -> start( RATE );
@@ -72,13 +72,13 @@ void KisToolAirBrush::initPaint(KisEvent *e)
 	painter() -> setPaintOp(op); // Painter takes over ownership of paintop
 }
 
-void KisToolAirBrush::endPaint()
+void KisToolAirbrush::endPaint()
 {
 	m_timer -> stop();
 	super::endPaint();
 }
 
-void KisToolAirBrush::setup(KActionCollection *collection)
+void KisToolAirbrush::setup(KActionCollection *collection)
 {
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 

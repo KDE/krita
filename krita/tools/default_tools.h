@@ -16,27 +16,28 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef RGB_PLUGIN_H_
-#define RGB_PLUGIN_H_
+#ifndef DEFAULT_TOOLS_H_
+#define DEFAULT_TOOLS_H_
 
 #include <kparts/plugin.h>
 
-#include "kis_types.h"
-
-
 /**
- * A plugin wrapper around the RGB colour space strategy.
+ * A module wrapper around Krita's default tools.
+ * Despite the fact that new tools are created for every new view,
+ * it is not possible to make tools standard parts of the type of the
+ * imagesize plugin, because we need to create a new set of tools for every
+ * pointer device (mouse, stylus, eraser, puck, etc.). So this plugin is
+ * a module which is loaded once into Krita. For every tool there is a factory
+ * class that is registered with the tool registry, and that is used to create
+ * new instances of the tools.
  */
-class RGBPlugin : public KParts::Plugin
+class DefaultTools : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	RGBPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~RGBPlugin();
-	
-private:
+	DefaultTools(QObject *parent, const char *name, const QStringList &);
+	virtual ~DefaultTools();
 
-	KisStrategyColorSpaceSP m_StrategyColorSpaceRGB;
 };
 
-#endif // RGB_PLUGIN_H_
+#endif // DEFAULT_TOOLS_H_

@@ -26,14 +26,16 @@
 class QTimer;
 class KisBrush;
 
-class KisToolAirBrush : public KisToolFreeHand {
+#include "kis_tool_factory.h"
+
+class KisToolAirbrush : public KisToolFreehand {
 
 	Q_OBJECT
-	typedef KisToolFreeHand super;
+	typedef KisToolFreehand super;
     
 public:
-	KisToolAirBrush();
-	virtual ~KisToolAirBrush();
+	KisToolAirbrush();
+	virtual ~KisToolAirbrush();
   
 	virtual void setup(KActionCollection *collection);
 
@@ -52,5 +54,17 @@ private:
 				// to get the initial size info into
 				// KisPainter.
 };
+
+class KisToolAirbrushFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolAirbrushFactory() : super() {};
+	virtual ~KisToolAirbrushFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolAirbrush(); }
+	virtual QString name() { return i18n("Airbrush tool"); }
+};
+
+
 
 #endif // KIS_TOOL_AIRBRUSH_H

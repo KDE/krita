@@ -50,6 +50,7 @@ KAboutData * newKritaAboutData()
 	aboutData->addAuthor("Bart Coppens", 0, "kde@bartcoppens.be");
 	aboutData->addAuthor("Casper Boemann", 0, "cbr@boemann.dk");
 	aboutData->addAuthor("Dirk Schoenberger", 0, "dirk.schoenberger@sz-online.de");
+	aboutData->addAuthor("Michael Thaler", 0, "michael.thaler@physik.tu-muenchen.de");
 	return aboutData;
 }
 

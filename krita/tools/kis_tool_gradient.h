@@ -30,6 +30,7 @@
 #include "kis_types.h"
 #include "kis_painter.h"
 #include "kis_gradient_painter.h"
+#include "kis_tool_factory.h"
 
 class IntegerWidget;
 class KisCmbComposite;
@@ -40,6 +41,8 @@ class QLabel;
 class QPoint;
 class QWidget;
 class QCheckBox;
+
+
 
 class KisToolGradient : public KisToolPaint {
 
@@ -106,6 +109,18 @@ private:
 	QLabel *m_lbAntiAliasThreshold;
 	KisDoubleWidget *m_slAntiAliasThreshold;
 };
+
+class KisToolGradientFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolGradientFactory() : super() {};
+	virtual ~KisToolGradientFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolGradient(); }
+	virtual QString name() { return i18n("Gradient Tool"); }
+};
+
+
 
 #endif //KIS_TOOL_GRADIENT_H_
 

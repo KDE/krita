@@ -27,6 +27,7 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
+#include "kis_tool_factory.h"
 
 class IntegerWidget;
 class KisBrush;
@@ -36,6 +37,7 @@ class KisPainter;
 class QLabel;
 class QPoint;
 class QWidget;
+
 
 class KisToolLine : public KisToolPaint {
 
@@ -76,6 +78,20 @@ class KisToolLine : public KisToolPaint {
 	QUANTUM m_opacity;
 	CompositeOp m_compositeOp;
 };
+
+
+class KisToolLineFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolLineFactory() : super() {};
+	virtual ~KisToolLineFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolLine(); }
+	virtual QString name() { return i18n("Line tool"); }
+};
+
+
+
 
 #endif //KIS_TOOL_LINE_H_
 

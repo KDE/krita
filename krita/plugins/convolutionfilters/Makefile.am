@@ -8,9 +8,9 @@ INCLUDES  = \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tiles \
+	-I$(srcdir)/../../core/tool \
 	-I$(srcdir)/../../core/paintop \
 	-I$(srcdir)/../../ui \
-	-I$(srcdir)/../../tools \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 

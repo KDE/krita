@@ -8,8 +8,9 @@ INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core/compositeop \
 	-I$(srcdir)/../../core/tiles \
+	-I$(srcdir)/../../core/tool \
 	-I$(srcdir)/../ui \
-	-I$(srcdir)../../tools $(KOFFICE_INCLUDES) \
+	$(KOFFICE_INCLUDES) \
 	 -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
 kde_module_LTLIBRARIES = kritaimagesize.la

@@ -314,7 +314,6 @@ private slots:
 	void brushActivated(KisResource *brush);
 	void patternActivated(KisResource *pattern);
 	void gradientActivated(KisResource *gradient);
-// 	void setPaintOffset();
 	void scrollH(int value);
 	void scrollV(int value);
 	void slotEmbedImage(const QString& filename);
@@ -327,7 +326,8 @@ private slots:
 	void viewColorDocker();
 	void viewControlDocker();
 	void viewLayerChannelDocker();
-	void viewResourceDocker();
+	void viewShapesDocker();
+	void viewFillsDocker();
 	void slotUpdateFullScreen(bool toggle);
 
 	void updateTabBar();
@@ -394,7 +394,8 @@ private:
 
         // Dockers
 	DockFrameDocker *m_layerchanneldocker;
-	DockFrameDocker *m_resourcedocker;
+	DockFrameDocker *m_shapesdocker;
+	DockFrameDocker *m_fillsdocker;
 	DockFrameDocker *m_toolcontroldocker;
 	DockFrameDocker *m_historydocker;
 	DockFrameDocker *m_colordocker;

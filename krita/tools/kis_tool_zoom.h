@@ -23,6 +23,8 @@
 
 #include "kis_tool_non_paint.h"
 
+#include "kis_tool_factory.h"
+
 class KisCanvasSubject;
 
 class KisToolZoom : public KisToolNonPaint {
@@ -55,5 +57,17 @@ private:
 	QPoint m_endPos;
 	bool m_dragging;
 };
+
+
+class KisToolZoomFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolZoomFactory() : super() {};
+	virtual ~KisToolZoomFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolZoom(); }
+	virtual QString name() { return i18n("Zoom tool"); }
+};
+
 
 #endif // KIS_ZOOM_TOOL_H_

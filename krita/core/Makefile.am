@@ -2,16 +2,15 @@
 INCLUDES  = -I$(srcdir)/builder \
 	-I$(srcdir)/resources \
 	-I$(srcdir)/visitors \
-	-I$(srcdir)/helper \
 	-I$(srcdir)/paintop \
 	-I$(srcdir)/tiles \
 	-I$(srcdir)/../ui \
+	-I$(srcdir)/tool \
 	-I../ui \
 	-I$(srcdir)/../ui/dialogs \
 	-I../ui/dialogs \
 	-I$(srcdir)/../ui/widgets \
 	-I../ui/widgets \
-	-I$(srcdir)/../tools \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) \
 	$(KOPAINTER_INCLUDES) \
@@ -24,12 +23,12 @@ INCLUDES  = -I$(srcdir)/builder \
 noinst_LTLIBRARIES = libkritacore.la
 
 libkritacore_la_LIBADD = tiles/libkistile.la \
-	helper/libkishelper.la \
 	builder/libkiscorebuilder.la \
 	strategy/libkisstrategy.la \
 	color_strategy/libkiscolor_strategy.la \
 	resources/libkisresources.la \
 	paintop/libkispaintop.la \
+	tool/libkistool.la \
 	$(LIB_KOPAINTER)
 
 libkritacore_la_SOURCES = kis_paint_device.cc \
@@ -45,7 +44,6 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_fill_painter.cc \
 	kis_gradient_painter.cc \
 	kis_convolution_painter.cc \
-	kis_tool_factory.cc \
 	kis_cursor.cc \
 	kis_floatingselection.cc \
 	kis_selection.cc \
@@ -53,12 +51,10 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_background.cc \
 	kis_global.cc \
 	kis_config.cc \
-	kis_tool.cc \
 	kis_guide.cc \
 	kis_canvas_subject.cc \
 	kis_canvas_controller.cc \
 	kis_canvas_observer.cc \
-	kis_tool_controller.cc \
 	kis_tile_command.cc \
 	kis_vec.cc \
 	kis_rect.cc \
@@ -89,7 +85,6 @@ noinst_HEADERS = kis_paint_device.h \
 	kis_factory.h \
 	kis_nameserver.h \
 	kis_painter.h \
-	kis_tool_factory.h \
 	kis_cursor.h \
 	kis_floatingselection.h \
 	kis_selection.h \
@@ -97,12 +92,10 @@ noinst_HEADERS = kis_paint_device.h \
 	kis_background.h \
 	kis_global.h \
 	kis_config.h \
-	kis_tool.h \
 	kis_guide.h \
 	kis_canvas_subject.h \
 	kis_canvas_controller.h \
 	kis_canvas_observer.h \
-	kis_tool_controller.h \
 	kis_tile_command.h \
 	kis_vec.h \
 	kis_rect.h \
@@ -122,5 +115,5 @@ noinst_HEADERS = kis_paint_device.h \
 
 libkritacore_la_METASOURCES = AUTO
 libkritacore_la_LDFLAGS = $(all_libraries)
-SUBDIRS = helper tiles builder strategy color_strategy paintop resources
+SUBDIRS = tiles builder strategy color_strategy paintop resources tool
 KDE_OPTIONS = nofinal

@@ -53,7 +53,6 @@ public:
 	virtual ~KisPluginRegistry();
 	
 	void registerColorStrategy(const QString & name, KisStrategyColorSpaceSP colorspace);
-	void registerTool(const QString & name, KisToolSP tool);
 
 	static KisPluginRegistry * singleton();
 

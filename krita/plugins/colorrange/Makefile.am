@@ -4,8 +4,13 @@ kritarc_DATA = colorrange.rc
 EXTRA_DIST = $(kritarc_DATA)
 
 
-INCLUDES  = -I$(srcdir)/../../core -I$(srcdir)/../../core/compositeop  -I$(srcdir)/../../core/color_strategy -I$(srcdir)/../../core/tiles -I$(srcdir)/../../ui -I$(srcdir)../../tools $(KOFFICE_INCLUDES) \
-	 -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
+INCLUDES  = -I$(srcdir)/../../core \
+	-I$(srcdir)/../../core/compositeop \
+	-I$(srcdir)/../../core/color_strategy \
+	-I$(srcdir)/../../core/tiles \
+	-I$(srcdir)/../../core/tool \
+	-I$(srcdir)/../../ui \
+	$(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
 kde_module_LTLIBRARIES = kritacolorrange.la
 

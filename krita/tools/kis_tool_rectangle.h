@@ -30,6 +30,7 @@
 #include "kis_tool.h"
 #include "kis_tool_paint.h"
 #include "kis_types.h"
+#include "kis_tool_factory.h"
 
 class QPainter;
 class KisPainter;
@@ -81,6 +82,17 @@ protected:
 	KisImageSP m_currentImage;
 
 };
+
+class KisToolRectangleFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolRectangleFactory() : super() {};
+	virtual ~KisToolRectangleFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolRectangle(); }
+	virtual QString name() { return i18n("Rectangle tool"); }
+};
+
 
 #endif // __KIS_TOOL_RECTANGLE_H__
 

@@ -89,7 +89,7 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
 	m_optWidget -> setCaption(i18n("Filter"));
-	QWidget* optionFreeHandWidget = KisToolFreeHand::createOptionWidget(m_optWidget);
+	QWidget* optionFreehandWidget = KisToolFreehand::createOptionWidget(m_optWidget);
 	m_cbFilter = new QComboBox(m_optWidget);
 	QLabel* lbFilter = new QLabel(i18n("Filter : "), m_optWidget);
 
@@ -97,7 +97,7 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 	
 	m_optionLayout = new QGridLayout(m_optWidget, 3, 2);
 
-	m_optionLayout -> addMultiCellWidget(optionFreeHandWidget, 0, 0, 0 , 1 );
+	m_optionLayout -> addMultiCellWidget(optionFreehandWidget, 0, 0, 0 , 1 );
  	m_optionLayout -> addWidget(lbFilter, 1, 0);
  	m_optionLayout -> addWidget(m_cbFilter, 1, 1);
 

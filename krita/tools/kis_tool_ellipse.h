@@ -34,6 +34,7 @@ class KisPainter;
 class KisView;
 class KisRect;
 
+
 class KisToolEllipse : public KisToolPaint {
 
 	typedef KisToolPaint super;
@@ -73,6 +74,20 @@ protected:
 	bool m_dragging;
 	KisImageSP m_currentImage;
 };
+
+
+#include "kis_tool_factory.h"
+
+class KisToolEllipseFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolEllipseFactory() : super() {};
+	virtual ~KisToolEllipseFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolEllipse(); }
+	virtual QString name() { return i18n("Ellipse tool"); }
+};
+
 
 #endif //__KIS_TOOL_ELLIPSE_H__
 

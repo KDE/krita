@@ -22,6 +22,8 @@
 #include "kis_tool_non_paint.h"
 #include "kis_tool_move.h"
 
+#include "kis_tool_factory.h"
+
 class KisToolPaste : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;
@@ -50,6 +52,18 @@ private:
 	QUANTUM m_oldOpacity;
 	KisFloatingSelectionSP m_selection;
 };
+
+
+class KisToolPasteFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolPasteFactory() : super() {};
+	virtual ~KisToolPasteFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolPaste(); }
+	virtual QString name() { return i18n("Paste tool"); }
+};
+
 
 #endif // KIS_TOOL_PASTE_H_
 

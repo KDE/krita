@@ -20,6 +20,7 @@
 #define KIS_TOOL_PAN_H_
 
 #include "kis_tool_non_paint.h"
+#include "kis_tool_factory.h"
 
 class KisCanvasSubject;
 class KisPoint;
@@ -49,6 +50,17 @@ private:
 	QCursor m_openHandCursor;
 	QCursor m_closedHandCursor;
 };
+
+class KisToolPanFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolPanFactory() : super() {};
+	virtual ~KisToolPanFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolPan(); }
+	virtual QString name() { return i18n("Pan tool"); }
+};
+
 
 #endif // KIS_TOOL_PAN_H_
 

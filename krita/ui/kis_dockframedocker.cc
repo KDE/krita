@@ -35,7 +35,7 @@
 DockFrameDocker::DockFrameDocker( QWidget* parent, const char* name ) : BaseDocker( parent, name )
 {
 	setWidget( m_tabwidget = new QTabWidget( this ) );
-	m_tabwidget -> setBaseSize( 200, 175 );
+	m_tabwidget -> setBaseSize( 175, 125 );
        
 }
 

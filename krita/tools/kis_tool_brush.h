@@ -1,4 +1,4 @@
-/*
+/**
  *  kis_tool_brush.h - part of Krita
  *
  *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
@@ -23,11 +23,14 @@
 
 #include "kis_tool_freehand.h"
 
+#include "kis_tool_factory.h"
+
+
 class KisPoint;
 
-class KisToolBrush : public KisToolFreeHand {
+class KisToolBrush : public KisToolFreehand {
 	Q_OBJECT
-	typedef KisToolFreeHand super;
+	typedef KisToolFreehand super;
 
 public:
 	KisToolBrush();
@@ -39,5 +42,17 @@ protected:
 
 	virtual void initPaint(KisEvent *e);
 };
+
+class KisToolBrushFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolBrushFactory() : super() {};
+	virtual ~KisToolBrushFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolBrush(); }
+	virtual QString name() { return i18n("Brush tool"); }
+};
+
+
 #endif // KIS_TOOL_BRUSH_H_
 

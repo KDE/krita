@@ -23,13 +23,16 @@
 
 #include "kis_tool.h"
 #include "kis_tool_freehand.h"
+#include "kis_tool_factory.h"
 
 class KisEvent;
 class KisButtonPressEvent;
 
-class KisToolDuplicate : public KisToolFreeHand {
 
-	typedef KisToolFreeHand super;
+
+class KisToolDuplicate : public KisToolFreehand {
+
+	typedef KisToolFreehand super;
 	Q_OBJECT
 
 public:
@@ -56,6 +59,19 @@ protected:
 	bool m_isOffsetNotUptodate; // Tells if the offset is update
 	KisPoint m_position; // Give the position of the last alt-click
 };
+
+
+class KisToolDuplicateFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolDuplicateFactory() : super() {};
+	virtual ~KisToolDuplicateFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolDuplicate(); }
+	virtual QString name() { return i18n("Duplicate tool"); }
+};
+
+
 
 #endif //__KIS_TOOL_DUPLICATE_H__
 

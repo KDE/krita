@@ -23,7 +23,6 @@
 #include <utility>
 #include "kis_types.h"
 #include "kis_global.h"
-#include "kisscopedlock.h"
 #include "kistilemediator.h"
 
 namespace {

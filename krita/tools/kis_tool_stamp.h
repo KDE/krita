@@ -26,6 +26,7 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
+#include "kis_tool_factory.h"
 
 class IntegerWidget;
 class KisBrush;
@@ -35,7 +36,6 @@ class KisPainter;
 class QLabel;
 class QPoint;
 class QWidget;
-
 
 class KisToolStamp : public KisToolPaint {
 
@@ -82,5 +82,17 @@ protected:
 	KisPainter *m_painter;
 
 };
+
+
+class KisToolStampFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolStampFactory() : super() {};
+	virtual ~KisToolStampFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolStamp(); }
+	virtual QString name() { return i18n("Stamp tool"); }
+};
+
 
 #endif //KIS_TOOL_STAMP_H_

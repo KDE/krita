@@ -33,7 +33,8 @@ Scaling
 
 Core
 
-	* Discontinuous selections (A byte-map mask for a whole image) (#Boudewijn)
+	* Discontinuous selections (A byte-map mask for a whole image)
+	  (#Boudewijn)
 	* Channels showing (note that we don't do Gimp-type grayscale
 	  mask channels, just showing/hiding the various color
 	  channels.

@@ -44,7 +44,7 @@ KisPluginRegistry *KisPluginRegistry::m_singleton = 0;
 KisPluginRegistry::KisPluginRegistry()
 	: super()
 {
-//	kdDebug() << "Creating plugin registry\n";
+	kdDebug() << "Creating plugin registry\n";
 
 	KisPluginRegistry::m_singleton = this;
 
@@ -66,8 +66,8 @@ KisPluginRegistry::KisPluginRegistry()
 		if (plugin) {
 			// guiFactory()->addClient(plugin);
 
-			//kdDebug() << "PluginDemo: Loaded plugin "
-			//	  << (*iter) -> name() << endl;
+			kdDebug() << "KisPluginRegistry: Loaded plugin "
+				  << (*iter) -> name() << endl;
 		}
 	}
 
@@ -86,27 +86,8 @@ KisPluginRegistry::~KisPluginRegistry()
 
 void KisPluginRegistry::registerColorStrategy(const QString & name, KisStrategyColorSpaceSP colorspace)
 {
-//	kdDebug() << "Adding color strategy: " << name << "\n";
+	kdDebug() << "Adding color strategy: " << name << "\n";
 	KisColorSpaceRegistry::singleton() -> add(colorspace);
-}
-
-void KisPluginRegistry::registerTool(const QString & /*name*/, KisToolSP /*tool*/)
-{
-	// XXX: Currently, tools are created whenever a view is
-	// created. That is to say, tools are not singletons, and the
-	// list of tools is not a singleton either; and every input
-	// device has its own list of tools.
-
-	// This needs to be reviewed -- I don't know how to create new
-	// instances of tools when a new view is created because C++
-	// doesn't have the concept of a Class class.
-
-	// This makes it hard to make a tool plugin...
-
-	// Perhaps have the toolplugin register itself once in a
-	// registry and provide a factory function. The
-	// KisToolFactory::create method could then use the factory
-	// function to add the plugin tools to the hard-coded tools.
 }
 
 #include "kis_plugin_registry.moc"

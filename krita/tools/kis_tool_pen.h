@@ -23,15 +23,18 @@
 
 #include "kis_tool_freehand.h"
 
+#include "kis_tool_factory.h"
+
+
 /**
  * Hard-edged pen-like tool. Funny: the icon is a pencil, and the effect
  * is neither that of an ink pen or a pencil, but more like a biro. Perhaps
  * rename, later, when we have a real pencil, a real fountain pen, a real
  * ink pen.
  */
-class KisToolPen : public KisToolFreeHand {
+class KisToolPen : public KisToolFreehand {
 	Q_OBJECT
-	typedef KisToolFreeHand super;
+	typedef KisToolFreehand super;
 
 public:
 	KisToolPen();
@@ -43,5 +46,17 @@ private:
 
 	virtual void initPaint(KisEvent *e);
 };
+
+
+class KisToolPenFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolPenFactory() : super() {};
+	virtual ~KisToolPenFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolPen(); }
+	virtual QString name() { return i18n("Pen tool"); }
+};
+
 #endif // KIS_TOOL_PEN_H_
 

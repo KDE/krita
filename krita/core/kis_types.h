@@ -94,6 +94,9 @@ typedef vKisHistogramSP::const_iterator vKisHistogramSP_cit;
 class KisPaintOpFactory;
 typedef KSharedPtr<KisPaintOpFactory> KisPaintOpFactorySP;
 
+class KisToolFactory;
+typedef KSharedPtr<KisToolFactory> KisToolFactorySP;
+
 class KisPluginRegistry;
 typedef KSharedPtr<KisPluginRegistry> KisPluginRegistrySP;
 

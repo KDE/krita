@@ -38,7 +38,7 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 
-KisToolFreeHand::KisToolFreeHand(QString transactionText)
+KisToolFreehand::KisToolFreehand(QString transactionText)
 		: super(),
 		m_dragDist ( 0 ),
 		m_transactionText(transactionText),
@@ -57,17 +57,17 @@ KisToolFreeHand::KisToolFreeHand(QString transactionText)
 	m_compositeOp = COMPOSITE_OVER;
 }
 
-KisToolFreeHand::~KisToolFreeHand()
+KisToolFreehand::~KisToolFreehand()
 {
 }
 
-void KisToolFreeHand::update(KisCanvasSubject *subject)
+void KisToolFreehand::update(KisCanvasSubject *subject)
 {
 	super::update(subject);
 	m_currentImage = m_subject -> currentImg();
 }
 
-void KisToolFreeHand::buttonPress(KisButtonPressEvent *e)
+void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 {
         if (!m_subject) return;
 
@@ -90,14 +90,14 @@ void KisToolFreeHand::buttonPress(KisButtonPressEvent *e)
          }
 }
 
-void KisToolFreeHand::buttonRelease(KisButtonReleaseEvent* e)
+void KisToolFreehand::buttonRelease(KisButtonReleaseEvent* e)
 {
 	if (e -> button() == QMouseEvent::LeftButton && m_mode == PAINT) {
 		endPaint();
         }
 }
 
-void KisToolFreeHand::move(KisMoveEvent *e)
+void KisToolFreehand::move(KisMoveEvent *e)
 {
 	if (m_mode == PAINT) {
 		paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
@@ -111,7 +111,7 @@ void KisToolFreeHand::move(KisMoveEvent *e)
 	}
 }
 
-void KisToolFreeHand::initPaint(KisEvent *)
+void KisToolFreehand::initPaint(KisEvent *)
 {
 	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 
@@ -142,7 +142,7 @@ void KisToolFreeHand::initPaint(KisEvent *)
 #endif
 }
 
-void KisToolFreeHand::endPaint() 
+void KisToolFreehand::endPaint() 
 {
 	m_mode = HOVER;
 	if (m_currentImage) { 
@@ -158,7 +158,7 @@ void KisToolFreeHand::endPaint()
 	}
 }
 
-QWidget* KisToolFreeHand::createOptionWidget(QWidget* parent)
+QWidget* KisToolFreehand::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
 	m_optWidget -> setCaption(m_transactionText);
@@ -185,24 +185,24 @@ QWidget* KisToolFreeHand::createOptionWidget(QWidget* parent)
 	return m_optWidget;
 }
 
-QWidget* KisToolFreeHand::optionWidget()
+QWidget* KisToolFreehand::optionWidget()
 {
 	return m_optWidget;
 }
 
-void KisToolFreeHand::slotSetOpacity(int opacityPerCent)
+void KisToolFreehand::slotSetOpacity(int opacityPerCent)
 {
 	m_opacity = opacityPerCent * OPACITY_OPAQUE / 100;
 }
 
-void KisToolFreeHand::slotSetCompositeMode(int compositeOp)
+void KisToolFreehand::slotSetCompositeMode(int compositeOp)
 {
 	m_compositeOp = (CompositeOp)compositeOp;
 }
 
 
 
-void KisToolFreeHand::paintAt(const KisPoint &pos,
+void KisToolFreehand::paintAt(const KisPoint &pos,
 			   const double pressure,
 			   const double xTilt,
 			   const double yTilt)
@@ -210,7 +210,7 @@ void KisToolFreeHand::paintAt(const KisPoint &pos,
 	painter() -> paintAt(pos, pressure, xTilt, yTilt);
 }
 
-void KisToolFreeHand::paintLine(const KisPoint & pos1,
+void KisToolFreehand::paintLine(const KisPoint & pos1,
 			     const double pressure1,
 			     const double xtilt1,
 			     const double ytilt1,
@@ -223,7 +223,7 @@ void KisToolFreeHand::paintLine(const KisPoint & pos1,
 }
 
 
-KisImageSP KisToolFreeHand::currentImage()
+KisImageSP KisToolFreehand::currentImage()
 {
 	return m_currentImage;
 }

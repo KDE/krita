@@ -1,5 +1,6 @@
 INCLUDES  = -I$(srcdir)/.. \
 	-I$(srcdir)/../../core \
+	-I$(srcdir)/../../core/tool \
 	-I.. \
 	$(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 noinst_LTLIBRARIES = libkisdialogs.la

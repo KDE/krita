@@ -81,5 +81,21 @@ private:
 	CompositeOp m_compositeOp;
 };
 
+
+#include "kis_tool_factory.h"
+
+class KisToolFillFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolFillFactory() : super() {};
+	virtual ~KisToolFillFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolFill(); }
+	virtual QString name() { return i18n("Fill tool"); }
+};
+
+
+
+
 #endif //__filltool_h__
 

@@ -24,10 +24,10 @@
 
 #include "kis_types.h"
 #include "kis_global.h"
-#include "kisscopedlock.h"
 #include "kispixeldata.h"
 #include "kistilemediator.h"
 #include "kistilemgr.h"
+#include "kis_scoped_lock.h"
 
 #define DEBUG_TILE_MANAGERS 0
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,34 +16,40 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef KIS_TOOL_FACTORY_H_
-#define KIS_TOOL_FACTORY_H_
+#ifndef KIS_TOOL_REGISTRY_H_
+#define KIS_TOOL_REGISTRY_H_
 
 #include "kis_types.h"
+#include "kis_generic_registry.h"
 
 class KActionCollection;
 class KisCanvasSubject;
-class KisView;
+class QStringList;
 
-class KisToolFactory {
+/**
+ * A registry, similar to the tool and colormodel registry
+ * where new tool plugins can register themselves. KisToolRegistry
+ * in contrast to the paintop and colormodel registries, creates
+ * a vector containing instances of all registered tools.
+ */
+class KisToolRegistry : public KisGenericRegistry<KisToolFactorySP> {
 
 public:
-	KisToolFactory();
-	~KisToolFactory();
+	virtual ~KisToolRegistry();
+
+	vKisTool createTools(KActionCollection *actionCollection, KisCanvasSubject *subject) const;
 
 public:
-	vKisTool create(KActionCollection *actionCollection, KisCanvasSubject *subject);
-
-public:
-	static KisToolFactory *singleton();
+	static KisToolRegistry* singleton();
+	
+private:
+	KisToolRegistry();
+	KisToolRegistry(const KisToolRegistry&);
+	KisToolRegistry operator=(const KisToolRegistry&);
 
 private:
-	KisToolFactory(const KisToolFactory&);
-	KisToolFactory& operator=(const KisToolFactory&);
-
-private:
-	static KisToolFactory *m_singleton;
+	static KisToolRegistry *m_singleton;
 };
 
-#endif // KIS_TOOL_FACTORY_H_
+#endif // KIS_TOOL_REGISTRY_H_
 

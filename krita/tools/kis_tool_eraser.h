@@ -25,9 +25,11 @@
 
 #include "kis_tool_freehand.h"
 
-class KisToolEraser : public KisToolFreeHand {
+#include "kis_tool_factory.h"
 
-	typedef KisToolFreeHand super;
+class KisToolEraser : public KisToolFreehand {
+
+	typedef KisToolFreehand super;
 	Q_OBJECT
 
 public:
@@ -40,6 +42,18 @@ protected:
 
 	virtual void initPaint(KisEvent *e);
 };
+
+
+class KisToolEraserFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolEraserFactory() : super() {};
+	virtual ~KisToolEraserFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolEraser(); }
+	virtual QString name() { return i18n("Eraser tool"); }
+};
+
 
 #endif // KIS_TOOL_ERASER_H_
 

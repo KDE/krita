@@ -23,6 +23,10 @@
 
 #include "kis_tool_freehand.h"
 
+#include "kis_tool_factory.h"
+
+
+
 class KisPoint;
 
 /**
@@ -30,9 +34,9 @@ class KisPoint;
  * brush shape. Not sure what kind of an icon could represent this... 
  * Depends a bit on how we're going to visualize selections.
  */
-class KisToolSelectBrush : public KisToolFreeHand {
+class KisToolSelectBrush : public KisToolFreehand {
 	Q_OBJECT
-	typedef KisToolFreeHand super;
+	typedef KisToolFreehand super;
 
 public:
 	KisToolSelectBrush();
@@ -49,5 +53,17 @@ protected:
 	virtual void initPaint(KisEvent *e);
 	virtual void endPaint();
 };
+
+class KisToolSelectBrushFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolSelectBrushFactory() : super() {};
+	virtual ~KisToolSelectBrushFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolSelectBrush(); }
+	virtual QString name() { return i18n("Brush select tool"); }
+};
+
+
 #endif // KIS_TOOL_SELECT_BRUSH_H_
 

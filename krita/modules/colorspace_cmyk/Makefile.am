@@ -6,10 +6,10 @@ kde_services_DATA = kritacmykplugin.desktop
 
 INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tiles \
+	-I$(srcdir)/../../core/tool \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core/compositeop \
 	-I$(srcdir)/../ui \
-	-I$(srcdir)../../tools \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) \
 	$(KOPAINTER_INCLUDES) \

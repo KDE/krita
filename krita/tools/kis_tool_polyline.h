@@ -26,9 +26,12 @@
 
 #include "kis_tool.h"
 #include "kis_tool_line.h"
+#include "kis_tool_factory.h"
 
 class KisDoc;
 class KisCanvas;
+
+
 
 class KisToolPolyLine : public KisToolLine {
 
@@ -51,5 +54,16 @@ private:
 	KisCanvasSubject * m_subject;
 
 };
+
+class KisToolPolyLineFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolPolyLineFactory() : super() {};
+	virtual ~KisToolPolyLineFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolPolyLine(); }
+	virtual QString name() { return i18n("Polyline tool"); }
+};
+
 
 #endif //__polylinetool_h__

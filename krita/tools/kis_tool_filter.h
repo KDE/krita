@@ -23,6 +23,7 @@
 
 #include "kis_tool.h"
 #include "kis_tool_freehand.h"
+#include "kis_tool_factory.h"
 
 class QComboBox;
 class QGridLayout;
@@ -31,9 +32,11 @@ class KisFilterConfigurationWidget;
 class KisButtonPressEvent;
 class KisView;
 
-class KisToolFilter : public KisToolFreeHand {
+
+
+class KisToolFilter : public KisToolFreehand {
 	Q_OBJECT
-	typedef KisToolFreeHand super;
+	typedef KisToolFreehand super;
 
 public:
 	KisToolFilter();
@@ -55,6 +58,17 @@ private:
 	QGridLayout* m_optionLayout;
 	QWidget* m_optWidget;
 	QComboBox* m_cbFilter;
+};
+
+
+class KisToolFilterFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolFilterFactory() : super() {};
+	virtual ~KisToolFilterFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolFilter(); }
+	virtual QString name() { return i18n("Filter tool"); }
 };
 
 #endif //__KIS_TOOL_FILTER_H__

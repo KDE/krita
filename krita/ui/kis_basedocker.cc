@@ -35,7 +35,7 @@ BaseDocker::BaseDocker( QWidget* parent, const char* name)
 	setResizeEnabled(true);
 	setVerticallyStretchable(false);
 	setHorizontallyStretchable(true);
-	setNewLine(false);
+	setNewLine(true);
 
 	QFont f;
 	f.setPointSize(8);

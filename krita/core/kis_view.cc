@@ -91,7 +91,7 @@
 #include "kis_controlframe.h"
 #include "kis_dockframedocker.h"
 #include "kis_tool.h"
-#include "kis_tool_factory.h"
+#include "kis_tool_registry.h"
 #include "kis_tool_non_paint.h"
 #include "kis_types.h"
 #include "kis_undo_adapter.h"
@@ -191,7 +191,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_bg = KoColor::white();
 
         m_layerchanneldocker = 0;
-        m_resourcedocker = 0;
+        m_shapesdocker = 0;
+	m_fillsdocker = 0;
         m_toolcontroldocker = 0;
         m_colordocker = 0;
 
@@ -259,8 +260,12 @@ void KisView::setupDockers()
         m_layerchanneldocker = new DockFrameDocker(this);
         m_layerchanneldocker -> setCaption(i18n("Layers/Channels/Paths"));
 
-        m_resourcedocker = new DockFrameDocker(this);
-        m_resourcedocker -> setCaption(i18n("Brushes/Patterns/Gradients"));
+        
+	m_shapesdocker = new DockFrameDocker(this);
+        m_shapesdocker -> setCaption(i18n("Brush shapes"));
+
+	m_fillsdocker = new DockFrameDocker(this);
+	m_fillsdocker -> setCaption(i18n("Fills"));
 
         m_toolcontroldocker = new DockFrameDocker(this);
         m_toolcontroldocker -> setCaption(i18n("Navigator/Info/Options"));
@@ -287,38 +292,38 @@ void KisView::setupDockers()
         m_historydocker -> setCaption(i18n("History/Actions"));
 
 
-	// Setup all brushes
+	// Setup brush shapes
         m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
-                                                  m_resourcedocker, "brush_chooser", this);
+                                                  m_shapesdocker, "brush_chooser", this);
+
         m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
-        m_resourcedocker -> plug(m_brushMediator -> chooserWidget());
+        m_shapesdocker -> plug(m_brushMediator -> chooserWidget());
         connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
+
+	// AutoBrush
+	m_autobrush = new KisAutobrush(m_shapesdocker, "autobrush", i18n("Autobrush"));
+	m_shapesdocker -> plug(m_autobrush);
+	connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
+	
+	// TextBrush
+	m_textBrush = new KisTextBrush(m_shapesdocker, "textbrush", i18n("Text Brush"));
+	m_shapesdocker -> plug(m_textBrush);
+	connect(m_textBrush, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
 
 
 	// Setup patterns
         m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
-                                                    m_resourcedocker, "pattern chooser", this);
+                                                    m_fillsdocker, "pattern chooser", this);
         m_pattern = dynamic_cast<KisPattern*>(m_patternMediator -> currentResource());
-        m_resourcedocker -> plug(m_patternMediator -> chooserWidget());
+        m_fillsdocker -> plug(m_patternMediator -> chooserWidget());
         connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
-
 
 	// Setup gradients
 	m_gradientMediator = new KisResourceMediator(MEDIATE_GRADIENTS, rserver, i18n("Gradients"),
-						    m_resourcedocker, "gradient chooser", this);
+						    m_fillsdocker, "gradient chooser", this);
 	m_gradient = dynamic_cast<KisGradient*>(m_gradientMediator -> currentResource());
-	m_resourcedocker -> plug(m_gradientMediator -> chooserWidget());
+	m_fillsdocker -> plug(m_gradientMediator -> chooserWidget());
 	connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(gradientActivated(KisResource*)));
-
-	// AutoBrush
-	m_autobrush = new KisAutobrush(m_resourcedocker, "autobrush", i18n("Autobrush"));
-	m_resourcedocker -> plug(m_autobrush);
-	connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
-	
-	// TextBrush
-	m_textBrush = new KisTextBrush(m_resourcedocker, "textbrush", i18n("Text Brush"));
-	m_resourcedocker -> plug(m_textBrush);
-	connect(m_textBrush, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
 
 	// Layers
         m_layerBox = new KisLayerBox(i18n("layer"), KisLayerBox::SHOWALL, m_layerchanneldocker);
@@ -364,8 +369,9 @@ void KisView::setupDockers()
         {
                 viewControlDocker();
                 viewLayerChannelDocker();
-                viewResourceDocker();
+                viewShapesDocker();
                 viewColorDocker();
+		viewFillsDocker();
                 mainWindow() -> setDockEnabled( DockBottom, false);
                 mainWindow() -> setDockEnabled( DockTop, false);
         }
@@ -576,7 +582,8 @@ void KisView::setupActions()
         (void)new KAction(i18n( "&Color Manager" ), 0, this, SLOT( viewColorDocker() ), actionCollection(), "view_color_docker" );
         (void)new KAction(i18n( "&Tool Properties" ), 0, this, SLOT( viewControlDocker() ), actionCollection(), "view_control_docker" );
         (void)new KAction(i18n( "&Layers/Channels" ), 0, this, SLOT( viewLayerChannelDocker() ), actionCollection(), "view_layer_docker" );
-        (void)new KAction(i18n( "&Brushes/Patterns/Gradients" ), 0, this, SLOT( viewResourceDocker() ), actionCollection(), "view_resource_docker" );
+        (void)new KAction(i18n( "&Shapes" ), 0, this, SLOT( viewShapesDocker() ), actionCollection(), "view_shapes_docker" );
+        (void)new KAction(i18n( "&Fills" ), 0, this, SLOT( viewFillsDocker() ), actionCollection(), "view_fills_docker" );
 
 	m_RulerAction = new KToggleAction( i18n( "Show Rulers" ), 0, this, SLOT( showRuler() ), actionCollection(), "view_ruler" );
 	m_RulerAction->setChecked( true );
@@ -758,6 +765,7 @@ KisTool *KisView::findTool(QString toolName, enumInputDevice inputDevice) const
 	}
 
 	KisTool *tool = 0;
+
 	InputDeviceToolSetMap::const_iterator vit = m_inputDeviceToolSetMap.find(inputDevice);
 
 	Q_ASSERT(vit != m_inputDeviceToolSetMap.end());
@@ -782,17 +790,13 @@ void KisView::setInputDevice(enumInputDevice inputDevice)
 
 		if (vit != m_inputDeviceToolSetMap.end()) {
 			vKisTool& oldTools = (*vit).second;
-
 			for (vKisTool::iterator it = oldTools.begin(); it != oldTools.end(); it++) {
 				KisTool *tool = *it;
 				KAction *toolAction = tool -> action();
-
 				toolAction -> disconnect(SIGNAL(activated()), tool, SLOT(activate()));
 			}
 		}
-
 		KisTool *oldTool = currentTool();
-
 		if (oldTool)
 		{
 			if (oldTool -> optionWidget()) {
@@ -828,6 +832,7 @@ void KisView::setInputDevice(enumInputDevice inputDevice)
 
 		currentTool() -> action() -> activate();
 	}
+	
 }
 
 enumInputDevice KisView::currentInputDevice() const
@@ -1613,6 +1618,9 @@ void KisView::viewControlDocker()
         if( m_toolcontroldocker->isVisible() == false )
         {
                 mainWindow()->addDockWindow( m_toolcontroldocker, DockRight );
+		m_toolcontroldocker -> undock();
+		m_toolcontroldocker -> move(mainWindow() -> x() + 50,
+					    mainWindow() -> y() + mainWindow() -> height() - 150);
                 m_toolcontroldocker->show();
         }
 }
@@ -1626,12 +1634,22 @@ void KisView::viewLayerChannelDocker()
         }
 }
 
-void KisView::viewResourceDocker()
+void KisView::viewFillsDocker()
 {
-        if( m_resourcedocker->isVisible() == false )
+        if( m_fillsdocker->isVisible() == false )
         {
-                mainWindow()->addDockWindow( m_resourcedocker, DockRight );
-                m_resourcedocker->show();
+                mainWindow()->addDockWindow( m_fillsdocker, DockRight );
+                m_shapesdocker->show();
+        }
+}
+
+
+void KisView::viewShapesDocker()
+{
+        if( m_shapesdocker->isVisible() == false )
+        {
+                mainWindow()->addDockWindow( m_shapesdocker, DockRight );
+                m_shapesdocker->show();
         }
 }
 
@@ -1803,13 +1821,13 @@ void KisView::print(KPrinter& printer)
 
 void KisView::setupTools()
 {
-	KisToolFactory *factory = KisToolFactory::singleton();
-	Q_ASSERT(factory);
+	KisToolRegistry * reg = KisToolRegistry::singleton();
+	Q_ASSERT(reg);
 
-	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = factory -> create(actionCollection(), this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = factory -> create(actionCollection(), this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = factory -> create(actionCollection(), this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = factory -> create(actionCollection(), this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = reg -> createTools(actionCollection(), this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = reg -> createTools(actionCollection(), this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = reg -> createTools(actionCollection(), this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = reg -> createTools(actionCollection(), this);
 
 	qApp -> installEventFilter(this);
 	m_tabletEventTimer.start();

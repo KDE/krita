@@ -26,6 +26,8 @@
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 
+#include "kis_tool_factory.h"
+
 class KisToolSelectRectangular : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;
@@ -55,6 +57,18 @@ private:
 	QPoint m_endPos;
 	bool m_selecting;
 };
+
+class KisToolSelectRectangularFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolSelectRectangularFactory() : super() {};
+	virtual ~KisToolSelectRectangularFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolSelectRectangular(); }
+	virtual QString name() { return i18n("Rectangular select tool"); }
+};
+
+
 
 #endif // KIS_TOOL_SELECT_RECTANGULAR_H_
 

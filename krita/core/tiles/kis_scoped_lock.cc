@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,28 +15,41 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include <qmutex.h>
+#include "kis_scoped_lock.h"
 
-#ifndef RGB_PLUGIN_H_
-#define RGB_PLUGIN_H_
-
-#include <kparts/plugin.h>
-
-#include "kis_types.h"
-
-
-/**
- * A plugin wrapper around the RGB colour space strategy.
- */
-class RGBPlugin : public KParts::Plugin
+KisScopedLock::KisScopedLock(QMutex *lock, bool initialLock)
 {
-	Q_OBJECT
-public:
-	RGBPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~RGBPlugin();
-	
-private:
+	Q_ASSERT(lock);
+	m_mutex = lock;
 
-	KisStrategyColorSpaceSP m_StrategyColorSpaceRGB;
-};
+	if (initialLock)
+		m_mutex -> lock();
+}
 
-#endif // RGB_PLUGIN_H_
+KisScopedLock::~KisScopedLock()
+{
+	Q_ASSERT(m_mutex);
+
+	if (m_mutex -> locked())
+		m_mutex -> unlock();
+}
+
+void KisScopedLock::lock()
+{
+	Q_ASSERT(m_mutex);
+	m_mutex -> lock();
+}
+
+void KisScopedLock::unlock()
+{
+	Q_ASSERT(m_mutex);
+	m_mutex -> unlock();
+}
+
+void KisScopedLock::trylock()
+{
+	Q_ASSERT(m_mutex);
+	m_mutex -> tryLock();
+}
+

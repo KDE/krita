@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,41 +15,24 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <qmutex.h>
-#include "kisscopedlock.h"
 
-KisScopedLock::KisScopedLock(QMutex *lock, bool initialLock)
+#ifndef KIS_TOOL_FACTORY_H_
+#define KIS_TOOL_FACTORY_H_
+
+#include "kis_types.h"
+
+
+class KisToolFactory  : public KShared
 {
-	Q_ASSERT(lock);
-	m_mutex = lock;
+       
+public:
+	KisToolFactory() {};
+	virtual ~KisToolFactory() {};
+	
+	virtual KisTool * createTool() = 0;
+	virtual QString name() { return QString("Abstract Tool"); }
 
-	if (initialLock)
-		m_mutex -> lock();
-}
+};
 
-KisScopedLock::~KisScopedLock()
-{
-	Q_ASSERT(m_mutex);
-
-	if (m_mutex -> locked())
-		m_mutex -> unlock();
-}
-
-void KisScopedLock::lock()
-{
-	Q_ASSERT(m_mutex);
-	m_mutex -> lock();
-}
-
-void KisScopedLock::unlock()
-{
-	Q_ASSERT(m_mutex);
-	m_mutex -> unlock();
-}
-
-void KisScopedLock::trylock()
-{
-	Q_ASSERT(m_mutex);
-	m_mutex -> tryLock();
-}
+#endif // KIS_TOOL_FACTORY_H_
 

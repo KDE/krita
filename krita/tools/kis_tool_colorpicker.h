@@ -22,11 +22,14 @@
 
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
+#include "kis_tool_factory.h"
 
 class KisCanvasSubject;
 class QWidget;
 class QVBoxLayout;
 class QCheckBox;
+
+
 
 class KisToolColorPicker : public KisToolNonPaint {
 
@@ -54,6 +57,17 @@ private:
 	QCheckBox *m_updateColor;
 	bool m_update;
 };
+
+class KisToolColorPickerFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolColorPickerFactory() : super() {};
+	virtual ~KisToolColorPickerFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolColorPicker(); }
+	virtual QString name() { return i18n("Color picker"); }
+};
+
 
 #endif // KIS_TOOL_COLOR_PICKER_H_
 

@@ -29,6 +29,9 @@
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 
+#include "kis_tool_factory.h"
+
+
 class KisToolSelectPolygonal : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;
@@ -85,6 +88,18 @@ private:
 	bool m_dragFirst;
 	float m_dragdist;
 };
+
+
+class KisToolSelectPolygonalFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolSelectPolygonalFactory() {};
+	virtual ~KisToolSelectPolygonalFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolSelectPolygonal(); }
+	virtual QString name() { return i18n("Polygonal select tool"); }
+};
+
 
 #endif //__selecttoolpolygonal_h__
 

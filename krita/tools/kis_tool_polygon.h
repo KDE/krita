@@ -25,6 +25,8 @@
 #include "kis_tool.h"
 #include "kis_tool_paint.h"
 
+#include "kis_tool_factory.h"
+
 class KisToolPolygon : public KisToolPaint {
 
 	typedef KisToolPaint super;
@@ -68,5 +70,16 @@ private:
 
 	KisCanvasSubject * m_subject;
 };
+
+class KisToolPolygonFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolPolygonFactory() : super() {};
+	virtual ~KisToolPolygonFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolPolygon(); }
+	virtual QString name() { return i18n("Polygon tool"); }
+};
+
 
 #endif //__KIS_TOOL_POLYGON__

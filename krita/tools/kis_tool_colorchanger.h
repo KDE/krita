@@ -29,6 +29,7 @@
 #include "kis_tool_paint.h"
 #include "kis_layer.h"
 
+#include "kis_tool_factory.h"
 
 class KisToolColorChanger : public KisToolPaint {
 
@@ -67,6 +68,18 @@ protected:
 
 	KisCanvasSubject * m_subject;
 };
+
+
+class KisToolColorChangerFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolColorChangerFactory() : super() {};
+	virtual ~KisToolColorChangerFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolColorChanger(); }
+	virtual QString name() { return i18n("Color changer"); }
+};
+
 
 #endif //__KIS_TOOL_COLORCHANGER_H__
 

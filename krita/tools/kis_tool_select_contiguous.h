@@ -26,6 +26,9 @@
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 
+#include "kis_tool_factory.h"
+
+
 /**
  * The 'magic wand' selection tool -- in fact just 
  * a floodfill that only creates a selection.
@@ -62,6 +65,17 @@ protected:
 private:
 	KisCanvasSubject *m_subject;
 };
+
+class KisToolSelectContiguousFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolSelectContiguousFactory() : super() {};
+	virtual ~KisToolSelectContiguousFactory(){};
+	
+	virtual KisTool * createTool() { return new KisToolSelectContiguous(); }
+	virtual QString name() { return i18n("Contiguous select tool"); }
+};
+
 
 #endif //__KIS_TOOL_SELECT_CONTIGUOUS_H__
 

@@ -390,6 +390,7 @@ bool KisDoc::initDoc()
 	    KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE,
 					"*.kra", i18n("Krita"),
 					dlgtype, "krita_template");
+	setUndo(false);
 
 	if (ret == KoTemplateChooseDia::Template) {
 		kdDebug() << "Eek: template is hard-coded rgba" << endl;
@@ -411,6 +412,8 @@ bool KisDoc::initDoc()
 	}
 
 	setModified(false);
+	setUndo(true);
+
 	return ok;
 }
 

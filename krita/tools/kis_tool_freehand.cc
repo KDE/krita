@@ -155,6 +155,7 @@ void KisToolFreeHand::endPaint()
 		}
 		delete m_painter;
 		m_painter = 0;
+		notifyModified();
 	}
 }
 

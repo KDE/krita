@@ -183,6 +183,7 @@ void KisToolFill::buttonPress(KisButtonPressEvent *e)
 	if (e->button() != QMouseEvent::LeftButton) return;
 
 	flood(e -> pos().floorX(), e -> pos().floorY());
+	notifyModified();
 }
 
 QWidget* KisToolFill::createoptionWidget(QWidget* parent)

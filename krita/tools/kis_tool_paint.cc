@@ -19,6 +19,7 @@
 #include <qwidget.h>
 
 #include <kdebug.h>
+#include <koDocument.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -131,6 +132,17 @@ void KisToolPaint::activate()
 		break;
 	default:
 		m_cursor = KisCursor::crossCursor();
+	}
+}
+
+void KisToolPaint::notifyModified() const
+{
+	if (m_subject) {
+		KoDocument *doc = m_subject -> document();
+
+		if (doc) {
+			doc -> setModified(true);
+		}
 	}
 }
 

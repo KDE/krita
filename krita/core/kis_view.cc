@@ -1589,6 +1589,7 @@ void KisView::rotateLayer180()
         QWMatrix m;
         //m.rotate(180);
         layer->transform(m.rotate(180));
+	m_doc -> setModified(true);
 
         layersUpdated();
         resizeEvent(0);
@@ -1605,6 +1606,7 @@ void KisView::rotateLayerLeft90()
         QWMatrix m;
         m.rotate(270);
         layer->transform(m);
+	m_doc -> setModified(true);
 
         layersUpdated();
         resizeEvent(0);
@@ -1623,6 +1625,7 @@ void KisView::rotateLayerRight90()
         QWMatrix m;
         m.rotate(90);
         layer -> transform(m);
+	m_doc -> setModified(true);
 
         layersUpdated();
         resizeEvent(0);
@@ -1643,6 +1646,7 @@ void KisView::mirrorLayerX()
         if (!layer) return;
 
         layer->mirrorX();
+	m_doc -> setModified(true);
         layersUpdated();
         currentImg() -> invalidate();
         updateCanvas();
@@ -1655,6 +1659,7 @@ void KisView::mirrorLayerY()
         if (!layer) return;
 
         layer->mirrorY();
+	m_doc -> setModified(true);
         layersUpdated();
         currentImg() -> invalidate();
         updateCanvas();
@@ -1669,6 +1674,7 @@ void KisView::scaleLayer(double sx, double sy)
 
 	layer -> scale(sx, sy);
 
+	m_doc -> setModified(true);
 	layersUpdated();
 	resizeEvent(0);
 	currentImg() -> invalidate();
@@ -2398,6 +2404,7 @@ void KisView::layerFront()
 
         if (img && (layer = img -> activeLayer())) {
                 img -> top(layer);
+		m_doc -> setModified(true);
                 layersUpdated();
                 resizeEvent(0);
                 updateCanvas();
@@ -2411,6 +2418,7 @@ void KisView::layerBack()
 
         if (img && (layer = img -> activeLayer())) {
                 img -> bottom(layer);
+		m_doc -> setModified(true);
                 layersUpdated();
                 resizeEvent(0);
                 updateCanvas();
@@ -2436,7 +2444,6 @@ void KisView::layersUpdated()
                         m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked());
 
                 m_layerBox -> setCurrentItem(img -> index(img -> activeLayer()));
-                m_doc -> setModified(true);
         }
 
         m_layerBox -> setUpdatesEnabled(true);
@@ -2632,6 +2639,7 @@ void KisView::resizeLayer(Q_INT32 w, Q_INT32 h)
 		KisLayerSP layer = img -> activeLayer();
 		if (layer) {
 			layer -> resize(w, h);
+			m_doc -> setModified(true);
 			img -> invalidate();
 			layersUpdated();
 			resizeEvent(0);
@@ -2652,6 +2660,7 @@ void KisView::layerResizeToImage()
                                 return;
 
                         layer -> resize(img -> width(), img -> height());
+			m_doc -> setModified(true);
                         img -> invalidate();
                         layersUpdated();
                         resizeEvent(0);
@@ -2698,6 +2707,7 @@ void KisView::layerTransform()
 //              if (!layer) return;
 
 //              layer -> transform(dlg.matrix());
+//		m_doc -> setModified(true);
 
 //              layersUpdated();
 //              updateCanvas();
@@ -2710,6 +2720,7 @@ void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h)
         if (!currentImg()) return;
 
 	currentImg() -> resize(w, h);
+	m_doc -> setModified(true);
 
 	currentImg() -> invalidate();
 	resizeEvent(0);
@@ -2722,6 +2733,7 @@ void KisView::scaleCurrentImage(double sx, double sy)
 	if (!currentImg()) return;
 	kdDebug() << "Going to scale image to (sx, sy): " << sx << ", " << sy << "\n";
 	currentImg() -> scale(sx, sy);
+	m_doc -> setModified(true);
 
 	currentImg() -> invalidate();
 	resizeEvent(0);

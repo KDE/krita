@@ -68,6 +68,9 @@ public:
 	virtual QWidget* createoptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 
+protected:
+	void notifyModified() const;
+
 protected slots:
 	virtual void activate();
 

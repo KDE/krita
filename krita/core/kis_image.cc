@@ -961,7 +961,6 @@ void KisImage::enableUndo(KoCommandHistory *history)
 	m_undoHistory = history;
 }
 
-// Composite the specified tile onto the projection layer.
 void KisImage::renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	KisPainter gc;

@@ -50,6 +50,7 @@
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
 #include <kis_view.h>
+#include <kis_global.h>
 
 #include "wdg_colorrange.h"
 
@@ -59,12 +60,6 @@ class KisView;
 class KisCanvasSubject;
 class DlgColorRange;
 
-
-enum enumMode {
-	REPLACE,
-	ADD,
-	SUBTRACT,
-};
 
 enum enumAction {
 	REDS,
@@ -78,11 +73,6 @@ enum enumAction {
 	SHADOWS,
 };
 
-enum enumTone {
-	CHANNEL_HIGHLIGHTS,
-	CHANNEL_MIDTONES,
-	CHANNEL_SHADOWS,
-};	
 
  /**
  * This dialog allows the user to create a selection mask based
@@ -122,7 +112,7 @@ private:
 	KisLayerSP m_layer;
 	KisView * m_view;
 	KisCanvasSubject * m_subject;
-	enumMode m_mode;
+	enumSelectionMode m_mode;
 	QCursor m_oldCursor;
 	KisTransaction * m_transaction;
 	enumAction m_currentAction;

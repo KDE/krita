@@ -49,7 +49,8 @@
 #include <kis_view.h>
 #include <kis_strategy_colorspace.h>
 #include <kis_profile.h>
-#include <kis_conversions.h>
+#include "kis_conversions.h"
+
 #include "dlg_colorrange.h"
 #include "wdg_colorrange.h"
 
@@ -200,7 +201,7 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
         updatePreview();
 
 	m_invert = false;
-	m_mode = REPLACE;
+	m_mode = SELECTION_REPLACE;
 	m_currentAction = REDS;
 	
 	connect(this, SIGNAL(okClicked()),
@@ -275,18 +276,18 @@ void DlgColorRange::slotSelectionTypeChanged(int index)
 void DlgColorRange::slotSubtract(bool on)
 {
 	if (on)
-		m_mode = SUBTRACT;
+		m_mode = SELECTION_SUBTRACT;
 }
 void DlgColorRange::slotAdd(bool on)
 {
 	if (on)
-		m_mode = ADD;
+		m_mode = SELECTION_ADD;
 }
 
 void DlgColorRange::slotReplace(bool on)
 {
 	if (on)
-		m_mode = REPLACE;
+		m_mode = SELECTION_REPLACE;
 }
 
 void DlgColorRange::slotSelectClicked()
@@ -301,7 +302,7 @@ void DlgColorRange::slotSelectClicked()
 		KisHLineIterator selIter = m_selection  -> createHLineIterator(x, y2, w, true);
 		while (!hiter.isDone()) {
 			// Clean up as we go, if necessary
-			if (m_mode == REPLACE) memset (selIter.rawData(), 0, 1); // Selections are hard-coded one byte big.
+			if (m_mode == SELECTION_REPLACE) memset (selIter.rawData(), 0, 1); // Selections are hard-coded one byte big.
 	
 			QColor c;
 			
@@ -312,10 +313,10 @@ void DlgColorRange::slotSelectClicked()
 			if (match) {
 				// Personally, I think the invert option a bit silly. But it's possible I don't quite understand it. BSAR.
 				if (!m_invert) {
-					if (m_mode == ADD || m_mode == REPLACE) {
+					if (m_mode == SELECTION_ADD || m_mode == SELECTION_REPLACE) {
 						*(selIter.rawData()) =  match;
 					}
-					else if (m_mode == SUBTRACT) {
+					else if (m_mode == SELECTION_SUBTRACT) {
 						Q_UINT8 selectedness = *(selIter.rawData());
 						if (match < selectedness) {
 							*(selIter.rawData()) = selectedness - match;
@@ -326,7 +327,7 @@ void DlgColorRange::slotSelectClicked()
 					}
 				}
 				else {
-					if (m_mode == ADD || m_mode == REPLACE) {
+					if (m_mode == SELECTION_ADD || m_mode == SELECTION_REPLACE) {
 						Q_UINT8 selectedness = *(selIter.rawData());
 						if (match < selectedness) {
 							*(selIter.rawData()) = selectedness - match;
@@ -335,7 +336,7 @@ void DlgColorRange::slotSelectClicked()
 							*(selIter.rawData()) = 0;
 						}
 					}
-					else if (m_mode == SUBTRACT) {
+					else if (m_mode == SELECTION_SUBTRACT) {
 						*(selIter.rawData()) =  match;
 					}
 				}

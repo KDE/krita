@@ -27,6 +27,13 @@
 
 class QColor;
 
+
+enum enumSelectionMode {
+	SELECTION_REPLACE,
+	SELECTION_ADD,
+	SELECTION_SUBTRACT,
+};
+
 /**
  * KisSelection contains a byte-map representation of a layer, where
  * the value of a byte signifies whether a corresponding pixel is selected, or not.

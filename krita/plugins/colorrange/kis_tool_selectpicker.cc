@@ -29,15 +29,82 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include "kis_cursor.h"
-#include "kis_canvas_subject.h"
-#include "kis_image.h"
-#include "kis_paint_device.h"
+#include <kis_cursor.h>
+#include <kis_canvas_subject.h>
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include <kis_button_press_event.h>
+#include <kis_canvas_subject.h>
+#include <kis_selection_options.h>
+#include <kis_selection.h>
+#include <kis_conversions.h>
+#include <kis_paint_device.h>
+#include <kis_iterators_pixel.h>
+
 #include "kis_tool_selectpicker.h"
-#include "kis_tool_selectpicker.moc"
-#include "kis_button_press_event.h"
-#include "kis_canvas_subject.h"
-#include "kis_selection_options.h"
+
+
+Q_UINT8 matchColors(const QColor & c, const QColor & c2, Q_UINT8 fuzziness)
+{
+	int h1, s1, v1, h2, s2, v2;
+	rgb_to_hsv(c.red(), c.green(), c.blue(), &h1, &s1, &v1);
+	rgb_to_hsv(c2.red(), c2.green(), c2.blue(), &h2, &s2, &v2);
+
+	//kdDebug() << "Hue 1: " << h1 << ", hue 2: " << h2 << "\n";
+
+	int diff = QABS(h1 - h2);
+
+	if (diff > fuzziness) return 0;
+
+	if (diff == 0) return 255;
+
+	return 255 - (diff / fuzziness * 255);
+}
+
+void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const QColor & c, int fuzziness, enumSelectionMode mode)
+{
+	// XXX: Multithread this!
+	Q_INT32 x, y, w, h;
+	dev -> exactBounds(x, y, w, h);
+	
+	KisStrategyColorSpaceSP cs = dev -> colorStrategy();
+	KisProfileSP profile = dev -> profile();
+	
+	for (int y2 = y; y2 < h - y; ++y2) {
+		KisHLineIterator hiter = dev -> createHLineIterator(x, y2, w, false);
+		KisHLineIterator selIter = selection -> createHLineIterator(x, y2, w, true);
+		while (!hiter.isDone()) {
+			// Clean up as we go, if necessary
+			if (mode == SELECTION_REPLACE) memset (selIter.rawData(), 0, 1); // Selections are hard-coded one byte big.
+	
+			QColor c2;
+			
+			cs -> toQColor(hiter.rawData(), &c2, profile);
+
+ 			Q_UINT8 match = matchColors(c, c2, fuzziness);
+			//kdDebug() << " Match: " << QString::number(match) << ", mode: " << mode << "\n";
+
+			if (mode == SELECTION_ADD || mode == SELECTION_REPLACE) {
+				*(selIter.rawData()) =  match;
+			}
+			else if (mode == SELECTION_SUBTRACT) {
+				Q_UINT8 selectedness = *(selIter.rawData());
+				if (match < selectedness) {
+					*(selIter.rawData()) = selectedness - match;
+				}
+				else {
+					*(selIter.rawData()) = 0;
+				}
+			}
+
+			++hiter;
+			++selIter;
+		}
+	}
+
+}
+
+
 
 KisToolSelectPicker::KisToolSelectPicker()
 {
@@ -45,8 +112,8 @@ KisToolSelectPicker::KisToolSelectPicker()
 	setCursor(KisCursor::pickerCursor());
 	m_subject = 0;
 	m_optWidget = 0;
-	m_updateColor = 0;
-	m_update = true;
+	m_fuzziness = 100;
+	m_selectAction = SELECTION_REPLACE;
 }
 
 KisToolSelectPicker::~KisToolSelectPicker() 
@@ -75,16 +142,18 @@ void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 		if (!dev || !dev -> visible())
 			return;
 
+
 		pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
 
-		if (dev -> pixel(pos.x(), pos.y(), &c, &opacity))
-			if(m_update)
-				if (e -> button() == QMouseEvent::LeftButton)
-					m_subject -> setFGColor(c);
-				else 
-					m_subject -> setBGColor(c);
+		dev -> pixel(pos.x(), pos.y(), &c, &opacity);
+		kdDebug() << "Going to select colors similar to: " << c.red() << ", " << c.green() << ", "<< c.blue() << "\n";
+		selectByColor(dev, dev -> selection(), c, m_fuzziness, m_selectAction);
+		m_subject -> canvasController() -> updateCanvas();
+		
 	}
 }
+
+
 
 void KisToolSelectPicker::setup(KActionCollection *collection)
 {
@@ -110,7 +179,7 @@ void KisToolSelectPicker::slotSetFuzziness(int fuzziness)
 
 void KisToolSelectPicker::slotSetAction(int action)
 {
-	m_selectAction = action;
+	m_selectAction =(enumSelectionMode)action;
 }
 
 QWidget* KisToolSelectPicker::createOptionWidget(QWidget* parent)
@@ -120,16 +189,18 @@ QWidget* KisToolSelectPicker::createOptionWidget(QWidget* parent)
 
 	QVBoxLayout * l = new QVBoxLayout(m_optWidget);
 	
-	KisSelectionOptions * options = new KisSelectionOptions(parent, m_subject);
+	KisSelectionOptions * options = new KisSelectionOptions(m_optWidget, m_subject);
 	l -> addWidget( options);
-	connect (l, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+	connect (options, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 	
 	QHBoxLayout * hbox = new QHBoxLayout(l);
 	
-	QLabel * lbl = new QLabel(i18n("Fuzziness"), m_optWidget);
+	QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
 	hbox -> addWidget(lbl);
 	
 	KIntNumInput * input = new KIntNumInput(m_optWidget, "fuzziness");
+	input -> setRange(0, 200, 10, true);
+	input -> setValue(20);
 	hbox -> addWidget(input);
 	connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
@@ -143,7 +214,4 @@ QWidget* KisToolSelectPicker::optionWidget()
 	return m_optWidget;
 }
 
-void KisToolSelectPicker::slotSetUpdateColor(bool state)
-{
-	m_update = state;
-}
+#include "kis_tool_selectpicker.moc"

@@ -20,16 +20,15 @@
 #ifndef KIS_TOOL_SELECT_PICKER_H_
 #define KIS_TOOL_SELECT_PICKER_H_
 
-#include "kis_tool.h"
-#include "kis_tool_non_paint.h"
-#include "kis_tool_factory.h"
+#include <kis_tool.h>
+#include <kis_tool_non_paint.h>
+#include <kis_tool_factory.h>
+#include <kis_selection.h>
 
 class KisCanvasSubject;
 class QWidget;
 class QVBoxLayout;
 class QCheckBox;
-
-
 
 class KisToolSelectPicker : public KisToolNonPaint {
 
@@ -48,18 +47,15 @@ public:
 	virtual QWidget* optionWidget();
 
 public slots:
-	virtual void slotSetUpdateColor(bool);
 	virtual void slotSetFuzziness(int);
 	virtual void slotSetAction(int);
 	
 private:
 	KisCanvasSubject *m_subject;
 	QWidget *m_optWidget;
-	QVBoxLayout *m_frame;
-	QCheckBox *m_updateColor;
-	bool m_update;
+
 	int m_fuzziness;
-	int m_selectAction; // XXX: Use enum
+	enumSelectionMode m_selectAction;
 	
 };
 

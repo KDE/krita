@@ -201,6 +201,9 @@ enum KisImageBuilder_Result {
 	KisImageBuilder_RESULT_PATH = 500,
 	KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE = 600
 };
+
+
+
 	
 // If QUANTUM changes size, this should change, too.
 typedef Q_UINT8 PIXELTYPE;

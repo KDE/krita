@@ -30,28 +30,36 @@
 #include "scan_factory.h"
 #include "scan.moc"
 
-Scan::Scan(QObject *parent, const char *name) : KParts::Plugin(parent, name)
+Scan::Scan(QObject *parent, const char *name) : KParts::Plugin(parent, name),
+						scanDialog( 0 )
 {
     setInstance(ScanFactory::pluginInstance());
-    
+
     (void) new KAction(i18n("&Scan Image"), BarIcon("unknown"), 0, this, SLOT(slotScan()), actionCollection(), "scan_image");
 }
 
 Scan::~Scan()
 {
+    delete scanDialog;
 }
 
 void Scan::slotScan()
 {
-    KScanDialog *dlg = KScanDialog::getScanDialog();
-    if(!dlg)
+    if ( !scanDialog )
     {
-	KMessageBox::sorry(0L, i18n("No Scan-Service available"), i18n("Scanner Plugin"));
-	kdDebug(31000) << "*** No Scan-service available, aborting!" << endl;
-	return;
+	scanDialog = KScanDialog::getScanDialog();
+	if ( scanDialog )
+	    connect(scanDialog, SIGNAL(finalImage(const QImage &, int)), 
+		    this, SLOT(slotShowImage(const QImage &)));
+	else
+        {
+	    KMessageBox::sorry(0L, i18n("No Scan-Service available"), 
+			       i18n("Scanner Plugin"));
+	    kdDebug(31000) << "*** No Scan-service available, aborting!" << endl;
+	    return;
+	}
     }
-    
-    connect(dlg, SIGNAL(finalImage(const QImage &)), this, SLOT(slotShowImage(const QImage &)));
+
     dlg->show();
 }
 
@@ -59,7 +67,7 @@ void Scan::slotShowImage(const QImage &img)
 {
     KTempFile temp(locateLocal("tmp", "scandialog"), ".png");
     img.save(temp.name(), "PNG");
-    
+
     KoView *view = dynamic_cast<KoView *>(parent());
     if(!view)
 	return;

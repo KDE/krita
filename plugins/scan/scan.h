@@ -23,6 +23,8 @@
 #include <kparts/plugin.h>
 #include <qimage.h>
 
+class KScanDialog;
+
 class Scan : public KParts::Plugin
 {
     Q_OBJECT
@@ -33,6 +35,9 @@ class Scan : public KParts::Plugin
     private slots:
 	void slotScan();
 	void slotShowImage(const QImage &img);
+    
+    private:
+        KScanDialog *scanDialog;
 };
 
 #endif

@@ -108,8 +108,6 @@ void KisRotateVisitor::xShearImage(double angleX, KisProgressDisplayInterface *m
         Q_INT32 targetH = height;
         KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
         QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
-        
-        //shear the image
         QUANTUM *tempRow = new QUANTUM[width * m_dev -> depth() * sizeof(QUANTUM)];
         QUANTUM *pixel = new QUANTUM[m_dev -> depth() * sizeof(QUANTUM)];
         QUANTUM *left = new QUANTUM[m_dev -> depth() * sizeof(QUANTUM)];
@@ -119,29 +117,53 @@ void KisRotateVisitor::xShearImage(double angleX, KisProgressDisplayInterface *m
         double weight;
         Q_INT32 currentPos;
         
-        for (Q_INT32 y=0; y < height; y++){
-                //calculate displacement
-                displacement = (height-y)*tanTheta;
-                displacementInt = floor(displacement);
-                weight=displacement-displacementInt;
-                //read a row from the image
-                m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
-                //initialize oleft
-                for(int channel = 0; channel < m_dev -> depth(); channel++)
-                        oleft[channel]=left[channel]=0;
-                //copy the pixels to the newData array
-                for(Q_INT32 x=0; x < width; x++){
-                        currentPos = (y*targetW+x+displacementInt) * m_dev -> depth(); // try to be at least a little efficient
-                        for(int channel = 0; channel < m_dev -> depth(); channel++){
-                                pixel[channel]=tempRow[x*m_dev -> depth()+channel];
-                                left[channel]=weight*pixel[channel];
-                                pixel[channel]=pixel[channel]-left[channel]+oleft[channel];
-                                newData[currentPos  + channel]=pixel[channel];
-                                oleft[channel]=left[channel];
+        if(tanTheta>=0){
+                for (Q_INT32 y=0; y < height; y++){
+                        //calculate displacement
+                        displacement = (height-y)*tanTheta;
+                        displacementInt = floor(displacement);
+                        weight=displacement-displacementInt;
+                        //read a row from the image
+                        m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
+                        //initialize oleft
+                        for(int channel = 0; channel < m_dev -> depth(); channel++)
+                                oleft[channel]=left[channel]=0;
+                        //copy the pixels to the newData array
+                        for(Q_INT32 x=0; x < width; x++){
+                                currentPos = (y*targetW+x+displacementInt) * m_dev -> depth(); // try to be at least a little efficient
+                                for(int channel = 0; channel < m_dev -> depth(); channel++){
+                                        pixel[channel]=tempRow[x*m_dev -> depth()+channel];
+                                        left[channel]=weight*pixel[channel];
+                                        pixel[channel]=pixel[channel]-left[channel]+oleft[channel];
+                                        newData[currentPos  + channel]=pixel[channel];
+                                        oleft[channel]=left[channel];
+                                }
                         }
-                }
+                }        
+        } else {
+                for (Q_INT32 y=0; y < height; y++){
+                        //calculate displacement
+                        displacement = y*QABS(tanTheta);
+                        displacementInt = floor(displacement);
+                        weight=displacement-displacementInt;
+                        //read a row from the image
+                        m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
+                        //initialize oleft
+                        for(int channel = 0; channel < m_dev -> depth(); channel++)
+                                oleft[channel]=left[channel]=0;
+                        //copy the pixels to the newData array
+                        for(Q_INT32 x=0; x < width; x++){
+                                currentPos = (y*targetW+x+displacementInt) * m_dev -> depth(); // try to be at least a little efficient
+                                for(int channel = 0; channel < m_dev -> depth(); channel++){
+                                        pixel[channel]=tempRow[x*m_dev -> depth()+channel];
+                                        left[channel]=weight*pixel[channel];
+                                        pixel[channel]=pixel[channel]-left[channel]+oleft[channel];
+                                        newData[currentPos  + channel]=pixel[channel];
+                                        oleft[channel]=left[channel];
+                                }
+                        }
+                }          
         }        
-
         //now write newData to the image
         kdDebug() << "write newData to the image!" << "\n";
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
@@ -176,29 +198,54 @@ void KisRotateVisitor::yShearImage(double angleY, KisProgressDisplayInterface *m
         double weight;
         Q_INT32 currentPos;
         
-        for (Q_INT32 x=0; x < width; x++){
-                //calculate displacement
-                displacement = x*tanTheta;
-                displacementInt = floor(displacement);
-                weight=displacement-displacementInt;
-                //read a column from the image
-                m_dev -> tiles() -> readPixelData(x, 0, x, height - 1, tempCol, m_dev -> depth());
-                //initialize oleft
-                for(int channel = 0; channel < m_dev -> depth(); channel++)
-                        oleft[channel]=left[channel]=0;
-                //copy the pixels to the newData array
-                for(Q_INT32 y=0; y < height; y++){
-                        currentPos = ((y+displacementInt)*targetW+x) * m_dev -> depth(); // try to be at least a little efficient
-                        for(int channel = 0; channel < m_dev -> depth(); channel++){
-                                pixel[channel]=tempCol[y*m_dev -> depth()+channel];
-                                left[channel]=weight*pixel[channel];
-                                pixel[channel]=pixel[channel]-left[channel]+oleft[channel];
-                                newData[currentPos  + channel]=pixel[channel];
-                                oleft[channel]=left[channel];
+        if(tanTheta>=0){
+                for (Q_INT32 x=0; x < width; x++){
+                        //calculate displacement
+                        displacement = x*tanTheta;
+                        displacementInt = floor(displacement);
+                        weight=displacement-displacementInt;
+                        //read a column from the image
+                        m_dev -> tiles() -> readPixelData(x, 0, x, height - 1, tempCol, m_dev -> depth());
+                        //initialize oleft
+                        for(int channel = 0; channel < m_dev -> depth(); channel++)
+                                oleft[channel]=left[channel]=0;
+                        //copy the pixels to the newData array
+                        for(Q_INT32 y=0; y < height; y++){
+                                currentPos = ((y+displacementInt)*targetW+x) * m_dev -> depth(); // try to be at least a little efficient
+                                for(int channel = 0; channel < m_dev -> depth(); channel++){
+                                        pixel[channel]=tempCol[y*m_dev -> depth()+channel];
+                                        left[channel]=weight*pixel[channel];
+                                        pixel[channel]=pixel[channel]-left[channel]+oleft[channel];
+                                        newData[currentPos  + channel]=pixel[channel];
+                                        oleft[channel]=left[channel];
+                                }
                         }
-                }
-        }        
-
+                }        
+        } else {
+                for (Q_INT32 x=0; x < width; x++){
+                        //calculate displacement
+                        displacement = (width-x)*QABS(tanTheta);
+                        kdDebug() << "displacement " << displacement << "\n";
+                        displacementInt = floor(displacement);
+                        weight=displacement-displacementInt;
+                        //read a column from the image
+                        m_dev -> tiles() -> readPixelData(x, 0, x, height - 1, tempCol, m_dev -> depth());
+                        //initialize oleft
+                        for(int channel = 0; channel < m_dev -> depth(); channel++)
+                                oleft[channel]=left[channel]=0;
+                        //copy the pixels to the newData array
+                        for(Q_INT32 y=0; y < height; y++){
+                                currentPos = ((y+displacementInt)*targetW+x) * m_dev -> depth(); // try to be at least a little efficient
+                                for(int channel = 0; channel < m_dev -> depth(); channel++){
+                                        pixel[channel]=tempCol[y*m_dev -> depth()+channel];
+                                        left[channel]=weight*pixel[channel];
+                                        pixel[channel]=pixel[channel]-left[channel]+oleft[channel];
+                                        newData[currentPos  + channel]=pixel[channel];
+                                        oleft[channel]=left[channel];
+                                }
+                        }
+                }        
+        }
         //now write newData to the image
         kdDebug() << "write newData to the image!" << "\n";
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());

@@ -35,10 +35,10 @@
                         <cstring>shearAngleX</cstring>
                     </property>
                     <property name="minValue">
-                        <number>0</number>
+                        <number>-45</number>
                     </property>
                     <property name="maxValue">
-                        <number>90</number>
+                        <number>45</number>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -54,10 +54,10 @@
                         <cstring>shearAngleY</cstring>
                     </property>
                     <property name="minValue">
-                        <number>0</number>
+                        <number>-45</number>
                     </property>
                     <property name="maxValue">
-                        <number>90</number>
+                        <number>45</number>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">

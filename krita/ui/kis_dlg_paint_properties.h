@@ -30,6 +30,8 @@ class KisCmbComposite;
 
 class KisPaintPropertyDlg : public KDialogBase {
 	typedef KDialogBase super;
+    Q_OBJECT
+
 public:
 	KisPaintPropertyDlg(const QString& deviceName,
 			    const QPoint& pos,
@@ -42,8 +44,8 @@ public:
 	Q_INT32 getOpacity() const;
 	CompositeOp getCompositeOp() const;
 	QPoint getPosition() const;
-public slots:
-void slotNameChanged( const QString & );
+protected slots:
+    void slotNameChanged( const QString & );
 
 
 private:

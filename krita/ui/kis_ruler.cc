@@ -78,7 +78,7 @@ void KisRuler::initMarker(Q_INT32 w, Q_INT32 h)
 
 void KisRuler::recalculateSize()
 {
-	Q_INT32 w; 
+	Q_INT32 w;
 	Q_INT32 h;
 
 	if (m_pixmapBuffer) {
@@ -127,7 +127,7 @@ void KisRuler::updatePointer(Q_INT32 x, Q_INT32 y)
 		if (m_orientation == Qt::Horizontal) {
 			if (m_currentPosition != -1)
 				repaint(m_currentPosition, 1, MARKER_WIDTH, MARKER_HEIGHT);
-			
+
 			if (x != -1) {
 				bitBlt(this, x, 1, &m_pixmapMarker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
 				m_currentPosition = x;
@@ -209,18 +209,18 @@ void KisRuler::drawRuler()
 	}
 
 	Q_INT32 pos = 0;
-	bool s1 = KoUnit::ptFromUnit(st1, m_unit) * m_zoom > 3.0;
-	bool s2 = KoUnit::ptFromUnit(st2, m_unit) * m_zoom > 3.0;
-	bool s3 = KoUnit::ptFromUnit(st3, m_unit) * m_zoom > 3.0;
-	bool s4 = KoUnit::ptFromUnit(st4, m_unit) * m_zoom > 3.0;
+	bool s1 = KoUnit::fromUserValue(st1, m_unit) * m_zoom > 3.0;
+	bool s2 = KoUnit::fromUserValue(st2, m_unit) * m_zoom > 3.0;
+	bool s3 = KoUnit::fromUserValue(st3, m_unit) * m_zoom > 3.0;
+	bool s4 = KoUnit::fromUserValue(st4, m_unit) * m_zoom > 3.0;
 
 	if (m_orientation == Qt::Horizontal) {
-		float cx = KoUnit::ptFromUnit(7 * 4, m_unit) / m_zoom;
+		float cx = KoUnit::fromUserValue(7 * 4, m_unit) / m_zoom;
 		Q_INT32 step = ((Q_INT32)(cx / (float)stt) + 1) * stt;
-		Q_INT32 start = (Q_INT32)(KoUnit::ptFromUnit(m_firstVisible, m_unit) / m_zoom);
+		Q_INT32 start = (Q_INT32)(KoUnit::fromUserValue(m_firstVisible, m_unit) / m_zoom);
 
 		do {
-			pos = (Q_INT32)(KoUnit::ptFromUnit(start, m_unit) * m_zoom - m_firstVisible);
+			pos = (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
 
 			if (!s3 && s4 && start % st4 == 0)
 				p.drawLine(pos, RULER_SIZE - 9, pos, RULER_SIZE);
@@ -242,12 +242,12 @@ void KisRuler::drawRuler()
 			start++;
 		} while (pos < m_pixmapBuffer -> width());
 	} else {
-		float cx = KoUnit::ptFromUnit(8 * 4, m_unit) / m_zoom;
+		float cx = KoUnit::fromUserValue(8 * 4, m_unit) / m_zoom;
 		Q_INT32 step = ((Q_INT32)(cx / (float)stt) + 1) * stt;
-		Q_INT32 start = (Q_INT32)(KoUnit::ptFromUnit(m_firstVisible, m_unit) / m_zoom);
+		Q_INT32 start = (Q_INT32)(KoUnit::fromUserValue(m_firstVisible, m_unit) / m_zoom);
 
 		do {
-			pos = (Q_INT32)(KoUnit::ptFromUnit(start, m_unit) * m_zoom - m_firstVisible);
+			pos = (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
 
 			if (!s3 && s4 && start % st4 == 0)
 				p.drawLine(RULER_SIZE - 9, pos, RULER_SIZE, pos);

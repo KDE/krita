@@ -1811,7 +1811,16 @@ void KisView::viewResourceDocker()
 void KisView::slotUpdateFullScreen(bool toggle)
 {
 	if (KoView::shell()) {
-		KoView::shell()->setWindowState( this->windowState() & ~toggle );
+
+		uint newState = KoView::shell() -> windowState();
+
+		if (toggle) {
+			newState |= Qt::WindowFullScreen;
+		} else {
+			newState &= ~Qt::WindowFullScreen;
+		}
+
+		KoView::shell() -> setWindowState(newState);
 	}
 }
 

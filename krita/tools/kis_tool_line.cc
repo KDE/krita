@@ -36,7 +36,9 @@
 
 KisToolLine::KisToolLine() 
 	: super(),
-	  m_dragging( false )
+	  m_dragging( false ),
+	  m_opacity(OPACITY_OPAQUE),
+	  m_compositeOp(COMPOSITE_OVER)
 {
 	setCursor(KisCursor::arrowCursor());
 
@@ -141,7 +143,9 @@ void KisToolLine::mouseRelease(QMouseEvent *e)
 	
 			m_painter -> setPaintColor(m_subject -> fgColor());
 			m_painter -> setBrush(m_subject -> currentBrush());
-			
+			m_painter->setOpacity(m_opacity);
+			m_painter->setCompositeOp(m_compositeOp);
+
 			m_painter -> paintLine(PAINTOP_BRUSH, m_startPos, m_endPos, PRESSURE_DEFAULT, 0, 0, 0);
 			m_currentImage -> notify( m_painter -> dirtyRect() );
                         

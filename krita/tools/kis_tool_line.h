@@ -52,7 +52,7 @@ class KisToolLine : public KisToolPaint {
 	void paintLine();
 	void paintLine(QPainter& gc, const QRect& rc);
 
-        QPoint straightLine(QPoint point);
+	QPoint straightLine(QPoint point);
 
 
 	bool m_dragging;
@@ -63,6 +63,9 @@ class KisToolLine : public KisToolPaint {
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;
 	KisPainter *m_painter;
+
+	QUANTUM m_opacity;
+	CompositeOp m_compositeOp;
 };
 
 #endif //KIS_TOOL_LINE_H_

@@ -47,4 +47,4 @@ libkistools_la_SOURCES = kis_tool_paint.cc \
 libkistools_la_METASOURCES = AUTO
 
 
-
+KDE_OPTIONS = nofinal

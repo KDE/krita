@@ -1,0 +1,173 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgResolution</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgResolution</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>487</width>
+            <height>356</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Image Resolution</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>lblMetric</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Metric system:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>cmbMetrics</cstring>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="2" column="1">
+            <item>
+                <property name="text">
+                    <string>Dots per inch</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Dots per centimeter</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>cmbMetrics</cstring>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>grpSize</cstring>
+            </property>
+            <property name="title">
+                <string>Print Size</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>lblHeight</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Height:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>lblWidth</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Width:</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="0" column="1">
+                    <property name="name">
+                        <cstring>intWidth</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="1" column="1">
+                    <property name="name">
+                        <cstring>intHeight</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>lblWarning</cstring>
+                    </property>
+                    <property name="text">
+                        <string>The print size of an image is determined by the size in pixels and the image resolution shown above. Most images do not have a resolution set by default. Changing width and height here will change the resolution, not the number of pixels.</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>grpResolution</cstring>
+            </property>
+            <property name="title">
+                <string>Image Resolution</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>lblScreen</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Screen resolution:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>lblScreenResolution</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>Panel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="text">
+                        <string>100</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>lblYResolution</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Image Y Resolution:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>lblImageXRes</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Image X Resolution:</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="1" column="1">
+                    <property name="name">
+                        <cstring>intXRes</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="2" column="1">
+                    <property name="name">
+                        <cstring>intYRes</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

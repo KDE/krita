@@ -338,21 +338,23 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 		  << ", " 
 		  << h 
 		  << ")\n";
-	if (m_adapter && m_adapter -> undo()) {
-		m_adapter -> beginMacro("Resize image");
-		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
-	}
+	if (w != width() || h != height()) {
+		if (m_adapter && m_adapter -> undo()) {
+			m_adapter -> beginMacro("Resize image");
+			m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
+		}
 
-	m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
-	m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
-// 	m_bkg = new KisBackground(this, w, h);
-	m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
- 	m_bkg -> resize(w, h);
-// 	m_projection -> resize(w, h);
-	if (m_adapter && m_adapter -> undo()) {
-		m_adapter -> endMacro();
+		m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
+		m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
+	// 	m_bkg = new KisBackground(this, w, h);
+		m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
+		m_bkg -> resize(w, h);
+	// 	m_projection -> resize(w, h);
+		if (m_adapter && m_adapter -> undo()) {
+			m_adapter -> endMacro();
+		}
+		invalidate();
 	}
-	invalidate();
 }
 
 void KisImage::resize(const QRect& rc)
@@ -1278,7 +1280,7 @@ void KisImage::expand(KisPaintDeviceSP dev)
 	Q_INT32 w;
 	Q_INT32 h;
 
-	if (dev -> width() >= width() || dev -> height() >= height()) {
+	if (dev -> width() > width() || dev -> height() > height()) {
 		w = QMAX(dev -> width(), width());
 		h = QMAX(dev -> height(), height());
 		resize(w, h);

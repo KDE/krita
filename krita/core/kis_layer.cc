@@ -40,6 +40,7 @@ KisLayer::KisLayer(const QString& name, uint width, uint height, uint bpp, cMode
 
 KisLayer::~KisLayer()
 {
+	kdDebug() << "KisLayer::~KisLayer\n";
 }
 
 // XXX Move the firstChannel and nextChannel to KisImage
@@ -226,7 +227,7 @@ bool KisLayer::boundryTileY(int tile) const
 }
 
 
-void KisLayer::allocateRect(QRect r)
+void KisLayer::allocateRect(const QRect& r)
 {
 	mLayerWidth  = r.width();  //jwc
 	mLayerHeight = r.height(); //jwc

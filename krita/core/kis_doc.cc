@@ -59,6 +59,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	: KoDocument(parentWidget, widgetName, parent, name, singleViewMode)
 {
 	bool loadPlugins = true;
+
         dcop = 0;
 	setInstance(KisFactory::global(), loadPlugins);
 	m_command_history = new KCommandHistory(actionCollection(), false);
@@ -72,9 +73,9 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 
 	connect(m_command_history, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored));
 	connect(m_command_history, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted));
-        if ( name )
-            dcopObject();
 
+        if (name)
+            dcopObject();
 }
 
 /*
@@ -86,10 +87,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 
 KisDoc::~KisDoc()
 {
-	KisImage *img = m_Images.first();
-
-	while (img) {
-		// disconnect old current image
+	for (KisImage *img = m_Images.first(); img; img = m_Images.next()) {
 		if (img == m_pCurrent) {
 			QObject::disconnect(m_pCurrent, SIGNAL(updated()), this, SLOT(slotImageUpdated()));
 			QObject::disconnect(m_pCurrent, SIGNAL(updated(const QRect&)), this, SLOT(slotImageUpdated(const QRect&)));
@@ -97,7 +95,6 @@ KisDoc::~KisDoc()
 		}
 
 		delete img;
-		img = m_Images.next();
 	}
 
 	delete m_pClipImage;
@@ -109,20 +106,18 @@ KisDoc::~KisDoc()
 
 DCOPObject* KisDoc::dcopObject()
 {
-    if ( !dcop )
-        dcop = new KIsDocIface( this );
+	if (!dcop)
+		dcop = new KIsDocIface(this);
 
-    return dcop;
+	return dcop;
 }
 
-
-KisImage* KisDoc::imageNum( unsigned int _num )
+KisImage* KisDoc::imageNum(unsigned int num)
 {
-    if( _num> m_Images.count())
-        return 0L;
-    else
-        return m_Images.at(_num);
+	if (num > m_Images.count())
+		return 0L;
 
+	return m_Images.at(num);
 }
 
 /*
@@ -266,8 +261,9 @@ QDomElement KisDoc::saveImages( QDomDocument &doc )
 }
 
 // save layers
-QDomElement KisDoc::saveLayers( QDomDocument &doc, KisImage *img )
+QDomElement KisDoc::saveLayers( QDomDocument &doc, KisImage * /*img*/ )
 {
+#if 0
     // layers element - variable
     QDomElement layers = doc.createElement( "layers" );
 
@@ -316,10 +312,12 @@ QDomElement KisDoc::saveLayers( QDomDocument &doc, KisImage *img )
     } // end of layers loop
 
     return layers;
+#endif
+    return doc.createElement("layers");
 }
 
 // save channels
-QDomElement KisDoc::saveChannels( QDomDocument &doc, KisLayer *lay )
+QDomElement KisDoc::saveChannels( QDomDocument &doc, KisLayer * /*lay*/ )
 {
     // channels element - variable, normally maximum of 4 channels
     QDomElement channels = doc.createElement( "channels" );
@@ -392,8 +390,9 @@ QDomElement KisDoc::saveGradientsSettings( QDomDocument &doc )
     ko virtual method implemented
 */
 
-bool KisDoc::completeSaving( KoStore* store )
+bool KisDoc::completeSaving( KoStore* /*store*/ )
 {
+#if 0
     kdDebug(0) << "KisDoc::completeSaving() entering" << endl;
 
     if (!store)         return false;
@@ -442,6 +441,8 @@ bool KisDoc::completeSaving( KoStore* store )
     setImage( tmp_currentImageName );
 
     return true;
+#endif
+    return false;
 }
 
 
@@ -669,8 +670,9 @@ void KisDoc::loadGradientsSettings( QDomElement &elem )
 }
 #endif
 
-bool KisDoc::completeLoading( KoStore* store )
+bool KisDoc::completeLoading( KoStore* /*store*/ )
 {
+#if 0
     kdDebug(0) << "KisDoc::completeLoading() entering" << endl;
 
     if ( !store )  return false;
@@ -722,6 +724,8 @@ bool KisDoc::completeLoading( KoStore* store )
 
     kdDebug(0) << "KisDoc::completeLoading() leaving" << endl;
     return true;
+#endif
+    return false;
 }
 
 /*
@@ -1204,9 +1208,10 @@ bool KisDoc::setClipImage()
 KisImage* KisDoc::newImage(const QString& n, int width, int height,
     cMode cm , uchar bitDepth )
 {
-    KisImage *img = new KisImage( n, width, height, cm, bitDepth );
-    m_Images.append(img);
-    return img;
+	KisImage *img = new KisImage(this, n, width, height, cm, bitDepth);
+
+	m_Images.append(img);
+	return img;
 }
 
 

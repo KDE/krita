@@ -72,7 +72,7 @@ public:
 
 	bool    boundryTileX(int tile) const;
 	bool    boundryTileY(int tile) const;
-	void    allocateRect(QRect _r);
+	void    allocateRect(const QRect& r);
     
 	void    clear(const KisColor& c, bool transparent);
 

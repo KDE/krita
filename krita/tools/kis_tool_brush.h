@@ -52,7 +52,6 @@ public:
 
 public slots:
 	virtual void toolSelect();
-	void timeout();
 
 protected:
 	KToggleAction *m_toggle;

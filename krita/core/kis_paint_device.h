@@ -26,10 +26,14 @@
 #include <qrect.h>
 #include <qstring.h>
 
+#include <ksharedptr.h>
+
 #include "kis_tiles.h"
 #include "kis_tile.h"
 
-class KisPaintDevice : public QObject {
+class KisPaintDevice : public QObject, public KShared {
+	typedef QObject super;
+
 public:
 	KisPaintDevice(const QString& name, uint width, uint height, uint bpp, const QRgb& defaultColor);
 	virtual ~KisPaintDevice();

@@ -22,35 +22,55 @@
 #ifndef __kis_image_h__
 #define __kis_image_h__
 
-#include <qmemarray.h>
 #include <qimage.h>
-#include <qptrlist.h>
+#include <qmemarray.h>
 #include <qobject.h>
-#include <qtimer.h>
 #include <qpixmap.h>
+#include <qptrlist.h>
+#include <qvaluevector.h>
+#include <qtimer.h>
 
-#include <stdlib.h>
+#include <ksharedptr.h>
 
 #include "kis_color.h"
 #include "kis_channel.h"
 #include "kis_layer.h"
 #include "kis_global.h"
 
-class KisBrush;
 class DCOPObject;
+class KCommand;
+class KisBrush;
+class KisDoc;
+
+typedef KSharedPtr<KisPaintDevice> KisPaintDeviceSP;
+typedef KSharedPtr<KisLayer> KisLayerSP;
+typedef KSharedPtr<KisChannel> KisChannelSP;
+
+typedef QValueVector<KisPaintDeviceSP> KisPaintDeviceSPLst;
+typedef KisPaintDeviceSPLst::iterator KisPaintDeviceSPLstIterator;
+typedef KisPaintDeviceSPLst::const_iterator KisPaintDeviceSPLstConstIterator;
+
+typedef QValueVector<KisLayerSP> KisLayerSPLst;
+typedef KisLayerSPLst::iterator KisLayerSPLstIterator;
+typedef KisLayerSPLst::const_iterator KisLayerSPLstConstIterator;
+
+typedef QValueVector<KisChannelSP> KisChannelSPLst;
+typedef KisChannelSPLst::iterator KisChannelSPLstIterator;
+typedef KisChannelSPLst::const_iterator KisChannelSPLstConstIterator;
 
 class KisImage : public QObject {
 	Q_OBJECT
 	typedef QObject super;
+
 public:
-	KisImage(const QString& name, int width, int height, cMode cm = cm_RGBA, uchar bitDepth = 8);
+	KisImage(KisDoc *doc, const QString& name, int width, int height, cMode cm = cm_RGBA, uchar bitDepth = 8);
 	virtual ~KisImage();
 
 	virtual DCOPObject* dcopObject();
 
 	KisPaintDevice* getCurrentPaintDevice();
 	KisChannel* getCurrentChannel();
-	KisLayer* getCurrentLayer();
+	KisLayerSP getCurrentLayer();
 
 	void upperLayer(unsigned int layer);
 	void lowerLayer(unsigned int layer);
@@ -58,21 +78,25 @@ public:
 	void setBackgroundLayer(unsigned int layer);
 
 	void addLayer(const QRect& r, const KisColor& c, bool transparent, const QString& name);
+	void addLayer(KisLayerSP layer);
+	void removeLayer(KisLayerSPLstIterator it);
 	void removeLayer(unsigned int layer);
+	void removeLayer(KisLayerSP layer);
 
 	void mergeAllLayers();
 	void mergeVisibleLayers();
 	void mergeLinkedLayers();
 
 	//	KisLayer* layerPtr(KisLayer *layer);
-	inline int getCurrentLayerIndex();
+	int getCurrentLayerIndex() const;
 	void setCurrentLayer(int layer);
 
-	inline QPtrList<KisLayer> layerList();
+	inline KisLayerSPLst layerList();
 
 	void markDirty(const QRect& rect);
 
 	void setAutoUpdate(bool autoUpdate = true);
+	inline void setUndo(bool doUndo = true);
 
 	void paintContent(QPainter& painter, const QRect& rect, bool transparent = false);
 	void paintPixmap(QPainter *painter, const QRect& area);
@@ -104,8 +128,8 @@ public slots:
 #endif
 
 protected:
-	void mergeLayers(QPtrList<KisLayer> layers);
-	void compositeImage(const QRect& rect = QRect());
+	void mergeLayers(KisLayerSPLst& layers);
+	void compositeImage(const QRect& rect = QRect(), bool allDirty = false);
 	void compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y);
 	void convertTileToPixmap(KisPaintDevice *dstDevice, int tileNo, QPixmap *pix);
 	void convertImageToPixmap(QImage *img, QPixmap *pix);
@@ -114,27 +138,30 @@ private:
 	KisImage(const KisImage&);
 	KisImage& operator=(const KisImage&);
 
+	void addCommand(KCommand *cmd);
 	void renderTile(KisTile *dst, const KisTile *src, const KisPaintDevice *srcDevice);
 	void renderBg(KisPaintDevice *srcDevice, int tileNo);
-	void resizeImage(KisLayer *lay, const QRect& rect);
+	void resizeImage(KisLayerSP lay, const QRect& rect);
 	void resizePixmap(bool dirty);
 	void destroyPixmap();
 	QRect findBoundingTiles(const QRect& area);
 
 private:
-	QPtrList<KisLayer> m_layers;
-	QPtrList<KisChannel> m_channels;
+	KisDoc *m_doc;
+
+	KisLayerSPLst m_layers;
+	KisChannelSPLst m_channels;
 
 	int m_xTiles;
 	int m_yTiles;
 	QPixmap **m_pixmapTiles;
 	QImage m_imgTile;
 
-	KisLayer *m_activeLayer;
-       	KisLayer *m_composeLayer;
-       	KisLayer *m_bgLayer;
+	KisLayerSP m_activeLayer;
+       	KisLayerSP m_composeLayer;
+       	KisLayerSP m_bgLayer;
 
-	KisChannel *m_activeChannel;
+	KisChannelSP m_activeChannel;
 
 	QString m_name;
 	QString m_author;
@@ -148,13 +175,14 @@ private:
 	QMemArray<bool> m_dirty;
 
 	QPtrList<QPixmap> m_dirtyTiles;
-	bool m_autoUpdate;
         DCOPObject* m_dcop;
+	bool m_autoUpdate;
+	bool m_doUndo;
 
-	QTimer* m_timer;
+	QTimer *m_timer;
 };
 
-QPtrList<KisLayer> KisImage::layerList()
+KisLayerSPLst KisImage::layerList()
 {
 	return m_layers;
 }
@@ -219,9 +247,9 @@ void KisImage::setEmail(const QString& e)
 	m_email = e;
 }
 
-int KisImage::getCurrentLayerIndex()
+void KisImage::setUndo(bool doUndo)
 {
-	return m_layers.find(m_activeLayer);
+	m_doUndo = doUndo;
 }
 
 #endif

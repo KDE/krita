@@ -34,6 +34,7 @@
 #include <qtooltip.h>
 #include <qstyle.h>
 
+#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <knuminput.h>
@@ -180,7 +181,7 @@ void LayerTable::init( KisDoc* doc)
 
     setCellWidth( CELLWIDTH );
     setCellHeight( iheight );
-    m_selected = (m_doc -> current() ? m_doc -> current()->layerList().count() : 0) - 1;
+    m_selected = (m_doc -> current() ? m_doc -> current()->layerList().size() : 0) - 1;
 
     QPopupMenu *submenu = new QPopupMenu();
 
@@ -260,7 +261,7 @@ void LayerTable::updateTable()
 	KisImage *img = m_doc -> current();
 
 	if (img) {
-		m_items = img -> layerList().count();
+		m_items = img -> layerList().size();
 		setNumRows(m_items);
 		setNumCols(1);
 	}
@@ -282,7 +283,7 @@ void LayerTable::update_contextmenu(int indx)
 {
 	KisImage *img = m_doc -> current();
 
-	if (static_cast<unsigned int>(indx) < img -> layerList().count()) {
+	if (static_cast<unsigned int>(indx) < img -> layerList().size()) {
 		KisLayer *lay = img -> layerList().at(indx);
 
 		m_contextmenu -> setItemChecked(VISIBLE, lay -> visible());
@@ -400,14 +401,14 @@ void LayerTable::slotAddLayer()
 {
     KisImage *img = m_doc->current();
 
-    QString name = i18n( "layer %1" ).arg( img->layerList().count() );
+    QString name = i18n( "layer %1" ).arg( img->layerList().size() );
 
     img->addLayer( img->imageExtents(), KisColor::white(), true, name );
 
-    QRect uR = img->layerList().at(img->layerList().count() - 1)->imageExtents();
+    QRect uR = img->layerList().at(img->layerList().size() - 1)->imageExtents();
     img->markDirty(uR);
 
-    selectLayer( img->layerList().count() - 1 );
+    selectLayer( img->layerList().size() - 1 );
 
     updateTable();
     updateAllCells();
@@ -418,13 +419,13 @@ void LayerTable::slotAddLayer()
 
 void LayerTable::slotRemoveLayer()
 {
-  if( m_doc->current()->layerList().count() != 0 )
+  if( m_doc->current()->layerList().size() != 0 )
   {
     QRect uR = m_doc->current()->layerList().at(m_selected)->imageExtents();
     m_doc->current()->removeLayer( m_selected );
     m_doc->current()->markDirty(uR);
 
-    if( m_selected == (int)m_doc->current()->layerList().count() )
+    if( m_selected == (int)m_doc->current()->layerList().size() )
       m_selected--;
 
     updateTable();
@@ -469,7 +470,7 @@ void LayerTable::slotRaiseLayer()
 
 void LayerTable::slotLowerLayer()
 {
-    int npos = (m_selected + 1) < (int)m_doc->current()->layerList().count() ?
+    int npos = (m_selected + 1) < (int)m_doc->current()->layerList().size() ?
         m_selected + 1 : m_selected;
 
     if( m_selected != npos )
@@ -486,10 +487,10 @@ void LayerTable::slotLowerLayer()
 
 void LayerTable::slotFrontLayer()
 {
-  if( m_selected != (int)(m_doc->current()->layerList().count() - 1))
+  if( m_selected != (int)(m_doc->current()->layerList().size() - 1))
   {
     m_doc->current()->setFrontLayer( m_selected );
-    selectLayer( m_doc->current()->layerList().count() - 1 );
+    selectLayer( m_doc->current()->layerList().size() - 1 );
 
     QRect uR = m_doc->current()->layerList().at( m_selected )->imageExtents();
     m_doc->current()->markDirty( uR );
@@ -521,7 +522,7 @@ void LayerTable::slotBackgroundLayer()
 void LayerTable::updateAllCells()
 {
     if(m_doc->current())
-        for( int i = 0; i < (int)m_doc->current()->layerList().count(); i++ )
+        for( int i = 0; i < (int)m_doc->current()->layerList().size(); i++ )
             updateCell( i, 0 );
 }
 
@@ -542,7 +543,10 @@ void LayerTable::slotProperties()
 void LayerTable::slotAboutToShow()
 {
 	KisImage *img = m_doc -> current();
-	bool activate = static_cast<unsigned int>(m_selected) < img -> layerList().count();
+	bool activate = static_cast<unsigned int>(m_selected) < img -> layerList().size();
+
+	kdDebug() << "m_selected =  " << m_selected << endl;
+	kdDebug() << "size = " << img -> layerList().size() << endl;
 
 	m_contextmenu -> setItemEnabled(VISIBLE, activate);
 	m_contextmenu -> setItemEnabled(LEVEL, activate);

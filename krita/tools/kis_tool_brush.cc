@@ -353,8 +353,3 @@ void BrushTool::toolSelect()
 	m_toggle -> setChecked(true);
 }
 
-void BrushTool::timeout()
-{
-}
-
-

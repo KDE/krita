@@ -25,12 +25,13 @@
  */
 
 // qt includes
+#include <qbutton.h>
+#include <qclipboard.h>
 #include <qevent.h>
 #include <qpainter.h>
-#include <qbutton.h>
 #include <qscrollbar.h>
 #include <qstringlist.h>
-#include <qclipboard.h>
+#include <qvaluelist.h>
 
 // kde includes
 #include <kmessagebox.h>
@@ -1274,10 +1275,10 @@ void KisView::crop()
     if(!img) return;
 
     QRect layerRect(0, 0, cImage.width(), cImage.height());
-    QString name = i18n("layer %1").arg(img->layerList().count());
+    QString name = i18n("layer %1").arg(img->layerList().size());
 
     img->addLayer(layerRect, white, true, name);
-    uint indx = img->layerList().count() - 1;
+    uint indx = img->layerList().size() - 1;
     img->setCurrentLayer(indx);
     img->setFrontLayer(indx);
 
@@ -1588,7 +1589,7 @@ void KisView::insert_layer()
     QRect layerRect(0, 0,
         pNewLayerDialog->width(), pNewLayerDialog->height());
 
-    QString name = i18n("layer %1").arg(img->layerList().count());
+    QString name = i18n("layer %1").arg(img->layerList().size());
 
     // new layers are currently appended - perhaps they should
     // be prepended so more recent ones are on top in the
@@ -1596,7 +1597,7 @@ void KisView::insert_layer()
 
     img->addLayer(layerRect, white, true, name);
 
-    uint indx = img->layerList().count() - 1;
+    uint indx = img->layerList().size() - 1;
     img->setCurrentLayer(indx);
     img->setFrontLayer(indx);
     m_pLayerView->layerTable()->selectLayer(indx);
@@ -1670,21 +1671,21 @@ void KisView::next_layer()
     if (!img) return;
 
     uint indx = img->getCurrentLayerIndex();
-    if(indx < img->layerList().count() - 1)
+    if(indx < img->layerList().size() - 1)
     {
         // make the next layer the current one, select it,
         // and make sure it's visible
         ++indx;
         img->setCurrentLayer(indx);
         m_pLayerView->layerTable()->selectLayer(indx);
-        img->layerList().at(indx)->setVisible(true);
+        img->layerList()[indx]->setVisible(true);
 
         // hide all layers on top of this one so this
         // one is clearly visible and can be painted on!
 
-        while(++indx <= img->layerList().count() - 1)
+        while(++indx <= img->layerList().size() - 1)
         {
-            img->layerList().at(indx)->setVisible(false);
+            img->layerList()[indx]->setVisible(false);
         }
 
         img->markDirty(img->getCurrentLayer()->layerExtents());
@@ -1714,13 +1715,13 @@ void KisView::previous_layer()
         --indx;
         img->setCurrentLayer(indx);
         m_pLayerView->layerTable()->selectLayer(indx);
-        img->layerList().at(indx)->setVisible(true);
+        img->layerList()[indx]->setVisible(true);
 
         // hide all layers beyond this one so this
         // one is clearly visible and can be painted on!
-        while(++indx <= img->layerList().count() - 1)
+        while(++indx <= img->layerList().size() - 1)
         {
-            img->layerList().at(indx)->setVisible(false);
+            img->layerList()[indx]->setVisible(false);
         }
 
         img->markDirty(img->getCurrentLayer()->layerExtents());
@@ -1932,7 +1933,7 @@ void KisView::layerScale(bool smooth)
     else
     {
         // bring new scaled layer to front
-        uint indx = img->layerList().count() - 1;
+        uint indx = img->layerList().size() - 1;
         img->setCurrentLayer(indx);
         img->markDirty(img->getCurrentLayer()->layerExtents());
         m_pLayerView->layerTable()->selectLayer(indx);
@@ -2318,7 +2319,7 @@ void KisView::addHasNewLayer(QImage& loadedImg, KURL& u)
 	uint indx;
 
 	img -> addLayer(layerRect, white, false, layerName);
-	indx = img -> layerList().count() - 1;
+	indx = img -> layerList().size() - 1;
 	img -> setCurrentLayer(indx);
 	img -> setFrontLayer(indx);
 	m_pLayerView -> layerTable() -> selectLayer(indx);

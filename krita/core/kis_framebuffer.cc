@@ -157,7 +157,7 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
 	QRect nr(0, 0, newWidth, newHeight);
 
 	QString layerName;
-	layerName.sprintf("layer %d", img->layerList().count());
+	layerName.sprintf("layer %d", img->layerList().size());
 	// paramaters: rectangle,  color, clear to transparent, name
 	img->addLayer(nr, white, true, layerName);
 
@@ -297,7 +297,7 @@ bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
 
 	QRect nr(0, 0, newWidth, newHeight);
 	QString layerName;
-	layerName.sprintf("layer %d", img->layerList().count());
+	layerName.sprintf("layer %d", img->layerList().size());
 	img->addLayer(nr, white, true, layerName);
 
 	// adding a layer makes it the new current layer

@@ -34,6 +34,9 @@
 #include "kis_floatingselection.h"
 #include "kis_selection_manager.h"
 #include "kis_painter.h"
+#include "kis_tile_command.h"
+#include "kis_iterators_quantum.h"
+#include "kis_iterators_pixel.h"
 
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
@@ -343,7 +346,6 @@ void KisSelectionManager::clear()
 	KisSelectionSP selection = layer -> selection();
 	QRect r = selection -> selectedRect();
 
-
 	kdDebug() << "Selection rect: " 
 		  << r.x() << ", "
 		  << r.y() << ", "
@@ -359,32 +361,40 @@ void KisSelectionManager::clear()
 		  << r.width() << ", "
 		  << r.height() << "\n";
 
-//                 KisFloatingSelectionSP selection = img -> selection();
+	KisTileCommand * ktc = new KisTileCommand("clear", (KisPaintDeviceSP) layer ); // Create a command
 
-//                 if (selection) {
-//                         KisPaintDeviceSP parent = selection -> parent();
 
-//                         if (parent) {
-//                                 QRect rc = selection -> bounds();
-//                                 QRect ur;
-//                                 KisPainter gc(parent);
+	KoColor c;
+	QUANTUM opacity;
+	Q_INT32 x = r.x();
+	Q_INT32 y = r.y();
+	QUANTUM s;
 
-//                                 m_adapter -> beginMacro(i18n("Remove Selection"));
-// 		img -> removeActiveSelection(); // commit=true
-//                                 ur = rc;
+	KisIteratorLineQuantum lineIt = selection -> iteratorQuantumSelectionBegin(ktc, r.x(), r.x() + r.width() - 1, r.y() );
+	KisIteratorLineQuantum lastLine = selection -> iteratorQuantumSelectionEnd(ktc, r.x(), r.x() + r.width() - 1, r.y() + r.height() - 1);
+	while( lineIt <= lastLine )
+	{
+		KisIteratorQuantum quantumIt = *lineIt;
+		KisIteratorQuantum lastQuantum = lineIt.end();
+		while( quantumIt <= lastQuantum )
+		{
+			// XXX: roundabout way of setting opacity
+			layer -> pixel(x, y, &c, &opacity);
+			s = QUANTUM_MAX - quantumIt; // Invert
+			
+			if (s > OPACITY_TRANSPARENT) {
+				layer -> setPixel(x, y, c, opacity - s);
+			}
+			++quantumIt; // the alphamask has just one byte per pixel.
+			++x;
+		}
+		++lineIt;
+		x = r.x();
+		++y;
+	}
+	layer -> removeSelection();
+	m_parent -> updateCanvas();
 
-//                                 if (parent -> x() || parent -> y())
-//                                         rc.moveBy(-parent -> x(), -parent -> y());
-
-//                                 gc.beginTransaction("remove selection on parent");
-//                                 gc.eraseRect(rc);
-//                                 m_adapter -> addCommand(gc.end());
-//                                 m_adapter -> endMacro();
-//                                 m_doc -> setModified(true);
-//                                 updateCanvas(ur);
-//                         }
-//                 }
-// 	}
 }
 
 

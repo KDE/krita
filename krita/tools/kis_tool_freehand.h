@@ -67,7 +67,6 @@ protected:
 			       const double xtilt,
 			       const double ytilt) =0;
 	inline KisPainter * painter() { return m_painter; };
-	inline KisImageSP currentImage() const { return m_currentImage; };
 	virtual void initPaint(const QPoint & pos);
 	virtual void endPaint();
 

@@ -1243,7 +1243,7 @@ void KisView::export_image()
 				KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
 				break;
 			case KisImageBuilder_RESULT_FAILURE:
-				KMessageBox::error(this, i18n("Error saving sile."), i18n("Error Saving File"));
+				KMessageBox::error(this, i18n("Error saving file."), i18n("Error Saving File"));
 				break;
 			case KisImageBuilder_RESULT_OK:
 			default:

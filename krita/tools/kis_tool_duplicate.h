@@ -18,8 +18,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __KIS_TOOL_PEN_H__
-#define __KIS_TOOL_PEN_H__
+#ifndef __KIS_TOOL_DUPLICATE_H__
+#define __KIS_TOOL_DUPLICATE_H__
 
 #include "kis_tool.h"
 #include "kis_tool_freehand.h"
@@ -59,5 +59,5 @@ protected:
  QPoint m_position; // Give the position of the last alt-click
 };
 
-#endif //__KIS_TOOL_PEN_H__
+#endif //__KIS_TOOL_DUPLICATE_H__
 

@@ -53,7 +53,7 @@ public:
 	void setParent(KisPaintDeviceSP parent);
 	void clearParentOnMove(bool f);
 
-	QImage toImage();
+// 	QImage toImage();
 
 private slots:
 	void parentVisibilityChanged(KisPaintDeviceSP parent);

@@ -131,6 +131,8 @@ public: // KoView implementation
 	KisFilterRegistrySP filterRegistry() const;
 	KisToolRegistry * toolRegistry() const { return m_toolRegistry; }
 
+	KoToolDockManager * toolDockManager() { return m_toolDockManager; }
+
 	void updateStatusBarSelectionLabel();
 
 
@@ -155,6 +157,7 @@ signals:
 	void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
 	void cursorEnter();
 	void cursorLeave();
+
 
 public slots:
 	void dialog_gradient();

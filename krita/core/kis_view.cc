@@ -265,7 +265,7 @@ DCOPObject* KisView::dcopObject()
 
 void KisView::setupDockers()
 {
-	m_toolDockManager = new KoToolDockManager(m_canvas);
+	m_toolDockManager = new KoToolDockManager(this);
 	Q_INT32 w = 0;
 	Q_INT32 h = 0;
 

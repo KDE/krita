@@ -232,40 +232,40 @@ void KisFloatingSelection::clearParentOnMove(bool f)
 	m_firstMove = true;
 }
 
-QImage KisFloatingSelection::toImage()
-{
-	KisTileMgrSP tm = tiles();
-	KisPixelDataSP raw;
-	Q_INT32 stride;
-	QUANTUM *src;
+// QImage KisFloatingSelection::toImage()
+// {
+// 	KisTileMgrSP tm = tiles();
+// 	KisPixelDataSP raw;
+// 	Q_INT32 stride;
+// 	QUANTUM *src;
 
-	if (tm) {
-		if (tm -> width() == 0 || tm -> height() == 0)
-			return QImage();
+// 	if (tm) {
+// 		if (tm -> width() == 0 || tm -> height() == 0)
+// 			return QImage();
 
-		raw = tm -> pixelData(0, 0, tm -> width() - 1, tm -> height() - 1, TILEMODE_READ);
+// 		raw = tm -> pixelData(0, 0, tm -> width() - 1, tm -> height() - 1, TILEMODE_READ);
 
-		if (raw == 0)
-			return QImage();
+// 		if (raw == 0)
+// 			return QImage();
 
-		if (m_clipImg.width() != tm -> width() || m_clipImg.height() != tm -> height())
-			m_clipImg.create(tm -> width(), tm -> height(), 32);
+// 		if (m_clipImg.width() != tm -> width() || m_clipImg.height() != tm -> height())
+// 			m_clipImg.create(tm -> width(), tm -> height(), 32);
 
-		stride = tm -> depth();
-		src = raw -> data;
+// 		stride = tm -> depth();
+// 		src = raw -> data;
 
-		for (Q_INT32 y = 0; y < tm -> height(); y++) {
-			for (Q_INT32 x = 0; x < tm -> width(); x++) {
-				// XXX Different img formats
-				// XXX Alpha channel
-				m_clipImg.setPixel(x, y, qRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE])));
-				src += stride;
-			}
-		}
-	}
+// 		for (Q_INT32 y = 0; y < tm -> height(); y++) {
+// 			for (Q_INT32 x = 0; x < tm -> width(); x++) {
+// 				// XXX Different img formats
+// 				// XXX Alpha channel
+// 				m_clipImg.setPixel(x, y, qRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE])));
+// 				src += stride;
+// 			}
+// 		}
+// 	}
 
-	return m_clipImg;
-}
+// 	return m_clipImg;
+// }
 
 #include "kis_floatingselection.moc"
 

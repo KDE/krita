@@ -640,8 +640,15 @@ void KisPainter::paintAt(const QPoint & pos,
 
 	// This is going to be sloooooow!
 	if (m_pressure != pressure || m_brush -> brushType() == PIPE_MASK || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
-		KisAlphaMask * mask = m_brush -> mask(pressure);
-		computeDab(mask);
+
+		if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
+			m_dab = m_brush -> image(pressure);
+		}
+		else {
+			KisAlphaMask * mask = m_brush -> mask(pressure);
+			computeDab(mask);
+		}
+
 		m_pressure = pressure;
 	}
 	bitBlt( x,  y,  m_brush -> compositeOp(), m_dab.data(), m_brush -> opacity(), 0, 0, m_dab -> width(), m_dab -> height());

@@ -78,9 +78,7 @@ void KisAlphaMask::copyAlpha(const QImage& img)
 			// own solution better, and so do my kids
 			// m_data.push_back(255 - qAlpha(img.pixel(x,y)));
                         QRgb c = img.pixel(x,y);
-                        QUANTUM a = ((255 - qRed(c))
-                                     + (255 - qGreen(c))
-                                     + (255 - qBlue(c))) / 3;
+                        QUANTUM a = (qGray(c) * qAlpha(c)) / 255;
 			m_data.push_back(a);
 
 		}

@@ -54,6 +54,7 @@ public:
 	   @return the next mask in the pipe.
 	*/
 	virtual KisAlphaMask *mask(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+	virtual KisLayerSP image(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 
 	virtual enumBrushType brushType() const;
 
@@ -71,7 +72,7 @@ private:
 	Q_UINT32 m_numOfBrushes;
 	mutable Q_UINT32 m_currentBrush;
 
-	QValueVector<Q_UINT8> m_data;
+	QByteArray m_data;
 	mutable QPtrList<KisBrush> m_brushes;
 
 	enumBrushType m_brushType;

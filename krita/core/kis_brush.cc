@@ -55,20 +55,19 @@ namespace {
 KisBrush::KisBrush(const QString& filename) : super(filename)
 {
 	m_brushType = INVALID;
+	m_ownData = true;
 }
 
 KisBrush::KisBrush(const QString& filename,
-		   const QValueVector<Q_UINT8> & data,
+		   const QByteArray& data,
 		   Q_UINT32 & dataPos) : super(filename)
 {
 	m_brushType = INVALID;
+	m_ownData = false;
 
-	m_data.clear();
-	// XXX: This can be done more efficiently, I guess.
-	for (Q_UINT32 i = dataPos; i < data.size(); i++) {
-		m_data.append(data[i]);
-	}
+	m_data.setRawData(data.data() + dataPos, data.size() - dataPos);
 	ioResult(0);
+	m_data.resetRawData(data.data() + dataPos, data.size() - dataPos);
 	dataPos += m_header_size + (m_width * m_height * m_bytes);
 }
 
@@ -112,6 +111,22 @@ KisAlphaMask *KisBrush::mask(Q_INT32 pressure) const
 	if (scale < 0) scale = 0;
 
 	return m_masks.at(scale);
+}
+
+KisLayerSP KisBrush::image(Q_INT32 pressure) const
+{
+	if (m_images.isEmpty()) {
+		createImages(m_img);
+	}
+
+	Q_INT32 scale = (pressure * PRESSURE_LEVELS) / PRESSURE_MAX;
+
+	if (scale >= PRESSURE_LEVELS || (uint)scale >= m_images.count())
+		scale = m_images.count() - 1;
+
+	if (scale < 0) scale = 0;
+
+	return m_images.at(scale);
 }
 
 void KisBrush::setHotSpot(QPoint pt)
@@ -239,6 +254,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 	} else if (bh.bytes == 4) {
 		// Has alpha
 		m_brushType = IMAGE;
+		m_img.setAlphaBuffer(true);
 
 		for (Q_UINT32 y = 0; y < bh.height; y++) {
 			for (Q_UINT32 x = 0; x < bh.width; x++) {
@@ -246,10 +262,11 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 					emit ioFailed(this);
 					return;
 				}
-				m_img.setPixel(x, y, qRgba(255 - m_data[k++],
-							   255 - m_data[k++],
-							   255 - m_data[k++],
-							   255 - m_data[k++]));
+				m_img.setPixel(x, y, qRgba(m_data[k+0],
+							   m_data[k+1],
+							   m_data[k+2],
+							   m_data[k+3]));
+				k += 4;
 			}
 		}
 	} else {
@@ -260,7 +277,9 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 	setWidth(m_img.width());
 	setHeight(m_img.height());
 	//createMasks(m_img);
-	m_data.clear(); // Save some memory, we're using enough of it as it is.
+	if (m_ownData) {
+		m_data.resize(0); // Save some memory, we're using enough of it as it is.
+	}
  	//kdDebug() << "Brush: " << &name[0] << " spacing: " << spacing() << "\n";
 	setValid(true);
 	emit loadComplete(this);
@@ -280,6 +299,35 @@ void KisBrush::createMasks(const QImage & img) const
 		//scale += 0.02;
 		scale += 1.0 / (PRESSURE_LEVELS / 2);
 		m_masks.append(new KisAlphaMask(img, scale));
+	}
+}
+
+void KisBrush::createImages(const QImage & img) const
+{
+	if (!m_images.isEmpty())
+		m_images.clear();
+
+	double scale = 0.0;
+	for (Q_INT32 i = 0; i < PRESSURE_LEVELS; i++) {
+
+		scale += 1.0 / (PRESSURE_LEVELS / 2);
+		QImage scaledImage = img.smoothScale(static_cast<int>(img.width() * scale + 0.5),
+						     static_cast<int>(img.height() * scale + 0.5));
+		KisLayer *layer = new KisLayer(scaledImage.width(), scaledImage.height(),
+					       IMAGE_TYPE_RGBA, "brush image");
+
+		for (int y = 0; y < scaledImage.height(); y++) {
+			for (int x = 0; x < scaledImage.width(); x++) {
+
+				QRgb pixel = scaledImage.pixel(x, y);
+				KoColor colour = KoColor(qRed(pixel), qGreen(pixel), qBlue(pixel));
+				QUANTUM alpha = (qAlpha(pixel) * OPACITY_OPAQUE) / 255;
+
+				layer -> setPixel(x, y, colour, alpha);
+			}
+		}
+		
+		m_images.append(layer);
 	}
 }
 

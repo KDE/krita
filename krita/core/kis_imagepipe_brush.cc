@@ -89,6 +89,17 @@ KisAlphaMask *KisImagePipeBrush::mask(Q_INT32 pressure) const
 	return m_brushes.at(m_currentBrush - 1) -> mask(pressure);
 }
 
+KisLayerSP KisImagePipeBrush::image(Q_INT32 pressure) const
+{
+	if (m_brushes.isEmpty()) return 0;
+	// XXX: This does not follow the instructions in the 'parasite'
+	if (m_currentBrush == m_brushes.count()) {
+		m_currentBrush = 0;
+	}
+	m_currentBrush++;
+	return m_brushes.at(m_currentBrush - 1) -> image(pressure);
+}
+
 void KisImagePipeBrush::setParasite(const QString& parasite)
 {
 	m_parasite = parasite;
@@ -166,6 +177,7 @@ void KisImagePipeBrush::ioResult(KIO::Job * /*job*/)
 	}
 
 	emit loadComplete(this);
+	m_data.resize(0);
 }
 #include "kis_imagepipe_brush.moc"
 

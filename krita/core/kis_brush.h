@@ -30,6 +30,7 @@
 #include "kis_resource.h"
 #include "kis_alpha_mask.h"
 #include "kis_global.h"
+#include "kis_layer.h"
 
 class QPoint;
 class QPixmap;
@@ -49,7 +50,7 @@ class KisBrush : public KisResource {
 public:
 	KisBrush(const QString& filename);
 	KisBrush(const QString& filename, 
-		 const QValueVector<Q_UINT8> & data,
+		 const QByteArray & data,
 		 Q_UINT32 & dataPos);
 	
 	virtual ~KisBrush();
@@ -63,6 +64,7 @@ public:
 	   pixels in the brush.
 	*/
 	virtual KisAlphaMask *mask(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+	virtual KisLayerSP image(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 
 	void setHotSpot(QPoint);
 	QPoint hotSpot(Q_INT32 pressure = PRESSURE_DEFAULT) const;
@@ -81,12 +83,15 @@ private slots:
 
 private:
 	void createMasks(const QImage & img) const;
+	void createImages(const QImage & img) const;
 
-	QValueVector<Q_UINT8> m_data;
+	QByteArray m_data;
+	bool m_ownData;
 	QPoint m_hotSpot;
 	Q_INT32 m_spacing;
 	QImage m_img;
 	mutable QPtrList<KisAlphaMask> m_masks;
+	mutable QValueVector<KisLayerSP> m_images;
 
 	Q_UINT32 m_header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
 	Q_UINT32 m_version;      /*  brush file version #  */

@@ -55,7 +55,7 @@ public:
 	inline bool operator<(const KisIteratorUnit& __rhs) const;
 	inline bool operator<=(const KisIteratorUnit& __rhs) const;
 	inline bool operator==(const KisIteratorUnit& __rhs) const;
-protected:
+
 	//Data access operators
 	inline operator QUANTUM () ;
 	inline operator QUANTUM*();

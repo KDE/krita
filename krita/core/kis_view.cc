@@ -397,7 +397,7 @@ void KisView::setupDockers()
 	m_colordocker -> setCaption(i18n("Color Manager"));
  	m_colordocker -> move(w, h); h+=100; // XXX Remember last position
 	show = new KToggleAction(i18n( "&Colors" ), 0, 0, actionCollection(), "view_color_docker" );
-	connect(show, SIGNAL(toggled(bool)), m_layerchanneldocker, SLOT(makeVisible(bool)));
+	connect(show, SIGNAL(toggled(bool)), m_colordocker, SLOT(makeVisible(bool)));
 	connect(m_colordocker, SIGNAL(visibleChange(bool)), SLOT(viewColorDocker(bool)));
 
 	m_hsvwidget = new KisHSVWidget(this, "hsv");

@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2005 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,11 +16,30 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "qcolor.h"
+#ifndef WET_PLUGIN_H_
+#define WET_PLUGIN_H_
 
-#include "kis_global.h"
+#include <kparts/plugin.h>
+
 #include "kis_types.h"
-#include "kis_profile.h"
-#include "kis_quantum.h"
 
-#include "kis_pixel.h"
+class KisView;
+class KisColorSpaceWet;
+
+/**
+ * A plugin wrapper around the WET colour space strategy.
+ */
+class WetPlugin : public KParts::Plugin
+{
+	Q_OBJECT
+public:
+	WetPlugin(QObject *parent, const char *name, const QStringList &);
+	virtual ~WetPlugin();
+	
+private:
+
+	KisView* m_view;
+	KisStrategyColorSpaceSP m_colorSpaceWet;
+};
+
+#endif // WET_PLUGIN_H_

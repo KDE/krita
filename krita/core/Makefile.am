@@ -39,7 +39,7 @@ libkritacore_la_SOURCES = kis_paint_device.cc kis_layer.cc kis_image.cc \
 		kis_transaction.cc kis_vec.cc kis_rect.cc kis_iterators_pixel.cc \
 		KRayonViewIface.cc KRayonViewIface.skel KIsDocIface.cc KIsDocIface.skel KIsImageIface.cc \
 		KIsImageIface.skel kis_selection_manager.cc kis_scale_visitor.cc kis_transform_visitor.cc \
-		kis_rotate_visitor.cc kis_quantum_operations.cc kis_clipboard.cc kis_pixel.cc \
+		kis_rotate_visitor.cc kis_quantum_operations.cc kis_clipboard.cc \
 		kis_filter.cc kis_filter_registry.cc kis_fileformat_registry.cc \
 		kis_docker_manager.cc
 

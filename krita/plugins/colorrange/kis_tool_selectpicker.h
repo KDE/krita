@@ -30,6 +30,12 @@ class QWidget;
 class QVBoxLayout;
 class QCheckBox;
 
+/**
+ * Tool to select colours by pointing at a color on the image.
+ * TODO: 
+ *       Implement shift/shift-ctrl keyboard shortcuts for 
+ *       temporary add/subtract selection mode.     
+ */
 class KisToolSelectPicker : public KisToolNonPaint {
 
 	Q_OBJECT

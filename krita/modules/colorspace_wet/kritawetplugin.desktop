@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Watercolor paint plugin
+Comment=Color model and tools for painting with simulated watercolors
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritawetplugin

@@ -70,6 +70,8 @@ class QColor;
  * A read-only pixel. You can retrieve the channel values by name or position
  * or all channels as a value vector.
  */
+
+ // XXX: Fill the selectedness from the iterators!
 class KisPixelRO {
 public:
 

@@ -83,6 +83,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32
 {
 	applyMatrix(matrix, m_device, x, y, w, h);
 }
+
 void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	// XXX: add checking of selections
@@ -114,6 +115,8 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		++afterIt;
 		pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldPixel();
 		++afterIt;
+
+		if (currentPixel.selected())
 		for(int i = 0; i < depth; i++)
 		{
 			int sum = matrix[i][1][1] + matrix[i][1][2] + matrix[i][2][1] + matrix[i][2][2];
@@ -141,35 +144,43 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 			pixels[ CONVOLUTION_PIXEL_CUR ] = pixels[ CONVOLUTION_PIXEL_RIGHT ];
 			pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ] = pixels[ CONVOLUTION_PIXEL_BOTTOM ];
 			pixels[ CONVOLUTION_PIXEL_BOTTOM ] = pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ];
-			
+
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldPixel();
 			++curIt;
 			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldPixel();
 			++afterIt;
-			for(int i = 0; i < depth; i++)
-			{
-				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
-							(	pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
-								+ pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
-								+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
-								+ pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ][i] * matrix[i][2][0]
-								+ pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
-								+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2]
-							 ) * matrix[i].sum() / matrix[i].factor() / sums[i] + matrix[i].offset() ) );
+			// XXX: do something useful with the selectedness
+			if (currentPixel.selected() > 0 ) {
+				for(int i = 0; i < depth; i++)
+				{
+					currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
+								(	pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
+									+ pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
+									+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
+									+ pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ][i] * matrix[i][2][0]
+									+ pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
+									+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2]
+								) * matrix[i].sum() / matrix[i].factor() / sums[i] + matrix[i].offset() ) );
+				}
 			}
 		}
 		// Corner : right top
 		currentPixel = dstIt.pixel();
-		for(int i = 0; i < depth; i++)
-		{
-			int sum = matrix[i][1][1] + matrix[i][1][0] + matrix[i][2][0] + matrix[i][2][1];
-			sum = (sum == 0) ? 1 : sum;
-			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
-								(     pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
-									  + pixels[ CONVOLUTION_PIXEL_RIGHT - 1 ][i] * matrix[i][1][0]
-									  + pixels[ CONVOLUTION_PIXEL_BOTTOM - 1 ][i] * matrix[i][2][0]
-									  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][2][1] )
-									  * matrix[i].sum() / matrix[i].factor() / sum + matrix[i].offset() ) );
+		if (currentPixel.selected() > 0 ) {
+			for(int i = 0; i < depth; i++)
+			{
+				int sum = matrix[i][1][1] + matrix[i][1][0] + matrix[i][2][0] + matrix[i][2][1];
+				sum = (sum == 0) ? 1 : sum;
+						// XXX: do something useful with the selectedness
+
+	
+				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
+									(     pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
+										+ pixels[ CONVOLUTION_PIXEL_RIGHT - 1 ][i] * matrix[i][1][0]
+										+ pixels[ CONVOLUTION_PIXEL_BOTTOM - 1 ][i] * matrix[i][2][0]
+										+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][2][1] )
+										* matrix[i].sum() / matrix[i].factor() / sum + matrix[i].offset() ) );
+			}
 		}
 	}
 
@@ -208,16 +219,21 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		++afterIt;
 		pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldPixel();
 		++afterIt;
-		for(int i = 0; i < depth; i++)
-		{
-			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
-									(   pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
-									  + pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
-									  + pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
-									  + pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
-									  + pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
-									  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] )
-									* matrix[i].sum() / matrix[i].factor() / rightSums[i] + matrix[i].offset() ) );
+		
+		// XXX: do something useful with the selectedness
+		if (currentPixel.selected() > 0 ) {
+	
+			for(int i = 0; i < depth; i++)
+			{
+				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
+										(   pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
+										+ pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
+										+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
+										+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
+										+ pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
+										+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] )
+										* matrix[i].sum() / matrix[i].factor() / rightSums[i] + matrix[i].offset() ) );
+			}
 		}
 		// Body : body
 		while( ! curIt.isDone() )
@@ -236,34 +252,45 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 			++curIt;
 			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldPixel();
 			++afterIt;
-			for(int i = 0; i < depth; i++)
-			{
-				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
-										(   pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
-										  + pixels[ CONVOLUTION_PIXEL_LEFTTOP ][i] * matrix[i][0][0]
-										  + pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
-										  + pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
-										  + pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
-										  + pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
-										  + pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ][i] * matrix[i][2][0]
-										  + pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
-										  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] )
-										/ matrix[i].factor() + matrix[i].offset() ) );
+			
+			// XXX: do something useful with the selectedness
+			if (currentPixel.selected() > 0 ) {
+
+				for(int i = 0; i < depth; i++)
+				{
+					currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
+											(   pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
+											+ pixels[ CONVOLUTION_PIXEL_LEFTTOP ][i] * matrix[i][0][0]
+											+ pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
+											+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
+											+ pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
+											+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
+											+ pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ][i] * matrix[i][2][0]
+											+ pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
+											+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] )
+											/ matrix[i].factor() + matrix[i].offset() ) );
+				}
 			}
 		}
 		// Body : right
 		currentPixel = dstIt.pixel();
-		for(int i = 0; i < depth; i++)
-		{
-			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
-									( pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
-									  + pixels[ CONVOLUTION_PIXEL_TOP - 1 ][i] * matrix[i][0][0]
-									  + pixels[ CONVOLUTION_PIXEL_RIGHTTOP - 1 ][i] * matrix[i][0][1]
-									  + pixels[ CONVOLUTION_PIXEL_RIGHT - 1 ][i] * matrix[i][1][0]
-									  + pixels[ CONVOLUTION_PIXEL_BOTTOM - 1 ][i] * matrix[i][2][0]
-									  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][2][1] )
-									* matrix[i].sum() / matrix[i].factor() / leftSums[i] + matrix[i].offset() ) );
+		
+		// XXX: do something useful with the selectedness
+		if (currentPixel.selected() > 0 ) {
+
+			for(int i = 0; i < depth; i++)
+			{
+				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
+										( pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
+										+ pixels[ CONVOLUTION_PIXEL_TOP - 1 ][i] * matrix[i][0][0]
+										+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP - 1 ][i] * matrix[i][0][1]
+										+ pixels[ CONVOLUTION_PIXEL_RIGHT - 1 ][i] * matrix[i][1][0]
+										+ pixels[ CONVOLUTION_PIXEL_BOTTOM - 1 ][i] * matrix[i][2][0]
+										+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][2][1] )
+										* matrix[i].sum() / matrix[i].factor() / leftSums[i] + matrix[i].offset() ) );
+			}
 		}
+		
 		above++;
 		y++;
 		dstY++;
@@ -285,16 +312,21 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		++curIt;
 		pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldPixel();
 		++curIt;
-		for(int i = 0; i < depth; i++)
-		{
-			int sum = matrix[i][1][1] + matrix[i][0][1] + matrix[i][0][2] + matrix[i][1][2];
-			sum = (sum == 0) ? 1 : sum;
-			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
-									(   pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
-									  + pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
-									  + pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
-									  + pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2] ) * matrix[i].sum()
-									/ matrix[i].factor() / sum + matrix[i].offset() ) );
+
+		// XXX: do something useful with the selectedness
+		if (currentPixel.selected() > 0 ) {
+	
+			for(int i = 0; i < depth; i++)
+			{
+				int sum = matrix[i][1][1] + matrix[i][0][1] + matrix[i][0][2] + matrix[i][1][2];
+				sum = (sum == 0) ? 1 : sum;
+				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
+										(   pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
+										+ pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
+										+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
+										+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2] ) * matrix[i].sum()
+										/ matrix[i].factor() / sum + matrix[i].offset() ) );
+			}
 		}
 		// Border : bottom
 		int sums[depth];
@@ -315,31 +347,40 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 			++beforeIt;
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldPixel();
 			++curIt;
-			for(int i = 0; i < depth; i++)
-			{
-				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
-										(   pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
-										  + pixels[ CONVOLUTION_PIXEL_LEFTTOP ][i] * matrix[i][0][0]
-										  + pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
-										  + pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
-										  + pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
-										  + pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2] ) * matrix[i].sum()
-										/ matrix[i].factor() / sums[i] + matrix[i].offset() ) );
+
+			// XXX: do something useful with the selectedness
+			if (currentPixel.selected() > 0 ) {
+	
+				for(int i = 0; i < depth; i++)
+				{
+					currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
+											(   pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
+											+ pixels[ CONVOLUTION_PIXEL_LEFTTOP ][i] * matrix[i][0][0]
+											+ pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
+											+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
+											+ pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
+											+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2] ) * matrix[i].sum()
+											/ matrix[i].factor() / sums[i] + matrix[i].offset() ) );
+				}
 			}
 		}
 
-	// Corner : right bottom
+		// Corner : right bottom
 		currentPixel = dstIt.pixel();
-		for(int i = 0; i < depth; i++)
-		{
-			int sum = matrix[i][1][1] + matrix[i][0][0] + matrix[i][0][1] + matrix[i][1][0];
-			sum = (sum == 0) ? 1 : sum;
-			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
-									(   pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
-									  + pixels[ CONVOLUTION_PIXEL_LEFTTOP + 1 ][i] * matrix[i][0][0]
-									  + pixels[ CONVOLUTION_PIXEL_TOP + 1 ][i] * matrix[i][0][1]
-									  + pixels[ CONVOLUTION_PIXEL_LEFT + 1 ][i] * matrix[i][1][0] ) * matrix[i].sum()
-									/ matrix[i].factor() / sum + matrix[i].offset() ) );
+		// XXX: do something useful with the selectedness
+		if (currentPixel.selected() > 0 ) {
+
+			for(int i = 0; i < depth; i++)
+			{
+				int sum = matrix[i][1][1] + matrix[i][0][0] + matrix[i][0][1] + matrix[i][1][0];
+				sum = (sum == 0) ? 1 : sum;
+				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
+										(   pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
+										+ pixels[ CONVOLUTION_PIXEL_LEFTTOP + 1 ][i] * matrix[i][0][0]
+										+ pixels[ CONVOLUTION_PIXEL_TOP + 1 ][i] * matrix[i][0][1]
+										+ pixels[ CONVOLUTION_PIXEL_LEFT + 1 ][i] * matrix[i][1][0] ) * matrix[i].sum()
+										/ matrix[i].factor() / sum + matrix[i].offset() ) );
+			}
 		}
 	}
 }

@@ -212,6 +212,17 @@ void KisToolSelectPicker::slotSetFuzziness(int fuzziness)
 void KisToolSelectPicker::slotSetAction(int action)
 {
 	m_selectAction =(enumSelectionMode)action;
+	switch(m_selectAction) {
+		case SELECTION_REPLACE:
+			m_subject -> setCanvasCursor(KisCursor::pickerCursor());
+			break;
+		case SELECTION_ADD:
+			m_subject -> setCanvasCursor(KisCursor::pickerPlusCursor());
+			break;
+		case SELECTION_SUBTRACT:
+			m_subject -> setCanvasCursor(KisCursor::pickerMinusCursor());
+			
+	};
 }
 
 QWidget* KisToolSelectPicker::createOptionWidget(QWidget* parent)

@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritawetplugin" version="1">
+<Menu name="Image"><text>&amp;Image</text>
+    <Menu name="Mode"><text>&amp;Mode</text>
+            <Action name="convert to watercolor"/>
+    </Menu>
+</Menu>
+<Menu name="Layer"><text>La&amp;yer</text>
+	<Action name="dry_paint"/>
+</Menu>
+<Toolbar name="painting tools" position="top"><Text>Painting Tools</Text>
+	<Action name="wet_brush"/>
+</Toolbar>
+</kpartgui>

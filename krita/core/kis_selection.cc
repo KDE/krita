@@ -247,7 +247,7 @@ void KisSelection::fill(uint color,
 }
 
 
-void KisSelection::setRectangularSelection(QRect & re, KisLayer *lay)
+void KisSelection::setRectangularSelection(const QRect & re, KisLayer *lay)
 {
     setBounds(re);
 
@@ -294,7 +294,7 @@ void KisSelection::setRectangularSelection(QRect & re, KisLayer *lay)
 }
 
 
-void KisSelection::setEllipticalSelection(QRect & re, KisLayer *lay)
+void KisSelection::setEllipticalSelection(const QRect & re, KisLayer *lay)
 {
     // set the bounding selection rectangle
     setBounds(re);
@@ -403,7 +403,7 @@ void KisSelection::setEllipticalSelection(QRect & re, KisLayer *lay)
 
 
 
-void KisSelection::setPolygonalSelection( QRect & re, QPointArray & pointsArray, KisLayer *lay )
+void KisSelection::setPolygonalSelection(const QRect & re, QPointArray & pointsArray, KisLayer *lay )
 {
     // set the bounding selection rectangle
     setBounds( re );
@@ -529,7 +529,7 @@ QPointArray KisSelection::getBundedPointArray( QPointArray & points, QPoint & to
     return m_points;
 }
 
-void KisSelection::setContiguousSelection(QRect & re, KisLayer *lay)
+void KisSelection::setContiguousSelection(const QRect & re, KisLayer *lay)
 {
     // set the bounding selection rectangle
     setBounds(re);

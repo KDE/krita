@@ -65,10 +65,10 @@ public:
     // with the appropriate selection tool, but other objects
     // can also set a selection, nullify it, fill it or reverse it
     
-    void setRectangularSelection(QRect & r, KisLayer *lay = 0);
-    void setEllipticalSelection(QRect & r, KisLayer *lay = 0);
-    void setPolygonalSelection(QRect & r, QPointArray & a, KisLayer *lay = 0);
-    void setContiguousSelection(QRect & r, KisLayer *lay = 0);      
+    void setRectangularSelection(const QRect& r, KisLayer *lay = 0);
+    void setEllipticalSelection(const QRect& r, KisLayer *lay = 0);
+    void setPolygonalSelection(const QRect& r, QPointArray & a, KisLayer *lay = 0);
+    void setContiguousSelection(const QRect& r, KisLayer *lay = 0);      
 
 protected:
 

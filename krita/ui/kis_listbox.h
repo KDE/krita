@@ -50,6 +50,7 @@ public:
 	void setCurrentItem(int n);
 	void setTopItem(int n);
 	void lower(int pos);
+	void clear();
 
 signals:
 	void itemToggleVisible(int n);
@@ -71,6 +72,7 @@ private slots:
 	void slotAboutToShow();
 	void slotShowContextMenu(QListBoxItem *item, const QPoint& pos);
 	void slotExecuted(QListBoxItem *item, const QPoint& pos);
+	void slotDoubleClicked(QListBoxItem* item);
 
 private:
 	flags m_flags;

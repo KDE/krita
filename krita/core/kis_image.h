@@ -121,6 +121,8 @@ public:
 	inline void setAuthor(const QString& a);
 	inline void setEmail(const QString& e);
 
+	int getHishestLayerEver() const;
+
 signals:
 	void updated();
 	void updated(const QRect& rect);
@@ -183,7 +185,7 @@ private:
         DCOPObject* m_dcop;
 	bool m_autoUpdate;
 	bool m_doUndo;
-
+	int m_nLayers;
 	QTimer *m_timer;
 };
 

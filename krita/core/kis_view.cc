@@ -93,6 +93,7 @@
 #include "kis_sidebar.h"
 #include "kis_tabbar.h"
 #include "kis_listbox.h"
+#include "kis_dlg_paint_properties.h"
 
 // dialogs
 #include "kis_dlg_gradient.h"
@@ -117,6 +118,7 @@ KisView::KisView(KisDoc* doc, QWidget* parent, const char* name) : super(doc, pa
 	QObject::connect(m_doc, SIGNAL(docUpdated()), this, SLOT(slotDocUpdated()));
 	QObject::connect(m_doc, SIGNAL(docUpdated(const QRect&)), this, SLOT(slotDocUpdated(const QRect&)));
 	QObject::connect(this, SIGNAL(embeddImage(const QString&)), this, SLOT(slotEmbeddImage(const QString&)));
+	connect(m_doc, SIGNAL(layersUpdated()), SLOT(slotLayersUpdated()));
 
 	m_fg = KoColor::black();
 	m_bg = KoColor::white();
@@ -271,19 +273,8 @@ void KisView::setupSideBar()
 	m_pPaletteChooser -> setCaption(i18n("Palettes"));
 	m_pSideBar -> plug(m_pPaletteChooser);
 
-	// layer view
-	m_pLayerView = new KisLayerView(m_doc, this);
-	m_pLayerView -> setCaption(i18n("Layers"));
-	m_pSideBar -> plug(m_pLayerView);
-
-	// channel view
-	m_pChannelView = new KisChannelView(m_doc, this);
-	m_pChannelView -> setCaption(i18n("Channels"));
-	m_pSideBar -> plug(m_pChannelView);
-
-#if 1
-	m_layerView = new KisListBoxView("Test Layer", KisListBoxView::SHOWALL, m_pSideBar, "Test View Layer");
-	m_layerView -> setCaption("Test List View");
+	m_layerView = new KisListBoxView("Layers", KisListBoxView::SHOWALL, m_pSideBar);
+	m_layerView -> setCaption(i18n("Layers"));
 
 	connect(m_layerView, SIGNAL(itemToggleVisible(int)), SLOT(slotLayerToggleVisible(int)));
 	connect(m_layerView, SIGNAL(itemSelected(int)), SLOT(slotLayerSelected(int)));
@@ -299,10 +290,13 @@ void KisView::setupSideBar()
 	connect(m_layerView, SIGNAL(itemBack(int)), SLOT(slotLayerBack(int)));
 	connect(m_layerView, SIGNAL(itemLevel(int)), SLOT(slotLayerLevel(int)));
 
-	m_layerView -> insertItem(i18n("background")); // XXX 
-
 	m_pSideBar -> plug(m_layerView);
-#endif
+	slotLayersUpdated();
+
+	// channel view
+	m_pChannelView = new KisChannelView(m_doc, this);
+	m_pChannelView -> setCaption(i18n("Channels"));
+	m_pSideBar -> plug(m_pChannelView);
 
 	// activate brushes tab
 	m_pSideBar -> slotActivateTab(i18n("Brushes"));
@@ -443,7 +437,7 @@ void KisView::setupActions()
 			  actionCollection(), "current_tool_properties");
 
 	// layer actions
-	(void)new KAction(i18n("&Add layer..."), 0, this, SLOT(insert_layer()), actionCollection(), "insert_layer");
+	(void)new KAction(i18n("&Add layer..."), 0, this, SLOT(slotLayerAdd()), actionCollection(), "insert_layer");
 	(void)new KAction(i18n("&Remove layer..."), 0, this, SLOT(remove_layer()), actionCollection(), "remove_layer");
 	(void)new KAction(i18n("&Link/Unlink layer..."), 0, this, SLOT(link_layer()), actionCollection(), "link_layer");
 	(void)new KAction(i18n("&Hide/Show layer..."), 0, this, SLOT(hide_layer()), actionCollection(), "hide_layer");
@@ -1221,8 +1215,7 @@ void KisView::crop()
 	img->setCurrentLayer(indx);
 	img->setFrontLayer(indx);
 
-	m_pLayerView->layerTable()->updateTable();
-	m_pLayerView->layerTable()->updateAllCells();
+	slotLayersUpdated();
 
 	// copy the image into the layer - this should now
 	// be handled by the framebuffer object, not the doc
@@ -1454,9 +1447,9 @@ void KisView::dialog_patterns()
 void KisView::dialog_layers()
 {
 	if(m_dialog_layers -> isChecked())
-		m_pSideBar -> plug(m_pLayerView);
+		m_pSideBar -> plug(m_layerView);
 	else
-		m_pSideBar -> unplug(m_pLayerView);
+		m_pSideBar -> unplug(m_layerView);
 
 }
 
@@ -1479,59 +1472,12 @@ void KisView::dialog_channels()
 
 void KisView::layer_properties()
 {
-	KisImageSP img = m_doc -> currentImg();
-
-	if (!img)
-		return;
-
-	KisLayerSP lay = img -> getCurrentLayer();
-
-	if (!lay)
-		return;
-
-	if (LayerPropertyDialog::editProperties(*(lay))) {
-		QRect updateRect = lay -> imageExtents();
-
-		m_pLayerView -> layerTable() -> updateAllCells();
-		img -> markDirty(updateRect);
-	}
+	slotLayerProperties(0);
 }
 
-/*
-    insert new layer into the currentImg image - using "new layer" dialog
-    for layer size (should also have fields for name and opacity).
-    This new layer will also be made uppermost so it is visble
-*/
 void KisView::insert_layer()
 {
-	KisImageSP img = m_doc -> currentImg();
-	uint indx;
-
-	if (!img)
-		return;
-
-	NewLayerDialog dlg;
-
-	dlg.exec();
-
-	if (!dlg.result() == QDialog::Accepted)
-		return;
-
-	QRect layerRect(0, 0, dlg.width(), dlg.height());
-	QString name = i18n("layer %1").arg(img -> layerList().size());
-
-
-	img -> addLayer(layerRect, white, true, name);
-	indx = img -> layerList().size() - 1;
-	img -> setCurrentLayer(indx);
-	img -> setFrontLayer(indx);
-	m_pLayerView -> layerTable() -> selectLayer(indx);
-	m_pLayerView -> layerTable() -> updateTable();
-	m_pLayerView -> layerTable() -> updateAllCells();
-	slotUpdateImage();
-	slotRefreshPainter();
-	m_doc -> setModified(true);
-	m_layerView -> insertItem(name);
+	slotLayerAdd();
 }
 
 /*
@@ -1541,10 +1487,11 @@ void KisView::insert_layer()
 
 void KisView::remove_layer()
 {
-	m_pLayerView -> layerTable() -> slotRemoveLayer();
-	slotUpdateImage();
-	slotRefreshPainter();
-	m_doc -> setModified(true);
+	KisImageSP img = m_doc -> currentImg();
+	int i;
+
+	if (img && (i = img -> getCurrentLayerIndex()) != -1)
+		slotLayerRemove(i);
 }
 
 /*
@@ -1555,16 +1502,10 @@ void KisView::remove_layer()
 void KisView::hide_layer()
 {
 	KisImageSP img = m_doc -> currentImg();
+	int i;
 
-	if (img) {
-		int indx = img -> getCurrentLayerIndex();
-		LayerTable *tbl = m_pLayerView -> layerTable();
-
-		tbl -> slotInverseVisibility(indx - 1);
-		tbl -> updateTable();
-		tbl -> updateAllCells();
-		m_doc -> setModified(true);
-	}
+	if (img && (i = img -> getCurrentLayerIndex()) != -1)
+		slotLayerToggleVisible(i);
 }
 
 /*
@@ -1575,16 +1516,10 @@ void KisView::hide_layer()
 void KisView::link_layer()
 {
 	KisImageSP img = m_doc -> currentImg();
+	int i;
 
-	if (img) {
-		int indx = img -> getCurrentLayerIndex();
-		LayerTable *tbl = m_pLayerView -> layerTable();
-
-		tbl -> slotInverseLinking(indx - 1);
-		tbl -> updateTable();
-		tbl -> updateAllCells();
-		m_doc -> setModified(true);
-	}
+	if (img && (i = img -> getCurrentLayerIndex()) != -1)
+		slotLayerToggleLinked(i);
 }
 
 /*
@@ -1594,6 +1529,7 @@ void KisView::link_layer()
 
 void KisView::next_layer()
 {
+#if 0
 	KisImageSP img = m_doc -> currentImg();
 
 	if (!img)
@@ -1628,6 +1564,7 @@ void KisView::next_layer()
 		slotRefreshPainter();
 		m_doc -> setModified(true);
 	}
+#endif
 }
 
 
@@ -1637,6 +1574,7 @@ void KisView::next_layer()
 */
 void KisView::previous_layer()
 {
+#if 0
 	KisImageSP img = m_doc -> currentImg();
 
 	if (!img)
@@ -1666,6 +1604,7 @@ void KisView::previous_layer()
 
 		m_doc->setModified(true);
 	}
+#endif
 }
 
 void KisView::import_image()
@@ -1865,10 +1804,8 @@ void KisView::layerScale(bool smooth)
         uint indx = img->layerList().size() - 1;
         img->setCurrentLayer(indx);
         img->markDirty(img->getCurrentLayer()->imageExtents());
-        m_pLayerView->layerTable()->selectLayer(indx);
-
-        m_pLayerView->layerTable()->updateTable();
-        m_pLayerView->layerTable()->updateAllCells();
+	slotLayerSelected(indx);
+	slotLayersUpdated();
         slotRefreshPainter();
 
         m_doc->setModified(true);
@@ -2249,9 +2186,9 @@ void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
 		clr = m_bg;
 
 	newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), clr, false, i18n("background"));
-	m_layerView -> insertItem(i18n("background"));
 	newimg -> markDirty(QRect(0, 0, newimg -> width(), newimg -> height()));
 	m_doc -> setCurrentImage(newimg);
+	slotLayersUpdated();
 }
 
 void KisView::addHasNewLayer(QImage& loadedImg, KURL& u)
@@ -2265,9 +2202,8 @@ void KisView::addHasNewLayer(QImage& loadedImg, KURL& u)
 	indx = img -> layerList().size() - 1;
 	img -> setCurrentLayer(indx);
 	img -> setFrontLayer(indx);
-	m_pLayerView -> layerTable() -> selectLayer(indx);
-	m_pLayerView -> layerTable() -> updateTable();
-	m_pLayerView -> layerTable() -> updateAllCells();
+	slotLayerSelected(indx);
+	slotLayersUpdated();
 }
 
 void KisView::setupTools()
@@ -2332,8 +2268,18 @@ void KisView::slotLayerToggleLinked(int n)
 	m_doc -> setModified(true);
 }
 
-void KisView::slotLayerProperties(int n)
+void KisView::slotLayerProperties(int /*n*/)
 {
+	KisImageSP img = m_doc -> currentImg();
+	KisLayerSP lay = img -> getCurrentLayer();
+	KisPaintPropertyDlg dlg(lay -> name(), lay -> opacity());
+
+	if (dlg.exec() == QDialog::Accepted) {
+		lay -> setName(dlg.getName());
+		lay -> setOpacity(dlg.getOpacity());
+		slotLayersUpdated();
+		slotUpdateImage();
+	}
 }
 
 void KisView::slotLayerAdd()
@@ -2345,25 +2291,23 @@ void KisView::slotLayerAdd()
 		return;
 
 	NewLayerDialog dlg;
-	KisLayerSPLst l = img -> layerList();
+	int n = img -> getHishestLayerEver();
 
 	dlg.exec();
 
-	if (!dlg.result() == QDialog::Accepted)
-		return;
+	if (dlg.result() == QDialog::Accepted) {
+		QRect layerRect(0, 0, dlg.width(), dlg.height());
+		QString name = i18n("layer %1").arg(n);
 
-	QRect layerRect(0, 0, dlg.width(), dlg.height());
-	QString name = i18n("layer %1").arg(l.size());
+		img -> addLayer(layerRect, white, true, name);
+		indx = n - 1;
+		img -> setCurrentLayer(indx);
+		m_layerView -> setCurrentItem(indx);
 
-	img -> addLayer(layerRect, white, true, name);
-	m_layerView -> insertItem(name);
-	indx = l.size() - 1;
-	img -> setCurrentLayer(indx);
-	m_layerView -> setCurrentItem(indx);
-
-	slotUpdateImage();
-	slotRefreshPainter();
-	m_doc -> setModified(true);
+		slotUpdateImage();
+		slotRefreshPainter();
+		m_doc -> setModified(true);
+	}
 }
 
 void KisView::slotLayerRemove(int n)
@@ -2372,8 +2316,6 @@ void KisView::slotLayerRemove(int n)
 	KisLayerSPLst l = img -> layerList();
 
 	if (l.size()) {
-		QRect uR = l[n] -> imageExtents();
-
 		img -> removeLayer(n);
 		m_doc -> setModified(true);
 		slotUpdateImage();
@@ -2391,33 +2333,57 @@ void KisView::slotLayerRmMask(int /*n*/)
 
 void KisView::slotLayerRaise(int n)
 {
+	KisImageSP img = m_doc -> currentImg();
+
+	if (img)
+		img -> upperLayer(n);
 }
 
 void KisView::slotLayerLower(int n)
 {
 	KisImageSP img = m_doc -> currentImg();
-	KisLayerSPLst l = img -> layerList();
 
-	int npos = n - 1 >= 0 ? n - 1 : n;
-
-	if (n != npos) {
+	if (img)
 		img -> lowerLayer(n);
-		m_layerView -> lower(n);
-		slotLayerSelected(npos);
-		m_doc -> setModified( true );
-	}
 }
 
 void KisView::slotLayerFront(int n)
 {
+	KisImageSP img = m_doc -> currentImg();
+
+	if (img)
+		img -> setFrontLayer(n);
+
 }
 
 void KisView::slotLayerBack(int n)
 {
+	KisImageSP img = m_doc -> currentImg();
+
+	if (img)
+		img -> setBackgroundLayer(n);
 }
 
 void KisView::slotLayerLevel(int /*n*/)
 {
+}
+
+void KisView::slotLayersUpdated()
+{
+	KisImageSP img = m_doc -> currentImg();
+	KisLayerSPLst l = img -> layerList();
+
+	m_layerView -> setUpdatesEnabled(false);
+	m_layerView -> clear();
+
+	for (KisLayerSPLstConstIterator it = l.begin(); it != l.end(); it++) {
+		m_layerView -> insertItem((*it) -> name());
+		kdDebug() << "name = " << (*it) -> name() << endl;
+	}
+
+	m_layerView -> setUpdatesEnabled(true);
+	m_layerView -> repaint();
+	m_doc -> setModified(true);
 }
 
 #include "kis_view.moc"

@@ -231,6 +231,7 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 	QRect tileExtents = KisUtil::findTileExtents(QRect(0, 0, m_width, m_height));
 	QRgb defaultColor = qRgba(CHANNEL_MIN, CHANNEL_MIN, CHANNEL_MIN, OPACITY_OPAQUE);
 
+	m_nLayers = 0;
 	m_xTiles = tileExtents.width() / TILE_SIZE;
 	m_yTiles = tileExtents.height() / TILE_SIZE;
 	m_activeChannel = 0;
@@ -348,49 +349,33 @@ DCOPObject* KisImage::dcopObject()
 
 void KisImage::upperLayer(unsigned int layer)
 {
-	Q_ASSERT(layer < m_layers.size());
-
-	if (layer > 0) {
-		KisLayerSP layer0 = m_layers.at(layer - 1);
-		KisLayerSP layer1 = m_layers.at(layer);
-
-		m_layers[layer] = layer0;
-		m_layers[layer - 1] = layer1;
+	if (layer + 1 < m_layers.size()) {
+		qSwap(m_layers[layer], m_layers[layer + 1]);
+		emit layersUpdated();
 	}
 }
 
 void KisImage::lowerLayer(unsigned int layer)
 {
-	Q_ASSERT(layer < m_layers.size());
-
-	if (layer < m_layers.size() - 1) {
-		KisLayerSP pLayer = m_layers[layer];
-		m_layers.erase(m_layers.begin() + layer);
-		m_layers.insert(m_layers.begin() + layer + 1, pLayer);
+	if (layer > 0) {
+		qSwap(m_layers[layer], m_layers[layer - 1]);
+		emit layersUpdated();
 	}
 }
 
 void KisImage::setFrontLayer(unsigned int layer)
 {
-	Q_ASSERT(layer < m_layers.size());
-
-	if (layer < m_layers.size() - 1) {
-		KisLayerSP pLayer = m_layers[layer];
-
-		m_layers.erase(m_layers.begin() + layer);
-		m_layers.push_back(pLayer);
+	if (layer + 1 != m_layers.size()) {
+		qSwap(m_layers[layer], m_layers[m_layers.size() - 1]);
+		emit layersUpdated();
 	}
 }
 
 void KisImage::setBackgroundLayer(unsigned int layer)
 {
-	Q_ASSERT(layer < m_layers.size());
-
-	if (layer > 0) {
-		KisLayerSP pLayer = m_layers[layer];
-
-		m_layers.erase(m_layers.begin() + layer);
-		m_layers.insert(m_layers.begin(), pLayer);
+	if (layer) {
+		qSwap(m_layers[layer], m_layers[0]);
+		emit layersUpdated();
 	}
 }
 
@@ -415,9 +400,11 @@ void KisImage::addLayer(const QRect& rect, const KoColor& c, bool /*tr*/, const 
 		defaultColor = c.color().rgb();
 	
 	lay = new KisLayer(name, rect.width(), rect.height(), m_bpp, m_cMode, defaultColor);
+	m_nLayers++;
 	m_layers.push_back(lay);
 	m_activeLayer = lay;
 	resizeImage(lay, rect);
+	emit layersUpdated();
 
 	if (m_doUndo)
 		addCommand(new KisCommandLayerAdd(this, lay));
@@ -438,12 +425,16 @@ void KisImage::removeLayer(KisLayerSPLstIterator it)
 		addCommand(new KisCommandLayerRm(this, lay));
 
 	m_layers.erase(it);
+	kdDebug() << 2 << endl;
+	emit layersUpdated();
 }
 
 void KisImage::removeLayer(unsigned int layer)
 {
-	if (layer >= m_layers.size())
+	if (layer >= m_layers.size()) {
+		kdDebug() << 1 << endl;
 		return;
+	}
 
 	removeLayer(m_layers.begin() + layer);
 }
@@ -955,7 +946,7 @@ void KisImage::addCommand(KCommand *cmd)
 
 int KisImage::getCurrentLayerIndex() const
 {
-	int n = -1;
+	int n = 0;
 
 	if (m_layers.empty())
 		return -1;
@@ -1059,6 +1050,11 @@ void KisImage::setCurrentChannel(KisChannelSP channel)
 		m_activeChannel = channel;
 		emit layersUpdated();
 	}
+}
+
+int KisImage::getHishestLayerEver() const
+{
+	return m_nLayers;
 }
 
 #include "kis_image.moc"

@@ -265,7 +265,6 @@ protected:
 	QWidget              *m_pPaletteChooser;    
 	QWidget              *m_pGradientChooser;
 	QWidget              *m_pImageChooser;
-	KisLayerView         *m_pLayerView;
 	KisChannelView	 *m_pChannelView;
 
 	// krayon and kde objects
@@ -307,6 +306,7 @@ private slots:
 	void slotLayerFront(int n);
 	void slotLayerBack(int n);
 	void slotLayerLevel(int n);
+	void slotLayersUpdated();
 };
 
 void KisView::setActiveTool(KisTool *tool)

@@ -48,3 +48,5 @@ BUGS
 - Drawing on a image more that 512**2 pixels crashes krita since KisPainter has a static pixmap size of 512**2, see KisPainter ctor
 - A few KoPainter integration issues 
 
+- Tile left over show up on image import
+- Image import larger than current image will crash if you click somewhere outside the image on the canvas that also contains tiles.

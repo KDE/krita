@@ -593,6 +593,7 @@ bool KisDoc::loadLayers(QDomElement& element, KisImageSP img)
 		}
 	}
 
+	slotLayersUpdated();
 	return true;
 }
 
@@ -1283,6 +1284,7 @@ bool KisDoc::slotNewImage()
 
 	img -> markDirty(QRect(0, 0, w, h));
 	setCurrentImage(img);
+	emit layersUpdated();
 	return true;
 }
 

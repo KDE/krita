@@ -101,7 +101,8 @@ KisListBoxView::KisListBoxView(const QString& label, flags f, QWidget *parent, c
 	connect(m_contextMnu, SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
 	connect(mnu, SIGNAL(activated(int)), SLOT(slotMenuAction(int)));
 	connect(m_lst, SIGNAL(contextMenuRequested(QListBoxItem *, const QPoint&)), SLOT(slotShowContextMenu(QListBoxItem*, const QPoint&)));
-	connect(m_lst, SIGNAL(executed(QListBoxItem*, const QPoint&)), SLOT(slotExecuted(QListBoxItem*, const QPoint&)));
+	connect(m_lst, SIGNAL(clicked(QListBoxItem*, const QPoint&)), SLOT(slotExecuted(QListBoxItem*, const QPoint&)));
+	connect(m_lst, SIGNAL(doubleClicked(QListBoxItem*)), SLOT(slotDoubleClicked(QListBoxItem*)));
 }
 
 KisListBoxView::~KisListBoxView()
@@ -185,20 +186,27 @@ void KisListBoxView::slotShowContextMenu(QListBoxItem *item, const QPoint& pos)
 
 void KisListBoxView::slotExecuted(QListBoxItem *item, const QPoint& pos)
 {
-	KisListBoxItem *p = dynamic_cast<KisListBoxItem*>(item);
-	int n = m_lst -> currentItem();
+	if (item) {
+		KisListBoxItem *p = dynamic_cast<KisListBoxItem*>(item);
+		int n = m_lst -> currentItem();
 
-	m_btnRm -> setEnabled(n != -1);
-	m_btnRaise -> setEnabled(n != -1);
-	m_btnLower -> setEnabled(n != -1);
+		m_btnRm -> setEnabled(n != -1);
+		m_btnRaise -> setEnabled(n != -1);
+		m_btnLower -> setEnabled(n != -1);
 
-	if (n == -1)
-		return;
+		if (n == -1)
+			return;
 
-	if (p -> intersectVisibleRect(pos, n))
-		slotMenuAction(VISIBLE);
-	else if (p -> intersectLinkedRect(pos, n))
-		slotMenuAction(LINKING);
+		if (p -> intersectVisibleRect(pos, n))
+			slotMenuAction(VISIBLE);
+		else if (p -> intersectLinkedRect(pos, n))
+			slotMenuAction(LINKING);
+	}
+}
+
+void KisListBoxView::slotDoubleClicked(QListBoxItem * /*item*/)
+{
+	slotMenuAction(PROPERTIES);
 }
 
 void KisListBoxView::setCurrentItem(int n)
@@ -233,6 +241,11 @@ void KisListBoxView::lower(int pos)
 void KisListBoxView::insertItem(const QString& name)
 {
 	m_lst -> insertItem(new KisListBoxItem(name, m_lst, m_flags));
+}
+
+void KisListBoxView::clear()
+{
+	m_lst -> clear();
 }
 
 KisListBoxItem::KisListBoxItem(const QString& label, QListBox *parent, int flags)

@@ -85,16 +85,22 @@ public:
 		h = layer -> height();
 
 		if (sx < 0) {
-			w += dx;
+			w += sx;
+			sx *= -1;
+			dx = 0;
+		} else {
 			sx = 0;
 		}
 
 		if (sy < 0) {
 			h += sy;
+			sy *= -1;
+			dy = 0;
+		} else {
 			sy = 0;
 		}
 
-		gc.bitBlt(QMAX(dx, 0), QMAX(dy, 0), layer -> compositeOp() , layer.data(), layer -> opacity(), sx, sy, w, h);
+		gc.bitBlt(dx, dy, layer -> compositeOp() , layer.data(), layer -> opacity(), sx, sy, w, h);
 		return true;
 	}
 

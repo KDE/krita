@@ -40,25 +40,29 @@ class KisFilter : public QObject, public KShared {
 	Q_OBJECT
 public:
 	KisFilter(const QString& name);
+
 public:
-	virtual void process(KisPaintDeviceSP, KisFilterConfiguration*, const QRect&, KisTileCommand* ) =0;
+	virtual void process(KisPaintDeviceSP, KisFilterConfiguration*, const QRect&, KisTileCommand* ) = 0;
+
 public:
 	inline const QString name() const { return m_name; };
+
 public slots:
+
 	void slotActivated();
+
 protected:
+
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
 	KisFilterConfigurationWidget* configurationWidget();
-	/** This function return the configuration of the filter.
-		*/
+
 	virtual KisFilterConfiguration* configuration();
-	/** This function return the colorspace of the active layout
-		*/
 	KisStrategyColorSpaceSP colorStrategy();
+
 private slots:
-	/** This signal is emited when a value of the configuration is changed 
-		*/
+
 	void refreshPreview();
+
 private:
 	QString m_name;
 	KisFilterConfigurationWidget* m_widget;
@@ -72,6 +76,9 @@ inline KisFilterConfigurationWidget* KisFilter::configurationWidget()
 
 inline KisStrategyColorSpaceSP KisFilter::colorStrategy()
 {
+	// XXX: This is really ugly, calling a static on kisview to get the
+	// current view. Besides, since the filters are plugins, and are added
+	// to the view, they have the view already as their parent.
 	return KisView::activeView()->currentImg()->activeLayer()->colorStrategy();
 }
 

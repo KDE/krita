@@ -58,9 +58,11 @@ void KisFilter::slotActivated()
 	KisView* view = KisView::activeView();
 	KisImageSP img = view->currentImg();
 	KisLayerSP layer = img->activeLayer();
+
 	// Create the config dialog
 	m_dialog = new KisPreviewDialog( (QWidget*)view, name().ascii(), true);
 	m_widget = createConfigurationWidget( (QWidget*)m_dialog->container );
+
 	if( m_widget != 0)
 	{
 		m_dialog->previewWidget->slotSetPreview( layer );
@@ -73,14 +75,16 @@ void KisFilter::slotActivated()
 			return;
 		}
 	}
+
 	//Apply the filter
 	KisFilterConfiguration* config = configuration();
 	KisTileCommand* ktc = new KisTileCommand(name(), (KisPaintDeviceSP)layer ); // Create a command
 	QRect rect(0, 0, layer->width(), layer->height());
+
 	process((KisPaintDeviceSP)layer, config, rect, ktc);
+
 	img->undoAdapter()->addCommand( ktc );
 	img->notify();
-/*	delete m_dialog;
-	delete config;*/
+
 }
 #include "kis_filter.moc"

@@ -93,7 +93,7 @@ public:
 	KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent = 0, const char *name = 0);
 	virtual ~KisView();
 
-public:
+public: // KoView implementation
 	virtual bool eventFilter(QObject *o, QEvent *e);
 	virtual int canvasXOffset() const;
 	virtual int canvasYOffset() const;

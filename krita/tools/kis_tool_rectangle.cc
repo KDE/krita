@@ -66,7 +66,7 @@ void KisToolRectangle::update (KisCanvasSubject *subject)
 void KisToolRectangle::buttonPress(KisButtonPressEvent *event)
 {
 // 	kdDebug (40001) << "KisToolRectangle::buttonPress" << event->pos () << endl;
-	if (event -> button() == LeftButton) {
+	if (m_currentImage && event -> button() == LeftButton) {
 		m_dragging = true;
 		m_dragStart = event -> pos();
 		m_dragEnd = event -> pos();

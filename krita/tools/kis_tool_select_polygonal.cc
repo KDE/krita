@@ -124,62 +124,64 @@ void KisToolSelectPolygonal::paint(QPainter& gc, const QRect& rc)
 
 void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 {
-	// start the polyline, and/or complete the segment
-	if (event -> button() == LeftButton) {
-		if (m_dragging) {
-			// erase old line on canvas
-			drawLine(m_dragStart, m_dragEnd);
-		
-			// get currentImg position
+	if (m_subject && m_subject -> currentImg()) {
+		// start the polyline, and/or complete the segment
+		if (event -> button() == LeftButton) {
+			if (m_dragging) {
+				// erase old line on canvas
+				drawLine(m_dragStart, m_dragEnd);
+
+				// get currentImg position
+				m_dragEnd = event -> pos().floorQPoint();
+
+				// draw new and final line for this segment
+				drawLine(m_dragStart, m_dragEnd);
+			} 
+			else {
+				clearSelection();
+				m_start = event -> pos().floorQPoint();
+				m_pointArray.resize(m_index = 0);
+				m_pointArray.putPoints(m_index++, 1, m_start.x(), m_start.y());
+			}
+
+			// here we need to add the point to the point array
+			// so it can be passed to the selection class to determine
+			// selection area and bounds.
+			m_dragging = true;
+			m_dragStart = event -> pos().floorQPoint();
 			m_dragEnd = event -> pos().floorQPoint();
-			
-			// draw new and final line for this segment
-			drawLine(m_dragStart, m_dragEnd);
+			m_pointArray.putPoints(m_index++, 1, m_dragStart.x(), m_dragStart.y());
 		} 
-		else {
-			clearSelection();
-			m_start = event -> pos().floorQPoint();
-			m_pointArray.resize(m_index = 0);
-			m_pointArray.putPoints(m_index++, 1, m_start.x(), m_start.y());
+		else if (event -> button() == Qt::RightButton || event -> button() == Qt::MidButton) {   
+			m_dragging = false;
+			finish(event -> pos().floorQPoint());
+
+			m_pointArray.putPoints(m_index++, 1, m_finish.x(), m_finish.y());
+	// 		m_imageRect = getDrawRect(m_pointArray);
+	// 		QPointArray points = zoomPointArray(m_pointArray);
+
+			// need to connect start and end positions to close the
+			// polyline 
+
+			// we need a bounding rectangle and a point array of 
+			// points in the polyline
+			// m_doc->getSelection()->setBounds(m_selectRect);        
+
+	// 		m_doc -> getSelection() -> setPolygonalSelection(m_imageRect, points, m_doc -> currentImg() -> getCurrentLayer());
+			m_pointArray.putPoints(m_index++, 1, m_pointArray[0].x(), m_pointArray[0].y());
+
+			kdDebug() << "selectRect" << " left: "   << m_imageRect.left() << " top: "    << m_imageRect.top();
+			kdDebug()  << " right: "  << m_imageRect.right() << " bottom: " << m_imageRect.bottom() << endl;
+
+			if (m_pointArray.size() > 1)
+				m_selectRegion = QRegion(m_pointArray, true);
+			else
+				m_selectRegion = QRegion();
+
+			// Initialize
+	//		m_index = 0;
+	//		m_pointArray.resize( 0 );
 		}
-        
-		// here we need to add the point to the point array
-		// so it can be passed to the selection class to determine
-		// selection area and bounds.
-		m_dragging = true;
-		m_dragStart = event -> pos().floorQPoint();
-		m_dragEnd = event -> pos().floorQPoint();
-		m_pointArray.putPoints(m_index++, 1, m_dragStart.x(), m_dragStart.y());
-	} 
-	else if (event -> button() == Qt::RightButton || event -> button() == Qt::MidButton) {   
-		m_dragging = false;
-		finish(event -> pos().floorQPoint());
-
-		m_pointArray.putPoints(m_index++, 1, m_finish.x(), m_finish.y());
-// 		m_imageRect = getDrawRect(m_pointArray);
-// 		QPointArray points = zoomPointArray(m_pointArray);
-
-		// need to connect start and end positions to close the
-		// polyline 
-        
-		// we need a bounding rectangle and a point array of 
-		// points in the polyline
-		// m_doc->getSelection()->setBounds(m_selectRect);        
-
-// 		m_doc -> getSelection() -> setPolygonalSelection(m_imageRect, points, m_doc -> currentImg() -> getCurrentLayer());
-		m_pointArray.putPoints(m_index++, 1, m_pointArray[0].x(), m_pointArray[0].y());
-
-		kdDebug() << "selectRect" << " left: "   << m_imageRect.left() << " top: "    << m_imageRect.top();
-	       	kdDebug()  << " right: "  << m_imageRect.right() << " bottom: " << m_imageRect.bottom() << endl;
-
-		if (m_pointArray.size() > 1)
-			m_selectRegion = QRegion(m_pointArray, true);
-		else
-			m_selectRegion = QRegion();
-
-		// Initialize
-//		m_index = 0;
-//		m_pointArray.resize( 0 );
 	}
 }
 

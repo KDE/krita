@@ -78,7 +78,7 @@ void KisToolLine::paint(QPainter& gc, const QRect& rc)
 
 void KisToolLine::buttonPress(KisButtonPressEvent *e)
 {
-	if (!m_subject) return;
+	if (!m_subject || !m_currentImage) return;
 
 	if (!m_subject -> currentBrush()) return;
 

@@ -56,7 +56,7 @@ KisToolAirBrush::~KisToolAirBrush()
 
 void KisToolAirBrush::timeoutPaint()
 {
-	if (painter()) {
+	if (currentImage() && painter()) {
 		painter() -> airBrushAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
 		currentImage() -> notify(painter() -> dirtyRect());
 	}

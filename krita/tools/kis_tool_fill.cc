@@ -179,7 +179,7 @@ void KisToolFill::floodLine(int x, int y, Q_INT32 depth, KisLayerSP lay,
 void KisToolFill::buttonPress(KisButtonPressEvent *e)
 {
 	if (!m_subject) return;
-	if (!m_currentImage -> activeDevice()) return;
+	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 	if (e->button() != QMouseEvent::LeftButton) return;
 
 	flood(e -> pos().floorX(), e -> pos().floorY());

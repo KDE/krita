@@ -71,7 +71,7 @@ void KisToolSelectBrush::buttonPress(KisButtonPressEvent *e)
 
         if (!m_subject -> currentBrush()) return;
 
-	if (!m_currentImage -> activeDevice()) return;
+	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 
         if (e -> button() == QMouseEvent::LeftButton) {
 //                 m_mode = PAINT;

@@ -73,7 +73,7 @@ void KisToolFreeHand::buttonPress(KisButtonPressEvent *e)
 
         if (!m_subject -> currentBrush()) return;
 
-	if (!m_currentImage -> activeDevice()) return;
+	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 
         if (e -> button() == QMouseEvent::LeftButton) {
 
@@ -113,7 +113,7 @@ void KisToolFreeHand::move(KisMoveEvent *e)
 
 void KisToolFreeHand::initPaint(KisEvent *)
 {
-	if (!m_currentImage -> activeDevice()) return;
+	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 
 	m_mode = PAINT;
 	m_dragDist = 0;

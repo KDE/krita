@@ -63,7 +63,7 @@ void KisToolZoom::paint(QPainter& gc, const QRect& rc)
 
 void KisToolZoom::buttonPress(KisButtonPressEvent *e)
 {
-	if (m_subject && !m_dragging) {
+	if (m_subject && m_subject -> currentImg() && !m_dragging) {
 		if (e -> button() == Qt::LeftButton) {
 			m_startPos = e -> pos().floorQPoint();
 			m_endPos = e -> pos().floorQPoint();

@@ -21,15 +21,13 @@
 #include <kaction.h>
 #include <kdebug.h>
 
-#include <koColor.h>
-
+#include "kis_color.h"
 #include "kis_doc.h"
 #include "kis_view.h"
 #include "kis_canvas.h"
 #include "kis_cursor.h"
 #include "kis_tool_colorchanger.h"
 #include "kis_dlg_toolopts.h"
-
 
 ColorChangerTool::ColorChangerTool(KisDoc *doc) : KisTool(doc)
 {

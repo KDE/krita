@@ -26,9 +26,9 @@
 #include <qscrollbar.h>
 #include <qwidget.h>
 
-#include <koColor.h>
 #include <koView.h>
 
+#include "kis_color.h"
 #include "kis_global.h"
 #include "kis_tool.h"
 
@@ -122,9 +122,12 @@ public:
 	float zoomFactor() const;
 	void setZoomFactor(float zf);
 
+	void setSetFGColor(const KoColor& c);
+	void setSetBGColor(const KoColor& c);
+
 signals:
-	void bgColorChanged(const KoColor &);
-	void fgColorChanged(const KoColor &);     
+	void bgColorChanged(const KoColor&);
+	void fgColorChanged(const KoColor&);     
 
 public slots:
 	void slotRefreshPainter();
@@ -136,8 +139,8 @@ public slots:
 	void slotSetKrayon(KisKrayon *);
 	void slotSetBrush(KisBrush *);
 	void slotSetPattern(KisPattern *);
-	void slotSetFGColor(const KoColor&);
-	void slotSetBGColor(const KoColor&);
+	void slotSetFGColor(const KoColor& c);
+	void slotSetBGColor(const KoColor& c);
 	void slotSetPaintOffset();
 
 	void slotTabSelected(const QString& name);

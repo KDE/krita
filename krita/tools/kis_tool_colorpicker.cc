@@ -20,6 +20,7 @@
 
 #include <kaction.h>
 
+#include "kis_color.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_doc.h"
 #include "kis_view.h"
@@ -27,62 +28,54 @@
 
 ColorPicker::ColorPicker(KisDoc *doc) : KisTool(doc)
 {
-    m_cursor = KisCursor::pickerCursor();
+	m_cursor = KisCursor::pickerCursor();
 }
 
-ColorPicker::~ColorPicker() {}
-
-KoColor ColorPicker::pick(int x, int y)
+ColorPicker::~ColorPicker() 
 {
-#if 0
-    KisImage * img = m_doc->currentImg();
-    KisLayer *lay = img->getCurrentLayer();
-    
-    if (!img) return KoColor::white();
-    if (!lay) return KoColor::white();
+}
 
-    // FIXME: Implement this for non-RGB modes.
-    if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	    return KoColor::white();
+KoColor ColorPicker::pick(KisImageSP img, KisPaintDeviceSP device, int x, int y)
+{
+	if (!img -> colorMode() == cm_RGB && !img -> colorMode() == cm_RGBA)
+		return KoColor::white();
 
-    int r = lay->pixel(0, x, y);
-    int g = lay->pixel(1, x, y);
-    int b = lay->pixel(2, x, y);
-        
-    return KoColor(r, g,  b, cs_RGB);
-#endif
-    return KoColor(0, 0, 0, cs_RGB);
+	QRgb rgb = device -> pixel(x, y);
+	return KoColor(qRed(rgb), qGreen(rgb),  qBlue(rgb), cs_RGB);
 }
 
 void ColorPicker::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_doc->currentImg();
-    if (!img) return;
+	if (e->button() == QMouseEvent::LeftButton || e->button() == QMouseEvent::RightButton) {
+		KisImageSP img = m_doc -> currentImg();
+		KisPaintDeviceSP layer;
 
-    if (e->button() != QMouseEvent::LeftButton
-    && e->button() != QMouseEvent::RightButton)
-        return;
+		if (!img) 
+			return;
 
-    if( !img->getCurrentLayer()->visible() )
-        return;
+		layer = img -> getCurrentPaintDevice();
+		
+		if (!layer -> visible())
+			return;
 
-    QPoint pos = e->pos();
-    pos = zoomed(pos);
-          
-    if( !img->getCurrentLayer()->imageExtents().contains(pos))
-        return;
-  
-    if (e->button() == QMouseEvent::LeftButton)
-        m_view->slotSetFGColor(pick(pos.x(), pos.y()));
-        
-    else if (e->button() == QMouseEvent::RightButton)
-        m_view->slotSetBGColor(pick(pos.x(), pos.y()));
+		QPoint pos = zoomed(e -> pos());
+
+		if (!layer -> tileExtents().contains(pos))
+			return;
+
+		KoColor pickedColor = pick(img, layer, pos.x(), pos.y());
+
+		if (e -> button() == QMouseEvent::LeftButton)
+			m_view -> setSetFGColor(pickedColor);
+		else 
+			m_view -> setSetBGColor(pickedColor);
+	}
 }
 
 void ColorPicker::setupAction(QObject *collection)
 {
 	KToggleAction *toggle = new KToggleAction(i18n("&Color picker"), "colorpicker", 0, this, SLOT(toolSelect()), collection, "tool_colorpicker");
 
-        toggle -> setExclusiveGroup("tools");
+	toggle -> setExclusiveGroup("tools");
 }
 

@@ -276,6 +276,69 @@ KisImage::~KisImage()
 	destroyPixmap();
 }
 
+inline void KisImage::renderTile(KisTile *dst, const KisTile *src, const KisPaintDevice *srcDevice)
+{
+	uchar src_opacity = srcDevice -> opacity();
+	uchar opacity;
+	uchar inverseOpacity;
+	uchar sr, sg, sb, sa;
+	uchar dr, dg, db, da;
+
+	if (!src -> data())
+		return;
+	
+	QRgb *drgb = dst -> data();
+	const QRgb *srgb = src -> data();
+
+	if (m_cMode == cm_RGBA) {
+		for (int y = 0; y < TILE_SIZE; y++) {
+			for (int x = 0; x < TILE_SIZE; x++) {
+				sr = qRed(*srgb);
+				sg = qGreen(*srgb);
+				sb = qBlue(*srgb);
+				sa = qAlpha(*srgb);
+				dr = qRed(*drgb);
+				dg = qGreen(*drgb);
+				db = qBlue(*drgb);
+				da = qAlpha(*drgb);
+
+				opacity = sa && da ? (da * src_opacity) / CHANNEL_MAX : 0;
+				inverseOpacity = CHANNEL_MAX - opacity;
+				dr = ((dr * da / CHANNEL_MAX) * inverseOpacity + sr * opacity) / CHANNEL_MAX;
+				dg = ((dg * da / CHANNEL_MAX) * inverseOpacity + sg * opacity) / CHANNEL_MAX;
+				db = ((db * da / CHANNEL_MAX) * inverseOpacity + sb * opacity) / CHANNEL_MAX;
+				da = sa + da - (sa * da) / CHANNEL_MAX;
+				*drgb = qRgba(dr, dg, db, da);
+
+				drgb++;
+				srgb++;
+			}
+		}
+	} else {
+		for (int y = 0; y < TILE_SIZE; y++) {
+			for (int x = 0; x < TILE_SIZE; x++) {
+				sr = qRed(*srgb);
+				sg = qGreen(*srgb);
+				sb = qBlue(*srgb);
+				sa = qAlpha(*srgb);
+				dr = qRed(*drgb);
+				dg = qGreen(*drgb);
+				db = qBlue(*drgb);
+				da = qAlpha(*drgb);
+
+				inverseOpacity = CHANNEL_MAX - src_opacity;
+				dr = (dr * inverseOpacity + sr * src_opacity) / CHANNEL_MAX;
+				dg = (dg * inverseOpacity + sg * src_opacity) / CHANNEL_MAX;
+				db = (db * inverseOpacity + sb * src_opacity) / CHANNEL_MAX;
+				*drgb = qRgb(dr, dg, db);
+
+				drgb++;
+				srgb++;
+			}
+		}
+	}
+}
+
 DCOPObject* KisImage::dcopObject()
 {
 	if (!m_dcop)
@@ -836,54 +899,6 @@ KisChannelSP KisImage::getCurrentChannel()
 KisLayerSP KisImage::getCurrentLayer() 
 { 
 	return m_activeLayer; 
-}
-
-void KisImage::renderTile(KisTile *dst, const KisTile *src, const KisPaintDevice *srcDevice)
-{
-	uchar src_opacity = srcDevice -> opacity();
-	uchar opacity;
-	uchar inverseOpacity;
-	uchar sr, sg, sb, sa;
-	uchar dr, dg, db, da;
-
-	if (!src -> data())
-		return;
-	
-	for (int y = 0; y < TILE_SIZE; y++) {
-		QRgb *drgb = dst -> data() + (y * TILE_SIZE);
-		const QRgb *srgb = src -> data() + (y * TILE_SIZE);
-
-		for (int x = 0; x < TILE_SIZE; x++) {
-			sr = qRed(*srgb);
-			sg = qGreen(*srgb);
-			sb = qBlue(*srgb);
-			sa = qAlpha(*srgb);
-			dr = qRed(*drgb);
-			dg = qGreen(*drgb);
-			db = qBlue(*drgb);
-			da = qAlpha(*drgb);
-			
-			if (m_cMode == cm_RGBA) {
-				opacity = sa && da ? (da * src_opacity) / CHANNEL_MAX : 0;
-				inverseOpacity = CHANNEL_MAX - opacity;
-				dr = ((dr * da / CHANNEL_MAX) * inverseOpacity + sr * opacity) / CHANNEL_MAX;
-				dg = ((dg * da / CHANNEL_MAX) * inverseOpacity + sg * opacity) / CHANNEL_MAX;
-				db = ((db * da / CHANNEL_MAX) * inverseOpacity + sb * opacity) / CHANNEL_MAX;
-				da = sa + da - (sa * da) / CHANNEL_MAX;
-				*drgb = qRgba(dr, dg, db, da);
-			}
-			else {
-				inverseOpacity = CHANNEL_MAX - src_opacity;
-				dr = (dr * inverseOpacity + sr * src_opacity) / CHANNEL_MAX;
-				dg = (dg * inverseOpacity + sg * src_opacity) / CHANNEL_MAX;
-				db = (db * inverseOpacity + sb * src_opacity) / CHANNEL_MAX;
-				*drgb = qRgb(dr, dg, db);
-			}
-
-			drgb++;
-			srgb++;
-		}
-	}
 }
 
 void KisImage::destroyPixmap()

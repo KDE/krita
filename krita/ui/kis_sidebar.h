@@ -26,7 +26,7 @@
 
 #include <kdualcolorbutton.h>
 
-#include <koColor.h>
+#include "kis_color.h"
 
 #include "kis_framebutton.h"
 #include "kis_global.h"

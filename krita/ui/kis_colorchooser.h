@@ -21,7 +21,7 @@
 #ifndef __kis_colorchooser_h__
 #define __kis_colorchooser_h__
 
-#include <koColor.h>
+#include "kis_color.h"
 
 #include "kpixmap.h"
 #include "kpixmapeffect.h"

@@ -23,8 +23,8 @@
 
 #include <qpoint.h>
 
-#include <koColor.h>
-
+#include "kis_color.h"
+#include "kis_image.h"
 #include "kis_tool.h"
 
 class ColorPicker : public KisTool {
@@ -32,10 +32,11 @@ public:
 	ColorPicker(KisDoc *doc);
 	virtual ~ColorPicker();
   
-	KoColor pick(int x, int y);
 	virtual void setupAction(QObject *collection);
+	virtual void mousePress(QMouseEvent *e);
 
-	virtual void mousePress(QMouseEvent*); 
+private:
+	KoColor pick(KisImageSP img, KisPaintDeviceSP device, int x, int y);
 };
 
 #endif //__colorpicker_h__

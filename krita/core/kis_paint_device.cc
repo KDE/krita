@@ -27,6 +27,7 @@ KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uin
 	m_tiles(width / TILE_SIZE, height / TILE_SIZE, bpp, defaultColor)
 {
 	m_name = name;
+	m_tileRect = QRect(0, 0, width, height);
 }
 
 KisPaintDevice::~KisPaintDevice()

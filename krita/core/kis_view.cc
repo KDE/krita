@@ -60,10 +60,10 @@
 #endif
 
 // KOffice
-#include <koColor.h>
 #include <koView.h>
 
 // core classes
+#include "kis_color.h"
 #include "kis_view.h"
 #include "kis_doc.h"
 #include "kis_util.h"
@@ -2140,6 +2140,18 @@ void KisView::slotSetPattern(KisPattern* p)
 }
 
 
+void KisView::setSetFGColor(const KoColor& c)
+{
+	emit fgColorChanged(c);
+	m_fg = c;
+}
+
+void KisView::setSetBGColor(const KoColor& c)
+{
+	emit bgColorChanged(c);
+	m_bg = c;
+}
+
 /*
     The new foreground color should show up in the color selector
     via signal sent to colorselector
@@ -2147,7 +2159,6 @@ void KisView::slotSetPattern(KisPattern* p)
 void KisView::slotSetFGColor(const KoColor& c)
 {
 	m_fg = c;
-	emit fgColorChanged(c);
 }
 
 /*
@@ -2157,7 +2168,6 @@ void KisView::slotSetFGColor(const KoColor& c)
 void KisView::slotSetBGColor(const KoColor& c)
 {
 	m_bg = c;
-	emit bgColorChanged(c);
 }
 
 void KisView::setupPrinter(KPrinter &printer)

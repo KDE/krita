@@ -26,7 +26,7 @@
 
 #include <kimageeffect.h>
 
-#include <koColor.h>
+#include "kis_color.h"
 
 class KisGradient 
 {

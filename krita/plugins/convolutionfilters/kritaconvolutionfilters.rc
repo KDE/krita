@@ -1,0 +1,22 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaconvolutionfilters" version="2">
+  <MenuBar>
+    <Menu name="Filter"><text>&amp;Filter</text>
+      <Seperator/>
+      <Action name="convolution_blur"/>
+      <Action name="convolution_sharpen"/>
+      <Action name="convolution_meanremoval"/>
+      <Menu name="Emboss"><text>&amp;Emboss</text>
+        <Action name="convolution_embosslaplascian"/>
+        <Action name="convolution_embosshorzvertical"/>
+        <Action name="convolution_embosshorizontalonly"/>
+        <Action name="convolution_embossverticalonly"/>
+        <Action name="convolution_embossalldirections"/>
+        <Action name="convolution_embosslossy"/>
+      </Menu>
+      <Menu name="Edge detection"><text>E&amp;dge Detection</text>
+        <Action name="convolution_edgedetectiontop" />
+      </Menu>
+    </Menu>
+  </MenuBar>
+</kpartgui>

@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="krita" version="1">
+<MenuBar>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="cut"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="editToolBar"><Text>Edit</Text>
+  <Action name="cut"/>
+</ToolBar>
+</kpartgui>

@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<kdevelop>
+ <general>
+  <author>Boudewijn Rempt</author>
+  <email>boud@valdyas.org</email>
+  <version>0.1</version>
+  <projectmanagement>KDevKDEAutoProject</projectmanagement>
+  <primarylanguage>C++</primarylanguage>
+  <keywords>
+   <keyword>C++</keyword>
+   <keyword>Code</keyword>
+   <keyword>Qt</keyword>
+   <keyword>KDE</keyword>
+   <keyword>kioslave</keyword>
+  </keywords>
+ </general>
+ <kdevautoproject>
+  <general>
+   <activetarget>src/libkritapart.la</activetarget>
+   <useconfiguration>debug</useconfiguration>
+  </general>
+    <configurations>
+      <optimized>
+        <builddir>optimized</builddir>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevg77options</f77compiler>
+        <cxxflags>-O2 -g0</cxxflags>
+      </optimized>
+      <debug>
+        <configargs>--enable-debug=full</configargs>
+        <builddir>debug</builddir>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevg77options</f77compiler>
+        <cxxflags>-O0 -g3</cxxflags>
+      </debug>
+    </configurations>
+ </kdevautoproject>
+ <kdevfileview>
+  <groups>
+   <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
+   <group pattern="*.po;*.ts" name="Translations" />
+   <group pattern="*" name="Others" />
+  </groups>
+ </kdevfileview>
+ <kdevdoctreeview>
+    <ignoretocs>
+      <toc>ada</toc>
+      <toc>ada_bugs_gcc</toc>
+      <toc>bash</toc>
+      <toc>bash_bugs</toc>
+      <toc>clanlib</toc>
+      <toc>fortran_bugs_gcc</toc>
+      <toc>gnome1</toc>
+      <toc>gnustep</toc>
+      <toc>gtk</toc>
+      <toc>gtk_bugs</toc>
+      <toc>haskell</toc>
+      <toc>haskell_bugs_ghc</toc>
+      <toc>java_bugs_gcc</toc>
+      <toc>java_bugs_sun</toc>
+      <toc>opengl</toc>
+      <toc>pascal_bugs_fp</toc>
+      <toc>php</toc>
+      <toc>php_bugs</toc>
+      <toc>perl</toc>
+      <toc>perl_bugs</toc>
+      <toc>python</toc>
+      <toc>python_bugs</toc>
+      <toc>ruby</toc>
+      <toc>ruby_bugs</toc>
+      <toc>sdl</toc>
+      <toc>stl</toc>
+      <toc>sw</toc>
+      <toc>w3c-dom-level2-html</toc>
+      <toc>w3c-svg</toc>
+      <toc>w3c-uaag10</toc>
+      <toc>wxwindows_bugs</toc>
+    </ignoretocs>
+    <ignoreqt_xml>
+      <toc>qmake User Guide</toc>
+    </ignoreqt_xml>
+ </kdevdoctreeview>
+ <kdevdebugger>
+  <general>
+   <dbgshell>libtool</dbgshell>
+  </general>
+ </kdevdebugger>
+  <kdevfilecreate>
+    <filetypes/>
+    <useglobaltypes>
+      <type ext="ui" />
+      <type ext="cpp" />
+      <type ext="h" />
+    </useglobaltypes>
+  </kdevfilecreate>
+</kdevelop>

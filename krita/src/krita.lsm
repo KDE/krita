@@ -1,0 +1,16 @@
+Begin3
+Title:          krita -- Some description
+Version:        0.1
+Entered-date:   
+Description:    
+Keywords:       KDE Qt
+Author:         Boudewijn Rempt <boud@valdyas.org>
+Maintained-by:  Boudewijn Rempt <boud@valdyas.org>
+Home-page:      
+Alternate-site: 
+Primary-site:   ftp://ftp.kde.org/pub/kde/unstable/apps/utils
+                xxxxxx  krita-0.1.tar.gz
+                xxx     krita-0.1.lsm
+Platform:       Linux. Needs KDE
+Copying-policy: GPL
+End

@@ -1,0 +1,13 @@
+# KDE Config File
+[Desktop Entry]
+Encoding=UTF-8
+MimeType=application/x-krita
+Comment= A really awesome KOffice application
+Type=MimeType
+#You need to change the mime type below to match what your application will handle...
+Patterns=*.xmpl;
+X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+#You need to change the mime type below to match what your application will handle...
+Value=.xmpl

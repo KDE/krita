@@ -76,22 +76,37 @@ QMutex dirtyTilesMutex;
 
 #endif
 
-class KisCommandLayer : public KCommand {
-	typedef KCommand super;
+class KisCommandLayerActive : public KNamedCommand {
+	typedef KNamedCommand super;
 
 public:
-	KisCommandLayer(KisImage *img, KisLayerSP layer);
+	KisCommandLayerActive(KisImage *img, KisLayerSP activeLayer, KisLayerSP oldActiveLayer);
+	virtual ~KisCommandLayerActive();
+
+	virtual void execute();
+	virtual void unexecute();
+
+private:
+	KisImage *m_img;
+	KisLayerSP m_activeLayer;
+	KisLayerSP m_oldActiveLayer;
+};
+
+class KisCommandLayer : public KNamedCommand {
+	typedef KNamedCommand super;
+
+public:
+	KisCommandLayer(KisImage *img, KisLayerSP layer, const QString& name);
 	virtual ~KisCommandLayer();
 
 protected:
 	void addLayer();
 	void removeLayer();
 
-protected:
+private:
 	KisImage *m_img;
 	KisLayerSP m_layer;
 };
-
 
 class KisCommandLayerAdd : public KisCommandLayer {
 	typedef KisCommandLayer super;
@@ -100,13 +115,8 @@ public:
 	KisCommandLayerAdd(KisImage *img, KisLayerSP layer);
 	virtual ~KisCommandLayerAdd();
 
-	virtual QString name() const;
 	virtual void execute();
 	virtual void unexecute();
-
-protected:
-	KisImage *m_img;
-	KisLayerSP m_layer;
 };
 
 class KisCommandLayerRm : public KisCommandLayer {
@@ -116,16 +126,38 @@ public:
 	KisCommandLayerRm(KisImage *img, KisLayerSP layer);
 	virtual ~KisCommandLayerRm();
 
-	virtual QString name() const;
 	virtual void execute();
 	virtual void unexecute();
-
-protected:
-	KisImage *m_img;
-	KisLayerSP m_layer;
 };
 
-KisCommandLayer::KisCommandLayer(KisImage *img, KisLayerSP layer)
+KisCommandLayerActive::KisCommandLayerActive(KisImage *img, KisLayerSP activeLayer, KisLayerSP oldActiveLayer) : super(i18n("Set Active Layer"))
+{
+	m_img = img;
+	m_activeLayer = activeLayer;
+	m_oldActiveLayer = oldActiveLayer;
+}
+
+KisCommandLayerActive::~KisCommandLayerActive()
+{
+}
+
+void KisCommandLayerActive::execute()
+{
+	Q_ASSERT(m_img);
+	m_img -> setUndo(false);
+	m_img -> setCurrentLayer(m_activeLayer);
+	m_img -> setUndo(true);
+}
+
+void KisCommandLayerActive::unexecute()
+{
+	Q_ASSERT(m_img);
+	m_img -> setUndo(false);
+	m_img -> setCurrentLayer(m_oldActiveLayer);
+	m_img -> setUndo(true);
+}
+
+KisCommandLayer::KisCommandLayer(KisImage *img, KisLayerSP layer, const QString& name) : super(name)
 {
 	m_img = img;
 	m_layer = layer;
@@ -153,17 +185,12 @@ void KisCommandLayer::removeLayer()
 	m_img -> setUndo(true);
 }
 
-KisCommandLayerAdd::KisCommandLayerAdd(KisImage *img, KisLayerSP layer) : super(img, layer)
+KisCommandLayerAdd::KisCommandLayerAdd(KisImage *img, KisLayerSP layer) : super(img, layer, i18n("Added Layer"))
 {
 }
 
 KisCommandLayerAdd::~KisCommandLayerAdd()
 {
-}
-
-QString KisCommandLayerAdd::name() const
-{
-	return i18n("Added Layer\n");
 }
 
 void KisCommandLayerAdd::execute()
@@ -176,17 +203,12 @@ void KisCommandLayerAdd::unexecute()
 	removeLayer();
 }
 
-KisCommandLayerRm::KisCommandLayerRm(KisImage *img, KisLayerSP layer) : super(img, layer)
+KisCommandLayerRm::KisCommandLayerRm(KisImage *img, KisLayerSP layer) : super(img, layer, i18n("Removed Layer"))
 {
 }
 
 KisCommandLayerRm::~KisCommandLayerRm()
 {
-}
-
-QString KisCommandLayerRm::name() const
-{
-	return i18n("Removed Layer\n");
 }
 
 void KisCommandLayerRm::execute()
@@ -272,12 +294,6 @@ void KisImage::upperLayer(unsigned int layer)
 
 		m_layers[layer] = layer0;
 		m_layers[layer - 1] = layer1;
-
-#if 0
-		KisLayer *pLayer = m_layers.at(layer);
-
-		m_layers.insert(layer - 1, pLayer);
-#endif
 	}
 }
 
@@ -321,7 +337,7 @@ void KisImage::addLayer(KisLayerSP layer)
 	if (qFind(m_layers.begin(), m_layers.end(), layer) == m_layers.end()) {
 		m_layers.push_back(layer);
 		m_activeLayer = layer;
-//		resizeImage(layer, QRect(0, 0, m_width, m_height));
+		compositeImage(QRect(0, 0, m_width, m_height), true);
 		emit layersUpdated();
 	}
 }
@@ -351,23 +367,25 @@ void KisImage::removeLayer(KisLayerSPLstIterator it)
 {
 	KisLayerSP lay = *it;
 
+	kdDebug() << "KisImage::removeLayer Iterator\n";
+
 	if (m_activeLayer == lay) {
-		if (m_layers.size())
-			m_activeLayer = m_layers[0];
-		else
+		if (m_layers.empty())
 			m_activeLayer = 0;
+		else
+			m_activeLayer = m_layers[0];
 	}
 
 	if (m_doUndo)
 		addCommand(new KisCommandLayerRm(this, lay));
 
 	m_layers.erase(it);
-//	delete lay;
-
 }
 
 void KisImage::removeLayer(unsigned int layer)
 {
+	kdDebug() << "KisImage::removeLayer unsigned int\n";
+
 	if (layer >= m_layers.size())
 		return;
 
@@ -376,10 +394,13 @@ void KisImage::removeLayer(unsigned int layer)
 
 void KisImage::removeLayer(KisLayerSP layer)
 {
-	KisLayerSPLstIterator nlayer;
+	KisLayerSPLstIterator it;
 
-	if ((nlayer = qFind(m_layers.begin(), m_layers.end(), layer)) != m_layers.end()) {
-		removeLayer(nlayer);
+	kdDebug() << "KisImage::removeLayer KisLayerSP\n";
+
+	if ((it = qFind(m_layers.begin(), m_layers.end(), layer)) != m_layers.end()) {
+		removeLayer(it);
+		compositeImage(QRect(0, 0, m_width, m_height), true);
 		emit layersUpdated();
 	}
 }
@@ -534,8 +555,8 @@ void KisImage::compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y
 		if (lay && lay -> visible()) {
 			KisTile *src = lay -> getTile(x, y);
 
-			Q_ASSERT(src);
-			renderTile(dst, src, lay);
+			if (src)
+				renderTile(dst, src, lay);
 		}
 	}
 }
@@ -560,10 +581,22 @@ void KisImage::compositeImage(const QRect& area, bool allDirty)
 
 void KisImage::setCurrentLayer(int layer)
 {
-	KisLayerSP p = m_layers.at(layer);
+	if (static_cast<uint>(layer) < m_layers.size()) {
+		KisLayerSP p = m_layers.at(layer);
 
-	if (p)
-		m_activeLayer = p;
+		setCurrentLayer(p);
+	}
+}
+
+void KisImage::setCurrentLayer(KisLayerSP layer)
+{
+	if (m_doUndo && layer)
+		addCommand(new KisCommandLayerActive(this, layer, m_activeLayer));
+
+	if (layer) {
+		m_activeLayer = layer;
+		emit layersUpdated();
+	}
 }
 
 void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
@@ -645,24 +678,26 @@ void KisImage::mergeLinkedLayers()
 
 void KisImage::mergeLayers(KisLayerSPLst& layers)
 {
-	KisLayerSPLstIterator a;
-	KisLayerSPLstIterator b;
-	QRect newRect;
+	KisLayerSP a;
+	KisLayerSPLstIterator it;
+	KMacroCommand *macro = new KMacroCommand(i18n("Merge Layers"));
+	QRect rc;
 
-	for (KisLayerSPLstConstIterator a = layers.begin(); a != layers.end(); a++)
-		newRect.unite((*a) -> imageExtents());
+	for (it = layers.begin(); it != layers.end(); it++)
+		rc = rc.unite((*it) -> imageExtents());	
 
-	a = layers.begin();
-	b = a + 1;
+	it = layers.begin();
+	a = new KisLayer((*it) -> name(), m_width, m_height, m_bitDepth, m_cMode, qRgba(255, 255, 255, 255));
+	a -> allocateRect(rc);
+	macro -> addCommand(new KisCommandLayerAdd(this, a));
 
-	for (; b != layers.end(); b++) {
-		QRect urect = (*a) -> imageExtents() | (*b) -> imageExtents();
+	for (; it != layers.end(); it++) {
+		QRect urect = (a) -> imageExtents() | (*it) -> imageExtents();
 
-		(*a) -> allocateRect(urect);
-		(*b) -> allocateRect(urect);
+		(*it) -> allocateRect(urect);
 
 		QRect rect = urect;
-		rect.moveTopLeft(urect.topLeft() - (*a) -> tileExtents().topLeft());
+		rect.moveTopLeft(urect.topLeft() - a -> tileExtents().topLeft());
 
 		int minYTile = rect.top() / TILE_SIZE;
 		int maxYTile = rect.bottom() / TILE_SIZE;
@@ -671,21 +706,24 @@ void KisImage::mergeLayers(KisLayerSPLst& layers)
 
 		for (int y = minYTile; y <= maxYTile; y++) {
 			for(int x = minXTile; x <= maxXTile; x++) {
-				KisTile *dst = (*a) -> getTile(x, y);
-				KisTile *src = (*b) -> getTile(x, y);
+				KisTile *dst = a -> getTile(x, y);
+				KisTile *src = (*it) -> getTile(x, y);
 
-				renderTile(dst, src, *b);
+				renderTile(dst, src, *it);
 			}
 		}
 
-		if (m_activeLayer == *b)
+		if (m_activeLayer == *it)
 			m_activeLayer = m_layers.size() ? m_layers[0] : 0;
 
-		removeLayer(*b);
+		removeLayer(*it);
+		macro -> addCommand(new KisCommandLayerRm(this, *it));
 	}
 
+	addLayer(a);
+	addCommand(macro);
 	emit layersUpdated();
-	compositeImage(newRect);
+	compositeImage(rc);
 }
 
 void KisImage::resizeImage(KisLayerSP lay, const QRect& rect)

@@ -90,6 +90,7 @@ public:
 	//	KisLayer* layerPtr(KisLayer *layer);
 	int getCurrentLayerIndex() const;
 	void setCurrentLayer(int layer);
+	void setCurrentLayer(KisLayerSP layer);
 
 	inline KisLayerSPLst layerList();
 

@@ -27,7 +27,7 @@ public:
 
 protected:
 	KisButtonEvent() {}
-	KisButtonEvent(enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState button, Qt::ButtonState state) : super(device, pos, globalPos, pressure, xTilt, yTilt, state), m_button(button) {}
+	KisButtonEvent(enumEventType type, enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState button, Qt::ButtonState state) : super(type, device, pos, globalPos, pressure, xTilt, yTilt, state), m_button(button) {}
 
 	Qt::ButtonState m_button;
 };

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
+ *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +26,21 @@
 #include "kis_vec.h"
 #include "kis_global.h"
 
+#ifdef Q_WS_X11
+
+// Irix has a different (and better) XInput tablet driver to
+// the XFree/xorg driver. Qt needs a separate code path for that
+// and so would we.
+#if !defined(Q_OS_IRIX)
+#define EXTENDED_X11_TABLET_SUPPORT
+#endif
+
+#include <map>
+#include <X11/Xlib.h>
+#include <X11/extensions/XInput.h>
+#endif // Q_WS_X11
+
+class KisEvent;
 class KisMoveEvent;
 class KisButtonPressEvent;
 class KisButtonReleaseEvent;
@@ -68,6 +84,7 @@ protected:
 	void moveEvent(KisMoveEvent *event);
 	void buttonPressEvent(KisButtonPressEvent *event);
 	void buttonReleaseEvent(KisButtonReleaseEvent *event);
+	void translateTabletEvent(KisEvent *event);
 
 	bool m_enableMoveEventCompressionHint;
 	double m_lastPressure;
@@ -77,9 +94,10 @@ protected:
 	// is unable to keep up with them. We override this behaviour so that
 	// we receive all move events, so that painting follows the mouse's motion
 	// accurately.
-	void initX11Support();
+	static void initX11Support();
 	bool x11Event(XEvent *event);
-	int translateX11ButtonState(int state);
+	static Qt::ButtonState translateX11ButtonState(int state);
+	static Qt::ButtonState translateX11Button(unsigned int button);
 
 	static bool X11SupportInitialised;
 
@@ -89,7 +107,67 @@ protected:
 
 	int m_lastRootX;
 	int m_lastRootY;
-#endif
+
+#ifdef EXTENDED_X11_TABLET_SUPPORT
+
+	class X11TabletDevice
+	{
+	public:
+		X11TabletDevice();
+		X11TabletDevice(const XDeviceInfo *deviceInfo);
+
+		XID id() const { return m_deviceId; }
+		enumInputDevice device() const { return m_device; }
+
+		// These return -1 if the device does not support the event
+		int buttonPressEvent() const { return m_buttonPressEvent; }
+		int buttonReleaseEvent() const { return m_buttonReleaseEvent; }
+		int motionNotifyEvent() const { return m_motionNotifyEvent; }
+
+		class State
+		{
+		public:
+			State() {}
+			State(const KisPoint& pos, double pressure, const KisVector2D& tilt);
+
+			// Position and pressure are normalised to 0 - 1
+			KisPoint pos() const { return m_pos; }
+			double pressure() const { return m_pressure; }
+			// Tilt is normalised to -1 -> +1
+			KisVector2D tilt() const { return m_tilt; }
+
+		private:
+			KisPoint m_pos;
+			double m_pressure;
+			KisVector2D m_tilt;
+		};
+	
+		State translateAxisData(const int *axisData) const;
+
+	private:
+		double translateAxisValue(int value, const XAxisInfo& axisInfo) const;
+
+		XID m_deviceId;
+		enumInputDevice m_device;
+		XAxisInfo m_xInfo;
+		XAxisInfo m_yInfo;
+		XAxisInfo m_pressureInfo;
+		XAxisInfo m_tiltXInfo;
+		XAxisInfo m_tiltYInfo;
+		int m_motionNotifyEvent;
+		int m_buttonPressEvent;
+		int m_buttonReleaseEvent;
+	};
+
+	static int X11DeviceMotionNotifyEvent;
+	static int X11DeviceButtonPressEvent;
+	static int X11DeviceButtonReleaseEvent;
+
+	typedef std::map<XID, X11TabletDevice> X11XIDTabletDeviceMap;
+	static X11XIDTabletDeviceMap X11TabletDeviceMap;
+#endif // EXTENDED_X11_TABLET_SUPPORT
+
+#endif // Q_WS_X11
 };
 
 #endif // KIS_CANVAS_H_

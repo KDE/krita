@@ -1950,6 +1950,23 @@ void KisView::canvasGotPaintEvent(QPaintEvent *event)
 
 void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 {
+#if defined(EXTENDED_X11_TABLET_SUPPORT)
+	// The event filter doesn't see tablet events going to the canvas.
+	if (e -> device() != INPUT_DEVICE_MOUSE) {
+		m_tabletEventTimer.start();
+	}
+#endif // EXTENDED_X11_TABLET_SUPPORT
+
+	if (e -> device() != currentInputDevice()) {
+		if (e -> device() == INPUT_DEVICE_MOUSE) {
+			if (m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
+				setInputDevice(INPUT_DEVICE_MOUSE);
+			}
+		} else {
+			setInputDevice(e -> device());
+		}
+	}
+
 	KisImageSP img = currentImg();
 
 	if (img) {
@@ -1993,8 +2010,21 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 
 void KisView::canvasGotMoveEvent(KisMoveEvent *e)
 {
-	if (e -> device() == INPUT_DEVICE_MOUSE && currentInputDevice() != INPUT_DEVICE_MOUSE && m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
-		setInputDevice(INPUT_DEVICE_MOUSE);
+#if defined(EXTENDED_X11_TABLET_SUPPORT)
+	// The event filter doesn't see tablet events going to the canvas.
+	if (e -> device() != INPUT_DEVICE_MOUSE) {
+		m_tabletEventTimer.start();
+	}
+#endif // EXTENDED_X11_TABLET_SUPPORT
+
+	if (e -> device() != currentInputDevice()) {
+		if (e -> device() == INPUT_DEVICE_MOUSE) {
+			if (m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
+				setInputDevice(INPUT_DEVICE_MOUSE);
+			}
+		} else {
+			setInputDevice(e -> device());
+		}
 	}
 
 	KisImageSP img = currentImg();
@@ -2033,6 +2063,23 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
 
 void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
 {
+#if defined(EXTENDED_X11_TABLET_SUPPORT)
+	// The event filter doesn't see tablet events going to the canvas.
+	if (e -> device() != INPUT_DEVICE_MOUSE) {
+		m_tabletEventTimer.start();
+	}
+#endif // EXTENDED_X11_TABLET_SUPPORT
+
+	if (e -> device() != currentInputDevice()) {
+		if (e -> device() == INPUT_DEVICE_MOUSE) {
+			if (m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
+				setInputDevice(INPUT_DEVICE_MOUSE);
+			}
+		} else {
+			setInputDevice(e -> device());
+		}
+	}
+
 	KisImageSP img = currentImg();
 
 	if (img && m_currentGuide) {

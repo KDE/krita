@@ -63,7 +63,7 @@ KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	  m_transform(0),
 	  m_load(0),
 	  m_save(0)
-	  
+
 {
 }
 
@@ -76,49 +76,49 @@ void KisSelectionManager::setup(KActionCollection * collection)
 {
 	// XXX: setup shortcuts!
 
-        m_cut = 
-		KStdAction::cut(this, 
-				SLOT(cut()), 
-				collection, 
+        m_cut =
+		KStdAction::cut(this,
+				SLOT(cut()),
+				collection,
 				"cut");
-	
-        m_copy = 
-		KStdAction::copy(this, 
-				 SLOT(copy()), 
-				 collection, 
+
+        m_copy =
+		KStdAction::copy(this,
+				 SLOT(copy()),
+				 collection,
 				 "copy");
-	
-        m_paste = 
-		KStdAction::paste(this, 
-				  SLOT(paste()), 
-				  collection, 
+
+        m_paste =
+		KStdAction::paste(this,
+				  SLOT(paste()),
+				  collection,
 				  "paste");
-	
 
-        m_pasteInto = 
-		new KAction(i18n("Paste Into"), 
-			    "paste_into", 0, 
-			    this, SLOT(paste_into()), 
+
+        m_pasteInto =
+		new KAction(i18n("Paste Into"),
+			    "paste_into", 0,
+			    this, SLOT(paste_into()),
 			    collection, "paste_into");
-	
 
-        m_selectAll = 
-		KStdAction::selectAll(this, 
-				      SLOT(selectAll()), 
-				      collection, 
+
+        m_selectAll =
+		KStdAction::selectAll(this,
+				      SLOT(selectAll()),
+				      collection,
 				      "select_all");
 
-        m_deselect = 
-		KStdAction::deselect(this, 
-				     SLOT(unSelectAll()), 
-				     collection, 
+        m_deselect =
+		KStdAction::deselect(this,
+				     SLOT(unSelectAll()),
+				     collection,
 				     "deselect");
 
 
-        m_clear = 
+        m_clear =
 		KStdAction::clear(this,
-				  SLOT(clear()), 
-				  collection, 
+				  SLOT(clear()),
+				  collection,
 				  "clear");
 
 	m_reselect =
@@ -134,13 +134,13 @@ void KisSelectionManager::setup(KActionCollection * collection)
 			    this, SLOT(invert()),
 			    collection, "invert");
 
-	
-        m_toNewLayer = 
-		new KAction(i18n("Copy Selection to New Layer"), 
+
+        m_toNewLayer =
+		new KAction(i18n("Copy Selection to New Layer"),
 			    0, 0,
-			    this, SLOT(copySelectionToNewLayer()), 
+			    this, SLOT(copySelectionToNewLayer()),
 			    collection, "copy_selection_to_new_layer");
-	
+
 	m_feather =
 		new KAction(i18n("Feather..."),
 			    0, 0,
@@ -153,7 +153,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 			    this, SLOT(border()),
 			    collection, "border");
 
-	m_expand = 
+	m_expand =
 		new KAction(i18n("Expand..."),
 			    0, 0,
 			    this, SLOT(expand()),
@@ -172,13 +172,13 @@ void KisSelectionManager::setup(KActionCollection * collection)
 			    this, SLOT(contract()),
 			    collection, "contract");
 
-	m_grow = 
+	m_grow =
 		new KAction(i18n("Grow"),
 			    0, 0,
 			    this, SLOT(grow()),
 			    collection, "grow");
 
-	m_similar = 
+	m_similar =
 		new KAction(i18n("Similar"),
 			    0, 0,
 			    this, SLOT(similar()),
@@ -200,7 +200,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
 
 	m_save
-		= new KAction(i18n("Save..."),
+		= new KAction(i18n("Save As..."),
 			      0, 0,
 			      this, SLOT(save()),
 			      collection, "save_selection");
@@ -253,7 +253,7 @@ void KisSelectionManager::imgSelectionChanged(KisImageSP img)
                 updateGUI();
 		m_parent -> updateCanvas();
 	}
-	
+
 }
 
 void KisSelectionManager::cut()
@@ -276,7 +276,7 @@ void KisSelectionManager::copy()
 	QRect r = selection -> selectedRect();
 	r = r.normalize();
 
-// 	kdDebug() << "Selection rect: " 
+// 	kdDebug() << "Selection rect: "
 // 		  << r.x() << ", "
 // 		  << r.y() << ", "
 // 		  << r.width() << ", "
@@ -307,7 +307,7 @@ void KisSelectionManager::selectAll()
 
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
-	
+
 
 	KisSelectionSP s = new KisSelection(layer, "layer selection for: " + layer -> name());
 	s -> select(QRect(0, 0, layer -> width(), layer -> height()));
@@ -326,9 +326,9 @@ void KisSelectionManager::unSelectAll()
 	if (!layer) return;
 
 	layer -> removeSelection(); // XXX save selection for reselect
-	
+
 	m_parent -> updateCanvas();
-        
+
 }
 
 void KisSelectionManager::clear()
@@ -345,7 +345,7 @@ void KisSelectionManager::clear()
 	KisSelectionSP selection = layer -> selection();
 	QRect r = selection -> selectedRect();
 
-// 	kdDebug() << "Selection rect: " 
+// 	kdDebug() << "Selection rect: "
 // 		  << r.x() << ", "
 // 		  << r.y() << ", "
 // 		  << r.width() << ", "
@@ -354,7 +354,7 @@ void KisSelectionManager::clear()
 	r = r.normalize();
 
 
-// 	kdDebug() << "Normalized selection rect: " 
+// 	kdDebug() << "Normalized selection rect: "
 // 		  << r.x() << ", "
 // 		  << r.y() << ", "
 // 		  << r.width() << ", "
@@ -362,13 +362,13 @@ void KisSelectionManager::clear()
 
 	// XXX: make undoable
 	KisPainter p(img -> activeDevice());
-	p.bitBlt(r.x(), r.y(), 
+	p.bitBlt(r.x(), r.y(),
 		 COMPOSITE_COPY_OPACITY, // XXX: Is a mere copy of transparency correct?
 		 selection.data(),
 		 r.x(), r.y(),
 		 r.width(), r.height());
 	p.end();
-	
+
 	layer -> removeSelection();
 	m_parent -> updateCanvas();
 
@@ -389,7 +389,7 @@ void KisSelectionManager::invert()
 
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
-	
+
 	if (layer -> hasSelection()) {
 		KisSelectionSP s = layer -> selection();
 		s -> invert(QRect(0, 0, layer -> width(), layer -> height()));
@@ -435,7 +435,7 @@ void KisSelectionManager::copySelectionToNewLayer()
 	copy();
 
 	KisFloatingSelectionSP s = img -> floatingSelection();
-	
+
 	img -> unsetFloatingSelection(false);
 
 	if (s && m_doc -> layerAdd(img, img -> nextLayerName(), s))
@@ -444,7 +444,7 @@ void KisSelectionManager::copySelectionToNewLayer()
 		img -> setFloatingSelection(s);
 
 	layer -> removeSelection();
-        
+
 }
 
 

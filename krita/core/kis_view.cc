@@ -334,7 +334,7 @@ void KisView::setupDockers()
 	connect(m_autogradient, SIGNAL(activatedResource(KisResource*)), this, SLOT(gradientActivated(KisResource*)));
 
 	// Layers
-        m_layerBox = new KisLayerBox(i18n("layer"), KisLayerBox::SHOWALL, m_layerchanneldocker);
+        m_layerBox = new KisLayerBox(i18n("Layer"), KisLayerBox::SHOWALL, m_layerchanneldocker);
         m_layerBox -> setCaption(i18n("Layers"));
 
         connect(m_layerBox, SIGNAL(itemToggleVisible()), SLOT(layerToggleVisible()));
@@ -586,7 +586,7 @@ void KisView::setupActions()
         m_layerLower = new KAction(i18n("Lower Layer"), "lowerlayer", 0, this, SLOT(layerLower()), actionCollection(), "lowerlayer");
         m_layerTop = new KAction(i18n("Layer to Top"), 0, this, SLOT(layerFront()), actionCollection(), "toplayer");
         m_layerBottom = new KAction(i18n("Layer to Bottom"), 0, this, SLOT(layerBack()), actionCollection(), "bottomlayer");
-        m_layerProperties = new KAction(i18n("Layer Properties..."), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
+        m_layerProperties = new KAction(i18n("Layer Properties"), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
         (void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
         m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
         m_layerResizeToImage = new KAction(i18n("Resize Layer to Image"), 0, this, SLOT(layerResizeToImage()), actionCollection(), "resizelayertoowner");

@@ -124,7 +124,7 @@
                                         <cstring>bnSaveColorRange</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Save...</string>
+                                        <string>Save As...</string>
                                     </property>
                                 </widget>
                                 <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="3">

@@ -74,7 +74,7 @@
   <Action name="save_layer_as_image"/>
   <Action name="layer_to_image"/>
   <Separator/>
-  <Menu name="Rotate"><text>&amp;Rotate layer</text>
+  <Menu name="Rotate"><text>&amp;Rotate Layer</text>
 	  <Action name="rotateLayerRight90"/>
 	  <Action name="rotateLayer180"/>
 	  <Action name="rotateLayerLeft90"/>
@@ -122,7 +122,7 @@
 
 <Menu name="settings"><text>Settings</text>
   <Separator group="settings_show"/>
-  <Action name="preferences"/>
+  <Action name="preferences" group="settings_configure"/>
 </Menu>
 
 </MenuBar>

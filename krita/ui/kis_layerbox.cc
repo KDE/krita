@@ -106,7 +106,7 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
         if (f & SHOWLINKED)
                 m_contextMnu -> insertItem(i18n("Linked"), LINKING);
 
-        m_contextMnu -> insertItem(i18n("Properties..."), PROPERTIES);
+        m_contextMnu -> insertItem(i18n("Properties"), PROPERTIES);
         m_contextMnu -> insertSeparator();
 
         m_contextMnu -> insertItem(i18n("Add %1...").arg(label), ADD);

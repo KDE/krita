@@ -58,15 +58,15 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)
 {
 	setInstance(ColorRangeFactory::instance());
-	
- 	kdDebug() << "Colorrange plugin. Class: " 
- 		  << className() 
- 		  << ", Parent: " 
+
+ 	kdDebug() << "Colorrange plugin. Class: "
+ 		  << className()
+ 		  << ", Parent: "
  		  << parent -> className()
  		  << "\n";
 
-	(void) new KAction(i18n("&ColorRange..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange");
-	
+	(void) new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange");
+
 	if ( !parent->inherits("KisView") )
 	{
 		m_view = 0;
@@ -85,7 +85,7 @@ void ColorRange::slotActivated()
 
 	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
 	KisSelectionSP selection = new KisSelection(layer, "colorrange");
-	
+
 	dlgColorRange -> setLayer(layer);
 	dlgColorRange -> setSelection(selection);
 

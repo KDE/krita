@@ -255,7 +255,7 @@
                     <cstring>bnSave</cstring>
                 </property>
                 <property name="text">
-                    <string>&amp;Save...</string>
+                    <string>&amp;Save As...</string>
                 </property>
             </widget>
             <spacer>

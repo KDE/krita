@@ -49,7 +49,7 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget( KisFilter* nfilter, QW
 
 		connect(m_integerWidgets[i], SIGNAL(valueChanged( int )), filter(), SLOT(refreshPreview()));
 
-		QLabel* lbl = new QLabel(iwparam[i].name, this);
+		QLabel* lbl = new QLabel(QString(iwparam[i].name)+":", this);
 		widgetLayout -> addWidget( lbl, i , 0);
 
 		widgetLayout -> addWidget( m_integerWidgets[i], i , 1);

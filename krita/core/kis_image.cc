@@ -152,8 +152,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_undoHistory = rhs.m_undoHistory;
 		m_uri = rhs.m_uri;
 		m_name = QString::null;
-		m_width = rhs.m_width;
-		m_height = rhs.m_height;
 		m_depth = rhs.m_depth;
 		m_ntileCols = rhs.m_ntileCols;
 		m_ntileRows = rhs.m_ntileRows;
@@ -168,8 +166,8 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		if (rhs.m_shadow)
 			m_shadow = new KisTileMgr(*rhs.m_shadow);
 
-		m_bkg = new KisBackground(this, m_width, m_height);
-		m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
+		m_bkg = new KisBackground(this, rhs.width(), rhs.height());
+		m_projection = new KisLayer(this, rhs.width(), rhs.height(), "projection", OPACITY_OPAQUE);
 		m_layers.reserve(rhs.m_layers.size());
 
 		for (vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); it++) {
@@ -253,12 +251,10 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height, cons
 	m_active.resize(n);
 	m_visible.resize(n);
 	m_name = name;
-	m_width = width;
-	m_height = height;
 	m_depth = n;
 	m_type = imgType;
-	m_bkg = new KisBackground(this, m_width, m_height);
-	m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
+	m_bkg = new KisBackground(this, width, height);
+	m_projection = new KisLayer(this, width, height, "projection", OPACITY_OPAQUE);
 	m_xres = 1.0;
 	m_yres = 1.0;
 	m_unit = KoUnit::U_PT;
@@ -274,25 +270,25 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height, cons
 void KisImage::resize(Q_INT32 w, Q_INT32 h)
 {
 	kdDebug() << "KisImage::resize. From: (" 
-		  << m_width 
+		  << width()
 		  << ", " 
-		  << m_height
+		  << height()
 		  << ") to (" 
 		  << w 
 		  << ", " 
 		  << h 
 		  << ")\n";
+	undoAdapter()->beginMacro("Resize image");
 	if (m_adapter && m_adapter -> undo())
-		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, m_width, m_height));
+		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
 
-	m_width = w;
-	m_height = h;
 	m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
 	m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
-// 	m_bkg = new KisBackground(this, m_width, m_height);
-	m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
+// 	m_bkg = new KisBackground(this, w, h);
+	m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
  	m_bkg -> resize(w, h);
 // 	m_projection -> resize(w, h);
+	undoAdapter()->endMacro();
 	invalidate();
 }
 
@@ -305,10 +301,11 @@ void KisImage::scale(double sx, double sy)
 {
 	if (m_layers.empty()) return; // Nothing to scale
 
+	undoAdapter()->beginMacro("Scale image");
 	// New image size. XXX: Pass along to discourage rounding errors?
 	Q_INT32 w, h;	
-	w = (Q_INT32)(( m_width * sx) + 0.5);
-	h = (Q_INT32)(( m_height * sy) + 0.5); 
+	w = (Q_INT32)(( width() * sx) + 0.5);
+	h = (Q_INT32)(( height() * sy) + 0.5); 
 	
 	vKisLayerSP_it it;
 	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
@@ -316,11 +313,9 @@ void KisImage::scale(double sx, double sy)
 		layer -> scale(sx, sy);
 	}
 
-	m_width = w;
-	m_height = h;
-
 	// Scale projection.
 	m_projection -> scale(sx, sy);
+	undoAdapter()->endMacro();
 
 	invalidate();
 }
@@ -425,12 +420,12 @@ void KisImage::setResolution(double xres, double yres)
 
 Q_INT32 KisImage::width() const
 {
-	return m_width;
+	return m_projection->width();
 }
 
 Q_INT32 KisImage::height() const
 {
-	return m_height;
+	return m_projection->height();
 }
 
 Q_UINT32 KisImage::depth() const
@@ -1046,7 +1041,7 @@ Q_INT32 KisImage::tileNum(Q_INT32 xpix, Q_INT32 ypix) const
 	Q_INT32 col;
 	Q_INT32 num;
 
-	if (xpix >= m_width || ypix >= m_height)
+	if (xpix >= width() || ypix >= height())
 		return -1;
 
 	row = ypix / TILE_HEIGHT;

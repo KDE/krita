@@ -132,7 +132,7 @@ void KisPainter::tileBlt(QUANTUM *dst,
 {
         Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
         Q_INT32 srcstride = srctile -> width() * srctile -> depth();
-        Q_INT32 stride = m_device -> image() -> depth();
+        Q_INT32 stride = m_device -> depth();
         m_device -> colorStrategy() -> tileBlt(stride, dst, dststride, src, srcstride, opacity, rows, cols, op);
 }
 
@@ -146,7 +146,7 @@ void KisPainter::tileBlt(QUANTUM *dst,
 {
         Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
         Q_INT32 srcstride = srctile -> width() * srctile -> depth();
-        Q_INT32 stride = m_device -> image() -> depth();
+        Q_INT32 stride = m_device -> depth();
         m_device -> colorStrategy() -> tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
 }
 
@@ -453,7 +453,7 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
         Q_INT32 ydiff;
 
         m_device -> colorStrategy() -> nativeColor(c, opacity, src);
-        stride = m_device -> image() -> depth();
+        stride = m_device -> depth();
         ydiff = y1 - TILE_HEIGHT * (y1 / TILE_HEIGHT);
 
         for (y = y1; y <= y2; y += TILE_HEIGHT - ydiff) {

@@ -270,13 +270,11 @@ private:
         bool m_visible;
         Q_INT32 m_x;
         Q_INT32 m_y;
-        Q_INT32 m_depth;
         Q_INT32 m_offX;
         Q_INT32 m_offY;
         Q_INT32 m_offW;
         Q_INT32 m_offH;
         Q_INT32 m_quantumSize;
-        bool m_alpha;
         QPixmap m_projection;
         bool m_projectionValid;
         QString m_name;
@@ -292,17 +290,18 @@ inline KisTileMgrSP KisPaintDevice::tiles() const
 
 inline Q_INT32 KisPaintDevice::depth() const
 {
-        return m_depth;
+        return ::imgTypeDepth(type());
+;
 }
 
 inline KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
 {
-        return KisColorSpaceFactoryInterface::singleton() -> create(type());
+        return KisColorSpaceFactory::singleton() -> create(type());
 }
 
 inline QImage KisPaintDevice::convertToImage()
 {
-	return colorStrategy() -> convertToImage(data(), m_depth, 0, 0, width(), height());
+	return colorStrategy() -> convertToImage(data(), depth(), 0, 0, width(), height());
 }
 
 inline KisTileMgrSP KisPaintDevice::data()
@@ -448,6 +447,10 @@ inline enumImgType KisPaintDevice::type() const {
         return data()->type();
 }
 
+inline bool KisPaintDevice::alpha() const
+{
+        return ::imgTypeHasAlpha(type());
+}
 
 #endif // KIS_PAINT_DEVICE_H_
 

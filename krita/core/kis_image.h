@@ -177,8 +177,6 @@ private:
 	KURL m_uri;
 	QString m_name;
 
-	Q_INT32 m_width;
-	Q_INT32 m_height;
 	Q_UINT32 m_depth;
 
 	Q_INT32 m_ntileCols;

@@ -10,6 +10,7 @@ INCLUDES  = -I$(srcdir)/builder \
 	$(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/strategy \
 	-I$(srcdir)/color_strategy \
+	-I$(srcdir)/compositeop \
 	 $(all_includes)
 
 #CXXFLAGS = -shared -fPIC
@@ -21,6 +22,7 @@ libkritacore_la_LIBADD = tiles/libkistile.la \
 	builder/libkiscorebuilder.la \
 	strategy/libkisstrategy.la \
 	color_strategy/libkiscolor_strategy.la \
+	compositeop/libkiscompositeop.la \
 	$(LIB_KOPAINTER)
 
 libkritacore_la_SOURCES = kis_paint_device.cc \
@@ -120,4 +122,4 @@ noinst_HEADERS = kis_paint_device.h \
 	
 libkritacore_la_METASOURCES = AUTO
 libkritacore_la_LDFLAGS = $(all_libraries)
-SUBDIRS = helper tiles builder strategy color_strategy 
+SUBDIRS = helper tiles builder strategy color_strategy compositeop

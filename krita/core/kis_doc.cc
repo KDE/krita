@@ -1065,7 +1065,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 		m_projection = m_images[0];
 
 	if (m_projection) {
-		KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+		KisColorSpaceFactory *factory = KisColorSpaceFactory::singleton();
 		Q_ASSERT(factory);
 		colorstate = factory -> create(m_projection -> nativeImgType());
 

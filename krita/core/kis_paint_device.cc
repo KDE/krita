@@ -87,15 +87,13 @@ namespace {
 KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
 {
         init();
-        m_alpha = ::imgTypeHasAlpha(imgType);
-        m_depth = ::imgTypeDepth(imgType);
         m_x = 0;
         m_y = 0;
         m_offX = 0;
         m_offY = 0;
         m_offW = 0;
         m_offH = 0;
-        m_tiles = new KisTileMgr(m_depth, imgType, width, height);
+        m_tiles = new KisTileMgr(::imgTypeDepth(imgType), imgType, width, height);
         m_visible = true;
         m_owner = 0;
         m_name = name;
@@ -112,8 +110,6 @@ KisPaintDevice::KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, co
 KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& name)
 {
         init();
-        m_depth = img -> depth();
-        m_alpha = img -> alpha();
         m_x = 0;
         m_y = 0;
         m_offX = 0;
@@ -142,13 +138,11 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs
                 m_visible = rhs.m_visible;
                 m_x = rhs.m_x;
                 m_y = rhs.m_y;
-                m_depth = rhs.m_depth;
                 m_offX = rhs.m_offX;
                 m_offY = rhs.m_offY;
                 m_offW = rhs.m_offW;
                 m_offH = rhs.m_offH;
                 m_quantumSize = rhs.m_quantumSize;
-                m_alpha = rhs.m_alpha;
                 m_projectionValid = false;
                 m_name = rhs.m_name;
                 m_compositeOp = COMPOSITE_OVER;
@@ -206,15 +200,13 @@ void KisPaintDevice::configure(KisImageSP image,
         if (image == 0 || name.isEmpty())
                 return;
 
-        m_depth = image -> depth();
-        m_alpha = image -> alpha();
         m_x = 0;
         m_y = 0;
         m_offX = 0;
         m_offY = 0;
         m_offW = 0;
         m_offH = 0;
-        m_tiles = new KisTileMgr(m_depth, imgType, width, height);
+        m_tiles = new KisTileMgr(::imgTypeDepth(imgType), imgType, width, height);
         m_visible = true;
         m_owner = image;
         m_name = name;
@@ -300,11 +292,6 @@ void KisPaintDevice::maskBounds(QRect *rc)
         rc -> setRect(x1, y1, x2 - x1, y2 - y1);
 }
 
-bool KisPaintDevice::alpha() const
-{
-        return m_alpha;
-}
-
 enumImgType KisPaintDevice::typeWithoutAlpha() const
 {
 	switch (type()) {
@@ -348,8 +335,6 @@ enumImgType KisPaintDevice::typeWithAlpha() const
 void KisPaintDevice::init()
 {
         m_visible = false;
-        m_depth = 0;
-        m_alpha = false;
         m_quantumSize = 0;
         m_offX = 0;
         m_offY = 0;
@@ -376,7 +361,7 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
         data = pd -> data;
         Q_ASSERT(data);
 
-        switch (m_alpha ? typeWithAlpha() : typeWithoutAlpha()) {
+        switch (alpha() ? typeWithAlpha() : typeWithoutAlpha()) {
         case IMAGE_TYPE_INDEXEDA:
         case IMAGE_TYPE_INDEXED:
                 break; // TODO
@@ -413,7 +398,7 @@ bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM op
         data = pd -> data;
         Q_ASSERT(data);
 
-        switch (m_alpha ? typeWithAlpha() : typeWithoutAlpha()) {
+        switch (alpha() ? typeWithAlpha() : typeWithoutAlpha()) {
         case IMAGE_TYPE_INDEXEDA:
         case IMAGE_TYPE_INDEXED:
                 break; // TODO
@@ -673,7 +658,7 @@ void KisPaintDevice::offsetBy(Q_INT32 x, Q_INT32 y)
 bool KisPaintDevice::write(KoStore *store)
 {
         KisTileMgrSP tm = data();
-        Q_INT32 totalBytes = height() * width() * m_depth * sizeof(QUANTUM);
+        Q_INT32 totalBytes = height() * width() * depth() * sizeof(QUANTUM);
         Q_INT32 nbytes = 0;
 
         Q_ASSERT(store);
@@ -682,7 +667,7 @@ bool KisPaintDevice::write(KoStore *store)
         for (Q_INT32 y = 0; y < height(); y += TILE_HEIGHT) {
                 for (Q_INT32 x = 0; x < width(); x += TILE_WIDTH) {
                         KisTileSP tile = tm -> tile(x, y, TILEMODE_READ);
-                        Q_INT32 tileBytes = tile -> height() * tile -> width() * m_depth * sizeof(QUANTUM);
+                        Q_INT32 tileBytes = tile -> height() * tile -> width() * depth() * sizeof(QUANTUM);
 
                         tile -> lock();
 
@@ -703,7 +688,7 @@ bool KisPaintDevice::write(KoStore *store)
 bool KisPaintDevice::read(KoStore *store)
 {
         KisTileMgrSP tm = data();
-        Q_INT32 totalBytes = height() * width() * m_depth * sizeof(QUANTUM);
+        Q_INT32 totalBytes = height() * width() * depth() * sizeof(QUANTUM);
         Q_INT32 nbytes = 0;
 
         Q_ASSERT(store);
@@ -712,7 +697,7 @@ bool KisPaintDevice::read(KoStore *store)
         for (Q_INT32 y = 0; y < height(); y += TILE_HEIGHT) {
                 for (Q_INT32 x = 0; x < width(); x += TILE_WIDTH) {
                         KisTileSP tile = tm -> tile(x, y, TILEMODE_WRITE);
-                        Q_INT32 tileBytes = tile -> height() * tile -> width() * m_depth * sizeof(QUANTUM);
+                        Q_INT32 tileBytes = tile -> height() * tile -> width() * depth() * sizeof(QUANTUM);
 
                         tile -> lock();
 

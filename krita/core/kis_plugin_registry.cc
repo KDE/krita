@@ -51,7 +51,7 @@ KisPluginRegistry::~KisPluginRegistry()
 void KisPluginRegistry::registerColorStrategy(const QString & name, enumImgType imgType, KisStrategyColorSpaceSP colorspace)
 {
 	kdDebug() << "Adding color strategy\n";
-	KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+	KisColorSpaceFactory *factory = KisColorSpaceFactory::singleton();
         Q_ASSERT(factory);
 	factory -> add(imgType, colorspace);
 }

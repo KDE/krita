@@ -2,3 +2,13 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/CorePaintop
 Comment=paint operation plugin for Krita
+Comment[da]=maleoperation-plugin for Krita
+Comment[es]=Extensión de operación de pintado para Krita
+Comment[et]=Krita joonistamisoperatsioonide plugin
+Comment[fr]=Module d'opérations de dessin pour Krita
+Comment[pt]=Módulo de operações de pintura do Krita
+Comment[pt_BR]=plugin de operação de pintura para o Krita
+Comment[ru]=Модуль рисования Krita
+Comment[sr]=Прикључак за сликарске операције за Krita-у
+Comment[sr@Latn]=Прикључак за сликарске операције за Krita-у
+Comment[sv]=Målningsinsticksprogram för Krita

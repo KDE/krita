@@ -86,8 +86,9 @@ class KMacroCommand;
   the screen; I don't know why, I don't know whether that's true, but
   it seems to work.
 
-  KisPainter apparently supports something called transactions that I'm
-  none too clear on.
+  KisPainter supports transactions that can group various paint operations
+  in one undoable step.
+
  */
 class KisPainter {
 public:

@@ -32,15 +32,23 @@ public:
 	virtual ~KisStrategyColorSpace();
 
 public:
-        // The nativeColor methods take a given color and fill *dst with 
-        // the tuple that describes the colour for this particular strategy.
-        
+        // The nativeColor methods take a given color that can be defined in any
+        // colorspace and fills a byte array with the corresponding color in the
+        // the colorspace managed by this strategy.
+
 	virtual void nativeColor(const KoColor& c, QUANTUM *dst) = 0;
 	virtual void nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
 	virtual void nativeColor(const QColor& c, QUANTUM *dst) = 0;
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst) = 0;
+
+        // composite takes two colors and composite them according to
+        // to the given composition operation. alpha is the alpha
+        // value of the source pixel. opacitity is the extra opacitiy
+        // of the composition.
+        // XXX: maybe I should pass whole chunks of pixels, for efficiency reasons.
+        virtual void composite(QUANTUM *src, QUANTUM *dst, Q_INT32 opacity, CompositeOp op) = 0;
 
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
 

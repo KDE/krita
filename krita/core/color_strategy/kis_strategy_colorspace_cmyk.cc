@@ -107,6 +107,76 @@ void KisStrategyColorSpaceCMYK::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *
     dst[PIXEL_CMYK_ALPHA] = opacity;
 }
 
+void KisStrategyColorSpaceCMYK::composite(QUANTUM *src, QUANTUM *dst, Q_INT32 opacity, CompositeOp op)
+{
+    QUANTUM alpha;
+    QUANTUM invAlpha;
+    QUANTUM *d;
+    QUANTUM *s;
+
+    d = dst;
+    s = src;
+
+    switch (op) {
+    case COMPOSITE_CLEAR:
+        // Make white (rgba makes black -- both use 0)
+        if ( opacity == OPACITY_OPAQUE ) {
+            memset(d, 0, MAX_CHANNEL_CMYKA);
+        }
+        break;
+    case COMPOSITE_COPY:
+        if ( opacity == OPACITY_OPAQUE ) {
+            memcpy(d, s, MAX_CHANNEL_CMYKA);
+        }
+        break;
+    case COMPOSITE_OVER:
+        // XXX: This is _not_ the correct algorithm.
+        if (s[PIXEL_CMYK_ALPHA] == OPACITY_TRANSPARENT)
+            break;
+
+        if ( opacity == OPACITY_OPAQUE ) {
+            if (s[PIXEL_CMYK_ALPHA] == OPACITY_TRANSPARENT ||
+                (d[PIXEL_CMYK_ALPHA] == OPACITY_OPAQUE && s[PIXEL_CMYK_ALPHA] == OPACITY_OPAQUE))
+            {
+                memcpy(d, s, MAX_CHANNEL_CMYKA * sizeof(QUANTUM));
+                break;
+            }
+        }
+        alpha = (s[PIXEL_CMYK_ALPHA] * opacity) / QUANTUM_MAX;
+        invAlpha = QUANTUM_MAX - alpha;
+
+        d[PIXEL_CYAN] = (d[PIXEL_CYAN] * invAlpha + s[PIXEL_CYAN] * alpha) / QUANTUM_MAX;
+        d[PIXEL_MAGENTA] = (d[PIXEL_MAGENTA] * invAlpha + s[PIXEL_MAGENTA] * alpha) / QUANTUM_MAX;
+        d[PIXEL_YELLOW] = (d[PIXEL_YELLOW] * invAlpha + s[PIXEL_YELLOW] * alpha) / QUANTUM_MAX;
+        d[PIXEL_BLACK] = (d[PIXEL_BLACK] * invAlpha + s[PIXEL_BLACK] * alpha) / QUANTUM_MAX;
+        alpha = (d[PIXEL_CMYK_ALPHA] * (QUANTUM_MAX - s[PIXEL_CMYK_ALPHA]) + s[PIXEL_CMYK_ALPHA]) / QUANTUM_MAX;
+        d[PIXEL_CMYK_ALPHA] = (d[PIXEL_CMYK_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_CMYK_ALPHA]) / QUANTUM_MAX;
+
+        break;
+    case COMPOSITE_IN:
+    case COMPOSITE_ATOP:
+    case COMPOSITE_XOR:
+    case COMPOSITE_PLUS:
+    case COMPOSITE_MINUS:
+    case COMPOSITE_ADD:
+    case COMPOSITE_SUBTRACT:
+    case COMPOSITE_DIFF:
+    case COMPOSITE_MULT:
+    case COMPOSITE_BUMPMAP:
+    case COMPOSITE_COPY_RED:
+    case COMPOSITE_COPY_GREEN:
+    case COMPOSITE_COPY_BLUE:
+    case COMPOSITE_COPY_OPACITY:
+    case COMPOSITE_DISSOLVE:
+    case COMPOSITE_DISPLACE:
+    case COMPOSITE_MODULATE:
+    case COMPOSITE_THRESHOLD:
+    default:
+        kdDebug() << "Not Implemented.\n";
+        return;
+    }
+}
+
 void KisStrategyColorSpaceCMYK::render(KisImageSP projection,
                                        QPainter& painter,
                                        Q_INT32 x,
@@ -135,7 +205,7 @@ void KisStrategyColorSpaceCMYK::render(KisImageSP projection,
         pd -> owner = false;
         pd -> data = m_buf;
         tm -> readPixelData(pd);
-#if 1
+#if 0
         kdDebug() << "ARG: x " << x
                   << ", y " << y
                   << ", w " << width
@@ -165,13 +235,13 @@ void KisStrategyColorSpaceCMYK::render(KisImageSP projection,
             c.y = *( pd->data + i + PIXEL_YELLOW );
             c.k = *( pd->data + i + PIXEL_BLACK );
 
-
+#if 0
             if ( i == 0 ) {
             kdDebug() << "cmyk: "
                       <<  s.sprintf("%02x %02x %02x %02x", c.c, c.m, c.y, c.k) << endl;
             kdDebug() << "alpha " << *( pd->data + i + PIXEL_CMYK_ALPHA ) << endl;
             }
-
+#endif
 
             if ( m_rgbLUT.contains ( c ) ) {
                 r =  m_rgbLUT[c];
@@ -187,12 +257,12 @@ void KisStrategyColorSpaceCMYK::render(KisImageSP projection,
                 r.r =  k.R();
                 r.g =  k.G();
                 r.b =  k.B();
-
+#if 0
                 if ( i == 0 ) {
                     kdDebug() << "rgb: "
                               << s.sprintf("#%02x %02x %02x", r.r, r.g, r.b ) << endl;
                 }
-
+#endif
                 m_rgbLUT[c] = r;
             }
 

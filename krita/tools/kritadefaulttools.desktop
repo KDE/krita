@@ -1,5 +1,16 @@
 [Desktop Entry]
 Name=Default Tools
+Name[bg]=Инструменти по подразбиране
+Name[da]=Standardværktøjer
+Name[es]=Herramientas predefinidas
+Name[et]=Vaiketööriistad
+Name[fr]=Outils par défaut
+Name[pt]=Ferramentas Predefinidas
+Name[pt_BR]=Ferramentas Padrão
+Name[ru]=Стандартный инструментарий
+Name[sv]=Standardverktyg
+Name[ta]=முன்னிருப்பு கருவிகள்
+Name[tr]=Öntanımlı Araçlar
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritadefaulttools

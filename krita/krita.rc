@@ -32,7 +32,6 @@
   <Action name="add_new_image_tab"/>
   <Action name="remove_current_image_tab"/>
   <Action name="scale_image"/>
-  <Action name="resize_image"/>
   <Action name="resizeimgtolayer"/>
   <Action name="duplicate_image"/>
 </Menu>

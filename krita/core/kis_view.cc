@@ -105,7 +105,6 @@
 
 // Dialog boxes
 #include "kis_dlg_builder_progress.h"
-#include "kis_dlg_dimension.h"
 #include "kis_dlg_gradient.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paint_properties.h"
@@ -162,7 +161,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_selectionSelectAll = 0;
         m_selectionSelectNone = 0;
         m_imgRm = 0;
-        m_imgResize = 0;
         m_imgDup = 0;
         m_imgImport = 0;
         m_imgExport = 0;
@@ -535,7 +533,6 @@ void KisView::setupActions()
         m_imgRename = new KAction(i18n("Rename Current Image"), 0, this, SLOT(slotRename()), actionCollection(), "rename_current_image_tab");
         (void)new KAction(i18n("Add New Image..."), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
         m_imgRm = new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
-        m_imgResize = new KAction(i18n("Resize Image..."), 0, this, SLOT(imageResize()), actionCollection(), "resize_image");
         m_imgDup = new KAction(i18n("Duplicate Image"), 0, this, SLOT(duplicateCurrentImg()), actionCollection(), "duplicate_image");
         m_imgMergeAll = new KAction(i18n("Merge &All Layers"), 0, this, SLOT(merge_all_layers()), actionCollection(), "merge_all_layers");
         m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(merge_visible_layers()), actionCollection(), "merge_visible_layers");
@@ -964,7 +961,6 @@ void KisView::imgUpdateGUI()
         Q_INT32 nlinked = 0;
 
         m_imgRm -> setEnabled(img != 0);
-        m_imgResize -> setEnabled(img != 0);
         m_imgDup -> setEnabled(img != 0);
         m_imgExport -> setEnabled(img != 0);
         m_layerAdd -> setEnabled(img != 0);
@@ -1651,25 +1647,6 @@ void KisView::remove_current_image_tab()
         }
 }
 
-void KisView::imageResize()
-{
-        KisImageSP img = currentImg();
-
-        if (img) {
-                KisConfig cfg;
-                KisDlgDimension dlg(cfg.maxImgWidth(), img -> width(), cfg.maxImgHeight(), img -> height(), this);
-
-                if (dlg.exec() == QDialog::Accepted) {
-                        QSize size = dlg.getSize();
-
-                        img -> resize(size.width(), size.height());
-                        img -> invalidate();
-                        resizeEvent(0);
-                        layersUpdated();
-                        canvasRefresh();
-                }
-        }
-}
 
 void KisView::merge_all_layers()
 {
@@ -2482,26 +2459,27 @@ void KisView::imgUpdated(KisImageSP img, const QRect& rc)
 
 void KisView::layerResize()
 {
-        KisImageSP img = currentImg();
+// XXX: use new dialog
+//         KisImageSP img = currentImg();
 
-        if (img) {
-                KisLayerSP layer = img -> activeLayer();
+//         if (img) {
+//                 KisLayerSP layer = img -> activeLayer();
 
-                if (layer) {
-                        KisConfig cfg;
-                        KisDlgDimension dlg(cfg.maxLayerWidth(), layer -> width(), cfg.maxLayerHeight(), layer -> height(), this);
+//                 if (layer) {
+//                         KisConfig cfg;
+//                         KisDlgDimension dlg(cfg.maxLayerWidth(), layer -> width(), cfg.maxLayerHeight(), layer -> height(), this);
 
-                        if (dlg.exec() == QDialog::Accepted) {
-                                QSize size = dlg.getSize();
+//                         if (dlg.exec() == QDialog::Accepted) {
+//                                 QSize size = dlg.getSize();
 
-                                layer -> resize(size.width(), size.height());
-                                img -> invalidate();
-                                layersUpdated();
-                                resizeEvent(0);
-                                canvasRefresh();
-                        }
-                }
-        }
+//                                 layer -> resize(size.width(), size.height());
+//                                 img -> invalidate();
+//                                 layersUpdated();
+//                                 resizeEvent(0);
+//                                 canvasRefresh();
+//                         }
+//                 }
+//         }
 }
 
 void KisView::layerResizeToImage()
@@ -2821,6 +2799,13 @@ KisImageSP KisView::currentImg() const
         m_current = m_doc -> imageNum(m_doc -> nimages() - 1);
         connectCurrentImg();
         return m_current;
+}
+
+void KisView::refresh() 
+{
+	resizeEvent(0);
+        layersUpdated();
+        canvasRefresh();
 }
 
 QString KisView::currentImgName() const

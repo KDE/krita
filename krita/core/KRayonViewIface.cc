@@ -105,10 +105,10 @@ void KRayonViewIface::remove_current_image_tab()
     m_view->remove_current_image_tab();
 }
 
-void KRayonViewIface::imageResize()
-{
-    m_view->imageResize();
-}
+// void KRayonViewIface::imageResize()
+// {
+//     m_view->imageResize();
+// }
 
 void KRayonViewIface::tool_properties()
 {

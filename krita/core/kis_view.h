@@ -96,6 +96,10 @@ public:
 	Q_INT32 importImage(bool createLayer, bool modal = false, const QString& filename = QString::null);
 
 	virtual KisImageSP currentImg() const;
+	/**
+	 * Refresh the complete view
+	 */
+	virtual void refresh();
 
 signals:
 	void bgColorChanged(const KoColor& c);
@@ -118,7 +122,6 @@ signals:
 	void imgResizeToActiveLayer();
 	void add_new_image_tab();
 	void remove_current_image_tab();
-	void imageResize();
 
 	// tool action slots
 	void tool_properties();
@@ -241,6 +244,7 @@ private slots:
 	void canvasRefresh();
 	void canvasGotKeyPressEvent(QKeyEvent*);
 	void canvasGotKeyReleaseEvent(QKeyEvent*);
+
 	void docImageListUpdate();
 	void imgSelectionChanged(KisImageSP img);
 	void layerToggleVisible();
@@ -316,7 +320,6 @@ private:
 	KAction *m_imgMergeLinked;
 	KAction *m_imgMergeVisible;
 	KAction *m_imgRename;
-	KAction *m_imgResize;
 	KAction *m_imgResizeToLayer;
 	KAction *m_imgRm;
 	KAction *m_imgScan;

@@ -83,6 +83,7 @@ public:
 
 	Q_INT32 width() const;
 	Q_INT32 height() const;
+
 	Q_UINT32 depth() const;
 	bool alpha() const;
 	bool empty() const;

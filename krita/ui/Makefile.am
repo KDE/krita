@@ -18,7 +18,6 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_controlframe.cc \
     kis_layerbox.cc \
     kis_dlg_create_img.cc \
-    kis_dlg_dimension.cc \
     kis_dlg_new_layer.cc \
     kis_dlg_paintoffset.cc \
     kis_dlg_paint_properties.cc \

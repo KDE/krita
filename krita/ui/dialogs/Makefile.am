@@ -5,6 +5,6 @@ libkisdialogs_la_SOURCES = dummy.cc \
 	new_image.ui
 
 noinst_HEADERS = wdgmatrix.h \
-	new_image.h 
+	new_image.h
 
 libkisdialogs_la_METASOURCES = AUTO

@@ -56,7 +56,7 @@ class KRayonViewIface : public KoViewIface
 	void imgResizeToActiveLayer();
 	void add_new_image_tab();
 	void remove_current_image_tab();
-	void imageResize();
+	//void imageResize(); // XXX: made into a plugin, don't know yet how to export a plugin with DCOP.
 
 	// tool action slots
 	void tool_properties();

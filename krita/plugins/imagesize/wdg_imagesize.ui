@@ -1,0 +1,343 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>WdgImageSize</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgImageSize</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>434</width>
+            <height>350</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Image Size</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QButtonGroup" row="0" column="0">
+            <property name="name">
+                <cstring>grpPixelDimensions</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Pixel Dimensions:</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox" row="0" column="2">
+                    <item>
+                        <property name="text">
+                            <string>percent</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>pixels</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbScaleTypeW</cstring>
+                    </property>
+                    <property name="currentItem">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="2">
+                    <item>
+                        <property name="text">
+                            <string>percent</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>pixels</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbScaleTypeH</cstring>
+                    </property>
+                    <property name="currentItem">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="0" column="1">
+                    <property name="name">
+                        <cstring>intWidth</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="1" column="1">
+                    <property name="name">
+                        <cstring>intHeight</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Height:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intHeight</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>lblWidth</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Width:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intWidth</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0">
+            <property name="name">
+                <cstring>grpPrintSize</cstring>
+            </property>
+            <property name="title">
+                <string>Print &amp;Size:</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox" row="0" column="2">
+                    <item>
+                        <property name="text">
+                            <string>percent</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>inches</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>cm</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>points</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>picas</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>columns</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbPrintWidthUnit</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="2" rowspan="2" colspan="1">
+                    <item>
+                        <property name="text">
+                            <string>percent</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>inches</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>cm</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>points</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>picas</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbPrintHeightUnit</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="3" column="2">
+                    <item>
+                        <property name="text">
+                            <string>pixels/inch</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>pixels/cm</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbXResolutionType</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="4" column="2">
+                    <item>
+                        <property name="text">
+                            <string>pixels/inch</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>pixels/cm</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbYResolutionType</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="2" column="1">
+                    <property name="name">
+                        <cstring>intPrintHeight</cstring>
+                    </property>
+                    <property name="value">
+                        <number>100</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="0" column="1" rowspan="2" colspan="1">
+                    <property name="name">
+                        <cstring>intPrintWidth</cstring>
+                    </property>
+                    <property name="value">
+                        <number>100</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Width:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Height:</string>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="4" column="1">
+                    <property name="name">
+                        <cstring>dblYRes</cstring>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="3" column="1">
+                    <property name="name">
+                        <cstring>dblXRes</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>textLabel5_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Y Resolution</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>dblYRes</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;X Resolution</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>dblXRes</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QCheckBox" row="2" column="0">
+            <property name="name">
+                <cstring>chkConstrain</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Constrain Proportions</string>
+            </property>
+            <property name="accel">
+                <string>Alt+C</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="3" column="0">
+            <property name="name">
+                <cstring>chkResample</cstring>
+            </property>
+            <property name="text">
+                <string>Resample Image</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>If checked, the image will be scaled, if unchecked cropped or enlarged to the new size without changing the contents.</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<tabstops>
+    <tabstop>intWidth</tabstop>
+    <tabstop>intHeight</tabstop>
+    <tabstop>intPrintWidth</tabstop>
+    <tabstop>intPrintHeight</tabstop>
+    <tabstop>dblXRes</tabstop>
+    <tabstop>dblYRes</tabstop>
+    <tabstop>chkConstrain</tabstop>
+    <tabstop>cmbScaleTypeW</tabstop>
+    <tabstop>cmbScaleTypeH</tabstop>
+    <tabstop>cmbPrintWidthUnit</tabstop>
+    <tabstop>cmbPrintHeightUnit</tabstop>
+    <tabstop>cmbXResolutionType</tabstop>
+    <tabstop>cmbYResolutionType</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

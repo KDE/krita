@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="imagesize" version="6">
+<MenuBar>
+    <Menu name="Image"><text>Image</text>
+	<Separator/>
+	<Action name="imagesize"/>
+	<Separator/>
+    </Menu>
+</MenuBar>
+</kpartgui>

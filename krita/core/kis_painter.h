@@ -160,6 +160,7 @@ public:
 	void setBackgroundColor(const KoColor& color) {m_backgroundColor = color; }
 	void setFillColor(const KoColor& color) { m_fillColor = color; }
 	void setOpacity(QUANTUM opacity) { m_opacity = opacity; }
+	void setCompositeOp(CompositeOp op) { m_compositeOp = op; }
 
 
 
@@ -192,6 +193,7 @@ private:
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
 	QUANTUM m_opacity;
+	CompositeOp m_compositeOp;
 
 	Q_INT32 m_pressure;
 };

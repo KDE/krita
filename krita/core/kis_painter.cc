@@ -66,6 +66,7 @@ KisPainter::KisPainter()
 	m_pattern= 0;
 	m_gradient = 0;
 	m_opacity = OPACITY_TRANSPARENT;
+	m_compositeOp = COMPOSITE_OVER;
 }
 
 KisPainter::KisPainter(KisPaintDeviceSP device)
@@ -670,7 +671,7 @@ void KisPainter::paintAt(const QPoint & pos,
                 y = 0;
         }
         
-	bitBlt( x,  y,  m_brush -> compositeOp(), m_dab.data(), m_brush -> opacity(), sx, sy, m_dab -> width(), m_dab -> height());
+	bitBlt( x,  y,  m_compositeOp, m_dab.data(), m_opacity, sx, sy, m_dab -> width(), m_dab -> height());
 
 	m_dirtyRect |= QRect(x, y, m_dab -> width(), m_dab -> height());
 }

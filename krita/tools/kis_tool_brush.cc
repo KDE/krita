@@ -19,6 +19,7 @@
  */
 #include <qevent.h>
 #include <qlabel.h>
+#include <qlayout.h>
 #include <qwidget.h>
 
 #include <kdebug.h>
@@ -32,6 +33,9 @@
 #include "kis_painter.h"
 #include "kis_view.h"
 #include "kis_tool_brush.h"
+#include "integerwidget.h"
+#include "kis_cmb_composite.h"
+#include "kis_brush.h"
 
 
 KisToolBrush::KisToolBrush()
@@ -44,6 +48,14 @@ KisToolBrush::KisToolBrush()
         m_painter = 0;
 	m_currentImage = 0;
 	m_optWidget = 0;
+
+	m_lbOpacity = 0;
+	m_slOpacity = 0;
+	m_lbComposite= 0;
+	m_cmbComposite = 0;
+
+	m_opacity = OPACITY_OPAQUE;
+	m_compositeOp = COMPOSITE_OVER;
 }
 
 KisToolBrush::~KisToolBrush()
@@ -146,6 +158,8 @@ void KisToolBrush::initPaint(const QPoint & pos)
 
 	m_painter -> setPaintColor(m_subject -> fgColor());
 	m_painter -> setBrush(m_subject -> currentBrush());
+	m_painter->setOpacity(m_opacity);
+	m_painter->setCompositeOp(m_compositeOp);
 
 	// Set the cursor -- ideally. this should be a mask created from the brush,
 	// now that X11 can handle colored cursors.
@@ -212,10 +226,27 @@ KDialog *KisToolBrush::options(QWidget * parent)
 
 QWidget* KisToolBrush::createoptionWidget(QWidget* parent)
 {
-	//Put the Widget code here
 	m_optWidget = new QWidget(parent);
 	m_optWidget -> setCaption(i18n("Brush"));
-	QLabel *test = new QLabel(i18n("Property"), m_optWidget);
+	
+	m_lbOpacity = new QLabel(i18n("Opacity: "), m_optWidget);
+	m_slOpacity = new IntegerWidget( 0, 100, m_optWidget, "int_widget");
+	m_slOpacity -> setTickmarks(QSlider::Below);
+	m_slOpacity -> setTickInterval(10);
+	m_slOpacity -> setValue(m_opacity / OPACITY_OPAQUE * 100);
+	connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
+
+	m_lbComposite = new QLabel(i18n("Mode: "), m_optWidget);
+	m_cmbComposite = new KisCmbComposite(m_optWidget);
+	connect(m_cmbComposite, SIGNAL(activated(int)), this, SLOT(slotSetCompositeMode(int)));
+
+	QGridLayout *optionLayout = new QGridLayout(m_optWidget, 4, 2);
+
+	optionLayout -> addWidget(m_lbOpacity, 1, 0);
+	optionLayout -> addWidget(m_slOpacity, 1, 1);
+
+	optionLayout -> addWidget(m_lbComposite, 2, 0);
+	optionLayout -> addWidget(m_cmbComposite, 2, 1);
 
 	return m_optWidget;
 }
@@ -224,3 +255,15 @@ QWidget* KisToolBrush::optionWidget()
 {
 	return m_optWidget;
 }
+
+void KisToolBrush::slotSetOpacity(int opacityPerCent)
+{
+	m_opacity = opacityPerCent * OPACITY_OPAQUE / 100;
+}
+
+void KisToolBrush::slotSetCompositeMode(int compositeOp)
+{
+	m_compositeOp = (CompositeOp)compositeOp;
+}
+
+#include "kis_tool_brush.moc"

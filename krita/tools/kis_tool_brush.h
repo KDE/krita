@@ -27,8 +27,12 @@ class QPoint;
 class QWidget;
 class QLabel;
 class KisPainter;
+class IntegerWidget;
+class KisCmbComposite;
+class KisBrush;
 
 class KisToolBrush : public KisToolPaint {
+	Q_OBJECT
 	typedef KisToolPaint super;
 
 public:
@@ -48,6 +52,10 @@ public:
 	virtual QWidget* createoptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 
+public slots:
+	virtual void slotSetOpacity(int);
+	virtual void slotSetCompositeMode(int);
+
 private:
 	virtual void paintLine(const QPoint & pos1,
 			       const QPoint & pos2,
@@ -60,6 +68,8 @@ private:
 
 	enumBrushMode m_mode;
 	KisPainter *m_painter;
+	QUANTUM m_opacity;
+	CompositeOp m_compositeOp;
 
         QPoint m_dragStart;
         float m_dragDist;
@@ -67,7 +77,10 @@ private:
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;
 	QWidget *m_optWidget;
-
+	QLabel *m_lbOpacity;
+	IntegerWidget *m_slOpacity;
+	QLabel *m_lbComposite;
+	KisCmbComposite *m_cmbComposite;
 };
 #endif // KIS_TOOL_BRUSH_H_
 

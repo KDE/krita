@@ -24,7 +24,7 @@ namespace KoChart
 
         Part *part() const { return m_part; }
 
-        virtual void show() = 0;
+        virtual bool show() = 0;
         // XXX add more?
 
     private:

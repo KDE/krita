@@ -67,20 +67,6 @@ KisSideBar::KisSideBar( QWidget* parent, const char* name )
     connect(m_pColorChooserFrame, SIGNAL(colorChanged(const KoColor &)),
         this, SLOT(slotColorChooserColorSelected(const KoColor &)));
 
-    // connect top frame for color modes
-    connect(m_pTopColorFrame, SIGNAL(greyClicked()), m_pColorChooserFrame,
-	    SLOT(slotShowGrey()));
-    connect(m_pTopColorFrame, SIGNAL(rgbClicked()), m_pColorChooserFrame,
-		SLOT(slotShowRGB()));
-    connect(m_pTopColorFrame, SIGNAL(hsbClicked()), m_pColorChooserFrame,
-		SLOT(slotShowHSB()));
-    connect(m_pTopColorFrame, SIGNAL(cmykClicked()), m_pColorChooserFrame,
-		SLOT(slotShowCMYK()));
-    connect(m_pTopColorFrame, SIGNAL(labClicked()), m_pColorChooserFrame,
-		SLOT(slotShowLAB()));
-    connect(m_pTopColorFrame, SIGNAL(hideClicked()),
-        this, SLOT(slotHideChooserFrame()));
-
     // connect control frame
     connect(m_pControlFrame, SIGNAL(fgColorChanged(const KoColor &)),
         this, SLOT(slotControlFGColorSelected(const KoColor &)));
@@ -487,35 +473,16 @@ ColorChooserFrame::ColorChooserFrame( QWidget* parent, const char* name )
         this, SLOT(slotColorSelected(const KoColor &)));
 }
 
-void ColorChooserFrame::slotShowGrey()
-{
-    m_pColorChooser->slotShowGrey();
-}
-
-void ColorChooserFrame::slotShowRGB()
-{
-    m_pColorChooser->slotShowRGB();
-}
-
-void ColorChooserFrame::slotShowHSB()
-{
-    m_pColorChooser->slotShowHSV();
-}
-
-void ColorChooserFrame::slotShowCMYK()
-{
-    m_pColorChooser->slotShowCMYK();
-}
-
-void ColorChooserFrame::slotShowLAB()
-{
-    m_pColorChooser->slotShowLAB();
-}
-
 void ColorChooserFrame::slotSetActiveColor( ActiveColor a )
 {
-	//    XXX
-    //m_pColorChooser->slotSetActiveColor(a);
+    KoColor c;
+
+    if (a == ac_Foreground)
+	    c = m_fg;
+    else
+	    c = m_bg;
+
+    m_pColorChooser->slotChangeColor(c);
 }
 
 void ColorChooserFrame::resizeEvent ( QResizeEvent * )
@@ -525,14 +492,14 @@ void ColorChooserFrame::resizeEvent ( QResizeEvent * )
 
 void ColorChooserFrame::slotSetFGColor(const KoColor& c)
 {
-	//    XXX
-    //m_pColorChooser->slotSetFGColor( c.color() );
+    m_fg = c;
+    m_pColorChooser->slotChangeColor(c);
 }
 
 void ColorChooserFrame::slotSetBGColor(const KoColor& c)
 {
-	//    XXX
-//    m_pColorChooser->slotSetBGColor( c.color() );
+    m_bg = c;
+    m_pColorChooser->slotChangeColor(c);
 }
 
 void ColorChooserFrame::slotColorSelected(const KoColor& c)

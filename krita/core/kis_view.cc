@@ -210,8 +210,8 @@ void KisView::setupSideBar()
 
 	m_sideBar -> slotActivateTab(i18n("Brushes"));
 //	m_sideBar -> setActiveBrush(*m_pBrush);
-	m_sideBar -> slotSetFGColor(m_fg);
 	m_sideBar -> slotSetBGColor(m_bg);
+	m_sideBar -> slotSetFGColor(m_fg);
 	connect(m_sideBar, SIGNAL(fgColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
 	connect(m_sideBar, SIGNAL(bgColorChanged(const KoColor&)), this, SLOT(slotSetBGColor(const KoColor&)));
 	connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_sideBar, SLOT(slotSetFGColor(const KoColor&)));

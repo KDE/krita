@@ -111,12 +111,6 @@ class ColorChooserFrame : public QFrame
     void slotSetBGColor(const KoColor&);
     void slotSetActiveColor( ActiveColor );
 
-    void slotShowGrey();
-    void slotShowRGB();
-    void slotShowHSB();
-    void slotShowCMYK();
-    void slotShowLAB();
-
  signals:
     void colorChanged(const KoColor&);
 
@@ -128,6 +122,8 @@ class ColorChooserFrame : public QFrame
 
  private:
     KoColorChooser   *m_pColorChooser;
+    KoColor m_fg;
+    KoColor m_bg;
 };
 
 

@@ -64,7 +64,10 @@ void Scan::slotScan()
 	}
     }
 
-    scanDialog->show();
+#ifdef KSCANDIALOG_HAS_ISVALID
+    if ( scanDialog->isValid() )
+#endif
+        scanDialog->show();
 }
 
 void Scan::slotShowImage(const QImage &img)

@@ -1,5 +1,5 @@
 
-SUBDIRS = recorder
+SUBDIRS = recorder calc
 
 messages:
 	for subdir in $(SUBDIRS); do \

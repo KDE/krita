@@ -1,0 +1,33 @@
+/* XPM */
+/* Drawn  by Nico Shirwing for the K Desktop Environment */
+/* See http://www.kde.org */
+static char*kcalc[]={
+"16 16 11 1",
+"# c #000000",
+"e c #c0c0c0",
+"f c #585858",
+"i c #ff0000",
+"g c #400000",
+"b c #004040",
+"c c #008080",
+"a c #00c0c0",
+"h c #ffc0c0",
+"d c #00ff00",
+". c None",
+"..##########....",
+".#aaaaaaaaaa#...",
+".#abbbbbbbbc#...",
+".#ab#d#dd#bc#...",
+".#ab#d##d#bc#...",
+".#accccccccc#...",
+".#aeeeeeeeec#...",
+".#aef#ff#fgc#...",
+".#a########c#...",
+".#aeeeeeeeec#...",
+".#aef#ff#f#c#...",
+".#a########c#...",
+".#aeeeeeehhc#...",
+".#a#f#ff#i#c#...",
+".#bbbbbbbbbb#...",
+"..##########...."};
+

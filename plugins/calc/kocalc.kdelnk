@@ -1,0 +1,19 @@
+# KDE Config File
+[KDE Desktop Entry]
+Name=KoCalc
+Exec=kocalc --server
+Comment=KOffice Calculator
+RepoID=IDL:KOM/PluginFactory:1.0,
+ActivationMode=shared
+Type=GUIPlugin
+Icon=kcalc.xpm
+MiniIcon=kcalc.xpm
+Interfaces=IDL:OpenParts/View:1.0,
+MenuEntries=Calculator,
+ToolBarEntries=Calculator,
+[Calculator]
+Icon=calc.xpm
+MiniIcon=calc.xpm
+Slot=open
+Menu=Extra
+Name=Calculator

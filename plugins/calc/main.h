@@ -22,17 +22,15 @@
 
 #include <komApplication.h>
 #include <komBase.h>
+#include <komPlugin.h>
 #include <kom.h>
 
 #include "openparts.h"
-#include "koView.h"
-#include "recorder.h"
+#include <koView.h>
+#include "calc.h"
 
 #include <qlist.h>
 #include <qstring.h>
-
-#include <string>
-#include <map>
 
 class MyApplication : public KOMApplication
 {
@@ -43,44 +41,31 @@ public:
   void start();
 };
 
+//class Factory : virtual public KoCalc::Factory_skel
 class Factory : virtual public KOM::PluginFactory_skel
 {
 public:
   Factory( const CORBA::ORB::ObjectTag &_tag );
   Factory( CORBA::Object_ptr _obj );
 
-  KOM::Plugin_ptr create( const KOM::Component_ptr _comp );
+  KOM::Plugin_ptr create( KOM::Component_ptr _comp );
 };
 
-class Recorder : virtual public KOMComponent,
-		 virtual public MakroRecorder::Recorder_skel
+class Calculator : virtual public KOMPlugin,
+		   virtual public KoCalc::Calc_skel
 {
 public:
-  Recorder( OpenParts::View_ptr );
+  Calculator( OpenParts::View_ptr );
 
-  virtual void start();
-  virtual void stop();
-  virtual void play();
+  virtual void open();
   
-  virtual CORBA::Boolean eventFilter( ::KOM::Base_ptr obj, const char* type, const CORBA::Any& value );
+  virtual CORBA::Boolean eventFilter( ::KOM::Base_ptr obj, const char* type,
+				      const CORBA::Any& value );
+
+  OpenParts::View_ptr view() { return m_vView; }
 
 protected:
-  enum Status { ST_STOP, ST_START, ST_PLAY };
-  
-  Status m_status;
   OpenParts::View_var m_vView;
-
-  struct Entry
-  {
-    CORBA::Any m_any;
-    QString m_strType;
-    int m_id;
-  };
-
-  QList<Entry> m_lstTape;
-  int m_id;
-  map<string,int> m_mapObjects;
-  map<int,KOM::Base_var> m_mapIds;
 };
 
 #endif

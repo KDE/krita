@@ -17,18 +17,20 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __recorder_idl__
-#define __recorder_idl__
+#ifndef __calc_idl__
+#define __calc_idl__
 
 #include <kom.idl>
 
-module MakroRecorder
+module KoCalc
 {
-	interface Recorder : KOM::Plugin
+	interface Calc : KOM::Plugin
 	{
-		slot void play();
-		slot void start();
-		slot void stop();
+		slot void open();
+	};
+
+	interface Factory : KOM::PluginFactory
+	{
 	};
 };
 

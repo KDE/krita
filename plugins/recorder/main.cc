@@ -62,6 +62,7 @@ Recorder::Recorder( OpenParts::View_ptr _view )
 {
   cerr << "Created MakroRecorder" << endl;
   
+  m_id = 0;
   m_status = ST_STOP;
   m_vView = OpenParts::View::_duplicate( _view );
   m_lstTape.setAutoDelete( true );
@@ -81,11 +82,19 @@ void Recorder::start()
     stop();
 
   m_lstTape.clear();
+  m_mapObjects.clear();
+  m_mapIds.clear();
+  m_id = 0;
   
   KOM::EventTypeSeq seq;
-  seq.length(1);
-  seq[0] = CORBA::string_dup( "UserEvent/KSpread/*" );
-  
+  seq.length(2);
+  seq[0] = CORBA::string_dup( "UserEvent/*" );
+  seq[1] = CORBA::string_dup( KOffice::View::eventNewPart );
+
+  CORBA::String_var str = komapp_orb->object_to_string( m_vView );
+  m_mapObjects[ str.in() ] = m_id;
+  m_mapIds[ m_id ] = KOM::Base::_duplicate( m_vView );
+
   m_vView->installFilter( this, "eventFilter", seq, KOM::Base::FM_READ );
 
   m_status = ST_START;
@@ -98,7 +107,16 @@ void Recorder::stop()
   if ( m_status == ST_STOP )
     return;
 
-  m_vView->uninstallFilter( this );
+  // Uninstall all event filters
+  map<int,KOM::Base_var>::iterator it = m_mapIds.begin();
+  for( ; it != m_mapIds.end(); ++it )
+  {    
+    it->second->uninstallFilter( this );
+  }
+  
+  m_mapObjects.clear();
+  m_mapIds.clear();
+  m_id = 0;
 
   m_status = ST_STOP;
 }
@@ -111,26 +129,93 @@ void Recorder::play()
     stop();
 
   m_status = ST_PLAY;
+  
+  m_mapObjects.clear();
+  m_mapIds.clear();
+  m_id = 0;
+  m_mapIds[ m_id ] = KOM::Base::_duplicate( m_vView );
+
+  KOM::EventTypeSeq seq;
+  seq.length(1);
+  seq[0] = CORBA::string_dup( KOffice::View::eventNewPart );
+  
+  m_vView->installFilter( this, "eventFilter", seq, KOM::Base::FM_READ );
+  
+  cerr << "RECORDS=" << m_lstTape.count() << endl;
 
   Entry* e;
   for( e = m_lstTape.first(); e != 0L; e = m_lstTape.next() )
-    m_vView->receive( e->m_strType, e->m_any );
+  {  
+    map<int,KOM::Base_var>::iterator it = m_mapIds.find( e->m_id );
+    if ( it == m_mapIds.end() )
+    {
+      cerr << "Did not find receiver for id " << e->m_id << endl;
+      return;
+    }
+    
+    cerr << "SENDING=" << e->m_strType << endl;
+    
+    it->second->receive( e->m_strType, e->m_any );
+  }
   
-  m_status = ST_STOP;
+  stop();
 }
   
-CORBA::Boolean Recorder::eventFilter( KOM::Base_ptr _obj, const char* _type, const CORBA::Any& _value )
+CORBA::Boolean Recorder::eventFilter( KOM::Base_ptr _obj, const char* _type,
+				      const CORBA::Any& _value )
 {
   cerr << "GOT Event " << _type << endl;
 
+  CORBA::String_var str = komapp_orb->object_to_string( _obj );
+
+  if ( strcmp( _type, KOffice::View::eventNewPart ) == 0L )
+  {
+    KOffice::View::EventNewPart event;
+    if ( _value >>= event )
+    {  
+      if ( m_status == ST_START )
+      {
+	CORBA::String_var str2 = komapp_orb->object_to_string( event.view );
+	m_mapObjects[ str2.in() ] = ++m_id;
+	m_mapIds[ m_id ] = KOM::Base::_duplicate( event.view );
+	
+	KOM::EventTypeSeq seq;
+	seq.length(2);
+	seq[0] = CORBA::string_dup( "UserEvent/*" );
+	seq[1] = CORBA::string_dup( KOffice::View::eventNewPart );
+
+	event.view->installFilter( this, "eventFilter", seq, KOM::Base::FM_READ );
+      }
+      else if ( m_status == ST_PLAY )
+      {
+	m_mapIds[ ++m_id ] = KOM::Base::_duplicate( event.view );
+
+	KOM::EventTypeSeq seq;
+	seq.length(1);
+	seq[0] = CORBA::string_dup( KOffice::View::eventNewPart );
+
+	event.view->installFilter( this, "eventFilter", seq, KOM::Base::FM_READ );
+      }
+    }
+    return false;
+  }
+
+  map<string,int>::iterator it = m_mapObjects.find( str.in() );
+  if ( it == m_mapObjects.end() )
+  {
+    cerr << "ERROR: Unknown new obejct" << endl;
+    return false;
+  }
+  
   Entry* e = new Entry;
   e->m_any = _value;
   e->m_strType = _type;
+  e->m_id = it->second;
   m_lstTape.append( e );
   
   return false;
 }
-
+  
 int main( int argc, char **argv )
 {
   MyApplication app( argc, argv );
@@ -143,4 +228,3 @@ int main( int argc, char **argv )
 }
 
 #include "main.moc"
-

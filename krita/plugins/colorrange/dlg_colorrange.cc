@@ -51,6 +51,8 @@
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
 #include <kis_view.h>
+#include <kis_strategy_colorspace.h>
+#include <kis_profile.h>
 
 #include "dlg_colorrange.h"
 #include "wdg_colorrange.h"
@@ -91,6 +93,35 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
 
+	m_page -> bnLoad -> setEnabled(false);
+	m_page -> bnSaveColorRange -> setEnabled(false);
+	m_page -> cmbSelectionPreview -> setEnabled(false);
+        m_page -> sldrFuzziness -> setValue( 40 );
+        m_page -> intFuzziness -> setValue( 40 );
+	m_fuzziness = 40;
+
+	
+        if (m_layer)
+		m_selection = m_layer -> selection();
+	else {
+		// Show message box? Without a layer no selections...
+		hide();
+		return;
+	}
+		
+        m_transaction = new KisTransaction(i18n("Select by Color Range"), m_selection.data());
+        updatePreview();
+
+
+        if (m_picker) {
+        	m_oldCursor = m_subject -> setCanvasCursor(KisCursor::pickerCursor());
+		m_picker -> update(m_canvasSubject);
+		m_mode = REPLACE;
+		m_page -> cmbSelect -> setCurrentItem(0);
+		m_picker -> activate();
+		m_subject -> setCanvasCursor(KisCursor::pickerCursor());
+	}
+
 	connect(this, SIGNAL(okClicked()),
 		this, SLOT(okClicked()));
 
@@ -127,31 +158,6 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 	connect(m_page -> cmbSelectionPreview, SIGNAL(activated(int)),
 		this, SLOT(slotPreviewTypeChanged(int)));
 
-	m_page -> bnLoad -> setEnabled(false);
-	m_page -> bnSaveColorRange -> setEnabled(false);
-	m_page -> cmbSelectionPreview -> setEnabled(false);
-        m_page -> sldrFuzziness->setValue( 40 );
-
-        if (m_layer)
-		m_selection = m_layer -> selection();
-	else {
-		// Show message box? Without a layer no selections...
-		hide();
-		return;
-	}
-		
-        m_transaction = new KisTransaction(i18n("Select by Color Range"), m_selection.data());
-        updatePreview();
-
-
-        if (m_picker) {
-        	m_oldCursor = m_subject -> setCanvasCursor(KisCursor::pickerCursor());
-		m_picker -> update(m_canvasSubject);
-		m_pickMode = PICK;
-		m_page -> cmbSelect -> setCurrentItem(0);
-		m_picker -> activate();
-		m_subject -> setCanvasCursor(KisCursor::pickerCursor());
-	}
 }
 
 DlgColorRange::~DlgColorRange()
@@ -190,28 +196,28 @@ void DlgColorRange::cancelClicked()
 
 void DlgColorRange::slotPickerPlusClicked()
 {
-	m_pickMode = PICK_PLUS;
+	m_mode = ADD;
 	m_picker -> activate();
 	m_page -> cmbSelect -> setCurrentItem(0);
-	m_canvasSubject -> setCanvasCursor(KisCursor::pickerPlusCursor());
+	m_subject -> setCanvasCursor(KisCursor::pickerPlusCursor());
 }
 
 
 void DlgColorRange::slotPickerClicked()
 {
-	m_pickMode = PICK;
+	m_mode = REPLACE;
 	m_page -> cmbSelect -> setCurrentItem(0);
 	m_picker -> activate();
-	m_canvasSubject -> setCanvasCursor(KisCursor::pickerCursor());
+	m_subject -> setCanvasCursor(KisCursor::pickerCursor());
 }
 
 
 void DlgColorRange::slotPickerMinusClicked()
 {
-	m_pickMode = PICK_MINUS;
+	m_mode = SUBTRACT;
 	m_page -> cmbSelect -> setCurrentItem(0);
 	m_picker -> activate();
-	m_canvasSubject -> setCanvasCursor(KisCursor::pickerMinusCursor());
+	m_subject -> setCanvasCursor(KisCursor::pickerMinusCursor());
 }
 
 void DlgColorRange::slotLoad()
@@ -232,6 +238,10 @@ void DlgColorRange::slotInvertClicked()
 void DlgColorRange::slotFuzzinessChanged(int value)
 {
 	m_page -> sldrFuzziness -> setValue(value);
+	kdDebug() << "fuzziness changed\n";
+	m_fuzziness = value;
+	selectByColor(m_currentColor, m_currentChannel, m_fuzziness, REPLACE); // XXX: is this correct?
+	updatePreview();
 }
 
 void DlgColorRange::slotSliderMoved(int value)
@@ -241,10 +251,54 @@ void DlgColorRange::slotSliderMoved(int value)
 
 void DlgColorRange::slotSelectionTypeChanged(int index)
 {
-	
-	if (index != 0) {
+	if (index != PICKER) {
 		if (m_picker) m_picker -> clear();
+		m_subject -> setCanvasCursor(m_oldCursor);
 	}
+
+	switch (index) {
+
+	case PICKER:
+		m_currentChannel = CHANNEL_ALLCHANNELS;
+		selectByColor(m_currentColor, CHANNEL_ALLCHANNELS, m_fuzziness, m_mode);
+		break;
+	case REDS :
+		m_currentChannel = CHANNEL_REDS;
+		selectByColor(QColor(255, 0, 0), CHANNEL_REDS, m_fuzziness, REPLACE);
+		break;
+	case YELLOWS:
+		m_currentChannel = CHANNEL_YELLOWS;
+		selectByColor(QColor(255, 255, 0), CHANNEL_YELLOWS, m_fuzziness, REPLACE);
+		break;
+	case GREENS:
+		m_currentChannel = CHANNEL_GREENS;
+		selectByColor(QColor(0, 255, 0), CHANNEL_GREENS, m_fuzziness, REPLACE);
+		break;
+	case CYANS:
+		m_currentChannel = CHANNEL_CYANS;
+		selectByColor(QColor(0, 255, 255), CHANNEL_CYANS, m_fuzziness, REPLACE);
+		break;
+	case BLUES:
+		m_currentChannel = CHANNEL_BLUES;
+		selectByColor(QColor(0, 0, 255), CHANNEL_BLUES, m_fuzziness, REPLACE);
+		break;
+	case MAGENTAS:
+		m_currentChannel = CHANNEL_MAGENTAS;
+		selectByColor(QColor(255, 0, 255), CHANNEL_MAGENTAS, m_fuzziness, REPLACE);
+		break;
+	case HIGHLIGHTS:
+		selectByValue(CHANNEL_HIGHLIGHTS, m_fuzziness, REPLACE);
+		break;
+	case MIDTONES:
+		selectByValue(CHANNEL_MIDTONES, m_fuzziness, REPLACE);
+		break;
+	case SHADOWS:
+		selectByValue(CHANNEL_SHADOWS, m_fuzziness, REPLACE);
+		break;
+	default:
+		break;
+	}
+	updatePreview();
 	
 }
 
@@ -254,12 +308,80 @@ void DlgColorRange::slotPreviewTypeChanged(int /*index*/)
 
 void DlgColorRange::slotColorChanged(const QColor & c)
 {
-	kdDebug() << "Color changed to " << c << "\n";
-	if (m_pickMode == PICK) {
-	}
-	else if (m_pickMode == PICK_PLUS) {
-	}
-	else if (m_pickMode == PICK_MINUS) {
+	m_currentColor = c;
+	selectByColor(m_currentColor, CHANNEL_ALLCHANNELS, m_fuzziness, m_mode);
+}
+
+Q_UINT8 DlgColorRange::matchColors(QColor c, QColor c2, enumChannel channel)
+{
+	switch (channel) {
+	case CHANNEL_REDS :
+		return c.red() + c2.red() / 2;
+		break;
+	case CHANNEL_YELLOWS:
+		return c.red() + c2.red() + c.green() + c2.green() / 4;
+		break;
+	case CHANNEL_GREENS:
+		return c.green() + c2.green() / 2;
+		break;
+	case CHANNEL_CYANS:
+		return c.green() + c2.green() + c.blue() + c2.blue() / 4;
+		break;
+	case CHANNEL_BLUES:
+		return c.blue() + c2.blue() / 2;
+		break;
+	case CHANNEL_MAGENTAS:
+		return c.red() + c2.red() + c.blue() + c2.blue() / 2;
+		break;
+	case CHANNEL_ALLCHANNELS:
+		return c.red() + c2.red() + c.green() + c2.green() + c.blue() + c2.blue() / 6;
+		break;
+	default:
+		return 255;
 	}
 }
+
+void DlgColorRange::selectByColor(const QColor & c, enumChannel channel, Q_UINT8 fuzziness, enumMode mode)
+{
+	// XXX: Multithread this!
+	Q_INT32 x, y, w, h;
+	m_layer -> exactBounds(x, y, w, h);
+	KisStrategyColorSpaceSP cs = m_layer -> colorStrategy();
+	KisProfileSP profile = m_layer -> profile();
+	
+	for (int y2 = y; y2 < h - y; ++y2) {
+		KisHLineIterator hiter = m_layer -> createHLineIterator(x, y2, w, false);
+		KisHLineIterator selIter = m_selection  -> createHLineIterator(x, y2, w, false);
+		while (!hiter.isDone()) {
+			// Clean up as we go, if necessary
+			if (mode == REPLACE) memset (selIter.rawData(), 0, 1); // Selections are hard-coded one byte big.
+	
+			QColor c2;
+			
+			cs -> toQColor(hiter.rawData(), &c2, profile);
+
+			Q_UINT8 match = matchColors(c, c2, channel);
+			kdDebug() << "Color match: " << QString::number(match) << ", fuzziness: " << QString::number(fuzziness) << "\n";
+			if (match < fuzziness) {
+				
+				if (mode == ADD) {
+					selIter.rawData()[0] = match;
+					
+				}
+				else if (mode == SUBTRACT) {
+					selIter.rawData()[0] = MIN_SELECTED;
+					
+				}
+			}
+
+			++hiter;
+			++selIter;
+		}
+	}
+}
+
+void DlgColorRange::selectByValue(const enumTone tone, Q_UINT32 fuzziness, enumMode mode)
+{
+}
+
 #include "dlg_colorrange.moc"

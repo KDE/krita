@@ -99,12 +99,41 @@ private:
  
 };
 
-enum enumPickMode {
-	PICK,
-	PICK_PLUS,
-	PICK_MINUS,
+enum enumMode {
+	REPLACE,
+	ADD,
+	SUBTRACT,
 };
-	
+
+enum enumAction {
+	PICKER,
+	REDS,
+	YELLOWS,
+	GREENS,
+	CYANS,
+	BLUES,
+	MAGENTAS,
+	HIGHLIGHTS,
+	MIDTONES,
+	SHADOWS,
+};
+
+
+enum enumChannel {
+	CHANNEL_REDS,
+	CHANNEL_YELLOWS,
+	CHANNEL_GREENS,
+	CHANNEL_CYANS,
+	CHANNEL_BLUES,
+	CHANNEL_MAGENTAS,
+	CHANNEL_ALLCHANNELS,
+};
+
+enum enumTone {
+	CHANNEL_HIGHLIGHTS,
+	CHANNEL_MIDTONES,
+	CHANNEL_SHADOWS,
+};	
 
  /**
  * This dialog allows the user to create a selection mask based
@@ -144,7 +173,9 @@ private slots:
 	
 private:
 	QImage createMask(KisSelectionSP selection, KisLayerSP layer);
-	
+	Q_UINT8 matchColors(QColor c, QColor c2, enumChannel channel);
+	void selectByColor(const QColor & c, enumChannel channel, Q_UINT8 fuzziness, enumMode mode);
+	void selectByValue(const enumTone tone, Q_UINT32 fuzziness, enumMode mode);
 private:
 
 	WdgColorRange * m_page;
@@ -154,9 +185,14 @@ private:
 	KisCanvasSubject * m_subject;
 	KisTool * m_picker;
 	ColorRangeCanvasSubject * m_canvasSubject;
-	int m_pickMode;
+	enumMode m_mode;
+	Q_UINT32 m_fuzziness;
 	QCursor m_oldCursor;
 	KisTransaction * m_transaction;
+	enumAction m_currentAction;
+	QColor m_currentColor;
+	enumChannel m_currentChannel;
 };
+
 
 #endif // DLG_COLORRANGE

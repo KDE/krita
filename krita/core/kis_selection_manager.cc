@@ -43,6 +43,8 @@
 #include "kis_dlg_apply_profile.h"
 #include "kis_config.h"
 #include "kis_global.h"
+#include "kis_transaction.h"
+#include "kis_undo_adapter.h"
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	: m_parent(parent),
@@ -435,7 +437,9 @@ void KisSelectionManager::clear()
 	QRect r = selection -> selectedRect();
 	r = r.normalize();
 
-	// XXX: make undoable
+	KisTransaction * t = 0;
+	if (img -> undoAdapter()) t = new KisTransaction("Cut", layer.data());
+	
 
 	KisRectIterator layerIt = layer -> createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
  	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
@@ -455,6 +459,7 @@ void KisSelectionManager::clear()
  		++selectionIt;
 	}
 
+	if (img -> undoAdapter()) img -> undoAdapter() -> addCommand(t);
 	layer -> removeSelection();
 	m_parent -> updateCanvas();
 

@@ -14,6 +14,7 @@ libkisui_la_SOURCES = kis_dlg_preferences.cc \
     kis_brushchooser.cc \
     kis_patternchooser.cc  kis_krayonchooser.cc \
     kis_layerview.cc kis_channelview.cc gradientview.cc \
-    kis_dlg_toolopts.cc kis_dlg_toolopts_polygon_preview.cc 
+    kis_dlg_toolopts.cc kis_dlg_toolopts_polygon_preview.cc \
+    kis_listbox.cc
 
 libkisui_la_METASOURCES = AUTO

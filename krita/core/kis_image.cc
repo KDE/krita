@@ -1027,5 +1027,39 @@ void KisImage::removeChannel(KisChannelSP channel)
 	}
 }
 
+int KisImage::getCurrentChannelIndex() const
+{
+	int n = -1;
+
+	if (m_channels.empty())
+		return -1;
+
+	for (KisChannelSPLstConstIterator it = m_channels.begin(); it != m_channels.end(); it++) {
+		if (*it == m_activeChannel)
+			return n;
+
+		n++;
+	}
+
+	return -1;
+}
+
+void KisImage::setCurrentChannel(int channel)
+{
+	if (static_cast<uint>(channel) < m_channels.size()) {
+		KisChannelSP p = m_channels[channel];
+
+		setCurrentChannel(p);
+	}
+}
+
+void KisImage::setCurrentChannel(KisChannelSP channel)
+{
+	if (channel) {
+		m_activeChannel = channel;
+		emit layersUpdated();
+	}
+}
+
 #include "kis_image.moc"
 

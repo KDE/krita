@@ -57,7 +57,11 @@ KisSideBar::KisSideBar( QWidget* parent, const char* name )
 
     // fixed width for sidebar itselt.  When free-floating,
     // there should be no fixed width
-    setFixedWidth( 200 );
+//    setFixedWidth( 200 );
+    QRect rc = geometry();
+
+    rc.setWidth(200);
+    setGeometry(rc);
 
     // connect chooser frame
     connect(m_pColorChooserFrame, SIGNAL(colorChanged(const KoColor &)),

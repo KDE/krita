@@ -933,14 +933,19 @@ bool KisDoc::saveAsQtImage(const QString& file, bool wholeImage)
     channel isn't used.
 */
 
-bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
+bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 {
+	return false;
 #if 0
 	KisImageSP img = currentImg();
-	if(!img) return false;
 
-	KisLayer *lay = img->getCurrentLayer();
-	if(!lay) return false;
+	if (!img) 
+		return false;
+
+	KisLayerSP lay = img -> getCurrentLayer();
+
+	if (!lay) 
+		return false;
 
 	if(qimg->depth() < 16)
 	{
@@ -981,7 +986,7 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
 
 //	bool alpha = (img->colorMode() == cm_RGBA);
 
-	lay -> resize(qimg -> width(), qimg -> height(), 32);
+	lay -> resize(qimg -> width(), qimg -> height(), 4);
 
 	for (int y = sy; y <= ey; y++) {
 		sl = qimg->scanLine(y);
@@ -989,6 +994,7 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
 		for (int x = sx; x <= ex; x++) {
 			QRgb *p = (QRgb*)qimg -> scanLine(y) + x;
 
+#if 0
 			if (layerGrayScale) {
 				/* only if qimage is gray scale - in which case all
 				   values are packed into the red channel if converted
@@ -1009,6 +1015,16 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
 			}
 			else
 				lay -> setPixel(startx + x, starty + y, *p);
+#endif
+
+			uchar color[MAX_CHANNELS];
+
+			color[PIXEL_RED] = qRed(*p);
+			color[PIXEL_GREEN] = qGreen(*p);
+			color[PIXEL_BLUE] = qBlue(*p);
+			color[PIXEL_ALPHA] = qAlpha(*p);
+
+			lay -> setPixel(startx + x, starty + y, color);
 
 #if 0
 			if (alpha)
@@ -1027,7 +1043,6 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
 
 	return true;
 #endif
-	return false; // BPP 
 }
 
 

@@ -28,6 +28,7 @@
 #include <qbutton.h>
 #include <qclipboard.h>
 #include <qevent.h>
+#include <qlistbox.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
 #include <qstringlist.h>
@@ -42,10 +43,13 @@
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kimageeffect.h>
+#include <klistview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
+#include <kpushbutton.h>
 #include <kstdaction.h>
+#include <ktabctl.h>
 #include <kruler.h>
 
 // Grmbl, X headers.....
@@ -64,31 +68,31 @@
 #include <koView.h>
 
 // core classes
-#include "kis_view.h"
-#include "kis_doc.h"
-#include "kis_util.h"
-#include "kis_canvas.h"
-#include "kis_framebuffer.h"
-#include "kis_painter.h"
-#include "kis_sidebar.h"
-#include "kis_tabbar.h"
-#include "kis_krayon.h"
 #include "kis_brush.h"
-#include "kis_pattern.h"
-#include "kis_tool.h"
+#include "kis_canvas.h"
+#include "kis_doc.h"
 #include "kis_factory.h"
+#include "kis_framebuffer.h"
 #include "kis_gradient.h"
+#include "kis_krayon.h"
+#include "kis_painter.h"
+#include "kis_pattern.h"
 #include "kis_pluginserver.h"
 #include "kis_selection.h"
-#include "kfloatingdialog.h"
+#include "kis_util.h"
+#include "kis_view.h"
+#include "kis_tool.h"
 #include "KRayonViewIface.h"
 
-// sidebar
+// ui
 #include "kis_brushchooser.h"
 #include "kis_patternchooser.h"
 #include "kis_krayonchooser.h"
 #include "kis_layerview.h"
 #include "kis_channelview.h"
+#include "kis_sidebar.h"
+#include "kis_tabbar.h"
+#include "kis_listbox.h"
 
 // dialogs
 #include "kis_dlg_gradient.h"
@@ -99,6 +103,8 @@
 // tools
 #include "kis_tool_factory.h"
 #include "kis_tool_paste.h"
+
+KListBox *channelView;
 
 KisView::KisView(KisDoc* doc, QWidget* parent, const char* name) : super(doc, parent, name)
 {
@@ -207,102 +213,100 @@ void KisView::setupCanvas()
 
 void KisView::setupSideBar()
 {
-    m_pSideBar = new KisSideBar(this, "kis_sidebar");
+	m_pSideBar = new KisSideBar(this, "kis_sidebar");
 
-    // krayon chooser
-    m_pKrayonChooser = new KisKrayonChooser(this);
-    m_pKrayon = m_pKrayonChooser->currentKrayon();
-    QObject::connect(m_pKrayonChooser,
-        SIGNAL(selected(KisKrayon *)),
-        this, SLOT(slotSetKrayon(KisKrayon*)));
+	// krayon chooser
+	m_pKrayonChooser = new KisKrayonChooser(this);
+	m_pKrayon = m_pKrayonChooser -> currentKrayon();
 
-    m_pKrayonChooser->setCaption(i18n("Krayons"));
-    m_pSideBar->plug(m_pKrayonChooser);
+	QObject::connect(m_pKrayonChooser, SIGNAL(selected(KisKrayon *)), this, SLOT(slotSetKrayon(KisKrayon*)));
 
-    // brush chooser
-    m_pBrushChooser = new KisBrushChooser(m_pSideBar->dockFrame());
-    m_pBrush = m_pBrushChooser->currentBrush();
-    QObject::connect(m_pBrushChooser,
-        SIGNAL(selected(KisBrush *)),
-        this, SLOT(slotSetBrush(KisBrush*)));
+	m_pKrayonChooser -> setCaption(i18n("Krayons"));
+	m_pSideBar -> plug(m_pKrayonChooser);
 
-    m_pBrushChooser->setCaption(i18n("Brushes"));
-    m_pSideBar->plug(m_pBrushChooser);
+	// brush chooser
+	m_pBrushChooser = new KisBrushChooser(m_pSideBar -> dockFrame());
+	m_pBrush = m_pBrushChooser -> currentBrush();
+	QObject::connect(m_pBrushChooser, SIGNAL(selected(KisBrush *)), this, SLOT(slotSetBrush(KisBrush*)));
+	m_pBrushChooser -> setCaption(i18n("Brushes"));
+	m_pSideBar -> plug(m_pBrushChooser);
 
-    // pattern chooser
-    m_pPatternChooser = new KisPatternChooser(this);
-    m_pPattern = m_pPatternChooser->currentPattern();
-    QObject::connect(m_pPatternChooser,
-        SIGNAL(selected(KisPattern *)),
-        this, SLOT(slotSetPattern(KisPattern*)));
+	// pattern chooser
+	m_pPatternChooser = new KisPatternChooser(this);
+	m_pPattern = m_pPatternChooser -> currentPattern();
+	QObject::connect(m_pPatternChooser, SIGNAL(selected(KisPattern *)), this, SLOT(slotSetPattern(KisPattern*)));
+	m_pPatternChooser -> setCaption(i18n("Patterns"));
+	m_pSideBar -> plug(m_pPatternChooser);
 
-    m_pPatternChooser->setCaption(i18n("Patterns"));
-    m_pSideBar->plug(m_pPatternChooser);
+	// gradient chooser
+	m_pGradientChooser = new QWidget(this);
+	m_pGradient = new KisGradient;
 
-   // gradient chooser
-    m_pGradientChooser = new QWidget(this);
-    m_pGradient = new KisGradient;
+	/*
+	   m_pGradient = m_pGradientChooser->currentGradient();
+	   QObject::connect(m_pGradientChooser,
+	   SIGNAL(selected(KisGradient *)),
+	   this, SLOT(slotSetGradient(KisGradient*)));
+	 */
+	m_pGradientChooser -> setCaption(i18n("Gradients"));
+	m_pSideBar -> plug(m_pGradientChooser);
 
-    /*
-    m_pGradient = m_pGradientChooser->currentGradient();
-    QObject::connect(m_pGradientChooser,
-        SIGNAL(selected(KisGradient *)),
-        this, SLOT(slotSetGradient(KisGradient*)));
-    */
-    m_pGradientChooser->setCaption(i18n("Gradients"));
-    m_pSideBar->plug(m_pGradientChooser);
+	// image file chooser
+	m_pImageChooser = new QWidget(this);
+	/*
+	   m_pImage = m_pImageFileChooser->currentImageFile();
+	   QObject::connect(m_pImageFileChooser,
+	   SIGNAL(selected(KisImageFile *)),
+	   this, SLOT(slotSetImageFile(KisImageFile*)));
+	 */
+	m_pImageChooser -> setCaption(i18n("Images"));
+	m_pSideBar -> plug(m_pImageChooser);
 
-   // image file chooser
-    m_pImageChooser = new QWidget(this);
-    /*
-    m_pImage = m_pImageFileChooser->currentImageFile();
-    QObject::connect(m_pImageFileChooser,
-        SIGNAL(selected(KisImageFile *)),
-        this, SLOT(slotSetImageFile(KisImageFile*)));
-    */
-    m_pImageChooser->setCaption(i18n("Images"));
-    m_pSideBar->plug(m_pImageChooser);
+	// palette chooser
+	m_pPaletteChooser = new QWidget(this);
+	/*
+	   m_pPalette = m_pPaletteChooser->currentPattern();
+	   QObject::connect(m_pPaletteChooser,
+	   SIGNAL(selected(KisPalette *)),
+	   this, SLOT(slotSetPalette(KisPalette *)));
+	 */
+	m_pPaletteChooser -> setCaption(i18n("Palettes"));
+	m_pSideBar -> plug(m_pPaletteChooser);
 
-   // palette chooser
-    m_pPaletteChooser = new QWidget(this);
-    /*
-    m_pPalette = m_pPaletteChooser->currentPattern();
-    QObject::connect(m_pPaletteChooser,
-        SIGNAL(selected(KisPalette *)),
-        this, SLOT(slotSetPalette(KisPalette *)));
-    */
-    m_pPaletteChooser->setCaption(i18n("Palettes"));
-    m_pSideBar->plug(m_pPaletteChooser);
+	// layer view
+	m_pLayerView = new KisLayerView(m_doc, this);
+	m_pLayerView -> setCaption(i18n("Layers"));
+	m_pSideBar -> plug(m_pLayerView);
 
-    // layer view
-    m_pLayerView = new KisLayerView(m_doc, this);
-    m_pLayerView->setCaption(i18n("Layers"));
-    m_pSideBar->plug(m_pLayerView);
+	// channel view
+	m_pChannelView = new KisChannelView(m_doc, this);
+	m_pChannelView -> setCaption(i18n("Channels"));
+	m_pSideBar -> plug(m_pChannelView);
 
-    // channel view
-    m_pChannelView = new KisChannelView(m_doc, this);
-    m_pChannelView->setCaption(i18n("Channels"));
-    m_pSideBar->plug(m_pChannelView);
+#if 1
+	channelView = new KListBox(m_pSideBar, "Test List View");
+	channelView -> setCaption("Test List View");
+	m_pSideBar -> plug(channelView);
 
-    // activate brushes tab
-    m_pSideBar->slotActivateTab(i18n("Brushes"));
+	new KisListBoxItem("Test 1", channelView);
+	new KisListBoxItem("Test 2", channelView);
+#endif
 
-    // init sidebar
-    m_pSideBar->slotSetBrush(*m_pBrush);
-    m_pSideBar->slotSetFGColor(m_fg);
-    m_pSideBar->slotSetBGColor(m_bg);
+	// activate brushes tab
+	m_pSideBar -> slotActivateTab(i18n("Brushes"));
 
-    connect(m_pSideBar, SIGNAL(fgColorChanged(const KoColor&)),
-        this, SLOT(slotSetFGColor(const KoColor&)));
-    connect(m_pSideBar, SIGNAL(bgColorChanged(const KoColor&)),
-        this, SLOT(slotSetBGColor(const KoColor&)));
+	// init sidebar
+	m_pSideBar -> slotSetBrush(*m_pBrush);
+	m_pSideBar -> slotSetFGColor(m_fg);
+	m_pSideBar -> slotSetBGColor(m_bg);
 
-    connect(this, SIGNAL(fgColorChanged(const KoColor&)),
-        m_pSideBar, SLOT(slotSetFGColor(const KoColor&)));
-    connect(this, SIGNAL(bgColorChanged(const KoColor&)),
-        m_pSideBar, SLOT(slotSetBGColor(const KoColor&)));
+	connect(m_pSideBar, SIGNAL(fgColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
+	connect(m_pSideBar, SIGNAL(bgColorChanged(const KoColor&)), this, SLOT(slotSetBGColor(const KoColor&)));
 
-    m_side_bar->setChecked(true);
+	connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_pSideBar, SLOT(slotSetFGColor(const KoColor&)));
+	connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_pSideBar, SLOT(slotSetBGColor(const KoColor&)));
+
+	m_side_bar -> setChecked(true);
 }
 
 /*
@@ -358,36 +362,31 @@ void KisView::setupRulers()
 */
 void KisView::setupTabBar()
 {
-    // tabbar
-    m_pTabBar = new KisTabBar(this, m_doc);
-    m_pTabBar->slotImageListUpdated();
+//	m_tabCtl = new KTabCtl(this, "KisView TabCtl");
 
-    QObject::connect(m_pTabBar, SIGNAL(tabSelected(const QString&)),
-		    m_doc, SLOT(setCurrentImage(const QString&)) );
+	// tabbar
+	m_pTabBar = new KisTabBar(this, m_doc);
+	m_pTabBar->slotImageListUpdated();
 
-    QObject::connect(m_doc, SIGNAL(imageListUpdated()),
-		    m_pTabBar, SLOT(slotImageListUpdated()) );
+	QObject::connect(m_pTabBar, SIGNAL(tabSelected(const QString&)), m_doc, SLOT(setCurrentImage(const QString&)));
+	QObject::connect(m_doc, SIGNAL(imageListUpdated()), m_pTabBar, SLOT(slotImageListUpdated()));
 
-    // tabbar control buttons
-    m_pTabFirst = new QPushButton(this);
-    m_pTabFirst->setPixmap(QPixmap(BarIcon( "tab_first")) );
-    QObject::connect(m_pTabFirst, SIGNAL(clicked()),
-        m_pTabBar, SLOT(slotScrollFirst()));
+	// tabbar control buttons
+	m_pTabFirst = new KPushButton(this);
+	m_pTabFirst->setPixmap(QPixmap(BarIcon("tab_first")));
+	QObject::connect(m_pTabFirst, SIGNAL(clicked()), m_pTabBar, SLOT(slotScrollFirst()));
 
-    m_pTabLeft = new QPushButton(this);
-    m_pTabLeft->setPixmap(QPixmap(BarIcon( "tab_left")) );
-    QObject::connect(m_pTabLeft, SIGNAL(clicked()),
-        m_pTabBar, SLOT(slotScrollLeft()));
+	m_pTabLeft = new KPushButton(this);
+	m_pTabLeft->setPixmap(QPixmap(BarIcon("tab_left"))); 
+	QObject::connect(m_pTabLeft, SIGNAL(clicked()), m_pTabBar, SLOT(slotScrollLeft()));
 
-    m_pTabRight = new QPushButton(this);
-    m_pTabRight->setPixmap(QPixmap(BarIcon( "tab_right")) );
-    QObject::connect(m_pTabRight, SIGNAL(clicked()),
-        m_pTabBar, SLOT(slotScrollRight()));
+	m_pTabRight = new KPushButton(this);
+	m_pTabRight->setPixmap(QPixmap(BarIcon("tab_right")));
+	QObject::connect(m_pTabRight, SIGNAL(clicked()), m_pTabBar, SLOT(slotScrollRight()));
 
-    m_pTabLast = new QPushButton(this);
-    m_pTabLast->setPixmap(QPixmap(BarIcon( "tab_last")) );
-    QObject::connect(m_pTabLast, SIGNAL(clicked()),
-        m_pTabBar, SLOT(slotScrollLast()));
+	m_pTabLast = new KPushButton(this);
+	m_pTabLast->setPixmap(QPixmap(BarIcon("tab_last")));
+	QObject::connect(m_pTabLast, SIGNAL(clicked()), m_pTabBar, SLOT(slotScrollLast()));
 }
 
 /*

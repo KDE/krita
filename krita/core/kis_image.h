@@ -85,12 +85,17 @@ public:
 	void setCurrentLayer(KisLayerSP layer);
 
 	inline KisLayerSPLst layerList();
+	inline KisChannelSPLst channelList();
 
 	void addChannel(const QRect& rc, uchar opacity, const QString& name);
 	void addChannel(KisChannelSP channel);
 	void removeChannel(KisChannelSPLstIterator it);
 	void removeChannel(unsigned int channel);
 	void removeChannel(KisChannelSP channel);
+
+	int getCurrentChannelIndex() const;
+	void setCurrentChannel(int channel);
+	void setCurrentChannel(KisChannelSP channel);
 
 	void markDirty(const QRect& rect);
 
@@ -185,6 +190,11 @@ private:
 KisLayerSPLst KisImage::layerList()
 {
 	return m_layers;
+}
+
+KisChannelSPLst KisImage::channelList()
+{
+	return m_channels;
 }
 
 int KisImage::height()

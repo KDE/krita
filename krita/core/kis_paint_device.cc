@@ -67,8 +67,12 @@ void KisPaintDevice::setPixel(uint x, uint y, const uchar *src, KisImageCmd *cmd
 		}
 	}
 
-	uchar *dst = pixel(x, y);
-	memcpy(dst, src, tile -> bpp());
+	uchar *dst = 0;
+
+	if (pixel(x, y, &dst)) {
+		dst = pixel(x, y);
+		memcpy(dst, src, tile -> bpp());
+	}
 }
 
 uchar* KisPaintDevice::pixel(uint x, uint y)
@@ -83,7 +87,10 @@ bool KisPaintDevice::pixel(uint x, uint y, uchar **val)
 {
 	int tileNoY = y / TILE_SIZE;
 	int tileNoX = x / TILE_SIZE;
-	KisTile *tile = m_tiles.getTile(tileNoX, tileNoY);
+	KisTileSP tile = m_tiles.getTile(tileNoX, tileNoY);
+
+	if (!tile)
+		return false;
 
 	*val = tile -> data(x % TILE_SIZE, y % TILE_SIZE);
 	return true;
@@ -108,6 +115,8 @@ QRgb KisPaintDevice::rgb(uint x, uint y)
 
 void KisPaintDevice::resize(uint width, uint height, uchar bpp)
 {
+	kdDebug() << "width = " << width << endl;
+	kdDebug() << "height = " << height << endl;
 	m_tiles.resize(width / TILE_SIZE, height / TILE_SIZE, bpp);
 }
 
@@ -140,7 +149,7 @@ bool KisPaintDevice::writeToStore(KoStore *store)
 {
 	for (uint ty = 0; ty < yTiles(); ty++) 
 		for (uint tx = 0; tx < xTiles(); tx++) {
-			KisTile *src = m_tiles.getTile(tx, ty);
+			KisTileSP src = m_tiles.getTile(tx, ty);
 			const char *p = reinterpret_cast<const char*>(src -> data());
 
 			if (store -> write(p, TILE_BYTES) != TILE_BYTES)
@@ -156,7 +165,7 @@ bool KisPaintDevice::loadFromStore(KoStore *store)
 
 	for (uint ty = 0; ty < yTiles(); ty++) {
 		for (uint tx = 0; tx < xTiles(); tx++) {
-			KisTile *dst = m_tiles.getTile(tx, ty);
+			KisTileSP dst = m_tiles.getTile(tx, ty);
 			char *p = reinterpret_cast<char*>(dst -> data());
 
 			nread = store -> read(p, TILE_BYTES);

@@ -37,31 +37,32 @@ class QPaintEvent;
 class QScrollBar;
 
 class KAction;
-class KRuler;
-class KToggleAction;
 class KHelpMenu;
+class KRuler;
+class KTabCtl;
+class KToggleAction;
 class DCOPObject;
 
 class KisDoc;
 class KisImage;
 class KisCanvas;
 class KisPainter;
-class KisTabBar;
 class KisSideBar;
 class KisGradient;
+class KisGridViewFrame;
 
 class KisBrushChooser;
 class KisPatternChooser;
 class KisKrayonChooser;
-
-class KisLayerView;
-class KisChannelView;
 
 class PasteTool;
 class KisKrayon;
 class KisBrush;
 class KisPattern;
 class KisTool;
+class KisTabBar;
+class KisLayerView;
+class KisChannelView;
 
 class KisView : public KoView {
 	Q_OBJECT
@@ -264,7 +265,7 @@ protected:
 	QWidget              *m_pGradientChooser;
 	QWidget              *m_pImageChooser;
 	KisLayerView         *m_pLayerView;
-	KisChannelView       *m_pChannelView;
+	KisChannelView	 *m_pChannelView;
 
 	// krayon and kde objects
 	KisCanvas           *m_pCanvas;
@@ -275,6 +276,7 @@ protected:
 	KoColor            m_fg;
 	KoColor m_bg;
 	KisTabBar           *m_pTabBar;
+	KTabCtl *m_tabCtl;
 	QButton             *m_pTabFirst, *m_pTabLeft, *m_pTabRight, *m_pTabLast;
 
 	// what's this doing here?

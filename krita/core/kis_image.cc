@@ -1004,12 +1004,16 @@ void KisImage::renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y)
 		for (Q_INT32 i = m_layers.size() - 1; i >= 0; i--) {
 			KisLayerSP layer = m_layers[i];
 
-			if (layer -> visible()) {
+			if (layer -> visible() && layer -> opacity() != OPACITY_TRANSPARENT) {
 				KisTileMgrSP tm = layer -> data();
 				KisTileSP src = tm -> tile(x, y, TILEMODE_READ);
 
 				if (src && !src -> valid()) {
-					gc.bitBlt(0, 0, COMPOSITE_OVER, src, 0, 0, src -> width(), src -> height());
+					if (layer -> opacity() == OPACITY_OPAQUE)
+						gc.bitBlt(0, 0, COMPOSITE_OVER, src, 0, 0, src -> width(), src -> height());
+					else
+						gc.drawTile(0, 0, COMPOSITE_OVER, src, layer -> opacity(), 0, 0, src -> width(), src -> height());
+
 					src -> valid(true);
 				}
 			}

@@ -1382,5 +1382,19 @@ void KisDoc::layerPrev(KisImageSP img, KisLayerSP layer)
 	}
 }
 
+void KisDoc::layerProperties(KisImageSP img, KisLayerSP layer, QUANTUM opacity, const QString& name)
+{
+	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+		return;
+
+	if (layer) {
+		layer -> setName(name);
+		layer -> opacity(opacity);
+		img -> invalidate();
+		setModified(true);
+		emit layersUpdated(img);
+	}
+}
+
 #include "kis_doc.moc"
 

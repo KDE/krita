@@ -1633,10 +1633,8 @@ void KisView::layerProperties()
 		if (layer) {
 			KisPaintPropertyDlg dlg(layer -> name(), layer -> opacity());
 
-			if (dlg.exec() == QDialog::Accepted) {
-				layer -> setName(dlg.getName());
-				layer -> opacity(dlg.getOpacity());
-				layersUpdated();
+			if (dlg.exec() == QDialog::Accepted && (layer -> name() != dlg.getName() || layer -> opacity() != dlg.getOpacity())) {
+				m_doc -> layerProperties(img, layer, dlg.getOpacity(), dlg.getName());
 				updateCanvas();
 			}
 		}

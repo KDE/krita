@@ -65,6 +65,7 @@ public:
 	void layerLower(KisImageSP img, KisLayerSP layer);
 	void layerNext(KisImageSP img, KisLayerSP layer);
 	void layerPrev(KisImageSP img, KisLayerSP layer);
+	void layerProperties(KisImageSP img, KisLayerSP layer, QUANTUM opacity, const QString& name);
 
 	void addCommand(KCommand *cmd);
 	Q_INT32 undoLimit() const;

@@ -41,7 +41,9 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, int opacity,
 	lbl = new QLabel( m_name, i18n("Name:"), page);
 
 	m_opacity = new IntegerWidget(0, 100, page);
-	m_opacity -> setValue(downscale(opacity));
+	opacity = downscale(opacity);
+	opacity = opacity * 100 / 255;
+	m_opacity -> setValue(opacity);
 	m_opacity -> setTickmarks(QSlider::Below);
 	m_opacity -> setTickInterval(13);
 
@@ -59,6 +61,8 @@ QString KisPaintPropertyDlg::getName() const
 
 int KisPaintPropertyDlg::getOpacity() const
 {
-	return upscale(m_opacity -> value());
+	Q_INT32 opacity = m_opacity -> value() * 255 / 100;
+
+	return upscale(opacity);
 }
 

@@ -244,10 +244,7 @@ void KisListBox::slotDoubleClicked(QListBoxItem * /*item*/)
 
 void KisListBox::setCurrentItem(int n)
 {
-	if (n != -1)
-		setTopItem(n);
-
-	slotSelectionChanged(m_lst -> item(n));
+	m_lst -> setSelected(n, true);
 }
 
 void KisListBox::setTopItem(int n)

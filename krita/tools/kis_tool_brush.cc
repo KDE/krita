@@ -66,6 +66,8 @@ void KisToolBrush::mousePress(QMouseEvent *e)
         if (!m_subject->currentBrush()) return;
 
         if (e->button() == QMouseEvent::LeftButton) {
+		kdDebug() << "mouse press button:" << e->button() << "\n";
+		m_mode = PAINT;
 		initPaint();
 		// Remember the startposition of the stroke
 		m_dragStart = e -> pos();
@@ -84,8 +86,12 @@ void KisToolBrush::mouseRelease(QMouseEvent* e)
 
 
 void KisToolBrush::mouseMove(QMouseEvent *e)
-{
-         if (m_mode == PAINT) {
+{		
+	// XXX: Funny, this: the mouse button of a mouse-move event is always 0; this problably means
+	// I should be checking the status of every button here. 
+	// XXX: Even if I accept all events, playing around with the stylus gives two or three spurious
+	// mouse-move events if I lift the stylus from the pad.
+	if (m_mode == PAINT) {
 		 QPoint pos = e -> pos();
 		 KisVector end(pos.x(), pos.y());
 		 KisVector start(m_dragStart.x(), m_dragStart.y());
@@ -150,15 +156,38 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
 void KisToolBrush::tabletEvent(QTabletEvent *e)
 {
          if (e->device() == QTabletEvent::Stylus) {
-                 paint(e->pos(), e->pressure(), e->xTilt(), e->yTilt());
+		 if (!m_subject) {
+			 e->accept();
+			 return;
+		 }
+
+		 if (!m_subject->currentBrush()) {
+			 e->accept();
+			 return;
+		 }
+
+		 Q_INT32 pressure = e -> pressure();
+
+		 if (pressure < 5 && m_mode == PAINT_STYLUS) {
+			 endPaint();
+		 }
+		 else if (pressure >= 5 && m_mode == HOVER) {
+			 m_mode = PAINT_STYLUS;
+			 initPaint();
+			 paint(e->pos(), e->pressure(), e->xTilt(), e->yTilt());
+		 }
+		 else if (pressure >= 5 && m_mode == PAINT_STYLUS) {
+			 kdDebug() << "Tablet: painting " << e->pos().x() << ", " << e -> pos().y() << "\n";
+			 paint(e->pos(), e->pressure(), e->xTilt(), e->yTilt());
+		 }
          }
+	 e->accept();
 }
 
 
 void KisToolBrush::initPaint() 
 {
 	// Create painter
-	m_mode = PAINT;
 	KisImageSP currentImage = m_subject -> currentImg();
 	KisPaintDeviceSP device;
 	if (currentImage && (device = currentImage -> activeDevice())) {
@@ -181,8 +210,8 @@ void KisToolBrush::initPaint()
 	m_hotSpotY = m_hotSpot.y();
 
 	m_spacing = brush -> spacing();
-	if (m_spacing < 0) {
-		m_spacing = 3;
+	if (m_spacing <= 0) {
+		m_spacing = 1;
 	}
 	
 	// Set the cursor -- ideally. this should be a pixmap created from the brush,
@@ -248,9 +277,6 @@ void KisToolBrush::paint(const QPoint & pos,
         if (device) {
                 m_painter->bitBlt( x,  y,  COMPOSITE_NORMAL, m_dab.data() );
         }
-        currentImage->invalidate( x,  y,
-                                  m_dab -> width(),
-                                  m_dab -> height() );
         currentImage -> notify(x,
 			       y,
 			       m_dab -> width(),

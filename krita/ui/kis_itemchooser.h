@@ -33,8 +33,6 @@ class KoIconItem;
 
 class IntegerWidget;
 
-class KisCmbComposite;
-
 typedef QPtrList<KoIconItem> vKoIconItem;
 
 class KisItemChooser : public QWidget {
@@ -68,8 +66,6 @@ private:
 private slots:
 	void slotItemSelected(KoIconItem *item);
 	void slotSetItemSpacing(int spacing);
-	void slotSetItemOpacity(int opacityPerCent);
-	void slotSetItemCompositeMode(int compositeOp);
 	void slotSetItemUseColorAsMask(bool);
 
 private:
@@ -77,10 +73,6 @@ private:
 	QWidget *m_container;
 	QLabel *m_lbSpacing;
 	IntegerWidget *m_slSpacing;
-	QLabel *m_lbOpacity;
-	IntegerWidget *m_slOpacity;
-	QLabel *m_lbComposite;
-	KisCmbComposite *m_cmbComposite;
 	QCheckBox *m_chkColorMask;
 	KoIconChooser *m_chooser;
 	bool m_doSpacing;

@@ -224,6 +224,7 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 
 	m_layer = lay;
 
+	m_size = m_device -> width() * m_device -> height();
 	if (lay -> hasSelection()) {
 		m_selection = lay -> selection();
 	} else {
@@ -238,10 +239,14 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 		for (int i = 0; i < lay -> depth(); i++)
 			m_oldColor[i] = pixel[i];
 
-		int size = m_device -> width() * m_device -> height();
-		m_map = new bool[size];
-		for (int i = 0; i < size; i++)
+		m_cancelRequested = false;
+		m_currentPercent = 0;
+		m_pixelsDone = 0;
+		m_map = new bool[m_size];
+		for (int i = 0; i < m_size; i++)
 			m_map[i] = false;
+		m_size*=2;
+		emit notifyProgressStage(this, i18n("Making fill outline..."), 0);
 		floodLine(startX, startY);
 		delete[] m_map;
 
@@ -250,6 +255,8 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 }
 
 void KisFillPainter::genericFillEnd(KisLayerSP filled) {
+	if (m_cancelRequested)
+		return;
 	// use the selection as mask over our fill        
 	for (int y = 0; y < m_layer -> height(); y++) {
 		for (int x = 0; x < m_layer -> width(); x++) {
@@ -259,11 +266,23 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
 			opacity = ((OPACITY_OPAQUE - m_selection -> selected(x, y)) * opacity)
 				/ QUANTUM_MAX;
 			filled -> setPixel(x, y, c, opacity); // XXX
+			++m_pixelsDone;
+		}
+		int progressPercent = (m_pixelsDone * 100) / m_size;
+		if (progressPercent > m_currentPercent) {
+			emit notifyProgress(this, progressPercent);
+			m_currentPercent = progressPercent;
+
+			if (m_cancelRequested) {
+				return;
+			}
 		}
 	}
 
 	bitBlt(0, 0, m_compositeOp, filled.data(), m_opacity, 0, 0,
 		   m_layer -> width(), m_layer -> height());
+	
+	emit notifyProgressDone(this);
 }
 
 void KisFillPainter::floodLine(int x, int y) {
@@ -295,6 +314,15 @@ void KisFillPainter::floodLine(int x, int y) {
 			mostLeft++;
 	}
 
+	int progressPercent = (m_pixelsDone * 100) / m_size;
+	if (progressPercent > m_currentPercent) {
+		emit notifyProgress(this, progressPercent);
+		m_currentPercent = progressPercent;
+
+		if (m_cancelRequested) {
+			return;
+		}
+	}
 
 	// yay for stack overflowing:
 	for (int i = mostLeft; i <= mostRight; i++) {
@@ -311,11 +339,14 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisIteratorPixel& it, K
 
 	while( ( ( d == Right && it <= lastPixel) || (d == Left && lastPixel <= it)) && !stop)
 	{
+		if (m_map[y*m_device -> width() + x])
+			break;
+		m_map[y*m_device -> width() + x] = true;
+		++m_pixelsDone;
 		KisPixel data = it;
 		diff = difference(m_oldColor, data);
 		if (diff == MAX_SELECTED) {
 			m_selection -> setSelected(x, y, diff);
-			m_map[y*m_device -> width() + x] = true;
 			if (d == Right) {
 				++it;
 				x++; most++;

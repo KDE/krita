@@ -45,6 +45,7 @@
 #include "kis_move_event.h"
 #include "kis_pattern.h"
 #include "kis_fill_painter.h"
+#include "kis_progress_display_interface.h"
 
 KisToolFill::KisToolFill() 
 	: super()
@@ -84,6 +85,12 @@ bool KisToolFill::flood(int startX, int startY)
 	painter.setFillThreshold(m_threshold);
 	painter.setCompositeOp(m_compositeOp);
 	painter.setPattern(*(m_subject -> currentPattern()));
+	
+	KisProgressDisplayInterface *progress = m_subject -> progressDisplay();
+	if (progress) {
+		progress -> setSubject(&painter, true, true);
+	}
+
 	if (m_usePattern)
 		painter.fillPattern(startX, startY);
 	else

@@ -115,6 +115,9 @@ private:
 	KisPaintDeviceSP m_layer;
 	QUANTUM* m_oldColor, *m_color;
 	int m_threshold;
+	int m_pixelsDone;
+	int m_size;
+	int m_currentPercent;
 	bool* m_map;
 };
 

@@ -75,11 +75,11 @@ void KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSubjec
 		m_tools.push_back(new KisToolMove);
 		m_tools.push_back(new KisToolZoom);
 		m_tools.push_back(new KisToolBrush);
-    m_tools.push_back(new KisToolDuplicate);
+		m_tools.push_back(new KisToolDuplicate);
 		m_tools.push_back(new KisToolAirBrush);
 		m_tools.push_back(new KisToolEraser);
 		m_tools.push_back(new KisToolLine);
-		m_tools.push_back(new KisToolStamp);
+		//m_tools.push_back(new KisToolStamp);
 		m_tools.push_back(new KisToolPaste);
 		m_tools.push_back(new KisToolSelectRectangular);
 		m_tools.push_back(new KisToolSelectFreehand);

@@ -9,6 +9,7 @@ libkistools_la_SOURCES = kis_tool_paint.cc \
 	kis_tool_move.cc \
 	kis_tool_select_rectangular.cc \
 	kis_tool_zoom.cc \
+	kis_tool_freehand.cc \
 	kis_tool_brush.cc \
 	kis_tool_eraser.cc \
 	kis_tool_line.cc \
@@ -20,6 +21,7 @@ libkistools_la_SOURCES = kis_tool_paint.cc \
         kis_tool_select_elliptical.cc \
         kis_tool_select_contiguous.cc \
         kis_tool_pen.cc \
+        kis_tool_duplicate.cc \
         kis_tool_fill.cc \
         kis_tool_rectangle.cc \
         kis_tool_ellipse.cc \

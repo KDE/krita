@@ -87,7 +87,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 {
 	// XXX: add checking of selections
 
-	Q_INT32 depth = src -> colorStrategy() -> pixelSize();
+	Q_INT32 depth = src -> colorStrategy() -> nColorChannels() + 1;
 	Q_INT32 top, left;
 
 	left = x;
@@ -137,7 +137,11 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		{
 			currentPixel = dstIt.pixel();
 			dstIt++;
-			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRO));
+			pixels[ CONVOLUTION_PIXEL_LEFT ] = pixels[ CONVOLUTION_PIXEL_CUR ];
+			pixels[ CONVOLUTION_PIXEL_CUR ] = pixels[ CONVOLUTION_PIXEL_RIGHT ];
+			pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ] = pixels[ CONVOLUTION_PIXEL_BOTTOM ];
+			pixels[ CONVOLUTION_PIXEL_BOTTOM ] = pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ];
+			
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldPixel();
 			curIt++;
 			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldPixel();
@@ -145,13 +149,13 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 			for(int i = 0; i < depth; i++)
 			{
 				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
-									(     pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
-										  + pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
-										  + pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
-										  + pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ][i] * matrix[i][2][0]
-										  + pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
-										  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] )
-									* matrix[i].sum() / matrix[i].factor() / sums[i] + matrix[i].offset() ) );
+							(	pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
+								+ pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
+								+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
+								+ pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ][i] * matrix[i][2][0]
+								+ pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
+								+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2]
+							 ) * matrix[i].sum() / matrix[i].factor() / sums[i] + matrix[i].offset() ) );
 			}
 		}
 		// Corner : right top
@@ -220,7 +224,12 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		{
 			currentPixel = dstIt.pixel();
 			dstIt++;
-			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRO));
+			pixels[ CONVOLUTION_PIXEL_LEFTTOP ] = pixels[ CONVOLUTION_PIXEL_TOP ];
+			pixels[ CONVOLUTION_PIXEL_TOP ] = pixels[ CONVOLUTION_PIXEL_RIGHTTOP ];
+			pixels[ CONVOLUTION_PIXEL_LEFT ] = pixels[ CONVOLUTION_PIXEL_CUR ];
+			pixels[ CONVOLUTION_PIXEL_CUR ] = pixels[ CONVOLUTION_PIXEL_RIGHT ];
+			pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ] = pixels[ CONVOLUTION_PIXEL_BOTTOM ];
+			pixels[ CONVOLUTION_PIXEL_BOTTOM ] = pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ];
 			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldPixel();
 			beforeIt++;
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldPixel();
@@ -298,7 +307,10 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		{
 			currentPixel = dstIt.pixel();
 			dstIt++;
-			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRO));
+			pixels[ CONVOLUTION_PIXEL_LEFTTOP ] = pixels[ CONVOLUTION_PIXEL_TOP ];
+			pixels[ CONVOLUTION_PIXEL_TOP ] = pixels[ CONVOLUTION_PIXEL_RIGHTTOP ];
+			pixels[ CONVOLUTION_PIXEL_LEFT ] = pixels[ CONVOLUTION_PIXEL_CUR ];
+			pixels[ CONVOLUTION_PIXEL_CUR ] = pixels[ CONVOLUTION_PIXEL_RIGHT ];
 			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldPixel();
 			beforeIt++;
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldPixel();

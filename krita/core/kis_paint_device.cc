@@ -30,6 +30,7 @@
 #include "kis_global.h"
 #include "kis_image_cmd.h"
 #include "kis_paint_device.h"
+#include "kis_util.h"
 #include "kis_tile.h"
 
 const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(unsigned int);
@@ -38,7 +39,9 @@ KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uch
 	m_tiles(width / TILE_SIZE, height / TILE_SIZE, bpp, defaultColor)
 {
 	m_name = name;
-	m_imgRect = m_tileRect = QRect(0, 0, width, height);
+	m_imgRect = QRect(0, 0, width, height);
+	m_tileRect = KisUtil::findTileExtents(m_imgRect);
+	resize(m_tileRect.width(), m_tileRect.height(), bpp);
 	m_visible = true;
 	m_opacity = 255;
 }
@@ -115,8 +118,10 @@ QRgb KisPaintDevice::rgb(uint x, uint y)
 
 void KisPaintDevice::resize(uint width, uint height, uchar bpp)
 {
-	kdDebug() << "width = " << width << endl;
-	kdDebug() << "height = " << height << endl;
+	m_imgRect.setWidth(width);
+      	m_imgRect.setHeight(height);
+	m_tileRect = KisUtil::findTileExtents(m_imgRect);
+	m_tiles.resize(m_tileRect.width() / TILE_SIZE, m_tileRect.height() / TILE_SIZE, bpp);
 	m_tiles.resize(width / TILE_SIZE, height / TILE_SIZE, bpp);
 }
 
@@ -200,7 +205,7 @@ void KisPaintDevice::moveTo(int x, int y)
 
 void KisPaintDevice::allocateRect(const QRect& rc, uchar bpp)
 {
-	m_imgRect = m_tileRect = rc;
-	resize(rc.width(), rc.height(), bpp);
+	resize(m_tileRect.width(), m_tileRect.height(), bpp);
+	m_imgRect = rc;
 }
 

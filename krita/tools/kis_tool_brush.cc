@@ -267,8 +267,11 @@ void BrushTool::mouseRelease(QMouseEvent *e)
 
 	if (device && device -> visible()) {
 		m_dragging = false;
-		m_doc -> addCommand(m_cmd);
-		m_cmd = 0;
+
+		if (m_cmd) {
+			m_doc -> addCommand(m_cmd);
+			m_cmd = 0;
+		}
 	}
 }
 

@@ -250,10 +250,7 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * m_bpp, m_bpp == 1 ? QImage::LittleEndian : QImage::IgnoreEndian);
 
 	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, m_bpp, cm, defaultColor);
-	m_composeLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE), m_bpp);
-
 	m_bgLayer = new KisLayer("_background", TILE_SIZE, TILE_SIZE, m_bpp, cm, defaultColor);
-	m_bgLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE), m_bpp);
 	renderBg(m_bgLayer, 0);
 	compositeImage();
 
@@ -766,10 +763,7 @@ void KisImage::mergeLayers(KisLayerSPLst& layers)
 	macro -> addCommand(new KisCommandLayerAdd(this, a));
 
 	for (; it != layers.end(); it++) {
-		QRect urect = (a) -> imageExtents() | (*it) -> imageExtents();
-
-		(*it) -> allocateRect(urect, m_bpp);
-
+		QRect urect = (a) -> imageExtents() & (*it) -> imageExtents();
 		QRect rect = urect;
 		rect.moveTopLeft(urect.topLeft() - a -> tileExtents().topLeft());
 

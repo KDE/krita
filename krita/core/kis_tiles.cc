@@ -117,8 +117,18 @@ bool KisTiles::isDirty(uint x, uint y)
 
 void KisTiles::resize(uint width, uint height, uint bpp)
 {
-	cleanup();
-	init(width, height, bpp);
+	kdDebug() << "width = " << width << endl;
+	kdDebug() << "height = " << height << endl;
+	kdDebug() << "Size before = " << m_tiles.size() << endl;
+	m_tiles.resize(width * height);
+	kdDebug() << "Size after = " << m_tiles.size() << endl;
+
+	for (int i = m_yTiles * m_xTiles; i < m_tiles.size(); i++)
+		m_tiles[i] = 0;
+	
+	m_xTiles = width;
+	m_yTiles = height;
+	m_bpp = bpp;
 }
 
 void KisTiles::init(uint width, uint height, uint bpp)
@@ -126,7 +136,6 @@ void KisTiles::init(uint width, uint height, uint bpp)
 	m_xTiles = width;
 	m_yTiles = height;
 	m_bpp = bpp;
-	m_tiles.clear();
 	m_tiles.resize(m_xTiles * m_yTiles);
 	qFill(m_tiles.begin(), m_tiles.end(), static_cast<KisTile*>(0));
 }

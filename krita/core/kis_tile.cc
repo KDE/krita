@@ -40,6 +40,7 @@ KisTile::KisTile(int x, int y, uint width, uint height, uchar bpp, const QRgb& d
 
 	if (qAlpha(defaultColor))
 		initTile();
+
 }
 
 KisTile::KisTile(const QPoint& parentPos, uint width, uint height, uchar bpp, const QRgb& defaultColor, bool dirty)
@@ -101,8 +102,10 @@ void KisTile::setDirty(bool dirty)
 
 uchar* KisTile::data()
 {
-	if (!m_data)
+	if (!m_data) {
 		m_data = new uchar[size()];
+		memset(m_data, 0, size());
+	}
 
 	return m_data;
 }

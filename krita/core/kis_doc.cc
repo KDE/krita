@@ -447,7 +447,14 @@ QDomDocument KisDoc::saveXML()
 bool KisDoc::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* )
 {
 	//todo
-	return true;
+	return false;
+}
+
+
+bool KisDoc::saveOasis( KoStore*, KoXmlWriter* )
+{
+	//todo
+	return false;
 }
 
 bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
@@ -1101,7 +1108,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
   		// XXX: re-activate when rest of Krita uses the image's resolution
 		// Compute the zoom based on the resolution of the screen and the image
  		QPaintDeviceMetrics m = QPaintDeviceMetrics(painter.device());
- 		
+
  		// XXX: also make dpi a config option?
  		zoomX = (m.logicalDpiX() / m_projection -> xRes()) * zoomX;
  		zoomY = (m.logicalDpiY() / m_projection -> yRes()) * zoomY;

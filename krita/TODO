@@ -1,10 +1,10 @@
+* The tabs for images inside a document seem to be broken :-(
 * Brush cursor shapes for tools (updating cursors from the tools doesn't work yet).
 * Give each layer its own imagetype; allow layers of diverse types in one image.
 * Option dialog for tools
 * Make tools kparts
 * Fix scrollbars
 * make brush tool antialiased; make un-antialiased pen tool
-* Fix spacing slider in sidebar
 * If you have a tablet, you can have more than one active tool at a time:
 	stylus, eraser, pointer and your ordinary mouse, not to mention
 	the possibility of having several styluses.

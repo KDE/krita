@@ -62,7 +62,6 @@ KisPainter::KisPainter()
 	m_hotSpotY = 0;
 	m_brushWidth = 0;
 	m_brushHeight = 0;
-	m_spacing = 1;
 
 	m_transaction = 0;
 
@@ -528,6 +527,21 @@ float KisPainter::paintLine(const QPoint & pos1,
 			    const Q_INT32 yTilt,
 			    const float savedDist)
 {
+
+	Q_INT32 spacing = m_brush -> spacing();
+
+	if (spacing <= 0) {
+		spacing = m_brushWidth;
+	}
+
+	// Some brushes are loaded with a weird spacing of 100, probably
+	// a bug in the brush loader.
+	if (spacing > m_brushWidth || spacing > m_brushHeight) {
+		spacing = m_brushWidth;
+	}
+
+
+
 	Q_INT32 x1, y1, x2, y2;
 
 	x1 = pos1.x();
@@ -564,7 +578,7 @@ float KisPainter::paintLine(const QPoint & pos1,
 	float dist = savedDist + newDist;
 	float l_savedDist = savedDist;
 
-	if (static_cast<int>(dist) < m_spacing) {
+	if (static_cast<int>(dist) < spacing) {
 		m_dirtyRect = QRect();
 		return dist;
 	}
@@ -591,18 +605,18 @@ float KisPainter::paintLine(const QPoint & pos1,
 
 	KisVector step = start;
 
-	while (dist >= m_spacing) {
+	while (dist >= spacing) {
 		if (l_savedDist > 0) {
-			step += dragVec * (m_spacing - l_savedDist);
-			l_savedDist -= m_spacing;
+			step += dragVec * (spacing - l_savedDist);
+			l_savedDist -= spacing;
 		}
 		else {
-			step += dragVec * m_spacing;
+			step += dragVec * spacing;
 		}
 		QPoint p(qRound(step.x()), qRound(step.y()));
 		// Fix this: paintAt does not always have to compute the dirtyRect
 		paintAt(p, pressure, xTilt, yTilt);
-		dist -= m_spacing;
+		dist -= spacing;
 	}
 
 	m_dirtyRect = r;
@@ -653,17 +667,6 @@ void KisPainter::setBrush(KisBrush* brush)
 	m_hotSpot = m_brush -> hotSpot();
 	m_hotSpotX = m_hotSpot.x();
 	m_hotSpotY = m_hotSpot.y();
-
-	m_spacing = m_brush -> spacing();
-	if (m_spacing <= 0) {
-		m_spacing = m_brushWidth;
-	}
-
-	// Some brushes are loaded with a weird spacing of 100, probably
-	// a bug in the brush loader.
-	if (m_spacing > m_brushWidth || m_spacing > m_brushHeight) {
-		m_spacing = m_brushWidth;
-	}
 
 	computeDab(mask);
 

@@ -22,6 +22,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <koIconChooser.h>
+
 #include "integerwidget.h"
 #include "kis_itemchooser.h"
 

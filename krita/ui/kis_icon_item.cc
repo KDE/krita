@@ -21,20 +21,20 @@
 
 #define THUMB_SIZE 30
 
-KisIconItem::KisIconItem(KisResource *r)
+KisIconItem::KisIconItem(KisResource *resource)
 {
-	m_r = r;
+	m_resource = resource;
 	validPixmap = false;
 	validThumb = false;
 	m_thumb = 0;
 	m_pixmap = 0;
 
-	if (m_r && m_r -> valid()) {
-		QImage img = m_r -> img();
+	if (m_resource && m_resource -> valid()) {
+		QImage img = m_resource -> img();
 
 		if (img.isNull()) {
-			m_r -> setValid(false);
-			m_r = 0;
+			m_resource -> setValid(false);
+			m_resource = 0;
 			return;
 		}
 
@@ -72,7 +72,6 @@ KisIconItem::KisIconItem(KisResource *r)
 		img = img.convertDepth(32);
 		m_pixmap = new QPixmap(img);
 		validPixmap = true;
-		m_spacing = 7;
 	}
 }
 
@@ -94,6 +93,20 @@ QPixmap& KisIconItem::thumbPixmap() const
 
 KisResource *KisIconItem::resource() const
 {
-	return m_r;
+	return m_resource;
+}
+
+int KisIconItem::spacing() const {
+	if ( m_resource && m_resource -> valid() ) {
+		return m_resource -> spacing();
+	}
+	else {
+		return 7;
+	}
+}
+void KisIconItem::setSpacing(int spacing) {
+	if ( m_resource && m_resource -> valid() ) {
+		m_resource -> setSpacing(spacing);
+	}
 }
 

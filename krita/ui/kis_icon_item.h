@@ -24,25 +24,21 @@ class KisResource;
 
 class KisIconItem : public KoIconItem {
 public:
-	KisIconItem(KisResource *r);
+	KisIconItem(KisResource *resource);
 	virtual ~KisIconItem();
 
-public:
 	virtual QPixmap& pixmap() const;
 	virtual QPixmap& thumbPixmap() const;
 
-public:
-	virtual int spacing() const { return m_spacing; }
-	virtual void setSpacing(int spacing) { m_spacing = spacing; }
+	virtual int spacing() const;
+	virtual void setSpacing(int spacing);
 
-public:
 	KisResource *resource() const;
 
 private:
-	KisResource *m_r;
+	KisResource *m_resource;
 	QPixmap *m_pixmap;
 	QPixmap *m_thumb;
-	Q_INT32 m_spacing;
 };
 
 #endif // KIS_ICON_ITEM_H_

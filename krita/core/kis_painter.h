@@ -178,8 +178,6 @@ private:
         Q_INT32 m_brushWidth;
         Q_INT32 m_brushHeight;
 
-        Q_INT32 m_spacing;
-
 	Q_INT32 m_lastPressure;
 };
 

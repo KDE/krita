@@ -104,7 +104,7 @@ KisToolMove::~KisToolMove()
 
 void KisToolMove::mousePress(QMouseEvent *e)
 {
-	QPoint pos;
+	QPoint pos = e -> pos();
 	KisImageSP img = m_view -> currentImg();
 	KisPaintDeviceSP dev;
 

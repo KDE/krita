@@ -57,6 +57,7 @@
 #include "kispixeldata.h"
 #include "kistile.h"
 #include "kistilemgr.h"
+#include "kis_iterators.h"
 
 KisPainter::KisPainter()
 {
@@ -163,7 +164,74 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
 		kdDebug() << "bitBlt: no device to blt onto.\n";
 		return;
 	}
+	#if 0
+	if (sw == -1)
+		sw = srcdev -> width();
+	if (sh == -1)
+		sh = srcdev -> height();
+	if( sx + sw > srcdev->width() )
+		sw = srcdev->width() - sx;
+	if( sy + sh > srcdev->height() )
+		sh = srcdev->height() - sy;
+	if( dx + sw > m_device->width() )
+		sw = m_device->width() - dx;
+	if( dy + sh > m_device->height() )
+		sh = m_device->height() - dy;
+	if (dx < 0 || dy < 0 || sx < 0 || sy < 0 || sw < 0 || sh < 0 )
+		return;
+	KisIteratorLineQuantum srcLit = srcdev->iteratorQuantumSelectionBegin( 0, sx, sx + sw - 1, sy);
+	KisIteratorLineQuantum srcLitend = srcdev->iteratorQuantumSelectionEnd( 0, sx, sx + sw - 1, sy + sh - 1);
+	KisIteratorLineQuantum dstLit = m_device->iteratorQuantumSelectionBegin( m_transaction, dx, dx + sw - 1, dy);
+// 	kdDebug() << "****************************************************************************" << endl;
+// 	kdDebug() << " srcdev -> width()=" << srcdev -> width() << " srcdev -> height()=" << srcdev -> height() << endl;
+// 	kdDebug() << " sy=" << sy << " sh=" << sh << " dy=" << dy << endl;
+// 	kdDebug() << " sx=" << sx << " sw=" << sw << " dx=" << dx << endl;
+	while ( srcLit <= srcLitend )
+	{
+		KisIteratorQuantum srcUit = *srcLit;
+		KisIteratorQuantum srcUitend = srcLit.end();
+		KisIteratorQuantum dstUit = * dstLit;
+//		kdDebug() << " srcUit : " << endl;
+//		srcUit.print_pos();
+//		kdDebug() << " srcUitend : " << endl;
+//		srcUitend.print_pos();
+//		kdDebug() << " start going through" << endl;
+		while( srcUit <= srcUitend )
+		{
+//		srcUit.print_pos();
+//		dstUit.print_pos();
+			QUANTUM* d = dstUit;
+			QUANTUM* s = srcUit;
 
+			if (s[PIXEL_ALPHA] != OPACITY_TRANSPARENT)
+			{
+				if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT || s[PIXEL_ALPHA] == OPACITY_OPAQUE) {
+					memcpy(d, s, 4 * sizeof(QUANTUM));
+				}
+				else
+				{
+					int srcAlpha = s[PIXEL_ALPHA];
+					int dstAlpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					d[PIXEL_RED]   = (d[PIXEL_RED]   * dstAlpha + s[PIXEL_RED]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * dstAlpha + s[PIXEL_GREEN] * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					d[PIXEL_BLUE]  = (d[PIXEL_BLUE]  * dstAlpha + s[PIXEL_BLUE]  * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					if (d[PIXEL_ALPHA] != 0) {
+						d[PIXEL_RED] = (d[PIXEL_RED] * QUANTUM_MAX) / d[PIXEL_ALPHA];
+						d[PIXEL_GREEN] = (d[PIXEL_GREEN] * QUANTUM_MAX) / d[PIXEL_ALPHA];
+						d[PIXEL_BLUE] = (d[PIXEL_BLUE] * QUANTUM_MAX) / d[PIXEL_ALPHA];
+					}
+				}
+			}
+			dstUit.skipPixel();
+			srcUit.skipPixel();
+		}
+//		srcUit.print_pos();
+//		srcUitend.print_pos();
+		++srcLit;
+		++dstLit;
+	}
+	#else
         Q_INT32 x;
         Q_INT32 y;
         Q_INT32 sx2 = sx;
@@ -429,6 +497,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
 
                 sy += TILE_HEIGHT;
         }
+	#endif
 }
 
 void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity)
@@ -506,7 +575,6 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
                 if (y > y1)
                         ydiff = 0;
         }
-
 }
 
 QRect KisPainter::dirtyRect() {

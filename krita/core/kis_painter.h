@@ -204,8 +204,6 @@ public:
 	void setCompositeOp(CompositeOp op) { m_compositeOp = op; }
 
 
-
-
 private:
         void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src,
                      KisTileSP srctile, Q_INT32 rows, Q_INT32 cols,
@@ -234,7 +232,6 @@ private:
 	KoColor m_paintColor;
 	KoColor m_backgroundColor;
 	KoColor m_fillColor;
-
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;

@@ -84,7 +84,7 @@ void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 {
 	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-	Q_INT32 depth = src -> colorStrategy() -> nColorChannels() - 1;
+	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
 	
 	while( ! srcIt.isDone() )
 	{

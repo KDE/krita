@@ -40,6 +40,7 @@
 #include "kis_previewwidget.h"
 #include "kis_brush.h"
 #include "kis_pattern.h"
+#include "kis_gradient.h"
 #include "kis_rgb_widget.h"
 #include "kis_hsv_widget.h"
 #include "kis_gray_widget.h"
@@ -71,7 +72,7 @@ ControlFrame::ControlFrame( QWidget* parent, const char* name )
 	l -> addWidget(m_pPatternWidget);
 	l -> insertSpacing(2, 2);
 
-	m_pGradientWidget = new KisGradientWidget(this);
+	m_pGradientWidget = new KisIconWidget(this);
 	l -> addWidget(m_pGradientWidget);
 	l -> insertSpacing(3, 2);
 
@@ -119,6 +120,12 @@ void ControlFrame::slotSetPattern(KoIconItem *item)
 {
 	if (item)
 		m_pPatternWidget -> slotSetItem(*item);
+}
+
+void ControlFrame::slotSetGradient(KoIconItem *item)
+{
+	if (item)
+		m_pGradientWidget -> slotSetItem(*item);
 }
 
 void ControlFrame::slotSetFGColor(const KoColor& c)

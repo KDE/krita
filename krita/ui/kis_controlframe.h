@@ -36,6 +36,7 @@ class KisGradientWidget;
 
 class KisBrush;
 class KisPattern;
+class KisGradient;
 class KoColorChooser;
 class ControlFrame;
 class KisRGBWidget;
@@ -61,6 +62,7 @@ public slots:
 
 	void slotSetBrush(KoIconItem *item);
 	void slotSetPattern(KoIconItem *item);
+	void slotSetGradient(KoIconItem *item);
 
 signals:
 	void fgColorChanged(const KoColor& c);
@@ -76,7 +78,7 @@ private:
 	KDualColorButton  *m_pColorButton;
 	KisIconWidget    *m_pBrushWidget;
 	KisIconWidget  *m_pPatternWidget;
-	KisGradientWidget *m_pGradientWidget;  
+	KisIconWidget  *m_pGradientWidget;
 };
 
 #endif

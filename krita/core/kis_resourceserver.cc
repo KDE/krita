@@ -35,6 +35,7 @@ KisResourceServer::KisResourceServer()
 	m_brushes.setAutoDelete(true);
 	m_pipebrushes.setAutoDelete(true);
 	m_patterns.setAutoDelete(true);
+	m_gradients.setAutoDelete(true);
 }
 
 KisResourceServer::~KisResourceServer()
@@ -42,6 +43,7 @@ KisResourceServer::~KisResourceServer()
 	m_brushes.clear();
 	m_pipebrushes.clear();
 	m_patterns.clear();
+	m_gradients.clear();
 }
 
 void KisResourceServer::loadBrushes()
@@ -61,6 +63,12 @@ void KisResourceServer::loadPatterns()
 {
 	m_patternFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_patterns", "*.pat");
 	loadPattern();
+}
+
+void KisResourceServer::loadGradients()
+{
+	m_gradientFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_gradients", "*.ggr");
+	loadGradient();
 }
 
 void KisResourceServer::loadBrush()
@@ -112,6 +120,21 @@ void KisResourceServer::loadPattern()
 	}
 }
 
+void KisResourceServer::loadGradient()
+{
+	if (!m_gradientFilenames.empty()) {
+		QString front = *m_gradientFilenames.begin();
+		m_gradientFilenames.pop_front();
+		KisGradient *gradient = new KisGradient(front);
+
+		connect(gradient, SIGNAL(loadComplete(KisResource*)), SLOT(gradientLoaded(KisResource*)));
+		connect(gradient, SIGNAL(ioFailed(KisResource*)), SLOT(gradientLoadFailed(KisResource*)));
+
+		if (!gradient -> loadAsync())
+			loadGradient();
+	}
+}
+
 void KisResourceServer::brushLoaded(KisResource *br)
 {
 	if (br && br -> valid()) {
@@ -151,6 +174,19 @@ void KisResourceServer::patternLoaded(KisResource *pat)
 
 	loadPattern();
 }
+
+void KisResourceServer::gradientLoaded(KisResource *gradient)
+{
+	if (gradient && gradient -> valid()) {
+		m_gradients.append(gradient);
+		emit loadedGradient(gradient);
+	} else {
+		delete gradient;
+	}
+
+	loadGradient();
+}
+
 void KisResourceServer::brushLoadFailed(KisResource *r)
 {
 	delete r;
@@ -170,6 +206,11 @@ void KisResourceServer::patternLoadFailed(KisResource *r)
 	loadPattern();
 }
 
+void KisResourceServer::gradientLoadFailed(KisResource *r)
+{
+	delete r;
+	loadGradient();
+}
 
 QPtrList<KisResource> KisResourceServer::brushes()
 {
@@ -196,4 +237,13 @@ QPtrList<KisResource> KisResourceServer::patterns()
 	return m_patterns;
 }
 
+QPtrList<KisResource> KisResourceServer::gradients()
+{
+	if (m_gradients.isEmpty())
+		loadGradients();
+
+	return m_gradients;
+}
+
 #include "kis_resourceserver.moc"
+

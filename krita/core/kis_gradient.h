@@ -2,6 +2,8 @@
  *  kis_gradient.h - part of Krayon
  *
  *  Copyright (c) 2000 Matthias Elter  <elter@kde.org>
+ *                2004 Boudewijn Rempt <boud@valdyas.org>
+ *                2004 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,17 +20,18 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __kis_gradient_h__
-#define __kis_gradient_h__
+#ifndef KIS_GRADIENT_H
+#define KIS_GRADIENT_H
+
+#include <qvaluevector.h>
 
 #include <kio/job.h>
 
 #include <koIconChooser.h>
+#include <koColor.h>
 
 #include "kis_resource.h"
 
-class QPoint;
-class QPixmap;
 class QImage;
 
 class KisGradient : public KisResource {
@@ -43,11 +46,164 @@ public:
 	virtual bool saveAsync();
 	virtual QImage img();
 
-	bool isValid() const { return m_valid; }
-	QPoint hotSpot() const { return m_hotSpot; }
+	void colorAt(double t, KoColor *color, QUANTUM *opacity) const;
 
-	QPixmap& pixmap() const;
-	QPixmap& thumbPixmap() const;
+protected:
+
+	class Color {
+	public:
+		Color() { m_alpha = 0; }
+		Color(const KoColor& color, double alpha) { m_color = color; m_alpha = alpha; }
+
+		const KoColor& color() const { return m_color; }
+		double alpha() const { return m_alpha; }
+
+	private:
+		KoColor m_color;
+		double m_alpha;
+	};
+
+	class ColorInterpolationStrategy {
+	public:
+		ColorInterpolationStrategy() {}
+		virtual ~ColorInterpolationStrategy() {}
+
+		virtual Color colorAt(double t, Color start, Color end) const = 0;
+	};
+
+	class RGBColorInterpolationStrategy : public ColorInterpolationStrategy {
+	public:
+		static RGBColorInterpolationStrategy *instance();
+
+		virtual Color colorAt(double t, Color start, Color end) const;
+
+	private:
+		RGBColorInterpolationStrategy() {}
+
+		static RGBColorInterpolationStrategy *m_instance;
+	};
+
+	class HSVCWColorInterpolationStrategy : public ColorInterpolationStrategy {
+	public:
+		static HSVCWColorInterpolationStrategy *instance();
+
+		virtual Color colorAt(double t, Color start, Color end) const;
+	private:
+		HSVCWColorInterpolationStrategy() {}
+
+		static HSVCWColorInterpolationStrategy *m_instance;
+	};
+
+	class HSVCCWColorInterpolationStrategy : public ColorInterpolationStrategy {
+	public:
+		static HSVCCWColorInterpolationStrategy *instance();
+
+		virtual Color colorAt(double t, Color start, Color end) const;
+	private:
+		HSVCCWColorInterpolationStrategy() {}
+
+		static HSVCCWColorInterpolationStrategy *m_instance;
+	};
+
+	class InterpolationStrategy {
+	public:
+		InterpolationStrategy() {}
+		virtual ~InterpolationStrategy() {}
+
+		virtual double valueAt(double t, double middle) const = 0;
+	};
+
+	class LinearInterpolationStrategy : public InterpolationStrategy {
+	public:
+		static LinearInterpolationStrategy *instance();
+
+		virtual double valueAt(double t, double middle) const;
+
+		// This does the actual calculation and is made
+		// static as an optimisation for the other
+		// strategies that need this for their own calculation.
+		static double calcValueAt(double t, double middle);
+
+	private:
+		LinearInterpolationStrategy() {}
+
+		static LinearInterpolationStrategy *m_instance;
+	};
+
+	class CurvedInterpolationStrategy : public InterpolationStrategy {
+	public:
+		static CurvedInterpolationStrategy *instance();
+
+		virtual double valueAt(double t, double middle) const;
+	private:
+		CurvedInterpolationStrategy();
+
+		static CurvedInterpolationStrategy *m_instance;
+		double m_logHalf;
+	};
+
+	class SphereIncreasingInterpolationStrategy : public InterpolationStrategy {
+	public:
+		static SphereIncreasingInterpolationStrategy *instance();
+
+		virtual double valueAt(double t, double middle) const;
+	private:
+		SphereIncreasingInterpolationStrategy() {}
+
+		static SphereIncreasingInterpolationStrategy *m_instance;
+	};
+
+	class SphereDecreasingInterpolationStrategy : public InterpolationStrategy {
+	public:
+		static SphereDecreasingInterpolationStrategy *instance();
+
+		virtual double valueAt(double t, double middle) const;
+	private:
+		SphereDecreasingInterpolationStrategy() {}
+
+		static SphereDecreasingInterpolationStrategy *m_instance;
+	};
+
+	class SineInterpolationStrategy : public InterpolationStrategy {
+	public:
+		static SineInterpolationStrategy *instance();
+
+		virtual double valueAt(double t, double middle) const;
+	private:
+		SineInterpolationStrategy() {}
+
+		static SineInterpolationStrategy *m_instance;
+	};
+
+	class Segment {
+	public:
+		Segment(InterpolationStrategy *interpolator, ColorInterpolationStrategy *colorInterpolator, double startOffset, double middleOffset, double endOffset, const Color& startColor, const Color& endColor);
+
+		// startOffset <= t <= endOffset
+		Color colorAt(double t) const;
+	
+		const Color& startColor() const;
+		const Color& endColor() const;
+
+		double startOffset() const;
+		double endOffset() const;
+
+	private:
+		InterpolationStrategy *m_interpolator;
+		ColorInterpolationStrategy *m_colorInterpolator;
+
+		double m_startOffset;
+		double m_middleOffset;
+		double m_endOffset;
+		double m_length;
+		double m_middleT;
+
+		Color m_startColor;
+		Color m_endColor;
+	};
+
+	const Segment *segmentAt(double t) const;
+	QImage generatePreview() const;
 
 private slots:
 	void ioData(KIO::Job *job, const QByteArray& data);
@@ -55,16 +211,10 @@ private slots:
 
 private:
 	QByteArray m_data;
-	QPoint m_hotSpot;
-
-	bool m_valid;
-	bool m_validThumb;
-
 	QImage m_img;
-        QPixmap *m_pixmap;
-        QPixmap *m_thumbPixmap;
 
+	QValueVector<Segment *> m_segments;
 };
 
-#endif
+#endif // KIS_GRADIENT_H
 

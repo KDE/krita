@@ -311,6 +311,7 @@ private slots:
 	void selectImage(const QString&);
 	void brushActivated(KisResource *brush);
 	void patternActivated(KisResource *pattern);
+	void gradientActivated(KisResource *gradient);
 	void setPaintOffset();
 	void scrollH(int value);
 	void scrollV(int value);
@@ -409,6 +410,7 @@ private:
 	KisLabelBuilderProgress *m_buildProgress;
 	KisResourceMediator *m_brushMediator;
 	KisResourceMediator *m_patternMediator;
+	KisResourceMediator *m_gradientMediator;
 	KisAutobrush *m_autobrush;
 
         // Current colours, brushes, patterns etc.

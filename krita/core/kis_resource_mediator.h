@@ -26,6 +26,7 @@ class KoIconItem;
 class KisBrush;
 class KisImagePipeBrush;
 class KisPattern;
+class KisGradient;
 class KisItemChooser;
 class KisIconItem;
 class KisResource;
@@ -33,6 +34,7 @@ class KisResourceServer;
 
 #define	MEDIATE_BRUSHES 1
 #define MEDIATE_PATTERNS 2
+#define MEDIATE_GRADIENTS 4
 
 class KisResourceMediator : public QObject {
 	Q_OBJECT

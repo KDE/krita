@@ -21,10 +21,12 @@
 
 #include "kis_brush.h"
 #include "kis_pattern.h"
+#include "kis_gradient.h"
 
 #include "kis_icon_item.h"
 #include "kis_brush_chooser.h"
 #include "kis_pattern_chooser.h"
+#include "kis_gradient_chooser.h"
 #include "kis_resource.h"
 #include "kis_resourceserver.h"
 #include "kis_resource_mediator.h"
@@ -59,6 +61,13 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
                         SIGNAL(loadedPattern(KisResource*)),
                         this,
                         SLOT(resourceServerLoadedResource(KisResource*)));
+	}
+	if (mediateOn & MEDIATE_GRADIENTS) {
+		m_chooser = new KisGradientChooser(chooserParent, chooserName);
+		connect(rserver,
+			SIGNAL(loadedGradient(KisResource*)),
+			this,
+			SLOT(resourceServerLoadedResource(KisResource*)));
 	}
 
 	connect(m_chooser, SIGNAL(selected(KoIconItem*)), SLOT(setActiveItem(KoIconItem*)));

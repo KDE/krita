@@ -29,6 +29,7 @@
 #include "kis_brush.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_pattern.h"
+#include "kis_gradient.h"
 
 class KisResourceServer : public QObject {
 	typedef QObject super;
@@ -43,24 +44,29 @@ public:
 	Q_INT32 brushCount() const { return m_brushes.count(); }
 	Q_INT32 pipebrushCount() const { return m_pipebrushes.count(); }
 	Q_INT32 patternCount() const { return m_patterns.count(); }
+	Q_INT32 gradientCount() const { return m_gradients.count(); }
 
 	QPtrList<KisResource> brushes();
 	QPtrList<KisResource> pipebrushes();
 	QPtrList<KisResource> patterns();
+	QPtrList<KisResource> gradients();
 
 	void loadBrushes();
 	void loadpipeBrushes();
 	void loadPatterns();
+	void loadGradients();
 
 signals:
 	void loadedBrush(KisResource *br);
 	void loadedpipeBrush(KisResource *br);
 	void loadedPattern(KisResource *pat);
+	void loadedGradient(KisResource *pat);
 
 private:
 	void loadBrush();
 	void loadpipeBrush();
 	void loadPattern();
+	void loadGradient();
 
 private slots:
 	void brushLoaded(KisResource *r);
@@ -72,6 +78,9 @@ private slots:
 	void patternLoaded(KisResource *r);
 	void patternLoadFailed(KisResource *br);
 
+	void gradientLoaded(KisResource *r);
+	void gradientLoadFailed(KisResource *br);
+
 private:
 	QPtrList<KisResource> m_brushes;
 	QStringList m_brushFilenames;
@@ -79,9 +88,11 @@ private:
 	QPtrList<KisResource> m_pipebrushes;
 	QStringList m_pipebrushFilenames;
 
-
 	QPtrList<KisResource> m_patterns;
 	QStringList m_patternFilenames;
+
+	QPtrList<KisResource> m_gradients;
+	QStringList m_gradientFilenames;
 };
 
 #endif // KIS_RESOURCESERVER_H_

@@ -275,6 +275,12 @@ void KisView::setupDockers()
         m_resourcedocker -> plug(m_patternMediator -> chooserWidget());
         connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
 
+	m_gradientMediator = new KisResourceMediator(MEDIATE_GRADIENTS, rserver, i18n("Gradients"),
+						    m_resourcedocker, "gradient chooser", this);
+	m_gradient = dynamic_cast<KisGradient*>(m_gradientMediator -> currentResource());
+	m_resourcedocker -> plug(m_gradientMediator -> chooserWidget());
+	connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(gradientActivated(KisResource*)));
+
 	m_autobrush = new KisAutobrush(m_resourcedocker, "autobrush", i18n("Autobrush"));
 	m_resourcedocker -> plug(m_autobrush);
 	connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
@@ -323,6 +329,7 @@ void KisView::setupDockers()
         rserver -> loadBrushes();
         rserver -> loadpipeBrushes();
         rserver -> loadPatterns();
+        rserver -> loadGradients();
 
         // TODO Here should be a better check
         if ( mainWindow() -> isDockEnabled( DockBottom))
@@ -567,10 +574,7 @@ void KisView::setupActions()
         (void)new KAction(i18n( "&Color Manager" ), 0, this, SLOT( viewColorDocker() ), actionCollection(), "view_color_docker" );
         (void)new KAction(i18n( "&Tool Properties" ), 0, this, SLOT( viewControlDocker() ), actionCollection(), "view_control_docker" );
         (void)new KAction(i18n( "&Layers/Channels" ), 0, this, SLOT( viewLayerChannelDocker() ), actionCollection(), "view_layer_docker" );
-        (void)new KAction(i18n( "&Brushes/Pattern" ), 0, this, SLOT( viewResourceDocker() ), actionCollection(), "view_resource_docker" );
-
-
-
+        (void)new KAction(i18n( "&Brushes/Patterns/Gradients" ), 0, this, SLOT( viewResourceDocker() ), actionCollection(), "view_resource_docker" );
 }
 
 void KisView::reset()
@@ -1838,6 +1842,20 @@ void KisView::patternActivated(KisResource *pattern)
                 m_controlWidget -> slotSetPattern(item);
 
         if (m_pattern)
+                notify();
+}
+
+void KisView::gradientActivated(KisResource *gradient)
+{
+        KisIconItem *item;
+
+        Q_ASSERT(m_toolcontroldocker);
+        m_gradient = dynamic_cast<KisGradient*>(gradient);
+
+        if (m_gradient && (item = m_gradientMediator -> itemFor(m_gradient)))
+                m_controlWidget -> slotSetGradient(item);
+
+        if (m_gradient)
                 notify();
 }
 

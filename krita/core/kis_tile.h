@@ -46,18 +46,22 @@ public:
 	void setDirty(bool dirty);
 	void move(int x, int y);
 	void move(const QPoint& parentPos);
+	uint* data();
+
 	inline bool dirty() const;
 	inline uint bpp();
-	uint* data();
 	inline const uint* data() const;
-
 	inline QPoint tileCoords();
 
+	inline bool cow() const;
+	inline void setCow(bool enable = true);
+	
 private:
 	void initTile();
 
 private:
 	QPoint m_parentPos;
+	bool m_cow;
 	bool m_dirty;
 	uint m_width;
 	uint m_height;
@@ -84,6 +88,16 @@ const uint* KisTile::data() const
 QPoint KisTile::tileCoords()
 {
 	return m_parentPos;
+}
+
+bool KisTile::cow() const
+{
+	return m_cow;
+}
+
+void KisTile::setCow(bool enable)
+{
+	m_cow = enable;
 }
 
 #endif // KIS_TILE_

@@ -28,8 +28,9 @@
 #include "kis_tool.h"
 
 class KisBrush;
-class KisFrameBuffer;
 class KisDoc;
+class KisImageCmd;
+class KisFrameBuffer;
 
 class PenTool : public KisTool {
 public:
@@ -49,6 +50,8 @@ public:
 	bool paint(QPoint pos);
 
 protected:
+	KisImageCmd *m_cmd;
+
 	QPoint m_dragStart;
 	bool m_dragging;
 	float m_dragdist;

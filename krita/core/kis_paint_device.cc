@@ -46,12 +46,22 @@ void KisPaintDevice::setPixel(uint x, uint y, uint pixel, KisImageCmd *cmd)
 	int tileNoY = y / TILE_SIZE;
 	int tileNoX = x / TILE_SIZE;
 	KisTileSP tile = m_tiles.getTile(tileNoX, tileNoY);
-	uint *ppixel;
 
-	if (cmd)
-		cmd -> addTile(tile);
+	if (cmd) {
+		if (!cmd -> hasTile(tile)) {
+			if (tile -> cow()) {
+				KisTileSP tileCopy = new KisTile(*tile);
 
-	ppixel = tile -> data();
+				tile -> setCow(false);	
+				swapTile(tileCopy);
+				tile = tileCopy;
+			}
+
+			cmd -> addTile(tile);
+		}
+	}
+
+	uint *ppixel = tile -> data();
 	*(ppixel + ((y % TILE_SIZE) * TILE_SIZE) + (x % TILE_SIZE)) = pixel;
 }
 

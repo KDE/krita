@@ -23,11 +23,14 @@
 
 #include <qtl.h>
 
+#include <kdebug.h>
+
 #include "kis_global.h"
 #include "kis_tile.h"
 
 KisTile::KisTile(int x, int y, uint width, uint height, uint bpp, const QRgb& defaultColor, bool dirty)
 {
+	m_cow = false;
 	m_dirty = dirty;
 	m_width = width;
 	m_height = height;
@@ -42,6 +45,7 @@ KisTile::KisTile(int x, int y, uint width, uint height, uint bpp, const QRgb& de
 
 KisTile::KisTile(const QPoint& parentPos, uint width, uint height, uint bpp, const QRgb& defaultColor, bool dirty)
 {
+	m_cow = false;
 	m_dirty = dirty;
 	m_width = width;
 	m_height = height;
@@ -70,6 +74,7 @@ KisTile& KisTile::operator=(const KisTile& tile)
 
 KisTile::~KisTile()
 {
+	kdDebug() << "KisTile::~KisTile()\n";
 	delete[] m_data;
 }
 	
@@ -82,6 +87,7 @@ void KisTile::copyTile(const KisTile& tile)
 	m_data = 0;
 	m_defaultColor = tile.m_defaultColor;
 	m_parentPos = tile.m_parentPos;
+	m_cow = false;
 
 	if (tile.m_data) {
 		m_data = new uint[m_width * m_height];

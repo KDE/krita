@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *                2001 John Califf
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,13 +27,15 @@
 #include <kdebug.h>
 
 #include "kis_brush.h"
+#include "kis_cursor.h"
+#include "kis_dlg_toolopts.h"
 #include "kis_doc.h"
+#include "kis_image.h"
+#include "kis_image_cmd.h"
+#include "kis_framebuffer.h"
+#include "kis_tool_pen.h"
 #include "kis_view.h"
 #include "kis_vec.h"
-#include "kis_framebuffer.h"
-#include "kis_cursor.h"
-#include "kis_tool_pen.h"
-#include "kis_dlg_toolopts.h"
 
 PenTool::PenTool(KisDoc *doc, KisCanvas *canvas, KisBrush *brush) : KisTool(doc)
 {
@@ -45,6 +48,7 @@ PenTool::PenTool(KisDoc *doc, KisCanvas *canvas, KisBrush *brush) : KisTool(doc)
 	m_useGradient = false;
 	m_lineThickness = 1;
 	setBrush(brush);
+	m_cmd = 0;
 }
 
 PenTool::~PenTool()
@@ -74,43 +78,44 @@ void PenTool::setBrush(KisBrush *_brush)
     }
 }
 
-
 void PenTool::mousePress(QMouseEvent *e)
 {
-    /* do all status checking on mouse press only!
-    Not needed elsewhere and slows things down if
-    done in mouseMove and Paint routines.  Nothing
-    happens unless mouse is first pressed anyway */
+	/* do all status checking on mouse press only!
+	   Not needed elsewhere and slows things down if
+	   done in mouseMove and Paint routines.  Nothing
+	   happens unless mouse is first pressed anyway */
 
-    KisImage * img = m_doc->currentImg();
-    if (!img) return;
+	if (e -> button() == QMouseEvent::LeftButton) {
+		KisImageSP img = m_doc -> currentImg();
+		KisPaintDeviceSP device;
 
-    if(!img->getCurrentLayer())
-        return;
+		if (!img) 
+			return;
 
-    if(!img->getCurrentLayer()->visible())
-        return;
+		device = img -> getCurrentPaintDevice();
 
-    if (e->button() != QMouseEvent::LeftButton)
-        return;
+		if (!device)
+			return;
 
-    if(!m_doc->frameBuffer())
-        return;
+		if (!device -> visible())
+			return;
 
-    m_dragging = true;
+		if (!m_doc -> frameBuffer())
+			return;
 
-    QPoint pos = e->pos();
-    pos = zoomed(pos);
-    m_dragStart = pos;
-    m_dragdist = 0;
+		m_dragging = true;
 
-    if(paint(pos))
-    {
-         m_doc->currentImg()->markDirty(QRect(pos
-            - m_brush->hotSpot(), m_brush->size()));
-    }
+		QPoint pos = zoomed(e -> pos());
+		m_dragStart = pos;
+		m_dragdist = 0;
+
+		Q_ASSERT(m_cmd == 0);
+		m_cmd = new KisImageCmd(i18n("Pen stroke"), img, device);
+
+		if (paint(pos))
+			img -> markDirty(QRect(pos - m_brush -> hotSpot(), m_brush -> size()));
+	}
 }
-
 
 bool PenTool::paint(QPoint pos)
 {
@@ -145,7 +150,7 @@ bool PenTool::paint(QPoint pos)
 	bool alpha = (img->colorMode() == cm_RGBA);
 
 	for (int y = sy; y <= ey; y++) {
-		sl = m_brush->scanline(y);
+		sl = m_brush -> scanline(y);
 
 		for (int x = sx; x <= ex; x++) {
 			// no color blending with pen tool (only with brush)
@@ -156,33 +161,22 @@ bool PenTool::paint(QPoint pos)
 			if (bv < m_penColorThreshold) 
 				continue;
 
-			r   = red;
-			g   = green;
-			b   = blue;
+			r = red;
+			g = green;
+			b = blue;
 
-			// use foreround color
-			if (!m_usePattern) {
-				lay -> setPixel(startx + x, starty + y, alpha ? qRgb(r, g, b) : qRgba(r, g, b, bv));
-#if 0
-						lay->setPixel(0, startx + x, starty + y, r);
-						lay->setPixel(1, startx + x, starty + y, g);
-						lay->setPixel(2, startx + x, starty + y, b);
-#endif
-			}
-			// map pattern to pen pixel
+			if (!m_usePattern)
+				// use foreround color
+				lay -> setPixel(startx + x, starty + y, alpha ? qRgb(r, g, b) : qRgba(r, g, b, bv), m_cmd);
 			else {
-				m_fb->setPatternToPixel(lay, startx + x, starty + y, 0);
-			}
-
-			if (alpha) {
-				//		        lay->setPixel(3, startx + x, starty + y, bv);
+				// map pattern to pen pixel
+				m_fb -> setPatternToPixel(lay, startx + x, starty + y, 0);
 			}
 		}
 	}
 
 	return true;
 }
-
 
 void PenTool::mouseMove(QMouseEvent *e)
 {
@@ -248,10 +242,12 @@ void PenTool::mouseMove(QMouseEvent *e)
 
 void PenTool::mouseRelease(QMouseEvent *e)
 {
-    if (e->button() != LeftButton)
-        return;
+	if (e->button() != LeftButton)
+		return;
 
-    m_dragging = false;
+	m_dragging = false;
+	m_doc -> addCommand(m_cmd);
+	m_cmd = 0;
 }
 
 void PenTool::optionsDialog()

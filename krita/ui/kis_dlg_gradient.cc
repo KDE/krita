@@ -124,8 +124,8 @@ GradientTab::GradientTab( KisGradient *_gradient,
     // repeat - periodicy
     repeat = new QComboBox( false, area );
     repeat->insertItem( i18n( "None" ) );
-    repeat->insertItem( i18n( "Sawtooth wave" ) );
-    repeat->insertItem( i18n( "Triangular wave" ) );
+    repeat->insertItem( i18n( "Sawtooth Wave" ) );
+    repeat->insertItem( i18n( "Triangular Wave" ) );
     layout->addWidget( repeat, 5, 1 );
 
     QLabel *lblRepeat= new QLabel( repeat, 

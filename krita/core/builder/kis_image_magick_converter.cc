@@ -37,6 +37,7 @@
 #include "kispixeldata.h"
 #include "kis_image_magick_converter.h"
 #include <qfile.h>
+#include "../../../config.h"
 
 namespace {
 	inline
@@ -100,6 +101,21 @@ namespace {
 	 * locks when calling user defined callbacks, this means that the same thread going back into IM
 	 * would deadlock since it would try to acquire locks it already holds.
 	 */
+#ifdef HAVE_MAGICK6
+	MagickBooleanType monitor(const char *text, const ExtendedSignedIntegralType, const ExtendedUnsignedIntegralType, ExceptionInfo *)
+	{
+		KApplication *app = KApplication::kApplication();
+
+		// TODO : Figure something out for above problems
+		Q_ASSERT(app);
+
+		if (app -> hasPendingEvents())
+			app -> processEvents();
+
+		printf("%s\n", text);
+		return MagickTrue;
+	}
+#else
 	unsigned int monitor(const char *text, const ExtendedSignedIntegralType, const ExtendedUnsignedIntegralType, ExceptionInfo *)
 	{
 		KApplication *app = KApplication::kApplication();
@@ -113,6 +129,8 @@ namespace {
 		printf("%s\n", text);
 		return true;
 	}
+#endif
+
 }
 
 KisImageMagickConverter::KisImageMagickConverter(KisDoc *doc, KisUndoAdapter *adapter)
@@ -316,7 +334,14 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 	tm = layer -> data();
 	image -> columns = layer -> width();
 	image -> rows = layer -> height();
+#ifdef HAVE_MAGICK6
+	if ( layer-> alpha() )
+		image -> matte = MagickTrue;
+	else
+		image -> matte = MagickFalse;
+#else       
 	image -> matte = layer -> alpha();
+#endif
 	w = TILE_WIDTH;
 	h = TILE_HEIGHT;
 	totalTiles = ((image -> columns + TILE_WIDTH - 1) / TILE_WIDTH) * ((image -> rows + TILE_HEIGHT - 1) / TILE_HEIGHT);

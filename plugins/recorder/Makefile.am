@@ -31,7 +31,7 @@ SUBDIRS = pics
 messages:
 #	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../recorder.pot
 
-recorder.h: recorder.idl
+recorder.h: recorder.idl $(micodir)/include/CORBA.h
 	rm -f recorder.h
 	rm -f recorder.cc
 	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) $(srcdir)/recorder.idl

@@ -37,7 +37,10 @@ KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
 	insertItem(i18n("Add"));
 	insertItem(i18n("Subtract"));
 	insertItem(i18n("Diff"));
-	insertItem(i18n("Mult"));
+	insertItem(i18n("Multiply"));
+	insertItem(i18n("Divide"));
+	insertItem(i18n("Dodge"));
+	insertItem(i18n("Burn"));
 	insertItem(i18n("Bumpmap"));
 	insertItem(i18n("Copy"));
 	insertItem(i18n("Copy Red"));
@@ -52,11 +55,12 @@ KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
 	insertItem(i18n("Threshold"));
 #endif
 	insertItem(i18n("No Composition"));
-#if 0
 	insertItem(i18n("Darken"));
 	insertItem(i18n("Lighten"));
 	insertItem(i18n("Hue"));
-	insertItem(i18n("Saturate"));
+	insertItem(i18n("Saturation"));
+	insertItem(i18n("Value"));
+	insertItem(i18n("Color"));
 	insertItem(i18n("Colorize"));
 	insertItem(i18n("Luminize"));
 	insertItem(i18n("Screen"));
@@ -65,7 +69,6 @@ KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
 	insertItem(i18n("Copy Magenta"));
 	insertItem(i18n("Copy Yellow"));
 	insertItem(i18n("Copy Black"));
-#endif
 	insertItem(i18n("Erase"));
 }
 

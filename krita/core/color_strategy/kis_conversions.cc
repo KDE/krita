@@ -83,10 +83,72 @@ void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V)
 	}
 }
 
- 
-void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, float * h, float * l, float * s)
+void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B)
 {
-	int max, min, delta;
+	*R = *G = *B = V;
+
+	if (S != 0 && H != -1) { // chromatic
+
+		if (H >= 360) {
+			// angle > 360
+			H %= 360;
+		}
+
+		unsigned int f = H % 60;
+		H /= 60;
+		unsigned int p = static_cast<unsigned int>(2*V*(255-S)+255)/510;
+		unsigned int q, t;
+
+		if (H & 1) {
+			q = static_cast<unsigned int>(2 * V * (15300 - S * f) + 15300) / 30600;
+			switch (H) {
+			case 1:
+				*R = static_cast<int>(q);
+				*G = static_cast<int>(V);
+				*B = static_cast<int>(p);
+				break;
+			case 3:
+				*R = static_cast<int>(p);
+				*G = static_cast<int>(q);
+				*B = static_cast<int>(V);
+				break;
+			case 5:
+				*R = static_cast<int>(V);
+				*G = static_cast<int>(p);
+				*B = static_cast<int>(q);
+				break;
+			}
+		} else {
+			t = static_cast<unsigned int>(2 * V * (15300 - (S * (60 - f))) + 15300) / 30600;
+			switch (H) {
+			case 0:
+				*R = static_cast<int>(V);
+				*G = static_cast<int>(t);
+				*B = static_cast<int>(p);
+				break;
+			case 2:
+				*R = static_cast<int>(p);
+				*G = static_cast<int>(V);
+				*B = static_cast<int>(t);
+				break;
+			case 4:
+				*R = static_cast<int>(t);
+				*G = static_cast<int>(p);
+				*B = static_cast<int>(V);
+				break;
+			}
+		}
+	}
+}
+
+void rgb_to_hls(Q_UINT8 red, Q_UINT8 green, Q_UINT8 blue, float * hue, float * lightness, float * saturation)
+{
+	float r = red / 255.0;
+	float g = green / 255.0;
+	float b = blue / 255.0;
+	float h, l, s;
+
+	float max, min, delta;
 
 	max = QMAX(r, g);
 	max = QMAX(max, b);
@@ -96,37 +158,40 @@ void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, float * h, float * l, float * s
 
 	delta = max - min;
 
-	*l = (max + min) / 2;
+	l = (max + min) / 2;
 
 	if (delta == 0) {
 		// This is a gray, no chroma...
-		*h = 0;
-		*s = 0;
+		h = 0;
+		s = 0;
 	}
 	else {
-		if ( *l < 0.5)
-			*s = delta / ( max + min );
+		if ( l < 0.5)
+			s = delta / ( max + min );
 		else
-			*s = delta / ( 2 - max - min );
+			s = delta / ( 2 - max - min );
 
 		float delta_r, delta_g, delta_b;
 
-		delta_r = ((( max - r ) / 6 ) + ( max / 2 )) / delta;
-		delta_g = ((( max - g ) / 6 ) + ( max / 2 )) / delta;
-		delta_b = ((( max - b ) / 6 ) + ( max / 2 )) / delta;
+		delta_r = (( max - r ) / 6 ) / delta;
+		delta_g = (( max - g ) / 6 ) / delta;
+		delta_b = (( max - b ) / 6 ) / delta;
 
 		if ( r == max )
-			*h = delta_b - delta_g;
+			h = delta_b - delta_g;
 		else if ( g == max)
-			*h = ( 1 / 3 ) + delta_r - delta_b;
+			h = ( 1.0 / 3 ) + delta_r - delta_b;
 		else if ( b == max)
-			*h = ( 2 / 3 ) + delta_g - delta_r;
+			h = ( 2.0 / 3 ) + delta_g - delta_r;
 
-		if (*h < 0) *h += 1;
-		if (*h > 1) *h += 1;
+		if (h < 0) h += 1;
+		if (h > 1) h += 1;
 		
 	}
 
+	*hue = h * 360;
+	*saturation = s;
+	*lightness = l;
 };
 
 float hue_value(float n1, float n2, float hue)
@@ -136,11 +201,11 @@ float hue_value(float n1, float n2, float hue)
 	else if (hue < 0 )
 		hue = hue +360;
 	if (hue < 60  )
-		return n1 + (n2 - n1) * hue / 60;
+		return n1 + (((n2 - n1) * hue) / 60);
 	else if (hue < 180 )
 		return n2;
 	else if (hue < 240 )
-		return n1 + (n2 - n1) * (240 - hue) / 60;
+		return n1 + (((n2 - n1) * (240 - hue)) / 60);
 	else return n1;
 };
 
@@ -156,12 +221,31 @@ void hls_to_rgb(float h, float l, float s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b
 
 	m1 = 2 * l - m2;
 	
-	*r = (Q_UINT8)hue_value(m1, m2, h + 120);
-	*g = (Q_UINT8)hue_value(m1, m2, h);
-	*b = (Q_UINT8)hue_value(m1, m2, h - 120);
+	*r = (Q_UINT8)(hue_value(m1, m2, h + 120) * 255 + 0.5);
+	*g = (Q_UINT8)(hue_value(m1, m2, h) * 255 + 0.5);
+	*b = (Q_UINT8)(hue_value(m1, m2, h - 120) * 255 + 0.5);
 
-	kdDebug() << " Converted hls (" << h << ", " << l << ", " << s << ")"
-		  << ") to rgb (" << *r << ", " << *g << ", " << *b << ")\n";
+	//kdDebug() << " Converted hls (" << h << ", " << l << ", " << s << ")"
+	//	  << ") to rgb (" << *r << ", " << *g << ", " << *b << ")\n";
 
 };
+
+void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, int * h, int * l, int * s)
+{
+	float hue, saturation, lightness;
+
+	rgb_to_hls(r, g, b, &hue, &lightness, &saturation);
+	*h = (int)(hue + 0.5);
+	*l = (int)(lightness * 255 + 0.5);
+	*s = (int)(saturation * 255 + 0.5);
+}
+
+void hls_to_rgb(int h, int l, int s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b)
+{
+	float hue = h;
+	float lightness = l / 255.0;
+	float saturation = s / 255.0;
+
+	hls_to_rgb(hue, lightness, saturation, r, g, b);
+}
 

@@ -1094,10 +1094,23 @@ void KisPainter::computeDab(KisAlphaMask* mask)
 			     mask -> height(),
 			     m_device -> typeWithAlpha(),
 			     "dab");
-       for (int y = 0; y < mask -> height(); y++) {
-		for (int x = 0; x < mask -> width(); x++) {
-			m_dab -> setPixel(x, y, m_paintColor, mask -> alphaAt(x, y));
+
+	KisStrategyColorSpaceSP colorStrategy = m_dab -> colorStrategy();
+	Q_INT32 maskWidth = mask -> width();
+	Q_INT32 maskHeight = mask -> height();
+	Q_INT32 dstDepth = m_dab -> depth();
+	QUANTUM *quantums = new QUANTUM[maskWidth * maskHeight * dstDepth];
+	QUANTUM *dst = quantums;
+
+	for (int y = 0; y < maskHeight; y++) {
+		for (int x = 0; x < maskWidth; x++) {
+			colorStrategy -> nativeColor(m_paintColor, mask -> alphaAt(x, y), dst);
+			dst += dstDepth;
 		}
 	}
+	
+	KisTileMgrSP dabTiles = m_dab -> data();
+	dabTiles -> writePixelData(0, 0, maskWidth - 1, maskHeight - 1, quantums, maskWidth * dstDepth);
+	delete [] quantums;
 }
 

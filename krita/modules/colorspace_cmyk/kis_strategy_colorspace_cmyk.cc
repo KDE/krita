@@ -43,7 +43,7 @@ namespace {
 }
 
 KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
-	KisStrategyColorSpace("CMYYK", TYPE_CMYK_8, icSigCmykData)
+	KisStrategyColorSpace("CMYK", TYPE_CMYK_8, icSigCmykData)
 {
 	m_channels.push_back(new KisChannelInfo(i18n("cyan"), 0, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("magenta"), 1, COLOR));

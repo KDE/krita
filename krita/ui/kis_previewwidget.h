@@ -39,8 +39,9 @@ class KisUndoAdapter;
  **/
 class KisPreviewView : public QWidget
 {
-    Q_OBJECT
-    public:
+	Q_OBJECT
+
+public:
         KisPreviewView(QWidget* parent = 0, const char * name = 0, WFlags f = 0);
         void setSourceLayer(KisLayerSP s);
         KisLayerSP getSourceLayer();
@@ -48,15 +49,16 @@ class KisPreviewView : public QWidget
         double getZoom() { return m_zoom; }
         QPoint getPos() { return m_pos; }
         void updateView();
-    public slots:
-        void setZoom(double zoom);
+
+public slots:
+	void setZoom(double zoom);
         void zoomIn();
         void zoomOut();
         void updatedPreview();
         void slotStartMoving(QPoint startDrag);
         void slotMoving(QPoint zoomedPos);
         void slotMoved(QPoint zoomedPos);
-    signals:
+signals:
         /** The moving/creation of this widget has finished; effects could be applied to it now */
         void updated();
         void startMoving(QPoint);
@@ -66,13 +68,13 @@ class KisPreviewView : public QWidget
          */
         void moving(QPoint);
         void moved(QPoint);
-    protected:
+protected:
         virtual void paintEvent(QPaintEvent*);
         virtual void mousePressEvent(QMouseEvent * e);
         virtual void mouseMoveEvent(QMouseEvent * e);
         virtual void mouseReleaseEvent(QMouseEvent * e);
         virtual void resizeEvent(QResizeEvent *e);
-    private:
+private:
         void render(QPainter &painter, KisImageSP image);
         void updateView(QPoint delta);
         void clampDelta(QPoint& delta);
@@ -97,46 +99,47 @@ class KisPreviewView : public QWidget
  */
 class KisPreviewWidget : public PreviewWidgetBase
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    /** Constructs the widget */
-    KisPreviewWidget( QWidget* parent = 0, const char* name = 0 );
+	/** Constructs the widget */
+	KisPreviewWidget( QWidget* parent = 0, const char* name = 0 );
 
-    /** @return the layer, so the dialog can apply its effect on it. */
-    KisLayerSP getLayer();
+	/** @return the layer, so the dialog can apply its effect on it. */
+	KisLayerSP getLayer();
 
-    /**
-     * returns the zoom factor. This could be useful if the filter has to rely on
-     * the whole layer. With this and getPos(), there is enough information to
-     * paint the preview from a source different from the layer in @see getLayer */
-    double getZoom();
+	/**
+	 * returns the zoom factor. This could be useful if the filter has to rely on
+	 * the whole layer. With this and getPos(), there is enough information to
+	 * paint the preview from a source different from the layer in @see getLayer */
+	double getZoom();
 
-    /** returns the 'vector' the image in the preview has been moved by. @see getZoom */
-    QPoint getPos();
+	/** returns the 'vector' the image in the preview has been moved by. @see getZoom */
+	QPoint getPos();
     
 
 public slots:
 
-    /** Sets the preview to use the layer specified as argument */
-    void slotSetLayer(KisLayerSP lay);
+	/** Sets the preview to use the layer specified as argument */
+	void slotSetLayer(KisLayerSP lay);
 
-    /** 
-     * This should be called at the beginning of the effect. This ensures that 
-     * the layer in the preview widget is in the right state. */
-    void slotRenewLayer();
+	/** 
+	 * This should be called at the beginning of the effect. This ensures that 
+	 * the layer in the preview widget is in the right state. */
+	void slotRenewLayer();
 
-    /**
-     * Call this when the effect has finished updating the layer. Makes the preview
-     * repaint itself. */
-    void slotUpdate();
+	/**
+	 * Call this when the effect has finished updating the layer. Makes the preview
+	 * repaint itself. */
+	void slotUpdate();
 
 signals:
-    /** This is emitted when the position or zoom factor of the widget has changed */
-    void updated();
+	/** This is emitted when the position or zoom factor of the widget has changed */
+	void updated();
 
 private slots:
-    void redirectUpdated();
+
+	void redirectUpdated();
 };
 
 #endif

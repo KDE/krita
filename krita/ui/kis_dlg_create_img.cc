@@ -24,7 +24,7 @@
 #include <qspinbox.h>
 #include <qslider.h>
 #include <qtextedit.h>
-#include <qchkbox.h>
+#include <qcheckbox.h>
 
 #include <klocale.h>
 #include <kcolorcombo.h>

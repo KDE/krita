@@ -145,6 +145,21 @@ public:
 
 	KisStrategyColorSpaceSP colorStrategy() const;
 
+	/**
+	 * Return the icm profile associated with this layer, or 
+	 * the profile associated with the image if the color space of
+	 * this layer is the same as the color space of the image,
+	 * or 0.
+	 */
+	KisProfileSP profile() const;
+
+	/**
+	 * Set the profile associated with this layer to the specified profile
+	 * or reset to 0 if the profile does not have the same colorspace signature
+	 * as the color model associated with this paint device.
+	 */
+	void setProfile(KisProfileSP profile);
+
 	CompositeOp compositeOp() { return m_compositeOp; }
 	void setCompositeOp(CompositeOp compositeOp) { m_compositeOp = compositeOp; }
 
@@ -286,6 +301,7 @@ private:
 	// Operation used to composite this layer with the layers _under_ this layer
 	CompositeOp m_compositeOp;
 	KisStrategyColorSpaceSP m_colorStrategy; 
+	KisProfileSP m_profile;
 
         void accept(KisScaleVisitor &);
         void accept(KisRotateVisitor &);

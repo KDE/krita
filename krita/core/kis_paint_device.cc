@@ -38,6 +38,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_scale_visitor.h"
 #include "kis_rotate_visitor.h"
+#include "kis_profile.h"
 
 namespace {
         class KisResizeDeviceCmd : public KNamedCommand {
@@ -102,12 +103,14 @@ KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, KisStrategyColorSp
 	m_name = name;
 	m_compositeOp = COMPOSITE_OVER;
 	m_colorStrategy = colorStrategy;
+	m_profile = 0;
 }
 
 KisPaintDevice::KisPaintDevice(KisImage *img, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
         init();
         configure(img, width, height, colorStrategy, name, COMPOSITE_OVER);
+	m_profile = 0;
 }
 
 KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImage *img, const QString& name)
@@ -124,6 +127,7 @@ KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImage *img, const QString& na
         m_owner = img;
         m_name = name;
         m_compositeOp = COMPOSITE_OVER;
+	m_profile = 0;
 }
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs)
@@ -147,6 +151,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs
                 m_name = rhs.m_name;
                 m_compositeOp = COMPOSITE_OVER;
 		m_colorStrategy = rhs.m_colorStrategy;
+		m_profile = rhs.m_profile;
         }
 }
 
@@ -640,6 +645,28 @@ void KisPaintDevice::convertFromImage(const QImage& img)
 		}
 	}
 }
+
+KisProfileSP KisPaintDevice::profile() const
+{
+	if (m_profile == 0) {
+		if (colorStrategy() == m_owner -> colorStrategy()) {
+			return m_owner -> profile();
+		}
+	}
+	return m_profile;
+}
+
+
+void KisPaintDevice::setProfile(KisProfileSP profile) 
+{
+	if (profile -> colorSpaceSignature() == colorStrategy() -> colorSpaceSignature()) {
+		m_profile = profile;
+	}
+	else {
+		m_profile = 0;
+	}
+}
+
 
 QImage KisPaintDevice::convertToQImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {

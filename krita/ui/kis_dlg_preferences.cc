@@ -204,7 +204,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 
 void ColorSettingsTab::refillMonitorProfiles(const QString & s)
 {
-
+	kdDebug() << "Get monitor profiles: " << s << "\n";
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbMonitorProfile -> clear();
 	vKisProfileSP profileList = cs -> profiles();
@@ -213,13 +213,12 @@ void ColorSettingsTab::refillMonitorProfiles(const QString & s)
 		if ((*it) -> deviceClass() == icSigDisplayClass)
 			m_page -> cmbMonitorProfile -> insertItem((*it) -> productName());
 	}
-	
 
 }
 
 void ColorSettingsTab::refillPrintProfiles(const QString & s)
 {
-
+	kdDebug() << "Get printer profiles " << s << "\n";
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbPrintProfile -> clear();
 	vKisProfileSP profileList = cs -> profiles();
@@ -229,11 +228,11 @@ void ColorSettingsTab::refillPrintProfiles(const QString & s)
 			m_page -> cmbPrintProfile -> insertItem((*it) -> productName());
 	}
 	
-
 }
 
 void ColorSettingsTab::refillImportProfiles(const QString & s)
 {
+	kdDebug() << "Get import profiles " << s << "\n";
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbImportProfile -> clear();
 	vKisProfileSP profileList = cs -> profiles();
@@ -242,8 +241,6 @@ void ColorSettingsTab::refillImportProfiles(const QString & s)
 		if ((*it) -> deviceClass() == icSigInputClass)
 			m_page -> cmbImportProfile -> insertItem((*it) -> productName());
 	}
-	
-
 }
 
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )

@@ -40,238 +40,240 @@
 
 // The View
 KisPreviewView::KisPreviewView(QWidget* parent, const char * name, WFlags f)
-    : QWidget(parent, name, f), m_undo(0), /* seems to work nicely */
-        m_pos(QPoint(0,0)), m_zoom(1.0)
+	: QWidget(parent, name, f), m_undo(0), /* seems to work nicely */
+	  m_pos(QPoint(0,0)), m_zoom(1.0)
 {
-    m_moving = false;
-    m_pixmap = QPixmap(size().width(), size().height());
-    updateView(m_pos);
+	m_moving = false;
+	m_pixmap = QPixmap(size().width(), size().height());
+	updateView(m_pos);
 }
 
 KisLayerSP KisPreviewView::getSourceLayer()
 {
-    return m_sourcelayer;
+	return m_sourcelayer;
 }
 
 KisLayerSP KisPreviewView::getPreviewLayer()
 {
-    return m_clippedview;
+	return m_clippedview;
 }
 
 void KisPreviewView::updateView()
 {
-    updateView(m_pos);
+	updateView(m_pos);
 }
 
 void KisPreviewView::updateView(QPoint delta)
 {
-    if (!m_clippedview || !m_sourcelayer) return;
+	if (!m_clippedview || !m_sourcelayer) return;
 
-    KisPainter gc;
-    KisPaintDeviceSP pd(m_sourcelayer.data());
+	KisPainter gc;
+	KisPaintDeviceSP pd(m_sourcelayer.data());
 
-    gc.begin(m_clippedview.data());
-    gc.bitBlt(0, 0, COMPOSITE_OVER, pd, delta.x(), delta.y(), -1, -1);
-    gc.end();
+	gc.begin(m_clippedview.data());
+	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, delta.x(), delta.y(), -1, -1);
+	gc.end();
 }
 
 void KisPreviewView::setSourceLayer(KisLayerSP lay)
 {
-    m_sourcelayer = lay;
-    KisPainter gc;
-    KisPaintDeviceSP pd(m_sourcelayer.data());
+	m_sourcelayer = lay;
+	KisPainter gc;
+	KisPaintDeviceSP pd(m_sourcelayer.data());
     
-    m_pixmap = QPixmap(size().width(), size().height());
+	m_pixmap = QPixmap(size().width(), size().height());
 
-    Q_INT32 w = static_cast<Q_INT32>(size().width() / m_zoom);
-    Q_INT32 h = static_cast<Q_INT32>(size().height() / m_zoom);
-    m_image = new KisImage(m_undo, w, h, lay->colorStrategy(), "preview");
-    m_clippedview = new KisLayer(m_image, w, h, m_image -> nextLayerName(), OPACITY_OPAQUE);
-    gc.begin(m_clippedview.data());
+	Q_INT32 w = static_cast<Q_INT32>(size().width() / m_zoom);
+	Q_INT32 h = static_cast<Q_INT32>(size().height() / m_zoom);
+	m_image = new KisImage(m_undo, w, h, lay->colorStrategy(), "preview");
+	m_clippedview = new KisLayer(m_image, w, h, m_image -> nextLayerName(), OPACITY_OPAQUE);
+	gc.begin(m_clippedview.data());
     
-    gc.bitBlt(0, 0, COMPOSITE_OVER, pd, m_pos.x(), m_pos.y(), -1, -1);
-    gc.end();
-    m_image -> add(m_clippedview, -1);
+	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, m_pos.x(), m_pos.y(), -1, -1);
+	gc.end();
+	m_image -> add(m_clippedview, -1);
 
-    update();
-    emit updated();
+	update();
+	emit updated();
 }
 
 void KisPreviewView::setZoom(double zoom) {
-    m_zoom = zoom;
-    clampDelta(m_pos);
-    setSourceLayer(m_sourcelayer); // so that it automatically resizes m_clippedview
+	m_zoom = zoom;
+	clampDelta(m_pos);
+	setSourceLayer(m_sourcelayer); // so that it automatically resizes m_clippedview
 }
 
 void KisPreviewView::zoomIn() {
-    if (m_zoom * 1.5 < 8) {
-        setZoom(m_zoom * 1.5);
-    }
+	if (m_zoom * 1.5 < 8) {
+		setZoom(m_zoom * 1.5);
+	}
 }
 
 void KisPreviewView::zoomOut() {
-    if (m_zoom / 1.5 > 1/8) {
-        setZoom(m_zoom / 1.5);
-    }
+	if (m_zoom / 1.5 > 1/8) {
+		setZoom(m_zoom / 1.5);
+	}
 }
 
 void KisPreviewView::updatedPreview() {
-    update();
+	update();
 }
 
 void KisPreviewView::render(QPainter &painter, KisImageSP image)
 {
-    if( image == 0 ) // This is usefull only for Qt/Designer
-        return;
+	if( image == 0 ) // This is usefull only for Qt/Designer
+		return;
 
-    Q_INT32 x1 = 0;
-    Q_INT32 y1 = 0;
-    Q_INT32 x2 = image -> width();
-    Q_INT32 y2 = image -> height();
-    Q_INT32 tileno;
+	Q_INT32 x1 = 0;
+	Q_INT32 y1 = 0;
+	Q_INT32 x2 = image -> width();
+	Q_INT32 y2 = image -> height();
+	Q_INT32 tileno;
 
-    if (!image)
-        return;
+	if (!image)
+		return;
 
-    if (m_zoom != 1.0)
-        painter.scale(m_zoom, m_zoom);
+	if (m_zoom != 1.0)
+		painter.scale(m_zoom, m_zoom);
 
-    for (Q_INT32 y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
-        for (Q_INT32 x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
-            if ((tileno = image -> tileNum(x, y)) < 0)
-                continue;
+	for (Q_INT32 y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
+		for (Q_INT32 x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
+			if ((tileno = image -> tileNum(x, y)) < 0)
+				continue;
 
-            image -> renderToProjection(tileno);
-        }
-    }
+			image -> renderToProjection(tileno);
+		}
+	}
+	// XXX: Doesn't this have the same bug as we had in kis_doc:;paintContent?
+	for (Q_INT32 y = y1; y < y2; y += RENDER_HEIGHT)
+		for (Q_INT32 x = x1; x < x2; x += RENDER_WIDTH) {
+			Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
+			Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
 
-    for (Q_INT32 y = y1; y < y2; y += RENDER_HEIGHT)
-        for (Q_INT32 x = x1; x < x2; x += RENDER_WIDTH) {
-            Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
-            Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
+			QImage img = image -> projection() -> convertToQImage(x, y, w, h);
 
-            QImage img = image -> projection() -> convertToQImage(x, y, w, h);
-
-            if (!img.isNull()) {
-                m_pixio.putImage(&m_pixmap, 0, 0, &img);
-                painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
-            }
-        }
+			if (!img.isNull()) {
+				// XXX: made obosolete by qt-copy patch 0005
+				// m_pixio.putImage(&m_pixmap, 0, 0, &img);
+				m_pixmap.convertFromImage(img);
+				painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
+			}
+		}
 }
 
 void KisPreviewView::clampDelta(QPoint& delta)
 {
-    if (delta.x() < 0)
-        delta.rx() = 0;
-    if (delta.y() < 0)
-        delta.ry() = 0;
-    if (delta.x() + size().width() / m_zoom >= m_sourcelayer -> width())
-        delta.rx() = m_sourcelayer -> width() - static_cast<int>(size().width() / m_zoom) - 1;
-    if (delta.y() + size().height() / m_zoom >= m_sourcelayer -> height())
-        delta.ry() = m_sourcelayer -> height() - static_cast<int>(size().height() / m_zoom) - 1;
+	if (delta.x() < 0)
+		delta.rx() = 0;
+	if (delta.y() < 0)
+		delta.ry() = 0;
+	if (delta.x() + size().width() / m_zoom >= m_sourcelayer -> width())
+		delta.rx() = m_sourcelayer -> width() - static_cast<int>(size().width() / m_zoom) - 1;
+	if (delta.y() + size().height() / m_zoom >= m_sourcelayer -> height())
+		delta.ry() = m_sourcelayer -> height() - static_cast<int>(size().height() / m_zoom) - 1;
 }
 
 void KisPreviewView::slotStartMoving(QPoint startDrag)
 {
-    m_startDrag = startDrag;
+	m_startDrag = startDrag;
 }
 
 void KisPreviewView::slotMoving(QPoint zoomedPos)
 {
-    QPoint delta = m_pos - (zoomedPos - m_startDrag);
-    m_moving = true;
-    clampDelta(delta);
-    updateView(delta);
-    update();
+	QPoint delta = m_pos - (zoomedPos - m_startDrag);
+	m_moving = true;
+	clampDelta(delta);
+	updateView(delta);
+	update();
 }
 
 void KisPreviewView::slotMoved(QPoint zoomedPos)
 {
-    m_pos -= zoomedPos - m_startDrag;
-    clampDelta(m_pos);
-    m_moving = false;
+	m_pos -= zoomedPos - m_startDrag;
+	clampDelta(m_pos);
+	m_moving = false;
 
-    emit updated();
+	emit updated();
 }
 
 void KisPreviewView::paintEvent(QPaintEvent*)
 {
-    setUpdatesEnabled(false);
-    QPainter painter(this);
-    render(painter, m_image);
-    setUpdatesEnabled(true);
+	setUpdatesEnabled(false);
+	QPainter painter(this);
+	render(painter, m_image);
+	setUpdatesEnabled(true);
 }
 
 void KisPreviewView::mouseMoveEvent(QMouseEvent * e)
 {
-    QPoint zoomedPos(static_cast<int>(e->pos().x()/m_zoom),
-                     static_cast<int>(e->pos().y()/m_zoom));
+	QPoint zoomedPos(static_cast<int>(e->pos().x()/m_zoom),
+			 static_cast<int>(e->pos().y()/m_zoom));
 
-    slotMoving(zoomedPos);
-    emit moving(zoomedPos);
+	slotMoving(zoomedPos);
+	emit moving(zoomedPos);
 }
 
 void KisPreviewView::mousePressEvent(QMouseEvent * e)
 {
-    m_startDrag = QPoint(static_cast<int>(e->pos().x()/m_zoom),
-                         static_cast<int>(e->pos().y()/m_zoom));
-    emit startMoving(m_startDrag);
+	m_startDrag = QPoint(static_cast<int>(e->pos().x()/m_zoom),
+			     static_cast<int>(e->pos().y()/m_zoom));
+	emit startMoving(m_startDrag);
 }
 
 void KisPreviewView::mouseReleaseEvent(QMouseEvent * e)
 {
-    mouseMoveEvent(e);
-    QPoint zoomedPos(static_cast<int>(e->pos().x()/m_zoom),
-                     static_cast<int>(e->pos().y()/m_zoom));
-    slotMoved(zoomedPos);
-    emit moved(zoomedPos);
+	mouseMoveEvent(e);
+	QPoint zoomedPos(static_cast<int>(e->pos().x()/m_zoom),
+			 static_cast<int>(e->pos().y()/m_zoom));
+	slotMoved(zoomedPos);
+	emit moved(zoomedPos);
 }
 
 void KisPreviewView::resizeEvent(QResizeEvent *) {
-    clampDelta(m_pos);
-    setSourceLayer(m_sourcelayer); // so that it automatically resizes m_clippedview
+	clampDelta(m_pos);
+	setSourceLayer(m_sourcelayer); // so that it automatically resizes m_clippedview
 }
 
 
 // The Standard Preview Widget
 
 KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
-    : PreviewWidgetBase( parent, name )
+	: PreviewWidgetBase( parent, name )
 {
-    connect(m_preview, SIGNAL(updated()), this, SLOT(redirectUpdated()));
+	connect(m_preview, SIGNAL(updated()), this, SLOT(redirectUpdated()));
 }
 
 void KisPreviewWidget::redirectUpdated() {
-    emit updated();
+	emit updated();
 }
 
 void KisPreviewWidget::slotSetLayer(KisLayerSP lay)
 {
-    m_original->setSourceLayer(lay);
-    m_preview->setSourceLayer(lay);
+	m_original->setSourceLayer(lay);
+	m_preview->setSourceLayer(lay);
 }
 
 void KisPreviewWidget::slotRenewLayer() {
-    m_preview->updateView();
+	m_preview->updateView();
 }
 
 KisLayerSP KisPreviewWidget::getLayer()
 {
-    return m_preview->getPreviewLayer();
+	return m_preview->getPreviewLayer();
 }
 
 void KisPreviewWidget::slotUpdate()
 {
-    m_preview->updatedPreview();
+	m_preview->updatedPreview();
 }
 
 double KisPreviewWidget::getZoom()
 {
-    return m_preview->getZoom();
+	return m_preview->getZoom();
 }
 
 QPoint KisPreviewWidget::getPos()
 {
-    return m_preview->getPos();
+	return m_preview->getPos();
 }
 #include "kis_previewwidget.moc"

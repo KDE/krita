@@ -1,0 +1,125 @@
+* Using littlecms for professional colourmanagement.
+
+
+Profiles are applied to image data on import, paste, copy, display and
+printing to calibrate for particular ways in which image data can 
+be presented or created. Profiles are associated with a certain
+color space and with a device class.
+
+* The following profiles are available in Krita:
+
+Image profile           The image profile is the default profile
+                        for the default color space for the layers 
+                        in Krita
+
+Layer profile           Krita images can have layers of different
+                        color spaces, so each layer can have a
+                        different profile, too.
+                        
+Display profile         When converting the visible part of 
+                        an image for displaying on the users monitor,
+                        a monitor calibration profile can be applied
+                        to adjust for display idiosyncrasies.
+
+Import profile          On importing an image from disk that does
+                        not have a profile embedded (XXX: embedded
+                        profiles aren't recoginized yet), a screenshot
+                        or a scan, the import profile is attached
+                        to the image.
+                        
+Output profile          On printing, a profile can be applied to the
+                        image to compensate for the printer
+                        idiosyncrasies. XXX: Printing doesn't work
+                        yet at all, and printing is big task that
+                        should be part of KDE. We should simply
+                        convert an image to a tiff file with embedded
+                        profile, and send that to a system printer.
+                        
+                        
+* At the following points we need to handle profiles:
+
+
+File import             Krita uses ImageMagick to import files. 
+                        ImageMagick knows about embedded profiles and
+                        makes them available in memory. We need to 
+                        hack our IM builder to convert the in-memory
+                        profile blob to a profile handle.
+        
+
+File export             Krita uses ImageMagick to export files.
+                        Here we need to do the reverse trick; take
+                        a profile handle and get IM to save it with 
+                        the file.
+
+Paste from clipboard    Two cases: Krita has placed a clip on the
+                        clipboard, or another application has placed
+                        a clip on the clipboard. Clips are wrapped
+                        in the KisClip class that can be created with
+                        a profile. That can be the profile of the
+                        image Krita copied the clip from, or the
+                        copy profile set in the Settings, or none.
+
+                        An external clip is always RGB8 (for now, no
+                        doubt Qt will extend its clipboard once RGB16
+                        images or RGB half images become widespread),
+                        so in those cases we always need an RGB
+                        profile.
+
+                        Paste from external applications is handled by
+                        the constructor from KisPaintDevice,
+                        internally it might entail a mode conversion.
+ 
+Copy to clipboard       If another application consumes a clip Krita
+                        has put on the clipboard it can receive the
+                        data as-is, or with a profile applied.
+
+                        Paste is handled by KisPaintDevice::convertToQImage.
+
+Display on monitor      For calibrated displays. This is handled 
+                        by KisPaintDevice::convertToQImage()
+
+Image mode conversion   A user can either choose to convert an
+                        existing layer or image to another color
+                        model/profile/bit depth or the conversion can
+                        happen automatically, for instance when
+                        painting when the color of a pixel is
+                        converted from KoColor to the color in the
+                        color model.
+
+                        This is handled by
+                        KisStrategyColorSpace:convertTo().
+
+File loading            Krita's own file format now has a field for
+                        the product name of a profile. We need also to
+                        be able to embed the entire profile into a
+                        Krita file. That should be easy, since a Krita
+                        file is just a zipfile.
+
+File saving             When loading a Krita file format image we
+                        should also be able to load embedded profiles.
+
+
+* Krita should have a few extra features that are easy to implement
+  once I a) know what they mean, technically and b) the foregoing is
+  completed. These are:
+
+Softproofing            Showing the image on the monitor with profiles
+                        for printing applied, too. 
+
+Out-of-gamut warnign    Colours that cannot be printed are shown in
+                        some hideous colour.
+
+Blackpoint compenstion  No idea about this...
+
+8-bit image dither      No idea.
+
+...                     lcms offers more stuff that I don't know
+                        anything about but which might be interesting.
+
+
+* External factors play a role. We need a free display calibration
+  tool for X11, a printing system that takes this stuff into account
+  and all the rest. That's not part of Krita, but it needs to be done
+  some time. XXX: Ask the KGamma developers about this?
+
+

@@ -230,14 +230,14 @@ QImage KisStrategyColorSpaceCMYK::convertToImage(KisTileMgrSP tm, Q_UINT32 depth
 	return img;
 }
 
-void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 stride,
-					QUANTUM *dst,
-					Q_INT32 dststride,
-					QUANTUM *src,
-					Q_INT32 srcstride,
-					Q_INT32 rows,
-					Q_INT32 cols,
-					CompositeOp op) const
+void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
+				       QUANTUM *dst,
+				       Q_INT32 dststride,
+				       QUANTUM *src,
+				       Q_INT32 srcstride,
+				       Q_INT32 rows,
+				       Q_INT32 cols,
+				       CompositeOp op) const
 {
         kdDebug() << "Compositing with: " << op << endl;
 	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
@@ -267,7 +267,7 @@ void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 stride,
 		}
 		break;
 	case COMPOSITE_OVER:
-		tileBlt(stride, dst, dststride, src, srcstride, OPACITY_OPAQUE, rows, cols, op);
+		bitBlt(stride, dst, dststride, src, srcstride, OPACITY_OPAQUE, rows, cols, op);
 		break;
 	default:
 		kdDebug() << "Not Implemented.\n";
@@ -276,15 +276,15 @@ void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 stride,
 	}
 }
 
-void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 stride,
-					QUANTUM *dst,
-					Q_INT32 dststride,
-					QUANTUM *src,
-					Q_INT32 srcstride,
-					QUANTUM opacity,
-					Q_INT32 rows,
-					Q_INT32 cols,
-					CompositeOp op) const
+void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
+				       QUANTUM *dst,
+				       Q_INT32 dststride,
+				       QUANTUM *src,
+				       Q_INT32 srcstride,
+				       QUANTUM opacity,
+				       Q_INT32 rows,
+				       Q_INT32 cols,
+				       CompositeOp op) const
 {
 	QUANTUM alpha = OPACITY_OPAQUE;
 	QUANTUM *d;
@@ -295,9 +295,9 @@ void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 stride,
 		return;
 	switch (op) {
 	case COMPOSITE_COPY:
-		tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
+		bitBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
 	case COMPOSITE_CLEAR:
-		tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
+		bitBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
 	case COMPOSITE_OVER:
 	default:
 		while (rows-- > 0) {

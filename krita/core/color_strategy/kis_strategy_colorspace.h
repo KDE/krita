@@ -90,24 +90,24 @@ public:
 	virtual QImage convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const = 0;
 	virtual QImage convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const = 0;
 
-	virtual void tileBlt(Q_INT32 stride,
-			     QUANTUM *dst, 
-			     Q_INT32 dststride,
-			     QUANTUM *src, 
-			     Q_INT32 srcstride,
-			     Q_INT32 rows, 
-			     Q_INT32 cols, 
-			     CompositeOp op) const = 0;
+	virtual void bitBlt(Q_INT32 stride,
+			    QUANTUM *dst, 
+			    Q_INT32 dststride,
+			    QUANTUM *src, 
+			    Q_INT32 srcstride,
+			    Q_INT32 rows, 
+			    Q_INT32 cols, 
+			    CompositeOp op) const = 0;
 	
-	virtual void tileBlt(Q_INT32 stride,
-			     QUANTUM *dst, 
-			     Q_INT32 dststride,
-			     QUANTUM *src, 
-			     Q_INT32 srcstride,
-			     QUANTUM opacity,
-			     Q_INT32 rows, 
-			     Q_INT32 cols, 
-			     CompositeOp op) const = 0;
+	virtual void bitBlt(Q_INT32 stride,
+			    QUANTUM *dst, 
+			    Q_INT32 dststride,
+			    QUANTUM *src, 
+			    Q_INT32 srcstride,
+			    QUANTUM opacity,
+			    Q_INT32 rows, 
+			    Q_INT32 cols, 
+			    CompositeOp op) const = 0;
 	
 	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src) =0;
 	

@@ -152,7 +152,7 @@ void KisPainter::tileBlt(QUANTUM *dst,
         Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
         Q_INT32 srcstride = srctile -> width() * srctile -> depth();
         Q_INT32 stride = m_device -> depth();
-        m_device -> colorStrategy() -> tileBlt(stride, dst, dststride, src, srcstride, opacity, rows, cols, op);
+        m_device -> colorStrategy() -> bitBlt(stride, dst, dststride, src, srcstride, opacity, rows, cols, op);
 }
 
 void KisPainter::tileBlt(QUANTUM *dst,
@@ -166,7 +166,7 @@ void KisPainter::tileBlt(QUANTUM *dst,
         Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
         Q_INT32 srcstride = srctile -> width() * srctile -> depth();
         Q_INT32 stride = m_device -> depth();
-        m_device -> colorStrategy() -> tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
+        m_device -> colorStrategy() -> bitBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
 }
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,

@@ -97,23 +97,23 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 	virtual QImage convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const;
 	virtual QImage convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const;
 
-	virtual void tileBlt(Q_INT32 stride,
-			     QUANTUM *dst, 
-			     Q_INT32 dststride,
-			     QUANTUM *src, 
-			     Q_INT32 srcstride,
-			     Q_INT32 rows, 
-			     Q_INT32 cols, 
-			     CompositeOp op) const;
-	virtual void tileBlt(Q_INT32 stride,
-			     QUANTUM *dst, 
-			     Q_INT32 dststride,
-			     QUANTUM *src, 
-			     Q_INT32 srcstride,
-			     QUANTUM opacity,
-			     Q_INT32 rows, 
-			     Q_INT32 cols, 
-			     CompositeOp op) const;
+	virtual void bitBlt(Q_INT32 stride,
+			    QUANTUM *dst, 
+			    Q_INT32 dststride,
+			    QUANTUM *src, 
+			    Q_INT32 srcstride,
+			    Q_INT32 rows, 
+			    Q_INT32 cols, 
+			    CompositeOp op) const;
+	virtual void bitBlt(Q_INT32 stride,
+			    QUANTUM *dst, 
+			    Q_INT32 dststride,
+			    QUANTUM *src, 
+			    Q_INT32 srcstride,
+			    QUANTUM opacity,
+			    Q_INT32 rows, 
+			    Q_INT32 cols, 
+			    CompositeOp op) const;
 	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src);
 	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst);
 	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst);

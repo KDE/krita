@@ -171,31 +171,31 @@ QImage KisStrategyColorSpaceGrayscale::convertToImage(KisTileMgrSP tm, Q_UINT32 
 }
 
 
-void KisStrategyColorSpaceGrayscale::tileBlt(Q_INT32 stride,
-					     QUANTUM *dst,
-					     Q_INT32 dststride,
-					     QUANTUM *src,
-					     Q_INT32 srcstride,
-					     Q_INT32 rows, 
-					     Q_INT32 cols, 
-					     CompositeOp op) const
+void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 stride,
+					    QUANTUM *dst,
+					    Q_INT32 dststride,
+					    QUANTUM *src,
+					    Q_INT32 srcstride,
+					    Q_INT32 rows, 
+					    Q_INT32 cols, 
+					    CompositeOp op) const
 {
 	if (rows <= 0 || cols <= 0)
 		return;
 
-	tileBlt(stride, dst, dststride, src, srcstride, OPACITY_OPAQUE, rows, cols, op);
+	bitBlt(stride, dst, dststride, src, srcstride, OPACITY_OPAQUE, rows, cols, op);
 
 }
 
-void KisStrategyColorSpaceGrayscale::tileBlt(Q_INT32 stride,
-					     QUANTUM *dst, 
-					     Q_INT32 dststride,
-					     QUANTUM *src, 
-					     Q_INT32 srcstride,
-					     QUANTUM opacity,
-					     Q_INT32 rows, 
-					     Q_INT32 cols, 
-					     CompositeOp op) const
+void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 stride,
+					    QUANTUM *dst, 
+					    Q_INT32 dststride,
+					    QUANTUM *src, 
+					    Q_INT32 srcstride,
+					    QUANTUM opacity,
+					    Q_INT32 rows, 
+					    Q_INT32 cols, 
+					    CompositeOp op) const
 {
 	QUANTUM *d;
 	QUANTUM *s;

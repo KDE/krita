@@ -1,0 +1,68 @@
+From: Mathew Brennesholtz <msb@philabs.research.philips.com>
+Subject: Re: contrast of color
+Date: 01 Oct 1999 00:00:00 GMT
+Message-ID: <37F4DD62.3AABA5D2@philabs.research.philips.com>
+Content-Transfer-Encoding: 7bit
+References: <37F3395E.484C921A@netvision.net.il>
+Content-Type: text/plain; charset=us-ascii
+X-Complaints-To: usenet@philabs.research.philips.com
+X-Trace: news.philabs.research.philips.com 938783269 3770 130.140.53.137 (1 Oct 1999 13:07:49 GMT)
+Organization: Philips Research, Briarcliff Manor, NY
+Mime-Version: 1.0
+NNTP-Posting-Date: 1 Oct 1999 13:07:49 GMT
+Newsgroups: sci.engr.color
+
+One intention of the L*a*b* formulation is that when you calculate:
+
+    delta-E = sqrt((delta-L*)^2 + (delta-a*)^2 + (delta-b*)^2),
+
+a delta-E = 1 should be just barely percievable to some viewers.  If you
+want most people to be able to distinguish between two colors most of the
+time, a delta-E = 3 is needed. Delta-E = 3 is called a MPCD (minimum
+perceptible color difference) or a JND (just noticable difference) by
+some authors.  Keep in mind that the L*a*b* space is not a perfectly
+uniform space, so the delta-E value that is percievable depends on
+location in x-y space and the direction between the two colors.
+
+Using a delta-E = 1 threshold, M. R. Pointer (The Number of Discernible
+Colours, Color Research and Application, 23:1 February 1998) calculated
+that there are 2.28 million discernable color/luminance combinations.
+Other studies (see references in Pointer) show that printing inks give
+1.6 million colors and EBU phosphors give 1.35 million colors.  These are
+far less than the 16 million colors claimed by 8 bit/color video cards,
+never mind 10 or 12 bit video systems.  Obviously, some of these
+color/luminance combinations are indistiguishable from each other.
+
+Hope that helps.
+
+IPLAB wrote:
+
+> Hallow !!
+> I understand that to measure contrast between two objects in color
+> picture, I can calculate the vector distance on  L a b space (between
+> the two objects).
+> Does anyone can tell me what is the minimum of the Vector distance
+> ,that eye can see ??
+>
+> Thanks
+>
+> from sally
+
+http://www.compuphase.com/cmetric.htm:
+
+
+typedef struct {
+   unsigned char r, g, b;
+} RGB;
+
+long ColourDistance(RGB e1, RGB e2)
+{
+  long r,g,b;
+  long rmean;
+
+  rmean = ( (int)e1.r + (int)e2.r ) / 2;
+  r = (int)e1.r - (int)e2.r;
+  g = (int)e1.g - (int)e2.g;
+  b = (int)e1.b - (int)e2.b;
+  return (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
+}

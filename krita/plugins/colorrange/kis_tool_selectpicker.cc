@@ -46,19 +46,42 @@
 
 Q_UINT8 matchColors(const QColor & c, const QColor & c2, Q_UINT8 fuzziness)
 {
+#if 1
+	// XXX: Is it enough to compare just hue, or should we compare saturation
+	// and value too?
 	int h1, s1, v1, h2, s2, v2;
 	rgb_to_hsv(c.red(), c.green(), c.blue(), &h1, &s1, &v1);
 	rgb_to_hsv(c2.red(), c2.green(), c2.blue(), &h2, &s2, &v2);
 
 	//kdDebug() << "Hue 1: " << h1 << ", hue 2: " << h2 << "\n";
 
-	int diff = QABS(h1 - h2);
+	int diff = QMAX(QABS(v1 - v2), QMAX(QABS(s1 - s2), QABS(h1 - h2)));
 
 	if (diff > fuzziness) return 0;
 
 	if (diff == 0) return 255;
 
 	return 255 - (diff / fuzziness * 255);
+#else //XXX: See doc/colordiff for this formulate. I don't know how to map the long values to a 0-255 range.
+	long r,g,b;
+	long rmean;
+
+	rmean = ( (int)c.red() + (int)c2.red() ) / 2;
+	
+	r = (int)c.red() - (int)c2.red();
+	g = (int)c.green() - (int)c2.green();
+	b = (int)c.blue() - (int)c2.blue();
+
+	long diff = (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
+					    
+        if (diff > fuzziness) return 0;
+
+        if (diff == 0,0) return 255;
+
+	kdDebug() << "Diff: " << QString::number(diff) << "\n";
+	return (Q_UINT8) diff;
+	
+#endif
 }
 
 void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const QColor & c, int fuzziness, enumSelectionMode mode)
@@ -83,9 +106,18 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const QColor 
 
  			Q_UINT8 match = matchColors(c, c2, fuzziness);
 			//kdDebug() << " Match: " << QString::number(match) << ", mode: " << mode << "\n";
-
-			if (mode == SELECTION_ADD || mode == SELECTION_REPLACE) {
+			if (mode == SELECTION_REPLACE) {
 				*(selIter.rawData()) =  match;
+			}
+			else if (mode == SELECTION_ADD) { 
+				Q_UINT8 d = *(selIter.rawData()); 
+				if (d + match > MAX_SELECTED) {
+					*(selIter.rawData()) = MAX_SELECTED;
+				}
+				else {
+					*(selIter.rawData()) = match + d;
+				}
+
 			}
 			else if (mode == SELECTION_SUBTRACT) {
 				Q_UINT8 selectedness = *(selIter.rawData());

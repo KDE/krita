@@ -42,8 +42,8 @@ class KisCompositeOp : public KisAbstractCapability {
 
 public:
 	KisCompositeOp();
-	KisCompositeOp(QString & label,
-		       QString & description);
+	KisCompositeOp(const QString & label,
+		       const QString & description);
 	virtual ~KisCompositeOp();
 
 	virtual void composite(Q_INT32 stride,

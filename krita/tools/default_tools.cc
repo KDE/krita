@@ -106,6 +106,7 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
 		r -> add(new KisToolSelectContiguousFactory());
 		r -> add(new KisToolZoomFactory());
 		r -> add(new KisToolEllipseFactory());
+		r -> add(new KisToolRectangleFactory());
 		r -> add(new KisToolPanFactory());
 		r -> add(new KisToolSelectEllipticalFactory());
 		r -> add(new KisToolEraserFactory());

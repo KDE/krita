@@ -1,1 +1,1 @@
-SUBDIRS = example colorsfilters variations colorrange imagesize screenshot histogram colorspace_cmyk convolutionfilters designerplugin
+SUBDIRS = example colorsfilters variations colorrange imagesize screenshot histogram colorspace_cmyk convolutionfilters

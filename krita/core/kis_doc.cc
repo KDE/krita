@@ -703,6 +703,11 @@ KisImageSP KisDoc::imageNum(unsigned int num) const
 	return m_images[num];
 }
 
+Q_INT32 KisDoc::nimages() const
+{
+	return m_images.size();
+}
+
 KisImageSP KisDoc::findImage(const QString& name)
 {
 	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
@@ -819,9 +824,11 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 				pixmap = m_projection -> pixmap(tileno);
 
 				if (!pixmap.isNull()) {
-					painter.drawPixmap(x, y, pixmap, x % TILE_WIDTH, y % TILE_HEIGHT, 
-							rect.width() - (x % TILE_WIDTH) + 1, 
-							rect.height() - (y % TILE_HEIGHT) + 1);
+					painter.drawPixmap(x, y, pixmap, 
+							(x % TILE_WIDTH),
+							(y % TILE_HEIGHT),
+							TILE_WIDTH - (x % TILE_WIDTH),
+							TILE_HEIGHT - (y % TILE_HEIGHT));
 				}
 			}	
 		}

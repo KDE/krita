@@ -80,6 +80,7 @@ public:
 	void removeImage(const QString& name);
 
 	KisImageSP imageNum(Q_UINT32 num) const;
+	Q_INT32 nimages() const;
 	KisImageSP findImage(const QString& name);
 	bool contains(KisImageSP img) const;
 

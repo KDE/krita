@@ -545,7 +545,7 @@ KisImageSP KisView::currentImg() const
 	if (m_current && m_doc -> contains(m_current))
 		return m_current;
 
-	m_current = m_doc -> imageNum(0);
+	m_current = m_doc -> imageNum(m_doc -> nimages() - 1);
 	connectCurrentImg();
 	return m_current;
 }

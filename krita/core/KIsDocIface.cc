@@ -65,3 +65,7 @@ void KIsDocIface::setRedoLimit(int limit)
     m_doc->setRedoLimit(limit);
 }
 
+void KIsDocIface::renameImage(const QString& oldName, const QString& newName)
+{
+    m_doc->renameImage(oldName,newName);
+}

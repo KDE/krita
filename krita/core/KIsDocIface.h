@@ -41,6 +41,7 @@ k_dcop:
     virtual int redoLimit() const;
     virtual void setRedoLimit(int limit);
 
+    virtual void renameImage(const QString& oldName, const QString& newName);
 
 private:
     KisDoc *m_doc;

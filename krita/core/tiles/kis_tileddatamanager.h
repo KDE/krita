@@ -62,7 +62,7 @@ public:
 	KisMemento *getMemento();
 	void rollback(KisMemento *memento);
 	void rollforward(KisMemento *memento);
-	void closeMemento();
+
 public:
 	/**
 	 * Reads and writes the tiles from/onto a KoStore (which is simply a file within a zip file)

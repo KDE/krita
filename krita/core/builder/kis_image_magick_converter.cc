@@ -62,12 +62,12 @@ namespace {
 	 * isn't that flexible either.
 	 */
 	KisStrategyColorSpaceSP getColorSpaceForColorType(ColorspaceType type) {
-
+		kdDebug() << "Colorspace type: " << type << "\n";
 		if (type == GRAYColorspace) {
 			KisColorSpaceRegistry::instance() -> get("CMYK");
 		}
 		else if (type == CMYKColorspace) {
-			return KisColorSpaceRegistry::instance() -> get("GRAY");
+			return KisColorSpaceRegistry::instance() -> get("GRAYA");
 		}
 		else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {
 			return KisColorSpaceRegistry::instance() -> get("RGBA");
@@ -281,10 +281,10 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 				{
 					Q_UINT8 *ptr= hiter.rawData();
 					// XXX: not colorstrategy and bitdepth independent
-					*(ptr++) = pp->blue;
-					*(ptr++) = pp->green;
-					*(ptr++) = pp->red;
-					*(ptr++) = OPACITY_OPAQUE - pp->opacity;
+					*(ptr++) = Downscale(pp->blue);
+					*(ptr++) = Downscale(pp->green);
+					*(ptr++) = Downscale(pp->red);
+					*(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
 
 					pp++;
 					hiter++;
@@ -372,18 +372,16 @@ KisImageBuilder_Result buildFile(const KURL&, KisImageSP)
 
 KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLayerSP layer)
 {
-#if 0 //AUTOLAYER
 	Image *image;
 	ExceptionInfo ei;
 	ImageInfo *ii;
-	Q_INT32 w;
-	Q_INT32 h;
-	KisTileMgrSP tm;
-	Q_INT32 ntile = 0;
-	Q_INT32 totalTiles;
 
 	if (!layer)
 		return KisImageBuilder_RESULT_INVALID_ARG;
+
+	KisImageSP img = layer -> image();
+	if (!img) 
+		return KisImageBuilder_RESULT_EMPTY;
 
 	if (uri.isEmpty())
 		return KisImageBuilder_RESULT_NO_URI;
@@ -392,7 +390,9 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 		return KisImageBuilder_RESULT_NOT_LOCAL;
 
 	GetExceptionInfo(&ei);
+
 	ii = CloneImageInfo(0);
+
 	qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
 
 	if (ii -> filename[MaxTextExtent - 1]) {
@@ -400,13 +400,13 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 		return KisImageBuilder_RESULT_PATH;
 	}
 
-	if (!layer -> width() || !layer -> height())
+	if (!img -> width() || !img -> height())
 		return KisImageBuilder_RESULT_EMPTY;
 
 	image = AllocateImage(ii);
-	tm = layer -> tiles();
-	image -> columns = layer -> width();
-	image -> rows = layer -> height();
+	image -> columns = img -> width();
+	image -> rows = img -> height();
+
 #ifdef HAVE_MAGICK6
 	if ( layer-> alpha() )
 		image -> matte = MagickTrue;
@@ -415,48 +415,62 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 #else
 	image -> matte = layer -> alpha();
 #endif
-	w = TILE_WIDTH;
-	h = TILE_HEIGHT;
-	totalTiles = ((image -> columns + TILE_WIDTH - 1) / TILE_WIDTH) * ((image -> rows + TILE_HEIGHT - 1) / TILE_HEIGHT);
 
-	for (Q_INT32 y = 0; y < layer -> height(); y += TILE_HEIGHT) {
-		if ((y + h) > layer -> height())
-			h = TILE_HEIGHT + layer -> height() - (y + h);
 
-		for (Q_INT32 x = 0; x < layer -> width(); x += TILE_WIDTH) {
-			if ((x + w) > layer -> width())
-				w = TILE_WIDTH + layer -> width() - (x + w);
+	Q_INT32 y, height, width;
 
-			KisPixelDataSP pd = tm -> pixelData(x, y, x + w - 1, y + h - 1, TILEMODE_READ);
-			PixelPacket *pp = SetImagePixels(image, x, y, w, h);
+	height = img -> height();
+	width = img -> width();
 
-			if (!pd || !pp) {
-				if (pp)
-					SyncImagePixels(image);
+	bool alpha = layer -> alpha();
 
-				DestroyExceptionInfo(&ei);
-				DestroyImage(image);
-				emit notifyProgressError(this);
-				return KisImageBuilder_RESULT_FAILURE;
-			}
+	for (y = 0; y < height; y++) {
 
-			ntile++;
-			emit notifyProgressStage(this, i18n("Saving..."), ntile * 100 / totalTiles);
-			tile2pp(pp, pd);
-			SyncImagePixels(image);
-			w = TILE_WIDTH;
+		// Allocate pixels for this scanline
+		PixelPacket *pp = SetImagePixels(image, 0, y, width, 1);
+
+		if (!pp) {
+			DestroyExceptionInfo(&ei);
+			DestroyImage(image);
+			emit notifyProgressError(this);
+			return KisImageBuilder_RESULT_FAILURE;
+			
 		}
 
-		h = TILE_HEIGHT;
+		KisHLineIterator it = layer -> createHLineIterator(0, y, width, false);
+		while (!it.isDone()) {
+
+			Q_UINT8 * d = it.rawData();
+			// NOTE: Upscale is necessary for a correct export, otherwise
+			// only Krita can read the result.
+			pp -> red = Upscale(d[PIXEL_RED]);
+			pp -> green = Upscale(d[PIXEL_GREEN]);
+			pp -> blue = Upscale(d[PIXEL_BLUE]);
+			if (alpha)
+				pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
+
+			pp++;
+			it++;
+		}
+
+		emit notifyProgressStage(this, i18n("Saving..."), y * 100 / height);
+
+#ifdef HAVE_MAGICK6
+		if (SyncImagePixels(image) == MagickFalse) 
+			kdDebug() << "Syncing pixels failed\n";
+#else
+		if (!SyncImagePixels(image)) 
+			kdDebug() << "Syncing pixels failed\n";
+#endif
 	}
 
+	// XXX: Write to a temp file, then have Krita use KIO to copy temp
+	// image to remote location.
 	WriteImage(ii, image);
 	DestroyExceptionInfo(&ei);
 	DestroyImage(image);
 	emit notifyProgressDone(this);
 	return KisImageBuilder_RESULT_OK;
-#endif // AUTOLAYER (below return is a hack)
-		return KisImageBuilder_RESULT_EMPTY;
 }
 
 void KisImageMagickConverter::ioData(KIO::Job *job, const QByteArray& data)

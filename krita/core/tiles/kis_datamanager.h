@@ -74,11 +74,6 @@ public:
 	 */
 	void rollforward(KisMemento *memento) { ACTUAL_DATAMGR::rollforward(memento); };
 
-	/**
-	 * Closes the current memento. No more undo data is stored.
-	 */
-	void closeMemento() { return ACTUAL_DATAMGR::closeMemento(); };
-
 public:
 	/**
 	 * Reads and writes the tiles from/onto a KoStore (wich is simply a file within a zip file)

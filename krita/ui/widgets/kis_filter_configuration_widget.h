@@ -28,6 +28,7 @@ class KisFilterConfigurationWidget : public QWidget {
 	Q_OBJECT
 public:
 	KisFilterConfigurationWidget ( KisFilter* nfilter, QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
+	virtual ~KisFilterConfigurationWidget() {};
 public:
 	inline KisFilter* filter() { return m_filter; };
 private:

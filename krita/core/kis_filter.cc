@@ -92,38 +92,21 @@ void KisFilter::slotActivated()
 	KisFilterConfiguration* config = configuration(m_widget);
 
 	QRect r1 = layer -> extent();
-	//r1.setRect(layer -> getX(), layer -> getY(), r1.width(), r1.height());
-	kdDebug() << "Layer rect: x,y: " << r1.x() << ", " << r1.y() << ", W,H: " << r1.width() << ", " << r1.height() << "\n";
-
 	QRect r2 = img -> bounds();
-	kdDebug() << "Image rect: x,y: " << r2.x() << ", " << r2.y() << ", W,H: " << r2.width() << ", " << r2.height() << "\n";
 
 	// Filters should work only on the visible part of an image.
 	QRect rect = r1.intersect(r2);
 
 	if (layer->hasSelection()) {
-		KisSelectionSP s = layer -> selection();
-		QRect r3 = s -> selectedRect();
-		//r3.setRect(s -> getX(), s -> getY(), r3.width(), r3.height());
-		kdDebug() << "Selection rect: x,y: " << r3.x() << ", " << r3.y() << ", W,H: " << r3.width() << ", " << r3.height() << "\n";
+		QRect r3 = layer -> selection() -> selectedRect();
 		rect = rect.intersect(r3);
 	}
 
 	enableProgress();
-	kdDebug() << "Going to process filter " << m_name << "\n";
-	kdDebug() << "On rect: x,y: " << rect.x() << ", " << rect.y() << ", W,H: " << rect.width() << ", " << rect.height() << "\n";
-	
-// 	// Always process from the current layer onto a temporary layer
-// 	KisPaintDeviceSP dstDev = new KisPaintDevice(layer -> colorStrategy(), "temporary paint device");
-
+	KisTransaction * cmd = new KisTransaction(name(), layer.data());
+	layer -> getMemento();
 	process((KisPaintDeviceSP)layer, (KisPaintDeviceSP)layer, config, rect);
-
-// 	// Blit temporary layer onto the source layer
-// 	KisPainter gc(layer);
-// 	gc.beginTransaction(name());
-// 	gc.bltSelection(rect.x(), rect.y(), COMPOSITE_COPY, dstDev, OPACITY_OPAQUE, 0, 0, rect.width(), rect.height());
-// 	img -> undoAdapter() -> addCommand( gc.end() );
-
+	img -> undoAdapter() -> addCommand(cmd);
 	disableProgress();
 
 	img->notify();

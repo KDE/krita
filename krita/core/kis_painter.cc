@@ -134,8 +134,6 @@ void KisPainter::beginTransaction( KisTransaction* command)
 KCommand *KisPainter::endTransaction()
 {
 	KCommand *command = m_transaction;
-	if (m_device)
-		m_device -> closeMemento();
         m_transaction = 0;
         return command;
 }

@@ -1,12 +1,14 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui library="colorsfilters" version="6">
 <MenuBar>
-    <Menu name="Effects"><text>Effects</text>
+    <Menu name="Image"><text>Image</text>
+    <Menu name="Adjust"><text>Adjust</text>
 	<Seperator/>
 	<Action name="brightnesscontrast"/>
 	<Action name="gammacorrection"/>
 	<Action name="coloradjustment"/>
 	<Action name="desaturate"/>
+    </Menu>
     </Menu>
 </MenuBar>
 </kpartgui>

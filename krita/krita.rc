@@ -7,44 +7,26 @@
   <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
+  <Action name="copy_merged"/>
   <Action name="paste"/>
   <Action name="paste_into"/>
   <Action name="remove"/>
-  <Action name="crop"/>
+  <Action name="copy_selection_to_new_layer"/>
   <Separator/>
   <Action name="scrap_selection"/>
   <Action name="fill_fgcolor"/>
   <Action name="fill_bgcolor"/>
   <Separator/>
-  <Action name="select_all"/>
-  <Action name="select_none"/>
-  <Action name="flip_selection"/>  
-  <Separator/>
-  <Action name="apply_gradient_to_selection"/>
-  <Action name="apply_tile_to_selection"/>
-  <Separator/>
-  <Action name="mask_from_selection"/>
-  <Action name="pattern_from_selection"/>
- </Menu>
-
- <Menu name="View"><text>&amp;View</text>
-  <Action name="view_newview"/>
-  <ActionList name="view_closeallviews"/>
-  <Separator/>
-  <ActionList name="view_split"/>
-  <Action name="zoom_in"/>
-  <Action name="zoom_out"/>
-  <Separator/>
-  <Action name="view_color_docker"/>  
-  <Action name="view_control_docker"/>
-  <Action name="view_layer_docker"/>
-  <Action name="view_resource_docker"/>
-  <Separator/>
-  <Action name="refresh_canvas"/>
-  <Action name="paint_offset"/>
+  <Action name="revert"/>
  </Menu>
 
 <Menu name="Image"><text>&amp;Image</text>
+    <Menu name="Mode"><text>&amp;Mode</text>
+            <Action name="bitmap"/>
+    </Menu>
+    <Menu name="Adjust"><text>&amp;Adjust</text>
+    </Menu>
+  <Separator/>
   <Action name="import_image"/>
   <Action name="export_image"/>
   <Separator/>
@@ -53,17 +35,14 @@
   <Action name="scale_image"/>
   <Action name="resize_image"/>
   <Action name="resizeimgtolayer"/>
-  <Action name="duplicate_image"/>  
-  <Separator/>
-  <Action name="merge_all_layers"/>
-  <Action name="merge_visible_layers"/>
-  <Action name="merge_linked_layers"/>
+  <Action name="duplicate_image"/>
+
 </Menu>
 
 <Menu name="Layer"><text>&amp;Layer</text>
   <Action name="insert_layer"/>
   <Action name="remove_layer"/>
-  <Action name="duplicate_layer"/>  
+  <Action name="duplicate_layer"/>
   <Action name="hide_layer"/>
   <Action name="link_layer"/>
   <Separator/>
@@ -72,10 +51,10 @@
   <Action name="toplayer"/>
   <Action name="bottomlayer"/>
   <Separator/>
-  <Action name="resizelayer"/>  
-  <Action name="resizelayertoowner"/>  
-  <Action name="transformlayer"/>  
-  <Separator/>  
+  <Action name="resizelayer"/>
+  <Action name="resizelayertoowner"/>
+  <Action name="transformlayer"/>
+  <Separator/>
   <Action name="insert_image_as_layer"/>
   <Action name="save_layer_as_image"/>
   <Action name="layer_to_image"/>
@@ -87,81 +66,79 @@
   <Separator/>
   <Action name="layer_mirrorX"/>
   <Action name="layer_mirrorY"/>
-  <Separator/>  
-  <Action name="layer_properties"/>  
-</Menu>
-
-<Menu name="Channel"><Text>Cha&amp;nnel</Text>
-</Menu>
-
-<Menu name="Tools"><Text>&amp;Tools</Text>
-  <Menu name="Transform"><Text>Transform</Text>
-    <Action name="tool_move"/>
-    <Action name="tool_zoom"/>
-  </Menu>
-  
-  <Menu name="select"><text>Selection</text>
-    <Action name="tool_select_freehand"/>
-    <Action name="tool_select_rectangular"/>
-    <Action name="tool_select_elliptical"/>  
-    <Action name="tool_select_polygonal"/>
-    <Action name="tool_select_contiguous"/>
-  </Menu>
-
-  <Action name="tool_colorpicker"/>  
-  <Action name="tool_pen"/>
-  <Action name="tool_brush"/>
-  <Action name="tool_airbrush"/>
-  <Action name="tool_eraser"/>  
-  <Action name="tool_line"/>
-  <Action name="tool_polyline"/>
-  <Action name="tool_polygon"/>
-  <Action name="tool_rectangle"/>
-  <Action name="tool_ellipse"/>      
-  <Action name="tool_fill"/>
-  <Action name="tool_colorchanger"/>  
-  <Action name="tool_stamp"/>
-  <Action name="tool_gradient"/>  
-  <Action name="tool_test"/>  
-  <Action name="tool_qpen"/>  
-</Menu>
-
-<Menu name="Color"><text>C&amp;olor</text>
-  <Action name="select_fgColor"/>
-  <Action name="select_bgColor"/>
-  <Separator/>  
-  <Action name="reverse_fg_bg"/>
-</Menu>
-
-<Menu name="Brush"><text>&amp;Brush</text>
-  <Action name="new_brush"/>
-  <Action name="edit_brush_as_image"/>
-  <Action name="brush_from_selection"/>
-</Menu>
-
-<Menu name="Pattern"><text>&amp;Pattern</text>
-  <Action name="new_pattern"/>
-  <Action name="edit_pattern"/>
   <Separator/>
-  <Action name="tile_pattern"/>
-  <Action name="pattern_paint"/>
+  <Action name="layer_properties"/>
+  <Separator/>
+  <Action name="merge_all_layers"/>
+  <Action name="merge_visible_layers"/>
+  <Action name="merge_linked_layers"/>
 </Menu>
 
-<Menu name="Effects"><text>Effe&amp;cts</text>
+<Menu name="Select"><text>&amp;Select</text>
+    <Action name="select_all"/>
+    <Action name="select_none"/>
+    <Action name="reselect"/>
+    <Action name="inverse"/>
+    <Separator/>
+    <Action name="color_range"/>
+    <Separator/>
+    <Action name="feather"/>
+    <Menu name="Modify"><text>&amp;Modify</text>
+            <Action name="border"/>
+            <Action name="smooth"/>
+            <Action name="expand"/>
+            <Action name="contract"/>
+    </Menu>
+    <Separator/>
+    <Action name="apply_gradient_to_selection"/>
+    <Action name="apply_tile_to_selection"/>
+    <Separator/>
+    <Action name="mask_from_selection"/>
+    <Action name="pattern_from_selection"/>
+    <Separator/>
+    <Action name="grow"/>
+    <Action name="similar"/>
+    <Separator/>
+    <Action name="transform_selection"/>
+    <Separator/>
+    <Action name="load_selection"/>
+    <Action name="save_selection"/>
+
+</Menu>
+
+<Menu name="Filter"><text>F&amp;ilter</text>
   <Action name="use_selection"/>
   <Action name="use_entire_image"/>
 </Menu>
 
+ <Menu name="View"><text>&amp;View</text>
+  <Action name="view_newview"/>
+  <ActionList name="view_closeallviews"/>
+  <Separator/>
+  <ActionList name="view_split"/>
+  <Action name="zoom_in"/>
+  <Action name="zoom_out"/>
+  <Separator/>
+  <Action name="view_color_docker"/>
+  <Action name="view_control_docker"/>
+  <Action name="view_layer_docker"/>
+  <Action name="view_resource_docker"/>
+  <Separator/>
+  <Action name="refresh_canvas"/>
+  <Action name="paint_offset"/>
+ </Menu>
+
+
 <Menu name="settings"><text>Settings</text>
-  <Action name="current_tool_properties"/>  
-  <Action name="dialog_gradient"/>    
-  <Action name="preferences"/>    
+  <Action name="current_tool_properties"/>
+  <Action name="dialog_gradient"/>
+  <Action name="preferences"/>
   <Action name="save_options"/>
   <Separator/>
-  <!--<Action name="show_sidebar"/>  
+  <!--<Action name="show_sidebar"/>
   <Action name="float_sidebar"/>
   <Action name="left_sidebar"/>
-  <Separator/> -->        
+  <Separator/> -->
 </Menu>
 
 </MenuBar>
@@ -187,33 +164,22 @@
   <Action name="flip_selection"/>
 </ToolBar>
 
-<!--
-<ToolBar name="kritabox" position="top"><Text>KritaBox</Text>
-  <Action name="colors_dialog"/>
-  <Action name="kritas_dialog"/>
-  <Action name="brushes_dialog"/>
-  <Action name="patterns_dialog"/>
-  <Action name="layers_dialog"/>
-  <Action name="channels_dialog"/>
-</ToolBar>
--->
-
 <ToolBar name="settings" position="top"><Text>Settings</Text>
   <Action name="show_sidebar"/>
-  <Action name="float_sidebar"/>      
+  <Action name="float_sidebar"/>
   <Action name="left_sidebar"/>
   <Action name="preferences"/>
-  <Action name="paint_offset"/>        
+  <Action name="paint_offset"/>
   <Action name="current_tool_properties"/>
-  <Action name="blending_properties"/>       
+  <Action name="blending_properties"/>
 </ToolBar>
 
 <ToolBar name="navigation" position="top"><Text>Navigation</Text>
   <Action name="tool_move"/>
   <Action name="tool_zoom"/>
-  <Action name="previous_layer"/>  
+  <Action name="previous_layer"/>
   <Action name="refresh_canvas"/>
-  <Action name="next_layer"/>  
+  <Action name="next_layer"/>
   <Action name="panic_button"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
@@ -222,7 +188,7 @@
 <ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
   <Action name="tool_select_freehand"/>
   <Action name="tool_select_rectangular"/>
-  <Action name="tool_select_elliptical"/>  
+  <Action name="tool_select_elliptical"/>
   <Action name="tool_select_polygonal"/>
   <Action name="tool_select_contiguous"/>
 </ToolBar>
@@ -234,21 +200,21 @@
   <Action name="tool_airbrush"/>
   <Action name="tool_eraser"/>
 
-  <Action name="tool_line"/>    
+  <Action name="tool_line"/>
   <Action name="tool_polyline"/>
   <Action name="tool_polygon"/>
   <Action name="tool_rectangle"/>
-  <Action name="tool_ellipse"/>      
+  <Action name="tool_ellipse"/>
 
   <Action name="tool_fill"/>
-  <Action name="tool_colorchanger"/>    
+  <Action name="tool_colorchanger"/>
   <Action name="tool_stamp"/>
   <Action name="tool_test"/>
   <Action name="tool_qpen"/>
 
-  <Action name="dialog_gradient"/>  
-  <Action name="current_tool_properties"/>  
-        
+  <Action name="dialog_gradient"/>
+  <Action name="current_tool_properties"/>
+
 </ToolBar>
 
 <Menu name="menuimage_popup">

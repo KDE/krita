@@ -40,7 +40,7 @@ class KRayonViewIface : public KoViewIface
 	void cut();
 	void removeSelection();
 	void paste();
-	void crop();
+	void copySelectionToNewLayer();
 	void selectAll();
 	void unSelectAll();
 

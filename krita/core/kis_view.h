@@ -128,7 +128,7 @@ public slots:
 	void cut();
 	void removeSelection();
 	void paste();
-	void crop();
+	void copySelectionToNewLayer();
 	void layer_rotate180();
 	void layer_rotateleft90();
 	void layer_rotateright90();
@@ -342,7 +342,7 @@ private:
 	KAction *m_selectionCopy;
 	KAction *m_selectionPaste;
 	KAction *m_selectionPasteInto;
-	KAction *m_selectionCrop;
+	KAction *m_selectionToNewLayer;
 	KAction *m_selectionFillBg;
 	KAction *m_selectionFillFg;
 	KAction *m_selectionRm;

@@ -149,7 +149,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_selectionCopy = 0;
 	m_selectionPaste = 0;
 	m_selectionPasteInto = 0;
-	m_selectionCrop = 0;
+	m_selectionToNewLayer = 0;
 	m_selectionFillBg = 0;
 	m_selectionFillFg = 0;
 	m_selectionRm = 0;
@@ -471,7 +471,7 @@ void KisView::setupActions()
 	m_selectionPasteInto = new KAction(i18n("Paste Into"), "paste_into", 0, this, SLOT(paste_into()), actionCollection(), "paste_into");
 
 	m_selectionRm = new KAction(i18n("Remove Selection"), "remove", 0, this, SLOT(removeSelection()), actionCollection(), "remove");
-	m_selectionCrop = new KAction(i18n("Copy Selection to New Layer"), "crop", 0,  this, SLOT(crop()), actionCollection(), "crop");
+	m_selectionToNewLayer = new KAction(i18n("Copy Selection to New Layer"), "copy_selection_to_new_layer", 0,  this, SLOT(copySelectionToNewLayer()), actionCollection(), "copy to layer");
 	m_selectionSelectAll = KStdAction::selectAll(this, SLOT(selectAll()), actionCollection(), "select_all");
 	m_selectionSelectNone = KStdAction::deselect(this, SLOT(unSelectAll()), actionCollection(), "select_none");
 	m_selectionFillFg = new KAction(i18n("Fill with Foreground Color"), 0, this, SLOT(fillSelectionFg()), actionCollection(), "fill_fgcolor");
@@ -839,7 +839,7 @@ void KisView::selectionUpdateGUI(bool enable)
 	enable = enable && img && img -> selection() && img -> selection() -> parent();
 	m_selectionCut -> setEnabled(enable);
 	m_selectionCopy -> setEnabled(enable);
-	m_selectionCrop -> setEnabled(enable);
+	m_selectionToNewLayer -> setEnabled(enable);
 	m_selectionPaste -> setEnabled(img != 0 && m_clipboardHasImage);
 	m_selectionPasteInto -> setEnabled(img != 0 && m_clipboardHasImage);
 	m_selectionRm -> setEnabled(enable);
@@ -932,7 +932,7 @@ void KisView::removeSelection()
 	}
 }
 
-void KisView::crop()
+void KisView::copySelectionToNewLayer()
 {
 	KisImageSP img = currentImg();
 

@@ -1,10 +1,10 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui library="kritaexample" version="7">
 <MenuBar>
-    <Menu name="Effects"><text>Effects</text>
-	<Seperator/>
-	<Action name="krita_example"/>
-	<Action name="krita_example_iterators"/>
+    <Menu name="Filter"><text>&Amp;Filter</text>
+    <Seperator/>
+    <Action name="krita_example"/>
+    <Action name="krita_example_iterators"/>
     </Menu>
 </MenuBar>
 </kpartgui>

@@ -49,9 +49,9 @@ void KRayonViewIface::paste()
 	m_view->paste();
 }
 
-void KRayonViewIface::crop()
+void KRayonViewIface::copySelectionToNewLayer()
 {
-	m_view->crop();
+	m_view->copySelectionToNewLayer();
 }
 
 void KRayonViewIface::selectAll()

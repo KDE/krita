@@ -21,7 +21,7 @@
 #include <kiconloader.h>
 #include <kinstance.h>
 #include <kmessagebox.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <kscan.h>
@@ -33,7 +33,7 @@
 typedef KGenericFactory<Scan> ScanFactory;
 K_EXPORT_COMPONENT_FACTORY( libkofficescan, ScanFactory( "kscan_plugin" ) );
 
-Scan::Scan(QObject *parent, const char *name, const QStringList &) 
+Scan::Scan(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name), scanDialog( 0 )
 {
     setInstance(ScanFactory::instance());
@@ -55,12 +55,12 @@ void Scan::slotScan()
 	{
 	    scanDialog->setMinimumSize(300, 300);
 
-	    connect(scanDialog, SIGNAL(finalImage(const QImage &, int)), 
+	    connect(scanDialog, SIGNAL(finalImage(const QImage &, int)),
 		    this, SLOT(slotShowImage(const QImage &)));
 	}
 	else
         {
-	    KMessageBox::sorry(0L, i18n("No Scan-Service available"), 
+	    KMessageBox::sorry(0L, i18n("No Scan-Service available"),
 			       i18n("Scanner Plugin"));
 	    kdDebug(31000) << "*** No Scan-service available, aborting!" << endl;
 	    return;

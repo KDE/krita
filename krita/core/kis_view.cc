@@ -52,7 +52,7 @@
 #include <kpushbutton.h>
 #include <kstatusbar.h>
 #include <kstdaction.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 
 // KOffice
 #include <koColor.h>
@@ -394,7 +394,7 @@ void KisView::slotRename()
 {
         bool ok;
         QString activeName = currentImgName();
-        QString newName = KLineEditDlg::getText( i18n("Image Name"), i18n("Enter name:"), activeName, &ok, this );
+        QString newName = KInputDialog::getText( i18n("Image Name"), i18n("Enter name:"), activeName, &ok, this );
 
         // Have a different name ?
         if ( ok ) // User pushed an OK button.

@@ -225,7 +225,7 @@ void KisView::setupDockers()
 		m_layerchanneldocker  -> setCaption(i18n("Layers/Channels"));
 		m_resourcedocker = new DockFrameDocker(this);
 		m_resourcedocker  -> setCaption(i18n("Brushes/Pattern"));
-		m_toolcontroldocker = new ToolControlDocker(this);
+		m_toolcontroldocker = new DockFrameDocker(this);
 		m_toolcontroldocker  -> setCaption(i18n("Tool Properties"));
 		m_colordocker = new ColorDocker(this);
 		m_colordocker  -> setCaption(i18n("Color Manager"));
@@ -279,17 +279,19 @@ void KisView::setupDockers()
 //  		m_pathView -> setCaption(i18n("Paths"));
 //  		m_sideBar -> plug(m_pathView);
 
-		m_toolcontroldocker -> slotSetBGColor(m_bg);
-		m_toolcontroldocker -> slotSetFGColor(m_fg);
-                connect(m_toolcontroldocker, SIGNAL(fgColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
-        	connect(m_toolcontroldocker, SIGNAL(bgColorChanged(const KoColor&)), this, SLOT(slotSetBGColor(const KoColor&)));
-		connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_toolcontroldocker, SLOT(slotSetFGColor(const KoColor&)));
-		connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_toolcontroldocker, SLOT(slotSetBGColor(const KoColor&)));
+		m_controlWidget = new ControlFrame(m_toolcontroldocker);
+		m_controlWidget -> setCaption(i18n("General"));
+		m_toolcontroldocker -> plug(m_controlWidget);
+		
+		m_controlWidget -> slotSetBGColor(m_bg);
+		m_controlWidget -> slotSetFGColor(m_fg);
+		connect(m_controlWidget, SIGNAL(fgColorChanged(const KoColor&)), SLOT(slotSetFGColor(const KoColor&)));
+        	connect(m_controlWidget, SIGNAL(bgColorChanged(const KoColor&)), SLOT(slotSetBGColor(const KoColor&)));
+		connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetFGColor(const KoColor&)));
+		connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetBGColor(const KoColor&)));
                 
-		connect(m_toolcontroldocker, SIGNAL(fgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetColor(const KoColor&)));
-		connect(m_toolcontroldocker, SIGNAL(bgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetColor(const KoColor&)));                
-                
-		connect(m_colordocker, SIGNAL(ColorChanged(const KoColor&)), m_toolcontroldocker, SLOT(slotColorSelected(const KoColor&)));
+		connect(this , SIGNAL(fgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetColor(const KoColor&)));
+		connect(m_colordocker, SIGNAL(ColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
 
 		rserver -> loadBrushes();
 		rserver -> loadpipeBrushes();
@@ -1652,7 +1654,7 @@ void KisView::brushActivated(KisResource *brush)
 	m_brush = dynamic_cast<KisBrush*>(brush);
 
 	if (m_brush && (item = m_brushMediator -> itemFor(m_brush)))
-		m_toolcontroldocker -> slotSetBrush(item);
+		m_controlWidget -> slotSetBrush(item);
 
         if (m_brush)
 		notify();
@@ -1666,7 +1668,7 @@ void KisView::patternActivated(KisResource *pattern)
 	m_pattern = dynamic_cast<KisPattern*>(pattern);
 
 	if (m_pattern && (item = m_patternMediator -> itemFor(m_pattern)))
-		m_toolcontroldocker -> slotSetPattern(item);
+		m_controlWidget -> slotSetPattern(item);
 
         if (m_pattern)
 		notify();
@@ -1676,23 +1678,24 @@ void KisView::setBGColor(const KoColor& c)
 {
 	emit bgColorChanged(c);
 	m_bg = c;
+	notify();
 }
 
 void KisView::setFGColor(const KoColor& c)
 {
 	emit fgColorChanged(c);
 	m_fg = c;
+        notify();
 }
 
 void KisView::slotSetFGColor(const KoColor& c)
 {
-        m_fg = c;
-        notify();
+	setFGColor(c);
 }
 
 void KisView::slotSetBGColor(const KoColor& c)                        
 {                        
-        m_bg = c;
+	setBGColor(c);
 }
 
 void KisView::setupPrinter(KPrinter& printer)
@@ -2279,7 +2282,7 @@ void KisView::selectFGColor()
 	KoColor c;
 
 	if (selectColor(c))
-		m_toolcontroldocker -> slotSetFGColor(c);
+		setFGColor(c);
 }
 
 void KisView::selectBGColor()
@@ -2287,7 +2290,7 @@ void KisView::selectBGColor()
 	KoColor c;
 
 	if (selectColor(c))
-		m_toolcontroldocker -> slotSetBGColor(c);
+		setBGColor(c);
 }
 
 void KisView::reverseFGAndBGColors()
@@ -2295,8 +2298,8 @@ void KisView::reverseFGAndBGColors()
 	KoColor oldFg = m_fg;
 	KoColor oldBg = m_bg;
 
-	m_toolcontroldocker -> slotSetFGColor(oldBg);
-	m_toolcontroldocker -> slotSetBGColor(oldFg);
+	setFGColor(oldBg);
+	setBGColor(oldFg);
 }
 
 void KisView::imgSelectionChanged(KisImageSP img)

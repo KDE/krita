@@ -115,14 +115,26 @@ void ControlFrame::resizeEvent ( QResizeEvent * )
 
 void ControlFrame::slotSetFGColor(const KoColor& c)
 {
+    disconnect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+    disconnect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+
     m_pColorButton->setCurrent(KDualColorButton::Foreground);
     m_pColorButton->setForeground( c.color() );
+    
+    connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+    connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 }
 
 void ControlFrame::slotSetBGColor(const KoColor& c)
 {
+    disconnect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+    disconnect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+    
     m_pColorButton->setCurrent(KDualColorButton::Background);
     m_pColorButton->setBackground( c.color() );
+    
+    connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+    connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 }
 
 void ControlFrame::slotFGColorSelected(const QColor& c)
@@ -141,7 +153,7 @@ DockFrameDocker::DockFrameDocker( QWidget* parent, const char* name ) : BaseDock
 
     setWidget( m_tabwidget = new QTabWidget( this ) );
     
-    m_tabwidget -> setFixedSize( 200, 200 );
+    m_tabwidget -> setFixedSize( 200, 175 );
     kdDebug() << "DockFrameDocker::DockFrameDocker leaving" << endl;
 }
 
@@ -188,87 +200,6 @@ void ColorDocker::slotSetColor(const KoColor& c)
 void ColorDocker::slotColorSelected(const KoColor& c)
 {
         emit ColorChanged( c );
-}
-
-ToolControlDocker::ToolControlDocker( QWidget* parent, const char* name ) : BaseDocker( parent, name )
-{
-        kdDebug() << "ToolControlDocker::ToolControlDocker" << endl;
-
-        m_tabwidget = new QTabWidget(this);
-        m_tabwidget -> setFixedSize(200,100);
-        m_controlframe  = new ControlFrame(this);
-        m_tabwidget-> addTab( m_controlframe , i18n("General"));
-
-        // connect control frame
-        connect(m_controlframe, SIGNAL(fgColorChanged(const KoColor &)),
-                this, SLOT(slotControlFGColorSelected(const KoColor &)));
-        connect(m_controlframe, SIGNAL(bgColorChanged(const KoColor &)),
-                this, SLOT(slotControlBGColorSelected(const KoColor &)));
-        connect(m_controlframe, SIGNAL(activeColorChanged(ActiveColor)),
-                this, SLOT(slotControlActiveColorChanged(ActiveColor)));
-
-        setWidget(m_tabwidget);
-
-        kdDebug() << "ToolControlDocker::ToolControlDocker leaving" << endl;
-}
-
-ToolControlDocker::~ToolControlDocker()
-{
-        delete m_controlframe;
-}
-
-void ToolControlDocker::slotSetFGColor(const KoColor& c)
-{
-        m_controlframe->slotSetFGColor( c );
-}
-
-void ToolControlDocker::slotSetBGColor(const KoColor& c)
-{
-        m_controlframe->slotSetBGColor( c );
-}
-
-void ToolControlDocker::slotColorSelected(const KoColor& c)
-{
-        if (m_controlframe->activeColor() == ac_Foreground)
-        {
-                m_controlframe->slotSetFGColor( c );
-                emit fgColorChanged( c );
-        }
-        else
-        {        
-                m_controlframe->slotSetBGColor( c );
-                emit bgColorChanged( c );
-        }
-}
-
-void ToolControlDocker::slotControlFGColorSelected(const KoColor& c)
-{
-        emit fgColorChanged(c);
-}
-
-void ToolControlDocker::slotControlBGColorSelected(const KoColor& c)
-{
-        emit bgColorChanged(c);
-}
-
-void ToolControlDocker::slotSetBrush(KoIconItem *item)
-{
-        m_controlframe -> slotSetBrush(item);
-}
-
-void ToolControlDocker::slotSetPattern(KoIconItem *item)
-{
-        m_controlframe -> slotSetPattern(item);
-}
-
-void ToolControlDocker::plug (QWidget* w)
-{
-        m_tabwidget-> addTab( w , w -> caption());
-}
-
-void ToolControlDocker::unplug(QWidget *w)
-{
-        m_tabwidget -> removePage(w);
 }
 
 #include "kis_sidebar.moc"

@@ -59,8 +59,8 @@ class KisResource;
 class KisResourceMediator;
 class KisSideBar;
 class DockFrameDocker;
-class ToolControlDocker;
 class ColorDocker;
+class ControlFrame;
 class KisUndoAdapter;
 
 class KisView : public KoView, 
@@ -340,13 +340,14 @@ private:
         //Dockers
 	DockFrameDocker *m_layerchanneldocker;
 	DockFrameDocker *m_resourcedocker;
-	ToolControlDocker *m_toolcontroldocker;
+	DockFrameDocker *m_toolcontroldocker;
 	ColorDocker *m_colordocker;
 
 	QWidget *m_paletteChooser;    
 	QWidget *m_gradientChooser;
 	QWidget *m_imageChooser;
 
+	ControlFrame *m_controlWidget;
 	KisChannelView *m_channelView;
 	QWidget *m_pathView;    
 	KisBuilderMonitor *m_imgBuilderMgr;

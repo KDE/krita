@@ -24,6 +24,10 @@
 #include "kis_tool_non_paint.h"
 
 class KisCanvasSubject;
+class QWidget;
+class QVBoxLayout;
+class QCheckBox;
+class RGBWidget;
 
 class KisToolColorPicker : public KisToolNonPaint {
 	Q_OBJECT
@@ -37,9 +41,19 @@ public:
 	virtual void update(KisCanvasSubject *subject);
 	virtual void setup(KActionCollection *collection);
 	virtual void mousePress(QMouseEvent *e);
+	virtual QWidget* createoptionWidget(QWidget* parent);
+	virtual QWidget* optionWidget();
+
+public slots:
+	virtual void slotSetUpdateColor(bool);
 
 private:
 	KisCanvasSubject *m_subject;
+	QWidget *m_optWidget;
+	QVBoxLayout *m_frame;
+	RGBWidget *m_colorSelector;
+	QCheckBox *m_updateColor;
+	bool m_update;
 };
 
 #endif // KIS_TOOL_COLOR_PICKER_H_

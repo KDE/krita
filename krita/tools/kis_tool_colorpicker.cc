@@ -18,9 +18,14 @@
  */
 
 #include <qpoint.h>
+#include <qlayout.h>
+#include <qcheckbox.h>
+
 #include <kaction.h>
 #include <klocale.h>
 #include <koColor.h>
+#include <koColorChooser.h>
+
 #include "kis_cursor.h"
 #include "kis_canvas_subject.h"
 #include "kis_image.h"
@@ -32,6 +37,10 @@ KisToolColorPicker::KisToolColorPicker()
 {
 	setCursor(KisCursor::pickerCursor());
 	m_subject = 0;
+	m_optWidget = 0;
+	m_colorSelector = 0;
+	m_updateColor = 0;
+	m_update = true;
 }
 
 KisToolColorPicker::~KisToolColorPicker() 
@@ -64,10 +73,13 @@ void KisToolColorPicker::mousePress(QMouseEvent *e)
 			return;
 
 		if (dev -> pixel(pos.x(), pos.y(), &c, &opacity)) {
-			if (e -> button() == QMouseEvent::LeftButton)
-				m_subject -> setFGColor(c);
-			else 
-				m_subject -> setBGColor(c);
+			if(m_colorSelector)
+				m_colorSelector -> slotChangeColor(c);
+			if(m_update)
+				if (e -> button() == QMouseEvent::LeftButton)
+					m_subject -> setFGColor(c);
+				else 
+					m_subject -> setBGColor(c);
 		}
 	}
 }
@@ -84,5 +96,32 @@ void KisToolColorPicker::update(KisCanvasSubject *subject)
 {
 	super::update(subject);
 	m_subject = subject;
+}
+
+QWidget* KisToolColorPicker::createoptionWidget(QWidget* parent)
+{
+	m_optWidget = new QWidget(parent);
+	m_optWidget -> setCaption(i18n("Color Picker"));
+	
+	m_frame = new QVBoxLayout(m_optWidget);
+	m_colorSelector = new RGBWidget(m_optWidget);
+	m_updateColor = new QCheckBox(i18n("Update current color"),m_optWidget);
+	m_updateColor -> setChecked(m_updateColor);
+	m_frame -> addWidget(m_colorSelector);
+	m_frame -> addWidget(m_updateColor);
+
+	connect(m_updateColor,SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
+
+	return m_optWidget;
+}
+
+QWidget* KisToolColorPicker::optionWidget()
+{
+	return m_optWidget;
+}
+
+void KisToolColorPicker::slotSetUpdateColor(bool state)
+{
+	m_update = state;
 }
 

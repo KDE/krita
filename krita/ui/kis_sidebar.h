@@ -125,36 +125,5 @@ private:
         KoColorChooser *m_ColorChooser;  
 };
 
-class ToolControlDocker : public BaseDocker {
-        Q_OBJECT
-
-public:
-        ToolControlDocker(QWidget *parent = 0, const char *name = 0);
-        ~ToolControlDocker();
-        void plug(QWidget *w);
-        void unplug(QWidget *w);
-
-public slots:
-        void slotColorSelected(const KoColor&);
-        
-        void slotSetFGColor(const KoColor&);
-        void slotSetBGColor(const KoColor&);
-
-        void slotSetBrush(KoIconItem *item);
-        void slotSetPattern(KoIconItem *item);
-
-signals:
-        void fgColorChanged(const KoColor&);
-        void bgColorChanged(const KoColor&);
-
-protected slots:
-        void slotControlFGColorSelected(const KoColor&);
-        void slotControlBGColorSelected(const KoColor&);
-
-private:
-        ControlFrame *m_controlframe;
-        QTabWidget *m_tabwidget;
-};
-
 #endif
 

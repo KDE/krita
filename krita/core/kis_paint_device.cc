@@ -93,7 +93,7 @@ KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, KisStrategyColorSp
 	m_offY = 0;
 	m_offW = 0;
 	m_offH = 0;
-	m_tiles = new KisTileMgr(colorStrategy, width, height);
+	m_tiles = new KisTileMgr(colorStrategy -> depth(), width, height);
 	m_visible = true;
 	m_owner = 0;
 	m_name = name;
@@ -207,7 +207,7 @@ void KisPaintDevice::configure(KisImageSP image,
 	m_offY = 0;
 	m_offW = 0;
 	m_offH = 0;
-	m_tiles = new KisTileMgr(colorStrategy, width, height);
+	m_tiles = new KisTileMgr(colorStrategy -> depth(), width, height);
 	m_visible = true;
 	m_owner = image;
 	m_name = name;
@@ -407,7 +407,7 @@ void KisPaintDevice::setData(KisTileMgrSP mgr)
 void KisPaintDevice::resize(Q_INT32 w, Q_INT32 h)
 {
         KisTileMgrSP old = data();
-        KisTileMgrSP tm = new KisTileMgr(colorStrategy(), w, h);
+        KisTileMgrSP tm = new KisTileMgr(colorStrategy() -> depth(), w, h);
         Q_INT32 oldW = width();
         Q_INT32 oldH = height();
         KisPainter gc;
@@ -520,7 +520,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
                 }
         }
 
-        KisTileMgrSP tm = new KisTileMgr(colorStrategy(), targetW, targetH);
+        KisTileMgrSP tm = new KisTileMgr(colorStrategy() -> depth(), targetW, targetH);
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * depth());
         setData(tm); // Also sets width and height correctly
 
@@ -537,7 +537,7 @@ void KisPaintDevice::mirrorX()
 
         QUANTUM *line1 = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
         QUANTUM *line2 = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
-        KisTileMgrSP tm = new KisTileMgr(colorStrategy(), width(), height());
+        KisTileMgrSP tm = new KisTileMgr(colorStrategy() -> depth(), width(), height());
 
         int cutoff = static_cast<int>(height()/2);
 
@@ -565,7 +565,7 @@ void KisPaintDevice::mirrorY()
            should too */
         QUANTUM *pixel = new QUANTUM[depth() * sizeof(QUANTUM)]; // the right pixel
         QUANTUM *line = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
-        KisTileMgrSP tm = new KisTileMgr(colorStrategy(), width(), height());
+        KisTileMgrSP tm = new KisTileMgr(colorStrategy() -> depth(), width(), height());
         int cutoff = static_cast<int>(width()/2);
 
         for(int i = 0; i < height(); i++) {
@@ -611,7 +611,7 @@ void KisPaintDevice::offsetBy(Q_INT32 x, Q_INT32 y)
                 y = 0;
 
         KisTileMgrSP old = data();
-        KisTileMgrSP tm = new KisTileMgr(colorStrategy(), x + old -> width(), y + old -> height());
+        KisTileMgrSP tm = new KisTileMgr(colorStrategy() -> depth(), x + old -> width(), y + old -> height());
         KisPixelDataSP dst;
         KisPixelDataSP src;
 

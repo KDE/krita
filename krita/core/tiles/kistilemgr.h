@@ -26,7 +26,6 @@
 #include <ksharedptr.h>
 #include "kistile.h"
 #include "kis_types.h"
-#include "kis_strategy_colorspace.h"
 
 class QPoint;
 struct KisPixelData;
@@ -70,10 +69,10 @@ class KisTileMgr : public KShared {
 
 public:
         /**
-          Create a KisTileMgr of width and height with the specified
-          colour depth.
+         * Create a KisTileMgr of width and height with the specified
+         * colour depth.
          */
-	KisTileMgr(KisStrategyColorSpaceSP colorStrategy, Q_UINT32 width, Q_UINT32 height);
+	KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
 
         /**
           Create a new KisTileMgr of width and height with the
@@ -84,7 +83,7 @@ public:
           than width and height, nor what happens when tm has a
           different depth.
          */
-	KisTileMgr(KisTileMgr *tm, KisStrategyColorSpaceSP colorStrategy, Q_UINT32 width, Q_UINT32 height);
+	KisTileMgr(KisTileMgr *tm, Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
 
         /**
           Creates a new KisTileMgr based on rhs, shares a reference
@@ -173,20 +172,14 @@ public:
 	Q_UINT32 ncols() const;
 
         /**
-           Color-depth of the KisRenderInterface implementation
-           managed by this KisTileMgr
+         * Depth in bytes (i.e., for now == channels) of a pixel
          */
 	Q_INT32 depth() const;
-	/** Return the color space that can interpret the data
-		*/
-	KisStrategyColorSpaceSP colorStrategy() const;
 
         /**
            Total size in memory the data managed by this KisTileMgr 
         */
 	Q_UINT32 memSize();
-	
-	
 
         /**
            Puts the x/y coordinates of the top left (?) corner
@@ -234,9 +227,9 @@ private:
 	KisTileSP invalidateTile(KisTileSP tile, Q_INT32 tilenum);
 
 private:
+        Q_UINT32 m_depth;
 	Q_UINT32 m_width;
 	Q_UINT32 m_height;
-	KisStrategyColorSpaceSP m_colorStrategy;
 	Q_UINT32 m_ntileRows;
 	Q_UINT32 m_ntileCols;
 	vKisTileSP m_tiles;
@@ -257,12 +250,7 @@ inline Q_INT32 KisTileMgr::height() const
 
 inline Q_INT32 KisTileMgr::depth() const
 {
-	return colorStrategy()->depth();
-}
-
-inline KisStrategyColorSpaceSP KisTileMgr::colorStrategy() const
-{
-	return m_colorStrategy;
+	return m_depth;
 }
 
 inline Q_UINT32 KisTileMgr::nrows() const

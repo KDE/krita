@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 #include <kglobalsettings.h>
-#include <kdualcolorbtn.h>
+#include <kdualcolorbutton.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <klocale.h>

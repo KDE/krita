@@ -1169,6 +1169,7 @@ void KisView::export_image()
 
 	if (img) {
 		KisImageMagickConverter ib(m_doc);
+		img = new KisImage(*img);
 
 		if (img -> nlayers() == 1) {
 			dst = img -> layer(0);
@@ -1271,85 +1272,92 @@ void KisView::slotEmbedImage(const QString& filename)
 
 Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filename)
 {
-	KURL url(filename);
+	KURL::List urls;
+	Q_INT32 rc = 0;
 
 	if (filename.isEmpty())
-		url = KFileDialog::getOpenURL(QString::null, KisUtil::readFilters(), 0, i18n("Import Image"));
+		urls = KFileDialog::getOpenURLs(QString::null, KisUtil::readFilters(), 0, i18n("Import Image"));
 
-	if (url.isEmpty())
+	if (urls.empty())
 		return 0;
 
 	KisImageMagickConverter ib(m_doc);
-	KisDlgBuilderProgress dlg(&ib);
 	KisImageSP img;
 
 	m_imgBuilderMgr -> attach(&ib);
 
-	if (modal) {
-		dlg.show();
-	} else {
-		m_buildProgress -> changeSubject(&ib);
-	}
+	for (KURL::List::iterator it = urls.begin(); it != urls.end(); it++) {
+		KURL url = *it;
+		KisDlgBuilderProgress dlg(&ib);
 
-	switch (ib.buildImage(url)) {
-	case KisImageBuilder_RESULT_UNSUPPORTED:
-		KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Loading file"));
-		break;
-	case KisImageBuilder_RESULT_NO_URI:
-	case KisImageBuilder_RESULT_NOT_LOCAL:
-		KNotifyClient::event("cannotopenfile");
-		return 0;
-	case KisImageBuilder_RESULT_NOT_EXIST:
-		KMessageBox::error(this, i18n("File does not exist."), i18n("Error Loading File"));
-		KNotifyClient::event("cannotopenfile");
-		return 0;
-	case KisImageBuilder_RESULT_BAD_FETCH:
-		KMessageBox::error(this, i18n("Unable to download file."), i18n("Error Loading File"));
-		KNotifyClient::event("cannotopenfile");
-		return 0;
-	case KisImageBuilder_RESULT_EMPTY:
-		KMessageBox::error(this, i18n("Empty file."), i18n("Error Loading File"));
-		KNotifyClient::event("cannotopenfile");
-		return 0;
-	case KisImageBuilder_RESULT_FAILURE:
-		KMessageBox::error(this, i18n("Error Loading File."), i18n("Error Loading File"));
-		KNotifyClient::event("cannotopenfile");
-		return 0;
-	case KisImageBuilder_RESULT_PROGRESS:
-		break;
-	case KisImageBuilder_RESULT_OK:
-	default:
-		break;
-	}
+		if (modal)
+			dlg.show();
+		else
+			m_buildProgress -> changeSubject(&ib);
 
-	if (!(img = ib.image()))
-		return 0;
-
-	if (createLayer && currentImg()) {
-		vKisLayerSP v = img -> layers();
-		KisImageSP current = currentImg();
-		Q_INT32 rc = v.size();
-
-		current -> unsetSelection();
-
-		for (vKisLayerSP_it it = v.begin(); it != v.end(); it++) {
-			KisLayerSP layer = *it;
-
-			layer -> setImage(current);
-			layer -> setName(current -> nextLayerName());
-			m_doc -> layerAdd(current, layer, 0);
-			m_layerBox -> setCurrentItem(img -> index(layer));
+		switch (ib.buildImage(url)) {
+			case KisImageBuilder_RESULT_UNSUPPORTED:
+				KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Loading file"));
+				continue;
+			case KisImageBuilder_RESULT_NO_URI:
+			case KisImageBuilder_RESULT_NOT_LOCAL:
+				KNotifyClient::event("cannotopenfile");
+				continue;
+			case KisImageBuilder_RESULT_NOT_EXIST:
+				KMessageBox::error(this, i18n("File does not exist."), i18n("Error Loading File"));
+				KNotifyClient::event("cannotopenfile");
+				continue;
+			case KisImageBuilder_RESULT_BAD_FETCH:
+				KMessageBox::error(this, i18n("Unable to download file."), i18n("Error Loading File"));
+				KNotifyClient::event("cannotopenfile");
+				continue;
+			case KisImageBuilder_RESULT_EMPTY:
+				KMessageBox::error(this, i18n("Empty file."), i18n("Error Loading File"));
+				KNotifyClient::event("cannotopenfile");
+				continue;
+			case KisImageBuilder_RESULT_FAILURE:
+				KMessageBox::error(this, i18n("Error Loading File."), i18n("Error Loading File"));
+				KNotifyClient::event("cannotopenfile");
+				continue;
+			case KisImageBuilder_RESULT_PROGRESS:
+				break;
+			case KisImageBuilder_RESULT_OK:
+			default:
+				break;
 		}
 
-		current -> invalidate();
-		resizeEvent(0);
-		updateCanvas();
-		return rc;
+		if (!(img = ib.image()))
+			continue;
+
+		if (createLayer && currentImg()) {
+			vKisLayerSP v = img -> layers();
+			KisImageSP current = currentImg();
+
+			rc += v.size();
+			current -> unsetSelection();
+
+			for (vKisLayerSP_it it = v.begin(); it != v.end(); it++) {
+				KisLayerSP layer = *it;
+
+				layer -> setImage(current);
+				layer -> setName(current -> nextLayerName());
+				m_doc -> layerAdd(current, layer, 0);
+				m_layerBox -> setCurrentItem(img -> index(layer));
+			}
+
+			current -> invalidate();
+			resizeEvent(0);
+			updateCanvas();
+		} else {
+			m_doc -> addImage(img);
+			rc++;
+		}
 	}
 
-	m_doc -> addImage(img);
-	selectImage(img);
-	return 1;
+	if (img)
+		selectImage(img);
+
+	return rc;
 }
 
 void KisView::layerScale(bool )

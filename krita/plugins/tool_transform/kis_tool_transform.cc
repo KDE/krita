@@ -121,10 +121,10 @@ printf("intro in transform has subject\n");
 		if(layer->hasSelection())
 		{
 			KisSelectionSP sel = layer->selection();
-			sel->extent(x,y,w,h);
+			sel->exactBounds(x,y,w,h);
 		}
 		else
-			layer->extent(x,y,w,h);
+			layer->exactBounds(x,y,w,h);
 		
 		m_startPos = QPoint(x, y);
 		m_endPos = QPoint(x+w, y+h);
@@ -222,6 +222,7 @@ void KisToolTransform::buttonRelease(KisButtonReleaseEvent *e)
 	if (m_subject && m_selecting) {
 		m_selecting = false;
 	}
+	transform();
 }
 
 void KisToolTransform::paintOutline()
@@ -271,28 +272,16 @@ void KisToolTransform::paintOutline(QPainter& gc, const QRect&)
 }
 
 void KisToolTransform::transform() {
-	// XXX: Should transforming be part of KisImage/KisPaintDevice's API?
-
 	KisImageSP img = m_subject -> currentImg();
 
 	if (!img)
 		return;
 
-	if (m_endPos.y() < 0)
-		m_endPos.setY(0);
+	KisProgressDisplayInterface *progress = 0;//view() -> progressDisplay();
+	img->activeLayer()->transform(1, 1, 0, 0, 1, -256, 0, progress);
 	
-	if (m_endPos.y() > img -> height())
-		m_endPos.setY(img -> height());
-	
-	if (m_endPos.x() < 0)
-		m_endPos.setX(0);
-	
-	if (m_endPos.x() > img -> width())
-				m_endPos.setX(img -> width());
-	
-	QRect rc(m_startPos, m_endPos);
+	QRect rc = img->activeLayer()->extent();
 	rc = rc.normalize();
-	
 	
 	img -> notify(rc);
 

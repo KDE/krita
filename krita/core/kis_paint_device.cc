@@ -37,6 +37,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_scale_visitor.h"
 #include "kis_rotate_visitor.h"
+#include "kis_transform_visitor.h"
 #include "kis_profile.h"
 #include "kis_canvas_controller.h"
 
@@ -261,7 +262,7 @@ QRect KisPaintDevice::exactBounds()
 
 	bool found = false;
 
-	for (Q_INT32 y2 = y; y < h ; ++y2) {
+	for (Q_INT32 y2 = y; y2 < y + h ; ++y2) {
 		KisHLineIterator it = createHLineIterator(x, y2, w, false);
 		while (!it.isDone() && found == false) {
 			if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
@@ -272,16 +273,15 @@ QRect KisPaintDevice::exactBounds()
 			++it;
 		}
 		if (found) break;
-
 	}
 
 	found = false;
 	
-	for (Q_INT32 y2 = h; y2 > y ; --y2) {
+	for (Q_INT32 y2 = y + h; y2 > y ; --y2) {
 		KisHLineIterator it = createHLineIterator(x, y2, w, false);
 		while (!it.isDone() && found == false) {
 			if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
-				boundH = y2 + 1;
+				boundH = y2 - boundY + 1;
 				found = true;
 				break;
 			}
@@ -291,7 +291,7 @@ QRect KisPaintDevice::exactBounds()
 	}
 	found = false;
 	
-	for (Q_INT32 x2 = x; x2 < w ; ++x2) {
+	for (Q_INT32 x2 = x; x2 < x + w ; ++x2) {
 		KisVLineIterator it = createVLineIterator(x2, y, h, false);
 		while (!it.isDone() && found == false) {
 			if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
@@ -307,11 +307,11 @@ QRect KisPaintDevice::exactBounds()
 	found = false;
 
 	// Loog for right edge )
-	for (Q_INT32 x2 = w; x2 > x ; --x2) {
+	for (Q_INT32 x2 = x + w; x2 > x ; --x2) {
 		KisVLineIterator it = createVLineIterator(x2, y, h, false);
 		while (!it.isDone() && found == false) {
 			if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
-				boundW = x2 + 1;
+				boundW = x2 - boundX + 1;
 				found = true;
 				break;
 			}
@@ -331,6 +331,11 @@ void KisPaintDevice::accept(KisScaleVisitor& visitor)
 }
 
 void KisPaintDevice::accept(KisRotateVisitor& visitor)
+{
+        visitor.visitKisPaintDevice(this);
+}
+
+void KisPaintDevice::accept(KisTransformVisitor& visitor)
 {
         visitor.visitKisPaintDevice(this);
 }
@@ -355,6 +360,15 @@ void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInter
         KisRotateVisitor visitor;
         accept(visitor);
         visitor.shear(angleX, angleY, m_progress);
+}
+
+void KisPaintDevice::transform(Q_INT32  xscale, Q_INT32  yscale, 
+			Q_INT32  xshear, Q_INT32  yshear, Q_INT32  denominator,
+			Q_INT32  xtranslate, Q_INT32  ytranslate, KisProgressDisplayInterface *m_progress)
+{
+        KisTransformVisitor visitor;
+        accept(visitor);
+        visitor.transform(xscale, yscale, xshear,  yshear, denominator, xtranslate, ytranslate, m_progress);
 }
 
 void KisPaintDevice::mirrorX()

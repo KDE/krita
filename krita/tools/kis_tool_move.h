@@ -19,29 +19,42 @@
 #if !defined KIS_TOOL_MOVE_H_
 #define KIS_TOOL_MOVE_H_
 
+#include <qcursor.h>
 #include <qpoint.h>
+#include "kis_types.h"
 #include "kis_tool.h"
+#include "kis_tool_non_paint.h"
 
-class MoveTool : public KisTool {
-	typedef KisTool super;
+class KisDoc;
+class KisView;
+
+class KisToolMove : public KisToolNonPaint {
+	Q_OBJECT
+	typedef KisToolNonPaint super;
 
 public:
-	MoveTool(KisDoc *doc);
-	virtual ~MoveTool();
+	KisToolMove(KisView *view, KisDoc *doc);
+	virtual ~KisToolMove();
 
-	virtual void setCursor();
-	virtual void setupAction(QObject *collection);
-
-	virtual void mousePress(QMouseEvent *e); 
+public:
+	virtual void mousePress(QMouseEvent *e);
 	virtual void mouseMove(QMouseEvent *e);
 	virtual void mouseRelease(QMouseEvent *e);
+	virtual void keyPress(QKeyEvent *e);
+	virtual void cursor(QWidget *w) const;
+	virtual void setCursor(const QCursor& cursor);
 
-protected:
+public slots:
+	virtual void activateSelf();
+
+private:
+	KisView *m_view;
+	KisDoc *m_doc;
 	QPoint m_dragStart;
-	QPoint m_dragPosition;
 	QPoint m_layerStart;
 	QPoint m_layerPosition;
-	bool   m_dragging;
+	QCursor m_cursor;
+	bool m_dragging;
 };
 
 #endif // KIS_TOOL_MOVE_H_

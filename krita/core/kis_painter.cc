@@ -145,6 +145,88 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, Q
 	src -> release();
 }
 
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
+{
+	Q_INT32 x;
+	Q_INT32 y;
+	QUANTUM *d;
+	QUANTUM *s;
+	QUANTUM alpha;
+
+	if (sw == -1)
+		sw = src -> width;
+
+	if (sh == -1)
+		sh = src -> height;
+
+	if (sw < 0 || sh < 0)
+		return;
+
+	// TODO switch on the image type then go for the composite
+	// TODO Implement all composites for all image depths
+	switch (op) {
+		case COMPOSITE_OVER:
+			for (y = 0; y < sh; y++) {
+				for (x = 0; x < sw; x++) {
+					s = src -> data + ((y + sy) * src -> width + (sx + x)) * src -> depth;
+					d = m_dst -> data + ((y + dy) * m_dst -> width + (dx + x)) * m_dst -> depth;
+
+					if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
+						continue;
+
+					if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT) {
+						d[PIXEL_RED] = s[PIXEL_RED];
+						d[PIXEL_GREEN] = s[PIXEL_GREEN];
+						d[PIXEL_BLUE] = s[PIXEL_BLUE];
+						d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
+						continue;
+					}
+
+					d[PIXEL_RED] = (d[PIXEL_RED] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_RED] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_GREEN] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_BLUE] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
+				}
+			}
+			break;
+		case COMPOSITE_COPY:
+			for (y = 0; y < sh; y++) {
+				for (x = 0; x < sw; x++) {
+					s = src -> data + ((y + sy) * src -> width + (sx + x)) * src -> depth;
+					d = m_dst -> data + ((y + dy) * m_dst -> width + (dx + x)) * m_dst -> depth;
+					d[PIXEL_RED] = s[PIXEL_RED];
+					d[PIXEL_GREEN] = s[PIXEL_GREEN];
+					d[PIXEL_BLUE] = s[PIXEL_BLUE];
+					d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
+				}
+			}
+			break;
+		default:
+			kdDebug() << "Not Implemented.\n";
+			break;
+	}
+}
+
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
+{
+	KisTileMgrSP tm = src ? src -> data() : 0;
+	KisPixelDataSP pd;
+
+	if (!tm)
+		return;
+
+	if (sw == -1)
+		sw = tm -> width();
+
+	if (sh == -1)
+		sh = tm -> height();
+
+	pd = tm -> pixelData(sx, sy, sx + sw - 1, sy + sh - 1, TILEMODE_READ);
+	Q_ASSERT(pd);
+	bitBlt(dx, dy, op, pd, 0, 0, pd -> width, pd -> height);
+}
+
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
 	Q_INT32 x;
@@ -195,17 +277,19 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, Q
 			}
 			break;
 		default:
+			kdDebug() << "Not Implemented.\n";
 			break;
 	}
 }
 
-void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
 	Q_INT32 x;
 	Q_INT32 y;
 	QUANTUM *d;
 	QUANTUM *s;
 	QUANTUM alpha;
+	QUANTUM invAlpha;
 
 	if (sw == -1)
 		sw = src -> width;
@@ -232,26 +316,18 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 						d[PIXEL_RED] = s[PIXEL_RED];
 						d[PIXEL_GREEN] = s[PIXEL_GREEN];
 						d[PIXEL_BLUE] = s[PIXEL_BLUE];
+						d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
 						continue;
 					}
 
-					d[PIXEL_RED] = (d[PIXEL_RED] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_RED] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_GREEN] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_BLUE] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					alpha = (s[PIXEL_ALPHA] * opacity) / QUANTUM_MAX;
+					invAlpha = QUANTUM_MAX - alpha;
+
+					d[PIXEL_RED] = (d[PIXEL_RED] * invAlpha + s[PIXEL_RED] * alpha) / QUANTUM_MAX;
+					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * invAlpha + s[PIXEL_GREEN] * alpha) / QUANTUM_MAX;
+					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * invAlpha + s[PIXEL_BLUE] * alpha) / QUANTUM_MAX;
 					alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
 					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
-				}
-			}
-			break;
-		case COMPOSITE_COPY:
-			for (y = 0; y < sh; y++) {
-				for (x = 0; x < sw; x++) {
-					s = src -> data + ((y + sy) * src -> width + (sx + x)) * src -> depth;
-					d = m_dst -> data + ((y + dy) * m_dst -> width + (dx + x)) * m_dst -> depth;
-					d[PIXEL_RED] = s[PIXEL_RED];
-					d[PIXEL_GREEN] = s[PIXEL_GREEN];
-					d[PIXEL_BLUE] = s[PIXEL_BLUE];
-					d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
 				}
 			}
 			break;
@@ -261,10 +337,13 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 	}
 }
 
-void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
-	KisTileMgrSP tm = src -> data();
+	KisTileMgrSP tm = src ? src -> data() : 0;
 	KisPixelDataSP pd;
+
+	if (!tm)
+		return;
 
 	if (sw == -1)
 		sw = tm -> width();
@@ -272,8 +351,9 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 	if (sh == -1)
 		sh = tm -> height();
 
-	pd = tm -> pixelData(sx, sy, sx + sw - 1, sy + sh - 1, TILEMODE_RW);
-	bitBlt(dx, dy, op, pd, sx, sy, sw, sh);
+	pd = tm -> pixelData(sx, sy, sx + sw - 1, sy + sh - 1, TILEMODE_READ);
+	Q_ASSERT(pd);
+	bitBlt(dx, dy, op, pd, opacity, 0, 0, pd -> width, pd -> height);
 }
 
 void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c)

@@ -58,6 +58,8 @@ public:
 public:
 	bool contains(Q_INT32 x, Q_INT32 y) const;
 	bool contains(const QPoint& pt) const;
+	void move(Q_INT32 x, Q_INT32 y);
+	void move(const QPoint& pt);
 	QString name();
 	void setName(const QString& name);
 	void mergeShadow();
@@ -90,6 +92,7 @@ public:
 
 signals:
 	void visibilityChanged(KisPaintDeviceSP device);
+	void drawOffsetChanged(KisPaintDeviceSP device);
 
 private:
 	void init();

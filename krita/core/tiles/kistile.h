@@ -50,7 +50,7 @@ public:
 	void lockAsync();
 	void release();
 	void allocate();
-	QUANTUM *data(Q_INT32 xoff = 0, Q_INT32 yoff = 0) const;
+	QUANTUM *data(Q_INT32 xoff = 0, Q_INT32 yoff = 0);
 	Q_INT32 width() const;
 	void width(Q_INT32 w);
 	Q_INT32 height() const;
@@ -92,6 +92,7 @@ private:
 	Q_INT32 m_nref;
 	Q_INT32 m_nshare;
 	Q_INT32 m_nwrite;
+	QImage m_img;
 };
 
 #endif // KISTILE_H_

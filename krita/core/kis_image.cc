@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <stdlib.h>
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
@@ -148,12 +149,13 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, 
 	
 	m_active.resize(n);
 	m_visible.resize(n);
-	m_projection = new KisTileMgr(depth, width, height);
+//	m_projection = new KisTileMgr(depth, width, height);
 	m_doc = doc;
 	m_name = name;
 	m_width = width;
 	m_height = height;
 	m_depth = depth;
+	m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
 	m_xres = 1.0;
 	m_yres = 1.0;
 	m_unit = KoUnit::U_PT;
@@ -178,7 +180,8 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 	if (m_height < h)
 		m_height = h;
 
-	m_projection = new KisTileMgr(m_depth, m_width, m_height);
+//	m_projection = new KisTileMgr(m_depth, m_width, m_height);
+	m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
 	m_construct = true;
 	m_pixmapProjection = QPixmap();
 }
@@ -984,58 +987,6 @@ void KisImage::copyTile(KisTileSP dst, KisTileSP src)
 	gc.bitBlt(0, 0, COMPOSITE_COPY, src, 0, 0, w, h);
 }
 
-void KisImage::renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y)
-{
-	if (!tm || !dst)
-		return;
-
-	if (dst -> width() == TILE_WIDTH && dst -> height() == TILE_HEIGHT) {
-		dst -> lock();
-		m_bgTile -> lock();
-		memcpy(dst -> data(), m_bgTile -> data(), sizeof(QUANTUM) * dst -> width() * dst -> height() * dst -> depth());
-		m_bgTile -> release();
-		dst -> release();
-	} else {
-		copyTile(dst, m_bgTile);
-	}
-
-	dst -> valid(true);
-
-	if (m_layers.size()) {
-		KisPainter gc(dst);
-
-		for (Q_INT32 i = m_layers.size() - 1; i >= 0; i--) {
-			KisLayerSP layer = m_layers[i];
-
-			if (layer -> visible() && layer -> opacity() != OPACITY_TRANSPARENT) {
-				KisTileMgrSP tm = layer -> data();
-				KisTileSP src = tm -> tile(x, y, TILEMODE_READ);
-
-				if (src && !src -> valid()) {
-					if (layer -> opacity() == OPACITY_OPAQUE)
-						gc.bitBlt(0, 0, COMPOSITE_OVER, src, 0, 0, src -> width(), src -> height());
-					else
-						gc.bitBlt(0, 0, COMPOSITE_OVER, src, layer -> opacity(), 0, 0, src -> width(), src -> height());
-
-					src -> valid(true);
-				}
-			}
-		}
-
-		gc.end();
-	}
-
-	if (dst -> valid()) {
-		QImage image;
-		QPainter gc(&m_pixmapProjection);
-
-		dst -> lock();
-		image = dst -> convertToImage();
-		gc.drawImage(x, y, image);
-		dst -> release();
-	}
-}
-
 void KisImage::expand(KisPaintDeviceSP dev)
 {
 	if (dev -> width() >= width() || dev -> height() >= height()) {
@@ -1044,26 +995,118 @@ void KisImage::expand(KisPaintDeviceSP dev)
 	}
 }
 
+void KisImage::rengerBg()
+{
+	KisTileMgrSP tm = m_projection -> data();
+	Q_UINT32 x;
+	Q_UINT32 y;
+
+	for (y = 0; y < tm -> height(); y += TILE_HEIGHT) {
+		for (x = 0; x < tm -> width(); x += TILE_WIDTH) {
+			KisTileSP dst = tm -> tile(x, y, TILEMODE_RW);
+
+			if (dst -> width() == TILE_WIDTH && dst -> height() == TILE_HEIGHT) {
+				dst -> lock();
+				m_bgTile -> lock();
+				memcpy(dst -> data(), m_bgTile -> data(), sizeof(QUANTUM) * dst -> width() * dst -> height() * dst -> depth());
+				m_bgTile -> release();
+				dst -> release();
+			} else {
+				copyTile(dst, m_bgTile);
+			}
+		}
+	}
+}
+
 QPixmap KisImage::recreatePixmap()
 {
-	KisTileMgrSP tm = m_projection;
+	KisTileMgrSP tm = m_projection -> data();
+	Q_INT32 sx;
+	Q_INT32 sy;
+	Q_INT32 dx;
+	Q_INT32 dy;
+	Q_INT32 w;
+	Q_INT32 h;
 
 	if (width() > m_pixmapProjection.width() || height() > m_pixmapProjection.height()) {
 		m_pixmapProjection.resize(width(), height());
 		invalidate();
 	}
 
-	for (Q_UINT32 y = 0; y < tm -> height(); y += TILE_HEIGHT) {
-		for (Q_UINT32 x = 0; x < tm -> width(); x += TILE_WIDTH) {
-			KisTileSP tile = tm -> tile(x, y, TILEMODE_RW);
+	rengerBg();
 
-			if (tile)
-				renderTile(tm, tile, x, y);
+	if (m_layers.size()) {
+		KisPainter gc(m_projection.data());
+
+		for (Q_INT32 i = m_layers.size() - 1; i >= 0; i--) {
+			KisLayerSP layer = m_layers[i];
+
+			if (layer -> visible() && layer -> opacity() != OPACITY_TRANSPARENT) {
+				sx = layer -> x();
+				sy = layer -> y();
+				w = layer -> width();
+				h = layer -> height();
+
+				if (sx < 0) {
+					dx = 0;
+					sx = abs(sx);
+					w -= sx;
+				} else {
+					dx = sx;
+					sx = 0;
+				}
+
+				if (sy < 0) {
+					dy = 0;
+					sy = abs(sy);
+					h -= sy;
+				} else {
+					dy = sy;
+					sy = 0;
+				}
+
+				if (dx + w > width())
+					w = width() - dx;
+
+				if (dy + h > height())
+					h = height() - dy;
+
+				if (!m_projection -> contains(dx, dy))
+					continue;
+
+				if (layer -> opacity() == OPACITY_OPAQUE)
+					gc.bitBlt(dx, dy, COMPOSITE_OVER, layer.data(), sx, sy, w, h);
+				else
+					gc.bitBlt(dx, dy, COMPOSITE_OVER, layer.data(), layer -> opacity(), sx, sy, w, h);
+			}
+		}
+	}
+
+	renderProjection();
+	return m_pixmapProjection;
+}
+
+void KisImage::renderProjection()
+{
+	KisTileMgrSP tm = m_projection -> data();
+	QImage image;
+	QPainter gc(&m_pixmapProjection);
+	Q_UINT32 x;
+	Q_UINT32 y;
+
+	for (y = 0; y < tm -> height(); y += TILE_HEIGHT) {
+		for (x = 0; x < tm -> width(); x += TILE_WIDTH) {
+			KisTileSP src = tm -> tile(x, y, TILEMODE_READ);
+
+			src -> lock();
+			image = src -> convertToImage();
+			gc.drawImage(x, y, image);
+			src -> release();
 		}
 	}
 
 	m_construct = false;
-	return m_pixmapProjection;
 }
 
 #include "kis_image.moc"
+

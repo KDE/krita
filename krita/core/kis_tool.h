@@ -47,6 +47,7 @@ public:
 	virtual void mouseMove(QMouseEvent *e) = 0;
 	virtual void mouseRelease(QMouseEvent *e) = 0;
 	virtual void keyPress(QKeyEvent *e) = 0;
+	virtual void keyRelease(QKeyEvent *e) = 0;
 
 	virtual void setCursor(const QCursor& cursor) = 0;
 	virtual void cursor(QWidget *w) const = 0;

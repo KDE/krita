@@ -17,171 +17,192 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
+#include <qpoint.h>
 #include <kaction.h>
 #include <kcommand.h>
-#include <kdebug.h>
 #include <klocale.h>
-
-#include "kis_canvas.h"
+#include <koColor.h>
 #include "kis_cursor.h"
 #include "kis_doc.h"
-#include "kis_tool_move.h"
+#include "kis_image.h"
+#include "kis_paint_device.h"
 #include "kis_view.h"
+#include "kis_tool_memento.h"
+#include "kis_tool_move.h"
 
-class MoveCommand : public KNamedCommand {
-	typedef KNamedCommand super;
+namespace {
+	class MoveCommand : public KNamedCommand {
+		typedef KNamedCommand super;
 
-public:
-	MoveCommand(KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
-	virtual ~MoveCommand();
+	public:
+		MoveCommand(KisView *view, KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
+		virtual ~MoveCommand();
 
-	virtual void execute();
-	virtual void unexecute();
+		virtual void execute();
+		virtual void unexecute();
 
-private:
-	void moveTo(const QPoint& pos);
+	private:
+		void moveTo(const QPoint& pos);
 
-private:
-	KisPaintDeviceSP m_device;
-	QPoint m_oldPos;
-	QPoint m_newPos;
-	KisImageSP m_img;
-};
+	private:
+		KisView *m_view;
+		KisPaintDeviceSP m_device;
+		QPoint m_oldPos;
+		QPoint m_newPos;
+		KisImageSP m_img;
+	};
 
-MoveCommand::MoveCommand(KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) : 
-	super(i18n("Move Painting Device"))
-{
-	m_img = img;
-	m_device = device;
-	m_oldPos = oldpos;
-	m_newPos = newpos;
-}
 
-MoveCommand::~MoveCommand()
-{
-}
+	MoveCommand::MoveCommand(KisView *view, KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) : 
+		super(i18n("Move Painting Device"))
+	{
+		m_view = view;
+		m_img = img;
+		m_device = device;
+		m_oldPos = oldpos;
+		m_newPos = newpos;
+	}
 
-void MoveCommand::execute()
-{
-	moveTo(m_newPos);
-}
+	MoveCommand::~MoveCommand()
+	{
+	}
 
-void MoveCommand::unexecute()
-{
-	moveTo(m_oldPos);
-}
+	void MoveCommand::execute()
+	{
+		moveTo(m_newPos);
+	}
 
-void MoveCommand::moveTo(const QPoint& pos)
-{
-	QRect oldRect = m_device -> imageExtents();
+	void MoveCommand::unexecute()
+	{
+		moveTo(m_oldPos);
+	}
 
-	m_device -> moveTo(pos.x(), pos.y());
-	m_img -> markDirty(m_device -> imageExtents());
-	m_img -> markDirty(oldRect);
-}
+	void MoveCommand::moveTo(const QPoint& pos)
+	{
+		QRect rc;
 
-MoveTool::MoveTool(KisDoc *doc) : super(doc)
-{
-	setCursor();
-	m_dragging = false;
-}
-
-MoveTool::~MoveTool()
-{
-}
-
-void MoveTool::mousePress(QMouseEvent *e)
-{
-	if (e -> button() == LeftButton) {
-		KisImageSP img = m_doc -> currentImg();
-		KisPaintDeviceSP device;
-
-		if (!img)
-			return;
-
-		device = img -> getCurrentPaintDevice();
-
-		if (!device || !device -> visible())
-			return;
-
-		QPoint pos = zoomed(e -> pos());
-
-		if (!device -> imageExtents().contains(pos))
-			return;
-
-		m_dragging = true;
-		m_dragStart.setX(e -> x());
-		m_dragStart.setY(e -> y());
-		m_layerStart = device -> imageExtents().topLeft();
-		m_layerPosition = m_layerStart;
+		rc.setRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
+		m_device -> move(pos.x(), pos.y());
+		rc |= QRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
+		m_img -> invalidate(rc);
+		m_view -> updateCanvas(rc);
 	}
 }
 
-void MoveTool::mouseMove(QMouseEvent *e)
+KisToolMove::KisToolMove(KisView *view, KisDoc *doc) : super(view, doc)
 {
-	if (!m_dragging)
-		return;
+	KToggleAction *toggle;
 
-	KisView *view = getCurrentView();
-	KisImageSP img = m_doc -> currentImg();
-	KisPaintDeviceSP device;
-
-	if (!img) 
-		return;
-
-	if (!(device = img -> getCurrentPaintDevice()))
-		return;
-
-	QPoint pos = e -> pos();
-	QPoint zoomedPos(pos - m_dragStart);
-
-	m_dragPosition = zoomed(zoomedPos);
-
-	QRect oldRect = device -> imageExtents();
-
-	device -> moveBy(m_dragPosition.x(), m_dragPosition.y());
-	img -> markDirty(device -> imageExtents());
-	img -> markDirty(oldRect);
-
-	m_layerPosition = device -> imageExtents().topLeft();
-	m_dragStart = e -> pos();
-	view -> slotRefreshPainter();
+	m_view = view;
+	m_doc = doc;
+	m_cursor = KisCursor::moveCursor();
+	m_dragging = false;
+	toggle = new KToggleAction(i18n("&Move"), "move", 0, this, SLOT(activateSelf()), view -> actionCollection(), "tool_move");
+	toggle -> setExclusiveGroup("tools");
 }
 
-void MoveTool::mouseRelease(QMouseEvent *e)
+KisToolMove::~KisToolMove()
 {
-	if (e -> button() == LeftButton) {
-		KisImageSP img = m_doc -> currentImg();
+}
 
-		if (!img) 
-			return;
+void KisToolMove::mousePress(QMouseEvent *e)
+{
+	KisImageSP img;
+	KisPaintDeviceSP dev;
+	QPoint pos;
 
-		if (!m_dragging) 
-			return;
+	if (e -> button() != QMouseEvent::LeftButton)
+		return;
 
-		if (m_layerPosition != m_layerStart) {
-			KCommand *cmd = new MoveCommand(img, img -> getCurrentPaintDevice(), m_layerStart, m_layerPosition);
+	if (!(img = m_view -> currentImg()))
+		return;
 
+	dev = img -> activeDevice();
+
+	if (!dev || !dev -> visible())
+		return;
+
+	pos = e -> pos();
+
+	if (!dev -> contains(pos))
+		return;
+
+	m_dragging = true;
+	m_dragStart.setX(e -> x());
+	m_dragStart.setY(e -> y());
+	m_layerStart.setX(dev -> x());
+	m_layerStart.setY(dev -> y());
+	m_layerPosition = m_layerStart;
+}
+
+void KisToolMove::mouseMove(QMouseEvent *e)
+{
+	if (m_dragging) {
+		KisImageSP img = m_view -> currentImg();
+		KisPaintDeviceSP dev;
+
+		if (img && (dev = img -> activeDevice())) {
+			QPoint pos = e -> pos();
+			QRect rc;
+
+			if (pos.x() < 0 || pos.y() < 0)
+				return;
+
+			if (pos.x() >= img -> width() || pos.y() >= img -> height())
+				return;
+
+			pos -= m_dragStart;
+			rc.setRect(dev -> x(), dev -> y(), dev -> width(), dev -> height());
+			dev -> move(dev -> x() + pos.x(), dev -> y() + pos.y());
+			rc |= QRect(dev -> x(), dev -> y(), dev -> width(), dev -> height());
+			img -> invalidate(rc);
+
+			m_layerPosition = QPoint(dev -> x(), dev -> y());
+			m_dragStart = e -> pos();
+			rc.setX(static_cast<Q_INT32>(rc.x() * m_view -> zoom()));
+			rc.setY(static_cast<Q_INT32>(rc.y() * m_view -> zoom()));
+			rc.setWidth(static_cast<Q_INT32>(rc.width() * m_view -> zoom()));
+			rc.setHeight(static_cast<Q_INT32>(rc.height() * m_view -> zoom()));
+			m_view -> updateCanvas(rc);
+		}
+	}
+}
+
+void KisToolMove::mouseRelease(QMouseEvent *e)
+{
+	if (m_dragging && e -> button() == QMouseEvent::LeftButton) {
+		KisImageSP img = m_view -> currentImg();
+		KisPaintDeviceSP dev;
+
+		if (img && (dev = img -> activeDevice())) {
+			KCommand *cmd;
+
+			mouseMove(e);
+			m_dragging = false;
+			cmd = new MoveCommand(m_view, img, img -> activeDevice(), m_layerStart, m_layerPosition);
 			m_doc -> addCommand(cmd);
 		}
-
-		m_dragging = false;
 	}
 }
 
-void MoveTool::setCursor()
+void KisToolMove::keyPress(QKeyEvent *)
 {
-	KisView *view = getCurrentView();
-
-	view -> kisCanvas() -> setCursor(KisCursor::moveCursor());
-	m_cursor = KisCursor::moveCursor();
 }
 
-void MoveTool::setupAction(QObject *collection)
+void KisToolMove::activateSelf()
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Move Tool"), "move", 0, this, SLOT(toolSelect()), collection, "tool_move");
+	if (m_view)
+		m_view -> activateTool(this);
+}
 
-        toggle -> setExclusiveGroup("tools");
+void KisToolMove::setCursor(const QCursor& cursor)
+{
+	m_cursor = cursor;
+}
+
+void KisToolMove::cursor(QWidget *w) const
+{
+	if (w)
+		w -> setCursor(m_cursor);
 }
 

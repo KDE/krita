@@ -107,13 +107,18 @@ void KisTile::release()
 
 void KisTile::allocate()
 {
-	if (m_data == 0)
+	if (m_data == 0) {
 		m_data = new QUANTUM[size()];
+		m_img = QImage(width(), height(), 32);
+	}
 }
 
-QUANTUM *KisTile::data(Q_INT32 xoff, Q_INT32 yoff) const
+QUANTUM *KisTile::data(Q_INT32 xoff, Q_INT32 yoff)
 {
 	Q_INT32 offset = yoff * m_width + xoff;
+
+	if (!m_data)
+		allocate();
 
 	return m_data + offset * m_depth;
 }
@@ -201,9 +206,6 @@ void KisTile::init(Q_INT32 depth, KisTileCacheInterface *cache, KisTileSwapInter
 	m_nref = 0;
 	m_nshare = 0;
 	m_nwrite = 0;
-
-	if (m_swap == 0)
-		allocate();
 }
 
 void KisTile::initRowHints()
@@ -253,7 +255,6 @@ void KisTile::writeRef()
 
 QImage KisTile::convertToImage()
 {
-	QImage img(width(), height(), 32);
 	QUANTUM *pixel = data();
 
 	// TODO : Get convertToImage out of here...
@@ -261,17 +262,17 @@ QImage KisTile::convertToImage()
 	// TODO : color info.  Also this proxy would support
 	// TODO : all image formats.  Only RGB/RGBA is supported
 	// TODO : here.
-	for (Q_INT32 j = 0; j < img.height(); j++) {
-		for (Q_INT32 i = 0; i < img.width(); i++) {
+	for (Q_INT32 j = 0; j < m_img.height(); j++) {
+		for (Q_INT32 i = 0; i < m_img.width(); i++) {
 			Q_UINT8 red = downscale(pixel[PIXEL_RED]);
 			Q_UINT8 green = downscale(pixel[PIXEL_GREEN]);
 			Q_UINT8 blue = downscale(pixel[PIXEL_BLUE]);
 
-			img.setPixel(i, j, qRgb(red, green, blue));
+			m_img.setPixel(i, j, qRgb(red, green, blue));
 			pixel += depth();
 		}
 	}
 
-	return img;
+	return m_img;
 }
 

@@ -38,6 +38,8 @@ signals:
 	void gotEnterEvent(QEvent*);
 	void gotLeaveEvent(QEvent*);
 	void mouseWheelEvent(QWheelEvent*);
+	void gotKeyPressEvent(QKeyEvent*);
+	void gotKeyReleaseEvent(QKeyEvent*);
 
 protected:
 	virtual void paintEvent(QPaintEvent *event);
@@ -47,6 +49,8 @@ protected:
 	virtual void enterEvent(QEvent *event );
 	virtual void leaveEvent(QEvent *event);
 	virtual void wheelEvent(QWheelEvent *event);
+	virtual void keyPressEvent(QKeyEvent *event);
+	virtual void keyReleaseEvent(QKeyEvent *event);
 };
 
 #endif // KIS_CANVAS_H_

@@ -65,6 +65,10 @@ void KisToolNonPaint::keyPress(QKeyEvent *)
 {
 }
 
+void KisToolNonPaint::keyRelease(QKeyEvent *)
+{
+}
+
 KDialog *KisToolNonPaint::options()
 {
 	return 0;

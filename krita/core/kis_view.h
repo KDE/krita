@@ -155,6 +155,8 @@ private slots:
 	void canvasGotLeaveEvent(QEvent *e);
 	void canvasGotMouseWheelEvent(QWheelEvent *e);
 	void canvasRefresh();
+	void canvasGotKeyPressEvent(QKeyEvent*);
+	void canvasGotKeyReleaseEvent(QKeyEvent*);
 	void docImageListUpdate();
 	void floatSidebar();
 	void layerToggleVisible();

@@ -49,6 +49,7 @@ public:
 	virtual void mouseMove(QMouseEvent *e);
 	virtual void mouseRelease(QMouseEvent *e);
 	virtual void keyPress(QKeyEvent *e);
+	virtual void keyRelease(QKeyEvent *e);
 	virtual KDialog *options();
 	virtual void save(KisToolMementoSP memento);
 	virtual void restore(KisToolMementoSP memento);

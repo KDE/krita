@@ -111,6 +111,18 @@ void KisPaintDevice::update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 	invalidate(x, y, w, h);
 }
 
+void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
+{
+	m_offX = x;
+	m_offY = y;
+	emit drawOffsetChanged(this);
+}
+
+void KisPaintDevice::move(const QPoint& pt)
+{
+	move(pt.x(), pt.y());
+}
+
 bool KisPaintDevice::contains(Q_INT32 x, Q_INT32 y) const
 {
 	QRect rc(m_offX, m_offY, m_width, m_height);

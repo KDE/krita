@@ -543,6 +543,12 @@ void KisView::paintView(const QRect& rc)
 		Q_INT32 xt;
 		Q_INT32 yt;
 
+		if (ur.x() < 0)
+			ur.setLeft(0);
+
+		if (ur.y() < 0)
+			ur.setTop(0);
+
 		if (canvasXOffset())
 			gc.eraseRect(0, 0, static_cast<Q_INT32>(canvasXOffset() * zoom()), height());
 
@@ -1511,25 +1517,31 @@ void KisView::canvasGotMouseReleaseEvent(QMouseEvent *e)
 
 void KisView::canvasGotEnterEvent(QEvent *e)
 {
-	if (m_tool) {
-		QEvent ev(*e);
-
-		m_tool -> enter(&ev);
-	}
+	if (m_tool)
+		m_tool -> enter(e);
 }
 
 void KisView::canvasGotLeaveEvent (QEvent *e)
 {
-	if (m_tool) {
-		QEvent ev(*e);
-
-		m_tool -> leave(&ev);
-	}
+	if (m_tool)
+		m_tool -> leave(e);
 }
 
 void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 {
 	QApplication::sendEvent(m_vScroll, event);
+}
+
+void KisView::canvasGotKeyPressEvent(QKeyEvent *event)
+{
+	if (m_tool)
+		m_tool -> keyPress(event);
+}
+
+void KisView::canvasGotKeyReleaseEvent(QKeyEvent *event)
+{
+	if (m_tool)
+		m_tool -> keyRelease(event);
 }
 
 void KisView::canvasRefresh()
@@ -1804,6 +1816,8 @@ void KisView::setupCanvas()
 	QObject::connect(m_canvas, SIGNAL(gotEnterEvent(QEvent*)), this, SLOT(canvasGotEnterEvent(QEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotLeaveEvent(QEvent*)), this, SLOT(canvasGotLeaveEvent(QEvent*)));
 	QObject::connect(m_canvas, SIGNAL(mouseWheelEvent(QWheelEvent*)), this, SLOT(canvasGotMouseWheelEvent(QWheelEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotKeyPressEvent(QKeyEvent*)), this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotKeyReleaseEvent(QKeyEvent*)), this, SLOT(canvasGotKeyReleaseEvent(QKeyEvent*)));
 }
 
 void KisView::projectionUpdated(KisImageSP img)

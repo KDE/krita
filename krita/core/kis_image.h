@@ -147,7 +147,8 @@ private:
 	void expand(KisPaintDeviceSP dev);
 	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name);
 	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
-	void renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y);
+	void renderProjection();
+	void rengerBg();
 
 private:
 	KisDoc *m_doc;
@@ -170,7 +171,7 @@ private:
 	bool m_construct;
 	enumImgType m_projType;
 	QPixmap m_pixmapProjection;
-	KisTileMgrSP m_projection;
+	KisLayerSP m_projection;
 	vKisLayerSP m_layers;
 	vKisChannelSP m_channels;
 	vKisLayerSP m_layerStack;

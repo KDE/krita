@@ -29,7 +29,9 @@
 #include "kis_tool_select_elliptical.h"
 #include "kis_tool_select_contiguous.h"
 #include "kis_tool_paste.h"
+#endif
 #include "kis_tool_move.h"
+#if 0
 #include "kis_tool_zoom.h"
 #include "kis_tool_brush.h"
 #include "kis_tool_airbrush.h"
@@ -85,9 +87,11 @@ vKisToolSP toolFactory(KisView *view, KisDoc *doc)
 
 	// Positioning tools
 	tools.push_back(new ZoomTool(doc));
-	tools.push_back(new MoveTool(doc));
+#endif
+	tools.push_back(new KisToolMove(view, doc));
 
 	// selection tools
+#if 0
 	tools.push_back(new FreehandSelectTool(doc, canvas));
 	tools.push_back(new RectangularSelectTool(doc, canvas));
 	tools.push_back(new PolygonalSelectTool(doc, canvas));

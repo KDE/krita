@@ -72,4 +72,15 @@ void KisCanvas::wheelEvent(QWheelEvent *e)
 	emit mouseWheelEvent(e);
 }
 
+void KisCanvas::keyPressEvent(QKeyEvent *e)
+{
+	emit gotKeyPressEvent(e);
+}
+
+void KisCanvas::keyReleaseEvent(QKeyEvent *e)
+{
+	emit gotKeyReleaseEvent(e);
+}
+
 #include "kis_canvas.moc"
+

@@ -1,5 +1,5 @@
 
-INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I$(idldir)
+INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = -lkom $(top_builddir)/lib/kofficecore/libkofficecore.la $(LIBMICO)
 

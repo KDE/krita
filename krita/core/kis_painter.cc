@@ -538,9 +538,27 @@ float KisPainter::paintLine(const enumPaintOp paintOp,
 			    const Q_INT32 pressure,
 			    const Q_INT32 xTilt,
 			    const Q_INT32 yTilt,
-			    const float savedDist)
+			    const float inSavedDist)
 {
 	if (!m_device) return 0;
+
+	float savedDist = inSavedDist;
+
+	if (savedDist < 0) {
+		// pos1 is the start of the line, rather than this being a 
+		// continuation of an existing line, so always paint it.
+		switch(paintOp) {
+		case PAINTOP_BRUSH:
+			paintAt(pos1, pressure, xTilt, yTilt);
+			break;
+		case PAINTOP_ERASE:
+			eraseAt(pos1, pressure, xTilt, yTilt);
+			break;
+		default:
+			kdDebug() << "Paint operation not implemented yet.\n";
+		}
+		savedDist = 0;
+	}
 
 	Q_INT32 xSpacing = m_brush -> xSpacing(pressure);
 	Q_INT32 ySpacing = m_brush -> ySpacing(pressure);

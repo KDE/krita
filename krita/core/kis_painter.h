@@ -119,6 +119,8 @@ public:
 
 	// ------------------------------------------------------------------------------------------
 	// Draw a line between pos1 and pos2 using the currently set brush and color. 
+	// If savedDist is less than zero, the brush is painted at pos1 before being
+	// painted along the line using the spacing setting.
 	// @Return the drag distance, that is the remains of the distance between p1 and p2 not covered
 	// because the currenlty set brush has a spacing greater than that distance.
 	float paintLine(const enumPaintOp paintOp,
@@ -127,7 +129,7 @@ public:
 			const Q_INT32 pressure,
 			const Q_INT32 xTilt,
 			const Q_INT32 yTilt,
-			const float savedDist);
+			const float savedDist = -1);
 
 	// Draw a spot at pos using the currently set brush and color
 	void paintAt(const QPoint &pos,

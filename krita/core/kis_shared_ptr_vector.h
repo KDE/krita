@@ -38,8 +38,8 @@ public:
 
 	void pop_back()
 	{
-		if (!empty()) {
-			back() = 0;
+		if (!super::back()) {
+			super::back() = 0;
 			super::pop_back();
 		}
 	}

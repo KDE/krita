@@ -123,3 +123,4 @@ noinst_HEADERS = kis_paint_device.h \
 libkritacore_la_METASOURCES = AUTO
 libkritacore_la_LDFLAGS = $(all_libraries)
 SUBDIRS = helper tiles builder strategy color_strategy paintop resources
+KDE_OPTIONS = nofinal

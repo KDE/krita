@@ -26,6 +26,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include "KIsImageIface.h"
+
 #include "kis_guide.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
@@ -140,10 +141,12 @@ KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height, c
 	init(undoAdapter, width, height, imgType, name);
 	setName(name);
 	startUpdateTimer();
+        m_dcop = 0L;
 }
 
 KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 {
+    m_dcop = 0L;
 	if (this != &rhs) {
 		m_undoHistory = rhs.m_undoHistory;
 		m_uri = rhs.m_uri;
@@ -203,9 +206,18 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 
 }
 
+
+DCOPObject *KisImage::dcopObject()
+{
+	if (!m_dcop)
+		m_dcop = new KIsImageIface(this);
+	return m_dcop;
+}
+
 KisImage::~KisImage()
 {
 	delete m_nserver;
+        delete m_dcop;
 	// Not necessary to destroy m_updateTimer
 }
 

@@ -39,6 +39,7 @@ class KoCommandHistory;
 class KisNameServer;
 class KisUndoAdapter;
 class KisPainter;
+class DCOPObject;
 
 class KisImage : public QObject, public KisRenderInterface {
 	Q_OBJECT
@@ -47,6 +48,7 @@ public:
 	KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	KisImage(const KisImage& rhs);
 	virtual ~KisImage();
+    virtual DCOPObject *dcopObject();
 
 public:
 	// Implement KisRenderInterface
@@ -214,6 +216,7 @@ private:
 
 	QTimer * m_updateTimer;
 	QMutex m_displayMutex;
+    DCOPObject *m_dcop;
 };
 
 #endif // KIS_IMAGE_H_

@@ -29,7 +29,7 @@ KIsDocIface::KIsDocIface( KisDoc *doc_ )
 	m_doc = doc_;
 }
 
-#if 0
+
 DCOPRef KIsDocIface::image( int num )
 {
 	KisImage *img=m_doc->imageNum(num);
@@ -40,7 +40,6 @@ DCOPRef KIsDocIface::image( int num )
 				img->dcopObject()->objId() );
 
 }
-#endif
 
 int KIsDocIface::undoLimit () const
 {

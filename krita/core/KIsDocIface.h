@@ -33,7 +33,7 @@ class KIsDocIface : virtual public KoDocumentIface
 		public:
 	KIsDocIface( KisDoc *doc_ );
  k_dcop:
-    //virtual DCOPRef image( int num );
+    virtual DCOPRef image( int num );
 
 	virtual int undoLimit () const;
 	virtual void setUndoLimit(int limit);

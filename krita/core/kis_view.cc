@@ -642,7 +642,7 @@ void KisView::paintView(const KisRect& r)
 			QPainter gc(m_canvas);
 			QRect wr = viewToWindow(vr).qRect();
 
-			if (wr.left() < 0 || wr.right() > img -> width() || wr.top() < 0 || wr.bottom() > img -> height()) {
+			if (wr.left() < 0 || wr.right() >= img -> width() || wr.top() < 0 || wr.bottom() >= img -> height()) {
 				// Erase areas outside document
 				QRegion rg(vr.qRect());
 				rg -= QRegion(windowToView(KisRect(0, 0, img -> width(), img -> height())).qRect());

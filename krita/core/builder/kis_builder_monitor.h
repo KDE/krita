@@ -15,41 +15,34 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#if !defined KIS_TOOL_PASTE_H_
-#define KIS_TOOL_PASTE_H_
+#if !defined KIS_BUILDER_MANAGER_H_
+#define KIS_BUILDER_MANAGER_H_
 
-#include "kis_selection.h"
-#include "kis_tool_non_paint.h"
-#include "kis_tool_move.h"
-#include "kis_strategy_move.h"
+#include <qobject.h>
+#include "builder/kis_builder_types.h"
 
-class KToggleAction;
-
-class KisToolPaste : public KisToolNonPaint, private KisStrategyMove {
-	typedef KisToolNonPaint super;
+class KisBuilderMonitor : public QObject {
+	Q_OBJECT
+	typedef QObject super;
 
 public:
-	KisToolPaste(KisView *view, KisDoc *doc);
-	virtual ~KisToolPaste();
+	KisBuilderMonitor(QObject *parent = 0, const char *name = 0);
+	virtual ~KisBuilderMonitor();
 
 public:
-	virtual void activate();
-	virtual void clear();
-	virtual void enter(QEvent *e);
-	virtual void leave(QEvent *e);
-	virtual void mouseMove(QMouseEvent *e);
-	virtual void mouseRelease(QMouseEvent *e);
-	virtual void setup();
+	void attach(KisBuilderSubject *subject);
+	void detach(KisBuilderSubject *subject);
+
+signals:
+	void size(Q_INT32 nSubjects);
+
+private slots:
+	void update(KisBuilderSubject *subject, KisImageBuilder_Step step, Q_INT8 percent);
+	void destroyed(QObject *o);
 
 private:
-	KisView *m_view;
-	KisDoc *m_doc;
-	KisSelectionSP m_clip;
-	bool m_justEntered;
-	QUANTUM m_oldOpacity;
-	KisSelectionSP m_selection;
-	KToggleAction *m_toggle;
+	vKisBuilderSubject m_subjects;
 };
 
-#endif // KIS_TOOL_PASTE_H_
+#endif // KIS_BUILDER_MANAGER_H_
 

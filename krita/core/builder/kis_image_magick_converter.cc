@@ -15,17 +15,16 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <qimage.h>
+#include <magick/api.h>
 #include <qstring.h>
-#include <qvaluelist.h>
-#include <klocale.h>
+#include <kapplication.h>
 #include <ksharedptr.h>
 #include <kurl.h>
 #include <kio/netaccess.h>
 #include <koColor.h>
-#include <Magick++.h>
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_doc.h"
@@ -37,11 +36,9 @@
 #include "kis_layer.h"
 #include "kis_image_magick_converter.h"
 
-typedef QValueList<Magick::Image> mimglist;
-
 namespace {
 	inline
-	void pp2tile(KisPixelDataSP pd, const Magick::PixelPacket *pp)
+	void pp2tile(KisPixelDataSP pd, const PixelPacket *pp)
 	{
 		Q_INT32 i;
 		Q_INT32 j;
@@ -60,7 +57,7 @@ namespace {
 	}
 
 	inline
-	void pp2tile(Magick::PixelPacket *pp, const KisPixelDataSP pd)
+	void pp2tile(PixelPacket *pp, const KisPixelDataSP pd)
 	{
 		Q_INT32 i;
 		Q_INT32 j;
@@ -77,83 +74,183 @@ namespace {
 			}
 		}
 	}
+
+	void InitGlobalMagick()
+	{
+		static bool init = false;
+
+		if (!init) {
+			KApplication *app = KApplication::kApplication();
+
+			InitializeMagick(*app -> argv());
+			atexit(DestroyMagick);
+			init = true;
+		}
+	}
+
+	/*
+	 * ImageMagick progress monitor callback.  Unfortunately it doesn't support passing in some user
+	 * data which complicates things quite a bit.  The plan was to allow the user start multiple
+	 * import/scans if he/she so wished.  However, without passing user data it's not possible to tell 
+	 * on which task we have made progress on.
+	 *
+	 * Additionally, ImageMagick is thread-safe, not re-entrant... i.e. IM does not relinquish held
+	 * locks when calling user defined callbacks, this means that the same thread going back into IM
+	 * would deadlock since it would try to acquire locks it already holds.
+	 */
+	unsigned int monitor(const char *text, const ExtendedSignedIntegralType, const ExtendedUnsignedIntegralType, ExceptionInfo *)
+	{
+		KApplication *app = KApplication::kApplication();
+
+		// TODO : Figure something out for above problems
+		Q_ASSERT(app);
+
+		if (app -> hasPendingEvents())
+			app -> processEvents();
+
+		printf("%s\n", text);
+		return true;
+	}
 }
 
 KisImageMagickConverter::KisImageMagickConverter(KisDoc *doc)
 {
+	InitGlobalMagick();
 	init(doc);
+	SetMonitorHandler(monitor);
+	m_stop = false;
 }
 
 KisImageMagickConverter::~KisImageMagickConverter()
 {
 }
 
-KisImageBuilder_Result KisImageMagickConverter::buildImage(const KURL& uri)
+KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isBlob)
 {
-	try {
-		mimglist mimages;
-		KisImageSP img;
-		QString name;
+	Image *image;
+	Image *images;
+	ExceptionInfo ei;
+	ImageInfo *ii;
 
-		if (uri.isEmpty())
-			return KisImageBuilder_RESULT_NO_URI;
+	if (m_stop) {
+		m_img = 0;
+		return KisImageBuilder_RESULT_INTR;
+	}
 
-		if (!KIO::NetAccess::exists(uri))
-			return KisImageBuilder_RESULT_NOT_EXIST;
+	GetExceptionInfo(&ei);
+	ii = CloneImageInfo(0);
 
-		if (!uri.isLocalFile())
-			return KisImageBuilder_RESULT_NOT_LOCAL;
+	if (isBlob) {
+		// TODO : Test.  Does BlobToImage even work?
+		Q_ASSERT(uri.isEmpty());
+		strncpy(ii -> filename, "123", 4);
+		images = BlobToImage(ii, &m_data[0], m_data.size(), &ei);
+	} else {
+		strncpy(ii -> filename, uri.path().latin1(), MaxTextExtent);
+		images = ReadImage(ii, &ei);
+	}
 
-		Magick::readImages(&mimages, uri.path().latin1());
+	if (ei.severity != UndefinedException)
+		CatchException(&ei);
 
-		if (mimages.empty())
-			return KisImageBuilder_RESULT_EMPTY;
-
-		img = new KisImage(m_doc, 0, 0, OPACITY_OPAQUE, IMAGE_TYPE_RGBA, m_doc -> nextImageName());
-
-		for (mimglist::iterator it = mimages.begin(); it != mimages.end(); it++) {
-			Magick::Image& magick = *it;
-			Magick::Geometry geo = magick.size();
-
-			if (geo.width() && geo.height()) {
-				KisLayerSP layer = new KisLayer(img, geo.width(), geo.height(), img -> nextLayerName(), OPACITY_OPAQUE);
-				KisTileMgrSP tm = layer -> data();
-				Q_INT32 w = TILE_WIDTH;
-				Q_INT32 h = TILE_HEIGHT;
-
-				img -> add(layer, -1);
-
-				for (Q_INT32 y = 0; y < img -> height(); y += TILE_HEIGHT) {
-					if ((y + h) > img -> height())
-						h = TILE_HEIGHT + img -> height() - (y + h);
-
-					for (Q_INT32 x = 0; x < img -> width(); x += TILE_WIDTH) {
-						if ((x + w) > img -> width())
-							w = TILE_WIDTH + img -> width() - (x + w);
-
-						const Magick::PixelPacket *pp = magick.getConstPixels(x, y, w, h);
-						KisPixelDataSP pd = tm -> pixelData(x, y, x + w - 1, y + h - 1, TILEMODE_RW);
-
-						if (!pd || !pp)
-							return KisImageBuilder_RESULT_FAILURE;
-
-						pp2tile(pd, pp);
-						tm -> releasePixelData(pd);
-						w = TILE_WIDTH;
-					}
-
-					h = TILE_HEIGHT;
-				}
-			}
-		}
-
-		img -> invalidate();
-		m_img = img;
-	} catch (...) {
+	if (images == 0) {
+		DestroyImageInfo(ii);
+		DestroyExceptionInfo(&ei);
+		emit notify(this, KisImageBuilder_STEP_ERROR, 0);
 		return KisImageBuilder_RESULT_FAILURE;
 	}
 
+	m_img = new KisImage(m_doc, 0, 0, OPACITY_OPAQUE, IMAGE_TYPE_RGBA, m_doc -> nextImageName());
+	emit notify(this, KisImageBuilder_STEP_TILING, 0);
+
+	while ((image = RemoveFirstImageFromList(&images))) {
+		ViewInfo *vi = OpenCacheView(image);
+
+		if (image -> columns && image -> rows) {
+			Q_INT32 totalTiles = ((image -> columns + TILE_WIDTH - 1) / TILE_WIDTH) * ((image -> rows + TILE_HEIGHT - 1) / TILE_HEIGHT);
+			Q_INT32 ntile = 0;
+			KisLayerSP layer = new KisLayer(m_img, image -> columns, image -> rows, m_img -> nextLayerName(), OPACITY_OPAQUE);
+			KisTileMgrSP tm = layer -> data();
+			Q_INT32 w = TILE_WIDTH;
+			Q_INT32 h = TILE_HEIGHT;
+
+			m_img -> add(layer, -1);
+
+			for (Q_INT32 y = 0; y < m_img -> height(); y += TILE_HEIGHT) {
+				if ((y + h) > m_img -> height())
+					h = TILE_HEIGHT + m_img -> height() - (y + h);
+
+				for (Q_INT32 x = 0; x < m_img -> width(); x += TILE_WIDTH) {
+					if ((x + w) > m_img -> width())
+						w = TILE_WIDTH + m_img -> width() - (x + w);
+
+					const PixelPacket *pp = AcquireCacheView(vi, x, y, w, h, &ei);
+					KisPixelDataSP pd = tm -> pixelData(x, y, x + w - 1, y + h - 1, TILEMODE_RW);
+
+					if (!pd || !pp) {
+						CloseCacheView(vi);
+						DestroyImageList(images);
+						DestroyImageInfo(ii);
+						DestroyExceptionInfo(&ei);
+						emit notify(this, KisImageBuilder_STEP_ERROR, 0);
+						return KisImageBuilder_RESULT_FAILURE;
+					}
+
+					pp2tile(pd, pp);
+					tm -> releasePixelData(pd);
+					w = TILE_WIDTH;
+					ntile++;
+					emit notify(this, KisImageBuilder_STEP_TILING, ntile * 100 / totalTiles);
+
+					if (m_stop) {
+						CloseCacheView(vi);
+						DestroyImageList(images);
+						DestroyImageInfo(ii);
+						DestroyExceptionInfo(&ei);
+						m_img = 0;
+						return KisImageBuilder_RESULT_INTR;
+					}
+
+				} 
+
+				h = TILE_HEIGHT;
+			}
+		}
+
+		emit notify(this, KisImageBuilder_STEP_DONE, 100);
+		CloseCacheView(vi);
+		DestroyImage(image);
+	}
+
+	emit notify(this, KisImageBuilder_STEP_DONE, 100);
+	DestroyImageList(images);
+	DestroyImageInfo(ii);
+	DestroyExceptionInfo(&ei);
+	m_img -> invalidate();
 	return KisImageBuilder_RESULT_OK;
+}
+
+KisImageBuilder_Result KisImageMagickConverter::buildImage(const KURL& uri)
+{
+	if (uri.isEmpty())
+		return KisImageBuilder_RESULT_NO_URI;
+
+	if (!KIO::NetAccess::exists(uri))
+		return KisImageBuilder_RESULT_NOT_EXIST;
+
+	if (!uri.isLocalFile()) {
+		if (m_job)
+			return KisImageBuilder_RESULT_BUSY;
+
+		m_data.resize(0);
+		m_job = KIO::get(uri, false, false);
+		connect(m_job, SIGNAL(result(KIO::Job*)), SLOT(ioResult(KIO::Job*)));
+		connect(m_job, SIGNAL(totalSize(KIO::Job*, KIO::filesize_t)), this, SLOT(ioTotalSize(KIO::Job*, KIO::filesize_t)));
+		connect(m_job, SIGNAL(data(KIO::Job*, const QByteArray&)), this, SLOT(ioData(KIO::Job*, const QByteArray&)));
+		return KisImageBuilder_RESULT_PROGRESS;
+	}
+
+	return decode(uri, false);
 }
 
 KisImageSP KisImageMagickConverter::image()
@@ -164,6 +261,7 @@ KisImageSP KisImageMagickConverter::image()
 void KisImageMagickConverter::init(KisDoc *doc)
 {
 	m_doc = doc;
+	m_job = 0;
 }
 
 KisImageBuilder_Result buildFile(const KURL&, KisImageSP)
@@ -173,59 +271,138 @@ KisImageBuilder_Result buildFile(const KURL&, KisImageSP)
 
 KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLayerSP layer)
 {
-	try {
-		Magick::Geometry geo;
-		Magick::Image image;
-		Q_INT32 w;
-		Q_INT32 h;
-		KisTileMgrSP tm;
+	Image *image;
+	ExceptionInfo ei;
+	ImageInfo *ii;
+	Q_INT32 w;
+	Q_INT32 h;
+	KisTileMgrSP tm;
+	Q_INT32 ntile = 0;
+	Q_INT32 totalTiles;
 
-		if (!layer)
-			return KisImageBuilder_RESULT_INVALID_ARG;
+	if (!layer)
+		return KisImageBuilder_RESULT_INVALID_ARG;
 
-		if (uri.isEmpty())
-			return KisImageBuilder_RESULT_NO_URI;
+	if (uri.isEmpty())
+		return KisImageBuilder_RESULT_NO_URI;
 
-		if (!uri.isLocalFile())
-			return KisImageBuilder_RESULT_NOT_LOCAL;
+	if (!uri.isLocalFile())
+		return KisImageBuilder_RESULT_NOT_LOCAL;
 
-		geo = Magick::Geometry(layer -> width(), layer -> height());
+	GetExceptionInfo(&ei);
+	ii = CloneImageInfo(0);
+	strncpy(ii -> filename, uri.path().latin1(), MaxTextExtent);
+	
+	if (!layer -> width() || !layer -> height())
+		return KisImageBuilder_RESULT_EMPTY;
 
-		if (!geo.width() || !geo.height())
-			return KisImageBuilder_RESULT_EMPTY;
+	image = AllocateImage(ii);
+	tm = layer -> data();
+	image -> columns = layer -> width();
+	image -> rows = layer -> height();
+	image -> matte = layer -> alpha();
+	w = TILE_WIDTH;
+	h = TILE_HEIGHT;
+	totalTiles = ((image -> columns + TILE_WIDTH - 1) / TILE_WIDTH) * ((image -> rows + TILE_HEIGHT - 1) / TILE_HEIGHT);
 
-		tm = layer -> data();
-		image.size(geo);
-		image.matte(layer -> alpha());
-		w = TILE_WIDTH;
-		h = TILE_HEIGHT;
+	for (Q_INT32 y = 0; y < layer -> height(); y += TILE_HEIGHT) {
+		if ((y + h) > layer -> height())
+			h = TILE_HEIGHT + layer -> height() - (y + h);
 
-		for (Q_UINT32 y = 0; y < geo.height(); y += TILE_HEIGHT) {
-			if ((y + h) > geo.height())
-				h = TILE_HEIGHT + geo.height() - (y + h);
+		for (Q_INT32 x = 0; x < layer -> width(); x += TILE_WIDTH) {
+			if ((x + w) > layer -> width())
+				w = TILE_WIDTH + layer -> width() - (x + w);
 
-			for (Q_UINT32 x = 0; x < geo.width(); x += TILE_WIDTH) {
-				if ((x + w) > geo.width())
-					w = TILE_WIDTH + geo.width() - (x + w);
+			KisPixelDataSP pd = tm -> pixelData(x, y, x + w - 1, y + h - 1, TILEMODE_READ);
+			PixelPacket *pp = SetImagePixels(image, x, y, w, h);
 
-				KisPixelDataSP pd = tm -> pixelData(x, y, x + w - 1, y + h - 1, TILEMODE_READ);
-				Magick::PixelPacket *pp = image.getPixels(x, y, w, h);
+			if (!pd || !pp) {
+				if (pp)
+					SyncImagePixels(image);
 
-				if (!pd || !pp)
-					return KisImageBuilder_RESULT_FAILURE;
-
-				pp2tile(pp, pd);
-				image.syncPixels();
-				w = TILE_WIDTH;
+				DestroyExceptionInfo(&ei);
+				DestroyImage(image);
+				emit notify(this, KisImageBuilder_STEP_ERROR, 0);
+				return KisImageBuilder_RESULT_FAILURE;
 			}
 
-			h = TILE_HEIGHT;
+			ntile++;
+			emit notify(this, KisImageBuilder_STEP_SAVING, ntile * 100 / totalTiles);
+			pp2tile(pp, pd);
+			SyncImagePixels(image);
+			w = TILE_WIDTH;
 		}
 
-		image.write(uri.path().latin1());
-		return KisImageBuilder_RESULT_OK;
-	} catch (...) {
-		return KisImageBuilder_RESULT_FAILURE;
+		h = TILE_HEIGHT;
 	}
+
+	WriteImage(ii, image);
+	DestroyExceptionInfo(&ei);
+	DestroyImage(image);
+	emit notify(this, KisImageBuilder_STEP_DONE, 100);
+	return KisImageBuilder_RESULT_OK;
 }
+
+void KisImageMagickConverter::ioData(KIO::Job *job, const QByteArray& data)
+{
+	if (data.isNull() || data.isEmpty()) {
+		emit notify(this, KisImageBuilder_STEP_LOADING, 0);
+		return;
+	}
+
+	if (m_data.empty()) {
+		Image *image;
+		ImageInfo *ii;
+		ExceptionInfo ei;
+
+		ii = CloneImageInfo(0);
+		GetExceptionInfo(&ei);
+		image = PingBlob(ii, data.data(), data.size(), &ei);
+
+		if (image == 0 || ei.severity == BlobError) {
+			DestroyExceptionInfo(&ei);
+			DestroyImageInfo(ii);
+			job -> kill();
+			emit notify(this, KisImageBuilder_STEP_ERROR, 0);
+			return;
+		}
+
+		DestroyImage(image);
+		DestroyExceptionInfo(&ei);
+		DestroyImageInfo(ii);
+		emit notify(this, KisImageBuilder_STEP_LOADING, 0);
+	}
+
+	Q_ASSERT(data.size() + m_data.size() <= m_size);
+	memcpy(&m_data[m_data.size()], data.data(), data.size());
+	m_data.resize(m_data.size() + data.size());
+	emit notify(this, KisImageBuilder_STEP_LOADING, m_data.size() * 100 / m_size);
+
+	if (m_stop)
+		job -> kill();
+}
+
+void KisImageMagickConverter::ioResult(KIO::Job *job)
+{
+	m_job = 0;
+
+	if (job -> error())
+		emit notify(this, KisImageBuilder_STEP_ERROR, 0);
+
+	decode(KURL(), true);
+}
+
+void KisImageMagickConverter::ioTotalSize(KIO::Job * /*job*/, KIO::filesize_t size)
+{
+	m_size = size;
+	m_data.reserve(size);
+	emit notify(this, KisImageBuilder_STEP_LOADING, 0);
+}
+
+void KisImageMagickConverter::intr()
+{
+	m_stop = true;
+}
+
+#include "kis_image_magick_converter.moc"
 

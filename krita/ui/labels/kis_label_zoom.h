@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -10,29 +9,20 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU General Public License for more details.g
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#if !defined KIS_ZOOM_TOOL_H_
-#define KIS_ZOOM_TOOL_H_
+#if !defined KIS_LABEL_ZOOM_H_
+#define KIS_LABEL_ZOOM_H_
 
-#include "kis_tool_non_paint.h"
+#include <qlabel.h>
 
-class KisZoomTool : public KisToolNonPaint {
-	typedef KisToolNonPaint super;
-
-public:
-	KisZoomTool(KisView *view, KisDoc *doc);
-
-public:
-	virtual void mousePress(QMouseEvent *e);
-	virtual void setup();
-
-private:
-	KisView *m_view;
+class KisLabelZoom : public QLabel {
+	Q_OBJECT
 };
 
-#endif // KIS_ZOOM_TOOL_H_
+#endif // KIS_LABEL_ZOOM_H_
+

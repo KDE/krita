@@ -19,9 +19,12 @@
 #define KIS_IMAGE_MAGICK_CONVERTER_H_
 
 #include <qobject.h>
+#include <qvaluevector.h>
+#include <kio/job.h>
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_image_builder.h"
+#include "kis_builder_subject.h"
 
 class QString;
 class KURL;
@@ -31,10 +34,16 @@ class KisNameServer;
 /**
  * Build a KisImage representation of an image file.
  */
-class KisImageMagickConverter {
+class KisImageMagickConverter : public KisBuilderSubject {
+	typedef QObject super;
+	Q_OBJECT
+
 public:
 	KisImageMagickConverter(KisDoc *doc);
 	virtual ~KisImageMagickConverter();
+
+public:
+	virtual void intr();
 
 public:
 	KisImageBuilder_Result buildImage(const KURL& uri);
@@ -42,14 +51,24 @@ public:
 	KisImageBuilder_Result buildFile(const KURL& uri, KisLayerSP layer);
 	KisImageSP image();
 
+private slots:
+	void ioData(KIO::Job *job, const QByteArray& data);
+	void ioResult(KIO::Job *job);
+	void ioTotalSize(KIO::Job *job, KIO::filesize_t size);
+
 private:
 	KisImageMagickConverter(const KisImageMagickConverter&);
 	KisImageMagickConverter& operator=(const KisImageMagickConverter&);
 	void init(KisDoc *doc);
+	KisImageBuilder_Result decode(const KURL& uri, bool isBlob);
 
 private:
 	KisImageSP m_img;
 	KisDoc *m_doc;
+	QValueVector<Q_UINT8> m_data;
+	KIO::TransferJob *m_job;
+	KIO::filesize_t m_size;
+	bool m_stop;
 };
 
 #endif // KIS_IMAGE_MAGICK_CONVERTER_H_

@@ -16,7 +16,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include <kaction.h>
-
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_tool_factory.h"
@@ -30,11 +29,10 @@
 #include "kis_tool_select_polygonal.h"
 #include "kis_tool_select_elliptical.h"
 #include "kis_tool_select_contiguous.h"
-#include "kis_tool_paste.h"
 #endif
 #include "kis_tool_move.h"
-#if 0
 #include "kis_tool_zoom.h"
+#if 0
 #include "kis_tool_brush.h"
 #include "kis_tool_airbrush.h"
 #include "kis_tool_pen.h"
@@ -88,8 +86,8 @@ vKisToolSP toolFactory(KisView *view, KisDoc *doc)
 	tools.push_back(new StampTool(doc, canvas, pattern));
 
 	// Positioning tools
-	tools.push_back(new ZoomTool(doc));
 #endif
+	tools.push_back(new KisZoomTool(view, doc));
 	tools.push_back(new KisToolMove(view, doc));
 
 	// selection tools

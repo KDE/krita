@@ -942,6 +942,9 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 
 void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
 {
+	if (!m_projection)
+		m_projection = m_images[0];
+
 	if (m_projection) {
 		QPixmap pixmap;
 		Q_INT32 x1 = rect.x();
@@ -949,6 +952,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 		Q_INT32 x2 = x1 + rect.width() - 1;
 		Q_INT32 y2 = y1 + rect.height() - 1;
 		Q_INT32 tileno;
+		KisSelectionSP selection;
 
 		if (transparent)
 			painter.eraseRect(rect);
@@ -973,31 +977,23 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 			}	
 		}
 
-#if 0
-		// TODO : Use QPainter here to draw whatever is left (outlines, borders) until KisPainter gets the missing functionality
-		{
-			KisSelectionSP selection = m_projection -> selection();
+		selection = m_projection -> selection();
 
-			if (selection) {
-				QPen pen(Qt::DotLine);
-				QRect rc = selection -> bounds();
-				QRect clip = selection -> clip();
+		if (selection) {
+			QPen pen(Qt::DotLine);
+			QRect rc = selection -> bounds();
+			QRect clip = selection -> clip();
 
-				if (!clip.isEmpty()) {
-					rc.setX(rc.x() + clip.x());
-					rc.setY(rc.y() + clip.y());
-					rc.setWidth(clip.width());
-					rc.setHeight(clip.height());
-				}
-
-	//			painter.setClipRect(rect);
-				painter.setPen(pen);
-				painter.drawRect(rc);
+			if (!clip.isEmpty()) {
+				rc.setX(rc.x() + clip.x());
+				rc.setY(rc.y() + clip.y());
+				rc.setWidth(clip.width());
+				rc.setHeight(clip.height());
 			}
-		}
-		
-#endif
 
+			painter.setPen(pen);
+			painter.drawRect(rc);
+		}
 	}
 }
 

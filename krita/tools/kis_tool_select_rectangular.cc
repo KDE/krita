@@ -58,6 +58,7 @@ namespace {
 	{
 		m_selection -> clearParentOnMove(true);
 		m_owner -> setSelection(m_selection);
+		m_owner -> notify(m_selection -> bounds());
 	}
 
 	void RectSelectCmd::unexecute()
@@ -190,10 +191,16 @@ void KisToolRectangularSelect::paintOutline(QPainter& gc, const QRect&)
 	QPoint start;
 	QPoint end;
 
-	start.setX(m_startPos.x() - m_view -> horzValue());
-	start.setY(m_startPos.y() - m_view -> vertValue());
-	end.setX(m_endPos.x() - start.x() - m_view -> horzValue());
-	end.setY(m_endPos.y() - start.y() - m_view -> vertValue());
+	start = m_view -> viewToWindow(m_startPos);
+	end = m_view -> viewToWindow(m_endPos);
+	start.setX(start.x() - m_view -> horzValue());
+	start.setY(start.y() - m_view -> vertValue());
+	end.setX(end.x() - m_view -> horzValue());
+	end.setY(end.y() - m_view -> vertValue());
+	end.setX((end.x() - start.x()));
+	end.setY((end.y() - start.y()));
+	start *= m_view -> zoom();
+	end *= m_view -> zoom();
 	gc.setRasterOp(Qt::NotROP);
 	gc.setPen(pen);
 	gc.drawRect(start.x(), start.y(), end.x(), end.y());

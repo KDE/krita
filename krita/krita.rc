@@ -86,9 +86,10 @@
 </Menu>
 
 <Menu name="Tools"><Text>Tools</Text>
-  <Action name="tool_move"/>
-  <Action name="tool_zoom"/>
-  <Action name="tool_colorpicker"/>  
+  <Menu name="Transform"><Text>Transform</Text>
+    <Action name="tool_move"/>
+    <Action name="tool_zoom"/>
+  </Menu>
   
   <Menu name="select"><text>Selection</text>
     <Action name="tool_select_freehand"/>
@@ -98,6 +99,7 @@
     <Action name="tool_select_contiguous"/>
   </Menu>
 
+  <Action name="tool_colorpicker"/>  
   <Action name="tool_pen"/>
   <Action name="tool_brush"/>
   <Action name="tool_airbrush"/>
@@ -110,7 +112,6 @@
   <Action name="tool_fill"/>
   <Action name="tool_colorchanger"/>  
   <Action name="tool_stamp"/>
-  <Action name="tool_paste"/>  
   <Action name="tool_gradient"/>  
 </Menu>
 
@@ -161,7 +162,6 @@
   <Action name="remove"/>
   <Action name="crop"/>
   <Action name="scrap_selection"/>
-  <Action name="tool_paste"/>
   <Action name="paste_special"/>
   <Separator/>
   <Action name="fill_selection"/>

@@ -1,5 +1,5 @@
 /*
- *  copyright (c) 2002 patrick julien <freak@codepimps.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  this program is free software; you can redistribute it and/or modify
  *  it under the terms of the gnu general public license as published by
@@ -35,12 +35,7 @@ public:
 	KoColor color() const;
 	void color(KoColor clr);
 
-	void scale(Q_INT32 width, Q_INT32 height, Q_INT32 interpolationType);
-	void resize(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-	void resize(const QRect& rc);
-
 	KisChannelSP createMask(Q_INT32 w, Q_INT32 h);
-	bool boundary(vKisSegments& inside, vKisSegments& outside, const QRect& rc);
 	bool bounds(QRect& rc);
 
 	Q_INT32 value(Q_INT32 x, Q_INT32 y);

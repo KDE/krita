@@ -15,41 +15,25 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#if !defined KIS_TOOL_PASTE_H_
-#define KIS_TOOL_PASTE_H_
+#if !defined KIS_BUILDER_SUBJECT_H_
+#define KIS_BUILDER_SUBJECT_H_
 
-#include "kis_selection.h"
-#include "kis_tool_non_paint.h"
-#include "kis_tool_move.h"
-#include "kis_strategy_move.h"
+#include <qobject.h>
+#include "kis_builder_types.h"
+#include "kis_image_builder.h"
 
-class KToggleAction;
+class KisBuilderSubject : public QObject {
+	Q_OBJECT
 
-class KisToolPaste : public KisToolNonPaint, private KisStrategyMove {
-	typedef KisToolNonPaint super;
-
-public:
-	KisToolPaste(KisView *view, KisDoc *doc);
-	virtual ~KisToolPaste();
+protected:
+	virtual ~KisBuilderSubject();
 
 public:
-	virtual void activate();
-	virtual void clear();
-	virtual void enter(QEvent *e);
-	virtual void leave(QEvent *e);
-	virtual void mouseMove(QMouseEvent *e);
-	virtual void mouseRelease(QMouseEvent *e);
-	virtual void setup();
+	virtual void intr() = 0;
 
-private:
-	KisView *m_view;
-	KisDoc *m_doc;
-	KisSelectionSP m_clip;
-	bool m_justEntered;
-	QUANTUM m_oldOpacity;
-	KisSelectionSP m_selection;
-	KToggleAction *m_toggle;
+signals:
+	void notify(KisBuilderSubject *subject, KisImageBuilder_Step step, Q_INT8 percent);
 };
 
-#endif // KIS_TOOL_PASTE_H_
+#endif // KIS_BUILDER_SUBJECT_H_
 

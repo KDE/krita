@@ -41,6 +41,7 @@
 #include <knotifyclient.h>
 #include <kpushbutton.h>
 #include <kruler.h>
+#include <kstatusbar.h>
 #include <kstdaction.h>
 
 // KOffice
@@ -55,6 +56,7 @@
 #include "kis_canvas.h"
 #include "kis_config.h"
 #include "kis_channelview.h"
+#include "kis_dlg_builder_progress.h"
 #include "kis_dlg_dimension.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paintoffset.h"
@@ -75,9 +77,12 @@
 #include "kis_view.h"
 #include "kis_util.h"
 #include "kis_paint_device_visitor.h"
+#include "labels/kis_label_builder_progress.h"
+#include "builder/kis_builder_subject.h"
+#include "builder/kis_builder_monitor.h"
+#include "strategy/kis_strategy_move.h"
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
-#include "strategy/kis_strategy_move.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
@@ -126,7 +131,9 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_imgRm = 0;
 	m_imgResize = 0;
 	m_imgDup = 0;
+	m_imgImport = 0;
 	m_imgExport = 0;
+	m_imgScan = 0;
 	m_imgMergeAll = 0;
 	m_imgMergeVisible = 0;
 	m_imgMergeLinked = 0;
@@ -158,6 +165,8 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_pattern = 0;
 	m_gradient = 0;
 	m_layerBox = 0;
+	m_imgBuilderMgr = new KisBuilderMonitor(this);
+	m_buildProgress = 0;
 	setInstance(KisFactory::global());
 	setupActions();
 	setupCanvas();
@@ -165,10 +174,13 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	setupScrollBars();
 	setupSideBar();
 	setupTabBar();
+	setupStatusBar();
 	dcopObject();
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
 	connect(m_doc, SIGNAL(projectionUpdated(KisImageSP)), SLOT(projectionUpdated(KisImageSP)));
+	connect(this, SIGNAL(embeddImage(const QString&)), SLOT(slotEmbedImage(const QString&)));
+	connect(m_imgBuilderMgr, SIGNAL(size(Q_INT32)), SLOT(nBuilders(Q_INT32)));
 	setupTools();
 	selectionUpdateGUI(false);
 	setupClipboard();
@@ -315,11 +327,25 @@ void KisView::setupTabBar()
 	QObject::connect(m_tabLast, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollLast()));
 }
 
+void KisView::setupStatusBar()
+{
+	KoMainWindow *sh = shell();
+	KStatusBar *sb = statusBar();
+
+	Q_ASSERT(sh);
+	Q_ASSERT(sb);
+
+	if (sb) {
+		m_buildProgress = new KisLabelBuilderProgress(this);
+		addStatusBarItem(m_buildProgress, 0);
+		m_buildProgress -> hide();
+	}
+}
+
 void KisView::setupActions()
 {
 	// navigation actions
 	KStdAction::redisplay(this, SLOT(canvasRefresh()), actionCollection(), "refresh_canvas");
-//	(void)new KAction(i18n("Refresh Canvas"), "reload", 0, this, SLOT(canvasRefresh()), actionCollection(), "refresh_canvas");
 	(void)new KAction(i18n("Reset Button"), "stop", 0, this, SLOT(reset()), actionCollection(), "panic_button");
 
 	// selection actions
@@ -334,8 +360,9 @@ void KisView::setupActions()
 	m_selectionFillBg = new KAction(i18n("Fill with Background Color"), 0, this, SLOT(fillSelectionBg()), actionCollection(), "fill_bgcolor");
 
 	// import/export actions
-	(void)new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
+	m_imgImport = new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
 	m_imgExport = new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
+	m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
 
 	// view actions
 	m_zoomIn = KStdAction::zoomIn(this, SLOT(zoomIn()), actionCollection(), "zoom_in");
@@ -412,6 +439,7 @@ void KisView::setupActions()
 void KisView::reset()
 {
 	zoomUpdateGUI(0, 0, 1.0);
+	canvasRefresh();
 }
 
 void KisView::resizeEvent(QResizeEvent *)
@@ -981,22 +1009,26 @@ void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 
 void KisView::zoomIn(Q_INT32 x, Q_INT32 y)
 {
-	zoomUpdateGUI(x, y, zoom() * 2);
+	if (zoom() <= KISVIEW_MAX_ZOOM)
+		zoomUpdateGUI(x, y, zoom() * 2);
 }
 
 void KisView::zoomOut(Q_INT32 x, Q_INT32 y)
 {
-	zoomUpdateGUI(x, y, zoom() / 2);
+	if (zoom() >= KISVIEW_MIN_ZOOM)
+		zoomUpdateGUI(x, y, zoom() / 2);
 }
 
 void KisView::zoomIn()
 {
-	zoomUpdateGUI(-1, -1, zoom() * 2);
+	if (zoom() <= KISVIEW_MAX_ZOOM)
+		zoomUpdateGUI(-1, -1, zoom() * 2);
 }
 
 void KisView::zoomOut()
 {
-	zoomUpdateGUI(-1, -1, zoom() / 2);
+	if (zoom() >= KISVIEW_MIN_ZOOM)
+		zoomUpdateGUI(-1, -1, zoom() / 2);
 }
 
 /*
@@ -1139,6 +1171,9 @@ void KisView::export_image()
 			gc.end();
 		}
 
+		m_imgBuilderMgr -> attach(&ib);
+		m_buildProgress -> changeSubject(&ib);
+
 		switch (ib.buildFile(url, dst)) {
 			case KisImageBuilder_RESULT_UNSUPPORTED:
 				KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving file"));
@@ -1215,20 +1250,32 @@ void KisView::save_layer_as_image()
 	}
 }
 
-void KisView::slotEmbedImage(const QString &)
+void KisView::slotEmbedImage(const QString& filename)
 {
-//	importImage(false, filename);
+	importImage(false, true, filename);
 }
 
-Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
+Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filename)
 {
 	KURL url(filename);
 
 	if (filename.isEmpty())
 		url = KFileDialog::getOpenURL(QString::null, KisUtil::readFilters(), 0, i18n("Import Image"));
 
+	if (url.isEmpty())
+		return 0;
+
 	KisImageMagickConverter ib(m_doc);
+	KisDlgBuilderProgress dlg(&ib);
 	KisImageSP img;
+
+	m_imgBuilderMgr -> attach(&ib);
+
+	if (modal) {
+		dlg.show();
+	} else {
+		m_buildProgress -> changeSubject(&ib);
+	}
 
 	switch (ib.buildImage(url)) {
 	case KisImageBuilder_RESULT_UNSUPPORTED:
@@ -1249,17 +1296,20 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 	case KisImageBuilder_RESULT_EMPTY:
 		KMessageBox::error(this, i18n("Empty file."), i18n("Error Loading File"));
 		KNotifyClient::event("cannotopenfile");
-		break;
+		return 0;
 	case KisImageBuilder_RESULT_FAILURE:
 		KMessageBox::error(this, i18n("Error Loading File."), i18n("Error Loading File"));
 		KNotifyClient::event("cannotopenfile");
+		return 0;
+	case KisImageBuilder_RESULT_PROGRESS:
 		break;
 	case KisImageBuilder_RESULT_OK:
 	default:
 		break;
 	}
 
-	img = ib.image();
+	if (!(img = ib.image()))
+		return 0;
 
 	if (createLayer && currentImg()) {
 		vKisLayerSP v = img -> layers();
@@ -1624,6 +1674,7 @@ void KisView::setupTools()
 	m_toolSet = toolFactory(this, m_doc);
 	m_paste = new KisToolPaste(this, m_doc);
 	m_toolSet.push_back(m_paste);
+	m_paste -> setup();
 }
 
 void KisView::canvasGotPaintEvent(QPaintEvent *event)
@@ -2261,6 +2312,25 @@ void KisView::windowToView(Q_INT32 *x, Q_INT32 *y)
 		*x -= horzValue();
 		*y -= vertValue();
 	}
+}
+
+void KisView::guiActivateEvent(KParts::GUIActivateEvent *event)
+{
+	KStatusBar *sb = statusBar();
+
+	if (sb)
+		sb -> show();
+
+	super::guiActivateEvent(event);
+}
+
+void KisView::nBuilders(Q_INT32 size)
+{
+	m_imgImport -> setEnabled(size == 0);
+	m_imgExport -> setEnabled(size == 0);
+
+	if (m_imgScan)
+		m_imgScan -> setEnabled(size == 0);
 }
 
 #include "kis_view.moc"

@@ -37,8 +37,10 @@ class KRuler;
 class KToggleAction;
 class KoIconItem;
 class KisBrush;
+class KisBuilderMonitor;
 class KisCanvas;
 class KisChannelView;
+class KisLabelBuilderProgress;
 class KisKrayon;
 class KisDoc;
 class KisGradient;
@@ -65,6 +67,7 @@ public:
 	virtual void print(KPrinter &printer);
 	virtual void setupPrinter(KPrinter &printer);
 	virtual void updateReadWrite(bool readwrite);
+	virtual void guiActivateEvent(KParts::GUIActivateEvent *event);
 
 public:  
 	void activateTool(KisToolSP tool);
@@ -76,7 +79,7 @@ public:
 	QString currentImgName() const;
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
-	Q_INT32 importImage(bool createLayer, const QString& filename = QString::null);
+	Q_INT32 importImage(bool createLayer, bool modal = false, const QString& filename = QString::null);
 	void updateCanvas();
 	void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	void updateCanvas(const QRect& rc);
@@ -148,6 +151,7 @@ private:
 	void setupScrollBars();
 	void setupSideBar();
 	void setupTabBar();
+	void setupStatusBar();
 	void setupTools();
 	void zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf);
 
@@ -206,6 +210,7 @@ private slots:
 	void merge_all_layers();
 	void merge_visible_layers();
 	void merge_linked_layers();
+	void nBuilders(Q_INT32 size);
 	void save_layer_as_image();
 	void projectionUpdated(KisImageSP img);
 	void selectFGColor();
@@ -243,7 +248,9 @@ private:
 	KAction *m_imgRm;
 	KAction *m_imgResize;
 	KAction *m_imgDup;
+	KAction *m_imgImport;
 	KAction *m_imgExport;
+	KAction *m_imgScan;
 	KAction *m_imgMergeAll;
 	KAction *m_imgMergeVisible;
 	KAction *m_imgMergeLinked;
@@ -303,6 +310,8 @@ private:
 	KisToolSP m_paste;
 	vKisToolSP m_toolSet;
 	bool m_clipboardHasImage;
+	KisBuilderMonitor *m_imgBuilderMgr;
+	KisLabelBuilderProgress *m_buildProgress;
 
 private:
 	mutable KisImageSP m_current;

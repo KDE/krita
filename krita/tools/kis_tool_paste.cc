@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <kaction.h>
 #include <kcommand.h>
 #include <klocale.h>
 #include "kis_paint_device.h"
@@ -60,10 +61,6 @@ void KisToolPaste::leave(QEvent *)
 	}
 }
 
-void KisToolPaste::mousePress(QMouseEvent *)
-{
-}
-
 void KisToolPaste::mouseRelease(QMouseEvent *e)
 {
 	if (m_selection) {
@@ -104,6 +101,8 @@ void KisToolPaste::mouseMove(QMouseEvent *e)
 
 void KisToolPaste::activate()
 {
+	m_toggle -> setChecked(true);
+
 	if (!m_selection)
 		m_selection = m_doc -> clipboardSelection();
 
@@ -119,5 +118,11 @@ void KisToolPaste::activate()
 			m_selection -> visible(true);
 		}
 	}
+}
+
+void KisToolPaste::setup()
+{
+	m_toggle = new KToggleAction(i18n("&Paste Tool"), "editpaste", 0, this, SLOT(activateSelf()), m_view -> actionCollection(), "tool_paste");
+	m_toggle -> setExclusiveGroup("tools");
 }
 

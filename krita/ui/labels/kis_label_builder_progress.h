@@ -15,41 +15,37 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#if !defined KIS_TOOL_PASTE_H_
-#define KIS_TOOL_PASTE_H_
+#if !defined KIS_LABEL_BUILDER_PROCESS_H_
+#define KIS_LABEL_BUILDER_PROCESS_H_
 
-#include "kis_selection.h"
-#include "kis_tool_non_paint.h"
-#include "kis_tool_move.h"
-#include "kis_strategy_move.h"
+#include <qlabel.h>
+#include "builder/kis_builder_types.h"
 
-class KToggleAction;
+class KProgress;
+class KisBuilderSubject;
 
-class KisToolPaste : public KisToolNonPaint, private KisStrategyMove {
-	typedef KisToolNonPaint super;
-
-public:
-	KisToolPaste(KisView *view, KisDoc *doc);
-	virtual ~KisToolPaste();
+class KisLabelBuilderProgress : public QLabel {
+	Q_OBJECT
+	typedef QLabel super;
 
 public:
-	virtual void activate();
-	virtual void clear();
-	virtual void enter(QEvent *e);
-	virtual void leave(QEvent *e);
-	virtual void mouseMove(QMouseEvent *e);
-	virtual void mouseRelease(QMouseEvent *e);
-	virtual void setup();
+	KisLabelBuilderProgress(QWidget *parent, const char *name = 0, WFlags f = 0);
+	virtual ~KisLabelBuilderProgress();
+
+public:
+	void changeSubject(KisBuilderSubject *subject);
+
+public slots:
+	virtual void update(KisBuilderSubject *subject, KisImageBuilder_Step step, Q_INT8 percent);
+
+private slots:
+	void cancelPressed();
+	void subjectDestroyed();
 
 private:
-	KisView *m_view;
-	KisDoc *m_doc;
-	KisSelectionSP m_clip;
-	bool m_justEntered;
-	QUANTUM m_oldOpacity;
-	KisSelectionSP m_selection;
-	KToggleAction *m_toggle;
+	KisBuilderSubject *m_subject;
+	KProgress *m_bar;
 };
 
-#endif // KIS_TOOL_PASTE_H_
+#endif // KIS_LABEL_BUILDER_PROCESS_H_
 

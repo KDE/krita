@@ -1,5 +1,4 @@
 /*
- *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -195,82 +194,6 @@ KCommand *KisPainter::endTransaction()
 	return command;
 }
 
-#if 0
-void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
-{
-	Q_INT32 x;
-	Q_INT32 y;
-	QUANTUM *d;
-	QUANTUM *s;
-	QUANTUM alpha;
-
-	if (sw == -1)
-		sw = src -> width;
-
-	if (sh == -1)
-		sh = src -> height;
-
-	if (sw < 0 || sh < 0)
-		return;
-
-	// TODO switch on the image type then go for the composite
-	// TODO Implement all composites for all image depths
-	switch (op) {
-		case COMPOSITE_OVER:
-			for (y = 0; y < sh; y++) {
-				for (x = 0; x < sw; x++) {
-					s = src -> data + ((y + sy) * src -> width + (sx + x)) * src -> depth;
-					d = m_dst -> data + ((y + dy) * m_dst -> width + (dx + x)) * m_dst -> depth;
-
-					if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
-						continue;
-
-					if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT) {
-						d[PIXEL_RED] = s[PIXEL_RED];
-						d[PIXEL_GREEN] = s[PIXEL_GREEN];
-						d[PIXEL_BLUE] = s[PIXEL_BLUE];
-						d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
-						continue;
-					}
-
-					if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT || (d[PIXEL_ALPHA] == OPACITY_OPAQUE && s[PIXEL_ALPHA] == OPACITY_OPAQUE)) {
-						d[PIXEL_RED] = s[PIXEL_RED];
-						d[PIXEL_GREEN] = s[PIXEL_GREEN];
-						d[PIXEL_BLUE] = s[PIXEL_BLUE];
-						d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
-						continue;
-					}
-
-					d[PIXEL_RED] = (d[PIXEL_RED] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_RED] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_GREEN] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_BLUE] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
-				}
-			}
-			break;
-		case COMPOSITE_COPY:
-			for (y = 0; y < sh; y++) {
-				for (x = 0; x < sw; x++) {
-					s = src -> data + ((y + sy) * src -> width + (sx + x)) * src -> depth;
-					d = m_dst -> data + ((y + dy) * m_dst -> width + (dx + x)) * m_dst -> depth;
-					d[PIXEL_RED] = s[PIXEL_RED];
-					d[PIXEL_GREEN] = s[PIXEL_GREEN];
-					d[PIXEL_BLUE] = s[PIXEL_BLUE];
-					d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
-				}
-			}
-			break;
-		default:
-			kdDebug() << "Not Implemented.\n";
-			break;
-	}
-
-	m_dst -> mgr -> releasePixelData(m_dst);
-	m_dst = 0;
-}
-#endif
-
 void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileSP srctile, QUANTUM opacity, Q_INT32 rows, Q_INT32 cols, CompositeOp op)
 {
 	if (opacity == OPACITY_OPAQUE)
@@ -391,63 +314,6 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 {
 	bitBlt(dx, dy, op, srcdev, OPACITY_OPAQUE, sx, sy, sw, sh);
 }
-
-#if 0
-void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
-{
-	Q_INT32 x;
-	Q_INT32 y;
-	QUANTUM *d;
-	QUANTUM *s;
-	QUANTUM alpha;
-	QUANTUM invAlpha;
-
-	if (sw == -1)
-		sw = src -> width;
-
-	if (sh == -1)
-		sh = src -> height;
-
-	if (sw < 0 || sh < 0)
-		return;
-
-	// TODO switch on the image type then go for the composite
-	// TODO Implement all composites for all image depths
-	switch (op) {
-		case COMPOSITE_OVER:
-			for (y = 0; y < sh; y++) {
-				for (x = 0; x < sw; x++) {
-					s = src -> data + ((y + sy) * src -> width + (sx + x)) * src -> depth;
-					d = m_dst -> data + ((y + dy) * m_dst -> width + (dx + x)) * m_dst -> depth;
-
-					if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
-						continue;
-
-					if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT) {
-						d[PIXEL_RED] = s[PIXEL_RED];
-						d[PIXEL_GREEN] = s[PIXEL_GREEN];
-						d[PIXEL_BLUE] = s[PIXEL_BLUE];
-						d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
-						continue;
-					}
-
-					alpha = (s[PIXEL_ALPHA] * opacity) / QUANTUM_MAX;
-					invAlpha = QUANTUM_MAX - alpha;
-
-					d[PIXEL_RED] = (d[PIXEL_RED] * invAlpha + s[PIXEL_RED] * alpha) / QUANTUM_MAX;
-					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * invAlpha + s[PIXEL_GREEN] * alpha) / QUANTUM_MAX;
-					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * invAlpha + s[PIXEL_BLUE] * alpha) / QUANTUM_MAX;
-					alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
-				}
-			}
-			break;
-		default:
-			kdDebug() << "Not Implemented.\n";
-			break;
-	}
-}
-#endif
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP srcdev, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {

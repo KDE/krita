@@ -1,5 +1,4 @@
 /*
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -16,23 +15,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#if !defined KIS_ZOOM_TOOL_H_
-#define KIS_ZOOM_TOOL_H_
+#if !defined KIS_BUILDER_TYPES_
+#define KIS_BUILDER_TYPES_
 
-#include "kis_tool_non_paint.h"
+#include <qvaluelist.h>
+#include <ksharedptr.h>
+#include "builder/kis_image_builder.h"
 
-class KisZoomTool : public KisToolNonPaint {
-	typedef KisToolNonPaint super;
+class KisBuilderSubject;
+typedef QValueList<KisBuilderSubject*> vKisBuilderSubject;
+typedef vKisBuilderSubject::iterator vKisBuilderSubject_it;
+typedef vKisBuilderSubject::const_iterator vKisBuilderSubject_cit;
 
-public:
-	KisZoomTool(KisView *view, KisDoc *doc);
+#endif // KIS_BUILDER_TYPES_
 
-public:
-	virtual void mousePress(QMouseEvent *e);
-	virtual void setup();
-
-private:
-	KisView *m_view;
-};
-
-#endif // KIS_ZOOM_TOOL_H_

@@ -20,6 +20,10 @@
 #if !defined KIS_CANVAS_H_
 #define KIS_CANVAS_H_
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <qwidget.h>
 
 #include "kis_point.h"
@@ -31,7 +35,7 @@
 // Irix has a different (and better) XInput tablet driver to
 // the XFree/xorg driver. Qt needs a separate code path for that
 // and so would we.
-#if !defined(Q_OS_IRIX) && 0
+#if defined(HAVE_XINPUTEXT) && !defined(Q_OS_IRIX)
 #define EXTENDED_X11_TABLET_SUPPORT
 #endif
 

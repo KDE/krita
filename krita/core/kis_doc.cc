@@ -1302,5 +1302,85 @@ void KisDoc::layerLower(KisImageSP img, KisLayerSP layer)
 	}
 }
 
+void KisDoc::layerNext(KisImageSP img, KisLayerSP layer)
+{
+	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+		return;
+
+	if (layer) {
+		Q_INT32 npos = img -> index(layer);
+		Q_INT32 n = img -> nlayers();
+
+		if (npos < 0 || npos >= n - 1)
+			return;
+
+		npos--;
+		layer = img -> layer(npos);
+
+		if (!layer)
+			return;
+
+		if (!layer -> visible()) {
+			layer -> visible(true);
+			setModified(true);
+		}
+
+		if (!img -> activate(layer))
+			return;
+
+		for (Q_INT32 i = 0; i < npos; i++) {
+			layer = img -> layer(i);
+
+			if (layer) {
+				layer -> visible(false);
+				img -> invalidate(layer -> x(), layer -> y(), layer -> width(), layer -> height());
+			}
+		}
+
+		setModified(true);
+		emit layersUpdated(img);
+	}
+}
+
+void KisDoc::layerPrev(KisImageSP img, KisLayerSP layer)
+{
+	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+		return;
+
+	if (layer) {
+		Q_INT32 npos = img -> index(layer);
+		Q_INT32 n = img -> nlayers();
+
+		if (npos < 0 || npos >= n - 1)
+			return;
+
+		npos++;
+		layer = img -> layer(npos);
+
+		if (!layer)
+			return;
+
+		if (!layer -> visible()) {
+			layer -> visible(true);
+			setModified(true);
+		}
+
+		if (!img -> activate(layer))
+			return;
+
+		for (Q_INT32 i = 0; i < npos; i++) {
+			layer = img -> layer(i);
+
+			if (layer) {
+				layer -> visible(false);
+				img -> invalidate(layer -> x(), layer -> y(), layer -> width(), layer -> height());
+			}
+		}
+
+		setModified(true);
+		emit layersUpdated(img);
+	}
+}
+
 #include "kis_doc.moc"
 

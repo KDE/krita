@@ -63,6 +63,8 @@ public:
 	void layerRemove(KisImageSP img, KisLayerSP layer);
 	void layerRaise(KisImageSP img, KisLayerSP layer);
 	void layerLower(KisImageSP img, KisLayerSP layer);
+	void layerNext(KisImageSP img, KisLayerSP layer);
+	void layerPrev(KisImageSP img, KisLayerSP layer);
 
 	void addCommand(KCommand *cmd);
 	Q_INT32 undoLimit() const;

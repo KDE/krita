@@ -105,6 +105,7 @@ public:
 	KisLayerSP activateLayer(Q_INT32 n);
 	Q_INT32 index(KisLayerSP layer);
 	KisLayerSP layer(const QString& name);
+	KisLayerSP layer(Q_UINT32 npos);
 	bool add(KisLayerSP layer, Q_INT32 position);
 	void rm(KisLayerSP layer);
 	bool raise(KisLayerSP layer);
@@ -112,6 +113,7 @@ public:
 	bool top(KisLayerSP layer);
 	bool bottom(KisLayerSP layer);
 	bool pos(KisLayerSP layer, Q_INT32 position);
+	Q_INT32 nlayers() const;
 
 	KisChannelSP activeChannel();
 	KisChannelSP activate(KisChannelSP channel);
@@ -119,11 +121,13 @@ public:
 	KisChannelSP unsetActiveChannel();
 	Q_INT32 index(KisChannelSP channel);
 	KisChannelSP channel(const QString& name);
+	KisChannelSP channel(Q_UINT32 npos);
 	bool add(KisChannelSP channel, Q_INT32 position);
 	void rm(KisChannelSP channel);
 	bool raise(KisChannelSP channel);
 	bool lower(KisChannelSP channel);
 	bool pos(KisChannelSP channel, Q_INT32 position);
+	Q_INT32 nchannels() const;
 
 	bool boundsLayer();
 	KisLayerSP corrolateLayer(Q_INT32 x, Q_INT32 y);

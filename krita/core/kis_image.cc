@@ -469,6 +469,14 @@ KisLayerSP KisImage::layer(const QString& name)
 	return 0;
 }
 
+KisLayerSP KisImage::layer(Q_UINT32 npos)
+{
+	if (npos >= m_layers.size())
+		return 0;
+
+	return m_layers[npos];
+}
+
 bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 {
 	bool alpha = false;
@@ -668,6 +676,11 @@ bool KisImage::pos(KisLayerSP layer, Q_INT32 position)
 	return true;
 }
 
+Q_INT32 KisImage::nlayers() const
+{
+	return m_layers.size();
+}
+
 KisChannelSP KisImage::activeChannel()
 {
 	return m_activeChannel;
@@ -737,6 +750,14 @@ KisChannelSP KisImage::channel(const QString& name)
 
 	return 0;
 
+}
+
+KisChannelSP KisImage::channel(Q_UINT32 npos)
+{
+	if (npos >= m_channels.size())
+		return 0;
+
+	return m_channels[npos];
 }
 
 bool KisImage::add(KisChannelSP channel, Q_INT32 position)
@@ -848,6 +869,11 @@ bool KisImage::pos(KisChannelSP channel, Q_INT32 position)
 	qSwap(m_channels[old], m_channels[position]);
 	channel -> update();
 	return true;
+}
+
+Q_INT32 KisImage::nchannels() const
+{
+	return m_channels.size();
 }
 
 bool KisImage::boundsLayer()
@@ -1005,7 +1031,7 @@ void KisImage::renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y)
 
 void KisImage::expand(KisPaintDeviceSP dev)
 {
-	if (dev -> width() >= width() && dev -> height() >= height()) {
+	if (dev -> width() >= width() || dev -> height() >= height()) {
 		resize(dev -> width(), dev -> height());
 		invalidate();
 	}

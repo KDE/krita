@@ -953,80 +953,36 @@ void KisView::dialog_channels()
 
 void KisView::next_layer()
 {
-#if 0
 	KisImageSP img = currentImg();
+	KisLayerSP layer;
 
 	if (!img)
 		return;
 
-	int indx = img -> getCurrentLayerIndex();
+	layer = img -> activeLayer();
 
-	if (indx == -1)
-		return;
-
-	KisLayerSPLst layers = img -> layerList();
-
-	if (static_cast<uint>(indx) < layers.size() - 1) {
-		LayerTable *tbl = m_pLayerView -> layerTable();
-
-		// make the next layer the currentImg one, select it,
-		// and make sure it's visible
-		indx++;
-		img -> setCurrentLayer(indx);
-		tbl -> selectLayer(indx);
-		layers[indx] -> setVisible(true);
-
-		// hide all layers on top of this one so this
-		// one is clearly visible and can be painted on!
-
-		while (++static_cast<uint>(indx) <= img -> layerList().size() - 1)
-			layers[indx] -> setVisible(false);
-
-		img->markDirty(img->getCurrentLayer()->imageExtents());
-		m_pLayerView->layerTable()->updateTable();
-		m_pLayerView->layerTable()->updateAllCells();
-		m_doc -> setModified(true);
+	if (layer) {
+		m_doc -> layerNext(img, layer);
+		resizeEvent(0);
+		updateCanvas();
 	}
-#endif
 }
 
-
-/*
-    make the previous layer in the layers list the active one and
-    bring it to the front of the view
-*/
 void KisView::previous_layer()
 {
-#if 0
 	KisImageSP img = currentImg();
+	KisLayerSP layer;
 
 	if (!img)
 		return;
 
-	int indx = img -> getCurrentLayerIndex();
+	layer = img -> activeLayer();
 
-	if (indx > 0) {
-		// make the previous layer the currentImg one, select it,
-		// and make sure it's visible
-		--indx;
-		img->setCurrentLayer(indx);
-		m_pLayerView->layerTable()->selectLayer(indx);
-		img->layerList()[indx]->setVisible(true);
-
-		// hide all layers beyond this one so this
-		// one is clearly visible and can be painted on!
-		while(++static_cast<uint>(indx) <= img->layerList().size() - 1) {
-			img->layerList()[indx]->setVisible(false);
-		}
-
-		img->markDirty(img->getCurrentLayer()->imageExtents());
-
-		m_pLayerView->layerTable()->updateTable();
-		m_pLayerView->layerTable()->updateAllCells();
-
-		m_doc->setModified(true);
+	if (layer) {
+		m_doc -> layerPrev(img, layer);
+		resizeEvent(0);
+		updateCanvas();
 	}
-#endif
 }
 
 void KisView::slotImportImage()
@@ -1779,7 +1735,6 @@ void KisView::layerFront()
 
 	if (img && img -> activeLayer())
 		img -> top(img -> activeLayer());
-
 }
 
 void KisView::layerBack()
@@ -1802,6 +1757,7 @@ void KisView::layersUpdated()
 
 	if (img) {
 		vKisLayerSP l = img -> layers();
+		Q_INT32 current = m_layerBox -> getCurrentItem();
 
 		m_layerBox -> setUpdatesEnabled(false);
 		m_layerBox -> clear();
@@ -1811,6 +1767,7 @@ void KisView::layersUpdated()
 
 		m_layerBox -> setUpdatesEnabled(true);
 		m_layerBox -> repaint();
+		m_layerBox -> setCurrentItem(current);
 		m_doc -> setModified(true);
 	}
 }

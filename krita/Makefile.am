@@ -45,6 +45,6 @@ dummy.cc:
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name \*.ui` >> rc.cpp
 	$(EXTRACTRC) `find . -name \*.rc` >> rc.cpp
-	$(XGETTEXT) rc.cpp `find . -name \*.cc` core/kis_aboutdata.h -o $(podir)/krita.pot
+	$(XGETTEXT) rc.cpp `find . -name \*.cc -o -name \*.h` core/kis_aboutdata.h -o $(podir)/krita.pot
 
 kde_services_DATA = kritapart.desktop

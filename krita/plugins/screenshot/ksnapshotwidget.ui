@@ -12,9 +12,6 @@
             <height>241</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KSnapshotWidget</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>

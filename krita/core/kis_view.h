@@ -59,13 +59,13 @@ class KisListBox;
 class KisPattern;
 class KisResource;
 class KisResourceMediator;
-class KisSideBar;
 class DockFrameDocker;
 class ColorDocker;
 class ControlFrame;
 class KisUndoAdapter;
 class KisRect;
 class KisPoint;
+
 class KisDlgColorRange;
 
 class KisView : public KoView,
@@ -244,7 +244,6 @@ private slots:
 	void canvasGotKeyPressEvent(QKeyEvent*);
 	void canvasGotKeyReleaseEvent(QKeyEvent*);
 	void docImageListUpdate();
-	void floatSidebar();
 	void imgSelectionChanged(KisImageSP img);
 	void layerToggleVisible();
 	void layerSelected(int n);
@@ -268,7 +267,6 @@ private slots:
 	void layersUpdated(KisImageSP img);
 	void layerTransform(bool smooth);
 
-	void placeSidebarLeft();
 	QPoint mapToScreen(const QPoint& pt);
 	void merge_all_layers();
 	void merge_visible_layers();
@@ -288,7 +286,6 @@ private slots:
 	void scrollTo(Q_INT32 x, Q_INT32 y);
 	void scrollV(int value);
 	void slotEmbedImage(const QString& filename);
-	void showSidebar();
 	void slotInsertImageAsLayer();
 	void imgUpdated(KisImageSP img, const QRect& rc);
 	void slotZoomIn();
@@ -314,45 +311,46 @@ private:
 	KisRuler *m_vRuler;
 
         // Actions
-	KAction *m_zoomIn;
-	KAction *m_zoomOut;
-	KAction *m_imgRm;
-	KAction *m_imgResize;
 	KAction *m_imgDup;
-	KAction *m_imgImport;
 	KAction *m_imgExport;
-	KAction *m_imgScan;
-	KAction *m_imgResizeToLayer;
+	KAction *m_imgImport;
 	KAction *m_imgMergeAll;
-	KAction *m_imgMergeVisible;
 	KAction *m_imgMergeLinked;
+	KAction *m_imgMergeVisible;
+	KAction *m_imgRename;
+	KAction *m_imgResize;
+	KAction *m_imgResizeToLayer;
+	KAction *m_imgRm;
+	KAction *m_imgScan;
 	KAction *m_layerAdd;
-	KAction *m_layerRm;
+	KAction *m_layerBottom;
 	KAction *m_layerDup;
-	KAction *m_layerLink;
 	KAction *m_layerHide;
+	KAction *m_layerLink;
+	KAction *m_layerLower;
 	KAction *m_layerProperties;
-	KAction *m_layerSaveAs;
+	KAction *m_layerRaise;
 	KAction *m_layerResize;
 	KAction *m_layerResizeToImage;
+	KAction *m_layerRm;
+	KAction *m_layerSaveAs;
 	KAction *m_layerToImage;
-	KAction *m_layerTransform;
-	KAction *m_layerRaise;
-	KAction *m_layerLower;
 	KAction *m_layerTop;
-	KAction *m_layerBottom;
-	KAction *m_selectionCut;
+	KAction *m_layerTransform;
+	KAction *m_selectionColorRange;
 	KAction *m_selectionCopy;
-	KAction *m_selectionPaste;
-	KAction *m_selectionPasteInto;
-	KAction *m_selectionToNewLayer;
+	KAction *m_selectionCut;
 	KAction *m_selectionFillBg;
 	KAction *m_selectionFillFg;
+	KAction *m_selectionPaste;
+	KAction *m_selectionPasteInto;
 	KAction *m_selectionRm;
 	KAction *m_selectionSelectAll;
 	KAction *m_selectionSelectNone;
-	KAction *m_selectionColorRange;
-	KAction *m_imgRename;
+	KAction *m_selectionToNewLayer;
+	KAction *m_zoomIn;
+	KAction *m_zoomOut;
+;
 	DCOPObject *m_dcop;
 
         // Widgets

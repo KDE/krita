@@ -24,8 +24,7 @@
     <Menu name="Mode"><text>&amp;Mode</text>
             <Action name="bitmap"/>
     </Menu>
-    <Menu name="Adjust"><text>&amp;Adjust</text>
-    </Menu>
+
   <Separator/>
   <Action name="import_image"/>
   <Action name="export_image"/>
@@ -36,8 +35,11 @@
   <Action name="resize_image"/>
   <Action name="resizeimgtolayer"/>
   <Action name="duplicate_image"/>
-
 </Menu>
+
+<Menu name="Adjust"><text>&amp;Adjust</text>
+</Menu>
+
 
 <Menu name="Layer"><text>&amp;Layer</text>
   <Action name="insert_layer"/>

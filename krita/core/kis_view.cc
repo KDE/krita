@@ -68,13 +68,6 @@
 #include "kis_channelview.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
-#include "kis_dlg_builder_progress.h"
-#include "kis_dlg_dimension.h"
-#include "kis_dlg_gradient.h"
-#include "kis_dlg_new_layer.h"
-#include "kis_dlg_paint_properties.h"
-#include "kis_dlg_paintoffset.h"
-#include "kis_dlg_transform.h"
 #include "kis_doc.h"
 #include "kis_factory.h"
 #include "kis_guide.h"
@@ -103,17 +96,23 @@
 #include "kis_view.h"
 #include "kis_rect.h"
 #include "KRayonViewIface.h"
-#include "kis_dlg_preferences.h"
 #include "labels/kis_label_builder_progress.h"
 #include "labels/kis_label_cursor_pos.h"
 #include "labels/kis_label_io_progress.h"
-
 #include "strategy/kis_strategy_move.h"
-
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
 
+// Dialog boxes
 #include "kis_dlg_colorrange.h"
+#include "kis_dlg_builder_progress.h"
+#include "kis_dlg_dimension.h"
+#include "kis_dlg_gradient.h"
+#include "kis_dlg_new_layer.h"
+#include "kis_dlg_paint_properties.h"
+#include "kis_dlg_paintoffset.h"
+#include "kis_dlg_transform.h"
+#include "kis_dlg_preferences.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
@@ -1068,6 +1067,7 @@ void KisView::selectColorRange()
 	}
 }
 
+
 void KisView::selectAll()
 {
 	KisImageSP img = currentImg();
@@ -1747,21 +1747,6 @@ void KisView::merge_linked_layers()
 		layersUpdated();
 		updateCanvas();
 	}
-}
-
-void KisView::showSidebar()
-{
-
-}
-
-void KisView::floatSidebar()
-{
-
-}
-
-void KisView::placeSidebarLeft()
-{
-
 }
 
 /*

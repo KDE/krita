@@ -1,0 +1,406 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>wdgNewImage</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>wdgNewImage</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>459</width>
+            <height>392</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>New Image</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>lblName</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Name</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>txtName</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>txtName</cstring>
+            </property>
+            <property name="text">
+                <string>untitled-1</string>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>grpImage</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Image Size: </string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>txtHeight</cstring>
+                    </property>
+                    <property name="text">
+                        <string>512</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignAuto</set>
+                    </property>
+                    <property name="inputMask">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="2" column="1">
+                    <property name="name">
+                        <cstring>txtResolution</cstring>
+                    </property>
+                    <property name="text">
+                        <string>100</string>
+                    </property>
+                    <property name="inputMask">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="4" column="1" rowspan="1" colspan="2">
+                    <item>
+                        <property name="text">
+                            <string>1 bit</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>8 bit</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>16 bit</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>32 bit</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>64 bit</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbDepth</cstring>
+                    </property>
+                    <property name="currentItem">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="3" column="1" rowspan="1" colspan="2">
+                    <item>
+                        <property name="text">
+                            <string>Bitmap</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Grayscale</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Indexed Color</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>RGB Color</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>CMYK Color</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Lab Color</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>YUV Color</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Real media</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbMode</cstring>
+                    </property>
+                    <property name="currentItem">
+                        <number>3</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>lblResolution</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Resolution</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>txtResolution</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>lblMode</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Mode</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>cmbMode</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>lblDepth</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Channel &amp;Depth</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>cmbDepth</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>lblHeight</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Height</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>txtHeight</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="2" column="2">
+                    <item>
+                        <property name="text">
+                            <string>pixels/inch</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>pixels/cm</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbResolution</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="0" column="2">
+                    <item>
+                        <property name="text">
+                            <string>pixels</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>inches</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>cm</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>points</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>picas</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>colums</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbWidth</cstring>
+                    </property>
+                    <property name="currentItem">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>txtWidth</cstring>
+                    </property>
+                    <property name="text">
+                        <string>512</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignAuto</set>
+                    </property>
+                    <property name="inputMask">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>lblWidth</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Width</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>txtWidth</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="2">
+                    <item>
+                        <property name="text">
+                            <string>pixels</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>inches</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>cm</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>points</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>picas</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>colums</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbWidth_2</cstring>
+                    </property>
+                    <property name="currentItem">
+                        <number>1</number>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>grpContents</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Contents</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>radioWhite</cstring>
+                    </property>
+                    <property name="text">
+                        <string>White</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="2" column="0">
+                    <property name="name">
+                        <cstring>radioForeground</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Foreground Color</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+F</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="3" column="0">
+                    <property name="name">
+                        <cstring>radioTransparent</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Transparent</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+T</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>radioBackground</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Background Color</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+B</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>txtName</tabstop>
+    <tabstop>txtWidth</tabstop>
+    <tabstop>txtHeight</tabstop>
+    <tabstop>txtResolution</tabstop>
+    <tabstop>cmbMode</tabstop>
+    <tabstop>cmbDepth</tabstop>
+    <tabstop>radioWhite</tabstop>
+    <tabstop>radioBackground</tabstop>
+    <tabstop>radioForeground</tabstop>
+    <tabstop>radioTransparent</tabstop>
+    <tabstop>cmbResolution</tabstop>
+    <tabstop>cmbWidth</tabstop>
+    <tabstop>cmbWidth_2</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

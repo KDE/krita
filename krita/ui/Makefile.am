@@ -35,7 +35,7 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_previewwidgetbase.ui \
     kis_previewwidget.cc \
     kis_rgb_widget.cc \
-    kis_hsv_widget.cc
+    kis_hsv_widget.cc 
 
 
 #    blendchooser.cc

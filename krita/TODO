@@ -22,7 +22,8 @@
 * Add auto-scroll when painting/erasing etc.
 * Add a 'hard' pen tool
 * Make toolbox conform to Karbon
-* Fix composite ops and make conformant to photoshop/gimp instead of ImageMagick
+* Fix composite ops and make conformant to photoshop/gimp instead of ImageMagick (steal
+from gwenviews xcf imgio slave)
 
 User interface
 

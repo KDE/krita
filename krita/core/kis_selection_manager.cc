@@ -357,9 +357,10 @@ KisLayerSP KisSelectionManager::paste()
 
 	if (clip) {
 		KisLayerSP layer = new KisLayer(img, img -> nextLayerName() + "(pasted)", OPACITY_OPAQUE);
+		QRect r = clip -> extent();
 		KisPainter gc;
 		gc.begin(layer.data());
-		gc.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), clip->getX(), clip->getY(), 0, 0);
+		gc.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), r.x(), r.y(), r.width(), r.height());
 		gc.end();
 		
 		KisConfig cfg;

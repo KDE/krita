@@ -150,6 +150,13 @@ void KisPaintDevice::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) cons
 	m_datamanager -> extent(x, y, w, h);
 }
 
+QRect KisPaintDevice::extent() const 
+{
+	Q_INT32 x, y, w, h;
+	extent(x, y, w, h);
+	return QRect(x, y, w, h);
+}
+
 void KisPaintDevice::accept(KisScaleVisitor& visitor)
 {
         visitor.visitKisPaintDevice(this);

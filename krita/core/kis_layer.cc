@@ -137,13 +137,6 @@ QRect KisLayer::layerExtents() const
 }
 
 
-QRect KisLayer::tileExtents() const
-{
-	return m_tileRect;
-//	return QRect(0, 0, TILE_SIZE, TILE_SIZE);
-//	return m_ch[0]->tileExtents();
-}
-
 #if 0
 QPoint KisLayer::channelOffset() const 
 {
@@ -244,26 +237,6 @@ void KisLayer::allocateRect(QRect r)
 	    m_ch[i]->allocateRect(r);
 #endif
 }
-
-
-#if 0
-void KisLayer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
-{
-    pt = pt - m_ch[0]->tileExtents().topLeft();
-    *tileNo = (pt.y() / TILE_SIZE) * xTiles() + pt.x() / TILE_SIZE;
-    *offset = (pt.y() % TILE_SIZE) * TILE_SIZE + pt.x() % TILE_SIZE;
-}
-
-
-void KisLayer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
-{
-    pt = pt - m_ch[0]->tileExtents().topLeft();
-    *tileNo = (pt.y() / TILE_SIZE) * xTiles() + pt.x() / TILE_SIZE;
-    *y = pt.y() % TILE_SIZE;
-    *x = pt.x() % TILE_SIZE;
-}
-#endif
-
 
 void KisLayer::clear(const KisColor& c, bool transparent )
 {

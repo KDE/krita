@@ -74,3 +74,23 @@ void KisPaintDevice::resize(uint width, uint height, uint bpp)
 	m_tiles.resize(width, height, bpp);
 }
 
+void KisPaintDevice::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
+{
+	pt = pt - tileExtents().topLeft();
+	*tileNo = (pt.y() / TILE_SIZE) * xTiles() + pt.x() / TILE_SIZE;
+	*offset = (pt.y() % TILE_SIZE) * TILE_SIZE + pt.x() % TILE_SIZE;
+}
+
+void KisPaintDevice::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
+{
+	pt = pt - tileExtents().topLeft();
+	*tileNo = (pt.y() / TILE_SIZE) * xTiles() + pt.x() / TILE_SIZE;
+	*y = pt.y() % TILE_SIZE;
+	*x = pt.x() % TILE_SIZE;
+}
+
+QRect KisPaintDevice::tileExtents() const
+{
+	return m_tileRect;
+}
+

@@ -30,6 +30,7 @@ public:
 	inline bool dirty() const;
 	inline unsigned int bpp();
 	unsigned int* data();
+	const unsigned int* data() const;
 
 private:
 	KisTile(const KisTile&);

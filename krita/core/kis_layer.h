@@ -39,13 +39,11 @@ public:
 	KisLayer(const QString& name, uint width, uint height, uint bpp, cMode cm);
 	virtual ~KisLayer();
 
-	uchar   opacity() const { return m_opacity; }
 	bool    visible() const { return m_visible; }
 	bool    linked()  const { return m_linked; }
 //	uchar   numChannels() const { return m_channels; }
 	cMode   colorMode()   const { return m_cMode; }
 
-	void    setOpacity(uchar o) { m_opacity = o; }
 	void    setVisible(bool v) { m_visible = v; }
 	void    setLinked(bool l)  { m_linked = l; }
 
@@ -58,8 +56,6 @@ public:
 
 	// extents of the image in canvas coords
 	QRect   imageExtents() const;
-	// extents of the layers tiles in canv coords  
-	QRect   tileExtents() const;
 	// topLeft of the image in the channel   
 //	QPoint  channelOffset() const; 
 
@@ -72,11 +68,6 @@ public:
 
 	void    loadRGBImage(QImage img, QImage alpha);
 	void    loadGrayImage(QImage img, QImage alpha);
-
-#if 0
-	void    findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
-	void    findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const;
-#endif
 
 //	uint* scanLine();
 //	uchar*  channelMem(uchar channel, uint tileNo, int ox, int oy) const;
@@ -99,7 +90,6 @@ protected:
 //	void calcNumChannels();
 
 public:
-	uchar    m_opacity;
 //	uchar    m_channels;
 	uchar    m_current;
 	bool     m_visible, m_linked;
@@ -110,7 +100,7 @@ public:
 	int      mLayerWidth;   
 	int      mLayerHeight;  	 
 
-	QRect    m_imgRect, m_tileRect;
+	QRect    m_imgRect;
 //	KisChannel* m_ch[MAX_CHANNELS];
 };
 

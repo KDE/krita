@@ -48,8 +48,17 @@ public:
 	inline uint xTiles() const;
 	inline uint yTiles() const;
 	inline uint bpp() const;
+	QRect tileExtents() const;
+
+	void findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
+	void findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const;
+
+	uchar   opacity() const { return m_opacity; }
+	void    setOpacity(uchar o) { m_opacity = o; }
 
 protected:
+	uchar m_opacity;
+	QRect m_tileRect;
 	QString m_name;
 	KisTiles m_tiles;
 	cMode m_cMode;

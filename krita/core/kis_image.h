@@ -115,10 +115,12 @@ protected:
 			int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
 	void convertImageToPixmap( QImage *img, QPixmap *pix );
 
+
 private:
 	KisImage(const KisImage&);
 	KisImage& operator=(const KisImage&);
 
+	void renderTile(KisTile *dst, KisTile *src, const KisPaintDevice *srcDevice);
 	void resizePixmap(KisLayer *lay, const QRect& rect);
 	QRect findBoundingTiles(const QRect& area);
 

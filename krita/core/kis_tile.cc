@@ -77,3 +77,8 @@ unsigned int* KisTile::data()
 	return m_data;
 }
 
+const unsigned int* KisTile::data() const
+{
+	return m_data;
+}
+

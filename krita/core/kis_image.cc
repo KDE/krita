@@ -328,41 +328,18 @@ void KisImage::paintPixmap(QPainter *p, const QRect& area)
     and updates the relevant pixmap
 */
 
-void KisImage::compositeTile(int x, int y, KisLayer *dstLay, int /*dstTile*/)
+void KisImage::compositeTile(int x, int y, KisLayer *dstLay, int dstTile)
 {
-#if 0
-	if (dstTile == -1)
-		dstTile = y * m_xTiles + x;
-
-	if (!dstLay)
-		dstLay = m_composeLayer;
-#endif
-
-	Q_ASSERT(dstLay == m_composeLayer);
 	KisTile *dst = dstLay -> getTile(0, 0);
-//	QRect tileBoundary(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
 	memcpy(dst -> data(), m_bgLayer -> getTile(0, 0) -> data(), TILE_SIZE * TILE_SIZE * sizeof(unsigned int));
 
 	for (KisLayer *lay = m_layers.first(); lay; lay = m_layers.next()) {
-		if (lay && lay -> visible()) { // && tileBoundary.intersects(lay -> imageExtents())) {
+		if (lay && lay -> visible()) {
 			KisTile *src = lay -> getTile(x, y);
-			uint *p = src -> data();
 
-			// TODO : Restore merging layers
-			memcpy(dst -> data(), p, TILE_SIZE * TILE_SIZE * sizeof(unsigned int));
-#if 0
-			for (int y = 0; y < TILE_SIZE; y++) {
-				uint *ptr = dst -> data();//(uint *)m_imgTile.scanLine(y);
-
-				for (int x = TILE_SIZE; x >= 0; x--) {
-					// TODO Merge with other layers
-					*(ptr + (y * TILE_SIZE) + x) = *(p + (y * TILE_SIZE) + x);
-				}
-			}
-
-			//renderLayerIntoTile(tileBoundary, lay, dstLay, dstTile);
-#endif
+			Q_ASSERT(src);
+			renderTile(dst, src, lay);
 		}
 	}
 }
@@ -406,7 +383,6 @@ void KisImage::compositeImage(const QRect& area)
 void KisImage::renderLayerIntoTile(QRect tileBoundary, const KisLayer *srcLay,
           KisLayer *dstLay, int dstTile)
 {
-	// TODO
 #if 0
     int tileNo, tileOffsetX, tileOffsetY, xTile, yTile;
 
@@ -955,9 +931,56 @@ KisChannel* KisImage::getCurrentChannel()
 	return m_activeChannel;
 }
 
-KisLayer* KisImage::getCurrentLayer()
+KisLayer* KisImage::getCurrentLayer() 
+{ 
+	return m_activeLayer; 
+}
+
+void KisImage::renderTile(KisTile *dst, KisTile *src, const KisPaintDevice *srcDevice)
 {
-	return m_activeLayer;
+	uchar src_opacity = srcDevice -> opacity();
+	uchar opacity;
+	uchar inverseOpacity;
+	QRgb *srgb;
+	QRgb *drgb;
+	uchar sr, sg, sb, sa;
+	uchar dr, dg, db, da;
+	
+	for (int y = 0; y < TILE_SIZE; y++) {
+		drgb = dst -> data() + (y * TILE_SIZE);
+		srgb = src -> data() + (y * TILE_SIZE);
+
+		for (int x = 0; x < TILE_SIZE; x++) {
+			sr = qRed(*srgb);
+			sg = qGreen(*srgb);
+			sb = qBlue(*srgb);
+			sa = qAlpha(*srgb);
+			dr = qRed(*drgb);
+			dg = qGreen(*drgb);
+			db = qBlue(*drgb);
+			da = qAlpha(*drgb);
+			
+			if (m_cMode == cm_RGBA) {
+				opacity = sa && da ? (da * src_opacity) / 255 : 0;
+				inverseOpacity = 255 - opacity;
+				dr = ((dr * da / 255) * inverseOpacity + sr * opacity) / 255;
+				dg = ((dg * da / 255) * inverseOpacity + sg * opacity) / 255;
+				db = ((db * da / 255) * inverseOpacity + sb * opacity) / 255;
+				da = sa + da - (sa * da) / 255;
+				*drgb = qRgba(dr, dg, db, da);
+			}
+			else {
+				inverseOpacity = 255 - src_opacity;
+				dr = (dr * inverseOpacity + sr * src_opacity) / 255;
+				dg = (dg * inverseOpacity + sg * src_opacity) / 255;
+				db = (db * inverseOpacity + sb * src_opacity) / 255;
+				*drgb = qRgb(dr, dg, db);
+			}
+
+			drgb++;
+			srgb++;
+		}
+	}
 }
 
 #include "kis_image.moc"

@@ -61,7 +61,7 @@ ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
 	setInstance(ImageSizeFactory::instance());
 	kdDebug() << "ImageSize\n";
 
-	(void) new KAction(i18n("&ImageSize..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "imagesize");
+	(void) new KAction(i18n("&Image Size..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "imagesize");
 	
 	if ( !parent->inherits("KisView") )
 	{

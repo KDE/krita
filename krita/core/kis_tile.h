@@ -23,6 +23,7 @@
 
 #include <qcolor.h>
 #include <qpoint.h>
+#include <qmutex.h>
 #include <qvaluevector.h>
 
 #include <ksharedptr.h>
@@ -36,8 +37,8 @@ typedef KisTileSPLst::const_iterator KisTileSPLstConstIterator;
 
 class KisTile : public KShared {
 public:
-	KisTile(int x, int y, uint width, uint height, uint bpp, const QRgb& defaultColor, bool dirty = false);
-	KisTile(const QPoint& parentPos, uint width, uint height, uint bpp, const QRgb& defaultColor, bool dirty = false);
+	KisTile(int x, int y, uint width, uint height, uchar bpp, const QRgb& defaultColor, bool dirty = false);
+	KisTile(const QPoint& parentPos, uint width, uint height, uchar bpp, const QRgb& defaultColor, bool dirty = false);
 	KisTile(const KisTile& tile);
 	KisTile& operator=(const KisTile& tile);
 	virtual ~KisTile();
@@ -46,15 +47,21 @@ public:
 	void setDirty(bool dirty);
 	void move(int x, int y);
 	void move(const QPoint& parentPos);
-	uint* data();
+	uchar* data();
+	uchar* data(int x, int y);
 
 	inline bool dirty() const;
-	inline uint bpp();
-	inline const uint* data() const;
+	inline uchar bpp() const;
+	inline const uchar* data() const;
+	const uchar* data(int x, int y) const;
 	inline QPoint tileCoords();
 
 	inline bool cow() const;
 	inline void setCow(bool enable = true);
+
+	inline uint size() const;
+	inline uint width() const;
+	inline uint height() const;
 	
 private:
 	void initTile();
@@ -65,9 +72,10 @@ private:
 	bool m_dirty;
 	uint m_width;
 	uint m_height;
-	uint m_bpp;
-	uint *m_data;
+	uchar m_bpp;
+	uchar *m_data;
 	QRgb m_defaultColor;
+	QMutex m_mutex;
 };
 
 bool KisTile::dirty() const
@@ -75,12 +83,12 @@ bool KisTile::dirty() const
 	return m_dirty;
 }
 
-uint KisTile::bpp()
+uchar KisTile::bpp() const
 {
 	return m_bpp;
 }
 
-const uint* KisTile::data() const
+const uchar* KisTile::data() const
 {
 	return m_data;
 }
@@ -98,6 +106,21 @@ bool KisTile::cow() const
 void KisTile::setCow(bool enable)
 {
 	m_cow = enable;
+}
+
+uint KisTile::size() const
+{
+	return m_width * m_height * m_bpp;
+}
+
+uint KisTile::width() const
+{
+	return m_width;
+}
+
+uint KisTile::height() const
+{
+	return m_height;
 }
 
 #endif // KIS_TILE_

@@ -121,7 +121,7 @@ void RectangleTool::draw(const QPoint& start, const QPoint& end )
 	p.setPen(pen);
 	p.setRasterOp( Qt::NotROP );
 	float zF = view->zoomFactor();
-	p.drawRect( QRect(start.x() + view->xPaintOffset() 
+	p.drawRect(QRect(start.x() + view->xPaintOffset() 
 				- (int)(zF * view->xScrollOffset()),
 				start.y() + view->yPaintOffset() 
 				- (int)(zF * view->yScrollOffset()), 
@@ -137,8 +137,10 @@ void RectangleTool::draw(KisPainter *gc, const QRect& rc)
 
 void RectangleTool::optionsDialog()
 {
-	KisView *view = getCurrentView();
+	kdDebug() << "RectangleTool::optionsDialog\n";
+
 	ToolOptsStruct ts;    
+	KisView *view = getCurrentView();
 
 	ts.usePattern = m_usePattern;
 	ts.useGradient = m_useGradient;
@@ -146,10 +148,12 @@ void RectangleTool::optionsDialog()
 	ts.opacity = m_opacity;
 	ts.fillShapes = m_fillSolid;
 
+	kdDebug() << "m_opacity = " << m_opacity << endl;
+
 	bool old_usePattern = m_usePattern;
 	bool old_useGradient = m_useGradient;
 	int  old_lineThickness = m_lineThickness;
-	unsigned int  old_opacity = m_opacity;
+	unsigned int old_opacity = m_opacity;
 	bool old_fillSolid = m_fillSolid;
 
 	ToolOptionsDialog OptsDialog(tt_linetool, ts);
@@ -160,25 +164,25 @@ void RectangleTool::optionsDialog()
 		return;
 
 	m_lineThickness = OptsDialog.lineToolTab()->thickness();
-	m_opacity   = OptsDialog.lineToolTab()->opacity();
-	m_usePattern    = OptsDialog.lineToolTab()->usePattern();
-	m_useGradient   = OptsDialog.lineToolTab()->useGradient();
-	m_fillSolid     = OptsDialog.lineToolTab()->solid();  
+	m_opacity = OptsDialog.lineToolTab()->opacity();
+	m_usePattern = OptsDialog.lineToolTab()->usePattern();
+	m_useGradient = OptsDialog.lineToolTab()->useGradient();
+	m_fillSolid = OptsDialog.lineToolTab()->solid();  
 
 	// User change value ?
 	if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient 
 			|| old_opacity != m_opacity || old_lineThickness != m_lineThickness
 			|| old_fillSolid != m_fillSolid) {    
-		KisPainter *p = view->kisPainter();
+		KisPainter *p = view -> kisPainter();
 
-		p->setLineThickness(m_lineThickness);
-		p->setLineOpacity(m_opacity);
-		p->setFilledRectangle(m_fillSolid);
-		p->setPatternFill(m_usePattern);
-		p->setGradientFill(m_useGradient);
+		p -> setLineThickness(m_lineThickness);
+		p -> setLineOpacity(m_opacity);
+		p -> setFilledRectangle(m_fillSolid);
+		p -> setPatternFill(m_usePattern);
+		p -> setGradientFill(m_useGradient);
 
 		// set rectangle tool settings
-		m_doc->setModified( true );
+		m_doc -> setModified(true);
 	}
 }
 
@@ -227,10 +231,9 @@ void RectangleTool::toolSelect()
 
 		gc -> setLineThickness(m_lineThickness);
 		gc -> setLineOpacity(m_opacity);
-		gc -> setFilledEllipse(m_usePattern);
+		gc -> setFilledRectangle(m_fillSolid);
+		gc -> setPatternFill(m_usePattern);
 		gc -> setGradientFill(m_useGradient);
-		gc -> setPatternFill(m_fillSolid);
-
 		view -> activateTool(this);
 	}
 }

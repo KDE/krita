@@ -66,6 +66,7 @@ ktvector toolFactory(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern, Ki
 	tools.reserve(100);
 	// painting tools
 	tools.push_back(new BrushTool(doc, brush));
+#if 0
 	tools.push_back(new AirBrushTool(doc, brush));
 	tools.push_back(new PenTool(doc, canvas, brush));
 	tools.push_back(new EraserTool(doc, brush));
@@ -91,6 +92,7 @@ ktvector toolFactory(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern, Ki
 	tools.push_back(new PolyGonTool(doc, canvas));
 	tools.push_back(new RectangleTool(doc, canvas));
 	tools.push_back(new EllipseTool(doc, canvas));
+#endif
 
 	return tools;
 }

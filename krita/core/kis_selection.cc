@@ -101,6 +101,8 @@ void KisSelection::setImage(QImage & img)
 */
 bool KisSelection::erase()
 {
+	return false; // BPP
+#if 0
 	KisImage *img = pDoc -> currentImg();
 
 	if (!img) 
@@ -143,6 +145,7 @@ bool KisSelection::erase()
 	}
 
 	return true;
+#endif
 }
 
 
@@ -169,6 +172,8 @@ void KisSelection::reverse()
 */
 void KisSelection::fill(uint color, KisPattern * /*pattern*/, KisGradient * /*gradient*/)
 {
+	// BPP
+#if 0
 	KisImage *img = pDoc -> currentImg();
 
 	if (!img) 
@@ -233,11 +238,14 @@ void KisSelection::fill(uint color, KisPattern * /*pattern*/, KisGradient * /*gr
 #endif
 		}
     }
+#endif
 }
 
 
 void KisSelection::setRectangularSelection(const QRect & re, KisLayer *lay)
 {
+	// BPP
+#if 0
 	setBounds(re);
 
 	QRect clipRect = rectangle;
@@ -278,11 +286,14 @@ void KisSelection::setRectangularSelection(const QRect & re, KisLayer *lay)
 				image.setPixel(x - sx, y - sy, qRgb(r, g, b));
 		}
 	}
+#endif
 }
 
 
 void KisSelection::setEllipticalSelection(const QRect & re, KisLayer *lay)
 {
+	// BPP
+#if 0
 	// set the bounding selection rectangle
 	setBounds(re);
 
@@ -386,12 +397,15 @@ void KisSelection::setEllipticalSelection(const QRect & re, KisLayer *lay)
 			}
 		}
 	}
+#endif
 }
 
 
 
 void KisSelection::setPolygonalSelection(const QRect & re, QPointArray & pointsArray, KisLayer *lay )
 {
+	//BPP
+#if 0
 	// set the bounding selection rectangle
 	setBounds( re );
 
@@ -495,6 +509,7 @@ void KisSelection::setPolygonalSelection(const QRect & re, QPointArray & pointsA
 			}
 		}
 	}
+#endif
 }
 
 // Pixmap size of top left point is (0, 0). But original size of
@@ -521,6 +536,7 @@ QPointArray KisSelection::getBundedPointArray( QPointArray & points, QPoint & to
 
 void KisSelection::setContiguousSelection(const QRect & re, KisLayer *lay)
 {
+#if 0
 	// set the bounding selection rectangle
 	setBounds(re);
 
@@ -585,6 +601,7 @@ void KisSelection::setContiguousSelection(const QRect & re, KisLayer *lay)
 				image.setPixel(x - sx, y - sy, qRgb(r, g, b));
 		}
 	}
+#endif
 }
 
 

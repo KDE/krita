@@ -18,6 +18,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -28,7 +29,7 @@
 #include "kis_global.h"
 #include "kis_tile.h"
 
-KisTile::KisTile(int x, int y, uint width, uint height, uint bpp, const QRgb& defaultColor, bool dirty)
+KisTile::KisTile(int x, int y, uint width, uint height, uchar bpp, const QRgb& defaultColor, bool dirty)
 {
 	m_cow = false;
 	m_dirty = dirty;
@@ -43,7 +44,7 @@ KisTile::KisTile(int x, int y, uint width, uint height, uint bpp, const QRgb& de
 		initTile();
 }
 
-KisTile::KisTile(const QPoint& parentPos, uint width, uint height, uint bpp, const QRgb& defaultColor, bool dirty)
+KisTile::KisTile(const QPoint& parentPos, uint width, uint height, uchar bpp, const QRgb& defaultColor, bool dirty)
 {
 	m_cow = false;
 	m_dirty = dirty;
@@ -90,7 +91,7 @@ void KisTile::copyTile(const KisTile& tile)
 	m_cow = false;
 
 	if (tile.m_data) {
-		m_data = new uint[m_width * m_height];
+		m_data = new uchar[size()];
 		memcpy(m_data, tile.m_data, m_width * m_height * sizeof(uint));
 	}
 }
@@ -100,19 +101,19 @@ void KisTile::setDirty(bool dirty)
 	m_dirty = dirty;
 }
 
-uint* KisTile::data()
+uchar* KisTile::data()
 {
 	if (!m_data)
-		m_data = new uint[m_width * m_height];
+		m_data = new uchar[size()];
 
 	return m_data;
 }
 
 void KisTile::initTile()
 {
-	m_data = new uint[m_width * m_height];
-	qFill(m_data, m_data + m_width * m_height, m_defaultColor);
-	memset(m_data, rand() % 255, m_width * m_height * sizeof(uint));
+	m_data = new uchar[size()];
+//	qFill(m_data, m_data + size(), m_defaultColor); // xXX Needs to know about bpp
+	memset(m_data, /*rand() %*/ 255, size());
 }
 
 void KisTile::move(int x, int y)
@@ -124,5 +125,31 @@ void KisTile::move(int x, int y)
 void KisTile::move(const QPoint& parentPos)
 {
 	m_parentPos = parentPos;
+}
+
+uchar *KisTile::data(int x, int y)
+{
+	int offset = (y * width() + x) * bpp();
+
+#if 0
+	kdDebug() << "x = " << x << endl;
+	kdDebug() << "y = " << y << endl;
+	kdDebug() << "m_width = " << m_width << endl;
+	kdDebug() << "m_height = " << m_height << endl;
+	kdDebug() << "m_bpp = " << m_bpp << endl;
+	kdDebug() << "offset = " << offset << endl;
+#endif
+	assert(data() <= data() + offset);
+	Q_ASSERT(data() + size() >= data() + offset);
+	return data() + offset;
+}
+
+const uchar *KisTile::data(int x, int y) const
+{
+	int offset = (y * width() + x) * bpp();
+
+	Q_ASSERT(data() <= data() + offset);
+	Q_ASSERT(data() + size() >= data() + offset);
+	return data() + offset;
 }
 

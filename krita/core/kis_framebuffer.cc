@@ -104,6 +104,8 @@ void KisFrameBuffer::setImage(QImage & img)
 
 bool KisFrameBuffer::eraseCurrentLayer()
 {
+	return false; // BPP
+#if 0
 	KisImage *img = pDoc -> currentImg();
 
 	if (!img) 
@@ -136,6 +138,7 @@ bool KisFrameBuffer::eraseCurrentLayer()
 			lay -> setPixel(x, y, qRgb(255, 255, 255));
 
 	return true;
+#endif
 }
 
 /*
@@ -148,6 +151,8 @@ bool KisFrameBuffer::eraseCurrentLayer()
 
 bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
 {
+	return false; // BPP
+#if 0
 	KisImage *img = pDoc->currentImg();
 	if (!img) return false;
 
@@ -276,6 +281,7 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
 	}
 
 	return true;
+#endif
 }
 
 /*
@@ -285,6 +291,8 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
 */
 bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
 {
+	return false; // TODO
+#if 0
 	KisImage *img = pDoc->currentImg();
 
 	if (!img) 
@@ -337,6 +345,7 @@ bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
 	}
 
 	return true;
+#endif
 }
 
 
@@ -451,6 +460,8 @@ bool KisFrameBuffer::layerToQImage(QImage *, QRect &, QRect &)
 
 bool KisFrameBuffer::changeColors(uint oldColor, uint newColor, QRect & r, KisSelection * /*selection*/)
 {
+	return false; // BPP
+#if 0
 	KisImage *img = pDoc->currentImg();
 	if (!img) return false;
 
@@ -505,6 +516,7 @@ bool KisFrameBuffer::changeColors(uint oldColor, uint newColor, QRect & r, KisSe
 	}
 
 	return true;
+#endif
 }
 
 /*
@@ -535,6 +547,8 @@ void KisFrameBuffer::setPattern(KisPattern *pattern)
 
 void KisFrameBuffer::setPatternToPixel(KisLayer *lay, int _x, int _y, uint /*value*/)
 {
+	// BPP
+#if 0
 	if (!pPenPattern)
 		return;
 
@@ -558,6 +572,7 @@ void KisFrameBuffer::setPatternToPixel(KisLayer *lay, int _x, int _y, uint /*val
 		+ (x % pPenPattern->width());
 
 	lay -> setPixel(x, y, *p);
+#endif
 }
 
 void KisFrameBuffer::setGradientPaint(bool _gradientPaint,
@@ -581,6 +596,8 @@ void KisFrameBuffer::setGradientPaint(bool _gradientPaint,
 void KisFrameBuffer::setGradientToPixel(KisLayer *lay,
     int x, int y)
 {
+	// BPP
+#if 0
     if(mGradient.width() == 0 || mGradient.height() == 0)
         return;
 
@@ -593,6 +610,7 @@ void KisFrameBuffer::setGradientToPixel(KisLayer *lay,
     u32Color = mGradient.imagePixelValue(x - xOffset, y - yOffset);
 
     lay -> setPixel(x, y, u32Color);
+#endif
 }
 
 #include "kis_framebuffer.moc"

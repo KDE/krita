@@ -20,6 +20,8 @@
 
 #include <qtl.h>
 
+#include <kdebug.h>
+
 #include "kis_global.h"
 #include "kis_tiles.h"
 #include "kis_tile.h"

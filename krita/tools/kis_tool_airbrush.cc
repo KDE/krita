@@ -118,6 +118,8 @@ void AirBrushTool::mousePress(QMouseEvent *e)
 
 bool AirBrushTool::paint(QPoint pos, bool timeout)
 {
+	return false; // BPP
+#if 0
 	KisView *view = getCurrentView();
 	KisImage *img = m_doc->currentImg();
 
@@ -224,6 +226,7 @@ bool AirBrushTool::paint(QPoint pos, bool timeout)
 	}
 
 	return true;
+#endif
 }
 
 void AirBrushTool::mouseMove(QMouseEvent *e)

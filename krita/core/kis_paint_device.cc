@@ -18,6 +18,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <string.h>
+
 #include <qcstring.h>
 #include <qdatastream.h>
 
@@ -41,7 +43,7 @@ KisPaintDevice::~KisPaintDevice()
 {
 }
 
-void KisPaintDevice::setPixel(uint x, uint y, uint pixel, KisImageCmd *cmd)
+void KisPaintDevice::setPixel(uint x, uint y, const uchar *src, KisImageCmd *cmd)
 {
 	int tileNoY = y / TILE_SIZE;
 	int tileNoX = x / TILE_SIZE;
@@ -61,27 +63,27 @@ void KisPaintDevice::setPixel(uint x, uint y, uint pixel, KisImageCmd *cmd)
 		}
 	}
 
-	uint *ppixel = tile -> data();
-	*(ppixel + ((y % TILE_SIZE) * TILE_SIZE) + (x % TILE_SIZE)) = pixel;
+	uchar *dst = pixel(x, y);
+	memcpy(dst, src, tile -> bpp());
 }
 
-uint KisPaintDevice::pixel(uint x, uint y)
+uchar* KisPaintDevice::pixel(uint x, uint y)
 {
-	uint pix;
+	uchar *pix = 0;
 
 	pixel(x, y, &pix);
 	return pix;
 }
 
-bool KisPaintDevice::pixel(uint x, uint y, uint *val)
+bool KisPaintDevice::pixel(uint x, uint y, uchar **val)
 {
 	int tileNoY = y / TILE_SIZE;
 	int tileNoX = x / TILE_SIZE;
 	KisTile *tile = m_tiles.getTile(tileNoX, tileNoY);
-	uint *ppixel;
+	uchar *ppixel = tile -> data();
 
-	ppixel = tile -> data();
-	*val = *(ppixel + ((y % TILE_SIZE) * TILE_SIZE) + (x % TILE_SIZE));
+	*val = tile -> data(x % TILE_SIZE, y % TILE_SIZE);
+//	*val = (ppixel + ((y % TILE_SIZE) * TILE_SIZE) + (x % TILE_SIZE));
 	return true;
 }
 

@@ -50,9 +50,9 @@ public:
 	inline void setName(const QString& name);
 	inline QString name() const;
 
-	virtual void setPixel(uint x, uint y, uint pixel, KisImageCmd *cmd = 0);
-	virtual bool pixel(uint x, uint y, uint *val);
-	virtual uint pixel(uint x, uint y);
+	virtual void setPixel(uint x, uint y, const uchar *pixel, KisImageCmd *cmd = 0);
+	virtual bool pixel(uint x, uint y, uchar **val);
+	virtual uchar *pixel(uint x, uint y);
 
 	virtual void resize(uint width, uint height, uint bpp);
 	
@@ -60,7 +60,7 @@ public:
 
 	inline uint xTiles() const;
 	inline uint yTiles() const;
-	inline uint bpp() const;
+	inline uchar bpp() const;
 	QRect tileExtents() const;
 
 	void findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
@@ -95,7 +95,7 @@ uint KisPaintDevice::yTiles() const
 	return m_tiles.yTiles();
 }
 
-uint KisPaintDevice::bpp() const
+uchar KisPaintDevice::bpp() const
 {
 	return m_tiles.bpp();
 }

@@ -49,6 +49,8 @@ PasteTool::~PasteTool()
 
 bool PasteTool::setClip()
 {
+	return false; // BPP
+#if 0
 	m_clipImage = kapp->clipboard()->image();
 
 	if (m_clipImage.isNull())
@@ -95,6 +97,7 @@ bool PasteTool::setClip()
 		kdDebug() << "paste tool - m_clipImage has no alpha buffer!" << endl;
 
 	return true;
+#endif
 }
 
 
@@ -133,6 +136,8 @@ void PasteTool::mousePress(QMouseEvent *e)
 
 bool PasteTool::pasteColor(QPoint pos)
 {
+	return false; // BPP
+#if 0
 	KisView *view = getCurrentView();
 	KisImage *img = m_doc->currentImg();
 	if (!img)   return false;
@@ -216,6 +221,7 @@ bool PasteTool::pasteColor(QPoint pos)
 	}
 
 	return true;
+#endif
 }
 
 

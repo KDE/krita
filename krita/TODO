@@ -1,4 +1,4 @@
-Krayon is the KOffice image manipulation application.
+Krita is the KOffice image manipulation application.
 It does not aim to be a direct competitor to the GIMP,
 but to integrate well with the other KOffice applications,
 to be easy to use and yet powerfull.
@@ -41,9 +41,10 @@ we want to have in the 1.0 release:
 
 BUGS
 
-- Selection tools don't get redrawed when they need to (except for rectangle select now)
-- opacity is totally broken, it sort of almost works for a white background, but nothing else
-- Paint offset causes mispaint
-- Save in tool propeties does not work
-- New for modified document does not give error
+- Selections tools don't scale to zoom factor
+- Move tool is broken
+- Fill tool is broken since layers don't report their size anymore
+- The polygon tools are broken
+- Drawing on a image more that 512**2 pixels crashes krita since KisPainter has a static pixmap size of 512**2, see KisPainter ctor
+- A few KoPainter integration issues 
 

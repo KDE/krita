@@ -1548,7 +1548,7 @@ void KisView::hide_layer()
 		int indx = img -> getCurrentLayerIndex();
 		LayerTable *tbl = m_pLayerView -> layerTable();
 
-		tbl -> slotInverseVisibility(indx);
+		tbl -> slotInverseVisibility(indx - 1);
 		tbl -> updateTable();
 		tbl -> updateAllCells();
 		m_doc -> setModified(true);
@@ -1568,7 +1568,7 @@ void KisView::link_layer()
 		int indx = img -> getCurrentLayerIndex();
 		LayerTable *tbl = m_pLayerView -> layerTable();
 
-		tbl -> slotInverseLinking(indx);
+		tbl -> slotInverseLinking(indx - 1);
 		tbl -> updateTable();
 		tbl -> updateAllCells();
 		m_doc -> setModified(true);

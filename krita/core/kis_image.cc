@@ -20,6 +20,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <limits.h>
+
 #include <qpainter.h>
 
 #include <qthread.h>
@@ -238,14 +240,14 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 	m_activeLayer = 0;
 	m_composeLayer = 0;
 	m_bgLayer = 0;
-	bd = m_bitDepth = 32; // XXX
+	bd = m_bitDepth = 4; // XXX
 	m_autoUpdate = false;
 	m_doUndo = true;
 
 	m_dcop = 0;
 	//dcopObject(); // build it
 	resizePixmap(false);
-	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth);
+	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * CHAR_BIT);
 
 	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, bd, cm, defaultColor);
 	m_composeLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE));
@@ -287,8 +289,8 @@ inline void KisImage::renderTile(KisTileSP dst, const KisTileSP src, const KisPa
 	if (!src -> data())
 		return;
 	
-	QRgb *drgb = dst -> data();
-	const QRgb *srgb = src -> data();
+	QRgb *drgb = (QRgb*)dst -> data();
+	const QRgb *srgb = (const QRgb*)src -> data();
 
 	if (m_cMode == cm_RGBA) {
 		for (int y = 0; y < TILE_SIZE; y++) {
@@ -657,15 +659,6 @@ void KisImage::compositeImage(const QRect& area, bool allDirty)
 		}
 	}
 
-#if 0
-	kdDebug() << "AREA ===========>\n";
-	QRect ur = area;
-	kdDebug() << "top = " << ur.top() << endl;
-	kdDebug() << "left = " << ur.left() << endl;
-	kdDebug() << "bottom = " << ur.bottom() << endl;
-	kdDebug() << "right = " << ur.right() << endl;
-#endif
-
 	emit updated(area);
 }
 
@@ -698,13 +691,17 @@ void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
 void KisImage::convertTileToPixmap(KisPaintDevice *dstDevice, int tileNo, QPixmap *pix)
 {
 	KisTileSP tile = dstDevice -> getTile(tileNo, tileNo);
-	uint *p = tile -> data();
+	uchar *src = tile -> data();
+	uchar bpp = tile -> bpp();
 
 	for (int y = 0; y < TILE_SIZE; y++) {
-		uint *ptr = (uint *)m_imgTile.scanLine(y);
+		uchar *dst = m_imgTile.scanLine(y);
 
-		for (int x = TILE_SIZE; x; x--)
-			*ptr++ = *p++;
+		for (int x = TILE_SIZE; x; x--) {
+			memcpy(dst, src, bpp);
+			dst += bpp;
+			src += bpp;
+		}
 	}
 
 	convertImageToPixmap(&m_imgTile, pix);
@@ -939,7 +936,7 @@ void KisImage::destroyPixmap()
 
 void KisImage::renderBg(KisPaintDevice *srcDevice, int tileNo)
 {
-	uint *ptr = srcDevice -> getTile(tileNo, tileNo) -> data();
+	uint *ptr = (uint*)srcDevice -> getTile(tileNo, tileNo) -> data();
 
 	for (int y = 0; y < TILE_SIZE; y++)
 		for (int x = 0; x < TILE_SIZE; x++) {

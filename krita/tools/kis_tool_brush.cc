@@ -135,7 +135,7 @@ bool BrushTool::paintCanvas(const QPoint& /* pos */)
 bool BrushTool::paint(const QPoint& pos)
 {
 	KisImageSP img = m_doc -> currentImg();
-	KisLayer *lay = img -> getCurrentLayer();
+	KisLayerSP lay = img -> getCurrentLayer();
 	int startx = pos.x() - m_hotSpotX;
 	int starty = pos.y() - m_hotSpotY;
 	QRect clipRect(startx, starty, m_brushWidth, m_brushHeight);
@@ -149,50 +149,24 @@ bool BrushTool::paint(const QPoint& pos)
 	int sy = clipRect.top() - starty;
 	int ex = clipRect.right() - startx;
 	int ey = clipRect.bottom() - starty;
-	double opacity = m_opacity / CHANNEL_MAX;
-	double invopacity = (CHANNEL_MAX - m_opacity) / CHANNEL_MAX;
+	uchar opacity = m_opacity;
+	uchar invopacity = (CHANNEL_MAX - m_opacity);
 
-	uchar *sl;
 	uchar bv, invbv;
-	uchar r, g, b, a;
-	int   v;
-	uint rgb;
+	int bpp = lay -> bpp();
+	uchar src2[4] = {(uchar)m_blue, (uchar)m_green, (uchar)m_red, CHANNEL_MAX}; // TODO FIXME
+	uchar dst[4];
 
 	for (int y = sy; y <= ey; y++) {
-		sl = m_brush -> scanline(y);
-
 		for (int x = sx; x <= ex; x++) {
-			lay -> pixel(startx + x, starty + y, &rgb);
-			r = qRed(rgb);
-			g = qGreen(rgb);
-			b = qBlue(rgb);
-			bv = *(sl + x);
+//			uchar *sl = m_brush -> scanline(y); // XXX If use pattern use sl instead of simple color
+			uchar *src = lay -> pixel(startx + x, starty + y);
+			
+			for (int w = 0; w < bpp; w++)
+				dst[w] = (src[w] * invopacity + src2[w] * opacity) / CHANNEL_MAX;
 
-			if (bv == 0)
-				continue;
-
-			invbv = CHANNEL_MAX - bv;
-			b = static_cast<int>(m_blue * opacity + r * invopacity);
-			g = static_cast<int>(m_green * opacity + g * invopacity);
-			r = static_cast<int>(m_red * opacity + r * invopacity);
-
-			if (m_alpha) {
-				a = qAlpha(rgb);
-				v = a + bv;
-
-				if (v < 0) 
-					v = 0;
-
-				if (v > CHANNEL_MAX) 
-					v = CHANNEL_MAX;
-
-				a = (uchar) v;
-				rgb = qRgba(r, g, b, a);
-			}
-			else 
-				rgb = qRgb(r, g, b);
-
-			lay -> setPixel(startx + x, starty + y, rgb, m_cmd);
+			src += bpp;
+			lay -> setPixel(startx + x, starty + y, dst, m_cmd);
 		}
 	}
 

@@ -41,12 +41,6 @@ static void swap(int *first, int *second)
 		*first ^= *second;
 		*second ^= *first;
 		*first ^= *second;
-#if 0
-		int swap = *first; 
-		
-		*first = *second; 
-		*second = swap;
-#endif
 	}
 }
 
@@ -281,11 +275,10 @@ void KisPainter::drawPolygon(const QPointArray& points, const QRect& rect)
 
 bool KisPainter::toLayer(const QRect& paintRect)
 {
-	kdDebug() << "KisPainter::toLayer\n";
-
-	KisImage *img;
+	return false; // BPP
+#if 0
+	KisImageSP img;
 	KisLayer *lay;
-	QImage qimg = m_painterPixmap.convertToImage();
 
 	if (!(img = m_doc -> currentImg()))
 		return false;
@@ -298,6 +291,10 @@ bool KisPainter::toLayer(const QRect& paintRect)
 	if (clipRect.isNull())
 		return false;
 
+	if (m_painterPixmap.width() < img -> width() || m_painterPixmap.height() < img -> height())
+		m_painterPixmap.resize(img -> width(), img -> height());
+
+	QImage qimg = m_painterPixmap.convertToImage();
 	bool colorBlending = true;
 	bool alpha = img -> colorMode() == cm_RGBA;
 	bool averageAlpha = true;
@@ -365,7 +362,6 @@ bool KisPainter::toLayer(const QRect& paintRect)
 	img -> markDirty(clipRect);
 	clearRectangle(clipRect);
 	return true;
+#endif
 }
-
-//#include "kis_painter.moc"
 

@@ -291,6 +291,8 @@ void KisTool::dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot)
 // pasete clip image
 bool KisTool::pasteClipImage(const QPoint& pos)
 {
+	return false; // BPP
+#if 0
 	KisView *view = getCurrentView();
 	KisImage *img = m_doc -> currentImg();
 
@@ -381,6 +383,7 @@ bool KisTool::pasteClipImage(const QPoint& pos)
 	}
 
 	return true;
+#endif
 }
 
 bool KisTool::shouldRepaint() const

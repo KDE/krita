@@ -36,7 +36,7 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_RGBA = 4;
 }
 
-KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() : 	m_pixmap(RENDER_WIDTH, RENDER_HEIGHT)
+KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() : 	m_pixmap(RENDER_WIDTH * 2, RENDER_HEIGHT * 2)
 {
 	m_buf = new QUANTUM[RENDER_WIDTH * RENDER_HEIGHT * MAX_CHANNEL_RGBA];
 }
@@ -131,7 +131,7 @@ void KisStrategyColorSpaceRGB::render(KisImageSP image, QPainter& painter, Q_INT
 
 		}
 		// kpixmapio has a nasty bug on powerpc that shows up as rendering errors
-		m_pixmap = QPixmap(img);
+		m_pixmap = m_pixmap.convertFromImage(img);
 #else
 		img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * QUANTUM_DEPTH, 0, 0, QImage::LittleEndian);
 		m_pixio.putImage(&m_pixmap, 0, 0, &img);

@@ -626,14 +626,13 @@ void KisPainter::paintAt(const QPoint & pos,
 	Q_INT32 x = pos.x() - m_hotSpotX;
 	Q_INT32 y = pos.y() - m_hotSpotY;
 	Q_INT32 calibratedPressure = pressure / 2;
-	// This is going to be sloooooow
-	if (calibratedPressure != m_lastPressure) {
-		KisAlphaMask * mask = m_brush -> mask(calibratedPressure);
-		m_brushWidth = mask -> width();
-		m_brushHeight = mask -> height();
-		computeDab(mask);
-		m_lastPressure = calibratedPressure;
-	}
+
+	// This is going to be sloooooow!
+	KisAlphaMask * mask = m_brush -> mask(calibratedPressure);
+	m_brushWidth = mask -> width();
+	m_brushHeight = mask -> height();
+	computeDab(mask);
+	m_lastPressure = calibratedPressure;
 
 	bitBlt( x,  y,  COMPOSITE_NORMAL, m_dab.data() );
 

@@ -248,7 +248,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 	setWidth(m_img.width());
 	setHeight(m_img.height());
 	createMasks(m_img);
-	m_data.clear();
+	m_data.clear(); // Save some memory, we're using enough of it as it is.
  	kdDebug() << "Brush: " << &name[0] << " spacing: " << spacing() << "\n";
 	setValid(true);
 	emit loadComplete(this);

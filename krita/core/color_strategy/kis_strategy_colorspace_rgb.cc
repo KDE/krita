@@ -37,7 +37,7 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_RGBA = 4;
 }
 
-ChannelInfo KisStrategyColorSpaceRGB::channelInfo[3] = { ChannelInfo("Red", 3), ChannelInfo("Green", 2), ChannelInfo("Blue", 1) };
+ChannelInfo KisStrategyColorSpaceRGB::channelInfo[4] = { ChannelInfo("Red", 3), ChannelInfo("Red", 2), ChannelInfo("Green", 1), ChannelInfo("Blue", 0) };
 
 KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() : 	m_pixmap(RENDER_WIDTH * 2, RENDER_HEIGHT * 2)
 {

@@ -1,5 +1,5 @@
 /*
- * colorrange.h -- Part of Krita
+ * histogram.h -- Part of Krita
  *
  * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *
@@ -49,19 +49,21 @@
 #include <kis_iterators.h>
 #include <kis_selection.h>
 
-#include "colorrange.h"
-#include "dlg_colorrange.h"
+#include "histogram.h"
+#include "dlg_histogram.h"
+#include "color_strategy/kis_strategy_colorspace.h"
+#include "kis_histogram.h"
 
-typedef KGenericFactory<ColorRange> ColorRangeFactory;
-K_EXPORT_COMPONENT_FACTORY( colorrange, ColorRangeFactory( "krita" ) )
+typedef KGenericFactory<Histogram> HistogramFactory;
+K_EXPORT_COMPONENT_FACTORY( histogram, HistogramFactory( "krita" ) )
 
-ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
+Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)
 {
-	setInstance(ColorRangeFactory::instance());
-	kdDebug() << "Colorrange\n";
+	setInstance(HistogramFactory::instance());
+	kdDebug() << "Histogram\n";
 
-	(void) new KAction(i18n("&ColorRange..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange");
+	(void) new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
 	
 	if ( !parent->inherits("KisView") )
 	{
@@ -71,25 +73,26 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
 	}
 }
 
-ColorRange::~ColorRange()
+Histogram::~Histogram()
 {
 }
 
-void ColorRange::slotActivated()
+void Histogram::slotActivated()
 {
-	DlgColorRange * dlgColorRange = new DlgColorRange(m_view, "ColorRange");
+	DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
 
 	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
-	KisSelectionSP selection = new KisSelection(layer, "colorrange");
-	
-	dlgColorRange -> setLayer(layer);
-	dlgColorRange -> setSelection(selection);
+	KisSelectionSP selection = new KisSelection(layer, "histogram");
+	ChannelInfo channel = layer -> colorStrategy() -> channelsInfo()[0];
+	KisHistogramSP histogram = new KisHistogram(layer, channel, LINEAR);
+	dlgHistogram -> setLayer(layer);
+	dlgHistogram -> setSelection(selection);
 
-	if (dlgColorRange -> exec() == QDialog::Accepted) {
+	if (dlgHistogram -> exec() == QDialog::Accepted) {
 		layer -> setActiveSelection(selection);
 	}
-	delete dlgColorRange;
+	delete dlgHistogram;
 }
 
-#include "colorrange.moc"
+#include "histogram.moc"
 

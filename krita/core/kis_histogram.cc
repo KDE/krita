@@ -1,0 +1,137 @@
+/*
+ *  Copyright (c) 2004 Boudewijn Rempt
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+#include <kdebug.h>
+
+#include "kis_histogram.h"
+#include "kis_layer.h"
+#include "kis_types.h"
+#include "kis_iterators.h"
+
+KisHistogram::KisHistogram(KisLayerSP layer, 
+			   const ChannelInfo & initialChannel, 
+			   const enumHistogramType type)
+{
+	m_layer = layer;
+	m_type = type;
+	// XXX: size needs to come from ChannelInfo, is determined by
+	// the channel depth.
+	Q_INT32 bins = QUANTUM_MAX;
+	m_values = vQuantums(bins, 0);
+	m_max = 0;
+	m_min = QUANTUM_MAX;
+	m_mean = QUANTUM_MAX / 2;
+	m_median = QUANTUM_MAX / 2;
+	m_stddev = QUANTUM_MAX / 2;
+	m_pixels = 0;
+	m_count = 0;
+	m_percentile = 100;
+	m_pixels = layer -> width() * layer -> height(); // XXX: extents once Casper is done.
+
+	computeHistogramFor(initialChannel);
+}
+
+KisHistogram::~KisHistogram()
+{
+}
+
+void KisHistogram::computeHistogramFor(const ChannelInfo & channel)
+{
+	Q_UINT32 total;
+
+	if (m_layer -> hasSelection()) {
+		// Get selection iterators
+		// XXX: not implemented yet
+	}
+	else {
+		// Get plain iterators
+		// XXX: refactor when iterator refactoring done...
+
+		// XXX: we don't actually need a command here, but the
+		// iterators demand it. Something for the redesign.
+		KisTileCommand* ktc = new KisTileCommand("histogram", (KisPaintDeviceSP)m_layer );
+
+		KisIteratorLineQuantum lineIt = m_layer -> iteratorQuantumSelectionBegin(ktc);
+		KisIteratorLineQuantum lastLine = m_layer -> iteratorQuantumSelectionEnd(ktc);
+		Q_INT32 depth = ::imgTypeDepth( m_layer -> typeWithAlpha() );
+		while( lineIt <= lastLine )
+		{
+			KisIteratorQuantum quantumIt = *lineIt;
+			KisIteratorQuantum lastQuantum = lineIt.end();
+			while( quantumIt <= lastQuantum )
+			{
+				for( int i = 0; i < depth; i++)
+				{
+					QUANTUM* data = quantumIt;
+					// Do computing
+					if (i == channel.pos()) {
+						QUANTUM datum = data[channel.pos()];
+						m_values[datum] = m_values[datum]++;
+						if (datum > m_max) m_max = datum;
+						if (datum < m_min) m_min = datum;
+						total += datum;
+						m_count++;
+
+					}
+					++quantumIt;
+				}
+				++quantumIt;
+			}
+			++lineIt;
+		}
+
+	}
+	m_mean = total / m_count;
+
+	dump();
+}
+
+
+void KisHistogram::dump() {
+	kdDebug() << "Histogram\n";
+
+	switch (m_type) {
+	case LINEAR:
+		kdDebug() << "Linear histogram\n";
+		break;
+	case LOGARITHMIC:
+		kdDebug() << "Logarithmic histogram\n";
+	}
+
+	kdDebug() << "Bins:\n";
+        vQuantums::iterator it;
+	QUANTUM i = 0;
+        for( it = m_values.begin(); it != m_values.end(); ++it ) {
+		kdDebug() << "Value " << QString().setNum(i) << ": " <<  QString().setNum((QUANTUM)(*it)) << "\n";
+		i++;
+	}
+
+	kdDebug() << "\n";
+
+	kdDebug() << "Max: " << QString().setNum(m_max) << "\n";
+	kdDebug() << "Max: " << QString().setNum(m_min) << "\n";
+	kdDebug() << "Max: " << QString().setNum(m_mean) << "\n";
+	kdDebug() << "Max: " << QString().setNum(m_median) << "\n";
+	kdDebug() << "Max: " << QString().setNum(m_stddev) << "\n";
+	kdDebug() << "Max: " << QString().setNum(m_pixels) << "\n";
+	kdDebug() << "Max: " << QString().setNum(m_count) << "\n";
+	kdDebug() << "Max: " << QString().setNum(m_percentile) << "\n";
+
+	kdDebug() << "\n";
+
+}

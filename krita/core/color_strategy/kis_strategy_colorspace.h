@@ -61,7 +61,7 @@ public:
 	virtual void nativeColor(QRgb rgb, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst) = 0;
 
-	virtual ChannelInfo* channelsInfo() const = 0;
+	virtual ChannelInfo * channelsInfo() const = 0;
 
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
 
@@ -69,24 +69,24 @@ public:
 	virtual QImage convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const = 0;
 
 	virtual void tileBlt(Q_INT32 stride,
-			QUANTUM *dst, 
-			Q_INT32 dststride,
-			QUANTUM *src, 
-			Q_INT32 srcstride,
-			Q_INT32 rows, 
-			Q_INT32 cols, 
-			CompositeOp op) const = 0;
-
+			     QUANTUM *dst, 
+			     Q_INT32 dststride,
+			     QUANTUM *src, 
+			     Q_INT32 srcstride,
+			     Q_INT32 rows, 
+			     Q_INT32 cols, 
+			     CompositeOp op) const = 0;
+	
 	virtual void tileBlt(Q_INT32 stride,
-			QUANTUM *dst, 
-			Q_INT32 dststride,
-			QUANTUM *src, 
-			Q_INT32 srcstride,
-			QUANTUM opacity,
-			Q_INT32 rows, 
-			Q_INT32 cols, 
-			CompositeOp op) const = 0;
-
+			     QUANTUM *dst, 
+			     Q_INT32 dststride,
+			     QUANTUM *src, 
+			     Q_INT32 srcstride,
+			     QUANTUM opacity,
+			     Q_INT32 rows, 
+			     Q_INT32 cols, 
+			     CompositeOp op) const = 0;
+	
 	virtual void computeDuplicatePixel(KisIteratorQuantum* dst, KisIteratorQuantum* dab, KisIteratorQuantum* src) =0;
 
 private:

@@ -23,6 +23,8 @@
 #include <ksharedptr.h>
 #include <koColor.h>
 
+#include "kis_global.h"
+
 class KisImage;
 typedef KSharedPtr<KisImage> KisImageSP;
 typedef QValueVector<KisImageSP> vKisImageSP;
@@ -71,6 +73,18 @@ typedef QValueVector<KisTileSP> vKisTileSP;
 typedef vKisTileSP::iterator vKisTileSP_it;
 typedef vKisTileSP::const_iterator vKisTileSP_cit;
 
+class KisHistogram;
+typedef KSharedPtr<KisHistogram> KisHistogramSP;
+typedef QValueVector<KisHistogramSP> vKisHistogramSP;
+typedef vKisHistogramSP::iterator vKisHistogramSP_it;
+typedef vKisHistogramSP::const_iterator vKisHistogramSP_cit;
+
+
+class KisTool;
+typedef QValueVector<KisTool*> vKisTool;
+typedef vKisTool::iterator vKisTool_it;
+typedef vKisTool::const_iterator vKisTool_cit;
+
 class KisTileMgr;
 typedef KSharedPtr<KisTileMgr> KisTileMgrSP;
 
@@ -81,11 +95,6 @@ typedef QValueVector<QPoint> vKisSegments;
 
 class KoColor;
 typedef QValueVector<KoColor> KoColorMap;
-
-class KisTool;
-typedef QValueVector<KisTool*> vKisTool;
-typedef vKisTool::iterator vKisTool_it;
-typedef vKisTool::const_iterator vKisTool_cit;
 
 class KisStrategyColorSpace;
 typedef KSharedPtr<KisStrategyColorSpace> KisStrategyColorSpaceSP;
@@ -99,6 +108,8 @@ typedef KSharedPtr<KisMemento> KisMementoSP;
 
 class KisAlphaMask;
 typedef KSharedPtr<KisAlphaMask> KisAlphaMaskSP;
+
+typedef QValueVector<QUANTUM> vQuantums;
 
 #endif // KISTYPES_H_
 

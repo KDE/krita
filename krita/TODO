@@ -54,7 +54,9 @@ User Interface
 	  on rendered QImage, or on scaled image?)
 	* Allow an active tool for every pointer present in X.
 	* Remove: current tool properties dialogs
-
+	* File/Open should list all image types Krita can handle, and simply
+          import non-native images, instead of forcing the user to use the import
+          image menu item.
 Tools
 
 	* All tools must have a tool options tab

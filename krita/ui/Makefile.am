@@ -31,7 +31,8 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_itemchooser.cc \
     kis_previewwidget.cc \
     kis_rgb_widget.cc \
-    kis_hsv_widget.cc 
+    kis_hsv_widget.cc \
+    kis_histogram_widget.cc
 
 libkisui_la_METASOURCES = AUTO
 SUBDIRS = labels dialogs

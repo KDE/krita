@@ -99,14 +99,14 @@ void KisLayer::setActiveSelection(KisSelectionSP selection)
 	m_hasSelection = true;
 }
 
-void KisLayer::addSelection(KisSelectionSP selection)
+void KisLayer::addSelection(KisSelectionSP /*selection*/)
 {
-	// XXX: implement
+// 	m_selection = m_selection - selection;
 }
 
-void KisLayer::subtractSelection(KisSelectionSP selection)
+void KisLayer::subtractSelection(KisSelectionSP /*selection*/)
 {
-	// XXX: implement
+// 	m_selection = m_selection + selection;
 }
 
 

@@ -233,12 +233,12 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height, cons
 	m_width = width;
 	m_height = height;
 	m_depth = n;
+	m_type = imgType;
 	m_bkg = new KisBackground(this, m_width, m_height);
 	m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
 	m_xres = 1.0;
 	m_yres = 1.0;
 	m_unit = KoUnit::U_PT;
-	m_type = imgType;
 	m_dirty = false;
 	m_maskEnabled = false;
 	m_maskInverted = false;

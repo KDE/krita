@@ -106,17 +106,6 @@ public slots:
 	void next_layer();
 	void previous_layer();
 
-
-	void layer_scale_smooth();
-	void layer_scale_rough();
-	void layerScale(bool smooth);
-	void layer_rotate180();
-	void layer_rotateleft90();
-	void layer_rotateright90();
-	void layer_rotate_custom();
-	void layer_mirrorX();
-	void layer_mirrorY();
-
 	// image action slots
 	void slotImportImage();
 	void export_image();
@@ -182,6 +171,15 @@ private slots:
 	void layerLevel(int n);
 	void layersUpdated();
 	void layersUpdated(KisImageSP img);
+	void layer_scale_smooth();
+	void layer_scale_rough();
+	void layerScale(bool smooth);
+	void layer_rotate180();
+	void layer_rotateleft90();
+	void layer_rotateright90();
+	void layer_rotate_custom();
+	void layer_mirrorX();
+	void layer_mirrorY();
 	void placeSidebarLeft();
 	void merge_all_layers();
 	void merge_visible_layers();

@@ -1276,14 +1276,14 @@ void KisView::save_layer_as_image()
 
 		switch (ib.buildFile(url, dst)) {
 			case KisImageBuilder_RESULT_UNSUPPORTED:
-				KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving file"));
+				KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
 				break;
 			case KisImageBuilder_RESULT_INVALID_ARG:
-				KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving file"));
+				KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving File"));
 				break;
 			case KisImageBuilder_RESULT_NO_URI:
 			case KisImageBuilder_RESULT_NOT_LOCAL:
-				KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving file"));
+				KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving File"));
 				break;
 			case KisImageBuilder_RESULT_BAD_FETCH:
 				KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>WdgImageSize</class>
 <widget class="QWidget">
     <property name="name">
@@ -170,9 +170,6 @@
                     <property name="text">
                         <string>&amp;Constrain Proportions</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -261,9 +258,6 @@
                     <property name="text">
                         <string>&amp;Scale</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+S</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -274,9 +268,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Resize</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+R</string>
                     </property>
                 </widget>
             </grid>

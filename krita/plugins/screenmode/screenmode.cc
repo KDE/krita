@@ -86,7 +86,7 @@ ScreenMode::~ScreenMode()
 
 void ScreenMode::slotFullScreen()
 {
-	m_view -> setWindowState( m_view -> windowState() ^ WindowFullScreen);
+	//m_view -> setWindowState( m_view -> windowState() ^ WindowFullScreen);
 }
 
 void ScreenMode::slotFullScreenMenu()

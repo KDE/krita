@@ -325,6 +325,18 @@ void KisImage::scale(double sx, double sy)
 	invalidate();
 }
 
+void KisImage::convertTo(const enumImgType& type)
+{
+	if (m_layers.empty()) return; // Nothing to convert
+	vKisLayerSP_it it;
+	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
+		(*it) -> convertTo(type);
+	}
+	m_projection -> convertTo(type);
+	invalidate();
+}
+
+
 enumImgType KisImage::imgType() const
 {
 	switch (m_type) {

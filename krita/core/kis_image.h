@@ -67,6 +67,7 @@ public:
 	void resize(Q_INT32 w, Q_INT32 h);
 	void resize(const QRect& rc);
 	void scale(double sx, double sy);
+	void convertTo(const enumImgType& type);
 	void enableUndo(KoCommandHistory *history);
 
 	enumImgType imgType() const;

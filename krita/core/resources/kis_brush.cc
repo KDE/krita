@@ -213,6 +213,7 @@ KisLayerSP KisBrush::image(KisStrategyColorSpaceSP colorSpace, double pressure, 
 	KisLayer *layer = new KisLayer(colorSpace, "brush image");
 
 	for (int y = 0; y < outputHeight; y++) {
+		KisHLineIterator iter = layer -> createHLineIterator( 0, y, outputWidth, true);
 		for (int x = 0; x < outputWidth; x++) {
 
 			QRgb pixel = outputImage.pixel(x, y);
@@ -232,7 +233,8 @@ KisLayerSP KisBrush::image(KisStrategyColorSpaceSP colorSpace, double pressure, 
 			QColor colour = QColor(red, green, blue);
 			QUANTUM a = (alpha * OPACITY_OPAQUE) / 255;
 
-			layer -> setPixel(x, y, colour, a);
+			layer -> colorStrategy() -> nativeColor(colour, a, iter);
+			iter++;
 		}
 	}
 

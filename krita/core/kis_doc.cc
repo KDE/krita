@@ -42,7 +42,6 @@
 
 #include "kis_doc.h"
 #include "kis_view.h"
-#include "kis_shell.h"
 #include "kis_factory.h"
 #include "kis_dlg_new.h"
 #include "kis_image.h"

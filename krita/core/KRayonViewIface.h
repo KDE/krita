@@ -51,7 +51,6 @@ public:
 	void export_image();
 	void add_new_image_tab();
 	void remove_current_image_tab();
-// 	void resizeCurrentImage();
 
 	// settings action slots
 	void preferences();

@@ -79,16 +79,13 @@ ColorRange::~ColorRange()
 
 void ColorRange::slotActivated()
 {
-	DlgColorRange * dlgColorRange = new DlgColorRange(m_view, "ColorRange");
-
 	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
-	KisSelectionSP selection = new KisSelection(KisPaintDeviceSP(layer.data()), "colorrange");
-
-	dlgColorRange -> setLayer(layer);
-	dlgColorRange -> setSelection(selection);
+	if (!layer) return;
+	
+	DlgColorRange * dlgColorRange = new DlgColorRange(layer, m_view, "ColorRange");
 
 	if (dlgColorRange -> exec() == QDialog::Accepted) {
-		layer -> setSelection(selection);
+		// XXX: Fix a way to make the dialog work on a copy of the selection...
 	}
 	delete dlgColorRange;
 }

@@ -42,13 +42,12 @@ public:
 
 	virtual ~KisSelection();
 
-	// Returns selectedness, or 0 if invalid coordinates
-	QUANTUM selected(Q_INT32 x, Q_INT32 y);
+// 	// Returns selectedness, or 0 if invalid coordinates
+// 	QUANTUM selected(Q_INT32 x, Q_INT32 y);
+// 
+// 	void setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
 
-	void setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
-
-	QImage maskImage() const;
-
+	QImage maskImage();
 
 	void select(QRect r);
 

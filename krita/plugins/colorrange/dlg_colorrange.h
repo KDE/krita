@@ -39,12 +39,8 @@ class DlgColorRange: public KDialogBase {
 
 public:
 
-	DlgColorRange(QWidget * parent = 0,
-			 const char* name = 0);
+	DlgColorRange(KisLayerSP layer, QWidget * parent = 0, const char* name = 0);
 	~DlgColorRange();
-
-	void setLayer(KisLayerSP layer);
-	void setSelection(KisSelectionSP selection);
 
 private slots:
 
@@ -60,7 +56,12 @@ private slots:
 	void slotSliderMoved(int value);
 	void slotSelectionTypeChanged(int index);
 	void slotPreviewTypeChanged(int index);
+	void updatePreview();
 
+
+private:
+	QImage createMask(KisSelectionSP selection, KisLayerSP layer);
+	
 private:
 
 	WdgColorRange * m_page;

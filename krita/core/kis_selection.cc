@@ -58,26 +58,48 @@ KisSelection::~KisSelection()
 {
 }
 
-QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y)
-{
-	QColor c;
-	QUANTUM opacity;
-	if (pixel(x, y, &c, &opacity)) {
-		return opacity;
-	}
-	else {
-		return MIN_SELECTED;
-	}
-}
+// QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y)
+// {
+// 	QColor c;
+// 	QUANTUM opacity;
+// 	if (pixel(x, y, &c, &opacity)) {
+// 		return opacity;
+// 	}
+// 	else {
+// 		return MIN_SELECTED;
+// 	}
+// }
+// 
+// void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
+// {
+// 	setPixel(x, y, m_maskColor, s);
+// }
 
-void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
+QImage KisSelection::maskImage()
 {
-	setPixel(x, y, m_maskColor, s);
-}
-
-QImage KisSelection::maskImage() const
-{
-	return QImage();
+	Q_INT32 x, y, w, h, y2, x2;
+	m_parentLayer -> exactBounds(x, y, w, h);
+	QImage img = QImage(w, h, 32);
+	uint black = qRgb(0, 0, 0);
+	uint white = qRgb(255, 255, 255);
+	
+	for (y2 = y; y2 < h - y; ++y2) {
+		KisHLineIteratorPixel it = createHLineIterator(x, y, w, false);
+		x2 = 0;
+		while (!it.isDone()) {
+			// We have always just one 8-bit channel, so this is safe.
+			if (it.pixel().alpha() > SELECTION_THRESHOLD) {
+				
+				img.setPixel(x2, y2, black);
+			}
+			else {
+				img.setPixel(x2, y2, white);
+			}
+			++x2;
+			++it;
+		}
+	}
+	return img;
 }
 
 void KisSelection::select(QRect r)
@@ -101,7 +123,7 @@ void KisSelection::invert(QRect rect)
 	while ( ! it.isDone() )
 	{
 		// CBR this is wrong only first byte is inverted
-		// BSAR: But we have only one byte in this color model. 
+		// BSAR: But we have always only one byte in this color model :-).
 		*(it.rawData()) = QUANTUM_MAX - *(it.rawData());
 		++it;
 	}

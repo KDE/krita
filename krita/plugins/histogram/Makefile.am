@@ -17,8 +17,8 @@ INCLUDES  = -I$(srcdir)/../../core \
 
 kde_module_LTLIBRARIES = kritahistogram.la
 
-kritahistogram_la_SOURCES = histogram.cc dlg_histogram.cc 
-noinst_HEADERS = dlg_histogram.h histogram.h
+kritahistogram_la_SOURCES = histogram.cc dlg_histogram.cc kis_histogram.cc wdghistogram.ui kis_histogram_widget.cc
+noinst_HEADERS = dlg_histogram.h histogram.h kis_histogram.h wdghistogram.h kis_histogram_widget.h
 
 
 kritahistogram_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

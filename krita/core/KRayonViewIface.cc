@@ -96,10 +96,6 @@ void KRayonViewIface::remove_current_image_tab()
     m_view->remove_current_image_tab();
 }
 
-// void KRayonViewIface::resizeCurrentImage()
-// {
-//     m_view->resizeCurrentImage();
-// }
 
 void KRayonViewIface::preferences()
 {

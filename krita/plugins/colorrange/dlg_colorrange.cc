@@ -32,14 +32,16 @@
 
 #include "kis_layer.h"
 #include "kis_selection.h"
+#include "kis_paint_device.h"
+#include "kis_iterators_pixel.h"
 
 #include "dlg_colorrange.h"
 #include "wdg_colorrange.h"
 
 
-DlgColorRange::DlgColorRange( QWidget *  parent,
-			      const char * name)
-	: super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok)
+DlgColorRange::DlgColorRange( KisLayerSP layer, QWidget *  parent, const char * name)
+	: super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok),
+	m_layer(layer)
 {
 	m_page = new WdgColorRange(this, "color_range");
 	setCaption(i18n("Color Range"));
@@ -83,6 +85,10 @@ DlgColorRange::DlgColorRange( QWidget *  parent,
 	m_page -> bnSaveColorRange -> setEnabled(false);
 	m_page -> cmbSelectionPreview -> setEnabled(false);
         m_page -> sldrFuzziness->setValue( 150 );
+
+        if (m_layer) m_selection = m_layer -> selection();
+        updatePreview();
+	
 }
 
 DlgColorRange::~DlgColorRange()
@@ -90,20 +96,18 @@ DlgColorRange::~DlgColorRange()
 	delete m_page;
 }
 
-void DlgColorRange::setLayer(KisLayerSP layer)
-{
-	m_layer = layer;
-}
 
-void DlgColorRange::setSelection(KisSelectionSP selection)
+void DlgColorRange::updatePreview()
 {
-	m_selection = selection;
-	int w, h;
-	w = m_page -> pixSelection -> width();
-	h = m_page -> pixSelection -> height();
-
-	// XXX: hardcoded size
-	QPixmap pix = QPixmap(m_selection -> maskImage().scale(400, 350, QImage::ScaleMin));
+	if (!m_selection) return;
+	
+	Q_INT32 x, y, w, h;
+	m_layer -> exactBounds(x, y, w, h);
+		
+	m_selection -> setMaskColor(Qt::blue);
+	QPixmap pix = QPixmap(m_selection -> convertToQImage(0, x, y, w, h));
+	m_selection -> setMaskColor(Qt::white); // XXX: Change when mask colour becomes configurable
+// 	createMask(m_selection, m_layer).smoothScale(400, 400, QImage::ScaleMin));
 
 	m_page -> pixSelection -> setPixmap(pix);
 }
@@ -136,6 +140,8 @@ void DlgColorRange::slotSave()
 
 void DlgColorRange::slotInvertClicked()
 {
+	m_selection -> invert();
+	updatePreview();
 }
 
 void DlgColorRange::slotFuzzinessChanged(int value)

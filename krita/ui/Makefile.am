@@ -29,7 +29,6 @@ libkisui_la_SOURCES = \
     kis_previewwidget.cc \
     kis_rgb_widget.cc \
     kis_hsv_widget.cc \
-    kis_histogram_widget.cc \
     kis_wdg_autobrush.ui \
     kis_autobrush.cc \
     kis_brush_chooser.cc \
@@ -48,7 +47,6 @@ libkisui_la_SOURCES = \
     kis_filter_box.cc \
     kis_palette_widget.cc \
     wdgmatrix.ui \
-    wdghistogram.ui \
     kis_previewwidgetbase.ui \
     wdgselectionoptions.ui \
     wdgnewimage.ui \
@@ -77,7 +75,6 @@ noinst_HEADERS = kis_dlg_preferences.h \
     kis_previewwidget.h \
     kis_rgb_widget.h \
     kis_hsv_widget.h \
-    kis_histogram_widget.h \
     kis_autobrush.h \
     kis_brush_chooser.h \
     kis_pattern_chooser.h \
@@ -90,7 +87,6 @@ noinst_HEADERS = kis_dlg_preferences.h \
     kis_basedocker.h \
     kis_filter_box.h \
     wdgmatrix.h \
-    wdghistogram.h \
     kis_previewwidgetbase.h \
     kis_previewdialog.h \
     wdgnewimage.h \

@@ -33,6 +33,21 @@ class KisTileCommand;
 class KisFilterConfigurationWidget;
 class KisPreviewDialog;
 
+
+template<class F>
+KisFilterSP createFilter(KisView* view)
+{
+	KisFilterSP kfi;
+	if( view->filterRegistry()->exist( F::sname() ) )
+	{
+		kfi = view->filterRegistry()->get( F::sname() );
+	} else {
+		kfi = new F(view);
+		view->filterRegistry()->add(kfi);
+	}
+	return kfi;
+}
+
 class KisFilterConfiguration {
 };
 

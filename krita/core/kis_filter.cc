@@ -87,6 +87,7 @@ void KisFilter::slotActivated()
 
 	img->undoAdapter()->addCommand( ktc );
 	img->notify();
-
+	delete m_dialog;
+	delete config;
 }
 #include "kis_filter.moc"

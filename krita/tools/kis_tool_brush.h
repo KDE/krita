@@ -27,11 +27,6 @@
 #include "kis_tool.h"
 #include "kis_tool_paint.h"
 
-#define noSPOTTYLINE
-#define SLOWLINE
-#define noTRACERLINE
-#define noPERICOLINE
-
 class KisToolBrush : public KisToolPaint {
 	typedef KisToolPaint super;
 
@@ -42,10 +37,7 @@ public:
         virtual void setup(KActionCollection *collection);
 
 	virtual void update(KisCanvasSubject *subject);
-#if defined TRACERLINE	
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
-#endif
+
 	virtual void mousePress(QMouseEvent *e);
 	virtual void mouseMove(QMouseEvent *e);
 	virtual void mouseRelease(QMouseEvent *e);
@@ -53,19 +45,19 @@ public:
 
 
 private:
+	virtual void paintLine(const QPoint & pos1,
+			       const QPoint & pos2,
+			       const Q_INT32 pressure,
+			       const Q_INT32 xtilt,
+			       const Q_INT32 ytilt);
 
 	virtual void paint(const QPoint & pos,
 			   const Q_INT32 pressure,
 			   const Q_INT32 xtilt,
 			   const Q_INT32 ytilt);
 
-	virtual void initPaint();
+	virtual void initPaint(const QPoint & pos);
 	virtual void endPaint();
-#if defined TRACERLINE
-	void paintLine(Q_INT32 s = 0);
-	void paintLine(QPainter& gc, const QRect& rc, Q_INT32 s = 0);
-	QPoint translateImageXYtoViewPort(const QPoint& p);
-#endif
 
 	enumBrushMode m_mode;
 	KisPainter *m_painter;
@@ -81,18 +73,9 @@ private:
 
         Q_INT32 m_spacing;
 
-#if defined PERICOLINE
-	Q_INT32 m_x1, m_y1;
-#endif
-
-#if defined SLOWLINE
         QPoint m_dragStart;
         float m_dragDist;
-#endif
 
-#if defined TRACERLINE
-	QPointArray *m_points;
-#endif
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;
 

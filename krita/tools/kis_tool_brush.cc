@@ -44,32 +44,20 @@ KisToolBrush::KisToolBrush()
 	  m_brushWidth ( 0 ),
 	  m_brushHeight ( 0 ),
 	  m_spacing ( 1 ),
-#if defined SLOWLINE
 	  m_dragDist ( 0 ),
-#endif
-# if defined PERICOLINE
-	  m_x1 ( 0 ),
-	  m_y1 ( 0 ),
-#endif
 	  m_usePattern ( false ),
 	  m_useGradient ( false )
 {
+#if 0 // until we got a decent cursor
 	setCursor(KisCursor::crossCursor());
-
+#endif
         m_painter = 0;
 	m_dab = 0;
 	m_currentImage = 0;
-
-#if defined TRACERLINE
-	m_points = 0;
-#endif
 }
 
 KisToolBrush::~KisToolBrush()
 {
-#if defined TRACERLINE
-	if (m_points) delete m_points;
-#endif
 }
 
 void KisToolBrush::update(KisCanvasSubject *subject)
@@ -79,19 +67,6 @@ void KisToolBrush::update(KisCanvasSubject *subject)
 
 	super::update(m_subject);
 }
-#if defined TRACERLINE
-void KisToolBrush::paint(QPainter& gc)
-{
- 	if (m_mode == PAINT)
- 		paintLine(gc, QRect());
-}
-
-void KisToolBrush::paint(QPainter& gc, const QRect& rc)
-{
- 	if (m_mode == PAINT)
- 		paintLine(gc, rc);
-}
-#endif
 
 void KisToolBrush::mousePress(QMouseEvent *e)
 {
@@ -100,28 +75,9 @@ void KisToolBrush::mousePress(QMouseEvent *e)
         if (!m_subject->currentBrush()) return;
 
         if (e->button() == QMouseEvent::LeftButton) {
-		kdDebug() << "mouse press button:" << e->button() << "\n";
 		m_mode = PAINT;
-		initPaint();
+		initPaint(e -> pos());
 
-#if defined SLOWLINE
-		// Remember the startposition of the stroke
-		m_dragStart = e -> pos();
-		m_dragDist = 0;
-#endif
-
-#if defined TRACERLINE
-		if (m_points) delete m_points;
-
-		m_points = new QPointArray(1);
-		
-		m_points -> setPoint(0, translateImageXYtoViewPort( e->pos()));
-#endif		
-
-#if defined PERICOLINE
-		m_x1 = e -> pos().x();
-		m_y1 = e -> pos().y();
-#endif
                 paint(e->pos(), 128, 0, 0);
 		m_currentImage -> notify(e -> pos().x(),
  				       e -> pos().y(),
@@ -135,265 +91,26 @@ void KisToolBrush::mouseRelease(QMouseEvent* e)
 {
 	if (e->button() == QMouseEvent::LeftButton && m_mode == PAINT) {
 		endPaint();
-# if defined PERICOLINE
-		m_x1 = 0;
-		m_y1 = 0;
-# endif		
         }
 }
 
 
-#if defined TRACERLINE
-void KisToolBrush::mouseMove(QMouseEvent *e) {
-	if (m_mode == PAINT) {
-		Q_INT32 s = m_points -> size();
-		m_points -> resize(s + 1);
-		m_points -> setPoint( s, translateImageXYtoViewPort( e->pos()));
-		paintLine( s - 1 );
-		return;
-	}
-}
-#endif
-
-#if defined SLOWLINE
 void KisToolBrush::mouseMove(QMouseEvent *e)
 {
 	if (m_mode == PAINT) {
-  		QPoint pos = e -> pos();
-		Q_INT32 x1, y1, x2, y2;
-
-		x1 = m_dragStart.x();
-		y1 = m_dragStart.y();
-
-		x2 = pos.x();
-		y2 = pos.y();
-
-		QRect r;
-		if (x1 < x2 ) {
-			if (y1 < y2) {
-				r = QRect(x1, y1, x2 - x1 + m_brushWidth, y2 - y1 + m_brushHeight);
-			}
-			else {
-				r = QRect(x1, y2, x2 - x1 + m_brushWidth, y1 - y2 + m_brushHeight);
-			}
-		}
-		else {
-			if (y1 < y2) {
-				r = QRect(x2, y1, x1 - x2 + m_brushWidth, y2 - y1 + m_brushHeight);
-			}
-			else {
-				r = QRect(x2, y2, x1 - x2 + m_brushWidth, y1 - y2 + m_brushHeight);
-			}
-		}
-
-		KisVector end(x2, y2);
-		KisVector start(x1, y1);
-
-		KisVector dragVec = end - start;
-		float savedDist = m_dragDist;
-		float newDist = dragVec.length();
-		float dist = savedDist + newDist;
-
-		if (static_cast<int>(dist) < m_spacing) {
-			m_dragDist += newDist;
-			m_dragStart = pos;
-			return;
-		}
-
-		m_dragDist = 0;
-#if 0
-		dragVec.normalize(); // XX: enabling this gives a link error, so copied the relevant code below.
-#endif
-		double length, ilength;
-		double x, y, z;
-		x = dragVec.x();
-		y = dragVec.y();
-		z = dragVec.z();
-		length = x * x + y * y + z * z;
-		length = sqrt (length);
-
-		if (length)
-		{
-			ilength = 1/length;
-			x *= ilength;
-			y *= ilength;
-			z *= ilength;
-		}
-
-		dragVec.setX(x);
-		dragVec.setY(y);
-		dragVec.setZ(z);
-
-		KisVector step = start;
-
-		while (dist >= m_spacing) {
-			if (savedDist > 0) {
-				step += dragVec * (m_spacing - savedDist);
-				savedDist -= m_spacing;
-			}
-			else {
-				step += dragVec * m_spacing;
-			}
-			QPoint p(qRound(step.x()), qRound(step.y()));
-			paint(p, 128, 0, 0);
-			dist -= m_spacing;
-		}
-		m_currentImage -> notify(r);
-
-		
-		if (dist > 0)
-			m_dragDist = dist;
-
-		m_dragStart = pos;
-         }
-}
-#endif
-
-#if defined SPOTTYLINE
-void KisToolBrush::mouseMove(QMouseEvent *e)
-{
-	// XXX: Funny, this: the mouse button of a mouse-move event is always 0; this problably means
-	// I should be checking the status of every button here.
-	// XXX: Even if I accept all events, playing around with the stylus gives two or three spurious
-	// mouse-move events if I lift the stylus from the pad.
-	if (m_mode == PAINT) {
-			paint(e->pos(), 128, 0, 0);
-			m_currentImage -> notify(e -> pos().x(),
-					       e -> pos().y(),
-					       m_dab -> width(),
-					       m_dab -> height());
-
+		paintLine(m_dragStart, e -> pos(), 128, 0, 0);
 	}
 }
-#endif
-
-#if defined PERICOLINE
-void KisToolBrush::mouseMove(QMouseEvent *e)
-{
-	if (m_mode == PAINT) {
-		Q_INT32 x1, y1, x2, y2;
-
-		x1 = m_x1;
-		y1 = m_y1;
-
-		x2 = e->pos().x();
-		y2 = e->pos().y();
-
-		QRect r;
-		if (x1 < x2 ) {
-			if (y1 < y2) {
-				r = QRect(x1, y1, x2 - x1 + m_brushWidth, y2 - y1 + m_brushHeight);
-			}
-			else {
-				r = QRect(x1, y2, x2 - x1 + m_brushWidth, y1 - y2 + m_brushHeight);
-			}
-		}
-		else {
-			if (y1 < y2) {
-				r = QRect(x2, y1, x1 - x2 + m_brushWidth, y2 - y1 + m_brushHeight);
-			}
-			else {
-				r = QRect(x2, y2, x1 - x2 + m_brushWidth, y1 - y2 + m_brushHeight);
-			}
-		}
-
-		m_x1 = x2;
-		m_y1 = y2;
-
-		if (x1 == x2 && y1 == y2) {
-			kdDebug() << "Same! (" << x2 << "," << y2 << ") - (" << x1 << "," << y1 << ")\n";
-		}
-// 		else if ((abs(x1 - x2) < m_spacing) && (abs(y1 - y2) < m_spacing)) {
-// 			kdDebug() << "Too close! (" << x2 << "," << y2 << ") - (" << x1 << "," << y1 << ")\n";
-// 		}
-// 		else if ((abs(x1 - x2) == m_spacing) && (abs(y1 - y2) == m_spacing)) {
-// 			kdDebug() << "Spot on! (" << x2 << "," << y2 << ") - (" << x1 << "," << y1 << ")\n";
-// 			paint(e->pos(), 128, 0, 0);
-// 		}
-		else {
-			// Draw a line
-			int diffX;
-			int diffY;
-
-			int runX;
-			int runY;
-
-			Q_INT32 tmp; // For swapping
-
-			diffX = x1 - x2;
-			diffY = y1 - y2;
-
-			if (abs (diffX) > abs(diffY) ) {
-
-				if ( diffX < 0 ) {
-					diffX = - diffX;
-					diffY = - diffY;
-
-					tmp = x1;
-					x1 = x2;
-					x2 = tmp;
-					
-					tmp = y1;
-					y1 = y2;
-					y2 = tmp;
-				}
-				// draw first point
-				paint(QPoint(x2, y2), 128, 0, 0);
-
-				// draw middle points
-				for ( runX = 1; runX < diffX; runX ++ ) {
-					runY = diffY * runX / diffX;
-					paint(QPoint(runX + x2, runY + y2), 128, 0, 0);
-				}
-				// draw last point
-				paint(QPoint(x1, y1), 128, 0, 0);
-			}			
-			else {
-				if ( diffY < 0 ) {
-					// swap coordinates
-					diffX = - diffX;
-					diffY = - diffY;
-
-					tmp = x1;
-					x1 = x2;
-					x2 = tmp;
-
-					tmp = y1;
-					y1 = y2;
-					y2 = tmp;
-						
-
-				}
-				// draw first point
-				paint(QPoint(x2, y2), 128, 0, 0);
-
-				// draw middle points
-				for( runY = 1; runY < diffY; runY++ )
-				{
-					runX = diffX * runY / diffY;
-					paint(QPoint(runX + x2, runY + y2), 128, 0, 0);
-
-				}
-				// draw last point
-				paint(QPoint(x1, y1), 128, 0, 0);
-			
-			}
-			m_currentImage -> notify(r);
-		}
-	}
-}
-
-#endif
 
 void KisToolBrush::tabletEvent(QTabletEvent *e)
 {
          if (e->device() == QTabletEvent::Stylus) {
 		 if (!m_subject) {
-			 e->accept();
+			 e -> accept();
 			 return;
 		 }
 
-		 if (!m_subject->currentBrush()) {
+		 if (!m_subject -> currentBrush()) {
 			 e->accept();
 			 return;
 		 }
@@ -405,20 +122,27 @@ void KisToolBrush::tabletEvent(QTabletEvent *e)
 		 }
 		 else if (pressure >= 5 && m_mode == HOVER) {
 			 m_mode = PAINT_STYLUS;
-			 initPaint();
-			 paint(e->pos(), e->pressure(), e->xTilt(), e->yTilt());
+			 initPaint(e -> pos());
+			 paint(e -> pos(), e->pressure(), e->xTilt(), e->yTilt());
+			 m_currentImage -> notify(e -> pos().x(),
+						  e -> pos().y(),
+						  m_dab -> width(),
+						  m_dab -> height());
+
 		 }
 		 else if (pressure >= 5 && m_mode == PAINT_STYLUS) {
-			 kdDebug() << "Tablet: painting " << e->pos().x() << ", " << e -> pos().y() << "\n";
-			 paint(e->pos(), e->pressure(), e->xTilt(), e->yTilt());
+			 paintLine(m_dragStart, e -> pos(), pressure, e -> xTilt(), e -> yTilt());
 		 }
          }
-	 e->accept();
+	 e -> accept();
 }
 
 
-void KisToolBrush::initPaint()
+void KisToolBrush::initPaint(const QPoint & pos)
 {
+	m_dragStart = pos;
+	m_dragDist = 0;
+
 	// Create painter
 	KisPaintDeviceSP device;
 	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
@@ -464,6 +188,7 @@ void KisToolBrush::initPaint()
 			     mask -> height(),
 			     m_currentImage -> imgType(),
 			     "dab");
+
         m_dab -> opacity(OPACITY_TRANSPARENT);
 	for (int y = 0; y < mask -> height(); y++) {
 		for (int x = 0; x < mask -> width(); x++) {
@@ -487,6 +212,99 @@ void KisToolBrush::endPaint()
 		m_painter = 0;
 		m_dab = 0; // XXX: No need to delete m_dab because shared pointer?
 	}
+}
+
+void KisToolBrush::paintLine(const QPoint & pos1,
+			     const QPoint & pos2,
+			     const Q_INT32 pressure,
+			     const Q_INT32 xtilt,
+			     const Q_INT32 ytilt)
+{
+	Q_INT32 x1, y1, x2, y2;
+
+	x1 = pos1.x();
+	y1 = pos1.y();
+
+	x2 = pos2.x();
+	y2 = pos2.y();
+
+	QRect r;
+	if (x1 < x2 ) {
+		if (y1 < y2) {
+			r = QRect(x1, y1, x2 - x1 + m_brushWidth, y2 - y1 + m_brushHeight);
+		}
+		else {
+			r = QRect(x1, y2, x2 - x1 + m_brushWidth, y1 - y2 + m_brushHeight);
+		}
+	}
+	else {
+		if (y1 < y2) {
+			r = QRect(x2, y1, x1 - x2 + m_brushWidth, y2 - y1 + m_brushHeight);
+		}
+		else {
+			r = QRect(x2, y2, x1 - x2 + m_brushWidth, y1 - y2 + m_brushHeight);
+		}
+	}
+
+	KisVector end(x2, y2);
+	KisVector start(x1, y1);
+
+	KisVector dragVec = end - start;
+	float savedDist = m_dragDist;
+	float newDist = dragVec.length();
+	float dist = savedDist + newDist;
+
+	if (static_cast<int>(dist) < m_spacing) {
+		m_dragDist += newDist;
+		m_dragStart = pos2;
+		return;
+	}
+
+	m_dragDist = 0;
+#if 0
+	dragVec.normalize(); // XX: enabling this gives a link error, so copied the relevant code below.
+#endif
+	double length, ilength;
+	double x, y, z;
+	x = dragVec.x();
+	y = dragVec.y();
+	z = dragVec.z();
+	length = x * x + y * y + z * z;
+	length = sqrt (length);
+
+	if (length)
+	{
+		ilength = 1/length;
+		x *= ilength;
+		y *= ilength;
+		z *= ilength;
+	}
+
+	dragVec.setX(x);
+	dragVec.setY(y);
+	dragVec.setZ(z);
+
+	KisVector step = start;
+
+	while (dist >= m_spacing) {
+		if (savedDist > 0) {
+			step += dragVec * (m_spacing - savedDist);
+			savedDist -= m_spacing;
+		}
+		else {
+			step += dragVec * m_spacing;
+		}
+		QPoint p(qRound(step.x()), qRound(step.y()));
+		paint(p, pressure, xtilt, ytilt);
+		dist -= m_spacing;
+	}
+	m_currentImage -> notify(r);
+
+		
+	if (dist > 0)
+		m_dragDist = dist;
+
+	m_dragStart = pos2;
 }
 
 void KisToolBrush::paint(const QPoint & pos,
@@ -519,51 +337,3 @@ void KisToolBrush::setup(KActionCollection *collection)
                                    "tool_brush");
         toggle -> setExclusiveGroup("tools");
 }
-
-#if defined TRACERLINE
-void KisToolBrush::paintLine(Q_INT32 s)
-{
-	if (m_subject) {
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
-		QWidget *canvas = controller -> canvas();
-		QPainter gc(canvas);
-		QRect rc;
-
-		paintLine(gc, rc, s);
-	}
-}
-
-void KisToolBrush::paintLine(QPainter& gc, const QRect&, Q_INT32 s)
-{
-	if (m_subject) {
-
-		RasterOp op = gc.rasterOp();
-		QPen old = gc.pen();
-		QPen pen( Qt::SolidLine );
-
-		gc.setRasterOp(Qt::NotROP);
-		gc.setPen(pen);
-
-		gc.drawPolyline(*m_points, s);
-
-		gc.setRasterOp(op);
-		gc.setPen(old);
-	}
-}
-
-QPoint KisToolBrush::translateImageXYtoViewPort(const QPoint& p) {
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
-		Q_ASSERT(controller);
-		QPoint p2;
-		p2 = controller -> viewToWindow(p);
-
-		p2.setX(p2.x() - controller -> horzValue());
-		p2.setY(p2.y() - controller -> vertValue());
-
-
-		p2 *= m_subject -> zoomFactor();
-
-		return p2;
-}
-
-#endif

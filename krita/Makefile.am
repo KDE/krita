@@ -30,7 +30,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/krita
 rc_DATA = krita.rc krita_readonly.rc
 
-SUBDIRS = ui core paintops . dtd plugins tools modules data pics 
+SUBDIRS = ui core paintops . dtd tools plugins modules data pics 
 
 # Needed to compile libkritacommon.la, which has no source files to itself
 # but everything in static libs.

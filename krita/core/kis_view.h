@@ -127,6 +127,9 @@ public: // KoView implementation
 
 	KisFilterRegistrySP filterRegistry() const;
 
+	void updateStatusBarSelectionLabel();
+
+
 public: // Plugin access API. XXX: This needs redesign.
 
 	virtual KisImageSP currentImg() const;
@@ -441,6 +444,7 @@ private:
 	vKisCanvasObserver m_observers;
 
 	QLabel *m_statusBarZoomLabel;
+	QLabel *m_statusBarSelectionLabel;
 
 	enumInputDevice m_inputDevice;
 	InputDeviceToolMap m_inputDeviceToolMap;

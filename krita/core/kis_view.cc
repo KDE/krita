@@ -214,6 +214,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_imgBuilderMgr = new KisBuilderMonitor(this);
         m_progress = 0;
         m_statusBarZoomLabel = 0;
+	m_statusBarSelectionLabel = 0;
 	m_filterRegistry = new KisFilterRegistry();
 
         setInstance(KisFactory::global());
@@ -494,6 +495,29 @@ void KisView::updateStatusBarZoomLabel ()
         }
 }
 
+void KisView::updateStatusBarSelectionLabel() 
+{
+	if (m_statusBarSelectionLabel == 0) {
+		kdDebug() << "No selection label yet\n";
+		return;
+	}
+
+        KisImageSP img = currentImg();
+	if (img) {
+		KisLayerSP layer = img -> activeLayer();
+		if (layer) {
+			if (layer -> hasSelection()) {
+				m_statusBarSelectionLabel -> setText(i18n("Selection Active"));
+				return;
+			}
+		}
+	}
+
+	m_statusBarSelectionLabel -> setText(i18n("No selection"));
+	
+							     
+}
+
 void KisView::setupStatusBar()
 {
         KStatusBar *sb = statusBar();
@@ -506,13 +530,22 @@ void KisView::setupStatusBar()
                 connect(this, SIGNAL(cursorEnter()), lbl, SLOT(enter()));
                 connect(this, SIGNAL(cursorLeave()), lbl, SLOT(leave()));
                 addStatusBarItem(lbl, 0);
+
                 m_statusBarZoomLabel = new QLabel(sb);
                 addStatusBarItem(m_statusBarZoomLabel, 1);
-                updateStatusBarZoomLabel ();
+                updateStatusBarZoomLabel();
+
+
+		m_statusBarSelectionLabel = new QLabel(sb);
+		addStatusBarItem(m_statusBarSelectionLabel, 2);
+		updateStatusBarSelectionLabel();
+
                 m_progress = new KisLabelProgress(this);
                 m_progress -> setMaximumWidth(225);
                 m_progress -> setMaximumHeight(sb -> height());
-                addStatusBarItem(m_progress, 2, true);
+
+                addStatusBarItem(m_progress, 3, true);
+
                 m_progress -> hide();
         }
 }
@@ -731,7 +764,6 @@ void KisView::resizeEvent(QResizeEvent *)
 void KisView::updateReadWrite(bool readwrite)
 {
         layerUpdateGUI(readwrite);
-        m_selectionManager -> updateGUI(readwrite);
 }
 
 void KisView::clearCanvas(const QRect& rc)
@@ -1009,6 +1041,8 @@ void KisView::imgUpdateGUI()
         m_imgFlatten -> setEnabled(n > 1);
         m_imgMergeVisible -> setEnabled(nvisible > 1 && nvisible != n);
         m_imgMergeLinked -> setEnabled(nlinked > 1);
+	
+	m_selectionManager -> updateGUI();
 }
 
 void KisView::updateTabBar()
@@ -2380,7 +2414,7 @@ void KisView::selectImage(const QString& name)
         connectCurrentImg();
         layersUpdated();
 	// XXX: was m_current && m_current -> activeLayer() -> selection()
-        m_selectionManager -> updateGUI(true);
+        m_selectionManager -> updateGUI();
         resizeEvent(0);
         updateCanvas();
         notify();
@@ -2398,7 +2432,7 @@ void KisView::selectImage(KisImageSP img)
         if (m_tabBar)
                 updateTabBar();
 	// XXX: was m_current && m_current -> activeLayer() -> selection()
-        m_selectionManager -> updateGUI(true);
+        m_selectionManager -> updateGUI();
 }
 
 void KisView::scrollH(int value)

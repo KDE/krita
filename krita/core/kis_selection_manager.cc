@@ -217,11 +217,11 @@ void KisSelectionManager::clipboardDataChanged()
 }
 
 
-void KisSelectionManager::updateGUI(bool enable)
+void KisSelectionManager::updateGUI()
 {
         KisImageSP img = m_parent -> currentImg();
 
-        enable = enable && img && img -> activeLayer() && img -> activeLayer() -> hasSelection();
+        bool enable = img && img -> activeLayer() && img -> activeLayer() -> hasSelection();
 
 	m_copy -> setEnabled(enable);
 	m_cut -> setEnabled(enable);
@@ -244,13 +244,13 @@ void KisSelectionManager::updateGUI(bool enable)
 	m_load -> setEnabled(enable);
 	m_save -> setEnabled(enable);
 
-
+	m_parent -> updateStatusBarSelectionLabel();
 }
 
 void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 {
         if (img == m_parent -> currentImg()) {
-                updateGUI(img -> activeLayer() -> hasSelection());
+                updateGUI();
 		m_parent -> updateCanvas();
 	}
 	

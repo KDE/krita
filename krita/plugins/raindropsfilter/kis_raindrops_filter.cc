@@ -61,9 +61,9 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 {
 	kdDebug() << "Raindropsfilter 2 called!\n";
 
-	Q_INT32 x = 0, y = 0;
-	Q_INT32 width = src -> image() -> width();
-	Q_INT32 height = src-> image() -> height();
+	Q_INT32 x = rect.x(), y = rect.y();
+	Q_INT32 width = rect.width();
+	Q_INT32 height = rect.height();
         
 	// create a QUANTUM array that holds the data the filter works on
 	QUANTUM * newData = src -> readBytes( x, y, width, height);
@@ -78,7 +78,7 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
 	//with the actual pixel data.
 	rainDrops(newData, width, height, dropSize, number, fishEyes, view() -> progressDisplay());
-	src -> writeBytes( newData, x, y, width, height);
+	dst -> writeBytes( newData, x, y, width, height);
 
 	delete[] newData;
 }
@@ -105,9 +105,9 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int DropSize, int Amount, int Coeff, KisProgressDisplayInterface *m_progress)
 {
         //Progress info
-        m_cancelRequested = false;
+        /*m_cancelRequested = false;
         m_progress -> setSubject(this, true, true);
-        emit notifyProgressStage(this,i18n("Applying oilpaint filter..."),0);
+        emit notifyProgressStage(this,i18n("Applying oilpaint filter..."),0);*/
     
         int BitCount = 0;
 
@@ -341,7 +341,7 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
                                 }
                         }
                 }
-        emit notifyProgress(this, (int) (((double)NumBlurs * 100.0) / Amount));
+        //emit notifyProgress(this, (int) (((double)NumBlurs * 100.0) / Amount));
         }
     
         if (!m_cancelRequested) 
@@ -350,7 +350,7 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
         delete [] NewBits;
 
         FreeBoolArray (BoolMatrix, Width);
-        emit notifyProgressDone(this);
+        //emit notifyProgressDone(this);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

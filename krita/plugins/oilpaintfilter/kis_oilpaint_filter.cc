@@ -62,9 +62,10 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 {
 	kdDebug() << "Oilpaintfilter 2 called!\n";
 
-	Q_INT32 x = 0, y = 0;
-	Q_INT32 width = src -> image() -> width();
-	Q_INT32 height = src-> image() -> height();
+	Q_INT32 x = rect.x(), y = rect.y();
+	Q_INT32 width = rect.width();
+	Q_INT32 height = rect.height();
+	kdDebug() << "x: " << x << " y: " << y << " width: " << width << " height: " << height << endl;
         
 	// create a QUANTUM array that holds the data the filter works on
 	QUANTUM * newData = src -> readBytes( x, y, width, height);
@@ -79,7 +80,7 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 	//with the actual pixel data.
 
 	OilPaint(newData, width, height, brushSize, smooth, view() -> progressDisplay());
-	src -> writeBytes( newData, x, y, width, height);
+	dst -> writeBytes( newData, x, y, width, height);
 
 	delete[] newData;
 }
@@ -101,9 +102,9 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 void KisOilPaintFilter::OilPaint(QUANTUM* data, int w, int h, int BrushSize, int Smoothness, KisProgressDisplayInterface *m_progress)
 {    
         //Progress info
-        m_cancelRequested = false;
+        /*m_cancelRequested = false;
         m_progress -> setSubject(this, true, true);
-        emit notifyProgressStage(this,i18n("Applying oilpaint filter..."),0);
+        emit notifyProgressStage(this,i18n("Applying oilpaint filter..."),0);*/
     
         int LineWidth = w * 4;
         if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
@@ -126,9 +127,9 @@ void KisOilPaintFilter::OilPaint(QUANTUM* data, int w, int h, int BrushSize, int
                 }
        
                 // Update de progress bar in dialog.
-                emit notifyProgress(this, (int) (((double)h2 * 100.0) / h)); 
+               //emit notifyProgress(this, (int) (((double)h2 * 100.0) / h)); 
        }
-       emit notifyProgressDone(this);
+       //emit notifyProgressDone(this);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

@@ -62,9 +62,9 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 {
 	kdDebug() << "Embossfilter called!\n";
 
-	Q_INT32 x = 0, y = 0;
-	Q_INT32 width = src -> image() -> width();
-	Q_INT32 height = src-> image() -> height();
+	Q_INT32 x = rect.x(), y = rect.y();
+	Q_INT32 width = rect.width();
+	Q_INT32 height = rect.height();
         
 	// create a QUANTUM array that holds the data the filter works on
 	QUANTUM * newData = src -> readBytes( x, y, width, height);
@@ -78,7 +78,7 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	//with the actual pixel data.
 
 	Emboss(newData, width, height, embossdepth, view() -> progressDisplay());
-	src -> writeBytes( newData, x, y, width, height);
+	dst -> writeBytes( newData, x, y, width, height);
 
 	delete[] newData;
 }
@@ -100,9 +100,9 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d, KisProgressDisplayInterface *m_progress)
 {
     //Progress info
-    m_cancelRequested = false;
+    /*m_cancelRequested = false;
     m_progress -> setSubject(this, true, true);
-    emit notifyProgressStage(this,i18n("Applying emboss filter..."),0);
+    emit notifyProgressStage(this,i18n("Applying emboss filter..."),0);*/
     
     float Depth = d / 10.0;
     int LineWidth = Width * 4;
@@ -132,9 +132,9 @@ void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d, KisPro
            Bits[i+1] = Gray;
            Bits[ i ] = Gray;
            }
-           emit notifyProgress(this, (int) (((double)h * 100.0) / Height));
+           //emit notifyProgress(this, (int) (((double)h * 100.0) / Height));
        }
-    emit notifyProgressDone(this);
+    //emit notifyProgressDone(this);
 }
        
 // This method have been ported from Pieter Z. Voloshyn algorithm code.   

@@ -68,6 +68,8 @@ void KisDlgBuilderProgress::update(KisBuilderSubject *subject, KisImageBuilder_S
 
 		reject();
 		break;
+	default:
+		break;
 	}
 
 	m_bar -> setValue(percent);

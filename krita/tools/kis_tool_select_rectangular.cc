@@ -109,7 +109,9 @@ void KisToolRectangularSelect::clearSelection()
 
 void KisToolRectangularSelect::mousePress(QMouseEvent *e)
 {
-	if (e -> button() == LeftButton) {
+	KisImageSP img = m_view -> currentImg();
+
+	if (img && img -> activeDevice() && e -> button() == LeftButton) {
 		clearSelection();
 		m_startPos = m_view -> windowToView(e -> pos());
 		m_endPos = m_view -> windowToView(e -> pos());
@@ -159,14 +161,15 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 				KisSelectionSP selection;
 				QRect rc(m_startPos.x(), m_startPos.y(), m_endPos.x() - m_startPos.x(), m_endPos.y() - m_startPos.y());
 
-				rc = rc.normalize();
-				img = m_view -> currentImg();
-				Q_ASSERT(img);
 				parent = img -> activeDevice();
-				selection = new KisSelection(parent, img, "rectangular selection tool frame", OPACITY_OPAQUE);
-				selection -> setBounds(rc);
-				img -> setSelection(selection);
-				m_doc -> addCommand(new RectSelectCmd(selection));
+
+				if (parent) {
+					rc = rc.normalize();
+					selection = new KisSelection(parent, img, "rectangular selection tool frame", OPACITY_OPAQUE);
+					selection -> setBounds(rc);
+					img -> setSelection(selection);
+					m_doc -> addCommand(new RectSelectCmd(selection));
+				}
 			}
 		}
 

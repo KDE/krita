@@ -41,11 +41,11 @@
 #include <knotifyclient.h>
 #include <kprinter.h>
 #include <kpushbutton.h>
-#include <kruler.h>
 #include <kstatusbar.h>
 #include <kstdaction.h>
 
 // KOffice
+#include <koCanvasRuler.h>
 #include <koColor.h>
 #include <koView.h>
 
@@ -167,6 +167,7 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_pattern = 0;
 	m_gradient = 0;
 	m_layerBox = 0;
+	m_currentGuide = 0;
 	m_imgBuilderMgr = new KisBuilderMonitor(this);
 	m_buildProgress = 0;
 	setInstance(KisFactory::global());
@@ -293,20 +294,12 @@ void KisView::setupScrollBars()
 
 void KisView::setupRulers()
 {
-	m_hRuler = new KRuler(Qt::Horizontal, this);
-	m_vRuler = new KRuler(Qt::Vertical, this);
+	m_hRuler = new KoCanvasRuler(Qt::Horizontal, this);
+	m_vRuler = new KoCanvasRuler(Qt::Vertical, this);
 	m_hRuler -> setGeometry(20, 0, width() - 20, 20);
 	m_vRuler -> setGeometry(0, 20, 20, height() - 20);
-	m_vRuler -> setRulerMetricStyle(KRuler::Pixel);
-	m_hRuler -> setRulerMetricStyle(KRuler::Pixel);
-	m_vRuler -> setFrameStyle(QFrame::Panel | QFrame::Raised);
-	m_hRuler -> setFrameStyle(QFrame::Panel | QFrame::Raised);
-	m_hRuler -> setLineWidth(1);
-	m_vRuler -> setLineWidth(1);
-	m_hRuler -> setShowEndLabel(true);
-	m_vRuler -> setShowEndLabel(true);
-	m_hRuler -> setShowPointer(true);
-	m_vRuler -> setShowPointer(true);
+	m_hRuler -> installEventFilter(this);
+	m_vRuler -> installEventFilter(this);
 }
 
 void KisView::setupTabBar()
@@ -458,6 +451,7 @@ void KisView::reset()
 
 void KisView::resizeEvent(QResizeEvent *)
 {
+	KisImageSP img = currentImg();
 	Q_INT32 rsideW = 0;
 	Q_INT32 lsideW = 0;
 	Q_INT32 ruler = 20;
@@ -468,6 +462,11 @@ void KisView::resizeEvent(QResizeEvent *)
 	Q_INT32 drawW;
 	Q_INT32 docW;
 	Q_INT32 docH;
+
+	if (img) {
+		KoCanvasGuideMgr *mgr = img -> guides();
+		mgr -> resize(size());
+	}
 
 	if (m_sideBar && m_sidebarToggle -> isChecked() && !m_floatsidebarToggle -> isChecked()) {
 		if (m_lsidebarToggle -> isChecked()) {
@@ -552,20 +551,18 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_tabBar -> show();
 	}
 
-	m_vRuler -> setRange(0, docH + static_cast<Q_INT32>(100 * zoom()));
-	m_hRuler -> setRange(0, docW + static_cast<Q_INT32>(100 * zoom()));
 	m_vScroll -> setLineStep(static_cast<Q_INT32>(100 * zoom()));
 	m_hScroll -> setLineStep(static_cast<Q_INT32>(100 * zoom()));
 
 	if (m_vScroll -> isVisible())
-		m_vRuler -> setOffset(m_vScroll -> value());
+		m_vRuler -> updateVisibleArea(0, m_vScroll -> value());
 	else
-		m_vRuler -> setOffset(-canvasYOffset());
+		m_vRuler -> updateVisibleArea(0, -canvasYOffset());
 
 	if (m_hScroll -> isVisible())
-		m_hRuler -> setOffset(m_hScroll -> value());
+		m_hRuler -> updateVisibleArea(m_hScroll -> value(), 0);
 	else
-		m_hRuler -> setOffset(-canvasXOffset());
+		m_hRuler -> updateVisibleArea(-canvasXOffset(), 0);
 
 	m_hRuler -> show();
 	m_vRuler -> show();
@@ -683,6 +680,8 @@ void KisView::paintView(const QRect& rc)
 
 		if (m_tool)
 			m_tool -> paint(gc, ur);
+
+		paintGuides();
 	} else {
 		clearCanvas(rc);
 	}
@@ -963,25 +962,8 @@ void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 	m_zoomIn -> setEnabled(zf <= KISVIEW_MAX_ZOOM);
 	m_zoomOut -> setEnabled(zf >= KISVIEW_MIN_ZOOM);
 
-	if (zf > 3.0) {
-		m_hRuler -> setPixelPerMark(static_cast<Q_INT32>(zf * 1.0));
-		m_vRuler -> setPixelPerMark(static_cast<Q_INT32>(zf * 1.0));
-	} else {
-		Q_INT32 mark = static_cast<Q_INT32>(zf * 10.0);
-
-		if (!mark)
-			mark = 1;
-
-		m_hRuler -> setPixelPerMark(mark);
-		m_vRuler -> setPixelPerMark(mark);
-	}
-
-	m_hRuler -> setShowTinyMarks(zf <= 0.4);
-	m_vRuler -> setShowTinyMarks(zf <= 0.4);
-	m_hRuler -> setShowLittleMarks(zf > 0.3);
-	m_vRuler -> setShowLittleMarks(zf > 0.3);
-	m_hRuler -> setShowMediumMarks(zf > 0.2);
-	m_vRuler -> setShowMediumMarks(zf > 0.2);
+	m_hRuler -> setZoom(zf);
+	m_vRuler -> setZoom(zf);
 
 	if (x < 0 || y < 0) {
 		bool vvisible = m_vScroll -> isVisible();
@@ -1531,21 +1513,6 @@ void KisView::merge_linked_layers()
 	}
 }
 
-void KisView::showMenubar()
-{
-}
-
-
-void KisView::showToolbar()
-{
-}
-
-
-void KisView::showStatusbar()
-{
-}
-
-
 void KisView::showSidebar()
 {
 	if (m_sidebarToggle -> isChecked())
@@ -1710,6 +1677,39 @@ void KisView::canvasGotPaintEvent(QPaintEvent *event)
 
 void KisView::canvasGotMousePressEvent(QMouseEvent *e)
 {
+	KisImageSP img = currentImg();
+
+	if (img) {
+		QPoint pt = mapToScreen(e -> pos());
+		KoCanvasGuideMgr *mgr = img -> guides();
+
+		m_lastGuidePoint = mapToScreen(e -> pos());
+		m_currentGuide = 0;
+
+		if ((e -> state() & ~ShiftButton) == NoButton) {
+			KoCanvasGuideSP gd = mgr -> find(pt.x(), pt.y(), 2.0 / zoom());
+
+			if (gd) {
+				m_currentGuide = gd;
+
+				if ((e -> button() == Qt::RightButton) || ((e -> button() & Qt::ShiftButton) == Qt::ShiftButton)) {
+					if (gd -> isSelected())
+						mgr -> unselect(gd);
+					else
+						mgr -> select(gd);
+				} else {
+					if (!gd -> isSelected()) {
+						mgr -> unselectAll();
+						mgr -> select(gd);
+					}
+				}
+
+				updateGuides();
+				return;
+			}
+		}
+	} 
+
 	if (m_tool) {
 		Q_INT32 x = static_cast<Q_INT32>((e -> pos().x() - canvasXOffset() + horzValue() * zoom()) / zoom());
 		Q_INT32 y = static_cast<Q_INT32>((e -> pos().y() - canvasYOffset() + vertValue() * zoom()) / zoom());
@@ -1721,23 +1721,46 @@ void KisView::canvasGotMousePressEvent(QMouseEvent *e)
 
 void KisView::canvasGotMouseMoveEvent(QMouseEvent *e)
 {
-	if (m_tool) {
+	KisImageSP img = currentImg();
+
+	m_hRuler -> updatePointer(e -> pos().x() - canvasXOffset(), e -> pos().y() - canvasYOffset());
+	m_vRuler -> updatePointer(e -> pos().x() - canvasXOffset(), e -> pos().y() - canvasYOffset());
+
+	if (img && m_currentGuide) {
+		QPoint p = mapToScreen(e -> pos());
+		KoCanvasGuideMgr *mgr = img -> guides();
+
+		if ((e -> state() & LeftButton == LeftButton) && mgr -> hasSelected()) {
+			eraseGuides();
+			p -= m_lastGuidePoint;
+
+			if (p.x())
+				mgr -> moveSelectedByX(p.x() / zoom());
+
+			if (p.y())
+				mgr -> moveSelectedByY(p.y() / zoom());
+
+			m_doc -> setModified(true);
+			paintGuides();
+		}
+	} else if (m_tool) {
 		Q_INT32 x = static_cast<Q_INT32>((e -> pos().x() - canvasXOffset() + horzValue() * zoom()) / zoom());
 		Q_INT32 y = static_cast<Q_INT32>((e -> pos().y() - canvasYOffset() + vertValue() * zoom()) / zoom());
 		QMouseEvent ev(QEvent::MouseButtonPress, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
 
-		if (zoom() >= 1.0 / 4.0) {
-			m_hRuler -> setValue(e -> pos().x() - canvasXOffset());
-			m_vRuler -> setValue(e -> pos().y() - canvasYOffset());
-		}
-
 		m_tool -> mouseMove(&ev);
 	}
+
+	m_lastGuidePoint = mapToScreen(e -> pos());
 }
 
 void KisView::canvasGotMouseReleaseEvent(QMouseEvent *e)
 {
-	if (m_tool) {
+	KisImageSP img = currentImg();
+
+	if (img && m_currentGuide) {
+		m_currentGuide = 0;
+	} else if (m_tool) {
 		Q_INT32 x = static_cast<Q_INT32>((e -> pos().x() - canvasXOffset() + horzValue() * zoom()) / zoom());
 		Q_INT32 y = static_cast<Q_INT32>((e -> pos().y() - canvasYOffset() + vertValue() * zoom()) / zoom());
 		QMouseEvent ev(QEvent::MouseButtonPress, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
@@ -2050,14 +2073,14 @@ void KisView::setPaintOffset()
 
 void KisView::scrollH(int value)
 {
-	m_hRuler -> setOffset(value);
-	m_canvas -> repaint();
+	m_hRuler -> updateVisibleArea(value, 0);
+	canvasRefresh();
 }
 
 void KisView::scrollV(int value)
 {
-	m_vRuler -> setOffset(value);
-	m_canvas -> repaint();
+	m_vRuler -> updateVisibleArea(0, value);
+	canvasRefresh();
 }
 
 QWidget *KisView::canvas()
@@ -2250,15 +2273,12 @@ void KisView::layerScale()
 
 QPoint KisView::viewToWindow(const QPoint& pt)
 {
-	QPoint r = pt;
+	QPoint converted;
 
-	if (zoom() < 1.0 || zoom() > 1.0) {
-		r.setX(r.x() + horzValue());
-		r.setY(r.y() + vertValue());
-		r /= zoom();
-	}
-
-	return r;
+	converted.rx() = pt.x() + horzValue() - canvasXOffset();
+	converted.ry() = pt.y() + vertValue() - canvasYOffset();
+	converted /= zoom();
+	return converted;
 }
 
 QRect KisView::viewToWindow(const QRect& rc)
@@ -2339,6 +2359,109 @@ void KisView::nBuilders(Q_INT32 size)
 
 	if (m_imgScan)
 		m_imgScan -> setEnabled(size == 0);
+}
+
+bool KisView::eventFilter(QObject *o, QEvent *e)
+{
+	if ((o == m_hRuler || o == m_vRuler) && (e -> type() == QEvent::MouseMove || e -> type() == QEvent::MouseButtonRelease)) {
+		QMouseEvent *me = dynamic_cast<QMouseEvent*>(e);
+		QPoint pt = mapFromGlobal(me -> globalPos());
+		KisImageSP img = currentImg();
+		KoCanvasGuideMgr *mgr;
+		QMouseEvent *m;
+
+		if (!img)
+			return super::eventFilter(o, e);
+		
+		mgr = img -> guides();
+
+		if (e -> type() == QEvent::MouseMove) {
+			bool flag = geometry().contains(pt);
+			KoCanvasGuideSP gd;
+
+			if (m_currentGuide == 0 && flag) {
+				// No guide is being edited and moving mouse over the canvas.  
+				// Create a new guide.
+				enterEvent(0);
+				eraseGuides();
+				mgr -> unselectAll();
+
+				if (o == m_vRuler)
+					gd = mgr -> add(pt.x() - m_vRuler -> width() + horzValue(), Qt::Vertical);
+				else
+					gd = mgr -> add(pt.y() - m_hRuler -> height() + vertValue(), Qt::Horizontal);
+
+				m_currentGuide = gd;
+				mgr -> select(gd);
+				m_lastGuidePoint = mapToScreen(pt);
+			} else if (m_currentGuide) {
+				if (flag) {
+					// moved an existing guide.
+					m = new QMouseEvent(QEvent::MouseMove, pt, me -> globalPos(), me -> button(), me -> state());
+					canvasGotMouseMoveEvent(m);
+					delete m;
+				} else {
+					//  moved a guide out of the frame, destroy it
+					leaveEvent(0);
+					eraseGuides();
+					mgr -> remove(m_currentGuide);
+					paintGuides();
+					m_currentGuide = 0;
+				}
+			}
+		} else if (e -> type() == QEvent::MouseButtonRelease && m_currentGuide) {
+			eraseGuides();
+			mgr -> unselect(m_currentGuide);
+			paintGuides();
+			m_currentGuide = 0;
+			enterEvent(0);
+			m = new QMouseEvent(QEvent::MouseMove, pt, me -> globalPos(), Qt::NoButton, Qt::NoButton);
+			canvasGotMouseMoveEvent(m);
+			delete m;
+		}
+	}
+
+	return super::eventFilter(o, e);
+}
+
+void KisView::eraseGuides()
+{
+	KisImageSP img = currentImg();
+
+	if (img) {
+		KoCanvasGuideMgr *mgr = img -> guides();
+
+		if (mgr)
+			mgr -> erase(m_canvas, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
+	}
+}
+
+void KisView::paintGuides()
+{
+	KisImageSP img = currentImg();
+
+	if (img) {
+		KoCanvasGuideMgr *mgr = img -> guides();
+
+		if (mgr)
+			mgr -> paint(m_canvas, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
+	}
+}
+
+void KisView::updateGuides()
+{
+	eraseGuides();
+	paintGuides();
+}
+
+QPoint KisView::mapToScreen(const QPoint& pt)
+{
+	QPoint converted;
+
+	converted.rx() = pt.x() + horzValue() - canvasXOffset();
+	converted.ry() = pt.y() + vertValue() - canvasYOffset();
+//	converted *= zoom();
+	return converted;
 }
 
 #include "kis_view.moc"

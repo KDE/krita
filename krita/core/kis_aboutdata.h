@@ -17,9 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-#ifndef KRAYON_ABOUTDATA
-#define KRAYON_ABOUTDATA
+#if !defined KIS_ABOUT_DATA_H_
+#define KIS_ABOUT_DATA_H_
 
 #include <kaboutdata.h>
 #include <klocale.h>
@@ -28,10 +27,10 @@ KAboutData * newKrayonAboutData()
 {
 	KAboutData * aboutData = new KAboutData( "krita",
 			I18N_NOOP("Krita"),
-			"0.2.0",
+			"0.3.0",
 			I18N_NOOP("KOffice image manipulation application."),
 			KAboutData::License_GPL,
-			"(c) 1999-2002 The Krita team.",
+			"(c) 1999-2002 The Krita team.\n(c) 2002-2003 Patrick Julien.",
 			"",
 			"http://koffice.kde.org/krita",
 			"submit@bugs.kde.org");
@@ -45,4 +44,5 @@ KAboutData * newKrayonAboutData()
 	return aboutData;
 }
 
-#endif
+#endif // KRAYON_ABOUTDATA
+

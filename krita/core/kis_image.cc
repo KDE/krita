@@ -182,6 +182,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_maskInverted = rhs.m_maskInverted;
 		m_maskClr = rhs.m_maskClr;
 		m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
+		m_guides = rhs.m_guides;
 	}
 }
 
@@ -1125,6 +1126,11 @@ QRect KisImage::bounds() const
 KisDoc* KisImage::document() const
 {
 	return m_doc;
+}
+
+KoCanvasGuideMgr *KisImage::guides() const
+{
+	return &m_guides;
 }
 
 KisTileMgrSP KisImage::tiles() const

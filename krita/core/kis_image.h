@@ -24,6 +24,7 @@
 #include <qimage.h>
 #include <qvaluevector.h>
 #include <kurl.h>
+#include <koCanvasGuide.h>
 #include <koColor.h>
 #include "kis_global.h"
 #include "kis_types.h"
@@ -141,6 +142,7 @@ public:
 	void notify(const QRect& rc);
 
 	KisDoc *document() const;
+	KoCanvasGuideMgr *guides() const;
 
 signals:
 	void activeLayerChanged(KisImageSP image);
@@ -189,7 +191,7 @@ private:
 	KoColor m_maskClr;
 	KisNameServer *m_nserver;
 	KisDoc *m_doc;
+	KoCanvasGuideMgr m_guides;
 };
 
 #endif // KIS_IMAGE_H_
-

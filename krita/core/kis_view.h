@@ -21,6 +21,7 @@
 #if !defined KIS_VIEW_H_
 #define KIS_VIEW_H_
 
+#include <koCanvasGuide.h>
 #include <koColor.h>
 #include <koView.h>
 #include "kis_global.h"
@@ -33,9 +34,9 @@ class QWidget;
 class DCOPObject;
 class KAction;
 class KPrinter;
-class KRuler;
 class KToggleAction;
 class KoIconItem;
+class KoCanvasRuler;
 class KisBrush;
 class KisBuilderMonitor;
 class KisCanvas;
@@ -59,7 +60,7 @@ public:
 	virtual ~KisView();
 
 public:
-	// Overide KoView
+	virtual bool eventFilter(QObject *o, QEvent *e);
 	virtual QWidget *canvas();
 	virtual int canvasXOffset() const;
 	virtual int canvasYOffset() const;
@@ -136,6 +137,9 @@ private:
 	void clearCanvas(const QRect& rc);
 	void connectCurrentImg() const;
 	void disconnectCurrentImg() const;
+	void eraseGuides();
+	void paintGuides();
+	void updateGuides();
 	void imgUpdateGUI();
 	void fillSelection(const KoColor& c, QUANTUM opacity);
 	void layerUpdateGUI(bool enable);
@@ -206,6 +210,7 @@ private slots:
 	void layer_mirrorX();
 	void layer_mirrorY();
 	void placeSidebarLeft();
+	QPoint mapToScreen(const QPoint& pt);
 	void merge_all_layers();
 	void merge_visible_layers();
 	void merge_linked_layers();
@@ -225,10 +230,7 @@ private slots:
 	void scrollTo(Q_INT32 x, Q_INT32 y);
 	void scrollV(int value);
 	void slotEmbedImage(const QString& filename);
-	void showMenubar();
 	void showSidebar();
-	void showStatusbar();
-	void showToolbar();
 	void slotInsertImageAsLayer();
 	void imgUpdated(KisImageSP img, const QRect& rc);
 
@@ -240,8 +242,8 @@ private:
 	QButton *m_tabLeft; 
 	QButton *m_tabRight; 
 	QButton *m_tabLast;
-	KRuler *m_hRuler;
-	KRuler *m_vRuler;
+	KoCanvasRuler *m_hRuler;
+	KoCanvasRuler *m_vRuler;
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
 	KAction *m_imgRm;
@@ -311,6 +313,8 @@ private:
 	bool m_clipboardHasImage;
 	KisBuilderMonitor *m_imgBuilderMgr;
 	KisLabelBuilderProgress *m_buildProgress;
+	KoCanvasGuideSP m_currentGuide;
+	QPoint m_lastGuidePoint;
 
 private:
 	mutable KisImageSP m_current;

@@ -111,6 +111,7 @@ void KisStrategyMove::startDrag(const QPoint& pos)
 		return;
 
 	m_dragging = true;
+	m_doc -> setModified(true);
 	m_dragStart.setX(pos.x());
 	m_dragStart.setY(pos.y());
 	m_layerStart.setX(dev -> x());

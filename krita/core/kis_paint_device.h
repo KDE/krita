@@ -56,7 +56,7 @@ public:
 
 	virtual void resize(uint width, uint height, uint bpp);
 	
-	inline KisTile *getTile(unsigned int x, unsigned int y);
+	inline KisTileSP getTile(unsigned int x, unsigned int y);
 
 	inline uint xTiles() const;
 	inline uint yTiles() const;
@@ -110,7 +110,7 @@ QString KisPaintDevice::name() const
 	return m_name;
 }
 
-KisTile *KisPaintDevice::getTile(unsigned int x, unsigned int y) 
+KisTileSP KisPaintDevice::getTile(unsigned int x, unsigned int y) 
 { 
 	return m_tiles.getTile(x, y); 
 }

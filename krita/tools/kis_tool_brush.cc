@@ -154,19 +154,34 @@ bool BrushTool::paint(const QPoint& pos)
 
 	uchar bv, invbv;
 	int bpp = lay -> bpp();
-	uchar src2[4] = {(uchar)m_blue, (uchar)m_green, (uchar)m_red, CHANNEL_MAX}; // TODO FIXME
-	uchar dst[4];
+//	uchar src2[4] = {(uchar)m_blue, (uchar)m_green, (uchar)m_red, CHANNEL_MAX}; // TODO FIXME
+	uchar src2[MAX_CHANNELS];
+	uchar dst[MAX_CHANNELS];
 
-	for (int y = sy; y <= ey; y++) {
-		for (int x = sx; x <= ex; x++) {
-//			uchar *sl = m_brush -> scanline(y); // XXX If use pattern use sl instead of simple color
-			uchar *src = lay -> pixel(startx + x, starty + y);
-			
-			for (int w = 0; w < bpp; w++)
-				dst[w] = (src[w] * invopacity + src2[w] * opacity) / CHANNEL_MAX;
+	src2[PIXEL_RED] = m_red;
+	src2[PIXEL_GREEN] = m_green;
+	src2[PIXEL_BLUE] = m_blue;
+	src2[PIXEL_ALPHA] = CHANNEL_MAX;
 
-			src += bpp;
-			lay -> setPixel(startx + x, starty + y, dst, m_cmd);
+	if (img -> colorMode() == cm_RGBA) {
+		for (int y = sy; y <= ey; y++) {
+			for (int x = sx; x <= ex; x++) {
+				//			uchar *sl = m_brush -> scanline(y); // XXX If use pattern use sl instead of simple color
+				uchar *src = lay -> pixel(startx + x, starty + y);
+
+				for (int w = 0; w < bpp; w++)
+					dst[w] = (src[w] * invopacity + src2[w] * opacity) / CHANNEL_MAX;
+
+				src += bpp;
+				lay -> setPixel(startx + x, starty + y, dst, m_cmd);
+			}
+		}
+	} else {
+		for (int y = sy; y <= ey; y++) {
+			for (int x = sx; x <= ex; x++) {
+				memcpy(dst, src2, bpp);
+				lay -> setPixel(startx + x, starty + y, dst, m_cmd);
+			}
 		}
 	}
 

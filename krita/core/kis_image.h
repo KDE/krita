@@ -141,6 +141,7 @@ private:
 	QRect findBoundingTiles(const QRect& area);
 
 private:
+	int m_bpp;
 	KisDoc *m_doc;
 
 	KisLayerSPLst m_layers;

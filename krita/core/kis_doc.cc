@@ -270,8 +270,8 @@ bool KisDoc::initDoc()
 			return false;
 
 		// add background layer
-		img->addLayer(QRect(0, 0, 512, 512), KoColor::white(), false, i18n("background"));
-		img->markDirty(QRect(0, 0, 512, 512));
+		img -> addLayer(QRect(0, 0, 512, 512), KoColor::white(), false, i18n("background"));
+		img -> markDirty(QRect(0, 0, 512, 512));
 
 		// list of images - mdi document
 		setCurrentImage(img);

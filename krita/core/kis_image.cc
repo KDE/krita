@@ -233,6 +233,7 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 {
 	QRect tileExtents = KisUtil::findTileExtents(QRect(0, 0, m_width, m_height));
 	QRgb defaultColor = qRgba(0, 0, 0, 255);
+	int bpp;
 
 	m_xTiles = tileExtents.width() / TILE_SIZE;
 	m_yTiles = tileExtents.height() / TILE_SIZE;
@@ -240,19 +241,41 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 	m_activeLayer = 0;
 	m_composeLayer = 0;
 	m_bgLayer = 0;
-	bd = m_bitDepth = 4; // XXX
+	m_bitDepth = bd;
 	m_autoUpdate = false;
 	m_doUndo = true;
 
 	m_dcop = 0;
-	//dcopObject(); // build it
+	dcopObject();
 	resizePixmap(false);
-	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * CHAR_BIT);
 
-	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, bd, cm, defaultColor);
+	switch (cm) {
+		case cm_Indexed:
+			bpp = 1;
+			break;
+		case cm_Greyscale:
+			bpp = 1;
+			break;
+		case cm_CMYK: 
+		case cm_RGB:
+			bpp = 4;
+			break;
+		case cm_CMYKA:
+		case cm_RGBA:
+			bpp = 4;
+			break;
+		case cm_Lab:
+		case cm_LabA:
+			Q_ASSERT(false);
+			break;
+	}
+
+	m_bpp = bpp;
+	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * bpp);
+	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, bpp, cm, defaultColor);
 	m_composeLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE));
 
-	m_bgLayer = new KisLayer("_background", TILE_SIZE, TILE_SIZE, bd, cm, defaultColor);
+	m_bgLayer = new KisLayer("_background", TILE_SIZE, TILE_SIZE, bpp, cm, defaultColor);
 	m_bgLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE));;
 	renderBg(m_bgLayer, 0);
 	compositeImage();
@@ -280,15 +303,15 @@ KisImage::~KisImage()
 
 inline void KisImage::renderTile(KisTileSP dst, const KisTileSP src, const KisPaintDevice *srcDevice)
 {
+	if (!src -> data())
+		return;
+
 	uchar src_opacity = srcDevice -> opacity();
 	uchar opacity;
 	uchar inverseOpacity;
 	uchar sr, sg, sb, sa;
 	uchar dr, dg, db, da;
 
-	if (!src -> data())
-		return;
-	
 	QRgb *drgb = (QRgb*)dst -> data();
 	const QRgb *srgb = (const QRgb*)src -> data();
 
@@ -322,11 +345,9 @@ inline void KisImage::renderTile(KisTileSP dst, const KisTileSP src, const KisPa
 				sr = qRed(*srgb);
 				sg = qGreen(*srgb);
 				sb = qBlue(*srgb);
-				sa = qAlpha(*srgb);
 				dr = qRed(*drgb);
 				dg = qGreen(*drgb);
 				db = qBlue(*drgb);
-				da = qAlpha(*drgb);
 
 				inverseOpacity = CHANNEL_MAX - src_opacity;
 				dr = (dr * inverseOpacity + sr * src_opacity) / CHANNEL_MAX;
@@ -417,7 +438,7 @@ void KisImage::addLayer(const QRect& rect, const KoColor& c, bool tr, const QStr
 	else
 		defaultColor = c.color().rgb();
 	
-	lay = new KisLayer(name, m_width, m_height, m_bitDepth, m_cMode, defaultColor);
+	lay = new KisLayer(name, m_width, m_height, m_bpp, m_cMode, defaultColor);
 	lay -> allocateRect(rect);
 	lay -> clear(c, tr);
 	m_layers.push_back(lay);
@@ -630,7 +651,7 @@ void KisImage::compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y
 {
 	KisTileSP dst = dstDevice -> getTile(tileNo, tileNo);
 
-	memcpy(dst -> data(), m_bgLayer -> getTile(0, 0) -> data(), TILE_SIZE * TILE_SIZE * sizeof(unsigned int));
+	memcpy(dst -> data(), m_bgLayer -> getTile(0, 0) -> data(), dst -> size());
 
 	for (KisLayerSPLstIterator it = m_layers.begin(); it != m_layers.end(); it++) {
 		KisLayerSP lay = *it;
@@ -774,7 +795,7 @@ void KisImage::mergeLayers(KisLayerSPLst& layers)
 		rc = rc.unite((*it) -> imageExtents());	
 
 	it = layers.begin();
-	a = new KisLayer((*it) -> name(), m_width, m_height, m_bitDepth, m_cMode, qRgba(255, 255, 255, 255));
+	a = new KisLayer((*it) -> name(), m_width, m_height, m_bpp, m_cMode, qRgba(255, 255, 255, 255));
 	a -> allocateRect(rc);
 	macro -> addCommand(new KisCommandLayerAdd(this, a));
 

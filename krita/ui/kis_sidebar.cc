@@ -339,6 +339,7 @@ void ControlFrame::slotBGColorSelected(const QColor& c)
 TopColorFrame::TopColorFrame( QWidget* parent, const char* name )
 : QFrame( parent, name )
 {
+#if 0
     setFrameStyle(Panel | Raised);
     setLineWidth(1);
 
@@ -389,10 +390,12 @@ TopColorFrame::TopColorFrame( QWidget* parent, const char* name )
 
     // RGB is default
     m_pRGBButton->setOn(true);
+#endif
 }
 
 void TopColorFrame::resizeEvent ( QResizeEvent * )
 {
+#if 0
     m_pRGBButton->setGeometry  (   0, 0, 30, 18 );
     m_pGreyButton->setGeometry (  30, 0, 30, 18 );
     m_pHSBButton->setGeometry  (  60, 0, 30, 18 );
@@ -400,6 +403,7 @@ void TopColorFrame::resizeEvent ( QResizeEvent * )
     m_pLABButton->setGeometry  ( 126, 0, 30, 18 );
     m_pEmptyFrame->setGeometry ( 156, 0, 26, 18 );
     m_pHideButton->setGeometry ( 182, 0, 18, 18 );
+#endif
 }
 
 void TopColorFrame::slotHideClicked()
@@ -548,29 +552,23 @@ DockFrame::DockFrame( QWidget* parent, const char* name )
 
 void DockFrame::plug (QWidget* w)
 {
-    if(!w) return;
+	if (!w) 
+		return;
 
-    QString name = w->caption();
+	QString name = w -> caption();
 
-    m_wlst.append(w);
-    w->reparent ( this, QPoint(0, 0), true );
+	m_wlst.append(w);
+	w -> reparent(this, QPoint(0, 0), true);
 
-    KoFrameButton* btn = new KoFrameButton(this);
-    btn->setToggleButton(true);
+	KoFrameButton* btn = new KoFrameButton(this);
 
-    QFont font = KGlobalSettings::generalFont();
-    font.setPointSize( 8 );
+	btn -> setText(i18n(name.latin1()));
+	btn -> setFixedHeight(18);
+	btn -> setToggleButton(true);
 
-    btn->setFont(font);
-    btn->setText(name);
-    btn->setGeometry(0, 0, btn->width(), 18);
-
-    // connect button
-    connect(btn, SIGNAL(clicked(const QString&)), this,
-		  SLOT(slotActivateTab(const QString&)));
-
-    m_blst.append(btn);
-    slotActivateTab(name);
+	connect(btn, SIGNAL(clicked(const QString&)), this, SLOT(slotActivateTab(const QString&)));
+	m_blst.append(btn);
+	slotActivateTab(name);
 }
 
 void DockFrame::unplug (QWidget* w)

@@ -18,19 +18,17 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 
 #include <qtl.h>
-
-#include <kdebug.h>
 
 #include "kis_global.h"
 #include "kis_tile.h"
 
 KisTile::KisTile(int x, int y, uint width, uint height, uchar bpp, const QRgb& defaultColor, bool dirty)
 {
+	Q_ASSERT(bpp <= 4);
 	m_cow = false;
 	m_dirty = dirty;
 	m_width = width;
@@ -46,6 +44,7 @@ KisTile::KisTile(int x, int y, uint width, uint height, uchar bpp, const QRgb& d
 
 KisTile::KisTile(const QPoint& parentPos, uint width, uint height, uchar bpp, const QRgb& defaultColor, bool dirty)
 {
+	Q_ASSERT(bpp <= 4);
 	m_cow = false;
 	m_dirty = dirty;
 	m_width = width;
@@ -59,7 +58,7 @@ KisTile::KisTile(const QPoint& parentPos, uint width, uint height, uchar bpp, co
 		initTile();
 }
 
-KisTile::KisTile(const KisTile& tile)
+KisTile::KisTile(const KisTile& tile) : KShared(tile)
 {
 	if (this != &tile)
 		copyTile(tile);
@@ -75,7 +74,6 @@ KisTile& KisTile::operator=(const KisTile& tile)
 
 KisTile::~KisTile()
 {
-	kdDebug() << "KisTile::~KisTile()\n";
 	delete[] m_data;
 }
 	
@@ -92,7 +90,7 @@ void KisTile::copyTile(const KisTile& tile)
 
 	if (tile.m_data) {
 		m_data = new uchar[size()];
-		memcpy(m_data, tile.m_data, m_width * m_height * sizeof(uint));
+		memcpy(m_data, tile.m_data, size());
 	}
 }
 
@@ -112,8 +110,8 @@ uchar* KisTile::data()
 void KisTile::initTile()
 {
 	m_data = new uchar[size()];
-//	qFill(m_data, m_data + size(), m_defaultColor); // xXX Needs to know about bpp
-	memset(m_data, /*rand() %*/ 255, size());
+	qFill(m_data, m_data + size(), m_defaultColor);
+	memset(m_data, rand() % 255, size());
 }
 
 void KisTile::move(int x, int y)
@@ -131,15 +129,7 @@ uchar *KisTile::data(int x, int y)
 {
 	int offset = (y * width() + x) * bpp();
 
-#if 0
-	kdDebug() << "x = " << x << endl;
-	kdDebug() << "y = " << y << endl;
-	kdDebug() << "m_width = " << m_width << endl;
-	kdDebug() << "m_height = " << m_height << endl;
-	kdDebug() << "m_bpp = " << m_bpp << endl;
-	kdDebug() << "offset = " << offset << endl;
-#endif
-	assert(data() <= data() + offset);
+	Q_ASSERT(data() <= data() + offset);
 	Q_ASSERT(data() + size() >= data() + offset);
 	return data() + offset;
 }

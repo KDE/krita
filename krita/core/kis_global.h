@@ -32,7 +32,22 @@ const int CHANNEL_MAX = 255;
 const int TILE_SIZE = 64;
 
 // maximal number of channels
-const int MAX_CHANNELS = 8;
+/*
+ * This  used to mean the maximun number of channel that Krita could
+ * have... No more, it means the maximum number of color channels in
+ * a pixel, the number of onscreen channels is limited only by
+ * memory.
+ */
+const int MAX_CHANNELS = 4;
+
+const int PIXEL_GRAY = 0;
+const int PIXEL_GRAY_ALPHA = 1;
+const int PIXEL_RED = 2;
+const int PIXEL_GREEN = 1;
+const int PIXEL_BLUE = 0;
+const int PIXEL_ALPHA = 3;
+const int PIXEL_INDEXED = 0;
+const int PIXEL_INDEXED_ALPHA = 1;
 
 enum ActiveColor { ac_Foreground, ac_Background};
 

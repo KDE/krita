@@ -23,6 +23,8 @@
 #include <qcstring.h>
 #include <qdatastream.h>
 
+#include <kdebug.h>
+
 #include <koStore.h>
 
 #include "kis_global.h"
@@ -50,8 +52,11 @@ void KisPaintDevice::setPixel(uint x, uint y, const uchar *src, KisImageCmd *cmd
 	KisTileSP tile = m_tiles.getTile(tileNoX, tileNoY);
 
 	if (cmd) {
-		if (!cmd -> hasTile(tile)) {
+		if (tile && !cmd -> hasTile(tile)) {
+			kdDebug() << "Tile is not in command\n";
+
 			if (tile -> cow()) {
+				kdDebug() << "Tile is COW\n";
 				KisTileSP tileCopy = new KisTile(*tile);
 
 				tile -> setCow(false);	

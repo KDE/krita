@@ -165,9 +165,10 @@ void KisToolBrush::paint(const QPoint & pos,
         currentImage->invalidate( pos.x(),  pos.y(),  
 				  tmpLayer->width(),  
 				  tmpLayer->height() );
-	m_subject -> canvasController() -> updateCanvas(pos.x(),  pos.y(),  
-							tmpLayer->width(),  
-							tmpLayer->height());
+	currentImage -> notify(pos.x(), 
+			pos.y(), 
+			tmpLayer -> width(), 
+			tmpLayer -> height());
 }
 
 

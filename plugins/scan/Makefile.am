@@ -1,8 +1,8 @@
 kwordrcdir = $(kde_datadir)/kword/kpartplugins
 kwordrc_DATA = scan-kword.rc
 
-krayonrcdir = $(kde_datadir)/krayon/kpartplugins
-krayonrc_DATA = scan-krayon.rc
+kritarcdir = $(kde_datadir)/krita/kpartplugins
+kritarc_DATA = scan-krita.rc
 
 killustratorrcdir = $(kde_datadir)/kontour/kpartplugins
 killustratorrc_DATA = scan-kontour.rc
@@ -10,7 +10,7 @@ killustratorrc_DATA = scan-kontour.rc
 kpresenterrcdir = $(kde_datadir)/kpresenter/kpartplugins
 kpresenterrc_DATA = scan-kpresenter.rc
 
-EXTRA_DIST = $(kwordrc_DATA) $(krayonrc_DATA) $(killustratorrc_DATA) $(kpresenterrc_DATA)
+EXTRA_DIST = $(kwordrc_DATA) $(kritarc_DATA) $(killustratorrc_DATA) $(kpresenterrc_DATA)
 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 kde_module_LTLIBRARIES = kofficescan.la

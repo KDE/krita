@@ -174,8 +174,8 @@ void DlgColorRange::updatePreview()
 	
 	Q_INT32 x, y, w, h;
 	m_layer -> exactBounds(x, y, w, h);
-	QPixmap pix = QPixmap(m_selection -> convertToQImage(0, x, y, w, h).smoothScale(250, 250, QImage::ScaleMin));
-
+	QPixmap pix = QPixmap(m_selection -> maskImage().smoothScale(350, 350, QImage::ScaleMin));
+	m_subject -> canvasController() -> updateCanvas();
 	m_page -> pixSelection -> setPixmap(pix);
 }
 
@@ -337,7 +337,7 @@ Q_UINT8 DlgColorRange::matchColors(QColor c, QColor c2, enumChannel channel)
 		return c.red() + c2.red() + c.green() + c2.green() + c.blue() + c2.blue() / 6;
 		break;
 	default:
-		return 255;
+		return 0;
 	}
 }
 
@@ -348,10 +348,9 @@ void DlgColorRange::selectByColor(const QColor & c, enumChannel channel, Q_UINT8
 	m_layer -> exactBounds(x, y, w, h);
 	KisStrategyColorSpaceSP cs = m_layer -> colorStrategy();
 	KisProfileSP profile = m_layer -> profile();
-	
 	for (int y2 = y; y2 < h - y; ++y2) {
 		KisHLineIterator hiter = m_layer -> createHLineIterator(x, y2, w, false);
-		KisHLineIterator selIter = m_selection  -> createHLineIterator(x, y2, w, false);
+		KisHLineIterator selIter = m_selection  -> createHLineIterator(x, y2, w, true);
 		while (!hiter.isDone()) {
 			// Clean up as we go, if necessary
 			if (mode == REPLACE) memset (selIter.rawData(), 0, 1); // Selections are hard-coded one byte big.
@@ -361,15 +360,15 @@ void DlgColorRange::selectByColor(const QColor & c, enumChannel channel, Q_UINT8
 			cs -> toQColor(hiter.rawData(), &c2, profile);
 
 			Q_UINT8 match = matchColors(c, c2, channel);
-			kdDebug() << "Color match: " << QString::number(match) << ", fuzziness: " << QString::number(fuzziness) << "\n";
+			
 			if (match < fuzziness) {
 				
-				if (mode == ADD) {
-					selIter.rawData()[0] = match;
+				if (mode == ADD || mode == REPLACE) {
+					*(selIter.rawData()) = MAX_SELECTED;
 					
 				}
 				else if (mode == SUBTRACT) {
-					selIter.rawData()[0] = MIN_SELECTED;
+					*(selIter.rawData()) = MIN_SELECTED;
 					
 				}
 			}

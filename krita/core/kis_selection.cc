@@ -79,22 +79,15 @@ QImage KisSelection::maskImage()
 {
 	Q_INT32 x, y, w, h, y2, x2;
 	m_parentLayer -> exactBounds(x, y, w, h);
-	QImage img = QImage(w, h, 32);
-	uint black = qRgb(0, 0, 0);
-	uint white = qRgb(255, 255, 255);
+	QImage img = QImage(w, h, 32);;
 	
 	for (y2 = y; y2 < h - y; ++y2) {
-		KisHLineIteratorPixel it = createHLineIterator(x, y, w, false);
+		KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
 		x2 = 0;
 		while (!it.isDone()) {
-			// We have always just one 8-bit channel, so this is safe.
-			if (it.pixel().alpha() > SELECTION_THRESHOLD) {
-				
-				img.setPixel(x2, y2, black);
-			}
-			else {
-				img.setPixel(x2, y2, white);
-			}
+			Q_UINT8 s = MAX_SELECTED - *(it.rawData());
+			Q_INT32 c = qRgb(s, s, s);
+			img.setPixel(x2, y2, c);
 			++x2;
 			++it;
 		}

@@ -426,22 +426,23 @@ void KisSelectionManager::invert()
 
 void KisSelectionManager::paste_into()
 {
-        KisImageSP img = m_parent -> currentImg();
+	// XXX Still broken
+//         KisImageSP img = m_parent -> currentImg();
 
-        Q_ASSERT(!QApplication::clipboard() -> image().isNull());
+//         Q_ASSERT(!QApplication::clipboard() -> image().isNull());
 
-        if (img) {
-                KisFloatingSelectionSP fsel = m_doc -> clipboardFloatingSelection();
-                KisLayerSP layer = m_doc -> layerAdd(img, img -> nextLayerName(), fsel);
+//         if (img) {
+//                 KisFloatingSelectionSP fsel = m_doc -> clipboardFloatingSelection();
+//                 KisLayerSP layer = m_doc -> layerAdd(img, img -> nextLayerName(), fsel);
 
-                img -> unsetFloatingSelection(false);
+//                 img -> unsetFloatingSelection(false);
 
-                if (layer) {
-                        layer -> setX(0);
-                        layer -> setY(0);
-                        m_parent -> updateCanvas(layer -> bounds());
-                }
-        }
+//                 if (layer) {
+//                         layer -> setX(0);
+//                         layer -> setY(0);
+//                         m_parent -> updateCanvas();
+//                 }
+//         }
 }
 
 

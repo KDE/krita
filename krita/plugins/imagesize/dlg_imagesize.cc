@@ -17,6 +17,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+#include <config.h>
+
+#if !HAVE_DECL_ROUND
+#define round(x) ((int)(x + 0.5))
+#else
+#include <math.h>
+#endif
+
 #include <iostream>
 
 using namespace std;

@@ -70,12 +70,15 @@ public:
 	virtual ~KisStrategyColorSpace();
 
 public:
+
         // The nativeColor methods take a given color that can be defined in any
         // colorspace and fills a byte array with the corresponding color in the
         // the colorspace managed by this strategy. 
+	// XXX: Add profile support
 	virtual void nativeColor(const QColor& c, QUANTUM *dst) = 0;
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
 
+	// XXX: Add profile support
  	virtual void toQColor(const QUANTUM *src, QColor *c) = 0;
  	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity) = 0;
 
@@ -175,6 +178,7 @@ public:
 	 */
 	KisProfileSP getProfileByName(const QString & name);
 
+	virtual bool valid() { return true; }
 
 protected:
 

@@ -128,7 +128,7 @@ public:
         /**
 	 * Set the specified pixel to the specified color. Note that this
          * bypasses KisPainter. the PaintDevice is here used as an equivalent
-         * to QImage, not QPixmap. This means that this is undoable; also,
+         * to QImage, not QPixmap. This means that this is not undoable; also,
          * there is no compositing with an existing value at this location.
 	 * @return true if the operation was succesful
 	 */

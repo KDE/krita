@@ -67,6 +67,8 @@ public:
 			    Q_INT32 cols, 
 			    CompositeOp op);
 
+	virtual bool valid() { return true; }
+
 private:
 	vKisChannelInfoSP m_channels;
 };

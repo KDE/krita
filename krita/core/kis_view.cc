@@ -452,6 +452,7 @@ void KisView::setupDockers()
                 viewShapesDocker();
                 viewColorDocker();
 		viewFillsDocker();
+		m_fillsdocker -> shade(true);
                 mainWindow() -> setDockEnabled( DockBottom, false);
                 mainWindow() -> setDockEnabled( DockTop, false);
         }
@@ -610,6 +611,8 @@ KisProfileSP KisView::monitorProfile()
 	if (m_monitorProfile == 0) {
 		resetMonitorProfile();
 	}
+	kdDebug() << "Monitor profile: " << m_monitorProfile << "\n";
+
 	return m_monitorProfile;
 }
 
@@ -1389,11 +1392,38 @@ void KisView::previous_layer()
         }
 }
 
+
+void KisView::imgResizeToActiveLayer()
+{
+        KisImageSP img = currentImg();
+        KisLayerSP layer;
+
+
+        if (img && (layer = img -> activeLayer())) {
+		int x, y, w, h;
+		layer -> extent(x, y, w, h);
+
+                if (w > img -> width() && h > img -> height()) {
+                        img -> resize(w, h);
+                }
+		else if (w <= img -> width() && h > img -> height()) {
+			img -> resize(img -> width(), h);
+		}
+		else if (w > img -> width() && h <= img -> height()) {
+			img -> resize(w, img -> height());
+		}
+        }
+}
+
+
+
 void KisView::slotImportImage()
 {
         if (importImage(false) > 0)
                 m_doc -> setModified(true);
 }
+
+
 
 void KisView::export_image()
 {

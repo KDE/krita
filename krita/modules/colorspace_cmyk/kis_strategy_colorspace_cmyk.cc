@@ -48,77 +48,75 @@ KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
 	m_channels.push_back(new KisChannelInfo(i18n("magenta"), 1, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("yellow"), 2, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("black"), 3, COLOR));
+
+	if (profileCount() == 0) {
+		kdDebug() << "No profiles loaded!";
+		return;
+	}
+	
+	m_defaultProfile = getProfileByName("Adobe CMYK"); // XXX: Do not i18n -- this is from a data file
+	if (m_defaultProfile == 0) {
+		kdDebug() << "No Adobe CMYK!";
+		if (profileCount() != 0) {
+			m_defaultProfile = profiles()[0];
+		}
+	}
+
+	if (m_defaultProfile == 0) {
+		kdDebug() << "No default CMYK profile; CMYK will not work!";
+		return;
+	}
+
+	// Create the default transforms from and to a QColor. Use the
+	// display profile if there's one, otherwise a generic sRGB profile
+	// XXX: For now, always use the generic sRGB profile.
+
+	cmsHPROFILE hsRGB = cmsCreate_sRGBProfile();
+	cmsHPROFILE hsCMYK = m_defaultProfile -> profile();
+
+	m_defaultFromRGB = cmsCreateTransform(hsRGB, TYPE_BGR_8, 
+					      hsCMYK, TYPE_CMYK_8,
+					      INTENT_PERCEPTUAL, 0);
+
+	m_defaultToRGB =  cmsCreateTransform(hsCMYK, TYPE_CMYK_8,
+					     hsRGB, TYPE_BGR_8, 
+					     INTENT_PERCEPTUAL, 0);
+
+	// Default pixel buffer for QColor conversion
+	m_qcolordata = new int[3];
+
 }
 
 KisStrategyColorSpaceCMYK::~KisStrategyColorSpaceCMYK()
 {
+	delete m_qcolordata;
+	cmsDeleteTransform(m_defaultToRGB);
+	cmsDeleteTransform(m_defaultFromRGB);
 }
 
 void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM *dst)
 {
-	// XXX: Use lcms transforms
-
-	QUANTUM c = 255 - color.red();
-	QUANTUM m = 255 - color.green();
-	QUANTUM y = 255 - color.blue();
-
-	QUANTUM k = 255;
-
-	if (c < k) k = c;
-	if (m < k) k = m;
-	if (y < k) k = y;
-
-	dst[PIXEL_CYAN] = (c - k) / ( 255 - k);
-	dst[PIXEL_MAGENTA] = (m  - k) / ( 255 - k);
-	dst[PIXEL_YELLOW] = (y - k) / ( 255 - k);
-	dst[PIXEL_BLACK] = k;
+	color.getRgb(m_qcolordata, m_qcolordata + 1, m_qcolordata + 2);
+	cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
 }
 
 void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM /*opacity*/, QUANTUM *dst)
 {
-	// XXX: Use lcms transforms
-
-	QUANTUM c = 255 - color.red();
-	QUANTUM m = 255 - color.green();
-	QUANTUM y = 255 - color.blue();
-
-	QUANTUM k = 255;
-
-	if (c < k) k = c;
-	if (m < k) k = m;
-	if (y < k) k = y;
-
-	dst[PIXEL_CYAN] = (c - k) / ( 255 - k);
-	dst[PIXEL_MAGENTA] = (m  - k) / ( 255 - k);
-	dst[PIXEL_YELLOW] = (y - k) / ( 255 - k);
-	dst[PIXEL_BLACK] = k;
-
+	color.getRgb(m_qcolordata, m_qcolordata + 1, m_qcolordata + 2);
+	cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
 }
 
 
 void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c)
 {
-#if 0	
-    *C = 255 - R;
-    *M = 255 - G;
-    *Y = 255 - B;
-
-    int min = (*C < *M) ? *C : *M;
-    *K = (min < *Y) ? min : *Y;
-
-    *C -= *K;
-    *M -= *K;
-    *Y -= *K;
-#endif
-// 	c -> setCMYK(downscale(src[PIXEL_CYAN]), 
-// 		     downscale(src[PIXEL_MAGENTA]), 
-// 		     downscale(src[PIXEL_YELLOW]), 
-// 		     downscale(src[PIXEL_BLACK]));
+	cmsDoTransform(m_defaultToRGB, const_cast <QUANTUM *>(src), m_qcolordata, 1);
+	c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
 }
 
 void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity)
 {
-// 	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
+	cmsDoTransform(m_defaultToRGB, const_cast <QUANTUM *>(src), m_qcolordata, 1);
+	c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
  	*opacity = OPACITY_OPAQUE;
 }
 
@@ -152,46 +150,19 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
 	
-	if (srcProfile == 0 || dstProfile == 0) {
-		kdDebug() << "Going to transform without profiles\n";
+	KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
 
-		// XXX: Temporary copy from cmyka.cc
-		Q_INT32 i = 0;
-		uchar *j = img.bits();
-		
-		while ( i < width * height * depth() ) {
-			QUANTUM k = *( data + i + PIXEL_BLACK );
-			QUANTUM c = *( data + i + PIXEL_CYAN );
-			QUANTUM m = *( data + i + PIXEL_MAGENTA );
-			QUANTUM y = *( data + i + PIXEL_YELLOW );
-			
-			c = c * ( QUANTUM_MAX - k) + k;
-			m = m * ( QUANTUM_MAX - k) + k;
-			y = y * ( QUANTUM_MAX - k) + k;
-			
-			// XXX: Temporary copy
-			const PIXELTYPE PIXEL_BLUE = 0;
-			const PIXELTYPE PIXEL_GREEN = 1;
-			const PIXELTYPE PIXEL_RED = 2;
-			const PIXELTYPE PIXEL_ALPHA = 3;
 
-			*( j + PIXEL_ALPHA ) = OPACITY_OPAQUE ;
-			*( j + PIXEL_RED )   = QUANTUM_MAX - c;
-			*( j + PIXEL_GREEN ) = QUANTUM_MAX - m;
-			*( j + PIXEL_BLUE )  = QUANTUM_MAX - y;
-			
-			i += 4;
-			j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
-                
-		}
-
+	if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
+		//kdDebug() << "Going to use default transform\n";
+		cmsDoTransform(m_defaultToRGB, 
+			       const_cast<QUANTUM *> (data), 
+			       img.bits(), 
+			       width * height);
 	}
 	else {
-		kdDebug() << "Going to transform with profiles\n";
-
+		//kdDebug() << "Going to transform with profiles\n";
 		// Do a nice calibrated conversion
-		// XXX: Don't assume RGBA -- that color model is not necessarily installed
-		KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
 		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile, 
 				img.bits(), dstCS, dstProfile,
 				width * height, renderingIntent);
@@ -240,8 +211,8 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 	case COMPOSITE_OVER:
 	default:
 		if (opacity == OPACITY_TRANSPARENT) return;
-
 		while (rows-- > 0) {
+
 			d = dst;
 			s = src;
 			for (i = cols; i > 0; i--, d += stride, s += stride) {

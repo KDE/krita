@@ -183,6 +183,7 @@ public slots:
 	void slotImportImage();
 	void export_image();
 	void slotImageProperties();
+        void imgResizeToActiveLayer();
 	void add_new_image_tab();
 	void remove_current_image_tab();
 	void resizeCurrentImage(Q_INT32 w, Q_INT32 h);

@@ -61,8 +61,8 @@ bool KisStrategyColorSpace::convertPixelsTo(QUANTUM * src, KisProfileSP srcProfi
 					    Q_UINT32 length, 
 					    Q_INT32 renderingIntent)
 {
- 	kdDebug() << "convertPixels for " << length << " pixels.\n";
-
+ 	kdDebug() << "convertPixels for " << length << " pixels from " << name() << " to " << dstColorStrategy -> name() << "\n";
+	kdDebug() << " src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
 	cmsHTRANSFORM tf = 0;
 	
 	if (!m_transforms.contains(KisProfilePair(srcProfile, dstProfile))) {
@@ -116,7 +116,7 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 // 		  << ", op: " << op << "\n";
 
 
- 	if (!(m_name == srcSpace -> name())) {
+ 	if (m_name != srcSpace -> name()) {
 		int len = depth() * rows * cols;
  		QUANTUM * convertedSrcPixels = new QUANTUM[len];
 		memset(convertedSrcPixels, 255, len * sizeof(QUANTUM));
@@ -155,7 +155,7 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 
 void KisStrategyColorSpace::resetProfiles() 
 {
-	// XXX: Should find a way to make sure not all profiles are loaded for all color strategies
+	// XXX: Should find a way to make sure not all profiles are read for all color strategies
 	m_profiles.clear();
 	m_profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.icm");
 	m_profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.ICM");

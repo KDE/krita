@@ -74,8 +74,14 @@ public:
 			    Q_INT32 cols, 
 			    CompositeOp op);
 
+	virtual bool valid() { return m_defaultProfile != 0; }
+
 private:
 	vKisChannelInfoSP m_channels;
+	KisProfileSP m_defaultProfile;
+	cmsHTRANSFORM m_defaultToRGB;
+	cmsHTRANSFORM m_defaultFromRGB;
+	int * m_qcolordata;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_CMYK_H_

@@ -173,6 +173,8 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
 		report = report.append(doBlit(COMPOSITE_COPY, *it, OPACITY_OPAQUE, testCount, img));
 		report = report.append(doBlit(COMPOSITE_COPY, *it, OPACITY_OPAQUE / 2, testCount, img));
 
+		doc -> removeImage(img);
+
 	}
 
 	return report;
@@ -370,24 +372,27 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 					
 		// Colour fill
 
-		t.restart();
-		for (Q_UINT32 i = 0; i < testCount; ++i) {
-			p.eraseRect(0, 0, 1000, 1000);
-			p.setPaintColor(Qt::yellow);
-			p.setFillThreshold(15);
-			p.setCompositeOp(COMPOSITE_OVER);
-			p.fillColor(500, 500);
-		}
-		report = report.append(QString("    Opaque floodfill of whole layer (incl. erase) %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+// 		t.restart();
+// 		for (Q_UINT32 i = 0; i < testCount; ++i) {
+// 			p.eraseRect(0, 0, 1000, 1000);
+// 			p.setPaintColor(Qt::yellow);
+// 			p.setFillThreshold(15);
+// 			p.setCompositeOp(COMPOSITE_OVER);
+// 			p.fillColor(500, 500);
+// 		}
+// 		report = report.append(QString("    Opaque floodfill of whole layer (incl. erase) %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 					
 
 		// Pattern fill
+
+		doc -> removeImage(img);
+
 	}
+
+
 
 	return report;
 	
-
-	return QString("Fill test\n");
 }
 
 QString PerfTest::gradientTest(Q_UINT32 testCount)
@@ -397,7 +402,47 @@ QString PerfTest::gradientTest(Q_UINT32 testCount)
 
 QString PerfTest::pixelTest(Q_UINT32 testCount)
 {
-	return QString("Pixel test\n");
+	QString report = QString("* pixel/setpixel test\n");
+
+	KisDoc * doc = m_view -> getDocument();
+	QStringList l = KisColorSpaceRegistry::instance() -> listColorSpaceNames();
+
+	for (QStringList::Iterator it = l.begin(); it != l.end(); ++it) {
+		report = report.append( "  Testing pixel/setpixel on " + *it + "\n");
+
+ 		KisImage * img = doc -> newImage("fill-" + *it, 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
+		doc -> addImage(img);
+		KisLayerSP l = img -> activeLayer();
+
+ 		QTime t;
+ 		t.restart();
+
+		QColor c = Qt::red;
+		QUANTUM opacity = OPACITY_OPAQUE;
+ 		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			for (Q_UINT32 x = 0; x < 1000; ++x) {
+				for (Q_UINT32 y = 0; y < 1000; ++y) {
+					l -> pixel(x, y, &c, &opacity);
+				}
+			}
+ 		}
+		report = report.append(QString("    read 1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+		
+		c= Qt::blue;
+ 		t.restart();
+ 		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			for (Q_UINT32 x = 0; x < 1000; ++x) {
+				for (Q_UINT32 y = 0; y < 1000; ++y) {
+					l -> setPixel(x, y, c, 128);
+				}
+			}
+ 		}
+		report = report.append(QString("    written 1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+		doc -> removeImage(img);
+	}
+
+	return report;
+
 }
 
 QString PerfTest::shapeTest(Q_UINT32 testCount)

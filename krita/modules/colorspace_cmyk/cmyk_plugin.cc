@@ -66,8 +66,10 @@ CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
 		m_StrategyColorSpaceCMYKA = new KisStrategyColorSpaceCMYKA();
 		m_StrategyColorSpaceCMYK = new KisStrategyColorSpaceCMYK();
 
-		KisPluginRegistry::instance() -> registerColorStrategy("CMYK", m_StrategyColorSpaceCMYK);
-		KisPluginRegistry::instance() -> registerColorStrategy("CMYK/Alpha", m_StrategyColorSpaceCMYKA);
+		if (m_StrategyColorSpaceCMYK -> valid()) 
+			KisPluginRegistry::instance() -> registerColorStrategy("CMYK", m_StrategyColorSpaceCMYK);
+// 		if (m_StrategyColorSpaceCMYKA -> valid())
+// 			KisPluginRegistry::instance() -> registerColorStrategy("CMYK/Alpha", m_StrategyColorSpaceCMYKA);
 	}
 	
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002, 2003 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,14 +16,23 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "kis_tool.h"
-#include "kis_tool.moc"
+#if !defined KIS_CANVAS_OBSERVER_H_
+#define KIS_CANVAS_OBSERVER_H_
 
-KisTool::KisTool()
-{
-}
+class KisCanvasSubject;
 
-KisTool::~KisTool()
-{
-}
+class KisCanvasObserver {
+public:
+	KisCanvasObserver();
+	virtual ~KisCanvasObserver();
+
+public:
+	virtual void update(KisCanvasSubject *subject) = 0;
+
+private:
+	KisCanvasObserver(const KisCanvasObserver&);
+	KisCanvasObserver& operator=(const KisCanvasObserver&);
+};
+
+#endif // KIS_CANVAS_OBSERVER_H_
 

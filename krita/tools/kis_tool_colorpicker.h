@@ -16,27 +16,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #if !defined KIS_TOOL_COLOR_PICKER_H_
 #define KIS_TOOL_COLOR_PICKER_H_
 
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 
-class KisDoc;
-class KisView;
+class KisCanvasSubject;
 
 class KisToolColorPicker : public KisToolNonPaint {
+	Q_OBJECT
 	typedef KisToolNonPaint super;
 
 public:
-	KisToolColorPicker(KisView *view, KisDoc *doc);
+	KisToolColorPicker();
 	virtual ~KisToolColorPicker();
   
-	virtual void setup();
+public:
+	virtual void update(KisCanvasSubject *subject);
+	virtual void setup(KActionCollection *collection);
 	virtual void mousePress(QMouseEvent *e);
 
 private:
-	KisView *m_view;
+	KisCanvasSubject *m_subject;
 };
 
 #endif // KIS_TOOL_COLOR_PICKER_H_

@@ -20,20 +20,13 @@
 #if !defined KIS_TOOL_MOVE_H_
 #define KIS_TOOL_MOVE_H_
 
-#include <qpoint.h>
-#include "kis_types.h"
-#include "kis_tool.h"
 #include "kis_tool_non_paint.h"
-#include "kis_strategy_move.h"
 
-class KisDoc;
-class KisView;
-
-class KisToolMove : public KisToolNonPaint, private KisStrategyMove {
+class KisToolMove : public KisToolNonPaint {
 	typedef KisToolNonPaint super;
 
 public:
-	KisToolMove(KisView *view, KisDoc *doc);
+	KisToolMove();
 	virtual ~KisToolMove();
 
 public:
@@ -44,8 +37,7 @@ public:
 	virtual void keyPress(QKeyEvent *e);
 
 private:
-	KisView *m_view;
-	KisDoc *m_doc;
+	KisCanvasSubject *m_subject;
 };
 
 #endif // KIS_TOOL_MOVE_H_

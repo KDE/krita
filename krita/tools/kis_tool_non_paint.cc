@@ -15,18 +15,26 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include "kdebug.h"
-#include "kis_tool_non_paint.h"
-#include "kis_view.h"
 
-KisToolNonPaint::KisToolNonPaint(KisView *view, KisDoc *doc)
+#include <qwidget.h>
+#include <kdebug.h>
+#include "kis_canvas_controller.h"
+#include "kis_canvas_subject.h"
+#include "kis_tool_non_paint.h"
+#include "kis_tool_non_paint.moc"
+
+KisToolNonPaint::KisToolNonPaint()
 {
-	m_view = view;
-	m_doc = doc;
+	m_subject = 0;
 }
 
 KisToolNonPaint::~KisToolNonPaint()
 {
+}
+
+void KisToolNonPaint::update(KisCanvasSubject *subject)
+{
+	m_subject = subject;
 }
 
 void KisToolNonPaint::paint(QPainter&)
@@ -89,14 +97,6 @@ KDialog *KisToolNonPaint::options()
 	return 0;
 }
 
-void KisToolNonPaint::save(KisToolMementoSP)
-{
-}
-
-void KisToolNonPaint::restore(KisToolMementoSP)
-{
-}
-
 void KisToolNonPaint::cursor(QWidget *w) const
 {
 	if (w)
@@ -108,36 +108,13 @@ void KisToolNonPaint::setCursor(const QCursor& cursor)
 	m_cursor = cursor;
 }
 
-void KisToolNonPaint::activateSelf()
-{
-	if (m_view)
-		m_view -> activateTool(this);
-}
-
-void KisToolNonPaint::setup()
-{
-}
-
 void KisToolNonPaint::activate()
 {
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> controller();
+
+		if (controller)
+			controller -> activateTool(this);
+	}
 }
-
-void KisToolNonPaint::setBrush(KisBrush *)
-{
-}
-
-void KisToolNonPaint::setPattern(KisPattern *)
-{
-}
-
-void KisToolNonPaint::setGradient(KisGradient *)
-{
-}
-
-void KisToolNonPaint::setFGColor(const KoColor& )
-{
-}
-
-
-#include "kis_tool_non_paint.moc"
 

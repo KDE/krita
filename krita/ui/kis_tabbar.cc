@@ -33,13 +33,13 @@
 #include <klineeditdlg.h>
 #include <kdebug.h>
 
-#include <kis_view.h>
+#include <kis_canvas_subject.h>
 #include <kis_doc.h>
 
 
 #include "kis_tabbar.h"
 
-KisTabBar::KisTabBar( KisView *_view, KisDoc *_doc )
+KisTabBar::KisTabBar( KisCanvasSubject *_view, KisDoc *_doc )
   : QWidget ( (QWidget*)_view )
   , m_pView ( _view )
   , m_pDoc  ( _doc )

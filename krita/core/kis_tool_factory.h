@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2000 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,12 +19,37 @@
 #if !defined KIS_TOOL_FACTORY_H_
 #define KIS_TOOL_FACTORY_H_
 
-#include "kis_global.h"
+#include <vector>
+#include "kis_types.h"
 
-class KisDoc;
-class KisView;
+class KActionCollection;
+class KisCanvasSubject;
 
-vKisToolSP toolFactory(KisView *view, KisDoc *doc);
+class KisToolFactory {
+	typedef std::vector<KisTool*> vKisTool;
+	typedef vKisTool::iterator vKisTool_it;
+	typedef vKisTool::const_iterator vKisTool_cit;
+
+public:
+	KisToolFactory();
+	~KisToolFactory();
+
+public:
+	void create(KActionCollection *actionCollection, KisCanvasSubject *subject);
+
+public:
+	static KisToolFactory *singleton();
+
+private:
+	KisToolFactory(const KisToolFactory&);
+	KisToolFactory& operator=(const KisToolFactory&);
+
+private:
+	vKisTool m_tools;
+
+private:
+	static KisToolFactory *m_singleton;
+};
 
 #endif // KIS_TOOL_FACTORY_H_
 

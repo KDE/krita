@@ -18,11 +18,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #if !defined KIS_VIEW_H_
 #define KIS_VIEW_H_
 
+#include <list>
 #include <koColor.h>
 #include <koView.h>
+#include "kis_canvas_controller.h"
+#include "kis_canvas_subject.h"
 #include "kis_global.h"
 #include "kis_types.h"
 
@@ -35,6 +39,7 @@ class KAction;
 class KPrinter;
 class KToggleAction;
 class KoIconItem;
+class KisCanvasObserver;
 class KisRuler;
 class KisBrush;
 class KisBuilderMonitor;
@@ -52,9 +57,12 @@ class KisSideBar;
 class KisTabBar;
 class KisUndoAdapter;
 
-class KisView : public KoView {
+class KisView : public KoView, private KisCanvasSubject, private KisCanvasControllerInterface {
 	Q_OBJECT
 	typedef KoView super;
+	typedef std::list<KisCanvasObserver*> vKisCanvasObserver;
+	typedef vKisCanvasObserver::iterator vKisCanvasObserver_it;
+	typedef vKisCanvasObserver::const_iterator vKisCanvasObserver_cit;
 
 public:
 	KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent = 0, const char *name = 0);
@@ -72,21 +80,9 @@ public:
 	virtual void guiActivateEvent(KParts::GUIActivateEvent *event);
 
 public:  
-	void activateTool(KisToolSP tool);
-	KoColor bgColor();
-	KoColor fgColor();
-	KisBrush *currentBrush();
-	KisImageSP currentImg() const;
-	KisPattern *currentPattern();
-	QString currentImgName() const;
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, bool modal = false, const QString& filename = QString::null);
-	void updateCanvas();
-	void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-	void updateCanvas(const QRect& rc);
-	void setBGColor(const KoColor& c);
-	void setFGColor(const KoColor& c);
 	void zoomIn(Q_INT32 x, Q_INT32 y);
 	void zoomOut(Q_INT32 x, Q_INT32 y);
 	Q_INT32 horzValue() const;
@@ -136,6 +132,31 @@ public slots:
 
 protected:
 	virtual void resizeEvent(QResizeEvent*);
+
+private:
+	virtual void attach(KisCanvasObserver *observer);
+	virtual void detach(KisCanvasObserver *observer);
+	virtual void notify();
+	virtual KisImageSP currentImg() const;
+	virtual QString currentImgName() const;
+	virtual KoColor bgColor() const;
+	virtual void setBGColor(const KoColor& c);
+	virtual KoColor fgColor() const;
+	virtual void setFGColor(const KoColor& c);
+	virtual KisBrush *currentBrush() const;
+	virtual KisPattern *currentPattern() const;
+	virtual KisGradient *currentGradient() const;
+	virtual double zoomFactor() const;
+	virtual KisUndoAdapter *undoAdapter() const;
+	virtual KisCanvasControllerInterface *controller() const;
+	virtual KoDocument *document() const;
+
+private:
+	virtual void activateTool(KisTool *tool);
+	virtual KisTool *currentTool() const;
+	virtual void updateCanvas();
+	virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	virtual void updateCanvas(const QRect& rc);
 
 private:
 	void clearCanvas(const QRect& rc);
@@ -314,7 +335,6 @@ private:
 	QWidget *m_imageChooser;
 	KisChannelView *m_channelView;
 	QWidget *m_pathView;    
-	vKisToolSP m_toolSet;
 	KisBuilderMonitor *m_imgBuilderMgr;
 	KisLabelBuilderProgress *m_buildProgress;
 	KisResourceMediator *m_brushMediator;
@@ -328,12 +348,12 @@ private:
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
 	KisListBox *m_layerBox;
-	KisToolSP m_tool;
-	KisToolSP m_paste;
+	KisTool *m_tool;
 	bool m_clipboardHasImage;
 	KisGuideSP m_currentGuide;
 	QPoint m_lastGuidePoint;
 	KisUndoAdapter *m_adapter;
+	vKisCanvasObserver m_observers;
 
 private:
 	mutable KisImageSP m_current;

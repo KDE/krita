@@ -19,6 +19,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+#include <algorithm>
+
 // Qt
 #include <qapplication.h>
 #include <qbutton.h>
@@ -79,7 +81,6 @@
 #include "kis_tabbar.h"
 #include "kis_tool.h"
 #include "kis_tool_factory.h"
-#include "kis_tool_paste.h"
 #include "kis_view.h"
 #include "kis_undo_adapter.h"
 #include "kis_util.h"
@@ -103,6 +104,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	else
 		setXMLFile("krita.rc");
 
+	m_tool = 0;
 	m_doc = doc;
 	m_adapter = adapter;
 	m_canvas = 0;
@@ -608,42 +610,24 @@ void KisView::clearCanvas(const QRect& rc)
 	gc.eraseRect(rc);
 }
 
-void KisView::activateTool(KisToolSP tool)
+void KisView::activateTool(KisTool *tool)
 {
 	if (m_tool)
 		m_tool -> clear();
 
-	if (tool && qFind(m_toolSet.begin(), m_toolSet.end(), tool) != m_toolSet.end()) {
+	if (tool) {
 		m_tool = tool;
 		m_tool -> cursor(m_canvas);
-                m_tool -> setFGColor( m_fg );
-                m_tool -> setBrush( m_brush );
-                m_tool -> setPattern( m_pattern );
-                m_tool -> setGradient( m_gradient );
-		m_tool -> activate();
-
+		notify();
 	} else {
 		m_tool = 0;
 		m_canvas -> setCursor(KisCursor::arrowCursor());
 	}
 }
 
-KisImageSP KisView::currentImg() const
+KisTool *KisView::currentTool() const
 {
-	if (m_current && m_doc -> contains(m_current))
-		return m_current;
-
-	m_current = m_doc -> imageNum(m_doc -> nimages() - 1);
-	connectCurrentImg();
-	return m_current;
-}
-
-QString KisView::currentImgName() const
-{
-	if (currentImg())
-		return currentImg() -> name();
-
-	return QString::null;
+	return m_tool;
 }
 
 Q_INT32 KisView::horzValue() const
@@ -831,8 +815,8 @@ void KisView::copy()
 
 void KisView::paste()
 {
-	Q_ASSERT(!QApplication::clipboard() -> image().isNull());
-	activateTool(m_paste);
+//	Q_ASSERT(!QApplication::clipboard() -> image().isNull());
+//	activateTool(m_paste);
 }
 
 void KisView::paste_into()
@@ -1631,18 +1615,17 @@ void KisView::brushActivated(KisResource *brush)
 	if (m_brush && (item = m_brushMediator -> itemFor(m_brush)))
 		m_sideBar -> slotSetBrush(item);
 
-        if ( m_brush && m_tool ) {
-            m_tool -> setBrush( m_brush );
-        }
+        if (m_brush)
+		notify();
 }
 
 void KisView::setActivePattern(KoIconItem *pattern)
 {
 	m_pattern = dynamic_cast<KisPattern*>(pattern);
 	m_sideBar -> slotSetPattern(*m_pattern);
-        if ( m_pattern && m_tool ) {
-            m_tool -> setPattern( m_pattern );
-        }
+
+        if (m_pattern)
+		notify();
 }
 
 void KisView::setBGColor(const KoColor& c)
@@ -1660,9 +1643,7 @@ void KisView::setFGColor(const KoColor& c)
 void KisView::slotSetFGColor(const KoColor& c)
 {
 	m_fg = c;
-        if ( m_tool ) {
-            m_tool->setFGColor( c );
-        }
+	notify();
 }
 
 void KisView::slotSetBGColor(const KoColor& c)
@@ -1714,12 +1695,14 @@ void KisView::print(KPrinter& printer)
 
 void KisView::setupTools()
 {
-	m_toolSet = toolFactory(this, m_doc);
+	// TODO Bind the tools to this view here.
+
+//	m_toolSet = toolFactory(this, m_doc);
         // Why is the paste tool local to the view,
         // instead of added by the toolfactory?
-	m_paste = new KisToolPaste(this, m_doc);
-	m_toolSet.push_back(m_paste);
-	m_paste -> setup();
+	//m_paste = 0; // TODO new KisToolPaste(this, m_doc);
+//	m_toolSet.push_back(m_paste);
+//	m_paste -> setup();
 }
 
 void KisView::canvasGotPaintEvent(QPaintEvent *event)
@@ -1975,7 +1958,7 @@ void KisView::layerProperties()
 					m_doc -> layerProperties(img, layer, dlg.getOpacity(), dlg.getName());
 
 				if (pt.x() != layer -> x() || pt.y() != layer -> y())
-					KisStrategyMove(this, m_doc).simpleMove(QPoint(layer -> x(), layer -> y()), pt);
+					KisStrategyMove(m_doc, this, this).simpleMove(QPoint(layer -> x(), layer -> y()), pt);
 
 				if (changed)
 					m_adapter -> endMacro();
@@ -2297,16 +2280,6 @@ void KisView::duplicateCurrentImg()
 	}
 }
 
-KoColor KisView::bgColor()
-{
-	return m_bg;
-}
-
-KoColor KisView::fgColor()
-{
-	return m_fg;
-}
-
 void KisView::setupClipboard()
 {
 	QClipboard *cb = QApplication::clipboard();
@@ -2596,6 +2569,89 @@ QPoint KisView::mapToScreen(const QPoint& pt)
 	converted.rx() = pt.x() + horzValue() - canvasXOffset();
 	converted.ry() = pt.y() + vertValue() - canvasYOffset();
 	return converted;
+}
+
+void KisView::attach(KisCanvasObserver *observer)
+{
+	if (observer)
+		m_observers.push_back(observer);
+}
+
+void KisView::detach(KisCanvasObserver *observer)
+{
+	vKisCanvasObserver_it it = std::find(m_observers.begin(), m_observers.end(), observer);
+
+	if (it != m_observers.end())
+		m_observers.erase(it);
+}
+
+void KisView::notify()
+{
+	for (vKisCanvasObserver_it it = m_observers.begin(); it != m_observers.end(); it++)
+		(*it) -> update(this);
+}
+
+KisImageSP KisView::currentImg() const
+{
+	if (m_current && m_doc -> contains(m_current))
+		return m_current;
+
+	m_current = m_doc -> imageNum(m_doc -> nimages() - 1);
+	connectCurrentImg();
+	return m_current;
+}
+
+QString KisView::currentImgName() const
+{
+	if (currentImg())
+		return currentImg() -> name();
+
+	return QString::null;
+}
+
+KoColor KisView::bgColor() const
+{
+	return m_bg;
+}
+
+KoColor KisView::fgColor() const
+{
+	return m_fg;
+}
+
+KisBrush *KisView::currentBrush() const
+{
+	return m_brush;
+}
+
+KisPattern *KisView::currentPattern() const
+{
+	return m_pattern;
+}
+
+KisGradient *KisView::currentGradient() const
+{
+	return m_gradient;
+}
+
+double KisView::zoomFactor() const
+{
+	return zoom();
+}
+
+KisUndoAdapter *KisView::undoAdapter() const
+{
+	return m_adapter;
+}
+
+KisCanvasControllerInterface *KisView::controller() const
+{
+	return const_cast<KisCanvasControllerInterface*>(static_cast<const KisCanvasControllerInterface*>(this));
+}
+
+KoDocument *KisView::document() const
+{
+	return koDocument();
 }
 
 #include "kis_view.moc"

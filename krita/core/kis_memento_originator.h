@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002, 2003 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,14 +16,24 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "kis_tool.h"
-#include "kis_tool.moc"
+#if !defined KIS_MEMENTO_ORIGINATOR_H_
+#define KIS_MEMENTO_ORIGINATOR_H_
 
-KisTool::KisTool()
-{
-}
+#include "kis_types.h"
 
-KisTool::~KisTool()
-{
-}
+class KisMementoOriginatorInterface {
+public:
+	KisMementoOriginatorInterface();
+	virtual ~KisMementoOriginatorInterface();
+
+public:
+	virtual KisMementoSP save() const = 0;
+	virtual void restore(KisMementoSP memento) = 0;
+
+private:
+	KisMementoOriginatorInterface(const KisMementoOriginatorInterface&);
+	KisMementoOriginatorInterface& operator=(const KisMementoOriginatorInterface&);
+};
+
+#endif // KIS_MEMENTO_ORIGINATOR_H_
 

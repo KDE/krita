@@ -16,20 +16,22 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #include <qpoint.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <koColor.h>
 #include "kis_cursor.h"
+#include "kis_canvas_subject.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
-#include "kis_view.h"
 #include "kis_tool_colorpicker.h"
+#include "kis_tool_colorpicker.moc"
 
-KisToolColorPicker::KisToolColorPicker(KisView *view, KisDoc *doc) : super(view, doc)
+KisToolColorPicker::KisToolColorPicker()
 {
-	m_view = view;
 	setCursor(KisCursor::pickerCursor());
+	m_subject = 0;
 }
 
 KisToolColorPicker::~KisToolColorPicker() 
@@ -38,42 +40,49 @@ KisToolColorPicker::~KisToolColorPicker()
 
 void KisToolColorPicker::mousePress(QMouseEvent *e)
 {
-	KisImageSP img;
-	KisPaintDeviceSP dev;
-	QPoint pos;
-	KoColor c;
-	QUANTUM opacity;
+	if (m_subject) {
+		KisImageSP img;
+		KisPaintDeviceSP dev;
+		QPoint pos;
+		KoColor c;
+		QUANTUM opacity;
 
-	if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)
-		return;
+		if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)
+			return;
 
-	if (!(img = m_view -> currentImg()))
-		return;
+		if (!(img = m_subject -> currentImg()))
+			return;
 
-	dev = img -> activeDevice();
+		dev = img -> activeDevice();
 
-	if (!dev || !dev -> visible())
-		return;
+		if (!dev || !dev -> visible())
+			return;
 
-	pos = e -> pos();
-	
-	if (!dev -> contains(pos))
-		return;
+		pos = e -> pos();
 
-	if (dev -> pixel(pos.x(), pos.y(), &c, &opacity)) {
-		if (e -> button() == QMouseEvent::LeftButton)
-			m_view -> setFGColor(c);
-		else 
-			m_view -> setBGColor(c);
+		if (!dev -> contains(pos))
+			return;
+
+		if (dev -> pixel(pos.x(), pos.y(), &c, &opacity)) {
+			if (e -> button() == QMouseEvent::LeftButton)
+				m_subject -> setFGColor(c);
+			else 
+				m_subject -> setBGColor(c);
+		}
 	}
 }
 
-void KisToolColorPicker::setup()
+void KisToolColorPicker::setup(KActionCollection *collection)
 {
 	KToggleAction *toggle;
 
-	Q_ASSERT(m_view);
-	toggle = new KToggleAction(i18n("&Color Picker"), "colorpicker", 0, this, SLOT(activateSelf()), m_view -> actionCollection(), "tool_colorpicker");
+	toggle = new KToggleAction(i18n("&Color Picker"), "colorpicker", 0, this, SLOT(activateSelf()), collection, "tool_colorpicker");
 	toggle -> setExclusiveGroup("tools");
+}
+
+void KisToolColorPicker::update(KisCanvasSubject *subject)
+{
+	super::update(subject);
+	m_subject = subject;
 }
 

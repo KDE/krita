@@ -10,7 +10,8 @@ libkiscore_la_SOURCES = kis_paint_device.cc kis_layer.cc kis_channel.cc kis_mask
 	kis_brush.cc kis_krayon.cc kis_pattern.cc kis_nameserver.cc \
 	kis_painter.cc kis_tool_factory.cc kis_cursor.cc kis_selection.cc kis_command.cc \
 	kis_background.cc kis_global.cc kis_config.cc kis_tool.cc kis_resource.cc kis_resource_mediator.cc \
-        kis_guide.cc 
+        kis_guide.cc kis_memento_originator.cc \
+	kis_canvas_subject.cc kis_canvas_controller.cc kis_canvas_observer.cc
 
 libkiscore_la_METASOURCES = AUTO
 libkiscore_la_LDFLAGS = $(KDE_RPATH)

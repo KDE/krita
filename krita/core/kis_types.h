@@ -80,14 +80,10 @@ typedef QValueVector<QPoint> vKisSegments;
 class KoColor;
 typedef QValueVector<KoColor> KoColorMap;
 
-class KisToolInterface;
-typedef KSharedPtr<KisToolInterface> KisToolSP;
-typedef QValueVector<KisToolSP> vKisToolSP;
-typedef vKisToolSP::iterator vKisToolSP_it;
-typedef vKisToolSP::const_iterator vKisToolSP_cit;
-
-class KisToolMemento;
-typedef KSharedPtr<KisToolMemento> KisToolMementoSP;
+class KisTool;
+typedef QValueVector<KisTool*> vKisTool;
+typedef vKisTool::iterator vKisTool_it;
+typedef vKisTool::const_iterator vKisTool_cit;
 
 class KisStrategyColorSpace;
 typedef KSharedPtr<KisStrategyColorSpace> KisStrategyColorSpaceSP;
@@ -95,6 +91,9 @@ typedef QMap<Q_INT32, KisStrategyColorSpaceSP> KisStrategyColorSpaceMap;
 
 class KisGuide;
 typedef KSharedPtr<KisGuide> KisGuideSP;
+
+class KisMemento;
+typedef KSharedPtr<KisMemento> KisMementoSP;
 
 #endif // KISTYPES_H_
 

@@ -19,15 +19,7 @@
 #define KIS_TOOL_PAINT_H_
 
 #include <qcursor.h>
-
-#include <koColor.h>
-
-#include "kis_global.h"
-#include "kis_types.h"
 #include "kis_tool.h"
-#include "kis_brush.h"
-#include "kis_pattern.h"
-#include "kis_gradient.h"
 
 class QEvent;
 class QKeyEvent;
@@ -36,15 +28,14 @@ class QMouseEvent;
 class QTabletEvent;
 class QRect;
 class KDialog;
-class KisDoc;
-class KisView;
+class KisCanvasSubject;
 
-class KisToolPaint : public KisToolInterface {
+class KisToolPaint : public KisTool {
 	Q_OBJECT
-	typedef KisToolInterface super;
+	typedef KisTool super;
 
 public:
-	KisToolPaint(KisView *view, KisDoc *doc);
+	KisToolPaint();
 	virtual ~KisToolPaint();
 	
 public:
@@ -53,8 +44,6 @@ public:
 	virtual void clear();
 	virtual void clear(const QRect& rc);
 
-	virtual void setup();
-	virtual void activate();
 	virtual void enter(QEvent *e);
 	virtual void leave(QEvent *e);
 	virtual void mousePress(QMouseEvent *e);
@@ -68,28 +57,12 @@ public:
 	virtual void setCursor(const QCursor& cursor);
 	virtual KDialog *options();
 
-	virtual void save(KisToolMementoSP memento);
-	virtual void restore(KisToolMementoSP memento);
-
-        virtual void setBrush(KisBrush *brush);
-        virtual void setPattern(KisPattern *pattern);
-        virtual void setGradient(KisGradient *gradient);
-        virtual void setFGColor(const KoColor& color);
-
-
-public slots:
-	virtual void activateSelf();
-
+protected slots:
+	virtual void activate();
+	
 private:
-	KisView *m_view;
-	KisDoc *m_doc;
 	QCursor m_cursor;
-
-protected:
-        KisBrush *m_brush;
-        KisPattern *m_pattern;
-        KisGradient *m_gradient;
-        KoColor m_color;
+	KisCanvasSubject *m_subject;
 };
 
 #endif // KIS_TOOL_PAINT_H_

@@ -26,7 +26,7 @@
 #include <qpainter.h>
 #include <qstrlist.h>
 
-class KisView;
+class KisCanvasSubject;
 class KisDoc;
 
 /**
@@ -42,7 +42,7 @@ class KisTabBar : public QWidget
     Q_OBJECT
 
 public:
-    KisTabBar( KisView *_view, KisDoc *_doc );
+    KisTabBar( KisCanvasSubject *_view, KisDoc *_doc );
 
 signals:
     void tabSelected( const QString& _text );
@@ -102,7 +102,7 @@ protected:
     
     void openPopupMenu( QPoint &_global );
     
-    KisView *m_pView;
+    KisCanvasSubject *m_pView;
     KisDoc  *m_pDoc;
     
     enum { autoScrollNo = 0, autoScrollLeft, autoScrollRight };

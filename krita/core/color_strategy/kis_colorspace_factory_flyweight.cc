@@ -23,7 +23,9 @@
 #include "kis_strategy_colorspace_cmyk.h"
 #include "kis_strategy_colorspace_rgb.h"
 
-KisColorSpaceFactoryFlyweight moveMe; // XXX Where should we create singletons in Krita?!?
+namespace {
+	KisColorSpaceFactoryFlyweight moveMe; // XXX Where should we create singletons in Krita?!?
+}
 
 KisColorSpaceFactoryFlyweight::KisColorSpaceFactoryFlyweight()
 {

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2002, 2003 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,31 +16,34 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #if !defined KIS_TOOL_H_
 #define KIS_TOOL_H_
 
-#include <qevent.h>
 #include <qobject.h>
-#include <qstring.h>
+#include "kis_canvas_observer.h"
 
-#include <koColor.h>
-
-#include "kis_types.h"
-#include "kis_cursor.h"
-#include "kis_brush.h"
-#include "kis_pattern.h"
-#include "kis_gradient.h"
-
+class QCursor;
+class QEvent;
+class QKeyEvent;
+class QMouseEvent;
 class QPainter;
 class QRect;
+class QTabletEvent;
+class QWidget;
+class KActionCollection;
 class KDialog;
+class KoColor;
+class KisBrush;
+class KisGradient;
+class KisPattern;
 
-class KisToolInterface : public QObject, public KShared {
+class KisTool : public QObject, public KisCanvasObserver {
 	Q_OBJECT
 
 public:
-	KisToolInterface();
-	virtual ~KisToolInterface();
+	KisTool();
+	virtual ~KisTool();
 
 public:
 	virtual void paint(QPainter& gc) = 0;
@@ -48,46 +51,25 @@ public:
 	virtual void clear() = 0;
 	virtual void clear(const QRect& rc) = 0;
 
-	virtual void setup() = 0;
-	virtual void activate() = 0;
+	virtual void setup(KActionCollection *collection) = 0;
+
 	virtual void enter(QEvent *e) = 0;
 	virtual void leave(QEvent *e) = 0;
 	virtual void mousePress(QMouseEvent *e) = 0;
 	virtual void mouseMove(QMouseEvent *e) = 0;
 	virtual void mouseRelease(QMouseEvent *e) = 0;
-        virtual void tabletEvent(QTabletEvent *e) = 0;
+	virtual void tabletEvent(QTabletEvent *e) = 0;
 	virtual void keyPress(QKeyEvent *e) = 0;
 	virtual void keyRelease(QKeyEvent *e) = 0;
 
 	virtual void setCursor(const QCursor& cursor) = 0;
 	virtual void cursor(QWidget *w) const = 0;
-	virtual KDialog *options() = 0;
-	
-	virtual void save(KisToolMementoSP memento) = 0;
-	virtual void restore(KisToolMementoSP memento) = 0;
-
-        virtual void setBrush(KisBrush *brush) = 0;
-        virtual void setPattern(KisPattern *pattern) = 0;
-        virtual void setGradient(KisGradient *gradient) = 0;
-        virtual void setFGColor(const KoColor& color) = 0;
-
-public slots:
-	virtual void activateSelf() = 0;
+	virtual KDialog *options(QWidget *parent) = 0;
 
 private:
-	KisToolInterface(const KisToolInterface&);
-	KisToolInterface& operator=(const KisToolInterface&);
+	KisTool(const KisTool&);
+	KisTool& operator=(const KisTool&);
 };
-
-inline
-KisToolInterface::KisToolInterface() : QObject(), KShared()
-{
-}
-
-inline
-KisToolInterface::~KisToolInterface()
-{
-}
 
 #endif // KIS_TOOL_H_
 

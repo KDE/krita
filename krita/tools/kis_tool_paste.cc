@@ -15,21 +15,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <kaction.h>
-#include <kcommand.h>
-#include <klocale.h>
-#include "kis_paint_device.h"
-#include "kis_cursor.h"
-#include "kis_doc.h"
-#include "kis_painter.h"
-#include "kis_tool_paste.h"
-#include "kis_undo_adapter.h"
-#include "kis_view.h"
 
-KisToolPaste::KisToolPaste(KisView *view, KisDoc *doc) : super(view, doc), KisStrategyMove(view, doc)
+#include <kaction.h>
+#include <klocale.h>
+#include "kis_canvas_subject.h"
+#include "kis_cursor.h"
+#include "kis_image.h"
+#include "kis_painter.h"
+#include "kis_paint_device.h"
+#include "kis_tool_paste.h"
+#include "kis_tool_paste.moc"
+#include "kis_undo_adapter.h"
+
+KisToolPaste::KisToolPaste()
 {
-	m_view = view;
-	m_doc = doc;
+	m_subject = 0;
 	setCursor(KisCursor::crossCursor());
 	m_justEntered = false;
 }
@@ -50,8 +50,8 @@ void KisToolPaste::enter(QEvent *)
 
 void KisToolPaste::leave(QEvent *)
 {
-	if (m_selection) {
-		KisImageSP owner = m_view -> currentImg();
+	if (m_subject && m_selection) {
+		KisImageSP owner = m_subject -> currentImg();
 //		QRect rc(m_selection -> bounds());
 
 		Q_ASSERT(owner);
@@ -64,8 +64,8 @@ void KisToolPaste::leave(QEvent *)
 
 void KisToolPaste::mouseRelease(QMouseEvent *e)
 {
-	if (m_selection) {
-		KisImageSP owner = m_view -> currentImg();
+	if (m_subject && m_selection) {
+		KisImageSP owner = m_subject -> currentImg();
 		KisPaintDeviceSP dev;
 		KisPainter gc;
 
@@ -105,13 +105,16 @@ void KisToolPaste::mouseMove(QMouseEvent *e)
 
 void KisToolPaste::activate()
 {
+	super::activate();
 	m_toggle -> setChecked(true);
 
+#if 0
 	if (!m_selection)
 		m_selection = m_doc -> clipboardSelection();
+#endif
 
-	if (m_selection) {
-		KisImageSP owner = m_view -> currentImg();
+	if (m_subject && m_selection) {
+		KisImageSP owner = m_subject -> currentImg();
 
 		if (owner) {
 			m_selection -> setImage(owner);
@@ -124,9 +127,9 @@ void KisToolPaste::activate()
 	}
 }
 
-void KisToolPaste::setup()
+void KisToolPaste::setup(KActionCollection *collection)
 {
-	m_toggle = new KToggleAction(i18n("&Paste Tool"), "editpaste", 0, this, SLOT(activateSelf()), m_view -> actionCollection(), "tool_paste");
+	m_toggle = new KToggleAction(i18n("&Paste Tool"), "editpaste", 0, this, SLOT(activateSelf()), collection, "tool_paste");
 	m_toggle -> setExclusiveGroup("tools");
 }
 

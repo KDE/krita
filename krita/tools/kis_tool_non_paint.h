@@ -15,13 +15,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #if !defined KIS_TOOL_NON_PAINT_H_
 #define KIS_TOOL_NON_PAINT_H_
 
 #include <qcursor.h>
-
 #include <koColor.h>
-
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_tool.h"
@@ -36,25 +35,25 @@ class QMouseEvent;
 class QTabletEvent;
 class QRect;
 class KDialog;
-class KisDoc;
-class KisView;
+class KisCanvasSubject;
 
-class KisToolNonPaint : public KisToolInterface {
+class KisToolNonPaint : public KisTool {
 	Q_OBJECT
-	typedef KisToolInterface super;
+	typedef KisTool super;
 
 public:
-	KisToolNonPaint(KisView *view, KisDoc *doc);
+	KisToolNonPaint();
 	virtual ~KisToolNonPaint();
 	
+public:
+	virtual void update(KisCanvasSubject *subject);
+
 public:
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
 	virtual void clear();
 	virtual void clear(const QRect& rc);
 
-	virtual void setup();
-	virtual void activate();
 	virtual void enter(QEvent *e);
 	virtual void leave(QEvent *e);
 	virtual void mousePress(QMouseEvent *e);
@@ -68,22 +67,12 @@ public:
 	virtual void setCursor(const QCursor& cursor);
 	virtual KDialog *options();
 
-	virtual void save(KisToolMementoSP memento);
-	virtual void restore(KisToolMementoSP memento);
-
-        virtual void setBrush(KisBrush *brush);
-        virtual void setPattern(KisPattern *pattern);
-        virtual void setGradient(KisGradient *gradient);
-        virtual void setFGColor(const KoColor& color);
-
-
-public slots:
-	virtual void activateSelf();
+protected slots:
+	virtual void activate();
 
 private:
-	KisView *m_view;
-	KisDoc *m_doc;
 	QCursor m_cursor;
+	KisCanvasSubject *m_subject;
 };
 
 #endif // KIS_TOOL_NON_PAINT_H_

@@ -15,20 +15,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+#include <qwidget.h>
 #include <kdebug.h>
-#include <koColor.h>
-
+#include "kis_canvas_controller.h"
+#include "kis_canvas_subject.h"
 #include "kis_tool_paint.h"
-#include "kis_view.h"
-#include "kis_global.h"
-#include "kis_types.h"
-#include "kis_resource.h"
+#include "kis_tool_paint.moc"
 
-
-KisToolPaint::KisToolPaint(KisView *view, KisDoc *doc)
+KisToolPaint::KisToolPaint()
 {
-	m_view = view;
-	m_doc = doc;
+	m_subject = 0;
 }
 
 KisToolPaint::~KisToolPaint()
@@ -95,14 +92,6 @@ KDialog *KisToolPaint::options()
 	return 0;
 }
 
-void KisToolPaint::save(KisToolMementoSP)
-{
-}
-
-void KisToolPaint::restore(KisToolMementoSP)
-{
-}
-
 void KisToolPaint::cursor(QWidget *w) const
 {
 	if (w)
@@ -114,40 +103,13 @@ void KisToolPaint::setCursor(const QCursor& cursor)
 	m_cursor = cursor;
 }
 
-void KisToolPaint::activateSelf()
-{
-	if (m_view)
-		m_view -> activateTool(this);
-}
-
-void KisToolPaint::setup()
-{
-}
-
 void KisToolPaint::activate()
 {
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> controller();
+
+		if (controller)
+			controller -> activateTool(this);
+	}
 }
-
-void KisToolPaint::setBrush(KisBrush *brush)
-{
-    m_brush = brush;
-}
-
-void KisToolPaint::setPattern(KisPattern *pattern)
-{
-    m_pattern = pattern;
-}
-
-void KisToolPaint::setGradient(KisGradient *gradient)
-{
-    m_gradient = gradient;
-}
-
-void KisToolPaint::setFGColor(const KoColor& color)
-{
-    m_color = color;
-}
-
-
-#include "kis_tool_paint.moc"
 

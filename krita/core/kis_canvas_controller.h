@@ -16,18 +16,30 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_MEMENTO_H_
-#define KIS_MEMENTO_H_
+#if !defined KIS_CANVAS_CONTROLLER_H_
+#define KIS_CANVAS_CONTROLLER_H_
 
-class KisMemento {
+#include <qglobal.h>
+
+class QRect;
+class KisTool;
+
+class KisCanvasControllerInterface {
 public:
-	virtual ~KisMemento();
+	KisCanvasControllerInterface();
+	virtual ~KisCanvasControllerInterface();
+
+public:
+	virtual void activateTool(KisTool *tool) = 0;
+	virtual KisTool *currentTool() const = 0;
+	virtual void updateCanvas() = 0;
+	virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
+	virtual void updateCanvas(const QRect& rc) = 0;
+
+private:
+	KisCanvasControllerInterface(const KisCanvasControllerInterface&);
+	KisCanvasControllerInterface& operator=(const KisCanvasControllerInterface&);
 };
 
-inline
-KisMemento::~KisMemento()
-{
-}
-
-#endif // KIS_MEMENTO_H_
+#endif // KIS_CANVAS_CONTROLLER_H_
 

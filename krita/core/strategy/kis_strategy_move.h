@@ -15,18 +15,20 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #if !defined KIS_STRATEGY_MOVE_H_
 #define KIS_STRATEGY_MOVE_H_
 
 #include <qpoint.h>
 #include "kis_types.h"
 
-class KisDoc;
-class KisView;
+class KoDocument;
+class KisCanvasControllerInterface;
+class KisCanvasSubject;
 
 class KisStrategyMove {
 public:
-	KisStrategyMove(KisView *view, KisDoc *doc);
+	KisStrategyMove(KoDocument *doc, KisCanvasControllerInterface *controller, KisCanvasSubject *subject);
 	virtual ~KisStrategyMove();
 
 public:
@@ -36,8 +38,9 @@ public:
 	void simpleMove(const QPoint& pt1, const QPoint& pt2);
 
 private:
-	KisView *m_view;
-	KisDoc *m_doc;
+	KoDocument *m_doc; 
+	KisCanvasControllerInterface *m_controller; 
+	KisCanvasSubject *m_subject;
 	QPoint m_dragStart;
 	QPoint m_layerStart;
 	QPoint m_layerPosition;

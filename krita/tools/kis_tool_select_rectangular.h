@@ -28,7 +28,7 @@ class KisToolRectangularSelect : public KisToolNonPaint {
 	typedef KisToolNonPaint super;
 
 public:
-	KisToolRectangularSelect(KisView *view, KisDoc *doc);
+	KisToolRectangularSelect(KisDoc *doc);
 	virtual ~KisToolRectangularSelect();
 
 public:
@@ -45,7 +45,6 @@ private:
 	void paintOutline(QPainter& gc, const QRect& rc);
 
 private:
-	KisView *m_view;
 	KisDoc *m_doc;
 	QPoint m_startPos;
 	QPoint m_endPos;

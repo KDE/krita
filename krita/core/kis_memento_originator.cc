@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002, 2003 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,14 +16,13 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "kis_tool.h"
-#include "kis_tool.moc"
+#include "kis_memento_originator.h"
 
-KisTool::KisTool()
+KisMementoOriginatorInterface::KisMementoOriginatorInterface()
 {
 }
 
-KisTool::~KisTool()
+KisMementoOriginatorInterface::~KisMementoOriginatorInterface()
 {
 }
 

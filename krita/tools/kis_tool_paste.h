@@ -21,29 +21,31 @@
 #include "kis_selection.h"
 #include "kis_tool_non_paint.h"
 #include "kis_tool_move.h"
-#include "kis_strategy_move.h"
 
+class KActionCollection;
 class KToggleAction;
 
-class KisToolPaste : public KisToolNonPaint, private KisStrategyMove {
+class KisToolPaste : public KisToolNonPaint {
+	Q_OBJECT
 	typedef KisToolNonPaint super;
 
 public:
-	KisToolPaste(KisView *view, KisDoc *doc);
+	KisToolPaste();
 	virtual ~KisToolPaste();
 
 public:
-	virtual void activate();
 	virtual void clear();
 	virtual void enter(QEvent *e);
 	virtual void leave(QEvent *e);
 	virtual void mouseMove(QMouseEvent *e);
 	virtual void mouseRelease(QMouseEvent *e);
-	virtual void setup();
+	virtual void setup(KActionCollection *collection);
+
+protected slots:
+	virtual void activate();
 
 private:
-	KisView *m_view;
-	KisDoc *m_doc;
+	KisCanvasSubject *m_subject;
 	KisSelectionSP m_clip;
 	bool m_justEntered;
 	QUANTUM m_oldOpacity;

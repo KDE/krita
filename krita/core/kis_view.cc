@@ -575,7 +575,6 @@ void KisView::resizeEvent(QResizeEvent *)
         Q_INT32 scrollBarExtent = style().pixelMetric(QStyle::PM_ScrollBarExtent);
         Q_INT32 tbarOffset = 64;
         Q_INT32 tbarBtnH = scrollBarExtent;
-        Q_INT32 tbarBtnW = scrollBarExtent;
         Q_INT32 drawH;
         Q_INT32 drawW;
         Q_INT32 docW;

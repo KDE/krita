@@ -352,8 +352,11 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 				m_hashTable[i]= 0;
 
 			// And put it in the redo hashtable of the memento
-			curTile->setNext(memento->m_redoHashTable[i]);
-			memento->m_redoHashTable[i] = curTile;
+			if(curTile)
+			{
+				curTile->setNext(memento->m_redoHashTable[i]);
+				memento->m_redoHashTable[i] = curTile;
+			}
 
 			// Put a copy of the memento tile into our hashtable
 			curTile = new KisTile(*tile);

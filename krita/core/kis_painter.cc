@@ -33,11 +33,6 @@ KisPainter::KisPainter()
 {
 }
 
-KisPainter::KisPainter(KisPixelDataSP pd)
-{
-	begin(pd);
-}
-
 KisPainter::KisPainter(KisPaintDeviceSP device)
 {
 	begin(device);
@@ -48,11 +43,6 @@ KisPainter::~KisPainter()
 	end();
 }
 
-void KisPainter::begin(KisPixelDataSP pd)
-{
-	m_dst = pd;
-}
-
 void KisPainter::begin(KisPaintDeviceSP device)
 {
 	m_device = device;
@@ -60,13 +50,9 @@ void KisPainter::begin(KisPaintDeviceSP device)
 
 void KisPainter::end()
 {
-	if (m_dst && m_dst -> mgr == 0)
-		m_dst -> tile -> release();
-
-	if (m_dst && m_dst -> mgr)
-		m_dst -> mgr -> releasePixelData(m_dst);
 }
 
+#if 0
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
 	Q_INT32 x;
@@ -83,8 +69,6 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 
 	if (sw < 0 || sh < 0)
 		return;
-
-	prepareEzPaint();
 
 	// TODO switch on the image type then go for the composite
 	// TODO Implement all composites for all image depths
@@ -142,6 +126,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 	m_dst -> mgr -> releasePixelData(m_dst);
 	m_dst = 0;
 }
+#endif
 
 void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileSP srctile, QUANTUM opacity, Q_INT32 rows, Q_INT32 cols, CompositeOp op)
 {
@@ -264,6 +249,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 	bitBlt(dx, dy, op, srcdev, OPACITY_OPAQUE, sx, sy, sw, sh);
 }
 
+#if 0
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
 	Q_INT32 x;
@@ -272,8 +258,6 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 	QUANTUM *s;
 	QUANTUM alpha;
 	QUANTUM invAlpha;
-
-	prepareEzPaint();
 
 	if (sw == -1)
 		sw = src -> width;
@@ -320,6 +304,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 			break;
 	}
 }
+#endif
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP srcdev, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
@@ -654,19 +639,6 @@ void KisPainter::eraseRect(const QRect& rc)
 void KisPainter::fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity)
 {
 	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
-}
-
-void KisPainter::prepareEzPaint()
-{
-	end();
-
-	if (m_device && !m_dst) {
-		KisTileMgrSP tm = m_device -> data();
-
-		m_dst = tm -> pixelData(0, 0, m_device -> width() - 1, m_device -> height() - 1, TILEMODE_RW);
-	}
-
-	Q_ASSERT(m_dst);
 }
 
 KisPaintDeviceSP KisPainter::device() const

@@ -279,6 +279,7 @@ private:
 	KisListBox *m_layerBox;
 	KisChannelView *m_channelView;
 	KisToolSP m_tool;
+	KisToolSP m_paste;
 	vKisToolSP m_toolSet;
 
 private:

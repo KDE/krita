@@ -39,6 +39,7 @@ class KisPaintDevice : public QObject, public KisRenderInterface {
 	typedef KisRenderInterface super;
 
 public:
+	KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& name);
 	virtual ~KisPaintDevice();
@@ -70,7 +71,6 @@ public:
 	bool contains(const QPoint& pt) const;
 	QString name();
 	void setName(const QString& name);
-	void mergeShadow();
 	KoColor pixel(Q_INT32 x, Q_INT32 y);
 	void pixel(Q_INT32 x, Q_INT32 y, const KoColor& c);
 	void maskBounds(Q_INT32 *x1, Q_INT32 *y1, Q_INT32 *x2, Q_INT32 *y2);

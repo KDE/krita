@@ -18,6 +18,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+
+// Qt
+#include <qapplication.h>
+#include <qclipboard.h>
 #include <qdom.h>
 #include <qimage.h>
 #include <qpainter.h>
@@ -25,6 +29,7 @@
 #include <qstringlist.h>
 #include <qwidget.h>
 
+// KDE
 #include <dcopobject.h>
 #include <kcommand.h>
 #include <kdebug.h>
@@ -35,6 +40,7 @@
 #include <klocale.h>
 #include <ksharedptr.h>
 
+// KOffice
 #include <koFilterManager.h>
 #include <koMainWindow.h>
 #include <koQueryTrader.h>
@@ -42,9 +48,11 @@
 #include <koStoreDevice.h>
 #include <koTemplateChooseDia.h>
 
+// Local
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_channel.h"
+#include "kis_dlg_create_img.h"
 #include "kis_doc.h"
 #include "kis_factory.h"
 #include "kis_image.h"
@@ -169,9 +177,9 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_dcop = 0;
 	setInstance(KisFactory::global(), true);
 	m_cmdHistory = 0;
-	m_clip = 0;
 	QPixmap::setDefaultOptimization(QPixmap::BestOptim);
 	m_nserver = 0;
+	m_pushedClipboard = false;
 
 	if (name)
 		dcopObject();
@@ -179,7 +187,6 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 
 KisDoc::~KisDoc()
 {
-	delete m_clip;
 	delete m_cmdHistory;
         delete m_dcop;
 	delete m_nserver;
@@ -228,7 +235,7 @@ bool KisDoc::initDoc()
 
 	if (ret == KoTemplateChooseDia::Template) {
 		QString name = nextImageName();
-		KisImageSP img = new KisImage(this, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, IMG_DEFAULT_DEPTH, 0, IMAGE_TYPE_RGBA, name);
+		KisImageSP img = new KisImage(this, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, OPACITY_OPAQUE, IMAGE_TYPE_RGBA, name);
 		KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_DEPTH, img -> nextLayerName(), OPACITY_OPAQUE);
 
 		layer -> visible(true);
@@ -896,57 +903,9 @@ bool KisDoc::LayerToQtImage(QImage * /*qimg*/, const QRect& /*clipRect*/)
 #endif
 }
 
-/*
-    removeClipImage - delete the currentImg clip image and nullify it
-*/
-void KisDoc::removeClipImage()
+KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, enumImgType type)
 {
-	delete m_clip;
-	m_clip = 0L;
-}
-
-/*
-    setClipImage - set currentImg clip image for the document
-    from the selection
-*/
-bool KisDoc::setClipImage()
-{
-#if 0
-    KisImageSP img = currentImg();
-    if(!img) return false;
-
-    KisLayer *lay = img->getCurrentLayer();
-    if(!lay) return false;
-
-    if(m_clip != 0L)
-    {
-        delete m_clip;
-        m_clip = 0L;
-    }
-
-    QRect selectRect = getSelection()->getRectangle();
-
-    // create a clip image same size, depth, etc., as selection image
-    m_clip = new QImage(selectRect.width(), selectRect.height(), 32);
-    if(!m_clip) return false;
-
-    // we will need alpha channel for masking the unselected pixels out
-    m_clip->setAlphaBuffer(true);
-
-    // make a deep copy of the selection image, if there is one
-    if(getSelection()->getImage().isNull())
-        return false;
-    else
-        *m_clip = getSelection()->getImage();
-
-    return true;
-#endif
-    return false;
-}
-
-KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, enumImgType type, Q_INT32 depth)
-{
-	KisImageSP img = new KisImage(this, width, height, depth, 0, type, name);
+	KisImageSP img = new KisImage(this, width, height, OPACITY_OPAQUE, type, name);
 
 	m_images.push_back(img);
 
@@ -996,60 +955,29 @@ void KisDoc::removeImage(const QString& name)
 
 bool KisDoc::slotNewImage()
 {
-#if 0
-	NewDialog dlg;
-	KisImageSP img;
+	KisDlgCreateImg dlg(IMG_WIDTH_MAX, IMG_DEFAULT_WIDTH, IMG_HEIGHT_MAX, IMG_DEFAULT_HEIGHT);
 
-	dlg.exec();
+	if (dlg.exec() == QDialog::Accepted) {
+		QUANTUM opacity = dlg.backgroundOpacity();
+		KoColor c = dlg.backgroundColor();
+		KisImageSP img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), OPACITY_OPAQUE, dlg.colorSpace(), nextImageName());
+		KisLayerSP layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
+		KisPainter gc(layer.data());
 
-	if (!dlg.result() == QDialog::Accepted)
-		return false;
+		gc.fillRect(0, 0, layer -> width(), layer -> height(), c, opacity);
+		gc.end();
+		img -> add(layer, -1);
+		addImage(img);
+		return true;
+	}
 
-	Q_INT32 w = dlg.newwidth();
-	Q_INT32 h = dlg.newheight();
-	bgMode bg = dlg.backgroundMode();
-	cMode cm = dlg.colorMode();
-
-	kdDebug() << "KisDoc::slotNewImage: w: "<< w << "h: " << h << endl;
-
-	int n = m_images.size() + 1;
-	QString	name = i18n("image %1").arg(n);
-
-	if (!(img = newImage(name, w, h, cm, 8)))
-		return false;
-
-	// XXX background color
-	if (bg == bm_White)
-		img -> addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
-	else if (bg == bm_Transparent)
-		img -> addLayer(QRect(0, 0, w, h), KoColor::white(), true, i18n("background"));
-	else if (bg == bm_ForegroundColor)
-		img -> addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
-	else if (bg == bm_BackgroundColor)
-		img -> addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
-
-	img -> markDirty(QRect(0, 0, w, h));
-	emit layersUpdated();
-	return true;
-#endif
-	QString name = "noname";
-	KisImageSP img = new KisImage(this, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, IMG_DEFAULT_DEPTH, 0, IMAGE_TYPE_RGBA, name);
-	KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, img -> nextLayerName(), OPACITY_OPAQUE);
-	KisPainter gc(layer.data());
-
-	gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::white());
-	gc.end();
-	img -> add(layer, -1);
-	addImage(img);
-	return true;
+	return false;
 }
 
 KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 {
 	return new KisView(this, parent, name);
 }
-
-#include "kis_timer.h"
 
 void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
 {
@@ -1379,6 +1307,42 @@ void KisDoc::layerProperties(KisImageSP img, KisLayerSP layer, QUANTUM opacity, 
 		emit layersUpdated(img);
 		emit projectionUpdated(img);
 	}
+}
+
+void KisDoc::setClipboardSelection(KisSelectionSP selection)
+{
+	m_clipboard = selection;
+
+	if (selection) {
+		QImage qimg = selection -> toImage();
+		QClipboard *cb = QApplication::clipboard();
+
+		cb -> setImage(qimg);
+		m_pushedClipboard = true;
+	}
+}
+
+KisSelectionSP KisDoc::clipboardSelection()
+{
+	return m_clipboard;
+}
+
+void KisDoc::clipboardDataChanged()
+{
+	if (!m_pushedClipboard) {
+		QClipboard *cb = QApplication::clipboard();
+		QImage qimg = cb -> image();
+
+		if (!qimg.isNull()) {
+			m_clipboard = new KisSelection(qimg.width(), qimg.height(), 
+					qimg.hasAlphaBuffer() ? IMAGE_TYPE_RGBA : IMAGE_TYPE_RGB,
+					"KisDoc created clipboard selection");
+
+			m_clipboard -> fromImage(qimg);
+		}
+	}
+
+	m_pushedClipboard = false;
 }
 
 #include "kis_doc.moc"

@@ -246,17 +246,17 @@ void KisTileMgr::invalidateTiles(KisTileSP top)
 	m_tiles[num] = invalidateTile(m_tiles[num], num);
 }
 
-Q_UINT32 KisTileMgr::width() const
+Q_INT32 KisTileMgr::width() const
 {
 	return m_width;
 }
 
-Q_UINT32 KisTileMgr::height() const
+Q_INT32 KisTileMgr::height() const
 {
 	return m_height;
 }
 
-Q_UINT32 KisTileMgr::depth() const
+Q_INT32 KisTileMgr::depth() const
 {
 	return m_depth;
 }

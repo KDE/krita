@@ -74,7 +74,7 @@ public:
 	void setRedoLimit(Q_INT32 limit);
 	void setUndo(bool undo);
 
-	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, enumImgType type, Q_INT32 depth);
+	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, enumImgType type);
 	void addImage(KisImageSP img);
 	void removeImage(KisImageSP img);
 	void removeImage(const QString& name);
@@ -91,12 +91,11 @@ public:
 	bool QtImageToLayer(QImage *qimage, KisView *pView);
 	bool LayerToQtImage(QImage *qimage, const QRect& clipRect);
 
-	bool setClipImage();
-	QImage getClipImage();
-	void removeClipImage();
-
 	QString nextImageName() const;
 	void setProjection(KisImageSP img);
+
+	void setClipboardSelection(KisSelectionSP selection);
+	KisSelectionSP clipboardSelection();
 
 public slots:
 	void slotImageUpdated();
@@ -113,6 +112,7 @@ private slots:
 	void slotAlphaChanged(KisImageSP img);
 	void slotVisibilityChanged(KisImageSP img, CHANNELTYPE ctype);
 	void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
+	void clipboardDataChanged();
 
 signals:
 	void docUpdated();
@@ -130,7 +130,6 @@ private:
 	QDomElement saveLayers(QDomDocument& doc, KisImageSP img);
 	QDomElement saveChannels(QDomDocument& doc, KisLayer* lay);
 	QDomElement saveToolSettings(QDomDocument& doc) const;
-
 	bool loadImages(QDomElement& elem);
 	bool loadLayers(QDomElement& elem, KisImageSP img);
 	void loadChannels(QDomElement& elem, KisLayerSP lay);
@@ -142,7 +141,8 @@ private:
 	KCommandHistory *m_cmdHistory;
 	vKisImageSP m_images;
 	KisImageSP m_projection;
-	QImage *m_clip;
+	KisSelectionSP m_clipboard;
+	bool m_pushedClipboard;
 	DCOPObject *m_dcop;
 	KisNameServer *m_nserver;
 };

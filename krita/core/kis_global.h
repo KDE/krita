@@ -1,6 +1,4 @@
 /*
- *  kis_global.h - part of KImageShop
- *
  *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
@@ -65,6 +63,11 @@ const QUANTUM QUANTUM_MAX = USHRT_MAX;
 const QUANTUM OPACITY_TRANSPARENT = 0;
 const QUANTUM OPACITY_OPAQUE = QUANTUM_MAX;
 const QUANTUM MAXCHANNELS = 5;
+const Q_INT32 IMG_WIDTH_MAX = QUANTUM_MAX;
+const Q_INT32 IMG_HEIGHT_MAX = QUANTUM_MAX;
+const Q_INT32 IMG_DEFAULT_WIDTH = 512;
+const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
+const Q_INT32 IMG_DEFAULT_DEPTH = 4;
 
 enum CompositeOp {
 	COMPOSITE_UNDEF,
@@ -125,10 +128,6 @@ const PIXELTYPE PIXEL_BLUE = 2;
 const PIXELTYPE PIXEL_ALPHA = 3;
 const PIXELTYPE PIXEL_INDEXED = 0;
 const PIXELTYPE PIXEL_INDEXED_ALPHA = 1;
-
-const Q_INT32 IMG_DEFAULT_WIDTH = 512;
-const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
-const Q_INT32 IMG_DEFAULT_DEPTH = 4;
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 

@@ -28,17 +28,12 @@
 
 KisToolRectangularSelect::KisToolRectangularSelect(KisView *view, KisDoc *doc) : super(view, doc)
 {
-	KToggleAction *toggle;
-
-	m_cursor = KisCursor::selectCursor();
+	setCursor(KisCursor::selectCursor());
 	m_view = view;
 	m_doc = doc;
 	m_selecting = false;
 	m_startPos = QPoint(0, 0);
 	m_endPos = QPoint(0, 0);
-	toggle = new KToggleAction(i18n("&Rectangular Select"), "rectangular", 0, this, 
-			SLOT(activateSelf()), view -> actionCollection(), "tool_select_rectangular");
-	toggle -> setExclusiveGroup("tools");
 }
 
 KisToolRectangularSelect::~KisToolRectangularSelect()
@@ -158,22 +153,12 @@ void KisToolRectangularSelect::paintOutline(QPainter& gc, const QRect&)
 	gc.setPen(old);
 }
 
-void KisToolRectangularSelect::activateSelf()
+void KisToolRectangularSelect::setup()
 {
-	if (m_view)
-		m_view -> activateTool(this);
-}
+	KToggleAction *toggle;
 
-void KisToolRectangularSelect::setCursor(const QCursor& cursor)
-{
-	m_cursor = cursor;
+	toggle = new KToggleAction(i18n("&Rectangular Select"), "rectangular", 0, this, 
+			SLOT(activateSelf()), m_view -> actionCollection(), "tool_select_rectangular");
+	toggle -> setExclusiveGroup("tools");
 }
-
-void KisToolRectangularSelect::cursor(QWidget *w) const
-{
-	if (w)
-		w -> setCursor(m_cursor);
-}
-
-#include "kis_tool_select_rectangular.moc"
 

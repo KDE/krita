@@ -22,6 +22,7 @@
 // Qt
 #include <qapplication.h>
 #include <qbutton.h>
+#include <qclipboard.h>
 #include <qcursor.h>
 #include <qevent.h>
 #include <qpainter.h>
@@ -68,6 +69,7 @@
 #include "kis_tabbar.h"
 #include "kis_tool.h"
 #include "kis_tool_factory.h"
+#include "kis_tool_paste.h"
 #include "kis_view.h"
 #include "kis_util.h"
 #include "kis_paint_device_visitor.h"
@@ -507,11 +509,10 @@ void KisView::resizeEvent(QResizeEvent *)
 	m_vRuler -> show();
 }
 
-/*
-    updateReadWrite - for the functionally illiterate
-*/
-void KisView::updateReadWrite(bool /*readwrite*/)
+void KisView::updateReadWrite(bool readwrite)
 {
+	layerUpdateGUI(readwrite);
+	selectionUpdateGUI(readwrite);
 }
 
 inline
@@ -530,6 +531,7 @@ void KisView::activateTool(KisToolSP tool)
 	if (tool && qFind(m_toolSet.begin(), m_toolSet.end(), tool) != m_toolSet.end()) {
 		m_tool = tool;
 		m_tool -> cursor(m_canvas);
+		m_tool -> activate();
 	} else {
 		m_tool = 0;
 		m_canvas -> setCursor(KisCursor::arrowCursor());
@@ -697,7 +699,7 @@ void KisView::selectionUpdateGUI(bool enable)
 {
 	m_selectionCut -> setEnabled(enable);
 	m_selectionCopy -> setEnabled(enable);
-	m_selectionPaste -> setEnabled(currentImg() != 0);
+	m_selectionPaste -> setEnabled(currentImg() != 0 && !QApplication::clipboard() -> image().isNull());
 	m_selectionCrop -> setEnabled(enable);
 	m_selectionRm -> setEnabled(enable);
 	m_selectionFillBg -> setEnabled(enable);
@@ -714,27 +716,22 @@ void KisView::cut()
 
 void KisView::copy()
 {
-#if 0
-	if (!m_doc -> setClipImage())
-		kdDebug() << "m_doc->setClipImage() failed" << endl;
+	KisImageSP img = currentImg();
 
-	if (m_doc -> getClipImage()) {
-		QImage cImage = *m_doc -> getClipImage();
-		kapp -> clipboard() -> setImage(cImage);
-       	}
-#endif
+	if (img) {
+		KisSelectionSP selection = img -> selection();
+
+		if (selection) {
+			m_doc -> setClipboardSelection(selection);
+			imgSelectionChanged(currentImg());
+		}
+	}
 }
 
 void KisView::paste()
 {
-#if 0
-	if (m_doc -> getClipImage()) {
-		m_paste -> setClip();
-		activateTool(m_paste);
-	}
-	else
-		KMessageBox::sorry(0, i18n("Nothing to paste!"), "", false);
-#endif
+	Q_ASSERT(!QApplication::clipboard() -> image().isNull());
+	activateTool(m_paste);
 }
 
 void KisView::removeSelection()
@@ -746,26 +743,42 @@ void KisView::removeSelection()
 
 		if (selection) {
 			KisPaintDeviceSP parent = selection -> parent();
-			QRect rc = selection -> bounds();
-			QRect clip = selection -> clip();
-			KisPainter gc(parent);
 
-			if (!clip.isEmpty()) {
-				rc.setX(rc.x() + clip.x());
-				rc.setY(rc.y() + clip.y());
-				rc.setWidth(clip.width());
-				rc.setHeight(clip.height());
+			if (parent) {
+				QRect rc = selection -> bounds();
+				QRect clip = selection -> clip();
+				KisPainter gc(parent);
+
+				if (!clip.isEmpty()) {
+					rc.setX(rc.x() + clip.x());
+					rc.setY(rc.y() + clip.y());
+					rc.setWidth(clip.width());
+					rc.setHeight(clip.height());
+				}
+
+				img -> unsetSelection(false);
+				gc.eraseRect(rc);
+				gc.end();
+				m_doc -> setModified(true);
+				img -> invalidate(rc);
+				updateCanvas(rc);
 			}
-
-			img -> unsetSelection(false);
-			gc.eraseRect(rc);
-			gc.end();
-			m_doc -> setModified(true);
-			img -> invalidate(rc);
-			updateCanvas(rc);
 		}
 	}
 }
+
+void KisView::crop()
+{
+	KisImageSP img = currentImg();
+
+	if (img) {
+		KisSelectionSP selection = img -> selection();
+
+		if (selection && m_doc -> layerAdd(img, img -> nextLayerName(), selection))
+			layersUpdated();
+	}
+}
+
 
 void KisView::imgUpdateGUI()
 {
@@ -839,20 +852,6 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 			img -> invalidate(rc);
 			m_doc -> setModified(true);
 			updateCanvas(rc);
-		}
-	}
-}
-
-void KisView::crop()
-{
-	KisImageSP img = currentImg();
-
-	if (img) {
-		KisSelectionSP selection = img -> selection();
-
-		if (selection && m_doc -> layerAdd(img, img -> nextLayerName(), selection)) {
-			img -> unsetSelection(false);
-			updateCanvas();
 		}
 	}
 }
@@ -1258,9 +1257,7 @@ void KisView::layer_mirrorY()
 
 void KisView::add_new_image_tab()
 {
-	if (m_doc -> slotNewImage()) {
-		m_doc -> setModified(true);
-	}
+	m_doc -> slotNewImage();
 }
 
 void KisView::remove_current_image_tab()
@@ -1494,6 +1491,8 @@ void KisView::print(KPrinter &)
 void KisView::setupTools()
 {
 	m_toolSet = toolFactory(this, m_doc);
+	m_paste = new KisToolPaste(this, m_doc);
+	m_toolSet.push_back(m_paste);
 }
 
 void KisView::canvasGotPaintEvent(QPaintEvent *event)

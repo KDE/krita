@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *                1999 Michael Koch    <koch@kde.org>
+ *                2002 Patrick Julien  <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,7 +20,6 @@
 #if !defined KIS_TOOL_MOVE_H_
 #define KIS_TOOL_MOVE_H_
 
-#include <qcursor.h>
 #include <qpoint.h>
 #include "kis_types.h"
 #include "kis_tool.h"
@@ -29,7 +29,6 @@ class KisDoc;
 class KisView;
 
 class KisToolMove : public KisToolNonPaint {
-	Q_OBJECT
 	typedef KisToolNonPaint super;
 
 public:
@@ -37,15 +36,16 @@ public:
 	virtual ~KisToolMove();
 
 public:
+	virtual void setup();
 	virtual void mousePress(QMouseEvent *e);
 	virtual void mouseMove(QMouseEvent *e);
 	virtual void mouseRelease(QMouseEvent *e);
 	virtual void keyPress(QKeyEvent *e);
-	virtual void cursor(QWidget *w) const;
-	virtual void setCursor(const QCursor& cursor);
 
-public slots:
-	virtual void activateSelf();
+public:
+	void startDrag(const QPoint& pos);
+	void drag(const QPoint& pos);
+	void endDrag(const QPoint& pos, bool undo = true);
 
 private:
 	KisView *m_view;
@@ -53,7 +53,6 @@ private:
 	QPoint m_dragStart;
 	QPoint m_layerStart;
 	QPoint m_layerPosition;
-	QCursor m_cursor;
 	bool m_dragging;
 };
 

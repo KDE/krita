@@ -1,7 +1,5 @@
 /*
- *  kis_tool_brush.h - part of Krayon
- *
- *  Copyright (c) 2001 John Califf
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,59 +15,37 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-#ifndef __pastetool_h__
-#define __pastetool_h__
-
-#include <qpoint.h>
+#if !defined KIS_TOOL_PASTE_H_
+#define KIS_TOOL_PASTE_H_
 
 #include "kis_selection.h"
-#include "kis_tool.h"
+#include "kis_tool_non_paint.h"
+#include "kis_tool_move.h"
 
-class KisSelection;
+class KisToolPaste : public KisToolNonPaint {
+	typedef KisToolNonPaint super;
 
-class PasteTool : public KisTool {
 public:
-	PasteTool(KisDoc *doc, KisCanvas *canvas);
-	virtual ~PasteTool();
-  
-	virtual void setupAction(QObject *collection);
-	virtual bool shouldRepaint();
-	virtual bool setClip();
+	KisToolPaste(KisView *view, KisDoc *doc);
+	virtual ~KisToolPaste();
 
-	virtual void mousePress(QMouseEvent*); 
-	virtual void mouseMove(QMouseEvent*);
-	virtual void mouseRelease(QMouseEvent*);
+public:
+	virtual void activate();
+	virtual void enter(QEvent *e);
+	virtual void leave(QEvent *e);
+	virtual void mousePress(QMouseEvent *e);
+	virtual void mouseMove(QMouseEvent *e);
+	virtual void mouseRelease(QMouseEvent *e);
 
-	void setOpacity(int opacity);
-	bool pasteMonochrome(QPoint pos);
-	bool pasteColor(QPoint pos);
-	bool pasteToCanvas(QPoint pos);
-
-public slots:
-	virtual void toolSelect();
-
-protected:
-
-	/* contains selection rectangle definition, status, etc. 
-	   This will also contain effects and raster operations to
-	   be performed on selection and/or area pasted to */
-
-	QPixmap     clipPix;   
-
-	QPoint      oldp;
-	QPoint      mHotSpot;
-	int         mHotSpotX;
-	int         mHotSpotY;
-
-	QSize       mClipSize;
-	int         clipWidth;
-	int         clipHeight;
-
-	QPoint 	    m_dragStart;
-	bool        m_dragging;
-	float       m_dragdist;
-
+private:
+	KisView *m_view;
+	KisDoc *m_doc;
+	KisToolMove *m_move;
+	KisSelectionSP m_clip;
+	bool m_justEntered;
+	QUANTUM m_oldOpacity;
+	KisSelectionSP m_selection;
 };
 
-#endif //__pastetool_h__
+#endif // KIS_TOOL_PASTE_H_
+

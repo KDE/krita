@@ -28,12 +28,8 @@
 
 KisToolColorPicker::KisToolColorPicker(KisView *view, KisDoc *doc) : super(view, doc)
 {
-	KToggleAction *toggle;
-
 	m_view = view;
-	m_cursor = KisCursor::pickerCursor();
-	toggle = new KToggleAction(i18n("&Color Picker"), "colorpicker", 0, this, SLOT(activateSelf()), view -> actionCollection(), "tool_colorpicker");
-	toggle -> setExclusiveGroup("tools");
+	setCursor(KisCursor::pickerCursor());
 }
 
 KisToolColorPicker::~KisToolColorPicker() 
@@ -71,14 +67,12 @@ void KisToolColorPicker::mousePress(QMouseEvent *e)
 		m_view -> setBGColor(c);
 }
 
-void KisToolColorPicker::setCursor(const QCursor& cursor)
+void KisToolColorPicker::setup()
 {
-	m_cursor = cursor;
-}
+	KToggleAction *toggle;
 
-void KisToolColorPicker::cursor(QWidget *w) const
-{
-	if (w)
-		w -> setCursor(m_cursor);
+	Q_ASSERT(m_view);
+	toggle = new KToggleAction(i18n("&Color Picker"), "colorpicker", 0, this, SLOT(activateSelf()), m_view -> actionCollection(), "tool_colorpicker");
+	toggle -> setExclusiveGroup("tools");
 }
 

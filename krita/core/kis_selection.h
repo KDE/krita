@@ -18,7 +18,10 @@
 #if !defined KIS_SELECTION_H_
 #define KIS_SELECTION_H_
 
+#include <qimage.h>
 #include <qrect.h>
+#include "kis_global.h"
+#include "kis_types.h"
 #include "kis_layer.h"
 
 class KisSelection : public KisLayer {
@@ -26,6 +29,7 @@ class KisSelection : public KisLayer {
 	typedef KisLayer super;
 
 public:
+	KisSelection(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	KisSelection(KisPaintDeviceSP parent, KisImageSP img, const QString& name, QUANTUM opacity);
 	virtual ~KisSelection();
 
@@ -36,9 +40,12 @@ public:
 
 public:
 	void commit();
+	void fromImage(const QImage& img);
+	QImage toImage();
 	void setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_INT32 height);
 	void setBounds(const QRect& rc);
 	KisPaintDeviceSP parent() const;
+	void setParent(KisPaintDeviceSP parent);
 
 private slots:
 	void parentVisibilityChanged(KisPaintDeviceSP parent);
@@ -46,6 +53,7 @@ private slots:
 private:
 	KisPaintDeviceSP m_parent;
 	KisImageSP m_img;
+	QImage m_clipImg;
 	QString m_name;
 	QRect m_rc;
 	bool m_firstMove;

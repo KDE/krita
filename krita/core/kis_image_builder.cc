@@ -114,7 +114,7 @@ KisImageBuilder_Result KisImageBuilder::buildImage()
 	if (mimages.empty())
 		return KisImageBuilder_RESULT_EMPTY;
 
-	img = new KisImage(m_members -> doc, 0, 0, 4, 0, IMAGE_TYPE_RGBA, m_members -> doc -> nextImageName());
+	img = new KisImage(m_members -> doc, 0, 0, OPACITY_OPAQUE, IMAGE_TYPE_RGBA, m_members -> doc -> nextImageName());
 
 	for (mimglist::iterator it = mimages.begin(); it != mimages.end(); it++) {
 		Magick::Image& magick = *it;

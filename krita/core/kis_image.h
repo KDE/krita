@@ -41,7 +41,7 @@ class KisImage : public QObject, public KisRenderInterface {
 	typedef vQPixmap::const_iterator vQPixmap_cit;
 
 public:
-	KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name);
+	KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name);
 	virtual ~KisImage();
 
 public:
@@ -152,7 +152,7 @@ private:
 	KisImage(const KisImage& rhs);
 	KisImage& operator=(const KisImage& rhs);
 	void expand(KisPaintDeviceSP dev);
-	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name);
+	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name);
 	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
 	void renderProjection(QPixmap& dst, KisTileSP src);
 

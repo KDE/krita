@@ -24,6 +24,12 @@
 #include "kis_channel.h"
 #include "kis_mask.h"
 
+KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name) : super(width, height, imgType, name)
+{
+	m_linked = false;
+	m_opacity = OPACITY_OPAQUE;
+}
+
 KisLayer::KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity)
 	: super(img, width, height, img -> imgType(), name)
 {

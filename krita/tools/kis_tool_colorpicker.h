@@ -19,7 +19,6 @@
 #if !defined KIS_TOOL_COLOR_PICKER_H_
 #define KIS_TOOL_COLOR_PICKER_H_
 
-#include <qcursor.h>
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 
@@ -33,13 +32,10 @@ public:
 	KisToolColorPicker(KisView *view, KisDoc *doc);
 	virtual ~KisToolColorPicker();
   
+	virtual void setup();
 	virtual void mousePress(QMouseEvent *e);
 
-	virtual void setCursor(const QCursor& cursor);
-	virtual void cursor(QWidget *w) const;
-
 private:
-	QCursor m_cursor;
 	KisView *m_view;
 };
 

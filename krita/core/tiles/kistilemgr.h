@@ -61,11 +61,11 @@ public:
 	void invalidateTiles(KisTileSP tile);
 
 	bool empty() const;
-	Q_UINT32 width() const;
-	Q_UINT32 height() const;
+	Q_INT32 width() const;
+	Q_INT32 height() const;
 	Q_UINT32 nrows() const;
 	Q_UINT32 ncols() const;
-	Q_UINT32 depth() const;
+	Q_INT32 depth() const;
 
 	Q_UINT32 memSize();
 	void tileCoord(const KisTileSP& tile, QPoint& coord);

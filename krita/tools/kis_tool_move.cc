@@ -92,14 +92,10 @@ namespace {
 
 KisToolMove::KisToolMove(KisView *view, KisDoc *doc) : super(view, doc)
 {
-	KToggleAction *toggle;
-
 	m_view = view;
 	m_doc = doc;
-	m_cursor = KisCursor::moveCursor();
+	setCursor(KisCursor::moveCursor());
 	m_dragging = false;
-	toggle = new KToggleAction(i18n("&Move"), "move", 0, this, SLOT(activateSelf()), view -> actionCollection(), "tool_move");
-	toggle -> setExclusiveGroup("tools");
 }
 
 KisToolMove::~KisToolMove()
@@ -108,12 +104,78 @@ KisToolMove::~KisToolMove()
 
 void KisToolMove::mousePress(QMouseEvent *e)
 {
+	QPoint pos;
+	KisImageSP img = m_view -> currentImg();
+	KisPaintDeviceSP dev;
+
+	if (!img || !(dev = img -> activeDevice()))
+		return;
+
+	if (e -> button() == QMouseEvent::LeftButton && dev -> contains(pos))
+		startDrag(pos);
+}
+
+void KisToolMove::mouseMove(QMouseEvent *e)
+{
+	drag(e -> pos());
+}
+
+void KisToolMove::mouseRelease(QMouseEvent *e)
+{
+	if (m_dragging && e -> button() == QMouseEvent::LeftButton)
+		endDrag(e -> pos());
+}
+
+void KisToolMove::keyPress(QKeyEvent *e)
+{
+	Q_INT32 dx = 0;
+	Q_INT32 dy = 0;
 	KisImageSP img;
 	KisPaintDeviceSP dev;
-	QPoint pos;
 
-	if (e -> button() != QMouseEvent::LeftButton)
+	if (!(img = m_view -> currentImg()))
 		return;
+
+	if (!(dev = img -> activeDevice()))
+		return;
+
+	switch (e -> key()) {
+	case Qt::Key_Home:
+		dx = -dev -> x();
+		dy = -dev -> y();
+		break;
+	case Qt::Key_Left:
+		dx = -1;
+		break;
+	case Qt::Key_Right:
+		dx = 1;
+		break;
+	case Qt::Key_Up:
+		dy = -1;
+		break;
+	case Qt::Key_Down:
+		dy = 1;
+		break;
+	default:
+		return;
+	}
+
+	if (m_dragging) {
+		//
+	} else {
+		QPoint pt(dev -> x(), dev -> y());
+		QPoint dt(dev -> x() + dx, dev -> y() + dy);
+		KCommand *cmd = new MoveCommand(m_view, img, img -> activeDevice(), pt, dt);
+
+		dev -> move(dt);
+		m_doc -> addCommand(cmd);
+	}
+}
+
+void KisToolMove::startDrag(const QPoint& pos)
+{
+	KisImageSP img;
+	KisPaintDeviceSP dev;
 
 	if (!(img = m_view -> currentImg()))
 		return;
@@ -123,27 +185,22 @@ void KisToolMove::mousePress(QMouseEvent *e)
 	if (!dev || !dev -> visible())
 		return;
 
-	pos = e -> pos();
-
-	if (!dev -> contains(pos))
-		return;
-
 	m_dragging = true;
-	m_dragStart.setX(e -> x());
-	m_dragStart.setY(e -> y());
+	m_dragStart.setX(pos.x());
+	m_dragStart.setY(pos.y());
 	m_layerStart.setX(dev -> x());
 	m_layerStart.setY(dev -> y());
 	m_layerPosition = m_layerStart;
 }
 
-void KisToolMove::mouseMove(QMouseEvent *e)
+void KisToolMove::drag(const QPoint& original)
 {
 	if (m_dragging) {
 		KisImageSP img = m_view -> currentImg();
 		KisPaintDeviceSP dev;
 
 		if (img && (dev = img -> activeDevice())) {
-			QPoint pos = e -> pos();
+			QPoint pos = original;
 			QRect rc;
 
 			if (pos.x() < 0 || pos.y() < 0)
@@ -158,54 +215,40 @@ void KisToolMove::mouseMove(QMouseEvent *e)
 			rc = rc.unite(QRect(dev -> x(), dev -> y(), dev -> width(), dev -> height()));
 			rc.setX(QMAX(0, rc.x()));
 			rc.setY(QMAX(0, rc.y()));
-			img -> invalidate(rc);
+			img -> invalidate(); //rc);
 			m_layerPosition = QPoint(dev -> x(), dev -> y());
-			m_dragStart = e -> pos();
+			m_dragStart = original;
 			rc.setX(static_cast<Q_INT32>(rc.x() * m_view -> zoom()));
 			rc.setY(static_cast<Q_INT32>(rc.y() * m_view -> zoom()));
 			rc.setWidth(static_cast<Q_INT32>(rc.width() * m_view -> zoom()));
 			rc.setHeight(static_cast<Q_INT32>(rc.height() * m_view -> zoom()));
-			m_view -> updateCanvas(rc);
+			m_view -> updateCanvas(); //rc);
 		}
 	}
 }
 
-void KisToolMove::mouseRelease(QMouseEvent *e)
+void KisToolMove::endDrag(const QPoint& pos, bool undo)
 {
-	if (m_dragging && e -> button() == QMouseEvent::LeftButton) {
-		KisImageSP img = m_view -> currentImg();
-		KisPaintDeviceSP dev;
+	KisImageSP img = m_view -> currentImg();
+	KisPaintDeviceSP dev;
 
-		if (img && (dev = img -> activeDevice())) {
-			KCommand *cmd;
+	if (img && (dev = img -> activeDevice())) {
+		drag(pos);
+		m_dragging = false;
 
-			mouseMove(e);
-			m_dragging = false;
-			cmd = new MoveCommand(m_view, img, img -> activeDevice(), m_layerStart, m_layerPosition);
+		if (undo) {
+			KCommand *cmd = new MoveCommand(m_view, img, img -> activeDevice(), m_layerStart, m_layerPosition);
+
 			m_doc -> addCommand(cmd);
 		}
 	}
 }
 
-void KisToolMove::keyPress(QKeyEvent *)
+void KisToolMove::setup()
 {
+	KToggleAction *toggle;
+
+	toggle = new KToggleAction(i18n("&Move"), "move", 0, this, SLOT(activateSelf()), m_view -> actionCollection(), "tool_move");
+	toggle -> setExclusiveGroup("tools");
 }
 
-void KisToolMove::activateSelf()
-{
-	if (m_view)
-		m_view -> activateTool(this);
-}
-
-void KisToolMove::setCursor(const QCursor& cursor)
-{
-	m_cursor = cursor;
-}
-
-void KisToolMove::cursor(QWidget *w) const
-{
-	if (w)
-		w -> setCursor(m_cursor);
-}
-
-#include "kis_tool_move.moc"

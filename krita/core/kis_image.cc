@@ -37,9 +37,9 @@
 #include "kispixeldata.h"
 #include "visitors/kis_flatten.h"
 
-KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name)
+KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name)
 {
-	init(doc, width, height, depth, opacity, imgType, name);
+	init(doc, width, height, opacity, imgType, name);
 	setName(name);
 }
 
@@ -89,7 +89,7 @@ void KisImage::setEmail(const QString& email)
 	m_email = email;
 }
 
-void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name)
+void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name)
 {
 	Q_INT32 n;
 
@@ -114,8 +114,10 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, 
 		case IMAGE_TYPE_RGBA:
 		case IMAGE_TYPE_LABA:
 		case IMAGE_TYPE_YUVA:
-		case IMAGE_TYPE_CMYKA:
 			n = 4;
+			break;
+		case IMAGE_TYPE_CMYKA:
+			n = 5;
 			break;
 		default:
 			kdDebug() << "KisImage::init  Unknow image type.\n";
@@ -128,7 +130,7 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, 
 	m_name = name;
 	m_width = width;
 	m_height = height;
-	m_depth = depth;
+	m_depth = n;
 	m_bkg = new KisBackground(this, m_width, m_height);
 	m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
 	m_xres = 1.0;
@@ -980,17 +982,9 @@ QPixmap KisImage::recreatePixmap(Q_INT32 tileNo)
 void KisImage::setSelection(KisSelectionSP selection)
 {
 	if (m_selection != selection) {
-		QRect rc;
-
-		if (m_selection)
-			rc = m_selection -> bounds();
-		
+		unsetSelection();
 		m_selection = selection;
-
-		if (m_selection)
-			rc |= m_selection -> bounds();
-
-		invalidate(rc);
+		invalidate(m_selection -> bounds());
 		emit selectionChanged(this);
 	}
 }

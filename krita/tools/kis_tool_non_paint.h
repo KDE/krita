@@ -18,6 +18,7 @@
 #if !defined KIS_TOOL_NON_PAINT_H_
 #define KIS_TOOL_NON_PAINT_H_
 
+#include <qcursor.h>
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_tool.h"
@@ -40,6 +41,8 @@ public:
 	virtual ~KisToolNonPaint();
 	
 public:
+	virtual void activate();
+	virtual void setup();
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
 	virtual void clear();
@@ -54,6 +57,8 @@ public:
 	virtual KDialog *options();
 	virtual void save(KisToolMementoSP memento);
 	virtual void restore(KisToolMementoSP memento);
+	virtual void cursor(QWidget *w) const;
+	virtual void setCursor(const QCursor& cursor);
 
 public slots:
 	virtual void activateSelf();
@@ -61,6 +66,7 @@ public slots:
 private:
 	KisView *m_view;
 	KisDoc *m_doc;
+	QCursor m_cursor;
 };
 
 #endif // KIS_TOOL_NON_PAINT_H_

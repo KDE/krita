@@ -110,6 +110,9 @@ vKisToolSP toolFactory(KisView *view, KisDoc *doc)
 	tools.push_back(new EllipseTool(doc, canvas));
 #endif
 
+	for (vKisToolSP_it it = tools.begin(); it != tools.end(); it++)
+		(*it) -> setup();
+
 	return tools;
 }
 

@@ -86,9 +86,29 @@ void KisToolNonPaint::restore(KisToolMementoSP)
 {
 }
 
+void KisToolNonPaint::cursor(QWidget *w) const
+{
+	if (w)
+		w -> setCursor(m_cursor);
+}
+
+void KisToolNonPaint::setCursor(const QCursor& cursor)
+{
+	m_cursor = cursor;
+}
+
 void KisToolNonPaint::activateSelf()
 {
-	m_view -> activateTool(this);
+	if (m_view)
+		m_view -> activateTool(this);
+}
+
+void KisToolNonPaint::setup()
+{
+}
+
+void KisToolNonPaint::activate()
+{
 }
 
 #include "kis_tool_non_paint.moc"

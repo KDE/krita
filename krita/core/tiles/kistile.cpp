@@ -108,7 +108,7 @@ void KisTile::release()
 void KisTile::allocate()
 {
 	if (m_data == 0) {
-		m_data = new QUANTUM[size()];
+		m_data = new QUANTUM[size() * 3];
 #if defined(NDEBUG)
 		memset(m_data, 127, size());
 #endif

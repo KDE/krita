@@ -43,6 +43,8 @@ public:
 	virtual void clear() = 0;
 	virtual void clear(const QRect& rc) = 0;
 
+	virtual void setup() = 0;
+	virtual void activate() = 0;
 	virtual void enter(QEvent *e) = 0;
 	virtual void leave(QEvent *e) = 0;
 	virtual void mousePress(QMouseEvent *e) = 0;

@@ -24,6 +24,27 @@
 #include "kistilemgr.h"
 #include "kispixeldata.h"
 
+KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
+{
+	init();
+	m_width = width;
+	m_height = height;
+	m_imgType = imgType;
+	m_alpha = true; // TODO
+	m_depth = 4; // TODO
+	m_x = 0;
+	m_y = 0;
+	m_offX = 0;
+	m_offY = 0;
+	m_offW = 0;
+	m_offH = 0;
+	m_tiles = new KisTileMgr(m_depth, width, height);
+	m_visible = true;
+	m_owner = 0;
+	m_name = name;
+	m_projectionValid = false;
+}
+
 KisPaintDevice::KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
 {
 	init();
@@ -129,9 +150,6 @@ void KisPaintDevice::update()
 
 void KisPaintDevice::update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	if (!m_owner)
-		return;
-	
 	if (x < m_offX)
 		x = m_offX;
 
@@ -185,19 +203,6 @@ void KisPaintDevice::setName(const QString& name)
 {
 	if (!name.isEmpty())
 		m_name = name;
-}
-
-void KisPaintDevice::mergeShadow()
-{
-	QRect rc;
-	KisPixelDataSP shadow;
-
-	if (!m_owner || m_shadow -> empty())
-		return;
-
-	maskBounds(&rc);
-	shadow = m_shadow -> pixelData(rc.left(), rc.top(), rc.right(), rc.bottom(), TILEMODE_READ);
-//	m_owner -> apply(this, shadow, OPACITY_OPAQUE, COMPOSITE_COPY, rc.x(), rc.y());
 }
 
 void KisPaintDevice::maskBounds(Q_INT32 *, Q_INT32 *, Q_INT32 *, Q_INT32 *)
@@ -453,6 +458,8 @@ void KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, const KoColor& c)
 	case IMAGE_TYPE_GREY:
 		data[PIXEL_GRAY] = upscale(c.R());
 		break;
+	case IMAGE_TYPE_RGBA:
+		data[PIXEL_ALPHA] = OPACITY_OPAQUE;
 	case IMAGE_TYPE_RGB:
 		data[PIXEL_RED] = upscale(c.R());
 		data[PIXEL_GREEN] = upscale(c.G());

@@ -12,7 +12,7 @@ libkisui_la_SOURCES = integerwidget.cc kis_dlg_preferences.cc \
     kis_dlg_toolopts.cc kis_dlg_toolopts_polygon_preview.cc \
     kis_sidebar.cc kis_listbox.cc \
     kis_itemchooser.cc kis_dlg_paint_properties.cc kis_dlg_paintoffset.cc \
-    kis_dlg_new_layer.cc 
-#    kis_dlg_new.cc  blendchooser.cc
+    kis_dlg_new_layer.cc kis_dlg_create_img.cc
+#    blendchooser.cc
 
 libkisui_la_METASOURCES = AUTO

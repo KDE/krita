@@ -185,7 +185,6 @@ KisTileSP KisTileMgr::tile(Q_INT32 tilenum, Q_INT32 mode)
 		}
 
 		tile -> writeRef();
-		tile -> dirty(true);
 	}
 
 	return tile;
@@ -341,7 +340,6 @@ void KisTileMgr::readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q
 				dst += stride;
 			}
 
-			t -> dirty(false);
 			t -> release();
 		}
 	} 

@@ -58,8 +58,6 @@ public:
 	Q_INT32 depth() const;
 	Q_INT32 size() const;
 
-	bool dirty() const;
-	void dirty(bool val);
 	Q_INT32 rowHint(Q_INT32 row) const;
 	void setRowHint(Q_INT32 row, drawingHints hint);
 	Q_INT32 refCount() const;
@@ -77,7 +75,6 @@ private:
 	void initRowHints();
 
 private:
-	bool m_dirty;
 	QUANTUM *m_data;
 	Q_INT32 m_width;
 	Q_INT32 m_height;
@@ -126,18 +123,6 @@ inline
 Q_INT32 KisTile::size() const
 {
 	return m_width * m_height * m_depth;
-}
-
-inline
-bool KisTile::dirty() const
-{
-	return m_dirty;
-}
-
-inline
-void KisTile::dirty(bool val)
-{
-	m_dirty = val;
 }
 
 #endif // KISTILE_H_

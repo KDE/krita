@@ -109,20 +109,6 @@ void KisTile::lockAsync()
 
 void KisTile::release()
 {
-#if 0
-	m_mutex.lock();
-	m_nref--;
-
-	if (m_dirty) {
-		m_nwrite--;
-		qFill(m_hints.begin(), m_hints.end(), unknown);
-	}
-
-	if (m_nref && m_nshare && m_cache)
-		m_cache -> insert(this);
-
-	m_mutex.unlock();
-#endif
 }
 
 void KisTile::allocate()
@@ -179,7 +165,6 @@ void KisTile::setRowHint(Q_INT32 row, KisTile::drawingHints hint)
 
 void KisTile::init(Q_INT32 depth, KisTileCacheInterface *cache, KisTileSwapInterface *swap)
 {
-	m_dirty = false;
 	m_width = TILE_WIDTH;
 	m_height = TILE_HEIGHT;
 	m_depth = depth;

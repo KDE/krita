@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>FormRGBSliders</class>
 <widget class="QDialog">
     <property name="name">
@@ -6,8 +6,8 @@
     </property>
     <property name="geometry">
         <rect>
-            <x>97</x>
-            <y>243</y>
+            <x>0</x>
+            <y>0</y>
             <width>352</width>
             <height>151</height>
         </rect>
@@ -27,232 +27,149 @@
         </size>
     </property>
     <property name="caption">
-        <string>Form1</string>
+        <string>RGB</string>
     </property>
     <property name="modal">
         <bool>true</bool>
     </property>
-    <widget class="QLabel">
+    <grid>
         <property name="name">
-            <cstring>textLabelRed</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>20</y>
-                <width>57</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Red :</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabelBlue</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>80</y>
-                <width>57</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Blue :</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabelGreen</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>50</y>
-                <width>57</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Green :</string>
-        </property>
-    </widget>
-    <widget class="QSlider">
-        <property name="name">
-            <cstring>sliderBlue</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>70</x>
-                <y>80</y>
-                <width>240</width>
-                <height>24</height>
-            </rect>
-        </property>
-        <property name="minValue">
-            <number>-255</number>
-        </property>
-        <property name="maxValue">
-            <number>255</number>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="tickmarks">
-            <enum>Both</enum>
-        </property>
-        <property name="tickInterval">
-            <number>32</number>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textRedValue</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>320</x>
-                <y>20</y>
-                <width>30</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>0</string>
-        </property>
-        <property name="alignment">
-            <set>AlignVCenter|AlignRight</set>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textGreenValue</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>320</x>
-                <y>50</y>
-                <width>30</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>0</string>
-        </property>
-        <property name="alignment">
-            <set>AlignVCenter|AlignRight</set>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textBlueValue</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>320</x>
-                <y>80</y>
-                <width>30</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>0</string>
-        </property>
-        <property name="alignment">
-            <set>AlignVCenter|AlignRight</set>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>pushButtonOk</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>70</x>
-                <y>120</y>
-                <width>98</width>
-                <height>24</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Ok</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>pushButtonCancel</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>190</x>
-                <y>120</y>
-                <width>98</width>
-                <height>24</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Cancel</string>
-        </property>
-    </widget>
-    <widget class="QSlider">
-        <property name="name">
-            <cstring>sliderRed</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>70</x>
-                <y>20</y>
-                <width>240</width>
-                <height>24</height>
-            </rect>
-        </property>
-        <property name="minValue">
-            <number>-255</number>
-        </property>
-        <property name="maxValue">
-            <number>255</number>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="tickmarks">
-            <enum>Both</enum>
-        </property>
-        <property name="tickInterval">
-            <number>32</number>
-        </property>
-    </widget>
-    <widget class="QSlider">
-        <property name="name">
-            <cstring>sliderGreen</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>70</x>
-                <y>50</y>
-                <width>240</width>
-                <height>24</height>
-            </rect>
-        </property>
-        <property name="minValue">
-            <number>-255</number>
-        </property>
-        <property name="maxValue">
-            <number>255</number>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="tickmarks">
-            <enum>Both</enum>
-        </property>
-        <property name="tickInterval">
-            <number>32</number>
-        </property>
-    </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabelRed</cstring>
+            </property>
+            <property name="text">
+                <string>Red :</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>textLabelBlue</cstring>
+            </property>
+            <property name="text">
+                <string>Blue :</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>textLabelGreen</cstring>
+            </property>
+            <property name="text">
+                <string>Green :</string>
+            </property>
+        </widget>
+        <widget class="QSlider" row="2" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>sliderBlue</cstring>
+            </property>
+            <property name="minValue">
+                <number>-255</number>
+            </property>
+            <property name="maxValue">
+                <number>255</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>Both</enum>
+            </property>
+            <property name="tickInterval">
+                <number>32</number>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="3">
+            <property name="name">
+                <cstring>textRedValue</cstring>
+            </property>
+            <property name="text">
+                <string>0</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="3">
+            <property name="name">
+                <cstring>textGreenValue</cstring>
+            </property>
+            <property name="text">
+                <string>0</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="3">
+            <property name="name">
+                <cstring>textBlueValue</cstring>
+            </property>
+            <property name="text">
+                <string>0</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="3" column="1">
+            <property name="name">
+                <cstring>pushButtonOk</cstring>
+            </property>
+            <property name="text">
+                <string>Ok</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="3" column="2">
+            <property name="name">
+                <cstring>pushButtonCancel</cstring>
+            </property>
+            <property name="text">
+                <string>Cancel</string>
+            </property>
+        </widget>
+        <widget class="QSlider" row="0" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>sliderRed</cstring>
+            </property>
+            <property name="minValue">
+                <number>-255</number>
+            </property>
+            <property name="maxValue">
+                <number>255</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>Both</enum>
+            </property>
+            <property name="tickInterval">
+                <number>32</number>
+            </property>
+        </widget>
+        <widget class="QSlider" row="1" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>sliderGreen</cstring>
+            </property>
+            <property name="minValue">
+                <number>-255</number>
+            </property>
+            <property name="maxValue">
+                <number>255</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>Both</enum>
+            </property>
+            <property name="tickInterval">
+                <number>32</number>
+            </property>
+        </widget>
+    </grid>
 </widget>
 <connections>
     <connection>

@@ -29,6 +29,7 @@
 #include "kis_view.h"
 #include "kis_tool_memento.h"
 #include "kis_tool_move.h"
+#include "kis_tool_move.moc"
 
 namespace {
 	class MoveCommand : public KNamedCommand {
@@ -53,7 +54,7 @@ namespace {
 	};
 
 
-	MoveCommand::MoveCommand(KisView *view, KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) : 
+	MoveCommand::MoveCommand(KisView *view, KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
 		super(i18n("Move Painting Device"))
 	{
 		m_view = view;

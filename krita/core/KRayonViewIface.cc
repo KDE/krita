@@ -74,9 +74,9 @@ void KRayonViewIface::dialog_colors()
   m_view->dialog_colors();
 }
 
-void KRayonViewIface::dialog_krayons()
+void KRayonViewIface::dialog_crayons()
 {
-  m_view->dialog_krayons();
+  m_view->dialog_crayons();
 }
 
 void KRayonViewIface::dialog_brushes()

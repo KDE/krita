@@ -99,24 +99,7 @@
 #include <kdebug.h>
 #include "kis_timer.h"
 
-/*
-    KisView - constructor.  What is a KoView?  A widget, but it
-    also seems to be a hybrid or composite of several koffice objects
-    designed to contain the document and display it. Every koffice app
-    does it differently but krayon's is the exemplary view which sets
-    the standard.   A document can have more than one view.
-
-    In my opinion it is a flaw to have a view limited to a single document.
-    A view should be able to contain multiple documents, switching them
-    in and out as needed. This is somewhat overcome in  Krayon by allowing
-    multiple images per document, but each view always shows the same
-    image and even the same layer within each image, although
-    with varying magnificaitons, etc. This is bad. Especially with split
-    views one should be able to have a different image in each pane, and
-    cut and paste, make comparisons, etc., between them.
-*/
-KisView::KisView(KisDoc* doc, QWidget* parent, const char* name)
-    : super(doc, parent, name)
+KisView::KisView(KisDoc* doc, QWidget* parent, const char* name) : super(doc, parent, name)
 {
 	m_doc = doc;
 	m_zoomFactor = 1.0;
@@ -124,7 +107,7 @@ KisView::KisView(KisDoc* doc, QWidget* parent, const char* name)
 	setXMLFile("krita.rc");
 	m_pTool = 0;
 	m_dcop = 0;
-	dcopObject(); // build it
+	dcopObject();
 
 	QObject::connect(m_doc, SIGNAL(docUpdated()), this, SLOT(slotDocUpdated()));
 	QObject::connect(m_doc, SIGNAL(docUpdated(const QRect&)), this, SLOT(slotDocUpdated(const QRect&)));
@@ -152,10 +135,6 @@ KisView::KisView(KisDoc* doc, QWidget* parent, const char* name)
 	slotSetPattern(m_pPattern);
 }
 
-/*
-    KisView destructor.  Delete objects created apart from the
-    widget and its children.
-*/
 KisView::~KisView()
 {
 	delete m_dcop;
@@ -163,12 +142,11 @@ KisView::~KisView()
 
 DCOPObject* KisView::dcopObject()
 {
-    if (!m_dcop)
-	m_dcop = new KRayonViewIface(this);
+	if (!m_dcop)
+		m_dcop = new KRayonViewIface(this);
 
-    return m_dcop;
+	return m_dcop;
 }
-
 
 /*
     Set up painter object for use of QPainter methods to draw
@@ -186,11 +164,11 @@ DCOPObject* KisView::dcopObject()
     The best solution is to have a painter for each image, which would
     take more memory, but detaches it from either document or view.
 */
+
 void KisView::setupPainter()
 {
 	m_pPainter = new KisPainter(m_doc, this);
 }
-
 
 /*
     Canvas for document (image) area - it's just a plain QWidget used to
@@ -201,32 +179,19 @@ void KisView::setupPainter()
     depth, which is often 16 bit even though the KisImage is 32 bit and
     can eventually be extended to 64 bit.
 */
+
 void KisView::setupCanvas()
 {
-    m_pCanvas = new KisCanvas(this, "kis_canvas");
+	m_pCanvas = new KisCanvas(this, "kis_canvas");
 
-    QObject::connect(m_pCanvas, SIGNAL(mousePressed( QMouseEvent*)),
-        this, SLOT(canvasGotMousePressEvent (QMouseEvent*)) );
-
-    QObject::connect(m_pCanvas, SIGNAL(mouseMoved( QMouseEvent*)),
-        this, SLOT(canvasGotMouseMoveEvent (QMouseEvent*)) );
-
-    QObject::connect(m_pCanvas, SIGNAL(mouseReleased (QMouseEvent*)),
-        this, SLOT(canvasGotMouseReleaseEvent (QMouseEvent*)) );
-
-    QObject::connect(m_pCanvas, SIGNAL(gotPaintEvent (QPaintEvent*)),
-		this, SLOT(canvasGotPaintEvent (QPaintEvent*)) );
-
-    QObject::connect(m_pCanvas, SIGNAL(gotEnterEvent (QEvent*)),
-		this, SLOT(canvasGotEnterEvent (QEvent*)) );
-
-    QObject::connect(m_pCanvas, SIGNAL(gotLeaveEvent (QEvent*)),
-		this, SLOT(canvasGotLeaveEvent (QEvent*)) );
-
-    QObject::connect(m_pCanvas, SIGNAL(mouseWheelEvent( QWheelEvent*)),
-                      this, SLOT(canvasGotMouseWheelEvent(QWheelEvent*)) );
+	QObject::connect(m_pCanvas, SIGNAL(mousePressed(QMouseEvent*)), this, SLOT(canvasGotMousePressEvent(QMouseEvent*)));
+	QObject::connect(m_pCanvas, SIGNAL(mouseMoved(QMouseEvent*)), this, SLOT(canvasGotMouseMoveEvent(QMouseEvent*)));
+	QObject::connect(m_pCanvas, SIGNAL(mouseReleased(QMouseEvent*)), this, SLOT(canvasGotMouseReleaseEvent(QMouseEvent*)));
+	QObject::connect(m_pCanvas, SIGNAL(gotPaintEvent(QPaintEvent*)), this, SLOT(canvasGotPaintEvent(QPaintEvent*)));
+	QObject::connect(m_pCanvas, SIGNAL(gotEnterEvent(QEvent*)), this, SLOT(canvasGotEnterEvent(QEvent*)));
+	QObject::connect(m_pCanvas, SIGNAL(gotLeaveEvent(QEvent*)), this, SLOT(canvasGotLeaveEvent(QEvent*)));
+	QObject::connect(m_pCanvas, SIGNAL(mouseWheelEvent(QWheelEvent*)), this, SLOT(canvasGotMouseWheelEvent(QWheelEvent*)));
 }
-
 
 /*
     SideBar - has tabs for brushes, layers, channels, etc.
@@ -237,6 +202,7 @@ void KisView::setupCanvas()
     can be detached or floated if the user wants them to be
     separate windows.
 */
+
 void KisView::setupSideBar()
 {
     m_pSideBar = new KisSideBar(this, "kis_sidebar");
@@ -343,18 +309,16 @@ void KisView::setupSideBar()
 */
 void KisView::setupScrollBars()
 {
-    m_pVert = new QScrollBar(QScrollBar::Vertical, this);
-    m_pHorz = new QScrollBar(QScrollBar::Horizontal, this);
+	m_pVert = new QScrollBar(QScrollBar::Vertical, this);
+	m_pHorz = new QScrollBar(QScrollBar::Horizontal, this);
 
-    m_pVert->setGeometry(width()-16, 20, 16, height()-36);
-    m_pHorz->setGeometry(20, height()-16, width()-36, 16);
-    m_pHorz->setValue(0);
-    m_pVert->setValue(0);
+	m_pVert->setGeometry(width()-16, 20, 16, height()-36);
+	m_pHorz->setGeometry(20, height()-16, width()-36, 16);
+	m_pHorz->setValue(0);
+	m_pVert->setValue(0);
 
-    QObject::connect(m_pVert,
-        SIGNAL(valueChanged(int)), this, SLOT(scrollV(int)));
-    QObject::connect(m_pHorz,
-        SIGNAL(valueChanged(int)), this, SLOT(scrollH(int)));
+	QObject::connect(m_pVert, SIGNAL(valueChanged(int)), this, SLOT(scrollV(int)));
+	QObject::connect(m_pHorz, SIGNAL(valueChanged(int)), this, SLOT(scrollH(int)));
 }
 
 /*
@@ -364,23 +328,23 @@ void KisView::setupScrollBars()
 */
 void KisView::setupRulers()
 {
-    m_pHRuler = new KRuler(Qt::Horizontal, this);
-    m_pVRuler = new KRuler(Qt::Vertical, this);
+	m_pHRuler = new KRuler(Qt::Horizontal, this);
+	m_pVRuler = new KRuler(Qt::Vertical, this);
 
-    m_pHRuler->setGeometry(20, 0, width()-20, 20);
-    m_pVRuler->setGeometry(0, 20, 20, height()-20);
+	m_pHRuler->setGeometry(20, 0, width()-20, 20);
+	m_pVRuler->setGeometry(0, 20, 20, height()-20);
 
-    m_pVRuler->setRulerMetricStyle(KRuler::Pixel);
-    m_pHRuler->setRulerMetricStyle(KRuler::Pixel);
+	m_pVRuler->setRulerMetricStyle(KRuler::Pixel);
+	m_pHRuler->setRulerMetricStyle(KRuler::Pixel);
 
-    m_pVRuler->setFrameStyle(QFrame::Panel | QFrame::Raised);
-    m_pHRuler->setFrameStyle(QFrame::Panel | QFrame::Raised);
+	m_pVRuler->setFrameStyle(QFrame::Panel | QFrame::Raised);
+	m_pHRuler->setFrameStyle(QFrame::Panel | QFrame::Raised);
 
-    m_pHRuler->setLineWidth(1);
-    m_pVRuler->setLineWidth(1);
+	m_pHRuler->setLineWidth(1);
+	m_pVRuler->setLineWidth(1);
 
-    //m_pHRuler->setShowEndLabel(true);
-    //m_pVRuler->setShowEndLabel(true);
+	//m_pHRuler->setShowEndLabel(true);
+	//m_pVRuler->setShowEndLabel(true);
 }
 
 
@@ -437,10 +401,6 @@ void KisView::setupTabBar()
 
 void KisView::setupActions()
 {
-	// history actions
-//	(void)KStdAction::undo(this, SLOT(undo()), actionCollection(), "edit_undo");
-//	(void)KStdAction::redo(this, SLOT(redo()), actionCollection(), "edit_redo");
-
 	// navigation actions
 	(void)new KAction(i18n("Refresh Canvas"), "reload", 0, this, SLOT(slotDocUpdated()), actionCollection(), "refresh_canvas");
 	(void)new KAction(i18n("Panic Button"), "stop", 0, this, SLOT(slotHalt()), actionCollection(), "panic_button");
@@ -466,7 +426,8 @@ void KisView::setupActions()
 	(void)new KAction(i18n("&Gradient Dialog"), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
 
 	// tool actions
-	(void)new KAction(i18n("&Current Tool Properties..."), "configure", 0, this, SLOT(tool_properties()), actionCollection(), "current_tool_properties");
+	(void)new KAction(i18n("&Current Tool Properties..."), "configure", 0, this, SLOT(tool_properties()), 
+			  actionCollection(), "current_tool_properties");
 
 	// layer actions
 	(void)new KAction(i18n("&Add layer..."), 0, this, SLOT(insert_layer()), actionCollection(), "insert_layer");
@@ -507,7 +468,7 @@ void KisView::setupActions()
 	// krayon box toolbar actions - these will be used only
 	// to dock and undock wideget in the krayon box
 	m_dialog_colors = new KToggleAction(i18n("&Colors"), "color_dialog", 0, this, SLOT(dialog_colors()), actionCollection(), "colors_dialog");
-	m_dialog_krayons = new KToggleAction(i18n("&Krayons"), "krayon_box", 0, this, SLOT(dialog_krayons()), actionCollection(), "krayons_dialog");
+	m_dialog_krayons = new KToggleAction(i18n("&Krayons"), "krayon_box", 0, this, SLOT(dialog_crayons()), actionCollection(), "krayons_dialog");
 	m_dialog_brushes = new KToggleAction(i18n("Brushes"), "brush_dialog", 0, this, SLOT(dialog_brushes()), actionCollection(), "brushes_dialog");
 	m_dialog_patterns = new KToggleAction(i18n("Patterns"), "pattern_dialog", 0, this, SLOT(dialog_patterns()), actionCollection(), "patterns_dialog");
 	m_dialog_layers = new KToggleAction(i18n("Layers"), "layer_dialog", 0, this, SLOT(dialog_layers()), actionCollection(), "layers_dialog");
@@ -535,6 +496,7 @@ void KisView::setupActions()
     requires a supercomputer for all the floating point
     calculatons.  Krayon is not idiot proof!
 */
+
 void KisView::slotHalt()
 {
     KMessageBox::error(NULL,
@@ -549,11 +511,11 @@ void KisView::slotHalt()
     slotGimp - a copout for the weak of mind and faint
     of heart.  Wiblur sucks, remember that!
 */
+
 void KisView::slotGimp()
 {
-    KMessageBox::error(NULL,
-        "Have you lost your mind?", "User Error", FALSE);
-    // save current image, export to xcf, open in gimp - coming!
+	KMessageBox::error(NULL, "Have you lost your mind?", "User Error", FALSE);
+	// save current image, export to xcf, open in gimp - coming!
 }
 
 /*
@@ -561,17 +523,18 @@ void KisView::slotGimp()
     this is the only way to change the current image.  There should
     be other ways, also.
 */
+
 void KisView::slotTabSelected(const QString& name)
 {
-    m_doc->setCurrentImage(name);
-    slotRefreshPainter();
+	m_doc->setCurrentImage(name);
+	slotRefreshPainter();
 }
-
 
 /*
     refreshPainter - refresh and resize the painter device
     whenever the image or layer is changed
 */
+
 void KisView::slotRefreshPainter()
 {
 	KisImage *img = m_doc -> current();
@@ -596,6 +559,7 @@ void KisView::slotRefreshPainter()
     This methold handles much which is not obvious, reducing
     the need for so many methods to explicitly resize things.
 */
+
 void KisView::resizeEvent(QResizeEvent*)
 {
     // sidebar width right or left side
@@ -815,9 +779,8 @@ void KisView::updateReadWrite(bool /*readwrite*/)
 */
 void KisView::scrollH(int)
 {
-
-    m_pHRuler->setOffset(m_pHorz->value());
-    m_pCanvas->repaint();
+	m_pHRuler -> setOffset(m_pHorz -> value());
+	m_pCanvas -> repaint();
 }
 
 /*
@@ -828,8 +791,8 @@ void KisView::scrollH(int)
 */
 void KisView::scrollV(int)
 {
-    m_pVRuler->setOffset(m_pVert->value());
-    m_pCanvas->repaint();
+	m_pVRuler -> setOffset(m_pVert->value());
+	m_pCanvas -> repaint();
 }
 
 /*
@@ -839,12 +802,12 @@ void KisView::scrollV(int)
 */
 void KisView::slotUpdateImage()
 {
-    KisImage* img = m_doc->current();
-    if(img)
-    {
-        QRect updateRect(0, 0, img->width(), img->height());
-        img->markDirty(updateRect);
-    }
+	KisImage *img = m_doc -> current();
+
+	if (img) {
+		QRect updateRect(0, 0, img -> width(), img -> height());
+		img -> markDirty(updateRect);
+	}
 }
 
 /*
@@ -852,19 +815,9 @@ void KisView::slotUpdateImage()
     that there is a new or different current image for the
     document - setCurrentImage() in kis_doc.cc
 */
+
 void KisView::slotDocUpdated()
 {
-	//kdDebug() << "slotDocUpdated()" << endl;
-
-	/*
-	 * clear the entire canvas area - especially needed when
-	 * the new current image is smaller than the former to remove
-	 * artifacts of the former image from the canvas.  This is very
-	 * fast, even if the image is quite large, because only the
-	 * canvas pixmap, which is no bigger than the visible viewport,
-	 * is cleared.
-	 */
-
 	QPainter p;
 	QRect ur(0, 0, m_pCanvas -> width(), m_pCanvas -> height());
 
@@ -872,20 +825,7 @@ void KisView::slotDocUpdated()
 	p.eraseRect(ur);
 	p.end();
 
-	/*
-	 * repaint contents of view. There is already a new or
-	 * different current Image.  It is not changed, but the contents
-	 * of the image are displayed on the fresh canvas
-	 */
-
 	m_pCanvas -> repaint();
-
-	/*
-	 * reset and resize the KisPainter pixmap (paint device).
-	 * The pixmap could be too small for the new image, causing
-	 * a crash,  or too large, causing inefficent use of memory
-	 */
-
 	slotRefreshPainter();
 }
 
@@ -895,6 +835,7 @@ void KisView::slotDocUpdated()
     need to update the canvas -  a definite update area
     is given, so only update that rectangle's contents.
 */
+
 void KisView::slotDocUpdated(const QRect& rect)
 {
 	KisImage *img;
@@ -907,7 +848,6 @@ void KisView::slotDocUpdated(const QRect& rect)
 
 	QRect ur = rect;
 
-
 	ur = ur.intersect(img->imageExtents());
 	ur.setBottom(ur.bottom() + 1);
 	ur.setRight(ur.right() + 1);
@@ -919,11 +859,6 @@ void KisView::slotDocUpdated(const QRect& rect)
 	Q_ASSERT(p.hasClipping());
 	p.scale(zoomFactor(), zoomFactor());
 	p.translate(xt, yt);
-
-	// This is the place where image is drawn on the canvas
-	// p is the paint device, ur is the update rectangle,
-	// bool transparency, ptr to the particular view to update
-
 	koDocument() -> paintEverything(p, ur, false, this);
 	p.end();
 }
@@ -1040,11 +975,11 @@ void KisView::canvasGotPaintEvent(QPaintEvent *e)
 	paintView(ur);
 }
 
-
 /*
     canvasGotMousePressEvent - just passes the signal on
     to the appropriate tool
 */
+
 void KisView::canvasGotMousePressEvent(QMouseEvent *e)
 {
 	if (m_pTool) {
@@ -1058,7 +993,6 @@ void KisView::canvasGotMousePressEvent(QMouseEvent *e)
 			m_doc -> setModified(true);
 	}
 }
-
 
 /*
     canvasGotMouseMoveEvent - just passes the signal on
@@ -1085,6 +1019,7 @@ void KisView::canvasGotMouseMoveEvent (QMouseEvent *e)
     canvasGotMouseReleaseEvent - just passes the signal on
     to the appropriate tool
 */
+
 void KisView::canvasGotMouseReleaseEvent (QMouseEvent *e)
 {
 	if (m_pTool) {
@@ -1100,6 +1035,7 @@ void KisView::canvasGotMouseReleaseEvent (QMouseEvent *e)
     canvasGotEnterEvent - just passes the signal on
     to the appropriate tool
 */
+
 void KisView::canvasGotEnterEvent (QEvent *e)
 {
 	if (m_pTool) {
@@ -1112,6 +1048,7 @@ void KisView::canvasGotEnterEvent (QEvent *e)
     canvasGotLeaveEvent - just passes the signal on
     to the appropriate tool
 */
+
 void KisView::canvasGotLeaveEvent (QEvent *e)
 {
 	if (m_pTool) {
@@ -1135,6 +1072,7 @@ void KisView::canvasGotMouseWheelEvent(QWheelEvent *e)
     activateTool - make the selected tool the active tool and
     establish connections via the base kis_tool class
 */
+
 void KisView::activateTool(KisTool* t)
 {
 	if (!t)
@@ -1163,6 +1101,7 @@ void KisView::activateTool(KisTool* t)
     options dialog by reparenting the widgets for each tool to a
     tabbed properties dialog, each tool getting a tab  - later
 */
+
 void KisView::tool_properties()
 {
 	Q_ASSERT(m_pTool);
@@ -1176,28 +1115,22 @@ void KisView::tool_properties()
 /*
     copy - copy selection contents to global kapp->clipboard()
 */
+
 void KisView::copy()
 {
-	// set local clip
 	if (!m_doc -> setClipImage())
 		kdDebug() << "m_doc->setClipImage() failed" << endl;
 
-	// copy local clip to global clipboard
 	if (m_doc -> getClipImage()) {
-		kdDebug() << "got m_doc->getClipImage()" << endl;
 		QImage cImage = *m_doc -> getClipImage();
 		kapp -> clipboard() -> setImage(cImage);
-        
-		if (kapp -> clipboard() -> image().isNull())
-			kdDebug() << "clip image is null" << endl;
-		else
-			kdDebug() << "clip image is NOT null" << endl;
-	}
+       	}
 }
 
 /*
     cut - move selection contents to global kapp->clipboard()
 */
+
 void KisView::cut()
 {
 	copy();
@@ -1207,19 +1140,17 @@ void KisView::cut()
 /*
     same as cut but don't move selection contents to clipboard
 */
+
 void KisView::removeSelection()
 {
-    // remove selection in place
-    if(!m_doc->getSelection()->erase())
-        kdDebug() << "m_doc->m_Selection.erase() failed" << endl;
+	// remove selection in place
+	if (!m_doc -> getSelection() -> erase())
+		kdDebug() << "m_doc->m_Selection.erase() failed" << endl;
 
-    // clear old selection outline
-    m_pTool->clearOld();
-
-    /* refresh canvas */
-    slotUpdateImage();
+	// clear old selection outline
+	m_pTool -> clearOld();
+	slotUpdateImage();
 }
-
 
 /*
     paste - from the global kapp->clipboard(). The image
@@ -1227,9 +1158,9 @@ void KisView::removeSelection()
     image so it can be used like a brush or stamp tool to paint
     with, or it can just be moved into place and pasted in.
 */
+
 void KisView::paste()
 {
-	// get local clip from global clipboard
 	if (m_doc -> getClipImage()) {
 		m_paste -> setClip();
 		activateTool(m_paste);
@@ -1244,89 +1175,90 @@ void KisView::paste()
     selection (in the case of a non-rectangular selection, find
     and use the bounding rectangle for selected pixels)
 */
+
 void KisView::crop()
 {
-    if(!m_doc->hasSelection())
-    {
-        KMessageBox::sorry(NULL, i18n("No selection to crop!"), "", FALSE);
-        return;
-    }
-    // copy contents of the current selection to a QImage
-    if(!m_doc->setClipImage())
-    {
-        kdDebug() << "m_doc->setClipImage() failed" << endl;
-        return;
-    }
-    // contents of current selection - make sure it's good
-    if(!m_doc->getClipImage())
-    {
-        kdDebug() << "m_doc->getClipImage() failed" << endl;
-        return;
-    }
+	if (!m_doc -> hasSelection()) {
+		KMessageBox::sorry(NULL, i18n("No selection to crop!"), "", FALSE);
+		return;
+	}
 
-    QImage cImage = *m_doc->getClipImage();
+	// copy contents of the current selection to a QImage
+	if (!m_doc->setClipImage()) {
+		kdDebug() << "m_doc->setClipImage() failed" << endl;
+		return;
+	}
 
-    // add new layer same size as selection rectangle,
-    // then paste cropped image into it at 0,0 offset
-    // keep old image - user can remove it later if he wants
-    // by removing its layer or may want to keep the original.
+	// contents of current selection - make sure it's good
+	if (!m_doc -> getClipImage()) {
+		kdDebug() << "m_doc->getClipImage() failed" << endl;
+		return;
+	}
 
-    KisImage* img = m_doc->current();
-    if(!img) return;
+	QImage cImage = *m_doc -> getClipImage();
 
-    QRect layerRect(0, 0, cImage.width(), cImage.height());
-    QString name = i18n("layer %1").arg(img->layerList().size());
+	// add new layer same size as selection rectangle,
+	// then paste cropped image into it at 0,0 offset
+	// keep old image - user can remove it later if he wants
+	// by removing its layer or may want to keep the original.
 
-    img->addLayer(layerRect, white, true, name);
-    uint indx = img->layerList().size() - 1;
-    img->setCurrentLayer(indx);
-    img->setFrontLayer(indx);
+	KisImage *img = m_doc -> current();
 
-    m_pLayerView->layerTable()->updateTable();
-    m_pLayerView->layerTable()->updateAllCells();
+	if (!img) 
+		return;
 
-    // copy the image into the layer - this should now
-    // be handled by the framebuffer object, not the doc
+	QRect layerRect(0, 0, cImage.width(), cImage.height());
+	QString name = i18n("layer %1").arg(img->layerList().size());
 
-    if(!m_doc->QtImageToLayer(&cImage, this))
-    {
-        kdDebug(0) << "crop: can't load image into layer." << endl;
-    }
-    else
-    {
-        slotUpdateImage();
-        slotRefreshPainter();
-    }
+	img->addLayer(layerRect, white, true, name);
+	uint indx = img->layerList().size() - 1;
+	img->setCurrentLayer(indx);
+	img->setFrontLayer(indx);
 
-    /* remove the current clip image which now belongs to the
-    previous layer - selection also is removed. To crop again,
-    you must first make another selection in the current layer.*/
+	m_pLayerView->layerTable()->updateTable();
+	m_pLayerView->layerTable()->updateAllCells();
 
-    m_doc->removeClipImage();
-    m_doc->clearSelection();
+	// copy the image into the layer - this should now
+	// be handled by the framebuffer object, not the doc
 
+	if (!m_doc->QtImageToLayer(&cImage, this)) {
+		kdDebug(0) << "crop: can't load image into layer." << endl;
+	}
+	else {
+		slotUpdateImage();
+		slotRefreshPainter();
+	}
+
+	/* remove the current clip image which now belongs to the
+	   previous layer - selection also is removed. To crop again,
+	   you must first make another selection in the current layer.*/
+
+	m_doc->removeClipImage();
+	m_doc->clearSelection();
 }
 
 /*
     selectAll - use the bounding rectangle of the layer itself
 */
+
 void KisView::selectAll()
 {
-    KisImage *img = m_doc->current();
-    if(!img) return;
+	KisImage *img = m_doc -> current();
 
-    QRect imageR = img->getCurrentLayer()->imageExtents();
-    m_doc->setSelection(imageR);
+	if (img) {
+		QRect rc = img -> getCurrentLayer() -> imageExtents();
+		m_doc -> setSelection(rc);
+	}
 }
 
 /*
     unSelectAll - clear the selection, if any
 */
+
 void KisView::unSelectAll()
 {
-    m_doc->clearSelection();
+	m_doc -> clearSelection();
 }
-
 
 /*--------------------------
        Zooming
@@ -1334,217 +1266,201 @@ void KisView::unSelectAll()
 
 void KisView::zoom(int _x, int _y, float zf)
 {
-    /* Avoid divide by zero errors by disallowing a zoom
-    factor of zero, which is impossible anyway, as it would
-    make the image infinitely small in size. */
-    if (zf == 0) zf = 1;
+	/* Avoid divide by zero errors by disallowing a zoom
+	   factor of zero, which is impossible anyway, as it would
+	   make the image infinitely small in size. */
+	if (zf == 0) zf = 1;
 
-    /* Set a reasonable lower limit for a zoom factor of 1/8.
-    At this level a 1600x1600 image would be 200 x 200 in size.
-    Extremely low zooms, like extremely high ones, can be very
-    expensive in terms of processor cycles and degrade performace,
-    although not nearly as much as extrmely high zooms.*/
-    if (zf < 0.15) zf = 1.0/8.0;
+	/* Set a reasonable lower limit for a zoom factor of 1/8.
+	   At this level a 1600x1600 image would be 200 x 200 in size.
+	   Extremely low zooms, like extremely high ones, can be very
+	   expensive in terms of processor cycles and degrade performace,
+	   although not nearly as much as extrmely high zooms.*/
+	if (zf < 0.15) zf = 1.0/8.0;
 
-    /* Set a reasonable upper limit for a zoom factor of 16. At this
-    level each pixel in the layer is shown as a 16x16 rectangle.
-    Zoom levels higher than this serve no useful purpose and are
-    *VERY* expensive.  It's possible to accidentally set a very high
-    zoom by continuing to click on the image with the zoom tool
-    without this limit. */
-    else if(zf > 16.0) zf = 16.0;
+	/* Set a reasonable upper limit for a zoom factor of 16. At this
+	   level each pixel in the layer is shown as a 16x16 rectangle.
+	   Zoom levels higher than this serve no useful purpose and are
+	 *VERY* expensive.  It's possible to accidentally set a very high
+	 zoom by continuing to click on the image with the zoom tool
+	 without this limit. */
+	else if(zf > 16.0) zf = 16.0;
 
-    setZoomFactor(zf);
+	setZoomFactor(zf);
 
-    // clear everything
-    QPainter p;
-    p.begin(m_pCanvas);
-    p.eraseRect(0, 0, width(), height());
-    p.end();
+	// clear everything
+	QPainter p;
+	p.begin(m_pCanvas);
+	p.eraseRect(0, 0, width(), height());
+	p.end();
 
-    // adjust scaling of rulers to zoom factor
-    if(zf > 3.0)
-    {
-        // 8 / 16 pixels per mark at 8.0 / 16.0 zoom factors
-        m_pHRuler->setPixelPerMark((int)(zf * 1.0));
-        m_pVRuler->setPixelPerMark((int)(zf * 1.0));
-    }
-    else
-    {
-        // to pixels per mark at zoom factor of 1.0
-        m_pHRuler->setPixelPerMark((int)(zf * 10.0));
-        m_pVRuler->setPixelPerMark((int)(zf * 10.0));
-    }
+	// adjust scaling of rulers to zoom factor
+	if(zf > 3.0)
+	{
+		// 8 / 16 pixels per mark at 8.0 / 16.0 zoom factors
+		m_pHRuler->setPixelPerMark((int)(zf * 1.0));
+		m_pVRuler->setPixelPerMark((int)(zf * 1.0));
+	}
+	else
+	{
+		// to pixels per mark at zoom factor of 1.0
+		m_pHRuler->setPixelPerMark((int)(zf * 10.0));
+		m_pVRuler->setPixelPerMark((int)(zf * 10.0));
+	}
 
-    // Kruler - lacks sane builtin limits at tiny sizes
-    // this causes hangups - avoid tiny rulers
+	// Kruler - lacks sane builtin limits at tiny sizes
+	// this causes hangups - avoid tiny rulers
 
-    if(zf > 3.0)
-    {
-        m_pHRuler->setValuePerLittleMark(1);
-        m_pVRuler->setValuePerLittleMark(1);
-    }
-    else
-    {
-        m_pHRuler->setValuePerLittleMark(10);
-        m_pVRuler->setValuePerLittleMark(10);
-    }
+	if(zf > 3.0)
+	{
+		m_pHRuler->setValuePerLittleMark(1);
+		m_pVRuler->setValuePerLittleMark(1);
+	}
+	else
+	{
+		m_pHRuler->setValuePerLittleMark(10);
+		m_pVRuler->setValuePerLittleMark(10);
+	}
 
-    // zoom factor of 1/4
-    if(zf < 0.30)
-    {
-        m_pHRuler->setShowLittleMarks(false);
-        m_pVRuler->setShowLittleMarks(false);
-    }
-    // zoom factor of 1/2 or greater
-    else
-    {
-        m_pHRuler->setShowLittleMarks(true);
-        m_pVRuler->setShowLittleMarks(true);
-    }
+	// zoom factor of 1/4
+	if(zf < 0.30)
+	{
+		m_pHRuler->setShowLittleMarks(false);
+		m_pVRuler->setShowLittleMarks(false);
+	}
+	// zoom factor of 1/2 or greater
+	else
+	{
+		m_pHRuler->setShowLittleMarks(true);
+		m_pVRuler->setShowLittleMarks(true);
+	}
 
-    // zoom factor of 1/8 - lowest possible
-    if(zf < 0.20)
-    {
-        m_pHRuler->setShowMediumMarks(false);
-        m_pVRuler->setShowMediumMarks(false);
-    }
-    // zoom factor of 1/4 or greater
-    else
-    {
-        m_pHRuler->setShowMediumMarks(true);
-        m_pVRuler->setShowMediumMarks(true);
-    }
+	// zoom factor of 1/8 - lowest possible
+	if(zf < 0.20)
+	{
+		m_pHRuler->setShowMediumMarks(false);
+		m_pVRuler->setShowMediumMarks(false);
+	}
+	// zoom factor of 1/4 or greater
+	else
+	{
+		m_pHRuler->setShowMediumMarks(true);
+		m_pVRuler->setShowMediumMarks(true);
+	}
 
-    /* scroll to the point clicked on and update the canvas.
-    Currently scrollTo() doesn't do anything but the zoomed view
-    does have the same offset as the prior view so it
-    approximately works */
+	/* scroll to the point clicked on and update the canvas.
+	   Currently scrollTo() doesn't do anything but the zoomed view
+	   does have the same offset as the prior view so it
+	   approximately works */
 
-    int x = static_cast<int> (_x * zf - docWidth() / 2);
-    int y = static_cast<int> (_y * zf - docHeight() / 2);
+	int x = static_cast<int> (_x * zf - docWidth() / 2);
+	int y = static_cast<int> (_y * zf - docHeight() / 2);
 
-    if (x < 0) x = 0;
-    if (y < 0) y = 0;
+	if (x < 0) x = 0;
+	if (y < 0) y = 0;
 
-    scrollTo(QPoint(x, y));
+	scrollTo(QPoint(x, y));
 
-    m_pCanvas->update();
+	m_pCanvas->update();
 
-    /* at low zoom levels mark everything dirty and redraw the
-    entire image to insure that the previous image is erased
-    completely from border areas.  Otherwise screen artificats
-    can be seen.*/
+	/* at low zoom levels mark everything dirty and redraw the
+	   entire image to insure that the previous image is erased
+	   completely from border areas.  Otherwise screen artificats
+	   can be seen.*/
 
-    if(zf < 1.0) slotUpdateImage();
+	if(zf < 1.0) slotUpdateImage();
 
 }
-
 
 void KisView::zoom_in(int x, int y)
 {
-    float zf = zoomFactor();
-    zf *= 2;
-    zoom(x, y, zf);
+	float zf = zoomFactor() * 2;
+    
+	zoom(x, y, zf);
 }
-
 
 void KisView::zoom_out(int x, int y)
 {
-    float zf = zoomFactor();
-    zf /= 2;
-    zoom(x, y, zf);
-}
+	float zf = zoomFactor() / 2;
 
+	zoom(x, y, zf);
+}
 
 void KisView::zoom_in()
 {
-    zoom_in(0, 0);
+	zoom_in(0, 0);
 }
-
 
 void KisView::zoom_out()
 {
-    zoom_out(0, 0);
+	zoom_out(0, 0);
 }
-
 
 /*
     dialog_gradient - invokes a GradientDialog which is
     now an options dialog.  Gradients can be used by many tools
     and are not a tool in themselves.
 */
+
 void KisView::dialog_gradient()
 {
-    GradientDialog *pGradientDialog = new GradientDialog(m_pGradient);
-    pGradientDialog->exec();
+	GradientDialog *pGradientDialog = new GradientDialog(m_pGradient);
+	pGradientDialog->exec();
 
-    if(pGradientDialog->result() == QDialog::Accepted)
-    {
-        /* set m_pGradient here and update gradientwidget in sidebar
-        to show sample of gradient selected. Also update effect for
-        the framebuffer's gradient, which is used in painting */
+	if (pGradientDialog->result() == QDialog::Accepted) {
+		/* set m_pGradient here and update gradientwidget in sidebar
+		   to show sample of gradient selected. Also update effect for
+		   the framebuffer's gradient, which is used in painting */
 
-        int type = pGradientDialog->gradientTab()->gradientType();
-        m_pGradient->setEffect(static_cast<KImageEffect::GradientType>(type));
+		int type = pGradientDialog->gradientTab()->gradientType();
+		m_pGradient->setEffect(static_cast<KImageEffect::GradientType>(type));
 
-        KisFrameBuffer *fb = m_doc->frameBuffer();
-        fb->setGradientEffect(static_cast<KImageEffect::GradientType>(type));
+		KisFrameBuffer *fb = m_doc->frameBuffer();
+		fb->setGradientEffect(static_cast<KImageEffect::GradientType>(type));
 
-        kdDebug() << "gradient type is " << type << endl;
-    }
+		kdDebug() << "gradient type is " << type << endl;
+	}
 }
-
 
 void KisView::dialog_colors()
 {
-
 }
 
-
-void KisView::dialog_krayons()
+void KisView::dialog_crayons()
 {
-
 }
-
 
 void KisView::dialog_brushes()
 {
-    KFloatingDialog *f = static_cast<KFloatingDialog *>(m_pBrushChooser);
+	KFloatingDialog *f = static_cast<KFloatingDialog *>(m_pBrushChooser);
 
-    if(m_dialog_brushes->isChecked())
-        f->setDocked(true);
-    else
-        f->setDocked(false);
+	f -> setDocked(m_dialog_brushes -> isChecked());
 }
-
 
 void KisView::dialog_patterns()
 {
-    if(m_dialog_patterns->isChecked())
-        m_pSideBar->plug(m_pPatternChooser);
-    else
-        m_pSideBar->unplug(m_pPatternChooser);
+	if (m_dialog_patterns -> isChecked())
+		m_pSideBar -> plug(m_pPatternChooser);
+	else
+		m_pSideBar -> unplug(m_pPatternChooser);
 }
-
 
 void KisView::dialog_layers()
 {
-    if(m_dialog_layers->isChecked())
-        m_pSideBar->plug(m_pLayerView);
-    else
-        m_pSideBar->unplug(m_pLayerView);
+	if(m_dialog_layers -> isChecked())
+		m_pSideBar -> plug(m_pLayerView);
+	else
+		m_pSideBar -> unplug(m_pLayerView);
 
 }
 
 void KisView::dialog_channels()
 {
-    if(m_dialog_channels->isChecked())
-        m_pSideBar->plug(m_pChannelView);
-    else
-        m_pSideBar->unplug(m_pChannelView);
+	if (m_dialog_channels -> isChecked())
+		m_pSideBar -> plug(m_pChannelView);
+	else
+		m_pSideBar -> unplug(m_pChannelView);
 }
-
 
 /*-------------------------------
     layer action slots
@@ -1554,20 +1470,25 @@ void KisView::dialog_channels()
     Properties dialog for the current layer.
     Only for changing name and opacity so far.
 */
+
 void KisView::layer_properties()
 {
-    KisImage * img = m_doc->current();
-    if (!img)  return;
+	KisImage *img = m_doc -> current();
 
-    KisLayer *lay = img->getCurrentLayer();
-    if (!lay)  return;
+	if (!img)  
+		return;
 
-    if(LayerPropertyDialog::editProperties(*(lay)))
-    {
-        QRect updateRect = lay->imageExtents();
-        m_pLayerView->layerTable()->updateAllCells();
-        img->markDirty(updateRect);
-    }
+	KisLayer *lay = img -> getCurrentLayer();
+
+	if (!lay)  
+		return;
+
+	if (LayerPropertyDialog::editProperties(*(lay))) {
+		QRect updateRect = lay -> imageExtents();
+
+		m_pLayerView -> layerTable() -> updateAllCells();
+		img -> markDirty(updateRect);
+	}
 }
 
 /*
@@ -1577,124 +1498,126 @@ void KisView::layer_properties()
 */
 void KisView::insert_layer()
 {
-    KisImage* img = m_doc->current();
-    if(!img) return;
+	KisImage *img = m_doc -> current();
+	uint indx;
 
-    NewLayerDialog *pNewLayerDialog = new NewLayerDialog();
-    pNewLayerDialog->exec();
+	if (!img) 
+		return;
 
-    if(!pNewLayerDialog->result() == QDialog::Accepted)
-        return;
+	NewLayerDialog dlg;
 
-    QRect layerRect(0, 0,
-        pNewLayerDialog->width(), pNewLayerDialog->height());
+	dlg.exec();
 
-    QString name = i18n("layer %1").arg(img->layerList().size());
+	if (!dlg.result() == QDialog::Accepted)
+		return;
 
-    // new layers are currently appended - perhaps they should
-    // be prepended so more recent ones are on top in the
-    // list and the background layer is at the bottom
+	QRect layerRect(0, 0, dlg.width(), dlg.height());
+	QString name = i18n("layer %1").arg(img -> layerList().size());
 
-    img->addLayer(layerRect, white, true, name);
 
-    uint indx = img->layerList().size() - 1;
-    img->setCurrentLayer(indx);
-    img->setFrontLayer(indx);
-    m_pLayerView->layerTable()->selectLayer(indx);
-
-    // update layerview table so change show up there
-    m_pLayerView->layerTable()->updateTable();
-    m_pLayerView->layerTable()->updateAllCells();
-
-    slotUpdateImage();
-    slotRefreshPainter();
-
-    m_doc->setModified(true);
+	img -> addLayer(layerRect, white, true, name);
+	indx = img -> layerList().size() - 1;
+	img -> setCurrentLayer(indx);
+	img -> setFrontLayer(indx);
+	m_pLayerView -> layerTable() -> selectLayer(indx);
+	m_pLayerView -> layerTable() -> updateTable();
+	m_pLayerView -> layerTable() -> updateAllCells();
+	slotUpdateImage();
+	slotRefreshPainter();
+	m_doc -> setModified(true);
 }
 
 /*
     remove current layer - to remove other layers, a user must
     access the layers tableview in a dialog or sidebar widget
 */
+
 void KisView::remove_layer()
 {
-    m_pLayerView->layerTable()->slotRemoveLayer();
-    slotUpdateImage();
-    slotRefreshPainter();
-
-    m_doc->setModified(true);
+	m_pLayerView -> layerTable() -> slotRemoveLayer();
+	slotUpdateImage();
+	slotRefreshPainter();
+	m_doc -> setModified(true);
 }
 
 /*
     hide/show the current layer - to hide other layers, a user must
     access the layers tableview in a dialog or sidebar widget
 */
+
 void KisView::hide_layer()
 {
-    KisImage * img = m_doc->current();
-    if (!img) return;
+	KisImage *img = m_doc -> current();
 
-    uint indx = img->getCurrentLayerIndex();
-    m_pLayerView->layerTable()->slotInverseVisibility(indx);
-
-    m_pLayerView->layerTable()->updateTable();
-    m_pLayerView->layerTable()->updateAllCells();
-
-    m_doc->setModified(true);
+	if (img) {
+		uint indx = img -> getCurrentLayerIndex();
+		LayerTable *tbl = m_pLayerView -> layerTable();
+	       
+		tbl -> slotInverseVisibility(indx);
+		tbl -> updateTable();
+		tbl -> updateAllCells();
+		m_doc -> setModified(true);
+	}
 }
 
 /*
     link/unlink the current layer - to link other layers, a user must
     access the layers tableview in a dialog or sidebar widget
 */
+
 void KisView::link_layer()
 {
-    KisImage * img = m_doc->current();
-    if (!img) return;
+	KisImage *img = m_doc -> current();
 
-    uint indx = img->getCurrentLayerIndex();
-    m_pLayerView->layerTable()->slotInverseLinking(indx);
+	if (img) {
+		uint indx = img -> getCurrentLayerIndex();
+		LayerTable *tbl = m_pLayerView -> layerTable();
 
-    m_pLayerView->layerTable()->updateTable();
-    m_pLayerView->layerTable()->updateAllCells();
-
-    m_doc->setModified(true);
+		tbl -> slotInverseLinking(indx);
+		tbl -> updateTable();
+		tbl -> updateAllCells();
+		m_doc -> setModified(true);
+	}
 }
 
 /*
     make the next layer in the layers list the active one and
     bring it to the front of the view
 */
+
 void KisView::next_layer()
 {
-    KisImage * img = m_doc->current();
-    if (!img) return;
+	KisImage *img = m_doc -> current();
 
-    uint indx = img->getCurrentLayerIndex();
-    if(indx < img->layerList().size() - 1)
-    {
-        // make the next layer the current one, select it,
-        // and make sure it's visible
-        ++indx;
-        img->setCurrentLayer(indx);
-        m_pLayerView->layerTable()->selectLayer(indx);
-        img->layerList()[indx]->setVisible(true);
+	if (!img) 
+		return;
 
-        // hide all layers on top of this one so this
-        // one is clearly visible and can be painted on!
+	uint indx = img -> getCurrentLayerIndex();
+	KisLayerSPLst layers = img -> layerList();
 
-        while(++indx <= img->layerList().size() - 1)
-        {
-            img->layerList()[indx]->setVisible(false);
-        }
+	if (indx < layers.size() - 1) {
+		LayerTable *tbl = m_pLayerView -> layerTable();
 
-        img->markDirty(img->getCurrentLayer()->layerExtents());
-        m_pLayerView->layerTable()->updateTable();
-        m_pLayerView->layerTable()->updateAllCells();
-        slotRefreshPainter();
+		// make the next layer the current one, select it,
+		// and make sure it's visible
+		indx++;
+		img -> setCurrentLayer(indx);
+		tbl -> selectLayer(indx);
+		layers[indx] -> setVisible(true);
 
-        m_doc->setModified(true);
-    }
+		// hide all layers on top of this one so this
+		// one is clearly visible and can be painted on!
+
+		while (++indx <= img -> layerList().size() - 1)
+			layers[indx] -> setVisible(false);
+
+		img->markDirty(img->getCurrentLayer()->layerExtents());
+		m_pLayerView->layerTable()->updateTable();
+		m_pLayerView->layerTable()->updateAllCells();
+		slotRefreshPainter();
+
+		m_doc->setModified(true);
+	}
 }
 
 

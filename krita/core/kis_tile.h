@@ -22,8 +22,9 @@
 #define KIS_TILE_
 
 #include <qcolor.h>
+#include <ksharedptr.h>
 
-class KisTile {
+class KisTile : public KShared {
 public:
 	KisTile(unsigned int width, unsigned int height, unsigned int bpp, const QRgb& defaultColor, bool dirty = false);
 	~KisTile();

@@ -65,7 +65,6 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_command_history = new KCommandHistory(actionCollection(), false);
 	m_current_view = 0;
 	m_pCurrent = 0L;
-	m_pNewDialog = 0L;
 	m_pClipImage = 0L;
 	m_pSelection = new KisSelection(this);
 	m_pFrameBuffer = new KisFrameBuffer(this);
@@ -916,6 +915,7 @@ bool KisDoc::saveAsQtImage(const QString& file, bool wholeImage)
     }
 
     QImage *qimg = new QImage(w, h, 32);
+
     if(qimg)
     {
         qimg->setAlphaBuffer(current()->colorMode() == cm_RGBA ? true : false);
@@ -1254,75 +1254,68 @@ void KisDoc::slotRemoveImage( const QString& _name )
 
 bool KisDoc::slotNewImage()
 {
-    if (!m_pNewDialog) m_pNewDialog = new NewDialog();
+	NewDialog dlg;
+	KisImage *img;
 
-    /* This dialog causes bad drawable or invalid window paramater.
-    It seems harmless, though, just a message about an Xerror.
-    Error only occurs when document is first created and has no
-    content, not when adding new image to an existing document */
+	/* This dialog causes bad drawable or invalid window paramater.
+	   It seems harmless, though, just a message about an Xerror.
+	   Error only occurs when document is first created and has no
+	   content, not when adding new image to an existing document */
 
-    m_pNewDialog->exec();
+	dlg.exec();
 
-    if(!m_pNewDialog->result() == QDialog::Accepted)
-        return false;
+	if (!dlg.result() == QDialog::Accepted)
+		return false;
 
-    int w = m_pNewDialog->newwidth();
-    int h = m_pNewDialog->newheight();
-    bgMode bg = m_pNewDialog->backgroundMode();
-    cMode cm = m_pNewDialog->colorMode();
+	int w = dlg.newwidth();
+	int h = dlg.newheight();
+	bgMode bg = dlg.backgroundMode();
+	cMode cm = dlg.colorMode();
 
-    kdDebug() << "KisDoc::slotNewImage: w: "<< w << "h: " << h << endl;
+	kdDebug() << "KisDoc::slotNewImage: w: "<< w << "h: " << h << endl;
 
-    QString name, desiredName;
-    int numero = 1;
-    unsigned int runs = 0;
+	QString name; 
+	QString desiredName;
+	int n = 1;
+	unsigned int runs = 0;
 
-    /* don't allow duplicate image names if some images have
-    been removed leaving "holes" in name sequence */
+	/* don't allow duplicate image names if some images have
+	   been removed leaving "holes" in name sequence */
 
-    do {
-        desiredName = i18n( "image %1" ).arg( numero );
-        KisImage *currentImg = m_Images.first();
+	do {
+		desiredName = i18n("image %1").arg(n);
+		KisImage *currentImg = m_Images.first();
 
-        while (currentImg)
-        {
-            if (currentImg->name() == desiredName)
-            {
-                numero++;
-            }
-            currentImg = m_Images.next();
-        }
-        runs++;
+		while (currentImg) {
+			if (currentImg -> name() == desiredName)
+				n++;
 
-    } while(runs < m_Images.count());
+			currentImg = m_Images.next();
+		}
 
-    name = i18n( "image %1" ).arg( numero );
+		runs++;
+	} while(runs < m_Images.count());
 
-    KisImage *img = newImage(name, w, h, cm, 8);
-    if (!img) return false;
+	name = i18n("image %1").arg(n);
 
-    kdDebug() << "KisDoc::slotNewImage: returned from newImage()" << endl;
+	if (!(img = newImage(name, w, h, cm, 8)))
+		return false;
 
-    // add background layer
+	// add background layer
+	if (bg == bm_White)
+		img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
+	else if (bg == bm_Transparent)
+		img->addLayer(QRect(0, 0, w, h), KisColor::white(), true, i18n("background"));
 
-    if (bg == bm_White)
-	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
+	else if (bg == bm_ForegroundColor)
+		img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
 
-    else if (bg == bm_Transparent)
-	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), true, i18n("background"));
+	else if (bg == bm_BackgroundColor)
+		img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
 
-    else if (bg == bm_ForegroundColor)
-	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
-
-    else if (bg == bm_BackgroundColor)
-	    img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
-
-    kdDebug() << "KisDoc::slotNewImage: returned from addLayer()" << endl;
-
-    img->markDirty(QRect(0, 0, w, h));
-    setCurrentImage(img);
-
-    return true;
+	img -> markDirty(QRect(0, 0, w, h));
+	setCurrentImage(img);
+	return true;
 }
 
 /*
@@ -1333,7 +1326,7 @@ bool KisDoc::slotNewImage()
 
 QCString KisDoc::mimeType() const
 {
-    return "application/x-krita";
+	return "application/x-krita";
 }
 
 

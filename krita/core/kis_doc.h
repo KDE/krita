@@ -277,7 +277,6 @@ private:
 
 	KisView * m_current_view;
 	KisImage  * m_pCurrent;
-	NewDialog * m_pNewDialog;
 	QImage    * m_pClipImage;
 
 	KisSelection *m_pSelection;

@@ -43,7 +43,7 @@ k_dcop:
     // dialog action slots
     void dialog_gradient();
     void dialog_colors();
-    void dialog_krayons();
+    void dialog_crayons();
     void dialog_brushes();
     void dialog_patterns();
     void dialog_layers();

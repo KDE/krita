@@ -30,6 +30,8 @@
 #include <qpointarray.h>
 #include <qrect.h>
 
+#include <ksharedptr.h>
+
 #include "kis_brush.h"
 #include "kis_cursor.h"
 #include "kis_pattern.h"
@@ -42,7 +44,7 @@ class KisCanvas;
 class KisDoc;
 class KisView;
 
-class KisTool : public QObject {
+class KisTool : public QObject, public KShared {
 Q_OBJECT
 
 public:

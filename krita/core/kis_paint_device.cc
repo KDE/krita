@@ -386,7 +386,7 @@ void KisPaintDevice::setData(KisTileMgrSP mgr)
 void KisPaintDevice::resize(Q_INT32 w, Q_INT32 h)
 {
         KisTileMgrSP old = data();
-        KisTileMgrSP tm = new KisTileMgr(colorStrategy() -> depth(), w, h);
+        KisTileMgrSP tm = new KisTileMgr(old, colorStrategy() -> depth(), w, h);
         Q_INT32 oldW = width();
         Q_INT32 oldH = height();
         KisPainter gc;

@@ -60,7 +60,7 @@ KisBackground::KisBackground(KisImageSP img, Q_INT32 width, Q_INT32 height) :
 	tm = data();
 	tile = tm -> tile(0, TILEMODE_WRITE);
 	Q_ASSERT( colorStrategy() != 0 );
-	fillBgTile(tile,  colorStrategy()->depth());
+	fillBgTile(tile,  colorStrategy()->depth() - 1);
 
 	for (Q_UINT32 i = 0, k = 0; i < tm -> nrows(); i++)
 		for (Q_UINT32 j = 0; j < tm -> ncols(); j++, k++)

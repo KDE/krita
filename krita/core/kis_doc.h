@@ -48,7 +48,7 @@ public:
 	virtual bool completeLoading(KoStore *store);
 	virtual bool completeSaving(KoStore*);
 	virtual DCOPObject* dcopObject();
-	virtual bool initDoc();
+	virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
 	virtual bool isEmpty() const;
 	virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
 	virtual bool saveOasis( KoStore*, KoXmlWriter* );

@@ -371,17 +371,27 @@ DCOPObject *KisDoc::dcopObject()
 	return m_dcop;
 }
 
-bool KisDoc::initDoc()
+bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
 	kdDebug() << "KisDoc::initDoc\n";
 	if (!init())
 		return false;
 
 	bool ok = false;
-	QString file;
+
+        if (flags==KoDocument::InitDocEmpty)
+        {
+                if ((ok = slotNewImage()))
+                        emit imageListUpdated();
+                setModified(false);
+                setUndo(true);
+                return ok;
+        }
+
+        QString file;
 	KoTemplateChooseDia::DialogType dlgtype;
 
-	if (initDocFlags() != KoDocument::InitDocFileNew)
+	if (flags != KoDocument::InitDocFileNew)
 		dlgtype = KoTemplateChooseDia::Everything;
 	else
 		dlgtype = KoTemplateChooseDia::OnlyTemplates;

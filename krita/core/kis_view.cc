@@ -1475,6 +1475,7 @@ void KisView::merge_all_layers()
 	if (img) {
 		KisLayerSP dst = new KisLayer(img, img -> width(), img -> height(), img -> nextLayerName(), OPACITY_OPAQUE);
 		KisPainter gc(dst.data());
+		gc.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
 		vKisLayerSP layers = img -> layers();
 		KisMerge<flattenAll> visitor(img, false);
 
@@ -1492,6 +1493,7 @@ void KisView::merge_visible_layers()
 	if (img) {
 		KisLayerSP dst = new KisLayer(img, img -> width(), img -> height(), img -> nextLayerName(), OPACITY_OPAQUE);
 		KisPainter gc(dst.data());
+		gc.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
 		KisMerge<flattenAllVisible> visitor(img, false);
 		vKisLayerSP layers = img -> layers();
 
@@ -1509,6 +1511,7 @@ void KisView::merge_linked_layers()
 	if (img) {
 		KisLayerSP dst = new KisLayer(img, img -> width(), img -> height(), img -> nextLayerName(), OPACITY_OPAQUE);
 		KisPainter gc(dst.data());
+		gc.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
 		KisMerge<flattenAllLinked> visitor(img, false);
 		vKisLayerSP layers = img -> layers();
 

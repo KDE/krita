@@ -25,7 +25,7 @@
 
 using namespace Magick;
 
-QImage convertFromMagickImage(Image& mimg)
+QImage convertFromMagickImage(const Image& mimg)
 {
 	QImage img;
 	Geometry geo = mimg.size();
@@ -56,7 +56,7 @@ QImage convertFromMagickImage(Image& mimg)
 	return img;
 }
 
-Image convertToMagickImage(QImage& img)
+Image convertToMagickImage(const QImage& img)
 {
 	Image mimg;
 	PixelPacket *pixel_cache;

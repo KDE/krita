@@ -25,8 +25,8 @@
 
 #include <qimage.h>
 
-QImage convertFromMagickImage(Magick::Image& mimg);
-Magick::Image convertToMagickImage(QImage& img);
+QImage convertFromMagickImage(const Magick::Image& mimg);
+Magick::Image convertToMagickImage(const QImage& img);
 
 #endif // KIS_MAGICK_H_
 

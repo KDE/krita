@@ -94,9 +94,6 @@ void ImageSize::slotImageSize()
 	dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
 	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
 
-	dlgImageSize -> setXRes(image -> xRes());
-	dlgImageSize -> setYRes(image -> yRes());
-		
 	if (dlgImageSize -> exec() == QDialog::Accepted) {
 		Q_INT32 w = dlgImageSize -> width();
 		Q_INT32 h = dlgImageSize -> height();
@@ -121,7 +118,6 @@ void ImageSize::slotLayerSize()
 
 	DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "LayerSize");
 	dlgImageSize -> setCaption("Layer Size");
-// 	dlgImageSize -> chkConstrain -> setCaption("Resample layer");
 
 	KisConfig cfg;
 
@@ -130,9 +126,6 @@ void ImageSize::slotLayerSize()
 	dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
 	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
 
-	dlgImageSize -> setXRes(image -> xRes());
-	dlgImageSize -> setYRes(image -> yRes());
-		
 	if (dlgImageSize -> exec() == QDialog::Accepted) {
 		Q_INT32 w = dlgImageSize -> width();
 		Q_INT32 h = dlgImageSize -> height();

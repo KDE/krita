@@ -20,18 +20,15 @@
 
 #include <config.h>
 
-#if !HAVE_DECL_ROUND
-#define round(x) ((int)(x + 0.5))
-#else
 #include <math.h>
-#endif
 
 #include <iostream>
 
 using namespace std;
 
-#include <qcombobox.h>
+#include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <qlabel.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -40,18 +37,9 @@ using namespace std;
 #include "dlg_imagesize.h"
 #include "wdg_imagesize.h"
 
-namespace {
-
-	enum enumScaleType {
-		PERCENT,
-		PIXEL
-	};
-
-}
 
 // XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
-
 DlgImageSize::DlgImageSize( QWidget *  parent,
 			    const char * name)
 	: super (parent, name, true, i18n("Image Size"), Ok | Cancel, Ok)
@@ -69,20 +57,6 @@ DlgImageSize::DlgImageSize( QWidget *  parent,
 	connect(this, SIGNAL(okClicked()),
 		this, SLOT(okClicked()));
 
-
-	connect(m_page -> chkConstrain, SIGNAL(toggled(bool)),
-		this, SLOT(slotConstrainToggled(bool)));
-
-
-	// Still unimplemented
-        m_page -> cmbPrintWidthUnit -> setEnabled(false);
-        m_page -> cmbPrintHeightUnit -> setEnabled(false);
-        m_page -> cmbXResolutionType -> setEnabled(false);
-        m_page -> cmbYResolutionType -> setEnabled(false);
-        m_page -> intPrintHeight -> setEnabled(false);
-        m_page -> intPrintWidth -> setEnabled(false);
-        m_page -> dblXRes -> setEnabled(false);
-        m_page -> dblYRes -> setEnabled(false);
 }
 
 DlgImageSize::~DlgImageSize()
@@ -94,12 +68,24 @@ void DlgImageSize::setWidth(Q_UINT32 w)
 {
 	blockAll();
 
+	m_page -> lblWidthOriginal -> setNum((int)w);
 	m_page -> intWidth -> setValue(w);
 	m_oldW = w;
 	m_origW = w;
 
 	unblockAll();
 }
+
+void DlgImageSize::setWidthPercent(Q_UINT32 w) 
+{
+	blockAll();
+
+	m_page -> intWidthPercent -> setValue(w);
+	m_oldWPercent = w;
+
+	unblockAll();
+}
+
 
 void DlgImageSize::setMaximumWidth(Q_UINT32 w)
 {
@@ -109,19 +95,32 @@ void DlgImageSize::setMaximumWidth(Q_UINT32 w)
 
 Q_INT32 DlgImageSize::width()
 {
-	return (Q_INT32)round(m_oldW);
+	return (Q_INT32)qRound(m_oldW);
 }
 
 void DlgImageSize::setHeight(Q_UINT32 h)
 {
 	blockAll();
-	
+
+	m_page -> lblHeightOriginal -> setNum((int)h);
 	m_page -> intHeight -> setValue(h);
 	m_oldH = h;
 	m_origH = h;
 
 	unblockAll();
 }
+
+
+void DlgImageSize::setHeightPercent(Q_UINT32 h)
+{
+	blockAll();
+
+	m_page -> intHeightPercent -> setValue(h);
+	m_oldHPercent = h;
+
+	unblockAll();
+}
+
 
 
 void DlgImageSize::setMaximumHeight(Q_UINT32 h)
@@ -133,22 +132,12 @@ void DlgImageSize::setMaximumHeight(Q_UINT32 h)
 
 Q_INT32 DlgImageSize::height()
 {
-	return (Q_INT32)round(m_oldH);
-}
-
-void DlgImageSize::setXRes(double x)
-{
-	m_page -> dblXRes -> setValue(x);
-}
-
-void DlgImageSize::setYRes(double y) 
-{
-	m_page -> dblYRes -> setValue(y);
+	return (Q_INT32)qRound(m_oldH);
 }
 
 bool DlgImageSize::scale() 
 {
-	return m_page -> chkResample -> isChecked();
+	return m_page -> radioScale -> isChecked();
 }
 
 // SLOTS
@@ -158,149 +147,104 @@ void DlgImageSize::okClicked()
 	accept();
 }
 
-void DlgImageSize::slotWidthChanged(int w)
-{
-	if (m_page -> chkConstrain -> isChecked()) {
-
-		blockAll();
-
-		if (m_page -> cmbScaleTypeW -> currentItem() == PERCENT) {
-			m_oldH = (m_origH * w) / 100.0;
-
-			if (m_oldH > m_maxH) m_oldH = m_maxH;
-
-			if (m_page -> cmbScaleTypeH -> currentItem() == PERCENT) {
-				m_page -> intHeight -> setValue(w);
-			}
-			else {
-				m_page -> intHeight -> setValue((int)round(m_oldH));
-			}
-		}
-		else {
-			double percent = (w / m_origW);
-
-			m_oldH = round(m_origH * percent);
-
-			if (m_page -> cmbScaleTypeH -> currentItem() == PERCENT) {
-				m_page -> intHeight -> setValue((int)round(percent));
-			}
-			else {
-				m_page -> intHeight -> setValue((int)m_oldH);
-			}
-		}
-
-		unblockAll();
-	}
-	if (m_page -> cmbScaleTypeW -> currentItem() == PERCENT) {
-		m_oldW = (m_origW * w) / 100;
-	}
-	else {
-		m_oldW = w;
-	}
-
-}
-
-void DlgImageSize::slotHeightChanged(int h)
-{
-	if (m_page -> chkConstrain -> isChecked()) {
-
-		blockAll();
-
-		if (m_page -> cmbScaleTypeH -> currentItem() == PERCENT) {
-			m_oldW = (m_origW * h) / 100.0;
-			if (m_oldW > m_maxW) m_oldW = m_maxW;
-
-			if (m_page -> cmbScaleTypeW -> currentItem() == PERCENT) {
-				m_page -> intWidth -> setValue(h);
-			}
-			else {
-				m_page -> intWidth -> setValue((int)round(m_oldW));
-			}
-		}
-		else {
-			double percent = (h / m_origH);
-
-			m_oldW = round(m_origH * percent);
-
-			if (m_page -> cmbScaleTypeW -> currentItem() == PERCENT) {
-				m_page -> intWidth -> setValue((int)round(percent));
-			}
-			else {
-				m_page -> intWidth -> setValue((int)m_oldW);
-			}
-		}
-
-		unblockAll();
-	}
-
-	if (m_page -> cmbScaleTypeH -> currentItem() == PERCENT) {
-		m_oldH = (m_origH * h) / 100;
-	}
-	else {
-		m_oldH = h;
-	}
-
-}
-
-void DlgImageSize::slotScaleTypeWChanged(int i)
+void DlgImageSize::slotWidthPixelsChanged(int w)
 {
 	blockAll();
 
-	if (i == PERCENT) {
-		m_page -> intWidth -> setValue((int)round((m_oldW / m_origW) * 100));
+	double wPercent = qRound(double(w) * 100 / double(m_origW));
+
+	// Compute width in percent
+	m_page -> intWidthPercent -> setValue((int)wPercent);
+	
+	// Set height in pixels and percent of necessary
+	if (m_page -> chkConstrain -> isChecked()) {
+		m_page -> intHeightPercent -> setValue((int)wPercent);
+
+		m_oldH = qRound(m_origH * wPercent / 100);
+		m_page -> intHeight -> setValue((int)m_oldH);
+
 	}
-	else {
-		m_page -> intWidth -> setValue((int)round(m_oldW));
+	m_oldW = w;
+
+	unblockAll();
+}
+
+void DlgImageSize::slotHeightPixelsChanged(int h)
+{
+	blockAll();
+
+	double hPercent = qRound(double(h) * 100 / double(m_origH));
+
+	// Compute height in percent
+	m_page -> intHeightPercent -> setValue((int)hPercent);
+	
+	// Set width in pixels and percent of necessary
+	if (m_page -> chkConstrain -> isChecked()) {
+		m_page -> intWidthPercent -> setValue((int)hPercent);
+
+		m_oldW = qRound(m_origW * hPercent / 100);
+		m_page -> intWidth -> setValue((int)m_oldW);
+
+	}
+	m_oldH = h;
+
+	unblockAll();
+}
+
+void DlgImageSize::slotWidthPercentChanged(int w)
+{
+	blockAll();
+
+	m_page -> intWidth -> setValue(qRound(w * m_origW / 100));
+
+	if (m_page -> chkConstrain -> isChecked()) {
+		m_page -> intHeightPercent -> setValue(w);
+		m_page -> intHeight -> setValue(qRound( w * m_origH / 100));
 	}
 
 	unblockAll();
 }
 
-void DlgImageSize::slotScaleTypeHChanged(int i)
+void DlgImageSize::slotHeightPercentChanged(int h)
 {
-
 	blockAll();
 
-	if (i == PERCENT) {
-		m_page -> intHeight -> setValue((int)round((m_oldH / m_origH) * 100));
-	}
-	else {
-		m_page -> intHeight -> setValue((int)round(m_oldH));
+	m_page -> intHeight -> setValue(qRound(h * m_origH / 100));
+	if (m_page -> chkConstrain -> isChecked()) {
+		m_page -> intWidthPercent -> setValue(h);
+		m_page -> intWidth -> setValue(qRound( h * m_origW / 100));
 	}
 
 	unblockAll();
+	
 }
 
-void DlgImageSize::slotConstrainToggled(bool b) 
-{
-	m_origW = m_oldW;
-	m_origH = m_oldH;
-}
 
 void DlgImageSize::blockAll()
 {
 	// XXX: more efficient to use blockSignals?
 	m_page -> intWidth -> disconnect();
 	m_page -> intHeight -> disconnect();
-	m_page -> cmbScaleTypeW -> disconnect();
-	m_page -> cmbScaleTypeH -> disconnect();
+	m_page -> intWidthPercent -> disconnect();
+	m_page -> intHeightPercent -> disconnect();
+
 }
 
 void DlgImageSize::unblockAll()
 {
 	// XXX: more efficient to use blockSignals?
 	connect (m_page -> intWidth, SIGNAL(valueChanged(int)),
-		 this, SLOT(slotWidthChanged(int)));
+		 this, SLOT(slotWidthPixelsChanged(int)));
 
 	connect (m_page -> intHeight, SIGNAL(valueChanged(int)),
-		 this, SLOT(slotHeightChanged(int)));
+		 this, SLOT(slotHeightPixelsChanged(int)));
 
-	connect (m_page -> cmbScaleTypeW, SIGNAL(activated(int)),
-		 this, SLOT(slotScaleTypeWChanged(int)));
+	connect (m_page -> intWidthPercent, SIGNAL(valueChanged(int)),
+		 this, SLOT(slotWidthPercentChanged(int)));
 
+	connect (m_page -> intHeightPercent, SIGNAL(valueChanged(int)),
+		 this, SLOT(slotHeightPercentChanged(int)));
 
-	connect (m_page -> cmbScaleTypeH, SIGNAL(activated(int)),
-		 this, SLOT(slotScaleTypeHChanged(int)));
 
 }
 

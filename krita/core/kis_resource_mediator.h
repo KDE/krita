@@ -61,9 +61,7 @@ signals:
 
 private slots:
 	void setActiveItem(KoIconItem *item);
-	void resourceServerLoadedBrush(KisBrush *resource);
-	void resourceServerLoadedPipeBrush(KisImagePipeBrush *resource);
-	void resourceServerLoadedPattern(KisPattern *resource);
+	void resourceServerLoadedResource(KisResource *resource);
 
 private:
 	KisItemChooser *m_chooser;

@@ -53,9 +53,9 @@ public:
 	void loadPatterns();
 
 signals:
-	void loadedBrush(KisBrush *br);
-	void loadedpipeBrush(KisImagePipeBrush *br);
-	void loadedPattern(KisPattern *pat);
+	void loadedBrush(KisResource *br);
+	void loadedpipeBrush(KisResource *br);
+	void loadedPattern(KisResource *pat);
 
 private:
 	void loadBrush();

@@ -45,21 +45,21 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 
 	if (mediateOn & MEDIATE_BRUSHES) {
 		connect(rserver,
-                        SIGNAL(loadedBrush(KisBrush*)),
+                        SIGNAL(loadedBrush(KisResource*)),
                         this,
-                        SLOT(resourceServerLoadedBrush(KisBrush*)));
+                        SLOT(resourceServerLoadedResource(KisResource*)));
 
 		connect(rserver,
-                        SIGNAL(loadedpipeBrush(KisImagePipeBrush*)),
+                        SIGNAL(loadedpipeBrush(KisResource*)),
                         this,
-                        SLOT(resourceServerLoadedPipeBrush(KisImagePipeBrush*)));
+                        SLOT(resourceServerLoadedResource(KisResource*)));
 
 	}
 	if (mediateOn & MEDIATE_PATTERNS)
 		connect(rserver,
-                        SIGNAL(loadedPattern(KisPattern*)),
+                        SIGNAL(loadedPattern(KisResource*)),
                         this,
-                        SLOT(resourceServerLoadedPattern(KisPattern*)));
+                        SLOT(resourceServerLoadedResource(KisResource*)));
 
 	m_chooser -> setCaption(chooserCaption);
 }
@@ -111,7 +111,7 @@ void KisResourceMediator::setActiveItem(KoIconItem *item)
 	}
 }
 
-void KisResourceMediator::resourceServerLoadedBrush(KisBrush *resource)
+void KisResourceMediator::resourceServerLoadedResource(KisResource *resource)
 {
 	if (resource && resource -> valid()) {
 		
@@ -119,35 +119,6 @@ void KisResourceMediator::resourceServerLoadedBrush(KisBrush *resource)
 
 		m_items[resource] = item;
 		item -> setSpacing(resource -> spacing());
-
-		m_chooser -> addItem(item);
-		emit addedResource(resource);
-		if (m_activeItem == 0) setActiveItem(item);
-	}
-}
-
-void KisResourceMediator::resourceServerLoadedPipeBrush(KisImagePipeBrush *resource)
-{
-	if (resource && resource -> valid()) {
-		KisIconItem *item = new KisIconItem(resource);
-
-		m_items[resource] = item;
-		item -> setSpacing(resource -> spacing());
-
-		m_chooser -> addItem(item);
-		emit addedResource(resource);
-		if (m_activeItem == 0) setActiveItem(item);
-	}
-}
-
-
-void KisResourceMediator::resourceServerLoadedPattern(KisPattern *resource)
-{
-	if (resource && resource -> valid()) {
-		KisIconItem *item = new KisIconItem(resource);
-
-		m_items[resource] = item;
-		//item -> setSpacing(resource -> spacing());
 
 		m_chooser -> addItem(item);
 		emit addedResource(resource);

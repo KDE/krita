@@ -116,8 +116,8 @@ void KisResourceServer::brushLoaded(KisResource *br)
 {
 	if (br && br -> valid()) {
 		m_brushes.append(br);
-		Q_ASSERT(dynamic_cast<KisBrush*>(br));
-		emit loadedBrush(static_cast<KisBrush*>(br));
+		Q_ASSERT(br);
+		emit loadedBrush(br);
 	} else {
 		delete br;
 	}
@@ -129,8 +129,8 @@ void KisResourceServer::pipebrushLoaded(KisResource *br)
 {
 	if (br && br -> valid()) {
 		m_pipebrushes.append(br);
-		Q_ASSERT(dynamic_cast<KisImagePipeBrush*>(br));
-		emit loadedpipeBrush(static_cast<KisImagePipeBrush*>(br));
+		Q_ASSERT(br);
+		emit loadedpipeBrush(br);
 	} else {
 		delete br;
 	}
@@ -143,8 +143,8 @@ void KisResourceServer::patternLoaded(KisResource *pat)
 {
 	if (pat && pat -> valid()) {
 		m_patterns.append(pat);
-		Q_ASSERT(dynamic_cast<KisPattern*>(pat));
-		emit loadedPattern(static_cast<KisPattern*>(pat));
+		Q_ASSERT(pat);
+		emit loadedPattern(pat);
 	} else {
 		delete pat;
 	}

@@ -8,71 +8,79 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>291</width>
-            <height>282</height>
+            <width>312</width>
+            <height>161</height>
         </rect>
     </property>
     <property name="caption">
         <string>KisWdgAutogradient</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget">
+        <spacer row="3" column="0">
             <property name="name">
-                <cstring>layout2</cstring>
+                <cstring>spacer1</cstring>
             </property>
-            <grid>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="1" column="1">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>16</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="KisGradientSliderWidget" row="0" column="0">
+            <property name="name">
+                <cstring>gradientSlider</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>32767</width>
+                    <height>30</height>
+                </size>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="2" column="0">
+            <property name="name">
+                <cstring>layout11</cstring>
+            </property>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KColorButton" row="2" column="1">
-                    <property name="name">
-                        <cstring>rightColorButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>labelRightColor</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Right:</string>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="1" column="3">
-                    <property name="name">
-                        <cstring>intNumInputLeftOpacity</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="4" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>labelColorInterpolationType</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Color interpolation:</string>
-                    </property>
-                </widget>
-                <widget class="KColorButton" row="1" column="1">
-                    <property name="name">
-                        <cstring>leftColorButton</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="QComboBox" row="3" column="2" rowspan="1" colspan="2">
+                <widget class="QComboBox">
                     <item>
                         <property name="text">
                             <string>Linear</string>
@@ -102,15 +110,7 @@
                         <cstring>comboBoxInterpolationType</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel" row="1" column="2">
-                    <property name="name">
-                        <cstring>labelLeftOpacity</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Opacity:</string>
-                    </property>
-                </widget>
-                <widget class="QComboBox" row="4" column="2" rowspan="1" colspan="2">
+                <widget class="QComboBox">
                     <item>
                         <property name="text">
                             <string>RGB</string>
@@ -130,34 +130,31 @@
                         <cstring>comboBoxColorInterpolationType</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel" row="3" column="0" rowspan="1" colspan="2">
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget" row="1" column="0">
+            <property name="name">
+                <cstring>layout8</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="2">
                     <property name="name">
-                        <cstring>labelInterpolation</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Interpolation:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="2">
-                    <property name="name">
-                        <cstring>labelRightOpacity</cstring>
+                        <cstring>labelLeftOpacity</cstring>
                     </property>
                     <property name="text">
                         <string>Opacity:</string>
                     </property>
                 </widget>
-                <widget class="KIntNumInput" row="2" column="3">
+                <widget class="KColorButton" row="1" column="1">
                     <property name="name">
-                        <cstring>intNumInputRightOpacity</cstring>
-                    </property>
-                </widget>
-                <widget class="KisGradientSliderWidget" row="0" column="0" rowspan="1" colspan="4">
-                    <property name="name">
-                        <cstring>gradientSlider</cstring>
+                        <cstring>rightColorButton</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
-                            <hsizetype>7</hsizetype>
+                            <hsizetype>0</hsizetype>
                             <vsizetype>0</vsizetype>
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
@@ -165,12 +162,20 @@
                     </property>
                     <property name="maximumSize">
                         <size>
-                            <width>32767</width>
+                            <width>30</width>
                             <height>30</height>
                         </size>
                     </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
                 </widget>
-                <widget class="QLabel" row="1" column="0">
+                <widget class="KIntNumInput" row="1" column="3">
+                    <property name="name">
+                        <cstring>intNumInputRightOpacity</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>labelLeftColor</cstring>
                     </property>
@@ -178,26 +183,52 @@
                         <string>Left:</string>
                     </property>
                 </widget>
+                <widget class="KIntNumInput" row="0" column="3">
+                    <property name="name">
+                        <cstring>intNumInputLeftOpacity</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="2">
+                    <property name="name">
+                        <cstring>labelRightOpacity</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Opacity:</string>
+                    </property>
+                </widget>
+                <widget class="KColorButton" row="0" column="1">
+                    <property name="name">
+                        <cstring>leftColorButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>30</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>labelRightColor</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Right:</string>
+                    </property>
+                </widget>
             </grid>
         </widget>
-        <spacer>
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>71</height>
-                </size>
-            </property>
-        </spacer>
-    </vbox>
+    </grid>
 </widget>
 <customwidgets>
     <customwidget>
@@ -230,12 +261,10 @@
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kcolorbutton.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>kcolorbutton.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
     <includehint>kisgradientsliderwidget.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
 </includehints>
 </UI>

@@ -70,7 +70,11 @@ KisDockFrameDocker::~KisDockFrameDocker()
 
 void KisDockFrameDocker::plug (QWidget* w)
 {
-        m_page-> tabWidget -> addTab( w , w -> caption());
+        m_page -> tabWidget -> addTab( w , w -> caption());
+	if (w -> layout() != 0) {
+ 		w -> layout() -> setSpacing(0);
+ 		w -> layout() -> setMargin(0);
+	}
 }
 
 void KisDockFrameDocker::unplug(QWidget *w)

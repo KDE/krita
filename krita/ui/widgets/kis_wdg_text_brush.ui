@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KisWdgTextBrush</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>395</width>
-            <height>204</height>
+            <width>197</width>
+            <height>87</height>
         </rect>
     </property>
     <property name="caption">
@@ -21,7 +21,7 @@
         </property>
         <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
-                <cstring>layout18</cstring>
+                <cstring>layout3</cstring>
             </property>
             <vbox>
                 <property name="name">
@@ -29,7 +29,7 @@
                 </property>
                 <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout4</cstring>
+                        <cstring>layout9</cstring>
                     </property>
                     <hbox>
                         <property name="name">
@@ -47,6 +47,12 @@
                             <property name="name">
                                 <cstring>lineEdit</cstring>
                             </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>120</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
                             <property name="font">
                                 <font>
                                 </font>
@@ -59,7 +65,7 @@
                 </widget>
                 <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout28</cstring>
+                        <cstring>layout10</cstring>
                     </property>
                     <hbox>
                         <property name="name">
@@ -67,151 +73,63 @@
                         </property>
                         <widget class="QLabel">
                             <property name="name">
-                                <cstring>textLabelFont</cstring>
+                                <cstring>lblFont</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Font:</string>
+                                <string>font</string>
                             </property>
                         </widget>
-                        <widget class="KFontCombo">
+                        <widget class="QToolButton">
                             <property name="name">
-                                <cstring>fontCombo</cstring>
+                                <cstring>bnFont</cstring>
                             </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout33</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout7</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabelSize</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Size:</string>
-                                    </property>
-                                </widget>
-                                <widget class="QSpinBox">
-                                    <property name="name">
-                                        <cstring>spinBoxSize</cstring>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>64</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>5</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>12</number>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>checkBoxItalic</cstring>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>&amp;Italic</string>
+                                <string>...</string>
                             </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout7</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QComboBox">
-                            <item>
-                                <property name="text">
-                                    <string>Light</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Normal</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Demibold</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Bold</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Strong</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Custom</string>
-                                </property>
-                            </item>
-                            <property name="name">
-                                <cstring>cmbWeight</cstring>
+                            <property name="accel">
+                                <string></string>
                             </property>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout7</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabelCustom</cstring>
-                                    </property>
-                                    <property name="enabled">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="text">
-                                        <string>Custom weight</string>
-                                    </property>
-                                </widget>
-                                <widget class="QSpinBox">
-                                    <property name="name">
-                                        <cstring>spinBoxCustomBoldness</cstring>
-                                    </property>
-                                    <property name="enabled">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="value">
-                                        <number>50</number>
-                                    </property>
-                                </widget>
-                            </hbox>
                         </widget>
                     </hbox>
                 </widget>
             </vbox>
         </widget>
+        <spacer row="0" column="1">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>121</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
         <spacer row="1" column="0">
             <property name="name">
-                <cstring>spacer6</cstring>
+                <cstring>spacer2</cstring>
             </property>
             <property name="orientation">
                 <enum>Vertical</enum>
@@ -222,7 +140,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>21</height>
+                    <height>31</height>
                 </size>
             </property>
         </spacer>
@@ -235,8 +153,6 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klineedit.h</includehint>
-    <includehint>kfontcombo.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

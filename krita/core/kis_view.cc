@@ -89,6 +89,7 @@
 #include "kis_resourceserver.h"
 #include "kis_ruler.h"
 #include "kis_selection.h"
+#include "kis_birdeye_box.h"
 #include "kis_controlframe.h"
 #include "kis_tool.h"
 #include "kis_tool_registry.h"
@@ -345,6 +346,12 @@ void KisView::setupDockers()
 	connect(m_controlWidget, SIGNAL(bgColorChanged(const QColor&)), SLOT(slotSetBGColor(const QColor&)));
 	connect(this, SIGNAL(fgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetFGColor(const QColor&)));
 	connect(this, SIGNAL(bgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetBGColor(const QColor&)));
+
+	// ---------------------------------------------------------------------
+	// Bird's eye box
+	m_birdEyeBox = new KisBirdEyeBox(m_toolcontroldocker);
+	m_birdEyeBox -> setCaption(i18n("Overview"));
+	m_toolcontroldocker -> plug(m_birdEyeBox);
 
 
  	// ---------------------------------------------------------------------

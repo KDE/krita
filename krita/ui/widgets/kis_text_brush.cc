@@ -22,9 +22,9 @@
 #include <qcheckbox.h> 
 #include <qlabel.h>
 
-#include <klineedit.h>
-#include <kfontcombo.h>
+#include <kfontdialog.h>
 
+#include <klineedit.h>
 #include "kis_text_brush.h"
 
 void KisTextBrushResource::updateBrush()
@@ -48,54 +48,25 @@ KisTextBrush::KisTextBrush(QWidget *parent, const char* name, const QString& cap
 	  m_textBrushResource(new KisTextBrushResource())
 {
 	setCaption(caption);
-	// XXX: Did I remove the wrong line here? BSAR
- 	connect((QObject*)lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(rebuildTextBrush()));
-	connect((QObject*)cmbWeight, SIGNAL(activated(int)), this, SLOT(rebuildTextBrush()));
-// 	connect((QObject*)buttonGroupBold, SIGNAL(clicked(int)), this, SLOT(rebuildTextBrush()));
-	connect((QObject*)checkBoxItalic, SIGNAL(toggled(bool)), this, SLOT(rebuildTextBrush()));
-	connect((QObject*)spinBoxSize, SIGNAL(valueChanged(int)), this, SLOT(rebuildTextBrush()));
-	fontCombo->setCurrentItem (0);
-	
+	connect((QObject*)lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(rebuildTextBrush()));
+	connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
+	m_font = font();
+	rebuildTextBrush();
+}
+
+
+void KisTextBrush::getFont()
+{
+	KFontDialog::getFont( m_font, false/*, QWidget* parent! */ );
+	rebuildTextBrush();
 }
 
 void KisTextBrush::rebuildTextBrush()
 {
-// 	kdDebug() << "KisTextBrush::rebuildTextBrush Font = " << fontCombo->currentFont() << " size = " << spinBoxSize->value() << " boldness = " << spinBoxCustomBoldness->value() << endl;
-
-	if( cmbWeight -> currentItem() == 5)
-	{
-		textLabelCustom -> setEnabled(true);
-		spinBoxCustomBoldness->setEnabled(true);
-	} else {
-		textLabelCustom->setEnabled(false);
-		spinBoxCustomBoldness->setEnabled(false);
-
-		if ( cmbWeight -> currentItem() == 0 )
-		{
-			spinBoxCustomBoldness->setValue(25);
-		}
-		else if ( cmbWeight -> currentItem() == 1 )
-		{
-			spinBoxCustomBoldness->setValue(50);
-		}
-		else if ( cmbWeight -> currentItem() == 2 )
-		{
-			spinBoxCustomBoldness->setValue(63);
-		}
-		else if ( cmbWeight -> currentItem() == 3 )
-		{
-			spinBoxCustomBoldness->setValue(75);
-		}
-		else if ( cmbWeight -> currentItem() == 4 )
-		{
-			spinBoxCustomBoldness->setValue(87);
-		}
-    }
-
-	QFont font(fontCombo->currentText(), spinBoxSize->value(), spinBoxCustomBoldness->value(), checkBoxItalic->isChecked());
-	lineEdit->setFont(font);
-	m_textBrushResource->setFont(font);
+	lblFont -> setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
+	lblFont -> setFont(m_font);
+	m_textBrushResource->setFont(m_font);
 	m_textBrushResource->setText(lineEdit->text());
 	m_textBrushResource->updateBrush();
-	emit(activatedResource(m_textBrushResource ));
+	emit(activatedResource(m_textBrushResource));
 }

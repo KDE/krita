@@ -51,12 +51,17 @@ class KisTextBrush : public KisWdgTextBrush
 	Q_OBJECT
 public:
 	KisTextBrush(QWidget *parent, const char* name, const QString& caption);
+
 signals:
 	void activatedResource(KisResource *r);
+
 private slots:
 	void rebuildTextBrush();
+	void getFont();
+
 private:
 	KisTextBrushResource* m_textBrushResource;
+	QFont m_font;
 };
 
 

@@ -36,7 +36,7 @@ class KisBirdEyeBox : public WdgBirdEye
 
 public:
 
-	KisBirdEyeBox(KisView* view, QWidget* parent=0, const char* name=0);
+	KisBirdEyeBox(QWidget* parent=0, const char* name=0);
 	~KisBirdEyeBox();
 
 	bool eventFilter(QObject*, QEvent*);
@@ -68,7 +68,7 @@ protected:
 
 private:
 	KisView* m_view;
-\	KisDoc* m_doc;
+	KisDoc* m_doc;
 
 	KAction* m_zoomIn;
 	KAction* m_zoomOut;
@@ -84,7 +84,6 @@ private:
 	bool m_handlePress;
 	QPoint m_lastPos;
 
-	KoZoomHandler* m_zoomHandler;
 };
 
 #endif // KIS_BIRDEYE_BOX_H

@@ -44,6 +44,7 @@ libkisui_la_SOURCES = kis_dlg_preferences.cc \
     kis_dockframedocker.cc \
     kis_basedocker.cc \
     kis_previewview.cc \
+    kis_birdeye_box.cc \
     wdgmatrix.ui \
     wdghistogram.ui \
     kis_previewwidgetbase.ui \
@@ -52,7 +53,8 @@ libkisui_la_SOURCES = kis_dlg_preferences.cc \
     wdgnewimage.ui \
     wdgcolorsettings.ui \
     wdgapplyprofile.ui \
-    wdgdockertab.ui
+    wdgdockertab.ui \
+    wdgbirdeye.ui
 
 
 noinst_HEADERS = kis_dlg_preferences.h \
@@ -93,7 +95,8 @@ noinst_HEADERS = kis_dlg_preferences.h \
     wdgnewimage.h \
     wdgcolorsettings.h \
     wdgapplyprofile.h \
-    wdgdockertab.h
+    wdgdockertab.h \
+    kis_birdeye_box.h
 
 
 libkisui_la_METASOURCES = AUTO

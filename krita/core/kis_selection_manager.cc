@@ -396,7 +396,8 @@ void KisSelectionManager::selectAll()
 	if (!layer) return;
 
 	KisSelectionSP s = new KisSelection(KisPaintDeviceSP(layer), "layer selection for: " + layer -> name());
-	s -> select(QRect(0, 0, img -> width(), img -> height())); //AUTOLAYER perhaps use extent ??
+	QRect r = layer -> extent();
+	s -> select(QRect(r.x(), r.y(), r.width(), r.height()));
 
 	s -> setVisible(true);
 
@@ -499,7 +500,7 @@ void KisSelectionManager::copySelectionToNewLayer()
 	paste();
 }
 
-
+// XXX: Maybe move these esoteric functions to plugins?
 void KisSelectionManager::feather() {}
 void KisSelectionManager::border() {}
 void KisSelectionManager::expand() {}

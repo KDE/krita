@@ -1,15 +1,5 @@
 Krita TODO
 
-This it the TODO list for the first release of Krita, which I hope we
-will be able to make in September or October. This release will be limited
-to 8-bit per channel and one, or at most two working color models (RGBA 
-and CMYK). (XXX: bitmap and grayscale, too? I don't think there's any
-urgency for indexed images like gifs.)
-
-The very first thing that's needed to at least enable me to use Krita
-to maintain the Krita screenshots page is screenshot and scale :-).
-
-Items with a hash have work started on them.
 
 Scaling
 
@@ -18,22 +8,12 @@ Scaling
 	  they fail.
 	- replace the structs CONTRIB and CLIST by some STL or Qt
 	  container.
-	- mode the code to a visitor class.
-	- Add progressinfo
-	- There is still a bug. The rightmost pixels in the scaled
-	  image are wrong. Actually it is not really a bug in the
-	  scaling code, if you draw a one pixel line at the rightmost
-	  edge of the image and scale it, the line is still there,
-	  there is just an addition line right of it. So the image is
-	  not scaled to the actual target width
 	- use iterators to access pixels.
         - Preview dialog should use KDialogBase
         - Decide on more user-friendly names for the scaling algs.
 
 Core
 
-	* Discontinuous selections (A byte-map mask for a whole image)
-	  (#Boudewijn)
 	* Channels showing (note that we don't do Gimp-type grayscale
 	  mask channels, just showing/hiding the various color
 	  channels.
@@ -43,22 +23,14 @@ Core
 	  image date, except for an occasional mask)
 	* Mask layers
 	* Loading and saving of selections
-	C Painting of gradients
-        X loading Gimp gradients
 	* Colorspace-aware difference between pixel function
 	* Anti-aliased filling (requires some simple colorspace
-	  function to merge 2 Pixels) -> also, make fill use
-	  the new cancelable progress meter the gradient tool uses.
+	  function to merge 2 Pixels)
 	* Load/save configuration of everything user-settable.
-	* Add filtering with image kernels (3 * 3 blocks of pixels)
-	* Scaling of images (#Boudewijn, Bart, Michael)
 	* Fix composite ops (nick from the code gwenview nicked for
 	  the xcf import)
 	* Make toolbox look like Karbon's toolbox, but follow the
 	  layout of photoshop's toolbox for minimum confusability.
-        * Rework iterators to allow iterating over pixels (#Cyrillle, Casper)
-        * Auto-extending layers (#Casper)
-        X Code cleanup (make naming conformant to Qt) (#Dirk)
         * Lock layers (make inaccessible) See bug #90456.
 
 File Format:
@@ -66,17 +38,12 @@ File Format:
 	* Save & load actual profiles in .kra files
 	* Save & load undo information in .kra files
 
-
 User Interface
 
         * Give color strategies an option page just like tools. Give layers an option page,
 	  combine both pages to show for layer properties. Color strategies can be stateful.
-	* Replace krita ruler with koruler. (This may be impossible because Krita doesn't use pages)
 	* Create brush-shape outline cursor
 	* All dialogs ui-fied (#Boudewijn, Sven, Casper)
-	* Tabs in dockers drag-and-droppable (vector of docker
-	  windows, create new docker if tab dropped outside existing
-	  docker window)
 	* Implement the following dialogs / widgets:
 		    - Select by color range (#Boudewijn)
 		    - Variations (#Boudewijn)
@@ -84,17 +51,9 @@ User Interface
 		    - Gradient (nick from Scribus?)
 		    - Histogram (#Boudewijn)
 		    - Modify curves (nick from Perico)
-	* Add history docker
 	* Add auto-scroll to canvas while painting	  
-	X Full-screen mode (#Boudewijn -- this should work, but it doesn't. Don't know
-          why :-(.)
-	* Add previews to all relevant dialogs. (XXX: let preview work 
-	  on rendered QImage, or on scaled image?)(#Bart) 
-	X Allow an active tool for every pointer present in X. (#Adrian -- no
-          support yet for Wacom tablets that have more than one stylus)
-	* File/Open should list all image types Krita can handle, and simply
-          import non-native images, instead of forcing the user to use the import
-          image menu item.
+	* Add previews to all relevant dialogs. (#Bart) 
+	* Show which tool is associated with which pointer (mouse, stylus, eraser, other stylusses)
 	* Allow guides to be disabled. Allow diagonal guides (useful
 	  for perspective drawings)
         * Create templates for often-used image formats. Add save-as-template
@@ -102,90 +61,53 @@ User Interface
         * Fix gimp XCF import/export (ImageMagick hacking...)
 	* Fix imports to import metadata and image files in non-rgb encodings.
 
+	Dockers
+		* Tabs in dockers drag-and-droppable (vector of docker
+		  windows, create new docker if tab dropped outside existing
+		  docker window)
+		* Add bird's eye view tab to dockers.
+		* Add action (macro) docker
+		* Add navigation/zoom docker
+		* Add history docker
+                * Convert the layer & channel box to a qlistbox; enable the channel box.
+
+        * Use OpenGL if available to composite checkerboard with image so
+          while scrolling the checks can stay in place, and the partially
+          transparent image move. This maybe needs Qt 4. OpenGL can also be
+  	  used to bumpmap images on a height-field canvas.
+
 Profiles
 
-X	* Add profiles to krita/data/profiles (done)
-
-X	* Create a KisProfile resource in krita/core/resources
-
-	* Implement the attached preferences tab & add to kis_dlg_preferences (Query: 
-      should there be separate settings for every color model? If so, we need 
-      to add settings loading and saving to the color strategy modules).
-
-X	* Store preferences in settings
-
 	* Add an input profile combobox to the import image & scan dialogs
-
 	* Add an export profile combobox to the export image/print dialogs
-
-X    	* Add a step in KisDoc::paintContent where the default monitor profile
-          is applied to the QImage at line 1157. --> No, this is done in the color strategies,
-          so we never need more than one transform.
-
-    * Add loading and saving of profiles associated with images in .krita 
-      files.
-
-    * Retrieve profiles from imported images (tiff, png and jpg can have
-      them, for instance embedded by a calibrated scanner).
-
-    * Export profiles in tiff, png and jpg (this and the previous item
-      depend on ImageMagick or GraphicsMagick supporting this in some way.)
-	
-    * Support out-of-gamut warning indications for parts of an image 
-      containing unprintable colours (no idea how to implement this). -> this
-      is pretty easy with lcms
-
+        * Add loading and saving of profiles associated with images in .krita 
+          files.
+        * Retrieve profiles from imported images (tiff, png and jpg can have
+          them, for instance embedded by a calibrated scanner).
+        * Export profiles in tiff, png and jpg (this and the previous item
+          depend on ImageMagick or GraphicsMagick supporting this in some way.)
+        * Support out-of-gamut warning indications for parts of an image 
+          containing unprintable colours (no idea how to implement this). -> this
+          is pretty easy with lcms
 
 Color conversions
 
-    * Replace koColor with KisColor, where KisColor is a combination of a
-      byte array and a pointer to a color model
-
-X    * Precreate all littlecms transforms inside the color model
-       constructors. -> no, that would take too much time and memory; instead,
-       create on demand and cache. Later: add some garbage collection.
-      
-
- X   * Remove the convertToRGBA and convertFromRGBA methods (and all calls to
-      them).
-	  
-    * Rework the nativeColor, toKoColor, convertTo methods to use KisColor and
-      littlecms for transforms.
-
-X    * In KisStrategyColorSpaceCMYK::convertToImage, use littlecms transform 
-      instead of homegrown code to return an RGB QImage (and rename this
-	  method to convertToQImage, since that's what it is, and do that 
-      everywhere).
-
-    * Make color strategies, filters and other plugins that act directly on 
-      channel data instead of using KisPainter to bitBlt templates.
-
-    * Add UI for depth choice
-
-    * Add UI for display settings for high bit depths -- we have upscale
-      and downscale, but that's not enough. I want, as in OpenEXR, to be
-      able 
-
-Gerhard Fuernkranz <nospam456@gmx.de>:
-
-> If you need even faster transforms, I can recommend Argyll's IMDI 
-> routines (http://www.argyllcms.com - Do you remember? Marti has 
-> forwarded Graeme's announcement with the new URL today). Particularly if 
-> you can live with 8bpp input, then IMDI is _very fast_ (I measured circa 
-> 14 Mpixels/second for a 3D -> 3D transform with 8bpp source and 8 or 
-> 16bpp destination, on an AMD Athlon XP 2600+ with 2080MHz. This 
-> corresponds to circa 18 frames/second @ 1024x768).
-
+        * Replace QColor with KisColor, where KisColor is a combination of a
+          byte array and a pointer to a color model
+        * Add UI for depth choice
+        * Add UI for display settings for high bit depths -- we have upscale
+          and downscale, but that's not enough. I want, as in OpenEXR, to be
+          able to set the lighting stops.
+        * Add channel-depths other than 8 bits.
+	* http://www.argyllcms.com may be faster than lcms in some
+	  cases. Investigatge this
 
 Tools
 
 	* All tools must have a tool options tab (#Boudewijn, Adrian, Cyrille)
-	* Loading and saving of tool state (XXX: do we really want this? It is
-          horribly confusing in the Gimp)
+        * Make crop tool more capable with grab handles around crop area.
 	* Implement the following tools: 
 		    - Elliptical selection (#Boudewijn)
-		    - Crop (This is a must-have -- tried to do something with Krita
-                         today and had to go to the Gimp)
 		    - Freehand selection (#Boudewijn)
 		    - Polygonal selection (#Boudewijn)
 		    - Continguous selection (magic wand) (#Boudewijn)
@@ -203,54 +125,33 @@ Tools
 		      last are perhaps more generally: painting with
 		      filters tool)
 		    - stamp tool (paint with patttern/image selection) (#Cyrille)
-		    - Text tool
+		    - Text tool (use KWord with a transparent background here?)
 		    - Measure tool
 		    - Pan tool (hand)
-		    - Gradient tool
+	            - calligraphic pen tool
+         
 	* Pressure sensivitize all relevant tools (e.g. line tool)
         * Add resize slider to freehand tools that resizes the mean brush size.
-          
-
-
-Plugins
-
-	* As many filters as possible :-)
-	* Fix filters to use current image, instead of first image in
-	  the document.
-        * Make tools and color strategy plugins into ktrader managed
-          objects.
-        * Rename all plugins to have a krita prefix. 
-        * Move all color strategies and tools to plugins. (#Boudewijn)
-
-     
-
-
-That's more or less all for version 1,0; afterwards I propose to move to:
-
-Core
-	* Add bit-depth independence
-	* Completely hide data storage backend from the code behind
-	  iterators.
-	* Add color models for LAB etc.
-	* Make pipe brushes pay attention to parasites
-
-User interface
-
-	* Add action (macro) docker
-	* Add navigation/zoom docker
-	* Add scriptability 
-	* Add third cursor mode:  outline of current brush
-	* Rethink document model (perhaps add dynamic links between images)
-        * Use OpenGL if available to composite checkerboard with image so
-          while scrolling the checks can stay in place, and the partially
-          transparent image move. This maybe needs Qt 4.
-Tools
-
+	* Divide the tools in tools and paint ops. Tools are:
+	  freehand, rect, ellipse, curve, text, etc. Paintops are: pen, brush,
+          filter, erase, select, deselect, airbrush etc.
 	* Implement path tools
 	* Calligraphic pen tool
 	* Sumi-e brush tool
 	* Natural media tools (chalk, ink, oil, watercolour -- fun!)
 
 
+Plugins
 
-A much shorter list, much harder  TODO's :-).
+	* As many filters as possible :-)
+	* Load plugins into registry on Krita startup, instead of on
+	  view creation.
+        * Rename all plugins to have a krita prefix. 
+	* Move all paintops to plugins.
+
+Modules
+
+	* Add color models for LAB, XYZ, HSV etc.
+	* Finally fix CMYK
+	* Add Wet & Sticky model (in progress already)
+	* Implement Curtiss et. al. for watercolour

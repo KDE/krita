@@ -59,7 +59,6 @@ public:
 	void rotateLayer180();
 	void rotateLayerLeft90();
 	void rotateLayerRight90();
-	void rotateLayerCustom();
 	void mirrorLayerX();
 	void mirrorLayerY();
 

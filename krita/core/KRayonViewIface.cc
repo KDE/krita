@@ -121,11 +121,6 @@ void KRayonViewIface::rotateLayerRight90()
     m_view->rotateLayerRight90();
 }
 
-void KRayonViewIface::rotateLayerCustom()
-{
-    m_view->rotateLayerCustom();
-}
-
 void KRayonViewIface::mirrorLayerX()
 {
     m_view->mirrorLayerX();

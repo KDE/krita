@@ -57,14 +57,6 @@ public:
 	 * Returns a QImage representing this resource.  This image could be null.
 w	 */
 	virtual QImage img() const = 0;
-	/**
-	 * Returns a QImage representing frame @p n in this resource.  This image could be null.
-	 */
-	virtual QImage frame(Q_INT32 n) const = 0;
-
-public:
-	virtual void cycle();
-	virtual void resetCycle();
 
 public:
 	bool dirty() const;

@@ -56,11 +56,6 @@ class KisTileCommand;
   However, KisPainter works on a tiled image and supports different
   colour models, and that's a lot more complicated.
 
-  Note that I currently think that it's necessary to call anchor,
-  invalidate and updateCanvas to make sure the painted bits show up on
-  the screen; I don't know why, I don't know whether that's true, but
-  it seems to work.
-
   KisPainter supports transactions that can group various paint operations
   in one undoable step.
 
@@ -104,11 +99,28 @@ public:
         void eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h);
         void eraseRect(const QRect& rc);
 
+	// ------------------------------------------------------------------------------------------
         // Fill a rectangle with a certain color
         void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c);
         void fillRect(const QRect& rc, const KoColor& c);
         void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity);
         void fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity);
+
+	
+	// ------------------------------------------------------------------------------------------
+	// Draw a line between pos1 and pos2 using the currently set brush and color
+	void drawLine(const QPoint &p1, const QPoint &p2);
+
+	// ------------------------------------------------------------------------------------------
+	// Set the parameters for the higher level graphics primitives
+   
+	void setBrush(KisBrush& brush) { m_brush = &brush; }
+	void setPattern(KisPattern& pattern) { m_pattern = &pattern; }
+	void setGradient(KisGradient& gradient) { m_gradient = &gradient; }
+	void setPaintColor(KoColor& color) { m_paintColor = &color; }
+	void setFillColor(KoColor& color) { m_fillColor = &color; }
+	void setOpacity(QUANTUM opacity) { m_opacity = opacity; }
+	
 
 private:
         void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src,
@@ -124,6 +136,14 @@ private:
 private:
         KisPaintDeviceSP m_device;
         KisTileCommand  *m_transaction;
+
+	KoColor *m_paintColor;
+	KoColor *m_fillColor;
+	KisBrush *m_brush;
+	KisPattern *m_pattern;
+	KisGradient *m_gradient;
+	QUANTUM m_opacity;
+
 };
 
 inline

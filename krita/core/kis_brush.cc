@@ -84,11 +84,6 @@ KisAlphaMask *KisBrush::mask() const
 	return m_mask;
 }
 
-QImage KisBrush::frame(Q_INT32) const
-{
-	return m_img;
-}
-
 void KisBrush::setHotSpot(QPoint pt)
 {
 	Q_INT32 x = pt.x();

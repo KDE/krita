@@ -30,14 +30,6 @@ KisResource::~KisResource()
 {
 }
 
-void KisResource::cycle()
-{
-}
-
-void KisResource::resetCycle()
-{
-}
-
 bool KisResource::dirty() const
 {
 	return m_dirty;

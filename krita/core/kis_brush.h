@@ -50,14 +50,6 @@ public:
 	*/
 	virtual KisAlphaMask *mask() const;
 
-	// XXX: Obviously meant for animated brushes, but because the
-	// number of frames is not known, and there is no way to
-	// retrieve that, we cannot use this at the moment.
-	// It's also better to let the brush determine the next frame;
-	// make it more intelligent.
-	virtual QImage frame(Q_INT32 n) const;
-
-
 	void setHotSpot(QPoint);
 	QPoint hotSpot() const { return m_hotSpot; }
 

@@ -500,3 +500,12 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
         }
 
 }
+
+void KisPainter::drawLine(const QPoint &p1, const QPoint &p2) {
+	// Draw a single point
+	if (p1.x() == p2.x() && p1.y() == p2.y()) {
+		
+	}
+	else { // Draw a line
+	}
+}

@@ -45,7 +45,6 @@ public:
 	virtual bool loadAsync();
 	virtual bool saveAsync();
 	virtual QImage img() const;
-	virtual QImage frame(Q_INT32 n) const;
 
 	bool isValid() const { return m_valid; }
 	QPoint hotSpot() const { return m_hotSpot; }

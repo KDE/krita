@@ -89,11 +89,6 @@ QImage KisPattern::img() const
 	return m_img;
 }
 
-QImage KisPattern::frame(Q_INT32) const
-{
-	return m_img;
-}
-
 
 QPixmap& KisPattern::pixmap() const
 {

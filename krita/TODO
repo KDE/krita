@@ -37,7 +37,8 @@ Core
         X Code cleanup (make naming conformant to Qt) (#Dirk)
 
 User Interface
-	
+
+	* Replace krita ruler with koruler.	
 	* Allow choice between crosshair-cursor, brush-shape outline cursor
 	  and iconic cursor.
 	* All dialogs ui-fied (#Boudewijn, Sven, Casper)

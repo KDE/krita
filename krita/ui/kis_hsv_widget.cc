@@ -38,46 +38,49 @@ KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, na
 
 	m_ColorButton = new KDualColorButton(this);
 	m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
-	QGridLayout *mGrid = new QGridLayout(this, 5, 5, 5, 2);
-	QSpacerItem *m_spacer= new QSpacerItem ( 0, 0);
+
+	QGridLayout *mGrid = new QGridLayout(this, 5, 7, 5, 2);
+	QSpacerItem *sp1 = new QSpacerItem ( 0, 0);
+	QSpacerItem *sp2 = new QSpacerItem( 0, 0);
 
 	m_colorwheel = new KisColorWheel(this);
 	m_colorwheel->setFixedSize( 120, 120);
 	m_VSelector = new KValueSelector(Qt::Vertical, this);
-	m_VSelector-> setFixedWidth(30);
+	m_VSelector-> setFixedSize( 30, 120);
 
 	/* setup slider labels */
 	mHLabel = new QLabel("H", this);
-	mHLabel->setFixedWidth(12);
-	mHLabel->setFixedHeight(20);
+	mHLabel->setFixedSize(12, 20);
 	mSLabel = new QLabel("S", this);
-	mSLabel->setFixedWidth(12);
-	mSLabel->setFixedHeight(20);
+	mSLabel->setFixedSize(12, 20);
 	mVLabel = new QLabel("V", this);
-	mVLabel->setFixedWidth(12);
-	mVLabel->setFixedHeight(20);
+	mVLabel->setFixedSize(12, 20);
 
 	/* setup spin box */
 	mHIn = new QSpinBox(0, 359, 1, this);
-	mHIn->setFixedWidth(50);
-	mHIn->setFixedHeight(20);
+	mHIn->setFixedSize(50, 20);
 	mSIn = new QSpinBox(0, 255, 1, this);
-	mSIn->setFixedWidth(50);
-	mSIn->setFixedHeight(20);
+	mSIn->setFixedSize(50, 20);
 	mVIn = new QSpinBox(0, 255, 1, this);
-	mVIn->setFixedWidth(50);
-	mVIn->setFixedHeight(20);
+	mVIn->setFixedSize(50, 20);
 
-	mGrid->addMultiCellWidget(m_ColorButton, 0, 0, 0, 0, Qt::AlignTop);
-	mGrid->addWidget(mHLabel, 1, 1);
-	mGrid->addWidget(mSLabel, 2, 1);
-	mGrid->addWidget(mVLabel, 3, 1);
-	mGrid->addMultiCellWidget(m_colorwheel, 0, 0, 1, 3);
-	mGrid->addWidget(mHIn, 1, 2);
-	mGrid->addWidget(mSIn, 2, 2);
-	mGrid->addWidget(mVIn, 3, 2);
-	mGrid->addMultiCellWidget(m_VSelector, 0, 0, 4, 4);
-	mGrid->addItem(m_spacer, 4, 0);
+	mGrid->addMultiCellWidget(m_ColorButton, 0, 0, 0, 1, Qt::AlignTop);
+
+	mGrid->addWidget(mHLabel, 1, 0);
+	mGrid->addWidget(mSLabel, 2, 0);
+	mGrid->addWidget(mVLabel, 3, 0);
+
+	mGrid->addMultiCellWidget(m_colorwheel, 0, 3, 2, 4);
+
+	mGrid->addWidget(mHIn, 1, 1);
+	mGrid->addWidget(mSIn, 2, 1);
+	mGrid->addWidget(mVIn, 3, 1);
+
+	mGrid->addMultiCellWidget(m_VSelector, 0, 3, 5, 5);
+
+// 	mGrid->addItem(sp1, 4, 0);
+       
+// 	mGrid->addItem(sp2, 0, 6);
 
 	connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
@@ -89,6 +92,8 @@ KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, na
 	connect(mHIn, SIGNAL(valueChanged(int)), this, SLOT(slotHChanged(int)));
 	connect(mSIn, SIGNAL(valueChanged(int)), this, SLOT(slotSChanged(int)));
 	connect(mVIn, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
+
+	setFixedSize(mGrid -> minimumSize());
 }
 
 void KisHSVWidget::slotHChanged(int h)

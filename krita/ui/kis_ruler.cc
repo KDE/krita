@@ -18,6 +18,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <qpainter.h>
+
+#include "kdebug.h"
+
 #include "kis_ruler.h"
 
 #define MARKER_WIDTH 1
@@ -193,7 +196,7 @@ void KisRuler::drawRuler()
 			st2 = 5;
 			st3 = 10;
 			st4 = 25;
-			stt = 5;
+			stt = 100;
 			break;
 		case KoUnit::U_CM:
 		case KoUnit::U_PI:
@@ -215,8 +218,9 @@ void KisRuler::drawRuler()
 	bool s4 = KoUnit::fromUserValue(st4, m_unit) * m_zoom > 3.0;
 
 	if (m_orientation == Qt::Horizontal) {
-		float cx = KoUnit::fromUserValue(7 * 4, m_unit) / m_zoom;
-		Q_INT32 step = ((Q_INT32)(cx / (float)stt) + 1) * stt;
+		// XXX: This was 7 * 4 -- why? what was the idea about having 30 point intervals?
+		float cx = KoUnit::fromUserValue(100, m_unit) / m_zoom;
+		Q_INT32 step = qRound(cx);//((Q_INT32)(cx / (float)stt) + 1) * stt;
 		Q_INT32 start = (Q_INT32)(KoUnit::fromUserValue(m_firstVisible, m_unit) / m_zoom);
 
 		do {

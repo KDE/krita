@@ -19,7 +19,9 @@
 */
 
 #include "kis_hsv_widget.h"
+#include "kis_colorwheel.h"
 
+#include <kselect.h> 
 #include <qlayout.h>
 #include <qhbox.h>
 #include <qlabel.h>
@@ -33,20 +35,12 @@ KisHSVWidget::KisHSVWidget(QWidget *parent) : super(parent)
 {  
 	m_ColorButton = new KDualColorButton(this);
 	m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
-	QGridLayout *mGrid = new QGridLayout(this, 3, 5, 5, 2);
+	QGridLayout *mGrid = new QGridLayout(this, 4, 5, 5, 2);
 
-	/* setup color sliders */
-	mHSlider = new KoColorSlider(this);
-	mHSlider->setMaximumHeight(20);
-	mHSlider->slotSetRange(0, 359);
-
-	mSSlider = new KoColorSlider(this);
-	mSSlider->setMaximumHeight(20);
-	mSSlider->slotSetRange(0, 255);
-	
-	mVSlider = new KoColorSlider(this);
-	mVSlider->setMaximumHeight(20);
-	mVSlider->slotSetRange(0, 255);
+	m_colorwheel = new KisColorWheel(this);
+	m_colorwheel->setFixedSize( 120, 120); 
+	m_VSelector = new KValueSelector(Qt::Vertical, this);
+	m_VSelector-> setFixedWidth(30);
 
 	/* setup slider labels */
 	mHLabel = new QLabel("H", this);
@@ -70,30 +64,28 @@ KisHSVWidget::KisHSVWidget(QWidget *parent) : super(parent)
 	mVIn->setFixedWidth(50);
 	mVIn->setFixedHeight(20);
 
-	mGrid->addMultiCellWidget(m_ColorButton, 0, 3, 0, 0, Qt::AlignTop);
-	mGrid->addWidget(mHLabel, 0, 1);
-	mGrid->addWidget(mSLabel, 1, 1);
-	mGrid->addWidget(mVLabel, 2, 1);
-	mGrid->addMultiCellWidget(mHSlider, 0, 0, 2, 3);
-	mGrid->addMultiCellWidget(mSSlider, 1, 1, 2, 3);
-	mGrid->addMultiCellWidget(mVSlider, 2, 2, 2, 3);
-	mGrid->addWidget(mHIn, 0, 4);
-	mGrid->addWidget(mSIn, 1, 4);
-	mGrid->addWidget(mVIn, 2, 4);
+	mGrid->addMultiCellWidget(m_ColorButton, 0, 0, 0, 0, Qt::AlignTop);
+	mGrid->addWidget(mHLabel, 1, 1);
+	mGrid->addWidget(mSLabel, 2, 1);
+	mGrid->addWidget(mVLabel, 3, 1);
+	mGrid->addMultiCellWidget(m_colorwheel, 0, 0, 1, 3);
+	mGrid->addWidget(mHIn, 1, 2);
+	mGrid->addWidget(mSIn, 2, 2);
+	mGrid->addWidget(mVIn, 3, 2);
+	mGrid->addMultiCellWidget(m_VSelector, 0, 0, 4, 4);
 
 	connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 
-	/* connect color sliders */
-	connect(mHSlider, SIGNAL(valueChanged(int)), this, SLOT(slotHChanged(int)));
-	connect(mSSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSChanged(int)));
-	connect(mVSlider, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
+	connect(m_VSelector, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
+	connect(m_colorwheel, SIGNAL(valueChanged(const KoColor&)), this, SLOT(slotWheelChanged(const KoColor&)));
 
 	/* connect spin box */
 	connect(mHIn, SIGNAL(valueChanged(int)), this, SLOT(slotHChanged(int)));
 	connect(mSIn, SIGNAL(valueChanged(int)), this, SLOT(slotSChanged(int)));
 	connect(mVIn, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
 }
+
 void KisHSVWidget::slotHChanged(int h)
 {
 	if (m_ColorButton->current() == KDualColorButton::Foreground){
@@ -139,6 +131,21 @@ void KisHSVWidget::slotVChanged(int v)
 	update();
 }
 
+void KisHSVWidget::slotWheelChanged(const KoColor& c)
+{
+	if (m_ColorButton->current() == KDualColorButton::Foreground){
+		m_fgColor.setHSV(c.H(), c.S(), m_fgColor.V());
+		m_ColorButton->setCurrent(KDualColorButton::Foreground);
+		emit fgColorChanged(m_fgColor);
+	}
+	else{
+		m_bgColor.setHSV(c.H(), c.S(), m_fgColor.V());
+		m_ColorButton->setCurrent(KDualColorButton::Background);
+		emit bgColorChanged(m_bgColor);
+	}
+	update();
+}
+
 void KisHSVWidget::update()
 {
 	KoColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
@@ -156,19 +163,8 @@ void KisHSVWidget::update()
 	connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 
-	mHSlider->slotSetColor1(KoColor(0, s, v, KoColor::csHSV).color());
-	mHSlider->slotSetColor2(KoColor(359, s, v, KoColor::csHSV).color());
-	mHSlider->slotSetValue(h);
 	mHIn->setValue(h);
-
-	mSSlider->slotSetColor1(KoColor(h, 0, v, KoColor::csHSV).color());
-	mSSlider->slotSetColor2(KoColor(h, 255, v, KoColor::csHSV).color());
-	mSSlider->slotSetValue(s);
 	mSIn->setValue(s);
-
-	mVSlider->slotSetColor1(KoColor(h, s, 0, KoColor::csHSV).color());
-	mVSlider->slotSetColor2(KoColor(h, s, 255, KoColor::csHSV).color());
-	mVSlider->slotSetValue(v);
 	mVIn->setValue(v);
 }
 

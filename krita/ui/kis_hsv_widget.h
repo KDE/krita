@@ -29,6 +29,8 @@ class KoColorSlider;
 class QLabel;
 class QSpinBox;
 class KDualColorButton;
+class KisColorWheel;
+class KValueSelector;
 
 class KisHSVWidget : public KisColorWidget
 {
@@ -40,9 +42,10 @@ public:
 	virtual ~KisHSVWidget() {}
 
 protected slots:
-	virtual void slotHChanged(int r);
-	virtual void slotSChanged(int g);
-	virtual void slotVChanged(int b);
+	virtual void slotHChanged(int h);
+	virtual void slotSChanged(int s);
+	virtual void slotVChanged(int v);
+	virtual void slotWheelChanged(const KoColor& c);
 
 	void slotFGColorSelected(const QColor& c);
 	void slotBGColorSelected(const QColor& c);
@@ -51,9 +54,8 @@ private:
 	void update();
 
 private:
-	KoColorSlider *mHSlider;
-	KoColorSlider *mSSlider;
-	KoColorSlider *mVSlider;
+	KisColorWheel *m_colorwheel;
+	KValueSelector *m_VSelector;
 	QLabel *mHLabel;
 	QLabel *mSLabel;
 	QLabel *mVLabel;

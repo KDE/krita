@@ -41,7 +41,8 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_autobrush.cc \
     kis_brush_chooser.cc \
     kis_pattern_chooser.cc \
-    kis_gradient_chooser.cc
+    kis_gradient_chooser.cc \
+    kis_colorwheel.cc
 
 noinst_HEADERS = integerwidget.h \
     kis_dlg_preferences.h \
@@ -75,7 +76,8 @@ noinst_HEADERS = integerwidget.h \
     kis_autobrush.h \
     kis_brush_chooser.h \
     kis_pattern_chooser.h \
-    kis_gradient_chooser.h
+    kis_gradient_chooser.h \
+    kis_colorwheel.h
 
 libkisui_la_METASOURCES = AUTO
 SUBDIRS = labels dialogs widgets

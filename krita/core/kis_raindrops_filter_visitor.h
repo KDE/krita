@@ -42,7 +42,7 @@ private:
         virtual void cancel() { m_cancelRequested = true; }
         
         //Raindrops algorithm
-        void   rainDrops(QUANTUM *data, int Width, int Height, int DropSize, int Amount, int Coeff);
+        void   rainDrops(QUANTUM *data, int Width, int Height, int DropSize, int Amount, int Coeff, KisProgressDisplayInterface *m_progress);
         bool** CreateBoolArray (uint Columns, uint Rows);
         void   FreeBoolArray (bool** lpbArray, uint Columns);
         uchar  LimitValues (int ColorValue);

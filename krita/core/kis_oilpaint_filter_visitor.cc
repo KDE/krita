@@ -141,77 +141,77 @@ emit notifyProgressDone(this);
 uint KisOilPaintFilterVisitor::MostFrequentColor (uchar* Bits, int Width, int Height, int X, 
                                               int Y, int Radius, int Intensity)
 {
-    int i, w, h, I;
-    uint color;
-    
-    double Scale = Intensity / 255.0;
-    int LineWidth = 4 * Width;
-    
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);   // Don't take off this step
+        int i, w, h, I;
+        uint color;
         
-    // Alloc some arrays to be used
-    uchar *IntensityCount = new uchar[(Intensity + 1) * sizeof (uchar)];
-    uint  *AverageColorR  = new uint[(Intensity + 1)  * sizeof (uint)];
-    uint  *AverageColorG  = new uint[(Intensity + 1)  * sizeof (uint)];
-    uint  *AverageColorB  = new uint[(Intensity + 1)  * sizeof (uint)];
+        double Scale = Intensity / 255.0;
+        int LineWidth = 4 * Width;
+        
+        if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);   // Don't take off this step
+                
+        // Alloc some arrays to be used
+        uchar *IntensityCount = new uchar[(Intensity + 1) * sizeof (uchar)];
+        uint  *AverageColorR  = new uint[(Intensity + 1)  * sizeof (uint)];
+        uint  *AverageColorG  = new uint[(Intensity + 1)  * sizeof (uint)];
+        uint  *AverageColorB  = new uint[(Intensity + 1)  * sizeof (uint)];
+        
+        // Erase the array
+        memset(IntensityCount, 0, (Intensity + 1) * sizeof (uchar));
 
-    // Erase the array
-    memset(IntensityCount, 0, (Intensity + 1) * sizeof (uchar));
-
-    /*for (i = 0; i <= Intensity; ++i)
-        IntensityCount[i] = 0;*/
-
-    for (w = X - Radius; w <= X + Radius; ++w)
-        {
-        for (h = Y - Radius; h <= Y + Radius; ++h)
-            {
-            // This condition helps to identify when a point doesn't exist
-            
-            if ((w >= 0) && (w < Width) && (h >= 0) && (h < Height))
+        /*for (i = 0; i <= Intensity; ++i)
+                IntensityCount[i] = 0;*/
+        
+        for (w = X - Radius; w <= X + Radius; ++w)
                 {
-                // You'll see a lot of times this formula
-                i = h * LineWidth + 4 * w;
-                I = (uint)(GetIntensity (Bits[i], Bits[i+1], Bits[i+2]) * Scale);
-                IntensityCount[I]++;
-
-                if (IntensityCount[I] == 1)
-                    {
-                    AverageColorR[I] = Bits[ i ];
-                    AverageColorG[I] = Bits[i+1];
-                    AverageColorB[I] = Bits[i+2];
-                    }
-                else
-                    {
-                    AverageColorR[I] += Bits[ i ];
-                    AverageColorG[I] += Bits[i+1];
-                    AverageColorB[I] += Bits[i+2];
-                    }
+                for (h = Y - Radius; h <= Y + Radius; ++h)
+                {
+                // This condition helps to identify when a point doesn't exist
+                
+                if ((w >= 0) && (w < Width) && (h >= 0) && (h < Height))
+                        {
+                        // You'll see a lot of times this formula
+                        i = h * LineWidth + 4 * w;
+                        I = (uint)(GetIntensity (Bits[i], Bits[i+1], Bits[i+2]) * Scale);
+                        IntensityCount[I]++;
+        
+                        if (IntensityCount[I] == 1)
+                        {
+                        AverageColorR[I] = Bits[ i ];
+                        AverageColorG[I] = Bits[i+1];
+                        AverageColorB[I] = Bits[i+2];
+                        }
+                        else
+                        {
+                        AverageColorR[I] += Bits[ i ];
+                        AverageColorG[I] += Bits[i+1];
+                        AverageColorB[I] += Bits[i+2];
+                        }
+                        }
                 }
-            }
+                }
+        
+        I = 0;
+        int MaxInstance = 0;
+        
+        for (i = 0 ; i <= Intensity ; ++i)
+        {
+        if (IntensityCount[i] > MaxInstance)
+                {
+                I = i;
+                MaxInstance = IntensityCount[i];
+                }
         }
-
-    I = 0;
-    int MaxInstance = 0;
-
-    for (i = 0 ; i <= Intensity ; ++i)
-       {
-       if (IntensityCount[i] > MaxInstance)
-          {
-          I = i;
-          MaxInstance = IntensityCount[i];
-          }
-       }
-
-    int R, G, B;
-    R = AverageColorR[I] / MaxInstance;
-    G = AverageColorG[I] / MaxInstance;
-    B = AverageColorB[I] / MaxInstance;
-    color = qRgb (R, G, B);
-
-    delete [] IntensityCount;        // free all the arrays
-    delete [] AverageColorR;
-    delete [] AverageColorG;
-    delete [] AverageColorB;
-
-    return (color);                    // return the most frequenty color
+        
+        int R, G, B;
+        R = AverageColorR[I] / MaxInstance;
+        G = AverageColorG[I] / MaxInstance;
+        B = AverageColorB[I] / MaxInstance;
+        color = qRgb (R, G, B);
+        
+        delete [] IntensityCount;        // free all the arrays
+        delete [] AverageColorR;
+        delete [] AverageColorG;
+        delete [] AverageColorB;
+        
+        return (color);                    // return the most frequenty color
 }

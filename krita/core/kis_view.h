@@ -195,6 +195,7 @@ public slots:
         void rotateLayer(double angle);
         void shearLayer(double angleX, double angleY);
         void rainDropsFilter(Q_UINT32 dropSize, Q_UINT32 number, Q_UINT32 fishEyes);
+        void oilPaintFilter(Q_UINT32 brushSize, Q_UINT32 smooth);
         
 	// settings action slots
 	void preferences();

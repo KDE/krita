@@ -187,7 +187,6 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 	case COMPOSITE_ATOP:
 		compositeAtop(stride, dst, dststride, src, srcstride, rows, cols, opacity);
 		break;
-#if 0
 	case COMPOSITE_XOR:
 		compositeXor(stride, dst, dststride, src, srcstride, rows, cols, opacity);
 		break;
@@ -212,7 +211,6 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 	case COMPOSITE_BUMPMAP:
 		compositeBumpmap(stride, dst, dststride, src, srcstride, rows, cols, opacity);
 		break;
-#endif
 	case COMPOSITE_COPY:
 		compositeCopy(stride, dst, dststride, src, srcstride, rows, cols, opacity);
 		break;

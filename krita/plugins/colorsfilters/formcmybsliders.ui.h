@@ -6,7 +6,8 @@
 ** init() function in place of a constructor, and a destroy() function in
 ** place of a destructor.
 *****************************************************************************/
-#include <math.h>
+
+#define round(x) (int(float(x) + 0.5))
 
 void FormCMYBSliders::slotCyanValueChanged( int v )
 {

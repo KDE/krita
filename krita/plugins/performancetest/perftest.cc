@@ -1,7 +1,7 @@
 /*
  * perftest.cc -- Part of Krita
  *
- * Copyright (c) 2004 Michael Thaler
+ * Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -53,7 +53,7 @@
 #include <kistilemgr.h>
 #include <kis_iterators_quantum.h>
 #include <kis_selection.h>
-
+#include <kis_colorspace_registry.h>
 #include "perftest.h"
 #include "dlg_perftest.h"
 
@@ -142,7 +142,13 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
 {
 	return QString("bitBlt test\n");
 
-	m_view -> a
+	KisDoc * doc = m_view -> getDocument();
+	QStringList l = KisColorSpaceRegistry::singleton() -> listColorSpaceNames();
+	for (QStringList::Iterator it = l.begin(); it != l.end(); ++it) {
+		kdDebug() << "Testing for colorspace " << *it;
+// 		KisImage * img = new KisImage(doc, 1000, 1000, KisColorSpaceRegistry::singleton() -> get(*it));
+	}
+	
 
 }
 

@@ -47,7 +47,7 @@ class KisImage : public QObject, public KisRenderInterface {
 
 public:
 	KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,
-			KisStrategyColorSpaceSP colorStrategy, const QString& name);
+		 KisStrategyColorSpaceSP colorStrategy, const QString& name);
 	KisImage(const KisImage& rhs);
 	virtual ~KisImage();
 	virtual DCOPObject *dcopObject();

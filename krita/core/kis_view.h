@@ -136,6 +136,8 @@ public: // Plugin access API. XXX: This needs redesign.
 	
 	void layersUpdated();
 
+	KisDoc * getDocument() { return m_doc; }
+
 signals:
 	void bgColorChanged(const KoColor& c);
 	void fgColorChanged(const KoColor& c);

@@ -1415,5 +1415,10 @@ void KisDoc::setCanvasCursor(const QCursor& cursor)
 	}
 }
 
+QString KisDoc::nextImageName() const
+{
+	return i18n("image %1").arg(m_images.size() + 1);
+}
+
 #include "kis_doc.moc"
 

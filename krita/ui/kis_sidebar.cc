@@ -53,7 +53,7 @@ KisSideBar::KisSideBar( QWidget* parent, const char* name )
     m_pColorChooserFrame    = new ColorChooserFrame(this);
 
     // krayon box
-    m_pDockFrame = new DockFrame(this);
+    m_dockFrame = new DockFrame(this);
 
     // fixed width for sidebar itselt.  When free-floating,
     // there should be no fixed width
@@ -113,7 +113,7 @@ void KisSideBar::resizeEvent ( QResizeEvent * )
     m_pColorChooserFrame->setGeometry( 0, total, width(), colorChooserHeight );
     total += colorChooserHeight;
 
-    m_pDockFrame->setGeometry( 0, total, width(), height() - total);
+    m_dockFrame->setGeometry( 0, total, width(), height() - total);
 }
 
 void KisSideBar::closeEvent ( QCloseEvent * )

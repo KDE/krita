@@ -63,3 +63,6 @@ TASKS
 - Brush should not be grayscale
 - KisPixelRegion should not inherit from ImageMagick Type
 
+- Change kis_sidebar to use KTabCtrl
+- Use KTabCtrl to get document tabs, if not, use KSpread's widget
+

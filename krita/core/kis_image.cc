@@ -398,7 +398,6 @@ void KisImage::markDirty(const QRect& r)
 
 void KisImage::slotUpdateTimeOut()
 {
-#if 1
 	// TODO : Go over tiles in m_dirtyTiles
 	// if tile is dirty,
 	for(int y = 0; y < m_yTiles; y++)
@@ -406,22 +405,6 @@ void KisImage::slotUpdateTimeOut()
 			if (m_dirty[y * m_xTiles + x])
 				compositeImage(QRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE));
 
-#else
-	dirtyTilesMutex.lock();
-
-	while (1) {
-		if (dirtyTiles.isEmpty())
-			break;
-
-		kdDebug() << "KisImage::slotUpdateTimeOut\n";
-		QPoint *pt = dirtyTiles.dequeue();
-
-		compositeImage(QRect(pt -> x() * TILE_SIZE, pt -> y() * TILE_SIZE, TILE_SIZE, TILE_SIZE));
-		delete pt;
-	}
-
-	dirtyTilesMutex.unlock();
-#endif
 }
 
 void KisImage::paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/)
@@ -947,6 +930,11 @@ void KisImage::setCurrentChannel(KisChannelSP channel)
 int KisImage::getHishestLayerEver() const
 {
 	return m_nLayers;
+}
+
+int KisImage::nLayers() const
+{
+	return m_layers.size();
 }
 
 #include "kis_image.moc"

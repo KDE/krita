@@ -192,7 +192,6 @@ class DockFrame : public QFrame
     QPtrList<KoFrameButton>  m_blst;
 };
 
-//class KisSideBar : public QWidget
 class KisSideBar : public KFloatingDialog
 {
     Q_OBJECT
@@ -200,9 +199,9 @@ class KisSideBar : public KFloatingDialog
  public:
     KisSideBar( QWidget* parent = 0, const char* name = 0 );
 
-    void plug (QWidget* w) { m_pDockFrame->plug(w); }
-    void unplug (QWidget* w) { m_pDockFrame->unplug(w); }
-    DockFrame *dockFrame() { return m_pDockFrame; }
+    void plug (QWidget* w) { m_dockFrame->plug(w); }
+    void unplug (QWidget* w) { m_dockFrame->unplug(w); }
+    QWidget *dockFrame() { return m_dockFrame; }
     
  public slots:
     void slotSetFGColor(const KoColor&);
@@ -212,7 +211,7 @@ class KisSideBar : public KFloatingDialog
     void slotSetBrush(KisBrush&);
     void slotSetPattern(KisPattern&);
   
-    void slotActivateTab(const QString& tab) { m_pDockFrame->slotActivateTab(tab); }
+    void slotActivateTab(const QString& tab) { m_dockFrame->slotActivateTab(tab); }
     void slotHideChooserFrame();
     
  signals:
@@ -234,7 +233,7 @@ class KisSideBar : public KFloatingDialog
     ControlFrame        *m_pControlFrame; 
     TopColorFrame       *m_pTopColorFrame;       
     ColorChooserFrame   *m_pColorChooserFrame;  
-    DockFrame           *m_pDockFrame;
+    DockFrame *m_dockFrame;
 };
 
 #endif

@@ -79,6 +79,12 @@ public:
 	void removeLayer(unsigned int layer);
 	void removeLayer(KisLayerSP layer);
 
+	/**
+	 * @name nLayers
+	 * @return Returns the number of layers in this image.
+	 */
+	int nLayers() const;
+
 	void mergeAllLayers();
 	void mergeVisibleLayers();
 	void mergeLinkedLayers();

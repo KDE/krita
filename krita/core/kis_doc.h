@@ -206,6 +206,8 @@ public:
 
 	void setCanvasCursor(const QCursor& cursor);
 
+	QString nextImageName() const;
+
 #if 0
     /*
      * Gradients settings

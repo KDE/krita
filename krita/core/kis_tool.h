@@ -2,6 +2,7 @@
  *  kis_tool.h - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -71,13 +72,6 @@ public:
 	virtual void setChecked(bool check);
 	virtual bool setClip();
 	
-	virtual void paintEvent(QPaintEvent *e);
-	virtual void enterEvent(QEvent *e);
-	virtual void leaveEvent(QEvent *e);
-	virtual void mousePress(QMouseEvent*); 
-	virtual void mouseMove(QMouseEvent*);
-	virtual void mouseRelease(QMouseEvent*);
-	
 	void setSelectCursor();
 	void setMoveCursor();
 
@@ -86,6 +80,12 @@ public:
 
 public slots:
 	virtual void toolSelect();
+	virtual void paintEvent(QPaintEvent *e);
+	virtual void enterEvent(QEvent *e);
+	virtual void leaveEvent(QEvent *e);
+	virtual void mousePress(QMouseEvent *e);
+	virtual void mouseMove(QMouseEvent *e);
+	virtual void mouseRelease(QMouseEvent *e);
 
 protected:
 	int zoomed(int n) const;
@@ -99,10 +99,6 @@ protected:
 	void setClipImage();
 	void dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot);
 	bool pasteClipImage(const QPoint& pos);
-
-private:
-	KisTool(const KisTool&);
-	KisTool& operator=(const KisTool&);
 
 protected:
 	KisDoc *m_doc;
@@ -120,12 +116,14 @@ protected:
 	bool m_fillSolid;
 
 private:
+	KisTool(const KisTool&);
+	KisTool& operator=(const KisTool&);
+
+private:
 	unsigned int m_paintThreshold;
 	bool m_paintWithPattern; 
 	bool m_paintWithGradient;
 };
-
-
 
 #endif
 

@@ -2,6 +2,7 @@
  *  kis_brush.h - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,9 +28,10 @@
 class QPoint;
 class QPixmap;
 
-class KisBrush : public KisKrayon
-{
- public:
+class KisBrush : public KisKrayon {
+	typedef KisKrayon super;
+
+public:
     KisBrush(QString file, bool monochrome = false, bool special = false);
     virtual ~KisBrush();
 
@@ -45,9 +47,9 @@ class KisBrush : public KisKrayon
    
     void      dump() const;
 
- private:
-    void      loadViaQImage(QString file, bool monochrome = false);
-    void      readBrushInfo(QString file);
+private:
+    void      loadViaQImage(const QString& file, bool monochrome = false);
+    void      readBrushInfo(const QString& file);
 
     bool      m_valid;
     int       m_spacing;

@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *                2001 John Califf
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,8 +35,7 @@
 
 #define THUMB_SIZE 30
 
-KisBrush::KisBrush(QString file, bool monochrome, bool special)
-  : KisKrayon()
+KisBrush::KisBrush(QString file, bool monochrome, bool special) : super()
 {
     // set defaults
     m_valid     = false;
@@ -79,7 +79,7 @@ KisBrush::~KisBrush()
 {
     if(hasValidPixmap())
     {
-        delete [] m_pData;
+        delete[] m_pData;
         delete m_pPixmap;
     }
 
@@ -90,7 +90,7 @@ KisBrush::~KisBrush()
 }
 
 
-void KisBrush::readBrushInfo(QString file)
+void KisBrush::readBrushInfo(const QString& file)
 {
     KSimpleConfig config(file, true);
 
@@ -108,7 +108,7 @@ void KisBrush::readBrushInfo(QString file)
     Load from file, actually
 */
 
-void KisBrush::loadViaQImage(QString file, bool monochrome)
+void KisBrush::loadViaQImage(const QString& file, bool monochrome)
 {
     QImage img(file);
 

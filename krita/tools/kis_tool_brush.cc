@@ -188,11 +188,10 @@ bool BrushTool::paint(const QPoint& pos)
 			dst -> green = 0;
 			dst -> blue = 0;
 			dst -> opacity = OpaqueOpacity;
-			device -> syncPixels(region);
 		}
 	}
 
-//	device -> syncPixels(region);
+	device -> syncPixels(region);
 	return true;
 }
 

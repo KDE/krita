@@ -1636,20 +1636,18 @@ void KisView::slotEmbeddImage(const QString &filename)
 */
 int KisView::insert_layer_image(bool newImage, const QString& filename)
 {
+	typedef QValueList<Magick::Image> imglist;
+	imglist images;
 	KURL url(filename);
-	QSize size;
-	Magick::Image img;
 
-	if(filename.isEmpty())
+	if (filename.isEmpty())
 		url = KFileDialog::getOpenURL(QString::null, KisUtil::readFilters(), 0, i18n("Image File for Layer"));
 
-	if (url.isEmpty()) {
-		kdDebug() << 1 << endl;
-		return -1;
-	}
+	if (url.isEmpty())
+		return 0;
 
 	if (!KIO::NetAccess::exists(url)) {
-		KMessageBox::error(this, i18n("File does not exists.\n"), i18n("Error Loading File"));
+		KMessageBox::error(this, i18n("File does not exists."), i18n("Error Loading File"));
 		return -1;
 	}
 
@@ -1657,75 +1655,40 @@ int KisView::insert_layer_image(bool newImage, const QString& filename)
 		KTempFile tf;
 		QString tmpname = tf.name();
 
-		if (!KIO::NetAccess::upload(tmpname, url)) {
+		if (!KIO::NetAccess::download(url, tmpname)) {
+			KMessageBox::error(this, i18n("Could not dowload file."), i18n("Error Loading File"));
 			KNotifyClient::event("cannotopenfile"); 
 			return -1;
 		}
 
-		img.read(tmpname.latin1());
+		Magick::readImages(&images, tmpname.latin1());
 	} else {
-		img.read(url.path().latin1());
+		Magick::readImages(&images, url.path().latin1());
 	}
 
-	img.matte(true);
-	size.setWidth(img.columns());
-	size.setHeight(img.rows());
+	for (imglist::iterator it = images.begin(); it != images.end(); it++) {
+		Magick::Image& img = *it;
+		QSize size(img.columns(), img.rows());
 
-//	QImage fileImage = convertFromMagickImage(img);
-//	QSize size = fileImage.size();
+		img.matte(true);
 
-#if 0
-	if (fileImage.depth() == 1) {
-		kdDebug() << "No 1 bit images. " << "Where's your 2 bits worth?" << endl;
-		return -1;
-	}
+		if (newImage)
+			appendToDocImgList(size, url);
+		else
+			addHasNewLayer(size, url);
 
-	/* convert indexed images, all gifs and some pngs of 8 bits
-	   or less, to 16 bit by creating a QPixmap from the file and
-	   blitting it into a 16 bit RGBA pixmap - you can blit from a
-	   lesser depth to a greater but not the other way around. This
-	   is the only way, and since the really huge images are 16
-	   bits or greater in depth (jpg and tiff), it's not too slow
-	   for most gifs, indexed pings, etc., which are usually much
-	   smaller. One bit images are taboo because of bigendian
-	   problems and are rejected */
+		// copy the image into the layer regardless of whether
+		// a new image or just a new layer was created for it above.
+		if (m_doc -> MagickImageToLayer(img, this)) {
+			slotUpdateImage();
+			slotRefreshPainter();
+		} else {
+			kdDebug(0) << "inset_layer_image: " << "Can't load image into layer." << endl;
 
-	if (fileImage.depth() < 16) {
-		QPixmap filePixmap(url.path());
-		QPixmap buffer(filePixmap.width(), filePixmap.height());
-
-		if (!filePixmap.isNull() && !buffer.isNull())
-			bitBlt(&buffer, 0, 0, &filePixmap, 0, 0, filePixmap.width(), filePixmap.height());
-
-		fileImage = buffer;
-
-		if (fileImage.depth() < 16) {
-			KMessageBox::error(this, i18n("Image cannot be converted to 16 bit."), i18n("Error Loading File"));
-			kdDebug() << "newImage can't be converted to 16 bit" << endl;
-			return -1;
+			// remove empty image
+			if (newImage)
+				remove_current_image_tab();
 		}
-	}
-#endif
-
-	// establish a rectangle the same size as the QImage loaded
-	// from file. This will be used to set the size of the new
-	// KisLayer for the picture and/or a new KisImage
-	if (newImage)
-		appendToDocImgList(size, url);
-	else
-		addHasNewLayer(size, url);
-
-	// copy the image into the layer regardless of whether
-	// a new image or just a new layer was created for it above.
-	if (!m_doc -> MagickImageToLayer(img, this)) {
-		kdDebug(0) << "inset_layer_image: " << "Can't load image into layer." << endl;
-
-		// remove empty image
-		if(newImage)
-			remove_current_image_tab();
-	} else {
-		slotUpdateImage();
-		slotRefreshPainter();
 	}
 
 	return 0;
@@ -2180,10 +2143,10 @@ void KisView::appendToDocImgList(const QSize& size, const KURL& u)
 {
 	QRect layerRect(0, 0, size.width(), size.height());
 	QString layerName(u.fileName());
-	KisImageSP newimg = m_doc -> newImage(layerName, layerRect.width(), layerRect.height());
+	KisImageSP newimg = m_doc -> newImage(m_doc -> nextImageName(), layerRect.width(), layerRect.height());
 
 	// add background for layer - should this always be white?
-	bgMode bg = bm_White; // bm_Transparent, bm_ForegroundColor, bm_BackgroundColor
+	bgMode bg = bm_White; // TODO bm_Transparent, bm_ForegroundColor, bm_BackgroundColor
 	KoColor clr;
 
 	if (bg == bm_White)
@@ -2205,7 +2168,7 @@ void KisView::addHasNewLayer(const QSize& size, const KURL& u)
 {
 	KisImageSP img = m_doc -> currentImg();
 	QRect layerRect(0, 0, size.width(), size.height());
-	QString layerName(u.fileName());
+	QString layerName(i18n("Layer %1").arg(img -> nLayers()));
 	uint indx;
 
 	img -> addLayer(layerRect, white, false, layerName);

@@ -65,6 +65,8 @@ KisFileFormat
 
         QWidget configWidget
 
+/** This is not needed, I guess? The modules will just register all
+    their fileformats with the registry.
 KisImpExpModule
 
         qstring name
@@ -74,6 +76,7 @@ KisImpExpModule
         qstringlist writeFilters
 
         KisFileFormat getFileFormatFor(qstring extension)
+*/
 
 KisFileFormatRegistry
 

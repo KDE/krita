@@ -40,7 +40,7 @@ libkritacore_la_SOURCES = kis_paint_device.cc kis_layer.cc kis_image.cc \
 		KRayonViewIface.cc KRayonViewIface.skel KIsDocIface.cc KIsDocIface.skel KIsImageIface.cc \
 		KIsImageIface.skel kis_selection_manager.cc kis_scale_visitor.cc  \
 		kis_rotate_visitor.cc kis_cms.cc kis_quantum_operations.cc kis_clipboard.cc kis_pixel.cc \
-		kis_filter.cc kis_filter_registry.cc  kis_plugin_loader.cc
+		kis_filter.cc kis_filter_registry.cc  kis_plugin_loader.cc kis_fileformat_registry.cc
 
 
 noinst_HEADERS = kis_paint_device.h kis_layer.h kis_image.h kis_doc.h \
@@ -50,7 +50,7 @@ noinst_HEADERS = kis_paint_device.h kis_layer.h kis_image.h kis_doc.h \
 		kis_vec.h kis_rect.h kis_iteratorpixeltrait.h kis_iterators_pixel.h \
 		kis_histogram.h KRayonViewIface.h KIsDocIface.h KIsImageIface.h 	kis_matrix.h \
 	kis_selection_manager.h kis_scale_visitor.h kis_rotate_visitor.h 	kis_cms.h \
-	kis_quantum_operations.h kis_filter.h kis_filter_registry.h
+	kis_quantum_operations.h kis_filter.h kis_filter_registry.h kis_fileformat_registry.h
 
 
 libkritacore_la_METASOURCES = AUTO

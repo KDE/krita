@@ -124,4 +124,11 @@ typedef vKisAnnotationSP::iterator vKisAnnotationSP_it;
 typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
 
 
+class KisFileFormat;
+typedef KSharedPtr<KisFileFormat> KisFileFormatSP;
+typedef KisSharedPtrVector<KisFileFormat> vKisFileFormatSP;
+typedef vKisFileFormatSP::iterator vKisFileFormatSP_it;
+typedef vKisFileFormatSP::const_iterator vKisFileFormatSP_cit;
+
+
 #endif // KISTYPES_H_

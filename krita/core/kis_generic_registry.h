@@ -44,6 +44,11 @@ public:
 		Q_ASSERT(p);
 		return p;
 	}
+	bool exist(const QString& name) const
+	{
+		typename storageMap::const_iterator it = m_storage.find(name);
+		return (it != m_storage.end());
+	}
 	QStringList listKeys() const
 	{
 		QStringList list;

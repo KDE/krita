@@ -37,7 +37,7 @@ KisDlgTransform::KisDlgTransform( QWidget *  parent,
 	: super (parent, name, true, "", Ok | Cancel)
 {
 	m_page = new WdgMatrix(this);
-	setCaption(i18n("Transform the current layer"));
+	setCaption(i18n("Transform Current Layer"));
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
 }

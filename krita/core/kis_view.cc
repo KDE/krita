@@ -535,8 +535,8 @@ void KisView::setupActions()
         (void)new KAction(i18n("Rotate &270"), 0, this, SLOT(layer_rotateleft90()), actionCollection(), "layer_rotateleft90");
         (void)new KAction(i18n("Rotate &90"), 0, this, SLOT(layer_rotateright90()), actionCollection(), "layer_rotateright90");
         (void)new KAction(i18n("Rotate &Custom..."), 0, this, SLOT(layer_rotate_custom()), actionCollection(), "layer_rotate_custom");
-        (void)new KAction(i18n("Mirror along &X axis"), 0, this, SLOT(layer_mirrorX()), actionCollection(), "layer_mirrorX");
-        (void)new KAction(i18n("Mirror along &Y axis"), 0, this, SLOT(layer_mirrorY()), actionCollection(), "layer_mirrorY");
+        (void)new KAction(i18n("Mirror Along &X Axis"), 0, this, SLOT(layer_mirrorX()), actionCollection(), "layer_mirrorX");
+        (void)new KAction(i18n("Mirror Along &Y Axis"), 0, this, SLOT(layer_mirrorY()), actionCollection(), "layer_mirrorY");
 
         // color actions
         (void)new KAction(i18n("Select Foreground Color..."), 0, this, SLOT(selectFGColor()), actionCollection(), "select_fgColor");

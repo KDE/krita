@@ -97,6 +97,11 @@ Q_INT32 KisStrategyColorSpaceRGB::nColorChannels() const
 	return MAX_CHANNEL_RGB;
 }
 
+Q_INT32 KisStrategyColorSpaceRGB::size() const
+{
+	return MAX_CHANNEL_RGBA;
+}
+
 QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
 						 KisProfileSP srcProfile, KisProfileSP dstProfile, 
 						 Q_INT32 renderingIntent)

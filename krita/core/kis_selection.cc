@@ -34,22 +34,15 @@
 
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
  	: super(
-#if USE_ALPHA_MAP
  		new KisColorSpaceAlpha(), // Note that the alpha color
 					  // model has _state_, so we
 					  // create a new one, instead
-#else					  // of sharing.
-		layer -> colorStrategy(),
-#endif
 		name)
 {
 	m_parentLayer = layer;
 	m_maskColor = Qt::white;
-#if USE_ALPHA_MAP
 	m_alpha = KisColorSpaceAlphaSP(dynamic_cast<KisColorSpaceAlpha*> (colorStrategy().data()));
  	m_alpha -> setMaskColor(m_maskColor);
-#endif
-// 	kdDebug() << "Selection created with compositeOp " << compositeOp() << "\n";
 }
 
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name, QColor color)
@@ -90,55 +83,37 @@ void KisSelection::select(QRect r)
 {
 	KisFillPainter painter(this);
 	painter.fillRect(r, m_maskColor, MAX_SELECTED);
-	m_selectedRect |= r;
 }
 
 void KisSelection::clear(QRect r)
 {
 	KisFillPainter painter(this);
 	painter.fillRect(r, m_maskColor, MIN_SELECTED);
-	if (r.contains(m_selectedRect, true)) {
-		    m_selectedRect = QRect();
-	}
 }
 
-void KisSelection::invert(QRect r)
+void KisSelection::invert(QRect rect)
 {
-	// XXX: switch to proper iterators
-// 	KisTileCommand* ktc = new KisTileCommand("Invert", (KisPaintDeviceSP) this ); // Create a command
-
-// 	KisIteratorLinePixel lineIt = iteratorPixelSelectionBegin(ktc, r.x(), r.x() + r.width() - 1, r.y() );
-// 	KisIteratorLinePixel lastLine = iteratorPixelSelectionEnd(ktc, r.x(), r.x() + r.width() - 1, r.y() + r.height() - 1);
-// 	while( lineIt <= lastLine )
-// 	{
-// 		KisIteratorPixel pixelIt = *lineIt;
-// 		KisIteratorPixel lastPixel = lineIt.end();
-// 		while( pixelIt <= lastPixel )
-// 		{
-// 			*pixelIt = QUANTUM_MAX - *pixelIt;
-// 			//AUTOLAYER do another invert that is colorspace specific
-// 			++pixelIt;
-// 		}
-// 		++lineIt;
-// 	}
-	m_selectedRect |= r;
+	KisRectIterator it = createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+	while ( ! it.isDone() )
+	{
+		*it = QUANTUM_MAX - *it;
+		it++;
+	}
 }
 
 void KisSelection::setMaskColor(QColor c)
 {
-#if USE_ALPHA_MAP
 	m_alpha -> setMaskColor(c);
-#endif
 	m_maskColor = c;
 }
 
 QRect KisSelection::selectedRect()
 {
-	if (!m_selectedRect.isNull()) {
-		return m_selectedRect;
-	}
-	else {
-		return QRect(0, 0, 0, 0);
-	}
+
+	Q_INT32 x, y, w, h;
+	extent(x, y, w, h);
+	
+	return QRect(x, y, w, h);
+
 }
 

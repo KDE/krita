@@ -113,6 +113,12 @@ Q_INT32 KisStrategyColorSpaceCMYKA::nColorChannels() const
 	return MAX_CHANNEL_CMYK;
 }
 
+Q_INT32 KisStrategyColorSpaceCMYKA::size() const
+{
+	return MAX_CHANNEL_CMYKA;
+}
+
+
 QImage KisStrategyColorSpaceCMYKA::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
 						   KisProfileSP srcProfile, KisProfileSP dstProfile, 
 						   Q_INT32 renderingIntent)

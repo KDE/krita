@@ -36,6 +36,7 @@
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_ALPHA = 1;
+	const PIXELTYPE PIXEL_MASK = 0;
 }
 
 KisColorSpaceAlpha::KisColorSpaceAlpha() :
@@ -50,22 +51,22 @@ KisColorSpaceAlpha::~KisColorSpaceAlpha()
 {
 }
 
-void KisColorSpaceAlpha::nativeColor(const QColor& /*c*/, QUANTUM *dst)
+void KisColorSpaceAlpha::nativeColor(const QColor& /*c*/, QUANTUM *dst, KisProfileSP /*profile*/)
 {
 	dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
-void KisColorSpaceAlpha::nativeColor(const QColor& /*c*/, QUANTUM opacity, QUANTUM *dst)
+void KisColorSpaceAlpha::nativeColor(const QColor& /*c*/, QUANTUM opacity, QUANTUM *dst, KisProfileSP /*profile*/)
 {
 	dst[PIXEL_MASK] = opacity;
 }
 
-void KisColorSpaceAlpha::toQColor(const QUANTUM */*src*/, QColor *c)
+void KisColorSpaceAlpha::toQColor(const QUANTUM */*src*/, QColor *c, KisProfileSP /*profile*/)
 {
 	c -> setRgb(m_maskColor.red(), m_maskColor.green(), m_maskColor.blue());
 }
 
-void KisColorSpaceAlpha::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity)
+void KisColorSpaceAlpha::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
 {
 	c -> setRgb(m_maskColor.red(), m_maskColor.green(), m_maskColor.blue());
 	if (m_inverted) {
@@ -126,6 +127,33 @@ QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q
 	}
 	return img;
 }
+
+bool KisColorSpaceAlpha::convertPixelsTo(QUANTUM * src, KisProfileSP /*srcProfile*/,
+					 QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, 
+					 Q_UINT32 length, 
+					 Q_INT32 /*renderingIntent*/)
+{
+ 	kdDebug() << "KisColorSpaceAlpha:: convertPixels for " << length << " pixels from " << name() << " to " << dstColorStrategy -> name() << "\n";
+
+	// No lcms trickery here, we are a QColor + opacity channel
+
+	Q_INT32 size = dstColorStrategy -> size();
+
+	Q_UINT32 j = 0;
+	Q_UINT32 i = 0;
+
+	while ( i < length ) {
+		
+		dstColorStrategy -> nativeColor(m_maskColor, *(src + i), (dst + j), dstProfile);
+
+		i += 1;
+		j += size;
+						
+	}
+	return true;
+	
+}
+
 
 void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 				QUANTUM *dst, 

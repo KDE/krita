@@ -105,6 +105,17 @@ public:
 	virtual Q_INT32 nColorChannels() const = 0;
 
 	/**
+	 * The total number of substance channels for a single pixel
+	 * in this color model
+	 */
+	virtual Q_INT32 nSubstanceChannels() const { return 0; };
+
+	/**
+	 * The size in bytes of a single pixel in this color model
+	 */
+	virtual Q_INT32 size() const = 0;
+
+	/**
 	 * Whether this color model has a channel of type ALPHA
 	 */
 	virtual bool alpha() const = 0;

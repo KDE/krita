@@ -27,8 +27,6 @@
 
 class QColor;
 
-#define USE_ALPHA_MAP 0
-
 /**
  * KisSelection contains a byte-map representation of a layer, where
  * the value of a byte signifies whether a corresponding pixel is selected, or not.
@@ -63,22 +61,12 @@ public:
 	// since the selection will want to own its own copy.
 	void setMaskColor(const QColor c);
 
-	/**
-	 * Set the area that encloses all selected pixels. This
-	 * will over the lifetime of the selection grow, and
-	 * only shrink when the entire selected rect is cleared.
-	 */
-	void setSelectedRect(QRect r) { m_selectedRect |= r; }
 	QRect selectedRect();
 
 private:
 	KisPaintDeviceSP m_parentLayer;
-	//KisColorSpaceAlphaSP m_alpha;
-#ifdef USE_ALPHA_MAP
 	KisColorSpaceAlphaSP m_alpha;
-#endif
 	QColor m_maskColor;
-	QRect m_selectedRect;
 };
 
 #endif // KIS_SELECTION_H_

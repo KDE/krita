@@ -96,6 +96,11 @@ Q_INT32 KisStrategyColorSpaceGrayscale::nColorChannels() const
 	return MAX_CHANNEL_GRAYSCALE;
 }
 
+Q_INT32 KisStrategyColorSpaceGrayscale::size() const
+{
+	return MAX_CHANNEL_GRAYSCALEA;
+}
+
 
 QImage KisStrategyColorSpaceGrayscale::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
 						       KisProfileSP srcProfile, KisProfileSP dstProfile, 

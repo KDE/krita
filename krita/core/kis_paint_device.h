@@ -184,9 +184,9 @@ public:
 	 */
 	Q_INT32 depth() const;
 
-	QRect clip() const;
-        void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
-        void setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh);
+// 	QRect clip() const;
+//         void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
+//         void setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh);
 
         KisImage *image();
         const KisImage *image() const;
@@ -340,24 +340,25 @@ inline void KisPaintDevice::setVisible(bool v)
         }
 }
 
-inline QRect KisPaintDevice::clip() const
-{
-        return QRect(0, 0, 10, 10); // fix AUTOLAYER
-}
+// inline QRect KisPaintDevice::clip() const
+// {
+// 	Q_
+//         return QRect(0, 0, 10, 10); // fix AUTOLAYER
+// }
 
-inline void KisPaintDevice::clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const
-{
-        if (offx && offy && offw && offh) {
-                *offx = 0;
-                *offy = 0;
-                *offw = 10;
-                *offh = 10;
-        }
-}
+// inline void KisPaintDevice::clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const
+// {
+//         if (offx && offy && offw && offh) {
+//                 *offx = 0;
+//                 *offy = 0;
+//                 *offw = 10;
+//                 *offh = 10;
+//         }
+// }
 
-inline void KisPaintDevice::setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh)
-{
-}
+// inline void KisPaintDevice::setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh)
+// {
+// }
 
 
 inline KisImage *KisPaintDevice::image()

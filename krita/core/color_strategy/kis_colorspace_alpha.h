@@ -26,8 +26,6 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_pixel.h"
 
-const PIXELTYPE PIXEL_MASK = 0;
-
 /**
  * The alpha mask is a special color strategy that treats all pixels as 
  * alpha value with a colour common to the mask. The default color is white.
@@ -38,11 +36,11 @@ public:
 	virtual ~KisColorSpaceAlpha();
 
 public:
-	virtual void nativeColor(const QColor& c, QUANTUM *dst);
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst);
+	virtual void nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile = 0);
+	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile = 0);
 	
-	virtual void toQColor(const QUANTUM *src, QColor *c);
-	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity);
+	virtual void toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile = 0);
+	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
 	virtual KisPixelRO toKisPixelRO(QUANTUM *src, KisProfileSP profile = 0) { return KisPixelRO (src, src, this, profile); }
 	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0) { return KisPixel (src, src, this, profile); }
@@ -51,6 +49,8 @@ public:
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const { return 0; };
+	virtual Q_INT32 size() const { return 1; };
+
 	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
 				       KisProfileSP srcProfile, KisProfileSP dstProfile, 
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
@@ -59,6 +59,19 @@ public:
 	virtual void setInverted(bool b) { m_inverted = b; }
 
 protected:
+
+	/**
+	 * Convert a byte array of srcLen pixels *src to the specified color space
+	 * and put the converted bytes into the prepared byte array *dst.
+	 *
+	 * Returns false if the conversion failed, true if it succeeded
+	 */
+	virtual bool convertPixelsTo(QUANTUM * src, KisProfileSP srcProfile,
+				     QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, 
+				     Q_UINT32 length,
+				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+
+
 
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst, 

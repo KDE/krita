@@ -52,6 +52,7 @@ public:
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const;
+	virtual Q_INT32 size() const;
 	
 	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
 				       KisProfileSP srcProfile, KisProfileSP dstProfile, 

@@ -78,7 +78,6 @@ void KisToolSelectBrush::buttonPress(KisButtonPressEvent *e)
 		m_prevYTilt = e -> yTilt();
 
 		QRect dirtyRect = m_painter -> dirtyRect();
-		m_currentImage -> activeLayer() -> selection() -> setSelectedRect(dirtyRect);
 		m_currentImage -> notify(dirtyRect);
 
          }
@@ -98,7 +97,6 @@ void KisToolSelectBrush::move(KisMoveEvent *e)
 		m_prevYTilt = e -> yTilt();
 
 		QRect dirtyRect = m_painter -> dirtyRect();
-		m_currentImage -> activeLayer() -> selection() -> setSelectedRect(dirtyRect);
 		m_currentImage -> notify(dirtyRect);
 	}
 }

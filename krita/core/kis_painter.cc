@@ -408,7 +408,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 					xxtra = QMIN(tile -> width(), -xxtra);
 					dst = tile -> data(tile -> width() - xxtra, 0);
 					src = srctile -> data(0, srctile -> height() - yxtra);
-					tileBlt(dst, tile, src, srctile, yxtra, xxtra, op);
+					tileBlt(dst, tile, src, srctile, yxtra, QMIN(xxtra, srctile -> width()), op);
 					tile -> release();
 					srctile -> release();
 				}
@@ -420,10 +420,10 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 					srctile -> lock();
 					tile -> lock();
 					yxtra = QMIN(tile -> height(), -yxtra);
-					xxtra = QMIN(tile -> width(), xxtra);
+					xxtra = QMIN(srctile -> width(), xxtra);
 					dst = tile -> data(0, tile -> height() - yxtra);
 					src = srctile -> data(srctile -> width() - xxtra, 0);
-					tileBlt(dst, tile, src, srctile, yxtra, xxtra, op);
+					tileBlt(dst, tile, src, srctile, yxtra, QMIN(xxtra, tile -> width()), op);
 					tile -> release();
 					srctile -> release();
 				}

@@ -63,6 +63,8 @@ User Interface
 	* File/Open should list all image types Krita can handle, and simply
           import non-native images, instead of forcing the user to use the import
           image menu item.
+	* Allow guides to be disabled. Allow diagonal guides (useful
+	  for perspective drawings)
 Tools
 
 	* All tools must have a tool options tab (#Boudewijn, Adrian, Cyrille)

@@ -29,6 +29,7 @@ KisHistogram::KisHistogram(KisLayerSP layer,
 {
 	m_layer = layer;
 	m_type = type;
+
 	// XXX: size needs to come from ChannelInfo, is determined by
 	// the channel depth.
 	Q_INT32 bincount = QUANTUM_MAX + 1;

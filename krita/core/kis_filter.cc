@@ -30,7 +30,7 @@
 KisFilter::KisFilter(const QString& name) :
 	m_name(name)
 {
-	KisFilterRegistry::singleton()->add( this );
+//	KisFilterRegistry::singleton()->add( this );
 }
 
 KisFilterConfiguration* KisFilter::configuration()

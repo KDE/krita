@@ -184,32 +184,31 @@ void KisToolStar::setup(KActionCollection *collection)
 
 QPointArray KisToolStar::starCoordinates(int N, int mx, int my, int x, int y)
 {
-  int R=0, r=0,n=0;
-
-  QPointArray starCoordinatesArray(2*N);
-  
-  // the radius of the outer edges
-  R=sqrt((x-mx)*(x-mx)+(y-my)*(y-my));
-  kdDebug() << "starCoordinates: Radius R: " << R << endl;
-  
-  // the radius of the inner edges 
-  r=R*m_innerOuterRatio/100.0;
-  kdDebug() << "starCoordinates: Radius R: " << R << endl;
-
-  //set outer edges
-  for(n=0;n<N;n++){
-    starCoordinatesArray.setPoint(2*n,mx+R*cos(n * 2.0 * M_PI / N),my+R*sin(n *
- 2.0 * M_PI / N));  
-  }
-
-  //set inner edges
-  for(n=0;n<N;n++){
-    starCoordinatesArray.setPoint(2*n+1,mx+r*cos((n + 0.5) * 2.0 * M_PI / N),my+r*sin((n +0.5) * 2.0 * M_PI / N)); 
-  }
-  
-  for(n=0;n<2*N;n++)
-    kdDebug() << "starCoordinatesArray: (x,y) " << starCoordinatesArray.point(n)  << endl;
-  return starCoordinatesArray;
+        int R=0, r=0,n=0;
+        
+        QPointArray starCoordinatesArray(2*N);
+        
+        // the radius of the outer edges
+        R=sqrt((x-mx)*(x-mx)+(y-my)*(y-my));
+        //kdDebug() << "starCoordinates: Radius R: " << R << endl;
+        
+        // the radius of the inner edges 
+        r=R*m_innerOuterRatio/100.0;
+        //kdDebug() << "starCoordinates: Radius R: " << R << endl;
+        
+        //set outer edges
+        for(n=0;n<N;n++){
+                starCoordinatesArray.setPoint(2*n,mx+R*cos(n * 2.0 * M_PI / N),my+R*sin(n *2.0 * M_PI / N));  
+        }
+        
+        //set inner edges
+        for(n=0;n<N;n++){
+                starCoordinatesArray.setPoint(2*n+1,mx+r*cos((n + 0.5) * 2.0 * M_PI / N),my+r*sin((n +0.5) * 2.0 * M_PI / N)); 
+        }
+        
+        for(n=0;n<2*N;n++)
+                //kdDebug() << "starCoordinatesArray: (x,y) " << starCoordinatesArray.point(n)  << endl;
+        return starCoordinatesArray;
 }
 
 

@@ -69,6 +69,6 @@ namespace KoChart
         class PartPrivate;
         PartPrivate *d;
     };
-};
+}
 
 #endif

@@ -21,64 +21,63 @@
 
 #include "kis_global.h"
 #include "kis_iterators.h"
-#include <kistile.h>
-#include <kistilemgr.h>
 
-KisIteratorQuantum::KisIteratorQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos) :
-	KisIteratorUnit<QUANTUM, KisIteratorQuantum, 1>( ndevice, command, nypos)
+KisIteratorQuantum::KisIteratorQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos, Q_INT32 nxpos) :
+	KisIteratorUnit<QUANTUM, KisIteratorQuantum, 1>( ndevice, command, nypos, nxpos)
 {
 
 }
 
-QUANTUM KisIteratorQuantum::operator*() const
+QUANTUM KisIteratorQuantum::operator*()
 {
-	KisTileMgrSP ktm = m_device->data();
-	KisTileSP tile;
-	int depth = ::imgTypeDepth( m_device->typeWithoutAlpha() ) +1;
-	int x = xpos / depth;
-	int num = ktm->tileNum(x, ypos);
-	if( tile = ktm->tile( num, TILEMODE_READ) ) // slow if only for reading the content
+	if( m_tileNeedRefresh && m_tileNeedRefreshRW )
 	{
-		m_command->addTile( num, tile);
+		if( !(m_tile = (m_ktm->tile( m_tilenum, TILEMODE_READ) ) ) )
+		{
+			return 0;
+		}
+		m_data =  m_tile->data(0, m_ypos_intile);
+		m_tileNeedRefresh = false;
 	}
-	int xt = x % tile->width();
-	int yt = ypos % tile->height();
-	QUANTUM* q = tile->data(xt, yt);
-	q += xpos % depth;
-	return *q;
+	return *(m_data + m_xintile);
 }
 
-KisIteratorQuantum::operator QUANTUM * ()  const
+KisIteratorQuantum::operator QUANTUM* ()
 {
-	KisTileMgrSP ktm = m_device->data();
-	KisTileSP tile;
-	int depth = ::imgTypeDepth( m_device->typeWithoutAlpha() ) +1;
-	int x = xpos / depth;
-	int num = ktm->tileNum(x, ypos);
-
-	if( (tile = ktm->tile( num , TILEMODE_NONE)) )
+	if( m_tileNeedRefreshRW )
 	{
-		m_command->addTile( num , tile);
+		if( (m_tile = m_ktm->tile( m_tilenum , TILEMODE_NONE)) )
+		{
+			m_command->addTile( m_tilenum , m_tile);
+		}
+		if (!(m_tile = m_ktm->tile( m_tilenum, TILEMODE_RW)))
+			return 0;
+		m_data =  m_tile->data(0, m_ypos_intile);
+		m_tileNeedRefreshRW = false;
 	}
-	if (!(tile = ktm->tile( num, TILEMODE_RW)))
-		return 0;
-	int xt = x % tile->width();
-	int yt = ypos % tile->height();
-	QUANTUM* q = tile->data(xt, yt);
-	q += xpos % depth;
-	return q;
+	return m_data + m_xintile;
 }
 
-KisIteratorLineQuantum::KisIteratorLineQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command) :
-	KisIteratorLine<KisIteratorQuantum, KisIteratorLineQuantum>( ndevice, command)
+
+KisIteratorLineQuantum::KisIteratorLineQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command, int nypos) :
+	KisIteratorLine<KisIteratorQuantum>( ndevice, command, nypos)
 {
 }
 
-KisIteratorQuantum KisIteratorLineQuantum::operator*() const
+KisIteratorQuantum KisIteratorLineQuantum::operator*()
 {
-	return KisIteratorQuantum( m_device, m_command, ypos );
+	return KisIteratorQuantum( m_device, m_command, ypos, 0 );
 }
-KisIteratorLineQuantum::operator KisIteratorQuantum ()  const
+KisIteratorLineQuantum::operator KisIteratorQuantum* ()
 {
-	return KisIteratorQuantum( m_device, m_command, ypos );
+	return new KisIteratorQuantum( m_device, m_command, ypos, 0 );
+}
+
+KisIteratorQuantum KisIteratorLineQuantum::begin()
+{
+	return KisIteratorQuantum( m_device, m_command, ypos, 0 );
+}
+KisIteratorQuantum KisIteratorLineQuantum::end()
+{
+	return KisIteratorQuantum( m_device, m_command, ypos, m_device->width() - 1 );
 }

@@ -37,6 +37,8 @@ class QPoint;
 class KoStore;
 class KisImage;
 class QWMatrix;
+class KisIteratorLineQuantum;
+class KisTileCommand;
 
 class KisPaintDevice : public QObject, public KisRenderInterface {
         Q_OBJECT
@@ -172,6 +174,22 @@ public:
         void expand(const QSize& size);
 
         void offsetBy(Q_INT32 x, Q_INT32 y);
+		/** This function return an iterator which point on the first line of the
+			* whole PaintDevice
+			*/
+		KisIteratorLineQuantum iteratorQuantumBegin(KisTileCommand* command);
+		/** This function return an iterator which point on the last line of the
+			* whole PaintDevice
+			*/
+		KisIteratorLineQuantum iteratorQuantumEnd(KisTileCommand* command);
+		/** This function return an iterator which point on the first line of the
+			* part of PaintDevice which is selected
+			*/
+		KisIteratorLineQuantum iteratorQuantumSelectionBegin(KisTileCommand* command);
+		/** This function return an iterator which point on the last line of the
+			* part of PaintDevice which is selected
+			*/
+		KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command);
 
 signals:
         void visibilityChanged(KisPaintDeviceSP device);

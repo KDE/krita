@@ -36,6 +36,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_colorspace_factory.h"
+#include "kis_iterators.h"
 
 namespace {
         class KisResizeDeviceCmd : public KNamedCommand {
@@ -927,6 +928,23 @@ Q_INT32 KisPaintDevice::depth() const
 KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
 {
 	return m_colorStrategy;
+}
+
+KisIteratorLineQuantum KisPaintDevice::iteratorQuantumBegin(KisTileCommand* command)
+{
+	return KisIteratorLineQuantum( this, command, 0);
+}
+KisIteratorLineQuantum KisPaintDevice::iteratorQuantumEnd(KisTileCommand* command)
+{
+	return KisIteratorLineQuantum( this, command, height() - 1);
+}
+KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionBegin(KisTileCommand* command)
+{
+	return KisIteratorLineQuantum( this, command, 0);
+}
+KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionEnd(KisTileCommand* command)
+{
+	return KisIteratorLineQuantum( this, command, height() - 1);
 }
 
 #include "kis_paint_device.moc"

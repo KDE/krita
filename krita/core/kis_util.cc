@@ -218,26 +218,3 @@ QRect KisUtil::findBoundingTiles(const QRect& area)
 	
 	return rc;
 }
-
-#if 0
-int KisUtil::calcNumChannels(cMode cm)
-{
-	switch (cm) {
-		case cm_Indexed:
-		case cm_Greyscale:
-			return 1;
-		case cm_RGB:
-		case cm_Lab:
-			return 3;
-		case cm_RGBA:
-		case cm_CMYK:
-		case cm_LabA:
-			return 4;
-		case cm_CMYKA:
-			return 5;
-	}
-
-	return 0;
-}
-
-#endif

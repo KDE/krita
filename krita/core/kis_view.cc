@@ -18,9 +18,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+
 // Qt
 #include <qapplication.h>
 #include <qbutton.h>
+#include <qcursor.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
@@ -46,6 +48,7 @@
 #include <koView.h>
 
 // Local
+#include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_canvas.h"
 #include "kis_channelview.h"
@@ -508,12 +511,15 @@ void KisView::clearCanvas(const QRect& rc)
 
 void KisView::activateTool(KisToolSP tool)
 {
-	if (tool && qFind(m_toolSet.begin(), m_toolSet.end(), tool) != m_toolSet.end()) {
-		if (m_tool)
-			m_tool -> clear();
+	if (m_tool)
+		m_tool -> clear();
 
+	if (tool && qFind(m_toolSet.begin(), m_toolSet.end(), tool) != m_toolSet.end()) {
 		m_tool = tool;
 		m_tool -> cursor(m_canvas);
+	} else {
+		m_tool = 0;
+		m_canvas -> setCursor(KisCursor::arrowCursor());
 	}
 }
 

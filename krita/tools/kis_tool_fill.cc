@@ -109,7 +109,8 @@ void KisToolFill::floodLine(int x, int y, Q_INT32 depth, KisLayerSP lay,
 							KisTileCommand* ktc, QUANTUM* color) {
 	bool stop = false;
 	int mostRight = x, mostLeft = x;
-	KisIteratorLinePixel lineIt = lay->iteratorPixelSelectionBegin( ktc, y, x,-1);
+	
+	KisIteratorLinePixel lineIt = lay->iteratorPixelSelectionBegin( ktc, x,-1, y);
 
 	KisIteratorPixel pixelIt = *lineIt;
 	KisIteratorPixel lastPixel = lineIt.end();
@@ -141,7 +142,7 @@ void KisToolFill::floodLine(int x, int y, Q_INT32 depth, KisLayerSP lay,
 	stop = false;
 	delete lineIt;
 	if (x > 0) {
-		KisIteratorLinePixel lineIt2 = lay->iteratorPixelSelectionBegin(ktc,y, 0,x-1);
+		KisIteratorLinePixel lineIt2 = lay->iteratorPixelSelectionBegin(ktc, 0,x-1, y);
 		KisIteratorPixel lastPixel = lineIt2.begin();
 		KisIteratorPixel pixelIt = lineIt2.end();
 		if (difference(m_oldColor, pixelIt, m_threshold, depth) == 0) {

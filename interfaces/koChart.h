@@ -1,18 +1,20 @@
 #ifndef __koffice_kchart_h__
 #define __koffice_kchart_h__
 
-#include <ktable.h>
+//#include <ktable.h>
 #include <koDocument.h>
+#include "../kchart/kdchart/KDChartTable.h"
+#include "../kchart/kdchart/KDChartData.h"
 
 namespace KoChart
 {
     class Part;
 
-    // the variant is either invalid (->nonexistant cell),
-    // a string (interpreted as label) or a double (interpreted
-    // as value)
-    typedef QVariant Value;
-    typedef KTable<QString,QString,Value> Data;
+    // KDChartData is either a double (interpreted as a value), a
+    // QString (interpreted as a label), a QDateTime (interpreted as a
+    // date/time value) or empty.
+    typedef KDChartData Value;
+    typedef KDChartTableData Data;
 
     class WizardExtension : public QObject
     {

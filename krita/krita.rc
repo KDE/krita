@@ -50,6 +50,7 @@
   <Action name="remove_current_image_tab"/>
   <Action name="scale_image"/>
   <Action name="resizeimgtolayer"/>
+  <Action name="flatten_image"/>
   <Action name="duplicate_image"/>
 </Menu>
 
@@ -90,7 +91,6 @@
   <Menu name="Mode"><text>&amp;Mode</text>
   </Menu>
   <Separator/>
-  <Action name="flatten_image"/>
   <Action name="merge_layer"/>
   <Action name="merge_visible_layers"/>
   <Action name="merge_linked_layers"/>

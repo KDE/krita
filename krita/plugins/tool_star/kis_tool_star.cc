@@ -216,8 +216,9 @@ QPointArray KisToolStar::starCoordinates(int N, int mx, int my, int x, int y)
                 starCoordinatesArray.setPoint(2*n+1,mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle)); 
         }
         
-        for(n=0;n<2*N;n++)
-                //kdDebug() << "starCoordinatesArray: (x,y) " << starCoordinatesArray.point(n)  << endl;
+        for(n=0;n<2*N;n++){
+		//kdDebug() << "starCoordinatesArray: (x,y) " << starCoordinatesArray.point(n)  << endl;
+	}
         return starCoordinatesArray;
 }
 

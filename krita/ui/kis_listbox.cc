@@ -62,15 +62,15 @@ KisListBox::KisListBox(const QString& label, flags f, QWidget *parent, const cha
 	QToolTip::add(btn, i18n("Create new %1").arg(label));
 	m_btnRm = new KPushButton(hbox);
 	m_btnRm -> setPixmap(BarIcon("deletelayer"));
-	QToolTip::add(m_btnRm, i18n("Remove Current %1").arg(label));
+	QToolTip::add(m_btnRm, i18n("Remove current %1").arg(label));
 	m_btnRaise = new KPushButton(hbox);
 	m_btnRaise -> setPixmap(BarIcon("raiselayer"));
-	QToolTip::add(m_btnRaise, i18n("Upper Current %1").arg(label));
+	QToolTip::add(m_btnRaise, i18n("Upper current %1").arg(label));
 	m_btnRaise -> setEnabled(false);
 	m_btnLower = new KPushButton(hbox);
 	m_btnLower -> setPixmap(BarIcon("lowerlayer"));
 	m_btnLower -> setEnabled(false);
-	QToolTip::add(m_btnLower, i18n("Lower Current %1").arg(label));
+	QToolTip::add(m_btnLower, i18n("Lower current %1").arg(label));
 
 	mnu = new KPopupMenu();
 	mnu -> insertItem(i18n("Raise %1").arg(label), RAISE);

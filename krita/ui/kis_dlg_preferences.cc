@@ -131,7 +131,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
   vbox = addVBoxPage( i18n( "Directories") );
   m_directories = new DirectoriesTab( vbox );
 
-  //vbox = addVBoxPage( i18n( "Undo/redo") ); //jwc
+  //vbox = addVBoxPage( i18n( "Undo/Redo") ); //jwc
   //m_undoRedo = new UndoRedoTab( vbox ); //jwc
 }
 

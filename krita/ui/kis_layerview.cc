@@ -87,9 +87,9 @@ KisLayerView::KisLayerView( KisDoc *doc, QWidget *parent, const char *name )
         layertable, SLOT( slotLowerLayer() ) );
 
     QToolTip::add( pbAddLayer, i18n( "Create new Layer" ) );
-    QToolTip::add( pbRemoveLayer, i18n( "Remove Current Layer" ) );
-    QToolTip::add( pbUp, i18n( "Raise Current Layer" ) );
-    QToolTip::add( pbDown, i18n( "Lower Current Layer" ) );
+    QToolTip::add( pbRemoveLayer, i18n( "Remove current layer" ) );
+    QToolTip::add( pbUp, i18n( "Raise current layer" ) );
+    QToolTip::add( pbDown, i18n( "Lower current layer" ) );
 
     initGUI();
 }
@@ -156,25 +156,25 @@ void LayerTable::init( KisDoc* doc)
     QString icon = locate( "kis_pics", "visible.png", KisFactory::global());
     mVisibleIcon = new QPixmap;
     if( !mVisibleIcon->load( icon ) )
-	    KMessageBox::error( this, i18n("Can't find visible.png"), i18n("Canvas") );
+	    KMessageBox::error( this, i18n("Can't find 'visible.png'."), i18n("Canvas") );
     mVisibleRect = QRect( QPoint( 3, (iheight - 24)/2), QSize(24,24));
 
     icon = locate( "kis_pics", "novisible.png",
         KisFactory::global() );
     mNovisibleIcon = new QPixmap;
     if( !mNovisibleIcon->load( icon ) )
-	    KMessageBox::error( this, i18n("Can't find novisible.png"), i18n("Canvas") );
+	    KMessageBox::error( this, i18n("Can't find 'novisible.png'."), i18n("Canvas") );
 
     icon = locate( "kis_pics", "linked.png", KisFactory::global() );
     mLinkedIcon = new QPixmap;
     if( !mLinkedIcon->load( icon ) )
-	    KMessageBox::error( this, i18n("Can't find linked.png"), i18n("Canvas") );
+	    KMessageBox::error( this, i18n("Can't find 'linked.png'."), i18n("Canvas") );
     mLinkedRect = QRect(QPoint(30, (iheight - 24)/2), QSize(24,24));
 
     icon = locate( "kis_pics", "unlinked.png", KisFactory::global() );
     mUnlinkedIcon = new QPixmap;
     if( !mUnlinkedIcon->load( icon ) )
-	    KMessageBox::error( this, i18n("Can't find unlinked.png"), i18n("Canvas") );
+	    KMessageBox::error( this, i18n("Can't find 'unlinked.png'."), i18n("Canvas") );
     mPreviewRect = QRect(QPoint(57, (iheight - 24)/2), QSize(24,24));
 
     updateTable();
@@ -585,11 +585,11 @@ LayerPropertyDialog::LayerPropertyDialog( QString layername,
 
     (void) new QWidget( buttons );
 
-    QPushButton *pbOk = new QPushButton( i18n("OK"), buttons);
+    QPushButton *pbOk = new QPushButton( i18n("&OK"), buttons);
     pbOk->setDefault( true );
     QObject::connect( pbOk, SIGNAL(clicked()), this, SLOT(accept()));
 
-    QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), buttons);
+    QPushButton *pbCancel = new QPushButton( i18n( "&Cancel" ), buttons);
     QObject::connect(pbCancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 

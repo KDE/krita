@@ -1243,7 +1243,7 @@ void KisView::export_image()
 				KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
 				break;
 			case KisImageBuilder_RESULT_FAILURE:
-				KMessageBox::error(this, i18n("Error Saving File."), i18n("Error Saving File"));
+				KMessageBox::error(this, i18n("Error saving sile."), i18n("Error Saving File"));
 				break;
 			case KisImageBuilder_RESULT_OK:
 			default:
@@ -1292,7 +1292,7 @@ void KisView::save_layer_as_image()
 				KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
 				break;
 			case KisImageBuilder_RESULT_FAILURE:
-				KMessageBox::error(this, i18n("Error Saving File."), i18n("Error Saving File"));
+				KMessageBox::error(this, i18n("Error saving file."), i18n("Error Saving File"));
 				break;
 			case KisImageBuilder_RESULT_OK:
 			default:
@@ -1335,27 +1335,27 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filena
 
 		switch (ib.buildImage(url)) {
 			case KisImageBuilder_RESULT_UNSUPPORTED:
-				KMessageBox::error(this, i18n("No coder for this type of file.  %1.").arg(url.path()), i18n("Error Importing File"));
+				KMessageBox::error(this, i18n("No coder for the type of file %1.").arg(url.path()), i18n("Error Importing File"));
 				continue;
 			case KisImageBuilder_RESULT_NO_URI:
 			case KisImageBuilder_RESULT_NOT_LOCAL:
 				KNotifyClient::event("cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_NOT_EXIST:
-				KMessageBox::error(this, i18n("File does not exist.  %1.").arg(url.path()), i18n("Error Importing File"));
+				KMessageBox::error(this, i18n("File %1 does not exist.").arg(url.path()), i18n("Error Importing File"));
 				KNotifyClient::event("cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_BAD_FETCH:
-				KMessageBox::error(this, i18n("Unable to download file.  %1.").arg(url.path()), i18n("Error Importing File"));
+				KMessageBox::error(this, i18n("Unable to download file %1.").arg(url.path()), i18n("Error Importing File"));
 				KNotifyClient::event("cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_EMPTY:
-				KMessageBox::error(this, i18n("Empty file.  %1.").arg(url.path()), i18n("Error Importing File"));
+				KMessageBox::error(this, i18n("Empty file: %1").arg(url.path()), i18n("Error Importing File"));
 				KNotifyClient::event("cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_FAILURE:
 				m_buildProgress -> changeSubject(0);
-				KMessageBox::error(this, i18n("Error Loading File.  %1.").arg(url.path()), i18n("Error Importing File"));
+				KMessageBox::error(this, i18n("Error loading file %1.").arg(url.path()), i18n("Error Importing File"));
 				KNotifyClient::event("cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_PROGRESS:

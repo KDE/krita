@@ -116,7 +116,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 		y = 0;
 	}
 
-	KisPaintDevice* srcdev = new KisPaintDevice(sw, sh, dab.data() -> colorStrategy(), "");
+	KisPaintDeviceSP srcdev = new KisPaintDevice(sw, sh, dab.data() -> colorStrategy(), "");
 
 	KisIteratorLinePixel srcLit = srcdev -> iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
 
@@ -175,6 +175,5 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	
 	
 	m_painter -> bitBlt( x,  y,  m_painter -> compositeOp(), srcdev, m_painter -> opacity(), sx, sy, srcdev -> width(),srcdev -> width());
-	delete srcdev;
 	m_painter -> addDirtyRect(QRect(x, y, dab -> width(), dab -> height()));
 }

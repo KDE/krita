@@ -126,7 +126,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 	if( srcPoint.y() < 0)
 		srcPoint.setY(0);
 
-	KisPaintDevice* srcdev = new KisPaintDevice(sw, sh, dab.data() -> colorStrategy(), "");
+	KisPaintDeviceSP srcdev = new KisPaintDevice(sw, sh, dab.data() -> colorStrategy(), "");
 	
 	KisIteratorLinePixel srcLit = srcdev -> iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
 	KisIteratorLinePixel dabLit = dab.data() -> iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
@@ -154,7 +154,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 		++srcLit; ++dabLit; ++devLit;
 	}
 	m_painter -> bitBlt( x,  y,  m_painter -> compositeOp(), srcdev, m_painter -> opacity(), sx, sy, srcdev -> width(),srcdev -> width());
-	delete srcdev;
+
 	m_painter -> addDirtyRect(QRect(x, y, dab -> width(), dab -> height()));
 
 }

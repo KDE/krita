@@ -42,7 +42,6 @@
 #include "kis_tool_pen.h"
 #include "kis_tool_select_freehand.h"
 #include "kis_tool_airbrush.h"
-#include "kis_tool_polygon.h"
 #include "kis_tool_select_polygonal.h"
 #include "kis_tool_brush.h"
 #include "kis_tool_freehand.h"
@@ -89,7 +88,6 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
 		r -> add(new KisToolPenFactory( actionCollection() ));
 		r -> add(new KisToolSelectFreehandFactory( actionCollection() ));
 		r -> add(new KisToolAirbrushFactory( actionCollection() ));
-		r -> add(new KisToolPolygonFactory( actionCollection() ));
 		r -> add(new KisToolSelectPolygonalFactory( actionCollection() ));
 		r -> add(new KisToolBrushFactory( actionCollection() ));
 		r -> add(new KisToolSelectRectangularFactory( actionCollection() ));

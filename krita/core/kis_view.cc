@@ -63,8 +63,6 @@
 #include <koMainWindow.h>
 #include <koView.h>
 #include "kotabbar.h"
-#include "kotooldockmanager.h"
-#include "kotooldockbase.h"
 
 // Local
 #include "builder/kis_builder_monitor.h"
@@ -246,8 +244,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         setupTools();
 
 	setupDockers();
+#if KIVIO_STYLE_DOCKERS
 	m_dockersSetup = false;
-
+#endif
 	setInputDevice(INPUT_DEVICE_MOUSE);
 
 	m_monitorProfile = 0;
@@ -257,7 +256,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 KisView::~KisView()
 {
         delete m_dcop;
+#if KIVIO_STYLE_DOCKERS
 	delete m_toolDockManager;
+#endif
 }
 
 DCOPObject* KisView::dcopObject()
@@ -272,19 +273,69 @@ DCOPObject* KisView::dcopObject()
 
 void KisView::setupDockers()
 {
+	KisResourceServer *rserver = KisFactory::rServer();
+
+#if KIVIO_STYLE_DOCKERS
 	m_toolDockManager = new KoToolDockManager(this);
 
-	KisResourceServer *rserver = KisFactory::rServer();
-	// ---------------------------------------------------------------------
-	// Control box
-
+	// Tools
 	m_toolcontroldocker = m_toolDockManager -> createTabbedToolDock("info");
 	m_toolcontroldocker -> setCaption(i18n("Navigator/Info/Options"));
-
 	KToggleAction * show = new KToggleAction(i18n( "&Navigator/Info/Tool Options" ), 0, 0,
 						 actionCollection(), "view_control_docker" );
 	connect(show, SIGNAL(toggled(bool)), m_toolcontroldocker, SLOT(makeVisible(bool)));
 	connect(m_toolcontroldocker, SIGNAL(visibleChange(bool)), SLOT(viewControlDocker(bool)));
+
+	// Layers
+	m_layerchanneldocker = m_toolDockManager -> createTabbedToolDock("layers/channels");
+	m_layerchanneldocker -> setCaption(i18n("Layers/Channels" ));
+	show = new KToggleAction(i18n( "&Layers/Channels" ), 0, 0, actionCollection(), "view_layer_docker" );
+ 	connect(show, SIGNAL(toggled(bool)), m_layerchanneldocker, SLOT(makeVisible(bool)));
+ 	connect(m_layerchanneldocker, SIGNAL(visibleChange(bool)), SLOT(viewLayerChannelDocker(bool)));
+
+	// Shapes
+	m_shapesdocker = m_toolDockManager -> createTabbedToolDock("shapes");
+        m_shapesdocker -> setCaption(i18n("Brush Shapes"));
+	show = new KToggleAction(i18n( "&Shapes" ), 0, 0, actionCollection(), "view_shapes_docker" );
+	connect(show, SIGNAL(toggled(bool)), m_shapesdocker, SLOT(makeVisible(bool)));
+	connect(m_shapesdocker, SIGNAL(visibleChange(bool)), SLOT(viewShapesDocker(bool)));
+
+	// Fills
+	m_fillsdocker = m_toolDockManager -> createTabbedToolDock("fills");
+	m_fillsdocker -> setCaption(i18n("Fills"));
+
+	show = new KToggleAction(i18n( "&Fills" ), 0, 0, actionCollection(), "view_fills_docker" );
+	connect(show, SIGNAL(toggled(bool)), m_fillsdocker, SLOT(makeVisible(bool)));
+	connect(m_fillsdocker, SIGNAL(visibleChange(bool)), SLOT(viewFillsDocker(bool)));
+
+	// Colors
+	m_colordocker = m_toolDockManager -> createTabbedToolDock("color");
+	m_colordocker -> setCaption(i18n("Color Manager"));
+	show = new KToggleAction(i18n( "&Colors" ), 0, 0, actionCollection(), "view_color_docker" );
+	connect(show, SIGNAL(toggled(bool)), m_colordocker, SLOT(makeVisible(bool)));
+	connect(m_colordocker, SIGNAL(visibleChange(bool)), SLOT(viewColorDocker(bool)));
+
+#else
+
+        m_layerchanneldocker = new KisDockFrameDocker(this);
+        m_layerchanneldocker -> setCaption(i18n("Layers/Channels/Paths"));
+
+	m_shapesdocker = new KisDockFrameDocker(this);
+        m_shapesdocker -> setCaption(i18n("Brush Shapes"));
+
+	m_fillsdocker = new KisDockFrameDocker(this);
+	m_fillsdocker -> setCaption(i18n("Fills"));
+
+        m_toolcontroldocker = new KisDockFrameDocker(this);
+        m_toolcontroldocker -> setCaption(i18n("Navigator/Info/Options"));
+
+	m_colordocker = new KisDockFrameDocker(this);
+	m_colordocker -> setCaption(i18n("Color Manager"));
+
+#endif
+
+	// ---------------------------------------------------------------------
+	// Control box
 
 	m_controlWidget = new ControlFrame(m_toolcontroldocker);
 	m_controlWidget -> setCaption(i18n("General"));
@@ -301,14 +352,6 @@ void KisView::setupDockers()
  	// ---------------------------------------------------------------------
  	// Layers
 
-	m_layerchanneldocker = m_toolDockManager -> createTabbedToolDock("layers/channels");
-	m_layerchanneldocker -> setCaption(i18n("Layers/Channels" ));
-
-	show = new KToggleAction(i18n( "&Layers/Channels" ), 0, 0, actionCollection(), "view_layer_docker" );
- 	connect(show, SIGNAL(toggled(bool)), m_layerchanneldocker, SLOT(makeVisible(bool)));
- 	connect(m_layerchanneldocker, SIGNAL(visibleChange(bool)), SLOT(viewLayerChannelDocker(bool)));
-
-	// Layers
         m_layerBox = new KisLayerBox(i18n("Layer"), KisLayerBox::SHOWALL, m_layerchanneldocker);
         m_layerBox -> setCaption(i18n("Layers"));
 
@@ -339,11 +382,6 @@ void KisView::setupDockers()
 	// ---------------------------------------------------------------------
 	// Shapes
 
-	m_shapesdocker = m_toolDockManager -> createTabbedToolDock("shapes");
-        m_shapesdocker -> setCaption(i18n("Brush Shapes"));
-	show = new KToggleAction(i18n( "&Shapes" ), 0, 0, actionCollection(), "view_shapes_docker" );
-	connect(show, SIGNAL(toggled(bool)), m_shapesdocker, SLOT(makeVisible(bool)));
-	connect(m_shapesdocker, SIGNAL(visibleChange(bool)), SLOT(viewShapesDocker(bool)));
 
         m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
                                                   m_shapesdocker, "brush_chooser", this);
@@ -364,13 +402,6 @@ void KisView::setupDockers()
 
 	// ---------------------------------------------------------------------
 	// Fills
-
-	m_fillsdocker = m_toolDockManager -> createTabbedToolDock("fills");
-	m_fillsdocker -> setCaption(i18n("Fills"));
-
-	show = new KToggleAction(i18n( "&Fills" ), 0, 0, actionCollection(), "view_fills_docker" );
-	connect(show, SIGNAL(toggled(bool)), m_fillsdocker, SLOT(makeVisible(bool)));
-	connect(m_fillsdocker, SIGNAL(visibleChange(bool)), SLOT(viewFillsDocker(bool)));
 
 
 	// Setup patterns
@@ -396,12 +427,6 @@ void KisView::setupDockers()
 	// ---------------------------------------------------------------------
 	// Colors
 
-	m_colordocker = m_toolDockManager -> createTabbedToolDock("color");
-	m_colordocker -> setCaption(i18n("Color Manager"));
-
-	show = new KToggleAction(i18n( "&Colors" ), 0, 0, actionCollection(), "view_color_docker" );
-	connect(show, SIGNAL(toggled(bool)), m_colordocker, SLOT(makeVisible(bool)));
-	connect(m_colordocker, SIGNAL(visibleChange(bool)), SLOT(viewColorDocker(bool)));
 
 	m_hsvwidget = new KisHSVWidget(this, "hsv");
 	m_hsvwidget -> setCaption(i18n("HSV"));
@@ -418,7 +443,21 @@ void KisView::setupDockers()
 	m_colordocker -> plug(m_graywidget);
 	attach(m_graywidget);
 
-	//m_dockersSetup = true;
+
+#if KIVIO_STYLE_DOCKERS
+#else
+        // TODO Here should be a better check
+        if ( mainWindow() -> isDockEnabled( DockBottom))
+        {
+                viewControlDocker();
+                viewLayerChannelDocker();
+                viewShapesDocker();
+                viewColorDocker();
+		viewFillsDocker();
+                mainWindow() -> setDockEnabled( DockBottom, false);
+                mainWindow() -> setDockEnabled( DockTop, false);
+        }
+#endif
 }
 
 void KisView::setupScrollBars()
@@ -1033,6 +1072,7 @@ void KisView::paintView(const KisRect& r)
                 clearCanvas(r.qRect());
 		m_canvas -> update(r.qRect());
         }
+#if KIVIO_STYLE_DOCKERS
 	if (!m_dockersSetup) {
 		m_colordocker -> restore(); //move(w, h); h+=100; // XXX Remember last position
 		m_fillsdocker -> restore(); //move(w, h); h+=100; // XXX Remember last position
@@ -1041,6 +1081,7 @@ void KisView::paintView(const KisRect& r)
 		m_toolcontroldocker -> restore(); //move(w, h); h+=100; // XXX Remember last position
 		m_dockersSetup = true;
 	}
+#endif
 
 }
 
@@ -1824,6 +1865,9 @@ void KisView::preferences()
 	resetMonitorProfile();
 }
 
+
+#if KIVIO_STYLE_DOCKERS
+
 void KisView::viewColorDocker(bool v)
 {
 	((KToggleAction*)actionCollection()->action("view_color_docker")) -> setChecked(v);
@@ -1847,6 +1891,56 @@ void KisView::viewShapesDocker(bool v)
 {
 	((KToggleAction*)actionCollection()->action("view_shapes_docker")) -> setChecked(v);
 }
+
+
+#else
+void KisView::viewColorDocker()
+{
+        if( m_colordocker->isVisible() == false )
+        {
+                mainWindow()->addDockWindow( m_colordocker, DockRight );
+                m_colordocker->show();
+        }
+}
+
+void KisView::viewControlDocker()
+{
+        if( m_toolcontroldocker->isVisible() == false )
+        {
+                mainWindow()->addDockWindow( m_toolcontroldocker, DockRight );
+                m_toolcontroldocker->show();
+        }
+}
+
+void KisView::viewLayerChannelDocker()
+{
+        if( m_layerchanneldocker->isVisible() == false )
+        {
+                mainWindow()->addDockWindow( m_layerchanneldocker, DockRight );
+                m_layerchanneldocker->show();
+        }
+}
+
+void KisView::viewFillsDocker()
+{
+        if( m_fillsdocker->isVisible() == false )
+        {
+                mainWindow()->addDockWindow( m_fillsdocker, DockRight );
+                m_shapesdocker->show();
+        }
+}
+
+
+void KisView::viewShapesDocker()
+{
+        if( m_shapesdocker->isVisible() == false )
+        {
+                mainWindow()->addDockWindow( m_shapesdocker, DockRight );
+                m_shapesdocker->show();
+        }
+}
+
+#endif
 
 void KisView::showRuler()
 {

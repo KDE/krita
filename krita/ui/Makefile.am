@@ -44,8 +44,9 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_colorwheel.cc \
     kis_progress_subject.cc \
     kis_double_widget.cc \
-    kis_dlg_apply_profile.cc
-
+    kis_dlg_apply_profile.cc \
+    kis_dockframedocker.cc \
+    kis_basedocker.cc
 
 noinst_HEADERS = integerwidget.h \
     kis_dlg_preferences.h \
@@ -79,7 +80,9 @@ noinst_HEADERS = integerwidget.h \
     kis_colorwheel.h \
     kis_progress_subject.h \
     kis_double_widget.h \
-    kis_dlg_apply_profile.h
+    kis_dlg_apply_profile.h \
+    kis_dockframedocker.h \
+    kis_basedocker.h
 
 libkisui_la_METASOURCES = AUTO
 SUBDIRS = labels dialogs widgets

@@ -12,13 +12,15 @@ libkisdialogs_la_SOURCES = dummy.cc \
 	kis_preview_dialog.ui \
 	wdgnewimage.ui \
 	wdgcolorsettings.ui \
-        wdgapplyprofile.ui
+        wdgapplyprofile.ui \
+	wdgdockertab.ui 
 
 noinst_HEADERS = wdgmatrix.h \
 	wdghistogram.h \
 	kis_previewwidgetbase.h \
 	wdgnewimage.h \
 	wdgcolorsettings.h \
-        wdgapplyprofile.h
+        wdgapplyprofile.h \
+	wdgdockertab.h
 
 METASOURCES = AUTO

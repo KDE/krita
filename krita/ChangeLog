@@ -1,6 +1,9 @@
 Changelog
-	
-2004-05-01	* Fixed preview widget bug
+
+2004-06-01	* Add shade button to dock windows.
+2004-06-01      * Change Krita back to QDockWindows using a compile-time option (boudewijn rempt)
+2004-06-01      * Fixed configure script for distributions with lcms.h in /usr/include/lcms
+2004-05-01	* Fixed preview widget bug (boudewijn rempt)
 2004-05-01      * Added oilify plugin filter (michael thaler)
 2004-04-01      * Added raindrop plugin filter (michael thaler)
 2005-03-01 	* Restarted changelog on the occasion of the first binary release (boudewijn rempt)

@@ -62,10 +62,6 @@ public slots:
 	virtual void slotSetUsePattern(int);
 
 private:
-	QUANTUM difference(QUANTUM* src, KisPixelRepresentation dst, QUANTUM threshold, int depth);
-	typedef enum { Left, Right } Direction;
-	void floodLine(int x, int y);
-	int floodSegment(int x, int y, int most, KisIteratorPixel* src, KisIteratorPixel* it, KisIteratorPixel* lastPixel, Direction d);
 	int m_threshold;
 	KisTileCommand* m_ktc;
 	Q_INT32 m_depth;
@@ -75,7 +71,6 @@ private:
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;
 	bool *m_map, m_samplemerged, m_usePattern, m_useSelection;
-	KisIteratorInfinitePixel *m_replaceWithIt; // so we can 'cache' the color iterator
 	KisSelectionSP m_selection;
 
 	QWidget *m_optWidget;

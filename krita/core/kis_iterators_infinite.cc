@@ -109,7 +109,7 @@ KisIteratorInfiniteLinePixel::operator KisIteratorPixel*() {
 
 KisIteratorInfiniteLinePixel& KisIteratorInfiniteLinePixel::inc() {
 	m_ypos++;
-	if (m_ypos % m_plane->height())
+	if (m_ypos % m_plane->height() == 0)
 		m_ypos = 0;
 	return *this;
 }
@@ -120,3 +120,8 @@ KisIteratorInfiniteLinePixel& KisIteratorInfiniteLinePixel::dec() {
 		m_ypos = m_plane->height() - 1;
 	return *this;
 }
+
+KisIteratorPixel KisIteratorInfiniteLinePixel::begin() {
+	return KisIteratorInfinitePixel( m_plane, m_command, m_ypos, m_xstart);
+}
+

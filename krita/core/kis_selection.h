@@ -29,7 +29,7 @@ class KoColor;
 // that wants to determine selectedness.
 #if (QUANTUM_DEPTH == 8)
 // XXX: swap when special color strategy for selec
-const QUANTUM MIX_SELECTED = OPACITY_TRANSPARENT;
+const QUANTUM MAX_SELECTED = OPACITY_TRANSPARENT;
 const QUANTUM MIN_SELECTED = OPACITY_OPAQUE;
 #endif
 

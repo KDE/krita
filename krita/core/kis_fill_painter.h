@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,6 +45,8 @@
 #include "kis_matrix.h"
 #include "kis_progress_subject.h"
 #include "kis_painter.h"
+#include "kis_iterators_infinite.h"
+#include "kis_selection.h"
 
 class KisFillPainter : public KisPainter
 {
@@ -73,10 +76,45 @@ public:
 	 */
         void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity);
         void fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity);
+	/**
+	 * Fill a rectangle with a certain pattern. The pattern is given through a
+	 * KisIteratorInfiniteLinePixel set at the right point.
+	 **/
+	void fillRect(const QRect& rc, KisIteratorInfiniteLinePixel src);
+	void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, KisIteratorInfiniteLinePixel src);
 
+	/**
+	 * Fills the enclosed area around the point with the set color. If there is a
+	 * selection, the whole selection is filled
+	 **/
+	void fillColor(int startX, int startY);
+
+	/**
+	 * Fills the enclosed area around the point with the set pattern. If there is a
+	 * selection, the whole selection is filled
+	 **/
+	void fillPattern(int startX, int startY);
+
+	void setFillThreshold(int threshold);
 private:
+	// for floodfill
+	/**
+	 * calculates the difference between 2 pixel values. Returns a value between 0 and
+	 * 255 (actually should be MIN_SELECTED to MAX_SELECTED?). Only 0 and 255 are
+	 * returned when anti-aliasing is off
+	 **/
+	QUANTUM difference(QUANTUM* src, KisPixelRepresentation dst);
+	void genericFillStart(int startX, int startY);
+	void genericFillEnd(KisLayerSP filled);
+	typedef enum { Left, Right } Direction;
+	void floodLine(int x, int y);
+	int floodSegment(int x, int y, int most, KisIteratorPixel* it, KisIteratorPixel* lastPixel, Direction d);
 
-
+	KisSelectionSP m_selection;
+	KisLayerSP m_layer;
+	QUANTUM* m_oldColor, *m_color;
+	int m_threshold;
+	bool* m_map;
 };
 
 
@@ -110,6 +148,17 @@ void KisFillPainter::fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity
         fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
 }
 
+inline
+void KisFillPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, KisIteratorInfiniteLinePixel src)
+{
+	fillRect(QRect(x, y, w, h), src);
+}
+
+inline
+void KisFillPainter::setFillThreshold(int threshold)
+{
+	m_threshold = threshold;
+}
 
 
 #endif //KIS_FILL_PAINTER_H_

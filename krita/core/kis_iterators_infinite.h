@@ -61,8 +61,9 @@ private:
 
 
 /**
- * This iterates over the lines of a KisPaintDeviceSP as if it was an endless plane. Note that
- * the begin() and end() calls return the beginning and ending of the PaintDevice
+ * This iterates over the lines of a KisPaintDeviceSP as if it was an endless plane. Note
+ * that the end() function will only return the end of the 'pattern', since an endless
+ * plane doesn't really has an end.
  **/
 class KisIteratorInfiniteLinePixel : public KisIteratorLinePixel
 {
@@ -82,6 +83,7 @@ public:
 	operator KisIteratorPixel* ();
 	inline virtual KisIteratorInfiniteLinePixel& inc();
 	inline virtual KisIteratorInfiniteLinePixel& dec();
+	virtual KisIteratorPixel begin();
 	virtual ~KisIteratorInfiniteLinePixel() {}
 private:
 	KisPaintDeviceSP m_plane;

@@ -4,6 +4,7 @@ INCLUDES = -I$(srcdir)/../core \
   -I$(srcdir)/../core/resources/ \
   -I$(srcdir)/../core/color_strategy \
   -I$(srcdir)/../core/tiles \
+  -I$(srcdir)/../core/paintop \
   $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
 
 noinst_LTLIBRARIES = libkisui.la

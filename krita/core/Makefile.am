@@ -3,6 +3,7 @@ INCLUDES  = -I$(srcdir)/builder \
 	-I$(srcdir)/resources \
 	-I$(srcdir)/visitors \
 	-I$(srcdir)/helper \
+	-I$(srcdir)/paintop \
 	-I$(srcdir)/tiles \
 	-I$(srcdir)/../ui \
 	-I../ui \
@@ -28,6 +29,7 @@ libkritacore_la_LIBADD = tiles/libkistile.la \
 	strategy/libkisstrategy.la \
 	color_strategy/libkiscolor_strategy.la \
 	resources/libkisresources.la \
+	paintop/libkispaintop.la \
 	$(LIB_KOPAINTER)
 
 libkritacore_la_SOURCES = kis_paint_device.cc \
@@ -43,14 +45,6 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_fill_painter.cc \
 	kis_gradient_painter.cc \
 	kis_convolution_painter.cc \
-	kis_paintop.cc \
-	kis_brushop.cc \
-	kis_eraseop.cc \
-	kis_airbrushop.cc \
-	kis_penop.cc \
-	kis_filterop.cc \
-	kis_convolveop.cc \
-	kis_duplicateop.cc \
 	kis_tool_factory.cc \
 	kis_cursor.cc \
 	kis_floatingselection.cc \
@@ -81,8 +75,7 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	KIsImageIface.skel \
 	kis_filter.cc \
 	kis_plugin_registry.cc \
-	kis_filter_registry.cc \
-	kis_paintop_registry.cc
+	kis_filter_registry.cc
 
 
 noinst_HEADERS = kis_paint_device.h \
@@ -123,9 +116,8 @@ noinst_HEADERS = kis_paint_device.h \
 	KIsImageIface.h \
 	kis_matrix.h \
 	kis_filter.h \
-	kis_filter_registry.h \
-	kis_paintop_registry.h
+	kis_filter_registry.h
 
 libkritacore_la_METASOURCES = AUTO
 libkritacore_la_LDFLAGS = $(all_libraries)
-SUBDIRS = helper tiles builder strategy color_strategy resources
+SUBDIRS = helper tiles builder strategy color_strategy paintop resources

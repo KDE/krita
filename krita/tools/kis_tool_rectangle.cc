@@ -36,7 +36,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
-#include "kis_brushop.h"
+#include "kis_paintop_registry.h"
 
 KisToolRectangle::KisToolRectangle()
 	: super(),
@@ -108,7 +108,7 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
 		KisPainter painter (device);
 		painter.beginTransaction (i18n ("rectangle"));
 		
-		KisPaintOp * op = new KisBrushOp(&painter); // XXX: add all paintops to the config widget
+		KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("paintbrush", &painter);
 		painter.setPaintOp(op);
 		painter.setPaintColor(m_subject -> fgColor());
 		painter.setBrush(m_subject -> currentBrush());

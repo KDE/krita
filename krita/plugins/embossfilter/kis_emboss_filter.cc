@@ -77,6 +77,8 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 
 	Emboss(newData, width, height, embossdepth);
 	src -> writeBytes( newData, x, y, width, height);
+
+	delete newData;
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

@@ -78,6 +78,8 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 
 	OilPaint(newData, width, height, brushSize, smooth, 0);
 	src -> writeBytes( newData, x, y, width, height);
+
+	delete newData;
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

@@ -78,6 +78,8 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 	//with the actual pixel data.
 	rainDrops(newData, width, height, dropSize, number, fishEyes, 0);
 	src -> writeBytes( newData, x, y, width, height);
+
+	delete newData;
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

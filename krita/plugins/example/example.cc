@@ -32,6 +32,7 @@
 
 #include <kis_doc.h>
 #include <kis_image.h>
+#include <kis_iterators.h>
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_tile_command.h>
@@ -53,6 +54,7 @@ KritaExample::KritaExample(QObject *parent, const char *name, const QStringList 
 		setInstance(KritaExampleFactory::instance());
 
 		(void) new KAction(i18n("&Invert..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "krita_example");
+		(void) new KAction(i18n("&Invert (iterators)..."), 0, 0, this, SLOT(slotIteratorsActivated()), actionCollection(), "krita_example_iterators");
 		if ( !parent->inherits("KisView") )
 		{
 				//kdError() << "KritaExempleFactory: KisView expected. Parent is " << parent->className() << endl;
@@ -64,6 +66,31 @@ KritaExample::KritaExample(QObject *parent, const char *name, const QStringList 
 
 KritaExample::~KritaExample()
 {
+}
+
+void KritaExample::slotIteratorsActivated()
+{
+	KisDoc* kD = (KisDoc*) this->m_view->koDocument();
+	if( kD->imageNum(0) == 0 )
+		return;
+	KisLayerSP lay = kD->imageNum(0)->activeLayer();
+	KisTileCommand* ktc = new KisTileCommand("Invert", (KisPaintDeviceSP)lay ); // Create a command
+	KisIteratorLineQuantum lineIt( (KisPaintDeviceSP)lay, ktc);
+	KisIteratorLineQuantum lastLine = lineIt.end();
+	while( lineIt <= lastLine )
+	{
+		KisIteratorQuantum quantumIt = lineIt;
+		KisIteratorQuantum lastQuantum = quantumIt.end();
+		while( quantumIt <= lastQuantum )
+		{
+			QUANTUM* data = quantumIt;
+			*data = QUANTUM_MAX - (*data);
+			++quantumIt;
+		}
+		++lineIt;
+	}
+	kD->imageNum(0)->undoAdapter()->addCommand( ktc );
+	kD->imageNum(0)->notify();
 }
 
 void KritaExample::slotActivated()

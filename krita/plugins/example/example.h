@@ -34,6 +34,7 @@ class KritaExample : public KParts::Plugin
 	
 		private slots:
 	void slotActivated();
+	void slotIteratorsActivated();
 	KisView* m_view;
 	KisPainter *m_painter;
 

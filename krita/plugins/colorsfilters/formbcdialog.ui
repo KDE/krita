@@ -1,0 +1,234 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>FormBCDialog</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>FormBCDialog</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>2</y>
+            <width>297</width>
+            <height>110</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>255</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>297</width>
+            <height>110</height>
+        </size>
+    </property>
+    <property name="sizeIncrement">
+        <size>
+            <width>0</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>Brightness / Contrast</string>
+    </property>
+    <property name="modal">
+        <bool>true</bool>
+    </property>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>pushButtonCancel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>80</y>
+                <width>80</width>
+                <height>24</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabelBrightnessLabel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>10</y>
+                <width>70</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Brightness :</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabelBrightnessValue</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>260</x>
+                <y>10</y>
+                <width>30</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>0</string>
+        </property>
+        <property name="alignment">
+            <set>AlignVCenter|AlignRight</set>
+        </property>
+    </widget>
+    <widget class="QSlider">
+        <property name="name">
+            <cstring>sliderContrast</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>80</x>
+                <y>40</y>
+                <width>170</width>
+                <height>24</height>
+            </rect>
+        </property>
+        <property name="minValue">
+            <number>-100</number>
+        </property>
+        <property name="maxValue">
+            <number>100</number>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
+        <property name="tickmarks">
+            <enum>Both</enum>
+        </property>
+        <property name="tickInterval">
+            <number>20</number>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabelContrastLabel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>40</y>
+                <width>60</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Contrast :</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabelContrastValue</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>260</x>
+                <y>40</y>
+                <width>30</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>0</string>
+        </property>
+        <property name="alignment">
+            <set>AlignVCenter|AlignRight</set>
+        </property>
+    </widget>
+    <widget class="QSlider">
+        <property name="name">
+            <cstring>sliderBrightness</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>80</x>
+                <y>10</y>
+                <width>170</width>
+                <height>24</height>
+            </rect>
+        </property>
+        <property name="minValue">
+            <number>-100</number>
+        </property>
+        <property name="maxValue">
+            <number>100</number>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
+        <property name="tickmarks">
+            <enum>Both</enum>
+        </property>
+        <property name="tickInterval">
+            <number>20</number>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>pushButtonOk</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>60</x>
+                <y>80</y>
+                <width>80</width>
+                <height>24</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Ok</string>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>sliderBrightness</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>FormBCDialog</receiver>
+        <slot>slotBrightnessValueChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>sliderContrast</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>FormBCDialog</receiver>
+        <slot>slotContrastValueChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>pushButtonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>FormBCDialog</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>pushButtonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>FormBCDialog</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">formbcdialog.ui.h</include>
+</includes>
+<slots>
+    <slot>slotBrightnessValueChanged( int v )</slot>
+    <slot>slotContrastValueChanged( int v )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

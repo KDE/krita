@@ -32,7 +32,7 @@ protected:
 public:
 	void add(_T item)
 	{
-		m_storage.insert( storageMap::value_type( item->name(), item) );
+		m_storage.insert( typename storageMap::value_type( item->name(), item) );
 	}
 	_T get(const QString& name) const
 	{

@@ -166,7 +166,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 					return;
 				}
 
-				val = 255 - m_data[k];
+				val = m_data[k];
 				m_img.setPixel(x, y, qRgb(val, val, val));
 				m_img.setAlphaBuffer(false);
 			}
@@ -184,8 +184,8 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 					return;
 				}
 
-				val = 255 - m_data[k];
-				alpha = 255 - m_data[k++];
+				val = m_data[k];
+				alpha = m_data[k++];
 				m_img.setPixel(x, y, qRgba(val, val, val, alpha));
 				m_img.setAlphaBuffer(true);
 			}
@@ -201,9 +201,10 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 					return;
 				}
 
-				m_img.setPixel(x, y, qRgb(255 - m_data[k++],
-							  255 - m_data[k++],
-							  255 - m_data[k++]));
+				m_img.setPixel(x, y, qRgb(m_data[k],
+							  m_data[k + 1],
+							  m_data[k + 2]));
+				k += 3;
 				m_img.setAlphaBuffer(false);
 			}
 		}
@@ -218,10 +219,11 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 					return;
 				}
 
-				m_img.setPixel(x, y, qRgba(255 - m_data[k++],
-							   255 - m_data[k++],
-							   255 - m_data[k++],
-							   255 - m_data[k++]));
+				m_img.setPixel(x, y, qRgba(m_data[k],
+							   m_data[k + 1],
+							   m_data[k + 2],
+							   m_data[k + 3]));
+				k += 4;
 				m_img.setAlphaBuffer(true);
 			}
 		}

@@ -88,6 +88,7 @@ void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 
 	while( ! srcIt.isDone() )
 	{
+	if(srcIt.isSelected())
 		for( int i = 0; i < depth; i++)
 		{
 			dstIt.rawData()[i] = QUANTUM_MAX - srcIt.oldRawData()[i];

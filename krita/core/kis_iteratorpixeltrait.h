@@ -50,12 +50,17 @@ public:
 	 */
 	inline KisQuantum operator[](int index)
 			{ return m_device -> toPixel(m_underlyingIterator->rawData())[index]; };
+			
+	/**
+	 * Returns if the pixel is selected or not. This is much faster than first building a KisPixel
+	 */
+	inline bool isSelected() {if(m_selectionIterator) return*(m_selectionIterator->rawData()); else return true;};
 	
 protected:
 	KisPaintDevice *m_device;
 	KisStrategyColorSpaceSP m_colorSpace;
 	inline void advance(int n){if(m_selectionIterator)(*m_selectionIterator)++;};
-	void setSelectionIterator(_iTp *si){m_selectionIterator = si; printf("setseliter\n");};
+	void setSelectionIterator(_iTp *si){m_selectionIterator = si;};
 
 	_iTp *m_underlyingIterator;
 	_iTp *m_selectionIterator;

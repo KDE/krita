@@ -26,6 +26,15 @@ public:
 	KisPoint() {}
 	KisPoint(double x, double y) : super(x, y) {}
 	KisPoint(const QPoint& pt) : super(pt) {}
+	KisPoint(const KoPoint& pt) : super(pt) {}
+
+	int floorX() const { return static_cast<int>(x()); }
+	int floorY() const { return static_cast<int>(y()); }
+	int roundX() const { return qRound(x()); }
+	int roundY() const { return qRound(y()); }
+
+	QPoint floorQPoint() const { return QPoint(static_cast<int>(x()), static_cast<int>(y())); }
+	QPoint roundQPoint() const { return QPoint(qRound(x()), qRound(y())); }
 };
 
 #endif // KIS_POINT_H_

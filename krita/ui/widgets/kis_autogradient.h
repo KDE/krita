@@ -75,6 +75,11 @@ class KisAutogradientResource : public KisGradient
 		 * @return true if it's possible to remove an segment
 		 */
 		bool removeSegmentPossible() const;
+		
+		/**
+		 * Recreates the preview of the gradient
+		 */
+		void updatePreview();
 	public:
 		virtual bool loadAsync() { return false; };
 };
@@ -97,6 +102,7 @@ class KisAutogradient : public KisWdgAutogradient
 		void slotChangedRightColor( const QColor& color);
 		void slotChangedLeftOpacity( int value );
 		void slotChangedRightOpacity( int value );
+		void paramChanged();
 };
 
 #endif

@@ -248,6 +248,7 @@ public:
 
 protected:
 	inline void pushSegment( KisGradientSegment* segment ) { m_segments.push_back(segment); };
+	void setImage(const QImage& img);
 
 	QValueVector<KisGradientSegment *> m_segments;
 private slots:

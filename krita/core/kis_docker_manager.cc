@@ -656,18 +656,25 @@ void KisDockerManager::slotBrushChanged(KisBrush * brush)
 void KisDockerManager::slotGradientChanged(KisGradient * gradient)
 {
 	KisIconItem *item;
-	if (gradient && (item = m_gradientMediator -> itemFor(gradient)))
-		if (m_controlWidget) m_controlWidget -> slotSetGradient(item);
+	if (!gradient || ! m_controlWidget)
+		return;
 
+	if ( (item = m_gradientMediator -> itemFor(gradient)) )
+		m_controlWidget -> slotSetGradient(item);
+	else
+		m_controlWidget -> slotSetGradient( new KisIconItem(gradient) );
 }
 
 void KisDockerManager::slotPatternChanged(KisPattern * pattern)
 {
 	KisIconItem *item;
-	if (pattern && (item = m_patternMediator -> itemFor(pattern)))
-		if (m_controlWidget) m_controlWidget -> slotSetPattern(item);
+	if (!pattern || ! m_controlWidget)
+		return;
 
-
+	if ( (item = m_gradientMediator -> itemFor(pattern)) )
+		m_controlWidget -> slotSetGradient(item);
+	else
+		m_controlWidget -> slotSetGradient( new KisIconItem(pattern) );
 }
 
 void KisDockerManager::resetLayerBox(KisImageSP img, KisLayerSP layer)

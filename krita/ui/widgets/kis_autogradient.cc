@@ -27,6 +27,10 @@
 
 #include "kis_gradient_slider_widget.h"
 
+// FIXME: use the same #define as in kis_gradient.cc, probably best customizable?
+#define PREVIEW_WIDTH 64
+#define PREVIEW_HEIGHT 64
+
 /************************** KisAutogradientResource **************************/
 
 void KisAutogradientResource::createSegment( int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, QColor left, QColor right )
@@ -219,6 +223,11 @@ bool KisAutogradientResource::removeSegmentPossible() const
 	return true;
 }
 
+void KisAutogradientResource::updatePreview()
+{
+	setImage( generatePreview( PREVIEW_WIDTH, PREVIEW_HEIGHT ) );
+}
+
 /****************************** KisAutogradient ******************************/
 
 KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QString& caption) : KisWdgAutogradient(parent, name)
@@ -252,7 +261,7 @@ void KisAutogradient::slotSelectedSegment(KisGradientSegment* segment)
 	int rightOpacity = qRound(segment -> endColor().alpha() * 100);
 	intNumInputRightOpacity -> setValue( rightOpacity );
 
-	emit activatedResource( m_autogradientResource );
+	paramChanged();
 }
 
 void KisAutogradient::slotChangedInterpolation(int type)
@@ -261,6 +270,8 @@ void KisAutogradient::slotChangedInterpolation(int type)
 	if(segment)
 		segment -> setInterpolation( type );
 	gradientSlider -> repaint();
+
+	paramChanged();
 }
 
 void KisAutogradient::slotChangedColorInterpolation(int type)
@@ -269,6 +280,8 @@ void KisAutogradient::slotChangedColorInterpolation(int type)
 	if(segment)
 		segment -> setColorInterpolation( type );
 	gradientSlider -> repaint();
+
+	paramChanged();
 }
 
 void KisAutogradient::slotChangedLeftColor( const QColor& color)
@@ -277,6 +290,8 @@ void KisAutogradient::slotChangedLeftColor( const QColor& color)
 	if(segment)
 		segment -> setStartColor( Color( color, segment -> startColor().alpha() ) );
 	gradientSlider -> repaint();
+
+	paramChanged();
 }
 
 void KisAutogradient::slotChangedRightColor( const QColor& color)
@@ -285,6 +300,8 @@ void KisAutogradient::slotChangedRightColor( const QColor& color)
 	if(segment)
 		segment -> setEndColor( Color( color, segment -> endColor().alpha() ) );
 	gradientSlider -> repaint();
+
+	paramChanged();
 }
 
 void KisAutogradient::slotChangedLeftOpacity( int value )
@@ -293,6 +310,8 @@ void KisAutogradient::slotChangedLeftOpacity( int value )
 	if(segment)
 		segment -> setStartColor( Color( segment -> startColor().color(), (double)value / 100 ) );
 	gradientSlider -> repaint(false);
+
+	paramChanged();
 }
 
 void KisAutogradient::slotChangedRightOpacity( int value )
@@ -301,6 +320,14 @@ void KisAutogradient::slotChangedRightOpacity( int value )
 	if(segment)
 		segment -> setEndColor( Color( segment -> endColor().color(), (double)value / 100 ) );
 	gradientSlider -> repaint(false);
+
+	paramChanged();
+}
+
+void KisAutogradient::paramChanged()
+{
+	m_autogradientResource -> updatePreview ();
+	emit activatedResource( m_autogradientResource );
 }
 
 #include "kis_autogradient.moc"

@@ -187,6 +187,14 @@ void KisGradient::ioResult(KIO::Job * /*job*/)
 	}
 }
 
+void KisGradient::setImage(const QImage& img)
+{
+	m_img = img;
+	m_img.detach();
+
+	setValid(true);
+}
+
 KisGradientSegment *KisGradient::segmentAt(double t) const
 {
 	if (t < DBL_EPSILON) {

@@ -101,6 +101,7 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 	QUANTUM *m_buf;
 
         static ColorLUT m_rgbLUT;
+	static ChannelInfo channelInfo[4];
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_CMYK_H_

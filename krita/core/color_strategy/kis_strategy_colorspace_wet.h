@@ -69,6 +69,8 @@ private:
 	KPixmapIO m_pixio;
 	QPixmap m_pixmap;
 	QUANTUM *m_buf;
+
+	static ChannelInfo channelInfo[8];
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_WET_H_

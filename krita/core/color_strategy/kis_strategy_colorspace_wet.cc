@@ -34,6 +34,8 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_WET = 8;
 }
 
+ChannelInfo KisStrategyColorSpaceWet::channelInfo[MAX_CHANNEL_WET]; // = { ChannelInfo("Red", 3), ChannelInfo("Green", 2), ChannelInfo("Blue", 1) };
+
 KisStrategyColorSpaceWet::KisStrategyColorSpaceWet() : 	m_pixmap(RENDER_WIDTH * 2, RENDER_HEIGHT * 2)
 {
 	m_buf = new QUANTUM[RENDER_WIDTH * RENDER_HEIGHT * MAX_CHANNEL_WET];
@@ -62,6 +64,11 @@ void KisStrategyColorSpaceWet::nativeColor(QRgb rgb, QUANTUM *dst)
 
 void KisStrategyColorSpaceWet::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst)
 {}
+
+ChannelInfo* KisStrategyColorSpaceWet::channelsInfo() const
+{
+	return channelInfo;
+}
 
 void KisStrategyColorSpaceWet::render(KisImageSP image, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
 {

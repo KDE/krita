@@ -63,6 +63,8 @@ private:
 	KPixmapIO m_pixio;
 	QPixmap m_pixmap;
 	QUANTUM *m_buf;
+
+	static ChannelInfo channelInfo[3];
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_H_

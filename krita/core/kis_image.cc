@@ -425,7 +425,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 
 }
 
-void KisImage::rotate(double angle) 
+void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress) 
 {
 	//kdDebug() << "KisImage::rotate. ANGLE: " 
 	//	  << angle
@@ -440,7 +440,7 @@ void KisImage::rotate(double angle)
 	vKisLayerSP_it it;
 	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
 		KisLayerSP layer = (*it);
-		layer -> rotate(angle);
+		layer -> rotate(angle, m_progress);
 	}
 
 	undoAdapter()->endMacro();

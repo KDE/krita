@@ -87,6 +87,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         QUANTUM * tmp = new QUANTUM[m_dev -> height() * m_dev -> depth() * sizeof(QUANTUM)];
         
         //progress info
+        m_cancelRequested = false;
         m_progress -> setSubject(this, true, true);
         
         /* Build y weights */
@@ -151,6 +152,9 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         {
                 //progress info
                 emit notifyProgress(this,(x * 100) / targetW);
+                if (m_cancelRequested) {
+                        break;
+                }
                 
                 calc_x_contrib(&contribX, xscale, fwidth, targetW, m_dev -> width(), filterf, x);
                 /* Apply horz filter to make dst column in tmp. */
@@ -206,10 +210,11 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                        }
                 } /* next dst row */
         } /* next dst column */
-        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
-        m_dev -> setTiles(tm); // Also sets width and height correctly
-        nRet = 0; /* success */
-
+        if(!m_cancelRequested){
+                tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
+                m_dev -> setTiles(tm); // Also sets width and height correctly
+                nRet = 0; /* success */
+        }
         free(tmp);
 
         /* free the memory allocated for vertical filter weights */

@@ -37,6 +37,7 @@
 #include "kis_iterators_quantum.h"
 #include "kis_iterators_pixel.h"
 #include "kis_scale_visitor.h"
+#include "kis_rotate_visitor.h"
 
 namespace {
         class KisResizeDeviceCmd : public KNamedCommand {
@@ -313,6 +314,11 @@ void KisPaintDevice::accept(KisScaleVisitor& visitor)
         visitor.visitKisPaintDevice(this);
 }
 
+void KisPaintDevice::accept(KisRotateVisitor& visitor)
+{
+        visitor.visitKisPaintDevice(this);
+}
+
 void KisPaintDevice::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, enumFilterType ftype)
 {
         KisScaleVisitor visitor;
@@ -320,9 +326,11 @@ void KisPaintDevice::scale(double xscale, double yscale, KisProgressDisplayInter
         visitor.scale(xscale, yscale, m_progress, ftype);
 }
 
-void KisPaintDevice::rotate(double angle) 
+void KisPaintDevice::rotate(double angle, KisProgressDisplayInterface *m_progress) 
 {
-        kdDebug() << "Rotating Code called! Going to rotate image by (angle): " << angle << "\n";
+        KisRotateVisitor visitor;
+        accept(visitor);
+        visitor.rotate(angle, m_progress);
 }
 
 // XXX: also allow transform on part of paint device?

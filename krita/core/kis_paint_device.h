@@ -45,6 +45,7 @@ class QWMatrix;
 class KisTileCommand;
 class KisIteratorLineQuantum;
 class KisIteratorLinePixel;
+class KisRotateVisitor;
 
 /**
  * Class modelled on QPaintDevice.
@@ -187,7 +188,7 @@ public:
         void resize(const QSize& size);
         void resize();
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
-        void rotate(double angle);
+        void rotate(double angle, KisProgressDisplayInterface *m_progress);
 
 	/**
 	   Apply the transformation matrix _in place_.
@@ -296,7 +297,8 @@ private:
 	KisStrategyColorSpaceSP m_colorStrategy; 
 
         void accept(KisScaleVisitor &);
-
+        void accept(KisRotateVisitor &);
+        
 };
 
 inline KisTileMgrSP KisPaintDevice::tiles() const

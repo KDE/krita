@@ -1527,7 +1527,7 @@ void KisView::rotateLayer(double angle)
 	KisLayerSP layer = currentImg() -> activeLayer();
 	if (!layer) return;
 
-	layer -> rotate(angle);
+	layer -> rotate(angle, m_progress);
 
 	m_doc -> setModified(true);
 	layersUpdated();
@@ -2627,7 +2627,7 @@ void KisView::rotateCurrentImage(double angle)
 {
 	if (!currentImg()) return;
 	//kdDebug() << "Going to rotate image by (angle): " << angle << "\n";
-	currentImg() -> rotate(angle);
+	currentImg() -> rotate(angle,m_progress);
 	m_doc -> setModified(true);
 
 	resizeEvent(0);

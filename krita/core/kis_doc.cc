@@ -305,7 +305,7 @@ QDomElement KisDoc::saveImages(QDomDocument& doc)
 }
 
 // save layers
-QDomElement KisDoc::saveLayers(QDomDocument& doc, KisImageSP img)
+QDomElement KisDoc::saveLayers(QDomDocument& doc, KisImageSP)
 {
 	// layers element - variable
 	QDomElement layersElement = doc.createElement("layers");
@@ -506,6 +506,7 @@ bool KisDoc::loadImages(QDomElement& element)
 // load layers
 bool KisDoc::loadLayers(QDomElement& /*element*/, KisImageSP /*img*/)
 {
+	return false;
 #if 0
 	QDomElement layers = element.namedItem("layers").toElement();
 
@@ -1207,23 +1208,23 @@ bool KisDoc::loadNativeFormat(const QString& file)
 	return false;
 }
 
-void KisDoc::slotActiveLayerChanged(KisImageSP img)
+void KisDoc::slotActiveLayerChanged(KisImageSP)
 {
 }
 
-void KisDoc::slotAlphaChanged(KisImageSP img)
+void KisDoc::slotAlphaChanged(KisImageSP)
 {
 }
 
-void KisDoc::slotSelectionChanged(KisImageSP img)
+void KisDoc::slotSelectionChanged(KisImageSP)
 {
 }
 
-void KisDoc::slotVisibilityChanged(KisImageSP img, CHANNELTYPE ctype)
+void KisDoc::slotVisibilityChanged(KisImageSP, CHANNELTYPE)
 {
 }
 
-void KisDoc::slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
+void KisDoc::slotUpdate(KisImageSP, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
 {
 	QRect rc(x, y, w, h);
 

@@ -17,6 +17,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include <string.h>
+#include <kdebug.h>
 #include <koColor.h>
 #include "kis_types.h"
 #include "kis_global.h"
@@ -253,6 +254,9 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 					d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
 				}
 			}
+			break;
+		default:
+			kdDebug() << "Not Implemented.\n";
 			break;
 	}
 }

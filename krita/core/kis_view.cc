@@ -60,6 +60,7 @@
 #include "kis_resourceserver.h"
 #include "kis_sidebar.h"
 #include "kis_tabbar.h"
+#include "kis_tool.h"
 #include "kis_view.h"
 #include "kis_util.h"
 
@@ -119,23 +120,16 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_gradient = 0;
 	m_layerBox = 0;
 	setInstance(KisFactory::global());
-
-	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
-	connect(m_doc, SIGNAL(projectionUpdated(KisImageSP)), SLOT(projectionUpdated(KisImageSP)));
-
-#if 0
-	m_pTool = 0;
-	QObject::connect(this, SIGNAL(embeddImage(const QString&)), this, SLOT(slotEmbedImage(const QString&)));
-#endif
-
 	setupActions();
 	setupCanvas();
 	setupRulers();
 	setupScrollBars();
 	setupSideBar();
 	setupTabBar();
-	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 	dcopObject();
+	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
+	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
+	connect(m_doc, SIGNAL(projectionUpdated(KisImageSP)), SLOT(projectionUpdated(KisImageSP)));
 }
 
 KisView::~KisView()
@@ -1038,6 +1032,10 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 		return 0;
 	case KisImageBuilder_RESULT_EMPTY:
 		KMessageBox::error(this, i18n("Empty file."), i18n("Error Loading File"));
+		KNotifyClient::event("cannotopenfile");
+		break;
+	case KisImageBuilder_RESULT_FAILURE:
+		KMessageBox::error(this, i18n("Error Loading File."), i18n("Error Loading File"));
 		KNotifyClient::event("cannotopenfile");
 		break;
 	case KisImageBuilder_RESULT_OK:

@@ -31,7 +31,7 @@ KisLayer::KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString&
 	m_opacity = opacity;
 }
 
-KisLayer::KisLayer(KisTileMgr tiles, KisImageSP img, const QString& name, QUANTUM opacity)
+KisLayer::KisLayer(KisTileMgr, KisImageSP img, const QString& name, QUANTUM opacity)
 	: super(img, img -> width(), img -> height(), img -> imgType(), name)
 {
 	m_linked = false;
@@ -42,30 +42,30 @@ KisLayer::~KisLayer()
 {
 }
 
-void KisLayer::copy(const KisPaintDevice& rhs, bool addAlpha)
+void KisLayer::copy(const KisPaintDevice& , bool )
 {
 }
 
-bool KisLayer::checkScaling(Q_INT32 width, Q_INT32 height)
+bool KisLayer::checkScaling(Q_INT32 , Q_INT32 )
 {
 	return false;
 }
 
-KisMaskSP KisLayer::createMask(Q_INT32 maskType)
+KisMaskSP KisLayer::createMask(Q_INT32 )
 {
 	return 0;
 }
 
-KisMaskSP KisLayer::addMask(KisMaskSP mask)
+KisMaskSP KisLayer::addMask(KisMaskSP )
 {
 	return 0;
 }
 
-void KisLayer::applyMask(Q_INT32 mode)
+void KisLayer::applyMask(Q_INT32 )
 {
 }
 
-void KisLayer::translate(Q_INT32 x, Q_INT32 y)
+void KisLayer::translate(Q_INT32 , Q_INT32 )
 {
 }
 
@@ -73,23 +73,23 @@ void KisLayer::addAlpha()
 {
 }
 
-void KisLayer::scaleFactor(double wfactor, double hfactor)
+void KisLayer::scaleFactor(double , double )
 {
 }
 
-void KisLayer::scale(Q_INT32 width, Q_INT32 height, Q_INT32 interpolation, bool localOrigin)
+void KisLayer::scale(Q_INT32 , Q_INT32 , Q_INT32 , bool )
 {
 }
 
-void KisLayer::scale(const QSize& size, Q_INT32 interpolation, bool localOrigin)
+void KisLayer::scale(const QSize& , Q_INT32 , bool )
 {
 }
 
-void KisLayer::resize(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+void KisLayer::resize(Q_INT32 , Q_INT32 , Q_INT32 , Q_INT32 )
 {
 }
 
-void KisLayer::resize(const QRect& rc)
+void KisLayer::resize(const QRect& )
 {
 }
 
@@ -97,7 +97,7 @@ void KisLayer::resize()
 {
 }
 
-void KisLayer::boundary(const vKisSegments& segments)
+void KisLayer::boundary(const vKisSegments& )
 {
 }
 

@@ -22,12 +22,6 @@
 #include <ksharedptr.h>
 #include <koColor.h>
 
-class KisPaintDeviceObserverInterface;
-typedef KSharedPtr<KisPaintDeviceObserverInterface> KisPaintDeviceObserverSP;
-
-class KisPaintDeviceSubjectInterface;
-typedef KSharedPtr<KisPaintDeviceSubjectInterface> KisPaintDeviceSubjectSP;
-
 class KisImage;
 typedef KSharedPtr<KisImage> KisImageSP;
 typedef QValueVector<KisImageSP> vKisImageSP;
@@ -62,7 +56,7 @@ class KisTile;
 typedef KSharedPtr<KisTile> KisTileSP;
 typedef QValueVector<KisTileSP> vKisTileSP;
 typedef vKisTileSP::iterator vKisTileSP_it;
-typedef vKisTileSP::const_iterator vKisTileSPLst_cit;
+typedef vKisTileSP::const_iterator vKisTileSP_cit;
 
 class KisTileMgr;
 typedef KSharedPtr<KisTileMgr> KisTileMgrSP;
@@ -74,6 +68,15 @@ typedef QValueVector<QPoint> vKisSegments;
 
 class KoColor;
 typedef QValueVector<KoColor> KoColorMap;
+
+class KisToolInterface;
+typedef KSharedPtr<KisToolInterface> KisToolSP;
+typedef QValueVector<KisToolSP> vKisToolSP;
+typedef vKisToolSP::iterator vKisToolSP_it;
+typedef vKisToolSP::const_iterator vKisToolSP_cit;
+
+class KisToolMemento;
+typedef KSharedPtr<KisToolMemento> KisToolMementoSP;
 
 #endif // KISTYPES_H_
 

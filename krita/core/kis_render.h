@@ -52,6 +52,7 @@ inline
 KisRenderInterface& KisRenderInterface::operator=(const KisRenderInterface& rhs)
 {
 	KShared::operator=(rhs);
+	return *this;
 }
 
 inline 

@@ -19,6 +19,7 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qtl.h>
+#include <kdebug.h>
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
@@ -139,6 +140,9 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, 
 		case IMAGE_TYPE_YUVA:
 		case IMAGE_TYPE_CMYKA:
 			n = 4;
+			break;
+		default:
+			kdDebug() << "KisImage::init  Unknow image type.\n";
 			break;
 	}
 	

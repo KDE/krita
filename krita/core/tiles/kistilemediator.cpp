@@ -90,7 +90,7 @@ Q_INT32 KisTileMediator::tileNum(KisTileSP tile, KisTileMgrSP mgr)
 {
 	KisScopedLock l(&KisTileMediator::m_mutex);
 
-	KisTileMediator::m_instance -> tileNum(tile, mgr);
+	return KisTileMediator::m_instance -> tileNum(tile, mgr);
 }
 
 void KisTileMediator::detachAll(KisTileMgr *mgr)

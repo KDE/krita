@@ -1,6 +1,4 @@
 /*
- *  kis_tool.cc - part of KImageShop
- *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
@@ -19,6 +17,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#if 0
 #include <qevent.h>
 #include <qpainter.h>
 #include <qpointarray.h>
@@ -524,3 +523,4 @@ const KisView* KisTool::getCurrentView() const
 }
 
 #include "kis_tool.moc"
+#endif

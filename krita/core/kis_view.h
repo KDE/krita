@@ -251,6 +251,7 @@ private:
 	KisGradient *m_gradient;
 	KisListBox *m_layerBox;
 	KisChannelView *m_channelView;
+	KisToolSP m_tool;
 
 private:
 	mutable KisImageSP m_current;

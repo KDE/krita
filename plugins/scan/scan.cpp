@@ -21,6 +21,8 @@
 #include <kiconloader.h>
 #include <kinstance.h>
 #include <kmessagebox.h>
+#include <kstddirs.h>
+#include <ktempfile.h>
 #include <kdebug.h>
 #include <kscan.h>
 #include <koDocument.h>
@@ -50,12 +52,15 @@ void Scan::slotScan()
 	return;
     }
     
-    connect(dlg, SIGNAL(finalImage(const QString &)), this, SLOT(slotShowImage(const QString &)));
+    connect(dlg, SIGNAL(finalImage(const QImage &)), this, SLOT(slotShowImage(const QImage &)));
     dlg->show();
 }
 
-void Scan::slotShowImage(const QString &file)
+void Scan::slotShowImage(const QImage &img)
 {
+    KTempFile temp(locateLocal("tmp", "scandialog"), ".png");
+    img.save(temp.name(), "PNG");
+    
     KoView *view = dynamic_cast<KoView *>(parent());
     if(!view)
 	return;
@@ -65,5 +70,5 @@ void Scan::slotShowImage(const QString &file)
     if(!doc)
 	return;
 	
-    emit doc->embeddImage(file);
+    emit doc->embeddImage(temp.name());
 }

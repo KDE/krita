@@ -21,6 +21,7 @@
 #define SCAN_H
 
 #include <kparts/plugin.h>
+#include <qimage.h>
 
 class Scan : public KParts::Plugin
 {
@@ -31,7 +32,7 @@ class Scan : public KParts::Plugin
 	
     private slots:
 	void slotScan();
-	void slotShowImage(const QString &file);
+	void slotShowImage(const QImage &img);
 };
 
 #endif

@@ -112,7 +112,7 @@ void PasteTool::mousePress(QMouseEvent *e)
 	if (e->button() != QMouseEvent::LeftButton)
 		return;
 
-	KisImage *img = m_doc->current();
+	KisImage *img = m_doc->currentImg();
 	if (!img)  return;
 
 	if(!img->getCurrentLayer()->visible()) return;
@@ -133,7 +133,7 @@ void PasteTool::mousePress(QMouseEvent *e)
 
 bool PasteTool::pasteColor(QPoint pos)
 {
-	KisImage *img = m_doc->current();
+	KisImage *img = m_doc->currentImg();
 	if (!img)   return false;
 
 	KisLayer *lay = img->getCurrentLayer();
@@ -231,7 +231,7 @@ bool PasteTool::pasteMonochrome(QPoint /* pos */)
 
 bool PasteTool::pasteToCanvas(QPoint pos)
 {
-	KisImage* img = m_doc->current();
+	KisImage* img = m_doc->currentImg();
 	if (!img) return false;
 
 	KisLayer *lay = img->getCurrentLayer();
@@ -253,7 +253,7 @@ bool PasteTool::pasteToCanvas(QPoint pos)
 
 	/* check image bounds.  The image extents are a rectangle
 	   containing all the layers that contribute to it, or maybe
-	   just the current layer in terms of canvas coords.  This
+	   just the currentImg layer in terms of canvas coords.  This
 	   is not clear, so also check layerExtents() below. */
 
 	ur = ur.intersect(img->imageExtents());
@@ -269,7 +269,7 @@ bool PasteTool::pasteToCanvas(QPoint pos)
 
 	/* check the layer bounds. There may be several different
 	   layers visible at once and we only want to draw over the
-	   current layer - which usually is also the topmost one
+	   currentImg layer - which usually is also the topmost one
 	   This may be unnecessary because imageExtents above may
 	   be the same as layerExtents, but just to be sure.. */
 
@@ -312,7 +312,7 @@ bool PasteTool::pasteToCanvas(QPoint pos)
 
 void PasteTool::mouseMove(QMouseEvent *e)
 {
-	KisImage * img = m_doc->current();
+	KisImage * img = m_doc->currentImg();
 	if (!img) return;
 
 	int spacing = 10;
@@ -384,7 +384,7 @@ void PasteTool::mouseMove(QMouseEvent *e)
 			m_view->updateCanvas(ur);
 
 			/* after old spot is refreshed, stamp image into canvas
-			   at current location. This may be slow or messy as updates
+			   at currentImg location. This may be slow or messy as updates
 			   rely on a timer - need threads and semaphores here to let
 			   us know when old marking has been replaced with image
 			   if timer is used, but it's not used for this. */

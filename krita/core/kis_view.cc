@@ -6,7 +6,7 @@
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
- *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -159,8 +159,8 @@ DCOPObject* KisView::dcopObject()
     are multiple views then the same painter paints images which
     are shown in each view.
 
-    Even better, the current image should be set by the view and not
-    by the document.  Each view could show a different current
+    Even better, the currentImg image should be set by the view and not
+    by the document.  Each view could show a different currentImg
     image.  Curently each view shows the same image, which is very
     limiting, although it's more compliant with koffice standards.
     The best solution is to have a painter for each image, which would
@@ -517,12 +517,12 @@ void KisView::slotHalt()
 void KisView::slotGimp()
 {
 	KMessageBox::error(NULL, "Have you lost your mind?", "User Error", FALSE);
-	// save current image, export to xcf, open in gimp - coming!
+	// save currentImg image, export to xcf, open in gimp - coming!
 }
 
 /*
     slotTabSelected - these refer to the tabs for images. Currently
-    this is the only way to change the current image.  There should
+    this is the only way to change the currentImg image.  There should
     be other ways, also.
 */
 
@@ -539,7 +539,7 @@ void KisView::slotTabSelected(const QString& name)
 
 void KisView::slotRefreshPainter()
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if(img) {
 		KisLayer *lay = img -> getCurrentLayer();
@@ -644,7 +644,7 @@ void KisView::resizeEvent(QResizeEvent*)
     int drawW = width() - ruler - lsideW - rsideW;
 
     // doc width and height are exactly same as the
-    // current image's width and height
+    // currentImg image's width and height
     int docW = docWidth();
     int docH = docHeight();
 
@@ -804,7 +804,7 @@ void KisView::scrollV(int)
 */
 void KisView::slotUpdateImage()
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (img) {
 		QRect updateRect(0, 0, img -> width(), img -> height());
@@ -814,7 +814,7 @@ void KisView::slotUpdateImage()
 
 /*
     slotDocUpdated - response to a signal from the document
-    that there is a new or different current image for the
+    that there is a new or different currentImg image for the
     document - setCurrentImage() in kis_doc.cc
 */
 
@@ -845,7 +845,7 @@ void KisView::slotDocUpdated(const QRect& rect)
 	int xt;
 	int yt;
 
-	if (!(img = m_doc -> current()))
+	if (!(img = m_doc -> currentImg()))
 		return;
 
 	QRect ur = rect;
@@ -877,7 +877,7 @@ void KisView::clearCanvas(const QRect& rc)
 
 void KisView::paintView(const QRect& rc)
 {
-	KisImage* img = m_doc -> current();
+	KisImage* img = m_doc -> currentImg();
 	QRect ur = rc;
 	QPainter p;
 
@@ -1098,7 +1098,7 @@ void KisView::activateTool(KisTool* t)
 
 /*
     tool_properties invokes the optionsDialog() method for the
-    current active tool.  There should be an options dialog for
+    currentImg active tool.  There should be an options dialog for
     each tool, but these can also be consolidated into a master
     options dialog by reparenting the widgets for each tool to a
     tabbed properties dialog, each tool getting a tab  - later
@@ -1185,13 +1185,13 @@ void KisView::crop()
 		return;
 	}
 
-	// copy contents of the current selection to a QImage
+	// copy contents of the currentImg selection to a QImage
 	if (!m_doc->setClipImage()) {
 		kdDebug() << "m_doc->setClipImage() failed" << endl;
 		return;
 	}
 
-	// contents of current selection - make sure it's good
+	// contents of currentImg selection - make sure it's good
 	if (!m_doc -> getClipImage()) {
 		kdDebug() << "m_doc->getClipImage() failed" << endl;
 		return;
@@ -1204,7 +1204,7 @@ void KisView::crop()
 	// keep old image - user can remove it later if he wants
 	// by removing its layer or may want to keep the original.
 
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (!img) 
 		return;
@@ -1231,9 +1231,9 @@ void KisView::crop()
 		slotRefreshPainter();
 	}
 
-	/* remove the current clip image which now belongs to the
+	/* remove the currentImg clip image which now belongs to the
 	   previous layer - selection also is removed. To crop again,
-	   you must first make another selection in the current layer.*/
+	   you must first make another selection in the currentImg layer.*/
 
 	m_doc->removeClipImage();
 	m_doc->clearSelection();
@@ -1245,7 +1245,7 @@ void KisView::crop()
 
 void KisView::selectAll()
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (img) {
 		QRect rc = img -> getCurrentLayer() -> imageExtents();
@@ -1469,13 +1469,13 @@ void KisView::dialog_channels()
 --------------------------------*/
 
 /*
-    Properties dialog for the current layer.
+    Properties dialog for the currentImg layer.
     Only for changing name and opacity so far.
 */
 
 void KisView::layer_properties()
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (!img)  
 		return;
@@ -1494,13 +1494,13 @@ void KisView::layer_properties()
 }
 
 /*
-    insert new layer into the current image - using "new layer" dialog
+    insert new layer into the currentImg image - using "new layer" dialog
     for layer size (should also have fields for name and opacity).
     This new layer will also be made uppermost so it is visble
 */
 void KisView::insert_layer()
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 	uint indx;
 
 	if (!img) 
@@ -1530,7 +1530,7 @@ void KisView::insert_layer()
 }
 
 /*
-    remove current layer - to remove other layers, a user must
+    remove currentImg layer - to remove other layers, a user must
     access the layers tableview in a dialog or sidebar widget
 */
 
@@ -1543,16 +1543,16 @@ void KisView::remove_layer()
 }
 
 /*
-    hide/show the current layer - to hide other layers, a user must
+    hide/show the currentImg layer - to hide other layers, a user must
     access the layers tableview in a dialog or sidebar widget
 */
 
 void KisView::hide_layer()
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (img) {
-		uint indx = img -> getCurrentLayerIndex();
+		int indx = img -> getCurrentLayerIndex();
 		LayerTable *tbl = m_pLayerView -> layerTable();
 	       
 		tbl -> slotInverseVisibility(indx);
@@ -1563,16 +1563,16 @@ void KisView::hide_layer()
 }
 
 /*
-    link/unlink the current layer - to link other layers, a user must
+    link/unlink the currentImg layer - to link other layers, a user must
     access the layers tableview in a dialog or sidebar widget
 */
 
 void KisView::link_layer()
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (img) {
-		uint indx = img -> getCurrentLayerIndex();
+		int indx = img -> getCurrentLayerIndex();
 		LayerTable *tbl = m_pLayerView -> layerTable();
 
 		tbl -> slotInverseLinking(indx);
@@ -1589,18 +1589,22 @@ void KisView::link_layer()
 
 void KisView::next_layer()
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (!img) 
 		return;
 
-	uint indx = img -> getCurrentLayerIndex();
+	int indx = img -> getCurrentLayerIndex();
+
+	if (indx == -1)
+		return;
+	
 	KisLayerSPLst layers = img -> layerList();
 
-	if (indx < layers.size() - 1) {
+	if (static_cast<uint>(indx) < layers.size() - 1) {
 		LayerTable *tbl = m_pLayerView -> layerTable();
 
-		// make the next layer the current one, select it,
+		// make the next layer the currentImg one, select it,
 		// and make sure it's visible
 		indx++;
 		img -> setCurrentLayer(indx);
@@ -1610,15 +1614,14 @@ void KisView::next_layer()
 		// hide all layers on top of this one so this
 		// one is clearly visible and can be painted on!
 
-		while (++indx <= img -> layerList().size() - 1)
+		while (++static_cast<uint>(indx) <= img -> layerList().size() - 1)
 			layers[indx] -> setVisible(false);
 
 		img->markDirty(img->getCurrentLayer()->layerExtents());
 		m_pLayerView->layerTable()->updateTable();
 		m_pLayerView->layerTable()->updateAllCells();
 		slotRefreshPainter();
-
-		m_doc->setModified(true);
+		m_doc -> setModified(true);
 	}
 }
 
@@ -1629,36 +1632,36 @@ void KisView::next_layer()
 */
 void KisView::previous_layer()
 {
-    KisImage * img = m_doc->current();
-    if (!img)  return;
+	KisImage *img = m_doc -> currentImg();
 
-    uint indx = img->getCurrentLayerIndex();
-    if(indx > 0)
-    {
-        // make the previous layer the current one, select it,
-        // and make sure it's visible
-        --indx;
-        img->setCurrentLayer(indx);
-        m_pLayerView->layerTable()->selectLayer(indx);
-        img->layerList()[indx]->setVisible(true);
+	if (!img)  
+		return;
 
-        // hide all layers beyond this one so this
-        // one is clearly visible and can be painted on!
-        while(++indx <= img->layerList().size() - 1)
-        {
-            img->layerList()[indx]->setVisible(false);
-        }
+	int indx = img -> getCurrentLayerIndex();
 
-        img->markDirty(img->getCurrentLayer()->layerExtents());
+	if (indx > 0) {
+		// make the previous layer the currentImg one, select it,
+		// and make sure it's visible
+		--indx;
+		img->setCurrentLayer(indx);
+		m_pLayerView->layerTable()->selectLayer(indx);
+		img->layerList()[indx]->setVisible(true);
 
-        m_pLayerView->layerTable()->updateTable();
-        m_pLayerView->layerTable()->updateAllCells();
-        slotRefreshPainter();
+		// hide all layers beyond this one so this
+		// one is clearly visible and can be painted on!
+		while(++static_cast<uint>(indx) <= img->layerList().size() - 1) {
+			img->layerList()[indx]->setVisible(false);
+		}
 
-        m_doc->setModified(true);
-   }
+		img->markDirty(img->getCurrentLayer()->layerExtents());
+
+		m_pLayerView->layerTable()->updateTable();
+		m_pLayerView->layerTable()->updateAllCells();
+		slotRefreshPainter();
+
+		m_doc->setModified(true);
+	}
 }
-
 
 void KisView::import_image()
 {
@@ -1668,29 +1671,28 @@ void KisView::import_image()
 
 void KisView::export_image()
 {
-    save_layer_image(true);
+	save_layer_image(true);
 }
 
 void KisView::insert_image_as_layer()
 {
-    insert_layer_image(false);
-
-    m_doc->setModified(true);
+	insert_layer_image(false);
+	m_doc -> setModified(true);
 }
 
 void KisView::save_layer_as_image()
 {
-    save_layer_image(false);
+	save_layer_image(false);
 }
 
 void KisView::slotEmbeddImage(const QString &filename)
 {
-    insert_layer_image(true, filename);
+	insert_layer_image(true, filename);
 }
 
 /*
     insert_layer_image - Insert a standard image like png or jpg
-    into the current layer.  This is the same as "import" in other
+    into the currentImg layer.  This is the same as "import" in other
     koffice apps, but since everything is organized by layers,
     one must create a new layer and/or a new image to contain it -
     not necessarily a new doc.
@@ -1777,8 +1779,8 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 
 
 /*
-    save_layer_image - export the current image after merging
-    layers or just export the current layer -  like the above
+    save_layer_image - export the currentImg image after merging
+    layers or just export the currentImg layer -  like the above
     method, the body of this, after a valid url is obtained,
     belongs in the doc, not the view and eventually needs to be
     moved from the doc to koffice/filters.
@@ -1819,7 +1821,7 @@ void KisView::layer_scale_rough()
 
 void KisView::layerScale(bool smooth)
 {
-    KisImage * img = m_doc->current();
+    KisImage * img = m_doc->currentImg();
     if (!img)  return;
 
     KisLayer *lay = img->getCurrentLayer();
@@ -1891,13 +1893,11 @@ void KisView::layer_rotate_custom()
 
 void KisView::layer_mirrorX()
 {
-
 }
 
 
 void KisView::layer_mirrorY()
 {
-
 }
 
 /*--------------------------
@@ -1918,9 +1918,9 @@ void KisView::add_new_image_tab()
 
 void KisView::remove_current_image_tab()
 {
-    if (m_doc->current())
+    if (m_doc->currentImg())
     {
-        m_doc->removeImage(m_doc->current());
+        m_doc->removeImage(m_doc->currentImg());
         slotUpdateImage();
         slotRefreshPainter();
 
@@ -1931,9 +1931,9 @@ void KisView::remove_current_image_tab()
 
 void KisView::merge_all_layers()
 {
-    if (m_doc->current())
+    if (m_doc->currentImg())
     {
-        m_doc->current()->mergeAllLayers();
+        m_doc->currentImg()->mergeAllLayers();
         slotUpdateImage();
         slotRefreshPainter();
 
@@ -1944,9 +1944,9 @@ void KisView::merge_all_layers()
 
 void KisView::merge_visible_layers()
 {
-    if (m_doc->current())
+    if (m_doc->currentImg())
     {
-        m_doc->current()->mergeVisibleLayers();
+        m_doc->currentImg()->mergeVisibleLayers();
         slotUpdateImage();
         slotRefreshPainter();
 
@@ -1957,9 +1957,9 @@ void KisView::merge_visible_layers()
 
 void KisView::merge_linked_layers()
 {
-    if (m_doc->current())
+    if (m_doc->currentImg())
     {
-        m_doc->current()->mergeLinkedLayers();
+        m_doc->currentImg()->mergeLinkedLayers();
         slotUpdateImage();
         slotRefreshPainter();
 
@@ -2041,22 +2041,22 @@ void KisView::preferences()
 
 /*
     docWidth - simply returns the width of the document which is
-    exactly the same as the width of the current image
+    exactly the same as the width of the currentImg image
 */
 int KisView::docWidth()
 {
-    if (m_doc->current()) return m_doc->current()->width();
+    if (m_doc->currentImg()) return m_doc->currentImg()->width();
     else return 0;
 }
 
 
 /*
     docHeight - simply returns the height of the document which is
-    exactly the same as the height of the current image
+    exactly the same as the height of the currentImg image
 */
 int KisView::docHeight()
 {
-    if (m_doc->current()) return m_doc->current()->height();
+    if (m_doc->currentImg()) return m_doc->currentImg()->height();
     else return 0;
 }
 
@@ -2129,7 +2129,7 @@ void KisView::slotSetKrayon(KisKrayon* k)
 
 void KisView::slotSetPattern(KisPattern* p)
 {
-	// set current pattern for this view
+	// set currentImg pattern for this view
 	m_pPattern = p;
 
 	// set pattern for other things that use patterns
@@ -2167,7 +2167,7 @@ void KisView::setupPrinter(KPrinter &printer)
     int count = 0;
     QStringList imageList = m_doc->images();
     for (QStringList::Iterator it = imageList.begin(); it != imageList.end(); ++it) {
-        if (*it == m_doc->current()->name())
+        if (*it == m_doc->currentImg()->name())
             break;
         ++count;
     }
@@ -2194,7 +2194,7 @@ void KisView::print(KPrinter &printer)
     }
     for (int i = from; i <= to; i++)
         imageList.append(i);
-    QString tmp_currentImageName = m_doc->currentImage();
+    QString tmp_currentImageName = m_doc->currentImgName();
     QValueList<int>::Iterator it = imageList.begin();
     for (; it != imageList.end(); ++it)
     {
@@ -2235,7 +2235,7 @@ void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
 
 void KisView::addHasNewLayer(QImage& loadedImg, KURL& u)
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 	QRect layerRect(0, 0, loadedImg.width(), loadedImg.height());
 	QString layerName(u.fileName());
 	uint indx;

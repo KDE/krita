@@ -61,7 +61,7 @@ AirBrushTool::~AirBrushTool()
 void AirBrushTool::timeoutPaint()
 {
 	if (paint(pos, true))
-		m_doc -> current() -> markDirty(QRect(pos - m_brush->hotSpot(), m_brush->size()));
+		m_doc -> currentImg() -> markDirty(QRect(pos - m_brush->hotSpot(), m_brush->size()));
 }
 
 void AirBrushTool::setBrush(KisBrush *brush)
@@ -87,7 +87,7 @@ void AirBrushTool::setBrush(KisBrush *brush)
 
 void AirBrushTool::mousePress(QMouseEvent *e)
 {
-	KisImage * img = m_doc->current();
+	KisImage * img = m_doc->currentImg();
 	if (!img) return;
 
 	if(!img->getCurrentLayer())
@@ -118,7 +118,7 @@ void AirBrushTool::mousePress(QMouseEvent *e)
 
 bool AirBrushTool::paint(QPoint pos, bool timeout)
 {
-	KisImage * img = m_doc->current();
+	KisImage * img = m_doc->currentImg();
 	if (!img)	    return false;
 
 	KisLayer *lay = img->getCurrentLayer();
@@ -226,7 +226,7 @@ bool AirBrushTool::paint(QPoint pos, bool timeout)
 
 void AirBrushTool::mouseMove(QMouseEvent *e)
 {
-	KisImage * img = m_doc->current();
+	KisImage * img = m_doc->currentImg();
 	if (!img) return;
 
 	int spacing = m_brush->spacing();

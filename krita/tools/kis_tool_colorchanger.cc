@@ -48,7 +48,7 @@ ColorChangerTool::ColorChangerTool(KisDoc *doc) : KisTool(doc)
 
 	layerAlpha = true;
     
-	// get current colors
+	// get currentImg colors
 	KoColor startColor( m_view->fgColor().R(), m_view->fgColor().G(), m_view->fgColor().B() );
 	KoColor endColor( m_view->bgColor().R(), m_view->bgColor().G(), m_view->bgColor().B() );        
     
@@ -73,7 +73,7 @@ bool ColorChangerTool::changeColors(int startX, int startY)
 	int sBlue;
 	QRgb srgb;
 
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (!img) 
 		return false;
@@ -138,7 +138,7 @@ bool ColorChangerTool::changeColors(int startX, int startY)
 
 void ColorChangerTool::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_doc->current();
+    KisImage * img = m_doc->currentImg();
     if (!img) return;
 
     if (e->button() != QMouseEvent::LeftButton
@@ -203,7 +203,7 @@ void ColorChangerTool::optionsDialog()
 		// note that gradients amd patterns are not associated with a
 		// particular tool, unlike the other options
 
-		// get current colors
+		// get currentImg colors
 		KoColor startColor( m_view->fgColor().R(), m_view->fgColor().G(), m_view->fgColor().B() );
 		KoColor endColor( m_view->bgColor().R(), m_view->bgColor().G(), m_view->bgColor().B() );        
 

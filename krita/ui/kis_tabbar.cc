@@ -176,7 +176,7 @@ void KisTabBar::setActiveTab( const QString& _text )
 
 /*
     remove a tab from the tabbar itself - tabs can also be remove
-    from menu with "remove current image tab"
+    from menu with "remove currentImg image tab"
 */
 void KisTabBar::slotRemove( )
 {
@@ -224,12 +224,12 @@ void KisTabBar::slotImageListUpdated()
 	        addTab(*it);
     }
 
-    // set active if there is a current image
-    // note that current() is the image pointer
+    // set active if there is a currentImg image
+    // note that currentImg() is the image pointer
     // and currentImage() is the name of that image
 
-    if(m_pDoc->current())
-        setActiveTab(m_pDoc->currentImage());
+    if(m_pDoc->currentImg())
+        setActiveTab(m_pDoc->currentImgName());
 }
 
 

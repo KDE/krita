@@ -182,7 +182,7 @@ void ChannelTable::init( KisDoc* doc )
     setCellWidth( CELLWIDTH );
     setCellHeight( CELLHEIGHT );
 
-    m_selected = 0; // XXX (m_doc->current() ? m_doc->current()->getCurrentLayer()->numChannels() : 0) - 1;
+    m_selected = 0; // XXX (m_doc->currentImg() ? m_doc->currentImg()->getCurrentLayer()->numChannels() : 0) - 1;
 
     updateAllCells();
 
@@ -239,7 +239,7 @@ void ChannelTable::paintCell( QPainter* _painter, int _row, int /* _col */)
                                   mVisibleRect.width(), mVisibleRect.height() ),
                            colorGroup() ); // , true );
 
-    if( /* m_doc->current().channels[_row ]->isVisible()*/ true )
+    if( /* m_doc->currentImg().channels[_row ]->isVisible()*/ true )
     {
         _painter->drawPixmap( mVisibleRect.topLeft(), *mVisibleIcon );
     }
@@ -269,7 +269,7 @@ void ChannelTable::updateTable()
 void ChannelTable::update_contextmenu( int  )
 {
     m_contextmenu->setItemChecked( VISIBLE,  true
-        /* m_doc->current()->layerList().at( _index )->visible()*/ );
+        /* m_doc->currentImg()->layerList().at( _index )->visible()*/ );
 }
 
 void ChannelTable::selectChannel( int _index )
@@ -279,16 +279,16 @@ void ChannelTable::selectChannel( int _index )
 
     updateCell( currentSel, 0 );
     m_selected = _index;
-    //m_doc->current()->setCurrentLayer( m_selected );
+    //m_doc->currentImg()->setCurrentLayer( m_selected );
     updateCell( m_selected, 0 );
 }
 
 void ChannelTable::slotInverseVisibility( int _index )
 {
-    //m_doc->current()->layerList().at( _index )->setVisible( !m_doc->current()->layerList().at( _index )->visible() );
+    //m_doc->currentImg()->layerList().at( _index )->setVisible( !m_doc->currentImg()->layerList().at( _index )->visible() );
     updateCell( _index, 0 );
 
-    //m_doc->current()->markDirty( m_doc->current()->layerList().at( _index )->imageExtents() );
+    //m_doc->currentImg()->markDirty( m_doc->currentImg()->layerList().at( _index )->imageExtents() );
 }
 
 void ChannelTable::slotMenuAction( int _id )
@@ -369,11 +369,11 @@ void ChannelTable::slotProperties()
 {
 #if 0
     if( ChannelPropertyDialog::editProperties(
-         *( m_doc->current()->getCurrentLayer()->firstChannel() ) ) )
+         *( m_doc->currentImg()->getCurrentLayer()->firstChannel() ) ) )
     {
-        //QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
+        //QRect updateRect = m_doc->currentImg()->layerList().at( m_selected )->imageExtents();
         updateCell( m_selected, 0 );
-        //m_doc->current()->markDirty( updateRect );
+        //m_doc->currentImg()->markDirty( updateRect );
     }
 #endif
 }

@@ -121,7 +121,7 @@ void BrushTool::mousePress(QMouseEvent *e)
 	if (e -> button() != QMouseEvent::LeftButton)
 		return;
 
-	if (!(img = m_doc -> current()))
+	if (!(img = m_doc -> currentImg()))
 		return;
 
 	if (!(device = img -> getCurrentPaintDevice()))
@@ -158,7 +158,7 @@ bool BrushTool::paintCanvas(const QPoint& /* pos */)
 
 bool BrushTool::paintMonochrome(const QPoint& pos)
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 	KisLayer *lay = img -> getCurrentLayer();
 	int startx = pos.x() - m_hotSpotX;
 	int starty = pos.y() - m_hotSpotY;
@@ -228,7 +228,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
 	if (!m_dragging)
 		return;
 
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (!img) 
 		return;

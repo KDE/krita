@@ -29,6 +29,13 @@
 #include "kis_global.h"
 #include "kis_paint_device.h"
 
+class KisChannel;
+
+typedef KSharedPtr<KisChannel> KisChannelSP;
+typedef QValueVector<KisChannelSP> KisChannelSPLst;
+typedef KisChannelSPLst::iterator KisChannelSPLstIterator;
+typedef KisChannelSPLst::const_iterator KisChannelSPLstConstIterator;
+
 class KisChannel : public KisPaintDevice {
 	typedef KisPaintDevice super;
 

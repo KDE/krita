@@ -101,7 +101,7 @@ void KisSelection::setImage(QImage & img)
 */
 bool KisSelection::erase()
 {
-	KisImage *img = pDoc -> current();
+	KisImage *img = pDoc -> currentImg();
 
 	if (!img) 
 		return false;
@@ -169,7 +169,7 @@ void KisSelection::reverse()
 */
 void KisSelection::fill(uint color, KisPattern * /*pattern*/, KisGradient * /*gradient*/)
 {
-	KisImage *img = pDoc -> current();
+	KisImage *img = pDoc -> currentImg();
 
 	if (!img) 
 		return;
@@ -255,7 +255,7 @@ void KisSelection::setRectangularSelection(const QRect & re, KisLayer *lay)
 	uchar r, g, b;
 	QRgb rgb;
 
-	bool alpha = (pDoc->current()->colorMode() == cm_RGBA);
+	bool alpha = (pDoc->currentImg()->colorMode() == cm_RGBA);
 
 	for (int y = sy; y <= ey; y++) {
 		for (int x = sx; x <= ex; x++) {
@@ -332,7 +332,7 @@ void KisSelection::setEllipticalSelection(const QRect & re, KisLayer *lay)
 	uchar a = 255;
 	QRgb rgb;
 
-	bool layerAlpha = (pDoc->current()->colorMode() == cm_RGBA);
+	bool layerAlpha = (pDoc->currentImg()->colorMode() == cm_RGBA);
 
 	for (int y = sy; y <= ey; y++) {
 		for (int x = sx; x <= ex; x++) {
@@ -442,7 +442,7 @@ void KisSelection::setPolygonalSelection(const QRect & re, QPointArray & pointsA
 	uchar a = 255;
 	QRgb rgb;
 
-	bool layerAlpha = ( pDoc->current()->colorMode() == cm_RGBA );
+	bool layerAlpha = ( pDoc->currentImg()->colorMode() == cm_RGBA );
 
 	for ( int y = sy; y <= ey; ++y ) {
 		for ( int x = sx; x <= ex; ++x ) {
@@ -566,7 +566,7 @@ void KisSelection::setContiguousSelection(const QRect & re, KisLayer *lay)
 	uchar r, g, b;
 	QRgb rgb;
 
-	bool alpha = (pDoc->current()->colorMode() == cm_RGBA);
+	bool alpha = (pDoc->currentImg()->colorMode() == cm_RGBA);
 
 	for (int y = sy; y <= ey; y++) {
 		for (int x = sx; x <= ex; x++) {

@@ -164,7 +164,7 @@ void KisPainter::drawRectangle(const QRect& rect)
 
 	// constructs a pen with the given line thickness
 	// color is always black - it is changed by krayon
-	// to the current fgColor when drawn to layer
+	// to the currentImg fgColor when drawn to layer
 	QPen pen(Qt::black, m_lineThickness);
 	p.setPen(pen);
 
@@ -205,7 +205,7 @@ void KisPainter::drawEllipse(int x, int y, int w, int h)
 
 	// constructs a pen with the given line thickness
 	// color is always black - it is changed by krayon
-	// to the current fgColor when drawn to layer
+	// to the currentImg fgColor when drawn to layer
 	QPen pen(Qt::black, m_lineThickness);
 	p.setPen(pen);
 
@@ -282,7 +282,7 @@ bool KisPainter::toLayer(const QRect& paintRect)
 	KisLayer *lay;
 	QImage qimg = m_painterPixmap.convertToImage();
 
-	if (!(img = m_doc -> current()))
+	if (!(img = m_doc -> currentImg()))
 		return false;
 
 	if (!(lay = img -> getCurrentLayer()))

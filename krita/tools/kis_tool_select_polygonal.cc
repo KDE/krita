@@ -74,7 +74,7 @@ void PolygonalSelectTool::clearOld()
 	m_pointArray.resize(0);
 	
 	// clear everything in 
-	QRect updateRect(0, 0, m_doc->current()->width(), m_doc->current()->height());
+	QRect updateRect(0, 0, m_doc->currentImg()->width(), m_doc->currentImg()->height());
 	m_view->updateCanvas(updateRect);
 	m_selectRegion = QRegion();
 }
@@ -87,7 +87,7 @@ void PolygonalSelectTool::mousePress( QMouseEvent* event )
 			// erase old line on canvas
 			drawLine(m_dragStart, m_dragEnd);
 		
-			// get current position
+			// get currentImg position
 			m_dragEnd = event -> pos();
 			
 			// draw new and final line for this segment
@@ -124,7 +124,7 @@ void PolygonalSelectTool::mousePress( QMouseEvent* event )
 		// points in the polyline
 		// m_doc->getSelection()->setBounds(m_selectRect);        
 
-		m_doc -> getSelection() -> setPolygonalSelection(m_imageRect, points, m_doc -> current() -> getCurrentLayer());
+		m_doc -> getSelection() -> setPolygonalSelection(m_imageRect, points, m_doc -> currentImg() -> getCurrentLayer());
 		m_pointArray.putPoints(m_index++, 1, m_pointArray[0].x(), m_pointArray[0].y());
 
 		kdDebug() << "selectRect" << " left: "   << m_imageRect.left() << " top: "    << m_imageRect.top();
@@ -250,7 +250,7 @@ void PolygonalSelectTool::mouseRelease(QMouseEvent *event)
 
 		QPoint pos = event -> pos();
 
-		KisImage *img = m_doc -> current();
+		KisImage *img = m_doc -> currentImg();
 
 		if (!img)
 			return;

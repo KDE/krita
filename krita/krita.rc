@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="2">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="3">
 
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
@@ -88,7 +88,7 @@
   <Separator/>  
   <Action name="insert_image_as_layer"/>
   <Action name="save_layer_as_image"/>
-<!--
+  <Separator/>
   <Action name="layer_rotateright90"/>
   <Action name="layer_rotate180"/>
   <Action name="layer_rotateleft90"/>
@@ -97,7 +97,6 @@
   <Action name="layer_mirrorX"/>
   <Action name="layer_mirrorY"/>
   <Separator/>  
--->  
   <Action name="layer_properties"/>  
 </Menu>
 

@@ -28,31 +28,28 @@
 
 #include <kcommand.h>
 #include <klocale.h>
+#include <ksharedptr.h>
 
 #include <koDocument.h>
 
-#include "kis_global.h"
-#include "kis_view.h"
-#include "kis_selection.h"
+#include "kis_image.h"
 #include "kis_framebuffer.h"
+#include "kis_global.h"
+#include "kis_selection.h"
+#include "kis_view.h"
 
-class NewDialog;
-class KisImage;
 class DCOPObject;
-
-//class KisView;
-//class KisSelection;
-//class KisFrameBuffer;
 
 /*
  * A KisDoc can hold multiple KisImages.
  *
- * KisDoc->current() returns a Pointer to the currently active KisImage.
+ * KisDoc -> currentImg() returns a Pointer to the currently active KisImage.
  */
 
 class KisDoc : public KoDocument
 {
-Q_OBJECT
+	typedef KoDocument super;
+	Q_OBJECT
 
 public:
 	KisDoc(QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false);
@@ -69,7 +66,7 @@ public:
 	virtual bool loadXML(QIODevice *, const QDomDocument& doc);
 	virtual bool completeLoading(KoStore *store);
 	virtual bool completeSaving(KoStore*);
-    virtual DCOPObject* dcopObject();
+	virtual DCOPObject* dcopObject();
 
 	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);
 
@@ -87,12 +84,12 @@ public:
 	/*
 	 * Create new KisImage, add it to our KisImage list and make it the current Image.
 	 */
-	KisImage* newImage(const QString& name, int width, int height, cMode cm = cm_RGBA, uchar bitDepth = 8);
+	KisImageSP newImage(const QString& name, int width, int height, cMode cm = cm_RGBA, uchar bitDepth = 8);
 
 	/*
 	 * Remove img from our list and delete it.
 	 */
-	void removeImage( KisImage *img );
+	void removeImage(KisImageSP img);
 
 	/*
 	 * Return apointer to the current view.
@@ -102,20 +99,25 @@ public:
 	/*
 	 * Return apointer to the current image.
 	 */
-	KisImage* current() const;
-
-    KisImage* imageNum( unsigned int _num );
+	KisImageSP currentImg() const;
+	KisImageSP imageNum( unsigned int _num );
 
 
 	/*
 	 * Return the name of the current image.
 	 */
-	QString currentImage();
+	QString currentImgName();
 
 	/*
 	 * Make img the current image.
 	 */
-	void setCurrentImage(KisImage *img);
+	void setCurrentImage(KisImageSP img);
+
+	/*
+	 * Unset the current image.
+	 */
+
+	void unsetCurrentImage();
 
 	/*
 	 * Does the doc contain any images?
@@ -244,7 +246,7 @@ protected:
 	QDomElement saveImages(QDomDocument& doc);
 
 	/* save layers */
-	QDomElement saveLayers(QDomDocument& doc, KisImage* img);
+	QDomElement saveLayers(QDomDocument& doc, KisImageSP img);
 
 	/* save channels */
 	QDomElement saveChannels(QDomDocument& doc, KisLayer* lay);
@@ -256,7 +258,7 @@ protected:
 	bool loadImages(QDomElement& elem);
 
 	/* load layers */
-	bool loadLayers(QDomElement& elem, KisImage* img);
+	bool loadLayers(QDomElement& elem, KisImageSP img);
 
 	/* load channels */
 	void loadChannels(QDomElement& elem, KisLayer* lay);
@@ -273,11 +275,12 @@ private:
 	   can only have one current image, which is what is loaded and saved -
 	   the permanent data associated with it. This coresponds to an
 	   image, but that image is interchangeable */
-	QPtrList <KisImage> m_Images;
+//	QPtrList <KisImage> m_Images;
+	KisImageSPLst m_images;
 
-	KisView * m_current_view;
-	KisImage  * m_pCurrent;
-	QImage    * m_pClipImage;
+	KisView *m_currentView;
+	KisImageSP m_currentImg;
+	QImage *m_pClipImage;
 
 	KisSelection *m_pSelection;
 	KisFrameBuffer *m_pFrameBuffer;

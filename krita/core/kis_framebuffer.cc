@@ -98,13 +98,13 @@ void KisFrameBuffer::setImage(QImage & img)
 }
 
 /*
-    erase a rectange within a the current layer
+    erase a rectange within a the currentImg layer
     ignore destination color values and alpha value
 */
 
 bool KisFrameBuffer::eraseCurrentLayer()
 {
-	KisImage *img = pDoc -> current();
+	KisImage *img = pDoc -> currentImg();
 
 	if (!img) 
 		return false;
@@ -139,16 +139,16 @@ bool KisFrameBuffer::eraseCurrentLayer()
 }
 
 /*
-    scale - from a rectangle in current layer smoothing colors.
+    scale - from a rectangle in currentImg layer smoothing colors.
     first, add new layer the size of rectange.
-    This will become the new current layer.
+    This will become the new currentImg layer.
     Scale from one layer to other by copying pixels and
     averaging 4 adjacent pixels -
 */
 
 bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
 {
-	KisImage *img = pDoc->current();
+	KisImage *img = pDoc->currentImg();
 	if (!img) return false;
 
 	KisLayer *lay = img->getCurrentLayer();
@@ -161,7 +161,7 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
 	// paramaters: rectangle,  color, clear to transparent, name
 	img->addLayer(nr, white, true, layerName);
 
-	// adding a layer makes it the new current layer
+	// adding a layer makes it the new currentImg layer
 	KisLayer *nlay = img->getCurrentLayer();
 
 	if (!nlay) {
@@ -285,7 +285,7 @@ bool KisFrameBuffer::scaleSmooth(QRect & srcR, int newWidth, int newHeight)
 */
 bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
 {
-	KisImage *img = pDoc->current();
+	KisImage *img = pDoc->currentImg();
 
 	if (!img) 
 		return false;
@@ -300,7 +300,7 @@ bool KisFrameBuffer::scaleRough(QRect & srcR, int newWidth, int newHeight)
 	layerName.sprintf("layer %d", img->layerList().size());
 	img->addLayer(nr, white, true, layerName);
 
-	// adding a layer makes it the new current layer
+	// adding a layer makes it the new currentImg layer
 	KisLayer *nlay = img->getCurrentLayer();
 	
 	if (!nlay) {
@@ -346,7 +346,7 @@ bool KisFrameBuffer::mirror(QRect & )
     // copy from end of src row data to
     // beginning of dest row for each row.
 
-    KisImage *img = pDoc->current();
+    KisImage *img = pDoc->currentImg();
     if (!img) return false;
 
     KisLayer *lay = img->getCurrentLayer();
@@ -362,7 +362,7 @@ bool KisFrameBuffer::flip(QRect & )
     // copy last row in src to first row in dest for each row
     // data in each row should be same
 
-    KisImage *img = pDoc->current();
+    KisImage *img = pDoc->currentImg();
     if (!img) return false;
 
     KisLayer *lay = img->getCurrentLayer();
@@ -378,7 +378,7 @@ bool KisFrameBuffer::rotate90(QRect & )
     // for each row in src, start at end of
     // row in dest and place data in reverse order
 
-    KisImage *img = pDoc->current();
+    KisImage *img = pDoc->currentImg();
     if (!img) return false;
 
     KisLayer *lay = img->getCurrentLayer();
@@ -395,7 +395,7 @@ bool KisFrameBuffer::rotate180(QRect & )
     // each row in reverse order from bottom of dest
     // to top
 
-    KisImage *img = pDoc->current();
+    KisImage *img = pDoc->currentImg();
     if (!img) return false;
 
     KisLayer *lay = img->getCurrentLayer();
@@ -411,7 +411,7 @@ bool KisFrameBuffer::rotate270(QRect & )
     // start at top left of src and copy data in
     // each row in src to each column in dest
 
-    KisImage *img = pDoc->current();
+    KisImage *img = pDoc->currentImg();
     if (!img) return false;
 
     KisLayer *lay = img->getCurrentLayer();
@@ -423,9 +423,9 @@ bool KisFrameBuffer::rotate270(QRect & )
 
 bool KisFrameBuffer::QImageToLayer(QImage *, QRect & , QRect & )
 {
-    // use current layer only
-    // copy from rectangle in QImage to rectangle in current layer
-    KisImage *img = pDoc->current();
+    // use currentImg layer only
+    // copy from rectangle in QImage to rectangle in currentImg layer
+    KisImage *img = pDoc->currentImg();
     if (!img) return false;
 
     KisLayer *lay = img->getCurrentLayer();
@@ -437,9 +437,9 @@ bool KisFrameBuffer::QImageToLayer(QImage *, QRect & , QRect & )
 
 bool KisFrameBuffer::layerToQImage(QImage *, QRect &, QRect &)
 {
-    // use current layer only
+    // use currentImg layer only
     // normally src and destination rectangles are same size
-    KisImage *img = pDoc->current();
+    KisImage *img = pDoc->currentImg();
     if (!img) return false;
 
     KisLayer *lay = img->getCurrentLayer();
@@ -451,7 +451,7 @@ bool KisFrameBuffer::layerToQImage(QImage *, QRect &, QRect &)
 
 bool KisFrameBuffer::changeColors(uint oldColor, uint newColor, QRect & r, KisSelection * /*selection*/)
 {
-	KisImage *img = pDoc->current();
+	KisImage *img = pDoc->currentImg();
 	if (!img) return false;
 
 	KisLayer *lay = img->getCurrentLayer();
@@ -510,8 +510,8 @@ bool KisFrameBuffer::changeColors(uint oldColor, uint newColor, QRect & r, KisSe
 /*
     setPenPattern - public method of setting the pen pattern
     externally.  This will almost always be the same as the
-    view's current pattern, but it can be set to any pattern.
-    Normally this is called when the view sets a new current
+    view's currentImg pattern, but it can be set to any pattern.
+    Normally this is called when the view sets a new currentImg
     pattern - kis_view.cc.
 
 */
@@ -563,7 +563,7 @@ void KisFrameBuffer::setPatternToPixel(KisLayer *lay, int _x, int _y, uint /*val
 void KisFrameBuffer::setGradientPaint(bool _gradientPaint,
     KoColor _startColor, KoColor _endColor)
 {
-    KisImage *img = pDoc->current();
+    KisImage *img = pDoc->currentImg();
     if (!img) return;
 
     KisLayer *lay = img->getCurrentLayer();

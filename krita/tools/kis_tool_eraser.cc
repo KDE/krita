@@ -76,7 +76,7 @@ void EraserTool::setBrush(KisBrush *_brush)
 
 void EraserTool::mousePress(QMouseEvent *e)
 {
-	KisImage *img = m_doc->current();
+	KisImage *img = m_doc->currentImg();
 
 	if (!img) 
 		return;
@@ -98,13 +98,13 @@ void EraserTool::mousePress(QMouseEvent *e)
 	m_dragdist = 0;
 
 	if (paint(pos))
-		m_doc->current()->markDirty(QRect(pos - m_brush->hotSpot(), m_brush->size()));
+		m_doc->currentImg()->markDirty(QRect(pos - m_brush->hotSpot(), m_brush->size()));
 }
 
 
 bool EraserTool::paint(QPoint pos)
 {
-	KisImage * img = m_doc->current();
+	KisImage * img = m_doc->currentImg();
 	KisLayer *lay = img->getCurrentLayer();
 
 	if (!img)	return false;
@@ -208,7 +208,7 @@ bool EraserTool::paint(QPoint pos)
 
 void EraserTool::mouseMove(QMouseEvent *e)
 {
-	KisImage * img = m_doc->current();
+	KisImage * img = m_doc->currentImg();
 	if (!img) return;
 
 	int spacing = m_brush->spacing();

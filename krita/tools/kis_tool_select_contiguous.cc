@@ -52,8 +52,8 @@ void ContiguousSelectTool::clearOld()
    if(m_dragStart.x() != -1)
         drawRect( m_dragStart, m_dragEnd ); 
 
-    QRect updateRect(0, 0, m_doc->current()->width(), 
-        m_doc->current()->height());
+    QRect updateRect(0, 0, m_doc->currentImg()->width(), 
+        m_doc->currentImg()->height());
     m_view->updateCanvas(updateRect);
 
     m_dragStart = QPoint(-1,-1);

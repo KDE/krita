@@ -181,7 +181,7 @@ void LayerTable::init( KisDoc* doc)
 
     setCellWidth( CELLWIDTH );
     setCellHeight( iheight );
-    m_selected = (m_doc -> current() ? m_doc -> current()->layerList().size() : 0) - 1;
+    m_selected = (m_doc -> currentImg() ? m_doc -> currentImg()->layerList().size() : 0) - 1;
 
     QPopupMenu *submenu = new QPopupMenu();
 
@@ -224,7 +224,7 @@ void LayerTable::slotDocUpdated()
 
 void LayerTable::paintCell(QPainter *painter, int row, int /*col*/)
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 	KisLayer *lay = img -> layerList().at(row);
 
 	if (!lay)
@@ -258,7 +258,7 @@ void LayerTable::paintCell(QPainter *painter, int row, int /*col*/)
 
 void LayerTable::updateTable()
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (img) {
 		m_items = img -> layerList().size();
@@ -281,7 +281,7 @@ void LayerTable::updateTable()
 
 void LayerTable::update_contextmenu(int indx)
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (static_cast<unsigned int>(indx) < img -> layerList().size()) {
 		KisLayer *lay = img -> layerList().at(indx);
@@ -293,7 +293,7 @@ void LayerTable::update_contextmenu(int indx)
 
 void LayerTable::selectLayer(int indx)
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 	int currentSel = m_selected;
 
 	m_selected = -1;
@@ -305,7 +305,7 @@ void LayerTable::selectLayer(int indx)
 
 void LayerTable::slotInverseVisibility(int indx)
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 	KisLayer *lay = img -> layerList().at(indx);
 
 	lay -> setVisible(!img -> layerList().at(indx) -> visible());
@@ -316,7 +316,7 @@ void LayerTable::slotInverseVisibility(int indx)
 
 void LayerTable::slotInverseLinking(int indx)
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 	KisLayer *lay = img -> layerList().at(indx);
 
 	lay -> setLinked(!lay -> linked());
@@ -399,7 +399,7 @@ void LayerTable::mouseDoubleClickEvent( QMouseEvent *ev )
 
 void LayerTable::slotAddLayer()
 {
-    KisImage *img = m_doc->current();
+    KisImage *img = m_doc->currentImg();
 
     QString name = i18n( "layer %1" ).arg( img->layerList().size() );
 
@@ -419,13 +419,13 @@ void LayerTable::slotAddLayer()
 
 void LayerTable::slotRemoveLayer()
 {
-  if( m_doc->current()->layerList().size() != 0 )
+  if( m_doc->currentImg()->layerList().size() != 0 )
   {
-    QRect uR = m_doc->current()->layerList().at(m_selected)->imageExtents();
-    m_doc->current()->removeLayer( m_selected );
-    m_doc->current()->markDirty(uR);
+    QRect uR = m_doc->currentImg()->layerList().at(m_selected)->imageExtents();
+    m_doc->currentImg()->removeLayer( m_selected );
+    m_doc->currentImg()->markDirty(uR);
 
-    if( m_selected == (int)m_doc->current()->layerList().size() )
+    if( m_selected == (int)m_doc->currentImg()->layerList().size() )
       m_selected--;
 
     updateTable();
@@ -437,16 +437,16 @@ void LayerTable::slotRemoveLayer()
 
 void LayerTable::swapLayers( int a, int b )
 {
-    if( ( m_doc->current()->layerList().at( a )->visible() ) &&
-      ( m_doc->current()->layerList().at( b )->visible() ) )
+    if( ( m_doc->currentImg()->layerList().at( a )->visible() ) &&
+      ( m_doc->currentImg()->layerList().at( b )->visible() ) )
     {
-        QRect l1 = m_doc->current()->layerList().at( a )->imageExtents();
-        QRect l2 = m_doc->current()->layerList().at( b )->imageExtents();
+        QRect l1 = m_doc->currentImg()->layerList().at( a )->imageExtents();
+        QRect l2 = m_doc->currentImg()->layerList().at( b )->imageExtents();
 
         if( l1.intersects( l2 ) )
         {
             QRect rect = l1.intersect( l2 );
-            m_doc->current()->markDirty( rect );
+            m_doc->currentImg()->markDirty( rect );
         }
     }
 }
@@ -458,7 +458,7 @@ void LayerTable::slotRaiseLayer()
 
     if( m_selected != newpos )
     {
-        m_doc->current()->upperLayer( m_selected );
+        m_doc->currentImg()->upperLayer( m_selected );
         repaint();
         swapLayers( m_selected, newpos );
         selectLayer( newpos );
@@ -470,12 +470,12 @@ void LayerTable::slotRaiseLayer()
 
 void LayerTable::slotLowerLayer()
 {
-    int npos = (m_selected + 1) < (int)m_doc->current()->layerList().size() ?
+    int npos = (m_selected + 1) < (int)m_doc->currentImg()->layerList().size() ?
         m_selected + 1 : m_selected;
 
     if( m_selected != npos )
     {
-        m_doc->current()->lowerLayer( m_selected );
+        m_doc->currentImg()->lowerLayer( m_selected );
         repaint();
         swapLayers( m_selected, npos );
         selectLayer( npos );
@@ -487,13 +487,13 @@ void LayerTable::slotLowerLayer()
 
 void LayerTable::slotFrontLayer()
 {
-  if( m_selected != (int)(m_doc->current()->layerList().size() - 1))
+  if( m_selected != (int)(m_doc->currentImg()->layerList().size() - 1))
   {
-    m_doc->current()->setFrontLayer( m_selected );
-    selectLayer( m_doc->current()->layerList().size() - 1 );
+    m_doc->currentImg()->setFrontLayer( m_selected );
+    selectLayer( m_doc->currentImg()->layerList().size() - 1 );
 
-    QRect uR = m_doc->current()->layerList().at( m_selected )->imageExtents();
-    m_doc->current()->markDirty( uR );
+    QRect uR = m_doc->currentImg()->layerList().at( m_selected )->imageExtents();
+    m_doc->currentImg()->markDirty( uR );
 
     updateAllCells();
 
@@ -506,11 +506,11 @@ void LayerTable::slotBackgroundLayer()
 {
     if( m_selected != 0 )
     {
-        m_doc->current()->setBackgroundLayer( m_selected );
+        m_doc->currentImg()->setBackgroundLayer( m_selected );
         selectLayer( 0 );
 
-        QRect uR = m_doc->current()->layerList().at(m_selected)->imageExtents();
-        m_doc->current()->markDirty(uR);
+        QRect uR = m_doc->currentImg()->layerList().at(m_selected)->imageExtents();
+        m_doc->currentImg()->markDirty(uR);
 
         updateAllCells();
 
@@ -521,8 +521,8 @@ void LayerTable::slotBackgroundLayer()
 
 void LayerTable::updateAllCells()
 {
-    if(m_doc->current())
-        for( int i = 0; i < (int)m_doc->current()->layerList().size(); i++ )
+    if(m_doc->currentImg())
+        for( int i = 0; i < (int)m_doc->currentImg()->layerList().size(); i++ )
             updateCell( i, 0 );
 }
 
@@ -530,11 +530,11 @@ void LayerTable::updateAllCells()
 void LayerTable::slotProperties()
 {
     if( LayerPropertyDialog::editProperties(
-        *( m_doc->current()->layerList().at(m_selected))))
+        *( m_doc->currentImg()->layerList().at(m_selected))))
     {
-        QRect uR = m_doc->current()->layerList().at( m_selected )->imageExtents();
+        QRect uR = m_doc->currentImg()->layerList().at( m_selected )->imageExtents();
         updateCell( m_selected, 0 );
-        m_doc->current()->markDirty( uR );
+        m_doc->currentImg()->markDirty( uR );
 
         m_doc->setModified( true );
     }
@@ -542,7 +542,7 @@ void LayerTable::slotProperties()
 
 void LayerTable::slotAboutToShow()
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 	bool activate = static_cast<unsigned int>(m_selected) < img -> layerList().size();
 
 	kdDebug() << "m_selected =  " << m_selected << endl;

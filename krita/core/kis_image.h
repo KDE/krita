@@ -36,30 +36,21 @@
 
 #include "kis_channel.h"
 #include "kis_layer.h"
-#include "kis_global.h"
+#include "kis_paint_device.h"
 
 class DCOPObject;
 class KCommand;
 class KisBrush;
 class KisDoc;
 
-typedef KSharedPtr<KisPaintDevice> KisPaintDeviceSP;
-typedef KSharedPtr<KisLayer> KisLayerSP;
-typedef KSharedPtr<KisChannel> KisChannelSP;
+class KisImage;
 
-typedef QValueVector<KisPaintDeviceSP> KisPaintDeviceSPLst;
-typedef KisPaintDeviceSPLst::iterator KisPaintDeviceSPLstIterator;
-typedef KisPaintDeviceSPLst::const_iterator KisPaintDeviceSPLstConstIterator;
+typedef KSharedPtr<KisImage> KisImageSP;
+typedef QValueVector<KisImageSP> KisImageSPLst;
+typedef KisImageSPLst::iterator KisImageSPLstIterator;
+typedef KisImageSPLst::const_iterator KisImageSPLstConstIterator;
 
-typedef QValueVector<KisLayerSP> KisLayerSPLst;
-typedef KisLayerSPLst::iterator KisLayerSPLstIterator;
-typedef KisLayerSPLst::const_iterator KisLayerSPLstConstIterator;
-
-typedef QValueVector<KisChannelSP> KisChannelSPLst;
-typedef KisChannelSPLst::iterator KisChannelSPLstIterator;
-typedef KisChannelSPLst::const_iterator KisChannelSPLstConstIterator;
-
-class KisImage : public QObject {
+class KisImage : public QObject, public KShared {
 	Q_OBJECT
 	typedef QObject super;
 

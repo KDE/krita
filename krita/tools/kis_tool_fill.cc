@@ -176,7 +176,7 @@ bool FillTool::flood(int startX, int startY)
     int starty = startY;
     QRgb srgb;
     
-    KisImage *img = m_doc->current();
+    KisImage *img = m_doc->currentImg();
     if (!img) return false;    
 
     KisLayer *lay = img->getCurrentLayer();
@@ -211,12 +211,12 @@ bool FillTool::flood(int startX, int startY)
               << " floodRect.top() "  << floodRect.top() << endl;
 
     /* set up gradient - if any.  this should only be done when the
-    current layer is changed or when the fgColor or bgColor are changed,
+    currentImg layer is changed or when the fgColor or bgColor are changed,
     or when the gradient is changed with the gradient settings dialog
     or by selecting a prexisting gradient from the chooser.
     Otherwise, it can get slow calculating gradients for every fill
     operation when this calculation is not needed - when the gradient
-    array is already filled with current values */
+    array is already filled with currentImg values */
     
     if(m_useGradient)
     {
@@ -239,7 +239,7 @@ bool FillTool::flood(int startX, int startY)
 
 void FillTool::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_doc->current();
+    KisImage * img = m_doc->currentImg();
     if (!img) return;
 
     if (e->button() != QMouseEvent::LeftButton

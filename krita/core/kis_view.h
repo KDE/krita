@@ -231,7 +231,7 @@ protected:
 	void addHasNewLayer(QImage& loadedImg, KURL& u);
 	void paintView(const QRect& rc);
 	void clearCanvas(const QRect& rc);
-             
+
 protected:
    	// krayon box floating dialog actions
 	ktvector m_tools;

@@ -35,7 +35,7 @@ ColorPicker::~ColorPicker() {}
 KoColor ColorPicker::pick(int x, int y)
 {
 #if 0
-    KisImage * img = m_doc->current();
+    KisImage * img = m_doc->currentImg();
     KisLayer *lay = img->getCurrentLayer();
     
     if (!img) return KoColor::white();
@@ -56,7 +56,7 @@ KoColor ColorPicker::pick(int x, int y)
 
 void ColorPicker::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_doc->current();
+    KisImage * img = m_doc->currentImg();
     if (!img) return;
 
     if (e->button() != QMouseEvent::LeftButton

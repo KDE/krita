@@ -53,7 +53,7 @@ void RectangularSelectTool::clearOld()
 
 	draw(m_dragStart, m_dragEnd); 
 	m_cleared = true;
-	rc.setRect(0, 0, m_doc -> current() -> width(), m_doc -> current() -> height());
+	rc.setRect(0, 0, m_doc -> currentImg() -> width(), m_doc -> currentImg() -> height());
 	m_view -> updateCanvas(rc);
 	m_selectRegion = QRegion();
 	m_dragEnd = m_dragStart = QPoint(0, 0);
@@ -172,7 +172,7 @@ void RectangularSelectTool::mouseMove( QMouseEvent* event )
 
 void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (!img) 
 		return;
@@ -217,7 +217,7 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 			return;
         
 		// if there are several partially overlapping or interior
-		// layers we must be sure to draw only on the current one
+		// layers we must be sure to draw only on the currentImg one
 		if (selectRect.intersects(lay -> layerExtents())) {
 			selectRect = selectRect.intersect(lay -> layerExtents());
 
@@ -232,11 +232,11 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 				<< " bottom: " << selectRect.bottom() << endl;
 		}    
 
-		if (m_dragEnd.x() > m_doc -> current() -> width())
-			m_dragEnd.setX(m_doc -> current() -> width());
+		if (m_dragEnd.x() > m_doc -> currentImg() -> width())
+			m_dragEnd.setX(m_doc -> currentImg() -> width());
 
-		if (m_dragEnd.y() > m_doc -> current() -> height())
-			m_dragEnd.setY(m_doc -> current() -> height());
+		if (m_dragEnd.y() > m_doc -> currentImg() -> height())
+			m_dragEnd.setY(m_doc -> currentImg() -> height());
 
 		if (old_end != m_dragEnd) {
 			draw(m_dragStart, old_end);

@@ -31,7 +31,7 @@ KIsDocIface::KIsDocIface( KisDoc *doc_ )
 
 QString KIsDocIface::currentImageName() const
 {
-    return m_doc->currentImage();
+    return m_doc->currentImgName();
 }
 
 DCOPRef KIsDocIface::image( int num )

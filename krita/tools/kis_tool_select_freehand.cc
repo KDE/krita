@@ -73,7 +73,7 @@ void FreehandSelectTool::clearOld()
 	m_pointArray.resize(0);
 	
 	// clear everything in 
-	QRect updateRect(0, 0, m_doc->current()->width(), m_doc->current()->height());
+	QRect updateRect(0, 0, m_doc->currentImg()->width(), m_doc->currentImg()->height());
 	m_view->updateCanvas(updateRect);
 	m_selectRegion = QRegion();
 }
@@ -218,7 +218,7 @@ void FreehandSelectTool::mouseRelease( QMouseEvent* event )
 		// we need a bounding rectangle and a point array of 
 		// points in the freehand line        
 
-		m_doc->getSelection()->setPolygonalSelection( m_imageRect, points, m_doc->current()->getCurrentLayer() );
+		m_doc->getSelection()->setPolygonalSelection( m_imageRect, points, m_doc->currentImg()->getCurrentLayer() );
 
 		kdDebug(0) << "selectRect" 
 			<< " left: "   << m_imageRect.left() 
@@ -245,7 +245,7 @@ void FreehandSelectTool::mouseRelease( QMouseEvent* event )
 
 		QPoint pos = event->pos();
 
-		KisImage *img = m_doc->current();
+		KisImage *img = m_doc->currentImg();
 		if ( !img )
 			return;
 		if( !img->getCurrentLayer()->visible() )

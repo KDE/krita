@@ -82,7 +82,7 @@ void PenTool::mousePress(QMouseEvent *e)
     done in mouseMove and Paint routines.  Nothing
     happens unless mouse is first pressed anyway */
 
-    KisImage * img = m_doc->current();
+    KisImage * img = m_doc->currentImg();
     if (!img) return;
 
     if(!img->getCurrentLayer())
@@ -106,7 +106,7 @@ void PenTool::mousePress(QMouseEvent *e)
 
     if(paint(pos))
     {
-         m_doc->current()->markDirty(QRect(pos
+         m_doc->currentImg()->markDirty(QRect(pos
             - m_brush->hotSpot(), m_brush->size()));
     }
 }
@@ -114,7 +114,7 @@ void PenTool::mousePress(QMouseEvent *e)
 
 bool PenTool::paint(QPoint pos)
 {
-	KisImage * img = m_doc->current();
+	KisImage * img = m_doc->currentImg();
 	KisLayer *lay = img->getCurrentLayer();
 	KisFrameBuffer *m_fb = m_doc->frameBuffer();
 
@@ -185,7 +185,7 @@ bool PenTool::paint(QPoint pos)
 
 void PenTool::mouseMove(QMouseEvent *e)
 {
-    KisImage * img = m_doc->current();
+    KisImage * img = m_doc->currentImg();
 
     int spacing = m_brush->spacing();
     if (spacing <= 0) spacing = 1;

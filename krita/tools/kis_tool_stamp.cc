@@ -85,7 +85,7 @@ void StampTool::setOpacity(int /* opacity */)
 
 /*
     On mouse press, the image is stamped or pasted
-    into the current layer
+    into the currentImg layer
 */
 
 void StampTool::mousePress(QMouseEvent *e)
@@ -95,7 +95,7 @@ void StampTool::mousePress(QMouseEvent *e)
 
 	// do sanity checking here, if possible, not inside loops
 	// when moving mouse!
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (!img)  
 		return;
@@ -147,7 +147,7 @@ void StampTool::mousePress(QMouseEvent *e)
 
 bool StampTool::stampToCanvas(QPoint pos)
 {
-    KisImage* img = m_doc->current();
+    KisImage* img = m_doc->currentImg();
     KisLayer *lay = img->getCurrentLayer();
     float zF = m_view->zoomFactor();
 
@@ -166,7 +166,7 @@ bool StampTool::stampToCanvas(QPoint pos)
 
     /* check image bounds.  The image extents are a rectangle
     containing all the layers that contribute to it, or
-    maybe just a rectangle containing the current layer in
+    maybe just a rectangle containing the currentImg layer in
     terms of canvas coords.  This is unclear... */
 
     ur = ur.intersect(img->imageExtents());
@@ -182,7 +182,7 @@ bool StampTool::stampToCanvas(QPoint pos)
 
     /* check the layer bounds. There may be several different
     layers visible at once and we only want to draw on the
-    current layer - which usually is also the topmost one
+    currentImg layer - which usually is also the topmost one
     Note:  This is probably unnecessary because intersects
     imageExtents() above is probably the same, but I'm not sure.
     Better to be safe... */
@@ -229,7 +229,7 @@ bool StampTool::stampToCanvas(QPoint pos)
 
 bool StampTool::stampColor(QPoint pos)
 {
-	KisImage *img = m_doc->current();
+	KisImage *img = m_doc->currentImg();
 	KisLayer *lay = img->getCurrentLayer();
 	QImage  *qimg = m_pattern->image();
 
@@ -305,7 +305,7 @@ bool StampTool::stampColor(QPoint pos)
 			}
 
 			/*  Do rudimentary color blending based on averaging
-			    values in the pattern, the background, and the current
+			    values in the pattern, the background, and the currentImg
 			    fgColor.  Later, various types of color blending will
 			    be implemented for patterns and brushes using krayon's
 			    predefined blend types. (not finished coding yet, but
@@ -343,7 +343,7 @@ bool StampTool::stampMonochrome(QPoint /*pos*/)
 
 void StampTool::mouseMove(QMouseEvent *e)
 {
-    KisImage * img = m_doc->current();
+    KisImage * img = m_doc->currentImg();
     if(!img) return;
 
     KisLayer *lay = img->getCurrentLayer();
@@ -416,7 +416,7 @@ void StampTool::mouseMove(QMouseEvent *e)
             m_view->updateCanvas(ur);
 
             // after old spot is refreshed, stamp image into canvas
-            // at current location. This may be slow or messy if updates
+            // at currentImg location. This may be slow or messy if updates
             // rely on a timer - need threads and semaphores here to let
             // us know when old marking has been replaced with image
             // if timer is used, but the timer is not used for this.

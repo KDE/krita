@@ -220,7 +220,7 @@ void KisTool::setClipImage()
 // drag clip image
 void KisTool::dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot) const
 {
-    KisImage *img = m_doc->current();
+    KisImage *img = m_doc->currentImg();
     if ( !img )
         return;
 
@@ -290,7 +290,7 @@ void KisTool::dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot) co
 // pasete clip image
 bool KisTool::pasteClipImage(const QPoint& pos)
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (!img)
 		return false;

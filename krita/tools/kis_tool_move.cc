@@ -50,7 +50,7 @@ void MoveCommand::unexecute()
 
 void MoveCommand::moveTo(const QPoint& pos)
 {
-	KisImage* img = m_doc->current();
+	KisImage* img = m_doc->currentImg();
 
 	if (!img) 
 		return;
@@ -76,7 +76,7 @@ MoveTool::~MoveTool()
 
 void MoveTool::mousePress( QMouseEvent *e )
 {
-	KisImage *img = m_doc -> current();
+	KisImage *img = m_doc -> currentImg();
 
 	if (!img)
 		return;
@@ -102,7 +102,7 @@ void MoveTool::mousePress( QMouseEvent *e )
 
 void MoveTool::mouseMove( QMouseEvent *e )
 {
-	KisImage* img = m_doc->current();
+	KisImage* img = m_doc->currentImg();
 	if (!img) return;
 
 	if( m_dragging )
@@ -126,7 +126,7 @@ void MoveTool::mouseMove( QMouseEvent *e )
 
 void MoveTool::mouseRelease(QMouseEvent *e )
 {
-	KisImage* img = m_doc->current();
+	KisImage* img = m_doc->currentImg();
 	if (!img) return;
 
 	if( e->button() != LeftButton ) return;

@@ -31,6 +31,13 @@
 #include "kis_tiles.h"
 #include "kis_tile.h"
 
+class KisPaintDevice;
+
+typedef KSharedPtr<KisPaintDevice> KisPaintDeviceSP;
+typedef QValueVector<KisPaintDeviceSP> KisPaintDeviceSPLst;
+typedef KisPaintDeviceSPLst::iterator KisPaintDeviceSPLstIterator;
+typedef KisPaintDeviceSPLst::const_iterator KisPaintDeviceSPLstConstIterator;
+
 class KisPaintDevice : public QObject, public KShared {
 	typedef QObject super;
 

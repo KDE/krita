@@ -32,6 +32,13 @@
 #include "kis_global.h"
 #include "kis_paint_device.h"
 
+class KisLayer;
+
+typedef KSharedPtr<KisLayer> KisLayerSP;
+typedef QValueVector<KisLayerSP> KisLayerSPLst;
+typedef KisLayerSPLst::iterator KisLayerSPLstIterator;
+typedef KisLayerSPLst::const_iterator KisLayerSPLstConstIterator;
+
 class KisLayer : public KisPaintDevice {
 	Q_OBJECT
 	typedef KisPaintDevice super;

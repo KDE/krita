@@ -216,8 +216,7 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
 		    filled -> colorStrategy() -> toQColor((QUANTUM*) line, &c, &opacity);
 		    m_selection -> colorStrategy() -> toQColor((QUANTUM*) selectionIt,
 							       &notUsed, &selectionOpacity);
-		    opacity = ((OPACITY_OPAQUE - selectionOpacity) * opacity)
-			    / QUANTUM_MAX;
+		    opacity = (selectionOpacity * opacity) / QUANTUM_MAX;
 		    filled -> colorStrategy() -> nativeColor(c, opacity, (QUANTUM*) line);
 		    ++m_pixelsDone;
 		    line++;

@@ -31,7 +31,7 @@
 #include "scan.moc"
 
 typedef KGenericFactory<Scan> ScanFactory;
-K_EXPORT_COMPONENT_FACTORY( libkofficescan, ScanFactory( "kscan_plugin" ) );
+K_EXPORT_COMPONENT_FACTORY( kofficescan, ScanFactory( "kscan_plugin" ) );
 
 Scan::Scan(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name), scanDialog( 0 )

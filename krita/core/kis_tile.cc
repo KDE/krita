@@ -146,3 +146,36 @@ const uchar *KisTile::data(int x, int y) const
 	return data() + offset;
 }
 
+QImage KisTile::convertTileToImage()
+{
+	QImage img(width(), height(), bpp() * 8);
+	uchar *src = data();
+	uchar bytes = bpp();
+
+	for (int y = 0; y < TILE_SIZE; y++) {
+		uchar *dst = img.scanLine(y);
+
+		for (int x = TILE_SIZE; x; x--) {
+			memcpy(dst, src, bytes);
+			dst += bytes;
+			src += bytes;
+		}
+	}
+}
+
+void KisTile::convertTileFromImage(const QImage& img)
+{
+	uchar *dst = data();
+	uchar bytes = bpp();
+
+	for (int y = 0; y < TILE_SIZE; y++) {
+		uchar *src = img.scanLine(y);
+
+		for (int x = TILE_SIZE; x; x--) {
+			memcpy(dst, src, bytes);
+			dst += bytes;
+			src += bytes;
+		}
+	}
+}
+

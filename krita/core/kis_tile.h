@@ -23,6 +23,7 @@
 
 #include <qcolor.h>
 #include <qpoint.h>
+#include <qimage.h>
 #include <qmutex.h>
 #include <qvaluevector.h>
 
@@ -62,6 +63,9 @@ public:
 	inline uint size() const;
 	inline uint width() const;
 	inline uint height() const;
+
+	QImage convertTileToImage();
+	void convertTileFromImage(const QImage& img);
 	
 private:
 	void initTile();

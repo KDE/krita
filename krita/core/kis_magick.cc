@@ -40,14 +40,7 @@ QImage convertFromMagickImage(const Image& mimg)
 				const PixelPacket *pixel = pixel_cache + row * img.width() + column;
 				QRgb rgb;
 
-#if QuantumDepth == 8
-				rgb = qRgba(pixel -> red, pixel -> green, pixel -> blue, pixel -> opacity);
-#elif QuantumDepth == 16
 				rgb = qRgba(Downscale(pixel -> red), Downscale(pixel -> green), Downscale(pixel -> blue), Downscale(pixel -> opacity));
-#else
-#error "Unkown QuantumDepth"
-#endif
-
 				img.setPixel(column, row, rgb);
 			}
 		}
@@ -70,13 +63,7 @@ Image convertToMagickImage(const QImage& img)
 			PixelPacket *pixel = pixel_cache + row * img.width() + column;
 			QRgb rgb = img.pixel(column, row);
 
-#if QuantumDepth == 8
-			*pixel = Color(qRed(rgb), qGreen(rgb), qBlue(rgb), qAlpha(rgb));
-#elif QuantumDepth == 16
 			*pixel = Color(Upscale(qRed(rgb)), Upscale(qGreen(rgb)), Upscale(qBlue(rgb)), Upscale(qAlpha(rgb)));
-#else
-#error "Unkown QuantumDepth"
-#endif
 		}
 	}
 

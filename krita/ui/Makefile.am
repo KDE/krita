@@ -43,7 +43,7 @@ libkisui_la_SOURCES = kis_dlg_preferences.cc \
     kis_previewview.cc \
     kis_previewdialog.cc \
     kis_birdeye_box.cc \
-    kis_paintop_box.cc \
+    kis_paint_box.cc \
     wdgmatrix.ui \
     wdghistogram.ui \
     kis_previewwidgetbase.ui \
@@ -96,7 +96,7 @@ noinst_HEADERS = kis_dlg_preferences.h \
     wdgapplyprofile.h \
     wdgdockertab.h \
     kis_birdeye_box.h \
-    kis_paintop_box.h
+    kis_paint_box.h
 
 
 libkisui_la_METASOURCES = AUTO

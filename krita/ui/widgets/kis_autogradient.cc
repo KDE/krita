@@ -233,9 +233,9 @@ KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QStrin
 	connect(leftColorButton, SIGNAL( changed(const QColor&) ), SLOT( slotChangedLeftColor(const QColor&) ));
 	connect(rightColorButton, SIGNAL( changed(const QColor&) ), SLOT( slotChangedRightColor(const QColor&) ));
 
-	intNumInputLeftOpacity -> setRange( 0, 100);
+	intNumInputLeftOpacity -> setRange( 0, 100, false);
 	connect(intNumInputLeftOpacity, SIGNAL( valueChanged(int) ), SLOT( slotChangedLeftOpacity(int) ));
-	intNumInputRightOpacity -> setRange( 0, 100);
+	intNumInputRightOpacity -> setRange( 0, 100, false);
 	connect(intNumInputRightOpacity, SIGNAL( valueChanged(int) ), SLOT( slotChangedRightOpacity(int) ));
 }
 

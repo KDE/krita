@@ -36,18 +36,18 @@
 
 
 KisPaintOp * KisFilterOpFactory::createOp(KisPainter * painter)
-{ 
-	KisPaintOp * op = new KisFilterOp(painter); 
-	return op; 
+{
+	KisPaintOp * op = new KisFilterOp(painter);
+	return op;
 }
 
 
 KisFilterOp::KisFilterOp(KisPainter * painter)
-	: super(painter) 
+	: super(painter)
 {
 }
 
-KisFilterOp::~KisFilterOp() 
+KisFilterOp::~KisFilterOp()
 {
 }
 
@@ -56,9 +56,8 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 			  const double /*xTilt*/,
 			  const double /*yTilt*/)
 {
-#if 0 //AUTOLAYER
 	if (!m_painter) return;
-	
+
 	KisFilterSP filter = m_painter -> filter();
 	if (!filter) return;
 
@@ -90,17 +89,22 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 		KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
 		dab = computeDab(mask);
 	}
-	
+
 	m_painter -> setPressure(pressure);
-	
-	Q_INT32 sw = dab->width();
-	Q_INT32 sh = dab->height();
 
-	if( x + sw > device->width() )
-		sw = device->width() - x;
 
-	if( y + sh > device->height() )
-		sh = device->height() - y;
+	QRect r = dab -> extent();
+
+	Q_INT32 sw = r.width();
+	Q_INT32 sh = r.height();
+
+	r = device -> extent();
+
+	if( x + sw > r.width() )
+		sw = r.width() - x;
+
+	if( y + sh > r.height() )
+		sh = r.height() - y;
 
 	if(sw < 0 || sh < 0)
 		return;
@@ -116,6 +120,8 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 		sy = -y;
 		y = 0;
 	}
+
+#if 0 // AUTOLAYERS
 
 	KisPaintDeviceSP srcdev = new KisPaintDevice(sw, sh, dab.data() -> colorStrategy(), "");
 
@@ -155,7 +161,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	}
 // 	kdDebug() << "applying filter to the square" << endl;
 	filter -> process( srcdev, m_filterConfiguration, QRect(0, 0, srcdev -> width(), srcdev -> height()), 0 );
-// XXX: Why was this commented out, and by whom?	
+// XXX: Why was this commented out, and by whom?
 // 	KisIteratorLinePixel srcLit2 = srcdev->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
 // 	KisIteratorLinePixel srcLitend2 = srcdev->iteratorPixelSelectionEnd( 0, sx, sw - 1, sh - 1);
 // 	while ( srcLit <= srcLitend )
@@ -173,9 +179,9 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 // 		}
 // 		++srcLit2;
 // 	}
-	
-	
+
+
 	m_painter -> bitBlt( x,  y,  m_painter -> compositeOp(), srcdev, m_painter -> opacity(), sx, sy, srcdev -> width(),srcdev -> width());
 	m_painter -> addDirtyRect(QRect(x, y, dab -> width(), dab -> height()));
-#endif //AUTOLAYER
+#endif
 }

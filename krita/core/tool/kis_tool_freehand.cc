@@ -22,6 +22,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwidget.h>
+#include <qrect.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -59,6 +60,7 @@ KisToolFreehand::KisToolFreehand(QString transactionText)
 
 	m_opacity = OPACITY_OPAQUE;
 	m_compositeOp = COMPOSITE_OVER;
+
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -79,6 +81,8 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 
 	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 
+// 	m_dirtyRect = QRect(0, 0, 0, 0);
+
         if (e -> button() == QMouseEvent::LeftButton) {
 
 		initPaint(e);
@@ -90,7 +94,11 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 		m_prevXTilt = e -> xTilt();
 		m_prevYTilt = e -> yTilt();
 
-		m_currentImage -> notify(m_painter -> dirtyRect());
+ 		QRect r = m_painter -> dirtyRect();
+// 		if ( r.isValid() ) {
+// 			m_dirtyRect = m_painter -> dirtyRect();
+ 			m_currentImage -> notify(r);
+// 		}
          }
 }
 
@@ -111,7 +119,9 @@ void KisToolFreehand::move(KisMoveEvent *e)
 		m_prevXTilt = e -> xTilt();
 		m_prevYTilt = e -> yTilt();
 
-		m_currentImage -> notify(m_painter -> dirtyRect());
+ 		QRect r = m_painter -> dirtyRect();
+// 		m_dirtyRect |= r;
+		m_currentImage -> notify(r);
 	}
 }
 
@@ -129,8 +139,7 @@ void KisToolFreehand::initPaint(KisEvent *)
 			delete m_painter;
 		if (m_useTempLayer) {
 			// XXX ugly! hacky!
-			m_target = dynamic_cast<KisDoc*>(m_subject->document())->layerAdd(
-				currentImage(), "temp", OPACITY_OPAQUE);
+			m_target = dynamic_cast<KisDoc*>(m_subject->document())->layerAdd(currentImage(), "temp", OPACITY_OPAQUE);
 			KisFillPainter painter(m_target.data());
 			//painter.eraseRect(0, 0, m_target -> width(), m_target -> height());
 			painter.end();
@@ -169,10 +178,10 @@ void KisToolFreehand::initPaint(KisEvent *)
 #endif
 }
 
-void KisToolFreehand::endPaint() 
+void KisToolFreehand::endPaint()
 {
 	m_mode = HOVER;
-	if (m_currentImage) { 
+	if (m_currentImage) {
 		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
 		if (adapter && m_painter) {
 			// If painting in mouse release, make sure painter
@@ -183,16 +192,15 @@ void KisToolFreehand::endPaint()
 				painter.setCompositeOp(m_compositeOp);
 				painter.beginTransaction(m_transactionText);
 
-				//AUTOLAYER fix this by making a form of dirtyRect
-				painter.bitBlt(0, 0,  m_compositeOp, m_target, OPACITY_OPAQUE,
-					0, 0, 400, 400);
+// 				painter.bitBlt(m_dirtyRect.x(), m_dirtyRect.y(),  m_compositeOp, m_target, OPACITY_OPAQUE,
+// 					m_dirtyRect.x(), m_dirtyRect.y(), m_dirtyRect.width(), m_dirtyRect.height());
 
 				adapter -> addCommand(painter.endTransaction());
 				//currentImage() -> rm(dynamic_cast<KisLayer*>(m_target.data()));
 				dynamic_cast<KisDoc*>(m_subject->document())->layerRemove(
 					currentImage(), dynamic_cast<KisLayer*>(m_target.data()));
 				currentImage() -> activate(dynamic_cast<KisLayer*>(m_source.data()));
-				// looks like deleting this isn't good for undo?
+				// looks like deleting this isn't good for undo? XXX: Figure this out.
 				//delete m_target;
 			} else {
 				adapter -> addCommand(m_painter->endTransaction());
@@ -208,7 +216,7 @@ QWidget* KisToolFreehand::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
 	m_optWidget -> setCaption(m_transactionText);
-	
+
 	m_lbOpacity = new QLabel(i18n("Opacity: "), m_optWidget);
 	m_slOpacity = new KIntNumInput( m_optWidget, "int_widget");
 	m_slOpacity -> setRange( 0, 100);

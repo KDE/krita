@@ -33,7 +33,7 @@ class KisToolControllerInterface;
 class KisUndoAdapter;
 class KisProgressDisplayInterface;
 class KisSelectionManager;
-
+class QWidget;
 /**
  * The canvas subject is the subset of operations that are directy available to
  * tools.

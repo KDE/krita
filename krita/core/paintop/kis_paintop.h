@@ -32,7 +32,7 @@
 class KisPoint;
 class KisAlphaMask;
 class KisPainter;
-
+class KisPaintBox;
 
 class KRITACORE_EXPORT KisPaintOp : public KShared
 {
@@ -70,5 +70,11 @@ public:
 
 	virtual KisPaintOp * createOp(KisPainter * painter) = 0;
 	virtual QString name() { return QString("Abstract PaintOp"); }
+
+	/**
+	 * Slot the paint op into the relevant toolbox, if so desired. It's
+	 * up to the paintop to decide whether it want to so something with this
+	 */
+	virtual void slot(KisPaintBox * box) {};
 };
 #endif // KIS_PAINTOP_H_

@@ -1161,15 +1161,12 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, QUANTUM devOpac
 
 	if (img) {
 		layer = new KisLayer(img, name, devOpacity);
-
+		// No need to fill the layer with something; it's empty and transparent
+		// and doesn't have any pixels by default.
 		if (layer && img -> add(layer, -1)) {
 			layer = img -> activate(layer);
 
 			if (layer) {
-// XXX: Autolayers had these two lines; the original code actually filled something using the painter
-// 				KisFillPainter painter(layer.data());
-// 				painter.end();
-
 				img -> top(layer);
 
 				if (m_undo)

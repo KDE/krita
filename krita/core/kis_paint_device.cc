@@ -192,8 +192,8 @@ void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInter
 }
 
 // XXX: also allow transform on part of paint device?
-void KisPaintDevice::transform(const QWMatrix & )
-{
+//void KisPaintDevice::transform(const QWMatrix & )
+//{
 #if 0 //AUTOLAYER
         if (tiles() == 0) {
 //                 kdDebug() << "No tilemgr.\n";
@@ -285,7 +285,7 @@ void KisPaintDevice::transform(const QWMatrix & )
         delete[] origPixel;
         delete[] newData;
 #endif //AUTOLAYER
-}
+//}
 
 void KisPaintDevice::mirrorX()
 {

@@ -34,7 +34,7 @@ public:
 
 public:
 	static KisPaintOpRegistry* instance();
-	
+
 private:
 	KisPaintOpRegistry();
 	KisPaintOpRegistry(const KisPaintOpRegistry&);

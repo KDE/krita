@@ -93,7 +93,7 @@ class KisRGBWidget;
 class KisGrayWidget;
 class KisSelectionManager;
 class KisBirdEyeBox;
-class KisPaintOpBox;
+class KisPaintBox;
 class KisToolRegistry;
 class KisFilterRegistry;
 
@@ -202,8 +202,8 @@ public slots:
 	void mirrorLayerX();
 	void mirrorLayerY();
 	void scaleLayer(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
-        void rotateLayer(double angle);
-        void shearLayer(double angleX, double angleY);
+	void rotateLayer(double angle);
+	void shearLayer(double angleX, double angleY);
 
 	// settings action slots
 	void preferences();
@@ -261,8 +261,6 @@ private:
 	virtual KisTool *currentTool() const;
 
 private:
-
-
 	void clearCanvas(const QRect& rc);
 	void connectCurrentImg() const;
 	void disconnectCurrentImg() const;
@@ -464,14 +462,14 @@ private:
 	KisDockFrameDocker *m_fillsdocker;
 	KisDockFrameDocker *m_toolcontroldocker;
 	KisDockFrameDocker *m_colordocker;
-	KisPaintOpBox *m_paintopdocker;
+	KisPaintBox *m_paintboxdocker;
 #endif
 	// Dialogs
 	QWidget *m_paletteChooser;
 	QWidget *m_gradientChooser;
 	QWidget *m_imageChooser;
 
-	KisPaintOpBox *m_paintOpBox;
+	KisPaintBox *m_paintBox;
 	ControlFrame *m_controlWidget;
 	KisBirdEyeBox * m_birdEyeBox;
 	KisChannelView *m_channelView;

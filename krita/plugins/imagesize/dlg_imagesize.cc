@@ -28,6 +28,7 @@ using namespace std;
 
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <qbuttongroup.h>
 #include <qlabel.h>
 #include <qcombobox.h>
 
@@ -67,10 +68,10 @@ DlgImageSize::~DlgImageSize()
 
 void DlgImageSize::hideScaleBox()
 {
-//	m_page -> grpResizeScale -> hide();
+	m_page -> grpResizeScale -> hide();
 }
 
-void DlgImageSize::setWidth(Q_UINT32 w) 
+void DlgImageSize::setWidth(Q_UINT32 w)
 {
 	blockAll();
 
@@ -82,7 +83,7 @@ void DlgImageSize::setWidth(Q_UINT32 w)
 	unblockAll();
 }
 
-void DlgImageSize::setWidthPercent(Q_UINT32 w) 
+void DlgImageSize::setWidthPercent(Q_UINT32 w)
 {
 	blockAll();
 
@@ -143,7 +144,7 @@ Q_INT32 DlgImageSize::height()
 	return (Q_INT32)qRound(m_page -> intHeight -> value());
 }
 
-bool DlgImageSize::scale() 
+bool DlgImageSize::scale()
 {
 	return m_page -> radioScale -> isChecked();
 }
@@ -168,7 +169,7 @@ void DlgImageSize::slotWidthPixelsChanged(int w)
 	double wPercent = double(w) * 100 / double(m_origW);
 
 	m_page -> intWidthPercent -> setValue(qRound(wPercent));
-	
+
 	// Set height in pixels and percent of necessary
 	if (m_page -> chkConstrain -> isChecked()) {
 		m_page -> intHeightPercent -> setValue(qRound(wPercent));
@@ -189,7 +190,7 @@ void DlgImageSize::slotHeightPixelsChanged(int h)
 	double hPercent = double(h) * 100 / double(m_origH);
 
 	m_page -> intHeightPercent -> setValue(qRound(hPercent));
-	
+
 	// Set width in pixels and percent of necessary
 	if (m_page -> chkConstrain -> isChecked()) {
 		m_page -> intWidthPercent -> setValue(qRound(hPercent));
@@ -228,7 +229,7 @@ void DlgImageSize::slotHeightPercentChanged(int h)
 	}
 
 	unblockAll();
-	
+
 }
 
 

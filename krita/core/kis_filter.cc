@@ -47,10 +47,7 @@ void KisFilter::refreshPreview( )
 	m_dialog -> previewWidget() -> slotRenewLayer();
 	KisLayerSP layer = m_dialog -> previewWidget() -> getLayer();
 	KisFilterConfiguration* config = configuration(m_widget);
-	//AUTOLAYER QRect rect(0, 0, layer -> width(), layer -> height());
-	Q_INT32 x, y, w, h;
-	layer -> extent( x, y, w, h );
-	QRect rect = QRect(x, y, w, h);
+	QRect rect = layer -> extent();
 	process((KisPaintDeviceSP) layer, config, rect, 0 );
 	m_dialog->previewWidget() -> slotUpdate();
 }
@@ -92,10 +89,7 @@ void KisFilter::slotActivated()
 	KisFilterConfiguration* config = configuration(m_widget);
 	KisTileCommand* ktc = new KisTileCommand(name(), (KisPaintDeviceSP)layer ); // Create a command
 
-	// XXX: AUTOLAYER (temporary fix, BSAR)
-	Q_INT32 x, y, w, h;
-	layer -> extent( x, y, w, h );
-	QRect rect = QRect(x, y, w, h);
+	QRect rect = layer -> extent();
 
 	process((KisPaintDeviceSP)layer, config, rect, ktc);
 

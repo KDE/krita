@@ -169,10 +169,10 @@ void KisToolFreehand::initPaint(KisEvent *)
 #endif
 }
 
-void KisToolFreehand::endPaint() 
+void KisToolFreehand::endPaint()
 {
 	m_mode = HOVER;
-	if (m_currentImage) { 
+	if (m_currentImage) {
 		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
 		if (adapter && m_painter) {
 			// If painting in mouse release, make sure painter
@@ -185,7 +185,7 @@ void KisToolFreehand::endPaint()
 
 				//AUTOLAYER fix this by making a form of dirtyRect
 				painter.bitBlt(0, 0,  m_compositeOp, m_target, OPACITY_OPAQUE,
-					0, 0, 400, 400);
+					       0, 0, 400, 400);
 
 				adapter -> addCommand(painter.endTransaction());
 				//currentImage() -> rm(dynamic_cast<KisLayer*>(m_target.data()));
@@ -208,7 +208,7 @@ QWidget* KisToolFreehand::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
 	m_optWidget -> setCaption(m_transactionText);
-	
+
 	m_lbOpacity = new QLabel(i18n("Opacity: "), m_optWidget);
 	m_slOpacity = new KIntNumInput( m_optWidget, "int_widget");
 	m_slOpacity -> setRange( 0, 100);

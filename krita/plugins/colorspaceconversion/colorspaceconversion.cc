@@ -56,9 +56,9 @@ ColorspaceConversion::ColorspaceConversion(QObject *parent, const char *name, co
 
 	setInstance(ColorspaceConversionFactory::instance());
 
- 	kdDebug() << "Colorspaceconversion plugin. Class: " 
- 		  << className() 
- 		  << ", Parent: " 
+ 	kdDebug() << "Colorspaceconversion plugin. Class: "
+ 		  << className()
+ 		  << ", Parent: "
  		  << parent -> className()
  		  << "\n";
 
@@ -101,7 +101,7 @@ void ColorspaceConversion::slotImgColorspaceConversion()
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(cspace);
 
 		image -> setProfile(image -> colorStrategy() -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbSourceProfile -> currentText()));
-		image -> convertTo(cs, 
+		image -> convertTo(cs,
 				   cs -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbDestProfile -> currentText()),
 				   dlgColorspaceConversion -> m_page -> grpIntent -> selectedId());
 	}
@@ -116,18 +116,22 @@ void ColorspaceConversion::slotLayerColorspaceConversion()
 
 	KisPaintDeviceSP dev = image -> activeDevice();
 	if (!dev) return;
-	
+
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
 	dlgColorspaceConversion -> setCaption(i18n("Convert current layer from") + dev -> colorStrategy() -> name());
 	dlgColorspaceConversion -> fillCmbSrcProfile(dev -> colorStrategy() -> name());
-	dlgColorspaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(dev -> profile() -> productName());
+
+	KisProfileSP p = dev -> profile();
+	if ( !p ) return;
+
+	dlgColorspaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(p -> productName());
 
 	if (dlgColorspaceConversion -> exec() == QDialog::Accepted) {
 		kdDebug() << "Going to convert layer\n";
 		QString cspace = dlgColorspaceConversion -> m_page -> cmbColorSpaces -> currentText();
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(cspace);
 		dev -> setProfile(dev -> colorStrategy() -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbSourceProfile -> currentText()));
-		dev -> convertTo(cs, 
+		dev -> convertTo(cs,
 				   cs -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbDestProfile -> currentText()),
 				   dlgColorspaceConversion -> m_page -> grpIntent -> selectedId());
 

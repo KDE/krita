@@ -145,9 +145,7 @@ Plugins
 
 	* As many filters as possible :-)
 	* Load plugins into registry on Krita startup, instead of on
-	  view creation.
-        * Rename all plugins to have a krita prefix. 
-	* Move all paintops to plugins.
+	  view creation. (Tried this, but failed miserable. BSAR)
 
 Modules
 

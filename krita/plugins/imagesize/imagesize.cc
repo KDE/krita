@@ -57,9 +57,9 @@ ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(ImageSizeFactory::instance());
 
- 	kdDebug() << "Imagesize plugin. Class: " 
- 		  << className() 
- 		  << ", Parent: " 
+ 	kdDebug() << "Imagesize plugin. Class: "
+ 		  << className()
+ 		  << ", Parent: "
  		  << parent -> className()
  		  << "\n";
 
@@ -101,21 +101,21 @@ void ImageSize::slotImageSize()
 	if (dlgImageSize -> exec() == QDialog::Accepted) {
 		m_view -> updateCanvas(); // XXX: Check whether this
 					  // is necessary after
-					  // Adrian's changes 
+					  // Adrian's changes
 		Q_INT32 w = dlgImageSize -> width();
 		Q_INT32 h = dlgImageSize -> height();
-		
+
 		if (dlgImageSize -> scale()) {
 
 			Q_INT32 f = dlgImageSize -> filterType();
-			m_view -> scaleCurrentImage((double)w / ((double)(image -> width())), 
+			m_view -> scaleCurrentImage((double)w / ((double)(image -> width())),
 						    (double)h / ((double)(image -> height())),
 						    (enumFilterType)f);
 		}
 		else {
 			m_view -> resizeCurrentImage(w, h);
 		}
-		
+
 	}
 	delete dlgImageSize;
 }
@@ -135,20 +135,18 @@ void ImageSize::slotLayerSize()
 	dlgImageSize -> setHeight(image -> height());
 	dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
 	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
+	dlgImageSize -> hideScaleBox();
 
 	if (dlgImageSize -> exec() == QDialog::Accepted) {
 		Q_INT32 w = dlgImageSize -> width();
 		Q_INT32 h = dlgImageSize -> height();
 		Q_INT32 f = dlgImageSize -> filterType();
 		if (dlgImageSize -> scale()) {
-			m_view -> scaleLayer((double)w / ((double)(image -> width())), 
+			m_view -> scaleLayer((double)w / ((double)(image -> width())),
 					     (double)h / ((double)(image -> height())),
 					     (enumFilterType)f);
 		}
-		else {
-			// AUTOLAYER should we crop layers ?
-		}
-		
+
 	}
 	delete dlgImageSize;
 }
@@ -167,7 +165,7 @@ void ImageSize::slotSelectionScale()
 	if (!layer) return;
 
 	if (!layer -> hasSelection()) return;
-	
+
 
 	DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "SelectionScale");
 	dlgImageSize -> setCaption(i18n("Scale Selection"));
@@ -186,10 +184,10 @@ void ImageSize::slotSelectionScale()
 		Q_INT32 h = dlgImageSize -> height();
 		Q_INT32 f = dlgImageSize -> filterType();
 
-		m_view -> scaleLayer((double)w / ((double)(image -> width())), 
+		m_view -> scaleLayer((double)w / ((double)(image -> width())),
 				     (double)h / ((double)(image -> height())),
 				     (enumFilterType)f);
-		
+
 	}
 	delete dlgImageSize;
 }

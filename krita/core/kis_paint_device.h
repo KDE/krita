@@ -204,7 +204,7 @@ public:
 	/**
 	   Apply the transformation matrix _in place_.
 	*/
-	void transform(const QWMatrix & matrix);
+//	void transform(const QWMatrix & matrix);
 
 	/**
 	 * Mirror the device along the X axis

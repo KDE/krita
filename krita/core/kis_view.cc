@@ -118,7 +118,7 @@
 #include "kis_hsv_widget.h"
 #include "kis_rgb_widget.h"
 #include "kis_gray_widget.h"
-#include "kis_paintop_box.h"
+#include "kis_paint_box.h"
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
@@ -346,8 +346,8 @@ void KisView::setupDockers()
 
 #endif
 	// Even with kivio dockers, this is always an old-style docker
-	m_paintopdocker = new KisPaintOpBox( this );
-	m_paintopdocker -> setCaption( i18n( "Tools" ) );
+	m_paintboxdocker = new KisPaintBox( this );
+	m_paintboxdocker -> setCaption( i18n( "Tools" ) );
 	(void)new KAction(i18n( "&Tools" ), 0, this, SLOT( viewPaintOpDocker() ), actionCollection(), "view_paintop_docker" );
 
 
@@ -481,7 +481,7 @@ void KisView::setupDockers()
 
 		mainWindow() -> setDockEnabled( DockBottom, false);
 		mainWindow() -> setDockEnabled( DockTop, false);
-		mainWindow() -> moveDockWindow( m_paintopdocker, QMainWindow::DockLeft  );
+		mainWindow() -> moveDockWindow( m_paintboxdocker, QMainWindow::DockLeft  );
 		mainWindow() -> moveDockWindow( m_colordocker, QMainWindow::DockLeft);
 	}
 #endif
@@ -1662,54 +1662,17 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
 
 void KisView::rotateLayer180()
 {
-	if (!currentImg()) return;
-	KisLayerSP layer = currentImg() -> activeLayer();
-	if (!layer) return;
-
-
-	QWMatrix m;
-	//m.rotate(180);
-	layer->transform(m.rotate(180));
-	m_doc -> setModified(true);
-
-	layersUpdated();
-	resizeEvent(0);
-	updateCanvas();
+	rotateLayer( 180 );
 }
 
 void KisView::rotateLayerLeft90()
 {
-	if (!currentImg()) return;
-	KisLayerSP layer = currentImg() -> activeLayer();
-	if (!layer) return;
-
-	QWMatrix m;
-	m.rotate(270);
-	layer->transform(m);
-	m_doc -> setModified(true);
-
-	layersUpdated();
-	resizeEvent(0);
-	updateCanvas();
-
+	rotateLayer( 270 );
 }
 
 void KisView::rotateLayerRight90()
 {
-	if (!currentImg()) return;
-	KisLayerSP layer = currentImg() -> activeLayer();
-	if (!layer) return;
-
-
-	QWMatrix m;
-	m.rotate(90);
-	layer -> transform(m);
-	m_doc -> setModified(true);
-
-	layersUpdated();
-	resizeEvent(0);
-	updateCanvas();
-
+	rotateLayer( 90 );
 }
 
 void KisView::rotateLayerCustom()
@@ -1954,10 +1917,10 @@ void KisView::viewShapesDocker()
 
 void KisView::viewPaintOpDocker()
 {
-	if ( m_paintopdocker->isVisible() == false )
+	if ( m_paintboxdocker->isVisible() == false )
 	{
-		mainWindow()->addDockWindow( m_paintopdocker, DockRight );
-		m_paintopdocker->show();
+		mainWindow()->addDockWindow( m_paintboxdocker, DockRight );
+		m_paintboxdocker->show();
 	}
 }
 

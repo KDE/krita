@@ -21,6 +21,8 @@
 #ifndef KIS_TOOL_FREEHAND_H_
 #define KIS_TOOL_FREEHAND_H_
 
+#include <qrect.h>
+
 #include "kis_types.h"
 #include "kis_tool_paint.h"
 #include "kis_point.h"
@@ -45,7 +47,7 @@ public:
 
 	virtual void update(KisCanvasSubject *subject);
 
-	virtual void buttonPress(KisButtonPressEvent *e); 
+	virtual void buttonPress(KisButtonPressEvent *e);
 	virtual void move(KisMoveEvent *e);
 	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
@@ -86,6 +88,7 @@ protected:
 	void setUseTempLayer(bool u);
 
 protected:
+
 	KisPoint m_prevPos;
 	double m_prevPressure;
 	double m_prevXTilt;
@@ -108,6 +111,11 @@ protected:
 	KIntNumInput *m_slOpacity;
 	QLabel *m_lbComposite;
 	KisCmbComposite *m_cmbComposite;
+
+private:
+
+//	QRect m_dirtyRect;
+
 };
 
 

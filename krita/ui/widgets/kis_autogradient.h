@@ -82,6 +82,7 @@ class KisAutogradientResource : public KisGradient
 class KisAutogradient : public KisWdgAutogradient
 {
 	Q_OBJECT
+
 	public:
 		KisAutogradient(QWidget *parent, const char* name, const QString& caption);;
 	signals:

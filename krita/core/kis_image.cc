@@ -61,8 +61,8 @@ namespace {
 
 	// Whether to repaint the display every
 	// DISPLAY_UPDATE_FREQUENCY milliseconds
-	const bool DISPLAY_TIMER = false;
-	const int DISPLAY_UPDATE_FREQUENCY = 50; // in milliseconds
+	const bool DISPLAY_TIMER = true;
+	const int DISPLAY_UPDATE_INTERVAL = 80; // in milliseconds
 
 	class KisResizeImageCmd : public KNamedCommand {
 		typedef KNamedCommand super;
@@ -843,6 +843,7 @@ Q_INT32 KisImage::nLinkedLayers() const
 
 void KisImage::flatten()
 {
+
 	vKisLayerSP beforeLayers = m_layers;
 
 	KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
@@ -1089,7 +1090,7 @@ void KisImage::startUpdateTimer()
 	if (DISPLAY_TIMER) {
 		m_updateTimer = new QTimer(this);
 		connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateDisplay()) );
-		m_updateTimer -> start( DISPLAY_UPDATE_FREQUENCY );
+		m_updateTimer -> start( DISPLAY_UPDATE_INTERVAL );
 	}
 }
 

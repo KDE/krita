@@ -199,8 +199,6 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		emit notifyProgressError(this);
 		return KisImageBuilder_RESULT_FAILURE;
 	}
-// Autolayer removed the following line
-// 	m_img = new KisImage(m_adapter, 0, 0, KisColorSpaceRegistry::instance() -> get("RGBA"), m_doc -> nextImageName());
 
 	emit notifyProgressStage(this, i18n("Importing..."), 0);
 

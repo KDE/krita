@@ -57,6 +57,4 @@ void KisBrushPaintOp::paint(const KisPainter & /*gc*/,
 	// composite temporary layer into target layer
 	// @see: doc/brush.txt
 
-
-
 }

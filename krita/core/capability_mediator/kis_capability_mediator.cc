@@ -15,43 +15,54 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include <stdlib.h>
 
 #include <qobject.h>
 #include <qstrlist.h>
 #include <qdict.h>
+#include <qstringlist.h>
+#include <qvaluelist.h>
+
+#include <klocale.h>
+#include <kdebug.h>
 
 #include "kis_abstract_capability.h"
 #include "kis_capability_mediator.h"
 
+#include "kis_image_type.h"
 
 KisCapabilityMediator::KisCapabilityMediator() 
 {
-// 	m_capabilities = new QDict();
+	initImageTypes();
 }
 
 KisCapabilityMediator::~KisCapabilityMediator() 
 {
-// 	KisAbstractCapability * tmp;
-// 	QDictIterator<KisAbstractCapability> it(m_capabilities);
-// 	for ( ; it.current(); ++it) {
-// 		tmp = it.current();
-// 		m_capabilities.remove(it.currentKey());
-// 		delete tmp;
-// 		tmp = 0;
-// 	}
 }
 
-void KisCapabilityMediatorregisterCapability(const QString & name, 
-					     const KisAbstractCapability capability)
-{
-}
-	
-QStrList* KisCapabilityMediator::capabilities(const QString & filter) const
-{
+
+QStringList KisCapabilityMediator::getImageTypes() {
+
+	return QStringList(m_imageTypes.keys());
 }
 
-KisAbstractCapability * KisCapabilityMediator::getCapability(const QString & name) const
-{
+KisImageTypeSP KisCapabilityMediator::getImageType(const QString & imageType) {
+	if (!m_imageTypes.contains(imageType)) {
+		kdDebug() << "Imagetype " << imageType << " does not exist. Aborting Krita.\n";
+		abort();
+	}
+
+	return m_imageTypes[imageType];
+}
+
+void KisCapabilityMediator::initImageTypes() {
+	// XXX: this could conceivably be read from a configuration file,
+	// and the types could be plugins.
+	m_imageTypes["RGBA"] = new KisImageType(i18n("RGBA"), i18n("RGB + Alpha"));
+	m_imageTypes["RGB"] = new KisImageType(i18n("RGB"), i18n("RGB"));
+	m_imageTypes["CMYKA"] = new KisImageType(i18n("CMYKA"), i18n("CMYK + Alpha"));
+	m_imageTypes["CMYK"] = new KisImageType(i18n("CMYK"), i18n("CMYK"));
+	m_imageTypes["WET"] = new KisImageType(i18n("Watercolor"), i18n("Watercolor"));
 }
 
 

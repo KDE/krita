@@ -38,7 +38,7 @@ public:
 
 	KisOverCompositeOp();
 	KisOverCompositeOp(QString & label,
-			   QString & desctription);
+			   QString & description);
 	virtual ~KisOverCompositeOp();
 
 	virtual void composite(Q_INT32 stride,

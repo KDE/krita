@@ -59,6 +59,9 @@ typedef KSharedPtr<KisBackground> KisBackgroundSP;
 class KisSelection;
 typedef KSharedPtr<KisSelection> KisSelectionSP;
 
+class KisStrategyColorSpace;
+typedef KSharedPtr<KisStrategyColorSpace> KisStrategyColorSpaceSP;
+
 class KisTile;
 typedef KSharedPtr<KisTile> KisTileSP;
 typedef QValueVector<KisTileSP> vKisTileSP;

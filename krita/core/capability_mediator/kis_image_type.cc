@@ -16,37 +16,32 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_BRUSH_PAINT_OP_H
-#define KIS_BRUSH_PAINT_OP_H
 
 #include <qstring.h>
+#include "kis_image_type.h"
 
-#include "kis_global.h"
+namespace {
+	const Q_INT8 DEFAULT_BIT_DEPTH = 8;
+	const Q_INT8 DEFAULT_BYTE_DEPTH = 1;
+	const Q_INT8 DEFAULT_CHANNELS = 4;
+	const Q_INT32 DEFAULT_MAX_CHANNEL_VALUE = UCHAR_MAX;
+	const bool DEFAULT_HAS_ALPHA = true;
+}
+KisImageType::KisImageType() : super()
+{
+}
 
-#include "kis_paint_op.h"
+KisImageType::KisImageType(QString label,
+			   QString description) 
+	: super( label , description ),
+	  m_bitsPerChannel( DEFAULT_BIT_DEPTH ),
+	  m_bytesPerChannel( DEFAULT_BYTE_DEPTH ),
+	  m_maxChannelValue( DEFAULT_MAX_CHANNEL_VALUE ),
+	  m_numChannels( DEFAULT_CHANNELS ),
+	  m_hasAlpha( DEFAULT_HAS_ALPHA )
+{
+}
 
-class KisPainter;
-
-/**
-   KisBrushPaintOp is a paint op that paints a 'soft', i.e. an 
-   anti-aliased dot.
-*/
-class KisBrushPaintOp : public KisPaintOp {
-	typedef KisPaintOp super;
-public:
-
-	KisBrushPaintOp();
-	KisBrushPaintOp(QString & label,
-			QString & description);
-	virtual ~KisBrushPaintOp();
-
-	virtual void paint(const KisPainter &gc,
-			   const double x,
-			   const double y,
-			   const Q_INT32 pressure,
-			   const Q_INT32 /*xTilt*/,
-			   const Q_INT32 /*yTilt*/);
-};
-
-#endif // KIS_BRUSH_PAINT_OP_H
-
+KisImageType::~KisImageType()
+{
+}

@@ -56,8 +56,6 @@ class RGB {
 };
 
 // Map cmyka to rgba
-//   Todo: pre-multiply the rgb with the alpha value. But then, the rest of
-//         Krita needs to know about that, too.
 typedef QMap<CMYK, RGB> ColorLUT;
 
 class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
@@ -72,7 +70,9 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst);
 	virtual void nativeColor(QRgb rgb, QUANTUM *dst);
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst);
+
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
+
 	virtual void tileBlt(Q_INT32 stride,
 			     QUANTUM *dst, 
 			     Q_INT32 dststride,

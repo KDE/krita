@@ -47,7 +47,7 @@ public:
 
 	KisPaintOp();
 	KisPaintOp(QString & label,
-		   QString & desctription);
+		   QString & description);
 	virtual ~KisPaintOp();
 
 	virtual void paint(const KisPainter &gc,

@@ -26,7 +26,7 @@ KisOverCompositeOp::KisOverCompositeOp() : super()
 }
 
 KisOverCompositeOp::KisOverCompositeOp(QString & label,
-			       QString & description) 
+				       QString & description) 
 	: super( label , description )
 {
 }

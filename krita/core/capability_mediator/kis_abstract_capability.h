@@ -15,11 +15,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 #if !defined KIS_ABSTRACT_CAPABILITY_H
 #define KIS_ABSTRACT_CAPABILITY_H
 
 #include <qstring.h>
+#include <ksharedptr.h>
 
 /**
    AbstractCapability is the base class from which specific
@@ -29,13 +29,17 @@
    These operations, because they may be needed in the UI,
    all have a label and a description.
 
+   Because each capability needs to be passed all over the place,
+   and because there is no reason for copying, all capabilities have
+   the capability to be shared using KShared.
 */
-class KisAbstractCapability {
+class KisAbstractCapability : public KShared {
 
 public:
 	KisAbstractCapability();
 	KisAbstractCapability(const QString & label,
-			      const QString & desctription);
+			      const QString & description);
+	KisAbstractCapability& operator=(const KisAbstractCapability& cap);
 	virtual ~KisAbstractCapability();
 
 
@@ -51,5 +55,10 @@ private:
 
 };
 
-#endif // KIS_ABSTRACT_CAPABILITY_H
+inline KisAbstractCapability & KisAbstractCapability::operator=(const KisAbstractCapability& cap)
+{
+	KShared::operator=(cap);
+	return *this;
+}
 
+#endif // KIS_ABSTRACT_CAPABILITY_H

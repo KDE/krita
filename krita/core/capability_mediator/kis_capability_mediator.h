@@ -20,17 +20,26 @@
 #define KIS_CAPABILITY_MEDIATOR_H
 
 #include <qobject.h>
-#include <qdict.h>
+#include <qmap.h> // Replace with std::map once I get back to the docs.
 
-class KisAbstractCapability;
-class QStrList;
 
+class QStringList;
+
+#include "kis_image_type.h"
 
 /**
    The CapabilityMediator is the root of the tree that defines
    Krita's capabilities. It stores references to the singletons
    that keep the composite ops, the paint ops, the image types --
    all the stuff traditonally kept in enums.
+
+   This class could be compared with a database, I guess.
+
+   Make this a template for each capability type. Once central
+   instance that contains the image types; the image types contain
+   colour strategies, the colour strategies composite ops. The
+   iamge types also contain paint ops, because not every paint op
+   is suitable for every image type.
 */
 class KisCapabilityMediator : public QObject {
 	Q_OBJECT
@@ -40,24 +49,15 @@ public:
 	virtual ~KisCapabilityMediator();
 
 public:
-	/**
-	 */
-	virtual void registerCapability(const QString & name, 
-					const KisAbstractCapability capability) = 0;
-	/**
-	   Return a QStrList filled with the names of the capabilities that satisfy the
-	   specified filter. (XXX: the filter needs perhaps be a little more sophisticated, 
-	   or something simpler, like a path. Or perhaps even an URI.)
-	 */
-	virtual QStrList* capabilities(const QString & filter) const = 0;
 
-	/**
-	   Retrieve the capabilitye with the specified name.
-	*/
-	virtual KisAbstractCapability * getCapability(const QString & name) const = 0;
+	virtual QStringList getImageTypes();
+	virtual KisImageTypeSP getImageType(const QString & imageType);
+
 private:
-	
-	QDict<KisAbstractCapability> * m_capabilities;
+	void initImageTypes();
+
+	typedef QMap<QString, KisImageTypeSP> ImageTypeMap;
+	ImageTypeMap m_imageTypes;
 };
 
 #endif // KIS_CAPABILITY_MEDIATOR_H

@@ -53,12 +53,13 @@ void KisToolDuplicate::activate()
 
 void KisToolDuplicate::mousePress(QMouseEvent *e)
 {
-	if(e->button() ==  RightButton)
-	{
+	if (e -> button() == RightButton) {
 		m_position = e->pos();
 		m_isOffsetNotUptodate = true;
 	} else {
-		super::mousePress(e);
+		if (m_position != QPoint(-1, -1)) {
+			super::mousePress(e);
+		}
 	}
 }
 
@@ -85,8 +86,6 @@ void KisToolDuplicate::initPaint(const QPoint & pos)
 		}
 		super::initPaint(pos);
 		painter()->setDuplicateOffset( m_offset );
-	} else {
-		super::endPaint();
 	}
 }
 

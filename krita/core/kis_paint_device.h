@@ -103,7 +103,17 @@ public:
 	 * case it's up to the colour strategy to choose a profile (most 
 	 * like sRGB).
 	 */
-	virtual QImage convertToQImage(KisProfileSP dstProfile, Q_INT32 x = 0, Q_INT32 y = 0, Q_INT32 w = -1, Q_INT32 h = -1);
+	virtual QImage convertToQImage(KisProfileSP dstProfile, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+		
+	/**
+	 * Create an RGBA QImage from a rectangle in the paint device.
+	 *
+	 * The dimensions is so that it takes what is currently on screen. relies on the image() to return an image.
+	 * profile RGB profile to use in conversion. May be 0, in which
+	 * case it's up to the colour strategy to choose a profile (most 
+	 * like sRGB).
+	 */	
+	virtual QImage convertToQImage(KisProfileSP dstProfile);
 
         virtual QString name() const;
         virtual void setName(const QString& name);
@@ -392,20 +402,9 @@ inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opac
 
 inline bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity, KisProfileSP profile)
 {
-	KisHLineIterator iter = createHLineIterator(x, 1, y, false);
-	/*KisTileMgrSP tm = tiles();
-	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);
-	QUANTUM * pix;
-
-	if (!pd)
-		return false;
-
-	pix = pd -> data;
-	Q_ASSERT(pix);
-	*/
+	KisHLineIterator iter = createHLineIterator(x, 1, y, true);
+	
 	colorStrategy() -> nativeColor(c, opacity, (QUANTUM*)(iter)); // profile
-
-	//tm -> releasePixelData(pd);
 
 	return true;
 }

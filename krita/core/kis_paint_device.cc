@@ -451,6 +451,20 @@ void KisPaintDevice::setProfile(KisProfileSP profile)
 	emit(profileChanged(m_profile));
 }
 
+QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile)
+{
+	Q_INT32 x1;
+	Q_INT32 y1;
+	Q_INT32 w;
+	Q_INT32 h;
+
+	x1 = - getX();	
+	y1 = - getY();	
+	w = image()->width();
+	h = image()->height();
+	
+	convertToQImage(dstProfile, x1, y1, w, h);
+}
 
 QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
 {

@@ -1,5 +1,5 @@
 /*
- *  kis_dlg_colorrange.h -- part of KimageShop^WKrayon^WKrita
+ *  dlg_colorrange.h -- part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -18,29 +18,29 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  *  02111-1307, USA.
  */
-#if !defined KIS_DLG_COLORRANGE
-#define KIS_DLG_COLORRANGE
+#if !defined DLG_COLORRANGE
+#define DLG_COLORRANGE
 
 #include <qpixmap.h>
 
 #include <kdialogbase.h>
 
-#include "dialogs/colorrange.h"
+#include "wdg_colorrange.h"
 
 
 /**
  * This dialog allows the user to create a selection mask based
  * on a (range of) colors.
  */
-class KisDlgColorRange: public KDialogBase {
+class DlgColorRange: public KDialogBase {
 	typedef KDialogBase super;
 	Q_OBJECT
 
 public:
 
-	KisDlgColorRange(QWidget * parent = 0,
+	DlgColorRange(QWidget * parent = 0,
 			 const char* name = 0);
-	~KisDlgColorRange();
+	~DlgColorRange();
 
 	/**
 	 * Set the initial preview pixmap
@@ -53,8 +53,8 @@ private slots:
 
 private:
 
-	ColorRange * m_page;
+	WdgColorRange * m_page;
 	QPixmap m_previewPix;
 };
 
-#endif // KIS_DLG_COLORRANGE
+#endif // DLG_COLORRANGE

@@ -66,7 +66,6 @@ class KisUndoAdapter;
 class KisRect;
 class KisPoint;
 
-class KisDlgColorRange;
 
 class KisView : public KoView,
 	private KisCanvasSubject,
@@ -226,7 +225,6 @@ private slots:
 	void duplicateCurrentImg();
 	void fillSelectionBg();
 	void fillSelectionFg();
-	void selectColorRange();
 	void paste_into();
 	void popupTabBarMenu( const QPoint& );
 	void moveImage( unsigned, unsigned );
@@ -337,7 +335,6 @@ private:
 	KAction *m_layerToImage;
 	KAction *m_layerTop;
 	KAction *m_layerTransform;
-	KAction *m_selectionColorRange;
 	KAction *m_selectionCopy;
 	KAction *m_selectionCut;
 	KAction *m_selectionFillBg;
@@ -365,8 +362,6 @@ private:
 	ColorDocker *m_colordocker;
 
 	// Dialogs
-	KisDlgColorRange * m_colorrange;
-
 	QWidget *m_paletteChooser;
 	QWidget *m_gradientChooser;
 	QWidget *m_imageChooser;

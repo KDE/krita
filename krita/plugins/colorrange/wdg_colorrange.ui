@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>ColorRange</class>
+<class>WdgColorRange</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>ColorRange</cstring>
+        <cstring>WdgColorRange</cstring>
     </property>
     <property name="geometry">
         <rect>

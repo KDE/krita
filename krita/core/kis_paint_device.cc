@@ -18,6 +18,7 @@
  */
 #include <qrect.h>
 #include <qwmatrix.h>
+#include <qimage.h>
 
 #include <kcommand.h>
 #include <klocale.h>
@@ -105,11 +106,11 @@ KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType&
         m_owner = 0;
         m_name = name;
         m_projectionValid = false;
-	m_compositeOp = COMPOSITE_OVER;
+        m_compositeOp = COMPOSITE_OVER;
 
-	KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
-	Q_ASSERT(factory);
-	m_colorStrategy = factory -> create(m_imgType);
+        KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+        Q_ASSERT(factory);
+        m_colorStrategy = factory -> create(m_imgType);
 }
 
 KisPaintDevice::KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
@@ -137,11 +138,11 @@ KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& n
         m_owner = img;
         m_name = name;
         m_projectionValid = false;
-	m_compositeOp = COMPOSITE_OVER;
+        m_compositeOp = COMPOSITE_OVER;
 
-	KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
-	Q_ASSERT(factory);
-	m_colorStrategy = factory -> create(m_imgType);
+        KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+        Q_ASSERT(factory);
+        m_colorStrategy = factory -> create(m_imgType);
 }
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs)
@@ -170,8 +171,8 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs
                 m_alpha = rhs.m_alpha;
                 m_projectionValid = false;
                 m_name = rhs.m_name;
-		m_compositeOp = COMPOSITE_OVER;
-		m_colorStrategy = rhs.m_colorStrategy;
+                m_compositeOp = COMPOSITE_OVER;
+                m_colorStrategy = rhs.m_colorStrategy;
         }
 }
 
@@ -217,11 +218,11 @@ void KisPaintDevice::invalidate()
         invalidate(0, 0, width(), height());
 }
 
-void KisPaintDevice::configure(KisImageSP image, 
-			       Q_INT32 width, Q_INT32 height, 
-			       const enumImgType& imgType, 
-			       const QString& name, 
-			       CompositeOp compositeOp)
+void KisPaintDevice::configure(KisImageSP image,
+                               Q_INT32 width, Q_INT32 height,
+                               const enumImgType& imgType,
+                               const QString& name,
+                               CompositeOp compositeOp)
 {
         if (image == 0 || name.isEmpty())
                 return;
@@ -242,12 +243,12 @@ void KisPaintDevice::configure(KisImageSP image,
         m_owner = image;
         m_name = name;
         m_projectionValid = false;
-	kdDebug() << "composite op: " << compositeOp << "\n";
-	m_compositeOp = compositeOp;	
+        kdDebug() << "composite op: " << compositeOp << "\n";
+        m_compositeOp = compositeOp;
 
-	KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
-	Q_ASSERT(factory);
-	m_colorStrategy = factory -> create(m_imgType);
+        KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+        Q_ASSERT(factory);
+        m_colorStrategy = factory -> create(m_imgType);
 }
 
 void KisPaintDevice::update()
@@ -333,7 +334,7 @@ bool KisPaintDevice::alpha() const
 }
 
 enumImgType KisPaintDevice::type() const {
-	return m_imgType;
+        return m_imgType;
 }
 
 enumImgType KisPaintDevice::typeWithoutAlpha() const
@@ -379,6 +380,10 @@ enumImgType KisPaintDevice::typeWithAlpha() const
 
         return m_imgType;
 
+}
+
+QImage KisPaintDevice::convertToImage()
+{
 }
 
 KisTileMgrSP KisPaintDevice::data()
@@ -527,7 +532,7 @@ void KisPaintDevice::init()
 
 bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
 {
-	// XXX: this should use the colour strategies!
+        // XXX: this should use the colour strategies!
 
         KisTileMgrSP tm = data();
         KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
@@ -567,7 +572,7 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
 bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)
 {
 
-	// XXX: this should use the colour strategies! 
+        // XXX: this should use the colour strategies!
         KisTileMgrSP tm = data();
         KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);
         QUANTUM *data;
@@ -667,150 +672,150 @@ void KisPaintDevice::resize()
 // XXX: also allow transform on part of paint device?
 void KisPaintDevice::transform(const QWMatrix & matrix)
 {
-	if (data() == 0) {
-		kdDebug() << "No tilemgr.\n";
-		return;
-	}
+        if (data() == 0) {
+                kdDebug() << "No tilemgr.\n";
+                return;
+        }
 
-	/* No, we're NOT duplicating the entire image, at the moment krita uses
-	   too much memory already */
-	QUANTUM *origPixel = new QUANTUM[depth() * sizeof(QUANTUM)];
+        /* No, we're NOT duplicating the entire image, at the moment krita uses
+           too much memory already */
+        QUANTUM *origPixel = new QUANTUM[depth() * sizeof(QUANTUM)];
 
-	// target image data
-	Q_INT32 targetW;
-	Q_INT32 targetH;
+        // target image data
+        Q_INT32 targetW;
+        Q_INT32 targetH;
 
-	// compute size of target image
-	// (this bit seems to be mostly from QImage.xForm)
-	QWMatrix mat = QPixmap::trueMatrix( matrix, width(), height() );
-	if ( mat.m12() == 0.0F && mat.m21() == 0.0F ) {
-		kdDebug() << "Scaling.\n";
-		if ( mat.m11() == 1.0F && mat.m22() == 1.0F ) { 
-			kdDebug() << "Identity matrix, do nothing.\n";
-			return;
-		}
-		targetW = qRound( mat.m11() * width() );
-		targetH = qRound( mat.m22() * height() );
-		targetW = QABS( targetW );
-		targetH = QABS( targetH );
-	} else {
-		kdDebug() << "rotation or shearing\n";
-		QPointArray a( QRect(0, 0, width(), height()) );
-		a = mat.map( a );
-		QRect r = a.boundingRect().normalize();
-		targetW = r.width();
-		targetH = r.height();
-	}
-	
-	// Create target pixel buffer which we'll read into a tile manager
-	// when done.
-	QUANTUM * newData = new QUANTUM[targetW * targetH * depth() * sizeof(QUANTUM)];
-	/* This _has_ to be fixed; horribly layertype dependent */
-	memset(newData, targetW * targetH * depth() * sizeof(QUANTUM), 0);
+        // compute size of target image
+        // (this bit seems to be mostly from QImage.xForm)
+        QWMatrix mat = QPixmap::trueMatrix( matrix, width(), height() );
+        if ( mat.m12() == 0.0F && mat.m21() == 0.0F ) {
+                kdDebug() << "Scaling.\n";
+                if ( mat.m11() == 1.0F && mat.m22() == 1.0F ) {
+                        kdDebug() << "Identity matrix, do nothing.\n";
+                        return;
+                }
+                targetW = qRound( mat.m11() * width() );
+                targetH = qRound( mat.m22() * height() );
+                targetW = QABS( targetW );
+                targetH = QABS( targetH );
+        } else {
+                kdDebug() << "rotation or shearing\n";
+                QPointArray a( QRect(0, 0, width(), height()) );
+                a = mat.map( a );
+                QRect r = a.boundingRect().normalize();
+                targetW = r.width();
+                targetH = r.height();
+        }
 
-	bool invertible;
-	QWMatrix targetMat = mat.invert( &invertible ); // invert matrix
-	if ( targetH == 0 || targetW == 0 || !invertible ) {
-		kdDebug() << "Error, return null image\n";
-		return;
-	}
+        // Create target pixel buffer which we'll read into a tile manager
+        // when done.
+        QUANTUM * newData = new QUANTUM[targetW * targetH * depth() * sizeof(QUANTUM)];
+        /* This _has_ to be fixed; horribly layertype dependent */
+        memset(newData, targetW * targetH * depth() * sizeof(QUANTUM), 0);
 
-	// I would have thought that one would take the source pixels,
-	// do the computation, and write the target pixels.
-	// Apparently, that's not true: one looks through the target
-	// pixels, and computes what should be there from the source
-	// pixels. I doubt I will ever completely understand this
-	// stuff.
-	// BC: I guess this makes it easier to make the transform anti-aliased,
-	// as you can easily take the weighted mean of the square the destination
-	// pixel has it's origin in.
+        bool invertible;
+        QWMatrix targetMat = mat.invert( &invertible ); // invert matrix
+        if ( targetH == 0 || targetW == 0 || !invertible ) {
+                kdDebug() << "Error, return null image\n";
+                return;
+        }
 
-	/* For each target line of target pixels, the original pixel is located (in the
-	   surrounding of)
-	   x = m11*x' + m21*y' + dx
+        // I would have thought that one would take the source pixels,
+        // do the computation, and write the target pixels.
+        // Apparently, that's not true: one looks through the target
+        // pixels, and computes what should be there from the source
+        // pixels. I doubt I will ever completely understand this
+        // stuff.
+        // BC: I guess this makes it easier to make the transform anti-aliased,
+        // as you can easily take the weighted mean of the square the destination
+        // pixel has it's origin in.
+
+        /* For each target line of target pixels, the original pixel is located (in the
+           surrounding of)
+           x = m11*x' + m21*y' + dx
            y = m22*y' + m12*x' + dy
-	*/
+        */
 
-	for (Q_INT32 y = 0; y < targetH; y++) {
-		/* at the moment, just round the original coordinates; but the unrounded
-		   values should be used for AA */
-		for (Q_INT32 x = 0; x < targetW; x++) {
-			Q_INT32 orX = qRound(targetMat.m11() * x + targetMat.m21() * y + targetMat.dx());
-			Q_INT32 orY = qRound(targetMat.m22() * y + targetMat.m12() * x + targetMat.dy());
+        for (Q_INT32 y = 0; y < targetH; y++) {
+                /* at the moment, just round the original coordinates; but the unrounded
+                   values should be used for AA */
+                for (Q_INT32 x = 0; x < targetW; x++) {
+                        Q_INT32 orX = qRound(targetMat.m11() * x + targetMat.m21() * y + targetMat.dx());
+                        Q_INT32 orY = qRound(targetMat.m22() * y + targetMat.m12() * x + targetMat.dy());
 
-			int currentPos = (y*targetW+x) * depth(); // try to be at least a little efficient
-			if (!(orX < 0 || orY < 0 || orX >= width() || orY >= height())) {
-				data() -> readPixelData(orX, orY, orX, orY, origPixel, depth());
-				for(int i = 0; i < depth(); i++)
-					newData[currentPos + i] = origPixel[i];
-			}
-		}
-	}
-	
+                        int currentPos = (y*targetW+x) * depth(); // try to be at least a little efficient
+                        if (!(orX < 0 || orY < 0 || orX >= width() || orY >= height())) {
+                                data() -> readPixelData(orX, orY, orX, orY, origPixel, depth());
+                                for(int i = 0; i < depth(); i++)
+                                        newData[currentPos + i] = origPixel[i];
+                        }
+                }
+        }
+
         KisTileMgrSP tm = new KisTileMgr(depth(), targetW, targetH);
-	tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * depth());
-	data(tm); // Also set width and height correctly
+        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * depth());
+        data(tm); // Also set width and height correctly
 
-	delete[] origPixel;
-	delete[] newData;
+        delete[] origPixel;
+        delete[] newData;
 
 }
 
 void KisPaintDevice::mirrorX()
 {
-	/* For each line, swap the liness at equal distances from the X axis*/
-	/* Should be bit depth independent, but I don't have anything to test that with.
-	   I don't know about colour strategy, but if bit depth works that should too */
+        /* For each line, swap the liness at equal distances from the X axis*/
+        /* Should be bit depth independent, but I don't have anything to test that with.
+           I don't know about colour strategy, but if bit depth works that should too */
 
-	QUANTUM *line1 = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
-	QUANTUM *line2 = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
-	KisTileMgrSP tm = new KisTileMgr(depth(), width(), height());
+        QUANTUM *line1 = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
+        QUANTUM *line2 = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
+        KisTileMgrSP tm = new KisTileMgr(depth(), width(), height());
 
-	int cutoff = static_cast<int>(height()/2);
+        int cutoff = static_cast<int>(height()/2);
 
-	for(int i = 0; i < cutoff; i++) {
-		data() -> readPixelData(0, i, width() - 1, i, line1, width() * depth());
-		data() -> readPixelData(0, height() - i - 1, width() - 1, height() - i - 1, line2, width() * depth());
-		tm -> writePixelData(0, height() - i - 1, width() - 1, height() - i - 1, line1, width() * depth());
-		tm -> writePixelData(0, i, width() - 1, i, line2, width() * depth());
-	}
+        for(int i = 0; i < cutoff; i++) {
+                data() -> readPixelData(0, i, width() - 1, i, line1, width() * depth());
+                data() -> readPixelData(0, height() - i - 1, width() - 1, height() - i - 1, line2, width() * depth());
+                tm -> writePixelData(0, height() - i - 1, width() - 1, height() - i - 1, line1, width() * depth());
+                tm -> writePixelData(0, i, width() - 1, i, line2, width() * depth());
+        }
 
-	data(tm);
+        data(tm);
 
-	delete[] line1;
-	delete[] line2;
+        delete[] line1;
+        delete[] line2;
 }
 
 void KisPaintDevice::mirrorY()
 {
-	/* For each line, swap the pixels at equal distances from the Y axis */
-	/* Note: I get the idea that this could be done faster with direct access to
-	   the pixel data. Now I have to copy the pixels twice only to get them
-	   and put them back in place. */
-	/* Should be bit depth and arch independent, but I don't have anything to test
-	   that with I don't know about colour strategy, but if bit depth works that
-	   should too */
-	QUANTUM *pixel = new QUANTUM[depth() * sizeof(QUANTUM)]; // the right pixel
-	QUANTUM *line = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
-	KisTileMgrSP tm = new KisTileMgr(depth(), width(), height());
-	int cutoff = static_cast<int>(width()/2);
+        /* For each line, swap the pixels at equal distances from the Y axis */
+        /* Note: I get the idea that this could be done faster with direct access to
+           the pixel data. Now I have to copy the pixels twice only to get them
+           and put them back in place. */
+        /* Should be bit depth and arch independent, but I don't have anything to test
+           that with I don't know about colour strategy, but if bit depth works that
+           should too */
+        QUANTUM *pixel = new QUANTUM[depth() * sizeof(QUANTUM)]; // the right pixel
+        QUANTUM *line = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
+        KisTileMgrSP tm = new KisTileMgr(depth(), width(), height());
+        int cutoff = static_cast<int>(width()/2);
 
-	for(int i = 0; i < height(); i++) {
-		data() -> readPixelData(0, i, width() - 1, i, line, width() * depth());
-		for(int j = 0; j < cutoff; j++) {
-			for(int k = 0; k < depth(); k++) {
-				pixel[k] = line[(width()-1)*depth() - j*depth() + k];
-				line[(width()-1)*depth() - j*depth() + k] = line[j*depth()+k];
-				line[j*depth()+k] = pixel[k];
-			}
-		}
-		tm -> writePixelData(0, i, width() - 1, i, line, width() * depth());
-	}
-	
-	data(tm); // Act like this is a resize; this should get it's own undo 'name'
-	
-	delete[] line;
-	delete[] pixel;
+        for(int i = 0; i < height(); i++) {
+                data() -> readPixelData(0, i, width() - 1, i, line, width() * depth());
+                for(int j = 0; j < cutoff; j++) {
+                        for(int k = 0; k < depth(); k++) {
+                                pixel[k] = line[(width()-1)*depth() - j*depth() + k];
+                                line[(width()-1)*depth() - j*depth() + k] = line[j*depth()+k];
+                                line[j*depth()+k] = pixel[k];
+                        }
+                }
+                tm -> writePixelData(0, i, width() - 1, i, line, width() * depth());
+        }
+
+        data(tm); // Act like this is a resize; this should get it's own undo 'name'
+
+        delete[] line;
+        delete[] pixel;
 }
 
 void KisPaintDevice::expand(Q_INT32 w, Q_INT32 h)
@@ -922,45 +927,45 @@ KisTileMgrSP KisPaintDevice::tiles() const
 
 Q_INT32 KisPaintDevice::depth() const
 {
-	return m_depth;
+        return m_depth;
 }
 
 KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
 {
-	return m_colorStrategy;
+        return m_colorStrategy;
 }
 
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumBegin(KisTileCommand* command)
 {
-	return KisIteratorLineQuantum( this, command, 0);
+        return KisIteratorLineQuantum( this, command, 0);
 }
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
 {
-	return KisIteratorLineQuantum( this, command, ystart, xstart, xend);
+        return KisIteratorLineQuantum( this, command, ystart, xstart, xend);
 }
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumEnd(KisTileCommand* command)
 {
-	return KisIteratorLineQuantum( this, command, height() - 1);
+        return KisIteratorLineQuantum( this, command, height() - 1);
 }
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
 {
-	return KisIteratorLineQuantum( this, command, yend, xstart, xend);
+        return KisIteratorLineQuantum( this, command, yend, xstart, xend);
 }
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionBegin(KisTileCommand* command)
 {
-	return KisIteratorLineQuantum( this, command, 0);
+        return KisIteratorLineQuantum( this, command, 0);
 }
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
 {
-	return KisIteratorLineQuantum( this, command, ystart,  xstart, xend);
+        return KisIteratorLineQuantum( this, command, ystart,  xstart, xend);
 }
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionEnd(KisTileCommand* command)
 {
-	return KisIteratorLineQuantum( this, command, height() - 1);
+        return KisIteratorLineQuantum( this, command, height() - 1);
 }
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
 {
-	return KisIteratorLineQuantum( this, command, yend, xstart, xend);
+        return KisIteratorLineQuantum( this, command, yend, xstart, xend);
 }
 
 #include "kis_paint_device.moc"

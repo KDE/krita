@@ -1,5 +1,5 @@
 /*
- *  kis_dlg_colorrange.cc - part of KimageShop^WKrayon^WKrita
+ *  dlg_colorrange.cc - part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -20,16 +20,16 @@
 
 #include <klocale.h>
 
-#include "kis_dlg_colorrange.h"
-#include "dialogs/colorrange.h"
+#include "dlg_colorrange.h"
+#include "wdg_colorrange.h"
 
 
-KisDlgColorRange::KisDlgColorRange( QWidget *  parent,
+DlgColorRange::DlgColorRange( QWidget *  parent,
 				    const char * name)
 	: super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok)
 {
 	m_previewPix = QPixmap();
-	m_page = new ColorRange(this, "color_range");
+	m_page = new WdgColorRange(this, "color_range");
 	setCaption(i18n("Color Range"));
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
@@ -38,20 +38,20 @@ KisDlgColorRange::KisDlgColorRange( QWidget *  parent,
 		this, SLOT(okClicked()));
 }
 
-KisDlgColorRange::~KisDlgColorRange()
+DlgColorRange::~DlgColorRange()
 {
 	delete m_page;
 }
 
-void KisDlgColorRange::setPixmap(QPixmap pix) 
+void DlgColorRange::setPixmap(QPixmap pix) 
 {
 	m_previewPix = pix;
 	m_previewPix.detach();
 }
 
-void KisDlgColorRange::okClicked()
+void DlgColorRange::okClicked()
 {
 	accept();
 }
 
-#include "kis_dlg_colorrange.moc"
+#include "dlg_colorrange.moc"

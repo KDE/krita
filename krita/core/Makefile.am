@@ -22,6 +22,8 @@ libkiscore_la_LIBADD = tiles/libkistile.la helper/libkishelper.la \
 	strategy/libkisstrategy.la \
 	color_strategy/libkiscolor_strategy.la
 
+# kis_pluginserver.cc 
+
 libkiscore_la_SOURCES = kis_paint_device.cc \
 	kis_layer.cc \
 	kis_channel.cc \
@@ -30,7 +32,6 @@ libkiscore_la_SOURCES = kis_paint_device.cc \
 	kis_doc.cc \
 	kis_view.cc \
 	kis_factory.cc \
-	kis_pluginserver.cc \
 	kis_resourceserver.cc \
 	kis_brush.cc \
 	kis_pattern.cc \

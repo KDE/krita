@@ -17,7 +17,6 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_color_widget.cc \
     kis_controlframe.cc \
     kis_listbox.cc \
-    kis_dlg_colorrange.cc \
     kis_dlg_create_img.cc \
     kis_dlg_dimension.cc \
     kis_dlg_new_layer.cc \

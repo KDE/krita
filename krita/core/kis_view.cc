@@ -104,7 +104,6 @@
 #include "visitors/kis_merge.h"
 
 // Dialog boxes
-#include "kis_dlg_colorrange.h"
 #include "kis_dlg_builder_progress.h"
 #include "kis_dlg_dimension.h"
 #include "kis_dlg_gradient.h"
@@ -184,8 +183,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_resourcedocker = 0;
 	m_toolcontroldocker = 0;
 	m_colordocker = 0;
-	
-	m_colorrange = 0;
 	
 	m_paletteChooser = 0;
 	m_gradientChooser = 0;
@@ -486,10 +483,6 @@ void KisView::setupActions()
 	m_selectionFillBg = new KAction(i18n("Fill with Background Color"), 0, this, 
 					SLOT(fillSelectionBg()), actionCollection(), 
 					"fill_bgcolor");
-	m_selectionColorRange = new KAction(i18n("Color Range"), 0, this, 
-					    SLOT(selectColorRange()), actionCollection(), 
-					    "color_range");
-
 
 	// import/export actions
 	m_imgImport = new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
@@ -1050,23 +1043,6 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 		}
 	}
 }
-
-void KisView::selectColorRange()
-{
-	KisImageSP img = currentImg();
-
-	if (img) {
-		m_colorrange = new KisDlgColorRange(this);
-		// Create preview pixmap
-		
-		if (m_colorrange -> exec() == QDialog::Accepted) {
-			// bla
-		}
-		delete m_colorrange;
-		m_colorrange = 0; // KPresenter sometimes uses 0, sometimes 0L in this context -- why?
-	}
-}
-
 
 void KisView::selectAll()
 {

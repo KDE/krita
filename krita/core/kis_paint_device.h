@@ -39,6 +39,7 @@ class KisImage;
 class QWMatrix;
 class KisIteratorLineQuantum;
 class KisTileCommand;
+
 /**
  * Class modelled on QPaintDevice.
  */
@@ -99,6 +100,8 @@ public:
         bool contains(const QPoint& pt) const;
 
         void data(KisTileMgrSP mgr);
+
+	QImage convertToImage();
 
         QString name();
         void setName(const QString& name);
@@ -182,28 +185,37 @@ public:
         void expand(const QSize& size);
 
         void offsetBy(Q_INT32 x, Q_INT32 y);
-		/** This function return an iterator which point on the first line of the
-			* whole PaintDevice
-			*/
-		KisIteratorLineQuantum iteratorQuantumBegin(KisTileCommand* command);
-		KisIteratorLineQuantum iteratorQuantumBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart);
-		/** This function return an iterator which point on the last line of the
-			* whole PaintDevice
-			*/
-		KisIteratorLineQuantum iteratorQuantumEnd(KisTileCommand* command);
-		KisIteratorLineQuantum iteratorQuantumEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
-		/** This function return an iterator which point on the first line of the
-			* part of PaintDevice which is selected
-			*/
-		KisIteratorLineQuantum iteratorQuantumSelectionBegin(KisTileCommand* command);
-		KisIteratorLineQuantum iteratorQuantumSelectionBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart);
-		/** This function return an iterator which point on the last line of the
-			* part of PaintDevice which is selected
-			*/
-		KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command);
-		KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
+
+	/** 
+	 * This function return an iterator which point on the first line of the
+	 * whole PaintDevice
+	 */
+	KisIteratorLineQuantum iteratorQuantumBegin(KisTileCommand* command);
+	KisIteratorLineQuantum iteratorQuantumBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart);
+
+	/**
+	 * This function return an iterator which point on the last line of the
+	 * whole PaintDevice
+	 */
+	KisIteratorLineQuantum iteratorQuantumEnd(KisTileCommand* command);
+	KisIteratorLineQuantum iteratorQuantumEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
+
+	/**
+	 * This function return an iterator which point on the first line of the
+	 * part of PaintDevice which is selected
+	 */
+	KisIteratorLineQuantum iteratorQuantumSelectionBegin(KisTileCommand* command);
+	KisIteratorLineQuantum iteratorQuantumSelectionBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart);
+
+	/**
+	 * This function return an iterator which point on the last line of the
+	 * part of PaintDevice which is selected
+	 */
+	KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command);
+	KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
 
 signals:
+
         void visibilityChanged(KisPaintDeviceSP device);
         void positionChanged(KisPaintDeviceSP device);
         void ioProgress(Q_INT8 percentage);

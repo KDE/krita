@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="colorrange" version="6">
+<MenuBar>
+    <Menu name="Select"><text>Select</text>
+	<Seperator/>
+	<Action name="colorrange"/>
+	<Seperator/>
+    </Menu>
+</MenuBar>
+</kpartgui>

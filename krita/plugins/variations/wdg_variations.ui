@@ -273,7 +273,7 @@
                     <cstring>bnSave</cstring>
                 </property>
                 <property name="text">
-                    <string>&amp;Save</string>
+                    <string>&amp;Save...</string>
                 </property>
                 <property name="accel">
                     <string>Alt+S</string>

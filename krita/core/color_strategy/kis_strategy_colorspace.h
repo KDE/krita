@@ -58,9 +58,11 @@ public:
 	virtual void nativeColor(QRgb rgb, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst) = 0;
 
-	virtual ChannelInfo* channelsInfo() const =0;
+	virtual ChannelInfo* channelsInfo() const = 0;
 
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
+
+	virtual QImage convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const = 0;
 
 	virtual void tileBlt(Q_INT32 stride,
 			QUANTUM *dst, 
@@ -70,6 +72,7 @@ public:
 			Q_INT32 rows, 
 			Q_INT32 cols, 
 			CompositeOp op) const = 0;
+
 	virtual void tileBlt(Q_INT32 stride,
 			QUANTUM *dst, 
 			Q_INT32 dststride,

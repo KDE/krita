@@ -47,18 +47,18 @@
 #include <kistilemgr.h>
 #include <kis_iterators.h>
 
-#include "variations.h"
-#include "dlg_variations.h"
+#include "colorrange.h"
+#include "dlg_colorrange.h"
 
-typedef KGenericFactory<Variations> VariationsFactory;
-K_EXPORT_COMPONENT_FACTORY( variations, VariationsFactory( "krita" ) )
+typedef KGenericFactory<ColorRange> ColorRangeFactory;
+K_EXPORT_COMPONENT_FACTORY( colorrange, ColorRangeFactory( "krita" ) )
 
-Variations::Variations(QObject *parent, const char *name, const QStringList &)
+ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)
 {
-	setInstance(VariationsFactory::instance());
+	setInstance(ColorRangeFactory::instance());
 
-	(void) new KAction(i18n("&Variations..."), 0, 0, this, SLOT(slotVariationsActivated()), actionCollection(), "variations");
+	(void) new KAction(i18n("&ColorRange..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange");
 	
 	if ( !parent->inherits("KisView") )
 	{
@@ -68,25 +68,27 @@ Variations::Variations(QObject *parent, const char *name, const QStringList &)
 	}
 }
 
-Variations::~Variations()
+ColorRange::~ColorRange()
 {
 }
 
-void Variations::slotVariationsActivated()
+void ColorRange::slotActivated()
 {
-	DlgVariations * dlgVariations = new DlgVariations(m_view, "Variations");
-	// Render layer to a QIMage -- keep in mind possibility of selection
+	DlgColorRange * dlgColorRange = new DlgColorRange(m_view, "ColorRange");
 
+	// Render layer to a QIMage -- keep in mind possibility of selection
+	//KisLayerSP layer = m_view -> currentImg() -> activeLayer();
+	//QImage img = layer.convertToImage();
 	// Scale QImage 
 
 	// Set original QImage in dialog
 		
-	if (dlgVariations -> exec() == QDialog::Accepted) {
+	if (dlgColorRange -> exec() == QDialog::Accepted) {
 		// Retrieve changes made by dialog
 		// Apply changes to layer (selection)
 	}
-	delete dlgVariations;
+	delete dlgColorRange;
 }
 
-#include "variations.moc"
+#include "colorrange.moc"
 

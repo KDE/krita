@@ -100,6 +100,22 @@ ChannelInfo* KisStrategyColorSpaceRGB::channelsInfo() const
 
 void KisStrategyColorSpaceRGB::render(KisImageSP image, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
 {
+	QImage img = convertToImage(image, x, y, width, height);
+	if (!img.isNull()) {
+#ifdef __BIG_ENDIAN__
+		// kpixmapio has a nasty bug on powerpc that shows up as rendering errors
+		m_pixmap = m_pixmap.convertFromImage(img);
+#else
+		m_pixio.putImage(&m_pixmap, 0, 0, &img);
+#endif
+
+		painter.drawPixmap(x, y, m_pixmap, 0, 0, width, height);	
+	}
+}
+
+
+QImage KisStrategyColorSpaceRGB::convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const 
+{
 	if (image) {
 		KisTileMgrSP tm = image -> tiles();
 		KisPixelDataSP pd = new KisPixelData;
@@ -137,18 +153,17 @@ void KisStrategyColorSpaceRGB::render(KisImageSP image, QPainter& painter, Q_INT
 			j += MAX_CHANNEL_RGBA; // Because we're hard-coded 32 bits deep, 4 bytes
 
 		}
-		// kpixmapio has a nasty bug on powerpc that shows up as rendering errors
-		m_pixmap = m_pixmap.convertFromImage(img);
+
 #else
 		img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * QUANTUM_DEPTH, 0, 0, QImage::LittleEndian);
-		m_pixio.putImage(&m_pixmap, 0, 0, &img);
-		//m_pixmap = QPixmap(img);
-
 #endif
-
-		painter.drawPixmap(x, y, m_pixmap, 0, 0, width, height);
+		return img;
+	}
+	else {
+		return QImage();
 	}
 }
+
 
 void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 				       QUANTUM *dst,

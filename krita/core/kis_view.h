@@ -100,8 +100,7 @@ public:
 	virtual void setupPrinter(KPrinter &printer);
 	virtual void updateReadWrite(bool readwrite);
 	virtual void guiActivateEvent(KParts::GUIActivateEvent *event);
-
-
+	
 public:
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
@@ -421,6 +420,7 @@ private:
 
 	QTime m_tabletEventTimer;
 	QTabletEvent::TabletDevice m_lastTabletEventDevice;
+
 
 private:
 	mutable KisImageSP m_current;

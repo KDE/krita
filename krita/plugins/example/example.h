@@ -35,6 +35,8 @@ public:
 private slots:
 	void slotActivated();
 	void slotIteratorsActivated();
+
+private:
 	KisView* m_view;
 	KisPainter *m_painter;
 

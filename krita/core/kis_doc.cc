@@ -74,9 +74,7 @@
 #include "builder/kis_builder_monitor.h"
 #include "builder/kis_image_magick_converter.h"
 #include "color_strategy/kis_strategy_colorspace.h"
-#include "color_strategy/kis_strategy_colorspace_grayscale.h"
-#include "color_strategy/kis_strategy_colorspace_rgb.h"
-#include "color_strategy/kis_strategy_colorspace_cmyk.h"
+#include "kis_colorspace_factory.h"
 #include "tiles/kistilemgr.h"
 
 #include "KIsDocIface.h"
@@ -429,30 +427,8 @@ bool KisDoc::init()
 	connect(m_cmdHistory, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
 	m_undo = true;
 	m_nserver = new KisNameServer(i18n("Image %1"), 0);
-	setupColorspaces();
 	return true;
 }
-
-// XXX: wasn't this done in the colourspace strategy factory?
-void KisDoc::setupColorspaces()
-{
-	KisStrategyColorSpaceSP p1 = new KisStrategyColorSpaceGrayscale;
-
-	m_colorspaces[IMAGE_TYPE_GREY] = p1;
-	m_colorspaces[IMAGE_TYPE_GREYA] = p1;
-	
-	KisStrategyColorSpaceSP p = new KisStrategyColorSpaceRGB;
-
-	m_colorspaces[IMAGE_TYPE_RGB] = p;
-	m_colorspaces[IMAGE_TYPE_RGBA] = p;
-
-        KisStrategyColorSpaceSP p2 = new KisStrategyColorSpaceCMYK;
-
-        m_colorspaces[IMAGE_TYPE_CMYK] = p2;
-        m_colorspaces[IMAGE_TYPE_CMYKA] = p2;
-
-}
-
 QDomDocument KisDoc::saveXML()
 {
 	QDomDocument doc = createDomDocument("DOC", CURRENT_DTD_VERSION);
@@ -1089,8 +1065,9 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 		m_projection = m_images[0];
 
 	if (m_projection) {
-		if (!(colorstate = m_colorspaces[m_projection -> nativeImgType()]))
-			return;
+		KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+		Q_ASSERT(factory);
+		colorstate = factory -> create(m_projection -> nativeImgType());
 
 		x1 = CLAMP(rect.x(), 0, m_projection -> width());
 		y1 = CLAMP(rect.y(), 0, m_projection -> height());

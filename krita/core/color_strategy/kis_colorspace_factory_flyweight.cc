@@ -20,7 +20,6 @@
 #include <kdebug.h>
 #include "kis_colorspace_factory_flyweight.h"
 #include "kis_paint_device.h"
-#include "kis_strategy_colorspace_cmyk.h"
 #include "kis_strategy_colorspace_rgb.h"
 #include "kis_strategy_colorspace_grayscale.h"
 
@@ -62,18 +61,19 @@ KisStrategyColorSpaceSP KisColorSpaceFactoryFlyweight::create(enumImgType imgTyp
 	case IMAGE_TYPE_RGBA:
 		p = new KisStrategyColorSpaceRGB;
 		break;
-	case IMAGE_TYPE_CMYK:
-	case IMAGE_TYPE_CMYKA:
-		p = new KisStrategyColorSpaceCMYK;
-		break;
 	default:
 		kdDebug() << "Color space strategy not implemented." << endl;
 		abort();
 		break;
 	}
 
-	m_flyweights[imgType] = p;
+	add(imgType, p);
 	return p;
+}
+
+void KisColorSpaceFactoryFlyweight::add(enumImgType imgType, KisStrategyColorSpaceSP colorspace) {
+	kdDebug() << "Added colorspace: " << imgType << ", " << colorspace << "\n";
+	m_flyweights[imgType] = colorspace;
 }
 
 KisStrategyColorSpaceSP KisColorSpaceFactoryFlyweight::find(enumImgType imgType) const

@@ -1,5 +1,5 @@
-/*
- * colorrange.h -- Part of Krita
+/* 
+ * cmyk_plugin.cc -- Part of Krita
  *
  * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *
@@ -18,13 +18,9 @@
  * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-
-
-#include <math.h>
-
 #include <stdlib.h>
+#include <vector>
 
-#include <qslider.h>
 #include <qpoint.h>
 
 #include <klocale.h>
@@ -38,63 +34,43 @@
 
 #include <kis_doc.h>
 #include <kis_image.h>
+#include <kis_iterators.h>
 #include <kis_layer.h>
-#include <kis_paint_device.h>
 #include <kis_global.h>
 #include <kis_tile_command.h>
 #include <kis_types.h>
 #include <kis_view.h>
+#include <kis_plugin_registry.h>
 #include <kistile.h>
 #include <kistilemgr.h>
-#include <kis_iterators.h>
-#include <kis_selection.h>
 
-#include "colorrange.h"
-#include "dlg_colorrange.h"
+#include "cmyk_plugin.h"
 
-typedef KGenericFactory<ColorRange> ColorRangeFactory;
-K_EXPORT_COMPONENT_FACTORY( colorrange, ColorRangeFactory( "krita" ) )
+#include "kis_strategy_colorspace_cmyk.h"
 
-ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
+typedef KGenericFactory<CMYKPlugin> CMYKPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( cmykplugin, CMYKPluginFactory( "krita" ) )
+
+
+CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)
 {
-	setInstance(ColorRangeFactory::instance());
-	
-	kdDebug() << "Colorrange plugin. Class: " 
+       	setInstance(CMYKPluginFactory::instance());
+
+	kdDebug() << "CMYK Color model plugin. Class: " 
 		  << className() 
 		  << ", Parent: " 
 		  << parent -> className()
 		  << "\n";
 
-	(void) new KAction(i18n("&ColorRange..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange");
+	m_StrategyColorSpaceCMYK = new KisStrategyColorSpaceCMYK();
+	KisPluginRegistry::singleton() -> registerColorStrategy("CMYK", IMAGE_TYPE_CMYK, m_StrategyColorSpaceCMYK);
+	KisPluginRegistry::singleton() -> registerColorStrategy("CMYK + Alpha", IMAGE_TYPE_CMYKA, m_StrategyColorSpaceCMYK);
 	
-	if ( !parent->inherits("KisView") )
-	{
-		m_view = 0;
-	} else {
-		m_view = (KisView*) parent;
-	}
 }
 
-ColorRange::~ColorRange()
+CMYKPlugin::~CMYKPlugin()
 {
 }
 
-void ColorRange::slotActivated()
-{
-	DlgColorRange * dlgColorRange = new DlgColorRange(m_view, "ColorRange");
-
-	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
-	KisSelectionSP selection = new KisSelection(layer, "colorrange");
-	
-	dlgColorRange -> setLayer(layer);
-	dlgColorRange -> setSelection(selection);
-
-	if (dlgColorRange -> exec() == QDialog::Accepted) {
-		layer -> setActiveSelection(selection);
-	}
-	delete dlgColorRange;
-}
-
-#include "colorrange.moc"
-
+#include "cmyk_plugin.moc"

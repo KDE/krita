@@ -3,9 +3,11 @@ noinst_LTLIBRARIES = libkisdialogs.la
 libkisdialogs_la_SOURCES = dummy.cc \
 	wdgmatrix.ui \
 	new_image.ui \
+	wdghistogram.ui \
 	kis_previewwidgetbase.ui
 
 noinst_HEADERS = wdgmatrix.h \
+	wdghistogram.h \
 	new_image.h \
 	kis_previewwidgetbase.h
 

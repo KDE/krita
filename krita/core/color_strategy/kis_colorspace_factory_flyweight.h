@@ -23,7 +23,9 @@
 #include "kis_colorspace_factory.h"
 
 class KisColorSpaceFactoryFlyweight : public KisColorSpaceFactoryInterface {
+
 	typedef KisColorSpaceFactoryInterface super;
+
 	typedef std::map<enumImgType, KisStrategyColorSpaceSP> acFlyweights;
 	typedef acFlyweights::iterator acFlyweights_it;
 	typedef acFlyweights::const_iterator acFlyweights_cit;
@@ -35,6 +37,7 @@ public:
 public:
 	virtual KisStrategyColorSpaceSP create(const KisPaintDeviceSP& device);
 	virtual KisStrategyColorSpaceSP create(enumImgType imgType);
+	virtual void add(enumImgType imgType, KisStrategyColorSpaceSP colorspace);
 
 private:
 	KisStrategyColorSpaceSP find(enumImgType imgType) const;

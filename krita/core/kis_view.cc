@@ -1808,19 +1808,9 @@ void KisView::viewResourceDocker()
 
 void KisView::slotUpdateFullScreen(bool toggle)
 {
-//	this->setWindowState( this->windowState() & ~toggle );
-	kdDebug() << "Full screen called.\n";
-
-        if (isFullScreen()) {
-		kdDebug() << "Already full-screen\n";
-                qApp -> mainWidget() -> showNormal();
+	if (KoView::shell()) {
+		KoView::shell()->setWindowState( this->windowState() & ~toggle );
 	}
-	else {
-		kdDebug() << "Going to full-screen\n";
-		qApp -> mainWidget() -> showFullScreen();
-	}
-
-
 }
 
 Q_INT32 KisView::docWidth() const
@@ -2739,7 +2729,7 @@ void KisView::guiActivateEvent(KParts::GUIActivateEvent *event)
 
         super::guiActivateEvent(event);
 }
-
+		      
 void KisView::nBuilders(Q_INT32 size)
 {
         m_imgImport -> setEnabled(size == 0);
@@ -2986,4 +2976,6 @@ KoDocument *KisView::document() const
 }
 
 #include "kis_view.moc"
+
+
 

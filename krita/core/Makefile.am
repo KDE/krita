@@ -16,13 +16,12 @@ INCLUDES  = -I$(srcdir)/builder \
 
 noinst_LTLIBRARIES = libkritacore.la
 
-libkritacore_la_LIBADD = tiles/libkistile.la helper/libkishelper.la \
+libkritacore_la_LIBADD = tiles/libkistile.la \
+	helper/libkishelper.la \
 	builder/libkiscorebuilder.la \
 	strategy/libkisstrategy.la \
 	color_strategy/libkiscolor_strategy.la \
 	$(LIB_KOPAINTER)
-
-# kis_pluginserver.cc 
 
 libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_layer.cc \
@@ -62,6 +61,7 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_rect.cc \
 	kis_iterators.cc \
 	kis_histogram.cc \
+	kis_plugin_registry.cc \
 	KRayonViewIface.cc \
 	KRayonViewIface.skel \
 	KIsDocIface.cc \

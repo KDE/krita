@@ -71,6 +71,13 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 {
 	setInstance(ColorsFiltersFactory::instance());
 
+	kdDebug() << "ColorsFilters plugin. Class: " 
+		  << className() 
+		  << ", Parent: " 
+		  << parent -> className()
+		  << "\n";
+
+
 	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, this, SLOT(slotBrightnessContrastActivated()), actionCollection(), "brightnesscontrast");
 	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, this, SLOT(slotGammaActivated()), actionCollection(), "gammacorrection");
 	(void) new KAction(i18n("&Color Adjustment..."), 0, 0, this, SLOT(slotColorActivated()), actionCollection(), "coloradjustment");

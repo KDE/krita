@@ -30,7 +30,7 @@ public:
 public:
 	virtual KisStrategyColorSpaceSP create(const KisPaintDeviceSP& device) = 0;
 	virtual KisStrategyColorSpaceSP create(enumImgType imgType) = 0;
-
+	virtual void add(enumImgType imgType, KisStrategyColorSpaceSP colorspace) = 0;
 public:
 	static KisColorSpaceFactoryInterface *singleton();
 

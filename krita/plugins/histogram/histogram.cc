@@ -61,7 +61,13 @@ Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)
 {
 	setInstance(HistogramFactory::instance());
-	kdDebug() << "Histogram\n";
+
+	kdDebug() << "Histogram plugin. Class: " 
+		  << className() 
+		  << ", Parent: " 
+		  << parent -> className()
+		  << "\n";
+
 
 	(void) new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
 	

@@ -53,12 +53,19 @@ K_EXPORT_COMPONENT_FACTORY( kritaexample, KritaExampleFactory( "krita" ) )
 {
        	setInstance(KritaExampleFactory::instance());
 
+	kdDebug() << "Example plugin. Class: " 
+		  << className() 
+		  << ", Parent: " 
+		  << parent -> className()
+		  << "\n";
+
+
 	(void) new KAction(i18n("&Invert..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "krita_example");
 	(void) new KAction(i18n("&Invert (iterators)..."), 0, 0, this, SLOT(slotIteratorsActivated()), actionCollection(), "krita_example_iterators");
 
 	if ( !parent->inherits("KisView") )
 	{
-		//kdError() << "KritaExempleFactory: KisView expected. Parent is " << parent->className() << endl;
+		kdDebug() << "KritaExampleFactory: KisView expected. Parent is " << parent -> className() << endl;
 		m_view = 0;
 	} else {
 		this->m_view = (KisView*) parent;
@@ -102,6 +109,8 @@ void KritaExample::slotIteratorsActivated()
 
 void KritaExample::slotActivated()
 {
+	kdDebug() << "View = " << this -> m_view << "\n";
+
 	KisDoc* kD = (KisDoc*) this->m_view->koDocument();
 	if( kD->imageNum(0) == 0 )
 		return;

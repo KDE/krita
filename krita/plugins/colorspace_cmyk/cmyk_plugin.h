@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt
+ *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,37 +15,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#ifndef KIS_HISTOGRAM_WIDGET_
-#define KIS_HISTOGRAM_WIDGET_
 
-#include <qwidget.h>
-#include <qpixmap.h>
+#ifndef CMYK_PLUGIN_H_
+#define CMYK_PLUGIN_H_
+
+#include <kparts/plugin.h>
 
 #include "kis_types.h"
 
-#include "dialogs/wdghistogram.h"
+class KisView;
 
 /**
- * The histogram widget takes a paint device or an image and
- * draws a histogram for the given KisHistogram.
+ * A plugin wrapper around the CMYK colour space strategy.
  */
-class KisHistogramWidget : public WdgHistogram {
-
-	typedef WdgHistogram super;
+class CMYKPlugin : public KParts::Plugin
+{
 	Q_OBJECT
-
-
 public:
-	KisHistogramWidget(QWidget *parent, const char *name);
-	virtual ~KisHistogramWidget();
-
-	void setHistogram(KisHistogramSP histogram);
-
+	CMYKPlugin(QObject *parent, const char *name, const QStringList &);
+	virtual ~CMYKPlugin();
+	
 private:
 
-	QPixmap m_pix;
-	KisHistogramSP m_histogram;
+	KisView* m_view;
+	KisStrategyColorSpaceSP m_StrategyColorSpaceCMYK;
 };
 
-
-#endif // KIS_HISTOGRAM_WIDGET_
+#endif // CMYK_PLUGIN_H_

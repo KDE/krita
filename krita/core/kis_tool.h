@@ -21,6 +21,9 @@
 #define KIS_TOOL_H_
 
 #include <qobject.h>
+
+#include <ksharedptr.h>
+
 #include "kis_canvas_observer.h"
 
 class QCursor;
@@ -40,7 +43,7 @@ class KisButtonPressEvent;
 class KisButtonReleaseEvent;
 class KisMoveEvent;
 
-class KisTool : public QObject, public KisCanvasObserver {
+class KisTool : public QObject, public KisCanvasObserver, public KShared {
 	Q_OBJECT
 
 public:

@@ -57,7 +57,7 @@ KisToolEllipse::~KisToolEllipse()
 
 void KisToolEllipse::update (KisCanvasSubject *subject)
 {
-        kdDebug (40001) << "KisToolEllipse::update(" << subject << ")" << endl;
+//         kdDebug (40001) << "KisToolEllipse::update(" << subject << ")" << endl;
         super::update (subject);
         if (m_subject)
             m_currentImage = m_subject->currentImg ();
@@ -65,7 +65,7 @@ void KisToolEllipse::update (KisCanvasSubject *subject)
 
 void KisToolEllipse::buttonPress(KisButtonPressEvent *event)
 {
-        kdDebug (40001) << "KisToolEllipse::buttonPress" << event->pos () << endl;
+//         kdDebug (40001) << "KisToolEllipse::buttonPress" << event->pos () << endl;
 	if (event -> button() == LeftButton) {
 		m_dragging = true;
 		m_dragStart = event -> pos();

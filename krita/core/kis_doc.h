@@ -64,6 +64,7 @@ private:
 	virtual void endMacro();
 	virtual bool inMacro() const;
 
+
 public:
 	KisLayerSP layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM devOpacity);
 	KisLayerSP layerAdd(KisImageSP img,
@@ -152,7 +153,6 @@ private:
 	QDomElement saveChannel(QDomDocument& doc, KisChannelSP channel);
 	KisChannelSP loadChannel(const QDomElement& elem, KisImageSP img);
 	bool init();
-	void setupColorspaces();
 
 private:
 	bool m_undo;
@@ -164,8 +164,7 @@ private:
 	DCOPObject *m_dcop;
 	KisNameServer *m_nserver;
 	KMacroCommand *m_currentMacro;
-	Q_INT32 m_conversionDepth;
-	KisStrategyColorSpaceMap m_colorspaces;
+	Q_INT32 m_conversionDepth;;
 };
 
 #endif // KIS_DOC_H_

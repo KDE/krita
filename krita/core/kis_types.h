@@ -80,8 +80,13 @@ typedef vKisHistogramSP::iterator vKisHistogramSP_it;
 typedef vKisHistogramSP::const_iterator vKisHistogramSP_cit;
 
 
+class KisPluginRegistry;
+typedef KSharedPtr<KisPluginRegistry> KisPluginRegistrySP;
+
 class KisTool;
-typedef QValueVector<KisTool*> vKisTool;
+typedef KSharedPtr<KisTool> KisToolSP;
+typedef QValueVector<KisToolSP> vKisTool;
+// was: typedef QValueVector<KisTool*> vKisTool;
 typedef vKisTool::iterator vKisTool_it;
 typedef vKisTool::const_iterator vKisTool_cit;
 

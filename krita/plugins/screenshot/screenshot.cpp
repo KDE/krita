@@ -40,6 +40,12 @@ K_EXPORT_COMPONENT_FACTORY( kritascreenshot, ScreenshotFactory( "kscreenshot_plu
 {
 	setInstance(ScreenshotFactory::instance());
 
+	kdDebug() << "Screenshot plugin. Class: " 
+		  << className() 
+		  << ", Parent: " 
+		  << parent -> className()
+		  << "\n";
+
 	KImageIO::registerFormats(); // ???
 
 	snapshot = new KSnapshot();

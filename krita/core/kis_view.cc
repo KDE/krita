@@ -1644,7 +1644,7 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 	QImage fileImage;
 
 	if(filename.isEmpty())
-		url = KFileDialog::getOpenURL(QString::null, KisUtil::readFilters(), 0, i18n("Image file for layer"));
+		url = KFileDialog::getOpenURL(QString::null, KisUtil::readFilters(), 0, i18n("Image File for Layer"));
 
 	if (url.isEmpty())
 		return -1;
@@ -1724,7 +1724,7 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 
 void KisView::save_layer_image(bool mergeLayers)
 {
-	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::readFilters(), 0, i18n("Image file for layer"));
+	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::readFilters(), 0, i18n("Image File for Layer"));
 
 	if (!url.isEmpty()) {
 		if (mergeLayers) {

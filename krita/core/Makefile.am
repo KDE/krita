@@ -1,5 +1,6 @@
 
-INCLUDES  = -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) $(KOPAINTER_INCLUDES)
+INCLUDES  = -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) -I$(interfacedir) \
+	$(KOPAINTER_INCLUDES) $(LIBMAGICK_CPPFLAGS)  $(all_includes)
 
 noinst_LTLIBRARIES = libkiscore.la
 
@@ -16,5 +17,5 @@ libkiscore_la_SOURCES = kis_view.cc kis_channel.cc kis_layer.cc kis_image.cc \
 	KIsDocIface.cc kis_image_cmd.cc kis_mask.cc kis_color_utils.cc
 
 libkiscore_la_METASOURCES = AUTO
-
-
+libkiscore_la_LDFLAGS = $(KDE_RPATH) $(LIBMAGICK_RPATH)
+libkiscore_la_LIBADD = $(LIBMAGICK_LIBS)

@@ -14,11 +14,11 @@ The applications included in KOffice as of the release of KDE2 are:
 - KWord
   Professional text editing 
 - KSpread
-  Progessional number cruncher/spreadsheet
+  Professional number cruncher/spreadsheet
 - KPresenter
-  Give presentations life
+  Professional presentation program
 - KChart
-  Creating graphics of your abstract data
+  Graphing of your abstract data
 - KIllustrator
   Vector graphics tool
 - KOffice Workspace
@@ -30,15 +30,16 @@ Developers:
 KOffice is created by Open Source programmers around the world. All 
 developers give there time/code to the community for everyone to
 benefit. The major reason this is done is because those developers
-want to have a good office suite, and they dont mind sharing that
+want to have a good office suite, and they don't mind sharing it
 with you.
+
 If you feel you found a bug or missing feature you can always contact
-the developers of koffice (via www.koffice.org) or delve into the
+the developers of koffice (via http://koffice.kde.org) or delve into the
 software yourself.
 
 The part that is shared between all koffice applications can be found
 in the lib directory. 
-There classes like KoDocument can be found, these classes are extended
+There classes like KoDocument can be found; these classes are extended
 in the project directories.
 
 Read the .h files in the respective directories for more info.
@@ -47,19 +48,17 @@ Read the .h files in the respective directories for more info.
 Document format:
 ================
 
-All KOffice applications use files in the XML format. The XML format 
-can be read with a text editor. The XML format itself is simply a set
-of tags, where the application can define what these tags look like.
-The definition of the document type is therefor different per 
-koffice application (as you will hardly find a curved line in a kword 
-document). The Docuemnt Type Definition can be found in every application
-sourcedir in the dir 'dtd'
+All KOffice applications use XML formatted files. The XML format 
+can be read with a text editor. XML itself is simply a set
+of tags, where the application can define how to display elements defined 
+by these tags. The definition of the document type is therefore different 
+for each KOffice application (as you will most likely not find a curved 
+line in a kword document). The Document Type Definition can be found in 
+every application source directory in the dir '(application)/dtd.'
 
-Also of interest is the lib/store/SPEC file
-
+Also of interest is the lib/store/SPEC file.
 
 If you want to see more/fix bugs in this file, feel free to ask or add it 
 yourself.
 
 Thomas <zander@earthling.net>
-

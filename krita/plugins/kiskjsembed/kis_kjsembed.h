@@ -34,6 +34,7 @@ class KisView;
 class KFileDialog;
 class KisKJSEmbedScript;
 class QPopupMenu;
+class KoTabbedToolDock;
 
 namespace Krita {
 	namespace Plugins {
@@ -53,11 +54,13 @@ namespace Krita {
 				void initBindings();
 			private slots:
 				void slotLoadScript();
+				void viewConsoleDocker(bool v);
 			private:
 				KisView* m_view;
 				KFileDialog* m_fileDialog;
 				KJSEmbed::KJSEmbedPart* m_jsEmbedPart;
 				KJSEmbed::JSConsoleWidget* m_jsConsoleWidget;
+				KoTabbedToolDock* m_consoleDocker;
 				Bindings::FunctionsFactory* m_functionsFactory;
 				Bindings::ObjectsFactory* m_objectsFactory;
 				std::vector<Script*> m_vScripts;

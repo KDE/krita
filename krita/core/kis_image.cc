@@ -934,7 +934,7 @@ bool KisImage::boundsLayer()
 	return false;
 }
 
-KisLayerSP KisImage::corrolateLayer(Q_INT32 , Q_INT32 )
+KisLayerSP KisImage::correlateLayer(Q_INT32 , Q_INT32 )
 {
 	return 0;
 }

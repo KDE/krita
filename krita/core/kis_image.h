@@ -131,7 +131,7 @@ public:
 	Q_INT32 nchannels() const;
 
 	bool boundsLayer();
-	KisLayerSP corrolateLayer(Q_INT32 x, Q_INT32 y);
+	KisLayerSP correlateLayer(Q_INT32 x, Q_INT32 y);
 
 	void setSelection(KisSelectionSP selection);
 	void unsetSelection(bool commit = true);

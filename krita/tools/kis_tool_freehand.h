@@ -32,6 +32,9 @@ class KisBrush;
 class KisPoint;
 class KisEvent;
 
+
+// XXX: rename this to KisToolFreehand -- Freehand is one word, so
+// 'hand' must not be capitalized.
 class KisToolFreeHand : public KisToolPaint {
 	Q_OBJECT
 	typedef KisToolPaint super;
@@ -83,7 +86,6 @@ protected:
 	double m_prevYTilt;
 	double m_dragDist;
 
-private:
 	QString m_transactionText;
 	enumBrushMode m_mode;
 	KisPainter *m_painter;

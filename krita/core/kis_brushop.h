@@ -28,6 +28,7 @@
 class KisPoint;
 class KisPainter;
 
+
 class KisBrushOp : public KisPaintOp {
 
 	typedef KisPaintOp super;

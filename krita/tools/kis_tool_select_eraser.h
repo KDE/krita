@@ -1,6 +1,7 @@
-/** kis_tool_select_eraser.h - part of Krita
+/*
+ *  kis_tool_select_eraser.h - part of Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,65 +18,33 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef KIS_TOOL_SELECT_ERASER_
-#define KIS_TOOL_SELECT_ERASER_
+#ifndef KIS_TOOL_SELECT_ERASER_H_
+#define KIS_TOOL_SELECT_ERASER_H_
 
-#include "kis_tool_paint.h"
+#include "kis_tool_freehand.h"
 
-class QPoint;
-class QWidget;
-class QLabel;
-class KisPainter;
-class KisBrush;
+class KisPoint;
 
 /**
- * The selection eraser creates a selection by painting with the current
- * eraser shape. Not sure what kind of an icon could represent this... 
- * Depends a bit on how we're going to visualize selections.
+ * The selection eraser makes a selection smaller by painting with the
+ * current eraser shape. Not sure what kind of an icon could represent
+ * this... Depends a bit on how we're going to visualize selections.
  */
-class KisToolSelectEraser : public KisToolPaint {
-
+class KisToolSelectEraser : public KisToolFreeHand {
 	Q_OBJECT
-	typedef KisToolPaint super;
+	typedef KisToolFreeHand super;
 
 public:
 	KisToolSelectEraser();
 	virtual ~KisToolSelectEraser();
 
-        virtual void setup(KActionCollection *collection);
-
-	virtual void update(KisCanvasSubject *subject);
-
-	virtual void buttonPress(KisButtonPressEvent *e); 
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
-
+	virtual void setup(KActionCollection *collection);
 	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 
+protected:
 
-private:
-	virtual void paintLine(const KisPoint & pos1,
-			       const KisPoint & pos2,
-			       const double pressure,
-			       const double xtilt,
-			       const double ytilt);
-
-	virtual void initPaint(const KisPoint & pos);
-	virtual void endPaint();
-
-	enumBrushMode m_mode;
-
-        KisPoint m_dragStart;
-        double m_dragDist;
-
-	KisCanvasSubject *m_subject;
-	KisImageSP m_currentImage;
-
-	QWidget *m_optWidget;
-
-
+	virtual void initPaint(KisEvent *e);
 };
-
-#endif // KIS_TOOL_SELECT_ERASER_
+#endif // KIS_TOOL_SELECT_ERASER_H_
 

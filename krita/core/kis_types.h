@@ -80,6 +80,8 @@ typedef KisSharedPtrVector<KisHistogram> vKisHistogramSP;
 typedef vKisHistogramSP::iterator vKisHistogramSP_it;
 typedef vKisHistogramSP::const_iterator vKisHistogramSP_cit;
 
+class KisPaintOpMaker;
+typedef KSharedPtr<KisPaintOpMaker> KisPaintOpMakerSP;
 
 class KisPluginRegistry;
 typedef KSharedPtr<KisPluginRegistry> KisPluginRegistrySP;
@@ -87,7 +89,6 @@ typedef KSharedPtr<KisPluginRegistry> KisPluginRegistrySP;
 class KisTool;
 typedef KSharedPtr<KisTool> KisToolSP;
 typedef KisSharedPtrVector<KisTool> vKisTool;
-// was: typedef QValueVector<KisTool*> vKisTool;
 typedef vKisTool::iterator vKisTool_it;
 typedef vKisTool::const_iterator vKisTool_cit;
 
@@ -108,9 +109,6 @@ typedef QMap<Q_INT32, KisStrategyColorSpaceSP> KisStrategyColorSpaceMap;
 
 class KisGuide;
 typedef KSharedPtr<KisGuide> KisGuideSP;
-
-//class KisMemento;
-//typedef KSharedPtr<KisMemento> KisMementoSP;
 
 class KisAlphaMask;
 typedef KSharedPtr<KisAlphaMask> KisAlphaMaskSP;

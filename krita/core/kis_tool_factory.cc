@@ -37,6 +37,7 @@
 #include "kis_tool_airbrush.h"
 #include "kis_tool_paste.h"
 #include "kis_tool_select_freehand.h"
+#include "kis_tool_select_eraser.h"
 #include "kis_tool_select_rectangular.h"
 #include "kis_tool_select_polygonal.h"
 #include "kis_tool_select_elliptical.h"
@@ -92,6 +93,7 @@ vKisTool KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSu
 	tools.push_back(new KisToolSelectElliptical);
 	tools.push_back(new KisToolSelectContiguous);
 	tools.push_back(new KisToolSelectBrush);
+	tools.push_back(new KisToolSelectEraser);
 	tools.push_back(new KisToolPen);
 	tools.push_back(new KisToolRectangle);
 	tools.push_back(new KisToolEllipse);

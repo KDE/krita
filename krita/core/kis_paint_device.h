@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the free software
  *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
-#if !defined KIS_PAINT_DEVICE_H_
+#ifndef KIS_PAINT_DEVICE_H_
 #define KIS_PAINT_DEVICE_H_
 
 #include <qcolor.h>
@@ -33,6 +33,7 @@
 #include "kis_image.h"
 #include "kistilemgr.h"
 #include "kis_strategy_colorspace.h"
+#include "kispixeldata.h"
 
 class QImage;
 class QSize;
@@ -130,7 +131,7 @@ public:
 	 * fill c and opacity with the values found at x and y
 	 * @return true if the operation was succesful
 	 */
-        bool pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity) const;
+        bool pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity);
 
         /**
 	 * Set the specified pixel to the specified color. Note that this
@@ -291,7 +292,10 @@ private:
         QString m_name;
 	// Operation used to composite this layer with the layers _under_ this layer
 	CompositeOp m_compositeOp;
-	KisStrategyColorSpaceSP m_colorStrategy;
+	KisStrategyColorSpaceSP m_colorStrategy; 
+
+	QUANTUM * m_tmpPixel; // Temporary pixel buffer for reuse in setpixel/pixel
+	
 };
 
 inline KisTileMgrSP KisPaintDevice::tiles() const
@@ -454,6 +458,45 @@ inline bool KisPaintDevice::alpha() const
 {
         return colorStrategy()->alpha();
 }
+
+inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
+{
+	KisTileMgrSP tm = data();
+	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
+	QUANTUM *pix;
+
+	if (!pd)
+		return false;
+
+	pix = pd -> data;
+	
+ 	if (!pix) return false;
+ 	colorStrategy() -> toKoColor(pix, c, opacity);
+
+	return true;
+}
+
+inline bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)
+{
+	KisTileMgrSP tm = data();
+	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);
+	QUANTUM * pix;
+
+	if (!pd)
+		return false;
+
+	pix = pd -> data;
+	Q_ASSERT(pix);
+
+	colorStrategy() -> nativeColor(c, opacity, pix);
+
+	tm -> releasePixelData(pd);
+
+	return true;
+
+
+}
+
 
 #endif // KIS_PAINT_DEVICE_H_
 

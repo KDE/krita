@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_
+#ifndef KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_
 #define KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_
 
 #include <qcolor.h>
@@ -56,17 +56,19 @@ public:
 	
 	virtual QImage convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const;
 
+// 	virtual void bitBlt(Q_INT32 stride,
+// 			    QUANTUM *dst, 
+// 			    Q_INT32 dststride,
+// 			    QUANTUM *src, 
+// 			    Q_INT32 srcstride,
+// 			    Q_INT32 rows, 
+// 			    Q_INT32 cols, 
+// 			    CompositeOp op) const;
+
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst, 
 			    Q_INT32 dststride,
-			    QUANTUM *src, 
-			    Q_INT32 srcstride,
-			    Q_INT32 rows, 
-			    Q_INT32 cols, 
-			    CompositeOp op) const;
-	virtual void bitBlt(Q_INT32 stride,
-			    QUANTUM *dst, 
-			    Q_INT32 dststride,
+			    KisStrategyColorSpaceSP srcSpace,
 			    QUANTUM *src, 
 			    Q_INT32 srcstride,
 			    QUANTUM opacity,

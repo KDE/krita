@@ -181,23 +181,57 @@ QImage KisStrategyColorSpaceCMYK::convertToImage(const QUANTUM *data, Q_INT32 wi
 	return img;
 }
 
+// void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
+// 				       QUANTUM *dst,
+// 				       Q_INT32 dststride,
+// 				       QUANTUM *src,
+// 				       Q_INT32 srcstride,
+// 				       Q_INT32 rows,
+// 				       Q_INT32 cols,
+// 				       CompositeOp op) const
+// {
+//         kdDebug() << "Compositing with: " << op << endl;
+// 	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
+// 	QUANTUM *d;
+// 	QUANTUM *s;
+
+// 	if (rows <= 0 || cols <= 0)
+// 		return;
+
+// 	switch (op) {
+// 	case COMPOSITE_COPY:
+
+// 	case COMPOSITE_CLEAR:
+
+// 	case COMPOSITE_OVER:
+// 		bitBlt(stride, dst, dststride, src, srcstride, OPACITY_OPAQUE, rows, cols, op);
+// 		break;
+// 	default:
+// 		kdDebug() << "Not Implemented.\n";
+// 		abort();
+// 		return;
+// 	}
+// }
+
 void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 				       QUANTUM *dst,
 				       Q_INT32 dststride,
+				       KisStrategyColorSpaceSP srcSpace,
 				       QUANTUM *src,
 				       Q_INT32 srcstride,
+				       QUANTUM opacity,
 				       Q_INT32 rows,
 				       Q_INT32 cols,
 				       CompositeOp op) const
 {
-        kdDebug() << "Compositing with: " << op << endl;
 	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
+	QUANTUM alpha = OPACITY_OPAQUE;
 	QUANTUM *d;
 	QUANTUM *s;
+	Q_INT32 i;
 
 	if (rows <= 0 || cols <= 0)
 		return;
-
 	switch (op) {
 	case COMPOSITE_COPY:
 		d = dst;
@@ -217,38 +251,6 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 			d += dststride;
 		}
 		break;
-	case COMPOSITE_OVER:
-		bitBlt(stride, dst, dststride, src, srcstride, OPACITY_OPAQUE, rows, cols, op);
-		break;
-	default:
-		kdDebug() << "Not Implemented.\n";
-		abort();
-		return;
-	}
-}
-
-void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
-				       QUANTUM *dst,
-				       Q_INT32 dststride,
-				       QUANTUM *src,
-				       Q_INT32 srcstride,
-				       QUANTUM opacity,
-				       Q_INT32 rows,
-				       Q_INT32 cols,
-				       CompositeOp op) const
-{
-	QUANTUM alpha = OPACITY_OPAQUE;
-	QUANTUM *d;
-	QUANTUM *s;
-	Q_INT32 i;
-
-	if (rows <= 0 || cols <= 0)
-		return;
-	switch (op) {
-	case COMPOSITE_COPY:
-		bitBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
-	case COMPOSITE_CLEAR:
-		bitBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
 	case COMPOSITE_OVER:
 	default:
 		while (rows-- > 0) {

@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_STRATEGY_COLORSPACE_H_
+#ifndef KIS_STRATEGY_COLORSPACE_H_
 #define KIS_STRATEGY_COLORSPACE_H_
 
 #include <map>
@@ -87,29 +87,19 @@ public:
 	
 	virtual QImage convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const = 0;
 
-	virtual void bitBlt(Q_INT32 stride,
-			    QUANTUM *dst, 
-			    Q_INT32 dststride,
-			    QUANTUM *src, 
-			    Q_INT32 srcstride,
-			    Q_INT32 rows, 
-			    Q_INT32 cols, 
-			    CompositeOp op) const = 0;
 	
+	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src) =0;
+
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst, 
 			    Q_INT32 dststride,
+			    KisStrategyColorSpaceSP srcSpace,
 			    QUANTUM *src, 
 			    Q_INT32 srcstride,
 			    QUANTUM opacity,
 			    Q_INT32 rows, 
 			    Q_INT32 cols, 
 			    CompositeOp op) const = 0;
-	
-	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src) =0;
-	
-// 	void addCompositeOp(KisCompositeOp* newco);
-// 	KisCompositeOp* compositeOp(const QString& name);
 
 private:
 
@@ -119,18 +109,7 @@ private:
 
 private:
 
-// 	compositeOpStorage m_compositeOpStorage;
 	QString m_name;
 };
-
-// inline void KisStrategyColorSpace::addCompositeOp(KisCompositeOp* newco)
-// {
-// 	m_compositeOpStorage.insert(compositeOpStorage::value_type( newco->name(),newco));
-// }
-
-// inline KisCompositeOp* KisStrategyColorSpace::compositeOp(const QString& name)
-// {
-// 	return m_compositeOpStorage.find(name)->second;
-// }
 
 #endif // KIS_STRATEGY_COLORSPACE_H_

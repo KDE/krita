@@ -25,7 +25,6 @@
 #include <qfontmetrics.h>
 #include <qpen.h>
 #include <qregion.h>
-#include <qregion.h>
 #include <qwmatrix.h>
 #include <qimage.h>
 #include <qmap.h>

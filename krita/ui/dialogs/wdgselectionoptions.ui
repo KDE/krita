@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>WdgSelectionOptions</class>
 <widget class="QWidget">
     <property name="name">
@@ -11,9 +11,6 @@
             <width>427</width>
             <height>153</height>
         </rect>
-    </property>
-    <property name="caption">
-        <string>Form1</string>
     </property>
     <grid>
         <property name="name">
@@ -101,9 +98,6 @@
                     <property name="text">
                         <string>&amp;Select</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+S</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -114,9 +108,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Deselect</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
                     </property>
                 </widget>
             </hbox>

@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_BUTTON_RELEASE_EVENT_H_
+#ifndef KIS_BUTTON_RELEASE_EVENT_H_
 #define KIS_BUTTON_RELEASE_EVENT_H_
 
 #include "kis_button_event.h"

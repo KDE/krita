@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  *  02111-1307, USA.
  */
-#if !defined DLG_HISTOGRAM
+#ifndef DLG_HISTOGRAM
 #define DLG_HISTOGRAM
 
 #include <qpixmap.h>

@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KISPIXELDATA_H_
+#ifndef KISPIXELDATA_H_
 #define KISPIXELDATA_H_
 
 #include "kis_types.h"

@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  *  02111-1307, USA.
  */
-#if !defined DLG_IMAGESIZE
+#ifndef DLG_IMAGESIZE
 #define DLG_IMAGESIZE
 
 #include <qpixmap.h>

@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  *  02111-1307, USA.
  */
-#if !defined DLG_COLORRANGE
+#ifndef DLG_COLORRANGE
 #define DLG_COLORRANGE
 
 #include <qpixmap.h>

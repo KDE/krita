@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the free software
  *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
-#if !defined KIS_CHANNEL_H_
+#ifndef KIS_CHANNEL_H_
 #define KIS_CHANNEL_H_
 
 #include "kis_paint_device.h"

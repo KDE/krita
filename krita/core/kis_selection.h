@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the free software
  *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
-#if !defined KIS_SELECTION_H_
+#ifndef KIS_SELECTION_H_
 #define KIS_SELECTION_H_
 
 #include "kis_global.h"
@@ -56,7 +56,7 @@ public:
 	virtual ~KisSelection();
 
 	// Returns selectedness, or 0 if invalid coordinates
-	QUANTUM selected(Q_INT32 x, Q_INT32 y) const;
+	QUANTUM selected(Q_INT32 x, Q_INT32 y);
 
 	void setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
 

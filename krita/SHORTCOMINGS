@@ -22,15 +22,6 @@ lists the design problems, and as such, is different from the TODO.
   * Check several methods in e.g. KisPaintDevice that suppose 8-bit
     RGBA, and extend them where necessary.    
 
-* Tool design. I'm not talking about making tools kparts or anything,
-  but about the basic design of what consitute the elements needed to
-  paint. In real life, you have: surface, tool, material. In Krita we
-  have tool, brush and image buffer, or on a lower level, tools,
-  brushes, paint operations and layers. This is an area that I am
-  still thinking about, but consider the possibility that some types
-  of tools only work on some types of colour models or layers -- and
-  that some kinds of tools need specialized colours or brushes.
-
 * Rendering. It isn't possible, yet, to effectively render layers of
   different image types, or rather, colour strategies. But that would
   be a nice thing to have, for instance to combine layers with single 

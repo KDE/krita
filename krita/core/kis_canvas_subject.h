@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_CANVAS_SUBJECT_H_
+#ifndef KIS_CANVAS_SUBJECT_H_
 #define KIS_CANVAS_SUBJECT_H_
 
 #include <qstring.h>

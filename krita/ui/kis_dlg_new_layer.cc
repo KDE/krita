@@ -35,7 +35,6 @@
 #include "kis_cmb_imagetype.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paint_properties.h"
-#include "kis_global.h"
 
 NewLayerDialog::NewLayerDialog(Q_INT32 maxWidth, 
 			       Q_INT32 defWidth, 

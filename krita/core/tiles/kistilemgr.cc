@@ -65,7 +65,9 @@ KisTileMgr::KisTileMgr(KisTileMgr *tm, Q_UINT32 depth, Q_UINT32 width, Q_UINT32 
 	duplicate(m_ntileRows * m_ntileCols, tm);
 }
 
-KisTileMgr::KisTileMgr(const KisTileMgr& rhs) : KShared(rhs)
+KisTileMgr::KisTileMgr(const KisTileMgr& rhs)
+	: KisPixelManagerInterface(rhs),
+	  KShared(rhs)
 {
 #if DEBUG_TILE_MANAGERS
 	numTileManagers++;
@@ -475,19 +477,3 @@ void KisTileMgr::duplicate(Q_INT32 ntiles, KisTileMgr *tm)
 		}
 	}
 }
-
-Q_INT32 KisTileMgr::tileNum(Q_UINT32 xpix, Q_UINT32 ypix) const
-{
-	Q_INT32 row;
-	Q_INT32 col;
-	Q_INT32 num;
-
-	if (xpix >= m_width || ypix >= m_height)
-		return -1;
-
-	row = ypix / TILE_HEIGHT;
-	col = xpix / TILE_WIDTH;
-	num = row * m_ntileCols + col;
-	return num;
-}
-

@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_PLUGIN_REGISTRY_H_
+#ifndef KIS_PLUGIN_REGISTRY_H_
 #define KIS_PLUGIN_REGISTRY_H_
 
 #include <stdlib.h>
@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <ktrader.h>
 
-#include <kis_types.h>
+#include "kis_types.h"
 
 /**
  * The plugin registry keeps track of the various plugins Krita

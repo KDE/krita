@@ -162,6 +162,5 @@ void KisToolRectangle::setup(KActionCollection *collection)
 }
 
 
-#include "kis_tool_rectangle.h"
 
 #include "kis_tool_rectangle.moc"

@@ -64,6 +64,8 @@ User Interface
           image menu item.
 	* Allow guides to be disabled. Allow diagonal guides (useful
 	  for perspective drawings)
+        * Create templates for often-used image formats.
+        * Check OASIS file saving.
 Tools
 
 	* All tools must have a tool options tab (#Boudewijn, Adrian, Cyrille)

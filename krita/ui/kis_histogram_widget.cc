@@ -27,7 +27,6 @@
 #include "kis_histogram.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_channelinfo.h"
 
 KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name) 
 	: super(parent, name)

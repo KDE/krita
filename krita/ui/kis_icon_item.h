@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_ICON_ITEM_H_
+#ifndef KIS_ICON_ITEM_H_
 #define KIS_ICON_ITEM_H_
 
 #include <koIconChooser.h>

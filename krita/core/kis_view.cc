@@ -102,7 +102,6 @@
 #include "labels/kis_label_progress.h"
 #include "labels/kis_label_cursor_pos.h"
 #include "strategy/kis_strategy_move.h"
-#include "kis_rect.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"

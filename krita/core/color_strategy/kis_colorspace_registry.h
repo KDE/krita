@@ -17,7 +17,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_COLORSPACE_REGISTRY_H_
+#ifndef KIS_COLORSPACE_REGISTRY_H_
 #define KIS_COLORSPACE_REGISTRY_H_
 
 #include "kis_types.h"

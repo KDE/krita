@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#if !defined KIS_ITERATORS_PIXEL_H_
+#ifndef KIS_ITERATORS_PIXEL_H_
 #define KIS_ITERATORS_PIXEL_H_
 
 #include "kis_iterators.h"
@@ -46,10 +46,10 @@ class KisIteratorLinePixel : public KisIteratorLine<KisIteratorPixel>
 {
 public:
 	KisIteratorLinePixel( KisPaintDeviceSP ndevice, 
-				KisTileCommand* command, 
-				Q_INT32 nypos = 0,
-				Q_INT32 nxstart = -1, 
-				Q_INT32 nxend = -1);
+			      KisTileCommand* command, 
+			      Q_INT32 nypos = 0,
+			      Q_INT32 nxstart = -1, 
+			      Q_INT32 nxend = -1);
 public:
 	virtual KisIteratorPixel operator*();
 	virtual operator KisIteratorPixel* ();

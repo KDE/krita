@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KISTILECACHE_H_
+#ifndef KISTILECACHE_H_
 #define KISTILECACHE_H_
 
 #include <qglobal.h>

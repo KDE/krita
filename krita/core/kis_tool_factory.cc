@@ -38,7 +38,6 @@
 #include "kis_tool_paste.h"
 #include "kis_tool_select_freehand.h"
 #include "kis_tool_select_eraser.h"
-#include "kis_tool_select_rectangular.h"
 #include "kis_tool_select_polygonal.h"
 #include "kis_tool_select_elliptical.h"
 #include "kis_tool_select_contiguous.h"

@@ -35,6 +35,7 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_RGBA = 4;
 }
 
+// XXX: Why no alpha channel?
 ChannelInfo KisStrategyColorSpaceRGB::channelInfo[3] = { ChannelInfo("Red", 2), ChannelInfo("Green", 1), ChannelInfo("Blue", 0) };
 
 
@@ -156,23 +157,9 @@ QImage KisStrategyColorSpaceRGB::convertToImage(const QUANTUM *data, Q_INT32 wid
 
 
 void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 stride,
-				      QUANTUM *dst,
-				      Q_INT32 dststride,
-				      QUANTUM *src,
-				      Q_INT32 srcstride,
-				      Q_INT32 rows, 
-				      Q_INT32 cols, 
-				      CompositeOp op) const
-{
-	if (rows <= 0 || cols <= 0)
-		return;
-
-	bitBlt(stride, dst, dststride, src, srcstride, OPACITY_OPAQUE, rows, cols, op);
-}
-
-void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 stride,
 				      QUANTUM *dst, 
 				      Q_INT32 dststride,
+				      KisStrategyColorSpaceSP srcSpace,
 				      QUANTUM *src, 
 				      Q_INT32 srcstride,
 				      QUANTUM opacity,
@@ -183,6 +170,11 @@ void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 stride,
 	if (rows <= 0 || cols <= 0)
 		return;
 
+// 	if (!srcSpace == this) {
+// 		QUANTUM * dstPixels = new QUANTUM[depth() * rows * cols  * sizeof(QUANTUM)];
+// 		convertPixels(src, srcSpace, dstPixels);
+// 		dst = dstPixels;
+// 	}
 
 	switch (op) {
 	case COMPOSITE_UNDEF:
@@ -299,8 +291,13 @@ void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 stride,
 		break;
 	default:
 		kdDebug() << "Composite op " << op << " not Implemented yet.\n";
-		return;
 	}
+
+
+// 	if (!srcSpace == this) {
+// 		delete[] dst;
+// 	}
+
 }
 
 void KisStrategyColorSpaceRGB::computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src)
@@ -331,3 +328,16 @@ void KisStrategyColorSpaceRGB::convertFromRGBA(KisPixelRepresentationRGB& src, K
 }
 
 
+// void KisStrategyColorSpaceRGB::convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 srcLen)
+// {
+// 	Q_INT32 srcPixelSize = (srcSpace -> depth() * sizeof(QUANTUM));
+// 	Q_INT32 dstPixelSize = depth() * sizeof(QUANTUM);
+// 	KoColor c;
+// 	QUANTUM opacity;
+
+	
+// 	for (Q_UINT32 s = 0, d = 0; s <= srcLen; s+= srcPixelSize, j+=dstPixelSize) {
+// 		srcSpace -> toKoColor(src[s], &c, &opacity);
+// 		nativeColor(&c, &opacity, dstSpace[j]);
+// 	}
+// }

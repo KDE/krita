@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_LABEL_ZOOM_H_
+#ifndef KIS_LABEL_ZOOM_H_
 #define KIS_LABEL_ZOOM_H_
 
 #include <qlabel.h>

@@ -140,45 +140,46 @@ QRect KisPainter::dirtyRect() {
 }
 
 
-void KisPainter::tileBlt(QUANTUM *dst,
-			 KisTileSP dsttile,
-			 QUANTUM *src,
-			 KisTileSP srctile,
-			 QUANTUM opacity,
-			 Q_INT32 rows,
-			 Q_INT32 cols,
+// void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, 
+// 			 KisStrategyColorSpaceSP srcSpace, QUANTUM *src, KisTileSP srctile, 
+// 			 Q_INT32 rows, Q_INT32 cols,
+// 			 CompositeOp op)
+// {
+// //         Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
+// //         Q_INT32 srcstride = srctile -> width() * srctile -> depth();
+// //         Q_INT32 stride = m_device -> depth();
+// //         m_device -> colorStrategy() -> bitBlt(stride, dst, dststride, srcSpace, src, srcstride, rows, cols, op);
+// 	tileBlt(dst, dsttile, srcSpace, src, srcTile, rows, cols, OPACITY_OPAQUE, op);
+// }
+
+void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, 
+			 KisStrategyColorSpaceSP srcSpace, QUANTUM *src, KisTileSP srctile, 
+			 Q_INT32 rows, Q_INT32 cols,
+			 QUANTUM opacity, 
 			 CompositeOp op)
 {
         Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
         Q_INT32 srcstride = srctile -> width() * srctile -> depth();
         Q_INT32 stride = m_device -> depth();
-        m_device -> colorStrategy() -> bitBlt(stride, dst, dststride, src, srcstride, opacity, rows, cols, op);
+        m_device -> colorStrategy() -> bitBlt(stride, dst, dststride, srcSpace, src, srcstride, opacity, rows, cols, op);
 }
 
-void KisPainter::tileBlt(QUANTUM *dst,
-			 KisTileSP dsttile,
-			 QUANTUM *src,
-			 KisTileSP srctile,
-			 Q_INT32 rows,
-			 Q_INT32 cols,
-			 CompositeOp op)
-{
-        Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
-        Q_INT32 srcstride = srctile -> width() * srctile -> depth();
-        Q_INT32 stride = m_device -> depth();
-        m_device -> colorStrategy() -> bitBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
-}
 
-void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, 
+			CompositeOp op,
                         KisPaintDeviceSP srcdev,
-                        Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
+                        Q_INT32 sx, Q_INT32 sy, 
+			Q_INT32 sw, Q_INT32 sh)
 {
         bitBlt(dx, dy, op, srcdev, OPACITY_OPAQUE, sx, sy, sw, sh);
 }
 
-void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, 
+			CompositeOp op,
                         KisPaintDeviceSP srcdev,
-                        QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
+                        QUANTUM opacity, 
+			Q_INT32 sx, Q_INT32 sy, 
+			Q_INT32 sw, Q_INT32 sh)
 {
 	if (srcdev == 0) {
 		kdDebug() << "bitBlt: source is null.\n";
@@ -271,7 +272,14 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
                         src = srctile -> data(sxmod, symod);
                         cols = QMIN(cols, srctile -> width());
                         rows = QMIN(rows, srctile -> height());
-                        tileBlt(dst, dsttile, src, srctile, opacity, rows, cols, op);
+
+                        tileBlt(dst, dsttile, 
+				srcdev -> colorStrategy(), 
+				src, 
+				srctile, 
+				rows, cols, 
+				opacity,
+				op);
 
                         if (yxtra < 0) {
                                 tile = srctm -> tile(sx, sy + TILE_HEIGHT - (sy % TILE_HEIGHT) + 1, TILEMODE_READ);
@@ -287,7 +295,14 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
                                         tile -> lock();
                                         dst = dsttile -> data(dxmod, rows);
                                         src = tile -> data(sxmod, 0);
-                                        tileBlt(dst, dsttile, src, tile, opacity, nrows, cols, op);
+                                        tileBlt(dst, 
+						dsttile, 
+						srcdev -> colorStrategy(), 
+						src, 
+						tile, 
+						nrows, cols, 
+						opacity,
+						op);
                                         tile -> release();
                                 }
                         } else if (yxtra > 0) {
@@ -310,7 +325,14 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
                                                 tile -> lock();
                                                 dst = tile -> data(dxmod, 0);
                                                 src = srctile -> data(sxmod, rows);
-                                                tileBlt(dst, tile, src, srctile, opacity, nrows, cols, op);
+                                                tileBlt(dst, 
+							tile, 
+							srcdev -> colorStrategy(), 
+							src, 
+							srctile, 
+							nrows, cols,
+							opacity, 
+							op);
                                                 tile -> release();
                                         }
                                 }
@@ -330,7 +352,14 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
                                         tile -> lock();
                                         dst = dsttile -> data(cols, dymod);
                                         src = tile -> data(0, symod);
-                                        tileBlt(dst, dsttile, src, tile, opacity, rows, ncols, op);
+                                        tileBlt(dst, 
+						dsttile, 
+						srcdev -> colorStrategy(), 
+						src, 
+						tile, 
+						rows, ncols, 
+						opacity, 
+						op);
                                         tile -> release();
                                 }
                         } else if (xxtra > 0) {
@@ -353,7 +382,14 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
                                                 tile -> lock();
                                                 dst = tile -> data(0, dymod);
                                                 src = srctile -> data(cols, symod);
-                                                tileBlt(dst, tile, src, srctile, opacity, rows, ncols, op);
+                                                tileBlt(dst, 
+							tile, 
+							srcdev -> colorStrategy(), 
+							src, 
+							srctile, 
+							rows, ncols,
+							opacity, 
+							op);
                                                 tile -> release();
                                         }
                                 }
@@ -399,7 +435,14 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
                                                 tile -> lock();
                                                 dst = tile -> data();
                                                 src = srctile -> data(cols, rows);
-                                                tileBlt(dst, tile, src, srctile, opacity, nrows, ncols, op);
+                                                tileBlt(dst, 
+							tile, 
+							srcdev -> colorStrategy(), 
+							src, 
+							srctile, 
+							nrows, ncols,
+							opacity, 
+							op);
                                                 tile -> release();
                                         }
                                 }
@@ -437,7 +480,14 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
                                                 tile -> lock();
                                                 dst = dsttile -> data(cols, rows);
                                                 src = tile -> data();
-                                                tileBlt(dst, dsttile, src, tile, opacity, nrows, ncols, op);
+                                                tileBlt(dst, 
+							dsttile, 
+							srcdev -> colorStrategy(), 
+							src, 
+							tile, 
+							nrows, ncols,
+							opacity, 
+							op);
                                                 tile -> release();
                                         }
                                 }

@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#if !defined KIS_ITERATORS_H_
+#ifndef KIS_ITERATORS_H_
 #define KIS_ITERATORS_H_
 
 #include <qstring.h>
@@ -48,10 +48,13 @@ public:
 	inline virtual KisIteratorUnit& inc();
 	inline virtual KisIteratorUnit& dec();
 	inline KisIteratorUnit& operator--();
+
 	/**
-	 * This function increments the position of the iterator by one pixel.
+	 * Increment the position of the iterator by one pixel.
 	 */
+
 	inline void skipPixel();
+
 	// Comparison operators
 	inline bool operator<(const KisIteratorUnit& __rhs) const;
 	inline bool operator<=(const KisIteratorUnit& __rhs) const;

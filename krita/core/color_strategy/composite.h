@@ -49,7 +49,7 @@
   authorization from the GraphicsMagick Group.
  */
 
-#if !defined COMPOSITE_H_
+#ifndef COMPOSITE_H_
 #define COMPOSITE_H_
 
 #include <kdebug.h>

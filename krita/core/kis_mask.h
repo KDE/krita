@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the free software
  *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
-#if !defined KIS_MASK_H_
+#ifndef KIS_MASK_H_
 #define KIS_MASK_H_
 
 #include "kis_channel.h"

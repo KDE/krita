@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_TOOL_AIRBRUSH_H
+#ifndef KIS_TOOL_AIRBRUSH_H
 #define KIS_TOOL_AIRBRUSH_H
 
 #include "kis_tool_freehand.h"

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KISTILEMEDIATOR_H_
+#ifndef KISTILEMEDIATOR_H_
 #define KISTILEMEDIATOR_H_
 
 #include <qmutex.h>

@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#if !defined KIS_ITERATORS_INFINITE_H_
+#ifndef KIS_ITERATORS_INFINITE_H_
 #define KIS_ITERATORS_INFINITE_H_
 
 #include "kis_global.h"

@@ -100,6 +100,7 @@ KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, KisStrategyColorSp
 	m_name = name;
 	m_compositeOp = COMPOSITE_OVER;
 	m_colorStrategy = colorStrategy;
+        m_tmpPixel = new QUANTUM[depth() * sizeof(QUANTUM)];
 }
 
 KisPaintDevice::KisPaintDevice(KisImage *img, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name)
@@ -151,6 +152,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs
 
 KisPaintDevice::~KisPaintDevice()
 {
+	delete[] m_tmpPixel;
 }
 
 Q_INT32 KisPaintDevice::tileNum(Q_INT32, Q_INT32) const
@@ -270,41 +272,6 @@ void KisPaintDevice::init()
 	m_colorStrategy = 0;
 }
 
-bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity) const
-{
-	KisTileMgrSP tm = data();
-	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
-	QUANTUM *data;
-
-	if (!pd)
-		return false;
-
-	data = pd -> data;
-	Q_ASSERT(data);
-
-	colorStrategy() -> toKoColor(data, c, opacity);
-
-	return true;
-}
-
-bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)
-{
-	KisTileMgrSP tm = data();
-	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);
-	QUANTUM *data;
-
-	if (!pd)
-		return false;
-
-	data = pd -> data;
-	Q_ASSERT(data);
-
-	colorStrategy() -> nativeColor(c, opacity, data);
-
-	tm -> releasePixelData(pd);
-
-	return true;
-}
 
 void KisPaintDevice::setData(KisTileMgrSP mgr)
 {
@@ -360,8 +327,8 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 
         /* No, we're NOT duplicating the entire image, at the moment krita uses
            too much memory already */
-        QUANTUM *origPixel = new QUANTUM[depth() * sizeof(QUANTUM)];
-
+        //QUANTUM *origPixel = new QUANTUM[depth() * sizeof(QUANTUM)];
+	QUANTUM * origPixel = m_tmpPixel;
         // target image data
         Q_INT32 targetW;
         Q_INT32 targetH;

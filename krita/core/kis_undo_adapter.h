@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_UNDO_ADAPTER_H_
+#ifndef KIS_UNDO_ADAPTER_H_
 #define KIS_UNDO_ADAPTER_H_
 
 #include <qglobal.h>

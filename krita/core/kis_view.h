@@ -20,7 +20,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_VIEW_H_
+#ifndef KIS_VIEW_H_
 #define KIS_VIEW_H_
 
 #include <qdatetime.h>

@@ -22,7 +22,6 @@
 
 #include <qrect.h>
 
-#include <qrect.h>
 
 #include <kdebug.h>
 

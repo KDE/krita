@@ -54,7 +54,7 @@ KisSelection::~KisSelection()
 {
 }
 
-QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y) const
+QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y)
 {
 	KoColor c;
 	QUANTUM opacity;

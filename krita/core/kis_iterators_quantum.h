@@ -18,7 +18,7 @@
 */
 
 
-#if !defined KIS_ITERATORS_QUANTUM_H_
+#ifndef KIS_ITERATORS_QUANTUM_H_
 #define KIS_ITERATORS_QUANTUM_H_
 
 #include <kdebug.h>

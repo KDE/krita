@@ -17,7 +17,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_PAINTER_H_
+#ifndef KIS_PAINTER_H_
 #define KIS_PAINTER_H_
 
 #include <qbrush.h>
@@ -25,7 +25,6 @@
 #include <qfontinfo.h>
 #include <qfontmetrics.h>
 #include <qpen.h>
-#include <qregion.h>
 #include <qregion.h>
 #include <qwmatrix.h>
 #include <qimage.h>
@@ -125,16 +124,22 @@ public:
 	/**
 	 * Blast the specified region from src onto the current paint device.
 	 */
-        void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src,
-                    Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
+        void bitBlt(Q_INT32 dx, Q_INT32 dy, 
+		    CompositeOp op, 
+		    KisPaintDeviceSP src,
+                    Q_INT32 sx = 0, Q_INT32 sy = 0, 
+		    Q_INT32 sw = -1, Q_INT32 sh = -1);
 
         /**
 	 * Overloaded version of the previous, differs in that it is possible to specify
          * a value for opacity
 	 */
-        void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src,
+        void bitBlt(Q_INT32 dx, Q_INT32 dy, 
+		    CompositeOp op, 
+		    KisPaintDeviceSP src,
                     QUANTUM opacity,
-                    Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
+                    Q_INT32 sx = 0, Q_INT32 sy = 0, 
+		    Q_INT32 sw = -1, Q_INT32 sh = -1);
 
 
 	/**
@@ -247,13 +252,19 @@ protected:
 
 	static double pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1);
 
-        void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src,
-                     KisTileSP srctile, Q_INT32 rows, Q_INT32 cols,
-                     CompositeOp op);
+//         void tileBlt(QUANTUM *dst, KisTileSP dsttile, 
+// 		     KisStrategyColorSpaceSP srcSpace, QUANTUM *src, KisTileSP srctile, 
+// 		     Q_INT32 rows, Q_INT32 cols,
+//                      CompositeOp op);
 
 
-        void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src,
-                     KisTileSP srctile, QUANTUM opacity, Q_INT32 rows, Q_INT32 cols,
+        void tileBlt(QUANTUM *dst, 
+		     KisTileSP dsttile, 
+		     KisStrategyColorSpaceSP srcSpace, 
+		     QUANTUM *src, 
+		     KisTileSP srctile, 
+                     Q_INT32 rows, Q_INT32 cols,
+		     QUANTUM opacity, 
                      CompositeOp op);
 
 

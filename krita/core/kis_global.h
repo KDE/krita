@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KISGLOBAL_H_
+#ifndef KISGLOBAL_H_
 #define KISGLOBAL_H_
 
 #include <limits.h>
@@ -62,7 +62,7 @@ const int TILE_HEIGHT = TILE_SIZE;
 /**
  * Size of a quantum -- this could be 8, 16, 32 or 64 -- but for now, only 8 is possible.
  */
-#if !defined(QUANTUM_DEPTH)
+#ifndef QUANTUM_DEPTH
 #define QUANTUM_DEPTH 8 // bits, i.e., one byte per channel
 #endif
 

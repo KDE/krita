@@ -18,7 +18,6 @@
  *  along with this program; if not, write to the Free Software
  */
 #include <dcopclient.h>
-#include <klocale.h>
 #include <kcmdlineargs.h>
 #include <koApplication.h>
 #include "core/kis_aboutdata.h"

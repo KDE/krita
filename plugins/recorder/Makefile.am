@@ -34,8 +34,8 @@ SUFFIXES = .h .moc
 install-exec-local:
 	$(INSTALL_SCRIPT) makro_recorder $(bindir)/makro_recorder
 
-messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../po/kword.pot
+messages: 
+#	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../recorder.pot
 
 recorder.h: recorder.idl
 	rm -f recorder.h

@@ -104,7 +104,6 @@ void KisFilter::slotActivated()
 
 	enableProgress();
 	KisTransaction * cmd = new KisTransaction(name(), layer.data());
-	layer -> getMemento();
 	process((KisPaintDeviceSP)layer, (KisPaintDeviceSP)layer, config, rect);
 	img -> undoAdapter() -> addCommand(cmd);
 	disableProgress();

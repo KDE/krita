@@ -23,6 +23,11 @@ Issues:
           unpack krita pixels to a format a file exporter (e.g, ImageMagick pixel
           packets) can work with. This means that plugins can depend on the presence
           of other plugins.
+	* Import/export should be lossless -- i.e., all extra information any file
+	  format may attach to the image should be kept around and used on export.
+	  Examples are Exif data and profiles, but also Gimp comments.
+	  
+	
 
 Notes
 

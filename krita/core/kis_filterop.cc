@@ -145,7 +145,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	++srcLit; ++dabLit; ++devLit;
 	}
 // 	kdDebug() << "applying filter to the square" << endl;
-	filter -> process( srcdev, 0, QRect(0, 0, srcdev -> width(), srcdev -> height()), 0 );
+	filter -> process( srcdev, m_filterConfiguration, QRect(0, 0, srcdev -> width(), srcdev -> height()), 0 );
 	
 // 	KisIteratorLinePixel srcLit2 = srcdev->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
 // 	KisIteratorLinePixel srcLitend2 = srcdev->iteratorPixelSelectionEnd( 0, sx, sw - 1, sh - 1);

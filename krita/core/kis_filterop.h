@@ -27,6 +27,7 @@
 
 class KisPoint;
 class KisPainter;
+class KisFilterConfiguration;
 
 class KisFilterOp : public KisPaintOp {
 
@@ -41,7 +42,15 @@ public:
 		     const double pressure,
 		     const double /*xTilt*/,
 		     const double /*yTilt*/);
-
+public:
+	void setFilterConfiguration(KisFilterConfiguration*);
+private:
+	KisFilterConfiguration* m_filterConfiguration;
 };
+
+inline void KisFilterOp::setFilterConfiguration(KisFilterConfiguration* filterConfiguration)
+{
+	m_filterConfiguration = filterConfiguration;
+}
 
 #endif // KIS_FILTEROP_H_

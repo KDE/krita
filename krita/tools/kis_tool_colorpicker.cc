@@ -2,6 +2,7 @@
  *  colorpicker.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,10 +23,11 @@
 
 #include <koColor.h>
 
-#include "kis_tool_colorpicker.h"
-#include "kis_doc.h"
-#include "kis_view.h"
 #include "kis_cursor.h"
+#include "kis_doc.h"
+#include "kis_pixel_packet.h"
+#include "kis_view.h"
+#include "kis_tool_colorpicker.h"
 
 ColorPicker::ColorPicker(KisDoc *doc) : KisTool(doc)
 {
@@ -38,11 +40,12 @@ ColorPicker::~ColorPicker()
 
 KoColor ColorPicker::pick(KisImageSP img, KisPaintDeviceSP device, int x, int y)
 {
-	if (!img -> colorMode() == cm_RGB && !img -> colorMode() == cm_RGBA)
-		return KoColor::white();
+	const KisPixelPacket *p = device -> getConstPixels(x, y, 1, 1);
 
-	QRgb rgb = device -> pixel(x, y);
-	return KoColor(qRed(rgb), qGreen(rgb),  qBlue(rgb), cs_RGB);
+	if (!p)
+		return KoColor::white();
+	
+	return *p;
 }
 
 void ColorPicker::mousePress(QMouseEvent *e)
@@ -50,22 +53,22 @@ void ColorPicker::mousePress(QMouseEvent *e)
 	if (e->button() == QMouseEvent::LeftButton || e->button() == QMouseEvent::RightButton) {
 		KisView *view = getCurrentView();
 		KisImageSP img = m_doc -> currentImg();
-		KisPaintDeviceSP layer;
+		KisPaintDeviceSP device;
 
 		if (!img) 
 			return;
 
-		layer = img -> getCurrentPaintDevice();
+		device = img -> getCurrentPaintDevice();
 		
-		if (!layer -> visible())
+		if (!device -> visible())
 			return;
 
 		QPoint pos = zoomed(e -> pos());
 
-		if (!layer -> tileExtents().contains(pos))
+		if (!device -> tileExtents().contains(pos))
 			return;
 
-		KoColor pickedColor = pick(img, layer, pos.x(), pos.y());
+		KoColor pickedColor = pick(img, device, pos.x(), pos.y());
 
 		if (e -> button() == QMouseEvent::LeftButton)
 			view -> setSetFGColor(pickedColor);

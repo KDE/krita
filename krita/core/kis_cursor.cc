@@ -115,12 +115,9 @@ QCursor KisCursor::pickerCursor()
 		0x74, 0x00, 0x00, 0x32, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 	QBitmap picker_bitmap(24, 24, picker_bits, true); 
-	QBitmap picker_mask(24, 24 );
-	QPixmap pix( picker_bitmap );
-	picker_mask = pix.createHeuristicMask( false );
-	pix.setMask( picker_mask );
+	QBitmap picker_mask = picker_bitmap.createHeuristicMask( false );
 
-	return QCursor( pix, 1, 22 );
+	return QCursor( picker_bitmap, picker_mask, 1, 22 );
 }
 
 QCursor KisCursor::penCursor()
@@ -134,12 +131,9 @@ QCursor KisCursor::penCursor()
 		0x7c, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 	QBitmap pen_bitmap( 24, 24, pen_bits, true );
-	QBitmap pen_mask( 24, 24 );
-	QPixmap pix( pen_bitmap );
-	pen_mask = pix.createHeuristicMask( false );
-	pix.setMask( pen_mask );
+	QBitmap pen_mask = pen_bitmap.createHeuristicMask( false );
 
-	return QCursor( pix, 1, 22 );
+	return QCursor( pen_bitmap, pen_mask, 1, 22 );
 }
 
 QCursor KisCursor::brushCursor()
@@ -155,12 +149,9 @@ QCursor KisCursor::brushCursor()
 		0x7e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 	QBitmap brush_bitmap( 25, 23, brush_bits, true );
-	QBitmap brush_mask( 25, 23 );
-	QPixmap pix( brush_bitmap );
-	brush_mask = pix.createHeuristicMask( false );
-	pix.setMask( brush_mask );
+	QBitmap brush_mask = brush_bitmap.createHeuristicMask( false );
 
-	return QCursor( pix, 1, 21 );
+	return QCursor( brush_bitmap, brush_mask, 1, 21 );
 }
 
 QCursor KisCursor::airbrushCursor()
@@ -174,12 +165,9 @@ QCursor KisCursor::airbrushCursor()
 		0xf8, 0x00, 0x06, 0x76, 0x00, 0x03, 0x36, 0x00, 0x03, 0x00, 0x00, 0x00};
 
 	QBitmap airbrush_bitmap( 24, 24, airbrush_bits, true );
-	QBitmap airbrush_mask( 24, 24 );
-	QPixmap pix( airbrush_bitmap );
-	airbrush_mask = pix.createHeuristicMask( false );
-	pix.setMask( airbrush_mask );
+	QBitmap airbrush_mask = airbrush_bitmap.createHeuristicMask( false );
 
-	return QCursor( pix, 1, 22 );
+	return QCursor( airbrush_bitmap, airbrush_mask, 1, 22 );
 }
 
 QCursor KisCursor::eraserCursor()
@@ -195,12 +183,9 @@ QCursor KisCursor::eraserCursor()
 		0x10, 0x01, 0x00, 0x00, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 	QBitmap eraser_bitmap( 25, 24, eraser_bits, true );
-	QBitmap eraser_mask( 25, 24 );
-	QPixmap pix( eraser_bitmap );
-	eraser_mask = pix.createHeuristicMask( false );
-	pix.setMask( eraser_mask );
+	QBitmap eraser_mask = eraser_bitmap.createHeuristicMask( false );
 
-	return QCursor( pix, 7, 22 );
+	return QCursor( eraser_bitmap, eraser_mask, 7, 22 );
 }
 
 QCursor KisCursor::fillerCursor()
@@ -214,12 +199,9 @@ QCursor KisCursor::fillerCursor()
 		0x08, 0x60, 0x00, 0x00, 0x00, 0x00};
 
 	QBitmap filler_bitmap( 22, 22, filler_bits, true );
-	QBitmap filler_mask( 22, 22 );
-	QPixmap pix( filler_bitmap );
-	filler_mask = pix.createHeuristicMask( false );
-	pix.setMask( filler_mask );
+	QBitmap filler_mask = filler_bitmap.createHeuristicMask( false );
 
-	return QCursor( pix, 3, 20 );
+	return QCursor( filler_bitmap, filler_mask, 3, 20 );
 }
 
 QCursor KisCursor::colorChangerCursor()
@@ -233,12 +215,9 @@ QCursor KisCursor::colorChangerCursor()
 		0x80, 0x81, 0x01, 0x00, 0x7e, 0x00, 0x00, 0x00, 0x00};
 
 	QBitmap colorChanger_bitmap( 24, 23, colorChanger_bits, true );
-	QBitmap colorChanger_mask( 24, 23 );
-	QPixmap pix( colorChanger_bitmap );
-	colorChanger_mask = pix.createHeuristicMask( false );
-	pix.setMask( colorChanger_mask );
+	QBitmap colorChanger_mask = colorChanger_bitmap.createHeuristicMask( false );
 
-	return QCursor( pix, 12, 10 );
+	return QCursor( colorChanger_bitmap, colorChanger_mask, 12, 10 );
 }
 
 QCursor KisCursor::zoomCursor()
@@ -252,12 +231,9 @@ QCursor KisCursor::zoomCursor()
 		0x00, 0x00, 0x7c, 0x00, 0x00, 0x38, 0x00, 0x00, 0x00};
 
 	QBitmap zoom_bitmap( 24, 23, zoom_bits, true );
-	QBitmap zoom_mask( 24, 23 );
-	QPixmap pix( zoom_bitmap );
-	zoom_mask = pix.createHeuristicMask( false );
-	pix.setMask( zoom_mask );
+	QBitmap zoom_mask = zoom_bitmap.createHeuristicMask( false );
 
-	return QCursor( pix, 9, 8 );
+	return QCursor( zoom_bitmap, zoom_mask, 9, 8 );
 }
 
 QCursor KisCursor::moveCursor()
@@ -271,12 +247,9 @@ QCursor KisCursor::moveCursor()
 		0x00, 0x7e, 0x00, 0x00, 0x3c, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00};
 
 	QBitmap move_bitmap( 24, 24, move_bits, true );
-	QBitmap move_mask( 24, 24 );
-	QPixmap pix( move_bitmap );
-	move_mask = pix.createHeuristicMask( false );
-	pix.setMask( move_mask );
+	QBitmap move_mask = move_bitmap.createHeuristicMask( false );
 
-	return QCursor( pix, 12, 11 );
+	return QCursor( move_bitmap, move_mask, 12, 11 );
 }
 
 QCursor KisCursor::handCursor()

@@ -340,7 +340,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 
 	m_undo = false;
 	m_dcop = 0;
-	setInstance(KisFactory::global(), false);
+//	setInstance(KisFactory::global(), false);
 	m_cmdHistory = 0;
 	m_nserver = 0;
 	m_pushedClipboard = false;

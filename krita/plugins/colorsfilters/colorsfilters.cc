@@ -59,11 +59,11 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 {
 	setInstance(ColorsFiltersFactory::instance());
 
-	kdDebug() << "ColorsFilters plugin. Class: " 
-		  << className() 
-		  << ", Parent: " 
-		  << parent -> className()
-		  << "\n";
+// 	kdDebug() << "ColorsFilters plugin. Class: " 
+// 		  << className() 
+// 		  << ", Parent: " 
+// 		  << parent -> className()
+// 		  << "\n";
 
 
 	KisBrightnessContrastFilter* kbc = new KisBrightnessContrastFilter();

@@ -58,11 +58,11 @@ Variations::Variations(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(VariationsFactory::instance());
 
-	kdDebug() << "Variations plugin. Class: " 
-		  << className() 
-		  << ", Parent: " 
-		  << parent -> className()
-		  << "\n";
+// 	kdDebug() << "Variations plugin. Class: " 
+// 		  << className() 
+// 		  << ", Parent: " 
+// 		  << parent -> className()
+// 		  << "\n";
 
 
 	(void) new KAction(i18n("&Variations..."), 0, 0, this, SLOT(slotVariationsActivated()), actionCollection(), "variations");

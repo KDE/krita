@@ -49,7 +49,7 @@
 #include "kis_strategy_colorspace_grayscale.h"
 
 typedef KGenericFactory<GrayPlugin> GrayPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritagrayplugin, GrayPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( kritagrayplugin, GrayPluginFactory( "kritacore" ) )
 
 
 GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)

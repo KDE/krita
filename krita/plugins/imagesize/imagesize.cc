@@ -61,11 +61,11 @@ ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(ImageSizeFactory::instance());
 
-	kdDebug() << "Imagesize plugin. Class: " 
-		  << className() 
-		  << ", Parent: " 
-		  << parent -> className()
-		  << "\n";
+// 	kdDebug() << "Imagesize plugin. Class: " 
+// 		  << className() 
+// 		  << ", Parent: " 
+// 		  << parent -> className()
+// 		  << "\n";
 
 	(void) new KAction(i18n("&Image Size..."), 0, 0, this, SLOT(slotImageSize()), actionCollection(), "imagesize");
 	(void) new KAction(i18n("&Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "layersize");

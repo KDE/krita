@@ -60,11 +60,11 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(ColorRangeFactory::instance());
 	
-	kdDebug() << "Colorrange plugin. Class: " 
-		  << className() 
-		  << ", Parent: " 
-		  << parent -> className()
-		  << "\n";
+// 	kdDebug() << "Colorrange plugin. Class: " 
+// 		  << className() 
+// 		  << ", Parent: " 
+// 		  << parent -> className()
+// 		  << "\n";
 
 	(void) new KAction(i18n("&ColorRange..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange");
 	

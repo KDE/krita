@@ -19,7 +19,6 @@
 #if !defined KIS_TOOL_FACTORY_H_
 #define KIS_TOOL_FACTORY_H_
 
-#include <vector>
 #include "kis_types.h"
 
 class KActionCollection;

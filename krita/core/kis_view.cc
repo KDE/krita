@@ -134,7 +134,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         else
                 setXMLFile("krita.rc");
 
-	setInstance(KisFactory::global(), true);
+//	setInstance(KisFactory::global(), true);
 
 	m_inputDevice = INPUT_DEVICE_UNKNOWN;
         m_doc = doc;

@@ -54,11 +54,11 @@ KritaExample::KritaExample(QObject *parent, const char *name, const QStringList 
 		: KParts::Plugin(parent, name)
 {
 	setInstance(KritaExampleFactory::instance());
-	kdDebug() << "Example plugin. Class: " 
-		  << className() 
-		  << ", Parent: " 
-		  << parent -> className()
-		  << "\n";
+	//kdDebug() << "Example plugin. Class: " 
+	//	  << className() 
+	//	  << ", Parent: " 
+	//	  << parent -> className()
+	//	  << "\n";
 	KisFilterInvert* kfi = new KisFilterInvert();
 	(void) new KAction(i18n("&Invert..."), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "krita_example");
 }

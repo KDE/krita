@@ -1,8 +1,8 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
-kritarc_DATA = grayplugin.rc
+#kritarcdir = $(kde_datadir)/krita/kpartplugins
+#kritarc_DATA = grayplugin.rc
 kde_services_DATA = kritagrayplugin.desktop
 
-EXTRA_DIST = $(kritarc_DATA)
+#EXTRA_DIST = $(kritarc_DATA)
 
 INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tiles \

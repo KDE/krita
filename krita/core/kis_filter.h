@@ -16,8 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef _KIS_PLUGIN_H_
-#define _KIS_PLUGIN_H_
+#ifndef _KIS_FILTER_H_
+#define _KIS_FILTER_H_
 
 #include <qobject.h>
 #include <qwidget.h>

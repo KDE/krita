@@ -1,8 +1,8 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
-kritarc_DATA = cmykplugin.rc
+#kritarcdir = $(kde_datadir)/krita/kpartplugins
+#kritarc_DATA = cmykplugin.rc
 kde_services_DATA = kritacmykplugin.desktop
 
-EXTRA_DIST = $(kritarc_DATA)
+#EXTRA_DIST = $(kritarc_DATA)
 
 INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tiles \

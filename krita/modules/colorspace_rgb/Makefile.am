@@ -1,13 +1,13 @@
 # location for the rc file
-kritarcdir = $(kde_datadir)/krita/kpartplugins
+#kritarcdir = $(kde_datadir)/krita/kpartplugins
 
 # rc file containing the GUI for the plugin
-kritarc_DATA = rgbplugin.rc
+#kritarc_DATA = rgbplugin.rc
 
 # Install the desktop file needed to detect the plugin
 kde_services_DATA = kritargbplugin.desktop
 
-EXTRA_DIST = $(kritarc_DATA)
+#EXTRA_DIST = $(kritarc_DATA)
 
 INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tiles \

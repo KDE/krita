@@ -49,8 +49,7 @@
 #include <kis_progress_display_interface.h>
 
 #include "kis_filter_configuration_widget.h"
-#include "kis_emboss_filter_configuration_widget.h"
-#include "kis_emboss_filter_configuration_base_widget.h"
+#include "kis_multi_integer_filter_widget.h"
 #include "kis_emboss_filter.h"
 
 KisEmbossFilter::KisEmbossFilter(KisView * view) : KisFilter(name(), view)
@@ -183,21 +182,18 @@ uchar KisEmbossFilter::LimitValues (int ColorValue)
 
 KisFilterConfigurationWidget* KisEmbossFilter::createConfigurationWidget(QWidget* parent)
 {
-	KisEmbossFilterConfigurationWidget* kefcw = new KisEmbossFilterConfigurationWidget(this,parent, "");
-	kdDebug() << kefcw << endl;
-	return kefcw  ;
+	vKisIntegerWidgetParam param;
+	param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth") ) );
+	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );
 }
 
 KisFilterConfiguration* KisEmbossFilter::configuration(KisFilterConfigurationWidget* nwidget)
 {
-	KisEmbossFilterConfigurationWidget* widget = (KisEmbossFilterConfigurationWidget*) nwidget;
-
+	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
 	if( widget == 0 )
 	{
-		return new KisEmbossFilterConfiguration(30);
+		return new KisEmbossFilterConfiguration( 30 );
 	} else {
-                Q_UINT32 depth = widget -> baseWidget() -> depthSpinBox -> value();
-                
-                return new KisEmbossFilterConfiguration(depth);
-        }
+		return new KisEmbossFilterConfiguration( widget->valueAt( 0 ) );
+	}
 }

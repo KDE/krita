@@ -19,13 +19,10 @@ INCLUDES  = \
 
 kde_module_LTLIBRARIES = kritaembossfilter.la
 
-kritaembossfilter_la_SOURCES = kis_emboss_filter_configuration_base_widget.ui \
-	kis_emboss_filter_plugin.cc \
-        kis_emboss_filter_configuration_widget.cc \
+kritaembossfilter_la_SOURCES = kis_emboss_filter_plugin.cc \
 	kis_emboss_filter.cc
 
-noinst_HEADERS = kis_emboss_filter_configuration_widget.h \
-	kis_emboss_filter_plugin.h \
+noinst_HEADERS = kis_emboss_filter_plugin.h \
         kis_emboss_filter.h
 
 kritaembossfilter_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

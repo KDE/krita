@@ -7,12 +7,12 @@ EXTRA_DIST = $(kritarc_DATA)
 INCLUDES  = -I$(srcdir)/../../core -I$(srcdir)/../../core/tiles -I$(srcdir)/../ui -I$(srcdir)../../tools $(KOFFICE_INCLUDES) \
 	 -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
-kde_module_LTLIBRARIES = screenmode.la
+kde_module_LTLIBRARIES = libscreenmode.la
 
-screenmode_la_SOURCES = screenmode.cc 
+libscreenmode_la_SOURCES = screenmode.cc 
 noinst_HEADERS = screenmode.h
 
-screenmode_la_LDFLAGS = $(all_libraries) -avoid-version $(KDE_PLUGIN)
-screenmode_la_LIBADD =  ../../libkritacommon.la $(LIB_KOFFICECORE) $(LIB_KOPAINTER)
+libscreenmode_la_LDFLAGS = $(all_libraries) -avoid-version $(KDE_PLUGIN)
+libscreenmode_la_LIBADD =  ../../libkritacommon.la $(LIB_KOFFICECORE) $(LIB_KOPAINTER)
 
-screenmode_la_METASOURCES = AUTO
+libscreenmode_la_METASOURCES = AUTO

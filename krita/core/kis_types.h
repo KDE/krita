@@ -115,10 +115,10 @@ typedef KSharedPtr<KisGuide> KisGuideSP;
 class KisAlphaMask;
 typedef KSharedPtr<KisAlphaMask> KisAlphaMaskSP;
 
-
 class KisFilter;
 typedef KSharedPtr<KisFilter> KisFilterSP;
 
+class KisFilterRegistry;
+typedef KSharedPtr<KisFilterRegistry> KisFilterRegistrySP;
 
 #endif // KISTYPES_H_
-

@@ -63,7 +63,7 @@ namespace {
 KisFloatingSelection::KisFloatingSelection(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name) : super(width, height, colorStrategy, name)
 {
 	m_clearOnMove = true;
-	visible(false);
+	setVisible(false);
 	setName(name);
 }
 
@@ -237,7 +237,7 @@ void KisFloatingSelection::setBounds(const QRect& rc)
 
 void KisFloatingSelection::parentVisibilityChanged(KisPaintDeviceSP parent)
 {
-	visible(parent -> visible());
+	setVisible(parent -> visible());
 }
 
 void KisFloatingSelection::setParent(KisPaintDeviceSP parent)

@@ -409,7 +409,7 @@ bool KisDoc::initDoc()
 		img -> setResolution(100, 100); // XXX
 		KisLayerSP layer = new KisLayer(img, cfg.defLayerWidth(), cfg.defLayerHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 
-		layer -> visible(true);
+		layer -> setVisible(true);
 		addImage(img);
 		ok = true;
 	} else if (ret == KoTemplateChooseDia::File) {
@@ -725,8 +725,8 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
 	linked = attr == "0" ? false : true;
 	layer = new KisLayer(img, width, height, name, opacity);
-	layer -> linked(linked);
-	layer -> visible(visible);
+	layer -> setLinked(linked);
+	layer -> setVisible(visible);
 	layer -> move(x, y);
 	return layer;
 }
@@ -1291,7 +1291,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 					addCommand(new LayerAddCmd(this, this, img, layer));
 				img -> invalidate();
 				setModified(true);
-				layer -> visible(true);
+				layer -> setVisible(true);
 				emit layersUpdated(img);
 			}
 		}
@@ -1330,7 +1330,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img,
 					addCommand(new LayerAddCmd(this, this, img, layer));
 				img -> invalidate();
 				setModified(true);
-				layer -> visible(true);
+				layer -> setVisible(true);
 				emit layersUpdated(img);
 			}
 		}
@@ -1361,7 +1361,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisFloatingSele
 
 		img -> invalidate(layer -> bounds());
 		layer -> move(selection -> x(), selection -> y());
-		layer -> visible(true);
+		layer -> setVisible(true);
 		emit layersUpdated(img);
 	}
 
@@ -1385,7 +1385,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, KisLayerSP l, Q_INT32 position)
 	if (m_undo)
 		addCommand(new LayerAddCmd(this, this, img, l));
 	img -> invalidate(l -> bounds());
-	l -> visible(true);
+	l -> setVisible(true);
 	emit layersUpdated(img);
 
 	if (!m_undo)
@@ -1457,7 +1457,7 @@ void KisDoc::layerNext(KisImageSP img, KisLayerSP layer)
 			return;
 
 		if (!layer -> visible()) {
-			layer -> visible(true);
+			layer -> setVisible(true);
 			setModified(true);
 		}
 
@@ -1468,7 +1468,7 @@ void KisDoc::layerNext(KisImageSP img, KisLayerSP layer)
 			layer = img -> layer(i);
 
 			if (layer) {
-				layer -> visible(false);
+				layer -> setVisible(false);
 				img -> invalidate(layer -> x(), layer -> y(), layer -> width(), layer -> height());
 			}
 		}
@@ -1497,7 +1497,7 @@ void KisDoc::layerPrev(KisImageSP img, KisLayerSP layer)
 			return;
 
 		if (!layer -> visible()) {
-			layer -> visible(true);
+			layer -> setVisible(true);
 			setModified(true);
 		}
 
@@ -1508,7 +1508,7 @@ void KisDoc::layerPrev(KisImageSP img, KisLayerSP layer)
 			layer = img -> layer(i);
 
 			if (layer) {
-				layer -> visible(false);
+				layer -> setVisible(false);
 				img -> invalidate(layer -> x(), layer -> y(), layer -> width(), layer -> height());
 			}
 		}

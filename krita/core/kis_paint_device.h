@@ -100,7 +100,7 @@ public:
         virtual void update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 	virtual const bool visible() const;
-        virtual void visible(bool v);
+        virtual void setVisible(bool v);
 
         /**
          * Reimplemented by KisSelection; here it does nothing useful, but it
@@ -111,7 +111,7 @@ public:
         bool contains(Q_INT32 x, Q_INT32 y) const;
         bool contains(const QPoint& pt) const;
 
-        void data(KisTileMgrSP mgr);
+        void setData(KisTileMgrSP mgr);
 
 	/** This function convert to a different colorspace
 		*/
@@ -125,7 +125,7 @@ public:
 	 * fill c and opacity with the values found at x and y
 	 * @return true if the operation was succesful
 	 */
-        bool pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity);
+        bool setPixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity);
 
         /**
 	 * Set the specified pixel to the specified color. Note that this
@@ -164,7 +164,7 @@ public:
         Q_INT32 width() const;
         Q_INT32 height() const;
 
-        void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
+        void setClip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
         QRect clip() const;
         void setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh);
 
@@ -262,6 +262,9 @@ signals:
         void positionChanged(KisPaintDeviceSP device);
         void ioProgress(Q_INT8 percentage);
 
+protected:
+        void setWidth(Q_INT32 w);
+        void setHeight(Q_INT32 h);
 
 private:
         KisPaintDevice& operator=(const KisPaintDevice&);

@@ -33,7 +33,7 @@ public:
 
 public:
 	virtual const bool visible() const;
-	virtual void visible(bool v);
+	virtual void setVisible(bool v);
 
 public:
 	// XXX: Masks were already out of order before I started on
@@ -83,7 +83,7 @@ public:
 	void setOpacity(QUANTUM val);
 
 	bool linked() const;
-	void linked(bool l);
+	void setLinked(bool l);
 
 private:
 	QUANTUM m_opacity;

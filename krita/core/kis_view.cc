@@ -530,7 +530,7 @@ void KisView::setupActions()
         m_layerBottom = new KAction(i18n("Layer to Bottom"), 0, this, SLOT(layerBack()), actionCollection(), "bottomlayer");
         m_layerProperties = new KAction(i18n("Layer Properties..."), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
         (void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
-        m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(save_layer_as_image()), actionCollection(), "save_layer_as_image");
+        m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
         m_layerResizeToImage = new KAction(i18n("Resize Layer to Image"), 0, this, SLOT(layerResizeToImage()), actionCollection(), "resizelayertoowner");
         m_layerToImage = new KAction(i18n("Layer to Image"), 0, this, SLOT(layerToImage()), actionCollection(), "layer_to_image");
 
@@ -553,9 +553,9 @@ void KisView::setupActions()
         (void)new KAction(i18n("Add New Image..."), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
         m_imgRm = new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
         m_imgDup = new KAction(i18n("Duplicate Image"), 0, this, SLOT(duplicateCurrentImg()), actionCollection(), "duplicate_image");
-        m_imgMergeAll = new KAction(i18n("Merge &All Layers"), 0, this, SLOT(merge_all_layers()), actionCollection(), "merge_all_layers");
-        m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(merge_visible_layers()), actionCollection(), "merge_visible_layers");
-        m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(merge_linked_layers()), actionCollection(), "merge_linked_layers");
+        m_imgMergeAll = new KAction(i18n("Merge &All Layers"), 0, this, SLOT(mergeAllLayers()), actionCollection(), "merge_all_layers");
+        m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
+        m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(mergeLinkedLayers()), actionCollection(), "merge_linked_layers");
 
         // setting actions
         (void)new KAction(i18n("Paint Offset..."), "paint_offset", this, SLOT(setPaintOffset()), actionCollection(), "paint_offset");
@@ -1457,7 +1457,7 @@ void KisView::slotInsertImageAsLayer()
                 m_doc -> setModified(true);
 }
 
-void KisView::save_layer_as_image()
+void KisView::saveLayerAsImage()
 {
         KURL url = KFileDialog::getSaveURL(QString::null, KisImageMagickConverter::writeFilters(), this, i18n("Export Layer"));
         KisImageSP img = currentImg();
@@ -1716,7 +1716,7 @@ void KisView::remove_current_image_tab()
 }
 
 
-void KisView::merge_all_layers()
+void KisView::mergeAllLayers()
 {
         KisImageSP img = currentImg();
 
@@ -1734,7 +1734,7 @@ void KisView::merge_all_layers()
         }
 }
 
-void KisView::merge_visible_layers()
+void KisView::mergeVisibleLayers()
 {
         KisImageSP img = currentImg();
 
@@ -1752,7 +1752,7 @@ void KisView::merge_visible_layers()
         }
 }
 
-void KisView::merge_linked_layers()
+void KisView::mergeLinkedLayers()
 {
         KisImageSP img = currentImg();
 
@@ -2164,7 +2164,7 @@ void KisView::layerToggleVisible()
                 KisLayerSP layer = img -> activeLayer();
 
                 if (layer) {
-                        layer -> visible(!layer -> visible());
+                        layer -> setVisible(!layer -> visible());
                         img -> invalidate();
                         m_doc -> setModified(true);
                         resizeEvent(0);
@@ -2203,7 +2203,7 @@ void KisView::layerToggleLinked()
                 KisLayerSP layer = img -> activeLayer();
 
                 if (layer) {
-                        layer -> linked(!layer -> linked());
+                        layer -> setLinked(!layer -> linked());
                         m_doc -> setModified(true);
                         layersUpdated();
                 }

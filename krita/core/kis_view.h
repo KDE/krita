@@ -296,11 +296,11 @@ private slots:
 	void layersUpdated(KisImageSP img);
 
 	QPoint mapToScreen(const QPoint& pt);
-	void merge_all_layers();
-	void merge_visible_layers();
-	void merge_linked_layers();
+	void mergeAllLayers();
+	void mergeVisibleLayers();
+	void mergeLinkedLayers();
 	void nBuilders(Q_INT32 size);
-	void save_layer_as_image();
+	void saveLayerAsImage();
 	void projectionUpdated(KisImageSP img);
 	void selectFGColor();
 	void selectBGColor();

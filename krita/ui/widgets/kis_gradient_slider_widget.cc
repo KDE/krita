@@ -42,7 +42,7 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
 	painter.setPen( Qt::black );
 	painter.drawRect( 5, 5, width() - 10, 10 );
 	KisStrategyColorSpaceSP colorSpace = KisColorSpaceRegistry::singleton()->get("RGBA");
-	KisPaintDeviceSP device = new KisPaintDevice( width() - 12, 8, colorSpace, " gradient preview " );
+	KisPaintDeviceSP device = new KisLayer( width() - 12, 8, colorSpace, " gradient preview " );
 	KisGradientPainter gradientPainter( device );
 	gradientPainter.setGradient(*m_autogradientResource );
 	gradientPainter.paintGradient(QPoint(0, 3), QPoint( device -> width() - 1, 3), KisGradientPainter::GradientShapeLinear, KisGradientPainter::GradientRepeatNone, 0.20, false );

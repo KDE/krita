@@ -33,7 +33,6 @@
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
-#include <kis_iteratorpixeltrait.h>
 #include <kis_layer.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
@@ -56,9 +55,9 @@ KritaExample::KritaExample(QObject *parent, const char *name, const QStringList 
 	setInstance(KritaExampleFactory::instance());
 
 
-	kdDebug() << "Example plugin. Class: "
-		  << className()
-		  << ", Parent: "
+	kdDebug() << "Example plugin. Class: " 
+		  << className() 
+		  << ", Parent: " 
 		  << parent -> className()
 		  << "\n";
 
@@ -83,31 +82,16 @@ KisFilterInvert::KisFilterInvert(KisView * view) : KisFilter(name(), view)
 
 void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect, KisTileCommand* ktc)
 {
-// 	KisRectIteratorPixel dstIt = dst -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-// 	KisRectIteratorPixel srcIt = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-
-// 	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
-
-// 	while( ! dstIt.isDone() )
-// 	{
-// 		for( int i = 0; i < depth; i++)
-// 		{
-// 			dstIt.value()[i] = QUANTUM_MAX - srcIt.value()[i];
-			
-// 		}
-// 		srcIt++;
-// 		dstIt++;
-// 	}
-	KisRectIterator dstIt = dst -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
-	KisStrategyColorSpaceSP cs = src -> colorStrategy();
-	while ( ! dstIt.isDone() )
+	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+	Q_INT32 depth = src->depth() - 1;
+	while( ! srcIt.isDone() )
 	{
-		KisPixel pixel = cs -> toKisPixel(dstIt, src -> profile());
-		
-		for ( int i = 0; i < depth; i++) {
-			pixel[i] = QUANTUM_MAX - pixel[i];
+		for( int i = 0; i < depth; i++)
+		{
+			dstIt[i] = QUANTUM_MAX - srcIt.oldValue()[i];
 		}
+		srcIt++;
 		dstIt++;
 	}
 }

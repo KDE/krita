@@ -1,7 +1,6 @@
 #ifndef __koffice_kchart_h__
 #define __koffice_kchart_h__
 
-//#include <ktable.h>
 #include <koDocument.h>
 #include <KDChartTable.h>
 #include <KDChartData.h>

@@ -83,16 +83,31 @@ KisFilterInvert::KisFilterInvert(KisView * view) : KisFilter(name(), view)
 
 void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect, KisTileCommand* ktc)
 {
-	KisRectIteratorPixel dstIt = dst -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-	KisRectIteratorPixel srcIt = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+// 	KisRectIteratorPixel dstIt = dst -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+// 	KisRectIteratorPixel srcIt = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+
+// 	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
+
+// 	while( ! dstIt.isDone() )
+// 	{
+// 		for( int i = 0; i < depth; i++)
+// 		{
+// 			dstIt.value()[i] = QUANTUM_MAX - srcIt.value()[i];
+			
+// 		}
+// 		srcIt++;
+// 		dstIt++;
+// 	}
+	KisRectIterator dstIt = dst -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
-	while( ! dstIt.isDone() )
+	KisStrategyColorSpaceSP cs = src -> colorStrategy();
+	while ( ! dstIt.isDone() )
 	{
-		for( int i = 0; i < depth; i++)
-		{
-			dstIt.value().channels()[i] = QUANTUM_MAX - dstIt.value().channels()[i];
+		KisPixel pixel = cs -> toKisPixel(dstIt, src -> profile());
+		
+		for ( int i = 0; i < depth; i++) {
+			pixel[i] = QUANTUM_MAX - pixel[i];
 		}
-		srcIt++;
 		dstIt++;
 	}
 }

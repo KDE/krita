@@ -41,16 +41,16 @@ public:
 	/**
 	 * Return the current pixel
 	 */
-	inline operator KisPixel() { return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile()); }; 
+	inline operator KisPixel() { return m_device -> pixel((QUANTUM*)(*this)); }; 
 	// XXX: Isn't this the same as the above?
- 	inline KisPixel value() { return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile()); };
-        inline KisPixelRO oldPixelValue() { return m_colorSpace -> toKisPixelRO( this -> oldQuantumValue(), m_device -> profile()); };
+ 	inline KisPixel value() { return m_device -> pixel((QUANTUM*)(*this)); };
+        inline KisPixelRO oldPixelValue() { return m_device -> pixelRO( this -> oldQuantumValue()); };
 
 	/**
 	 * Return one channel from the current kispixel. Does not check whether
 	 * channel index actually exists in this colorspace.
 	 */
-	inline KisQuantum operator[](int index) { return m_colorSpace->toKisPixel((QUANTUM*)(*this), m_device->profile())[index]; };
+	inline KisQuantum operator[](int index) { return m_device -> pixel((QUANTUM*)(*this))[index]; };
 
         inline operator QUANTUM*() { return (Q_UINT8 *)m_underlyingIterator; };
 

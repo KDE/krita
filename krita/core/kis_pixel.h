@@ -165,27 +165,4 @@ private:
 	KisProfileSP m_profile;
 };
 
-
-/**
- * A color is a self-contained pixel, that is, the data in the color
- * is not a reference to some pixel in an image. When a color is
- * deleted, the QUANTUM data is deleted, too, the creator of the color
- * is not responsible for that.
- *
- * By contrast, a KisPixel(RO) is a view on data owned by somebody
- * else.
- *
- * Probably the easiest way to construct a KisColor is by calling
- * factory methods in the color strategies, instead of messing with
- * pointers to arrays of channels yourself.
- */
-//class KisColor : public KisPixel {
-//	
-//public:
-//
-//	~KisColor() { delete m_channels; delete m_alpha; };
-//
-//
-//};
-
 #endif

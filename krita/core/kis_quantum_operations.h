@@ -27,9 +27,9 @@ class KisQuantumOperation {
 	public:
 		KisQuantumOperation( ) { };
 		virtual QUANTUM operation(QUANTUM) =0;
-		/** This function is mean to be called to clone this object.
-			* @param index this is the offset
-			*/
+		/** This function is called to clone this object.
+		 * @param index this is the offset
+		 */
 		virtual KisQuantumOperation* clone(int index) =0;
 };
 

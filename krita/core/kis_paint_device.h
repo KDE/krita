@@ -34,6 +34,7 @@
 #include "kis_scale_visitor.h"
 //#include "kis_iterators_pixel.h"
 #include <koffice_export.h>
+#include "kis_pixel.h"
 
 class QImage;
 class QSize;
@@ -142,6 +143,13 @@ public:
 	 * @return true if the operation was succesful
 	 */
         bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity);
+
+	/**
+	 * Return a KisPixel wrapper around these bytes. If there are not enough
+	 * bytes, bad things will happen. XXX: use vectors?
+	 */
+	KisPixel pixel(Q_UINT8 * bytes);
+	KisPixelRO pixelRO(Q_UINT8 * bytes);
 
         bool alpha() const;
 
@@ -371,6 +379,17 @@ inline bool KisPaintDevice::alpha() const
 {
         return colorStrategy()->alpha();
 }
+
+inline KisPixel KisPaintDevice::pixel(Q_UINT8 * bytes)
+{
+	return m_colorStrategy -> toKisPixel(bytes, m_profile);
+}
+
+inline KisPixelRO KisPaintDevice::pixelRO(Q_UINT8 * bytes)
+{
+	return m_colorStrategy -> toKisPixelRO(bytes, m_profile);
+}
+
 
 #endif // KIS_PAINT_DEVICE_H_
 

@@ -78,13 +78,23 @@ public:
 public:
 	bool contains(Q_INT32 x, Q_INT32 y) const;
 	bool contains(const QPoint& pt) const;
+
 	void data(KisTileMgrSP mgr);
+
 	QString name();
 	void setName(const QString& name);
+
+	// fill c and opacity with the values found at x and y
 	bool pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity);
-	bool pixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity);
+	// Set the specified pixel to the specified color. Note that this
+	// bypasses KisPainter. the PaintDevice is here used as an equivalent
+	// to QImage, not QPixmap. This means that this is undoable; also,
+        // there is no compositing with an existing value at this location.
+	bool setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity);
+
 	void maskBounds(Q_INT32 *x1, Q_INT32 *y1, Q_INT32 *x2, Q_INT32 *y2);
 	void maskBounds(QRect *rc);
+
 	bool alpha() const;
 	enumImgType type() const;
 	enumImgType typeWithAlpha() const;

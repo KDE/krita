@@ -29,7 +29,6 @@
 #include "kis_tool_select_polygonal.h"
 #include "kis_tool_select_elliptical.h"
 #include "kis_tool_select_contiguous.h"
-#include "kis_tool_brush.h"
 #include "kis_tool_airbrush.h"
 #include "kis_tool_pen.h"
 #include "kis_tool_line.h"
@@ -50,6 +49,7 @@
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_test.h"
 #include "kis_tool_qpen.h"
+#include "kis_tool_brush.h"
 
 /*
  * toolFactory
@@ -73,7 +73,6 @@ vKisToolSP toolFactory(KisView *view, KisDoc *doc)
 
 #if 0
     // painting tools
-    tools.push_back(new BrushTool(doc, brush));
     tools.push_back(new AirBrushTool(doc, brush));
     tools.push_back(new PenTool(doc, canvas, brush));
     tools.push_back(new EraserTool(doc, brush));
@@ -81,6 +80,7 @@ vKisToolSP toolFactory(KisView *view, KisDoc *doc)
 
     tools.push_back( new KisToolTest( view, doc ));
     tools.push_back( new KisToolQPen( view, doc ));
+    tools.push_back( new KisToolBrush( view, doc ));
     tools.push_back( new KisToolColorPicker( view, doc ));
 
 #if 0

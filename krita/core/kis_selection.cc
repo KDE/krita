@@ -191,7 +191,7 @@ void KisSelection::fromImage(const QImage& img)
 			else
 				opacity = OPACITY_OPAQUE;
 
-			pixel(x, y, c, opacity);
+			setPixel(x, y, c, opacity);
 		}
 	}
 }

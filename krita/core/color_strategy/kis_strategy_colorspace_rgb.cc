@@ -125,7 +125,6 @@ void KisStrategyColorSpaceRGB::render(KisImageSP projection, QPainter& painter, 
 			j += MAX_CHANNEL_RGBA; // Because we're hard-coded 32 bits deep, 4 bytes
 			
 		}
-
 #else
 		img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * CHAR_BIT, 0, 0, QImage::LittleEndian);
 #endif
@@ -254,7 +253,6 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 			break;
 		default:
 			kdDebug() << "Not Implemented.\n";
-			abort();
 			return;
 	}
 }

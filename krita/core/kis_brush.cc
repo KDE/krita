@@ -32,6 +32,9 @@
 #include <qimage.h>
 #include <qpoint.h>
 #include <qvaluevector.h>
+
+#include <kdebug.h>
+
 #include "kis_global.h"
 #include "kis_brush.h"
 
@@ -175,6 +178,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 	k = bh.header_size;
 
 	if (bh.bytes == 1) {
+		kdDebug() << "rgb brush" << endl;
 		Q_INT32 val;
 
 		for (Q_UINT32 y = 0; y < bh.height; y++)
@@ -188,6 +192,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 				m_img.setPixel(x, y, qRgb(val, val, val));
 			}
 	} else if (bh.bytes == 4) {
+		kdDebug() << "rgba brush" << endl;
 		for (Q_UINT32 y = 0; y < bh.height; y++)
 			for (Q_UINT32 x = 0; x < bh.width; x++) {
 				if (k + 4 > m_data.size()) {

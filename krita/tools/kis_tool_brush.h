@@ -1,4 +1,4 @@
-g/*
+/*
  *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -20,16 +20,16 @@ g/*
 #define KIS_TOOL_BRUSH_H_
 
 #include <qpoint.h>
-#include <qpointarray.h>
-#include <qpixmap.h>
-
 #include "kis_tool.h"
 #include "kis_tool_paint.h"
 
-/**
-   KisToolBrush is a supersampled pattern-using brush.
+enum enumBrushMode {
+	PAINT,
+	SMUDGE,
+	ERASE,
+	HOVER
+};
 
-*/
 class KisToolBrush : public KisToolPaint {
 	typedef KisToolPaint super;
 
@@ -37,21 +37,33 @@ public:
 	KisToolBrush(KisView *view, KisDoc *doc);
 	virtual ~KisToolBrush();
 
-public:
         virtual void setup();
 	virtual void mousePress(QMouseEvent *e);
-	virtual void tabletEvent(QTabletEvent *e);
 	virtual void mouseMove(QMouseEvent *e);
 	virtual void mouseRelease(QMouseEvent *e);
+	virtual void tabletEvent(QTabletEvent *e);
 
 private:
+
+	virtual void paint(const QPoint & pos, 
+			   const Q_INT32 pressure,
+			   const Q_INT32 xtilt,
+			   const Q_INT32 ytilt);
+
+	virtual void smudge(const QPoint & pos, 
+			    const Q_INT32 pressure,
+			    const Q_INT32 xtilt,
+			    const Q_INT32 ytilt);
+	
+	virtual void erase(const QPoint & pos, 
+			   const Q_INT32 pressure,
+			   const Q_INT32 xtilt,
+			   const Q_INT32 ytilt);
+
 	KisView *m_view;
 	KisDoc *m_doc;
 
-        bool m_mousePressed; // Are we drawing?
-        int m_oldPressure;
-        // If the mouse moves too fast, keep the delta's in here
-        QPointArray m_polyline; 
+	enumBrushMode m_mode;
 };
 #endif // KIS_TOOL_BRUSH_H_
 

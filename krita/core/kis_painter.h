@@ -149,7 +149,6 @@ public:
         // ----------------------------------------------------------------------------------------
         // QPainter-using methods.
 
-        // XXX: we use a simple black pen for everything, for now.
         // XXX: we actually use QPainter for everything.
         // XXX: we even use QPixmaps, for added sluggishness.
         // XXX: we don't even think about compositing.

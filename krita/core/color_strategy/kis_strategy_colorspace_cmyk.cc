@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  This program is free software; you can CYANistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
@@ -16,6 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <limits.h>
+#include <stdlib.h>
 
 #include <qimage.h>
 #include <qpainter.h>
@@ -105,76 +106,6 @@ void KisStrategyColorSpaceCMYK::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *
     dst[PIXEL_YELLOW] = upscale( k.Y() );
     dst[PIXEL_BLACK] = upscale( k.K() );
     dst[PIXEL_CMYK_ALPHA] = opacity;
-}
-
-void KisStrategyColorSpaceCMYK::composite(QUANTUM *dst, QUANTUM *src, Q_INT32 opacity, CompositeOp op) const
-{
-    QUANTUM alpha;
-    QUANTUM invAlpha;
-    QUANTUM *d;
-    QUANTUM *s;
-
-    d = dst;
-    s = src;
-
-    switch (op) {
-    case COMPOSITE_CLEAR:
-        // Make white (rgba makes black -- both use 0)
-        if ( opacity == OPACITY_OPAQUE ) {
-            memset(d, 0, MAX_CHANNEL_CMYKA);
-        }
-        break;
-    case COMPOSITE_COPY:
-        if ( opacity == OPACITY_OPAQUE ) {
-            memcpy(d, s, MAX_CHANNEL_CMYKA);
-        }
-        break;
-    case COMPOSITE_OVER:
-        // XXX: This is _not_ the correct algorithm.
-        if (s[PIXEL_CMYK_ALPHA] == OPACITY_TRANSPARENT)
-            break;
-
-        if ( opacity == OPACITY_OPAQUE ) {
-            if (s[PIXEL_CMYK_ALPHA] == OPACITY_TRANSPARENT ||
-                (d[PIXEL_CMYK_ALPHA] == OPACITY_OPAQUE && s[PIXEL_CMYK_ALPHA] == OPACITY_OPAQUE))
-            {
-                memcpy(d, s, MAX_CHANNEL_CMYKA * sizeof(QUANTUM));
-                break;
-            }
-        }
-        alpha = (s[PIXEL_CMYK_ALPHA] * opacity) / QUANTUM_MAX;
-        invAlpha = QUANTUM_MAX - alpha;
-
-        d[PIXEL_CYAN] = (d[PIXEL_CYAN] * invAlpha + s[PIXEL_CYAN] * alpha) / QUANTUM_MAX;
-        d[PIXEL_MAGENTA] = (d[PIXEL_MAGENTA] * invAlpha + s[PIXEL_MAGENTA] * alpha) / QUANTUM_MAX;
-        d[PIXEL_YELLOW] = (d[PIXEL_YELLOW] * invAlpha + s[PIXEL_YELLOW] * alpha) / QUANTUM_MAX;
-        d[PIXEL_BLACK] = (d[PIXEL_BLACK] * invAlpha + s[PIXEL_BLACK] * alpha) / QUANTUM_MAX;
-        alpha = (d[PIXEL_CMYK_ALPHA] * (QUANTUM_MAX - s[PIXEL_CMYK_ALPHA]) + s[PIXEL_CMYK_ALPHA]) / QUANTUM_MAX;
-        d[PIXEL_CMYK_ALPHA] = (d[PIXEL_CMYK_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_CMYK_ALPHA]) / QUANTUM_MAX;
-
-        break;
-    case COMPOSITE_IN:
-    case COMPOSITE_ATOP:
-    case COMPOSITE_XOR:
-    case COMPOSITE_PLUS:
-    case COMPOSITE_MINUS:
-    case COMPOSITE_ADD:
-    case COMPOSITE_SUBTRACT:
-    case COMPOSITE_DIFF:
-    case COMPOSITE_MULT:
-    case COMPOSITE_BUMPMAP:
-    case COMPOSITE_COPY_RED:
-    case COMPOSITE_COPY_GREEN:
-    case COMPOSITE_COPY_BLUE:
-    case COMPOSITE_COPY_OPACITY:
-    case COMPOSITE_DISSOLVE:
-    case COMPOSITE_DISPLACE:
-    case COMPOSITE_MODULATE:
-    case COMPOSITE_THRESHOLD:
-    default:
-        kdDebug() << "Not Implemented.\n";
-        return;
-    }
 }
 
 void KisStrategyColorSpaceCMYK::render(KisImageSP projection,
@@ -268,9 +199,9 @@ void KisStrategyColorSpaceCMYK::render(KisImageSP projection,
 
             // fix the pixel in QImage.
             *( j + PIXEL_ALPHA ) = *( pd->data + i + PIXEL_CMYK_ALPHA );
-            *( j + PIXEL_RED ) = r.r;
-            *( j + PIXEL_GREEN ) =  r.g;
-            *( j + PIXEL_BLUE ) =  r.b;
+            *( j + PIXEL_CYAN )   = r.r;
+            *( j + PIXEL_MAGENTA ) =  r.g;
+            *( j + PIXEL_YELLOW )  =  r.b;
 
              i += MAX_CHANNEL_CMYKA;
              j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
@@ -281,26 +212,110 @@ void KisStrategyColorSpaceCMYK::render(KisImageSP projection,
     }
 }
 
-void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 /*stride*/,
-			QUANTUM * /*dst*/, 
-			Q_INT32 /*dststride*/,
-			QUANTUM * /*src*/, 
-			Q_INT32 /*srcstride*/,
-			Q_INT32 /*rows*/, 
-			Q_INT32 /*cols*/, 
-			CompositeOp /*op*/) const
+void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 stride,
+	QUANTUM *dst,
+	Q_INT32 dststride,
+	QUANTUM *src,
+	Q_INT32 srcstride,
+	Q_INT32 rows,
+	Q_INT32 cols,
+	CompositeOp op) const
 {
+        kdDebug() << "Compositing with: " << op << endl;
+	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
+	QUANTUM *d;
+	QUANTUM *s;
+	QUANTUM alpha;
+	Q_INT32 i;
+
+	if (rows <= 0 || cols <= 0)
+		return;
+
+	switch (op) {
+		case COMPOSITE_COPY:
+			d = dst;
+			s = src;
+
+			while (rows-- > 0) {
+				memcpy(d, s, linesize);
+				d += dststride;
+				s += srcstride;
+			}
+			break;
+		case COMPOSITE_CLEAR:
+			d = dst;
+			s = src;
+			while (rows-- > 0) {
+				memset(d, 0, linesize);
+				d += dststride;
+			}
+			break;
+		case COMPOSITE_OVER:
+			tileBlt(stride, dst, dststride, src, srcstride, OPACITY_OPAQUE, rows, cols, op);
+			break;
+		default:
+			kdDebug() << "Not Implemented.\n";
+			abort();
+			return;
+	}
 }
 
-void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 /*stride*/,
-			QUANTUM * /*dst*/, 
-			Q_INT32 /*dststride*/,
-			QUANTUM * /*src*/, 
-			Q_INT32 /*srcstride*/,
-			QUANTUM /*opacity*/,
-			Q_INT32 /*rows*/,
-			Q_INT32 /*cols*/,
-			CompositeOp /*op*/) const
+void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 stride,
+	QUANTUM *dst,
+	Q_INT32 dststride,
+	QUANTUM *src,
+	Q_INT32 srcstride,
+	QUANTUM opacity,
+	Q_INT32 rows,
+	Q_INT32 cols,
+	CompositeOp op) const
 {
-}
+	QUANTUM alpha;
+	QUANTUM *d;
+	QUANTUM *s;
+	Q_INT32 i;
 
+	if (rows <= 0 || cols <= 0)
+		return;
+	switch (op) {
+		case COMPOSITE_COPY:
+                        tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
+		case COMPOSITE_CLEAR:
+                        tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
+		case COMPOSITE_OVER:
+			while (rows-- > 0) {
+				d = dst;
+				s = src;
+				for (i = cols; i > 0; i--, d += stride, s += stride) {
+        				// XXX: this is probably incorrect. CMYK simulates ink; layers of
+					// ink over ink until a certain maximum, QUANTUM_MAX arbitrarily
+					// is reached. We invert the opacity because opacity_transparent
+					// and opacity_opaque were designed for RGB, which works the other
+					// way around.
+					alpha = (QUANTUM_MAX - opacity) + (QUANTUM_MAX - alpha);
+					if (alpha >= OPACITY_OPAQUE) // OPAQUE is CMYK transparent
+						continue;
+					if (s[PIXEL_CYAN] > alpha) {
+						d[PIXEL_CYAN] = d[PIXEL_CYAN] + (s[PIXEL_CYAN] - alpha);
+					}
+					if (s[PIXEL_MAGENTA] > alpha) {
+        					d[PIXEL_MAGENTA] = d[PIXEL_MAGENTA] + (s[PIXEL_MAGENTA] - alpha);
+					}
+					if (s[PIXEL_YELLOW] > alpha) {
+        					d[PIXEL_YELLOW] = d[PIXEL_YELLOW]  + (s[PIXEL_YELLOW] - alpha);
+					}
+					if (s[PIXEL_BLACK] > alpha) {
+        					d[PIXEL_BLACK] = d[PIXEL_BLACK] + (s[PIXEL_BLACK] - alpha);
+					}
+					d[PIXEL_ALPHA] = alpha; // XXX: this is certainly incorrect.
+				}
+				dst += dststride;
+				src += srcstride;
+			}
+			break;
+		default:
+			kdDebug() << "Not Implemented.\n";
+			return;
+	}
+
+}

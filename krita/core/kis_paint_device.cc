@@ -528,7 +528,7 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
 	return true;
 }
 
-bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)
+bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)
 {
 	KisTileMgrSP tm = data();
 	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);

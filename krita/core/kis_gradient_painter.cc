@@ -713,7 +713,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 					KoColor c;
 					QUANTUM opacity;
 					layer -> pixel(x, y, &c, &opacity);
-					opacity = OPACITY_OPAQUE - selection -> selected(x, y);
+					opacity = ((OPACITY_OPAQUE - selection -> selected(x, y)) * opacity) / QUANTUM_MAX;
 					layer -> setPixel(x, y, c, opacity); // XXX: we need a setOpacity in KisPaintDevice!
 					
 				}

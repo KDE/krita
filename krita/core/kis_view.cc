@@ -2161,6 +2161,28 @@ void KisView::layerRemove()
 
 void KisView::layerDuplicate()
 {
+	KisImageSP img = currentImg();
+
+	if (!img)
+		return;
+	
+	KisLayerSP active = img -> activeLayer();
+
+	if (!active)
+		return;
+
+	Q_INT32 index = img -> index(active);
+	KisLayerSP dup = new KisLayer(*active);
+	dup -> setName(QString(i18n("Duplicate of '%1'")).arg(active -> name()));
+	KisLayerSP layer = m_doc -> layerAdd(img, dup, index);
+	
+	if (layer) {
+		emit currentLayerChanged(img -> index(layer));
+		resizeEvent(0);
+		updateCanvas(0, 0, img -> width(), img -> height());
+	} else {
+		KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
+	}
 }
 
 void KisView::layerAddMask(int /*n*/)

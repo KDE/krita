@@ -56,52 +56,6 @@ KisToolSelectBrush::~KisToolSelectBrush()
 {
 }
 
-// XXX: Cut & Paste antipattern, and all that just to pass
-// the dirty rect to the selection
-void KisToolSelectBrush::buttonPress(KisButtonPressEvent *e)
-{
-        if (!m_subject) return;
-
-        if (!m_subject -> currentBrush()) return;
-
-	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
-
-        if (e -> button() == QMouseEvent::LeftButton) {
-
-		initPaint(e);
-
-		paintAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
-
-		m_prevPos = e -> pos();
-		m_prevPressure = e -> pressure();
-		m_prevXTilt = e -> xTilt();
-		m_prevYTilt = e -> yTilt();
-
-		QRect dirtyRect = m_painter -> dirtyRect();
-		m_currentImage -> notify(dirtyRect);
-
-         }
-}
-
-// XXX: Cut & Paste antipattern, and all that just to pass
-// the dirty rect to the selection
-
-void KisToolSelectBrush::move(KisMoveEvent *e)
-{
-	if (m_mode == PAINT) {
-		paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
-
-		m_prevPos = e -> pos();
-		m_prevPressure = e -> pressure();
-		m_prevXTilt = e -> xTilt();
-		m_prevYTilt = e -> yTilt();
-
-		QRect dirtyRect = m_painter -> dirtyRect();
-		m_currentImage -> notify(dirtyRect);
-	}
-}
-
-
 void KisToolSelectBrush::initPaint(KisEvent */*e*/) 
 {
 	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
@@ -119,9 +73,9 @@ void KisToolSelectBrush::initPaint(KisEvent */*e*/)
 		m_painter -> beginTransaction(i18n("selectionbrush"));
 		m_painter -> setPaintColor(Qt::black);
 		m_painter -> setBrush(m_subject -> currentBrush());
-		m_painter -> setOpacity(OPACITY_OPAQUE);
+		m_painter -> setOpacity(MAX_SELECTED);
 		m_painter -> setCompositeOp(COMPOSITE_OVER);
-		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("eraser", painter());
+		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", painter());
 		painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 	}
 	// Set the cursor -- ideally. this should be a mask created from the brush,
@@ -137,7 +91,7 @@ void KisToolSelectBrush::endPaint()
 {
 	m_mode = HOVER;
 	KisSelectionSP selection;
-	if (m_currentImage && (selection = m_currentImage -> activeLayer() -> selection())) {
+	if (m_currentImage && m_currentImage -> activeLayer() && (selection = m_currentImage -> activeLayer() -> selection())) {
 		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
 		if (adapter && m_painter) {
 			// If painting in mouse release, make sure painter
@@ -178,4 +132,3 @@ QWidget* KisToolSelectBrush::optionWidget()
 }
 
 #include "kis_tool_select_brush.moc"
-

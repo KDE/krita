@@ -72,14 +72,14 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 		m_painter -> beginTransaction(i18n("selectioneraser"));
 		m_painter -> setPaintColor(Qt::white); // XXX: the mask color!
 		m_painter -> setBrush(m_subject -> currentBrush());
-		m_painter -> setOpacity(OPACITY_TRANSPARENT);
-		m_painter -> setCompositeOp(COMPOSITE_OVER);
+		m_painter -> setOpacity(OPACITY_OPAQUE);
+		m_painter -> setCompositeOp(COMPOSITE_ERASE);
 
 		// XXX: Yes, the selection eraser is a brush and the
 		// selection brush is an eraser. That's because
 		// transparent == selected in KisSelection until we
 		// have a proper alpha colour model.
-		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", painter());
+		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("eraser", painter());
 		painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 	}
 	// Set the cursor -- ideally. this should be a mask created from the brush,

@@ -140,7 +140,7 @@ void DlgColorRange::slotSave()
 
 void DlgColorRange::slotInvertClicked()
 {
-	m_selection -> invert();
+	m_selection -> invert(m_layer -> extent());
 	updatePreview();
 }
 

@@ -38,11 +38,13 @@ KisResourceServer::KisResourceServer()
 	m_gradients.setAutoDelete(true);
 	m_palettes.setAutoDelete(true);
 
+#if 0  // XXX: How often was this called? I guess it isn't necessary here, at least. (BSAR)
 	loadBrushes();
-	loadpipeBrushes();
+	loadPipeBrushes();
 	loadPatterns();
 	loadGradients();
 	loadPalettes();
+#endif 
 }
 
 KisResourceServer::~KisResourceServer()
@@ -61,7 +63,7 @@ void KisResourceServer::loadBrushes()
 	loadBrush();
 }
 
-void KisResourceServer::loadpipeBrushes()
+void KisResourceServer::loadPipeBrushes()
 {
 	m_pipebrushFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_brushes", "*.gih");
 	loadpipeBrush();
@@ -166,6 +168,7 @@ void KisResourceServer::loadPalette()
 
 		if (!palette -> loadAsync())
 			loadPalette();
+
 	}
 }
 
@@ -278,7 +281,7 @@ QPtrList<KisResource> KisResourceServer::brushes()
 QPtrList<KisResource> KisResourceServer::pipebrushes()
 {
 	if (m_pipebrushes.isEmpty())
-		loadpipeBrushes();
+		loadPipeBrushes();
 
 	return m_pipebrushes;
 }

@@ -44,7 +44,7 @@ public:
 	
 
 	void loadBrushes();
-	void loadpipeBrushes();
+	void loadPipeBrushes();
 	void loadPatterns();
 	void loadGradients();
 	void loadPalettes();

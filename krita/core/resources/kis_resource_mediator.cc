@@ -44,9 +44,6 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 	Q_ASSERT(rserver);
 	m_activeItem = 0;
 
-	QPtrList<KisResource> resourceslist;
-	KisResource *resource;
-
 	if (mediateOn & MEDIATE_BRUSHES) {
 		m_chooser = new KisBrushChooser(chooserParent, chooserName);
 		connect(rserver,
@@ -58,14 +55,8 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 			SIGNAL(loadedpipeBrush(KisResource*)),
 			this,
 			SLOT(resourceServerLoadedResource(KisResource*)));
-
-		resourceslist = rserver -> brushes();
-		for ( resource = resourceslist.first(); resource; resource = resourceslist.next() )
-			resourceServerLoadedResource(resource);
-
-		resourceslist = rserver -> pipebrushes();
-		for ( resource = resourceslist.first(); resource; resource = resourceslist.next() )
-			resourceServerLoadedResource(resource);
+		rserver -> loadBrushes();
+		rserver -> loadPipeBrushes();
 	}
 	if (mediateOn & MEDIATE_PATTERNS) {
 		m_chooser = new KisPatternChooser(chooserParent, chooserName);
@@ -73,10 +64,7 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 			SIGNAL(loadedPattern(KisResource*)),
 			this,
 			SLOT(resourceServerLoadedResource(KisResource*)));
-
-		resourceslist = rserver -> patterns();
-		for ( resource = resourceslist.first(); resource; resource = resourceslist.next() )
-			resourceServerLoadedResource(resource);
+		rserver -> loadPatterns();
 			
 	}
 	if (mediateOn & MEDIATE_GRADIENTS) {
@@ -86,9 +74,7 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 			this,
 			SLOT(resourceServerLoadedResource(KisResource*)));
 
-		resourceslist = rserver -> gradients();
-		for ( resource = resourceslist.first(); resource; resource = resourceslist.next() )
-			resourceServerLoadedResource(resource);
+		rserver -> loadGradients();
 	}
 
 	connect(m_chooser, SIGNAL(selected(KoIconItem*)), SLOT(setActiveItem(KoIconItem*)));

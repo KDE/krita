@@ -84,6 +84,7 @@ class KisButtonReleaseEvent;
 class KisMoveEvent;
 class KisHSVWidget;
 class KisRGBWidget;
+class KisPaletteWidget;
 class KisGrayWidget;
 class KisSelectionManager;
 class KisBirdEyeBox;
@@ -437,6 +438,7 @@ private:
 	KisHSVWidget *m_hsvwidget;
 	KisRGBWidget *m_rgbwidget;
 	KisGrayWidget *m_graywidget;
+	KisPaletteWidget *m_palettewidget;
 
         // Dockers
 	KoTabbedToolDock *m_layerchannelslider;

@@ -23,7 +23,9 @@
 
 #include "kis_canvas_subject.h"
 #include "kis_canvas_observer.h"
+
 #include <koffice_export.h>
+
 class KoFrameButton;
 class QGridLayout;
 class QColor;

@@ -1,4 +1,3 @@
-
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -26,6 +25,7 @@
 #include <qvaluevector.h>
 
 #include <kio/job.h>
+#include <kpalette.h>
 
 #include "kis_types.h"
 #include "kis_resource.h"
@@ -86,8 +86,8 @@ public:
 	void add(const KisPaletteEntry &);
 	void remove(const KisPaletteEntry &);
 	KisPaletteEntry getColor(Q_UINT32 index);
+	Q_INT32 nColors();
 
-	QString name() const;
 	
 private slots:
 
@@ -100,6 +100,7 @@ private:
 	bool m_ownData;
 	QImage m_img;
 	QString m_name;
+	QString m_comment;
 	Q_INT32 m_columns;
 	QValueVector<KisPaletteEntry> m_colors;
 	

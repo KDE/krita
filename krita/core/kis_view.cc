@@ -1,7 +1,7 @@
 /*
  * This file is part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
+*  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
@@ -115,6 +115,7 @@
 #include "kis_hsv_widget.h"
 #include "kis_rgb_widget.h"
 #include "kis_gray_widget.h"
+#include "kis_palette_widget.h"
 #include "kis_paint_box.h"
 #include "kis_filter_box.h"
 
@@ -215,6 +216,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_hsvwidget = 0;
 	m_rgbwidget = 0;
 	m_graywidget = 0;
+	m_palettewidget = 0;
 
 	m_paletteChooser = 0;
 	m_gradientChooser = 0;
@@ -259,9 +261,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 	resetMonitorProfile();
 
-	// Test loading palettes
-	KisResourceServer *rserver = KisFactory::rServer();
-	rserver -> palettes();
 
 }
 
@@ -356,7 +355,7 @@ void KisView::setupDockers()
 		m_colordocker -> setCaption(i18n("Color Manager"));
 
 		m_layerchanneldocker = new KisDockFrameDocker(this);
-		m_layerchanneldocker -> setCaption(i18n("Layers/Channels/Paths"));
+		m_layerchanneldocker -> setCaption(i18n("Layers/Channels"));
 
 
 		(void)new KAction(i18n( "&Layers/Channels" ), 0, this, SLOT( viewLayerChannelDocker() ), actionCollection(), "view_layer_docker" );
@@ -444,9 +443,6 @@ void KisView::setupDockers()
 	else {
 		m_layerchanneldocker -> plug(m_channelView);
 	}
-
-
-
 
 
 	// ---------------------------------------------------------------------
@@ -597,6 +593,20 @@ void KisView::setupDockers()
 		m_colordocker -> plug(m_graywidget);
 	}
 	attach(m_graywidget);
+
+	m_palettewidget = new KisPaletteWidget(this);
+	m_palettewidget -> setCaption(i18n("Palettes"));
+
+	connect(rserver, SIGNAL(loadedPalette(KisResource*)), m_palettewidget, SLOT(slotAddPalette(KisResource*)));
+	rserver->loadPalettes();
+	connect(m_palettewidget, SIGNAL(colorSelected(const QColor &)), this, SLOT(slotSetFGColor(const QColor &)));
+
+	if (cfg.paletteStyle() == PALETTE_SLIDER) {
+		m_colorslider -> plug(m_palettewidget);
+	}
+	else {
+		m_colordocker -> plug(m_palettewidget);
+	}
 
 
 #if 0

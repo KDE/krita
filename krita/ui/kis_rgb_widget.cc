@@ -25,10 +25,12 @@
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+
 #include <koFrameButton.h>
 #include <koColorSlider.h>
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
+
 #include <qcolor.h>
 
 KisRGBWidget::KisRGBWidget(QWidget *parent, const char *name) : super(parent, name)

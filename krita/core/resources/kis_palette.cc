@@ -96,7 +96,8 @@ KisPalette::KisPalette(const KisGradient * gradient, Q_INT32 nColors, const QStr
 	}
 }
 
-KisPalette::KisPalette(const QString& filename) : super(filename)
+KisPalette::KisPalette(const QString& filename)
+	: super(filename)
 {
 	// Implemented in super class
 }
@@ -125,6 +126,10 @@ QImage KisPalette::img()
 	return m_img;
 }
 
+Q_INT32 KisPalette::nColors()
+{
+	return m_colors.count();
+}
 
 void KisPalette::ioData(KIO::Job * /*job*/, const QByteArray& data)
 {
@@ -139,18 +144,28 @@ void KisPalette::ioData(KIO::Job * /*job*/, const QByteArray& data)
 void KisPalette::ioResult(KIO::Job * /*job*/)
 {
 	enumPaletteType format = FORMAT_UNKNOWN;
-	if (strncmp(m_data.data(), "RIFF", 4) == 0 &&
-	    strncmp(m_data.data() + 8, "PAL data", 8) == 0)
+
+	QString s = QString::fromUtf8(m_data.data());
+
+	if (s.isEmpty() || s.isNull() || s.length() < 50) {
+// 		kdDebug() << "Illegal Gimp palette file: " << filename() << "\n";
+                setValid(false);
+                emit loadComplete(this);
+                return;
+        }
+
+
+	if (s.startsWith("RIFF") || s.startsWith("PAL data"))
 	{
 //		kdDebug() << "PAL format palette file\n";
 		format = FORMAT_PAL;
 	}
-	else if (strncmp(m_data.data(), "GIMP Palette", 12) == 0) 
+	else if (s.startsWith("GIMP Palette"))
 	{
 		// XXX: No checks for wrong input yet!
 		Q_UINT32 index = 0;
 
-		QStringList lines = QStringList::split("\n", QString::fromUtf8(m_data.data()));
+		QStringList lines = QStringList::split("\n", s);
 
 		QString entry, channel, columns;
 		QStringList c;
@@ -164,15 +179,15 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 		// Read name
 		if (!lines[1].startsWith("Name: ") || !lines[0].startsWith("GIMP") )
 		{
-			kdDebug() << "Illegal Gimp palette file: " << filename() << "\n";
+// 			kdDebug() << "Illegal Gimp palette file: " << filename() << "\n";
 			setValid(false);
 			emit loadComplete(this);
 			return;
 		}
 
-		m_name = lines[1].mid(strlen("Name: ")).stripWhiteSpace();;
+		setName(lines[1].mid(strlen("Name: ")).stripWhiteSpace());
 		
-		index = 3;
+		index = 2;
 
 		// Read columns
 		if (lines[index].startsWith("Columns: ")) {
@@ -183,9 +198,12 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 
 		// Loop over the rest of the lines
 		for (Q_UINT32 i = index; i < lines.size() - 1; i++) {
-			if (!lines[i].startsWith("#"))
-			{
-				if (!lines[i].contains("\t") > 0) {
+// 			kdDebug() << "line: " << lines[i] << "\n";
+			if (lines[i].startsWith("#")) {
+				m_comment += lines[i].mid(1).stripWhiteSpace() + " ";
+			}
+			else {
+				if (lines[i].contains("\t") > 0) {
 					QStringList a = QStringList::split("\t", lines[i]);
 					e.name = a[1];
 
@@ -209,8 +227,8 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 
 		return;
 	}
-	else if(m_data.size() == 768) {
-		kdDebug() << "Photoshop format palette file. Not implemented yet\n";
+	else if (s.length() == 768) {
+// 		kdDebug() << "Photoshop format palette file. Not implemented yet\n";
 		format = FORMAT_ACT;
 	}
 	
@@ -241,9 +259,4 @@ void KisPalette::remove(const KisPaletteEntry & c)
 KisPaletteEntry KisPalette::getColor(Q_UINT32 index)
 {
 	return m_colors[index];
-}
-
-QString KisPalette::name() const
-{
-	return QString();
 }

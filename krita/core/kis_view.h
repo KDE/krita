@@ -181,6 +181,7 @@ private slots:
 	void layerBack();
 	void layerLevel(int n);
 	void layersUpdated();
+	void layersUpdated(KisImageSP img);
 	void placeSidebarLeft();
 	void merge_all_layers();
 	void merge_visible_layers();

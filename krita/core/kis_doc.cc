@@ -1012,7 +1012,7 @@ void KisDoc::addImage(KisImageSP img)
 	m_images.push_back(img);
 	img -> invalidate();
 	emit imageListUpdated();
-	emit layersUpdated();
+	emit layersUpdated(img);
 	emit docUpdated();
 }
 
@@ -1024,7 +1024,7 @@ void KisDoc::removeImage(KisImageSP img)
 		m_images.erase(it);
 
 	emit imageListUpdated();
-	emit layersUpdated();
+	emit layersUpdated(img);
 	emit docUpdated();
 
 //	if (m_undo)
@@ -1088,7 +1088,7 @@ bool KisDoc::slotNewImage()
 	img -> invalidate();
 	layer -> visible(true);
 	addImage(img);
-	emit layersUpdated();
+	emit layersUpdated(img);
 	return true;
 }
 
@@ -1121,11 +1121,6 @@ void KisDoc::slotImageUpdated()
 void KisDoc::slotImageUpdated(const QRect& rect)
 {
 	emit docUpdated(rect);
-}
-
-void KisDoc::slotLayersUpdated()
-{
-	emit layersUpdated();
 }
 
 #if 0
@@ -1240,4 +1235,72 @@ void KisDoc::setProjection(KisImageSP img)
 	m_projection = img;
 }
 
+KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM devOpacity)
+{
+	KisLayerSP layer;
+
+	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+		return 0;
+
+	if (img) {
+		layer = new KisLayer(img, width, height, name, devOpacity);
+
+		if (layer && img -> add(layer, -1)) {
+			layer = img -> activate(layer);
+
+			if (layer) {
+				KisPainter gc(layer.data());
+
+				gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
+				gc.end();
+				img -> top(layer);
+				img -> invalidate();
+				setModified(true);
+				layer -> visible(true);
+				emit layersUpdated(img);
+			}
+		} 
+	}
+
+	return layer;
+}
+
+void KisDoc::layerRemove(KisImageSP img, KisLayerSP layer)
+{
+	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+		return;
+
+	if (layer) {
+		setModified(true);
+		img -> invalidate();
+		img -> rm(layer);
+		emit layersUpdated(img);
+	}
+}
+
+void KisDoc::layerRaise(KisImageSP img, KisLayerSP layer)
+{
+	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+		return;
+
+	if (layer) {
+		setModified(true);
+		img -> raise(layer);
+		emit layersUpdated(img);
+	}
+}
+
+void KisDoc::layerLower(KisImageSP img, KisLayerSP layer)
+{
+	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+		return;
+
+	if (layer) {
+		setModified(true);
+		img -> lower(layer);
+		emit layersUpdated(img);
+	}
+}
+
 #include "kis_doc.moc"
+

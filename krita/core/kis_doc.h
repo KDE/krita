@@ -59,6 +59,11 @@ public:
 	KoColor foreground() const;
 	KoColor background() const;
 
+	KisLayerSP layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM devOpacity);
+	void layerRemove(KisImageSP img, KisLayerSP layer);
+	void layerRaise(KisImageSP img, KisLayerSP layer);
+	void layerLower(KisImageSP img, KisLayerSP layer);
+
 	void addCommand(KCommand *cmd);
 	Q_INT32 undoLimit() const;
 	void setUndoLimit(Q_INT32 limit);
@@ -101,7 +106,6 @@ public:
 public slots:
 	void slotImageUpdated();
 	void slotImageUpdated(const QRect& rect);
-	void slotLayersUpdated();
 
 	bool slotNewImage();
 
@@ -119,7 +123,7 @@ private slots:
 signals:
 	void docUpdated();
 	void docUpdated(const QRect& rect);
-	void layersUpdated();
+	void layersUpdated(KisImageSP img);
 	void imageListUpdated();
 
 protected:

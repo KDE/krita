@@ -120,13 +120,11 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_layerBox = 0;
 	setInstance(KisFactory::global());
 
+	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
+
 #if 0
 	m_pTool = 0;
-
 	QObject::connect(this, SIGNAL(embeddImage(const QString&)), this, SLOT(slotEmbedImage(const QString&)));
-	connect(m_doc, SIGNAL(layersUpdated()), SLOT(layersUpdated()));
-	setActiveBrush(m_pBrush);
-	setActivePattern(m_pPattern);
 #endif
 
 	setupActions();
@@ -1699,25 +1697,12 @@ void KisView::layerAdd()
 		dlg.exec();
 
 		if (dlg.result() == QDialog::Accepted) {
-			KisLayerSP layer = new KisLayer(img, dlg.width(), dlg.height(), img -> nextLayerName(), OPACITY_OPAQUE);
+			KisLayerSP layer = m_doc -> layerAdd(img, dlg.width(), dlg.height(), img -> nextLayerName(), OPACITY_OPAQUE);
 
-			if (img -> add(layer, -1)) {
-				layer = img -> activate(layer);
-
-				if (layer) {
-					KisPainter gc(layer.data());
-
-					gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
-					gc.end();
-					img -> top(layer);
-					img -> invalidate();
-					m_doc -> setModified(true);
-					layer -> visible(true);
-					layersUpdated();
-					m_layerBox -> setCurrentItem(img -> index(layer));
-					resizeEvent(0);
-					updateCanvas(layer -> x(), layer -> y(), layer -> width(), layer -> height());
-				}
+			if (layer) {
+				m_layerBox -> setCurrentItem(img -> index(layer));
+				resizeEvent(0);
+				updateCanvas(layer -> x(), layer -> y(), layer -> width(), layer -> height());
 			} else {
 				KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
 			}
@@ -1735,10 +1720,7 @@ void KisView::layerRemove()
 		if (layer) {
 			Q_INT32 n = img -> index(layer);
 
-			m_doc -> setModified(true);
-			img -> invalidate(layer -> x(), layer -> y(), layer -> width(), layer -> height());
-			img -> rm(layer);
-			layersUpdated();
+			m_doc -> layerRemove(img, layer);
 			m_layerBox -> setCurrentItem(n - 1);
 			resizeEvent(0);
 			updateCanvas();
@@ -1758,13 +1740,15 @@ void KisView::layerRmMask(int /*n*/)
 void KisView::layerRaise()
 {
 	KisImageSP img = currentImg();
+	KisLayerSP layer;
 
-	if (img) {
-		KisLayerSP layer = img -> activeLayer();
+	if (!img)
+		return;
 
-		m_doc -> setModified(true);
-		img -> raise(layer);
-		layersUpdated();
+	layer = img -> activeLayer();
+
+	if (layer) {
+		m_doc -> layerRaise(img, layer);
 		m_layerBox -> setCurrentItem(img -> index(layer));
 		resizeEvent(0);
 		updateCanvas();
@@ -1774,13 +1758,15 @@ void KisView::layerRaise()
 void KisView::layerLower()
 {
 	KisImageSP img = currentImg();
+	KisLayerSP layer;
 
-	if (img) {
-		KisLayerSP layer = img -> activeLayer();
+	if (!img)
+		return;
 
-		m_doc -> setModified(true);
-		img -> lower(layer);
-		layersUpdated();
+	layer = img -> activeLayer();
+
+	if (layer) {
+		m_doc -> layerLower(img, layer);
 		m_layerBox -> setCurrentItem(img -> index(layer));
 		resizeEvent(0);
 		updateCanvas();
@@ -1827,6 +1813,12 @@ void KisView::layersUpdated()
 		m_layerBox -> repaint();
 		m_doc -> setModified(true);
 	}
+}
+
+void KisView::layersUpdated(KisImageSP img)
+{
+	if (img == currentImg())
+		layersUpdated();
 }
 
 void KisView::selectImage(const QString& name)

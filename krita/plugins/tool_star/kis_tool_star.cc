@@ -151,17 +151,20 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
         if (!m_subject || !m_currentImage)
             return;
 
-        KisCanvasControllerInterface *controller = m_subject->canvasController ();
-//         kdDebug (40001) << "KisToolStar::draw(" << start << "," << end << ")"
-//                         << " windowToView: start=" << controller->windowToView (start)
-//                         << " windowToView: end=" << controller->windowToView (end)
-//                         << endl;
-        QWidget *canvas = controller->canvas ();
-        QPainter p (canvas);
+        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        QWidget *canvas = controller->canvas ();	
+	QPainter p (canvas);
+	QPen pen(Qt::SolidLine);
+	
+        KisPoint startPos;
+        KisPoint endPos;	
+	startPos = controller -> windowToView(start);
+	endPos = controller -> windowToView(end);
 
-        p.setRasterOp (Qt::NotROP);
+	p.setRasterOp(Qt::NotROP);
+
         //p.drawEllipse (QRect (controller->windowToView (start).floorQPoint(), controller->windowToView (end).floorQPoint()));
-        p.drawPolygon(starCoordinates(m_vertices, start.x(), start.y(), end.x(), end.y()));
+        p.drawPolygon(starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y()));
         p.end ();
 }
 

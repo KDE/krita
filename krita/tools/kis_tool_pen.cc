@@ -80,7 +80,7 @@ void KisToolPen::mousePress(QMouseEvent *e)
         if (e->button() == QMouseEvent::LeftButton) {
 		m_mode = PAINT;
 		initPaint(e -> pos());
-		m_painter -> paintAt(e->pos(), PRESSURE_DEFAULT, 0, 0);
+		m_painter -> penAt(e->pos(), PRESSURE_DEFAULT, 0, 0);
 		// XXX: get the rect that should be notified
 		m_currentImage -> notify( m_painter -> dirtyRect() );
          }
@@ -127,7 +127,7 @@ void KisToolPen::tabletEvent(QTabletEvent *e)
 		 } else if (pressure >= PRESSURE_THRESHOLD && m_mode == HOVER) {
 			 m_mode = PAINT_STYLUS;
 			 initPaint(e -> pos());
-			 m_painter -> paintAt(e -> pos(), pressure, e->xTilt(), e->yTilt());
+			 m_painter -> penAt(e -> pos(), pressure, e->xTilt(), e->yTilt());
 			 // XXX: Get the rect that should be updated
 			 m_currentImage -> notify( m_painter -> dirtyRect() );
 

@@ -540,7 +540,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 						KisLayerSP layer = loadLayer(child.toElement(), img);
 
 						if (!layer)
-							return false;
+							return 0;
 
 						img -> add(layer, -1);
 					}
@@ -549,7 +549,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 						KisChannelSP channel = loadChannel(child.toElement(), img);
 
 						if (!channel)
-							return false;
+							return 0;
 
 						img -> add(channel, -1);
 					}

@@ -2329,7 +2329,12 @@ void KisView::layerToImage()
 
 	if (img) {
 		KisSelectionSP selection = img -> selection();
-		KisLayerSP layer = selection ? selection.data() : img -> activeLayer();
+		KisLayerSP layer;
+	       
+		if (selection)
+			layer = selection.data();
+		else
+			img -> activeLayer();
 
 		if (layer) {
 			KisImageSP dupedImg = new KisImage(m_doc, layer -> width(), layer -> height(), img -> nativeImgType(), m_doc -> nextImageName());

@@ -74,11 +74,11 @@ void KisToolLine::paint(QPainter& gc, const QRect& rc)
 
 void KisToolLine::mousePress(QMouseEvent *e)
 {
-        if (!m_subject) return;
+	if (!m_subject) return;
 
-        if (!m_subject -> currentBrush()) return;
+	if (!m_subject -> currentBrush()) return;
 
-        if (e -> button() == QMouseEvent::LeftButton) {
+	if (e -> button() == QMouseEvent::LeftButton) {
 		m_dragging = true;
 		//KisCanvasControllerInterface *controller = m_subject -> canvasController();
 		m_startPos = e -> pos(); //controller -> windowToView(e -> pos());
@@ -93,9 +93,9 @@ void KisToolLine::mouseMove(QMouseEvent *e)
 			paintLine();
 		//KisCanvasControllerInterface *controller = m_subject -> canvasController();
 
-                if  ((e -> state() & Qt::ShiftButton) == Qt::ShiftButton) {
-                    m_endPos = straightLine(e -> pos());
-                } else m_endPos = e -> pos();//controller -> windowToView(e -> pos());
+		if ((e -> state() & Qt::ShiftButton) == Qt::ShiftButton) {
+			m_endPos = straightLine(e -> pos());
+		} else m_endPos = e -> pos();//controller -> windowToView(e -> pos());
 		paintLine();
 	}
 }
@@ -113,32 +113,31 @@ void KisToolLine::mouseRelease(QMouseEvent *e)
 			return;
 		}
 
-                if  ((e -> state() & Qt::ShiftButton) == Qt::ShiftButton) {
-                    m_endPos = straightLine(e -> pos());
-                } else m_endPos = e -> pos();
+		if ((e -> state() & Qt::ShiftButton) == Qt::ShiftButton) {
+			m_endPos = straightLine(e -> pos());
+		} else m_endPos = e -> pos();
 
 		KisPaintDeviceSP device;
 		if (m_currentImage &&
 		    (device = m_currentImage -> activeDevice()) &&
 		    m_subject &&
-		    m_subject -> currentBrush())
-		{
-                    delete m_painter;
+		    m_subject -> currentBrush()) {
+			delete m_painter;
 			m_painter = new KisPainter( device );
 			m_painter -> beginTransaction(i18n("line"));
 
 			m_painter -> setPaintColor(m_subject -> fgColor());
 			m_painter -> setBrush(m_subject -> currentBrush());
-			m_painter->setOpacity(m_opacity);
-			m_painter->setCompositeOp(m_compositeOp);
+			m_painter -> setOpacity(m_opacity);
+			m_painter -> setCompositeOp(m_compositeOp);
 
 			m_painter -> paintLine(PAINTOP_BRUSH, m_startPos, m_endPos, PRESSURE_DEFAULT, 0, 0);
 			m_currentImage -> notify( m_painter -> dirtyRect() );
 
-                        /* remove remains of the line drawn while moving */
-                        if (controller -> canvas()) {
-                            controller -> canvas() -> update();
-                        }
+			/* remove remains of the line drawn while moving */
+			if (controller -> canvas()) {
+				controller -> canvas() -> update();
+			}
 
 			KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
 			if (adapter && m_painter) {
@@ -146,8 +145,7 @@ void KisToolLine::mouseRelease(QMouseEvent *e)
 			}
 			delete m_painter;
 			m_painter = 0;
-		}
-               	else {
+		} else {
 			// m_painter can be 0 here...!!!
 			controller -> updateCanvas(m_painter -> dirtyRect()); // Removes the last remaining line.
 		}
@@ -163,18 +161,18 @@ void KisToolLine::tabletEvent(QTabletEvent */*event*/)
 
 QPoint KisToolLine::straightLine(QPoint point)
 {
-    QPoint comparison = point - m_startPos;
-    QPoint result;
+	QPoint comparison = point - m_startPos;
+	QPoint result;
 
-    if ( abs(comparison.x()) > abs(comparison.y())) {
-        result.setX(point.x());
-        result.setY(m_startPos.y());
-    } else {
-        result.setX( m_startPos.x() );
-        result.setY( point.y() );
-    }
+	if (abs(comparison.x()) > abs(comparison.y())) {
+		result.setX(point.x());
+		result.setY(m_startPos.y());
+	} else {
+		result.setX( m_startPos.x() );
+		result.setY( point.y() );
+	}
 
-    return result;
+	return result;
 }
 
 void KisToolLine::paintLine()
@@ -229,3 +227,4 @@ void KisToolLine::setup(KActionCollection *collection)
 }
 
 #include "kis_tool_line.moc"
+

@@ -58,7 +58,7 @@ namespace {
 	}
 
 	inline
-	void pp2tile(PixelPacket *pp, const KisPixelDataSP pd)
+	void tile2pp(PixelPacket *pp, const KisPixelDataSP pd)
 	{
 		Q_INT32 i;
 		Q_INT32 j;
@@ -241,7 +241,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildImage(const KURL& uri)
 	if (uri.isEmpty())
 		return KisImageBuilder_RESULT_NO_URI;
 
-	if (!KIO::NetAccess::exists(uri))
+	if (!KIO::NetAccess::exists(uri, false, qApp -> mainWidget()))
 		return KisImageBuilder_RESULT_NOT_EXIST;
 
 	if (!uri.isLocalFile()) {
@@ -340,7 +340,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 
 			ntile++;
 			emit notify(this, KisImageBuilder_STEP_SAVING, ntile * 100 / totalTiles);
-			pp2tile(pp, pd);
+			tile2pp(pp, pd);
 			SyncImagePixels(image);
 			w = TILE_WIDTH;
 		}

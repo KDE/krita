@@ -1748,23 +1748,6 @@ void KisView::shearLayer(double angleX, double angleY)
 	canvasRefresh();
 }
 
-void KisView::oilPaintFilter(Q_UINT32 brushSize, Q_UINT32 smooth)
-{
-        if (!currentImg()) return;
-
-	KisLayerSP layer = currentImg() -> activeLayer();
-	if (!layer) return;
-
-	layer -> oilPaintFilter(brushSize, smooth, m_progress);
-
-	m_doc -> setModified(true);
-	layersUpdated();
-	resizeEvent(0);
-	updateCanvas();
-	canvasRefresh();
-}
-
-
 void KisView::add_new_image_tab()
 {
         m_doc -> slotNewImage();

@@ -40,7 +40,6 @@
 #include "kis_iterators_pixel_mask.h"
 #include "kis_scale_visitor.h"
 #include "kis_rotate_visitor.h"
-#include "kis_oilpaint_filter_visitor.h"
 #include "kis_profile.h"
 
 namespace {
@@ -309,10 +308,6 @@ void KisPaintDevice::accept(KisRotateVisitor& visitor)
         visitor.visitKisPaintDevice(this);
 }
 
-void KisPaintDevice::accept(KisOilPaintFilterVisitor& visitor)
-{
-        visitor.visitKisPaintDevice(this);
-}
 
 void KisPaintDevice::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, enumFilterType ftype)
 {
@@ -333,13 +328,6 @@ void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInter
         KisRotateVisitor visitor;
         accept(visitor);
         visitor.shear(angleX, angleY, m_progress);
-}
-
-void KisPaintDevice::oilPaintFilter(Q_UINT32 brushSize, Q_UINT32 smooth, KisProgressDisplayInterface *m_progress) 
-{
-        KisOilPaintFilterVisitor visitor;
-        accept(visitor);
-        visitor.oilPaintFilter(brushSize, smooth, m_progress);
 }
 
 // XXX: also allow transform on part of paint device?

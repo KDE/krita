@@ -44,7 +44,6 @@ class KisTileCommand;
 class KisIteratorLineQuantum;
 class KisIteratorLinePixel;
 class KisRotateVisitor;
-class KisOilPaintFilterVisitor;
 
 /**
  * Class modelled on QPaintDevice.
@@ -198,7 +197,6 @@ public:
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
-        void oilPaintFilter(Q_UINT32 brushSize, Q_UINT32 smooth, KisProgressDisplayInterface *m_progress);
         
 	/**
 	   Apply the transformation matrix _in place_.
@@ -334,7 +332,6 @@ private:
 
 	void accept(KisScaleVisitor &);
 	void accept(KisRotateVisitor &);
-        void accept(KisOilPaintFilterVisitor &);
         
 	// Whether there is a selection valid for this layer
 	bool m_hasSelection;

@@ -77,8 +77,7 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_cms.cc \
 	kis_quantum_operations.cc \
 	kis_clipboard.cc \
-	kis_pixel.cc \
-        kis_oilpaint_filter_visitor.cc
+	kis_pixel.cc
         
 noinst_HEADERS = kis_paint_device.h \
 	kis_layer.h \
@@ -118,8 +117,7 @@ noinst_HEADERS = kis_paint_device.h \
 	kis_scale_visitor.h \
 	kis_rotate_visitor.h \
 	kis_cms.h \
-	kis_quantum_operations.h \
-        kis_oilpaint_filter_visitor.h
+	kis_quantum_operations.h
 
 libkritacore_la_METASOURCES = AUTO
 libkritacore_la_LDFLAGS = $(all_libraries)

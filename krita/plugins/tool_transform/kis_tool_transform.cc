@@ -2,7 +2,7 @@
  *  kis_tool_transform.cc -- part of Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -102,15 +102,12 @@ void KisToolTransform::update(KisCanvasSubject *subject)
 void KisToolTransform::clear()
 {
 	paintOutline();
-printf("clean in transform %d\n",this);
 }
 
 void KisToolTransform::activate()
 {
-printf("intro in transform %d\n",this);
 	if(m_subject)
 	{
-printf("intro in transform has subject\n");
 		KisToolControllerInterface *controller = m_subject -> toolController();
 
 		if (controller)
@@ -128,11 +125,17 @@ printf("intro in transform has subject\n");
 			layer->exactBounds(x,y,w,h);
 		
 		m_startPos = QPoint(x, y);
-		m_endPos = QPoint(x+w, y+h);
+		m_endPos = QPoint(x+w-1, y+h-1);
+		m_org_cenX = (m_startPos.x() + m_endPos.x()) / 2.0;
+		m_org_cenY = (m_startPos.y() + m_endPos.y()) / 2.0;
+
+		m_scaleX = 1.0;
+		m_scaleY = 1.0;
+		m_translateX = m_org_cenX;
+		m_translateY = m_org_cenY;
 		
 		paintOutline();
 	}
-printf("intro in transform end\n");
 }
 
 void KisToolTransform::paint(QPainter& gc)
@@ -145,29 +148,59 @@ void KisToolTransform::paint(QPainter& gc, const QRect& rc)
 	paintOutline(gc, rc);
 }
 
-void KisToolTransform::clearRect()
-{
-	if (m_subject) {
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
-		KisImageSP img = m_subject -> currentImg();
-
-		Q_ASSERT(controller);
-
-		controller -> canvas() -> update();
-		
-		m_startPos = QPoint(0, 0);
-		m_endPos = QPoint(0, 0);
-
-		m_selecting = false;
-	}
-}
 
 void KisToolTransform::buttonPress(KisButtonPressEvent *e)
 {
 	if (m_subject) {
 		KisImageSP img = m_subject -> currentImg();
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 
 		if (img && img -> activeDevice() && e -> button() == LeftButton) {
+			switch(m_function)
+			{
+				case ROTATE:
+					m_clickoffset = e -> pos().floorQPoint() 
+							- controller -> windowToView(QPoint(m_translateX,m_translateY));
+					m_clickangle = -m_a - atan2(m_clickoffset.x(),m_clickoffset.y());
+					m_clickoffset = QPoint(0, 0);
+					break;
+				case MOVE:
+					m_clickoffset = e -> pos().floorQPoint() 
+							- controller -> windowToView(QPoint(m_translateX,m_translateY));
+					break;
+				case TOPLEFTSCALE:
+					m_clickoffset = e -> pos().floorQPoint() 
+							- controller -> windowToView(m_topleft);
+					break;
+				case TOPSCALE:
+					m_clickoffset = e -> pos().floorQPoint() 
+							- controller -> windowToView((m_topleft + m_topright)/2);
+					break;
+				case TOPRIGHTSCALE:
+					m_clickoffset = e -> pos().floorQPoint() 
+							- controller -> windowToView(m_topright);
+					break;
+				case RIGHTSCALE:
+					m_clickoffset = e -> pos().floorQPoint() 
+							- controller -> windowToView((m_topright + m_bottomright)/2);
+					break;
+				case BOTTOMRIGHTSCALE:
+					m_clickoffset = e -> pos().floorQPoint() 
+							- controller -> windowToView(m_bottomright);
+					break;
+				case BOTTOMSCALE:
+					m_clickoffset = e -> pos().floorQPoint() 
+							- controller -> windowToView((m_bottomleft + m_bottomright)/2);
+					break;
+				case BOTTOMLEFTSCALE:
+					m_clickoffset = e -> pos().floorQPoint() 
+							- controller -> windowToView(m_bottomleft);
+					break;
+				case LEFTSCALE:
+					m_clickoffset = e -> pos().floorQPoint() 
+							- controller -> windowToView((m_topleft + m_bottomleft)/2);
+					break;
+			}
 			m_selecting = true;
 		}
 	}
@@ -187,28 +220,131 @@ void KisToolTransform::move(KisMoveEvent *e)
 {
 	if (m_subject) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
-		QPoint start, end;
 
 		Q_ASSERT(controller);
-		start = controller -> windowToView(m_startPos);
-		end = controller -> windowToView(m_endPos);
-		QPoint topleft(start.x(),start.y());
-		QPoint topright(end.x(),start.y());
+		QPoint topleft = controller -> windowToView(m_topleft);
+		QPoint topright = controller -> windowToView(m_topright);
+		QPoint bottomleft = controller -> windowToView(m_bottomleft);
+		QPoint bottomright = controller -> windowToView(m_bottomright);
 		
-		if(det(e -> pos().floorQPoint() - topleft, topright - topleft)>0)
-			controller -> canvas() -> setCursor(KisCursor::crossCursor());
-		else
-			controller -> canvas() -> setCursor(KisCursor::moveCursor());
-		
-		if(distsq(e -> pos().floorQPoint(), topleft)<25)
-			controller -> canvas() -> setCursor(KisCursor::sizeFDiagCursor());
-		if(distsq(e -> pos().floorQPoint(), topright)<25)
-			controller -> canvas() -> setCursor(KisCursor::sizeBDiagCursor());
+		QPoint mousePos = e -> pos().floorQPoint();
 		
 		if (m_subject && m_selecting) {
+			paintOutline();
+			
+			mousePos -= m_clickoffset;
+			
+			// transform mousePos coords, so it seems like it isn't rotated and centered at 0,0
+			double newX = invrotX(mousePos.x() - m_translateX, mousePos.y() - m_translateY);
+			double newY = invrotY(mousePos.x() - m_translateX, mousePos.y() - m_translateY);
+			double dx=0, dy=0;
+			
+			if(m_function == MOVE)
+			{
+				m_translateX += newX;
+				m_translateY += newY;
+			}
 
+			if(m_function == ROTATE)
+			{
+				m_a = -atan2(mousePos.x() - m_translateX, mousePos.y() - m_translateY)
+					- m_clickangle;
+			}
+			
+			if(m_function == TOPSCALE
+					|| m_function == TOPLEFTSCALE
+					|| m_function == TOPRIGHTSCALE)
+			{
+				dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
+				m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
+			}
+			
+			if(m_function == RIGHTSCALE
+					|| m_function == TOPRIGHTSCALE
+					|| m_function == BOTTOMRIGHTSCALE)
+			{
+				dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
+				m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
+			}
+			
+			if(m_function == BOTTOMSCALE
+					|| m_function == BOTTOMLEFTSCALE
+					|| m_function == BOTTOMRIGHTSCALE)
+			{
+				dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
+				m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
+			}
+			
+			if(m_function == LEFTSCALE
+					|| m_function == TOPLEFTSCALE
+					|| m_function == BOTTOMLEFTSCALE)
+			{
+				dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
+				m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
+			}
+			m_translateX += rotX(dx, dy);
+			m_translateY += rotY(dx, dy);
+			
 			paintOutline();
-			paintOutline();
+		}
+		else
+		{
+			m_function = ROTATE;
+			
+			if(det(mousePos - topleft, topright - topleft)>0)
+				controller -> canvas() -> setCursor(KisCursor::crossCursor());
+			else if(det(mousePos - topright, bottomright - topright)>0)
+				controller -> canvas() -> setCursor(KisCursor::crossCursor());
+			else if(det(mousePos - bottomright, bottomleft - bottomright)>0)
+				controller -> canvas() -> setCursor(KisCursor::crossCursor());
+			else if(det(mousePos - bottomleft, topleft - bottomleft)>0)
+				controller -> canvas() -> setCursor(KisCursor::crossCursor());
+			else
+			{
+				controller -> canvas() -> setCursor(KisCursor::moveCursor());
+				m_function = MOVE;
+			}
+			
+			if(distsq(mousePos, m_topleft)<25)
+			{
+				controller -> canvas() -> setCursor(KisCursor::sizeFDiagCursor());
+				m_function = TOPLEFTSCALE;
+			}
+			if(distsq(mousePos, (m_topleft + m_topright)/2)<25)
+			{
+				controller -> canvas() -> setCursor(KisCursor::sizeVerCursor());
+				m_function = TOPSCALE;
+			}
+			if(distsq(mousePos, m_topright)<25)
+			{
+				controller -> canvas() -> setCursor(KisCursor::sizeBDiagCursor());
+				m_function = TOPRIGHTSCALE;
+			}
+			if(distsq(mousePos, (m_topright + m_bottomright)/2)<25)
+			{
+				controller -> canvas() -> setCursor(KisCursor::sizeHorCursor());
+				m_function = RIGHTSCALE;
+			}
+			if(distsq(mousePos, m_bottomleft)<25)
+			{
+				controller -> canvas() -> setCursor(KisCursor::sizeBDiagCursor());
+				m_function = BOTTOMLEFTSCALE;
+			}
+			if(distsq(mousePos, (m_bottomleft + m_bottomright)/2)<25)
+			{
+				controller -> canvas() -> setCursor(KisCursor::sizeVerCursor());
+				m_function = BOTTOMSCALE;
+			}
+			if(distsq(mousePos, m_bottomright)<25)
+			{
+				controller -> canvas() -> setCursor(KisCursor::sizeFDiagCursor());
+				m_function = BOTTOMRIGHTSCALE;
+			}
+			if(distsq(mousePos, (m_topleft + m_bottomleft)/2)<25)
+			{
+				controller -> canvas() -> setCursor(KisCursor::sizeHorCursor());
+				m_function = LEFTSCALE;
+			}
 		}
 	}
 }
@@ -238,6 +374,30 @@ void KisToolTransform::paintOutline()
 	}
 }
 
+void KisToolTransform::recalcOutline()
+{
+	double x,y;
+	
+	m_sina = sin(m_a);
+	m_cosa = cos(m_a);
+	
+	x = (m_startPos.x() - m_org_cenX) * m_scaleX;
+	y = (m_startPos.y() - m_org_cenY) * m_scaleY;
+	m_topleft = QPoint(int(rotX(x,y) + m_translateX), int(rotY(x,y) + m_translateY));
+	
+	x = (m_endPos.x() - m_org_cenX) * m_scaleX;
+	y = (m_startPos.y() - m_org_cenY) * m_scaleY;
+	m_topright = QPoint(int(rotX(x,y) + m_translateX), int(rotY(x,y) + m_translateY));
+	
+	x = (m_startPos.x() - m_org_cenX) * m_scaleX;
+	y = (m_endPos.y() - m_org_cenY) * m_scaleY;
+	m_bottomleft = QPoint(int(rotX(x,y) + m_translateX), int(rotY(x,y) + m_translateY));
+	
+	x = (m_endPos.x() - m_org_cenX) * m_scaleX;
+	y = (m_endPos.y() - m_org_cenY) * m_scaleY;
+	m_bottomright = QPoint(int(rotX(x,y) + m_translateX), int(rotY(x,y) + m_translateY));
+}
+
 void KisToolTransform::paintOutline(QPainter& gc, const QRect&)
 {
 	if (m_subject) {
@@ -246,14 +406,13 @@ void KisToolTransform::paintOutline(QPainter& gc, const QRect&)
 		QPen old = gc.pen();
 		QPen pen(Qt::SolidLine);
 		pen.setWidth(1);
-		QPoint start;
-		QPoint end;
-
 		Q_ASSERT(controller);
-		start = controller -> windowToView(m_startPos);
-		end = controller -> windowToView(m_endPos);
-		QPoint topleft(start.x(),start.y());
-		QPoint topright(end.x(),start.y());
+
+		recalcOutline();		
+		QPoint topleft = controller -> windowToView(m_topleft);
+		QPoint topright = controller -> windowToView(m_topright);
+		QPoint bottomleft = controller -> windowToView(m_bottomleft);
+		QPoint bottomright = controller -> windowToView(m_bottomright);
 
 		gc.setRasterOp(Qt::NotROP);
 		gc.setPen(pen);
@@ -262,11 +421,17 @@ void KisToolTransform::paintOutline(QPainter& gc, const QRect&)
 		gc.drawRect((topleft.x()+topright.x())/2-4, (topleft.y()+topright.y())/2-4, 8, 8);
 		gc.drawLine((topleft.x()+topright.x())/2, (topleft.y()+topright.y())/2, topright.x(), topright.y());
 		gc.drawRect(topright.x()-4, topright.y()-4, 8, 8);
-		gc.drawRect(end.x()-4, (start.y()+end.y())/2-4, 8, 8);
-		gc.drawRect(end.x()-4, end.y()-4,8, 8);
-		gc.drawRect((start.x()+end.x())/2-4, end.y()-4, 8, 8);
-		gc.drawRect(start.x()-4, end.y()-4, 8, 8);
-		gc.drawRect(start.x()-4, (start.y()+end.y())/2-4, 8, 8);
+		gc.drawLine(topright.x(), topright.y(), (topright.x()+bottomright.x())/2, (topright.y()+bottomright.y())/2);
+		gc.drawRect((topright.x()+bottomright.x())/2-4, (topright.y()+bottomright.y())/2-4, 8, 8);
+		gc.drawLine((topright.x()+bottomright.x())/2, (topright.y()+bottomright.y())/2,bottomright.x(), bottomright.y());
+		gc.drawRect(bottomright.x()-4, bottomright.y()-4, 8, 8);
+		gc.drawLine(bottomright.x(), bottomright.y(), (bottomleft.x()+bottomright.x())/2, (bottomleft.y()+bottomright.y())/2);
+		gc.drawRect((bottomleft.x()+bottomright.x())/2-4, (bottomleft.y()+bottomright.y())/2-4, 8, 8);
+		gc.drawLine((bottomleft.x()+bottomright.x())/2, (bottomleft.y()+bottomright.y())/2, bottomleft.x(), bottomleft.y());
+		gc.drawRect(bottomleft.x()-4, bottomleft.y()-4, 8, 8);
+		gc.drawLine(bottomleft.x(), bottomleft.y(), (topleft.x()+bottomleft.x())/2, (topleft.y()+bottomleft.y())/2);
+		gc.drawRect((topleft.x()+bottomleft.x())/2-4, (topleft.y()+bottomleft.y())/2-4, 8, 8);
+		gc.drawLine((topleft.x()+bottomleft.x())/2, (topleft.y()+bottomleft.y())/2, topleft.x(), topleft.y());
 		gc.setRasterOp(op);
 		gc.setPen(old);
 	}

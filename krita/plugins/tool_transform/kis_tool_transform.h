@@ -55,10 +55,14 @@ public:
 	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 private:
-	void clearRect();
 	void paintOutline();
 	void paintOutline(QPainter& gc, const QRect& rc);
 	void transform();
+	void recalcOutline();
+	double rotX(double x, double y) { return m_cosa*x - m_sina*y;};
+	double rotY(double x, double y) { return m_sina*x + m_cosa*y;};
+	double invrotX(double x, double y) { return m_cosa*x + m_sina*y;};
+	double invrotY(double x, double y) { return -m_sina*x + m_cosa*y;};
 
 private slots:
 
@@ -71,14 +75,30 @@ protected slots:
 	virtual void activate();
 
 private:
+	enum function {ROTATE,MOVE,TOPLEFTSCALE,TOPSCALE,TOPRIGHTSCALE,RIGHTSCALE,
+				BOTTOMRIGHTSCALE, BOTTOMSCALE,BOTTOMLEFTSCALE, LEFTSCALE};
+	function m_function;
 	KisCanvasSubject *m_subject;
 	QPoint m_startPos;
 	QPoint m_endPos;
 	bool m_selecting;
+	QPoint m_topleft;
+	QPoint m_topright;
+	QPoint m_bottomleft;
+	QPoint m_bottomright;
+	double m_scaleX;
+	double m_scaleY;
+	double m_translateX;
+	double m_translateY;
+	QPoint m_clickoffset;
+	double m_org_cenX;
+	double m_org_cenY;
+	double m_cosa;
+	double m_sina;
+	double m_a;
+	double m_clickangle;
 
 	QWidget * m_optWidget;
-
-
 };
 
 class KisToolTransformFactory : public KisToolFactory {

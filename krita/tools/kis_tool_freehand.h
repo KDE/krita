@@ -79,12 +79,22 @@ protected:
 
 	KisImageSP currentImage();
 
+	/**
+	 * Use a temporary drawing layer (true), or draw directly on the paint device (false).
+	 * To be set before KisToolFreehand::initPaint is called.
+	 **/
+	void setUseTempLayer(bool u);
+
 protected:
 	KisPoint m_prevPos;
 	double m_prevPressure;
 	double m_prevXTilt;
 	double m_prevYTilt;
 	double m_dragDist;
+
+	bool m_useTempLayer;
+	KisPaintDeviceSP m_target;
+	KisPaintDeviceSP m_source;
 
 	QString m_transactionText;
 	enumBrushMode m_mode;

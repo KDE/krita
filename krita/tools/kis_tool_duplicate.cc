@@ -94,9 +94,11 @@ void KisToolDuplicate::initPaint(KisEvent *e)
 			m_offset = e -> pos() - m_position;
 			m_isOffsetNotUptodate = false;
 		}
+		//setUseTempLayer( true );
 		super::initPaint(e);
 		painter() -> setDuplicateOffset( m_offset );
 		KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("duplicate", painter());
+		op -> setSource(m_source);
 		painter() -> setPaintOp(op);
 	}
 }

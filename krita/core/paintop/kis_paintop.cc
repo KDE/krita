@@ -33,6 +33,7 @@
 KisPaintOp::KisPaintOp(KisPainter * painter) 
 {
 	m_painter = painter;
+	setSource(painter->device());
 }
 
 KisPaintOp::~KisPaintOp()
@@ -89,4 +90,8 @@ void KisPaintOp::splitCoordinate(double coordinate, Q_INT32 *whole, double *frac
 
 	*whole = i;
 	*fraction = f;
+}
+
+void KisPaintOp::setSource(KisPaintDeviceSP p) {
+	m_source = p;
 }

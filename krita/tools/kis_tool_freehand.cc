@@ -2,6 +2,7 @@
  *  kis_tool_brush.cc - part of Krita
  *
  *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +29,7 @@
 #include <klocale.h>
 
 #include "kis_painter.h"
+#include "kis_fill_painter.h"
 #include "kis_tool_freehand.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
@@ -52,6 +54,8 @@ KisToolFreehand::KisToolFreehand(QString transactionText)
 	m_slOpacity = 0;
 	m_lbComposite= 0;
 	m_cmbComposite = 0;
+
+	m_useTempLayer = false;
 
 	m_opacity = OPACITY_OPAQUE;
 	m_compositeOp = COMPOSITE_OVER;
@@ -123,7 +127,23 @@ void KisToolFreehand::initPaint(KisEvent *)
 	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
 		if (m_painter)
 			delete m_painter;
-		m_painter = new KisPainter( device );
+		if (m_useTempLayer) {
+			m_target = new KisLayer(currentImage(), device->width(), device->height(), "temp",
+				OPACITY_OPAQUE);
+			KisFillPainter painter(m_target.data());
+			painter.fillRect(0, 0, m_target -> width(), m_target -> height(), KoColor::black(),
+				OPACITY_TRANSPARENT);
+			painter.end();
+			dynamic_cast<KisLayer*>(m_target.data()) -> setVisible(true);
+			// XXX doesn't look very good I'm afraid
+			currentImage() -> add(dynamic_cast<KisLayer*>(m_target.data()),
+				currentImage() -> index(dynamic_cast<KisLayer*>(device.data()) + 1));
+			m_target = currentImage() -> activate(dynamic_cast<KisLayer*>(m_target.data()));
+		} else {
+			m_target = device;
+		}
+		m_painter = new KisPainter( m_target );
+		m_source = device;
 		m_painter -> beginTransaction(m_transactionText);
 	}
 
@@ -150,7 +170,19 @@ void KisToolFreehand::endPaint()
 		if (adapter && m_painter) {
 			// If painting in mouse release, make sure painter
 			// is destructed or end()ed
-			adapter -> addCommand(m_painter->endTransaction());
+			if (m_useTempLayer) {
+				m_painter->endTransaction();
+				KisPainter painter( m_source );
+				painter.beginTransaction(m_transactionText);
+				painter.bitBlt(0, 0,  m_painter->compositeOp(), m_target, m_painter -> opacity(),
+					0, 0, m_source -> width() - 1, m_source -> width() - 1);
+				adapter -> addCommand(painter.endTransaction());
+				currentImage() -> rm(dynamic_cast<KisLayer*>(m_target.data()));
+				currentImage() -> activate(dynamic_cast<KisLayer*>(m_source.data()));
+				delete m_target;
+			} else {
+				adapter -> addCommand(m_painter->endTransaction());
+			}
 		}
 		delete m_painter;
 		m_painter = 0;
@@ -227,6 +259,10 @@ KisImageSP KisToolFreehand::currentImage()
 {
 	return m_currentImage;
 }
+
+void KisToolFreehand::setUseTempLayer(bool u) {
+	m_useTempLayer = u;
+};
 
 #include "kis_tool_freehand.moc"
 

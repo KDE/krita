@@ -74,8 +74,10 @@ void KisToolFilter::setup(KActionCollection *collection)
 
 void KisToolFilter::initPaint(KisEvent *e) 
 {
+	//setUseTempLayer( true );
 	super::initPaint(e);
 	KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("filter", painter());
+	op -> setSource ( m_source );
 	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 	painter() -> setFilter( m_filter );
 	// XXX: Isn't there a better way to set the config? The filter config widget needs to

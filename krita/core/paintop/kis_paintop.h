@@ -44,7 +44,7 @@ public:
 			     const double pressure,
 			     const double /*xTilt*/,
 			     const double /*yTilt*/) = 0;
-
+	void setSource(KisPaintDeviceSP p);
 protected:
 
 	virtual KisLayerSP computeDab(KisAlphaMaskSP mask);
@@ -56,7 +56,7 @@ protected:
 	virtual void splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction);
 
 	KisPainter * m_painter;
-
+	KisPaintDeviceSP m_source; // use this layer as source layer for the operation
 };
 
 class KisPaintOpFactory  : public KShared

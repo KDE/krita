@@ -58,6 +58,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 	if (!m_painter) return;
 	
 	KisPaintDeviceSP device = m_painter -> device();
+	if (m_source) device = m_source;
 	if (!device) return;
 
 	KisBrush * brush = m_painter -> brush();

@@ -61,7 +61,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	KisFilterSP filter = m_painter -> filter();
 	if (!filter) return;
 
-	KisPaintDeviceSP device = m_painter -> device();
+	KisPaintDeviceSP device = m_source;
 	if (!device) return;
 
 	KisBrush * brush = m_painter -> brush();

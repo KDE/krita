@@ -62,10 +62,10 @@ public:
 	// elsewhere. This may affect KOffice compatibility.
 	virtual void paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/) 
 	{
-	  paintContent(painter, rect);
+	  paintContent(painter, rect, 0);
 	}
 	
-	virtual void paintContent(QPainter& painter, const QRect& rect);
+	virtual void paintContent(QPainter& painter, const QRect& rect, KisProfileSP profile);
 	virtual QDomDocument saveXML();
 
 private:

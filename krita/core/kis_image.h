@@ -60,7 +60,8 @@ public:
 				     Q_INT32 y1,
 				     Q_INT32 x2,
 				     Q_INT32 y2,
-				     QPainter &painter);
+				     QPainter &painter,
+				     KisProfileSP profile = 0);
 
 	// XXX: Add a convertToQImage to KisImage?
 
@@ -91,10 +92,6 @@ public:
 	// Set the profile associated with this image
 	void setProfile(const KisProfileSP& profile);
 
-
-	// Get the profile that this image uses to display itself on 
-	// the monitor
-	KisProfileSP monitorProfile() const { return m_monitorProfile; }
 
 	void enableUndo(KoCommandHistory *history);
  
@@ -198,7 +195,6 @@ private:
 	QString m_description;
 
 	KisProfileSP m_profile;
-	KisProfileSP m_monitorProfile;
 
 	Q_UINT32 m_depth;
 

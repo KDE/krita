@@ -138,6 +138,10 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 	// be factored out again if needed.
 	img = img.copy();
 #endif
+
+//  	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
+//  		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
+
 	
 	if (srcProfile != 0 && dstProfile != 0) {
 		convertPixelsTo(img.bits(), srcProfile, 

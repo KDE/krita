@@ -1,0 +1,152 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgApplyProfile</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgApplyProfile</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>538</width>
+            <height>312</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>3</hsizetype>
+            <vsizetype>3</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Apply profile</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>lblProfile</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Profiles:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>cmbProfile</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="1">
+                    <item>
+                        <property name="text">
+                            <string>None</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbProfile</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>The image data you want to paste does not have an ICM profile associated with it. If you do not select a profile, Krita will assume that the image data is encoded in the import profile defined in the Settings dialog.</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
+                <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>grpRenderIntent</cstring>
+                    </property>
+                    <property name="title">
+                        <string>&amp;Rendering intent</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string></string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Rendering intent determines the bias in the color conversion.</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton" row="1" column="0">
+                            <property name="name">
+                                <cstring>radioRelativeColorimetric</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Relative Colorimetric</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Within and outside gamut; same as Absolute Colorimetric. White point changed to result in neutral grays.</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="2" column="0">
+                            <property name="name">
+                                <cstring>radioSaturation</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Saturation</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Hue and saturation maintained with lightness sacrificed to maintain saturation. White point changed to result in neutral grays. Intended for business graphics (make it colorful charts, graphs, overheads, ...)</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="3" column="0">
+                            <property name="name">
+                                <cstring>radioButton4</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Absolute Colorimetric</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Within the destination device gamut; hue, ightness and saturation are maintained. Outside the gamut; hue and lightness are maintained, saturation is sacrificed. White point for source and destination; unchanged. Intended for spot clors (Pantone, TruMatch, logo colors, ...)</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="0" column="0">
+                            <property name="name">
+                                <cstring>radioPerceptual</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Perceptual</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Hue hopefully maintained (but not required), lightness and saturation sacrificed to maintain the perceived color. White point changed to result in neutral grays. Intended for images.</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>cmbProfile</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

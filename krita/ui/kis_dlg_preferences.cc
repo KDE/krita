@@ -50,16 +50,13 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 	// Layout
 	QGridLayout* grid = new QGridLayout( this, 3, 1, KDialog::marginHint(), KDialog::spacingHint());
 
-// 	// checkbutton
-// 	m_saveOnExit
-// 		= new QCheckBox( i18n( "Save and restore dialog geometries" ), this );
-// 	grid->addWidget( m_saveOnExit, 0, 0 );
-
 	QLabel* label;
 	label = new QLabel(this, i18n("Cursor shape:"), this);
 	grid -> addWidget(label, 0, 0);
 
 	m_cmbCursorShape = new QComboBox(this);
+
+// XXX: Why doesn't insertImten with a bitmap work?
 // 	m_cmbCursorShape -> insertItem(*KisCursor::brushCursor().bitmap(), "Tool icon");
 // 	m_cmbCursorShape -> insertItem(*KisCursor::crossCursor().bitmap(), "Crosshair");
 // 	m_cmbCursorShape -> insertItem(*KisCursor::arrowCursor().bitmap(), "Arrow");
@@ -72,18 +69,6 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 	m_cmbCursorShape -> setCurrentItem(cfg.defCursorStyle());
 
 	grid -> addWidget(m_cmbCursorShape, 1, 0);
-
-
-
-	// only for testing it
-	/* KIntNumInput* i = new KIntNumInput( "a", 1, 100, 1, 1,
-	   QString::null, 10, true, this ); */
-
-// 	KIntNumInput* i = new KIntNumInput(1, this, 10, "a");
-// 	i->setRange(1, 100, 1);
-// 	grid->addWidget( i, 1, 0 );
-
-
 
 	grid->setRowStretch( 2, 1 );
 }
@@ -207,6 +192,7 @@ void ColorSettingsTab::refillMonitorProfiles(const QString & s)
 	kdDebug() << "Get monitor profiles: " << s << "\n";
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbMonitorProfile -> clear();
+	m_page -> cmbMonitorProfile -> insertItem(i18n("None"));
 	vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
@@ -221,6 +207,7 @@ void ColorSettingsTab::refillPrintProfiles(const QString & s)
 	kdDebug() << "Get printer profiles " << s << "\n";
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbPrintProfile -> clear();
+	m_page -> cmbPrintProfile -> insertItem(i18n("None"));
 	vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
@@ -235,6 +222,7 @@ void ColorSettingsTab::refillImportProfiles(const QString & s)
 	kdDebug() << "Get import profiles " << s << "\n";
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbImportProfile -> clear();
+	m_page -> cmbImportProfile -> insertItem(i18n("None"));
 	vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
@@ -288,7 +276,6 @@ void PreferencesDialog::editPreferences()
 		cfg.setAskProfileOnPaste( dialog -> m_colorSettings -> m_page -> chkAskPaste -> isChecked());
 		cfg.setApplyMonitorProfileOnCopy( dialog -> m_colorSettings -> m_page -> chkApplyMonitorOnCopy -> isChecked());
 		cfg.setRenderIntent( dialog -> m_colorSettings -> m_page -> grpIntent -> selectedId());
-		
 	}
 }
 

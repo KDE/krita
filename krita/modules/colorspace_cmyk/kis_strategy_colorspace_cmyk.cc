@@ -75,10 +75,27 @@ void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM *dst)
 	dst[PIXEL_BLACK] = k;
 }
 
-void KisStrategyColorSpaceCMYK::nativeColor(const QColor& c, QUANTUM /*opacity*/, QUANTUM *dst)
+void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM /*opacity*/, QUANTUM *dst)
 {
-	nativeColor(c, dst);
+	// XXX: Use lcms transforms
+
+	QUANTUM c = 255 - color.red();
+	QUANTUM m = 255 - color.green();
+	QUANTUM y = 255 - color.blue();
+
+	QUANTUM k = 255;
+
+	if (c < k) k = c;
+	if (m < k) k = m;
+	if (y < k) k = y;
+
+	dst[PIXEL_CYAN] = (c - k) / ( 255 - k);
+	dst[PIXEL_MAGENTA] = (m  - k) / ( 255 - k);
+	dst[PIXEL_YELLOW] = (y - k) / ( 255 - k);
+	dst[PIXEL_BLACK] = k;
+
 }
+
 
 void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c)
 {
@@ -131,7 +148,8 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 						  Q_INT32 renderingIntent)
 
 {
-	kdDebug() << "convertToQImage: (" << width << ", " << height << ")\n";
+	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
+		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
 
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
 	

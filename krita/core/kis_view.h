@@ -40,6 +40,7 @@
 #include "kis_tool_registry.h"
 #include "kis_types.h"
 #include "kis_scale_visitor.h"
+#include "kis_profile.h"
 
 class QButton;
 class QLabel;
@@ -133,6 +134,10 @@ public: // KoView implementation
 
 	void updateStatusBarSelectionLabel();
 
+	/**
+	 * Reset the monitor profile to the new settings.
+	 */
+	void resetMonitorProfile();
 
 public: // Plugin access API. XXX: This needs redesign.
 
@@ -249,6 +254,8 @@ private:
 	virtual KisTool *currentTool() const;
 
 private:
+
+
 	void clearCanvas(const QRect& rc);
 	void connectCurrentImg() const;
 	void disconnectCurrentImg() const;
@@ -259,6 +266,13 @@ private:
 
 	void layerUpdateGUI(bool enable);
 	void paintView(const KisRect& rc);
+
+	/** 
+	 * Get the profile that this view uses to display itself on 
+	 * he monitor.
+	 */
+	KisProfileSP monitorProfile();
+
 	bool selectColor(QColor& result);
 	void selectImage(KisImageSP img);
 
@@ -475,6 +489,10 @@ private:
 	KoToolDockManager * m_toolDockManager;
 
 	bool m_dockersSetup;
+
+	// Monitorprofile for this view
+	KisProfileSP m_monitorProfile;
+
 private:
 	mutable KisImageSP m_current;
 };

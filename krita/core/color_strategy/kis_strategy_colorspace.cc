@@ -61,12 +61,12 @@ bool KisStrategyColorSpace::convertPixelsTo(QUANTUM * src, KisProfileSP srcProfi
 					    Q_UINT32 length, 
 					    Q_INT32 renderingIntent)
 {
-	kdDebug() << "convertPixels for " << length << " pixels.\n";
+ 	kdDebug() << "convertPixels for " << length << " pixels.\n";
 
 	cmsHTRANSFORM tf = 0;
 	
 	if (!m_transforms.contains(KisProfilePair(srcProfile, dstProfile))) {
-
+		kdDebug() << "Create new transform\n";
 		tf = createTransform(dstColorStrategy,
 				     srcProfile,
 				     dstProfile,
@@ -75,6 +75,7 @@ bool KisStrategyColorSpace::convertPixelsTo(QUANTUM * src, KisProfileSP srcProfi
 		m_transforms[KisProfilePair(srcProfile, dstProfile)] = tf;				      
 	}
 	else {
+		kdDebug() << "Use cached transform\n";
 		tf = m_transforms[KisProfilePair(srcProfile, dstProfile)];
 	}
 

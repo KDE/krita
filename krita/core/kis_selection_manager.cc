@@ -41,6 +41,8 @@
 #include "kis_paint_device.h"
 #include "kistilemgr.h"
 #include "kis_colorspace_registry.h"
+#include "kis_dlg_apply_profile.h"
+#include "kis_config.h"
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	: m_parent(parent),
@@ -246,9 +248,10 @@ void KisSelectionManager::updateGUI()
 
 	m_parent -> updateStatusBarSelectionLabel();
 
-	KAction a;
-	for (Q_UINT32 i = 0; i < m_pluginActions.count(); ++i) {
-	}
+// 	KAction a;
+// 	for (Q_UINT32 i = 0; i < m_pluginActions.count(); ++i) {
+// 		// ??? What was supposed to happen here?
+// 	}
 }
 
 void KisSelectionManager::imgSelectionChanged(KisImageSP img)
@@ -286,16 +289,16 @@ void KisSelectionManager::copy()
 // 		  << r.width() << ", "
 // 		  << r.height() << "\n";
 
-	KisPaintDeviceSP s = new KisPaintDevice(r.width(), r.height(), 
+	KisPaintDeviceSP clip = new KisPaintDevice(r.width(), r.height(), 
 						img -> activeDevice() -> colorStrategy(), 
 						"Copy from " + img -> activeDevice() -> name() );
-	s -> setCompositeOp(COMPOSITE_OVER);
-
+	clip -> setCompositeOp(COMPOSITE_OVER);
+	clip -> setProfile(layer -> profile());
 
 	// TODO if the source is linked... copy from all linked layers?!?
 
 	KisPainter gc;
-	gc.begin(s);
+	gc.begin(clip);
 	// Copy image data
 	gc.bitBlt(0, 0, COMPOSITE_COPY, layer.data(), r.x() - layer -> x(), r.y() - layer -> y(), r.width(), r.height());
 	// Apply selection mask.
@@ -311,7 +314,7 @@ void KisSelectionManager::copy()
 //                << r.height() << "\n";
 
 
- 	m_clipboard -> setClip(s);
+ 	m_clipboard -> setClip(clip);
  	imgSelectionChanged(m_parent -> currentImg());
 
 }
@@ -328,12 +331,27 @@ KisLayerSP KisSelectionManager::paste()
 	KisPaintDeviceSP clip = m_clipboard -> clip();
 
 	if (clip) {
+
+
 		KisLayerSP layer = new KisLayer(img, clip -> width(), clip -> height(), img -> nextLayerName() + "(pasted)", OPACITY_OPAQUE);
-		
 		KisPainter gc;
 		gc.begin(layer.data());
 		gc.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), clip -> x(), clip -> y(), clip -> width(), clip -> height());
 		gc.end();
+		
+		KisConfig cfg;
+		if (cfg.askProfileOnPaste() && clip -> profile() == 0 && img -> profile() != 0) {
+			KisDlgApplyProfile * dlg = new KisDlgApplyProfile(m_parent);
+			if (dlg -> exec() == QDialog::Accepted) {
+				KisProfileSP profile = dlg -> profile();
+				if (profile != img -> profile()) {
+					layer -> setProfile(profile);
+					layer -> convertTo(img -> colorStrategy(), img -> profile(), dlg -> renderIntent());
+				}
+
+			}
+		}
+
 
 		m_doc -> layerAdd(img, layer, img -> index(layer));
 		layer -> move(0,0);

@@ -1004,6 +1004,7 @@ bool KisDoc::slotNewImage()
 				   dlg.imgName());
 		img -> setResolution(dlg.imgResolution(), dlg.imgResolution()); // XXX needs to be added to dialog
 		img -> setDescription(dlg.imgDescription());
+		kdDebug() << "selected profile: " << dlg.profile() << "\n";
 		img -> setProfile(dlg.profile());
 
 		layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
@@ -1032,7 +1033,7 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 	return v;
 }
 
-void KisDoc::paintContent(QPainter& painter, const QRect& rect)
+void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfileSP profile)
 {
 	Q_INT32 x1;
 	Q_INT32 y1;
@@ -1054,7 +1055,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect)
 		x2 = CLAMP(rect.x() + rect.width(), 0, m_currentImage -> width());
 		y2 = CLAMP(rect.y() + rect.height(), 0, m_currentImage -> height());
 
-		m_currentImage -> renderToPainter(x1, y1, x2, y2, painter);
+		m_currentImage -> renderToPainter(x1, y1, x2, y2, painter, profile);
 	}
 }
 

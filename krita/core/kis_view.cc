@@ -56,6 +56,7 @@
 #include <kinputdialog.h>
 #include <kurldrag.h>
 #include <kpopupmenu.h>
+#include <kdebug.h>
 
 // KOffice
 #include <qcolor.h>
@@ -248,6 +249,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_dockersSetup = false;
 
 	setInputDevice(INPUT_DEVICE_MOUSE);
+
+	m_monitorProfile = 0;
 }
 
 
@@ -562,6 +565,30 @@ void KisView::updateStatusBarProfileLabel()
 	else {
 		m_statusBarProfileLabel -> setText(img -> profile() -> productName());
 	}
+}
+
+
+KisProfileSP KisView::monitorProfile()
+{
+	if (m_monitorProfile == 0) {
+		resetMonitorProfile();
+	}
+	return m_monitorProfile;
+}
+
+
+void KisView::resetMonitorProfile()
+{
+	KisConfig cfg;
+	QString monitorProfileName = cfg.monitorProfile();
+
+	m_monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
+	if (m_monitorProfile) {
+		kdDebug() << "Monitor profile: " << m_monitorProfile -> productName() << "\n";
+	} else {
+		kdDebug() << "Empty monitor profile " << monitorProfileName << "\n";
+	}
+	
 }
 
 void KisView::setupStatusBar()
@@ -992,7 +1019,7 @@ void KisView::paintView(const KisRect& r)
                                 gc.translate((canvasXOffset() - horzValue()) / zoom(), (canvasYOffset() - vertValue()) / zoom());
 
                                 m_doc -> setCurrentImage(img);
-                                m_doc -> paintContent(gc, wr);
+                                m_doc -> paintContent(gc, wr, monitorProfile());
 				m_doc -> setCurrentImage(0);
 
                                 if (currentTool())
@@ -1761,6 +1788,7 @@ void KisView::mergeLayer()
 void KisView::preferences()
 {
         PreferencesDialog::editPreferences();
+	resetMonitorProfile();
 }
 
 void KisView::viewColorDocker(bool v)
@@ -1910,6 +1938,8 @@ void KisView::slotSetBGColor(const QColor& c)
 
 void KisView::setupPrinter(KPrinter& printer)
 {
+// XXX: If only printing were this simple, but it isn't, not by a long stretch
+#if 0
         KisImageSP img = currentImg();
 
         if (img) {
@@ -1922,10 +1952,13 @@ void KisView::setupPrinter(KPrinter& printer)
                 printer.setPageSize(KPrinter::A4);
                 printer.setOrientation(KPrinter::Portrait);
         }
+#endif
 }
 
 void KisView::print(KPrinter& printer)
 {
+// XXX: If only printing would be this simple, but it isn't, not by a long stretch
+#if 0
 	QPainter gc(&printer);
 	QValueList< int > pagesList = printer.pageList();
 	KisImageSP img;
@@ -1945,6 +1978,7 @@ void KisView::print(KPrinter& printer)
 		m_doc -> paintContent(gc, img -> bounds());
 		m_doc -> setCurrentImage(0);
 	}
+#endif
 }
 
 void KisView::setupTools()
@@ -1960,7 +1994,10 @@ void KisView::setupTools()
 
 void KisView::canvasGotPaintEvent(QPaintEvent *event)
 {
-	bitBlt(m_canvas, event -> rect().x(), event -> rect().y(), &m_canvasPixmap, event -> rect().x(), event -> rect().y(), event -> rect().width(), event -> rect().height());
+	bitBlt(m_canvas, 
+	       event -> rect().x(), event -> rect().y(), 
+	       &m_canvasPixmap, 
+	       event -> rect().x(), event -> rect().y(), event -> rect().width(), event -> rect().height());
 }
 
 void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)

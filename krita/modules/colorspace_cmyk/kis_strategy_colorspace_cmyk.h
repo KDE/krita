@@ -46,8 +46,8 @@ public:
 	virtual void nativeColor(const QColor& c, QUANTUM *dst);
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst);
 
-	virtual void toQColor(const QUANTUM *src, QColor *c);
-	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity);
+	virtual void toQColor(const QUANTUM *src, QColor *color);
+	virtual void toQColor(const QUANTUM *src, QColor *color, QUANTUM *opacity);
 
 	virtual KisPixelRO toKisPixelRO(QUANTUM *src, KisProfileSP profile = 0)
 		{ return KisPixelRO (src, src + PIXEL_CMYK_ALPHA, this, profile); }

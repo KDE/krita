@@ -24,8 +24,9 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
-
 #include <qcolor.h>
+
+#include <kdebug.h>
 
 #include "kis_undo_adapter.h"
 #include "kis_global.h"
@@ -82,14 +83,15 @@ void KisPreviewView::setSourceLayer(KisLayerSP lay)
     
 	Q_INT32 w = static_cast<Q_INT32>(size().width() / m_zoom);
 	Q_INT32 h = static_cast<Q_INT32>(size().height() / m_zoom);
+
 	m_image = new KisImage(m_undo, w, h, lay->colorStrategy(), "preview");
+	m_image -> setProfile(lay -> profile());
 	m_clippedview = new KisLayer(m_image, w, h, m_image -> nextLayerName(), OPACITY_OPAQUE);
 	gc.begin(m_clippedview.data());
-    
+	
 	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, m_pos.x(), m_pos.y(), -1, -1);
 	gc.end();
 	m_image -> add(m_clippedview, -1);
-
 	update();
 	emit updated();
 }

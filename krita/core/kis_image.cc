@@ -311,9 +311,6 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 	m_ntileCols = (width + TILE_WIDTH - 1) / TILE_WIDTH;
 	m_ntileRows = (height + TILE_HEIGHT - 1) / TILE_HEIGHT;
 
-	KisConfig cfg;
-	QString monitorProfileName = cfg.monitorProfile();
-	m_monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
 	
 }
 
@@ -1058,7 +1055,8 @@ void KisImage::renderToPainter(Q_INT32 x1,
 			       Q_INT32 y1,
 			       Q_INT32 x2,
 			       Q_INT32 y2,
-			       QPainter &painter)
+			       QPainter &painter,
+			       KisProfileSP profile)
 {
 	Q_INT32 x;
 	Q_INT32 y;
@@ -1072,7 +1070,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
 			
 			renderToProjection(tileno);
 			
-			QImage img = projection() -> convertToQImage(m_monitorProfile, x, y, TILE_WIDTH, TILE_HEIGHT);
+			QImage img = projection() -> convertToQImage(profile, x, y, TILE_WIDTH, TILE_HEIGHT);
 
 			if (!img.isNull()) {
 				// XXX: made obosolete by qt-copy patch 0005

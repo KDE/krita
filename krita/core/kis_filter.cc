@@ -29,20 +29,23 @@
 
 KisFilter::KisFilter(const QString& name, KisView * view) :
 	m_name(name),
-	m_view(view)
+	m_view(view),
+	m_dialog(0)
 {
 }
 
-KisFilterConfiguration* KisFilter::configuration()
+KisFilterConfiguration* KisFilter::configuration(KisFilterConfigurationWidget*)
 {
 	return 0;
 }
 
 void KisFilter::refreshPreview( )
 {
+	if( m_dialog == 0 )
+		return;
 	m_dialog -> previewWidget -> slotRenewLayer();
 	KisLayerSP layer = m_dialog -> previewWidget -> getLayer();
-	KisFilterConfiguration* config = configuration();
+	KisFilterConfiguration* config = configuration(m_widget);
 	QRect rect(0, 0, layer -> width(), layer -> height());
 	process((KisPaintDeviceSP) layer, config, rect, 0 );
 	m_dialog->previewWidget -> slotUpdate();
@@ -54,7 +57,7 @@ KisFilterConfigurationWidget* KisFilter::createConfigurationWidget(QWidget* )
 }
 
 void KisFilter::slotActivated()
-{;
+{
 	KisImageSP img = m_view -> currentImg();
 	if (!img) return;
 
@@ -80,7 +83,7 @@ void KisFilter::slotActivated()
 	}
 
 	//Apply the filter
-	KisFilterConfiguration* config = configuration();
+	KisFilterConfiguration* config = configuration(m_widget);
 	KisTileCommand* ktc = new KisTileCommand(name(), (KisPaintDeviceSP)layer ); // Create a command
 	QRect rect(0, 0, layer->width(), layer->height());
 
@@ -89,6 +92,7 @@ void KisFilter::slotActivated()
 	img->undoAdapter()->addCommand( ktc );
 	img->notify();
 	delete m_dialog;
+	m_dialog = 0;
 	delete config;
 }
 #include "kis_filter.moc"

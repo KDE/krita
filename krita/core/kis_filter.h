@@ -28,6 +28,7 @@
 #include "kis_view.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_filter_registry.h"
 
 class KisTileCommand;
 class KisFilterConfigurationWidget;
@@ -38,9 +39,9 @@ template<class F>
 KisFilterSP createFilter(KisView* view)
 {
 	KisFilterSP kfi;
-	if( view->filterRegistry()->exist( F::sname() ) )
+	if( view->filterRegistry()->exist( F::name() ) )
 	{
-		kfi = view->filterRegistry()->get( F::sname() );
+		kfi = view->filterRegistry()->get( F::name() );
 	} else {
 		kfi = new F(view);
 		view->filterRegistry()->add(kfi);
@@ -58,20 +59,20 @@ public:
 
 public:
 	virtual void process(KisPaintDeviceSP, KisFilterConfiguration*, const QRect&, KisTileCommand* ) = 0;
-
+	
 public:
+	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
 	inline const QString name() const { return m_name; };
+	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
+// 	KisFilterConfigurationWidget* configurationWidget(QWidget* parent);
 
 public slots:
 
 	void slotActivated();
 
 protected:
+// 	KisFilterConfigurationWidget* configurationWidget();
 
-	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-	KisFilterConfigurationWidget* configurationWidget();
-
-	virtual KisFilterConfiguration* configuration();
 	KisStrategyColorSpaceSP colorStrategy();
 
 private slots:
@@ -84,11 +85,17 @@ private:
 	KisFilterConfigurationWidget* m_widget;
 	KisPreviewDialog* m_dialog;
 };
-
+/*
 inline KisFilterConfigurationWidget* KisFilter::configurationWidget()
 {
 	return m_widget;
 }
+
+inline KisFilterConfigurationWidget* KisFilter::configurationWidget(QWidget* parent)
+{
+	return (m_widget = createConfigurationWidget(parent) );
+}*/
+
 
 inline KisStrategyColorSpaceSP KisFilter::colorStrategy()
 {

@@ -24,7 +24,7 @@
 #include "tiles/kis_iterator.h"
 #include "kis_pixel.h"
 #include "kis_strategy_colorspace.h"
- 
+#include <kis_paint_device.h>
 template< typename _iTp> 
 class KisIteratorPixelTrait
 {

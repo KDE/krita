@@ -27,7 +27,7 @@ static const KCmdLineOptions options[] = {
 	KCmdLineLastOption
 };
 
-extern "C" int kdemain(int argc, char **argv)
+extern "C" KRITA_EXPORT int kdemain(int argc, char **argv)
 {
 	KCmdLineArgs::init(argc, argv, newKritaAboutData());
 	KCmdLineArgs::addCmdLineOptions(options);

@@ -22,12 +22,12 @@
 #define __kis_factory_h__
 
 #include <koFactory.h>
-
+#include <koffice_export.h>
 class KInstance;
 class KisResourceServer;
 class KAboutData;
 
-class KisFactory : public KoFactory
+class KRITACORE_EXPORT KisFactory : public KoFactory
 {
 	Q_OBJECT
 

@@ -32,14 +32,14 @@
 #include "kis_guide.h"
 #include "kis_scale_visitor.h"
 #include "resources/kis_profile.h"
-
+#include <koffice_export.h>
 class KoCommandHistory;
 class KisNameServer;
 class KisUndoAdapter;
 class KisPainter;
 class DCOPObject;
 
-class KisImage : public QObject, public KisRenderInterface {
+class KRITACORE_EXPORT KisImage : public QObject, public KisRenderInterface {
 	Q_OBJECT
 
 public:

@@ -24,7 +24,7 @@
 
 #include "kis_canvas_subject.h"
 #include "kis_canvas_observer.h"
-
+#include <koffice_export.h>
 class KoFrameButton;
 class QGridLayout;
 class QColor;
@@ -33,7 +33,7 @@ class QLabel;
 class QSpinBox;
 class KDualColorButton;
 
-class KisGrayWidget
+class KRITAUI_EXPORT KisGrayWidget
 	 : public QWidget,
 	   public KisCanvasObserver
 {

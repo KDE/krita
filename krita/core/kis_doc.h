@@ -26,7 +26,7 @@
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
-
+#include <koffice_export.h>
 class QImage;
 class QString;
 class DCOPObject;
@@ -36,7 +36,7 @@ class KMacroCommand;
 class KisView;
 class KisNameServer;
 
-class KisDoc : public KoDocument, private KisUndoAdapter {
+class KRITACORE_EXPORT KisDoc : public KoDocument, private KisUndoAdapter {
 
 	typedef KoDocument super;
 	Q_OBJECT

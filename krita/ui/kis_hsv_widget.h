@@ -26,7 +26,7 @@
 
 #include "kis_canvas_subject.h"
 #include "kis_canvas_observer.h"
-
+#include <koffice_export.h>
 
 
 class KoFrameButton;
@@ -38,7 +38,7 @@ class KDualColorButton;
 class KisColorWheel;
 class KValueSelector;
 
-class KisHSVWidget
+class KRITAUI_EXPORT KisHSVWidget
 	 : public QWidget,
 	   public KisCanvasObserver
 {

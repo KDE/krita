@@ -46,7 +46,7 @@
 #include "kis_filter.h"
 #include "kis_progress_subject.h"
 #include "kis_paintop.h"
-
+#include <koffice_export.h>
 class QRect;
 class KisTileCommand;
 class KisBrush;
@@ -64,7 +64,7 @@ class KisPattern;
   in one undoable step.
 
  */
-class KisPainter : public KisProgressSubject {
+class KRITACORE_EXPORT KisPainter : public KisProgressSubject {
 	typedef KisProgressSubject super;
 
 public:

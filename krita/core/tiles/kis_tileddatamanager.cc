@@ -203,9 +203,9 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 	// Loop through all tiles, if a tile is wholly outside the extent, add to the memento, then delete it,
 	// if the tile is partially outside the extent, clear the outside pixels to black transparent (XXX: use the
 	// default pixel for this when avaiable).
-	for(int i = 0; i < 1024; i++)
+	for(int tileHash = 0; tileHash < 1024; tileHash++)
 	{
-		KisTile *tile = m_hashTable[i];
+		KisTile *tile = m_hashTable[tileHash];
 		KisTile *previousTile = 0;
 		
 		while(tile)
@@ -221,8 +221,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 				tile = tile->getNext();
 			}
 			else {
-				Q_UINT32 tileHash = calcTileHash(tileRect.x(), tileRect.y());
-				ensureTileMementoed(tileRect.x(), tileRect.y(), tileHash, tile);
+				ensureTileMementoed(tile -> getCol(), tile -> getRow(), tileHash, tile);
 			
 				if (newRect.intersects(tileRect)) {
 					kdDebug() << "Partially inside, clear the non-intersecting bits\n";
@@ -253,7 +252,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
  					if (previousTile)
 						previousTile -> setNext(tile);
 					else 
-						m_hashTable[i] = 0;
+						m_hashTable[tileHash] = tile;
  					delete deltile;
 // 					memset(tile -> data(0,0), 0, KisTile::HEIGHT * KisTile::WIDTH * m_pixelSize);
 // 					previousTile = tile;
@@ -267,8 +266,8 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 	// Set the extent correctly
 	m_extentMinX = x;
 	m_extentMinY = y;
-	m_extentMaxX = x + w + 1;
-	m_extentMaxY = y + h + 1;
+	m_extentMaxX = x + w - 1;
+	m_extentMaxY = y + h - 1;
 }
 
 

@@ -25,6 +25,7 @@
 #include "kis_paint_device.h"
 #include "kis_rotate_visitor.h"
 #include "kis_progress_display_interface.h"
+#include "kis_iterators_pixel.h"
 
 void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progress) 
 {
@@ -403,6 +404,8 @@ void KisRotateVisitor::rotateRight90()
         kdDebug() << "rotateRight called!" << "\n";
         Q_INT32 width = m_dev->width();
         Q_INT32 height = m_dev->height();
+        //KisIteratorLinePixel lineIt = m_dev->iteratorPixelBegin(0,0,width,0);
+        //KisIteratorLinePixel endLineIt = m_dev->iteratorPixelEnd(0,0,width,height);
         //calculate widht of the croped image
         Q_INT32 targetW = height;
         Q_INT32 targetH = width;
@@ -410,6 +413,29 @@ void KisRotateVisitor::rotateRight90()
         QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
         QUANTUM *tempRow = new QUANTUM[width * m_dev -> depth() * sizeof(QUANTUM)];
         Q_INT32 currentPos;
+        /*
+        Q_INT32 x=0;
+        Q_INT32 y=0;
+        while( lineIt <= endLineIt )
+        {
+                KisIteratorPixel pixelIt = *lineIt;
+                KisIteratorPixel endIt = lineIt.end();
+                while( pixelIt <= endIt )
+                {
+                        currentPos = (x*targetW+height-y-1) * m_dev -> depth();
+                        for (int i = 0; i < m_dev -> depth(); i++)
+			{     
+                             newData[currentPos+i] = pixelIt[i];
+                        }
+                        // your computing
+                        ++x;
+                        ++pixelIt;
+                }
+                x=0;
+                ++y;
+                ++lineIt;
+        }
+        */
         for(Q_INT32 y=0; y < height; y++){
                 m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
                 for(Q_INT32 x=0; x < width; x++){
@@ -422,11 +448,18 @@ void KisRotateVisitor::rotateRight90()
         kdDebug() << "write newData to the image!" << "\n";
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
         m_dev -> setTiles(tm); // Also sets width and height correctly
+
 }
 
 void KisRotateVisitor::rotateLeft90()
 {
         kdDebug() << "rotateLeft called!" << "\n";
+        
+        KisIteratorLinePixel lineIt = m_dev->iteratorPixelBegin( 0, 0, m_dev -> width(), 
+0);
+        KisIteratorLinePixel endLineIt = m_dev->iteratorPixelEnd( 0, 0, 
+m_dev->width(), m_dev->height());
+        
         Q_INT32 width = m_dev->width();
         Q_INT32 height = m_dev->height();
         //calculate widht of the croped image

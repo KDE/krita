@@ -1787,12 +1787,21 @@ void KisView::layerProperties()
 
 			if (dlg.exec() == QDialog::Accepted) { 
 				QPoint pt = dlg.getPosition();
+				bool changed = layer -> name() != dlg.getName();
+
+				changed = changed || layer -> opacity() != dlg.getOpacity() || pt.x() != layer -> x() || pt.y() != layer -> y();
+
+				if (changed)
+					m_doc -> beginMacro(i18n("Property changes"));
 
 				if (layer -> name() != dlg.getName() || layer -> opacity() != dlg.getOpacity())
 					m_doc -> layerProperties(img, layer, dlg.getOpacity(), dlg.getName());
 
 				if (pt.x() != layer -> x() || pt.y() != layer -> y())
 					KisStrategyMove(this, m_doc).simpleMove(QPoint(layer -> x(), layer -> y()), pt);
+
+				if (changed)
+					m_doc -> endMacro();
 			}
 		}
 	}

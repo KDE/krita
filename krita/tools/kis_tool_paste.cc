@@ -53,11 +53,10 @@ void KisToolPaste::leave(QEvent *)
 		QRect rc(m_selection -> bounds());
 
 		Q_ASSERT(owner);
-		m_selection -> visible(false);
 		owner -> unsetSelection(false);
+		m_selection -> visible(false);
 		m_selection = 0;
-		owner -> invalidate(rc);
-		m_view -> updateCanvas(rc);
+		owner -> notify(); //rc);
 	}
 }
 

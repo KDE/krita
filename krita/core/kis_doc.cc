@@ -73,7 +73,7 @@ namespace {
 		typedef KisCommand super;
 
 	public:
-		KisCommandImageAdd(KisDoc *doc, KisImageSP img) : super("Add Image", doc)
+		KisCommandImageAdd(KisDoc *doc, KisImageSP img) : super(i18n("Add Image"), doc)
 		{
 			m_doc = doc;
 			m_img = img;
@@ -141,7 +141,7 @@ namespace {
 		typedef KisCommand super;
 
 	public:
-		KisCommandImageRm(KisDoc *doc, KisImageSP img) : super("Remove Image", doc)
+		KisCommandImageRm(KisDoc *doc, KisImageSP img) : super(i18n("Remove Image"), doc)
 		{
 			m_doc = doc;
 			m_img = img;
@@ -174,7 +174,7 @@ namespace {
 		typedef KisCommand super;
 
 	public:
-		LayerAddCmd(KisDoc *doc, KisImageSP img, KisLayerSP layer) : super("Add Layer", doc)
+		LayerAddCmd(KisDoc *doc, KisImageSP img, KisLayerSP layer) : super(i18n("Add Layer"), doc)
 		{
 			m_doc = doc;
 			m_img = img;
@@ -211,7 +211,7 @@ namespace {
 		typedef KNamedCommand super;
 
 	public:
-		LayerRmCmd(KisDoc *doc, KisImageSP img, KisLayerSP layer) : super("Remove Layer")
+		LayerRmCmd(KisDoc *doc, KisImageSP img, KisLayerSP layer) : super(i18n("Remove Layer"))
 		{
 			m_doc = doc;
 			m_img = img;
@@ -242,6 +242,50 @@ namespace {
 		KisImageSP m_img;
 		KisLayerSP m_layer;
 		Q_INT32 m_index;
+	};
+
+	class LayerPropsCmd : public KNamedCommand {
+		typedef KNamedCommand super;
+
+	public:
+		LayerPropsCmd(KisLayerSP layer, KisImageSP img, KisDoc *doc, const QString& name, Q_INT32 opacity) : super(i18n("Layer Property Changes"))
+		{
+			m_layer = layer;
+			m_img = img;
+			m_doc = doc;
+			m_name = name;
+			m_opacity = opacity;
+		}
+
+		virtual ~LayerPropsCmd()
+		{
+		}
+
+	public:
+		virtual void execute()
+		{
+			QString name = m_layer -> name();
+			Q_INT32 opacity = m_layer -> opacity();
+
+			m_doc -> setUndo(false);
+			m_doc -> layerProperties(m_img, m_layer, m_opacity, m_name);
+			m_doc -> setUndo(true);
+			m_name = name;
+			m_opacity = opacity;
+			m_img -> notify();
+		}
+
+		virtual void unexecute()
+		{
+			execute();
+		}
+
+	private:
+		KisLayerSP m_layer; 
+		KisImageSP m_img; 
+		KisDoc *m_doc; 
+		QString m_name; 
+		Q_INT32 m_opacity;
 	};
 }
 
@@ -1294,8 +1338,18 @@ void KisDoc::layerProperties(KisImageSP img, KisLayerSP layer, QUANTUM opacity, 
 		return;
 
 	if (layer) {
-		layer -> setName(name);
-		layer -> opacity(opacity);
+		if (m_undo) {
+			QString oldname = layer -> name();
+			Q_INT32 oldopacity = layer -> opacity();
+
+			layer -> setName(name);
+			layer -> opacity(opacity);
+			addCommand(new LayerPropsCmd(layer, img, this, oldname, oldopacity));
+		} else {
+			layer -> setName(name);
+			layer -> opacity(opacity);
+		}
+
 		img -> invalidate();
 		setModified(true);
 		emit layersUpdated(img);

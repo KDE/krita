@@ -3,8 +3,8 @@
 
 //#include <ktable.h>
 #include <koDocument.h>
-#include "../kchart/kdchart/KDChartTable.h"
-#include "../kchart/kdchart/KDChartData.h"
+#include <KDChartTable.h>
+#include <KDChartData.h>
 
 namespace KoChart
 {

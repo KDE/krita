@@ -156,9 +156,10 @@ bool BrushTool::paint(const QPoint& pos)
 	int sy = clipRect.top();
 	int ex = clipRect.width();
 	int ey = clipRect.height();
-	int invOpacity = CHANNEL_MAX - m_opacity;
 	int bv; 
 	int invbv;
+	int opacity = Upscale(m_opacity);
+	int invOpacity = MaxRGB - opacity;
 	bool alpha = img -> colorMode() == cm_RGBA;
 	KisPixelPacket *view = device -> getPixels(sx, sy, ex, ey);
 
@@ -170,19 +171,42 @@ bool BrushTool::paint(const QPoint& pos)
 
 		for (int x = 0; x < ex; x++) {
 			bv = *(sl - startx + sx + x);
-			invbv = CHANNEL_MAX - bv;
+			bv = Upscale(bv);
+			invbv = MaxRGB - bv;
 
 			if (bv == 0)
 				continue;
 
 			KisPixelPacket *src = view + y * ex + x;
 
-			src -> red = (Upscale(m_red) * bv + src -> red * invbv) / CHANNEL_MAX;
-			src -> green = (Upscale(m_green) * bv + src -> green * invbv) / CHANNEL_MAX;
-			src -> blue = (Upscale(m_blue) * bv + src -> blue * invbv) / CHANNEL_MAX;
+			int r = Upscale(m_red);
+			int g = Upscale(m_green);
+			int b = Upscale(m_blue);
 
-			if (alpha)
-				src -> opacity = (Upscale(m_opacity) * bv + src -> opacity * invbv) / CHANNEL_MAX;
+			src -> red = (r * opacity + src -> red * invOpacity) / MaxRGB;
+			src -> green = (g * opacity + src -> green * invOpacity) / MaxRGB;
+			src -> blue = (b * opacity + src -> blue * invOpacity) / MaxRGB;
+#if 0
+			src -> red = ((m_red * (CHANNEL_MAX - m_opacity) + Downscale(src -> red) * m_opacity)) / CHANNEL_MAX;
+			src -> green = ((m_green * (CHANNEL_MAX - m_opacity) + Downscale(src -> green) * m_opacity)) / CHANNEL_MAX;
+			src -> blue = ((m_blue * (CHANNEL_MAX - m_opacity) + Downscale(src -> blue) * m_opacity)) / CHANNEL_MAX;
+
+			src -> red = Upscale(src -> red);
+			src -> green = Upscale(src -> green);
+			src -> blue = Upscale(src -> blue);
+#endif
+
+#if 0
+			if (alpha) {
+				src -> opacity = Upscale(m_opacity) + Upscale(bv);
+
+				if (src -> opacity > MaxRGB)
+					src -> opacity = MaxRGB;
+
+				if (src -> opacity < 0)
+					src -> opacity = 0;
+			}
+#endif
 		}
 	}
 

@@ -54,16 +54,6 @@ public:
 	inline void setName(const QString& name);
 	inline QString name() const;
 
-#if 0
-	virtual void setPixel(uint x, uint y, const uchar *pixel, KisImageCmd *cmd = 0);
-	virtual bool pixel(uint x, uint y, uchar **val);
-	virtual uchar *pixel(uint x, uint y);
-
-	virtual void setPixel(uint x, uint y, const QRgb& rgb, KisImageCmd *cmd = 0);
-	virtual bool pixel(uint x, uint y, QRgb *rgb);
-	virtual QRgb rgb(uint x, uint y);
-#endif
-
 	const KisPixelPacket* getConstPixels(int x, int y, uint width = TILE_SIZE, uint height = TILE_SIZE) const;
 	KisPixelPacket* getPixels(int x, int y, uint width = TILE_SIZE, uint height = TILE_SIZE);
 	void syncPixels();
@@ -99,7 +89,8 @@ public:
 	inline int width() const;
 	inline int height() const;
 
-	
+	Magick::Image getImage() { return *m_tiles; }
+
 protected:
 	uchar m_bpp;
 	uchar m_opacity;

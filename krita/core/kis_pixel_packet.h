@@ -23,7 +23,8 @@
 
 #include <Magick++.h>
 
-class QColor;
+#include <qcolor.h>
+
 class KoColor;
 
 class KisPixelPacket : public Magick::PixelPacket {

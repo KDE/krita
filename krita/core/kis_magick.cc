@@ -40,7 +40,8 @@ QImage convertFromMagickImage(const Image& mimg)
 				const PixelPacket *pixel = pixel_cache + row * img.width() + column;
 				QRgb rgb;
 
-				rgb = qRgba(Downscale(pixel -> red), Downscale(pixel -> green), Downscale(pixel -> blue), Downscale(pixel -> opacity));
+				rgb = qRgba(Downscale(pixel -> red), Downscale(pixel -> green), Downscale(pixel -> blue), 
+						Downscale(TransparentOpacity - pixel -> opacity));
 				img.setPixel(column, row, rgb);
 			}
 		}
@@ -63,7 +64,7 @@ Image convertToMagickImage(const QImage& img)
 			PixelPacket *pixel = pixel_cache + row * img.width() + column;
 			QRgb rgb = img.pixel(column, row);
 
-			*pixel = Color(Upscale(qRed(rgb)), Upscale(qGreen(rgb)), Upscale(qBlue(rgb)), Upscale(qAlpha(rgb)));
+			*pixel = Color(Upscale(qRed(rgb)), Upscale(qGreen(rgb)), Upscale(qBlue(rgb)), TransparentOpacity - Upscale(qAlpha(rgb)));
 		}
 	}
 

@@ -39,6 +39,9 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 
+#include "kis_tiles.h"
+#include "kis_tile.h"
+
 class DCOPObject;
 class KCommand;
 class KisBrush;
@@ -145,7 +148,7 @@ private:
 	KisImage& operator=(const KisImage&);
 
 	void addCommand(KCommand *cmd);
-//	void renderTile(KisTileSP dst, const KisTileSP src, const KisPaintDevice *srcDevice);
+	void renderTile(KisPixelPacket *dst, const KisPixelPacket *src, const KisPaintDevice *srcDevice);
 	void renderBg(KisPaintDevice *srcDevice, int tileNo);
 	void resizeImage(KisPaintDevice *device, const QRect& rect);
 	void resizePixmap(bool dirty);

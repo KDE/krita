@@ -101,18 +101,7 @@ void KisTiles::markDirty(uint x, uint y)
 	if (!intersects(x, y))
 		return;
 	
-	m_tiles[getTileNo(x, y)] -> setDirty(true);
-}
-
-bool KisTiles::isDirty(uint x, uint y)
-{
-	if (!intersects(x, y))
-		return false;
-
-	int tileNo = getTileNo(x, y);
-	KisTileSP tile = m_tiles[tileNo];
-
-	return tile ? tile -> dirty() : false;
+	m_tiles[getTileNo(x, y)] -> modifyImage();
 }
 
 void KisTiles::resize(uint width, uint height, uint bpp)

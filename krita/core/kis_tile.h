@@ -21,14 +21,21 @@
 #if !defined KIS_TILE_
 #define KIS_TILE_
 
+#include <Magick++.h>
+
 #include <qcolor.h>
 #include <qpoint.h>
 #include <qimage.h>
 #include <qmutex.h>
+#include <qpoint.h>
+#include <qsize.h>
 #include <qvaluevector.h>
 
 #include <ksharedptr.h>
 
+#include "kis_global.h"
+
+class KisPixelPacket;
 class KisTile;
 
 typedef KSharedPtr<KisTile> KisTileSP;
@@ -38,93 +45,69 @@ typedef KisTileSPLst::const_iterator KisTileSPLstConstIterator;
 
 class KisTile : public KShared {
 public:
-	KisTile(int x, int y, uint width, uint height, uchar bpp, const QRgb& defaultColor, bool dirty = false);
-	KisTile(const QPoint& parentPos, uint width, uint height, uchar bpp, const QRgb& defaultColor, bool dirty = false);
+	KisTile(int x, int y, uint width = TILE_SIZE, uint height = TILE_SIZE, int depth = 4, const QRgb& defaultColor = 0);
 	KisTile(const KisTile& tile);
 	KisTile& operator=(const KisTile& tile);
-	virtual ~KisTile();
+	~KisTile();
 
-	void copyTile(const KisTile& tile);
-	void setDirty(bool dirty);
+	const KisPixelPacket* getConstPixels(int x, int y, uint width = TILE_SIZE, uint height = TILE_SIZE) const;
+	const KisPixelPacket* getConstPixels() const;
+	KisPixelPacket* getPixels(int x, int y, uint width = TILE_SIZE, uint height = TILE_SIZE);
+	KisPixelPacket* getPixels();
+	void syncPixels();
+
+	void copy(const KisTile& tile);
+	void clear();
+
 	void move(int x, int y);
 	void move(const QPoint& parentPos);
-	uchar* data();
-	uchar* data(int x, int y);
 
-	inline bool dirty() const;
-	inline uchar bpp() const;
-	inline const uchar* data() const;
-	const uchar* data(int x, int y) const;
-	inline QPoint tileCoords();
+	QPoint topLeft() const;
+	QPoint bottomRight() const;
 
-	inline bool cow() const;
-	inline void setCow(bool enable = true);
+	const QRect& geometry() const;
 
-	inline uint size() const;
+	void modifyImage();
+
+	inline QSize size() const;
 	inline uint width() const;
 	inline uint height() const;
+	inline int depth() const;
 
 	QImage convertTileToImage();
 	void convertTileFromImage(const QImage& img);
 	
 private:
+	void setGeometry(int x, int y, int w, int h);
+	void setGeometry(const QRect& rc);
 	void initTile();
 
 private:
-	QPoint m_parentPos;
-	bool m_cow;
-	bool m_dirty;
-	uint m_width;
-	uint m_height;
-	uchar m_bpp;
-	uchar *m_data;
+	QRect m_geometry;
+	int m_depth;
+	Magick::Image *m_data;
 	QRgb m_defaultColor;
 	QMutex m_mutex;
 };
 
-bool KisTile::dirty() const
+int KisTile::depth() const
 {
-	return m_dirty;
+	return m_depth;
 }
 
-uchar KisTile::bpp() const
+QSize KisTile::size() const
 {
-	return m_bpp;
-}
-
-const uchar* KisTile::data() const
-{
-	return m_data;
-}
-
-QPoint KisTile::tileCoords()
-{
-	return m_parentPos;
-}
-
-bool KisTile::cow() const
-{
-	return m_cow;
-}
-
-void KisTile::setCow(bool enable)
-{
-	m_cow = enable;
-}
-
-uint KisTile::size() const
-{
-	return m_width * m_height * m_bpp;
+	return m_geometry.size();
 }
 
 uint KisTile::width() const
 {
-	return m_width;
+	return m_geometry.width();
 }
 
 uint KisTile::height() const
 {
-	return m_height;
+	return m_geometry.height();
 }
 
 #endif // KIS_TILE_

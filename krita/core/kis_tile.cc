@@ -18,164 +18,168 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <string.h>
-#include <stdlib.h>
+#include <Magick++.h>
 
 #include <qtl.h>
 
 #include "kis_global.h"
+#include "kis_pixel_packet.h"
+#include "kis_magick.h"
 #include "kis_tile.h"
 
-KisTile::KisTile(int x, int y, uint width, uint height, uchar bpp, const QRgb& defaultColor, bool dirty)
+using namespace Magick;
+
+KisTile::KisTile(int x, int y, uint width, uint height, int depth, const QRgb& defaultColor) : m_data(0)
 {
-	Q_ASSERT(bpp <= 4);
-	m_cow = false;
-	m_dirty = dirty;
-	m_width = width;
-	m_height = height;
-	m_bpp = bpp;
-	m_data = 0;
-	m_defaultColor = defaultColor;
-	move(x, y);
+	try {
+		m_depth = depth;
+		m_defaultColor = defaultColor;
+		setGeometry(x, y, width, height);
 
-	if (qAlpha(defaultColor))
-		initTile();
-
-}
-
-KisTile::KisTile(const QPoint& parentPos, uint width, uint height, uchar bpp, const QRgb& defaultColor, bool dirty)
-{
-	Q_ASSERT(bpp <= 4);
-	m_cow = false;
-	m_dirty = dirty;
-	m_width = width;
-	m_height = height;
-	m_bpp = bpp;
-	m_data = 0;
-	m_defaultColor = defaultColor;
-	m_parentPos = parentPos;
-
-	if (qAlpha(defaultColor))
-		initTile();
+		if (qAlpha(defaultColor))
+			initTile();
+	}
+	catch (...) {
+		delete m_data;
+		throw;
+	}
 }
 
 KisTile::KisTile(const KisTile& tile) : KShared(tile)
 {
-	if (this != &tile)
-		copyTile(tile);
+	if (&tile != this)
+		copy(tile);
 }
 
 KisTile& KisTile::operator=(const KisTile& tile)
 {
-	if (this != &tile)
-		copyTile(tile);
+	if (&tile != this)
+		copy(tile);
 
 	return *this;
 }
 
 KisTile::~KisTile()
 {
-	delete[] m_data;
+	delete m_data;
 }
-	
-void KisTile::copyTile(const KisTile& tile)
+
+const KisPixelPacket* KisTile::getConstPixels(int x, int y, uint width, uint height) const
 {
-	m_dirty = tile.m_dirty;
-	m_width = tile.m_width;
-	m_height = tile.m_height;
-	m_bpp = tile.m_bpp;
+	if (!m_data)
+		return 0;
+
+	return static_cast<const KisPixelPacket*>(m_data -> getConstPixels(x, y, width, height));
+}
+
+const KisPixelPacket* KisTile::getConstPixels() const
+{
+	return getConstPixels(0, 0, m_geometry.width(), m_geometry.height());
+}
+
+KisPixelPacket* KisTile::getPixels(int x, int y, uint width, uint height)
+{
+	if (!m_data)
+		initTile();
+	
+	return static_cast<KisPixelPacket*>(m_data -> getPixels(x, y, width, height));
+}
+
+KisPixelPacket* KisTile::getPixels()
+{
+	return getPixels(0, 0, m_geometry.width(), m_geometry.height());
+}
+
+void KisTile::syncPixels()
+{
+	if (m_data)
+		m_data -> syncPixels();
+}
+
+void KisTile::modifyImage()
+{
+	if (m_data)
+		m_data -> modifyImage();
+}
+
+void KisTile::copy(const KisTile& tile)
+{
+	m_depth = tile.m_depth;
 	m_data = 0;
 	m_defaultColor = tile.m_defaultColor;
-	m_parentPos = tile.m_parentPos;
-	m_cow = false;
+	m_geometry = tile.m_geometry;
 
-	if (tile.m_data) {
-		m_data = new uchar[size()];
-		memcpy(m_data, tile.m_data, size());
-	}
+	if (tile.m_data)
+		m_data = new Image(*tile.m_data);
 }
 
-void KisTile::setDirty(bool dirty)
+void KisTile::clear()
 {
-	m_dirty = dirty;
-}
-
-uchar* KisTile::data()
-{
-	if (!m_data) {
-		m_data = new uchar[size()];
-		memset(m_data, 0, size());
-	}
-
-	return m_data;
-}
-
-void KisTile::initTile()
-{
-	m_data = new uchar[size()];
-	qFill(m_data, m_data + size(), m_defaultColor);
-	memset(m_data, rand() % 255, size());
+	m_depth = 0;
+	delete m_data;
+	m_data = 0;
+	m_defaultColor = 0;
+	setGeometry(0, 0, 0, 0);
 }
 
 void KisTile::move(int x, int y)
 {
-	m_parentPos.setX(x);
-	m_parentPos.setY(y);
+	m_geometry.moveBy(x, y);
 }
 
 void KisTile::move(const QPoint& parentPos)
 {
-	m_parentPos = parentPos;
+	m_geometry.moveBy(parentPos.x(), parentPos.y());
 }
 
-uchar *KisTile::data(int x, int y)
+QPoint KisTile::topLeft() const
 {
-	int offset = (y * width() + x) * bpp();
-
-	Q_ASSERT(data() <= data() + offset);
-	Q_ASSERT(data() + size() >= data() + offset);
-	return data() + offset;
+	return m_geometry.topLeft();
 }
 
-const uchar *KisTile::data(int x, int y) const
+QPoint KisTile::bottomRight() const
 {
-	int offset = (y * width() + x) * bpp();
+	return m_geometry.bottomRight();
+}
 
-	Q_ASSERT(data() <= data() + offset);
-	Q_ASSERT(data() + size() >= data() + offset);
-	return data() + offset;
+const QRect& KisTile::geometry() const
+{
+	return m_geometry;
+}
+
+void KisTile::setGeometry(int x, int y, int w, int h)
+{
+	m_geometry.setRect(x, y, w, h);
+}
+
+void KisTile::setGeometry(const QRect& rc)
+{
+	m_geometry = rc;
 }
 
 QImage KisTile::convertTileToImage()
 {
-	QImage img(width(), height(), bpp() * 8);
-	uchar *src = data();
-	uchar bytes = bpp();
+	if (!m_data)
+		return QImage();
 
-	for (int y = 0; y < TILE_SIZE; y++) {
-		uchar *dst = img.scanLine(y);
-
-		for (int x = TILE_SIZE; x; x--) {
-			memcpy(dst, src, bytes);
-			dst += bytes;
-			src += bytes;
-		}
-	}
+	return convertFromMagickImage(*m_data);
 }
 
 void KisTile::convertTileFromImage(const QImage& img)
 {
-	uchar *dst = data();
-	uchar bytes = bpp();
+	if (img.isNull())
+		return;
 
-	for (int y = 0; y < TILE_SIZE; y++) {
-		uchar *src = img.scanLine(y);
+	m_depth = img.depth();
+	m_defaultColor = 0;
+	setGeometry(0, 0, img.width(), img.height());
+	initTile();
+	*m_data = convertToMagickImage(img);
+}
 
-		for (int x = TILE_SIZE; x; x--) {
-			memcpy(dst, src, bytes);
-			dst += bytes;
-			src += bytes;
-		}
-	}
+void KisTile::initTile()
+{
+	delete m_data;
+	m_data = new Image(Geometry(m_geometry.width(), m_geometry.height()));
 }
 

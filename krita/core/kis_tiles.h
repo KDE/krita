@@ -43,7 +43,6 @@ public:
 	bool swapTile(uint x1, uint y1, uint x2, uint y2);
 
 	void markDirty(uint x, uint y);
-	bool isDirty(uint x, uint y);
 
 	void resize(uint width, uint height, uint bpp);
 
@@ -59,10 +58,10 @@ private:
 
 private:
 	KisTileSPLst m_tiles;
+	QRgb m_defaultColor;
 	uint m_xTiles;
 	uint m_yTiles;
 	uint m_bpp;
-	QRgb m_defaultColor;
 };
 
 uint KisTiles::xTiles() const

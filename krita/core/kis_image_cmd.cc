@@ -68,7 +68,7 @@ void KisImageCmd::addTile(KisTileSP tile)
 		KisTileSP tileCopy = new KisTile(*tile);
 
 		m_originalTiles.push_back(tileCopy);
-		tile -> setCow();
+		//tile -> setCow();
 		m_tiles.push_back(tile);
 	}
 }

@@ -275,9 +275,9 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 							  srcProfile,
 							  m_profile);
 			}
-			srcIter++;
-			dstIter++;
-			selIter++;
+			++srcIter;
+			++dstIter;
+			++selIter;
 		}
 	}
 }

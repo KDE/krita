@@ -135,7 +135,7 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 			img(x, y, 1) = d[1];
 			img(x, y, 2) = d[2];
 			++x;
-			srcIt++;
+			++srcIt;
 		}
 
 	}
@@ -174,8 +174,8 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 			d[1] = img(x, y, 1);
 			d[2] = img(x, y, 2);
 			++x;
-			dstIt++;
-			srcIt++;
+			++dstIt;
+			++srcIt;
 		}
 
 	}

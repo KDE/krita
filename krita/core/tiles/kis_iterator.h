@@ -50,10 +50,10 @@ public:
 	const Q_UINT8 * oldRawData() const { return ACTUAL_RECTITERATOR::oldRawData();};
 
 	/// Advances one pixel going to the beginning of the next line when it reaches the end of a line
-	KisRectIterator & operator++(int n) { ACTUAL_RECTITERATOR::operator++(n); return *this; };
+	KisRectIterator & operator++() { ACTUAL_RECTITERATOR::operator++(); return *this; };
 	
 	/// Goes back one pixel going to the end of the line above when it reaches the beginning of a line
-	KisRectIterator & operator--(int n) { ACTUAL_RECTITERATOR::operator--(n); return *this; };
+	//KisRectIterator & operator--() { ACTUAL_RECTITERATOR::operator--(); return *this; };
 	
 	/// returns true when iterators has reached the end
 	bool isDone()  const { return ACTUAL_RECTITERATOR::isDone(); };
@@ -80,7 +80,7 @@ public:
 	const Q_UINT8 *oldRawData() const { return ACTUAL_HLINEITERATOR::oldRawData();};
 
 	/// Advances one pixel until it reaches the end of the line
-	KisHLineIterator & operator++(int) { ACTUAL_HLINEITERATOR::operator++(); return *this; };
+	KisHLineIterator & operator++() { ACTUAL_HLINEITERATOR::operator++(); return *this; };
 	
 	/// Returns the number of consequtive horizontal pixels that we point at
 	/// This is useful for optimizing
@@ -90,7 +90,7 @@ public:
 	KisHLineIterator & operator+=(int n) { ACTUAL_HLINEITERATOR::operator+=(n); return *this; };
 	
 	/// Goes back one pixel until it reaches the beginning of the line
-	KisHLineIterator & operator--(int) { ACTUAL_HLINEITERATOR::operator--(); return *this; };
+	//KisHLineIterator & operator--() { ACTUAL_HLINEITERATOR::operator--(); return *this; };
 	
 	/// returns true when iterators has reached the end
 	bool isDone()  const { return ACTUAL_HLINEITERATOR::isDone(); };
@@ -119,10 +119,10 @@ public:
 	const Q_UINT8 * oldRawData() const { return ACTUAL_VLINEITERATOR::oldRawData();};
 
 	/// Advances one pixel until it reaches the end of the line
-	KisVLineIterator & operator++(int) { ACTUAL_VLINEITERATOR::operator++(); return *this; };
+	KisVLineIterator & operator++() { ACTUAL_VLINEITERATOR::operator++(); return *this; };
 	
 	/// Goes back one pixel until it reaches the beginning of the line
-	KisVLineIterator & operator--(int) { ACTUAL_VLINEITERATOR::operator--(); return *this; };
+	//KisVLineIterator & operator--() { ACTUAL_VLINEITERATOR::operator--(); return *this; };
 	
 	/// returns true when iterators has reached the end
 	bool isDone() const { return ACTUAL_VLINEITERATOR::isDone(); };

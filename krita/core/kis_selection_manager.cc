@@ -326,8 +326,8 @@ void KisSelectionManager::copy()
 		else
 			p.alpha() = p_alpha - s_alpha;
 
-		layerIt++;
- 		selectionIt++;
+		++layerIt;
+ 		++selectionIt;
 	}
 
 	selection -> invert(QRect(r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height()));
@@ -451,8 +451,8 @@ void KisSelectionManager::clear()
 		else
 			p.alpha() = p_alpha - s_alpha;
 
-		layerIt++;
- 		selectionIt++;
+		++layerIt;
+ 		++selectionIt;
 	}
 
 	layer -> removeSelection();

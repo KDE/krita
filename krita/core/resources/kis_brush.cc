@@ -236,7 +236,7 @@ KisLayerSP KisBrush::image(KisStrategyColorSpaceSP colorSpace, double pressure, 
 			QUANTUM a = (alpha * OPACITY_OPAQUE) / 255;
 
 			layer -> colorStrategy() -> nativeColor(colour, a, iter.rawData(), 0); // XXX: Do we need a profile here?
-			iter++;
+			++iter;
 		}
 	}
 

@@ -76,7 +76,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 			nd = (int)(((nd - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2);
 			dstIt[i] = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
 		}
-		srcIt++;
-		dstIt++;
+		++srcIt;
+		++dstIt;
 	}
 }

@@ -290,7 +290,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 					*(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
 
 					pp++;
-					hiter++;
+					++hiter;
 				}
 
 				emit notifyProgress(this, y * 100 / image->rows);
@@ -453,7 +453,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 				pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
 
 			pp++;
-			it++;
+			++it;
 		}
 
 		emit notifyProgressStage(this, i18n("Saving..."), y * 100 / height);

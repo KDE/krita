@@ -112,10 +112,12 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator+=(int n)
 	return *this;
 }
 
+/*
 KisTiledHLineIterator & KisTiledHLineIterator::operator -- ()
 {
 	return *this;
 }
+*/
 
 bool KisTiledHLineIterator::isDone() const
 {

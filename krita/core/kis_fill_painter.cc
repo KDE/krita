@@ -90,7 +90,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
 		while( ! hiter.isDone())
 		{
 			memcpy(hiter.rawData(), src, depth);
-			hiter++;
+			++hiter;
 		}
 	}
 }
@@ -218,8 +218,8 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
 		    opacity = (selectionOpacity * opacity) / QUANTUM_MAX;
 		    filled -> colorStrategy() -> nativeColor(c, opacity, line.rawData(), 0);
 		    ++m_pixelsDone;
-		    line++;
-		    selectionIt++;
+		    ++line;
+		    ++selectionIt;
 	    }
 	    int progressPercent = (m_pixelsDone * 100) / m_size;
 	    if (progressPercent > m_currentPercent) {
@@ -306,10 +306,15 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& 
 			// m_selection -> setSelected(x, y, diff);
 			colorStrategy -> nativeColor(selectionColor, diff, selection.rawData(), 0);
 			if (d == Right) {
-				it++; selection++;
+				++it; ++selection;
 				x++; most++;
 			} else {
+				//XXX: Iterator decrement has not been implemented
+				// for the tile iterators so this was broken. Add 
+				// decrement operators for this case. AP
+				/*
 				it--; selection--;
+				*/
 				x--; most--;
 			}
 		} else {

@@ -47,7 +47,7 @@ KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*
 			// a setDefaultBackground method to the data manager?
 			memcpy(hiter.rawData(), src, d);
 
-			hiter++;
+			++hiter;
 		}
 	}
 }

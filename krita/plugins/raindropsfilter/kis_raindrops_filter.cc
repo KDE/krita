@@ -88,7 +88,7 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 				    memcpy(hiter.rawData(), ptr , pixelSize);
 			}
 			ptr += pixelSize;
-			hiter++;
+			++hiter;
 		}
 	}
 

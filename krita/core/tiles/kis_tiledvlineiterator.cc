@@ -88,11 +88,12 @@ void KisTiledVLineIterator::nextTile()
 	}
 }
 
-
+/*
 KisTiledVLineIterator & KisTiledVLineIterator::operator -- ()
 {
 	return *this;
 }
+*/
 
 bool KisTiledVLineIterator::isDone() const
 {

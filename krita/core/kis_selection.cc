@@ -103,7 +103,7 @@ void KisSelection::invert(QRect rect)
 		// CBR this is wrong only first byte is inverted
 		// BSAR: But we have only one byte in this color model. 
 		*(it.rawData()) = QUANTUM_MAX - *(it.rawData());
-		it++;
+		++it;
 	}
 }
 

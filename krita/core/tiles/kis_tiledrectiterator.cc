@@ -69,7 +69,7 @@ KisTiledRectIterator::~KisTiledRectIterator( )
 {
 }
 
-KisTiledRectIterator & KisTiledRectIterator::operator ++ (int )
+KisTiledRectIterator & KisTiledRectIterator::operator ++ ()
 {
 	// advance through rect completing each tile before moving on
 	// as per excellent suggestion by Cyrille, avoiding excessive tile switching
@@ -141,11 +141,12 @@ void KisTiledRectIterator::nextTile()
 		m_rightInTile = KisTile::WIDTH - 1;
 }
 
-
-KisTiledRectIterator & KisTiledRectIterator::operator -- (int)
+/*
+KisTiledRectIterator & KisTiledRectIterator::operator -- ()
 {
 	return *this;
 }
+*/
 
 bool KisTiledRectIterator::isDone() const
 {

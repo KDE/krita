@@ -90,7 +90,7 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 				    memcpy(hiter.rawData(), ptr , pixelSize);
 			}
 			ptr += pixelSize;
-			hiter++;
+			++hiter;
 		}
 	}
 

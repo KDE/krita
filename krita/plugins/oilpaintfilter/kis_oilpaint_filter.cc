@@ -91,7 +91,7 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 				    memcpy(hiter.rawData(), ptr , pixelSize);
 			}
 			ptr += pixelSize;
-			hiter++;
+			++hiter;
 		}
 	}
 

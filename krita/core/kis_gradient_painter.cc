@@ -582,7 +582,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 					break;
 				}
 			}
-			iter++;
+			++iter;
 
 			if (m_cancelRequested) {
 				break;
@@ -691,7 +691,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 						break;
 					}
 				}
-				iter++;
+				++iter;
 			}
 
 			if (m_cancelRequested) {

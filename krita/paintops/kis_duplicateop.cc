@@ -137,7 +137,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 			}
 			dstPR.alpha() = ( dabPR.alpha() * srcPR.alpha() ) / QUANTUM_MAX;
 			*/
-			srcLit++; dabLit++; devLit++;
+			++srcLit; ++dabLit; ++devLit;
 		}
 		srcY++;
 	}

@@ -113,7 +113,7 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 				else dstData[ configPC->channel( i ) ] = d + s;
 			}
 		}
-		rectIt++;
+		++rectIt;
 	}
 }
 
@@ -140,7 +140,7 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 				dd = (QUANTUM)( QUANTUM_MAX * pow( ((float)sd)/QUANTUM_MAX, 1.0 / configPC->valueFor( i ) ) );
 			}
 		}
-		rectIt++;
+		++rectIt;
 	}
 }
 
@@ -178,7 +178,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 				maxvalue = histo[ lightness ];
 			}
 		}
-		rectIt++;
+		++rectIt;
 	}
 	Q_INT32 start;
 	for( start = 0; histo[start] < maxvalue * 0.1; start++) { /*kdDebug() << start << endl;*/ }
@@ -198,7 +198,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 				dstData[i] = (QUANTUM) QMIN ( QUANTUM_MAX, QMAX(0, (srcData[i] - start) * factor) );
 			}
 		}
-		rectIt++;
+		++rectIt;
 	}
 }
 
@@ -241,6 +241,6 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 			rectIt[2] = lightness;
 
 		}
-		rectIt++;
+		++rectIt;
 	}
 }

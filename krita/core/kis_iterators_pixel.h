@@ -36,7 +36,9 @@ class KisHLineIteratorPixel : public KisHLineIterator, public KisIteratorPixelTr
 {
 public:
     KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x , Q_INT32 y , Q_INT32 w, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
-	inline KisHLineIteratorPixel & operator ++(int n) { KisHLineIterator::operator++(n); advance(n); return *this;}
+
+    inline KisHLineIteratorPixel & operator ++() { KisHLineIterator::operator++(); advance(1); return *this;}
+
     Q_INT32 x() const { return KisHLineIterator::x() + m_offsetx; }
     Q_INT32 y() const { return KisHLineIterator::y() + m_offsety; }
 protected:
@@ -47,7 +49,9 @@ class KisVLineIteratorPixel : public KisVLineIterator, public KisIteratorPixelTr
 {
 public:
     KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 xpos , Q_INT32 ypos , Q_INT32 height, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
-	inline KisVLineIteratorPixel & operator ++(int n) { KisVLineIterator::operator++(n); advance(n); return *this;}
+
+    inline KisVLineIteratorPixel & operator ++() { KisVLineIterator::operator++(); advance(1); return *this;}
+
     Q_INT32 x() const { return KisVLineIterator::x() + m_offsetx; }
     Q_INT32 y() const { return KisVLineIterator::y() + m_offsety; }
 protected:
@@ -58,7 +62,9 @@ class KisRectIteratorPixel : public KisRectIterator, public KisIteratorPixelTrai
 {
 public:
     KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
-	inline KisRectIteratorPixel & operator ++(int n) { KisRectIterator::operator++(n); advance(n); return *this;}
+
+    inline KisRectIteratorPixel & operator ++() { KisRectIterator::operator++(); advance(1); return *this;}
+
     Q_INT32 x() const { return KisRectIterator::x() + m_offsetx; }
     Q_INT32 y() const { return KisRectIterator::y() + m_offsety; }
 protected:

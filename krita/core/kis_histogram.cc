@@ -81,7 +81,7 @@ void KisHistogram::computeHistogramFor(const KisChannelInfo & channel)
  					m_count++;
  				}
 			}
-			srcIt++;
+			++srcIt;
 		}
 	}
 	m_mean = total / m_count;

@@ -66,7 +66,7 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 						     mask -> alphaAt(x++, y),
 						     hiter.rawData(),
 						     profile);
-			hiter++;
+			++hiter;
 		}
 	}
 

@@ -140,7 +140,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 			KisPixel p = colorStrategy -> toKisPixel( hiter.rawData(), 0);
 			p.alpha() = alpha;
 
-			hiter++;
+			++hiter;
 		}
 	}
 

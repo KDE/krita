@@ -23,7 +23,25 @@
 #include <kparts/plugin.h>
 #include "kis_perchannel_filter.h"
 
+
 class KisView;
+
+
+class KisDesaturateFilter : public KisFilter {
+public:
+	KisDesaturateFilter();
+public:
+	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
+
+};
+
+class KisGammaCorrectionFilter : public KisPerChannelFilter {
+public:
+	KisGammaCorrectionFilter();
+public:
+	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
+
+};
 
 class KisColorAdjustementFilter : public KisPerChannelFilter {
 public:
@@ -35,16 +53,9 @@ public:
 
 class ColorsFilters : public KParts::Plugin
 {
-	Q_OBJECT
 public:
 	ColorsFilters(QObject *parent, const char *name, const QStringList &);
 	virtual ~ColorsFilters();
-	
-private slots:
-//         void slotColorActivated();
-	void slotBrightnessContrastActivated();
-	void slotGammaActivated();
-	void slotDesaturate();
 
 private:
 	KisView* m_view;

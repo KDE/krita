@@ -46,11 +46,8 @@
 
 // #include <kmessagebox.h>
 
-#include "formbcdialog.h"
-#include "formrgbsliders.h"
-#include "formcmybsliders.h"
-
-#include "colorsfilters.moc"
+#include "colorsfilters.h"
+#include "kis_brightness_contrast_filter.h"
 
 #define min(x,y) ((x)<(y)?(x):(y))
 
@@ -69,11 +66,14 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 		  << "\n";
 
 
-	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, this, SLOT(slotBrightnessContrastActivated()), actionCollection(), "brightnesscontrast");
-	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, this, SLOT(slotGammaActivated()), actionCollection(), "gammacorrection");
+	KisBrightnessContrastFilter* kbc = new KisBrightnessContrastFilter();
+	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, kbc, SLOT(slotActivated()), actionCollection(), "brightnesscontrast");
+	KisGammaCorrectionFilter* kgc = new KisGammaCorrectionFilter();
+	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, kgc, SLOT(slotActivated()), actionCollection(), "gammacorrection");
 	KisColorAdjustementFilter* kfca = new KisColorAdjustementFilter();
 	(void) new KAction(i18n("&Color Adjustment..."), 0, 0, kfca, SLOT(slotActivated()), actionCollection(), "coloradjustment");
-	(void) new KAction(i18n("&Desaturate"), 0, 0, this, SLOT(slotDesaturate()), actionCollection(), "desaturate");
+	KisDesaturateFilter* kdf = new KisDesaturateFilter();
+	(void) new KAction(i18n("&Desaturate"), 0, 0, kdf, SLOT(slotActivated()), actionCollection(), "desaturate");
 	if ( !parent->inherits("KisView") )
 	{
 		m_view = 0;
@@ -93,8 +93,8 @@ KisColorAdjustementFilter::KisColorAdjustementFilter() : KisPerChannelFilter("Co
 void KisColorAdjustementFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
 {
 	KisPerChannelFilterConfiguration* configPC = (KisPerChannelFilterConfiguration*) config;
-	KisIteratorLinePixel lineIt = device->iteratorPixelSelectionBegin(ktc);//, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel lastLine = device->iteratorPixelSelectionEnd(ktc);//, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
+	KisIteratorLinePixel lineIt = device->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
+	KisIteratorLinePixel lastLine = device->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
 	Q_INT32 depth = device->depth() - 1;
 	while( lineIt <= lastLine )
 	{
@@ -117,251 +117,62 @@ void KisColorAdjustementFilter::process(KisPaintDeviceSP device, KisFilterConfig
 	}
 }
 
-#if 0
-void ColorsFilters::slotColorActivated()
+KisGammaCorrectionFilter::KisGammaCorrectionFilter() : KisPerChannelFilter("Gamma adjustement", 1, 600, 1)
 {
-	KisLayerSP lay = m_view->currentImg()->activeLayer();
-	KisTileCommand* ktc = new KisTileCommand(i18n("Color adjustment"), (KisPaintDeviceSP)lay ); // Create a command
-	KisTileMgrSP ktm = lay->data();
-	KisTileSP tile;
-	if( lay->colorStrategy()->name() == "RGBA")
+}
+
+void KisGammaCorrectionFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
+{
+	KisPerChannelFilterConfiguration* configPC = (KisPerChannelFilterConfiguration*) config;
+	KisIteratorLinePixel lineIt = device->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
+	KisIteratorLinePixel lastLine = device->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
+	Q_INT32 depth = device->depth() - 1;
+	while( lineIt <= lastLine )
 	{
-		FormRGBSliders* frsd = new FormRGBSliders( m_view, "Color adjustment", TRUE);
-
-		frsd->setCaption(i18n("Color adjustment"));
-
-		frsd->setMinValue(-255);
-		frsd->setMaxValue(255);
-		frsd->setPrecision(1);
-		frsd->setInitValue(0);
-		if( frsd->exec() == QDialog::Rejected )
-			return;
-		int red = (int)frsd->getRedValue();
-		int green = (int)frsd->getGreenValue();
-		int blue = (int)frsd->getBlueValue();
-		for(unsigned int i = 0; i < ktm->nrows() * ktm->ncols(); i++)
+		KisIteratorPixel pixelIt = *lineIt;
+		KisIteratorPixel lastPixel = lineIt.end();
+		while( pixelIt <= lastPixel )
 		{
-			if( (tile = ktm->tile( i , TILEMODE_NONE)) )
+			KisPixelRepresentation data = pixelIt;
+			for( int i = 0; i < depth; i++)
 			{
-				ktc->addTile( i , tile);
+				KisQuantum d = pixelIt[ configPC->channel( i ) ];
+				d = ( QUANTUM_MAX * pow( ((float)d)/QUANTUM_MAX, 1.0 / configPC->valueFor( i ) ) );
 			}
-			if (!(tile = ktm->tile( i, TILEMODE_RW)))
-				continue;
-			QUANTUM *data = tile->data(0, 0);
-			// we compute the color inversion
-			// kdDebug() << lay->alpha() << (int)(lay->alpha()) << (1+lay->alpha()) << endl;
-			for( int j = 0; j < tile->size(); j += 1 ) //lay->alpha() )
-			{
-				data[j] = processColor( data[j], blue );
-				j ++;
-				data[j] = processColor( data[j], green );
-				j ++;
-				data[j] = processColor( data[j], red );
-				j ++;
-			}
+			++pixelIt;
 		}
-		m_view->currentImg()->undoAdapter()->addCommand( ktc );
-		m_view->currentImg()->notify();
-	} else if( lay->colorStrategy()->name() == "CMYKA") {
-		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Color adjustment", TRUE);
-		frsd->setCaption(i18n("Color adjustment"));
-		frsd->setMinValue(-255);
-		frsd->setMaxValue(255);
-		frsd->setPrecision(1);
-		frsd->setInitValue(0);
-		if( frsd->exec() == QDialog::Rejected )
-			return;
-		QUANTUM cyan = (QUANTUM)frsd->getCyanValue();
-		QUANTUM magenta = (QUANTUM)frsd->getMagentaValue();
-		QUANTUM yellow = (QUANTUM)frsd->getYellowValue();
-		QUANTUM black = (QUANTUM)frsd->getBlackValue();
-		for(unsigned int i = 0; i < ktm->nrows() * ktm->ncols(); i++)
-		{
-			if( (tile = ktm->tile( i , TILEMODE_NONE)) )
-			{
-				ktc->addTile( i , tile);
-			}
-			if (!(tile = ktm->tile( i, TILEMODE_RW)))
-				continue;
-			QUANTUM *data = tile->data(0, 0);
-			// we compute the color inversion
-			// kdDebug() << lay->alpha() << (int)(lay->alpha()) << (1+lay->alpha()) << endl;
-			for( int j = 0; j < tile->size(); j += 1 ) //lay->alpha() )
-			{
-				data[j] = processColor( data[j], cyan );
-				j ++;
-				data[j] = processColor( data[j], magenta );
-				j ++;
-				data[j] = processColor( data[j], yellow );
-				j ++;
-				data[j] = processColor( data[j], black );
-				j ++;
-			}
-		}
-		m_view->currentImg()->undoAdapter()->addCommand( ktc );
-		m_view->currentImg()->notify();
-	}
-}
-#endif
-
-void ColorsFilters::slotDesaturate()
-{
-	KisLayerSP lay = m_view->currentImg()->activeLayer();
-	KisTileCommand* ktc = new KisTileCommand("Desaturate", (KisPaintDeviceSP)lay ); // Create a command
-	if( lay->colorStrategy()->name() == "RGBA") {
-		KisIteratorLinePixel lineIt = lay->iteratorPixelSelectionBegin(ktc);
-		KisIteratorLinePixel lastLine = lay->iteratorPixelSelectionEnd(ktc);
-		while( lineIt <= lastLine )
-		{
-			KisIteratorPixel pixelIt = *lineIt;
-			KisIteratorPixel lastPixel = lineIt.end();
-			while( pixelIt <= lastPixel )
-			{
-				KisPixelRepresentation data = pixelIt;
-				/* I thought of using the HSV model, but GIMP seems to use
-				   HSL for desaturating. Better use the gimp model for now 
-				   (HSV produces a lighter image than HSL) */
-				Q_INT32 lightness = ( QMAX(QMAX(data[0], data[1]), data[2])
-				                    +QMIN(QMIN(data[0], data[1]), data[2])) / 2; 
-				data[0] = lightness;
-				data[1] = lightness;
-				data[2] = lightness;
-				++pixelIt;
-			}
-			++lineIt;
-		}
-		m_view->currentImg()->undoAdapter()->addCommand( ktc );
-		m_view->currentImg()->notify();
-	} else {
-		kdDebug() << "Colorsfilters: desaturate not yet supported for this type" << endl;
+		++lineIt;
 	}
 }
 
-void ColorsFilters::slotGammaActivated()
+KisDesaturateFilter::KisDesaturateFilter() : KisFilter("Desaturate")
 {
-	KisLayerSP lay = m_view->currentImg()->activeLayer();
-	KisTileCommand* ktc = new KisTileCommand(i18n("Gamma Correction"), (KisPaintDeviceSP)lay ); // Create a command
-	KisTileMgrSP ktm = lay->data();
-	KisTileSP tile;
-	if( lay->colorStrategy()->name() == "RGBA")
-	{
-		FormRGBSliders* frsd = new FormRGBSliders( m_view, "Gamma Correction", TRUE);
-		frsd->setCaption(i18n("Gamma Correction"));
-		frsd->setMinValue(1);
-		frsd->setMaxValue(600);
-		frsd->setPrecision(100);
-		frsd->setInitValue(1);
-		if( frsd->exec() == QDialog::Rejected )
-			return;
-		float red = frsd->getRedValue();
-		float green = frsd->getGreenValue();
-		float blue = frsd->getBlueValue();
-//		kdDebug() << "RGB" << red << " " << green << " " << blue << endl;
-		for(unsigned int i = 0; i < ktm->nrows() * ktm->ncols(); i++)
-		{
-			if( (tile = ktm->tile( i , TILEMODE_NONE)) )
-			{
-				ktc->addTile( i , tile);
-			}
-			if (!(tile = ktm->tile( i, TILEMODE_RW)))
-				continue;
-			QUANTUM *data = tile->data(0, 0);
-			// we compute the color inversion
-			// kdDebug() << lay->alpha() << (int)(lay->alpha()) << (1+lay->alpha()) << endl;
-			for( int j = 0; j < tile->size(); j += 1 ) //lay->alpha() )
-			{
-				data[j] = (QUANTUM)( QUANTUM_MAX * pow( ((float)data[j])/QUANTUM_MAX, 1.0 / blue ) );
-				j ++;
-				data[j] = (QUANTUM)( QUANTUM_MAX * pow( ((float)data[j])/QUANTUM_MAX, 1.0 / green ) );
-				j ++;
-				data[j] = (QUANTUM)( QUANTUM_MAX * pow( ((float)data[j])/QUANTUM_MAX, 1.0 / red ) );
-				j ++;
-			}
-		}
-		m_view->currentImg()->undoAdapter()->addCommand( ktc );
-		m_view->currentImg()->notify();
-	} else if( lay->colorStrategy()->name() == "CMYA") {
-		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Gamma Correction", TRUE);
-		frsd->setCaption(i18n("Gamma Correction"));
-		frsd->setMinValue(1);
-		frsd->setMaxValue(600);
-		frsd->setPrecision(100);
-		frsd->setInitValue(1);
-		if( frsd->exec() == QDialog::Rejected )
-			return;
-		float cyan = frsd->getCyanValue();
-		float magenta = frsd->getMagentaValue();
-		float yellow = frsd->getYellowValue();
-		float black = frsd->getBlackValue();
-		for(unsigned int i = 0; i < ktm->nrows() * ktm->ncols(); i++)
-		{
-			if( (tile = ktm->tile( i , TILEMODE_NONE)) )
-			{
-				ktc->addTile( i , tile);
-			}
-			if (!(tile = ktm->tile( i, TILEMODE_RW)))
-				continue;
-			QUANTUM *data = tile->data(0, 0);
-			// we compute the color inversion
-			// kdDebug() << lay->alpha() << (int)(lay->alpha()) << (1+lay->alpha()) << endl;
-			for( int j = 0; j < tile->size(); j += 1 ) //lay->alpha() )
-			{
-				data[j] = (QUANTUM)( QUANTUM_MAX * pow( ((float)data[j])/QUANTUM_MAX, 1.0 / cyan ) );
-				j ++;
-				data[j] = (QUANTUM)( QUANTUM_MAX * pow( ((float)data[j])/QUANTUM_MAX, 1.0 / magenta ) );
-				j ++;
-				data[j] = (QUANTUM)( QUANTUM_MAX * pow( ((float)data[j])/QUANTUM_MAX, 1.0 / yellow ) );
-				j ++;
-				data[j] = (QUANTUM)( QUANTUM_MAX * pow( ((float)data[j])/QUANTUM_MAX, 1.0 / black ) );
-				j ++;
-			}
-		}
-		m_view->currentImg()->undoAdapter()->addCommand( ktc );
-		m_view->currentImg()->notify();
-	}
 }
-void ColorsFilters::slotBrightnessContrastActivated()
+
+void KisDesaturateFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
 {
-	//Get the new values
-	FormBCDialog* fbcd = new FormBCDialog( m_view, "Brightness / Contrast", TRUE);
-	fbcd->setCaption(i18n("Brightness / Contrast"));
-	if( fbcd->exec() ==  QDialog::Rejected )
+	if(colorStrategy()->name() != "RGBA")
 		return;
-	int bright = fbcd->sliderBrightness->value();
-	int contrast = 100+fbcd->sliderContrast->value();
-	KisLayerSP lay = m_view->currentImg()->activeLayer();
-	KisTileCommand* ktc = new KisTileCommand(i18n("Brightness / Contrast"), (KisPaintDeviceSP)lay ); // Create a command
-	int nbchannel = lay->depth() - 1; // get the number of channel whithout alpha
-	KisTileMgrSP ktm = lay->data();
-	KisTileSP tile;
-	for(unsigned int i = 0; i < ktm->nrows() * ktm->ncols(); i++)
+	KisIteratorLinePixel lineIt = device->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
+	KisIteratorLinePixel lastLine = device->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
+	Q_INT32 depth = device->depth() - 1;
+	while( lineIt <= lastLine )
 	{
-		if( (tile = ktm->tile( i , TILEMODE_NONE)) )
+		KisIteratorPixel pixelIt = *lineIt;
+		KisIteratorPixel lastPixel = lineIt.end();
+		while( pixelIt <= lastPixel )
 		{
-			ktc->addTile( i , tile);
+			KisPixelRepresentation data = pixelIt;
+			/* I thought of using the HSV model, but GIMP seems to use
+					HSL for desaturating. Better use the gimp model for now 
+					(HSV produces a lighter image than HSL) */
+			Q_INT32 lightness = ( QMAX(QMAX(data[0], data[1]), data[2])
+													+ QMIN(QMIN(data[0], data[1]), data[2]) ) / 2; 
+			data[0] = lightness;
+			data[1] = lightness;
+			data[2] = lightness;
+			++pixelIt;
 		}
-		if (!(tile = ktm->tile( i, TILEMODE_RW)))
-			continue;
-		QUANTUM *data = tile->data(0, 0);
-//		kdDebug() << lay->alpha() << (int)(lay->alpha()) << (1+lay->alpha()) << endl;
-		for( int j = 0; j < tile->size(); j += 1 ) //lay->alpha() )
-		{
-			int end = j + nbchannel;
-			for( ; j < end ; j ++ )
-			{
-			// change the brightness
-				QUANTUM d = data[j];
-				if( d < -bright  ) d = 0;
-				else if( d > QUANTUM_MAX - bright ) d = QUANTUM_MAX;
-				else d += bright;
-			// change the contrast
-				int nd = d * contrast / 100;
-				if( nd > QUANTUM_MAX ) d = QUANTUM_MAX;
-				else d = nd;
-				data[j] = d ;
-			}
-		}
+		++lineIt;
 	}
-	m_view->currentImg()->undoAdapter()->addCommand( ktc );
-	m_view->currentImg()->notify();
 }

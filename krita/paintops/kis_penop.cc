@@ -89,13 +89,23 @@ void KisPenOp::paintAt(const KisPoint &pos,
 	}
 	
 	m_painter -> setPressure(pressure);
+	QRect dabRect = dab -> extent();
 
-	Q_INT32 dabWidth = dab -> extent().width();
-	Q_INT32 dabHeight = dab -> extent().height();
-
-	Q_ASSERT(dab -> extent().x() == 0);
-	Q_ASSERT(dab -> extent().y() == 0);
-
-	m_painter->bltSelection( x,  y,  m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), 0, 0, dabWidth, dabHeight);
-	m_painter->addDirtyRect(QRect(x, y, dabWidth, dabHeight));
+	Q_ASSERT(dabRect.x() == 0);
+	Q_ASSERT(dabRect.y() == 0);
+	
+	KisImage * image = device -> image();
+	
+	if (image != 0) {
+		QRect imageRect = image -> bounds();
+		if (x > imageRect.width()
+			|| y > imageRect.height()
+			|| x + dabRect.width() < 0
+			|| y < + dabRect.height() < 0) return;
+	}
+	
+	if (dabRect.isNull() || dabRect.isEmpty() || !dabRect.isValid()) return;
+	
+	m_painter -> bltSelection( x,  y,  m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), 0, 0, dabRect.width(), dabRect.height());
+	m_painter -> addDirtyRect(QRect(x, y, dabRect.width(), dabRect.height()));
 }

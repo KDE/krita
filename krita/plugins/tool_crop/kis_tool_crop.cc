@@ -340,7 +340,7 @@ void KisToolCrop::crop() {
 	if (((WdgToolCrop *)m_optWidget) -> cmbType -> currentItem() == 0) {
 		KisLayerSP layer = img -> activeLayer();
 		cropLayer(layer, rc);
-		layer -> move(rc.x(), rc.y());
+		//layer -> move(rc.x(), rc.y());
 		
 	}
 	else {
@@ -377,7 +377,7 @@ void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc)
 		 rc.width(),
 		 rc.height());
 	p.end();
-	
+
 	
 	p.begin(layer.data());
 	p.bitBlt(0, 0, COMPOSITE_COPY, tmp.data(), rc.x(), rc.y(), rc.width(), rc.height());
@@ -512,7 +512,6 @@ void KisToolCrop::cursor (Q_INT32 handle)
                 m_subject -> setCanvasCursor(KisCursor::moveCursor());
                 return;
         }
-        kdDebug() << "setCursor(KisCursor::selectCursor()) called" << endl;
         m_subject -> setCanvasCursor(KisCursor::selectCursor());
         return;
 }

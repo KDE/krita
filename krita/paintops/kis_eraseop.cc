@@ -98,6 +98,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 	Q_INT32 maskWidth = mask -> width();
 	Q_INT32 maskHeight = mask -> height();
 
+
 	if (device -> alpha()) {
 		dab -> setOpacity(OPACITY_OPAQUE);
 		for (int y = 0; y < maskHeight; y++) {
@@ -106,6 +107,23 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 				dab -> setPixel(x, y, m_painter -> paintColor(), QUANTUM_MAX - mask->alphaAt(x, y));
 			}
 		}
+		QRect dabRect = dab -> extent();
+
+		Q_ASSERT(dabRect.x() == 0);
+		Q_ASSERT(dabRect.y() == 0);
+	
+		KisImage * image = device -> image();
+	
+		if (image != 0) {
+			QRect imageRect = image -> bounds();
+				if (destX > imageRect.width()
+				|| destY > imageRect.height()
+				|| destX + dabRect.width() < 0
+				|| destY < + dabRect.height() < 0) return;
+		}
+	
+		if (dabRect.isNull() || dabRect.isEmpty() || !dabRect.isValid()) return;
+
 		m_painter -> bltSelection(destX, destY, COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, 0, 0, maskWidth, maskHeight);
 
  	} else {
@@ -115,6 +133,23 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 				dab -> setPixel(x, y, m_painter -> backgroundColor(), mask->alphaAt(x, y));
 			}
 		}
+				QRect dabRect = dab -> extent();
+
+		Q_ASSERT(dabRect.x() == 0);
+		Q_ASSERT(dabRect.y() == 0);
+	
+		KisImage * image = device -> image();
+	
+		if (image != 0) {
+			QRect imageRect = image -> bounds();
+				if (destX > imageRect.width()
+				|| destY > imageRect.height()
+				|| destX + dabRect.width() < 0
+				|| destY < + dabRect.height() < 0) return;
+		}
+	
+		if (dabRect.isNull() || dabRect.isEmpty() || !dabRect.isValid()) return;
+
 		m_painter -> bltSelection(destX, destY, COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE, 0, 0, maskWidth, maskHeight);
  	}
 

@@ -52,9 +52,20 @@ private:
 			   const Q_INT32 xtilt,
 			   const Q_INT32 ytilt);
 
+	virtual void initPaint();
+	virtual void endPaint();
+
 	enumBrushMode m_mode;
-	KMacroCommand *m_macro;
 	KisPainter *m_painter;
+
+	KisLayerSP m_dab;
+
+        Q_INT32 m_hotSpotX;
+        Q_INT32 m_hotSpotY;
+        Q_INT32 m_brushWidth;
+        Q_INT32 m_brushHeight;
+        Q_INT32 m_spacing;
+
 };
 #endif // KIS_TOOL_BRUSH_H_
 

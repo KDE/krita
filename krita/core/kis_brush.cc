@@ -37,6 +37,7 @@
 
 #include "kis_global.h"
 #include "kis_brush.h"
+#include "kis_alpha_mask.h"
 
 #define SPACING_DEFAULT 7
 
@@ -54,11 +55,13 @@ namespace {
 
 KisBrush::KisBrush(const QString& filename) : super(filename)
 {
+	m_mask = 0;
 	m_spacing = SPACING_DEFAULT;
 }
 
 KisBrush::~KisBrush()
 {
+	delete m_mask;
 }
 
 bool KisBrush::loadAsync()
@@ -77,12 +80,17 @@ bool KisBrush::saveAsync()
 
 QImage KisBrush::img() const
 {
-    return m_img;
+	return m_img;
+}
+
+KisAlphaMask *KisBrush::mask() const
+{
+	return m_mask;
 }
 
 QImage KisBrush::frame(Q_INT32) const
 {
-    return m_img;
+	return m_img;
 }
 
 void KisBrush::setHotSpot(QPoint pt)
@@ -174,13 +182,16 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		emit ioFailed(this);
 		return;
 	}
+	
+
 
 	k = bh.header_size;
 
 	if (bh.bytes == 1) {
+		// Grayscale
 		Q_INT32 val;
 
-		for (Q_UINT32 y = 0; y < bh.height; y++)
+		for (Q_UINT32 y = 0; y < bh.height; y++) {
 			for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
 				if (static_cast<Q_UINT32>(k) > m_data.size()) {
 					emit ioFailed(this);
@@ -190,16 +201,22 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 				val = 255 - m_data[k];
 				m_img.setPixel(x, y, qRgb(val, val, val));
 			}
+		}
 	} else if (bh.bytes == 4) {
-		for (Q_UINT32 y = 0; y < bh.height; y++)
+		// Has alpha
+		for (Q_UINT32 y = 0; y < bh.height; y++) {
 			for (Q_UINT32 x = 0; x < bh.width; x++) {
 				if (static_cast<Q_UINT32>(k + 4) > m_data.size()) {
 					emit ioFailed(this);
 					return;
 				}
 
-				m_img.setPixel(x, y, qRgba(255 - m_data[k++], 255 - m_data[k++], 255 - m_data[k++], 255 - m_data[k++]));
+				m_img.setPixel(x, y, qRgba(255 - m_data[k++],
+							   255 - m_data[k++], 
+							   255 - m_data[k++], 
+							   255 - m_data[k++]));
 			}
+		}
 	} else {
 		emit ioFailed(this);
 		return;
@@ -207,6 +224,8 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 
 	setWidth(m_img.width());
 	setHeight(m_img.height());
+	m_mask = new KisAlphaMask(m_img);
+	kdDebug() << "Brush: " << &name[0] << "\n";
 	setValid(true);
 	emit loadComplete(this);
 }

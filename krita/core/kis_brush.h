@@ -26,9 +26,11 @@
 #include <kio/job.h>
 #include "kis_krayon.h"
 #include "kis_resource.h"
+#include "kis_alpha_mask.h"
 
 class QPoint;
 class QPixmap;
+
 
 class KisBrush : public KisResource {
 	typedef KisResource super;
@@ -38,13 +40,22 @@ public:
 	KisBrush(const QString& filename);
 	virtual ~KisBrush();
 
-public:
 	virtual bool loadAsync();
 	virtual bool saveAsync();
 	virtual QImage img() const;
+
+	/**
+	   @return a mask computed from the grey-level values of the
+	   pixels in the brush. The 'normal' scaled version is constructed
+	   when the brush is created; XXX create a scaled version of the mask.
+	*/
+	virtual KisAlphaMask *mask() const;
+
+	// XXX: Obviously meant for animated brushes, but because the
+	// number of frames is not known, and there is no way to
+	// retrieve that, we cannot use this at the moment.
 	virtual QImage frame(Q_INT32 n) const;
 
-public:
 	void setSpacing(Q_INT32 s) { m_spacing = s; }
 	Q_INT32 spacing() const { return m_spacing; }
 	void setHotSpot(QPoint);
@@ -63,6 +74,8 @@ private:
 	Q_INT32 m_spacing;
 	QPoint m_hotSpot;
 	QImage m_img;
+	KisAlphaMask *m_mask;
+	
 };
 
 #endif // KIS_BRUSH_

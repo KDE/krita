@@ -24,7 +24,7 @@
 /**
    This struct offers access to the actual bytes with pixel data.
    
-   XXX: how about endianness, and is it 32-bit aligned
+   XXX: how about endianness, and is it 32-bit aligned?
 */
    
 struct KisPixelData : public KShared {

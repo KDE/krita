@@ -1,3 +1,16 @@
+01-01-2004
+	* The brushes now cache their alpha mask; made a start
+	(but it's going too slow) with adding hotspot, spacing
+	and in-betweening to kis_tool_brush. When that's done,
+	the brush is fine, and I'll start making a real fun 
+	paint tool.
+23-12-2003
+	* Added undo/redo to kis_tool_brush that seems to work
+	* Changed kispainter to not use KMacroCommands to aggregate
+   	  transactions.
+	* Removed silly test tools.
+xx-11-2003
+	* Added a semi-working brush tool
 14-10-2003
 	* Added support for QTabletEvents to the tools
 	* Added a silly test tool that puts red squares on the 

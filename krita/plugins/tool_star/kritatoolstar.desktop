@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Star tool
+Name[da]=Beskæringsværktøj
+Name[es]=Herramienta para recortar
+Name[et]=Kärpimistööriist
+Name[ga]=Uirlis bhearrtha
+Name[pt]=Ferramenta de recorte
+Name[pt_BR]=Ferramenta de recorte
+Name[ru]=Инструмент обрезки
+Name[sv]=Beskärningsverktyg
+Name[uk]=Засіб обрізання
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritatoolstar

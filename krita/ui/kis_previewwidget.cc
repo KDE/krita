@@ -47,7 +47,6 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
 	connect(pushButton1/*plus*/, SIGNAL(clicked()), this, SLOT(zoomIn()));
 	connect(pushButton2/*minus*/, SIGNAL(clicked()), this, SLOT(zoomOut()));
 	m_pos = QPoint(0,0);
-	m_moved = false;
 	m_zoom = 1;
 }
 
@@ -85,8 +84,8 @@ void KisPreviewWidget::slotSetPreview(KisLayerSP lay)
 void KisPreviewWidget::zoomIn() {
 	if (m_zoom * 1.5 < 8) {
 		m_zoom *= 1.5;
-		m_startDrag *= 1.5;
-		updateWidgets(m_startDrag);
+		clampDelta(m_pos);
+		updateWidgets(m_pos);
 		emit updated();
 	}
 }
@@ -94,14 +93,14 @@ void KisPreviewWidget::zoomIn() {
 void KisPreviewWidget::zoomOut() {
 	if (m_zoom / 1.5 > 1/8) {
 		m_zoom /= 1.5;
-		m_startDrag /= 1.5;
-		updateWidgets(m_startDrag);
+		clampDelta(m_pos);
+		updateWidgets(m_pos);
 		emit updated();
 	}
 }
 
 void KisPreviewWidget::slotRenewLayer() {
-	updateWidgets(m_startDrag);
+	updateWidgets(m_pos);
 }
 
 KisLayerSP KisPreviewWidget::getLayer()
@@ -124,23 +123,20 @@ void KisPreviewWidget::paintEvent(QPaintEvent*)
 
 void KisPreviewWidget::mousePressEvent(QMouseEvent * e)
 {
-	if(!m_moved) {
-		m_startDrag = e->pos();
-		m_moved = true;
-	} else {
-		m_startDrag = e->pos() - m_startDrag;
-	}
+	m_startDrag = QPoint(static_cast<int>(e->pos().x()/m_zoom),
+		static_cast<int>(e->pos().y()/m_zoom));
 }
 
 void KisPreviewWidget::mouseMoveEvent(QMouseEvent * e)
 {
 	if (! m_original || ! m_preview)
 		return;
-	QPoint delta = (e->pos() - m_startDrag); // m_zoom;
-	if (delta.x() > 0)
-		delta.rx() = 0;
-	if (delta.y() > 0)
-		delta.ry() = 0;
+
+	QPoint zoomedPos(static_cast<int>(e->pos().x()/m_zoom),
+		static_cast<int>(e->pos().y()/m_zoom));
+
+	QPoint delta = m_pos - (zoomedPos - m_startDrag);
+	clampDelta(delta);
 	updateWidgets(delta);
 	repaint();
 }
@@ -148,32 +144,42 @@ void KisPreviewWidget::mouseMoveEvent(QMouseEvent * e)
 void KisPreviewWidget::mouseReleaseEvent(QMouseEvent * e)
 {
 	mouseMoveEvent(e);
+	QPoint zoomedPos(static_cast<int>(e->pos().x()/m_zoom),
+		static_cast<int>(e->pos().y()/m_zoom));
+	m_pos -= zoomedPos - m_startDrag;
+	clampDelta(m_pos);
+
 	emit updated();
-	m_startDrag = e->pos() - m_startDrag;
-	if (m_startDrag.x() > 0)
-		m_startDrag.rx() = 0;
-	if (m_startDrag.y() > 0)
-		m_startDrag.ry() = 0;
 }
 
 void KisPreviewWidget::updateWidgets(QPoint delta)
 {
-
 	if (!m_layer) return;
 
 	KisPainter gc;
 	KisPaintDeviceSP pd(m_layer.data());
 
-	//delta *= m_zoom;
 	/* left */
 	gc.begin(layerNew1.data());
-	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, -delta.x(), -delta.y(), -1, -1);
+	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, delta.x(), delta.y(), -1, -1);
 	gc.end();
 
 	/* right */
 	gc.begin(layerNew2.data());
-	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, -delta.x(), -delta.y(), -1, -1);
+	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, delta.x(), delta.y(), -1, -1);
 	gc.end();
+}
+
+void KisPreviewWidget::clampDelta(QPoint& delta)
+{
+	if (delta.x() < 0)
+		delta.rx() = 0;
+	if (delta.y() < 0)
+		delta.ry() = 0;
+	if (delta.x() + SIZE / m_zoom >= m_layer -> width())
+		delta.rx() = m_layer -> width() - static_cast<int>(SIZE / m_zoom) - 1;
+	if (delta.y() + SIZE / m_zoom >= m_layer -> height())
+		delta.ry() = m_layer -> height() - static_cast<int>(SIZE / m_zoom) - 1;
 }
 
 void KisPreviewWidget::render(QPainter &painter, KisImageSP image, double zoomX, double zoomY)

@@ -58,7 +58,7 @@ public:
 	double getZoom() { return m_zoom; }
 
 	/** returns the 'vector' the image in the preview has been moved by. @see getZoom */
-	QPoint getPos() { return m_startDrag; }
+	QPoint getPos() { return m_pos; }
     
 
 public slots:
@@ -90,12 +90,12 @@ private:
 
 	void render(QPainter &painter, KisImageSP image, double zoomX, double zoomY);
 	void updateWidgets(QPoint delta);
+	void clampDelta(QPoint& delta);
 	KisLayerSP m_layer;
 	KisImageSP m_original, m_preview;
 	QPoint m_startDrag, m_pos;
 	KisUndoAdapter* m_undo;
 	KisLayerSP layerNew1 /*original image*/, layerNew2/*preview image*/;
-	bool m_moved;
 	double m_zoom;
 
 private slots:

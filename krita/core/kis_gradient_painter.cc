@@ -537,9 +537,9 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
 	int totalPixels = width * height;
 
-/*	if (antiAliasThreshold < 1 - DBL_EPSILON) {
+	if (antiAliasThreshold < 1 - DBL_EPSILON) {
 		totalPixels *= 2;
-	}*/
+	}
 
 	int pixelsProcessed = 0;
 	int lastProgressPercent = 0;
@@ -586,16 +586,14 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 			}
 		}
 	}
-#if 0
-	if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
 
-		KisLayerSP antiAliasedLayer = new KisLayer(*layer);
+	if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
 
 		emit notifyProgressStage(this, i18n("Anti-aliasing gradient..."), lastProgressPercent);
 
-		//QImage distanceImage(layer -> width(), layer -> height(), 32);
 
 		for (int y = starty; y < height; y++) {
+			KisHLineIterator iter = layer -> createHLineIterator( startx, y, width, true);
 			for (int x = startx; x < width; x++) {
 
 				double maxDistance = 0;
@@ -603,7 +601,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 				QColor thisPixel;
 				QUANTUM thisPixelOpacity;
 
-				layer -> pixel(x, y, &thisPixel, &thisPixelOpacity);
+				layer -> colorStrategy() -> toQColor((QUANTUM*) iter, &thisPixel, &thisPixelOpacity);
 
 				for (int yOffset = -1; yOffset < 2; yOffset++) {
 					for (int xOffset = -1; xOffset < 2; xOffset++) {
@@ -633,9 +631,6 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 						}
 					}
 				}
-
-				//int distCol = (int)(maxDistance * 255 + 0.5);
-				//distanceImage.setPixel(x, y, qRgb(distCol, distCol, distCol));
 
 				if (maxDistance > antiAliasThreshold) {
 					const int numSamples = 4;
@@ -679,7 +674,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
 					QColor color(red, green,  blue);
 
-					antiAliasedLayer ->setPixel(x, y, color, opacity);
+					layer -> colorStrategy() -> nativeColor( color, opacity, (QUANTUM*)iter);
 				}
 
 				pixelsProcessed++;
@@ -694,16 +689,15 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 						break;
 					}
 				}
+				iter++;
 			}
 
 			if (m_cancelRequested) {
 				break;
 			}
 		}
-
-		layer = antiAliasedLayer;
 	}
-#endif
+
 	if (!m_cancelRequested) {
 		if (m_device -> hasSelection()) {
 			// apply mask...

@@ -423,18 +423,18 @@ void KisView::setupActions()
 	(void)KStdAction::cut(this, SLOT(cut()), actionCollection(), "cut");
 	(void)KStdAction::copy(this, SLOT(copy()), actionCollection(), "copy");
 	(void)KStdAction::paste(this, SLOT(paste()), actionCollection(), "paste_special");
-	(void)new KAction(i18n("Remove selection"), "remove", 0, this, SLOT(removeSelection()), actionCollection(), "remove");
+	(void)new KAction(i18n("Remove Selection"), "remove", 0, this, SLOT(removeSelection()), actionCollection(), "remove");
 	(void)new KAction(i18n("Copy Selection to new Layer"), "crop", 0,  this, SLOT(crop()), actionCollection(), "crop");
 	(void)KStdAction::selectAll(this, SLOT(selectAll()), actionCollection(), "select_all");
 	(void)new KAction(i18n("Select None"), 0, this, SLOT(unSelectAll()), actionCollection(), "select_none");
 
 	// import/export actions
-	(void)new KAction(i18n("Import Image"), "wizard", 0, this, SLOT(import_image()), actionCollection(), "import_image");
-	(void)new KAction(i18n("Export Image"), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
+	(void)new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(import_image()), actionCollection(), "import_image");
+	(void)new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
 
 	// view actions
-	(void)new KAction(i18n("Zoom &in"), "viewmag+", 0, this, SLOT(zoom_in()), actionCollection(), "zoom_in");
-	(void)new KAction(i18n("Zoom &out"), "viewmag-", 0, this, SLOT(zoom_out()), actionCollection(), "zoom_out");
+	(void)new KAction(i18n("Zoom &In"), "viewmag+", 0, this, SLOT(zoom_in()), actionCollection(), "zoom_in");
+	(void)new KAction(i18n("Zoom &Out"), "viewmag-", 0, this, SLOT(zoom_out()), actionCollection(), "zoom_out");
 
 	// tool settings actions
 	(void)new KAction(i18n("&Gradient Dialog"), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
@@ -445,11 +445,11 @@ void KisView::setupActions()
 
 	// layer actions
 	(void)new KAction(i18n("&Add Layer..."), 0, this, SLOT(slotLayerAdd()), actionCollection(), "insert_layer");
-	(void)new KAction(i18n("&Remove Layer..."), 0, this, SLOT(remove_layer()), actionCollection(), "remove_layer");
-	(void)new KAction(i18n("&Link/Unlink Layer..."), 0, this, SLOT(link_layer()), actionCollection(), "link_layer");
-	(void)new KAction(i18n("&Hide/Show layer..."), 0, this, SLOT(hide_layer()), actionCollection(), "hide_layer");
-	(void)new KAction(i18n("&Next Layer..."), "forward", 0, this, SLOT(next_layer()), actionCollection(), "next_layer");
-	(void)new KAction(i18n("&Previous Layer..."), "back", 0, this, SLOT(previous_layer()), actionCollection(), "previous_layer");
+	(void)new KAction(i18n("&Remove Layer"), 0, this, SLOT(remove_layer()), actionCollection(), "remove_layer");
+	(void)new KAction(i18n("&Link/Unlink Layer"), 0, this, SLOT(link_layer()), actionCollection(), "link_layer");
+	(void)new KAction(i18n("&Hide/Show Layer"), 0, this, SLOT(hide_layer()), actionCollection(), "hide_layer");
+	(void)new KAction(i18n("&Next Layer"), "forward", 0, this, SLOT(next_layer()), actionCollection(), "next_layer");
+	(void)new KAction(i18n("&Previous Layer"), "back", 0, this, SLOT(previous_layer()), actionCollection(), "previous_layer");
 	(void)new KAction(i18n("Layer Properties..."), 0, this, SLOT(layer_properties()), actionCollection(), "layer_properties");
 	(void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(insert_image_as_layer()), actionCollection(), "insert_image_as_layer");
 	(void)new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(save_layer_as_image()), actionCollection(), "save_layer_as_image");
@@ -465,7 +465,7 @@ void KisView::setupActions()
 	(void)new KAction(i18n("Mirror &Y"), 0, this, SLOT(layer_mirrorY()), actionCollection(), "layer_mirrorY");
 
 	// image actions
-	(void)new KAction(i18n("Add new Image"), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
+	(void)new KAction(i18n("Add new Image..."), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
 	(void)new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
 	(void)new KAction(i18n("Merge &All Layers"), 0, this, SLOT(merge_all_layers()), actionCollection(), "merge_all_layers");
 	(void)new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(merge_visible_layers()), actionCollection(), "merge_visible_layers");

@@ -49,14 +49,14 @@ NewLayerDialog::NewLayerDialog( QWidget *parent, const char *name )
 
     m_width = new QSpinBox( 1, MAXIMAGEWIDTH, 10, this );
     m_width->setValue( INITIALWIDTH );
-    QLabel* wlabel = new QLabel( m_width, i18n("W&idth"), this );
+    QLabel* wlabel = new QLabel( m_width, i18n("W&idth:"), this );
 
     grid->addWidget( wlabel, 0, 0 );
     grid->addWidget( m_width, 0, 1 );
 
     m_height = new QSpinBox( 1, MAXIMAGEHEIGHT, 10, this );
     m_height->setValue( INITIALHEIGHT );
-    QLabel* hlabel = new QLabel( m_height, i18n("&Height"), this );
+    QLabel* hlabel = new QLabel( m_height, i18n("&Height:"), this );
 
     grid->addWidget( hlabel, 1, 0 );
     grid->addWidget( m_height, 1, 1 );

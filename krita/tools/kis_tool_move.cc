@@ -30,7 +30,7 @@
 
 #if 0
 MoveCommand::MoveCommand(KisDoc *doc, int layer, const QPoint& oldpos, const QPoint& newpos)
-  : KisCommand(i18n("Move layer"), doc)
+  : KisCommand(i18n("Move Layer"), doc)
 {
 	m_layer = layer;
 	m_oldPos = oldpos;

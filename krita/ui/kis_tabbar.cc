@@ -339,9 +339,9 @@ void KisTabBar::openPopupMenu( const QPoint &_global )
     if ( m_pPopupMenu != 0L )  delete m_pPopupMenu;
     m_pPopupMenu = new QPopupMenu();
 
-    m_pPopupMenu->insertItem( i18n( "Rename image" ), this, SLOT( slotRename() ) );
-    m_pPopupMenu->insertItem( i18n( "Remove image" ), this, SLOT( slotRemove() ) );
-    m_pPopupMenu->insertItem( i18n( "New image" ), this, SLOT( slotAdd() ) );
+    m_pPopupMenu->insertItem( i18n( "Rename Image" ), this, SLOT( slotRename() ) );
+    m_pPopupMenu->insertItem( i18n( "Remove Image" ), this, SLOT( slotRemove() ) );
+    m_pPopupMenu->insertItem( i18n( "New Image" ), this, SLOT( slotAdd() ) );
     m_pPopupMenu->popup( _global );
 }
 

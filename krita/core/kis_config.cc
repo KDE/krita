@@ -111,8 +111,8 @@ void KisConfig::initStatic()
     (void) m_blendList.append( i18n("Difference") );
     (void) m_blendList.append( i18n("Addition") );
     (void) m_blendList.append( i18n("Subtract") );
-    (void) m_blendList.append( i18n("Darken only") );
-    (void) m_blendList.append( i18n("Lighten only") );
+    (void) m_blendList.append( i18n("Darken Only") );
+    (void) m_blendList.append( i18n("Lighten Only") );
     (void) m_blendList.append( i18n("Hue") );
     (void) m_blendList.append( i18n("Saturation") );
     (void) m_blendList.append( i18n("Color") );

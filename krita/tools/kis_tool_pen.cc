@@ -110,7 +110,7 @@ void PenTool::mousePress(QMouseEvent *e)
 		m_dragdist = 0;
 
 		Q_ASSERT(m_cmd == 0);
-		m_cmd = new KisImageCmd(i18n("Pen stroke"), img, device);
+		m_cmd = new KisImageCmd(i18n("Pen Stroke"), img, device);
 
 		if (paint(pos))
 			img -> markDirty(QRect(pos - m_brush -> hotSpot(), m_brush -> size()));

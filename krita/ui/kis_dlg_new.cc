@@ -45,14 +45,14 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
 
     iwidth = new QSpinBox( 1, MAXIMAGEWIDTH, 10, this );
     iwidth->setValue( INITIALWIDTH );
-    QLabel* wlabel = new QLabel( iwidth, i18n("W&idth"), this );
+    QLabel* wlabel = new QLabel( iwidth, i18n("W&idth:"), this );
 
     grid->addWidget( wlabel, 0, 0 );
     grid->addWidget( iwidth, 0, 1 );
 
     iheight = new QSpinBox( 1, MAXIMAGEHEIGHT, 10, this );
     iheight->setValue( INITIALHEIGHT );
-    QLabel* hlabel = new QLabel( iheight, i18n("&Height"), this );
+    QLabel* hlabel = new QLabel( iheight, i18n("&Height:"), this );
 
     grid->addWidget( hlabel, 1, 0 );
     grid->addWidget( iheight, 1, 1 );
@@ -85,8 +85,8 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
     ground->setExclusive( TRUE );
 
     // insert radiobuttons
-    bground[bm_BackgroundColor] = new QRadioButton( i18n("&Background Color"), ground );
-    bground[bm_ForegroundColor] = new QRadioButton( i18n("&Foreground Color"), ground );
+    bground[bm_BackgroundColor] = new QRadioButton( i18n("&Background color"), ground );
+    bground[bm_ForegroundColor] = new QRadioButton( i18n("&Foreground color"), ground );
     bground[bm_White] = new QRadioButton( i18n("&White"), ground );
     bground[bm_White]->setChecked( true );
     bground[bm_Transparent] = new QRadioButton( i18n("&Transparent"), ground );

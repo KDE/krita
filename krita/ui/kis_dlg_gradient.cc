@@ -55,18 +55,18 @@ GradientTab::GradientTab( KisGradient *_gradient,
     layout->addWidget( opacity, 0, 1 );
 
     QLabel *lblOpacity = new QLabel( opacity, 
-        i18n( "Opacity" ), area );
+        i18n( "Opacity:" ), area );
     layout->addWidget( lblOpacity, 0, 0 );
 
     // offset percentage - foreground/background
-    offset = new IntegerWidget( 0, 100, 
+    offset = new IntegerWidget( 0, 100,
         area, "offset" );
     offset->setTickmarks( QSlider::Below );
     offset->setTickInterval( 10 );
     layout->addWidget( offset, 1, 1 );
 
-    QLabel *lblOffset = new QLabel( offset, 
-        i18n( "Offset" ), area );
+    QLabel *lblOffset = new QLabel( offset,
+        i18n( "Offset:" ), area );
     layout->addWidget( lblOffset, 1, 0 );
 
     // mode - how the gradient blends with the layer
@@ -74,8 +74,8 @@ GradientTab::GradientTab( KisGradient *_gradient,
     mode = new BlendChooser( area );
     layout->addWidget( mode, 2, 1 );
 
-    QLabel *lblMode = new QLabel( mode, 
-        i18n( "Mode" ), area );
+    QLabel *lblMode = new QLabel( mode,
+        i18n( "Mode:" ), area );
     layout->addWidget( lblMode, 2, 0 );
 
     // blend - how the foregroud and background
@@ -87,18 +87,18 @@ GradientTab::GradientTab( KisGradient *_gradient,
     blend->insertItem( i18n( "Custom (from editor)" ) );
     layout->addWidget( blend, 3, 1 );
 
-    QLabel *lblBlend = new QLabel( blend, 
-        i18n( "Blend" ), area );
+    QLabel *lblBlend = new QLabel( blend,
+        i18n( "Blend:" ), area );
     layout->addWidget( lblBlend, 3, 0 );
 
     // gradient types - from kimageeffects
-        
-    /* enum GradientType 
+
+    /* enum GradientType
     { VerticalGradient, HorizontalGradient,
       DiagonalGradient, CrossDiagonalGradient,
       PyramidGradient, RectangleGradient,
       PipeCrossGradient, EllipticGradient }; */
-    
+
     gradient = new QComboBox( false, area );
     gradient->insertItem( i18n( "Vertical" ) );
     gradient->insertItem( i18n( "Horizontal" ) );
@@ -111,14 +111,14 @@ GradientTab::GradientTab( KisGradient *_gradient,
     //gradient->insertItem( i18n( "Shapeburst (angular)" ) );
     //gradient->insertItem( i18n( "Shapeburst (spherical)" ) );
     //gradient->insertItem( i18n( "Shapeburst (dimpled)" ) );
-    
+
     // set to existing gradient effect type
     gradient->setCurrentItem(static_cast<int>(_gradient->gradientType()));
-    
+
     layout->addWidget( gradient, 4, 1 );
 
-    QLabel *lblGradient = new QLabel( gradient, 
-        i18n( "Gradient" ), area );
+    QLabel *lblGradient = new QLabel( gradient,
+        i18n( "Gradient:" ), area );
     layout->addWidget( lblGradient, 4, 0 );
 
     // repeat - periodicy
@@ -128,25 +128,25 @@ GradientTab::GradientTab( KisGradient *_gradient,
     repeat->insertItem( i18n( "Triangular Wave" ) );
     layout->addWidget( repeat, 5, 1 );
 
-    QLabel *lblRepeat= new QLabel( repeat, 
-        i18n( "Repeat" ), area );
+    QLabel *lblRepeat= new QLabel( repeat,
+        i18n( "Repeat:" ), area );
     layout->addWidget( lblRepeat, 5, 0 );
 
     layout->setColStretch( 1, 1 );
     layout->setRowStretch( 6, 1 );
-  
+
     opacity->setMinimumWidth(gradient->sizeHint().width());
 }
 
-int GradientTab::gradientOpacity()   { return opacity->value(); } 
-int GradientTab::gradientOffset()    { return offset->value(); } 
+int GradientTab::gradientOpacity()   { return opacity->value(); }
+int GradientTab::gradientOffset()    { return offset->value(); }
 int GradientTab::gradientMode()      { return mode->currentItem(); }
-int GradientTab::gradientBlend()     { return blend->currentItem(); } 
-int GradientTab::gradientType()      { return gradient->currentItem(); } 
+int GradientTab::gradientBlend()     { return blend->currentItem(); }
+int GradientTab::gradientType()      { return gradient->currentItem(); }
 int GradientTab::gradientRepeat()    { return repeat->currentItem(); }
 
 GradientDialog::GradientDialog( KisGradient *_gradient,
-    QWidget *_parent,  const char *_name, bool _modal) 
+    QWidget *_parent,  const char *_name, bool _modal)
     : KDialog( _parent, _name, _modal)
 {
     setCaption( i18n( "Gradients Options" ) );
@@ -177,5 +177,5 @@ GradientDialog::GradientDialog( KisGradient *_gradient,
    
     resize(1,1);
 }
- 
+
 #include "kis_dlg_gradient.moc"

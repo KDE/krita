@@ -77,7 +77,7 @@ DirectoriesTab::DirectoriesTab( QWidget *_parent, const char *_name )
   grid->addWidget( m_pLineEdit, 1, 0 );
 
   // Label
-  label = new QLabel( this, i18n( "Directory for temporary files" ) , this );
+  label = new QLabel( this, i18n( "Directory for temporary files:" ) , this );
   grid->addWidget( label, 0, 0 );
 
   // Inputline
@@ -87,7 +87,7 @@ DirectoriesTab::DirectoriesTab( QWidget *_parent, const char *_name )
   grid->addWidget( m_pGimpGradients, 3, 0 );
 
   // Label
-  label = new QLabel( this, i18n( "Directory of GIMP gradients" ) , this );
+  label = new QLabel( this, i18n( "Directory of GIMP gradients:" ) , this );
   grid->addWidget( label, 2, 0 );
 
   grid->setRowStretch( 4, 1 );

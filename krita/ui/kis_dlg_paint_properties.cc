@@ -42,7 +42,7 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, int opacity,
 	m_name = new KLineEdit(deviceName, this);
 	layout -> addWidget(m_name, 0, 1);
 
-	lbl = new QLabel( m_name, i18n("Name"), this);
+	lbl = new QLabel( m_name, i18n("Name:"), this);
 	layout -> addWidget(lbl, 0, 0);
 
 	m_opacity = new IntegerWidget(0, 100, this);
@@ -51,7 +51,7 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, int opacity,
 	m_opacity -> setTickInterval(13);
 	layout -> addWidget(m_opacity, 1, 1);
 
-	lbl = new QLabel(m_opacity, i18n("Opacity"), this);
+	lbl = new QLabel(m_opacity, i18n("Opacity:"), this);
 	layout -> addWidget(lbl, 1, 0);
 	layout -> setRowStretch(2, 1);
 

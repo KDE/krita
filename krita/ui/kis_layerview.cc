@@ -202,7 +202,7 @@ void LayerTable::init( KisDoc* doc)
 
     m_contextmenu->insertSeparator();
 
-    m_contextmenu->insertItem( i18n( "Add Layer" ), ADDLAYER );
+    m_contextmenu->insertItem( i18n( "Add Layer..." ), ADDLAYER );
     m_contextmenu->insertItem( i18n( "Remove Layer"), REMOVELAYER );
     m_contextmenu->insertItem( i18n( "Add Mask" ), ADDMASK );
     m_contextmenu->insertItem( i18n( "Remove Mask"), REMOVEMASK );

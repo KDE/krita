@@ -348,14 +348,25 @@ KisPixelDataSP KisTileMgr::pixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32
 	pd -> y2 = y2;
 	pd -> width = x2 - x1 + 1;
 	pd -> height = y2 - y1 + 1;
+	pd -> data = 0;
 	pd -> depth = depth();
-	pd -> tile = 0;
-	pd -> data = new QUANTUM[pd -> width * pd -> height * depth()];
-	pd -> stride = depth() * pd -> width;
-	pd -> owner = true;
 
-	if (mode & TILEMODE_READ)
-		readPixelData(pd);
+	if (tilenum1 == tilenum2 && (x1 % TILE_WIDTH) == 0 && (y1 % TILE_HEIGHT) == 0) {
+		KisTileSP t = tile(tilenum1, mode);
+
+		pd -> tile = t;
+		pd -> data = t -> data();
+		pd -> stride = t -> depth() * t -> width();
+		pd -> owner = false;
+	} else {
+		pd -> tile = 0;
+		pd -> data = new QUANTUM[pd -> width * pd -> height * depth()];
+		pd -> stride = depth() * pd -> width;
+		pd -> owner = true;
+
+		if (mode & TILEMODE_READ)
+			readPixelData(pd);
+	}
 
 	return pd;
 }

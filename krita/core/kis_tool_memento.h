@@ -22,6 +22,9 @@
 #include "kis_types.h"
 
 class KisToolMemento : public KShared {
+public:
+	KisToolMemento();
+	virtual ~KisToolMemento();
 };
 
 #endif // KIS_TOOL_MEMENTO_H_

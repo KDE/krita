@@ -19,111 +19,25 @@
 #define KIS_RECT_H_
 
 #include <qrect.h>
-
+#include <koRect.h>
 #include "kis_point.h"
 
-class KisRect
+class KisRect : public KoRect
 {
+	typedef KoRect super;
 public:
-	KisRect();
-	KisRect(double x, double y, double w, double h);
-	KisRect(const QRect& qr);
-
-	void setX(double x);
-	void setY(double y);
-	void setWidth(double w);
-	void setHeight(double h);
-
-	double x() const;
-	double y() const;
-	double width() const;
-	double height() const;
-
-	bool isNull() const;
+	KisRect() {}
+	KisRect(double x, double y, double w, double h) : super(x, y, w, h) {}
+	KisRect(const KisPoint& topLeft, const KisPoint& bottomRight) : super(topLeft, bottomRight) {}
+	KisRect(const QRect& qr) : super(qr.x(), qr.y(), qr.width(), qr.height()) {}
 
 	QRect qRect() const;
 
 private:
-	double m_x1;
-	double m_y1;
-	double m_x2;
-	double m_y2;
+	// Use qRect() which uses ceil() and floor() to return a rectangle 
+	// 'enclosing' the rectangle, whereas toQRect rounds the points.
+	QRect toQRect() const;
 };
-
-inline
-KisRect::KisRect()
-{
-	m_x1 = 0;
-	m_y1 = 0;
-	m_x2 = 0;
-	m_y2 = 0;
-}
-
-inline
-KisRect::KisRect(double x, double y, double w, double h)
-{
-	m_x1 = x;
-	m_y1 = y;
-	m_x2 = x + w;
-	m_y2 = y + h;
-}
-
-inline
-KisRect::KisRect(const QRect& qr)
-{
-	m_x1 = qr.x();
-	m_y1 = qr.y();
-	m_x2 = qr.x() + qr.width();
-	m_y2 = qr.y() + qr.height();
-}
-
-inline
-void KisRect::setX(double x)
-{
-	m_x1 = x;
-}
-
-inline
-void KisRect::setY(double y)
-{
-	m_y1 = y;
-}
-
-inline
-void KisRect::setWidth(double w)
-{
-	m_x2 = m_x1 + w;
-}
-
-inline
-void KisRect::setHeight(double h)
-{
-	m_y2 = m_y1 + h;
-}
-
-inline
-double KisRect::x() const
-{
-	return m_x1;
-}
-
-inline
-double KisRect::y() const
-{
-	return m_y1;
-}
-
-inline
-double KisRect::width() const
-{
-	return m_x2 - m_x1;
-}
-
-inline
-double KisRect::height() const
-{
-	return m_y2 - m_y1;
-}
 
 #endif // KIS_RECT_H_
 

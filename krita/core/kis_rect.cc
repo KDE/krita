@@ -21,13 +21,8 @@
 
 #include "kis_rect.h"
 
-bool KisRect::isNull() const
-{
-	return width() < DBL_EPSILON || height() < DBL_EPSILON;
-}
-
 QRect KisRect::qRect() const
 {
-	return QRect(static_cast<int>(floor(m_x1)), static_cast<int>(floor(m_y1)), static_cast<int>(ceil(m_x2) - floor(m_x1)), static_cast<int>(ceil(m_y2) - floor(m_y1)));
+	return QRect(static_cast<int>(floor(left())), static_cast<int>(floor(top())), static_cast<int>(ceil(right()) - floor(left())), static_cast<int>(ceil(bottom()) - floor(top())));
 }
 

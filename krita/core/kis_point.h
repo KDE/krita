@@ -18,13 +18,14 @@
 #if !defined KIS_POINT_H_
 #define KIS_POINT_H_
 
-#include "kis_vec.h"
+#include <koPoint.h>
 
-class KisPoint : public KisVector2D {
-	typedef KisVector2D super;
+class KisPoint : public KoPoint {
+	typedef KoPoint super;
 public:
 	KisPoint() {}
-	KisPoint(double x, double y) : KisVector2D(x, y) {}
+	KisPoint(double x, double y) : super(x, y) {}
+	KisPoint(const QPoint& pt) : super(pt) {}
 };
 
 #endif // KIS_POINT_H_

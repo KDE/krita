@@ -635,19 +635,7 @@ void KisView::paintView(const KisRect& r)
 	if (img) {
 
 		KisRect vr = windowToView(r);
-		//vr &= QRect(0, 0, m_canvas -> width(), m_canvas -> height());
-		if (vr.x() < 0) {
-			vr.setX(0);
-		}
-		if (vr.width() > m_canvas -> width()) {
-			vr.setWidth(m_canvas -> width());
-		}
-		if (vr.y() < 0) {
-			vr.setY(0);
-		}
-		if (vr.height() > m_canvas -> height()) {
-			vr.setHeight(m_canvas -> height());
-		}
+		vr &= KisRect(0, 0, m_canvas -> width(), m_canvas -> height());
 
 		if (!vr.isNull()) {
 

@@ -101,8 +101,10 @@ KisListBoxView::KisListBoxView(const QString& label, flags f, QWidget *parent, c
 	connect(m_contextMnu, SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
 	connect(mnu, SIGNAL(activated(int)), SLOT(slotMenuAction(int)));
 	connect(m_lst, SIGNAL(contextMenuRequested(QListBoxItem *, const QPoint&)), SLOT(slotShowContextMenu(QListBoxItem*, const QPoint&)));
-	connect(m_lst, SIGNAL(clicked(QListBoxItem*, const QPoint&)), SLOT(slotExecuted(QListBoxItem*, const QPoint&)));
+	connect(m_lst, SIGNAL(selectionChanged(QListBoxItem*)), SLOT(slotCurrentChanged(QListBoxItem*)));
+	connect(m_lst, SIGNAL(clicked(QListBoxItem *, const QPoint&)), SLOT(slotClicked(QListBoxItem*, const QPoint&)));
 	connect(m_lst, SIGNAL(doubleClicked(QListBoxItem*)), SLOT(slotDoubleClicked(QListBoxItem*)));
+	connect(m_lst, SIGNAL(returnPressed(QListBoxItem*)), SLOT(slotDoubleClicked(QListBoxItem*)));
 }
 
 KisListBoxView::~KisListBoxView()
@@ -184,18 +186,17 @@ void KisListBoxView::slotShowContextMenu(QListBoxItem *item, const QPoint& pos)
 	m_contextMnu -> popup(pos);
 }
 
-void KisListBoxView::slotExecuted(QListBoxItem *item, const QPoint& pos)
+void KisListBoxView::slotCurrentChanged(QListBoxItem *item)
 {
+	slotMenuAction(SELECTION);
+}
+
+void KisListBoxView::slotClicked(QListBoxItem *item, const QPoint& pos)
+{
+	int n = m_lst -> currentItem();
+
 	if (item) {
 		KisListBoxItem *p = dynamic_cast<KisListBoxItem*>(item);
-		int n = m_lst -> currentItem();
-
-		m_btnRm -> setEnabled(n != -1);
-		m_btnRaise -> setEnabled(n != -1);
-		m_btnLower -> setEnabled(n != -1);
-
-		if (n == -1)
-			return;
 
 		if (p -> intersectVisibleRect(pos, n))
 			slotMenuAction(VISIBLE);
@@ -219,23 +220,6 @@ void KisListBoxView::setTopItem(int n)
 {
 	m_lst -> setTopItem(n);
 	m_lst -> triggerUpdate(false);
-}
-
-void KisListBoxView::lower(int pos)
-{
-	QListBoxItem *p = m_lst -> item(pos - 1);
-	QListBoxItem *q = m_lst -> item(pos);
-
-	m_lst -> takeItem(p);
-	m_lst -> takeItem(q);
-
-	if (p && q) {
-		m_lst -> changeItem(p, pos);
-		m_lst -> changeItem(q, pos - 1);
-	}
-	else {
-		kdDebug() << "Not flipping.\n";
-	}
 }
 
 void KisListBoxView::insertItem(const QString& name)
@@ -274,7 +258,7 @@ KisListBoxItem::~KisListBoxItem()
 {
 }
 
-int KisListBoxItem::height(const QListBox *lb) const
+int KisListBoxItem::height(const QListBox * /*lb*/) const
 {
 	return HEIGHT;
 }

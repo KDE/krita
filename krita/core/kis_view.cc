@@ -1873,14 +1873,14 @@ void KisView::remove_current_image_tab()
 
 void KisView::merge_all_layers()
 {
-    if (m_doc->currentImg())
-    {
-        m_doc->currentImg()->mergeAllLayers();
-        slotUpdateImage();
-        slotRefreshPainter();
+	KisImageSP img = m_doc -> currentImg();
 
-        m_doc->setModified(true);
-    }
+	if (img) {
+		img -> mergeAllLayers();
+		slotUpdateImage();
+		slotRefreshPainter();
+		m_doc -> setModified(true);
+	}
 }
 
 
@@ -2376,10 +2376,8 @@ void KisView::slotLayersUpdated()
 	m_layerView -> setUpdatesEnabled(false);
 	m_layerView -> clear();
 
-	for (KisLayerSPLstConstIterator it = l.begin(); it != l.end(); it++) {
+	for (KisLayerSPLstConstIterator it = l.begin(); it != l.end(); it++)
 		m_layerView -> insertItem((*it) -> name());
-		kdDebug() << "name = " << (*it) -> name() << endl;
-	}
 
 	m_layerView -> setUpdatesEnabled(true);
 	m_layerView -> repaint();

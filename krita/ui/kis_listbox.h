@@ -49,7 +49,6 @@ public:
 	void insertItem(const QString& name);
 	void setCurrentItem(int n);
 	void setTopItem(int n);
-	void lower(int pos);
 	void clear();
 
 signals:
@@ -71,7 +70,8 @@ private slots:
 	void slotMenuAction(int mnuId);
 	void slotAboutToShow();
 	void slotShowContextMenu(QListBoxItem *item, const QPoint& pos);
-	void slotExecuted(QListBoxItem *item, const QPoint& pos);
+	void slotClicked(QListBoxItem *item, const QPoint& pos);
+	void slotCurrentChanged(QListBoxItem *item);
 	void slotDoubleClicked(QListBoxItem* item);
 
 private:

@@ -656,7 +656,7 @@ void KisImage::compositeImage(const QRect& area, bool allDirty)
 void KisImage::setCurrentLayer(int layer)
 {
 	if (static_cast<uint>(layer) < m_layers.size()) {
-		KisLayerSP p = m_layers.at(layer);
+		KisLayerSP p = m_layers[layer];
 
 		setCurrentLayer(p);
 	}
@@ -667,10 +667,8 @@ void KisImage::setCurrentLayer(KisLayerSP layer)
 	if (m_doUndo && layer)
 		addCommand(new KisCommandLayerActive(this, layer, m_activeLayer));
 
-	if (layer) {
+	if (layer)
 		m_activeLayer = layer;
-		emit layersUpdated();
-	}
 }
 
 void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
@@ -782,14 +780,13 @@ void KisImage::mergeLayers(KisLayerSPLst& layers)
 		int minXTile = rect.left() / TILE_SIZE;
 		int maxXTile = rect.right() / TILE_SIZE;
 
-		for (int y = minYTile; y <= maxYTile; y++) {
+		for (int y = minYTile; y <= maxYTile; y++)
 			for(int x = minXTile; x <= maxXTile; x++) {
 				KisTileSP dst = a -> getTile(x, y);
 				KisTileSP src = (*it) -> getTile(x, y);
 
 				renderTile(dst, src, *it);
 			}
-		}
 
 		if (m_activeLayer == *it)
 			m_activeLayer = m_layers.empty() ? KisLayerSP(0) : m_layers[0];

@@ -1390,7 +1390,7 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
                         KisImageSP current = currentImg();
 
                         rc += v.size();
-			current -> removeActiveSelection();
+			current -> activeLayer() -> removeSelection();
 
                         for (vKisLayerSP_it it = v.begin(); it != v.end(); it++) {
                                 KisLayerSP layer = *it;
@@ -2324,7 +2324,7 @@ void KisView::selectImage(const QString& name)
         m_current = m_doc -> findImage(name);
         connectCurrentImg();
         layersUpdated();
-        m_selectionManager -> updateGUI(m_current && m_current -> activeSelection());
+        m_selectionManager -> updateGUI(m_current && m_current -> activeLayer() -> selection());
         resizeEvent(0);
         updateCanvas();
         notify();
@@ -2342,7 +2342,7 @@ void KisView::selectImage(KisImageSP img)
         if (m_tabBar)
                 updateTabBar();
 
-        m_selectionManager -> updateGUI(m_current && m_current -> activeSelection());
+        m_selectionManager -> updateGUI(m_current && m_current -> activeLayer() -> selection());
 }
 
 void KisView::scrollH(int value)
@@ -2434,7 +2434,7 @@ void KisView::connectCurrentImg() const
                 connect(m_current, SIGNAL(activeSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
 		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
 
-		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), SLOT(imgUpdated(KisImageSP)));
+// 		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), SLOT(imgUpdated(KisImageSP)));
                 connect(m_current, SIGNAL(update(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
 		connect(m_current, SIGNAL(layersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
         }
@@ -2514,8 +2514,10 @@ void KisView::layerToImage()
         KisImageSP img = currentImg();
 
         if (img) {
-                KisSelectionSP selection = img -> activeSelection();
-                KisLayerSP layer;
+		KisLayerSP layer = img -> activeLayer();
+		
+                KisSelectionSP selection = layer-> selection();
+                
 
 //                 if (selection)
 //                         layer = selection.data();

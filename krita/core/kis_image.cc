@@ -1189,25 +1189,6 @@ KisFloatingSelectionSP KisImage::floatingSelection() const
 	return m_floatingSelection;
 }
 
-
-KisSelectionSP KisImage::activeSelection()
-{
-	if (activeLayer() -> hasSelection()) {
-		return activeLayer() -> selection();
-	}
-	else {
-		return 0;
-	}
-}
-
-
-void KisImage::removeActiveSelection()
-{
-	if (activeLayer() -> hasSelection()) {
-		activeLayer() -> removeSelection();
-	}
-}
-
 void KisImage::expand(KisPaintDeviceSP dev)
 {
 	Q_INT32 w;
@@ -1290,13 +1271,13 @@ void KisImage::slotUpdateDisplay()
 
 void KisImage::slotSelectionChanged() 
 {
-	kdDebug() << "KisImage::slotSelectionChanged\n";
+// 	kdDebug() << "KisImage::slotSelectionChanged\n";
 	emit activeSelectionChanged(KisImageSP(this));
 }
 
 void KisImage::slotSelectionCreated()
 {
-	kdDebug() << "KisImage::slotSelectionCreated\n";
+// 	kdDebug() << "KisImage::slotSelectionCreated\n";
 	emit selectionCreated(KisImageSP(this));
 }
 

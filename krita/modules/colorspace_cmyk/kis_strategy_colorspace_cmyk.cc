@@ -185,17 +185,17 @@ QImage KisStrategyColorSpaceCMYK::convertToImage(const QUANTUM *data, Q_INT32 wi
 		}
 #endif
 		
-		kdDebug() << "KisStrategyColorSpaceCMYK::convertToImage "
-			  << "R: " << r.r
-			  << ", G: " << r.g
-			  << ", B: " << r.b
-			  << " -- " 
-			  << " C: " << c.c
-			  << ", M: " << c.m
-			  << ", Y: " << c.y
-			  << ", K: " << c.k
-			  << ", opacity: " << *(data + i + PIXEL_CMYK_ALPHA)
-			  << "\n";
+// 		kdDebug() << "KisStrategyColorSpaceCMYK::convertToImage "
+// 			  << "R: " << r.r
+// 			  << ", G: " << r.g
+// 			  << ", B: " << r.b
+// 			  << " -- " 
+// 			  << " C: " << c.c
+// 			  << ", M: " << c.m
+// 			  << ", Y: " << c.y
+// 			  << ", K: " << c.k
+// 			  << ", opacity: " << *(data + i + PIXEL_CMYK_ALPHA)
+// 			  << "\n";
 
 		// fix the pixel in QImage.
 		*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_CMYK_ALPHA );

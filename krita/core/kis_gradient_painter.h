@@ -45,6 +45,8 @@
 
 class KisGradient;
 
+
+// XXX: Need to set dirtyRect in KisPainter
 class KisGradientPainter : public KisPainter
 {
 

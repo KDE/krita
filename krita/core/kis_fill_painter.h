@@ -47,6 +47,7 @@
 #include "kis_iterators_infinite.h"
 #include "kis_selection.h"
 
+// XXX: Filling should set dirty rect.
 class KisFillPainter : public KisPainter
 {
 

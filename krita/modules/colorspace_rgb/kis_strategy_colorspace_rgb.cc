@@ -46,7 +46,7 @@ KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
 
 KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
 {
-	kdDebug() << "KisStrategyColorSpaceRGB has been destroyed" << endl;
+// 	kdDebug() << "KisStrategyColorSpaceRGB has been destroyed" << endl;
 }
 
 void KisStrategyColorSpaceRGB::nativeColor(const KoColor& c, QUANTUM *dst)

@@ -214,13 +214,13 @@ void KisSelectionManager::clipboardDataChanged()
 
 void KisSelectionManager::updateGUI(bool enable)
 {
-	kdDebug() << "KisSelectionManager::updateGUI(" << enable << ")\n";
+// 	kdDebug() << "KisSelectionManager::updateGUI(" << enable << ")\n";
 
         KisImageSP img = m_parent -> currentImg();
 
-        enable = enable && img && img -> activeSelection(); // XXX: don't see the idea behind this: && img -> activeSelection() -> parent();
+        enable = enable && img && img -> activeLayer() -> hasSelection(); // XXX: don't see the idea behind this: && img -> activeSelection() -> parent();
 
-	kdDebug() << "Becomes: " << enable << "\n";
+// 	kdDebug() << "Becomes: " << enable << "\n";
 
 	m_copy -> setEnabled(enable);
 	m_cut -> setEnabled(enable);
@@ -248,8 +248,11 @@ void KisSelectionManager::updateGUI(bool enable)
 
 void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 {
-        if (img == m_parent -> currentImg())
-                updateGUI(img -> activeSelection() != 0);
+        if (img == m_parent -> currentImg()) {
+                updateGUI(img -> activeLayer() -> hasSelection());
+		m_parent -> updateCanvas();
+	}
+	
 }
 
 
@@ -263,18 +266,25 @@ void KisSelectionManager::cut()
 void KisSelectionManager::copy()
 {
         KisImageSP img = m_parent -> currentImg();
+        if (!img) return;
 
-        if (img) {
-                KisSelectionSP selection = img -> activeSelection();
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
 
-                if (selection) {
-			// create a floating selection from selection
+	if (!layer -> hasSelection()) return;
+
+	KisSelectionSP selection = layer -> selection();
+
+//                 KisSelectionSP selection = img -> activeLayer() -> selection();
+
+//                 if (selection) {
+// 			// create a floating selection from selection
 
 //                         selection -> clearParentOnMove(false);
 //                         m_doc -> setClipboardSelection(selection);
 //                         imgSelectionChanged(currentImg());
-                }
-        }
+ 
+
 }
 
 
@@ -288,31 +298,32 @@ void KisSelectionManager::paste()
 void KisSelectionManager::selectAll()
 {
         KisImageSP img = m_parent -> currentImg();
+	if (!img) return;
 
-        if (img) {
-                 KisPaintDeviceSP dev;
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
+	
 
-                 img -> removeActiveSelection();
-                 dev = img -> activeDevice();
+	KisSelectionSP s = new KisSelection(layer, "layer selection for: " + layer -> name());
+	s -> selectAll();
+	s -> setVisible(true);
 
-                 if (dev) {
-//                         KisFloatingSelectionSP selection = new KisFloatingSelection(dev, img, "Selection box from KisView", OPACITY_OPAQUE);
+	layer -> setSelection(s);
 
-//                         selection -> setBounds(dev -> bounds());
-//                         img -> setSelection(selection);
-			 m_parent -> updateCanvas();
-                 }
-         }
 }
 
 void KisSelectionManager::unSelectAll()
 {
         KisImageSP img = m_parent -> currentImg();
+	if (!img) return;
 
-        if (img) {
-                 img -> removeActiveSelection();
-                 m_parent -> updateCanvas();
-        }
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
+
+	layer -> removeSelection(); // XXX save selection for reselect
+	
+	m_parent -> updateCanvas();
+        
 }
 
 void KisSelectionManager::clear()
@@ -333,7 +344,7 @@ void KisSelectionManager::clear()
 //                                 KisPainter gc(parent);
 
 //                                 m_adapter -> beginMacro(i18n("Remove Selection"));
-		img -> removeActiveSelection(); // commit=true
+// 		img -> removeActiveSelection(); // commit=true
 //                                 ur = rc;
 
 //                                 if (parent -> x() || parent -> y())
@@ -387,18 +398,21 @@ void KisSelectionManager::paste_into()
 void KisSelectionManager::copySelectionToNewLayer()
 {
         KisImageSP img = m_parent -> currentImg();
+	if (!img) return;
 
-        if (img) {
-                KisSelectionSP selection = img -> activeSelection();
-		//XXX: Create new layer, transfer all selected pixels to new layer
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
 
-		img -> removeActiveSelection(); // XXX: commit==false
-
+	KisSelectionSP selection = layer -> selection();
+	//XXX: Create new layer, transfer all selected pixels to new layer
+	
+// 		img -> removeActiveSelection(); // XXX: commit==false
+	
 //                 if (selection && m_doc -> layerAdd(img, img -> nextLayerName(), selection))
 //                         layersUpdated();
 //                 else
 //                         img -> setSelection(selection);
-        }
+        
 }
 
 

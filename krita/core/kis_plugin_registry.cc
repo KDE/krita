@@ -44,7 +44,7 @@ KisPluginRegistry *KisPluginRegistry::m_singleton = 0;
 KisPluginRegistry::KisPluginRegistry()
 	: super()
 {
-	kdDebug() << "Creating plugin registry\n";
+//	kdDebug() << "Creating plugin registry\n";
 
 	KisPluginRegistry::m_singleton = this;
 
@@ -66,8 +66,8 @@ KisPluginRegistry::KisPluginRegistry()
 		if (plugin) {
 			// guiFactory()->addClient(plugin);
 
-			kdDebug() << "PluginDemo: Loaded plugin "
-				  << (*iter) -> name() << endl;
+			//kdDebug() << "PluginDemo: Loaded plugin "
+			//	  << (*iter) -> name() << endl;
 		}
 	}
 
@@ -86,7 +86,7 @@ KisPluginRegistry::~KisPluginRegistry()
 
 void KisPluginRegistry::registerColorStrategy(const QString & name, KisStrategyColorSpaceSP colorspace)
 {
-	kdDebug() << "Adding color strategy: " << name << "\n";
+//	kdDebug() << "Adding color strategy: " << name << "\n";
 	KisColorSpaceRegistry::singleton() -> add(colorspace);
 }
 

@@ -57,11 +57,11 @@ CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
 {
        	setInstance(CMYKPluginFactory::instance());
 
-	kdDebug() << "CMYK Color model plugin. Class: " 
-		  << className() 
-		  << ", Parent: " 
-		  << parent -> className()
-		  << "\n";
+// 	kdDebug() << "CMYK Color model plugin. Class: " 
+// 		  << className() 
+// 		  << ", Parent: " 
+// 		  << parent -> className()
+// 		  << "\n";
 
 	if ( parent->inherits("KisPluginRegistry") )
 	{

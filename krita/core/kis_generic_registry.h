@@ -36,7 +36,7 @@ public:
 	void add(_T item)
 	{
 		m_storage.insert( typename storageMap::value_type( item->name(), item) );
-		kdDebug() << "Added to registry: " << item -> name() << "\n";
+//		kdDebug() << "Added to registry: " << item -> name() << "\n";
 	}
 	_T get(const QString& name) const
 	{

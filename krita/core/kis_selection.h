@@ -64,6 +64,8 @@ public:
 
 	QImage maskImage() const;
 
+	void selectAll();
+
 	void clear();
 
 	// Clear the selection and set the mask to color c

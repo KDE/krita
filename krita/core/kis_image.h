@@ -145,13 +145,9 @@ public:
 	bool pos(KisChannelSP channel, Q_INT32 position);
 	Q_INT32 nchannels() const;
 
-
 	void setFloatingSelection(KisFloatingSelectionSP floatingSelection);
 	void unsetFloatingSelection(bool commit = true);
 	KisFloatingSelectionSP floatingSelection() const;
-
-	KisSelectionSP activeSelection();
-	void removeActiveSelection();
 
 	QRect bounds() const;
 

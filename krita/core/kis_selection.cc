@@ -84,10 +84,19 @@ QImage KisSelection::maskImage() const
 	return QImage();
 }
 
+void KisSelection::selectAll()
+{
+	KisFillPainter painter(this);
+	painter.fillRect(0, 0, width(), height(), m_maskColor, MAX_SELECTED);
+	//m_selectedRect = painter -> dirtyRect(); // XXX: use this when fill supports it.
+	m_selectedRect = QRect(0, 0, width(), height());
+}
+
 void KisSelection::clear() 
 {
 	KisFillPainter painter(this);
 	painter.fillRect(0, 0, width(), height(), m_maskColor, MIN_SELECTED);
+	m_selectedRect = QRect();
 }
 
 void KisSelection::clear(KoColor c) 
@@ -105,10 +114,10 @@ void KisSelection::setMaskColor(KoColor c)
 
 QRect KisSelection::selectedRect() 
 { 
-	if (m_selectedRect.isValid()) {
+	if (m_selectedRect.isNull()) {
 		return m_selectedRect;
 	}
 	else {
-		return QRect(0, 0, width(), height());
+		return QRect(0, 0, 0, 0);
 	}
 }

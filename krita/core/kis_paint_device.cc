@@ -347,46 +347,23 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
 	return false;
 }
 
-
 bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)
 {
+	KisTileMgrSP tm = data();
+	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);
+	QUANTUM *data;
 
-        // XXX: this should use the colour strategies! reklur
-#if 0
-        KisTileMgrSP tm = data();
-        KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);
-        QUANTUM *data;
+	if (!pd)
+		return false;
 
-        if (!pd)
-                return false;
+	data = pd -> data;
+	Q_ASSERT(data);
 
-        data = pd -> data;
-        Q_ASSERT(data);
+	colorStrategy() -> nativeColor(c, opacity, data);
 
-        switch (alpha() ? typeWithAlpha() : typeWithoutAlpha()) {
-        case IMAGE_TYPE_INDEXEDA:
-        case IMAGE_TYPE_INDEXED:
-                break; // TODO
-        case IMAGE_TYPE_GREYA:
-                data[PIXEL_GRAY_ALPHA] = opacity;
-        case IMAGE_TYPE_GREY:
-                data[PIXEL_GRAY] = upscale(c.R());
-                break;
-        case IMAGE_TYPE_RGBA:
-                data[PIXEL_ALPHA] = opacity;
-        case IMAGE_TYPE_RGB:
-                data[PIXEL_RED] = upscale(c.R());
-                data[PIXEL_GREEN] = upscale(c.G());
-                data[PIXEL_BLUE] = upscale(c.B());
-                break;
-        default:
-                kdDebug() << "Not Implemented.\n";
-                break;
-        }
+	tm -> releasePixelData(pd);
 
-        tm -> releasePixelData(pd);
-        return true;
-#endif
+	return true;
 }
 
 void KisPaintDevice::setData(KisTileMgrSP mgr)

@@ -30,7 +30,7 @@
 #include "kis_render.h"
 #include "kis_guide.h"
 
-class KCommandHistory;
+class KoCommandHistory;
 class KisNameServer;
 class KisUndoAdapter;
 class KisPainter;
@@ -59,7 +59,7 @@ public:
 	QString nextLayerName() const;
 	void resize(Q_INT32 w, Q_INT32 h);
 	void resize(const QRect& rc);
-	void enableUndo(KCommandHistory *history);
+	void enableUndo(KoCommandHistory *history);
 
 	enumImgType imgType() const;
 	enumImgType nativeImgType() const;
@@ -160,7 +160,7 @@ private:
 	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
 
 private:
-	KCommandHistory *m_undoHistory;
+	KoCommandHistory *m_undoHistory;
 	KURL m_uri;
 	QString m_name;
 	Q_INT32 m_width;

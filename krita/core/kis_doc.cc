@@ -50,6 +50,7 @@
 #include <koStoreDevice.h>
 #include <koTemplateChooseDia.h>
 #include <koApplication.h>
+#include <kocommandhistory.h>
 
 // Local
 #include "kis_types.h"
@@ -421,7 +422,7 @@ bool KisDoc::init()
 		m_nserver = 0;
 	}
 
-	m_cmdHistory = new KCommandHistory(actionCollection(), true);
+	m_cmdHistory = new KoCommandHistory(actionCollection(), true);
 	connect(m_cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
 	connect(m_cmdHistory, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
 	m_undo = true;

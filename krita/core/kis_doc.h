@@ -30,7 +30,7 @@ class QImage;
 class QString;
 class DCOPObject;
 class KCommand;
-class KCommandHistory;
+class KoCommandHistory;
 class KMacroCommand;
 class KisView;
 class KisNameServer;
@@ -156,7 +156,7 @@ private:
 
 private:
 	bool m_undo;
-	KCommandHistory *m_cmdHistory;
+	KoCommandHistory *m_cmdHistory;
 	vKisImageSP m_images;
 	KisImageSP m_projection;
 	KisSelectionSP m_clipboard;

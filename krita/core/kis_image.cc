@@ -22,6 +22,7 @@
 #include <qsize.h>
 #include <qtl.h>
 #include <kcommand.h>
+#include <kocommandhistory.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include "KIsImageIface.h"
@@ -946,7 +947,7 @@ KisLayerSP KisImage::correlateLayer(Q_INT32 , Q_INT32 )
 	return 0;
 }
 
-void KisImage::enableUndo(KCommandHistory *history)
+void KisImage::enableUndo(KoCommandHistory *history)
 {
 	m_undoHistory = history;
 }

@@ -62,7 +62,7 @@ void KisToolPaste::mouseRelease(QMouseEvent *e)
 		KisImageSP owner = m_view -> currentImg();
 		KisPainter gc;
 
-//		m_selection -> opacity(m_oldOpacity);
+		m_selection -> opacity(m_oldOpacity);
 		m_move -> drag(e -> pos());
 		owner -> unsetSelection(false);
 		gc.begin(m_selection -> parent());
@@ -96,8 +96,8 @@ void KisToolPaste::activate()
 
 		if (owner) {
 			m_selection -> setImage(owner);
-			//			m_oldOpacity = m_selection -> opacity();
-			//			m_selection -> opacity(OPACITY_OPAQUE / 2);
+			m_oldOpacity = m_selection -> opacity();
+			m_selection -> opacity(OPACITY_OPAQUE / 2);
 			owner -> unsetSelection();
 			m_selection -> setParent(owner -> activeDevice());
 			owner -> setSelection(m_selection);

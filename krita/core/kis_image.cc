@@ -94,36 +94,7 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity,
 	Q_INT32 n;
 
 	m_nserver = new KisNameServer("Layer %1", 0);
-	Q_ASSERT(imgType != IMAGE_TYPE_UNKNOWN);
-
-	switch (imgType) {
-		case IMAGE_TYPE_INDEXED:
-		case IMAGE_TYPE_GREY:
-			n = 1;
-			break;
-		case IMAGE_TYPE_INDEXEDA:
-		case IMAGE_TYPE_GREYA:
-			n = 2;
-			break;
-		case IMAGE_TYPE_RGB:
-		case IMAGE_TYPE_LAB:
-		case IMAGE_TYPE_YUV:
-		case IMAGE_TYPE_CMYK:
-			n = 3;
-			break;
-		case IMAGE_TYPE_RGBA:
-		case IMAGE_TYPE_LABA:
-		case IMAGE_TYPE_YUVA:
-			n = 4;
-			break;
-		case IMAGE_TYPE_CMYKA:
-			n = 5;
-			break;
-		default:
-			kdDebug() << "KisImage::init  Unknow image type.\n";
-			return;
-	}
-	
+	n = ::imgTypeDepth(imgType);
 	m_active.resize(n);
 	m_visible.resize(n);
 	m_doc = doc;
@@ -186,6 +157,11 @@ enumImgType KisImage::imgType() const
 	}
 
 	return m_type;
+}
+
+enumImgType KisImage::nativeImgType() const
+{
+	return alpha() ? imgTypeWithAlpha() : imgType();
 }
 
 enumImgType KisImage::imgTypeWithAlpha() const

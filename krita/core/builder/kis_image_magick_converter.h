@@ -15,50 +15,42 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#if !defined KIS_IMAGE_BUILDER_H_
-#define KIS_IMAGE_BUILDER_H_
+#if !defined KIS_IMAGE_MAGICK_CONVERTER_H_
+#define KIS_IMAGE_MAGICK_CONVERTER_H_
 
 #include <qobject.h>
 #include "kis_types.h"
 #include "kis_global.h"
+#include "kis_image_builder.h"
 
 class QString;
 class KURL;
 class KisDoc;
-class KisImageBuilderPriv;
 class KisNameServer;
 
-enum KisImageBuilder_Result {
-	KisImageBuilder_RESULT_FAILURE = -400,
-	KisImageBuilder_RESULT_NOT_EXIST = -300,
-	KisImageBuilder_RESULT_NOT_LOCAL = -200,
-	KisImageBuilder_RESULT_BAD_FETCH = -100,
-	KisImageBuilder_RESULT_OK = 0,
-	KisImageBuilder_RESULT_EMPTY = 100,
-	KisImageBuilder_RESULT_NO_URI = 200
-};
-
 /**
- * Build a KisImage representation of a file image.
+ * Build a KisImage representation of an image file.
  */
-class KisImageBuilder {
+class KisImageMagickConverter {
 public:
-	KisImageBuilder(KisDoc *doc, const QString& filename);
-	KisImageBuilder(KisDoc *doc, const KURL& uri);
-	virtual ~KisImageBuilder();
+	KisImageMagickConverter(KisDoc *doc);
+	virtual ~KisImageMagickConverter();
 
 public:
-	KisImageBuilder_Result buildImage();
+	KisImageBuilder_Result buildImage(const KURL& uri);
+	KisImageBuilder_Result buildFile(const KURL& uri, KisImageSP img);
+	KisImageBuilder_Result buildFile(const KURL& uri, KisLayerSP layer);
 	KisImageSP image();
 
 private:
-	KisImageBuilder(const KisImageBuilder&);
-	KisImageBuilder& operator=(const KisImageBuilder&);
-	void init(KisDoc *doc, const KURL& uri);
+	KisImageMagickConverter(const KisImageMagickConverter&);
+	KisImageMagickConverter& operator=(const KisImageMagickConverter&);
+	void init(KisDoc *doc);
 
 private:
-	KisImageBuilderPriv *m_members;
+	KisImageSP m_img;
+	KisDoc *m_doc;
 };
 
-#endif // KIS_IMAGE_BUILDER_H_
+#endif // KIS_IMAGE_MAGICK_CONVERTER_H_
 

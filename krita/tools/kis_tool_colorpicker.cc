@@ -42,6 +42,7 @@ void KisToolColorPicker::mousePress(QMouseEvent *e)
 	KisPaintDeviceSP dev;
 	QPoint pos;
 	KoColor c;
+	QUANTUM opacity;
 
 	if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)
 		return;
@@ -59,12 +60,12 @@ void KisToolColorPicker::mousePress(QMouseEvent *e)
 	if (!dev -> contains(pos))
 		return;
 
-	c = dev -> pixel(pos.x(), pos.y());
-
-	if (e -> button() == QMouseEvent::LeftButton)
-		m_view -> setFGColor(c);
-	else 
-		m_view -> setBGColor(c);
+	if (dev -> pixel(pos.x(), pos.y(), &c, &opacity)) {
+		if (e -> button() == QMouseEvent::LeftButton)
+			m_view -> setFGColor(c);
+		else 
+			m_view -> setBGColor(c);
+	}
 }
 
 void KisToolColorPicker::setup()

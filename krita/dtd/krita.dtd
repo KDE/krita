@@ -17,7 +17,7 @@
 		author:		The image's author
 		email:		The image's author's email address
 		editor:		The program this file was written with
-        mime:		The MIME type (must always have the value application/x-kspread
+        mime:		The MIME type (must always have the value application/x-krita
         width:      The image with in pixels.
         height:     The image height in pixels.
         bitDepth:   The bit depth. == The number of bits a pixel uses _per channel_!.

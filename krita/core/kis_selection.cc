@@ -192,7 +192,7 @@ void KisSelection::fromImage(const QImage& img)
 
 				// TODO pixel opacity
 				c.setRGB(upscale(qRed(rgb)), upscale(qGreen(rgb)), upscale(qBlue(rgb)));
-				pixel(x, y, c);
+				pixel(x, y, c, OPACITY_OPAQUE);
 			}
 		}
 	}

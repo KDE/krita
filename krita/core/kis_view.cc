@@ -55,7 +55,7 @@
 #include "kis_channelview.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paintoffset.h"
-#include "kis_image_builder.h"
+#include "kis_image_magick_converter.h"
 #include "kis_itemchooser.h"
 #include "kis_factory.h"
 #include "kis_painter.h"
@@ -1064,25 +1064,54 @@ void KisView::slotImportImage()
 
 void KisView::export_image()
 {
-#if 0
-	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::writeFilters(), 0, i18n("Image File for Layer"));
+	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::writeFilters(), 0, i18n("Export Image"));
+	KisImageSP img = currentImg();
+	KisLayerSP dst;
 
-	if (!url.isEmpty()) {
-		if (mergeLayers) {
-			/* merge should not always remove layers -
-			   merged into another but should have an option
-			   for keeping old layers and merging into a new
-			   one created for that purpose with a Yes/No dialog
-			   to confirm, at least. */
-			merge_all_layers();
+	Q_ASSERT(img);
+
+	if (img) {
+		KisImageMagickConverter ib(m_doc);
+
+		if (img -> nlayers() == 1) {
+			dst = img -> layer(0);
+			Q_ASSERT(dst);
+		} else {
+			dst = new KisLayer(img, img -> width(), img -> height(), "layer for exporting", OPACITY_OPAQUE);
+
+			KisPainter gc;
+			KisMerge<flattenAll> visitor(img, true);
+			vKisLayerSP layers = img -> layers();
+			gc.begin(dst.data());
+			visitor(gc, layers);
+			gc.end();
 		}
 
-		//  save as standard image file (jpg, png, xpm, ppm,
-		//  bmp, tiff, but NO gif due to patent restrictions)
-		if (!m_doc -> saveAsQtImage(url.path(), mergeLayers))
-			kdDebug(0) << "Can't save doc as image" << endl;
+		switch (ib.buildFile(url, dst)) {
+			case KisImageBuilder_RESULT_UNSUPPORTED:
+				KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving file"));
+				break;
+			case KisImageBuilder_RESULT_INVALID_ARG:
+				KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving file"));
+				break;
+			case KisImageBuilder_RESULT_NO_URI:
+			case KisImageBuilder_RESULT_NOT_LOCAL:
+				KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving file"));
+				break;
+			case KisImageBuilder_RESULT_BAD_FETCH:
+				KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));
+				break;
+			case KisImageBuilder_RESULT_EMPTY:
+				KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
+				break;
+			case KisImageBuilder_RESULT_FAILURE:
+				KMessageBox::error(this, i18n("Error Saving File."), i18n("Error Saving File"));
+				break;
+			case KisImageBuilder_RESULT_OK:
+			default:
+				break;
+		}
 	}
-#endif
 }
 
 void KisView::slotInsertImageAsLayer()
@@ -1105,12 +1134,15 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 	KURL url(filename);
 
 	if (filename.isEmpty())
-		url = KFileDialog::getOpenURL(QString::null, KisUtil::readFilters(), 0, i18n("Image File for Layer"));
+		url = KFileDialog::getOpenURL(QString::null, KisUtil::readFilters(), 0, i18n("Import Image"));
 
-	KisImageBuilder ib(m_doc, url);
+	KisImageMagickConverter ib(m_doc);
 	KisImageSP img;
 
-	switch (ib.buildImage()) {
+	switch (ib.buildImage(url)) {
+	case KisImageBuilder_RESULT_UNSUPPORTED:
+		KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Loading file"));
+		break;
 	case KisImageBuilder_RESULT_NO_URI:
 	case KisImageBuilder_RESULT_NOT_LOCAL:
 		KNotifyClient::event("cannotopenfile");

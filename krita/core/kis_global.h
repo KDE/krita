@@ -126,6 +126,7 @@ const PIXELTYPE PIXEL_RED = 0;
 const PIXELTYPE PIXEL_GREEN = 1;
 const PIXELTYPE PIXEL_BLUE = 2;
 const PIXELTYPE PIXEL_ALPHA = 3;
+const PIXELTYPE PIXEL_CMYK_ALPHA = 4;
 const PIXELTYPE PIXEL_INDEXED = 0;
 const PIXELTYPE PIXEL_INDEXED_ALPHA = 1;
 
@@ -133,6 +134,9 @@ const PIXELTYPE PIXEL_INDEXED_ALPHA = 1;
 
 #define downscale(quantum)  ((unsigned char) ((quantum)/257UL))
 #define upscale(value)  ((QUANTUM) (257UL*(value)))
+
+Q_INT32 imgTypeDepth(const enumImgType& type);
+bool imgTypeHasAlpha(const enumImgType& type);
 
 #endif // KISGLOBAL_H_
 

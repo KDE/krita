@@ -71,8 +71,8 @@ public:
 	bool contains(const QPoint& pt) const;
 	QString name();
 	void setName(const QString& name);
-	KoColor pixel(Q_INT32 x, Q_INT32 y);
-	void pixel(Q_INT32 x, Q_INT32 y, const KoColor& c);
+	bool pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity);
+	bool pixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity);
 	void maskBounds(Q_INT32 *x1, Q_INT32 *y1, Q_INT32 *x2, Q_INT32 *y2);
 	void maskBounds(QRect *rc);
 	bool alpha() const;

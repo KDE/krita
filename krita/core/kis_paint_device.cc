@@ -16,6 +16,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include <qrect.h>
+#include <kdebug.h>
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_image.h"
@@ -30,8 +31,8 @@ KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType&
 	m_width = width;
 	m_height = height;
 	m_imgType = imgType;
-	m_alpha = true; // TODO
-	m_depth = 4; // TODO
+	m_alpha = ::imgTypeHasAlpha(imgType);
+	m_depth = ::imgTypeDepth(imgType);
 	m_x = 0;
 	m_y = 0;
 	m_offX = 0;
@@ -415,61 +416,78 @@ void KisPaintDevice::init()
 	m_projectionValid = false;
 }
 
-KoColor KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y)
+bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
 {
 	KisTileMgrSP tm = data();
 	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
 	QUANTUM *data;
-	KoColor c;
 	Q_INT32 tmp;
 
-	Q_ASSERT(pd);
+	if (!pd)
+		return false;
+
+	*opacity = OPACITY_OPAQUE;
 	data = pd -> data;
 	Q_ASSERT(data);
 
-	switch (type()) {
+	switch (m_alpha ? typeWithAlpha() : type()) {
+	case IMAGE_TYPE_INDEXEDA:
 	case IMAGE_TYPE_INDEXED:
 		break; // TODO
+	case IMAGE_TYPE_GREYA:
+		*opacity = data[PIXEL_GRAY_ALPHA];
 	case IMAGE_TYPE_GREY:
 		tmp = downscale(data[PIXEL_GRAY]);
-		c.setRGB(tmp, tmp, tmp);
+		c -> setRGB(tmp, tmp, tmp);
 		break;
+	case IMAGE_TYPE_RGBA:
+		*opacity = data[PIXEL_ALPHA];
 	case IMAGE_TYPE_RGB:
-		c.setRGB(downscale(data[PIXEL_RED]), downscale(data[PIXEL_GREEN]), downscale(data[PIXEL_BLUE]));
+		c -> setRGB(downscale(data[PIXEL_RED]), downscale(data[PIXEL_GREEN]), downscale(data[PIXEL_BLUE]));
 		break;
 	default:
+		kdDebug() << "Not Implemented.\n";
 		break;
 	}
 
-	return c;
+	return true;
 }
 
-void KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, const KoColor& c)
+bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)
 {
 	KisTileMgrSP tm = data();
 	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);
-	QUANTUM *data = pd -> data;
+	QUANTUM *data;
 
+	if (!pd)
+		return false;
+
+	data = pd -> data;
 	Q_ASSERT(data);
 
-	switch (type()) {
+	switch (m_alpha ? typeWithAlpha() : type()) {
+	case IMAGE_TYPE_INDEXEDA:
 	case IMAGE_TYPE_INDEXED:
 		break; // TODO
+	case IMAGE_TYPE_GREYA:
+		data[PIXEL_GRAY_ALPHA] = opacity;
 	case IMAGE_TYPE_GREY:
 		data[PIXEL_GRAY] = upscale(c.R());
 		break;
 	case IMAGE_TYPE_RGBA:
-		data[PIXEL_ALPHA] = OPACITY_OPAQUE;
+		data[PIXEL_ALPHA] = opacity;
 	case IMAGE_TYPE_RGB:
 		data[PIXEL_RED] = upscale(c.R());
 		data[PIXEL_GREEN] = upscale(c.G());
 		data[PIXEL_BLUE] = upscale(c.B());
 		break;
 	default:
+		kdDebug() << "Not Implemented.\n";
 		break;
 	}
 
 	tm -> releasePixelData(pd);
+	return true;
 }
 
 #include "kis_paint_device.moc"

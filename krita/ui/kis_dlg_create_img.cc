@@ -26,7 +26,7 @@
 #include "kis_dlg_create_img.h"
 
 KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, QWidget *parent, const char *name) 
-	: super(parent, name, true, "", Ok | Cancel), m_type(IMAGE_TYPE_RGB), m_opacity(OPACITY_OPAQUE)
+	: super(parent, name, true, "", Ok | Cancel), m_type(IMAGE_TYPE_RGBA), m_opacity(OPACITY_OPAQUE)
 {
 	QWidget *page = new QWidget(this);
 	QLabel *lbl;
@@ -63,7 +63,7 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 max
 	grp -> insert(radio, IMAGE_TYPE_GREY);
 	radio = new QRadioButton(i18n("&RGB"), grp);
 	radio -> setChecked(true);
-	grp -> insert(radio, IMAGE_TYPE_RGB);
+	grp -> insert(radio, IMAGE_TYPE_RGBA);
 	radio = new QRadioButton(i18n("&CMYK"), grp);
 	radio -> setEnabled(false);
 	grp -> insert(radio, IMAGE_TYPE_CMYK);

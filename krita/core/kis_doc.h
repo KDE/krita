@@ -87,10 +87,6 @@ public:
 	QStringList images();
 	void renameImage(const QString& oldName, const QString& newName);
 
-	bool saveAsQtImage(const QString& file, bool wholeImage);
-	bool QtImageToLayer(QImage *qimage, KisView *pView);
-	bool LayerToQtImage(QImage *qimage, const QRect& clipRect);
-
 	QString nextImageName() const;
 	void setProjection(KisImageSP img);
 

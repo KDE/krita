@@ -67,6 +67,7 @@ public:
 	void enableUndo(KCommandHistory *history);
 
 	enumImgType imgType() const;
+	enumImgType nativeImgType() const;
 	enumImgType imgTypeWithAlpha() const;
 
 	KURL uri() const;

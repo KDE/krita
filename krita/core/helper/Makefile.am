@@ -4,6 +4,6 @@ INCLUDES  = -I$(srcdir)/../../ui -I$(srcdir)/.. -I$(srcdir)/../../tools $(KOFFIC
 
 noinst_LTLIBRARIES = libkishelper.la
 
-libkishelper_la_SOURCES = kisscopedlock.cpp
+libkishelper_la_SOURCES = kisscopedlock.cpp 
 libkishelper_la_METASOURCES = AUTO
 

@@ -1,6 +1,4 @@
-
-INCLUDES  = -I$(srcdir)/../helper -I$(srcdir)/../../ui -I$(srcdir)/.. -I$(srcdir)/../../tools $(KOFFICE_INCLUDES) -I$(interfacedir) \
-	$(KOPAINTER_INCLUDES) $(LIBMAGICK_CPPFLAGS)  $(all_includes)
+INCLUDES  = -I$(srcdir)/../helper -I$(srcdir)/.. $(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(LIBMAGICK_CPPFLAGS)  $(all_includes)
 
 noinst_LTLIBRARIES = libkistile.la
 

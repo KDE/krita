@@ -719,6 +719,7 @@ bool KisDoc::contains(KisImageSP img) const
 	return qFind(m_images.begin(), m_images.end(), img) != m_images.end();
 }
 
+#if 0
 /*
     Save currentImg document (image) in a standard image format
     Note that only the currentImg visible layer(s) will be saved
@@ -902,6 +903,7 @@ bool KisDoc::LayerToQtImage(QImage * /*qimg*/, const QRect& /*clipRect*/)
 	return true;
 #endif
 }
+#endif
 
 KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, enumImgType type)
 {

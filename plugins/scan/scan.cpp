@@ -25,7 +25,6 @@
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <kscan.h>
-#include <koDocument.h>
 #include <koView.h>
 
 #include "scan_factory.h"
@@ -65,10 +64,5 @@ void Scan::slotShowImage(const QImage &img)
     if(!view)
 	return;
 
-    KoDocument *doc = view->koDocument();
-
-    if(!doc)
-	return;
-	
-    emit doc->embeddImage(temp.name());
+    emit view->embeddImage(temp.name());
 }

@@ -29,7 +29,7 @@ class Scan : public KParts::Plugin
 {
     Q_OBJECT
     public:
-	Scan(QObject *parent, const char *name);
+	Scan(QObject *parent, const char *name, const QStringList &);
 	virtual ~Scan();
 	
     private slots:

@@ -15,8 +15,8 @@ EXTRA_DIST = $(kwordrc_DATA) $(krayonrc_DATA) $(killustratorrc_DATA) $(kpresente
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 kde_module_LTLIBRARIES = libkofficescan.la
 
-libkofficescan_la_SOURCES = scan_factory.cpp scan.cpp
-noinst_HEADERS = scan_factory.h scan.h
+libkofficescan_la_SOURCES = scan.cpp
+noinst_HEADERS = scan.h
 
 libkofficescan_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
 libkofficescan_la_LIBADD = $(LIB_KPARTS) $(LIB_KIO) $(LIB_KOFFICECORE)

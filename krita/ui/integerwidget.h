@@ -29,10 +29,11 @@
 #include <qwidget.h>
 
 class QHBoxLayout;
-class KSpinBox;
+class KisSpinBox;
 
 // really strange thing... you can't compile when you call 
 // IntegerWidget::setTickSettings( QSlider::Below ) without this...
+
 #ifdef Below
 #undef Below
 #endif
@@ -75,7 +76,7 @@ protected:
 
   QHBoxLayout* layout;
   QSlider* slider;
-  KSpinBox* spinBox;
+  KisSpinBox* spinBox;
 };
 
 /**
@@ -83,15 +84,15 @@ protected:
  * and mark text in the spinbox. Does not attempt to be generic, it only does
  * what I need now :o)
  */
-class KSpinBox : public QSpinBox
+class KisSpinBox : public QSpinBox
 {
   Q_OBJECT
 
 public:
-  KSpinBox( QWidget *parent=0, const char *name=0 );
-  KSpinBox ( int minValue, int maxValue, int step=1, QWidget*parent=0,
+  KisSpinBox( QWidget *parent=0, const char *name=0 );
+  KisSpinBox ( int minValue, int maxValue, int step=1, QWidget*parent=0,
 	     const char *name=0 );
-  ~KSpinBox() {}
+  ~KisSpinBox() {}
 
 
 public slots:

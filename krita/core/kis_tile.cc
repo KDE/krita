@@ -23,12 +23,10 @@
 
 #include <qtl.h>
 
-#include <kdebug.h>
-
 #include "kis_global.h"
 #include "kis_tile.h"
 
-KisTile::KisTile(unsigned int width, unsigned int height, unsigned int bpp, const QRgb& defaultColor, bool dirty)
+KisTile::KisTile(int x, int y, uint width, uint height, uint bpp, const QRgb& defaultColor, bool dirty)
 {
 	m_dirty = dirty;
 	m_width = width;
@@ -36,6 +34,21 @@ KisTile::KisTile(unsigned int width, unsigned int height, unsigned int bpp, cons
 	m_bpp = bpp;
 	m_data = 0;
 	m_defaultColor = defaultColor;
+	move(x, y);
+
+	if (qAlpha(defaultColor))
+		initTile();
+}
+
+KisTile::KisTile(const QPoint& parentPos, uint width, uint height, uint bpp, const QRgb& defaultColor, bool dirty)
+{
+	m_dirty = dirty;
+	m_width = width;
+	m_height = height;
+	m_bpp = bpp;
+	m_data = 0;
+	m_defaultColor = defaultColor;
+	m_parentPos = parentPos;
 
 	if (qAlpha(defaultColor))
 		initTile();
@@ -68,10 +81,11 @@ void KisTile::copyTile(const KisTile& tile)
 	m_bpp = tile.m_bpp;
 	m_data = 0;
 	m_defaultColor = tile.m_defaultColor;
+	m_parentPos = tile.m_parentPos;
 
 	if (tile.m_data) {
-		m_data = new unsigned int[m_width * m_height];
-		memcpy(m_data, tile.m_data, m_width * m_height * sizeof(unsigned int));
+		m_data = new uint[m_width * m_height];
+		memcpy(m_data, tile.m_data, m_width * m_height * sizeof(uint));
 	}
 }
 
@@ -80,18 +94,29 @@ void KisTile::setDirty(bool dirty)
 	m_dirty = dirty;
 }
 
-unsigned int* KisTile::data()
+uint* KisTile::data()
 {
 	if (!m_data)
-		m_data = new unsigned int[m_width * m_height];
+		m_data = new uint[m_width * m_height];
 
 	return m_data;
 }
 
 void KisTile::initTile()
 {
-	m_data = new unsigned int[m_width * m_height];
+	m_data = new uint[m_width * m_height];
 	qFill(m_data, m_data + m_width * m_height, m_defaultColor);
-	memset(m_data, rand() % 255, m_width * m_height * sizeof(unsigned int));
+	memset(m_data, rand() % 255, m_width * m_height * sizeof(uint));
+}
+
+void KisTile::move(int x, int y)
+{
+	m_parentPos.setX(x);
+	m_parentPos.setY(y);
+}
+
+void KisTile::move(const QPoint& parentPos)
+{
+	m_parentPos = parentPos;
 }
 

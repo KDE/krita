@@ -22,6 +22,7 @@
 #define KIS_TILES_
 
 #include <qcolor.h>
+#include <qpoint.h>
 
 #include "kis_tile.h"
 
@@ -35,7 +36,9 @@ public:
 	inline uint bpp() const;
 
 	KisTileSP setTile(uint x, uint y, KisTileSP tile);
+	KisTileSP setTile(const QPoint& pt, KisTileSP tile);
 	KisTileSP getTile(uint x, uint y);
+	KisTileSP getTile(const QPoint& pt);
 	KisTileSP takeTile(uint x, uint y);
 	bool swapTile(uint x1, uint y1, uint x2, uint y2);
 

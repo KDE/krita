@@ -2,6 +2,7 @@
  *  kis_tool_brush.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +32,8 @@
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_dlg_toolopts.h"
+#include "kis_image.h"
+#include "kis_image_cmd.h"
 #include "kis_global.h"
 #include "kis_paint_device.h"
 #include "kis_tool_brush.h"
@@ -39,44 +42,14 @@
 #include "kis_view.h"
 #include "kis_vec.h"
 
-class BrushToolCmd : public KisCommand {
-public:
-	BrushToolCmd(KisDoc *doc);
-	virtual ~BrushToolCmd();
-
-	virtual void execute();
-	virtual void unexecute();
-};
-
-BrushToolCmd::BrushToolCmd(KisDoc *doc) : KisCommand(doc)
-{
-}
-
-BrushToolCmd::~BrushToolCmd()
-{
-}
-
-void BrushToolCmd::execute()
-{
-	kdDebug() << "BrushToolCmd::execute\n";
-}
-
-void BrushToolCmd::unexecute()
-{
-	kdDebug() << "BrushToolCmd::unexecute\n";
-}
-
-BrushTool::BrushTool(KisDoc *doc, KisBrush *brush) : KisTool(doc)
+BrushTool::BrushTool(KisDoc *doc, KisBrush *brush) : super(doc)
 {
 	m_doc = doc;
 	m_dragging = false;
 	m_dragdist = 0;
-
-	// initialize brush tool settings
 	m_usePattern = false;
 	m_useGradient = false;
 	m_opacity = CHANNEL_MAX;
-
 	setBrush(brush);
 }
 
@@ -115,8 +88,8 @@ void BrushTool::setBrush(KisBrush *brush)
 void BrushTool::mousePress(QMouseEvent *e)
 {
 	KisView *view = getCurrentView();
-	KisImage *img;
-	KisPaintDevice *device; 
+	KisImageSP img;
+	KisPaintDeviceSP device; 
 	QPoint pos = zoomed(e -> pos());
 
 	if (e -> button() != QMouseEvent::LeftButton)
@@ -143,6 +116,8 @@ void BrushTool::mousePress(QMouseEvent *e)
 	m_dragging = true;
 	m_dragStart = pos;
 	m_dragdist = 0;
+	Q_ASSERT(m_cmd == 0);
+	m_cmd = new KisImageCmd(i18n("Paint"), img, device);
 
 	if (paintMonochrome(pos)) {
 		QRect rc(pos - m_hotSpot, m_brushSize);
@@ -173,7 +148,8 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 	int sy = clipRect.top() - starty;
 	int ex = clipRect.right() - startx;
 	int ey = clipRect.bottom() - starty;
-	int invopacity = CHANNEL_MAX - m_opacity;
+	double opacity = m_opacity / CHANNEL_MAX;
+	double invopacity = (CHANNEL_MAX - m_opacity) / CHANNEL_MAX;
 
 	uchar *sl;
 	uchar bv, invbv;
@@ -195,10 +171,9 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 				continue;
 
 			invbv = CHANNEL_MAX - bv;
-			b = (m_blue * m_opacity + r * invopacity) / CHANNEL_MAX;
-			g = (m_green * m_opacity + g * invopacity) / CHANNEL_MAX;
-			r = (m_red * m_opacity + r * invopacity) / CHANNEL_MAX;
-//			rgb = (qRgb(m_red, m_green, m_red) * m_opacity + rgb * invopacity) / CHANNEL_MAX;
+			b = static_cast<int>(m_blue * opacity + r * invopacity);
+			g = static_cast<int>(m_green * opacity + g * invopacity);
+			r = static_cast<int>(m_red * opacity + r * invopacity);
 
 			if (m_alpha) {
 				a = qAlpha(rgb);
@@ -216,7 +191,7 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 			else 
 				rgb = qRgb(r, g, b);
 
-			lay -> setPixel(startx + x, starty + y, rgb);
+			lay -> setPixel(startx + x, starty + y, rgb, m_cmd);
 		}
 	}
 
@@ -282,6 +257,8 @@ void BrushTool::mouseRelease(QMouseEvent *e)
 		return;
 
 	m_dragging = false;
+	m_doc -> addCommand(m_cmd);
+	m_cmd = 0;
 }
 
 bool BrushTool::paintColor(const QPoint& /*pos*/)

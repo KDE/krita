@@ -33,7 +33,7 @@ IntegerWidget::IntegerWidget( int min, int max, QWidget* parent, const char* nam
 {
   layout = 0L;
 
-  spinBox = new KSpinBox( min, max, 1, this, "spinbox" );
+  spinBox = new KisSpinBox( min, max, 1, this, "spinbox" );
   connect( spinBox, SIGNAL( valueChanged( int ) ), this, SLOT( setSliderValue( int ) ) );
 
   slider = new QSlider( min, max, 1, min, QSlider::Horizontal, this, "sld" );
@@ -44,9 +44,6 @@ IntegerWidget::IntegerWidget( int min, int max, QWidget* parent, const char* nam
 
 IntegerWidget::~IntegerWidget()
 {
-  delete spinBox;
-  delete slider;
-  delete layout;
 }
 
 // the currently set value
@@ -114,18 +111,18 @@ void IntegerWidget::setSliderValue( int value )
 //// a quick wrapper around QSpinBox to be able to set focus to the LineEdit
 //
 
-KSpinBox::KSpinBox( QWidget *parent, const char *name )
+KisSpinBox::KisSpinBox( QWidget *parent, const char *name )
   : QSpinBox( parent, name )
 {
 }
 
-KSpinBox::KSpinBox( int minValue, int maxValue, int step, QWidget *parent,
+KisSpinBox::KisSpinBox( int minValue, int maxValue, int step, QWidget *parent,
 		    const char *name )
   : QSpinBox( minValue, maxValue, step, parent, name )
 {
 }
 
-void KSpinBox::setEditFocus( bool mark )
+void KisSpinBox::setEditFocus( bool mark )
 {
   QLineEdit *edit = editor();
   edit->setFocus();

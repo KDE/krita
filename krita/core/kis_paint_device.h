@@ -32,6 +32,7 @@
 #include "kis_tile.h"
 
 class KoStore;
+class KisImageCmd;
 class KisPaintDevice;
 
 typedef KSharedPtr<KisPaintDevice> KisPaintDeviceSP;
@@ -49,7 +50,7 @@ public:
 	inline void setName(const QString& name);
 	inline QString name() const;
 
-	virtual void setPixel(uint x, uint y, uint val);
+	virtual void setPixel(uint x, uint y, uint pixel, KisImageCmd *cmd = 0);
 	virtual bool pixel(uint x, uint y, uint *val);
 	virtual uint pixel(uint x, uint y);
 
@@ -64,6 +65,7 @@ public:
 
 	void findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
 	void findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const;
+	KisTileSP swapTile(KisTileSP tile);
 
 	inline uchar opacity() const;
 	inline void setOpacity(uchar o);
@@ -71,8 +73,8 @@ public:
 	inline bool visible() const;
 	inline void setVisible(bool v);
 
-	bool writeToStore(KoStore *store);
-	bool loadFromStore(KoStore *store);
+	virtual bool writeToStore(KoStore *store);
+	virtual bool loadFromStore(KoStore *store);
 
 protected:
 	uchar m_opacity;

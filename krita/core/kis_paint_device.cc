@@ -21,14 +21,15 @@
 #include <qcstring.h>
 #include <qdatastream.h>
 
-#include <kdebug.h>
-
 #include <koStore.h>
 
 #include "kis_global.h"
+#include "kis_image_cmd.h"
 #include "kis_paint_device.h"
 #include "kis_tile.h"
 
+const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(unsigned int);
+    
 KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uint bpp, const QRgb& defaultColor) :
 	m_tiles(width / TILE_SIZE, height / TILE_SIZE, bpp, defaultColor)
 {
@@ -40,12 +41,15 @@ KisPaintDevice::~KisPaintDevice()
 {
 }
 
-void KisPaintDevice::setPixel(uint x, uint y, uint pixel)
+void KisPaintDevice::setPixel(uint x, uint y, uint pixel, KisImageCmd *cmd)
 {
 	int tileNoY = y / TILE_SIZE;
 	int tileNoX = x / TILE_SIZE;
-	KisTile *tile = m_tiles.getTile(tileNoX, tileNoY);
+	KisTileSP tile = m_tiles.getTile(tileNoX, tileNoY);
 	uint *ppixel;
+
+	if (cmd)
+		cmd -> addTile(tile);
 
 	ppixel = tile -> data();
 	*(ppixel + ((y % TILE_SIZE) * TILE_SIZE) + (x % TILE_SIZE)) = pixel;
@@ -96,14 +100,13 @@ QRect KisPaintDevice::tileExtents() const
 	return m_tileRect;
 }
 
-/*
-    append binary image data per channel per layer to save file
-*/
- 
+KisTileSP KisPaintDevice::swapTile(KisTileSP tile)
+{
+	return m_tiles.setTile(tile -> tileCoords(), tile);
+}
+
 bool KisPaintDevice::writeToStore(KoStore *store)
 {
-	const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(unsigned int);
-    
 	for (uint ty = 0; ty < yTiles(); ty++) 
 		for (uint tx = 0; tx < xTiles(); tx++) {
 			KisTile *src = m_tiles.getTile(tx, ty);
@@ -118,7 +121,6 @@ bool KisPaintDevice::writeToStore(KoStore *store)
 
 bool KisPaintDevice::loadFromStore(KoStore *store)
 {
-	const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(unsigned int);
 	int nread;
 
 	for (uint ty = 0; ty < yTiles(); ty++) {
@@ -128,10 +130,8 @@ bool KisPaintDevice::loadFromStore(KoStore *store)
 
 			nread = store -> read(p, TILE_BYTES);
 
-			if (nread != TILE_BYTES) {
-				kdDebug() << "nread = " << nread << endl;
+			if (nread != TILE_BYTES)
 				return false;
-			}
 		}
 	}
 

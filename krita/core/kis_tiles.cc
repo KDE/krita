@@ -20,8 +20,6 @@
 
 #include <qtl.h>
 
-#include <kdebug.h>
-
 #include "kis_global.h"
 #include "kis_tiles.h"
 #include "kis_tile.h"
@@ -49,6 +47,11 @@ KisTileSP KisTiles::setTile(uint x, uint y, KisTileSP tile)
 	return oldTile;
 }
 
+KisTileSP KisTiles::setTile(const QPoint& pt, KisTileSP tile)
+{
+	return setTile(pt.x(), pt.y(), tile);
+}
+
 KisTileSP KisTiles::getTile(uint x, uint y)
 {
 	if (!intersects(x, y))
@@ -57,9 +60,14 @@ KisTileSP KisTiles::getTile(uint x, uint y)
 	int tileNo = getTileNo(x, y);
 
 	if (!m_tiles[tileNo])
-		m_tiles[tileNo] = new KisTile(TILE_SIZE, TILE_SIZE, m_bpp, m_defaultColor);
+		m_tiles[tileNo] = new KisTile(x, y, TILE_SIZE, TILE_SIZE, m_bpp, m_defaultColor);
 	
 	return m_tiles[tileNo];
+}
+
+KisTileSP KisTiles::getTile(const QPoint& pt)
+{
+	return getTile(pt.x(), pt.y());
 }
 
 KisTileSP KisTiles::takeTile(uint x, uint y)

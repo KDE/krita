@@ -22,6 +22,7 @@
 #define KIS_TILE_
 
 #include <qcolor.h>
+#include <qpoint.h>
 #include <qvaluevector.h>
 
 #include <ksharedptr.h>
@@ -35,27 +36,33 @@ typedef KisTileSPLst::const_iterator KisTileSPLstConstIterator;
 
 class KisTile : public KShared {
 public:
-	KisTile(unsigned int width, unsigned int height, unsigned int bpp, const QRgb& defaultColor, bool dirty = false);
+	KisTile(int x, int y, uint width, uint height, uint bpp, const QRgb& defaultColor, bool dirty = false);
+	KisTile(const QPoint& parentPos, uint width, uint height, uint bpp, const QRgb& defaultColor, bool dirty = false);
 	KisTile(const KisTile& tile);
 	KisTile& operator=(const KisTile& tile);
 	virtual ~KisTile();
 
 	void copyTile(const KisTile& tile);
 	void setDirty(bool dirty);
+	void move(int x, int y);
+	void move(const QPoint& parentPos);
 	inline bool dirty() const;
-	inline unsigned int bpp();
-	unsigned int* data();
-	inline const unsigned int* data() const;
+	inline uint bpp();
+	uint* data();
+	inline const uint* data() const;
+
+	inline QPoint tileCoords();
 
 private:
 	void initTile();
 
 private:
+	QPoint m_parentPos;
 	bool m_dirty;
-	unsigned int m_width;
-	unsigned int m_height;
-	unsigned int m_bpp;
-	unsigned int *m_data;
+	uint m_width;
+	uint m_height;
+	uint m_bpp;
+	uint *m_data;
 	QRgb m_defaultColor;
 };
 
@@ -64,14 +71,19 @@ bool KisTile::dirty() const
 	return m_dirty;
 }
 
-unsigned int KisTile::bpp()
+uint KisTile::bpp()
 {
 	return m_bpp;
 }
 
-const unsigned int* KisTile::data() const
+const uint* KisTile::data() const
 {
 	return m_data;
+}
+
+QPoint KisTile::tileCoords()
+{
+	return m_parentPos;
 }
 
 #endif // KIS_TILE_

@@ -29,8 +29,11 @@ class KToggleAction;
 
 class KisBrush;
 class KisDoc;
+class KisImageCmd;
 
 class BrushTool : public KisTool {
+	typedef KisTool super;
+
 public:
 	BrushTool(KisDoc *doc, KisBrush *brush);
 	virtual ~BrushTool();
@@ -55,6 +58,7 @@ public slots:
 
 protected:
 	KToggleAction *m_toggle;
+	KisImageCmd *m_cmd;
 	QPoint m_dragStart;
 	bool m_dragging;
 	float m_dragdist;

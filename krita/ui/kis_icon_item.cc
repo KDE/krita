@@ -133,7 +133,7 @@ int KisIconItem::compositeOp() const {
 		return m_resource -> compositeOp();
 	}
 	else {
-		return COMPOSITE_NORMAL;
+		return COMPOSITE_OVER;
 	}
 	
 }

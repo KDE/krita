@@ -27,9 +27,7 @@
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name) 
 	: super( false, parent, name )
 {
-
-	insertItem(i18n("Undefined"));
-	insertItem(i18n("Over"));
+	insertItem(i18n("Normal"));
 	insertItem(i18n("In"));
 	insertItem(i18n("Out"));
 	insertItem(i18n("Atop"));
@@ -68,7 +66,6 @@ KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
 	insertItem(i18n("Copy magenta"));
 	insertItem(i18n("Copy yellow"));
 	insertItem(i18n("Copy black"));
-	insertItem(i18n("Normal"));
 	
 }
 

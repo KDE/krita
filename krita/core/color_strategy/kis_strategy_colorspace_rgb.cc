@@ -283,9 +283,6 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 	case COMPOSITE_COPY_BLACK:
 		compositeCopyBlack(stride, dst, dststride, src, srcstride, rows, cols, opacity);
 		break;
-	case COMPOSITE_NORMAL:
-		compositeNormal(stride, dst, dststride, src, srcstride, rows, cols, opacity);
-		break;
 	case COMPOSITE_ERASE:
 		compositeErase(stride, dst, dststride, src, srcstride, rows, cols, opacity);
 		break;

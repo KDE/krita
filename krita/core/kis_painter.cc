@@ -732,7 +732,7 @@ void KisPainter::eraseAt(const QPoint &pos,
 				m_dab -> setPixel(x, y, m_backgroundColor, mask -> alphaAt(x, y));
 			}
 		}
-		bitBlt( pos.x() - m_hotSpotX,  pos.y() - m_hotSpotY,  COMPOSITE_NORMAL, m_dab.data() );
+		bitBlt( pos.x() - m_hotSpotX,  pos.y() - m_hotSpotY,  COMPOSITE_OVER, m_dab.data() );
 		
 		m_dirtyRect = QRect(pos.x() - m_hotSpotX,
 				    pos.y() - m_hotSpotY,

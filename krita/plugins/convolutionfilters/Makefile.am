@@ -9,8 +9,11 @@ INCLUDES  = -I$(srcdir)/../../core/color_strategy -I$(srcdir)/../../core/composi
 
 kde_module_LTLIBRARIES = kritaconvolutionfilters.la
 
-kritaconvolutionfilters_la_SOURCES = convolutionfilters.cc
-noinst_HEADERS = convolutionfilters.h
+kritaconvolutionfilters_la_SOURCES = convolutionfilters.cc \
+	kis_convolution_filter.cc
+
+noinst_HEADERS = convolutionfilters.h \
+	kis_convolution_filter.h
 
 kritaconvolutionfilters_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritaconvolutionfilters_la_LIBADD =  ../../libkritacommon.la $(LIB_KOFFICECORE) $(LIB_KOPAINTER)

@@ -21,31 +21,86 @@
 #define EXAMPLE_H
 
 #include <kparts/plugin.h>
+#include "kis_convolution_filter.h"
+#include "kis_matrix.h"
 
 class KisView;
 
+class KisGaussianBlurFilter : public KisConvolutionFilter {
+public:
+	KisGaussianBlurFilter();
+public:
+	virtual KisMatrix3x3* matrixes();
+};
+
+class KisSharpenFilter : public KisConvolutionFilter {
+public:
+	KisSharpenFilter();
+public:
+	virtual KisMatrix3x3* matrixes();
+};
+
+class KisMeanRemovalFilter : public KisConvolutionFilter {
+public:
+	KisMeanRemovalFilter();
+public:
+	virtual KisMatrix3x3* matrixes();
+};
+
+class KisEmbossLaplascianFilter : public KisConvolutionFilter {
+public:
+	KisEmbossLaplascianFilter();
+public:
+	virtual KisMatrix3x3* matrixes();
+};
+
+class KisEmbossInAllDirectionsFilter : public KisConvolutionFilter {
+public:
+	KisEmbossInAllDirectionsFilter();
+public:
+	virtual KisMatrix3x3* matrixes();
+};
+
+class KisEmbossHorizontalVerticalFilter : public KisConvolutionFilter {
+public:
+	KisEmbossHorizontalVerticalFilter();
+public:
+	virtual KisMatrix3x3* matrixes();
+};
+
+class KisEmbossVerticalFilter : public KisConvolutionFilter {
+public:
+	KisEmbossVerticalFilter();
+public:
+	virtual KisMatrix3x3* matrixes();
+};
+
+class KisEmbossHorizontalFilter : public KisConvolutionFilter {
+public:
+	KisEmbossHorizontalFilter();
+public:
+	virtual KisMatrix3x3* matrixes();
+};
+
+class KisEmbossDiagonalFilter : public KisConvolutionFilter {
+public:
+	KisEmbossDiagonalFilter();
+public:
+	virtual KisMatrix3x3* matrixes();
+};
+
+class KisTopEdgeDetectionFilter : public KisConvolutionFilter {
+public:
+	KisTopEdgeDetectionFilter();
+public:
+	virtual KisMatrix3x3* matrixes();
+};
 
 class KritaConvolutionFilters : public KParts::Plugin
 {
-	Q_OBJECT
 public:
 	KritaConvolutionFilters(QObject *parent, const char *name, const QStringList &);
 	virtual ~KritaConvolutionFilters();
-	
-private slots:
-	void slotGaussianBlurActivated();
-	void slotSharpenActivated();
-	void slotMeanRemovalActivated();
-	void slotEmbossLaplascianActivated();
-	void slotEmbossEmbossAllDirectionsActivated();
-	void slotTopEdgeDetectionActivated();
-private:
-	void doIt(KisMatrix3x3* matrix, const char* name);
-	Q_INT32 depth();
-private:
-	KisView* m_view;
-	KisPainter *m_painter;
-
 };
 
 #endif

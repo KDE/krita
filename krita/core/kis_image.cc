@@ -16,6 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <stdlib.h>
+#include <math.h>
 
 #include <qimage.h>
 #include <qpainter.h>
@@ -452,24 +453,46 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 
 void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress) 
 {
-	//kdDebug() << "KisImage::rotate. ANGLE: " 
-	//	  << angle
-	//	  << "\n";
+	const double pi=3.1415926535897932385;
+        
+        if (m_layers.empty()) return; // Nothing to scale
 
-
-	if (m_layers.empty()) return; // Nothing to scale
-
-        //fix undo
-	undoAdapter()->beginMacro("Shear image");
+        //new image size
+	Q_INT32 w=width();
+        Q_INT32 h=height();	
+        
+        if(angleX != 0 && angleY == 0){
+                w = width() + QABS(height()*tan(angleX*pi/180));
+                h = height();
+        }        
 	
-	vKisLayerSP_it it;
-	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-		KisLayerSP layer = (*it);
-		layer -> shear(angleX, angleY, m_progress);
+        if(angleX == 0 && angleY != 0){
+                w = width();
+                h = height() + QABS(width()*tan(angleY*pi/180));
+        }    
+        
+	if (w != width() || h != height()) {
+
+		undoAdapter() -> beginMacro("Shear image");
+
+		vKisLayerSP_it it;
+		for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
+			KisLayerSP layer = (*it);
+			layer -> shear(angleX, angleY, m_progress);
+		}
+
+		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
+		
+		m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
+		m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
+
+		m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
+		m_bkg = new KisBackground(this, w, h);
+
+		undoAdapter()->endMacro();
+
+		emit sizeChanged(KisImageSP(this), w, h);
 	}
-
-	undoAdapter()->endMacro();
-
 }
 
 void KisImage::convertTo( KisStrategyColorSpaceSP colorStrategy)

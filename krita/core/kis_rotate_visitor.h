@@ -41,8 +41,8 @@ private:
 	// Implement KisProgressSubject
 	bool m_cancelRequested;
         virtual void cancel() { m_cancelRequested = true; }
-        void xShearImage(double angle, Q_INT32 width, Q_INT32 height, Q_INT32 x_offset, Q_INT32 y_offset);
-        
+        void xShearImage(double angleX, KisProgressDisplayInterface *m_progress);
+        void yShearImage(double angleY, KisProgressDisplayInterface *m_progress);
 };
 
 inline KisRotateVisitor::KisRotateVisitor()

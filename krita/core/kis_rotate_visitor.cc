@@ -85,15 +85,94 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
 {
         kdDebug() << "Shear Code called! Going to shear image by xAngle " << angleX << " and yAngle " << angleY << "\n";
         
-        const double pi=3.1415926535897932385;
-        
-        Q_INT32 xOffset, yOffset, yWidth;
-        Q_INT32 shearX=-tan(angleX*pi/180);
-
-        xOffset=(fabs(2.0*m_dev->height()*shearX)+0.5);
-        xShearImage(shearX,m_dev->width(),m_dev->height(),xOffset,0);
+        if(angleX != 0 && angleY == 0)
+                xShearImage(angleX, m_progress);
+        if(angleX == 0 && angleY != 0)
+                yShearImage(angleY, m_progress);
 }
 
-void KisRotateVisitor::xShearImage(double angle, Q_INT32 width, Q_INT32 height, Q_INT32 x_offset, Q_INT32 y_offset)
+void KisRotateVisitor::xShearImage(double angleX, KisProgressDisplayInterface *m_progress)
 {
+        kdDebug() << "xShearImage called, angle " << angleX << "\n";
+
+        const double pi=3.1415926535897932385;
+        
+        Q_INT32 width = m_dev->width();
+        Q_INT32 height = m_dev->height();
+        
+        double theta=angleX*pi/180;
+        double tanTheta=tan(theta);
+        
+        //calculate widht of the sheared image
+        Q_INT32 targetW = width + QABS(height*tanTheta);
+        Q_INT32 targetH = height;
+        KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
+        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
+        
+        //shear the image
+        QUANTUM *tempRow = new QUANTUM[width * m_dev -> depth() * sizeof(QUANTUM)];
+        Q_INT32 displacement;
+        Q_INT32 currentPos;
+        
+        for (Q_INT32 y=0; y < height; y++){
+                //calculate displacement
+                displacement = (height-y)*tanTheta;
+                //read a row from the image
+                m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
+                //copy the pixels to the newData array
+                for(Q_INT32 x=0; x < width; x++){
+                        currentPos = (y*targetW+x) * m_dev -> depth(); // try to be at least a little efficient
+                        for(int channel = 0; channel < m_dev -> depth(); channel++){
+                                newData[currentPos + displacement*m_dev -> depth() + channel]=tempRow[x*m_dev -> depth()+channel];
+                        }
+                }
+        }        
+
+        //now write newData to the image
+        kdDebug() << "write newData to the image!" << "\n";
+        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
+        m_dev -> setTiles(tm); // Also sets width and height correctly
+}
+
+void KisRotateVisitor::yShearImage(double angleY, KisProgressDisplayInterface *m_progress)
+{
+        kdDebug() << "YShearImage called, angle " << angleY << "\n";
+
+        const double pi=3.1415926535897932385;
+        
+        Q_INT32 width = m_dev->width();
+        Q_INT32 height = m_dev->height();
+        
+        double theta=angleY*pi/180;
+        double tanTheta=tan(theta);
+        
+        //calculate widht of the sheared image
+        Q_INT32 targetW = width;
+        Q_INT32 targetH = height + QABS(width*tanTheta); ;
+        KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
+        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
+        
+        //shear the image
+        QUANTUM *tempCol = new QUANTUM[height * m_dev -> depth() * sizeof(QUANTUM)];
+        Q_INT32 displacement;
+        Q_INT32 currentPos;
+        
+        for (Q_INT32 x=0; x < width; x++){
+                //calculate displacement
+                displacement = x*tanTheta;
+                //read a column from the image
+                m_dev -> tiles() -> readPixelData(x, 0, x, height - 1, tempCol, m_dev -> depth());
+                //copy the pixels to the newData array
+                for(Q_INT32 y=0; y < height; y++){
+                        currentPos = ((y+displacement)*targetW+x) * m_dev -> depth(); // try to be at least a little efficient
+                        for(int channel = 0; channel < m_dev -> depth(); channel++){
+                                newData[currentPos + channel]=tempCol[y*m_dev -> depth()+channel];
+                        }
+                }
+        }        
+
+        //now write newData to the image
+        kdDebug() << "write newData to the image!" << "\n";
+        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
+        m_dev -> setTiles(tm); // Also sets width and height correctly
 }

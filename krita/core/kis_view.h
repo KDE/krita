@@ -101,11 +101,6 @@ signals:
 
 public slots:
 	void dialog_gradient();
-	void dialog_colors();
-	void dialog_brushes();
-	void dialog_patterns();
-	void dialog_layers();
-	void dialog_channels();
 	void slotSetFGColor(const KoColor& c);
 	void slotSetBGColor(const KoColor& c);
              
@@ -277,6 +272,10 @@ private slots:
 	void imgUpdated(KisImageSP img, const QRect& rc);
 	void slotZoomIn();
 	void slotZoomOut();
+	void viewColorDocker();
+	void viewControlDocker();
+	void viewLayerChannelDocker();
+	void viewResourceDocker();
 
 private:
 	KisDoc *m_doc;
@@ -331,15 +330,6 @@ private:
 	KAction *m_selectionSelectAll;
 	KAction *m_selectionSelectNone;
 
-	KToggleAction *m_sidebarToggle; 
-	KToggleAction *m_floatsidebarToggle; 
-	KToggleAction *m_lsidebarToggle;
-	KToggleAction *m_dlgColorsToggle;
-	KToggleAction *m_dlgBrushToggle;
-	KToggleAction *m_dlgPatternToggle; 
-	KToggleAction *m_dlgLayersToggle; 
-	KToggleAction *m_dlgChannelsToggle;
-
 	DCOPObject *m_dcop;
 
         // Widgets
@@ -347,10 +337,10 @@ private:
 	QScrollBar *m_vScroll; // is not right yet.
         
         //Dockers
-        DockFrameDocker *m_layerchanneldocker;
-        DockFrameDocker *m_brushpatterndocker;
-        ToolControlDocker *m_toolcontroldocker;
-        ColorDocker *m_colordocker;
+	DockFrameDocker *m_layerchanneldocker;
+	DockFrameDocker *m_resourcedocker;
+	ToolControlDocker *m_toolcontroldocker;
+	ColorDocker *m_colordocker;
 
 	QWidget *m_paletteChooser;    
 	QWidget *m_gradientChooser;

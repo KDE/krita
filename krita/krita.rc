@@ -35,6 +35,11 @@
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
   <Separator/>
+  <Action name="view_color_docker"/>  
+  <Action name="view_control_docker"/>
+  <Action name="view_layer_docker"/>
+  <Action name="view_resource_docker"/>
+  <Separator/>
   <Action name="refresh_canvas"/>
   <Action name="paint_offset"/>
  </Menu>

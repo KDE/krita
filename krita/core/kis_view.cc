@@ -154,14 +154,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_imgMergeAll = 0;
 	m_imgMergeVisible = 0;
 	m_imgMergeLinked = 0;
-	m_sidebarToggle = 0;
-	m_floatsidebarToggle  = 0;
-	m_lsidebarToggle = 0;
-	m_dlgColorsToggle = 0;
-	m_dlgBrushToggle = 0;
-	m_dlgPatternToggle = 0;
-	m_dlgLayersToggle = 0;
-	m_dlgChannelsToggle = 0;
 	m_hScroll = 0;
 	m_vScroll = 0;
 	m_dcop = 0;
@@ -169,10 +161,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_yoff = 0;
 	m_fg = KoColor::black();
 	m_bg = KoColor::white();
-        m_layerchanneldocker = 0;
-        m_brushpatterndocker = 0;
-        m_toolcontroldocker = 0;
-        m_colordocker = 0;
+	m_layerchanneldocker = 0;
+	m_resourcedocker = 0;
+	m_toolcontroldocker = 0;
+	m_colordocker = 0;
 	m_paletteChooser = 0;
 	m_gradientChooser = 0;
 	m_imageChooser = 0;
@@ -226,21 +218,25 @@ void KisView::setupSideBar()
 	KisResourceServer *rserver = KisFactory::rServer();
 
 	if (sb) {
-                m_layerchanneldocker = new DockFrameDocker(this);
-                m_brushpatterndocker = new DockFrameDocker(this);
-                m_toolcontroldocker = new ToolControlDocker(this);
-                m_colordocker = new ColorDocker(this);
+		m_layerchanneldocker = new DockFrameDocker(this);
+		m_layerchanneldocker  -> setCaption(i18n("Layers/Channels"));
+		m_resourcedocker = new DockFrameDocker(this);
+		m_resourcedocker  -> setCaption(i18n("Brushes/Pattern"));
+		m_toolcontroldocker = new ToolControlDocker(this);
+		m_toolcontroldocker  -> setCaption(i18n("Tool Properties"));
+		m_colordocker = new ColorDocker(this);
+		m_colordocker  -> setCaption(i18n("Color Manager"));
                 
 		m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
-							 m_brushpatterndocker, "brush_chooser", this);
+							 m_resourcedocker, "brush_chooser", this);
 		m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
-		m_brushpatterndocker -> plug(m_brushMediator -> chooserWidget());
+		m_resourcedocker -> plug(m_brushMediator -> chooserWidget());
 		connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
 
 		m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
-							    m_brushpatterndocker, "pattern chooser", this);
+							    m_resourcedocker, "pattern chooser", this);
 		m_pattern = dynamic_cast<KisPattern*>(m_patternMediator -> currentResource());
-		m_brushpatterndocker -> plug(m_patternMediator -> chooserWidget());
+		m_resourcedocker -> plug(m_patternMediator -> chooserWidget());
 		connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
 
 //  		m_gradientChooser = new QWidget(this);
@@ -270,7 +266,7 @@ void KisView::setupSideBar()
 		connect(m_layerBox, SIGNAL(itemLevel(int)), SLOT(layerLevel(int)));
 
 		m_layerchanneldocker -> plug(m_layerBox);
-                layersUpdated();
+		layersUpdated();
 
   		m_channelView = new KisChannelView(m_doc, this);
   		m_channelView -> setCaption(i18n("Channels"));
@@ -291,25 +287,13 @@ void KisView::setupSideBar()
 		connect(m_toolcontroldocker, SIGNAL(bgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetColor(const KoColor&)));                
                 
 		connect(m_colordocker, SIGNAL(ColorChanged(const KoColor&)), m_toolcontroldocker, SLOT(slotColorSelected(const KoColor&)));
-                
-		m_sidebarToggle -> setChecked(true);
 
 		rserver -> loadBrushes();
 		rserver -> loadpipeBrushes();
 		rserver -> loadPatterns();
                 
-                mainWindow() -> addDockWindow( m_layerchanneldocker, DockRight);
-                m_layerchanneldocker  -> setCaption(i18n("Layers/Channels"));
-                m_layerchanneldocker -> show();
-                mainWindow() -> addDockWindow( m_brushpatterndocker, DockRight );
-                m_brushpatterndocker  -> setCaption(i18n("Brushes/Pattern"));
-                m_brushpatterndocker -> show();
-                mainWindow() -> addDockWindow( m_toolcontroldocker, DockLeft );
-                m_toolcontroldocker  -> setCaption(i18n("Tool Control"));
-                m_toolcontroldocker -> show();
-                mainWindow() -> addDockWindow( m_colordocker, DockLeft );
-                m_colordocker  -> setCaption(i18n("Color"));
-                m_colordocker -> show();
+		viewLayerChannelDocker();
+		viewResourceDocker();
 	}
 }
 
@@ -472,23 +456,13 @@ void KisView::setupActions()
 
 	// setting actions
 	(void)new KAction(i18n("Paint Offset..."), "paint_offset", this, SLOT(setPaintOffset()), actionCollection(), "paint_offset");
-	m_sidebarToggle = new KToggleAction(i18n("Show/Hide Sidebar"), "ok", 0, this, SLOT(showSidebar()), actionCollection(), "show_sidebar");
-	m_floatsidebarToggle = new KToggleAction(i18n("Dock/Undock Sidebar"), "attach", 0, this, SLOT(floatSidebar()), actionCollection(), "float_sidebar");
-	m_lsidebarToggle = new KToggleAction(i18n("Left/Right Sidebar"), "view_right", 0, this, SLOT(placeSidebarLeft()), actionCollection(), "left_sidebar");
 	KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
-	// crayon box toolbar actions - these will be used only
-	// to dock and undock wideget in the crayon box
-	m_dlgColorsToggle = new KToggleAction(i18n("&Colors"), "color_dialog", 0, this, SLOT(dialog_colors()), actionCollection(), "colors_dialog");
-	m_dlgBrushToggle = new KToggleAction(i18n("Brushes"), "brush_dialog", 0, this, SLOT(dialog_brushes()), actionCollection(), "brushes_dialog");
-	m_dlgPatternToggle = new KToggleAction(i18n("Patterns"), "pattern_dialog", 0, this, SLOT(dialog_patterns()), actionCollection(), "patterns_dialog");
-	m_dlgLayersToggle = new KToggleAction(i18n("Layers"), "layer_dialog", 0, this, SLOT(dialog_layers()), actionCollection(), "layers_dialog");
-	m_dlgChannelsToggle = new KToggleAction(i18n("Channels"), "channel_dialog", 0, this, SLOT(dialog_channels()), actionCollection(), "channels_dialog");
-
-	m_dlgBrushToggle -> setChecked(true);
-	m_dlgPatternToggle -> setChecked(true);
-	m_dlgLayersToggle -> setChecked(true);
-	m_dlgChannelsToggle -> setChecked(true);
+	//docker actions
+	(void)new KAction(i18n( "&Color Manager" ), 0, this, SLOT( viewColorDocker() ), actionCollection(), "view_color_docker" );
+	(void)new KAction(i18n( "&Tool Properties" ), 0, this, SLOT( viewControlDocker() ), actionCollection(), "view_control_docker" );
+	(void)new KAction(i18n( "&Layers/Channels" ), 0, this, SLOT( viewLayerChannelDocker() ), actionCollection(), "view_layer_docker" );
+	(void)new KAction(i18n( "&Brushes/Pattern" ), 0, this, SLOT( viewResourceDocker() ), actionCollection(), "view_resource_docker" );
 }
 
 void KisView::reset()
@@ -1120,30 +1094,6 @@ void KisView::dialog_gradient()
 #endif
 }
 
-void KisView::dialog_colors()
-{
-}
-
-void KisView::dialog_brushes()
-{
-//	m_brushChooser -> setDocked(m_dlgBrushToggle -> isChecked());
-}
-
-void KisView::dialog_patterns()
-{
-//	m_PatternChooser -> setDocked(m_dlgPatternToggle -> isChecked());
-}
-
-void KisView::dialog_layers()
-{
-
-}
-
-void KisView::dialog_channels()
-{
-
-}
-
 void KisView::next_layer()
 {
 	KisImageSP img = currentImg();
@@ -1591,6 +1541,42 @@ void KisView::placeSidebarLeft()
 void KisView::preferences()
 {
 //	PreferencesDialog::editPreferences();
+}
+
+void KisView::viewColorDocker()
+{
+	if( m_colordocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_colordocker, DockRight );
+		m_colordocker->show();
+	}
+}
+
+void KisView::viewControlDocker()
+{
+	if( m_toolcontroldocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_toolcontroldocker, DockRight );
+		m_toolcontroldocker->show();
+	}
+}
+
+void KisView::viewLayerChannelDocker()
+{
+	if( m_layerchanneldocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_layerchanneldocker, DockRight );
+		m_layerchanneldocker->show();
+	}
+}
+
+void KisView::viewResourceDocker()
+{
+	if( m_resourcedocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_resourcedocker, DockRight );
+		m_resourcedocker->show();
+	}
 }
 
 Q_INT32 KisView::docWidth() const

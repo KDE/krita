@@ -109,3 +109,28 @@ really necessary. A good idea is perhaps to add a combobox to the
 selection tool properties widget to choose between 'select' and
 'deselect', where the brush is initially set to 'select' and the
 eraser to 'deselect'.
+
+From a thread in the mailing list Boudewijn wrote:
+-----------------------------------------------------------------------
+This is the behaviour I expect from a paint app:
+
+If there's a selection on the current layer, only the selected pixels in the 
+current layer should be transformed, rotated, scaled or sheared. This happens 
+within the layer. If the new pixels overlap untransformed pixels, they are 
+composed with the giving composite op and opacity.
+
+If there's no selection, a transform on a layer should transform all pixels in 
+a layer, i.e., act as if the layer was completely selected. No new layer is 
+created. There is no composition, because the old layer data is completely 
+discarded.
+
+If a transform is applied to a image, all layers are transformed. The 
+selection is transformed, too: in the new situation, the layer that has a 
+selection active still has a selection, but the shape of the selection is 
+transformed.
+
+If a layer is moved, the selection moves with the layer (this is not 
+implemented yet).
+
+A transform never creates a new layer (expect perhaps temporarily and it 
+wouldn't be visible to the user).

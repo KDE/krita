@@ -55,7 +55,6 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 			     const double /*xTilt*/,
 			     const double /*yTilt*/)
 {
-#if 0 //AUTOLAYER
 	if (!m_painter) return;
 	
 	KisPaintDeviceSP device = m_painter -> device();
@@ -92,34 +91,12 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 	
 	m_painter -> setPressure(pressure);
 
-	// Draw correctly near the left and top edges
-	Q_INT32 sx = 0;
-	Q_INT32 sy = 0;
-	if (x < 0) {
-		sx = -x;
-		x = 0;
-	}
-	if (y < 0) {
-		sy = -y;
-		y = 0;
-	}
 	QPoint srcPoint = QPoint((Q_INT32)(pt.x() - m_painter -> duplicateOffset().x()),
 				 (Q_INT32)(pt.y() - m_painter -> duplicateOffset().y()));
 
-	if( srcPoint.x() >= device -> width() || srcPoint.y() >= device -> height() )
-		return;
 		
-	Q_INT32 sw = dab->width();
-	Q_INT32 sh = dab->height();
-
-	if( srcPoint.x() + sw > device->width() )
-		sw = device->width() - srcPoint.x();
-
-	if( srcPoint.y() + sh > device->height() )
-		sh = device->height() - srcPoint.y();
-
-	if(sw < 0 || sh < 0)
-		return;
+	Q_INT32 sw = brush -> width();
+	Q_INT32 sh = brush -> height();
 
 	if (srcPoint.x() < 0 )
 		srcPoint.setX(0);
@@ -127,22 +104,32 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 	if( srcPoint.y() < 0)
 		srcPoint.setY(0);
 
-	KisPaintDeviceSP srcdev = new KisPaintDevice(sw, sh, dab.data() -> colorStrategy(), "");
-	
-	KisIteratorLinePixel srcLit = srcdev -> iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
-	KisIteratorLinePixel dabLit = dab.data() -> iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
-	KisIteratorLinePixel srcLitend = srcdev -> iteratorPixelSelectionEnd( 0, sx, sw - 1, sh - 1);
-	KisIteratorLinePixel devLit = device -> iteratorPixelSelectionBegin( m_painter -> transaction(), srcPoint.x(), srcPoint.x() + sw - 1, srcPoint.y());
-	while ( srcLit <= srcLitend )
+	KisPaintDeviceSP srcdev = new KisPaintDevice(dab.data() -> colorStrategy(), "");
+	int srcY = 0;
+
+	while ( srcY < sh )
 	{
-		KisIteratorPixel srcUit = *srcLit;
-		KisIteratorPixel dabUit = *dabLit;
-		KisIteratorPixel srcUitend = srcLit.end();
-		KisIteratorPixel devUit = * devLit;
-		while( srcUit <= srcUitend )
+		KisHLineIteratorPixel srcLit = srcdev -> createHLineIterator(0, srcY, sw - 1, true);
+		KisHLineIteratorPixel dabLit = dab.data() -> createHLineIterator(0, srcY, sw - 1, false);
+		KisHLineIteratorPixel devLit = device -> createHLineIterator(srcPoint.x(), srcPoint.y() + srcY, srcPoint.x() + sw - 1, false);
+		
+		while( !srcLit.isDone() )
 		{
-			// XXX: Fix this when alpha is set in KisPixel
+			KisPixel srcP((QUANTUM*) srcLit);
+			KisPixel dabP((QUANTUM*) dabLit);
+			KisPixel devP((QUANTUM*) devLit);
+			for( Q_INT32 i = 0; i < device -> colorStrategy() -> nColorChannels(); i++) {
+				QUANTUM devQ = (QUANTUM) devP[ i ];
+				QUANTUM dabQ = (QUANTUM) dabP[ i ];
+				srcP[ i ] = (QUANTUM) (((QUANTUM_MAX - dabQ) * (devQ) ) / QUANTUM_MAX);
+			}
+			for( Q_INT32 i = device -> colorStrategy() -> nColorChannels(); i < device -> colorStrategy() -> nChannels(); i++) {
+				QUANTUM devQ = (QUANTUM) devP[ i ];
+				QUANTUM dabQ = (QUANTUM) dabP[ i ];
+				srcP[ i ] = (QUANTUM) ((dabQ * devQ) / QUANTUM_MAX);
+			}
 			
+			// XXX: Fix this when alpha is set in KisPixel
 			//device -> colorStrategy() -> computeDuplicatePixel( &srcUit, &dabUit, &devUit);
 			/*
 			for (int i = 0; i < depth; ++i) {
@@ -150,12 +137,12 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 			}
 			dstPR.alpha() = ( dabPR.alpha() * srcPR.alpha() ) / QUANTUM_MAX;
 			*/
-			++srcUit; ++dabUit; ++devUit;
+			srcLit++; dabLit++; devLit++;
 		}
-		++srcLit; ++dabLit; ++devLit;
+		srcY++;
 	}
-	m_painter -> bitBlt( x,  y,  m_painter -> compositeOp(), srcdev, m_painter -> opacity(), sx, sy, srcdev -> width(),srcdev -> width());
 
-	m_painter -> addDirtyRect(QRect(x, y, dab -> width(), dab -> height()));
-#endif //AUTOLAYER
+	m_painter -> bitBlt( x,  y,  m_painter -> compositeOp(), srcdev, m_painter -> opacity(), 0, 0, brush -> width(), brush -> height());
+
+	m_painter -> addDirtyRect(QRect(x, y, brush -> width(), brush -> height()));
 }

@@ -54,11 +54,13 @@ of tags, where the application can define how to display elements defined
 by these tags. The definition of the document type is therefore different 
 for each KOffice application (as you will most likely not find a curved 
 line in a kword document). The Document Type Definition can be found in 
-every application source directory in the dir '(application)/dtd.'
+every application's source directory in the dir '(application)/dtd.'
 
-Also of interest is the lib/store/SPEC file.
+If you would like more information about the makeup of the actual KOffice 
+document structure (not the XML DTD), see the lib/store/SPEC file.
 
 If you want to see more/fix bugs in this file, feel free to ask or add it 
 yourself.
 
 Thomas <zander@earthling.net>
+(added/edited by Chris Lee <lee@azsites.com>)

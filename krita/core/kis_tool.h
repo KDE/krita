@@ -20,23 +20,23 @@
 #define KIS_TOOL_H_
 
 #include <qevent.h>
+#include <qobject.h>
 #include <qstring.h>
 #include <ksharedptr.h>
 #include "kis_types.h"
 #include "kis_cursor.h"
 
 class QRect;
+class KDialog;
 
-class KisToolInterface : public KShared {
+class KisToolInterface : public QObject, public KShared {
+	Q_OBJECT
+
 public:
 	KisToolInterface();
 	virtual ~KisToolInterface();
 
 public:
-	virtual QString name() const = 0;
-	virtual QString description() const = 0;
-	virtual QString groupName() const = 0;
-
 	virtual void paint(QPaintEvent *e) = 0;
 	virtual void clear() = 0;
 	virtual void clear(const QRect& rc) = 0;
@@ -55,13 +55,16 @@ public:
 	virtual void save(KisToolMementoSP memento) = 0;
 	virtual void restore(KisToolMementoSP memento) = 0;
 
+public slots:
+	virtual void activateSelf() = 0;
+
 private:
 	KisToolInterface(const KisToolInterface&);
 	KisToolInterface& operator=(const KisToolInterface&);
 };
 
 inline
-KisToolInterface::KisToolInterface() : KShared()
+KisToolInterface::KisToolInterface() : QObject(), KShared()
 {
 }
 

@@ -67,6 +67,7 @@ public:
 	virtual void updateReadWrite(bool readwrite);
 
 public:  
+	void activateTool(KisToolSP tool);
 	KoColor bgColor();
 	KoColor fgColor();
 	KisBrush *currentBrush();
@@ -250,6 +251,7 @@ private:
 	KisListBox *m_layerBox;
 	KisChannelView *m_channelView;
 	KisToolSP m_tool;
+	vKisToolSP m_toolSet;
 
 private:
 	mutable KisImageSP m_current;

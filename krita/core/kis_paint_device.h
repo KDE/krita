@@ -23,12 +23,13 @@
 #include <qpixmap.h>
 #include <qvaluelist.h>
 #include <qstring.h>
-#include <kcommand.h>
+#include <koColor.h>
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_render.h"
 
 class QImage;
+class QPoint;
 class KoStore;
 class KisImage;
 
@@ -55,9 +56,13 @@ public:
 	virtual void update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 public:
+	bool contains(Q_INT32 x, Q_INT32 y) const;
+	bool contains(const QPoint& pt) const;
 	QString name();
 	void setName(const QString& name);
 	void mergeShadow();
+	KoColor pixel(Q_INT32 x, Q_INT32 y);
+	void pixel(Q_INT32 x, Q_INT32 y, const KoColor& c);
 	void fill(const KoColor& clr);
 	void maskBounds(Q_INT32 *x1, Q_INT32 *y1, Q_INT32 *x2, Q_INT32 *y2);
 	void maskBounds(QRect *rc);

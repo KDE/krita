@@ -1,6 +1,4 @@
 /*
- *  colorpicker.h - part of KImageShop
- *
  *  Copyright (c) 1999 Matthias Elter
  *  Copyright (c) 2002 Patrick Julien
  *
@@ -18,27 +16,32 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#if !defined KIS_TOOL_COLOR_PICKER_H_
+#define KIS_TOOL_COLOR_PICKER_H_
 
-#ifndef __colorpicker_h__
-#define __colorpicker_h__
-
-#include <qpoint.h>
-
-#include <koColor.h>
-#include "kis_image.h"
+#include <qcursor.h>
 #include "kis_tool.h"
+#include "kis_tool_non_paint.h"
 
-class ColorPicker : public KisTool {
+class KisDoc;
+class KisView;
+
+class KisToolColorPicker : public KisToolNonPaint {
+	typedef KisToolNonPaint super;
+
 public:
-	ColorPicker(KisDoc *doc);
-	virtual ~ColorPicker();
+	KisToolColorPicker(KisView *view, KisDoc *doc);
+	virtual ~KisToolColorPicker();
   
-	virtual void setupAction(QObject *collection);
 	virtual void mousePress(QMouseEvent *e);
 
+	virtual void setCursor(const QCursor& cursor);
+	virtual void cursor(QWidget *w) const;
+
 private:
-	KoColor pick(KisImageSP img, KisPaintDeviceSP device, int x, int y);
+	QCursor m_cursor;
+	KisView *m_view;
 };
 
-#endif //__colorpicker_h__
+#endif // KIS_TOOL_COLOR_PICKER_H_
 

@@ -1,8 +1,5 @@
 /*
- *  kis_tool_factory.cc - part of Krayon
- *
  *  Copyright (c) 2000 Patrick Julien <freak@ideasandassociates.com>
- *
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,17 +15,19 @@
  *  along with view program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <kaction.h>
 
 #include "kis_global.h"
+#include "kis_types.h"
 #include "kis_tool_factory.h"
 
 // tools
+#if 0
 #include "kis_tool_select_freehand.h"
 #include "kis_tool_select_rectangular.h"
 #include "kis_tool_select_polygonal.h"
 #include "kis_tool_select_elliptical.h"
 #include "kis_tool_select_contiguous.h"
-
 #include "kis_tool_paste.h"
 #include "kis_tool_move.h"
 #include "kis_tool_zoom.h"
@@ -40,11 +39,14 @@
 #include "kis_tool_polygon.h"
 #include "kis_tool_rectangle.h"
 #include "kis_tool_ellipse.h"
+#endif
 #include "kis_tool_colorpicker.h"
+#if 0
 #include "kis_tool_colorchanger.h"
 #include "kis_tool_eraser.h"
 #include "kis_tool_fill.h"
 #include "kis_tool_stamp.h"
+#endif
 
 /*
  * toolFactory
@@ -58,20 +60,24 @@
  * safe, you should store the vector returned by this function inside the parent.  This
  * way, nobody will use this vector after the parent dies.
  */
-
-ktvector toolFactory(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern, KisDoc *doc)
+vKisToolSP toolFactory(KisView *view, KisDoc *doc)
 {
-	ktvector tools;
+	vKisToolSP tools;
 
-	tools.reserve(100);
+	Q_ASSERT(view);
+	Q_ASSERT(doc);
+	tools.reserve(25);
+
+#if 0
 	// painting tools
 	tools.push_back(new BrushTool(doc, brush));
-#if 0
 	tools.push_back(new AirBrushTool(doc, brush));
 	tools.push_back(new PenTool(doc, canvas, brush));
 	tools.push_back(new EraserTool(doc, brush));
 #endif
-	tools.push_back(new ColorPicker(doc));
+
+	tools.push_back(new KisToolColorPicker(view, doc));
+
 #if 0
 	tools.push_back(new ColorChangerTool(doc));
 	tools.push_back(new FillTool(doc));
@@ -79,10 +85,8 @@ ktvector toolFactory(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern, Ki
 
 	// Positioning tools
 	tools.push_back(new ZoomTool(doc));
-#endif
 	tools.push_back(new MoveTool(doc));
 
-#if 0
 	// selection tools
 	tools.push_back(new FreehandSelectTool(doc, canvas));
 	tools.push_back(new RectangularSelectTool(doc, canvas));

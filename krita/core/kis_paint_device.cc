@@ -111,6 +111,18 @@ void KisPaintDevice::update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 	invalidate(x, y, w, h);
 }
 
+bool KisPaintDevice::contains(Q_INT32 x, Q_INT32 y) const
+{
+	QRect rc(m_offX, m_offY, m_width, m_height);
+
+	return rc.contains(x, y);
+}
+
+bool KisPaintDevice::contains(const QPoint& pt) const
+{
+	return contains(pt.x(), pt.y());
+}
+	
 QString KisPaintDevice::name()
 {
 	return m_name;
@@ -163,18 +175,18 @@ bool KisPaintDevice::alpha() const
 enumImgType KisPaintDevice::type() const
 {
 	switch (m_imgType) {
-	case IMAGE_TYPE_INDEXED:
-		return IMAGE_TYPE_INDEXEDA;
-	case IMAGE_TYPE_GREY:
-		return IMAGE_TYPE_GREYA;
-	case IMAGE_TYPE_RGB:
-		return IMAGE_TYPE_RGBA;
-	case IMAGE_TYPE_CMYK:
-		return IMAGE_TYPE_CMYKA;
-	case IMAGE_TYPE_LAB:
-		return IMAGE_TYPE_LABA;
-	case IMAGE_TYPE_YUV:
-		return IMAGE_TYPE_YUVA;
+	case IMAGE_TYPE_INDEXEDA:
+		return IMAGE_TYPE_INDEXED;
+	case IMAGE_TYPE_GREYA:
+		return IMAGE_TYPE_GREY;
+	case IMAGE_TYPE_RGBA:
+		return IMAGE_TYPE_RGB;
+	case IMAGE_TYPE_CMYKA:
+		return IMAGE_TYPE_CMYK;
+	case IMAGE_TYPE_LABA:
+		return IMAGE_TYPE_LAB;
+	case IMAGE_TYPE_YUVA:
+		return IMAGE_TYPE_YUV;
 	default:
 		return m_imgType;
 	}
@@ -185,18 +197,18 @@ enumImgType KisPaintDevice::type() const
 enumImgType KisPaintDevice::typeWithAlpha() const
 {
 	switch (m_imgType) {
-		case IMAGE_TYPE_INDEXEDA:
-			return IMAGE_TYPE_INDEXED;
-		case IMAGE_TYPE_GREYA:
-			return IMAGE_TYPE_GREY;
-		case IMAGE_TYPE_RGBA:
-			return IMAGE_TYPE_RGB;
-		case IMAGE_TYPE_CMYKA:
-			return IMAGE_TYPE_CMYK;
-		case IMAGE_TYPE_LABA:
-			return IMAGE_TYPE_LAB;
-		case IMAGE_TYPE_YUVA:
-			return IMAGE_TYPE_YUV;
+		case IMAGE_TYPE_INDEXED:
+			return IMAGE_TYPE_INDEXEDA;
+		case IMAGE_TYPE_GREY:
+			return IMAGE_TYPE_GREYA;
+		case IMAGE_TYPE_RGB:
+			return IMAGE_TYPE_RGBA;
+		case IMAGE_TYPE_CMYK:
+			return IMAGE_TYPE_CMYKA;
+		case IMAGE_TYPE_LAB:
+			return IMAGE_TYPE_LABA;
+		case IMAGE_TYPE_YUV:
+			return IMAGE_TYPE_YUVA;
 		default:
 			return m_imgType;
 	}
@@ -317,4 +329,58 @@ void KisPaintDevice::init()
 	m_projectionValid = false;
 }
 
+KoColor KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y)
+{
+	KisTileMgrSP tm = data();
+	KisPixelDataSP pd = tm -> pixelData(x, y, x + 1, y + 1, TILEMODE_READ);
+	QUANTUM *data = pd -> data;
+	KoColor c;
+	Q_INT32 tmp;
+
+	Q_ASSERT(data);
+
+	switch (type()) {
+	case IMAGE_TYPE_INDEXED:
+		break; // TODO
+	case IMAGE_TYPE_GREY:
+		tmp = downscale(data[PIXEL_GRAY]);
+		c.setRGB(tmp, tmp, tmp);
+		break;
+	case IMAGE_TYPE_RGB:
+		c.setRGB(downscale(data[PIXEL_RED]), downscale(data[PIXEL_GREEN]), downscale(data[PIXEL_BLUE]));
+		break;
+	default:
+		break;
+	}
+
+	return c;
+}
+
+void KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, const KoColor& c)
+{
+	KisTileMgrSP tm = data();
+	KisPixelDataSP pd = tm -> pixelData(x, y, x + 1, y + 1, TILEMODE_WRITE);
+	QUANTUM *data = pd -> data;
+
+	Q_ASSERT(data);
+
+	switch (type()) {
+	case IMAGE_TYPE_INDEXED:
+		break; // TODO
+	case IMAGE_TYPE_GREY:
+		data[PIXEL_GRAY] = upscale(c.R());
+		break;
+	case IMAGE_TYPE_RGB:
+		data[PIXEL_RED] = upscale(c.R());
+		data[PIXEL_GREEN] = upscale(c.G());
+		data[PIXEL_BLUE] = upscale(c.B());
+		break;
+	default:
+		break;
+	}
+
+	tm -> releasePixelData(pd);
+}
+
 #include "kis_paint_device.moc"
+

@@ -1021,11 +1021,12 @@ void KisDoc::removeImage(KisImageSP img)
 {
 	vKisImageSP_it it = qFind(m_images.begin(), m_images.end(), img);
 
-	if (it != m_images.end())
+	if (it != m_images.end()) {
 		m_images.erase(it);
+		setModified(true);
+	}
 
 	emit imageListUpdated();
-	emit layersUpdated(img);
 	emit docUpdated();
 
 //	if (m_undo)

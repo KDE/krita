@@ -1,8 +1,6 @@
 /*
- *  kis_tool_factory.h - part of Krayon
  *
  *  Copyright (c) 2000 Patrick Julien <freak@ideasandassociates.com>
- *
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,13 +22,10 @@
 
 #include "kis_global.h"
 
-class KisCanvas;
-class KisBrush;
-class KisPattern;
 class KisDoc;
 class KisView;
 
-ktvector toolFactory(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern, KisDoc *doc);
+vKisToolSP toolFactory(KisView *view, KisDoc *doc);
 
 #endif // KIS_TOOL_FACTORY_H_
 

@@ -26,6 +26,7 @@
 #include <qscrollbar.h>
 #include <qspinbox.h>
 #include <qlineedit.h>
+
 // KDE
 #include <dcopobject.h>
 #include <kaction.h>
@@ -61,6 +62,7 @@
 #include "kis_sidebar.h"
 #include "kis_tabbar.h"
 #include "kis_tool.h"
+#include "kis_tool_factory.h"
 #include "kis_view.h"
 #include "kis_util.h"
 
@@ -130,6 +132,7 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
 	connect(m_doc, SIGNAL(projectionUpdated(KisImageSP)), SLOT(projectionUpdated(KisImageSP)));
+	m_toolSet = toolFactory(this, doc);
 }
 
 KisView::~KisView()
@@ -482,6 +485,14 @@ void KisView::clearCanvas(const QRect& rc)
 	QPainter gc(m_canvas);
 
 	gc.eraseRect(rc);
+}
+
+void KisView::activateTool(KisToolSP tool)
+{
+	if (tool && qFind(m_toolSet.begin(), m_toolSet.end(), tool) != m_toolSet.end()) {
+		m_tool = tool;
+		m_tool -> cursor(m_canvas);
+	}
 }
 
 KisImageSP KisView::currentImg() const
@@ -1157,7 +1168,6 @@ void KisView::layerScale(bool )
 #endif
 }
 
-
 void KisView::layer_rotate180()
 {
 
@@ -1182,7 +1192,6 @@ void KisView::layer_mirrorX()
 {
 }
 
-
 void KisView::layer_mirrorY()
 {
 }
@@ -1196,9 +1205,11 @@ void KisView::add_new_image_tab()
 
 void KisView::remove_current_image_tab()
 {
-	if (currentImg()) {
-		m_doc -> removeImage(currentImg());
-		m_doc -> setModified(true);
+	KisImageSP current = currentImg();
+
+	if (current) {
+		m_current = 0;
+		m_doc -> removeImage(current);
 	}
 }
 
@@ -1473,10 +1484,10 @@ void KisView::canvasGotPaintEvent(QPaintEvent *event)
 		Q_INT32 urW = ur.width();
 		Q_INT32 urH = ur.height();
 
-		urL = static_cast<int>(static_cast<double>(urL) / zoom());
-		urT = static_cast<int>(static_cast<double>(urT) / zoom());
-		urW = static_cast<int>(static_cast<double>(urW) / zoom());
-		urH = static_cast<int>(static_cast<double>(urH) / zoom());
+		urL = static_cast<Q_INT32>(static_cast<double>(urL) / zoom());
+		urT = static_cast<Q_INT32>(static_cast<double>(urT) / zoom());
+		urW = static_cast<Q_INT32>(static_cast<double>(urW) / zoom());
+		urH = static_cast<Q_INT32>(static_cast<double>(urH) / zoom());
 		ur.setLeft(urL);
 		ur.setTop(urT);
 		ur.setWidth(urW);
@@ -1486,83 +1497,60 @@ void KisView::canvasGotPaintEvent(QPaintEvent *event)
 	paintView(ur);
 }
 
-void KisView::canvasGotMousePressEvent(QMouseEvent *)
+void KisView::canvasGotMousePressEvent(QMouseEvent *e)
 {
-	kdDebug() << "KisView::canvasGotMousePressEvent\n";
-#if 0
-	if (m_pTool) {
-		int x = e -> pos().x() - canvasXOffset() + (int)(zoom() * m_hScroll -> value());
-		int y = e -> pos().y() - canvasYOffset() + (int)(zoom() * m_vScroll -> value());
+	if (m_tool) {
+		Q_INT32 x = e -> pos().x() - canvasXOffset() + static_cast<Q_INT32>(zoom() * m_hScroll -> value());
+		Q_INT32 y = e -> pos().y() - canvasYOffset() + static_cast<Q_INT32>(zoom() * m_vScroll -> value());
 		QMouseEvent ev(QEvent::MouseButtonPress, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
 
-		m_pTool -> mousePress(&ev);
-
-		if (e -> button() == Qt::LeftButton && m_pTool && m_pTool -> willModify())
-			m_doc -> setModified(true);
+		m_tool -> mousePress(&ev);
 	}
-#endif
 }
 
-void KisView::canvasGotMouseMoveEvent (QMouseEvent *)
+void KisView::canvasGotMouseMoveEvent(QMouseEvent *e)
 {
-//	kdDebug() << "KisView::canvasGotMouseMoveEvent\n";
-#if 0
-	if (m_pTool) {
-		int x = e -> pos().x() - canvasXOffset() + (int)(zoom() * m_hScroll -> value());
-		int y = e -> pos().y() - canvasYOffset() + (int)(zoom() * m_vScroll -> value());
-		QMouseEvent ev(QEvent::MouseMove, QPoint(x, y), e->globalPos(), e->button(), e->state());
+	if (m_tool) {
+		Q_INT32 x = e -> pos().x() - canvasXOffset() + static_cast<Q_INT32>(zoom() * m_hScroll -> value());
+		Q_INT32 y = e -> pos().y() - canvasYOffset() + static_cast<Q_INT32>(zoom() * m_vScroll -> value());
+		QMouseEvent ev(QEvent::MouseButtonPress, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
 
-		// set ruler pointers
 		if (zoom() >= 1.0 / 4.0) {
 			m_hRuler -> setValue(e -> pos().x() - canvasXOffset());
 			m_vRuler -> setValue(e -> pos().y() - canvasYOffset());
 		}
 
-		m_pTool -> mouseMove(&ev);
+		m_tool -> mouseMove(&ev);
 	}
-#endif
 }
 
-void KisView::canvasGotMouseReleaseEvent (QMouseEvent *)
+void KisView::canvasGotMouseReleaseEvent(QMouseEvent *e)
 {
-	kdDebug() << "KisView::canvasGotMouseReleaseEvent\n";
-#if 0
-	if (m_pTool) {
-		int x = e -> pos().x() - canvasXOffset() + (int)(zoom() * m_hScroll -> value());
-		int y = e -> pos().y() - canvasYOffset() + (int)(zoom() * m_vScroll -> value());
-		QMouseEvent ev(QEvent::MouseButtonRelease, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
+	if (m_tool) {
+		Q_INT32 x = e -> pos().x() - canvasXOffset() + static_cast<Q_INT32>(zoom() * m_hScroll -> value());
+		Q_INT32 y = e -> pos().y() - canvasYOffset() + static_cast<Q_INT32>(zoom() * m_vScroll -> value());
+		QMouseEvent ev(QEvent::MouseButtonPress, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
 
-		m_pTool -> mouseRelease(&ev);
+		m_tool -> mouseRelease(&ev);
 	}
-#endif
 }
 
-void KisView::canvasGotEnterEvent (QEvent *)
+void KisView::canvasGotEnterEvent(QEvent *e)
 {
-	kdDebug() << "KisView::canvasGotEnterEvent\n";
-#if 0
-	if (m_pTool) {
-		QEvent ev(*e);
-		m_pTool -> enterEvent(&ev);
-	}
-#endif
-}
-
-void KisView::canvasGotLeaveEvent (QEvent *)
-{
-	kdDebug() << "KisView::canvasGotLeaveEvent\n";
-#if 0
-	if (m_pTool) {
-		// clear artifacts from tools which paint on canvas
-		// this does not affect the image or layer
-		if (m_pTool -> shouldRepaint())
-			m_canvas -> repaint();
-
+	if (m_tool) {
 		QEvent ev(*e);
 
-		m_pTool -> leaveEvent(&ev);
+		m_tool -> enter(&ev);
 	}
-#endif
+}
+
+void KisView::canvasGotLeaveEvent (QEvent *e)
+{
+	if (m_tool) {
+		QEvent ev(*e);
+
+		m_tool -> leave(&ev);
+	}
 }
 
 void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
@@ -1602,6 +1590,7 @@ void KisView::layerSelected(int n)
 
 void KisView::docImageListUpdate()
 {
+	m_current = 0;
 	zoomUpdateGUI(0, 0, 1.0);
 	resizeEvent(0);
 	updateCanvas();

@@ -44,6 +44,7 @@
 
 #include <qcolor.h>
 
+#include <kis_resourceserver.h>
 #include "kis_cursor.h"
 #include <kis_doc.h>
 #include <kis_config.h>

@@ -21,12 +21,13 @@
 
 #include <qpoint.h>
 #include "kis_types.h"
+#include <koffice_export.h>
 
 class KoDocument;
 class KisCanvasControllerInterface;
 class KisCanvasSubject;
 
-class KisStrategyMove {
+class KRITAUI_EXPORT KisStrategyMove {
 public:
 	KisStrategyMove();
 	explicit KisStrategyMove(KisCanvasSubject *subject);

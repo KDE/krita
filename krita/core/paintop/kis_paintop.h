@@ -26,13 +26,14 @@
 #include <ksharedptr.h>
 
 #include "kis_types.h"
+#include <koffice_export.h>
 
 class KisPoint;
 class KisAlphaMask;
 class KisPainter;
 
 
-class KisPaintOp
+class KRITACORE_EXPORT KisPaintOp
 {
 
 public:

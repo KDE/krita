@@ -20,8 +20,9 @@
 
 #include "kis_paint_device.h"
 #include "kis_types.h"
+#include <koffice_export.h>
 
-class KisLayer : public KisPaintDevice {
+class KRITACORE_EXPORT KisLayer : public KisPaintDevice {
 	typedef KisPaintDevice super;
 
 	Q_OBJECT

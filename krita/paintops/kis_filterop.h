@@ -24,7 +24,7 @@
 #define KIS_FILTEROP_H_
 
 #include "kis_paintop.h"
-
+#include <koffice_export.h>
 class KisPoint;
 class KisPainter;
 class KisFilterConfiguration;
@@ -41,7 +41,7 @@ public:
 
 
 
-class KisFilterOp : public KisPaintOp {
+class KRITAPAINT_EXPORT KisFilterOp : public KisPaintOp {
 
 	typedef KisPaintOp super;
 

@@ -23,6 +23,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
+#include <koffice_export.h>
 
 class QColor;
 
@@ -33,7 +34,7 @@ class QColor;
  * the value of a byte signifies whether a corresponding pixel is selected, or not.
  *
  */
-class KisSelection : public KisPaintDevice {
+class KRITACORE_EXPORT KisSelection : public KisPaintDevice {
 
 	typedef KisPaintDevice super;
 

@@ -49,9 +49,10 @@
 #include "kis_selection.h"
 #include "kis_pixel.h"
 #include "kis_pattern.h"
+#include <koffice_export.h>
 
 // XXX: Filling should set dirty rect.
-class KisFillPainter : public KisPainter
+class KRITACORE_EXPORT KisFillPainter : public KisPainter
 {
 
 	typedef KisPainter super;

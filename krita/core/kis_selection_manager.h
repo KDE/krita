@@ -23,7 +23,7 @@
 
 #include "kis_image.h"
 #include "kis_selection.h"
-
+#include <koffice_export.h>
 class KAction;
 class KisView;
 class KisDoc;
@@ -33,7 +33,7 @@ class KisClipboard;
  * The selection manager is responsible selections
  * and the clipboard.
  */
-class KisSelectionManager : public QObject {
+class KRITACORE_EXPORT KisSelectionManager : public QObject {
 
 	Q_OBJECT;
 

@@ -25,22 +25,22 @@
 class KisPixelRepresentationReadOnly {
 public:
 	KisPixelRepresentationReadOnly() : m_channels(0) { }
-  KisPixelRepresentationReadOnly(QUANTUM* channels) : m_channels(channels) {}
-	public:
-		QUANTUM operator[](int index) { return m_channels[index]; };
- private:
-  QUANTUM* m_channels;
+	KisPixelRepresentationReadOnly(QUANTUM* channels) : m_channels(channels) {}
+public:
+	QUANTUM operator[](int index) { return m_channels[index]; };
+private:
+	QUANTUM* m_channels;
 };
 
 
 class KisPixelRepresentation {
 public:
-  KisPixelRepresentation(QUANTUM* channels) : m_channels(channels) {}
+	KisPixelRepresentation(QUANTUM* channels) : m_channels(channels) {}
 	KisPixelRepresentation(int nbchannel) : m_channels(new QUANTUM(nbchannel)) { }
-	public:
-		KisQuantum operator[](int index) { return KisQuantum(m_channels + index ); };
- private:
-  QUANTUM* m_channels;
+public:
+	KisQuantum operator[](int index) { return KisQuantum(m_channels + index ); };
+private:
+	QUANTUM* m_channels;
 };
 
 #endif

@@ -38,7 +38,10 @@ namespace {
 
 // Init static data
 ColorLUT KisStrategyColorSpaceCMYK::m_rgbLUT = ColorLUT();
-ChannelInfo KisStrategyColorSpaceCMYK::channelInfo[4] = { ChannelInfo("Cyan", 4), ChannelInfo("Magenta", 3), ChannelInfo("Yellow", 2), ChannelInfo("Black", 1) };
+ChannelInfo KisStrategyColorSpaceCMYK::channelInfo[4] = { ChannelInfo("Cyan", 4), 
+							  ChannelInfo("Magenta", 3), 
+							  ChannelInfo("Yellow", 2), 
+							  ChannelInfo("Black", 1) };
 
 
 KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() : KisStrategyColorSpace("CMYKA"), m_pixmap(RENDER_WIDTH * 2, RENDER_HEIGHT * 2)

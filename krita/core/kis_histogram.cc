@@ -31,8 +31,8 @@ KisHistogram::KisHistogram(KisLayerSP layer,
 	m_type = type;
 	// XXX: size needs to come from ChannelInfo, is determined by
 	// the channel depth.
-	Q_INT32 bins = QUANTUM_MAX;
-	m_values = vQuantums(bins, 0);
+	Q_INT32 bincount = QUANTUM_MAX + 1;
+ 	m_values = vBins(bincount, 0);
 	m_max = 0;
 	m_min = QUANTUM_MAX;
 	m_mean = QUANTUM_MAX / 2;
@@ -52,7 +52,9 @@ KisHistogram::~KisHistogram()
 
 void KisHistogram::computeHistogramFor(const ChannelInfo & channel)
 {
-	Q_UINT32 total;
+	Q_UINT32 total = 0;
+	Q_UINT32 total_white = 0;
+	Q_UINT32 total_black = 0;
 
 	if (m_layer -> hasSelection()) {
 		// Get selection iterators
@@ -73,15 +75,15 @@ void KisHistogram::computeHistogramFor(const ChannelInfo & channel)
 			{
 				for( int i = 0; i < depth; i++)
 				{
-					// Do computing
-					if (i == channel.pos()) {
-						KisQuantum datum = pixelIt[channel.pos()];
-						m_values[datum] = m_values[datum]++;
-						if (datum > m_max) m_max = datum;
-						if (datum < m_min) m_min = datum;
-						total += datum;
-						m_count++;
-					}
+ 					// Do computing
+ 					if (i == channel.pos()) {
+ 						KisQuantum datum = pixelIt[channel.pos()];
+// 						m_values[datum] = m_values[datum]++;
+// 						if (datum > m_max) m_max = datum;
+// 						if (datum < m_min) m_min = datum;
+// 						total += datum;
+ 						m_count++;
+ 					}
 					++pixelIt;
 				}
 				++pixelIt;
@@ -91,8 +93,9 @@ void KisHistogram::computeHistogramFor(const ChannelInfo & channel)
 
 	}
 	m_mean = total / m_count;
-
+#if 0
 	dump();
+#endif
 }
 
 
@@ -108,23 +111,26 @@ void KisHistogram::dump() {
 	}
 
 	kdDebug() << "Bins:\n";
-        vQuantums::iterator it;
+        vBins::iterator it;
 	QUANTUM i = 0;
         for( it = m_values.begin(); it != m_values.end(); ++it ) {
-		kdDebug() << "Value " << QString().setNum(i) << ": " <<  QString().setNum((QUANTUM)(*it)) << "\n";
+		kdDebug() << "Value " 
+			  << QString().setNum(i)
+			  << ": " 
+			  <<  QString().setNum((*it)) 
+			  << "\n";
 		i++;
 	}
-
 	kdDebug() << "\n";
 
 	kdDebug() << "Max: " << QString().setNum(m_max) << "\n";
-	kdDebug() << "Max: " << QString().setNum(m_min) << "\n";
-	kdDebug() << "Max: " << QString().setNum(m_mean) << "\n";
-	kdDebug() << "Max: " << QString().setNum(m_median) << "\n";
-	kdDebug() << "Max: " << QString().setNum(m_stddev) << "\n";
-	kdDebug() << "Max: " << QString().setNum(m_pixels) << "\n";
-	kdDebug() << "Max: " << QString().setNum(m_count) << "\n";
-	kdDebug() << "Max: " << QString().setNum(m_percentile) << "\n";
+	kdDebug() << "Min: " << QString().setNum(m_min) << "\n";
+	kdDebug() << "Mean: " << QString().setNum(m_mean) << "\n";
+	kdDebug() << "Median: " << QString().setNum(m_median) << "\n";
+	kdDebug() << "Stddev: " << QString().setNum(m_stddev) << "\n";
+	kdDebug() << "pixels: " << QString().setNum(m_pixels) << "\n";
+	kdDebug() << "count: " << QString().setNum(m_count) << "\n";
+	kdDebug() << "percentile: " << QString().setNum(m_percentile) << "\n";
 
 	kdDebug() << "\n";
 

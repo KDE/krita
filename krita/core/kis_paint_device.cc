@@ -471,7 +471,9 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
         // when done.
         QUANTUM * newData = new QUANTUM[targetW * targetH * depth() * sizeof(QUANTUM)];
         /* This _has_ to be fixed; horribly layertype dependent */
-        memset(newData, targetW * targetH * depth() * sizeof(QUANTUM), 0);
+        // XXX: according to man memset, this param order is wrong.
+        // memset(newData, targetW * targetH * depth() * sizeof(QUANTUM), 0);
+        memset(newData, 0, targetW * targetH * depth() * sizeof(QUANTUM));
 
         bool invertible;
         QWMatrix targetMat = mat.invert( &invertible ); // invert matrix

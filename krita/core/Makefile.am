@@ -65,7 +65,6 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_iterators_quantum.cc \
 	kis_iterators_pixel.cc \
 	kis_histogram.cc \
-	kis_plugin_registry.cc \
 	KRayonViewIface.cc \
 	KRayonViewIface.skel \
 	KIsDocIface.cc \
@@ -73,7 +72,8 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	KIsImageIface.cc \
 	KIsImageIface.skel \
 	kis_filter.cc \
-	kis_filter_factory.cc
+	kis_filter_factory.cc \
+	kis_plugin_registry.cc
 
 noinst_HEADERS = kis_paint_device.h \
 	kis_layer.h \

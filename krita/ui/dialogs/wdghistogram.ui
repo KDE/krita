@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>WdgHistogram</class>
 <widget class="QWidget">
     <property name="name">
@@ -11,9 +11,6 @@
             <width>538</width>
             <height>295</height>
         </rect>
-    </property>
-    <property name="caption">
-        <string>Form1</string>
     </property>
     <grid>
         <property name="name">
@@ -85,9 +82,6 @@
                     <property name="text">
                         <string>&amp;Linear</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+L</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -98,9 +92,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Logarithmic</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+L</string>
                     </property>
                 </widget>
                 <spacer row="2" column="1">

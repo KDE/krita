@@ -34,6 +34,8 @@ enum enumHistogramType {
 	LOGARITHMIC
 };
 
+typedef QValueVector<Q_UINT32> vBins;
+
 class KisHistogram : public KShared {
 
 public:
@@ -45,7 +47,16 @@ public:
 
 	void computeHistogramFor(const ChannelInfo & channel);
 
-	vQuantums getValues() { return m_values; }
+	/**
+	 * Returns an iterator over the values comprising this histogram
+	 */
+	vBins::iterator begin() { return m_values.begin();}
+	/**
+	 * Returns an iterator that shows where the values comprising
+	 * this histogram end.
+	 */
+	vBins::iterator end() { return m_values.end();}
+
 	QUANTUM getMax() { return m_max; }
 	QUANTUM getMin() { return m_min; }
 	double getMean() { return m_mean; }
@@ -64,11 +75,12 @@ private:
 
 	enumHistogramType m_type;
 	
-	vQuantums m_values;
+	vBins m_values;
 	QUANTUM m_max, m_min;
 	double m_mean, m_median, m_stddev;
 	Q_UINT32 m_pixels, m_count;
 	Q_UINT8 m_percentile;
+
 };
 
 

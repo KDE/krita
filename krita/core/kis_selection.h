@@ -36,7 +36,10 @@
  * not implemented yet.
  *
  */
-class KisSelection : public KShared {
+class KisSelection : public KShared { //: public KisLayer {
+
+	// Q_OBJECT
+	//typedef KisLayer super;
 
 public:
 	KisSelection(KisLayerSP layer, const QString& name);
@@ -55,13 +58,6 @@ public:
 
 private:
 	KisLayerSP m_layer;
-
-	// An 8-bit QImage is a pretty efficient way of storing the
-	// 8-bit selection mask, and has as a plus that it's really,
-	// really fast to show a preview of the mask.
-	QImage m_mask;
-	QString m_name;
 };
 
-#endif // KIS_FLOATINGSELECTION_H_
-
+#endif // KIS_SELECTION_H_

@@ -37,7 +37,9 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_RGBA = 4;
 }
 
-ChannelInfo KisStrategyColorSpaceRGB::channelInfo[4] = { ChannelInfo("Red", 3), ChannelInfo("Red", 2), ChannelInfo("Green", 1), ChannelInfo("Blue", 0) };
+ChannelInfo KisStrategyColorSpaceRGB::channelInfo[4] = { ChannelInfo("Red", 2), 
+							 ChannelInfo("Green", 1), 
+							 ChannelInfo("Blue", 0) };
 
 KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
 	KisStrategyColorSpace("RGBA"),
@@ -117,12 +119,12 @@ void KisStrategyColorSpaceRGB::render(KisImageSP image, QPainter& painter, Q_INT
 {
 	QImage img = convertToImage(image, x, y, width, height);
 	if (!img.isNull()) {
-#ifdef __BIG_ENDIAN__
-		// kpixmapio has a nasty bug on powerpc that shows up as rendering errors
-		m_pixmap = m_pixmap.convertFromImage(img);
-#else
+// #ifdef __BIG_ENDIAN__
+// 		// kpixmapio has a nasty bug on powerpc that shows up as rendering errors
+// 		m_pixmap = m_pixmap.convertFromImage(img &);
+// #else
 		m_pixio.putImage(&m_pixmap, 0, 0, &img);
-#endif
+// #endif
 
 		painter.drawPixmap(x, y, m_pixmap, 0, 0, width, height);	
 	}

@@ -21,34 +21,19 @@
 
 #include <map>
 #include <qcolor.h>
+
 #include <ksharedptr.h>
 #include <koColor.h>
+
 #include "kis_global.h"
 #include "kis_types.h"
+#include "kis_channelinfo.h"
 #include "kis_compositeop.h"
 
 class QPainter;
 class KisIteratorPixel;
 class KisPixelRepresentation;
 class KisPixelRepresentationRGB;
-
-/** 
- * This class give some basic information about a channel.
- */
-class ChannelInfo {
-	public:
-		ChannelInfo( ) { };
-		ChannelInfo( QString nname, Q_INT32 npos ) : m_name (nname), m_pos (npos) { };
-	public:
-		inline QString name() const { return m_name; };
-		/** 
-		 * This function return the position of the channel in the pixel
-		 */
-		inline Q_INT32 pos() const { return m_pos; };
-	private:
-		QString m_name;
-		Q_INT32 m_pos;
-};
 
 class KisStrategyColorSpace : public KShared {
 	typedef std::map<QString, KisCompositeOp*> compositeOpStorage;
@@ -67,6 +52,8 @@ public:
 	virtual void nativeColor(QRgb rgb, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst) = 0;
 
+	// XXX: make this a proper vector. Pointers to arrays are _so_ seventies, and
+	// Stroustrup assures us a vector is as effecient a mem array anyway.
 	virtual ChannelInfo * channelsInfo() const = 0;
 	virtual Q_INT32 depth() const = 0;
 	virtual bool alpha() const = 0;

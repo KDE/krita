@@ -108,12 +108,12 @@ void KisStrategyColorSpaceGrayscale::render(KisImageSP image, QPainter& painter,
 
 	QImage img = convertToImage(image, x, y, width, height);
 	if (!img.isNull()) {
-#ifdef __BIG_ENDIAN__
-		// kpixmapio has a nasty bug on powerpc that shows up as rendering errors
-		m_pixmap = m_pixmap.convertFromImage(img);
-#else
+// #ifdef __BIG_ENDIAN__
+// 		// kpixmapio has a nasty bug on powerpc that shows up as rendering errors
+// 		m_pixmap = m_pixmap.convertFromImage(img);
+// #else
 		m_pixio.putImage(&m_pixmap, 0, 0, &img);
-#endif
+// #endif
 
 		painter.drawPixmap(x, y, m_pixmap, 0, 0, width, height);	
 	}

@@ -45,17 +45,18 @@ public:
 			 const char* name = 0);
 	~DlgHistogram();
 
+	void setHistogram(KisHistogramSP histogram);
 	void setLayer(KisLayerSP layer);
-	void setSelection(KisSelectionSP selection);
 
 private slots:
 
 	void okClicked();
+	void slotChannelSelected(const QString & channelName);
 
 private:
 
 	KisHistogramWidget * m_page;
-	KisSelectionSP m_selection;
+	KisHistogramSP m_histogram;
 	KisLayerSP m_layer;
 };
 

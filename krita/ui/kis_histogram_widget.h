@@ -22,7 +22,7 @@
 #include <qpixmap.h>
 
 #include "kis_types.h"
-
+#include "kis_channelinfo.h"
 #include "dialogs/wdghistogram.h"
 
 /**
@@ -40,7 +40,8 @@ public:
 	virtual ~KisHistogramWidget();
 
 	void setHistogram(KisHistogramSP histogram);
-
+	void setChannels(ChannelInfo * channels, Q_INT32 channelCount);
+	
 private:
 
 	QPixmap m_pix;

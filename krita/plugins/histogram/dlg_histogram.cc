@@ -27,18 +27,18 @@
 
 #include <knuminput.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "kis_types.h"
-
+#include "kis_histogram.h"
 #include "kis_layer.h"
-#include "kis_selection.h"
+#include "kis_paint_device.h"
 
 #include "dlg_histogram.h"
 #include "kis_histogram_widget.h"
 
 
-DlgHistogram::DlgHistogram( QWidget *  parent,
-			      const char * name)
+DlgHistogram::DlgHistogram( QWidget *  parent, const char * name)
 	: super (parent, name, true, i18n("Histogram"), Ok | Cancel, Ok)
 {
 	m_page = new KisHistogramWidget(this, "histogram");
@@ -52,14 +52,29 @@ DlgHistogram::~DlgHistogram()
 	delete m_page;
 }
 
-void DlgHistogram::setLayer(KisLayerSP layer) 
+void DlgHistogram::setHistogram(KisHistogramSP histogram) 
 {
-	m_layer = layer;
+	m_histogram = histogram;
+	m_page -> setHistogram(histogram);
 }
 
-void DlgHistogram::setSelection(KisSelectionSP selection)
+void DlgHistogram::setLayer(KisLayerSP layer)
 {
-	m_selection = selection;	
+	m_layer = layer;
+
+	// XXX: depth() - 1: compensate for the alpha channel which isn't in channels info.
+	// We need to rationalize Krita here: the typeWithAlpha, typeWithoutAlpha, ChannelsWithAlpha
+	// and WithoutAlpha are very confusing.
+	m_page -> setChannels(layer -> colorStrategy() -> channelsInfo(), layer -> depth() - 1);
+	ChannelInfo channel = layer -> colorStrategy() -> channelsInfo()[0];
+	KisHistogramSP histogram = new KisHistogram(layer, channel, LINEAR);
+	setHistogram(histogram);
+
+	connect(m_page -> cmbChannel,
+		SIGNAL(activated(const QString &)),
+		this,
+		SLOT(slotChannelSelected(const QString &)));
+
 }
 
 void DlgHistogram::okClicked()
@@ -67,5 +82,18 @@ void DlgHistogram::okClicked()
 	accept();
 }
 
+void DlgHistogram::slotChannelSelected(const QString & channelName)
+{
+	ChannelInfo * channels = m_layer -> colorStrategy() -> channelsInfo();
+	for (int i = 0; i < m_layer -> depth() - 1; i++) {
+		ChannelInfo channel = channels[i];
+		if (channel.name() == channelName) {
+			KisHistogramSP histogram = new KisHistogram(m_layer, channel, LINEAR);
+			setHistogram(histogram);
+			return;
+		}
+	}
+	kdDebug() << "Channel selected that does not exist, apparently.\n";
+}
 
 #include "dlg_histogram.moc"

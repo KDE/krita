@@ -23,15 +23,11 @@
 #include "kis_global.h"
 
 KisSelection::KisSelection(KisLayerSP layer, const QString& name) 
+// 	: super(layer -> width(),
+// 		layer -> height(),
+// 		name)
 {
-	m_name = name;
 	m_layer = layer;
-	m_mask = QImage();
-	m_mask.create(m_layer -> width(), m_layer -> height(), 8, 256);
-	for (int i = 0; i < 256; i++) {
-		m_mask.setColor(i, qRgb(i, i, i));
-	}
-	m_mask.fill(NOT_SELECTED);
 }
 
 KisSelection::~KisSelection() 
@@ -40,33 +36,35 @@ KisSelection::~KisSelection()
 
 QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y) const
 {
-	if (m_mask.valid(x, y)) {
-		return (QUANTUM)m_mask.pixelIndex(x, y);
-	}
-	else {
+// 	if (m_mask.valid(x, y)) {
+// 		return (QUANTUM)m_mask.pixelIndex(x, y);
+// 	}
+// 	else {
 		return 0;
-	}
+// 	}
 }
 
 QUANTUM KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
 {
-	if (m_mask.valid(x, y)) {
-		int previous = m_mask.pixelIndex(x, y);
-		m_mask.setPixel(x, y, s);
-		return (QUANTUM)previous;
-	}
-	else {
+// 	if (m_mask.valid(x, y)) {
+// 		int previous = m_mask.pixelIndex(x, y);
+// 		m_mask.setPixel(x, y, s);
+// 		return (QUANTUM)previous;
+// 	}
+// 	else {
 		return 0;
-	}
+// 	}
 	
 }
 
 QImage KisSelection::maskImage() const 
 {
-	return m_mask;
+ 	return QImage();
 }
 
 void KisSelection::reset()
 {
-	m_mask.fill(NOT_SELECTED);
+// 	m_mask.fill(NOT_SELECTED);
 }
+
+// #include "kis_selection.moc"

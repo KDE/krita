@@ -22,8 +22,9 @@
 
 #include <string.h>
 
-/** This template is a generic way to store an array associated with a width and a heigth
-	*/
+/**
+ * This template is a generic way to store an array associated with a width and a height
+ */
 template<typename _Tp, int _W, int _H>
 class KisMatrix
 {

@@ -88,14 +88,10 @@ void Histogram::slotActivated()
 	DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
 
 	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
-	KisSelectionSP selection = new KisSelection(layer, "histogram");
-	ChannelInfo channel = layer -> colorStrategy() -> channelsInfo()[0];
-	KisHistogramSP histogram = new KisHistogram(layer, channel, LINEAR);
 	dlgHistogram -> setLayer(layer);
-	dlgHistogram -> setSelection(selection);
 
 	if (dlgHistogram -> exec() == QDialog::Accepted) {
-		layer -> setActiveSelection(selection);
+		// Do nothing; this is an informational dialog
 	}
 	delete dlgHistogram;
 }

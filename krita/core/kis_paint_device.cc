@@ -78,8 +78,12 @@ void KisPaintDevice::configure(KisImageSP image, Q_INT32 width, Q_INT32 height, 
 	m_imgType = imgType;
 	m_depth = image -> depth();
 	m_alpha = image -> alpha();
+	m_x = 0;
+	m_y = 0;
 	m_offX = 0;
 	m_offY = 0;
+	m_offW = 0;
+	m_offH = 0;
 	m_tiles = new KisTileMgr(m_depth, width, height);
 	m_visible = true;
 	m_owner = image;
@@ -99,23 +103,29 @@ void KisPaintDevice::update()
 
 void KisPaintDevice::update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	Q_INT32 xoff;
-	Q_INT32 yoff;
-
 	if (!m_owner)
 		return;
 	
-	drawOffset(&xoff, &yoff);
-	x += xoff;
-	y += yoff;
+	if (x < m_offX)
+		x = m_offX;
+
+	if (y < m_offY)
+		y = m_offY;
+
+	if (w > m_offW)
+		w = m_offW;
+
+	if (h > m_offH)
+		h = m_offH;
+
 	invalidate(x, y, w, h);
 }
 
 void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
 {
-	m_offX = x;
-	m_offY = y;
-	emit drawOffsetChanged(this);
+	m_x = x;
+	m_y = y;
+	emit positionChanged(this);
 }
 
 void KisPaintDevice::move(const QPoint& pt)
@@ -125,7 +135,7 @@ void KisPaintDevice::move(const QPoint& pt)
 
 bool KisPaintDevice::contains(Q_INT32 x, Q_INT32 y) const
 {
-	QRect rc(m_offX, m_offY, m_width, m_height);
+	QRect rc(m_x + m_offX, m_y + m_offY, m_width - m_offW, m_height - m_offH);
 
 	return rc.contains(x, y);
 }
@@ -135,6 +145,11 @@ bool KisPaintDevice::contains(const QPoint& pt) const
 	return contains(pt.x(), pt.y());
 }
 	
+bool KisPaintDevice::shouldDrawBorder() const
+{
+	return false;
+}
+
 QString KisPaintDevice::name()
 {
 	return m_name;
@@ -259,14 +274,29 @@ Q_INT32 KisPaintDevice::quantumSizeWithAlpha() const
 	return 0;
 }
 
+QRect KisPaintDevice::bounds() const
+{
+	return QRect(m_x, m_y, m_width, m_height);
+}
+
 Q_INT32 KisPaintDevice::x() const
 {
-	return m_offX;
+	return m_x;
+}
+
+void KisPaintDevice::setX(Q_INT32 x)
+{
+	m_x = x;
 }
 
 Q_INT32 KisPaintDevice::y() const
 {
-	return m_offY;
+	return m_y;
+}
+
+void KisPaintDevice::setY(Q_INT32 y)
+{
+	m_y = y;
 }
 
 Q_INT32 KisPaintDevice::width() const
@@ -293,12 +323,22 @@ void KisPaintDevice::visible(bool v)
 	}
 }
 
-void KisPaintDevice::drawOffset(Q_INT32 *offx, Q_INT32 *offy)
+void KisPaintDevice::clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh)
 {
-	if (offx && offy) {
+	if (offx && offy && offw && offh) {
 		*offx = m_offX;
 		*offy = m_offY;
+		*offw = m_offW;
+		*offh = m_offH;
 	}
+}
+
+void KisPaintDevice::setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh)
+{
+	m_offX = offx;
+	m_offY = offy;
+	m_offW = offw;
+	m_offH = offh;
 }
 
 bool KisPaintDevice::cmap(KoColorMap& cm)
@@ -337,6 +377,10 @@ void KisPaintDevice::init()
 	m_quantumSize = 0;
 	m_offX = 0;
 	m_offY = 0;
+	m_offW = 0;
+	m_offH = 0;
+	m_x = 0;
+	m_y = 0;
 	m_projectionValid = false;
 }
 

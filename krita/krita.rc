@@ -37,11 +37,13 @@
   <Action name="tool_zoom"/>
   <Action name="tool_colorpicker"/>  
   
-  <Action name="tool_select_freehand"/>
-  <Action name="tool_select_rectangular"/>
-  <Action name="tool_select_elliptical"/>  
-  <Action name="tool_select_polygonal"/>
-  <Action name="tool_select_contiguous"/>
+  <Menu name="select"><text>Selection</text>
+    <Action name="tool_select_freehand"/>
+    <Action name="tool_select_rectangular"/>
+    <Action name="tool_select_elliptical"/>  
+    <Action name="tool_select_polygonal"/>
+    <Action name="tool_select_contiguous"/>
+  </Menu>
 
   <Action name="tool_pen"/>
   <Action name="tool_brush"/>

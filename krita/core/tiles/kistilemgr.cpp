@@ -15,7 +15,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
 #include <string.h>
 #include <qpoint.h>
 #include "kis_types.h"
@@ -90,11 +89,12 @@ KisTileSP KisTileMgr::tile(Q_INT32 tilenum, Q_INT32 mode)
 		allocate(ntiles);
 
 	tile = m_tiles[tilenum];
+	Q_ASSERT(tile);
 
 	if (mode & TILEMODE_READ) {
 		KisScopedLock l(tile -> mutex());
 
-		if (mode & TILEMODE_RW) {
+		if (mode & TILEMODE_WRITE) {
 			if (tile -> shareCount() > 1) {
 				KisTileSP tileNew = new KisTile(*tile);
 

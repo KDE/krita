@@ -29,7 +29,11 @@ KisToolNonPaint::~KisToolNonPaint()
 {
 }
 
-void KisToolNonPaint::paint(QPaintEvent *)
+void KisToolNonPaint::paint(QPainter&)
+{
+}
+
+void KisToolNonPaint::paint(QPainter&, const QRect&)
 {
 }
 

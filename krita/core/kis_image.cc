@@ -29,6 +29,7 @@
 #include "kis_doc.h"
 #include "kis_mask.h"
 #include "kis_nameserver.h"
+#include "kis_selection.h"
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kispixeldata.h"
@@ -295,11 +296,6 @@ bool KisImage::empty() const
 	return m_layers.size() > 0;
 }
 
-KisLayerSP KisImage::selection()
-{
-	return m_selection;
-}
-
 bool KisImage::colorMap(KoColorMap& cm)
 {
 	if (m_clrMap.empty())
@@ -395,6 +391,9 @@ vKisChannelSP KisImage::channels() const
 
 KisPaintDeviceSP KisImage::activeDevice()
 {
+	if (m_selection)
+		return m_selection.data();
+
 	if (m_activeChannel)
 		return m_activeChannel.data();
 
@@ -434,7 +433,6 @@ KisLayerSP KisImage::activate(KisLayerSP layer)
 			m_layerStack.erase(it);
 
 		m_layerStack.insert(m_layerStack.begin() + 0, layer);
-		layer -> invalidateBounds();
 	}
 
 	if (layer != m_activeLayer) {
@@ -495,10 +493,6 @@ bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 		return false;
 
 //	undo_push_layer_add 
-
-	if (layer -> isFloatingSel())
-		m_selection = layer;
-
 	layer -> setImage(KisImageSP(this));
 
 	if (layer -> mask())
@@ -530,10 +524,7 @@ bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 
 void KisImage::rm(KisLayerSP layer)
 {
-	Q_INT32 x;
-	Q_INT32 y;
-	Q_INT32 w;
-	Q_INT32 h;
+	QRect rc;
 	vKisLayerSP_it it;
 
 	if (layer == 0)
@@ -565,11 +556,9 @@ void KisImage::rm(KisLayerSP layer)
 		}
 	}
 
-	layer -> drawOffset(&x, &y);
-	w = layer -> width();
-	h = layer -> height();
-	emit update(KisImageSP(this), x, y, w, h);
-	invalidate(x, y, w, h);
+	rc = layer -> bounds();
+	emit update(KisImageSP(this), rc.x(), rc.y(), rc.width(), rc.height());
+	invalidate(rc.x(), rc.y(), rc.width(), rc.height());
 
 	if (m_layers.size() == 1 && m_layers[0] -> alpha())
 		emit alphaChanged(KisImageSP(this));
@@ -641,8 +630,6 @@ bool KisImage::bottom(KisLayerSP layer)
 
 bool KisImage::pos(KisLayerSP layer, Q_INT32 position)
 {
-	Q_INT32 offx;
-	Q_INT32 offy;
 	Q_INT32 old;
 	Q_INT32 nlayers;
 
@@ -674,8 +661,7 @@ bool KisImage::pos(KisLayerSP layer, Q_INT32 position)
 
 	//undo_push_layer_reposition (gimage, layer);
 	qSwap(m_layers[old], m_layers[position]);	
-	layer -> drawOffset(&offx, &offy);
-	layer -> update(offx, offy, layer -> width(), layer -> height());
+	layer -> update(layer -> x(), layer -> y(), layer -> width(), layer -> height());
 	invalidate();
 	return true;
 }
@@ -976,6 +962,31 @@ QPixmap KisImage::pixmap()
 	return m_pixmapProjection;
 }
 
+void KisImage::setSelection(KisSelectionSP selection)
+{
+	if (m_selection != selection) {
+		m_selection = selection;
+		emit selectionChanged(this);
+	}
+}
+
+void KisImage::unsetSelection()
+{
+	if (m_selection) {
+		QRect rc = m_selection -> bounds();
+
+		m_selection = 0;
+		invalidate(rc);
+		emit selectionChanged(this);
+		emit update(this, rc.x(), rc.y(), rc.width(), rc.height());
+	}
+}
+
+KisSelectionSP KisImage::selection() const
+{
+	return m_selection;
+}
+
 void KisImage::copyTile(KisTileSP dst, KisTileSP src)
 {
 	KisPainter gc(dst);
@@ -1083,6 +1094,15 @@ QPixmap KisImage::recreatePixmap()
 	}
 
 	renderProjection();
+
+	if (m_selection) {
+		QPainter gc(&m_pixmapProjection);
+		QPen pen(Qt::DotLine);
+
+		gc.setPen(pen);
+		gc.drawRect(m_selection -> x(), m_selection -> y(), m_selection -> width(), m_selection -> height());
+	}
+
 	return m_pixmapProjection;
 }
 

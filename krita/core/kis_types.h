@@ -52,6 +52,9 @@ typedef QValueVector<KisLayerSP> vKisLayerSP;
 typedef vKisLayerSP::iterator vKisLayerSP_it;
 typedef vKisLayerSP::const_iterator vKisLayerSP_cit;
 
+class KisSelection;
+typedef KSharedPtr<KisSelection> KisSelectionSP;
+
 class KisTile;
 typedef KSharedPtr<KisTile> KisTileSP;
 typedef QValueVector<KisTileSP> vKisTileSP;

@@ -1,5 +1,5 @@
 /*
- *  copyright (c) 2002 patrick julien <freak@codepimps.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  this program is free software; you can redistribute it and/or modify
  *  it under the terms of the gnu general public license as published by
@@ -44,10 +44,7 @@ public:
 	void resize();
 
 	void boundary(const vKisSegments& segments);
-	void invalidateBounds();
-
 	KisMaskSP mask() const;
-	bool isFloatingSel() const;
 
 	QUANTUM opacity() const;
 	void opacity(QUANTUM val);
@@ -59,8 +56,6 @@ private:
 	QUANTUM m_opacity;
 	bool m_preserveTranspanrency;
 	KisMaskSP m_mask;
-	KisTileMgrSP m_store;
-	KisPaintDeviceSP m_attachedTo;
 	bool m_initial;
 	bool m_boundsValid;
 	QRect m_bounds;

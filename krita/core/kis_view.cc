@@ -582,6 +582,9 @@ void KisView::paintView(const QRect& rc)
 
 		m_doc -> setProjection(img);
 		m_doc -> paintContent(gc, ur, false, 1.0, 1.0);
+
+		if (m_tool)
+			m_tool -> paint(gc, ur);
 	} else {
 		clearCanvas(rc);
 	}

@@ -21,6 +21,7 @@
 #include <qcolor.h>
 #include <qobject.h>
 #include <qpixmap.h>
+#include <qrect.h>
 #include <qvaluelist.h>
 #include <qstring.h>
 #include <koColor.h>
@@ -51,15 +52,16 @@ public:
 
 public:
 	virtual void configure(KisImageSP image, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
+	virtual bool shouldDrawBorder() const;
 	virtual void duplicate(KisPaintDevice& rhs, bool addAlpha);
+	virtual void move(Q_INT32 x, Q_INT32 y);
+	virtual void move(const QPoint& pt);
 	virtual void update();
 	virtual void update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 public:
 	bool contains(Q_INT32 x, Q_INT32 y) const;
 	bool contains(const QPoint& pt) const;
-	void move(Q_INT32 x, Q_INT32 y);
-	void move(const QPoint& pt);
 	QString name();
 	void setName(const QString& name);
 	void mergeShadow();
@@ -77,13 +79,17 @@ public:
 	const KisTileMgrSP shadow() const;
 	Q_INT32 quantumSize() const;
 	Q_INT32 quantumSizeWithAlpha() const;
+	QRect bounds() const;
 	Q_INT32 x() const;
+	void setX(Q_INT32 x);
 	Q_INT32 y() const;
+	void setY(Q_INT32 y);
 	Q_INT32 width() const;
 	Q_INT32 height() const;
 	const bool visible() const;
 	void visible(bool v);
-	void drawOffset(Q_INT32 *offx, Q_INT32 *offy);
+	void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh);
+	void setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh);
 	bool cmap(KoColorMap& cm);
 	KoColor colorAt();
 	KisImageSP image();
@@ -92,23 +98,27 @@ public:
 
 signals:
 	void visibilityChanged(KisPaintDeviceSP device);
-	void drawOffsetChanged(KisPaintDeviceSP device);
+	void positionChanged(KisPaintDeviceSP device);
 
 private:
 	void init();
 	KisPaintDevice(const KisPaintDevice&);
 	KisPaintDevice& operator=(const KisPaintDevice&);
 
-protected:
+private:
 	KisImageSP m_owner;
 	KisTileMgrSP m_tiles;
 	KisTileMgrSP m_shadow;
 	bool m_visible;
+	Q_INT32 m_x;
+	Q_INT32 m_y;
 	Q_INT32 m_width;
 	Q_INT32 m_height;
 	Q_INT32 m_depth;
 	Q_INT32 m_offX;
 	Q_INT32 m_offY;
+	Q_INT32 m_offW;
+	Q_INT32 m_offH;
 	Q_INT32 m_quantumSize;
 	enumImgType m_imgType;
 	bool m_alpha;

@@ -24,7 +24,9 @@
 // tools
 #if 0
 #include "kis_tool_select_freehand.h"
+#endif
 #include "kis_tool_select_rectangular.h"
+#if 0
 #include "kis_tool_select_polygonal.h"
 #include "kis_tool_select_elliptical.h"
 #include "kis_tool_select_contiguous.h"
@@ -93,7 +95,9 @@ vKisToolSP toolFactory(KisView *view, KisDoc *doc)
 	// selection tools
 #if 0
 	tools.push_back(new FreehandSelectTool(doc, canvas));
-	tools.push_back(new RectangularSelectTool(doc, canvas));
+#endif
+	tools.push_back(new KisToolRectangularSelect(view, doc));
+#if 0
 	tools.push_back(new PolygonalSelectTool(doc, canvas));
 	tools.push_back(new EllipticalSelectTool(doc, canvas));
 	tools.push_back(new ContiguousSelectTool(doc, canvas));

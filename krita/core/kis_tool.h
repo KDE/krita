@@ -26,6 +26,7 @@
 #include "kis_types.h"
 #include "kis_cursor.h"
 
+class QPainter;
 class QRect;
 class KDialog;
 
@@ -37,7 +38,8 @@ public:
 	virtual ~KisToolInterface();
 
 public:
-	virtual void paint(QPaintEvent *e) = 0;
+	virtual void paint(QPainter& gc) = 0;
+	virtual void paint(QPainter& gc, const QRect& rc) = 0;
 	virtual void clear() = 0;
 	virtual void clear(const QRect& rc) = 0;
 

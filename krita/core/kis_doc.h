@@ -30,7 +30,6 @@ class QString;
 class DCOPObject;
 class KCommand;
 class KCommandHistory;
-class KisSelection;
 class KisView;
 class KisNameServer;
 
@@ -95,14 +94,6 @@ public:
 	QImage getClipImage();
 	void removeClipImage();
 
-	KisSelection *getSelection();
-	void setSelection(const QRect& r);
-	void clearSelection();
-	bool hasSelection();
-
-//	QRect getImageRect();
-//	void setImage(const QString& imageName); // for print, save file and load file.
-
 	QString nextImageName() const;
 	void setProjection(KisImageSP img);
 
@@ -119,7 +110,6 @@ private slots:
 	// Slots for KisImage
 	void slotActiveLayerChanged(KisImageSP img);
 	void slotAlphaChanged(KisImageSP img);
-	void slotSelectionChanged(KisImageSP img);
 	void slotVisibilityChanged(KisImageSP img, CHANNELTYPE ctype);
 	void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
 
@@ -152,7 +142,6 @@ private:
 	vKisImageSP m_images;
 	KisImageSP m_projection;
 	QImage *m_clip;
-	KisSelection *m_selection;
 	DCOPObject *m_dcop;
 	KisNameServer *m_nserver;
 };

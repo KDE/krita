@@ -81,13 +81,13 @@ public:
 
 	KisPixelDataSP pixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q_INT32 mode);
 	void releasePixelData(KisPixelDataSP pd);
+	Q_INT32 tileNum(Q_UINT32 xpix, Q_UINT32 ypix) const;
 
 private:
 	KisTileMgr(const KisTileMgr& rhs);
 	KisTileMgr& operator=(const KisTileMgr&);
 	void allocate(Q_INT32 ntiles);
 	KisTileSP invalidateTile(KisTileSP tile, Q_INT32 tilenum);
-	Q_INT32 tileNum(Q_UINT32 xpix, Q_UINT32 ypix) const;
 
 	void readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
 	void readPixelData(KisPixelDataSP pd);

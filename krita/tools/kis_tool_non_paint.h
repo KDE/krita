@@ -40,7 +40,8 @@ public:
 	virtual ~KisToolNonPaint();
 	
 public:
-	virtual void paint(QPaintEvent *e);
+	virtual void paint(QPainter& gc);
+	virtual void paint(QPainter& gc, const QRect& rc);
 	virtual void clear();
 	virtual void clear(const QRect& rc);
 	virtual void enter(QEvent *e);

@@ -52,7 +52,6 @@
 #include "kis_mask.h"
 #include "kis_nameserver.h"
 #include "kis_painter.h"
-#include "kis_selection.h"
 #include "kis_view.h"
 
 static const char *CURRENT_DTD_VERSION = "1.2";
@@ -923,32 +922,6 @@ bool KisDoc::LayerToQtImage(QImage * /*qimg*/, const QRect& /*clipRect*/)
 }
 
 /*
-    setSelection - set selection for document
-*/
-void KisDoc::setSelection(const QRect& r)
-{
-	Q_ASSERT(m_selection);
-	m_selection -> setBounds(r);
-}
-
-/*
-    clearSelection - clear selection for document
-*/
-void KisDoc::clearSelection()
-{
-	m_selection -> setNull();
-}
-
-
-/*
-   hasSelection - does this document have a document-wide selection?
-*/
-bool KisDoc::hasSelection()
-{
-	return !m_selection -> getRectangle().isNull();
-}
-
-/*
     removeClipImage - delete the currentImg clip image and nullify it
 */
 void KisDoc::removeClipImage()
@@ -1112,6 +1085,8 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 
 		if (!projection.isNull())
 			painter.drawPixmap(rect.topLeft(), projection, rect);
+
+		// TODO : Use QPainter here to draw whatever is left (outlines, borders)
 	}
 }
 
@@ -1214,10 +1189,6 @@ void KisDoc::slotActiveLayerChanged(KisImageSP)
 }
 
 void KisDoc::slotAlphaChanged(KisImageSP)
-{
-}
-
-void KisDoc::slotSelectionChanged(KisImageSP)
 {
 }
 

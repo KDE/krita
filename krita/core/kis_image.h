@@ -78,7 +78,6 @@ public:
 	Q_UINT32 depth() const;
 	bool alpha() const;
 	bool empty() const;
-	KisLayerSP selection();
 	bool colorMap(KoColorMap& cm);
 	KisChannelSP mask();
 	KoColor foreground() const;
@@ -132,6 +131,10 @@ public:
 	bool boundsLayer();
 	KisLayerSP corrolateLayer(Q_INT32 x, Q_INT32 y);
 
+	void setSelection(KisSelectionSP selection);
+	void unsetSelection();
+	KisSelectionSP selection() const;
+
 signals:
 	void activeLayerChanged(KisImageSP image);
 	void activeChannelChanged(KisImageSP image);
@@ -177,7 +180,7 @@ private:
 	vKisLayerSP m_layerStack;
 	KisLayerSP m_activeLayer;
 	KisChannelSP m_activeChannel;
-	KisLayerSP m_selection;
+	KisSelectionSP m_selection;
 	KisChannelSP m_selectionMask;
 	QBitArray m_visible;
 	QBitArray m_active;

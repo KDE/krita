@@ -361,6 +361,11 @@ void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoCo
 	fillRect(x, y, w, h, c, OPACITY_OPAQUE);
 }
 
+void KisPainter::fillRect(const QRect& rc, const KoColor& c)
+{
+	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE);
+}
+
 void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity)
 {
 	Q_INT32 dx = x + w;
@@ -381,5 +386,10 @@ void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoCo
 			d += m_dst -> depth;
 		}
 	}
+}
+
+void KisPainter::fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity)
+{
+	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
 }
 

@@ -32,39 +32,39 @@ class KisView;
  */
 class KRayonViewIface : public KoViewIface
 {
-    K_DCOP
-public:
-    KRayonViewIface( KisView *view_ );
-k_dcop:
-    void copy();
-    void cut();
-    void removeSelection();
-    void paste();
-    void crop();
-    void selectAll();
-    void unSelectAll();
+	K_DCOP
+		public:
+	KRayonViewIface( KisView *view_ );
+ k_dcop:
+	void copy();
+	void cut();
+	void removeSelection();
+	void paste();
+	void crop();
+	void selectAll();
+	void unSelectAll();
     
-    // dialog action slots
-    void dialog_gradient();
-    void dialog_colors();
-    void dialog_crayons();
-    void dialog_brushes();
-    void dialog_patterns();
-    void dialog_layers();
-    void dialog_channels();
+	// dialog action slots
+	void dialog_gradient();
+	void dialog_colors();
+	void dialog_crayons();
+	void dialog_brushes();
+	void dialog_patterns();
+	void dialog_layers();
+	void dialog_channels();
 
-    // layer action slots
-    void insert_layer();
-    void remove_layer();
-    void link_layer();
-    void hide_layer();
-    void next_layer();
-    void previous_layer();
+	// layer action slots
+	void insert_layer();
+	void remove_layer();
+	void link_layer();
+	void hide_layer();
+	void next_layer();
+	void previous_layer();
 
-    void layer_properties(); 
+	void layer_properties(); 
 
-private:
-    KisView *m_view;
+ private:
+	KisView *m_view;
 };
 
 #endif

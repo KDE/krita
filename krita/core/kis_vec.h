@@ -30,54 +30,54 @@
 class KisVector
 {
  public:
-  KisVector();
-  KisVector(double x, double y, double z = 0);
-  KisVector(int x, int y, int z = 0);
-  KisVector(long x, long y, long z = 0);
+	KisVector();
+	KisVector(double x, double y, double z = 0);
+	KisVector(int x, int y, int z = 0);
+	KisVector(long x, long y, long z = 0);
 
-  bool isNull()	const;
+	bool isNull()	const;
 
-  double length() const;
+	double length() const;
 
-  double	 x() const;
-  double	 y() const;
-  double	 z() const;
-  void   setX(double);
-  void   setY(double);
-  void   setZ(double);
+	double	 x() const;
+	double	 y() const;
+	double	 z() const;
+	void   setX(double);
+	void   setY(double);
+	void   setZ(double);
 
-  KisVector &normalize();
-  KisVector &crossProduct(const KisVector &);
-  double  dotProduct(const KisVector &) const;
+	KisVector &normalize();
+	KisVector &crossProduct(const KisVector &);
+	double  dotProduct(const KisVector &) const;
 
-  KisVector &operator+=(const KisVector &);
-  KisVector &operator-=(const KisVector &);
-  KisVector &operator*=(int);
-  KisVector &operator*=(long);
-  KisVector &operator*=(double);
-  KisVector &operator/=(int);
-  KisVector &operator/=(long);
-  KisVector &operator/=(double);
+	KisVector &operator+=(const KisVector &);
+	KisVector &operator-=(const KisVector &);
+	KisVector &operator*=(int);
+	KisVector &operator*=(long);
+	KisVector &operator*=(double);
+	KisVector &operator/=(int);
+	KisVector &operator/=(long);
+	KisVector &operator/=(double);
 
-  friend inline bool operator==(const KisVector &, const KisVector &);
-  friend inline bool operator!=(const KisVector &, const KisVector &);
-  friend inline KisVector operator+(const KisVector &, const KisVector &);
-  friend inline KisVector operator-(const KisVector &, const KisVector &);
-  friend inline KisVector operator*(const KisVector &, int);
-  friend inline KisVector operator*(int, const KisVector &);
-  friend inline KisVector operator*(const KisVector &, long);
-  friend inline KisVector operator*(long, const KisVector &);
-  friend inline KisVector operator*(const KisVector &, double);
-  friend inline KisVector operator*(double, const KisVector &);
-  friend inline KisVector operator-(const KisVector &);
-  friend inline KisVector operator/(const KisVector &, int);
-  friend inline KisVector operator/(const KisVector &, long);
-  friend inline KisVector operator/(const KisVector &, double);
+	friend inline bool operator==(const KisVector &, const KisVector &);
+	friend inline bool operator!=(const KisVector &, const KisVector &);
+	friend inline KisVector operator+(const KisVector &, const KisVector &);
+	friend inline KisVector operator-(const KisVector &, const KisVector &);
+	friend inline KisVector operator*(const KisVector &, int);
+	friend inline KisVector operator*(int, const KisVector &);
+	friend inline KisVector operator*(const KisVector &, long);
+	friend inline KisVector operator*(long, const KisVector &);
+	friend inline KisVector operator*(const KisVector &, double);
+	friend inline KisVector operator*(double, const KisVector &);
+	friend inline KisVector operator-(const KisVector &);
+	friend inline KisVector operator/(const KisVector &, int);
+	friend inline KisVector operator/(const KisVector &, long);
+	friend inline KisVector operator/(const KisVector &, double);
    
  private:
-  double m_x;
-  double m_y;
-  double m_z;
+	double m_x;
+	double m_y;
+	double m_z;
 };
 
 inline KisVector::KisVector()
@@ -169,34 +169,34 @@ inline KisVector operator-(const KisVector &v)
 
 inline KisVector &KisVector::operator/=(int c)
 {
-  if (!c == 0)
-    {
-      m_x/=c;
-      m_y/=c;
-      m_z/=c;
-    }
-    return *this;
+	if (!c == 0)
+	{
+		m_x/=c;
+		m_y/=c;
+		m_z/=c;
+	}
+	return *this;
 }
 
 inline KisVector &KisVector::operator/=(long c)
 {
-  if (!c == 0)
-    {
-      m_x/=c;
-      m_y/=c;
-      m_z/=c;
-    }
-    return *this;
+	if (!c == 0)
+	{
+		m_x/=c;
+		m_y/=c;
+		m_z/=c;
+	}
+	return *this;
 }
 
 inline KisVector &KisVector::operator/=(double c)
 {
-  if (!c == 0)
-    {
-      m_x/=c;
-      m_y/=c;
-      m_z/=c;
-    }
-    return *this;
+	if (!c == 0)
+	{
+		m_x/=c;
+		m_y/=c;
+		m_z/=c;
+	}
+	return *this;
 }
 #endif

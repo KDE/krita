@@ -30,29 +30,29 @@ class KAboutData;
 
 class KisFactory : public KoFactory
 {
-    Q_OBJECT
-public:
-    KisFactory( QObject* parent = 0, const char* name = 0 );
-    ~KisFactory();
+	Q_OBJECT
+		public:
+	KisFactory( QObject* parent = 0, const char* name = 0 );
+	~KisFactory();
 
-    virtual KParts::Part *createPartObject( 
-        QWidget *parentWidget = 0, 
-        const char *widgetName = 0, 
-        QObject *parent = 0, 
-        const char *name = 0, 
-        const char *classname = "KoDocument", 
-        const QStringList &args = QStringList() ); 
+	virtual KParts::Part *createPartObject( 
+		QWidget *parentWidget = 0, 
+		const char *widgetName = 0, 
+		QObject *parent = 0, 
+		const char *name = 0, 
+		const char *classname = "KoDocument", 
+		const QStringList &args = QStringList() ); 
 
-    static KAboutData        *aboutData();
-    static KInstance         *global();
-    static KisPluginServer   *pServer();
-    static KisResourceServer *rServer();
+	static KAboutData        *aboutData();
+	static KInstance         *global();
+	static KisPluginServer   *pServer();
+	static KisResourceServer *rServer();
 
-private:
-    static KInstance           *s_global;
-    static KisPluginServer     *s_pserver;
-    static KisResourceServer   *s_rserver;
-    static KAboutData          *s_aboutData;
+ private:
+	static KInstance           *s_global;
+	static KisPluginServer     *s_pserver;
+	static KisResourceServer   *s_rserver;
+	static KAboutData          *s_aboutData;
 };
 
 #endif

@@ -22,30 +22,30 @@
 
 KisVector& KisVector::normalize()
 {
-  double length, ilength;
+	double length, ilength;
   
-  length = m_x*m_x + m_y*m_y + m_z*m_z;
-  length = sqrt (length);
+	length = m_x*m_x + m_y*m_y + m_z*m_z;
+	length = sqrt (length);
   
-  if (length)
-    {
-      ilength = 1/length;
-      m_x *= ilength;
-      m_y *= ilength;
-      m_z *= ilength;
-    }
-  return *this;
+	if (length)
+	{
+		ilength = 1/length;
+		m_x *= ilength;
+		m_y *= ilength;
+		m_z *= ilength;
+	}
+	return *this;
 }
 
 KisVector& KisVector::crossProduct(const KisVector &v)
 {
-  double x,y,z;
+	double x,y,z;
   
-  x = m_y*v.m_z - m_z*v.m_y;
-  y = m_z*v.m_x - m_x*v.m_z;
-  z = m_x*v.m_y - m_y*v.m_x;
-  m_x=x; m_y=y; m_z=z;
+	x = m_y*v.m_z - m_z*v.m_y;
+	y = m_z*v.m_x - m_x*v.m_z;
+	z = m_x*v.m_y - m_y*v.m_x;
+	m_x=x; m_y=y; m_z=z;
   
-  return *this;
+	return *this;
 }
 

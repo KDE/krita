@@ -30,64 +30,64 @@
 
 class KisGradient 
 {
-public:
+ public:
 
-    KisGradient();
-    ~KisGradient();
+	KisGradient();
+	~KisGradient();
     
-    void setNull();
+	void setNull();
     
-    void setEffect(KImageEffect::GradientType _effect)
-        { mEffect = _effect; }
+	void setEffect(KImageEffect::GradientType _effect)
+		{ mEffect = _effect; }
         
-    /* using kde's native kimageeffect gradients for 2 color
-    gradients may be preferred - how to handle gimp gradients
-    is another matter and requires a translation method - this
-    will be done with plugins for a later release - not a high
-    priority at all for the Krayon release 1.0 and Gimp gradients will
-    be redone for Gimp 2.0 anyway */
+	/* using kde's native kimageeffect gradients for 2 color
+	   gradients may be preferred - how to handle gimp gradients
+	   is another matter and requires a translation method - this
+	   will be done with plugins for a later release - not a high
+	   priority at all for the Krayon release 1.0 and Gimp gradients will
+	   be redone for Gimp 2.0 anyway */
     
-    void mapKdeGradient(QRect gradR, 
-        KoColor startColor, KoColor endColor);
+	void mapKdeGradient(QRect gradR, 
+			    KoColor startColor, KoColor endColor);
         	
-    /*  these probably won't be used without copying kimageffect code
-    and modifying for use with krayon - use what's above.  Eventually
-    all kimageeffect gradients will need to be relplaced with native
-    gradients for better flexibility and 32 bit (or 64 bit) rendering */
+	/*  these probably won't be used without copying kimageffect code
+	    and modifying for use with krayon - use what's above.  Eventually
+	    all kimageeffect gradients will need to be relplaced with native
+	    gradients for better flexibility and 32 bit (or 64 bit) rendering */
     
-    void mapVertGradient(QRect gradR, 
-        KoColor startColor, KoColor endColor);
-    void mapHorGradient(QRect gradR, 
-        KoColor startColor, KoColor endColor);
+	void mapVertGradient(QRect gradR, 
+			     KoColor startColor, KoColor endColor);
+	void mapHorGradient(QRect gradR, 
+			    KoColor startColor, KoColor endColor);
      
-    const int width()  { return mGradientWidth; }
-    const int height() { return mGradientHeight; }
+	const int width()  { return mGradientWidth; }
+	const int height() { return mGradientHeight; }
     
-    uint arrayPixelValue(int x, int y) 
-        { return gradArray[y * mGradientWidth + x]; }
+	uint arrayPixelValue(int x, int y) 
+		{ return gradArray[y * mGradientWidth + x]; }
 
-    uint imagePixelValue(int x, int y)
-        { return *((uint *)gradImage.scanLine(y)  + x); }    
+	uint imagePixelValue(int x, int y)
+		{ return *((uint *)gradImage.scanLine(y)  + x); }    
     
-    KImageEffect::GradientType gradientType() { return mEffect; }
+	KImageEffect::GradientType gradientType() { return mEffect; }
         
-    QImage gradient(const QSize &size, const QColor &ca,
-	    const QColor &cb, KImageEffect::GradientType eff, int ncols);
+	QImage gradient(const QSize &size, const QColor &ca,
+			const QColor &cb, KImageEffect::GradientType eff, int ncols);
         
-    QImage& dither(QImage &img, const QColor *palette, int size);
+	QImage& dither(QImage &img, const QColor *palette, int size);
     
-    int nearestColor( int r, int g, int b, const QColor *palette, int size );
+	int nearestColor( int r, int g, int b, const QColor *palette, int size );
     
 
-private:
+ private:
     
-    QMemArray <uint> gradArray;
-    QImage gradImage;
+	QMemArray <uint> gradArray;
+	QImage gradImage;
         
-    int mGradientWidth;
-    int mGradientHeight;
+	int mGradientWidth;
+	int mGradientHeight;
 
-    KImageEffect::GradientType mEffect;
+	KImageEffect::GradientType mEffect;
     
 };
 

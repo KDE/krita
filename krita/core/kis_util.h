@@ -30,17 +30,17 @@
 #include "kis_global.h"
 
 class KisUtil {
-public:
-    static void printRect( const QRect&, const QString& name = "Rect" );
-    static void printPoint( const QPoint&, const QString& name = "Point" );
+ public:
+	static void printRect( const QRect&, const QString& name = "Rect" );
+	static void printPoint( const QPoint&, const QString& name = "Point" );
 
-    static void enlargeRectToContainPoint( QRect& r, QPoint p );
-    static QRect findTileExtents(QRect r );
+	static void enlargeRectToContainPoint( QRect& r, QPoint p );
+	static QRect findTileExtents(QRect r );
 
 //    static QString channelIdtoString(cId);
 
-    static QImage roughScaleQImage(QImage & src, int width, int height);
-    static QRect findBoundingTiles(const QRect& area);
+	static QImage roughScaleQImage(QImage & src, int width, int height);
+	static QRect findBoundingTiles(const QRect& area);
 //    static int calcNumChannels(cMode cm);
 };
 

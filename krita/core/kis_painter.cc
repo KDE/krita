@@ -1,6 +1,6 @@
-
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -654,11 +654,13 @@ void KisPainter::paintAt(const QPoint & pos,
 	Q_INT32 calibratedPressure = pressure / 2;
 
 	// This is going to be sloooooow!
-	KisAlphaMask * mask = m_brush -> mask(calibratedPressure);
-	m_brushWidth = mask -> width();
-	m_brushHeight = mask -> height();
-	computeDab(mask);
-
+	if (m_pressure != pressure || m_brush -> brushType() == PIPE_MASK || m_brush -> brushType() == PIPE_IMAGE) {
+		KisAlphaMask * mask = m_brush -> mask(calibratedPressure);
+		m_brushWidth = mask -> width();
+		m_brushHeight = mask -> height();
+		computeDab(mask);
+		m_pressure = pressure;
+	}
 	bitBlt( x,  y,  COMPOSITE_NORMAL, m_dab.data() );
 
 	m_dirtyRect = QRect(x,

@@ -24,112 +24,112 @@
 #include <dcopclient.h>
 
 KRayonViewIface::KRayonViewIface( KisView *view_ )
-    : KoViewIface( view_ )
+	: KoViewIface( view_ )
 {
-    m_view = view_;
+	m_view = view_;
 }
 
 void KRayonViewIface::copy()
 {
-  m_view->copy();
+	m_view->copy();
 }
 
 void KRayonViewIface::cut()
 {
-  m_view->cut();
+	m_view->cut();
 }
 
 void KRayonViewIface::removeSelection()
 {
-  m_view->removeSelection();
+	m_view->removeSelection();
 }
 
 void KRayonViewIface::paste()
 {
-  m_view->paste();
+	m_view->paste();
 }
 
 void KRayonViewIface::crop()
 {
-  m_view->crop();
+	m_view->crop();
 }
 
 void KRayonViewIface::selectAll()
 {
-  m_view->selectAll();
+	m_view->selectAll();
 }
 
 void KRayonViewIface::unSelectAll()
 {
-  m_view->unSelectAll();
+	m_view->unSelectAll();
 }
 
 void KRayonViewIface::dialog_gradient()
 {
-  m_view->dialog_gradient();
+	m_view->dialog_gradient();
 }
 
 void KRayonViewIface::dialog_colors()
 {
-  m_view->dialog_colors();
+	m_view->dialog_colors();
 }
 
 void KRayonViewIface::dialog_crayons()
 {
-  m_view->dialog_crayons();
+	m_view->dialog_crayons();
 }
 
 void KRayonViewIface::dialog_brushes()
 {
-  m_view->dialog_brushes();
+	m_view->dialog_brushes();
 }
 
 void KRayonViewIface::dialog_patterns()
 {
-  m_view->dialog_patterns();
+	m_view->dialog_patterns();
 }
 
 void KRayonViewIface::dialog_layers()
 {
-  m_view->dialog_layers();
+	m_view->dialog_layers();
 }
 
 void KRayonViewIface::dialog_channels()
 {
-  m_view->dialog_channels();
+	m_view->dialog_channels();
 }
 
 void KRayonViewIface::insert_layer()
 {
-  m_view->insert_layer();
+	m_view->insert_layer();
 }
 
 void KRayonViewIface::remove_layer()
 {
-  m_view->remove_layer();
+	m_view->remove_layer();
 }
 
 void KRayonViewIface::link_layer()
 {
-  m_view->link_layer();
+	m_view->link_layer();
 }
 
 void KRayonViewIface::hide_layer()
 {
-  m_view->hide_layer();
+	m_view->hide_layer();
 }
 
 void KRayonViewIface::next_layer()
 {
-  m_view->next_layer();
+	m_view->next_layer();
 }
 
 void KRayonViewIface::previous_layer()
 {
-  m_view->previous_layer();
+	m_view->previous_layer();
 }
 
 void KRayonViewIface::layer_properties() 
 {
-  m_view->layer_properties();
+	m_view->layer_properties();
 }

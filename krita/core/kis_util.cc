@@ -33,72 +33,72 @@ const long BIGNUM = (TILE_SIZE*10000);
 
 void KisUtil::printRect( const QRect& r, const QString& name )
 {
-    kdDebug()<<name.latin1()<<":: l:"<<r.left()<<" t:"<< r.top()<<" r:"<<r.right()<<" b:"<<r.bottom()<<" w:"<<r.width()<<" h: "<< r.height()<<endl;
+	kdDebug()<<name.latin1()<<":: l:"<<r.left()<<" t:"<< r.top()<<" r:"<<r.right()<<" b:"<<r.bottom()<<" w:"<<r.width()<<" h: "<< r.height()<<endl;
 }
 
 void KisUtil::printPoint( const QPoint& p, const QString& name )
 {
-    kdDebug()<< name.latin1() <<" :: x:"<<p.x()<<" y:"<<p.y()<<endl;
+	kdDebug()<< name.latin1() <<" :: x:"<<p.x()<<" y:"<<p.y()<<endl;
 }
 
 void KisUtil::enlargeRectToContainPoint( QRect& r, QPoint p )
 {
-  if (r.contains(p))
-    {
-        kdDebug()<<"KisUtil::enlargeRectToContainPoint: point already contained\n";
-      return;
-    }
-  if (p.x()<r.left())   r.setLeft(p.x());
-  if (p.x()>r.right())  r.setRight(p.x());
-  if (p.y()<r.top())    r.setTop(p.y());
-  if (p.y()>r.bottom()) r.setBottom(p.y());
+	if (r.contains(p))
+	{
+		kdDebug()<<"KisUtil::enlargeRectToContainPoint: point already contained\n";
+		return;
+	}
+	if (p.x()<r.left())   r.setLeft(p.x());
+	if (p.x()>r.right())  r.setRight(p.x());
+	if (p.y()<r.top())    r.setTop(p.y());
+	if (p.y()>r.bottom()) r.setBottom(p.y());
 }
 
 // Find a rectangle which encloses r whose coordinates are divisible
 // by TILE_SIZE (ie no remainder)
 QRect KisUtil::findTileExtents( QRect r )
 {
-  r.setLeft(((r.left()+BIGNUM)/TILE_SIZE)*TILE_SIZE-BIGNUM);
-  r.setTop(((r.top()+BIGNUM)  /TILE_SIZE)*TILE_SIZE-BIGNUM);
-  r.setBottom(((r.bottom()+TILE_SIZE+BIGNUM)/TILE_SIZE)*TILE_SIZE-BIGNUM-1);
-  r.setRight(((r.right()+TILE_SIZE+BIGNUM)  /TILE_SIZE)*TILE_SIZE-BIGNUM-1);
-  return(r);
+	r.setLeft(((r.left()+BIGNUM)/TILE_SIZE)*TILE_SIZE-BIGNUM);
+	r.setTop(((r.top()+BIGNUM)  /TILE_SIZE)*TILE_SIZE-BIGNUM);
+	r.setBottom(((r.bottom()+TILE_SIZE+BIGNUM)/TILE_SIZE)*TILE_SIZE-BIGNUM-1);
+	r.setRight(((r.right()+TILE_SIZE+BIGNUM)  /TILE_SIZE)*TILE_SIZE-BIGNUM-1);
+	return(r);
 }
 
 /*
-    roughScaleQImage - scale a qimage keeping palette, no anti-aliasing
-    or color blending based on surrounding pixel values
+  roughScaleQImage - scale a qimage keeping palette, no anti-aliasing
+  or color blending based on surrounding pixel values
 
-    based on:
-        libfbx-stretch.c -- Surface Stretching Functions
-        (C)opyright 2000 U4X Labs - LGPL licensing
-        Written by: Mike Bourgeous <nitrogen@u4x.org>
+  based on:
+  libfbx-stretch.c -- Surface Stretching Functions
+  (C)opyright 2000 U4X Labs - LGPL licensing
+  Written by: Mike Bourgeous <nitrogen@u4x.org>
 */
 
 QImage KisUtil::roughScaleQImage(QImage & src, int width, int height)
 {
-    QImage dest(width, height, src.depth());
+	QImage dest(width, height, src.depth());
 
-    int xpos, ypos;
-    int x1, y1;
-    int x = 0, y = 0;
+	int xpos, ypos;
+	int x1, y1;
+	int x = 0, y = 0;
 
-    float ratio_x = (float)src.width() / (float)width;
-    float ratio_y = (float)src.height() / (float)height;
+	float ratio_x = (float)src.width() / (float)width;
+	float ratio_y = (float)src.height() / (float)height;
 
-    for (ypos = y; ypos < y + height; ypos++)
-    {
-        for (xpos = x; xpos < x + width; xpos++)
-        {
-            x1 = (int)((xpos - x) * ratio_x);
-            y1 = (int)((ypos - y) * ratio_y);
+	for (ypos = y; ypos < y + height; ypos++)
+	{
+		for (xpos = x; xpos < x + width; xpos++)
+		{
+			x1 = (int)((xpos - x) * ratio_x);
+			y1 = (int)((ypos - y) * ratio_y);
 
-            QRgb value = src.pixel(x1, y1);
-            dest.setPixel(xpos, ypos, value);
-        }
-    }
+			QRgb value = src.pixel(x1, y1);
+			dest.setPixel(xpos, ypos, value);
+		}
+	}
 
-    return dest;
+	return dest;
 }
 
 QRect KisUtil::findBoundingTiles(const QRect& area)

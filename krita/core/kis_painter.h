@@ -71,16 +71,16 @@ public:
         ~KisPainter();
 
 public:
-        // Start painting on the specified device.
+        // Start painting on the specified device. Not undoable.
         void begin(KisPaintDeviceSP device);
 
-        // ???
+        // Finish painting on the current device
         KCommand *end();
 
-        // ???
+        // Begin an undoable paint operation
         void beginTransaction(const QString& customName = QString::null);
 
-        // ???
+        // Finish the undoable paint operation
         KCommand *endTransaction();
 
         // The current paint device.
@@ -202,6 +202,7 @@ private:
         Q_INT32 m_brushWidth;
         Q_INT32 m_brushHeight;
 
+	Q_INT32 m_pressure;
 };
 
 inline

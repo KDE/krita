@@ -24,38 +24,38 @@
 #include <dcopclient.h>
 
 KIsImageIface::KIsImageIface( KisImage *img_ )
-    : DCOPObject()
+	: DCOPObject()
 {
-    m_img = img_;
+	m_img = img_;
 }
 
 QString KIsImageIface::name()const
 {
-    return m_img->name();
+	return m_img->name();
 }
 
 int KIsImageIface::height() const
 {
-    return m_img->height();
+	return m_img->height();
 }
 
 int KIsImageIface::width() const
 {
-    return m_img->width();
+	return m_img->width();
 }
 
 bool KIsImageIface::alpha() const
 {
-    return m_img->alpha();
+	return m_img->alpha();
 }
 
 bool KIsImageIface::empty() const
 {
-    return m_img->empty();
+	return m_img->empty();
 }
 
 void KIsImageIface::setName(const QString& name)
 {
-    m_img->setName( name );
+	m_img->setName( name );
 }
 

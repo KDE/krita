@@ -108,6 +108,7 @@
 #include "kis_move_event.h"
 #include "kis_colorspace_registry.h"
 #include "kis_scale_visitor.h"
+#include "kis_profile.h"
 
 // Widgets
 #include "kis_autobrush.h"
@@ -804,7 +805,6 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_vRuler -> show();
 	}
 
-// 	if (!m_dockersSetup) setupDockers();
 }
 
 void KisView::updateReadWrite(bool readwrite)
@@ -2638,6 +2638,7 @@ void KisView::connectCurrentImg() const
 		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
 
 // 		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), SLOT(imgUpdated(KisImageSP)));
+		connect(m_current, SIGNAL(profileChanged(KisProfileSP)), SLOT(profileChanged(KisProfileSP)));
                 connect(m_current, SIGNAL(update(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
 		connect(m_current, SIGNAL(layersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
 		connect(m_current, SIGNAL(sizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
@@ -2675,6 +2676,11 @@ void KisView::imgUpdated(KisImageSP img, const QRect& rc)
 void KisView::imgUpdated(KisImageSP img)
 {
 	imgUpdated(img, QRect(img -> bounds()));
+}
+
+void KisView::profileChanged(KisProfileSP /*profile*/)
+{
+	updateStatusBarProfileLabel();
 }
 
 void KisView::slotImageSizeChanged(KisImageSP img, Q_INT32 /*w*/, Q_INT32 /*h*/)

@@ -174,6 +174,7 @@ signals:
 	void update(KisImageSP image, const QRect& rc);
 	void layersChanged(KisImageSP image);
 	void sizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
+	void profileChanged(KisProfileSP profile);
 
 private slots:
 	void slotUpdateDisplay(); 

@@ -209,8 +209,7 @@ cmsHTRANSFORM KisStrategyColorSpace::createTransform(KisStrategyColorSpaceSP dst
 		return tf;
 	}
 	else {
-		// XXX: Cannot create the profile!
-		kdDebug() << "Cannot create the profile, we're going to crash, probably.\n";
+		kdDebug() << "Haven't got the profiles, we're going to crash, probably.\n";
 		return 0;
 	}
 

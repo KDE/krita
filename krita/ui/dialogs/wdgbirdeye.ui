@@ -1,0 +1,135 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgBirdEye</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgBirdEye</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>281</width>
+            <height>293</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>1</hsizetype>
+            <vsizetype>1</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>Overview</string>
+    </property>
+    <property name="layoutMargin" stdset="0">
+    </property>
+    <property name="layoutSpacing" stdset="0">
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <property name="layoutSpacing" stdset="0">
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>3</number>
+                </property>
+                <widget class="QFrame" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>canvas</cstring>
+                    </property>
+                    <property name="mouseTracking">
+                        <bool>true</bool>
+                    </property>
+                    <property name="frameShape">
+                        <enum>Box</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Raised</enum>
+                    </property>
+                </widget>
+                <widget class="QSlider" row="1" column="0">
+                    <property name="name">
+                        <cstring>slider</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>5</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>500</number>
+                    </property>
+                    <property name="value">
+                        <number>100</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+                <widget class="QSpinBox" row="1" column="1">
+                    <property name="name">
+                        <cstring>zoomBox</cstring>
+                    </property>
+                    <property name="suffix">
+                        <string>%</string>
+                    </property>
+                    <property name="buttonSymbols">
+                        <enum>PlusMinus</enum>
+                    </property>
+                    <property name="maxValue">
+                        <number>10000</number>
+                    </property>
+                    <property name="minValue">
+                        <number>5</number>
+                    </property>
+                    <property name="value">
+                        <number>100</number>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>WdgBirdEye</receiver>
+        <slot>zoomChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>zoomBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>WdgBirdEye</receiver>
+        <slot>zoomChanged(int)</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in declaration">kiconloader.h</include>
+</includes>
+<slots>
+    <slot>zoomChanged(int)</slot>
+    <slot>zoomMinus()</slot>
+    <slot>zoomPlus()</slot>
+</slots>
+<pixmapfunction>BarIcon</pixmapfunction>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

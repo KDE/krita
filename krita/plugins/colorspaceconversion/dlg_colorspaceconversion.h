@@ -27,6 +27,8 @@
 
 #include "wdgconvertcolorspace.h"
 
+
+class QComboBox;
 /**
  * XXX
  */
@@ -42,10 +44,15 @@ public:
 
 	WdgConvertColorSpace * m_page;
 
-private slots:
+public slots:
 
 	void okClicked();
-	void fillCmbProfiles(const QString &);
+	void fillCmbDestProfile(const QString &);
+	void fillCmbSrcProfile(const QString &);
+
+private:
+
+	void fillCmbProfile(QComboBox * cmb, const QString &);
 };
 
 #endif // DLG_COLORSPACECONVERSION

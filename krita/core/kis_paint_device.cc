@@ -675,6 +675,7 @@ void KisPaintDevice::setProfile(KisProfileSP profile)
 	else {
 		m_profile = 0;
 	}
+	emit(profileChanged(m_profile));
 }
 
 

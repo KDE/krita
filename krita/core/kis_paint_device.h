@@ -305,6 +305,7 @@ signals:
         void ioProgress(Q_INT8 percentage);
 	void selectionChanged();
 	void selectionCreated();
+	void profileChanged(KisProfileSP profile);
 
 protected:
         void setWidth(Q_INT32 w);

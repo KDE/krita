@@ -496,6 +496,7 @@ void KisImage::setProfile(const KisProfileSP& profile)
 		kdDebug() << "KisImage::setProfile: empty profile\n";
 		m_profile = 0;
 	}
+	emit(profileChanged(m_profile));
 }
 
 KURL KisImage::uri() const

@@ -46,13 +46,13 @@ DlgColorspaceConversion::DlgColorspaceConversion( QWidget *  parent,
 
 	m_page -> cmbColorSpaces -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
 
-	fillCmbProfiles(m_page -> cmbColorSpaces -> currentText());
+	fillCmbDestProfile(m_page -> cmbColorSpaces -> currentText());
 
 	// XXX: Until we have implemented high bit depth images
 	m_page -> cmbDepth -> setEnabled(false);
 
 	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const QString &)), 
-		this, SLOT(fillCmbProfiles(const QString &)));
+		this, SLOT(fillCmbDestProfile(const QString &)));
 
 
 	connect(this, SIGNAL(okClicked()),
@@ -73,22 +73,30 @@ void DlgColorspaceConversion::okClicked()
 }
 
 
-void DlgColorspaceConversion::fillCmbProfiles(const QString & s) 
+void DlgColorspaceConversion::fillCmbDestProfile(const QString & s) 
 {
+	fillCmbProfile(m_page -> cmbDestProfile, s);
+	
+}
+
+void DlgColorspaceConversion::fillCmbSrcProfile(const QString & s)
+{
+	fillCmbProfile(m_page -> cmbSourceProfile, s);
+
+}
+
+void DlgColorspaceConversion::fillCmbProfile(QComboBox * cmb, const QString & s)
+{
+	cmb -> clear();
 
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
-	m_page -> cmbSourceProfile -> clear();
-	m_page -> cmbDestProfile -> clear();
 
 	vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-		m_page -> cmbSourceProfile -> insertItem((*it) -> productName());
-		m_page -> cmbDestProfile -> insertItem((*it) -> productName());
+		cmb -> insertItem((*it) -> productName());
 
 	}
-	
-
 }
 
 

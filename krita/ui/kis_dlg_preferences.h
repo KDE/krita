@@ -1,5 +1,5 @@
 /*
- *  preferencesdlg.h - part of KImageShop
+ *  preferencesdlg.h - part of KImageShop^WKrita
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *

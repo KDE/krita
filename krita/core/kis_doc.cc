@@ -597,16 +597,16 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
 		description = element.attribute("description");
 
-		if ((attr = element.attribute("x-res")).isNull()) 
+		if ((attr = element.attribute("x-res")).isNull())
 			xres = 100.0;
 		else if ((xres = attr.toInt()) < 0 || xres > cfg.maxImgHeight())
 			xres = 100.0;
-		
-		if ((attr = element.attribute("y-res")).isNull()) 
+
+		if ((attr = element.attribute("y-res")).isNull())
 			yres = 100.0;
 		else if ((yres = attr.toInt()) < 0 || yres > cfg.maxImgHeight())
 			yres = 100.0;
-		
+
 
 
 		if ((colorspacename = element.attribute("colorspacename")).isNull())
@@ -984,8 +984,8 @@ void KisDoc::removeImage(const QString& name)
 bool KisDoc::slotNewImage()
 {
 	KisConfig cfg;
-	KisDlgCreateImg dlg(cfg.maxImgWidth(), cfg.defImgWidth(), 
-			    cfg.maxImgHeight(), cfg.defImgHeight(), 
+	KisDlgCreateImg dlg(cfg.maxImgWidth(), cfg.defImgWidth(),
+			    cfg.maxImgHeight(), cfg.defImgHeight(),
 			    "RGBA",
 			    nextImageName());
 
@@ -997,9 +997,9 @@ bool KisDoc::slotNewImage()
 		KisLayerSP layer;
 		KisFillPainter painter;
 
-		img = new KisImage(this, dlg.imgWidth(), 
-				   dlg.imgHeight(), 
-				   KisColorSpaceRegistry::instance()->colorSpace(dlg.colorStrategyName()), 
+		img = new KisImage(this, dlg.imgWidth(),
+				   dlg.imgHeight(),
+				   KisColorSpaceRegistry::instance()->colorSpace(dlg.colorStrategyName()),
 				   dlg.imgName());
 		img -> setResolution(dlg.imgResolution(), dlg.imgResolution()); // XXX needs to be added to dialog
 		img -> setDescription(dlg.imgDescription());
@@ -1495,6 +1495,9 @@ bool KisDoc::importImage(const QString& filename)
 
 	if (!filename.isEmpty()) {
 		KURL url(filename);
+
+		// XXX: If we ever want to load an imageformat that ImageMagick
+		//      doesn't support, build a switch here.
 		KisImageMagickConverter ib(this, this);
 
 		if (url.isEmpty())

@@ -61,6 +61,12 @@ Core
         X Code cleanup (make naming conformant to Qt) (#Dirk)
         * Lock layers (make inaccessible) See bug #90456.
 
+File Format:
+
+	* Save & load actual profiles in .kra files
+	* Save & load undo information in .kra files
+
+
 User Interface
 
         * Give color strategies an option page just like tools. Give layers an option page,
@@ -98,22 +104,23 @@ User Interface
 
 Profiles
 
-	* Add profiles to krita/data/profiles (done)
+X	* Add profiles to krita/data/profiles (done)
 
-	* Create a KisProfile resource in krita/core/resources
+X	* Create a KisProfile resource in krita/core/resources
 
 	* Implement the attached preferences tab & add to kis_dlg_preferences (Query: 
       should there be separate settings for every color model? If so, we need 
       to add settings loading and saving to the color strategy modules).
 
-	* Store preferences in settings
+X	* Store preferences in settings
 
 	* Add an input profile combobox to the import image & scan dialogs
 
 	* Add an export profile combobox to the export image/print dialogs
 
-    	* Add a step in KisDoc::paintContent where the default monitor profile
-      is applied to the QImage at line 1157.
+X    	* Add a step in KisDoc::paintContent where the default monitor profile
+          is applied to the QImage at line 1157. --> No, this is done in the color strategies,
+          so we never need more than one transform.
 
     * Add loading and saving of profiles associated with images in .krita 
       files.
@@ -125,7 +132,8 @@ Profiles
       depend on ImageMagick or GraphicsMagick supporting this in some way.)
 	
     * Support out-of-gamut warning indications for parts of an image 
-      containing unprintable colours (no idea how to implement this).
+      containing unprintable colours (no idea how to implement this). -> this
+      is pretty easy with lcms
 
 
 Color conversions
@@ -133,19 +141,21 @@ Color conversions
     * Replace koColor with KisColor, where KisColor is a combination of a
       byte array and a pointer to a color model
 
-    * Precreate all littlecms transforms inside the color model constructors.
+X    * Precreate all littlecms transforms inside the color model
+       constructors. -> no, that would take too much time and memory; instead,
+       create on demand and cache. Later: add some garbage collection.
+      
 
-    * Remove the convertToRGBA and convertFromRGBA methods (and all calls to
+ X   * Remove the convertToRGBA and convertFromRGBA methods (and all calls to
       them).
 	  
     * Rework the nativeColor, toKoColor, convertTo methods to use KisColor and
       littlecms for transforms.
 
-    * In KisStrategyColorSpaceCMYK::convertToImage, use littlecms transform 
+X    * In KisStrategyColorSpaceCMYK::convertToImage, use littlecms transform 
       instead of homegrown code to return an RGB QImage (and rename this
 	  method to convertToQImage, since that's what it is, and do that 
       everywhere).
-
 
     * Make color strategies, filters and other plugins that act directly on 
       channel data instead of using KisPainter to bitBlt templates.
@@ -155,6 +165,16 @@ Color conversions
     * Add UI for display settings for high bit depths -- we have upscale
       and downscale, but that's not enough. I want, as in OpenEXR, to be
       able 
+
+Gerhard Fuernkranz <nospam456@gmx.de>:
+
+> If you need even faster transforms, I can recommend Argyll's IMDI 
+> routines (http://www.argyllcms.com - Do you remember? Marti has 
+> forwarded Graeme's announcement with the new URL today). Particularly if 
+> you can live with 8bpp input, then IMDI is _very fast_ (I measured circa 
+> 14 Mpixels/second for a 3D -> 3D transform with 8bpp source and 8 or 
+> 16bpp destination, on an AMD Athlon XP 2600+ with 2080MHz. This 
+> corresponds to circa 18 frames/second @ 1024x768).
 
 
 Tools

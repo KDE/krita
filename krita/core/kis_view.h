@@ -72,8 +72,6 @@ class KisResourceMediator;
 class KisAutobrush;
 class KisTextBrush;
 class KisAutogradient;
-//class DockFrameDocker;
-//class ColorDocker;
 class ControlFrame;
 class KisUndoAdapter;
 class KisRect;
@@ -346,6 +344,7 @@ private slots:
 	void slotInsertImageAsLayer();
 	void imgUpdated(KisImageSP img, const QRect& rc);
 	void imgUpdated(KisImageSP img);
+	void profileChanged(KisProfileSP profile);
 	void slotZoomIn();
 	void slotZoomOut();
 	void slotImageSizeChanged(KisImageSP img, Q_INT32 w, Q_INT32 h);

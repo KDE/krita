@@ -23,6 +23,7 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qcombobox.h>
+#include <qbuttongroup.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -87,14 +88,25 @@ void ColorspaceConversion::slotImgColorspaceConversion()
 	if (!image) return;
 
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
+
 	dlgColorspaceConversion -> setCaption(i18n("Convert all layers from ") + image -> colorStrategy() -> name());
+
+	dlgColorspaceConversion -> fillCmbSrcProfile(image -> colorStrategy() -> name());
+
+	if (image -> profile()) {
+		dlgColorspaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(image -> profile() -> productName());
+	}
 
 	if (dlgColorspaceConversion -> exec() == QDialog::Accepted) {
 		kdDebug() << "Going to convert image\n";
 		// XXX: Do the rest of the stuff
 		QString cspace = dlgColorspaceConversion -> m_page -> cmbColorSpaces -> currentText();
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(cspace);
-		//image -> convertTo(cs);
+
+		image -> setProfile(image -> colorStrategy() -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbSourceProfile -> currentText()));
+		image -> convertTo(cs, 
+				   cs -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbDestProfile -> currentText()),
+				   dlgColorspaceConversion -> m_page -> grpIntent -> selectedId());
 	}
 	delete dlgColorspaceConversion;
 }
@@ -110,12 +122,17 @@ void ColorspaceConversion::slotLayerColorspaceConversion()
 	
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
 	dlgColorspaceConversion -> setCaption(i18n("Convert current layer from") + dev -> colorStrategy() -> name());
+	dlgColorspaceConversion -> fillCmbSrcProfile(dev -> colorStrategy() -> name());
+	dlgColorspaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(dev -> profile() -> productName());
 
 	if (dlgColorspaceConversion -> exec() == QDialog::Accepted) {
 		kdDebug() << "Going to convert layer\n";
 		QString cspace = dlgColorspaceConversion -> m_page -> cmbColorSpaces -> currentText();
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(cspace);
-		//image -> activeLayer() -> convertTo(cs);
+		dev -> setProfile(dev -> colorStrategy() -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbSourceProfile -> currentText()));
+		dev -> convertTo(cs, 
+				   cs -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbDestProfile -> currentText()),
+				   dlgColorspaceConversion -> m_page -> grpIntent -> selectedId());
 
 	}
 	delete dlgColorspaceConversion;

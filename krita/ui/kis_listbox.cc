@@ -373,7 +373,6 @@ void KisListBoxItem::paint(QPainter *gc)
 
 	m_parent -> style().drawPrimitive(QStyle::PE_Panel, gc, m_visibleRect, m_parent -> colorGroup());
 	pt = QPoint(m_visibleRect.left() + 2, m_visibleRect.top() + 2);
-	printf("m_visible = %d\n", m_visible);
 	pix = m_visible ? &m_visiblePix : &m_invisiblePix;
 	gc -> drawPixmap(pt, *pix, QRect(0, 0, m_visibleRect.width(), m_visibleRect.height()));
 

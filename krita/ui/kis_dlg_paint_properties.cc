@@ -26,6 +26,7 @@
 #include <kpushbutton.h>
 #include <qvbox.h>
 
+#include "kis_global.h"
 #include "kis_dlg_paint_properties.h"
 #include "integerwidget.h"
 
@@ -40,7 +41,7 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, int opacity,
 	lbl = new QLabel( m_name, i18n("Name:"), page);
 
 	m_opacity = new IntegerWidget(0, 100, page);
-	m_opacity -> setValue(opacity * 100 / USHRT_MAX);
+	m_opacity -> setValue(downscale(opacity));
 	m_opacity -> setTickmarks(QSlider::Below);
 	m_opacity -> setTickInterval(13);
 
@@ -58,6 +59,6 @@ QString KisPaintPropertyDlg::getName() const
 
 int KisPaintPropertyDlg::getOpacity() const
 {
-	return m_opacity -> value() * USHRT_MAX / 100;
+	return upscale(m_opacity -> value());
 }
 

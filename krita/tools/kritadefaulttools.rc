@@ -22,7 +22,6 @@
   <Action name="tool_polygon"/>
   <Action name="tool_rectangle"/>
   <Action name="tool_ellipse"/>
-  <Action name="tool_star"/>
   <Separator/>
   <Action name="tool_fill"/>
   <Action name="tool_gradient"/>

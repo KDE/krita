@@ -31,6 +31,7 @@
 #include "kis_tool_paint.h"
 #include "kis_types.h"
 #include "kis_tool_factory.h"
+#include "kis_point.h"
 
 class QPainter;
 class KisPainter;

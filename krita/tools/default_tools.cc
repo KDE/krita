@@ -64,7 +64,6 @@
 #include "kis_tool_select_elliptical.h"
 #include "kis_tool_eraser.h"
 #include "kis_tool_select_eraser.h"
-#include "kis_tool_star.h"
 
 typedef KGenericFactory<DefaultTools> DefaultToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritadefaulttools, DefaultToolsFactory( "krita" ) )
@@ -110,7 +109,6 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
 		r -> add(new KisToolSelectEllipticalFactory( actionCollection() ));
 		r -> add(new KisToolEraserFactory( actionCollection() ));
 		r -> add(new KisToolSelectEraserFactory( actionCollection() ));
-                r -> add(new KisToolStarFactory( actionCollection() ));	
         }
 }
 

@@ -1,11 +1,11 @@
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) $(KOPAINTER_INCLUDES) 
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
 ## The part
 kde_module_LTLIBRARIES = libkritapart.la
 libkritapart_la_SOURCES = dummy.cc
 
 libkritapart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkritapart_la_LIBADD = core/libkiscore.la ui/libkisui.la ../lib/kofficeui/libkofficeui.la ../lib/kopainter/libkopainter.la tools/libkistools.la
+libkritapart_la_LIBADD = core/libkiscore.la ui/libkisui.la $(LIB_KOFFICEUI) $(LIB_KOPAINTER) tools/libkistools.la
 
 METASOURCES = AUTO
 
@@ -13,7 +13,7 @@ METASOURCES = AUTO
 lib_LTLIBRARIES = krita.la
 krita_la_SOURCES = main.cc
 krita_la_LDFLAGS = $(all_libraries) -avoid-version -module
-krita_la_LIBADD = ../lib/kofficecore/libkofficecore.la $(LIB_KOPAINTER)
+krita_la_LIBADD = $(LIB_KOFFICECORE) $(LIB_KOPAINTER)
 
 ## The executable
 bin_PROGRAMS = krita

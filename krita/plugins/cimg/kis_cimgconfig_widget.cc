@@ -21,6 +21,7 @@
  */
 #include "qlayout.h"
 #include "qcheckbox.h"
+#include "qpushbutton.h"
 
 #include "knuminput.h"
 
@@ -35,6 +36,7 @@ KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, c
 	m_page = new WdgCImg(this);
 	QHBoxLayout * l = new QHBoxLayout(this);
 	l -> add(m_page);
+	connect( m_page -> bnRefresh, SIGNAL(clicked()), filter(), SLOT(refreshPreview()));
 }
 
 
@@ -56,3 +58,4 @@ KisCImgFilterConfiguration * KisCImgconfigWidget::config()
 	return cfg;
 
 }
+#include "kis_cimgconfig_widget.moc"

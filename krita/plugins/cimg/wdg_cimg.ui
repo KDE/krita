@@ -9,128 +9,58 @@
             <x>0</x>
             <y>0</y>
             <width>600</width>
-            <height>215</height>
+            <height>249</height>
         </rect>
     </property>
     <property name="caption">
         <string>CImg configuration</string>
     </property>
-    <hbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox">
+        <widget class="QPushButton" row="0" column="0">
             <property name="name">
-                <cstring>grpSmooth</cstring>
+                <cstring>bnRefresh</cstring>
             </property>
-            <property name="title">
-                <string>&amp;Smoothing</string>
+            <property name="text">
+                <string>&amp;Refresh preview</string>
             </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KDoubleNumInput" row="0" column="1">
-                    <property name="name">
-                        <cstring>numDetail</cstring>
-                    </property>
-                    <property name="value">
-                        <number>0.1</number>
-                    </property>
-                    <property name="maxValue">
-                        <number>100</number>
-                    </property>
-                </widget>
-                <widget class="KDoubleNumInput" row="1" column="1">
-                    <property name="name">
-                        <cstring>numGradient</cstring>
-                    </property>
-                    <property name="value">
-                        <number>0.9</number>
-                    </property>
-                    <property name="maxValue">
-                        <number>100</number>
-                    </property>
-                </widget>
-                <widget class="KDoubleNumInput" row="2" column="1">
-                    <property name="name">
-                        <cstring>numTimeStep</cstring>
-                    </property>
-                    <property name="value">
-                        <number>20</number>
-                    </property>
-                    <property name="maxValue">
-                        <number>500</number>
-                    </property>
-                </widget>
-                <widget class="KDoubleNumInput" row="3" column="1">
-                    <property name="name">
-                        <cstring>numBlur</cstring>
-                    </property>
-                    <property name="value">
-                        <number>1.4</number>
-                    </property>
-                    <property name="maxValue">
-                        <number>10</number>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="4" column="0">
-                    <property name="name">
-                        <cstring>textLabel5</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Blurring iterations</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="3" column="0">
-                    <property name="name">
-                        <cstring>textLabel4</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Blur</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>textLabel3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Time step</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Gradient factor</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Detail factor</string>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="4" column="1">
-                    <property name="name">
-                        <cstring>numBlurIterations</cstring>
-                    </property>
-                    <property name="value">
-                        <number>1</number>
-                    </property>
-                    <property name="minValue">
-                        <number>1</number>
-                    </property>
-                    <property name="maxValue">
-                        <number>16</number>
-                    </property>
-                </widget>
-            </grid>
+            <property name="accel">
+                <string>Alt+R</string>
+            </property>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QLabel" row="0" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>textLabel1_2</cstring>
+            </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>Warning: this filter may take a long time.</string>
+            </property>
+        </widget>
+        <spacer row="0" column="3">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>51</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QGroupBox" row="1" column="2" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>grpPrecision</cstring>
             </property>
@@ -146,7 +76,7 @@
                         <cstring>textLabel6</cstring>
                     </property>
                     <property name="text">
-                        <string>Angular step</string>
+                        <string>Angular step:</string>
                     </property>
                 </widget>
                 <widget class="KDoubleNumInput" row="0" column="1">
@@ -218,7 +148,7 @@
                         <cstring>textLabel7</cstring>
                     </property>
                     <property name="text">
-                        <string>Integral step</string>
+                        <string>Integral step:</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="2" column="0">
@@ -226,12 +156,123 @@
                         <cstring>textLabel8</cstring>
                     </property>
                     <property name="text">
-                        <string>Gaussian</string>
+                        <string>Gaussian:</string>
                     </property>
                 </widget>
             </grid>
         </widget>
-    </hbox>
+        <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>grpSmooth</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Smoothing</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KDoubleNumInput" row="0" column="1">
+                    <property name="name">
+                        <cstring>numDetail</cstring>
+                    </property>
+                    <property name="value">
+                        <number>0.1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="1" column="1">
+                    <property name="name">
+                        <cstring>numGradient</cstring>
+                    </property>
+                    <property name="value">
+                        <number>0.9</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="2" column="1">
+                    <property name="name">
+                        <cstring>numTimeStep</cstring>
+                    </property>
+                    <property name="value">
+                        <number>20</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>500</number>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="3" column="1">
+                    <property name="name">
+                        <cstring>numBlur</cstring>
+                    </property>
+                    <property name="value">
+                        <number>1.4</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>10</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>textLabel5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Blurring iterations:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Blur:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Time step:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Gradient factor:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Detail factor:</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="4" column="1">
+                    <property name="name">
+                        <cstring>numBlurIterations</cstring>
+                    </property>
+                    <property name="value">
+                        <number>1</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>16</number>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
 </widget>
 <customwidgets>
 </customwidgets>

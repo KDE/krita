@@ -29,7 +29,6 @@ kde_module_LTLIBRARIES = kritacimg.la
 
 noinst_HEADERS = \
 	CImg.h\
-	greycstoration.h\
 	kis_cimg_filter.h\
 	kis_cimg_plugin.h\
 	kis_cimgconfig_widget.h

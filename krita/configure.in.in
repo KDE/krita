@@ -1,5 +1,2 @@
-# krita has two problems currently:
-# - the lack of developers ;)
-# - its name conflicts with an existing product
-# If anyone starts developing krita again, please rename it, first thing.
+# Not quite ready yet
 DO_NOT_COMPILE="$DO_NOT_COMPILE krita"

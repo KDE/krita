@@ -30,6 +30,7 @@ extern "C"
 {
     void *init_libkofficescan()
     {
+	KGlobal::locale()->insertCatalogue("kscan_plugin");
 	return new ScanFactory();
     }
 }

@@ -23,3 +23,5 @@ libkofficescan_la_LIBADD = $(LIB_KPARTS) $(LIB_KIO) $(LIB_KOFFICECORE)
 
 libkofficescan_la_METASOURCES = AUTO
 
+messages: rc.cpp
+	$(XGETTEXT) *.cpp -o $(podir)/kscan_plugin.pot

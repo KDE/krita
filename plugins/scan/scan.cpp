@@ -64,8 +64,8 @@ void Scan::slotScan()
 	}
     }
 
-#ifdef KSCANDIALOG_HAS_ISVALID
-    if ( scanDialog->isValid() )
+#ifdef KSCANDIALOG_HAS_SETUP
+    if ( scanDialog->setup() )
 #endif
         scanDialog->show();
 }

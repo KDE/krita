@@ -206,7 +206,7 @@ bool FillTool::flood(int startX, int startY)
     QRect floodRect(left, top, width, height);
     
     kdDebug() << "floodRect.left() " << floodRect.left() 
-              << "floodRect.top() "  << floodRect.top() << endl;
+              << " floodRect.top() "  << floodRect.top() << endl;
 
     /* set up gradient - if any.  this should only be done when the
     current layer is changed or when the fgColor or bgColor are changed,
@@ -257,7 +257,7 @@ void FillTool::mousePress(QMouseEvent *e)
     transparent on middle click, and background color on right click,
     need another paramater or nned to set color here and pass in */
     
-    if (e->button() == QMouseEvent::LeftButton)
+    if (e  ->button() == QMouseEvent::LeftButton)
         flood(pos.x(), pos.y());
     else if (e->button() == QMouseEvent::RightButton)
         flood(pos.x(), pos.y());
@@ -328,3 +328,4 @@ bool FillTool::loadSettings(QDomElement& elem)
 
 	return rc;
 }
+

@@ -143,8 +143,6 @@ bool EraserTool::paint(QPoint pos)
 		uchar a;
 		int   v;
 
-		kdDebug() << "EraserTool::paint alpha\n";
-
 		for (int y = sy; y <= ey; y++) {
 			sl = m_brush -> scanline(y);
 

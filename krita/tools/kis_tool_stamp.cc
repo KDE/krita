@@ -229,122 +229,109 @@ bool StampTool::stampToCanvas(QPoint pos)
 
 bool StampTool::stampColor(QPoint pos)
 {
-#if 0
-    KisImage *img = m_doc->current();
-    KisLayer *lay = img->getCurrentLayer();
-    QImage  *qimg = m_pattern->image();
+	KisImage *img = m_doc->current();
+	KisLayer *lay = img->getCurrentLayer();
+	QImage  *qimg = m_pattern->image();
 
-    int startx = pos.x();
-    int starty = pos.y();
+	int startx = pos.x();
+	int starty = pos.y();
 
-    QRect clipRect(startx, starty, patternWidth, patternHeight);
+	QRect clipRect(startx, starty, patternWidth, patternHeight);
 
-    if (!clipRect.intersects(lay->imageExtents()))
-        return false;
+	if (!clipRect.intersects(lay->imageExtents()))
+		return false;
 
-    clipRect = clipRect.intersect(lay->imageExtents());
+	clipRect = clipRect.intersect(lay->imageExtents());
 
-    int sx = clipRect.left() - startx;
-    int sy = clipRect.top() - starty;
-    int ex = clipRect.right() - startx;
-    int ey = clipRect.bottom() - starty;
+	int sx = clipRect.left() - startx;
+	int sy = clipRect.top() - starty;
+	int ex = clipRect.right() - startx;
+	int ey = clipRect.bottom() - starty;
 
-    uchar r = 0, g = 0, b = 0, a = 255;
-    int   v = 255;
-    int   bv = 0;
+	uchar r = 0, g = 0, b = 0, a = 255;
+	QRgb rgb;
+	int   v = 255;
+	int   bv = 0;
 
-    int red     = m_view->fgColor().R();
-    int green   = m_view->fgColor().G();
-    int blue    = m_view->fgColor().B();
+	int red     = m_view->fgColor().R();
+	int green   = m_view->fgColor().G();
+	int blue    = m_view->fgColor().B();
 
-    bool colorBlending = false;
-    bool grayscale = false;
-    bool layerAlpha =  (img->colorMode() == cm_RGBA);
-    bool patternAlpha = (qimg->hasAlphaBuffer());
+	bool colorBlending = false;
+	bool grayscale = false;
+	bool layerAlpha =  (img->colorMode() == cm_RGBA);
+	bool patternAlpha = (qimg->hasAlphaBuffer());
 
-    for (int y = sy; y <= ey; y++)
-    {
-        for (int x = sx; x <= ex; x++)
-	    {
-            // destination binary values by channel
-            if(colorBlending)
-            {
-	            r = lay->pixel(0, startx + x, starty + y);
-	            g = lay->pixel(1, startx + x, starty + y);
-	            b = lay->pixel(2, startx + x, starty + y);
-            }
+	for (int y = sy; y <= ey; y++) {
+		for (int x = sx; x <= ex; x++) {
+			// destination binary values by channel
+			if (colorBlending) {
+				rgb = lay -> pixel(startx + x, starty + y);
+				r = qRed(rgb);
+				g = qGreen(rgb);
+				b = qBlue(rgb);
+				a = qAlpha(rgb);
+			}
 
-            // pixel value in scanline at x offset to right
-            uint *p = (uint *)qimg->scanLine(y) + x;
+			// pixel value in scanline at x offset to right
+			uint *p = (uint *)qimg->scanLine(y) + x;
 
-            /* If the image pixel has an alpha channel value of 0,
-            don't paint the pixel. This is normal in many images used
-            as sprites. Setting an alpha value of 0 in the layer does
-            the same but also changes the layer and we don't want that
-            for images with transparent backgrounds. */
+			/* If the image pixel has an alpha channel value of 0,
+			   don't paint the pixel. This is normal in many images used
+			   as sprites. Setting an alpha value of 0 in the layer does
+			   the same but also changes the layer and we don't want that
+			   for images with transparent backgrounds. */
 
-            if(patternAlpha)
-            {
-                //if (!(*p & 0xff000000)) continue;
-                if (((*p) >> 24) == 0) continue;
-            }
+			if (patternAlpha)
+				if (qAlpha(*p) == 0)
+					continue;
 
-            /*  Do rudimentary color blending based on averaging
-            values in the pattern, the background, and the current
-            fgColor.  Later, various types of color blending will
-            be implemented for patterns and brushes using krayon's
-            predefined blend types. (not finished coding yet, but
-            the types have been defined and there is a combo box
-            for selecting them in tool opts dialogs.) */
+			if (layerAlpha) {
+				if (grayscale) {
+					v = a + bv;
+				}
+				else {
+					v = qAlpha(*p);
+					v += a;
+				}
 
-            if(colorBlending)
-            {
-                // make mud!
-	            lay->setPixel(0, startx + x, starty + y,
-                    (qRed(*p) + r + red)/3);
-	            lay->setPixel(1, startx + x, starty + y,
-                    (qGreen(*p) + g + green)/3);
-	            lay->setPixel(2, startx + x, starty + y,
-                    (qBlue(*p) + b + blue)/3);
-            }
-            else
-            {
-                /* set layer pixel to be same as image - this is
-                the same as the overwrite blend mode */
+				if (v < 0) 
+					v = 0;
 
-	            lay->setPixel(0, startx + x, starty + y, qRed(*p));
-	            lay->setPixel(1, startx + x, starty + y, qGreen(*p));
-	            lay->setPixel(2, startx + x, starty + y, qBlue(*p));
-            }
+				if (v > 255) 
+					v = 255;
+				
+				a = (uchar) v;
+			}
 
-            if (layerAlpha)
-	        {
-	            a = lay->pixel(3, startx + x, starty + y);
+			/*  Do rudimentary color blending based on averaging
+			    values in the pattern, the background, and the current
+			    fgColor.  Later, various types of color blending will
+			    be implemented for patterns and brushes using krayon's
+			    predefined blend types. (not finished coding yet, but
+			    the types have been defined and there is a combo box
+			    for selecting them in tool opts dialogs.) */
 
-                if(grayscale)
-                {
-                    v = a + bv;
-		            if (v < 0 ) v = 0;
-		            if (v > 255 ) v = 255;
-		            a = (uchar) v;
-			    }
-                else
-                {
-                    v = (int)((*p) >> 24);
-                    v += a;
-		            if (v < 0 ) v = 0;
-		            if (v > 255 ) v = 255;
-		            a = (uchar) v;
-                }
+			if (colorBlending) {
+				// make mud!
+				r = (qRed(*p) + r + red) / 3;
+				g = (qGreen(*p) + g + green) / 3;
+				b = (qBlue(*p) + b + blue) / 3;
+			}
+			else {
+				/* set layer pixel to be same as image - this is
+				   the same as the overwrite blend mode */
 
-	            lay->setPixel(3, startx + x, starty + y, a);
-	        }
-	    }
-    }
+				r = qRed(*p);
+				g = qGreen(*p);
+				b = qBlue(*p);
+			}
 
-    return true;
-#endif
-    return false;
+			lay -> setPixel(startx + x, starty + y, qRgba(r, g, b, a));
+		}
+	}
+
+	return true;
 }
 
 

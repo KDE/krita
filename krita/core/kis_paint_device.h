@@ -56,8 +56,12 @@ public:
 	inline uchar opacity() const;
 	inline void setOpacity(uchar o);
 
+	inline bool visible() const;
+	inline void setVisible(bool v);
+
 protected:
 	uchar m_opacity;
+	bool m_visible;
 	QRect m_tileRect;
 	QString m_name;
 	KisTiles m_tiles;
@@ -102,6 +106,16 @@ uchar KisPaintDevice::opacity() const
 void KisPaintDevice::setOpacity(uchar o) 
 { 
 	m_opacity = o; 
+}
+
+bool KisPaintDevice::visible() const 
+{ 
+	return m_visible; 
+}
+
+void KisPaintDevice::setVisible(bool v) 
+{ 
+	m_visible = v; 
 }
 
 #endif // KIS_PAINT_DEVICE_H_

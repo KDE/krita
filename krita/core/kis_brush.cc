@@ -34,7 +34,6 @@
 
 #define THUMB_SIZE 30
 
-
 KisBrush::KisBrush(QString file, bool monochrome, bool special)
   : KisKrayon()
 {
@@ -43,7 +42,7 @@ KisBrush::KisBrush(QString file, bool monochrome, bool special)
     validThumb  = false;
     validPixmap = false;
 
-    m_spacing = 4;
+    m_spacing = 7;
     m_hotSpot = QPoint( 0, 0 );
 
     // load the brush image data

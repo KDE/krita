@@ -54,9 +54,6 @@ protected:
     int nBlue;
 
     // source colors (existing)
-    int sRed;
-    int sGreen;
-    int sBlue;
 
     int fillOpacity;
     bool layerAlpha;

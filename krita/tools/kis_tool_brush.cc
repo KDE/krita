@@ -20,6 +20,7 @@
 
 #include <qbitmap.h>
 #include <qcolor.h>
+#include <qwaitcondition.h>
 
 #include <kaction.h>
 #include <kapplication.h>
@@ -30,6 +31,8 @@
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_dlg_toolopts.h"
+#include "kis_global.h"
+#include "kis_paint_device.h"
 #include "kis_tool_brush.h"
 #include "kis_undo.h"
 #include "kis_util.h"
@@ -72,7 +75,7 @@ BrushTool::BrushTool(KisDoc *doc, KisBrush *brush) : KisTool(doc)
 	// initialize brush tool settings
 	m_usePattern = false;
 	m_useGradient = false;
-	m_opacity = 255;
+	m_opacity = CHANNEL_MAX;
 
 	setBrush(brush);
 }
@@ -112,18 +115,19 @@ void BrushTool::setBrush(KisBrush *brush)
 void BrushTool::mousePress(QMouseEvent *e)
 {
 	KisImage *img;
-	KisLayer *lay;
+	KisPaintDevice *device; 
+	QPoint pos = e -> pos();
+
+	if (e -> button() != QMouseEvent::LeftButton)
+		return;
 
 	if (!(img = m_doc -> current()))
 		return;
 
-	if (!(lay = img -> getCurrentLayer()))
+	if (!(device = img -> getCurrentPaintDevice()))
 		return;
 
-	if (!lay -> visible())
-		return;
-
-	if (e -> button() != QMouseEvent::LeftButton)
+	if (!device -> visible())
 		return;
 
 	m_red = m_view -> fgColor().R();
@@ -136,8 +140,6 @@ void BrushTool::mousePress(QMouseEvent *e)
 		m_spacing = 3;
 
 	m_dragging = true;
-
-	QPoint pos = e -> pos();
 	pos = zoomed(pos);
 	m_dragStart = pos;
 	m_dragdist = 0;
@@ -171,7 +173,7 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 	int sy = clipRect.top() - starty;
 	int ex = clipRect.right() - startx;
 	int ey = clipRect.bottom() - starty;
-	int invopacity = 255 - m_opacity;
+	int invopacity = CHANNEL_MAX - m_opacity;
 
 	uchar *sl;
 	uchar bv, invbv;
@@ -192,11 +194,11 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 			if (bv == 0)
 				continue;
 
-			invbv = 255 - bv;
-			b = (m_blue * m_opacity + r * invopacity) / 255;
-			g = (m_green * m_opacity + g * invopacity) / 255;
-			r = (m_red * m_opacity + r * invopacity) / 255;
-			rgb = (qRgb(m_red, m_green, m_red) * m_opacity + rgb * invopacity) / 255;
+			invbv = CHANNEL_MAX - bv;
+			b = (m_blue * m_opacity + r * invopacity) / CHANNEL_MAX;
+			g = (m_green * m_opacity + g * invopacity) / CHANNEL_MAX;
+			r = (m_red * m_opacity + r * invopacity) / CHANNEL_MAX;
+//			rgb = (qRgb(m_red, m_green, m_red) * m_opacity + rgb * invopacity) / CHANNEL_MAX;
 
 			if (m_alpha) {
 				a = qAlpha(rgb);
@@ -205,8 +207,8 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 				if (v < 0) 
 					v = 0;
 
-				if (v > 255) 
-					v = 255;
+				if (v > CHANNEL_MAX) 
+					v = CHANNEL_MAX;
 
 				a = (uchar) v;
 				rgb = qRgba(r, g, b, a);
@@ -232,9 +234,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
 		return;
 
 	QPoint pos = zoomed(e -> pos());
-	int mouseX = e -> x();
-	int mouseY = e -> y();
-	KisVector end(mouseX, mouseY);
+	KisVector end(e -> x(), e -> y());
 	KisVector start(m_dragStart.x(), m_dragStart.y());
 	KisVector dragVec = end - start;
 	float saved_dist = m_dragdist;
@@ -246,9 +246,8 @@ void BrushTool::mouseMove(QMouseEvent *e)
 		m_dragStart = pos;
 		return;
 	}
-	else
-		m_dragdist = 0;
-
+		
+	m_dragdist = 0;
 	dragVec.normalize();
 	KisVector step = start;
 
@@ -306,7 +305,7 @@ void BrushTool::optionsDialog()
 
 	OptsDialog.exec();
 
-	if(OptsDialog.result() == QDialog::Rejected)
+	if (OptsDialog.result() == QDialog::Rejected)
 		return;
 
 	m_opacity = OptsDialog.brushToolTab()->opacity();
@@ -353,4 +352,9 @@ void BrushTool::toolSelect()
 
 	m_toggle -> setChecked(true);
 }
+
+void BrushTool::timeout()
+{
+}
+
 

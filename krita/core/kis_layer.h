@@ -39,12 +39,10 @@ public:
 	KisLayer(const QString& name, uint width, uint height, uint bpp, cMode cm, const QRgb& defaultColor);
 	virtual ~KisLayer();
 
-	bool    visible() const { return m_visible; }
 	bool    linked()  const { return m_linked; }
 //	uchar   numChannels() const { return m_channels; }
 	cMode   colorMode()   const { return m_cMode; }
 
-	void    setVisible(bool v) { m_visible = v; }
 	void    setLinked(bool l)  { m_linked = l; }
 
 	void    moveBy(int dx, int dy);
@@ -92,7 +90,7 @@ protected:
 public:
 //	uchar    m_channels;
 	uchar    m_current;
-	bool     m_visible, m_linked;
+	bool     m_linked;
 	uchar    m_bitDepth;
     
 	int      mLayerXOffset; 

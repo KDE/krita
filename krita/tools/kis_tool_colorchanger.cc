@@ -64,73 +64,73 @@ ColorChangerTool::~ColorChangerTool()
 
 bool ColorChangerTool::changeColors(int startX, int startY)
 {
-#if 0
-    int startx = startX;
-    int starty = startY;
-    
-    KisImage *img = m_doc->current();
-    if (!img) return false;    
+	int startx = startX;
+	int starty = startY;
+	int sRed;
+	int sGreen;
+	int sBlue;
+	QRgb srgb;
 
-    KisLayer *lay = img->getCurrentLayer();
-    if (!lay) return false;
+	KisImage *img = m_doc -> current();
 
-    if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	    return false;
-    
-    layerAlpha = (img->colorMode() == cm_RGBA);
-    fLayer = lay;
-    
-    // source color values of selected pixed
-    sRed    = lay->pixel(0, startx, starty);
-    sGreen  = lay->pixel(1, startx, starty);
-    sBlue   = lay->pixel(2, startx, starty);
+	if (!img) 
+		return false;
 
-    // new color values from color selector 
-    nRed     = m_view->fgColor().R();
-    nGreen   = m_view->fgColor().G();
-    nBlue    = m_view->fgColor().B();
-    
-    int left    = lay->imageExtents().left(); 
-    int top     = lay->imageExtents().top();    
-    int width   = lay->imageExtents().width();    
-    int height  = lay->imageExtents().height();    
+	KisLayer *lay = img->getCurrentLayer();
+	
+	if (!lay) 
+		return false;
 
-    QRect ur(left, top, width, height);
-    
-    kdDebug() << "ur.left() " << ur.left() 
-              << "ur.top() "  << ur.top() << endl;
+	if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
+		return false;
 
-    // prepare for painting with gradient
-    if(m_useGradient)
-    {
-        KisColor startColor(m_view->fgColor().R(),
-            m_view->fgColor().G(), m_view->fgColor().B());
-        KisColor endColor(m_view->bgColor().R(),
-            m_view->bgColor().G(), m_view->bgColor().B());        
-            
-        m_doc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
-    }
-        
-    // prepare for painting with pattern
-    if(m_usePattern)
-    {
-        m_doc->frameBuffer()->setPattern(m_view->currentPattern());
-    }
-        
-    // this does the painting
-    if(!m_doc->frameBuffer()->changeColors(qRgba(sRed, sGreen, sBlue, m_opacity), 
-        qRgba(nRed, nGreen, nBlue, m_opacity), ur))
-    {     
-        kdDebug() << "error changing colors" << endl;
-        return false;    
-    } 
-    
-    /* refresh canvas so changes show up */
-    img->markDirty(ur);
-  
-    return true;
-#endif
-    return false;
+	layerAlpha = (img->colorMode() == cm_RGBA);
+	fLayer = lay;
+
+	// source color values of selected pixed
+	srgb = lay -> pixel(startx, starty);
+	sRed = qRed(srgb);
+	sGreen = qGreen(srgb);
+	sBlue = qBlue(srgb);
+
+	// new color values from color selector 
+	nRed     = m_view->fgColor().R();
+	nGreen   = m_view->fgColor().G();
+	nBlue    = m_view->fgColor().B();
+
+	int left    = lay->imageExtents().left(); 
+	int top     = lay->imageExtents().top();    
+	int width   = lay->imageExtents().width();    
+	int height  = lay->imageExtents().height();    
+
+	QRect ur(left, top, width, height);
+
+	kdDebug() << "ur.left() " << ur.left() << "ur.top() "  << ur.top() << endl;
+
+	// prepare for painting with gradient
+	if (m_useGradient) {
+		KisColor startColor(m_view->fgColor().R(),
+				m_view->fgColor().G(), m_view->fgColor().B());
+		KisColor endColor(m_view->bgColor().R(),
+				m_view->bgColor().G(), m_view->bgColor().B());        
+
+		m_doc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
+	}
+
+	// prepare for painting with pattern
+	if (m_usePattern)
+		m_doc->frameBuffer()->setPattern(m_view->currentPattern());
+
+	// this does the painting
+	if (!m_doc->frameBuffer()->changeColors(qRgba(sRed, sGreen, sBlue, m_opacity), 
+				qRgba(nRed, nGreen, nBlue, m_opacity), ur)) {     
+		kdDebug() << "error changing colors" << endl;
+		return false;    
+	} 
+
+	/* refresh canvas so changes show up */
+	img->markDirty(ur);
+	return true;
 }
 
 

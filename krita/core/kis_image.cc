@@ -82,6 +82,7 @@ KisImage::KisImage(const QString& name, int w, int h, cMode cm, uchar bd)
 
 	m_xTiles = tileExtents.width() / TILE_SIZE;
 	m_yTiles = tileExtents.height() / TILE_SIZE;
+	m_activeChannel = 0;
 	m_activeLayer = 0;
 	m_composeLayer = 0;
 	m_bgLayer = 0;
@@ -247,7 +248,7 @@ void KisImage::markDirty(const QRect& r)
 
 			if (m_autoUpdate)
 				compositeImage(QRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE));
-#if 0
+#if 1
 			else {
 				dirtyTilesMutex.lock();
 				dirtyTiles.enqueue(new QPoint(x, y));
@@ -270,12 +271,29 @@ void KisImage::markDirty(const QRect& r)
 
 void KisImage::slotUpdateTimeOut()
 {
+#if 1
 	// TODO : Go over tiles in m_dirtyTiles
 	// if tile is dirty,
 	for(int y = 0; y < m_yTiles; y++)
 		for(int x = 0; x < m_xTiles; x++)
 			if (m_dirty[y * m_xTiles + x])
 				compositeImage(QRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE));
+#else
+	dirtyTilesMutex.lock();
+
+	while (1) {
+		if (dirtyTiles.isEmpty())
+			break;
+
+		kdDebug() << "KisImage::slotUpdateTimeOut\n";
+		QPoint *pt = dirtyTiles.dequeue();
+
+		compositeImage(QRect(pt -> x() * TILE_SIZE, pt -> y() * TILE_SIZE, TILE_SIZE, TILE_SIZE));
+		delete pt;
+	}
+
+	dirtyTilesMutex.unlock();
+#endif
 }
 
 void KisImage::paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/)
@@ -649,8 +667,6 @@ void KisImage::renderTile(KisTile *dst, const KisTile *src, const KisPaintDevice
 	uchar src_opacity = srcDevice -> opacity();
 	uchar opacity;
 	uchar inverseOpacity;
-	const QRgb *srgb;
-	QRgb *drgb;
 	uchar sr, sg, sb, sa;
 	uchar dr, dg, db, da;
 
@@ -658,8 +674,8 @@ void KisImage::renderTile(KisTile *dst, const KisTile *src, const KisPaintDevice
 		return;
 	
 	for (int y = 0; y < TILE_SIZE; y++) {
-		drgb = dst -> data() + (y * TILE_SIZE);
-		srgb = src -> data() + (y * TILE_SIZE);
+		QRgb *drgb = dst -> data() + (y * TILE_SIZE);
+		const QRgb *srgb = src -> data() + (y * TILE_SIZE);
 
 		for (int x = 0; x < TILE_SIZE; x++) {
 			sr = qRed(*srgb);
@@ -672,19 +688,19 @@ void KisImage::renderTile(KisTile *dst, const KisTile *src, const KisPaintDevice
 			da = qAlpha(*drgb);
 			
 			if (m_cMode == cm_RGBA) {
-				opacity = sa && da ? (da * src_opacity) / 255 : 0;
-				inverseOpacity = 255 - opacity;
-				dr = ((dr * da / 255) * inverseOpacity + sr * opacity) / 255;
-				dg = ((dg * da / 255) * inverseOpacity + sg * opacity) / 255;
-				db = ((db * da / 255) * inverseOpacity + sb * opacity) / 255;
-				da = sa + da - (sa * da) / 255;
+				opacity = sa && da ? (da * src_opacity) / CHANNEL_MAX : 0;
+				inverseOpacity = CHANNEL_MAX - opacity;
+				dr = ((dr * da / CHANNEL_MAX) * inverseOpacity + sr * opacity) / CHANNEL_MAX;
+				dg = ((dg * da / CHANNEL_MAX) * inverseOpacity + sg * opacity) / CHANNEL_MAX;
+				db = ((db * da / CHANNEL_MAX) * inverseOpacity + sb * opacity) / CHANNEL_MAX;
+				da = sa + da - (sa * da) / CHANNEL_MAX;
 				*drgb = qRgba(dr, dg, db, da);
 			}
 			else {
-				inverseOpacity = 255 - src_opacity;
-				dr = (dr * inverseOpacity + sr * src_opacity) / 255;
-				dg = (dg * inverseOpacity + sg * src_opacity) / 255;
-				db = (db * inverseOpacity + sb * src_opacity) / 255;
+				inverseOpacity = CHANNEL_MAX - src_opacity;
+				dr = (dr * inverseOpacity + sr * src_opacity) / CHANNEL_MAX;
+				dg = (dg * inverseOpacity + sg * src_opacity) / CHANNEL_MAX;
+				db = (db * inverseOpacity + sb * src_opacity) / CHANNEL_MAX;
 				*drgb = qRgb(dr, dg, db);
 			}
 
@@ -711,7 +727,7 @@ void KisImage::renderBg(KisPaintDevice *srcDevice, int tileNo)
 		for (int x = 0; x < TILE_SIZE; x++) {
 			uchar v = 128 + 63 * ((x / 16 + y / 16) % 2);
 
-			*(ptr + (y * TILE_SIZE) + x) = qRgba(v, v, v, 255);
+			*(ptr + (y * TILE_SIZE) + x) = qRgba(v, v, v, CHANNEL_MAX);
 		}
 
 	compositeImage();

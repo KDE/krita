@@ -25,6 +25,8 @@
 
 class KisTool;
 
+const int CHANNEL_MAX = 255;
+
 // size for graphic blocks - must be a power of 2
 const int TILE_SIZE = 64;
 

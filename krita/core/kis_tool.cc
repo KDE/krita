@@ -289,100 +289,95 @@ void KisTool::dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot) co
 // pasete clip image
 bool KisTool::pasteClipImage(const QPoint& pos)
 {
-#if 0
-    KisImage *img = m_doc->current();
-    if ( !img )
-        return false;
+	KisImage *img = m_doc -> current();
 
-    KisLayer *lay = img->getCurrentLayer();
-    if ( !lay )
-        return false;
+	if (!img)
+		return false;
 
-    QImage *qimg = &m_clipImage;
+	KisLayer *lay = img -> getCurrentLayer();
 
-    int startx = pos.x();
-    int starty = pos.y();
+	if (!lay)
+		return false;
 
-    QRect clipRect( startx, starty, qimg->width(), qimg->height() );
+	QImage *qimg = &m_clipImage;
 
-    if ( !clipRect.intersects( img->getCurrentLayer()->imageExtents() ) )
-        return false;
+	int startx = pos.x();
+	int starty = pos.y();
 
-    clipRect = clipRect.intersect( img->getCurrentLayer()->imageExtents() );
+	QRect clipRect(startx, starty, qimg -> width(), qimg -> height());
 
-    int sx = clipRect.left() - startx;
-    int sy = clipRect.top() - starty;
-    int ex = clipRect.right() - startx;
-    int ey = clipRect.bottom() - starty;
+	if (!clipRect.intersects(img -> getCurrentLayer() -> imageExtents()))
+		return false;
 
-    uchar r, g, b, a;
-    int   v = 255;
-    int   bv = 0;
+	clipRect = clipRect.intersect(img -> getCurrentLayer() -> imageExtents());
 
-    int red     = m_view->fgColor().R();
-    int green   = m_view->fgColor().G();
-    int blue    = m_view->fgColor().B();
+	int sx = clipRect.left() - startx;
+	int sy = clipRect.top() - starty;
+	int ex = clipRect.right() - startx;
+	int ey = clipRect.bottom() - starty;
 
-    bool grayscale = false;
-    bool colorBlending = false;
-    bool layerAlpha = ( img->colorMode() == cm_RGBA );
-    bool imageAlpha = qimg->hasAlphaBuffer();
+	uchar r, g, b, a;
+	int   v = 255;
+	int   bv = 0;
+	QRgb rgb;
 
-    for ( int y = sy; y <= ey; ++y ) {
-        for (int x = sx; x <= ex; ++x) {
-            // destination binary values by channel
-            r = lay->pixel(0, startx + x, starty + y);
-            g = lay->pixel(1, startx + x, starty + y);
-            b = lay->pixel(2, startx + x, starty + y);
+	int red     = m_view->fgColor().R();
+	int green   = m_view->fgColor().G();
+	int blue    = m_view->fgColor().B();
 
-            // pixel value in scanline at x offset to right
-            uint *p = (uint *)qimg->scanLine(y) + x;
+	bool grayscale = false;
+	bool colorBlending = false;
+	bool layerAlpha = ( img->colorMode() == cm_RGBA );
+	bool imageAlpha = qimg->hasAlphaBuffer();
 
-            // if the alpha value of the pixel in the selection
-            // image is 0, don't paint the pixel.  It's transparent.
-            if( ( imageAlpha ) && ( ( (*p) >> 24 ) == 0 ) )
-                continue;
+	for (int y = sy; y <= ey; ++y ) {
+		for (int x = sx; x <= ex; ++x) {
+			// destination binary values by channel
+			rgb = lay -> pixel(startx + x, starty + y);
+			r = qRed(rgb);
+			g = qGreen(rgb);
+			b = qBlue(rgb);
+			a = qAlpha(rgb);
 
-            if( colorBlending ) {
-                // make mud!
-                lay->setPixel( 0, startx + x, starty + y, ( qRed(*p) + r + red ) / 3 );
-                lay->setPixel( 1, startx + x, starty + y, ( qGreen(*p) + g + green ) / 3 );
-                lay->setPixel( 2, startx + x, starty + y, ( qBlue(*p) + b + blue ) / 3 );
-            }
-            else {
-                // set layer pixel to be same as image
-                lay->setPixel( 0, startx + x, starty + y, qRed(*p) );
-                lay->setPixel( 1, startx + x, starty + y, qGreen(*p) );
-                lay->setPixel( 2, startx + x, starty + y, qBlue(*p) );
-            }
+			// pixel value in scanline at x offset to right
+			uint *p = (uint *)qimg -> scanLine(y) + x;
 
-            if ( layerAlpha ) {
-                a = lay->pixel(3, startx + x, starty + y);
-                if( grayscale ) {
-                    v = a + bv;
-                    if ( v < 0 )
-                        v = 0;
-                    if ( v > 255 )
-                        v = 255;
-                    a = (uchar) v;
-                }
-                else {
-                    v = (int)((*p) >> 24);
-                    v += a;
-                    if (v < 0 ) 
-                        v = 0;
-                    if (v > 255 )
-                        v = 255;
-                    a = (uchar) v;
-                }
+			// if the alpha value of the pixel in the selection
+			// image is 0, don't paint the pixel.  It's transparent.
+			if (imageAlpha && qAlpha(*p) == 0)
+				continue;
 
-                lay->setPixel( 3, startx + x, starty + y, a );
-            }
-        }
-    }
+			if (layerAlpha) {
+				if (grayscale) {
+					v = a + bv;
+				}
+				else {
+					v = qAlpha(*p);
+					v += a;
+				}
+				
+				if (v < 0) 
+					v = 0;
 
-    return true;
-#endif
+				if (v > 255)
+					v = 255;
+
+				a = (uchar) v;
+			}
+
+			if (colorBlending) {
+				// make mud!
+				r = (qRed(*p) + r + red ) / 3;
+				g = (qGreen(*p) + g + green) / 3;
+				b = (qBlue(*p) + b + blue) / 3;
+				lay -> setPixel(startx + x, starty + y, qRgba(r, g, b, a));
+			}
+			else
+				lay -> setPixel(startx + x, starty + y, *p);
+		}
+	}
+
+	return true;
 }
 
 bool KisTool::shouldRepaint() const

@@ -1,6 +1,7 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
 ## The part
+lib_LTLIBRARIES = 
 kde_module_LTLIBRARIES = libkritapart.la
 libkritapart_la_SOURCES = dummy.cc
 

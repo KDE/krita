@@ -78,6 +78,9 @@ namespace {
 
 	KisProfileSP getProfileForProfileInfo(const Image * image, KisStrategyColorSpaceSP cs) 
 	{
+#ifndef HAVE_MAGICK6
+		return 0;
+#else
 
 		if (image->profiles == NULL)
 			return  0;
@@ -116,7 +119,7 @@ namespace {
 			name = GetNextImageProfile(image);
 		}
 		return p;
-
+#endif
 	}
 
 

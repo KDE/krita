@@ -34,7 +34,7 @@ kdelnkdir = $(kde_appsdir)/Office
 kdemimedir = $(kde_mimedir)/application
 
 rcdir = $(kde_datadir)/krita
-rc_DATA = krita.rc
+rc_DATA = krita.rc krita_readonly.rc
 
 SUBDIRS = core tools ui . dtd plugins data pics
 

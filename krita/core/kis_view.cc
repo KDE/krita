@@ -117,7 +117,10 @@ KisView::KisView(KisDoc* doc, QWidget* parent, const char* name) : super(doc, pa
 	m_doc = doc;
 	m_zoomFactor = 1.0;
 	setInstance(KisFactory::global());
-	setXMLFile("krita.rc");
+	if ( !m_doc->isReadWrite() )
+		setXMLFile("krita_readonly.rc");
+	else
+		setXMLFile("krita.rc");
 	m_pTool = 0;
 	m_dcop = 0;
 	dcopObject();

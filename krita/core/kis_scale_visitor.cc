@@ -143,26 +143,28 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                         break;
         }
         
-#if 0 //AUTOLAYER        
+     
         // target image data
         Q_INT32 targetW;
         Q_INT32 targetH;
+
+        Q_INT32 width = m_dev->image()->width();
+        Q_INT32 height = m_dev->image()->height();
         
         // compute size of target image
         // (this bit seems to be mostly from QImage.xForm)
         QWMatrix scale_matrix;
 	scale_matrix.scale(xscale, yscale);
-	scale_matrix = QPixmap::trueMatrix( scale_matrix, m_dev->width(), m_dev->height() );
+	scale_matrix = QPixmap::trueMatrix( scale_matrix, width, height );
         if ( scale_matrix.m11() == 1.0F && scale_matrix.m22() == 1.0F ) {
 //                 kdDebug() << "Identity matrix, do nothing.\n";
                 return;
         }
-        targetW = qRound( scale_matrix.m11() * m_dev->width() );
-        targetH = qRound( scale_matrix.m22() * m_dev->height() );
+        targetW = qRound( scale_matrix.m11() * width );
+        targetH = qRound( scale_matrix.m22() * height );
         targetW = QABS( targetW );
         targetH = QABS( targetH );
  
-        KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
         QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
         int n;				/* pixel number */
         double center, left, right;	/* filter calculation variables */
@@ -178,7 +180,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         
         
         // create intermediate column to hold horizontal dst column zoom
-        QUANTUM * tmp = new QUANTUM[m_dev -> height() * m_dev -> depth() * sizeof(QUANTUM)];
+        QUANTUM * tmp = new QUANTUM[height * m_dev -> depth() * sizeof(QUANTUM)];
         
         //progress info
         m_cancelRequested = false;
@@ -205,8 +207,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                                 weight[0] = filterStrategy->valueAt(weight[0] / fscale) / fscale;
                                 if(xx < 0) {
                                         n = -xx;
-                                } else if(xx >= m_dev -> height()) {
-                                        n = (m_dev -> height() - xx) + m_dev -> height() - 1;
+                                } else if(xx >= height) {
+                                        n = (height - xx) + height - 1;
                                 } else {
                                         n = xx;
                                 }
@@ -227,8 +229,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                                 weight[0] = filterStrategy->valueAt(weight[0]);
                                 if(xx < 0) {
                                         n = -xx;
-                                } else if(xx >= m_dev -> height()) {
-                                        n = (m_dev -> height() - xx) + m_dev -> height() - 1;
+                                } else if(xx >= height) {
+                                        n = (height - xx) + height - 1;
                                 } else {
                                         n = xx;
                                 }
@@ -250,19 +252,19 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                         break;
                 }
                 
-                calc_x_contrib(&contribX, xscale, fwidth, targetW, m_dev -> width(), filterStrategy, x);
+                calc_x_contrib(&contribX, xscale, fwidth, targetW, width, filterStrategy, x);
                 /* Apply horz filter to make dst column in tmp. */
-                for(int y = 0; y < m_dev -> height(); y++)
+                for(int y = 0; y < height; y++)
                 {
                         for(int channel = 0; channel < m_dev -> depth(); channel++){
                                 weight[channel] = 0.0;
                                 bPelDelta[channel] = FALSE;
                         }
-                        m_dev -> tiles() -> readPixelData(contribX.p[0].m_pixel, y, contribX.p[0].m_pixel, y, pel, m_dev -> depth());
+                        pel = m_dev -> readBytes(contribX.p[0].m_pixel, y, 1, 1);
                         for(int xx = 0; xx < contribX.n; xx++)
                         {
-                                if (!(contribX.p[xx].m_pixel < 0 || contribX.p[xx].m_pixel >= m_dev -> width())){
-                                        m_dev -> tiles()->readPixelData(contribX.p[xx].m_pixel, y, contribX.p[xx].m_pixel, y, pel2, m_dev -> depth());
+                                if (!(contribX.p[xx].m_pixel < 0 || contribX.p[xx].m_pixel >= width)){
+                                        pel2 = m_dev -> readBytes(contribX.p[xx].m_pixel, y, 1, 1);
                                         for(int channel = 0; channel < m_dev -> depth(); channel++)
                                         {
                                                 if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;
@@ -305,21 +307,21 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                 } /* next dst row */
         } /* next dst column */
         if(!m_cancelRequested){
-                tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
-                m_dev -> setTiles(tm); // Also sets width and height correctly
+                m_dev -> writeBytes( newData, 0, 0, targetW, targetH);
                 nRet = 0; /* success */
-        } else {
-                delete newData;
         }
-        free(tmp);
 
         /* free the memory allocated for vertical filter weights */
         for(int y = 0; y < targetH; y++)
                 free(contribY[y].p);
         free(contribY);
-#endif //AUTOLAYER
+
         delete filterStrategy;
-        
+        delete[] newData;
+        delete[] pel;
+        delete[] pel2;
+        delete[] tmp;
+
         //progress info
         emit notifyProgressDone(this);
         

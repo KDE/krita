@@ -43,7 +43,7 @@ KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const char *name, 
         }
 
         KisFilterSP kef = createFilter<KisEmbossFilter>(view);
-	(void) new KAction("&Emboss...", 0, 0, kef, SLOT(slotActivated()), actionCollection(), "emboss_filter");
+	(void) new KAction("&Emboss with variable depth...", 0, 0, kef, SLOT(slotActivated()), actionCollection(), "emboss_filter");
 }
 
 KisEmbossFilterPlugin::~KisEmbossFilterPlugin()

@@ -31,7 +31,7 @@ KisItemChooser::KisItemChooser(const vKoIconItem& items, QWidget *parent, const 
 	m_slSpacing = new IntegerWidget( 1, 100, this, "int widget" );
 	m_slSpacing -> setTickmarks(QSlider::Below);
 	m_slSpacing -> setTickInterval(10);
-	QObject::connect(m_slSpacing, SIGNAL(valueChanged(int)), this, SLOT(slotSetBrushSpacing(int)));
+	QObject::connect(m_slSpacing, SIGNAL(valueChanged(int)), this, SLOT(slotSetItemSpacing(int)));
     	m_frame = new QHBox(this);
 	m_frame -> setFrameStyle(QFrame::Panel | QFrame::Sunken);
 	m_chooser = new KoIconChooser(QSize(30,30), m_frame, "icon_chooser");

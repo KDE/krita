@@ -271,9 +271,8 @@ QImage KisTile::convertToImage()
 			Q_UINT8 red = downscale(pixel[PIXEL_RED]);
 			Q_UINT8 green = downscale(pixel[PIXEL_GREEN]);
 			Q_UINT8 blue = downscale(pixel[PIXEL_BLUE]);
-			Q_UINT8 alpha = downscale(pixel[PIXEL_ALPHA]);
 
-			img.setPixel(i, j, qRgba(red, green, blue, alpha));
+			img.setPixel(i, j, qRgb(red, green, blue));
 			pixel += depth();
 		}
 	}

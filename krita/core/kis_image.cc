@@ -952,7 +952,7 @@ void KisImage::copyTile(KisTileSP dst, KisTileSP src)
 
 	w = dst -> width() < src -> width() ? dst -> width() : src -> width();
 	h = dst -> height() < src -> height() ? dst -> height() : src -> height();
-	gc.bitBlt(0, 0, COMPOSITE_COPY, src, 0, w, h);
+	gc.bitBlt(0, 0, COMPOSITE_COPY, src, 0, 0, w, h);
 }
 
 void KisImage::renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y)

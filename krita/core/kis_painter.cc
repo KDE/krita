@@ -129,12 +129,12 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, Q
 	pd = new KisPixelData;
 	pd -> mgr = 0;
 	pd -> mode = TILEMODE_RW;
-	pd -> x1 = sx;
-	pd -> y1 = sy;
-	pd -> x2 = sx + sw - 1;
-	pd -> y2 = sy + sh - 1;
-	pd -> width = sw;
-	pd -> height = sh;
+	pd -> x1 = 0;
+	pd -> y1 = 0;
+	pd -> x2 = src -> width() - 1;
+	pd -> y2 = src -> height() - 1;
+	pd -> width = src -> width();
+	pd -> height = src -> height();
 	pd -> depth = src -> depth();
 	pd -> tile = src;
 	pd -> data = src -> data();
@@ -146,6 +146,8 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, Q
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
+	Q_INT32 x;
+	Q_INT32 y;
 	QUANTUM *d;
 	QUANTUM *s;
 	QUANTUM alpha;
@@ -156,12 +158,15 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 	if (sh == -1)
 		sh = src -> height;
 
+	if (sw < 0 || sh < 0)
+		return;
+
 	// TODO switch on the image type then go for the composite
 	// TODO Implement all composites for all image depths
 	switch (op) {
 		case COMPOSITE_OVER:
-			for (Q_INT32 y = 0; y < sh; y++) {
-				for (Q_INT32 x = 0; x < sw; x++) {
+			for (y = 0; y < sh; y++) {
+				for (x = 0; x < sw; x++) {
 					s = src -> data + ((y + sy) * src -> width + (sx + x)) * src -> depth;
 					d = m_dst -> data + ((y + dy) * m_dst -> width + (dx + x)) * src -> depth;
 
@@ -184,9 +189,16 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 			}
 			break;
 		case COMPOSITE_COPY:
-			memcpy(m_dst -> data + (dy * m_dst -> width + dx) * m_dst -> depth, 
-					src -> data + (sy * src -> width + sx) * src -> depth, 
-					sizeof(QUANTUM) * sw * sh * m_dst -> depth);
+			for (y = 0; y < sh; y++) {
+				for (x = 0; x < sw; x++) {
+					s = src -> data + ((y + sy) * src -> width + (sx + x)) * src -> depth;
+					d = m_dst -> data + ((y + dy) * m_dst -> width + (dx + x)) * src -> depth;
+					d[PIXEL_RED] = s[PIXEL_RED];
+					d[PIXEL_GREEN] = s[PIXEL_GREEN];
+					d[PIXEL_BLUE] = s[PIXEL_BLUE];
+					d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
+				}
+			}
 			break;
 	}
 }

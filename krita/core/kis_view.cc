@@ -2441,9 +2441,11 @@ QPoint KisView::viewToWindow(const QPoint& pt)
 {
 	QPoint converted;
 
-	converted.rx() = pt.x() + horzValue() - canvasXOffset();
-	converted.ry() = pt.y() + vertValue() - canvasYOffset();
-	converted /= zoom();
+        converted.rx() = static_cast<int>(pt.x() * zoom());
+        converted.rx() -= static_cast<int>(horzValue() * zoom()) + canvasXOffset();
+        converted.ry() = static_cast<int>(pt.y() * zoom());
+        converted.ry() -= static_cast<int>(vertValue() * zoom()) + canvasYOffset();
+
 	return converted;
 }
 

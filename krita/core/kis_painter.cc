@@ -632,6 +632,12 @@ void KisPainter::paintAt(const QPoint & pos,
 	// composite temporary layer into target layer
 	// @see: doc/brush.txt
 
+	// Note that this paint op is not correct: it really should do
+	// sub-pixel positioning of the dab to create a soft line
+	// effect. What is does now is equivalent to the 'pen' tool in
+	// the Gimp and, presumably, Photoshop.
+
+
 	if (!m_device) return;
 
 	QPoint hotSpot = m_brush -> hotSpot(pressure);
@@ -661,6 +667,26 @@ void KisPainter::eraseAt(const QPoint &pos,
 			 const Q_INT32 /*xTilt*/,
 			 const Q_INT32 /*yTilt*/) 
 {
+// Erasing is traditionally in paint applications one of two things:
+// either it is painting in the 'background' color, or it is replacing
+// all pixels with transparent (black?) pixels.
+//
+// That's what this paint op does for now; however, anyone who has
+// ever worked with paper and soft pencils knows that a sharp piece of
+// eraser rubber is a pretty useful too for making sharp to fuzzy lines
+// in the graphite layer, or equally useful: for smudging skin tones.
+//
+// A smudge tool for Krita is in the making, but when working with 
+// a tablet, the eraser tip should be at least as functional as a rubber eraser.
+// That means that only after repeated or forceful application should all the
+// 'paint' or 'graphite' be removed from the surface -- a kind of pressure
+// sensitive, incremental smudge.
+//
+// And there should be an option to not have the eraser work on certain
+// kinds of material. Layers are just a hack for this; putting your ink work
+// in one layer and your pencil in another is not the same as really working
+// with the combination.
+ 
 	if (!m_device) return;
 	
 	KisAlphaMask *mask = m_brush -> mask(pressure);
@@ -699,6 +725,159 @@ void KisPainter::eraseAt(const QPoint &pos,
 
 	m_dirtyRect |= r;
 }
+
+
+
+
+
+void KisPainter::airBrushAt(const QPoint &pos,
+			    const Q_INT32 pressure,
+			    const Q_INT32 /*xTilt*/,
+			    const Q_INT32 /*yTilt*/)
+{
+// See: http://www.sysf.physto.se/~klere/airbrush/ for information
+// about _real_ airbrushes.
+//
+// Most graphics apps -- especially the simple ones like Kolourpaint
+// and the previous version of this routine in Krita took a brush
+// shape -- often a simple ellipse -- and filled that shape with a
+// random 'spray' of single pixels.
+//
+// Other, more advanced graphics apps, like the Gimp or Photoshop,
+// take the brush shape and paint just as with the brush paint op,
+// only making the initial dab more transparent, and perhaps adding
+// extra transparence near the edges. Then, using a timer, when the
+// cursor stays in place, dab upon dab is positioned in the same
+// place, which makes the result less and less transparent.
+//
+// What I want to do here is create an airbrush that approaches a real
+// one. It won't use brush shapes, instead going for the old-fashioned
+// circle. Depending upon pressure, both the size of the dab and the
+// rate of paint deposition is determined. The edges of the dab are
+// more transparent than the center, with perhaps even some fully
+// transparent pixels between the near-transparent pixels.
+//
+// By pressing some to-be-determined key at the same time as pressing
+// mouse-down, one edge of the dab is made straight, to simulate
+// working with a shield.
+//
+// Tilt may be used to make the gradients more realistic, but I don't
+// have a tablet that supports tilt.
+//
+// Anyway, it's exactly twenty years ago that I have held a real
+// airbrush, for the first and up to now the last time...
+//
+
+#if 0
+	KisView *view = getCurrentView();
+	KisImage *img = m_doc->currentImg();
+
+	if (!img)	    return false;
+
+	KisLayer *lay = img->getCurrentLayer();
+	if (!lay)       return false;
+
+	if (!m_brush)  return false;
+
+	if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
+		return false;
+
+	if(!m_dragging) return false;
+
+	int hotX = m_brush->hotSpot().x();
+	int hotY = m_brush->hotSpot().y();
+
+	int startx = pos.x() - hotX;
+	int starty = pos.y() - hotY;
+
+	QRect clipRect(startx, starty, m_brush->width(), m_brush->height());
+	if (!clipRect.intersects(lay->imageExtents()))
+		return false;
+
+	clipRect = clipRect.intersect(lay->imageExtents());
+
+	int sx = clipRect.left() - startx;
+	int sy = clipRect.top() - starty;
+	int ex = clipRect.right() - startx;
+	int ey = clipRect.bottom() - starty;
+
+	uchar *sl;
+	uchar bv, invbv;
+	uchar r, g, b, a;
+	int   v;
+
+	int red   = view->fgColor().R();
+	int green = view->fgColor().G();
+	int blue  = view->fgColor().B();
+
+	bool alpha = (img->colorMode() == cm_RGBA);
+
+	for (int y = sy; y <= ey; y++) {
+		sl = m_brush->scanline(y);
+
+		for (int x = sx; x <= ex; x++) {
+			/* get a truly ??? random number and divide it by
+			   desired density - if x is that number, paint
+			   a pixel from brush there this turn */
+			int nRandom = KApplication::random();
+
+			bool paintPoint = false;
+
+			if ((nRandom % density) == ((x - sx) % density))
+				paintPoint = true;
+
+			// don't keep painting over points already painted
+			// this makes image too dark and grany, eventually -
+			// that effect is good with the regular brush tool,
+			// but not with an airbrush or with the pen tool
+			if (timeout && (m_brushArray[brushWidth * (y-sy) + (x-sx) ] > 0))
+				paintPoint = false;
+
+			if (paintPoint) {
+				QRgb rgb = lay -> pixel(startx + x, starty + y);
+
+				r = qRed(rgb);
+				g = qGreen(rgb);
+				b = qBlue(rgb);
+				bv = *(sl + x);
+
+				if (bv == 0) 
+					continue;
+
+				invbv = 255 - bv;
+				b = ((blue * bv) + (b * invbv))/255;
+				g = ((green * bv) + (g * invbv))/255;
+				r = ((red * bv) + (r * invbv))/255;
+
+				if (alpha) {
+					a = qAlpha(rgb);
+					v = a + bv;
+
+					if (v < 0) 
+						v = 0;
+
+					if (v > 255) 
+						v = 255;
+
+					a = (uchar)v;
+				}
+
+				rgb = alpha ? qRgba(r, g, b, a) : qRgb(r, g, b);
+				lay -> setPixel(startx + x, starty + y, rgb);
+
+				// add this point to points already painted
+				if (timeout) {
+					m_brushArray[brushWidth * (y-sy) + (x-sx)] = 1;
+					nPoints++;
+				}
+			}
+		}
+	}
+
+	return true;
+#endif
+}
+
 
 void KisPainter::setBrush(KisBrush* brush)
 {

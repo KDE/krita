@@ -177,7 +177,7 @@ void KisToolLine::paintLine()
 void KisToolLine::paintLine(QPainter& gc, const QRect&)
 {
 	if (m_subject) {
-//		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 		RasterOp op = gc.rasterOp();
 		QPen old = gc.pen();
 		QPen pen(Qt::SolidLine);
@@ -185,16 +185,16 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
 		QPoint end;
 
 //		Q_ASSERT(controller);
-		start = m_startPos; //controller -> viewToWindow(m_startPos);
-		end = m_endPos; //controller -> viewToWindow(m_endPos);
+		start = controller -> viewToWindow(m_startPos);
+		end = controller -> viewToWindow(m_endPos);
 //  		start.setX(start.x() - controller -> horzValue());
 //  		start.setY(start.y() - controller -> vertValue());
 //  		end.setX(end.x() - controller -> horzValue());
 //  		end.setY(end.y() - controller -> vertValue());
 //  		end.setX((end.x() - start.x()));
 //  		end.setY((end.y() - start.y()));
- 		start *= m_subject -> zoomFactor();
- 		end *= m_subject -> zoomFactor();
+// 		start *= m_subject -> zoomFactor();
+// 		end *= m_subject -> zoomFactor();
 		gc.setRasterOp(Qt::NotROP);
 		gc.setPen(pen);
 		gc.drawLine(start.x(), start.y(), end.x(), end.y());

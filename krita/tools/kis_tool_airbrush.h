@@ -1,7 +1,7 @@
 /*
  *  kis_tool_airbrush.h - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter
+ *  Copyright (c) 2004 Boudewijn Rempt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,53 +18,63 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __airbrushtool_h__
-#define __airbrushtool_h__
+#if !defined KIS_TOOL_AIRBRUSH_H
+#define KIS_TOOL_AIRBRUSH_H
 
-#include <qpoint.h>
-#include <qpointarray.h>
+#include "kis_tool_paint.h"
 
-#include "kis_tool.h"
+class QPoint;
+class QTimer;
 
-class KisBrush;
-class KisDoc;
+class KisPainter;
 
-class AirBrushTool : public KisTool {
+class KisToolAirBrush : public KisToolPaint {
 	Q_OBJECT
+	typedef KisToolPaint super;
     
-public:
-	AirBrushTool(KisDoc *doc, KisBrush *brush);
-	virtual ~AirBrushTool();
+ public:
+	KisToolAirBrush();
+	virtual ~KisToolAirBrush();
   
-	virtual void setupAction(QObject *collection);
-	virtual QDomElement saveSettings(QDomDocument& doc) const;
-	virtual bool loadSettings(QDomElement& elem);
+	virtual void setup(KActionCollection *collection);
 
-	virtual void setBrush(KisBrush *brush);
-	virtual void optionsDialog();
-    
-	virtual void mousePress(QMouseEvent*); 
-	virtual void mouseMove(QMouseEvent*);
-	virtual void mouseRelease(QMouseEvent*);
+	virtual void update(KisCanvasSubject *subject);
 
-	bool paint(QPoint pos, bool timeout);
+	virtual void mousePress(QMouseEvent *e); 
+	virtual void mouseMove(QMouseEvent *e);
+	virtual void mouseRelease(QMouseEvent *e);
+	virtual void tabletEvent(QTabletEvent *e);
+	
+	virtual KDialog * optionsDialog(QWidget * parent);
 
-protected slots:
+ protected slots:
 	void timeoutPaint();  
 
-protected:
-	QTimer *m_timer;
-	QMemArray<int> m_brushArray; // array of points in brush
-	int nPoints;  // number of points marked in array
-    
-	QPoint  pos; 
-	QPoint 	m_dragStart;
-	bool   	m_dragging;
-	float   m_dragdist;
-	int     density; 
+ private:
 
-	unsigned int brushWidth;
-	unsigned int brushHeight;
+	virtual void paintLine(const QPoint & pos1,
+			       const QPoint & pos2,
+			       const Q_INT32 pressure,
+			       const Q_INT32 xtilt,
+			       const Q_INT32 ytitl);
+	virtual void initPaint(const QPoint & pos);
+	virtual void endPaint();
+
+	enumBrushMode m_mode;
+	KisPainter * m_painter;
+
+	QTimer * m_timer;
+    
+	QPoint m_dragStart;
+	float m_dragDist;
+
+	QPoint m_currentPos;
+	Q_INT32 m_pressure;
+	Q_INT32 m_xTilt;
+	Q_INT32 m_yTilt;
+
+	KisCanvasSubject *m_subject;
+	KisImageSP m_currentImage;
 };
 
-#endif //__airbrushtool_h__
+#endif // KIS_TOOL_AIRBRUSH_H

@@ -28,8 +28,9 @@
 #include "kis_dlg_toolopts.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
-#include "kis_tool_brush.h"
 #include "kis_view.h"
+#include "kis_tool_brush.h"
+
 
 KisToolBrush::KisToolBrush()
         : super(),
@@ -109,16 +110,14 @@ void KisToolBrush::tabletEvent(QTabletEvent *e)
 
 		 if (pressure < 5 && m_mode == PAINT_STYLUS) {
 			 endPaint();
-		 }
-		 else if (pressure >= 5 && m_mode == HOVER) {
+		 } else if (pressure >= 5 && m_mode == HOVER) {
 			 m_mode = PAINT_STYLUS;
 			 initPaint(e -> pos());
 			 m_painter -> paintAt(e -> pos(), e->pressure(), e->xTilt(), e->yTilt());
 			 // XXX: Get the rect that should be updated
 			 m_currentImage -> notify( m_painter -> dirtyRect() );
 
-		 }
-		 else if (pressure >= 5 && m_mode == PAINT_STYLUS) {
+		 } else if (pressure >= 5 && m_mode == PAINT_STYLUS) {
 			 paintLine(m_dragStart, e -> pos(), pressure, e -> xTilt(), e -> yTilt());
 		 }
          }

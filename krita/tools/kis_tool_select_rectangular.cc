@@ -20,6 +20,8 @@
 
 #include <qpainter.h>
 #include <qpen.h>
+
+#include <kdebug.h>
 #include <kaction.h>
 #include <kcommand.h>
 #include <klocale.h>
@@ -125,15 +127,12 @@ void KisToolRectangularSelect::clearSelection()
 void KisToolRectangularSelect::mousePress(QMouseEvent *e)
 {
 	if (m_subject) {
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 		KisImageSP img = m_subject -> currentImg();
-
-		Q_ASSERT(controller);
 
 		if (img && img -> activeDevice() && e -> button() == LeftButton) {
 			clearSelection();
-			m_startPos = controller -> windowToView(e -> pos());
-			m_endPos = controller -> windowToView(e -> pos());
+			m_startPos = e -> pos();
+			m_endPos = e -> pos();
 			m_selecting = true;
 		}
 	}
@@ -142,14 +141,11 @@ void KisToolRectangularSelect::mousePress(QMouseEvent *e)
 void KisToolRectangularSelect::mouseMove(QMouseEvent *e)
 {
 	if (m_subject && m_selecting) {
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
-
-		Q_ASSERT(controller);
 
 		if (m_startPos != m_endPos)
 			paintOutline();
 
-		m_endPos = controller -> windowToView(e -> pos());
+		m_endPos = e -> pos(); //controller -> windowToView(e -> pos());
 		paintOutline();
 	}
 }
@@ -160,15 +156,11 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 		if (m_startPos == m_endPos) {
 			clearSelection();
 		} else {
-			KisCanvasControllerInterface *controller = m_subject -> canvasController();
 			KisImageSP img = m_subject -> currentImg();
-
-			Q_ASSERT(controller);
 
 			if (!img)
 				return;
 
-			m_startPos = controller -> viewToWindow(m_startPos);
 			m_endPos = e -> pos();
 
 			if (m_endPos.y() < 0)
@@ -186,7 +178,8 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 			if (img) {
 				KisPaintDeviceSP parent;
 				KisSelectionSP selection;
-				QRect rc(m_startPos.x(), m_startPos.y(), m_endPos.x() - m_startPos.x(), m_endPos.y() - m_startPos.y());
+
+                                QRect rc(m_startPos, m_endPos);
 
 				parent = img -> activeDevice();
 
@@ -231,17 +224,10 @@ void KisToolRectangularSelect::paintOutline(QPainter& gc, const QRect&)
 		Q_ASSERT(controller);
 		start = controller -> viewToWindow(m_startPos);
 		end = controller -> viewToWindow(m_endPos);
-		start.setX(start.x() - controller -> horzValue());
-		start.setY(start.y() - controller -> vertValue());
-		end.setX(end.x() - controller -> horzValue());
-		end.setY(end.y() - controller -> vertValue());
-		end.setX((end.x() - start.x()));
-		end.setY((end.y() - start.y()));
-		start *= m_subject -> zoomFactor();
-		end *= m_subject -> zoomFactor();
+
 		gc.setRasterOp(Qt::NotROP);
 		gc.setPen(pen);
-		gc.drawRect(start.x(), start.y(), end.x(), end.y());
+		gc.drawRect(QRect(start, end));
 		gc.setRasterOp(op);
 		gc.setPen(old);
 	}

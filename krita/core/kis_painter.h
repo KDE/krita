@@ -142,6 +142,15 @@ public:
 		     const Q_INT32 /*xTilt*/,
 		     const Q_INT32 /*yTilt*/);
 
+	// Paint a filled circle at pos with pressure dependent alpha and
+	// 'ragged' edges. Meant to simulate the true effect of an airbrush.
+	void airBrushAt(const QPoint &pos,
+			const Q_INT32 pressure,
+			const Q_INT32 /*xTilt*/,
+			const Q_INT32 /*yTilt*/);
+
+
+
 	// ------------------------------------------------------------------------------------------
 	// Set the parameters for the higher level graphics primitives.
 	void setBrush(KisBrush* brush);

@@ -26,8 +26,8 @@
 #include <koUnitWidgets.h>
 #include "kis_dlg_create_img.h"
 
-KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, QWidget *parent, const char *name)
-	: super(parent, name, true, "", Ok | Cancel), m_type(IMAGE_TYPE_RGBA), m_opacity(OPACITY_OPAQUE)
+KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, enumImgType defImgType, QWidget *parent, const char *name)
+	: super(parent, name, true, "", Ok | Cancel), m_type(defImgType), m_opacity(OPACITY_OPAQUE)
 {
 	QWidget *page = new QWidget(this);
 	QLabel *lbl;
@@ -56,18 +56,59 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 max
 
 	grp = new QButtonGroup(2, QGroupBox::Horizontal, i18n("Color Mode"), page);
 	grp -> setExclusive(true);
-	radio = new QRadioButton(i18n("&Indexed"), grp);
-	radio -> setEnabled(false);
-	grp -> insert(radio, IMAGE_TYPE_INDEXEDA);
-	radio = new QRadioButton(i18n("&Grayscale"), grp);
-	radio -> setEnabled(false);
-	grp -> insert(radio, IMAGE_TYPE_GREYA);
-	radio = new QRadioButton(i18n("&RGB"), grp);
-	radio -> setChecked(true);
-	grp -> insert(radio, IMAGE_TYPE_RGBA);
-	radio = new QRadioButton(i18n("&CMYK"), grp);
-	radio -> setEnabled(true);
-	grp -> insert(radio, IMAGE_TYPE_CMYKA);
+	
+	QRadioButton *indexedRadio = new QRadioButton(i18n("&Indexed"), grp);
+	indexedRadio -> setEnabled(false);
+	grp -> insert(indexedRadio, IMAGE_TYPE_INDEXEDA);
+
+	QRadioButton *grayScaleRadio = new QRadioButton(i18n("&Grayscale"), grp);
+	grayScaleRadio -> setEnabled(false);
+	grp -> insert(grayScaleRadio, IMAGE_TYPE_GREYA);
+
+	QRadioButton *rgbRadio = new QRadioButton(i18n("&RGB"), grp);
+	rgbRadio -> setEnabled(true);
+	grp -> insert(rgbRadio, IMAGE_TYPE_RGBA);
+
+	QRadioButton *cmykRadio = new QRadioButton(i18n("&CMYK"), grp);
+	cmykRadio -> setEnabled(true);
+	grp -> insert(cmykRadio, IMAGE_TYPE_CMYKA);
+
+	QRadioButton *labRadio = new QRadioButton(i18n("&LAB"), grp);
+	labRadio -> setEnabled(false);
+	grp -> insert(labRadio, IMAGE_TYPE_LABA);
+
+	QRadioButton *yuvRadio = new QRadioButton(i18n("&YUV"), grp);
+	yuvRadio -> setEnabled(false);
+	grp -> insert(yuvRadio, IMAGE_TYPE_YUVA);
+
+	switch (defImgType) {
+	case IMAGE_TYPE_INDEXED:
+	case IMAGE_TYPE_INDEXEDA:
+		indexedRadio -> setChecked(true);
+		break;
+	case IMAGE_TYPE_GREY:
+	case IMAGE_TYPE_GREYA:
+		grayScaleRadio -> setChecked(true);
+		break;
+	default:
+	case IMAGE_TYPE_RGB:
+	case IMAGE_TYPE_RGBA:
+		rgbRadio -> setChecked(true);
+		break;
+	case IMAGE_TYPE_CMYK:
+	case IMAGE_TYPE_CMYKA:
+		cmykRadio -> setChecked(true);
+		break;
+	case IMAGE_TYPE_YUV:
+	case IMAGE_TYPE_YUVA:
+		yuvRadio -> setChecked(true);
+		break;
+	case IMAGE_TYPE_LAB:
+	case IMAGE_TYPE_LABA:
+		labRadio -> setChecked(true);
+		break;
+	}
+
 	connect(grp, SIGNAL(clicked(int)), SLOT(imgTypeCliked(int)));
 
 	layout -> addWidget(grp);

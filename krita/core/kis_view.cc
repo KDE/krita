@@ -2010,6 +2010,8 @@ void KisView::layerAdd()
 				m_layerBox -> setCurrentItem(img -> index(layer));
 				resizeEvent(0);
 				updateCanvas(layer -> x(), layer -> y(), layer -> width(), layer -> height());
+				cfg.defLayerWidth(dlg.layerWidth());
+				cfg.defLayerHeight(dlg.layerHeight());
 			} else {
 				KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
 			}

@@ -1031,7 +1031,7 @@ void KisDoc::removeImage(const QString& name)
 bool KisDoc::slotNewImage()
 {
 	KisConfig cfg;
-	KisDlgCreateImg dlg(cfg.maxImgWidth(), cfg.defImgWidth(), cfg.maxImgHeight(), cfg.defImgHeight());
+	KisDlgCreateImg dlg(cfg.maxImgWidth(), cfg.defImgWidth(), cfg.maxImgHeight(), cfg.defImgHeight(), cfg.defImgType());
 
 	if (dlg.exec() == QDialog::Accepted) {
 		QString name;
@@ -1041,13 +1041,18 @@ bool KisDoc::slotNewImage()
 		KisLayerSP layer;
 		KisPainter gc;
 
-		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), dlg.colorSpace(), nextImageName());
+		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), dlg.imgType(), nextImageName());
 		layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 		gc.begin(layer.data());
 		gc.fillRect(0, 0, layer -> width(), layer -> height(), c, opacity);
 		gc.end();
 		img -> add(layer, -1);
 		addImage(img);
+		cfg.defImgWidth(dlg.imgWidth());
+		cfg.defImgHeight(dlg.imgHeight());
+		cfg.defLayerWidth(dlg.imgWidth());
+		cfg.defLayerHeight(dlg.imgHeight());
+		cfg.defImgType(dlg.imgType());
 		return true;
 	}
 

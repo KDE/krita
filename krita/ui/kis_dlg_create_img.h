@@ -28,13 +28,13 @@ class KisDlgCreateImg : public KDialogBase {
 	Q_OBJECT
 
 public:
-	KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, QWidget *parent = 0, const char *name = 0);
+	KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, enumImgType defImgType, QWidget *parent = 0, const char *name = 0);
 	virtual ~KisDlgCreateImg();
 
 public:
 	KoColor backgroundColor() const;
 	QUANTUM backgroundOpacity() const;
-	enumImgType colorSpace() const;
+	enumImgType imgType() const;
 	Q_INT32 imgWidth() const;
 	Q_INT32 imgHeight() const;
 
@@ -61,7 +61,7 @@ Q_INT32 KisDlgCreateImg::imgHeight() const
 }
 
 inline
-enumImgType KisDlgCreateImg::colorSpace() const
+enumImgType KisDlgCreateImg::imgType() const
 {
 	return m_type;
 }

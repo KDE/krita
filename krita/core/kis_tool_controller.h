@@ -23,6 +23,7 @@ class KisTool;
 
 class KisToolControllerInterface {
 public:
+	KisToolControllerInterface();
 	virtual ~KisToolControllerInterface();
 
 public:

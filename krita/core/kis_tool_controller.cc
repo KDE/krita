@@ -18,6 +18,10 @@
 
 #include "kis_tool_controller.h"
 
+KisToolControllerInterface::KisToolControllerInterface()
+{
+}
+
 KisToolControllerInterface::~KisToolControllerInterface()
 {
 }

@@ -19,7 +19,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if! defined KIS_TOOL_STAMP_H_
+#ifndef KIS_TOOL_STAMP_H_
 #define KIS_TOOL_STAMP_H_
 
 #include "kis_tool_paint.h"
@@ -35,15 +35,15 @@ class KisToolStamp : public KisToolPaint {
  public:
 	KisToolStamp();
 	virtual ~KisToolStamp();
- 
+
 	virtual void setup(KActionCollection *collection);
 	virtual void update(KisCanvasSubject *subject);
- 
+
 /* 	virtual bool shouldRepaint(); */
 /* 	virtual void setPattern(KisPattern *pattern); */
 	virtual KDialog *options(QWidget * parent);
 
-	virtual void mousePress(QMouseEvent *event); 
+	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);
 	virtual void tabletEvent(QTabletEvent *event);

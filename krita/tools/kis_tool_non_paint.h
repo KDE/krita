@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_TOOL_NON_PAINT_H_
+#ifndef KIS_TOOL_NON_PAINT_H_
 #define KIS_TOOL_NON_PAINT_H_
 
 #include <qcursor.h>
@@ -46,7 +46,7 @@ class KisToolNonPaint : public KisTool {
 public:
 	KisToolNonPaint();
 	virtual ~KisToolNonPaint();
-	
+
 public:
 	virtual void update(KisCanvasSubject *subject);
 

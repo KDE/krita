@@ -20,7 +20,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_TOOL_LINE_H_
+#ifndef KIS_TOOL_LINE_H_
 #define KIS_TOOL_LINE_H_
 
 #include "kis_tool_paint.h"
@@ -51,10 +51,10 @@ class KisToolLine : public KisToolPaint {
  private:
 	void paintLine();
 	void paintLine(QPainter& gc, const QRect& rc);
-        
+
         QPoint straightLine(QPoint point);
 
-    
+
 	bool m_dragging;
 
 	QPoint m_startPos;

@@ -17,7 +17,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_TOOL_COLOR_PICKER_H_
+#ifndef KIS_TOOL_COLOR_PICKER_H_
 #define KIS_TOOL_COLOR_PICKER_H_
 
 #include "kis_tool.h"
@@ -32,7 +32,7 @@ class KisToolColorPicker : public KisToolNonPaint {
 public:
 	KisToolColorPicker();
 	virtual ~KisToolColorPicker();
-  
+
 public:
 	virtual void update(KisCanvasSubject *subject);
 	virtual void setup(KActionCollection *collection);

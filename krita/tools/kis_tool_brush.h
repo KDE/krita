@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_TOOL_BRUSH_H_
+#ifndef KIS_TOOL_BRUSH_H_
 #define KIS_TOOL_BRUSH_H_
 
 #include "kis_tool_paint.h"

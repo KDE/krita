@@ -2354,8 +2354,9 @@ void KisView::imgUpdated(KisImageSP img, const QRect& rc)
 		QRect ur = rc;
 
 		resizeEvent(0);
-		ur.setX(ur.x() - static_cast<Q_INT32>(horzValue() * zoom()));
-		ur.setY(ur.y() - static_cast<Q_INT32>(vertValue() * zoom()));
+		/*ur.setX(ur.x() - static_cast<Q_INT32>(horzValue() * zoom()));
+		ur.setY(ur.y() - static_cast<Q_INT32>(vertValue() * zoom()));*/
+		ur.moveBy(- horzValue(), - vertValue());
 		updateCanvas(ur);
 	}
 }

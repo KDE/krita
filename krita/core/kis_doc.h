@@ -154,8 +154,10 @@ private:
 	QDomElement saveChannel(QDomDocument& doc, KisChannelSP channel);
 	KisChannelSP loadChannel(const QDomElement& elem, KisImageSP img);
 	bool init();
+	void initSingletons();
 
 private:
+	static bool m_singletonsHasBeenInited;
 	bool m_undo;
 	KoCommandHistory *m_cmdHistory;
 	vKisImageSP m_images;

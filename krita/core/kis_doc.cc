@@ -74,12 +74,15 @@
 #include "builder/kis_builder_monitor.h"
 #include "builder/kis_image_magick_converter.h"
 #include "color_strategy/kis_strategy_colorspace.h"
+#include "color_strategy/kis_strategy_colorspace_rgb.h"
+#include "color_strategy/kis_strategy_colorspace_grayscale.h"
 #include "kis_colorspace_factory.h"
 #include "tiles/kistilemgr.h"
 
 #include "KIsDocIface.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
+bool KisDoc::m_singletonsHasBeenInited = false;
 
 namespace {
 	class KisCommandImageAdd : public KisCommand {
@@ -336,6 +339,7 @@ namespace {
 KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) :
 	super(parentWidget, widgetName, parent, name, singleViewMode)
 {
+	initSingletons();
 	m_undo = false;
 	m_dcop = 0;
 	setInstance(KisFactory::global(), false);
@@ -366,6 +370,16 @@ DCOPObject *KisDoc::dcopObject()
 		m_dcop = new KIsDocIface(this);
 
 	return m_dcop;
+}
+
+void KisDoc::initSingletons()
+{
+	if(!KisDoc::m_singletonsHasBeenInited)
+	{
+		KisDoc::m_singletonsHasBeenInited = true;
+		new KisStrategyColorSpaceRGB();
+		new KisStrategyColorSpaceGrayscale();
+	}
 }
 
 bool KisDoc::initDoc()

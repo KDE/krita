@@ -106,7 +106,10 @@ public:
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, bool modal = false, const QString& filename = QString::null);
-
+	/** This function return the active KisView
+		*/
+	static KisView* activeView();
+	
 	virtual KisImageSP currentImg() const;
 	/**
 	 * Refresh the complete view
@@ -160,6 +163,9 @@ public slots:
 
 protected:
 	virtual void resizeEvent(QResizeEvent*);
+	static void setActiveView(KisView* view);
+protected slots:
+	virtual void windowActivationChange ( bool oldActive );
 
 private:
 	// Implement KisCanvasSubject
@@ -320,6 +326,7 @@ private slots:
 	void updateTabBar();
 
 private:
+	static KisView* m_activeView;
 	KisDoc *m_doc;
 	KisCanvas *m_canvas;
 
@@ -416,7 +423,7 @@ private:
 	KisUndoAdapter *m_adapter;
 	vKisCanvasObserver m_observers;
 
-        QLabel *m_statusBarZoomLabel;
+	QLabel *m_statusBarZoomLabel;
 
 	enumInputDevice m_inputDevice;
 	InputDeviceToolMap m_inputDeviceToolMap;
@@ -430,5 +437,13 @@ private:
 	mutable KisImageSP m_current;
 };
 
+inline void KisView::setActiveView(KisView* view)
+{
+	KisView::m_activeView = view;
+}
+inline KisView* KisView::activeView()
+{
+	return m_activeView;
+}
 #endif // KIS_VIEW_H_
 

@@ -35,7 +35,6 @@
 namespace {
 	const Q_INT32 MAX_CHANNEL_RGB = 3;
 	const Q_INT32 MAX_CHANNEL_RGBA = 4;
-	KisStrategyColorSpaceRGB moveMe; // XXX Where should we create singletons in Krita?!?
 }
 
 ChannelInfo KisStrategyColorSpaceRGB::channelInfo[4] = { ChannelInfo("Red", 3), ChannelInfo("Red", 2), ChannelInfo("Green", 1), ChannelInfo("Blue", 0) };

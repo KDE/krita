@@ -125,6 +125,8 @@
 // sent to a receiver if it does not accept the tablet event.
 #define MOUSE_CHANGE_EVENT_DELAY 100
 
+KisView* KisView::m_activeView = 0;
+
 KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name) : super(doc, parent, name)
 {
         if (!doc -> isReadWrite())
@@ -3052,6 +3054,15 @@ KoDocument *KisView::document() const
 {
         return koDocument();
 }
+
+void KisView::windowActivationChange ( bool oldActive )
+{
+	if(isActiveWindow())
+	{
+		KisView::setActiveView(this);
+	}
+}
+
 
 #include "kis_view.moc"
 

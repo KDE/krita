@@ -43,46 +43,37 @@
 
 // #include <kmessagebox.h>
 
-#include "example.moc"
+#include "example.h"
 
 typedef KGenericFactory<KritaExample> KritaExampleFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaexample, KritaExampleFactory( "krita" ) )
 
-	KritaExample::KritaExample(QObject *parent, const char *name, const QStringList &)
+KritaExample::KritaExample(QObject *parent, const char *name, const QStringList &)
 		: KParts::Plugin(parent, name)
 {
-       	setInstance(KritaExampleFactory::instance());
-
+	setInstance(KritaExampleFactory::instance());
 	kdDebug() << "Example plugin. Class: " 
 		  << className() 
 		  << ", Parent: " 
 		  << parent -> className()
 		  << "\n";
-
-
-	(void) new KAction(i18n("&Invert..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "krita_example");
-	(void) new KAction(i18n("&Invert (iterators)..."), 0, 0, this, SLOT(slotIteratorsActivated()), actionCollection(), "krita_example_iterators");
-
-	if ( !parent->inherits("KisView") )
-	{
-		kdDebug() << "KritaExampleFactory: KisView expected. Parent is " << parent -> className() << endl;
-		m_view = 0;
-	} else {
-		this->m_view = (KisView*) parent;
-	}
+	KisFilterInvert* kfi = new KisFilterInvert();
+	(void) new KAction(i18n("&Invert..."), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "krita_example");
 }
 
 KritaExample::~KritaExample()
 {
 }
 
-void KritaExample::slotIteratorsActivated()
+KisFilterInvert::KisFilterInvert() : KisFilter("Invert")
 {
-	KisLayerSP lay = m_view->currentImg()->activeLayer();
-	KisTileCommand* ktc = new KisTileCommand("Invert", (KisPaintDeviceSP)lay ); // Create a command
-	KisIteratorLineQuantum lineIt = lay->iteratorQuantumSelectionBegin(ktc);
-	KisIteratorLineQuantum lastLine = lay->iteratorQuantumSelectionEnd(ktc);
-	Q_INT32 depth = lay->depth() - 1;
+}
+
+void KisFilterInvert::process(KisPaintDeviceSP device, KisFilterConfiguration* config, KisTileCommand* ktc)
+{
+	KisIteratorLineQuantum lineIt = device->iteratorQuantumSelectionBegin(ktc, config->x(), config->x() + config->width() - 1, config->y() );
+	KisIteratorLineQuantum lastLine = device->iteratorQuantumSelectionEnd(ktc, config->x(), config->x() + config->width() - 1, config->y() + config->height() - 1);
+	Q_INT32 depth = device->depth() - 1;
 	while( lineIt <= lastLine )
 	{
 		KisIteratorQuantum quantumIt = *lineIt;
@@ -98,10 +89,9 @@ void KritaExample::slotIteratorsActivated()
 		}
 		++lineIt;
 	}
-	m_view->currentImg()->undoAdapter()->addCommand( ktc );
-	m_view->currentImg()->notify();
 }
 
+#if 0
 void KritaExample::slotActivated()
 {
 	KisLayerSP lay = m_view->currentImg()->activeLayer();
@@ -133,3 +123,4 @@ void KritaExample::slotActivated()
 	m_view->currentImg()->undoAdapter()->addCommand( ktc );
 	m_view->currentImg()->notify();
 }
+#endif

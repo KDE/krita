@@ -116,5 +116,9 @@ typedef KSharedPtr<KisAlphaMask> KisAlphaMaskSP;
 
 typedef QValueVector<QUANTUM> vQuantums;
 
+class KisFilter;
+typedef KSharedPtr<KisFilter> KisFilterSP;
+
+
 #endif // KISTYPES_H_
 

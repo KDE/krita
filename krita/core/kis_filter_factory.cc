@@ -17,33 +17,28 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_COLORSPACE_FACTORY_H_
-#define KIS_COLORSPACE_FACTORY_H_
+#include "kis_filter_factory.h"
+#include "kis_paint_device.h"
+#include "kis_filter.h"
 
-#include "kis_types.h"
-#include "kis_generic_factory.h"
+KisFilterFactory *KisFilterFactory::m_singleton = 0;
 
-class QStringList;
+KisFilterFactory::KisFilterFactory()
+{
+	kdDebug() << " creating a KisFilterFactory" << endl;
+	Q_ASSERT(KisFilterFactory::m_singleton == 0);
+	KisFilterFactory::m_singleton = this;
+}
 
-class KisColorSpaceFactory : public KisGenericFactory<KisStrategyColorSpaceSP> {
+KisFilterFactory::~KisFilterFactory()
+{
+}
 
-public:
-	virtual ~KisColorSpaceFactory();
-
-public:
-	KisStrategyColorSpaceSP colorSpace(const QString& name) const KDE_DEPRECATED;
-	QStringList listColorSpaceNames() const KDE_DEPRECATED;
-public:
-	static KisColorSpaceFactory* singleton();
-	
-private:
-	KisColorSpaceFactory();
-	KisColorSpaceFactory(const KisColorSpaceFactory&);
-	KisColorSpaceFactory operator=(const KisColorSpaceFactory&);
-
-private:
-	static KisColorSpaceFactory *m_singleton;
-};
-
-#endif // KIS_COLORSPACE_FACTORY_H_
-
+KisFilterFactory* KisFilterFactory::singleton()
+{
+	if(KisFilterFactory::m_singleton == 0)
+	{
+		KisFilterFactory::m_singleton = new KisFilterFactory();
+	}
+	return KisFilterFactory::m_singleton;
+}

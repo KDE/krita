@@ -35,7 +35,6 @@
 namespace {
 	const Q_INT32 MAX_CHANNEL_GRAYSCALE = 1;
 	const Q_INT32 MAX_CHANNEL_GRAYSCALEA = 2;
-	KisStrategyColorSpaceGrayscale moveMe; // XXX Where should we create singletons in Krita?!?
 }
 
 ChannelInfo KisStrategyColorSpaceGrayscale::channelInfo[1] = { ChannelInfo("Gray", 1) };

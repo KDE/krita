@@ -72,5 +72,5 @@ noinst_HEADERS = integerwidget.h \
     kis_pattern_chooser.h
 
 libkisui_la_METASOURCES = AUTO
-SUBDIRS = labels dialogs
+SUBDIRS = labels dialogs designerplugin
 

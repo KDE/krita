@@ -21,25 +21,21 @@
 #define EXAMPLE_H
 
 #include <kparts/plugin.h>
-
-class KisView;
-
+#include "kis_filter.h"
 
 class KritaExample : public KParts::Plugin
 {
-	Q_OBJECT
 public:
 	KritaExample(QObject *parent, const char *name, const QStringList &);
 	virtual ~KritaExample();
-	
-private slots:
-	void slotActivated();
-	void slotIteratorsActivated();
+};
 
-private:
-	KisView* m_view;
-	KisPainter *m_painter;
-
+class KisFilterInvert : public KisFilter 
+{
+public:
+	KisFilterInvert();
+public:
+	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , KisTileCommand* );
 };
 
 #endif

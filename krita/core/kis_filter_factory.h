@@ -17,33 +17,30 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_COLORSPACE_FACTORY_H_
-#define KIS_COLORSPACE_FACTORY_H_
+#if !defined KIS_FILTER_FACTORY_H_
+#define KIS_FILTER_FACTORY_H_
 
 #include "kis_types.h"
 #include "kis_generic_factory.h"
 
 class QStringList;
 
-class KisColorSpaceFactory : public KisGenericFactory<KisStrategyColorSpaceSP> {
+class KisFilterFactory : public KisGenericFactory<KisFilterSP> {
 
 public:
-	virtual ~KisColorSpaceFactory();
+	virtual ~KisFilterFactory();
 
 public:
-	KisStrategyColorSpaceSP colorSpace(const QString& name) const KDE_DEPRECATED;
-	QStringList listColorSpaceNames() const KDE_DEPRECATED;
-public:
-	static KisColorSpaceFactory* singleton();
-	
-private:
-	KisColorSpaceFactory();
-	KisColorSpaceFactory(const KisColorSpaceFactory&);
-	KisColorSpaceFactory operator=(const KisColorSpaceFactory&);
+	static KisFilterFactory* singleton();
 
 private:
-	static KisColorSpaceFactory *m_singleton;
+	KisFilterFactory();
+	KisFilterFactory(const KisFilterFactory&);
+	KisFilterFactory operator=(const KisFilterFactory&);
+
+private:
+	static KisFilterFactory *m_singleton;
 };
 
-#endif // KIS_COLORSPACE_FACTORY_H_
+#endif // KIS_FILTERSPACE_FACTORY_H_
 

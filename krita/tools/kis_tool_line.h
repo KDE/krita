@@ -1,5 +1,5 @@
 /*
- *  linetool.h - part of Krayon
+ *  kis_tool_line.h - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@comuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
@@ -41,7 +41,7 @@ class KisToolLine : public KisToolPaint {
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);
-	virtual void tabletEvent(QTabletEvent *e);
+	virtual void tabletEvent(QTabletEvent *event);
 
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);

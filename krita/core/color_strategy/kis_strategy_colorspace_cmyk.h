@@ -29,19 +29,19 @@
 #include "kis_strategy_colorspace.h"
 
 /**
-   This class implements the conversion of the Krita images that contain cmy + transparency
-   data to rbg for screen rendering.
+   This class implements the conversion of the Krita images that
+   contain cmy + transparency data to rbg for screen rendering.
 
- */
+*/
 
 class CMYK {
  public:
-    QUANTUM c;
-    QUANTUM m;
-    QUANTUM y;
-    QUANTUM k;
+	QUANTUM c;
+	QUANTUM m;
+	QUANTUM y;
+	QUANTUM k;
 
-    bool operator< (const CMYK &) const;
+	bool operator< (const CMYK &) const;
 };
 
 inline bool CMYK::operator<(const CMYK &other) const
@@ -50,9 +50,9 @@ inline bool CMYK::operator<(const CMYK &other) const
 
 class RGB {
  public:
-    QUANTUM r;
-    QUANTUM g;
-    QUANTUM b;
+	QUANTUM r;
+	QUANTUM g;
+	QUANTUM b;
 };
 
 // Map cmyka to rgba
@@ -61,11 +61,11 @@ class RGB {
 typedef QMap<CMYK, RGB> ColorLUT;
 
 class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
-public:
+ public:
 	KisStrategyColorSpaceCMYK();
 	virtual ~KisStrategyColorSpaceCMYK();
 
-public:
+ public:
 	virtual void nativeColor(const KoColor& c, QUANTUM *dst);
 	virtual void nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst);
 	virtual void nativeColor(const QColor& c, QUANTUM *dst);
@@ -74,24 +74,24 @@ public:
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst);
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
 	virtual void tileBlt(Q_INT32 stride,
-			QUANTUM *dst, 
-			Q_INT32 dststride,
-			QUANTUM *src, 
-			Q_INT32 srcstride,
-			Q_INT32 rows, 
-			Q_INT32 cols, 
-			CompositeOp op) const;
+			     QUANTUM *dst, 
+			     Q_INT32 dststride,
+			     QUANTUM *src, 
+			     Q_INT32 srcstride,
+			     Q_INT32 rows, 
+			     Q_INT32 cols, 
+			     CompositeOp op) const;
 	virtual void tileBlt(Q_INT32 stride,
-			QUANTUM *dst, 
-			Q_INT32 dststride,
-			QUANTUM *src, 
-			Q_INT32 srcstride,
-			QUANTUM opacity,
-			Q_INT32 rows, 
-			Q_INT32 cols, 
-			CompositeOp op) const;
+			     QUANTUM *dst, 
+			     Q_INT32 dststride,
+			     QUANTUM *src, 
+			     Q_INT32 srcstride,
+			     QUANTUM opacity,
+			     Q_INT32 rows, 
+			     Q_INT32 cols, 
+			     CompositeOp op) const;
 
-private:
+ private:
 
 	KPixmapIO m_pixio;
 	QPixmap m_pixmap;

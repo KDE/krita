@@ -149,12 +149,12 @@ void KisToolLine::mouseRelease(QMouseEvent *e)
 			delete m_painter;
 			m_painter = 0;
 		}
-		controller -> updateCanvas(); // Removes the last remaining line.
+		controller -> updateCanvas(m_painter -> dirtyRect()); // Removes the last remaining line.
 	}
     
 }
 
-void KisToolLine::tabletEvent(QTabletEvent *e) 
+void KisToolLine::tabletEvent(QTabletEvent */*event*/) 
 {
 	// Nothing yet -- I'm not sure how to handle this, perhaps
 	// have thick-thin lines for pressure.

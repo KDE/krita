@@ -1,5 +1,5 @@
 # all_includes must remain last!
-INCLUDES  = -I$(srcdir)/builder/ -I$(srcdir)/visitors/ -I$(srcdir)/helper/ -I$(srcdir)/tiles/ -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) \
+INCLUDES  = -I$(srcdir)/builder/ -I${srcdir}/singletons -I$(srcdir)/visitors/ -I$(srcdir)/helper/ -I$(srcdir)/tiles/ -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) \
 	 -I$(interfacedir) $(KOPAINTER_INCLUDES) -I$(srcdir)/strategy/ -I$(srcdir)/color_strategy $(all_includes)
 
 noinst_LTLIBRARIES = libkiscore.la
@@ -9,5 +9,5 @@ libkiscore_la_SOURCES = kis_paint_device.cc kis_layer.cc kis_channel.cc kis_mask
 
 libkiscore_la_METASOURCES = AUTO
 libkiscore_la_LDFLAGS = $(KDE_RPATH)
-SUBDIRS = helper tiles builder strategy color_strategy
+SUBDIRS = helper tiles builder strategy color_strategy 
 

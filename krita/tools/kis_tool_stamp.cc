@@ -2,6 +2,7 @@
  *  kis_tool_stamp.cc - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,42 +19,41 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include <qcolor.h>
-#include <qclipboard.h>
 #include <qpainter.h>
 
-#include <kaction.h>
-#include <kapplication.h>
 #include <kdebug.h>
+#include <kaction.h>
+#include <kcommand.h>
+#include <klocale.h>
 
-#include "kis_doc.h"
-#include "kis_view.h"
-#include "kis_vec.h"
 #include "kis_cursor.h"
-#include "kis_util.h"
-#include "kis_pattern.h"
-#include "kis_tool_stamp.h"
 #include "kis_dlg_toolopts.h"
+#include "kis_doc.h"
+#include "kis_painter.h"
+#include "kis_tool_stamp.h"
+#include "kis_view.h"
 
-
-StampTool::StampTool(KisDoc *doc, KisCanvas *canvas, KisPattern *pattern) : KisTool(doc)
-{
-	m_dragging = false;
-	m_dragdist = 0;
-	m_canvas = canvas;
-	m_doc = doc;
-
-	// initialize stamp tool settings
-	m_opacity = 255;
-	m_useGradient = false;
-	setPattern(pattern);
-}
-
-StampTool::~StampTool() 
+KisToolStamp::KisToolStamp() : 
+	super()
 {
 }
 
-void StampTool::setPattern(KisPattern *pattern)
+KisToolStamp::~KisToolStamp() 
+{
+}
+
+void KisToolStamp::update(KisCanvasSubject *subject)
+{
+	kdDebug() << "update line\n";
+	m_subject = subject;
+	m_currentImage = subject -> currentImg();
+
+	super::update(m_subject);
+}
+
+
+#if 0
+void KisToolStamp::setPattern(KisPattern *pattern)
 {
 	m_pattern = pattern;
 
@@ -75,24 +75,19 @@ void StampTool::setPattern(KisPattern *pattern)
 	if (spacing < 1) 
 		spacing = 3;
 }
-
-void StampTool::setOpacity(int /* opacity */)
-{
-	/* this will allow, eventually, for a global
-	   opacity setting for painting tools which
-	   overrides individual settings */
-}
+#endif
 
 /*
    On mouse press, the image is stamped or pasted
    into the currentImg layer
  */
 
-void StampTool::mousePress(QMouseEvent *e)
+void KisToolStamp::mousePress(QMouseEvent *e)
 {
+
 	if (e->button() != QMouseEvent::LeftButton) 
 		return;
-
+#if 0
 	// do sanity checking here, if possible, not inside loops
 	// when moving mouse!
 	KisImage *img = m_doc -> currentImg();
@@ -137,15 +132,16 @@ void StampTool::mousePress(QMouseEvent *e)
 	// stamp the pattern image into the layer memory
 	if(stampColor(zoomed(pos) - mHotSpot))
 		img -> markDirty(QRect(zoomed(pos) - mHotSpot, mPatternSize));
+#endif
 }
 
-
+#if 0
 /*
    Stamp to canvas - stamp the pattern only onto canvas -
    it will not affect the layer or image
  */
 
-bool StampTool::stampToCanvas(QPoint pos)
+bool KisToolStamp::stampToCanvas(QPoint pos)
 {
 	KisView *view = getCurrentView();
 	KisImage* img = m_doc->currentImg();
@@ -227,7 +223,7 @@ Better to be safe... */
    stamp the pattern into the layer
  */
 
-bool StampTool::stampColor(QPoint pos)
+bool KisToolStamp::stampColor(QPoint pos)
 {
 	KisView *view = getCurrentView();
 	KisImage *img = m_doc->currentImg();
@@ -336,14 +332,15 @@ bool StampTool::stampColor(QPoint pos)
 }
 
 
-bool StampTool::stampMonochrome(QPoint /*pos*/)
+bool KisToolStamp::stampMonochrome(QPoint /*pos*/)
 {
 	return true;
 }
+#endif
 
-
-void StampTool::mouseMove(QMouseEvent *e)
+void KisToolStamp::mouseMove(QMouseEvent *e)
 {
+#if 0
 	KisView *view = getCurrentView();
 	KisImage * img = m_doc->currentImg();
 	if(!img) return;
@@ -430,10 +427,11 @@ void StampTool::mouseMove(QMouseEvent *e)
 
 	if (dist > 0) m_dragdist = dist;
 	m_dragStart = pos;
+#endif
 }
 
 
-void StampTool::mouseRelease(QMouseEvent *e)
+void KisToolStamp::mouseRelease(QMouseEvent *e)
 {
 	if (e -> button() != LeftButton)
 		return;
@@ -441,63 +439,34 @@ void StampTool::mouseRelease(QMouseEvent *e)
 	m_dragging = false;
 }
 
-
-void StampTool::optionsDialog()
+void KisToolStamp::tabletEvent(QTabletEvent */*event*/) 
 {
-	ToolOptsStruct ts;
-	bool old_useGradient = m_useGradient;
-	unsigned int  old_opacity = m_opacity;
-
-	ts.useGradient = m_useGradient;
-	ts.opacity = m_opacity;
-
-	ToolOptionsDialog OptsDialog(tt_stamptool, ts);
-
-	OptsDialog.exec();
-
-	if (OptsDialog.result() == QDialog::Rejected)
-		return;
-
-	m_opacity = OptsDialog.stampToolTab() -> opacity();
-	m_useGradient = OptsDialog.stampToolTab() -> useGradient();
-
-	if (old_useGradient != m_useGradient || old_opacity != m_opacity)
-		m_doc -> setModified(true);
+	// Nothing yet -- I'm not sure how to handle this, perhaps
+	// have thick-thin lines for pressure.
 }
 
-void StampTool::setupAction(QObject *collection)
+KDialog * KisToolStamp::options(QWidget * parent)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Stamp (Pattern) Tool"), "stamp", 0, this, SLOT(toolSelect()), collection, "tool_stamp");
+	ToolOptsStruct ts;
+// 	bool old_useGradient = m_useGradient;
+// 	unsigned int  old_opacity = m_opacity;
+
+// 	ts.useGradient = m_useGradient;
+// 	ts.opacity = m_opacity;
+
+        ToolOptionsDialog * d = new ToolOptionsDialog(tt_stamptool, ts, parent);
+	return d;
+}
+
+void KisToolStamp::setup(KActionCollection *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Stamp (Pattern) Tool"),
+						  "stamp", 0, this, 
+						  SLOT(activate()), collection,
+						  "tool_stamp");
 
 	toggle -> setExclusiveGroup("tools");
 
-}
-
-bool StampTool::shouldRepaint()
-{
-	return true;
-}
-
-QDomElement StampTool::saveSettings(QDomDocument& doc) const
-{
-	// Stamp (Pattern) tool element
-	QDomElement stampTool = doc.createElement("stampTool");
-
-	stampTool.setAttribute("opacity", m_opacity);
-	stampTool.setAttribute("blendWithCurrentGradient", static_cast<int>(m_useGradient));
-	return stampTool;
-}
-
-bool StampTool::loadSettings(QDomElement& elem)
-{
-	bool rc = elem.tagName() == "stampTool";
-
-	if (rc) {
-		m_opacity = elem.attribute("opacity").toInt();
-		m_useGradient = static_cast<bool>(elem.attribute("blendWithCurrentGradient").toInt());
-	}
-
-	return rc;
 }
 
 

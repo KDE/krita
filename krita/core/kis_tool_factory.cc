@@ -30,6 +30,7 @@
 #include "kis_tool_brush.h"
 #include "kis_tool_eraser.h"
 #include "kis_tool_line.h"
+#include "kis_tool_stamp.h"
 
 namespace {
 	KisToolFactory moveMe; // XXX Where to create singletons in Krita?!?
@@ -61,6 +62,7 @@ void KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSubjec
 		m_tools.push_back(new KisToolBrush);
 		m_tools.push_back(new KisToolEraser);
 		m_tools.push_back(new KisToolLine);
+		m_tools.push_back(new KisToolStamp);
 	}
 
 	for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); it++) {

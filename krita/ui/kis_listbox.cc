@@ -174,6 +174,8 @@ void KisListBox::slotMenuAction(int mnuId)
 	}
 
 	m_btnRm -> setEnabled(m_lst -> count());
+	m_btnRaise -> setEnabled(m_lst -> selectedItem() && m_lst -> selectedItem() != m_lst -> item(0));
+	m_btnLower -> setEnabled(m_lst -> selectedItem() && m_lst -> currentItem() != -1 && static_cast<uint>(m_lst -> currentItem()) != m_lst -> count() - 1);
 	m_lst -> triggerUpdate(false);
 }
 
@@ -319,12 +321,12 @@ void KisListBoxItem::init(const QString& label, QListBox *parent, KisListBox::fl
 	KIconLoader il;
 
 	m_label = label;
-	m_visiblePix = loadPixmap("visible.png", il);
+	m_visiblePix = loadPixmap("visible.png", il, 21);
 	m_visibleRect = QRect(QPoint(3, (HEIGHT - 24) / 2), QSize(24,24));
-	m_invisiblePix = loadPixmap("novisible.png", il);
-	m_linkedPix = loadPixmap("linked.png", il);
+	m_invisiblePix = loadPixmap("novisible.png", il, 21);
+	m_linkedPix = loadPixmap("linked.png", il, 21);
 	m_linkedRect = QRect(QPoint(30, (HEIGHT - 24) / 2), QSize(24,24));
-	m_unlinkedPix = loadPixmap("unlinked.png", il);
+	m_unlinkedPix = loadPixmap("unlinked.png", il, 21);
 	m_previewRect = QRect(QPoint(57, (HEIGHT - 24) / 2), QSize(24,24));
 	m_parent = parent;
 	m_visible = true;
@@ -362,7 +364,7 @@ int KisListBoxItem::width() const
 
 void KisListBoxItem::paint(QPainter *gc)
 {
-	QBrush br = isSelected() ? QBrush::gray : QBrush::lightGray;
+	QBrush br = isSelected() ? m_parent -> colorGroup().highlight() : QBrush::white;
 	QPoint pt;
 	QPixmap *pix;
 
@@ -383,9 +385,9 @@ void KisListBoxItem::paint(QPainter *gc)
 	gc -> drawText(HEIGHT * 3 + 3 * 3, 20, m_label);
 }
 
-QPixmap KisListBoxItem::loadPixmap(const QString& filename, const KIconLoader& il)
+QPixmap KisListBoxItem::loadPixmap(const QString& filename, const KIconLoader& il, int size)
 {
-	QPixmap pixmap = il.loadIcon(filename, KIcon::NoGroup);
+	QPixmap pixmap = il.loadIcon(filename, KIcon::NoGroup, size);
 
 	if (pixmap.isNull())
 		KMessageBox::error(0, i18n("Can't find %1").arg(filename), i18n("Canvas"));

@@ -115,7 +115,7 @@ public:
 
 private:
 	void init(const QString& label, QListBox *parent, KisListBox::flags f);
-	QPixmap loadPixmap(const QString& filename, const KIconLoader& il);
+	QPixmap loadPixmap(const QString& filename, const KIconLoader& il, int size);
 	bool intersectRect(const QRect& rc, const QPoint& pos, int yOffset) const;
 
 private:

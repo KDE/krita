@@ -44,16 +44,16 @@ public:
 
 public:
 	// Overide KoDocument
-	virtual bool initDoc();
-	virtual bool loadNativeFormat(const QString& file);
-	virtual QCString mimeType() const;
-	virtual QDomDocument saveXML();
-	virtual bool loadXML(QIODevice *, const QDomDocument& doc);
 	virtual bool completeLoading(KoStore *store);
 	virtual bool completeSaving(KoStore*);
 	virtual DCOPObject* dcopObject();
-	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);
+	virtual bool initDoc();
 	virtual bool isEmpty() const;
+	virtual bool loadNativeFormat(const QString& file);
+	virtual bool loadXML(QIODevice *, const QDomDocument& doc);
+	virtual QCString mimeType() const;
+	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);
+	virtual QDomDocument saveXML();
 
 public:
 	KoColor foreground() const;

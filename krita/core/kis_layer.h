@@ -61,6 +61,9 @@ public:
 	QUANTUM opacity() const;
 	void opacity(QUANTUM val);
 
+	bool linked() const;
+	void linked(bool l);
+
 private:
 	QUANTUM m_opacity;
 	bool m_preserveTranspanrency;
@@ -70,6 +73,7 @@ private:
 	bool m_initial;
 	bool m_boundsValid;
 	QRect m_bounds;
+	bool m_linked;
 };
 
 #endif // KIS_LAYER_H_

@@ -81,7 +81,6 @@ private:
 	bool m_dirty;
 	bool m_valid;
 	QUANTUM *m_data;
-	Q_INT32 m_datacnt;
 	Q_INT32 m_width;
 	Q_INT32 m_height;
 	Q_INT32 m_depth;

@@ -172,6 +172,18 @@ void KisTileMgr::validate(KisTileSP tile)
 //	tile -> valid(true);
 }
 
+KisTileSP KisTileMgr::invalidate(Q_INT32 xpix, Q_INT32 ypix)
+{
+	KisTileSP t;
+	Q_INT32 tilenum = tileNum(xpix, ypix);
+
+	if (tilenum < 0)
+		return 0;
+
+	t = tile(tilenum, TILEMODE_NONE);
+	return invalidateTile(t, tilenum);
+}
+
 KisTileSP KisTileMgr::invalidate(KisTileSP tile, Q_INT32 xpix, Q_INT32 ypix)
 {
 	Q_INT32 tilenum;
@@ -447,8 +459,8 @@ void KisTileMgr::writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, 
 
 			while (rows--) {
 				memcpy(dst, src, cols * depth() * sizeof(QUANTUM));
-				src += stride;
 				dst += dststride;
+				src += stride;
 			}
 
 			t -> valid(false);
@@ -511,7 +523,7 @@ KisTileSP KisTileMgr::invalidateTile(KisTileSP tile, Q_INT32 tilenum)
 {
 	KisScopedLock l(tile -> mutex());
 
-	if (!tile -> valid())
+	if (tile -> valid())
 		return 0;
 
 	if (tile -> shareCount() > 1) {

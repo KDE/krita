@@ -1,6 +1,4 @@
 /*
- *  kis_dlg_paint_properties.h - part of Krita aka Krayon aka KImageShop
- *
  *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,9 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-#if !defined (KIS_DLG_LAYER_PROPERTIES_H)
-#define KIS_DLG_LAYER_PROPERTIES_H
+#if !defined KIS_DLG_LAYER_PROPERTIES_H_
+#define KIS_DLG_LAYER_PROPERTIES_H_
 
 #include <kdialog.h>
 
@@ -31,7 +28,6 @@ class KisPaintDevice;
 class IntegerWidget;
 
 class KisPaintPropertyDlg : public KDialog {
-	Q_OBJECT
 	typedef KDialog super;
 
 public:
@@ -46,5 +42,5 @@ private:
 	IntegerWidget *m_opacity;
 };
 
-#endif // KIS_DLG_LAYER_PROPERTIES_H
+#endif // KIS_DLG_LAYER_PROPERTIES_H_
 

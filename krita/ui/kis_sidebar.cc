@@ -202,7 +202,7 @@ TopTitleFrame::TopTitleFrame( QWidget* parent, const char* name )
 
     // setup buttons
     m_pHideButton = new KoFrameButton(i18n("(*)"), this);
-    m_pTitleButton = new KoFrameButton(i18n("Krayon Box"), this);
+    m_pTitleButton = new KoFrameButton(i18n("Crayon Box"), this);
 
     QFont font = KGlobalSettings::generalFont();
     font.setPointSize( 8 );

@@ -28,6 +28,7 @@ public:
 
 	QString name();
 	Q_INT32 number();
+	Q_INT32 currentSeed() const;
 
 private:
 	Q_INT32 m_generator;

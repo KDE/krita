@@ -1,6 +1,4 @@
 /*
- *  kis_painter.cc - part of Krayon
- *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
@@ -18,350 +16,200 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-#include <qcolor.h>
-#include <qclipboard.h>
-#include <qpainter.h>
-#include <qpoint.h>
-#include <qrect.h>
-
-#include <kdebug.h>
-
-#include "kis_cursor.h"
-#include "kis_doc.h"
+#include <string.h>
+#include <koColor.h>
+#include "kis_types.h"
+#include "kis_global.h"
+#include "kistile.h"
+#include "kistilemgr.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
-#include "kis_view.h"
-#include "kis_vec.h"
-#include "kis_util.h"
+#include "kispixeldata.h"
 
-static void swap(int *first, int *second)
+KisPainter::KisPainter()
 {
-	if (*first > *second) {
-		*first ^= *second;
-		*second ^= *first;
-		*first ^= *second;
-	}
 }
 
-/*
-    KisPainter allows use of QPainter methods to indirectly draw into
-    Krayon's layers.  While there is some overhead in using QPainter
-    instead of native methods, this is a useful tenative solution
-    for lines, ellipses, polgons, curves and other shapes, and
-    text rendering.  Most of these will eventually be replaced with
-    native methods which draw directly into krayon's layers for
-    performance, except perhaps text and curved line segments which
-    have been well implemented by Qt and/or for which killustrator can
-    be used as an embedded part within krayon.  All matrix and other
-    transformations available to Qt can be used with these kis_painter
-    routines without inferfering at all with native krayon methods.
-*/
-
-KisPainter::KisPainter(KisDoc *doc, KisView *view)
+KisPainter::KisPainter(KisTileSP tile)
 {
-  	m_doc = doc;
-	m_view = view;
-	m_lineThickness = 1;
-	m_lineOpacity = 255;
-	m_gradientFill = false;
-	m_patternFill = false;
-	m_filledEllipse = false;
-	m_filledRectangle = false;
-	m_painterPixmap.resize(512, 512);
-	clearAll();
+	begin(tile);
+}
+
+KisPainter::KisPainter(KisPixelDataSP pd)
+{
+	begin(pd);
+}
+	
+KisPainter::KisPainter(KisPaintDeviceSP device)
+{
+	begin(device);
+}
+
+KisPainter::KisPainter(KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+	begin(device, x, y, w, h);
+}
+
+KisPainter::KisPainter(KisPaintDeviceSP device, const QRect& rc)
+{
+	begin(device, rc);
 }
 
 KisPainter::~KisPainter()
 {
+	end();
 }
 
-void KisPainter::clearAll()
+void KisPainter::begin(KisTileSP tile)
 {
-	m_painterPixmap.fill();
+	m_dst = new KisPixelData;
+	m_dst -> mgr = 0;
+	m_dst -> mode = TILEMODE_RW;
+	m_dst -> x1 = 0;
+	m_dst -> y1 = 0;
+	m_dst -> x2 = tile -> width();
+	m_dst -> y2 = tile -> height();
+	m_dst -> width = tile -> width();
+	m_dst -> height = tile -> height();
+	m_dst -> depth = tile -> depth();
+	m_dst -> tile = tile;
+	m_dst -> data = tile -> data();
+	m_dst -> stride = tile -> depth() * tile -> width();
+	m_dst -> owner = false;
+	m_dst -> tile -> lock();
 }
 
-void KisPainter::clearRectangle(int x, int y, int w, int h)
+void KisPainter::begin(KisPixelDataSP pd)
 {
-	QPainter p(&m_painterPixmap);
-
-	p.eraseRect(x, y, w, h);
+	m_dst = pd;
 }
 
-void KisPainter::clearRectangle(const QRect& rc)
+void KisPainter::begin(KisPaintDeviceSP device)
 {
-	clearRectangle(rc.x(), rc.y(), rc.width(), rc.height());
+	begin(device, 0, 0, device -> width(), device -> height());
 }
 
-void KisPainter::clearRectangle(const QPoint& topLeft, const QPoint& bottomRight)
+void KisPainter::begin(KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	clearRectangle(topLeft.x(), topLeft.y(), bottomRight.x(), bottomRight.y());
+	KisTileMgrSP tm = device -> data();
+
+	m_dst = tm -> pixelData(x, y, x + w - 1, y + h - 1, TILEMODE_RW);
 }
 
-void KisPainter::resize(int width, int height)
+void KisPainter::begin(KisPaintDeviceSP device, const QRect& rc)
 {
-	m_painterPixmap.resize(width, height);
+	KisTileMgrSP tm = device -> data();
+
+	m_dst = tm -> pixelData(rc.x(), rc.y(), rc.width(), rc.height(), TILEMODE_RW);
 }
 
-void KisPainter::drawLine(int x1, int y1, int x2, int y2)
+void KisPainter::end()
 {
-	/* use black for pen color - it will be set
-	   to actual foreground color and mapped to gradient
-	   and pattern when drawn into layer */
+	if (m_dst && m_dst -> mgr == 0)
+		m_dst -> tile -> release();
 
-	QPainter p(&m_painterPixmap);
-	QPen pen(Qt::black, m_lineThickness);
+	if (m_dst && m_dst -> mgr)
+		m_dst -> mgr -> releasePixelData(m_dst);
 
-	p.setPen(pen);
-	p.drawLine(x1, y1, x2, y2);
-
-	x1 += m_view -> xPaintOffset();
-	x2 += m_view -> xPaintOffset();
-	y1 += m_view -> yPaintOffset();
-	y2 += m_view -> yPaintOffset();
-
-	/* establish rectangle with values ascending from
-	   left to right and top to bottom for copying into
-	   layer image - not needed with rectangle and ellipse */
-
-	swap(&x1, &x2);
-	swap(&y1, &y2);
-
-	QRect rect = QRect(QPoint(x1, y1), QPoint(x2, y2));
-
-	// account for line thickness in update rectangle
-	QRect ur(rect);
-	ur.setLeft(rect.left() - m_lineThickness);
-	ur.setTop(rect.top() - m_lineThickness);
-	ur.setRight(rect.right() + m_lineThickness);
-	ur.setBottom(rect.bottom() + m_lineThickness);
-
-	if (!toLayer(ur))
-		kdDebug() << "error drawing line" << endl;
+	m_dst = 0;
 }
 
-void KisPainter::drawLine(const QRect& rc)
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
-	drawLine(rc.left(), rc.top(), rc.right(), rc.bottom());
+	KisPixelDataSP pd;
+
+	src -> lock();
+
+	if (sw == -1)
+		sw = src -> width();
+
+	if (sh == -1)
+		sh = src -> height();
+
+	pd = new KisPixelData;
+	pd -> mgr = 0;
+	pd -> mode = TILEMODE_RW;
+	pd -> x1 = sx;
+	pd -> y1 = sy;
+	pd -> x2 = sx + sw - 1;
+	pd -> y2 = sy + sh - 1;
+	pd -> width = sw;
+	pd -> height = sh;
+	pd -> depth = src -> depth();
+	pd -> tile = src;
+	pd -> data = src -> data();
+	pd -> stride = src -> depth() * src -> width();
+	pd -> owner = false;
+	bitBlt(dx, dy, op, pd, sx, sy, sw, sh);
+	src -> release();
 }
 
-void KisPainter::drawLine(const QPoint& topLeft, const QPoint& bottomRight)
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
-	drawLine(topLeft.x(), topLeft.y(), bottomRight.x(), bottomRight.y());
-}
+	if (sw == -1)
+		sw = m_dst -> width;
 
-void KisPainter::drawRectangle(int x, int y, int w, int h)
-{
-	QRect rc(x, y, w, h);
+	if (sh == -1)
+		sh = m_dst -> height;
 
-	drawRectangle(rc);
-}
+	// TODO switch on the image type then go for the composite
+	// TODO Implement all composites for all image depths
+	switch (op) {
+		case COMPOSITE_OVER:
+			for (Q_INT32 y = 0; y < sh; y++) {
+				for (Q_INT32 x = 0; x < sw; x++) {
+					QUANTUM *s = src -> data + ((y + sy) * sw + (sx + x)) * src -> depth;
+					QUANTUM *d = m_dst -> data + ((y + dy) * sw + (dx + x)) * src -> depth;
 
-void KisPainter::drawRectangle(const QRect& rect)
-{
-	QPainter p(&m_painterPixmap);
-
-	// constructs a pen with the given line thickness
-	// color is always black - it is changed by krayon
-	// to the currentImg fgColor when drawn to layer
-	QPen pen(Qt::black, m_lineThickness);
-	p.setPen(pen);
-
-	// constructs a brush with a solid pattern if
-	// we want to fill the rectangle
-	QBrush brush(Qt::black);
-
-	if (m_filledRectangle)
-		p.setBrush(brush);
-
-	p.drawRect(rect);
-
-	// account for line thickness in update rectangle
-	QRect ur(rect);
-
-	ur.setLeft(rect.left() - m_lineThickness);
-	ur.setTop(rect.top() - m_lineThickness);
-	ur.setRight(rect.right() + m_lineThickness);
-	ur.setBottom(rect.bottom() + m_lineThickness);
-
-	if (!toLayer(ur))
-		kdDebug() << "error drawing rectangle" << endl;
-}
-
-void KisPainter::drawRectangle(const QPoint& topLeft, const QPoint& bottomRight)
-{
-	QRect rc(topLeft, bottomRight);
-
-	drawRectangle(rc);
-}
-
-/*
-    draw ellipse with center at (x,y) with given width and height
-*/
-void KisPainter::drawEllipse(int x, int y, int w, int h)
-{
-	QPainter p(&m_painterPixmap);
-
-	// constructs a pen with the given line thickness
-	// color is always black - it is changed by krayon
-	// to the currentImg fgColor when drawn to layer
-	QPen pen(Qt::black, m_lineThickness);
-	p.setPen(pen);
-
-	// constructs a brush with a solid pattern if
-	// we want to fill the ellipse
-	QBrush brush(Qt::black);
-
-	if (m_filledEllipse)
-		p.setBrush(brush);
-
-	p.drawEllipse(x, y, w, h);
-
-	QRect rect(x - w / 2, y - h / 2, w, h);
-	QRect ur(rect);
-
-	// account for line thickness in update rectangle
-	ur.setLeft(rect.left() - m_lineThickness);
-	ur.setTop(rect.top() - m_lineThickness);
-	ur.setRight(rect.right() + m_lineThickness);
-	ur.setBottom(rect.bottom() + m_lineThickness);
-
-	if (!toLayer(QRect(x, y, w, h)))
-		kdDebug() << "error drawing ellipse" << endl;
-}
-
-/*
-    draw ellipse inside given rectangle
-*/
-void KisPainter::drawEllipse(const QRect& rc)
-{
-	drawEllipse(rc.x(), rc.y(), rc.width(), rc.height());
-}
-
-void KisPainter::drawEllipse(const QPoint& topLeft, const QPoint& bottomRight)
-{
-	drawEllipse(QRect(topLeft, bottomRight));
-}
-
-/*
-    draw polygon
-*/
-void KisPainter::drawPolygon(const QPointArray& points, const QRect& rect)
-{
-	QPainter p(&m_painterPixmap);
-	QPen pen(Qt::black, m_lineThickness);
-	QBrush brush(Qt::black);
-
-	p.setPen(pen);
-
-	// constructs a brush with a solid pattern if
-	// we want to fill the ellipse
-	if (m_filledPolygon)
-		p.setBrush(brush);
-
-	p.drawPolygon(points);
-
-	// account for line thickness in update rectangle
-	QRect ur(rect);
-
-	ur.setLeft(rect.left() - m_lineThickness);
-	ur.setTop(rect.top() - m_lineThickness);
-	ur.setRight(rect.right() + m_lineThickness);
-	ur.setBottom(rect.bottom() + m_lineThickness);
-
-	if (!toLayer(ur))
-		kdDebug() << "error drawing polygon" << endl;
-}
-
-bool KisPainter::toLayer(const QRect& paintRect)
-{
-	return false; // BPP
-#if 0
-	KisImageSP img;
-	KisLayer *lay;
-
-	if (!(img = m_doc -> currentImg()))
-		return false;
-
-	if (!(lay = img -> getCurrentLayer()))
-		return false;
-
-	QRect clipRect = paintRect.intersect(lay -> imageExtents());
-	
-	if (clipRect.isNull())
-		return false;
-
-	if (m_painterPixmap.width() < img -> width() || m_painterPixmap.height() < img -> height())
-		m_painterPixmap.resize(img -> width(), img -> height());
-
-	QImage qimg = m_painterPixmap.convertToImage();
-	bool colorBlending = true;
-	bool alpha = img -> colorMode() == cm_RGBA;
-	bool averageAlpha = true;
-	int a = 255;
-	int opacity = m_lineOpacity;
-	int invopacity = 255 - opacity;
-	QRgb fg = qRgb(m_view -> fgColor().R(), m_view -> fgColor().G(), m_view -> fgColor().B());
-
-	if (m_gradientFill)
-		m_doc -> frameBuffer() -> setGradientPaint(true, m_view -> fgColor(), m_view -> bgColor());
-	else if (m_patternFill)
-		m_doc -> frameBuffer() -> setPattern(m_view -> currentPattern());
-
-	for (int y = clipRect.top(); y <= clipRect.bottom(); y++) {
-		for (int x = clipRect.left(); x <= clipRect.right(); x++) {
-			QRgb rgb = lay -> pixel(x, y);
-			int r = qRed(rgb);
-			int g = qGreen(rgb);
-			int b = qBlue(rgb);
-
-			if (alpha) {
-				int v;
-
-				if (averageAlpha)
-					v = (qAlpha(rgb) + opacity) / 2;
-				else
-					v = opacity;
-
-				if (v < 0) 
-					v = 0;
-
-				if (v > 255) 
-					v = 255;
-
-				a = v;
+					d[PIXEL_RED] = s[PIXEL_RED];
+					d[PIXEL_GREEN] = s[PIXEL_GREEN];
+					d[PIXEL_BLUE] = s[PIXEL_BLUE];
+					d[PIXEL_ALPHA] = OPACITY_OPAQUE;
+				}
 			}
-			
-			QRgb *p = (QRgb*)qimg.scanLine(y) + x;
+			break;
+		case COMPOSITE_COPY:
+			memcpy(m_dst -> data + (dy * m_dst -> width + dx) * m_dst -> depth, 
+					src -> data + (sy * src -> width + sx) * src -> depth, 
+					sizeof(QUANTUM) * sw * sh * m_dst -> depth);
+			break;
+	}
+}
 
-			if (QColor(*p) != Qt::black) 
-				continue;
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
+{
+	KisTileMgrSP tm = src -> data();
+	KisPixelDataSP pd;
 
-			/* NOTE: Currently these different painting modes are
-			   mutually exclusive but when the krayon blend settings
-			   are hooked in there will be a variety of blending methods
-			   which can be combined to meet the user's exact specs.
-			   This will be handled by the KisFrameBuffer class */
+	if (sw == -1)
+		sw = tm -> width();
 
-			if (m_gradientFill)
-				m_doc -> frameBuffer() -> setGradientToPixel(lay, x, y);
-			else if (m_patternFill)
-				m_doc -> frameBuffer() -> setPatternToPixel(lay, x, y, 0);
-			else if (colorBlending) {
-				r = (qRed(fg) * opacity + r * invopacity) / 255;
-				g = (qGreen(fg) * opacity + g * invopacity) / 255;
-				b = (qBlue(fg) * opacity + b * invopacity) / 255;
-				rgb = qRgba(r, g, b, a);
-				lay -> setPixel(x, y, rgb);
-			}
-			else
-				lay -> setPixel(x, y, fg);
+	if (sh == -1)
+		sh = tm -> height();
+
+	pd = tm -> pixelData(sx, sy, sx + sw - 1, sy + sh - 1, TILEMODE_RW);
+	bitBlt(dx, dy, op, pd, sx, sy, sw, sh);
+}
+
+void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c)
+{
+	Q_INT32 dx = x + w;
+	Q_INT32 dy = y + h;
+	Q_INT32 x1;
+	Q_INT32 y1;
+	QUANTUM r = upscale(c.R());
+	QUANTUM g = upscale(c.G());
+	QUANTUM b = upscale(c.B());
+	QUANTUM *d = m_dst -> data;
+
+	for (y1 = y; y1 < dy; y1++) {
+		for (x1 = x; x1 < dx; x1++) {
+			d[PIXEL_RED] = r;
+			d[PIXEL_GREEN] = g;
+			d[PIXEL_BLUE] = b;
+			d[PIXEL_ALPHA] = OPACITY_OPAQUE;
+			d += m_dst -> depth;
 		}
 	}
-
-	img -> markDirty(clipRect);
-	clearRectangle(clipRect);
-	return true;
-#endif
 }
 

@@ -29,7 +29,12 @@ KisNameServer::~KisNameServer()
 
 QString KisNameServer::name()
 {
-	return QString("image %1").arg(m_generator++);
+	return m_prefix.arg(m_generator++);
+}
+
+Q_INT32 KisNameServer::currentSeed() const
+{
+	return m_generator;
 }
 
 Q_INT32 KisNameServer::number()

@@ -34,19 +34,28 @@ KisPaintDevice::~KisPaintDevice()
 {
 }
 
-void KisPaintDevice::invalidate(Q_INT32, Q_INT32, Q_INT32, Q_INT32)
+void KisPaintDevice::invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
+	Q_INT32 dx = x + w;
+	Q_INT32 dy = y + h;
+	Q_INT32 x1;
+	Q_INT32 y1;
+
 	m_projectionValid = false;
+
+	for (y1 = y; y1 < dy; y1 += TILE_HEIGHT)
+		for (x1 = x; x1 < dx; x1 += TILE_WIDTH)
+			m_tiles -> invalidate(x1, y1);
 }
 
-void KisPaintDevice::invalidate(const QRect&)
+void KisPaintDevice::invalidate(const QRect& rc)
 {
-	m_projectionValid = false;
+	invalidate(rc.x(), rc.y(), rc.width(), rc.height());
 }
 
 void KisPaintDevice::invalidate()
 {
-	m_projectionValid = false;
+	invalidate(0, 0, width(), height());
 }
 
 QPixmap KisPaintDevice::pixmap()
@@ -123,7 +132,7 @@ void KisPaintDevice::mergeShadow()
 
 	maskBounds(&rc);
 	shadow = m_shadow -> pixelData(rc.left(), rc.top(), rc.right(), rc.bottom(), TILEMODE_READ);
-	m_owner -> apply(this, shadow, OPACITY_OPAQUE, COMPOSITE_COPY, rc.x(), rc.y());
+//	m_owner -> apply(this, shadow, OPACITY_OPAQUE, COMPOSITE_COPY, rc.x(), rc.y());
 }
 
 void KisPaintDevice::fill(const KoColor& )
@@ -224,6 +233,16 @@ Q_INT32 KisPaintDevice::quantumSize() const
 Q_INT32 KisPaintDevice::quantumSizeWithAlpha() const
 {
 	return 0;
+}
+
+Q_INT32 KisPaintDevice::x() const
+{
+	return m_offX;
+}
+
+Q_INT32 KisPaintDevice::y() const
+{
+	return m_offY;
 }
 
 Q_INT32 KisPaintDevice::width() const

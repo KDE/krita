@@ -58,7 +58,6 @@ private:
 
 private:
 	KisImageBuilderPriv *m_members;
-	KisNameServer *m_nserver;
 };
 
 #endif // KIS_IMAGE_BUILDER_H_

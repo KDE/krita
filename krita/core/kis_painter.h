@@ -1,6 +1,4 @@
 /*
- *  kis_painter.h - part of KImageShop
- *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
@@ -18,119 +16,44 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#if !defined KIS_PAINTER_H_
+#define KIS_PAINTER_H_
 
-#ifndef __kis_painter_h__
-#define __kis_painter_h__
+#include "kis_global.h"
+#include "kis_types.h"
 
-#include <qobject.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qrect.h>
-
-class KisDoc;
-class KisView;
+class QRect;
 
 class KisPainter {
 public:
-	KisPainter(KisDoc *doc, KisView *view);
-	virtual ~KisPainter();
+	KisPainter();
+	KisPainter(KisTileSP tile);
+	KisPainter(KisPixelDataSP pd);
+	KisPainter(KisPaintDeviceSP device);
+	KisPainter(KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	KisPainter(KisPaintDeviceSP device, const QRect& rc);
+	~KisPainter();
 
-	void resize(int width, int height);
-	void clearAll();
+public:
+	void begin(KisTileSP tile);
+	void begin(KisPixelDataSP pd);
+	void begin(KisPaintDeviceSP device);
+	void begin(KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	void begin(KisPaintDeviceSP device, const QRect& rc);
+	void end();
+	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
+	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
+	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 
-	void clearRectangle(int x, int y, int w, int h);
-	void clearRectangle(const QRect& rc);
-	void clearRectangle(const QPoint& topLeft, const QPoint& bottomRight);
-
-	void drawLine(int x1, int y1, int x2, int y2);
-	void drawLine(const QRect& rc);
-	void drawLine(const QPoint& topLeft, const QPoint& bottomRight);
-
-	void drawRectangle(int x, int y, int w, int h);
-	void drawRectangle(const QRect& rc);    
-	void drawRectangle(const QPoint& topLeft, const QPoint& bottomRight);
-
-	void drawEllipse(int x, int y, int w, int h);
-	void drawEllipse(const QRect& rc);
-	void drawEllipse(const QPoint& topLeft, const QPoint& bottomRight);
-
-	void drawPolygon(const QPointArray& points, const QRect& rect);
-
-	inline void setLineThickness(int t);
-	inline void setLineOpacity(int o);
-	inline void setFilledEllipse(bool f);
-	inline void setFilledRectangle(bool f);
-	inline void setFilledPolygon(bool f);
-	inline void setGradientFill(bool g);
-	inline void setGradientLine(bool g);
-	inline void setPatternFill(bool p);
-	inline void setPatternLine(bool p);
-
-protected:
-	bool toLayer(const QRect& paintRect);
+	void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c);
 
 private:
-	QPixmap m_painterPixmap;
+	KisPainter(const KisPainter&);
+	KisPainter& operator=(const KisPainter&);
 
-	KisDoc *m_doc;
-	KisView *m_view;
-
-	int  m_lineThickness;
-	int  m_lineOpacity;
-	bool m_filledEllipse;
-	bool m_filledRectangle;
-	bool m_filledPolygon;
-	bool m_gradientFill;
-	bool m_gradientLine;
-	bool m_patternFill;
-	bool m_patternLine;
+private:
+	KisPixelDataSP m_dst;
 };
 
-void KisPainter::setLineThickness(int t)
-{ 
-	m_lineThickness = t;
-}
-
-void KisPainter::setLineOpacity(int o)
-{ 
-	m_lineOpacity = o;
-}
-
-void KisPainter::setFilledEllipse(bool f)   
-{ 
-	m_filledEllipse = f;
-}
-
-void KisPainter::setFilledRectangle(bool f) 
-{ 
-	m_filledRectangle = f;
-}
-
-void KisPainter::setFilledPolygon(bool f)   
-{ 
-	m_filledPolygon = f;
-}
-
-void KisPainter::setGradientFill(bool g)    
-{ 
-	m_gradientFill = g;
-}
-
-void KisPainter::setGradientLine(bool g)    
-{ 
-	m_gradientLine = g;
-}
-
-void KisPainter::setPatternFill(bool p)     
-{ 
-	m_patternFill = p;
-}
-
-void KisPainter::setPatternLine(bool p)     
-{ 
-	m_patternLine = p;
-}
-
-#endif
+#endif // KIS_PAINTER_H_-
 

@@ -56,6 +56,7 @@ public:
 
 	bool completetlyValid() const;
 	void validate(KisTileSP tile);
+	KisTileSP invalidate(Q_INT32 xpix, Q_INT32 ypix);
 	KisTileSP invalidate(KisTileSP tile, Q_INT32 xpix, Q_INT32 ypix);
 	void invalidateTiles(KisTileSP tile);
 

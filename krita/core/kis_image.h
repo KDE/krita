@@ -31,6 +31,7 @@
 
 class KCommandHistory;
 class KisDoc;
+class KisNameServer;
 
 class KisImage : public QObject, public KisRenderInterface {
 	Q_OBJECT
@@ -50,6 +51,7 @@ public:
 public:
 	QString name() const;
 	void setName(const QString& name);
+	QString nextLayerName() const;
 	QString author() const;
 	void setAuthor(const QString& author);
 	QString email() const;
@@ -92,8 +94,6 @@ public:
 	bool visibleComponent(CHANNELTYPE pixel);
 
 	void flush();
-	void apply(KisPaintDeviceSP device, KisPixelDataSP src2, QUANTUM opacity, enumComposite mode, Q_INT32 x, Q_INT32 y);
-	void replace(KisPixelDataSP device, KisPixelDataSP src2, QUANTUM opacity, KisPixelDataSP mask, Q_INT32 x, Q_INT32 y);
 
 	vKisLayerSP layers() const;
 	vKisChannelSP channels() const;
@@ -102,6 +102,7 @@ public:
 
 	KisLayerSP activeLayer();
 	KisLayerSP activate(KisLayerSP layer);
+	KisLayerSP activateLayer(Q_INT32 n);
 	Q_INT32 index(KisLayerSP layer);
 	KisLayerSP layer(const QString& name);
 	bool add(KisLayerSP layer, Q_INT32 position);
@@ -114,6 +115,7 @@ public:
 
 	KisChannelSP activeChannel();
 	KisChannelSP activate(KisChannelSP channel);
+	KisChannelSP activateChannel(Q_INT32 n);
 	KisChannelSP unsetActiveChannel();
 	Q_INT32 index(KisChannelSP channel);
 	KisChannelSP channel(const QString& name);
@@ -139,7 +141,7 @@ private:
 	KisImage& operator=(const KisImage& rhs);
 	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name);
 	PIXELTYPE pixelFromChannel(CHANNELTYPE type);
-	void renderTile(KisTileSP dst, Q_INT32 x, Q_INT32 y);
+	void renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y);
 	void expand(KisPaintDeviceSP dev);
 
 private:
@@ -177,6 +179,8 @@ private:
 	bool m_maskEnabled;
 	bool m_maskInverted;
 	KoColor m_maskClr;
+	KisNameServer *m_nserver;
+	KisTileSP m_bgTile;
 };
 
 #endif // KIS_IMAGE_H_

@@ -28,6 +28,7 @@
 KisGradientWidget::KisGradientWidget( QWidget* parent, const char* name )
     : QFrame( parent, name )
 {
+	m_pGradient = 0;
     setBackgroundColor( white );
     setFrameStyle( Panel | Sunken );
 }

@@ -51,6 +51,7 @@
 #include "kis_layer.h"
 #include "kis_mask.h"
 #include "kis_nameserver.h"
+#include "kis_painter.h"
 #include "kis_selection.h"
 #include "kis_view.h"
 
@@ -183,11 +184,10 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_undo = false;
 	m_dcop = 0;
 	setInstance(KisFactory::global(), true);
-	m_cmdHistory = new KCommandHistory(actionCollection(), false);
+	m_cmdHistory = 0;
 	m_clip = 0;
 	QPixmap::setDefaultOptimization(QPixmap::BestOptim);
-	m_nserver = new KisNameServer(i18n("Image %1"), 0);
-
+	m_nserver = 0;
 
 #if 0
 //	m_selection = new KisSelection(this);
@@ -236,19 +236,19 @@ QDomDocument KisDoc::saveXML()
 	return doc;
 }
 
-
-
 bool KisDoc::initDoc()
 {
 	bool ok = false;
-	QString name = i18n("image %1").arg(m_images.size() + 1);
 	QString templ;
 	KoTemplateChooseDia::ReturnType ret;
 
+	m_cmdHistory = new KCommandHistory(actionCollection(), false);
+	m_nserver = new KisNameServer(i18n("Image %1"), 0);
 	ret = KoTemplateChooseDia::choose(KisFactory::global(), templ, "application/x-krita", "*.kra",
 			i18n("Krita"), KoTemplateChooseDia::NoTemplates, "krita_template");
 
 	if (ret == KoTemplateChooseDia::Template) {
+		QString name = nextImageName();
 		KisImageSP img = new KisImage(this, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, IMG_DEFAULT_DEPTH, 0, IMAGE_TYPE_RGBA, name);
 		KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_DEPTH, i18n("background"), 0);
 
@@ -1084,6 +1084,10 @@ bool KisDoc::slotNewImage()
 	img -> invalidate();
 	addImage(img);
 	emit layersUpdated();
+
+	KisPainter gc(layer.data());
+
+	gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::white());
 	return true;
 }
 

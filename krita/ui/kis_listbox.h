@@ -35,7 +35,7 @@ class QWidget;
 class KIconLoader;
 class KPopupMenu;
 
-class KisListBoxView : public QFrame {
+class KisListBox : public QFrame {
 	typedef QFrame super;
 	Q_OBJECT
 
@@ -43,8 +43,8 @@ public:
 	enum action {VISIBLE, SELECTION, LINKING, PROPERTIES, ADD, REMOVE, ADDMASK, REMOVEMASK, RAISE, LOWER, FRONT, BACK, LEVEL};
 	enum flags {SHOWVISIBLE = 1, SHOWLINKED = (1 << 1), SHOWPREVIEW = (1 << 2), SHOWMASK = (1 << 3), SHOWALL = (SHOWMASK|SHOWPREVIEW|SHOWLINKED|SHOWVISIBLE)};
 
-	KisListBoxView(const QString& label, flags f = SHOWALL, QWidget *parent = 0, const char *name = 0);
-	virtual ~KisListBoxView();
+	KisListBox(const QString& label, flags f = SHOWALL, QWidget *parent = 0, const char *name = 0);
+	virtual ~KisListBox();
 
 	void insertItem(const QString& name, bool visible = true, bool linked = false);
 	void setCurrentItem(int n);
@@ -59,13 +59,13 @@ signals:
 	void itemToggleLinked(int n);
 	void itemProperties(int n);
 	void itemAdd();
-	void itemRemove(int n);
+	void itemRemove();
 	void itemAddMask(int n);
 	void itemRmMask(int n);
-	void itemRaise(int n);
-	void itemLower(int n);
-	void itemFront(int n);
-	void itemBack(int n);
+	void itemRaise();
+	void itemLower();
+	void itemFront();
+	void itemBack();
 	void itemLevel(int n);
 
 private slots:
@@ -93,7 +93,7 @@ class KisListBoxItem : public QListBoxItem {
 	typedef QListBoxItem super;
 
 public:
-	KisListBoxItem(const QString& label, QListBox *parent, KisListBoxView::flags f = KisListBoxView::SHOWALL);
+	KisListBoxItem(const QString& label, QListBox *parent, KisListBox::flags f = KisListBox::SHOWALL);
 	virtual ~KisListBoxItem();
 
 	virtual int height(const QListBox *lb) const;
@@ -112,7 +112,7 @@ public:
 	bool intersectPreviewRect(const QPoint& pos, int yOffset) const;
 
 private:
-	void init(const QString& label, QListBox *parent, KisListBoxView::flags f);
+	void init(const QString& label, QListBox *parent, KisListBox::flags f);
 	QPixmap loadPixmap(const QString& filename, const KIconLoader& il);
 	bool intersectRect(const QRect& rc, const QPoint& pos, int yOffset) const;
 
@@ -130,7 +130,7 @@ private:
 	QWidget *m_parent;
 	bool m_visible;
 	bool m_linked;
-	KisListBoxView::flags m_flags;
+	KisListBox::flags m_flags;
 };
 
 bool KisListBoxItem::visible()

@@ -27,6 +27,7 @@
 KisLayer::KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity)
 	: super(img, width, height, img -> imgType(), name)
 {
+	m_linked = false;
 }
 
 KisLayer::KisLayer(KisTileMgr tiles, KisImageSP img, const QString& name, QUANTUM opacity)
@@ -120,4 +121,13 @@ void KisLayer::opacity(QUANTUM val)
 {
 }
 
+bool KisLayer::linked() const
+{
+	return m_linked;
+}
+
+void KisLayer::linked(bool l)
+{
+	m_linked = l;
+}
 

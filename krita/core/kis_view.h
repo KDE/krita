@@ -30,27 +30,22 @@ class QButton;
 class QPaintEvent;
 class QScrollBar;
 class QWidget;
-
 class DCOPObject;
 class KPrinter;
 class KRuler;
 class KToggleAction;
-
+class KoIconItem;
+class KisBrush;
 class KisCanvas;
+class KisChannelView;
+class KisCrayon;
 class KisDoc;
 class KisGradient;
-class KisGridViewFrame;
-class KisPainter;
-class KisSideBar;
-class KisBrushChooser;
-class KisPatternChooser;
-class KisKrayonChooser;
-class KisKrayon;
-class KisBrush;
+class KisItemChooser;
+class KisListBox;
 class KisPattern;
+class KisSideBar;
 class KisTabBar;
-class KisChannelView;
-class KisListBoxView;
 
 class KisView : public KoView {
 	Q_OBJECT
@@ -88,24 +83,12 @@ public:
 //	void setActiveTool(KisTool *tool);
 //	KisTool* getActiveTool();
 
-
-
-
-	KisPainter  *kisPainter();
 	KisPattern  *currentPattern();
 	KisBrush    *currentBrush();
 
 //	void activateTool(KisTool*);
 	void layerScale(bool smooth);
-        
-//	Q_INT32 xScrollOffset();
-//	Q_INT32 yScrollOffset();
-
-
 	void save_layer_image(bool mergeLayers);
-
-
-
 	void setCanvasCursor(const QCursor& cursor);
 
 signals:
@@ -113,34 +96,6 @@ signals:
 	void fgColorChanged(const KoColor& c);     
 
 public slots:
-	void slotRefreshPainter();
-	void slotSetBGColor(const KoColor& c);
-	void slotSetFGColor(const KoColor& c);
-	void slotUpdateImage();
-	void zoomIn();
-	void zoomOut();
-
-	void slotDocUpdated();
-	void slotDocUpdated(const QRect&);
-
-	void slotSetKrayon(KisKrayon *);
-	void slotSetBrush(KisBrush *);
-	void slotSetPattern(KisPattern *);
-
-	void slotTabSelected(const QString& name);
-
-	void slotHalt(); // for the faint of heart
-     
-	// edit action slots
-	void copy();
-	void cut();
-	void removeSelection();
-	void paste();
-	void crop();
-	void selectAll();
-	void unSelectAll();
-
-	// dialog action slots
 	void dialog_gradient();
 	void dialog_colors();
 	void dialog_crayons();
@@ -148,18 +103,23 @@ public slots:
 	void dialog_patterns();
 	void dialog_layers();
 	void dialog_channels();
-
-	// layer action slots
-	void insert_layer();
+	void slotDocUpdated();
+	void slotDocUpdated(const QRect&);
+	void slotHalt(); // for the faint of heart
+	void slotRefreshPainter();
+	void slotSetBGColor(const KoColor& c);
+	void slotSetFGColor(const KoColor& c);
+	void slotUpdateImage();
+	void zoomIn();
+	void zoomOut();
+     
 	void remove_layer();
 	void link_layer();
 	void hide_layer();
 	void next_layer();
 	void previous_layer();
-
 	void layer_properties(); 
 
-	void slotInsertImageAsLayer();
 	void save_layer_as_image();
 	void slotEmbeddImage(const QString& filename);
 
@@ -185,12 +145,6 @@ public slots:
 	void tool_properties();
 
 	// settings action slots
-	void showMenubar();
-	void showToolbar();
-	void showStatusbar();
-	void floatSidebar();
-	void showSidebar();
-	void leftSidebar();
 	void saveOptions();
 	void preferences();
 
@@ -213,6 +167,13 @@ private:
 	void zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf);
 
 private slots:
+	void copy();
+	void cut();
+	void removeSelection();
+	void paste();
+	void crop();
+	void selectAll();
+	void unSelectAll();
 	void canvasGotMousePressEvent(QMouseEvent *e);
 	void canvasGotMouseMoveEvent(QMouseEvent *e);
 	void canvasGotMouseReleaseEvent(QMouseEvent *e);
@@ -221,25 +182,35 @@ private slots:
 	void canvasGotLeaveEvent(QEvent *e);
 	void canvasGotMouseWheelEvent(QWheelEvent *e);
 	void docImageListUpdate();
+	void floatSidebar();
 	void layerToggleVisible(int n);
 	void layerSelected(int n);
 	void layerToggleLinked(int n);
 	void layerProperties(int n);
 	void layerAdd();
-	void layerRemove(int n);
+	void layerRemove();
 	void layerAddMask(int n);
 	void layerRmMask(int n);
-	void layerRaise(int n);
-	void layerLower(int n);
-	void layerFront(int n);
-	void layerBack(int n);
+	void layerRaise();
+	void layerLower();
+	void layerFront();
+	void layerBack();
 	void layerLevel(int n);
 	void layersUpdated();
+	void placeSidebarLeft();
 	void selectImage(const QString&);
+	void setActiveBrush(KoIconItem *brush);
+	void setActiveCrayon(KoIconItem *);
+	void setActivePattern(KoIconItem *pattern);
 	void setPaintOffset();
 	void scrollH(int value);
 	void scrollTo(Q_INT32 x, Q_INT32 y);
 	void scrollV(int value);
+	void showMenubar();
+	void showSidebar();
+	void showStatusbar();
+	void showToolbar();
+	void slotInsertImageAsLayer();
 
 private:
 	KisDoc *m_doc;
@@ -249,7 +220,6 @@ private:
 	QButton *m_tabLeft; 
 	QButton *m_tabRight; 
 	QButton *m_tabLast;
-	KisSideBar *m_sideBar;
 	KRuler *m_hRuler;
 	KRuler *m_vRuler;
 	KAction *m_zoomIn;
@@ -270,35 +240,22 @@ private:
 	Q_INT32 m_yoff;    
 	KoColor m_fg;
 	KoColor m_bg;
+	KisSideBar *m_sideBar;
+	KisItemChooser *m_brushChooser;
+	KisItemChooser *m_crayonChooser;    
+	KisItemChooser *m_patternChooser;
+	QWidget *m_paletteChooser;    
+	QWidget *m_gradientChooser;
+	QWidget *m_imageChooser;
+	KisBrush *m_brush;
+	KisCrayon *m_crayon;
+	KisPattern *m_pattern;
+	KisGradient *m_gradient;
+	KisListBox *m_layerBox;
+	KisChannelView *m_channelView;
 
 private:
 	mutable KisImageSP m_current;
-#if 0
-	// krayon box (sidebar)
-	KisDoc *m_doc;  // always needed
-	KisToolSP m_pTool; // current active tool
-	KisToolSP m_paste; // The special paste tool
-
-	// krayon objects - all can be krayons
-	KisKrayon     *m_pKrayon;   // current krayon for this view   
-	KisBrush      *m_pBrush;    // current brush for this view
-	KisPattern    *m_pPattern;  // current pattern for this view 
-	KisGradient   *m_pGradient; // current gradient   
-
-	// sidebar dock widgets
-	KisKrayonChooser     *m_pKrayonChooser;    
-	KisBrushChooser      *m_pBrushChooser;
-	KisPatternChooser    *m_pPatternChooser;
-	QWidget              *m_pPaletteChooser;    
-	QWidget              *m_pGradientChooser;
-	QWidget              *m_pImageChooser;
-	KisChannelView	 *m_pChannelView;
-
-	// krayon and kde objects
-	KisPainter          *m_pPainter;
-	KisListBoxView *m_layerView;
-#endif
-
 };
 
 #endif // KIS_VIEW_H_

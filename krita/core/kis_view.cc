@@ -40,73 +40,26 @@
 
 // KOffice
 #include <koColor.h>
+#include <koView.h>
 
 // Local
 #include "kis_doc.h"
 #include "kis_canvas.h"
+#include "kis_channelview.h"
+#include "kis_dlg_new_layer.h"
 #include "kis_dlg_paintoffset.h"
 #include "kis_image_builder.h"
+#include "kis_itemchooser.h"
 #include "kis_factory.h"
 #include "kis_layer.h"
+#include "kis_listbox.h"
 #include "kis_paint_device.h"
+#include "kis_dlg_paint_properties.h"
+#include "kis_resourceserver.h"
 #include "kis_sidebar.h"
 #include "kis_tabbar.h"
 #include "kis_view.h"
 #include "kis_util.h"
-
-#if 0
-// Qt
-#include <qclipboard.h>
-#include <qlistbox.h>
-#include <qsize.h>
-#include <qstringlist.h>
-#include <qvaluelist.h>
-
-// KDE
-#include <kaboutdata.h>
-#include <kapplication.h>
-#include <kdebug.h>
-#include <khelpmenu.h>
-#include <klistview.h>
-#include <kmimetype.h>
-#include <kprinter.h>
-
-// KOffice
-#include <koColor.h>
-#include <koView.h>
-
-// core classes
-#include "kis_brush.h"
-#include "kis_framebuffer.h"
-#include "kis_gradient.h"
-#include "kis_krayon.h"
-#include "kis_painter.h"
-#include "kis_pattern.h"
-#include "kis_pluginserver.h"
-#include "kis_magick.h"
-#include "kis_selection.h"
-#include "kis_tool.h"
-#include "KRayonViewIface.h"
-
-// ui
-#include "kis_brushchooser.h"
-#include "kis_patternchooser.h"
-#include "kis_krayonchooser.h"
-#include "kis_layerview.h"
-#include "kis_channelview.h"
-#include "kis_listbox.h"
-#include "kis_dlg_paint_properties.h"
-
-// dialogs
-#include "kis_dlg_gradient.h"
-#include "kis_dlg_preferences.h"
-#include "kis_dlg_new.h"
-#include "kis_dlg_new_layer.h"
-
-// tools
-#include "kis_tool_factory.h"
-#include "kis_tool_paste.h"
-#endif
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
@@ -120,7 +73,6 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 
 	m_doc = doc;
 	m_canvas = 0;
-	m_sideBar = 0;
 	m_tabBar = 0;
 	m_tabFirst = 0;
 	m_tabLeft = 0;
@@ -146,35 +98,39 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_yoff = 0;
 	m_fg = KoColor::black();
 	m_bg = KoColor::white();
+	m_sideBar = 0;
+	m_brushChooser = 0;
+	m_crayonChooser = 0;
+	m_patternChooser = 0;
+	m_paletteChooser = 0;
+	m_gradientChooser = 0;
+	m_imageChooser = 0;
+	m_brush = 0;
+	m_crayon = 0;
+	m_pattern = 0;
+	m_gradient = 0;
+	m_layerBox = 0;
 	setInstance(KisFactory::global());
-	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 
 #if 0
 	m_pTool = 0;
-	dcopObject();
 
 	QObject::connect(m_doc, SIGNAL(docUpdated()), this, SLOT(slotDocUpdated()));
 	QObject::connect(m_doc, SIGNAL(docUpdated(const QRect&)), this, SLOT(slotDocUpdated(const QRect&)));
 	QObject::connect(this, SIGNAL(embeddImage(const QString&)), this, SLOT(slotEmbeddImage(const QString&)));
 	connect(m_doc, SIGNAL(layersUpdated()), SLOT(layersUpdated()));
-
-
-
-	m_pTool     = 0;
-	m_pBrush    = 0;
-	m_pPattern  = 0;
-	m_pGradient = 0;
-	m_pPatternChooser = 0;
-
-	slotSetBrush(m_pBrush);
-	slotSetPattern(m_pPattern);
+	setActiveBrush(m_pBrush);
+	setActivePattern(m_pPattern);
 #endif
+
 	setupActions();
 	setupCanvas();
 	setupRulers();
 	setupScrollBars();
 	setupSideBar();
 	setupTabBar();
+	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
+	dcopObject();
 }
 
 KisView::~KisView()
@@ -193,119 +149,75 @@ DCOPObject* KisView::dcopObject()
 	return 0;
 }
 
-/*
-    SideBar - has tabs for brushes, layers, channels, etc.
-    Nonstandard, but who sets the standards?  Unrelieved
-    uniformity is the mark of small minds.  Note:  Some of these
-    sidebar widgets are unfinished and just have placeholders
-    so far.  Note that the sidebar itself, and each widget in it,
-    can be detached or floated if the user wants them to be
-    separate windows.
-*/
-
 void KisView::setupSideBar()
 {
-#if 0
 	m_sideBar = new KisSideBar(this, "kis_sidebar");
-	// krayon chooser
-	m_pKrayonChooser = new KisKrayonChooser(this);
-	m_pKrayon = m_pKrayonChooser -> currentKrayon();
 
-	QObject::connect(m_pKrayonChooser, SIGNAL(selected(KisKrayon *)), this, SLOT(slotSetKrayon(KisKrayon*)));
+	m_crayonChooser = new KisItemChooser(KisFactory::rServer() -> brushes(), m_sideBar -> dockFrame(), "crayon_chooser");
+	m_crayonChooser -> addItem(KisFactory::rServer() -> patterns());
+//	m_pKrayon = m_crayonChooser -> currentKrayon();
+	QObject::connect(m_crayonChooser, SIGNAL(selected(KoIconItem*)), this, SLOT(setActiveCrayon(KoIconItem*)));
+	m_crayonChooser -> setCaption(i18n("Crayons"));
+	m_sideBar -> plug(m_crayonChooser);
 
-	m_pKrayonChooser -> setCaption(i18n("Krayons"));
-	m_sideBar -> plug(m_pKrayonChooser);
+	m_brushChooser = new KisItemChooser(KisFactory::rServer() -> brushes(), m_sideBar -> dockFrame(), "brush_chooser");
+	m_brush = dynamic_cast<KisBrush*>(m_brushChooser -> currentItem());
+	QObject::connect(m_brushChooser, SIGNAL(selected(KoIconItem*)), this, SLOT(setActiveBrush(KoIconItem*)));
+	m_brushChooser -> setCaption(i18n("Brushes"));
+	m_sideBar -> plug(m_brushChooser);
 
-	// brush chooser
-	m_pBrushChooser = new KisBrushChooser(m_sideBar -> dockFrame());
-	m_pBrush = m_pBrushChooser -> currentBrush();
-	QObject::connect(m_pBrushChooser, SIGNAL(selected(KisBrush *)), this, SLOT(slotSetBrush(KisBrush*)));
-	m_pBrushChooser -> setCaption(i18n("Brushes"));
-	m_sideBar -> plug(m_pBrushChooser);
+	m_patternChooser = new KisItemChooser(KisFactory::rServer() -> patterns(), m_sideBar -> dockFrame(), "pattern_chooser");
+//	m_pPattern = m_patternChooser -> currentPattern();
+	QObject::connect(m_patternChooser, SIGNAL(selected(KoIconItem*)), this, SLOT(setActivePattern(KoIconItem*)));
+	m_patternChooser -> setCaption(i18n("Patterns"));
+	m_sideBar -> plug(m_patternChooser);
 
-	// pattern chooser
-	m_pPatternChooser = new KisPatternChooser(this);
-	m_pPattern = m_pPatternChooser -> currentPattern();
-	QObject::connect(m_pPatternChooser, SIGNAL(selected(KisPattern *)), this, SLOT(slotSetPattern(KisPattern*)));
-	m_pPatternChooser -> setCaption(i18n("Patterns"));
-	m_sideBar -> plug(m_pPatternChooser);
+	m_gradientChooser = new QWidget(this);
+//	m_gradient = new KisGradient;
+	m_gradientChooser -> setCaption(i18n("Gradients"));
+	m_sideBar -> plug(m_gradientChooser);
 
-	// gradient chooser
-	m_pGradientChooser = new QWidget(this);
-	m_pGradient = new KisGradient;
+	m_imageChooser = new QWidget(this);
+	m_imageChooser -> setCaption(i18n("Images"));
+	m_sideBar -> plug(m_imageChooser);
 
-	/*
-	   m_pGradient = m_pGradientChooser->currentGradient();
-	   QObject::connect(m_pGradientChooser,
-	   SIGNAL(selected(KisGradient *)),
-	   this, SLOT(slotSetGradient(KisGradient*)));
-	 */
-	m_pGradientChooser -> setCaption(i18n("Gradients"));
-	m_sideBar -> plug(m_pGradientChooser);
+	m_paletteChooser = new QWidget(this);
+	m_paletteChooser -> setCaption(i18n("Palettes"));
+	m_sideBar -> plug(m_paletteChooser);
 
-	// image file chooser
-	m_pImageChooser = new QWidget(this);
-	/*
-	   m_pImage = m_pImageFileChooser->currentImageFile();
-	   QObject::connect(m_pImageFileChooser,
-	   SIGNAL(selected(KisImageFile *)),
-	   this, SLOT(slotSetImageFile(KisImageFile*)));
-	 */
-	m_pImageChooser -> setCaption(i18n("Images"));
-	m_sideBar -> plug(m_pImageChooser);
+	m_layerBox = new KisListBox(i18n("layer"), KisListBox::SHOWALL, m_sideBar);
+	m_layerBox -> setCaption(i18n("Layers"));
 
-	// palette chooser
-	m_pPaletteChooser = new QWidget(this);
-	/*
-	   m_pPalette = m_pPaletteChooser->currentPattern();
-	   QObject::connect(m_pPaletteChooser,
-	   SIGNAL(selected(KisPalette *)),
-	   this, SLOT(slotSetPalette(KisPalette *)));
-	 */
-	m_pPaletteChooser -> setCaption(i18n("Palettes"));
-	m_sideBar -> plug(m_pPaletteChooser);
+	connect(m_layerBox, SIGNAL(itemToggleVisible(int)), SLOT(layerToggleVisible(int)));
+	connect(m_layerBox, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
+	connect(m_layerBox, SIGNAL(itemToggleLinked(int)), SLOT(layerToggleLinked(int)));
+	connect(m_layerBox, SIGNAL(itemProperties(int)), SLOT(layerProperties(int)));
+	connect(m_layerBox, SIGNAL(itemAdd()), SLOT(layerAdd()));
+	connect(m_layerBox, SIGNAL(itemRemove()), SLOT(layerRemove()));
+	connect(m_layerBox, SIGNAL(itemAddMask(int)), SLOT(layerAddMask(int)));
+	connect(m_layerBox, SIGNAL(itemRmMask(int)), SLOT(layerRmMask(int)));
+	connect(m_layerBox, SIGNAL(itemRaise()), SLOT(layerRaise()));
+	connect(m_layerBox, SIGNAL(itemLower()), SLOT(layerLower()));
+	connect(m_layerBox, SIGNAL(itemFront()), SLOT(layerFront()));
+	connect(m_layerBox, SIGNAL(itemBack()), SLOT(layerBack()));
+	connect(m_layerBox, SIGNAL(itemLevel(int)), SLOT(layerLevel(int)));
 
-	m_layerView = new KisListBoxView("Layer", KisListBoxView::SHOWALL, m_sideBar);
-	m_layerView -> setCaption(i18n("Layers"));
-
-	connect(m_layerView, SIGNAL(itemToggleVisible(int)), SLOT(layerToggleVisible(int)));
-	connect(m_layerView, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
-	connect(m_layerView, SIGNAL(itemToggleLinked(int)), SLOT(layerToggleLinked(int)));
-	connect(m_layerView, SIGNAL(itemProperties(int)), SLOT(layerProperties(int)));
-	connect(m_layerView, SIGNAL(itemAdd()), SLOT(layerAdd()));
-	connect(m_layerView, SIGNAL(itemRemove(int)), SLOT(layerRemove(int)));
-	connect(m_layerView, SIGNAL(itemAddMask(int)), SLOT(layerAddMask(int)));
-	connect(m_layerView, SIGNAL(itemRmMask(int)), SLOT(layerRmMask(int)));
-	connect(m_layerView, SIGNAL(itemRaise(int)), SLOT(layerRaise(int)));
-	connect(m_layerView, SIGNAL(itemLower(int)), SLOT(layerLower(int)));
-	connect(m_layerView, SIGNAL(itemFront(int)), SLOT(layerFront(int)));
-	connect(m_layerView, SIGNAL(itemBack(int)), SLOT(layerBack(int)));
-	connect(m_layerView, SIGNAL(itemLevel(int)), SLOT(layerLevel(int)));
-
-	m_sideBar -> plug(m_layerView);
+	m_sideBar -> plug(m_layerBox);
 	layersUpdated();
 
-	// channel view
-	m_pChannelView = new KisChannelView(m_doc, this);
-	m_pChannelView -> setCaption(i18n("Channels"));
-	m_sideBar -> plug(m_pChannelView);
+	m_channelView = new KisChannelView(m_doc, this);
+	m_channelView -> setCaption(i18n("Channels"));
+	m_sideBar -> plug(m_channelView);
 
-	// activate brushes tab
 	m_sideBar -> slotActivateTab(i18n("Brushes"));
-
-	// init sidebar
-	m_sideBar -> slotSetBrush(*m_pBrush);
+//	m_sideBar -> setActiveBrush(*m_pBrush);
 	m_sideBar -> slotSetFGColor(m_fg);
 	m_sideBar -> slotSetBGColor(m_bg);
-
 	connect(m_sideBar, SIGNAL(fgColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
 	connect(m_sideBar, SIGNAL(bgColorChanged(const KoColor&)), this, SLOT(slotSetBGColor(const KoColor&)));
-
 	connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_sideBar, SLOT(slotSetFGColor(const KoColor&)));
 	connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_sideBar, SLOT(slotSetBGColor(const KoColor&)));
-
-	m_side_bar -> setChecked(true);
-#endif
+	m_sidebarToggle -> setChecked(true);
 }
 
 void KisView::setupScrollBars()
@@ -419,14 +331,14 @@ void KisView::setupActions()
 	(void)new KAction(i18n("Paint Offset..."), "paint_offet", this, SLOT(setPaintOffset()), actionCollection(), "paint_offset");
 	m_sidebarToggle = new KToggleAction(i18n("Show/Hide Sidebar"), "ok", 0, this, SLOT(showSidebar()), actionCollection(), "show_sidebar");
 	m_floatsidebarToggle = new KToggleAction(i18n("Dock/Undock Sidebar"), "attach", 0, this, SLOT(floatSidebar()), actionCollection(), "float_sidebar");
-	m_lsidebarToggle = new KToggleAction(i18n("Left/Right Sidebar"), "view_right", 0, this, SLOT(leftSidebar()), actionCollection(), "left_sidebar");
+	m_lsidebarToggle = new KToggleAction(i18n("Left/Right Sidebar"), "view_right", 0, this, SLOT(placeSidebarLeft()), actionCollection(), "left_sidebar");
 	(void)KStdAction::saveOptions(this, SLOT(saveOptions()), actionCollection(), "save_options");
-	(void)new KAction(i18n("Krayon Preferences..."), "edit", 0, this, SLOT(preferences()), actionCollection(), "preferences");
+	(void)new KAction(i18n("Krita Preferences..."), "edit", 0, this, SLOT(preferences()), actionCollection(), "preferences");
 
-	// krayon box toolbar actions - these will be used only
-	// to dock and undock wideget in the krayon box
+	// crayon box toolbar actions - these will be used only
+	// to dock and undock wideget in the crayon box
 	m_dlgColorsToggle = new KToggleAction(i18n("&Colors"), "color_dialog", 0, this, SLOT(dialog_colors()), actionCollection(), "colors_dialog");
-	m_dlgCrayonToggle = new KToggleAction(i18n("&Krayons"), "krayon_box", 0, this, SLOT(dialog_crayons()), actionCollection(), "krayons_dialog");
+	m_dlgCrayonToggle = new KToggleAction(i18n("C&rayons"), "krayon_box", 0, this, SLOT(dialog_crayons()), actionCollection(), "crayons_dialog");
 	m_dlgBrushToggle = new KToggleAction(i18n("Brushes"), "brush_dialog", 0, this, SLOT(dialog_brushes()), actionCollection(), "brushes_dialog");
 	m_dlgPatternToggle = new KToggleAction(i18n("Patterns"), "pattern_dialog", 0, this, SLOT(dialog_patterns()), actionCollection(), "patterns_dialog");
 	m_dlgLayersToggle = new KToggleAction(i18n("Layers"), "layer_dialog", 0, this, SLOT(dialog_layers()), actionCollection(), "layers_dialog");
@@ -440,7 +352,7 @@ void KisView::setupActions()
 
 /*
     slotHalt - try to restore reasonable defaults for a user
-    who may have pushed krayon beyond its limits or the
+    who may have pushed krita beyond its limits or the
     limits of his/her hardware and system memory!  This can happen
     when someone sets a ridiculously high zoom factor which
     requires a supercomputer for all the floating point
@@ -456,20 +368,6 @@ void KisView::slotHalt()
     zoom(0, 0, 1.0);
     slotUpdateImage();
     slotRefreshPainter();
-#endif
-}
-
-/*
-    slotTabSelected - these refer to the tabs for images. Currently
-    this is the only way to change the currentImg image.  There should
-    be other ways, also.
-*/
-
-void KisView::slotTabSelected(const QString& )
-{
-#if 0
-	m_doc->setCurrentImage(name);
-	slotRefreshPainter();
 #endif
 }
 
@@ -511,7 +409,7 @@ void KisView::resizeEvent(QResizeEvent *)
 	Q_INT32 docH;
 
 	if (m_sideBar && m_sidebarToggle -> isChecked() && !m_floatsidebarToggle -> isChecked()) {
-		if(m_lsidebarToggle -> isChecked()) {
+		if (m_lsidebarToggle -> isChecked()) {
 			lsideW = m_sideBar -> width();
 			m_sideBar -> setGeometry(0, 0, lsideW, height());
 		} else {
@@ -578,7 +476,6 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_tabBar -> show();
 	} else {
 		// we need both scrollbars
-		//m_vScroll->setRange(0, docH - drawH);
 		m_vScroll -> setRange(0, static_cast<int>((docH - drawH) / zoom()));
 		m_vScroll -> setGeometry(width() - tbarBtnW - rsideW, ruler, tbarBtnW, height() - (ruler + tbarBtnH));
 		m_hScroll -> setRange(0, static_cast<int>((docW - drawW) / zoom()));
@@ -1121,11 +1018,7 @@ void KisView::dialog_crayons()
 
 void KisView::dialog_brushes()
 {
-#if 0
-	KFloatingDialog *f = static_cast<KFloatingDialog *>(m_pBrushChooser);
-
-	f -> setDocked(m_dialog_brushes -> isChecked());
-#endif
+	m_brushChooser -> setDocked(m_dlgBrushToggle -> isChecked());
 }
 
 void KisView::dialog_patterns()
@@ -1142,9 +1035,9 @@ void KisView::dialog_layers()
 {
 #if 0
 	if(m_dialog_layers -> isChecked())
-		m_sideBar -> plug(m_layerView);
+		m_sideBar -> plug(m_layerBox);
 	else
-		m_sideBar -> unplug(m_layerView);
+		m_sideBar -> unplug(m_layerBox);
 #endif
 }
 
@@ -1170,11 +1063,6 @@ void KisView::dialog_channels()
 void KisView::layer_properties()
 {
 //	layerProperties(0);
-}
-
-void KisView::insert_layer()
-{
-//	layerAdd();
 }
 
 /*
@@ -1379,9 +1267,14 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 			KisLayerSP layer = *it;
 
 			layer -> setImage(current);
+			layer -> setName(current -> nextLayerName());
 			current -> add(layer, -1);
+			m_layerBox -> setCurrentItem(img -> index(layer));
 		}
 
+		layersUpdated();
+		resizeEvent(0);
+		updateCanvas();
 		return rc;
 	}
 
@@ -1515,10 +1408,6 @@ void KisView::layer_mirrorY()
 {
 }
 
-/*--------------------------
-    image action slots
---------------------------*/
-
 void KisView::add_new_image_tab()
 {
 #if 0
@@ -1531,7 +1420,6 @@ void KisView::add_new_image_tab()
     }
 #endif
 }
-
 
 void KisView::remove_current_image_tab()
 {
@@ -1546,7 +1434,6 @@ void KisView::remove_current_image_tab()
     }
 #endif
 }
-
 
 void KisView::merge_all_layers()
 {
@@ -1592,10 +1479,6 @@ void KisView::merge_linked_layers()
 #endif
 }
 
-
-/*------------------------------------
-  Preferences and configuration slots
----------------------------------------*/
 void KisView::showMenubar()
 {
 }
@@ -1613,40 +1496,23 @@ void KisView::showStatusbar()
 
 void KisView::showSidebar()
 {
-#if 0
-    if (m_side_bar->isChecked())
-    {
-        m_sideBar->show();
-    }
-    else
-    {
-        m_sideBar->hide();
-    }
+	if (m_sidebarToggle -> isChecked())
+		m_sideBar -> show();
+	else
+		m_sideBar -> hide();
 
-    // force resize to show scrollbars, etc
-    resizeEvent(0L);
-#endif
+	resizeEvent(0);
 }
-
 
 void KisView::floatSidebar()
 {
-#if 0
-    KFloatingDialog *f = (KFloatingDialog *)m_sideBar;
-    f->setDocked(!m_float_side_bar->isChecked());
-
-    // force resize to show scrollbars, etc
-    resizeEvent(0L);
-#endif
+	m_sideBar -> setDocked(!m_floatsidebarToggle -> isChecked());
+	resizeEvent(0);
 }
 
-/*
-    leftSidebar -this does nothing except force a resize to show scrollbars
-    Repositioning of sidebar is handled by resizeEvent() entirley
-*/
-void KisView::leftSidebar()
+void KisView::placeSidebarLeft()
 {
-//    resizeEvent(0L);
+	resizeEvent(0);
 }
 
 /*
@@ -1679,7 +1545,7 @@ Q_INT32 KisView::docHeight() const
 
 void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
 {
-//    kdDebug() << "scroll to " << pt.x() << "," << pt.y() << endl;
+	kdDebug() << "scroll to " << x << "," << y << endl;
 
     // this needs to update the scrollbar values and
     // let resizeEvent() handle the repositioning
@@ -1687,8 +1553,9 @@ void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
 }
 
 
-void KisView::slotSetBrush(KisBrush*  )
+void KisView::setActiveBrush(KoIconItem *brush)
 {
+	m_brush = dynamic_cast<KisBrush*>(brush);	
 #if 0
 	Q_ASSERT(b);
 	m_pBrush = b;
@@ -1700,15 +1567,15 @@ void KisView::slotSetBrush(KisBrush*  )
 #endif
 }
 
-void KisView::slotSetKrayon(KisKrayon*  )
+void KisView::setActiveCrayon(KoIconItem *)
 {
 #if 0
 	m_pKrayon = k;
-	m_sideBar -> slotSetKrayon(*k);
+	m_sideBar -> setActiveCrayon(*k);
 #endif
 }
 
-void KisView::slotSetPattern(KisPattern*  )
+void KisView::setActivePattern(KoIconItem *)
 {
 #if 0
 	// set currentImg pattern for this view
@@ -1717,7 +1584,7 @@ void KisView::slotSetPattern(KisPattern*  )
 	// set pattern for other things that use patterns
 	Q_ASSERT(m_sideBar);
 	Q_ASSERT(m_doc);
-	m_sideBar -> slotSetPattern(*p);
+	m_sideBar -> setActivePattern(*p);
 	m_doc -> frameBuffer() -> setPattern(p);
 #endif
 }
@@ -1739,13 +1606,9 @@ void KisView::slotSetFGColor(const KoColor& c)
 	m_fg = c;
 }
 
-/*
-    The new background color should show up in the color selector
-    via signal sent to colorselector
-*/
-void KisView::slotSetBGColor(const KoColor&)
+void KisView::slotSetBGColor(const KoColor& c)
 {
-//	m_bg = c;
+	m_bg = c;
 }
 
 void KisView::setupPrinter(KPrinter& )
@@ -1800,50 +1663,6 @@ void KisView::print(KPrinter &)
     m_doc->setImage(tmp_currentImageName);
 #endif
 }
-
-#if 0
-void KisView::appendToDocImgList(const QSize& , const KURL& )
-{
-	QRect layerRect(0, 0, size.width(), size.height());
-	QString layerName(u.fileName());
-	KisImageSP newimg = m_doc -> newImage(m_doc -> nextImageName(), layerRect.width(), layerRect.height());
-
-	// add background for layer - should this always be white?
-	bgMode bg = bm_White; // TODO bm_Transparent, bm_ForegroundColor, bm_BackgroundColor
-	KoColor clr;
-
-	if (bg == bm_White)
-		clr = KoColor::white();
-	else if (bg == bm_Transparent)
-		clr = KoColor::white();
-	else if (bg == bm_ForegroundColor)
-		clr = m_fg;
-	else if (bg == bm_BackgroundColor)
-		clr = m_bg;
-
-	newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), clr, false, i18n("background"));
-	newimg -> markDirty(QRect(0, 0, newimg -> width(), newimg -> height()));
-	m_doc -> setCurrentImage(newimg);
-	layersUpdated();
-}
-#endif
-
-#if 0
-void KisView::addHasNewLayer(const QSize& , const KURL& )
-{
-	KisImageSP img = currentImg();
-	QRect layerRect(0, 0, size.width(), size.height());
-	QString layerName(i18n("Layer %1").arg(img -> nLayers()));
-	uint indx;
-
-	img -> addLayer(layerRect, white, false, layerName);
-	indx = img -> layerList().size() - 1;
-	img -> setCurrentLayer(indx);
-	img -> setFrontLayer(indx);
-	layerSelected(indx);
-	layersUpdated();
-}
-#endif
 
 void KisView::setupTools()
 {
@@ -1990,26 +1809,31 @@ void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 	QApplication::sendEvent(m_vScroll, event);
 }
 
-void KisView::layerToggleVisible(int )
+void KisView::layerToggleVisible(int n)
 {
-#if 0
 	KisImageSP img = currentImg();
-	KisLayerSPLst l = img -> layerList();
-	KisLayerSP lay = l[n];
 
-	lay -> setVisible(!lay -> visible());
-	img -> markDirty(lay -> imageExtents());
-	m_doc -> setModified(true);
-#endif
+	if (img) {
+		vKisLayerSP l = img -> layers();
+
+		if (n >= 0 && static_cast<Q_UINT32>(n) < l.size()) {
+			KisLayerSP layer = l[n];
+
+			layer -> visible(!layer -> visible());
+			img -> invalidate();
+			m_doc -> setModified(true);
+			resizeEvent(0);
+			updateCanvas();
+		}
+	}
 }
 
-void KisView::layerSelected(int )
+void KisView::layerSelected(int n)
 {	
-#if 0
-	KisImage *img = currentImg();
+	KisImageSP img = currentImg();
 
-	img -> setCurrentLayer(n);
-#endif
+	if (!img -> activateLayer(n))
+		KMessageBox::error(this, i18n("Non existent layer."), i18n("Error Selecting Layer"));
 }
 
 void KisView::docImageListUpdate()
@@ -2019,77 +1843,89 @@ void KisView::docImageListUpdate()
 	updateCanvas();
 }
 
-void KisView::layerToggleLinked(int)
+void KisView::layerToggleLinked(int n)
 {
-#if 0
 	KisImageSP img = currentImg();
-	KisLayerSPLst l = img -> layerList();
-	KisLayerSP lay = l[n];
 
-	lay -> setLinked(!lay -> linked());
-	m_doc -> setModified(true);
-#endif
+	if (img) {
+		vKisLayerSP l = img -> layers();
+
+		if (n >= 0 && static_cast<Q_UINT32>(n) < l.size()) {
+			KisLayerSP layer = l[n];
+
+			layer -> linked(!layer -> linked());
+			m_doc -> setModified(true);
+		}
+	}
 }
 
-void KisView::layerProperties(int /*n*/)
+void KisView::layerProperties(int n)
 {
-#if 0
 	KisImageSP img = currentImg();
-	KisLayerSP lay = img -> getCurrentLayer();
-	KisPaintPropertyDlg dlg(lay -> name(), lay -> opacity());
 
-	if (dlg.exec() == QDialog::Accepted) {
-		lay -> setName(dlg.getName());
-		lay -> setOpacity(dlg.getOpacity());
-		layersUpdated();
-		slotUpdateImage();
+	if (img) {
+		KisLayerSP layer = img -> activeLayer();
+
+		if (layer && n == img -> index(layer)) {
+			KisPaintPropertyDlg dlg(layer -> name(), layer -> opacity());
+
+			if (dlg.exec() == QDialog::Accepted) {
+				layer -> setName(dlg.getName());
+				layer -> opacity(dlg.getOpacity());
+				layersUpdated();
+				slotUpdateImage();
+			}
+		}
 	}
-#endif
 }
 
 void KisView::layerAdd()
 {
-#if 0
-	KisImageSP img = currentImg();
-	int indx;
-
-	if (!img)
-		return;
-
-	NewLayerDialog dlg;
-	int n = img -> getHishestLayerEver();
-
-	dlg.exec();
-
-	if (dlg.result() == QDialog::Accepted) {
-		QRect layerRect(0, 0, dlg.width(), dlg.height());
-		QString name = i18n("layer %1").arg(n);
-
-		img -> addLayer(layerRect, white, true, name);
-		indx = n - 1;
-		img -> setCurrentLayer(indx);
-		m_layerView -> setCurrentItem(indx);
-
-		slotUpdateImage();
-		slotRefreshPainter();
-		m_doc -> setModified(true);
-	}
-#endif
-}
-
-void KisView::layerRemove(int )
-{
-#if 0
 	KisImageSP img = currentImg();
 
 	if (img) {
-		img -> removeLayer(n);
-		m_doc -> setModified(true);
-		slotUpdateImage();
-		slotRefreshPainter();
-		m_layerView -> setSelected(n - 1);
+		NewLayerDialog dlg(this);
+
+		dlg.exec();
+
+		if (dlg.result() == QDialog::Accepted) {
+			KisLayerSP layer = new KisLayer(img, dlg.width(), dlg.height(), img -> nextLayerName(), OPACITY_OPAQUE);
+
+			if (img -> add(layer, -1)) {
+				layer = img -> activate(layer);
+
+				if (layer) {
+					m_doc -> setModified(true);
+					layersUpdated();
+					m_layerBox -> setCurrentItem(img -> index(layer));
+					resizeEvent(0);
+					updateCanvas();
+				}
+			} else {
+				KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
+			}
+		}
 	}
-#endif
+}
+
+void KisView::layerRemove()
+{
+	KisImageSP img = currentImg();
+
+	if (img) {
+		KisLayerSP layer = img -> activeLayer();
+		
+		if (layer) {
+			Q_INT32 n = img -> index(layer);
+
+			m_doc -> setModified(true);
+			img -> rm(layer);
+			layersUpdated();
+			m_layerBox -> setCurrentItem(n - 1);
+			resizeEvent(0);
+			updateCanvas();
+		}
+	}
 }
 
 void KisView::layerAddMask(int /*n*/)
@@ -2100,53 +1936,53 @@ void KisView::layerRmMask(int /*n*/)
 {
 }
 
-void KisView::layerRaise(int )
+void KisView::layerRaise()
 {
-#if 0
 	KisImageSP img = currentImg();
-	int npos;
 
 	if (img) {
-		npos = m_layerView -> getCurrentItem() - 1;
-		img -> upperLayer(n);
-		m_layerView -> setSelected(npos);
+		KisLayerSP layer = img -> activeLayer();
+
+		m_doc -> setModified(true);
+		img -> raise(layer);
+		layersUpdated();
+		m_layerBox -> setCurrentItem(img -> index(layer));
+		resizeEvent(0);
+		updateCanvas();
 	}
-#endif
 }
 
-void KisView::layerLower(int )
+void KisView::layerLower()
 {
-#if 0
 	KisImageSP img = currentImg();
-	int npos;
 
 	if (img) {
-		npos = m_layerView -> getCurrentItem() + 1;
-		img -> lowerLayer(n);
-		m_layerView -> setSelected(npos);
+		KisLayerSP layer = img -> activeLayer();
+
+		m_doc -> setModified(true);
+		img -> lower(layer);
+		layersUpdated();
+		m_layerBox -> setCurrentItem(img -> index(layer));
+		resizeEvent(0);
+		updateCanvas();
 	}
-#endif
 }
 
-void KisView::layerFront(int )
+void KisView::layerFront()
 {
-#if 0
 	KisImageSP img = currentImg();
 
-	if (img)
-		img -> setFrontLayer(n);
-#endif
+	if (img && img -> activeLayer())
+		img -> top(img -> activeLayer());
 
 }
 
-void KisView::layerBack(int )
+void KisView::layerBack()
 {
-#if 0
 	KisImageSP img = currentImg();
 
-	if (img)
-		img -> setBackgroundLayer(n);
-#endif
+	if (img && img -> activeLayer())
+		img -> bottom(img -> activeLayer());
 }
 
 void KisView::layerLevel(int /*n*/)
@@ -2155,23 +1991,21 @@ void KisView::layerLevel(int /*n*/)
 
 void KisView::layersUpdated()
 {
-#if 0
 	KisImageSP img = currentImg();
 
 	if (img) {
-		KisLayerSPLst l = img -> layerList();
+		vKisLayerSP l = img -> layers();
 
-		m_layerView -> setUpdatesEnabled(false);
-		m_layerView -> clear();
+		m_layerBox -> setUpdatesEnabled(false);
+		m_layerBox -> clear();
 
-		for (KisLayerSPLstConstIterator it = l.begin(); it != l.end(); it++)
-			m_layerView -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked());
+		for (vKisLayerSP_it it = l.begin(); it != l.end(); it++)
+			m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked());
 
-		m_layerView -> setUpdatesEnabled(true);
-		m_layerView -> repaint();
+		m_layerBox -> setUpdatesEnabled(true);
+		m_layerBox -> repaint();
 		m_doc -> setModified(true);
 	}
-#endif
 }
 
 void KisView::selectImage(const QString& name)

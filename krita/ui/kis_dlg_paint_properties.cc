@@ -1,6 +1,4 @@
 /*
- *  kis_dlg_paint_properties.cc - part of Krita aka Krayon aka KImageShop
- *
  *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,7 +15,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -27,11 +24,8 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kpushbutton.h>
-#include <knuminput.h>
 
 #include "kis_dlg_paint_properties.h"
-#include "kis_global.h"
-#include "kis_paint_device.h"
 #include "integerwidget.h"
 
 KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, int opacity, QWidget *parent, const char *name, WFlags f) : super(parent, name, f)
@@ -46,7 +40,7 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, int opacity,
 	layout -> addWidget(lbl, 0, 0);
 
 	m_opacity = new IntegerWidget(0, 100, this);
-	m_opacity -> setValue(opacity * 100 / CHANNEL_MAX);
+	m_opacity -> setValue(opacity * 100 / 255);
 	m_opacity -> setTickmarks(QSlider::Below);
 	m_opacity -> setTickInterval(13);
 	layout -> addWidget(m_opacity, 1, 1);
@@ -82,4 +76,3 @@ int KisPaintPropertyDlg::getOpacity() const
 	return m_opacity -> value() * 255 / 100;
 }
 
-#include <kis_dlg_paint_properties.moc>

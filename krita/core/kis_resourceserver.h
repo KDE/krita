@@ -38,16 +38,16 @@ public:
   int brushCount() { return m_brushes.count(); }
   int patternCount() { return m_patterns.count(); }
 
-  QPtrList<KisBrush> brushes() { return m_brushes; }
-  QPtrList<KisPattern> patterns() { return m_patterns; }
+  QPtrList<KoIconItem> brushes() { return m_brushes; }
+  QPtrList<KoIconItem> patterns() { return m_patterns; }
 
  protected:
   const KisBrush* loadBrush( const QString& filename );
   const KisPattern* loadPattern( const QString& filename );
  
  private:
-  QPtrList<KisBrush>  m_brushes;
-  QPtrList<KisPattern>  m_patterns;
+  QPtrList<KoIconItem>  m_brushes;
+  QPtrList<KoIconItem>  m_patterns;
 };
 
 #endif // __kis_resourceserver_h__

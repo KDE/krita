@@ -21,13 +21,44 @@
 #include <qtl.h>
 #include "kis_image.h"
 #include "kis_paint_device.h"
+#include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_channel.h"
 #include "kis_doc.h"
 #include "kis_mask.h"
+#include "kis_nameserver.h"
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kispixeldata.h"
+
+namespace {
+	void renderBgTile(KisTileSP tile)
+	{
+		QUANTUM *p;
+		QUANTUM *q;
+
+		if (!tile)
+			return;
+
+		tile -> lock();
+		p = tile -> data();
+
+		for (Q_INT32 y = 0; y < tile -> height(); y++) {
+			for (Q_INT32 x = 0; x < tile -> width(); x++) {
+				QUANTUM v = 128 + 63 * ((x / 16 + y / 16) % 2);
+
+				v = upscale(v);
+				q = p + (y * tile -> width() + x) * tile -> depth();
+				q[PIXEL_RED] = v;
+				q[PIXEL_GREEN] = v;
+				q[PIXEL_BLUE] = v;
+				q[PIXEL_ALPHA] = OPACITY_OPAQUE;
+			}
+		}
+
+		tile -> release();
+	}
+}
 
 KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name)
 {
@@ -37,6 +68,7 @@ KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, Q
 
 KisImage::~KisImage()
 {
+	delete m_nserver;
 }
 
 QString KisImage::name() const
@@ -48,6 +80,16 @@ void KisImage::setName(const QString& name)
 {
 	if (!name.isEmpty())
 		m_name = name;
+}
+
+QString KisImage::nextLayerName() const
+{
+	if (m_nserver -> currentSeed() == 0) {
+		m_nserver -> number();
+		return "background";
+	}
+
+	return m_nserver -> name();
 }
 
 QString KisImage::author() const
@@ -74,6 +116,7 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, 
 {
 	Q_INT32 n;
 
+	m_nserver = new KisNameServer("Layer %1", 0);
 	Q_ASSERT(imgType != IMAGE_TYPE_UNKNOWN);
 
 	switch (imgType) {
@@ -119,14 +162,17 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, 
 	m_alpha = false;
 	m_opacity = opacity;
 	m_undoHistory = 0;
+	m_bgTile = new KisTile(depth);
+	renderBgTile(m_bgTile);
 }
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h)
 {
 	m_width = w;
 	m_height = h;
-	m_projection = new KisTileMgr(m_depth, m_width, m_height);
+	m_projection = new KisTileMgr(m_depth, m_width < w ? w : m_width, m_height < h ? h : m_height);
 	m_construct = true;
+	m_pixmapProjection = QPixmap();
 }
 
 void KisImage::resize(const QRect& rc)
@@ -329,9 +375,9 @@ void KisImage::flush()
 {
 }
 
+#if 0
 void KisImage::apply(KisPaintDeviceSP /*device*/, KisPixelDataSP /*src2*/, QUANTUM /*opacity*/, enumComposite /*mode*/, Q_INT32 /*x*/, Q_INT32 /*y*/)
 {
-#if 0
 	Q_INT32 x1;
 	Q_INT32 y1;
 	Q_INT32 x2;
@@ -372,12 +418,12 @@ void KisImage::apply(KisPaintDeviceSP /*device*/, KisPixelDataSP /*src2*/, QUANT
 	} else {
 //		combine_regions (&src1PR, src2PR, &destPR, NULL, NULL, opacity * 255.999, mode, active_components, operation);
 	}
-#endif
 }
 
 void KisImage::replace(KisPixelDataSP , KisPixelDataSP , QUANTUM , KisPixelDataSP , Q_INT32 , Q_INT32 )
 {
 }
+#endif
 
 vKisLayerSP KisImage::layers() const
 {
@@ -439,6 +485,14 @@ KisLayerSP KisImage::activate(KisLayerSP layer)
 	}
 
 	return layer;
+}
+
+KisLayerSP KisImage::activateLayer(Q_INT32 n)
+{
+	if (n < 0 || static_cast<Q_UINT32>(n) > m_layers.size())
+		return 0;
+
+	return activate(m_layers[n]);
 }
 
 Q_INT32 KisImage::index(KisLayerSP layer)
@@ -682,6 +736,14 @@ KisChannelSP KisImage::activate(KisChannelSP channel)
 	}
 
 	return channel;
+}
+
+KisChannelSP KisImage::activateChannel(Q_INT32 n)
+{
+	if (n < 0 || static_cast<Q_UINT32>(n) > m_channels.size())
+		return 0;
+
+	return activate(m_channels[n]);
 }
 
 KisChannelSP KisImage::unsetActiveChannel()
@@ -928,32 +990,42 @@ QPixmap KisImage::pixmap()
 	return m_pixmapProjection;
 }
 
-void KisImage::renderTile(KisTileSP dst, Q_INT32 x, Q_INT32 y)
+void KisImage::renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y)
 {
-	QImage image;
-	QPainter gc(&m_pixmapProjection);
+	KisPainter gc;
+
+	if (!dst)
+		return;
 
 	dst -> lock();
+	m_bgTile -> lock();
+	memcpy(dst -> data(), m_bgTile -> data(), sizeof(QUANTUM) * dst -> width() * dst -> height() * dst -> depth());
+	m_bgTile -> release();
+	dst -> release();
+	gc.begin(dst);
 
 	for (vKisLayerSP_it it = m_layers.begin(); it != m_layers.end(); it++) {
-		if (!(*it) -> visible())
-			continue;
+		if ((*it) -> visible()) {
+			KisTileMgrSP tm = (*it) -> data();
+			KisTileSP src = tm -> tile(x, y, TILEMODE_READ);
 
-		KisTileMgrSP tm = (*it) -> data();
-		KisTileSP src = tm -> tile(x, y, TILEMODE_READ);
-
-		if (src) {
-			src -> lock();
-			memcpy(dst -> data(), src -> data(), sizeof(QUANTUM) * dst -> width() * dst -> height() * dst -> depth());  // TODO
-			src -> valid(true);
-			src -> release();
+			if (src)
+				gc.bitBlt(0, 0, COMPOSITE_OVER, src);
 		}
 	}
 
+	gc.end();
 	dst -> valid(true);
-	image = dst -> convertToImage();
-	gc.drawImage(x, y, image);
-	dst -> release();
+
+	if (dst -> valid()) {
+		QImage image;
+		QPainter gc(&m_pixmapProjection);
+
+		dst -> lock();
+		image = dst -> convertToImage();
+		gc.drawImage(x, y, image);
+		dst -> release();
+	}
 }
 
 void KisImage::expand(KisPaintDeviceSP dev)
@@ -967,7 +1039,7 @@ void KisImage::expand(KisPaintDeviceSP dev)
 QPixmap KisImage::recreatePixmap()
 {
 	KisTileMgrSP tm = m_projection;
-	
+
 	if (width() > m_pixmapProjection.width() || height() > m_pixmapProjection.height()) {
 		m_pixmapProjection.resize(width(), height());
 		invalidate();
@@ -977,8 +1049,8 @@ QPixmap KisImage::recreatePixmap()
 		for (Q_UINT32 x = 0; x < tm -> width(); x += TILE_WIDTH) {
 			KisTileSP tile = tm -> tile(x, y, TILEMODE_RW);
 
-			if (tile && !tile -> valid())
-				renderTile(tile, x, y);
+			if (tile)
+				renderTile(tm, tile, x, y);
 		}
 	}
 

@@ -28,6 +28,7 @@
 KisBrushWidget::KisBrushWidget( QWidget* parent, const char* name ) 
     : QFrame( parent, name )
 {
+	m_pBrush = 0;
     setBackgroundColor( white );
     setFrameStyle( Panel | Sunken );
 }

@@ -70,6 +70,8 @@ public:
 	const KisTileMgrSP shadow() const;
 	Q_INT32 quantumSize() const;
 	Q_INT32 quantumSizeWithAlpha() const;
+	Q_INT32 x() const;
+	Q_INT32 y() const;
 	Q_INT32 width() const;
 	Q_INT32 height() const;
 	const bool visible() const;

@@ -25,7 +25,6 @@
 #define BLENDHOOSER_H
 
 #include <qcombobox.h>
-
 #include "kis_config.h"
 
 class BlendChooser : public QComboBox

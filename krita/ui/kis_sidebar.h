@@ -29,7 +29,6 @@
 #include <koColor.h>
 #include <koFrameButton.h>
 
-#include "kis_global.h"
 #include "kfloatingdialog.h"
 
 class KDualColorButton;
@@ -44,8 +43,7 @@ class KisPattern;
 class KisColorChooser;
 class KoColorChooser;
 
-typedef KoColor ActiveColor;
-
+enum ActiveColor { ac_Foreground, ac_Background};
 
 class TopTitleFrame : public QFrame
 {

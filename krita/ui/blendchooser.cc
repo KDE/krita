@@ -39,7 +39,7 @@ KisConfig::Blending BlendChooser::currentBlending() const
     return (KisConfig::Blending) currentItem();
 }
 
-void BlendChooser::setCurrentBlending( KisConfig::Blending blending )
+void BlendChooser::setCurrentBlending( KisConfig::Blending )
 {
     setCurrentItem( blending );
 }

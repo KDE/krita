@@ -21,8 +21,8 @@
 #include <kdialog.h>
 
 class KisDlgPaintOffset : public KDialog {
-	typedef KDialog super;
 	Q_OBJECT
+	typedef KDialog super;
 
 public:
 	KisDlgPaintOffset(Q_INT32 xoff, Q_INT32 yoff, QWidget *parent, const char *name);

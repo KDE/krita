@@ -160,9 +160,7 @@ bool KisTile::valid() const
 
 void KisTile::valid(bool valid)
 {
-	m_mutex.lock();
 	m_valid = valid;
-	m_mutex.unlock();
 }
 
 bool KisTile::dirty() const
@@ -202,7 +200,6 @@ void KisTile::init(Q_INT32 depth, KisTileCacheInterface *cache, KisTileSwapInter
 	m_height = TILE_HEIGHT;
 	m_depth = depth;
 	m_data = 0;
-	m_datacnt = 0;
 	m_swap = swap;
 	m_swapNo = SWAP_IN_CORE;
 	m_cache = cache;
@@ -271,12 +268,12 @@ QImage KisTile::convertToImage()
 	// TODO : here.
 	for (Q_INT32 j = 0; j < img.height(); j++) {
 		for (Q_INT32 i = 0; i < img.width(); i++) {
-			Q_INT8 red = downscale(pixel[PIXEL_RED]);
-			Q_INT8 green = downscale(pixel[PIXEL_GREEN]);
-			Q_INT8 blue = downscale(pixel[PIXEL_BLUE]);
-			Q_INT8 alpha = downscale(pixel[PIXEL_ALPHA]);
+			Q_UINT8 red = downscale(pixel[PIXEL_RED]);
+			Q_UINT8 green = downscale(pixel[PIXEL_GREEN]);
+			Q_UINT8 blue = downscale(pixel[PIXEL_BLUE]);
+			Q_UINT8 alpha = downscale(OPACITY_OPAQUE - pixel[PIXEL_ALPHA]);
 
-			img.setPixel(i, j, qRgba(red, green, blue, OPACITY_OPAQUE - alpha));
+			img.setPixel(i, j, qRgba(red, green, blue, alpha));
 			pixel += depth();
 		}
 	}

@@ -240,7 +240,7 @@ void DlgColorRange::slotFuzzinessChanged(int value)
 	m_page -> sldrFuzziness -> setValue(value);
 	kdDebug() << "fuzziness changed\n";
 	m_fuzziness = value;
-	selectByColor(m_currentColor, m_currentChannel, m_fuzziness, REPLACE); // XXX: is this correct?
+	selectByColor(m_currentColor, m_fuzziness, REPLACE); // XXX: is this correct?
 	updatePreview();
 }
 
@@ -252,52 +252,40 @@ void DlgColorRange::slotSliderMoved(int value)
 void DlgColorRange::slotSelectionTypeChanged(int index)
 {
 	if (index != PICKER) {
-		if (m_picker) m_picker -> clear();
+		if (m_picker)
+		m_picker -> clear();
 		m_subject -> setCanvasCursor(m_oldCursor);
 	}
 
 	switch (index) {
 
-	case PICKER:
-		m_currentChannel = CHANNEL_ALLCHANNELS;
-		selectByColor(m_currentColor, CHANNEL_ALLCHANNELS, m_fuzziness, m_mode);
-		break;
 	case REDS :
-		m_currentChannel = CHANNEL_REDS;
-		selectByColor(QColor(255, 0, 0), CHANNEL_REDS, m_fuzziness, REPLACE);
+		m_currentColor = QColor(255, 0, 0);
+		m_mode = REPLACE;
 		break;
 	case YELLOWS:
-		m_currentChannel = CHANNEL_YELLOWS;
-		selectByColor(QColor(255, 255, 0), CHANNEL_YELLOWS, m_fuzziness, REPLACE);
+		m_currentColor = QColor(255, 255, 0);
+		m_mode = REPLACE;
 		break;
 	case GREENS:
-		m_currentChannel = CHANNEL_GREENS;
-		selectByColor(QColor(0, 255, 0), CHANNEL_GREENS, m_fuzziness, REPLACE);
+		m_currentColor = QColor(0, 255, 0);
+		m_mode = REPLACE;
 		break;
 	case CYANS:
-		m_currentChannel = CHANNEL_CYANS;
-		selectByColor(QColor(0, 255, 255), CHANNEL_CYANS, m_fuzziness, REPLACE);
+		m_currentColor = QColor(0, 255, 255);
+		m_mode = REPLACE;
 		break;
 	case BLUES:
-		m_currentChannel = CHANNEL_BLUES;
-		selectByColor(QColor(0, 0, 255), CHANNEL_BLUES, m_fuzziness, REPLACE);
+		m_currentColor = QColor(0, 0, 255);
+		m_mode = REPLACE;
 		break;
 	case MAGENTAS:
-		m_currentChannel = CHANNEL_MAGENTAS;
-		selectByColor(QColor(255, 0, 255), CHANNEL_MAGENTAS, m_fuzziness, REPLACE);
-		break;
-	case HIGHLIGHTS:
-		selectByValue(CHANNEL_HIGHLIGHTS, m_fuzziness, REPLACE);
-		break;
-	case MIDTONES:
-		selectByValue(CHANNEL_MIDTONES, m_fuzziness, REPLACE);
-		break;
-	case SHADOWS:
-		selectByValue(CHANNEL_SHADOWS, m_fuzziness, REPLACE);
-		break;
-	default:
+		m_currentColor = QColor(255, 0, 255);
+		m_mode = REPLACE;
 		break;
 	}
+	
+	selectByColor(m_currentColor, m_fuzziness, m_mode);
 	updatePreview();
 	
 }
@@ -309,39 +297,71 @@ void DlgColorRange::slotPreviewTypeChanged(int /*index*/)
 void DlgColorRange::slotColorChanged(const QColor & c)
 {
 	m_currentColor = c;
-	selectByColor(m_currentColor, CHANNEL_ALLCHANNELS, m_fuzziness, m_mode);
+		kdDebug() << "Color: " << QString::number(c.red()) << ", "
+                          << QString::number(c.green()) << ", "
+                          << QString::number(c.blue()) << "\n";
+ 
+	selectByColor(m_currentColor, m_fuzziness, m_mode);
 }
 
-Q_UINT8 DlgColorRange::matchColors(QColor c, QColor c2, enumChannel channel)
+/**
+ * Returns the selectedness of the pixel c2 compared to the reference pixel c, taking into
+ * account the specified fuzziness.
+ *
+ * The following algorithm is used:
+ * for all channels in colortype of c:
+ *    determine the absolute difference
+ *    determine which is the biggest difference
+ *    if the absolute difference is greater than fuzziness, return MIN_SELECTED
+ *    else
+ *      antialias the result of in the range using an algorithm from the gimp.
+ *
+ */
+Q_UINT8 DlgColorRange::matchColors(QColor c, QColor c2, Q_UINT8 fuzziness)
 {
-	switch (channel) {
-	case CHANNEL_REDS :
-		return c.red() + c2.red() / 2;
-		break;
-	case CHANNEL_YELLOWS:
-		return c.red() + c2.red() + c.green() + c2.green() / 4;
-		break;
-	case CHANNEL_GREENS:
-		return c.green() + c2.green() / 2;
-		break;
-	case CHANNEL_CYANS:
-		return c.green() + c2.green() + c.blue() + c2.blue() / 4;
-		break;
-	case CHANNEL_BLUES:
-		return c.blue() + c2.blue() / 2;
-		break;
-	case CHANNEL_MAGENTAS:
-		return c.red() + c2.red() + c.blue() + c2.blue() / 2;
-		break;
-	case CHANNEL_ALLCHANNELS:
-		return c.red() + c2.red() + c.green() + c2.green() + c.blue() + c2.blue() / 6;
-		break;
-	default:
+// 	kdDebug() << "Color 1: " << QString::number(c.red()) << ", "
+// 	                      << QString::number(c.green()) << ", "
+// 	                      <<  QString::number(c.blue()) << "\n";
+// 
+// 
+// 	kdDebug() << "Color 2: " << QString::number(c2.red()) << ", "
+// 	                      << QString::number(c2.green()) << ", "
+// 	                      <<  QString::number(c2.blue()) << "\n";
+// 	                      
+// 	kdDebug() << "Fuzziness: " << QString::number(fuzziness) << "\n";
+
+	Q_INT32 diffMax = 0;
+	Q_INT32 dr, dg, db = 0;
+
+	dr = QABS(c.red() - c2.red());
+	dg = QABS(c.green() - c2.green());
+	db = QABS(c.blue() - c2.blue());
+
+// /*	kdDebug() << " red difference: " << QString::number(dr)
+// 		  << " green difference: " << QString::number(dg)
+// 		  << " blue difference: " << QString::number(db) << "\n";
+// 	*/
+	diffMax = QMAX(dr, QMAX(dg, db));
+
+/*	kdDebug() << "Max difference: " << QString::number(diffMax) << "\n";*/
+	
+	if (diffMax > fuzziness)
+		return MIN_SELECTED;
+
+	float aa = 1.5 - ((float) diffMax / fuzziness);
+
+/*	kdDebug() << "AA value: " << QString::number(aa) << "\n";*/
+	
+	if (aa <= 0.0)
 		return 0;
-	}
+	else if (aa < 0.5)
+		return Q_UINT8 (aa * 512);
+	else
+		return 255;
+
 }
 
-void DlgColorRange::selectByColor(const QColor & c, enumChannel channel, Q_UINT8 fuzziness, enumMode mode)
+void DlgColorRange::selectByColor(const QColor & c, Q_UINT8 fuzziness, enumMode mode)
 {
 	// XXX: Multithread this!
 	Q_INT32 x, y, w, h;
@@ -359,20 +379,25 @@ void DlgColorRange::selectByColor(const QColor & c, enumChannel channel, Q_UINT8
 			
 			cs -> toQColor(hiter.rawData(), &c2, profile);
 
-			Q_UINT8 match = matchColors(c, c2, channel);
-			
-			if (match < fuzziness) {
-				
+ 			Q_UINT8 match = matchColors(c, c2, fuzziness);
+// 			kdDebug() << "Match: " << QString::number(match) << "\n";
+
+			if (match > 0) {
+/*				kdDebug() << ">>>>>>>>>>>>>>>>>>>>>>> Match: " << QString::number(match) << "\n";*/
 				if (mode == ADD || mode == REPLACE) {
-					*(selIter.rawData()) = MAX_SELECTED;
-					
+					*(selIter.rawData()) =  match;
 				}
 				else if (mode == SUBTRACT) {
-					*(selIter.rawData()) = MIN_SELECTED;
-					
+					Q_UINT8 selectedness = *(selIter.rawData());
+					if (match < selectedness) {
+						*(selIter.rawData()) = selectedness - match;
+					}
+					else {
+						*(selIter.rawData()) = 0;
+					}
 				}
 			}
-
+			
 			++hiter;
 			++selIter;
 		}

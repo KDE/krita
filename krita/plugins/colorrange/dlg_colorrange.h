@@ -118,17 +118,6 @@ enum enumAction {
 	SHADOWS,
 };
 
-
-enum enumChannel {
-	CHANNEL_REDS,
-	CHANNEL_YELLOWS,
-	CHANNEL_GREENS,
-	CHANNEL_CYANS,
-	CHANNEL_BLUES,
-	CHANNEL_MAGENTAS,
-	CHANNEL_ALLCHANNELS,
-};
-
 enum enumTone {
 	CHANNEL_HIGHLIGHTS,
 	CHANNEL_MIDTONES,
@@ -173,8 +162,8 @@ private slots:
 	
 private:
 	QImage createMask(KisSelectionSP selection, KisLayerSP layer);
-	Q_UINT8 matchColors(QColor c, QColor c2, enumChannel channel);
-	void selectByColor(const QColor & c, enumChannel channel, Q_UINT8 fuzziness, enumMode mode);
+	Q_UINT8 matchColors(QColor c, QColor c2, Q_UINT8 fuzziness);
+	void selectByColor(const QColor & c, Q_UINT8 fuzziness, enumMode mode);
 	void selectByValue(const enumTone tone, Q_UINT32 fuzziness, enumMode mode);
 private:
 
@@ -191,7 +180,6 @@ private:
 	KisTransaction * m_transaction;
 	enumAction m_currentAction;
 	QColor m_currentColor;
-	enumChannel m_currentChannel;
 };
 
 

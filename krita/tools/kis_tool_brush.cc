@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <koColor.h>
 
+#include "kis_vec.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
 #include "kis_doc.h"
@@ -32,6 +33,7 @@
 #include "kis_tool_brush.h"
 #include "kis_layer.h"
 #include "kis_alpha_mask.h"
+#include "kis_cursor.h"
 
 
 KisToolBrush::KisToolBrush()
@@ -41,8 +43,13 @@ KisToolBrush::KisToolBrush()
 	  m_hotSpotY ( 0 ),
 	  m_brushWidth ( 0 ),
 	  m_brushHeight ( 0 ),
-	  m_spacing ( 0 )
+	  m_spacing ( 0 ),
+	  m_dragDist ( 0 ),
+	  m_usePattern ( false ),
+	  m_useGradient ( false )
 {
+	setCursor(KisCursor::crossCursor());
+
         m_painter = 0;
 	m_dab = 0;
 }
@@ -59,6 +66,9 @@ void KisToolBrush::mousePress(QMouseEvent *e)
 
         if (e->button() == QMouseEvent::LeftButton) {
 		initPaint();
+		// Remember the startposition of the stroke
+		m_dragStart = e -> pos();
+		m_dragDist = 0;
                 paint(e->pos(), 128, 0, 0);
          }
 }
@@ -71,12 +81,67 @@ void KisToolBrush::mouseRelease(QMouseEvent* e)
         }
 }
 
+
 void KisToolBrush::mouseMove(QMouseEvent *e)
 {
          if (m_mode == PAINT) {
-                 paint(e->pos(), 128, 0, 0);
-         }
+		 QPoint pos = e -> pos();
+		 KisVector end(pos.x(), pos.y());
+		 KisVector start(m_dragStart.x(), m_dragStart.y());
+		 KisVector dragVec = end - start;
+		 float savedDist = m_dragDist;
+		 float newDist = dragVec.length();
+		 float dist = savedDist + newDist;
 
+		 if (static_cast<int>(dist) < m_spacing) {
+			 m_dragDist += newDist;
+			 m_dragStart = pos;
+			 return;
+		 }
+		 
+		 m_dragDist = 0;
+		 //dragVec.normalize();
+
+		 double length, ilength;
+		 double x, y, z;
+		 x = dragVec.x();
+		 y = dragVec.y();
+		 z = dragVec.z();
+		 length = x * x + y * y + z * z;
+		 length = sqrt (length);
+  
+		 if (length)
+		 {
+			 ilength = 1/length;
+			 x *= ilength;
+			 y *= ilength;
+			 z *= ilength;
+		 }
+
+		 dragVec.setX(x);
+		 dragVec.setY(y);
+		 dragVec.setZ(z);
+
+		 KisVector step = start;
+
+		 while (dist >= m_spacing) {
+			 if (savedDist > 0) {
+				 step += dragVec * (m_spacing - savedDist);
+				 savedDist -= m_spacing;
+			 }
+			 else {
+				 step += dragVec * m_spacing;
+			 }
+			 QPoint p(qRound(step.x()), qRound(step.y()));
+			 paint(p, 128, 0, 0);
+			 dist -= m_spacing;
+		 }
+		 
+		 if (dist > 0) 
+			 m_dragDist = dist;
+
+		 m_dragStart = pos;
+         }
 }
 
 
@@ -90,6 +155,7 @@ void KisToolBrush::tabletEvent(QTabletEvent *e)
 
 void KisToolBrush::initPaint() 
 {
+	// Create painter
 	m_mode = PAINT;
 	KisImageSP currentImage = m_subject -> currentImg();
 	KisPaintDeviceSP device;
@@ -99,8 +165,35 @@ void KisToolBrush::initPaint()
 		m_painter = new KisPainter( device );
 		m_painter->beginTransaction("brush");
 	}
-	KisAlphaMask *mask = m_subject -> currentBrush() -> mask();
 
+	// Retrieve and cache brush data. XXX: this is not ideal, since it is 
+	// done for every stroke, even if the brush and colour have not changed.
+	// So, more work is done than is necessary.
+	KisBrush *brush = m_subject -> currentBrush();
+	KisAlphaMask *mask = brush -> mask();
+	m_brushWidth = mask -> width();
+	m_brushHeight = mask -> height();
+	
+	m_hotSpot = brush -> hotSpot();
+	m_hotSpotX = m_hotSpot.x();
+	m_hotSpotY = m_hotSpot.y();
+
+	m_spacing = brush -> spacing();
+	if (m_spacing < 0) {
+		m_spacing = 3;
+	}
+	
+	// Set the cursor -- ideally. this should be a pixmap created from the brush,
+	// now that X11 can handle colored cursors. 
+
+#if 0
+	// Setting cursors has no effect until the tool is selected again; this
+	// should be fixed.
+	setCursor(KisCursor::brushCursor());
+#endif
+
+
+	// Create dab
 	m_dab = new KisLayer(mask -> width(), 
 			     mask -> height(),
 			     currentImage -> imgType(),
@@ -141,6 +234,9 @@ void KisToolBrush::paint(const QPoint & pos,
 #if 0
         kdDebug() << "paint: " << pos.x() << ", " << pos.y() << endl;
 #endif
+	Q_INT32 x = pos.x() - m_hotSpotX;
+	Q_INT32 y = pos.y() - m_hotSpotY;
+
         KisImageSP currentImage = m_subject -> currentImg();
 
         if (!currentImage) return;
@@ -148,15 +244,15 @@ void KisToolBrush::paint(const QPoint & pos,
         // Blit the temporary KisPaintDevice onto the current layer
         KisPaintDeviceSP device = currentImage -> activeDevice();
         if (device) {
-                m_painter->bitBlt( pos.x(),  pos.y(),  COMPOSITE_NORMAL, m_dab.data() );
+                m_painter->bitBlt( x,  y,  COMPOSITE_NORMAL, m_dab.data() );
         }
-        currentImage->invalidate( pos.x(),  pos.y(),
+        currentImage->invalidate( x,  y,
                                   m_dab -> width(),
                                   m_dab -> height() );
-        currentImage -> notify(pos.x(),
-                        pos.y(),
-                        m_dab -> width(),
-                        m_dab -> height());
+        currentImage -> notify(x,
+			       y,
+			       m_dab -> width(),
+			       m_dab -> height());
 }
 
 

@@ -60,12 +60,20 @@ private:
 
 	KisLayerSP m_dab;
 
+	QPoint m_hotSpot;
         Q_INT32 m_hotSpotX;
         Q_INT32 m_hotSpotY;
+
         Q_INT32 m_brushWidth;
         Q_INT32 m_brushHeight;
+
         Q_INT32 m_spacing;
 
+        QPoint m_dragStart;
+        float m_dragDist;
+
+	bool m_usePattern;
+	bool m_useGradient;
 };
 #endif // KIS_TOOL_BRUSH_H_
 

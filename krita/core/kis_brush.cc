@@ -225,7 +225,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 	setWidth(m_img.width());
 	setHeight(m_img.height());
 	m_mask = new KisAlphaMask(m_img);
-	kdDebug() << "Brush: " << &name[0] << "\n";
+	kdDebug() << "Brush: " << &name[0] << " spacing: " << m_spacing << "\n";
 	setValid(true);
 	emit loadComplete(this);
 }

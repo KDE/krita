@@ -30,6 +30,7 @@
 #include "kis_strategy_colorspace_rgb.h"
 #include "tiles/kispixeldata.h"
 #include "composite.h"
+#include "kis_iterators.h"
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_RGB = 3;
@@ -317,4 +318,22 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 		return;
 	}
 }
+
+void KisStrategyColorSpaceRGB::computeDuplicatePixel(KisIteratorQuantum* dst, KisIteratorQuantum* dab, KisIteratorQuantum* src)
+{
+	QUANTUM b = (**dab); dab->inc();
+	QUANTUM g = (**dab); dab->inc();
+	QUANTUM r = (**dab); dab->inc();
+	QUANTUM a = (**dab); dab->inc();
+	QUANTUM* d;
+	d = (*dst); *d = ( (QUANTUM_MAX - b) * (**src) ) / QUANTUM_MAX;
+	dst->inc(); 	src->inc();
+	d = (*dst); *d = ( (QUANTUM_MAX - g) * (**src) ) / QUANTUM_MAX;
+	dst->inc(); +src->inc();
+	d = (*dst); *d = ( (QUANTUM_MAX - r) * (**src) ) / QUANTUM_MAX;
+	dst->inc(); src->inc();
+	d =(*dst); *d = ( a * (**src) ) / QUANTUM_MAX;
+	dst->inc(); src->inc();
+}
+
 

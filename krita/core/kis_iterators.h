@@ -76,10 +76,14 @@ public:
 	//Increment operator
 	inline KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& operator++()
 	{
+		return inc();
+	}
+	inline KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& inc()
+	{
 		Q_ASSERT( m_tile != 0 );
 		m_xintile+=sizeOfTp;
 		if( m_xintile >= m_tile->width() * m_depth )
-		{
+    	{
 			m_xintile =  0;
 			m_tilenum++;
 			m_tileNeedRefresh = true;

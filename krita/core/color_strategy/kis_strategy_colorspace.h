@@ -25,6 +25,7 @@
 #include "kis_types.h"
 
 class QPainter;
+class KisIteratorQuantum;
 
 /** 
  * This class give some basic information about a channel.
@@ -85,6 +86,8 @@ public:
 			Q_INT32 rows, 
 			Q_INT32 cols, 
 			CompositeOp op) const = 0;
+
+	virtual void computeDuplicatePixel(KisIteratorQuantum* dst, KisIteratorQuantum* dab, KisIteratorQuantum* src) =0;
 
 private:
 	KisStrategyColorSpace(const KisStrategyColorSpace&);

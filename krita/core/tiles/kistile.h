@@ -23,6 +23,7 @@
 #include <qvaluevector.h>
 #include <ksharedptr.h>
 #include "kis_types.h"
+#include <kdebug.h>
 
 class KisTileCacheInterface;
 class KisTileSwapInterface;

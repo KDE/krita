@@ -3,6 +3,7 @@
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -606,6 +607,9 @@ double KisPainter::paintLine(const enumPaintOp paintOp,
 		case PAINTOP_ERASE:
 			eraseAt(pos1, pressure, xTilt, yTilt);
 			break;
+		case PAINTOP_DUPLICATE:
+			duplicateAt(pos1, pressure, xTilt, yTilt);
+			break;
 		case PAINTOP_PEN:
 			penAt(pos1, pressure, xTilt, yTilt);
 			break;
@@ -680,6 +684,9 @@ double KisPainter::paintLine(const enumPaintOp paintOp,
 			break;
 		case PAINTOP_AIRBRUSH:
 			airBrushAt(p, pressure, xTilt, yTilt);
+			break;
+		case PAINTOP_DUPLICATE:
+			duplicateAt(pos1, pressure, xTilt, yTilt);
 			break;
 		case PAINTOP_PEN:
 			penAt(p, pressure, xTilt, yTilt);
@@ -928,6 +935,89 @@ void KisPainter::paintAt(const KisPoint & pos,
 
 	m_dirtyRect |= QRect(x, y, m_dab -> width(), m_dab -> height());
 }
+
+void KisPainter::duplicateAt(const KisPoint &pos, const double pressure, const double /*xTilt*/, const double /*yTilt*/)
+{
+	if (!m_device) return;
+
+	KisPoint hotSpot = m_brush -> hotSpot(pressure);
+	KisPoint pt = pos - hotSpot;
+
+	// Split the coordinates into integer plus fractional parts. The integer
+	// is where the dab will be positioned and the fractional part determines
+	// the sub-pixel positioning.
+	Q_INT32 x;
+	double xFraction;
+	Q_INT32 y;
+	double yFraction;
+	
+	splitCoordinate(pt.x(), &x, &xFraction);
+	splitCoordinate(pt.y(), &y, &yFraction);
+
+	if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
+		// XXX: No subpixel available for image brushes yet.
+		if (fabs(m_pressure - pressure) > DBL_EPSILON || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
+			m_dab = m_brush -> image(pressure);
+		}
+	}
+	else {
+		KisAlphaMaskSP mask = m_brush -> mask(pressure, xFraction, yFraction);
+		computeDab(mask);
+	}
+
+	m_pressure = pressure;
+
+	// Draw correctly near the left and top edges
+	Q_INT32 sx = 0;
+	Q_INT32 sy = 0;
+	if (x < 0) {
+		sx = -x;
+		x = 0;
+	}
+	if (y < 0) {
+		sy = -y;
+		y = 0;
+	}
+	QPoint srcPoint = QPoint((Q_INT32)(pt.x()  - m_duplicateOffset.x()), (Q_INT32)(pt.y() - m_duplicateOffset.y()));
+	if( srcPoint.x() >=m_device->width() || srcPoint.y() >=m_device->height() )
+		return;
+		
+	KisPaintDevice* srcdev = new KisPaintDevice( m_dab.data()->width(), m_dab.data()->height(), m_dab.data()->type(), "");
+	Q_INT32 sw = srcdev->width();
+	Q_INT32 sh = srcdev->height();
+	if( srcPoint.x() + sw > m_device->width() )
+		sw = m_device->width() - srcPoint.x();
+	if( srcPoint.y() + sh > m_device->height() )
+		sh = m_device->height() - srcPoint.y();
+	if(sw < 0 || sh < 0)
+		return;
+	if (srcPoint.x() < 0 )
+		srcPoint.setX(0);
+	if( srcPoint.y() < 0)
+		srcPoint.setY(0);
+	
+	KisIteratorLineQuantum srcLit = srcdev->iteratorQuantumSelectionBegin( 0, sx, sx + sw - 1, sy);
+	KisIteratorLineQuantum dabLit = m_dab.data()->iteratorQuantumSelectionBegin( 0, sx, sx + sw - 1, sy);
+	KisIteratorLineQuantum srcLitend = srcdev->iteratorQuantumSelectionEnd( 0, sx, sx + sw - 1, sy + sh - 1);
+	KisIteratorLineQuantum devLit = m_device->iteratorQuantumSelectionBegin( m_transaction, srcPoint.x(), srcPoint.x() + sw - 1, srcPoint.y());
+	while ( srcLit <= srcLitend )
+	{
+		KisIteratorQuantum srcUit = *srcLit;
+		KisIteratorQuantum dabUit = *dabLit;
+		KisIteratorQuantum srcUitend = srcLit.end();
+		KisIteratorQuantum devUit = * devLit;
+		while( srcUit <= srcUitend )
+		{
+			m_device -> colorStrategy() -> computeDuplicatePixel( &srcUit, &dabUit, &devUit);
+		}
+		++srcLit; ++dabLit; ++devLit;
+	}
+	// Create the source
+	bitBlt( x,  y,  m_compositeOp, srcdev, m_opacity, sx, sy, srcdev -> width(),srcdev -> width());
+	delete srcdev;
+	m_dirtyRect |= QRect(x, y, m_dab -> width(), m_dab -> height());
+}
+
 
 void KisPainter::penAt(const KisPoint & pos,
 			 const double pressure,

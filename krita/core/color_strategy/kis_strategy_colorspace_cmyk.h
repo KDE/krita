@@ -95,6 +95,7 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 			     Q_INT32 rows, 
 			     Q_INT32 cols, 
 			     CompositeOp op) const;
+	virtual void computeDuplicatePixel(KisIteratorQuantum* dst, KisIteratorQuantum* dab, KisIteratorQuantum* src);
 
  private:
 

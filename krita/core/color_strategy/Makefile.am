@@ -1,4 +1,4 @@
-INCLUDES  = -I$(srcdir)/.. $(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
+INCLUDES  = -I$(srcdir)/.. -I$(srcdir)/../tiles $(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
 noinst_LTLIBRARIES = libkiscolor_strategy.la
 

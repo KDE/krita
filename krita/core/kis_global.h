@@ -158,7 +158,8 @@ enum enumPaintOp {
 	PAINTOP_PEN,
 	PAINTOP_ERASE,
 	PAINTOP_AIRBRUSH,
-	PAINTOP_CONVOLVE };
+	PAINTOP_CONVOLVE,
+	PAINTOP_DUPLICATE };
 
 enum enumPaintStyles {
 	PAINTSTYLE_HARD,
@@ -210,6 +211,8 @@ const PIXELTYPE PIXEL_INDEXED_ALPHA = 1;
 
 Q_INT32 imgTypeDepth(const enumImgType& type);
 bool imgTypeHasAlpha(const enumImgType& type);
+
+#define USEITERATORSFORPO 1
 
 #endif // KISGLOBAL_H_
 

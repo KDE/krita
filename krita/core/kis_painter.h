@@ -196,6 +196,14 @@ public:
 		     const double /*yTilt*/);
 
 	/**
+	 * Duplicate a part of the image
+	 */
+	void duplicateAt(const KisPoint &pos,
+					const double pressure,
+					const double /*xTilt*/,
+					const double /*yTilt*/);
+	void setDuplicateOffset(const QPoint offset);
+	/**
 	 * Paint a filled circle at pos with pressure dependent alpha and
 	 * 'ragged' edges. Meant to simulate the true effect of an airbrush.
 	 */
@@ -249,11 +257,18 @@ private:
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
+	QPoint m_duplicateOffset;
 	QUANTUM m_opacity;
 	CompositeOp m_compositeOp;
 
 	double m_pressure;
 };
+
+inline
+void KisPainter::setDuplicateOffset(const QPoint offset)
+{
+	m_duplicateOffset = offset;
+}
 
 inline
 void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c)

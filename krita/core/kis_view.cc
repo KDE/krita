@@ -1229,6 +1229,7 @@ void KisView::dialog_gradient()
 
  		kdDebug() << "gradient type is " << type << endl;
 	}
+        delete pGradientDialog;
 #endif
 }
 
@@ -1631,13 +1632,16 @@ void KisView::add_new_image_tab()
 
 void KisView::remove_current_image_tab()
 {
-	KisImageSP current = currentImg();
+    if ( m_doc->nimages() == 1 )
+        return;
 
-	if (current) {
-		disconnectCurrentImg();
-		m_current = 0;
-		m_doc -> removeImage(current);
-	}
+    KisImageSP current = currentImg();
+
+    if (current) {
+        disconnectCurrentImg();
+        m_current = 0;
+        m_doc -> removeImage(current);
+    }
 }
 
 void KisView::imageResize()

@@ -1,7 +1,6 @@
 /*
- *  kis_patternwidget.h - part of KImageShop
- *
  *  Copyright (c) 2000 Matthias Elter  <elter@kde.org>
+ *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,32 +17,33 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __kis_patternwidget_h__
-#define __kis_patternwidget_h__
+#if !defined KIS_ICONWIDGET_H_
+#define KIS_ICONWIDGET_H_
 
 #include <qframe.h>
 
-class KisPattern;
+class KoIconItem;
 
-class KisPatternWidget : public QFrame
-{
-  Q_OBJECT
+class KisIconWidget : public QFrame {
+	typedef QFrame super;
+	Q_OBJECT
 
- public:
-  KisPatternWidget( QWidget* parent = 0, const char* name = 0 );
+public:
+	KisIconWidget(QWidget *parent = 0, const char *name = 0);
 
- public slots:
-  void slotSetPattern( KisPattern& );
+public slots:
+	void slotSetItem(KoIconItem& item);
 
- signals:
-  void clicked();
+signals:
+	void clicked();
   
- protected:
-  virtual void drawContents ( QPainter * );
-  virtual void mousePressEvent ( QMouseEvent * );
+protected:
+	virtual void drawContents(QPainter *gc);
+	virtual void mousePressEvent(QMouseEvent *e);
 
- private:
-    KisPattern *m_pPattern; 
+private:
+	KoIconItem *m_item; 
 };
 
-#endif
+#endif // KIS_ICONWIDGET_H_
+

@@ -5,7 +5,7 @@ libkisui_la_LIBADD = ./labels/libkislabel.la
 libkisui_la_SOURCES = integerwidget.cc kis_dlg_preferences.cc kis_dlg_builder_progress.cc \
     kfloatingdialog.cc kfloatingtabdialog.cc \
     kis_tabbar.cc  kis_canvas.cc \
-    kis_brushwidget.cc kis_patternwidget.cc \
+    kis_iconwidget.cc \
     kis_gradientwidget.cc kis_previewwidget.cc kis_krayonwidget.cc \
     kis_channelview.cc gradientview.cc \
     kis_dlg_toolopts.cc kis_dlg_toolopts_polygon_preview.cc \

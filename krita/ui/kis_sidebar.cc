@@ -2,6 +2,7 @@
  *  kis_sidebar.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
+ *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,10 +32,13 @@
 
 #include "kis_sidebar.h"
 #include "kis_krayonwidget.h"
-#include "kis_brushwidget.h"
-#include "kis_patternwidget.h"
+#include "kis_iconwidget.h"
 #include "kis_gradientwidget.h"
 #include "kis_previewwidget.h"
+#include "kis_brush.h"
+#include "kis_pattern.h"
+
+
 
 //KisSideBar::KisSideBar( QWidget* parent, const char* name ) : QWidget( parent, name )
 KisSideBar::KisSideBar( QWidget* parent, const char* name )
@@ -42,14 +46,8 @@ KisSideBar::KisSideBar( QWidget* parent, const char* name )
 {
     kdDebug() << "KisSideBar::KisSideBar" << endl;
 
-    /* TopTitleFrame and Control frame are always at top of sidebar
-    sidabar and are always visible (unless the whole sidebar is hidden */
-    m_pTopTitleFrame = new TopTitleFrame(this);
     m_pControlFrame  = new ControlFrame(this);
 
-    // TopColorFrame is just for selecting color chooser -
-    // the ColorChooser frame can be hidden
-    m_pTopColorFrame        = new TopColorFrame(this);
     m_pColorChooserFrame    = new ColorChooserFrame(this);
 
     // krayon box
@@ -78,23 +76,42 @@ KisSideBar::KisSideBar( QWidget* parent, const char* name )
     kdDebug() << "KisSideBar::KisSideBar leaving" << endl;
 }
 
+KisSideBar::~KisSideBar()
+{
+}
+
+void KisSideBar::plug (QWidget* w) 
+{ 
+	m_dockFrame -> plug(w); 
+}
+
+void KisSideBar::unplug(QWidget *w) 
+{ 
+	m_dockFrame -> unplug(w); 
+}
+
+QWidget *KisSideBar::dockFrame() 
+{ 
+	return m_dockFrame; 
+}
+
 void KisSideBar::resizeEvent ( QResizeEvent * )
 {
-    int topTitleFrameHeight = 20;
+//    int topTitleFrameHeight = 20;
     int controlHeight = 42;
-    int topColorFrameHeight = 18;
+//    int topColorFrameHeight = 18;
     int colorChooserHeight = 152; //m_pColorChooserFrame->isVisible() ? 152 : 0;
 
     int total = 0;
 
-    m_pTopTitleFrame->setGeometry( 0, 0, width(), topTitleFrameHeight );
-    total += topTitleFrameHeight;
+//    m_pTopTitleFrame->setGeometry( 0, 0, width(), topTitleFrameHeight );
+//    total += topTitleFrameHeight;
 
     m_pControlFrame->setGeometry( 0, total, width(), controlHeight);
-    total += controlHeight;
+    total += m_pControlFrame -> height();
 
-    m_pTopColorFrame->setGeometry( 0, total, width(), topColorFrameHeight );
-    total += topColorFrameHeight;
+//    m_pTopColorFrame->setGeometry( 0, total, width(), topColorFrameHeight );
+//    total += topColorFrameHeight;
 
     m_pColorChooserFrame->setGeometry( 0, total, width(), colorChooserHeight );
     total += colorChooserHeight;
@@ -150,11 +167,6 @@ void KisSideBar::slotControlBGColorSelected(const KoColor& c)
   emit bgColorChanged( c );
 }
 
-void KisSideBar::slotSetKrayon(KisKrayon& k )
-{
-    m_pControlFrame->slotSetKrayon(k);
-}
-
 void KisSideBar::slotSetBrush( KisBrush& b )
 {
     m_pControlFrame->slotSetBrush(b);
@@ -175,55 +187,6 @@ void KisSideBar::slotHideChooserFrame( )
     resizeEvent(0L);
 }
 
-/*
-    Top Frame - really just a selector for the color chooser to show,
-    or to hide the color chooser entirely
-*/
-
-TopTitleFrame::TopTitleFrame( QWidget* parent, const char* name )
-    : QFrame( parent, name )
-{
-    setFrameStyle(Panel | Raised);
-    setLineWidth(1);
-
-    // setup buttons
-    m_pHideButton = new KoFrameButton(i18n("(*)"), this);
-    m_pTitleButton = new KoFrameButton(i18n("Crayon Box"), this);
-
-    QFont font = KGlobalSettings::generalFont();
-    font.setPointSize( 8 );
-
-    m_pHideButton->setFont(font);
-    m_pTitleButton->setFont(font);
-
-    m_pHideButton->setToggleButton(true);
-    m_pTitleButton->setToggleButton(false);
-
-    // connect buttons
-    connect(m_pHideButton, SIGNAL(clicked()), this,
-		  SLOT(slotHideClicked()));
-
-    setFrameStyle( Panel | Raised );
-}
-
-void TopTitleFrame::resizeEvent ( QResizeEvent * )
-{
-   //int w = width();
-    m_pTitleButton->setGeometry(0, 0, 182, 20);
-    m_pHideButton->setGeometry(182, 0, 18, 20);
-}
-
-void TopTitleFrame::slotHideClicked()
-{
-    emit hideClicked();
-}
-
-
-/*
-    Control Frame - status display with access to
-    color selector, brushes, patterns, and preview
-*/
-
 ControlFrame::ControlFrame( QWidget* parent, const char* name )
     : QFrame( parent, name )
 {
@@ -237,11 +200,9 @@ ControlFrame::ControlFrame( QWidget* parent, const char* name )
     setLineWidth(1);
 
     m_pColorButton = new KDualColorButton(this);
-    m_pBrushWidget = new KisBrushWidget(this);
-    m_pPatternWidget = new KisPatternWidget(this /*, defaultPattern.latin1()*/);
+    m_pBrushWidget = new KisIconWidget(this);
+    m_pPatternWidget = new KisIconWidget(this);
     m_pGradientWidget = new KisGradientWidget(this);
-    m_pPreviewWidget = new KisPreviewWidget(this);
-    m_pKrayonWidget = new KisKrayonWidget(this);
     connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this,
 	    SLOT(slotFGColorSelected(const QColor &)));
 
@@ -268,19 +229,14 @@ void ControlFrame::slotActiveColorChanged(KDualColorButton::DualColor s)
 	    emit activeColorChanged(ac_Background);
 }
 
-void ControlFrame::slotSetKrayon(KisKrayon& k)
-{
-    m_pKrayonWidget->slotSetKrayon(k);
-}
-
 void ControlFrame::slotSetBrush(KisBrush& b)
 {
-    m_pBrushWidget->slotSetBrush(b);
+    m_pBrushWidget->slotSetItem(b);
 }
 
 void ControlFrame::slotSetPattern(KisPattern& b)
 {
-    m_pPatternWidget->slotSetPattern(b);
+    m_pPatternWidget->slotSetItem(b);
 }
 
 void ControlFrame::resizeEvent ( QResizeEvent * )
@@ -296,11 +252,6 @@ void ControlFrame::resizeEvent ( QResizeEvent * )
     m_pPatternWidget->setGeometry(x, 4, iw, iw );
     x += (sp + iw);
     m_pGradientWidget->setGeometry(x, 4, iw, iw );
-    x += (sp + iw);
-    m_pPreviewWidget->setGeometry(x, 4, iw, iw );
-    x += (sp + iw);
-    m_pKrayonWidget->setGeometry(x, 4, iw, iw );
-
 }
 
 void ControlFrame::slotSetFGColor(const KoColor& c)
@@ -321,142 +272,6 @@ void ControlFrame::slotFGColorSelected(const QColor& c)
 void ControlFrame::slotBGColorSelected(const QColor& c)
 {
     emit bgColorChanged( KoColor(c) );
-}
-
-
-/*
-    Top Color Frame - really just a selector for the color chooser to show,
-    or to hide the color chooser entirely
-*/
-
-TopColorFrame::TopColorFrame( QWidget* parent, const char* name )
-: QFrame( parent, name )
-{
-#if 0
-    setFrameStyle(Panel | Raised);
-    setLineWidth(1);
-
-    // setup buttons
-    m_pHideButton = new KoFrameButton(i18n("(*)"), this);
-    m_pLABButton = new KoFrameButton(i18n("LAB"), this);
-    m_pCMYKButton = new KoFrameButton(i18n("CMYK"), this);
-    m_pHSBButton = new KoFrameButton(i18n("HSV"), this);
-    m_pGreyButton = new KoFrameButton(i18n("Gray"), this);
-    m_pRGBButton = new KoFrameButton(i18n("RGB"), this);
-
-    m_pEmptyFrame = new QFrame(this);
-    m_pEmptyFrame->setFrameStyle(Panel | Raised);
-    m_pEmptyFrame->setLineWidth(1);
-
-    QFont font = KGlobalSettings::generalFont();
-    font.setPointSize( 8 );
-
-    m_pHideButton->setFont(font);
-    m_pGreyButton->setFont(font);
-    m_pRGBButton->setFont(font);
-    m_pHSBButton->setFont(font);
-    m_pCMYKButton->setFont(font);
-    m_pLABButton->setFont(font);
-
-    m_pHideButton->setToggleButton(true);
-    m_pGreyButton->setToggleButton(true);
-    m_pRGBButton->setToggleButton(true);
-    m_pHSBButton->setToggleButton(true);
-    m_pCMYKButton->setToggleButton(true);
-    m_pLABButton->setToggleButton(true);
-
-    // connect buttons
-    connect(m_pHideButton, SIGNAL(clicked()), this,
-		  SLOT(slotHideClicked()));
-    connect(m_pGreyButton, SIGNAL(clicked()), this,
-		  SLOT(slotGreyClicked()));
-    connect(m_pRGBButton, SIGNAL(clicked()), this,
-		  SLOT(slotRGBClicked()));
-    connect(m_pHSBButton, SIGNAL(clicked()), this,
-		  SLOT(slotHSBClicked()));
-    connect(m_pCMYKButton, SIGNAL(clicked()), this,
-		  SLOT(slotCMYKClicked()));
-    connect(m_pLABButton, SIGNAL(clicked()), this,
-		  SLOT(slotLABClicked()));
-
-    setFrameStyle( Panel | Raised );
-
-    // RGB is default
-    m_pRGBButton->setOn(true);
-#endif
-}
-
-void TopColorFrame::resizeEvent ( QResizeEvent * )
-{
-#if 0
-    m_pRGBButton->setGeometry  (   0, 0, 30, 18 );
-    m_pGreyButton->setGeometry (  30, 0, 30, 18 );
-    m_pHSBButton->setGeometry  (  60, 0, 30, 18 );
-    m_pCMYKButton->setGeometry (  90, 0, 36, 18 );
-    m_pLABButton->setGeometry  ( 126, 0, 30, 18 );
-    m_pEmptyFrame->setGeometry ( 156, 0, 26, 18 );
-    m_pHideButton->setGeometry ( 182, 0, 18, 18 );
-#endif
-}
-
-void TopColorFrame::slotHideClicked()
-{
-    emit hideClicked();
-}
-
-void TopColorFrame::slotGreyClicked()
-{
-    m_pCMYKButton->setOn(false);
-    m_pGreyButton->setOn(true);
-    m_pRGBButton->setOn(false);
-    m_pHSBButton->setOn(false);
-    m_pLABButton->setOn(false);
-
-    emit greyClicked();
-}
-
-void TopColorFrame::slotRGBClicked()
-{
-    m_pCMYKButton->setOn(false);
-    m_pGreyButton->setOn(false);
-    m_pRGBButton->setOn(true);
-    m_pHSBButton->setOn(false);
-    m_pLABButton->setOn(false);
-
-    emit rgbClicked();
-}
-
-void TopColorFrame::slotHSBClicked()
-{
-    m_pCMYKButton->setOn(false);
-    m_pGreyButton->setOn(false);
-    m_pRGBButton->setOn(false);
-    m_pHSBButton->setOn(true);
-    m_pLABButton->setOn(false);
-
-    emit hsbClicked();
-}
-
-void TopColorFrame::slotCMYKClicked()
-{
-    m_pCMYKButton->setOn(true);
-    m_pGreyButton->setOn(false);
-    m_pRGBButton->setOn(false);
-    m_pHSBButton->setOn(false);
-    m_pLABButton->setOn(false);
-
-    emit cmykClicked();
-}
-
-void TopColorFrame::slotLABClicked()
-{
-    m_pCMYKButton->setOn(false);
-    m_pGreyButton->setOn(false);
-    m_pRGBButton->setOn(false);
-    m_pHSBButton->setOn(false);
-    m_pLABButton->setOn(true);
-
-    emit labClicked();
 }
 
 /*
@@ -516,7 +331,7 @@ void ColorChooserFrame::slotColorSelected(const KoColor& c)
 */
 
 DockFrame::DockFrame( QWidget* parent, const char* name )
-    : QFrame( parent, name )
+    : super( parent, name )
 {
     setFrameStyle(Panel | Raised);
     setLineWidth(1);

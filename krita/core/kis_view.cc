@@ -217,13 +217,6 @@ void KisView::setupSideBar()
 	if (sb) {
 		m_sideBar = new KisSideBar(this, "kis_sidebar");
 
-		m_crayonChooser = new KisItemChooser(KisFactory::rServer() -> brushes(), false, m_sideBar -> dockFrame(), "crayon_chooser");
-		m_crayonChooser -> addItem(KisFactory::rServer() -> patterns());
-		//	m_pKrayon = m_crayonChooser -> currentKrayon();
-		QObject::connect(m_crayonChooser, SIGNAL(selected(KoIconItem*)), this, SLOT(setActiveCrayon(KoIconItem*)));
-		m_crayonChooser -> setCaption(i18n("Crayons"));
-		m_sideBar -> plug(m_crayonChooser);
-
 		m_brushChooser = new KisItemChooser(KisFactory::rServer() -> brushes(), true, m_sideBar -> dockFrame(), "brush_chooser");
 		m_brush = dynamic_cast<KisBrush*>(m_brushChooser -> currentItem());
 		QObject::connect(m_brushChooser, SIGNAL(selected(KoIconItem*)), this, SLOT(setActiveBrush(KoIconItem*)));
@@ -241,9 +234,11 @@ void KisView::setupSideBar()
 		m_gradientChooser -> setCaption(i18n("Gradients"));
 		m_sideBar -> plug(m_gradientChooser);
 
+#if 0
 		m_imageChooser = new QWidget(this);
 		m_imageChooser -> setCaption(i18n("Images"));
 		m_sideBar -> plug(m_imageChooser);
+#endif
 
 		m_paletteChooser = new QWidget(this);
 		m_paletteChooser -> setCaption(i18n("Palettes"));
@@ -845,6 +840,8 @@ void KisView::paste_into()
 		KisSelectionSP selection = m_doc -> clipboardSelection();
 		KisLayerSP layer = m_doc -> layerAdd(img, img -> nextLayerName(), selection);
 
+		img -> unsetSelection(false);
+
 		if (layer) {
 			layer -> setX(0);
 			layer -> setY(0);
@@ -1409,7 +1406,7 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filena
 		}
 	}
 
-	if (img)
+	if (img && !createLayer)
 		selectImage(img);
 
 	return rc;
@@ -1536,8 +1533,8 @@ void KisView::merge_all_layers()
 	if (img) {
 		KisLayerSP dst = new KisLayer(img, img -> width(), img -> height(), img -> nextLayerName(), OPACITY_OPAQUE);
 		KisPainter gc(dst.data());
-		KisMerge<flattenAll> visitor(img, false);
 		vKisLayerSP layers = img -> layers();
+		KisMerge<flattenAll> visitor(img, false);
 
 		visitor(gc, layers);
 		img -> add(dst, -1);

@@ -30,6 +30,8 @@
 
 #include <qmsgbox.h>
 #include <qstring.h>
+#include <kglobal.h>
+#include <kstddirs.h>
 
 typedef KOMAutoLoader<Factory> MyAutoLoader;
 
@@ -83,6 +85,7 @@ QString util_rangeName( KSpread::Range _area )
 MyApplication::MyApplication( int &argc, char **argv ) :
   KOMApplication( argc, argv, "kocalc")
 {
+  KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kcalc/pics/");
 }
 
 void MyApplication::start()

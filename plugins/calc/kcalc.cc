@@ -33,6 +33,7 @@
 #include "fontdlg.h"
 #include "version.h"
 #include <kconfig.h>
+#include <kiconloader.h>
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken
 // glibc
@@ -1571,10 +1572,7 @@ void QtCalculator::configclicked(){
   label2->setAlignment(AlignLeft|WordBreak|ExpandTabs);
   label2->setText(labelstring2.data());
   
-  QString pixdir = kapp->kde_datadir() + "/kcalc/pics/";
-
-
-  QPixmap pm((pixdir + "kcalclogo.xpm").data());
+  QPixmap pm(ICON("kcalclogo.xpm"));
   QLabel *logo = new QLabel(box);
   logo->setPixmap(pm);
   logo->setGeometry(30, 20, pm.width(), pm.height());

@@ -26,6 +26,7 @@
 #include "kis_profile.h"
 #include "kis_quantum.h"
 #include "kis_strategy_colorspace.h"
+#include "kis_selection.h"
 
 class QColor;
 
@@ -72,23 +73,34 @@ class QColor;
  */
 class KisPixelRO {
 public:
-	
-	KisPixelRO(QUANTUM * channels = 0, QUANTUM* alpha = 0, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0)
-		: m_channels(channels), m_alpha(alpha), m_colorStrategy(colorStrategy), m_profile(profile) {}
 
+        KisPixelRO(QUANTUM * channels = 0, QUANTUM* alpha = 0, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0)
+                : m_channels(channels),
+                  m_alpha(alpha),
+                  m_selected(MAX_SELECTED),
+                  m_colorStrategy(colorStrategy),
+                  m_profile(profile) {};
+
+	virtual ~KisPixelRO();
 public:
 
 	QUANTUM operator[](int index) { return m_channels[index]; }
 
 	QUANTUM alpha() { return m_alpha[0]; }
+
+	QUANTUM selected() { return m_selected; }
+	void setSelected(QUANTUM selected) { m_selected = selected; }
+
 	KisStrategyColorSpaceSP colorStrategy() { return m_colorStrategy; }
 
 	void setProfile(KisProfileSP profile) { m_profile = profile; }
+
 	KisProfileSP profile() { return m_profile; }
 
 private:
 	QUANTUM* m_channels;
 	QUANTUM* m_alpha;
+        QUANTUM  m_selected;
 	KisStrategyColorSpaceSP m_colorStrategy;
 	KisProfileSP m_profile;
 };
@@ -108,31 +120,48 @@ public:
 	 * Create a new pixel with the specified number of channels and alpha channels.
 	 */
 	KisPixel(int nbChannels, int nbAlphaChannels = 1, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0) 
+
 		: m_channels(new QUANTUM(nbChannels)), 
 		  m_alpha(new QUANTUM(nbAlphaChannels)), 
+		  m_selected(MAX_SELECTED),
 		  m_colorStrategy(colorStrategy), 
 		  m_profile(profile) { };
 
-	/**
-	 * Create a read/write pixel for existing channel data.
-	 */
-	KisPixel(QUANTUM * channels, QUANTUM* alpha = 0, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0)
-		  : m_channels(channels), m_alpha(alpha), m_colorStrategy(colorStrategy), m_profile(profile) {}
+        /**
+         * Create a read/write pixel for existing channel data.
+         */
+        KisPixel(QUANTUM * channels, QUANTUM* alpha = 0, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0)
+                  : m_channels(channels),
+                    m_alpha(alpha),
+                    m_selected(MAX_SELECTED),
+                    m_colorStrategy(colorStrategy),
+                    m_profile(profile) {};
+
+
+	virtual ~KisPixel();
 
 public:
 
 	KisQuantum operator[](int index) { return KisQuantum(&m_channels[index]); };
+
 	KisQuantum alpha() { return KisQuantum(m_alpha); };
+
+	QUANTUM selected() { return m_selected; }
+        void setSelected(QUANTUM selected) { m_selected = selected; }
+
 	KisStrategyColorSpaceSP colorStrategy() { return m_colorStrategy; };
 
 	void setProfile(KisProfileSP profile) { m_profile = profile; }
+
 	KisProfileSP profile() { return m_profile; }
 
 	QUANTUM* channels() { return m_channels; }
+ 
 
 private:
 	QUANTUM* m_channels;
 	QUANTUM* m_alpha;
+        QUANTUM  m_selected;
 	KisStrategyColorSpaceSP m_colorStrategy;
 	KisProfileSP m_profile;
 };
@@ -151,38 +180,13 @@ private:
  * factory methods in the color strategies, instead of messing with
  * pointers to arrays of channels yourself.
  */
-class KisColor {
-	
-public:
-
-	KisColor(QColor c, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile) {};
-
-	KisColor(QUANTUM * channels, QUANTUM* alpha, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile)
-		: m_channels(channels), 
-		  m_alpha(alpha), 
-		  m_colorStrategy(colorStrategy), 
-		  m_profile(profile) {};
-
-	~KisColor() { delete m_channels; delete m_alpha; };
-
-public:
-
-	KisQuantum operator[](int index) { return KisQuantum(&m_channels[index]); };
-	KisQuantum alpha() { return KisQuantum(m_alpha); };
-	KisStrategyColorSpaceSP colorStrategy() { return m_colorStrategy; };
-
-	void setProfile(KisProfileSP profile) { m_profile = profile; }
-	KisProfileSP profile() { return m_profile; }
-
-	QUANTUM* channels() { return m_channels; }
-
-
-private:
-	QUANTUM* m_channels;
-	QUANTUM* m_alpha;
-	KisStrategyColorSpaceSP m_colorStrategy;
-	KisProfileSP m_profile;	
-
-};
+//class KisColor : public KisPixel {
+//	
+//public:
+//
+//	~KisColor() { delete m_channels; delete m_alpha; };
+//
+//
+//};
 
 #endif

@@ -16,15 +16,18 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <stdlib.h>
+
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qsize.h>
 #include <qtl.h>
+
 #include <kcommand.h>
 #include <kocommandhistory.h>
 #include <kdebug.h>
 #include <klocale.h>
+
 #include "KIsImageIface.h"
 
 #include "kis_guide.h"

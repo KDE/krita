@@ -134,77 +134,80 @@ void KisStrategyColorSpaceCMYK::render(KisImageSP projection,
 
 }
 
-QImage KisStrategyColorSpaceCMYK::convertToImage(KisImageSP projection, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const
+QImage KisStrategyColorSpaceCMYK::convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const
 {
+	if (!image) return QImage();
+
+	return convertToImage(image -> tiles(), image -> depth(), x, y, width, height);
+}
+
+QImage KisStrategyColorSpaceCMYK::convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const 
+{
+	if (!tm) return QImage();
+
 	// XXX I still don't understand upscale/downscale, so very likely
 	// have introduced related bugs in this bit.
-	if (projection) {
-		KisTileMgrSP tm = projection -> tiles();
-		KisPixelDataSP pd = new KisPixelData;
-		QImage img;
-
-		pd -> mgr = 0;
-		pd -> tile = 0;
-		pd -> mode = TILEMODE_READ;
-		pd -> x1 = x;
-		pd -> x2 = x + width - 1;
-		pd -> y1 = y;
-		pd -> y2 = y + height - 1;
-		pd -> width = pd -> x2 - pd -> x1 + 1;
-		pd -> height = pd -> y2 - pd -> y1 + 1;
-		pd -> depth = projection -> depth();
-		pd -> stride = pd -> depth * pd -> width;
-		pd -> owner = false;
-		pd -> data = m_buf;
-		tm -> readPixelData(pd);
-
-		img = QImage(pd->width,  pd->height, 32, 0, QImage::LittleEndian);
-		Q_INT32 i = 0;
-
-		uchar *j = img.bits();
-		QString s;
-		while ( i < pd ->stride * pd -> height ) {
-
-			RGB r;
-			// Check in LUT whether k already exists; if so, grab it, else
-			CMYK c;
-			c.c = *( pd->data + i + PIXEL_CYAN );
-			c.m = *( pd->data + i + PIXEL_MAGENTA );
-			c.y = *( pd->data + i + PIXEL_YELLOW );
-			c.k = *( pd->data + i + PIXEL_BLACK );
-
-			if ( m_rgbLUT.contains ( c ) ) {
-				r =  m_rgbLUT[c];
-			}
-			else {
-				// Accessing the rgba of KoColor automatically converts
-				// from cmyk to rgb and caches the result.
-				KoColor k = KoColor(c.c,
-						    c.m,
-						    c.y,
-						    c.k );
-				// Store as little as possible
-				r.r =  k.R();
-				r.g =  k.G();
-				r.b =  k.B();
-				m_rgbLUT[c] = r;
-			}
-
-			// fix the pixel in QImage.
-			*( j + PIXEL_ALPHA ) = *( pd->data + i + PIXEL_CMYK_ALPHA );
-			*( j + PIXEL_CYAN )   = r.r;
-			*( j + PIXEL_MAGENTA ) =  r.g;
-			*( j + PIXEL_YELLOW )  =  r.b;
-
-			i += MAX_CHANNEL_CMYKA;
-			j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
-
+	KisPixelDataSP pd = new KisPixelData;
+	QImage img;
+	
+	pd -> mgr = 0;
+	pd -> tile = 0;
+	pd -> mode = TILEMODE_READ;
+	pd -> x1 = x;
+	pd -> x2 = x + width - 1;
+	pd -> y1 = y;
+	pd -> y2 = y + height - 1;
+	pd -> width = pd -> x2 - pd -> x1 + 1;
+	pd -> height = pd -> y2 - pd -> y1 + 1;
+	pd -> depth = depth;
+	pd -> stride = pd -> depth * pd -> width;
+	pd -> owner = false;
+	pd -> data = m_buf;
+	tm -> readPixelData(pd);
+	
+	img = QImage(pd->width,  pd->height, 32, 0, QImage::LittleEndian);
+	Q_INT32 i = 0;
+	
+	uchar *j = img.bits();
+	QString s;
+	while ( i < pd ->stride * pd -> height ) {
+		
+		RGB r;
+		// Check in LUT whether k already exists; if so, grab it, else
+		CMYK c;
+		c.c = *( pd->data + i + PIXEL_CYAN );
+		c.m = *( pd->data + i + PIXEL_MAGENTA );
+		c.y = *( pd->data + i + PIXEL_YELLOW );
+		c.k = *( pd->data + i + PIXEL_BLACK );
+		
+		if ( m_rgbLUT.contains ( c ) ) {
+			r =  m_rgbLUT[c];
 		}
-		return img;
+		else {
+			// Accessing the rgba of KoColor automatically converts
+			// from cmyk to rgb and caches the result.
+			KoColor k = KoColor(c.c,
+					    c.m,
+					    c.y,
+					    c.k );
+			// Store as little as possible
+			r.r =  k.R();
+			r.g =  k.G();
+			r.b =  k.B();
+			m_rgbLUT[c] = r;
+		}
+		
+		// fix the pixel in QImage.
+		*( j + PIXEL_ALPHA ) = *( pd->data + i + PIXEL_CMYK_ALPHA );
+		*( j + PIXEL_CYAN )   = r.r;
+		*( j + PIXEL_MAGENTA ) =  r.g;
+		*( j + PIXEL_YELLOW )  =  r.b;
+		
+		i += MAX_CHANNEL_CMYKA;
+		j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
+		
 	}
-	else {
-		return QImage();
-	}
+	return img;
 }
 
 void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 stride,

@@ -75,7 +75,8 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 	
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
 
-	virtual QImage convertToImage(KisImageSP projection, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const;
+	virtual QImage convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const;
+	virtual QImage convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const;
 
 	virtual void tileBlt(Q_INT32 stride,
 			     QUANTUM *dst, 

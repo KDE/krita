@@ -19,8 +19,7 @@
 #define KIS_LAYER_H_
 
 #include "kis_paint_device.h"
-
-class KisSelection;
+#include "kis_types.h"
 
 class KisLayer : public KisPaintDevice {
 	typedef KisPaintDevice super;
@@ -46,6 +45,15 @@ public:
 
 	// Selection stuff. XXX: is it necessary to make the actual
 	// selection object available outside the layer?
+
+	/** Set the specified selection object as the active selection for this layer */
+	void setActiveSelection(KisSelectionSP selection);
+
+	/** Adds the specified selection to the currently active selection for this layer */
+	void addSelection(KisSelectionSP selection);
+
+	/** Subtracts the specified selection from the currently active selection for this layer */
+	void subtractSelection(KisSelectionSP selection);
 
 	/** Whether there is a valid selection for this layer. */
 	bool hasSelection() const;
@@ -91,7 +99,7 @@ private:
 
 	// Contains the actual selection. For now, there can be only
 	// one selection per layer. XXX: is this a limitation? 
-	KisSelection * m_selection;
+	KisSelectionSP m_selection;
 
 };
 

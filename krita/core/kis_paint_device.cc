@@ -384,8 +384,7 @@ enumImgType KisPaintDevice::typeWithAlpha() const
 
 QImage KisPaintDevice::convertToImage()
 {
-//	return m_colorStrategy -> convertToImage(data(), m_depth, 0, 0, m_width, m_height);
-return QImage();
+	return m_colorStrategy -> convertToImage(data(), m_depth, 0, 0, m_width, m_height);
 }
 
 KisTileMgrSP KisPaintDevice::data()

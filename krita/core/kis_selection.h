@@ -18,11 +18,12 @@
 #if !defined KIS_SELECTION_H_
 #define KIS_SELECTION_H_
 
-#include "qvaluevector.h"
+#include <qimage.h>
 
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
+
 
 /**
  * KisSelection contains a byte-map representation of a layer, where
@@ -35,25 +36,28 @@
  * not implemented yet.
  *
  */
-class KisSelection {
+class KisSelection : public KShared {
 
 public:
-	KisSelection(KisPaintDeviceSP layer, const QString& name);
+	KisSelection(KisLayerSP layer, const QString& name);
 	virtual ~KisSelection();
 
 	// Returns selectedness, or 0 if invalid coordinates
-	QUANTUM selected(Q_INT32 x, Q_INT32 y);
+	QUANTUM selected(Q_INT32 x, Q_INT32 y) const;
 
 	// Sets selectedness, and returns previous selectedness or 0
 	// if invalid coordinates.
 	QUANTUM setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
 
+	QImage maskImage() const;
+
 private:
-	KisPaintDeviceSP m_layer;
-	// XXX: check whether the STL vector is faster/better match.
-	// a big chunk of memory is _not_ an alternative.
-	typedef QValueVector<QUANTUM> MaskVector;
-	MaskVector * m_mask;
+	KisLayerSP m_layer;
+
+	// An 8-bit QImage is a pretty efficient way of storing the
+	// 8-bit selection mask, and has as a plus that it's really,
+	// really fast to show a preview of the mask.
+	QImage m_mask;
 	QString m_name;
 };
 

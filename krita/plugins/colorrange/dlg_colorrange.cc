@@ -20,15 +20,26 @@
 
 #include <klocale.h>
 
+#include "kis_types.h"
+
+#include "kis_layer.h"
+#include "kis_selection.h"
+
 #include "dlg_colorrange.h"
 #include "wdg_colorrange.h"
 
+#include "qpushbutton.h"
+#include "qcheckbox.h"
+#include "qslider.h"
+#include "qcombobox.h"
+#include "qpixmap.h"
+#include "qimage.h"
+#include "qlabel.h"
 
 DlgColorRange::DlgColorRange( QWidget *  parent,
-				    const char * name)
+			      const char * name)
 	: super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok)
 {
-	m_previewPix = QPixmap();
 	m_page = new WdgColorRange(this, "color_range");
 	setCaption(i18n("Color Range"));
 	setMainWidget(m_page);
@@ -36,6 +47,34 @@ DlgColorRange::DlgColorRange( QWidget *  parent,
 
 	connect(this, SIGNAL(okClicked()),
 		this, SLOT(okClicked()));
+
+	connect(m_page -> bnPickerPlus, SIGNAL(clicked()),
+		this, SLOT(slotPickerPlusClicked()));
+
+	connect(m_page -> bnPicker, SIGNAL(clicked()),
+		this, SLOT(slotPickerClicked()));
+
+	connect(m_page -> bnPickerMinus, SIGNAL(clicked()),
+		this, SLOT(slotPickerMinusClicked()));
+
+	connect(m_page -> bnLoad, SIGNAL(clicked()),
+		this, SLOT(slotLoad()));
+
+	connect(m_page -> bnSaveColorRange, SIGNAL(clicked()),
+		this, SLOT(slotSave()));
+
+	connect(m_page -> chkInvert, SIGNAL(clicked()),
+		this, SLOT(slotInvertClicked()));
+
+	connect(m_page -> sldrFuzziness, SIGNAL(valueChanged(int)),
+		this, SLOT(slotFuzzinessChanged(int)));
+
+	connect(m_page -> cmbSelect, SIGNAL(activated(int)),
+		this, SLOT(slotSelectionTypeChanged(int)));
+
+	connect(m_page -> cmbSelectionPreview, SIGNAL(activated(int)),
+		this, SLOT(slotPreviewTypeChanged(int)));
+
 }
 
 DlgColorRange::~DlgColorRange()
@@ -43,15 +82,65 @@ DlgColorRange::~DlgColorRange()
 	delete m_page;
 }
 
-void DlgColorRange::setPixmap(QPixmap pix) 
+void DlgColorRange::setLayer(KisLayerSP layer) 
 {
-	m_previewPix = pix;
-	m_previewPix.detach();
+	m_layer = layer;
+}
+
+void DlgColorRange::setSelection(KisSelectionSP selection)
+{
+	m_selection = selection;
+	int w, h;
+	w = m_page -> pixSelection -> width();
+	h = m_page -> pixSelection -> height();
+	
+	// XXX: hardcoded size
+	QPixmap pix = QPixmap(m_selection -> maskImage().scale(400, 350, QImage::ScaleMin));
+
+	m_page -> pixSelection -> setPixmap(pix);
 }
 
 void DlgColorRange::okClicked()
 {
 	accept();
 }
+
+
+void DlgColorRange::slotPickerPlusClicked() 
+{
+}
+
+void DlgColorRange::slotPickerClicked() 
+{
+}
+
+void DlgColorRange::slotLoad() 
+{
+}
+
+void DlgColorRange::slotPickerMinusClicked() 
+{
+}
+
+void DlgColorRange::slotSave() 
+{
+}
+
+void DlgColorRange::slotInvertClicked() 
+{
+}
+
+void DlgColorRange::slotFuzzinessChanged(int value) 
+{
+}
+
+void DlgColorRange::slotSelectionTypeChanged(int index) 
+{
+}
+
+void DlgColorRange::slotPreviewTypeChanged(int index) 
+{
+}
+
 
 #include "dlg_colorrange.moc"

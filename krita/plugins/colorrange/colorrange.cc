@@ -79,20 +79,14 @@ void ColorRange::slotActivated()
 {
 	DlgColorRange * dlgColorRange = new DlgColorRange(m_view, "ColorRange");
 
-	// Render layer to a QIMage -- keep in mind possibility of selection
 	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
-	QImage img = layer -> convertToImage();
+	KisSelectionSP selection = new KisSelection(layer, "colorrange");
+	
+	dlgColorRange -> setLayer(layer);
+	dlgColorRange -> setSelection(selection);
 
-	// Scale QImage to fit in preview
-
-	// Set original QImage in dialog
-		
 	if (dlgColorRange -> exec() == QDialog::Accepted) {
-		// Retrieve changes made by dialog
-		// Apply changes to layer (selection)
-		// Iterate through the pixels of the layer
-		
-		// If the pixel matches the criteria from the dialog, set the pixel selected
+		layer -> setActiveSelection(selection);
 	}
 	delete dlgColorRange;
 }

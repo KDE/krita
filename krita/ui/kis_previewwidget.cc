@@ -159,6 +159,9 @@ void KisPreviewWidget::mouseReleaseEvent(QMouseEvent * e)
 
 void KisPreviewWidget::updateWidgets(QPoint delta)
 {
+
+	if (!m_layer) return;
+
 	KisPainter gc;
 	KisPaintDeviceSP pd(m_layer.data());
 

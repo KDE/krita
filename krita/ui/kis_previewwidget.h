@@ -46,7 +46,7 @@ public:
 
 	KisPreviewWidget( QWidget* parent = 0, const char* name = 0 );
 
-	/** @return the layer, so the dialog can apply it's effect on it */
+	/** @return the layer, so the dialog can apply its effect on it. */
 	KisLayerSP getLayer();
 
 	/**

@@ -16,7 +16,6 @@
  *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
 #include "kis_global.h"
-#include "kis_types.h"
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kis_image.h"
@@ -66,14 +65,12 @@ KisLayer::KisLayer(KisTileMgrSP tm, KisImageSP img, const QString& name, QUANTUM
 	super(tm, img, name),
 	m_opacity(opacity),
 	m_linked(false),
-	m_hasSelection(false),
-	m_selection(0)
+	m_hasSelection(false)
 {
 }
 
 KisLayer::~KisLayer()
 {
-	delete m_selection;
 }
 
 KisMaskSP KisLayer::createMask(Q_INT32 )
@@ -96,7 +93,21 @@ KisMaskSP KisLayer::mask() const
 	return 0;
 }
 
+void KisLayer::setActiveSelection(KisSelectionSP selection)
+{
+	m_selection = selection;
+	m_hasSelection = true;
+}
 
+void KisLayer::addSelection(KisSelectionSP selection)
+{
+	// XXX: implement
+}
+
+void KisLayer::subtractSelection(KisSelectionSP selection)
+{
+	// XXX: implement
+}
 
 
 bool KisLayer::hasSelection() const
@@ -107,7 +118,6 @@ bool KisLayer::hasSelection() const
 
 void KisLayer::removeSelection()
 {
-	delete m_selection;
 	m_selection = 0;
 	m_hasSelection = false;
 }
@@ -127,6 +137,7 @@ QUANTUM KisLayer::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
 {
 	if (!m_hasSelection) {
 		m_selection = new KisSelection(this, "layer selection for: " + name());
+		m_hasSelection = true;
 	}
 	return m_selection -> setSelected(x, y, s);
 }

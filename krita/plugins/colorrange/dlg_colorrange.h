@@ -25,6 +25,7 @@
 
 #include <kdialogbase.h>
 
+#include "kis_types.h"
 #include "wdg_colorrange.h"
 
 
@@ -42,19 +43,28 @@ public:
 			 const char* name = 0);
 	~DlgColorRange();
 
-	/**
-	 * Set the initial preview pixmap
-	 */
-	void setPixmap(QPixmap pix);
+	void setLayer(KisLayerSP layer);
+	void setSelection(KisSelectionSP selection);
 
 private slots:
 
 	void okClicked();
 
+	void slotPickerPlusClicked();
+	void slotPickerClicked();
+	void slotLoad();
+	void slotPickerMinusClicked();
+	void slotSave();
+	void slotInvertClicked();
+	void slotFuzzinessChanged(int value);
+	void slotSelectionTypeChanged(int index);
+	void slotPreviewTypeChanged(int index);
+
 private:
 
 	WdgColorRange * m_page;
-	QPixmap m_previewPix;
+	KisSelectionSP m_selection;
+	KisLayerSP m_layer;
 };
 
 #endif // DLG_COLORRANGE

@@ -116,52 +116,56 @@ void KisStrategyColorSpaceRGB::render(KisImageSP image, QPainter& painter, Q_INT
 
 QImage KisStrategyColorSpaceRGB::convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const 
 {
-	if (image) {
-		KisTileMgrSP tm = image -> tiles();
-		KisPixelDataSP pd = new KisPixelData;
-		QImage img;
+	if (!image) return QImage();
 
-		pd -> mgr = 0;
-		pd -> tile = 0;
-		pd -> mode = TILEMODE_READ;
-		pd -> x1 = x;
-		pd -> x2 = x + width - 1;
-		pd -> y1 = y;
-		pd -> y2 = y + height - 1;
-		pd -> width = pd -> x2 - pd -> x1 + 1;
-		pd -> height = pd -> y2 - pd -> y1 + 1;
-		pd -> depth = image -> depth();
-		pd -> stride = pd -> depth * pd -> width;
-		pd -> owner = false;
-		pd -> data = m_buf;
-		tm -> readPixelData(pd);
+	return convertToImage(image -> tiles(), image -> depth(), x, y, width, height);
+}
 
+QImage KisStrategyColorSpaceRGB::convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const 
+{
+	if (!tm) return QImage();
+
+	KisPixelDataSP pd = new KisPixelData;
+	QImage img;
+	
+	pd -> mgr = 0;
+	pd -> tile = 0;
+	pd -> mode = TILEMODE_READ;
+	pd -> x1 = x;
+	pd -> x2 = x + width - 1;
+	pd -> y1 = y;
+	pd -> y2 = y + height - 1;
+	pd -> width = pd -> x2 - pd -> x1 + 1;
+	pd -> height = pd -> y2 - pd -> y1 + 1;
+	pd -> depth = depth;
+	pd -> stride = pd -> depth * pd -> width;
+	pd -> owner = false;
+	pd -> data = m_buf;
+	tm -> readPixelData(pd);
+	
 #ifdef __BIG_ENDIAN__
-		img = QImage(pd->width,  pd->height, 32, 0, QImage::LittleEndian);
-		Q_INT32 i = 0;
-		uchar *j = img.bits();
-
-		while ( i < pd ->stride * pd -> height ) {
-
-			// Swap the bytes
-			*( j + 0)  = *( pd->data + i + PIXEL_ALPHA );
-			*( j + 1 ) = *( pd->data + i + PIXEL_RED );
-			*( j + 2 ) = *( pd->data + i + PIXEL_GREEN );
-			*( j + 3 ) = *( pd->data + i + PIXEL_BLUE );
-
-			i += MAX_CHANNEL_RGBA;
-			j += MAX_CHANNEL_RGBA; // Because we're hard-coded 32 bits deep, 4 bytes
-
-		}
-
+	img = QImage(pd->width,  pd->height, 32, 0, QImage::LittleEndian);
+	Q_INT32 i = 0;
+	uchar *j = img.bits();
+	
+	while ( i < pd ->stride * pd -> height ) {
+		
+		// Swap the bytes
+		*( j + 0)  = *( pd->data + i + PIXEL_ALPHA );
+		*( j + 1 ) = *( pd->data + i + PIXEL_RED );
+		*( j + 2 ) = *( pd->data + i + PIXEL_GREEN );
+		*( j + 3 ) = *( pd->data + i + PIXEL_BLUE );
+		
+		i += MAX_CHANNEL_RGBA;
+		j += MAX_CHANNEL_RGBA; // Because we're hard-coded 32 bits deep, 4 bytes
+		
+	}
+	
 #else
-		img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * QUANTUM_DEPTH, 0, 0, QImage::LittleEndian);
+	img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * QUANTUM_DEPTH, 0, 0, QImage::LittleEndian);
 #endif
-		return img;
-	}
-	else {
-		return QImage();
-	}
+	return img;
+
 }
 
 

@@ -34,24 +34,24 @@
 
 AirBrushTool::AirBrushTool(KisDoc *doc, KisBrush *brush) : KisTool(doc)
 {
-    m_dragging = false;
-    m_cursor = KisCursor::airbrushCursor();
-    m_dragdist = 0;
-    density = 64;
-    m_doc = doc;
+	m_dragging = false;
+	m_cursor = KisCursor::airbrushCursor();
+	m_dragdist = 0;
+	density = 64;
+	m_doc = doc;
 
-    // initialize airbrush tool settings
-    m_opacity = 255;
-    m_usePattern = false;
-    m_useGradient = false;
+	// initialize airbrush tool settings
+	m_opacity = 255;
+	m_usePattern = false;
+	m_useGradient = false;
 
-    setBrush(brush);
+	setBrush(brush);
 
-    pos.setX(-1);
-    pos.setY(-1);
+	pos.setX(-1);
+	pos.setY(-1);
 
-    m_timer = new QTimer(this);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
+	m_timer = new QTimer(this);
+	connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
 }
 
 AirBrushTool::~AirBrushTool()
@@ -60,273 +60,253 @@ AirBrushTool::~AirBrushTool()
 
 void AirBrushTool::timeoutPaint()
 {
-    // kdDebug(0) << "timeoutPaint() caled" << endl;
-
-    if(paint(pos, true))
-    {
-         m_doc->current()->markDirty(QRect(pos
-            - m_brush->hotSpot(), m_brush->size()));
-    }
+	if (paint(pos, true))
+		m_doc -> current() -> markDirty(QRect(pos - m_brush->hotSpot(), m_brush->size()));
 }
 
 void AirBrushTool::setBrush(KisBrush *brush)
 {
-    m_brush = brush;
-    brushWidth =  (unsigned int) m_brush->width();
-    brushHeight = (unsigned int) m_brush->height();
+	m_brush = brush;
+	brushWidth =  (unsigned int) m_brush->width();
+	brushHeight = (unsigned int) m_brush->height();
 
-    // set the array of points to same size as brush
-    m_brushArray.resize(brushWidth * brushHeight);
-    m_brushArray.fill(0);
+	// set the array of points to same size as brush
+	m_brushArray.resize(brushWidth * brushHeight);
+	m_brushArray.fill(0);
 
-    kdDebug() << "setBrush(): "
-        << "brushwidth "   << brushWidth
-        << " brushHeight " << brushHeight
-        << endl;
+	kdDebug() << "setBrush(): "
+		<< "brushwidth "   << brushWidth
+		<< " brushHeight " << brushHeight
+		<< endl;
 
-    // set custom cursor
-    m_view->kisCanvas()->setCursor( KisCursor::airbrushCursor() );
-    m_cursor = KisCursor::airbrushCursor();
+	// set custom cursor
+	m_view->kisCanvas()->setCursor( KisCursor::airbrushCursor() );
+	m_cursor = KisCursor::airbrushCursor();
 }
 
 
 void AirBrushTool::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_doc->current();
-    if (!img) return;
+	KisImage * img = m_doc->current();
+	if (!img) return;
 
-    if(!img->getCurrentLayer())
-        return;
+	if(!img->getCurrentLayer())
+		return;
 
-    if(!img->getCurrentLayer()->visible())
-        return;
+	if(!img->getCurrentLayer()->visible())
+		return;
 
-    if (e->button() != QMouseEvent::LeftButton)
-        return;
+	if (e->button() != QMouseEvent::LeftButton)
+		return;
 
-    m_dragging = true;
+	m_dragging = true;
 
-    pos = e->pos();
-    pos = zoomed(pos);
-    m_dragStart = pos;
-    m_dragdist = 0;
+	pos = e->pos();
+	pos = zoomed(pos);
+	m_dragStart = pos;
+	m_dragdist = 0;
 
-    // clear array
-    m_brushArray.fill(0);
-    nPoints = 0;
+	// clear array
+	m_brushArray.fill(0);
+	nPoints = 0;
 
-    kdDebug() << "mousePress(): "
-        << "brushwidth " << brushWidth
-        << " brushHeight " << brushHeight
-        << endl;
-
-    kdDebug() << "mousePress(): "
-        << "m_brush->hotSpot().x() " << m_brush->hotSpot().x()
-        << "m_brush->hotSpot().y() " << m_brush->hotSpot().y()
-        << endl;
-
-    // Start the m_timer - 50 milliseconds or
-    // 20 timeouts/second (multishot)
-    m_timer->start(50, FALSE);
+	// Start the m_timer - 50 milliseconds or
+	// 20 timeouts/second (multishot)
+	m_timer->start(50, FALSE);
 }
 
 
 bool AirBrushTool::paint(QPoint pos, bool timeout)
 {
-    KisImage * img = m_doc->current();
-    if (!img)	    return false;
+	KisImage * img = m_doc->current();
+	if (!img)	    return false;
 
-    KisLayer *lay = img->getCurrentLayer();
-    if (!lay)       return false;
+	KisLayer *lay = img->getCurrentLayer();
+	if (!lay)       return false;
 
-    if (!m_brush)  return false;
+	if (!m_brush)  return false;
 
-    if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	    return false;
+	if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
+		return false;
 
-    if(!m_dragging) return false;
+	if(!m_dragging) return false;
 
-    int hotX = m_brush->hotSpot().x();
-    int hotY = m_brush->hotSpot().y();
+	int hotX = m_brush->hotSpot().x();
+	int hotY = m_brush->hotSpot().y();
 
-    int startx = pos.x() - hotX;
-    int starty = pos.y() - hotY;
+	int startx = pos.x() - hotX;
+	int starty = pos.y() - hotY;
 
-    QRect clipRect(startx, starty, m_brush->width(), m_brush->height());
-    if (!clipRect.intersects(lay->imageExtents()))
-        return false;
+	QRect clipRect(startx, starty, m_brush->width(), m_brush->height());
+	if (!clipRect.intersects(lay->imageExtents()))
+		return false;
 
-    clipRect = clipRect.intersect(lay->imageExtents());
+	clipRect = clipRect.intersect(lay->imageExtents());
 
-    int sx = clipRect.left() - startx;
-    int sy = clipRect.top() - starty;
-    int ex = clipRect.right() - startx;
-    int ey = clipRect.bottom() - starty;
+	int sx = clipRect.left() - startx;
+	int sy = clipRect.top() - starty;
+	int ex = clipRect.right() - startx;
+	int ey = clipRect.bottom() - starty;
 
-    uchar *sl;
-    uchar bv, invbv;
-    uchar r, g, b, a;
-    int   v;
+	uchar *sl;
+	uchar bv, invbv;
+	uchar r, g, b, a;
+	int   v;
 
-    int red   = m_view->fgColor().R();
-    int green = m_view->fgColor().G();
-    int blue  = m_view->fgColor().B();
+	int red   = m_view->fgColor().R();
+	int green = m_view->fgColor().G();
+	int blue  = m_view->fgColor().B();
 
-    bool alpha = (img->colorMode() == cm_RGBA);
+	bool alpha = (img->colorMode() == cm_RGBA);
 
-    for (int y = sy; y <= ey; y++)
-    {
-        sl = m_brush->scanline(y);
+	for (int y = sy; y <= ey; y++) {
+		sl = m_brush->scanline(y);
 
-        for (int x = sx; x <= ex; x++)
-	    {
-            /* get a truly ??? random number and divide it by
-            desired density - if x is that number, paint
-            a pixel from brush there this turn */
-            int nRandom = KApplication::random();
+		for (int x = sx; x <= ex; x++) {
+			/* get a truly ??? random number and divide it by
+			   desired density - if x is that number, paint
+			   a pixel from brush there this turn */
+			int nRandom = KApplication::random();
 
-            bool paintPoint = false;
+			bool paintPoint = false;
 
-            if((nRandom % density) == ((x - sx) % density))
-                paintPoint = true;
+			if ((nRandom % density) == ((x - sx) % density))
+				paintPoint = true;
 
-            // don't keep painting over points already painted
-            // this makes image too dark and grany, eventually -
-            // that effect is good with the regular brush tool,
-            // but not with an airbrush or with the pen tool
-            if(timeout && (m_brushArray[brushWidth * (y-sy) + (x-sx) ] > 0))
-            {
-                paintPoint = false;
-            }
+			// don't keep painting over points already painted
+			// this makes image too dark and grany, eventually -
+			// that effect is good with the regular brush tool,
+			// but not with an airbrush or with the pen tool
+			if (timeout && (m_brushArray[brushWidth * (y-sy) + (x-sx) ] > 0))
+				paintPoint = false;
 
-            if(paintPoint)
-            {
-#if 0
-	            r = lay->pixel(0, startx + x, starty + y);
-	            g = lay->pixel(1, startx + x, starty + y);
-	            b = lay->pixel(2, startx + x, starty + y);
+			if (paintPoint) {
+				QRgb rgb = lay -> pixel(startx + x, starty + y);
 
-	            bv = *(sl + x);
-	            if (bv == 0) continue;
+				r = qRed(rgb);
+				g = qGreen(rgb);
+				b = qBlue(rgb);
+				bv = *(sl + x);
 
-                invbv = 255 - bv;
+				if (bv == 0) 
+					continue;
 
-                b = ((blue * bv) + (b * invbv))/255;
-                g = ((green * bv) + (g * invbv))/255;
-                r = ((red * bv) + (r * invbv))/255;
+				invbv = 255 - bv;
+				b = ((blue * bv) + (b * invbv))/255;
+				g = ((green * bv) + (g * invbv))/255;
+				r = ((red * bv) + (r * invbv))/255;
 
-	            lay->setPixel(0, startx + x, starty + y, r);
-	            lay->setPixel(1, startx + x, starty + y, g);
-	            lay->setPixel(2, startx + x, starty + y, b);
+				if (alpha) {
+					a = qAlpha(rgb);
+					v = a + bv;
 
-	            if (alpha)
-	            {
-	                a = lay->pixel(3, startx + x, starty + y);
-	                v = a + bv;
-	                if (v < 0 ) v = 0;
-		            if (v > 255 ) v = 255;
-		            a = (uchar) v;
+					if (v < 0) 
+						v = 0;
 
-	                lay->setPixel(3, startx + x, starty + y, a);
-	            }
-                // add this point to points already painted
-                if(timeout)
-                {
-                    m_brushArray[brushWidth * (y-sy) + (x-sx)] = 1;
-                    nPoints++;
-                }
-#endif
-            }
-	    }
-    }
+					if (v > 255) 
+						v = 255;
 
-    return true;
+					a = (uchar)v;
+				}
+
+				rgb = alpha ? qRgba(r, g, b, a) : qRgb(r, g, b);
+				lay -> setPixel(startx + x, starty + y, rgb);
+
+				// add this point to points already painted
+				if (timeout) {
+					m_brushArray[brushWidth * (y-sy) + (x-sx)] = 1;
+					nPoints++;
+				}
+			}
+		}
+	}
+
+	return true;
 }
-
 
 void AirBrushTool::mouseMove(QMouseEvent *e)
 {
-    KisImage * img = m_doc->current();
-    if (!img) return;
+	KisImage * img = m_doc->current();
+	if (!img) return;
 
-    int spacing = m_brush->spacing();
-    if (spacing <= 0) spacing = 1;
+	int spacing = m_brush->spacing();
+	if (spacing <= 0) spacing = 1;
 
-    if(m_dragging)
-    {
-        if( !img->getCurrentLayer()->visible() )
-        	return;
+	if(m_dragging)
+	{
+		if( !img->getCurrentLayer()->visible() )
+			return;
 
-        pos = e->pos();
-        int mouseX = e->x();
-        int mouseY = e->y();
+		pos = e->pos();
+		int mouseX = e->x();
+		int mouseY = e->y();
 
-        pos = zoomed(pos);
-        mouseX = zoomed(mouseX);
-        mouseY = zoomed(mouseY);
+		pos = zoomed(pos);
+		mouseX = zoomed(mouseX);
+		mouseY = zoomed(mouseY);
 
-        KisVector end(mouseX, mouseY);
-        KisVector start(m_dragStart.x(), m_dragStart.y());
+		KisVector end(mouseX, mouseY);
+		KisVector start(m_dragStart.x(), m_dragStart.y());
 
-        KisVector dragVec = end - start;
-        float saved_dist = m_dragdist;
-        float new_dist = dragVec.length();
-        float dist = saved_dist + new_dist;
+		KisVector dragVec = end - start;
+		float saved_dist = m_dragdist;
+		float new_dist = dragVec.length();
+		float dist = saved_dist + new_dist;
 
-        if ((int)dist < spacing)
-	    {
-            // save for next movevent
-	        m_dragdist += new_dist;
-	        m_dragStart = pos;
-	        return;
-	    }
-        else
-	        m_dragdist = 0;
+		if ((int)dist < spacing)
+		{
+			// save for next movevent
+			m_dragdist += new_dist;
+			m_dragStart = pos;
+			return;
+		}
+		else
+			m_dragdist = 0;
 
-        dragVec.normalize();
-        KisVector step = start;
+		dragVec.normalize();
+		KisVector step = start;
 
-        while (dist >= spacing)
-	    {
-	        if (saved_dist > 0)
-	        {
-	            step += dragVec * (spacing-saved_dist);
-	            saved_dist -= spacing;
-	        }
-	        else
-	            step += dragVec * spacing;
+		while (dist >= spacing)
+		{
+			if (saved_dist > 0)
+			{
+				step += dragVec * (spacing-saved_dist);
+				saved_dist -= spacing;
+			}
+			else
+				step += dragVec * spacing;
 
-	        QPoint p(qRound(step.x()), qRound(step.y()));
+			QPoint p(qRound(step.x()), qRound(step.y()));
 
-	        if (paint(p, false))
-            {
-                img->markDirty(QRect(p - m_brush->hotSpot(),
-                    m_brush->size()));
-            }
+			if (paint(p, false))
+			{
+				img->markDirty(QRect(p - m_brush->hotSpot(),
+							m_brush->size()));
+			}
 
- 	        dist -= spacing;
-	    }
+			dist -= spacing;
+		}
 
-        //save for next movevent
-        if (dist > 0) m_dragdist = dist;
-        m_dragStart = pos;
-    }
+		//save for next movevent
+		if (dist > 0) m_dragdist = dist;
+		m_dragStart = pos;
+	}
 }
 
 
 void AirBrushTool::mouseRelease(QMouseEvent *e)
 {
-    // perhaps erase on right button
-    if (e->button() != LeftButton)  return;
+	// perhaps erase on right button
+	if (e->button() != LeftButton)  return;
 
-    // stop the m_timer - restart when mouse pressed again
-    m_timer->stop();
+	// stop the m_timer - restart when mouse pressed again
+	m_timer->stop();
 
-    //reset array of points
-    m_brushArray.fill(0);
-    nPoints = 0;
+	//reset array of points
+	m_brushArray.fill(0);
+	nPoints = 0;
 
-    m_dragging = false;
+	m_dragging = false;
 }
 
 void AirBrushTool::optionsDialog()
@@ -364,7 +344,7 @@ void AirBrushTool::setupAction(QObject *collection)
 	KToggleAction *toggle = new KToggleAction(i18n("&Airbrush tool"), "airbrush", 0, this, 
 			SLOT(toolSelect()), collection, "tool_airbrush");
 
-        toggle -> setExclusiveGroup("tools");
+	toggle -> setExclusiveGroup("tools");
 }
 
 QDomElement AirBrushTool::saveSettings(QDomDocument& doc) const

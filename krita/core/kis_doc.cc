@@ -942,108 +942,96 @@ bool KisDoc::saveAsQtImage(const QString& file, bool wholeImage)
 
 bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
 {
-    KisImage *img = current();
-    if(!img) return false;
+	KisImage *img = current();
+	if(!img) return false;
 
-    KisLayer *lay = img->getCurrentLayer();
-    if(!lay) return false;
+	KisLayer *lay = img->getCurrentLayer();
+	if(!lay) return false;
 
-    if(qimg->depth() < 16)
-    {
-        QImage cI = qimg->smoothScale(qimg->width(), qimg->height());
-        qimg = &cI;
-    }
+	if(qimg->depth() < 16)
+	{
+		QImage cI = qimg->smoothScale(qimg->width(), qimg->height());
+		qimg = &cI;
+	}
 
-    if(qimg->depth() < 32)
-    {
-        kdDebug() << "qimg depth is less than 32" << endl;
-        kdDebug() << "qimg depth is: " << qimg->depth() << endl;
+	if(qimg->depth() < 32)
+	{
+		kdDebug() << "qimg depth is less than 32" << endl;
+		kdDebug() << "qimg depth is: " << qimg->depth() << endl;
 
-        qimg->convertDepth(32);
-    }
+		qimg->convertDepth(32);
+	}
 
-    qimg->setAlphaBuffer(true);
+	qimg->setAlphaBuffer(true);
 
-    bool layerGrayScale = false;
-    bool qimageGrayScale = false;
+	bool layerGrayScale = false;
+	bool qimageGrayScale = false;
 
-    int startx = 0;
-    int starty = 0;
+	int startx = 0;
+	int starty = 0;
 
-    QRect clipRect(startx, starty, qimg->width(), qimg->height());
+	QRect clipRect(startx, starty, qimg->width(), qimg->height());
 
-    if (!clipRect.intersects(lay->imageExtents()))
-        return false;
+	if (!clipRect.intersects(lay->imageExtents()))
+		return false;
 
-    clipRect = clipRect.intersect(lay->imageExtents());
+	clipRect = clipRect.intersect(lay->imageExtents());
 
-    int sx = clipRect.left() - startx;
-    int sy = clipRect.top() - starty;
-    int ex = clipRect.right() - startx;
-    int ey = clipRect.bottom() - starty;
+	int sx = clipRect.left() - startx;
+	int sy = clipRect.top() - starty;
+	int ex = clipRect.right() - startx;
+	int ey = clipRect.bottom() - starty;
 
-    uchar *sl;
-    uchar r, a;
+	uchar *sl;
+	uchar r, a;
 
-    bool alpha = (img->colorMode() == cm_RGBA);
+	bool alpha = (img->colorMode() == cm_RGBA);
 
-    for (int y = sy; y <= ey; y++)
-    {
-        sl = qimg->scanLine(y);
+	lay -> resize(qimg -> width(), qimg -> height(), 32);
 
-        for (int x = sx; x <= ex; x++)
-	    {
-            uint *p = (uint *)qimg->scanLine(y) + x;
+	for (int y = sy; y <= ey; y++) {
+		sl = qimg->scanLine(y);
 
-            //QRgb *p = (QRgb *)qimg->scanLine(y) + x;
+		for (int x = sx; x <= ex; x++) {
+			QRgb *p = (QRgb*)qimg -> scanLine(y) + x;
 
-#if 0 /// XXX
-            if(layerGrayScale)
-            {
-                /* only if qimage is gray scale - in which case all
-                values are packed into the red channel if converted
-                to 32 bit already - can test above there should be no
-                8 or 16 bit QImages in Krayon */
-                if(qimageGrayScale)
-                {
-	                r = *(sl + x);
-                }
-                /* rgb qimage, but we are in grayscale mode
-                average rgb values to convert to 32 bit
-                gray scale - actually only shows 256 shades
-                of gray because all channels are same value */
-                else
-                {
-	                r = (qRed(*p) + qGreen(*p) + qBlue(*p))/3;
-                }
+			if (layerGrayScale) {
+				/* only if qimage is gray scale - in which case all
+				   values are packed into the red channel if converted
+				   to 32 bit already - can test above there should be no
+				   8 or 16 bit QImages in Krayon */
+				if (qimageGrayScale) {
+					r = *(sl + x);
+				}
+				/* rgb qimage, but we are in grayscale mode
+				   average rgb values to convert to 32 bit
+				   gray scale - actually only shows 256 shades
+				   of gray because all channels are same value */
+				else {
+					r = (qRed(*p) + qGreen(*p) + qBlue(*p)) / 3;
+				}
 
-	            lay->setPixel(0, startx + x, starty + y, r);
-	            lay->setPixel(1, startx + x, starty + y, r);
-	            lay->setPixel(2, startx + x, starty + y, r);
-            }
-            else
-		
-            {
-	            lay->setPixel(startx + x, starty + y, qRed(*p));
-	            lay->setPixel(startx + x, starty + y, qGreen(*p));
-	            lay->setPixel(startx + x, starty + y, qBlue(*p));
-            }
+				lay -> setPixel(startx + x, starty + y, qRgb(r, r, r));
+			}
+			else
+				lay -> setPixel(startx + x, starty + y, *p);
 
-            if (alpha)
-	        {
-                /* We need to get alpha value from qimg and this
-                will not work with 16 bit images correctly, but we
-                have already converted to 32 bit above */
+#if 0
+			if (alpha)
+			{
+				/* We need to get alpha value from qimg and this
+				   will not work with 16 bit images correctly, but we
+				   have already converted to 32 bit above */
 
-                a = qAlpha(*p);
-		        lay->setPixel(startx + x, starty + y, a);
-	        }
+				a = qAlpha(*p);
+				lay -> setPixel(startx + x, starty + y, a);
+			}
 #endif
-	lay -> setPixel(startx + x, starty + y, *p);
-	    }
-    }
+//			lay -> setPixel(startx + x, starty + y, *p);
+		}
+	}
 
-    return true;
+	return true;
 }
 
 

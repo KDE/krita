@@ -48,10 +48,12 @@ private:
 	void cleanup();
 
 private:
+	unsigned underrun[1024];
 	KisTile **m_tiles;
 	unsigned int m_xTiles;
 	unsigned int m_yTiles;
 	unsigned int m_bpp;
+	unsigned overrun[1024];
 };
 
 unsigned int KisTiles::xTiles() const

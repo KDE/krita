@@ -39,8 +39,11 @@ public:
 
 	virtual void setPixel(uint x, uint y, uint val);
 	virtual bool pixel(uint x, uint y, uint *val);
+	virtual uint pixel(uint x, uint y);
 
 	virtual void resize(uint width, uint height, uint bpp);
+	
+	inline KisTile *getTile(unsigned int x, unsigned int y);
 
 	inline uint xTiles() const;
 	inline uint yTiles() const;
@@ -75,6 +78,11 @@ void KisPaintDevice::setName(const QString& name)
 QString KisPaintDevice::name() const
 {
 	return m_name;
+}
+
+KisTile *KisPaintDevice::getTile(unsigned int x, unsigned int y) 
+{ 
+	return m_tiles.getTile(x, y); 
 }
 
 #endif // KIS_PAINT_DEVICE_H_

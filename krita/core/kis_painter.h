@@ -73,7 +73,6 @@ protected:
 	bool toLayer(const QRect& paintRect);
 
 private:
-	QImage m_painterImage;
 	QPixmap m_painterPixmap;
 
 	KisDoc *m_doc;

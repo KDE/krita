@@ -27,12 +27,13 @@
 
 #include <kdebug.h>
 
+#include "kis_cursor.h"
 #include "kis_doc.h"
+#include "kis_paint_device.h"
+#include "kis_painter.h"
 #include "kis_view.h"
 #include "kis_vec.h"
-#include "kis_cursor.h"
 #include "kis_util.h"
-#include "kis_painter.h"
 
 static void swap(int *first, int *second)
 {
@@ -275,12 +276,11 @@ void KisPainter::drawPolygon(const QPointArray& points, const QRect& rect)
 
 bool KisPainter::toLayer(const QRect& paintRect)
 {
-#if 0
+	kdDebug() << "KisPainter::toLayer\n";
+
 	KisImage *img;
 	KisLayer *lay;
-	QImage *qimg;
-
-	m_painterImage = m_painterPixmap.convertToImage();
+	QImage qimg = m_painterPixmap.convertToImage();
 
 	if (!(img = m_doc -> current()))
 		return false;
@@ -288,67 +288,51 @@ bool KisPainter::toLayer(const QRect& paintRect)
 	if (!(lay = img -> getCurrentLayer()))
 		return false;
 
-	qimg = &m_painterImage;
-	kdDebug() << "painter pixmap "  << " width " << qimg -> width() << " height " << qimg -> height() << endl;
-
-	if (!img -> colorMode() == cm_RGB && !img -> colorMode() == cm_RGBA) {
-		kdDebug() << "Warning: color mode not enabled" << endl;
+	QRect clipRect = paintRect.intersect(lay -> imageExtents());
+	
+	if (clipRect.isNull())
 		return false;
-	}
-
-	if (qimg -> depth() < 16)
-		kdDebug() << "Warning: kisPainter image depth < 16" << endl;
 
 	bool colorBlending = true;
 	bool alpha = img -> colorMode() == cm_RGBA;
-	bool averageAlpha = false;
-
-	QRect clipRect(paintRect);
-	
-	if (!clipRect.intersects(lay -> imageExtents()))
-		return false;
-
-	clipRect = clipRect.intersect(lay -> imageExtents());
-
-	int sx = clipRect.left();
-	int sy = clipRect.top();
-	int ex = clipRect.right();
-	int ey = clipRect.bottom();
-	unsigned char r;
-	unsigned char g;
-	unsigned char b;
+	bool averageAlpha = true;
 	int a = 255;
 	int opacity = m_lineOpacity;
 	int invopacity = 255 - opacity;
+	QRgb fg = qRgb(m_view -> fgColor().R(), m_view -> fgColor().G(), m_view -> fgColor().B());
 
-	int fgRed     = m_view -> fgColor().R();
-	int fgGreen   = m_view -> fgColor().G();
-	int fgBlue    = m_view -> fgColor().B();
-
-	// prepare framebuffer for painting with gradient
 	if (m_gradientFill)
 		m_doc -> frameBuffer() -> setGradientPaint(true, m_view -> fgColor(), m_view -> bgColor());
-	// prepare framebuffer for painting with pattern
 	else if (m_patternFill)
 		m_doc -> frameBuffer() -> setPattern(m_view -> currentPattern());
 
-	for (int y = sy; y <= ey; y++) {
-		for (int x = sx; x <= ex; x++) {
-			// destination binary values by channel
-			r = lay -> pixel(0, x, y);
-			g = lay -> pixel(1, x, y);
-			b = lay -> pixel(2, x, y);
+	for (int y = clipRect.top(); y <= clipRect.bottom(); y++) {
+		for (int x = clipRect.left(); x <= clipRect.right(); x++) {
+			QRgb rgb = lay -> pixel(x, y);
+			int r = qRed(rgb);
+			int g = qGreen(rgb);
+			int b = qBlue(rgb);
 
-			if (alpha)
-				a = lay -> pixel(3, x, y);
-            
-			// pixel value in scanline at x offset to right
-			// in terms of the image
-			uint *p = (uint *)qimg -> scanLine(y) + x;
+			if (alpha) {
+				int v;
 
-			// ignore the white background filler,
-			// only change black pixels
-			if(QColor(*p) != Qt::black) 
+				if (averageAlpha)
+					v = (qAlpha(rgb) + opacity) / 2;
+				else
+					v = opacity;
+
+				if (v < 0) 
+					v = 0;
+
+				if (v > 255) 
+					v = 255;
+
+				a = v;
+			}
+			
+			QRgb *p = (QRgb*)qimg.scanLine(y) + x;
+
+			if (QColor(*p) != Qt::black) 
 				continue;
 
 			/* NOTE: Currently these different painting modes are
@@ -357,60 +341,26 @@ bool KisPainter::toLayer(const QRect& paintRect)
 			   which can be combined to meet the user's exact specs.
 			   This will be handled by the KisFrameBuffer class */
 
-			// paint with gradient
 			if (m_gradientFill)
 				m_doc -> frameBuffer() -> setGradientToPixel(lay, x, y);
-			// paint with pattern
 			else if (m_patternFill)
 				m_doc -> frameBuffer() -> setPatternToPixel(lay, x, y, 0);
-			// set layer pixel to foreground color
-			else if (!colorBlending) {
-				lay -> setPixel(0, x,  y, fgRed);
-				lay -> setPixel(1, x,  y, fgGreen);
-				lay -> setPixel(2, x,  y, fgBlue);
+			else if (colorBlending) {
+				r = (qRed(fg) * opacity + r * invopacity) / 255;
+				g = (qGreen(fg) * opacity + g * invopacity) / 255;
+				b = (qBlue(fg) * opacity + b * invopacity) / 255;
+				rgb = qRgba(r, g, b, a);
+				lay -> setPixel(x, y, rgb);
 			}
-			/* blend source and destination values
-			   for each color based on opacity of source */
-			else {
-				lay -> setPixel(0, x, y, (fgRed * opacity + r * invopacity) / 255);
-				lay -> setPixel(1, x, y, (fgGreen * opacity + g * invopacity) / 255);
-				lay -> setPixel(2, x, y, (fgBlue * opacity + b * invopacity) / 255);
-			}
-
-			/* average source and destination alpha values
-			   for semi-transparent effect with other layers */
-			if (alpha && averageAlpha) {
-				int v = (a + opacity) / 2;
-				
-				if (v < 0) 
-					v = 0;
-
-				if (v > 255) 
-					v = 255;
-
-				a = (uchar)v;
-				lay -> setPixel(3, x,  y, a);
-			}
-			/* use alpha value of the tool only -
-			   ignore existing layer alpha value.  This
-			   allows drawing on transparent areas  */
-			else if(alpha) {
-				int v = opacity;
-
-				if (v < 0 ) v = 0;
-				if (v > 255 ) v = 255;
-				a = (uchar) v;
-				lay->setPixel(3, x,  y, a);
-			}
+			else
+				lay -> setPixel(x, y, fg);
 		}
 	}
 
 	img -> markDirty(clipRect);
 	clearRectangle(clipRect);
 	return true;
-#endif
-	return false;
 }
 
-#include "kis_painter.moc"
+//#include "kis_painter.moc"
 

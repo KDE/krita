@@ -34,19 +34,17 @@
 #include "kis_tool_pen.h"
 #include "kis_dlg_toolopts.h"
 
-PenTool::PenTool(KisDoc *doc, KisCanvas *canvas, KisBrush *_brush) : KisTool(doc)
+PenTool::PenTool(KisDoc *doc, KisCanvas *canvas, KisBrush *brush) : KisTool(doc)
 {
 	m_dragging = false;
 	m_canvas = canvas;
 	m_doc = doc;
-
-	// initialize pen tool settings
 	m_penColorThreshold = 128;
 	m_opacity = 255;
 	m_usePattern = false;
 	m_useGradient = false;
 	m_lineThickness = 1;
-	setBrush(_brush);
+	setBrush(brush);
 }
 
 PenTool::~PenTool()
@@ -116,74 +114,72 @@ void PenTool::mousePress(QMouseEvent *e)
 
 bool PenTool::paint(QPoint pos)
 {
-    KisImage * img = m_doc->current();
-    KisLayer *lay = img->getCurrentLayer();
-    KisFrameBuffer *m_fb = m_doc->frameBuffer();
+	KisImage * img = m_doc->current();
+	KisLayer *lay = img->getCurrentLayer();
+	KisFrameBuffer *m_fb = m_doc->frameBuffer();
 
-    int startx = (pos - m_brush->hotSpot()).x();
-    int starty = (pos - m_brush->hotSpot()).y();
+	int startx = (pos - m_brush->hotSpot()).x();
+	int starty = (pos - m_brush->hotSpot()).y();
 
-    QRect clipRect(startx, starty, m_brush->width(), m_brush->height());
+	QRect clipRect(startx, starty, m_brush->width(), m_brush->height());
 
-    if (!clipRect.intersects(lay->imageExtents()))
-        return false;
+	if (!clipRect.intersects(lay->imageExtents()))
+		return false;
 
-    clipRect = clipRect.intersect(lay->imageExtents());
+	clipRect = clipRect.intersect(lay->imageExtents());
 
-    int sx = clipRect.left() - startx;
-    int sy = clipRect.top() - starty;
-    int ex = clipRect.right() - startx;
-    int ey = clipRect.bottom() - starty;
+	int sx = clipRect.left() - startx;
+	int sy = clipRect.top() - starty;
+	int ex = clipRect.right() - startx;
+	int ey = clipRect.bottom() - starty;
 
-    uchar *sl;
-    uchar bv;
-    uchar r, g, b;
+	uchar *sl;
+	uchar bv;
+	uchar r, g, b;
 
-    int red = m_view->fgColor().R();
-    int green = m_view->fgColor().G();
-    int blue = m_view->fgColor().B();
+	int red = m_view->fgColor().R();
+	int green = m_view->fgColor().G();
+	int blue = m_view->fgColor().B();
 
-    bool alpha = (img->colorMode() == cm_RGBA);
+	bool alpha = (img->colorMode() == cm_RGBA);
 
-    for (int y = sy; y <= ey; y++)
-    {
-        sl = m_brush->scanline(y);
+	for (int y = sy; y <= ey; y++) {
+		sl = m_brush->scanline(y);
 
-        for (int x = sx; x <= ex; x++)
-	    {
-            // no color blending with pen tool (only with brush)
-	        // alpha blending only (maybe)
+		for (int x = sx; x <= ex; x++) {
+			// no color blending with pen tool (only with brush)
+			// alpha blending only (maybe)
 
-	        bv = *(sl + x);
-	        if (bv < m_penColorThreshold) continue;
+			bv = *(sl + x);
 
-		    r   = red;
-            g   = green;
-            b   = blue;
+			if (bv < m_penColorThreshold) 
+				continue;
 
-            // use foreround color
-            if(!m_usePattern)
-            {
+			r   = red;
+			g   = green;
+			b   = blue;
+
+			// use foreround color
+			if (!m_usePattern) {
+				lay -> setPixel(startx + x, starty + y, alpha ? qRgb(r, g, b) : qRgba(r, g, b, bv));
 #if 0
-	            lay->setPixel(0, startx + x, starty + y, r);
-	            lay->setPixel(1, startx + x, starty + y, g);
-	            lay->setPixel(2, startx + x, starty + y, b);
+						lay->setPixel(0, startx + x, starty + y, r);
+						lay->setPixel(1, startx + x, starty + y, g);
+						lay->setPixel(2, startx + x, starty + y, b);
 #endif
-            }
-            // map pattern to pen pixel
-            else
-            {
-//	            m_fb->setPatternToPixel(lay, startx + x, starty + y, 0);
-            }
+			}
+			// map pattern to pen pixel
+			else {
+				m_fb->setPatternToPixel(lay, startx + x, starty + y, 0);
+			}
 
-            if (alpha)
-	        {
-//		        lay->setPixel(3, startx + x, starty + y, bv);
-	        }
-	    }
-    }
+			if (alpha) {
+				//		        lay->setPixel(3, startx + x, starty + y, bv);
+			}
+		}
+	}
 
-    return true;
+	return true;
 }
 
 

@@ -87,8 +87,6 @@ public:
     
 	void    clear(const KisColor& c, bool transparent);
 
-	KisTile *getTile(unsigned int x, unsigned int y) { return m_tiles.getTile(x, y); }
-
 #if 0
 	KisChannel* firstChannel();
 	KisChannel* nextChannel();

@@ -25,95 +25,34 @@
 
 //#define DEBUG_STORE 1
 
-KisChannel::KisChannel(cId id, uchar bd)
-  : m_id( id )
-  , m_bitDepth( bd )
+KisChannel::KisChannel(cId id, const QString& name, uint width, uint height, uint bpp) : super(name, width, height, bpp)
 {
-    m_xTiles = 0;
-    m_yTiles = 0;
-    m_tiles = 0;
-
-    m_imgRect = m_tileRect = QRect(0, 0, 0, 0);
+	m_id = id;
+	m_imgRect = m_tileRect = QRect(0, 0, 0, 0);
 }
-
 
 KisChannel::~KisChannel()
 {
-    for(uint y = 0; y < yTiles(); y++)
-        for(uint x = 0; x < xTiles(); x++)
-	        delete m_tiles[y * xTiles() + x];
 }
-
-
-
-void KisChannel::setPixel(uint x, uint y, uchar pixel)
-{
-    // no sanity checks for performance reasons!
-    // find the point in tile coordinates
-    x = x - m_tileRect.x();
-    y = y - m_tileRect.y();
-  
-    // find the tile
-    int tileNo = (y / TILE_SIZE) * m_xTiles + x / TILE_SIZE;
-  
-    // does the tile exist?
-    if (m_tiles[tileNo] == 0) return;
-  
-    // get a pointer to the points tile data
-    uchar *ptr 
-        = m_tiles[tileNo] + ((y % TILE_SIZE) * TILE_SIZE + x % TILE_SIZE);
-
-    *ptr = pixel;
-}
-
-
-uchar KisChannel::pixel(uint x, uint y)
-{
-    // again no sanity checks for performance reasons!
-    // find the point in tile coordinates
-    x = x - m_tileRect.x();
-    y = y - m_tileRect.y();
-  
-    // find the tile
-    int tileNo = (y / TILE_SIZE) * m_xTiles + x / TILE_SIZE;
-
-    // does the tile exist?
-    if (m_tiles[tileNo] == 0)  return(0); 
-    // FIXME: fix this return some sort of undef (or bg) via KisColor
-  
-    // get a pointer to the points tile data
-    uchar *ptr 
-        = m_tiles[tileNo] + ((y % TILE_SIZE) * TILE_SIZE + x % TILE_SIZE);
-
-    return *ptr;
-}
-
 
 uint KisChannel::lastTileOffsetX()
 {
-
-    uint lastTileXOffset 
-        = TILE_SIZE - ( m_tileRect.right() - m_imgRect.right());
-    return((lastTileXOffset) ? lastTileXOffset :  TILE_SIZE);
+	uint lastTileXOffset = TILE_SIZE - ( m_tileRect.right() - m_imgRect.right());
+	return((lastTileXOffset) ? lastTileXOffset :  TILE_SIZE);
 }
-
 
 uint KisChannel::lastTileOffsetY()
 {
-    uint lastTileYOffset 
-        = TILE_SIZE - (m_tileRect.bottom() - m_imgRect.bottom());
-        
-    return((lastTileYOffset) ? lastTileYOffset :  TILE_SIZE);
+	uint lastTileYOffset = TILE_SIZE - (m_tileRect.bottom() - m_imgRect.bottom());
+	return((lastTileYOffset) ? lastTileYOffset :  TILE_SIZE);
 }
 
-
+#if 0
 void KisChannel::moveBy(int dx, int dy)
 {
-	Q_ASSERT(false);
-    m_imgRect.moveBy(dx, dy);
-    m_tileRect.moveBy(dx, dy);
+	m_imgRect.moveBy(dx, dy);
+	m_tileRect.moveBy(dx, dy);
 }
-
 
 void KisChannel::moveTo(int x, int y)
 {
@@ -124,11 +63,12 @@ void KisChannel::moveTo(int x, int y)
     m_tileRect.moveBy(dx,dy);
 }
 
+#endif
 
 QRect KisChannel::tileRect(int tileNo)
 {
-    int xTile = tileNo % m_xTiles;
-    int yTile = tileNo / m_xTiles;
+    int xTile = tileNo % xTiles();
+    int yTile = tileNo / xTiles();
 
     QRect tr(xTile * TILE_SIZE, yTile * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     tr.moveBy(m_tileRect.x(), m_tileRect.y());
@@ -144,6 +84,7 @@ QRect KisChannel::tileRect(int tileNo)
 
 void KisChannel::allocateRect(QRect newRect)
 {
+#if 0
     if (newRect.isNull())
         return;
   
@@ -240,6 +181,7 @@ void KisChannel::allocateRect(QRect newRect)
 		            memset(m_tiles[(y * m_xTiles) + x], 255, 
                         TILE_SIZE * TILE_SIZE);
             }
+#endif
 }
 
 
@@ -249,6 +191,7 @@ void KisChannel::allocateRect(QRect newRect)
  
 bool KisChannel::writeToStore( KoStore *store)
 {
+#if 0
     if (!store) return false;
     
     // empty byte array
@@ -286,11 +229,14 @@ bool KisChannel::writeToStore( KoStore *store)
     // write contents of byte array to store
     store->write(cByteArray);
     return true;
+#endif
+    return false;
 }
 
 
 bool  KisChannel::loadFromStore(KoStore *store)
 {
+#if 0
     if (!store) return false;
     
     unsigned int maxsize = (unsigned int)(TILE_SIZE * TILE_SIZE * m_yTiles * m_xTiles);
@@ -327,6 +273,8 @@ bool  KisChannel::loadFromStore(KoStore *store)
     }
 
     return true;
+#endif
+    return false;
 }
 
 

@@ -18,6 +18,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <kdebug.h>
+
 #include "kis_global.h"
 #include "kis_paint_device.h"
 
@@ -45,6 +47,14 @@ void KisPaintDevice::setPixel(uint x, uint y, uint pixel)
 
 	ppixel = tile -> data();
 	*(ppixel + ((y % TILE_SIZE) * TILE_SIZE) + (x % TILE_SIZE)) = pixel;
+}
+
+uint KisPaintDevice::pixel(uint x, uint y)
+{
+	uint pix;
+
+	pixel(x, y, &pix);
+	return pix;
 }
 
 bool KisPaintDevice::pixel(uint x, uint y, uint *val)

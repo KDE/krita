@@ -18,6 +18,9 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <assert.h>
+#include <stdlib.h>
+
 #include <kdebug.h>
 
 #include "kis_global.h"
@@ -90,5 +93,7 @@ void KisTiles::cleanup()
 			delete m_tiles[y * m_xTiles + x];
 
 	delete[] m_tiles;
+	m_xTiles = 0;
+	m_yTiles = 0;
 }
 

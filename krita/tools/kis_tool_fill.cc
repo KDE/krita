@@ -53,36 +53,26 @@ FillTool::~FillTool()
 // floodfill based on GPL code in gpaint by Li-Cheng (Andy) Tai
 int FillTool::is_old_pixel_value(struct fillinfo *info, int x, int y)
 {
-#if 0
-	unsigned char o_r = fLayer -> pixel(0, x, y);
-	unsigned char o_g = fLayer -> pixel(1, x, y);   
-	unsigned char o_b = fLayer -> pixel(2, x, y);   
+	QRgb rgb = fLayer -> pixel(x, y);
+	unsigned char o_r = qRed(rgb);
+	unsigned char o_g = qGreen(rgb);
+	unsigned char o_b = qBlue(rgb);
 
 	return o_r == info -> o_r && o_g == info->o_g && o_b == info->o_b;
-#endif
-	return 0;
 }
 
 void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
 {
-#if 0
-	// fill with pattern
 	if(m_useGradient)
 		m_doc -> frameBuffer() -> setGradientToPixel(fLayer, x, y);
-	// fill with pattern
 	else if(m_usePattern)
 		m_doc -> frameBuffer() -> setPatternToPixel(fLayer, x, y, 0);
-	// fill with color
-	else {
-		fLayer -> setPixel(0, x, y, info -> r);
-		fLayer -> setPixel(1, x, y, info -> g);   
-		fLayer -> setPixel(2, x, y, info -> b);
-	}
+	else
+		fLayer -> setPixel(x, y, qRgba(info -> r, info -> g, info -> b, m_opacity));
     
 	// alpha adjustment with either fill method
-	if (layerAlpha)
-		fLayer -> setPixel(3, x, y, m_opacity);
-#endif
+//	if (layerAlpha)
+//		fLayer -> setPixel(3, x, y, m_opacity);
 }
 
 
@@ -92,7 +82,6 @@ void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
 
 void FillTool::flood_fill(struct fillinfo *info, int x, int y)
 {
-#if 0
    struct fillpixelinfo stack[STACKSIZE];
    struct fillpixelinfo * sp = stack;
    int l, x1, x2, dy;
@@ -121,11 +110,9 @@ void FillTool::flood_fill(struct fillinfo *info, int x, int y)
    if ((x >= info->left) && (x <= info->right) 
    && (y >= info->top) && (y <= info->bottom))
    {
-        if((fLayer->pixel(0, x, y) == info->r)
-        && (fLayer->pixel(1, x, y) == info->g)
-        && (fLayer->pixel(2, x, y) == info->b))
-            return;
-      
+	   if (is_old_pixel_value(info, x, y))
+		   return;
+
         PUSH(y, x, x, 1);
         PUSH(y + 1, x, x, -1);
       	 
@@ -156,7 +143,6 @@ skip:
 
 #undef POP
 #undef PUSH
-#endif	 
 }   
    
 void FillTool::seed_flood_fill(int x, int y, const QRect& frect)
@@ -184,9 +170,9 @@ void FillTool::seed_flood_fill(int x, int y, const QRect& frect)
 
 bool FillTool::flood(int startX, int startY)
 {
-#if 0
     int startx = startX;
     int starty = startY;
+    QRgb srgb;
     
     KisImage *img = m_doc->current();
     if (!img) return false;    
@@ -201,9 +187,10 @@ bool FillTool::flood(int startX, int startY)
     fLayer = lay;
     
     // source color values of selected pixed
-    sRed    = lay->pixel(0, startx, starty);
-    sGreen  = lay->pixel(1, startx, starty);
-    sBlue   = lay->pixel(2, startx, starty);
+    srgb = lay -> pixel(startx, starty);
+    sRed = qRed(srgb);
+    sGreen = qGreen(srgb);
+    sBlue = qBlue(srgb);
 
     // new color values from color selector 
 
@@ -244,8 +231,6 @@ bool FillTool::flood(int startX, int startY)
     /* refresh canvas so changes show up */
     QRect updateRect(0, 0, img->width(), img->height());
     img->markDirty(updateRect);
-#endif
-  
     return true;
 }
 

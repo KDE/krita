@@ -27,55 +27,42 @@
 #include <koStore.h>
 
 #include "kis_global.h"
+#include "kis_paint_device.h"
 
-class KisChannel
-{
+class KisChannel : public KisPaintDevice {
+	typedef KisPaintDevice super;
+
 public:
+	KisChannel(cId id, const QString& name, uint width, uint height, uint bpp);
+	virtual ~KisChannel();
 
-    KisChannel(cId id, uchar bitDepth = 8);
-    virtual ~KisChannel();
+	cId channelId() const { return m_id; }
+	int width() const { return m_imgRect.width(); }
+	int height() const { return m_imgRect.height(); }
+	QRect tileExtents() const { return m_tileRect; };
+	QRect imageExtents() const { return m_imgRect; };
+	QPoint offset() const { return m_imgRect.topLeft() - m_tileRect.topLeft(); };
 
-    cId    channelId()    const { return m_id; }
-    uchar  bitDepth()     const { return m_bitDepth; }
-    uint   xTiles()       const { return m_xTiles; }
-    uint   yTiles()       const { return m_yTiles; }
-    int    width()        const { return m_imgRect.width(); }
-    int    height()       const { return m_imgRect.height(); }
-    QRect  tileExtents()  const { return m_tileRect; };
-    QRect  imageExtents() const { return m_imgRect; };
-    QPoint offset()       const { return m_imgRect.topLeft() - m_tileRect.topLeft(); };
 
-    uchar** tiles()       { return m_tiles; }
-
-    void allocateRect(QRect newRect);
-  
+#if 0
     void moveBy(int dx, int dy);
     void moveTo(int x, int y);
+#endif
   
-    void  setPixel(uint x, uint y, uchar val);
-    uchar pixel(uint x, uint y);
-	
-    QRect tileRect(int tileNo);
+	void allocateRect(QRect newRect);
+    	QRect tileRect(int tileNo);
 
-    uint lastTileOffsetX();
-    uint lastTileOffsetY();
+	uint lastTileOffsetX();
+	uint lastTileOffsetY();
 
-    bool  writeToStore(KoStore *store); 
-    bool  loadFromStore(KoStore *store); 
-    
- 
- protected:
-  
-    cId      m_id;
-    uchar    m_bitDepth;
-    
-    // array of pointers to tile data
-    uchar**  m_tiles;
-    uint     m_xTiles, m_yTiles;
-  
-    QRect    m_imgRect, m_tileRect;
+	bool  writeToStore(KoStore *store); 
+	bool  loadFromStore(KoStore *store); 
 
+protected:
+	cId m_id;
+	QRect m_imgRect; 
+	QRect m_tileRect;
 };
 
-
 #endif // __kis_channel_h__
+

@@ -2304,7 +2304,7 @@ void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
 	else if (bg == bm_BackgroundColor)
 		newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), KisColor::white(), false, i18n("background"));
 
-	newimg -> markDirty(QRect(0, 0, newimg -> width(), newimg -> height()));
+//	newimg -> markDirty(QRect(0, 0, newimg -> width(), newimg -> height())); // XXX
 	m_doc -> setCurrentImage(newimg);
 }
 

@@ -43,6 +43,7 @@ private:
         virtual void cancel() { m_cancelRequested = true; }
         void xShearImage(double shearX, KisProgressDisplayInterface *m_progress);
         void yShearImage(double shearY, KisProgressDisplayInterface *m_progress);
+        void yCropImage(double deltaY);
 };
 
 inline KisRotateVisitor::KisRotateVisitor()

@@ -55,6 +55,7 @@ void KisToolBrush::mousePress(QMouseEvent *e)
 
  	if (e->button() == QMouseEvent::LeftButton) {
  		m_mode = PAINT;
+		paint(e->pos(), 128, 0, 0);
  	}
 }
 
@@ -90,7 +91,7 @@ void KisToolBrush::paint(const QPoint & pos,
 	// Retrieve the mask of the brush used
 	QImage img = m_subject -> currentBrush() -> img();
 #if 0
-	kdDebug() << "mask depth: " << mask.depth() << endl;
+s	kdDebug() << "mask depth: " << mask.depth() << endl;
 #endif
 	// Mess with the default mask according to pressure, tilt and whatnot
 
@@ -136,22 +137,10 @@ void KisToolBrush::paint(const QPoint & pos,
 			// real coloured brush, and are knackered for
 			// the nonce.
 			QRgb c = img.pixel(x,y);
-  			QUANTUM a = ((255 - qRed(c))
- 				     + (255 - qGreen(c))
- 				     + (255 - qBlue(c))) / 3;
-// 			if (qRed(c) == 255 && qGreen(c) == 255 && qBlue(c) == 255 ) {
-// 				tmpLayer->setPixel(x, y, m_subject -> fgColor(), OPACITY_TRANSPARENT);
-// 			}
-// 			else {
-// 				KoColor k = m_subject -> fgColor();
-
-// 				k.setRGB(k.R() * (QUANTUM_MAX - a + k.R() * a) / QUANTUM_MAX,
-// 					 k.G() * (QUANTUM_MAX - a + k.G() * a) / QUANTUM_MAX,
-// 					 k.B() * (QUANTUM_MAX - a + k.B() * a) / OPACITY_OPAQUE);
-
+			QUANTUM a = ((255 - qRed(c))
+				     + (255 - qGreen(c))
+				     + (255 - qBlue(c))) / 3;
 			tmpLayer->setPixel(x, y, m_subject -> fgColor(), a);
-// 			}
-
 		}
 	}
 	// Blit the temporary KisPaintDevice onto the current layer

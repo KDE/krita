@@ -114,30 +114,34 @@ void KisStrategyColorSpaceRGB::render(KisImageSP projection, QPainter& painter, 
 		uchar *j = img.bits();
 
 		while ( i < pd ->stride * pd -> height ) {
-			
-			// Swap the bytes			
+
+			// Swap the bytes
 			*( j + 0)  = *( pd->data + i + PIXEL_ALPHA );
 			*( j + 1 ) = *( pd->data + i + PIXEL_RED );
 			*( j + 2 ) = *( pd->data + i + PIXEL_GREEN );
 			*( j + 3 ) = *( pd->data + i + PIXEL_BLUE );
-			
+
 			i += MAX_CHANNEL_RGBA;
 			j += MAX_CHANNEL_RGBA; // Because we're hard-coded 32 bits deep, 4 bytes
-			
+
 		}
+		// kpixmapio has a nasty bug on powerpc that shows up as rendering errors
+		m_pixmap = QPixmap(img);
+
 #else
 		img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * CHAR_BIT, 0, 0, QImage::LittleEndian);
+		m_pixio.putImage(&m_pixmap, 0, 0, &img);
+
 #endif
 
-		m_pixio.putImage(&m_pixmap, 0, 0, &img);
 		painter.drawPixmap(x, y, m_pixmap, 0, 0, width, height);
 	}
 }
 
 void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
-	QUANTUM *dst, 
+	QUANTUM *dst,
 	Q_INT32 dststride,
-	QUANTUM *src, 
+	QUANTUM *src,
 	Q_INT32 srcstride,
 	Q_INT32 rows, 
 	Q_INT32 cols, 

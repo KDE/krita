@@ -241,7 +241,7 @@ ControlFrame::ControlFrame( QWidget* parent, const char* name )
     m_pPatternWidget = new KisPatternWidget(this /*, defaultPattern.latin1()*/);
     m_pGradientWidget = new KisGradientWidget(this);
     m_pPreviewWidget = new KisPreviewWidget(this);
-
+    m_pKrayonWidget = new KisKrayonWidget(this);
     connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this,
 	    SLOT(slotFGColorSelected(const QColor &)));
 
@@ -298,6 +298,9 @@ void ControlFrame::resizeEvent ( QResizeEvent * )
     m_pGradientWidget->setGeometry(x, 4, iw, iw );
     x += (sp + iw);
     m_pPreviewWidget->setGeometry(x, 4, iw, iw );
+    x += (sp + iw);
+    m_pKrayonWidget->setGeometry(x, 4, iw, iw );
+
 }
 
 void ControlFrame::slotSetFGColor(const KoColor& c)
@@ -523,7 +526,7 @@ DockFrame::DockFrame( QWidget* parent, const char* name )
 
 void DockFrame::plug (QWidget* w)
 {
-	if (!w) 
+	if (!w)
 		return;
 
 	QString name = w -> caption();

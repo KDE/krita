@@ -22,7 +22,7 @@
 #include "kistile.h"
 
 namespace {
-	void fillBgTile(KisTileSP tile)
+	void fillBgTile(KisTileSP tile, Q_INT32 nbc )
 	{
 		QUANTUM *p;
 		QUANTUM *q;
@@ -39,10 +39,11 @@ namespace {
 
 				v = upscale(v);
 				q = p + (y * tile -> width() + x) * tile -> depth();
-				q[PIXEL_RED] = v;
-				q[PIXEL_GREEN] = v;
-				q[PIXEL_BLUE] = v;
-				q[PIXEL_ALPHA] = OPACITY_OPAQUE;
+				for(Q_INT32 c = 0; c < nbc; c++)
+				{
+					q[c] = v;
+				}
+				q[nbc] = OPACITY_OPAQUE;
 			}
 		}
 
@@ -58,7 +59,7 @@ KisBackground::KisBackground(KisImageSP img, Q_INT32 width, Q_INT32 height) :
 
 	tm = data();
 	tile = tm -> tile(0, TILEMODE_WRITE);
-	fillBgTile(tile);
+	fillBgTile(tile,  ::imgTypeDepth( img->imgTypeWithAlpha() ));
 
 	for (Q_UINT32 i = 0, k = 0; i < tm -> nrows(); i++)
 		for (Q_UINT32 j = 0; j < tm -> ncols(); j++, k++)

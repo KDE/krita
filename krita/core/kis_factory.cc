@@ -29,13 +29,7 @@
 #include "kis_resourceserver.h"
 #include "kis_doc.h"
 
-extern "C" 
-{
-	void* init_libkritapart()
-	{
-		return new KisFactory;
-	}
-}
+K_EXPORT_COMPONENT_FACTORY( libkritapart, KisFactory )
 
 KAboutData* KisFactory::s_aboutData = 0;
 KInstance* KisFactory::s_global = 0;

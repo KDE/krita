@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritascreenshot" version="1">
+<MenuBar>
+    <Menu name="Tools"><text>Tools</text>
+	<Seperator/>
+	<Action name="screenshot"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

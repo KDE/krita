@@ -1,0 +1,322 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>KSnapshotWidget</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KSnapshotWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>369</width>
+            <height>241</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>KSnapshotWidget</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="KSnapshotThumb" row="0" column="0" rowspan="4" colspan="3">
+            <property name="name">
+                <cstring>lblImage</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>200</width>
+                    <height>130</height>
+                </size>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Thumbnail of the current snapshot</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>This is a thumbnail of the current snapshot.
+
+The image can be dragged to another application or document to copy the full screenshot there. Try it with the Konqueror file manager!</string>
+            </property>
+        </widget>
+        <widget class="KPushButton" row="0" column="3">
+            <property name="name">
+                <cstring>btnNew</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;New Snapshot</string>
+            </property>
+            <property name="iconSet">
+                <iconset>"ksnapshot"</iconset>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Click this button to take a new snapshot.</string>
+            </property>
+        </widget>
+        <spacer row="1" column="3">
+            <property name="name">
+                <cstring>Spacer6</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>16</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="KPushButton" row="3" column="3">
+            <property name="name">
+                <cstring>btnPrint</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Print...</string>
+            </property>
+            <property name="iconSet">
+                <iconset>"fileprint"</iconset>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Click this button to print the current screenshot.</string>
+            </property>
+        </widget>
+        <widget class="Line" row="4" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>line1</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="6" column="1">
+            <property name="name">
+                <cstring>spinDelay</cstring>
+            </property>
+            <property name="suffix">
+                <string> sec</string>
+            </property>
+            <property name="specialValueText">
+                <string>No delay</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Snapshot delay in seconds</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;qt&gt;
+This is the number of seconds to wait after clicking the &lt;i&gt;New Snapshot&lt;/i&gt; button before taking the snapshot.
+&lt;p&gt;
+This is very useful for getting windows, menus and other items on the screen set up just the way you want.
+&lt;p&gt;
+If &lt;i&gt;no delay&lt;/i&gt; is set, the program will wait for a mouse click before taking a snapshot.
+&lt;/p&gt;
+&lt;/qt&gt;</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="6" column="0">
+            <property name="name">
+                <cstring>lblDelay</cstring>
+            </property>
+            <property name="text">
+                <string>Snapshot &amp;delay:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>spinDelay</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="5" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Cap&amp;ture mode:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>comboMode</cstring>
+            </property>
+        </widget>
+        <spacer row="6" column="2" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>Spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>156</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QCheckBox" row="7" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>cbIncludeDecorations</cstring>
+            </property>
+            <property name="text">
+                <string>Include &amp;window decorations</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>When enabled, snapshot of a window will also include the window decorations</string>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="5" column="1" rowspan="1" colspan="3">
+            <item>
+                <property name="text">
+                    <string>Full Screen</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Window Under Cursor</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Region</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>comboMode</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;qt&gt;Using this menu, you can select from the three following snapshot modes:
+&lt;p&gt;
+&lt;b&gt;Full Screen&lt;/b&gt; - captures the entire desktop.&lt;br&gt;
+&lt;b&gt;Window Under Cursor&lt;/b&gt; - captures only the window (or menu) that is under the mouse cursor when the snapshot is taken.&lt;br&gt;
+&lt;b&gt;Region&lt;/b&gt; - captures only the region of the desktop that you specify. When taking a new snapshot in this mode you will be able to select any area of the screen by clicking and dragging the mouse.&lt;/p&gt;&lt;/qt&gt;</string>
+            </property>
+        </widget>
+        <spacer row="8" column="1">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>31</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>KSnapshotThumb</class>
+        <header location="local">ksnapshot.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+        <signal>startDrag()</signal>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="PNG" length="782">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002d549444154789cad954f48147114c73fbb33b6399a075b313d581ddc352f42170f0929eab5407031e8929d942824c2e82a1da29b8740c9bd04057ad134a514bd186ee36e4276709dda560d5977d7249d7567ffcc4e07dd45626577a32fbcdfccfbfd980fef3de6bd1f866190cb805640079e02c3c0b99cdf1400ed066a0137e0079a7382811780f19f6c08104d86616032998cb5c561c27e1789d86fcca285427446b2a2c754b6569ddc7a064099983e0cfb5d6c7e7192320a620220086002927a66ab34034ec47e9332e0f6f3c2c100a34fce62a0a5dde20cf864fae17018b148448da8ac7e59656a6a8abdbd3d9aae35515d5d8d2449149714b3b1b98173c4c9fcdc3c95f60eb6bebe4e23c40cf8a4464646d809ede05a72217f92e9747432383888f5bc15004dd358fcb8c8867f83e04e306b0659c1fdfdfd9977b368c6e3f130fc7298bb77eee25df7323030c08a6785dddd5d2449ca1f0c60b3d9e8e9ed412c12a9b05660b7db292b2b43595768bede4cf79d6e26de4eb0bfbfcfccbb99fcc03df77ab879e326edaded2492092c672cc4e231cc8299783c4e6363236dad6dd8ec367c3e5f56b0391b581004f4948e1a51319b8f60a15088c3c343144561766e9603f5804b172f110e85f32fc5f4e434d6722bb5b5b558cbad08824020184092244a4a4a58f3ae313e39cecae715963dcb59c15923defeb94d281c425555a2d1285a5463617e81d1b151bc5e2f6ed94d3010c4e1705067abcb1facc535946f0abe1f3e7c7e1ff1449c96961614af82dbe3a6e6720d8140005dd7e9ededcdbf14a228227f92a9bf528fa3d3412412a1ea42157d0ffb68b8dac0fb0fef9197656459a6abab2b2b383ddd8ca5b1fbc69bc7ff3ed55c630f8c578f32be2d13b11e533171d4f395f68eec519c228b5481faebfb11f2ef526cad3a49ea60a09decf9bc641c2fa954662b992ec550ae540bb031a02a3de845a018283d7e9edaea399404a2809a069b00e1182870ca6f9887521cdd8fc93f3ef0c4ca5ba36f940000000049454e44ae426082</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>comboMode</sender>
+        <signal>activated(int)</signal>
+        <receiver>KSnapshotWidget</receiver>
+        <slot>slotModeChanged(int)</slot>
+    </connection>
+    <connection>
+        <sender>btnNew</sender>
+        <signal>clicked()</signal>
+        <receiver>KSnapshotWidget</receiver>
+        <slot>slotNewClicked()</slot>
+    </connection>
+    <connection>
+        <sender>btnPrint</sender>
+        <signal>clicked()</signal>
+        <receiver>KSnapshotWidget</receiver>
+        <slot>slotPrintClicked()</slot>
+    </connection>
+    <connection>
+        <sender>lblImage</sender>
+        <signal>startDrag()</signal>
+        <receiver>KSnapshotWidget</receiver>
+        <slot>slotStartDrag()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>btnNew</tabstop>
+    <tabstop>btnPrint</tabstop>
+    <tabstop>comboMode</tabstop>
+    <tabstop>spinDelay</tabstop>
+    <tabstop>cbIncludeDecorations</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+    <include location="global" impldecl="in implementation">kiconloader.h</include>
+    <include location="global" impldecl="in implementation">kglobalsettings.h</include>
+    <include location="local" impldecl="in implementation">ksnapshotwidget.ui.h</include>
+</includes>
+<signals>
+    <signal>newClicked()</signal>
+    <signal>saveClicked()</signal>
+    <signal>printClicked()</signal>
+    <signal>startImageDrag()</signal>
+</signals>
+<slots>
+    <slot access="protected" specifier="non virtual">slotModeChanged( int mode )</slot>
+    <slot access="protected" specifier="non virtual">slotNewClicked()</slot>
+    <slot access="protected" specifier="non virtual">slotSaveClicked()</slot>
+    <slot access="protected" specifier="non virtual">slotPrintClicked()</slot>
+    <slot access="protected" specifier="non virtual">slotStartDrag()</slot>
+    <slot specifier="non virtual" returnType="int">previewWidth()</slot>
+    <slot specifier="non virtual" returnType="int">previewHeight()</slot>
+</slots>
+<functions>
+    <function specifier="non virtual">setPreview( const QPixmap &amp; pm )</function>
+    <function specifier="non virtual">setDelay( int i )</function>
+    <function specifier="non virtual">setIncludeDecorations( bool b )</function>
+    <function specifier="non virtual">setMode( int mode )</function>
+    <function specifier="non virtual" returnType="int">delay()</function>
+    <function specifier="non virtual" returnType="bool">includeDecorations()</function>
+    <function specifier="non virtual" returnType="int">mode()</function>
+    <function specifier="non virtual" returnType="QPixmap">preview()</function>
+</functions>
+<pixmapfunction>SmallIconSet</pixmapfunction>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>ksnapshotthumb.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

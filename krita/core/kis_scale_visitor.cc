@@ -214,6 +214,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                 tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
                 m_dev -> setTiles(tm); // Also sets width and height correctly
                 nRet = 0; /* success */
+        } else {
+                delete newData;
         }
         free(tmp);
 

@@ -17,6 +17,8 @@
  */
 #include <koIconChooser.h>
 
+#include "kdebug.h"
+
 #include "kis_brush.h"
 #include "kis_pattern.h"
 
@@ -41,12 +43,18 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
                 SIGNAL(selected(KoIconItem*)),
                 SLOT(setActiveItem(KoIconItem*)));
 
-	if (mediateOn & MEDIATE_BRUSHES)
+	if (mediateOn & MEDIATE_BRUSHES) {
 		connect(rserver,
                         SIGNAL(loadedBrush(KisBrush*)),
                         this,
                         SLOT(resourceServerLoadedBrush(KisBrush*)));
 
+		connect(rserver,
+                        SIGNAL(loadedpipeBrush(KisImagePipeBrush*)),
+                        this,
+                        SLOT(resourceServerLoadedPipeBrush(KisImagePipeBrush*)));
+
+	}
 	if (mediateOn & MEDIATE_PATTERNS)
 		connect(rserver,
                         SIGNAL(loadedPattern(KisPattern*)),
@@ -105,6 +113,7 @@ void KisResourceMediator::setActiveItem(KoIconItem *item)
 void KisResourceMediator::resourceServerLoadedBrush(KisBrush *resource)
 {
 	if (resource && resource -> valid()) {
+		
 		KisIconItem *item = new KisIconItem(resource);
 
 		m_items[resource] = item;
@@ -114,6 +123,21 @@ void KisResourceMediator::resourceServerLoadedBrush(KisBrush *resource)
 		emit addedResource(resource);
 	}
 }
+
+void KisResourceMediator::resourceServerLoadedPipeBrush(KisImagePipeBrush *resource)
+{
+	if (resource && resource -> valid()) {
+		kdDebug() << "Mediator loaded pipe brush" << resource -> name() << "\n";
+		KisIconItem *item = new KisIconItem(resource);
+
+		m_items[resource] = item;
+		item -> setSpacing(resource -> spacing());
+
+		m_chooser -> addItem(item);
+		emit addedResource(resource);
+	}
+}
+
 
 void KisResourceMediator::resourceServerLoadedPattern(KisPattern *resource)
 {

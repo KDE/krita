@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,72 +15,71 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_BRUSH_
-#define KIS_BRUSH_
+#if !defined KIS_IMAGEPIPE_BRUSH_
+#define KIS_IMAGEPIPE_BRUSH_
 
-#include <qcstring.h>
-#include <qimage.h>
-#include <qsize.h>
+// #include <qcstring.h>
+// #include <qimage.h>
+// #include <qsize.h>
 #include <qptrlist.h>
+#include <qvaluelist.h>
 
 #include <kio/job.h>
 
 #include "kis_resource.h"
-#include "kis_alpha_mask.h"
+#include "kis_brush.h"
 #include "kis_global.h"
 
 class QPoint;
-class QPixmap;
+class QImage;
+class QSize;
+class QCString;
 
-class KisBrush : public KisResource {
-	typedef KisResource super;
+
+class KisAlphaMask;
+
+class KisImagePipeBrush : public KisBrush {
+	typedef KisBrush super;
 	Q_OBJECT
 
 public:
-	KisBrush(const QString& filename);
-	KisBrush(const QString& filename, 
-		 const QValueVector<Q_UINT8> & data,
-		 Q_UINT32 & dataPos);
-	
-	virtual ~KisBrush();
+	KisImagePipeBrush(const QString& filename);
+	virtual ~KisImagePipeBrush();
 
 	virtual bool loadAsync();
 	virtual bool saveAsync();
+
+	/**
+	  @return the next image in the pipe.
+	  */
 	virtual QImage img();
 
 	/**
-	   @return a mask computed from the grey-level values of the
-	   pixels in the brush.
+	   @return the next mask in the pipe.
 	*/
 	virtual KisAlphaMask *mask(Q_INT32 scale = PRESSURE_LEVELS / 2);
 
 	void setHotSpot(QPoint);
 	QPoint hotSpot() const { return m_hotSpot; }
 
-	uchar value(Q_INT32 x, Q_INT32 y) const;
-	uchar *scanline(Q_INT32 i) const;
-	uchar *bits() const;
-
-
 private slots:
 	void ioData(KIO::Job *job, const QByteArray& data);
 	void ioResult(KIO::Job *job);
 
 private:
-	void createMasks(const QImage & img);
+
+	void setParasite(const QString& parasite);
+
+	QString m_name;
+	QString m_parasite; // This contains some kind of instructions on how to use the brush
+			  // That I haven't decoded yet.
+	Q_UINT32 m_numOfBrushes;
+	Q_UINT32 m_currentBrush;
 
 	QValueVector<Q_UINT8> m_data;
 	QPoint m_hotSpot;
-	QImage m_img;
-	QPtrList<KisAlphaMask> m_masks;
-
-	Q_UINT32 m_header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
-	Q_UINT32 m_version;      /*  brush file version #  */
-	Q_UINT32 m_width;        /*  width of brush  */
-	Q_UINT32 m_height;       /*  height of brush  */
-	Q_UINT32 m_bytes;        /*  depth of brush in bytes */
-	Q_UINT32 m_magic_number; /*  GIMP brush magic number  */
+	QPtrList<KisBrush> m_brushes;
 
 };
-#endif // KIS_BRUSH_
 
+#endif // KIS_IMAGEPIPE_BRUSH_

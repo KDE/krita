@@ -55,6 +55,20 @@ KisBrush::KisBrush(const QString& filename) : super(filename)
 {
 }
 
+KisBrush::KisBrush(const QString& filename,
+		   const QValueVector<Q_UINT8> & data,
+		   Q_UINT32 & dataPos) : super(filename)
+{
+	m_data.clear();
+	// XXX: This can be done more efficiently, I guess.
+	for (Q_UINT32 i = dataPos; i < data.size(); i++) {
+		m_data.append(data[i]);
+	}
+	ioResult(0);
+	dataPos += m_header_size + (m_width * m_height * m_bytes);
+}
+
+
 KisBrush::~KisBrush()
 {
 	m_masks.setAutoDelete(true);
@@ -75,18 +89,14 @@ bool KisBrush::saveAsync()
 	return false;
 }
 
-QImage KisBrush::img() const
+QImage KisBrush::img()
 {
 	return m_img;
 }
 
 KisAlphaMask *KisBrush::mask(Q_INT32 scale)
 {
-	kdDebug() << "Scale: " << scale << "\n";
-	kdDebug() << "Masks: " << m_masks.count()<< "\n";
-	kdDebug() << "Pressure levels: " << PRESSURE_LEVELS << "\n";
-
-	if (scale >= PRESSURE_LEVELS || scale >= m_masks.count())
+	if (scale >= PRESSURE_LEVELS || (uint)scale >= m_masks.count())
 		scale = m_masks.count() - 1;
 
 	if (scale < 0) scale = 0;
@@ -156,11 +166,23 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 
 	memcpy(&bh, &m_data[0], sizeof(GimpBrushHeader));
 	bh.header_size = ntohl(bh.header_size);
+	m_header_size = bh.header_size;
+
 	bh.version = ntohl(bh.version);
+	m_version = bh.version;
+
 	bh.width = ntohl(bh.width);
+	m_width = bh.width;
+
 	bh.height = ntohl(bh.height);
+	m_height = bh.height;
+
 	bh.bytes = ntohl(bh.bytes);
+	m_bytes = bh.bytes;
+
 	bh.magic_number = ntohl(bh.magic_number);
+	m_magic_number = bh.magic_number;
+
 	bh.spacing = ntohl(bh.spacing);
 
 	if (bh.header_size > m_data.size() || bh.header_size == 0) {
@@ -226,7 +248,8 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 	setWidth(m_img.width());
 	setHeight(m_img.height());
 	createMasks(m_img);
-	kdDebug() << "Brush: " << &name[0] << " spacing: " << spacing() << "\n";
+	m_data.clear();
+ 	kdDebug() << "Brush: " << &name[0] << " spacing: " << spacing() << "\n";
 	setValid(true);
 	emit loadComplete(this);
 }

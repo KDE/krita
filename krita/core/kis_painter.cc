@@ -672,6 +672,10 @@ void KisPainter::setBrush(KisBrush* brush)
 
 void KisPainter::computeDab(KisAlphaMask* mask)
 {
+	// XXX: According to the SeaShore source, the Gimp uses a temporary layer
+	// the size of the layer that is being painted on. Thas layer is cleared
+	// between painting actions. Our temporary layer is only just big enough to 
+	// contain the brush mask.
 	m_dab = new KisLayer(mask -> width(),
 			     mask -> height(),
 			     m_device -> image() -> imgType(),

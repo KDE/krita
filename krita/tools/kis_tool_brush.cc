@@ -191,7 +191,7 @@ void KisToolBrush::setup(KActionCollection *collection)
 {
         KToggleAction *toggle;
         toggle = new KToggleAction(i18n("&Brush"),
-				   "handdrawn", 0, this,
+				   "color_line", 0, this,
                                    SLOT(activate()), collection,
                                    "tool_brush");
         toggle -> setExclusiveGroup("tools");

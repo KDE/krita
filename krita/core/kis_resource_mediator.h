@@ -24,6 +24,7 @@
 
 class KoIconItem;
 class KisBrush;
+class KisImagePipeBrush;
 class KisPattern;
 class KisItemChooser;
 class KisIconItem;
@@ -38,13 +39,13 @@ class KisResourceMediator : public QObject {
 	typedef QObject super;
 
 public:
-	KisResourceMediator(Q_INT32 mediateOn, 
-			    KisResourceServer *rserver, 
+	KisResourceMediator(Q_INT32 mediateOn,
+			    KisResourceServer *rserver,
 			    const QString& chooserCaption,
-			    QWidget *chooserParent = 0, 
+			    QWidget *chooserParent = 0,
 			    const char *chooserName = 0,
-			    QObject *parent = 0, 
-			    const char *name = 0); 
+			    QObject *parent = 0,
+			    const char *name = 0);
 	virtual ~KisResourceMediator();
 
 public:
@@ -61,6 +62,7 @@ signals:
 private slots:
 	void setActiveItem(KoIconItem *item);
 	void resourceServerLoadedBrush(KisBrush *resource);
+	void resourceServerLoadedPipeBrush(KisImagePipeBrush *resource);
 	void resourceServerLoadedPattern(KisPattern *resource);
 
 private:

@@ -44,7 +44,7 @@ public:
 
 	virtual bool loadAsync();
 	virtual bool saveAsync();
-	virtual QImage img() const;
+	virtual QImage img();
 
 	bool isValid() const { return m_valid; }
 	QPoint hotSpot() const { return m_hotSpot; }
@@ -57,12 +57,12 @@ private slots:
 	void ioResult(KIO::Job *job);
 
 private:
-	QByteArray m_data;	
+	QByteArray m_data;
 	QPoint m_hotSpot;
 
 	bool m_valid;
 	bool m_validThumb;
-	
+
 	QImage m_img;
         QPixmap *m_pixmap;
         QPixmap *m_thumbPixmap;

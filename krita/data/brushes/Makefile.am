@@ -8,4 +8,7 @@ kritabrushes_DATA = 10x10squareBlur.gbr 10x10square.gbr 11circle.gbr 11fcircle.g
 	5x5squareBlur.gbr 5x5square.gbr 7circle.gbr 7fcircle.gbr 9circle.gbr \
 	9fcircle.gbr callig1.gbr callig2.gbr callig3.gbr callig4.gbr confetti.gbr \
 	DStar11.gbr DStar17.gbr DStar25.gbr dunes.gbr galaxy_big.gbr galaxy.gbr \
-	galaxy_small.gbr pepper.gbr pixel.gbr thegimp.gbr xcf.gbr
+	galaxy_small.gbr pepper.gbr pixel.gbr thegimp.gbr xcf.gbr \
+	SketchBrush-16.gih SketchBrush-32.gih SketchBrush-64.gih confetti.gih \
+	feltpen.gih hsparks.gih vine.gih
+

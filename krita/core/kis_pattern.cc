@@ -84,7 +84,7 @@ bool KisPattern::saveAsync()
 	return false;
 }
 
-QImage KisPattern::img() const
+QImage KisPattern::img()
 {
 	return m_img;
 }
@@ -154,7 +154,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 	k = bh.header_size;
 
 	if (bh.bytes == 1) {
-		kdDebug() << "Loading grayscale pattern " << &name[0] << endl;
+// 		kdDebug() << "Loading grayscale pattern " << &name[0] << endl;
 		// Grayscale
 		Q_INT32 val;
 
@@ -172,7 +172,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 			}
 		}
 	} else if (bh.bytes == 2) {
-		kdDebug() << "Loading grayscale + alpha pattern " << &name[0] << endl;
+// 		kdDebug() << "Loading grayscale + alpha pattern " << &name[0] << endl;
 		// Grayscale + A
 		Q_INT32 val;
 		Q_INT32 alpha;
@@ -191,7 +191,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 			}
 		}
 	} else if (bh.bytes == 3) {
-		kdDebug() << "Loading rgb pattern " << &name[0] << endl;
+// 		kdDebug() << "Loading rgb pattern " << &name[0] << endl;
 		// RGB without alpha
 		for (Q_UINT32 y = 0; y < bh.height; y++) {
 			for (Q_UINT32 x = 0; x < bh.width; x++) {
@@ -208,7 +208,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 			}
 		}
 	} else if (bh.bytes == 4) {
-		kdDebug() << "Loading rgba pattern " << &name[0] << endl;
+// 		kdDebug() << "Loading rgba pattern " << &name[0] << endl;
 		// Has alpha
 		for (Q_UINT32 y = 0; y < bh.height; y++) {
 			for (Q_UINT32 x = 0; x < bh.width; x++) {
@@ -289,7 +289,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 
 	// default hotspot
 	m_hotSpot = QPoint(width()/2, height()/2);
-	kdDebug() << "pattern loaded\n";
+// 	kdDebug() << "pattern loaded\n";
 	emit loadComplete(this);
 }
 

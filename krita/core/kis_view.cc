@@ -54,6 +54,7 @@
 // Local
 #include "kis_types.h"
 #include "kis_brush.h"
+#include "kis_imagepipe_brush.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_canvas.h"
@@ -235,14 +236,14 @@ void KisView::setupSideBar()
 		m_sideBar ->plug(m_patternMediator -> chooserWidget());
 		connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
 
-		m_gradientChooser = new QWidget(this);
-		//	m_gradient = new KisGradient;
-		m_gradientChooser -> setCaption(i18n("Gradients"));
-		m_sideBar -> plug(m_gradientChooser);
+// 		m_gradientChooser = new QWidget(this);
+// 		//	m_gradient = new KisGradient;
+// 		m_gradientChooser -> setCaption(i18n("Gradients"));
+// 		m_sideBar -> plug(m_gradientChooser);
 
-		m_paletteChooser = new QWidget(this);
-		m_paletteChooser -> setCaption(i18n("Palettes"));
-		m_sideBar -> plug(m_paletteChooser);
+// 		m_paletteChooser = new QWidget(this);
+// 		m_paletteChooser -> setCaption(i18n("Palettes"));
+// 		m_sideBar -> plug(m_paletteChooser);
 
 		m_layerBox = new KisListBox(i18n("layer"), KisListBox::SHOWALL, m_sideBar);
 		m_layerBox -> setCaption(i18n("Layers"));
@@ -264,13 +265,13 @@ void KisView::setupSideBar()
 		m_sideBar -> plug(m_layerBox);
 		layersUpdated();
 
-		m_channelView = new KisChannelView(m_doc, this);
-		m_channelView -> setCaption(i18n("Channels"));
-		m_sideBar -> plug(m_channelView);
+// 		m_channelView = new KisChannelView(m_doc, this);
+// 		m_channelView -> setCaption(i18n("Channels"));
+// 		m_sideBar -> plug(m_channelView);
 
-		m_pathView = new QWidget(this);
-		m_pathView -> setCaption(i18n("Paths"));
-		m_sideBar -> plug(m_pathView);
+// 		m_pathView = new QWidget(this);
+// 		m_pathView -> setCaption(i18n("Paths"));
+// 		m_sideBar -> plug(m_pathView);
 
 		m_sideBar -> slotActivateTab(i18n("Brushes"));
 
@@ -283,6 +284,7 @@ void KisView::setupSideBar()
 		m_sidebarToggle -> setChecked(true);
 
 		rserver -> loadBrushes();
+		rserver -> loadpipeBrushes();
 		rserver -> loadPatterns();
 	}
 }

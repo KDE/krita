@@ -27,6 +27,7 @@
 
 #include "kis_resource.h"
 #include "kis_brush.h"
+#include "kis_imagepipe_brush.h"
 #include "kis_pattern.h"
 
 class KisResourceServer : public QObject {
@@ -40,34 +41,46 @@ public:
 
 public:
 	Q_INT32 brushCount() const { return m_brushes.count(); }
+	Q_INT32 pipebrushCount() const { return m_pipebrushes.count(); }
 	Q_INT32 patternCount() const { return m_patterns.count(); }
 
 	QPtrList<KisResource> brushes();
+	QPtrList<KisResource> pipebrushes();
 	QPtrList<KisResource> patterns();
 
 	void loadBrushes();
+	void loadpipeBrushes();
 	void loadPatterns();
 
 signals:
 	void loadedBrush(KisBrush *br);
+	void loadedpipeBrush(KisImagePipeBrush *br);
 	void loadedPattern(KisPattern *pat);
 
 private:
 	void loadBrush();
+	void loadpipeBrush();
 	void loadPattern();
 
 private slots:
 	void brushLoaded(KisResource *r);
 	void brushLoadFailed(KisResource *br);
 
+	void pipebrushLoaded(KisResource *r);
+	void pipebrushLoadFailed(KisResource *br);
+
 	void patternLoaded(KisResource *r);
 	void patternLoadFailed(KisResource *br);
 
 private:
-	QPtrList<KisResource> m_patterns;
+	QPtrList<KisResource> m_brushes;
 	QStringList m_brushFilenames;
 
-	QPtrList<KisResource> m_brushes;
+	QPtrList<KisResource> m_pipebrushes;
+	QStringList m_pipebrushFilenames;
+
+
+	QPtrList<KisResource> m_patterns;
 	QStringList m_patternFilenames;
 };
 

@@ -26,7 +26,7 @@
  * The KisResource class provides a representation of Krita image resources.  This
  * includes, but not limited to, brushes and patterns.
  *
- * This replaces the KisKrayon facility that used to be present in Krayon. 
+ * This replaces the KisKrayon facility that used to be present in Krayon.
  */
 class KisResource : public QObject {
 	typedef QObject super;
@@ -56,7 +56,7 @@ public:
 	/**
 	 * Returns a QImage representing this resource.  This image could be null.
 	 */
-	virtual QImage img() const = 0;
+	virtual QImage img() = 0;
 
 public:
 	bool dirty() const;

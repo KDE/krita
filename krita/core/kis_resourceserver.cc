@@ -33,12 +33,14 @@
 KisResourceServer::KisResourceServer()
 {
 	m_brushes.setAutoDelete(true);
+	m_pipebrushes.setAutoDelete(true);
 	m_patterns.setAutoDelete(true);
 }
 
 KisResourceServer::~KisResourceServer()
 {
 	m_brushes.clear();
+	m_pipebrushes.clear();
 	m_patterns.clear();
 }
 
@@ -47,6 +49,13 @@ void KisResourceServer::loadBrushes()
 	m_brushFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_brushes", "*.gbr");
 	loadBrush();
 }
+
+void KisResourceServer::loadpipeBrushes()
+{
+	m_pipebrushFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_brushes", "*.gih");
+	loadpipeBrush();
+}
+
 
 void KisResourceServer::loadPatterns()
 {
@@ -69,6 +78,23 @@ void KisResourceServer::loadBrush()
 			loadBrush();
 	}
 }
+
+void KisResourceServer::loadpipeBrush()
+{
+	if (!m_pipebrushFilenames.empty()) {
+		QString front = *m_pipebrushFilenames.begin();
+		KisImagePipeBrush *brush;
+
+		m_pipebrushFilenames.pop_front();
+		brush = new KisImagePipeBrush(front);
+		connect(brush, SIGNAL(loadComplete(KisResource*)), SLOT(pipebrushLoaded(KisResource*)));
+		connect(brush, SIGNAL(ioFailed(KisResource*)), SLOT(pipebrushLoadFailed(KisResource*)));
+
+		if (!brush -> loadAsync())
+			loadpipeBrush();
+	}
+}
+
 
 void KisResourceServer::loadPattern()
 {
@@ -99,6 +125,21 @@ void KisResourceServer::brushLoaded(KisResource *br)
 	loadBrush();
 }
 
+void KisResourceServer::pipebrushLoaded(KisResource *br)
+{
+	if (br && br -> valid()) {
+		m_pipebrushes.append(br);
+		Q_ASSERT(dynamic_cast<KisImagePipeBrush*>(br));
+		kdDebug() << "loaded pipebrush: " << br -> name() << "\n";
+		emit loadedpipeBrush(static_cast<KisImagePipeBrush*>(br));
+	} else {
+		delete br;
+	}
+
+	loadpipeBrush();
+}
+
+
 void KisResourceServer::patternLoaded(KisResource *pat)
 {
 	if (pat && pat -> valid()) {
@@ -117,6 +158,12 @@ void KisResourceServer::brushLoadFailed(KisResource *r)
 	loadBrush();
 }
 
+void KisResourceServer::pipebrushLoadFailed(KisResource *r)
+{
+	delete r;
+	loadpipeBrush();
+}
+
 void KisResourceServer::patternLoadFailed(KisResource *r)
 {
 	kdDebug() << "loading pattern failed\n";
@@ -126,20 +173,28 @@ void KisResourceServer::patternLoadFailed(KisResource *r)
 
 
 QPtrList<KisResource> KisResourceServer::brushes()
-{ 
+{
 	if (m_brushes.isEmpty())
 		loadBrushes();
 
-	return m_brushes; 
+	return m_brushes;
+}
+
+
+QPtrList<KisResource> KisResourceServer::pipebrushes()
+{
+	if (m_pipebrushes.isEmpty())
+		loadpipeBrushes();
+
+	return m_pipebrushes;
 }
 
 QPtrList<KisResource> KisResourceServer::patterns()
-{ 
+{
 	if (m_patterns.isEmpty())
 		loadPatterns();
 
-	return m_patterns; 
+	return m_patterns;
 }
 
 #include "kis_resourceserver.moc"
-

@@ -187,7 +187,7 @@ DCOPObject* KisView::dcopObject()
 */
 void KisView::setupPainter()
 {
-    m_pPainter = new KisPainter(m_doc, this);
+	m_pPainter = new KisPainter(m_doc, this);
 }
 
 
@@ -576,7 +576,7 @@ void KisView::slotRefreshPainter()
 	KisImage *img = m_doc -> current();
 
 	if(img) {
-		KisLayer *lay = img->getCurrentLayer();
+		KisLayer *lay = img -> getCurrentLayer();
 
 		if(lay) {
 			QRect extents(lay -> imageExtents());

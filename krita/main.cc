@@ -45,6 +45,5 @@ int main(int argc, char **argv)
 	if (!app.start())
 		return 1;
 
-	app.exec();
-	return 0;
+	return app.exec();
 }

@@ -26,22 +26,23 @@
 
 KAboutData * newKrayonAboutData()
 {
-    KAboutData * aboutData = new KAboutData( "krita",
-                                             I18N_NOOP("Krita"),
-                                             "0.2.0",
-                                             I18N_NOOP("KOffice image manipulation application."),
-                                             KAboutData::License_GPL,
-                                             "(c) 1999-2002 The Krita team.",
-                                             "",
-                                             "http://koffice.kde.org/krita",
-                                             "submit@bugs.kde.org");
-    aboutData->addAuthor("Matthias Elter", 0, "me@kde.org");
-    aboutData->addAuthor("Carsten Pfeiffer", 0, "carpdjih@cetus.zrz.tu-berlin.de");
-    aboutData->addAuthor("Michael Koch", 0, "koch@kde.org");
-    aboutData->addAuthor("John Califf",0, "jcaliff@compuzone.net");
-    aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
-    aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
-    return aboutData;
+	KAboutData * aboutData = new KAboutData( "krita",
+			I18N_NOOP("Krita"),
+			"0.2.0",
+			I18N_NOOP("KOffice image manipulation application."),
+			KAboutData::License_GPL,
+			"(c) 1999-2002 The Krita team.",
+			"",
+			"http://koffice.kde.org/krita",
+			"submit@bugs.kde.org");
+	aboutData->addAuthor("Matthias Elter", 0, "me@kde.org");
+	aboutData->addAuthor("Carsten Pfeiffer", 0, "carpdjih@cetus.zrz.tu-berlin.de");
+	aboutData->addAuthor("Michael Koch", 0, "koch@kde.org");
+	aboutData->addAuthor("John Califf",0, "jcaliff@compuzone.net");
+	aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
+	aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
+	aboutData->addAuthor("Patrick Julien", 0, "freak@codepimps.org");
+	return aboutData;
 }
 
 #endif

@@ -121,7 +121,8 @@ public:
 	// Draw a line between pos1 and pos2 using the currently set brush and color. 
 	// @Return the drag distance, that is the remains of the distance between p1 and p2 not covered
 	// because the currenlty set brush has a spacing greater than that distance.
-	float paintLine(const QPoint &pos1,
+	float paintLine(const enumPaintOp paintOp,
+			const QPoint &pos1,
 			const QPoint &pos2,
 			const Q_INT32 pressure,
 			const Q_INT32 xTilt,
@@ -133,19 +134,6 @@ public:
 		     const Q_INT32 pressure,
 		     const Q_INT32 /*xTilt*/,
 		     const Q_INT32 /*yTilt*/);
-
-
-	// ------------------------------------------------------------------------------------------
-	// Erase the line between pos1 and pos2 to transparency or the background color (depending on
-	// the type of the paint device.
-	// @Return the drag distance, that is the remains of the distance between p1 and p2 not covered
-	// because the currenlty set brush has a spacing greater than that distance.
-	float eraseLine(const QPoint &pos1,
-			const QPoint &pos2,
-			const Q_INT32 pressure,
-			const Q_INT32 xTilt,
-			const Q_INT32 yTilt,
-			const float savedDist);
 
 	// Erase to the background color or transparency (depending on the type of the paint device)
 	// using the currently set brush.

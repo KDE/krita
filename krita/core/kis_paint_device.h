@@ -91,7 +91,6 @@ public:
          */
         virtual void anchor();
 
-public:
         bool contains(Q_INT32 x, Q_INT32 y) const;
         bool contains(const QPoint& pt) const;
 

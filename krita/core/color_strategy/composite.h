@@ -1205,7 +1205,7 @@ void compositeNormal(Q_INT32 stride,
 		     Q_INT32 srcstride,
 		     Q_INT32 rows, 
 		     Q_INT32 cols, 
-		     QUANTUM /*opacity*/ = OPACITY_OPAQUE)
+		     QUANTUM /*opacity*/)
 {
 	//Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
 	QUANTUM *d;

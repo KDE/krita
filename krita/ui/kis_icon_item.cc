@@ -17,6 +17,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kis_resource.h"
+#include "kis_global.h"
 #include "kis_icon_item.h"
 
 #define THUMB_SIZE 30
@@ -101,8 +102,9 @@ int KisIconItem::spacing() const {
 		return m_resource -> spacing();
 	}
 	else {
-		return 7;
+		return 1;
 	}
+	
 }
 void KisIconItem::setSpacing(int spacing) {
 	if ( m_resource && m_resource -> valid() ) {
@@ -110,3 +112,34 @@ void KisIconItem::setSpacing(int spacing) {
 	}
 }
 
+
+int KisIconItem::opacity() const {
+	if ( m_resource && m_resource -> valid() ) {
+		return m_resource -> opacity();
+	}
+	else {
+		return OPACITY_OPAQUE;
+	}
+}
+
+void KisIconItem::setOpacity(int opacity) {
+	if ( m_resource && m_resource -> valid() ) {
+		m_resource -> setOpacity(opacity);
+	}
+}
+
+int KisIconItem::compositeOp() const {
+	if ( m_resource && m_resource -> valid() ) {
+		return m_resource -> compositeOp();
+	}
+	else {
+		return COMPOSITE_NORMAL;
+	}
+	
+}
+
+void KisIconItem::setCompositeOp(int compositeOp) {
+	if ( m_resource && m_resource -> valid() ) {
+		m_resource -> setCompositeOp((CompositeOp)compositeOp);
+	}
+}

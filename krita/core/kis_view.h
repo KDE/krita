@@ -227,7 +227,7 @@ private slots:
 	void layerResize();
 	void layerResizeToImage();
 	void layerToImage();
-	void layerScale();
+	void layerTransform();
 	void layerAdd();
 	void layerRemove();
 	void layerDuplicate();
@@ -240,7 +240,7 @@ private slots:
 	void layerLevel(int n);
 	void layersUpdated();
 	void layersUpdated(KisImageSP img);
-	void layerScale(bool smooth);
+	void layerTransform(bool smooth);
 	void layer_rotate180();
 	void layer_rotateleft90();
 	void layer_rotateright90();
@@ -314,7 +314,7 @@ private:
 	KAction *m_layerResize;
 	KAction *m_layerResizeToImage;
 	KAction *m_layerToImage;
-	KAction *m_layerScale;
+	KAction *m_layerTransform;
 	KAction *m_layerRaise;
 	KAction *m_layerLower;
 	KAction *m_layerTop;

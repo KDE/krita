@@ -179,7 +179,7 @@ void KisToolBrush::paintLine(const QPoint & pos1,
 {
 	if (!m_currentImage -> activeDevice()) return;
 
-	m_dragDist = m_painter -> paintLine(pos1, pos2, pressure, xtilt, ytilt, m_dragDist);
+	m_dragDist = m_painter -> paintLine(PAINTOP_BRUSH, pos1, pos2, pressure, xtilt, ytilt, m_dragDist);
 	m_currentImage -> notify( m_painter -> dirtyRect() );
 	m_dragStart = pos2;
 }

@@ -172,6 +172,7 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 	if (rows <= 0 || cols <= 0)
 		return;
 
+
 	switch (op) {
 	case COMPOSITE_UNDEF:
 		// Undefined == no composition
@@ -289,7 +290,7 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 		compositeErase(stride, dst, dststride, src, srcstride, rows, cols, opacity);
 		break;
 	default:
-		kdDebug() << "Not Implemented.\n";
+		kdDebug() << "Composite op " << op << " not Implemented yet.\n";
 		return;
 	}
 }

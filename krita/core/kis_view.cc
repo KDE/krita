@@ -67,6 +67,7 @@
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paint_properties.h"
 #include "kis_dlg_paintoffset.h"
+#include "kis_dlg_transform.h"
 #include "kis_doc.h"
 #include "kis_factory.h"
 #include "kis_guide.h"
@@ -130,7 +131,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_layerResize = 0;
 	m_layerResizeToImage = 0;
 	m_layerToImage = 0;
-	m_layerScale = 0;
+	m_layerTransform = 0;
 	m_layerRaise = 0;
 	m_layerLower = 0;
 	m_layerTop = 0;
@@ -438,7 +439,7 @@ void KisView::setupActions()
 	m_layerToImage = new KAction(i18n("Layer to Image"), 0, this, SLOT(layerToImage()), actionCollection(), "layer_to_image");
 
 	// layer transformations - should be generic, for selection too
-	m_layerScale = new KAction(i18n("Scale Layer..."), 0, this, SLOT(layerScale()), actionCollection(), "scalelayer");
+	m_layerTransform = new KAction(i18n("Scale Layer..."), 0, this, SLOT(layerTransform()), actionCollection(), "transformlayer");
 	(void)new KAction(i18n("Rotate &180"), 0, this, SLOT(layer_rotate180()), actionCollection(), "layer_rotate180");
 	(void)new KAction(i18n("Rotate &270"), 0, this, SLOT(layer_rotateleft90()), actionCollection(), "layer_rotateleft90");
 	(void)new KAction(i18n("Rotate &90"), 0, this, SLOT(layer_rotateright90()), actionCollection(), "layer_rotateright90");
@@ -760,7 +761,7 @@ void KisView::layerUpdateGUI(bool enable)
 	m_layerResize -> setEnabled(enable);
 	m_layerResizeToImage -> setEnabled(enable);
 	m_layerToImage -> setEnabled(enable);
-	m_layerScale -> setEnabled(enable);
+	m_layerTransform -> setEnabled(enable);
 	m_layerRaise -> setEnabled(enable && nlayers > 1 && layerPos);
 	m_layerLower -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
 	m_layerTop -> setEnabled(enable && nlayers > 1 && layerPos);
@@ -1360,7 +1361,7 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filena
 	return rc;
 }
 
-void KisView::layerScale(bool )
+void KisView::layerTransform(bool )
 {
 #if 0
     KisImageSP img = m_doc->currentImg();
@@ -1394,7 +1395,7 @@ void KisView::layerScale(bool )
 
     if(!ok)
     {
-        kdDebug() << "layer_scale() failed" << endl;
+        kdDebug() << "layer_transform() failed" << endl;
     }
     else
     {
@@ -1412,16 +1413,50 @@ void KisView::layerScale(bool )
 
 void KisView::layer_rotate180()
 {
+	if (!currentImg()) return;
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
 
+
+	QWMatrix m;
+	//m.rotate(180);
+	layer->transform(m.rotate(180));
+
+	layersUpdated();
+	resizeEvent(0);
+	updateCanvas();
 }
 
 void KisView::layer_rotateleft90()
 {
+	if (!currentImg()) return;
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
+
+	QWMatrix m;
+	m.rotate(270);
+	layer->transform(m);
+
+	layersUpdated();
+	resizeEvent(0);
+	updateCanvas();
 
 }
 
 void KisView::layer_rotateright90()
 {
+	if (!currentImg()) return;
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
+
+
+	QWMatrix m;
+	m.rotate(90);
+	layer->transform(m);
+
+	layersUpdated();
+	resizeEvent(0);
+	updateCanvas();
 
 }
 
@@ -2391,8 +2426,21 @@ void KisView::layerToImage()
 	}
 }
 
-void KisView::layerScale()
+void KisView::layerTransform()
 {
+	if (!currentImg()) return;
+
+// 	KisDlgTransform dlg(this);
+// 	if (dlg.exec() == QDialog::Accepted) {
+// 		// transform current layer
+// 		KisLayerSP layer = currentImg() -> activeLayer();
+// 		if (!layer) return;
+
+// 		layer -> transform(dlg.matrix());
+
+// 		layersUpdated();
+// 		updateCanvas();
+// 	}
 }
 
 QPoint KisView::viewToWindow(const QPoint& pt)

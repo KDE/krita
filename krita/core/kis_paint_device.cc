@@ -650,14 +650,17 @@ void KisPaintDevice::resize()
 
 // XXX: also allow transform on part of paint device?
 void KisPaintDevice::transform(const QWMatrix & matrix)
-{
+{	
 	// Can only handle 8 bits per channel for the moment
 	if (QUANTUM_DEPTH != 8) {
-		kdDebug() << "transform only supports 8 bits per channel\n";
+		kdDebug() << "Transform only supports 8 bits per channel.\n";
 		return;
 	}
 
-	if (data() == 0) return;
+	if (data() == 0) {
+		kdDebug() << "No tilemgr.\n";
+		return;
+	}
 
 	// Code mostly copied from QImage.xForm
 
@@ -666,8 +669,8 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 	Q_INT32 hs = height();
 	Q_INT32 sbpl = ws * depth(); // Bytes per line
 	QUANTUM * oldData = new QUANTUM[ws * hs * depth() * sizeof(QUANTUM)];
-	memset(oldData, ws * hs * depth() * sizeof(QUANTUM), 0);
-	data() -> readPixelData(0, 0, ws, hs, oldData, ws * depth());
+	memset(oldData, ws * hs * depth() * sizeof(QUANTUM), 255);
+	//data() -> readPixelData(0, 0, ws - 1, hs - 1, oldData, ws * depth());
 
 	// target image data
 	Q_INT32 wd;
@@ -678,15 +681,17 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 	// compute size of target image
 	QWMatrix mat = QPixmap::trueMatrix( matrix, ws, hs );
 	if ( mat.m12() == 0.0F && mat.m21() == 0.0F ) {
-		// scaling
-		if ( mat.m11() == 1.0F && mat.m22() == 1.0F ) // identity matrix
-			return; // Do nothing
+		kdDebug() << "Scaling.\n";
+		if ( mat.m11() == 1.0F && mat.m22() == 1.0F ) { 
+			kdDebug() << "Identity matrix, do nothing.\n";
+			return;
+		}
 		wd = qRound( mat.m11() * ws );
 		hd = qRound( mat.m22() * hs );
 		wd = QABS( wd );
 		hd = QABS( hd );
 	} else {
-		// rotation or shearing
+		kdDebug() << "rotation or shearing\n";
 		QPointArray a( QRect(0, 0, ws, hs) );
 		a = mat.map( a );
 		QRect r = a.boundingRect().normalize();
@@ -697,12 +702,14 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 	// Create target pixel buffer which we'll read into a tile manager
 	// when done.
 	QUANTUM * newData = new QUANTUM[wd * hd * depth() * sizeof(QUANTUM)];
-	memset(newData, wd * hd * depth() * sizeof(QUANTUM), 0);
-	
+	memset(newData, wd * hd * depth() * sizeof(QUANTUM), 255);
+
 	bool invertible;
 	QWMatrix trueMat = mat.invert( &invertible ); // invert matrix
-	if ( hd == 0 || wd == 0 || !invertible )	 // error, return null image
+	if ( hd == 0 || wd == 0 || !invertible ) {
+		kdDebug() << "Error, return null image\n";
 		return;
+	}
 
 	Q_INT32 dbpl = wd * depth(); // destination bytes per line
 
@@ -740,6 +747,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 
 	//For each target line of pixels
 	for (Q_INT32 y = 0; y < dHeight; y++) {
+		kdDebug() << "Handling line " << y << " with bit depth " << bitDepth << ".\n";
 		trigx = m21ydx;
 		trigy = m22ydy;
 		QUANTUM * maxp = newData + dbpl;
@@ -776,7 +784,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 				trigy += m12;
 				dptr += 3;
 			}
-		break;
+			break;
 		case 32: // 32 bits, 4 channels (RGBA / CMYK)
 			while ( dptr < maxp ) {
 				if ( trigx < maxws && trigy < maxhs )
@@ -799,10 +807,8 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 	}
 	
         KisTileMgrSP tm = new KisTileMgr(depth(), wd, hd);
-	tm -> writePixelData(0, 0, wd, hd, newData, wd * depth());
-	data(tm);
-        width(wd);
-        height(hd);
+	tm -> writePixelData(0, 0, wd - 1, hd - 1, newData, wd * depth());
+	data(tm); // Also set width and height correctly
 
 	delete[] oldData;
 	delete[] newData;

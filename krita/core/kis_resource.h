@@ -21,7 +21,7 @@
 #include <qimage.h>
 #include <qobject.h>
 #include <qstring.h>
-
+#include "kis_global.h"
 /**
  * The KisResource class provides a representation of Krita image resources.  This
  * includes, but not limited to, brushes and patterns.
@@ -71,6 +71,10 @@ public:
 	Q_INT32 height() const;
 	void setSpacing(Q_INT32 s) { m_spacing = s; }
 	Q_INT32 spacing() const { return m_spacing; }
+	void setOpacity(Q_INT32 o) { m_opacity = o; }
+	Q_INT32 opacity() const { return m_opacity; }
+	void setCompositeOp(CompositeOp op) { m_compositeOp = op; }
+	CompositeOp compositeOp() const { return m_compositeOp; }
 
 
 protected:
@@ -94,7 +98,8 @@ private:
 	Q_INT32 m_width;
 	Q_INT32 m_height;
 	Q_INT32 m_spacing;
-
+	Q_INT32 m_opacity;
+	CompositeOp m_compositeOp;
 };
 
 #endif // KIS_RESOURCE_H_

@@ -35,14 +35,15 @@ public:
         // The nativeColor methods take a given color that can be defined in any
         // colorspace and fills a byte array with the corresponding color in the
         // the colorspace managed by this strategy.
-
 	virtual void nativeColor(const KoColor& c, QUANTUM *dst) = 0;
 	virtual void nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
 	virtual void nativeColor(const QColor& c, QUANTUM *dst) = 0;
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst) = 0;
+
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
+
 	virtual void tileBlt(Q_INT32 stride,
 			QUANTUM *dst, 
 			Q_INT32 dststride,

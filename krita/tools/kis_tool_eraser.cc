@@ -52,7 +52,6 @@ KisToolEraser::~KisToolEraser()
 
 void KisToolEraser::update(KisCanvasSubject *subject)
 {
-	kdDebug() << "update eraser\n";
 	m_subject = subject;
 	m_currentImage = subject -> currentImg();
 
@@ -160,7 +159,7 @@ void KisToolEraser::eraseLine(const QPoint & pos1,
 			     const Q_INT32 xtilt,
 			     const Q_INT32 ytilt)
 {
-	m_dragDist = m_painter -> eraseLine(pos1, pos2, pressure, xtilt, ytilt, m_dragDist);
+	m_dragDist = m_painter -> paintLine(PAINTOP_ERASE, pos1, pos2, pressure, xtilt, ytilt, m_dragDist);
 	m_currentImage -> notify( m_painter -> dirtyRect() );
 	m_dragStart = pos2;
 }

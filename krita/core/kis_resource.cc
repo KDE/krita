@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kis_resource.h"
-
+#include "kis_global.h"
 
 KisResource::KisResource(const QString& filename)
 {
@@ -24,6 +24,8 @@ KisResource::KisResource(const QString& filename)
 	m_valid = false;
 	m_dirty = false;
 	m_spacing = 7;
+	m_opacity = OPACITY_OPAQUE;
+	m_compositeOp = COMPOSITE_NORMAL;
 }
 
 KisResource::~KisResource()

@@ -44,7 +44,6 @@ KisToolStamp::~KisToolStamp()
 
 void KisToolStamp::update(KisCanvasSubject *subject)
 {
-	kdDebug() << "update line\n";
 	m_subject = subject;
 	m_currentImage = subject -> currentImg();
 

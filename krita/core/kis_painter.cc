@@ -530,7 +530,8 @@ QRect KisPainter::dirtyRect() {
 }
 
 
-float KisPainter::paintLine(const QPoint & pos1,
+float KisPainter::paintLine(const enumPaintOp paintOp,
+			    const QPoint & pos1,
 			    const QPoint & pos2,
 			    const Q_INT32 pressure,
 			    const Q_INT32 xTilt,
@@ -626,7 +627,17 @@ float KisPainter::paintLine(const QPoint & pos1,
 		}
 		QPoint p(qRound(step.x()), qRound(step.y()));
 		// Fix this: paintAt does not always have to compute the dirtyRect
-		paintAt(p, pressure, xTilt, yTilt);
+		switch(paintOp) {
+		case PAINTOP_BRUSH:
+			paintAt(p, pressure, xTilt, yTilt);
+			break;
+		case PAINTOP_ERASE:
+			eraseAt(p, pressure, xTilt, yTilt);
+			break;
+		default:
+			kdDebug() << "Paint operation not implemented yet.\n";
+		}
+
 		dist -= spacing;
 	}
 
@@ -657,9 +668,6 @@ void KisPainter::paintAt(const QPoint & pos,
 
 	if (!m_device) return;
 
-#if 0
-        kdDebug() << "paint: " << pos.x() << ", " << pos.y() << endl;
-#endif
 	Q_INT32 x = pos.x() - m_hotSpotX;
 	Q_INT32 y = pos.y() - m_hotSpotY;
 	Q_INT32 calibratedPressure = pressure / 2;
@@ -672,113 +680,12 @@ void KisPainter::paintAt(const QPoint & pos,
 		computeDab(mask);
 		m_pressure = pressure;
 	}
-	bitBlt( x,  y,  COMPOSITE_NORMAL, m_dab.data(), 0, 0, m_brushWidth, m_brushHeight );
+	bitBlt( x,  y,  m_brush -> compositeOp(), m_dab.data(), OPACITY_OPAQUE - m_brush -> opacity(), 0, m_brushWidth, m_brushHeight );
 
 	m_dirtyRect = QRect(x,
 			    y,
 			    m_dab -> width(),
 			    m_dab -> height());
-}
-
-
-float KisPainter::eraseLine(const QPoint &pos1,
-			    const QPoint &pos2,
-			    const Q_INT32 pressure,
-			    const Q_INT32 xTilt,
-			    const Q_INT32 yTilt,
-			    const float savedDist)
-{
-	if (!m_device) return 0;
-
-	Q_INT32 spacing = m_brush -> spacing();
-
-	if (spacing <= 0) {
-		spacing = m_brushWidth;
-	}
-
-	Q_INT32 x1, y1, x2, y2;
-
-	x1 = pos1.x();
-	y1 = pos1.y();
-
-	x2 = pos2.x();
-	y2 = pos2.y();
-
-	QRect r;
-
-	if (x1 < x2 ) {
-		if (y1 < y2) {
-			r = QRect(x1, y1, x2 - x1 + m_dab -> width(), y2 - y1 + m_dab -> height());
-		}
-		else {
-			r = QRect(x1, y2, x2 - x1 + m_dab -> width(), y1 - y2 + m_dab -> height());
-		}
-	}
-	else {
-		if (y1 < y2) {
-			r = QRect(x2, y1, x1 - x2 + m_dab -> width(), y2 - y1 + m_dab -> height());
-		}
-		else {
-			r = QRect(x2, y2, x1 - x2 + m_dab -> width(), y1 - y2 + m_dab -> height());
-		}
-	}
-
-	KisVector end(x2, y2);
-	KisVector start(x1, y1);
-
-	KisVector dragVec = end - start;
-
-	float newDist = dragVec.length();
-	float dist = savedDist + newDist;
-	float l_savedDist = savedDist;
-
-	if (static_cast<int>(dist) < spacing) {
-		m_dirtyRect = QRect();
-		return dist;
-	}
-
-	double length, ilength;
-	double x, y, z;
-	x = dragVec.x();
-	y = dragVec.y();
-	z = dragVec.z();
-	length = x * x + y * y + z * z;
-	length = sqrt (length);
-
-	if (length)
-	{
-		ilength = 1/length;
-		x *= ilength;
-		y *= ilength;
-		z *= ilength;
-	}
-
-	dragVec.setX(x);
-	dragVec.setY(y);
-	dragVec.setZ(z);
-
-	KisVector step = start;
-
-	while (dist >= spacing) {
-		if (l_savedDist > 0) {
-			step += dragVec * (spacing - l_savedDist);
-			l_savedDist -= spacing;
-		}
-		else {
-			step += dragVec * spacing;
-		}
-		QPoint p(qRound(step.x()), qRound(step.y()));
-		// Fix this: paintAt does not always have to compute the dirtyRect
-		eraseAt(p, pressure, xTilt, yTilt);
-		dist -= spacing;
-	}
-
-	m_dirtyRect = r;
-
-	if (dist > 0)
-		return dist;
-	else
-		return 0;
 }
 
 void KisPainter::eraseAt(const QPoint &pos,
@@ -795,7 +702,7 @@ void KisPainter::eraseAt(const QPoint &pos,
 	m_brushHeight = mask -> height();
 
 	if (m_device -> alpha()) {
-		// Erase to inverted brush transparency
+		kdDebug() << "Erase to inverted brush transparency.\n";
 		m_dab = new KisLayer(mask -> width(),
 				     mask -> height(),
 				     m_device -> typeWithAlpha(),
@@ -814,7 +721,7 @@ void KisPainter::eraseAt(const QPoint &pos,
 				    m_dab -> width(),
 				    m_dab -> height());
  	} else {
- 		// Erase to background colour
+ 		kdDebug() << "Erase to background colour.\n";
 		m_dab = new KisLayer(mask -> width(),
 				     mask -> height(),
 				     m_device -> typeWithAlpha(),
@@ -854,8 +761,7 @@ void KisPainter::computeDab(KisAlphaMask* mask)
 			     mask -> height(),
 			     m_device -> typeWithAlpha(),
 			     "dab");
-	m_dab -> setOpacity(OPACITY_TRANSPARENT);
-	for (int y = 0; y < mask -> height(); y++) {
+       for (int y = 0; y < mask -> height(); y++) {
 		for (int x = 0; x < mask -> width(); x++) {
 			m_dab -> setPixel(x, y, m_paintColor, mask -> alphaAt(x, y));
 		}

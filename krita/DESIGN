@@ -15,7 +15,7 @@ A Perspective on Krita's Design
   
 Design Patterns
 
-  Patrick Julien restructured Krita to use a lot design patterns krita
+  Patrick Julien restructured Krita to use a lot design patterns. Krita
   appears to have a very solid base for blasting pixels to the screen,
   zooming, selecting and moving. These are what I recognize as his
   changes:

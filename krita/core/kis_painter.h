@@ -72,20 +72,6 @@ public:
         KisPainter(KisPaintDeviceSP device);
         virtual ~KisPainter();
 
-	/**
-	 * The methods below are 'higher' level than the above methods. They need brushes, colors etc.
-	 * set before they can be called. The methods do not directly tell the image to update, but
-	 * you can call dirtyRect() to get the rect that needs to be notified by your painting code.
-	 *
-	 * Call will reset it!
-	*/
-	QRect dirtyRect();
-
-	/**
-	 * Add the r to the current dirty rect.
-	 */
-	QRect addDirtyRect(QRect r) { m_dirtyRect |= r; return m_dirtyRect; }
-
 private:
 	// Implement KisProgressSubject
 	virtual void cancel() { m_cancelRequested = true; }
@@ -144,6 +130,23 @@ public:
                     QUANTUM opacity,
                     Q_INT32 sx = 0, Q_INT32 sy = 0, 
 		    Q_INT32 sw = -1, Q_INT32 sh = -1);
+
+
+	/**
+	 * The methods below are 'higher' level than the above methods. They need brushes, colors etc.
+	 * set before they can be called. The methods do not directly tell the image to update, but
+	 * you can call dirtyRect() to get the rect that needs to be notified by your painting code.
+	 *
+	 * Call will reset it!
+	*/
+	QRect dirtyRect();
+
+	/**
+	 * Add the r to the current dirty rect.
+	 */
+	QRect addDirtyRect(QRect r) { m_dirtyRect |= r; return m_dirtyRect; }
+
+
 
 	/**
 	 * Paint a line that connects the dots in points

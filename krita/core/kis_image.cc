@@ -1124,8 +1124,7 @@ void KisImage::renderToProjection(Q_INT32 tileno)
 	}
 
 	dst = tm -> tile(tileno, TILEMODE_WRITE);
-	Q_ASSERT(dst);
-
+	
 	if (!dst)
 		return;
 
@@ -1144,8 +1143,8 @@ void KisImage::renderToProjection(Q_INT32 tileno)
 			visitor(gc, s);
 		}
 
-// 		if (m_floatingSelection)
-// 			visitor(gc, m_floatingSelection);
+ 		if (m_floatingSelection)
+ 			visitor(gc, m_floatingSelection);
 	}
 
 	gc.end();

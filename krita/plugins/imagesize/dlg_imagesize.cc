@@ -95,7 +95,8 @@ void DlgImageSize::setMaximumWidth(Q_UINT32 w)
 
 Q_INT32 DlgImageSize::width()
 {
-	return (Q_INT32)qRound(m_oldW);
+	//return (Q_INT32)qRound(m_oldW);
+	return (Q_INT32)qRound(m_page -> intWidth -> value());
 }
 
 void DlgImageSize::setHeight(Q_UINT32 h)
@@ -132,7 +133,8 @@ void DlgImageSize::setMaximumHeight(Q_UINT32 h)
 
 Q_INT32 DlgImageSize::height()
 {
-	return (Q_INT32)qRound(m_oldH);
+	//return (Q_INT32)qRound(m_oldH);
+	return (Q_INT32)qRound(m_page -> intHeight -> value());
 }
 
 bool DlgImageSize::scale() 

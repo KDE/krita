@@ -103,37 +103,3 @@ void KisFilterInvert::process(KisPaintDeviceSP device, KisFilterConfiguration* /
 		++lineIt;
 	}
 }
-
-#if 0
-void KritaExample::slotActivated()
-{
-	KisLayerSP lay = m_view->currentImg()->activeLayer();
-	KisTileCommand* ktc = new KisTileCommand("Invert", (KisPaintDeviceSP)lay ); // Create a command
-	int nbchannel = lay->depth() - 1; // get the number of channel whithout alpha
-	KisTileMgrSP ktm = lay->data();
-	KisTileSP tile;
-
-	for(int i = 0; i < ktm->nrows() * ktm->ncols(); i++)
-	{
-		if( (tile = ktm->tile( i , TILEMODE_NONE)) )
-		{
-			ktc->addTile( i , tile);
-		}
-		if (!(tile = ktm->tile( i, TILEMODE_RW)))
-			continue;
-		QUANTUM *data = tile->data(0, 0);
-		// we compute the color inversion
-//		kdDebug() << lay->alpha() << (int)(lay->alpha()) << (1+lay->alpha()) << endl;
-		for( int j = 0; j < tile->size(); j += 1 ) //lay->alpha() )
-		{
-			int end = j + nbchannel;
-			for( ; j < end ; j ++ )
-			{
-				data[j] = QUANTUM_MAX - data[j];
-			}
-		}
-	}
-	m_view->currentImg()->undoAdapter()->addCommand( ktc );
-	m_view->currentImg()->notify();
-}
-#endif

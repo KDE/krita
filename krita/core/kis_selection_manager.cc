@@ -34,7 +34,6 @@
 #include "kis_floatingselection.h"
 #include "kis_selection_manager.h"
 #include "kis_painter.h"
-#include "kis_tile_command.h"
 #include "kis_iterators_quantum.h"
 #include "kis_iterators_pixel.h"
 

@@ -158,6 +158,7 @@ public:
         Q_INT32 quantumSize() const;
         Q_INT32 quantumSizeWithAlpha() const;
 
+	// XXX?
         QRect bounds() const;
 
         Q_INT32 x() const;

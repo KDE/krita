@@ -29,10 +29,12 @@ KisColorSpaceRegistry::KisColorSpaceRegistry()
 	kdDebug() << " creating a KisColorSpaceRegistry" << endl;
 	Q_ASSERT(KisColorSpaceRegistry::m_singleton == 0);
 	KisColorSpaceRegistry::m_singleton = this;
+#if 0
 	// Hack to add the alpha color space which isn't a module or 
 	// selections wouldn't work. It adds itself.
 	KisStrategyColorSpaceSP alpha = new KisColorSpaceAlpha();
 	add(alpha);
+#endif
 }
 
 KisColorSpaceRegistry::~KisColorSpaceRegistry()

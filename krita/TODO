@@ -23,14 +23,14 @@ Core
 	  image date, except for an occasional mask)
 	* Mask layers
 	* Loading and saving of selections
-	* Painting of gradients
+	C Painting of gradients
         X loading Gimp gradients
 	* Colorspace-aware difference between pixel function
 	* Anti-aliased filling (requires some simple colorspace
 	  function to merge 2 Pixels)
 	* Load/save configuration of everything user-settable.
 	* Add filtering with image kernels (3 * 3 blocks of pixels)
-	* Scaling of images (#Boudewijn, Bart)
+	* Scaling of images (#Boudewijn, Bart, Michael)
 	* Fix composite ops (nick from the code gwenview nicked for
 	  the xcf import)
 	* Make toolbox look like Karbon's toolbox, but follow the
@@ -41,7 +41,9 @@ Core
 
 User Interface
 
-	* Replace krita ruler with koruler.	
+        * Give color strategies an option page just like tools. Give layers an option page,
+	  combine both pages to show for layer properties. Color strategies can be stateful.
+	* Replace krita ruler with koruler. (This may be impossible because Krita doesn't use pages)
 	* Create brush-shape outline cursor
 	* All dialogs ui-fied (#Boudewijn, Sven, Casper)
 	* Tabs in dockers drag-and-droppable (vector of docker

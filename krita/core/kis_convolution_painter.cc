@@ -36,7 +36,6 @@
 #include <qstring.h>
 
 #include <kdebug.h>
-#include <kcommand.h>
 #include <klocale.h>
 
 #include <koColor.h>
@@ -51,7 +50,6 @@
 #include "kis_pattern.h"
 #include "kis_rect.h"
 #include "kis_strategy_colorspace.h"
-#include "kis_tile_command.h"
 #include "kis_types.h"
 #include "kis_vec.h"
 #include "kispixeldata.h"

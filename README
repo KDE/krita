@@ -1,14 +1,12 @@
 KOffice is based on KDE ( http://www.kde.org ) which is needed to run KOffice.
-You need kdelibs and kdebase installed if you want to compile and 
-run koffice. Look in the kdelibs sourcedir for the file COMPILING
-for help. Also look at the website as there are many helpfiles 
-available.
+You need kdelibs and kdebase installed if you want to compile and run
+koffice. Look in the kdelibs sourcedir for the file COMPILING for help. Also
+look at the website as there are many helpfiles available.
 
-KOffice is a collection of office applications linked together by a
-common basis. This common basis assures that all office application
-can work together. You can, for instance, insert a spreadsheet in 
-your thesis without leaving your document. Editing the spreadsheet
-happens _inside_ your thesis.
+KOffice is a collection of office applications linked together by a common
+basis. This common basis assures that all office application can work
+together. You can, for instance, insert a spreadsheet in your thesis without
+leaving your document. Editing the spreadsheet happens _inside_ your thesis.
 
 The applications currently included in KOffice are:
 - KWord
@@ -21,8 +19,6 @@ The applications currently included in KOffice are:
   Graphing of your abstract data
 - Karbon
   Vector graphics tool
-- Krita
-  Image manipulation program
 - Kugar
   Database report creation
 - Kivio
@@ -38,20 +34,18 @@ official stable version of KOffice.
 Developers:
 ===========
 
-KOffice is created by Open Source programmers around the world. All 
-developers give their time/code to the community for everyone to
-benefit. The major reason this is done is because those developers
-want to have a good office suite, and they don't mind sharing it
-with you.
+KOffice is created by Open Source programmers around the world. All developers
+give their time/code to the community for everyone to benefit. The major reason
+this is done is because those developers want to have a good office suite, and
+they don't mind sharing it with you.
 
-If you feel you found a bug or missing feature you can always contact
-the developers of koffice (via http://www.koffice.org ) or delve into the
-software yourself.
+If you feel you found a bug or missing feature you can always contact the
+developers of koffice (via http://www.koffice.org ) or delve into the software
+yourself.
 
-The part that is shared between all KOffice applications can be found
-in the lib directory. 
-There classes like KoDocument can be found; these classes are extended
-in the project directories.
+The part that is shared between all KOffice applications can be found in the lib
+directory. There classes like KoDocument can be found; these classes are
+extended in the project directories.
 
 Read the .h files in the respective directories for more info.
 

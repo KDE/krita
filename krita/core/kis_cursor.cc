@@ -2,6 +2,7 @@
  *  kis_cursor.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
+ *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +22,7 @@
 #include <qbitmap.h>
 #include <qcursor.h>
 #include <kcursor.h>
+#include <kiconloader.h>
 
 #include "kis_cursor.h"
 
@@ -260,5 +262,28 @@ QCursor KisCursor::handCursor()
 QCursor KisCursor::selectCursor()
 {
 	return Qt::crossCursor;
+}
+
+QCursor KisCursor::openHandCursor()
+{
+	return load("openhand_cursor");
+}
+
+QCursor KisCursor::closedHandCursor()
+{
+	return load("closedhand_cursor");
+}
+
+QCursor KisCursor::load(QString iconName, int hotspotX, int hotspotY)
+{
+	QPixmap pixmap = UserIcon(iconName);
+	Q_ASSERT(!pixmap.isNull());
+
+	QBitmap mask(pixmap.width(), pixmap.height());
+
+	mask = pixmap.createHeuristicMask();
+	pixmap.setMask(mask);
+
+	return QCursor(pixmap, hotspotX, hotspotY);
 }
 

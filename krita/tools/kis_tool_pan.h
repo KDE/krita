@@ -46,6 +46,8 @@ private:
 	Q_INT32 m_origScrollX;
 	Q_INT32 m_origScrollY;
 	bool m_dragging;
+	QCursor m_openHandCursor;
+	QCursor m_closedHandCursor;
 };
 
 #endif // KIS_TOOL_PAN_H_

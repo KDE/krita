@@ -2,6 +2,7 @@
  *  kis_cursor.h - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
+ *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,5 +59,11 @@ public:
 	static QCursor selectCursor();        // select cursor
 	static QCursor zoomCursor();          // zoom tool cursor
 	static QCursor handCursor();          // hand tool cursor
+	static QCursor openHandCursor();      // Pan tool cursor
+	static QCursor closedHandCursor();    // Pan tool cursor
+
+private:
+	// Load a cursor from an image file. XPM format seems to work the best.
+	static QCursor load(QString iconName, int hotspotX = -1, int hotspotY = -1);
 };
 #endif // __kis_cursor_h__

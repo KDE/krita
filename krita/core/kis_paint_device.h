@@ -36,6 +36,7 @@ class QSize;
 class QPoint;
 class KoStore;
 class KisImage;
+class QWMatrix;
 
 class KisPaintDevice : public QObject, public KisRenderInterface {
         Q_OBJECT
@@ -148,6 +149,11 @@ public:
         void resize(Q_INT32 w, Q_INT32 h);
         void resize(const QSize& size);
         void resize();
+
+	/**
+	   Apply the transformation matrix _in place_.
+	*/
+	void transform(const QWMatrix & matrix);
 
         void expand(Q_INT32 w, Q_INT32 h);
         void expand(const QSize& size);

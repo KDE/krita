@@ -91,10 +91,10 @@ void KisStrategyColorSpaceRGB::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *d
 	dst[PIXEL_ALPHA] = opacity;
 }
 
-void KisStrategyColorSpaceRGB::render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
+void KisStrategyColorSpaceRGB::render(KisImageSP image, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
 {
-	if (projection) {
-		KisTileMgrSP tm = projection -> tiles();
+	if (image) {
+		KisTileMgrSP tm = image -> tiles();
 		KisPixelDataSP pd = new KisPixelData;
 		QImage img;
 
@@ -107,7 +107,7 @@ void KisStrategyColorSpaceRGB::render(KisImageSP projection, QPainter& painter, 
 		pd -> y2 = y + height - 1;
 		pd -> width = pd -> x2 - pd -> x1 + 1;
 		pd -> height = pd -> y2 - pd -> y1 + 1;
-		pd -> depth = projection -> depth();
+		pd -> depth = image -> depth();
 		pd -> stride = pd -> depth * pd -> width;
 		pd -> owner = false;
 		pd -> data = m_buf;
@@ -135,7 +135,8 @@ void KisStrategyColorSpaceRGB::render(KisImageSP projection, QPainter& painter, 
 
 #else
 		img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * CHAR_BIT, 0, 0, QImage::LittleEndian);
-		m_pixio.putImage(&m_pixmap, 0, 0, &img);
+		//m_pixio.putImage(&m_pixmap, 0, 0, &img);
+		m_pixmap = QPixmap(img);
 
 #endif
 

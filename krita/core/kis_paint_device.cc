@@ -16,10 +16,14 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <qrect.h>
+#include <qwmatrix.h>
+
 #include <kcommand.h>
 #include <klocale.h>
 #include <kdebug.h>
+
 #include <koStore.h>
+
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_image.h"
@@ -506,6 +510,8 @@ void KisPaintDevice::init()
 
 bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
 {
+	// XXX: this should use the colour strategies!
+
         KisTileMgrSP tm = data();
         KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
         QUANTUM *data;
@@ -543,6 +549,8 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
 
 bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)
 {
+
+	// XXX: this should use the colour strategies! 
         KisTileMgrSP tm = data();
         KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);
         QUANTUM *data;
@@ -637,6 +645,111 @@ void KisPaintDevice::resize()
 
         if (img)
                 resize(img -> bounds().size());
+}
+
+void KisPaintDevice::transform(const QWMatrix & matrix)
+{
+	// Code mostly copied from QImage/QPixmap
+
+	// source image data
+	Q_INT32 ws = width();
+	Q_INT32 hs = height();
+
+	// target image data
+	Q_INT32 wd;
+	Q_INT32 hd;
+	
+	// compute size of target image
+	QWMatrix mat = QPixmap::trueMatrix( matrix, ws, hs );
+	if ( mat.m12() == 0.0F && mat.m21() == 0.0F ) {
+		// scaling
+		if ( mat.m11() == 1.0F && mat.m22() == 1.0F ) // identity matrix
+			return; // Do nothing
+		wd = qRound( mat.m11() * ws );
+		hd = qRound( mat.m22() * hs );
+		wd = QABS( wd );
+		hd = QABS( hd );
+	} else {
+		// rotation or shearing
+		QPointArray a( QRect(0, 0, ws, hs) );
+		a = mat.map( a );
+		QRect r = a.boundingRect().normalize();
+		wd = r.width();
+		hd = r.height();
+	}
+	
+
+	bool invertible;
+	QWMatrix trueMat = mat.invert( &invertible ); // invert matrix
+	if ( hd == 0 || wd == 0 || !invertible )	 // error, return null image
+		return;
+
+	// Create and initialize the new tiles
+	KisTileMgrSP oldData = data();
+	KisTileMgrSP newData = new KisTileMgr(oldData -> depth(), wd, hd);
+        KisPainter gc;
+	// Now we already set the tilemanager of this paint device to the new tiles
+        data(newData);
+	// And resize it
+        width(wd);
+        height(hd);
+	// Clean it out
+        gc.begin(this);
+	gc.eraseRect(0, 0, wd, hd);
+        gc.end();
+
+	// Now start the transformation. This uses the pixel/setPixel interface, so
+	// it's likely to be extremely slow, but understandable
+
+	int xoffset = 0;
+	int sWidth = ws;
+	int sHeight = hs;
+	int dWidth = wd;
+	int dHeight = hd;
+	
+	int m11 = (int)(trueMat.m11()*65536.0);
+	int m12 = (int)(trueMat.m12()*65536.0);
+	int m21 = (int)(trueMat.m21()*65536.0);
+	int m22 = (int)(trueMat.m22()*65536.0);
+	int dx  = (int)(trueMat.dx() *65536.0);
+	int dy  = (int)(trueMat.dy() *65536.0);
+
+	int m21ydx = dx + (xoffset<<16) + QABS(m11)/2;
+	int m22ydy = dy + QABS(m22)/2;
+	
+	uint trigx;
+	uint trigy;
+	uint maxws = sWidth<<16;
+	uint maxhs = sHeight<<16;
+
+	// I would have thought that one would take the source pixels,
+	// do the computation, and write the target pixels.
+	// Apparently, that's not true: one looks through the target
+	// pixels, and computes what should be there from the source
+	// pixels. I doubt I will ever completely understand this
+	// stuff.
+
+	//For each target line of pixels
+	KoColor c;
+	QUANTUM opacity = OPACITY_TRANSPARENT;
+	Q_INT32 tmp;
+
+	for (Q_INT32 y = 0; y < dHeight; y++) {
+		trigx = m21ydx;
+		trigy = m22ydy;
+		// For each target pixel
+		for (Q_INT32 x = 0; x < dWidth; x++) {
+			if ( trigx < maxws && trigy < maxhs ) {
+				// Copy the data
+				
+			}
+			trigx += m11;
+			trigy += m12;
+		}
+		m21ydx += m21;
+		m22ydy += m22;
+	}
+	
 }
 
 void KisPaintDevice::expand(Q_INT32 w, Q_INT32 h)

@@ -1126,14 +1126,15 @@ void KisImage::notify()
 
 void KisImage::notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
 {
-	invalidate(x, y, width, height);
-	emit update(KisImageSP(this), QRect(x, y, width, height));
+	notify(QRect(x, y, width, height));
 }
 
 void KisImage::notify(const QRect& rc)
 {
+    if (rc.isValid()) {
 	invalidate(rc);
 	emit update(KisImageSP(this), rc);
+    }
 }
 
 QRect KisImage::bounds() const

@@ -167,6 +167,15 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
                         KisPaintDeviceSP srcdev,
                         QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
+	if (srcdev == 0) {
+		kdDebug() << "bitBlt: source is null.\n";
+		return;
+	}
+	if (m_device == 0) {
+		kdDebug() << "bitBlt: no device to blt onto.\n";
+		return;
+	}
+
         Q_INT32 x;
         Q_INT32 y;
         Q_INT32 sx2 = sx;

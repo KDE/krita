@@ -96,7 +96,9 @@ void KisToolZoom::buttonRelease(KisButtonReleaseEvent *e)
 		m_endPos = e -> pos().floorQPoint();
 		m_dragging = false;
 
-		if (m_startPos == m_endPos) {
+		QPoint delta = m_endPos - m_startPos;
+
+		if (sqrt(delta.x() * delta.x() + delta.y() * delta.y()) < 10) {
 			controller -> zoomIn(m_endPos.x(), m_endPos.y());
 		} else {
 			controller -> zoomTo(QRect(m_startPos, m_endPos));

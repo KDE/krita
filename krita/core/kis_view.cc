@@ -49,6 +49,7 @@
 
 // Local
 #include "kis_types.h"
+#include "kis_paint_device.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_canvas.h"
@@ -61,7 +62,6 @@
 #include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_listbox.h"
-#include "kis_paint_device.h"
 #include "kis_dlg_paint_properties.h"
 #include "kis_resourceserver.h"
 #include "kis_selection.h"

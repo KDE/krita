@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include "kis_paint_device.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_painter.h"

@@ -7,7 +7,7 @@ toolbar_DATA = alignBlock.png alignCenter.png alignRight.png bold.png \
 	part-kimageshop.png part-unspecif.png text-bold.png \
 	text-italic.png text-underlined.png \
 	picture.png clipart.png parts.png \
-	italic.png underl.png alignLeft.png
+	italic.png underl.png alignLeft.png product.png sum.png
 
 toolbardir = $(kde_datadir)/koffice/toolbar
 

@@ -2,7 +2,6 @@
 * Move composite ops and paint ops to capability framework
 * Add tranform dialog (scale, shear etc.) and debug transform code.
 * Fix linetool to use pressure to draw tapered lines.
-* The image which you see and the one on which you paint are not alyways the same.
 * Brush cursor shapes for tools (updating cursors from the tools doesn't work yet).
 * Give each layer its own imagetype; allow layers of diverse types in one image.
 * Make tools kparts

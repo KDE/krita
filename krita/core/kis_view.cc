@@ -1566,6 +1566,7 @@ void KisView::layer_mirrorY()
 void KisView::add_new_image_tab()
 {
 	m_doc -> slotNewImage();
+	updateTabBar();
 }
 
 void KisView::remove_current_image_tab()
@@ -2258,6 +2259,7 @@ void KisView::selectImage(const QString& name)
 	selectionUpdateGUI(m_current && m_current -> selection());
 	resizeEvent(0);
 	updateCanvas();
+	notify();
 }
 
 void KisView::selectImage(KisImageSP img)

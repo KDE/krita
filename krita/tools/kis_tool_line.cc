@@ -91,7 +91,10 @@ void KisToolLine::mouseMove(QMouseEvent *e)
 		if (m_startPos != m_endPos)
 			paintLine();
 		//KisCanvasControllerInterface *controller = m_subject -> canvasController();
-		m_endPos = e -> pos();//controller -> windowToView(e -> pos());
+                
+                if  ((e -> state() & Qt::ShiftButton) == Qt::ShiftButton) {
+                    m_endPos = straightLine(e -> pos());
+                } else m_endPos = e -> pos();//controller -> windowToView(e -> pos());
 		paintLine();
 	}
 }
@@ -109,9 +112,10 @@ void KisToolLine::mouseRelease(QMouseEvent *e)
 			return;
 		}
 
-		m_endPos = e -> pos();
-		
-		
+                if  ((e -> state() & Qt::ShiftButton) == Qt::ShiftButton) {
+                    m_endPos = straightLine(e -> pos());
+                } else m_endPos = e -> pos();
+
 		if (m_endPos.y() < 0)
 			m_endPos.setY(0);
 		
@@ -140,6 +144,11 @@ void KisToolLine::mouseRelease(QMouseEvent *e)
 			
 			m_painter -> paintLine(PAINTOP_BRUSH, m_startPos, m_endPos, PRESSURE_DEFAULT, 0, 0, 0);
 			m_currentImage -> notify( m_painter -> dirtyRect() );
+                        
+                        /* remove remains of the line drawn while moving */
+                        if (controller -> canvas()) {
+                            controller -> canvas() -> update();
+                        }
 			
 			KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
 			if (adapter && m_painter) {
@@ -160,6 +169,22 @@ void KisToolLine::tabletEvent(QTabletEvent */*event*/)
 {
 	// Nothing yet -- I'm not sure how to handle this, perhaps
 	// have thick-thin lines for pressure.
+}
+
+QPoint KisToolLine::straightLine(QPoint point)
+{
+    QPoint comparison = point - m_startPos;
+    QPoint result;
+    
+    if ( abs(comparison.x()) > abs(comparison.y())) {
+        result.setX(point.x());
+        result.setY(m_startPos.y());
+    } else {
+        result.setX( m_startPos.x() );
+        result.setY( point.y() );
+    }
+    
+    return result;
 }
 
 void KisToolLine::paintLine()

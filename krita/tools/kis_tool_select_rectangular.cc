@@ -113,9 +113,9 @@ void KisToolRectangularSelect::clearSelection()
 
 		Q_ASSERT(controller);
 
-		if (img) {
+		if (img && img -> selection().data() != 0) {
 			img -> unsetSelection();
-			controller -> updateCanvas();
+                        controller -> canvas() -> update();
 		}
 
 		m_startPos = QPoint(0, 0);

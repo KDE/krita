@@ -51,6 +51,8 @@ class KisToolLine : public KisToolPaint {
  private:
 	void paintLine();
 	void paintLine(QPainter& gc, const QRect& rc);
+        
+        QPoint straightLine(QPoint point);
 
     
 	bool m_dragging;

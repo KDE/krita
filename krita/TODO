@@ -1,89 +1,119 @@
-* Create a history/action docker
-* Add scriptability
-* Figure out a way to have 1, 8, 16, 24 and 64 bits per channel.
-* Fix speed of painting.
-* Add tranform dialog (scale, shear etc.) and debug transform code.
-* Fix linetool to use pressure to draw tapered lines.
-* Brush cursor shapes for tools (updating cursors from the tools doesn't work yet).
-* Give each layer its own imagetype; allow layers of diverse types in one image.
-* Make tools kparts
-* Fix scrollbars
-* make brush tool antialiased; make un-antialiased pen tool
-* If you have a tablet, you can have more than one active tool at a time:
-	stylus, eraser, pointer and your ordinary mouse, not to mention
-	the possibility of having several styluses.
-* Implement saving/loading of tool properties.
-* redo configuration dialog
-* Find a way to set the hourglass cursor when doing complex things from
-	e.g. KisPainter.
-* Make pipe brushes pay attention to the instructions in the 'parasite'
-* Use patterns and gradients while painting
-* Add auto-scroll when painting/erasing etc.
-* Add a 'hard' pen tool
-* Make toolbox conform to Karbon
-* Fix composite ops and make conformant to photoshop/gimp instead of ImageMagick (steal
-from gwenviews xcf imgio slave)
+Krita TODO
 
-User interface
+This it the TODO list for the first release of Krita, which I hope we
+will be able to make in September or October. This release will be limited
+to 8-bit per channel and one, or at most two working color models (RGBA 
+and CMYK). (XXX: bitmap and grayscale, too? I don't think there's any
+urgency for indexed images like gifs.)
 
-        * add tool palette
-        * add tool option palette
-        * floatable palettes
-        * show/hide rulers
-        * add decent toolbar icons
-        * config dialog
-        * gradient dialog
-        * the progressbar in the statusbar gets mad sometimes, 
-          appearing twice
-        * More coordination with Karbon's Rob Buis. We really should
-	  use the same code for our UI.
-
-Tools
-
-        * pen, pencil, airbrush, chalk etc.
-        * text tool
-        * more types of selection
-        * smear, convolve etc.
-        * rotate, scale, shear
+The very first thing that's needed to at least enable me to use Krita
+to maintain the Krita screenshots page is screenshot and scale :-).
 
 Core
 
-        * Add support for natural media-like painting
-        * Add support for filters
-        * channels, masks are broken
-	* Adjustment layers
+	* Discontinuous selections (A byte-map mask for a whole image)
+	* Channels
+	* Histogram computations
+	* Adjustment layers (Layers that dynamically apply a filter to
+	  the layer they are linked to, these do not store actual
+	  image date, except for an occasional mask)
+	* Mask layers
+	* Loading and saving of selections
+	* Painting of gradients
+	* Fill with pattern
+	* Non-rectangular fill
+	* Load/save configuration of everything user-settable.
+	* Add filtering with image kernels (3 * 3 blocks of pixels)
+	* Scaling of images
+	* Fix composite ops (nick from the code gwenview nicked for
+	  the xcf import)
+	* Make toolbox look like Karbon's toolbox, but follow the
+	  layout of photoshop's toolbox for minimum confusability.
+	* Add create image from screenshot.
 
-To investigate
+User Interface
 
-        * plugins -- what are they, how should they work,
-          what's the interface to Krita -> Done by Cyrille.
-        * graphics algorithms. One cannot steal from the Gimp
-          forever.
+	* All dialogs ui-fied
+	* Tabs in dockers drag-and-droppable (vector of docker
+	  windows, create new docker if tab dropped outside existing
+	  docker window)
+	* Show/Hide rulers
+	* Implement the following dialogs / widgets:
+		    - Select by color range
+		    - Variations
+		    - Transform
+		    - Gradient (nick from Scribus?)
+		    - Histogram
+		    - Modify curves (nick from Perico)
+	* Add history docker
+	* Two cursor modes: precise (a cross-hair), and beginner
+	  (image cursor of the current tool)
+	* Add auto-scroll to canvas while painting	  
+	* Full-screen mode
+	* Add previews to all relevant dialogs. (XXX: let preview work
+	  on rendered QImage, or on scaled image?)
+	* Allow an active tool for every pointer present in X.
+	* Remove: current tool properties dialogs
+
+Tools
+
+	* All tools must have a tool options tab
+	* Loading and saving of tool state
+	* Implement the following tools: 
+		    - Elliptical selection
+		    - Crop
+		    - Freehand selection
+		    - Polygonal selection
+		    - Continguous selection (magic wand)
+		    - pen(cil) tool (same as brush, but not anti-aliased)
+		    - fix airbrush tool (add rate option, add increase
+		      of brush size if kept in one place)
+		    - poly-line tool
+		    - rectangle tool
+		    - ellipse tool
+		    - polygon tool
+		    - color changer, smudge tool,sharpen tool, blur
+		      tool, dodge tool, burn tool, sponge tool (These
+		      last are perhaps more generally: painting with
+		      filters tool)
+		    - stamp tool (paint with pattter/image selection)
+		    - Text tool
+		    - Measure tool
+		    - Pan tool (hand)
+		    - Gradient tool
+	* Pressure sensivitize all relevant tools (e.g. line tool)
+	* XXX Make tools plugins?
 
 
-Old TODO, parts of it seem pretty obsolete, and others are more of a 'redo'
-than a 'todo':
+Plugins
 
-- color modes: Indexed, Greyscale, RGB and RGBA, CMYK, CMKYA
-- channels (RGB, CMYK, HSB, etc...)
-- layer masks
-- basic image manipulation (contrast/brightness/saturation etc.)
-- scale images
-- basic plugin filters (blur/sharpen etc.)
-- move tool
-- crop tool
-- basic text tool
-- color picker tool
-- fill tool (fill with color or pattern)
-- gradient tool
-- pen (paint brush or pattern)
-- airbrush (paint brush or pattern)
-- eraser
-- blur/sharpen with brush tool 
-- fullscreen editing mode
-- Rotate layouts
-- Saves channel information to file
-- Undo/Redo
-- preview in pixel
-- Canvas size should be independent of image size
-- Rulers use kivio rulers
+	* As many filters as possible :-)
+	* Fix filters to use current image, instead of first image in
+	  the document.
+
+I think we should then fork into a stable, bugfix branch and a
+development branch. For the development branch, I propose the
+following:
+
+Core
+	* Add bit-depth independence
+	* Completely hide data storage backend from the code behind
+	  iterators.
+	* Add color models for LAB etc.
+	* Make pipe brushes pay attention to parasites
+
+User interface
+
+	* Add action (macro) docker
+	* Add navigation/zoom docker
+	* Add scriptability 
+	* Add third cursor mode:  outline of current brush
+	* Rethink document model (perhaps add dynamic links between images)
+Tools
+
+	* Implement path tools
+	* Calligraphic pen tool
+	* Sumi-e brush tool
+	* Natural media tools (chalk, ink, oil, watercolour -- fun!)
+
+A much shorter list, much harder  TODO's :-).

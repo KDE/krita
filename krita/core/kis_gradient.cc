@@ -26,7 +26,7 @@
 #include <kdebug.h>
 #include <kimageeffect.h>
 
-#include "kis_color.h"
+#include <koColor.h>
 
 #include "kis_selection.h"
 #include "kis_gradient.h"

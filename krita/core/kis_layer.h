@@ -26,7 +26,7 @@
 #include <qobject.h>
 #include <qptrlist.h>
 
-#include "kis_color.h"
+#include <koColor.h>
 
 #include "kis_channel.h"
 #include "kis_global.h"

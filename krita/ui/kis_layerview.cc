@@ -41,12 +41,13 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 
+#include <koFrameButton.h>
+
 #include "kis_doc.h"
 #include "kis_view.h"
 #include "kis_util.h"
 #include "kis_layerview.h"
 #include "kis_factory.h"
-#include "kis_framebutton.h"
 #include "integerwidget.h"
 
 //#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
@@ -59,16 +60,16 @@ KisLayerView::KisLayerView( KisDoc *doc, QWidget *parent, const char *name )
     buttons = new QHBox( this );
     buttons->setMaximumHeight(12);
 
-    pbAddLayer = new KisFrameButton( buttons );
+    pbAddLayer = new KoFrameButton( buttons );
     pbAddLayer->setPixmap( BarIcon( "newlayer" ) );
 
-    pbRemoveLayer = new KisFrameButton( buttons );
+    pbRemoveLayer = new KoFrameButton( buttons );
     pbRemoveLayer->setPixmap( BarIcon( "deletelayer" ) );
 
-    pbUp = new KisFrameButton( buttons );
+    pbUp = new KoFrameButton( buttons );
     pbUp->setPixmap( BarIcon( "raiselayer" ) );
 
-    pbDown = new KisFrameButton( buttons );
+    pbDown = new KoFrameButton( buttons );
     pbDown->setPixmap( BarIcon( "lowerlayer" ) );
 
     // only serves as beautifier for the widget

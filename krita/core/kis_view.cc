@@ -60,10 +60,10 @@
 #endif
 
 // KOffice
+#include <koColor.h>
 #include <koView.h>
 
 // core classes
-#include "kis_color.h"
 #include "kis_view.h"
 #include "kis_doc.h"
 #include "kis_util.h"

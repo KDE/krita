@@ -1,12 +1,13 @@
 /*
  *  kis_krayonchooser.cc - part of KImageShop
  *
- *  A chooser for KisKrayons. Makes use of the IconChooser class and maintains
+ *  A chooser for KisKrayons. Makes use of the KoIconChooser class and maintains
  *  all available krayons for KIS.
  *
  *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *  Copyright (c) 2000 Matthias Elter   <elter@kde.org>
  *  Copyright (c) 2000 John Califf   <jcaliff@compuzone.net>
+ *  Copyright (c) 2002 Patrick Julein <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,16 +26,17 @@
 
 #include <qhbox.h>
 #include <qlabel.h>
+#include <qptrlist.h>
 #include <qlayout.h>
 
 #include <kinstance.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <qptrlist.h>
+
+#include <koIconChooser.h>
 
 #include "kis_factory.h"
 #include "kis_resourceserver.h"
-#include "iconchooser.h"
 #include "integerwidget.h"
 #include "kis_pattern.h"
 #include "kis_brush.h"
@@ -59,17 +61,17 @@ KisKrayonChooser::KisKrayonChooser( QWidget *parent, const char *name )
     // only serves as beautifier for the iconchooser
     frame = new QHBox( this );
     frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    chooser = new IconChooser( frame, QSize(30,30), "krayon chooser" );
+    chooser = new KoIconChooser( QSize(30,30), frame, "krayon chooser" );
 
     //container = new QWidget(frame);
-    //chooser = new IconChooser( container, QSize(30,30), "icon chooser" );
+    //chooser = new KoIconChooser( container, QSize(30,30), "icon chooser" );
 
     QPtrList<KisBrush> bList = KisFactory::rServer()->brushes();
 
     for (KisBrush *brush = bList.first(); brush != 0; brush = bList.next())
     {
         if ( brush->isValid() && (KisKrayon *)brush->isValidKrayon() )
-	        chooser->addItem( (IconItem *) brush );
+	        chooser->addItem(brush);
     }
 
     QPtrList<KisPattern> pList = KisFactory::rServer()->patterns();
@@ -77,11 +79,11 @@ KisKrayonChooser::KisKrayonChooser( QWidget *parent, const char *name )
     for (KisPattern *pattern = pList.first(); pattern != 0; pattern = pList.next())
     {
         if ( pattern->isValid() && (KisKrayon *)pattern->isValidKrayon() )
-	        chooser->addItem( (IconItem *) pattern );
+	        chooser->addItem(pattern );
     }
 
-    QObject::connect( chooser, SIGNAL( selected( IconItem * ) ),
-		    this, SLOT( slotItemSelected( IconItem * )));
+    QObject::connect( chooser, SIGNAL( selected( KoIconItem * ) ),
+		    this, SLOT( slotItemSelected( KoIconItem * )));
 
     initGUI();
 
@@ -105,7 +107,7 @@ KisKrayonChooser::~KisKrayonChooser()
 // set the active pattern in the chooser - does NOT emit selected() (should it?)
 void KisKrayonChooser::setCurrentKrayon( KisKrayon *krayon )
 {
-    chooser->setCurrentItem( (IconItem *) krayon );
+    chooser->setCurrentItem( krayon );
     slSpacing->setValue( /* pattern->spacing() */ 5 );
 }
 
@@ -133,7 +135,7 @@ void KisKrayonChooser::initGUI()
 
 // called when an item is selected in the chooser
 // set the slider to the correct position
-void KisKrayonChooser::slotItemSelected( IconItem *item )
+void KisKrayonChooser::slotItemSelected( KoIconItem *item )
 {
     KisKrayon *krayon = (KisKrayon *) item;
     slSpacing->setValue( /* pattern->spacing() */ 5 );

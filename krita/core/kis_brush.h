@@ -23,7 +23,6 @@
 
 #include <qsize.h>
 #include "kis_krayon.h"
-#include "iconitem.h"
 
 class QPoint;
 class QPixmap;

@@ -2,6 +2,7 @@
  *  kis_krayon.h - part of Krayon
  *
  *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,35 +24,36 @@
 
 #include <qsize.h>
 
-#include "iconitem.h"
+#include <koIconChooser.h>
 
 class QPoint;
 class QPixmap;
 class QImage;
 
-class KisKrayon : public IconItem
-{
-    public:
-        KisKrayon();
-        virtual ~KisKrayon();
+class KisKrayon : public KoIconItem {
+	typedef KoIconItem super;
 
-        bool      isValidKrayon()	const { return m_validKrayon; }
-        void      setValidKrayon(bool valid);  
+public:
+	KisKrayon();
+	virtual ~KisKrayon();
 
-        QPixmap&  pixmap()  const;
-        QPixmap&  thumbPixmap() const;
-        QImage*   image()   const;
-        QSize     size()    const { return QSize(m_w, m_h); } 
-        int       width()   const { return m_w; }
-        int       height()  const { return m_h; }
+	bool      isValidKrayon()	const { return m_validKrayon; }
+	void      setValidKrayon(bool valid);  
 
-    protected:
-        int       m_w, m_h;
-        QImage   *m_pImage;
-        QPixmap  *m_pPixmap;
-        QPixmap  *m_pThumbPixmap;
+	QPixmap&  pixmap()  const;
+	QPixmap&  thumbPixmap() const;
+	QImage*   image()   const;
+	QSize     size()    const { return QSize(m_w, m_h); } 
+	int       width()   const { return m_w; }
+	int       height()  const { return m_h; }
 
-    private:
+protected:
+	int       m_w, m_h;
+	QImage   *m_pImage;
+	QPixmap  *m_pPixmap;
+	QPixmap  *m_pThumbPixmap;
+
+private:
         bool      m_validKrayon;
 };
 

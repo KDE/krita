@@ -20,7 +20,8 @@
 
 #include <kaction.h>
 
-#include "kis_color.h"
+#include <koColor.h>
+
 #include "kis_tool_colorpicker.h"
 #include "kis_doc.h"
 #include "kis_view.h"

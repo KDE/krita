@@ -1,11 +1,12 @@
 /*
  *  kis_patternchooser.h - part of KImageShop
  *
- *  A chooser for KisPatterns. Makes use of the IconChooser class and maintains
+ *  A chooser for KisPatterns. Makes use of the KoIconChooser class and maintains
  *  all available patterns for KIS.
  *
  *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *  Copyright (c) 2000 Matthias Elter   <elter@kde.org>
+ *  Copyright (c) 2002 Patrick Julein <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +32,7 @@
 
 class QHBox;
 class QLabel;
-class IconChooser;
+class KoIconChooser;
 class IntegerWidget;
 
 class KisPatternChooser : public QWidget
@@ -48,7 +49,7 @@ public:
 protected:
   void 		initGUI();
 
-  IconChooser 	*chooser;
+  KoIconChooser 	*chooser;
 
 private:
     QHBox 	*frame;
@@ -57,7 +58,7 @@ private:
     IntegerWidget *slSpacing;
 
 private slots:
-  void 		slotItemSelected( IconItem * );
+  void 		slotItemSelected( KoIconItem * );
   void 		slotSetPatternSpacing( int );
 
 signals:

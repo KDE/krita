@@ -2,6 +2,7 @@
  *  kis_pattern.cc - part of KImageShop
  *
  *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,7 +28,7 @@
 
 #include "kis_krayon.h"
 
-KisKrayon::KisKrayon() : IconItem()
+KisKrayon::KisKrayon() : super()
 {
     m_validKrayon = false;
 }

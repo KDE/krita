@@ -51,7 +51,7 @@ void KisPatternWidget::drawContents ( QPainter *p )
     int x = 0;
     int y = 0;
     
-    IconItem *item = (IconItem *)m_pPattern;
+    KoIconItem *item = m_pPattern;
     
     if ((m_pPattern->width() < ITEMSIZE && m_pPattern->height() < ITEMSIZE)
     || (!item->hasValidThumb()))

@@ -1,11 +1,12 @@
 /*
  *  kis_patternchooser.cc - part of Krayon
  *
- *  A chooser for KisPatterns. Makes use of the IconChooser class and maintains
+ *  A chooser for KisPatterns. Makes use of the KoIconChooser class and maintains
  *  all available brushes for KIS.
  *
  *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *  Copyright (c) 2000 Matthias Elter   <elter@kde.org>
+ *  Copyright (c) 2002 Patrick Julein <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,15 +26,16 @@
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qptrlist.h>
 
 #include <kinstance.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <qptrlist.h>
+
+#include <koIconChooser.h>
 
 #include "kis_factory.h"
 #include "kis_resourceserver.h"
-#include "iconchooser.h"
 #include "integerwidget.h"
 
 #include "kis_patternchooser.h"
@@ -56,18 +58,18 @@ KisPatternChooser::KisPatternChooser( QWidget *parent, const char *name )
     // only serves as beautifier for the iconchooser
     frame = new QHBox( this );
     frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    chooser = new IconChooser( frame, QSize(30,30), "pattern chooser" );
+    chooser = new KoIconChooser( QSize(30,30), frame, "pattern chooser" );
 
     QPtrList<KisPattern> bList = KisFactory::rServer()->patterns();
 
     for (KisPattern *pattern = bList.first(); pattern != 0; pattern = bList.next())
     {
         if ( pattern->isValid() )
-	        chooser->addItem( (IconItem *) pattern );
+	        chooser->addItem(pattern );
     }
 
-    QObject::connect( chooser, SIGNAL( selected( IconItem * ) ),
-		    this, SLOT( slotItemSelected( IconItem * )));
+    QObject::connect( chooser, SIGNAL(selected( KoIconItem * ) ),
+		    this, SLOT( slotItemSelected( KoIconItem * )));
 
     initGUI();
 
@@ -91,7 +93,7 @@ KisPatternChooser::~KisPatternChooser()
 // set the active pattern in the chooser - does NOT emit selected() (should it?)
 void KisPatternChooser::setCurrentPattern( KisPattern *pattern )
 {
-    chooser->setCurrentItem( (IconItem *) pattern );
+    chooser->setCurrentItem(  pattern );
     slSpacing->setValue( pattern->spacing() );
 }
 
@@ -119,7 +121,7 @@ void KisPatternChooser::initGUI()
 
 // called when an item is selected in the chooser
 // set the slider to the correct position
-void KisPatternChooser::slotItemSelected( IconItem *item )
+void KisPatternChooser::slotItemSelected( KoIconItem *item )
 {
     KisPattern *pattern = (KisPattern *) item;
     slSpacing->setValue( pattern->spacing());

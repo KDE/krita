@@ -23,7 +23,7 @@
 
 #include <qpoint.h>
 
-#include "kis_color.h"
+#include <koColor.h>
 #include "kis_image.h"
 #include "kis_tool.h"
 

@@ -40,12 +40,12 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 
+#include <koFrameButton.h>
 
 #include "kis_doc.h"
 #include "kis_view.h"
 #include "kis_util.h"
 #include "kis_channelview.h"
-#include "kis_framebutton.h"
 #include "kis_factory.h"
 #include "integerwidget.h"
 
@@ -57,16 +57,16 @@ KisChannelView::KisChannelView( KisDoc *_doc, QWidget *_parent, const char *_nam
     buttons = new QHBox( this );
     buttons->setMaximumHeight(15);
 
-    pbAddChannel = new KisFrameButton( buttons );
+    pbAddChannel = new KoFrameButton( buttons );
     pbAddChannel->setPixmap( BarIcon( "newlayer" ) );
 
-    pbRemoveChannel = new KisFrameButton( buttons );
+    pbRemoveChannel = new KoFrameButton( buttons );
     pbRemoveChannel->setPixmap( BarIcon( "deletelayer" ) );
 
-    pbUp = new KisFrameButton( buttons );
+    pbUp = new KoFrameButton( buttons );
     pbUp->setPixmap( BarIcon( "raiselayer" ) );
 
-    pbDown = new KisFrameButton( buttons );
+    pbDown = new KoFrameButton( buttons );
     pbDown->setPixmap( BarIcon( "lowerlayer" ) );
 
     frame = new QHBox( this );

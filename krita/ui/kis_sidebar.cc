@@ -26,15 +26,15 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <koColorChooser.h>
+#include <koFrameButton.h>
+
 #include "kis_sidebar.h"
 #include "kis_krayonwidget.h"
 #include "kis_brushwidget.h"
 #include "kis_patternwidget.h"
 #include "kis_gradientwidget.h"
 #include "kis_previewwidget.h"
-#include "kis_colorchooser.h"
-#include "kis_framebutton.h"
-
 
 //KisSideBar::KisSideBar( QWidget* parent, const char* name ) : QWidget( parent, name )
 KisSideBar::KisSideBar( QWidget* parent, const char* name )
@@ -197,8 +197,8 @@ TopTitleFrame::TopTitleFrame( QWidget* parent, const char* name )
     setLineWidth(1);
 
     // setup buttons
-    m_pHideButton = new KisFrameButton(i18n("(*)"), this);
-    m_pTitleButton = new KisFrameButton(i18n("Krayon Box"), this);
+    m_pHideButton = new KoFrameButton(i18n("(*)"), this);
+    m_pTitleButton = new KoFrameButton(i18n("Krayon Box"), this);
 
     QFont font = KGlobalSettings::generalFont();
     font.setPointSize( 8 );
@@ -343,12 +343,12 @@ TopColorFrame::TopColorFrame( QWidget* parent, const char* name )
     setLineWidth(1);
 
     // setup buttons
-    m_pHideButton = new KisFrameButton(i18n("(*)"), this);
-    m_pLABButton = new KisFrameButton(i18n("LAB"), this);
-    m_pCMYKButton = new KisFrameButton(i18n("CMYK"), this);
-    m_pHSBButton = new KisFrameButton(i18n("HSV"), this);
-    m_pGreyButton = new KisFrameButton(i18n("Gray"), this);
-    m_pRGBButton = new KisFrameButton(i18n("RGB"), this);
+    m_pHideButton = new KoFrameButton(i18n("(*)"), this);
+    m_pLABButton = new KoFrameButton(i18n("LAB"), this);
+    m_pCMYKButton = new KoFrameButton(i18n("CMYK"), this);
+    m_pHSBButton = new KoFrameButton(i18n("HSV"), this);
+    m_pGreyButton = new KoFrameButton(i18n("Gray"), this);
+    m_pRGBButton = new KoFrameButton(i18n("RGB"), this);
 
     m_pEmptyFrame = new QFrame(this);
     m_pEmptyFrame->setFrameStyle(Panel | Raised);
@@ -473,7 +473,7 @@ ColorChooserFrame::ColorChooserFrame( QWidget* parent, const char* name )
     setFrameStyle(Panel | Raised);
     setLineWidth(1);
 
-    m_pColorChooser = new KisColorChooser(this);
+    m_pColorChooser = new KoColorChooser(this, "Sidebar color chooser");
 
     connect(m_pColorChooser, SIGNAL(colorChanged(const KoColor &)),
         this, SLOT(slotColorSelected(const KoColor &)));
@@ -506,7 +506,8 @@ void ColorChooserFrame::slotShowLAB()
 
 void ColorChooserFrame::slotSetActiveColor( ActiveColor a )
 {
-    m_pColorChooser->slotSetActiveColor(a);
+	//    XXX
+    //m_pColorChooser->slotSetActiveColor(a);
 }
 
 void ColorChooserFrame::resizeEvent ( QResizeEvent * )
@@ -516,12 +517,14 @@ void ColorChooserFrame::resizeEvent ( QResizeEvent * )
 
 void ColorChooserFrame::slotSetFGColor(const KoColor& c)
 {
-    m_pColorChooser->slotSetFGColor( c.color() );
+	//    XXX
+    //m_pColorChooser->slotSetFGColor( c.color() );
 }
 
 void ColorChooserFrame::slotSetBGColor(const KoColor& c)
 {
-    m_pColorChooser->slotSetBGColor( c.color() );
+	//    XXX
+//    m_pColorChooser->slotSetBGColor( c.color() );
 }
 
 void ColorChooserFrame::slotColorSelected(const KoColor& c)
@@ -552,7 +555,7 @@ void DockFrame::plug (QWidget* w)
     m_wlst.append(w);
     w->reparent ( this, QPoint(0, 0), true );
 
-    KisFrameButton* btn = new KisFrameButton(this);
+    KoFrameButton* btn = new KoFrameButton(this);
     btn->setToggleButton(true);
 
     QFont font = KGlobalSettings::generalFont();
@@ -575,7 +578,7 @@ void DockFrame::unplug (QWidget* w)
     if(!w) return;
 
 #if 0
-    KisFrameButton *b;
+    KoFrameButton *b;
 
     for ( b = m_blst.first(); b != 0; b = m_blst.next() )
     {
@@ -613,7 +616,7 @@ void DockFrame::slotActivateTab(const QString& tab)
 		    w->hide();
 	}
 
-    KisFrameButton *b;
+    KoFrameButton *b;
     for ( b = m_blst.first(); b != 0; b = m_blst.next() )
 	    b->setOn(b->text() == tab);
 }
@@ -623,7 +626,7 @@ void DockFrame::resizeEvent( QResizeEvent * )
     int bw = 0;
     int row = 0;
 
-    KisFrameButton *b;
+    KoFrameButton *b;
 
     for ( b = m_blst.first(); b != 0; b = m_blst.next() )
 	{

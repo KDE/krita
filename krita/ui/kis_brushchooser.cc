@@ -1,11 +1,12 @@
 /*
  *  kis_brushchooser.cc - part of Krayon
  *
- *  A chooser for KisBrushes. Makes use of the IconChooser class and maintains
+ *  A chooser for KisBrushes. Makes use of the KoIconChooser class and maintains
  *  all available brushes for KIS.
  *
  *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *  Copyright (c) 2000 Matthias Elter   <elter@kde.org>
+ *  Copyright (c) 2002 Patrick Julein <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,9 +31,10 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
+#include <koIconChooser.h>
+
 #include "kis_factory.h"
 #include "kis_resourceserver.h"
-#include "iconchooser.h"
 #include "integerwidget.h"
 #include "kis_brushchooser.h"
 
@@ -54,18 +56,18 @@ KisBrushChooser::KisBrushChooser( QWidget *parent, const char *name )
     // only serves as beautifier for the iconchooser
     frame = new QHBox( this );
     frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    chooser = new IconChooser( frame, QSize(30,30), "icon chooser" );
+    chooser = new KoIconChooser( /*frame,*/ QSize(30,30), frame, "icon chooser" ); // XXX
 
     QPtrList<KisBrush> bList = KisFactory::rServer()->brushes();
 
     for (KisBrush *brush = bList.first(); brush != 0; brush = bList.next())
     {
         if ( brush->isValid() )
-	        chooser->addItem( (IconItem *) brush );
+	        chooser->addItem( (KoIconItem *) brush );
     }
 
-    QObject::connect( chooser, SIGNAL( selected( IconItem * ) ),
-		    this, SLOT( slotItemSelected( IconItem * )));
+    QObject::connect( chooser, SIGNAL( selected( KoIconItem * ) ),
+		    this, SLOT( slotItemSelected( KoIconItem * )));
 
     initGUI();
 
@@ -101,7 +103,7 @@ KisBrushChooser::~KisBrushChooser()
 // set the active brush in the chooser - does NOT emit selected() (should it?)
 void KisBrushChooser::setCurrentBrush( KisBrush *brush )
 {
-    chooser->setCurrentItem( (IconItem *) brush );
+    chooser->setCurrentItem( (KoIconItem *) brush );
     slSpacing->setValue( brush->spacing() );
 }
 
@@ -114,7 +116,7 @@ KisBrush * KisBrushChooser::currentBrush()
 
 // called when an item is selected in the chooser
 // set the slider to the correct position
-void KisBrushChooser::slotItemSelected( IconItem *item )
+void KisBrushChooser::slotItemSelected( KoIconItem *item )
 {
     KisBrush *brush = (KisBrush *) item;
     slSpacing->setValue( brush->spacing() );

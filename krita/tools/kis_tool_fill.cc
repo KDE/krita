@@ -21,7 +21,8 @@
 #include <kaction.h>
 #include <kdebug.h>
 
-#include "kis_color.h"
+#include <koColor.h>
+
 #include "kis_doc.h"
 #include "kis_view.h"
 #include "kis_canvas.h"

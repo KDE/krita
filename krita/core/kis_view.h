@@ -26,9 +26,9 @@
 #include <qscrollbar.h>
 #include <qwidget.h>
 
+#include <koColor.h>
 #include <koView.h>
 
-#include "kis_color.h"
 #include "kis_global.h"
 #include "kis_tool.h"
 

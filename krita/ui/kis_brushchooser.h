@@ -1,11 +1,12 @@
 /*
  *  kis_brushchooser.h - part of KImageShop
  *
- *  A chooser for KisBrushes. Makes use of the IconChooser class and maintains
+ *  A chooser for KisBrushes. Makes use of the KoIconChooser class and maintains
  *  all available brushes for KIS.
  *
  *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *  Copyright (c) 2000 Matthias Elter   <elter@kde.org>
+ *  Copyright (c) 2002 Patrick Julein <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,12 +28,15 @@
 
 #include <qwidget.h>
 #include <qframe.h>
+
+#include <koIconChooser.h>
+
 #include "kfloatingdialog.h"
 #include "kis_brush.h"
 
 class QHBox;
 class QLabel;
-class IconChooser;
+class KoIconChooser;
 class IntegerWidget;
 
 class KisBrushChooser : public KFloatingDialog
@@ -48,7 +52,7 @@ public:
 
 protected:
     void initGUI();
-    IconChooser	*chooser;
+    KoIconChooser	*chooser;
 
 private:
     QHBox 	*frame;
@@ -57,7 +61,7 @@ private:
     IntegerWidget *slSpacing;
 
 private slots:
-    void slotItemSelected( IconItem * );
+    void slotItemSelected(KoIconItem * );
     void slotSetBrushSpacing( int );
 
 signals:

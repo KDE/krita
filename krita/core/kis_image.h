@@ -32,7 +32,7 @@
 
 #include <ksharedptr.h>
 
-#include "kis_color.h"
+#include <koColor.h>
 
 #include "kis_channel.h"
 #include "kis_layer.h"

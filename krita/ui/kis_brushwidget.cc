@@ -46,7 +46,7 @@ void KisBrushWidget::drawContents ( QPainter *p )
     int x = 0;
     int y = 0;
 
-    IconItem *item = (IconItem *)m_pBrush;
+    KoIconItem *item = m_pBrush;
     
     if ((m_pBrush->width() < ITEMSIZE && m_pBrush->height() < ITEMSIZE)
     || (!item->hasValidThumb()))

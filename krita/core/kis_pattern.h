@@ -22,16 +22,13 @@
 #define __kis_pattern_h__
 
 #include <qsize.h>
-
-#include "iconitem.h"
 #include "kis_krayon.h"
 
 class QPoint;
 class QPixmap;
 class QImage;
 
-class KisPattern : public KisKrayon
-{
+class KisPattern : public KisKrayon {
 public:
     KisPattern(QString file);
     KisPattern(int formula);

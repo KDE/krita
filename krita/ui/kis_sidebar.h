@@ -26,9 +26,9 @@
 
 #include <kdualcolorbutton.h>
 
-#include "kis_color.h"
+#include <koColor.h>
+#include <koFrameButton.h>
 
-#include "kis_framebutton.h"
 #include "kis_global.h"
 #include "kfloatingdialog.h"
 
@@ -42,6 +42,7 @@ class KisKrayon;
 class KisBrush;
 class KisPattern;
 class KisColorChooser;
+class KoColorChooser;
 
 
 class TopTitleFrame : public QFrame
@@ -61,7 +62,7 @@ class TopTitleFrame : public QFrame
     void slotHideClicked();
 
  private:
-    KisFrameButton *m_pHideButton, *m_pTitleButton;
+    KoFrameButton *m_pHideButton, *m_pTitleButton;
     QFrame *m_pEmptyFrame;
 };
 
@@ -93,7 +94,7 @@ class TopColorFrame : public QFrame
     void slotLABClicked();
 
  private:
-    KisFrameButton *m_pHideButton, *m_pGreyButton, *m_pRGBButton, 
+    KoFrameButton *m_pHideButton, *m_pGreyButton, *m_pRGBButton, 
     *m_pHSBButton, *m_pCMYKButton, *m_pLABButton;
     QFrame *m_pEmptyFrame;
 };
@@ -126,7 +127,7 @@ class ColorChooserFrame : public QFrame
     void slotColorSelected(const KoColor&);
 
  private:
-    KisColorChooser   *m_pColorChooser;
+    KoColorChooser   *m_pColorChooser;
 };
 
 
@@ -188,7 +189,7 @@ class DockFrame : public QFrame
 
  private:
     QPtrList<QWidget>         m_wlst;
-    QPtrList<KisFrameButton>  m_blst;
+    QPtrList<KoFrameButton>  m_blst;
 };
 
 //class KisSideBar : public QWidget

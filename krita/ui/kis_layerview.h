@@ -40,7 +40,7 @@ class IntegerWidget;
 class LayerTable;
 class KisLayer;
 class QHBox;
-class KisFrameButton;
+class KoFrameButton;
 
 class KisLayerView : public QWidget
 {
@@ -60,10 +60,10 @@ private:
     QHBox *frame;
     QHBox *buttons;
 
-    KisFrameButton *pbAddLayer;
-    KisFrameButton *pbRemoveLayer;
-    KisFrameButton *pbUp;
-    KisFrameButton *pbDown;
+    KoFrameButton *pbAddLayer;
+    KoFrameButton *pbRemoveLayer;
+    KoFrameButton *pbUp;
+    KoFrameButton *pbDown;
 };
 
 class LayerTable : public QGridView

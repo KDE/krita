@@ -221,6 +221,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_progress = 0;
         m_statusBarZoomLabel = 0;
 	m_statusBarSelectionLabel = 0;
+	m_statusBarProfileLabel = 0;
 	m_filterRegistry = new KisFilterRegistry();
 
         setInstance(KisFactory::global());
@@ -529,7 +530,6 @@ void KisView::updateStatusBarZoomLabel ()
 void KisView::updateStatusBarSelectionLabel()
 {
 	if (m_statusBarSelectionLabel == 0) {
-		kdDebug() << "No selection label yet\n";
 		return;
 	}
 
@@ -545,8 +545,23 @@ void KisView::updateStatusBarSelectionLabel()
 	}
 
 	m_statusBarSelectionLabel -> setText(i18n("No selection"));
+}
 
+void KisView::updateStatusBarProfileLabel()
+{
+	if (m_statusBarProfileLabel == 0) {
+		return;
+	}
 
+	KisImageSP img = currentImg();
+	if (!img) return;
+
+	if (img -> profile() == 0) {
+		m_statusBarProfileLabel -> setText(i18n("No profile"));
+	}
+	else {
+		m_statusBarProfileLabel -> setText(img -> profile() -> productName());
+	}
 }
 
 void KisView::setupStatusBar()
@@ -571,11 +586,16 @@ void KisView::setupStatusBar()
 		addStatusBarItem(m_statusBarSelectionLabel, 2);
 		updateStatusBarSelectionLabel();
 
+
+		m_statusBarProfileLabel = new QLabel(sb);
+		addStatusBarItem(m_statusBarProfileLabel, 3);
+		updateStatusBarProfileLabel();
+
                 m_progress = new KisLabelProgress(this);
                 m_progress -> setMaximumWidth(225);
                 m_progress -> setMaximumHeight(sb -> height());
 
-                addStatusBarItem(m_progress, 3, true);
+                addStatusBarItem(m_progress, 4, true);
 
                 m_progress -> hide();
         }
@@ -1088,6 +1108,8 @@ void KisView::imgUpdateGUI()
 	m_imgMergeLayer -> setEnabled(n > 1);
 
 	m_selectionManager -> updateGUI();
+
+	updateStatusBarProfileLabel();
 }
 
 void KisView::updateTabBar()

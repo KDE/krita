@@ -274,6 +274,8 @@ private:
 	void setupTools();
 
         void updateStatusBarZoomLabel();
+	void updateStatusBarProfileLabel();
+
 	void zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf);
 
 	void setInputDevice(enumInputDevice inputDevice);
@@ -459,6 +461,7 @@ private:
 
 	QLabel *m_statusBarZoomLabel;
 	QLabel *m_statusBarSelectionLabel;
+	QLabel *m_statusBarProfileLabel;
 
 	enumInputDevice m_inputDevice;
 	InputDeviceToolMap m_inputDeviceToolMap;

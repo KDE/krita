@@ -33,8 +33,8 @@ public:
 	virtual int spacing() const;
 	virtual void setSpacing(int spacing);
 
-	virtual int opacity() const;
-	virtual void setOpacity(int opacity);
+	virtual QUANTUM opacity() const;
+	virtual void setOpacity(QUANTUM opacity);
 
 	virtual int compositeOp() const;
 	virtual void setCompositeOp(int compositeOp);

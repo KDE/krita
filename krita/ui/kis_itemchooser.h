@@ -68,7 +68,7 @@ private:
 private slots:
 	void slotItemSelected(KoIconItem *item);
 	void slotSetItemSpacing(int spacing);
-	void slotSetItemOpacity(int opacity);
+	void slotSetItemOpacity(int opacityPerCent);
 	void slotSetItemCompositeMode(int compositeOp);
 
 private:

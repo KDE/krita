@@ -113,7 +113,7 @@ void KisIconItem::setSpacing(int spacing) {
 }
 
 
-int KisIconItem::opacity() const {
+QUANTUM KisIconItem::opacity() const {
 	if ( m_resource && m_resource -> valid() ) {
 		return m_resource -> opacity();
 	}
@@ -122,7 +122,7 @@ int KisIconItem::opacity() const {
 	}
 }
 
-void KisIconItem::setOpacity(int opacity) {
+void KisIconItem::setOpacity(QUANTUM opacity) {
 	if ( m_resource && m_resource -> valid() ) {
 		m_resource -> setOpacity(opacity);
 	}

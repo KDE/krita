@@ -25,6 +25,22 @@
 
 #define TILE_NOT_ATTACHED -1
 
+
+/**
+   Comment taken from Patrick Julien's mail dd. 11/10/03
+
+   KisTileMgr helps upper layers have a unified, simple interface to
+   find and manipulate tiles. However, lower layers (swapping, for
+   example, if it's ever written) would find this complicated to use,
+   you see, krita, being a koffice application, supports multiple
+   frames, documents, etc. Layers, channels, masks, images for all the
+   documents are KisPaintDevices, this is a whole lot of KisTileMgr's
+   to go over, KisTileMediator allows a lower layer (like swapping) to
+   access tiles by different criterias without actually worrying where
+   tiles actually are in memory since it simply does not care. Here we
+   would access tiles by their age, not by which layer etc.
+
+ */
 class KisTileMediator {
 public:
 	KisTileMediator();

@@ -57,6 +57,30 @@ public:
 	void height(Q_INT32 h);
 	Q_INT32 depth() const;
 	Q_INT32 size() const;
+
+        /** Comment from email dd. 12/10/03
+	   > > > Dirty probably means, if a tile is modified or not, so that krita
+	   > > > knows if a tile has to be repainted or not. But what does valid then
+	   > > > mean.
+	   > >
+	   > > Ouch! You got me, I really don't remember, it's already been 9 months.
+	   >
+	   > I still don't understand it. Each tile has two bools: dirty and
+	   > valid/invalid. I grep'ed for both and I think actually valid/invalid
+	   > actually indicates the state of the tile. Maybe dirty has something to
+	   > do with swapping?
+	   >
+	   > Now, the rendering code, that actually renders the tiles to the screen
+	   > is in KisDoc (and in KisColorStrategyRGB which is called from
+	   > KisDoc). But the rendering code is not making any use of the
+	   > valid/invalid flag of the tiles. I thought the whole point about
+	   > setting tiles valid/invalid is to know if they should be drawn to the
+	   > screen or not? Or am I getting something terribly wrong here? What is
+	   > the intention of valid/invalid?
+	   
+	   The dirty flag was meant for actual rendering, the valid flag meant that the 
+	   tile pointed to valid memory, i.e. memory that is still in-core.
+	*/
 	bool dirty() const;
 	void dirty(bool val);
 	bool valid() const;

@@ -23,7 +23,7 @@
 #include "kis_paint_device.h"
 #include "kis_scale_visitor.h"
 
-void KisScaleVisitor::scale(double xscale, double yscale) 
+void KisScaleVisitor::scale(double xscale, double yscale, enumFilterType filterType) 
 {
         
         //define filter supports
@@ -34,7 +34,7 @@ void KisScaleVisitor::scale(double xscale, double yscale)
         const double B_spline_support=2.0;
         const double Lanczos3_support=3.0;
         const double Mitchell_support=2.0;
-       
+       	
         double (KisScaleVisitor::*filterf)(double) = &KisScaleVisitor::Mitchell_filter; //pointer to filter function
         double fwidth;
         
@@ -57,17 +57,7 @@ void KisScaleVisitor::scale(double xscale, double yscale)
         targetH = QABS( targetH );
 
         //set filter type
-        enum filterType {
-                BOX_FILTER,
-                TRIANGLE_FILTER,
-                BELL_FILTER,
-                B_SPLINE_FILTER,
-                FILTER,
-                LANCZOS3_FILTER,
-                MITCHELL_FILTER
-        };
-        filterType filter=MITCHELL_FILTER;
-        switch(filter){
+        switch(filterType){
                 case BOX_FILTER: filterf=&KisScaleVisitor::box_filter; fwidth=box_support; break;
                 case TRIANGLE_FILTER: filterf=&KisScaleVisitor::triangle_filter; fwidth=triangle_support; break;
                 case BELL_FILTER: filterf=&KisScaleVisitor::bell_filter; fwidth=bell_support; break;

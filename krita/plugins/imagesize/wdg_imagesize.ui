@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WdgImageSize</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>377</width>
-            <height>314</height>
+            <width>392</width>
+            <height>352</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,7 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QButtonGroup" row="1" column="0">
+        <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>grpPixelDimensions</cstring>
             </property>
@@ -176,7 +176,7 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QButtonGroup" row="0" column="0">
+        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>buttonGroup3</cstring>
             </property>
@@ -271,6 +271,60 @@
                     </property>
                 </widget>
             </grid>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>lblFilterType</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Scaling type:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>cmbFilterType</cstring>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="2" column="1">
+            <item>
+                <property name="text">
+                    <string>Box</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Triangle</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Bell</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>B-Spline</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Filter</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Lanczos 3</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Mitchell</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>cmbFilterType</cstring>
+            </property>
+            <property name="currentItem">
+                <number>6</number>
+            </property>
         </widget>
     </grid>
 </widget>

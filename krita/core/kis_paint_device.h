@@ -34,7 +34,7 @@
 #include "kistilemgr.h"
 #include "kis_strategy_colorspace.h"
 #include "kispixeldata.h"
-
+#include "kis_scale_visitor.h"
 
 class QImage;
 class QSize;
@@ -45,7 +45,6 @@ class QWMatrix;
 class KisTileCommand;
 class KisIteratorLineQuantum;
 class KisIteratorLinePixel;
-class KisScaleVisitor;
 
 /**
  * Class modelled on QPaintDevice.
@@ -187,7 +186,7 @@ public:
         void resize(Q_INT32 w, Q_INT32 h);
         void resize(const QSize& size);
         void resize();
-	void scale(double sx, double sy);
+	void scale(double sx, double sy, enumFilterType ftype=MITCHELL_FILTER);
         void rotate(double angle);
 
 	/**

@@ -27,7 +27,6 @@
 
 #include "wdg_imagesize.h"
 
-
 /**
  * This dialog allows the user to create a selection mask based
  * on a (range of) colors.
@@ -53,6 +52,8 @@ public:
 	Q_INT32 height();
 
 	bool scale();
+
+	Q_INT32 filterType();
 
 private slots:
 

@@ -37,6 +37,7 @@
 #include "kis_global.h"
 #include "kis_tool_controller.h"
 #include "kis_types.h"
+#include "kis_scale_visitor.h"
 
 class QButton;
 class QLabel;
@@ -124,6 +125,8 @@ public: // KoView implementation
 
 	KisFilterRegistrySP filterRegistry() const;
 
+public: // Plugin access API. XXX: This needs redesign.
+
 	virtual KisImageSP currentImg() const;
 
 	virtual void updateCanvas();
@@ -132,6 +135,7 @@ public: // KoView implementation
 	virtual void updateCanvas(const KisRect& rc);
 	
 	void layersUpdated();
+
 signals:
 	void bgColorChanged(const KoColor& c);
 	void fgColorChanged(const KoColor& c);
@@ -154,7 +158,7 @@ public slots:
 	void add_new_image_tab();
 	void remove_current_image_tab();
 	void resizeCurrentImage(Q_INT32 w, Q_INT32 h);
-	void scaleCurrentImage(double sx, double sy);
+	void scaleCurrentImage(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
         void rotateCurrentImage(double angle);
         
 	// Layer action slots
@@ -165,7 +169,7 @@ public slots:
 	void mirrorLayerX();
 	void mirrorLayerY();
 	void resizeLayer(Q_INT32 w, Q_INT32 h);
-	void scaleLayer(double sx, double sy);
+	void scaleLayer(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
         void rotateLayer(double angle);
         
 	// settings action slots

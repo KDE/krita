@@ -48,6 +48,7 @@
 #include "kispixeldata.h"
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
+#include "kis_scale_visitor.h"
 
 #define DEBUG_IMAGES 0
 
@@ -382,7 +383,7 @@ void KisImage::resize(const QRect& rc)
 	resize(rc.width(), rc.height());
 }
 
-void KisImage::scale(double sx, double sy) 
+void KisImage::scale(double sx, double sy, enumFilterType ftype) 
 {
 	kdDebug() << "KisImage::scale. SX: " 
 		  << sx
@@ -406,7 +407,7 @@ void KisImage::scale(double sx, double sy)
 	vKisLayerSP_it it;
 	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
 		KisLayerSP layer = (*it);
-		layer -> scale(sx, sy);
+		layer -> scale(sx, sy, ftype);
 	}
 
 

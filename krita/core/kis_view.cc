@@ -105,7 +105,7 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_colorspace_registry.h"
-
+#include "kis_scale_visitor.h"
 
 // Widgets
 #include "kis_autobrush.h"
@@ -1503,14 +1503,14 @@ void KisView::mirrorLayerY()
         updateCanvas();
 }
 
-void KisView::scaleLayer(double sx, double sy)
+void KisView::scaleLayer(double sx, double sy, enumFilterType ftype)
 {
 	if (!currentImg()) return;
 
 	KisLayerSP layer = currentImg() -> activeLayer();
 	if (!layer) return;
 
-	layer -> scale(sx, sy);
+	layer -> scale(sx, sy, ftype);
 
 	m_doc -> setModified(true);
 	layersUpdated();
@@ -2608,11 +2608,11 @@ void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h)
 	canvasRefresh();
 }
 
-void KisView::scaleCurrentImage(double sx, double sy)
+void KisView::scaleCurrentImage(double sx, double sy, enumFilterType ftype)
 {
 	if (!currentImg()) return;
 	kdDebug() << "Going to scale image to (sx, sy): " << sx << ", " << sy << "\n";
-	currentImg() -> scale(sx, sy);
+	currentImg() -> scale(sx, sy, ftype);
 	m_doc -> setModified(true);
 
 	resizeEvent(0);

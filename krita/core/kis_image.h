@@ -34,6 +34,7 @@
 #include "kis_types.h"
 #include "kis_render.h"
 #include "kis_guide.h"
+#include "kis_scale_visitor.h"
 
 class KoCommandHistory;
 class KisNameServer;
@@ -70,7 +71,7 @@ public:
 	void resize(Q_INT32 w, Q_INT32 h);
 	void resize(const QRect& rc);
 
-	void scale(double sx, double sy);
+	void scale(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
         void rotate(double angle);
         
 	void convertTo(KisStrategyColorSpaceSP colorStrategy);

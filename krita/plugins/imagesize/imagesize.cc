@@ -47,6 +47,7 @@
 #include <kistilemgr.h>
 #include <kis_iterators_quantum.h>
 #include <kis_selection.h>
+#include <kis_scale_visitor.h>
 
 #include "imagesize.h"
 #include "dlg_imagesize.h"
@@ -106,8 +107,11 @@ void ImageSize::slotImageSize()
 		Q_INT32 h = dlgImageSize -> height();
 		
 		if (dlgImageSize -> scale()) {
+
+			Q_INT32 f = dlgImageSize -> filterType();
 			m_view -> scaleCurrentImage((double)w / ((double)(image -> width())), 
-						    (double)h / ((double)(image -> height())));
+						    (double)h / ((double)(image -> height())),
+						    (enumFilterType)f);
 		}
 		else {
 			m_view -> resizeCurrentImage(w, h);
@@ -136,9 +140,11 @@ void ImageSize::slotLayerSize()
 	if (dlgImageSize -> exec() == QDialog::Accepted) {
 		Q_INT32 w = dlgImageSize -> width();
 		Q_INT32 h = dlgImageSize -> height();
-		
+		Q_INT32 f = dlgImageSize -> filterType();
 		if (dlgImageSize -> scale()) {
-			m_view -> scaleLayer((double)w / ((double)(image -> width())), (double)h / ((double)(image -> height())));
+			m_view -> scaleLayer((double)w / ((double)(image -> width())), 
+					     (double)h / ((double)(image -> height())),
+					     (enumFilterType)f);
 		}
 		else {
 			m_view -> resizeLayer(w, h);

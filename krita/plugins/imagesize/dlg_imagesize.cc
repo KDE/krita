@@ -29,6 +29,7 @@ using namespace std;
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
+#include <qcombobox.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -140,6 +141,12 @@ Q_INT32 DlgImageSize::height()
 bool DlgImageSize::scale() 
 {
 	return m_page -> radioScale -> isChecked();
+}
+
+
+Q_INT32 DlgImageSize::filterType()
+{
+	return m_page -> cmbFilterType -> currentItem();
 }
 
 // SLOTS

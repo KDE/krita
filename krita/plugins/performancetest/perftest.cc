@@ -141,6 +141,9 @@ void PerfTest::slotPerfTest()
 QString PerfTest::bltTest(Q_UINT32 testCount)
 {
 	return QString("bitBlt test\n");
+
+	m_view -> a
+
 }
 
 QString PerfTest::fillTest(Q_UINT32 testCount)

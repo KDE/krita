@@ -23,6 +23,16 @@
 
 class KisPaintDevice;
 
+enum enumFilterType {
+	BOX_FILTER,
+	TRIANGLE_FILTER,
+	BELL_FILTER,
+	B_SPLINE_FILTER,
+	FILTER,
+	LANCZOS3_FILTER,
+	MITCHELL_FILTER
+};
+
 class KisScaleVisitor : public KisProgressSubject {
         typedef KisProgressSubject super;  
         
@@ -36,11 +46,12 @@ class KisScaleVisitor : public KisProgressSubject {
 		Q_INT32  n;  //number of contributors
 		CONTRIB *p; //pointer to list of contributions
 	};
+
 public:
         KisScaleVisitor();
         ~KisScaleVisitor();
         void visitKisPaintDevice(KisPaintDevice* dev);
-        void scale(double sx, double sy);
+        void scale(double sx, double sy, enumFilterType filterType = MITCHELL_FILTER);
 private:
         KisPaintDevice* m_dev;
         

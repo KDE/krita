@@ -79,7 +79,7 @@ namespace {
 	KisProfileSP getProfileForProfileInfo(const Image * image, KisStrategyColorSpaceSP cs) 
 	{
 
-		if (image->profiles == (HashmapInfo *) NULL)
+		if (image->profiles == NULL)
 			return  0;
     
 		const char *name;

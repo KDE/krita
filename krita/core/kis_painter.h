@@ -44,6 +44,7 @@
 #include "kis_paint_device.h"
 #include "kis_point.h"
 #include "kis_matrix.h"
+#include "kis_filter.h"
 #include "kis_progress_subject.h"
 
 class QRect;
@@ -90,6 +91,9 @@ public:
 
         // Finish the undoable paint operation
         KCommand *endTransaction();
+
+        // begin a transaction with the given command
+        void beginTransaction( KisTileCommand* command);
 
         // The current paint device.
         KisPaintDeviceSP device() const;
@@ -227,6 +231,14 @@ public:
 	/**
 	 * Duplicate a part of the image
 	 */
+	void filterAt(const KisPoint &pos,
+			 const double pressure,
+			 const double /*xTilt*/,
+			 const double /*yTilt*/);
+	void setFilter(KisFilterSP filter);
+	/***
+		* Applya filter to a point
+		*/
 	void duplicateAt(const KisPoint &pos,
 			 const double pressure,
 			 const double /*xTilt*/,
@@ -293,6 +305,7 @@ protected:
 	KisPoint m_duplicateOffset;
 	QUANTUM m_opacity;
 	CompositeOp m_compositeOp;
+	KisFilterSP m_filter;
 
 	double m_pressure;
 	bool m_cancelRequested;
@@ -302,6 +315,12 @@ inline
 void KisPainter::setDuplicateOffset(const KisPoint offset)
 {
 	m_duplicateOffset = offset;
+}
+
+inline
+void KisPainter::setFilter(KisFilterSP filter)
+{
+	m_filter = filter;
 }
 
 inline

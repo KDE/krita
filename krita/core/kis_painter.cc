@@ -113,6 +113,14 @@ void KisPainter::beginTransaction(const QString& customName)
         m_transaction = new KisTileCommand(customName, m_device);
 }
 
+void KisPainter::beginTransaction( KisTileCommand* command)
+{
+	if (m_transaction)
+		delete m_transaction;
+	m_transaction = command;
+}
+
+
 KCommand *KisPainter::endTransaction()
 {
         KCommand *command = m_transaction;
@@ -545,6 +553,9 @@ double KisPainter::paintLine(const enumPaintOp paintOp,
 		case PAINTOP_DUPLICATE:
 			duplicateAt(pos1, pressure1, xTilt1, yTilt1);
 			break;
+		case PAINTOP_FILTER:
+			filterAt(pos1, pressure1, xTilt1, yTilt1);
+			break;
 		case PAINTOP_PEN:
 			penAt(pos1, pressure1, xTilt1, yTilt1);
 			break;
@@ -635,6 +646,9 @@ double KisPainter::paintLine(const enumPaintOp paintOp,
 			break;
 		case PAINTOP_DUPLICATE:
 			duplicateAt(pos1, pressure, xTilt, yTilt);
+			break;
+		case PAINTOP_FILTER:
+			filterAt(pos1, pressure, xTilt, yTilt);
 			break;
 		case PAINTOP_PEN:
 			penAt(p, pressure, xTilt, yTilt);
@@ -1066,6 +1080,84 @@ void KisPainter::duplicateAt(const KisPoint &pos, const double pressure, const d
 	m_dirtyRect |= QRect(x, y, m_dab -> width(), m_dab -> height());
 }
 
+void KisPainter::filterAt(const KisPoint &pos, const double pressure, const double /*xTilt*/, const double /*yTilt*/)
+{
+	if (!m_device) return;
+
+	KisPoint hotSpot = m_brush -> hotSpot(pressure);
+	KisPoint pt = pos - hotSpot;
+
+	// Split the coordinates into integer plus fractional parts. The integer
+	// is where the dab will be positioned and the fractional part determines
+	// the sub-pixel positioning.
+	Q_INT32 x;
+	double xFraction;
+	Q_INT32 y;
+	double yFraction;
+
+	splitCoordinate(pt.x(), &x, &xFraction);
+	splitCoordinate(pt.y(), &y, &yFraction);
+
+	if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
+		return;
+	}
+	else {
+		KisAlphaMaskSP mask = m_brush -> mask(pressure, xFraction, yFraction);
+		computeDab(mask);
+	}
+
+	m_pressure = pressure;
+	
+	Q_INT32 sw = m_dab->width();
+	Q_INT32 sh = m_dab->height();
+	if( x + sw > m_device->width() )
+		sw = m_device->width() - x;
+	if( y + sh > m_device->height() )
+		sh = m_device->height() - y;
+	if(sw < 0 || sh < 0)
+		return;
+
+	// Draw correctly near the left and top edges
+	Q_INT32 sx = 0;
+	Q_INT32 sy = 0;
+	if (x < 0) {
+		sx = -x;
+		x = 0;
+	}
+	if (y < 0) {
+		sy = -y;
+		y = 0;
+	}
+
+	KisPaintDevice* srcdev = new KisPaintDevice(sw, sh, m_dab.data()->colorStrategy(), "");
+
+	KisIteratorLinePixel srcLit = srcdev->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
+	KisIteratorLinePixel dabLit = m_dab.data()->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
+	KisIteratorLinePixel srcLitend = srcdev->iteratorPixelSelectionEnd( 0, sx, sw - 1, sh - 1);
+	KisIteratorLinePixel devLit = m_device->iteratorPixelSelectionBegin( m_transaction, x, x + sw - 1, y);
+	while ( srcLit <= srcLitend )
+	{
+		KisIteratorPixel srcUit = *srcLit;
+		KisIteratorPixel srcUitend = srcLit.end();
+		KisIteratorPixel dabUit = *dabLit;
+		KisIteratorPixel devUit = * devLit;
+		while ( srcUit <= srcUitend )
+		{
+			KisPixelRepresentation srcP = srcUit;
+			KisPixelRepresentation dabP = dabUit;
+			KisPixelRepresentation devP = devUit;
+			for( Q_INT32 i = 0; i < m_device->depth() - 1; i++)
+			{
+				srcUit[ i ] = devUit[ i ];
+			}
+			srcUit[ m_device->depth() - 1 ] = dabUit[ m_device->depth() - 1 ];
+			++srcUit; ++dabUit; ++devUit;
+		}
+	++srcLit; ++dabLit; ++devLit;
+	}
+	m_filter->process( srcdev, 0, QRect(0,0,srcdev->width(), srcdev->height()), 0 );
+	bitBlt( x,  y,  m_compositeOp, srcdev, m_opacity, sx, sy, srcdev -> width(),srcdev -> width());
+}
 
 void KisPainter::penAt(const KisPoint & pos,
 		       const double pressure,
@@ -1538,7 +1630,7 @@ void KisPainter::applyConvolutionColorTransformation(KisMatrix3x3* matrix)
 								   / matrix[i].factor() / sums[i] + matrix[i].offset() ) );
 			}
 		}
-		// Corner : right top
+	// Corner : right bottom
 		currentPixel = curIt;
 		for(int i = 0; i < depth; i++)
 		{

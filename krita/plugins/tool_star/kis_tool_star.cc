@@ -182,7 +182,8 @@ void KisToolStar::setup(KActionCollection *collection)
 
 QPointArray KisToolStar::starCoordinates(int N, int mx, int my, int x, int y)
 {
-        int R=0, r=0,n=0;
+        Q_INT32 R=0, r=0, n=0;
+        double angle;
         
         QPointArray starCoordinatesArray(2*N);
         
@@ -194,14 +195,17 @@ QPointArray KisToolStar::starCoordinates(int N, int mx, int my, int x, int y)
         r=R*m_innerOuterRatio/100.0;
         //kdDebug() << "starCoordinates: Radius R: " << R << endl;
         
+        // the angle
+        angle=-atan2((x-mx),(y-my));
+        
         //set outer edges
         for(n=0;n<N;n++){
-                starCoordinatesArray.setPoint(2*n,mx+R*cos(n * 2.0 * M_PI / N),my+R*sin(n *2.0 * M_PI / N));  
+                starCoordinatesArray.setPoint(2*n,mx+R*cos(n * 2.0 * M_PI / N + angle),my+R*sin(n *2.0 * M_PI / N+angle));  
         }
         
         //set inner edges
         for(n=0;n<N;n++){
-                starCoordinatesArray.setPoint(2*n+1,mx+r*cos((n + 0.5) * 2.0 * M_PI / N),my+r*sin((n +0.5) * 2.0 * M_PI / N)); 
+                starCoordinatesArray.setPoint(2*n+1,mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle)); 
         }
         
         for(n=0;n<2*N;n++)

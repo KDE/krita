@@ -19,13 +19,13 @@
 #include <stdlib.h>
 #include <kdebug.h>
 
-#include "kis_types.h"
 #include "kis_plugin_registry.h"
  
 #include "kis_colorspace_factory.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_global.h"
 #include "kis_types.h"
+#include "kis_tool.h"
 
 namespace {
 	KisPluginRegistry moveMe; // XXX Where to create singletons in Krita?

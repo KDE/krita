@@ -934,17 +934,33 @@ KisIteratorLineQuantum KisPaintDevice::iteratorQuantumBegin(KisTileCommand* comm
 {
 	return KisIteratorLineQuantum( this, command, 0);
 }
+KisIteratorLineQuantum KisPaintDevice::iteratorQuantumBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
+{
+	return KisIteratorLineQuantum( this, command, ystart, xstart, xend);
+}
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumEnd(KisTileCommand* command)
 {
 	return KisIteratorLineQuantum( this, command, height() - 1);
+}
+KisIteratorLineQuantum KisPaintDevice::iteratorQuantumEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
+{
+	return KisIteratorLineQuantum( this, command, yend, xstart, xend);
 }
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionBegin(KisTileCommand* command)
 {
 	return KisIteratorLineQuantum( this, command, 0);
 }
+KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
+{
+	return KisIteratorLineQuantum( this, command, ystart,  xstart, xend);
+}
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionEnd(KisTileCommand* command)
 {
 	return KisIteratorLineQuantum( this, command, height() - 1);
+}
+KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
+{
+	return KisIteratorLineQuantum( this, command, yend, xstart, xend);
 }
 
 #include "kis_paint_device.moc"

@@ -1,3 +1,12 @@
+22-01-2004
+	* Fixed spacing tool, fixed cursors for paint tools, restarted
+	eraser tool, fixed some toolbar icons.
+21-01-2004
+	* Krita now can load and use the Gimp's pipe-line (.gih) brushes
+20-01-2004
+	* Krita now honours the pressure sensititivy of a graphics tablet
+19-01-2004
+	* Krita now loads the Gimp's pattern (.pat) files.
 04-04-2004
 	* Added Everaldo's wonderful icons.
 01-01-2004

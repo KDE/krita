@@ -466,8 +466,6 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile)
 
 QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
 {
-#if 0
-	// xxx: Enable this when readBytes finally works
 	QImage image;
 
 	if (w < 0)
@@ -481,37 +479,6 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 	delete[] data;
 
 	return image;
-#else
-
-        QImage image;
-        QUANTUM *data = new QUANTUM[depth() * w * h];
-        QUANTUM *ptr=data;
-
-        if (w < 0)
-                w = 0;
-
-        if (h < 0)
-                h = 0;
-
-        for(Q_INT32 y=y1; y <y1+h;y++)
-        {
-                KisHLineIterator hiter = createHLineIterator(x1, y, w, false);
-                while(! hiter.isDone())
-                {
-                        memcpy(ptr, (Q_UINT8 *)hiter, depth());
-
-                        ptr += depth();
-                        hiter++;
-                }
-        }
-
-        // XXX: determine whether to apply the monitor profile or based on the copy setting
-	image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
-
-        delete[] data;
-
-        return image;
-#endif
 }
 
 KisRectIteratorPixel &KisPaintDevice::createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable)

@@ -30,6 +30,7 @@
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kispixeldata.h"
+#include "kis_tile_command.h"
 #include "kis_iterators_quantum.h"
 #include "kis_iterators_pixel.h"
 
@@ -158,7 +159,7 @@ void KisFloatingSelection::copySelection(KisSelectionSP selection) {
 		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, r.x() - m_parent -> x(), r.y() - m_parent -> y(), r.width(), r.height());
 
 		// XXX: switch to proper iterators
-		KisTileCommand* ktc = new KisTileCommand("apply mask", (KisPaintDeviceSP) this ); // Create a command
+		KisTileCommand * ktc = new KisTileCommand("apply mask", (KisPaintDeviceSP) this ); // Create a command
 		
 		KoColor c;
 		QUANTUM opacity;
@@ -189,13 +190,15 @@ void KisFloatingSelection::copySelection(KisSelectionSP selection) {
 			++y;
 		}
 		super::move(r.x(), r.y());
-	}
-	kdDebug() << "Selection copied: "
-		  << r.x() << ", "
-		  << r.y() << ", "
-		  << r.width() << ", "
-		  << r.height() << "\n";
 
+		kdDebug() << "Selection copied: "
+			  << r.x() << ", "
+			  << r.y() << ", "
+			  << r.width() << ", "
+			  << r.height() << "\n";
+
+
+	}
 
 }
 

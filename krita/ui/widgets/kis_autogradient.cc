@@ -57,7 +57,7 @@ void KisAutogradientResource::createSegment( QString interpolation, QString colo
 	} 
 	
 
-	pushSegment(new Segment(interpolator, colorInterpolator, startOffset, middleOffset, endOffset, Color( left, 1 ), Color( right, 0 )));
+	// pushSegment(new Segment(interpolator, colorInterpolator, startOffset, middleOffset, endOffset, Color( left, 1 ), Color( right, 0 )));
 
 }
 

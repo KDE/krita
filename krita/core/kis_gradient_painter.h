@@ -42,6 +42,7 @@
 #include "kis_point.h"
 #include "kis_matrix.h"
 #include "kis_progress_subject.h"
+#include "kis_painter.h"
 
 class KisGradient;
 

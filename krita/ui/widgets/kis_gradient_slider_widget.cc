@@ -44,7 +44,7 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
 	KisStrategyColorSpaceSP colorSpace = KisColorSpaceRegistry::singleton()->get("RGBA");
 	KisPaintDeviceSP device = new KisPaintDevice( width() - 12, 8, colorSpace, " gradient preview " );
 	KisGradientPainter gradientPainter( device );
-	gradientPainter.setGradient(m_autogradientResource );
+	gradientPainter.setGradient(*m_autogradientResource );
 	gradientPainter.paintGradient(QPoint(0, 3), QPoint( device -> width() - 1, 3), KisGradientPainter::GradientShapeLinear, KisGradientPainter::GradientRepeatNone, 0.20, false );
 	
 	QPixmap pixmap(TILE_WIDTH, device->height());

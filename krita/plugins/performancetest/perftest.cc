@@ -561,6 +561,7 @@ QString PerfTest::readBytesTest(Q_UINT32 testCount)
 
 	QTime t;
 	t.restart();
+	
 	for (Q_UINT32 i = 0; i < testCount; ++i) {
 		Q_UINT8 * newData;
 		newData = l -> readBytes( 0, 0, 1000, 1000);
@@ -612,39 +613,409 @@ QString PerfTest::writeBytesTest(Q_UINT32 testCount)
 	t.restart();
 	for (Q_UINT32 i = 0; i < testCount; ++i) {
 		l -> writeBytes(data, 0, 0, 1000, 1000);
-/**
-		Q_UINT8 * ptr = data;
-
- 		int adv;
-
-		// XXX: Isn't this a very slow copy?
-		for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
-		{
-			KisHLineIterator hiter = l -> createHLineIterator(0, y2, 1000, true);
-			while(! hiter.isDone())
-			{
-	 			adv = hiter.nConseqHPixels();
-	 			memcpy(hiter.rawData(), ptr , adv * pixelSize);
-	
-	 			ptr += adv * pixelSize;
-	 			hiter += adv;
-	//			memcpy(hiter.rawData(), ptr, pixelSize);
-	//			++hiter;
-	//			ptr += pixelSize;
-			}
-		}
-*/
 	}
 	delete[] data;
+	doc -> removeImage(img);
 	report = report.append(QString("    written 1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 	return report;
 
 
 }
 
+/////// Iterator tests
+
+
+QString hlineRODefault(KisDoc * doc, Q_UINT32 testCount)
+{
+	KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+	KisLayerSP l = img -> activeLayer();
+;
+	int pixelSize = l -> pixelSize();
+	
+	QTime t;
+	t.restart();
+
+
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+ 		int adv;
+
+		for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
+		{
+			KisHLineIterator hiter = l -> createHLineIterator(0, y2, 1000, false);
+			while(! hiter.isDone())
+			{
+	 			adv = hiter.nConseqHPixels();
+	 			hiter += adv;
+			}
+		}
+
+	}
+	
+	doc -> removeImage(img);
+	return QString("    hline iterated read-only 1000 x 1000 pixels %1 times over default tile: %2\n").arg(testCount).arg(t.elapsed());
+
+	
+}
+
+QString hlineRO(KisDoc * doc, Q_UINT32 testCount)
+{
+	KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+	KisLayerSP l = img -> activeLayer();
+
+	int pixelSize = l -> pixelSize();
+	
+	KisFillPainter p(l.data());
+	p.fillRect(0, 0, 1000, 1000, Qt::blue);
+	p.end();
+	
+	QTime t;
+	t.restart();
+
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+ 		int adv;
+
+		for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
+		{
+			KisHLineIterator hiter = l -> createHLineIterator(0, y2, 1000, false);
+			while(! hiter.isDone())
+			{
+	 			adv = hiter.nConseqHPixels();
+	 			hiter += adv;
+			}
+		}
+
+	}
+	
+	doc -> removeImage(img);
+	return QString("    hline iterated read-only 1000 x 1000 pixels %1 times over existing tile: %2\n").arg(testCount).arg(t.elapsed());
+
+}
+
+QString hlineWRDefault(KisDoc * doc, Q_UINT32 testCount)
+{
+	KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+ KisLayerSP l = img -> activeLayer();
+
+	int pixelSize = l -> pixelSize();
+	
+	QTime t;
+	t.restart();
+	
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+ 		int adv;
+
+		for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
+		{
+			KisHLineIterator hiter = l -> createHLineIterator(0, y2, 1000, true);
+			while(! hiter.isDone())
+			{
+	 			adv = hiter.nConseqHPixels();
+	 			hiter += adv;
+			}
+		}
+
+	}
+
+	doc -> removeImage(img);
+	return QString("    hline iterated writable 1000 x 1000 pixels %1 times over default tile: %2\n").arg(testCount).arg(t.elapsed());
+
+}
+
+QString hlineWR(KisDoc * doc, Q_UINT32 testCount)
+{
+	KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+ KisLayerSP l = img -> activeLayer();
+
+	int pixelSize = l -> pixelSize();
+	
+	KisFillPainter p(l.data());
+	p.fillRect(0, 0, 1000, 1000, Qt::blue);
+	p.end();
+	
+	
+	QTime t;
+	t.restart();
+	
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+ 		int adv;
+		for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
+		{
+			KisHLineIterator hiter = l -> createHLineIterator(0, y2, 1000, true);
+			while(! hiter.isDone())
+			{
+	 			adv = hiter.nConseqHPixels();
+	 			hiter += adv;
+			}
+		}
+
+	}
+	
+	doc -> removeImage(img);
+	return QString("    hline iterated writable 1000 x 1000 pixels %1 times over existing tile: %2\n").arg(testCount).arg(t.elapsed());
+
+}
+
+
+QString vlineRODefault(KisDoc * doc, Q_UINT32 testCount)
+{
+	KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+ KisLayerSP l = img -> activeLayer();
+
+	int pixelSize = l -> pixelSize();
+	
+	QTime t;
+	t.restart();
+	
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
+		{
+			KisVLineIterator hiter = l -> createVLineIterator(y2, 0, 1000, true);
+			while(! hiter.isDone())
+			{
+	 			++hiter;
+			}
+		}
+
+	}
+
+	doc -> removeImage(img);
+	return QString("    vline iterated read-only 1000 x 1000 pixels %1 times over default tile: %2\n").arg(testCount).arg(t.elapsed());
+
+}
+
+QString vlineRO(KisDoc * doc, Q_UINT32 testCount)
+{
+	KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+ KisLayerSP l = img -> activeLayer();
+
+	int pixelSize = l -> pixelSize();
+	
+	KisFillPainter p(l.data());
+	p.fillRect(0, 0, 1000, 1000, Qt::blue);
+	p.end();
+	
+
+	QTime t;
+	t.restart();
+	
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
+		{
+			KisVLineIterator hiter = l -> createVLineIterator(y2, 0, 1000, true);
+			while(! hiter.isDone())
+			{
+	 			++hiter;
+			}
+		}
+
+	}
+	
+	doc -> removeImage(img);
+	return QString("    vline iterated read-only 1000 x 1000 pixels %1 times over existing tile: %2\n").arg(testCount).arg(t.elapsed());
+
+}
+
+QString vlineWRDefault(KisDoc * doc, Q_UINT32 testCount)
+{
+	KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+ KisLayerSP l = img -> activeLayer();
+
+	int pixelSize = l -> pixelSize();
+	
+	QTime t;
+	t.restart();
+	
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+
+		for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
+		{
+			KisVLineIterator hiter = l -> createVLineIterator(y2, 0, 1000, true);
+			while(! hiter.isDone())
+			{
+	 			++hiter;
+			}
+		}
+
+	}
+
+	doc -> removeImage(img);
+	return QString("    vline iterated writable 1000 x 1000 pixels %1 times over default tile: %2\n").arg(testCount).arg(t.elapsed());
+}
+
+QString vlineWR(KisDoc * doc, Q_UINT32 testCount)
+{
+
+	KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+ KisLayerSP l = img -> activeLayer();
+
+	int pixelSize = l -> pixelSize();
+	
+	KisFillPainter p(l.data());
+	p.fillRect(0, 0, 1000, 1000, Qt::blue);
+	p.end();
+
+	QTime t;
+	t.restart();
+
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
+		{
+			KisHLineIterator hiter = l -> createHLineIterator(y2, 0, 1000, true);
+			while(! hiter.isDone())
+			{
+	 			++hiter;
+			}
+		}
+
+	}
+	
+	doc -> removeImage(img);
+	return QString("    vline iterated writable 1000 x 1000 pixels %1 times over existing tile: %2\n").arg(testCount).arg(t.elapsed());
+
+}
+
+QString rectRODefault(KisDoc * doc, Q_UINT32 testCount)
+{
+	KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+ KisLayerSP l = img -> activeLayer();
+;
+	int pixelSize = l -> pixelSize();
+	
+	QTime t;
+	t.restart();
+
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		KisRectIterator r = l -> createRectIterator(0, 0, 1000, 1000, false);
+		while(! r.isDone())
+		{
+			++r;
+		}
+	}
+
+	doc -> removeImage(img);
+	return QString("    rect iterated read-only 1000 x 1000 pixels %1 times over default tile: %2\n").arg(testCount).arg(t.elapsed());
+
+	
+}
+
+QString rectRO(KisDoc * doc, Q_UINT32 testCount)
+{
+	KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+ KisLayerSP l = img -> activeLayer();
+
+	int pixelSize = l -> pixelSize();
+	
+	KisFillPainter p(l.data());
+	p.fillRect(0, 0, 1000, 1000, Qt::blue);
+	p.end();
+	
+	QTime t;
+	t.restart();
+
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		KisRectIterator r = l -> createRectIterator(0, 0, 1000, 1000, false);
+		while(! r.isDone())
+		{
+			++r;
+		}
+	}
+	
+	doc -> removeImage(img);	
+	return QString("    rect iterated read-only 1000 x 1000 pixels %1 times over existing tile: %2\n").arg(testCount).arg(t.elapsed());
+
+}
+
+QString rectWRDefault(KisDoc * doc, Q_UINT32 testCount)
+{
+
+
+	KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+ KisLayerSP l = img -> activeLayer();
+
+	int pixelSize = l -> pixelSize();
+	
+	QTime t;
+	t.restart();
+
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		KisRectIterator r = l -> createRectIterator(0, 0, 1000, 1000, true);
+		while(! r.isDone())
+		{
+			++r;
+		}
+	}
+	
+	doc -> removeImage(img);
+	return QString("    rect iterated writable 1000 x 1000 pixels %1 times over default tile: %2\n").arg(testCount).arg(t.elapsed());
+
+}
+
+QString rectWR(KisDoc * doc, Q_UINT32 testCount)
+{
+	KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+ KisLayerSP l = img -> activeLayer();
+;
+	int pixelSize = l -> pixelSize();
+	
+	KisFillPainter p(l.data());
+	p.fillRect(0, 0, 1000, 1000, Qt::blue);
+	p.end();
+	
+
+	QTime t;
+	t.restart();
+
+
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		KisRectIterator r = l -> createRectIterator(0, 0, 1000, 1000, true);
+		while(! r.isDone())
+		{
+			++r;
+		}
+	}
+
+	
+	doc -> removeImage(img);
+	return QString("    rect iterated writable 1000 x 1000 pixels %1 times over existing tile: %2\n").arg(testCount).arg(t.elapsed());
+
+
+}
 QString PerfTest::iteratorTest(Q_UINT32 testCount)
 {
-	return QString("Iterator test");
+	QString report = "Iterator test";
+
+	KisDoc * doc = m_view -> getDocument();
+	
+	report = report.append(hlineRODefault(doc, testCount));
+	report = report.append(hlineRO(doc, testCount));
+	report = report.append(hlineWRDefault(doc, testCount));
+	report = report.append(hlineWR(doc, testCount));
+
+	report = report.append(vlineRODefault(doc, testCount));
+	report = report.append(vlineRO(doc, testCount));
+	report = report.append(vlineWRDefault(doc, testCount));
+	report = report.append(vlineWR(doc, testCount));
+
+	report = report.append(rectRODefault(doc, testCount));
+	report = report.append(rectRO(doc, testCount));
+	report = report.append(rectWRDefault(doc, testCount));
+	report = report.append(rectWR(doc, testCount));
+	
+	return report;
+
+	
 }
 
 #include "perftest.moc"

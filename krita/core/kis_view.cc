@@ -599,10 +599,12 @@ void KisView::setupDockers()
 	attach(m_graywidget);
 
 
+#if NO_RELEASE_FATURE
 	// Filters
 	m_filterBox = new KisFilterBox(this, this, "filter box");
 	m_paintboxdocker -> plug( m_filterBox, "Painting filters" );
 	m_filterBox -> init();
+#endif
 
 	if ( cfg.paletteStyle() == PALETTE_DOCKER || cfg.paletteStyle() == PALETTE_TOOLBOX ) {
 		// TODO Here should be a better check

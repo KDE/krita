@@ -699,29 +699,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 	}
 
 	if (!m_cancelRequested) {
-		if (m_device -> hasSelection()) {
-			// apply mask...
-			QColor c, selectionColor;
-			QUANTUM opacity, selectionOpacity;
-
-			KisSelectionSP selection = m_device -> selection();
-			for (int y = starty; y < height; y++) 
-			{
-				KisHLineIteratorPixel iter = layer->createHLineIterator(startx, y, width, true);
-				KisHLineIteratorPixel selectionIter = selection->createHLineIterator(startx, y, height, false); 
-			
-				while(! iter.isDone())
-				{
-					layer -> colorStrategy() -> toQColor(iter.rawData(), &c, &opacity);
-					selection -> colorStrategy() -> toQColor(selectionIter.rawData(), &selectionColor, &selectionOpacity);
-					opacity = (selectionOpacity * opacity) / QUANTUM_MAX;
-					layer -> colorStrategy() -> nativeColor(c, opacity, iter.rawData());
-					iter++;
-					selectionIter++;
-				}
-			}
-		}
-		bitBlt(startx, starty, m_compositeOp, layer.data(), m_opacity, 0, 0, width, height);
+		bltSelection(startx, starty, m_compositeOp, layer.data(), m_opacity, 0, 0, width, height);
 	}
 	delete shapeStrategy;
 

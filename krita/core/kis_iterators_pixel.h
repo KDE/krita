@@ -35,22 +35,34 @@
 class KisHLineIteratorPixel : public KisHLineIterator, public KisIteratorPixelTrait <KisHLineIterator>
 {
 public:
-	KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x , Q_INT32 y , Q_INT32 w, bool writable);
+    KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x , Q_INT32 y , Q_INT32 w, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
 	inline KisHLineIteratorPixel & operator ++(int n) { KisHLineIterator::operator++(n); advance(n); return *this;}
+    Q_INT32 x() { return KisHLineIterator::x() + m_offsetx; }
+    Q_INT32 y() { return KisHLineIterator::y() + m_offsety; }
+protected:
+    Q_INT32 m_offsetx, m_offsety;
 };
 
 class KisVLineIteratorPixel : public KisVLineIterator, public KisIteratorPixelTrait <KisVLineIterator>
 {
 public:
-	KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 xpos , Q_INT32 ypos , Q_INT32 height, bool writable);
+    KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 xpos , Q_INT32 ypos , Q_INT32 height, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
 	inline KisVLineIteratorPixel & operator ++(int n) { KisVLineIterator::operator++(n); advance(n); return *this;}
+    Q_INT32 x() { return KisVLineIterator::x() + m_offsetx; }
+    Q_INT32 y() { return KisVLineIterator::y() + m_offsety; }
+protected:
+    Q_INT32 m_offsetx, m_offsety;
 };
 
 class KisRectIteratorPixel : public KisRectIterator, public KisIteratorPixelTrait <KisRectIterator>
 {
 public:
-	KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, bool writable);
+    KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
 	inline KisRectIteratorPixel & operator ++(int n) { KisRectIterator::operator++(n); advance(n); return *this;}
+    Q_INT32 x() { return KisRectIterator::x() + m_offsetx; }
+    Q_INT32 y() { return KisRectIterator::y() + m_offsety; }
+protected:
+    Q_INT32 m_offsetx, m_offsety;
 };
 
 #endif

@@ -165,6 +165,8 @@ void KisPaintDevice::setName(const QString& name)
 void KisPaintDevice::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
 {
 	m_datamanager -> extent(x, y, w, h);
+    x += m_x;
+    y += m_y;
 }
 
 QRect KisPaintDevice::extent() const
@@ -503,25 +505,25 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 KisRectIteratorPixel KisPaintDevice::createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable)
 {
 	if(hasSelection())
-		return KisRectIteratorPixel(this, m_datamanager, m_selection->m_datamanager, left, top, w, h, writable);
+		return KisRectIteratorPixel(this, m_datamanager, m_selection->m_datamanager, left, top, w, h, m_x, m_y, writable);
 	else
-		return KisRectIteratorPixel(this, m_datamanager, NULL, left, top, w, h, writable);
+		return KisRectIteratorPixel(this, m_datamanager, NULL, left, top, w, h, m_x, m_y, writable);
 }
 
 KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable)
 {
 	if(hasSelection())
-		return KisHLineIteratorPixel(this, m_datamanager, m_selection->m_datamanager, x, y, w, writable);
+		return KisHLineIteratorPixel(this, m_datamanager, m_selection->m_datamanager, x, y, w, m_x, m_y, writable);
 	else
-		return KisHLineIteratorPixel(this, m_datamanager, NULL, x, y, w, writable);
+		return KisHLineIteratorPixel(this, m_datamanager, NULL, x, y, w, m_x, m_y, writable);
 }
 
 KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable)
 {
 	if(hasSelection())
-		return KisVLineIteratorPixel(this, m_datamanager, m_selection->m_datamanager, x, y, h, writable);
+		return KisVLineIteratorPixel(this, m_datamanager, m_selection->m_datamanager, x, y, h, m_x, m_y, writable);
 	else
-		return KisVLineIteratorPixel(this, m_datamanager, NULL, x, y, h, writable);
+		return KisVLineIteratorPixel(this, m_datamanager, NULL, x, y, h, m_x, m_y, writable);
 	
 }
 

@@ -122,8 +122,8 @@ private:
 
 		if (!m_test(dev))
 			return;
-		sx = m_rc.x() - dev-> getX();
-		sy = m_rc.y() - dev-> getY();
+		sx = m_rc.x();
+		sy = m_rc.y();
 // 		kdDebug() << "Visiting on: " << dev
 // 			  << " dx: " << dx
 // 			  << " dy: " << dy

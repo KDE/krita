@@ -90,8 +90,8 @@ public:
 			Q_INT32 sx, sy, dx, dy, w, h;
 
 			layer -> extent(sx,sy,w,h);
-			dx = layer->getX() - gc.device()->getX() + sx;
-			dy = layer->getY() - gc.device()->getY() + sy;
+			dx = sx;
+			dy = sy;
 			
 			gc.bitBlt(dx, dy, layer -> compositeOp() , layer.data(), layer -> opacity(), sx, sy, w, h);
 

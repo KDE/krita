@@ -2125,7 +2125,20 @@ void KisView::canvasGotLeaveEvent (QEvent *e)
 
 void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 {
-        QApplication::sendEvent(m_vScroll, event);
+	if(event->state() == ControlButton )
+	{
+		if(event->delta() / 120 != 0)
+		{
+			if(event->delta() > 0)
+			{
+				zoomIn();
+			} else {
+				zoomOut();
+			}
+		}
+	} else {
+		QApplication::sendEvent(m_vScroll, event);
+	}
 }
 
 void KisView::canvasGotKeyPressEvent(QKeyEvent *event)

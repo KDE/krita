@@ -55,7 +55,7 @@ NewLayerDialog::NewLayerDialog(Q_INT32 maxWidth,
 	setCaption(i18n("New Layer"));
 
 	setMainWidget(page);
-	grid = new QGridLayout(page, 7, 2);
+	grid = new QGridLayout(page, 8, 2);
 
 	// Name
 	lbl = new QLabel(i18n("Name:"), page);
@@ -96,9 +96,8 @@ NewLayerDialog::NewLayerDialog(Q_INT32 maxWidth,
 	m_height = new QSpinBox(1, maxHeight, 10, page);
 	m_height -> setValue(defHeight);
 	lbl = new QLabel(m_height, i18n("&Height:"), page);
-
 	grid -> addWidget(lbl, 5, 0);
-	grid -> addWidget(m_height, 6, 1);
+	grid -> addWidget(m_height, 5, 1);
 
 	// Position
 	QGridLayout *gridInBox;
@@ -106,18 +105,19 @@ NewLayerDialog::NewLayerDialog(Q_INT32 maxWidth,
 
 	grp = new QGroupBox(i18n("Position"), page);
 	gridInBox = new QGridLayout(grp, 3, 2, 12);
+	gridInBox -> setRowSpacing(0, 10);
 
 	lbl = new QLabel(i18n("X axis:"), grp);
 	m_x = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, 0, 10, grp);
-	gridInBox -> addWidget(lbl, 0, 0);
-	gridInBox -> addWidget(m_x, 0, 1);
+	gridInBox -> addWidget(lbl, 1, 0);
+	gridInBox -> addWidget(m_x, 1, 1);
 
 	lbl = new QLabel(i18n("Y axis:"), grp);
 	m_y = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, 0, 10, grp);
-	gridInBox -> addWidget(lbl, 1, 0);
-	gridInBox -> addWidget(m_y, 1, 1);
+	gridInBox -> addWidget(lbl, 2, 0);
+	gridInBox -> addWidget(m_y, 2, 1);
 
-	grid -> addMultiCellWidget(grp, 5, 6, 0, 1);
+	grid -> addMultiCellWidget(grp, 6, 7, 0, 1);
 
 }
 

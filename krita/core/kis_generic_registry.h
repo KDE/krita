@@ -66,7 +66,7 @@ public:
 		return list;
 	}
 
-private:
+protected:
 	KisGenericRegistry(const KisGenericRegistry&) { };
 	KisGenericRegistry operator=(const KisGenericRegistry&) { };
 	storageMap m_storage;

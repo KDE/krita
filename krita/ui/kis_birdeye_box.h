@@ -36,7 +36,7 @@ class KisBirdEyeBox : public WdgBirdEye
 
 public:
 
-	KisBirdEyeBox(KivioView* view, QWidget* parent=0, const char* name=0);
+	KisBirdEyeBox(KisView* view, QWidget* parent=0, const char* name=0);
 	~KisBirdEyeBox();
 
 	bool eventFilter(QObject*, QEvent*);
@@ -54,7 +54,7 @@ protected slots:
 
 	void updateVisibleArea();
 	void canvasZoomChanged();
-	void slotUpdateView(KivioPage*);
+/* 	void slotUpdateView(KivioPage*); */
 	void togglePageBorder(bool);
 	void doAutoResizeMin();
 	void doAutoResizeMax();

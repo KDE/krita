@@ -21,7 +21,6 @@
 
 // Qt
 #include <qapplication.h>
-#include <qclipboard.h>
 #include <qdom.h>
 #include <qimage.h>
 #include <qpainter.h>
@@ -29,7 +28,6 @@
 #include <qstringlist.h>
 #include <qwidget.h>
 #include <qpaintdevicemetrics.h>
-#include <qmessagebox.h>
 
 // KDE
 #include <dcopobject.h>
@@ -39,7 +37,6 @@
 #include <kimageio.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
-#include <kmessagebox.h>
 #include <kmimetype.h>
 #include <knotifyclient.h>
 #include <klocale.h>
@@ -341,7 +338,6 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_dcop = 0;
 	m_cmdHistory = 0;
 	m_nserver = 0;
-	m_pushedClipboard = false;
 	m_currentMacro = 0;
 	m_macroNestDepth = 0;
 	m_ioProgressBase = 0;
@@ -349,9 +345,6 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 
 	if (name)
 		dcopObject();
-
-	connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
-		 this, SLOT( clipboardDataChanged() ) );
 
 }
 
@@ -1421,43 +1414,6 @@ void KisDoc::setLayerProperties(KisImageSP img,
 		emit layersUpdated(img);
 		emit currentImageUpdated(img);
 	}
-}
-
-void KisDoc::setClipboard(KisPaintDeviceSP selection)
-{
-	m_clipboard = selection;
-
-	if (selection) {
-		QImage qimg = selection -> convertToQImage();
-		QClipboard *cb = QApplication::clipboard();
-
-		cb -> setImage(qimg);
-		m_pushedClipboard = true;
-	}
-}
-
-KisPaintDeviceSP KisDoc::clipboard()
-{
-	return m_clipboard;
-}
-
-void KisDoc::clipboardDataChanged()
-{
-	if (!m_pushedClipboard) {
-		QClipboard *cb = QApplication::clipboard();
-		QImage qimg = cb -> image();
-
-		if (!qimg.isNull()) {
-			m_clipboard =
-				new KisPaintDevice(qimg.width(), qimg.height(),
-						   KisColorSpaceRegistry::instance()->get( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
-						   "KisDoc created clipboard selection");
-
-			m_clipboard -> convertFromImage(qimg);
-		}
-	}
-
-	m_pushedClipboard = false;
 }
 
 bool KisDoc::undo() const

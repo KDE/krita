@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,33 +17,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef KIS_COLORSPACE_REGISTRY_H_
-#define KIS_COLORSPACE_REGISTRY_H_
+#include "qcolor.h"
 
+#include "kis_global.h"
 #include "kis_types.h"
-#include "kis_generic_registry.h"
+#include "kis_profile.h"
+#include "kis_quantum.h"
 
-class QStringList;
-
-class KisColorSpaceRegistry : public KisGenericRegistry<KisStrategyColorSpaceSP> {
-
-public:
-	virtual ~KisColorSpaceRegistry();
-
-	QStringList listColorSpaceNames() const;
-	static KisColorSpaceRegistry* instance();
-
-	KisProfileSP getProfileByName(const QString & name) const;
-	
-private:
-	KisColorSpaceRegistry();
-	KisColorSpaceRegistry(const KisColorSpaceRegistry&);
-	KisColorSpaceRegistry operator=(const KisColorSpaceRegistry&);
-
-private:
-	static KisColorSpaceRegistry *m_singleton;
-
-};
-
-#endif // KIS_COLORSPACE_REGISTRY_H_
-
+#include "kis_pixel.h"

@@ -51,6 +51,8 @@
 #include "visitors/kis_merge.h"
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
+#include "kis_config.h"
+#include "kis_colorspace_registry.h"
 
 #define DEBUG_IMAGES 0
 
@@ -308,6 +310,11 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 	m_undoHistory = 0;
 	m_ntileCols = (width + TILE_WIDTH - 1) / TILE_WIDTH;
 	m_ntileRows = (height + TILE_HEIGHT - 1) / TILE_HEIGHT;
+
+	KisConfig cfg;
+	QString monitorProfileName = cfg.monitorProfile();
+	m_monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
+	
 }
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h)
@@ -1064,7 +1071,9 @@ void KisImage::renderToPainter(Q_INT32 x1,
 				continue;
 			
 			renderToProjection(tileno);
-			QImage img = projection() -> convertToQImage(x, y, TILE_WIDTH, TILE_HEIGHT);
+			
+			QImage img = projection() -> convertToQImage(m_monitorProfile, x, y, TILE_WIDTH, TILE_HEIGHT);
+
 			if (!img.isNull()) {
 				// XXX: made obosolete by qt-copy patch 0005
 				// m_pixio.putImage(&m_pixmap, 0, 0, &img);

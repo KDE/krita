@@ -173,6 +173,7 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 		kdDebug() << "Going to transform with profiles\n";
 
 		// Do a nice calibrated conversion
+		// XXX: Don't assume RGBA -- that color model is not necessarily installed
 		KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
 		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile, 
 				img.bits(), dstCS, dstProfile,

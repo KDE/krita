@@ -664,7 +664,7 @@ void KisPaintDevice::setProfile(KisProfileSP profile)
 }
 
 
-QImage KisPaintDevice::convertToQImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, KisProfileSP dstProfile)
+QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	if (w < 0) {
 		w = width();

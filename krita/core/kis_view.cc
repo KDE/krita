@@ -29,7 +29,6 @@
 // Qt
 #include <qapplication.h>
 #include <qbutton.h>
-// #include <qclipboard.h>
 #include <qcursor.h>
 #include <qevent.h>
 #include <qpainter.h>

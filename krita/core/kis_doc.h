@@ -131,17 +131,6 @@ public:
 	QString nextImageName() const;
 	void setCurrentImage(KisImageSP img);
 
-	/**
-	 * Sets the clipboard to the contents of the specified paint device; also
-	 * set the system clipboard to a QImage representation of the specified 
-	 * paint device.
-	 */
-	void setClipboard(KisPaintDeviceSP layer);
-	
-	/**
-	 * Get the contents of the clipboard in the form of a paint device.
-	 */
-	KisPaintDeviceSP clipboard();
 
 	bool importImage(const QString& filename);
 
@@ -165,7 +154,6 @@ protected:
 
 private slots:
 	void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
-	void clipboardDataChanged();
 	void slotIOProgress(Q_INT8 percentage);
 
 private:
@@ -185,10 +173,6 @@ private:
 	KoCommandHistory *m_cmdHistory;
 	vKisImageSP m_images;
 	KisImageSP m_currentImage;
-
-	KisPaintDeviceSP m_clipboard;
-
-	bool m_pushedClipboard;
 	DCOPObject *m_dcop;
 	KisNameServer *m_nserver;
 	KMacroCommand *m_currentMacro;

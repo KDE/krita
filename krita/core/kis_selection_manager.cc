@@ -15,9 +15,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #include <qobject.h>
-#include <qclipboard.h>
 #include <qapplication.h>
+#include <qclipboard.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -26,6 +27,7 @@
 
 #include <qcolor.h>
 
+#include "kis_clipboard.h"
 #include "kis_types.h"
 #include "kis_view.h"
 #include "kis_doc.h"
@@ -44,7 +46,6 @@ KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	: m_parent(parent),
 	  m_doc(doc),
 	  m_previousSelection(0),
-	  m_clipboardHasImage(false),
 	  m_copy(0),
 	  m_cut(0),
 	  m_paste(0),
@@ -64,9 +65,9 @@ KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	  m_transform(0),
 	  m_load(0),
 	  m_save(0)
-
 {
 	m_pluginActions.setAutoDelete(true);
+	m_clipboard = KisClipboard::instance();
 }
 
 KisSelectionManager::~KisSelectionManager()
@@ -200,20 +201,20 @@ void KisSelectionManager::setup(KActionCollection * collection)
 			      this, SLOT(save()),
 			      collection, "save_selection");
 
+
         QClipboard *cb = QApplication::clipboard();
         connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
+}
 
+void KisSelectionManager::clipboardDataChanged()
+{
+  updateGUI();
 }
 
 
 void KisSelectionManager::addSelectionAction(KAction * action)
 {
 	m_pluginActions.append(action);
-}
-
-void KisSelectionManager::clipboardDataChanged()
-{
-        m_clipboardHasImage = !QApplication::clipboard() -> image().isNull();
 }
 
 
@@ -225,7 +226,7 @@ void KisSelectionManager::updateGUI()
 
 	m_copy -> setEnabled(enable);
 	m_cut -> setEnabled(enable);
-	m_paste -> setEnabled(img != 0 && m_clipboardHasImage);
+	m_paste -> setEnabled(img != 0 && m_clipboard -> hasClip());
 	m_selectAll -> setEnabled(img != 0);
 	m_deselect -> setEnabled(enable);
 	m_clear -> setEnabled(enable);
@@ -310,7 +311,7 @@ void KisSelectionManager::copy()
 //                << r.height() << "\n";
 
 
- 	m_doc -> setClipboard(s);
+ 	m_clipboard -> setClip(s);
  	imgSelectionChanged(m_parent -> currentImg());
 
 }
@@ -324,7 +325,7 @@ KisLayerSP KisSelectionManager::paste()
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return 0;
 
-	KisPaintDeviceSP clip = m_doc -> clipboard();
+	KisPaintDeviceSP clip = m_clipboard -> clip();
 
 	if (clip) {
 		KisLayerSP layer = new KisLayer(img, clip -> width(), clip -> height(), img -> nextLayerName() + "(pasted)", OPACITY_OPAQUE);
@@ -340,24 +341,7 @@ KisLayerSP KisSelectionManager::paste()
 
 		return layer;
 	}
-	else {
-		QClipboard *cb = QApplication::clipboard();
-		QImage qimg = cb -> image();
 
-		if (!qimg.isNull()) {
-			KisLayerSP layer =
-				new KisLayer(qimg.width(), qimg.height(),
-					     KisColorSpaceRegistry::instance()->get( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
-					     "KisDoc created clipboard selection");
-
-			layer -> convertFromImage(qimg);
-			m_doc -> layerAdd(img, layer, img -> index(layer));
-			layer -> move(0,0);
-			img -> notify();	
-
-			return layer;
-		}
-	}
 	return 0;
 }
 

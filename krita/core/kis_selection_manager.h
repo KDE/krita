@@ -27,6 +27,7 @@
 class KAction;
 class KisView;
 class KisDoc;
+class KisClipboard;
 
 /**
  * The selection manager is responsible selections
@@ -47,9 +48,9 @@ public:
 
 public slots:
 
-	void clipboardDataChanged();
 	void updateGUI();
 	void imgSelectionChanged(KisImageSP img);
+	void clipboardDataChanged();
 
 	void cut();
 	void copy();
@@ -75,9 +76,10 @@ private:
 
 	KisView * m_parent;
 	KisDoc * m_doc;
+
 	KisSelectionSP m_previousSelection;
 
-	bool m_clipboardHasImage;
+	KisClipboard * m_clipboard;
 
 	KAction *m_copy;
 	KAction *m_cut;

@@ -91,6 +91,11 @@ public:
 	// Set the profile associated with this image
 	void setProfile(const KisProfileSP& profile);
 
+
+	// Get the profile that this image uses to display itself on 
+	// the monitor
+	KisProfileSP monitorProfile() const { return m_monitorProfile; }
+
 	void enableUndo(KoCommandHistory *history);
  
 	KisStrategyColorSpaceSP colorStrategy() const;
@@ -193,6 +198,7 @@ private:
 	QString m_description;
 
 	KisProfileSP m_profile;
+	KisProfileSP m_monitorProfile;
 
 	Q_UINT32 m_depth;
 
@@ -225,6 +231,7 @@ private:
 	DCOPObject *m_dcop;
 
 	QPixmap m_pixmap;
+
 
 };
 

@@ -19,10 +19,13 @@
 #ifndef _KIS_PIXEL_H_
 #define _KIS_PIXEL_H_
 
+#include "ksharedptr.h"
+
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_profile.h"
 #include "kis_quantum.h"
+#include "kis_strategy_colorspace.h"
 
 class QColor;
 
@@ -152,7 +155,7 @@ class KisColor {
 	
 public:
 
-	KisColor(QColor c, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile);
+	KisColor(QColor c, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile) {};
 
 	KisColor(QUANTUM * channels, QUANTUM* alpha, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile)
 		: m_channels(channels), 
@@ -173,7 +176,6 @@ public:
 
 	QUANTUM* channels() { return m_channels; }
 
-	QColor toQColor();
 
 private:
 	QUANTUM* m_channels;

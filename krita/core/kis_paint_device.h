@@ -119,7 +119,7 @@ public:
 	 * case it's up to the colour strategy to choose a profile (most 
 	 * like sRGB).
 	 */
-	virtual QImage convertToQImage(Q_INT32 x = 0, Q_INT32 y = 0, Q_INT32 w = -1, Q_INT32 h = -1, KisProfileSP dstProfile = 0);
+	virtual QImage convertToQImage(KisProfileSP dstProfile, Q_INT32 x = 0, Q_INT32 y = 0, Q_INT32 w = -1, Q_INT32 h = -1);
 
         virtual QString name() const;
         virtual void setName(const QString& name);
@@ -192,6 +192,8 @@ public:
         void resize(Q_INT32 w, Q_INT32 h);
         void resize(const QSize& size);
         void resize();
+
+	// XXX: Do all rotations etc. use the visitor instead of the QMatrix-based code by now?
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
@@ -496,7 +498,7 @@ inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opac
 	
  	if (!pix) return false;
 
- 	colorStrategy() -> toQColor(pix, c, opacity);
+ 	colorStrategy() -> toQColor(pix, c, opacity); //profile
 
 	return true;
 }
@@ -513,7 +515,7 @@ inline bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUAN
 	pix = pd -> data;
 	Q_ASSERT(pix);
 
-	colorStrategy() -> nativeColor(c, opacity, pix);
+	colorStrategy() -> nativeColor(c, opacity, pix); //profile
 
 	tm -> releasePixelData(pd);
 

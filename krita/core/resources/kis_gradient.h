@@ -77,8 +77,13 @@ class KisGradientSegment {
 		void setEndColor(const Color& color) { m_endColor = color; }
 
 		double startOffset() const;
+		double middleOffset() const;
 		double endOffset() const;
-
+		
+		void setStartOffset(double t);
+		void setMiddleOffset(double t);
+		void setEndOffset(double t);
+		
 		int interpolation() const;
 		int colorInterpolation() const;
 		
@@ -209,7 +214,6 @@ class KisGradientSegment {
 	
 			static SineInterpolationStrategy *m_instance;
 		};
-
 	private:
 		InterpolationStrategy *m_interpolator;
 		ColorInterpolationStrategy *m_colorInterpolator;
@@ -243,6 +247,7 @@ public:
 protected:
 	inline void pushSegment( KisGradientSegment* segment ) { m_segments.push_back(segment); };
 
+	QValueVector<KisGradientSegment *> m_segments;
 private slots:
 	void ioData(KIO::Job *job, const QByteArray& data);
 	void ioResult(KIO::Job *job);
@@ -250,8 +255,6 @@ private slots:
 private:
 	QByteArray m_data;
 	QImage m_img;
-
-	QValueVector<KisGradientSegment *> m_segments;
 };
 
 #endif // KIS_GRADIENT_H

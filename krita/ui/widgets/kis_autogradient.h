@@ -31,6 +31,31 @@ class KisAutogradientResource : public KisGradient
 		}
 	public:
 		void createSegment( int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, QColor left, QColor right );
+		const QValueVector<double> getHandlePositions() const;
+
+		/** 
+		 * Moves the StartOffset of the specified segment to the specified value
+		 * and corrects the EndOffset of the previous segment.
+		 * If the Segment is the first Segment the StartOffset will be set to 0.0 .
+		 * The offset will maximally be moved till the middle of the current or the previous
+		 * segment
+		 */
+		void moveSegmentStartOffset( KisGradientSegment* segment, double t);
+
+		/** 
+		 * Moves the EndOffset of the specified segment to the specified value
+		 * and corrects the StartOffset of the following segment.
+		 * If the Segment is the last Segment the EndOffset will be set to 1.0 .
+		 * The offset will maximally be moved till the middle of the current or the following
+		 * segment
+		 */
+		void moveSegmentEndOffset( KisGradientSegment* segment, double t);
+
+		/** 
+		 * Moves the Middle of the specified segment to the specified value
+		 * The offset will maximally be moved till the EndOffset or StartOffset of the segment
+		 */
+		void moveSegmentMiddleOffset( KisGradientSegment* segment, double t);
 	public:
 		virtual bool loadAsync() { return false; };
 };

@@ -33,16 +33,26 @@ class KisGradientSliderWidget : public QWidget
 		KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, WFlags f = 0);
 	public:
 		virtual void paintEvent ( QPaintEvent * );
-		inline void setGradientResource( KisAutogradientResource* agr) { m_autogradientResource = agr; }
+		void setGradientResource( KisAutogradientResource* agr);
 		KisGradientSegment* currentSegment() { return m_currentSegment; };
 	signals:
 		void sigSelectedSegment(KisGradientSegment*);
 	protected:
+		virtual void mousePressEvent( QMouseEvent * e );
 		virtual void mouseReleaseEvent ( QMouseEvent * e );
+		virtual void mouseMoveEvent( QMouseEvent * e );
 	private:
+		enum {
+			NO_DRAG,
+			LEFT_DRAG,
+			RIGHT_DRAG,
+			MIDDLE_DRAG
+		};
+		
 		KPixmapIO m_pixmapIO;
 		KisAutogradientResource* m_autogradientResource;
 		KisGradientSegment* m_currentSegment;
+		int m_drag;
 };
 
 #endif

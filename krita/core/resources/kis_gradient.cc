@@ -350,9 +350,51 @@ double KisGradientSegment::startOffset() const
 	return m_startOffset;
 }
 
+double KisGradientSegment::middleOffset() const
+{
+	return m_middleOffset;
+}
+
 double KisGradientSegment::endOffset() const
 {
 	return m_endOffset;
+}
+
+void KisGradientSegment::setStartOffset(double t)
+{
+	m_startOffset = t;
+	m_length = m_endOffset - m_startOffset;
+
+	if (m_length < DBL_EPSILON) {
+		m_middleT = 0.5;
+	}
+	else {
+		m_middleT = (m_middleOffset - m_startOffset) / m_length;
+	}
+}
+void KisGradientSegment::setMiddleOffset(double t)
+{
+	m_middleOffset = t;
+
+	if (m_length < DBL_EPSILON) {
+		m_middleT = 0.5;
+	}
+	else {
+		m_middleT = (m_middleOffset - m_startOffset) / m_length;
+	}
+}
+
+void KisGradientSegment::setEndOffset(double t)
+{
+	m_endOffset = t;
+	m_length = m_endOffset - m_startOffset;
+
+	if (m_length < DBL_EPSILON) {
+		m_middleT = 0.5;
+	}
+	else {
+		m_middleT = (m_middleOffset - m_startOffset) / m_length;
+	}
 }
 
 int KisGradientSegment::interpolation() const

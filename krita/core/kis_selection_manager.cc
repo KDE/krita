@@ -312,7 +312,7 @@ void KisSelectionManager::copy()
 	// Apply selection mask.
 	selection -> invert(QRect(r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height()));
 
-	KisRectIterator layerIt = clip -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
+	KisRectIterator layerIt = clip -> createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
  	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
 
 	while (!layerIt.isDone()) {
@@ -437,7 +437,7 @@ void KisSelectionManager::clear()
 
 	// XXX: make undoable
 
-	KisRectIterator layerIt = layer -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
+	KisRectIterator layerIt = layer -> createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
  	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
 
 	while (!layerIt.isDone()) {
@@ -477,9 +477,10 @@ void KisSelectionManager::invert()
 	if (!layer) return;
 
 	if (layer -> hasSelection()) {
+		Q_INT32 x,y,w,h;
 		KisSelectionSP s = layer -> selection();
-		// AUTOLAYER change the following
-		s -> invert(QRect(0, 0, 100, 100));
+		layer->extent(x, y, w, h); // it's intentionally the extent of the layer
+		s -> invert(QRect(x, y, w, h));
 	}
 	else {
 		selectAll();

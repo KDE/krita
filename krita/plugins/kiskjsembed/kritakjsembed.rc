@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritakjsembed" version="1">
+<MenuBar>
+    <Menu name="Scripts"><text>&amp;Scripts</text>
+    <Seperator/>
+    <Action name="krita_scripts_load"/>
+    <Menu name="LoadedScripts"><text>&amp;Scripts</text>
+    </Menu>
+    </Menu>
+</MenuBar>
+</kpartgui>

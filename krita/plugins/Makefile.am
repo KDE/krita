@@ -1,1 +1,1 @@
-SUBDIRS = example colorsfilters variations colorrange imagesize screenshot histogram convolutionfilters rotateimage performancetest tool_crop shearimage
+SUBDIRS = example colorsfilters variations colorrange imagesize screenshot histogram convolutionfilters rotateimage performancetest tool_crop shearimage kiskjsembed

@@ -275,9 +275,9 @@ void KisView::setupDockers()
 
 	m_toolcontroldocker = m_toolDockManager -> createTabbedToolDock("info");
 	m_toolcontroldocker -> setCaption(i18n("Navigator/Info/Options"));
- 	m_toolcontroldocker -> move(w, h); h+=100; // XXX Remember last position
-        
- 	KToggleAction * show = new KToggleAction(i18n( "&Navigator/Info/Tool Options" ), 0, 0, 
+ 	m_toolcontroldocker -> restore(); //move(w, h); h+=100; // XXX Remember last position
+
+ 	KToggleAction * show = new KToggleAction(i18n( "&Navigator/Info/Tool Options" ), 0, 0,
 						 actionCollection(), "view_control_docker" );
  	connect(show, SIGNAL(toggled(bool)), m_toolcontroldocker, SLOT(makeVisible(bool)));
  	connect(m_toolcontroldocker, SIGNAL(visibleChange(bool)), SLOT(viewControlDocker(bool)));
@@ -299,7 +299,7 @@ void KisView::setupDockers()
 
 	m_layerchanneldocker = m_toolDockManager -> createTabbedToolDock("layers/channels");
 	m_layerchanneldocker -> setCaption(i18n("Layers/Channels" ));
- 	m_layerchanneldocker -> move(w, h); h+=100; // XXX Remember last position
+ 	m_layerchanneldocker -> restore(); //move(w, h); h+=100; // XXX Remember last position
  	show = new KToggleAction(i18n( "&Layers/Channels" ), 0, 0, actionCollection(), "view_layer_docker" );
  	connect(show, SIGNAL(toggled(bool)), m_layerchanneldocker, SLOT(makeVisible(bool)));
  	connect(m_layerchanneldocker, SIGNAL(visibleChange(bool)), SLOT(viewLayerChannelDocker(bool)));
@@ -337,7 +337,7 @@ void KisView::setupDockers()
 
 	m_shapesdocker = m_toolDockManager -> createTabbedToolDock("shapes");
         m_shapesdocker -> setCaption(i18n("Brush Shapes"));
- 	m_shapesdocker -> move(w, h); h+=100; // XXX Remember last position
+ 	m_shapesdocker -> restore(); //move(w, h); h+=100; // XXX Remember last position
 	show = new KToggleAction(i18n( "&Shapes" ), 0, 0, actionCollection(), "view_shapes_docker" );
 	connect(show, SIGNAL(toggled(bool)), m_shapesdocker, SLOT(makeVisible(bool)));
 	connect(m_shapesdocker, SIGNAL(visibleChange(bool)), SLOT(viewShapesDocker(bool)));
@@ -364,7 +364,7 @@ void KisView::setupDockers()
 
 	m_fillsdocker = m_toolDockManager -> createTabbedToolDock("fills");
 	m_fillsdocker -> setCaption(i18n("Fills"));
- 	m_fillsdocker -> move(w, h); h+=100; // XXX Remember last position
+ 	m_fillsdocker -> restore(); //move(w, h); h+=100; // XXX Remember last position
 	show = new KToggleAction(i18n( "&Fills" ), 0, 0, actionCollection(), "view_fills_docker" );
 	connect(show, SIGNAL(toggled(bool)), m_fillsdocker, SLOT(makeVisible(bool)));
 	connect(m_fillsdocker, SIGNAL(visibleChange(bool)), SLOT(viewFillsDocker(bool)));
@@ -395,7 +395,7 @@ void KisView::setupDockers()
 
 	m_colordocker = m_toolDockManager -> createTabbedToolDock("color");
 	m_colordocker -> setCaption(i18n("Color Manager"));
- 	m_colordocker -> move(w, h); h+=100; // XXX Remember last position
+ 	m_colordocker -> restore(); //move(w, h); h+=100; // XXX Remember last position
 	show = new KToggleAction(i18n( "&Colors" ), 0, 0, actionCollection(), "view_color_docker" );
 	connect(show, SIGNAL(toggled(bool)), m_colordocker, SLOT(makeVisible(bool)));
 	connect(m_colordocker, SIGNAL(visibleChange(bool)), SLOT(viewColorDocker(bool)));
@@ -810,6 +810,7 @@ void KisView::setCurrentTool(KisTool *tool)
                 if (oldTool -> optionWidget())
 			if (m_toolcontroldocker) m_toolcontroldocker -> unplug(oldTool -> optionWidget());
                 oldTool -> clear();
+                oldTool -> action() -> setChecked( false );
         }
 
         if (tool) {
@@ -825,7 +826,10 @@ void KisView::setCurrentTool(KisTool *tool)
 			}
                 }
                 m_canvas -> enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
+		
                 notify();
+		tool -> action() -> setChecked( true );
+
 	} else {
 		kdDebug() << "tool == 0\n";
 		m_inputDeviceToolMap[currentInputDevice()] = 0;
@@ -1786,7 +1790,7 @@ void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
 void KisView::brushActivated(KisResource *brush)
 {
 	KisIconItem *item;
-	
+
 	m_brush = dynamic_cast<KisBrush*>(brush);
 
 	if (m_brush )
@@ -2691,25 +2695,6 @@ void KisView::layerToImage()
                 }
         }
 }
-
-void KisView::layerTransform()
-{
-        if (!currentImg()) return;
-
-//      KisDlgTransform dlg(this);
-//      if (dlg.exec() == QDialog::Accepted) {
-//              // transform current layer
-//              KisLayerSP layer = currentImg() -> activeLayer();
-//              if (!layer) return;
-
-//              layer -> transform(dlg.matrix());
-//		m_doc -> setModified(true);
-
-//              layersUpdated();
-//              updateCanvas();
-//      }
-}
-
 
 void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h)
 {

@@ -60,6 +60,7 @@ class KisGradient;
 class KisPattern;
 class KisResource;
 class KisResourceMediator;
+class KisAutobrush;
 class DockFrameDocker;
 class ColorDocker;
 class ControlFrame;
@@ -396,6 +397,7 @@ private:
 	KisLabelBuilderProgress *m_buildProgress;
 	KisResourceMediator *m_brushMediator;
 	KisResourceMediator *m_patternMediator;
+	KisAutobrush *m_autobrush;
 
         // Current colours, brushes, patterns etc.
         Q_INT32 m_xoff;

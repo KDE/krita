@@ -83,7 +83,9 @@ public:
 
 	virtual enumBrushType brushType() const;
 
-
+protected:
+	void setImage(QImage& img) { m_img = img; };
+	void setBrushType(enumBrushType type) { m_brushType = type; };
 private slots:
 	void ioData(KIO::Job *job, const QByteArray& data);
 	void ioResult(KIO::Job *job);

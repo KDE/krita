@@ -80,6 +80,7 @@
 #include "kis_paint_device.h"
 #include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
+#include "kis_autobrush.h"
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
 #include "kis_ruler.h"
@@ -269,6 +270,10 @@ void KisView::setupDockers()
         m_pattern = dynamic_cast<KisPattern*>(m_patternMediator -> currentResource());
         m_resourcedocker -> plug(m_patternMediator -> chooserWidget());
         connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
+
+				m_autobrush = new KisAutobrush(m_resourcedocker, "autobrush", i18n("Autobrush"));
+				m_resourcedocker -> plug(m_autobrush);
+				connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
 
         m_layerBox = new KisLayerBox(i18n("layer"), KisLayerBox::SHOWALL, m_layerchanneldocker);
         m_layerBox -> setCaption(i18n("Layers"));

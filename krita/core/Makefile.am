@@ -71,6 +71,51 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	KIsImageIface.cc \
 	KIsImageIface.skel
 
+noinst_HEADERS = kis_paint_device.h \
+	kis_layer.h \
+	kis_channel.h \
+	kis_mask.h \
+	kis_image.h \
+	kis_doc.h \
+	kis_view.h \
+	kis_factory.h \
+	kis_resourceserver.h \
+	kis_brush.h \
+	kis_pattern.h \
+	kis_nameserver.h \
+	kis_painter.h \
+	kis_tool_factory.h \
+	kis_cursor.h \
+	kis_floatingselection.h \
+	kis_selection.h \
+	kis_command.h \
+	kis_background.h \
+	kis_global.h \
+	kis_config.h \
+	kis_tool.h \
+	kis_resource.h \
+	kis_resource_mediator.h \
+	kis_guide.h \
+	kis_memento_originator.h \
+	kis_canvas_subject.h \
+	kis_canvas_controller.h \
+	kis_canvas_observer.h \
+	kis_tool_controller.h \
+	kis_tile_command.h \
+	kis_alpha_mask.h \
+	kis_imagepipe_brush.h \
+	kis_gradient.h \
+	kis_vec.h \
+	kis_rect.h \
+	kis_iterators.h \
+	kis_iterators_quantum.h \
+	kis_iterators_pixel.h \
+	kis_histogram.h \
+	kis_plugin_registry.h \
+	KRayonViewIface.h
+	KIsDocIface.h
+	KIsImageIface.h
+	
 libkritacore_la_METASOURCES = AUTO
 libkritacore_la_LDFLAGS = $(all_libraries)
 SUBDIRS = helper tiles builder strategy color_strategy 

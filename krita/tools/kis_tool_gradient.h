@@ -32,7 +32,7 @@
 #include "kis_gradient_painter.h"
 #include "kis_tool_factory.h"
 
-class IntegerWidget;
+class KIntNumInput;
 class KisCmbComposite;
 class KisPainter;
 class KisDoubleWidget;
@@ -98,7 +98,7 @@ private:
 
 	QWidget *m_optWidget;
 	QLabel *m_lbOpacity;
-	IntegerWidget *m_slOpacity;
+	KIntNumInput *m_slOpacity;
 	QLabel *m_lbComposite;
 	KisCmbComposite *m_cmbComposite;
 	QLabel *m_lbShape;

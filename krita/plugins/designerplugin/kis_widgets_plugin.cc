@@ -20,7 +20,6 @@
 #include "kis_widgets_plugin.h"
 #include "kis_cmb_imagetype.h"
 #include "kis_cmb_composite.h"
-#include "integerwidget.h"
 #include "kis_filter_configuration_widget.h"
 #include "kis_previewwidget.h"
 
@@ -34,8 +33,6 @@ KisWidgetInfo::KisWidgetInfo(QString nincludeFile, QString ntoolTip, QString nwh
 
 KisWidgetsPlugin::KisWidgetsPlugin()
 {
-	m_widgetsMap.insert(widgetInfoMap::value_type("IntegerWidget", 
-		KisWidgetInfo("integerwidget.h", "a combobox displaying the colorspaces", "", false)));
 	m_widgetsMap.insert(widgetInfoMap::value_type("KisCmbImageType", 
 		KisWidgetInfo("kis_cmb_imagetype.h", "a combobox displaying the colorspaces", "", false)));
 	m_widgetsMap.insert(widgetInfoMap::value_type("KisCmbComposite", 
@@ -74,10 +71,6 @@ QWidget* KisWidgetsPlugin::create(const QString& key, QWidget* parent, const cha
 	if(key == "KisCmbComposite")
 	{
 		return new KisCmbComposite(parent, name);
-	}
-	if(key == "IntegerWidget")
-	{
-		return new IntegerWidget(0, 100, parent, name);
 	}
 	if(key == "KisFilterConfigurationWidget")
 	{

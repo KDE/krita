@@ -34,7 +34,7 @@
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_view.h"
-#include "integerwidget.h"
+#include "knuminput.h"
 #include "kis_cmb_composite.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
@@ -207,9 +207,8 @@ QWidget* KisToolFreehand::createOptionWidget(QWidget* parent)
 	m_optWidget -> setCaption(m_transactionText);
 	
 	m_lbOpacity = new QLabel(i18n("Opacity: "), m_optWidget);
-	m_slOpacity = new IntegerWidget( 0, 100, m_optWidget, "int_widget");
-	m_slOpacity -> setTickmarks(QSlider::Below);
-	m_slOpacity -> setTickInterval(10);
+	m_slOpacity = new KIntNumInput( m_optWidget, "int_widget");
+	m_slOpacity -> setRange( 0, 100);
 	m_slOpacity -> setValue(m_opacity / OPACITY_OPAQUE * 100);
 	connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
 

@@ -30,7 +30,7 @@ class KisPainter;
 class QWidget;
 class QLabel;
 class QCheckBox;
-class IntegerWidget;
+class KIntNumInput;
 class KisCmbComposite;
 class KActionCollection;
 
@@ -72,7 +72,7 @@ private:
 
 	QWidget *m_optWidget;
 	QLabel *m_lbThreshold;
-	IntegerWidget *m_slThreshold;
+	KIntNumInput *m_slThreshold;
 	QLabel *m_lbComposite;
 	KisCmbComposite *m_cmbComposite;
 	QCheckBox *m_checkUsePattern;

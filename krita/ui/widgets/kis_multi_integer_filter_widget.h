@@ -21,9 +21,9 @@
 
 #include "kis_filter_configuration_widget.h"
 #include <vector> 
-#include "integerwidget.h"
+#include <knuminput.h>
 
-class IntegerWidget;
+class KIntNumInput;
 
 struct KisIntegerWidgetParam {
 	KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, const char* nname);
@@ -44,7 +44,7 @@ class KisMultiIntegerFilterWidget : public KisFilterConfigurationWidget
 		inline Q_INT32 nbValues() { return m_nbintegerWidgets; };
 		inline Q_INT32 valueAt( Q_INT32 i ) { return m_integerWidgets[i]->value(); };
 	private:
-		IntegerWidget** m_integerWidgets;
+		KIntNumInput** m_integerWidgets;
 		Q_INT32 m_nbintegerWidgets;
 };
 

@@ -38,7 +38,7 @@ class KisView;
 class QPopupMenu;
 class QLineEdit;
 class QPixmap;
-class IntegerWidget;
+class KIntNumInput;
 class ChannelTable;
 class KisChannel;
 class QHBox;
@@ -131,7 +131,7 @@ protected:
 			       QWidget *_parent, const char *_name );
 
 	QLineEdit *m_name;
-	IntegerWidget *m_opacity;
+	KIntNumInput *m_opacity;
 };
 
 #endif

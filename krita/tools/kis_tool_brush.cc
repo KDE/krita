@@ -27,7 +27,6 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-#include "integerwidget.h"
 #include "kis_brush.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"

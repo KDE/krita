@@ -29,7 +29,6 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-#include "integerwidget.h"
 #include "kis_brush.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"

@@ -38,6 +38,7 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kdialog.h>
+#include <knuminput.h>
 
 #include <koFrameButton.h>
 
@@ -45,7 +46,6 @@
 #include "kis_view.h"
 #include "kis_channelview.h"
 #include "kis_factory.h"
-#include "integerwidget.h"
 
 KisChannelView::KisChannelView( KisDoc *_doc, QWidget *_parent, const char *_name )
 	: QWidget( _parent, _name )
@@ -396,10 +396,9 @@ ChannelPropertyDialog::ChannelPropertyDialog( QString _channelname,
 	QLabel *lblName = new QLabel( m_name, i18n( "Name:" ), this );
 	layout->addWidget( lblName, 0, 0 );
 
-	m_opacity = new IntegerWidget( 0, 255, this );
+	m_opacity = new KIntNumInput( this );
+	m_opacity -> setRange( 0, 255);
 	m_opacity->setValue( _opacity );
-	m_opacity->setTickmarks( QSlider::Below );
-	m_opacity->setTickInterval( 32 );
 	layout->addWidget( m_opacity, 1, 1 );
 
 	QLabel *lblOpacity = new QLabel( m_opacity, i18n( "Opacity:" ), this );

@@ -28,7 +28,6 @@
 #include "kis_types.h"
 #include "kis_tool_factory.h"
 
-class IntegerWidget;
 class KisBrush;
 class KisCmbComposite;
 class KisPainter;

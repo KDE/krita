@@ -28,7 +28,7 @@
 class QWidget;
 class QLabel;
 class KisPainter;
-class IntegerWidget;
+class KIntNumInput;
 class KisCmbComposite;
 class KisBrush;
 class KisEvent;
@@ -105,7 +105,7 @@ protected:
 	KisImageSP m_currentImage;
 	QWidget *m_optWidget;
 	QLabel *m_lbOpacity;
-	IntegerWidget *m_slOpacity;
+	KIntNumInput *m_slOpacity;
 	QLabel *m_lbComposite;
 	KisCmbComposite *m_cmbComposite;
 };

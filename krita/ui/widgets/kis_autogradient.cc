@@ -23,9 +23,9 @@
 #include <qcombobox.h>
 
 #include <kcolorbutton.h>
+#include <knuminput.h>
 
 #include "kis_gradient_slider_widget.h"
-#include "integerwidget.h"
 
 /************************** KisAutogradientResource **************************/
 
@@ -232,8 +232,11 @@ KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QStrin
 	connect(comboBoxInterpolationType, SIGNAL( activated(int) ), SLOT( slotChangedInterpolation(int) ));
 	connect(leftColorButton, SIGNAL( changed(const QColor&) ), SLOT( slotChangedLeftColor(const QColor&) ));
 	connect(rightColorButton, SIGNAL( changed(const QColor&) ), SLOT( slotChangedRightColor(const QColor&) ));
-	connect(integerWidgetLeftOpacity, SIGNAL( valueChanged(int) ), SLOT( slotChangedLeftOpacity(int) ));
-	connect(integerWidgetRightOpacity, SIGNAL( valueChanged(int) ), SLOT( slotChangedRightOpacity(int) ));
+
+	intNumInputLeftOpacity -> setRange( 0, 100);
+	connect(intNumInputLeftOpacity, SIGNAL( valueChanged(int) ), SLOT( slotChangedLeftOpacity(int) ));
+	intNumInputRightOpacity -> setRange( 0, 100);
+	connect(intNumInputRightOpacity, SIGNAL( valueChanged(int) ), SLOT( slotChangedRightOpacity(int) ));
 }
 
 void KisAutogradient::slotSelectedSegment(KisGradientSegment* segment)
@@ -244,10 +247,10 @@ void KisAutogradient::slotSelectedSegment(KisGradientSegment* segment)
 	comboBoxInterpolationType -> setCurrentItem( segment -> interpolation() );
 
 	int leftOpacity = qRound(segment -> startColor().alpha() * 100);
-	integerWidgetLeftOpacity -> setValue( leftOpacity );
+	intNumInputLeftOpacity -> setValue( leftOpacity );
 
 	int rightOpacity = qRound(segment -> endColor().alpha() * 100);
-	integerWidgetRightOpacity -> setValue( rightOpacity );
+	intNumInputRightOpacity -> setValue( rightOpacity );
 
 	emit activatedResource( m_autogradientResource );
 }

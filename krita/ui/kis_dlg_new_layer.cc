@@ -54,7 +54,7 @@ NewLayerDialog::NewLayerDialog(Q_INT32 maxWidth,
 	setCaption(i18n("New Layer"));
 
 	setMainWidget(page);
-	grid = new QGridLayout(page, 8, 2);
+	grid = new QGridLayout(page, 8, 2, 0, 6);
 
 	// Name
 	lbl = new QLabel(i18n("Name:"), page);

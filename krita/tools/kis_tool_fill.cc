@@ -30,13 +30,14 @@
 
 #include <qcolor.h>
 
+#include "knuminput.h"
+
 #include "kis_layer.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
 #include "kis_view.h"
 #include "kis_tool_brush.h"
-#include "integerwidget.h"
 #include "kis_cmb_composite.h"
 #include "kis_tool_fill.h"
 #include "color_strategy/kis_strategy_colorspace.h"
@@ -127,9 +128,8 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
 	m_optWidget -> setCaption(i18n("Fill"));
 	
 	m_lbThreshold = new QLabel(i18n("Threshold: "), m_optWidget);
-	m_slThreshold = new IntegerWidget( 0, 255, m_optWidget, "int_widget");
-	m_slThreshold -> setTickmarks(QSlider::Below);
-	m_slThreshold -> setTickInterval(32);
+	m_slThreshold = new KIntNumInput( m_optWidget, "int_widget");
+	m_slThreshold -> setRange( 0, 255); 
 	m_slThreshold -> setValue(m_threshold);
 	connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 

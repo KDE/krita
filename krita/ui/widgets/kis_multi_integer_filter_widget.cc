@@ -21,6 +21,8 @@
 #include <qlabel.h>
 #include <qlayout.h>
 
+#include <knuminput.h>
+
 #include "kis_filter.h"
 
 KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, const char* nname) :
@@ -38,13 +40,15 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget( KisFilter* nfilter, QW
 
 	this->setCaption(caption);
 
-	QGridLayout *widgetLayout = new QGridLayout(this, m_nbintegerWidgets + 1, 2);
+	QGridLayout *widgetLayout = new QGridLayout(this, m_nbintegerWidgets + 1, 3);
+	widgetLayout -> setColStretch ( 1, 1 );
 
-	m_integerWidgets = new IntegerWidget*[ m_nbintegerWidgets ];
+	m_integerWidgets = new KIntNumInput*[ m_nbintegerWidgets ];
 
 	for( Q_INT32 i = 0; i < m_nbintegerWidgets; ++i)
 	{
-		m_integerWidgets[i] = new IntegerWidget( iwparam[i].min, iwparam[i].max, this, iwparam[i].name);
+		m_integerWidgets[i] = new KIntNumInput( this, iwparam[i].name);
+		m_integerWidgets[i] -> setRange( iwparam[i].min, iwparam[i].max);
 		m_integerWidgets[i] -> setValue( iwparam[i].initvalue );
 
 		connect(m_integerWidgets[i], SIGNAL(valueChanged( int )), filter(), SLOT(refreshPreview()));

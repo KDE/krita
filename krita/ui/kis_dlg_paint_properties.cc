@@ -27,7 +27,6 @@
 #include <knuminput.h>
 #include "kis_global.h"
 #include "kis_dlg_paint_properties.h"
-#include "integerwidget.h"
 #include "kis_cmb_composite.h"
 
 KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName,
@@ -63,13 +62,11 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName,
 	grid -> addWidget(m_name, 0, 1);
         connect( m_name, SIGNAL( textChanged ( const QString & ) ), SLOT( slotNameChanged( const QString & ) ) );
 	lbl = new QLabel(i18n("Opacity:"), page);
-#if 0
-	IntegerWidget *m_opacity = new IntegerWidget(0, 100, page);
-#else
+
 	m_opacity = new KIntNumInput(page);
 	m_opacity -> setRange(0, 100, 13, true);
 	m_opacity -> setValue(opacity);
-#endif
+
 	grid -> addWidget(lbl, 1, 0);
 	grid -> addWidget(m_opacity, 1, 1);
 

@@ -30,6 +30,7 @@
 #include <kaction.h>
 #include <kcommand.h>
 #include <klocale.h>
+#include <knuminput.h>
 
 #include "kis_cursor.h"
 #include "kis_doc.h"
@@ -40,7 +41,6 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
-#include "integerwidget.h"
 #include "kis_cmb_composite.h"
 #include "kis_double_widget.h"
 #include "kis_progress_display_interface.h"
@@ -236,18 +236,17 @@ QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
 	m_optWidget = new QWidget(parent);
 	m_optWidget -> setCaption(i18n("Gradient"));
 	
-	m_lbOpacity = new QLabel(i18n("Opacity: "), m_optWidget);
-	m_slOpacity = new IntegerWidget( 0, 100, m_optWidget, "int_widget");
-	m_slOpacity -> setTickmarks(QSlider::Below);
-	m_slOpacity -> setTickInterval(10);
+	m_lbOpacity = new QLabel(i18n("Opacity:"), m_optWidget);
+	m_slOpacity = new KIntNumInput( m_optWidget, "int_widget");
+	m_slOpacity -> setRange( 0, 100);
 	m_slOpacity -> setValue(m_opacity / OPACITY_OPAQUE * 100);
 	connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
 
-	m_lbComposite = new QLabel(i18n("Mode: "), m_optWidget);
+	m_lbComposite = new QLabel(i18n("Mode:"), m_optWidget);
 	m_cmbComposite = new KisCmbComposite(m_optWidget);
 	connect(m_cmbComposite, SIGNAL(activated(int)), this, SLOT(slotSetCompositeMode(int)));
 
-	QGridLayout *optionLayout = new QGridLayout(m_optWidget, 8, 2);
+	QGridLayout *optionLayout = new QGridLayout(m_optWidget, 8, 2, 0, 6);
 
 	optionLayout -> addWidget(m_lbOpacity, 1, 0);
 	optionLayout -> addWidget(m_slOpacity, 1, 1);
@@ -255,8 +254,8 @@ QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
 	optionLayout -> addWidget(m_lbComposite, 2, 0);
 	optionLayout -> addWidget(m_cmbComposite, 2, 1);                 
 
-	m_lbShape = new QLabel(i18n("Shape: "), m_optWidget);
-	m_lbRepeat = new QLabel(i18n("Repeat: "), m_optWidget);
+	m_lbShape = new QLabel(i18n("Shape:"), m_optWidget);
+	m_lbRepeat = new QLabel(i18n("Repeat:"), m_optWidget);
 
 	m_ckReverse = new QCheckBox(i18n("Reverse"), m_optWidget, "reverse_check");
 	connect(m_ckReverse, SIGNAL(toggled(bool)), this, SLOT(slotSetReverse(bool)));

@@ -97,7 +97,7 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 
 	m_cbFilter ->insertStringList( m_subject ->filterList() );
 	
-	m_optionLayout = new QGridLayout(m_optWidget, 3, 2);
+	m_optionLayout = new QGridLayout(m_optWidget, 3, 2, 0, 6);
 
 	m_optionLayout -> addMultiCellWidget(optionFreehandWidget, 0, 0, 0 , 1 );
  	m_optionLayout -> addWidget(lbFilter, 1, 0);

@@ -1,9 +1,13 @@
 kritarcdir = $(kde_datadir)/krita/kpartplugins
 kritarc_DATA = kritakjsembed.rc
 
+SUBDIRS = functions objects
+
 EXTRA_DIST = $(kritarc_DATA)
 
-INCLUDES  = -I$(srcdir)/../../core \
+INCLUDES  = -I$(srcdir)/../../ \
+	-I$(srcdir)/../../core \
+	-I$(srcdir)/../../core/tool \
 	-I$(srcdir)/../../core/compositeop \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core/tiles \
@@ -15,10 +19,14 @@ INCLUDES  = -I$(srcdir)/../../core \
 
 kde_module_LTLIBRARIES = kritakjsembed.la
 
-kritakjsembed_la_SOURCES = kis_kjsembed.cc kis_kjsembed_script.cc
-noinst_HEADERS = kis_kjsembed.h kis_kjsembed_script.cc
+kritakjsembed_la_SOURCES = kis_kjsembed.cc \
+	kis_script.cc \
+	kis_function_base.cc \
+	kis_object_base.cc
+	
+noinst_HEADERS = kis_kjsembed.h kis_script.h kis_function_base.h
 
 kritakjsembed_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritakjsembed_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE) -lkjsembed
+kritakjsembed_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE) -lkjsembed  ./functions/libkiskjsembedfunctions.la ./objects/libkiskjsembedobjects.la
 
 kritakjsembed_la_METASOURCES = AUTO

@@ -15,31 +15,33 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/
+ */
 
-#include "kis_kjsembed_script.h"
+#ifndef _KIS_KJSEMBED_OBJECTS_FACTORY_H_
+#define _KIS_KJSEMBED_OBJECTS_FACTORY_H_
 
-// KJSEmbed
-#include <kjsembed/kjsembedpart.h>
+#include <kjs/object.h>
 
-KisKJSEmbedScript::KisKJSEmbedScript(KJSEmbed::KJSEmbedPart* jsembedpart, const QString& script) :
-m_jsEmbedPart(jsembedpart), m_script(script)
-{
-	
-}
+namespace KJSEmbed {
+	class KJSEmbedPart;
+};
+
+class KisView;
+
+namespace Krita {
+	namespace Plugins {
+		namespace KisKJSEmbed {
+			namespace Bindings {
+				class ObjectsFactory {
+					public:
+						ObjectsFactory( KJSEmbed::KJSEmbedPart *part, KisView* view );
+					private:
+						KJS::Object m_jsObjMainWindow;
+				};
+			};
+		};
+	};
+};
 
 
-KisKJSEmbedScript* KisKJSEmbedScript::loadFromFile(KJSEmbed::KJSEmbedPart* jsembedpart, const QString& file)
-{
-	QString scripttxt = jsembedpart->loadFile(file);
-	
-	return 0;
-}
-
-void KisKJSEmbedScript::execute()
-{
-	KJS::Completion result = m_jsEmbedPart->completion();
-	m_jsEmbedPart->execute( result, m_script, KJS::Null());
-}
-
-#include "kis_kjsembed_script.moc"
+#endif

@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+ /* This file is part of the KDE project
    Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
 
    This library is free software; you can redistribute it and/or
@@ -17,55 +17,33 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _KIS_KJSEMBEDED_H_
-#define _KIS_KJSEMBEDED_H_
+#ifndef _KIS_KJSEMBED_SCRIPT_H_
+#define _KIS_KJSEMBED_SCRIPT_H_
 
-#include <kparts/plugin.h>
-#include <kjsembed/jsproxy_imp.h>
-
-#include <vector>
+#include <qobject.h>
+#include <qstring.h>
 
 namespace KJSEmbed {
 	class KJSEmbedPart;
-	class JSConsoleWidget;
 };
-
-class KisView;
-class KFileDialog;
-class KisKJSEmbedScript;
-class QPopupMenu;
 
 namespace Krita {
 	namespace Plugins {
 		namespace KisKJSEmbed {
-			class Script;
-			namespace Bindings {
-				class FunctionsFactory;
-				class ObjectsFactory;
-			};
-			class KisKJSEmbed : public KParts::Plugin
-			{
+			class Script : public QObject {
 				Q_OBJECT
-			public:
-				KisKJSEmbed(QObject *parent, const char *name, const QStringList &);
-				virtual ~KisKJSEmbed();
-			private:
-				void initBindings();
-			private slots:
-				void slotLoadScript();
-			private:
-				KisView* m_view;
-				KFileDialog* m_fileDialog;
-				KJSEmbed::KJSEmbedPart* m_jsEmbedPart;
-				KJSEmbed::JSConsoleWidget* m_jsConsoleWidget;
-				Bindings::FunctionsFactory* m_functionsFactory;
-				Bindings::ObjectsFactory* m_objectsFactory;
-				std::vector<Script*> m_vScripts;
-				QPopupMenu* m_scriptMenu;
+				public:
+					Script(KJSEmbed::KJSEmbedPart* jsembedpart, const QString& script);
+				public:
+					static Script* loadFromFile(KJSEmbed::KJSEmbedPart* jsembedpart, const QString& file);
+				public slots:
+					void execute();
+				private:
+					KJSEmbed::KJSEmbedPart* m_jsEmbedPart;
+					QString m_script;
 			};
 		};
 	};
 };
-
 
 #endif

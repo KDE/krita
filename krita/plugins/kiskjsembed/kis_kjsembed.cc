@@ -23,6 +23,7 @@
 #include <qpopupmenu.h>
 
 // KDE
+#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kgenericfactory.h>
 #include <kxmlguifactory.h>
@@ -32,16 +33,25 @@
 #include <kjsembed/kjsembedpart.h>
 
 // Krita
-#include "kis_view.h"
+#include "core/kis_view.h"
 
 // KisKJSEmbed
-#include "kis_kjsembed_script.h"
+#include "kis_script.h"
+#include "functions/kis_functions_factory.h"
+#include "objects/kis_objects_factory.h"
+
+namespace Krita {
+namespace Plugins {
+namespace KisKJSEmbed {
+
+using namespace Bindings;
 
 typedef KGenericFactory<KisKJSEmbed> KritaKJSEmbedFactory;
 K_EXPORT_COMPONENT_FACTORY( kritakjsembed, KritaKJSEmbedFactory( "krita" ) )
 
+
 KisKJSEmbed::KisKJSEmbed(QObject *parent, const char *name, const QStringList &)
-		: KParts::Plugin(parent, name)
+		: KParts::Plugin(parent, name), m_scriptMenu(0)
 {
 	setInstance(KritaKJSEmbedFactory::instance());
 
@@ -59,53 +69,48 @@ KisKJSEmbed::KisKJSEmbed(QObject *parent, const char *name, const QStringList &)
 	}
 	m_fileDialog = new KFileDialog( "~", "*.krajs",m_view, "Load a krita JavaScript", true);
 	m_jsEmbedPart = new KJSEmbed::KJSEmbedPart(this, "krita KJSEmbed Part");
-	
-	m_jsConsoleWidget = new KJSEmbed::JSConsoleWidget(m_jsEmbedPart, m_view);
-// 	win->show();
+
+		
+	m_jsConsoleWidget = new KJSEmbed::JSConsoleWidget(m_jsEmbedPart, 0);
+	m_jsConsoleWidget->show();
 	
 	initBindings();
 	(void) new KAction(i18n("&Load Script..."), 0, 0, this, SLOT(slotLoadScript()), actionCollection(), "krita_scripts_load");
 	
-	m_scriptMenu = dynamic_cast<QPopupMenu*>(factory()->container("LoadedScripts",this));
 }
 
 KisKJSEmbed::~KisKJSEmbed()
 {
+	delete m_functionsFactory;
+	delete m_objectsFactory;
 }
 
 void KisKJSEmbed::initBindings()
 {
-	
+	m_functionsFactory = new FunctionsFactory( m_jsEmbedPart, m_view );
+	m_objectsFactory = new ObjectsFactory( m_jsEmbedPart, m_view );
 }
 
 void KisKJSEmbed::slotLoadScript()
 {
-	m_fileDialog->show();
-	if(m_fileDialog->result() == QDialog::Rejected)
+	if(m_scriptMenu == 0)
+	{ // This can't be done in the constructor because when it is called the factory is not already available
+		m_scriptMenu = static_cast<QPopupMenu*>(factory()->container("LoadedScripts",this));
+	}
+	if(m_fileDialog->exec() == QDialog::Rejected)
 		return;
 	QStringList fileList = m_fileDialog->selectedFiles();
 	for ( QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it ) {
-		KisKJSEmbedScript* script = KisKJSEmbedScript::loadFromFile(m_jsEmbedPart, *it );
+		Script* script = Script::loadFromFile(m_jsEmbedPart, *it );
 		if(script != 0)
 		{
+			kdDebug() << "KisKJSEmbed::slotLoadScript() script " << *it << " successfully loaded." << endl;
 			m_vScripts.push_back( script );
 			m_scriptMenu->insertItem( *it, script, SLOT(execute()) );
 		}
 	}
 }
 
-KisPaintDeviceKJSImp::KisPaintDeviceKJSImp( KJS::ExecState *exec, int id  ) : JSProxyImp(exec)
-{
-
-}
-KisPaintDeviceKJSImp::~KisPaintDeviceKJSImp()
-{
-
-}
-void KisPaintDeviceKJSImp::addBindings( KJS::ExecState *exec, KJS::Object &object )
-{
-
-}
-
+}; }; };
 
 #include "kis_kjsembed.moc"

@@ -26,7 +26,7 @@
 
 class QPainter;
 
-class KisRuler : public QFrame { 
+class KisRuler : public QFrame {
 	Q_OBJECT
 	typedef QFrame super;
 
@@ -35,7 +35,7 @@ public:
 	virtual ~KisRuler();
 
 public:
-	KoUnit::Unit unit();
+	KoUnit::Unit unit() const;
 
 public slots:
 	void setZoom(double zoom);

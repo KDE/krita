@@ -22,10 +22,9 @@
 #ifndef KIS_DOUBLE_WIDGET_H
 #define KIS_DOUBLE_WIDGET_H
 
-#include <qslider.h>
 #include <qspinbox.h>
 #include <qwidget.h>
-
+#include <qslider.h>
 class QHBoxLayout;
 
 class KDoubleSpinBox;

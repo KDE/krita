@@ -18,14 +18,14 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_DLG_TRANSFORM_H_
+#ifndef KIS_DLG_TRANSFORM_H_
 #define KIS_DLG_TRANSFORM_H_
 
 #include <qwmatrix.h>
 
 #include <kdialogbase.h>
 
-#include "dialogs/wdgmatrix.h"
+class WdgMatrix;
 
 /**
    This is a temporary dialog that allows the user to enter the

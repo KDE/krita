@@ -28,6 +28,7 @@
 #include <koColorSlider.h>
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
+#include <koColor.h>
 
 KisGrayWidget::KisGrayWidget(QWidget *parent, const char *name) : super(parent, name)
 {

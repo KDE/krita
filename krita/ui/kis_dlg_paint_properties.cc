@@ -61,7 +61,7 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName,
 	m_name = new KLineEdit(deviceName, page);
 	grid -> addWidget(lbl, 0, 0);
 	grid -> addWidget(m_name, 0, 1);
-        connect( m_name, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
+        connect( m_name, SIGNAL( textChanged ( const QString & ) ), SLOT( slotNameChanged( const QString & ) ) );
 	lbl = new QLabel(i18n("Opacity:"), page);
 #if 0
 	IntegerWidget *m_opacity = new IntegerWidget(0, 100, page);

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_PROGRESS_DISPLAY_INTERFACE_H_
+#ifndef KIS_PROGRESS_DISPLAY_INTERFACE_H_
 #define KIS_PROGRESS_DISPLAY_INTERFACE_H_
 
 class KisProgressSubject;

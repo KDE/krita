@@ -28,9 +28,10 @@
 #include <koColorSlider.h>
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
+#include <koColor.h>
 
 KisRGBWidget::KisRGBWidget(QWidget *parent, const char *name) : super(parent, name)
-{  
+{
 	m_subject = 0;
 
 	m_ColorButton = new KDualColorButton(this);
@@ -45,7 +46,7 @@ KisRGBWidget::KisRGBWidget(QWidget *parent, const char *name) : super(parent, na
 	mGSlider = new KoColorSlider(this);
 	mGSlider->setMaximumHeight(20);
 	mGSlider->slotSetRange(0, 255);
-	
+
 	mBSlider = new KoColorSlider(this);
 	mBSlider->setMaximumHeight(20);
 	mBSlider->slotSetRange(0, 255);
@@ -159,7 +160,7 @@ void KisRGBWidget::update(KisCanvasSubject *subject)
 
 	disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	disconnect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
-	
+
 	m_ColorButton->setForeground( m_fgColor.color() );
 	m_ColorButton->setBackground( m_bgColor.color() );
 

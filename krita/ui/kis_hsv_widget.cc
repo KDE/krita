@@ -21,7 +21,7 @@
 #include "kis_hsv_widget.h"
 #include "kis_colorwheel.h"
 
-#include <kselect.h> 
+#include <kselect.h>
 #include <qlayout.h>
 #include <qhbox.h>
 #include <qlabel.h>
@@ -30,9 +30,10 @@
 #include <koColorSlider.h>
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
+#include <koColor.h>
 
 KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, name)
-{  
+{
 	m_subject = 0;
 
 	m_ColorButton = new KDualColorButton(this);
@@ -41,7 +42,7 @@ KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, na
 	QSpacerItem *m_spacer= new QSpacerItem ( 0, 0);
 
 	m_colorwheel = new KisColorWheel(this);
-	m_colorwheel->setFixedSize( 120, 120); 
+	m_colorwheel->setFixedSize( 120, 120);
 	m_VSelector = new KValueSelector(Qt::Vertical, this);
 	m_VSelector-> setFixedWidth(30);
 

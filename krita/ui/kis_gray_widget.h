@@ -21,7 +21,6 @@
 #define KIS_GRAY_WIDGET_H
 
 #include "qwidget.h"
-#include <koColor.h>
 
 #include "kis_canvas_subject.h"
 #include "kis_canvas_observer.h"

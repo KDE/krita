@@ -17,7 +17,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_ICONWIDGET_H_
+#ifndef KIS_ICONWIDGET_H_
 #define KIS_ICONWIDGET_H_
 
 #include <qframe.h>
@@ -36,13 +36,13 @@ public slots:
 
 signals:
 	void clicked();
-  
+
 protected:
 	virtual void drawContents(QPainter *gc);
 	virtual void mousePressEvent(QMouseEvent *e);
 
 private:
-	KoIconItem *m_item; 
+	KoIconItem *m_item;
 };
 
 #endif // KIS_ICONWIDGET_H_

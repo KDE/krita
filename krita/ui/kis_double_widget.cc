@@ -21,6 +21,7 @@
 
 #include <qhbox.h>
 #include <qlayout.h>
+#include <qslider.h>
 
 #include <knuminput.h>
 
@@ -31,7 +32,7 @@ KisDoubleWidget::KisDoubleWidget(double min, double max, QWidget* parent, const 
 {
 	m_spinBox = new KDoubleSpinBox(min, max, 0.05, 0, 2, this, "spinbox");
 	connect(m_spinBox, SIGNAL(valueChanged(double)), this, SLOT(setSliderValue(double)));
-	
+
 	m_slider = new QSlider(static_cast<int>(min * 100 + 0.5), static_cast<int>(max * 100 + 0.5), 1, 0, QSlider::Horizontal, this, "sld");
 	connect(m_slider, SIGNAL(valueChanged(int)), this, SLOT(sliderValueChanged(int)));
 

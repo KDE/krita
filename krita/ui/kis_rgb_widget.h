@@ -21,7 +21,6 @@
 #define KIS_RGB_WIDGET_H
 
 #include "qwidget.h"
-#include <koColor.h>
 
 #include "kis_canvas_subject.h"
 #include "kis_canvas_observer.h"
@@ -33,6 +32,8 @@ class KoColorSlider;
 class QLabel;
 class QSpinBox;
 class KDualColorButton;
+class KoColorSlider;
+class KoColor;
 
 class KisRGBWidget
 	 : public QWidget,

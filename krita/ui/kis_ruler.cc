@@ -99,7 +99,7 @@ void KisRuler::recalculateSize()
 	updatePointer(m_currentPosition, m_currentPosition);
 }
 
-KoUnit::Unit KisRuler::unit()
+KoUnit::Unit KisRuler::unit() const
 {
 	return  m_unit;
 }

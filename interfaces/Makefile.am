@@ -4,7 +4,7 @@ lib_LTLIBRARIES = libkochart.la
 
 libkochart_la_SOURCES = koChart.cc
 libkochart_la_LDFLAGS = $(all_libraries) -version-info 1:0:0
-libkochart_la_LIBADD = $(top_builddir)/lib/kofficecore/libkofficecore.la
+libkochart_la_LIBADD = $(LIB_KOFFICECORE)
 METASOURCES = AUTO
 
 include_HEADERS = koChart.h

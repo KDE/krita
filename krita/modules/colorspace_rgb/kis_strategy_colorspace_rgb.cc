@@ -36,7 +36,7 @@ namespace {
 }
 
 // XXX: Why no alpha channel?
-ChannelInfo KisStrategyColorSpaceRGB::channelInfo[3] = { ChannelInfo("Red", 2), ChannelInfo("Green", 1), ChannelInfo("Blue", 0) };
+ChannelInfo KisStrategyColorSpaceRGB::channelInfo[4] = { ChannelInfo("Red", 2), ChannelInfo("Green", 1), ChannelInfo("Blue", 0), ChannelInfo("Alpha", 3) };
 
 
 KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :

@@ -66,7 +66,7 @@ protected:
 			    CompositeOp op);
 
 private:
-	static ChannelInfo channelInfo[3];
+	static ChannelInfo channelInfo[4];
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_H_

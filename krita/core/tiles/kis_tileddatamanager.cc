@@ -40,6 +40,10 @@ KisTiledDataManager::KisTiledDataManager(Q_UINT32 depth)
 		m_hashTable [i] = 0;
 	m_numTiles = 0;
 	m_currentMemento = 0;
+	m_extentMinX = 0;
+	m_extentMinY = 0;
+	m_extentMaxX = 0;
+	m_extentMaxY = 0;
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
@@ -49,6 +53,10 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
 	m_hashTable = new KisTile * [1024];
 	m_numTiles = 0;
 	m_currentMemento = 0;
+	m_extentMinX = dm.m_extentMinX;
+	m_extentMinY = dm.m_extentMinY;
+	m_extentMaxX = dm.m_extentMaxX;
+	m_extentMaxY = dm.m_extentMaxY;
 	
 	// Deep copy every tile
 	for(int i = 0; i < 1024; i++)
@@ -138,6 +146,7 @@ bool KisTiledDataManager::read(KoStore *store)
 		Q_UINT32 tileHash = calcTileHash(col, row);
 		
 		KisTile *tile = new KisTile(m_depth, col, row);
+		updateExtent(col,row);
 		
 		store->read((char *)tile->m_data, KisTile::HEIGHT * KisTile::WIDTH * m_depth);
 		
@@ -147,7 +156,7 @@ bool KisTiledDataManager::read(KoStore *store)
 	return true;
 }
 
-Q_UINT32 KisTiledDataManager::getSize()
+Q_UINT32 KisTiledDataManager::size()
 {
 	return m_depth * KisTile::WIDTH * KisTile::HEIGHT * m_numTiles;
 }
@@ -155,6 +164,14 @@ Q_UINT32 KisTiledDataManager::getSize()
 Q_UINT32 KisTiledDataManager::getDepth()
 {
 	return m_depth;
+}
+	
+void KisTiledDataManager::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
+{
+	x = m_extentMinX;
+	y = m_extentMinY;
+	w = m_extentMaxX - m_extentMinX + 1;
+	h = m_extentMaxY - m_extentMinY + 1;
 }
 	
 void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UINT8 def)
@@ -303,6 +320,18 @@ void KisTiledDataManager::ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32
 	m_currentMemento->m_numTiles++;
 }
 
+void KisTiledDataManager::updateExtent(Q_INT32 col, Q_INT32 row)
+{
+	if(m_extentMinX > col * KisTile::WIDTH)
+		m_extentMinX = col * KisTile::WIDTH;
+	if(m_extentMaxX < (col+1) * KisTile::WIDTH - 1)
+		m_extentMaxX = (col+1) * KisTile::WIDTH - 1;
+	if(m_extentMinY > row * KisTile::HEIGHT)
+		m_extentMinY = row * KisTile::HEIGHT;
+	if(m_extentMaxY < (row+1) * KisTile::HEIGHT - 1)
+		m_extentMaxY = (row+1) * KisTile::HEIGHT - 1;
+}
+
 KisTile *KisTiledDataManager::getTile(Q_INT32 col, Q_INT32 row, bool writeAccess)
 {
 	Q_UINT32 tileHash = calcTileHash(col, row);
@@ -327,13 +356,12 @@ KisTile *KisTiledDataManager::getTile(Q_INT32 col, Q_INT32 row, bool writeAccess
 			tile->setNext(m_hashTable[tileHash]);
 			m_hashTable[tileHash] = tile;
 			m_numTiles++;
+			updateExtent(col, row);
 		}
 		else
 			// If only read access it is enough to share a default tile
 			tile = m_defaultTile;
 	}
-	
-	// CBR_MISSING ensure tile is not offloaded and also increase use_count
-	
+		
 	return tile;
 }

@@ -82,6 +82,8 @@ public:
         bool contains(Q_INT32 x, Q_INT32 y) const;
         bool contains(const QPoint& pt) const;
 
+	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+
 	/** 
 	 *   Converts the paint device to a different colorspace
 	 */

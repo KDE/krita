@@ -75,8 +75,11 @@ public:
 public:
 
 	// XXX: Refactor these names to conform to rest of Krita : depth() && setDepth()
-	Q_UINT32 getSize();
+	Q_UINT32 size();
 	Q_UINT32 getDepth();
+	
+	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+
 
 public:
 
@@ -117,11 +120,16 @@ private:
 	KisTile *m_defaultTile;
 	KisTile **m_hashTable;
 	KisMemento *m_currentMemento;
+	Q_UINT32 m_extentMinX;
+	Q_UINT32 m_extentMinY;
+	Q_UINT32 m_extentMaxX;
+	Q_UINT32 m_extentMaxY;
 private:
 
 	void ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, KisTile *refTile);
 	KisTile *getTile(Q_INT32 col, Q_INT32 row, bool writeAccess);
 	Q_UINT32 calcTileHash(Q_INT32 col, Q_INT32 row);
+	void updateExtent(Q_INT32 col, Q_INT32 row);
 };
 
 // during development the following line helps to check the interface is correct

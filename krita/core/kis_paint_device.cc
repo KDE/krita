@@ -147,6 +147,11 @@ void KisPaintDevice::init()
 		m_selection = 0;
 }
 
+void KisPaintDevice::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
+{
+	m_datamanager->extent(x, y, w, h);
+}
+
 void KisPaintDevice::accept(KisScaleVisitor& visitor)
 {
         visitor.visitKisPaintDevice(this);

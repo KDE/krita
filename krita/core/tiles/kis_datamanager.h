@@ -80,12 +80,18 @@ public:
 	/**
 	 * Return the size in bytes the image data takes.
 	 */
-	Q_UINT32 getSize() { return ACTUAL_DATAMGR::getSize(); };
+	Q_UINT32 size() { return ACTUAL_DATAMGR::size(); };
 
 	/**
 	 * The number of Q_UINT8 that make up pixel.
 	 */
 	Q_UINT32 getDepth() { return ACTUAL_DATAMGR::getDepth(); };
+
+	/**
+	 * Return the extent of the data in x,y,w,h.
+	 */
+	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
+						 { return ACTUAL_DATAMGR::extent(x, y, w, h); };
 
 public:
 

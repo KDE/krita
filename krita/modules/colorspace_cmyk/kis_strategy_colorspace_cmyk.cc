@@ -37,7 +37,7 @@
 #include "kis_factory.h"
 #include "kis_profile.h"
 
-namespace {
+namespace cmyk {
 	const Q_INT32 MAX_CHANNEL_CMYK = 4;
 }
 
@@ -132,17 +132,17 @@ bool KisStrategyColorSpaceCMYK::alpha() const
 
 Q_INT32 KisStrategyColorSpaceCMYK::depth() const
 {
-	return MAX_CHANNEL_CMYK;
+	return cmyk::MAX_CHANNEL_CMYK;
 }
 
 Q_INT32 KisStrategyColorSpaceCMYK::nColorChannels() const
 {
-	return MAX_CHANNEL_CMYK;
+	return cmyk::MAX_CHANNEL_CMYK;
 }
 
 Q_INT32 KisStrategyColorSpaceCMYK::size() const
 {
-	return MAX_CHANNEL_CMYK;
+	return cmyk::MAX_CHANNEL_CMYK;
 }
 
 QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 

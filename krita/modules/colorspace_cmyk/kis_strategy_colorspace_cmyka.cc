@@ -37,7 +37,7 @@
 #include "kis_factory.h"
 #include "kis_profile.h"
 
-namespace {
+namespace cmyka {
 	const Q_INT32 MAX_CHANNEL_CMYK = 4;
 	const Q_INT32 MAX_CHANNEL_CMYKA = 5;
 }
@@ -105,17 +105,17 @@ bool KisStrategyColorSpaceCMYKA::alpha() const
 
 Q_INT32 KisStrategyColorSpaceCMYKA::depth() const
 {
-	return MAX_CHANNEL_CMYKA;
+	return cmyka::MAX_CHANNEL_CMYKA;
 }
 
 Q_INT32 KisStrategyColorSpaceCMYKA::nColorChannels() const
 {
-	return MAX_CHANNEL_CMYK;
+	return cmyka::MAX_CHANNEL_CMYK;
 }
 
 Q_INT32 KisStrategyColorSpaceCMYKA::size() const
 {
-	return MAX_CHANNEL_CMYKA;
+	return cmyka::MAX_CHANNEL_CMYKA;
 }
 
 
@@ -154,7 +154,7 @@ QImage KisStrategyColorSpaceCMYKA::convertToQImage(const QUANTUM *data, Q_INT32 
 			*( j + PIXEL_GREEN ) = QUANTUM_MAX - m;
 			*( j + PIXEL_BLUE )  = QUANTUM_MAX - y;
 			
-			i += MAX_CHANNEL_CMYKA;
+			i += cmyka::MAX_CHANNEL_CMYKA;
 			j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
 		}
 		

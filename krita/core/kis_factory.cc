@@ -153,6 +153,9 @@ KInstance* KisFactory::global()
 		s_global -> dirs() -> addResourceType("kis_profiles",
 						  KStandardDirs::kde_default("data") + "krita/profiles/");
 
+		s_global -> dirs() -> addResourceType("kis_palettes",
+						  KStandardDirs::kde_default("data") + "krita/palettes/");
+
 		// Tell the iconloader about share/apps/koffice/icons
 		s_global -> iconLoader() -> addAppDir("koffice");
 	}

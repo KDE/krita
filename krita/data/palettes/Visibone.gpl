@@ -1,0 +1,346 @@
+GIMP Palette
+Name: Visibone
+Columns: 16
+#
+# Visibone -- GIMP Palette file
+#
+#  Arrangement idea from www.visibone.com
+#  Conversion to GIMP Palette and addition of
+#  hex codes and color names by Tigert <tigert@gimp.org>
+# 
+255 255 255	#FFFFFF - White
+204 204 204	#CCCCCC - Pale Gray
+153 153 153	#999999 - Light Gray
+102 102 102	#666666 - Dark Gray
+ 51  51  51	#333333 - Obscure Gray
+  0   0   0	#000000 - Black
+255 204   0	#FFCC00 - Yellow-Yellow-Orange
+255 153   0	#FF9900 - Orange-Orange-Yellow
+255 102   0	#FF6600 - Orange-Orange-Red
+255  51   0	#FF3300 - Red-Red-Orange
+  0   0   0	#000000 - Black
+ 51  51  51	#333333 - Obscure Gray
+102 102 102	#666666 - Dark Gray
+153 153 153	#999999 - Light Gray
+204 204 204	#CCCCCC - Pale Gray
+255 255 255	#FFFFFF - White
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+255 204  51	#FFCC33 - Light Yellow-Orange
+255 204 102	#FFCC66 - Light Orange-Yellow
+255 153 102	#FF9966 - Light Orange-Red
+255 102  51	#FF6633 - Light Red-Orange
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+204 153   0	#CC9900 - Dark Yellow-Orange
+204 153  51	#CC9933 - Medium Orange-Yellow
+204 102  51	#CC6633 - Medium Orange-Red
+204  51   0	#CC3300 - Dark Red-Orange
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+ 51  51   0	#333300 - Obscure Weak Yellow
+102 102   0	#666600 - Obscure Dull Yellow
+153 153   0	#999900 - Dark Faded Yellow
+204 204   0	#CCCC00 - Dark Hard Yellow
+255 255   0	#FFFF00 - Yellow
+153 102   0	#996600 - Dark Orange-Yellow
+153  51   0	#993300 - Dark Orange-Red
+ 51   0   0	#330000 - Obscure Weak Red
+102   0   0	#660000 - Obscure Dull Red
+153   0   0	#990000 - Dark Faded Red
+204   0   0	#CC0000 - Dark Hard Red
+255   0   0	#FF0000 - Red
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+204 255   0	#CCFF00 - Yellow-Yellow-Spring
+204 255  51	#CCFF33 - Light Yellow-Spring
+153 204   0	#99CC00 - Dark Yellow-Spring
+102 102  51	#666633 - Dark Weak Yellow
+153 153  51	#999933 - Dark Dull Yellow
+204 204  51	#CCCC33 - Medium Faded Yellow
+255 255  51	#FFFF33 - Light Hard Yellow
+102  51   0	#663300 - Obscure Dull Orange
+  0   0   0	#000000 - Black
+102  51  51	#663333 - Dark Weak Red
+153  51  51	#993333 - Dark Dull Red
+204  51  51	#CC3333 - Medium Faded Red
+255  51  51	#FF3333 - Light Hard Red
+204   0  51	#CC0033 - Dark Red-Pink
+255  51 102	#FF3366 - Light Red-Pink
+255   0  51	#FF0033 - Red-Red-Pink 
+153 255   0	#99FF00 - Spring-Spring-Yellow
+204 255 102	#CCFF66 - Light Spring-Yellow
+153 204  51	#99CC33 - Medium Spring-Yellow
+102 153   0	#669900 - Dark Spring-Yellow
+153 153 102	#999966 - Medium Weak Yellow
+204 204 102	#CCCC66 - Light Dull Yellow
+255 255 102	#FFFF66 - Light Faded Yellow
+153 102  51	#996633 - Dark Dull Orange
+204 102   0	#CC6600 - Dark Hard Orange
+153 102 102	#996666 - Medium Weak Red
+204 102 102	#CC6666 - Light Dull Red
+255 102 102	#FF6666 - Light Faded Red
+153   0  51	#990033 - Dark Pink-Red
+204  51 102	#CC3366 - Medium Pink-Red
+255 102 153	#FF6699 - Light Pink-Red
+255   0 102	#FF0066 - Pink-Pink-Red
+102 255   0	#66FF00 - Spring-Spring-Green
+153 255 102	#99FF66 - Light Spring-Green
+102 204  51	#66CC33 - Medium Spring-Green
+ 51 153   0	#339900 - Dark Spring-Green
+  0   0   0	#000000 - Black
+204 204 153	#CCCC99 - Light Weak Yellow
+255 255 153	#FFFF99 - Pale Dull Yellow
+204 153 102	#CC9966 - Light Dull Orange
+255 153  51	#FF9933 - Light Hard Orange
+204 153 153	#CC9999 - Light Weak Red
+255 153 153	#FF9999 - Pale Dull Red
+  0   0   0	#000000 - Black
+153   0 102	#990066 - Dark Pink-Magenta
+204  51 153	#CC3399 - Medium Pink-Magenta
+255 102 204	#FF66CC - Light Pink-Magenta
+255   0 153	#FF0099 - Pink-Pink-Magenta
+ 51 255   0	#33FF00 - Green-Green-Spring
+102 255  51	#66FF33 - Light Green-Spring
+ 51 204   0	#33CC00 - Dark Green-Spring
+ 51 102   0	#336600 - Obscure Dull Spring
+102 204   0	#66CC00 - Dark Hard Spring
+153 255  51	#99FF33 - Light Hard Spring
+255 255 204	#FFFFCC - Pale Weak Yellow
+255 204 153	#FFCC99 - Pale Dull Orange
+  0   0   0	#000000 - Black
+255 204 204	#FFCCCC - Pale Weak Red
+204 102 153	#CC6699 - Light Dull Pink
+153  51 102	#993366 - Dark Dull Pink
+102   0  51	#660033 - Obscure Dull Pink
+204   0 153	#CC0099 - Dark Magenta-Pink
+255  51 204	#FF33CC - Light Magenta-Pink
+255   0 204	#FF00CC - Magenta-Magenta-Pink
+  0 255   0	#00FF00 - Green
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+102 153  51	#669933 - Dark Dull Spring
+153 204 102	#99CC66 - Light Dull Spring
+204 255 153	#CCFF99 - Pale Dull Spring
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+255 153 204	#FF99CC - Pale Dull Pink
+255  51 153	#FF3399 - Light Hard Pink
+204   0 102	#CC0066 - Dark Hard Pink
+  0   0   0	#000000 - Black
+102  51 102	#663366 - Dark Weak Magenta
+ 51   0  51	#330033 - Obscure Weak Magenta
+  0 204   0	#00CC00 - Dark Hard Green
+ 51 255  51	#33FF33 - Light Hard Green
+102 255 102	#66FF66 - Light Faded Green
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+204 153 204	#CC99CC - Light Weak Magenta
+153 102 153	#996699 - Medium Weak Magenta
+153  51 153	#993399 - Dark Dull Magenta
+102   0 102	#660066 - Obscure Dull Magenta
+  0 153   0	#009900 - Dark Faded Green
+ 51 204  51	#33CC33 - Medium Faded Green
+102 204 102	#66CC66 - Light Dull Green
+153 255 153	#99FF99 - Pale Dull Green
+204 255 204	#CCFFCC - Pale Weak Green
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+255 204 255	#FFCCFF - Pale Weak Magenta
+255 153 255	#FF99FF - Pale Dull Magenta
+204 102 204	#CC66CC - Light Dull Magenta
+204  51 204	#CC33CC - Medium Faded Magenta
+153   0 153	#990099 - Dark Faded Magenta
+  0 102   0	#006600 - Obscure Dull Green
+ 51 153  51	#339933 - Dark Dull Green
+102 153 102	#669966 - Medium Weak Green
+153 204 153	#99CC99 - Light Weak Green
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+255 102 255	#FF66FF - Light Faded Magenta
+255  51 255	#FF33FF - Light Hard Magenta
+204   0 204	#CC00CC - Dark Hard Magenta
+  0  51   0	#003300 - Obscure Weak Green
+ 51 102  51	#336633 - Dark Weak Green
+  0   0   0	#000000 - Black
+  0 204 102	#00CC66 - Dark Hard Teal
+ 51 255 153	#33FF99 - Light Hard Teal
+153 255 204	#99FFCC - Pale Dull Teal
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+204 153 255	#CC99FF - Pale Dull Violet
+153 102 204	#9966CC - Light Dull Violet
+102  51 153	#663399 - Dark Dull Violet
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+255   0 255	#FF00FF - Magenta
+  0 255  51	#00FF33 - Green-Green-Teal
+ 51 255 102	#33FF66 - Light Green-Teal
+  0 204  51	#00CC33 - Dark Green-Teal
+  0 102  51	#006633 - Obscure Dull Teal
+ 51 153 102	#339966 - Dark Dull Teal
+102 204 153	#66CC99 - Light Dull Teal
+204 255 255	#CCFFFF - Pale Weak Cyan
+  0   0   0	#000000 - Black
+153 204 255	#99CCFF - Pale Dull Azure
+204 204 255	#CCCCFF - Pale Weak Blue
+153  51 255	#9933FF - Light Hard Violet
+102   0 204	#6600CC - Dark Hard Violet
+ 51   0 102	#330066 - Obscure Dull Violet
+153   0 204	#9900CC - Dark Magenta-Violet
+204  51 255	#CC33FF - Light Magenta-Violet
+204   0 255	#CC00FF - Magenta-Magenta-Violet
+  0 255 102	#00FF66 - Teal-Teal-Green
+102 255 153	#66FF99 - Light Teal-Green
+ 51 204 102	#33CC66 - Medium Teal-Green
+  0 153  51	#009933 - Dark Teal-Green
+  0   0   0	#000000 - Black
+153 255 255	#99FFFF - Pale Dull Cyan
+153 204 204	#99CCCC - Light Weak Cyan
+ 51 153 255	#3399FF - Light Hard Azure
+102 153 204	#6699CC - Light Dull Azure
+153 153 255	#9999FF - Pale Dull Blue
+153 153 204	#9999CC - Light Weak Blue
+  0   0   0	#000000 - Black
+102   0 153	#660099 - Dark Violet-Magenta
+153  51 204	#9933CC - Medium Violet-Magenta
+204 102 255	#CC66FF - Light Violet-Magenta
+153   0 255	#9900FF - Violet-Violet-Magenta
+  0 255 153	#00FF99 - Teal-Teal-Cyan
+102 255 204	#66FFCC - Light Teal-Cyan
+ 51 204 153	#33CC99 - Medium Teal-Cyan
+  0 153 102	#009966 - Dark Teal-Cyan
+102 255 255	#66FFFF - Light Faded Cyan
+102 204 204	#66CCCC - Light Dull Cyan
+102 153 153	#669999 - Medium Weak Cyan
+  0 102 204	#0066CC - Dark Hard Azure
+ 51 102 153	#336699 - Dark Dull Azure
+102 102 255	#6666FF - Light Faded Blue
+102 102 204	#6666CC - Light Dull Blue
+102 102 153	#666699 - Medium Weak Blue
+102   0 153	#660099 - Dark Violet-Magenta
+153  51 204	#9933CC - Medium Violet-Magenta
+204 102 255	#CC66FF - Light Violet-Magenta
+153   0 255	#9900FF - Violet-Violet-Magenta
+  0 255 204	#00FFCC - Cyan-Cyan-Teal
+ 51 255 204	#33FFCC - Light Cyan-Teal
+  0 204 153	#00CC99 - Dark Cyan-Teal
+ 51 255 255	#33FFFF - Light Hard Cyan
+ 51 204 204	#33CCCC - Medium Faded Cyan
+ 51 153 153	#339999 - Dark Dull Cyan
+ 51 102 102	#336666 - Dark Weak Cyan
+  0   0   0	#000000 - Black
+  0  51 102	#003366 - Obscure Dull Azure
+ 51  51 255	#3333FF - Light Hard Blue
+ 51  51 204	#3333CC - Medium Faded Blue
+ 51  51 153	#333399 - Dark Dull Blue
+ 51  51 102	#333366 - Dark Weak Blue
+ 51   0 204	#3300CC - Dark Blue-Violet
+102  51 255	#6633FF - Light Blue-Violet
+ 51   0 255	#3300FF - Blue-Blue-Violet
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0 255 255	#00FFFF - Cyan
+  0 204 204	#00CCCC - Dark Hard Cyan
+  0 153 153	#009999 - Dark Faded Cyan
+  0 102 102	#006666 - Obscure Dull Cyan
+  0  51  51	#003333 - Obscure Weak Cyan
+  0 102 153	#006699 - Dark Azure-Cyan
+  0  51 153	#003399 - Dark Azure-Blue
+  0   0 255	#0000FF - Blue
+  0   0 204	#0000CC - Dark Hard Blue
+  0   0 153	#000099 - Dark Faded Blue
+  0   0 102	#000066 - Obscure Dull Blue
+  0   0  51	#000033 - Obscure Weak Blue
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0 153 204	#0099CC - Dark Cyan-Azure
+ 51 153 204	#3399CC - Medium Azure-Cyan
+ 51 102 204	#3366CC - Medium Azure-Blue
+  0  51 204	#0033CC - Dark Blue-Azure
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+ 51 204 255	#33CCFF - Light Cyan-Azure
+102 204 255	#66CCFF - Light Azure-Cyan
+102 153 255	#6699FF - Light Azure-Blue
+ 51 102 255	#3366FF - Light Blue-Azure
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+  0   0   0	#000000 - Black
+255 255 255	#FFFFFF - White
+204 204 204	#CCCCCC - Pale Gray
+153 153 153	#999999 - Light Gray
+102 102 102	#666666 - Dark Gray
+ 51  51  51	#333333 - Obscure Gray
+  0   0   0	#000000 - Black
+  0 204 255	#00CCFF - Cyan-Cyan-Azure
+  0 153 255	#0099FF - Azure-Azure-Cyan
+  0 102 255	#0066FF - Azure-Azure-Blue
+  0  51 255	#0033FF - Blue-Blue-Azure
+  0   0   0	#000000 - Black
+ 51  51  51	#333333 - Obscure Gray
+102 102 102	#666666 - Dark Gray
+153 153 153	#999999 - Light Gray
+204 204 204	#CCCCCC - Pale Gray
+255 255 255	#FFFFFF - White

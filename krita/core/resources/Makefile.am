@@ -15,7 +15,8 @@ libkisresources_la_SOURCES =  \
 	kis_resource.cc \
 	kis_resource_mediator.cc \
 	kis_resourceserver.cc \
-        kis_profile.cc
+        kis_profile.cc \
+	kis_palette.cc
 
 noinst_HEADERS = \
 	kis_alpha_mask.h \
@@ -26,7 +27,8 @@ noinst_HEADERS = \
 	kis_resource.h \
 	kis_resource_mediator.h \
 	kis_resourceserver.h \
-        kis_profile.h
- 
+        kis_profile.h \
+	kis_palette.h
+
 libkisresources_la_METASOURCES = AUTO
 

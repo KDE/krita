@@ -31,7 +31,11 @@
 #include "kis_guide.h"
 #include "kis_scale_visitor.h"
 #include "resources/kis_profile.h"
+#include "kis_annotation.h"
+
+
 #include <koffice_export.h>
+
 class KoCommandHistory;
 class KisNameServer;
 class KisUndoAdapter;
@@ -207,6 +211,7 @@ private:
 
 	QPixmap m_pixmap;
 
+	vKisAnnotationSP m_annotations;
 
 };
 

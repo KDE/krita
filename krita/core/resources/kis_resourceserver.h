@@ -30,6 +30,7 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_pattern.h"
 #include "kis_gradient.h"
+#include "kis_palette.h"
 #include "kis_types.h"
 
 // XXX: Encapsulate resources in shared pointers.
@@ -46,32 +47,35 @@ public:
 	void loadpipeBrushes();
 	void loadPatterns();
 	void loadGradients();
+	void loadPalettes();
 
 public:
 	Q_INT32 brushCount() const { return m_brushes.count(); }
 	Q_INT32 pipebrushCount() const { return m_pipebrushes.count(); }
 	Q_INT32 patternCount() const { return m_patterns.count(); }
 	Q_INT32 gradientCount() const { return m_gradients.count(); }
-
+	Q_INT32 paletteCount() const { return m_palettes.count(); }
 	
 	// XXX (BSAR): Does this mean the the lists are copied for every call?
 	QPtrList<KisResource> brushes();
 	QPtrList<KisResource> pipebrushes();
 	QPtrList<KisResource> patterns();
 	QPtrList<KisResource> gradients();
+	QPtrList<KisResource> palettes();
 
 signals:
 	void loadedBrush(KisResource *br);
 	void loadedpipeBrush(KisResource *br);
 	void loadedPattern(KisResource *pat);
 	void loadedGradient(KisResource *pat);
-
+	void loadedPalette(KisResource *pal);
 private:
 
 	void loadBrush();
 	void loadpipeBrush();
 	void loadPattern();
 	void loadGradient();
+	void loadPalette();
 
 	KisResourceServer(const KisResourceServer&);
 	KisResourceServer& operator=(const KisResourceServer&);
@@ -89,6 +93,9 @@ private slots:
 	void gradientLoaded(KisResource *r);
 	void gradientLoadFailed(KisResource *br);
 
+	void paletteLoaded(KisResource *r);
+	void paletteLoadFailed(KisResource *br);
+
 private:
 	QPtrList<KisResource> m_brushes;
 	QStringList m_brushFilenames;
@@ -101,6 +108,9 @@ private:
 
 	QPtrList<KisResource> m_gradients;
 	QStringList m_gradientFilenames;
+
+	QPtrList<KisResource> m_palettes;
+	QStringList m_paletteFilenames;
 
 };
 

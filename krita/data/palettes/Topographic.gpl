@@ -1,0 +1,265 @@
+GIMP Palette
+Name: Topographic
+#
+#   "Topographic" color map - M. Davis
+#  waterline
+#       Rocks
+#       Snow
+#      Rocks
+#
+  0   0   0	grey0
+  0   0 168	Untitled
+  4   0 172	Untitled
+  4   8 172	Untitled
+  4  12 172	Untitled
+  4  16 172	Untitled
+  8  20 176	Untitled
+  8  24 176	Untitled
+  8  28 176	Untitled
+ 12  32 176	Untitled
+ 12  36 180	Untitled
+ 16  40 184	Untitled
+ 16  44 184	Untitled
+ 20  48 184	Untitled
+ 20  52 188	Untitled
+ 24  56 192	Untitled
+ 24  60 192	Untitled
+ 28  64 192	Untitled
+ 28  68 196	Untitled
+ 32  72 200	Untitled
+ 32  76 200	Untitled
+ 36  80 200	Untitled
+ 36  84 204	Untitled
+ 40  88 208	Untitled
+ 40  92 208	Untitled
+ 44  96 208	Untitled
+ 44 100 212	Untitled
+ 48 104 216	Untitled
+ 48 108 216	Untitled
+ 52 112 216	Untitled
+ 52 116 220	Untitled
+ 56 120 224	Untitled
+ 60 124 224	Untitled
+ 60 128 224	Untitled
+ 64 132 228	Untitled
+ 64 136 232	Untitled
+ 68 132 232	Untitled
+ 68 136 232	Untitled
+ 68 140 232	Untitled
+ 68 144 232	Untitled
+ 72 148 236	Untitled
+ 72 152 240	Untitled
+ 76 156 240	Untitled
+ 76 160 240	Untitled
+ 80 164 244	Untitled
+ 80 168 248	Untitled
+ 84 172 248	Untitled
+ 84 176 248	Untitled
+ 40 124   0	Untitled
+ 40 124   0	Untitled
+ 44 124   0	Untitled
+ 44 124   0	Untitled
+ 44 124   4	Untitled
+ 44 124   4	Untitled
+ 44 128   4	Untitled
+ 44 128   4	Untitled
+ 48 128   4	Untitled
+ 48 128   4	Untitled
+ 48 128   8	Untitled
+ 48 128   8	Untitled
+ 48 132   8	Untitled
+ 48 132   8	Untitled
+ 52 132   8	Untitled
+ 52 132   8	Untitled
+ 56 132  12	Untitled
+ 56 132  12	Untitled
+ 60 132  12	Untitled
+ 60 132  12	Untitled
+ 60 136  12	Untitled
+ 60 136  12	Untitled
+ 60 136  16	Untitled
+ 60 136  16	Untitled
+ 60 140  16	Untitled
+ 60 140  16	Untitled
+ 64 140  16	Untitled
+ 64 140  16	Untitled
+ 64 140  20	Untitled
+ 64 140  20	Untitled
+ 64 144  20	Untitled
+ 64 144  20	Untitled
+ 68 144  20	Untitled
+ 68 144  20	Untitled
+ 68 144  24	Untitled
+ 68 144  24	Untitled
+ 68 148  24	Untitled
+ 72 148  24	Untitled
+ 72 148  28	Untitled
+ 72 152  28	Untitled
+ 72 152  32	Untitled
+ 76 152  32	Untitled
+ 76 156  32	Untitled
+ 80 156  32	Untitled
+ 80 156  36	Untitled
+ 80 160  36	Untitled
+ 80 160  40	Untitled
+ 84 160  40	Untitled
+ 84 164  40	Untitled
+ 88 164  40	Untitled
+ 88 164  44	Untitled
+ 88 168  44	Untitled
+ 88 168  48	Untitled
+ 92 168  48	Untitled
+ 92 172  48	Untitled
+ 96 172  48	Untitled
+ 96 172  52	Untitled
+ 96 176  52	Untitled
+100 176  52	Untitled
+100 176  56	Untitled
+100 180  56	Untitled
+100 180  56	Untitled
+104 180  60	Untitled
+104 184  60	Untitled
+104 184  64	Untitled
+108 184  64	Untitled
+108 188  64	Untitled
+108 188  68	Untitled
+112 188  68	Untitled
+112 188  72	Untitled
+112 192  72	Untitled
+112 192  76	Untitled
+116 192  76	Untitled
+116 196  76	Untitled
+116 196  80	Untitled
+120 196  80	Untitled
+120 200  80	Untitled
+120 200  84	Untitled
+124 200  84	Untitled
+124 204  84	Untitled
+124 204  88	Untitled
+128 204  88	Untitled
+128 208  88	Untitled
+128 208  92	Untitled
+132 208  92	Untitled
+132 212  92	Untitled
+136 212  92	Untitled
+136 212  96	Untitled
+136 216  96	Untitled
+136 216 100	Untitled
+140 216 100	Untitled
+140 220 100	Untitled
+140 220 104	Untitled
+144 220 104	Untitled
+144 224 104	Untitled
+144 224 108	Untitled
+148 224 108	Untitled
+148 228 108	Untitled
+152 228 108	Untitled
+152 228 108	Untitled
+156 228 108	Untitled
+156 228 108	Untitled
+160 228 108	Untitled
+164 228 108	Untitled
+168 228 108	Untitled
+168 228 108	Untitled
+172 228 108	Untitled
+172 228 108	Untitled
+176 228 108	Untitled
+176 228 108	Untitled
+180 228 108	Untitled
+180 228 108	Untitled
+184 228 108	Untitled
+184 228 108	Untitled
+188 228 108	Untitled
+188 228 108	Untitled
+192 228 108	Untitled
+196 228 108	Untitled
+196 228 108	Untitled
+200 228 108	Untitled
+204 228 108	Untitled
+204 228 108	Untitled
+208 228 108	Untitled
+208 228 108	Untitled
+212 228 108	Untitled
+212 228 108	Untitled
+216 228 108	Untitled
+220 228 108	Untitled
+220 228 108	Untitled
+224 228 108	Untitled
+228 228 108	Untitled
+228 228 108	Untitled
+232 228 108	Untitled
+232 228 108	Untitled
+232 228 104	Untitled
+232 228 104	Untitled
+232 228 100	Untitled
+232 228 100	Untitled
+232 228  96	Untitled
+232 228  96	Untitled
+232 228  92	Untitled
+232 224  92	Untitled
+232 224  92	Untitled
+232 220  88	Untitled
+232 216  84	Untitled
+232 216  80	Untitled
+232 212  80	Untitled
+232 212  76	Untitled
+232 208  76	Untitled
+232 204  72	Untitled
+232 204  68	Untitled
+232 200  68	Untitled
+232 200  64	Untitled
+232 200  64	Untitled
+232 196  64	Untitled
+232 196  60	Untitled
+232 192  60	Untitled
+232 192  56	Untitled
+232 188  56	Untitled
+232 188  52	Untitled
+232 184  52	Untitled
+232 184  48	Untitled
+232 180  48	Untitled
+232 180  44	Untitled
+232 180  44	Untitled
+232 176  44	Untitled
+232 176  44	Untitled
+232 176  40	Untitled
+232 176  40	Untitled
+232 172  40	Untitled
+232 172  36	Untitled
+232 168  36	Untitled
+232 168  36	Untitled
+228 164  32	Untitled
+228 164  32	Untitled
+228 160  32	Untitled
+228 160  32	Untitled
+224 156  28	Untitled
+224 152  24	Untitled
+224 152  24	Untitled
+224 148  20	Untitled
+220 148  20	Untitled
+220 140  16	Untitled
+220 140  16	Untitled
+220 132  16	Untitled
+216 132  16	Untitled
+216 124   8	Untitled
+216 124   8	Untitled
+216 116   8	Untitled
+128 128 128	Untitled
+128 128 128	Untitled
+252 252 252	grey99
+252 252 252	grey99
+252 252 252	grey99
+252 252 252	grey99
+252 252 252	grey99
+252 252 252	grey99
+252 252 252	grey99
+252 252 252	grey99
+192 192 192	Untitled
+192 192 192	Untitled
+252 252 252	grey99
+252 252 252	grey99
+252 252 252	grey99
+252 252 252	grey99
+252 252 252	grey99
+252 252 252	grey99
+252 252 252	grey99

@@ -72,7 +72,8 @@ public:
 	Q_INT32 renderIntent();
 	void setRenderIntent(Q_INT32 renderIntent);
 
-
+	Q_INT32 maxNumberOfThreads();
+	void setMaxNumberOfThreads(Q_INT32 numberOfThreads);
 
 private:
 	KisConfig(const KisConfig&);

@@ -79,7 +79,17 @@ public:
 public:
 	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
 
+	// This filter can be used in painting tools as a paint operation
 	virtual bool supportsPainting() = 0;
+	// This filter supports cutting up the work area and filtering
+	// each chunk in a separate thread. Filters that need access to the
+	// whole area for correct computations should return false.
+	virtual bool supportsThreading() { return true; };
+	// Used when threading is used -- the overlap margin is passed to the
+	// filter to use to compute pixels, but the margin is not pasted into the
+	// resulting image.
+	virtual int  overlapMarginNeeded() { return 0; };
+
 	virtual void enableProgress();
 	virtual void disableProgress();
 	virtual void setAutoUpdate(bool set);

@@ -1,0 +1,260 @@
+GIMP Palette
+Name: Plasma
+Columns: 16
+#
+240 240   0	Untitled
+240 224   0	Untitled
+240 208   0	Untitled
+240 192   0	Untitled
+240 176   0	Untitled
+240 160   0	Untitled
+240 144   0	Untitled
+240 128   0	Untitled
+240 112   0	Untitled
+240  96   0	Untitled
+240  80   0	Untitled
+240  64   0	Untitled
+240  48   0	Untitled
+240  32   0	Untitled
+240  16   0	Untitled
+240   0   0	Untitled
+224 224  16	Untitled
+224 212  16	Untitled
+224 200  16	Untitled
+224 184  16	Untitled
+224 172  12	Untitled
+224 156  12	Untitled
+224 144  12	Untitled
+224 128  12	Untitled
+224 116   8	Untitled
+224 100   8	Untitled
+224  88   8	Untitled
+224  72   8	Untitled
+224  60   4	Untitled
+224  44   4	Untitled
+224  32   4	Untitled
+224  16   0	Untitled
+208 208  32	Untitled
+208 200  32	Untitled
+208 188  28	Untitled
+208 176  28	Untitled
+208 164  24	Untitled
+208 152  24	Untitled
+208 140  20	Untitled
+208 128  20	Untitled
+208 116  16	Untitled
+208 104  16	Untitled
+208  92  12	Untitled
+208  80  12	Untitled
+208  68   8	Untitled
+208  56   8	Untitled
+208  44   4	Untitled
+208  32   0	Untitled
+192 192  48	Untitled
+192 184  48	Untitled
+192 176  44	Untitled
+192 164  40	Untitled
+192 156  36	Untitled
+192 144  32	Untitled
+192 136  32	Untitled
+192 128  28	Untitled
+192 116  24	Untitled
+192 108  20	Untitled
+192  96  16	Untitled
+192  88  16	Untitled
+192  80  12	Untitled
+192  68   8	Untitled
+192  60   4	Untitled
+192  48   0	Untitled
+176 176  64	Untitled
+176 172  60	Untitled
+176 164  56	Untitled
+176 156  52	Untitled
+176 148  48	Untitled
+176 140  44	Untitled
+176 132  40	Untitled
+176 124  36	Untitled
+176 120  32	Untitled
+176 112  28	Untitled
+176 104  24	Untitled
+176  96  20	Untitled
+176  88  16	Untitled
+176  80  12	Untitled
+176  72   8	Untitled
+176  64   0	Untitled
+160 160  80	Untitled
+160 156  76	Untitled
+160 152  72	Untitled
+160 144  64	Untitled
+160 140  60	Untitled
+160 136  56	Untitled
+160 128  48	Untitled
+160 124  44	Untitled
+160 120  40	Untitled
+160 112  32	Untitled
+160 108  28	Untitled
+160 104  24	Untitled
+160  96  16	Untitled
+160  92  12	Untitled
+160  88   8	Untitled
+160  80   0	Untitled
+144 144  96	Untitled
+144 144  92	Untitled
+144 140  84	Untitled
+144 136  80	Untitled
+144 132  72	Untitled
+144 128  64	Untitled
+144 128  60	Untitled
+144 124  52	Untitled
+144 120  48	Untitled
+144 116  40	Untitled
+144 112  32	Untitled
+144 112  28	Untitled
+144 108  20	Untitled
+144 104  16	Untitled
+144 100   8	Untitled
+144  96   0	Untitled
+128 128 112	Untitled
+128 128 108	Untitled
+128 128 100	Untitled
+128 128  92	Untitled
+128 124  84	Untitled
+128 124  76	Untitled
+128 124  68	Untitled
+128 124  60	Untitled
+128 120  56	Untitled
+128 120  48	Untitled
+128 120  40	Untitled
+128 120  32	Untitled
+128 116  24	Untitled
+128 116  16	Untitled
+128 116   8	Untitled
+128 112   0	Untitled
+112 112 128	Untitled
+112 112 120	Untitled
+112 112 112	grey44
+112 112 104	Untitled
+112 116  96	Untitled
+112 116  88	Untitled
+112 116  80	Untitled
+112 116  72	Untitled
+112 120  60	Untitled
+112 120  52	Untitled
+112 120  44	Untitled
+112 120  36	Untitled
+112 124  28	Untitled
+112 124  20	Untitled
+112 124  12	Untitled
+112 128   0	Untitled
+ 96  96 144	Untitled
+ 96  96 136	Untitled
+ 96 100 128	Untitled
+ 96 104 116	Untitled
+ 96 108 108	Untitled
+ 96 112  96	Untitled
+ 96 112  88	Untitled
+ 96 116  80	Untitled
+ 96 120  68	Untitled
+ 96 124  60	Untitled
+ 96 128  48	Untitled
+ 96 128  40	Untitled
+ 96 132  32	Untitled
+ 96 136  20	Untitled
+ 96 140  12	Untitled
+ 96 144   0	Untitled
+ 80  80 160	Untitled
+ 80  84 152	Untitled
+ 80  88 140	Untitled
+ 80  96 128	Untitled
+ 80 100 120	Untitled
+ 80 104 108	Untitled
+ 80 112  96	Untitled
+ 80 116  88	Untitled
+ 80 120  76	Untitled
+ 80 128  64	Untitled
+ 80 132  56	Untitled
+ 80 136  44	Untitled
+ 80 144  32	Untitled
+ 80 148  24	Untitled
+ 80 152  12	Untitled
+ 80 160   0	Untitled
+ 64  64 176	Untitled
+ 64  68 168	Untitled
+ 64  76 156	Untitled
+ 64  84 144	Untitled
+ 64  92 132	Untitled
+ 64 100 120	Untitled
+ 64 108 108	Untitled
+ 64 116  96	Untitled
+ 64 120  84	Untitled
+ 64 128  72	Untitled
+ 64 136  60	Untitled
+ 64 144  48	Untitled
+ 64 152  36	Untitled
+ 64 160  24	Untitled
+ 64 168  12	Untitled
+ 64 176   0	Untitled
+ 48  48 192	Untitled
+ 48  56 180	Untitled
+ 48  64 168	Untitled
+ 48  76 156	Untitled
+ 48  84 144	Untitled
+ 48  96 128	Untitled
+ 48 104 116	Untitled
+ 48 112 104	Untitled
+ 48 124  92	Untitled
+ 48 132  80	Untitled
+ 48 144  64	Untitled
+ 48 152  52	Untitled
+ 48 160  40	Untitled
+ 48 172  28	Untitled
+ 48 180  16	Untitled
+ 48 192   0	Untitled
+ 32  32 208	Untitled
+ 32  40 196	Untitled
+ 32  52 184	Untitled
+ 32  64 168	Untitled
+ 32  76 156	Untitled
+ 32  88 140	Untitled
+ 32 100 128	Untitled
+ 32 112 112	Untitled
+ 32 124 100	Untitled
+ 32 136  84	Untitled
+ 32 148  72	Untitled
+ 32 160  56	Untitled
+ 32 172  44	Untitled
+ 32 184  28	Untitled
+ 32 196  16	Untitled
+ 32 208   0	Untitled
+ 16  16 224	Untitled
+ 16  28 212	Untitled
+ 16  40 196	Untitled
+ 16  56 180	Untitled
+ 16  68 168	Untitled
+ 16  84 152	Untitled
+ 16  96 136	Untitled
+ 16 112 120	Untitled
+ 16 124 108	Untitled
+ 16 140  92	Untitled
+ 16 152  76	Untitled
+ 16 168  60	Untitled
+ 16 180  48	Untitled
+ 16 196  32	Untitled
+ 16 208  16	Untitled
+ 16 224   0	Untitled
+  0   0 240	Untitled
+  0  16 224	Untitled
+  0  32 208	Untitled
+  0  48 192	Untitled
+  0  64 176	Untitled
+  0  80 160	Untitled
+  0  96 144	Untitled
+  0 112 128	Untitled
+  0 128 112	Untitled
+  0 144  96	Untitled
+  0 160  80	Untitled
+  0 176  64	Untitled
+  0 192  48	Untitled
+  0 208  32	Untitled
+  0 224  16	Untitled
+  0 240   0	Untitled

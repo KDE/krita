@@ -258,6 +258,11 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	setInputDevice(INPUT_DEVICE_MOUSE);
 
 	resetMonitorProfile();
+
+	// Test loading palettes
+	KisResourceServer *rserver = KisFactory::rServer();
+	rserver -> palettes();
+
 }
 
 

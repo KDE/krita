@@ -34,6 +34,7 @@ namespace {
 	const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
 	const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
 	const enumPaletteStyle DEFAULT_PALETTE_STYLE = PALETTE_TOOLBOX;
+	const Q_INT32 DEFAULT_MAX_THREADS = 4;
 }
 
 KisConfig::KisConfig()
@@ -223,5 +224,15 @@ Q_INT32 KisConfig::renderIntent()
 void KisConfig::setRenderIntent(Q_INT32 renderIntent)
 {
 	m_cfg -> writeEntry("renderIntent", renderIntent);
+}
+
+Q_INT32 KisConfig::maxNumberOfThreads()
+{
+	return m_cfg -> readNumEntry("maxthreads", DEFAULT_MAX_THREADS);
+}
+
+void KisConfig::setMaxNumberOfThreads(Q_INT32 maxThreads)
+{
+	m_cfg -> writeEntry("maxthreads", maxThreads);
 }
 

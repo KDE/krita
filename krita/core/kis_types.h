@@ -114,6 +114,14 @@ class KisChannelInfo;
 typedef KSharedPtr<KisChannelInfo> KisChannelInfoSP;
 typedef KisSharedPtrVector<KisChannelInfo> vKisChannelInfoSP;
 typedef vKisChannelInfoSP::iterator vKisChannelInfoSP_it;
-typedef vKisChannelInfoSP::const_iterator vKischannelInfoSP_cit;
+typedef vKisChannelInfoSP::const_iterator vKisChannelInfoSP_cit;
+
+
+class KisAnnotation;
+typedef KSharedPtr<KisAnnotation> KisAnnotationSP;
+typedef KisSharedPtrVector<KisAnnotation> vKisAnnotationSP;
+typedef vKisAnnotationSP::iterator vKisAnnotationSP_it;
+typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
+
 
 #endif // KISTYPES_H_

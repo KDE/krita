@@ -36,11 +36,13 @@ KisResourceServer::KisResourceServer()
 	m_pipebrushes.setAutoDelete(true);
 	m_patterns.setAutoDelete(true);
 	m_gradients.setAutoDelete(true);
+	m_palettes.setAutoDelete(true);
 
 	loadBrushes();
 	loadpipeBrushes();
 	loadPatterns();
 	loadGradients();
+	loadPalettes();
 }
 
 KisResourceServer::~KisResourceServer()
@@ -49,6 +51,7 @@ KisResourceServer::~KisResourceServer()
 	m_pipebrushes.clear();
 	m_patterns.clear();
 	m_gradients.clear();
+	m_palettes.clear();
 }
 
 
@@ -75,6 +78,14 @@ void KisResourceServer::loadGradients()
 {
 	m_gradientFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_gradients", "*.ggr");
 	loadGradient();
+}
+
+void KisResourceServer::loadPalettes()
+{
+	m_paletteFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_palettes", "*.gpl");
+	m_paletteFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_palettes", "*.pal");
+	m_paletteFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_palettes", "*.act");
+	loadPalette();
 }
 
 void KisResourceServer::loadBrush()
@@ -143,6 +154,20 @@ void KisResourceServer::loadGradient()
 }
 
 
+void KisResourceServer::loadPalette()
+{
+	if (!m_paletteFilenames.empty()) {
+		QString front = *m_paletteFilenames.begin();
+		m_paletteFilenames.pop_front();
+		KisPalette *palette = new KisPalette(front);
+
+		connect(palette, SIGNAL(loadComplete(KisResource*)), SLOT(paletteLoaded(KisResource*)));
+		connect(palette, SIGNAL(ioFailed(KisResource*)), SLOT(paletteLoadFailed(KisResource*)));
+
+		if (!palette -> loadAsync())
+			loadPalette();
+	}
+}
 
 void KisResourceServer::brushLoaded(KisResource *br)
 {
@@ -197,6 +222,19 @@ void KisResourceServer::gradientLoaded(KisResource *gradient)
 }
 
 
+void KisResourceServer::paletteLoaded(KisResource *palette)
+{
+	if (palette && palette -> valid()) {
+		m_palettes.append(palette);
+		emit loadedPalette(palette);
+	} else {
+		delete palette;
+	}
+
+	loadPalette();
+}
+
+
 void KisResourceServer::brushLoadFailed(KisResource *r)
 {
 	delete r;
@@ -219,6 +257,13 @@ void KisResourceServer::gradientLoadFailed(KisResource *r)
 {
 	delete r;
 	loadGradient();
+}
+
+
+void KisResourceServer::paletteLoadFailed(KisResource *r)
+{
+	delete r;
+	loadPalette();
 }
 
 QPtrList<KisResource> KisResourceServer::brushes()
@@ -252,6 +297,15 @@ QPtrList<KisResource> KisResourceServer::gradients()
 		loadGradients();
 
 	return m_gradients;
+}
+
+
+QPtrList<KisResource> KisResourceServer::palettes()
+{
+	if (m_palettes.isEmpty())
+		loadPalettes();
+
+	return m_palettes;
 }
 
 

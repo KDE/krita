@@ -365,9 +365,7 @@ bool KisDoc::initDoc()
 		addImage(img);
 		ok = true;
 	} else if (ret == KoTemplateChooseDia::File) {
-		KURL url;
-
-		url.setPath(file);
+		KURL url( file );
 		ok = openURL(url);
 	} else if (ret == KoTemplateChooseDia::Empty) {
 		if ((ok = slotNewImage()))

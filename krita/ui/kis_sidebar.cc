@@ -499,7 +499,7 @@ void ColorChooserFrame::slotShowRGB()
 
 void ColorChooserFrame::slotShowHSB()
 {
-    m_pColorChooser->slotShowHSB();
+    m_pColorChooser->slotShowHSV();
 }
 
 void ColorChooserFrame::slotShowCMYK()

@@ -108,11 +108,9 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 
 {
 
-	QImage img;
-	
 #ifdef __BIG_ENDIAN__
-	img = QImage(width, height, 32, 0, QImage::LittleEndian);
-
+	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
+	img.setAlphaBuffer(true);
 	// Find a way to use convertPixelsTo without needing to code a
 	// complete agrb color strategy or something like that.
 
@@ -134,8 +132,8 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 	}
 	
 #else
-	img = QImage(const_cast<QUANTUM *>(data), width, height, 32, 0, 0, QImage::LittleEndian);
-
+	QImage img = QImage(const_cast<QUANTUM *>(data), width, height, 32, 0, 0, QImage::LittleEndian);
+	img.setAlphaBuffer(true);
 	// XXX: The previous version of this code used the quantum data directly
 	// as an optimisation. We're introducing a copy overhead here which could
 	// be factored out again if needed.

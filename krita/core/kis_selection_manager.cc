@@ -210,7 +210,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
 void KisSelectionManager::clipboardDataChanged()
 {
-  updateGUI();
+	updateGUI();
 }
 
 
@@ -222,10 +222,21 @@ void KisSelectionManager::addSelectionAction(KAction * action)
 
 void KisSelectionManager::updateGUI()
 {
+	if (m_parent == 0) {
+		kdDebug() << "Eek, no parent!\n";
+		return;
+	}
+
+	if (m_clipboard == 0) {
+		kdDebug() << "Eek, no clipboard!\n";
+		return;
+	}
+
         KisImageSP img = m_parent -> currentImg();
-
-        bool enable = img && img -> activeLayer() && img -> activeLayer() -> hasSelection();
-
+	bool enable = false;
+	if (img) {
+		enable = img && img -> activeLayer() && img -> activeLayer() -> hasSelection();
+	}
 	m_copy -> setEnabled(enable);
 	m_cut -> setEnabled(enable);
 	m_paste -> setEnabled(img != 0 && m_clipboard -> hasClip());
@@ -248,10 +259,6 @@ void KisSelectionManager::updateGUI()
 
 	m_parent -> updateStatusBarSelectionLabel();
 
-// 	KAction a;
-// 	for (Q_UINT32 i = 0; i < m_pluginActions.count(); ++i) {
-// 		// ??? What was supposed to happen here?
-// 	}
 }
 
 void KisSelectionManager::imgSelectionChanged(KisImageSP img)
@@ -296,16 +303,34 @@ void KisSelectionManager::copy()
 
 	// TODO if the source is linked... copy from all linked layers?!?
 
+	// Copy image data
 	KisPainter gc;
 	gc.begin(clip);
-	// Copy image data
 	gc.bitBlt(0, 0, COMPOSITE_COPY, layer.data(), r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height());
+	gc.end();
+
 	// Apply selection mask.
 	selection -> invert(QRect(r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height()));
 
-	gc.bitBlt(0, 0, COMPOSITE_COPY_OPACITY, selection.data(), r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height());
+	KisRectIterator layerIt = clip -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
+ 	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
+
+	while (!layerIt.isDone()) {
+ 		KisPixel p = clip -> toPixel(layerIt);
+ 		KisPixel s = selection -> toPixel(selectionIt);
+ 		Q_UINT8 p_alpha, s_alpha;
+ 		p_alpha = p.alpha();
+ 		s_alpha = s.alpha();
+		if (p_alpha < s_alpha)
+			p.alpha() = 0;
+		else
+			p.alpha() = p_alpha - s_alpha;
+
+		layerIt++;
+ 		selectionIt++;
+	}
+
 	selection -> invert(QRect(r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height()));
-	gc.end();
 
 //      kdDebug() << "Selection copied: "
 //                << r.x() << ", "
@@ -406,24 +431,9 @@ void KisSelectionManager::clear()
 
 	KisSelectionSP selection = layer -> selection();
 	QRect r = selection -> selectedRect();
-
-// 	kdDebug() << "Selection rect: "
-// 		  << r.x() << ", "
-// 		  << r.y() << ", "
-// 		  << r.width() << ", "
-// 		  << r.height() << "\n";
-
 	r = r.normalize();
 
-
-//  	kdDebug() << "Normalized selection rect: "
-//  		  << r.x() << ", "
-//  		  << r.y() << ", "
-//  		  << r.width() << ", "
-//  		  << r.height() << "\n";
-
 	// XXX: make undoable
-
 
 	KisRectIterator layerIt = layer -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
  	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
@@ -442,8 +452,6 @@ void KisSelectionManager::clear()
 		layerIt++;
  		selectionIt++;
 	}
-
-	KisPainter p(img -> activeDevice());
 
 	layer -> removeSelection();
 	m_parent -> updateCanvas();

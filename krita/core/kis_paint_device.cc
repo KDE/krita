@@ -439,8 +439,8 @@ KisProfileSP KisPaintDevice::profile() const
 
 
 void KisPaintDevice::setProfile(KisProfileSP profile)
-{
-	if (profile -> colorSpaceSignature() == colorStrategy() -> colorSpaceSignature() && profile -> valid()) {
+{	
+	if (profile && profile -> colorSpaceSignature() == colorStrategy() -> colorSpaceSignature() && profile -> valid()) {
 		m_profile = profile;
 	}
 	else {
@@ -458,16 +458,20 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile)
 
 	x1 = - getX();
 	y1 = - getY();
-	w = image()->width();
-	h = image()->height();
+
+	if (image()) {
+		w = image()->width();
+		h = image()->height();
+	}
+	else {
+		extent(x1, y1, w, h);
+	}
 
 	return convertToQImage(dstProfile, x1, y1, w, h);
 }
 
 QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
 {
-	QImage image;
-
 	if (w < 0)
 		w = 0;
 
@@ -475,7 +479,7 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 		h = 0;
 
 	QUANTUM * data = m_datamanager -> readBytes(x1, y1, w, h);
-	image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
+	QImage image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
 	delete[] data;
 
 	return image;

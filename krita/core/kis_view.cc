@@ -912,17 +912,17 @@ void KisView::imgUpdateGUI()
 
 void KisView::updateTabBar()
 {
-		m_tabBar->clear();
-		// populate list
-		QStringList lst = m_doc->images();
-		if (!lst.isEmpty())
-		{
-			QStringList::Iterator it;
+	QStringList lst = m_doc->images();
 
-		for ( it = lst.begin(); it != lst.end(); ++it )
-		m_tabBar->addTab(*it);
-		}
-		if(currentImg())
+	m_tabBar->clear();
+
+	// populate list
+	if (!lst.empty()) {
+		for (QStringList::Iterator it = lst.begin(); it != lst.end(); ++it)
+			m_tabBar->addTab(*it);
+	}
+
+	if (currentImg())
 		m_tabBar->setActiveTab(currentImgName());
 }
 

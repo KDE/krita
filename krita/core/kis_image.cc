@@ -44,7 +44,7 @@ KisImage::KisImage(const QString& name, int w, int h, cMode cm, uchar bd)
 {
 	m_author = i18n("The Krita team");
 	m_email = "kimageshop@mail.kde.org";
-	m_autoUpdate = false;
+	m_autoUpdate = true;
 
 	QRect tileExtents = KisUtil::findTileExtents(QRect(0, 0, m_width, m_height));
 
@@ -117,9 +117,11 @@ KisImage::KisImage(const QString& name, int w, int h, cMode cm, uchar bd)
 	   creating a QPixmap.  With a QImage you can create a 32 bit
 	   depth with a 16 bit display with no problems, however. */
 
+#if 0
 	m_timer = new QTimer(this);
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(slotUpdateTimeOut()));
 	m_timer -> start(1);
+#endif
 }
 
 /*
@@ -680,7 +682,8 @@ void KisImage::setCurrentLayer(int layer)
 */
 void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
 {
-	pix -> convertFromImage(*image);
+	if (image && pix)
+		pix -> convertFromImage(*image);
 }
 
 void KisImage::convertTileToPixmap(KisLayer *lay, int tileNo, QPixmap *pix)
@@ -897,7 +900,7 @@ void KisImage::resizePixmap(KisLayer *lay, const QRect& rect)
 	int tmpXTiles = lay -> xTiles();
 	int tmpYTiles = lay -> yTiles();
 
-	m_timer -> stop();
+	//m_timer -> stop();
 
 	if (tmpXTiles > m_xTiles || tmpYTiles > m_yTiles) {
 		int old_m_xTiles = m_xTiles;
@@ -947,7 +950,7 @@ void KisImage::resizePixmap(KisLayer *lay, const QRect& rect)
 		}
 	}
 
-	m_timer -> start(1);
+	//m_timer -> start(1);
 }
 
 void KisImage::setAutoUpdate(bool autoEnable)

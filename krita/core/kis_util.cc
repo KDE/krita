@@ -167,6 +167,13 @@ QRect KisUtil::findBoundingTiles(const QRect& area)
 	rc.setTop(area.top() / TILE_SIZE);
 	rc.setRight(area.right() / TILE_SIZE);
 	rc.setBottom(area.bottom() / TILE_SIZE);
+
+	if (rc.left() < 0)
+		rc.setLeft(0);
+
+	if (rc.top() < 0)
+		rc.setTop(0);
+	
 	return rc;
 }
 

@@ -21,7 +21,6 @@
 #if !defined KIS_VIEW_H_
 #define KIS_VIEW_H_
 
-#include <koCanvasGuide.h>
 #include <koColor.h>
 #include <koView.h>
 #include "kis_global.h"
@@ -36,7 +35,7 @@ class KAction;
 class KPrinter;
 class KToggleAction;
 class KoIconItem;
-class KoCanvasRuler;
+class KisRuler;
 class KisBrush;
 class KisBuilderMonitor;
 class KisCanvas;
@@ -247,8 +246,8 @@ private:
 	QButton *m_tabLeft; 
 	QButton *m_tabRight; 
 	QButton *m_tabLast;
-	KoCanvasRuler *m_hRuler;
-	KoCanvasRuler *m_vRuler;
+	KisRuler *m_hRuler;
+	KisRuler *m_vRuler;
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
 	KAction *m_imgRm;
@@ -318,7 +317,7 @@ private:
 	bool m_clipboardHasImage;
 	KisBuilderMonitor *m_imgBuilderMgr;
 	KisLabelBuilderProgress *m_buildProgress;
-	KoCanvasGuideSP m_currentGuide;
+	KisGuideSP m_currentGuide;
 	QPoint m_lastGuidePoint;
 	KisResourceMediator *m_brushMediator;
 

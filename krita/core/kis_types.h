@@ -89,5 +89,8 @@ class KisStrategyColorSpace;
 typedef KSharedPtr<KisStrategyColorSpace> KisStrategyColorSpaceSP;
 typedef QMap<Q_INT32, KisStrategyColorSpaceSP> KisStrategyColorSpaceMap;
 
+class KisGuide;
+typedef KSharedPtr<KisGuide> KisGuideSP;
+
 #endif // KISTYPES_H_
 

@@ -45,7 +45,6 @@
 #include <kstdaction.h>
 
 // KOffice
-#include <koCanvasRuler.h>
 #include <koColor.h>
 #include <koMainWindow.h>
 #include <koView.h>
@@ -66,6 +65,7 @@
 #include "kis_image_magick_converter.h"
 #include "kis_itemchooser.h"
 #include "kis_factory.h"
+#include "kis_guide.h"
 #include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_listbox.h"
@@ -73,6 +73,7 @@
 #include "kis_paint_device.h"
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
+#include "kis_ruler.h"
 #include "kis_selection.h"
 #include "kis_sidebar.h"
 #include "kis_tabbar.h"
@@ -294,8 +295,8 @@ void KisView::setupScrollBars()
 
 void KisView::setupRulers()
 {
-	m_hRuler = new KoCanvasRuler(Qt::Horizontal, this);
-	m_vRuler = new KoCanvasRuler(Qt::Vertical, this);
+	m_hRuler = new KisRuler(Qt::Horizontal, this);
+	m_vRuler = new KisRuler(Qt::Vertical, this);
 	m_hRuler -> setGeometry(20, 0, width() - 20, 20);
 	m_vRuler -> setGeometry(0, 20, 20, height() - 20);
 
@@ -479,7 +480,7 @@ void KisView::resizeEvent(QResizeEvent *)
 	Q_INT32 docH;
 
 	if (img) {
-		KoCanvasGuideMgr *mgr = img -> guides();
+		KisGuideMgr *mgr = img -> guides();
 		mgr -> resize(size());
 	}
 
@@ -1730,13 +1731,13 @@ void KisView::canvasGotMousePressEvent(QMouseEvent *e)
 
 	if (img) {
 		QPoint pt = mapToScreen(e -> pos());
-		KoCanvasGuideMgr *mgr = img -> guides();
+		KisGuideMgr *mgr = img -> guides();
 
 		m_lastGuidePoint = mapToScreen(e -> pos());
 		m_currentGuide = 0;
 
 		if ((e -> state() & ~ShiftButton) == Qt::NoButton) {
-			KoCanvasGuideSP gd = mgr -> find(static_cast<Q_INT32>(pt.x() / zoom()), static_cast<Q_INT32>(pt.y() / zoom()), QMAX(2.0, 2.0 / zoom()));
+			KisGuideSP gd = mgr -> find(static_cast<Q_INT32>(pt.x() / zoom()), static_cast<Q_INT32>(pt.y() / zoom()), QMAX(2.0, 2.0 / zoom()));
 
 			if (gd) {
 				m_currentGuide = gd;
@@ -1777,7 +1778,7 @@ void KisView::canvasGotMouseMoveEvent(QMouseEvent *e)
 
 	if (img && m_currentGuide) {
 		QPoint p = mapToScreen(e -> pos());
-		KoCanvasGuideMgr *mgr = img -> guides();
+		KisGuideMgr *mgr = img -> guides();
 
 		if ((e -> state() & LeftButton == LeftButton) && mgr -> hasSelected()) {
 			eraseGuides();
@@ -2444,7 +2445,7 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
 		QMouseEvent *me = dynamic_cast<QMouseEvent*>(e);
 		QPoint pt = mapFromGlobal(me -> globalPos());
 		KisImageSP img = currentImg();
-		KoCanvasGuideMgr *mgr;
+		KisGuideMgr *mgr;
 		QMouseEvent *m;
 
 		if (!img)
@@ -2454,7 +2455,7 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
 
 		if (e -> type() == QEvent::MouseMove) {
 			bool flag = geometry().contains(pt);
-			KoCanvasGuideSP gd;
+			KisGuideSP gd;
 
 			if (m_currentGuide == 0 && flag) {
 				// No guide is being edited and moving mouse over the canvas.  
@@ -2506,7 +2507,7 @@ void KisView::eraseGuides()
 	KisImageSP img = currentImg();
 
 	if (img) {
-		KoCanvasGuideMgr *mgr = img -> guides();
+		KisGuideMgr *mgr = img -> guides();
 
 		if (mgr)
 			mgr -> erase(m_canvas, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
@@ -2518,7 +2519,7 @@ void KisView::paintGuides()
 	KisImageSP img = currentImg();
 
 	if (img) {
-		KoCanvasGuideMgr *mgr = img -> guides();
+		KisGuideMgr *mgr = img -> guides();
 
 		if (mgr)
 			mgr -> paint(m_canvas, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());

@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include "KIsImageIface.h"
+#include "kis_guide.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_visitor.h"
@@ -1139,9 +1140,9 @@ KisDoc* KisImage::document() const
 	return m_doc;
 }
 
-KoCanvasGuideMgr *KisImage::guides() const
+KisGuideMgr *KisImage::guides() const
 {
-	return const_cast<KoCanvasGuideMgr*>(&m_guides);
+	return const_cast<KisGuideMgr*>(&m_guides);
 }
 
 KisTileMgrSP KisImage::tiles() const

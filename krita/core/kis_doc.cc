@@ -337,7 +337,6 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	super(parentWidget, widgetName, parent, name, singleViewMode),
 	m_pixmap(RENDER_WIDTH, RENDER_HEIGHT)
 {
-// 	kdDebug() << "KisDoc created for " << widgetName << "\n";
 
 	m_undo = false;
 	m_dcop = 0;
@@ -351,6 +350,10 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 
 	if (name)
 		dcopObject();
+
+	connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
+		 this, SLOT( clipboardDataChanged() ) );
+
 }
 
 KisDoc::~KisDoc()
@@ -375,7 +378,6 @@ DCOPObject *KisDoc::dcopObject()
 
 bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
-// 	kdDebug() << "KisDoc::initDoc\n";
 	if (!init())
 		return false;
 
@@ -435,7 +437,6 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
 bool KisDoc::init()
 {
-// 	kdDebug() << "KisDoc::init\n";
 	if (m_cmdHistory) {
 		delete m_cmdHistory;
 		m_cmdHistory = 0;
@@ -516,7 +517,6 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
 
 				m_images.push_back(img);
 			} else {
-// 				kdDebug(DBG_AREA_CORE) << "KisDoc::loadXML nodeName == " << node.nodeName() << endl;
 				return false;
 			}
 		}
@@ -536,10 +536,9 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 	image.setAttribute("width", img -> width());
 	image.setAttribute("height", img -> height());
 	image.setAttribute("colorspacename", img -> colorStrategy() -> name());
-	kdDebug() << "Saving image with description " << img -> description() << "\n";
 	image.setAttribute("description", img -> description());
 	// XXX: Save profile as blob inside the image, instead of the product name.
-	if (img -> profile() -> valid())
+	if (img -> profile() && img -> profile()-> valid())
 		image.setAttribute("profile", img -> profile() -> productName());
 	image.setAttribute("x-res", img -> xRes());
 	image.setAttribute("y-res", img -> yRes());
@@ -610,17 +609,17 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 			yres = 100.0;
 		
 		if ((profileProductName = element.attribute("profile")).isNull()) {
-			profile = new KisProfile();
+			profile = 0;
 		}
 		else {
-			QPtrList<KisResource> resourceslist = KisFactory::rServer() -> profiles();
-			KisResource * resource;
-			for ( resource = resourceslist.first(); resource; resource = resourceslist.next() ) {
-				Q_ASSERT(dynamic_cast<KisProfile*>(resource));
-				profile = static_cast<KisProfile*>(resource);
-				if (profile -> productName() == profileProductName)
+			vKisProfileSP profileList = KisFactory::rServer() -> profiles();
+			vKisProfileSP::iterator it;
+			
+			for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+				if ((*it) -> productName() == profileProductName) {
+					profile = (*it);
 					break;
-				profile = new KisProfile(); // Create invalid default profile.
+				}
 			}
 		}
 
@@ -631,7 +630,6 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 			if ((attr = element.attribute("colorspace")).isNull())
 				return 0;
 			colorspace_int = attr.toInt();
-// 			kdDebug() << "colorspace_int = " << colorspace_int << endl;
 			if( colorspace_int <= IMAGE_TYPE_UNKNOWN || colorspace_int > IMAGE_TYPE_YUVA)
 				return 0;
 			switch(colorspace_int)
@@ -676,8 +674,6 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 				} else if (node.nodeName() == "COLORMAP") {
 					// TODO
 				} //else {
-// 					kdDebug(DBG_AREA_CORE) << "KisDoc::loadImage nodeName == " << node.nodeName() << endl;
-// 				}
 			}
 		}
 	} else {
@@ -1042,11 +1038,6 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 
 void KisDoc::paintContent(QPainter& painter, const QRect& rect)
 {
-// 	kdDebug() << "KisDoc::paintContent called with rect: "
-// 		  << rect.x() << ","
-// 		  << rect.y() << ","
-// 		  << rect.right() << ","
-// 		  << rect.bottom() << "\n";
 	Q_INT32 x;
 	Q_INT32 y;
 	Q_INT32 x1;

@@ -95,9 +95,13 @@ inline KisView* KisFilter::view()
 
 inline KisStrategyColorSpaceSP KisFilter::colorStrategy()
 {
-	// XXX: is this wise? Isn't it better to check whether view, image
-	// and layer aren't empty? BSAR.
-	return m_view -> currentImg() -> activeLayer() -> colorStrategy();
+	KisImageSP img = m_view -> currentImg();
+	if (!img) return 0;
+
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return 0;
+
+	return layer -> colorStrategy();
 }
 
 inline void KisFilter::process(KisPaintDeviceSP dev, KisFilterConfiguration* config, const QRect& rect, KisTileCommand* ktc)

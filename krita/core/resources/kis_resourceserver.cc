@@ -36,7 +36,6 @@ KisResourceServer::KisResourceServer()
 	m_pipebrushes.setAutoDelete(true);
 	m_patterns.setAutoDelete(true);
 	m_gradients.setAutoDelete(true);
-	m_profiles.setAutoDelete(true);
 
 	loadBrushes();
 	loadpipeBrushes();
@@ -51,7 +50,6 @@ KisResourceServer::~KisResourceServer()
 	m_pipebrushes.clear();
 	m_patterns.clear();
 	m_gradients.clear();
-//	m_profiles.clear(); // Profiles are encapsulated in shared pointers
 }
 
 
@@ -224,13 +222,15 @@ void KisResourceServer::gradientLoaded(KisResource *gradient)
 }
 
 
-void KisResourceServer::profileLoaded(KisResource *profile)
+void KisResourceServer::profileLoaded(KisResource *resource)
 {
-	if (profile && profile -> valid()) {
-		m_profiles.append(profile);
-		emit loadedProfile(profile);
+	if (resource && resource -> valid()) {
+		KisProfile * p = static_cast<KisProfile*>(resource);
+		m_profiles.push_back(p);
+		emit loadedProfile(p);
+		kdDebug() << "Profiles loaded; " << m_profiles.count() << "\n";
 	} else {
-		delete profile;
+		delete resource;
 	}
 
 	loadProfile();
@@ -301,10 +301,10 @@ QPtrList<KisResource> KisResourceServer::gradients()
 }
 
 
-QPtrList<KisResource> KisResourceServer::profiles()
+vKisProfileSP KisResourceServer::profiles()
 {
 	kdDebug()<< "Call to profiles\n";
-	if (m_profiles.isEmpty())
+	if (m_profiles.empty())
 		
 		loadProfiles();
 

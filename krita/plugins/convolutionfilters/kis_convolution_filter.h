@@ -27,13 +27,13 @@
 
 class KisConvolutionConfiguration : public KisFilterConfiguration {
 	public:
-		KisConvolutionConfiguration(KisMatrix3x3* matrixes) : m_matrixes(matrixes) {
-		};
+		KisConvolutionConfiguration(KisMatrix3x3* matrixes) : m_matrixes(matrixes) {};
 	public:
 		inline KisMatrix3x3* matrixes() { return m_matrixes; };
 	private:
 		KisMatrix3x3* m_matrixes;
 };
+
 
 class KisConvolutionFilter : public KisFilter {
 public:
@@ -41,6 +41,8 @@ public:
 public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
 };
+
+
 /** This class is used for a convolution filter with a constant matrix
  */
 class KisConvolutionConstFilter : public KisConvolutionFilter {

@@ -27,6 +27,10 @@
 
 class KisView;
 
+// XXX:; All these filters are loaded on document creation. A document
+// can, theoretically, contain zero or more images of different 
+// depths. If there are zero images, then closing Krita will crash
+// in the destructor.
 class KisGaussianBlurFilter : public KisConvolutionConstFilter {
 public:
 	KisGaussianBlurFilter(KisView * view);

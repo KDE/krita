@@ -42,6 +42,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
 	(void)global();
 	s_rserver = new KisResourceServer;
+	// Initially load the profiles
 	s_rserver -> profiles();
 }
 

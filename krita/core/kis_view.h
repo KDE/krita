@@ -168,8 +168,10 @@ public slots:
 	void previous_layer();
 
 	// image action slots
+	// XXX: Rename to make all names consistent with slotDoX() pattern
 	void slotImportImage();
 	void export_image();
+	void slotImageProperties();
 	void imgResizeToActiveLayer();
 	void add_new_image_tab();
 	void remove_current_image_tab();
@@ -397,10 +399,11 @@ private:
 	KAction *m_layerSaveAs;
 	KAction *m_layerToImage;
 	KAction *m_layerTop;
-	KAction *m_layerTransform;
+//	KAction *m_layerTransform;
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
 	KAction *m_fullScreen;
+	KAction *m_imgProperties;
 	KToggleAction *m_RulerAction;
 
 	DCOPObject *m_dcop;

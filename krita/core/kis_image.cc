@@ -178,6 +178,7 @@ KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,  
 	setName(name);
 	startUpdateTimer();
         m_dcop = 0L;
+	m_profile = 0;
 }
 
 KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
@@ -201,7 +202,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_clrMap = rhs.m_clrMap;
 		m_dirty = rhs.m_dirty;
 		m_adapter = rhs.m_adapter;
-
+		m_profile = rhs.m_profile;
 		if (rhs.m_shadow)
 			m_shadow = new KisTileMgr(*rhs.m_shadow);
 
@@ -489,8 +490,14 @@ KisProfileSP KisImage::profile() const
 
 void KisImage::setProfile(const KisProfileSP& profile) 
 {
-	if (profile -> valid())
+	if (profile && profile -> valid()) {
+		kdDebug() << "KisImage::setProfile: " << profile -> productName() << "\n";
 		m_profile = profile;
+	}
+	else {
+		kdDebug() << "KisImage::setProfile: empty profile\n";
+		m_profile = 0;
+	}
 }
 
 KURL KisImage::uri() const

@@ -124,6 +124,7 @@ typedef KSharedPtr<KisFilterRegistry> KisFilterRegistrySP;
 
 class KisProfile;
 typedef KSharedPtr<KisProfile> KisProfileSP;
+typedef KisSharedPtrVector<KisProfile> vKisProfileSP;
 
 class KisChannelInfo;
 typedef KSharedPtr<KisChannelInfo> KisChannelInfoSP;

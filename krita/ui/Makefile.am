@@ -22,6 +22,7 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_controlframe.cc \
     kis_layerbox.cc \
     kis_dlg_create_img.cc \
+    kis_dlg_image_properties.cc \
     kis_dlg_new_layer.cc \
     kis_dlg_paint_properties.cc \
     kis_dlg_transform.cc \
@@ -58,6 +59,7 @@ noinst_HEADERS = integerwidget.h \
     kis_dlg_create_img.h \
     kis_dlg_new_layer.h \
     kis_dlg_paint_properties.h \
+    kis_dlg_image_properties.h \
     kis_dlg_transform.h \
     kis_gradientwidget.h \
     kis_gray_widget.h \

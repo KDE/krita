@@ -52,9 +52,10 @@ bool KisProfile::loadAsync()
 {
 	cmsErrorAction(LCMS_ERROR_IGNORE);
 	
+
 	m_profile = cmsOpenProfileFromFile(filename().ascii(), "r");
 
-// 	kdDebug() << "loading profile: " << filename() << "\n";
+ 	kdDebug() << "loading profile: " << filename() << "\n";
 	if (m_profile) {
 		m_colorSpace = cmsGetColorSpace(m_profile);
 // 		kdDebug() << "\tColorspace: " << m_colorSpace << "\n";

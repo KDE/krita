@@ -31,6 +31,7 @@
 #include "kis_pattern.h"
 #include "kis_gradient.h"
 #include "kis_profile.h"
+#include "kis_types.h"
 
 // XXX: Encapsulate resources in shared pointers.
 class KisResourceServer : public QObject {
@@ -61,7 +62,9 @@ public:
 	QPtrList<KisResource> pipebrushes();
 	QPtrList<KisResource> patterns();
 	QPtrList<KisResource> gradients();
-	QPtrList<KisResource> profiles();
+	// Profiles do not carry view-specified data, they can safely be shared,
+	// and will never be changed.
+	vKisProfileSP profiles();
 	
 
 signals:
@@ -69,7 +72,7 @@ signals:
 	void loadedpipeBrush(KisResource *br);
 	void loadedPattern(KisResource *pat);
 	void loadedGradient(KisResource *pat);
-	void loadedProfile(KisResource *profile);
+	void loadedProfile(KisProfile *profile);
 
 private:
 
@@ -111,7 +114,7 @@ private:
 	QPtrList<KisResource> m_gradients;
 	QStringList m_gradientFilenames;
 
-	QPtrList<KisResource> m_profiles;
+	vKisProfileSP m_profiles;
 	QStringList m_profileFilenames;
 };
 

@@ -142,7 +142,7 @@
                 </property>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
-                        <cstring>textLabel1</cstring>
+                        <cstring>lblColorSpaces</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Color space:</string>
@@ -168,7 +168,7 @@
                 </widget>
                 <widget class="QLabel" row="1" column="0">
                     <property name="name">
-                        <cstring>textLabel2</cstring>
+                        <cstring>lblProfiles</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Profile:</string>
@@ -192,7 +192,7 @@
                 </widget>
                 <widget class="QLabel" row="2" column="0">
                     <property name="name">
-                        <cstring>textLabel3</cstring>
+                        <cstring>lblDepth</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Depth:</string>
@@ -221,7 +221,7 @@
                 </widget>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
-                        <cstring>textLabel5</cstring>
+                        <cstring>lblColor</cstring>
                     </property>
                     <property name="text">
                         <string>Canvas color:</string>
@@ -234,7 +234,7 @@
                 </widget>
                 <widget class="QLabel" row="2" column="0">
                     <property name="name">
-                        <cstring>textLabel4</cstring>
+                        <cstring>lblDescription</cstring>
                     </property>
                     <property name="text">
                         <string>Description:</string>

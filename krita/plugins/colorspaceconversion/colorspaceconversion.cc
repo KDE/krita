@@ -87,7 +87,7 @@ void ColorspaceConversion::slotImgColorspaceConversion()
 	if (!image) return;
 
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
-	dlgColorspaceConversion -> setCaption(i18n("Convert all layers"));
+	dlgColorspaceConversion -> setCaption(i18n("Convert all layers from ") + image -> colorStrategy() -> name());
 	dlgColorspaceConversion -> m_page -> chkAlpha -> setChecked(image -> alpha());
 
 	if (dlgColorspaceConversion -> exec() == QDialog::Accepted) {
@@ -106,7 +106,7 @@ void ColorspaceConversion::slotLayerColorspaceConversion()
 	if (!dev) return;
 	
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
-	dlgColorspaceConversion -> setCaption(i18n("Convert current layer"));
+	dlgColorspaceConversion -> setCaption(i18n("Convert current layer from") + dev -> colorStrategy() -> name());
 	dlgColorspaceConversion -> m_page -> chkAlpha -> setChecked(dev -> alpha());
 
 	if (dlgColorspaceConversion -> exec() == QDialog::Accepted) {

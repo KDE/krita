@@ -162,16 +162,13 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 	WdgColorSettings * wcs = new WdgColorSettings(this);
 	l -> addWidget( wcs, 0, 0);
 
-	QPtrList<KisResource> resourceslist = KisFactory::rServer() -> profiles();
-	KisResource * resource;
-	KisProfile * profile;
-	for ( resource = resourceslist.first(); resource; resource = resourceslist.next() ) {
-		kdDebug() << "Adding profile: " << resource -> filename() << "\n";
-		Q_ASSERT(dynamic_cast<KisProfile*>(resource));
-		profile = static_cast<KisProfile*>(resource);
-		wcs -> cmbMonitorProfile -> insertItem(profile -> productName());
-		wcs -> cmbImportProfile -> insertItem(profile -> productName());
-		wcs -> cmbPrintProfile -> insertItem(profile -> productName());
+	vKisProfileSP profileList = KisFactory::rServer() -> profiles();
+        vKisProfileSP::iterator it;
+
+        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+		wcs -> cmbMonitorProfile -> insertItem((*it) -> productName());
+		wcs -> cmbImportProfile -> insertItem((*it) -> productName());
+		wcs -> cmbPrintProfile -> insertItem((*it) -> productName());
 	}
 			
 	

@@ -1,4 +1,4 @@
-  /*
+/*
  *  dlg_colorspaceconversion.cc - part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
@@ -46,16 +46,11 @@ DlgColorspaceConversion::DlgColorspaceConversion( QWidget *  parent,
 
 	m_page -> cmbColorSpaces -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
 
-	QPtrList<KisResource> resourceslist = KisFactory::rServer() -> profiles();
-	KisResource * resource;
-	KisProfile * profile;
-	for ( resource = resourceslist.first(); resource; resource = resourceslist.next() ) {
-		kdDebug() << "Adding profile: " << resource -> filename() << "\n";
-		Q_ASSERT(dynamic_cast<KisProfile*>(resource));
-		profile = static_cast<KisProfile*>(resource);
-
-		m_page -> cmbSourceProfile -> insertItem(profile -> productName());
-		m_page -> cmbDestProfile -> insertItem(profile -> productName());
+	vKisProfileSP profileList = KisFactory::rServer() -> profiles();
+        vKisProfileSP::iterator it;
+        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+		m_page -> cmbSourceProfile -> insertItem((*it) -> productName());
+		m_page -> cmbDestProfile -> insertItem((*it) -> productName());
 	}
 	// XXX: Until we have implemented high bit depth images
 	m_page -> cmbDepth -> setEnabled(false);

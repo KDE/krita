@@ -124,6 +124,7 @@
 #include "kis_dlg_paint_properties.h"
 #include "kis_dlg_transform.h"
 #include "kis_dlg_preferences.h"
+#include "kis_dlg_image_properties.h"
 
 // Action managers
 #include "kis_selection_manager.h"
@@ -170,7 +171,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_layerSaveAs = 0;
         m_layerResizeToImage = 0;
         m_layerToImage = 0;
-        m_layerTransform = 0;
+//        m_layerTransform = 0;
         m_layerRaise = 0;
         m_layerLower = 0;
         m_layerTop = 0;
@@ -596,6 +597,7 @@ void KisView::setupActions()
         // import/export actions
         m_imgImport = new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
         m_imgExport = new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
+	m_imgProperties = new KAction(i18n("Image properties..."), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
         m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
         m_imgResizeToLayer = new KAction(i18n("Resize Image to Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
         // view actions
@@ -622,7 +624,7 @@ void KisView::setupActions()
         m_layerToImage = new KAction(i18n("Layer to Image"), 0, this, SLOT(layerToImage()), actionCollection(), "layer_to_image");
 
         // layer transformations
-        m_layerTransform = new KAction(i18n("Scale Layer..."), 0, this, SLOT(layerTransform()), actionCollection(), "transformlayer");
+//        m_layerTransform = new KAction(i18n("Scale Layer..."), 0, this, SLOT(layerTransform()), actionCollection(), "transformlayer");
         (void)new KAction(i18n("Rotate &180"), 0, this, SLOT(rotateLayer180()), actionCollection(), "rotateLayer180");
         (void)new KAction(i18n("Rotate &270"), 0, this, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
         (void)new KAction(i18n("Rotate &90"), 0, this, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerRight90");
@@ -1050,7 +1052,7 @@ void KisView::layerUpdateGUI(bool enable)
         m_layerSaveAs -> setEnabled(enable);
         m_layerResizeToImage -> setEnabled(enable);
         m_layerToImage -> setEnabled(enable);
-        m_layerTransform -> setEnabled(enable);
+//        m_layerTransform -> setEnabled(enable);
         m_layerRaise -> setEnabled(enable && nlayers > 1 && layerPos);
         m_layerLower -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
         m_layerTop -> setEnabled(enable && nlayers > 1 && layerPos);
@@ -1369,6 +1371,18 @@ void KisView::export_image()
                         break;
                 }
         }
+}
+
+
+void KisView::slotImageProperties()
+{
+        KisImageSP img = currentImg();
+
+	if (!img) return;
+
+	KisDlgImageProperties * dlg = new KisDlgImageProperties(img, this);
+	dlg -> exec();
+	delete dlg;
 }
 
 void KisView::slotInsertImageAsLayer()

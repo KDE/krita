@@ -63,19 +63,17 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth,
 	m_page -> cmbColorSpaces -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
 	m_page -> cmbColorSpaces -> setCurrentText(colorStrategyName);
 
-	QPtrList<KisResource> resourceslist = KisFactory::rServer() -> profiles();
-	KisResource * resource;
-	KisProfile * profile;
-	for ( resource = resourceslist.first(); resource; resource = resourceslist.next() ) {
-		Q_ASSERT(dynamic_cast<KisProfile*>(resource));
-		profile = static_cast<KisProfile*>(resource);
-		m_page -> cmbProfile -> insertItem(profile -> productName());
+	vKisProfileSP profileList = KisFactory::rServer() -> profiles();
+        vKisProfileSP::iterator it;
+        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+		m_page -> cmbProfile -> insertItem((*it) -> productName());
 	}
 	
 }
 
 KisDlgCreateImg::~KisDlgCreateImg()
 {
+	delete m_page;
 }
 
 Q_INT32 KisDlgCreateImg::imgWidth() const
@@ -129,19 +127,18 @@ QString KisDlgCreateImg::imgDescription() const
 
 KisProfileSP KisDlgCreateImg::profile() const
 {
-	QPtrList<KisResource> resourceslist = KisFactory::rServer() -> profiles();
-	KisResource * resource;
-
+	vKisProfileSP resourceslist = KisFactory::rServer() -> profiles();
 	Q_UINT32 index = m_page -> cmbProfile -> currentItem();
-
-	if (index > resourceslist.count()) return 0;
-
-	resource = resourceslist.at(index);
 	
-	KisProfileSP profile;
-	profile = static_cast<KisProfile*>(resource);
+	if (resourceslist.count() == 0 || 
+	    index > resourceslist.count() ||
+	    index == 0) { 
+		return 0;
+	}
+	else {
+		return resourceslist.at(index - 1);
+	}
 	
-	return profile;
 }
 
 #include "kis_dlg_create_img.moc"

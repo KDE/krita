@@ -393,6 +393,7 @@ void KisSelectionManager::unSelectAll()
 
 }
 
+
 void KisSelectionManager::clear()
 {
         KisImageSP img = m_parent -> currentImg();
@@ -424,11 +425,12 @@ void KisSelectionManager::clear()
 
 	// XXX: make undoable
 	KisPainter p(img -> activeDevice());
-	p.bitBlt(r.x(), r.y(),
-		 COMPOSITE_COPY_OPACITY, // XXX: Is a mere copy of transparency correct?
-		 selection.data(),
-		 r.x(), r.y(),
-		 r.width(), r.height());
+ 	p.bitBlt(r.x(), r.y(),
+ 		 COMPOSITE_OVER, //_OPACITY, // XXX: Is a mere copy of transparency correct?
+ 		 selection.data(),
+ 		 r.x(), r.y(),
+ 		 r.width(), r.height());
+
 	p.end();
 
 	layer -> removeSelection();

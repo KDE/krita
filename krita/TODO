@@ -94,7 +94,7 @@ User Interface
         * Create templates for often-used image formats. Add save-as-template
         * Check OASIS file saving.
         * Fix gimp XCF import/export (ImageMagick hacking...)
-
+	* Fix imports to import metadata and image files in non-rgb encodings.
 
 Profiles
 

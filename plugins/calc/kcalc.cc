@@ -22,19 +22,18 @@
 */
 
 #include "config.h"
-#include <assert.h>
-#include <stdio.h>
+//#include <assert.h>
+//#include <stdio.h>
 
 #include <kapp.h>
 #include <klocale.h>
+#include <kconfig.h>
+#include <kiconloader.h>
 
 #include "kcalc.h"
 #include "configdlg.h"
 #include "fontdlg.h"
 #include "version.h"
-#include <kconfig.h>
-#include <kiconloader.h>
-#include <kglobal.h>
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken
 // glibc
@@ -1573,7 +1572,7 @@ void QtCalculator::configclicked(){
   label2->setAlignment(AlignLeft|WordBreak|ExpandTabs);
   label2->setText(labelstring2.data());
 
-  QPixmap pm(ICON("kcalclogo.xpm"));
+  QPixmap pm( BarIcon( "kcalclogo.xpm" ) );
   QLabel *logo = new QLabel(box);
   logo->setPixmap(pm);
   logo->setGeometry(30, 20, pm.width(), pm.height());

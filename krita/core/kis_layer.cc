@@ -114,11 +114,12 @@ bool KisLayer::isFloatingSel() const
 
 QUANTUM KisLayer::opacity() const
 {
-	return 0;
+	return m_opacity;
 }
 
 void KisLayer::opacity(QUANTUM val)
 {
+	m_opacity = val;
 }
 
 bool KisLayer::linked() const

@@ -169,7 +169,7 @@ bool KisTileMgr::completetlyValid() const
 
 void KisTileMgr::validate(KisTileSP tile)
 {
-//	tile -> valid(true);
+	tile -> valid(true);
 }
 
 KisTileSP KisTileMgr::invalidate(Q_INT32 xpix, Q_INT32 ypix)
@@ -523,7 +523,7 @@ KisTileSP KisTileMgr::invalidateTile(KisTileSP tile, Q_INT32 tilenum)
 {
 	KisScopedLock l(tile -> mutex());
 
-	if (tile -> valid())
+	if (!tile -> valid())
 		return 0;
 
 	if (tile -> shareCount() > 1) {

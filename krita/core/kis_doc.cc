@@ -250,7 +250,7 @@ bool KisDoc::initDoc()
 	if (ret == KoTemplateChooseDia::Template) {
 		QString name = nextImageName();
 		KisImageSP img = new KisImage(this, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, IMG_DEFAULT_DEPTH, 0, IMAGE_TYPE_RGBA, name);
-		KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_DEPTH, i18n("background"), 0);
+		KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_DEPTH, img -> nextLayerName(), OPACITY_OPAQUE);
 
 		emit imageListUpdated();
 		setModified(true);
@@ -1078,16 +1078,15 @@ bool KisDoc::slotNewImage()
 #endif
 	QString name = "noname";
 	KisImageSP img = new KisImage(this, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, IMG_DEFAULT_DEPTH, 0, IMAGE_TYPE_RGBA, name);
-	KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, i18n("background"), 0);
+	KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, img -> nextLayerName(), OPACITY_OPAQUE);
+	KisPainter gc(layer.data());
 
+	gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::white());
+	gc.end();
 	img -> add(layer, -1);
 	img -> invalidate();
 	addImage(img);
 	emit layersUpdated();
-
-	KisPainter gc(layer.data());
-
-	gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::white());
 	return true;
 }
 

@@ -139,10 +139,11 @@ signals:
 private:
 	KisImage(const KisImage& rhs);
 	KisImage& operator=(const KisImage& rhs);
+	void copyTile(KisTileSP dst, KisTileSP src);
+	void expand(KisPaintDeviceSP dev);
 	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name);
 	PIXELTYPE pixelFromChannel(CHANNELTYPE type);
 	void renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y);
-	void expand(KisPaintDeviceSP dev);
 
 private:
 	KisDoc *m_doc;

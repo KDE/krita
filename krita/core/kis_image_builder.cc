@@ -59,7 +59,7 @@ namespace {
 				pixel[PIXEL_RED] = pp -> red;
 				pixel[PIXEL_GREEN] = pp -> green;
 				pixel[PIXEL_BLUE] = pp -> blue;
-				pixel[PIXEL_ALPHA] = pp -> opacity;
+				pixel[PIXEL_ALPHA] = OPACITY_OPAQUE - pp -> opacity;
 				pixel += pd -> depth;
 				pp++;
 			}

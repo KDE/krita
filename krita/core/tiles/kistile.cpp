@@ -264,14 +264,14 @@ QImage KisTile::convertToImage()
 	// TODO : Get convertToImage out of here...
 	// TODO : use some kind of proxy to access
 	// TODO : color info.  Also this proxy would support
-	// TODO : all image formats.  Only RGBA is supported
+	// TODO : all image formats.  Only RGB/RGBA is supported
 	// TODO : here.
 	for (Q_INT32 j = 0; j < img.height(); j++) {
 		for (Q_INT32 i = 0; i < img.width(); i++) {
 			Q_UINT8 red = downscale(pixel[PIXEL_RED]);
 			Q_UINT8 green = downscale(pixel[PIXEL_GREEN]);
 			Q_UINT8 blue = downscale(pixel[PIXEL_BLUE]);
-			Q_UINT8 alpha = downscale(OPACITY_OPAQUE - pixel[PIXEL_ALPHA]);
+			Q_UINT8 alpha = downscale(pixel[PIXEL_ALPHA]);
 
 			img.setPixel(i, j, qRgba(red, green, blue, alpha));
 			pixel += depth();

@@ -74,6 +74,7 @@ public:
 	Q_INT32 importImage(bool createLayer, const QString& filename = QString::null);
 	KoColor fgColor();
 	void updateCanvas();
+	void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	void updateCanvas(const QRect& rc);
 	void setBGColor(const KoColor& c);
 	void setFGColor(const KoColor& c);

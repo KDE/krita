@@ -146,11 +146,15 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, Q
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
+	QUANTUM *d;
+	QUANTUM *s;
+	QUANTUM alpha;
+
 	if (sw == -1)
-		sw = m_dst -> width;
+		sw = src -> width;
 
 	if (sh == -1)
-		sh = m_dst -> height;
+		sh = src -> height;
 
 	// TODO switch on the image type then go for the composite
 	// TODO Implement all composites for all image depths
@@ -158,13 +162,24 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 		case COMPOSITE_OVER:
 			for (Q_INT32 y = 0; y < sh; y++) {
 				for (Q_INT32 x = 0; x < sw; x++) {
-					QUANTUM *s = src -> data + ((y + sy) * sw + (sx + x)) * src -> depth;
-					QUANTUM *d = m_dst -> data + ((y + dy) * sw + (dx + x)) * src -> depth;
+					s = src -> data + ((y + sy) * src -> width + (sx + x)) * src -> depth;
+					d = m_dst -> data + ((y + dy) * m_dst -> width + (dx + x)) * src -> depth;
 
-					d[PIXEL_RED] = s[PIXEL_RED];
-					d[PIXEL_GREEN] = s[PIXEL_GREEN];
-					d[PIXEL_BLUE] = s[PIXEL_BLUE];
-					d[PIXEL_ALPHA] = OPACITY_OPAQUE;
+					if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
+						continue;
+
+					if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT) {
+						d[PIXEL_RED] = s[PIXEL_RED];
+						d[PIXEL_GREEN] = s[PIXEL_GREEN];
+						d[PIXEL_BLUE] = s[PIXEL_BLUE];
+						continue;
+					}
+
+					d[PIXEL_RED] = (d[PIXEL_RED] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_RED] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_GREEN] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_BLUE] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
 				}
 			}
 			break;
@@ -193,6 +208,11 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 
 void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c)
 {
+	fillRect(x, y, w, h, c, OPACITY_OPAQUE);
+}
+
+void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity)
+{
 	Q_INT32 dx = x + w;
 	Q_INT32 dy = y + h;
 	Q_INT32 x1;
@@ -207,7 +227,7 @@ void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoCo
 			d[PIXEL_RED] = r;
 			d[PIXEL_GREEN] = g;
 			d[PIXEL_BLUE] = b;
-			d[PIXEL_ALPHA] = OPACITY_OPAQUE;
+			d[PIXEL_ALPHA] = opacity;
 			d += m_dst -> depth;
 		}
 	}

@@ -168,9 +168,13 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, 
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h)
 {
-	m_width = w;
-	m_height = h;
-	m_projection = new KisTileMgr(m_depth, m_width < w ? w : m_width, m_height < h ? h : m_height);
+	if (m_width < w)
+		m_width = w;
+
+	if (m_height < h)
+		m_height = h;
+
+	m_projection = new KisTileMgr(m_depth, m_width, m_height);
 	m_construct = true;
 	m_pixmapProjection = QPixmap();
 }
@@ -375,56 +379,6 @@ void KisImage::flush()
 {
 }
 
-#if 0
-void KisImage::apply(KisPaintDeviceSP /*device*/, KisPixelDataSP /*src2*/, QUANTUM /*opacity*/, enumComposite /*mode*/, Q_INT32 /*x*/, Q_INT32 /*y*/)
-{
-	Q_INT32 x1;
-	Q_INT32 y1;
-	Q_INT32 x2;
-	Q_INT32 y2;
-	Q_INT32 xoff;
-	Q_INT32 yoff;
-	KisPixelDataSP src1;
-	KisPixelDataSP dst;
-
-	device -> drawOffset(&xoff, &yoff);
-	x1 = CLAMP(x, 0, width());
-	y1 = CLAMP(y, 0, height());
-	x2 = CLAMP(x + src2 -> width, 0, width());
-	y2 = CLAMP(y + src2 -> height, 0, height());
-
-	if (m_selectionMask) {
-		x1 = CLAMP(x1, -xoff, m_selectionMask -> width() - xoff);
-		y1 = CLAMP(y1, -yoff, m_selectionMask -> height() - yoff);
-		x2 = CLAMP(x2, -xoff, m_selectionMask -> width() - xoff);
-		y2 = CLAMP(y2, -yoff, m_selectionMask -> height() - yoff);
-	}
-
-	//gimp_drawable_push_undo (drawable, x1, y1, x2, y2, NULL, FALSE);
-	KisPixelDataSP pixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q_INT32 mode);
-	src1 = device -> data() -> pixelData(x1, y1, x2 - x1, y2 - y1, TILEMODE_READ);
-	dst = device -> data() -> pixelData(x1, y1, x2 - x1, y2 - y1, TILEMODE_RW);
-	//pixel_region_resize (src2PR, src2PR->x + (x1 - x), src2PR->y + (y1 - y), (x2 - x1), (y2 - y1));
-
-	if (m_selectionMask) {
-		Q_INT32 mx;
-		Q_INT32 my;
-		KisPixelDataSP maskdata;
-
-		mx = x1 + xoff;
-		my = y1 + yoff;
-		maskdata = m_selectionMask -> data() -> pixelData(mx, my, x2 - x1, y2 - y1, TILEMODE_RW);
-//		combine_regions (&src1PR, src2PR, &destPR, &maskPR, NULL, opacity * 255.999, mode, active_components, operation);
-	} else {
-//		combine_regions (&src1PR, src2PR, &destPR, NULL, NULL, opacity * 255.999, mode, active_components, operation);
-	}
-}
-
-void KisImage::replace(KisPixelDataSP , KisPixelDataSP , QUANTUM , KisPixelDataSP , Q_INT32 , Q_INT32 )
-{
-}
-#endif
-
 vKisLayerSP KisImage::layers() const
 {
 	return m_layers;
@@ -528,7 +482,7 @@ bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 	if (qFind(m_layers.begin(), m_layers.end(), layer) != m_layers.end())
 		return false;
 
-//	undo_push_layer_add (gimage, layer, 0, gimp_image_get_active_layer (gimage));
+//	undo_push_layer_add 
 
 	if (layer -> isFloatingSel())
 		m_selection = layer;
@@ -578,7 +532,7 @@ void KisImage::rm(KisLayerSP layer)
 	if (it == m_layers.end())
 		return;
 
-//	undo_push_layer_remove (gimage, layer, gimp_container_get_child_index (gimage->layers, GIMP_OBJECT (layer)), layer);
+//	undo_push_layer_remove
 	m_layers.erase(it);
 	it = qFind(m_layerStack.begin(), m_layerStack.end(), layer);
 
@@ -603,7 +557,7 @@ void KisImage::rm(KisLayerSP layer)
 	w = layer -> width();
 	h = layer -> height();
 	emit update(KisImageSP(this), x, y, w, h);
-	invalidate();
+	invalidate(x, y, w, h);
 
 	if (m_layers.size() == 1 && m_layers[0] -> alpha())
 		emit alphaChanged(KisImageSP(this));
@@ -796,7 +750,7 @@ bool KisImage::add(KisChannelSP channel, Q_INT32 position)
 	if (qFind(m_channels.begin(), m_channels.end(), channel) != m_channels.end())
 		return false;
 
-	//undo_push_channel_add (gimage, channel, 0, gimp_image_get_active_channel (gimage));
+	//undo_push_channel_add
 
 	if (position == -1) {
 		KisChannelSP active = activeChannel();
@@ -826,7 +780,7 @@ void KisImage::rm(KisChannelSP channel)
 	if (it == m_channels.end())
 		return;
 
-	//undo_push_channel_remove(gimage, channel,gimp_container_get_child_index(gimage->channels, GIMP_OBJECT(channel)),gimp_image_get_active_channel(gimage));
+	//undo_push_channel_remove
 	m_channels.erase(it);
 
 	if (channel == activeChannel()) {
@@ -990,32 +944,53 @@ QPixmap KisImage::pixmap()
 	return m_pixmapProjection;
 }
 
+void KisImage::copyTile(KisTileSP dst, KisTileSP src)
+{
+	KisPainter gc(dst);
+	Q_INT32 w;
+	Q_INT32 h;
+
+	w = dst -> width() < src -> width() ? dst -> width() : src -> width();
+	h = dst -> height() < src -> height() ? dst -> height() : src -> height();
+	gc.bitBlt(0, 0, COMPOSITE_COPY, src, 0, w, h);
+}
+
 void KisImage::renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y)
 {
-	KisPainter gc;
-
 	if (!dst)
 		return;
 
-	dst -> lock();
-	m_bgTile -> lock();
-	memcpy(dst -> data(), m_bgTile -> data(), sizeof(QUANTUM) * dst -> width() * dst -> height() * dst -> depth());
-	m_bgTile -> release();
-	dst -> release();
-	gc.begin(dst);
-
-	for (vKisLayerSP_it it = m_layers.begin(); it != m_layers.end(); it++) {
-		if ((*it) -> visible()) {
-			KisTileMgrSP tm = (*it) -> data();
-			KisTileSP src = tm -> tile(x, y, TILEMODE_READ);
-
-			if (src)
-				gc.bitBlt(0, 0, COMPOSITE_OVER, src);
-		}
+	if (dst -> width() == TILE_WIDTH && dst -> height() == TILE_HEIGHT) {
+		dst -> lock();
+		m_bgTile -> lock();
+		memcpy(dst -> data(), m_bgTile -> data(), sizeof(QUANTUM) * dst -> width() * dst -> height() * dst -> depth());
+		m_bgTile -> release();
+		dst -> release();
+	} else {
+		copyTile(dst, m_bgTile);
 	}
 
-	gc.end();
 	dst -> valid(true);
+
+	if (m_layers.size()) {
+		KisPainter gc(dst);
+
+		for (Q_INT32 i = m_layers.size() - 1; i >= 0; i--) {
+			KisLayerSP layer = m_layers[i];
+
+			if (layer -> visible()) {
+				KisTileMgrSP tm = layer -> data();
+				KisTileSP src = tm -> tile(x, y, TILEMODE_READ);
+
+				if (src && !src -> valid()) {
+					gc.bitBlt(0, 0, COMPOSITE_OVER, src, 0, 0, src -> width(), src -> height());
+					src -> valid(true);
+				}
+			}
+		}
+
+		gc.end();
+	}
 
 	if (dst -> valid()) {
 		QImage image;
@@ -1026,11 +1001,12 @@ void KisImage::renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y)
 		gc.drawImage(x, y, image);
 		dst -> release();
 	}
+
 }
 
 void KisImage::expand(KisPaintDeviceSP dev)
 {
-	if (dev -> width() > width() || dev -> height() > height()) {
+	if (dev -> width() >= width() && dev -> height() >= height()) {
 		resize(dev -> width(), dev -> height());
 		invalidate();
 	}

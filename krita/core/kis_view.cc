@@ -51,6 +51,7 @@
 #include "kis_image_builder.h"
 #include "kis_itemchooser.h"
 #include "kis_factory.h"
+#include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_listbox.h"
 #include "kis_paint_device.h"
@@ -681,9 +682,18 @@ void KisView::paintView(const QRect& rc)
 	}
 }
 
+inline
 void KisView::updateCanvas()
 {
 	QRect rc(0, 0, m_canvas -> width(), m_canvas -> height());
+
+	updateCanvas(rc);
+}
+
+inline
+void KisView::updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+	QRect rc(x, y, w, h);
 
 	updateCanvas(rc);
 }
@@ -1269,10 +1279,12 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 			layer -> setImage(current);
 			layer -> setName(current -> nextLayerName());
 			current -> add(layer, -1);
+			current -> top(layer);
 			m_layerBox -> setCurrentItem(img -> index(layer));
 		}
 
 		layersUpdated();
+		current -> invalidate();
 		resizeEvent(0);
 		updateCanvas();
 		return rc;
@@ -1820,7 +1832,7 @@ void KisView::layerToggleVisible(int n)
 			KisLayerSP layer = l[n];
 
 			layer -> visible(!layer -> visible());
-			img -> invalidate();
+			img -> invalidate(vertValue(), horzValue(), width(), height());
 			m_doc -> setModified(true);
 			resizeEvent(0);
 			updateCanvas();
@@ -1895,11 +1907,17 @@ void KisView::layerAdd()
 				layer = img -> activate(layer);
 
 				if (layer) {
+					KisPainter gc(layer.data());
+
+					gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
+					gc.end();
+					img -> top(layer);
+					img -> invalidate(layer -> x(), layer -> y(), layer -> width(), layer -> height());
 					m_doc -> setModified(true);
 					layersUpdated();
 					m_layerBox -> setCurrentItem(img -> index(layer));
 					resizeEvent(0);
-					updateCanvas();
+					updateCanvas(layer -> x(), layer -> y(), layer -> width(), layer -> height());
 				}
 			} else {
 				KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
@@ -1919,6 +1937,7 @@ void KisView::layerRemove()
 			Q_INT32 n = img -> index(layer);
 
 			m_doc -> setModified(true);
+			img -> invalidate(layer -> x(), layer -> y(), layer -> width(), layer -> height());
 			img -> rm(layer);
 			layersUpdated();
 			m_layerBox -> setCurrentItem(n - 1);

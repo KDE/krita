@@ -155,27 +155,16 @@ QImage KisStrategyColorSpaceRGB::convertToImage(const QUANTUM *data, Q_INT32 wid
 	return img;
 }
 
-
 void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 stride,
 				      QUANTUM *dst, 
 				      Q_INT32 dststride,
-				      KisStrategyColorSpaceSP srcSpace,
 				      QUANTUM *src, 
 				      Q_INT32 srcstride,
 				      QUANTUM opacity,
 				      Q_INT32 rows, 
 				      Q_INT32 cols, 
-				      CompositeOp op) const
+				      CompositeOp op)
 {
-	if (rows <= 0 || cols <= 0)
-		return;
-
-// 	if (!srcSpace == this) {
-// 		QUANTUM * dstPixels = new QUANTUM[depth() * rows * cols  * sizeof(QUANTUM)];
-// 		convertPixels(src, srcSpace, dstPixels);
-// 		dst = dstPixels;
-// 	}
-
 	switch (op) {
 	case COMPOSITE_UNDEF:
 		// Undefined == no composition
@@ -292,12 +281,6 @@ void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 stride,
 	default:
 		kdDebug() << "Composite op " << op << " not Implemented yet.\n";
 	}
-
-
-// 	if (!srcSpace == this) {
-// 		delete[] dst;
-// 	}
-
 }
 
 void KisStrategyColorSpaceRGB::computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src)
@@ -326,18 +309,3 @@ void KisStrategyColorSpaceRGB::convertFromRGBA(KisPixelRepresentationRGB& src, K
 		dst[i] = src[i];
 	}
 }
-
-
-// void KisStrategyColorSpaceRGB::convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 srcLen)
-// {
-// 	Q_INT32 srcPixelSize = (srcSpace -> depth() * sizeof(QUANTUM));
-// 	Q_INT32 dstPixelSize = depth() * sizeof(QUANTUM);
-// 	KoColor c;
-// 	QUANTUM opacity;
-
-	
-// 	for (Q_UINT32 s = 0, d = 0; s <= srcLen; s+= srcPixelSize, j+=dstPixelSize) {
-// 		srcSpace -> toKoColor(src[s], &c, &opacity);
-// 		nativeColor(&c, &opacity, dstSpace[j]);
-// 	}
-// }

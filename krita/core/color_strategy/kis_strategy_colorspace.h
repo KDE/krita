@@ -28,7 +28,6 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_channelinfo.h"
-// #include "kis_compositeop.h"
 
 class QPainter;
 class KisIteratorPixel;
@@ -37,7 +36,6 @@ class KisPixelRepresentationRGB;
 
 class KisStrategyColorSpace : public KShared {
 
-// 	typedef std::map< QString, KisCompositeOp* > compositeOpStorage;
 
 public:
 	KisStrategyColorSpace(const QString& name);
@@ -63,7 +61,7 @@ public:
 
 	virtual Q_INT32 depth() const = 0;
 	virtual bool alpha() const = 0;
-	inline QString name() { return m_name; };
+	inline QString name() const { return m_name; };
 
 	/**
 	 * This function is used to convert a KisPixelRepresentation to another color strategy.
@@ -90,6 +88,11 @@ public:
 	
 	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src) =0;
 
+	/**
+	 * Compose two arrays of pixels together. If source and target
+	 * are not the same colour model, the source pixels will be
+	 * converted to the target model.
+	 */
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst, 
 			    Q_INT32 dststride,
@@ -99,8 +102,31 @@ public:
 			    QUANTUM opacity,
 			    Q_INT32 rows, 
 			    Q_INT32 cols, 
-			    CompositeOp op) const = 0;
+			    CompositeOp op);
 
+protected:
+
+	/**
+	 * Convert a byte array of srcLen pixels *src in the color space
+	 * srcSpace to the current color model and put the converted
+	 * bytes into the prepared byte array *dst.
+	 */
+	virtual void convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 srcLen);
+
+	
+	/**
+	 * Compose two byte arrays containing pixels in the same color
+	 * model together.
+	 */
+	virtual void bitBlt(Q_INT32 stride,
+			    QUANTUM *dst, 
+			    Q_INT32 dststride,
+			    QUANTUM *src, 
+			    Q_INT32 srcstride,
+			    QUANTUM opacity,
+			    Q_INT32 rows, 
+			    Q_INT32 cols, 
+			    CompositeOp op) = 0;
 private:
 
 	KisStrategyColorSpace(const KisStrategyColorSpace&);

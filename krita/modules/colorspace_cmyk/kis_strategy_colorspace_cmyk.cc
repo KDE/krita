@@ -181,48 +181,16 @@ QImage KisStrategyColorSpaceCMYK::convertToImage(const QUANTUM *data, Q_INT32 wi
 	return img;
 }
 
-// void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
-// 				       QUANTUM *dst,
-// 				       Q_INT32 dststride,
-// 				       QUANTUM *src,
-// 				       Q_INT32 srcstride,
-// 				       Q_INT32 rows,
-// 				       Q_INT32 cols,
-// 				       CompositeOp op) const
-// {
-//         kdDebug() << "Compositing with: " << op << endl;
-// 	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
-// 	QUANTUM *d;
-// 	QUANTUM *s;
-
-// 	if (rows <= 0 || cols <= 0)
-// 		return;
-
-// 	switch (op) {
-// 	case COMPOSITE_COPY:
-
-// 	case COMPOSITE_CLEAR:
-
-// 	case COMPOSITE_OVER:
-// 		bitBlt(stride, dst, dststride, src, srcstride, OPACITY_OPAQUE, rows, cols, op);
-// 		break;
-// 	default:
-// 		kdDebug() << "Not Implemented.\n";
-// 		abort();
-// 		return;
-// 	}
-// }
 
 void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 				       QUANTUM *dst,
 				       Q_INT32 dststride,
-				       KisStrategyColorSpaceSP srcSpace,
 				       QUANTUM *src,
 				       Q_INT32 srcstride,
 				       QUANTUM opacity,
 				       Q_INT32 rows,
 				       Q_INT32 cols,
-				       CompositeOp op) const
+				       CompositeOp op)
 {
 	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
 	QUANTUM alpha = OPACITY_OPAQUE;

@@ -48,26 +48,24 @@ public:
 	
 	virtual QImage convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const;
 
-	virtual void bitBlt(Q_INT32 stride,
-			    QUANTUM *dst, 
-			    Q_INT32 dststride,
-			    KisStrategyColorSpaceSP srcSpace,
-			    QUANTUM *src, 
-			    Q_INT32 srcstride,
-			    QUANTUM opacity,
-			    Q_INT32 rows, 
-			    Q_INT32 cols, 
-			    CompositeOp op) const;
-
 	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src);
 
 	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst);
 	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst);
 
+protected:
+
+	virtual void bitBlt(Q_INT32 stride,
+			    QUANTUM *dst, 
+			    Q_INT32 dststride,
+			    QUANTUM *src, 
+			    Q_INT32 srcstride,
+			    QUANTUM opacity,
+			    Q_INT32 rows, 
+			    Q_INT32 cols, 
+			    CompositeOp op);
+
 private:
-
-// 	void convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 srcLen);
-
 	static ChannelInfo channelInfo[3];
 };
 

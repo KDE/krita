@@ -18,6 +18,7 @@
  */
 #include "kis_strategy_colorspace.h"
 #include "kis_pixel_representation.h"
+#include "kis_global.h"
 
 KisStrategyColorSpace::KisStrategyColorSpace(const QString& name) : m_name(name)
 {
@@ -35,3 +36,58 @@ void KisStrategyColorSpace::convertTo(KisPixelRepresentation& src, KisPixelRepre
 	 this->convertToRGBA(src, intermediate);
 	 cs->convertFromRGBA(intermediate, dst);
 }
+
+
+
+void KisStrategyColorSpace::convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 srcLen)
+{
+	Q_INT32 srcPixelSize = srcSpace -> depth() * sizeof(QUANTUM);
+	Q_INT32 dstPixelSize = depth() * sizeof(QUANTUM);
+	KoColor c;
+	QUANTUM opacity;
+
+	for (Q_UINT32 s = 0, d = 0; s <= srcLen; s += srcPixelSize, d += dstPixelSize) {
+		srcSpace -> toKoColor(&src[s], &c, &opacity);
+		nativeColor(c, opacity, &dst[d]);
+	}
+}
+
+void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
+				   QUANTUM *dst, 
+				   Q_INT32 dststride,
+				   KisStrategyColorSpaceSP srcSpace,
+				   QUANTUM *src, 
+				   Q_INT32 srcstride,
+				   QUANTUM opacity,
+				   Q_INT32 rows, 
+				   Q_INT32 cols, 
+				   CompositeOp op)
+{
+	if (rows <= 0 || cols <= 0)
+		return;
+
+	QUANTUM * dstPixels = 0;
+ 	if (!(m_name == srcSpace -> name())) {
+ 		QUANTUM * dstPixels = new QUANTUM[depth() * rows * cols  * sizeof(QUANTUM)];
+
+  		convertPixels(src, srcSpace, dstPixels, (rows * cols * srcSpace -> depth() * sizeof(QUANTUM)));
+ 		dst = dstPixels;
+ 	}
+
+	bitBlt(stride,
+	       dst, 
+	       dststride,
+	       src, 
+	       srcstride,
+	       opacity,
+	       rows, 
+	       cols, 
+	       op);
+
+
+ 	if (!(m_name == srcSpace -> name())) {
+ 		delete[] dstPixels;
+ 	}
+
+}
+

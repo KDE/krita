@@ -43,7 +43,7 @@ private:
 	QUANTUM* m_channels;
 };
 
-// XXX: conversions always via koColor; this class is BAD. It is unsuited as 
+// XXX: conversions always via koColor; this class is BAD. RGB is unsuited as 
 // an intermediary colourspace format, and besides, we must use koColor and later
 // littleCMS for that.
 class KisPixelRepresentationRGB : public KisPixelRepresentation {

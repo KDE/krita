@@ -140,18 +140,6 @@ QRect KisPainter::dirtyRect() {
 }
 
 
-// void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, 
-// 			 KisStrategyColorSpaceSP srcSpace, QUANTUM *src, KisTileSP srctile, 
-// 			 Q_INT32 rows, Q_INT32 cols,
-// 			 CompositeOp op)
-// {
-// //         Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
-// //         Q_INT32 srcstride = srctile -> width() * srctile -> depth();
-// //         Q_INT32 stride = m_device -> depth();
-// //         m_device -> colorStrategy() -> bitBlt(stride, dst, dststride, srcSpace, src, srcstride, rows, cols, op);
-// 	tileBlt(dst, dsttile, srcSpace, src, srcTile, rows, cols, OPACITY_OPAQUE, op);
-// }
-
 void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, 
 			 KisStrategyColorSpaceSP srcSpace, QUANTUM *src, KisTileSP srctile, 
 			 Q_INT32 rows, Q_INT32 cols,

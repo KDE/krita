@@ -2409,7 +2409,17 @@ void KisView::imgUpdated(KisImageSP img, const QRect& rc)
 
 void KisView::resizeLayer(Q_INT32 w, Q_INT32 h)
 {
-	// XXX
+	KisImageSP img = currentImg();
+	if (img) {
+		KisLayerSP layer = img -> activeLayer();
+		if (layer) {
+			layer -> resize(w, h);
+			img -> invalidate();
+			layersUpdated();
+			resizeEvent(0);
+			canvasRefresh();
+		}
+	}
 }
 
 void KisView::layerResizeToImage()
@@ -2492,7 +2502,7 @@ void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h)
 void KisView::scaleCurrentImage(double sx, double sy)
 {
 	if (!currentImg()) return;
-
+	kdDebug() << "Going to scale image to (sx, sy): " << sx << ", " << sy << "\n";
 	currentImg() -> scale(sx, sy);
 
 	currentImg() -> invalidate();

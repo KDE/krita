@@ -38,7 +38,7 @@ public:
 
 public:
 	// XXX: Masks were already out of order before I started on
-	// Krita, and I don't know what they were for.x
+	// Krita, and I don't know what they were for.
 	KisMaskSP createMask(Q_INT32 maskType);
 	KisMaskSP addMask(KisMaskSP mask);
 	void applyMask(Q_INT32 mode);

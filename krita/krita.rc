@@ -52,9 +52,7 @@
   <Action name="toplayer"/>
   <Action name="bottomlayer"/>
   <Separator/>
-  <Action name="resizelayer"/>
   <Action name="resizelayertoowner"/>
-  <Action name="transformlayer"/>
   <Separator/>
   <Action name="insert_image_as_layer"/>
   <Action name="save_layer_as_image"/>

@@ -151,17 +151,16 @@ void DlgImageSize::slotWidthPixelsChanged(int w)
 {
 	blockAll();
 
-	double wPercent = qRound(double(w) * 100 / double(m_origW));
+	double wPercent = double(w) * 100 / double(m_origW);
 
-	// Compute width in percent
-	m_page -> intWidthPercent -> setValue((int)wPercent);
+	m_page -> intWidthPercent -> setValue(qRound(wPercent));
 	
 	// Set height in pixels and percent of necessary
 	if (m_page -> chkConstrain -> isChecked()) {
-		m_page -> intHeightPercent -> setValue((int)wPercent);
+		m_page -> intHeightPercent -> setValue(qRound(wPercent));
 
 		m_oldH = qRound(m_origH * wPercent / 100);
-		m_page -> intHeight -> setValue((int)m_oldH);
+		m_page -> intHeight -> setValue(qRound(m_oldH));
 
 	}
 	m_oldW = w;
@@ -173,17 +172,16 @@ void DlgImageSize::slotHeightPixelsChanged(int h)
 {
 	blockAll();
 
-	double hPercent = qRound(double(h) * 100 / double(m_origH));
+	double hPercent = double(h) * 100 / double(m_origH);
 
-	// Compute height in percent
-	m_page -> intHeightPercent -> setValue((int)hPercent);
+	m_page -> intHeightPercent -> setValue(qRound(hPercent));
 	
 	// Set width in pixels and percent of necessary
 	if (m_page -> chkConstrain -> isChecked()) {
-		m_page -> intWidthPercent -> setValue((int)hPercent);
+		m_page -> intWidthPercent -> setValue(qRound(hPercent));
 
 		m_oldW = qRound(m_origW * hPercent / 100);
-		m_page -> intWidth -> setValue((int)m_oldW);
+		m_page -> intWidth -> setValue(qRound(m_oldW));
 
 	}
 	m_oldH = h;

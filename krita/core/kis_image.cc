@@ -45,11 +45,9 @@
 #include "visitors/kis_flatten.h"
 
 namespace {
-
-	const bool DISPLAY_TIMER = false; // Whether to repaint the
-	// display every
-	// DISPLAY_UPDATE_FREQUENCY
-	// milliseconds
+	// Whether to repaint the display every
+	// DISPLAY_UPDATE_FREQUENCY milliseconds
+	const bool DISPLAY_TIMER = false;
 	const int DISPLAY_UPDATE_FREQUENCY = 50; // in milliseconds
 
 	class KisResizeImageCmd : public KNamedCommand {
@@ -288,10 +286,10 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 	m_height = h;
 	m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
 	m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
-	//m_bkg = new KisBackground(this, m_width, m_height);
-	//m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
-	m_bkg -> resize(w, h);
-	m_projection -> resize(w, h);
+// 	m_bkg = new KisBackground(this, m_width, m_height);
+	m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
+ 	m_bkg -> resize(w, h);
+// 	m_projection -> resize(w, h);
 	invalidate();
 }
 
@@ -312,15 +310,15 @@ void KisImage::scale(double sx, double sy)
 	vKisLayerSP_it it;
 	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
 		KisLayerSP layer = (*it);
-		//kdDebug() << "Scaling layer " << layer -> name() << "\n";
 		layer -> scale(sx, sy);
 	}
 
-	// resize(w, h);
 	m_width = w;
 	m_height = h;
-	// Scale projection
-	//m_projection -> scale(sx, sy);
+
+	// Scale projection.
+	m_projection -> scale(sx, sy);
+
 	invalidate();
 }
 

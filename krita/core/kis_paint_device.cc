@@ -698,7 +698,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
         // (this bit seems to be mostly from QImage.xForm)
         QWMatrix mat = QPixmap::trueMatrix( matrix, width(), height() );
         if ( mat.m12() == 0.0F && mat.m21() == 0.0F ) {
-                kdDebug() << "Scaling layer" << m_name << "\n";
+                kdDebug() << "Scaling layer: " << m_name << "\n";
                 if ( mat.m11() == 1.0F && mat.m22() == 1.0F ) {
                         kdDebug() << "Identity matrix, do nothing.\n";
                         return;
@@ -729,7 +729,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
                 return;
         }
 
-        // I would have thought that one would take the source pixels,
+        // BSAR: I would have thought that one would take the source pixels,
         // do the computation, and write the target pixels.
         // Apparently, that's not true: one looks through the target
         // pixels, and computes what should be there from the source
@@ -738,6 +738,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
         // BC: I guess this makes it easier to make the transform anti-aliased,
         // as you can easily take the weighted mean of the square the destination
         // pixel has it's origin in.
+	// BSAR: Ah, ok. I get it now...
 
         /* For each target line of target pixels, the original pixel is located (in the
            surrounding of)
@@ -763,7 +764,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 
         KisTileMgrSP tm = new KisTileMgr(depth(), targetW, targetH);
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * depth());
-        data(tm); // Also set width and height correctly
+        data(tm); // Also sets width and height correctly
 
         delete[] origPixel;
         delete[] newData;

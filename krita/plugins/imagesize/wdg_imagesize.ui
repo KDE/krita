@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>359</width>
+            <width>377</width>
             <height>314</height>
         </rect>
     </property>
@@ -299,6 +299,7 @@
     <tabstop>intWidthPercent</tabstop>
     <tabstop>intHeightPercent</tabstop>
     <tabstop>chkConstrain</tabstop>
+    <tabstop>radioScale</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>

@@ -1,0 +1,177 @@
+/*
+ *  kis_tool_polyline.cc -- part of Krita
+ *
+ *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+
+#include <math.h> 
+ 
+#include <qpainter.h>
+#include <qspinbox.h>
+
+#include <kaction.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <knuminput.h>
+
+#include "kis_doc.h"
+#include "kis_view.h"
+#include "kis_painter.h"
+#include "kis_canvas_subject.h"
+#include "kis_canvas_controller.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
+#include "kis_paintop_registry.h"
+
+#include "kis_tool_polyline.h"
+
+KisToolPolyline::KisToolPolyline()
+        : super(),
+          m_dragging (false),
+          m_currentImage (0)
+{
+	setName("tool_polyline");
+	// initialize ellipse tool settings
+//	m_lineThickness = 4;
+// 	m_opacity = 255;
+// 	m_usePattern = false;
+// 	m_useGradient = false;
+// 	m_fillSolid = false;
+}
+
+KisToolPolyline::~KisToolPolyline()
+{
+}
+
+void KisToolPolyline::update (KisCanvasSubject *subject)
+{
+//         kdDebug (40001) << "KisToolStar::update(" << subject << ")" << endl;
+        super::update (subject);
+        if (m_subject)
+            m_currentImage = m_subject->currentImg ();
+}
+
+void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
+{
+//         kdDebug (40001) << "KisToolStar::buttonPress" << event->pos () << endl;
+	if (m_currentImage && event -> button() == LeftButton) {
+		m_dragging = true;
+		m_dragStart = event -> pos();
+		m_dragEnd = event -> pos();
+        }
+}
+
+void KisToolPolyline::move(KisMoveEvent *event)
+{
+//         kdDebug (40001) << "KisToolStar::move" << event->pos () << endl;
+	if (m_dragging) {
+		// erase old lines on canvas
+		draw(m_dragStart, m_dragEnd);
+		// get current mouse position
+		m_dragEnd = event -> pos();
+		// draw new lines on canvas
+		draw(m_dragStart, m_dragEnd);
+	}
+}
+
+void KisToolPolyline::buttonRelease(KisButtonReleaseEvent *event)
+{
+        if (!m_subject || !m_currentImage)
+            return;
+
+	if (m_dragging && event -> button() == LeftButton) {
+		// erase old lines on canvas
+		draw(m_dragStart, m_dragEnd);
+		m_dragging = false;
+
+                m_dragEnd = event->pos ();
+                if (m_dragStart == m_dragEnd)
+                        return;
+
+                if (!m_currentImage)
+                        return;
+
+                KisPaintDeviceSP device = m_currentImage->activeDevice ();;
+                KisPainter painter (device);
+                painter.beginTransaction (i18n ("polyline"));
+
+                painter.setPaintColor(m_subject -> fgColor());
+                painter.setBrush(m_subject -> currentBrush());
+                //painter.setOpacity(m_opacity);
+                //painter.setCompositeOp(m_compositeOp);
+		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
+		painter.setPaintOp(op); // Painter takes ownership
+
+                //painter.paintEllipse(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
+         
+                //kdDebug() << "Number of points:" << coord.size() << endl;
+                QPoint start,end;
+                
+                painter.paintLine(m_dragStart, PRESSURE_DEFAULT, 0, 0, m_dragEnd, PRESSURE_DEFAULT, 0, 0);
+                //painter.paintLine(m_dragStart, PRESSURE_DEFAULT, 0, 0, m_dragEnd, PRESSURE_DEFAULT, 0, 0);
+                m_currentImage -> notify( painter.dirtyRect() );
+		notifyModified();
+
+                KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+                if (adapter) {
+                        adapter -> addCommand(painter.endTransaction());
+                }
+        }
+}
+
+void KisToolPolyline::draw(const KisPoint& start, const KisPoint& end )
+{
+        if (!m_subject || !m_currentImage)
+            return;
+
+        KisCanvasControllerInterface *controller = m_subject->canvasController ();
+//         kdDebug (40001) << "KisToolStar::draw(" << start << "," << end << ")"
+//                         << " windowToView: start=" << controller->windowToView (start)
+//                         << " windowToView: end=" << controller->windowToView (end)
+//                         << endl;
+        QWidget *canvas = controller->canvas ();
+        QPainter p (canvas);
+
+        p.setRasterOp (Qt::NotROP);
+        //p.drawEllipse (QRect (controller->windowToView (start).floorQPoint(), controller->windowToView (end).floorQPoint()));
+        p.drawLine(start.floorQPoint(), end.floorQPoint());
+        p.end ();
+}
+
+void KisToolPolyline::setup(KActionCollection *collection)
+{
+        m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		KShortcut shortcut(Qt::Key_Plus);
+		shortcut.append(KShortcut(Qt::Key_F8));
+		m_action = new KRadioAction(i18n("Tool &Polyline"),
+					    "polyline",
+					    shortcut,
+					    this,
+					    SLOT(activate()),
+					    collection,
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+        }
+}
+
+#include "kis_tool_polyline.moc"

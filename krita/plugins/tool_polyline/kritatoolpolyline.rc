@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritatoolpolyline" version="1">
+
+
+<ToolBar name="painting tools" position="left"><Text>Painting Tools</Text>
+  <Action name="tool_polyline"/>
+</ToolBar>
+
+
+</kpartgui>

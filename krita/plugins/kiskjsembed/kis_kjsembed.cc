@@ -28,9 +28,6 @@
 #include <kgenericfactory.h>
 #include <kxmlguifactory.h>
 
-// KOffice
-#include "kotooldockmanager.h"
-#include "kotooldockbase.h"
 
 // KJSEmbed
 #include <kjsembed/jsconsolewidget.h> 
@@ -38,6 +35,12 @@
 
 // Krita
 #include "core/kis_view.h"
+
+// KOffice
+#if KIVIO_STYLE_DOCKERS
+#include "kotooldockmanager.h"
+#include "kotooldockbase.h"
+#endif
 
 // KisKJSEmbed
 #include "kis_script.h"
@@ -77,9 +80,11 @@ KisKJSEmbed::KisKJSEmbed(QObject *parent, const char *name, const QStringList &)
 	initBindings();
 #if 0
 //      XXX: The console should be a docker. Enabling this causes a crash at the moment, though.
+#if KIVIO_STYLE_DOCKERS
  	m_consoleDocker = m_view -> toolDockManager() -> createTabbedToolDock("scripting");
  	m_consoleDocker -> setCaption("Scripting console");
  	m_consoleDocker -> restore();
+#endif
 #endif
  	m_jsConsoleWidget = new KJSEmbed::JSConsoleWidget(m_jsEmbedPart);
 #if 0

@@ -1,10 +1,10 @@
 # all_includes must remain last!
 INCLUDES  = -I$(srcdir)/builder/ -I$(srcdir)/visitors/ -I$(srcdir)/helper/ -I$(srcdir)/tiles/ -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) \
-	 -I$(interfacedir) $(KOPAINTER_INCLUDES) -I$(srcdir)/strategy/ $(all_includes)
+	 -I$(interfacedir) $(KOPAINTER_INCLUDES) -I$(srcdir)/strategy/ $(all_includes) -I$(srcdir)/color_strategy
 
 noinst_LTLIBRARIES = libkiscore.la
 
-libkiscore_la_LIBADD = tiles/libkistile.la helper/libkishelper.la builder/libkiscorebuilder.la strategy/libkisstrategy.la
+libkiscore_la_LIBADD = tiles/libkistile.la helper/libkishelper.la builder/libkiscorebuilder.la strategy/libkisstrategy.la color_strategy/libkiscolor_strategy.la
 libkiscore_la_SOURCES = kis_paint_device.cc kis_layer.cc kis_channel.cc kis_mask.cc kis_image.cc kis_doc.cc\
 	kis_view.cc kis_factory.cc kis_pluginserver.cc kis_resourceserver.cc \
 	kis_brush.cc kis_krayon.cc kis_pattern.cc kis_nameserver.cc \
@@ -14,5 +14,5 @@ libkiscore_la_SOURCES = kis_paint_device.cc kis_layer.cc kis_channel.cc kis_mask
 
 libkiscore_la_METASOURCES = AUTO
 libkiscore_la_LDFLAGS = $(KDE_RPATH)
-SUBDIRS = helper tiles builder strategy
+SUBDIRS = helper tiles builder strategy color_strategy
 

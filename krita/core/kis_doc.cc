@@ -71,9 +71,9 @@
 #include "builder/kis_builder_subject.h"
 #include "builder/kis_builder_monitor.h"
 #include "builder/kis_image_magick_converter.h"
-#include "strategy/kis_strategy_colorspace.h"
-#include "strategy/kis_strategy_colorspace_rgb.h"
-#include "strategy/kis_strategy_colorspace_cmyk.h"
+#include "color_strategy/kis_strategy_colorspace.h"
+#include "color_strategy/kis_strategy_colorspace_rgb.h"
+#include "color_strategy/kis_strategy_colorspace_cmyk.h"
 #include "tiles/kistilemgr.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";

@@ -34,6 +34,9 @@
 #include "kis_floatingselection.h"
 #include "kis_tool_select_elliptical.h"
 #include "kis_undo_adapter.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 namespace {
 	class EllipseSelectCmd : public KNamedCommand {
@@ -127,7 +130,7 @@ void KisToolSelectElliptical::clearSelection()
 	}
 }
 
-void KisToolSelectElliptical::mousePress(QMouseEvent *e)
+void KisToolSelectElliptical::buttonPress(KisButtonPressEvent *e)
 {
 	if (m_subject) {
 		KisImageSP img = m_subject -> currentImg();
@@ -141,7 +144,7 @@ void KisToolSelectElliptical::mousePress(QMouseEvent *e)
 	}
 }
 
-void KisToolSelectElliptical::mouseMove(QMouseEvent *e)
+void KisToolSelectElliptical::move(KisMoveEvent *e)
 {
 	if (m_subject && m_selecting) {
 
@@ -153,7 +156,7 @@ void KisToolSelectElliptical::mouseMove(QMouseEvent *e)
 	}
 }
 
-void KisToolSelectElliptical::mouseRelease(QMouseEvent *e)
+void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 {
 	clearSelection();
 	m_selecting = false;
@@ -228,8 +231,8 @@ void KisToolSelectElliptical::paintOutline(QPainter& gc, const QRect&)
 		QPoint end;
 
 		Q_ASSERT(controller);
-		start = controller -> windowToView(m_startPos);
-		end = controller -> windowToView(m_endPos);
+		start = controller -> windowToView(m_startPos).floorQPoint();
+		end = controller -> windowToView(m_endPos).floorQPoint();
 
 		gc.setRasterOp(Qt::NotROP);
 		gc.setPen(pen);

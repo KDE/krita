@@ -597,6 +597,10 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
 						img -> add(layer, -1);
 					}
+
+					if (img -> nlayers()) {
+						img -> activateLayer(0);
+					}
 				} else if (node.nodeName() == "CHANNELS") {
 					for (child = node.firstChild(); !child.isNull(); child = child.nextSibling()) {
 						KisChannelSP channel = loadChannel(child.toElement(), img);

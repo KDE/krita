@@ -577,9 +577,8 @@ bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 		layer -> mask() -> setImage(KisImageSP(this));
 
 	if (position == -1) {
-		KisLayerSP active = activeLayer();
-
-		position = active ? index(active) : 0;
+		// Add to bottom of layer stack
+		position = m_layers.size();
 	}
 
 	if (position == 0 && m_selection && m_selection != layer)

@@ -1,11 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Krayon
+Name=Krita
 Name[af]=krita
 Name[eo]=Krajono
 Name[is]=Vaxlitir
 Name[ko]=K크레용
-Name[pt_BR]=Krayon - Editor de imagens
+Name[pt_BR]=Krita - Editor de imagens
 Name[xx]=xx
 Exec=krita
 DocPath=krita/index.html

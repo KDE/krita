@@ -71,10 +71,6 @@ public:
 	Q_INT32 height() const;
 	virtual void setSpacing(Q_INT32) {}
 	virtual Q_INT32 spacing() const { return 1; }
-	void setOpacity(QUANTUM o) { m_opacity = o; }
-	QUANTUM opacity() const { return m_opacity; }
-	void setCompositeOp(CompositeOp op) { m_compositeOp = op; }
-	CompositeOp compositeOp() const { return m_compositeOp; }
 	virtual void setUseColorAsMask(bool) {}
 	virtual bool useColorAsMask() const { return false; }
 	virtual bool hasColor() const { return false; }
@@ -99,8 +95,6 @@ private:
 	bool m_valid;
 	Q_INT32 m_width;
 	Q_INT32 m_height;
-	QUANTUM m_opacity;
-	CompositeOp m_compositeOp;
 };
 
 #endif // KIS_RESOURCE_H_

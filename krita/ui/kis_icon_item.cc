@@ -135,38 +135,6 @@ void KisIconItem::setSpacing(int spacing) {
 	}
 }
 
-
-QUANTUM KisIconItem::opacity() const {
-	if ( m_resource && m_resource -> valid() ) {
-		return m_resource -> opacity();
-	}
-	else {
-		return OPACITY_OPAQUE;
-	}
-}
-
-void KisIconItem::setOpacity(QUANTUM opacity) {
-	if ( m_resource && m_resource -> valid() ) {
-		m_resource -> setOpacity(opacity);
-	}
-}
-
-int KisIconItem::compositeOp() const {
-	if ( m_resource && m_resource -> valid() ) {
-		return m_resource -> compositeOp();
-	}
-	else {
-		return COMPOSITE_OVER;
-	}
-	
-}
-
-void KisIconItem::setCompositeOp(int compositeOp) {
-	if ( m_resource && m_resource -> valid() ) {
-		m_resource -> setCompositeOp((CompositeOp)compositeOp);
-	}
-}
-
 bool KisIconItem::useColorAsMask() const {
 	if ( m_resource && m_resource -> valid() ) {
 		return m_resource -> useColorAsMask();

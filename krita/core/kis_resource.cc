@@ -23,8 +23,6 @@ KisResource::KisResource(const QString& filename)
 	m_filename = filename;
 	m_valid = false;
 	m_dirty = false;
-	m_opacity = OPACITY_OPAQUE;
-	m_compositeOp = COMPOSITE_OVER;
 }
 
 KisResource::~KisResource()

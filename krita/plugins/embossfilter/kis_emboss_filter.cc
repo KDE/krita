@@ -114,42 +114,49 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 
 void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d, KisProgressDisplayInterface *m_progress)
 {
-    //Progress info
-    /*m_cancelRequested = false;
-    m_progress -> setSubject(this, true, true);
-    emit notifyProgressStage(this,i18n("Applying emboss filter..."),0);*/
+        //Progress info
+	if ( m_progressEnabled ) {
+		m_cancelRequested = false;
+		m_progress -> setSubject(this, true, true);
+		emit notifyProgressStage(this,i18n("Applying emboss filter..."),0);
+	}
     
-    float Depth = d / 10.0;
-    int LineWidth = Width * 4;
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-
-    uchar *Bits = (uchar*) data;
-    int    i = 0, j = 0;
-    int    R = 0, G = 0, B = 0;
-    uchar  Gray = 0;
-
-    bool m_cancel = false; //make it compile...
-
-    for (int h = 0 ; !m_cancelRequested && (h < Height) ; ++h)
-       {
-       for (int w = 0 ; !m_cancelRequested && (w < Width) ; ++w)
-           {
-           i = h * LineWidth + 4 * w;
-           j = (h + Lim_Max (h, 1, Height)) * LineWidth + 4 * (w + Lim_Max (w, 1, Width));
-
-           R = abs ((int)((Bits[i+2] - Bits[j+2]) * Depth + 128));
-           G = abs ((int)((Bits[i+1] - Bits[j+1]) * Depth + 128));
-           B = abs ((int)((Bits[ i ] - Bits[ j ]) * Depth + 128));
-
-           Gray = LimitValues ((R + G + B) / 3);
-
-           Bits[i+2] = Gray;
-           Bits[i+1] = Gray;
-           Bits[ i ] = Gray;
-           }
-           emit notifyProgress(this, (int) (((double)h * 100.0) / Height));
-       }
-    emit notifyProgressDone(this);
+        float Depth = d / 10.0;
+        int LineWidth = Width * 4;
+        if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+        
+        uchar *Bits = (uchar*) data;
+        int    i = 0, j = 0;
+        int    R = 0, G = 0, B = 0;
+        uchar  Gray = 0;
+        
+        bool m_cancel = false; //make it compile...
+        
+        for (int h = 0 ; !m_cancelRequested && (h < Height) ; ++h)
+        {
+        for (int w = 0 ; !m_cancelRequested && (w < Width) ; ++w)
+                {
+                i = h * LineWidth + 4 * w;
+                j = (h + Lim_Max (h, 1, Height)) * LineWidth + 4 * (w + Lim_Max (w, 1, Width));
+        
+                R = abs ((int)((Bits[i+2] - Bits[j+2]) * Depth + 128));
+                G = abs ((int)((Bits[i+1] - Bits[j+1]) * Depth + 128));
+                B = abs ((int)((Bits[ i ] - Bits[ j ]) * Depth + 128));
+        
+                Gray = LimitValues ((R + G + B) / 3);
+        
+                Bits[i+2] = Gray;
+                Bits[i+1] = Gray;
+                Bits[ i ] = Gray;
+                }
+                if ( m_progressEnabled ) {
+			// Update de progress bar in dialog.
+			emit notifyProgress(this, (int) (((double)h * 100.0) / Height));
+		}
+        }
+        if ( m_progressEnabled ) {
+		emit notifyProgressDone(this);
+	}
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

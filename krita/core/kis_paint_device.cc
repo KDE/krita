@@ -32,6 +32,7 @@
 #include "kistile.h"
 #include "kispixeldata.h"
 #include "kis_painter.h"
+#include "kis_fill_painter.h"
 #include "kis_undo_adapter.h"
 #include "kis_iterators_quantum.h"
 #include "kis_iterators_pixel.h"
@@ -326,19 +327,19 @@ void KisPaintDevice::resize(Q_INT32 w, Q_INT32 h)
         KisTileMgrSP tm = new KisTileMgr(old, colorStrategy() -> depth(), w, h);
         Q_INT32 oldW = width();
         Q_INT32 oldH = height();
-        KisPainter gc;
+        KisFillPainter painter;
 
         setData(tm);
 
-        gc.begin(this);
+        painter.begin(this);
 
         if (oldW < w)
-                gc.eraseRect(oldW, 0, w, h);
+                painter.eraseRect(oldW, 0, w, h);
 
         if (oldH < h)
-                gc.eraseRect(0, oldH, w, h);
+                painter.eraseRect(0, oldH, w, h);
 
-        gc.end();
+        painter.end();
 }
 
 void KisPaintDevice::scale(double sx, double sy) 

@@ -35,6 +35,7 @@
 #include "kis_paint_device.h"
 #include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
+#include "kis_fill_painter.h"
 #include "kis_layer.h"
 #include "kis_background.h"
 #include "kis_channel.h"
@@ -819,12 +820,12 @@ void KisImage::flatten()
 	vKisLayerSP beforeLayers = m_layers;
 
 	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
-	KisPainter gc(dst.data());
-	gc.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
+	KisFillPainter painter(dst.data());
+	painter.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers = layers();
 	KisMerge<isVisible, All> visitor(this);
-	visitor(gc, mergeLayers);
+	visitor(painter, mergeLayers);
 	add(dst, -1);
 
 	notify();
@@ -840,12 +841,12 @@ void KisImage::mergeVisibleLayers()
 	vKisLayerSP beforeLayers = m_layers;
 
 	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
-	KisPainter gc(dst.data());
-	gc.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
+	KisFillPainter painter(dst.data());
+	painter.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers = layers();
 	KisMerge<isVisible, isVisible> visitor(this);
-	visitor(gc, mergeLayers);
+	visitor(painter, mergeLayers);
 
 	int insertIndex = -1;
 
@@ -868,12 +869,12 @@ void KisImage::mergeLinkedLayers()
 	vKisLayerSP beforeLayers = m_layers;
 
 	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
-	KisPainter gc(dst.data());
-	gc.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
+	KisFillPainter painter(dst.data());
+	painter.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers = layers();
 	KisMerge<isLinked, isLinked> visitor(this);
-	visitor(gc, mergeLayers);
+	visitor(painter, mergeLayers);
 
 	int insertIndex = -1;
 

@@ -79,13 +79,13 @@ public:
 
 
 	// XXX: convertToRGBA and convertFromRGBA must use LAB or XYZ; furthermore, they should
-	// use koColor for now, and littlecms later.
+	// use koColor for now, and littlecms later. XXX2: Now that we have toKoColor, these are deprecated
 
 	/** This function converts a pixel to RGBA */
-	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst) = 0;
+	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst) KDE_DEPRECATED = 0;
 
 	/** This function converts a pixel from RGBA */
-	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst) = 0;
+	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst) KDE_DEPRECATED = 0;
 	
 	virtual QImage convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const = 0;
 	virtual QImage convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const = 0;

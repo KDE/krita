@@ -24,6 +24,7 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
+#include "kis_fill_painter.h"
 #include "kis_floatingselection.h"
 #include "kis_undo_adapter.h"
 #include "kistile.h"
@@ -146,15 +147,15 @@ void KisFloatingSelection::move(Q_INT32 x, Q_INT32 y)
 	QRect rc = clip();
 
 	if (m_clearOnMove && m_firstMove && m_parent) {
-		KisPainter gc(m_parent);
+		KisFillPainter painter(m_parent);
 		KisUndoAdapter *adapter = image() -> undoAdapter();
 
 		adapter -> beginMacro(i18n("Move Selection"));
 		adapter -> addCommand(new KisResetFirstMoveCmd(this));
-		gc.beginTransaction("clear the parent's background from KisFloatingSelection::move");
-		gc.eraseRect(this -> x() - m_parent -> x(), this -> y() - m_parent -> y(), width(), height());
+		painter.beginTransaction("clear the parent's background from KisFloatingSelection::move");
+		painter.eraseRect(this -> x() - m_parent -> x(), this -> y() - m_parent -> y(), width(), height());
 		m_firstMove = false;
-		adapter -> addCommand(gc.endTransaction());
+		adapter -> addCommand(painter.endTransaction());
 		m_endMacroOnAnchor = true;
 	}
 

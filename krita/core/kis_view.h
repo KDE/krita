@@ -231,7 +231,7 @@ private:
 	void paintGuides();
 	void updateGuides();
 	void imgUpdateGUI();
-	void fillSelection(const KoColor& c, QUANTUM opacity);
+// 	void fillSelection(const KoColor& c, QUANTUM opacity);
 
 	void layerUpdateGUI(bool enable);
 	void paintView(const KisRect& rc);
@@ -257,8 +257,8 @@ private slots:
 
 	void clipboardDataChanged();
 	void duplicateCurrentImg();
-	void fillSelectionBg();
-	void fillSelectionFg();
+// 	void fillSelectionBg();
+// 	void fillSelectionFg();
 	void paste_into();
 	void popupTabBarMenu( const QPoint& );
 	void moveImage( unsigned, unsigned );
@@ -376,8 +376,8 @@ private:
 	KAction *m_layerTransform;
 	KAction *m_selectionCopy;
 	KAction *m_selectionCut;
-	KAction *m_selectionFillBg;
-	KAction *m_selectionFillFg;
+// 	KAction *m_selectionFillBg;
+// 	KAction *m_selectionFillFg;
 	KAction *m_selectionPaste;
 	KAction *m_selectionPasteInto;
 	KAction *m_selectionRm;

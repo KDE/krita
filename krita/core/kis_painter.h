@@ -137,19 +137,6 @@ public:
                     Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 
 
-
-        void eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h);
-        void eraseRect(const QRect& rc);
-
-	/**
-         * Fill a rectangle with a certain color
-	 */
-        void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c);
-        void fillRect(const QRect& rc, const KoColor& c);
-        void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity);
-        void fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity);
-
-
 	/**
 	 * Paint a line that connects the dots in points
 	 */
@@ -306,37 +293,6 @@ protected:
 	bool m_cancelRequested;
 	KisPaintDeviceSP m_dab;
 };
-
-
-inline
-void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c)
-{
-        fillRect(x, y, w, h, c, OPACITY_OPAQUE);
-}
-
-inline
-void KisPainter::fillRect(const QRect& rc, const KoColor& c)
-{
-        fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE);
-}
-
-inline
-void KisPainter::eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
-{
-        fillRect(x1, y1, w, h, KoColor::black(), OPACITY_TRANSPARENT);
-}
-
-inline
-void KisPainter::eraseRect(const QRect& rc)
-{
-        fillRect(rc, KoColor::black(), OPACITY_TRANSPARENT);
-}
-
-inline
-void KisPainter::fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity)
-{
-        fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
-}
 
 
 #endif // KIS_PAINTER_H_

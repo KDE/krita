@@ -25,7 +25,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_colorspace_registry.h"
-#include "kis_painter.h"
+#include "kis_fill_painter.h"
 
 // XXX: This needs to be a 8-bits one-channel color strategy that 
 // can compose with any other color strategy.
@@ -78,16 +78,14 @@ QImage KisSelection::maskImage() const
 
 void KisSelection::clear() 
 {
-	KisPainter gc(this);
-	gc.fillRect(0, 0, width(), height(), m_maskColor, MIN_SELECTED);
-	gc.end();
+	KisFillPainter painter(this);
+	painter.fillRect(0, 0, width(), height(), m_maskColor, MIN_SELECTED);
 }
 
 void KisSelection::clear(KoColor c) 
 {
-	KisPainter gc(this);
-	gc.fillRect(0, 0, width(), height(), c, MIN_SELECTED);
-	gc.end();
+	KisFillPainter painter(this);
+	painter.fillRect(0, 0, width(), height(), c, MIN_SELECTED);
 
 }
 

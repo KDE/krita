@@ -169,8 +169,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_selectionPaste = 0;
         m_selectionPasteInto = 0;
         m_selectionToNewLayer = 0;
-        m_selectionFillBg = 0;
-        m_selectionFillFg = 0;
+//         m_selectionFillBg = 0;
+//         m_selectionFillFg = 0;
         m_selectionRm = 0;
         m_selectionSelectAll = 0;
         m_selectionSelectNone = 0;
@@ -520,10 +520,10 @@ void KisView::setupActions()
         m_selectionToNewLayer = new KAction(i18n("Copy Selection to New Layer"), "copy_selection_to_new_layer", 0,  this, SLOT(copySelectionToNewLayer()), actionCollection(), "copy to layer");
         m_selectionSelectAll = KStdAction::selectAll(this, SLOT(selectAll()), actionCollection(), "select_all");
         m_selectionSelectNone = KStdAction::deselect(this, SLOT(unSelectAll()), actionCollection(), "select_none");
-        m_selectionFillFg = new KAction(i18n("Fill with Foreground Color"), 0, this, SLOT(fillSelectionFg()), actionCollection(), "fill_fgcolor");
-        m_selectionFillBg = new KAction(i18n("Fill with Background Color"), 0, this,
-                                        SLOT(fillSelectionBg()), actionCollection(),
-                                        "fill_bgcolor");
+//         m_selectionFillFg = new KAction(i18n("Fill with Foreground Color"), 0, this, SLOT(fillSelectionFg()), actionCollection(), "fill_fgcolor");
+//         m_selectionFillBg = new KAction(i18n("Fill with Background Color"), 0, this,
+//                                         SLOT(fillSelectionBg()), actionCollection(),
+//                                         "fill_bgcolor");
 
         // import/export actions
         m_imgImport = new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
@@ -980,8 +980,8 @@ void KisView::selectionUpdateGUI(bool enable)
         m_selectionPaste -> setEnabled(img != 0 && m_clipboardHasImage);
         m_selectionPasteInto -> setEnabled(img != 0 && m_clipboardHasImage);
         m_selectionRm -> setEnabled(enable);
-        m_selectionFillBg -> setEnabled(enable);
-        m_selectionFillFg -> setEnabled(enable);
+//         m_selectionFillBg -> setEnabled(enable);
+//         m_selectionFillFg -> setEnabled(enable);
         m_selectionSelectAll -> setEnabled(img != 0);
         m_selectionSelectNone -> setEnabled(enable);
 }
@@ -1128,40 +1128,40 @@ void KisView::updateTabBar()
                 m_tabBar->setActiveTab(currentImgName());
 }
 
-void KisView::fillSelectionBg()
-{
-        fillSelection(bgColor(), OPACITY_OPAQUE);
-}
+// void KisView::fillSelectionBg()
+// {
+//         fillSelection(bgColor(), OPACITY_OPAQUE);
+// }
 
-void KisView::fillSelectionFg()
-{
-        fillSelection(fgColor(), OPACITY_OPAQUE);
-}
+// void KisView::fillSelectionFg()
+// {
+//         fillSelection(fgColor(), OPACITY_OPAQUE);
+// }
 
-void KisView::fillSelection(const KoColor& /*c*/, QUANTUM /*opacity*/)
-{
-        KisImageSP img = currentImg();
+// void KisView::fillSelection(const KoColor& /*c*/, QUANTUM /*opacity*/)
+// {
+//         KisImageSP img = currentImg();
 
-        if (img) {
-                KisSelectionSP selection = img -> activeSelection();
+//         if (img) {
+//                 KisSelectionSP selection = img -> activeSelection();
 
-		// For all selected pixels set pixels to color.
+// 		// For all selected pixels set pixels to color.
 
-//                 if (selection) {
-//                         QRect rc = selection -> bounds();
-//                         QRect ur = rc;
-//                         KisPainter gc(selection.data());
+// //                 if (selection) {
+// //                         QRect rc = selection -> bounds();
+// //                         QRect ur = rc;
+// //                         KisPainter gc(selection.data());
 
-//                         rc.moveBy(-rc.x(), -rc.y());
-//                         gc.beginTransaction(i18n("Fill Selection."));
-//                         gc.fillRect(rc, c, opacity);
-//                         m_adapter -> addCommand(gc.endTransaction());
-//                         gc.end();
-//                         m_doc -> setModified(true);
-//                         updateCanvas(ur);
-//                 }
-        }
-}
+// //                         rc.moveBy(-rc.x(), -rc.y());
+// //                         gc.beginTransaction(i18n("Fill Selection."));
+// //                         gc.fillRect(rc, c, opacity);
+// //                         m_adapter -> addCommand(gc.endTransaction());
+// //                         gc.end();
+// //                         m_doc -> setModified(true);
+// //                         updateCanvas(ur);
+// //                 }
+//         }
+// }
 
 void KisView::selectAll()
 {

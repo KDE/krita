@@ -65,6 +65,7 @@
 #include "kis_layer.h"
 #include "kis_nameserver.h"
 #include "kis_painter.h"
+#include "kis_fill_painter.h"
 #include "kis_mask.h"
 #include "kis_floatingselection.h"
 #include "kis_command.h"
@@ -1071,14 +1072,15 @@ bool KisDoc::slotNewImage()
 		KoColor c = dlg.backgroundColor();
 		KisImageSP img;
 		KisLayerSP layer;
-		KisPainter gc;
+		KisFillPainter painter;
 
 		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), KisColorSpaceRegistry::singleton()->colorSpace(dlg.colorStrategyName()), nextImageName());
 		img -> setResolution(100.0, 100.0); // XXX needs to be added to dialog
 		layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
-		gc.begin(layer.data());
-		gc.fillRect(0, 0, layer -> width(), layer -> height(), c, opacity);
-		gc.end();
+
+		painter.begin(layer.data());
+		painter.fillRect(0, 0, layer -> width(), layer -> height(), c, opacity);
+		painter.end();
 		img -> add(layer, -1);
 		addImage(img);
 		cfg.defImgWidth(dlg.imgWidth());
@@ -1303,10 +1305,10 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 			layer = img -> activate(layer);
 
 			if (layer) {
-				KisPainter gc(layer.data());
+				KisFillPainter painter(layer.data());
+				painter.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
+				painter.end();
 
-				gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
-				gc.end();
 				img -> top(layer);
 
 				if (m_undo)
@@ -1341,10 +1343,9 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img,
 			layer = img -> activate(layer);
 
 			if (layer) {
-				KisPainter gc(layer.data());
-
-				gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
-				gc.end();
+				KisFillPainter painter(layer.data());
+				painter.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
+				painter.end();
 				img -> top(layer);
 
 				if (m_undo)

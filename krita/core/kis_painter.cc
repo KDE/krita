@@ -663,7 +663,7 @@ void KisPainter::paintAt(const QPoint & pos,
 	Q_INT32 calibratedPressure = pressure / 2;
 
 	// This is going to be sloooooow!
-	if (m_pressure != pressure || m_brush -> brushType() == PIPE_MASK || m_brush -> brushType() == PIPE_IMAGE) {
+	if (m_pressure != pressure || m_brush -> brushType() == PIPE_MASK || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
 		KisAlphaMask * mask = m_brush -> mask(calibratedPressure);
 		m_brushWidth = mask -> width();
 		m_brushHeight = mask -> height();

@@ -44,8 +44,9 @@ kritadefaulttools_la_SOURCES = \
 	kis_tool_select_eraser.cc \
 	kis_tool_pan.cc \
 	kis_tool_text.cc \
-	kis_tool_gradient.cc
-
+	kis_tool_gradient.cc \
+        kis_tool_star.cc
+        
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = kritadefaulttools.la
 
@@ -75,7 +76,8 @@ noinst_HEADERS = \
 	kis_tool_pan.h \
 	kis_tool_select_elliptical.h \
 	kis_tool_eraser.h \
-	kis_tool_select_eraser.h
+	kis_tool_select_eraser.h \
+        kis_tool_star.h
 
 
 kritadefaulttools_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

@@ -50,7 +50,7 @@ public:
 	virtual DCOPObject* dcopObject();
 	virtual bool initDoc();
 	virtual bool isEmpty() const;
-	virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, KoStore* );
+	virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
 	virtual bool loadXML(QIODevice *, const QDomDocument& doc);
 	virtual QCString mimeType() const;
 	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);

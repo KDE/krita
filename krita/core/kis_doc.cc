@@ -462,7 +462,7 @@ QDomDocument KisDoc::saveXML()
 	return doc;
 }
 
-bool KisDoc::loadOasis( const QDomDocument&, KoOasisStyles&, KoStore* )
+bool KisDoc::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* )
 {
 	//todo
 	return true;

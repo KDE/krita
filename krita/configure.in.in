@@ -1,12 +1,12 @@
 dnl First check for ImageMagick...
 
 KDE_FIND_PATH(Magick++-config, MAGICK_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
-  AC_MSG_WARN([Could not find ImageMagick anywhere, check http://www.imagemagick.org/ for ImageMagick >= 5.4.4.])
+  AC_MSG_WARN([Could not find ImageMagick anywhere, check http://www.imagemagick.org/ for ImageMagick >= 5.5.2.])
 ])
 
 if test -n "$MAGICK_CONFIG"; then
   vers=`$MAGICK_CONFIG --version 2>/dev/null | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
-  if test -n "$vers" && test "$vers" -ge 5004004
+  if test -n "$vers" && test "$vers" -ge 5005002
   then
      LIBMAGICK_LIBS="`$MAGICK_CONFIG --libs`"
      LIBMAGICK_RPATH=
@@ -20,7 +20,7 @@ if test -n "$MAGICK_CONFIG"; then
      LIBMAGICK_RPATH=`echo $LIBMAGICK_RPATH | sed -e "s/-L/-R/g"`
      LIBMAGICK_CPPFLAGS="`$MAGICK_CONFIG --cppflags`"
   else
-     AC_MSG_WARN([You need at least ImageMagick 5.4.4])
+     AC_MSG_WARN([You need at least ImageMagick 5.5.2])
   fi
 fi
 

@@ -38,7 +38,7 @@ public:
 
 	void pop_back()
 	{
-		if (!super::back()) {
+		if (!superempty()) {
 			super::back() = 0;
 			super::pop_back();
 		}

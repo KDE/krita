@@ -130,7 +130,6 @@ void KisResourceServer::pipebrushLoaded(KisResource *br)
 	if (br && br -> valid()) {
 		m_pipebrushes.append(br);
 		Q_ASSERT(dynamic_cast<KisImagePipeBrush*>(br));
-		kdDebug() << "loaded pipebrush: " << br -> name() << "\n";
 		emit loadedpipeBrush(static_cast<KisImagePipeBrush*>(br));
 	} else {
 		delete br;

@@ -127,7 +127,6 @@ void KisResourceMediator::resourceServerLoadedBrush(KisBrush *resource)
 void KisResourceMediator::resourceServerLoadedPipeBrush(KisImagePipeBrush *resource)
 {
 	if (resource && resource -> valid()) {
-		kdDebug() << "Mediator loaded pipe brush" << resource -> name() << "\n";
 		KisIconItem *item = new KisIconItem(resource);
 
 		m_items[resource] = item;

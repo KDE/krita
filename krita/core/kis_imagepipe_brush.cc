@@ -161,14 +161,11 @@ void KisImagePipeBrush::ioResult(KIO::Job * /*job*/)
 	
 	i++; // Skip past the second newline
 
-	//kdDebug() << "Pipe brush: " << name() << ", num of brushes: " << m_numOfBrushes << ", parasite: " << m_parasite << "\n";
-	
  	Q_UINT32 numOfBrushes = 0;
   	while (numOfBrushes < m_numOfBrushes && i < m_data.size()){
 		KisBrush * brush = new KisBrush(name() + "_" + numOfBrushes,
 						m_data,
 						i);
-		//kdDebug() << "Loaded: " << brush -> name() << "\n";
 		m_brushes.append(brush);
 		
  		numOfBrushes++;

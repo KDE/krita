@@ -30,7 +30,8 @@ enum KisImageBuilder_Result {
 	KisImageBuilder_RESULT_BUSY = 150,
 	KisImageBuilder_RESULT_NO_URI = 200,
 	KisImageBuilder_RESULT_UNSUPPORTED = 300,
-	KisImageBuilder_RESULT_INTR = 400
+	KisImageBuilder_RESULT_INTR = 400,
+	KisImageBuilder_RESULT_PATH = 500
 };
 
 enum KisImageBuilder_Step {

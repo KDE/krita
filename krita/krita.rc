@@ -35,6 +35,7 @@
   <Action name="zoom_out"/>
   <Separator/>
   <Action name="refresh_canvas"/>
+  <Action name="paint_offset"/>
  </Menu>
 
 <Menu name="Image"><text>&amp;Image</text>
@@ -146,7 +147,6 @@
   <Action name="dialog_gradient"/>    
   <Action name="preferences"/>    
   <Action name="save_options"/>
-  <Action name="paint_offset"/>
   <Separator/>
   <Action name="show_sidebar"/>  
   <Action name="float_sidebar"/>

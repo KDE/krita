@@ -49,12 +49,12 @@ public:
 public:
 	// Implement KisRenderInterface
 	virtual Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix) const;
+	virtual void validate(Q_INT32 tileno);
+	virtual KisTileMgrSP tiles() const;
 	virtual void invalidate(Q_INT32 tileno);
 	virtual void invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	virtual void invalidate(const QRect& rc);
 	virtual void invalidate();
-	virtual QPixmap pixmap(Q_INT32);
-	virtual QPixmap recreatePixmap(Q_INT32);
 	virtual bool write(KoStore *store);
 	virtual bool read(KoStore *store);
 

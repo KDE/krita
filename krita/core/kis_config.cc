@@ -15,14 +15,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <limits.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include "kis_global.h"
 #include "kis_config.h"
 
 namespace {
-	const Q_INT32 IMG_WIDTH_MAX = QUANTUM_MAX;
-	const Q_INT32 IMG_HEIGHT_MAX = QUANTUM_MAX;
+	const Q_INT32 IMG_WIDTH_MAX = USHRT_MAX;
+	const Q_INT32 IMG_HEIGHT_MAX = USHRT_MAX;
 	const Q_INT32 IMG_DEFAULT_WIDTH = 512;
 	const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
 }

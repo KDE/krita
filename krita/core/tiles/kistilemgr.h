@@ -56,12 +56,10 @@ public:
 
 	KisTileSP tile(Q_INT32 xpix, Q_INT32 ypix, Q_INT32 mode);
 	KisTileSP tile(Q_INT32 tilenum, Q_INT32 mode);
-	void tileAsync(Q_INT32 xpix, Q_INT32 ypix);
 
 	void tileMap(Q_INT32 xpix, Q_INT32 ypix, KisTileSP src);
 	void tileMap(Q_INT32 tilenum, KisTileSP src);
 
-	bool completetlyValid() const;
 	KisTileSP invalidate(Q_INT32 tileno);
 	KisTileSP invalidate(Q_INT32 xpix, Q_INT32 ypix);
 	KisTileSP invalidate(KisTileSP tile, Q_INT32 xpix, Q_INT32 ypix);
@@ -78,10 +76,12 @@ public:
 	void tileCoord(const KisTileSP& tile, QPoint& coord);
 	void tileCoord(const KisTileSP& tile, Q_INT32 *x, Q_INT32 *y);
 
-	void mapOver(KisTileSP dst, KisTileSP src);
-
 	KisPixelDataSP pixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q_INT32 mode);
 	void releasePixelData(KisPixelDataSP pd);
+	void readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
+	void readPixelData(KisPixelDataSP pd);
+	void writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
+	void writePixelData(KisPixelDataSP pd);
 	Q_INT32 tileNum(Q_UINT32 xpix, Q_UINT32 ypix) const;
 
 private:
@@ -89,12 +89,6 @@ private:
 	void allocate(Q_INT32 ntiles);
 	void duplicate(Q_INT32 ntiles, KisTileMgr *tm);
 	KisTileSP invalidateTile(KisTileSP tile, Q_INT32 tilenum);
-
-	void readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
-	void readPixelData(KisPixelDataSP pd);
-
-	void writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
-	void writePixelData(KisPixelDataSP pd);
 
 private:
 	Q_UINT32 m_width;

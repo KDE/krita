@@ -71,6 +71,8 @@
 #include "builder/kis_builder_subject.h"
 #include "builder/kis_builder_monitor.h"
 #include "builder/kis_image_magick_converter.h"
+#include "strategy/kis_strategy_colorspace.h"
+#include "strategy/kis_strategy_colorspace_rgb.h"
 #include "tiles/kistilemgr.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
@@ -303,7 +305,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_dcop = 0;
 	setInstance(KisFactory::global(), true);
 	m_cmdHistory = 0;
-	QPixmap::setDefaultOptimization(QPixmap::BestOptim);
+//	QPixmap::setDefaultOptimization(QPixmap::BestOptim);
 	m_nserver = 0;
 	m_pushedClipboard = false;
 	m_currentMacro = 0;
@@ -338,14 +340,13 @@ DCOPObject *KisDoc::dcopObject()
 bool KisDoc::initDoc()
 {
 	bool ok = false;
-	QString templ;
+	QString file;
 	KoTemplateChooseDia::ReturnType ret;
 
 	if (!init())
 		return false;
 
-	ret = KoTemplateChooseDia::choose(KisFactory::global(), templ, "application/x-kra", "*.kra",
-			i18n("Krita"), KoTemplateChooseDia::NoTemplates, "krita_template");
+	ret = KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE, "Krita", "*.kra", KoTemplateChooseDia::NoTemplates);
 
 	if (ret == KoTemplateChooseDia::Template) {
 		KisConfig cfg;
@@ -359,7 +360,7 @@ bool KisDoc::initDoc()
 	} else if (ret == KoTemplateChooseDia::File) {
 		KURL url;
 
-		url.setPath(templ);
+		url.setPath(file);
 		ok = openURL(url);
 	} else if (ret == KoTemplateChooseDia::Empty) {
 		if ((ok = slotNewImage()))
@@ -387,7 +388,16 @@ bool KisDoc::init()
 	connect(m_cmdHistory, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
 	m_undo = true;
 	m_nserver = new KisNameServer(i18n("Image %1"), 0);
+	setupColorspaces();
 	return true;
+}
+
+void KisDoc::setupColorspaces()
+{
+	KisStrategyColorSpaceSP p = new KisStrategyColorSpaceRGB;
+
+	m_colorspaces[IMAGE_TYPE_RGB] = p;
+	m_colorspaces[IMAGE_TYPE_RGBA] = p;
 }
 
 QDomDocument KisDoc::saveXML()
@@ -956,7 +966,7 @@ void KisDoc::removeImage(const QString& name)
 bool KisDoc::slotNewImage()
 {
 	KisConfig cfg;
-	KisDlgCreateImg dlg(cfg.maxImgWidth() , cfg.defImgWidth(), cfg.maxImgHeight(), cfg.defImgHeight());
+	KisDlgCreateImg dlg(cfg.maxImgWidth(), cfg.defImgWidth(), cfg.maxImgHeight(), cfg.defImgHeight());
 
 	if (dlg.exec() == QDialog::Accepted) {
 		QString name;
@@ -988,17 +998,27 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 
 void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
 {
+	Q_INT32 x;
+	Q_INT32 y;
+	Q_INT32 x1;
+	Q_INT32 y1;
+	Q_INT32 x2;
+	Q_INT32 y2;
+	Q_INT32 tileno;
+	KisSelectionSP selection;
+	KisStrategyColorSpaceSP colorstate;
+
 	if (!m_projection)
 		m_projection = m_images[0];
 
 	if (m_projection) {
-		QPixmap pixmap;
-		Q_INT32 x1 = rect.x();
-		Q_INT32 y1 = rect.y();
-		Q_INT32 x2 = x1 + rect.width() - 1;
-		Q_INT32 y2 = y1 + rect.height() - 1;
-		Q_INT32 tileno;
-		KisSelectionSP selection;
+		if (!(colorstate = m_colorspaces[m_projection -> nativeImgType()]))
+			return;
+		
+		x1 = CLAMP(rect.x(), 0, m_projection -> width());
+		y1 = CLAMP(rect.y(), 0, m_projection -> height());
+		x2 = CLAMP(rect.x() + rect.width(), 0, m_projection -> width());
+		y2 = CLAMP(rect.y() + rect.height(), 0, m_projection -> height());
 
 		if (transparent)
 			painter.eraseRect(rect);
@@ -1006,26 +1026,20 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 		if (zoomX != 1.0 || zoomY != 1.0)
 			painter.scale(zoomX, zoomY);
 
-		for (Q_INT32 y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
-			for (Q_INT32 x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
+		for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
+			for (x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
 				if ((tileno = m_projection -> tileNum(x, y)) < 0)
 					continue;
 
-				pixmap = m_projection -> pixmap(tileno);
-
-				if (!pixmap.isNull()) {
-					painter.drawPixmap(x, y, pixmap, 
-							(x % TILE_WIDTH),
-							(y % TILE_HEIGHT),
-							TILE_WIDTH - (x % TILE_WIDTH),
-							TILE_HEIGHT - (y % TILE_HEIGHT));
-				}
-			}	
+				m_projection -> validate(tileno);
+			}
 		}
 
-		selection = m_projection -> selection();
+		for (y = y1; y < y2; y += RENDER_HEIGHT)
+			for (x = x1; x < x2; x += RENDER_WIDTH)
+				colorstate -> render(m_projection, painter, x, y, QMIN(x2 - x, RENDER_WIDTH), QMIN(y2 - y, RENDER_HEIGHT));
 
-		if (selection) {
+		if ((selection = m_projection -> selection())) {
 			QPen pen(Qt::DotLine);
 			QRect rc = selection -> bounds();
 			QRect clip = selection -> clip();

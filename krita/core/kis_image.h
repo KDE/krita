@@ -21,8 +21,8 @@
 #include <qbitarray.h>
 #include <qobject.h>
 #include <qstring.h>
+#include <qimage.h>
 #include <qvaluevector.h>
-#include <kpixmapio.h>
 #include <kurl.h>
 #include <koColor.h>
 #include "kis_global.h"
@@ -36,9 +36,6 @@ class KisPainter;
 
 class KisImage : public QObject, public KisRenderInterface {
 	Q_OBJECT
-	typedef QValueVector<QPixmap> vQPixmap;
-	typedef vQPixmap::iterator vQPixmap_it;
-	typedef vQPixmap::const_iterator vQPixmap_cit;
 
 public:
 	KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
@@ -48,12 +45,12 @@ public:
 public:
 	// Implement KisRenderInterface
 	virtual Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix) const;
+	virtual void validate(Q_INT32 tileno);
 	virtual void invalidate(Q_INT32 tileno);
 	virtual void invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	virtual void invalidate(const QRect& rc);
 	virtual void invalidate();
-	virtual QPixmap pixmap(Q_INT32 tileNo);
-	virtual QPixmap recreatePixmap(Q_INT32 tileNo);
+	virtual KisTileMgrSP tiles() const;
 
 public:
 	QString name() const;
@@ -158,7 +155,6 @@ private:
 	void expand(KisPaintDeviceSP dev);
 	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
-	void renderProjection(QPixmap& dst, KisTileSP src);
 
 private:
 	KCommandHistory *m_undoHistory;
@@ -177,7 +173,6 @@ private:
 	bool m_dirty;
 	KisTileMgrSP m_shadow;
 	KisBackgroundSP m_bkg;
-	vQPixmap m_projectionPixmaps;
 	KisLayerSP m_projection;
 	vKisLayerSP m_layers;
 	vKisChannelSP m_channels;
@@ -193,7 +188,6 @@ private:
 	bool m_maskInverted;
 	KoColor m_maskClr;
 	KisNameServer *m_nserver;
-	KPixmapIO m_pixmapIO;
 	KisDoc *m_doc;
 };
 

@@ -18,8 +18,6 @@
 #if !defined KISTILE_H_
 #define KISTILE_H_
 
-#include <qcstring.h>
-#include <qimage.h>
 #include <qglobal.h>
 #include <qmutex.h>
 #include <qvaluevector.h>
@@ -70,7 +68,6 @@ public:
 	void shareRelease();
 	Q_INT32 writeCount() const;
 	void writeRef();
-	QImage convertToImage();
 	void duplicate(KisTile *tile);
 
 private:
@@ -93,7 +90,6 @@ private:
 	Q_INT32 m_nref;
 	Q_INT32 m_nshare;
 	Q_INT32 m_nwrite;
-	QImage m_img;
 };
 
 inline

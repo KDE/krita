@@ -432,7 +432,6 @@ void KisView::setupActions()
 	m_sidebarToggle = new KToggleAction(i18n("Show/Hide Sidebar"), "ok", 0, this, SLOT(showSidebar()), actionCollection(), "show_sidebar");
 	m_floatsidebarToggle = new KToggleAction(i18n("Dock/Undock Sidebar"), "attach", 0, this, SLOT(floatSidebar()), actionCollection(), "float_sidebar");
 	m_lsidebarToggle = new KToggleAction(i18n("Left/Right Sidebar"), "view_right", 0, this, SLOT(placeSidebarLeft()), actionCollection(), "left_sidebar");
-	(void)KStdAction::saveOptions(this, SLOT(saveOptions()), actionCollection(), "save_options");
 	KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
 	// crayon box toolbar actions - these will be used only
@@ -1562,15 +1561,6 @@ void KisView::placeSidebarLeft()
 {
 	resizeEvent(0);
 }
-
-/*
-    saveOptions - here we need to write entries to a congig
-    file.
-*/
-void KisView::saveOptions()
-{
-}
-
 
 /*
     preferences - the main Krayon preferences dialog - modeled

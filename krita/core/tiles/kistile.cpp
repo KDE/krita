@@ -45,7 +45,6 @@ KisTile::KisTile(KisTile& rhs) : super(rhs)
 			rhs.lock();
 			memcpy(m_data, rhs.m_data, m_width * m_height * m_depth * sizeof(QUANTUM));
 			rhs.release();
-			m_img = QImage(width(), height(), 32);
 		}
 	}
 }
@@ -108,10 +107,8 @@ void KisTile::release()
 
 void KisTile::allocate()
 {
-	if (m_data == 0) {
+	if (m_data == 0)
 		m_data = new QUANTUM[size()];
-		m_img = QImage(width(), height(), 32);
-	}
 }
 
 QUANTUM *KisTile::data(Q_INT32 xoff, Q_INT32 yoff)
@@ -221,31 +218,7 @@ void KisTile::writeRef()
 	m_nwrite++;
 }
 
-QImage KisTile::convertToImage()
-{
-	QUANTUM *pixel = data();
-
-	Q_ASSERT(m_img.width() == width());
-	Q_ASSERT(m_img.height() == height());
-
-	// TODO : Get convertToImage out of here...
-	// TODO : use some kind of proxy to access
-	// TODO : color info.  Also this proxy would support
-	// TODO : all image formats.  Only RGB/RGBA is supported
-	// TODO : here.
-	for (Q_INT32 j = 0; j < height(); j++) {
-		QRgb *dst = reinterpret_cast<QRgb*>(m_img.scanLine(j));
-
-		for (Q_INT32 i = 0; i < width(); i++) {
-			*dst++ = qRgb(downscale(pixel[PIXEL_RED]), downscale(pixel[PIXEL_GREEN]), downscale(pixel[PIXEL_BLUE]));
-			pixel += depth();
-		}
-	}
-
-	return m_img;
-}
-
-void KisTile::duplicate(KisTile *tile) 
+void KisTile::duplicate(KisTile *tile)
 {
 	tile -> lock();
 

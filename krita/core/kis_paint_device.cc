@@ -164,6 +164,10 @@ Q_INT32 KisPaintDevice::tileNum(Q_INT32, Q_INT32) const
 	return 0;
 }
 
+void KisPaintDevice::validate(Q_INT32)
+{
+}
+
 void KisPaintDevice::invalidate(Q_INT32 tileno)
 {
 	data() -> invalidate(tileno);
@@ -191,16 +195,6 @@ void KisPaintDevice::invalidate(const QRect& rc)
 void KisPaintDevice::invalidate()
 {
 	invalidate(0, 0, width(), height());
-}
-
-QPixmap KisPaintDevice::pixmap(Q_INT32)
-{
-	return QPixmap();
-}
-
-QPixmap KisPaintDevice::recreatePixmap(Q_INT32)
-{
-	return QPixmap();
 }
 
 void KisPaintDevice::configure(KisImageSP image, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
@@ -428,7 +422,6 @@ void KisPaintDevice::visible(bool v)
 	if (m_visible != v) {
 		m_visible = v;
 		emit visibilityChanged(this);
-		update();
 	}
 }
 
@@ -722,6 +715,11 @@ bool KisPaintDevice::read(KoStore *store)
 	}
 
 	return true;
+}
+
+KisTileMgrSP KisPaintDevice::tiles() const
+{
+	return m_tiles;
 }
 
 #include "kis_paint_device.moc"

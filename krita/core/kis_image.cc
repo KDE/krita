@@ -24,7 +24,6 @@
 #include <kcommand.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kpixmapio.h>
 #include "KIsImageIface.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
@@ -151,7 +150,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 			m_shadow = new KisTileMgr(*rhs.m_shadow);
 
 		m_bkg = new KisBackground(this, m_width, m_height);
-		m_projectionPixmaps.resize(m_ntileCols * m_ntileRows);
 		m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
 		m_layers.reserve(rhs.m_layers.size());
 
@@ -239,7 +237,6 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgTyp
 	m_undoHistory = 0;
 	m_ntileCols = (width + TILE_WIDTH - 1) / TILE_WIDTH;
 	m_ntileRows = (height + TILE_HEIGHT - 1) / TILE_HEIGHT;
-	m_projectionPixmaps.resize(m_ntileCols * m_ntileRows);
 }
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h)
@@ -251,7 +248,6 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 	m_height = h;
 	m_projection = new KisLayer(this, m_width, m_height, "image projection", OPACITY_OPAQUE);
 	m_bkg = new KisBackground(this, m_width, m_height);
-	m_projectionPixmaps.clear();
 }
 
 void KisImage::resize(const QRect& rc)
@@ -1005,62 +1001,47 @@ void KisImage::invalidate()
 	m_projection -> invalidate();
 }
 
-QPixmap KisImage::pixmap(Q_INT32 tileNo)
-{
-	KisTileMgrSP tm = m_projection -> data();
-	KisTileSP src;
-
-	Q_ASSERT(tm);
-	src = tm -> tile(tileNo, TILEMODE_READ);
-
-	if (src && src -> valid())
-		return m_projectionPixmaps[tileNo];
-
-	return m_projectionPixmaps[tileNo] = recreatePixmap(tileNo);
-}
-
-QPixmap KisImage::recreatePixmap(Q_INT32 tileNo)
+void KisImage::validate(Q_INT32 tileno)
 {
 	KisTileMgrSP tm = m_projection -> data();
 	KisTileSP dst;
 	KisPainter gc;
 	QPoint pt;
+	QPixmap pix;
 
 	Q_ASSERT(tm);
 
-	if (tileNo < 0)
-		return QPixmap();
+	if (tileno < 0)
+		return;
 
-	if (static_cast<Q_UINT32>(tileNo) >= m_projectionPixmaps.size()) {
+	if (tileno >= (m_ntileCols * m_ntileRows)) { 
 		m_ntileCols = (width() + TILE_WIDTH - 1) / TILE_WIDTH;
 		m_ntileRows = (height() + TILE_HEIGHT - 1) / TILE_HEIGHT;
-		m_projectionPixmaps.resize(m_ntileCols * m_ntileRows);
 
-		if (static_cast<Q_UINT32>(tileNo) >= m_projectionPixmaps.size())
-			return QPixmap();
+		if (tileno >= (m_ntileCols * m_ntileRows))
+			return;
 	}
 
-	dst = tm -> tile(tileNo, TILEMODE_WRITE);
+	dst = tm -> tile(tileno, TILEMODE_WRITE);
 
-	if (dst -> valid())
-		return m_projectionPixmaps[tileNo];
-
+	if (!dst || dst -> valid())
+		return;
+	
 	gc.begin(m_projection.data());
 	tm -> tileCoord(dst, pt);
 	gc.bitBlt(pt.x(), pt.y(), COMPOSITE_COPY, m_bkg.data(), pt.x(), pt.y(), dst -> width(), dst -> height());
 
-	KisFlatten<flattenAllVisible> visitor(pt.x(), pt.y(), dst -> width(), dst -> height());
+	if (!m_layers.empty()) {
+		KisFlatten<flattenAllVisible> visitor(pt.x(), pt.y(), dst -> width(), dst -> height());
 
-	visitor(gc, m_layers);
+		visitor(gc, m_layers);
 
-	if (m_selection)
-		visitor(gc, m_selection);
+		if (m_selection)
+			visitor(gc, m_selection);
+	}
 
 	gc.end();
-	renderProjection(m_projectionPixmaps[tileNo], dst);
-	// TODO Draw the selection outline
 	dst -> valid(true);
-	return m_projectionPixmaps[tileNo];
 }
 
 void KisImage::setSelection(KisSelectionSP selection)
@@ -1118,26 +1099,6 @@ void KisImage::expand(KisPaintDeviceSP dev)
 	}
 }
 
-void KisImage::renderProjection(QPixmap& dst, KisTileSP src)
-{
-	if (!src)
-		return;
-
-	if (dst.width() < src -> width() || dst.height() < src -> height())
-		dst.resize(src -> width(), src -> height());
-
-	if (src) {
-		QImage image;
-
-		src -> lock();
-		image = src -> convertToImage();
-		src -> release();
-
-		if (!image.isNull())
-			dst = m_pixmapIO.convertToPixmap(image);
-	}
-}
-
 void KisImage::notify()
 {
 	invalidate(0, 0, width(), height());
@@ -1164,6 +1125,11 @@ QRect KisImage::bounds() const
 KisDoc* KisImage::document() const
 {
 	return m_doc;
+}
+
+KisTileMgrSP KisImage::tiles() const
+{
+	return m_projection -> data();
 }
 
 #include "kis_image.moc"

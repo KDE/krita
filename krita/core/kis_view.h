@@ -127,7 +127,6 @@ public slots:
 	void tool_properties();
 
 	// settings action slots
-	void saveOptions();
 	void preferences();
 
 protected:

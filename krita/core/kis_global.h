@@ -47,7 +47,7 @@
  * on the edge of an canvas are exempt from
  * this rule.
  */
-const int TILE_SIZE = 128;
+const int TILE_SIZE = 64;
 
 /**
  * Default width of a tile.
@@ -62,13 +62,15 @@ const int TILE_HEIGHT = TILE_SIZE;
 /**
  * Size of a quantum
  */
-typedef Q_UINT16 QUANTUM;
+typedef Q_UINT8 QUANTUM;
 
-const QUANTUM QUANTUM_MAX = USHRT_MAX;
+const QUANTUM QUANTUM_MAX = UCHAR_MAX;
 const QUANTUM OPACITY_TRANSPARENT = 0;
 const QUANTUM OPACITY_OPAQUE = QUANTUM_MAX;
 const QUANTUM MAXCHANNELS = 5;
 const Q_INT32 IMG_DEFAULT_DEPTH = 4;
+const Q_INT32 RENDER_HEIGHT = TILE_SIZE * 4;
+const Q_INT32 RENDER_WIDTH = TILE_SIZE * 4;
 
 enum CompositeOp {
 	COMPOSITE_UNDEF,
@@ -123,9 +125,9 @@ const CHANNELTYPE ALPHACHANNEL = 5;
 const PIXELTYPE PIXEL_UNDEF = 255;
 const PIXELTYPE PIXEL_GRAY = 0;
 const PIXELTYPE PIXEL_GRAY_ALPHA = 1;
-const PIXELTYPE PIXEL_RED = 0;
+const PIXELTYPE PIXEL_RED = 2;
 const PIXELTYPE PIXEL_GREEN = 1;
-const PIXELTYPE PIXEL_BLUE = 2;
+const PIXELTYPE PIXEL_BLUE = 0;
 const PIXELTYPE PIXEL_ALPHA = 3;
 const PIXELTYPE PIXEL_CYAN = 0;
 const PIXELTYPE PIXEL_MAGENTA = 1;
@@ -137,8 +139,8 @@ const PIXELTYPE PIXEL_INDEXED_ALPHA = 1;
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-#define downscale(quantum)  ((unsigned char) ((quantum)/257UL))
-#define upscale(value)  ((QUANTUM) (257UL*(value)))
+#define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
+#define upscale(value)  (value) // ((QUANTUM) (257UL*(value)))
 
 Q_INT32 imgTypeDepth(const enumImgType& type);
 bool imgTypeHasAlpha(const enumImgType& type);

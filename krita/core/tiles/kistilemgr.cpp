@@ -168,22 +168,6 @@ KisTileSP KisTileMgr::tile(Q_INT32 tilenum, Q_INT32 mode)
 	return tile;
 }
 
-void KisTileMgr::tileAsync(Q_INT32 xpix, Q_INT32 ypix)
-{
-	KisTileSP tile;
-	Q_INT32 tilenum;
-	Q_INT32 ntiles;
-
-	tilenum = tileNum(xpix, ypix);
-	ntiles = m_ntileRows * m_ntileCols;
-
-	if (tilenum < 0 || tilenum >= ntiles)
-		return;
-
-	tile = m_tiles[tilenum];
-	tile -> lockAsync();
-}
-
 void KisTileMgr::tileMap(Q_INT32 xpix, Q_INT32 ypix, KisTileSP src)
 {
 	Q_INT32 tilenum;
@@ -214,11 +198,6 @@ void KisTileMgr::tileMap(Q_INT32 tilenum, KisTileSP src)
 	tile = m_tiles[tilenum];
 	detach(tile, tilenum);
 	attach(src, tilenum);
-}
-
-bool KisTileMgr::completetlyValid() const
-{
-	return false;
 }
 
 KisTileSP KisTileMgr::invalidate(Q_INT32 tileno)
@@ -341,21 +320,6 @@ void KisTileMgr::tileCoord(const KisTileSP& tile, Q_INT32 *x, Q_INT32 *y)
 		*x = coord.x();
 		*y = coord.y();
 	}
-}
-
-void KisTileMgr::mapOver(KisTileSP dst, KisTileSP src)
-{
-	Q_INT32 tilenum;
-
-	if (!dst || !src)
-		return;
-
-	tilenum = m_mediator -> tileNum(dst, this);
-
-	if (tilenum < 0)
-		return;
-
-	tileMap(tilenum, src);
 }
 
 KisPixelDataSP KisTileMgr::pixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q_INT32 mode)

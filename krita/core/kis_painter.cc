@@ -246,6 +246,7 @@ void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileS
 	Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
 	Q_INT32 srcstride = srctile -> width() * srctile -> depth();
 	Q_INT32 stride = m_device -> image() -> depth();
+	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
 	QUANTUM *d;
 	QUANTUM *s;
 	QUANTUM alpha;
@@ -256,26 +257,22 @@ void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileS
 
 	switch (op) {
 		case COMPOSITE_COPY:
+			d = dst;
+			s = src;
+
 			while (rows-- > 0) {
-				d = dst;
-				s = src;
-
-				for (i = cols; i > 0; i--, d += stride, s += stride)
-					memcpy(d, s, stride * sizeof(QUANTUM));
-
-				dst += dststride;
-				src += srcstride;
+				memcpy(d, s, linesize);
+				d += dststride;
+				s += srcstride;
 			}
 			break;
 		case COMPOSITE_CLEAR:
+			d = dst;
+			s = src;
+
 			while (rows-- > 0) {
-				d = dst;
-				s = src;
-
-				for (i = cols; i > 0; i--, d += stride, s += stride)
-					memset(d, 0, stride * sizeof(QUANTUM));
-
-				dst += dststride;
+				memset(d, 0, linesize);
+				d += dststride;
 			}
 			break;
 		case COMPOSITE_OVER:

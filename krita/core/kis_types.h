@@ -19,6 +19,7 @@
 #define KISTYPES_H_
 
 #include <qvaluevector.h>
+#include <qmap.h>
 #include <ksharedptr.h>
 #include <koColor.h>
 
@@ -83,6 +84,10 @@ typedef vKisToolSP::const_iterator vKisToolSP_cit;
 
 class KisToolMemento;
 typedef KSharedPtr<KisToolMemento> KisToolMementoSP;
+
+class KisStrategyColorSpace;
+typedef KSharedPtr<KisStrategyColorSpace> KisStrategyColorSpaceSP;
+typedef QMap<Q_INT32, KisStrategyColorSpaceSP> KisStrategyColorSpaceMap;
 
 #endif // KISTYPES_H_
 

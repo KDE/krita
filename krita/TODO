@@ -9,82 +9,90 @@ urgency for indexed images like gifs.)
 The very first thing that's needed to at least enable me to use Krita
 to maintain the Krita screenshots page is screenshot and scale :-).
 
+Items with a hash have work started on them.
+
 Core
 
-	* Discontinuous selections (A byte-map mask for a whole image)
+	* Discontinuous selections (A byte-map mask for a whole image) (#Boudewijn)
 	* Channels
-	* Histogram computations
+	* Histogram computations (#Boudewijn)
 	* Adjustment layers (Layers that dynamically apply a filter to
 	  the layer they are linked to, these do not store actual
 	  image date, except for an occasional mask)
 	* Mask layers
 	* Loading and saving of selections
 	* Painting of gradients
-	* Fill with pattern
-	* Non-rectangular fill
+        * loading Gimp gradients
+	* Fill with pattern (#Bart)
+	* Non-rectangular fill (#Bart)
 	* Load/save configuration of everything user-settable.
 	* Add filtering with image kernels (3 * 3 blocks of pixels)
-	* Scaling of images
+	* Scaling of images (#Boudewijn, Bart)
 	* Fix composite ops (nick from the code gwenview nicked for
 	  the xcf import)
 	* Make toolbox look like Karbon's toolbox, but follow the
 	  layout of photoshop's toolbox for minimum confusability.
-	* Add create image from screenshot.
+        * Rework iterators to allow iterating over pixels (#Cyrillle, Casper)
+        * Auto-extending layers (#Casper)
 
 User Interface
 	
 	* Allow choice between crosshair-cursor, brush-shape outline cursor
 	  and iconic cursor.
-	* All dialogs ui-fied
+	* All dialogs ui-fied (#Boudewijn, Sven, Casper)
 	* Tabs in dockers drag-and-droppable (vector of docker
 	  windows, create new docker if tab dropped outside existing
 	  docker window)
 	* Show/Hide rulers
 	* Implement the following dialogs / widgets:
-		    - Select by color range
-		    - Variations
-		    - Transform
+		    - Select by color range (#Boudewijn)
+		    - Variations (#Boudewijn)
+		    - Transform (#Boudewijn)
 		    - Gradient (nick from Scribus?)
-		    - Histogram
+		    - Histogram (#Boudewijn)
 		    - Modify curves (nick from Perico)
 	* Add history docker
 	* Add auto-scroll to canvas while painting	  
-	* Full-screen mode
-	* Add previews to all relevant dialogs. (XXX: let preview work
-	  on rendered QImage, or on scaled image?)
-	* Allow an active tool for every pointer present in X.
-	* Remove: current tool properties dialogs
+	* Full-screen mode (#Boudewijn -- this should work, but it doesn't. Don't know
+          why :-(.)
+	* Add previews to all relevant dialogs. (XXX: let preview work 
+	  on rendered QImage, or on scaled image?)(#Bart) 
+	* Allow an active tool for every pointer present in X. (#Adrian -- no
+          support yet for Wacom tablets that have more than one stylus)
 	* File/Open should list all image types Krita can handle, and simply
           import non-native images, instead of forcing the user to use the import
           image menu item.
 Tools
 
-	* All tools must have a tool options tab
-	* Loading and saving of tool state
+	* All tools must have a tool options tab (#Boudewijn, Adrian, Cyrille)
+	* Loading and saving of tool state (XXX: do we really want this? It is
+          horribly confusing in the Gimp)
 	* Implement the following tools: 
-		    - Elliptical selection
+		    - Elliptical selection (#Boudewijn)
 		    - Crop
-		    - Freehand selection
-		    - Polygonal selection
-		    - Continguous selection (magic wand)
-		    - pen(cil) tool (same as brush, but not anti-aliased)
+		    - Freehand selection (#Boudewijn)
+		    - Polygonal selection (#Boudewijn)
+		    - Continguous selection (magic wand) (#Boudewijn)
+		    - pen(cil) tool (same as brush, but not anti-aliased) (#Boudewijn,
+                      done, except there's still a little ant-aliasing present, perhaps
+                      dependent on the brush).
 		    - fix airbrush tool (add rate option, add increase
 		      of brush size if kept in one place)
 		    - poly-line tool
-		    - rectangle tool
-		    - ellipse tool
+		    - rectangle tool (#Clarence, still some work to with opacity and so on)
+		    - ellipse too (#Clarence, still some work to with opacity and so on)l
 		    - polygon tool
 		    - color changer, smudge tool,sharpen tool, blur
 		      tool, dodge tool, burn tool, sponge tool (These
 		      last are perhaps more generally: painting with
 		      filters tool)
-		    - stamp tool (paint with pattter/image selection)
+		    - stamp tool (paint with patttern/image selection) (#Cyrille)
 		    - Text tool
 		    - Measure tool
 		    - Pan tool (hand)
 		    - Gradient tool
 	* Pressure sensivitize all relevant tools (e.g. line tool)
-	* XXX Make tools plugins?
+	* XXX Make tools plugins? (#Boudewijn)
 
 
 Plugins
@@ -92,10 +100,13 @@ Plugins
 	* As many filters as possible :-)
 	* Fix filters to use current image, instead of first image in
 	  the document.
+        * Make tools and color strategy plugins into ktrader managed
+          objects.
+        * Rename all plugins to have a krita prefix. 
+        * Move all color strategies and tools to plugins. (#Boudewijn)
 
-I think we should then fork into a stable, bugfix branch and a
-development branch. For the development branch, I propose the
-following:
+
+That's more or less all for version 1,0; afterwards I propose to move to:
 
 Core
 	* Add bit-depth independence

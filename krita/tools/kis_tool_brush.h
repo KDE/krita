@@ -43,6 +43,7 @@ public:
 	virtual void mouseRelease(QMouseEvent *e);
 	virtual void tabletEvent(QTabletEvent *e);
 
+	virtual KDialog *options(QWidget * parent);
 
 private:
 	virtual void paintLine(const QPoint & pos1,

@@ -16,39 +16,143 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include "integerwidget.h"
+
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qspinbox.h>
 #include <qvbox.h>
+
 #include <klineedit.h>
 #include <klocale.h>
-#include "kis_dlg_new_layer.h"
+#include <knuminput.h>
+#include <kpushbutton.h>
 
-NewLayerDialog::NewLayerDialog(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, QWidget *parent, const char *name) 
+#include "kis_global.h"
+#include "kis_cmb_composite.h"
+#include "kis_cmb_imagetype.h"
+#include "kis_dlg_new_layer.h"
+#include "kis_dlg_paint_properties.h"
+#include "kis_global.h"
+
+NewLayerDialog::NewLayerDialog(Q_INT32 maxWidth, 
+			       Q_INT32 defWidth, 
+			       Q_INT32 maxHeight, 
+			       Q_INT32 defHeight,
+			       enumImgType imageType,
+			       const QString & deviceName,
+			       QWidget *parent, 
+			       const char *name) 
 	: super(parent, name, true, "", Ok | Cancel)
 {
 	QWidget *page = new QWidget(this);
+
 	QGridLayout *grid;
 	QLabel *lbl;
 
-	setMainWidget(page);
-	grid = new QGridLayout(page, 2, 2);
 	setCaption(i18n("New Layer"));
+
+	setMainWidget(page);
+	grid = new QGridLayout(page, 7, 2);
+
+	// Name
+	lbl = new QLabel(i18n("Name:"), page);
+	m_name = new KLineEdit(deviceName, page);
+	grid -> addWidget(lbl, 0, 0);
+	grid -> addWidget(m_name, 0, 1);
+	
+	// Opacity
+	lbl = new QLabel(i18n("Opacity:"), page);
+	m_opacity = new KIntNumInput(page);
+	m_opacity -> setRange(0, 100, 13, true);
+	m_opacity -> setValue(100);
+	grid -> addWidget(lbl, 1, 0);
+	grid -> addWidget(m_opacity, 1, 1);
+
+	// Composite mode
+	lbl = new QLabel(i18n("Composite mode:"), page);
+	m_cmbComposite = new KisCmbComposite(page);
+	m_cmbComposite -> setCurrentItem((int)COMPOSITE_OVER);
+	grid -> addWidget(lbl, 2, 0);
+	grid -> addWidget(m_cmbComposite, 2, 1);
+
+	// Layer type
+	lbl = new QLabel(i18n("Layer type:"), page);
+	m_cmbImageType = new KisCmbImageType(page);
+	m_cmbImageType -> setCurrentItem((int)imageType);
+	grid -> addWidget(lbl, 3, 0);
+	grid -> addWidget(m_cmbImageType, 3, 1);
+
+	// Width
 	m_width = new QSpinBox( 1, maxWidth, 10, page);
 	m_width -> setValue(defWidth);
 	lbl = new QLabel(m_width, i18n("W&idth:"), page);
+	grid -> addWidget(lbl, 4, 0);
+	grid -> addWidget(m_width, 4, 1);
 
-	grid -> addWidget(lbl, 0, 0);
-	grid -> addWidget(m_width, 0, 1);
-
+	// Height
 	m_height = new QSpinBox(1, maxHeight, 10, page);
 	m_height -> setValue(defHeight);
 	lbl = new QLabel(m_height, i18n("&Height:"), page);
 
-	grid -> addWidget(lbl, 1, 0);
-	grid -> addWidget(m_height, 1, 1);
+	grid -> addWidget(lbl, 5, 0);
+	grid -> addWidget(m_height, 6, 1);
+
+	// Position
+	QGridLayout *gridInBox;
+	QGroupBox *grp;
+
+	grp = new QGroupBox(i18n("Position"), page);
+	gridInBox = new QGridLayout(grp, 3, 2, 12);
+
+	lbl = new QLabel(i18n("X axis:"), grp);
+	m_x = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, 0, 10, grp);
+	gridInBox -> addWidget(lbl, 0, 0);
+	gridInBox -> addWidget(m_x, 0, 1);
+
+	lbl = new QLabel(i18n("Y axis:"), grp);
+	m_y = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, 0, 10, grp);
+	gridInBox -> addWidget(lbl, 1, 0);
+	gridInBox -> addWidget(m_y, 1, 1);
+
+	grid -> addMultiCellWidget(grp, 5, 6, 0, 1);
+
 }
+
+int NewLayerDialog::opacity() const
+{
+	Q_INT32 opacity = m_opacity -> value();
+
+	if (!opacity)
+		return 0;
+
+	opacity = opacity * 255 / 100;
+	return upscale(opacity - 1);
+}
+
+
+QPoint NewLayerDialog::position() const
+{
+	return QPoint(m_x -> value(), m_y -> value());
+}
+
+
+CompositeOp NewLayerDialog::compositeOp() const
+{
+	return (CompositeOp)m_cmbComposite -> currentItem();
+}
+
+enumImgType NewLayerDialog::imageType() const
+{
+	return (enumImgType)m_cmbImageType -> currentItem();
+}
+
+QString NewLayerDialog::layerName() const
+{
+	return m_name -> text();
+}
+
 
 #include "kis_dlg_new_layer.moc"
 

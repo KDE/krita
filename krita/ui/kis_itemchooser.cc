@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julein <freak@codepimps.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 
 #include "integerwidget.h"
 #include "kis_itemchooser.h"
+#include "kis_global.h"
+#include "kis_cmb_composite.h"
 
 KisItemChooser::KisItemChooser(const vKoIconItem& items, bool spacing, QWidget *parent, const char *name) : super(parent, name)
 {
@@ -52,12 +54,19 @@ void KisItemChooser::initGUI(bool spacing)
 	mainLayout -> addWidget(m_frame, 10);
 
 	if (spacing) {
-		QHBoxLayout *spacingLayout = new QHBoxLayout( -1, "spacing layout" );
+		QGridLayout *spacingLayout = new QGridLayout( 3, 3);
 
 		mainLayout -> addLayout(spacingLayout, 1);
-		spacingLayout -> addWidget(m_lbSpacing, 0);
-		spacingLayout -> addStretch();
-		spacingLayout -> addWidget(m_slSpacing, 1);
+
+		spacingLayout -> addWidget(m_lbSpacing, 0, 0);
+		spacingLayout -> addWidget(m_slSpacing, 0, 1);
+
+ 		spacingLayout -> addWidget(m_lbOpacity, 1, 0);
+		spacingLayout -> addWidget(m_slOpacity, 1, 1);
+
+		spacingLayout -> addWidget(m_lbComposite, 2, 0);
+		spacingLayout -> addWidget(m_cmbComposite, 2, 1);
+		
 	}
 }
 
@@ -90,6 +99,25 @@ void KisItemChooser::slotSetItemSpacing(int spacingValue)
 		item -> setSpacing(spacingValue);
 }
 
+
+void KisItemChooser::slotSetItemOpacity(int opacityValue)
+{
+	KoIconItem *item = currentItem();
+
+// 	if (m_doSpacing && item)
+// 		item -> setOpacity(opacityValue);
+}
+
+
+void KisItemChooser::slotSetItemCompositeMode(int compositeOp)
+{
+	KoIconItem *item = currentItem();
+
+// 	if (m_doSpacing && item)
+// 		item -> setCompositeOp((CompositeOp)spacingValue);
+}
+
+
 void KisItemChooser::addItem(KoIconItem *item)
 {
 	m_chooser -> addItem(item);
@@ -113,9 +141,24 @@ void KisItemChooser::init(bool spacing)
 		m_slSpacing -> setTickmarks(QSlider::Below);
 		m_slSpacing -> setTickInterval(10);
 		QObject::connect(m_slSpacing, SIGNAL(valueChanged(int)), this, SLOT(slotSetItemSpacing(int)));
+
+		m_lbOpacity = new QLabel(i18n("Opacity: "), this);
+		m_slOpacity = new IntegerWidget( OPACITY_TRANSPARENT, OPACITY_OPAQUE, this, "int_widget");
+		m_slOpacity -> setTickmarks(QSlider::Below);
+		m_slOpacity -> setTickInterval(10);
+		QObject::connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetItemOpacity(int)));
+
+		m_lbComposite = new QLabel(i18n("Mode: "), this);
+		m_cmbComposite = new KisCmbComposite(this);
+		QObject::connect(m_cmbComposite, SIGNAL(activated(int)), this, SLOT(slotSetItemCompositeMode(int)));
+
 	} else {
 		m_lbSpacing = 0;
 		m_slSpacing = 0;
+		m_lbOpacity = 0;
+		m_slOpacity = 0;
+		m_lbComposite= 0;
+		m_cmbComposite = 0;
 	}
 
 	m_frame = new QHBox(this);
@@ -124,6 +167,8 @@ void KisItemChooser::init(bool spacing)
 	QObject::connect(m_chooser, SIGNAL(selected(KoIconItem*)), this, SLOT(slotItemSelected(KoIconItem*)));
 	initGUI(spacing);
 }
+
+
 
 #include "kis_itemchooser.moc"
 

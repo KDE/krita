@@ -13,28 +13,28 @@ class QComboBox;
 
 class GradientTab : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 
 	GradientTab(KisGradient *_gradient,
         QWidget *_parent = 0, const char *_name = 0);
 
-    int gradientOpacity()const;
-    int gradientOffset()const;
-    int gradientMode()const;
-    int gradientBlend()const;
-    int gradientType()const;
-    int gradientRepeat()const;
-
+	int gradientOpacity()const;
+	int gradientOffset()const;
+	int gradientMode()const;
+	int gradientBlend()const;
+	int gradientType()const;
+	int gradientRepeat()const;
+	
 private:
 
-    IntegerWidget *opacity;
-    IntegerWidget *offset;
-    BlendChooser *mode;
-    QComboBox *blend;
-    QComboBox *gradient;
-    QComboBox *repeat;
+	IntegerWidget *opacity;
+	IntegerWidget *offset;
+	BlendChooser *mode;
+	QComboBox *blend;
+	QComboBox *gradient;
+	QComboBox *repeat;
 };
 
 
@@ -42,18 +42,20 @@ private:
 
 class GradientDialog : public KDialogBase
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 
 	GradientDialog(KisGradient *_gradient,
-        QWidget *_parent = 0, const char *_name = 0, bool modal = true);
+		       QWidget *_parent = 0,
+		       const char *_name = 0, 
+		       bool modal = true);
 
-    GradientTab *gradientTab ()const { return pGradientTab; }
+	GradientTab *gradientTab ()const { return pGradientTab; }
 
 private:
 
-    GradientTab *pGradientTab;
+	GradientTab *pGradientTab;
 };
 
 #endif

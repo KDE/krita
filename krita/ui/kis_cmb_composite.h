@@ -23,7 +23,7 @@
 
 #include "kis_global.h"
 
-class QComboBox;
+#include "qcombobox.h"
 
 /**
  * A combobox filled with the various composition strategies defined in kis_global.
@@ -38,12 +38,15 @@ class QComboBox;
 
 class KisCmbComposite : public QComboBox
 {
+	typedef QComboBox super;
+
 	Q_OBJECT
 
  public: 
 
 	KisCmbComposite(QWidget * parent = 0, const char * name = 0 );
 	virtual ~KisCmbComposite();
+
 };
 
 #endif

@@ -20,21 +20,28 @@
 
 #include <kdialogbase.h>
 
+#include "kis_global.h"
+
 class QWidget;
 class KIntSpinBox;
 class KLineEdit;
-class KisPaintDevice;
 class KIntNumInput;
+class KisCmbComposite;
 
 class KisPaintPropertyDlg : public KDialogBase {
 	typedef KDialogBase super;
 
 public:
-	KisPaintPropertyDlg(const QString& deviceName, const QPoint& pos, Q_INT32 opacity, QWidget *parent = 0, const char *name = 0, WFlags f = 0);
+	KisPaintPropertyDlg(const QString& deviceName, 
+			    const QPoint& pos, 
+			    Q_INT32 opacity, 
+			    CompositeOp compositeOp,
+			    QWidget *parent = 0, const char *name = 0, WFlags f = 0);
 	virtual ~KisPaintPropertyDlg();
 
 	QString getName() const;
 	Q_INT32 getOpacity() const;
+	CompositeOp getCompositeOp() const;
 	QPoint getPosition() const;
 
 private:
@@ -42,6 +49,7 @@ private:
 	KIntNumInput *m_opacity;
 	KIntSpinBox *m_x;
 	KIntSpinBox *m_y;
+	KisCmbComposite *m_cmbComposite;
 };
 
 #endif // KIS_DLG_LAYER_PROPERTIES_H_

@@ -50,46 +50,48 @@
 #include <koColor.h>
 #include <koMainWindow.h>
 #include <koView.h>
+#include "kotabbar.h"
 
 // Local
-#include "kis_types.h"
+#include "builder/kis_builder_monitor.h"
+#include "builder/kis_builder_subject.h"
 #include "kis_brush.h"
-#include "kis_imagepipe_brush.h"
-#include "kis_cursor.h"
-#include "kis_doc.h"
 #include "kis_canvas.h"
-#include "kis_config.h"
 #include "kis_channelview.h"
+#include "kis_config.h"
+#include "kis_cursor.h"
 #include "kis_dlg_builder_progress.h"
 #include "kis_dlg_dimension.h"
+#include "kis_dlg_gradient.h"
 #include "kis_dlg_new_layer.h"
+#include "kis_dlg_paint_properties.h"
 #include "kis_dlg_paintoffset.h"
-#include "kis_icon_item.h"
-#include "kis_image_magick_converter.h"
+#include "kis_doc.h"
 #include "kis_factory.h"
 #include "kis_guide.h"
-#include "kis_painter.h"
+#include "kis_gradient.h"
+#include "kis_icon_item.h"
+#include "kis_image_magick_converter.h"
+#include "kis_imagepipe_brush.h"
 #include "kis_layer.h"
 #include "kis_listbox.h"
-#include "kis_dlg_paint_properties.h"
 #include "kis_paint_device.h"
+#include "kis_paint_device_visitor.h"
+#include "kis_painter.h"
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
 #include "kis_ruler.h"
 #include "kis_selection.h"
 #include "kis_sidebar.h"
-#include "kis_tabbar.h"
 #include "kis_tool.h"
 #include "kis_tool_factory.h"
-#include "kis_view.h"
+#include "kis_types.h"
 #include "kis_undo_adapter.h"
 #include "kis_util.h"
-#include "kis_paint_device_visitor.h"
-#include "builder/kis_builder_subject.h"
-#include "builder/kis_builder_monitor.h"
+#include "kis_view.h"
 #include "labels/kis_label_builder_progress.h"
-#include "labels/kis_label_io_progress.h"
 #include "labels/kis_label_cursor_pos.h"
+#include "labels/kis_label_io_progress.h"
 #include "strategy/kis_strategy_move.h"
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
@@ -168,7 +170,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_fg = KoColor::black();
 	m_bg = KoColor::white();
 	m_sideBar = 0;
-	m_paletteChooser = 0;
+ 	m_paletteChooser = 0;
 	m_gradientChooser = 0;
 	m_imageChooser = 0;
 	m_brush = 0;
@@ -235,14 +237,14 @@ void KisView::setupSideBar()
 		m_sideBar ->plug(m_patternMediator -> chooserWidget());
 		connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
 
-// 		m_gradientChooser = new QWidget(this);
-// 		//	m_gradient = new KisGradient;
-// 		m_gradientChooser -> setCaption(i18n("Gradients"));
-// 		m_sideBar -> plug(m_gradientChooser);
+//  		m_gradientChooser = new QWidget(this);
+//  		m_gradient = new KisGradient;
+//  		m_gradientChooser -> setCaption(i18n("Gradients"));
+//  		m_sideBar -> plug(m_gradientChooser);
 
-// 		m_paletteChooser = new QWidget(this);
-// 		m_paletteChooser -> setCaption(i18n("Palettes"));
-// 		m_sideBar -> plug(m_paletteChooser);
+//  		m_paletteChooser = new QWidget(this);
+//  		m_paletteChooser -> setCaption(i18n("Palettes"));
+//  		m_sideBar -> plug(m_paletteChooser);
 
 		m_layerBox = new KisListBox(i18n("layer"), KisListBox::SHOWALL, m_sideBar);
 		m_layerBox -> setCaption(i18n("Layers"));
@@ -264,13 +266,13 @@ void KisView::setupSideBar()
 		m_sideBar -> plug(m_layerBox);
 		layersUpdated();
 
-// 		m_channelView = new KisChannelView(m_doc, this);
-// 		m_channelView -> setCaption(i18n("Channels"));
-// 		m_sideBar -> plug(m_channelView);
+//  		m_channelView = new KisChannelView(m_doc, this);
+//  		m_channelView -> setCaption(i18n("Channels"));
+//  		m_sideBar -> plug(m_channelView);
 
-// 		m_pathView = new QWidget(this);
-// 		m_pathView -> setCaption(i18n("Paths"));
-// 		m_sideBar -> plug(m_pathView);
+//  		m_pathView = new QWidget(this);
+//  		m_pathView -> setCaption(i18n("Paths"));
+//  		m_sideBar -> plug(m_pathView);
 
 		m_sideBar -> slotActivateTab(i18n("Brushes"));
 
@@ -318,22 +320,22 @@ void KisView::setupTabBar()
 	KStatusBar *sb = statusBar();
 
 	if (sb) {
-		m_tabBar = new KisTabBar(this, m_doc);
-		m_tabBar -> slotImageListUpdated();
-		connect(m_tabBar, SIGNAL(tabSelected(const QString&)), SLOT(selectImage(const QString&)));
-		QObject::connect(m_doc, SIGNAL(imageListUpdated()), m_tabBar, SLOT(slotImageListUpdated()));
-		m_tabFirst = new KPushButton(this);
-		m_tabLeft = new KPushButton(this);
-		m_tabRight = new KPushButton(this);
-		m_tabLast = new KPushButton(this);
-		m_tabFirst -> setPixmap(QPixmap(BarIcon("tab_first")));
-		m_tabLeft -> setPixmap(QPixmap(BarIcon("tab_left")));
-		m_tabRight -> setPixmap(QPixmap(BarIcon("tab_right")));
-		m_tabLast -> setPixmap(QPixmap(BarIcon("tab_last")));
-		QObject::connect(m_tabFirst, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollFirst()));
-		QObject::connect(m_tabLeft, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollLeft()));
-		QObject::connect(m_tabRight, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollRight()));
-		QObject::connect(m_tabLast, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollLast()));
+		m_tabBar = new KoTabBar(this);
+// 		m_tabBar -> slotImageListUpdated();
+// 		connect(m_tabBar, SIGNAL(tabSelected(const QString&)), SLOT(selectImage(const QString&)));
+// 		QObject::connect(m_doc, SIGNAL(imageListUpdated()), m_tabBar, SLOT(slotImageListUpdated()));
+// 		m_tabFirst = new KPushButton(this);
+// 		m_tabLeft = new KPushButton(this);
+// 		m_tabRight = new KPushButton(this);
+// 		m_tabLast = new KPushButton(this);
+// 		m_tabFirst -> setPixmap(QPixmap(BarIcon("tab_first")));
+// 		m_tabLeft -> setPixmap(QPixmap(BarIcon("tab_left")));
+// 		m_tabRight -> setPixmap(QPixmap(BarIcon("tab_right")));
+// 		m_tabLast -> setPixmap(QPixmap(BarIcon("tab_last")));
+// 		QObject::connect(m_tabFirst, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollFirst()));
+// 		QObject::connect(m_tabLeft, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollLeft()));
+// 		QObject::connect(m_tabRight, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollRight()));
+// 		QObject::connect(m_tabLast, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollLast()));
 	}
 }
 
@@ -506,16 +508,16 @@ void KisView::resizeEvent(QResizeEvent *)
 	m_hRuler -> setGeometry(ruler + lsideW, 0, width() - ruler - rsideW - lsideW, ruler);
 	m_vRuler -> setGeometry(0 + lsideW, ruler, ruler, height() - (ruler + tbarBtnH));
 
-	if (m_tabBar) {
-		m_tabFirst -> setGeometry(0 + lsideW, height() - tbarBtnH, tbarBtnW, tbarBtnH);
-		m_tabLeft -> setGeometry(tbarBtnW + lsideW, height() - tbarBtnH, tbarBtnW, tbarBtnH);
-		m_tabRight -> setGeometry(2 * tbarBtnW + lsideW, height() - tbarBtnH, tbarBtnW, tbarBtnH);
-		m_tabLast -> setGeometry(3 * tbarBtnW + lsideW, height() - tbarBtnH, tbarBtnW, tbarBtnH);
-		m_tabFirst -> show();
-		m_tabLeft -> show();
-		m_tabRight -> show();
-		m_tabLast -> show();
-	}
+//  	if (m_tabBar) {
+//  		m_tabFirst -> setGeometry(0 + lsideW, height() - tbarBtnH, tbarBtnW, tbarBtnH);
+//  		m_tabLeft -> setGeometry(tbarBtnW + lsideW, height() - tbarBtnH, tbarBtnW, tbarBtnH);
+//  		m_tabRight -> setGeometry(2 * tbarBtnW + lsideW, height() - tbarBtnH, tbarBtnW, tbarBtnH);
+//  		m_tabLast -> setGeometry(3 * tbarBtnW + lsideW, height() - tbarBtnH, tbarBtnW, tbarBtnH);
+//  		m_tabFirst -> show();
+//  		m_tabLeft -> show();
+//  		m_tabRight -> show();
+//  		m_tabLast -> show();
+//  	}
 
 	drawH = height() - ruler - tbarBtnH - canvasYOffset();
 	drawW = width() - ruler - lsideW - rsideW - canvasXOffset();
@@ -535,8 +537,8 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_canvas -> setGeometry(ruler + lsideW, ruler, drawW, drawH);
 		m_canvas -> show();
 
-		if (m_tabBar)
-			m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, width() - rsideW - lsideW - tbarOffset, tbarBtnH);
+ 		if (m_tabBar)
+ 			m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, width() - rsideW - lsideW - tbarOffset, tbarBtnH);
 	} else if (docH <= drawH) {
 		// we need a horizontal scrollbar only
 		m_vScroll -> hide();
@@ -550,8 +552,8 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_hScroll -> show();
 		m_canvas -> show();
 
-		if (m_tabBar)
-			m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, (width() - rsideW - lsideW - tbarOffset) / 2, tbarBtnH);
+ 		if (m_tabBar)
+ 			m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, (width() - rsideW - lsideW - tbarOffset) / 2, tbarBtnH);
 	} else if(docW <= drawW) {
 		// we need a vertical scrollbar only
 		m_hScroll -> hide();
@@ -562,8 +564,8 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_vScroll -> show();
 		m_canvas -> show();
 
-		if (m_tabBar)
-			m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, width() - rsideW -lsideW - tbarOffset, tbarBtnH);
+ 		if (m_tabBar)
+ 			m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, width() - rsideW -lsideW - tbarOffset, tbarBtnH);
 	} else {
 		// we need both scrollbars
 		m_vScroll -> setRange(0, static_cast<int>((docH - drawH) / zoom()));
@@ -578,8 +580,8 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_hScroll -> show();
 		m_canvas -> show();
 
-		if (m_tabBar)
-			m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, (width() - rsideW -lsideW - tbarOffset)/2, tbarBtnH);
+ 		if (m_tabBar)
+ 			m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, (width() - rsideW -lsideW - tbarOffset)/2, tbarBtnH);
 	}
 
 	m_vScroll -> setLineStep(static_cast<Q_INT32>(100 * zoom()));
@@ -733,19 +735,13 @@ void KisView::updateCanvas(const QRect& rc)
 	paintView(ur);
 }
 
-/*
-    tool_properties invokes the optionsDialog() method for the
-    currentImg active tool.  There should be an options dialog for
-    each tool, but these can also be consolidated into a master
-    options dialog by reparenting the widgets for each tool to a
-    tabbed properties dialog, each tool getting a tab  - later
-*/
 void KisView::tool_properties()
 {
-#if 0
-	Q_ASSERT(m_pTool);
-	m_pTool -> optionsDialog();
-#endif
+	if (m_tool) {
+		KDialog * optionsDialog = m_tool -> options(this);
+		if (optionsDialog) 
+			optionsDialog -> show();
+	}
 }
 
 void KisView::layerUpdateGUI(bool enable)
@@ -1091,25 +1087,24 @@ void KisView::slotZoomOut()
     now an options dialog.  Gradients can be used by many tools
     and are not a tool in themselves.
 */
-
 void KisView::dialog_gradient()
 {
 #if 0
-	GradientDialog *pGradientDialog = new GradientDialog(m_pGradient);
-	pGradientDialog->exec();
+	GradientDialog *pGradientDialog = new GradientDialog(m_gradient);
+ 	pGradientDialog -> exec();
 
 	if (pGradientDialog->result() == QDialog::Accepted) {
 		/* set m_pGradient here and update gradientwidget in sidebar
 		   to show sample of gradient selected. Also update effect for
 		   the framebuffer's gradient, which is used in painting */
 
-		int type = pGradientDialog->gradientTab()->gradientType();
-		m_pGradient->setEffect(static_cast<KImageEffect::GradientType>(type));
+ 		int type = pGradientDialog->gradientTab()->gradientType();
+ 		m_gradient->setEffect(static_cast<KImageEffect::GradientType>(type));
 
-		KisFrameBuffer *fb = m_doc->frameBuffer();
-		fb->setGradientEffect(static_cast<KImageEffect::GradientType>(type));
+ 		KisFrameBuffer *fb = m_doc->frameBuffer();
+ 		fb->setGradientEffect(static_cast<KImageEffect::GradientType>(type));
 
-		kdDebug() << "gradient type is " << type << endl;
+ 		kdDebug() << "gradient type is " << type << endl;
 	}
 #endif
 }
@@ -1957,19 +1952,29 @@ void KisView::layerProperties()
 		KisLayerSP layer = img -> activeLayer();
 
 		if (layer) {
-			KisPaintPropertyDlg dlg(layer -> name(), QPoint(layer -> x(), layer -> y()), layer -> opacity());
+			KisPaintPropertyDlg dlg(layer -> name(), 
+						QPoint(layer -> x(), 
+						       layer -> y()), 
+						layer -> opacity(),
+						layer -> compositeOp());
 
 			if (dlg.exec() == QDialog::Accepted) {
 				QPoint pt = dlg.getPosition();
-				bool changed = layer -> name() != dlg.getName();
 
-				changed = changed || layer -> opacity() != dlg.getOpacity() || pt.x() != layer -> x() || pt.y() != layer -> y();
+				bool changed = layer -> name() != dlg.getName()
+					|| layer -> opacity() != dlg.getOpacity()
+					|| layer -> compositeOp() != dlg.getCompositeOp()
+					|| pt.x() != layer -> x() 
+					|| pt.y() != layer -> y();
+					
 
 				if (changed)
 					m_adapter -> beginMacro(i18n("Property changes"));
 
-				if (layer -> name() != dlg.getName() || layer -> opacity() != dlg.getOpacity())
-					m_doc -> layerProperties(img, layer, dlg.getOpacity(), dlg.getName());
+				if (layer -> name() != dlg.getName() 
+				    || layer -> opacity() != dlg.getOpacity() 
+				    || layer -> compositeOp() != dlg.getCompositeOp())
+					m_doc -> setLayerProperties(img, layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
 
 				if (pt.x() != layer -> x() || pt.y() != layer -> y())
 					KisStrategyMove(this).simpleMove(QPoint(layer -> x(), layer -> y()), pt);
@@ -1989,17 +1994,23 @@ void KisView::layerAdd()
 		KisConfig cfg;
 		NewLayerDialog dlg(cfg.maxLayerWidth(),
                                    cfg.defLayerWidth(),
-                                   cfg.maxLayerHeight() ,
+                                   cfg.maxLayerHeight(),
                                    cfg.defLayerHeight(),
+				   img -> imgType(),
+				   img -> nextLayerName(),
                                    this);
 
 		dlg.exec();
 
 		if (dlg.result() == QDialog::Accepted) {
 			KisLayerSP layer = m_doc -> layerAdd(img,
-                                                             dlg.layerWidth(), dlg.layerHeight(),
-                                                             img -> nextLayerName(),
-                                                             OPACITY_OPAQUE);
+                                                             dlg.layerWidth(), 
+							     dlg.layerHeight(),
+							     dlg.layerName(),
+							     dlg.compositeOp(),
+							     dlg.opacity(),
+							     dlg.position(),
+							     dlg.imageType());
 
 			if (layer) {
 				m_layerBox -> setCurrentItem(img -> index(layer));
@@ -2156,8 +2167,8 @@ void KisView::selectImage(KisImageSP img)
 	resizeEvent(0);
 	updateCanvas();
 
-	if (m_tabBar)
-		m_tabBar -> slotImageListUpdated();
+// 	if (m_tabBar)
+// 		m_tabBar -> slotImageListUpdated();
 
 	selectionUpdateGUI(m_current && m_current -> selection());
 }

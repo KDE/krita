@@ -65,6 +65,14 @@ private:
 
 public:
 	KisLayerSP layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM devOpacity);
+	KisLayerSP layerAdd(KisImageSP img, 
+			    Q_INT32 width, 
+			    Q_INT32 height, 
+			    const QString& name, 
+			    CompositeOp compositeOp, 
+			    QUANTUM opacity, 
+			    QPoint pos, 
+			    enumImgType type);
 	KisLayerSP layerAdd(KisImageSP img, const QString& name, KisSelectionSP selection);
 	KisLayerSP layerAdd(KisImageSP img, KisLayerSP layer, Q_INT32 position);
 	void layerRemove(KisImageSP img, KisLayerSP layer);
@@ -72,7 +80,12 @@ public:
 	void layerLower(KisImageSP img, KisLayerSP layer);
 	void layerNext(KisImageSP img, KisLayerSP layer);
 	void layerPrev(KisImageSP img, KisLayerSP layer);
-	void layerProperties(KisImageSP img, KisLayerSP layer, QUANTUM opacity, const QString& name);
+	// Set the layerproperties
+	void setLayerProperties(KisImageSP img, 
+			     KisLayerSP layer, 
+			     QUANTUM opacity, 
+			     CompositeOp compositeOp,
+			     const QString& name);
 
 	Q_INT32 undoLimit() const;
 	void setUndoLimit(Q_INT32 limit);

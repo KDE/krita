@@ -25,11 +25,13 @@
 #include "kis_cmb_composite.h"
 
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name) 
-	: QComboBox( parent, name )
+	: super( false, parent, name )
 {
 
+	insertItem(i18n("Undefined"));
 	insertItem(i18n("Over"));
 	insertItem(i18n("In"));
+	insertItem(i18n("Out"));
 	insertItem(i18n("Atop"));
 	insertItem(i18n("Xor"));
 	insertItem(i18n("Plus"));
@@ -49,13 +51,27 @@ KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
 	insertItem(i18n("Displace"));
 	insertItem(i18n("Modulate"));
 	insertItem(i18n("Threshold"));
-	insertItem(i18n("Modulate"));
+	insertItem(i18n("No composition"));
+	insertItem(i18n("Darken"));
+	insertItem(i18n("Lighten"));
+	insertItem(i18n("Hue"));
+	insertItem(i18n("Saturate"));
+	insertItem(i18n("Colorize"));
+	insertItem(i18n("Luminize"));
+	insertItem(i18n("Screen"));
+	insertItem(i18n("Overlay"));
+	insertItem(i18n("Copy cyan"));
+	insertItem(i18n("Copy magenta"));
+	insertItem(i18n("Copy yellow"));
+	insertItem(i18n("Copy black"));
+	insertItem(i18n("Normal"));
 	
 }
 
 KisCmbComposite::~KisCmbComposite()
 {
 }
+
 
 #include "kis_cmb_composite.moc"
 

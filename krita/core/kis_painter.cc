@@ -702,7 +702,7 @@ void KisPainter::computeDab(KisAlphaMask* mask)
 			     mask -> height(),
 			     m_device -> image() -> imgType(),
 			     "dab");
-	m_dab -> opacity(OPACITY_TRANSPARENT);
+	m_dab -> setOpacity(OPACITY_TRANSPARENT);
 	for (int y = 0; y < mask -> height(); y++) {
 		for (int x = 0; x < mask -> width(); x++) {
 			m_dab -> setPixel(x, y, m_paintColor, mask -> alphaAt(x, y));

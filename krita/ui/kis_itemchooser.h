@@ -21,14 +21,19 @@
 #include <qptrlist.h>
 #include <qwidget.h>
 #include <qframe.h>
+
 #include <koIconChooser.h>
 #include "kfloatingdialog.h"
 
 class QHBox;
 class QLabel;
+
 class KoIconChooser;
 class KoIconItem;
+
 class IntegerWidget;
+
+class KisCmbComposite;
 
 typedef QPtrList<KoIconItem> vKoIconItem;
 
@@ -37,8 +42,13 @@ class KisItemChooser : public KFloatingDialog {
 	Q_OBJECT
 
 public:
-	KisItemChooser(const vKoIconItem& items, bool spacing, QWidget *parent = 0, const char *name = 0);
-	KisItemChooser(bool spacing, QWidget *parent = 0, const char *name = 0);
+	KisItemChooser(const vKoIconItem& items, 
+		       bool spacing, 
+		       QWidget *parent = 0, 
+		       const char *name = 0);
+	KisItemChooser(bool spacing, 
+		       QWidget *parent = 0, 
+		       const char *name = 0);
 	virtual ~KisItemChooser();
 
 	KoIconItem *currentItem();
@@ -58,12 +68,18 @@ private:
 private slots:
 	void slotItemSelected(KoIconItem *item);
 	void slotSetItemSpacing(int spacing);
+	void slotSetItemOpacity(int opacity);
+	void slotSetItemCompositeMode(int compositeOp);
 
 private:
 	QHBox *m_frame;
 	QWidget *m_container;
 	QLabel *m_lbSpacing;
 	IntegerWidget *m_slSpacing;
+	QLabel *m_lbOpacity;
+	IntegerWidget *m_slOpacity;
+	QLabel *m_lbComposite;
+	KisCmbComposite *m_cmbComposite;
 	KoIconChooser *m_chooser;
 	bool m_doSpacing;
 };

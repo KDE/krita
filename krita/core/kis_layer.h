@@ -45,7 +45,7 @@ public:
 	KisMaskSP mask() const;
 
 	QUANTUM opacity() const;
-	void opacity(QUANTUM val);
+	void setOpacity(QUANTUM val);
 
 	bool linked() const;
 	void linked(bool l);

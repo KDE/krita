@@ -31,6 +31,7 @@
 #include "kis_tool_brush.h"
 #include "kis_vec.h"
 #include "kis_view.h"
+#include "kis_dlg_toolopts.h"
 
 KisToolBrush::KisToolBrush()
         : super(),
@@ -188,4 +189,21 @@ void KisToolBrush::setup(KActionCollection *collection)
                                    SLOT(activate()), collection,
                                    "tool_brush");
         toggle -> setExclusiveGroup("tools");
+}
+
+KDialog *KisToolBrush::options(QWidget * parent)
+{
+        ToolOptsStruct ts;
+
+        ts.usePattern = false; //m_usePattern;
+        ts.useGradient = false; //m_useGradient;
+        ts.opacity = OPACITY_OPAQUE; //m_opacity;
+
+//         bool old_usePattern = m_usePattern;
+//         bool old_useGradient = m_useGradient;
+//         unsigned int old_opacity = m_opacity;
+
+        ToolOptionsDialog * d = new ToolOptionsDialog(tt_brushtool, ts, parent);
+
+	return d;
 }

@@ -171,7 +171,7 @@ private:
 		sy = QMAX(sy + y1, 0);
 		dx = QMAX(dx + x1, dev -> x());
 		dy = QMAX(dy + y1, dev -> y());
-		gc.bitBlt(dx, dy, COMPOSITE_OVER, dev, opacity, sx, sy, w, h);
+		gc.bitBlt(dx, dy, dev -> compositeOp(), dev, opacity, sx, sy, w, h);
 	}
 
 private:

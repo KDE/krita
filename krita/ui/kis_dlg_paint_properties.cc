@@ -28,11 +28,17 @@
 #include "kis_global.h"
 #include "kis_dlg_paint_properties.h"
 #include "integerwidget.h"
+#include "kis_cmb_composite.h"
 
-KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, const QPoint& pos, Q_INT32 opacity, QWidget *parent, const char *name, WFlags f)
+KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, 
+					 const QPoint& pos, 
+					 Q_INT32 opacity, 
+					 CompositeOp compositeOp,
+					 QWidget *parent, const char *name, WFlags f)
 	: super(parent, name, f, name, Ok | Cancel)
 {
 	QWidget *page = new QWidget(this);
+
 	QVBoxLayout *layout;
 	QGridLayout *grid;
 	QGridLayout *gridInBox;
@@ -45,10 +51,11 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, const QPoint
 	if (opacity)
 		opacity++;
 
-	setCaption(i18n("Device Properties"));
+	setCaption(i18n("Layer Properties"));
 	setMainWidget(page);
+
 	layout = new QVBoxLayout(page, 3);
-	grid = new QGridLayout(layout, 5, 2, 3);
+	grid = new QGridLayout(layout, 6, 2, 3);
 
 	lbl = new QLabel(i18n("Name:"), page);
 	m_name = new KLineEdit(deviceName, page);
@@ -66,8 +73,15 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, const QPoint
 	grid -> addWidget(lbl, 1, 0);
 	grid -> addWidget(m_opacity, 1, 1);
 
+
+	lbl = new QLabel(i18n("Composite mode:"), page);
+	m_cmbComposite = new KisCmbComposite(page);
+	m_cmbComposite -> setCurrentItem(compositeOp);
+	grid -> addWidget(lbl, 2, 0);
+	grid -> addWidget(m_cmbComposite, 2, 1);
+
 	grp = new QGroupBox(i18n("Position"), page);
-	gridInBox = new QGridLayout(grp, 2, 2, 12);
+	gridInBox = new QGridLayout(grp, 3, 2, 12);
 
 	lbl = new QLabel(i18n("X axis:"), grp);
 	m_x = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, pos.x(), 10, grp);
@@ -107,3 +121,8 @@ QPoint KisPaintPropertyDlg::getPosition() const
 	return QPoint(m_x -> value(), m_y -> value());
 }
 
+
+CompositeOp KisPaintPropertyDlg::getCompositeOp() const
+{
+	return (CompositeOp)m_cmbComposite -> currentItem();
+}

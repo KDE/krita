@@ -274,11 +274,12 @@ namespace {
 
 	public:
 		LayerPropsCmd(KisLayerSP layer,
-			KisImageSP img,
-			KisDoc *doc,
-			KisUndoAdapter *adapter,
-			const QString& name,
-			Q_INT32 opacity) : super(i18n("Layer Property Changes"))
+			      KisImageSP img,
+			      KisDoc *doc,
+			      KisUndoAdapter *adapter,
+			      const QString& name,
+			      Q_INT32 opacity,
+			      CompositeOp compositeOp) : super(i18n("Layer Property Changes"))
 		{
 			m_layer = layer;
 			m_img = img;
@@ -286,6 +287,7 @@ namespace {
 			m_adapter = adapter;
 			m_name = name;
 			m_opacity = opacity;
+			m_compositeOp = compositeOp;
 		}
 
 		virtual ~LayerPropsCmd()
@@ -297,12 +299,18 @@ namespace {
 		{
 			QString name = m_layer -> name();
 			Q_INT32 opacity = m_layer -> opacity();
+			CompositeOp compositeOp = m_layer -> compositeOp();
 
 			m_adapter -> setUndo(false);
-			m_doc -> layerProperties(m_img, m_layer, m_opacity, m_name);
+			m_doc -> setLayerProperties(m_img, 
+						    m_layer,
+						    m_opacity, 
+						    m_compositeOp,
+						    m_name);
 			m_adapter -> setUndo(true);
 			m_name = name;
 			m_opacity = opacity;
+			m_compositeOp = compositeOp;
 			m_img -> notify();
 		}
 
@@ -318,6 +326,7 @@ namespace {
 		KisDoc *m_doc;
 		QString m_name;
 		Q_INT32 m_opacity;
+		CompositeOp m_compositeOp;
 	};
 }
 
@@ -421,6 +430,7 @@ bool KisDoc::init()
 	return true;
 }
 
+// XXX: wasn't this done in the colourspace strategy factory?
 void KisDoc::setupColorspaces()
 {
 	KisStrategyColorSpaceSP p = new KisStrategyColorSpaceRGB;
@@ -1239,6 +1249,46 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 	return layer;
 }
 
+KisLayerSP KisDoc::layerAdd(KisImageSP img, 
+			    Q_INT32 width, 
+			    Q_INT32 height,
+			    const QString& name, 
+			    CompositeOp compositeOp, 
+			    QUANTUM opacity, 
+			    QPoint pos,
+			    enumImgType type) 
+{
+	KisLayerSP layer;
+	if (!contains(img)) return 0;
+	if (img) {
+		layer = new KisLayer(width, height, type, name);
+		layer -> setOpacity(opacity);
+		layer -> setCompositeOp(compositeOp);
+		layer -> move(pos);
+		if (layer && img -> add(layer, -1)) {
+			layer = img -> activate(layer);
+
+			if (layer) {
+				KisPainter gc(layer.data());
+
+				gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
+				gc.end();
+				img -> top(layer);
+
+				if (m_undo)
+					addCommand(new LayerAddCmd(this, this, img, layer));
+				img -> invalidate();
+				setModified(true);
+				layer -> visible(true);
+				emit layersUpdated(img);
+			}
+		}
+	}
+
+	return layer;
+}
+
+
 KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisSelectionSP selection)
 {
 	KisLayerSP layer;
@@ -1417,7 +1467,11 @@ void KisDoc::layerPrev(KisImageSP img, KisLayerSP layer)
 	}
 }
 
-void KisDoc::layerProperties(KisImageSP img, KisLayerSP layer, QUANTUM opacity, const QString& name)
+void KisDoc::setLayerProperties(KisImageSP img, 
+				KisLayerSP layer, 
+				QUANTUM opacity, 
+				CompositeOp compositeOp,
+				const QString& name)
 {
 	if (!contains(img))
 		return;
@@ -1426,13 +1480,15 @@ void KisDoc::layerProperties(KisImageSP img, KisLayerSP layer, QUANTUM opacity, 
 		if (m_undo) {
 			QString oldname = layer -> name();
 			Q_INT32 oldopacity = layer -> opacity();
-
+			CompositeOp oldCompositeOp = layer -> compositeOp();
 			layer -> setName(name);
-			layer -> opacity(opacity);
-			addCommand(new LayerPropsCmd(layer, img, this, this, oldname, oldopacity));
+			layer -> setOpacity(opacity);
+			layer -> setCompositeOp(compositeOp);
+			addCommand(new LayerPropsCmd(layer, img, this, this, oldname, oldopacity, oldCompositeOp));
 		} else {
 			layer -> setName(name);
-			layer -> opacity(opacity);
+			layer -> setOpacity(opacity);
+			layer -> setCompositeOp(compositeOp);
 		}
 
 		img -> invalidate();

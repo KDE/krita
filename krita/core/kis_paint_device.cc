@@ -225,6 +225,7 @@ void KisPaintDevice::configure(KisImageSP image,
         m_owner = image;
         m_name = name;
         m_projectionValid = false;
+	kdDebug() << "composite op: " << compositeOp << "\n";
 	m_compositeOp = compositeOp;	
 }
 

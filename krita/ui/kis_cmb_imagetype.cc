@@ -1,7 +1,7 @@
 /*
- *  kis_timer.cc - part of KImageShop
+ *  kis_cmb_imageType.cc - part of KImageShop/Krayon/Krita
  *
- *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
+ *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,23 +18,35 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include <sys/time.h>
-#include <iostream>
-#include "kis_timer.h"
+#include <qcombobox.h>
 
-using namespace std;
+#include <klocale.h>
 
-struct timeval tv1, tv2;
-struct timezone tz;
+#include "kis_cmb_imagetype.h"
 
-void KisTimer::start()
+KisCmbImageType::KisCmbImageType(QWidget * parent, const char * name) 
+	: super( false, parent, name )
 {
-  gettimeofday( &tv1, &tz );
+
+	insertItem(i18n("Unknown"));
+	insertItem(i18n("Indexed"));
+	insertItem(i18n("Indexed + alpha"));
+	insertItem(i18n("Grayscale"));
+	insertItem(i18n("Grayscale + alpha"));
+	insertItem(i18n("RGB"));
+	insertItem(i18n("RGBA"));
+	insertItem(i18n("CMYK"));
+	insertItem(i18n("CMYKA"));
+	insertItem(i18n("LAB"));
+	insertItem(i18n("LABA"));
+	insertItem(i18n("YUV"));
+	insertItem(i18n("YUVA"));
 }
 
-void KisTimer::stop( const char* text)
+KisCmbImageType::~KisCmbImageType()
 {
-  gettimeofday( &tv2, &tz );
-  float time = float( tv2.tv_sec - tv1.tv_sec ) + ( tv2.tv_usec - tv1.tv_usec ) / 1000000.;
-  cout << text << " took " << time << " seconds\n";
 }
+
+
+#include "kis_cmb_imagetype.moc"
+

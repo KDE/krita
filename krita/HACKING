@@ -1,0 +1,62 @@
+Since 1999, people have been hacking on Krita. Everyone brought their
+own coding style, their own code conventions, their own likes and
+dislikes. Me, (Boudewijn that is), I like indents of four spaces, and
+no scope prefixes for variables. However, in the interests of
+consistency, these are the rules new code should adhere to:
+
+
+Indentation
+
+	With real tabs, each tab eight spaces. Use the default Linux indentation
+	style of (X)Emacs or KDevelop -- also for brace placement.
+
+Includes
+
+	Avoid as much as possible #includes in header files; use forward declarations
+	of classes.
+
+Initializers
+
+	Avoid as much as possible initializers in the body of the constructor. Use
+	initializer lists instead.
+
+Scope prefixes
+
+	Use only m_ for class-level variables. No other scope prefixes; no g_, l_,
+	no 'p' for pointer variables.
+
+Shared pointers
+
+	Use shared pointers wherever possible.
+
+Getter/setter
+
+	Krita doesn't use Qt's properties -- yet. If you want to introduce use of
+	properties, convert any and all classes in Krita before committing.
+
+	Getter/setters are named 'getX() for getters and x(int x) for setters. If you
+	come across violations of this rule, change the code.	
+
+	Note that this does not hold for dialogs: getter in dialogs
+	have no 'get' prefix. I guess.
+
+Class naming
+
+	If you use a well-known design pattern, name the class according to the design
+	pattern.
+
+Designer
+
+	Krita doesn't use .ui files. Yet. When we get down to the great UI redesign,
+	all dialogs should be done in Designer.
+
+Enums
+
+	All enums should be prefixed with 'enum'.
+
+Namespaces
+
+	Currently, we only use anonymous (right term?) namespaces for things like undo
+	commands. For the rest, some classes have a 'Kis' prefix, others don't. This should
+	be made consistent, and we might want to use namespaces to keep all of Krita
+	inside.

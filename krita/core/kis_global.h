@@ -60,22 +60,28 @@ const int TILE_WIDTH = TILE_SIZE;
 const int TILE_HEIGHT = TILE_SIZE;
 
 /**
- * Size of a quantum
+ * Size of a quantum -- this could be 8, 16, 32 or 64 -- but for now, only 8 is possible.
  */
-typedef Q_UINT8 QUANTUM;
+#if !defined(QUANTUM_DEPTH)
+#define QUANTUM_DEPTH 8
+#endif
 
+#if (QUANTUM_DEPTH == 8)
+typedef Q_UINT8 QUANTUM;
 const QUANTUM QUANTUM_MAX = UCHAR_MAX;
 const QUANTUM OPACITY_TRANSPARENT = 0;
 const QUANTUM OPACITY_OPAQUE = QUANTUM_MAX;
+#endif
+
 const QUANTUM MAXCHANNELS = 5;
 const Q_INT32 IMG_DEFAULT_DEPTH = 4;
 const Q_INT32 RENDER_HEIGHT = TILE_SIZE * 4;
 const Q_INT32 RENDER_WIDTH = TILE_SIZE * 4;
 
 /*
- * Most wacom pads have 500 levels of pressure; this is downscaled
- * to 100 levels with steps of 5 because the line would be too jittery
- * otherwise.
+ * Most wacom pads have 512 levels of pressure; Qt only supports 256, and even 
+ * this is downscaled to 127 levels because the line would be too jittery, and
+ * the amount of masks take too much memory otherwise.
  */
 const Q_INT32 PRESSURE_LEVELS=127;
 
@@ -83,6 +89,7 @@ enum CompositeOp {
 	COMPOSITE_UNDEF,
 	COMPOSITE_OVER,
 	COMPOSITE_IN,
+	COMPOSITE_OUT,
 	COMPOSITE_ATOP,
 	COMPOSITE_XOR,
 	COMPOSITE_PLUS,
@@ -102,6 +109,19 @@ enum CompositeOp {
 	COMPOSITE_DISPLACE,
 	COMPOSITE_MODULATE,
 	COMPOSITE_THRESHOLD,
+	COMPOSITE_NO,
+	COMPOSITE_DARKEN,
+	COMPOSITE_LIGHTEN,
+	COMPOSITE_HUE,
+	COMPOSITE_SATURATE,
+	COMPOSITE_COLORIZE,
+	COMPOSITE_LUMINIZE,
+	COMPOSITE_SCREEN,
+	COMPOSITE_OVERLAY,
+	COMPOSITE_COPY_CYAN,
+	COMPOSITE_COPY_MAGENTA,
+	COMPOSITE_COPY_YELLOW,
+	COMPOSITE_COPY_BLACK,
 	COMPOSITE_NORMAL
 };
 

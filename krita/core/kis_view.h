@@ -35,11 +35,15 @@ class QButton;
 class QPaintEvent;
 class QScrollBar;
 class QWidget;
+
 class DCOPObject;
 class KAction;
 class KPrinter;
 class KToggleAction;
+
 class KoIconItem;
+class KoTabBar;
+
 class KisCanvasObserver;
 class KisRuler;
 class KisBrush;
@@ -54,7 +58,6 @@ class KisPattern;
 class KisResource;
 class KisResourceMediator;
 class KisSideBar;
-class KisTabBar;
 class KisUndoAdapter;
 
 class KisView : public KoView, 
@@ -277,7 +280,7 @@ private:
 	KisCanvas *m_canvas;
 
         // Fringe benefits
-	KisTabBar *m_tabBar;
+	KoTabBar *m_tabBar;
 	QButton *m_tabFirst; 
 	QButton *m_tabLeft; 
 	QButton *m_tabRight; 

@@ -20,21 +20,51 @@
 #define KIS_DLG_NEW_LAYER_H_
 
 class QSpinBox;
+class QWidget;
+class KIntSpinBox;
+class KLineEdit;
+class KisPaintDevice;
+class KIntNumInput;
+class KisCmbComposite;
+class KisCmbImageType;
+
 #include <kdialogbase.h>
+
+#include <kis_global.h>
 
 class NewLayerDialog : public KDialogBase {
 	typedef KDialogBase super;
 	Q_OBJECT
 
 public:
-	NewLayerDialog(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, QWidget *parent = 0, const char *name = 0);
+	NewLayerDialog(Q_INT32 maxWidth, 
+		       Q_INT32 defWidth,
+		       Q_INT32 maxHeight, 
+		       Q_INT32 defHeight, 
+		       enumImgType imageType,
+		       const QString & deviceName,
+		       QWidget *parent = 0,
+		       const char *name = 0);
 
 	Q_INT32 layerWidth() const { return m_width -> value(); };
 	Q_INT32 layerHeight() const { return m_height -> value(); };
+	QString layerName() const;
+	CompositeOp compositeOp() const;
+	Q_INT32 opacity() const;
+	QPoint position() const;
+	enumImgType imageType() const;
 
 private:
 	QSpinBox *m_width;
 	QSpinBox *m_height;
+
+	KIntSpinBox *m_x;
+	KIntSpinBox *m_y;
+
+	KLineEdit *m_name;
+	KIntNumInput *m_opacity;
+	KisCmbComposite *m_cmbComposite;
+	KisCmbImageType *m_cmbImageType;
 };
 
 #endif // KIS_DLG_NEW_LAYER_H_

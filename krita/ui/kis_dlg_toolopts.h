@@ -21,250 +21,251 @@
 #ifndef __tooloptionsdialog_h__
 #define __tooloptionsdialog_h__
 
+#include <qcheckbox.h>
+#include <qradiobutton.h>
+
 #include <kdialogbase.h>
+#include <knuminput.h>
 
 class QVBoxLayout;
-class QRadioButton;
-class KIntNumInput;
-class QCheckBox;
 
 enum tooltype
 {
-    tt_linetool,
-    tt_rectangletool,
-    tt_ellipsetool,
-    tt_polylinetool,
-    tt_brushtool,
-    tt_airbrushtool,
-    tt_pentool,
-    tt_erasertool,
-    tt_filltool,
-    tt_colorchangertool,
-    tt_colorpickertool,
-    tt_movetool,
-    tt_stamptool,
-    tt_pastetool,
-    tt_polygontool
+	tt_linetool,
+	tt_rectangletool,
+	tt_ellipsetool,
+	tt_polylinetool,
+	tt_brushtool,
+	tt_airbrushtool,
+	tt_pentool,
+	tt_erasertool,
+	tt_filltool,
+	tt_colorchangertool,
+	tt_colorpickertool,
+	tt_movetool,
+	tt_stamptool,
+	tt_pastetool,
+	tt_polygontool
 };
 
 struct ToolOptsStruct
 {
-    int lineThickness;
-    int lineOpacity;
+	int lineThickness;
+	int lineOpacity;
 
-    int penThreshold;
-    int penOpacity;
+	int penThreshold;
+	int penOpacity;
 
-    int opacity;
+	int opacity;
 
-    int polygonCorners;
-    int polygonSharpness;
+	int polygonCorners;
+	int polygonSharpness;
 
-    bool fillShapes;
-    bool usePattern;
-    bool useGradient;
-    bool convexPolygon;
-    bool concavePolygon;
+	bool fillShapes;
+	bool usePattern;
+	bool useGradient;
+	bool convexPolygon;
+	bool concavePolygon;
 };
 
 
 class KisToolTab : public QWidget
 {
-  Q_OBJECT
+	Q_OBJECT
 
-public:
+		public:
 
-    KisToolTab(ToolOptsStruct ts, QWidget *parent = 0, const char *name = 0 );
+	KisToolTab(ToolOptsStruct ts, QWidget *parent = 0, const char *name = 0 );
 
-    int  thickness()const    { return mpThickness->value(); };
-    int  opacity()const      { return mpOpacity->value(); };
-    int  penThreshold()const { return mpPenThreshold->value(); };
-    int  density()const      { return mpDensity->value(); };
-    int  granularuty()const  { return mpGranularity->value(); };
-    int  corners()const      { return mpCorners->value(); };
-    int  sharpness()const    { return mpSharpness->value(); };
+	int  thickness()const    { return mpThickness->value(); };
+	int  opacity()const      { return mpOpacity->value(); };
+	int  penThreshold()const { return mpPenThreshold->value(); };
+	int  density()const      { return mpDensity->value(); };
+	int  granularuty()const  { return mpGranularity->value(); };
+	int  corners()const      { return mpCorners->value(); };
+	int  sharpness()const    { return mpSharpness->value(); };
 
-    bool solid()const        { return mpSolid->isChecked(); };
-    bool usePattern()const   { return mpUsePattern->isChecked(); };
-    bool useGradient()const  { return mpUseGradient->isChecked(); };
-    bool blendPattern()const { return mpBlendPattern->isChecked(); };
-    bool blendGradient()const{ return mpBlendGradient->isChecked(); };
-    bool convexPolygon()const  { return mpConvexPolygon->isChecked(); };
-    bool concavePolygon()const { return mpConcavePolygon->isChecked(); };
+	bool solid()const        { return mpSolid->isChecked(); };
+	bool usePattern()const   { return mpUsePattern->isChecked(); };
+	bool useGradient()const  { return mpUseGradient->isChecked(); };
+	bool blendPattern()const { return mpBlendPattern->isChecked(); };
+	bool blendGradient()const{ return mpBlendGradient->isChecked(); };
+	bool convexPolygon()const  { return mpConvexPolygon->isChecked(); };
+	bool concavePolygon()const { return mpConcavePolygon->isChecked(); };
 
-protected:
+ protected:
 
-    KIntNumInput  *mpThickness;
-    KIntNumInput  *mpOpacity;
-    KIntNumInput  *mpPenThreshold;
-    KIntNumInput  *mpDensity;
-    KIntNumInput  *mpGranularity;
-    KIntNumInput  *mpCorners;
-    KIntNumInput  *mpSharpness;
+	KIntNumInput  *mpThickness;
+	KIntNumInput  *mpOpacity;
+	KIntNumInput  *mpPenThreshold;
+	KIntNumInput  *mpDensity;
+	KIntNumInput  *mpGranularity;
+	KIntNumInput  *mpCorners;
+	KIntNumInput  *mpSharpness;
 
-    QCheckBox *mpSolid;
-    QCheckBox *mpUsePattern;
-    QCheckBox *mpUseGradient;
-    QCheckBox *mpBlendPattern;
-    QCheckBox *mpBlendGradient;
-    QRadioButton *mpConvexPolygon;
-    QRadioButton *mpConcavePolygon;
+	QCheckBox *mpSolid;
+	QCheckBox *mpUsePattern;
+	QCheckBox *mpUseGradient;
+	QCheckBox *mpBlendPattern;
+	QCheckBox *mpBlendGradient;
+	QRadioButton *mpConvexPolygon;
+	QRadioButton *mpConcavePolygon;
 };
 
 
 class NullToolTab : public KisToolTab
 {
-  Q_OBJECT
+	Q_OBJECT
 
-public:
+		public:
 
-    NullToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
-        const char *name = 0 );
+	NullToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
+		     const char *name = 0 );
 };
 
 
 class LineToolTab : public KisToolTab
 {
-  Q_OBJECT
+	Q_OBJECT
 
-public:
+		public:
 
-    LineToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
-        const char *name = 0 );
+	LineToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
+		     const char *name = 0 );
 };
 
 
 class PenToolTab : public KisToolTab
 {
-  Q_OBJECT
+	Q_OBJECT
 
-public:
+		public:
 
-    PenToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
-        const char *name = 0 );
+	PenToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
+		    const char *name = 0 );
 };
 
 
 class BrushToolTab : public KisToolTab
 {
-  Q_OBJECT
+	Q_OBJECT
 
-public:
+		public:
 
-    BrushToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
-        const char *name = 0 );
+	BrushToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
+		      const char *name = 0 );
 };
 
 
 class EraserToolTab : public KisToolTab
 {
-  Q_OBJECT
+	Q_OBJECT
 
-public:
+		public:
 
-    EraserToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
-        const char *name = 0 );
+	EraserToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
+		       const char *name = 0 );
 };
 
 
 class AirBrushToolTab : public KisToolTab
 {
-  Q_OBJECT
+	Q_OBJECT
 
-public:
+		public:
 
-    AirBrushToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
-        const char *name = 0 );
+	AirBrushToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
+			 const char *name = 0 );
 };
 
 
 class FillToolTab : public KisToolTab
 {
-  Q_OBJECT
+	Q_OBJECT
 
-public:
+		public:
 
-    FillToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
-        const char *name = 0 );
+	FillToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
+		     const char *name = 0 );
 };
 
 
 class StampToolTab : public KisToolTab
 {
-  Q_OBJECT
+	Q_OBJECT
 
-public:
+		public:
 
-    StampToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
-        const char *name = 0 );
+	StampToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
+		      const char *name = 0 );
 };
 
 class PolygonPreview;
 class PolygonToolTab : public KisToolTab
 {
-  Q_OBJECT
+	Q_OBJECT
 
-public:
+		public:
 
-    PolygonToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
+	PolygonToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
 
-        const char *name = 0 );
-private:
-    PolygonPreview *preview;
+			const char *name = 0 );
+ private:
+	PolygonPreview *preview;
 
-private slots:
-    void slotConvexPolygon();
-    void slotConcavePolygon();
+	private slots:
+		void slotConvexPolygon();
+	void slotConcavePolygon();
 };
 
 
 class ToolOptionsDialog : public KDialogBase
 {
-  Q_OBJECT
+	Q_OBJECT
 
-public:
+		public:
 
-    ToolOptionsDialog( tooltype tt, ToolOptsStruct ts,
-        QWidget *parent = 0, const char *name = 0 );
+	ToolOptionsDialog( tooltype tt, ToolOptsStruct ts,
+			   QWidget *parent = 0, const char *name = 0 );
 
-    NullToolTab *nullToolTab()const
-        { return pNullToolTab; }
+	NullToolTab *nullToolTab()const
+		{ return pNullToolTab; }
 
-    LineToolTab *lineToolTab()const
-        { return pLineToolTab; }
+	LineToolTab *lineToolTab()const
+		{ return pLineToolTab; }
 
-    PenToolTab  *penToolTab()const
-        { return pPenToolTab; }
+	PenToolTab  *penToolTab()const
+		{ return pPenToolTab; }
 
-    BrushToolTab *brushToolTab()const
-        { return pBrushToolTab; }
+	BrushToolTab *brushToolTab()const
+		{ return pBrushToolTab; }
 
-    AirBrushToolTab *airBrushToolTab()const
-        { return pAirBrushToolTab; }
+	AirBrushToolTab *airBrushToolTab()const
+		{ return pAirBrushToolTab; }
 
-    EraserToolTab *eraserToolTab()const
-        { return pEraserToolTab; }
+	EraserToolTab *eraserToolTab()const
+		{ return pEraserToolTab; }
 
-    FillToolTab *fillToolTab()const
-        { return pFillToolTab; }
+	FillToolTab *fillToolTab()const
+		{ return pFillToolTab; }
 
-    StampToolTab *stampToolTab()const
-        { return pStampToolTab; }
+	StampToolTab *stampToolTab()const
+		{ return pStampToolTab; }
 
-    PolygonToolTab *polygonToolTab()const
-        { return pPolygonToolTab; }
+	PolygonToolTab *polygonToolTab()const
+		{ return pPolygonToolTab; }
 
-private:
+ private:
 
-    NullToolTab     *pNullToolTab;
-    LineToolTab     *pLineToolTab;
-    PenToolTab      *pPenToolTab;
-    BrushToolTab    *pBrushToolTab;
-    AirBrushToolTab *pAirBrushToolTab;
-    EraserToolTab   *pEraserToolTab;
-    FillToolTab     *pFillToolTab;
-    StampToolTab    *pStampToolTab;
-    PolygonToolTab  *pPolygonToolTab;
+	NullToolTab     *pNullToolTab;
+	LineToolTab     *pLineToolTab;
+	PenToolTab      *pPenToolTab;
+	BrushToolTab    *pBrushToolTab;
+	AirBrushToolTab *pAirBrushToolTab;
+	EraserToolTab   *pEraserToolTab;
+	FillToolTab     *pFillToolTab;
+	StampToolTab    *pStampToolTab;
+	PolygonToolTab  *pPolygonToolTab;
 };
 
 #endif // __tooloptionsdialog.h__

@@ -88,7 +88,7 @@ GradientTab::GradientTab( KisGradient *_gradient,
     layout->addWidget( blend, 3, 1 );
 
     QLabel *lblBlend = new QLabel( blend,
-        i18n( "Blend:" ), area );
+        i18n( "Blend XXX:" ), area );
     layout->addWidget( lblBlend, 3, 0 );
 
     // gradient types - from kimageeffects

@@ -96,7 +96,7 @@ QUANTUM KisLayer::opacity() const
 	return m_opacity;
 }
 
-void KisLayer::opacity(QUANTUM val)
+void KisLayer::setOpacity(QUANTUM val)
 {
 	m_opacity = val;
 }

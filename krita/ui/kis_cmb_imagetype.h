@@ -1,7 +1,7 @@
 /*
- *  kis_timer.h - part of KImageShop
+ *  kis_cmb_imagetype.h - part of KImageShop/Krayon/Krita
  *
- *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
+ *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,17 +18,28 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __kis_timer_h__
-#define __kis_timer_h__
+#if !defined KIS_CMB_IMAGETYPE_H_
+#define KIS_CMB_IMAGETYPE_H_
 
-class KisTimer
+#include "kis_global.h"
+
+#include "qcombobox.h"
+
+/**
+ * A combobox filled with the various image types defined in kis_global.
+ */
+
+class KisCmbImageType : public QComboBox
 {
- public:
-  KisTimer() {}
-  ~KisTimer() {}
-  
-  static void start();
-  static void stop( const char* text );
-};                  
+	typedef QComboBox super;
+
+	Q_OBJECT
+
+ public: 
+
+	KisCmbImageType(QWidget * parent = 0, const char * name = 0 );
+	virtual ~KisCmbImageType();
+
+};
 
 #endif

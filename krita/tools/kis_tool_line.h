@@ -2,6 +2,7 @@
  *  linetool.h - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@comuzone.net>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,32 +31,35 @@ class KisView;
 class KisCanvas;
 
 class LineTool : public KisTool {
+	typedef KisTool super;
+
 public:
 	LineTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~LineTool();
 
 	virtual void setupAction(QObject *collection);
+	
+	virtual QString settingsName() const;
 	virtual QDomElement saveSettings(QDomDocument& doc) const;
 	virtual bool loadSettings(QDomElement& elem);
 
-	virtual void mousePress( QMouseEvent* event );
-	virtual void mouseMove( QMouseEvent* event );
-	virtual void mouseRelease( QMouseEvent* event );
+	virtual void mousePress(QMouseEvent *event);
+	virtual void mouseMove(QMouseEvent *event);
+	virtual void mouseRelease(QMouseEvent *event);
 
 	virtual void optionsDialog();
 	virtual void toolSelect();
   
 protected:
-	void drawLine( const QPoint&, const QPoint& );
+	virtual void draw(const QPoint& start, const QPoint& end);
     
 protected:
+	int m_lineThickness;
+	bool m_dragging;
 
-	int         m_lineThickness;
-
-	QPoint      m_dragStart;
-	QPoint      m_dragEnd;
-
-	bool        m_dragging;
+	QPoint m_dragStart;
+	QPoint m_dragEnd;
 };
 
 #endif //__linetool_h__
+

@@ -128,15 +128,19 @@ void KisToolFreehand::initPaint(KisEvent *)
 		if (m_painter)
 			delete m_painter;
 		if (m_useTempLayer) {
-			m_target = new KisLayer(currentImage(), device->width(), device->height(), "temp", OPACITY_OPAQUE);
+			// XXX ugly! hacky!
+			m_target = dynamic_cast<KisDoc*>(m_subject->document())->layerAdd(
+				currentImage(), device->width(), device->height(), "temp", OPACITY_OPAQUE);
 			KisFillPainter painter(m_target.data());
 			painter.eraseRect(0, 0, m_target -> width(), m_target -> height());
 			painter.end();
+			m_target -> setCompositeOp(m_compositeOp);
 			dynamic_cast<KisLayer*>(m_target.data()) -> setVisible(true);
 			// XXX doesn't look very good I'm afraid
 			currentImage() -> add(dynamic_cast<KisLayer*>(m_target.data()),
-					      currentImage() -> index(dynamic_cast<KisLayer*>(device.data()) + 1));
+				currentImage() -> index(dynamic_cast<KisLayer*>(device.data())) + 1);
 			m_target = currentImage() -> activate(dynamic_cast<KisLayer*>(m_target.data()));
+			currentImage() -> notify();
 		} else {
 			m_target = device;
 		}
@@ -148,8 +152,13 @@ void KisToolFreehand::initPaint(KisEvent *)
 	m_painter -> setPaintColor(m_subject -> fgColor());
 	m_painter -> setBackgroundColor(m_subject -> bgColor());
 	m_painter -> setBrush(m_subject -> currentBrush());
+	// if you're drawing on a temporary layer, the layer already sets this
 	m_painter -> setOpacity(m_opacity);
-	m_painter -> setCompositeOp(m_compositeOp);
+	if (m_useTempLayer) {
+		m_painter -> setCompositeOp(COMPOSITE_OVER);
+	} else {
+		m_painter -> setCompositeOp(m_compositeOp);
+	}
 
 	// Set the cursor -- ideally. this should be a mask created from the brush,
 	// now that X11 can handle colored cursors.
@@ -171,13 +180,17 @@ void KisToolFreehand::endPaint()
 			if (m_useTempLayer) {
 				m_painter -> endTransaction();
 				KisPainter painter( m_source );
+				painter.setCompositeOp(m_compositeOp);
 				painter.beginTransaction(m_transactionText);
-				painter.bitBlt(0, 0,  m_painter -> compositeOp(), m_target, m_painter -> opacity(),
-					       0, 0, m_source -> width() - 1, m_source -> width() - 1);
+				painter.bitBlt(0, 0,  m_compositeOp, m_target, OPACITY_OPAQUE,
+					0, 0, m_source -> width() - 1, m_source -> width() - 1);
 				adapter -> addCommand(painter.endTransaction());
-				currentImage() -> rm(dynamic_cast<KisLayer*>(m_target.data()));
+				//currentImage() -> rm(dynamic_cast<KisLayer*>(m_target.data()));
+				dynamic_cast<KisDoc*>(m_subject->document())->layerRemove(
+					currentImage(), dynamic_cast<KisLayer*>(m_target.data()));
 				currentImage() -> activate(dynamic_cast<KisLayer*>(m_source.data()));
-				delete m_target;
+				// looks like deleting this isn't good for undo?
+				//delete m_target;
 			} else {
 				adapter -> addCommand(m_painter->endTransaction());
 			}

@@ -30,19 +30,96 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
 {
         const double pi=3.1415926535897932385;
         kdDebug() << "Rotating Code called! Going to rotate image by (angle): " << angle << "\n";
-        Q_INT32 origHeight = m_dev -> height();
-        double theta=angle*pi/180;
-        //first perform a shear along the x-axis by tan(theta/2)
-        double shearX=tan(theta/2);
-        xShearImage(shearX, m_progress);
-        //next perform a shear along the y-axis by sin(theta)
-        double shearY=sin(theta);
-        yShearImage(shearY, m_progress);
-        //again perform a shear along the x-axis by tan(theta/2)
-        xShearImage(shearX, m_progress);
-        double deltaY=origHeight*QABS(shearX*shearY);
-        if (deltaY != 0)
+        
+        if(angle>=315 && angle <360){
+                angle=angle-360;
+        } else if(angle > -360 && angle < -45){
+                angle=angle+360;
+        }
+        
+        if(angle>=-45 && angle <45){
+                Q_INT32 origHeight = m_dev -> height();
+                Q_INT32 origWidth = m_dev -> width();
+                double theta=angle*pi/180;
+                //first perform a shear along the x-axis by tan(theta/2)
+                double shearX=tan(theta/2);
+                xShearImage(shearX, m_progress);
+                //next perform a shear along the y-axis by sin(theta)
+                double shearY=sin(theta);
+                yShearImage(shearY, m_progress);
+                //again perform a shear along the x-axis by tan(theta/2)
+                xShearImage(shearX, m_progress);
+                double deltaX=(origWidth+origHeight*QABS(shearX))*QABS(shearX*shearY);
+                if (deltaX != 0)
+                        xCropImage(deltaX);
+                double deltaY=origHeight*QABS(shearX*shearY);
+                if (deltaY != 0)
                         yCropImage(deltaY);
+        } else if(angle>=45 && angle < 135 && angle != 90){
+                rotateRight90();
+                Q_INT32 origHeight = m_dev -> height();
+                Q_INT32 origWidth = m_dev -> width();
+                double theta=(angle-90)*pi/180;
+                //first perform a shear along the x-axis by tan(theta/2)
+                double shearX=tan(theta/2);
+                xShearImage(shearX, m_progress);
+                //next perform a shear along the y-axis by sin(theta)
+                double shearY=sin(theta);
+                yShearImage(shearY, m_progress);
+                //again perform a shear along the x-axis by tan(theta/2)
+                xShearImage(shearX, m_progress);
+                double deltaX=(origWidth+origHeight*QABS(shearX))*QABS(shearX*shearY);
+                if (deltaX != 0)
+                        xCropImage(deltaX);
+                double deltaY=origHeight*QABS(shearX*shearY);
+                if (deltaY != 0)
+                        yCropImage(deltaY);
+        } else if(angle>=135 && angle < 225 && angle != 180){
+                rotate180();
+                Q_INT32 origHeight = m_dev -> height();
+                Q_INT32 origWidth = m_dev -> width();
+                double theta=(angle-180)*pi/180;
+                //first perform a shear along the x-axis by tan(theta/2)
+                double shearX=tan(theta/2);
+                xShearImage(shearX, m_progress);
+                //next perform a shear along the y-axis by sin(theta)
+                double shearY=sin(theta);
+                yShearImage(shearY, m_progress);
+                //again perform a shear along the x-axis by tan(theta/2)
+                xShearImage(shearX, m_progress);
+                double deltaX=(origWidth+origHeight*QABS(shearX))*QABS(shearX*shearY);
+                if (deltaX != 0)
+                        xCropImage(deltaX);
+                double deltaY=origHeight*QABS(shearX*shearY);
+                if (deltaY != 0)
+                        yCropImage(deltaY);
+        } else if(angle>=225 && angle < 315 && angle != 270){
+                rotateLeft90();
+                Q_INT32 origHeight = m_dev -> height();
+                Q_INT32 origWidth = m_dev -> width();
+                double theta=(angle-270)*pi/180;
+                //first perform a shear along the x-axis by tan(theta/2)
+                double shearX=tan(theta/2);
+                xShearImage(shearX, m_progress);
+                //next perform a shear along the y-axis by sin(theta)
+                double shearY=sin(theta);
+                yShearImage(shearY, m_progress);
+                //again perform a shear along the x-axis by tan(theta/2)
+                xShearImage(shearX, m_progress);
+                double deltaX=(origWidth+origHeight*QABS(shearX))*QABS(shearX*shearY);
+                if (deltaX != 0)
+                        xCropImage(deltaX);
+                double deltaY=origHeight*QABS(shearX*shearY);
+                if (deltaY != 0)
+                        yCropImage(deltaY);
+        } else if(angle==90){      
+                rotateRight90();
+        } else if (angle==180){
+                rotate180();
+        } else if (angle==270){
+                rotateLeft90();
+        }
+
 }
 
 void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress) 
@@ -191,7 +268,6 @@ void KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface *m
                 for (Q_INT32 x=0; x < width; x++){
                         //calculate displacement
                         displacement = (width-x)*QABS(shearY);
-                        kdDebug() << "displacement " << displacement << "\n";
                         displacementInt = floor(displacement);
                         weight=displacement-displacementInt;
                         //read a column from the image
@@ -218,6 +294,31 @@ void KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface *m
         m_dev -> setTiles(tm); // Also sets width and height correctly
 }
 
+void KisRotateVisitor::xCropImage(double deltaX)
+{
+        Q_INT32 width = m_dev->width();
+        Q_INT32 height = m_dev->height();
+        //calculate widht of the croped image
+        Q_INT32 targetW = width -2 * deltaX + 2;
+        Q_INT32 targetH = height;
+        KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
+        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
+        QUANTUM *tempRow = new QUANTUM[width * m_dev -> depth() * sizeof(QUANTUM)];
+        Q_INT32 currentPos;
+        for(Q_INT32 y=0; y < height; y++){
+                m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
+                for(Q_INT32 x=deltaX; x < (width-deltaX) + 1; x++){
+                        currentPos = (y*targetW+x) * m_dev -> depth();
+                        for(int channel = 0; channel < m_dev -> depth(); channel++){
+                                newData[currentPos - (int)deltaX*m_dev -> depth() + channel]=tempRow[x*m_dev -> depth()+channel];
+                        }    
+                }
+        }
+        kdDebug() << "write newData to the image!" << "\n";
+        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
+        m_dev -> setTiles(tm); // Also sets width and height correctly
+}
+
 void KisRotateVisitor::yCropImage(double deltaY)
 {
         Q_INT32 width = m_dev->width();
@@ -234,7 +335,89 @@ void KisRotateVisitor::yCropImage(double deltaY)
                 for(Q_INT32 x=0; x < width; x++){
                         currentPos = (y*targetW+x) * m_dev -> depth();
                         for(int channel = 0; channel < m_dev -> depth(); channel++){
-                                newData[currentPos - (int)deltaY*targetW*m_dev -> depth()  + channel]=tempRow[x*m_dev -> depth()+channel];
+                                newData[currentPos - (int)deltaY*targetW*m_dev -> depth() + channel]=tempRow[x*m_dev -> depth()+channel];
+                        }    
+                }
+        }
+        kdDebug() << "write newData to the image!" << "\n";
+        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
+        m_dev -> setTiles(tm); // Also sets width and height correctly
+}
+
+void KisRotateVisitor::rotateRight90()
+{
+        kdDebug() << "rotateRight called!" << "\n";
+        Q_INT32 width = m_dev->width();
+        Q_INT32 height = m_dev->height();
+        //calculate widht of the croped image
+        Q_INT32 targetW = height;
+        Q_INT32 targetH = width;
+        KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
+        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
+        QUANTUM *tempRow = new QUANTUM[width * m_dev -> depth() * sizeof(QUANTUM)];
+        Q_INT32 currentPos;
+        for(Q_INT32 y=0; y < height; y++){
+                m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
+                for(Q_INT32 x=0; x < width; x++){
+                        currentPos = (x*targetW+height-y-1) * m_dev -> depth();
+                        for(int channel = 0; channel < m_dev -> depth(); channel++){
+                                newData[currentPos + channel]=tempRow[x*m_dev -> depth()+channel];
+                        }    
+                }
+        }
+        kdDebug() << "write newData to the image!" << "\n";
+        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
+        m_dev -> setTiles(tm); // Also sets width and height correctly
+}
+
+void KisRotateVisitor::rotateLeft90()
+{
+        kdDebug() << "rotateLeft called!" << "\n";
+        Q_INT32 width = m_dev->width();
+        Q_INT32 height = m_dev->height();
+        //calculate widht of the croped image
+        Q_INT32 targetW = height;
+        Q_INT32 targetH = width;
+        kdDebug() << "targetW: " << targetW << " targetH: " << targetH << "\n";
+        KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
+        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
+        QUANTUM *tempRow = new QUANTUM[width * m_dev -> depth() * sizeof(QUANTUM)];
+        Q_INT32 currentPos;
+        for(Q_INT32 y=0; y < height; y++){
+                m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
+                kdDebug() << "y: " << y << "\n";
+                for(Q_INT32 x=0; x < width; x++){
+                        currentPos = (x*targetW+y) * m_dev -> depth();
+                        for(int channel = 0; channel < m_dev -> depth(); channel++){
+                                newData[currentPos + channel]=tempRow[(width-x-1)*m_dev -> depth()+channel];
+                        }    
+                }
+        }
+        kdDebug() << "write newData to the image!" << "\n";
+        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
+        m_dev -> setTiles(tm); // Also sets width and height correctly
+}
+
+void KisRotateVisitor::rotate180()
+{
+        kdDebug() << "rotate180 called!" << "\n";
+        Q_INT32 width = m_dev->width();
+        Q_INT32 height = m_dev->height();
+        //calculate widht of the croped image
+        Q_INT32 targetW = width;
+        Q_INT32 targetH = height;
+        kdDebug() << "targetW: " << targetW << " targetH: " << targetH << "\n";
+        KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
+        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
+        QUANTUM *tempRow = new QUANTUM[width * m_dev -> depth() * sizeof(QUANTUM)];
+        Q_INT32 currentPos;
+        for(Q_INT32 y=0; y < height; y++){
+                m_dev -> tiles() -> readPixelData(0, height-y-1, width-1, height-y-1, tempRow, m_dev -> depth());
+                kdDebug() << "y: " << y << "\n";
+                for(Q_INT32 x=0; x < width; x++){
+                        currentPos = (y*targetW+width-x) * m_dev -> depth();
+                        for(int channel = 0; channel < m_dev -> depth(); channel++){
+                                newData[currentPos + channel]=tempRow[x*m_dev -> depth()+channel];
                         }    
                 }
         }

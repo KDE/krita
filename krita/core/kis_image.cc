@@ -436,13 +436,8 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 
 	if (m_layers.empty()) return; // Nothing to scale
         Q_INT32 w, h;
-        //width after performing a shear along the x-axis by tan(theta/2)
-        w = width() + QABS(height()*tan(angle*pi/360));
-        //height after performing a shear along the y-axis by sin(theta)
-        h = height() + QABS(width()*sin(angle*pi/180));
-        //width after performing another shear along the x-axis by tan(theta/2)        
-	w = w + QABS(height()*tan(angle*pi/360));
-        
+        w = width()*QABS(cos(angle*pi/180)) + height()*QABS(sin(angle*pi/180)) + 1;
+        h = height()*QABS(cos(angle*pi/180)) + width()*QABS(sin(angle*pi/180)) + 1;
 	if (w != width() || h != height()) {
 
 		undoAdapter() -> beginMacro("Rotate image");

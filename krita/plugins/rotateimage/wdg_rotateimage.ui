@@ -46,10 +46,10 @@
                         <cstring>intAngle</cstring>
                     </property>
                     <property name="minValue">
-                        <number>-45</number>
+                        <number>-359</number>
                     </property>
                     <property name="maxValue">
-                        <number>45</number>
+                        <number>359</number>
                     </property>
                 </widget>
             </grid>

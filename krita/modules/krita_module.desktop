@@ -2,3 +2,14 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/CoreModule
 Comment=Core functionality module for Krita
+Comment[cy]=Modiwl swyddogaeth craidd ar gyfer Krita
+Comment[da]=Kernefunktionalitetsmodul for Krita
+Comment[es]=Módulo de funcionalidad principal para Krita
+Comment[et]=Krita tuumikfunktsioonide moodul
+Comment[pt]=Módulo de funcionalidade nuclear para o Krita
+Comment[pt_BR]=Módulo de funcionalidades principais para o Krita
+Comment[sr]=Модел основне функционалности за Krita-у
+Comment[sr@Latn]=Модел основне функционалности за Krita-у
+Comment[sv]=Modul med kärnfunktioner för Krita
+Comment[ta]=Kritaக்கான முக்கிய செயல்படுத்தக்கூடிய கூறு
+Comment[xx]=xxCore functionality module for Kritaxx

@@ -47,6 +47,10 @@ KisPaintBox::~KisPaintBox()
 {
 }
 
+void KisPaintBox::plug( QWidget *w )
+{
+	plug( w,  w -> caption() );
+}
 void KisPaintBox::plug(QWidget *w, const QString & label)
 {
 	m_toolbox -> addItem( w,  label );

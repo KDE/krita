@@ -52,6 +52,7 @@ public:
 	virtual ~KisPaintBox();
 
 	/// Plug a new entry into the stack
+	void plug( QWidget *w );
 	void plug(QWidget *w, const QString & label);
 	void plug(QWidget *w, const QString & label, const QIconSet & iconset);
 

@@ -33,12 +33,13 @@ namespace {
 	const Q_INT32 IMG_DEFAULT_WIDTH = 512;
 	const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
 	const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
+	const enumPaletteStyle DEFAULT_PALETTE_STYLE = PALETTE_TOOLBOX;
 }
 
 KisConfig::KisConfig()
 {
 	KApplication *app = KApplication::kApplication();
-	
+
 	Q_ASSERT(app);
 
 	m_cfg = app -> config();
@@ -118,6 +119,18 @@ enumCursorStyle KisConfig::defCursorStyle() const
 void KisConfig::defCursorStyle(enumCursorStyle style)
 {
 	m_cfg -> writeEntry("cursorStyleDef", style);
+}
+
+
+
+enumPaletteStyle KisConfig::paletteStyle() const
+{
+	return ( enumPaletteStyle ) m_cfg -> readNumEntry( "paletteStyle",  DEFAULT_PALETTE_STYLE );
+}
+
+void KisConfig::setPaletteStyle( enumPaletteStyle style )
+{
+	m_cfg -> writeEntry( "paletteStyle",  style );
 }
 
 

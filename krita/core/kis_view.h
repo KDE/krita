@@ -23,8 +23,6 @@
 #ifndef KIS_VIEW_H_
 #define KIS_VIEW_H_
 
-#define KIVIO_STYLE_DOCKERS 0
-
 #include <qdatetime.h>
 #include <qpixmap.h>
 
@@ -43,13 +41,10 @@
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
 
-#if KIVIO_STYLE_DOCKERS
 #include "kotooldockmanager.h"
 #include "kotooldockbase.h"
-#else
 #include "kis_dockframedocker.h"
 #include "kis_basedocker.h"
-#endif
 
 class QButton;
 class QLabel;
@@ -137,9 +132,7 @@ public: // KoView implementation
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, bool modal = false, const KURL& url = KURL());
 
-#if KIVIO_STYLE_DOCKERS
 	KoToolDockManager * toolDockManager() { return m_toolDockManager; }
-#endif
 	void updateStatusBarSelectionLabel();
 
 	/**
@@ -372,22 +365,19 @@ private slots:
 	void showRuler();
 
 
-/*  XXX: Moc works on the un-preprocessed header file, meaning that the switch doesn't work */
-/* #if KIVIO_STYLE_DOCKERS */
+ 	void viewColorSlider(bool v = true);
+ 	void viewControlSlider(bool v = true);
+ 	void viewLayerChannelSlider(bool v = true);
+ 	void viewShapesSlider(bool v = true);
+ 	void viewFillsSlider(bool v = true);
 
-/* 	void viewColorDocker(bool v = true); */
-/* 	void viewControlDocker(bool v = true); */
-/* 	void viewLayerChannelDocker(bool v = true); */
-/* 	void viewShapesDocker(bool v = true); */
-/* 	void viewFillsDocker(bool v = true); */
-/* #else */
 	void viewColorDocker();
 	void viewControlDocker();
 	void viewLayerChannelDocker();
 	void viewShapesDocker();
 	void viewFillsDocker();
-	void viewPaintOpDocker();
-/* #endif */
+	void viewPaintBoxDocker();
+
 
 
 private:
@@ -450,20 +440,19 @@ private:
 	KisGrayWidget *m_graywidget;
 
         // Dockers
-#if KIVIO_STYLE_DOCKERS
-	KoTabbedToolDock *m_layerchanneldocker;
-	KoTabbedToolDock *m_shapesdocker;
-	KoTabbedToolDock *m_fillsdocker;
-	KoTabbedToolDock *m_toolcontroldocker;
-	KoTabbedToolDock *m_colordocker;
-#else
+	KoTabbedToolDock *m_layerchannelslider;
+	KoTabbedToolDock *m_shapesslider;
+	KoTabbedToolDock *m_fillsslider;
+	KoTabbedToolDock *m_toolcontrolslider;
+	KoTabbedToolDock *m_colorslider;
+
 	KisDockFrameDocker *m_layerchanneldocker;
 	KisDockFrameDocker *m_shapesdocker;
 	KisDockFrameDocker *m_fillsdocker;
 	KisDockFrameDocker *m_toolcontroldocker;
 	KisDockFrameDocker *m_colordocker;
+
 	KisPaintBox *m_paintboxdocker;
-#endif
 	// Dialogs
 	QWidget *m_paletteChooser;
 	QWidget *m_gradientChooser;
@@ -510,10 +499,8 @@ private:
 	QTabletEvent::TabletDevice m_lastTabletEventDevice;
 	QPixmap m_canvasPixmap;
 
-#if KIVIO_STYLE_DOCKERS
 	KoToolDockManager * m_toolDockManager;
-	bool m_dockersSetup;
-#endif
+	bool m_slidersSetup;
 	// Monitorprofile for this view
 	KisProfileSP m_monitorProfile;
 

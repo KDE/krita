@@ -81,8 +81,6 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 
 	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 
-// 	m_dirtyRect = QRect(0, 0, 0, 0);
-
         if (e -> button() == QMouseEvent::LeftButton) {
 
 		initPaint(e);
@@ -95,10 +93,10 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 		m_prevYTilt = e -> yTilt();
 
  		QRect r = m_painter -> dirtyRect();
-// 		if ( r.isValid() ) {
-// 			m_dirtyRect = m_painter -> dirtyRect();
+ 		if ( r.isValid() ) {
+ 			m_dirtyRect = m_painter -> dirtyRect();
  			m_currentImage -> notify(r);
-// 		}
+ 		}
          }
 }
 
@@ -120,7 +118,7 @@ void KisToolFreehand::move(KisMoveEvent *e)
 		m_prevYTilt = e -> yTilt();
 
  		QRect r = m_painter -> dirtyRect();
-// 		m_dirtyRect |= r;
+ 		m_dirtyRect |= r;
 		m_currentImage -> notify(r);
 	}
 }
@@ -192,8 +190,8 @@ void KisToolFreehand::endPaint()
 				painter.setCompositeOp(m_compositeOp);
 				painter.beginTransaction(m_transactionText);
 
-// 				painter.bitBlt(m_dirtyRect.x(), m_dirtyRect.y(),  m_compositeOp, m_target, OPACITY_OPAQUE,
-// 					m_dirtyRect.x(), m_dirtyRect.y(), m_dirtyRect.width(), m_dirtyRect.height());
+ 				painter.bitBlt(m_dirtyRect.x(), m_dirtyRect.y(),  m_compositeOp, m_target, OPACITY_OPAQUE,
+ 					m_dirtyRect.x(), m_dirtyRect.y(), m_dirtyRect.width(), m_dirtyRect.height());
 
 				adapter -> addCommand(painter.endTransaction());
 				//currentImage() -> rm(dynamic_cast<KisLayer*>(m_target.data()));

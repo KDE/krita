@@ -44,6 +44,9 @@ public:
 	enumCursorStyle defCursorStyle() const;
 	void defCursorStyle(enumCursorStyle style);
 
+	enumPaletteStyle paletteStyle() const;
+	void setPaletteStyle( enumPaletteStyle style );
+
 	QString monitorProfile() const;
 	void setMonitorProfile(QString monitorProfile);
 
@@ -76,6 +79,7 @@ public:
 
 	Q_INT32 renderIntent();
 	void setRenderIntent(Q_INT32 renderIntent);
+
 
 
 private:

@@ -84,6 +84,13 @@ enum enumCursorStyle {
 	CURSOR_STYLE_OUTLINE
 };
 
+
+enum enumPaletteStyle {
+	PALETTE_SLIDER,
+	PALETTE_DOCKER,
+	PALETTE_TOOLBOX
+};
+
 /*
  * Most wacom pads have 512 levels of pressure; Qt only supports 256, and even
  * this is downscaled to 127 levels because the line would be too jittery, and

@@ -87,14 +87,13 @@ public:
 			return false;
 
 		if (m_mergeTest(layer.data())) {
-			Q_INT32 x, y, w, h;
-			x = y = 0;
-			w = m_img -> width();
-			h = m_img -> height();
+			Q_INT32 sx, sy, dx, dy, w, h;
 
-			// layer -> extent( x, y, w, y );
-
-			gc.bitBlt(x, y, layer -> compositeOp() , layer.data(), layer -> opacity(), x, y, w, h);
+			layer -> getExtent(sx,sy,w,h);
+			dx = layer->getX() - gc->device()->getX() + sx;
+			dy = layer->getY() - gc->device()->getY() + sy;
+			
+			gc.bitBlt(dx, dy, layer -> compositeOp() , layer.data(), layer -> opacity(), sx, sy, w, h);
 
 			if (!m_haveFoundInsertionPlace) {
 

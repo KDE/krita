@@ -43,7 +43,7 @@ void KisZoomTool::update(KisCanvasSubject *subject)
 void KisZoomTool::mousePress(QMouseEvent *e)
 {
 	if (m_subject) {
-		KisCanvasControllerInterface *controller = m_subject -> controller();
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 	
 		if (e -> button() == Qt::LeftButton)
 			controller -> zoomIn();

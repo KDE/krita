@@ -28,6 +28,7 @@
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_global.h"
+#include "kis_tool_controller.h"
 #include "kis_types.h"
 
 class QButton;
@@ -57,7 +58,10 @@ class KisSideBar;
 class KisTabBar;
 class KisUndoAdapter;
 
-class KisView : public KoView, private KisCanvasSubject, private KisCanvasControllerInterface {
+class KisView : public KoView, 
+		private KisCanvasSubject, 
+		private KisCanvasControllerInterface,
+		private KisToolControllerInterface {
 	Q_OBJECT
 	typedef KoView super;
 	typedef std::list<KisCanvasObserver*> vKisCanvasObserver;
@@ -136,13 +140,12 @@ private:
 	virtual KisGradient *currentGradient() const;
 	virtual double zoomFactor() const;
 	virtual KisUndoAdapter *undoAdapter() const;
-	virtual KisCanvasControllerInterface *controller() const;
+	virtual KisCanvasControllerInterface *canvasController() const;
+	virtual KisToolControllerInterface *toolController() const;
 	virtual KoDocument *document() const;
 
 private:
 	// Implement KisCanvasControllerInterface
-	virtual void activateTool(KisTool *tool);
-	virtual KisTool *currentTool() const;
 	virtual QWidget *canvas() const;
 	virtual Q_INT32 horzValue() const;
 	virtual Q_INT32 vertValue() const;
@@ -159,6 +162,11 @@ private:
 	virtual QPoint windowToView(const QPoint& pt);
 	virtual QRect windowToView(const QRect& rc);
 	virtual void windowToView(Q_INT32 *x, Q_INT32 *y);
+
+private:
+	// Implement KisToolControllerInterface
+	virtual void setCurrentTool(KisTool *tool);
+	virtual KisTool *currentTool() const;
 
 private:
 	void clearCanvas(const QRect& rc);

@@ -183,7 +183,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 
 		for (Q_UINT32 y = 0; y < bh.height; y++)
 			for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
-				if (k > m_data.size()) {
+				if (static_cast<Q_UINT32>(k) > m_data.size()) {
 					emit ioFailed(this);
 					return;
 				}
@@ -195,7 +195,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		kdDebug() << "rgba brush" << endl;
 		for (Q_UINT32 y = 0; y < bh.height; y++)
 			for (Q_UINT32 x = 0; x < bh.width; x++) {
-				if (k + 4 > m_data.size()) {
+				if (static_cast<Q_UINT32>(k + 4) > m_data.size()) {
 					emit ioFailed(this);
 					return;
 				}

@@ -105,7 +105,7 @@ void KisToolRectangularSelect::paint(QPainter& gc, const QRect& rc)
 void KisToolRectangularSelect::clearSelection()
 {
 	if (m_subject) {
-		KisCanvasControllerInterface *controller = m_subject -> controller();
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 		KisImageSP img = m_subject -> currentImg();
 
 		Q_ASSERT(controller);
@@ -124,7 +124,7 @@ void KisToolRectangularSelect::clearSelection()
 void KisToolRectangularSelect::mousePress(QMouseEvent *e)
 {
 	if (m_subject) {
-		KisCanvasControllerInterface *controller = m_subject -> controller();
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 		KisImageSP img = m_subject -> currentImg();
 
 		Q_ASSERT(controller);
@@ -141,7 +141,7 @@ void KisToolRectangularSelect::mousePress(QMouseEvent *e)
 void KisToolRectangularSelect::mouseMove(QMouseEvent *e)
 {
 	if (m_subject && m_selecting) {
-		KisCanvasControllerInterface *controller = m_subject -> controller();
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 
 		Q_ASSERT(controller);
 
@@ -159,7 +159,7 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 		if (m_startPos == m_endPos) {
 			clearSelection();
 		} else {
-			KisCanvasControllerInterface *controller = m_subject -> controller();
+			KisCanvasControllerInterface *controller = m_subject -> canvasController();
 			KisImageSP img = m_subject -> currentImg();
 
 			Q_ASSERT(controller);
@@ -208,7 +208,7 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 void KisToolRectangularSelect::paintOutline()
 {
 	if (m_subject) {
-		KisCanvasControllerInterface *controller = m_subject -> controller();
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 		QWidget *canvas = controller -> canvas();
 		QPainter gc(canvas);
 		QRect rc;
@@ -220,7 +220,7 @@ void KisToolRectangularSelect::paintOutline()
 void KisToolRectangularSelect::paintOutline(QPainter& gc, const QRect&)
 {
 	if (m_subject) {
-		KisCanvasControllerInterface *controller = m_subject -> controller();
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 		RasterOp op = gc.rasterOp();
 		QPen old = gc.pen();
 		QPen pen(Qt::DotLine);

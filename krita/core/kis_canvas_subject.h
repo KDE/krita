@@ -29,6 +29,7 @@ class KisCanvasControllerInterface;
 class KisCanvasObserver;
 class KisGradient;
 class KisPattern;
+class KisToolControllerInterface;
 class KisUndoAdapter;
 
 class KisCanvasSubject {
@@ -51,7 +52,8 @@ public:
 	virtual KisGradient *currentGradient() const = 0;
 	virtual double zoomFactor() const = 0;
 	virtual KisUndoAdapter *undoAdapter() const = 0;
-	virtual KisCanvasControllerInterface *controller() const = 0;
+	virtual KisCanvasControllerInterface *canvasController() const = 0;
+	virtual KisToolControllerInterface *toolController() const = 0;
 	virtual KoDocument *document() const = 0;
 
 private:

@@ -18,8 +18,8 @@
 
 #include <qwidget.h>
 #include <kdebug.h>
-#include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
+#include "kis_tool_controller.h"
 #include "kis_tool_paint.h"
 #include "kis_tool_paint.moc"
 
@@ -106,10 +106,10 @@ void KisToolPaint::setCursor(const QCursor& cursor)
 void KisToolPaint::activate()
 {
 	if (m_subject) {
-		KisCanvasControllerInterface *controller = m_subject -> controller();
+		KisToolControllerInterface *controller = m_subject -> toolController();
 
 		if (controller)
-			controller -> activateTool(this);
+			controller -> setCurrentTool(this);
 	}
 }
 

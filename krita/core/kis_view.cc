@@ -610,7 +610,7 @@ void KisView::clearCanvas(const QRect& rc)
 	gc.eraseRect(rc);
 }
 
-void KisView::activateTool(KisTool *tool)
+void KisView::setCurrentTool(KisTool *tool)
 {
 	if (m_tool)
 		m_tool -> clear();
@@ -2650,9 +2650,14 @@ KisUndoAdapter *KisView::undoAdapter() const
 	return m_adapter;
 }
 
-KisCanvasControllerInterface *KisView::controller() const
+KisCanvasControllerInterface *KisView::canvasController() const
 {
 	return const_cast<KisCanvasControllerInterface*>(static_cast<const KisCanvasControllerInterface*>(this));
+}
+
+KisToolControllerInterface *KisView::toolController() const
+{
+	return const_cast<KisToolControllerInterface*>(static_cast<const KisToolControllerInterface*>(this));
 }
 
 KoDocument *KisView::document() const

@@ -32,8 +32,6 @@ public:
 	virtual ~KisCanvasControllerInterface();
 
 public:
-	virtual void activateTool(KisTool *tool) = 0;
-	virtual KisTool *currentTool() const = 0;
 	virtual QWidget *canvas() const = 0;
 	virtual Q_INT32 horzValue() const = 0;
 	virtual Q_INT32 vertValue() const = 0;

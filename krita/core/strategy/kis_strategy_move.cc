@@ -109,7 +109,7 @@ void KisStrategyMove::reset(KisCanvasSubject *subject)
 
 	if (m_subject) {
 		m_doc = subject -> document();
-		m_controller = subject -> controller();
+		m_controller = subject -> canvasController();
 	} else {
 		m_doc = 0;
 		m_controller = 0;

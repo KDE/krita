@@ -12,6 +12,7 @@ INCLUDES  = \
 	-I$(srcdir)/../../core/paintop \
 	-I$(srcdir)/../../ui \
 	-I$(srcdir)/../../ui/widgets \
+	-I../../ui/widgets \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 

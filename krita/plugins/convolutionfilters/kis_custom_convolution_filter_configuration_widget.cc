@@ -45,7 +45,7 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
 	// Create the form
 	ChannelInfo *cis = cs->channels();
 	Q_INT32 depth = cs->depth();
-	m_ccfcws = new (KisCustomConvolutionFilterConfigurationBaseWidget*)[depth];
+	m_ccfcws = new KisCustomConvolutionFilterConfigurationBaseWidget*[depth];
 	m_pos = new int[depth];
 	for(Q_INT32 i = 0; i < depth; i++)
 	{

@@ -341,10 +341,17 @@ bool KisDoc::initDoc()
 	QString file;
 	KoTemplateChooseDia::ReturnType ret;
 
+    // FIXME : hack to hide the startup dialog (ita)
+    KoTemplateChooseDia::DialogType dlgtype;
+    if (displayStartupDlgFlag())
+            dlgtype = KoTemplateChooseDia::Everything;
+    else
+            dlgtype = KoTemplateChooseDia::OnlyTemplates;
+	
 	if (!init())
 		return false;
 
-	ret = KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE, "Krita", "*.kra", KoTemplateChooseDia::NoTemplates);
+	ret = KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE, "Krita", "*.kra", dlgtype);
 
 	if (ret == KoTemplateChooseDia::Template) {
 		KisConfig cfg;

@@ -1205,50 +1205,80 @@ void compositeNormal(Q_INT32 stride,
 		     Q_INT32 srcstride,
 		     Q_INT32 rows, 
 		     Q_INT32 cols, 
-		     QUANTUM /*opacity*/)
+		     QUANTUM opacity)
 {
-	//Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
 	QUANTUM *d;
 	QUANTUM *s;
 	Q_INT32 i;
 
-	while (rows-- > 0) {
-		d = dst;
-		s = src;
+	if (opacity == OPACITY_TRANSPARENT) 
+		return;
 
-		for (i = cols; i > 0; i--, d += stride, s += stride) {
-			if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
-				continue;
+	if (opacity != OPACITY_OPAQUE) {
+		while (rows-- > 0) {
+			d = dst;
+			s = src;
 
-			if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT || (d[PIXEL_ALPHA] == OPACITY_OPAQUE && s[PIXEL_ALPHA] == OPACITY_OPAQUE)) {
-				memcpy(d, s, stride * sizeof(QUANTUM));
-				continue;
+			for (i = cols; i > 0; i--, d += stride, s += stride) {
+				if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
+					continue;
+
+				int srcAlpha = (s[PIXEL_ALPHA] * opacity) / QUANTUM_MAX;
+				int dstAlpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha)) / QUANTUM_MAX;
+
+				d[PIXEL_RED]   = (d[PIXEL_RED]   * dstAlpha + s[PIXEL_RED]   * srcAlpha) / QUANTUM_MAX;
+				d[PIXEL_GREEN] = (d[PIXEL_GREEN] * dstAlpha + s[PIXEL_GREEN] * srcAlpha) / QUANTUM_MAX;
+				d[PIXEL_BLUE]  = (d[PIXEL_BLUE]  * dstAlpha + s[PIXEL_BLUE]  * srcAlpha) / QUANTUM_MAX;
+
+				d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * 255) / QUANTUM_MAX;
+
+				if (d[PIXEL_ALPHA] != 0) {
+					d[PIXEL_RED] = (d[PIXEL_RED] * 255) / d[PIXEL_ALPHA];
+					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * 255) / d[PIXEL_ALPHA];
+					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * 255) / d[PIXEL_ALPHA];
+				}
 			}
 
-			if (s[PIXEL_ALPHA] == OPACITY_OPAQUE) {
-				memcpy(d, s, stride * sizeof(QUANTUM));
-				continue;
-			}
-
-			d[PIXEL_RED]   = (d[PIXEL_RED] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_RED] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-			d[PIXEL_GREEN] = (d[PIXEL_GREEN] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_GREEN] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-			d[PIXEL_BLUE]  = (d[PIXEL_BLUE] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_BLUE] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-
-			if (d[PIXEL_ALPHA] + s[PIXEL_ALPHA] > OPACITY_OPAQUE) {
-				d[PIXEL_ALPHA] = OPACITY_OPAQUE;
-			}
-			else {
-				d[PIXEL_ALPHA] = d[PIXEL_ALPHA] + s[PIXEL_ALPHA];
-			}
-					
+			dst += dststride;
+			src += srcstride;
 		}
-
-		dst += dststride;
-		src += srcstride;
 	}
+	else {
+		while (rows-- > 0) {
+			d = dst;
+			s = src;
+		
+			for (i = cols; i > 0; i--, d += stride, s += stride) {
+				if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
+					continue;
 
+				if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT || s[PIXEL_ALPHA] == OPACITY_OPAQUE) {
+					memcpy(d, s, stride * sizeof(QUANTUM));
+					continue;
+				}
 
+				int srcAlpha = s[PIXEL_ALPHA];
+				int dstAlpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha)) / QUANTUM_MAX;
+
+				d[PIXEL_RED]   = (d[PIXEL_RED]   * dstAlpha + s[PIXEL_RED]   * srcAlpha) / QUANTUM_MAX;
+				d[PIXEL_GREEN] = (d[PIXEL_GREEN] * dstAlpha + s[PIXEL_GREEN] * srcAlpha) / QUANTUM_MAX;
+				d[PIXEL_BLUE]  = (d[PIXEL_BLUE]  * dstAlpha + s[PIXEL_BLUE]  * srcAlpha) / QUANTUM_MAX;
+
+				d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * 255) / QUANTUM_MAX;
+
+				if (d[PIXEL_ALPHA] != 0) {
+					d[PIXEL_RED] = (d[PIXEL_RED] * 255) / d[PIXEL_ALPHA];
+					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * 255) / d[PIXEL_ALPHA];
+					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * 255) / d[PIXEL_ALPHA];
+				}
+			}
+		
+			dst += dststride;
+			src += srcstride;
+		}
+	}
 }
+
 
 void compositeErase(Q_INT32 stride,
 		    QUANTUM *dst, 

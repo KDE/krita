@@ -18,10 +18,17 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <string.h>
+
+#include <Magick++.h>
+
 #include "kis_color_utils.h"
+#include "kis_pixel_packet.h"
 #include "kis_global.h"
 
 namespace KisColorUtils {
+	using namespace Magick;
+
 	QRgb bytes2rgb(const uchar* bytes, int /*bpp*/)
 	{
 		// XXX
@@ -35,6 +42,27 @@ namespace KisColorUtils {
 		bytes[PIXEL_GREEN] = qGreen(rgb);
 		bytes[PIXEL_BLUE] = qBlue(rgb);
 		bytes[PIXEL_ALPHA] = qAlpha(rgb);
+	}
+
+	void blendOver(KisPixelPacket *dst, const KisPixelPacket *src)
+	{
+		if (!dst || !src)
+			return;
+
+		if (src -> opacity != TransparentOpacity) {
+			if (src -> opacity == OpaqueOpacity) {
+				memcpy(dst, src, sizeof(KisPixelPacket));
+			} else if (src -> opacity != TransparentOpacity) {
+				Quantum opacity = (MaxRGB - src -> opacity) + src -> opacity * (MaxRGB - dst -> opacity) / MaxRGB;
+				Quantum invSrcOpacity = MaxRGB - src -> opacity;
+				Quantum invDstOpacity = MaxRGB - dst -> opacity;
+
+				dst -> red = ((invSrcOpacity * src -> red + src -> opacity * invDstOpacity * dst -> red / MaxRGB) / opacity);
+				dst -> green = ((invSrcOpacity * src -> green + src -> opacity * invDstOpacity * dst -> green / MaxRGB) / opacity);
+				dst -> blue = ((invSrcOpacity * src -> blue + src -> opacity * invDstOpacity * dst -> blue / MaxRGB) / opacity);
+				dst -> opacity = MaxRGB - opacity;
+			}
+		}
 	}
 }
 

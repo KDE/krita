@@ -89,7 +89,7 @@ public:
 	inline int width() const;
 	inline int height() const;
 
-	Magick::Image getImage() { return *m_tiles; }
+	Magick::Image* getImage() { return m_tiles; }
 
 protected:
 	uchar m_bpp;

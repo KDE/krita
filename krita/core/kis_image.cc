@@ -33,6 +33,7 @@
 #include <klocale.h>
 
 #include "kis_brush.h"
+#include "kis_color_utils.h"
 #include "kis_doc.h"
 #include "kis_image.h"
 #include "kis_factory.h"
@@ -46,40 +47,6 @@
 #include "KIsImageIface.h"
 
 using namespace Magick;
-
-/*
- * Very experimental thread test, only for experimenting
- */
-
-#if 1
-class KisRenderThread : public QThread {
-public:
-	KisRenderThread(KisImage *img, QWaitCondition *wcDirty)
-	{
-		m_img = img;
-		m_wcDirty = wcDirty;
-	}
-
-protected:
-	virtual void run()
-	{
-		kdDebug() << "Thread running.\n";
-
-		while (1) {
-			m_wcDirty -> wait();
-			m_img -> slotUpdateTimeOut();
-		}
-	}
-
-	KisImage *m_img;
-	QWaitCondition *m_wcDirty;
-};
-
-QWaitCondition wcDirty;
-QPtrQueue<QPoint> dirtyTiles;
-QMutex dirtyTilesMutex;
-
-#endif
 
 class KisCommandLayerActive : public KNamedCommand {
 	typedef KNamedCommand super;
@@ -346,7 +313,7 @@ void KisImage::addLayer(const QRect& rect, const KoColor& c, bool /*tr*/, const 
 	QRgb defaultColor;
 
 	if (getCurrentLayer())
-		defaultColor = qRgba(CHANNEL_MAX, CHANNEL_MAX, CHANNEL_MAX, OPACITY_TRANSPARENT);
+		defaultColor = qRgba(0, 0, 0, 0);
 	else
 		defaultColor = c.color().rgb();
 	
@@ -422,13 +389,6 @@ void KisImage::markDirty(const QRect& r)
 
 			if (m_autoUpdate)
 				compositeImage(QRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE));
-#if 0
-			else {
-				dirtyTilesMutex.lock();
-				dirtyTiles.enqueue(new QPoint(x, y));
-				dirtyTilesMutex.unlock();
-			}
-#endif
 		}
 	}
 
@@ -542,50 +502,24 @@ void KisImage::paintPixmap(QPainter *p, const QRect& area)
 
 void KisImage::compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y)
 {
-#if 0
-	Magick::Geometry geo(TILE_SIZE, TILE_SIZE, x * TILE_SIZE, y * TILE_SIZE);
-	bool initial = true;
-	Image dstimg = dstDevice -> getImage();
+	Image *dstimg = dstDevice -> getImage();
+	Image tile(Geometry(TILE_SIZE, TILE_SIZE), Color(0, 0, 0, TransparentOpacity));
 
-	for (KisLayerSPLstConstIterator it = m_layers.begin(); it != m_layers.end(); it++) {
+	Q_ASSERT(dstimg);
+	
+	for (KisLayerSPLstIterator it = m_layers.begin(); it != m_layers.end(); it++) {
 		KisLayerSP layer = *it;
 
 		if (layer && layer -> visible()) {
-			if (initial) {
-				initial = false;
-				KisPixelPacket *dst = dstDevice -> getPixels(0, 0);
-				const KisPixelPacket *src = layer -> getConstPixels(x, y);
+			const PixelPacket *src = layer -> getConstPixels(x, y);
+			PixelPacket *dst = tile.getPixels(0, 0, TILE_SIZE, TILE_SIZE);
 
-				memcpy(dst, src, TILE_SIZE * TILE_SIZE * sizeof(KisPixelPacket));
-				dstDevice -> syncPixels();
-			} else {
-				dstimg.compositeImage(layer -> getImage(), geo);
-			}
+			memcpy(dst, src, sizeof(PixelPacket) * TILE_SIZE * TILE_SIZE);
+			tile.syncPixels();
+//			tile.opacity(TransparentOpacity - Upscale(layer -> opacity()));
+			dstimg -> composite(tile, tileNo * TILE_SIZE, tileNo * TILE_SIZE, OverCompositeOp);
 		}
 	}
-#else
-
-	KisPixelPacket *dst = dstDevice -> getPixels(0, 0);
-	const KisPixelPacket *bkgPacket = m_bgLayer -> getConstPixels(0, 0);
-
-	Q_ASSERT(dst);
-	memcpy(dst, bkgPacket, TILE_SIZE * TILE_SIZE * sizeof(KisPixelPacket));
-
-	for (KisLayerSPLstConstIterator it = m_layers.begin(); it != m_layers.end(); it++) {
-		KisLayerSP lay = *it;
-
-		if (lay && lay -> visible()) {
-			const KisPixelPacket *src = lay -> getConstPixels(x, y);
-
-			if (dst && src) {
-//				memcpy(dst, src, TILE_SIZE * TILE_SIZE * sizeof(KisPixelPacket));
-				renderTile(dst, src, lay);
-			}
-		}
-	}
-
-	dstDevice -> syncPixels();
-#endif
 }
 
 void KisImage::compositeImage(const QRect& area, bool allDirty)
@@ -597,6 +531,11 @@ void KisImage::compositeImage(const QRect& area, bool allDirty)
 			if (!allDirty && m_dirty[y * m_xTiles + x] == false)
 				continue;
 
+			KisPixelPacket *dst = m_composeLayer -> getPixels(0, 0);
+			const KisPixelPacket *src = m_bgLayer -> getConstPixels(0, 0);
+
+			memcpy(dst, src, TILE_SIZE * TILE_SIZE * sizeof(KisPixelPacket));
+			m_composeLayer -> syncPixels();
 			compositeTile(m_composeLayer, 0, x * TILE_SIZE, y * TILE_SIZE);
 			convertTileToPixmap(m_composeLayer, 0, m_pixmapTiles[y * m_xTiles + x]);
 			m_dirty[y * m_xTiles + x] = false;
@@ -640,7 +579,7 @@ void KisImage::convertTileToPixmap(KisPaintDevice *dstDevice, int tileNo, QPixma
 			const KisPixelPacket *pixel = srcTile + row * m_imgTile.width() + column;
 			QRgb rgb;
 
-			rgb = qRgba(Downscale(pixel -> red), Downscale(pixel -> green), Downscale(pixel -> blue), Downscale(TransparentOpacity - pixel -> opacity));
+			rgb = *pixel;
 			m_imgTile.setPixel(column, row, rgb);
 		}
 	}
@@ -917,6 +856,7 @@ void KisImage::addChannel(const QRect& rc, uchar opacity, const QString& name)
 	m_channels.push_back(chan);
 	m_activeChannel = chan;
 	resizeImage(chan, rc);
+
 #if 0
 	if (m_doUndo)
 		addCommand(new KisCommandLayerAdd(this, lay));

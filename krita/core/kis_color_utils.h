@@ -23,9 +23,12 @@
 
 #include <qcolor.h>
 
+class KisPixelPacket;
+
 namespace KisColorUtils {
 	QRgb bytes2rgb(const uchar* bytes, int bpp);
 	void rgb2bytes(const QRgb& rgb, uchar* bytes, int bpp);
+	void blendOver(KisPixelPacket *dst, const KisPixelPacket *src);
 }
 
 #endif // KIS_COLOR_UTILS_H_

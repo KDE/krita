@@ -30,7 +30,7 @@ KisPixelPacket::KisPixelPacket(const QRgb& rgb)
 	red = Upscale(qRed(rgb));
 	green = Upscale(qGreen(rgb));
 	blue = Upscale(qBlue(rgb)); 
-	opacity = Upscale(qAlpha(rgb));
+	opacity = TransparentOpacity - Upscale(qAlpha(rgb));
 }
 
 KisPixelPacket::KisPixelPacket(const QColor& clr)
@@ -40,7 +40,7 @@ KisPixelPacket::KisPixelPacket(const QColor& clr)
 	red = Upscale(qRed(rgb));
 	green = Upscale(qGreen(rgb));
 	blue = Upscale(qBlue(rgb)); 
-	opacity = Upscale(qAlpha(rgb));
+	opacity = TransparentOpacity - Upscale(qAlpha(rgb));
 }
 
 KisPixelPacket::KisPixelPacket(const KoColor& clr)
@@ -51,7 +51,7 @@ KisPixelPacket::KisPixelPacket(const KoColor& clr)
 	red = Upscale(qRed(rgb));
 	green = Upscale(qGreen(rgb));
 	blue = Upscale(qBlue(rgb)); 
-	opacity = Upscale(qAlpha(rgb));
+	opacity = TransparentOpacity - Upscale(qAlpha(rgb));
 }
 
 KisPixelPacket::KisPixelPacket(const KisPixelPacket& rhs)
@@ -79,7 +79,7 @@ KisPixelPacket& KisPixelPacket::operator=(const QRgb& rgb)
 	red = Upscale(qRed(rgb));
 	green = Upscale(qGreen(rgb));
 	blue = Upscale(qBlue(rgb)); 
-	opacity = Upscale(qAlpha(rgb));
+	opacity = TransparentOpacity - Upscale(qAlpha(rgb));
 	return *this;
 }
 
@@ -90,7 +90,7 @@ KisPixelPacket& KisPixelPacket::operator=(const QColor& clr)
 	red = Upscale(qRed(rgb));
 	green = Upscale(qGreen(rgb));
 	blue = Upscale(qBlue(rgb)); 
-	opacity = Upscale(qAlpha(rgb));
+	opacity = TransparentOpacity - Upscale(qAlpha(rgb));
 	return *this;
 }
 
@@ -102,7 +102,7 @@ KisPixelPacket& KisPixelPacket::operator=(const KoColor& clr)
 	red = Upscale(qRed(rgb));
 	green = Upscale(qGreen(rgb));
 	blue = Upscale(qBlue(rgb)); 
-	opacity = Upscale(qAlpha(rgb));
+	opacity = TransparentOpacity - Upscale(qAlpha(rgb));
 	return *this;
 }
 
@@ -124,7 +124,7 @@ KisPixelPacket& KisPixelPacket::operator=(const PixelPacket& rhs)
 
 KisPixelPacket::operator QRgb() const
 {
-	return qRgba(Downscale(red), Downscale(green), Downscale(blue), Downscale(opacity));
+	return qRgba(Downscale(red), Downscale(green), Downscale(blue), Downscale(TransparentOpacity - opacity));
 }
 
 KisPixelPacket::operator QColor() const

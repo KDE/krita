@@ -40,15 +40,15 @@ const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(uint);
     
 KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uchar bpp, const QRgb& defaultColor)
 {
-	Color clr(Upscale(qRed(defaultColor)), Upscale(qGreen(defaultColor)), Upscale(qBlue(defaultColor)), Upscale(qAlpha(defaultColor)));
+	Color clr(Upscale(qRed(defaultColor)), Upscale(qGreen(defaultColor)), Upscale(qBlue(defaultColor)), TransparentOpacity - Upscale(qAlpha(defaultColor)));
 
 	m_bpp = bpp;
 	m_name = name;
 	m_imgRect = QRect(0, 0, width, height);
-	resize(m_imgRect.width(), m_imgRect.height(), bpp);
+	m_tileRect = KisUtil::findTileExtents(m_imgRect);
 	m_visible = true;
-	m_opacity = qAlpha(defaultColor);
-	m_tiles = new Image(Geometry(width, height), clr);
+	m_opacity = CHANNEL_MAX;
+	m_tiles = new Image(Geometry(m_tileRect.width(), m_tileRect.height()), clr);
 	m_tiles -> matte(true);
 }
 
@@ -161,6 +161,7 @@ void KisPaintDevice::allocateRect(const QRect& rc, uchar bpp)
 
 const KisPixelPacket* KisPaintDevice::getConstPixels(int x, int y, uint width, uint height) const
 {
+	Q_ASSERT(m_tiles);
 	return static_cast<const KisPixelPacket*>(m_tiles -> getConstPixels(x, y, width, height));
 }
 

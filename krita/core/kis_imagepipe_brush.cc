@@ -115,6 +115,23 @@ enumBrushType KisImagePipeBrush::brushType() const
 	}
 }
 
+bool KisImagePipeBrush::useColorAsMask() const
+{
+	if (m_brushes.count() > 0) {
+		return m_brushes.at(0) -> useColorAsMask();
+	}
+	else {
+		return false;
+	}
+}
+
+void KisImagePipeBrush::setUseColorAsMask(bool useColorAsMask)
+{
+	for (uint i = 0; i < m_brushes.count(); i++) {
+		m_brushes.at(i) -> setUseColorAsMask(useColorAsMask);
+	}
+}
+
 bool KisImagePipeBrush::hasColor() const
 {
 	if (m_brushes.count() > 0) {

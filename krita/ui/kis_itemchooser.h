@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_BRUSH_CHOOSER_H_
-#define KIS_BRUSH_CHOOSER_H_
+#if !defined KIS_ITEM_CHOOSER_H_
+#define KIS_ITEM_CHOOSER_H_
 
 #include <qptrlist.h>
 #include <qwidget.h>
@@ -25,13 +25,9 @@
 #include <koIconChooser.h>
 
 class QHBox;
-class QLabel;
-class QCheckBox;
 
 class KoIconChooser;
 class KoIconItem;
-
-class IntegerWidget;
 
 typedef QPtrList<KoIconItem> vKoIconItem;
 
@@ -40,12 +36,7 @@ class KisItemChooser : public QWidget {
 	Q_OBJECT
 
 public:
-	KisItemChooser(const vKoIconItem& items, 
-		       bool spacing, 
-		       QWidget *parent = 0, 
-		       const char *name = 0);
-	KisItemChooser(bool spacing, 
-		       QWidget *parent = 0, 
+	KisItemChooser(QWidget *parent = 0, 
 		       const char *name = 0);
 	virtual ~KisItemChooser();
 
@@ -54,29 +45,23 @@ public:
 
 public slots:
 	void addItem(KoIconItem *item);
-	void addItem(const vKoIconItem& items);
+	void addItems(const vKoIconItem& items);
 
 signals:
 	void selected(KoIconItem *item);
 
-private:
-	void initGUI(bool spacing);
-	void init(bool spacing);
+protected:
+	virtual void update(KoIconItem *item) = 0;
+	QWidget *chooserWidget() const;
+	void notify();
 
 private slots:
 	void slotItemSelected(KoIconItem *item);
-	void slotSetItemSpacing(int spacing);
-	void slotSetItemUseColorAsMask(bool);
 
 private:
 	QHBox *m_frame;
-	QWidget *m_container;
-	QLabel *m_lbSpacing;
-	IntegerWidget *m_slSpacing;
-	QCheckBox *m_chkColorMask;
 	KoIconChooser *m_chooser;
-	bool m_doSpacing;
 };
 
-#endif // KIS_BRUSH_CHOOSER_H_
+#endif // KIS_ITEM_CHOOSER_H_
 

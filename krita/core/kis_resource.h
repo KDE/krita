@@ -69,11 +69,6 @@ public:
 	void setValid(bool valid);
 	Q_INT32 width() const;
 	Q_INT32 height() const;
-	virtual void setSpacing(Q_INT32) {}
-	virtual Q_INT32 spacing() const { return 1; }
-	virtual void setUseColorAsMask(bool) {}
-	virtual bool useColorAsMask() const { return false; }
-	virtual bool hasColor() const { return false; }
 
 protected:
 	void setWidth(Q_INT32 w);

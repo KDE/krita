@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
- *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org
+ *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -10,38 +9,33 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.g
+ *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_ICON_ITEM_H_
-#define KIS_ICON_ITEM_H_
+#if !defined KIS_PATTERN_CHOOSER_H_
+#define KIS_PATTERN_CHOOSER_H_
 
-#include <koIconChooser.h>
-class KisResource;
+#include "kis_itemchooser.h"
 
-class KisIconItem : public KoIconItem {
+class QLabel;
+
+class KisPatternChooser : public KisItemChooser {
+	typedef KisItemChooser super;
+	Q_OBJECT
 
 public:
-	KisIconItem(KisResource *resource);
-	virtual ~KisIconItem();
+	KisPatternChooser(QWidget *parent = 0, const char *name = 0);
+	virtual ~KisPatternChooser();
 
-	virtual QPixmap& pixmap() const;
-	virtual QPixmap& thumbPixmap() const;
-
-	KisResource *resource() const;
-
-	virtual int compare(const KoIconItem *other) const;
-
-	void updatePixmaps();
+protected:
+	virtual void update(KoIconItem *item);
 
 private:
-	KisResource *m_resource;
-	QPixmap m_pixmap;
-	QPixmap m_thumb;
+	QLabel *m_lbName;
 };
 
-#endif // KIS_ICON_ITEM_H_
+#endif // KIS_PATTERN_CHOOSER_H_
 

@@ -51,10 +51,6 @@ void KisIconItem::updatePixmaps()
 			return;
 		}
 
-		if (m_resource -> hasColor() && m_resource -> useColorAsMask()) {
-			img = createColorMaskImage(img);
-		}
-
 		if (img.width() > THUMB_SIZE || img.height() > THUMB_SIZE) {
 			QImage thumb = img;
 			Q_INT32 xsize = THUMB_SIZE;
@@ -92,22 +88,6 @@ void KisIconItem::updatePixmaps()
 	}
 }
 
-QImage KisIconItem::createColorMaskImage(QImage srcImage)
-{
-	QImage image = srcImage;
-	image.detach();
-
-	for (int x = 0; x < image.width(); x++) {
-		for (int y = 0; y < image.height(); y++) {
-			QRgb c = image.pixel(x, y);
-			int a = (qGray(c) * qAlpha(c)) / 255;
-			image.setPixel(x, y, qRgba(a, 0, a, a));
-		}
-	}
-
-	return image;
-}
-
 QPixmap& KisIconItem::pixmap() const
 {
 	return const_cast<QPixmap&>(m_pixmap);
@@ -121,47 +101,6 @@ QPixmap& KisIconItem::thumbPixmap() const
 KisResource *KisIconItem::resource() const
 {
 	return m_resource;
-}
-
-int KisIconItem::spacing() const {
-	if ( m_resource && m_resource -> valid() ) {
-		return m_resource -> spacing();
-	}
-	else {
-		return 1;
-	}
-	
-}
-void KisIconItem::setSpacing(int spacing) {
-	if ( m_resource && m_resource -> valid() ) {
-		m_resource -> setSpacing(spacing);
-	}
-}
-
-bool KisIconItem::useColorAsMask() const {
-	if ( m_resource && m_resource -> valid() ) {
-		return m_resource -> useColorAsMask();
-	}
-	else {
-		return false;
-	}
-}
-
-void KisIconItem::setUseColorAsMask(bool useColorAsMask) {
-	if ( m_resource && m_resource -> valid() ) {
-		m_resource -> setUseColorAsMask(useColorAsMask);
-		updatePixmaps();
-	}
-}
-
-bool KisIconItem::hasColor() const
-{
-	if ( m_resource && m_resource -> valid() ) {
-		return m_resource -> hasColor();
-	}
-	else {
-		return false;
-	}
 }
 
 int KisIconItem::compare(const KoIconItem *o) const

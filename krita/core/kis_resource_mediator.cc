@@ -23,7 +23,8 @@
 #include "kis_pattern.h"
 
 #include "kis_icon_item.h"
-#include "kis_itemchooser.h"
+#include "kis_brush_chooser.h"
+#include "kis_pattern_chooser.h"
 #include "kis_resource.h"
 #include "kis_resourceserver.h"
 #include "kis_resource_mediator.h"
@@ -38,12 +39,9 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 {
 	Q_ASSERT(rserver);
 	m_activeItem = 0;
-	m_chooser = new KisItemChooser(true, chooserParent, chooserName);
-	connect(m_chooser,
-                SIGNAL(selected(KoIconItem*)),
-                SLOT(setActiveItem(KoIconItem*)));
 
 	if (mediateOn & MEDIATE_BRUSHES) {
+		m_chooser = new KisBrushChooser(chooserParent, chooserName);
 		connect(rserver,
                         SIGNAL(loadedBrush(KisResource*)),
                         this,
@@ -55,12 +53,15 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
                         SLOT(resourceServerLoadedResource(KisResource*)));
 
 	}
-	if (mediateOn & MEDIATE_PATTERNS)
+	if (mediateOn & MEDIATE_PATTERNS) {
+		m_chooser = new KisPatternChooser(chooserParent, chooserName);
 		connect(rserver,
                         SIGNAL(loadedPattern(KisResource*)),
                         this,
                         SLOT(resourceServerLoadedResource(KisResource*)));
+	}
 
+	connect(m_chooser, SIGNAL(selected(KoIconItem*)), SLOT(setActiveItem(KoIconItem*)));
 	m_chooser -> setCaption(chooserCaption);
 }
 
@@ -118,7 +119,6 @@ void KisResourceMediator::resourceServerLoadedResource(KisResource *resource)
 		KisIconItem *item = new KisIconItem(resource);
 
 		m_items[resource] = item;
-		item -> setSpacing(resource -> spacing());
 
 		m_chooser -> addItem(item);
 		emit addedResource(resource);

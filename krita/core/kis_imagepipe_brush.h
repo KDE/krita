@@ -54,6 +54,8 @@ public:
 	virtual KisAlphaMaskSP mask(double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
 	virtual KisLayerSP image(double pressure = PRESSURE_DEFAULT) const;
 
+	virtual bool useColorAsMask() const;
+	virtual void setUseColorAsMask(bool useColorAsMask);
 	virtual bool hasColor() const;
 
 	virtual enumBrushType brushType() const;

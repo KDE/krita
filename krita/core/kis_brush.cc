@@ -109,7 +109,21 @@ bool KisBrush::saveAsync()
 
 QImage KisBrush::img()
 {
-	return m_img;
+	QImage image = m_img;
+
+	if (hasColor() && useColorAsMask()) {
+		image.detach();
+
+		for (int x = 0; x < image.width(); x++) {
+			for (int y = 0; y < image.height(); y++) {
+				QRgb c = image.pixel(x, y);
+				int a = (qGray(c) * qAlpha(c)) / 255;
+				image.setPixel(x, y, qRgba(a, 0, a, a));
+			}
+		}
+	}
+
+	return image;
 }
 
 KisAlphaMaskSP KisBrush::mask(double pressure, double subPixelX, double subPixelY) const
@@ -282,8 +296,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		const char *text = &m_data[sizeof(GimpBrushV1Header)];
 		name = QString::fromAscii(text, bh.header_size - sizeof(GimpBrushV1Header));
 	} else {
-		// Version 2 is UTF-8.
-		name = QString::fromUtf8(&m_data[sizeof(GimpBrushHeader)], bh.header_size - sizeof(GimpBrushHeader));
+		name = QString::fromAscii(&m_data[sizeof(GimpBrushHeader)], bh.header_size - sizeof(GimpBrushHeader));
 	}
 
 	setName(name);

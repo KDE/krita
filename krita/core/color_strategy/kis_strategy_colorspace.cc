@@ -42,16 +42,17 @@ void KisStrategyColorSpace::convertTo(KisPixelRepresentation& src, KisPixelRepre
 
 
 
-void KisStrategyColorSpace::convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 srcLen)
+void KisStrategyColorSpace::convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 numPixels)
 {
 	//kdDebug() << "Converting " << srcLen << " pixels from " << srcSpace -> name() << " to " << name() << "\n";
-	
-	Q_INT32 srcPixelSize = srcSpace -> depth() * sizeof(QUANTUM);
-	Q_INT32 dstPixelSize = depth() * sizeof(QUANTUM);
+
+	Q_INT32 srcPixelSize = srcSpace -> depth();
+	Q_INT32 dstPixelSize = depth();
+
 	KoColor c;
 	QUANTUM opacity = OPACITY_OPAQUE;
 
-	for (Q_UINT32 s = 0, d = 0; s <= srcLen; s += srcPixelSize, d += dstPixelSize) {
+	for (Q_UINT32 i = 0, s = 0, d = 0; i < numPixels; i++, s += srcPixelSize, d += dstPixelSize) {
 		srcSpace -> toKoColor(&src[s], &c, &opacity);
 		nativeColor(c, opacity, &dst[d]);
 
@@ -82,11 +83,11 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 
 
  	if (!(m_name == srcSpace -> name())) {
-		int len = depth() * rows * cols  * sizeof(QUANTUM);
+		int len = depth() * rows * cols;
  		QUANTUM * convertedSrcPixels = new QUANTUM[len];
-		memset(convertedSrcPixels, 255, len);
+		memset(convertedSrcPixels, 255, len * sizeof(QUANTUM));
 
-  		convertPixels(src, srcSpace, convertedSrcPixels, (rows * cols * srcSpace -> depth() * sizeof(QUANTUM)));
+  		convertPixels(src, srcSpace, convertedSrcPixels, (rows * cols * srcSpace -> depth()));
  		srcstride = (srcstride / srcSpace -> depth()) * depth();
 
 		bitBlt(stride,

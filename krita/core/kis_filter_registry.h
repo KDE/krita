@@ -1,4 +1,5 @@
 /*
+ *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -13,21 +14,33 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- *   02111-1307, USA.
- *
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
- 
-#include "kis_compositeop.h"
 
-#ifndef _KIS_COMPOSITE_OP_RGBA_H_
-#define _KIS_COMPOSITE_OP_RGBA_H_
+#if !defined KIS_FILTER_REGISTRY_H_
+#define KIS_FILTER_REGISTRY_H_
 
-class KisCompositeOpRGBAOver : public KisCompositeOp
-{
-	public:
-		KisCompositeOpRGBAOver();
-		virtual void compose(KisPixelRepresentation dst, KisPixelRepresentation src, QUANTUM opacity);
+#include "kis_types.h"
+#include "kis_generic_registry.h"
+
+class QStringList;
+
+class KisFilterRegistry : public KisGenericRegistry<KisFilterSP> {
+
+public:
+	virtual ~KisFilterRegistry();
+
+public:
+	static KisFilterRegistry* singleton();
+
+private:
+	KisFilterRegistry();
+	KisFilterRegistry(const KisFilterRegistry&);
+	KisFilterRegistry operator=(const KisFilterRegistry&);
+
+private:
+	static KisFilterRegistry *m_singleton;
 };
 
-#endif
+#endif // KIS_FILTERSPACE_REGISTRY_H_
+

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,24 +16,28 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_MEMENTO_ORIGINATOR_H_
-#define KIS_MEMENTO_ORIGINATOR_H_
+#ifndef CMYK_PLUGIN_H_
+#define CMYK_PLUGIN_H_
+
+#include <kparts/plugin.h>
 
 #include "kis_types.h"
 
-class KisMementoOriginatorInterface {
-public:
-	KisMementoOriginatorInterface();
-	virtual ~KisMementoOriginatorInterface();
+class KisView;
 
+/**
+ * A plugin wrapper around the CMYK colour space strategy.
+ */
+class CMYKPlugin : public KParts::Plugin
+{
+	Q_OBJECT
 public:
-	virtual KisMementoSP save() const = 0;
-	virtual void restore(KisMementoSP memento) = 0;
-
+	CMYKPlugin(QObject *parent, const char *name, const QStringList &);
+	virtual ~CMYKPlugin();
+	
 private:
-	KisMementoOriginatorInterface(const KisMementoOriginatorInterface&);
-	KisMementoOriginatorInterface& operator=(const KisMementoOriginatorInterface&);
+
+	KisStrategyColorSpaceSP m_StrategyColorSpaceCMYK;
 };
 
-#endif // KIS_MEMENTO_ORIGINATOR_H_
-
+#endif // CMYK_PLUGIN_H_

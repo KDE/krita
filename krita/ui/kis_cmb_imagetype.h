@@ -18,12 +18,12 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_CMB_IMAGETYPE_H_
+#ifndef KIS_CMB_IMAGETYPE_H_
 #define KIS_CMB_IMAGETYPE_H_
 
-#include "kis_global.h"
-
 #include "qcombobox.h"
+
+#include "kis_global.h"
 
 /**
  * A combobox filled with the various image types defined in kis_global.
@@ -41,5 +41,4 @@ class KisCmbImageType : public QComboBox
 	virtual ~KisCmbImageType();
 
 };
-
 #endif

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,18 +16,28 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_MEMENTO_H_
-#define KIS_MEMENTO_H_
+#ifndef RGB_PLUGIN_H_
+#define RGB_PLUGIN_H_
 
-class KisMemento {
+#include <kparts/plugin.h>
+
+#include "kis_types.h"
+
+class KisView;
+
+/**
+ * A plugin wrapper around the RGB colour space strategy.
+ */
+class RGBPlugin : public KParts::Plugin
+{
+	Q_OBJECT
 public:
-	virtual ~KisMemento();
+	RGBPlugin(QObject *parent, const char *name, const QStringList &);
+	virtual ~RGBPlugin();
+	
+private:
+
+	KisStrategyColorSpaceSP m_StrategyColorSpaceRGB;
 };
 
-inline
-KisMemento::~KisMemento()
-{
-}
-
-#endif // KIS_MEMENTO_H_
-
+#endif // RGB_PLUGIN_H_

@@ -32,9 +32,10 @@
 
 /** 
  * These classe can be used to iterate over the pixel data in
- * a given paint device, reading and writing data. This class is useless
- * as she provide no public way to access data, you should use one of
- * the children class : KisIteratorPixel or KisIteratorQuantum
+ * a given paint device, reading and writing data. 
+ *
+ * Do not use this class directly. Instead, use one of the descendant 
+ * classes: KisIteratorPixel or KisIteratorQuantum.
  */
 class KisIteratorUnit {
 
@@ -50,7 +51,7 @@ public:
 	 * This function increments the position of the iterator by one pixel.
 	 */
 	inline void skipPixel();
-  // Comparison operators
+	// Comparison operators
 	inline bool operator<(const KisIteratorUnit& __rhs) const;
 	inline bool operator<=(const KisIteratorUnit& __rhs) const;
 	inline bool operator==(const KisIteratorUnit& __rhs) const;

@@ -16,19 +16,19 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef _KIS_GENERIC_FACTORY_H_
-#define _KIS_GENERIC_FACTORY_H_
+#ifndef _KIS_GENERIC_REGISTRY_H_
+#define _KIS_GENERIC_REGISTRY_H_
  
 #include <map>
 #include <qstring.h>
 
 template<typename _T>
-class KisGenericFactory {
+class KisGenericRegistry {
 	typedef std::map<QString, _T> storageMap;
 public:
-	virtual ~KisGenericFactory() { };
+	virtual ~KisGenericRegistry() { };
 protected:
-	KisGenericFactory() { };
+	KisGenericRegistry() { };
 public:
 	void add(_T item)
 	{
@@ -58,8 +58,8 @@ public:
 	}
 
 private:
-	KisGenericFactory(const KisGenericFactory&) { };
-	KisGenericFactory operator=(const KisGenericFactory&) { };
+	KisGenericRegistry(const KisGenericRegistry&) { };
+	KisGenericRegistry operator=(const KisGenericRegistry&) { };
 	storageMap m_storage;
 };
 

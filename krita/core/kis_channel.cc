@@ -19,8 +19,10 @@
 #include "kis_types.h"
 #include "kis_channel.h"
 #include "kis_image.h"
+#include "kis_colorspace_registry.h"
 
-KisChannel::KisChannel(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, const KoColor&) : super(img, width, height, KisColorSpaceFactory::singleton()->colorSpace("Grayscale + Alpha"), name)
+KisChannel::KisChannel(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, const KoColor&) 
+	: super(img, width, height, KisColorSpaceRegistry::singleton()->colorSpace("Grayscale + Alpha"), name)
 {
 }
 

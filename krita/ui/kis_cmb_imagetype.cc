@@ -21,14 +21,15 @@
 #include <qcombobox.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "kis_cmb_imagetype.h"
-#include "kis_colorspace_factory.h"
+#include "kis_colorspace_registry.h"
 
 KisCmbImageType::KisCmbImageType(QWidget * parent, const char * name) 
 	: super( false, parent, name )
 {
-	insertStringList(KisColorSpaceFactory::singleton()->listColorSpaceNames());
+	insertStringList(KisColorSpaceRegistry::singleton()->listColorSpaceNames());
 }
 
 KisCmbImageType::~KisCmbImageType()

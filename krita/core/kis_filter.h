@@ -19,8 +19,11 @@
 #ifndef _KIS_PLUGIN_H_
 #define _KIS_PLUGIN_H_
 
-#include <ksharedptr.h>
+#include <qobject.h>
 #include <qwidget.h>
+
+#include <ksharedptr.h>
+
 #include "kis_types.h"
 #include "kis_view.h"
 #include "kis_image.h"

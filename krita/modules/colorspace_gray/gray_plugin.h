@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,13 +16,29 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "kis_memento_originator.h"
+#ifndef GRAY_PLUGIN_H_
+#define GRAY_PLUGIN_H_
 
-KisMementoOriginatorInterface::KisMementoOriginatorInterface()
+#include <kparts/plugin.h>
+
+#include "kis_types.h"
+
+class KisView;
+
+/**
+ * A plugin wrapper around the GRAY colour space strategy.
+ */
+class GrayPlugin : public KParts::Plugin
 {
-}
+	Q_OBJECT
+public:
+	GrayPlugin(QObject *parent, const char *name, const QStringList &);
+	virtual ~GrayPlugin();
+	
+private:
 
-KisMementoOriginatorInterface::~KisMementoOriginatorInterface()
-{
-}
+	KisView* m_view;
+	KisStrategyColorSpaceSP m_StrategyColorSpaceGray;
+};
 
+#endif // GRAY_PLUGIN_H_

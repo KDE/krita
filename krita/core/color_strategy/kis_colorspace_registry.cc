@@ -16,34 +16,39 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include "kdebug.h"
 
-#if !defined KIS_COLORSPACE_FACTORY_H_
-#define KIS_COLORSPACE_FACTORY_H_
+#include "kis_colorspace_registry.h"
+#include "kis_paint_device.h"
 
-#include "kis_types.h"
-#include "kis_generic_factory.h"
+KisColorSpaceRegistry *KisColorSpaceRegistry::m_singleton = 0;
 
-class QStringList;
+KisColorSpaceRegistry::KisColorSpaceRegistry()
+{
+	kdDebug() << " creating a KisColorSpaceRegistry" << endl;
+	Q_ASSERT(KisColorSpaceRegistry::m_singleton == 0);
+	KisColorSpaceRegistry::m_singleton = this;
+}
 
-class KisColorSpaceFactory : public KisGenericFactory<KisStrategyColorSpaceSP> {
+KisColorSpaceRegistry::~KisColorSpaceRegistry()
+{
+}
 
-public:
-	virtual ~KisColorSpaceFactory();
+KisColorSpaceRegistry* KisColorSpaceRegistry::singleton()
+{
+	if(KisColorSpaceRegistry::m_singleton == 0)
+	{
+		KisColorSpaceRegistry::m_singleton = new KisColorSpaceRegistry();
+	}
+	return KisColorSpaceRegistry::m_singleton;
+}
 
-public:
-	KisStrategyColorSpaceSP colorSpace(const QString& name) const KDE_DEPRECATED;
-	QStringList listColorSpaceNames() const KDE_DEPRECATED;
-public:
-	static KisColorSpaceFactory* singleton();
-	
-private:
-	KisColorSpaceFactory();
-	KisColorSpaceFactory(const KisColorSpaceFactory&);
-	KisColorSpaceFactory operator=(const KisColorSpaceFactory&);
+KisStrategyColorSpaceSP KisColorSpaceRegistry::colorSpace(const QString& name) const
+{
+	return get(name);
+}
 
-private:
-	static KisColorSpaceFactory *m_singleton;
-};
-
-#endif // KIS_COLORSPACE_FACTORY_H_
-
+QStringList KisColorSpaceRegistry::listColorSpaceNames() const
+{
+	return listKeys();
+}

@@ -73,16 +73,13 @@
 #include "builder/kis_builder_subject.h"
 #include "builder/kis_builder_monitor.h"
 #include "builder/kis_image_magick_converter.h"
-#include "color_strategy/kis_strategy_colorspace.h"
-#include "color_strategy/kis_strategy_colorspace_rgb.h"
-#include "color_strategy/kis_strategy_colorspace_grayscale.h"
-#include "kis_colorspace_factory.h"
+#include "kis_strategy_colorspace.h"
+#include "kis_colorspace_registry.h"
 #include "tiles/kistilemgr.h"
 
 #include "KIsDocIface.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
-bool KisDoc::m_singletonsHasBeenInited = false;
 
 namespace {
 	class KisCommandImageAdd : public KisCommand {
@@ -339,7 +336,8 @@ namespace {
 KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) :
 	super(parentWidget, widgetName, parent, name, singleViewMode)
 {
-	initSingletons();
+	kdDebug() << "KisDoc created for " << widgetName << "\n";
+
 	m_undo = false;
 	m_dcop = 0;
 	setInstance(KisFactory::global(), false);
@@ -372,18 +370,9 @@ DCOPObject *KisDoc::dcopObject()
 	return m_dcop;
 }
 
-void KisDoc::initSingletons()
-{
-	if(!KisDoc::m_singletonsHasBeenInited)
-	{
-		KisDoc::m_singletonsHasBeenInited = true;
-		new KisStrategyColorSpaceRGB();
-		new KisStrategyColorSpaceGrayscale();
-	}
-}
-
 bool KisDoc::initDoc()
 {
+	kdDebug() << "KisDoc::initDoc\n";
 	if (!init())
 		return false;
 
@@ -398,14 +387,14 @@ bool KisDoc::initDoc()
 
 	KoTemplateChooseDia::ReturnType ret =
 	    KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE,
-			"*.kra", i18n("Krita"),
-			dlgtype, "krita_template");
+					"*.kra", i18n("Krita"),
+					dlgtype, "krita_template");
 
 	if (ret == KoTemplateChooseDia::Template) {
 		kdDebug() << "Eek: template is hard-coded rgba" << endl;
 		KisConfig cfg;
 		QString name = nextImageName();
-		KisImageSP img = new KisImage(this, cfg.defImgWidth(), cfg.defImgHeight(), KisColorSpaceFactory::singleton()->colorSpace("RGBA"), name);
+		KisImageSP img = new KisImage(this, cfg.defImgWidth(), cfg.defImgHeight(), KisColorSpaceRegistry::singleton()->colorSpace("RGBA"), name);
 		img -> setResolution(100, 100); // XXX
 		KisLayerSP layer = new KisLayer(img, cfg.defLayerWidth(), cfg.defLayerHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 
@@ -426,6 +415,7 @@ bool KisDoc::initDoc()
 
 bool KisDoc::init()
 {
+	kdDebug() << "KisDoc::init\n";
 	if (m_cmdHistory) {
 		delete m_cmdHistory;
 		m_cmdHistory = 0;
@@ -443,6 +433,7 @@ bool KisDoc::init()
 	m_nserver = new KisNameServer(i18n("Image %1"), 1);
 	return true;
 }
+
 QDomDocument KisDoc::saveXML()
 {
 	QDomDocument doc = createDomDocument("DOC", CURRENT_DTD_VERSION);
@@ -460,14 +451,14 @@ QDomDocument KisDoc::saveXML()
 
 bool KisDoc::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* )
 {
-	//todo
+	//XXX: todo (and that includes defining an OASIS format for layered 2D raster data!)
 	return false;
 }
 
 
 bool KisDoc::saveOasis( KoStore*, KoXmlWriter* )
 {
-	//todo
+	//XXX: todo (and that includes defining an OASIS format for layered 2D raster data!)
 	return false;
 }
 
@@ -612,7 +603,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 						return 0;
 			}
 		}
-		img = new KisImage(this, width, height, KisColorSpaceFactory::singleton()->colorSpace(colorspacename), name);
+		img = new KisImage(this, width, height, KisColorSpaceRegistry::singleton()->colorSpace(colorspacename), name);
 
 		for (node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
 			if (node.isElement()) {
@@ -1069,7 +1060,7 @@ bool KisDoc::slotNewImage()
 		KisLayerSP layer;
 		KisPainter gc;
 
-		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), KisColorSpaceFactory::singleton()->colorSpace(dlg.colorStrategyName()), nextImageName());
+		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), KisColorSpaceRegistry::singleton()->colorSpace(dlg.colorStrategyName()), nextImageName());
 		img -> setResolution(100.0, 100.0); // XXX needs to be added to dialog
 		layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 		gc.begin(layer.data());
@@ -1575,7 +1566,7 @@ void KisDoc::clipboardDataChanged()
 
 		if (!qimg.isNull()) {
 			m_clipboard = new KisFloatingSelection(qimg.width(), qimg.height(),
-					KisColorSpaceFactory::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
+					KisColorSpaceRegistry::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
 					"KisDoc created clipboard selection");
 
 			m_clipboard -> fromImage(qimg);

@@ -17,8 +17,11 @@
  */
 #include <stdlib.h>
 #include <string.h>
+
 #include <qpoint.h>
+
 #include <kdebug.h>
+
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kisscopedlock.h"
@@ -73,7 +76,7 @@ KisTileMgr::~KisTileMgr()
 	delete m_mediator;
 }
 
-void KisTileMgr::attach(KisTileSP tile, Q_INT32 tilenum, bool)
+void KisTileMgr::attach(KisTileSP tile, Q_INT32 tilenum)
 {
 	if (m_tiles.empty())
 		allocate(m_ntileRows * m_ntileCols);
@@ -99,7 +102,7 @@ void KisTileMgr::attach(KisTileSP tile, Q_INT32 tilenum, bool)
 	}
 }
 
-void KisTileMgr::detach(KisTileSP tile, Q_INT32 tilenum, bool)
+void KisTileMgr::detach(KisTileSP tile, Q_INT32 tilenum)
 {
 	if (m_tiles.empty())
 		allocate(m_ntileRows * m_ntileCols);

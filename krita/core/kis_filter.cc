@@ -20,7 +20,7 @@
 
 #include <qlayout.h>
 
-#include "kis_filter_factory.h"
+#include "kis_filter_registry.h"
 #include "kis_tile_command.h"
 #include "kis_undo_adapter.h"
 #include "kis_filter_configuration_widget.h"
@@ -30,7 +30,7 @@
 KisFilter::KisFilter(const QString& name) :
 	m_name(name)
 {
-	KisFilterFactory::singleton()->add( this );
+	KisFilterRegistry::singleton()->add( this );
 }
 
 KisFilterConfiguration* KisFilter::configuration()
@@ -83,3 +83,4 @@ void KisFilter::slotActivated()
 /*	delete m_dialog;
 	delete config;*/
 }
+#include "kis_filter.moc"

@@ -28,7 +28,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_channelinfo.h"
-#include "kis_compositeop.h"
+// #include "kis_compositeop.h"
 
 class QPainter;
 class KisIteratorPixel;
@@ -36,7 +36,9 @@ class KisPixelRepresentation;
 class KisPixelRepresentationRGB;
 
 class KisStrategyColorSpace : public KShared {
-	typedef std::map<QString, KisCompositeOp*> compositeOpStorage;
+
+// 	typedef std::map< QString, KisCompositeOp* > compositeOpStorage;
+
 public:
 	KisStrategyColorSpace(const QString& name);
 	virtual ~KisStrategyColorSpace();
@@ -55,21 +57,32 @@ public:
 	// XXX: make this a proper vector. Pointers to arrays are _so_ seventies, and
 	// Stroustrup assures us a vector is as effecient a mem array anyway.
 	virtual ChannelInfo * channelsInfo() const = 0;
+
 	virtual Q_INT32 depth() const = 0;
 	virtual bool alpha() const = 0;
 	inline QString name() { return m_name; };
 
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
 
-	/** This function is used to convert a KisPixelRepresentation to an other color strategy.
-		* When implementing a color space, there is no need to implement a conversion to all strategy,
-		* if there is no direct conversion facilities, the function should use the conversion to/from RGBA
-		*/
+	/**
+	 * This function is used to convert a KisPixelRepresentation to an other color strategy.
+	 * When implementing a color space, there is no need to implement a conversion to all strategies,
+	 * if there is no direct conversion facilities, the function should use the conversion to/from RGBA
+	 *
+	 * XXX: bsar. RGBA is a bad choice for an intermediate format. Use koColor; which can be expanded to use
+	 * littleCms.
+	 */
 	virtual void convertTo(KisPixelRepresentation& src, KisPixelRepresentation& dst,  KisStrategyColorSpaceSP cs);
-	/** This function convert a pixel to RGBA */
-	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst) =0;
-	/** This function convert a pixel from RGBA */
-	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst) =0;
+
+
+	// XXX: convertToRGBA and convertFromRGBA must use LAB or XYZ; furthermore, they should
+	// use koColor for now, and littlecms later.
+
+	/** This function converts a pixel to RGBA */
+	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst) = 0;
+
+	/** This function converts a pixel from RGBA */
+	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst) = 0;
 	
 	virtual QImage convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const = 0;
 	virtual QImage convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const = 0;
@@ -95,25 +108,29 @@ public:
 	
 	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src) =0;
 	
-	void addCompositeOp(KisCompositeOp* newco);
-	KisCompositeOp* compositeOp(const QString& name);
+// 	void addCompositeOp(KisCompositeOp* newco);
+// 	KisCompositeOp* compositeOp(const QString& name);
 
 private:
+
 	KisStrategyColorSpace(const KisStrategyColorSpace&);
+
 	KisStrategyColorSpace& operator=(const KisStrategyColorSpace&);
-	compositeOpStorage m_compositeOpStorage;
+
+private:
+
+// 	compositeOpStorage m_compositeOpStorage;
 	QString m_name;
 };
 
-inline void KisStrategyColorSpace::addCompositeOp(KisCompositeOp* newco)
-{
-	m_compositeOpStorage.insert(compositeOpStorage::value_type( newco->name(),newco));
-}
-inline KisCompositeOp* KisStrategyColorSpace::compositeOp(const QString& name)
-{
-	return m_compositeOpStorage.find(name)->second;
-}
+// inline void KisStrategyColorSpace::addCompositeOp(KisCompositeOp* newco)
+// {
+// 	m_compositeOpStorage.insert(compositeOpStorage::value_type( newco->name(),newco));
+// }
 
+// inline KisCompositeOp* KisStrategyColorSpace::compositeOp(const QString& name)
+// {
+// 	return m_compositeOpStorage.find(name)->second;
+// }
 
 #endif // KIS_STRATEGY_COLORSPACE_H_
-

@@ -1,7 +1,7 @@
 # all_includes must remain last!
 INCLUDES  = -I$(srcdir)/builder \
 	-I$(srcdir)/visitors \
-	-I$(srcdir)/helper/ \
+	-I$(srcdir)/helper \
 	-I$(srcdir)/tiles \
 	-I$(srcdir)/../ui \
 	-I../ui \
@@ -14,7 +14,6 @@ INCLUDES  = -I$(srcdir)/builder \
 	$(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/strategy \
 	-I$(srcdir)/color_strategy \
-	-I$(srcdir)/compositeop \
 	$(all_includes)
 
 #CXXFLAGS = -shared -fPIC
@@ -26,7 +25,6 @@ libkritacore_la_LIBADD = tiles/libkistile.la \
 	builder/libkiscorebuilder.la \
 	strategy/libkisstrategy.la \
 	color_strategy/libkiscolor_strategy.la \
-	compositeop/libkiscompositeop.la \
 	$(LIB_KOPAINTER)
 
 libkritacore_la_SOURCES = kis_paint_device.cc \
@@ -54,7 +52,6 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_resource.cc \
 	kis_resource_mediator.cc \
 	kis_guide.cc \
-	kis_memento_originator.cc \
 	kis_canvas_subject.cc \
 	kis_canvas_controller.cc \
 	kis_canvas_observer.cc \
@@ -76,7 +73,7 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	KIsImageIface.cc \
 	KIsImageIface.skel \
 	kis_filter.cc \
-	kis_filter_factory.cc \
+	kis_filter_registry.cc \
 	kis_plugin_registry.cc
 
 noinst_HEADERS = kis_paint_device.h \
@@ -104,7 +101,6 @@ noinst_HEADERS = kis_paint_device.h \
 	kis_resource.h \
 	kis_resource_mediator.h \
 	kis_guide.h \
-	kis_memento_originator.h \
 	kis_canvas_subject.h \
 	kis_canvas_controller.h \
 	kis_canvas_observer.h \
@@ -125,8 +121,8 @@ noinst_HEADERS = kis_paint_device.h \
 	KIsImageIface.h \
 	kis_matrix.h \
 	kis_filter.h \
-	kis_filter_factory.h
-	
+	kis_filter_registry.h
+
 libkritacore_la_METASOURCES = AUTO
 libkritacore_la_LDFLAGS = $(all_libraries)
-SUBDIRS = helper tiles builder strategy color_strategy compositeop
+SUBDIRS = helper tiles builder strategy color_strategy 

@@ -74,7 +74,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 		if (!dev -> contains(pos))
 			return;
 
-		if (dev -> setPixel(pos.x(), pos.y(), &c, &opacity)) {
+		if (dev -> pixel(pos.x(), pos.y(), &c, &opacity)) {
 			if(m_colorSelector)
 				if (e -> button() == QMouseEvent::LeftButton)
 					m_colorSelector -> slotSetFGColor(c);

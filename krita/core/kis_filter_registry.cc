@@ -17,28 +17,28 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "kis_filter_factory.h"
+#include "kis_filter_registry.h"
 #include "kis_paint_device.h"
 #include "kis_filter.h"
 
-KisFilterFactory *KisFilterFactory::m_singleton = 0;
+KisFilterRegistry *KisFilterRegistry::m_singleton = 0;
 
-KisFilterFactory::KisFilterFactory()
+KisFilterRegistry::KisFilterRegistry()
 {
-	kdDebug() << " creating a KisFilterFactory" << endl;
-	Q_ASSERT(KisFilterFactory::m_singleton == 0);
-	KisFilterFactory::m_singleton = this;
+	kdDebug() << " creating a KisFilterRegistry" << endl;
+	Q_ASSERT(KisFilterRegistry::m_singleton == 0);
+	KisFilterRegistry::m_singleton = this;
 }
 
-KisFilterFactory::~KisFilterFactory()
+KisFilterRegistry::~KisFilterRegistry()
 {
 }
 
-KisFilterFactory* KisFilterFactory::singleton()
+KisFilterRegistry* KisFilterRegistry::singleton()
 {
-	if(KisFilterFactory::m_singleton == 0)
+	if(KisFilterRegistry::m_singleton == 0)
 	{
-		KisFilterFactory::m_singleton = new KisFilterFactory();
+		KisFilterRegistry::m_singleton = new KisFilterRegistry();
 	}
-	return KisFilterFactory::m_singleton;
+	return KisFilterRegistry::m_singleton;
 }

@@ -1,0 +1,11 @@
+About Modules
+
+Modules are plug-ins that implement exchangable core functionality
+for Krita, such as colour strategies. Modules are loaded at startup
+and shared among all Krita documents and views. That means that making
+modules stateful is iffy, and that you need to be careful about 
+re-entrancy.
+
+Modules are named modules because the plugins, which are kpartgui's
+are already called plugins. Capito? Good.
+

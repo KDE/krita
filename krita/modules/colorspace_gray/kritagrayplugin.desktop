@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Grayscale Color Model
+Comment=Color model for 8-bits grayscale images
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritagrayplugin

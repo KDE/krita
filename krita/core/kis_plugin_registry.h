@@ -19,7 +19,11 @@
 #define KIS_PLUGIN_REGISTRY_H_
 
 #include <stdlib.h>
+
+#include <qwidget.h>
+
 #include <kdebug.h>
+#include <ktrader.h>
 
 #include <kis_types.h>
 
@@ -36,20 +40,25 @@
  * items, too.
  */
 
-class KisPluginRegistry : public KShared
+class KisPluginRegistry : public QObject, public KShared
 {
 
+	typedef QObject super;
+	Q_OBJECT
+
+	
 public:
 
 	KisPluginRegistry();
 	virtual ~KisPluginRegistry();
-
+	
 	void registerColorStrategy(const QString & name, KisStrategyColorSpaceSP colorspace);
 	void registerTool(const QString & name, KisToolSP tool);
 
 	static KisPluginRegistry * singleton();
 
 private:
+	QStringList availablePlugins();
 
 	static KisPluginRegistry * m_singleton;
 

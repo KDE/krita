@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KISTILEMGR_H_
+#ifndef KISTILEMGR_H_
 #define KISTILEMGR_H_
 
 #include <qcstring.h>
@@ -23,7 +23,9 @@
 #include <qmutex.h>
 #include <qpair.h>
 #include <qvaluelist.h>
+
 #include <ksharedptr.h>
+
 #include "kistile.h"
 #include "kis_types.h"
 
@@ -59,6 +61,7 @@ class KisTileMediator;
  *
  */
 class KisTileMgr : public KShared {
+
 	typedef KShared super;
 	typedef QValueList<KisTileSP> KisTileSPLst;
 	typedef KisTileSPLst::iterator KisTileSPLst_it;
@@ -69,8 +72,11 @@ class KisTileMgr : public KShared {
 
 public:
         /**
-         * Create a KisTileMgr of width and height with the specified
-         * colour depth.
+          Create a KisTileMgr of width and height with the specified
+          depth. For now, this depth is in QUANTUMS, which are bytes,
+	  and is this equivelent to channels. Later, with will still be
+	  bytes, but how the bytes are divided up by the color strategy
+	  into channels, is up to that strategy.
          */
 	KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
 
@@ -92,17 +98,15 @@ public:
 	KisTileMgr(const KisTileMgr& rhs);
 
 	virtual ~KisTileMgr();
-
-public:
         /**
           XXX?
          */
-	void attach(KisTileSP tile, Q_INT32 tilenum, bool keepold = true);
+	void attach(KisTileSP tile, Q_INT32 tilenum);
 
         /**
           XXX?
         */
-	void detach(KisTileSP tile, Q_INT32 tilenum, bool keepold = true);
+	void detach(KisTileSP tile, Q_INT32 tilenum);
 
         /**
            Create or duplicate a tile at location xpix/ypix.
@@ -227,6 +231,7 @@ private:
 	KisTileSP invalidateTile(KisTileSP tile, Q_INT32 tilenum);
 
 private:
+
         Q_UINT32 m_depth;
 	Q_UINT32 m_width;
 	Q_UINT32 m_height;

@@ -1,0 +1,9 @@
+About plugins
+
+Plugins are components with a GUI that perform some action for Krita.
+Note that plugins are only loaded when a KisView is constructed; note 
+also that every plugin is reloaded when a new KisView is created.
+
+Plugins are _not_ allowed to depend on each other. You may _not_
+#include a header file from a plugin anywhere but in that same plugin.
+

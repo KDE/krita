@@ -307,9 +307,9 @@ void KisPaintDevice::init()
         m_projectionValid = false;
 }
 
-bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
+bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
 {
-        // XXX: this should use the colour strategies! klur
+        // XXX: this should use the colour strategies!
 #if 0
         KisTileMgrSP tm = data();
         KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
@@ -340,11 +340,13 @@ bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity
                 break;
         default:
                 kdDebug() << "Not Implemented.\n";
-                break;
+                return false;
         }
-#endif
         return true;
+#endif
+	return false;
 }
+
 
 bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)
 {

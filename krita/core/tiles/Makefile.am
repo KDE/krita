@@ -1,8 +1,10 @@
 INCLUDES  = -I$(srcdir)/../ \
-	-I$(srcdir)/../color_strategy \
-	-I$(srcdir)/../compositeop \
 	-I$(srcdir)/../helper \
-	$(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(LIBMAGICK_CPPFLAGS)  $(all_includes)
+	-I$(interfacedir) \
+	$(KOFFICE_INCLUDES) \
+	$(KOPAINTER_INCLUDES) \
+	$(LIBMAGICK_CPPFLAGS) \
+	 $(all_includes)
 
 noinst_LTLIBRARIES = libkistile.la
 

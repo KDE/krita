@@ -106,6 +106,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_colorspace_registry.h"
 
 // Dialog boxes
 #include "kis_dlg_builder_progress.h"
@@ -2277,7 +2278,7 @@ void KisView::layerAdd()
                                                              dlg.compositeOp(),
                                                              dlg.opacity(),
                                                              dlg.position(),
-                                                             KisColorSpaceFactory::singleton()->colorSpace(dlg.colorStrategyName()));
+                                                             KisColorSpaceRegistry::singleton()->colorSpace(dlg.colorStrategyName()));
 
                         if (layer) {
                                 m_layerBox -> setCurrentItem(img -> index(layer));

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=CMYK Color Model
+Comment=Color model for 8-bit/channel CMYK images
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritacmykplugin

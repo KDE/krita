@@ -33,7 +33,6 @@
 #include "kis_image.h"
 #include "kistilemgr.h"
 #include "kis_strategy_colorspace.h"
-#include "kis_colorspace_factory.h"
 
 class QImage;
 class QSize;
@@ -125,7 +124,7 @@ public:
 	 * fill c and opacity with the values found at x and y
 	 * @return true if the operation was succesful
 	 */
-        bool setPixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity);
+        bool pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity);
 
         /**
 	 * Set the specified pixel to the specified color. Note that this

@@ -108,8 +108,8 @@ typedef QMap<Q_INT32, KisStrategyColorSpaceSP> KisStrategyColorSpaceMap;
 class KisGuide;
 typedef KSharedPtr<KisGuide> KisGuideSP;
 
-class KisMemento;
-typedef KSharedPtr<KisMemento> KisMementoSP;
+//class KisMemento;
+//typedef KSharedPtr<KisMemento> KisMementoSP;
 
 class KisAlphaMask;
 typedef KSharedPtr<KisAlphaMask> KisAlphaMaskSP;

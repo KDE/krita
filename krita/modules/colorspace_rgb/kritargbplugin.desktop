@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=RGB Color Model
+Comment=Color model for 8-bit/channel RGB imags
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritargbplugin

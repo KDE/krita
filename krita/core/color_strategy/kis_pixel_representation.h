@@ -43,4 +43,19 @@ private:
 	QUANTUM* m_channels;
 };
 
+// XXX: conversions always via koColor; this class is BAD. It is unsuited as 
+// an intermediary colourspace format, and besides, we must use koColor and later
+// littleCMS for that.
+class KisPixelRepresentationRGB : public KisPixelRepresentation {
+public:
+	inline KisPixelRepresentationRGB( const KisPixelRepresentation& pr) : KisPixelRepresentation(pr) { };
+	inline KisPixelRepresentationRGB( ) : KisPixelRepresentation(4) { };
+public:
+	inline KisQuantum red() { return (*this)[PIXEL_RED]; };
+	inline KisQuantum green() { return (*this)[PIXEL_GREEN]; };
+	inline KisQuantum blue() { return (*this)[PIXEL_BLUE]; };
+	inline KisQuantum alpha() { return (*this)[PIXEL_ALPHA]; };
+};
+
+
 #endif

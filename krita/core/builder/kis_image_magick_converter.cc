@@ -18,14 +18,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include <magick/api.h>
+
+#include <qfile.h>
 #include <qstring.h>
+
 #include <kdeversion.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kurl.h>
 #include <kio/netaccess.h>
+
 #include <koColor.h>
+
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_doc.h"
@@ -36,7 +42,8 @@
 #include "kistilemgr.h"
 #include "kispixeldata.h"
 #include "kis_image_magick_converter.h"
-#include <qfile.h>
+#include "kis_colorspace_registry.h"
+
 #include "../../../config.h"
 
 namespace {
@@ -184,7 +191,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		emit notify(this, KisImageBuilder_STEP_ERROR, 0);
 		return KisImageBuilder_RESULT_FAILURE;
 	}
-	m_img = new KisImage(m_adapter, 0, 0, KisColorSpaceFactory::singleton()->colorSpace("RGBA"), m_doc -> nextImageName());
+	m_img = new KisImage(m_adapter, 0, 0, KisColorSpaceRegistry::singleton()->colorSpace("RGBA"), m_doc -> nextImageName());
 	emit notify(this, KisImageBuilder_STEP_TILING, 0);
 
 	while ((image = RemoveFirstImageFromList(&images))) {

@@ -17,12 +17,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kis_strategy_colorspace.h"
-#include "kis_strategy_colorspace_rgb.h"
-#include "kis_colorspace_factory.h"
+#include "kis_pixel_representation.h"
 
 KisStrategyColorSpace::KisStrategyColorSpace(const QString& name) : m_name(name)
 {
-	KisColorSpaceFactory::singleton()->add(this);
+
 }
 
 KisStrategyColorSpace::~KisStrategyColorSpace()
@@ -31,7 +30,8 @@ KisStrategyColorSpace::~KisStrategyColorSpace()
 
 void KisStrategyColorSpace::convertTo(KisPixelRepresentation& src, KisPixelRepresentation& dst,  KisStrategyColorSpaceSP cs)
 {
-	 KisPixelRepresentationRGB intermediaire;
-	 this->convertToRGBA(src, intermediaire);
-	 cs->convertFromRGBA(intermediaire, dst);
+	 KisPixelRepresentationRGB intermediate;
+
+	 this->convertToRGBA(src, intermediate);
+	 cs->convertFromRGBA(intermediate, dst);
 }

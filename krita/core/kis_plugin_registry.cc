@@ -17,27 +17,63 @@
  */
 
 #include <stdlib.h>
+
 #include <kdebug.h>
+#include <kservice.h>
+#include <ktrader.h>
+#include <kparts/componentfactory.h>
+#include <kparts/plugin.h>
 
 #include "kis_plugin_registry.h"
  
-#include "kis_colorspace_factory.h"
+#include "kis_colorspace_registry.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_tool.h"
 
+// XXX: is this a candidate for KStaticDeleter?
 namespace {
 	KisPluginRegistry moveMe; // XXX Where to create singletons in Krita?
 }
 
 KisPluginRegistry *KisPluginRegistry::m_singleton = 0;
 
+
+
 KisPluginRegistry::KisPluginRegistry()
+	: super()
 {
 	kdDebug() << "Creating plugin registry\n";
+
 	KisPluginRegistry::m_singleton = this;
+
+
+	KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/CoreModule"), 
+							     QString::fromLatin1("Type == 'Service'"));
+    
+	KTrader::OfferList::ConstIterator iter;
+	
+	for(iter = offers.begin(); iter != offers.end(); ++iter) 
+	{
+		KService::Ptr service = *iter;
+		int errCode = 0;
+		KParts::Plugin* plugin =
+			KParts::ComponentFactory::createInstanceFromService<KParts::Plugin>
+			( service, this, 0, QStringList(), &errCode);
+		// here we ought to check the error code.
+
+		if (plugin) {
+			// guiFactory()->addClient(plugin);
+
+			kdDebug() << "PluginDemo: Loaded plugin "
+				  << (*iter) -> name() << endl;
+		}
+	}
+
 }
+
+
 
 KisPluginRegistry *KisPluginRegistry::singleton()
 {
@@ -50,10 +86,8 @@ KisPluginRegistry::~KisPluginRegistry()
 
 void KisPluginRegistry::registerColorStrategy(const QString & name, KisStrategyColorSpaceSP colorspace)
 {
-	kdDebug() << "Adding color strategy\n";
-/*	KisColorSpaceFactory *factory = KisColorSpaceFactory::singleton();
-	Q_ASSERT(factory);
-	factory -> add(imgType, colorspace);*/
+	kdDebug() << "Adding color strategy: " << name << "\n";
+	KisColorSpaceRegistry::singleton() -> add(colorspace);
 }
 
 void KisPluginRegistry::registerTool(const QString & /*name*/, KisToolSP /*tool*/)
@@ -74,3 +108,5 @@ void KisPluginRegistry::registerTool(const QString & /*name*/, KisToolSP /*tool*
 	// KisToolFactory::create method could then use the factory
 	// function to add the plugin tools to the hard-coded tools.
 }
+
+#include "kis_plugin_registry.moc"

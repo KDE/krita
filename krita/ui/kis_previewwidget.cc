@@ -32,7 +32,6 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_types.h"
-#include "color_strategy/kis_colorspace_factory.h"
 #include "color_strategy/kis_strategy_colorspace.h"
 
 #include "kis_previewwidget.h"

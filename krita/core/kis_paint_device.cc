@@ -34,11 +34,11 @@
 
 const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(unsigned int);
     
-KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uint bpp, const QRgb& defaultColor) :
+KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uchar bpp, const QRgb& defaultColor) :
 	m_tiles(width / TILE_SIZE, height / TILE_SIZE, bpp, defaultColor)
 {
 	m_name = name;
-	m_tileRect = QRect(0, 0, width, height);
+	m_imgRect = m_tileRect = QRect(0, 0, width, height);
 }
 
 KisPaintDevice::~KisPaintDevice()
@@ -82,16 +82,14 @@ bool KisPaintDevice::pixel(uint x, uint y, uchar **val)
 	int tileNoY = y / TILE_SIZE;
 	int tileNoX = x / TILE_SIZE;
 	KisTile *tile = m_tiles.getTile(tileNoX, tileNoY);
-	uchar *ppixel = tile -> data();
 
 	*val = tile -> data(x % TILE_SIZE, y % TILE_SIZE);
-//	*val = (ppixel + ((y % TILE_SIZE) * TILE_SIZE) + (x % TILE_SIZE));
 	return true;
 }
 
-void KisPaintDevice::resize(uint width, uint height, uint bpp)
+void KisPaintDevice::resize(uint width, uint height, uchar bpp)
 {
-	m_tiles.resize(width, height, bpp);
+	m_tiles.resize(width / TILE_SIZE, height / TILE_SIZE, bpp);
 }
 
 void KisPaintDevice::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
@@ -150,5 +148,31 @@ bool KisPaintDevice::loadFromStore(KoStore *store)
 	}
 
 	return true;
+}
+
+QRect KisPaintDevice::imageExtents() const
+{
+	return m_imgRect;
+}
+
+void KisPaintDevice::moveBy(int dx, int dy)
+{
+	m_imgRect.moveBy(dx, dy);
+	m_tileRect.moveBy(dx, dy);
+}
+
+void KisPaintDevice::moveTo(int x, int y)
+{
+	int dx = x - m_imgRect.x();
+	int dy = y - m_imgRect.y();
+
+	m_imgRect.moveTopLeft(QPoint(x, y));
+	m_tileRect.moveBy(dx,dy);
+}
+
+void KisPaintDevice::allocateRect(const QRect& rc, uchar bpp)
+{
+	m_imgRect = m_tileRect = rc;
+	resize(rc.width(), rc.height(), bpp);
 }
 

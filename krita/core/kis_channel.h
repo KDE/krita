@@ -50,20 +50,10 @@ public:
 	QRect imageExtents() const { return m_imgRect; };
 	QPoint offset() const { return m_imgRect.topLeft() - m_tileRect.topLeft(); };
 
-
-#if 0
-    void moveBy(int dx, int dy);
-    void moveTo(int x, int y);
-#endif
-  
-	void allocateRect(QRect newRect);
-    	QRect tileRect(int tileNo);
+   	QRect tileRect(int tileNo);
 
 	uint lastTileOffsetX();
 	uint lastTileOffsetY();
-
-	bool  writeToStore(KoStore *store); 
-	bool  loadFromStore(KoStore *store); 
 
 protected:
 	cId m_id;

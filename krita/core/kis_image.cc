@@ -273,10 +273,10 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 	m_bpp = bpp;
 	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * bpp);
 	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, bpp, cm, defaultColor);
-	m_composeLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE));
+	m_composeLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE), bpp);
 
 	m_bgLayer = new KisLayer("_background", TILE_SIZE, TILE_SIZE, bpp, cm, defaultColor);
-	m_bgLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE));;
+	m_bgLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE), bpp);
 	renderBg(m_bgLayer, 0);
 	compositeImage();
 
@@ -439,8 +439,8 @@ void KisImage::addLayer(const QRect& rect, const KoColor& c, bool tr, const QStr
 		defaultColor = c.color().rgb();
 	
 	lay = new KisLayer(name, m_width, m_height, m_bpp, m_cMode, defaultColor);
-	lay -> allocateRect(rect);
-	lay -> clear(c, tr);
+	lay -> allocateRect(rect, m_bpp);
+//	lay -> clear(c, tr);
 	m_layers.push_back(lay);
 	m_activeLayer = lay;
 	resizeImage(lay, rect);
@@ -796,13 +796,13 @@ void KisImage::mergeLayers(KisLayerSPLst& layers)
 
 	it = layers.begin();
 	a = new KisLayer((*it) -> name(), m_width, m_height, m_bpp, m_cMode, qRgba(255, 255, 255, 255));
-	a -> allocateRect(rc);
+	a -> allocateRect(rc, m_bpp);
 	macro -> addCommand(new KisCommandLayerAdd(this, a));
 
 	for (; it != layers.end(); it++) {
 		QRect urect = (a) -> imageExtents() | (*it) -> imageExtents();
 
-		(*it) -> allocateRect(urect);
+		(*it) -> allocateRect(urect, m_bpp);
 
 		QRect rect = urect;
 		rect.moveTopLeft(urect.topLeft() - a -> tileExtents().topLeft());

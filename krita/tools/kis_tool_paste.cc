@@ -238,6 +238,8 @@ bool PasteTool::pasteMonochrome(QPoint /* pos */)
 
 bool PasteTool::pasteToCanvas(QPoint pos)
 {
+	return false;
+#if 0
 	KisView *view = getCurrentView();
 	KisImage* img = m_doc->currentImg();
 	if (!img) return false;
@@ -315,6 +317,7 @@ bool PasteTool::pasteToCanvas(QPoint pos)
 	p.end();
 
 	return true;
+#endif
 }
 
 

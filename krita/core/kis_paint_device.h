@@ -44,7 +44,7 @@ class KisPaintDevice : public QObject, public KShared {
 	typedef QObject super;
 
 public:
-	KisPaintDevice(const QString& name, uint width, uint height, uint bpp, const QRgb& defaultColor);
+	KisPaintDevice(const QString& name, uint width, uint height, uchar bpp, const QRgb& defaultColor);
 	virtual ~KisPaintDevice();
 
 	inline void setName(const QString& name);
@@ -54,7 +54,7 @@ public:
 	virtual bool pixel(uint x, uint y, uchar **val);
 	virtual uchar *pixel(uint x, uint y);
 
-	virtual void resize(uint width, uint height, uint bpp);
+	virtual void resize(uint width, uint height, uchar bpp);
 	
 	inline KisTileSP getTile(unsigned int x, unsigned int y);
 
@@ -76,10 +76,19 @@ public:
 	virtual bool writeToStore(KoStore *store);
 	virtual bool loadFromStore(KoStore *store);
 
+	QRect imageExtents() const;
+	void moveBy(int dx, int dy);
+	void moveTo(int x, int y);
+	void allocateRect(const QRect& rc, uchar bpp);
+
+	inline int width() const;
+	inline int height() const;
+
 protected:
 	uchar m_opacity;
 	bool m_visible;
 	QRect m_tileRect;
+	QRect m_imgRect;
 	QString m_name;
 	KisTiles m_tiles;
 	cMode m_cMode;
@@ -133,6 +142,16 @@ bool KisPaintDevice::visible() const
 void KisPaintDevice::setVisible(bool v) 
 { 
 	m_visible = v; 
+}
+
+int KisPaintDevice::width() const
+{
+	return m_imgRect.width();
+}
+
+int KisPaintDevice::height() const
+{
+	return m_imgRect.height();
 }
 
 #endif // KIS_PAINT_DEVICE_H_

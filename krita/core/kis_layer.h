@@ -48,66 +48,32 @@ public:
 	virtual ~KisLayer();
 
 	bool    linked()  const { return m_linked; }
-//	uchar   numChannels() const { return m_channels; }
 	cMode   colorMode()   const { return m_cMode; }
 
 	void    setLinked(bool l)  { m_linked = l; }
-
-	void    moveBy(int dx, int dy);
-	void    moveTo(int x, int y);
 
 	int     channelLastTileOffsetX() const;
 	int     channelLastTileOffsetY() const;
 	QRect   tileRect(int tileNo);
 
-	// extents of the image in canvas coords
-	QRect   imageExtents() const;
-	// topLeft of the image in the channel   
-//	QPoint  channelOffset() const; 
-
 	// information about where the layer rectange (not the
 	// entire image rectangle) is in canvas coords -jwc-
-	int     width()  { return mLayerWidth; } 
-	int     height() { return mLayerHeight; } 
-	QPoint  offset() { return QPoint(mLayerXOffset, mLayerYOffset); }
-	QRect   layerExtents() const;   
 
 	void    loadRGBImage(QImage img, QImage alpha);
 	void    loadGrayImage(QImage img, QImage alpha);
 
-//	uint* scanLine();
-//	uchar*  channelMem(uchar channel, uint tileNo, int ox, int oy) const;
-
 	bool    boundryTileX(int tile) const;
 	bool    boundryTileY(int tile) const;
-	void    allocateRect(const QRect& r);
     
-	void    clear(const KoColor& c, bool transparent);
-
-#if 0
-	KisChannel* firstChannel();
-	KisChannel* nextChannel();
-#endif
-
 signals:
 	void layerPropertiesChanged();
 
-protected:
-//	void calcNumChannels();
-
 public:
-//	uchar    m_channels;
 	uchar    m_current;
 	bool     m_linked;
 	uchar    m_bitDepth;
     
-	int      mLayerXOffset; 
-	int      mLayerYOffset; 
-	int      mLayerWidth;   
-	int      mLayerHeight;  	 
-
 	QRect    m_imgRect;
-//	KisChannel* m_ch[MAX_CHANNELS];
 };
 
 #endif // __kis_layer_h__

@@ -1610,7 +1610,7 @@ void KisView::next_layer()
 		while (++static_cast<uint>(indx) <= img -> layerList().size() - 1)
 			layers[indx] -> setVisible(false);
 
-		img->markDirty(img->getCurrentLayer()->layerExtents());
+		img->markDirty(img->getCurrentLayer()->imageExtents());
 		m_pLayerView->layerTable()->updateTable();
 		m_pLayerView->layerTable()->updateAllCells();
 		slotRefreshPainter();
@@ -1646,7 +1646,7 @@ void KisView::previous_layer()
 			img->layerList()[indx]->setVisible(false);
 		}
 
-		img->markDirty(img->getCurrentLayer()->layerExtents());
+		img->markDirty(img->getCurrentLayer()->imageExtents());
 
 		m_pLayerView->layerTable()->updateTable();
 		m_pLayerView->layerTable()->updateAllCells();
@@ -1852,7 +1852,7 @@ void KisView::layerScale(bool smooth)
         // bring new scaled layer to front
         uint indx = img->layerList().size() - 1;
         img->setCurrentLayer(indx);
-        img->markDirty(img->getCurrentLayer()->layerExtents());
+        img->markDirty(img->getCurrentLayer()->imageExtents());
         m_pLayerView->layerTable()->selectLayer(indx);
 
         m_pLayerView->layerTable()->updateTable();

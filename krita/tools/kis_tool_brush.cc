@@ -161,39 +161,29 @@ bool BrushTool::paint(const QPoint& pos)
 	src2[PIXEL_GREEN] = m_green;
 	src2[PIXEL_BLUE] = m_blue;
 	src2[PIXEL_ALPHA] = CHANNEL_MAX;
+	
+	bool alpha = img -> colorMode() == cm_RGBA;
 
-	if (img -> colorMode() == cm_RGBA) {
-		for (int y = sy; y <= ey; y++) {
-			uchar *sl = m_brush -> scanline(y);
+	for (int y = sy; y <= ey; y++) {
+		uchar *sl = m_brush -> scanline(y);
 
-			for (int x = sx; x <= ex; x++) {
-				uchar *src = lay -> pixel(startx + x, starty + y);
-				bv = *(sl + x);
+		for (int x = sx; x <= ex; x++) {
+			uchar *src = lay -> pixel(startx + x, starty + y);
+			bv = *(sl + x);
 
-				if (bv == 0)
-					continue;
+			if (bv == 0)
+				continue;
 
-				invbv = CHANNEL_MAX - bv;
+			invbv = CHANNEL_MAX - bv;
 
-				for (int w = 0; w < bpp; w++) {
-					dst[w] = (src2[w] * bv + src[w] * invbv) / CHANNEL_MAX;
+			for (int w = 0; w < bpp; w++) {
+				dst[w] = (src2[w] * bv + src[w] * invbv) / CHANNEL_MAX;
+
+				if (alpha)
 					dst[w] = (dst[w] * opacity + src[w] * invopacity) / CHANNEL_MAX;
-				}
-
-				src += bpp;
-				lay -> setPixel(startx + x, starty + y, dst, m_cmd);
 			}
-		}
-	} else {
-		for (int y = sy; y <= ey; y++) {
-			for (int x = sx; x <= ex; x++) {
-				uchar *src = lay -> pixel(startx + x, starty + y);
 
-				for (int w = 0; w < bpp; w++)
-					dst[w] = (src2[w] * bv + src[w] * invbv) / CHANNEL_MAX;
-
-				lay -> setPixel(startx + x, starty + y, dst, m_cmd);
-			}
+			lay -> setPixel(startx + x, starty + y, dst, m_cmd);
 		}
 	}
 

@@ -26,6 +26,7 @@
 class QWidget;
 class KisTool;
 class KisRect;
+class KisPoint;
 
 class KisCanvasControllerInterface {
 public:
@@ -47,10 +48,12 @@ public:
 	virtual void zoomTo(const QRect& r) = 0;
 	virtual void zoomTo(const KisRect& r) = 0;
 	virtual QPoint viewToWindow(const QPoint& pt) = 0;
+	virtual KisPoint viewToWindow(const KisPoint& pt) = 0;
 	virtual QRect viewToWindow(const QRect& rc) = 0;
 	virtual KisRect viewToWindow(const KisRect& rc) = 0;
 	virtual void viewToWindow(Q_INT32 *x, Q_INT32 *y) = 0;
 	virtual QPoint windowToView(const QPoint& pt) = 0;
+	virtual KisPoint windowToView(const KisPoint& pt) = 0;
 	virtual QRect windowToView(const QRect& rc) = 0;
 	virtual KisRect windowToView(const KisRect& rc) = 0;
 	virtual void windowToView(Q_INT32 *x, Q_INT32 *y) = 0;

@@ -21,6 +21,7 @@
 #if !defined KIS_LISTVIEW_H_
 #define KIS_LISTVIEW_H_
 
+#include <qframe.h>
 #include <qpixmap.h>
 #include <qrect.h>
 #include <qsize.h>
@@ -31,12 +32,35 @@
 class QPainter;
 class QWidget;
 class KIconLoader;
+class KPopupMenu;
+
+class KisListBoxView : public QFrame {
+	typedef QFrame super;
+	Q_OBJECT
+
+public:
+	enum action {VISIBLE, SELECTION, LINKING, PROPERTIES, ADD, REMOVE, ADDMASK, REMOVEMASK, UPPER, LOWER, FRONT, BACK, LEVEL};
+	enum flags {SHOWVISIBLE = 1, SHOWLINKED = (1 << 1), SHOWPREVIEW = (1 << 2), SHOWMASK = (1 << 3), SHOWALL = (SHOWMASK|SHOWPREVIEW|SHOWLINKED|SHOWVISIBLE)};
+
+	KisListBoxView(const QString& label, flags f = SHOWALL, QWidget *parent = 0, const char *name = 0);
+	virtual ~KisListBoxView();
+
+private slots:
+	void slotMenuAction(int mnuId);
+	void slotAboutToShow();
+	void slotShowContextMenu(QListBoxItem *item, const QPoint& pos);
+	void slotExecuted(QListBoxItem *item, const QPoint& pos);
+
+private:
+	KListBox *m_lst;
+	KPopupMenu *m_contextMnu;
+};
 
 class KisListBoxItem : public QListBoxItem {
 	typedef QListBoxItem super;
 
 public:
-	KisListBoxItem(const QString& name, QListBox *parent, int flags = 0);
+	KisListBoxItem(const QString& label, QListBox *parent, int flags = 0);
 	virtual ~KisListBoxItem();
 
 	virtual int height(const QListBox *lb) const;
@@ -45,12 +69,18 @@ public:
 	virtual int width() const;
 	virtual void paint(QPainter *gc);
 
+	bool intersectVisibleRect(const QPoint& pos, int yOffset) const;
+	bool intersectLinkedRect(const QPoint& pos, int yOffset) const;
+	bool intersectPreviewRect(const QPoint& pos, int yOffset) const;
+
 private:
+	void init(const QString& label, QListBox *parent, int flags);
 	QPixmap loadPixmap(const QString& filename, const KIconLoader& il);
+	bool intersectRect(const QRect& rc, const QPoint& pos, int yOffset) const;
 
 private:
 	mutable QSize m_size;
-	QString m_name;
+	QString m_label;
 	QPixmap m_visiblePix;
 	QPixmap m_invisiblePix;
 	QPixmap m_linkedPix;

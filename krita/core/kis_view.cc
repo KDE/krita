@@ -104,7 +104,7 @@
 #include "kis_tool_factory.h"
 #include "kis_tool_paste.h"
 
-KListBox *channelView;
+KisListBoxView *channelView;
 
 KisView::KisView(KisDoc* doc, QWidget* parent, const char* name) : super(doc, parent, name)
 {
@@ -284,12 +284,9 @@ void KisView::setupSideBar()
 	m_pSideBar -> plug(m_pChannelView);
 
 #if 1
-	channelView = new KListBox(m_pSideBar, "Test List View");
+	channelView = new KisListBoxView("Test", KisListBoxView::SHOWALL, m_pSideBar, "Test List View");
 	channelView -> setCaption("Test List View");
 	m_pSideBar -> plug(channelView);
-
-	new KisListBoxItem("Test 1", channelView);
-	new KisListBoxItem("Test 2", channelView);
 #endif
 
 	// activate brushes tab

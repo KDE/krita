@@ -156,9 +156,11 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
 
 void KisFillPainter::fillRect(const QRect& rc, KisIteratorInfiniteLinePixel src) {
 #if 0
-// FIXME: correct to use KisPAinterDevice functions
-	KisIteratorLinePixel lineIt(m_device, 0, rc.y(), rc.x(), rc.x() + rc.width() - 1);
-	KisIteratorLinePixel stopLine(m_device, 0, rc.y() + rc.height() - 1);
+	KisIteratorLinePixel lineIt = m_device->iteratorPixelBegin( 0, rc.x(),
+			rc.x() + rc.width() - 1, rc.y());
+	KisIteratorLinePixel stopLine = m_device->iteratorPixelBegin( 0, 0,
+			-1, rc.y() + rc.height() - 1);
+
 	Q_INT32 depth = m_device -> depth();
 
 	while (lineIt < stopLine) {
@@ -199,6 +201,7 @@ void KisFillPainter::fillColor(int startX, int startY) {
 }
 
 void KisFillPainter::fillPattern(int startX, int startY) {
+#if 0
 	genericFillStart(startX, startY);
 
 	// Now create a layer and fill it
@@ -212,11 +215,10 @@ void KisFillPainter::fillPattern(int startX, int startY) {
 	painter.end();
 
 	genericFillEnd(filled);
+#endif
 }
 
 void KisFillPainter::genericFillStart(int startX, int startY) {
-#if 0
-// FIXME: correct to use KisPAinterDevice functions
 	KisPaintDeviceSP lay = m_device.data();
 	Q_ASSERT(lay); // XXX: isn't this too agressive? maybe just a return; ?
 
@@ -229,21 +231,26 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 		m_selection = new KisSelection(lay, "Fill Temporary Selection");
 		m_selection -> clear(QRect(0, 0, lay -> width(), lay -> height()));
 		m_oldColor = new QUANTUM[m_device->depth()];
-		KisIteratorPixel pixel(m_device, 0, startY, startX);
+		KisIteratorLinePixel lineIt = m_layer -> iteratorPixelBegin( 0, startX,
+				m_layer -> width(), startY);
+		KisIteratorPixel pixel = *lineIt;
+
 		for (int i = 0; i < lay -> depth(); i++)
 			m_oldColor[i] = pixel[i];
 
-		m_map = new bool[m_device -> width() * m_device -> height()];
+		int size = m_device -> width() * m_device -> height();
+		m_map = new bool[size];
+		for (int i = 0; i < size; i++)
+			m_map[i] = false;
 		floodLine(startX, startY);
 		delete[] m_map;
 
 		delete m_oldColor;
 	}
-#endif
 }
 
 void KisFillPainter::genericFillEnd(KisLayerSP filled) {
-	// use the selection as mask over our fill
+	// use the selection as mask over our fill        
 	for (int y = 0; y < m_layer -> height(); y++) {
 		for (int x = 0; x < m_layer -> width(); x++) {
 			QColor c;
@@ -256,19 +263,13 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
 	}
 
 	bitBlt(0, 0, m_compositeOp, filled.data(), m_opacity, 0, 0,
-		m_layer -> width(), m_layer -> height());
-
-	if (!m_layer -> hasSelection())
-		delete m_selection;
+		   m_layer -> width(), m_layer -> height());
 }
 
 void KisFillPainter::floodLine(int x, int y) {
-#if 0
-// FIXME: correct to use KisPAinterDevice functions
-
 	int mostRight, mostLeft = x;
 	
-	KisIteratorLinePixel lineIt = m_layer->iteratorPixelSelectionBegin( 0, x, -1, y);
+	KisIteratorLinePixel lineIt = m_layer->iteratorPixelBegin( 0, x, -1, y);
 
 	KisIteratorPixel pixelIt = *lineIt;
 	KisIteratorPixel lastPixel = lineIt.end();
@@ -277,18 +278,18 @@ void KisFillPainter::floodLine(int x, int y) {
 		return;
 	}
 
-	mostRight = floodSegment(x, y, x, &pixelIt, &lastPixel, Right);
+	mostRight = floodSegment(x, y, x, pixelIt, lastPixel, Right);
 
 	if (lastPixel < pixelIt) mostRight--;
 
 	if (x > 0) {
 		mostLeft--;
 
-		KisIteratorLinePixel lineIt2 = m_layer->iteratorPixelSelectionBegin(0, 0, x-1, y);
+		KisIteratorLinePixel lineIt2 = m_layer->iteratorPixelBegin(0, 0, x-1, y);
 		KisIteratorPixel lastPixel = lineIt2.begin();
 		KisIteratorPixel pixelIt = lineIt2.end();
 
-		mostLeft = floodSegment(x,y, mostLeft, &pixelIt, &lastPixel, Left);
+		mostLeft = floodSegment(x,y, mostLeft, pixelIt, lastPixel, Left);
 
 		if (pixelIt < lastPixel)
 			mostLeft++;
@@ -302,28 +303,24 @@ void KisFillPainter::floodLine(int x, int y) {
 		if (y < m_layer->height() - 1 && !m_map[(y+1)*m_device -> width() + i])
 			floodLine(i, y+1);
 	}
-#endif
 }
 
-int KisFillPainter::floodSegment(int x, int y, int most, KisIteratorPixel* it, KisIteratorPixel* lastPixel, Direction d) {
-#if 0
-// FIXME: correct to use KisPAinterDevice functions
-
+int KisFillPainter::floodSegment(int x, int y, int most, KisIteratorPixel& it, KisIteratorPixel& lastPixel, Direction d) {
 	bool stop = false;
 	QUANTUM diff;
 
-	while( ( ( d == Right && *it <= *lastPixel) || (d == Left && *lastPixel <= *it)) && !stop)
+	while( ( ( d == Right && it <= lastPixel) || (d == Left && lastPixel <= it)) && !stop)
 	{
-		KisPixel data = *it;
+		KisPixel data = it;
 		diff = difference(m_oldColor, data);
 		if (diff == MAX_SELECTED) {
 			m_selection -> setSelected(x, y, diff);
 			m_map[y*m_device -> width() + x] = true;
 			if (d == Right) {
-				it->inc();
+				++it;
 				x++; most++;
 			} else {
-				it->dec();
+				--it;
 				x--; most--;
 			}
 		} else {
@@ -332,7 +329,6 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisIteratorPixel* it, K
 	}
 	
 	return most;
-	#endif
 }
 
 /* RGB-only I fear */

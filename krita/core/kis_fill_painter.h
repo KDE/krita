@@ -109,7 +109,7 @@ private:
 	void genericFillEnd(KisLayerSP filled);
 	typedef enum { Left, Right } Direction;
 	void floodLine(int x, int y);
-	int floodSegment(int x, int y, int most, KisIteratorPixel* it, KisIteratorPixel* lastPixel, Direction d);
+	int floodSegment(int x, int y, int most, KisIteratorPixel& it, KisIteratorPixel& lastPixel, Direction d);
 
 	KisSelectionSP m_selection;
 	KisPaintDeviceSP m_layer;

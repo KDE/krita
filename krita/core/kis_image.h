@@ -99,7 +99,7 @@ signals:
 	void layersUpdated();
 
 #if 1
-protected slots:
+public slots:
 	void slotUpdateTimeOut();
 #endif
 

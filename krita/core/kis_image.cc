@@ -20,9 +20,12 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <assert.h>
-
 #include <qpainter.h>
+
+#include <qthread.h>
+#include <qptrqueue.h>
+#include <qmutex.h>
+#include <qwaitcondition.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -36,7 +39,36 @@
 #include "kis_image.h"
 #include "KIsImageIface.h"
 
-#define KIS_DEBUG(AREA, CMD)
+/*
+ * Very experimental thread test, only for experimenting
+ */
+
+class KisRenderThread : public QThread {
+public:
+	KisRenderThread(KisImage *img, QWaitCondition *wcDirty)
+	{
+		m_img = img;
+		m_wcDirty = wcDirty;
+	}
+
+protected:
+	virtual void run()
+	{
+		kdDebug() << "Thread running.\n";
+
+		while (1) {
+			m_wcDirty -> wait();
+			m_img -> slotUpdateTimeOut();
+		}
+	}
+
+	KisImage *m_img;
+	QWaitCondition *m_wcDirty;
+};
+
+QWaitCondition wcDirty;
+QPtrQueue<QPoint> dirtyTiles;
+QMutex dirtyTilesMutex;
 
 KisImage::KisImage(const QString& name, int w, int h, cMode cm, uchar bd)
 	: m_name(name),
@@ -67,33 +99,15 @@ KisImage::KisImage(const QString& name, int w, int h, cMode cm, uchar bd)
 	m_bgLayer = new KisLayer("_background", TILE_SIZE, TILE_SIZE, bd, cm, defaultColor);
 	m_bgLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE));;
 	renderBg(m_bgLayer, 0);
-
-#if 0
-	// FIXME: make it work with non-RGB color spaces
-	// make it work with BigEndian! - john
-	uint *ptr = m_bgLayer -> getTile(0, 0) -> data();
-
-	for (int y = 0; y < TILE_SIZE; y++)
-		for (int x = 0; x < TILE_SIZE; x++) {
-			uchar v = 128 + 63 * ((x / 16 + y / 16) % 2);
-
-			*(ptr + (y * TILE_SIZE) + x) = qRgba(v, v, v, 255);
-		}
-#endif
-
 	compositeImage();
-
-	/* note - 32 bit pixmaps may not show up on a 16 bit display
-	   and will even crash it !!!  Without depth paramater Qt will
-	   use native format. imagePixmap = new QPixmap(w, h, 32); does
-	   not work!, so alway default to native display depth when
-	   creating a QPixmap.  With a QImage you can create a 32 bit
-	   depth with a 16 bit display with no problems, however. */
 
 #if 1
 	m_timer = new QTimer(this);
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(slotUpdateTimeOut()));
 	m_timer -> start(1);
+#else
+	QThread *thr = new KisRenderThread(this, &wcDirty);
+	thr -> start();
 #endif
 }
 
@@ -109,8 +123,20 @@ KisImage::~KisImage()
 	delete m_composeLayer;
 	delete m_bgLayer;
 	delete m_dcop;
-	// XXX m_layers;
-	// XXX m_channels;
+
+	while (m_layers.count()) {
+		KisLayer *p = m_layers.first();
+
+		m_layers.remove(p);
+		delete p;
+	}
+
+	while (m_layers.count()) {
+		KisChannel *p = m_channels.first();
+
+		m_channels.remove(p);
+		delete p;
+	}
 }
 
 DCOPObject* KisImage::dcopObject()
@@ -215,14 +241,23 @@ void KisImage::markDirty(const QRect& r)
 
 	for (int y = rc.top(); y < maxY; y++) {
 		for (int x = rc.left(); x < maxX; x++) {
+			//dirtyTilesMutex.lock();
 			m_dirty[y * m_xTiles + x] = true;
+			//dirtyTilesMutex.unlock();
 
 			if (m_autoUpdate)
 				compositeImage(QRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE));
-			else
-				m_dirtyTiles.append(m_pixmapTiles[y * m_xTiles + x]);
+#if 0
+			else {
+				dirtyTilesMutex.lock();
+				dirtyTiles.enqueue(new QPoint(x, y));
+				dirtyTilesMutex.unlock();
+			}
+#endif
 		}
 	}
+
+	//wcDirty.wakeOne();
 }
 
 /*
@@ -233,7 +268,6 @@ void KisImage::markDirty(const QRect& r)
     is normall the kisCanvas() for the view.
 */
 
-#if 1
 void KisImage::slotUpdateTimeOut()
 {
 	// TODO : Go over tiles in m_dirtyTiles
@@ -243,7 +277,6 @@ void KisImage::slotUpdateTimeOut()
 			if (m_dirty[y * m_xTiles + x])
 				compositeImage(QRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE));
 }
-#endif
 
 void KisImage::paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/)
 {
@@ -400,56 +433,43 @@ void KisImage::convertTileToPixmap(KisPaintDevice *dstDevice, int tileNo, QPixma
 */
 void KisImage::mergeAllLayers()
 {
-    QPtrList<KisLayer> l;
-    KisLayer *lay = m_layers.first();
-
-    while(lay)
-    {
-        l.append(lay);
-        lay = m_layers.next();
-    }
-
-    mergeLayers(l);
+	QPtrList<KisLayer> l(m_layers);
+	
+	mergeLayers(l);
 }
 
 /*
     mergeVisibleLayers - merge only those layers which are visible.
     Merge everything into the first visible layer encountered.
 */
+
 void KisImage::mergeVisibleLayers()
 {
-    QPtrList<KisLayer> l;
+	QPtrList<KisLayer> l;
 
-    KisLayer *lay = m_layers.first();
+	for (KisLayer *lay = m_layers.first(); lay; lay = m_layers.next()) {
+		if (lay -> visible())
+			l.append(lay);
+	}
 
-    while(lay)
-    {
-        if(lay->visible())
-	    l.append(lay);
-        lay = m_layers.next();
-    }
-
-    mergeLayers(l);
+	mergeLayers(l);
 }
 
 /*
     mergeLinkeLayers - merge only those layers linked.
     Merge everything into the first linked layer encountered.
 */
+
 void KisImage::mergeLinkedLayers()
 {
-    QPtrList<KisLayer> l;
+	QPtrList<KisLayer> l;
 
-    KisLayer *lay = m_layers.first();
+	for (KisLayer *lay = m_layers.first(); lay; lay = m_layers.next()) {
+		if (lay -> linked())
+			l.append(lay);
+	}
 
-    while(lay)
-    {
-        if (lay->linked())
-	        l.append(lay);
-        lay = m_layers.next();
-    }
-
-    mergeLayers(l);
+	mergeLayers(l);
 }
 
 /*
@@ -459,73 +479,58 @@ void KisImage::mergeLinkedLayers()
     needs to be a paramater and option for not deleting layers
     merged into others but keeping them instead.
 */
+
 void KisImage::mergeLayers(QPtrList<KisLayer> list)
 {
-#if 0
-    list.setAutoDelete(false);
+	KisLayer *a = list.first();
+	KisLayer *b;
+	QRect newRect;
 
-    KisLayer *a, *b;
-    QRect newRect;
+	while (a) {
+		newRect.unite(a -> imageExtents());
+		a = list.next();
+	}
 
-    a = list.first();
-    while(a)
-    {
-        newRect.unite(a->imageExtents());
-        //a->renderOpacityToAlpha();
-        a = list.next();
-    }
+	while ((a = list.first()) && (b = list.next())) {
+		if (!a || !b) 
+			break;
 
-    while((a = list.first()) && (b = list.next()))
-    {
-        if (!a || !b) break;
-        QRect ar = a->imageExtents();
-        QRect br = b->imageExtents();
+		QRect urect = a -> imageExtents() | b -> imageExtents();
 
-        QRect urect = ar.unite(br);
+		// allocate out tiles if required
+		a -> allocateRect(urect);
+		b -> allocateRect(urect);
 
-        // allocate out tiles if required
-        a->allocateRect(urect);
-        b->allocateRect(urect);
+		// rect in layer coords (offset from tileExtents.topLeft())
+		QRect rect = urect;
+		rect.moveTopLeft(urect.topLeft() - a->tileExtents().topLeft());
 
-        // rect in layer coords (offset from tileExtents.topLeft())
-        QRect rect = urect;
-        rect.moveTopLeft(urect.topLeft() - a->tileExtents().topLeft());
+		// workout which tiles in the layer need to be updated
+		int minYTile = rect.top() / TILE_SIZE;
+		int maxYTile = rect.bottom() / TILE_SIZE;
+		int minXTile = rect.left() / TILE_SIZE;
+		int maxXTile = rect.right() / TILE_SIZE;
 
-        // workout which tiles in the layer need to be updated
-        int minYTile=rect.top() / TILE_SIZE;
-        int maxYTile=rect.bottom() / TILE_SIZE;
-        int minXTile=rect.left() / TILE_SIZE;
-        int maxXTile=rect.right() / TILE_SIZE;
+		for (int y = minYTile; y <= maxYTile; y++) {
+			for(int x = minXTile; x <= maxXTile; x++) {
+				KisTile *dst = a -> getTile(x, y);
+				KisTile *src = b -> getTile(x, y);
 
-        QRect tileBoundary;
+				renderTile(dst, src, b);
+			}
+		}
 
-        for(int y=minYTile; y<=maxYTile; y++)
-	    {
-	        for(int x=minXTile; x<=maxXTile; x++)
-	        {
-	            int dstTile = y * a->xTiles() + x;
-	            tileBoundary = a->tileRect(dstTile);
-	            renderLayerIntoTile(tileBoundary, b, a, dstTile);
-	        }
-	    }
+		list.remove(b);
+		m_layers.remove(b);
 
-        list.remove(b);
-        m_layers.remove(b);
+		if (m_activeLayer == b)
+			m_activeLayer = m_layers.count() ? m_layers.at(0) : 0;
 
-        if( m_activeLayer == b )
-	    {
-	        if(m_layers.count() != 0)
-	            m_activeLayer = m_layers.at(0);
-	        else
-	            m_activeLayer = NULL;
-	    }
+		delete b;
+	}
 
-        delete b;
-    }
-
-    emit layersUpdated();
-    compositeImage(newRect);
-#endif
+	emit layersUpdated();
+	compositeImage(newRect);
 }
 
 void KisImage::resizeImage(KisLayer *lay, const QRect& rect)
@@ -559,6 +564,13 @@ void KisImage::resizeImage(KisLayer *lay, const QRect& rect)
 
 void KisImage::resizePixmap(bool dirty)
 {
+	/* note - 32 bit pixmaps may not show up on a 16 bit display
+	   and will even crash it !!!  Without depth paramater Qt will
+	   use native format. imagePixmap = new QPixmap(w, h, 32); does
+	   not work!, so alway default to native display depth when
+	   creating a QPixmap.  With a QImage you can create a 32 bit
+	   depth with a 16 bit display with no problems, however. */
+
 	m_dirty.resize(m_xTiles * m_yTiles);
 	m_pixmapTiles = new QPixmap*[m_xTiles * m_yTiles];
 
@@ -693,8 +705,6 @@ void KisImage::destroyPixmap()
 
 void KisImage::renderBg(KisPaintDevice *srcDevice, int tileNo)
 {
-	// FIXME: make it work with non-RGB color spaces
-	// make it work with BigEndian! - john
 	uint *ptr = srcDevice -> getTile(tileNo, tileNo) -> data();
 
 	for (int y = 0; y < TILE_SIZE; y++)

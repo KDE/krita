@@ -40,10 +40,10 @@ KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize)
 		m_hashTable [i] = 0;
 	m_numTiles = 0;
 	m_currentMemento = 0;
-	m_extentMinX = 0;
-	m_extentMinY = 0;
-	m_extentMaxX = 0;
-	m_extentMaxY = 0;
+	m_extentMinX = 0x7FFFFFFF;
+	m_extentMinY = 0x7FFFFFFF;
+	m_extentMaxX = -(0x7FFFFFFE);
+	m_extentMaxY = -(0x7FFFFFFE);
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)

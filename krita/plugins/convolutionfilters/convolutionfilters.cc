@@ -108,9 +108,11 @@ K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFact
 	KisFilterSP kledf = createFilter<KisLeftEdgeDetectionFilter>(view);
 	(void) new KAction("Left Edge Detection", 0, 0, kledf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionleft");
 
+// XXX: This filter crashes Krita
+#if 0
 	KisFilterSP kccf = createFilter<KisCustomConvolutionFilter>(view);
-	(void) new KAction("Custom Convolution", 0, 0, kccf, SLOT(slotActivated()), actionCollection(), "convolution_custom");
-
+	(void) new KAction("Custom Convolution...", 0, 0, kccf, SLOT(slotActivated()), actionCollection(), "convolution_custom");
+#endif
 }
 
 KritaConvolutionFilters::~KritaConvolutionFilters()

@@ -65,6 +65,7 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 	Q_INT32 height = rect.height();
 	kdDebug() << "x: " << x << " y: " << y << " width: " << width << " height: " << height << endl;
 
+	// XXX: Fix this: this filter can easily use the iterators without much work.
 	// create a QUANTUM array that holds the data the filter works on
 	QUANTUM * newData = src -> readBytes( x, y, width, height);
 
@@ -78,7 +79,21 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 	//with the actual pixel data.
 
 	OilPaint(newData, width, height, brushSize, smooth, view() -> progressDisplay());
-	dst -> writeBytes( newData, x, y, width, height);
+// 	dst -> writeBytes( newData, x, y, width, height);
+	Q_INT32 pixelSize = dst -> pixelSize();
+	QUANTUM * ptr = newData;
+	for(Q_INT32 y2 = y; y2 < y + height; y2++)
+	{
+		KisHLineIteratorPixel hiter = dst -> createHLineIterator(x, y2, width, true);
+		while(! hiter.isDone())
+		{
+			if (hiter.isSelected()) {
+				    memcpy(hiter.rawData(), ptr , pixelSize);
+			}
+			ptr += pixelSize;
+			hiter++;
+		}
+	}
 
 	delete[] newData;
 }

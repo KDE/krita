@@ -47,7 +47,7 @@ public:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
 	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
 private:
-	void Emboss(QUANTUM* data, int Width, int Height, int d, KisProgressDisplayInterface* m_progress);
+	void Emboss(KisPaintDeviceSP, KisPaintDeviceSP,, int Width, int Height, int d, KisProgressDisplayInterface* m_progress);
 	inline int Lim_Max (int Now, int Up, int Max);
 	inline uchar LimitValues (int ColorValue);
 };

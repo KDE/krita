@@ -2,4 +2,6 @@ if use_kjsembed
   kjsembed_plugin = kiskjsembed
 endif
 
-SUBDIRS = cimg example colorsfilters variations colorrange imagesize screenshot histogram convolutionfilters rotateimage performancetest shearimage colorspaceconversion raindropsfilter oilpaintfilter embossfilter tool_crop tool_filter tool_star tool_polyline tool_polygon $(kjsembed_plugin) # imagemagick
+#embossfilter (we already had a working emboss filter)
+
+SUBDIRS = cimg example colorsfilters variations colorrange imagesize screenshot histogram convolutionfilters rotateimage performancetest shearimage colorspaceconversion raindropsfilter oilpaintfilter tool_crop tool_filter tool_star tool_polyline tool_polygon $(kjsembed_plugin) # imagemagick

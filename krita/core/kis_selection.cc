@@ -84,6 +84,9 @@ void KisSelection::select(QRect r)
 {
 	KisFillPainter painter(this);
 	painter.fillRect(r, m_maskColor, MAX_SELECTED);
+	Q_INT32 x, y, w, h;
+	extent(x, y, w, h);
+	kdDebug () << "Selection rect: x:" << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
 }
 
 void KisSelection::clear(QRect r)
@@ -97,7 +100,8 @@ void KisSelection::invert(QRect rect)
 	KisRectIterator it = createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 	while ( ! it.isDone() )
 	{
-		//CBR this is wrong only first byte is inverted
+		// CBR this is wrong only first byte is inverted
+		// BSAR: But we have only one byte in this color model. 
 		*(it.rawData()) = QUANTUM_MAX - *(it.rawData());
 		it++;
 	}

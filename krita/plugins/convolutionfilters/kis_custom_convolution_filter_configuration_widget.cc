@@ -21,6 +21,10 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtabwidget.h>
+#include <qpushbutton.h>
+
+#include <klocale.h>
+
 #include "kis_filter.h"
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -33,12 +37,20 @@
 KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigurationWidget( KisFilter* nfilter, QWidget * parent, const char * name)
 	: KisFilterConfigurationWidget( nfilter, parent, name )
 {
-	QGridLayout *widgetLayout = new QGridLayout(this, 1, 1);
+	QGridLayout *widgetLayout = new QGridLayout(this, 2, 1);
+
+	QPushButton *bnRefresh = new QPushButton(i18n("Refresh preview"), this, "bnrefresh");
+	QSpacerItem *spacer = new QSpacerItem(100, 30, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+	widgetLayout -> addWidget(bnRefresh, 0, 0);
+	widgetLayout -> addItem(spacer, 0, 1);
+
 	QTabWidget* tabWidget = new QTabWidget(this, "tabWidget");
-	widgetLayout -> addWidget(tabWidget, 0 , 0);
+	widgetLayout -> addMultiCellWidget(tabWidget, 1, 1, 0, 1);
 
 	KisImageSP img = filter() -> view() -> currentImg();
 	if (!img) return;
+
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
@@ -52,11 +64,11 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
 	{
 		m_pos[i] = cis[i] -> pos();
 		m_ccfcws[i] = new KisCustomConvolutionFilterConfigurationBaseWidget((QWidget*)this);
-		connect(m_ccfcws[i]->matrixWidget, SIGNAL(valueChanged()), filter(), SLOT(refreshPreview()));
-		connect((QObject*)m_ccfcws[i]->spinBoxFactor, SIGNAL(valueChanged(int)), filter(), SLOT(refreshPreview()));
-		connect((QObject*)m_ccfcws[i]->spinBoxOffset, SIGNAL(valueChanged(int)), filter(), SLOT(refreshPreview()));
 		tabWidget->addTab(m_ccfcws[i], cis[ i ] -> name() );
 	}
+
+	connect( bnRefresh, SIGNAL(clicked()), filter(), SLOT(refreshPreview()));
+	
 }
 
 #include "kis_custom_convolution_filter_configuration_widget.moc"

@@ -343,4 +343,3 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		}
 	}
 }
-

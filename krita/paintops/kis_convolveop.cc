@@ -54,5 +54,6 @@ void KisConvolveOp::paintAt(const KisPoint &/*pos*/,
 			    const double /*xTilt*/,
 			    const double /*yTilt*/)
 {
-	// XXX: use convolve painter here.}
+	// XXX: use convolve painter here.
+	
 }

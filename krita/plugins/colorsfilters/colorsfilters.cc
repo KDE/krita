@@ -24,6 +24,7 @@
 
 #include <qslider.h>
 #include <qpoint.h>
+#include <qcolor.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -42,6 +43,7 @@
 #include <kis_view.h>
 #include <kis_iterators_pixel.h>
 #include <kis_pixel.h>
+#include <kis_strategy_colorspace.h>
 // #include <kmessagebox.h>
 
 #include "colorsfilters.h"
@@ -99,17 +101,19 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 	Q_INT32 depth = src->nChannels() - 1;
 	while( ! rectIt.isDone() )
 	{
-		KisPixelRO data = rectIt.oldPixel();
-		KisPixel dstData = rectIt.pixel();
-		for( int i = 0; i < depth; i++)
-		{
-			KisQuantum d = rectIt[ configPC->channel( i ) ];
-			Q_INT32 s = configPC->valueFor( i );
-			if( d < -s  ) dstData[ configPC->channel( i ) ] = 0;
-			else if( d > QUANTUM_MAX - s) dstData[ configPC->channel( i ) ] = QUANTUM_MAX;
-			else dstData[ configPC->channel( i ) ] = d + s;
+		if (rectIt.isSelected()) {
+			KisPixelRO data = rectIt.oldPixel();
+			KisPixel dstData = rectIt.pixel();
+			for( int i = 0; i < depth; i++)
+			{
+				KisQuantum d = rectIt[ configPC->channel( i ) ];
+				Q_INT32 s = configPC->valueFor( i );
+				if( d < -s  ) dstData[ configPC->channel( i ) ] = 0;
+				else if( d > QUANTUM_MAX - s) dstData[ configPC->channel( i ) ] = QUANTUM_MAX;
+				else dstData[ configPC->channel( i ) ] = d + s;
+			}
+			rectIt++;
 		}
-		rectIt++;
 	}
 }
 
@@ -128,11 +132,13 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 	Q_INT32 depth = src->nChannels() - 1;
 	while( ! rectIt.isDone() )
 	{
-		for( int i = 0; i < depth; i++)
-		{
-			QUANTUM sd = rectIt.oldRawData()[ configPC->channel( i ) ];
-			KisQuantum dd = rectIt[ configPC->channel( i ) ];
-			dd = (QUANTUM)( QUANTUM_MAX * pow( ((float)sd)/QUANTUM_MAX, 1.0 / configPC->valueFor( i ) ) );
+		if (rectIt.isSelected()) {
+			for( int i = 0; i < depth; i++)
+			{
+				QUANTUM sd = rectIt.oldRawData()[ configPC->channel( i ) ];
+				KisQuantum dd = rectIt[ configPC->channel( i ) ];
+				dd = (QUANTUM)( QUANTUM_MAX * pow( ((float)sd)/QUANTUM_MAX, 1.0 / configPC->valueFor( i ) ) );
+			}
 		}
 		rectIt++;
 	}
@@ -161,40 +167,38 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	Q_INT32 maxvalue = 0;
 	while( ! rectIt.isDone() )
 	{
-		KisPixel data = rectIt.pixel();
-		Q_INT32 lightness = ( QMAX(QMAX(data[0], data[1]), data[2])
-				+ QMIN(QMIN(data[0], data[1]), data[2]) ) / 2;
-		histo[ lightness ] ++;
-// 			kdDebug() << " histo[ " << lightness << " ] = " << histo[ lightness ] << " " << maxvalue << endl;
-		if( histo[ lightness ] > maxvalue )
-		{
-// 			kdDebug() << lightness << endl;
-// 			kdDebug() << " change max value from " << maxvalue << " to " << histo[ lightness ] << endl;
-			maxvalue = histo[ lightness ];
+		if (rectIt.isSelected()) {
+			KisPixel data = rectIt.pixel();
+			Q_INT32 lightness = ( QMAX(QMAX(data[0], data[1]), data[2])
+						+ QMIN(QMIN(data[0], data[1]), data[2]) ) / 2;
+			histo[ lightness ] ++;
+
+			if( histo[ lightness ] > maxvalue )
+			{
+				maxvalue = histo[ lightness ];
+			}
 		}
 		rectIt++;
 	}
-// 	kdDebug() << maxvalue << endl;
 	Q_INT32 start;
-// 	kdDebug() << histo[0] << " " << maxvalue * 0.1 << endl;
 	for( start = 0; histo[start] < maxvalue * 0.1; start++) { /*kdDebug() << start << endl;*/ }
 	Q_INT32 end;
-// 	kdDebug() << histo[QUANTUM_MAX] << " " << maxvalue * 0.1 << endl;
 	for( end = QUANTUM_MAX; histo[end] < maxvalue * 0.1; end--) { /*kdDebug() << end << endl;*/ }
 	double factor = QUANTUM_MAX / (double) (end - start);
-// 	kdDebug() << "end=" << end << " start=" << start << " factor=" << factor << endl;
 	rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
 	while( ! rectIt.isDone() )
 	{
-		KisPixel srcData = rectIt.pixel();
-		KisPixel dstData = rectIt.pixel();
+		if (rectIt.isSelected()) {
+			KisPixel srcData = rectIt.pixel();
+			KisPixel dstData = rectIt.pixel();
 
-		// Iterate through all channels except alpha
-		// XXX: Check for off-by-one errors
-		for (int i = 0; i < depth; ++i) {
-			dstData[i] = (QUANTUM) QMIN ( QUANTUM_MAX, QMAX(0, (srcData[i] - start) * factor) );
+			// Iterate through all channels except alpha
+			// XXX: Check for off-by-one errors
+			for (int i = 0; i < depth; ++i) {
+				dstData[i] = (QUANTUM) QMIN ( QUANTUM_MAX, QMAX(0, (srcData[i] - start) * factor) );
+			}
+			rectIt++;
 		}
-		rectIt++;
 	}
 }
 
@@ -209,24 +213,34 @@ KisDesaturateFilter::KisDesaturateFilter(KisView * view)
 void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
 
-	if(colorStrategy()->name() != "RGBA")
-		return;
-
 	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
-// 	Q_INT32 depth = device->nChannels() - 1;
+
+	KisStrategyColorSpaceSP scs = src -> colorStrategy();
+	KisProfileSP profile = src -> profile();
+
+	QColor c;
 	while( ! rectIt.isDone() )
 	{
-		KisPixelRO srcData = rectIt.oldPixel();
-		KisPixel dstData = rectIt.pixel();
-		/* I thought of using the HSV model, but GIMP seems to use
-		HSL for desaturating. Better use the gimp model for now
+		if (rectIt.isSelected()) {
+			Q_UINT8 * srcData = rectIt.oldRawData();
+			// Try to be colorspace independent
+			scs -> toQColor(srcData, &c, profile);
+			;
+			/* I thought of using the HSV model, but GIMP seems to use
+				HSL for desaturating. Better use the gimp model for now
 				(HSV produces a lighter image than HSL) */
-		Q_INT32 lightness = ( QMAX(QMAX(srcData[0], srcData[1]), srcData[2])
-				+ QMIN(QMIN(srcData[0], srcData[1]), srcData[2]) ) / 2;
-		rectIt[0] = lightness;
-		rectIt[1] = lightness;
-		rectIt[2] = lightness;
 
-		rectIt++;
+// 			Q_INT32 lightness = ( QMAX(QMAX(c.red(), c.green()), c.blue())
+// 					+ QMIN(QMIN(c.red(), c.green()), c.blue()) ) / 2;
+
+			// XXX: BSAR: Doesn't this doe the same but better?
+			Q_INT32 lightness = qGray(c.red(), c.green(), c.blue());
+
+			rectIt[0] = lightness;
+			rectIt[1] = lightness;
+			rectIt[2] = lightness;
+
+			rectIt++;
+		}
 	}
 }

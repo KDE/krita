@@ -8,7 +8,9 @@ being done new tiles are added as needed.
 There is also a default tile that is only readable (in theory). Whenever
 access is only readaccess you get this tile for areas that don't have there
 own tile yet. The idea is that the default tile is filled with transparent
-pixels.
+pixels. (Or, with special layers like the background pattern or the selection,
+with something else relevant. bsar)
+
 
 So imagine a new image of size 640x640. The layer has no tiles, but when the
 layer is being read (for viewing) we probe all over the image (640x640) and
@@ -33,6 +35,9 @@ tiles that have been created.
 As there is no way for us to know which pixel have true tiles and which have
 the default, we would write to all the pixels within the extent, which would
 automatically create ALL the tiles inside the extent.
+(XXX: Of course, the tile manager could decide that the written value
+is the same as the default value, and if that's true for all pixels in a tile, 
+not create a tile at all) (bsar))
 
 In other cases like a gradient fill we would probably want to fill the
 current image area, so we we would just write to the paintdevice, and tiles
@@ -43,8 +48,8 @@ default) - and if you write to the paintdevice - tiles will be created as
 needed. So simply don't worry.
 
 But in some cases, when you want to modify already written pixels, as in
-some filters you want to know where true data have been written. Otherwice
-we would have to modify an infinite number of pixel to be sure everything is
+some filters you want to know where true data have been written. Otherwise
+we would have to modify an infinite number of pixels to be sure everything is
 changed. This is where the extent comes in handy.
 
 Comments and requests for more details or other areas are most welcome. In

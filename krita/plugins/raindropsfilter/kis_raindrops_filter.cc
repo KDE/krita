@@ -76,7 +76,21 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
 	//with the actual pixel data.
 	rainDrops(newData, width, height, dropSize, number, fishEyes, view() -> progressDisplay());
-	dst -> writeBytes( newData, x, y, width, height);
+// 	dst -> writeBytes( newData, x, y, width, height);
+	Q_INT32 pixelSize = dst -> pixelSize();
+	QUANTUM * ptr = newData;
+	for(Q_INT32 y2 = y; y2 < y + height; y2++)
+	{
+		KisHLineIteratorPixel hiter = dst -> createHLineIterator(x, y2, width, true);
+		while(! hiter.isDone())
+		{
+			if (hiter.isSelected()) {
+				    memcpy(hiter.rawData(), ptr , pixelSize);
+			}
+			ptr += pixelSize;
+			hiter++;
+		}
+	}
 
 	delete[] newData;
 }

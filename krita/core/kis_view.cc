@@ -108,7 +108,6 @@
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
 
-
 // Widgets
 #include "kis_autobrush.h"
 #include "kis_text_brush.h"
@@ -595,8 +594,8 @@ void KisView::setupDockers()
 	attach(m_graywidget);
 
 
-#if NO_RELEASE_FEATURE
-	// Filters
+#if 0
+	// Filters XXX: Disable for the release.
 	m_filterBox = new KisFilterBox(this, this, "filter box");
 	m_paintboxdocker -> plug( m_filterBox, "Painting filters" );
 	m_filterBox -> init();

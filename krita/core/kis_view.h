@@ -377,6 +377,8 @@ private:
         // Widgets
 	QScrollBar *m_hScroll; // XXX: the sizing of the scrollthumbs
 	QScrollBar *m_vScroll; // is not right yet.
+	int m_scrollX;
+	int m_scrollY;
 
         // Dockers
 	DockFrameDocker *m_layerchanneldocker;

@@ -338,6 +338,8 @@ void KisView::setupDockers()
 
 void KisView::setupScrollBars()
 {
+	m_scrollX = 0;
+	m_scrollY = 0;
         m_vScroll = new QScrollBar(QScrollBar::Vertical, this);
         m_hScroll = new QScrollBar(QScrollBar::Horizontal, this);
         m_vScroll -> setGeometry(width() - 16, 20, 16, height() - 36);
@@ -2445,13 +2447,15 @@ void KisView::setPaintOffset()
 void KisView::scrollH(int value)
 {
         m_hRuler -> updateVisibleArea(value, 0);
-        canvasRefresh();
+	m_canvas -> scroll(m_scrollX - value, 0);
+	m_scrollX = value;
 }
 
 void KisView::scrollV(int value)
 {
         m_vRuler -> updateVisibleArea(0, value);
-        canvasRefresh();
+	m_canvas -> scroll(0, m_scrollY - value);
+	m_scrollY = value;
 }
 
 int KisView::canvasXOffset() const

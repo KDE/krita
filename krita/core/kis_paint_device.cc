@@ -23,6 +23,7 @@
 #include <qcstring.h>
 #include <qdatastream.h>
 #include <qpoint.h>
+#include <qsize.h>
 
 #include <kdebug.h>
 
@@ -61,7 +62,7 @@ void KisPaintDevice::resize(int width, int height, uchar depth)
 	m_imgRect.setWidth(width);
       	m_imgRect.setHeight(height);
 	m_tileRect = KisUtil::findTileExtents(m_imgRect);
-	//m_tiles.resize(m_tileRect.width() / TILE_SIZE, m_tileRect.height() / TILE_SIZE, depth);
+//	m_tiles -> scale(Geometry(width, height));
 }
 
 void KisPaintDevice::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
@@ -166,14 +167,12 @@ void KisPaintDevice::syncPixels(KisPixelPacket *region)
 
 int KisPaintDevice::xTiles() const
 {
-//	return m_tiles.xTiles();
-	return 0;
+	return m_tileRect.width() / TILE_SIZE;
 }
 
 int KisPaintDevice::yTiles() const
 {
-	return 0;
-	//return m_tiles.yTiles();
+	return m_tileRect.height() / TILE_SIZE;
 }
 
 uchar KisPaintDevice::depth() const
@@ -231,5 +230,10 @@ int KisPaintDevice::width() const
 int KisPaintDevice::height() const
 {
 	return m_imgRect.height();
+}
+
+QSize KisPaintDevice::size() const
+{
+	return QSize(width(), height());
 }
 

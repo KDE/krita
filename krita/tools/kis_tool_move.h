@@ -27,25 +27,9 @@
 #include "kis_tool.h"
 #include "kis_undo.h"
 
-#if 0
-class MoveCommand : public KisCommand {
-public:
-	MoveCommand(KisDoc *doc, int layer, const QPoint& oldpos, const QPoint& newpos);
-
-	virtual void execute();
-	virtual void unexecute();
-
-private:
-	void moveTo(const QPoint& pos);
-
-	int m_layer;
-	QPoint m_oldPos;
-	QPoint m_newPos;
-	KisDoc *m_doc;
-};
-#endif
-
 class MoveTool : public KisTool {
+	typedef KisTool super;
+
 public:
 	MoveTool(KisDoc *doc);
 	virtual ~MoveTool();

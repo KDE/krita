@@ -306,7 +306,7 @@ void KisImage::addLayer(const QRect& rect, const KoColor& c, bool /*tr*/, const 
 	QRgb defaultColor;
 
 	if (getCurrentLayer())
-		defaultColor = qRgba(0, 0, 0, 0);
+		defaultColor = qRgba(255, 255, 255, 0);
 	else
 		defaultColor = c.color().rgb();
 	
@@ -478,10 +478,17 @@ void KisImage::paintPixmap(QPainter *p, const QRect& area)
 
 void KisImage::compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y)
 {
+	QRect rc;
+
 	for (KisLayerSPLstIterator it = m_layers.begin(); it != m_layers.end(); it++) {
 		KisLayerSP layer = *it;
 
 		if (layer && layer -> visible()) {
+			rc.setSize(layer -> size());
+
+			if (!rc.contains(x, y))
+				continue;
+
 			Magick::Image *dst = dstDevice -> getImage();
 			Magick::Image *src = layer -> getImage();
 			Magick::Image area(*src);
@@ -507,10 +514,12 @@ void KisImage::compositeImage(const QRect& area, bool allDirty)
 			Magick::Image *dst = m_composeLayer -> getImage();
 			Magick::Image *src = m_bgLayer -> getImage();
 
-			dst -> composite(*src, 0, 0, CopyCompositeOp);
-			compositeTile(m_composeLayer, 0, x * TILE_SIZE, y * TILE_SIZE);
-			convertTileToPixmap(m_composeLayer, 0, m_pixmapTiles[y * m_xTiles + x]);
-			m_dirty[y * m_xTiles + x] = false;
+			if (dst && src) {
+				dst -> composite(*src, 0, 0, CopyCompositeOp);
+				compositeTile(m_composeLayer, 0, x * TILE_SIZE, y * TILE_SIZE);
+				convertTileToPixmap(m_composeLayer, 0, m_pixmapTiles[y * m_xTiles + x]);
+				m_dirty[y * m_xTiles + x] = false;
+			}
 		}
 	}
 
@@ -715,7 +724,6 @@ void KisImage::resizePixmap(bool dirty)
 			m_pixmapTiles[y * m_xTiles + x] = new QPixmap(TILE_SIZE, TILE_SIZE);
 			m_pixmapTiles[y * m_xTiles + x] -> fill();
 		}
-
 }
 
 void KisImage::setAutoUpdate(bool autoUpdate)

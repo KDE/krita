@@ -33,6 +33,7 @@
 #include "kis_tiles.h"
 #include "kis_tile.h"
 
+class QSize;
 class KoStore;
 class KisImageCmd;
 class KisPaintDevice;
@@ -57,6 +58,7 @@ public:
 	void syncPixels(KisPixelPacket *region);
 
 	virtual void resize(int width, int height, uchar depth);
+	QSize size() const;
 	
 	KisTileSP getTile(unsigned int x, unsigned int y);
 	const KisTileSP getTile(unsigned int x, unsigned int y) const;

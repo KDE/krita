@@ -79,8 +79,10 @@ ktvector toolFactory(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern, Ki
 
 	// Positioning tools
 	tools.push_back(new ZoomTool(doc));
+#endif
 	tools.push_back(new MoveTool(doc));
 
+#if 0
 	// selection tools
 	tools.push_back(new FreehandSelectTool(doc, canvas));
 	tools.push_back(new RectangularSelectTool(doc, canvas));

@@ -92,7 +92,7 @@ KisResourceServer::~KisResourceServer()
 
 const KisBrush * KisResourceServer::loadBrush( const QString& filename )
 {
-    KisBrush *brush = new KisBrush( filename, false, false );
+    KisBrush *brush = new KisBrush( filename, true, false );
 
     if ( brush->isValid() )
         m_brushes.append(brush);

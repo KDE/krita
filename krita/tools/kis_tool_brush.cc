@@ -157,10 +157,10 @@ bool BrushTool::paint(const QPoint& pos)
 	int sy = clipRect.top();
 	int ex = clipRect.width();
 	int ey = clipRect.height();
-	double bv; 
 	bool alpha = img -> colorMode() == cm_RGBA;
 	int opacity = TransparentOpacity - Upscale(m_opacity);
 	KisPixelPacket *region = device -> getPixels(sx, sy, ex, ey);
+	int r, g, b, a;
 
 	if (!region)
 		return false;
@@ -169,25 +169,30 @@ bool BrushTool::paint(const QPoint& pos)
 		return true;
 	
 	for (int y = 0; y < ey; y++) {
-		uchar *sl = m_brush -> scanline(y - starty + sy);
+		uchar *mask = m_brush -> scanline(y - starty + sy);
 
 		for (int x = 0; x < ex; x++) {
-			bv = *(sl - startx + sx + x);
-//			bv = Upscale(bv);
+			KisPixelPacket *dst = region + y * ex + x;
+			int bv = TransparentOpacity - Upscale(*(mask + x));
 
-			if (bv < 3)
+			// In operator
+			if (bv == TransparentOpacity)
 				continue;
 
-			KisPixelPacket *dst = region + y * ex + x;
-			int r = Upscale(m_red);
-			int g = Upscale(m_green);
-			int b = Upscale(m_blue);
+			r = (bv * dst -> red) / MaxRGB;
+			dst -> red = r;
+			g = (bv * dst -> green) / MaxRGB;
+			dst -> green = g;
+			b = (bv * dst -> blue) / MaxRGB;
+			dst -> blue = b;
 
-			// Hardcode to black for the moment
-			dst -> red = 0;
-			dst -> green = 0;
-			dst -> blue = 0;
-			dst -> opacity = OpaqueOpacity;
+			if (alpha) {
+				a = (opacity * dst -> opacity) / MaxRGB;
+				dst -> opacity = a;
+				opacity = dst -> opacity;
+			}
+
+			// TODO : Do Over Operator here or user selected op
 		}
 	}
 

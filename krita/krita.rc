@@ -10,12 +10,7 @@
   <Action name="copy_merged"/>
   <Action name="paste"/>
   <Action name="paste_into"/>
-  <Action name="remove"/>
-  <Action name="copy_selection_to_new_layer"/>
-  <Separator/>
-  <Action name="scrap_selection"/>
-  <Action name="fill_fgcolor"/>
-  <Action name="fill_bgcolor"/>
+  <Action name="clear"/>
   <Separator/>
   <Action name="revert"/>
  </Menu>
@@ -79,10 +74,12 @@
   <Action name="save_layer_as_image"/>
   <Action name="layer_to_image"/>
   <Separator/>
-  <Action name="rotateLayerRight90"/>
-  <Action name="rotateLayer180"/>
-  <Action name="rotateLayerLeft90"/>
-  <!--Action name="rotateLayerCustom"/-->
+  <Menu name="Rotate"><text>&amp;Rotate layer</text>
+	  <Action name="rotateLayerRight90"/>
+	  <Action name="rotateLayer180"/>
+	  <Action name="rotateLayerLeft90"/>
+	  <Action name="rotateLayerCustom"/>
+  </Menu>
   <Separator/>
   <Action name="mirrorLayerX"/>
   <Action name="mirrorLayerY"/>
@@ -94,13 +91,13 @@
   <Action name="merge_linked_layers"/>
 </Menu>
 
+
 <Menu name="Select"><text>Se&amp;lect</text>
     <Action name="select_all"/>
-    <Action name="select_none"/>
+    <Action name="deselect"/>
     <Action name="reselect"/>
-    <Action name="inverse"/>
-    <Separator/>
-    <Action name="color_range"/>
+    <Action name="copy_selection_to_new_layer"/>
+    <Action name="invert"/>
     <Separator/>
     <Action name="feather"/>
     <Menu name="Modify"><text>&amp;Modify</text>
@@ -108,27 +105,19 @@
             <Action name="smooth"/>
             <Action name="expand"/>
             <Action name="contract"/>
-    </Menu>
-    <Separator/>
-    <Action name="apply_gradient_to_selection"/>
-    <Action name="apply_tile_to_selection"/>
-    <Separator/>
-    <Action name="mask_from_selection"/>
-    <Action name="pattern_from_selection"/>
-    <Separator/>
-    <Action name="grow"/>
-    <Action name="similar"/>
-    <Separator/>
-    <Action name="transform_selection"/>
-    <Separator/>
-    <Action name="load_selection"/>
-    <Action name="save_selection"/>
-
+   </Menu>
+   <Separator/>
+   <Action name = "grow"/>
+   <Action name = "similar"/>
+   <Separator/>
+   <Action name="transform_selection"/>
+   <Separator/>
+   <Action name="load_selection"/>
+   <Action name="save_selection"/>
 </Menu>
 
 <Menu name="Filter"><text>F&amp;ilter</text>
-  <Action name="use_selection"/>
-  <Action name="use_entire_image"/>
+
 </Menu>
 
 <Menu name="settings"><text>Settings</text>

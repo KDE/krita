@@ -31,37 +31,37 @@ KRayonViewIface::KRayonViewIface( KisView *view_ )
 
 void KRayonViewIface::copy()
 {
-	m_view->copy();
+// 	m_view->copy();
 }
 
 void KRayonViewIface::cut()
 {
-	m_view->cut();
+// 	m_view->cut();
 }
 
 void KRayonViewIface::removeSelection()
 {
-	m_view->removeSelection();
+// 	m_view->removeSelection();
 }
 
 void KRayonViewIface::paste()
 {
-	m_view->paste();
+// 	m_view->paste();
 }
 
 void KRayonViewIface::copySelectionToNewLayer()
 {
-	m_view->copySelectionToNewLayer();
+// 	m_view->copySelectionToNewLayer();
 }
 
 void KRayonViewIface::selectAll()
 {
-	m_view->selectAll();
+// 	m_view->selectAll();
 }
 
 void KRayonViewIface::unSelectAll()
 {
-	m_view->unSelectAll();
+// 	m_view->unSelectAll();
 }
 
 void KRayonViewIface::dialog_gradient()

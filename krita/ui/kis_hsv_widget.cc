@@ -40,9 +40,6 @@ KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, na
 	m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
 
 	QGridLayout *mGrid = new QGridLayout(this, 5, 7, 5, 2);
-	QSpacerItem *sp1 = new QSpacerItem ( 0, 0);
-	QSpacerItem *sp2 = new QSpacerItem( 0, 0);
-
 	m_colorwheel = new KisColorWheel(this);
 	m_colorwheel->setFixedSize( 120, 120);
 	m_VSelector = new KValueSelector(Qt::Vertical, this);
@@ -78,9 +75,6 @@ KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, na
 
 	mGrid->addMultiCellWidget(m_VSelector, 0, 3, 5, 5);
 
-// 	mGrid->addItem(sp1, 4, 0);
-       
-// 	mGrid->addItem(sp2, 0, 6);
 
 	connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));

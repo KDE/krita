@@ -75,7 +75,8 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	KIsImageIface.skel \
 	kis_filter.cc \
 	kis_plugin_registry.cc \
-	kis_filter_registry.cc
+	kis_filter_registry.cc \
+	kis_selection_manager.cc
 
 
 noinst_HEADERS = kis_paint_device.h \
@@ -116,7 +117,8 @@ noinst_HEADERS = kis_paint_device.h \
 	KIsImageIface.h \
 	kis_matrix.h \
 	kis_filter.h \
-	kis_filter_registry.h
+	kis_filter_registry.h \
+	kis_selection_manager.h
 
 libkritacore_la_METASOURCES = AUTO
 libkritacore_la_LDFLAGS = $(all_libraries)

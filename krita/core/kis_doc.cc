@@ -77,6 +77,8 @@
 #include "color_strategy/kis_strategy_colorspace_cmyk.h"
 #include "tiles/kistilemgr.h"
 
+#include "KIsDocIface.h"
+
 static const char *CURRENT_DTD_VERSION = "1.3";
 
 namespace {
@@ -360,13 +362,10 @@ QCString KisDoc::mimeType() const
 
 DCOPObject *KisDoc::dcopObject()
 {
-#if 0
 	if (!m_dcop)
 		m_dcop = new KIsDocIface(this);
 
 	return m_dcop;
-#endif
-	return 0;
 }
 
 bool KisDoc::initDoc()

@@ -124,7 +124,19 @@ public slots:
 
 	// settings action slots
 	void preferences();
-
+    void copy();
+	void cut();
+	void removeSelection();
+	void paste();
+	void crop();
+	void layer_rotate180();
+	void layer_rotateleft90();
+	void layer_rotateright90();
+	void layer_rotate_custom();
+	void layer_mirrorX();
+	void layer_mirrorY();
+	void selectAll();
+	void unSelectAll();
 protected:
 	virtual void resizeEvent(QResizeEvent*);
 
@@ -207,18 +219,13 @@ private:
 	void zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf);
 
 private slots:
-	void copy();
-	void cut();
 	void clipboardDataChanged();
 	void duplicateCurrentImg();
-	void removeSelection();
 	void fillSelectionBg();
 	void fillSelectionFg();
-	void paste();
 	void paste_into();
-	void crop();
-	void selectAll();
-	void unSelectAll();
+
+
 	void canvasGotMousePressEvent(QMouseEvent *e);
 	void canvasGotMouseMoveEvent(QMouseEvent *e);
 	void canvasGotMouseReleaseEvent(QMouseEvent *e);
@@ -254,12 +261,7 @@ private slots:
 	void layersUpdated();
 	void layersUpdated(KisImageSP img);
 	void layerTransform(bool smooth);
-	void layer_rotate180();
-	void layer_rotateleft90();
-	void layer_rotateright90();
-	void layer_rotate_custom();
-	void layer_mirrorX();
-	void layer_mirrorY();
+
 	void placeSidebarLeft();
 	QPoint mapToScreen(const QPoint& pt);
 	void merge_all_layers();

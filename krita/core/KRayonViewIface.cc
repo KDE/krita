@@ -69,55 +69,6 @@ void KRayonViewIface::dialog_gradient()
 	m_view->dialog_gradient();
 }
 
-void KRayonViewIface::dialog_colors()
-{
-	m_view->dialog_colors();
-}
-
-void KRayonViewIface::dialog_crayons()
-{
-	m_view->dialog_crayons();
-}
-
-void KRayonViewIface::dialog_brushes()
-{
-	m_view->dialog_brushes();
-}
-
-void KRayonViewIface::dialog_patterns()
-{
-	m_view->dialog_patterns();
-}
-
-void KRayonViewIface::dialog_layers()
-{
-	m_view->dialog_layers();
-}
-
-void KRayonViewIface::dialog_channels()
-{
-	m_view->dialog_channels();
-}
-
-void KRayonViewIface::insert_layer()
-{
-	m_view->insert_layer();
-}
-
-void KRayonViewIface::remove_layer()
-{
-	m_view->remove_layer();
-}
-
-void KRayonViewIface::link_layer()
-{
-	m_view->link_layer();
-}
-
-void KRayonViewIface::hide_layer()
-{
-	m_view->hide_layer();
-}
 
 void KRayonViewIface::next_layer()
 {
@@ -129,7 +80,72 @@ void KRayonViewIface::previous_layer()
 	m_view->previous_layer();
 }
 
-void KRayonViewIface::layer_properties() 
+void KRayonViewIface::slotImportImage()
 {
-	m_view->layer_properties();
+    m_view->slotImportImage();
+}
+
+void KRayonViewIface::export_image()
+{
+    m_view->export_image();
+}
+
+void KRayonViewIface::imgResizeToActiveLayer()
+{
+    m_view->imgResizeToActiveLayer();
+}
+
+void KRayonViewIface::add_new_image_tab()
+{
+    m_view->add_new_image_tab();
+}
+
+void KRayonViewIface::remove_current_image_tab()
+{
+    m_view->remove_current_image_tab();
+}
+
+void KRayonViewIface::imageResize()
+{
+    m_view->imageResize();
+}
+
+void KRayonViewIface::tool_properties()
+{
+    m_view->tool_properties();
+}
+
+void KRayonViewIface::preferences()
+{
+    m_view->preferences();
+}
+
+void KRayonViewIface::layer_rotate180()
+{
+    m_view->layer_rotate180();
+}
+
+void KRayonViewIface::layer_rotateleft90()
+{
+    m_view->layer_rotateleft90();
+}
+
+void KRayonViewIface::layer_rotateright90()
+{
+    m_view->layer_rotateright90();
+}
+
+void KRayonViewIface::layer_rotate_custom()
+{
+    m_view->layer_rotate_custom();
+}
+
+void KRayonViewIface::layer_mirrorX()
+{
+    m_view->layer_mirrorX();
+}
+
+void KRayonViewIface::layer_mirrorY()
+{
+    m_view->layer_mirrorY();
 }

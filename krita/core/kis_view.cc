@@ -103,6 +103,7 @@
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
 #include "kis_rect.h"
+#include "KRayonViewIface.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
@@ -213,13 +214,10 @@ KisView::~KisView()
 
 DCOPObject* KisView::dcopObject()
 {
-#if 0
-	if (!m_dcop)
-		m_dcop = new KRayonViewIface(this);
+    if (!m_dcop)
+        m_dcop = new KRayonViewIface(this);
 
-	return m_dcop;
-#endif
-	return 0;
+    return m_dcop;
 }
 
 void KisView::setupDockers()

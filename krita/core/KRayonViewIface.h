@@ -43,15 +43,9 @@ class KRayonViewIface : public KoViewIface
 	void crop();
 	void selectAll();
 	void unSelectAll();
-    
+
 	// dialog action slots
 	void dialog_gradient();
-	void dialog_colors();
-	void dialog_crayons();
-	void dialog_brushes();
-	void dialog_patterns();
-	void dialog_layers();
-	void dialog_channels();
 
 	// layer action slots
 	void insert_layer();
@@ -61,7 +55,25 @@ class KRayonViewIface : public KoViewIface
 	void next_layer();
 	void previous_layer();
 
-	void layer_properties(); 
+	void slotImportImage();
+	void export_image();
+	void imgResizeToActiveLayer();
+	void add_new_image_tab();
+	void remove_current_image_tab();
+	void imageResize();
+
+	// tool action slots
+	void tool_properties();
+
+	// settings action slots
+	void preferences();
+
+	void layer_rotate180();
+	void layer_rotateleft90();
+	void layer_rotateright90();
+	void layer_rotate_custom();
+	void layer_mirrorX();
+	void layer_mirrorY();
 
  private:
 	KisView *m_view;

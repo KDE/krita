@@ -184,6 +184,7 @@
 </ToolBar>
 
 <ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
+  <Action name="tool_select_brush"/>
   <Action name="tool_select_freehand"/>
   <Action name="tool_select_rectangular"/>
   <Action name="tool_select_elliptical"/>

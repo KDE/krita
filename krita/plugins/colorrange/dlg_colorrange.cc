@@ -17,7 +17,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include <qpushbutton.h>
+#include <qcheckbox.h>
+#include <qslider.h>
+#include <qcombobox.h>
+#include <qpixmap.h>
+#include <qimage.h>
+#include <qlabel.h>
 
+#include <knuminput.h>
 #include <klocale.h>
 
 #include "kis_types.h"
@@ -28,13 +36,6 @@
 #include "dlg_colorrange.h"
 #include "wdg_colorrange.h"
 
-#include "qpushbutton.h"
-#include "qcheckbox.h"
-#include "qslider.h"
-#include "qcombobox.h"
-#include "qpixmap.h"
-#include "qimage.h"
-#include "qlabel.h"
 
 DlgColorRange::DlgColorRange( QWidget *  parent,
 			      const char * name)
@@ -66,8 +67,11 @@ DlgColorRange::DlgColorRange( QWidget *  parent,
 	connect(m_page -> chkInvert, SIGNAL(clicked()),
 		this, SLOT(slotInvertClicked()));
 
-	connect(m_page -> sldrFuzziness, SIGNAL(valueChanged(int)),
+	connect(m_page -> intFuzziness, SIGNAL(valueChanged(int)),
 		this, SLOT(slotFuzzinessChanged(int)));
+
+	connect(m_page -> sldrFuzziness, SIGNAL(sliderMoved(int)),
+		this, SLOT(slotSliderMoved(int)));
 
 	connect(m_page -> cmbSelect, SIGNAL(activated(int)),
 		this, SLOT(slotSelectionTypeChanged(int)));
@@ -75,6 +79,9 @@ DlgColorRange::DlgColorRange( QWidget *  parent,
 	connect(m_page -> cmbSelectionPreview, SIGNAL(activated(int)),
 		this, SLOT(slotPreviewTypeChanged(int)));
 
+	m_page -> bnLoad -> setEnabled(false);
+	m_page -> bnSaveColorRange -> setEnabled(false);
+	m_page -> cmbSelectionPreview -> setEnabled(false);
 }
 
 DlgColorRange::~DlgColorRange()
@@ -132,6 +139,12 @@ void DlgColorRange::slotInvertClicked()
 
 void DlgColorRange::slotFuzzinessChanged(int value) 
 {
+	m_page -> sldrFuzziness -> setValue(value);
+}
+
+void DlgColorRange::slotSliderMoved(int value)
+{
+	m_page -> intFuzziness -> setValue(value);
 }
 
 void DlgColorRange::slotSelectionTypeChanged(int index) 

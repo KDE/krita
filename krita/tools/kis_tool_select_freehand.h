@@ -29,7 +29,6 @@
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 
-
 class KisToolSelectFreehand : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;

@@ -57,6 +57,7 @@ private slots:
 	void slotSave();
 	void slotInvertClicked();
 	void slotFuzzinessChanged(int value);
+	void slotSliderMoved(int value);
 	void slotSelectionTypeChanged(int index);
 	void slotPreviewTypeChanged(int index);
 

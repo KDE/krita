@@ -175,18 +175,21 @@
                                 <cstring>cmbSelect</cstring>
                             </property>
                         </widget>
-                        <widget class="QLineEdit" row="1" column="3">
+                        <widget class="KIntNumInput" row="1" column="3">
                             <property name="name">
-                                <cstring>txtFuzziness</cstring>
+                                <cstring>intFuzziness</cstring>
                             </property>
-                            <property name="text">
-                                <string></string>
+                            <property name="value">
+                                <number>150</number>
                             </property>
-                            <property name="alignment">
-                                <set>AlignRight</set>
+                            <property name="minValue">
+                                <number>0</number>
                             </property>
-                            <property name="inputMask">
-                                <string>000; </string>
+                            <property name="maxValue">
+                                <number>200</number>
+                            </property>
+                            <property name="referencePoint">
+                                <number>100</number>
                             </property>
                         </widget>
                         <widget class="QLabel" row="1" column="0">
@@ -197,7 +200,7 @@
                                 <string>&amp;Fuzziness:</string>
                             </property>
                             <property name="buddy" stdset="0">
-                                <cstring>txtFuzziness</cstring>
+                                <cstring>intFuzziness</cstring>
                             </property>
                         </widget>
                         <widget class="QSlider" row="2" column="0" rowspan="1" colspan="4">
@@ -396,6 +399,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <images>
     <image name="image0">
         <data format="PNG" length="310">89504e470d0a1a0a0000000d494844520000001200000012080600000056ce8e57000000fd49444154789c9dd3316e833014c6f13f095ba274ee09cac89829f25ce5008cadda7bd447734fd04a59cd053a568ad425fa326003250a189ee48107fcf81e06985fc2a0b22c05ec80f502033939e110b6c51ee7621d122040c033b0cb5300002787f9344dc785d5d40658af125280e51669a077e00c5ca6d26c8823d9309269477a038e24be23495255551df61f696b6c3449a2ae6b8aa2c06406f7e1e2b933f03d95a24de2bd97b5b69f42c00b61a79622004fc021f4b404390eaf1b83c690e1cedc8552104dac064a483209c97bdf6fa47c6837a365bdc62bf007fc025fc00ff73ffd784f161b39f000ecc3d34f014afa7f868956c0361ccf06625d01f42ac2940d1a0bf50000000049454e44ae426082</data>
@@ -413,7 +418,6 @@
 <tabstops>
     <tabstop>cmbSelect</tabstop>
     <tabstop>sldrFuzziness</tabstop>
-    <tabstop>txtFuzziness</tabstop>
     <tabstop>cmbSelectionPreview</tabstop>
     <tabstop>bnLoad</tabstop>
     <tabstop>bnSaveColorRange</tabstop>
@@ -423,4 +427,7 @@
     <tabstop>chkInvert</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+</includehints>
 </UI>

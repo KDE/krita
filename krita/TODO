@@ -32,7 +32,9 @@ Core
 	* Add create image from screenshot.
 
 User Interface
-
+	
+	* Allow choice between crosshair-cursor, brush-shape outline cursor
+	  and iconic cursor.
 	* All dialogs ui-fied
 	* Tabs in dockers drag-and-droppable (vector of docker
 	  windows, create new docker if tab dropped outside existing
@@ -46,8 +48,6 @@ User Interface
 		    - Histogram
 		    - Modify curves (nick from Perico)
 	* Add history docker
-	* Two cursor modes: precise (a cross-hair), and beginner
-	  (image cursor of the current tool)
 	* Add auto-scroll to canvas while painting	  
 	* Full-screen mode
 	* Add previews to all relevant dialogs. (XXX: let preview work

@@ -27,7 +27,7 @@ KisSelection::KisSelection(KisLayerSP layer, const QString& name)
 	m_name = name;
 	m_layer = layer;
 	m_mask = QImage();
-	m_mask.create(layer -> width(), layer -> height(), 8, 256);
+	m_mask.create(m_layer -> width(), m_layer -> height(), 8, 256);
 	for (int i = 0; i < 256; i++) {
 		m_mask.setColor(i, qRgb(i, i, i));
 	}
@@ -66,3 +66,7 @@ QImage KisSelection::maskImage() const
 	return m_mask;
 }
 
+void KisSelection::reset()
+{
+	m_mask.fill(NOT_SELECTED);
+}

@@ -1,0 +1,56 @@
+Krita's design is not entirely satisfactory at the moment. This file
+lists the design problems, and as such, is different from the TODO.
+
+* Hard-coded channel size. In kis_global.h, QUANTUM, PIXEL_TYPE and
+  CHANNEL_TYPE are hard-coded to be 8 bits wide; for some purposes
+  (namely my wet colour type), this needs to be 16 bits. For
+  compatibility with OpenEXR, it needs to be 32 bits. It's a bad idea
+  to make this a compile-time option, because that would mean we would
+  have to deliver three binaries to support all bit depths... I guess
+  this is a throwback to the days when we mooched all our code from
+  {Image|Graphics|Magick. Same with the definition of the maximum
+  number of channels -- that's something that shouldn't be hardcoded.
+
+* Colors and color strategies. If you want to add a new image type, 
+  you need to:
+  * create a color strategy
+  * extend KoColor
+  * add PIXELTYPE definitions for the extra channels your need color
+    strategy needs. (And working with them is far more tiresome than
+    accessing the members of a struct -- or data-only class.)
+  * extend the UI
+  * Check several methods in e.g. KisPaintDevice that suppose 8-bit
+    RGBA, and extend them where necessary.    
+
+* Tool design. I'm not talking about making tools kparts or anything,
+  but about the basic design of what consitute the elements needed to
+  paint. In real life, you have: surface, tool, material. In Krita we
+  have tool, brush and image buffer, or on a lower level, tools,
+  brushes, paint operations and layers. This is an area that I am
+  still thinking about, but consider the possibility that some types
+  of tools only work on some types of colour models or layers -- and
+  that some kinds of tools need specialized colours or brushes.
+
+* Rendering. It isn't possible, yet, to effectively render layers of
+  different image types, or rather, colour strategies. But that would
+  be a nice thing to have, for instance to combine layers with single 
+  colours as spot colour masks, or to combine different types of
+  natural media layers. All that is needed is to render the layers to 
+  a common format -- common sense suggests 8-bit RGBA, and compose
+  the results before rendering to a pixmap. The latter step could then
+  be offloaded to, say, OpenGL, where possible.
+
+* Coupling of UI and core. Try to trace the tortuous path from
+  settings in the brush icon view to the final settings in KisBrush.
+  There is way too much coupling, and, worse, manual synching between
+  enums defined in kis_global.h and UI and code.
+  
+* Easy access to pixels for filters and other pixel-mangling code.
+  Encapsulating the tiles in a vector has been mooted, but it still
+  needs to be designed and implemented, and it will be for
+  random-access reading only. Random access writing, and fast random
+  access writing needs to be just as fast, without tiresome copying of
+  bytes into memory buffers. And don't forget kernel operations.
+
+
+Boudewijn Rempt <boud@valdyas.org>

@@ -51,6 +51,8 @@ public:
 
 	QImage maskImage() const;
 
+	void reset();
+
 private:
 	KisLayerSP m_layer;
 

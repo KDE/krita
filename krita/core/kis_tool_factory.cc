@@ -38,6 +38,7 @@
 #include "kis_tool_select_polygonal.h"
 #include "kis_tool_select_elliptical.h"
 #include "kis_tool_select_contiguous.h"
+#include "kis_tool_select_brush.h"
 #include "kis_tool_pen.h"
 #include "kis_tool_fill.h"
 #include "kis_tool_rectangle.h"
@@ -83,6 +84,7 @@ void KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSubjec
 		m_tools.push_back(new KisToolSelectPolygonal);
 		m_tools.push_back(new KisToolSelectElliptical);
 		m_tools.push_back(new KisToolSelectContiguous);
+		m_tools.push_back(new KisToolSelectBrush);
 		m_tools.push_back(new KisToolPen);
 		m_tools.push_back(new KisToolRectangle);
 		m_tools.push_back(new KisToolEllipse);

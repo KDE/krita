@@ -29,7 +29,7 @@
 #include "kis_resourceserver.h"
 #include "kis_doc.h"
 
-#define USE_TEMPLATES 0
+#define USE_TEMPLATES 1
 
 extern "C" 
 {

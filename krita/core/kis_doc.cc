@@ -417,6 +417,10 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 		resetURL();
 		ok = loadNativeFormat( fileName );
 		emit imageListUpdated();
+		if (nimages() == 0) {
+			if ((ok = slotNewImage()))
+				emit imageListUpdated();
+		}
 		ok = true;
 	} else if (ret == KoTemplateChooseDia::File) {
 		KURL url( file );

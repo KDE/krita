@@ -1,1 +1,1 @@
-SUBDIRS = . brushes patterns gradients
+SUBDIRS = . brushes patterns gradients templates

@@ -23,7 +23,7 @@
 
 </MenuBar>
 
-<ToolBar name="selection" position="top"><Text>Selection</Text>
+<ToolBar name="edit" position="top"><Text>Edit</Text>
   <Action name="copy"/>
 </ToolBar>
 

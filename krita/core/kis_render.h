@@ -24,6 +24,7 @@
 class QRect;
 
 class KisRenderInterface : public KShared {
+
 public:
 	KisRenderInterface();
 	KisRenderInterface(const KisRenderInterface& rhs);

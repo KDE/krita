@@ -39,6 +39,7 @@
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_layer.h>
+#include <kis_paint_device.h>
 #include <kis_global.h>
 #include <kis_tile_command.h>
 #include <kis_types.h>
@@ -80,8 +81,9 @@ void ColorRange::slotActivated()
 
 	// Render layer to a QIMage -- keep in mind possibility of selection
 	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
-	//QImage img = layer.convertToImage();
-	// Scale QImage 
+	QImage img = layer -> convertToImage();
+
+	// Scale QImage to fit in preview
 
 	// Set original QImage in dialog
 		

@@ -53,7 +53,7 @@
                                 <cstring>labelLeftColor</cstring>
                             </property>
                             <property name="text">
-                                <string>Left color :</string>
+                                <string>Left color:</string>
                             </property>
                         </widget>
                         <widget class="KColorButton">
@@ -96,7 +96,7 @@
                                 <cstring>labelRightColor</cstring>
                             </property>
                             <property name="text">
-                                <string>Right color :</string>
+                                <string>Right color:</string>
                             </property>
                         </widget>
                         <widget class="KColorButton">
@@ -139,7 +139,7 @@
                                 <cstring>labelInterpolation</cstring>
                             </property>
                             <property name="text">
-                                <string>Interpolation :</string>
+                                <string>Interpolation:</string>
                             </property>
                         </widget>
                         <widget class="QComboBox">

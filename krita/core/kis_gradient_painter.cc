@@ -565,7 +565,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 			QUANTUM opacity;
 
 			m_gradient -> colorAt(t, &color, &opacity);
-			layer -> colorStrategy() -> nativeColor( color, opacity, iter);
+			layer -> colorStrategy() -> nativeColor( color, opacity, iter.rawData());
 
 			pixelsProcessed++;
 
@@ -601,7 +601,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 				QColor thisPixel;
 				QUANTUM thisPixelOpacity;
 
-				layer -> colorStrategy() -> toQColor((QUANTUM*) iter, &thisPixel, &thisPixelOpacity);
+				layer -> colorStrategy() -> toQColor(iter.rawData(), &thisPixel, &thisPixelOpacity);
 
 				for (int yOffset = -1; yOffset < 2; yOffset++) {
 					for (int xOffset = -1; xOffset < 2; xOffset++) {
@@ -674,7 +674,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
 					QColor color(red, green,  blue);
 
-					layer -> colorStrategy() -> nativeColor( color, opacity, (QUANTUM*)iter);
+					layer -> colorStrategy() -> nativeColor( color, opacity, iter.rawData());
 				}
 
 				pixelsProcessed++;
@@ -712,10 +712,10 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 			
 				while(! iter.isDone())
 				{
-					layer -> colorStrategy() -> toQColor((QUANTUM*) iter, &c, &opacity);
-					selection -> colorStrategy() -> toQColor((QUANTUM*) selectionIter, &selectionColor, &selectionOpacity);
+					layer -> colorStrategy() -> toQColor(iter.rawData(), &c, &opacity);
+					selection -> colorStrategy() -> toQColor(selectionIter.rawData(), &selectionColor, &selectionOpacity);
 					opacity = (selectionOpacity * opacity) / QUANTUM_MAX;
-					layer -> colorStrategy() -> nativeColor(c, opacity, (QUANTUM*) iter);
+					layer -> colorStrategy() -> nativeColor(c, opacity, iter.rawData());
 					iter++;
 					selectionIter++;
 				}

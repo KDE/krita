@@ -72,7 +72,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 		for( int i = 0; i < depth; i++)
 		{
 			// change the brightness
-			int nd = srcIt.oldValue()[ i ] + configBC->brightness();
+			int nd = srcIt.oldRawData()[ i ] + configBC->brightness();
 			nd = (int)(((nd - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2);
 			dstIt[i] = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
 		}

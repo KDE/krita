@@ -38,9 +38,9 @@ libkritacore_la_SOURCES = kis_paint_device.cc kis_layer.cc kis_image.cc \
 		kis_guide.cc kis_canvas_subject.cc kis_canvas_controller.cc kis_canvas_observer.cc \
 		kis_tile_command.cc kis_vec.cc kis_rect.cc kis_iterators_pixel.cc kis_histogram.cc \
 		KRayonViewIface.cc KRayonViewIface.skel KIsDocIface.cc KIsDocIface.skel KIsImageIface.cc \
-		KIsImageIface.skel kis_selection_manager.cc kis_scale_visitor.cc 	kis_rotate_visitor.cc \
-	kis_cms.cc kis_quantum_operations.cc kis_clipboard.cc kis_pixel.cc 	kis_filter.cc \
-	kis_filter_registry.cc  kis_plugin_loader.cc
+		KIsImageIface.skel kis_selection_manager.cc kis_scale_visitor.cc  \
+		kis_rotate_visitor.cc kis_cms.cc kis_quantum_operations.cc kis_clipboard.cc kis_pixel.cc \
+		kis_filter.cc kis_filter_registry.cc  kis_plugin_loader.cc
 
 
 noinst_HEADERS = kis_paint_device.h kis_layer.h kis_image.h kis_doc.h \

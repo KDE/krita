@@ -316,8 +316,8 @@ void KisSelectionManager::copy()
  	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
 
 	while (!layerIt.isDone()) {
- 		KisPixel p = clip -> toPixel(layerIt);
- 		KisPixel s = selection -> toPixel(selectionIt);
+ 		KisPixel p = clip -> toPixel(layerIt.rawData());
+ 		KisPixel s = selection -> toPixel(selectionIt.rawData());
  		Q_UINT8 p_alpha, s_alpha;
  		p_alpha = p.alpha();
  		s_alpha = s.alpha();
@@ -441,8 +441,8 @@ void KisSelectionManager::clear()
  	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
 
 	while (!layerIt.isDone()) {
- 		KisPixel p = layer -> toPixel(layerIt);
- 		KisPixel s = selection -> toPixel(selectionIt);
+ 		KisPixel p = layer -> toPixel(layerIt.rawData());
+ 		KisPixel s = selection -> toPixel(selectionIt.rawData());
  		Q_UINT8 p_alpha, s_alpha;
  		p_alpha = p.alpha();
  		s_alpha = s.alpha();

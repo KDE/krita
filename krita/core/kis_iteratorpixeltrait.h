@@ -41,9 +41,7 @@ public:
 	/**
 	 * Return the current pixel
 	 */
-	inline operator KisPixel() { return m_device->toPixel((Q_UINT8 *)(*m_underlyingIterator)); }; 
-	// XXX: Isn't this the same as the above?
- 	inline KisPixel value() { return m_device->toPixel((Q_UINT8 *)(*m_underlyingIterator)); };
+ 	inline KisPixel value() { return m_device->toPixel(m_underlyingIterator->rawData()); };
         inline KisPixelRO oldPixelValue() { return m_device->toPixelRO( this->oldQuantumValue()); };
 
 	/**
@@ -51,10 +49,10 @@ public:
 	 * channel index actually exists in this colorspace.
 	 */
 	inline KisQuantum operator[](int index)
-			{ return m_device -> toPixel((Q_UINT8 *)(*m_underlyingIterator))[index]; };
+			{ return m_device -> toPixel(m_underlyingIterator->rawData())[index]; };
 
 protected:
-	inline QUANTUM* oldQuantumValue() { return m_underlyingIterator -> oldValue(); };
+	inline QUANTUM* oldQuantumValue() { return m_underlyingIterator->oldRawData(); };
 	
 protected:
 	KisPaintDevice *m_device;

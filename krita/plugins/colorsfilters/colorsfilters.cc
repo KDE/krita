@@ -100,8 +100,8 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 	Q_INT32 depth = src->nChannels() - 1;
 	while( ! rectIt.isDone() )
 	{
-		KisPixelRO data = rectIt.oldValue();
-		KisPixel dstData = rectIt;
+		KisPixelRO data = rectIt.oldPixelValue();
+		KisPixel dstData = rectIt.value();
 		for( int i = 0; i < depth; i++)
 		{
 			KisQuantum d = rectIt[ configPC->channel( i ) ];
@@ -131,7 +131,7 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 	{
 		for( int i = 0; i < depth; i++)
 		{
-			QUANTUM sd = rectIt.oldValue()[ configPC->channel( i ) ];
+			QUANTUM sd = rectIt.oldRawData()[ configPC->channel( i ) ];
 			KisQuantum dd = rectIt[ configPC->channel( i ) ];
 			dd = (QUANTUM)( QUANTUM_MAX * pow( ((float)sd)/QUANTUM_MAX, 1.0 / configPC->valueFor( i ) ) );
 		}
@@ -162,7 +162,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	Q_INT32 maxvalue = 0;
 	while( ! rectIt.isDone() )
 	{
-		KisPixel data = rectIt;
+		KisPixel data = rectIt.value();
 		Q_INT32 lightness = ( QMAX(QMAX(data[0], data[1]), data[2])
 				+ QMIN(QMIN(data[0], data[1]), data[2]) ) / 2;
 		histo[ lightness ] ++;
@@ -187,8 +187,8 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
 	while( ! rectIt.isDone() )
 	{
-		KisPixel srcData = rectIt;
-		KisPixel dstData = rectIt;
+		KisPixel srcData = rectIt.value();
+		KisPixel dstData = rectIt.value();
 
 		// Iterate through all channels except alpha
 		// XXX: Check for off-by-one errors
@@ -217,8 +217,8 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 // 	Q_INT32 depth = device->nChannels() - 1;
 	while( ! rectIt.isDone() )
 	{
-		KisPixelRO srcData = rectIt.oldValue();
-		KisPixel dstData = KisPixel((Q_UINT8 *)rectIt);
+		KisPixelRO srcData = rectIt.oldPixelValue();
+		KisPixel dstData = rectIt.value();
 		/* I thought of using the HSV model, but GIMP seems to use
 		HSL for desaturating. Better use the gimp model for now
 				(HSV produces a lighter image than HSL) */

@@ -44,10 +44,10 @@ public:
 
 public:	
 	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-	operator Q_UINT8 * () { return ACTUAL_RECTITERATOR::operator Q_UINT8 *();};
+	Q_UINT8 * rawData() { return ACTUAL_RECTITERATOR::rawData();};
 
 	/// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
-	Q_UINT8 * oldValue () { return ACTUAL_RECTITERATOR::oldValue();};
+	Q_UINT8 * oldRawData() { return ACTUAL_RECTITERATOR::oldRawData();};
 
 	/// Advances one pixel going to the beginning of the next line when it reaches the end of a line
 	KisRectIterator & operator++(int n) { ACTUAL_RECTITERATOR::operator++(n); return *this; };
@@ -74,10 +74,10 @@ public:
 
 public:	
 	/// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-	operator Q_UINT8 * () { return ACTUAL_HLINEITERATOR::operator Q_UINT8 *();};
+	Q_UINT8 *rawData() { return ACTUAL_HLINEITERATOR::rawData();};
 
 	/// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
-	Q_UINT8 * oldValue () { return ACTUAL_HLINEITERATOR::oldValue();};
+	Q_UINT8 *oldRawData() { return ACTUAL_HLINEITERATOR::oldRawData();};
 
 	/// Advances one pixel until it reaches the end of the line
 	KisHLineIterator & operator++(int) { ACTUAL_HLINEITERATOR::operator++(); return *this; };
@@ -113,10 +113,10 @@ public:
 
 public:
 	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-	operator Q_UINT8 * () { return ACTUAL_VLINEITERATOR::operator Q_UINT8 *();};
+	Q_UINT8 *rawData() { return ACTUAL_VLINEITERATOR::rawData();};
 
 	/// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
-	Q_UINT8 * oldValue () { return ACTUAL_VLINEITERATOR::oldValue();};
+	Q_UINT8 * oldRawData() { return ACTUAL_VLINEITERATOR::oldRawData();};
 
 	/// Advances one pixel until it reaches the end of the line
 	KisVLineIterator & operator++(int) { ACTUAL_VLINEITERATOR::operator++(); return *this; };

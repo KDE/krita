@@ -36,13 +36,13 @@ KisTiledIterator::~KisTiledIterator( )
 {
 }
 
-KisTiledIterator::operator Q_UINT8 * ()
+Q_UINT8 * KisTiledIterator::rawData()
 {
 	return m_data + m_offset;
 }
 
 
-Q_UINT8 * KisTiledIterator::oldValue ()
+Q_UINT8 * KisTiledIterator::oldRawData()
 {
 	return m_oldData + m_offset;
 }

@@ -447,7 +447,7 @@ Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
 		KisTiledHLineIterator hiter = KisTiledHLineIterator(this, x, y2, w, false);
 		while(! hiter.isDone())
 		{
-			memcpy(ptr, (Q_UINT8 *)hiter, m_pixelSize);
+			memcpy(ptr, hiter.rawData(), m_pixelSize);
 
 			ptr += m_pixelSize;
 			++hiter;
@@ -480,7 +480,7 @@ void KisTiledDataManager::writeBytes(Q_UINT8 * bytes,
 		KisTiledHLineIterator hiter = KisTiledHLineIterator(this, x, y2, w, true);
 		while(! hiter.isDone())
 		{
-			memcpy((Q_UINT8 *)hiter, ptr , m_pixelSize);
+			memcpy(hiter.rawData(), ptr , m_pixelSize);
 
 			ptr += m_pixelSize;
 			++hiter;

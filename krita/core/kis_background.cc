@@ -38,7 +38,7 @@ KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*
 			QColor c(v,v,v);
 			colorStrategy() -> nativeColor(c, OPACITY_OPAQUE, src);
 
-			memcpy((Q_UINT8 *)hiter, src, d);
+			memcpy(hiter.rawData(), src, d);
 
 			hiter++;
 		}

@@ -62,7 +62,7 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 		{
 			colorStrategy -> nativeColor(m_painter -> paintColor(),
 						     mask -> alphaAt(x++, y),
-						     (Q_UINT8 *)hiter,
+						     hiter.rawData(),
 						     m_painter -> device() -> profile());
 			hiter++;
 		}

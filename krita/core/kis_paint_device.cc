@@ -572,7 +572,7 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity)
 {
   KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
 
-  Q_UINT8 *pix = (Q_UINT8 *)iter;
+  Q_UINT8 *pix = iter.rawData();
 
   if (!pix) return false;
 
@@ -585,7 +585,7 @@ bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opa
 {
   KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
 
-  colorStrategy() -> nativeColor(c, opacity, (QUANTUM*)(iter), m_profile);
+  colorStrategy() -> nativeColor(c, opacity, iter.rawData(), m_profile);
 
   return true;
 }

@@ -188,8 +188,8 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 					adv = dstIter.nConseqHPixels();
 
 				m_device -> colorStrategy() -> bitBlt(dstDepth,
-								      (Q_UINT8 *)dstIter, srcDepth,
-								      srcdev -> colorStrategy(), (Q_UINT8 *)srcIter, dstDepth,
+								      dstIter.rawData(), srcDepth,
+								      srcdev -> colorStrategy(), srcIter.rawData(), dstDepth,
 								      opacity,
 								      1, adv,
 								      op,

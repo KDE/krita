@@ -233,7 +233,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 				KisHLineIteratorPixel hiter = layer -> createHLineIterator(0, y, image->columns, true);
 				while(! hiter.isDone())
 				{
-					Q_UINT8 *ptr= (Q_UINT8 *)hiter;
+					Q_UINT8 *ptr= hiter.rawData();
 					// XXX: not colorstrategy and bitdepth independent
 					*(ptr++) = pp->blue;
 					*(ptr++) = pp->green;

@@ -90,7 +90,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
 		KisHLineIterator hiter = m_device->createHLineIterator(x1, y, w, true);
 		while( ! hiter.isDone())
 		{
-			memcpy((Q_UINT8 *)hiter, src, depth);
+			memcpy(hiter.rawData(), src, depth);
 			hiter++;
 		}
 	}
@@ -175,8 +175,8 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 		m_selection -> clear(QRect(0, 0, m_width, m_height));
 		m_oldColor = new QUANTUM[m_device->pixelSize()];
 
-		KisHLineIterator pixelIt = m_layer->createHLineIterator(startX, startY, startX+1, false);
-		KisPixel pixel((QUANTUM*)(pixelIt));
+		KisHLineIteratorPixel pixelIt = m_layer->createHLineIterator(startX, startY, startX+1, false);
+		KisPixel pixel = pixelIt.value();
 
 		for (int i = 0; i < lay -> pixelSize(); i++) {
 			m_oldColor[i] = pixel[i];
@@ -213,11 +213,11 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
 	    while(! line.isDone()) {
 		    QColor c;
 		    QUANTUM opacity;
-		    filled -> colorStrategy() -> toQColor((QUANTUM*) line, &c, &opacity, 0);
-		    m_selection -> colorStrategy() -> toQColor((QUANTUM*) selectionIt,
+		    filled -> colorStrategy() -> toQColor(line.rawData(), &c, &opacity, 0);
+		    m_selection -> colorStrategy() -> toQColor(selectionIt.rawData(),
 							       &notUsed, &selectionOpacity, 0);
 		    opacity = (selectionOpacity * opacity) / QUANTUM_MAX;
-		    filled -> colorStrategy() -> nativeColor(c, opacity, (QUANTUM*) line, 0);
+		    filled -> colorStrategy() -> nativeColor(c, opacity, line.rawData(), 0);
 		    ++m_pixelsDone;
 		    line++;
 		    selectionIt++;
@@ -249,7 +249,7 @@ void KisFillPainter::floodLine(int x, int y) {
 
 	int lastPixel = m_width;
 
-	if (difference(m_oldColor, ((QUANTUM*)pixelIt)) == MIN_SELECTED) {
+	if (difference(m_oldColor, pixelIt.rawData()) == MIN_SELECTED) {
 		return;
 	}
 
@@ -301,11 +301,11 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& 
 			break;
 		m_map[y*m_width + x] = true;
 		++m_pixelsDone;
-		KisPixel data = KisPixel((QUANTUM*)(it));
+		KisPixel data = it.value();
 		diff = difference(m_oldColor, data);
 		if (diff == MAX_SELECTED) {
 			// m_selection -> setSelected(x, y, diff);
-			colorStrategy -> nativeColor(selectionColor, diff, (QUANTUM*) selection, 0);
+			colorStrategy -> nativeColor(selectionColor, diff, selection.rawData(), 0);
 			if (d == Right) {
 				it++; selection++;
 				x++; most++;

@@ -87,7 +87,7 @@ void single_step(KisStrategyColorSpaceSP cs, KisPaintDeviceSP src,  KisPaintDevi
 	// effect.
 	KisHLineIterator iter = src -> createHLineIterator(p.x(), p.y(), 1,  false);
 
-	Q_UINT8 *orig = (Q_UINT8 *)iter;
+	Q_UINT8 *orig = iter.rawData();
 	Q_UINT8 *pix = orig;
 
  	if (!orig) return;
@@ -96,7 +96,7 @@ void single_step(KisStrategyColorSpaceSP cs, KisPaintDeviceSP src,  KisPaintDevi
 		QColor c;
 		QUANTUM opacity;
 
-		src -> colorStrategy() -> toQColor(( QUANTUM* )pix, &c, &opacity);
+		src -> colorStrategy() -> toQColor(pix, &c, &opacity);
 		Q_UINT8 *pix = new Q_UINT8[sizeof( cell )];
 		cs -> nativeColor(c, opacity, pix);
 	}

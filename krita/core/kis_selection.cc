@@ -97,7 +97,8 @@ void KisSelection::invert(QRect rect)
 	KisRectIterator it = createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 	while ( ! it.isDone() )
 	{
-		*it = QUANTUM_MAX - *it;
+		//CBR this is wrong only first byte is inverted
+		*(it.rawData()) = QUANTUM_MAX - *(it.rawData());
 		it++;
 	}
 }

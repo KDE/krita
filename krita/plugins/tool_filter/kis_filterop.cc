@@ -137,7 +137,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 		{
 			// XXX: QUANTUM should be Q_UINT8
 			QUANTUM alpha = mask -> alphaAt( x++, y );
-			KisPixel p = colorStrategy -> toKisPixel( (QUANTUM *)hiter, 0);
+			KisPixel p = colorStrategy -> toKisPixel( hiter.rawData(), 0);
 			p.alpha() = alpha;
 
 			hiter++;

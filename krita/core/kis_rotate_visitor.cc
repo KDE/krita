@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <math.h>
-
+#include <qapplication.h>
 #include <qwmatrix.h>
 
 #include <kdebug.h>
@@ -29,7 +29,7 @@
 
 void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progress) 
 {
-#if 0 //AUTOLAYER
+
         const double pi=3.1415926535897932385;
         kdDebug() << "Rotating Code called! Going to rotate image by (angle): " << angle << "\n";
         
@@ -43,11 +43,11 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
         m_cancelRequested = false;
         m_progress -> setSubject(this, true, true);
         Q_INT32 progressCurrent=0;
-        emit notifyProgressStage(this,i18n("Rotating Image..."),0);
-        
+        QRect r = m_dev -> extent();
+        emit notifyProgressStage(this,i18n("Rotating Image..."),0); 
         if(angle>=-45 && angle <45){
-                Q_INT32 origHeight = m_dev -> height();
-                Q_INT32 origWidth = m_dev -> width();
+                Q_INT32 origHeight = r.height();
+                Q_INT32 origWidth = r.width();
                 double theta=angle*pi/180;
                 double shearX=tan(theta/2);
                 double shearY=sin(theta);
@@ -69,8 +69,8 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                         yCropImage(deltaY);
         } else if(angle>=45 && angle < 135 && angle != 90){
                 rotateRight90();
-                Q_INT32 origHeight = m_dev -> height();
-                Q_INT32 origWidth = m_dev -> width();
+                Q_INT32 origHeight = r.height();
+                Q_INT32 origWidth = r.width();
                 double theta=(angle-90)*pi/180;
                 double shearX=tan(theta/2);
                 double shearY=sin(theta);
@@ -91,8 +91,8 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                         yCropImage(deltaY);
         } else if(angle>=135 && angle < 225 && angle != 180){
                 rotate180();
-                Q_INT32 origHeight = m_dev -> height();
-                Q_INT32 origWidth = m_dev -> width();
+                Q_INT32 origHeight = r.height();
+                Q_INT32 origWidth = r.width();
                 double theta=(angle-180)*pi/180;
                 double shearX=tan(theta/2);
                 double shearY=sin(theta);
@@ -113,8 +113,8 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                         yCropImage(deltaY);
         } else if(angle>=225 && angle < 315 && angle != 270){
                 rotateLeft90();
-                Q_INT32 origHeight = m_dev -> height();
-                Q_INT32 origWidth = m_dev -> width();
+                Q_INT32 origHeight = r.height();
+                Q_INT32 origWidth = r.width();
                 double theta=(angle-270)*pi/180;
                 double shearX=tan(theta/2);
                 double shearY=sin(theta);
@@ -133,6 +133,7 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                 double deltaY=origHeight*QABS(shearX*shearY);
                 if (deltaY != 0)
                         yCropImage(deltaY);
+
         } else if(angle==90){      
                 rotateRight90();
         } else if (angle==180){
@@ -142,7 +143,7 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
         }
 
         emit notifyProgressDone(this);
-#endif // AUTOLAYER
+
 
 }
 
@@ -396,119 +397,46 @@ void KisRotateVisitor::yCropImage(double deltaY)
 
 void KisRotateVisitor::rotateRight90()
 {
-#if 0 //AUTOLAYER
-        kdDebug() << "rotateRight called!" << "\n";
-        Q_INT32 width = m_dev->width();
-        Q_INT32 height = m_dev->height();
-        //KisIteratorLinePixel lineIt = m_dev->iteratorPixelBegin(0,0,width,0);
-        //KisIteratorLinePixel endLineIt = m_dev->iteratorPixelEnd(0,0,width,height);
-        //calculate widht of the croped image
-        Q_INT32 targetW = height;
-        Q_INT32 targetH = width;
-        KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
-        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
-        QUANTUM *tempRow = new QUANTUM[width * m_dev -> depth() * sizeof(QUANTUM)];
-        Q_INT32 currentPos;
-        /*
-        Q_INT32 x=0;
-        Q_INT32 y=0;
-        while( lineIt <= endLineIt )
-        {
-                KisIteratorPixel pixelIt = *lineIt;
-                KisIteratorPixel endIt = lineIt.end();
-                while( pixelIt <= endIt )
-                {
-                        currentPos = (x*targetW+height-y-1) * m_dev -> depth();
-                        for (int i = 0; i < m_dev -> depth(); i++)
-			{     
-                             newData[currentPos+i] = pixelIt[i];
-                        }
-                        // your computing
-                        ++x;
-                        ++pixelIt;
-                }
-                x=0;
-                ++y;
-                ++lineIt;
-        }
-        */
-        for(Q_INT32 y=0; y < height; y++){
-                m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
-                for(Q_INT32 x=0; x < width; x++){
-                        currentPos = (x*targetW+height-y-1) * m_dev -> depth();
-                        for(int channel = 0; channel < m_dev -> depth(); channel++){
-                                newData[currentPos + channel]=tempRow[x*m_dev -> depth()+channel];
-                        }    
-                }
-        }
-        kdDebug() << "write newData to the image!" << "\n";
-        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
-        m_dev -> setTiles(tm); // Also sets width and height correctly
-#endif //AUTOLAYER
+	Q_INT32 x, y, rx, ry, rw, rh;
+	m_dev -> extent(rx, ry, rw, rh);
+	Q_INT32 pixelSize = m_dev -> pixelSize();
+	
+	x = 0;
+	for (y = ry; y < rh; ++y) {
+		KisHLineIterator hit = m_dev -> createHLineIterator(rx, y, rw, true);
+		KisVLineIterator vit = m_dev -> createVLineIterator(x, ry, rh, false);
+		while (!hit.isDone() && !vit.isDone()) {
+			memcpy(hit.rawData(), vit.oldRawData(), pixelSize);
+			++hit;
+			++vit;
+		}
+		x = x + 1;
+		qApp -> processEvents();
+	}
 }
 
 void KisRotateVisitor::rotateLeft90()
 {
-#if 0 //AUTOLAYER
-        kdDebug() << "rotateLeft called!" << "\n";
-        
-        KisIteratorLinePixel lineIt = m_dev->iteratorPixelBegin( 0, 0, m_dev -> width(), 
-0);
-        KisIteratorLinePixel endLineIt = m_dev->iteratorPixelEnd( 0, 0, 
-m_dev->width(), m_dev->height());
-        
-        Q_INT32 width = m_dev->width();
-        Q_INT32 height = m_dev->height();
-        //calculate widht of the croped image
-        Q_INT32 targetW = height;
-        Q_INT32 targetH = width;
-        kdDebug() << "targetW: " << targetW << " targetH: " << targetH << "\n";
-        KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
-        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
-        QUANTUM *tempRow = new QUANTUM[width * m_dev -> depth() * sizeof(QUANTUM)];
-        Q_INT32 currentPos;
-        for(Q_INT32 y=0; y < height; y++){
-                m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
-                kdDebug() << "y: " << y << "\n";
-                for(Q_INT32 x=0; x < width; x++){
-                        currentPos = (x*targetW+y) * m_dev -> depth();
-                        for(int channel = 0; channel < m_dev -> depth(); channel++){
-                                newData[currentPos + channel]=tempRow[(width-x-1)*m_dev -> depth()+channel];
-                        }    
-                }
-        }
-        kdDebug() << "write newData to the image!" << "\n";
-        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
-        m_dev -> setTiles(tm); // Also sets width and height correctly
-#endif //AUTOLAYER
+	Q_INT32 x, y, rx, ry, rw, rh;
+	m_dev -> extent(rx, ry, rw, rh);
+	Q_INT32 pixelSize = m_dev -> pixelSize();
+	
+	x = rw;
+	for (y = ry; y < rh; ++y) {
+		KisHLineIterator hit = m_dev -> createHLineIterator(rx, y, rw, true);
+		KisVLineIterator vit = m_dev -> createVLineIterator(x, ry, rh, false);
+		while (!hit.isDone() && !vit.isDone()) {
+			memcpy(hit.rawData(), vit.oldRawData(), pixelSize);
+			++hit;
+			++vit;
+		}
+		x = x - 1;
+		qApp -> processEvents();
+	}
 }
 
 void KisRotateVisitor::rotate180()
 {
-#if 0 //AUTOLAYER
-        kdDebug() << "rotate180 called!" << "\n";
-        Q_INT32 width = m_dev->width();
-        Q_INT32 height = m_dev->height();
-        //calculate widht of the croped image
-        Q_INT32 targetW = width;
-        Q_INT32 targetH = height;
-        kdDebug() << "targetW: " << targetW << " targetH: " << targetH << "\n";
-        KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
-        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
-        QUANTUM *tempRow = new QUANTUM[width * m_dev -> depth() * sizeof(QUANTUM)];
-        Q_INT32 currentPos;
-        for(Q_INT32 y=0; y < height; y++){
-                m_dev -> tiles() -> readPixelData(0, height-y-1, width-1, height-y-1, tempRow, m_dev -> depth());
-                kdDebug() << "y: " << y << "\n";
-                for(Q_INT32 x=0; x < width; x++){
-                        currentPos = (y*targetW+width-x) * m_dev -> depth();
-                        for(int channel = 0; channel < m_dev -> depth(); channel++){
-                                newData[currentPos + channel]=tempRow[x*m_dev -> depth()+channel];
-                        }    
-                }
-        }
-        kdDebug() << "write newData to the image!" << "\n";
-        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
-        m_dev -> setTiles(tm); // Also sets width and height correctly
-#endif //AUTOLAYER
+	rotateLeft90();
+	rotateLeft90();
 }

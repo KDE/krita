@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaexample" version="6">
+<MenuBar>
+    <Menu name="Effects"><text>Effects</text>
+	<Seperator/>
+	<Action name="krita_example"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

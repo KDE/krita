@@ -410,7 +410,7 @@ KoColor KisImage::transformColor() const
 	return KoColor();
 }
 
-KisTileMgrSP KisImage::shadow()
+KisTileMgrSP KisImage::shadow() const
 {
 	return m_shadow;
 }
@@ -541,7 +541,7 @@ KisLayerSP KisImage::activateLayer(Q_INT32 n)
 	return activate(m_layers[n]);
 }
 
-Q_INT32 KisImage::index(KisLayerSP layer)
+Q_INT32 KisImage::index(const KisLayerSP &layer)
 {
 	for (Q_UINT32 i = 0; i < m_layers.size(); i++) {
 		if (m_layers[i] == layer)
@@ -1163,7 +1163,7 @@ void KisImage::notify(const QRect& rc)
 		}
 	}
 
- 
+
 }
 
 QRect KisImage::bounds() const
@@ -1186,7 +1186,7 @@ KisTileMgrSP KisImage::tiles() const
 	return m_projection -> data();
 }
 
-void KisImage::slotUpdateDisplay() 
+void KisImage::slotUpdateDisplay()
 {
 	if (m_dirtyRect.isValid()) {
 		m_displayMutex.lock();
@@ -1199,7 +1199,7 @@ void KisImage::slotUpdateDisplay()
 	}
 }
 
-void KisImage::startUpdateTimer() 
+void KisImage::startUpdateTimer()
 {
 	if (DISPLAY_TIMER) {
 		m_updateTimer = new QTimer(this);

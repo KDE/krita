@@ -88,7 +88,7 @@ public:
 	KisChannelSP mask();
 	KoColor color() const;
 	KoColor transformColor() const;
-	KisTileMgrSP shadow();
+	KisTileMgrSP shadow() const;
 
 	void activeComponent(CHANNELTYPE type, bool active);
 	bool activeComponent(CHANNELTYPE type);
@@ -109,7 +109,7 @@ public:
 	const KisLayerSP activeLayer() const;
 	KisLayerSP activate(KisLayerSP layer);
 	KisLayerSP activateLayer(Q_INT32 n);
-	Q_INT32 index(KisLayerSP layer);
+	Q_INT32 index(const KisLayerSP &layer);
 	KisLayerSP layer(const QString& name);
 	KisLayerSP layer(Q_UINT32 npos);
 	bool add(KisLayerSP layer, Q_INT32 position);

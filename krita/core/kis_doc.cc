@@ -814,6 +814,9 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 
 void KisDoc::addImage(KisImageSP img)
 {
+	if (contains(img))
+		return;
+
 	m_images.push_back(img);
 
 	if (m_undo)

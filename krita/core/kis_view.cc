@@ -670,25 +670,6 @@ void KisView::updateCanvas(const QRect& rc)
 
 	ur.setX(ur.x() - static_cast<Q_INT32>(horzValue() * zoom()));
 	ur.setY(ur.y() - static_cast<Q_INT32>(vertValue() * zoom()));
-
-#if 0
-	if (zoom() > 1.0 || zoom() < 1.0) {
-		Q_INT32 urL = ur.left();
-		Q_INT32 urT = ur.top();
-		Q_INT32 urW = ur.width();
-		Q_INT32 urH = ur.height();
-
-		urL = static_cast<int>(static_cast<double>(urL) / zoom());
-		urT = static_cast<int>(static_cast<double>(urT) / zoom());
-		urW = static_cast<int>(static_cast<double>(urW) / zoom());
-		urH = static_cast<int>(static_cast<double>(urH) / zoom());
-		ur.setLeft(urL);
-		ur.setTop(urT);
-		ur.setWidth(urW);
-		ur.setHeight(urH);
-	}
-#endif
-
 	paintView(ur);
 }
 
@@ -957,8 +938,29 @@ void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 	m_vRuler -> setShowMediumMarks(zf > 0.2);
 
 	if (x < 0 || y < 0) {
+		QRect ur(0, 0, m_canvas -> width(), m_canvas -> height());
+
 		resizeEvent(0);
-		updateCanvas();
+		ur.setX(ur.x() - static_cast<Q_INT32>(horzValue() * zoom()));
+		ur.setY(ur.y() - static_cast<Q_INT32>(vertValue() * zoom()));
+
+		if (zoom() > 1.0 || zoom() < 1.0) {
+			Q_INT32 urL = ur.left();
+			Q_INT32 urT = ur.top();
+			Q_INT32 urW = ur.width();
+			Q_INT32 urH = ur.height();
+
+			urL = static_cast<int>(static_cast<double>(urL) / zoom());
+			urT = static_cast<int>(static_cast<double>(urT) / zoom());
+			urW = static_cast<int>(static_cast<double>(urW) / zoom());
+			urH = static_cast<int>(static_cast<double>(urH) / zoom());
+			ur.setLeft(urL);
+			ur.setTop(urT);
+			ur.setWidth(urW);
+			ur.setHeight(urH);
+		}
+
+		updateCanvas(ur);
 	} else {
 		x = static_cast<Q_INT32>(x * zf - width() / 2);
 		y = static_cast<Q_INT32>(y * zf - height() / 2);
@@ -1265,12 +1267,10 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 
 			layer -> setImage(current);
 			layer -> setName(current -> nextLayerName());
-			current -> add(layer, -1);
-			current -> top(layer);
+			m_doc -> layerAdd(current, layer, 0);
 			m_layerBox -> setCurrentItem(img -> index(layer));
 		}
 
-		layersUpdated();
 		current -> invalidate();
 		resizeEvent(0);
 		updateCanvas();
@@ -1727,8 +1727,8 @@ void KisView::layerToggleVisible()
 			img -> invalidate();
 			m_doc -> setModified(true);
 			resizeEvent(0);
-			updateCanvas();
 			layersUpdated();
+			canvasRefresh();
 		}
 	}
 }
@@ -2012,7 +2012,7 @@ void KisView::setupCanvas()
 void KisView::projectionUpdated(KisImageSP img)
 {
 	if (img == currentImg())
-		updateCanvas();
+		canvasRefresh();
 }
 
 bool KisView::selectColor(KoColor& result)
@@ -2109,8 +2109,13 @@ void KisView::clipboardDataChanged()
 
 void KisView::imgUpdated(KisImageSP img, const QRect& rc)
 {
-	if (img == currentImg())
-		updateCanvas(rc);
+	if (img == currentImg()) {
+		QRect ur = rc;
+
+		ur.setX(ur.x() - static_cast<Q_INT32>(horzValue() * zoom()));
+		ur.setY(ur.y() - static_cast<Q_INT32>(vertValue() * zoom()));
+		updateCanvas(ur);
+	}
 }
 
 void KisView::layerResize()
@@ -2215,10 +2220,13 @@ QRect KisView::windowToView(const QRect& rc)
 {
 	QRect r;
 
-	r.setX(static_cast<Q_INT32>(rc.x() * zoom()) - horzValue());
-	r.setY(static_cast<Q_INT32>(rc.y() * zoom()) - vertValue());
-	r.setWidth(static_cast<Q_INT32>(rc.width() * zoom()));
-	r.setHeight(static_cast<Q_INT32>(rc.height() * zoom()));
+	if (zoom() > 1.0 || zoom() < 1.0) {
+		r.setX(static_cast<Q_INT32>(rc.x() * zoom()) - horzValue());
+		r.setY(static_cast<Q_INT32>(rc.y() * zoom()) - vertValue());
+		r.setWidth(static_cast<Q_INT32>(rc.width() * zoom()));
+		r.setHeight(static_cast<Q_INT32>(rc.height() * zoom()));
+	}
+
 	return r;
 }
 

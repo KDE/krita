@@ -234,12 +234,10 @@ QImage KisTile::convertToImage()
 	// TODO : all image formats.  Only RGB/RGBA is supported
 	// TODO : here.
 	for (Q_INT32 j = 0; j < height(); j++) {
-		for (Q_INT32 i = 0; i < width(); i++) {
-			Q_UINT8 red = downscale(pixel[PIXEL_RED]);
-			Q_UINT8 green = downscale(pixel[PIXEL_GREEN]);
-			Q_UINT8 blue = downscale(pixel[PIXEL_BLUE]);
+		QRgb *dst = reinterpret_cast<QRgb*>(m_img.scanLine(j));
 
-			m_img.setPixel(i, j, qRgb(red, green, blue));
+		for (Q_INT32 i = 0; i < width(); i++) {
+			*dst++ = qRgb(downscale(pixel[PIXEL_RED]), downscale(pixel[PIXEL_GREEN]), downscale(pixel[PIXEL_BLUE]));
 			pixel += depth();
 		}
 	}

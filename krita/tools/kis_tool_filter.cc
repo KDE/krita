@@ -20,11 +20,16 @@
 
 #include <qbitmap.h>
 #include <qpainter.h>
+#include <qcombobox.h>
+#include <qlayout.h>
+#include <qlabel.h>
 
 #include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "kis_filter.h"
+#include "kis_filter_configuration_widget.h"
 #include "kis_filter_registry.h"
 #include "kis_brush.h"
 #include "kis_view.h"
@@ -40,7 +45,7 @@
 #include "kis_filterop.h"
 
 KisToolFilter::KisToolFilter(KisView* view) 
-	: super(i18n("Filter tool")), m_view(view)
+	: super(i18n("Filter tool")), m_view(view), m_filterConfigurationWidget(0)
 {
 	setName("tool_filter");
 	m_subject = 0;
@@ -69,7 +74,56 @@ void KisToolFilter::initPaint(KisEvent *e)
 {
 	super::initPaint(e);
 
-	KisPaintOp * op = new KisFilterOp(painter());
+	KisFilterOp* op = new KisFilterOp(painter());
 	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
-	painter()->setFilter( m_view->filterRegistry()->get( "Invert" ) ); // XXX: put this in config widget
+	painter() -> setFilter( m_filter );
+	op -> setFilterConfiguration( m_filter -> configuration( m_filterConfigurationWidget ) );
 }
+
+QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
+{
+	m_optWidget = new QWidget(parent);
+	m_optWidget -> setCaption(i18n("Filter"));
+	QWidget* optionFreeHandWidget = KisToolFreeHand::createOptionWidget(m_optWidget);
+	m_cbFilter = new QComboBox(m_optWidget);
+	QLabel* lbFilter = new QLabel(i18n("Filter : "), m_optWidget);
+
+	m_cbFilter ->insertStringList(m_view->filterRegistry()->listKeys() );
+	
+	m_optionLayout = new QGridLayout(m_optWidget, 3, 2);
+
+	m_optionLayout -> addMultiCellWidget(optionFreeHandWidget, 0, 0, 0 , 1 );
+ 	m_optionLayout -> addWidget(lbFilter, 1, 0);
+ 	m_optionLayout -> addWidget(m_cbFilter, 1, 1);
+
+	connect(m_cbFilter, SIGNAL(activated ( const QString& )), this, SLOT( changeFilter( const QString& ) ) );
+	changeFilter( m_cbFilter->currentText () );
+	
+	return m_optWidget;
+}
+
+QWidget* KisToolFilter::optionWidget()
+{
+	return m_optWidget;
+}
+
+void KisToolFilter::changeFilter( const QString & string )
+{
+	kdDebug() << "KisToolFilter::changeFilter : change to " << string << endl;
+	m_filter = m_view -> filterRegistry() -> get( string );
+	Q_ASSERT(m_filter != 0);
+	if( m_filterConfigurationWidget != 0 )
+	{
+		m_optionLayout -> remove ( m_filterConfigurationWidget );
+		delete m_filterConfigurationWidget;
+	}
+	m_filterConfigurationWidget = m_filter -> createConfigurationWidget( m_optWidget );
+	kdDebug() << "KisToolFilter::changeFilter m_filterConfigurationWidget = " << m_filterConfigurationWidget << endl;
+	if( m_filterConfigurationWidget != 0 )
+	{
+		kdDebug() << "KisToolFilter::changeFilter add to layout manager" << endl;
+		m_optionLayout -> addMultiCellWidget ( m_filterConfigurationWidget, 2, 2, 0, 1 );
+	}
+}
+
+#include "kis_tool_filter.moc"

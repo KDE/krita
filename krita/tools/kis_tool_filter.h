@@ -24,12 +24,15 @@
 #include "kis_tool.h"
 #include "kis_tool_freehand.h"
 
+class QComboBox;
+class QGridLayout;
 class KisEvent;
+class KisFilterConfigurationWidget;
 class KisButtonPressEvent;
 class KisView;
 
 class KisToolFilter : public KisToolFreeHand {
-
+	Q_OBJECT
 	typedef KisToolFreeHand super;
 
 public:
@@ -37,11 +40,22 @@ public:
 	virtual ~KisToolFilter();
   
 	virtual void setup(KActionCollection *collection);
+	virtual QWidget* createOptionWidget(QWidget* parent);
+	virtual QWidget* optionWidget();
+
+public slots:
+	void changeFilter( const QString & string );
 
 protected:
 	virtual void initPaint(KisEvent *e);
+
 private:
 	KisView* m_view;
+	KisFilterSP m_filter;
+	KisFilterConfigurationWidget* m_filterConfigurationWidget;
+	QGridLayout* m_optionLayout;
+	QWidget* m_optWidget;
+	QComboBox* m_cbFilter;
 };
 
 #endif //__KIS_TOOL_FILTER_H__

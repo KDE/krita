@@ -21,6 +21,7 @@
 #ifndef KIS_TOOL_FREEHAND_H_
 #define KIS_TOOL_FREEHAND_H_
 
+#include "kis_types.h"
 #include "kis_tool_paint.h"
 
 class QWidget;

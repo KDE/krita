@@ -29,8 +29,6 @@
 #include "kis_resourceserver.h"
 #include "kis_doc.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkritapart, KisFactory )
-
 KAboutData* KisFactory::s_aboutData = 0;
 KInstance* KisFactory::s_global = 0;
 KisResourceServer* KisFactory::s_rserver = 0;

@@ -33,3 +33,4 @@ dummy.cc:
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc */*.cc core/kis_aboutdata.h -o $(podir)/krita.pot
+kde_services_DATA = kritapart.desktop

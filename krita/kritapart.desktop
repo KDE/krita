@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KOffice Image Manipulation Component
+X-KDE-Library=libkritapart
+MimeType=application/x-krita
+Type=Service
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-NativeMimeType=application/x-krita

@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,30 +33,44 @@ class KisDoc;
 class KisPainter;
 class KisView;
 
-class KisToolEllipse : public KisToolRectangle {
+class KisToolEllipse : public KisToolPaint {
 
-	typedef KisToolRectangle super;
+	typedef KisToolPaint super;
 	Q_OBJECT
 
 public:
 	KisToolEllipse();
 	virtual ~KisToolEllipse();
 
-	virtual QString settingsName() const;
+        //
+        // KisCanvasObserver interface
+        //
+
+        virtual void update (KisCanvasSubject *subject);
+
+        //
+        // KisToolPaint interface
+        //
 
 	virtual void setup(KActionCollection *collection);
 
+	virtual void mousePress(QMouseEvent *event);
+	virtual void mouseMove(QMouseEvent *event);
+	virtual void mouseRelease(QMouseEvent *event);
+
 protected:
 	virtual void draw(const QPoint& start, const QPoint& stop);
-	virtual void draw(KisPainter *gc, const QRect& rc);
+	//virtual void draw(KisPainter *gc, const QRect& rc);
 
 protected:
-	KisCanvasSubject * m_subject;
-
 	int m_lineThickness;
-	QPoint  m_dragStart;
-	QPoint  m_dragEnd;
-	bool    m_dragging;
+
+	QPoint m_dragStart;
+	QPoint m_dragEnd;
+	QRect m_final_lines;
+
+	bool m_dragging;
+	KisImageSP m_currentImage;
 };
 
 #endif //__KIS_TOOL_ELLIPSE_H__

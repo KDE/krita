@@ -4,6 +4,7 @@
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,15 +35,13 @@
 #include "kis_tool_ellipse.h"
 #include "kis_dlg_toolopts.h"
 
-KisToolEllipse::KisToolEllipse() :
-     super()
+KisToolEllipse::KisToolEllipse()
+        : super(),
+          m_dragging (false),
+          m_currentImage (0)
 {
-	m_subject = 0;
-	
-	m_dragging = false;
-
 	// initialize ellipse tool settings
-	m_lineThickness = 4;
+//	m_lineThickness = 4;
 // 	m_opacity = 255;
 // 	m_usePattern = false;
 // 	m_useGradient = false;
@@ -53,47 +52,102 @@ KisToolEllipse::~KisToolEllipse()
 {
 }
 
-void KisToolEllipse::draw(const QPoint& start, const QPoint& end)
+void KisToolEllipse::update (KisCanvasSubject *subject)
 {
-// 	KisView *view = getCurrentView();
-// 	QPainter p;
-// 	QPen pen;
-
-// 	pen.setWidth(m_lineThickness);
-// 	p.begin(m_canvas);
-// 	p.setPen(pen);
-// 	p.setRasterOp(Qt::NotROP);
-// 	float zF = view -> zoomFactor();
-
-// 	p.drawEllipse( 
-// 			QRect(start.x() + view->xPaintOffset() - (int)(zF * view->xScrollOffset()),
-// 				start.y() + view->yPaintOffset() - (int)(zF * view->yScrollOffset()), 
-// 				end.x() - start.x(), 
-// 				end.y() - start.y()));
-// 	p.end();
+        kdDebug (40001) << "KisToolEllipse::update(" << subject << ")" << endl;
+        super::update (subject);
+        if (m_subject)
+            m_currentImage = m_subject->currentImg ();
 }
 
-void KisToolEllipse::draw(KisPainter *gc, const QRect& rc)
+void KisToolEllipse::mousePress(QMouseEvent *event)
 {
-// 	gc -> drawEllipse(rc);
+        kdDebug (40001) << "KisToolEllipse::mousePress" << event->pos () << endl;
+	if (event -> button() == LeftButton) {
+		m_dragging = true;
+		m_dragStart = event -> pos();
+		m_dragEnd = event -> pos();
+	}
+}
+
+void KisToolEllipse::mouseMove(QMouseEvent *event)
+{
+        kdDebug (40001) << "KisToolEllipse::mouseMove" << event->pos () << endl;
+	if (m_dragging) {
+		// erase old lines on canvas
+		draw(m_dragStart, m_dragEnd);
+		// get current mouse position
+		m_dragEnd = event -> pos();
+		// draw new lines on canvas
+		draw(m_dragStart, m_dragEnd);
+	}
+}
+
+void KisToolEllipse::mouseRelease(QMouseEvent *event)
+{
+        if (!m_subject)
+            return;
+
+	if (m_dragging && event -> button() == LeftButton) {
+		// erase old lines on canvas
+		draw(m_dragStart, m_dragEnd);
+		m_dragging = false;
+
+                m_dragEnd = event->pos ();
+                if (m_dragStart == m_dragEnd)
+                        return;
+
+                if (!m_currentImage)
+                        return;
+
+                KisPaintDeviceSP device = m_currentImage->activeDevice ();;
+                KisPainter painter (device);
+                painter.beginTransaction (i18n ("ellipse"));
+
+                painter.setPaintColor(m_subject -> fgColor());
+                painter.setBrush(m_subject -> currentBrush());
+                //painter.setOpacity(m_opacity);
+                //painter.setCompositeOp(m_compositeOp);
+
+                painter.paintEllipse(PAINTOP_BRUSH, m_dragStart, m_dragEnd, PRESSURE_DEFAULT);
+                m_currentImage -> notify( painter.dirtyRect() );
+
+                KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+                if (adapter) {
+                        adapter -> addCommand(painter.endTransaction());
+                }
+        }
+}
+
+void KisToolEllipse::draw(const QPoint& start, const QPoint& end )
+{
+        if (!m_subject)
+            return;
+
+        KisCanvasControllerInterface *controller = m_subject->canvasController ();
+        kdDebug (40001) << "KisToolEllipse::draw(" << start << "," << end << ")"
+                        << " windowToView: start=" << controller->windowToView (start)
+                        << " windowToView: end=" << controller->windowToView (end)
+                        << endl;
+        QWidget *canvas = controller->canvas ();
+        QPainter p (canvas);
+
+        p.setRasterOp (Qt::NotROP);
+        p.drawEllipse (QRect (controller->windowToView (start), controller->windowToView (end)));
+        p.end ();
 }
 
 void KisToolEllipse::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Ellipse Tool"), 
-						  "ellipse", 
-						  0, 
-						  this, 
-						  SLOT(activate()), 
-						  collection, 
+	KToggleAction *toggle = new KToggleAction(i18n("&Ellipse Tool"),
+						  "ellipse",
+						  0,
+						  this,
+						  SLOT(activate()),
+						  collection,
 						  "tool_ellipse");
 
 	toggle -> setExclusiveGroup("tools");
-}
-
-QString KisToolEllipse::settingsName() const
-{
-	return "ellipseTool";
 }
 
 #include "kis_tool_ellipse.moc"

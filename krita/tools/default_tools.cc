@@ -88,6 +88,7 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
 		KisToolRegistry * r = KisToolRegistry::singleton();
 
 		r -> add(new KisToolFillFactory());
+		r -> add(new KisToolGradientFactory());
 		r -> add(new KisToolPenFactory());
 		r -> add(new KisToolSelectFreehandFactory());
 		r -> add(new KisToolAirbrushFactory());

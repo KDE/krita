@@ -1020,6 +1020,18 @@ bool KisDoc::contains(KisImageSP img) const
 KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorstrategy)
 {
 	KisImageSP img = new KisImage(this, width, height, colorstrategy, name);
+
+	KisLayerSP layer = new KisLayer(img, width, height, img -> nextLayerName(), OPACITY_OPAQUE);
+
+	KisFillPainter painter;
+
+	painter.begin(layer.data());
+	painter.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::white(), OPACITY_OPAQUE);
+	painter.end();
+
+	img -> add(layer, -1);
+
+	addImage(img);
 	return img;
 }
 

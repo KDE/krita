@@ -102,10 +102,13 @@ public:
 	void setRedoLimit(Q_INT32 limit);
 
 	/**
-	 * Create a new image that has this document as a parent, but the image is not added
-	 * to this document's set of images. Call addImage for that.
+	 * Create a new image that has this document as a parent and
+	 * add it to the current document.
+	 *
+	 * The image has one layer as big as the image.
 	 */
 	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorstrategy);
+
 	void addImage(KisImageSP img);
 	void removeImage(KisImageSP img);
 	void removeImage(const QString& name);

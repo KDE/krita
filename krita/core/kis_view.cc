@@ -2363,7 +2363,9 @@ void KisView::selectImage(const QString& name)
         m_current = m_doc -> findImage(name);
         connectCurrentImg();
         layersUpdated();
-        m_selectionManager -> updateGUI(m_current && m_current -> activeLayer() -> selection());
+	kdDebug() << "Image: " << m_current -> name() << " layer: " << m_current -> activeLayer() << "\n";
+	// XXX: was m_current && m_current -> activeLayer() -> selection()
+        m_selectionManager -> updateGUI(true);
         resizeEvent(0);
         updateCanvas();
         notify();
@@ -2380,8 +2382,8 @@ void KisView::selectImage(KisImageSP img)
 
         if (m_tabBar)
                 updateTabBar();
-
-        m_selectionManager -> updateGUI(m_current && m_current -> activeLayer() -> selection());
+	// XXX: was m_current && m_current -> activeLayer() -> selection()
+        m_selectionManager -> updateGUI(true);
 }
 
 void KisView::scrollH(int value)
@@ -2921,11 +2923,18 @@ void KisView::notify()
 
 KisImageSP KisView::currentImg() const
 {
-        if (m_current && m_doc -> contains(m_current))
+        if (m_current && m_doc -> contains(m_current)) {
                 return m_current;
+	}
+
+	if (m_doc -> nimages() < 1) {
+		return 0;
+	}
 
         m_current = m_doc -> imageNum(m_doc -> nimages() - 1);
+
         connectCurrentImg();
+
         return m_current;
 }
 

@@ -55,7 +55,11 @@
 #include <kis_iterators_quantum.h>
 #include <kis_selection.h>
 #include <kis_colorspace_registry.h>
+#include <kis_painter.h>
+#include <kis_fill_painter.h>
+
 #include "perftest.h"
+
 #include "dlg_perftest.h"
 
 typedef KGenericFactory<PerfTest> PerfTestFactory;
@@ -145,16 +149,29 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
 
 	KisDoc * doc = m_view -> getDocument();
 	QStringList l = KisColorSpaceRegistry::singleton() -> listColorSpaceNames();
+
+
+
 	for (QStringList::Iterator it = l.begin(); it != l.end(); ++it) {
 		report = report.append( "  Testing blitting on " + *it + "\n");
- 		KisImage * img = doc -> newImage("blit-test", 1000, 1000, KisColorSpaceRegistry::singleton() -> get(*it));
+
+ 		KisImage * img = doc -> newImage("blt-" + *it, 1000, 1000, KisColorSpaceRegistry::singleton() -> get(*it));
 		doc -> addImage(img);
+
+		KisLayerSP small = new KisLayer(TILE_WIDTH / 2, TILE_HEIGHT /2, 
+						KisColorSpaceRegistry::singleton() -> get(*it),
+						"small blit");
+		KisFillPainter p(small.data()) ;
+		p.fillRect(0, 0, TILE_WIDTH/2, TILE_HEIGHT/2, KoColor::black());
+
 		QTime t;
-		t.start();
+		t.restart();
 		for (Q_UINT32 i = 0; i < testCount; ++i) {
-			
+			KisPainter p(img -> activeLayer().data());
+			p.bitBlt(0, 0, COMPOSITE_OVER, small.data());
 		}
 		report = report.append(QString("   %1 opaquae blits of rectangles < tilesize : %2ms\n").arg(testCount).arg(t.elapsed()));
+
 	}
 
 	return report;

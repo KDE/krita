@@ -221,7 +221,7 @@ void KisSelectionManager::updateGUI(bool enable)
 {
         KisImageSP img = m_parent -> currentImg();
 
-        enable = enable && img && img -> activeLayer() -> hasSelection(); // XXX: don't see the idea behind this: && img -> activeSelection() -> parent();
+        enable = enable && img && img -> activeLayer() && img -> activeLayer() -> hasSelection();
 
 	m_copy -> setEnabled(enable);
 	m_cut -> setEnabled(enable);

@@ -5,7 +5,7 @@
 	<Seperator/>
 	<Action name="brightnesscontrast"/>
 	<Action name="gammacorrection"/>
-	<Action name="coloradjustement"/>
+	<Action name="coloradjustment"/>
     </Menu>
 </MenuBar>
 </kpartgui>

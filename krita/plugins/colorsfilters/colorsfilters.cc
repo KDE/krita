@@ -64,7 +64,7 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 
 		(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, this, SLOT(slotBrightnessContrastActivated()), actionCollection(), "brightnesscontrast");
 		(void) new KAction(i18n("&Gamma correction..."), 0, 0, this, SLOT(slotGammaActivated()), actionCollection(), "gammacorrection");
-		(void) new KAction(i18n("&Color adjustement..."), 0, 0, this, SLOT(slotColorActivated()), actionCollection(), "coloradjustement");
+		(void) new KAction(i18n("&Color adjustment..."), 0, 0, this, SLOT(slotColorActivated()), actionCollection(), "coloradjustment");
 		if ( !parent->inherits("KisView") )
 		{
 				m_view = 0;
@@ -90,12 +90,12 @@ void ColorsFilters::slotColorActivated()
 	if( kD->imageNum(0) == 0 )
 		return;
 	KisLayerSP lay = kD->imageNum(0)->activeLayer();
-	KisTileCommand* ktc = new KisTileCommand("Color adjustement", (KisPaintDeviceSP)lay ); // Create a command
+	KisTileCommand* ktc = new KisTileCommand("Color adjustment", (KisPaintDeviceSP)lay ); // Create a command
 	KisTileMgrSP ktm = lay->data();
 	KisTileSP tile;
 	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB)
 	{
-		FormRGBSliders* frsd = new FormRGBSliders( this->m_view, "Color adjustement", TRUE);
+		FormRGBSliders* frsd = new FormRGBSliders( this->m_view, "Color adjustment", TRUE);
 		frsd->setMinValue(-255);
 		frsd->setMaxValue(255);
 		frsd->setPrecision(1);
@@ -130,7 +130,7 @@ void ColorsFilters::slotColorActivated()
 		kD->imageNum(0)->undoAdapter()->addCommand( ktc );
 		kD->imageNum(0)->notify();
 	} else if( lay->typeWithoutAlpha() == IMAGE_TYPE_CMYK) {
-		FormCMYBSliders* frsd = new FormCMYBSliders( this->m_view, "Color adjustement", TRUE);
+		FormCMYBSliders* frsd = new FormCMYBSliders( this->m_view, "Color adjustment", TRUE);
 		frsd->setMinValue(-255);
 		frsd->setMaxValue(255);
 		frsd->setPrecision(1);

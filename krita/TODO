@@ -11,7 +11,8 @@ The following feature list aims to give us an idea of what
 we want to have in the 1.0 release:
 
 - color modes: Indexed, Greyscale, RGB and RGBA.
-- layers/channels
+- layers
+- channels (RGB, CMYK, HSB, etc...)
 - layer masks
 - plugin filter API
 - plugin tool API
@@ -38,6 +39,8 @@ we want to have in the 1.0 release:
 - Rotate layouts
 - Saves channel information to file
 - Undo/Redo
+- preview in pixel
+- Canvas size should be independent of image size
 
 BUGS
 
@@ -58,5 +61,5 @@ TASKS
 - Restore undo command
 - Restore load/save (plus use ImageMagick to get xcf and pdp support)
 - Brush should not be grayscale
-- KisPixelRegion should not inherit for ImageMagick Type
+- KisPixelRegion should not inherit from ImageMagick Type
 

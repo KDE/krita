@@ -21,6 +21,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <Magick++.h>
+
 #include <qdom.h>
 #include <qimage.h>
 #include <qpainter.h>
@@ -47,6 +49,7 @@
 #include "kis_framebuffer.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_pixel_packet.h"
 #include "kis_selection.h"
 #include "kis_undo.h"
 #include "kis_view.h"
@@ -930,17 +933,36 @@ bool KisDoc::saveAsQtImage(const QString& file, bool wholeImage)
 	return qimg.save(file, KImageIO::type(file).ascii());
 }
 
+bool KisDoc::MagickImageToLayer(const Magick::Image& mimg, KisView * /*view*/)
+{
+	KisImageSP img = currentImg();
+	QImage cI;
+	KisLayerSP lay = img -> getCurrentLayer();
+	QRect clipRect(0, 0, mimg.columns(), mimg.rows());
+
+	if (!clipRect.intersects(lay -> imageExtents()))
+		return false;
+
+	clipRect = clipRect.intersect(lay -> imageExtents());
+
+	int sx = clipRect.left();
+	int sy = clipRect.top();
+	int ex = clipRect.right();
+	int ey = clipRect.bottom();
+	KisPixelPacket *dst = lay -> getPixels(sx, sy, ex, ey);
+	const Magick::PixelPacket *src = mimg.getConstPixels(sx, sy, ex, ey);
+
+	memcpy(dst, src, ey * ex * sizeof(KisPixelPacket));
+	lay -> syncPixels(dst);
+	return true;
+}
 
 /*
-    Copy a QImage exactly into the currentImg image's active layer,
-    pixel by pixel using scanlines,  fully 32 bit even if the alpha
-    channel isn't used.
+    Copy a QImage exactly into the currentImg image's active layer.
 */
 
 bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 {
-	return false;
-#if 0
 	KisImageSP img = currentImg();
 	QImage cI;
 
@@ -952,21 +974,7 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 	if (!lay)
 		return false;
 
-	if (qimg -> depth() < 16) {
-		cI = qimg -> smoothScale(qimg -> width(), qimg -> height());
-		qimg = &cI;
-	}
-
-	if (qimg -> depth() < 32) {
-		kdDebug() << "qimg depth is less than 32" << endl;
-		kdDebug() << "qimg depth is: " << qimg -> depth() << endl;
-		qimg -> convertDepth(32);
-	}
-
 	qimg -> setAlphaBuffer(true);
-
-//	bool layerGrayScale = false;
-//	bool qimageGrayScale = false;
 
 	int startx = 0;
 	int starty = 0;
@@ -976,75 +984,23 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 	if (!clipRect.intersects(lay -> imageExtents()))
 		return false;
 
-	clipRect = clipRect.intersect(lay->imageExtents());
+	clipRect = clipRect.intersect(lay -> imageExtents());
 
 	int sx = clipRect.left() - startx;
 	int sy = clipRect.top() - starty;
 	int ex = clipRect.right() - startx;
 	int ey = clipRect.bottom() - starty;
+	KisPixelPacket *region = lay -> getPixels(sx, sy, ex, ey);
+	QRgb rgba;
 
-	uchar *sl;
-//	uchar r;
-
-//	bool alpha = (img->colorMode() == cm_RGBA);
-
-	lay -> resize(qimg -> width(), qimg -> height(), 4);
-
-	for (int y = sy; y <= ey; y++) {
-		sl = qimg -> scanLine(y);
-
+	for (int y = sy; y <= ey; y++)
 		for (int x = sx; x <= ex; x++) {
-			QRgb *p = (QRgb*)qimg -> scanLine(y) + x;
-
-#if 0
-			if (layerGrayScale) {
-				/* only if qimage is gray scale - in which case all
-				   values are packed into the red channel if converted
-				   to 32 bit already - can test above there should be no
-				   8 or 16 bit QImages in Krayon */
-				if (qimageGrayScale)
-					r = *(sl + x);
-
-				/* rgb qimage, but we are in grayscale mode
-				   average rgb values to convert to 32 bit
-				   gray scale - actually only shows 256 shades
-				   of gray because all channels are same value */
-				else {
-					r = (qRed(*p) + qGreen(*p) + qBlue(*p)) / 3;
-				}
-
-				lay -> setPixel(startx + x, starty + y, qRgb(r, r, r));
-			}
-			else
-				lay -> setPixel(startx + x, starty + y, *p);
-#endif
-
-			uchar color[MAX_CHANNELS];
-
-			color[PIXEL_RED] = qRed(*p);
-			color[PIXEL_GREEN] = qGreen(*p);
-			color[PIXEL_BLUE] = qBlue(*p);
-			color[PIXEL_ALPHA] = qAlpha(*p);
-
-			lay -> setPixel(startx + x, starty + y, color);
-
-#if 0
-			if (alpha)
-			{
-				/* We need to get alpha value from qimg and this
-				   will not work with 16 bit images correctly, but we
-				   have already converted to 32 bit above */
-
-				a = qAlpha(*p);
-				lay -> setPixel(startx + x, starty + y, a);
-			}
-#endif
-//			lay -> setPixel(startx + x, starty + y, *p);
+			rgba = qimg -> pixel(x, y);
+			*(region + (y - sy) * ex + (x - sx)) = rgba;
 		}
-	}
 
+	lay -> syncPixels(region);
 	return true;
-#endif
 }
 
 
@@ -1274,13 +1230,13 @@ bool KisDoc::slotNewImage()
 
 	// XXX background color
 	if (bg == bm_White)
-		img->addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
+		img -> addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
 	else if (bg == bm_Transparent)
-		img->addLayer(QRect(0, 0, w, h), KoColor::white(), true, i18n("background"));
+		img -> addLayer(QRect(0, 0, w, h), KoColor::white(), true, i18n("background"));
 	else if (bg == bm_ForegroundColor)
-		img->addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
+		img -> addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
 	else if (bg == bm_BackgroundColor)
-		img->addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
+		img -> addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
 
 	img -> markDirty(QRect(0, 0, w, h));
 	setCurrentImage(img);

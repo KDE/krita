@@ -30,7 +30,7 @@ KisTiles::KisTiles()
 {
 }
 
-KisTiles::KisTiles(uint width, uint height, uint depth, const QRgb& defaultColor)
+KisTiles::KisTiles(int width, int height, int depth, const QRgb& defaultColor)
 {
 	m_defaultColor = defaultColor;
 	init(width, height, depth);
@@ -41,7 +41,7 @@ KisTiles::~KisTiles()
 	cleanup();
 }
 
-KisTileSP KisTiles::setTile(uint x, uint y, KisTileSP tile)
+KisTileSP KisTiles::setTile(int x, int y, KisTileSP tile)
 {
 	if (!intersects(x, y))
 		return 0;
@@ -58,7 +58,7 @@ KisTileSP KisTiles::setTile(const QPoint& pt, KisTileSP tile)
 	return setTile(pt.x(), pt.y(), tile);
 }
 
-KisTileSP KisTiles::getTile(uint x, uint y)
+KisTileSP KisTiles::getTile(int x, int y)
 {
 	if (!intersects(x, y))
 		return 0;
@@ -66,8 +66,9 @@ KisTileSP KisTiles::getTile(uint x, uint y)
 	int tileNo = getTileNo(x, y);
 
 	if (!m_tiles[tileNo])
-		m_tiles[tileNo] = new KisTile(x, y, TILE_SIZE, TILE_SIZE, m_depth, m_defaultColor);
-	
+		m_tiles[tileNo] = new KisTile(x, y, false, TILE_SIZE, TILE_SIZE, m_depth, m_defaultColor);
+
+	Q_ASSERT(m_tiles[tileNo] != 0);	
 	return m_tiles[tileNo];
 }
 
@@ -76,7 +77,25 @@ KisTileSP KisTiles::getTile(const QPoint& pt)
 	return getTile(pt.x(), pt.y());
 }
 
-KisTileSP KisTiles::takeTile(uint x, uint y)
+const KisTileSP KisTiles::getTile(int x, int y) const
+{
+	if (!intersects(x, y))
+		return 0;
+
+	int tileNo = getTileNo(x, y);
+
+	if (!m_tiles[tileNo])
+		return 0;
+	
+	return m_tiles[tileNo];
+}
+
+const KisTileSP KisTiles::getTile(const QPoint& pt) const
+{
+	return getTile(pt.x(), pt.y());
+}
+
+KisTileSP KisTiles::takeTile(int x, int y)
 {
 	if (!intersects(x, y))
 		return 0;
@@ -88,7 +107,7 @@ KisTileSP KisTiles::takeTile(uint x, uint y)
 	return tile;
 }
 
-bool KisTiles::swapTile(uint x1, uint y1, uint x2, uint y2)
+bool KisTiles::swapTile(int x1, int y1, int x2, int y2)
 {
 	if (!intersects(x1, y1) || !intersects(x2, y2))
 		return false;
@@ -100,15 +119,15 @@ bool KisTiles::swapTile(uint x1, uint y1, uint x2, uint y2)
 	return true;
 }
 
-void KisTiles::markDirty(uint x, uint y)
+void KisTiles::markDirty(int x, int y)
 {
 	if (!intersects(x, y))
 		return;
 	
-	m_tiles[getTileNo(x, y)] -> modifyImage();
+//	m_tiles[getTileNo(x, y)] -> modifyImage();
 }
 
-void KisTiles::resize(uint width, uint height, uint depth)
+void KisTiles::resize(int width, int height, int depth)
 {
 	m_tiles.resize(width * height);
 
@@ -120,7 +139,7 @@ void KisTiles::resize(uint width, uint height, uint depth)
 	m_depth = depth;
 }
 
-void KisTiles::init(uint width, uint height, uint depth)
+void KisTiles::init(int width, int height, int depth)
 {
 	m_xTiles = width;
 	m_yTiles = height;
@@ -136,28 +155,29 @@ void KisTiles::cleanup()
 	m_yTiles = 0;
 }
 
-uint KisTiles::xTiles() const
+int KisTiles::xTiles() const
 { 
 	return m_xTiles; 
 }
 
-uint KisTiles::yTiles() const 
+int KisTiles::yTiles() const 
 { 
 	return m_yTiles; 
 }
 
-uint KisTiles::depth() const
+int KisTiles::depth() const
 {
 	return m_depth;
 }
 
-uint KisTiles::getTileNo(uint x, uint y)
+int KisTiles::getTileNo(int x, int y) const
 {
 	return y * xTiles() + x;
 }
 
-bool KisTiles::intersects(uint x, uint y)
+bool KisTiles::intersects(int x, int y) const
 {
 	return !(y >= yTiles() || x >= xTiles());
 }
+
 

@@ -29,36 +29,38 @@
 class KisTiles {
 public:
 	KisTiles();
-	KisTiles(uint width, uint height, uint depth, const QRgb& defaultColor);
+	KisTiles(int width, int height, int depth, const QRgb& defaultColor);
 	~KisTiles();
 	
-	uint xTiles() const;
-	uint yTiles() const;
-	uint depth() const;
-	KisTileSP setTile(uint x, uint y, KisTileSP tile);
+	int xTiles() const;
+	int yTiles() const;
+	int depth() const;
+	KisTileSP setTile(int x, int y, KisTileSP tile);
 	KisTileSP setTile(const QPoint& pt, KisTileSP tile);
-	KisTileSP getTile(uint x, uint y);
+	KisTileSP getTile(int x, int y);
 	KisTileSP getTile(const QPoint& pt);
-	KisTileSP takeTile(uint x, uint y);
-	bool swapTile(uint x1, uint y1, uint x2, uint y2);
-	void markDirty(uint x, uint y);
-	void resize(uint width, uint height, uint depth);
-	uint getTileNo(uint x, uint y);
-	bool intersects(uint x, uint y);
+	const KisTileSP getTile(int x, int y) const;
+	const KisTileSP getTile(const QPoint& pt) const;
+	KisTileSP takeTile(int x, int y);
+	bool swapTile(int x1, int y1, int x2, int y2);
+	void markDirty(int x, int y);
+	void resize(int width, int height, int depth);
+	int getTileNo(int x, int y) const;
+	bool intersects(int x, int y) const;
 
 private:
 	KisTiles(const KisTiles&);
 	KisTiles& operator=(const KisTiles&);
 
-	void init(uint width, uint height, uint depth);
+	void init(int width, int height, int depth);
 	void cleanup();
 
 private:
 	KisTileSPLst m_tiles;
 	QRgb m_defaultColor;
-	uint m_xTiles;
-	uint m_yTiles;
-	uint m_depth;
+	int m_xTiles;
+	int m_yTiles;
+	int m_depth;
 };
 
 #endif // KIS_TILES_

@@ -64,6 +64,7 @@ void KisImageCmd::unexecute()
 
 void KisImageCmd::addTile(KisTileSP tile)
 {
+#if 0
 	if (!hasTile(tile)) {
 		KisTileSP tileCopy = new KisTile(*tile);
 
@@ -71,6 +72,7 @@ void KisImageCmd::addTile(KisTileSP tile)
 		//tile -> setCow();
 		m_tiles.push_back(tile);
 	}
+#endif
 }
 
 bool KisImageCmd::hasTile(KisTileSP tile)

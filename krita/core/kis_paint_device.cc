@@ -18,8 +18,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <string.h>
-
 #include <Magick++.h>
 
 #include <qcstring.h>
@@ -32,6 +30,7 @@
 
 #include "kis_global.h"
 #include "kis_image_cmd.h"
+#include "kis_pixel_region.h"
 #include "kis_util.h"
 #include "kis_tile.h"
 
@@ -39,7 +38,7 @@ using namespace Magick;
 
 const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(int);
     
-KisPaintDevice::KisPaintDevice(const QString& name, int width, int height, uchar depth, const QRgb& defaultColor)
+KisPaintDevice::KisPaintDevice(const QString& name, int width, int height, uchar depth, const QRgb& defaultColor, bool alpha)
 {
 	Color clr(Upscale(qRed(defaultColor)), Upscale(qGreen(defaultColor)), Upscale(qBlue(defaultColor)), TransparentOpacity - Upscale(qAlpha(defaultColor)));
 
@@ -49,9 +48,8 @@ KisPaintDevice::KisPaintDevice(const QString& name, int width, int height, uchar
 	m_tileRect = KisUtil::findTileExtents(m_imgRect);
 	m_visible = true;
 	m_opacity = CHANNEL_MAX;
-	m_tiles.resize(width / TILE_SIZE, height / TILE_SIZE, depth);
-//	m_tiles = new Image(Geometry(m_tileRect.width(), m_tileRect.height()), clr);
-//	m_tiles -> matte(true); // TODO : alpha parameter
+	m_tiles = new Image(Geometry(m_tileRect.width(), m_tileRect.height()), clr);
+	m_tiles -> matte(alpha);
 }
 
 KisPaintDevice::~KisPaintDevice()
@@ -63,7 +61,7 @@ void KisPaintDevice::resize(int width, int height, uchar depth)
 	m_imgRect.setWidth(width);
       	m_imgRect.setHeight(height);
 	m_tileRect = KisUtil::findTileExtents(m_imgRect);
-	m_tiles.resize(m_tileRect.width() / TILE_SIZE, m_tileRect.height() / TILE_SIZE, depth);
+	//m_tiles.resize(m_tileRect.width() / TILE_SIZE, m_tileRect.height() / TILE_SIZE, depth);
 }
 
 void KisPaintDevice::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
@@ -84,13 +82,6 @@ void KisPaintDevice::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y
 QRect KisPaintDevice::tileExtents() const
 {
 	return m_tileRect;
-}
-
-KisTileSP KisPaintDevice::swapTile(KisTileSP tile)
-{
-	QPoint pt = tile -> geometry().topLeft();
-
-	return m_tiles.setTile(pt.x(), pt.y(), tile);
 }
 
 bool KisPaintDevice::writeToStore(KoStore *store)
@@ -158,50 +149,31 @@ void KisPaintDevice::allocateRect(const QRect& rc, uchar depth)
 	m_imgRect = rc;
 }
 
-const KisPixelRegionSP KisPaintDevice::getConstPixels(int x, int y, int width, int height) const
+const KisPixelPacket* KisPaintDevice::getConstPixels(int x, int y, int w, int h) const
 {
-#if 0
-	Q_ASSERT(m_tiles);
-	return static_cast<const KisPixelPacket*>(m_tiles -> getConstPixels(x, y, width, height));
-#endif
 	return 0;
 }
 
-KisPixelRegionSP KisPaintDevice::getPixels(int x, int y, int w, int h)
+KisPixelPacket* KisPaintDevice::getPixels(int x, int y, int w, int h)
 {
-	QRect geometry(x, y, w, h);
-	// Do the coordinates fit in one tile?
-	// if yes...
-	// 	return a copy of that tile
-	// else
-	// 	create a KisPixelPacket with new memory
-	// 	copy tile data to new memory
-	
-	// Enumerate tiles in KisPixelPacket
-	// Place geometry in KisPixelPacket
-	// KisPixelRegionSP takes care of COW support
-#if 0
-	m_tiles -> modifyImage();
-	return static_cast<KisPixelPacket*>(m_tiles -> getPixels(x, y, width, height));
-#endif
-	return 0;
+	return static_cast<KisPixelPacket*>(m_tiles -> getPixels(x, y, w, h));
 }
 
-void KisPaintDevice::syncPixels(KisPixelRegionSP packet)
+void KisPaintDevice::syncPixels(KisPixelPacket *region)
 {
-	// Save original tiles for undo
-	// Swap in modified tiles created in getPixels
-//	m_tiles -> syncPixels();
+	m_tiles -> syncPixels();
 }
 
 int KisPaintDevice::xTiles() const
 {
-	return m_tiles.xTiles();
+//	return m_tiles.xTiles();
+	return 0;
 }
 
 int KisPaintDevice::yTiles() const
 {
-	return m_tiles.yTiles();
+	return 0;
+	//return m_tiles.yTiles();
 }
 
 uchar KisPaintDevice::depth() const
@@ -221,7 +193,14 @@ QString KisPaintDevice::name() const
 
 KisTileSP KisPaintDevice::getTile(unsigned int x, unsigned int y) 
 { 
-	return m_tiles.getTile(x, y); 
+	// TODO
+	return 0;
+}
+
+const KisTileSP KisPaintDevice::getTile(unsigned int x, unsigned int y) const
+{ 
+	// TODO
+	return 0;
 }
 
 uchar KisPaintDevice::opacity() const 

@@ -30,7 +30,6 @@
 
 #include "kis_global.h"
 #include "kis_pixel_packet.h"
-#include "kis_pixel_region.h"
 #include "kis_tiles.h"
 #include "kis_tile.h"
 
@@ -47,19 +46,20 @@ class KisPaintDevice : public QObject, public KShared {
 	typedef QObject super;
 
 public:
-	KisPaintDevice(const QString& name, int width, int height, uchar depth, const QRgb& defaultColor);
+	KisPaintDevice(const QString& name, int width, int height, uchar depth, const QRgb& defaultColor, bool alpha = true);
 	virtual ~KisPaintDevice();
 
 	void setName(const QString& name);
 	QString name() const;
 
-	const KisPixelRegionSP getConstPixels(int x, int y, int width = TILE_SIZE, int height = TILE_SIZE) const;
-	KisPixelRegionSP getPixels(int x, int y, int width = TILE_SIZE, int height = TILE_SIZE);
-	void syncPixels(KisPixelRegionSP region);
+	const KisPixelPacket* getConstPixels(int x, int y, int width = TILE_SIZE - 1, int height = TILE_SIZE - 1) const;
+	KisPixelPacket* getPixels(int x, int y, int width = TILE_SIZE - 1, int height = TILE_SIZE - 1);
+	void syncPixels(KisPixelPacket *region);
 
 	virtual void resize(int width, int height, uchar depth);
 	
 	KisTileSP getTile(unsigned int x, unsigned int y);
+	const KisTileSP getTile(unsigned int x, unsigned int y) const;
 
 	int xTiles() const;
 	int yTiles() const;
@@ -68,7 +68,6 @@ public:
 
 	void findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
 	void findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const;
-	KisTileSP swapTile(KisTileSP tile);
 
 	uchar opacity() const;
 	void setOpacity(uchar o);
@@ -87,6 +86,8 @@ public:
 	int width() const;
 	int height() const;
 
+	Magick::Image* getImage() { return m_tiles; }
+
 protected:
 	uchar m_depth;
 	uchar m_opacity;
@@ -94,7 +95,8 @@ protected:
 	QRect m_tileRect;
 	QRect m_imgRect;
 	QString m_name;
-	KisTiles m_tiles;
+	Magick::Image *m_tiles;
+//	KisTiles m_tiles;
 };
 
 #endif // KIS_PAINT_DEVICE_H_

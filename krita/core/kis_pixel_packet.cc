@@ -25,6 +25,14 @@
 
 using namespace Magick;
 
+KisPixelPacket::KisPixelPacket()
+{
+	red = 0;
+	green = 0;
+	blue = 0;
+	opacity = 0;
+}
+
 KisPixelPacket::KisPixelPacket(const QRgb& rgb)
 {
 	red = Upscale(qRed(rgb));
@@ -116,8 +124,12 @@ KisPixelPacket& KisPixelPacket::operator=(const KisPixelPacket& rhs)
 
 KisPixelPacket& KisPixelPacket::operator=(const PixelPacket& rhs)
 {
-	if (&rhs != this)
-		memcpy(this, &rhs, sizeof(KisPixelPacket));
+	if (&rhs != this) {
+		red = rhs.red;
+		green = rhs.green;
+		blue = rhs.blue;
+		opacity = rhs.opacity;
+	}
 
 	return *this;
 }

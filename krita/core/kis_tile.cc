@@ -18,9 +18,13 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <exception>
+
 #include <Magick++.h>
 
 #include <qtl.h>
+
+#include <kdebug.h>
 
 #include "kis_global.h"
 #include "kis_pixel_packet.h"
@@ -37,14 +41,8 @@ KisTile::KisTile(int x, int y, bool alpha, int width, int height, int depth, con
 	m_defaultColor = defaultColor;
 	setGeometry(x, y, width, height);
 
-	try {
-		if (qAlpha(defaultColor))
-			initTile();
-	}
-	catch (...) {
-		delete m_data;
-		throw;
-	}
+	if (qAlpha(defaultColor))
+		initTile();
 }
 
 KisTile::KisTile(const KisTile& tile) : KShared(tile)
@@ -110,8 +108,8 @@ void KisTile::syncPixels()
 
 void KisTile::modifyImage()
 {
-	if (m_data)
-		m_data -> modifyImage();
+//	if (m_data)
+//		m_data -> modifyImage();
 }
 
 void KisTile::copy(const KisTile& tile)
@@ -122,8 +120,8 @@ void KisTile::copy(const KisTile& tile)
 	m_geometry = tile.m_geometry;
 
 	if (tile.m_data) {
-		m_data = new Image(*tile.m_data);
-		m_data -> matte(m_alpha);
+		m_data = new Image();
+		*m_data = *tile.m_data;
 	}
 }
 
@@ -193,10 +191,19 @@ void KisTile::convertTileFromImage(const QImage& img)
 
 void KisTile::initTile()
 {
-	delete m_data;
-	m_data = new Image(Geometry(m_geometry.width(), m_geometry.height()));
-	m_data -> matte(m_alpha);
-	// TODO : Init with default color
+	Color c(Upscale(qRed(m_defaultColor)), 
+			Upscale(qGreen(m_defaultColor)), 
+			Upscale(qBlue(m_defaultColor)), 
+			Upscale(TransparentOpacity - qAlpha(m_defaultColor)));
+
+	try {
+		delete m_data;
+		m_data = new Image(Geometry(m_geometry.width(), m_geometry.height()), "red"); //c);
+		m_data -> matte(m_alpha);
+	} catch (std::exception& e) {
+		kdDebug() << "KisTile::initTile " << e.what() << endl;
+		throw;
+	}
 }
 
 Image* KisTile::getImage()

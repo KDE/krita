@@ -29,6 +29,7 @@ class KoColor;
 
 class KisPixelPacket : public Magick::PixelPacket {
 public:
+	KisPixelPacket();
 	KisPixelPacket(const QRgb& rgb);
 	KisPixelPacket(const QColor& clr);
 	KisPixelPacket(const KoColor& clr);

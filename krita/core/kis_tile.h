@@ -48,8 +48,6 @@ typedef Magick::CompositeOperator TileCompositeOperator;
 class KisTile : public KShared {
 public:
 	KisTile(int x, int y, bool alpha, int width = TILE_SIZE, int height = TILE_SIZE, int depth = 4, const QRgb& defaultColor = 0);
-	KisTile(const KisTile& tile);
-	KisTile& operator=(const KisTile& tile);
 	~KisTile();
 
 	const KisPixelPacket* getConstPixels(int x, int y, int width = TILE_SIZE, int height = TILE_SIZE) const;
@@ -85,6 +83,8 @@ public:
 	void composite(const KisTileSP src, const TileCompositeOperator& op);
 	
 private:
+	KisTile(const KisTile& tile);
+	KisTile& operator=(const KisTile& tile);
 	void setGeometry(int x, int y, int w, int h);
 	void setGeometry(const QRect& rc);
 	void initTile();

@@ -38,6 +38,7 @@
 #include "kis_selection.h"
 #include "kis_view.h"
 
+class Magick::Image;
 class DCOPObject;
 
 /*
@@ -142,6 +143,8 @@ public:
 	 *  save current image as Qt image (standard image formats)
 	 */
 	bool saveAsQtImage(const QString& file, bool wholeImage);
+
+	bool MagickImageToLayer(const Magick::Image& img, KisView *view);
 
 	/*
 	 *  needs to go in kis_framebuffer.cc

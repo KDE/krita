@@ -24,6 +24,9 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+// ImageMagick
+#include <Magick++.h>
+
 // Qt
 #include <qbutton.h>
 #include <qclipboard.h>
@@ -31,6 +34,7 @@
 #include <qlistbox.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
+#include <qsize.h>
 #include <qstringlist.h>
 #include <qvaluelist.h>
 
@@ -42,14 +46,16 @@
 #include <kfiledialog.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kimageeffect.h>
+#include <kio/netaccess.h>
 #include <klistview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <knotifyclient.h>
 #include <kmimetype.h>
 #include <kpushbutton.h>
 #include <kstdaction.h>
 #include <ktabctl.h>
+#include <ktempfile.h>
 #include <kruler.h>
 
 // Grmbl, X headers.....
@@ -78,6 +84,7 @@
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_pluginserver.h"
+#include "kis_magick.h"
 #include "kis_selection.h"
 #include "kis_util.h"
 #include "kis_view.h"
@@ -504,17 +511,6 @@ void KisView::slotHalt()
     zoom(0, 0, 1.0);
     slotUpdateImage();
     slotRefreshPainter();
-}
-
-/*
-    slotGimp - a copout for the weak of mind and faint
-    of heart.  Wiblur sucks, remember that!
-*/
-
-void KisView::slotGimp()
-{
-	KMessageBox::error(NULL, "Have you lost your mind?", "User Error", FALSE);
-	// save currentImg image, export to xcf, open in gimp - coming!
 }
 
 /*
@@ -1638,25 +1634,47 @@ void KisView::slotEmbeddImage(const QString &filename)
     because it can also be used for importing an image file during
     doc init.  Eventually it needs to go into koffice/filters.
 */
-int KisView::insert_layer_image(bool newImage, const QString &filename)
+int KisView::insert_layer_image(bool newImage, const QString& filename)
 {
 	KURL url(filename);
-	QImage fileImage;
+	QSize size;
+	Magick::Image img;
 
 	if(filename.isEmpty())
 		url = KFileDialog::getOpenURL(QString::null, KisUtil::readFilters(), 0, i18n("Image File for Layer"));
 
-	if (url.isEmpty())
-		return -1;
-
-	if (!fileImage.load(url.path())) {
-		KMimeType::Ptr mt = KMimeType::findByURL(url, 0, true);
-
-		kdDebug() << "Can't create QImage from file" << endl;
-		KMessageBox::error(this, i18n("Could not import file of type\n%1").arg(mt -> name()), i18n("Missing Import Filter"));
+	if (url.isEmpty()) {
+		kdDebug() << 1 << endl;
 		return -1;
 	}
 
+	if (!KIO::NetAccess::exists(url)) {
+		KMessageBox::error(this, i18n("File does not exists.\n"), i18n("Error Loading File"));
+		return -1;
+	}
+
+	if (!url.isLocalFile()) {
+		KTempFile tf;
+		QString tmpname = tf.name();
+
+		if (!KIO::NetAccess::upload(tmpname, url)) {
+			KNotifyClient::event("cannotopenfile"); 
+			return -1;
+		}
+
+		img.read(tmpname.latin1());
+	} else {
+		img.read(url.path().latin1());
+	}
+
+	img.matte(true);
+	size.setWidth(img.columns());
+	size.setHeight(img.rows());
+
+//	QImage fileImage = convertFromMagickImage(img);
+//	QSize size = fileImage.size();
+
+#if 0
 	if (fileImage.depth() == 1) {
 		kdDebug() << "No 1 bit images. " << "Where's your 2 bits worth?" << endl;
 		return -1;
@@ -1687,25 +1705,25 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 			return -1;
 		}
 	}
+#endif
 
 	// establish a rectangle the same size as the QImage loaded
 	// from file. This will be used to set the size of the new
 	// KisLayer for the picture and/or a new KisImage
 	if (newImage)
-		appendToDocImgList(fileImage, url);
+		appendToDocImgList(size, url);
 	else
-		addHasNewLayer(fileImage, url);
+		addHasNewLayer(size, url);
 
 	// copy the image into the layer regardless of whether
 	// a new image or just a new layer was created for it above.
-	if (!m_doc -> QtImageToLayer(&fileImage, this)) {
+	if (!m_doc -> MagickImageToLayer(img, this)) {
 		kdDebug(0) << "inset_layer_image: " << "Can't load image into layer." << endl;
 
 		// remove empty image
 		if(newImage)
 			remove_current_image_tab();
-	}
-	else {
+	} else {
 		slotUpdateImage();
 		slotRefreshPainter();
 	}
@@ -1724,7 +1742,7 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 
 void KisView::save_layer_image(bool mergeLayers)
 {
-	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::readFilters(), 0, i18n("Image File for Layer"));
+	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::writeFilters(), 0, i18n("Image File for Layer"));
 
 	if (!url.isEmpty()) {
 		if (mergeLayers) {
@@ -2158,9 +2176,9 @@ void KisView::print(KPrinter &printer)
     m_doc->setImage(tmp_currentImageName);
 }
 
-void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
+void KisView::appendToDocImgList(const QSize& size, const KURL& u)
 {
-	QRect layerRect(0, 0, loadedImg.width(), loadedImg.height());
+	QRect layerRect(0, 0, size.width(), size.height());
 	QString layerName(u.fileName());
 	KisImageSP newimg = m_doc -> newImage(layerName, layerRect.width(), layerRect.height());
 
@@ -2183,10 +2201,10 @@ void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
 	slotLayersUpdated();
 }
 
-void KisView::addHasNewLayer(QImage& loadedImg, KURL& u)
+void KisView::addHasNewLayer(const QSize& size, const KURL& u)
 {
 	KisImageSP img = m_doc -> currentImg();
-	QRect layerRect(0, 0, loadedImg.width(), loadedImg.height());
+	QRect layerRect(0, 0, size.width(), size.height());
 	QString layerName(u.fileName());
 	uint indx;
 

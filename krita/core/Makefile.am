@@ -4,7 +4,8 @@ INCLUDES  = -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) -I$(inter
 
 noinst_LTLIBRARIES = libkiscore.la
 
-libkiscore_la_SOURCES = kis_pixel_packet.cc kis_view.cc kis_channel.cc \
+libkiscore_la_SOURCES = kis_pixel_packet.cc \
+	kis_view.cc kis_channel.cc \
 	 kis_layer.cc kis_image.cc \
     kis_pluginserver.cc kis_resourceserver.cc \
 	kis_factory.cc kis_config.cc kis_undo.cc \

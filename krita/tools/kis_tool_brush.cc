@@ -37,6 +37,7 @@
 #include "kis_global.h"
 #include "kis_paint_device.h"
 #include "kis_pixel_packet.h"
+#include "kis_pixel_region.h"
 #include "kis_tool_brush.h"
 #include "kis_undo.h"
 #include "kis_util.h"
@@ -141,8 +142,6 @@ bool BrushTool::paintCanvas(const QPoint& /* pos */)
 
 bool BrushTool::paint(const QPoint& pos)
 {
-	return false;
-#if 0
 	KisImageSP img = m_doc -> currentImg();
 	KisPaintDeviceSP device = img -> getCurrentPaintDevice();
 	int startx = pos.x() - m_hotSpotX;
@@ -161,9 +160,9 @@ bool BrushTool::paint(const QPoint& pos)
 	double bv; 
 	bool alpha = img -> colorMode() == cm_RGBA;
 	int opacity = TransparentOpacity - Upscale(m_opacity);
-	KisPixelPacket *view = device -> getPixels(sx, sy, ex, ey);
+	KisPixelPacket *region = device -> getPixels(sx, sy, ex, ey);
 
-	if (!view)
+	if (!region)
 		return false;
 
 	if (opacity == TransparentOpacity)
@@ -179,36 +178,22 @@ bool BrushTool::paint(const QPoint& pos)
 			if (bv < 3)
 				continue;
 
-			KisPixelPacket *dst = view + y * ex + x;
+			KisPixelPacket *dst = region + y * ex + x;
 			int r = Upscale(m_red);
 			int g = Upscale(m_green);
 			int b = Upscale(m_blue);
-			KisPixelPacket src(r, g, b, opacity);
 
-			// In operator
-#if 1
-//			if (alpha)
-//				dst -> opacity = ((MaxRGB - bv) * (MaxRGB - opacity)) / MaxRGB;
-
-			bv = (double)bv / CHANNEL_MAX;
-			dst -> red = (bv / CHANNEL_MAX * r);
-			dst -> green = (bv / CHANNEL_MAX * g);
-			dst -> blue = (bv / CHANNEL_MAX * b);
-#endif
-		
-#if 0
-			dst -> red = (dst -> red * (opacity) + src.red * (MaxRGB - opacity)) / MaxRGB;
-			dst -> green = (dst -> green * (opacity) + src.green * (MaxRGB - opacity)) / MaxRGB;
-			dst -> blue = (dst -> blue * (opacity) + src.blue * (MaxRGB - opacity)) / MaxRGB;
-#endif
-			
+			// Hardcode to black for the moment
+			dst -> red = 0;
+			dst -> green = 0;
+			dst -> blue = 0;
 			dst -> opacity = OpaqueOpacity;
+			device -> syncPixels(region);
 		}
 	}
 
-	device -> syncPixels(view);
+//	device -> syncPixels(region);
 	return true;
-#endif
 }
 
 void BrushTool::mouseMove(QMouseEvent *e)

@@ -35,6 +35,7 @@
 class QButton;
 class QPaintEvent;
 class QScrollBar;
+class QSize;
 
 class KAction;
 class KHelpMenu;
@@ -149,7 +150,6 @@ public slots:
 	void slotTabSelected(const QString& name);
 
 	void slotHalt(); // for the faint of heart
-	void slotGimp(); // for the weak of mind
     
 	void zoom_in();
 	void zoom_out();
@@ -233,8 +233,8 @@ protected slots:
 protected:
 	virtual void resizeEvent(QResizeEvent*);
 
-	void appendToDocImgList(QImage& loadedImg, KURL& u);
-	void addHasNewLayer(QImage& loadedImg, KURL& u);
+	void appendToDocImgList(const QSize& size, const KURL& u);
+	void addHasNewLayer(const QSize& size, const KURL& u);
 	void paintView(const QRect& rc);
 	void clearCanvas(const QRect& rc);
 

@@ -219,18 +219,16 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 	m_depth = KisUtil::calcNumChannels(cm);
 
 	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * m_depth, m_depth == 1 ? QImage::LittleEndian : QImage::IgnoreEndian);
-//	m_imgTile.setAlphaBuffer(true);
+	//	m_imgTile.setAlphaBuffer(true);
 
 	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, m_depth, cm, defaultColor);
 	m_bgLayer = new KisLayer("_background", TILE_SIZE, TILE_SIZE, m_depth, cm, defaultColor);
 	renderBg(m_bgLayer, 0);
 	compositeImage();
 
-#if 1
 	m_timer = new QTimer(this);
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(slotUpdateTimeOut()));
 	m_timer -> start(1);
-#endif
 }
 
 /*
@@ -501,13 +499,13 @@ void KisImage::compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y
 		KisLayerSP layer = *it;
 
 		if (layer && layer -> visible()) {
-			KisTileSP dst = dstDevice -> getTile(tileNo, tileNo);
-			KisTileSP src = layer -> getTile(x, y);
-			
-			if (!src)
-				continue;
+			Magick::Image *dst = dstDevice -> getImage();
+			Magick::Image *src = layer -> getImage();
+			Magick::Image area(*src);
 
-			dst -> composite(src, OverCompositeOp);
+			Q_ASSERT(dst && src);
+			area.crop(Geometry(TILE_SIZE, TILE_SIZE, x, y));
+			dst -> composite(area, 0, 0, OverCompositeOp);
 		}
 	}
 
@@ -523,12 +521,10 @@ void KisImage::compositeImage(const QRect& area, bool allDirty)
 			if (!allDirty && m_dirty[y * m_xTiles + x] == false)
 				continue;
 
-			KisTileSP dst = m_composeLayer -> getTile(0, 0);
-			const KisTileSP src = m_bgLayer -> getTile(0, 0);
-		
-			if (src)
-				dst -> composite(src, CopyCompositeOp);
-			
+			Magick::Image *dst = m_composeLayer -> getImage();
+			Magick::Image *src = m_bgLayer -> getImage();
+
+			dst -> composite(*src, 0, 0, CopyCompositeOp);
 			compositeTile(m_composeLayer, 0, x * TILE_SIZE, y * TILE_SIZE);
 			convertTileToPixmap(m_composeLayer, 0, m_pixmapTiles[y * m_xTiles + x]);
 			m_dirty[y * m_xTiles + x] = false;
@@ -564,7 +560,9 @@ void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
 
 void KisImage::convertTileToPixmap(KisPaintDevice *dstDevice, int tileNo, QPixmap *pix)
 {
-	KisTileSP srcTile = dstDevice -> getTile(tileNo * TILE_SIZE, tileNo * TILE_SIZE);
+//	KisTileSP srcTile = dstDevice -> getTile(tileNo * TILE_SIZE, tileNo * TILE_SIZE);
+	m_imgTile = convertFromMagickImage(*dstDevice -> getImage());
+#if 0
 	const KisPixelPacket *src = srcTile -> getConstPixels();
 
 	if (!src)
@@ -578,6 +576,7 @@ void KisImage::convertTileToPixmap(KisPaintDevice *dstDevice, int tileNo, QPixma
 			m_imgTile.setPixel(column, row, rgb);
 		}
 	}
+#endif
 
 	convertImageToPixmap(&m_imgTile, pix);
 }
@@ -809,18 +808,22 @@ void KisImage::destroyPixmap()
 
 void KisImage::renderBg(KisPaintDevice *srcDevice, int tileNo)
 {
-	KisPixelRegionSP region = srcDevice -> getPixels(tileNo, tileNo);
+	Q_ASSERT(srcDevice);
+	KisPixelPacket* region = srcDevice -> getPixels(tileNo, tileNo);
 
 	if (!region)
 		return;
 
-	KisPixelPacket *p = region -> start();
-	
 	for (int y = 0; y < TILE_SIZE; y++)
 		for (int x = 0; x < TILE_SIZE; x++) {
+			KisPixelPacket *p = region + y * TILE_SIZE + x;
 			uchar v = 128 + 63 * ((x / 16 + y / 16) % 2);
 
-			*(p + (y * TILE_SIZE) + x) = qRgba(v, v, v, OPACITY_OPAQUE);
+			Q_ASSERT(p);
+			p -> red = v;
+			p -> green = v;
+			p -> blue = v;
+			p -> opacity = OpaqueOpacity;
 		}
 
 	srcDevice -> syncPixels(region);

@@ -82,3 +82,4 @@ int KisPaintPropertyDlg::getOpacity() const
 	return m_opacity -> value() * 255 / 100;
 }
 
+#include <kis_dlg_paint_properties.moc>

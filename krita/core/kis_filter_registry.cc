@@ -21,24 +21,24 @@
 #include "kis_paint_device.h"
 #include "kis_filter.h"
 
-KisFilterRegistry *KisFilterRegistry::m_singleton = 0;
+// KisFilterRegistry *KisFilterRegistry::m_singleton = 0;
 
 KisFilterRegistry::KisFilterRegistry()
 {
-	kdDebug() << " creating a KisFilterRegistry" << endl;
-	Q_ASSERT(KisFilterRegistry::m_singleton == 0);
-	KisFilterRegistry::m_singleton = this;
+// 	kdDebug() << " creating a KisFilterRegistry" << endl;
+// 	Q_ASSERT(KisFilterRegistry::m_singleton == 0);
+// 	KisFilterRegistry::m_singleton = this;
 }
 
 KisFilterRegistry::~KisFilterRegistry()
 {
 }
 
-KisFilterRegistry* KisFilterRegistry::singleton()
-{
-	if(KisFilterRegistry::m_singleton == 0)
-	{
-		KisFilterRegistry::m_singleton = new KisFilterRegistry();
-	}
-	return KisFilterRegistry::m_singleton;
-}
+// KisFilterRegistry* KisFilterRegistry::singleton()
+// {
+// 	if(KisFilterRegistry::m_singleton == 0)
+// 	{
+// 		KisFilterRegistry::m_singleton = new KisFilterRegistry();
+// 	}
+// 	return KisFilterRegistry::m_singleton;
+// }

@@ -22,24 +22,25 @@
 
 #include "kis_types.h"
 #include "kis_generic_registry.h"
+#include <ksharedptr.h>
 
 class QStringList;
 
-class KisFilterRegistry : public KisGenericRegistry<KisFilterSP> {
+class KisFilterRegistry : public KisGenericRegistry<KisFilterSP>, public KShared {
 
 public:
+	KisFilterRegistry();
 	virtual ~KisFilterRegistry();
 
-public:
-	static KisFilterRegistry* singleton();
+// public:
+// 	static KisFilterRegistry* singleton();
 
-private:
-	KisFilterRegistry();
-	KisFilterRegistry(const KisFilterRegistry&);
-	KisFilterRegistry operator=(const KisFilterRegistry&);
+// private:
+// 	KisFilterRegistry(const KisFilterRegistry&) { };
+// 	KisFilterRegistry operator=(const KisFilterRegistry&) { };
 
-private:
-	static KisFilterRegistry *m_singleton;
+// private:
+// 	static KisFilterRegistry *m_singleton;
 };
 
 #endif // KIS_FILTERSPACE_REGISTRY_H_

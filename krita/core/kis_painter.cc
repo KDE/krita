@@ -534,14 +534,6 @@ float KisPainter::paintLine(const QPoint & pos1,
 		spacing = m_brushWidth;
 	}
 
-	// Some brushes are loaded with a weird spacing of 100, probably
-	// a bug in the brush loader.
-	if (spacing > m_brushWidth || spacing > m_brushHeight) {
-		spacing = m_brushWidth;
-	}
-
-
-
 	Q_INT32 x1, y1, x2, y2;
 
 	x1 = pos1.x();

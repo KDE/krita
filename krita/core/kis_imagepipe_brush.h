@@ -18,9 +18,6 @@
 #if !defined KIS_IMAGEPIPE_BRUSH_
 #define KIS_IMAGEPIPE_BRUSH_
 
-// #include <qcstring.h>
-// #include <qimage.h>
-// #include <qsize.h>
 #include <qptrlist.h>
 #include <qvaluelist.h>
 
@@ -30,11 +27,10 @@
 #include "kis_brush.h"
 #include "kis_global.h"
 
-class QPoint;
-class QImage;
-class QSize;
 class QCString;
-
+class QImage;
+class QPoint;
+class QSize;
 
 class KisAlphaMask;
 

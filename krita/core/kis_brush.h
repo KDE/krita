@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,9 +21,9 @@
 #define KIS_BRUSH_
 
 #include <qcstring.h>
-#include <qimage.h>
 #include <qsize.h>
 #include <qptrlist.h>
+#include <qimage.h>
 
 #include <kio/job.h>
 
@@ -65,10 +66,6 @@ public:
 
 	void setHotSpot(QPoint);
 	QPoint hotSpot() const { return m_hotSpot; }
-
-/* 	uchar value(Q_INT32 x, Q_INT32 y) const; */
-/* 	uchar *scanline(Q_INT32 i) const; */
-/* 	uchar *bits() const; */
 
 	virtual enumBrushType brushType() const;
 

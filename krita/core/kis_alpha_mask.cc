@@ -24,18 +24,18 @@
 #include "kis_global.h"
 #include "kis_alpha_mask.h"
 
-KisAlphaMask::KisAlphaMask(const QImage& img) 
+KisAlphaMask::KisAlphaMask(const QImage& img)
 {
 	m_scale = 1;
-	computeAlpha(img);
+	m_valid = false;
+	m_img = img;
 }
 
 KisAlphaMask::KisAlphaMask(const QImage& img, double scale)
 {
 	m_scale = scale;
-	QImage scaledImg = img.smoothScale((int)(img.width() * scale), 
-					   (int)(img.height() * scale));
-	computeAlpha(scaledImg);
+	m_valid = false;
+	m_img = img;
 }
 
 KisAlphaMask::~KisAlphaMask() 
@@ -58,6 +58,13 @@ double KisAlphaMask::scale()
 
 QUANTUM KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
 {
+
+	if (!m_valid) {
+		// Defer computing mask until actually needed
+		computeAlpha(m_img);
+		m_valid = true;
+	}
+
 	if (y >= 0 && y < m_scaledHeight && x >= 0 && x < m_scaledWidth) {
 		return m_data[((y) * m_scaledWidth) + x];
 	}
@@ -89,6 +96,14 @@ void KisAlphaMask::copyAlpha(const QImage& img)
 
 void KisAlphaMask::computeAlpha(const QImage& img) 
 {
+
+	if (m_scale != 1) {
+		QImage scaledImg = img.smoothScale((int)(img.width() * scale), 
+						   (int)(img.height() * scale));
+		
+	}
+	computeAlpha(m_img);
+
 	m_scaledWidth = img.width();
 	m_scaledHeight = img.height();
 

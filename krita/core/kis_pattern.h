@@ -21,13 +21,10 @@
 #ifndef __kis_pattern_h__
 #define __kis_pattern_h__
 
-#include <qsize.h>
-
 #include <kio/job.h>
 
 #include <koIconChooser.h>
 
-#include "kis_resource.h"
 #include "kis_resource.h"
 
 class QPoint;

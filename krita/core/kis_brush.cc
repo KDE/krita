@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -129,27 +130,6 @@ void KisBrush::setHotSpot(QPoint pt)
 	m_hotSpot = QPoint(x, y);
 }
 
-// uchar KisBrush::value(Q_INT32 x, Q_INT32 y) const
-// {
-// 	return m_data[width() * y + x];
-// }
-
-// uchar *KisBrush::scanline(Q_INT32 i) const
-// {
-// 	if (valid())
-// 		return m_img.scanLine(i);
-
-// 	return 0;
-// }
-
-// uchar *KisBrush::bits() const
-// {
-// 	if (valid())
-// 		return m_img.bits();
-
-// 	return 0;
-// }
-
 enumBrushType KisBrush::brushType() const {
 	return m_brushType;
 }
@@ -201,7 +181,13 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		return;
 	}
 
-	setSpacing(bh.spacing / 10);
+        if (bh.spacing > m_width || bh.spacing > m_height) {
+                setSpacing(m_width);
+        }
+        else {
+                setSpacing(bh.spacing / 10);
+        }
+
 	name.resize(bh.header_size - sizeof(GimpBrushHeader));
 	memcpy(&name[0], &m_data[sizeof(GimpBrushHeader)], name.size());
 

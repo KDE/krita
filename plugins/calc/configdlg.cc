@@ -27,7 +27,6 @@
 #include <kapp.h>
 #include <klocale.h>
 
-#include <kmsgbox.h>
 #include "configdlg.h"
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken

@@ -20,7 +20,7 @@
 #include "kis_mask.h"
 #include "kis_image.h"
 
-KisMask::KisMask(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, const KoColor& color) : super(img, width, height, name, color)
+KisMask::KisMask(KisImage *img, Q_INT32 width, Q_INT32 height, const QString& name, const KoColor& color) : super(img, width, height, name, color)
 {
 }
 

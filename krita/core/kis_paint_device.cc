@@ -102,13 +102,13 @@ KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, KisStrategyColorSp
 	m_colorStrategy = colorStrategy;
 }
 
-KisPaintDevice::KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name)
+KisPaintDevice::KisPaintDevice(KisImage *img, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
         init();
         configure(img, width, height, colorStrategy, name, COMPOSITE_OVER);
 }
 
-KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& name)
+KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImage *img, const QString& name)
 {
         init();
         m_x = 0;
@@ -193,7 +193,7 @@ void KisPaintDevice::invalidate()
         invalidate(0, 0, width(), height());
 }
 
-void KisPaintDevice::configure(KisImageSP image,
+void KisPaintDevice::configure(KisImage *image,
                                Q_INT32 width, Q_INT32 height,
                                KisStrategyColorSpaceSP colorStrategy,
                                const QString& name,

@@ -68,7 +68,7 @@ KisFloatingSelection::KisFloatingSelection(Q_INT32 width, Q_INT32 height, KisStr
 	setName(name);
 }
 
-KisFloatingSelection::KisFloatingSelection(KisPaintDeviceSP parent, KisImageSP img, const QString& name, QUANTUM opacity) : super(img, 0, 0, name, opacity)
+KisFloatingSelection::KisFloatingSelection(KisPaintDeviceSP parent, KisImage *img, const QString& name, QUANTUM opacity) : super(img, 0, 0, name, opacity)
 {
 	Q_ASSERT(parent);
 	Q_ASSERT(parent -> visible());

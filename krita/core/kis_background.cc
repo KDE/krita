@@ -51,7 +51,7 @@ namespace {
 	}
 }
 
-KisBackground::KisBackground(KisImageSP img, Q_INT32 width, Q_INT32 height) :
+KisBackground::KisBackground(KisImage *img, Q_INT32 width, Q_INT32 height) :
 	super(img, width, height, "background flyweight", OPACITY_OPAQUE)
 {
 	KisTileMgrSP tm;

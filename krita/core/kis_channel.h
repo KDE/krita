@@ -24,7 +24,7 @@ class KisChannel : public KisPaintDevice {
 	typedef KisPaintDevice super;
 
 public:
-	KisChannel(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, const KoColor& color);
+	KisChannel(KisImage *img, Q_INT32 width, Q_INT32 height, const QString& name, const KoColor& color);
 	KisChannel(const KisChannel& rhs);
 	virtual ~KisChannel();
 

@@ -48,6 +48,12 @@
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
 
+#define DEBUG_IMAGES 0
+
+#if DEBUG_IMAGES
+static int numImages = 0;
+#endif
+
 namespace {
 	// Whether to repaint the display every
 	// DISPLAY_UPDATE_FREQUENCY milliseconds
@@ -199,6 +205,10 @@ namespace {
 
 KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
+#if DEBUG_IMAGES
+	numImages++;
+	kdDebug() << "IMAGE " << name << " CREATED total now = " << numImages << endl;
+#endif
 	init(undoAdapter, width, height, colorStrategy, name);
 	setName(name);
 	startUpdateTimer();
@@ -207,6 +217,10 @@ KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,  
 
 KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 {
+#if DEBUG_IMAGES
+	numImages++;
+	kdDebug() << "IMAGE " << rhs.m_name << " copy CREATED total now = " << numImages << endl;
+#endif
 	m_dcop = 0L;
 	if (this != &rhs) {
 		m_undoHistory = rhs.m_undoHistory;
@@ -233,7 +247,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		for (vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); it++) {
 			KisLayerSP layer = new KisLayer(**it);
 
-			layer -> setImage(KisImageSP(this));
+			layer -> setImage(this);
 			m_layers.push_back(layer);
 			m_layerStack.push_back(layer);
 			m_activeLayer = layer;
@@ -244,7 +258,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		for (vKisChannelSP_cit it = rhs.m_channels.begin(); it != rhs.m_channels.end(); it++) {
 			KisChannelSP channel = new KisChannel(**it);
 
-			channel -> setImage(KisImageSP(this));
+			channel -> setImage(this);
 			m_channels.push_back(channel);
 			m_activeChannel = channel;
 		}
@@ -275,6 +289,10 @@ DCOPObject *KisImage::dcopObject()
 
 KisImage::~KisImage()
 {
+#if DEBUG_IMAGES
+	numImages--;
+	kdDebug() << "IMAGE " << name() << " DESTROYED total now = " << numImages << endl;
+#endif
 	delete m_nserver;
         delete m_dcop;
 	// Not necessary to destroy m_updateTimer

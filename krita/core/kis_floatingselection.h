@@ -34,7 +34,7 @@ class KisFloatingSelection : public KisLayer {
 
 public:
 	KisFloatingSelection(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name);
-	KisFloatingSelection(KisPaintDeviceSP parent, KisImageSP img, const QString& name, QUANTUM opacity);
+	KisFloatingSelection(KisPaintDeviceSP parent, KisImage *img, const QString& name, QUANTUM opacity);
 	virtual ~KisFloatingSelection();
 
 public:
@@ -58,7 +58,7 @@ private slots:
 
 private:
 	KisPaintDeviceSP m_parent;
-	KisImageSP m_img;
+	KisImage *m_img;
 	QImage m_clipImg;
 	QString m_name;
 	QRect m_rc;

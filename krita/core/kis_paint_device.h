@@ -55,12 +55,12 @@ public:
 	KisPaintDevice(Q_INT32 width, Q_INT32 height,
 			KisStrategyColorSpaceSP colorStrategy,
 			const QString& name);
-	KisPaintDevice(KisImageSP img,
+	KisPaintDevice(KisImage *img,
 			Q_INT32 width, Q_INT32 height,
 			KisStrategyColorSpaceSP colorStrategy,
 			const QString& name);
 	KisPaintDevice(KisTileMgrSP tm,
-			KisImageSP img,
+			KisImage *img,
 			const QString& name);
 	KisPaintDevice(const KisPaintDevice& rhs);
 	virtual ~KisPaintDevice();
@@ -78,7 +78,7 @@ public:
         virtual bool read(KoStore *store);
 
 public:
-	virtual void configure(KisImageSP image, 
+	virtual void configure(KisImage *image, 
 			Q_INT32 width, Q_INT32 height, 
 			KisStrategyColorSpaceSP colorStrategy, 
 			const QString& name,
@@ -170,9 +170,9 @@ public:
         bool cmap(KoColorMap& cm);
         KoColor colorAt();
 
-        KisImageSP image();
-        const KisImageSP image() const;
-        void setImage(KisImageSP image);
+        KisImage *image();
+        const KisImage *image() const;
+        void setImage(KisImage *image);
 
         void resize(Q_INT32 w, Q_INT32 h);
         void resize(const QSize& size);
@@ -270,7 +270,7 @@ private:
         void init();
 
 private:
-        KisImageSP m_owner;
+        KisImage *m_owner;
         KisTileMgrSP m_tiles;
         KisTileMgrSP m_shadow;
         bool m_visible;
@@ -422,17 +422,17 @@ inline KoColor KisPaintDevice::colorAt()
         return KoColor();
 }
 
-inline KisImageSP KisPaintDevice::image()
+inline KisImage *KisPaintDevice::image()
 {
         return m_owner;
 }
 
-inline const KisImageSP KisPaintDevice::image() const
+inline const KisImage *KisPaintDevice::image() const
 {
         return m_owner;
 }
 
-inline void KisPaintDevice::setImage(KisImageSP image)
+inline void KisPaintDevice::setImage(KisImage *image)
 {
         m_owner = image;
 }

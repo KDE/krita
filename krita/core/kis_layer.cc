@@ -15,6 +15,9 @@
  *  along with this program; if not, write to the free software
  *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
+
+#include <kdebug.h>
+
 #include "kis_global.h"
 #include "kistile.h"
 #include "kistilemgr.h"
@@ -24,6 +27,12 @@
 #include "kis_mask.h"
 #include "kis_selection.h"
 
+#define DEBUG_LAYERS 0
+
+#if DEBUG_LAYERS
+static int numLayers = 0;
+#endif
+
 KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name) : 
 	super(width, height, colorStrategy, name),
 	m_opacity(OPACITY_OPAQUE),
@@ -31,9 +40,13 @@ KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorS
 	m_hasSelection(false),
 	m_selection(0)
 {
+#if DEBUG_LAYERS
+	numLayers++;
+	kdDebug() << "LAYER " << name << " CREATED total now = " << numLayers << endl;
+#endif
 }
 
-KisLayer::KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity)
+KisLayer::KisLayer(KisImage *img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity)
 	: super(img, width, height, img -> colorStrategy(), name),
 	  m_opacity(opacity),
 	  m_linked(false),
@@ -41,10 +54,18 @@ KisLayer::KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString&
 	  m_selection(0)
 
 {
+#if DEBUG_LAYERS
+	numLayers++;
+	kdDebug() << "LAYER " << name << " CREATED total now = " << numLayers << endl;
+#endif
 }
 
 KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
 {
+#if DEBUG_LAYERS
+	numLayers++;
+	kdDebug() << "LAYER " << rhs.name() << " copy CREATED total now = " << numLayers << endl;
+#endif
 	if (this != &rhs) {
 		m_opacity = rhs.m_opacity;
 		m_preserveTransparency = rhs.m_preserveTransparency;
@@ -61,16 +82,24 @@ KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
 	}
 }
 
-KisLayer::KisLayer(KisTileMgrSP tm, KisImageSP img, const QString& name, QUANTUM opacity) : 
+KisLayer::KisLayer(KisTileMgrSP tm, KisImage *img, const QString& name, QUANTUM opacity) : 
 	super(tm, img, name),
 	m_opacity(opacity),
 	m_linked(false),
 	m_hasSelection(false)
 {
+#if DEBUG_LAYERS
+	numLayers++;
+	kdDebug() << "LAYER " << name << " CREATED total now = " << numLayers << endl;
+#endif
 }
 
 KisLayer::~KisLayer()
 {
+#if DEBUG_LAYERS
+	numLayers--;
+	kdDebug() << "LAYER " << name() << " DESTROYED total now = " << numLayers << endl;
+#endif
 }
 
 KisMaskSP KisLayer::createMask(Q_INT32 )

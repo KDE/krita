@@ -26,7 +26,7 @@ class KisBackground : public KisLayer {
 	typedef KisLayer super;
 
 public:
-	KisBackground(KisImageSP img, Q_INT32 width, Q_INT32 height);
+	KisBackground(KisImage *img, Q_INT32 width, Q_INT32 height);
 	virtual ~KisBackground();
 
 public:

@@ -1,0 +1,18 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="screenmode" version="6">
+<MenuBar>
+    <Menu name="View"><text>View</text>
+	<Separator/>
+	<Action name="fullscreenmenubar"/>
+	<Action name="fullscreen"/>
+	<Action name="normal"/>
+	<Separator/>
+    </Menu>
+</MenuBar>
+<ToolBar name="screen_mode" position="top"><Text>Screen mode</Text>
+	<Action name="fullscreenmenubar"/>
+	<Action name="fullscreen"/>
+	<Action name="normal"/>
+</ToolBar>
+
+</kpartgui>

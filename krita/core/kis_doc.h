@@ -131,10 +131,6 @@ signals:
 	void imageListUpdated();
 	void layersUpdated(KisImageSP img);
 	void currentImageUpdated(KisImageSP img);
-	void ioProgress(Q_INT8 percentage);
-	void ioSteps(Q_INT32 steps);
-	void ioCompletedStep();
-	void ioDone();
 
 protected:
 	// Overide KoDocument
@@ -153,6 +149,9 @@ private:
 	QDomElement saveChannel(QDomDocument& doc, KisChannelSP channel);
 	KisChannelSP loadChannel(const QDomElement& elem, KisImageSP img);
 	bool init();
+	void setIOSteps(Q_INT32 nsteps);
+	void IOCompletedStep();
+	void IODone();
 // 	void initSingletons();
 
 private:
@@ -168,6 +167,8 @@ private:
 	KMacroCommand *m_currentMacro;
 	Q_INT32 m_macroNestDepth;
 	Q_INT32 m_conversionDepth;
+	int m_ioProgressTotalSteps;
+	int m_ioProgressBase;
 };
 
 #endif // KIS_DOC_H_

@@ -346,6 +346,8 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_pushedClipboard = false;
 	m_currentMacro = 0;
 	m_macroNestDepth = 0;
+	m_ioProgressBase = 0;
+	m_ioProgressTotalSteps = 0;
 
 	if (name)
 		dcopObject();
@@ -816,7 +818,7 @@ bool KisDoc::completeSaving(KoStore *store)
 		images.push_back(img);
 	}
 
-	emit ioSteps(totalSteps);
+	setIOSteps(totalSteps);
 
 	for (vKisImageSP_it it = images.begin(); it != images.end(); it++) {
 		vKisLayerSP layers = (*it) -> layers();
@@ -831,7 +833,7 @@ bool KisDoc::completeSaving(KoStore *store)
 				if (!(*it2) -> write(store)) {
 					(*it2) -> disconnect();
 					store -> close();
-					emit ioDone();
+					IODone();
 					return false;
 				}
 
@@ -839,7 +841,7 @@ bool KisDoc::completeSaving(KoStore *store)
 			}
 
 			// TODO Mask
-			emit ioCompletedStep();
+			IOCompletedStep();
 			(*it2) -> disconnect();
 		}
 
@@ -852,19 +854,19 @@ bool KisDoc::completeSaving(KoStore *store)
 				if (!(*it2) -> write(store)) {
 					(*it2) -> disconnect();
 					store -> close();
-					emit ioDone();
+					IODone();
 					return false;
 				}
 
 				store -> close();
 			}
 
-			emit ioCompletedStep();
+			IOCompletedStep();
 			(*it2) -> disconnect();
 		}
 	}
 
-	emit ioDone();
+	IODone();
 	return true;
 }
 
@@ -878,7 +880,7 @@ bool KisDoc::completeLoading(KoStore *store)
 	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++)
 		totalSteps += (*it) -> nlayers() + (*it) -> nchannels();
 
-	emit ioSteps(totalSteps);
+	setIOSteps(totalSteps);
 
 	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
 		vKisLayerSP layers = (*it) -> layers();
@@ -893,7 +895,7 @@ bool KisDoc::completeLoading(KoStore *store)
 				if (!(*it2) -> read(store)) {
 					(*it2) -> disconnect();
 					store -> close();
-					emit ioDone();
+					IODone();
 					return false;
 				}
 
@@ -901,7 +903,7 @@ bool KisDoc::completeLoading(KoStore *store)
 			}
 
 			// TODO Mask
-			emit ioCompletedStep();
+			IOCompletedStep();
 			(*it2) -> disconnect();
 		}
 
@@ -914,19 +916,19 @@ bool KisDoc::completeLoading(KoStore *store)
 				if (!(*it2) -> read(store)) {
 					(*it2) -> disconnect();
 					store -> close();
-					emit ioDone();
+					IODone();
 					return false;
 				}
 
 				store -> close();
 			}
 
-			emit ioCompletedStep();
+			IOCompletedStep();
 			(*it2) -> disconnect();
 		}
 	}
 
-	emit ioDone();
+	IODone();
 	return true;
 }
 
@@ -1621,6 +1623,23 @@ bool KisDoc::undo() const
 	return m_undo;
 }
 
+void KisDoc::setIOSteps(Q_INT32 nsteps)
+{
+	m_ioProgressTotalSteps = nsteps * 100;
+	m_ioProgressBase = 0;
+	emitProgress(0);
+}
+
+void KisDoc::IOCompletedStep()
+{
+	m_ioProgressBase += 100;
+}
+
+void KisDoc::IODone()
+{
+	emitProgress(-1);
+}
+
 void KisDoc::slotIOProgress(Q_INT8 percentage)
 {
 	KApplication *app = KApplication::kApplication();
@@ -1630,7 +1649,9 @@ void KisDoc::slotIOProgress(Q_INT8 percentage)
 	if (app -> hasPendingEvents())
 		app -> processEvents();
 
-	emit ioProgress(percentage);
+	int totalPercentage = ((m_ioProgressBase + percentage) * 100) / m_ioProgressTotalSteps;
+
+	emitProgress(totalPercentage);
 }
 
 bool KisDoc::importImage(const QString& filename)

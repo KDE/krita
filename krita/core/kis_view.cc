@@ -100,7 +100,6 @@
 #include "KRayonViewIface.h"
 #include "labels/kis_label_builder_progress.h"
 #include "labels/kis_label_cursor_pos.h"
-#include "labels/kis_label_io_progress.h"
 #include "strategy/kis_strategy_move.h"
 #include "kis_rect.h"
 #include "kis_button_press_event.h"
@@ -461,7 +460,6 @@ void KisView::setupStatusBar()
         KStatusBar *sb = statusBar();
 
         if (sb) {
-                KisLabelIOProgress *l;
                 QLabel *lbl;
 
                 lbl = new KisLabelCursorPos(sb);
@@ -475,17 +473,8 @@ void KisView::setupStatusBar()
                 m_buildProgress = new KisLabelBuilderProgress(this);
                 m_buildProgress -> setMaximumWidth(225);
                 m_buildProgress -> setMaximumHeight(sb -> height());
-                addStatusBarItem(m_buildProgress, 2);
+                addStatusBarItem(m_buildProgress, 2, true);
                 m_buildProgress -> hide();
-                l = new KisLabelIOProgress(this);
-                connect(m_doc, SIGNAL(ioProgress(Q_INT8)), l, SLOT(update(Q_INT8)));
-                connect(m_doc, SIGNAL(ioSteps(Q_INT32)), l, SLOT(steps(Q_INT32)));
-                connect(m_doc, SIGNAL(ioCompletedStep()), l, SLOT(completedStep()));
-                connect(m_doc, SIGNAL(ioDone()), l, SLOT(done()));
-                l -> setMaximumWidth(200);
-                l -> setMaximumHeight(sb -> height());
-                addStatusBarItem(l, 3);
-                l -> hide();
         }
 }
 

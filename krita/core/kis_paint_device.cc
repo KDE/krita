@@ -815,6 +815,63 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 
 }
 
+void KisPaintDevice::mirrorX()
+{
+	/* For each line, swap the liness at equal distances from the X axis*/
+	/* Should be bit depth independent, but I don't have anything to test that with.
+	   I don't know about colour strategy, but if bit depth works that should too */
+
+	QUANTUM *line1 = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
+	QUANTUM *line2 = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
+	KisTileMgrSP tm = new KisTileMgr(depth(), width(), height());
+
+	int cutoff = static_cast<int>(height()/2);
+
+	for(int i = 0; i < cutoff; i++) {
+		data() -> readPixelData(0, i, width() - 1, i, line1, width() * depth());
+		data() -> readPixelData(0, height() - i - 1, width() - 1, height() - i - 1, line2, width() * depth());
+		tm -> writePixelData(0, height() - i - 1, width() - 1, height() - i - 1, line1, width() * depth());
+		tm -> writePixelData(0, i, width() - 1, i, line2, width() * depth());
+	}
+
+	data(tm);
+
+	delete[] line1;
+	delete[] line2;
+}
+
+void KisPaintDevice::mirrorY()
+{
+	/* For each line, swap the pixels at equal distances from the Y axis */
+	/* Note: I get the idea that this could be done faster with direct access to
+	   the pixel data. Now I have to copy the pixels twice only to get them
+	   and put them back in place. */
+	/* Should be bit depth and arch independent, but I don't have anything to test
+	   that with I don't know about colour strategy, but if bit depth works that
+	   should too */
+	QUANTUM *pixel = new QUANTUM[depth() * sizeof(QUANTUM)]; // the right pixel
+	QUANTUM *line = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
+	KisTileMgrSP tm = new KisTileMgr(depth(), width(), height());
+	int cutoff = static_cast<int>(width()/2);
+
+	for(int i = 0; i < height(); i++) {
+		data() -> readPixelData(0, i, width() - 1, i, line, width() * depth());
+		for(int j = 0; j < cutoff; j++) {
+			for(int k = 0; k < depth(); k++) {
+				pixel[k] = line[(width()-1)*depth() - j*depth() + k];
+				line[(width()-1)*depth() - j*depth() + k] = line[j*depth()+k];
+				line[j*depth()+k] = pixel[k];
+			}
+		}
+		tm -> writePixelData(0, i, width() - 1, i, line, width() * depth());
+	}
+	
+	data(tm); // Act like this is a resize; this should get it's own undo 'name'
+	
+	delete[] line;
+	delete[] pixel;
+}
+
 void KisPaintDevice::expand(Q_INT32 w, Q_INT32 h)
 {
         w = QMAX(w, width());

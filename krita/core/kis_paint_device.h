@@ -156,6 +156,15 @@ public:
 	   Apply the transformation matrix _in place_.
 	*/
 	void transform(const QWMatrix & matrix);
+	
+	/**
+	 * Mirror the device along the X axis
+	 */
+	void mirrorX();
+	/**
+	 * Mirror the device along the Y axis
+	 */
+	void mirrorY();
 
         void expand(Q_INT32 w, Q_INT32 h);
         void expand(const QSize& size);

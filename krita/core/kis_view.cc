@@ -439,8 +439,8 @@ void KisView::setupActions()
 	(void)new KAction(i18n("Rotate &270"), 0, this, SLOT(layer_rotateleft90()), actionCollection(), "layer_rotateleft90");
 	(void)new KAction(i18n("Rotate &90"), 0, this, SLOT(layer_rotateright90()), actionCollection(), "layer_rotateright90");
 	(void)new KAction(i18n("Rotate &Custom..."), 0, this, SLOT(layer_rotate_custom()), actionCollection(), "layer_rotate_custom");
-	(void)new KAction(i18n("Mirror &X"), 0, this, SLOT(layer_mirrorX()), actionCollection(), "layer_mirrorX");
-	(void)new KAction(i18n("Mirror &Y"), 0, this, SLOT(layer_mirrorY()), actionCollection(), "layer_mirrorY");
+	(void)new KAction(i18n("Mirror along &X axis"), 0, this, SLOT(layer_mirrorX()), actionCollection(), "layer_mirrorX");
+	(void)new KAction(i18n("Mirror along &Y axis"), 0, this, SLOT(layer_mirrorY()), actionCollection(), "layer_mirrorY");
 
 	// color actions
 	(void)new KAction(i18n("Select Foreground Color..."), 0, this, SLOT(selectFGColor()), actionCollection(), "select_fgColor");
@@ -1468,10 +1468,26 @@ void KisView::layer_rotate_custom()
 
 void KisView::layer_mirrorX()
 {
+	if (!currentImg()) return;
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
+
+	layer->mirrorX();
+	layersUpdated();
+	currentImg() -> invalidate();
+	updateCanvas();
 }
 
 void KisView::layer_mirrorY()
 {
+	if (!currentImg()) return;
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
+
+	layer->mirrorY();
+	layersUpdated();
+	currentImg() -> invalidate();
+	updateCanvas();
 }
 
 void KisView::add_new_image_tab()

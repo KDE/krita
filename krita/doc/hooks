@@ -1,0 +1,33 @@
+Some color models support more tools, filters and other things like
+colour selectors than other color models. Some support far less of
+those things, in fact.
+
+Among these things are:
+
+* tools
+* palettes
+* filters
+* paint ops
+
+Thus, if a paint device is of a certain color model, certain GUI things
+must be activated and deactived when that paint device becomes active.
+
+A paint op may need to knwo something about the layer it is going to paint
+on: it is not sufficient to generate a mask and have that composited by
+the color strategy because the footprint may be determined by the deposit
+and height field that is already present.
+
+For some color models, pixels in a paint device must be
+initialized using more or less complex algorithms. It is not enough to
+initialize a single default pixel (which we cannot do yet), we must
+additionally initialize the whole default tile; and since nothing in
+Krita outside the tilemanager code should know about the very existence
+of tiles, we must find a generic solution of the canvas initialisation.
+
+Additionally, some color models need permanently running filters to model
+physical pocesses, like drying and flowing of paint or ink, or adsorbtion into
+lower layers.
+
+Finally, some color models (like the selection, or wetdreams) want a way to
+efficiently add some kind of visualisation at the paintView level, instead
+of the rendering level.

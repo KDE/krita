@@ -297,10 +297,8 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
                         starty=end.y();
                         endy=start.y();
                 }
-                m_handlesRegion += QRect( startx, starty, 1, QABS( endy-starty ) );
-                m_handlesRegion += QRect( endx, starty, 1, QABS( endy-starty ) );
-                m_handlesRegion += QRect( startx, starty, QABS( endx - startx ), 1 );
-                m_handlesRegion += QRect( startx, endy, QABS( endx - startx ), 1 );
+                gc.drawRect(QRect(start, end));
+                gc.setRasterOp(Qt::CopyROP);
                 QMemArray <QRect> rects = m_handlesRegion.rects (); 
                 for (QMemArray <QRect>::ConstIterator it = rects.begin (); 
                         it != rects.end ();

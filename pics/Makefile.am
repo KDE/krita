@@ -1,3 +1,3 @@
 
-SUBDIRS = hicolor
+SUBDIRS = crystalsvg
 

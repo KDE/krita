@@ -255,7 +255,10 @@ public:
 	enum enumGradientShape {
 		GradientShapeLinear,
 		GradientShapeBiLinear,
-		GradientShapeRadial
+		GradientShapeRadial,
+		GradientShapeSquare,
+		GradientShapeConical,
+		GradientShapeConicalSymetric
 	};
 
 	enum enumGradientRepeat {

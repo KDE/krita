@@ -199,6 +199,153 @@ namespace {
 	}
 
 
+	class SquareGradientStrategy : public GradientShapeStrategy {
+		typedef GradientShapeStrategy super;
+	public:
+		SquareGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+
+		virtual double valueAt(double x, double y) const;
+
+	protected:
+		double m_normalisedVectorX;
+		double m_normalisedVectorY;
+		double m_vectorLength;
+	};
+
+	SquareGradientStrategy::SquareGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+		: super(gradientVectorStart, gradientVectorEnd)
+	{
+		double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+		double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+
+		m_vectorLength = sqrt((dx * dx) + (dy * dy));
+
+		if (m_vectorLength < DBL_EPSILON) {
+			m_normalisedVectorX = 0;
+			m_normalisedVectorY = 0;
+		}
+		else {
+			m_normalisedVectorX = dx / m_vectorLength;
+			m_normalisedVectorY = dy / m_vectorLength;
+		}
+	}
+
+	double SquareGradientStrategy::valueAt(double x, double y) const
+	{
+		double px = x - m_gradientVectorStart.x();
+		double py = y - m_gradientVectorStart.y();
+
+		double distance1 = 0;
+		double distance2 = 0;
+
+		if (m_vectorLength > DBL_EPSILON) {
+
+			// Point to line distance is:
+			// distance = ((l0.y() - l1.y()) * p.x() + (l1.x() - l0.x()) * p.y() + l0.x() * l1.y() - l1.x() * l0.y()) / m_vectorLength;
+			//
+			// Here l0 = (0, 0) and |l1 - l0| = 1
+
+			distance1 = -m_normalisedVectorY * px + m_normalisedVectorX * py;
+			distance1 = fabs(distance1);
+
+			// Rotate point by 90 degrees and get the distance to the perpendicular
+			distance2 = -m_normalisedVectorY * -py + m_normalisedVectorX * px;
+			distance2 = fabs(distance2);
+		}
+
+		double t = QMAX(distance1, distance2) / m_vectorLength;
+
+		return t;
+	}
+
+
+	class ConicalGradientStrategy : public GradientShapeStrategy {
+		typedef GradientShapeStrategy super;
+	public:
+		ConicalGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+
+		virtual double valueAt(double x, double y) const;
+
+	protected:
+		double m_vectorAngle;
+	};
+
+	ConicalGradientStrategy::ConicalGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+		: super(gradientVectorStart, gradientVectorEnd)
+	{
+		double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+		double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+
+		// Get angle from 0 to 2 PI.
+		m_vectorAngle = atan2(dy, dx) + M_PI;
+	}
+
+	double ConicalGradientStrategy::valueAt(double x, double y) const
+	{
+		double px = x - m_gradientVectorStart.x();
+		double py = y - m_gradientVectorStart.y();
+
+		double angle = atan2(py, px) + M_PI;
+
+		angle -= m_vectorAngle;
+
+		if (angle < 0) {
+			angle += 2 * M_PI;
+		}
+
+		double t = angle / (2 * M_PI);
+
+		return t;
+	}
+
+
+	class ConicalSymetricGradientStrategy : public GradientShapeStrategy {
+		typedef GradientShapeStrategy super;
+	public:
+		ConicalSymetricGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+
+		virtual double valueAt(double x, double y) const;
+
+	protected:
+		double m_vectorAngle;
+	};
+
+	ConicalSymetricGradientStrategy::ConicalSymetricGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+		: super(gradientVectorStart, gradientVectorEnd)
+	{
+		double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+		double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+
+		// Get angle from 0 to 2 PI.
+		m_vectorAngle = atan2(dy, dx) + M_PI;
+	}
+
+	double ConicalSymetricGradientStrategy::valueAt(double x, double y) const
+	{
+		double px = x - m_gradientVectorStart.x();
+		double py = y - m_gradientVectorStart.y();
+
+		double angle = atan2(py, px) + M_PI;
+
+		angle -= m_vectorAngle;
+
+		if (angle < 0) {
+			angle += 2 * M_PI;
+		}
+
+		double t;
+
+		if (angle < M_PI) {
+			t = angle / M_PI;
+		}
+		else {
+			t = 1 - ((angle - M_PI) / M_PI);
+		}
+
+		return t;
+	}
+
+
 	class GradientRepeatStrategy {
 	public:
 		GradientRepeatStrategy() {}
@@ -1843,6 +1990,15 @@ bool KisPainter::paintGradient(const KisPoint& gradientVectorStart,
 		break;
 	case GradientShapeRadial:
 		shapeStrategy = new RadialGradientStrategy(gradientVectorStart, gradientVectorEnd);
+		break;
+	case GradientShapeSquare:
+		shapeStrategy = new SquareGradientStrategy(gradientVectorStart, gradientVectorEnd);
+		break;
+	case GradientShapeConical:
+		shapeStrategy = new ConicalGradientStrategy(gradientVectorStart, gradientVectorEnd);
+		break;
+	case GradientShapeConicalSymetric:
+		shapeStrategy = new ConicalSymetricGradientStrategy(gradientVectorStart, gradientVectorEnd);
 		break;
 	}
 

@@ -48,7 +48,7 @@ public:
         // value of the source pixel. opacitity is the extra opacitiy
         // of the composition.
         // XXX: maybe I should pass whole chunks of pixels, for efficiency reasons.
-        virtual void composite(QUANTUM *src, QUANTUM *dst, Q_INT32 opacity, CompositeOp op) = 0;
+        virtual void composite(QUANTUM *dst, QUANTUM *src, Q_INT32 opacity, CompositeOp op) const = 0;
 
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
 

@@ -37,7 +37,7 @@ public:
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst);
 	virtual void nativeColor(QRgb rgb, QUANTUM *dst);
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst);
-        virtual void composite(QUANTUM *src, QUANTUM *dst, Q_INT32 opacity, CompositeOp op);
+        virtual void composite(QUANTUM *dst, QUANTUM *src, Q_INT32 opacity, CompositeOp op) const;
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
 
 private:

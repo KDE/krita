@@ -107,7 +107,7 @@ void KisStrategyColorSpaceCMYK::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *
     dst[PIXEL_CMYK_ALPHA] = opacity;
 }
 
-void KisStrategyColorSpaceCMYK::composite(QUANTUM *src, QUANTUM *dst, Q_INT32 opacity, CompositeOp op)
+void KisStrategyColorSpaceCMYK::composite(QUANTUM *dst, QUANTUM *src, Q_INT32 opacity, CompositeOp op) const
 {
     QUANTUM alpha;
     QUANTUM invAlpha;

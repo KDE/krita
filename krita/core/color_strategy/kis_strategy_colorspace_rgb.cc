@@ -87,7 +87,7 @@ void KisStrategyColorSpaceRGB::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *d
     dst[PIXEL_ALPHA] = opacity;
 }
 
-void KisStrategyColorSpaceRGB::composite(QUANTUM *src, QUANTUM *dst, Q_INT32 opacity, CompositeOp op)
+void KisStrategyColorSpaceRGB::composite(QUANTUM *dst, QUANTUM *src, Q_INT32 opacity, CompositeOp op) const
 {
     QUANTUM alpha;
     QUANTUM invAlpha;

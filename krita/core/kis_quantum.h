@@ -36,6 +36,10 @@ class KisQuantum {
 		{
 			return ((*this) = *this - q);
 		}
+		inline QUANTUM operator+=(QUANTUM q)
+		{
+			return ((*this) = *this + q);
+		}
 	private:
 		QUANTUM* m_quantum;
 };

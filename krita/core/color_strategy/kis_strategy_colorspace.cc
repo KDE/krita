@@ -16,6 +16,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+#include <kdebug.h>
+
 #include "kis_strategy_colorspace.h"
 #include "kis_pixel_representation.h"
 #include "kis_global.h"
@@ -41,14 +44,17 @@ void KisStrategyColorSpace::convertTo(KisPixelRepresentation& src, KisPixelRepre
 
 void KisStrategyColorSpace::convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 srcLen)
 {
+	//kdDebug() << "Converting " << srcLen << " pixels from " << srcSpace -> name() << " to " << name() << "\n";
+	
 	Q_INT32 srcPixelSize = srcSpace -> depth() * sizeof(QUANTUM);
 	Q_INT32 dstPixelSize = depth() * sizeof(QUANTUM);
 	KoColor c;
-	QUANTUM opacity;
+	QUANTUM opacity = OPACITY_OPAQUE;
 
 	for (Q_UINT32 s = 0, d = 0; s <= srcLen; s += srcPixelSize, d += dstPixelSize) {
 		srcSpace -> toKoColor(&src[s], &c, &opacity);
-		nativeColor(c, opacity, &dst[d]);
+		nativeColor(KoColor::white(), opacity, &dst[d]);
+
 	}
 }
 
@@ -65,29 +71,47 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 {
 	if (rows <= 0 || cols <= 0)
 		return;
-
-	QUANTUM * dstPixels = 0;
- 	if (!(m_name == srcSpace -> name())) {
- 		QUANTUM * dstPixels = new QUANTUM[depth() * rows * cols  * sizeof(QUANTUM)];
-
-  		convertPixels(src, srcSpace, dstPixels, (rows * cols * srcSpace -> depth() * sizeof(QUANTUM)));
- 		dst = dstPixels;
- 	}
-
-	bitBlt(stride,
-	       dst, 
-	       dststride,
-	       src, 
-	       srcstride,
-	       opacity,
-	       rows, 
-	       cols, 
-	       op);
+	
+	// kdDebug() << name() << "::bitBlt. stride: " << stride
+// 		  << ", dststride: " << dststride
+// 		  << ", srcSpace: " << srcSpace -> name()
+// 		  << ", opacity: " << (Q_UINT8) opacity
+// 		  << ", rows: " << rows
+// 		  << ", cols: " << cols
+// 		  << ", op: " << op << "\n";
 
 
  	if (!(m_name == srcSpace -> name())) {
- 		delete[] dstPixels;
+		int len = depth() * rows * cols  * sizeof(QUANTUM);
+ 		QUANTUM * convertedSrcPixels = new QUANTUM[len];
+		memset(convertedSrcPixels, 255, len);
+
+  		convertPixels(src, srcSpace, convertedSrcPixels, (rows * cols * srcSpace -> depth() * sizeof(QUANTUM)));
+ 		srcstride = (srcstride / srcSpace -> depth()) * depth();
+
+		bitBlt(stride,
+		       dst, 
+		       dststride,
+		       convertedSrcPixels, 
+		       srcstride,
+		       opacity,
+		       rows, 
+		       cols, 
+		       op);
+
+ 		delete[] convertedSrcPixels;
  	}
+	else {
+		bitBlt(stride,
+		       dst, 
+		       dststride,
+		       src, 
+		       srcstride,
+		       opacity,
+		       rows, 
+		       cols, 
+		       op);
+	}
 
 }
 

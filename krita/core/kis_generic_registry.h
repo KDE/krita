@@ -18,9 +18,12 @@
 
 #ifndef _KIS_GENERIC_REGISTRY_H_
 #define _KIS_GENERIC_REGISTRY_H_
- 
+
 #include <map>
+
 #include <qstring.h>
+
+#include <kdebug.h>
 
 template<typename _T>
 class KisGenericRegistry {
@@ -33,6 +36,7 @@ public:
 	void add(_T item)
 	{
 		m_storage.insert( typename storageMap::value_type( item->name(), item) );
+		kdDebug() << "Added to registry: " << item -> name() << "\n";
 	}
 	_T get(const QString& name) const
 	{

@@ -1,1 +1,1 @@
-SUBDIRS = example colorsfilters variations colorrange imagesize screenshot histogram convolutionfilters
+SUBDIRS = example colorsfilters variations colorrange imagesize screenshot histogram convolutionfilters 

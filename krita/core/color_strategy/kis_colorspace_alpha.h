@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#ifndef KIS_COLORSPACE_ALPHAMASK_RGB_H_
-#define KIS_COLORSPACE_ALPHAMASK_RGB_H_
+#ifndef KIS_COLORSPACE_ALPHA_H_
+#define KIS_COLORSPACE_ALPHA_H_
 
 #include <qcolor.h>
 
@@ -28,10 +28,14 @@
 
 const PIXELTYPE PIXEL_MASK = 0;
 
-class KisColorSpaceAlphaMask : public KisStrategyColorSpace {
+/**
+ * The alpha mask is a special color strategy that treats all pixels as 
+ * alpha value with a colour common to the mask. The default color is white.
+ */
+class KisColorSpaceAlpha : public KisStrategyColorSpace {
 public:
-	KisColorSpaceAlphaMask();
-	virtual ~KisColorSpaceAlphaMask();
+	KisColorSpaceAlpha();
+	virtual ~KisColorSpaceAlpha();
 
 public:
 	virtual void nativeColor(const KoColor& c, QUANTUM *dst);
@@ -75,4 +79,4 @@ private:
 	KoColor m_maskColor;
 };
 
-#endif // KIS_COLORSPACE_ALPHAMASK_RGB_H_
+#endif // KIS_COLORSPACE_ALPHA_H_

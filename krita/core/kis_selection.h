@@ -28,7 +28,7 @@ class KoColor;
 // Note: this is intentionally not namespaced, because it's meant for all of Krita 
 // that wants to determine selectedness.
 #if (QUANTUM_DEPTH == 8)
-// XXX: swap when special color strategy for selec
+// XXX: swap when special color strategy for selections is done?
 const QUANTUM MAX_SELECTED = OPACITY_TRANSPARENT;
 const QUANTUM MIN_SELECTED = OPACITY_OPAQUE;
 #endif
@@ -73,9 +73,10 @@ public:
 	// Note: it is intentional to deep-copy the color
 	// since the selection will want to own its own copy.
 	void setMaskColor(const KoColor c);
-
+	void dump();
 private:
 	KisLayerSP m_parentLayer;
+	KisColorSpaceAlphaSP m_alpha;
 	KoColor m_maskColor;
 };
 

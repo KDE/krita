@@ -126,7 +126,7 @@ KisMaskSP KisLayer::mask() const
 KisSelectionSP KisLayer::selection(){
 	if (!m_hasSelection) {
 		m_selection = new KisSelection(this, "layer selection for: " + name());
-		m_selection -> clear(KoColor::white());
+		m_selection -> clear();
 		m_selection -> setVisible(true);
 		m_hasSelection = true;
 		emit selectionCreated();

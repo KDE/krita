@@ -1140,6 +1140,7 @@ void KisImage::renderToProjection(Q_INT32 tileno)
 		visitor(gc, m_layers);
 
 		if (m_activeLayer -> hasSelection()) {
+			kdDebug() << "Active layer has selection -- will render selection now.\n";
 			KisSelectionSP s = m_activeLayer -> selection();
 			visitor(gc, s);
 		}

@@ -113,6 +113,10 @@ typedef KSharedPtr<KisGuide> KisGuideSP;
 class KisAlphaMask;
 typedef KSharedPtr<KisAlphaMask> KisAlphaMaskSP;
 
+class KisColorSpaceAlpha;
+typedef KSharedPtr<KisColorSpaceAlpha> KisColorSpaceAlphaSP;
+
+
 class KisFilter;
 typedef KSharedPtr<KisFilter> KisFilterSP;
 

@@ -18,8 +18,9 @@
  */
 #include "kdebug.h"
 
+#include "kis_types.h"
 #include "kis_colorspace_registry.h"
-#include "kis_paint_device.h"
+#include "kis_colorspace_alpha.h"
 
 KisColorSpaceRegistry *KisColorSpaceRegistry::m_singleton = 0;
 
@@ -28,6 +29,10 @@ KisColorSpaceRegistry::KisColorSpaceRegistry()
 	kdDebug() << " creating a KisColorSpaceRegistry" << endl;
 	Q_ASSERT(KisColorSpaceRegistry::m_singleton == 0);
 	KisColorSpaceRegistry::m_singleton = this;
+	// Hack to add the alpha color space which isn't a module or 
+	// selections wouldn't work. It adds itself.
+	KisStrategyColorSpaceSP alpha = new KisColorSpaceAlpha();
+	add(alpha);
 }
 
 KisColorSpaceRegistry::~KisColorSpaceRegistry()

@@ -44,7 +44,6 @@ public:
 
 	enumCursorStyle defCursorStyle() const;
 	void defCursorStyle(enumCursorStyle style);
-	
 
 private:
 	KisConfig(const KisConfig&);

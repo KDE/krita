@@ -1111,7 +1111,8 @@ bool KisDoc::slotNewImage()
 
 KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 {
-	return new KisView(this, this, parent, name);
+	KisView * v = new KisView(this, this, parent, name);
+	return v;
 }
 
 void KisDoc::paintContent(QPainter& painter, const QRect& rect)

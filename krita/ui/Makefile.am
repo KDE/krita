@@ -14,7 +14,6 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_dlg_preferences.cc \
     kis_dlg_progress.cc \
     gradientview.cc \
-    kis_basedocker.cc \
     kis_canvas.cc \
     kis_channelview.cc \
     kis_cmb_composite.cc \
@@ -25,7 +24,6 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_dlg_new_layer.cc \
     kis_dlg_paint_properties.cc \
     kis_dlg_transform.cc \
-    kis_dockframedocker.cc \
     kis_gradientwidget.cc \
     kis_gray_widget.cc \
     kis_icon_item.cc \
@@ -50,7 +48,6 @@ noinst_HEADERS = integerwidget.h \
     kis_dlg_preferences.h \
     kis_dlg_progress.h \
     gradientview.h \
-    kis_basedocker.h \
     kis_canvas.h \
     kis_channelview.h \
     kis_cmb_composite.h \
@@ -61,7 +58,6 @@ noinst_HEADERS = integerwidget.h \
     kis_dlg_new_layer.h \
     kis_dlg_paint_properties.h \
     kis_dlg_transform.h \
-    kis_dockframedocker.h \
     kis_gradientwidget.h \
     kis_gray_widget.h \
     kis_icon_item.h \

@@ -54,6 +54,8 @@ class KToggleAction;
 
 class KoIconItem;
 class KoTabBar;
+class KoToolDockManager;
+class KoTabbedToolDock;
 
 class KisCanvasObserver;
 class KisRuler;
@@ -70,8 +72,8 @@ class KisResourceMediator;
 class KisAutobrush;
 class KisTextBrush;
 class KisAutogradient;
-class DockFrameDocker;
-class ColorDocker;
+//class DockFrameDocker;
+//class ColorDocker;
 class ControlFrame;
 class KisUndoAdapter;
 class KisRect;
@@ -90,7 +92,7 @@ class KisView
 	: public KoView,
 	  private KisCanvasSubject,
 	  private KisCanvasControllerInterface,
-	  private KisToolControllerInterface 
+	  private KisToolControllerInterface
 {
 
 	Q_OBJECT
@@ -121,7 +123,7 @@ public: // KoView implementation
 
 	virtual void updateReadWrite(bool readwrite);
 	virtual void guiActivateEvent(KParts::GUIActivateEvent *event);
-	
+
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, bool modal = false, const KURL& url = KURL());
@@ -140,7 +142,7 @@ public: // Plugin access API. XXX: This needs redesign.
 	virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	virtual void updateCanvas(const QRect& rc);
 	virtual void updateCanvas(const KisRect& rc);
-	
+
 	void layersUpdated();
 
 	KisDoc * getDocument() { return m_doc; }
@@ -340,17 +342,17 @@ private slots:
 	void slotZoomIn();
 	void slotZoomOut();
 	void slotImageSizeChanged(KisImageSP img, Q_INT32 w, Q_INT32 h);
-	void viewColorDocker();
-	void viewControlDocker();
-	void viewLayerChannelDocker();
-	void viewShapesDocker();
-	void viewFillsDocker();
+	void viewColorDocker(bool v = true);
+	void viewControlDocker(bool v = true);
+	void viewLayerChannelDocker(bool v = true);
+	void viewShapesDocker(bool v = true);
+	void viewFillsDocker(bool v = true);
 	void slotUpdateFullScreen(bool toggle);
 
 	void updateTabBar();
 	void showRuler();
 
-	
+
 private:
 	KisDoc *m_doc;
 	KisCanvas *m_canvas;
@@ -410,12 +412,11 @@ private:
 	KisGrayWidget *m_graywidget;
 
         // Dockers
-	DockFrameDocker *m_layerchanneldocker;
-	DockFrameDocker *m_shapesdocker;
-	DockFrameDocker *m_fillsdocker;
-	DockFrameDocker *m_toolcontroldocker;
-	DockFrameDocker *m_historydocker;
-	DockFrameDocker *m_colordocker;
+	KoTabbedToolDock *m_layerchanneldocker;
+	KoTabbedToolDock *m_shapesdocker;
+	KoTabbedToolDock *m_fillsdocker;
+	KoTabbedToolDock *m_toolcontroldocker;
+	KoTabbedToolDock *m_colordocker;
 
 	// Dialogs
 	QWidget *m_paletteChooser;
@@ -462,7 +463,9 @@ private:
 	QPixmap m_canvasPixmap;
 
 	KisToolRegistry * m_toolRegistry;
-	
+	KoToolDockManager * m_toolDockManager;
+
+	bool m_dockersSetup;
 private:
 	mutable KisImageSP m_current;
 };

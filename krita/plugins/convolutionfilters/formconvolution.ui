@@ -1,15 +1,15 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>FormMatrix</class>
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>kisFormMatrix</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>FormMatrix</cstring>
+        <cstring>kisFormMatrix</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>4</y>
-            <width>186</width>
-            <height>194</height>
+            <y>11</y>
+            <width>138</width>
+            <height>214</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -23,153 +23,111 @@
     <property name="caption">
         <string>Matrix filter</string>
     </property>
-    <vbox>
+    <hbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout5</cstring>
+                <cstring>layout6</cstring>
             </property>
-            <grid>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QSpinBox" row="2" column="2">
+                <widget class="QTabWidget">
                     <property name="name">
-                        <cstring>m33</cstring>
+                        <cstring>tabWidget</cstring>
                     </property>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>tab</cstring>
+                        </property>
+                        <attribute name="title">
+                            <string></string>
+                        </attribute>
+                    </widget>
                 </widget>
-                <widget class="QSpinBox" row="2" column="0">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>m31</cstring>
+                        <cstring>layout4</cstring>
                     </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabelFactor</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Factor :</string>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox">
+                            <property name="name">
+                                <cstring>spinBox1_10</cstring>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer1</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>21</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
                 </widget>
-                <widget class="QSpinBox" row="0" column="0">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>m11</cstring>
+                        <cstring>layout3</cstring>
                     </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabelOffset</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Offset :</string>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox">
+                            <property name="name">
+                                <cstring>spinBox1_11</cstring>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>24</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
                 </widget>
-                <widget class="QSpinBox" row="1" column="2">
-                    <property name="name">
-                        <cstring>m23</cstring>
-                    </property>
-                </widget>
-                <widget class="QSpinBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>m21</cstring>
-                    </property>
-                </widget>
-                <widget class="QSpinBox" row="1" column="1">
-                    <property name="name">
-                        <cstring>m22</cstring>
-                    </property>
-                </widget>
-                <widget class="QSpinBox" row="0" column="1">
-                    <property name="name">
-                        <cstring>m12</cstring>
-                    </property>
-                </widget>
-                <widget class="QSpinBox" row="2" column="1">
-                    <property name="name">
-                        <cstring>m32</cstring>
-                    </property>
-                </widget>
-                <widget class="QSpinBox" row="0" column="2">
-                    <property name="name">
-                        <cstring>m13</cstring>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout4</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabelFactor</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Factor :</string>
-                    </property>
-                </widget>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>spinBox1_10</cstring>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>21</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </hbox>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout3</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabelOffset</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Offset :</string>
-                    </property>
-                </widget>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>spinBox1_11</cstring>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>21</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </hbox>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout7</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>pushButtonOk</cstring>
@@ -186,21 +144,55 @@
                         <string>Cancel</string>
                     </property>
                 </widget>
-            </hbox>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </vbox>
         </widget>
-    </vbox>
+        <spacer>
+            <property name="name">
+                <cstring>spacer7</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </hbox>
 </widget>
 <connections>
     <connection>
         <sender>pushButtonOk</sender>
         <signal>clicked()</signal>
-        <receiver>FormMatrix</receiver>
+        <receiver>kisFormMatrix</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>pushButtonCancel</sender>
         <signal>clicked()</signal>
-        <receiver>FormMatrix</receiver>
+        <receiver>kisFormMatrix</receiver>
         <slot>reject()</slot>
     </connection>
 </connections>

@@ -1,0 +1,104 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KisMatrixWidget</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KisMatrixWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>191</width>
+            <height>115</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Matrix widget</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QSpinBox" row="0" column="0">
+            <property name="name">
+                <cstring>m11</cstring>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="0" column="2">
+            <property name="name">
+                <cstring>m13</cstring>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="0" column="1">
+            <property name="name">
+                <cstring>m12</cstring>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="1" column="2">
+            <property name="name">
+                <cstring>m23</cstring>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="1" column="0">
+            <property name="name">
+                <cstring>m21</cstring>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="1" column="1">
+            <property name="name">
+                <cstring>m22</cstring>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="2" column="0">
+            <property name="name">
+                <cstring>m31</cstring>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="2" column="1">
+            <property name="name">
+                <cstring>m32</cstring>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="2" column="2">
+            <property name="name">
+                <cstring>m33</cstring>
+            </property>
+        </widget>
+        <spacer row="3" column="1">
+            <property name="name">
+                <cstring>spacer4</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>41</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="1" column="3">
+            <property name="name">
+                <cstring>spacer5</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritaconvolutionfilters" version="2">
+<kpartgui library="kritaconvolutionfilters" version="3">
   <MenuBar>
     <Menu name="Filter"><text>&amp;Filter</text>
       <Seperator/>
@@ -16,6 +16,9 @@
       </Menu>
       <Menu name="Edge detection"><text>E&amp;dge Detection</text>
         <Action name="convolution_edgedetectiontop" />
+        <Action name="convolution_edgedetectionright" />
+        <Action name="convolution_edgedetectionbottom" />
+        <Action name="convolution_edgedetectionleft" />
       </Menu>
     </Menu>
   </MenuBar>

@@ -343,9 +343,6 @@
                     <property name="text">
                         <string>White</string>
                     </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton" row="2" column="0">
                     <property name="name">
@@ -353,9 +350,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Foreground Color</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+F</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="3" column="0">
@@ -365,9 +359,6 @@
                     <property name="text">
                         <string>&amp;Transparent</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+T</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0">
                     <property name="name">
@@ -375,9 +366,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Background Color</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+B</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>

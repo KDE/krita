@@ -398,7 +398,8 @@ void KisRotateVisitor::yCropImage(double deltaY)
 void KisRotateVisitor::rotateRight90()
 {
 	Q_INT32 x, y, rx, ry, rw, rh;
-	m_dev -> extent(rx, ry, rw, rh);
+	m_dev -> exactBounds(rx, ry, rw, rh);
+
 	Q_INT32 pixelSize = m_dev -> pixelSize();
 	
 	x = 0;
@@ -413,12 +414,14 @@ void KisRotateVisitor::rotateRight90()
 		x = x + 1;
 		qApp -> processEvents();
 	}
+	m_dev -> crop(ry, rx, rh, rw);
 }
 
 void KisRotateVisitor::rotateLeft90()
 {
 	Q_INT32 x, y, rx, ry, rw, rh;
-	m_dev -> extent(rx, ry, rw, rh);
+	m_dev -> exactBounds(rx, ry, rw, rh);
+
 	Q_INT32 pixelSize = m_dev -> pixelSize();
 	
 	x = rw;
@@ -433,6 +436,7 @@ void KisRotateVisitor::rotateLeft90()
 		x = x - 1;
 		qApp -> processEvents();
 	}
+	m_dev -> crop(ry, rx, rh, rw);
 }
 
 void KisRotateVisitor::rotate180()

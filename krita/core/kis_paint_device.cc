@@ -239,6 +239,92 @@ QRect KisPaintDevice::extent() const
 	return QRect(x, y, w, h);
 }
 
+
+void KisPaintDevice::exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h)
+{
+	QRect r = exactBounds();
+	x = r.x();
+	y = r.y();
+	w = r.width();
+	h = r.height();
+}
+
+QRect KisPaintDevice::exactBounds()
+{
+	Q_INT32 x, y, w, h, boundX, boundY, boundW, boundH;
+	extent(x, y, w, h);
+
+	kdDebug() << "Extent: " << x << ", " << y << ", " << w << ", " << h << "\n";
+	extent(boundX, boundY, boundW, boundH);
+	Q_UINT8 * emptyPixel = new Q_UINT8(m_pixelSize);
+	memset(emptyPixel, 0, m_pixelSize);
+
+	bool found = false;
+
+	for (Q_INT32 y2 = y; y < h ; ++y2) {
+		KisHLineIterator it = createHLineIterator(x, y2, w, false);
+		while (!it.isDone() && found == false) {
+			if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
+				boundY = y2;
+				found = true;
+				break;
+			}
+			++it;
+		}
+		if (found) break;
+
+	}
+
+	found = false;
+	
+	for (Q_INT32 y2 = h; y2 > y ; --y2) {
+		KisHLineIterator it = createHLineIterator(x, y2, w, false);
+		while (!it.isDone() && found == false) {
+			if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
+				boundH = y2 + 1;
+				found = true;
+				break;
+			}
+			++it;
+		}
+		if (found) break;
+	}
+	found = false;
+	
+	for (Q_INT32 x2 = x; x2 < w ; ++x2) {
+		KisVLineIterator it = createVLineIterator(x2, y, h, false);
+		while (!it.isDone() && found == false) {
+			if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
+				boundX = x2;
+				found = true;
+				break;
+			}
+			++it;
+		}
+		if (found) break;
+	}
+
+	found = false;
+
+	// Loog for right edge )
+	for (Q_INT32 x2 = w; x2 > x ; --x2) {
+		KisVLineIterator it = createVLineIterator(x2, y, h, false);
+		while (!it.isDone() && found == false) {
+			if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
+				boundW = x2 + 1;
+				found = true;
+				break;
+			}
+			++it;
+		}
+		if (found) break;
+	}
+		
+	delete emptyPixel;
+	kdDebug() << "Bounds: " << boundX << ", " << boundY << ", " << boundW << ", " << boundH << "\n";
+	return QRect(boundX, boundY, boundW, boundH);
+}
+
 void KisPaintDevice::accept(KisScaleVisitor& visitor)
 {
         visitor.visitKisPaintDevice(this);
@@ -274,11 +360,11 @@ void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInter
 void KisPaintDevice::mirrorX()
 {
         /* Read a line and write it backwards into a temporary buffer. */
-	
 	Q_INT32 x, y, rx, ry, rw, rh, le;
-	extent(rx, ry, rw, rh);
+	exactBounds(rx, ry, rw, rh);
 
 	le = rw * m_pixelSize - m_pixelSize;
+	// We need this tmpLine until we can use decrement iterators
 	Q_UINT8 * tmpLine = new Q_UINT8[(rw * m_pixelSize)];
 	
 	for (y = ry; y < rh; ++y) {
@@ -300,14 +386,10 @@ void KisPaintDevice::mirrorY()
 {
 	/* Read a line from bottom to top and and from top to bottom and write their values to each other */
 	Q_INT32 rx, ry, rw, rh;
-	extent(rx, ry, rw, rh);
-
-
+	exactBounds(rx, ry, rw, rh);
 		
 	Q_INT32 y1, y2;
-	for (y1 = 0, y2 = rh;
-		y1 < rh / 2 || y2 > rh / 2;
-		++y1, --y2) {
+	for (y1 = 0, y2 = rh; y1 < rh / 2 || y2 > rh / 2; ++y1, --y2) {
 		KisHLineIterator itTop = createHLineIterator(rx, y1, rw, true);
 		KisHLineIterator itBottom = createHLineIterator(rx, y2, rw, true);
 		while (!itTop.isDone() && !itBottom.isDone()) {
@@ -336,52 +418,37 @@ bool KisPaintDevice::read(KoStore *store)
         return retval;
 }
 
-void KisPaintDevice::convertTo(KisStrategyColorSpaceSP, KisProfileSP , Q_INT32)
+void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
-#if 0 //AUTOLAYER
 
-	// XXX:  Given the way lcms works, we'd better not do
-	// this with iterators but with the largest chunks of
-	// contiguous bytes we can get.
-	KisPaintDevice dst(width(), height(), dstColorStrategy, "");
+	Q_INT32 x, y, w, h;
+	extent(x, y, w, h);
+
+
+	KisPaintDevice dst(dstColorStrategy, name());
 	dst.setProfile(dstProfile);
-
-	KisStrategyColorSpaceSP srcColorStrategy = colorStrategy();
-	if(srcColorStrategy == dstColorStrategy)
-
-//XXX: Not bit depth independent, assumes both src and dst occupies same number of bytes per pixel
-	KisPaintDevice dst(width(), height(), dstCS, "");
-	KisStrategyColorSpaceSP srcCS = colorStrategy();
-	if(srcCS == dstCS)
+	
+	if(colorStrategy() == dstColorStrategy)
 	{
 		return;
 	}
 
-	KisIteratorLinePixel dstLIt = dst.iteratorPixelBegin(0);
-	KisIteratorLinePixel endLIt = dst.iteratorPixelEnd(0);
-	KisIteratorLinePixel srcLIt = this->iteratorPixelBegin(0);
-	while( dstLIt <= endLIt)
-	{
-		KisIteratorPixel dstIt = dstLIt.begin();
-		KisIteratorPixel endIt = endLIt.begin();
-		KisIteratorPixel srcIt = srcLIt.begin();
-		while(dstIt <= endIt )
-		{
-			KisPixel srcPr = srcIt;
-			KisPixel dstPr = dstIt;
-			srcColorStrategy -> convertTo(srcPr, dstPr, renderingIntent);
-			++dstIt; ++srcIt;
+	for (Q_INT32 y2 = y; y2 < h; ++y2) {
+		KisHLineIteratorPixel srcIt = createHLineIterator(x, y2, w, false);
+		KisHLineIteratorPixel dstIt = createHLineIterator(x, y2, w, true);
+		while (!srcIt.isDone()) {
+// 			m_colorStrategy -> convertTo(srcIt.pixel(), dstIt.pixel(), renderingIntent)
+			++srcIt;
+			++dstIt;
 		}
-		++dstLIt; ++srcLIt;
 	}
-	setTiles(dst.tiles());
-
+	delete m_datamanager;
+	m_datamanager = dst.m_datamanager;
 	m_colorStrategy = dstColorStrategy;
-	setProfile(dstProfile);
-#endif  //AUTOLAYER
+	m_profile = dstProfile;
+
+
 }
-
-
 
 void KisPaintDevice::convertFromImage(const QImage& img)
 {

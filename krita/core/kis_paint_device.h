@@ -84,9 +84,22 @@ public:
         bool contains(Q_INT32 x, Q_INT32 y) const;
         bool contains(const QPoint& pt) const;
 
+	/**
+	 * Retrieve the bounds of the paint device. The size is not exact,
+	 * but may be larger if the underlying datamanager works that way.
+	 * For instance, the tiled datamanager keeps the extent to the nearest
+	 * multiple of 64.
+	 */
 	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
 	QRect extent() const;
 
+	/**
+	 * Get the exact bounds of this paint device. This may be very slow,
+	 * especially on larger paint devices because it does a linear scanline search.
+	 */
+	 void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h);
+	 QRect exactBounds();
+		
 	void crop(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) { m_datamanager -> setExtent(x, y, w, h); };
 	void crop(QRect r) { m_datamanager -> setExtent(r); };
 	

@@ -102,7 +102,9 @@ KisImageMv::KisImageMv(KisDoc *doc) : super("Rename Image", doc)
 	m_doc = doc;
 }
 
-KisImageMv::~KisImageMv();
+KisImageMv::~KisImageMv()
+{
+}
 
 void KisImageMv::execute()
 {

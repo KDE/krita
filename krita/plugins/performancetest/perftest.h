@@ -23,6 +23,8 @@
 #define PERFTEST_H_
 
 #include <kparts/plugin.h>
+#include <kis_types.h>
+#include <kis_global.h>
 
 class KisView;
 
@@ -48,6 +50,12 @@ private:
 	QString scaleTest(Q_UINT32 testCount);
 	QString rotateTest(Q_UINT32 testCount);
 	QString renderTest(Q_UINT32 restCount);
+
+	QString doBlit(CompositeOp op, 
+		       QString cspace,
+		       QUANTUM opacity,
+		       Q_UINT32 testCount,
+		       KisImageSP img);
 
 private:
 

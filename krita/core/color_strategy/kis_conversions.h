@@ -24,6 +24,64 @@
  * A number of often-used conversions between color models
  */
 
+void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V)
+{
+	unsigned int max = R;
+	unsigned int min = R;
+	unsigned char maxValue = 0; // r = 0, g = 1, b = 2
+
+	// find maximum and minimum RGB values
+	if(static_cast<unsigned int>(G) > max) {
+		max = G;
+		maxValue = 1;
+	}
+	
+	if (static_cast<unsigned int>(B) > max)
+	{
+		max = B;
+		maxValue = 2;
+	}
+
+	if(static_cast<unsigned int>(G) < min)
+		min = G;
+		
+	if(static_cast<unsigned int>(B) < min )
+		min = B;
+
+	int delta = max - min;
+	*V = max; // value
+	*S = max ? (510 * delta + max) / ( 2 * max) : 0; // saturation
+	
+	// calc hue
+	if(*S == 0)
+		*H = -1; // undefined hue
+	else
+	{
+		switch(maxValue)
+		{
+		case 0:  // red
+			if(G >= B)
+				*H = (120 * (G - B) + delta) / (2 * delta);
+			else
+				*H = (120 * (G - B + delta) + delta) / (2 * delta) + 300;
+			break;
+		case 1:  // green
+			if(B > R)
+				*H = 120 + (120 * (B - R) + delta) / (2 * delta);
+			else
+				*H = 60 + (120 * (B - R + delta) + delta) / (2 * delta);
+			break;
+		case 2:  // blue
+			if(R > G)
+				*H = 240 + (120 * (R - G) + delta) / (2 * delta);
+			else
+				*H = 180 + (120 * (R - G + delta) + delta) / (2 * delta);
+			break;
+		}
+	}
+}
+
+ 
 void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, float * h, float * l, float * s)
 {
 	int max, min, delta;

@@ -85,7 +85,7 @@ void ColorRange::slotActivated()
 	// XXX: Non-modal dialog, it must somehow be deleted when hidden.		
 	DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");
 
-	dlgColorRange -> show();
+	dlgColorRange -> exec();
 }
 
 #include "colorrange.moc"

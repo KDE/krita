@@ -149,6 +149,7 @@ void KisHSVWidget::slotWheelChanged(const KoColor& c)
 	if (m_ColorButton->current() == KDualColorButton::Foreground){
 		m_fgColor.setHSV(c.H(), c.S(), m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
+		// XXX: I once got a crash here. BSAR.
 		if(m_subject)
 			m_subject->setFGColor(m_fgColor.color());
 	}

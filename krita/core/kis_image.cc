@@ -601,8 +601,8 @@ KisLayerSP KisImage::activate(KisLayerSP layer)
 
 		m_layerStack.insert(m_layerStack.begin() + 0, layer);
 
-		connect(layer, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-		connect(layer, SIGNAL(selectionCreated()), this, SLOT(slotSelectionCreated()));
+		connect(layer.data(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+		connect(layer.data(), SIGNAL(selectionCreated()), this, SLOT(slotSelectionCreated()));
 	}
 
 	if (layer != m_activeLayer) {
@@ -1049,13 +1049,13 @@ KisGuideMgr *KisImage::guides() const
 
 void KisImage::slotSelectionChanged()
 {
-// 	kdDebug() << "KisImage::slotSelectionChanged\n";
+ 	kdDebug() << "KisImage::slotSelectionChanged\n";
 	emit activeSelectionChanged(KisImageSP(this));
 }
 
 void KisImage::slotSelectionCreated()
 {
-// 	kdDebug() << "KisImage::slotSelectionCreated\n";
+ 	kdDebug() << "KisImage::slotSelectionCreated\n";
 	emit selectionCreated(KisImageSP(this));
 }
 

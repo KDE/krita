@@ -25,7 +25,7 @@
 #include <qimage.h>
 #include <qlabel.h>
 #include <qcolor.h>
-#include <qcursor.h>
+#include <qradiobutton.h>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -34,7 +34,6 @@
 #include <kis_brush.h>
 #include <kis_canvas_observer.h>
 #include <kis_canvas_subject.h>
-#include <kis_cursor.h>
 #include <kis_filter.h>
 #include <kis_filter_registry.h>
 #include <kis_gradient.h>
@@ -45,126 +44,194 @@
 #include <kis_pattern.h>
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
-#include <kis_tool_controller.h>
-#include <kis_tool.h>
-#include <kis_tool_registry.h>
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
 #include <kis_view.h>
 #include <kis_strategy_colorspace.h>
 #include <kis_profile.h>
-
+#include <kis_conversions.h>
 #include "dlg_colorrange.h"
 #include "wdg_colorrange.h"
 
-void ColorRangeCanvasSubject::setBGColor(const QColor& c) 
-{ 
-	m_parent -> slotColorChanged(c);
+
+// XXX: Poynton says: hsv/hls is not what one ought to use for colour calculations.
+//      Unfortunately, I don't know enough to be able to use anything else.
+
+bool isReddish(int h)
+{
+	return ((h > 330 && h < 360) || ( h > 0 && h < 40));
 }
-void ColorRangeCanvasSubject::setFGColor(const QColor& c) 
-{ 
-	m_parent -> slotColorChanged(c); 
+
+bool isYellowish(int h)
+{
+	return (h> 40 && h < 65);
 }
+
+bool isGreenish(int h)
+{
+	return (h > 70 && h < 155);
+}
+
+bool isCyanish(int h)
+{
+	return (h > 150 && h < 190);
+}
+
+bool isBlueish(int h)
+{
+	return (h > 185 && h < 270);
+}
+
+bool isMagentaish(int h)
+{
+	return (h > 265 && h < 330);
+}
+
+bool isHighlight(int v)
+{
+	return (v > 200);
+}
+
+bool isMidTone(int v)
+{
+	return (v > 100 && v < 200);
+}
+
+bool isShadow(int v)
+{
+	return (v < 100);
+}
+
+
+Q_UINT32 matchColors(const QColor & c, enumAction action)
+{
+	int r = c.red();
+	int g = c.green();
+	int b = c.blue();
+
+	int h, s, v;
+	rgb_to_hsv(r, g, b, &h, &s, &v);
+
+
+	
+	// XXX: Map the degree in which the colors conform to the requirement
+	//      to a range of selectedness between 0 and 255
+
+	// XXX: Implement out-of-gamut using lcms
+	
+	switch(action) {
+
+		case REDS:
+			if (isReddish(h))
+				return MAX_SELECTED;
+			else
+				return MIN_SELECTED;
+		case YELLOWS:
+			if (isYellowish(h)) {
+				return MAX_SELECTED;
+			}
+			else
+				return MIN_SELECTED;
+		case GREENS:
+			if (isGreenish(h))
+				return MAX_SELECTED;
+			else
+				return MIN_SELECTED;		
+		case CYANS:
+			if (isCyanish(h))
+				return MAX_SELECTED;
+			else
+				return MIN_SELECTED;
+		case BLUES:
+			if (isBlueish(h))
+				return MAX_SELECTED;
+			else
+				return MIN_SELECTED;		
+		case MAGENTAS:
+			if (isMagentaish(h))
+				return MAX_SELECTED;
+			else
+				return MIN_SELECTED;		
+		case HIGHLIGHTS:
+			if (isHighlight(v))
+				return MAX_SELECTED;
+			else
+				return MIN_SELECTED;		
+		case MIDTONES:
+			if (isMidTone(v))
+				return MAX_SELECTED;
+			else
+				return MIN_SELECTED;		
+		case SHADOWS:
+			if (isShadow(v))
+				return MAX_SELECTED;
+			else
+				return MIN_SELECTED;
+	};
+
+	return MIN_SELECTED;
+}
+
 
 
 DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  parent, const char * name)
-	: super (parent, name, false, i18n("Color Range"), Ok | Cancel, Ok)
+	: super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok)
 {
 	m_layer = layer;
 	m_view = view;
 	
 	m_subject = view -> getCanvasSubject();
-	
-	
-	m_canvasSubject = new ColorRangeCanvasSubject(this, m_view);
-	KisID id = KisID("colorpicker", "");
-	m_picker = m_view -> toolRegistry() -> createTool((KisCanvasSubject*)m_canvasSubject, id);
-	
-	if (!m_picker) {
-		m_page -> bnPickerPlus -> hide();
-		m_page -> bnPicker -> hide();
-		m_page -> bnPickerMinus -> hide();
-		m_page -> cmbSelect -> removeItem(0);
-	}
-
-	
+		
 	m_page = new WdgColorRange(this, "color_range");
 	setCaption(i18n("Color Range"));
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
 
-	m_page -> bnLoad -> setEnabled(false);
-	m_page -> bnSaveColorRange -> setEnabled(false);
-	m_page -> cmbSelectionPreview -> setEnabled(false);
-        m_page -> sldrFuzziness -> setValue( 40 );
-        m_page -> intFuzziness -> setValue( 40 );
-	m_fuzziness = 40;
-
-	
-        if (m_layer)
+        if (m_layer) {
+		m_hadSelectionToStartWith = m_layer -> hasSelection();
 		m_selection = m_layer -> selection();
+	}
 	else {
 		// Show message box? Without a layer no selections...
-		hide();
 		return;
 	}
 		
         m_transaction = new KisTransaction(i18n("Select by Color Range"), m_selection.data());
         updatePreview();
 
-
-        if (m_picker) {
-        	m_oldCursor = m_subject -> setCanvasCursor(KisCursor::pickerCursor());
-		m_picker -> update(m_canvasSubject);
-		m_mode = REPLACE;
-		m_page -> cmbSelect -> setCurrentItem(0);
-		m_picker -> activate();
-		m_subject -> setCanvasCursor(KisCursor::pickerCursor());
-	}
-
+	m_invert = false;
+	m_mode = REPLACE;
+	m_currentAction = REDS;
+	
 	connect(this, SIGNAL(okClicked()),
 		this, SLOT(okClicked()));
 
 	connect(this, SIGNAL(cancelClicked()),
 		this, SLOT(cancelClicked()));
 		
-	connect(m_page -> bnPickerPlus, SIGNAL(clicked()),
-		this, SLOT(slotPickerPlusClicked()));
-
-	connect(m_page -> bnPicker, SIGNAL(clicked()),
-		this, SLOT(slotPickerClicked()));
-
-	connect(m_page -> bnPickerMinus, SIGNAL(clicked()),
-		this, SLOT(slotPickerMinusClicked()));
-
-	connect(m_page -> bnLoad, SIGNAL(clicked()),
-		this, SLOT(slotLoad()));
-
-	connect(m_page -> bnSaveColorRange, SIGNAL(clicked()),
-		this, SLOT(slotSave()));
-
 	connect(m_page -> chkInvert, SIGNAL(clicked()),
 		this, SLOT(slotInvertClicked()));
-
-	connect(m_page -> intFuzziness, SIGNAL(valueChanged(int)),
-		this, SLOT(slotFuzzinessChanged(int)));
-
-	connect(m_page -> sldrFuzziness, SIGNAL(sliderMoved(int)),
-		this, SLOT(slotSliderMoved(int)));
 
 	connect(m_page -> cmbSelect, SIGNAL(activated(int)),
 		this, SLOT(slotSelectionTypeChanged(int)));
 
-	connect(m_page -> cmbSelectionPreview, SIGNAL(activated(int)),
-		this, SLOT(slotPreviewTypeChanged(int)));
+	connect (m_page -> radioAdd, SIGNAL(toggled(bool)),
+		 this, SLOT(slotAdd(bool)));
 
+	connect (m_page -> radioReplace, SIGNAL(toggled(bool)),
+		 this, SLOT(slotReplace(bool)));
+
+	connect (m_page -> radioSubtract, SIGNAL(toggled(bool)),
+		 this, SLOT(slotSubtract(bool)));
+
+	connect (m_page -> bnSelect, SIGNAL(clicked()),
+		this, SLOT(slotSelectClicked()));
+		
 }
 
 DlgColorRange::~DlgColorRange()
 {
 	delete m_page;
-	delete m_picker;
-	delete m_canvasSubject;
 }
 
 
@@ -181,187 +248,48 @@ void DlgColorRange::updatePreview()
 
 void DlgColorRange::okClicked()
 {
-	hide();
-	m_subject -> setCanvasCursor(m_oldCursor);
-		m_subject -> undoAdapter() -> addCommand(m_transaction);
+	m_subject -> undoAdapter() -> addCommand(m_transaction);
+	accept();
 }
 
 void DlgColorRange::cancelClicked()
 {
-	hide();
-	m_subject -> setCanvasCursor(m_oldCursor);
-	m_transaction -> unexecute();
-	// Restore the old selection.
-}
-
-void DlgColorRange::slotPickerPlusClicked()
-{
-	m_mode = ADD;
-	m_picker -> activate();
-	m_page -> cmbSelect -> setCurrentItem(0);
-	m_subject -> setCanvasCursor(KisCursor::pickerPlusCursor());
-}
-
-
-void DlgColorRange::slotPickerClicked()
-{
-	m_mode = REPLACE;
-	m_page -> cmbSelect -> setCurrentItem(0);
-	m_picker -> activate();
-	m_subject -> setCanvasCursor(KisCursor::pickerCursor());
-}
-
-
-void DlgColorRange::slotPickerMinusClicked()
-{
-	m_mode = SUBTRACT;
-	m_page -> cmbSelect -> setCurrentItem(0);
-	m_picker -> activate();
-	m_subject -> setCanvasCursor(KisCursor::pickerMinusCursor());
-}
-
-void DlgColorRange::slotLoad()
-{
-}
-
-
-void DlgColorRange::slotSave()
-{
+	if (m_hadSelectionToStartWith)
+		m_transaction -> unexecute();
+	else
+		m_layer -> removeSelection();
+	m_subject -> canvasController() -> updateCanvas();
+	reject();
 }
 
 void DlgColorRange::slotInvertClicked()
 {
-	m_selection -> invert(m_layer -> extent());
-	updatePreview();
-}
-
-void DlgColorRange::slotFuzzinessChanged(int value)
-{
-	m_page -> sldrFuzziness -> setValue(value);
-	kdDebug() << "fuzziness changed\n";
-	m_fuzziness = value;
-	selectByColor(m_currentColor, m_fuzziness, REPLACE); // XXX: is this correct?
-	updatePreview();
-}
-
-void DlgColorRange::slotSliderMoved(int value)
-{
-	m_page -> intFuzziness -> setValue(value);
+	m_invert = m_page -> chkInvert -> isChecked();
 }
 
 void DlgColorRange::slotSelectionTypeChanged(int index)
 {
-	if (index != PICKER) {
-		if (m_picker)
-		m_picker -> clear();
-		m_subject -> setCanvasCursor(m_oldCursor);
-	}
-
-	switch (index) {
-
-	case REDS :
-		m_currentColor = QColor(255, 0, 0);
-		m_mode = REPLACE;
-		break;
-	case YELLOWS:
-		m_currentColor = QColor(255, 255, 0);
-		m_mode = REPLACE;
-		break;
-	case GREENS:
-		m_currentColor = QColor(0, 255, 0);
-		m_mode = REPLACE;
-		break;
-	case CYANS:
-		m_currentColor = QColor(0, 255, 255);
-		m_mode = REPLACE;
-		break;
-	case BLUES:
-		m_currentColor = QColor(0, 0, 255);
-		m_mode = REPLACE;
-		break;
-	case MAGENTAS:
-		m_currentColor = QColor(255, 0, 255);
-		m_mode = REPLACE;
-		break;
-	}
-	
-	selectByColor(m_currentColor, m_fuzziness, m_mode);
-	updatePreview();
-	
+	m_currentAction = (enumAction)index;
 }
 
-void DlgColorRange::slotPreviewTypeChanged(int /*index*/)
+void DlgColorRange::slotSubtract(bool on)
 {
+	if (on)
+		m_mode = SUBTRACT;
 }
-
-void DlgColorRange::slotColorChanged(const QColor & c)
+void DlgColorRange::slotAdd(bool on)
 {
-	m_currentColor = c;
-		kdDebug() << "Color: " << QString::number(c.red()) << ", "
-                          << QString::number(c.green()) << ", "
-                          << QString::number(c.blue()) << "\n";
- 
-	selectByColor(m_currentColor, m_fuzziness, m_mode);
+	if (on)
+		m_mode = ADD;
 }
 
-/**
- * Returns the selectedness of the pixel c2 compared to the reference pixel c, taking into
- * account the specified fuzziness.
- *
- * The following algorithm is used:
- * for all channels in colortype of c:
- *    determine the absolute difference
- *    determine which is the biggest difference
- *    if the absolute difference is greater than fuzziness, return MIN_SELECTED
- *    else
- *      antialias the result of in the range using an algorithm from the gimp.
- *
- */
-Q_UINT8 DlgColorRange::matchColors(QColor c, QColor c2, Q_UINT8 fuzziness)
+void DlgColorRange::slotReplace(bool on)
 {
-// 	kdDebug() << "Color 1: " << QString::number(c.red()) << ", "
-// 	                      << QString::number(c.green()) << ", "
-// 	                      <<  QString::number(c.blue()) << "\n";
-// 
-// 
-// 	kdDebug() << "Color 2: " << QString::number(c2.red()) << ", "
-// 	                      << QString::number(c2.green()) << ", "
-// 	                      <<  QString::number(c2.blue()) << "\n";
-// 	                      
-// 	kdDebug() << "Fuzziness: " << QString::number(fuzziness) << "\n";
-
-	Q_INT32 diffMax = 0;
-	Q_INT32 dr, dg, db = 0;
-
-	dr = QABS(c.red() - c2.red());
-	dg = QABS(c.green() - c2.green());
-	db = QABS(c.blue() - c2.blue());
-
-// /*	kdDebug() << " red difference: " << QString::number(dr)
-// 		  << " green difference: " << QString::number(dg)
-// 		  << " blue difference: " << QString::number(db) << "\n";
-// 	*/
-	diffMax = QMAX(dr, QMAX(dg, db));
-
-/*	kdDebug() << "Max difference: " << QString::number(diffMax) << "\n";*/
-	
-	if (diffMax > fuzziness)
-		return MIN_SELECTED;
-
-	float aa = 1.5 - ((float) diffMax / fuzziness);
-
-/*	kdDebug() << "AA value: " << QString::number(aa) << "\n";*/
-	
-	if (aa <= 0.0)
-		return 0;
-	else if (aa < 0.5)
-		return Q_UINT8 (aa * 512);
-	else
-		return 255;
-
+	if (on)
+		m_mode = REPLACE;
 }
 
-void DlgColorRange::selectByColor(const QColor & c, Q_UINT8 fuzziness, enumMode mode)
+void DlgColorRange::slotSelectClicked()
 {
 	// XXX: Multithread this!
 	Q_INT32 x, y, w, h;
@@ -373,21 +301,19 @@ void DlgColorRange::selectByColor(const QColor & c, Q_UINT8 fuzziness, enumMode 
 		KisHLineIterator selIter = m_selection  -> createHLineIterator(x, y2, w, true);
 		while (!hiter.isDone()) {
 			// Clean up as we go, if necessary
-			if (mode == REPLACE) memset (selIter.rawData(), 0, 1); // Selections are hard-coded one byte big.
+			if (m_mode == REPLACE) memset (selIter.rawData(), 0, 1); // Selections are hard-coded one byte big.
 	
-			QColor c2;
+			QColor c;
 			
-			cs -> toQColor(hiter.rawData(), &c2, profile);
+			cs -> toQColor(hiter.rawData(), &c, profile);
 
- 			Q_UINT8 match = matchColors(c, c2, fuzziness);
-// 			kdDebug() << "Match: " << QString::number(match) << "\n";
+ 			Q_UINT8 match = matchColors(c, m_currentAction);
 
-			if (match > 0) {
-/*				kdDebug() << ">>>>>>>>>>>>>>>>>>>>>>> Match: " << QString::number(match) << "\n";*/
-				if (mode == ADD || mode == REPLACE) {
+			if (match) {
+				if (m_mode == ADD || m_mode == REPLACE) {
 					*(selIter.rawData()) =  match;
 				}
-				else if (mode == SUBTRACT) {
+				else if (m_mode == SUBTRACT) {
 					Q_UINT8 selectedness = *(selIter.rawData());
 					if (match < selectedness) {
 						*(selIter.rawData()) = selectedness - match;
@@ -402,10 +328,9 @@ void DlgColorRange::selectByColor(const QColor & c, Q_UINT8 fuzziness, enumMode 
 			++selIter;
 		}
 	}
+	updatePreview();
 }
 
-void DlgColorRange::selectByValue(const enumTone tone, Q_UINT32 fuzziness, enumMode mode)
-{
-}
+
 
 #include "dlg_colorrange.moc"

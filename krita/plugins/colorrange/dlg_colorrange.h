@@ -59,45 +59,6 @@ class KisView;
 class KisCanvasSubject;
 class DlgColorRange;
 
-// A little hack around CanvasSubject to make sure we get the colour, and not the view.
-class ColorRangeCanvasSubject: public KisCanvasSubject  {
-	
-public:
-		
-	ColorRangeCanvasSubject(DlgColorRange * parent, KisView * view) : m_parent(parent), m_view(view) { m_subject = m_view -> getCanvasSubject(); };
-	virtual ~ColorRangeCanvasSubject() {};
-
-	virtual void attach(KisCanvasObserver *observer) { observer -> update(this); };
-	virtual void detach(KisCanvasObserver *observer) { observer -> update(this); };
-	virtual void notify() { m_subject -> notify() ;};
-	virtual KisImageSP currentImg() const { return m_subject -> currentImg(); };
-	virtual QString currentImgName() const { return m_subject -> currentImgName(); };
-	virtual QColor bgColor() const { return QColor(); };
-	virtual void setBGColor(const QColor& c);
-	virtual QColor fgColor() const { return QColor(); };
-	virtual void setFGColor(const QColor& c);
-	virtual KisBrush *currentBrush() const { return 0; };
-	virtual KisPattern *currentPattern() const { return 0; };
-	virtual KisGradient *currentGradient() const { return 0; };
-	virtual double zoomFactor() const { return m_subject -> zoomFactor(); };
-	virtual KisUndoAdapter *undoAdapter() const { return m_subject -> undoAdapter(); };
-	virtual KisCanvasControllerInterface *canvasController() const { return m_subject -> canvasController(); };
-	virtual KisToolControllerInterface * toolController() const { return m_subject -> toolController(); };
-	virtual KoDocument * document() const { return m_subject -> document() ; };
-	virtual QCursor setCanvasCursor(const QCursor & cursor) { return m_subject-> setCanvasCursor(cursor); };
-	virtual KisProgressDisplayInterface *progressDisplay() const { return m_subject-> progressDisplay(); };
-	virtual KisSelectionManager * selectionManager() { return m_subject -> selectionManager(); };
-	virtual KisFilterRegistry * filterRegistry() const { return m_subject -> filterRegistry(); };
-	virtual KisFilterSP filterGet(const KisID& id) { return m_subject -> filterGet(id); };
-	virtual KisIDList filterList() {return m_subject -> filterList(); };
-
-private:
-
-	DlgColorRange * m_parent;
-	KisView * m_view;
-	KisCanvasSubject * m_subject;
- 
-};
 
 enum enumMode {
 	REPLACE,
@@ -106,7 +67,6 @@ enum enumMode {
 };
 
 enum enumAction {
-	PICKER,
 	REDS,
 	YELLOWS,
 	GREENS,
@@ -139,32 +99,22 @@ public:
 	DlgColorRange(KisView * view, KisLayerSP layer, QWidget * parent = 0, const char* name = 0);
 	~DlgColorRange();
 
-public slots:
-	void slotColorChanged(const QColor & c);
-
 private slots:
 
 	void okClicked();
 	void cancelClicked();
 	
-	void slotPickerPlusClicked();
-	void slotPickerClicked();
-	void slotLoad();
-	void slotPickerMinusClicked();
-	void slotSave();
 	void slotInvertClicked();
-	void slotFuzzinessChanged(int value);
-	void slotSliderMoved(int value);
 	void slotSelectionTypeChanged(int index);
-	void slotPreviewTypeChanged(int index);
 	void updatePreview();
-
-	
+	void slotSubtract(bool on);
+	void slotAdd(bool on);
+	void slotReplace(bool on);
+	void slotSelectClicked();
+			
 private:
 	QImage createMask(KisSelectionSP selection, KisLayerSP layer);
-	Q_UINT8 matchColors(QColor c, QColor c2, Q_UINT8 fuzziness);
-	void selectByColor(const QColor & c, Q_UINT8 fuzziness, enumMode mode);
-	void selectByValue(const enumTone tone, Q_UINT32 fuzziness, enumMode mode);
+
 private:
 
 	WdgColorRange * m_page;
@@ -172,14 +122,12 @@ private:
 	KisLayerSP m_layer;
 	KisView * m_view;
 	KisCanvasSubject * m_subject;
-	KisTool * m_picker;
-	ColorRangeCanvasSubject * m_canvasSubject;
 	enumMode m_mode;
-	Q_UINT32 m_fuzziness;
 	QCursor m_oldCursor;
 	KisTransaction * m_transaction;
 	enumAction m_currentAction;
-	QColor m_currentColor;
+	bool m_invert;
+	bool m_hadSelectionToStartWith;
 };
 
 

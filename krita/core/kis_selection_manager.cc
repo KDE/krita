@@ -265,6 +265,7 @@ void KisSelectionManager::updateGUI()
 
 void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 {
+	kdDebug() << "KisSelectionManager::imgSelectionChanged\n";
         if (img == m_parent -> currentImg()) {
                 updateGUI();
 		m_parent -> updateCanvas();

@@ -437,7 +437,7 @@ void KisView::setupActions()
 	(void)new KAction(i18n("Zoom &Out"), "viewmag-", 0, this, SLOT(zoom_out()), actionCollection(), "zoom_out");
 
 	// tool settings actions
-	(void)new KAction(i18n("&Gradient Dialog"), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
+	(void)new KAction(i18n("&Gradient Dialog..."), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
 
 	// tool actions
 	(void)new KAction(i18n("&Current Tool Properties..."), "configure", 0, this, SLOT(tool_properties()),
@@ -477,7 +477,7 @@ void KisView::setupActions()
 	m_float_side_bar = new KToggleAction(i18n("Dock/Undock Sidebar"), "attach", 0, this, SLOT(floatSidebar()), actionCollection(), "float_sidebar");
 	m_lsidebar = new KToggleAction(i18n("Left/Right Sidebar"), "view_right", 0, this, SLOT(leftSidebar()), actionCollection(), "left_sidebar");
 	(void)KStdAction::saveOptions(this, SLOT(saveOptions()), actionCollection(), "save_options");
-	(void)new KAction(i18n("Krayon Preferences"), "edit", 0, this, SLOT(preferences()), actionCollection(), "preferences");
+	(void)new KAction(i18n("Krayon Preferences..."), "edit", 0, this, SLOT(preferences()), actionCollection(), "preferences");
 
 	// krayon box toolbar actions - these will be used only
 	// to dock and undock wideget in the krayon box

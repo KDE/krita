@@ -86,7 +86,7 @@ KisLayerView::KisLayerView( KisDoc *doc, QWidget *parent, const char *name )
     connect( pbDown, SIGNAL( clicked() ),
         layertable, SLOT( slotLowerLayer() ) );
 
-    QToolTip::add( pbAddLayer, i18n( "Create New Layer" ) );
+    QToolTip::add( pbAddLayer, i18n( "Create new Layer" ) );
     QToolTip::add( pbRemoveLayer, i18n( "Remove Current Layer" ) );
     QToolTip::add( pbUp, i18n( "Upper Current Layer" ) );
     QToolTip::add( pbDown, i18n( "Lower Current Layer" ) );
@@ -198,7 +198,7 @@ void LayerTable::init( KisDoc* doc)
     m_contextmenu->insertItem( i18n( "Selection"), SELECTION );
     m_contextmenu -> insertItem(i18n("Level"), submenu, LEVEL);
     m_contextmenu->insertItem( i18n( "Linked"), LINKING );
-    m_contextmenu->insertItem( i18n( "Properties"), PROPERTIES );
+    m_contextmenu->insertItem( i18n( "Properties..."), PROPERTIES );
 
     m_contextmenu->insertSeparator();
 

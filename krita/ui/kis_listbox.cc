@@ -59,7 +59,7 @@ KisListBoxView::KisListBoxView(const QString& label, flags f, QWidget *parent, c
 	hbox = new QHBox(this);
 	btn = new KPushButton(hbox);
 	btn -> setPixmap(BarIcon("newlayer"));
-	QToolTip::add(btn, i18n("Create New %1").arg(label));
+	QToolTip::add(btn, i18n("Create new %1").arg(label));
 	m_btnRm = new KPushButton(hbox);
 	m_btnRm -> setPixmap(BarIcon("deletelayer"));
 	QToolTip::add(m_btnRm, i18n("Remove Current %1").arg(label));
@@ -90,10 +90,10 @@ KisListBoxView::KisListBoxView(const QString& label, flags f, QWidget *parent, c
 	if (f & SHOWLINKED)
 		m_contextMnu -> insertItem(i18n("Linked"), LINKING);
 
-	m_contextMnu -> insertItem(i18n("Properties"), PROPERTIES);
+	m_contextMnu -> insertItem(i18n("Properties..."), PROPERTIES);
 	m_contextMnu -> insertSeparator();
 
-	m_contextMnu -> insertItem(i18n("Add %1").arg(label), ADD);
+	m_contextMnu -> insertItem(i18n("Add %1...").arg(label), ADD);
 	m_contextMnu -> insertItem(i18n("Remove %1").arg(label), REMOVE);
 
 	if (f & SHOWMASK) {

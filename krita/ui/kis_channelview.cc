@@ -382,7 +382,7 @@ ChannelPropertyDialog::ChannelPropertyDialog( QString _channelname,
     m_name = new QLineEdit( _channelname, this );
     layout->addWidget( m_name, 0, 1 );
 
-    QLabel *lblName = new QLabel( m_name, i18n( "Name" ), this );
+    QLabel *lblName = new QLabel( m_name, i18n( "Name:" ), this );
     layout->addWidget( lblName, 0, 0 );
 
     m_opacity = new IntegerWidget( 0, 255, this );
@@ -391,7 +391,7 @@ ChannelPropertyDialog::ChannelPropertyDialog( QString _channelname,
     m_opacity->setTickInterval( 32 );
     layout->addWidget( m_opacity, 1, 1 );
 
-    QLabel *lblOpacity = new QLabel( m_opacity, i18n( "Opacity" ), this );
+    QLabel *lblOpacity = new QLabel( m_opacity, i18n( "Opacity:" ), this );
     layout->addWidget( lblOpacity, 1, 0 );
 
     layout->setRowStretch( 2, 1 );
@@ -401,11 +401,11 @@ ChannelPropertyDialog::ChannelPropertyDialog( QString _channelname,
 
     (void) new QWidget( buttons );
 
-    QPushButton *pbOk = new QPushButton( i18n( "OK" ), buttons );
+    QPushButton *pbOk = new QPushButton( i18n( "&OK" ), buttons );
     pbOk->setDefault( true );
     QObject::connect( pbOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
 
-    QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), buttons );
+    QPushButton *pbCancel = new QPushButton( i18n( "&Cancel" ), buttons );
     QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 

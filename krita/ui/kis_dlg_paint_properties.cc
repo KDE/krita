@@ -60,11 +60,11 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, int opacity,
 
 	(void) new QWidget(buttons);
 
-	KPushButton *btn = new KPushButton(i18n("OK"), buttons);
+	KPushButton *btn = new KPushButton(i18n("&OK"), buttons);
 	btn -> setDefault(true);
 	connect(btn, SIGNAL(clicked()), SLOT(accept()));
 
-	btn = new KPushButton(i18n("Cancel"), buttons);
+	btn = new KPushButton(i18n("&Cancel"), buttons);
 	connect(btn, SIGNAL(clicked()), this, SLOT(reject()));
 }
 

@@ -339,7 +339,7 @@ void KisTabBar::openPopupMenu( const QPoint &_global )
     if ( m_pPopupMenu != 0L )  delete m_pPopupMenu;
     m_pPopupMenu = new QPopupMenu();
 
-    m_pPopupMenu->insertItem( i18n( "Rename Image" ), this, SLOT( slotRename() ) );
+    m_pPopupMenu->insertItem( i18n( "Rename Image..." ), this, SLOT( slotRename() ) );
     m_pPopupMenu->insertItem( i18n( "Remove Image" ), this, SLOT( slotRemove() ) );
     m_pPopupMenu->insertItem( i18n( "New Image" ), this, SLOT( slotAdd() ) );
     m_pPopupMenu->popup( _global );
@@ -361,7 +361,7 @@ void KisTabBar::renameTab()
 
     bool ok;
     QString activeName = imgName;
-    QString newName = KLineEditDlg::getText( i18n("Image Name"), activeName, &ok, this );
+    QString newName = KLineEditDlg::getText( i18n("Image Name"), i18n("Enter name:"), activeName, &ok, this );
 
     // Have a different name ?
     if ( ok ) // User pushed an OK button.

@@ -442,7 +442,7 @@ void KisView::setupActions()
 	(void)new KAction(i18n("&Link/Unlink Layer..."), 0, this, SLOT(link_layer()), actionCollection(), "link_layer");
 	(void)new KAction(i18n("&Hide/Show layer..."), 0, this, SLOT(hide_layer()), actionCollection(), "hide_layer");
 	(void)new KAction(i18n("&Next Layer..."), "forward", 0, this, SLOT(next_layer()), actionCollection(), "next_layer");
-	(void)new KAction(i18n("&Previous Payer..."), "back", 0, this, SLOT(previous_layer()), actionCollection(), "previous_layer");
+	(void)new KAction(i18n("&Previous Layer..."), "back", 0, this, SLOT(previous_layer()), actionCollection(), "previous_layer");
 	(void)new KAction(i18n("Layer Properties..."), 0, this, SLOT(layer_properties()), actionCollection(), "layer_properties");
 	(void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(insert_image_as_layer()), actionCollection(), "insert_image_as_layer");
 	(void)new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(save_layer_as_image()), actionCollection(), "save_layer_as_image");

@@ -18,7 +18,7 @@ if test "$have_lcms_header" = 'yes'
 then
         AC_DEFINE(LCMS_HEADER, <lcms/lcms.h>, [The correct header])
 
-	echo "#include <lcms/lcms.h" > conftest.$ac_ext
+	echo "#include <lcms/lcms.h>" > conftest.$ac_ext
 	echo "#if LCMS_VERSION < 114" >> conftest.$ac_ext
 	echo "#error Need lcms < 1.14" >> conftest.$ac_ext
 	echo "#endif" >> conftest.$ac_ext

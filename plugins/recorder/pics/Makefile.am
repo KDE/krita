@@ -1,4 +1,4 @@
 
 picsdir = $(kde_datadir)/koffice/toolbar
-pics_DATA = record.xpm stop.xpm play.xpm
+pics_DATA = record.png stop.png play.png
 

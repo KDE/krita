@@ -35,7 +35,7 @@
 #include "kis_render.h"
 #include "kis_guide.h"
 #include "kis_scale_visitor.h"
-#include "kis_profile.h"
+#include "resources/kis_profile.h"
 
 class KoCommandHistory;
 class KisNameServer;

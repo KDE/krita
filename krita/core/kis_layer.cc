@@ -41,40 +41,6 @@ KisLayer::~KisLayer()
 	kdDebug() << "KisLayer::~KisLayer\n";
 }
 
-// XXX Move the firstChannel and nextChannel to KisImage
-#if 0
-void KisLayer::calcNumChannels()
-{
-    switch (m_cMode)
-    {
-	    case cm_Indexed:
-	    case cm_Greyscale:
-	        m_channels = 1;
-	        return;
-
-	    case cm_RGB:
-	    case cm_Lab:
-	        m_channels = 3;
-	        return;
-
-	    case cm_RGBA:
-	    case cm_CMYK:
-	    case cm_LabA:
-	        m_channels = 4;
-	        return;
-
-	    case cm_CMYKA:
-	        m_channels = 5;
-	        return;
-
-	    default:
-	        m_channels = 0;
-	        return;
-    }
-}
-
-#endif
-
 QRect KisLayer::tileRect(int tileNo)
 {
 	int xTile = tileNo % m_tiles.xTiles();

@@ -135,15 +135,15 @@ bool BrushTool::paintCanvas(const QPoint& /* pos */)
 bool BrushTool::paint(const QPoint& pos)
 {
 	KisImageSP img = m_doc -> currentImg();
-	KisLayerSP lay = img -> getCurrentLayer();
+	KisPaintDeviceSP device = img -> getCurrentPaintDevice();
 	int startx = pos.x() - m_hotSpotX;
 	int starty = pos.y() - m_hotSpotY;
 	QRect clipRect(startx, starty, m_brushWidth, m_brushHeight);
 
-	if (!clipRect.intersects(lay -> imageExtents()))
+	if (!clipRect.intersects(device -> imageExtents()))
 		return false;
 
-	clipRect = clipRect.intersect(lay -> imageExtents());
+	clipRect = clipRect.intersect(device -> imageExtents());
 
 	int sx = clipRect.left() - startx;
 	int sy = clipRect.top() - starty;
@@ -153,7 +153,7 @@ bool BrushTool::paint(const QPoint& pos)
 	uchar invopacity = (CHANNEL_MAX - m_opacity);
 
 	uchar bv, invbv;
-	int bpp = lay -> bpp();
+	int bpp = device -> bpp();
 	uchar src2[MAX_CHANNELS];
 	uchar dst[MAX_CHANNELS];
 
@@ -168,7 +168,7 @@ bool BrushTool::paint(const QPoint& pos)
 		uchar *sl = m_brush -> scanline(y);
 
 		for (int x = sx; x <= ex; x++) {
-			uchar *src = lay -> pixel(startx + x, starty + y);
+			uchar *src = device -> pixel(startx + x, starty + y);
 			bv = *(sl + x);
 
 			if (bv == 0)
@@ -183,7 +183,7 @@ bool BrushTool::paint(const QPoint& pos)
 					dst[w] = (dst[w] * opacity + src[w] * invopacity) / CHANNEL_MAX;
 			}
 
-			lay -> setPixel(startx + x, starty + y, dst, m_cmd);
+			device -> setPixel(startx + x, starty + y, dst, m_cmd);
 		}
 	}
 

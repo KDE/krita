@@ -26,7 +26,7 @@
 KisChannel::KisChannel(cId id, const QString& name, uint width, uint height, const QRgb& defaultColor) : super(name, width, height, 1, defaultColor)
 {
 	m_id = id;
-	m_imgRect = m_tileRect = QRect(0, 0, 0, 0);
+	m_imgRect = m_tileRect = QRect(0, 0, width, height);
 }
 
 KisChannel::~KisChannel()
@@ -55,5 +55,4 @@ QRect KisChannel::tileRect(int tileNo)
 
     return(tr);
 }
-
 

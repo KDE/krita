@@ -87,7 +87,7 @@ uint KisTiles::getTileNo(uint x, uint y)
 
 bool KisTiles::intersects(uint x, uint y)
 {
-	return !(y > yTiles() || x > xTiles());
+	return !(y >= yTiles() || x >= xTiles());
 }
 
 #endif // KIS_TILES_

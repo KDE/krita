@@ -233,7 +233,6 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 {
 	QRect tileExtents = KisUtil::findTileExtents(QRect(0, 0, m_width, m_height));
 	QRgb defaultColor = qRgba(0, 0, 0, 255);
-	int bpp;
 
 	m_xTiles = tileExtents.width() / TILE_SIZE;
 	m_yTiles = tileExtents.height() / TILE_SIZE;
@@ -248,35 +247,15 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 	m_dcop = 0;
 	dcopObject();
 	resizePixmap(false);
+	m_bpp = KisUtil::calcNumChannels(cm);
 
-	switch (cm) {
-		case cm_Indexed:
-			bpp = 1;
-			break;
-		case cm_Greyscale:
-			bpp = 1;
-			break;
-		case cm_CMYK: 
-		case cm_RGB:
-			bpp = 4;
-			break;
-		case cm_CMYKA:
-		case cm_RGBA:
-			bpp = 4;
-			break;
-		case cm_Lab:
-		case cm_LabA:
-			Q_ASSERT(false);
-			break;
-	}
+	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * m_bpp);
 
-	m_bpp = bpp;
-	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * bpp);
-	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, bpp, cm, defaultColor);
-	m_composeLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE), bpp);
+	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, m_bpp, cm, defaultColor);
+	m_composeLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE), m_bpp);
 
-	m_bgLayer = new KisLayer("_background", TILE_SIZE, TILE_SIZE, bpp, cm, defaultColor);
-	m_bgLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE), bpp);
+	m_bgLayer = new KisLayer("_background", TILE_SIZE, TILE_SIZE, m_bpp, cm, defaultColor);
+	m_bgLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE), m_bpp);
 	renderBg(m_bgLayer, 0);
 	compositeImage();
 

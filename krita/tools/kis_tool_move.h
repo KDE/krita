@@ -24,11 +24,12 @@
 #include "kis_types.h"
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
+#include "kis_strategy_move.h"
 
 class KisDoc;
 class KisView;
 
-class KisToolMove : public KisToolNonPaint {
+class KisToolMove : public KisToolNonPaint, private KisStrategyMove {
 	typedef KisToolNonPaint super;
 
 public:
@@ -42,18 +43,9 @@ public:
 	virtual void mouseRelease(QMouseEvent *e);
 	virtual void keyPress(QKeyEvent *e);
 
-public:
-	void startDrag(const QPoint& pos);
-	void drag(const QPoint& pos);
-	void endDrag(const QPoint& pos, bool undo = true);
-
 private:
 	KisView *m_view;
 	KisDoc *m_doc;
-	QPoint m_dragStart;
-	QPoint m_layerStart;
-	QPoint m_layerPosition;
-	bool m_dragging;
 };
 
 #endif // KIS_TOOL_MOVE_H_

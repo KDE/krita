@@ -83,7 +83,7 @@ void KisSideBar::resizeEvent ( QResizeEvent * )
     int topTitleFrameHeight = 20;
     int controlHeight = 42;
     int topColorFrameHeight = 18;
-    int colorChooserHeight = m_pColorChooserFrame->isVisible() ? 152 : 0;
+    int colorChooserHeight = 152; //m_pColorChooserFrame->isVisible() ? 152 : 0;
 
     int total = 0;
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,34 +15,34 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#if !defined KIS_DLG_LAYER_PROPERTIES_H_
-#define KIS_DLG_LAYER_PROPERTIES_H_
+#if !defined KIS_STRATEGY_MOVE_H_
+#define KIS_STRATEGY_MOVE_H_
 
-#include <kdialogbase.h>
+#include <qpoint.h>
+#include "kis_types.h"
 
-class QWidget;
-class KIntSpinBox;
-class KLineEdit;
-class KisPaintDevice;
-class KIntNumInput;
+class KisDoc;
+class KisView;
 
-class KisPaintPropertyDlg : public KDialogBase {
-	typedef KDialogBase super;
+class KisStrategyMove {
+public:
+	KisStrategyMove(KisView *view, KisDoc *doc);
+	virtual ~KisStrategyMove();
 
 public:
-	KisPaintPropertyDlg(const QString& deviceName, const QPoint& pos, Q_INT32 opacity, QWidget *parent = 0, const char *name = 0, WFlags f = 0);
-	virtual ~KisPaintPropertyDlg();
-
-	QString getName() const;
-	Q_INT32 getOpacity() const;
-	QPoint getPosition() const;
+	void startDrag(const QPoint& pos);
+	void drag(const QPoint& pos);
+	void endDrag(const QPoint& pos, bool undo = true);
+	void simpleMove(const QPoint& pt1, const QPoint& pt2);
 
 private:
-	KLineEdit *m_name;
-	KIntNumInput *m_opacity;
-	KIntSpinBox *m_x;
-	KIntSpinBox *m_y;
+	KisView *m_view;
+	KisDoc *m_doc;
+	QPoint m_dragStart;
+	QPoint m_layerStart;
+	QPoint m_layerPosition;
+	bool m_dragging;
 };
 
-#endif // KIS_DLG_LAYER_PROPERTIES_H_
+#endif // KIS_STRATEGY_MOVE_H_
 

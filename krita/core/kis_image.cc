@@ -147,6 +147,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_type = rhs.m_type;
 		m_clrMap = rhs.m_clrMap;
 		m_dirty = rhs.m_dirty;
+		m_doc = rhs.m_doc;
 
 		if (rhs.m_shadow)
 			m_shadow = new KisTileMgr(*rhs.m_shadow);
@@ -1101,14 +1102,18 @@ void KisImage::unsetSelection(bool commit)
 		QRect rc = m_selection -> bounds();
 
 		if (commit) {
+			bool inMacro = m_doc -> inMacro();
+
 			if (m_doc -> undo()) {
-				m_doc -> beginMacro(i18n("Anchor Selection"));
+				if (!inMacro)
+					m_doc -> beginMacro(i18n("Anchor Selection"));
+
 				m_doc -> addCommand(new KisSelectionSet(m_doc, this, m_selection));
 			}
 
 			m_selection -> commit();
 
-			if (m_doc -> undo())
+			if (m_doc -> undo() && !inMacro)
 				m_doc -> endMacro();
 		}
 

@@ -77,6 +77,7 @@
 #include "kis_paint_device_visitor.h"
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
+#include "strategy/kis_strategy_move.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
@@ -774,15 +775,18 @@ void KisView::removeSelection()
 				QRect ur;
 				KisPainter gc(parent);
 
-				img -> unsetSelection(false);
+				Q_ASSERT(!m_doc -> inMacro());
+				m_doc -> beginMacro(i18n("Remove Selection"));
+				img -> unsetSelection(true);
 				ur = rc;
 			
 				if (parent -> x() || parent -> y())
 					rc.moveBy(-parent -> x(), -parent -> y());
 
-				gc.beginTransaction(i18n("Remove Selection"));
+				gc.beginTransaction("remove selection on parent");
 				gc.eraseRect(rc);
 				m_doc -> addCommand(gc.end());
+				m_doc -> endMacro();
 				m_doc -> setModified(true);
 				img -> invalidate(rc);
 				updateCanvas(ur);
@@ -798,8 +802,12 @@ void KisView::crop()
 	if (img) {
 		KisSelectionSP selection = img -> selection();
 
+		img -> unsetSelection(false);
+
 		if (selection && m_doc -> layerAdd(img, img -> nextLayerName(), selection))
 			layersUpdated();
+		else
+			img -> setSelection(selection);
 	}
 }
 
@@ -1257,6 +1265,8 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 		vKisLayerSP v = img -> layers();
 		KisImageSP current = currentImg();
 		Q_INT32 rc = v.size();
+
+		current -> unsetSelection();
 
 		for (vKisLayerSP_it it = v.begin(); it != v.end(); it++) {
 			KisLayerSP layer = *it;
@@ -1773,10 +1783,17 @@ void KisView::layerProperties()
 		KisLayerSP layer = img -> activeLayer();
 
 		if (layer) {
-			KisPaintPropertyDlg dlg(layer -> name(), layer -> opacity());
+			KisPaintPropertyDlg dlg(layer -> name(), QPoint(layer -> x(), layer -> y()), layer -> opacity());
 
-			if (dlg.exec() == QDialog::Accepted && (layer -> name() != dlg.getName() || layer -> opacity() != dlg.getOpacity()))
-				m_doc -> layerProperties(img, layer, dlg.getOpacity(), dlg.getName());
+			if (dlg.exec() == QDialog::Accepted) { 
+				QPoint pt = dlg.getPosition();
+
+				if (layer -> name() != dlg.getName() || layer -> opacity() != dlg.getOpacity())
+					m_doc -> layerProperties(img, layer, dlg.getOpacity(), dlg.getName());
+
+				if (pt.x() != layer -> x() || pt.y() != layer -> y())
+					KisStrategyMove(this, m_doc).simpleMove(QPoint(layer -> x(), layer -> y()), pt);
+			}
 		}
 	}
 }

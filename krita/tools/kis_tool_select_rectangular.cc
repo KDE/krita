@@ -56,6 +56,7 @@ namespace {
 
 	void RectSelectCmd::execute()
 	{
+		m_selection -> clearParentOnMove(true);
 		m_owner -> setSelection(m_selection);
 	}
 

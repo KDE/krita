@@ -71,6 +71,7 @@ public:
 
 	void beginMacro(const QString& macroName);
 	void endMacro();
+	bool inMacro() const;
 	void addCommand(KCommand *cmd);
 	Q_INT32 undoLimit() const;
 	void setUndoLimit(Q_INT32 limit);

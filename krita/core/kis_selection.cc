@@ -91,12 +91,23 @@ void KisSelection::commit()
 		KisImageSP img;
 		KisPainter gc;
 		QRect rc = clip();
+		QPoint pt(0, 0);
 		Q_INT32 w = width();
 		Q_INT32 h = height();
 
 		if (!rc.isEmpty()) {
 			w = rc.width();
 			h = rc.height();
+		}
+
+		if (x() < 0) {
+			pt.setX(-x());
+			setX(0);
+		}
+
+		if (y() < 0) {
+			pt.setY(-y());
+			setY(0);
 		}
 
 		img = m_parent -> image();
@@ -117,7 +128,7 @@ void KisSelection::commit()
 		gc.beginTransaction("copy selection to parent");
 		Q_ASSERT(w <= width());
 		Q_ASSERT(h <= height());
-		gc.bitBlt(x() - m_parent -> x(), y() - m_parent -> y(), COMPOSITE_COPY, this, opacity(), 0, 0, w, h);
+		gc.bitBlt(x() - m_parent -> x(), y() - m_parent -> y(), COMPOSITE_COPY, this, opacity(), pt.x(), pt.y(), w, h);
 		doc -> addCommand(gc.endTransaction());
 		gc.end();
 	}

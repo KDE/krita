@@ -967,6 +967,11 @@ void KisDoc::slotImageUpdated(const QRect& rect)
 	emit docUpdated(rect);
 }
 
+bool KisDoc::inMacro() const
+{
+	return m_currentMacro != 0;
+}
+
 void KisDoc::beginMacro(const QString& macroName)
 {
 	if (!m_currentMacro)

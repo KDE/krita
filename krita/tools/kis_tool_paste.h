@@ -21,8 +21,9 @@
 #include "kis_selection.h"
 #include "kis_tool_non_paint.h"
 #include "kis_tool_move.h"
+#include "kis_strategy_move.h"
 
-class KisToolPaste : public KisToolNonPaint {
+class KisToolPaste : public KisToolNonPaint, private KisStrategyMove {
 	typedef KisToolNonPaint super;
 
 public:
@@ -41,7 +42,6 @@ public:
 private:
 	KisView *m_view;
 	KisDoc *m_doc;
-	KisToolMove *m_move;
 	KisSelectionSP m_clip;
 	bool m_justEntered;
 	QUANTUM m_oldOpacity;

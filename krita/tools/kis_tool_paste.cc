@@ -24,18 +24,16 @@
 #include "kis_tool_paste.h"
 #include "kis_view.h"
 
-KisToolPaste::KisToolPaste(KisView *view, KisDoc *doc) : super(view, doc)
+KisToolPaste::KisToolPaste(KisView *view, KisDoc *doc) : super(view, doc), KisStrategyMove(view, doc)
 {
 	m_view = view;
 	m_doc = doc;
-	m_move = new KisToolMove(view, doc);
 	setCursor(KisCursor::crossCursor());
 	m_justEntered = false;
 }
 
 KisToolPaste::~KisToolPaste()
 {
-	delete m_move;
 }
 
 void KisToolPaste::clear()
@@ -74,7 +72,7 @@ void KisToolPaste::mouseRelease(QMouseEvent *e)
 		KisPaintDeviceSP dev;
 		KisPainter gc;
 
-		m_move -> drag(e -> pos());
+		drag(e -> pos());
 		owner -> unsetSelection(false);
 		dev = owner -> activeDevice();
 		gc.begin(m_selection -> parent());
@@ -98,10 +96,10 @@ void KisToolPaste::mouseMove(QMouseEvent *e)
 
 	if (m_justEntered) {
 		m_selection -> move(e -> x(), e -> y());
-		m_move -> startDrag(e -> pos());
+		startDrag(e -> pos());
 		m_justEntered = false;
 	} else {
-		m_move -> drag(e -> pos());
+		drag(e -> pos());
 	}
 }
 

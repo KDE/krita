@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir)/../core -I$(srcdir)/../ui $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)  
+INCLUDES = -I$(srcdir)/../core -I$(srcdir)/../ui $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes) -I$(srcdir)/../core/strategy/
 
 noinst_LTLIBRARIES = libkistools.la
 

@@ -155,7 +155,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 			    collection, "expand");
 
 	m_smooth =
-		new KAction(i18n("Smoooth..."),
+		new KAction(i18n("Smooth..."),
 			    0, 0,
 			    this, SLOT(smooth()),
 			    collection, "smooth");

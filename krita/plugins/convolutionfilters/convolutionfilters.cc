@@ -168,24 +168,20 @@ void KritaConvolutionFilters::slotTopEdgeDetectionActivated()
 
 Q_INT32 KritaConvolutionFilters::depth()
 {
-	KisDoc* kD = (KisDoc*) this->m_view->koDocument();
-	if( kD->imageNum(0) == 0 )
-		return 0;
-	return ::imgTypeDepth( kD->imageNum(0)->activeDevice()->typeWithoutAlpha() ) + 1;
+	KisImageSP img = this->m_view->currentImg();
+	return ::imgTypeDepth( img->activeDevice()->typeWithoutAlpha() ) + 1;
 	
 }
 
 void KritaConvolutionFilters::doIt(KisMatrix3x3* matrixes, const char* name)
 {
-	KisDoc* kD = (KisDoc*) this->m_view->koDocument();
-	if( kD->imageNum(0) == 0 )
-		return;
-	KisPainter painter( kD->imageNum(0)-> activeDevice());
+	KisImageSP img = this->m_view->currentImg();
+	KisPainter painter( img->activeDevice() );
 	painter.beginTransaction(name);
 	painter.applyConvolutionColorTransformation(matrixes);
-	KisUndoAdapter *adapter = kD->imageNum(0) -> undoAdapter();
+	KisUndoAdapter *adapter = img -> undoAdapter();
 	if (adapter ) {
 		adapter -> addCommand(painter.endTransaction());
 	}
-	kD->imageNum(0)->notify();
+	img->notify();
 }

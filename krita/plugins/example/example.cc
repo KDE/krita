@@ -78,10 +78,7 @@ KritaExample::~KritaExample()
 
 void KritaExample::slotIteratorsActivated()
 {
-	KisDoc* kD = (KisDoc*) this->m_view->koDocument();
-	if( kD->imageNum(0) == 0 )
-		return;
-	KisLayerSP lay = kD->imageNum(0)->activeLayer();
+	KisLayerSP lay = m_view->currentImg()->activeLayer();
 	KisTileCommand* ktc = new KisTileCommand("Invert", (KisPaintDeviceSP)lay ); // Create a command
 	KisIteratorLineQuantum lineIt = lay->iteratorQuantumSelectionBegin(ktc);
 	KisIteratorLineQuantum lastLine = lay->iteratorQuantumSelectionEnd(ktc);
@@ -101,18 +98,13 @@ void KritaExample::slotIteratorsActivated()
 		}
 		++lineIt;
 	}
-	kD->imageNum(0)->undoAdapter()->addCommand( ktc );
-	kD->imageNum(0)->notify();
+	m_view->currentImg()->undoAdapter()->addCommand( ktc );
+	m_view->currentImg()->notify();
 }
 
 void KritaExample::slotActivated()
 {
-	kdDebug() << "View = " << this -> m_view << "\n";
-
-	KisDoc* kD = (KisDoc*) this->m_view->koDocument();
-	if( kD->imageNum(0) == 0 )
-		return;
-	KisLayerSP lay = kD->imageNum(0)->activeLayer();
+	KisLayerSP lay = m_view->currentImg()->activeLayer();
 	KisTileCommand* ktc = new KisTileCommand("Invert", (KisPaintDeviceSP)lay ); // Create a command
 	int nbchannel = ::imgTypeDepth( lay->typeWithoutAlpha() ); // get the number of channel whithout alpha
 	KisTileMgrSP ktm = lay->data();
@@ -138,6 +130,6 @@ void KritaExample::slotActivated()
 			}
 		}
 	}
-	kD->imageNum(0)->undoAdapter()->addCommand( ktc );
-	kD->imageNum(0)->notify();
+	m_view->currentImg()->undoAdapter()->addCommand( ktc );
+	m_view->currentImg()->notify();
 }

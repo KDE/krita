@@ -96,10 +96,7 @@ ColorsFilters::~ColorsFilters()
 
 void ColorsFilters::slotColorActivated()
 {
-	KisDoc* kD = (KisDoc*) m_view->koDocument();
-	if( kD->imageNum(0) == 0 )
-		return;
-	KisLayerSP lay = kD->imageNum(0)->activeLayer();
+	KisLayerSP lay = m_view->currentImg()->activeLayer();
 	KisTileCommand* ktc = new KisTileCommand(i18n("Color adjustment"), (KisPaintDeviceSP)lay ); // Create a command
 	KisTileMgrSP ktm = lay->data();
 	KisTileSP tile;
@@ -139,8 +136,8 @@ void ColorsFilters::slotColorActivated()
 				j ++;
 			}
 		}
-		kD->imageNum(0)->undoAdapter()->addCommand( ktc );
-		kD->imageNum(0)->notify();
+		m_view->currentImg()->undoAdapter()->addCommand( ktc );
+		m_view->currentImg()->notify();
 	} else if( lay->typeWithoutAlpha() == IMAGE_TYPE_CMYK) {
 		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Color adjustment", TRUE);
 		frsd->setCaption(i18n("Color adjustment"));
@@ -177,17 +174,14 @@ void ColorsFilters::slotColorActivated()
 				j ++;
 			}
 		}
-		kD->imageNum(0)->undoAdapter()->addCommand( ktc );
-		kD->imageNum(0)->notify();
+		m_view->currentImg()->undoAdapter()->addCommand( ktc );
+		m_view->currentImg()->notify();
 	}
 }
 
 void ColorsFilters::slotDesaturate()
 {
-	KisDoc* kD = (KisDoc*) m_view->koDocument();
-	if( kD->imageNum(0) == 0 )
-		return;
-	KisLayerSP lay = kD->imageNum(0)->activeLayer();
+	KisLayerSP lay = m_view->currentImg()->activeLayer();
 	KisTileCommand* ktc = new KisTileCommand("Desaturate", (KisPaintDeviceSP)lay ); // Create a command
 	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB) {
 		KisIteratorLinePixel lineIt = lay->iteratorPixelSelectionBegin(ktc);
@@ -211,8 +205,8 @@ void ColorsFilters::slotDesaturate()
 			}
 			++lineIt;
 		}
-		kD->imageNum(0)->undoAdapter()->addCommand( ktc );
-		kD->imageNum(0)->notify();
+		m_view->currentImg()->undoAdapter()->addCommand( ktc );
+		m_view->currentImg()->notify();
 	} else {
 		kdDebug() << "Colorsfilters: desaturate not yet supported for this type" << endl;
 	}
@@ -220,10 +214,7 @@ void ColorsFilters::slotDesaturate()
 
 void ColorsFilters::slotGammaActivated()
 {
-	KisDoc* kD = (KisDoc*) m_view->koDocument();
-	if( kD->imageNum(0) == 0 )
-		return;
-	KisLayerSP lay = kD->imageNum(0)->activeLayer();
+	KisLayerSP lay = m_view->currentImg()->activeLayer();
 	KisTileCommand* ktc = new KisTileCommand(i18n("Gamma Correction"), (KisPaintDeviceSP)lay ); // Create a command
 	KisTileMgrSP ktm = lay->data();
 	KisTileSP tile;
@@ -262,8 +253,8 @@ void ColorsFilters::slotGammaActivated()
 				j ++;
 			}
 		}
-		kD->imageNum(0)->undoAdapter()->addCommand( ktc );
-		kD->imageNum(0)->notify();
+		m_view->currentImg()->undoAdapter()->addCommand( ktc );
+		m_view->currentImg()->notify();
 	} else if( lay->typeWithoutAlpha() == IMAGE_TYPE_CMYK) {
 		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Gamma Correction", TRUE);
 		frsd->setCaption(i18n("Gamma Correction"));
@@ -300,8 +291,8 @@ void ColorsFilters::slotGammaActivated()
 				j ++;
 			}
 		}
-		kD->imageNum(0)->undoAdapter()->addCommand( ktc );
-		kD->imageNum(0)->notify();
+		m_view->currentImg()->undoAdapter()->addCommand( ktc );
+		m_view->currentImg()->notify();
 	}
 }
 void ColorsFilters::slotBrightnessContrastActivated()
@@ -311,12 +302,9 @@ void ColorsFilters::slotBrightnessContrastActivated()
 	fbcd->setCaption(i18n("Brightness / Contrast"));
 	if( fbcd->exec() ==  QDialog::Rejected )
 		return;
-	KisDoc* kD = (KisDoc*) m_view->koDocument();
-	if( kD->imageNum(0) == 0 )
-		return;
 	int bright = fbcd->sliderBrightness->value();
 	int contrast = 100+fbcd->sliderContrast->value();
-	KisLayerSP lay = kD->imageNum(0)->activeLayer();
+	KisLayerSP lay = m_view->currentImg()->activeLayer();
 	KisTileCommand* ktc = new KisTileCommand(i18n("Brightness / Contrast"), (KisPaintDeviceSP)lay ); // Create a command
 	int nbchannel = ::imgTypeDepth( lay->typeWithoutAlpha() ); // get the number of channel whithout alpha
 	KisTileMgrSP ktm = lay->data();
@@ -349,6 +337,6 @@ void ColorsFilters::slotBrightnessContrastActivated()
 			}
 		}
 	}
-	kD->imageNum(0)->undoAdapter()->addCommand( ktc );
-	kD->imageNum(0)->notify();
+	m_view->currentImg()->undoAdapter()->addCommand( ktc );
+	m_view->currentImg()->notify();
 }

@@ -49,8 +49,7 @@
 #include <kis_progress_display_interface.h>
 
 #include "kis_filter_configuration_widget.h"
-#include "kis_oilpaint_filter_configuration_widget.h"
-#include "kis_oilpaint_filter_configuration_base_widget.h"
+#include "kis_multi_integer_filter_widget.h"
 #include "kis_oilpaint_filter.h"
 
 KisOilPaintFilter::KisOilPaintFilter(KisView * view) : KisFilter(name(), view)
@@ -227,22 +226,19 @@ uint KisOilPaintFilter::MostFrequentColor (uchar* Bits, int Width, int Height, i
 
 KisFilterConfigurationWidget* KisOilPaintFilter::createConfigurationWidget(QWidget* parent)
 {
-	KisOilPaintFilterConfigurationWidget* kopfcw = new KisOilPaintFilterConfigurationWidget(this,parent, "");
-	kdDebug() << kopfcw << endl;
-	return kopfcw  ;
+	vKisIntegerWidgetParam param;
+	param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush Size") ) );
+	param.push_back( KisIntegerWidgetParam( 10, 255, 30, i18n("Smooth") ) );
+	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );
 }
 
 KisFilterConfiguration* KisOilPaintFilter::configuration(KisFilterConfigurationWidget* nwidget)
 {
-	KisOilPaintFilterConfigurationWidget* widget = (KisOilPaintFilterConfigurationWidget*) nwidget;
-
+	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
 	if( widget == 0 )
 	{
-		return new KisOilPaintFilterConfiguration(1,30);
+		return new KisOilPaintFilterConfiguration( 1, 30);
 	} else {
-                Q_UINT32 brushSize = widget -> baseWidget() -> brushSizeSpinBox -> value();
-                Q_UINT32 smooth = widget -> baseWidget() -> smoothSpinBox -> value();
-                
-                return new KisOilPaintFilterConfiguration(brushSize, smooth);
-        }
+		return new KisOilPaintFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
+	}
 }

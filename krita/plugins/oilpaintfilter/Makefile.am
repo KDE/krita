@@ -19,14 +19,11 @@ INCLUDES  = \
 
 kde_module_LTLIBRARIES = kritaoilpaintfilter.la
 
-kritaoilpaintfilter_la_SOURCES = kis_oilpaint_filter_configuration_base_widget.ui \
-	kis_oilpaint_filter_plugin.cc \
-        kis_oilpaint_filter_configuration_widget.cc \
+kritaoilpaintfilter_la_SOURCES = kis_oilpaint_filter_plugin.cc \
 	kis_oilpaint_filter.cc
 
-noinst_HEADERS = kis_oilpaint_filter_configuration_widget.h \
-	kis_oilpaint_filter_plugin.h \
-        kis_oilpaint_filter.h
+noinst_HEADERS = kis_oilpaint_filter_plugin.h \
+	kis_oilpaint_filter.h
 
 kritaoilpaintfilter_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritaoilpaintfilter_la_LIBADD =  ../../libkritacommon.la $(LIB_KOFFICECORE) $(LIB_KOPAINTER)

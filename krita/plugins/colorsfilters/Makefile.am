@@ -19,7 +19,7 @@ kritacolorsfilters_la_SOURCES = colorsfilters.cc \
 	kis_brightness_contrast_filter.cc
 
 noinst_HEADERS = colorsfilters.h \
-	kis_perchannel_filter.cc \
+	kis_perchannel_filter.h \
 	kis_brightness_contrast_filter.h
 
 kritacolorsfilters_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

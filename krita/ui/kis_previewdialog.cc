@@ -19,6 +19,8 @@
  */
 #include <qframe.h>
 #include <qvbox.h>
+#include <qgroupbox.h>
+#include <qlayout.h>
  
 #include "kis_previewwidget.h"
 #include "kis_previewdialog.h"
@@ -27,10 +29,18 @@ KisPreviewDialog::KisPreviewDialog( QWidget *  parent, const char * name, bool m
 	: super (parent, name, modal, caption, Ok | Cancel, Ok)
 {
 	QVBox* layout = new QVBox(this);
+	layout -> setSpacing( 6 );
 
 	preview = new KisPreviewWidget( layout, "previewWidget" );
-	containerFrame = new QFrame( layout, "container" );
-	containerFrame -> setMinimumSize( QSize( 150, 150 ) );
+
+	QGroupBox* groupBox = new QGroupBox( caption, layout, "groupBox" );
+	groupBox -> setColumnLayout(0, Qt::Vertical );
+	groupBox -> layout()->setSpacing( 6 );
+	groupBox -> layout()->setMargin( 11 );
+	QGridLayout *groupBoxLayout = new QGridLayout( groupBox -> layout(), 1, 1);
+
+	containerFrame = new QFrame( groupBox, "container" );
+	groupBoxLayout -> addWidget( containerFrame, 0 , 0);
 
 	setMainWidget(layout);
 }

@@ -48,9 +48,7 @@
 #include <kis_view.h>
 #include <kis_progress_display_interface.h>
 
-#include "kis_filter_configuration_widget.h"
-#include "kis_raindrops_filter_configuration_widget.h"
-#include "kis_raindrops_filter_configuration_base_widget.h"
+#include "kis_multi_integer_filter_widget.h"
 #include "kis_raindrops_filter.h"
 
 KisRainDropsFilter::KisRainDropsFilter(KisView * view) : KisFilter(name(), view)
@@ -421,23 +419,20 @@ uchar KisRainDropsFilter::LimitValues (int ColorValue)
 
 KisFilterConfigurationWidget* KisRainDropsFilter::createConfigurationWidget(QWidget* parent)
 {
-	KisRainDropsFilterConfigurationWidget* krdfcw = new KisRainDropsFilterConfigurationWidget(this,parent, "");
-	kdDebug() << krdfcw << endl;
-	return krdfcw  ;
+	vKisIntegerWidgetParam param;
+	param.push_back( KisIntegerWidgetParam( 1, 200, 80, i18n("Drop Size") ) );
+	param.push_back( KisIntegerWidgetParam( 1, 500, 80, i18n("Number") ) );
+	param.push_back( KisIntegerWidgetParam( 1, 100, 30, i18n("Fish eyes") ) );
+	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );
 }
 
 KisFilterConfiguration* KisRainDropsFilter::configuration(KisFilterConfigurationWidget* nwidget)
 {
-	KisRainDropsFilterConfigurationWidget* widget = (KisRainDropsFilterConfigurationWidget*) nwidget;
-
+	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
 	if( widget == 0 )
 	{
-		return new KisRainDropsFilterConfiguration(30,80,20);
+		return new KisRainDropsFilterConfiguration( 30, 80, 20);
 	} else {
-                Q_UINT32 dropSize = widget -> baseWidget() -> dropSizeSpinBox -> value();
-                Q_UINT32 number = widget -> baseWidget() -> numberSpinBox -> value();
-                Q_UINT32 fishEyes = widget -> baseWidget() -> fishEyesSpinBox -> value();
-                
-                return new KisRainDropsFilterConfiguration(dropSize, number, fishEyes);
-        }
+		return new KisRainDropsFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ), widget->valueAt( 2 ) );
+	}
 }

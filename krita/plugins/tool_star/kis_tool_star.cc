@@ -22,11 +22,13 @@
 #include <math.h> 
  
 #include <qpainter.h>
+#include <qspinbox.h>
 
 #include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <knuminput.h>
 
 #include "kis_doc.h"
 #include "kis_view.h"
@@ -74,7 +76,9 @@ void KisToolStar::buttonPress(KisButtonPressEvent *event)
 		m_dragging = true;
 		m_dragStart = event -> pos();
 		m_dragEnd = event -> pos();
-	}
+                m_vertices = ((WdgToolStar*)m_optWidget) -> verticesSpinBox -> value();
+                m_innerOuterRatio = ((WdgToolStar*)m_optWidget) -> ratioSpinBox -> value();
+        }
 }
 
 void KisToolStar::move(KisMoveEvent *event)

@@ -37,6 +37,20 @@ KisLayer::KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString&
 	m_opacity = opacity;
 }
 
+KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
+{
+	if (this != &rhs) {
+		m_opacity = rhs.m_opacity;
+		m_preserveTranspanrency = rhs.m_preserveTranspanrency;
+		m_initial = rhs.m_initial;
+		m_bounds = rhs.m_bounds;
+		m_linked = rhs.m_linked;
+
+		if (rhs.m_mask)
+			m_mask = new KisMask(*rhs.m_mask);
+	}
+}
+
 KisLayer::KisLayer(KisTileMgrSP tm, KisImageSP img, const QString& name, QUANTUM opacity) : super(tm, img, name)
 {
 	m_linked = false;

@@ -36,6 +36,22 @@ KisTileMgr::KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height)
 	m_mediator = new KisTileMediator;
 }
 
+KisTileMgr::KisTileMgr(const KisTileMgr& rhs) : KShared(rhs)
+{
+	if (this != &rhs) {
+		m_width = rhs.m_width;
+		m_height = rhs.m_height;
+		m_depth = rhs.m_depth;
+		m_ntileRows = rhs.m_ntileRows;
+		m_ntileCols = rhs.m_ntileCols;
+		m_mediator = new KisTileMediator;
+		m_tiles = rhs.m_tiles;
+
+		for (vKisTileSP_it it = m_tiles.begin(); it != m_tiles.end(); it++)
+			(*it) -> shareRef();
+	}
+}
+
 KisTileMgr::~KisTileMgr()
 {
 	m_mediator -> detachAll(this);

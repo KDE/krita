@@ -18,3 +18,17 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_channel.h"
+#include "kis_image.h"
+
+KisChannel::KisChannel(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, const KoColor&) : super(img, width, height, IMAGE_TYPE_GREY, name)
+{
+}
+
+KisChannel::KisChannel(const KisChannel& rhs) : super(rhs)
+{
+}
+
+KisChannel::~KisChannel()
+{
+}
+

@@ -144,11 +144,16 @@ void KisToolRectangularSelect::paintOutline(QPainter& gc, const QRect&)
 	RasterOp op = gc.rasterOp();
 	QPen old = gc.pen();
 	QPen pen(Qt::DotLine);
+	QPoint start;
+	QPoint end;
 
+	start.setX(m_startPos.x() - m_view -> horzValue());
+	start.setY(m_startPos.y() - m_view -> vertValue());
+	end.setX(m_endPos.x() - start.x() - m_view -> horzValue());
+	end.setY(m_endPos.y() - start.y() - m_view -> vertValue());
 	gc.setRasterOp(Qt::NotROP);
 	gc.setPen(pen);
-//	gc.setClipRect(rc);
-	gc.drawRect(m_startPos.x(), m_startPos.y(), m_endPos.x() - m_startPos.x(), m_endPos.y() - m_startPos.y());
+	gc.drawRect(start.x(), start.y(), end.x(), end.y());
 	gc.setRasterOp(op);
 	gc.setPen(old);
 }

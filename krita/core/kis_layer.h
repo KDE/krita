@@ -30,6 +30,7 @@ public:
 	KisLayer(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity);
 	KisLayer(KisTileMgrSP tiles, KisImageSP img, const QString& name, QUANTUM opacity);
+	KisLayer(const KisLayer& rhs);
 	virtual ~KisLayer();
 
 public:
@@ -62,7 +63,6 @@ private:
 	bool m_preserveTranspanrency;
 	KisMaskSP m_mask;
 	bool m_initial;
-	bool m_boundsValid;
 	QRect m_bounds;
 	bool m_linked;
 };

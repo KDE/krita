@@ -42,6 +42,7 @@ class KisImage : public QObject, public KisRenderInterface {
 
 public:
 	KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name);
+	KisImage(const KisImage& rhs);
 	virtual ~KisImage();
 
 public:
@@ -150,7 +151,6 @@ signals:
 	void update(KisImageSP image, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
 
 private:
-	KisImage(const KisImage& rhs);
 	KisImage& operator=(const KisImage& rhs);
 	void expand(KisPaintDeviceSP dev);
 	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name);

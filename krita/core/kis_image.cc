@@ -43,9 +43,70 @@ KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, 
 	setName(name);
 }
 
+KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
+{
+	if (this != &rhs) {
+		m_doc = rhs.m_doc;
+		m_undoHistory = rhs.m_undoHistory;
+		m_uri = rhs.m_uri;
+		m_name = QString::null;
+		m_author = rhs.m_author;
+		m_email = rhs.m_email;
+		m_width = rhs.m_width;
+		m_height = rhs.m_height;
+		m_depth = rhs.m_depth;
+		m_ntileCols = rhs.m_ntileCols;
+		m_ntileRows = rhs.m_ntileRows;
+		m_opacity = rhs.m_opacity;
+		m_xres = rhs.m_xres;
+		m_yres = rhs.m_yres;
+		m_unit = rhs.m_unit;
+		m_type = rhs.m_type;
+		m_clrMap = rhs.m_clrMap;
+		m_dirty = rhs.m_dirty;
+
+		if (rhs.m_shadow)
+			m_shadow = new KisTileMgr(*rhs.m_shadow);
+
+		m_bkg = new KisBackground(this, m_width, m_height);
+		m_projectionPixmaps.resize(m_ntileCols * m_ntileRows);
+		m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
+		m_layers.reserve(rhs.m_layers.size());
+
+		for (vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); it++) {
+			KisLayerSP layer = new KisLayer(**it);
+
+			m_layers.push_back(layer);	
+			m_layerStack.push_back(layer);
+			m_activeLayer = layer;
+		}
+
+		m_channels.reserve(rhs.m_channels.size());
+
+		for (vKisChannelSP_cit it = rhs.m_channels.begin(); it != rhs.m_channels.end(); it++) {
+			KisChannelSP channel = new KisChannel(**it);
+
+			m_channels.push_back(channel);
+			m_activeChannel = channel;
+		}
+
+		if (rhs.m_selectionMask)
+			m_selectionMask = new KisChannel(*m_selectionMask);
+		
+		m_visible = rhs.m_visible;
+		m_active = rhs.m_active;
+		m_alpha = rhs.m_alpha;
+		m_maskEnabled = rhs.m_maskEnabled;
+		m_maskInverted = rhs.m_maskInverted;
+		m_maskClr = rhs.m_maskClr;
+		m_nserver = new KisNameServer("Layer %1", rhs.m_nserver -> currentSeed() + 1);
+	}
+}
+
 KisImage::~KisImage()
 {
 	delete m_nserver;
+	printf("KisImage::~KisImage\n");
 }
 
 QString KisImage::name() const
@@ -975,7 +1036,7 @@ void KisImage::unsetSelection(bool commit)
 
 		m_selection = 0;
 		invalidate(rc);
-		emit selectionChanged(this);
+		emit selectionChanged(KisImageSP(this));
 		emit update(this, rc.x(), rc.y(), rc.width(), rc.height());
 	}
 }

@@ -25,6 +25,7 @@ class KisMask : public KisChannel {
 
 public:
 	KisMask(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, const KoColor& color);
+	KisMask(const KisMask& rhs);
 	virtual ~KisMask();
 
 public:

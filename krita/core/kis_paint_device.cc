@@ -73,6 +73,35 @@ KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& n
 	m_projectionValid = false;
 }
 
+KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs)
+{
+	if (this != &rhs) {
+		m_owner = 0;
+
+		if (rhs.m_tiles)
+			m_tiles = new KisTileMgr(*rhs.m_tiles);
+
+		if (rhs.m_shadow)
+			m_shadow = new KisTileMgr(*rhs.m_shadow);
+
+		m_visible = rhs.m_visible;
+		m_x = rhs.m_x;
+		m_y = rhs.m_y;
+		m_width = rhs.m_width;
+		m_height = rhs.m_height;
+		m_depth = rhs.m_depth;
+		m_offX = rhs.m_offX;
+		m_offY = rhs.m_offY;
+		m_offW = rhs.m_offW;
+		m_offH = rhs.m_offH;
+		m_quantumSize = rhs.m_quantumSize;
+		m_imgType = rhs.m_imgType;
+		m_alpha = rhs.m_alpha;
+		m_projectionValid = false;
+		m_name = rhs.m_name;
+	}
+}
+
 KisPaintDevice::~KisPaintDevice()
 {
 }
@@ -137,11 +166,6 @@ void KisPaintDevice::configure(KisImageSP image, Q_INT32 width, Q_INT32 height, 
 	m_owner = image;
 	m_name = name;
 	m_projectionValid = false;
-}
-
-void KisPaintDevice::duplicate(KisPaintDevice& , bool )
-{
-
 }
 
 void KisPaintDevice::update()

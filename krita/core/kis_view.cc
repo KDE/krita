@@ -649,6 +649,9 @@ void KisView::updateCanvas(const QRect& rc)
 {
 	QRect ur = rc;
 
+	ur.setX(ur.x() - horzValue());
+	ur.setY(ur.y() - vertValue());
+
 	if (zoom() > 1.0 || zoom() < 1.0) {
 		Q_INT32 urL = ur.left();
 		Q_INT32 urT = ur.top();
@@ -686,6 +689,7 @@ void KisView::tool_properties()
 
 void KisView::layerUpdateGUI(bool enable)
 {
+	enable = enable && currentImg() && currentImg() -> activeLayer();
 	m_layerRm -> setEnabled(enable);
 	m_layerLink -> setEnabled(enable);
 	m_layerHide -> setEnabled(enable);
@@ -697,14 +701,17 @@ void KisView::layerUpdateGUI(bool enable)
 
 void KisView::selectionUpdateGUI(bool enable)
 {
+	KisImageSP img = currentImg();
+
+	enable = enable && img && img -> selection();
 	m_selectionCut -> setEnabled(enable);
 	m_selectionCopy -> setEnabled(enable);
-	m_selectionPaste -> setEnabled(currentImg() != 0 && !QApplication::clipboard() -> image().isNull());
+	m_selectionPaste -> setEnabled(img != 0 && !QApplication::clipboard() -> image().isNull());
 	m_selectionCrop -> setEnabled(enable);
 	m_selectionRm -> setEnabled(enable);
 	m_selectionFillBg -> setEnabled(enable);
 	m_selectionFillFg -> setEnabled(enable);
-	m_selectionSelectAll -> setEnabled(currentImg() != 0);
+	m_selectionSelectAll -> setEnabled(img != 0);
 	m_selectionSelectNone -> setEnabled(enable);
 }
 
@@ -757,6 +764,10 @@ void KisView::removeSelection()
 				}
 
 				img -> unsetSelection(false);
+			
+				if (parent -> x() || parent -> y())
+					rc.moveBy(-parent -> x(), -parent -> y());
+
 				gc.eraseRect(rc);
 				gc.end();
 				m_doc -> setModified(true);
@@ -1064,9 +1075,12 @@ void KisView::slotImportImage()
 
 void KisView::export_image()
 {
-	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::writeFilters(), 0, i18n("Export Image"));
+	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::writeFilters(), this, i18n("Export Image"));
 	KisImageSP img = currentImg();
 	KisLayerSP dst;
+
+	if (url.isEmpty())
+		return;
 
 	Q_ASSERT(img);
 
@@ -1082,6 +1096,7 @@ void KisView::export_image()
 			KisPainter gc;
 			KisMerge<flattenAll> visitor(img, true);
 			vKisLayerSP layers = img -> layers();
+
 			gc.begin(dst.data());
 			visitor(gc, layers);
 			gc.end();
@@ -1966,6 +1981,16 @@ void KisView::disconnectCurrentImg() const
 
 void KisView::duplicateCurrentImg()
 {
+	KisImageSP img = currentImg();
+
+	Q_ASSERT(img);
+
+	if (img) {
+		KisImageSP dubbed = new KisImage(*img);
+
+		dubbed -> setName(m_doc -> nextImageName());
+		m_doc -> addImage(dubbed);
+	}
 }
 
 KoColor KisView::bgColor()

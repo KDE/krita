@@ -55,5 +55,41 @@ private:
 	KisPaintDeviceSP m_device;	
 };
 
+inline
+void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c)
+{
+	fillRect(x, y, w, h, c, OPACITY_OPAQUE);
+}
+
+inline
+void KisPainter::fillRect(const QRect& rc, const KoColor& c)
+{
+	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE);
+}
+
+inline
+void KisPainter::eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
+{
+	fillRect(x1, y1, w, h, KoColor::black(), OPACITY_TRANSPARENT);
+}
+
+inline
+void KisPainter::eraseRect(const QRect& rc)
+{
+	fillRect(rc, KoColor::black(), OPACITY_TRANSPARENT);
+}
+
+inline
+void KisPainter::fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity)
+{
+	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
+}
+
+inline
+KisPaintDeviceSP KisPainter::device() const
+{
+	return m_device;
+}
+
 #endif // KIS_PAINTER_H_-
 

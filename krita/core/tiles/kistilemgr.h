@@ -41,6 +41,7 @@ class KisTileMgr : public KShared {
 
 public:
 	KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
+	KisTileMgr(const KisTileMgr& rhs);
 	virtual ~KisTileMgr();
 
 public:
@@ -78,7 +79,6 @@ public:
 	Q_INT32 tileNum(Q_UINT32 xpix, Q_UINT32 ypix) const;
 
 private:
-	KisTileMgr(const KisTileMgr& rhs);
 	KisTileMgr& operator=(const KisTileMgr&);
 	void allocate(Q_INT32 ntiles);
 	KisTileSP invalidateTile(KisTileSP tile, Q_INT32 tilenum);

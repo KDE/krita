@@ -84,6 +84,8 @@ public:
 	void setFGColor(const KoColor& c);
 	void zoomIn(Q_INT32 x, Q_INT32 y);
 	void zoomOut(Q_INT32 x, Q_INT32 y);
+	Q_INT32 horzValue() const;
+	Q_INT32 vertValue() const;
 
 signals:
 	void bgColorChanged(const KoColor& c);
@@ -125,10 +127,8 @@ private:
 	void clearCanvas(const QRect& rc);
 	void connectCurrentImg() const;
 	void disconnectCurrentImg() const;
-	void duplicateCurrentImg();
 	void imgUpdateGUI();
 	void fillSelection(const KoColor& c, QUANTUM opacity);
-	Q_INT32 horzValue() const;
 	void layerUpdateGUI(bool enable);
 	void paintView(const QRect& rc);
 	void selectionUpdateGUI(bool enable);
@@ -141,12 +141,12 @@ private:
 	void setupSideBar();
 	void setupTabBar();
 	void setupTools();
-	Q_INT32 vertValue() const;
 	void zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf);
 
 private slots:
 	void copy();
 	void cut();
+	void duplicateCurrentImg();
 	void removeSelection();
 	void fillSelectionBg();
 	void fillSelectionFg();

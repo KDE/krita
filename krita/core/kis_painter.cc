@@ -524,21 +524,6 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 	}
 }
 
-void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c)
-{
-	fillRect(x, y, w, h, c, OPACITY_OPAQUE);
-}
-
-void KisPainter::fillRect(const QRect& rc, const KoColor& c)
-{
-	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE);
-}
-
-void KisPainter::eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
-{
-	fillRect(x1, y1, w, h, KoColor::black(), OPACITY_TRANSPARENT);
-}
-
 void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity)
 {
 	Q_INT32 x;
@@ -555,6 +540,8 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 	KisTileMgrSP tm = m_device -> data();
 	Q_INT32 xmod;
 	Q_INT32 ymod;
+	Q_INT32 xdiff;
+	Q_INT32 ydiff;
 
 	switch (m_device -> image() -> imgType()) {
 	case IMAGE_TYPE_GREY:
@@ -574,6 +561,14 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 		src[PIXEL_BLUE] = upscale(c.B());
 		src[PIXEL_ALPHA] = opacity;
 		break;
+	case IMAGE_TYPE_CMYK:
+	case IMAGE_TYPE_CMYKA:
+		src[PIXEL_CYAN] = upscale(c.C());
+		src[PIXEL_MAGENTA] = upscale(c.M());
+		src[PIXEL_YELLOW] = upscale(c.Y());
+		src[PIXEL_BLACK] = upscale(c.K());
+		src[PIXEL_CMYK_ALPHA] = opacity;
+		break;
 	default:
 		kdDebug() << "Not Implemented.\n";
 		return;
@@ -586,11 +581,15 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 		y2 = m_device -> y() + m_device -> height() + 1;
 
 	stride = m_device -> image() -> depth();
-	ymod = (y1 % TILE_HEIGHT);
-	xmod = (x1 % TILE_WIDTH);
+	ydiff = y1 - TILE_HEIGHT * (y1 / TILE_HEIGHT);
 
-	for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
-		for (x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
+	for (y = y1; y <= y2; y += TILE_HEIGHT - ydiff) {
+		xdiff = x1 - TILE_WIDTH * (x1 / TILE_WIDTH);
+
+		for (x = x1; x <= x2; x += TILE_WIDTH - xdiff) {
+			ymod = (y % TILE_HEIGHT);
+			xmod = (x % TILE_WIDTH);
+
 			if (!(tile = tm -> tile(x, y, TILEMODE_WRITE)))
 				continue;
 		
@@ -600,19 +599,18 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 			if (ymod > tile -> height())
 				continue;
 
-			tile -> lock();
-			dst = tile -> data(xmod, ymod);
 			rows = tile -> height() - ymod;
+			cols = tile -> width() - xmod;
 
 			if (rows > y2 - y + 1)
 				rows = y2 - y + 1;
-
-			cols = tile -> width() - xmod;
 
 			if (cols > x2 - x + 1)
 				cols = x2 - x + 1;
 
 			dststride = tile -> width() * tile -> depth();
+			tile -> lock();
+			dst = tile -> data(xmod, ymod);
 
 			while (rows-- > 0) {
 				QUANTUM *d = dst;
@@ -625,24 +623,15 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 				dst += dststride;
 			}
 
-			tile -> valid(false);
 			tile -> release();
+			tile -> valid(false);
+
+			if (x > x1)
+				xdiff = 0;
 		}
+
+		if (y > y1)
+			ydiff = 0;
 	}
-}
-
-void KisPainter::eraseRect(const QRect& rc)
-{
-	fillRect(rc, KoColor::black(), OPACITY_TRANSPARENT);
-}
-
-void KisPainter::fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity)
-{
-	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
-}
-
-KisPaintDeviceSP KisPainter::device() const
-{
-	return m_device;
 }
 

@@ -42,6 +42,7 @@ public:
 	KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& name);
+	KisPaintDevice(const KisPaintDevice& rhs);
 	virtual ~KisPaintDevice();
 
 public:
@@ -58,7 +59,6 @@ public:
 	virtual KisTileMgrSP data();
 	virtual const KisTileMgrSP data() const;
 	virtual bool shouldDrawBorder() const;
-	virtual void duplicate(KisPaintDevice& rhs, bool addAlpha);
 	virtual void move(Q_INT32 x, Q_INT32 y);
 	virtual void move(const QPoint& pt);
 	virtual void update();
@@ -103,9 +103,8 @@ signals:
 	void positionChanged(KisPaintDeviceSP device);
 
 private:
-	void init();
-	KisPaintDevice(const KisPaintDevice&);
 	KisPaintDevice& operator=(const KisPaintDevice&);
+	void init();
 
 private:
 	KisImageSP m_owner;

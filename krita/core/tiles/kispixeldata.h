@@ -18,10 +18,7 @@
 #if !defined KISPIXELDATA_H_
 #define KISPIXELDATA_H_
 
-#include "kistile.h"
-#include "kistilemgr.h"
-
-#define PIXEL_APPLY_REPLACE 1
+#include "kis_types.h"
 
 struct KisPixelData : public KShared {
 	KisPixelData();

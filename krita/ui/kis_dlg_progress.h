@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *                2004 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,37 +16,37 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_LABEL_BUILDER_PROGRESS_H_
-#define KIS_LABEL_BUILDER_PROGRESS_H_
+#if !defined KIS_DLG_PROGRESS_H_
+#define KIS_DLG_PROGRESS_H_
 
-#include <qlabel.h>
-#include "builder/kis_builder_types.h"
+#include <kdialogbase.h>
 
+class QLabel;
 class KProgress;
-class KisBuilderSubject;
+class KisProgressSubject;
 
-class KisLabelBuilderProgress : public QLabel {
+class KisDlgProgress : public KDialogBase {
+	typedef KDialogBase super;
 	Q_OBJECT
-	typedef QLabel super;
 
 public:
-	KisLabelBuilderProgress(QWidget *parent, const char *name = 0, WFlags f = 0);
-	virtual ~KisLabelBuilderProgress();
-
-public:
-	void changeSubject(KisBuilderSubject *subject);
+	KisDlgProgress(KisProgressSubject *subject, QWidget *parent = 0, const char *name = 0);
+	virtual ~KisDlgProgress();
 
 public slots:
-	virtual void update(KisBuilderSubject *subject, KisImageBuilder_Step step, Q_INT8 percent);
+	virtual void update(KisProgressSubject *subject, int percent);
+	virtual void updateStage(KisProgressSubject *subject, const QString& stage, int percent);
+	virtual void subjectDone(KisProgressSubject *subject);
+	virtual void subjectError(KisProgressSubject *);
 
-private slots:
-	void cancelPressed();
-	void subjectDestroyed();
+protected slots:
+	virtual void slotCancel();
 
 private:
-	KisBuilderSubject *m_subject;
+	QLabel *m_lbl;
 	KProgress *m_bar;
+	KisProgressSubject *m_subject;
 };
 
-#endif // KIS_LABEL_BUILDER_PROGRESS_H_
+#endif // KIS_DLG_PROGRESS_H_
 

@@ -3,6 +3,8 @@ INCLUDES  = -I$(srcdir)/../ \
 	-I$(srcdir)/../compositeop \
 	-I$(srcdir)/../visitors/ \
 	-I$(srcdir)/../tiles/ \
+	-I$(srcdir)/../../ui/ \
+	-I../../ui/ \
 	$(KOFFICE_INCLUDES) -I$(interfacedir) \
 	$(KOPAINTER_INCLUDES) $(LIBMAGICK_CPPFLAGS)  $(all_includes)
 

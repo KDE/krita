@@ -10,7 +10,7 @@ noinst_LTLIBRARIES = libkisui.la
 libkisui_la_LIBADD = ./labels/libkislabel.la ./dialogs/libkisdialogs.la ./widgets/libkiswidgets.la
 libkisui_la_SOURCES = integerwidget.cc \
     kis_dlg_preferences.cc \
-    kis_dlg_builder_progress.cc \
+    kis_dlg_progress.cc \
     gradientview.cc \
     kis_basedocker.cc \
     kis_canvas.cc \
@@ -41,13 +41,14 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_brush_chooser.cc \
     kis_pattern_chooser.cc \
     kis_gradient_chooser.cc \
-    kis_colorwheel.cc
+    kis_colorwheel.cc \
+    kis_progress_subject.cc
 
 #    kis_dlg_paintoffset.cc 
 
 noinst_HEADERS = integerwidget.h \
     kis_dlg_preferences.h \
-    kis_dlg_builder_progress.h \
+    kis_dlg_progress.h \
     gradientview.h \
     kis_basedocker.h \
     kis_canvas.h \
@@ -78,7 +79,8 @@ noinst_HEADERS = integerwidget.h \
     kis_brush_chooser.h \
     kis_pattern_chooser.h \
     kis_gradient_chooser.h \
-    kis_colorwheel.h
+    kis_colorwheel.h \
+    kis_progress_subject.h
 
 libkisui_la_METASOURCES = AUTO
 SUBDIRS = labels dialogs widgets

@@ -24,7 +24,7 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_image_builder.h"
-#include "kis_builder_subject.h"
+#include "kis_progress_subject.h"
 
 class QString;
 class KURL;
@@ -35,7 +35,7 @@ class KisUndoAdapter;
 /**
  * Build a KisImage representation of an image file.
  */
-class KisImageMagickConverter : public KisBuilderSubject {
+class KisImageMagickConverter : public KisProgressSubject {
 	typedef QObject super;
 	Q_OBJECT
 
@@ -43,8 +43,8 @@ public:
 	KisImageMagickConverter(KisDoc *doc, KisUndoAdapter *adapter);
 	virtual ~KisImageMagickConverter();
 
-public:
-	virtual void intr();
+public slots:
+	virtual void cancel();
 
 public:
 	KisImageBuilder_Result buildImage(const KURL& uri);

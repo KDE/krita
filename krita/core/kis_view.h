@@ -55,7 +55,7 @@ class KisBrush;
 class KisBuilderMonitor;
 class KisCanvas;
 class KisChannelView;
-class KisLabelBuilderProgress;
+class KisLabelProgress;
 class KisDoc;
 class KisGradient;
 class KisPattern;
@@ -414,7 +414,7 @@ private:
 	KisChannelView *m_channelView;
 	QWidget *m_pathView;
 	KisBuilderMonitor *m_imgBuilderMgr;
-	KisLabelBuilderProgress *m_buildProgress;
+	KisLabelProgress *m_progress;
 	KisResourceMediator *m_brushMediator;
 	KisResourceMediator *m_patternMediator;
 	KisResourceMediator *m_gradientMediator;

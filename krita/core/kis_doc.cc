@@ -56,7 +56,6 @@
 // Local
 #include "kis_types.h"
 #include "kis_config.h"
-#include "kis_dlg_builder_progress.h"
 #include "kis_global.h"
 #include "kis_channel.h"
 #include "kis_dlg_create_img.h"

@@ -99,7 +99,7 @@
 #include "kis_view.h"
 #include "kis_rect.h"
 #include "KRayonViewIface.h"
-#include "labels/kis_label_builder_progress.h"
+#include "labels/kis_label_progress.h"
 #include "labels/kis_label_cursor_pos.h"
 #include "strategy/kis_strategy_move.h"
 #include "kis_rect.h"
@@ -109,7 +109,7 @@
 #include "kis_colorspace_registry.h"
 
 // Dialog boxes
-#include "kis_dlg_builder_progress.h"
+#include "kis_dlg_progress.h"
 #include "kis_dlg_gradient.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paint_properties.h"
@@ -206,7 +206,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_currentGuide = 0;
         m_brushMediator = 0;
         m_imgBuilderMgr = new KisBuilderMonitor(this);
-        m_buildProgress = 0;
+        m_progress = 0;
         m_statusBarZoomLabel = 0;
 
         setInstance(KisFactory::global());
@@ -471,11 +471,11 @@ void KisView::setupStatusBar()
                 m_statusBarZoomLabel = new QLabel(sb);
                 addStatusBarItem(m_statusBarZoomLabel, 1);
                 updateStatusBarZoomLabel ();
-                m_buildProgress = new KisLabelBuilderProgress(this);
-                m_buildProgress -> setMaximumWidth(225);
-                m_buildProgress -> setMaximumHeight(sb -> height());
-                addStatusBarItem(m_buildProgress, 2, true);
-                m_buildProgress -> hide();
+                m_progress = new KisLabelProgress(this);
+                m_progress -> setMaximumWidth(225);
+                m_progress -> setMaximumHeight(sb -> height());
+                addStatusBarItem(m_progress, 2, true);
+                m_progress -> hide();
         }
 }
 
@@ -1400,8 +1400,8 @@ void KisView::export_image()
                 dst = img -> layer(0);
                 Q_ASSERT(dst);
 
-                m_imgBuilderMgr -> attach(&ib);
-                m_buildProgress -> changeSubject(&ib);
+                //m_imgBuilderMgr -> attach(&ib);
+                m_progress -> changeSubject(&ib);
 
                 switch (ib.buildFile(url, dst)) {
                 case KisImageBuilder_RESULT_UNSUPPORTED:
@@ -1500,16 +1500,16 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
         KisImageMagickConverter ib(m_doc, m_adapter);
         KisImageSP img;
 
-        m_imgBuilderMgr -> attach(&ib);
+        //m_imgBuilderMgr -> attach(&ib);
 
         for (KURL::List::iterator it = urls.begin(); it != urls.end(); it++) {
                 KURL url = *it;
-                KisDlgBuilderProgress dlg(&ib);
+                KisDlgProgress dlg(&ib);
 
                 if (modal)
                         dlg.show();
                 else
-                        m_buildProgress -> changeSubject(&ib);
+                        m_progress -> changeSubject(&ib);
 
                 switch (ib.buildImage(url)) {
                 case KisImageBuilder_RESULT_UNSUPPORTED:
@@ -1532,7 +1532,7 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
                         KNotifyClient::event(this -> winId(), "cannotopenfile");
                         continue;
                 case KisImageBuilder_RESULT_FAILURE:
-                        m_buildProgress -> changeSubject(0);
+                        m_progress -> changeSubject(0);
                         KMessageBox::error(this, i18n("Error loading file %1.").arg(url.path()), i18n("Error Importing File"));
                         KNotifyClient::event(this -> winId(), "cannotopenfile");
                         continue;

@@ -101,7 +101,6 @@ public:
 
 	void activateTool(KisTool*);
 	void updateCanvas(const QRect& rc);
-	void showScrollBars();
 	void layerScale(bool smooth);
         
 	int docWidth();

@@ -98,9 +98,6 @@
 #include <kdebug.h>
 #include "kis_timer.h"
 
-//#define TEST_PIXMAP
-//#define KISBarIcon(x) BarIcon(x, KisFactory::global())
-
 /*
     KisView - constructor.  What is a KoView?  A widget, but it
     also seems to be a hybrid or composite of several koffice objects
@@ -566,7 +563,6 @@ void KisView::slotGimp()
 void KisView::slotTabSelected(const QString& name)
 {
     m_doc->setCurrentImage(name);
-    showScrollBars();
     slotRefreshPainter();
 }
 
@@ -591,20 +587,6 @@ void KisView::slotRefreshPainter()
 		m_pPainter -> clearAll();
 	}
 }
-
-
-/*
-    showScrollBars - force showing of scrollbars for
-    the view with a fake resize event
-*/
-void KisView::showScrollBars()
-{
-    if(isVisible())
-    {
-        m_doc->resetShells();
-    }
-}
-
 
 /*
     resizeEvent - only via a resize event are things shown
@@ -861,7 +843,6 @@ void KisView::slotUpdateImage()
     {
         QRect updateRect(0, 0, img->width(), img->height());
         img->markDirty(updateRect);
-        showScrollBars();
     }
 }
 
@@ -897,19 +878,6 @@ void KisView::slotDocUpdated()
 	 */
 
 	m_pCanvas -> repaint();
-
-	/*
-	 * reset shells to show scrollbars. This is always necessary
-	 * to get the scrollbars to show correctly when the new current image
-	 * has a different size from the former one.  Loading a different
-	 * or new image does not cause either the canvas, the view, or the
-	 * shell to resize of its own initative. The view is a viewport in
-	 * the shell window and size is absorbed by scrolling unless the
-	 * shell window size is explicitly changed by the user with the
-	 * mouse, etc., or in this manner with code
-	 */
-
-	m_doc -> resetShells();
 
 	/*
 	 * reset and resize the KisPainter pixmap (paint device).
@@ -1483,12 +1451,6 @@ void KisView::zoom(int _x, int _y, float zf)
 
     if(zf < 1.0) slotUpdateImage();
 
-    /* at high and normal zoom levels just send a fake resize event
-    to make sure that scroll bars show up. It can take a *very* long
-    time to recalculate a large image at high zoom, so don't mark
-    it dirty unnecessarily. */
-
-    else showScrollBars();
 }
 
 
@@ -1742,7 +1704,6 @@ void KisView::next_layer()
         img->markDirty(img->getCurrentLayer()->layerExtents());
         m_pLayerView->layerTable()->updateTable();
         m_pLayerView->layerTable()->updateAllCells();
-        showScrollBars();
         slotRefreshPainter();
 
         m_doc->setModified(true);
@@ -1780,8 +1741,6 @@ void KisView::previous_layer()
 
         m_pLayerView->layerTable()->updateTable();
         m_pLayerView->layerTable()->updateAllCells();
-
-        showScrollBars();
         slotRefreshPainter();
 
         m_doc->setModified(true);
@@ -1994,7 +1953,6 @@ void KisView::layerScale(bool smooth)
 
         m_pLayerView->layerTable()->updateTable();
         m_pLayerView->layerTable()->updateAllCells();
-        showScrollBars();
         slotRefreshPainter();
 
         m_doc->setModified(true);
@@ -2207,20 +2165,18 @@ void KisView::slotSetPaintOffset()
         m_xPaintOffset = 0;
         m_yPaintOffset = 0;
     }
-
-    showScrollBars();
 }
 
 
 int KisView::xPaintOffset()
 {
-    return m_xPaintOffset;
+	return m_xPaintOffset;
 }
 
 
 int KisView::yPaintOffset()
 {
-    return m_yPaintOffset;
+	return m_yPaintOffset;
 }
 
 

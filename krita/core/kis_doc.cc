@@ -415,20 +415,9 @@ bool KisDoc::loadXML( QIODevice *, const QDomDocument& doc )
 		return false;
 	}
 
-	if (images.attribute("version") != "1.2") {
-		kdDebug(0) << "KisDoc::loadXML() old file format" << endl;
-		oldFileFormat = true;
-
-		if (!loadXMLOldFileFormat(images))
-		       	return false;
-	}
-	else {
-		oldFileFormat = false;
-		
-		// load images
-		if (!loadImages(images))
-			return false;
-	}
+	// load images
+	if (!loadImages(images))
+		return false;
 
 	kdDebug(0) << "KisDoc::loadXML() leaving succesfully" << endl;
 	return true;
@@ -632,200 +621,50 @@ bool KisDoc::completeLoading( KoStore* store )
     if ( !store )  return false;
     if ( !m_pCurrent) return false;
 
-    if ( !oldFileFormat )
+    QStringList imageNames = images();
+    QString tmp_currentImageName = currentImage();
+    uint imageNumbers = 1;
+
+    for ( QStringList::Iterator it = imageNames.begin(); it != imageNames.end(); ++it )
     {
-        QStringList imageNames = images();
-        QString tmp_currentImageName = currentImage();
-        uint imageNumbers = 1;
+	    setImage( *it );
+	    QPtrList<KisLayer> layers = m_pCurrent->layerList();
+	    uint layerNumbers = 0;
 
-        for ( QStringList::Iterator it = imageNames.begin(); it != imageNames.end(); ++it )
-        {
-            setImage( *it );
-            QPtrList<KisLayer> layers = m_pCurrent->layerList();
-            uint layerNumbers = 0;
+	    for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next() )
+	    {
+		    for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel() )
+		    {
+			    QString image = QString( "image%1" ).arg( imageNumbers );
+			    QString layer;
+			    if ( layerNumbers == 0 )
+				    layer = QString::fromLatin1( "background" );
+			    else
+				    layer = QString( "layer%1" ).arg( layerNumbers );
 
-            for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next() )
-            {
-                for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel() )
-                {
-                    QString image = QString( "image%1" ).arg( imageNumbers );
-                    QString layer;
-                    if ( layerNumbers == 0 )
-                        layer = QString::fromLatin1( "background" );
-                    else
-                        layer = QString( "layer%1" ).arg( layerNumbers );
+			    QString url = QString( "images/%1/layers/%2/channels/ch%3.bin" )
+				    .arg( image )
+				    .arg( layer )
+				    .arg( static_cast<int>(ch->channelId()) );
 
-                    QString url = QString( "images/%1/layers/%2/channels/ch%3.bin" )
-                                  .arg( image )
-                                  .arg( layer )
-                                  .arg( static_cast<int>(ch->channelId()) );
+			    if ( store->open( url ) )
+			    {
+				    kdDebug(0) << "KisDoc::completeLoading() ch->loadFromStore()" << endl;
+				    ch->loadFromStore( store );
+				    store->close();
+			    }
+		    }
+		    ++layerNumbers;
+	    }
+	    ++imageNumbers;
 
-                    if ( store->open( url ) )
-                    {
-                        kdDebug(0) << "KisDoc::completeLoading() ch->loadFromStore()" << endl;
-                        ch->loadFromStore( store );
-                        store->close();
-                    }
-                }
-                ++layerNumbers;
-            }
-            ++imageNumbers;
-
-            // need this to force redraw of image data just loaded
-            current()->markDirty( QRect( 0, 0, current()->width(), current()->height() ) );
-            setCurrentImage( current() );
-        }
+	    // need this to force redraw of image data just loaded
+	    current()->markDirty( QRect( 0, 0, current()->width(), current()->height() ) );
+	    setCurrentImage( current() );
     }
-    else
-        completeLoadingOldFileFormat( store );
 
     kdDebug(0) << "KisDoc::completeLoading() leaving" << endl;
     return true;
-}
-
-// load old file format
-bool KisDoc::loadXMLOldFileFormat( QDomElement &image )
-{
-    // this assumes that we are loading an existing image
-    // with certain attributes set
-
-    QString name = image.attribute( "name" );
-    int w = image.attribute( "width" ).toInt();
-    int h = image.attribute( "height" ).toInt();
-    int cm = image.attribute( "cMode" ).toInt();
-    int bd = image.attribute( "bitDepth" ).toInt();
-
-    kdDebug(0) << "name: " << name << endl;
-    kdDebug(0) << "width: " << w << endl;
-    kdDebug(0) << "height: " << w << endl;
-    kdDebug(0) << "cMode: " << cm << endl;
-    kdDebug(0) << "bitDepth: " << bd << endl;
-
-    cMode colorMode;
-
-    switch ( cm )
-    {
-        case 0:
-            colorMode = cm_Indexed;
-            break;
-        case 1:
-            colorMode = cm_Greyscale;
-            break;
-        case 2:
-            colorMode = cm_RGB;
-            break;
-        case 3:
-            colorMode = cm_RGBA;
-            break;
-        case 4:
-            colorMode = cm_CMYK;
-            break;
-        case 5:
-            colorMode = cm_CMYKA;
-            break;
-        case 6:
-            colorMode = cm_Lab;
-            break;
-        case 7:
-            colorMode = cm_LabA;
-            break;
-        default:
-            return false;
-    }
-
-    KisImage *img = newImage( name, w, h, colorMode, bd );
-    if ( !img ) return false;
-
-    img->setAuthor( image.attribute( "author" ) );
-    img->setEmail( image.attribute( "email" ) );
-
-    // layers element
-    QDomElement layers = image.namedItem( "layers" ).toElement();
-    if ( layers.isNull() )
-    {
-        kdDebug(0) << "KisDoc::loadXMLOldFileFormat(): layers.isNull() error!" << endl;
-        return false;
-    }
-
-    // layer elements
-    QDomNode l = layers.firstChild();
-
-    while ( !l.isNull() )
-    {
-        QDomElement layer = l.toElement();
-        if ( layer.tagName() != "layer" ) continue;
-
-        kdDebug(0) << "layer" << endl;
-
-        QString layerName = layer.attribute( "name" );
-        int w = layer.attribute( "width" ).toInt();
-        int h = layer.attribute( "height" ).toInt();
-        int x = layer.attribute( "x" ).toInt();
-        int y = layer.attribute( "y" ).toInt();
-
-        img->addLayer( QRect( x, y, w, h ), KisColor::white(), true, layerName );
-        img->markDirty( QRect( x, y, w, h ) );
-
-        KisLayer *lay = img->getCurrentLayer();
-        lay->setOpacity( layer.attribute( "opacity" ).toInt() );
-
-        if ( layer.attribute( "visible" ) == "true" )
-            lay->setVisible( true );
-        else
-            lay->setVisible( false );
-
-        if ( layer.attribute( "linked" ) == "true" )
-            lay->setLinked( true );
-        else
-            lay->setLinked( false );
-
-        // channels element
-        QDomElement channels = layer.namedItem( "channels" ).toElement();
-        if ( channels.isNull() ) continue;
-
-        // channel elements
-        QDomNode c = channels.firstChild();
-
-        while ( !c.isNull() )
-        {
-            QDomElement channel = c.toElement();
-            if (channel.tagName() != "channel" ) continue;
-
-            kdDebug(0) << "channel" << endl;
-            c = c.nextSibling();
-        }
-
-        l = l.nextSibling();
-    }
-
-    setCurrentImage( img );
-
-    return true;
-}
-
-void KisDoc::completeLoadingOldFileFormat( KoStore *store )
-{
-    QPtrList<KisLayer> layers = m_pCurrent->layerList();
-
-    for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next() )
-    {
-        for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel() )
-        {
-            QString url = QString( "layers/%1/channels/ch%2.bin" ).arg( lay->name() )
-                          .arg( static_cast<int>(ch->channelId()) );
-
-            if ( store->open( url ) )
-            {
-                kdDebug(0) << "KisDoc::completeLoadingOldFileFormat() ch->loadFromStore()" << endl;
-                ch->loadFromStore( store );
-                store->close();
-            }
-        }
-    }
-
-    // need this to force redraw of image data just loaded
-    current()->markDirty( QRect( 0, 0, current()->width(), current()->height() ) );
-    setCurrentImage( current() );
 }
 
 /*
@@ -936,7 +775,7 @@ QStringList KisDoc::images()
 */
 bool KisDoc::isEmpty() const
 {
-	return m_pCurrent != 0;
+	return !isModified();
 }
 
 /*
@@ -965,55 +804,6 @@ QString KisDoc::currentImage()
 KisImage* KisDoc::current() const
 {
 	return m_pCurrent;
-}
-
-/*
-    resetShells - touch all shells for this document to
-    force a fake resize and show scrollbars in the view(s)
-    This is necessary when a new current image is established
-    which may have a different size from the former one.
-    resetShells() is invoked by the docUpdated() signal sent to the
-    view, from the view's docUpdated(), as a result of the current
-    image changing.  See the method setCurrentImage() in this class.
-    What a roundabout way to do the simplest thing!
-*/
-void KisDoc::resetShells()
-{
-    int shellCount = 0;
-    QPtrListIterator<KoMainWindow> it( shells() );
-
-    for ( ; it.current(); ++it )
-    {
-        KoMainWindow *tmpKo = it.current();
-
-        shellCount++;
-
-        kdDebug() << "KisShell Number: " << shellCount << endl;
-
-        int shellWidth  = tmpKo->width();
-        int shellHeight = tmpKo->height();
-
-        tmpKo->resize(shellWidth - 1, shellHeight - 1);
-
-        //kdDebug() << "KisShell width  - 1: "  << shellWidth  << endl;
-        //kdDebug() << "KisShell height - 1: "  << shellHeight << endl;
-
-        tmpKo->resize(shellWidth, shellHeight);
-
-        //kdDebug() << "KisShell width: "  << shellWidth  << endl;
-        //kdDebug() << "KisShell height: " << shellHeight << endl;
-    }
-}
-
-/*
-    currentShell - pointer to current main window for doc
-    Right now it just returns a ptr to the first shell for
-    this doc until it can be determined which shell contains
-    the active view (and which view is active!).
-*/
-KoMainWindow * KisDoc::currentShell()
-{
-    return shells().getFirst();
 }
 
 /*
@@ -1556,21 +1346,6 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 	}
 
 	return view;
-}
-
-
-/*
-    creatShell - Create view shell or top level window for document
-    The document can have more than one shell if there are multiple
-    views (not split) each with its own shell window
-*/
-
-KoMainWindow* KisDoc::createShell()
-{
-    KoMainWindow* shell = new KisShell;
-    shell->show();
-
-    return shell;
 }
 
 /*

@@ -62,7 +62,6 @@ public:
 	 * See koDocument.h.
 	 */
 
-	virtual KoMainWindow* createShell();
 	virtual QCString mimeType() const;
 	virtual bool initDoc();
 	virtual QDomDocument saveXML();
@@ -71,17 +70,6 @@ public:
 	virtual bool completeSaving(KoStore*);
 
 	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);
-
-	/*
-	 *  Current shell or frame window for this doc.
-	 */
-	KoMainWindow* currentShell();
-
-	/*
-	 *  Force a redraw of scrollbars and other widgets in all
-	 *  shell windows for this document.
-	 */
-	void resetShells();
 
 	/*
 	 * KOffice undo/redo.
@@ -266,11 +254,6 @@ protected:
 
 	/* load tool settings */
 	void loadToolSettings(QDomElement& elem);
-
-	/* load old file format */
-	bool loadXMLOldFileFormat( QDomElement &image );
-	void completeLoadingOldFileFormat( KoStore *store );
-	bool oldFileFormat;
 
 	/* undo/redo */
 	KCommandHistory m_commands;

@@ -27,6 +27,7 @@ class KisPaintDevice;
 class KIntNumInput;
 class KisCmbComposite;
 class KisCmbImageType;
+class KisCmbIDList;
 
 #include <kdialogbase.h>
 
@@ -37,7 +38,7 @@ class NewLayerDialog : public KDialogBase {
 	Q_OBJECT
 
 public:
-	NewLayerDialog(const QString colorSpaceName,
+	NewLayerDialog(const KisID colorSpace,
 		       const QString & deviceName,
 		       QWidget *parent = 0,
 		       const char *name = 0);
@@ -46,13 +47,13 @@ public:
 	CompositeOp compositeOp() const;
 	Q_INT32 opacity() const;
 	QPoint position() const;
-	QString colorStrategyName() const;
+	KisID colorStrategyID() const;
 
 private:
 	KLineEdit *m_name;
 	KIntNumInput *m_opacity;
 	KisCmbComposite *m_cmbComposite;
-	KisCmbImageType *m_cmbImageType;
+	KisCmbIDList *m_cmbImageType;
 };
 
 #endif // KIS_DLG_NEW_LAYER_H_

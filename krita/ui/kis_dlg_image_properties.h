@@ -32,7 +32,7 @@
 
 class KisView;
 class QButtonGroup;
-
+class KisID;
 
 class KisDlgImageProperties : public KDialogBase {
 	typedef KDialogBase super;
@@ -48,7 +48,7 @@ private slots:
 
 	void okClicked();
 
-	void fillCmbProfiles(const QString &);
+	void fillCmbProfiles(const KisID &);
 
 
 private:

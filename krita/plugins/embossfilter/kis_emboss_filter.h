@@ -41,7 +41,7 @@ public:
 	KisEmbossFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline QString name() { return "Emboss"; };
+	static inline KisID id() { return KisID("emboss", i18n("Emboss")); };
 	virtual bool supportsPainting() { return true; }
 public:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);

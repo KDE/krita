@@ -58,7 +58,7 @@ typedef unsigned char uchar;
 
 
 KisCImgFilter::KisCImgFilter(KisView * view) 
-	: KisFilter(name(), view),
+	: KisFilter(id(), view),
 	  eigen(CImg<>(2,1), CImg<>(2,2))
 {
 	restore = true;

@@ -57,7 +57,7 @@ public:
 	virtual ~KisToolMoveFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolMove(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Move tool"); }
+	virtual KisID id() { return KisID("move", i18n("Move tool")); }
 };
 
 

@@ -76,12 +76,13 @@ lines, rectangles, ellipses and text tools.
 * grayscale and RGB color models (and a buggy CMYK model)
 * basic support for colour management.
 * basic scripting support
+* full colour management system
+* pervasive use of selections
+* auto-extending layers
 
 Todo for version 1.0
 
-* full colour management system
 * working cmyk colour model
-* pervasive use of selections
 * code speedups
 * bug-fixes
 * Show/hide individual color channels
@@ -89,7 +90,6 @@ Todo for version 1.0
 * Loading and saving of selections
 * Fix dockers to be dockers or floaters, according to user preferences. Make
   tabs draggable.
-* auto-extending layers
 * lock layers
 * brush-shaped outline cursor
 * birds' eye box
@@ -120,7 +120,7 @@ The man who for the first time made Krita into something that did almost work:
 
 The architect of Krita's current design:
  
-  Patrick Julien <freak@codepimps.org>
+  Patrick Julien
  
 The current crew:
 
@@ -151,4 +151,5 @@ Caveat
 
 In order to run this release, simply execute the 'krita' script in this directory. Be aware
 that this messess with kdeinit, which is black magic, and running Krita may render your
-existing KOffice installation unusable until you login onto KDE again.
+existing KOffice installation unusable until you login onto KDE again. And... You have
+followed the installation istructions, haven't you?

@@ -31,7 +31,8 @@ class KisEvent;
 class KisFilterConfigurationWidget;
 class KisButtonPressEvent;
 class KisView;
-
+class KisID;
+class KisCmbIDList;
 
 
 class KisToolFilter : public KisToolFreehand {
@@ -47,7 +48,7 @@ public:
 	virtual QWidget* optionWidget();
 
 public slots:
-	void changeFilter( const QString & string );
+	void changeFilter( const KisID & filter);
 
 protected:
 	virtual void initPaint(KisEvent *e);
@@ -57,7 +58,7 @@ private:
 	KisFilterConfigurationWidget* m_filterConfigurationWidget;
 	QGridLayout* m_optionLayout;
 	QWidget* m_optWidget;
-	QComboBox* m_cbFilter;
+	KisCmbIDList * m_cbFilter;
 };
 
 
@@ -68,7 +69,7 @@ public:
 	virtual ~KisToolFilterFactory(){};
 
 	virtual KisTool * createTool() { KisTool * t =  new KisToolFilter(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Filter tool"); }
+	virtual KisID id() { return KisID("filter", i18n("Filter tool")); }
 };
 
 #endif //__KIS_TOOL_FILTER_H__

@@ -1,7 +1,7 @@
 /*
  *  kis_cmb_imagetype.h - part of KImageShop/Krayon/Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2005 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,27 +18,50 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef KIS_CMB_IMAGETYPE_H_
-#define KIS_CMB_IMAGETYPE_H_
+#ifndef KIS_CMB_IDLIST_H_
+#define KIS_CMB_IDLIST_H_
 
 #include "qcombobox.h"
 
-#include "kis_global.h"
+#include "kis_id.h"
 
 /**
- * A combobox filled with the various image types defined in kis_global.
+ * A combobox that is associated with a list of KisID's. The
+ * descriptive (i18n'ed) text is displayed, but the various
+ * signals return a KisID.
  */
-
-class KisCmbImageType : public QComboBox
+class KisCmbIDList : public QComboBox
 {
 	typedef QComboBox super;
 
 	Q_OBJECT
 
- public: 
+public:
 
-	KisCmbImageType(QWidget * parent = 0, const char * name = 0 );
-	virtual ~KisCmbImageType();
+	KisCmbIDList(QWidget * parent = 0, const char * name = 0 );
+	virtual ~KisCmbIDList();
+
+
+public:
+	void setIDList(const KisIDList & list);
+	void setCurrent(const KisID id);
+	void setCurrentText(const QString & s);
+
+	KisID currentItem() const;
+
+signals:
+
+	void activated(const KisID &);
+	void highlighted(const KisID &);
+
+private slots:
+
+	void slotIDActivated(Q_UINT32 i);
+	void slotIDHighlighted(Q_UINT32 i);
+
+private:
+
+	KisIDList m_list;
 
 };
 #endif

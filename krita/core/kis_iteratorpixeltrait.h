@@ -60,7 +60,10 @@ protected:
 
 	KisStrategyColorSpaceSP m_colorSpace;
 
-	inline void advance(int n){if(m_selectionIterator)(*m_selectionIterator)++;};
+	// XXX: Is this fix correct? BSAR
+	//inline void advance(int n){if(m_selectionIterator)(*m_selectionIterator)++;};
+	inline void advance(int n){if (m_selectionIterator) for(int i=0; i< n; i++) (*m_selectionIterator)++;};
+
 	void setSelectionIterator(_iTp *si){m_selectionIterator = si;};
 
 	_iTp *m_underlyingIterator;

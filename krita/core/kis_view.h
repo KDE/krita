@@ -45,6 +45,7 @@
 #include "kotooldockbase.h"
 #include "kis_dockframedocker.h"
 #include "kis_basedocker.h"
+#include "kis_id.h"
 
 class QButton;
 class QLabel;
@@ -92,6 +93,7 @@ class KisPaintBox;
 class KisToolRegistry;
 class KisFilterRegistry;
 class KisFilterBox;
+
 
 class KisView
 	: public KoView,
@@ -513,8 +515,8 @@ public:
 	KisToolRegistry * toolRegistry() const;
 	KisFilterRegistry * filterRegistry() const;
 
-	virtual KisFilterSP filterGet(const QString& name);
-	virtual QStringList filterList();
+	virtual KisFilterSP filterGet(const KisID& id);
+	virtual KisIDList filterList();
 
 private:
 	KisFilterRegistry * m_filterRegistry;

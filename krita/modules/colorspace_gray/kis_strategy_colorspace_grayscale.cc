@@ -42,7 +42,7 @@ namespace {
 
 
 KisStrategyColorSpaceGrayscale::KisStrategyColorSpaceGrayscale() :
-	KisStrategyColorSpace("GRAYA", i18n("Grayscale/Alpha"), TYPE_GRAYA_8, icSigGrayData)
+	KisStrategyColorSpace(KisID("GRAYA", i18n("Grayscale/Alpha")), TYPE_GRAYA_8, icSigGrayData)
 {
 	m_channels.push_back(new KisChannelInfo(i18n("gray"), 0, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 1, ALPHA));

@@ -28,11 +28,12 @@
 
 #include "kis_global.h"
 #include "kis_cmb_composite.h"
-#include "kis_cmb_imagetype.h"
+#include "kis_cmb_idlist.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paint_properties.h"
+#include "kis_colorspace_registry.h"
 
-NewLayerDialog::NewLayerDialog(const QString colorSpaceName,
+NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 			       const QString & deviceName,
 			       QWidget *parent, 
 			       const char *name) 
@@ -71,8 +72,10 @@ NewLayerDialog::NewLayerDialog(const QString colorSpaceName,
 
 	// Layer type
 	lbl = new QLabel(i18n("Layer type:"), page);
-	m_cmbImageType = new KisCmbImageType(page);
-	m_cmbImageType -> setCurrentText(colorSpaceName);
+	m_cmbImageType = new KisCmbIDList(page);
+	m_cmbImageType -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
+	m_cmbImageType -> setCurrent(colorSpaceID);
+
 	grid -> addWidget(lbl, 3, 0);
 	grid -> addWidget(m_cmbImageType, 3, 1);
 }
@@ -93,9 +96,9 @@ CompositeOp NewLayerDialog::compositeOp() const
 	return (CompositeOp)m_cmbComposite -> currentItem();
 }
 
-QString NewLayerDialog::colorStrategyName() const
+KisID NewLayerDialog::colorStrategyID() const
 {
-	return m_cmbImageType -> currentText ();
+	return m_cmbImageType -> currentItem();
 }
 
 QString NewLayerDialog::layerName() const

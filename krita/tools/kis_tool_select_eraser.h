@@ -57,7 +57,7 @@ public:
 	virtual ~KisToolSelectEraserFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectEraser(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Eraser select tool"); }
+	virtual KisID id() { return KisID("eraserselect", i18n("Eraser select tool")); }
 };
 
 

@@ -90,7 +90,7 @@ ColorsFilters::~ColorsFilters()
 //==================================================================
 
 KisColorAdjustmentFilter::KisColorAdjustmentFilter(KisView * view) :
-	KisPerChannelFilter(view, name(), -255, 255, 0)
+	KisPerChannelFilter(view, id(), -255, 255, 0)
 {
 }
 
@@ -121,7 +121,7 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 //==================================================================
 
 KisGammaCorrectionFilter::KisGammaCorrectionFilter(KisView * view)
-	: KisPerChannelFilter(view, name(), 1, 600, 1)
+	: KisPerChannelFilter(view, id(), 1, 600, 1)
 {
 }
 
@@ -147,7 +147,7 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 //==================================================================
 
 
-KisAutoContrast::KisAutoContrast(KisView* view) : KisFilter(name(), view)
+KisAutoContrast::KisAutoContrast(KisView* view) : KisFilter(id(), view)
 {
 
 }
@@ -206,7 +206,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 //==================================================================
 
 KisDesaturateFilter::KisDesaturateFilter(KisView * view)
-	: KisFilter(name(), view)
+	: KisFilter(id(), view)
 {
 }
 

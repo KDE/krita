@@ -43,7 +43,7 @@ namespace cmyka {
 }
 
 KisStrategyColorSpaceCMYKA::KisStrategyColorSpaceCMYKA() :
-	KisStrategyColorSpace("CMYKA", i18n("CMYK/Alpha"),
+	KisStrategyColorSpace(KisID("CMYKA", i18n("CMYK/Alpha")),
 			      (COLORSPACE_SH(PT_CMYK) | CHANNELS_SH(4) | BYTES_SH(1) | EXTRA_SH(1)),
 			      icSigCmykData)
 {

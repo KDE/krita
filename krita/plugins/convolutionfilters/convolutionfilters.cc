@@ -119,7 +119,7 @@ KritaConvolutionFilters::~KritaConvolutionFilters()
 {
 }
 
-KisGaussianBlurFilter::KisGaussianBlurFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
+KisGaussianBlurFilter::KisGaussianBlurFilter(KisView * view) : KisConvolutionConstFilter(id(), view)
 {
 	if (!colorStrategy()) return;
 	Q_INT32 imgdepth = colorStrategy()->nColorChannels() + 1;
@@ -134,7 +134,7 @@ KisGaussianBlurFilter::KisGaussianBlurFilter(KisView * view) : KisConvolutionCon
 }
 
 
-KisSharpenFilter::KisSharpenFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
+KisSharpenFilter::KisSharpenFilter(KisView * view) : KisConvolutionConstFilter(id(), view)
 {
 	if (!colorStrategy()) return;
 
@@ -149,7 +149,7 @@ KisSharpenFilter::KisSharpenFilter(KisView * view) : KisConvolutionConstFilter(n
 	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisMeanRemovalFilter::KisMeanRemovalFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
+KisMeanRemovalFilter::KisMeanRemovalFilter(KisView * view) : KisConvolutionConstFilter(id(), view)
 {
 	if (!colorStrategy()) return;
 
@@ -164,7 +164,7 @@ KisMeanRemovalFilter::KisMeanRemovalFilter(KisView * view) : KisConvolutionConst
 	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisEmbossLaplascianFilter::KisEmbossLaplascianFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
+KisEmbossLaplascianFilter::KisEmbossLaplascianFilter(KisView * view) : KisConvolutionConstFilter(id(), view)
 {
 	if (!colorStrategy()) return;
 
@@ -180,7 +180,7 @@ KisEmbossLaplascianFilter::KisEmbossLaplascianFilter(KisView * view) : KisConvol
 }
 
 KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter(KisView * view)
-	: KisConvolutionConstFilter(name(), view)
+	: KisConvolutionConstFilter(id(), view)
 {
 	if(!colorStrategy()) return;
 
@@ -196,7 +196,7 @@ KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter(KisView * view)
 }
 
 KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter(KisView * view)
-	: KisConvolutionConstFilter(name(), view)
+	: KisConvolutionConstFilter(id(), view)
 {
 	if (!colorStrategy()) return;
 
@@ -211,7 +211,7 @@ KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter(KisView * v
 	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisEmbossVerticalFilter::KisEmbossVerticalFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
+KisEmbossVerticalFilter::KisEmbossVerticalFilter(KisView * view) : KisConvolutionConstFilter(id(), view)
 {
 	if (!colorStrategy()) return;
 
@@ -227,7 +227,7 @@ KisEmbossVerticalFilter::KisEmbossVerticalFilter(KisView * view) : KisConvolutio
 }
 
 KisEmbossHorizontalFilter::KisEmbossHorizontalFilter(KisView * view) :
-	KisConvolutionConstFilter(name(), view)
+	KisConvolutionConstFilter(id(), view)
 {
 	if (!colorStrategy()) return;
 
@@ -243,7 +243,7 @@ KisEmbossHorizontalFilter::KisEmbossHorizontalFilter(KisView * view) :
 
 }
 
-KisEmbossDiagonalFilter::KisEmbossDiagonalFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
+KisEmbossDiagonalFilter::KisEmbossDiagonalFilter(KisView * view) : KisConvolutionConstFilter(id(), view)
 {
 	if (!colorStrategy()) return;
 
@@ -259,7 +259,7 @@ KisEmbossDiagonalFilter::KisEmbossDiagonalFilter(KisView * view) : KisConvolutio
 }
 
 
-KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
+KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter(KisView * view) : KisConvolutionConstFilter(id(), view)
 {
 	if (!colorStrategy()) return;
 
@@ -275,7 +275,7 @@ KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter(KisView * view) : KisConvol
 
 }
 
-KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
+KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter(KisView * view) : KisConvolutionConstFilter(id(), view)
 {
 	if (!colorStrategy()) return;
 
@@ -290,7 +290,7 @@ KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter(KisView * view) : KisCo
 	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
+KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter(KisView * view) : KisConvolutionConstFilter(id(), view)
 {
 	if (!colorStrategy()) return;
 
@@ -305,7 +305,7 @@ KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter(KisView * view) : Kis
 	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
+KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter(KisView * view) : KisConvolutionConstFilter(id(), view)
 {
 	if (!colorStrategy()) return;
 

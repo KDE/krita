@@ -35,7 +35,7 @@ libkritacore_la_SOURCES = kis_paint_device.cc kis_layer.cc kis_image.cc \
 		kis_doc.cc kis_view.cc kis_factory.cc kis_nameserver.cc kis_painter.cc \
 		kis_fill_painter.cc kis_gradient_painter.cc kis_convolution_painter.cc kis_cursor.cc \
 		kis_selection.cc kis_command.cc kis_background.cc kis_global.cc kis_config.cc \
-		kis_guide.cc kis_canvas_subject.cc kis_canvas_controller.cc kis_canvas_observer.cc \
+		kis_guide.cc kis_canvas_controller.cc kis_canvas_observer.cc \
 		kis_transaction.cc kis_vec.cc kis_rect.cc kis_iterators_pixel.cc kis_histogram.cc \
 		KRayonViewIface.cc KRayonViewIface.skel KIsDocIface.cc KIsDocIface.skel KIsImageIface.cc \
 		KIsImageIface.skel kis_selection_manager.cc kis_scale_visitor.cc  \

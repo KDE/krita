@@ -71,6 +71,7 @@
 #include "kis_profile.h"
 #include "kis_resource.h"
 #include "kis_resourceserver.h"
+#include "kis_id.h"
 #include "KIsDocIface.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
@@ -524,7 +525,7 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 	image.setAttribute("mime", "application/x-kra");
 	image.setAttribute("width", img -> width());
 	image.setAttribute("height", img -> height());
-	image.setAttribute("colorspacename", img -> colorStrategy() -> name());
+	image.setAttribute("colorspacename", img -> colorStrategy() -> id().id());
 	image.setAttribute("description", img -> description());
 	// XXX: Save profile as blob inside the image, instead of the product name.
 	if (img -> profile() && img -> profile()-> valid())
@@ -613,22 +614,24 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 			{
 			case IMAGE_TYPE_GREYA:
 			case IMAGE_TYPE_GREY:
-				colorspacename = "Grayscale/Alpha";
+				colorspacename = "GRAYA";
 				break;
 			case IMAGE_TYPE_RGB:
 			case IMAGE_TYPE_RGBA:
 				colorspacename = "RGBA";
 				break;
 			case IMAGE_TYPE_CMYK:
+				colorspacename = "CMYKA";
+				break;
 			case IMAGE_TYPE_CMYKA:
-				colorspacename = "CMYK/Alpha";
+				colorspacename = "CMYKA";
 				break;
 			default:
 				return 0;
 			}
 		}
 
-		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
+		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(KisID(colorspacename, ""));
 // 		kdDebug() << "Colorspace: " << cs << "\n";
 		if (cs == 0) return 0;
 		
@@ -971,10 +974,8 @@ bool KisDoc::slotNewImage()
 		QColor c = dlg.backgroundColor();
 		KisImageSP img;
 		KisLayerSP layer;
-		KisFillPainter painter;
 		
-// 		kdDebug() << dlg.colorStrategyName() << "\n";
-		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance()->get(dlg.colorStrategyName());
+		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance()->get(dlg.colorStrategyID());
 
 		if (!cs) return false;
 		
@@ -984,14 +985,18 @@ bool KisDoc::slotNewImage()
 				   dlg.imgName());
 		img -> setResolution(dlg.imgResolution(), dlg.imgResolution()); // XXX needs to be added to dialog
 		img -> setDescription(dlg.imgDescription());
-// 		kdDebug() << "selected profile: " << dlg.profile() << "\n";
+
 		img -> setProfile(dlg.profile());
 
 		layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
 
-		painter.begin(layer.data());
-		painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), c, opacity);
-		painter.end();
+		// Default color and opacity: don't allocate memory
+		if ( c.red() != 0 || c.green() != 0 || c.blue() != 0 || opacity != 0) {
+			KisFillPainter painter;
+			painter.begin(layer.data());
+			painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), c, opacity);
+			painter.end();
+		}
 
 		img -> add(layer, -1);
 

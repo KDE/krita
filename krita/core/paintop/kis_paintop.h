@@ -24,8 +24,10 @@
 #define KIS_PAINTOP_H_
 
 #include <ksharedptr.h>
+#include <klocale.h>
 
 #include "kis_types.h"
+#include "kis_id.h"
 
 #include <koffice_export.h>
 
@@ -69,7 +71,7 @@ public:
 	virtual ~KisPaintOpFactory() {};
 
 	virtual KisPaintOp * createOp(KisPainter * painter) = 0;
-	virtual QString name() { return QString("Abstract PaintOp"); }
+	virtual KisID id() { return KisID("abstractpaintop", i18n("Abstract PaintOp")); }
 
 	/**
 	 * Slot the paint op into the relevant toolbox, if so desired. It's

@@ -25,8 +25,8 @@
 #include "kis_painter.h"
 #include "kis_convolution_painter.h"
 
-KisConvolutionFilter::KisConvolutionFilter(const QString& name, KisView * view) :
-	KisFilter( name, view )
+KisConvolutionFilter::KisConvolutionFilter(const KisID& id, KisView * view) :
+	KisFilter( id, view )
 {
 
 }

@@ -33,7 +33,7 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
 {
 }
 
-KisBrightnessContrastFilter::KisBrightnessContrastFilter(KisView * view ) : KisFilter( name(), view )
+KisBrightnessContrastFilter::KisBrightnessContrastFilter(KisView * view ) : KisFilter( id(), view )
 {
 
 }
@@ -43,7 +43,7 @@ KisFilterConfigurationWidget* KisBrightnessContrastFilter::createConfigurationWi
 	vKisIntegerWidgetParam param;
 	param.push_back( KisIntegerWidgetParam( -100, 100, 0, i18n("Brightness") ) );
 	param.push_back( KisIntegerWidgetParam( -100, 100, 0, i18n("Contrast") ) );
-	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );
+	return new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisBrightnessContrastFilter::configuration(KisFilterConfigurationWidget* nwidget)

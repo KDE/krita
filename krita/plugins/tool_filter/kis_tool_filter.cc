@@ -28,23 +28,25 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_filter.h"
-#include "kis_filter_configuration_widget.h"
-// #include "kis_filter_registry.h"
-#include "kis_brush.h"
-#include "kis_canvas_subject.h"
-#include "kis_cursor.h"
-#include "kis_doc.h"
-#include "kis_image.h"
+#include <kis_filter.h>
+#include <kis_filter_configuration_widget.h>
+#include <kis_brush.h>
+#include <kis_canvas_subject.h>
+#include <kis_cursor.h>
+#include <kis_doc.h>
+#include <kis_image.h>
+#include <kis_painter.h>
+#include <kis_vec.h>
+#include <kis_button_press_event.h>
+#include <kis_button_release_event.h>
+#include <kis_move_event.h>
+#include <kis_filterop.h>
+#include <kis_paintop.h>
+#include <kis_paintop_registry.h>
+#include <kis_id.h>
+#include <kis_cmb_idlist.h>
+
 #include "kis_tool_filter.h"
-#include "kis_painter.h"
-#include "kis_vec.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
-#include "kis_filterop.h"
-#include "kis_paintop.h"
-#include "kis_paintop_registry.h"
 
 KisToolFilter::KisToolFilter()
 	: super(i18n("Filter tool")), m_filterConfigurationWidget(0)
@@ -80,6 +82,7 @@ void KisToolFilter::initPaint(KisEvent *e)
 	op -> setSource ( m_source );
 	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 	painter() -> setFilter( m_filter );
+
 	// XXX: Isn't there a better way to set the config? The filter config widget needs to
 	// to go into the tool options widget, and just the data carried over to the filter.
 	// I've got a bit of a problem with core classes having too much GUI about them.
@@ -92,10 +95,10 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 	m_optWidget = new QWidget(parent);
 	m_optWidget -> setCaption(i18n("Filter"));
 	QWidget* optionFreehandWidget = KisToolFreehand::createOptionWidget(m_optWidget);
-	m_cbFilter = new QComboBox(m_optWidget);
+	m_cbFilter = new KisCmbIDList(m_optWidget);
 	QLabel* lbFilter = new QLabel(i18n("Filter:"), m_optWidget);
 
-	m_cbFilter ->insertStringList( m_subject ->filterList() );
+	m_cbFilter ->setIDList( m_subject ->filterList() );
 
 	m_optionLayout = new QGridLayout(m_optWidget, 3, 2, 0, 6);
 
@@ -104,7 +107,7 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
  	m_optionLayout -> addWidget(m_cbFilter, 1, 1);
 
 	connect(m_cbFilter, SIGNAL(activated ( const QString& )), this, SLOT( changeFilter( const QString& ) ) );
-	changeFilter( m_cbFilter->currentText () );
+	changeFilter( m_cbFilter->currentItem () );
 
 	return m_optWidget;
 }
@@ -114,9 +117,9 @@ QWidget* KisToolFilter::optionWidget()
 	return m_optWidget;
 }
 
-void KisToolFilter::changeFilter( const QString & string )
+void KisToolFilter::changeFilter( const KisID & id)
 {
-	m_filter =  m_subject -> filterGet( string );
+	m_filter =  m_subject -> filterGet( id );
 	Q_ASSERT(m_filter != 0);
 	if( m_filterConfigurationWidget != 0 )
 	{

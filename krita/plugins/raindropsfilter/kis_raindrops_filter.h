@@ -45,7 +45,7 @@ public:
 	KisRainDropsFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline QString name() { return "Raindrops"; };
+	static inline KisID id() { return KisID("raindrops", i18n("Raindrops")); };
 	virtual bool supportsPainting() { return false; }
 public:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);

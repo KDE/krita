@@ -91,7 +91,7 @@ public:
 	virtual ~KisToolCropFactory(){};
 
 	virtual KisTool * createTool() { KisTool * t = new KisToolCrop(); t -> setup(m_ac); return t;}
-	virtual QString name() { return i18n("Crop tool"); }
+	virtual KisID id() { return KisID("crop", i18n("Crop tool")); }
 };
 
 

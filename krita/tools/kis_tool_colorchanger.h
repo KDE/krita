@@ -42,10 +42,6 @@ public:
   
 	virtual void setup(KActionCollection *collection);
 
-// 	virtual QDomElement saveSettings(QDomDocument& doc) const;
-// 	virtual bool loadSettings(QDomElement& elem);
-// 	virtual void setCursor();
-
 	virtual void buttonPress(KisButtonPressEvent*); 
 
 	bool changeColors(int startx, int starty);
@@ -77,7 +73,7 @@ public:
 	virtual ~KisToolColorChangerFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolColorChanger(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Color changer"); }
+	virtual KisID id() { return KisID("colorchanger", i18n("Color changer")); }
 };
 
 

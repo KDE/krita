@@ -57,6 +57,7 @@
 #include <kis_strategy_colorspace.h>
 #include <kis_painter.h>
 #include <kis_fill_painter.h>
+#include <kis_id.h>
 
 #include "perftest.h"
 
@@ -139,6 +140,9 @@ void PerfTest::slotPerfTest()
 		if (dlgPerfTest -> page() -> chkColorConversion -> isChecked()) {
 			report = report.append(colorConversionTest(testCount));
 		}
+		if (dlgPerfTest -> page() -> chkFilter-> isChecked()) {
+			report = report.append(filterTest(testCount));
+		}
 
 		KDialogBase * d = new KDialogBase(m_view, "", true, "", KDialogBase::Ok);
 		d -> setCaption("Performance test results");
@@ -157,13 +161,13 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
 	QString report = QString("* bitBlt test\n");
 
 	KisDoc * doc = m_view -> getDocument();
-	QStringList l = KisColorSpaceRegistry::instance() -> listColorSpaceNames();
+	KisIDList l = KisColorSpaceRegistry::instance() -> listKeys();
 
+	for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+		report = report.append( "  Testing blitting on " + (*it).name() + "\n");
 
-	for (QStringList::Iterator it = l.begin(); it != l.end(); ++it) {
-		report = report.append( "  Testing blitting on " + *it + "\n");
-
- 		KisImage * img = doc -> newImage("blt-" + *it, 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
+ 		KisImage * img = doc -> newImage("blt-" + (*it).name(), 1000, 1000,
+				KisColorSpaceRegistry::instance() -> get(*it));
 		doc -> addImage(img);
 
 		report = report.append(doBlit(COMPOSITE_OVER, *it, OPACITY_OPAQUE, testCount, img));
@@ -183,7 +187,7 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
 
 
 QString PerfTest::doBlit(CompositeOp op, 
-			 QString cspace,
+			 KisID cspace,
 			 QUANTUM opacity,
 			 Q_UINT32 testCount,
 			 KisImageSP img)
@@ -292,13 +296,13 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 	QString report = QString("* Fill test\n");
 
 	KisDoc * doc = m_view -> getDocument();
-	QStringList l = KisColorSpaceRegistry::instance() -> listColorSpaceNames();
+	KisIDList l = KisColorSpaceRegistry::instance() -> listKeys();
 
 
-	for (QStringList::Iterator it = l.begin(); it != l.end(); ++it) {
-		report = report.append( "  Testing blitting on " + *it + "\n");
+	for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+		report = report.append( "  Testing blitting on " + (*it).name() + "\n");
 
- 		KisImage * img = doc -> newImage("fill-" + *it, 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
+ 		KisImage * img = doc -> newImage("fill-" + (*it).name(), 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
 		doc -> addImage(img);
 		KisLayerSP l = img -> activeLayer();
 
@@ -378,12 +382,23 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 			p.setPaintColor(Qt::yellow);
 			p.setFillThreshold(15);
 			p.setCompositeOp(COMPOSITE_OVER);
-			p.fillColor(500, 500);
+			p.fillColor(0,0);
 		}
 		report = report.append(QString("    Opaque floodfill of whole circle (incl. erase and painting of circle) %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 					
 
 		// Pattern fill
+		t.restart();
+		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			p.eraseRect(0, 0, 1000, 1000);
+// 			p.paintEllipse(500, 1000, 100, 0, 0);
+			p.setPaintColor(Qt::yellow);
+			p.setFillThreshold(15);
+			p.setCompositeOp(COMPOSITE_OVER);
+			p.fillPattern(0,0);
+		}
+		report = report.append(QString("    Opaque patternfill  of whole circle (incl. erase and painting of circle) %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+		
 
 		doc -> removeImage(img);
 
@@ -405,12 +420,14 @@ QString PerfTest::pixelTest(Q_UINT32 testCount)
 	QString report = QString("* pixel/setpixel test\n");
 
 	KisDoc * doc = m_view -> getDocument();
-	QStringList l = KisColorSpaceRegistry::instance() -> listColorSpaceNames();
+	KisIDList l = KisColorSpaceRegistry::instance() -> listKeys();
 
-	for (QStringList::Iterator it = l.begin(); it != l.end(); ++it) {
-		report = report.append( "  Testing pixel/setpixel on " + *it + "\n");
 
- 		KisImage * img = doc -> newImage("fill-" + *it, 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
+	for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+		report = report.append( "  Testing pixel/setpixel on " + (*it).name() + "\n");
+
+ 		KisImage * img = doc -> newImage("fill-" + (*it).name(), 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
+		
 		doc -> addImage(img);
 		KisLayerSP l = img -> activeLayer();
 
@@ -482,7 +499,41 @@ QString PerfTest::colorConversionTest(Q_UINT32 testCount)
 
 QString PerfTest::filterTest(Q_UINT32 testCount)
 {
-	return QString("Filter test");
+
+	QString report = QString("* Filter test\n");
+
+	KisIDList filters = m_view -> filterList();
+	KisDoc * doc = m_view -> getDocument();
+	KisIDList l = KisColorSpaceRegistry::instance() -> listKeys();
+
+
+	for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+		report = report.append( "  Testing filtering on " + (*it).name() + "\n");
+
+ 		KisImage * img = doc -> newImage("filter-" + (*it).name(), 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
+		doc -> addImage(img);
+		KisLayerSP l = img -> activeLayer();
+// 		KisFillPainter p(l.data());
+// 		p.fillPattern(0, 0);
+// 		p.end();
+
+		QTime t;
+
+		for (KisIDList::Iterator it = filters.begin(); it != filters.end(); ++it) {
+			KisFilterSP f = m_view -> filterGet(*it);
+			t.restart();
+			f -> enableProgress();
+			f -> process(l.data(), l.data(), f -> configuration(f -> createConfigurationWidget(m_view)), QRect(0, 0, 1000, 1000));
+			f -> disableProgress();
+			report = report.append(QString("    filtered " + (*it).name() + "1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+
+		}
+ 		
+		//doc -> removeImage(img);
+
+	}
+	return report;
+	
 }
 
 

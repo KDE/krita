@@ -222,7 +222,8 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 }
 
 KisLayerSP KisPattern::image(KisStrategyColorSpaceSP colorSpace) {
-	QMap<QString, KisLayerSP>::const_iterator it = m_colorspaces.find(colorSpace->name());
+	// XXX: What does this do? (bsar)
+	QMap<QString, KisLayerSP>::const_iterator it = m_colorspaces.find(colorSpace->id().id());
 	if (it != m_colorspaces.end())
 		return (*it);
 	Q_INT32 width = m_img.width();
@@ -250,7 +251,7 @@ KisLayerSP KisPattern::image(KisStrategyColorSpaceSP colorSpace) {
 			layer -> setPixel(x, y, colour, a);
 		}
 	}
-	m_colorspaces[colorSpace->name()] = layer;
+	m_colorspaces[colorSpace->id().id()] = layer;
 	return layer;
 }
 

@@ -92,7 +92,7 @@ public:
 	virtual ~KisToolStarFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolStar(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Star tool"); }
+	virtual KisID id() { return KisID("starshape", i18n("Star tool")); }
 };
 
 

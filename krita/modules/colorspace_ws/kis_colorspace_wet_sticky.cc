@@ -38,7 +38,7 @@ using namespace WetAndSticky;
 
 
 KisColorSpaceWetSticky::KisColorSpaceWetSticky() :
-	KisStrategyColorSpace("W&S", i18n("Wet & Sticky"), 0, icMaxEnumData)
+	KisStrategyColorSpace(KisID("W&S", i18n("Wet & Sticky")), 0, icMaxEnumData)
 {
 
 	// Basic representational definition

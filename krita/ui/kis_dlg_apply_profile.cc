@@ -26,6 +26,8 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_dlg_apply_profile.h"
 #include "kis_config.h"
+#include "kis_id.h"
+#include "kis_cmb_idlist.h"
 
 // XXX: Hardcode RGBA name. This should be a constant, somewhere.
 KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
@@ -38,7 +40,8 @@ KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
 
-	fillCmbProfiles("RGBA");
+	// XXX: This is BAD! (bsar)
+	fillCmbProfiles(KisID("RGBA", ""));
 	KisConfig cfg;
 	m_page -> grpRenderIntent -> setButton(cfg.renderIntent());
 
@@ -61,8 +64,9 @@ KisProfileSP KisDlgApplyProfile::profile() const
 	} else {
 		profileName = m_page -> cmbProfile -> currentText();
 	}
-	// XXX: i18n!
-	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get("RGBA");
+	// XXX: This is bad -- hardcoded for one color model. This dialog ought to be part
+	// of the rgba color strategy.
+	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
 	return cs -> getProfileByName(profileName);
 }
 
@@ -73,7 +77,7 @@ int KisDlgApplyProfile::renderIntent() const
 
 
 // XXX: Copy & paste from kis_dlg_create_img -- refactor to separate class
-void KisDlgApplyProfile::fillCmbProfiles(const QString & s) 
+void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
 {
 
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);

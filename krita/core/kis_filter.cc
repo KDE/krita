@@ -33,9 +33,10 @@
 #include "kis_previewwidget.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
+#include "kis_id.h"
 
-KisFilter::KisFilter(const QString& name, KisView * view) :
-	m_name(name),
+KisFilter::KisFilter(const KisID& id, KisView * view) :
+	m_id(id),
 	m_view(view),
 	m_dialog(0)
 {
@@ -65,7 +66,7 @@ KisFilterConfigurationWidget* KisFilter::createConfigurationWidget(QWidget* )
 
 void KisFilter::slotActivated()
 {
-	kdDebug() << "Filter activated: " << m_name << "\n";
+	kdDebug() << "Filter activated: " << m_id.name() << "\n";
 	KisImageSP img = m_view -> currentImg();
 	if (!img) return;
 
@@ -73,7 +74,7 @@ void KisFilter::slotActivated()
 	if (!layer) return;
 
 	// Create the config dialog
-	m_dialog = new KisPreviewDialog( (QWidget*) m_view, name().ascii(), true, name());
+	m_dialog = new KisPreviewDialog( (QWidget*) m_view, id().name().ascii(), true, id().name());
 	m_widget = createConfigurationWidget( (QWidget*)m_dialog->container() );
 
 	if( m_widget != 0)
@@ -110,7 +111,7 @@ void KisFilter::slotActivated()
 	}
 
 	enableProgress();
-	KisTransaction * cmd = new KisTransaction(name(), layer.data());
+	KisTransaction * cmd = new KisTransaction(id().name(), layer.data());
 	process((KisPaintDeviceSP)layer, (KisPaintDeviceSP)layer, config, rect);
 	img -> undoAdapter() -> addCommand(cmd);
 	disableProgress();

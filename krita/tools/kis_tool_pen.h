@@ -55,7 +55,7 @@ public:
 	virtual ~KisToolPenFactory(){};
 
 	virtual KisTool * createTool() { KisTool * t =  new KisToolPen(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Pen tool"); }
+	virtual KisID id() { return KisID("pen", i18n("Pen tool")); }
 };
 
 #endif // KIS_TOOL_PEN_H_

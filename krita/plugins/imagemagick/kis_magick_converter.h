@@ -51,17 +51,20 @@ public:
 	KisMagickConverter();
 	virtual ~KisMagickConverter();
 
-public slots:
-
-	virtual void cancel();
 
 public:
 
-	KisPaintDeviceSP fromMagickImage(Image * image, const QString name &);
+	KisPaintDeviceSP fromMagickImage(Image * image, const QString & name);
+
+	// XXX: Implement!
+	KisPaintDeviceSP fromMagickImage(Image * image, const QRect rect, const QString & name) { return fromMagickImage(image, name); };
+
 	Image * toMagickImage(KisPaintDeviceSP device);
 
+	// XXX: Implement!
+	Image * toMagickImage(KisPaintDeviceSP device, const QRect rect) { return toMagickImage(device); };
 
-
+	void cancel();
 private:
 	KisMagickConverter(const KisMagickConverter&);
 	KisMagickConverter& operator=(const KisMagickConverter&);

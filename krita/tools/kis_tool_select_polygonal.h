@@ -97,7 +97,7 @@ public:
 	virtual ~KisToolSelectPolygonalFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectPolygonal(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Polygonal select tool"); }
+	virtual KisID id() { return KisID("polygonalselect", i18n("Polygonal select tool")); }
 };
 
 

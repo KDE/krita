@@ -66,7 +66,7 @@ public:
 	virtual ~KisToolSelectEllipticalFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectElliptical(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Elliptical select tool"); }
+	virtual KisID id() { return KisID("ellipticalselect", i18n("Elliptical select tool")); }
 };
 
 

@@ -27,6 +27,7 @@
 #include "kis_global.h"
 #include "wdgnewimage.h"
 
+class KisID;
 class QButtonGroup;
 
 
@@ -45,7 +46,7 @@ public:
 public:
 	QColor backgroundColor() const;
 	QUANTUM backgroundOpacity() const;
-	QString colorStrategyName() const;
+	KisID colorStrategyID() const;
 	Q_INT32 imgWidth() const;
 	Q_INT32 imgHeight() const;
 	QString imgName() const;
@@ -55,7 +56,7 @@ public:
 
 private slots:
 
-	void fillCmbProfiles(const QString &);
+	void fillCmbProfiles(const KisID &);
 
 private:
 

@@ -38,7 +38,7 @@ class KisConvolutionConfiguration : public KisFilterConfiguration {
 
 class KisConvolutionFilter : public KisFilter {
 public:
-	KisConvolutionFilter(const QString& name, KisView * view);
+	KisConvolutionFilter(const KisID& id, KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 };
@@ -48,7 +48,7 @@ public:
  */
 class KisConvolutionConstFilter : public KisConvolutionFilter {
 	public:
-		KisConvolutionConstFilter(const QString& name, KisView * view) : KisConvolutionFilter(name, view) { } ;
+		KisConvolutionConstFilter(const KisID& id, KisView * view) : KisConvolutionFilter(id, view) { } ;
 		virtual ~KisConvolutionConstFilter();
 	public:
 		virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);

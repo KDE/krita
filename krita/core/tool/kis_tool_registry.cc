@@ -25,6 +25,7 @@
 #include "kis_tool.h"
 #include "kis_tool_factory.h"
 #include "kis_canvas_subject.h"
+#include "kis_id.h"
 
 // KisToolRegistry *KisToolRegistry::m_singleton = 0;
 
@@ -54,9 +55,9 @@ vKisTool KisToolRegistry::createTools(KisCanvasSubject *subject) const
 
 	vKisTool tools;
 
-	QStringList factories = listKeys();
+	KisIDList factories = listKeys();
 
-	for ( QStringList::Iterator it = factories.begin(); it != factories.end(); ++it )
+	for (KisIDList::Iterator it = factories.begin(); it != factories.end(); ++it )
 	{
 		KisToolFactorySP f = get(*it);
 

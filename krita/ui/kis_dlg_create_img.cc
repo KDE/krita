@@ -39,6 +39,8 @@
 #include "kis_resource.h"
 #include "kis_resourceserver.h"
 #include "kis_factory.h"
+#include "kis_id.h"
+#include "kis_cmb_idlist.h"
 
 KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, 
 				 Q_INT32 maxHeight, Q_INT32 defHeight, 
@@ -61,13 +63,14 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth,
 	m_page -> intHeight -> setMaxValue(maxHeight);
 	m_page -> doubleResolution -> setValue(100.0); // XXX: Get this from settings?
 
-	m_page -> cmbColorSpaces -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
+	m_page -> cmbColorSpaces -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
 	m_page -> cmbColorSpaces -> setCurrentText(colorStrategyName);
 
-	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const QString &)), 
-		this, SLOT(fillCmbProfiles(const QString &)));
+	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)), 
+		this, SLOT(fillCmbProfiles(const KisID &)));
 
-	fillCmbProfiles(colorStrategyName);
+	// Temporary KisID; this will be matched to the translated ID in the current KisIDList.
+	fillCmbProfiles(KisID(colorStrategyName, ""));
 
 }
 
@@ -86,9 +89,9 @@ Q_INT32 KisDlgCreateImg::imgHeight() const
 	return m_page -> intHeight -> value();
 }
 
-QString KisDlgCreateImg::colorStrategyName() const
+KisID KisDlgCreateImg::colorStrategyID() const
 {
-	return m_page -> cmbColorSpaces -> currentText ();
+	return m_page -> cmbColorSpaces -> currentItem();
 }
 
 QColor KisDlgCreateImg::backgroundColor() const
@@ -127,7 +130,7 @@ QString KisDlgCreateImg::imgDescription() const
 
 KisProfileSP KisDlgCreateImg::profile() const
 {
-	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(m_page -> cmbColorSpaces -> currentText());
+	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(m_page -> cmbColorSpaces -> currentItem());
 	if (!cs) return 0;
 
 	vKisProfileSP resourceslist = cs -> profiles();
@@ -144,14 +147,14 @@ KisProfileSP KisDlgCreateImg::profile() const
 	
 }
 
-void KisDlgCreateImg::fillCmbProfiles(const QString & s) 
+void KisDlgCreateImg::fillCmbProfiles(const KisID & s)
 {
 
 
 	m_page -> cmbProfile -> clear();
 	m_page -> cmbProfile -> insertItem(i18n("None"));
 
-	kdDebug() << "Colorspace: " << s << "\n";
+	kdDebug() << "Colorspace: " << s.id() << "\n";
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	kdDebug() << "Instance: " << cs << "\n";
 

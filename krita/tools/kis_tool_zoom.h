@@ -66,7 +66,7 @@ public:
 	virtual ~KisToolZoomFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t = new KisToolZoom(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Zoom tool"); }
+	virtual KisID id() { return KisID("zoom", i18n("Zoom tool")); }
 };
 
 

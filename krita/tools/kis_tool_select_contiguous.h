@@ -73,7 +73,7 @@ public:
 	virtual ~KisToolSelectContiguousFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectContiguous(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Contiguous select tool"); }
+	virtual KisID id() { return KisID("contiguousselect", i18n("Contiguous select tool")); }
 };
 
 

@@ -38,7 +38,6 @@ class KisColorSpaceRegistry : public KisGenericRegistry<KisStrategyColorSpaceSP>
 public:
 	virtual ~KisColorSpaceRegistry();
 
-	QStringList listColorSpaceNames() const;
 	static KisColorSpaceRegistry* instance();
 
 	KisProfileSP getProfileByName(const QString & name) const;

@@ -94,7 +94,7 @@ public:
 	virtual ~KisToolSelectFreehandFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectFreehand(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Freehand select tool"); }
+	virtual KisID id() { return KisID("freehandselect", i18n("Freehand select tool")); }
 };
 
 

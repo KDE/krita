@@ -118,7 +118,7 @@ public:
 	virtual ~KisToolGradientFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolGradient(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Gradient Tool"); }
+	virtual KisID id() { return KisID("gradient", i18n("Gradient Tool")); }
 };
 
 

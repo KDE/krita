@@ -51,7 +51,7 @@ class KisPerChannelFilter
 	: public KisFilter
 {
 public:
-	KisPerChannelFilter(KisView * view, const QString& name, Q_INT32 min, Q_INT32 max, Q_INT32 initvalue );
+	KisPerChannelFilter(KisView * view, const KisID& id, Q_INT32 min, Q_INT32 max, Q_INT32 initvalue );
 public:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
 	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);

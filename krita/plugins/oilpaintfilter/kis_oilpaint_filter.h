@@ -43,7 +43,7 @@ public:
 	KisOilPaintFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline QString name() { return "Oilpaint"; };
+	static inline KisID id() { return KisID("oilpaint", i18n("Oilpaint")); };
 	virtual bool supportsPainting() { return true; }
 public:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);

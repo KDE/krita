@@ -30,6 +30,7 @@
 #include "kis_types.h"
 #include "kis_channelinfo.h"
 #include "kis_profile.h"
+#include "kis_id.h"
 
 class QPainter;
 class KisIteratorPixel;
@@ -60,12 +61,11 @@ public:
 	/**
 	 * Create a new colorspace strategy.
 	 *
-	 * @param name The internal Krita name for this color strategy that we can use for loading and saving
-	 * @param description i18n'able The user-friendly description of this strategy
+	 * @param id The Krita identification of this color model.
 	 * @param cmType The littlecms colorstrategy type we wrap.
 	 * @param colorSpaceSignature The icc signature for the colorspace we are.
 	 */
-	KisStrategyColorSpace(const QString& name, const QString& description, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature);
+	KisStrategyColorSpace(const KisID & id, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature);
 
 	virtual ~KisStrategyColorSpace();
 
@@ -120,16 +120,7 @@ public:
 	 */
 	virtual bool alpha() const = 0;
 
-	/**
-	 * The internal identification of this color model
-	 */
-	inline QString name() const { return m_name; };
-
-
-	/**
-	 * The user-friendly name of this color model.
-	 */
-	inline QString description() const { return m_description; };
+	inline KisID id() const { return m_id; }
 
 	/**
 	 * This function is used to convert a KisPixelRepresentation from this color strategy to the specified
@@ -231,8 +222,7 @@ protected:
 
 private:
 
-	QString m_name;                              // The internal name
-	QString m_description;                       // The user-friendly description
+	KisID m_id;
 	Q_UINT32 m_cmType;                           // The colorspace type as defined by littlecms
 	icColorSpaceSignature m_colorSpaceSignature; // The colorspace signature as defined in icm/icc files
 

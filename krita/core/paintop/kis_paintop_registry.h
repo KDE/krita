@@ -30,8 +30,8 @@ class KRITACORE_EXPORT KisPaintOpRegistry : public KisGenericRegistry<KisPaintOp
 public:
 	virtual ~KisPaintOpRegistry();
 
-	KisPaintOp * paintOp(const QString & name, KisPainter * painter) const;
-
+	KisPaintOp * paintOp(const KisID& id, KisPainter * painter) const;
+	KisPaintOp * paintOp(const QString& id, KisPainter * painter) const;
 public:
 	static KisPaintOpRegistry* instance();
 

@@ -61,7 +61,7 @@ public:
 	virtual ~KisToolSelectBrushFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectBrush(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Brush select tool"); }
+	virtual KisID id() { return KisID("brushselect", i18n("Brush select tool")); }
 };
 
 

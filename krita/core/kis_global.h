@@ -184,10 +184,5 @@ typedef Q_UINT8 PIXELTYPE;
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((QUANTUM) (257UL*(value)))
 
-#if 0
-Q_INT32 imgTypeDepth(const enumImgType& type);
-bool imgTypeHasAlpha(const enumImgType& type);
-#endif
-
 #endif // KISGLOBAL_H_
 

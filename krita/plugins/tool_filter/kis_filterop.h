@@ -36,7 +36,7 @@ public:
 	virtual ~KisFilterOpFactory() {}
 
 	virtual KisPaintOp * createOp(KisPainter * painter);
-	virtual QString name() { return QString("filter"); }
+	virtual KisID id() { return KisID(("filter"), i18n("filter")); }
 };
 
 

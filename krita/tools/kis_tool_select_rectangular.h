@@ -65,7 +65,7 @@ public:
 	virtual ~KisToolSelectRectangularFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectRectangular(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Rectangular select tool"); }
+	virtual KisID id() { return KisID("rectangularselect", i18n("Rectangular select tool")); }
 };
 
 

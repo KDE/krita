@@ -86,7 +86,7 @@ public:
 	virtual ~KisToolLineFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolLine(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Line tool"); }
+	virtual KisID id() { return KisID("line", i18n("Line tool")); }
 };
 
 

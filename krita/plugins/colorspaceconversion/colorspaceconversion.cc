@@ -86,9 +86,9 @@ void ColorspaceConversion::slotImgColorspaceConversion()
 
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
 
-	dlgColorspaceConversion -> setCaption(i18n("Convert All Layers From ") + image -> colorStrategy() -> name());
+	dlgColorspaceConversion -> setCaption(i18n("Convert All Layers From ") + image -> colorStrategy() -> id().name());
 
-	dlgColorspaceConversion -> fillCmbSrcProfile(image -> colorStrategy() -> name());
+	dlgColorspaceConversion -> fillCmbSrcProfile(image -> colorStrategy() -> id());
 
 	if (image -> profile()) {
 		dlgColorspaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(image -> profile() -> productName());
@@ -97,7 +97,7 @@ void ColorspaceConversion::slotImgColorspaceConversion()
 	if (dlgColorspaceConversion -> exec() == QDialog::Accepted) {
 		kdDebug() << "Going to convert image\n";
 		// XXX: Do the rest of the stuff
-		QString cspace = dlgColorspaceConversion -> m_page -> cmbColorSpaces -> currentText();
+		KisID cspace = dlgColorspaceConversion -> m_page -> cmbColorSpaces -> currentItem();
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(cspace);
 
 		image -> setProfile(image -> colorStrategy() -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbSourceProfile -> currentText()));
@@ -118,8 +118,8 @@ void ColorspaceConversion::slotLayerColorspaceConversion()
 	if (!dev) return;
 
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
-	dlgColorspaceConversion -> setCaption(i18n("Convert Current Layer From") + dev -> colorStrategy() -> name());
-	dlgColorspaceConversion -> fillCmbSrcProfile(dev -> colorStrategy() -> name());
+	dlgColorspaceConversion -> setCaption(i18n("Convert Current Layer From") + dev -> colorStrategy() -> id().name());
+	dlgColorspaceConversion -> fillCmbSrcProfile(dev -> colorStrategy() -> id());
 
 	KisProfileSP p = dev -> profile();
 	if ( !p ) return;
@@ -128,7 +128,7 @@ void ColorspaceConversion::slotLayerColorspaceConversion()
 
 	if (dlgColorspaceConversion -> exec() == QDialog::Accepted) {
 		kdDebug() << "Going to convert layer\n";
-		QString cspace = dlgColorspaceConversion -> m_page -> cmbColorSpaces -> currentText();
+		KisID cspace = dlgColorspaceConversion -> m_page -> cmbColorSpaces -> currentItem();
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(cspace);
 		dev -> setProfile(dev -> colorStrategy() -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbSourceProfile -> currentText()));
 		dev -> convertTo(cs,

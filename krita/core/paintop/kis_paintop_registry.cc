@@ -22,6 +22,7 @@
 #include "kis_types.h"
 #include "kis_paintop_registry.h"
 #include "kis_paintop.h"
+#include "kis_id.h"
 
 KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 
@@ -45,13 +46,18 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 	return KisPaintOpRegistry::m_singleton;
 }
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const QString & name, KisPainter * painter) const
+KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, KisPainter * painter) const
 {
-	KisPaintOpFactorySP f = get(name);
+	KisPaintOpFactorySP f = get(id);
 	if (f) {
 		return f -> createOp(painter);
 	}
 	else {
 		return 0;
 	}
+}
+
+KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, KisPainter * painter) const
+{
+	return paintOp(KisID(id, ""), painter);
 }

@@ -29,7 +29,7 @@
 #include "kis_matrix_widget.h"
 
 
-KisCustomConvolutionFilter::KisCustomConvolutionFilter(KisView * view) : KisConvolutionFilter(name(), view)
+KisCustomConvolutionFilter::KisCustomConvolutionFilter(KisView * view) : KisConvolutionFilter(id(), view)
 {
 
 }

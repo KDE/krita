@@ -50,7 +50,7 @@ public:
 	virtual ~KisToolBrushFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolBrush(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Brush tool"); }
+	virtual KisID id() { return KisID("brush", i18n("Brush tool")); }
 };
 
 

@@ -42,7 +42,7 @@ public:
 	KisFilterInvert(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
-	static inline QString name() { return "Invert"; };
+	static inline KisID id() { return KisID("invert", i18n("Invert")); };
 	virtual bool supportsPainting() { return true; }
 };
 

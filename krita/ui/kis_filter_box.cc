@@ -29,7 +29,7 @@
 #include "kis_filter_registry.h"
 #include "kis_filter.h"
 #include "kis_canvas_subject.h"
-
+#include "kis_id.h"
 #include "kis_filter_box.h"
 
 KisFilterBox::KisFilterBox(KisCanvasSubject * subject, QWidget * parent, const char * name)
@@ -46,11 +46,11 @@ void KisFilterBox::init()
 {
 	// Fill the box with all the filter that can be used to paint with
 	clear();
-	QStringList filters = m_subject -> filterList();
-	for ( QStringList::Iterator it = filters.begin(); it != filters.end(); ++ it ) {
+	KisIDList filters = m_subject -> filterList();
+	for ( KisIDList::Iterator it = filters.begin(); it != filters.end(); ++ it ) {
 		KisFilterSP f = m_subject -> filterGet( *it );
 		if ( f -> supportsPainting() ) {
-			insertItem( f -> name() );
+			insertItem( (*it).name() );
 		}
 	}
  	connect(this, SIGNAL(currentChanged( QListBoxItem * )), this, SLOT( slotFilterSelected( QListBoxItem * ) ));

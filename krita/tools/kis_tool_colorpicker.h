@@ -65,7 +65,7 @@ public:
 	virtual ~KisToolColorPickerFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolColorPicker(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Color picker"); }
+	virtual KisID id() { return KisID("colorpicker", i18n("Color picker")); }
 };
 
 

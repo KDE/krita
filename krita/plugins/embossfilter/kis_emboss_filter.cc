@@ -52,7 +52,7 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_emboss_filter.h"
 
-KisEmbossFilter::KisEmbossFilter(KisView * view) : KisFilter(name(), view)
+KisEmbossFilter::KisEmbossFilter(KisView * view) : KisFilter(id(), view)
 {
 }
 
@@ -120,31 +120,31 @@ void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d, KisPro
 		m_progress -> setSubject(this, true, true);
 		emit notifyProgressStage(this,i18n("Applying emboss filter..."),0);
 	}
-    
+
         float Depth = d / 10.0;
         int LineWidth = Width * 4;
         if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-        
+
         uchar *Bits = (uchar*) data;
         int    i = 0, j = 0;
         int    R = 0, G = 0, B = 0;
         uchar  Gray = 0;
-        
+
         bool m_cancel = false; //make it compile...
-        
+
         for (int h = 0 ; !m_cancelRequested && (h < Height) ; ++h)
         {
         for (int w = 0 ; !m_cancelRequested && (w < Width) ; ++w)
                 {
                 i = h * LineWidth + 4 * w;
                 j = (h + Lim_Max (h, 1, Height)) * LineWidth + 4 * (w + Lim_Max (w, 1, Width));
-        
+
                 R = abs ((int)((Bits[i+2] - Bits[j+2]) * Depth + 128));
                 G = abs ((int)((Bits[i+1] - Bits[j+1]) * Depth + 128));
                 B = abs ((int)((Bits[ i ] - Bits[ j ]) * Depth + 128));
-        
+
                 Gray = LimitValues ((R + G + B) / 3);
-        
+
                 Bits[i+2] = Gray;
                 Bits[i+1] = Gray;
                 Bits[ i ] = Gray;
@@ -208,7 +208,7 @@ KisFilterConfigurationWidget* KisEmbossFilter::createConfigurationWidget(QWidget
 {
 	vKisIntegerWidgetParam param;
 	param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth") ) );
-	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );
+	return new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisEmbossFilter::configuration(KisFilterConfigurationWidget* nwidget)

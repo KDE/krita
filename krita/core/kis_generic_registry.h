@@ -23,14 +23,13 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-
 #include <kdebug.h>
 
-// XXX: Map on KisID to have a combination of unique identifying
-//      string and an an i18n-ed display string
+#include "kis_id.h"
+
 template<typename _T>
 class KisGenericRegistry {
-	typedef std::map<QString, _T> storageMap;
+	typedef std::map<KisID, _T> storageMap;
 public:
 	virtual ~KisGenericRegistry() { };
 protected:
@@ -38,10 +37,11 @@ protected:
 public:
 	void add(_T item)
 	{
-		m_storage.insert( typename storageMap::value_type( item->name(), item) );
-		//kdDebug() << "Added " << item -> name() << "\n";
+		m_storage.insert( typename storageMap::value_type( item->id(), item) );
+		kdDebug() << "Added " << item -> id().name() << "\n";
 	}
-	_T get(const QString& name) const
+
+	_T get(const KisID& name) const
 	{
 		_T p;
 		typename storageMap::const_iterator it = m_storage.find(name);
@@ -54,14 +54,32 @@ public:
 		}
 		return p;
 	}
-	bool exist(const QString& name) const
+
+	/**
+	 * Get a single entry based on the identifying part of KisID, not the
+	 * the descriptive part.
+	 */
+	_T get(const QString& id) const
 	{
-		typename storageMap::const_iterator it = m_storage.find(name);
+		return get(KisID(id, ""));
+	}
+
+
+	bool exists(const KisID& id) const
+	{
+		typename storageMap::const_iterator it = m_storage.find(id);
 		return (it != m_storage.end());
 	}
-	QStringList listKeys() const
+
+	bool exists(const QString& id) const
 	{
-		QStringList list;
+		return exists(KisID(id, ""));
+	}
+
+
+	KisIDList listKeys() const
+	{
+		KisIDList list;
 		typename storageMap::const_iterator it = m_storage.begin();
 		typename storageMap::const_iterator endit = m_storage.end();
 		while( it != endit )

@@ -28,6 +28,8 @@
 #include "kis_types.h"
 #include "kis_image.h"
 
+class KisID;
+
 class KisDlgApplyProfile : public KDialogBase {
 	typedef KDialogBase super;
 
@@ -42,7 +44,7 @@ public:
 	KisProfileSP profile() const;
 	int renderIntent() const;
 
-	void fillCmbProfiles(const QString & s);
+	void fillCmbProfiles(const KisID & s);
 
 private:
 	

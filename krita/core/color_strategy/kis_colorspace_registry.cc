@@ -44,16 +44,11 @@ KisColorSpaceRegistry* KisColorSpaceRegistry::instance()
 	return KisColorSpaceRegistry::m_singleton;
 }
 
-QStringList KisColorSpaceRegistry::listColorSpaceNames() const
-{
-	return listKeys();
-}
-
-KisProfileSP KisColorSpaceRegistry::getProfileByName(const QString & name) const 
+KisProfileSP KisColorSpaceRegistry::getProfileByName(const QString & name) const
 {
 	KisProfileSP profile = 0;
-	QStringList keys = listKeys();
-	for ( QStringList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
+	KisIDList keys = listKeys();
+	for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
 		profile = get(*it) -> getProfileByName(name);
 		if (profile != 0) return profile;
 	}

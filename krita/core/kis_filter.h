@@ -23,12 +23,14 @@
 #include <qwidget.h>
 
 #include <ksharedptr.h>
+#include <klocale.h>
 
 #include "kis_types.h"
 #include "kis_view.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_filter_registry.h"
+#include "kis_id.h"
 
 class KisFilterConfigurationWidget;
 class KisPreviewDialog;
@@ -41,9 +43,9 @@ template<class F>
 KisFilterSP createFilter(KisView* view)
 {
        KisFilterSP kfi;
-       if( view->filterRegistry()->exist( F::name() ) )
+       if( view->filterRegistry()->exists( F::id() ) )
        {
-               kfi = view->filterRegistry()->get( F::name() );
+               kfi = view->filterRegistry()->get( F::id() );
       } else {
                kfi = new F(view);
                view->filterRegistry()->add(kfi);
@@ -69,7 +71,7 @@ class KisFilter : public KisProgressSubject, public KShared {
 	Q_OBJECT
 public:
 
-	KisFilter(const QString& name, KisView * view);
+	KisFilter(const KisID& id, KisView * view);
 	virtual ~KisFilter() {}
 
 public:
@@ -94,7 +96,7 @@ public:
 	virtual void disableProgress();
 	virtual void setAutoUpdate(bool set);
 
-	inline const QString name() const { return m_name; };
+	inline const KisID id() const { return m_id; };
 
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
 
@@ -116,7 +118,7 @@ protected:
 	bool m_cancelRequested;
 	bool m_progressEnabled;
 
-	QString m_name;
+	KisID m_id;
 	KisView * m_view;
 	KisFilterConfigurationWidget* m_widget;
 	KisPreviewDialog* m_dialog;

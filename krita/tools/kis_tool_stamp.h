@@ -90,7 +90,7 @@ public:
 	virtual ~KisToolStampFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolStamp(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Stamp tool"); }
+	virtual KisID id() { return KisID("stamp", i18n("Stamp tool")); }
 };
 
 

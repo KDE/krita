@@ -65,7 +65,7 @@ public:
 	virtual ~KisToolTextFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolText(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Text tool"); }
+	virtual KisID id() { return KisID("text", i18n("Text tool")); }
 };
 
 

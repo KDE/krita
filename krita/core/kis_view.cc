@@ -2646,7 +2646,7 @@ void KisView::layerAdd()
 
 	if (img) {
 		KisConfig cfg;
-		NewLayerDialog dlg(img->colorStrategy()->name(), img->nextLayerName(), this);
+		NewLayerDialog dlg(img->colorStrategy()->id(), img->nextLayerName(), this);
 
 		dlg.exec();
 
@@ -2655,7 +2655,7 @@ void KisView::layerAdd()
 							     dlg.layerName(),
 							     dlg.compositeOp(),
 							     dlg.opacity(),
-							     KisColorSpaceRegistry::instance() -> get(dlg.colorStrategyName()));
+							     KisColorSpaceRegistry::instance() -> get(dlg.colorStrategyID()));
 			if (layer) {
 				m_layerBox -> setCurrentItem(img -> index(layer));
 				resizeEvent(0);
@@ -3436,12 +3436,12 @@ KisProgressDisplayInterface *KisView::progressDisplay() const
 
 
 // XXX: Temporary re-instatement of old way of getting filter and tools plugins
-KisFilterSP KisView::filterGet(const QString& name)
+KisFilterSP KisView::filterGet(const KisID& id)
 {
-	return filterRegistry()->get( name );
+	return filterRegistry()->get( id);
 }
 
-QStringList KisView::filterList()
+KisIDList KisView::filterList()
 {
 	return filterRegistry()->listKeys();
 }

@@ -33,13 +33,14 @@
 #include "kis_colorspace_alpha.h"
 #include "kis_channelinfo.h"
 #include "kis_types.h"
+#include "kis_id.h"
 
 namespace {
 	const PIXELTYPE PIXEL_MASK = 0;
 }
 
 KisColorSpaceAlpha::KisColorSpaceAlpha() :
-	KisStrategyColorSpace("ALPHA", i18n("Alpha mask"),  TYPE_GRAY_8, icSigGrayData)
+	KisStrategyColorSpace(KisID("ALPHA", i18n("Alpha mask")),  TYPE_GRAY_8, icSigGrayData)
 {
 // 	kdDebug() << "Alpha mask created\n";
 	m_maskColor = Qt::red;
@@ -128,10 +129,7 @@ bool KisColorSpaceAlpha::convertPixelsTo(QUANTUM * src, KisProfileSP /*srcProfil
 					 Q_UINT32 length,
 					 Q_INT32 /*renderingIntent*/)
 {
-//  	kdDebug() << "KisColorSpaceAlpha:: convertPixels for " << length << " pixels from " << name() << " to " << dstColorStrategy -> name() << "\n";
-
 	// No lcms trickery here, we are a QColor + opacity channel
-
 	Q_INT32 size = dstColorStrategy -> pixelSize();
 
 	Q_UINT32 j = 0;

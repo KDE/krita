@@ -104,7 +104,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 	if( srcPoint.y() < 0)
 		srcPoint.setY(0);
 
-	KisPaintDeviceSP srcdev = new KisPaintDevice(dab.data() -> colorStrategy(), "");
+	KisPaintDeviceSP srcdev = new KisPaintDevice(dab.data() -> colorStrategy(), "duplicate srcdev");
 	int srcY = 0;
 
 	while ( srcY < sh )

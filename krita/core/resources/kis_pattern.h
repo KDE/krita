@@ -44,7 +44,10 @@ public:
 	virtual bool saveAsync();
 	virtual QImage img();
 
-	/** returns a KisLayerSP made with colorSpace as the Colorspace strategy **/
+	/**
+	 * returns a KisLayerSP made with colorSpace as the Colorspace strategy
+	 * for use in the fill painter.
+	 **/
 	KisLayerSP image(KisStrategyColorSpaceSP colorSpace);
 
 private slots:

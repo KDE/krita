@@ -116,7 +116,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 
 
 	// Create a temporary paint device
-	KisPaintDeviceSP tmpDev = new KisPaintDevice(colorStrategy, "");
+	KisPaintDeviceSP tmpDev = new KisPaintDevice(colorStrategy, "temp");
 
 	// Copy the layer data onto the new paint device
 	KisPainter p( tmpDev );

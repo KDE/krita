@@ -28,7 +28,7 @@
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 #include "kis_paint_box.h"
-
+#include "kis_id.h"
 
 
 KisPaintBox::KisPaintBox(QWidget * parent, const char * name)
@@ -86,8 +86,8 @@ void KisPaintBox::addPaintOps()
 
 	KisPaintOpRegistry * por = KisPaintOpRegistry::instance();
 	KisPaintOpFactorySP pof = 0;
-	QStringList keys = por -> listKeys();
-	for ( QStringList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
+	KisIDList keys = por -> listKeys();
+	for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
 // 		pof = por -> get(*it);
 // 		if ( pof )
 // 			pof -> slot( this );

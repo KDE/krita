@@ -29,9 +29,8 @@
 #include "kis_profile.h"
 #include "kis_config.h"
 
-KisStrategyColorSpace::KisStrategyColorSpace(const QString& name, const QString& description, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature)
-	: m_name(name),
-	  m_description(description),
+KisStrategyColorSpace::KisStrategyColorSpace(const KisID& id, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature)
+	: m_id(id),
 	  m_cmType(cmType),
 	  m_colorSpaceSignature(colorSpaceSignature)
 {
@@ -52,8 +51,7 @@ bool KisStrategyColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 rend
 {
 	return convertPixelsTo(src.channels(), src.profile(),
 			       dst.channels(), dst.colorStrategy(), dst.profile(),
-			       1);
-
+			       renderingIntent);
 }
 
 bool KisStrategyColorSpace::convertPixelsTo(QUANTUM * src, KisProfileSP srcProfile,
@@ -109,7 +107,7 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 // 	kdDebug() << name() << "::bitBlt. source color space: " << srcSpace -> name() << "\n";
 
 
- 	if (m_name != srcSpace -> name()) {
+ 	if (m_id!= srcSpace -> id()) {
 // 		kdDebug() << "compositing heterogenous color spaces: src = " << srcSpace -> name() << ", dst = " << m_name << "\n";
 		int len = pixelSize() * rows * cols;
  		QUANTUM * convertedSrcPixels = new QUANTUM[len];

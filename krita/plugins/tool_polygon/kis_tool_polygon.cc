@@ -45,8 +45,8 @@
 KisToolPolygon::KisToolPolygon()
         : super(),
           m_dragging (false),
-          m_polyLineStarted (false),
-          m_currentImage (0)
+          m_currentImage (0),
+          m_polyLineStarted (false)
 {
 	setName("tool_polygon");
 	// initialize ellipse tool settings

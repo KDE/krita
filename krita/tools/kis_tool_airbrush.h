@@ -62,7 +62,7 @@ public:
 	virtual ~KisToolAirbrushFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolAirbrush(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Airbrush tool"); }
+	virtual KisID id() { return KisID("airbrush", i18n("Airbrush tool")); }
 };
 
 

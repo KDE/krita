@@ -88,7 +88,7 @@ public:
 	virtual ~KisToolPolylineFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolPolyline(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Polyline tool"); }
+	virtual KisID id() { return KisID("polyline", i18n("Polyline tool")); }
 };
 
 

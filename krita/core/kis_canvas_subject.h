@@ -22,6 +22,7 @@
 #include <qstring.h>
 #include <qcolor.h>
 #include "kis_types.h"
+#include "kis_id.h"
 
 class KoDocument;
 class KisBrush;
@@ -42,8 +43,8 @@ class KisFilterRegistry;
  */
 class KisCanvasSubject {
 public:
-	KisCanvasSubject();
-	virtual ~KisCanvasSubject();
+	KisCanvasSubject() {};
+	virtual ~KisCanvasSubject() {};
 
 public:
 	virtual void attach(KisCanvasObserver *observer) = 0;
@@ -66,8 +67,8 @@ public:
 	virtual KisProgressDisplayInterface *progressDisplay() const = 0;
 	virtual KisSelectionManager * selectionManager() = 0;
 	virtual KisFilterRegistry * filterRegistry() const = 0;
-	virtual KisFilterSP filterGet(const QString& name) = 0;
-	virtual QStringList filterList() = 0;
+	virtual KisFilterSP filterGet(const KisID& id) = 0;
+	virtual KisIDList filterList() = 0;
 private:
 	KisCanvasSubject(const KisCanvasSubject&);
 	KisCanvasSubject& operator=(const KisCanvasSubject&);

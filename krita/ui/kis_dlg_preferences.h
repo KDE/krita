@@ -31,8 +31,8 @@ class QLineEdit;
 class QCheckBox;
 class KURLRequester;
 class WdgColorSettings;
-
-
+class KisCmbIDList;
+class KisID;
 
 /**
  *  "General"-tab for preferences dialog
@@ -100,9 +100,9 @@ public:
 
 private slots:
 
-	void refillMonitorProfiles(const QString & s);
-	void refillPrintProfiles(const QString & s);
-	void refillImportProfiles(const QString & s);
+	void refillMonitorProfiles(const KisID & s);
+	void refillPrintProfiles(const KisID & s);
+	void refillImportProfiles(const KisID & s);
 
 public:
 

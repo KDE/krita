@@ -41,6 +41,8 @@
 #include "kis_image.h"
 #include "kis_config.h"
 #include "kis_view.h"
+#include "kis_id.h"
+#include "kis_cmb_idlist.h"
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, const char *name)
 	: super(parent, name, true, "", Ok | Cancel)
@@ -67,14 +69,14 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 
 	m_page -> doubleResolution -> setValue(image -> xRes()); // XXX: separate values for x & y?
 
-	m_page -> cmbColorSpaces -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
-	m_page -> cmbColorSpaces -> setCurrentText(image -> colorStrategy() -> name()); // XXX i18n?
+	m_page -> cmbColorSpaces -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
+	m_page -> cmbColorSpaces -> setCurrent(image -> colorStrategy() -> id()); // XXX i18n?
 	m_page -> cmbColorSpaces -> setEnabled(false); // XXX: re-enable when colorspace conversion is possible
 	m_page -> cmbColorSpaces -> hide();
 	m_page -> lblColorSpaces -> hide();
 
 
-	fillCmbProfiles(image -> colorStrategy() -> name());
+	fillCmbProfiles(image -> colorStrategy() -> id());
 	
 	if (image -> profile()) {
 		m_page -> cmbProfile -> setCurrentText(image -> profile() -> productName());
@@ -95,8 +97,8 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 		this, SLOT(okClicked()));
 
 
-	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const QString &)), 
-		this, SLOT(fillCmbProfiles(const QString &)));
+	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)), 
+		this, SLOT(fillCmbProfiles(const KisID &)));
 
 	
 }
@@ -141,7 +143,7 @@ void KisDlgImageProperties::okClicked()
 }
 
 // XXX: Copy & paste from kis_dlg_create_img -- refactor to separate class
-void KisDlgImageProperties::fillCmbProfiles(const QString & s) 
+void KisDlgImageProperties::fillCmbProfiles(const KisID & s)
 {
 
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);

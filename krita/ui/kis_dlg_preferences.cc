@@ -39,10 +39,12 @@
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_dlg_preferences.h"
-#include "wdgcolorsettings.h"
 #include "kis_resourceserver.h"
 #include "kis_factory.h"
 #include "kis_colorspace_registry.h"
+#include "kis_id.h"
+#include "kis_cmb_idlist.h"
+#include "wdgcolorsettings.h"
 
 GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 	: QWidget( _parent, _name )
@@ -154,15 +156,15 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 
 	KisConfig cfg;
 	
-	m_page -> cmbWorkingColorSpace -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
+	m_page -> cmbWorkingColorSpace -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
 	m_page -> cmbWorkingColorSpace -> setCurrentText(cfg.workingColorSpace());
 
-	m_page -> cmbPrintingColorSpace -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
+	m_page -> cmbPrintingColorSpace -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
 	m_page -> cmbPrintingColorSpace -> setCurrentText(cfg.printerColorSpace());
 
-	refillMonitorProfiles(cfg.workingColorSpace());
-	refillPrintProfiles(cfg.printerColorSpace());
-	refillImportProfiles(cfg.workingColorSpace());
+	refillMonitorProfiles(KisID(cfg.workingColorSpace(), ""));
+	refillPrintProfiles(KisID(cfg.printerColorSpace(), ""));
+	refillImportProfiles(KisID(cfg.workingColorSpace(), ""));
 
  	m_page -> cmbMonitorProfile -> setCurrentText(cfg.monitorProfile());
  	m_page -> cmbImportProfile -> setCurrentText(cfg.importProfile());
@@ -174,20 +176,20 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 	m_page -> chkApplyMonitorOnCopy -> setChecked(cfg.applyMonitorProfileOnCopy());
 	m_page -> grpIntent -> setButton(cfg.renderIntent());
 
-	connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const QString &)), 
-		this, SLOT(refillMonitorProfiles(const QString &)));
+	connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const KisID &)),
+		this, SLOT(refillMonitorProfiles(const KisID &)));
 
-	connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const QString &)), 
-		this, SLOT(refillImportProfiles(const QString &)));
+	connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const KisID &)), 
+		this, SLOT(refillImportProfiles(const KisID &)));
 
-	connect(m_page -> cmbPrintingColorSpace, SIGNAL(activated(const QString &)), 
-		this, SLOT(refillPrintProfiles(const QString &)));
+	connect(m_page -> cmbPrintingColorSpace, SIGNAL(activated(const KisID &)), 
+		this, SLOT(refillPrintProfiles(const KisID &)));
 
 
 }
 
 
-void ColorSettingsTab::refillMonitorProfiles(const QString & s)
+void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
 {
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbMonitorProfile -> clear();
@@ -201,7 +203,7 @@ void ColorSettingsTab::refillMonitorProfiles(const QString & s)
 
 }
 
-void ColorSettingsTab::refillPrintProfiles(const QString & s)
+void ColorSettingsTab::refillPrintProfiles(const KisID & s)
 {
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbPrintProfile -> clear();
@@ -215,7 +217,7 @@ void ColorSettingsTab::refillPrintProfiles(const QString & s)
 	
 }
 
-void ColorSettingsTab::refillImportProfiles(const QString & s)
+void ColorSettingsTab::refillImportProfiles(const KisID & s)
 {
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbImportProfile -> clear();

@@ -26,6 +26,7 @@
 #include <kis_global.h>
 
 class KisView;
+class KisID;
 
 class PerfTest : public KParts::Plugin
 {
@@ -54,7 +55,7 @@ private:
 	QString filterTest(Q_UINT32 testCount);
 
 	QString doBlit(CompositeOp op, 
-		       QString cspace,
+		       KisID cspace,
 		       QUANTUM opacity,
 		       Q_UINT32 testCount,
 		       KisImageSP img);

@@ -7,12 +7,13 @@ INCLUDES = -I$(srcdir)/../core/filters -I$(srcdir)/../core \
 
 noinst_LTLIBRARIES = libkisui.la
 libkisui_la_LIBADD = ./labels/libkislabel.la ./widgets/libkiswidgets.la
-libkisui_la_SOURCES = kis_dlg_preferences.cc \
+libkisui_la_SOURCES = \
+    kis_cmb_idlist.cc \
+    kis_dlg_preferences.cc \
     kis_dlg_progress.cc \
     kis_canvas.cc \
     kis_channelview.cc \
     kis_cmb_composite.cc \
-    kis_cmb_imagetype.cc \
     kis_controlframe.cc \
     kis_layerbox.cc \
     kis_dlg_create_img.cc \
@@ -61,8 +62,6 @@ noinst_HEADERS = kis_dlg_preferences.h \
     kis_dlg_progress.h \
     kis_canvas.h \
     kis_channelview.h \
-    kis_cmb_composite.h \
-    kis_cmb_imagetype.h \
     kis_controlframe.h \
     kis_layerbox.h \
     kis_dlg_create_img.h \

@@ -19,6 +19,9 @@
 #ifndef KIS_TOOL_FACTORY_H_
 #define KIS_TOOL_FACTORY_H_
 
+#include <klocale.h>
+
+#include "kis_id.h"
 #include "kis_types.h"
 #include "kactioncollection.h"
 
@@ -30,7 +33,7 @@ public:
 	virtual ~KisToolFactory() {};
 
 	virtual KisTool * createTool() = 0;
-	virtual QString name() { return QString("Abstract Tool"); }
+	virtual KisID id() { return KisID("Abstract Tool", i18n("Abstract Tool")); }
 
 protected:
 

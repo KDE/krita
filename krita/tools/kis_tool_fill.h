@@ -89,7 +89,7 @@ public:
 	virtual ~KisToolFillFactory(){};
 	
 	virtual KisTool * createTool() { KisToolFill * t = new KisToolFill(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Fill tool"); }
+	virtual KisID id() { return KisID("fill", i18n("Fill tool")); }
 
 };
 

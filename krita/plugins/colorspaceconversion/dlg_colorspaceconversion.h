@@ -26,7 +26,8 @@
 #include <kdialogbase.h>
 
 #include "wdgconvertcolorspace.h"
-
+#include <kis_id.h>
+#include <kis_cmb_idlist.h>
 
 class QComboBox;
 /**
@@ -47,12 +48,12 @@ public:
 public slots:
 
 	void okClicked();
-	void fillCmbDestProfile(const QString &);
-	void fillCmbSrcProfile(const QString &);
+	void fillCmbDestProfile(const KisID &);
+	void fillCmbSrcProfile(const KisID &);
 
 private:
 
-	void fillCmbProfile(QComboBox * cmb, const QString &);
+	void fillCmbProfile(QComboBox * cmb, const KisID &);
 };
 
 #endif // DLG_COLORSPACECONVERSION

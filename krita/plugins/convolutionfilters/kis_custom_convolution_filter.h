@@ -24,28 +24,28 @@
 #include "kis_convolution_filter.h"
 
 class KisCustomConvolutionConfiguration : public KisConvolutionConfiguration {
-	public:
-		KisCustomConvolutionConfiguration(KisMatrix3x3* matrixes) : KisConvolutionConfiguration(matrixes) {
-		};
-		~KisCustomConvolutionConfiguration() { delete m_matrixes; };
-	private:
-		KisMatrix3x3* m_matrixes;
+public:
+	KisCustomConvolutionConfiguration(KisMatrix3x3* matrixes) : KisConvolutionConfiguration(matrixes) {
+	};
+	~KisCustomConvolutionConfiguration() { delete m_matrixes; };
+private:
+	KisMatrix3x3* m_matrixes;
 };
 
 class KisCustomConvolutionFilter : public KisConvolutionFilter {
-	public:
-		KisCustomConvolutionFilter(KisView * view);
-	public:
-		static inline QString name() { return "Custom Convolution"; };
-	        virtual bool supportsPainting() { return true; }
+public:
+	KisCustomConvolutionFilter(KisView * view);
+public:
+	static inline KisID id() { return KisID("custom convolution", i18n("Custom Convolution")); };
+	virtual bool supportsPainting() { return true; }
 
-	public:
-		virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-		virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
-	protected:
-		virtual KisMatrix3x3* matrixes() { return m_matrix; };
-	private:
-		KisMatrix3x3* m_matrix;
+public:
+	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
+	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+protected:
+	virtual KisMatrix3x3* matrixes() { return m_matrix; };
+private:
+	KisMatrix3x3* m_matrix;
 };
 
 

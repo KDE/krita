@@ -36,7 +36,7 @@ public:
 	virtual ~KisPenOpFactory() {}
 
 	virtual KisPaintOp * createOp(KisPainter * painter);
-	virtual QString name() { return QString("pen"); }
+	virtual KisID id(){ return KisID("pen", i18n("pen")); }
 };
 
 

@@ -55,22 +55,15 @@ public:
         // KisToolPaint interface
         //
 
-// 	virtual QString settingsName() const;
-// 	virtual QDomElement saveSettings(QDomDocument& doc) const;
-// 	virtual bool loadSettings(QDomElement& elem);
-
 	virtual void setup(KActionCollection *collection);
 
 	virtual void buttonPress(KisButtonPressEvent *event);
 	virtual void move(KisMoveEvent *event);
 	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
-public slots:
-//	virtual void toolSelect();
 
 protected:
 	virtual void draw(const KisPoint&, const KisPoint&);
-	//virtual void draw(KisPainter *gc, const QRect& rc);
 
 protected:
 	int m_lineThickness;
@@ -91,7 +84,7 @@ public:
 	virtual ~KisToolRectangleFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolRectangle(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Rectangle tool"); }
+	virtual KisID id() { return KisID("rectangle", i18n("Rectangle tool")); }
 };
 
 

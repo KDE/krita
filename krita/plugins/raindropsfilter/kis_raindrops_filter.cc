@@ -51,7 +51,7 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_raindrops_filter.h"
 
-KisRainDropsFilter::KisRainDropsFilter(KisView * view) : KisFilter(name(), view)
+KisRainDropsFilter::KisRainDropsFilter(KisView * view) : KisFilter(id(), view)
 {
 }
 
@@ -443,7 +443,7 @@ KisFilterConfigurationWidget* KisRainDropsFilter::createConfigurationWidget(QWid
 	param.push_back( KisIntegerWidgetParam( 1, 200, 80, i18n("Drop Size") ) );
 	param.push_back( KisIntegerWidgetParam( 1, 500, 80, i18n("Number") ) );
 	param.push_back( KisIntegerWidgetParam( 1, 100, 30, i18n("Fish eyes") ) );
-	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );
+	return new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisRainDropsFilter::configuration(KisFilterConfigurationWidget* nwidget)

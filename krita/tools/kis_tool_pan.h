@@ -59,7 +59,7 @@ public:
 	virtual ~KisToolPanFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolPan(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Pan tool"); }
+	virtual KisID id() { return KisID("pan", i18n("Pan tool")); }
 };
 
 

@@ -85,7 +85,7 @@ public:
 	virtual ~KisToolEllipseFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolEllipse(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Ellipse tool"); }
+	virtual KisID id() { return KisID("ellipse", i18n("Ellipse tool")); }
 };
 
 

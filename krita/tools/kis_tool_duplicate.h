@@ -68,7 +68,7 @@ public:
 	virtual ~KisToolDuplicateFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolDuplicate(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Duplicate tool"); }
+	virtual KisID id() { return KisID("duplicate", i18n("Duplicate tool")); }
 };
 
 

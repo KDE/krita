@@ -45,7 +45,7 @@ public:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
 	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline QString name() { return "Brightness / Contrast"; };
+	static inline KisID id() { return KisID("brightnesscontrast", i18n("Brightness / Contrast")); };
 	virtual bool supportsPainting() { return true; }
 };
 

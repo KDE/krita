@@ -36,7 +36,7 @@ public:
 	virtual ~KisDuplicateOpFactory() {}
 
 	virtual KisPaintOp * createOp(KisPainter * painter);
-	virtual QString name() { return QString("duplicate"); }
+	virtual KisID id() { return KisID("duplicate", i18n("duplicate")); }
 };
 
 class KisDuplicateOp : public KisPaintOp {

@@ -32,7 +32,7 @@ public:
 	KisDesaturateFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline QString name() { return i18n("Desaturate"); };
+	static inline KisID id() { return KisID("desaturate", i18n("Desaturate")); };
 	virtual bool supportsPainting() { return true; }
 };
 
@@ -41,7 +41,7 @@ public:
 	KisGammaCorrectionFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline QString name() { return i18n("Gamma Adjustment"); };
+	static inline KisID id() { return KisID("gammadjustment", i18n("Gamma Adjustment")); };
         virtual bool supportsPainting() { return true; }
 
 };
@@ -51,7 +51,7 @@ public:
 	KisColorAdjustmentFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline QString name() { return i18n("Color Adjustment"); };
+	static inline KisID id() { return KisID("coloradjustment", i18n("Color Adjustment")); };
         virtual bool supportsPainting() { return true; }
 
 };
@@ -61,7 +61,7 @@ public:
 	KisAutoContrast(KisView* view);
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline QString name() { return i18n("Auto Contrast"); };
+	static inline KisID id() { return KisID("autocontrast", i18n("Auto Contrast")); };
         virtual bool supportsPainting() { return true; }
 
 };

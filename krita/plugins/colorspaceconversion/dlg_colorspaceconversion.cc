@@ -31,6 +31,7 @@
 #include <kis_factory.h>
 #include <kis_colorspace_registry.h>
 #include <kis_resourceserver.h>
+#include <kis_id.h>
 
 #include "dlg_colorspaceconversion.h"
 #include "wdgconvertcolorspace.h"
@@ -44,9 +45,9 @@ DlgColorspaceConversion::DlgColorspaceConversion( QWidget *  parent,
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
 
-	m_page -> cmbColorSpaces -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
+	m_page -> cmbColorSpaces -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
 
-	fillCmbDestProfile(m_page -> cmbColorSpaces -> currentText());
+	fillCmbDestProfile(m_page -> cmbColorSpaces -> currentItem());
 
 	// XXX: Until we have implemented high bit depth images
 	m_page -> cmbDepth -> setEnabled(false);
@@ -73,19 +74,19 @@ void DlgColorspaceConversion::okClicked()
 }
 
 
-void DlgColorspaceConversion::fillCmbDestProfile(const QString & s) 
+void DlgColorspaceConversion::fillCmbDestProfile(const KisID & s)
 {
 	fillCmbProfile(m_page -> cmbDestProfile, s);
 	
 }
 
-void DlgColorspaceConversion::fillCmbSrcProfile(const QString & s)
+void DlgColorspaceConversion::fillCmbSrcProfile(const KisID & s)
 {
 	fillCmbProfile(m_page -> cmbSourceProfile, s);
 
 }
 
-void DlgColorspaceConversion::fillCmbProfile(QComboBox * cmb, const QString & s)
+void DlgColorspaceConversion::fillCmbProfile(QComboBox * cmb, const KisID& s)
 {
 	cmb -> clear();
 

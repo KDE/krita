@@ -79,7 +79,6 @@ private:
 	QCursor m_toolCursor;
 protected:
 	KisCanvasSubject *m_subject;
-	QString m_name;
 	QRect m_dirtyRect;
 
 

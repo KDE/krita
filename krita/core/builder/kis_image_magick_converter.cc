@@ -64,13 +64,13 @@ namespace {
 	KisStrategyColorSpaceSP getColorSpaceForColorType(ColorspaceType type) {
 		kdDebug() << "Colorspace type: " << type << "\n";
 		if (type == GRAYColorspace) {
-			KisColorSpaceRegistry::instance() -> get("CMYK");
+			KisColorSpaceRegistry::instance() -> get(KisID("CMYK", ""));
 		}
 		else if (type == CMYKColorspace) {
-			return KisColorSpaceRegistry::instance() -> get("GRAYA");
+			return KisColorSpaceRegistry::instance() -> get(KisID("GRAYA", ""));
 		}
 		else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {
-			return KisColorSpaceRegistry::instance() -> get("RGBA");
+			return KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
 		}
 		return 0;
 	
@@ -246,7 +246,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 			emit notifyProgressError(this);
 			return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
 		}
-		kdDebug() << "Image has colorspace: " << cs -> name() << "\n";
+		kdDebug() << "Image has colorspace: " << cs -> id().name() << "\n";
 
 		KisProfileSP profile = getProfileForProfileInfo(image, cs);
  		if (profile)

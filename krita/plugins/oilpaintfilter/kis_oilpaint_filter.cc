@@ -52,7 +52,7 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_oilpaint_filter.h"
 
-KisOilPaintFilter::KisOilPaintFilter(KisView * view) : KisFilter(name(), view)
+KisOilPaintFilter::KisOilPaintFilter(KisView * view) : KisFilter(id(), view)
 {
 }
 
@@ -251,7 +251,7 @@ KisFilterConfigurationWidget* KisOilPaintFilter::createConfigurationWidget(QWidg
 	vKisIntegerWidgetParam param;
 	param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush Size") ) );
 	param.push_back( KisIntegerWidgetParam( 10, 255, 30, i18n("Smooth") ) );
-	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );
+	return new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisOilPaintFilter::configuration(KisFilterConfigurationWidget* nwidget)

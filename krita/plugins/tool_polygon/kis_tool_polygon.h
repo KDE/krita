@@ -88,7 +88,7 @@ public:
 	virtual ~KisToolPolygonFactory(){};
 	
 	virtual KisTool * createTool() { KisTool * t =  new KisToolPolygon(); t -> setup(m_ac); return t; }
-	virtual QString name() { return i18n("Polygon tool"); }
+	virtual KisID id() { return KisID("polygon", i18n("Polygon tool")); }
 };
 
 

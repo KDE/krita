@@ -496,7 +496,9 @@ void KisView::clearCanvas(const QRect& rc)
 void KisView::activateTool(KisToolSP tool)
 {
 	if (tool && qFind(m_toolSet.begin(), m_toolSet.end(), tool) != m_toolSet.end()) {
-		m_tool -> clear();
+		if (m_tool)
+			m_tool -> clear();
+
 		m_tool = tool;
 		m_tool -> cursor(m_canvas);
 	}

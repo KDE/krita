@@ -35,7 +35,7 @@ class KisResourceServer : public QObject {
 	Q_OBJECT
 
 public:
-	// Create a resource server for a particular resource type
+	/** Create a resource server for a particular resource type */
 	KisResourceServer();
 	virtual ~KisResourceServer();
 

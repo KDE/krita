@@ -39,7 +39,9 @@ class KisImage;
 class QWMatrix;
 class KisIteratorLineQuantum;
 class KisTileCommand;
-
+/**
+ * Class modelled on QPaintDevice.
+ */
 class KisPaintDevice : public QObject, public KisRenderInterface {
         Q_OBJECT
         typedef KisRenderInterface super;
@@ -101,13 +103,19 @@ public:
         QString name();
         void setName(const QString& name);
 
-        // fill c and opacity with the values found at x and y
+        /** 
+	 * fill c and opacity with the values found at x and y
+	 * @return true if the operation was succesful
+	 */
         bool pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity);
 
-        // Set the specified pixel to the specified color. Note that this
-        // bypasses KisPainter. the PaintDevice is here used as an equivalent
-        // to QImage, not QPixmap. This means that this is undoable; also,
-        // there is no compositing with an existing value at this location.
+        /**
+	 * Set the specified pixel to the specified color. Note that this
+         * bypasses KisPainter. the PaintDevice is here used as an equivalent
+         * to QImage, not QPixmap. This means that this is undoable; also,
+         * there is no compositing with an existing value at this location.
+	 * @return true if the operation was succesful
+	 */
         bool setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity);
 
         void maskBounds(Q_INT32 *x1, Q_INT32 *y1, Q_INT32 *x2, Q_INT32 *y2);

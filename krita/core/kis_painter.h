@@ -53,7 +53,7 @@ class KisBrush;
 class KisPattern;
 class KisGradient;
 
-/*
+/**
   KisPainter contains the graphics primitives necessary to draw on a
   KisPaintDevice. This is the same kind of abstraction as used in Qt
   itself, where you have QPainter and QPaintDevice.
@@ -72,10 +72,14 @@ public:
         ~KisPainter();
 
 public:
-        // Start painting on the specified device. Not undoable.
+        /**
+	 * Start painting on the specified device. Not undoable.
+	 */
         void begin(KisPaintDeviceSP device);
 
-        // Finish painting on the current device
+        /**
+	 * Finish painting on the current device
+	 */
         KCommand *end();
 
         // Begin an undoable paint operation
@@ -87,16 +91,19 @@ public:
         // The current paint device.
         KisPaintDeviceSP device() const;
 
-        // ----------------------------------------------------------------------------------------
-        // Native paint methods that are tile aware, undo/redo-able,
-        // use the color strategies and the composite operations.
-
-        // Blast the specified region from src onto the current paint device.
+	/**
+         * Native paint methods that are tile aware, undo/redo-able,
+         * use the color strategies and the composite operations.
+	 *
+	 * Blast the specified region from src onto the current paint device.
+	 */
         void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src,
                     Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 
-        // Overloaded version of the previous, differs in that it is possible to specify
-        // a value for opacity
+        /**
+	 * Overloaded version of the previous, differs in that it is possible to specify
+         * a value for opacity
+	 */
         void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src,
                     QUANTUM opacity,
                     Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
@@ -104,26 +111,29 @@ public:
         void eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h);
         void eraseRect(const QRect& rc);
 
-	// ------------------------------------------------------------------------------------------
-        // Fill a rectangle with a certain color
+	/**
+         * Fill a rectangle with a certain color
+	 */
         void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c);
         void fillRect(const QRect& rc, const KoColor& c);
         void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity);
         void fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity);
 
-	// ------------------------------------------------------------------------------------------
-	// The methods below are 'higher' level than the above methods. They need brushes, colors etc.
-	// set before they can be called. The methods do not directly tell the image to update, but
-	// you can call dirtyRect() to get the rect that needs to be notified by your painting code.
-	// Call will reset it!
+	/**
+	 * The methods below are 'higher' level than the above methods. They need brushes, colors etc.
+	 * set before they can be called. The methods do not directly tell the image to update, but
+	 * you can call dirtyRect() to get the rect that needs to be notified by your painting code.
+	 * Call will reset it!
+	*/
 	QRect dirtyRect();
 
-	// ------------------------------------------------------------------------------------------
-	// Draw a line between pos1 and pos2 using the currently set brush and color.
-	// If savedDist is less than zero, the brush is painted at pos1 before being
-	// painted along the line using the spacing setting.
-	// @Return the drag distance, that is the remains of the distance between p1 and p2 not covered
-	// because the currenlty set brush has a spacing greater than that distance.
+	/**
+	 * Draw a line between pos1 and pos2 using the currently set brush and color.
+	 * If savedDist is less than zero, the brush is painted at pos1 before being
+	 * painted along the line using the spacing setting.
+	 * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
+	 * because the currenlty set brush has a spacing greater than that distance.
+	 */
 	double paintLine(const enumPaintOp paintOp,
 			const KisPoint &pos1,
 			const KisPoint &pos2,
@@ -156,21 +166,25 @@ public:
                           const QPoint &endPoint,
                           const double pressure);
 
-	// Draw a spot at pos using the currently set brush and color
+	/** Draw a spot at pos using the currently set brush and color */
 	void paintAt(const KisPoint &pos,
 		     const double pressure,
 		     const double /*xTilt*/,
 		     const double /*yTilt*/);
 
-	// Erase to the background color or transparency (depending on the type of the paint device)
-	// using the currently set brush.
+	/**
+	 * Erase to the background color or transparency (depending on the type of the paint device)
+	 * using the currently set brush.
+	 */
 	void eraseAt(const KisPoint &pos,
 		     const double pressure,
 		     const double /*xTilt*/,
 		     const double /*yTilt*/);
 
-	// Paint a filled circle at pos with pressure dependent alpha and
-	// 'ragged' edges. Meant to simulate the true effect of an airbrush.
+	/**
+	 * Paint a filled circle at pos with pressure dependent alpha and
+	 * 'ragged' edges. Meant to simulate the true effect of an airbrush.
+	 */
 	void airBrushAt(const KisPoint &pos,
 			const double pressure,
 			const double /*xTilt*/,

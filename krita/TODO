@@ -59,6 +59,7 @@ Core
         * Rework iterators to allow iterating over pixels (#Cyrillle, Casper)
         * Auto-extending layers (#Casper)
         X Code cleanup (make naming conformant to Qt) (#Dirk)
+        * Lock layers (make inaccessible) See bug #90456.
 
 User Interface
 

@@ -36,23 +36,23 @@ KAboutData * newKritaAboutData()
 			"",
 			"http://www.koffice.org/krita",
 			"submit@bugs.kde.org");
-	aboutData->addAuthor("Matthias Elter", 0, "me@kde.org");
+	aboutData->addAuthor("Adrian Page", 0, "Adrian.Page@tesco.net");
+	aboutData->addAuthor("Bart Coppens", 0, "kde@bartcoppens.be");
+	aboutData->addAuthor("Boudewijn Rempt", 0, "boud@valdyas.org");
 	aboutData->addAuthor("Carsten Pfeiffer", 0, "carpdjih@cetus.zrz.tu-berlin.de");
-	aboutData->addAuthor("Michael Koch", 0, "koch@kde.org");
+	aboutData->addAuthor("Casper Boemann", 0, "cbr@boemann.dk");
+	aboutData->addAuthor("Clarence Dang", 0, "dang@kde.org");
+	aboutData->addAuthor("Cyrille Berger", 0, "cyb@lepi.org");
+	aboutData->addAuthor("Dirk Schoenberger", 0, "dirk.schoenberger@sz-online.de");
 	aboutData->addAuthor("John Califf",0, "jcaliff@compuzone.net");
 	aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
-	aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
-	aboutData->addAuthor("Patrick Julien", 0, "freak@codepimps.org");
-	aboutData->addAuthor("Boudewijn Rempt", 0, "boud@valdyas.org");
-	aboutData->addAuthor("Sven Langkamp", 0, "longamp@reallygood.de");
-	aboutData->addAuthor("Cyrille Berger", 0, "cyb@lepi.org");
-	aboutData->addAuthor("Adrian Page", 0, "Adrian.Page@tesco.net");
-	aboutData->addAuthor("Roger Larsson", 0, "roger.larsson@norran.net");
-	aboutData->addAuthor("Bart Coppens", 0, "kde@bartcoppens.be");
-	aboutData->addAuthor("Clarence Dang", 0, "dang@kde.org");
-	aboutData->addAuthor("Casper Boemann", 0, "cbr@boemann.dk");
-	aboutData->addAuthor("Dirk Schoenberger", 0, "dirk.schoenberger@sz-online.de");
+	aboutData->addAuthor("Matthias Elter", 0, "me@kde.org");
+	aboutData->addAuthor("Michael Koch", 0, "koch@kde.org");
 	aboutData->addAuthor("Michael Thaler", 0, "michael.thaler@physik.tu-muenchen.de");
+	aboutData->addAuthor("Patrick Julien", 0, "freak@codepimps.org");
+	aboutData->addAuthor("Roger Larsson", 0, "roger.larsson@norran.net");
+	aboutData->addAuthor("Sven Langkamp", 0, "longamp@reallygood.de");
+	aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
 	return aboutData;
 }
 

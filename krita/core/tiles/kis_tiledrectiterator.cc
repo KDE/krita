@@ -37,9 +37,9 @@ KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  Q_INT
 	
 	// Find tile row,col matching x,y
 	m_topRow = yToRow(m_y);
-	m_bottomRow = yToRow(m_y);
+	m_bottomRow = yToRow(m_y + m_h - 1);
 	m_leftCol = xToCol(m_x);
-	m_rightCol = xToCol(m_x);
+	m_rightCol = xToCol(m_x + m_w - 1);
 	m_row = m_topRow;
 	m_col = m_leftCol;
 	

@@ -4,7 +4,9 @@ INCLUDES  = -I$(srcdir)/builder \
 	-I$(srcdir)/helper/ \
 	-I$(srcdir)/tiles \
 	-I$(srcdir)/../ui \
+	-I../ui \
 	-I$(srcdir)/../ui/dialogs \
+	-I../ui/dialogs \
 	-I$(srcdir)/../ui/widgets \
 	-I$(srcdir)/../tools \
 	$(KOFFICE_INCLUDES) \

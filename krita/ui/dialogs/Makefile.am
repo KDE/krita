@@ -1,5 +1,6 @@
 INCLUDES  = -I$(srcdir)/.. \
 	-I$(srcdir)/../../core \
+	-I.. \
 	$(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 noinst_LTLIBRARIES = libkisdialogs.la
 libkisdialogs_la_SOURCES = dummy.cc \

@@ -62,7 +62,7 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 max
 	grp -> insert(indexedRadio, IMAGE_TYPE_INDEXEDA);
 
 	QRadioButton *grayScaleRadio = new QRadioButton(i18n("&Grayscale"), grp);
-	grayScaleRadio -> setEnabled(false);
+	grayScaleRadio -> setEnabled(true);
 	grp -> insert(grayScaleRadio, IMAGE_TYPE_GREYA);
 
 	QRadioButton *rgbRadio = new QRadioButton(i18n("&RGB"), grp);

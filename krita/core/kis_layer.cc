@@ -31,8 +31,7 @@ KisLayer::KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString&
 	m_opacity = opacity;
 }
 
-KisLayer::KisLayer(KisTileMgr, KisImageSP img, const QString& name, QUANTUM opacity)
-	: super(img, img -> width(), img -> height(), img -> imgType(), name)
+KisLayer::KisLayer(KisTileMgrSP tm, KisImageSP img, const QString& name, QUANTUM opacity) : super(tm, img, name)
 {
 	m_linked = false;
 	m_opacity = opacity;

@@ -40,6 +40,7 @@ class KisPaintDevice : public QObject, public KisRenderInterface {
 
 public:
 	KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
+	KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& name);
 	virtual ~KisPaintDevice();
 
 public:

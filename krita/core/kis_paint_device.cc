@@ -30,6 +30,27 @@ KisPaintDevice::KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, co
 	configure(img, width, height, imgType, name);
 }
 
+KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& name)
+{
+	init();
+	m_width = tm -> width();
+	m_height = tm -> height();
+	m_imgType = img -> imgType();
+	m_depth = img -> depth();
+	m_alpha = img -> alpha();
+	m_x = 0;
+	m_y = 0;
+	m_offX = 0;
+	m_offY = 0;
+	m_offW = 0;
+	m_offH = 0;
+	m_tiles = tm;
+	m_visible = true;
+	m_owner = img;
+	m_name = name;
+	m_projectionValid = false;
+}
+
 KisPaintDevice::~KisPaintDevice()
 {
 }
@@ -41,8 +62,8 @@ Q_INT32 KisPaintDevice::tileNum(Q_INT32, Q_INT32) const
 
 void KisPaintDevice::invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	Q_INT32 dx = x + w;
-	Q_INT32 dy = y + h;
+	Q_INT32 dx = x + w + 1;
+	Q_INT32 dy = y + h + 1;
 	Q_INT32 x1;
 	Q_INT32 y1;
 

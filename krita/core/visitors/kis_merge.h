@@ -26,7 +26,6 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
-#include "visitors/kis_flatten.h"
 
 template <typename cond_t>
 class KisMerge : public KisPaintDeviceVisitor {
@@ -65,13 +64,37 @@ public:
 		if (m_img -> index(layer) < 0)
 			return false;
 
-		KisFlatten<cond_t> flatten(0, 0, layer -> width(), layer -> height());
+		if (!m_test(layer.data()))
+			return false;
 
-		flatten(gc, layer);
-
-		if (!m_keepOld && m_test(layer.data()))
+		if (!m_keepOld)
 			m_img -> rm(layer);
 
+		Q_INT32 sx;
+		Q_INT32 sy;
+		Q_INT32 dx;
+		Q_INT32 dy;
+		Q_INT32 w;
+		Q_INT32 h;
+
+		sx = layer -> x();
+		sy = layer -> y();
+		dx = layer -> x();
+		dy = layer -> y();
+		w = layer -> width();
+		h = layer -> height();
+
+		if (sx < 0) {
+			w += dx;
+			sx = 0;
+		}
+
+		if (sy < 0) {
+			h += sy;
+			sy = 0;
+		}
+
+		gc.bitBlt(QMAX(dx, 0), QMAX(dy, 0), COMPOSITE_OVER, layer.data(), layer -> opacity(), sx, sy, w, h);
 		return true;
 	}
 

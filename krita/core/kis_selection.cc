@@ -59,7 +59,7 @@ void KisSelection::commit()
 	Q_ASSERT(h <= height());
 //	gc.fillRect(m_rc, KoColor::red(), OPACITY_OPAQUE);
 	// TODO Go over each tile... if src == dst, then don't do anything.  Just drop the share count.
-//	gc.bitBlt(m_rc.x(), m_rc.y(), COMPOSITE_COPY, this, opacity(), rc.x(), rc.y(), rc.width(), rc.height());
+	gc.bitBlt(m_rc.x(), m_rc.y(), COMPOSITE_COPY, this, opacity(), 0, 0, m_rc.width(), m_rc.height());
 }
 
 bool KisSelection::shouldDrawBorder() const
@@ -69,13 +69,14 @@ bool KisSelection::shouldDrawBorder() const
 
 void KisSelection::move(Q_INT32 x, Q_INT32 y)
 {
+	// Should selections be allowed to move?!?
 	QRect rc = clip();
 
 	if (m_firstMove) {
 		KisPainter gc(m_parent);
 
 		// push_undo_fill
-		gc.fillRect(m_rc, KoColor::black(), OPACITY_TRANSPARENT);
+		gc.eraseRect(m_rc);
 		m_firstMove = false;
 		m_parent -> invalidate(rc);
 	}
@@ -87,6 +88,15 @@ void KisSelection::move(Q_INT32 x, Q_INT32 y)
 
 void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_INT32 height)
 {
+	configure(m_img, width, height, m_img -> imgType(), m_name);
+
+	KisPainter gc(this);
+
+	kdDebug(DBG_AREA_CORE) << "selection -> (parentX = " << parentX << ", parentY = " << parentY << ", width = " << width << ", height = " << height << ")\n";
+	gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, parentX, parentY, width, height);
+	m_rc.setRect(parentX, parentY, width, height);
+	super::move(parentX, parentY);
+#if 0
 	KisTileMgrSP tm1 = m_parent -> data();
 	KisTileMgrSP tm2;
 	KisTileSP tile;
@@ -98,7 +108,7 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 	Q_INT32 clipY;
 	Q_INT32 k;
 
-	configure(m_img, parentX + width + 1, parentY + height + 1, m_img -> imgType(), m_name);
+	configure(m_img, width, height, m_img -> imgType(), m_name);
 	tm2 = data();
 	Q_ASSERT(tm2);
 	kdDebug(DBG_AREA_CORE) << "selection -> (parentX = " << parentX << ", parentY = " << parentY << ", width = " << width << ", height = " << height << ")\n";
@@ -144,15 +154,16 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 		KisPainter gc(this);
 		KisPainter g2(m_parent);
 
-//		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, parentX, parentY, width, height);
+		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, parentX, parentY, width, height);
 //		gc.fillRect(clipX, clipY, width, height, KoColor::red(), OPACITY_OPAQUE);
-		g2.fillRect(m_rc.x(), m_rc.y(), m_rc.width(), m_rc.height(), KoColor::green(), OPACITY_OPAQUE);
+//		g2.fillRect(m_rc.x(), m_rc.y(), m_rc.width(), m_rc.height(), KoColor::green(), OPACITY_OPAQUE);
 	}
 #endif
 
 	parentX = parentX / TILE_WIDTH * TILE_WIDTH;
 	parentY = parentY / TILE_HEIGHT * TILE_HEIGHT;
 	super::move(parentX, parentY);
+#endif
 }
 
 void KisSelection::setBounds(const QRect& rc)

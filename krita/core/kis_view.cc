@@ -71,6 +71,7 @@
 #include "kis_view.h"
 #include "kis_util.h"
 #include "kis_paint_device_visitor.h"
+#include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
@@ -757,7 +758,7 @@ void KisView::removeSelection()
 			}
 
 			img -> unsetSelection(false);
-			gc.fillRect(clip, KoColor::black(), OPACITY_TRANSPARENT);
+			gc.eraseRect(rc);
 			gc.end();
 			m_doc -> setModified(true);
 			img -> invalidate(rc);
@@ -790,6 +791,9 @@ void KisView::imgUpdateGUI()
 
 			if (layer -> visible())
 				nvisible++;
+
+			if (nlinked > 1 && nvisible > 1)
+				break;
 		}
 	}
 
@@ -821,15 +825,16 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 			KisPainter gc(selection.data());
 
 			if (!clip.isEmpty()) {
-				rc.setX(rc.x() + clip.x());
-				rc.setY(rc.y() + clip.y());
+				rc.setX(clip.x());
+				rc.setY(clip.y());
 				rc.setWidth(clip.width());
 				rc.setHeight(clip.height());
+			} else {
+				rc.setX(0);
+				rc.setY(0);
 			}
 
-			clip.setX(0);
-			clip.setY(0);
-			gc.fillRect(QRect(0, 0, 15, 15), c, opacity);
+			gc.fillRect(rc, c, opacity);
 			gc.end();
 			img -> invalidate(rc);
 			m_doc -> setModified(true);
@@ -840,62 +845,16 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 
 void KisView::crop()
 {
-#if 0
-	if (!m_doc -> hasSelection()) {
-		KMessageBox::sorry(NULL, i18n("No selection to crop!"), "", FALSE);
-		return;
-	}
-
-	// copy contents of the currentImg selection to a QImage
-	if (!m_doc->setClipImage()) {
-		kdDebug() << "m_doc->setClipImage() failed" << endl;
-		return;
-	}
-
-	// contents of currentImg selection - make sure it's good
-	if (!m_doc -> getClipImage()) {
-		kdDebug() << "m_doc->getClipImage() failed" << endl;
-		return;
-	}
-
-	QImage cImage = *m_doc -> getClipImage();
-
-	// add new layer same size as selection rectangle,
-	// then paste cropped image into it at 0,0 offset
-	// keep old image - user can remove it later if he wants
-	// by removing its layer or may want to keep the original.
-
 	KisImageSP img = currentImg();
 
-	if (!img)
-		return;
+	if (img) {
+		KisSelectionSP selection = img -> selection();
 
-	QRect layerRect(0, 0, cImage.width(), cImage.height());
-	QString name = i18n("layer %1").arg(img->layerList().size());
-
-	img->addLayer(layerRect, white, true, name);
-	uint indx = img->layerList().size() - 1;
-	img->setCurrentLayer(indx);
-	img->setFrontLayer(indx);
-
-	layersUpdated();
-
-	// copy the image into the layer - this should now
-	// be handled by the framebuffer object, not the doc
-
-	if (!m_doc->QtImageToLayer(&cImage, this)) {
-		kdDebug(0) << "crop: can't load image into layer." << endl;
+		if (selection && m_doc -> layerAdd(img, img -> nextLayerName(), selection)) {
+			img -> unsetSelection(false);
+			updateCanvas();
+		}
 	}
-	else {
-	}
-
-	/* remove the currentImg clip image which now belongs to the
-	   previous layer - selection also is removed. To crop again,
-	   you must first make another selection in the currentImg layer.*/
-
-	m_doc->removeClipImage();
-	m_doc->clearSelection();
-#endif
 }
 
 void KisView::selectAll()

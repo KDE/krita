@@ -27,7 +27,6 @@ class QRect;
 class KisPainter {
 public:
 	KisPainter();
-	KisPainter(KisTileSP tile);
 	KisPainter(KisPixelDataSP pd);
 	KisPainter(KisPaintDeviceSP device);
 	KisPainter(KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
@@ -37,22 +36,23 @@ public:
 public:
 	void begin(KisPaintDeviceSP device);
 	void end();
-	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
-	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, QUANTUM opacity, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, QUANTUM opacity, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
+	KisPaintDeviceSP device() const;
+	void eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h);
+	void eraseRect(const QRect& rc);
 	void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c);
 	void fillRect(const QRect& rc, const KoColor& c);
 	void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity);
 	void fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity);
 
 private:
-	void begin(KisTileSP tile);
 	void begin(KisPixelDataSP pd);
 	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, QUANTUM opacity, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 	void prepareEzPaint();
 	void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileSP srctile, Q_INT32 rows, Q_INT32 cols, CompositeOp op);
+	void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileSP srctile, QUANTUM opacity, Q_INT32 rows, Q_INT32 cols, CompositeOp op);
 	KisPainter(const KisPainter&);
 	KisPainter& operator=(const KisPainter&);
 

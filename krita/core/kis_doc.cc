@@ -51,9 +51,11 @@
 #include "kis_layer.h"
 #include "kis_nameserver.h"
 #include "kis_painter.h"
+#include "kis_mask.h"
 #include "kis_selection.h"
-#include "kis_undo.h"
+#include "kis_command.h"
 #include "kis_view.h"
+#include "kistilemgr.h"
 
 static const char *CURRENT_DTD_VERSION = "1.2";
 
@@ -1218,6 +1220,30 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 				emit layersUpdated(img);
 			}
 		} 
+	}
+
+	return layer;
+}
+
+KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisSelectionSP selection)
+{
+	KisLayerSP layer;
+
+	if (contains(img) && selection) {
+		layer = new KisLayer(selection -> data(), img, name, OPACITY_OPAQUE);
+
+		if (selection -> mask())
+			layer -> addMask(selection -> mask());
+
+		if (!img -> add(layer, -1))
+			return 0;
+
+		img -> top(layer);
+		img -> invalidate(layer -> bounds());
+		setModified(true);
+		layer -> move(selection -> x(), selection -> y());
+		layer -> visible(true);
+		emit layersUpdated(img);
 	}
 
 	return layer;

@@ -41,3 +41,5 @@ void KisKJSEmbedScript::execute()
 	KJS::Completion result = m_jsEmbedPart->completion();
 	m_jsEmbedPart->execute( result, m_script, KJS::Null());
 }
+
+#include "kis_kjsembed_script.moc"

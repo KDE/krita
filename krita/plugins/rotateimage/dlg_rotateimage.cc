@@ -79,3 +79,5 @@ void DlgRotateImage::okClicked()
 }
 
 //#include "dlg_rotateimage.moc"
+
+#include "dlg_rotateimage.moc"

@@ -107,3 +107,5 @@ void KisPaintDeviceKJSImp::addBindings( KJS::ExecState *exec, KJS::Object &objec
 
 }
 
+
+#include "kis_kjsembed.moc"

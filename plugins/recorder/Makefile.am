@@ -12,9 +12,9 @@ makro_recorder_SOURCES = main.cc recorder.cc
 
 noinst_HEADERS = main.h recorder.h
 
-SRCMETA =	main.moc
+METASOURCES =	main.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
 idl_DATA = 
 idl_HEADERS =  
@@ -26,10 +26,6 @@ SUBDIRS = pics
 
 ####### Implicit rules
 
-SUFFIXES = .h .moc
-
-.h.moc:
-	$(MOC) $< -o $@      
 
 ####### Build rules
 
@@ -46,6 +42,5 @@ recorder.h: recorder.idl
 
 main.cc: main.h recorder.h
 recorder.cc: recorder.h
-main.cc: main.moc
 
 

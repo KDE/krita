@@ -545,7 +545,7 @@ void KisImage::rm(KisLayerSP layer)
 	}
 
 	if (layer == m_activeLayer) {
-		if (m_layerStack.empty()) {
+		if (m_layers.empty()) {
 			m_activeLayer = 0;
 			emit activeLayerChanged(KisImageSP(this));
 		} else {

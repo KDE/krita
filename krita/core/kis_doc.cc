@@ -341,17 +341,17 @@ bool KisDoc::initDoc()
 	bool ok = false;
 	QString file;
 	KoTemplateChooseDia::ReturnType ret;
+	KoTemplateChooseDia::DialogType dlgtype;
 
-    KoTemplateChooseDia::DialogType dlgtype;
-    if (KoApplication::isStarting())
-            dlgtype = KoTemplateChooseDia::Everything;
-    else
-            dlgtype = KoTemplateChooseDia::OnlyTemplates;
+	if (KoApplication::isStarting())
+		dlgtype = KoTemplateChooseDia::Everything;
+	else
+		dlgtype = KoTemplateChooseDia::OnlyTemplates;
 	
 	if (!init())
 		return false;
 
-	ret = KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE, "Krita", "*.kra", dlgtype);
+	ret = KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE, "Krita", "*.kra", dlgtype, "krita_template");
 
 	if (ret == KoTemplateChooseDia::Template) {
 		KisConfig cfg;

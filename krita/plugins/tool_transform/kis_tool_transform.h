@@ -87,7 +87,7 @@ public:
 	virtual ~KisToolTransformFactory(){};
 
 	virtual KisTool * createTool() { KisTool * t = new KisToolTransform(); t -> setup(m_ac); return t;}
-	virtual KisID id() { return KisID("transform", i18n("Transform tool"); }
+	virtual KisID id() { return KisID("transform", i18n("Transform tool")); }
 };
 
 

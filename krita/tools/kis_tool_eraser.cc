@@ -173,3 +173,5 @@ void KisToolEraser::setup(KActionCollection *collection)
 				   "tool_eraser");
 	toggle -> setExclusiveGroup("tools");
 }
+
+#include "kis_tool_eraser.moc"

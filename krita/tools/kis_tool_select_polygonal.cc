@@ -330,3 +330,5 @@ void KisToolSelectPolygonal::paintEvent(QPaintEvent *e)
 }
 
 #include "kis_tool_select_polygonal.h"
+
+#include "kis_tool_select_polygonal.moc"

@@ -321,3 +321,5 @@ void KisToolSelectFreehand::paintEvent(QPaintEvent *e)
 }
 
 #include "kis_tool_select_freehand.h"
+
+#include "kis_tool_select_freehand.moc"

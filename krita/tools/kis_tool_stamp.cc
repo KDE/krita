@@ -456,3 +456,5 @@ void KisToolStamp::setup(KActionCollection *collection)
 }
 
 
+
+#include "kis_tool_stamp.moc"

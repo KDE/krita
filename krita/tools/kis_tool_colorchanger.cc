@@ -259,3 +259,5 @@ void KisToolColorChanger::setup(KActionCollection *collection)
 // 	return rc;
 // }
 
+
+#include "kis_tool_colorchanger.moc"

@@ -239,3 +239,5 @@ void KisToolLine::setup(KActionCollection *collection)
 
 	toggle -> setExclusiveGroup("tools");
 }
+
+#include "kis_tool_line.moc"

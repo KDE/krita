@@ -22,7 +22,5 @@ SUBDIRS = pics
 
 IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 
-kspread.idl: $(top_srcdir)/kspread/kspread.idl
-	-rm -f kspread.idl
-	$(LN_S) $(top_srcdir)/kspread/kspread.idl kspread.idl
+kspread_IDLDIR = $(top_srcdir)/kspread
 

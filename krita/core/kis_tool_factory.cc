@@ -30,6 +30,7 @@
 #include "kis_tool_pan.h"
 #include "kis_tool_brush.h"
 #include "kis_tool_duplicate.h"
+#include "kis_tool_filter.h"
 #include "kis_tool_eraser.h"
 #include "kis_tool_line.h"
 #include "kis_tool_stamp.h"
@@ -79,6 +80,7 @@ vKisTool KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSu
 	tools.push_back(new KisToolPan);
 	tools.push_back(new KisToolBrush);
 	tools.push_back(new KisToolDuplicate);
+	tools.push_back(new KisToolFilter);
 	tools.push_back(new KisToolAirBrush);
 	tools.push_back(new KisToolEraser);
 	tools.push_back(new KisToolLine);

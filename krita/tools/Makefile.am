@@ -27,7 +27,8 @@ libkistools_la_SOURCES = kis_tool_paint.cc \
         kis_tool_select_elliptical.cc \
         kis_tool_select_contiguous.cc \
         kis_tool_pen.cc \
-        kis_tool_duplicate.cc \
+	kis_tool_duplicate.cc \
+	kis_tool_filter.cc \
         kis_tool_fill.cc \
         kis_tool_rectangle.cc \
         kis_tool_ellipse.cc \

@@ -698,7 +698,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
         // (this bit seems to be mostly from QImage.xForm)
         QWMatrix mat = QPixmap::trueMatrix( matrix, width(), height() );
         if ( mat.m12() == 0.0F && mat.m21() == 0.0F ) {
-                kdDebug() << "Scaling.\n";
+                kdDebug() << "Scaling layer" << m_name << "\n";
                 if ( mat.m11() == 1.0F && mat.m22() == 1.0F ) {
                         kdDebug() << "Identity matrix, do nothing.\n";
                         return;
@@ -708,7 +708,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
                 targetW = QABS( targetW );
                 targetH = QABS( targetH );
         } else {
-                kdDebug() << "rotation or shearing\n";
+                kdDebug() << "Rotating or shearing layer " << m_name << "\n";
                 QPointArray a( QRect(0, 0, width(), height()) );
                 a = mat.map( a );
                 QRect r = a.boundingRect().normalize();

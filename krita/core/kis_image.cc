@@ -312,7 +312,7 @@ void KisImage::scale(double sx, double sy)
 	vKisLayerSP_it it;
 	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
 		KisLayerSP layer = (*it);
-		kdDebug() << "Scaling layer " << layer -> name() << "\n";
+		//kdDebug() << "Scaling layer " << layer -> name() << "\n";
 		layer -> scale(sx, sy);
 	}
 
@@ -320,8 +320,7 @@ void KisImage::scale(double sx, double sy)
 	m_width = w;
 	m_height = h;
 	// Scale projection
-	m_projection -> scale(sx, sy);
-
+	//m_projection -> scale(sx, sy);
 	invalidate();
 }
 

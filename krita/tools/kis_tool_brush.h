@@ -39,10 +39,9 @@ public:
 	virtual void mouseMove(QMouseEvent *e);
 	virtual void mouseRelease(QMouseEvent *e);
 	virtual void tabletEvent(QTabletEvent *e);
-
 private:
 
-	virtual void paint(const QPoint & pos, 
+	virtual void paint(const QPoint & pos,
 			   const Q_INT32 pressure,
 			   const Q_INT32 xtilt,
 			   const Q_INT32 ytilt);

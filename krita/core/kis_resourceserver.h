@@ -34,6 +34,7 @@ class KisResourceServer : public QObject {
 	Q_OBJECT
 
 public:
+	// Create a resource server for a particular resource type
 	KisResourceServer();
 	virtual ~KisResourceServer();
 
@@ -50,7 +51,7 @@ public:
 signals:
 	void loadedBrush(KisBrush *br);
 	void loadedPattern(KisPattern *pat);
-	
+
 private:
 	void loadBrush();
 	void loadPattern();

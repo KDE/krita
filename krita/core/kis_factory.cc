@@ -96,7 +96,7 @@ KInstance* KisFactory::global()
 	    s_global->dirs()->addResourceType("kis_brushes",
 	        KStandardDirs::kde_default("data") + "krita/brushes/");
 
-	    s_global->dirs()->addResourceType("kis_pattern",
+	    s_global->dirs()->addResourceType("kis_patterns",
             KStandardDirs::kde_default("data") + "krita/patterns/");
 
 	    s_global->dirs()->addResourceType("kis_gradients",

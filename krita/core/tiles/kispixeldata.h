@@ -43,9 +43,9 @@ struct KisPixelData : public KShared {
     bool owner; // Whether the data will be managed by somebody else
     Q_INT32 width;
     Q_INT32 height; 
-    Q_INT32 stride; // The number of bytes each scanline takes
+    Q_INT32 stride; // The number of bytes each pixel takes
     Q_INT32 depth; // Color depth, I guess. XXX
-};	
+};
 
 inline
 KisPixelData::KisPixelData()

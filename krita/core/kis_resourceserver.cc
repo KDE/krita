@@ -20,11 +20,15 @@
  */
 #include <qimage.h>
 #include <qstringlist.h>
+
+#include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kinstance.h>
+
 #include "kis_factory.h"
 #include "kis_resourceserver.h"
+
 
 KisResourceServer::KisResourceServer()
 {
@@ -46,17 +50,7 @@ void KisResourceServer::loadBrushes()
 
 void KisResourceServer::loadPatterns()
 {
-	QStringList formats;
-	QStringList list = QImage::inputFormatList();
-
-	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
-		formats << QString("*.%1").arg((*it).lower());
-
-	for (QStringList::Iterator it = formats.begin(); it != formats.end(); it++) {
-		QStringList l = KisFactory::global() -> dirs() -> findAllResources("kis_pattern", *it, false, true);
-		m_patternFilenames  += l;
-	}
-
+	m_patternFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_patterns", "*.pat");
 	loadPattern();
 }
 
@@ -77,7 +71,7 @@ void KisResourceServer::loadBrush()
 }
 
 void KisResourceServer::loadPattern()
-{	
+{
 	if (!m_patternFilenames.empty()) {
 		QString front = *m_patternFilenames.begin();
 		KisPattern *pattern;
@@ -125,6 +119,7 @@ void KisResourceServer::brushLoadFailed(KisResource *r)
 
 void KisResourceServer::patternLoadFailed(KisResource *r)
 {
+	kdDebug() << "loading pattern failed\n";
 	delete r;
 	loadPattern();
 }

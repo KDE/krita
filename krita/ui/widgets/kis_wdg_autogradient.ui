@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KisWdgAutogradient</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,25 +8,28 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>398</width>
-            <height>153</height>
+            <width>365</width>
+            <height>278</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KisWdgAutogradient</string>
     </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget" row="0" column="0">
+        <widget class="QLayoutWidget" row="0" column="1">
             <property name="name">
-                <cstring>layout5</cstring>
+                <cstring>layout11</cstring>
             </property>
-            <hbox>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel">
+                <widget class="KisGradientSliderWidget">
                     <property name="name">
-                        <cstring>gradientPreview</cstring>
+                        <cstring>gradientSlider</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -36,125 +39,209 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
-                    <property name="pixmap">
-                        <pixmap>image0</pixmap>
-                    </property>
-                    <property name="scaledContents">
-                        <bool>true</bool>
-                    </property>
                 </widget>
                 <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout4</cstring>
+                        <cstring>layout12</cstring>
                     </property>
-                    <vbox>
+                    <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="KisGradientSliderWidget">
+                        <widget class="QLabel">
                             <property name="name">
-                                <cstring>gradientlider</cstring>
+                                <cstring>labelLeftColor</cstring>
                             </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
+                            <property name="text">
+                                <string>Left color :</string>
                             </property>
-                            <property name="minimumSize">
+                        </widget>
+                        <widget class="KColorButton">
+                            <property name="name">
+                                <cstring>leftColorButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer10</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
                                 <size>
-                                    <width>0</width>
-                                    <height>22</height>
+                                    <width>51</width>
+                                    <height>20</height>
                                 </size>
                             </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>32767</width>
-                                    <height>22</height>
-                                </size>
-                            </property>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout12</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>labelColor</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Color :</string>
-                                    </property>
-                                </widget>
-                                <widget class="KColorButton">
-                                    <property name="name">
-                                        <cstring>kColorButton1</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string></string>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout15</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>labelInterpolationType</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Interpolation:</string>
-                                    </property>
-                                </widget>
-                                <widget class="QComboBox">
-                                    <property name="name">
-                                        <cstring>comboBoxInterpolationType</cstring>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout16</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>labelColorInterpolationType</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Color interpolation:</string>
-                                    </property>
-                                </widget>
-                                <widget class="QComboBox">
-                                    <property name="name">
-                                        <cstring>comboBoxColorInterpolationType</cstring>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                    </vbox>
+                        </spacer>
+                    </hbox>
                 </widget>
-            </hbox>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout12_2</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>labelRightColor</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Right color :</string>
+                            </property>
+                        </widget>
+                        <widget class="KColorButton">
+                            <property name="name">
+                                <cstring>rightColorButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer10_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>51</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout15</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>labelInterpolation</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Interpolation :</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>Linear</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Curved</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Sine</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Sphere Increasing</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Sphere Decreasing</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>comboBoxInterpolationType</cstring>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer11</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>41</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout16</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>labelColorInterpolationType</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Color interpolation:</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>RGB</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>HSV CW</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>HSV CCW</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>comboBoxColorInterpolationType</cstring>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
         </widget>
-        <spacer row="1" column="0">
+        <widget class="QLabel" row="0" column="0">
             <property name="name">
-                <cstring>spacer1</cstring>
+                <cstring>gradientPreview</cstring>
+            </property>
+            <property name="pixmap">
+                <pixmap>image0</pixmap>
+            </property>
+        </widget>
+        <spacer row="1" column="1">
+            <property name="name">
+                <cstring>spacer7</cstring>
             </property>
             <property name="orientation">
                 <enum>Vertical</enum>
@@ -165,7 +252,24 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>81</height>
+                    <height>31</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="0" column="2">
+            <property name="name">
+                <cstring>spacer8</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>31</width>
+                    <height>20</height>
                 </size>
             </property>
         </spacer>
@@ -200,6 +304,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kisgradientsliderwidget.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
     <includehint>kcolorbutton.h</includehint>
 </includehints>
 </UI>

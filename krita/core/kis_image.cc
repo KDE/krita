@@ -46,6 +46,7 @@
 #include "kis_nameserver.h"
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
+#include "kis_transaction.h"
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
 #include "kis_config.h"
@@ -291,7 +292,7 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 	m_height = height;
 }
 
-void KisImage::resize(Q_INT32 w, Q_INT32 h)
+void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
 {
 // 	kdDebug() << "KisImage::resize. From: ("
 // 		  << width()
@@ -315,6 +316,17 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 		m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
  		m_bkg = new KisBackground(this, w, h);
 
+		if (cropLayers) {
+			vKisLayerSP_it it;
+			for ( it = layers().begin(); it != layers().end(); ++it ) {
+				KisLayerSP layer = (*it);
+				KisTransaction * t = new KisTransaction("crop", layer.data());
+				layer -> crop(0, 0, w, h);
+				 if (m_adapter && m_adapter -> undo())
+					m_adapter -> addCommand(t);
+			}
+		}
+
 		if (m_adapter && m_adapter -> undo()) {
 			m_adapter -> endMacro();
 		}
@@ -323,9 +335,9 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 	}
 }
 
-void KisImage::resize(const QRect& rc)
+void KisImage::resize(const QRect& rc, bool cropLayers)
 {
-	resize(rc.width(), rc.height());
+	resize(rc.width(), rc.height(), cropLayers);
 }
 
 void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype)

@@ -308,6 +308,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         } /* next dst column */
         if(!m_cancelRequested){
                 m_dev -> writeBytes( newData, 0, 0, targetW, targetH);
+                m_dev -> crop(0, 0, targetW, targetH);
                 nRet = 0; /* success */
         }
 

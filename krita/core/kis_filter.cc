@@ -34,6 +34,8 @@
 #include "kis_painter.h"
 #include "kis_selection.h"
 #include "kis_id.h"
+#include "kis_canvas_subject.h"
+#include "kis_doc.h"
 
 KisFilter::KisFilter(const KisID& id, KisView * view) :
 	m_id(id),
@@ -114,6 +116,9 @@ void KisFilter::slotActivated()
 	KisTransaction * cmd = new KisTransaction(id().name(), layer.data());
 	process((KisPaintDeviceSP)layer, (KisPaintDeviceSP)layer, config, rect);
 	img -> undoAdapter() -> addCommand(cmd);
+	// Yuck, filters should work against the canvassubject interface, not the view object.
+	// code against interfaces, not implementations!
+	dynamic_cast<KisCanvasSubject*>(m_view) -> document() -> setModified(true);
 	disableProgress();
 
 	img->notify();

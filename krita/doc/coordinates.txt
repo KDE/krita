@@ -1,0 +1,9 @@
+Coordinates in Krita
+
+As with any paint app, finding out what you mean when you say (x,y) is difficult.
+There are the screen coordinates, the coordinates of the canvas inside the view,
+the zoomed coordinates -- and the image coordinates, paint device coordinates and the
+coordinates of the data inside the paint device.
+
+Iterators are created in terms of the image coordinates.
+

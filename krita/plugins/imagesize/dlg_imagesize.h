@@ -54,7 +54,8 @@ public:
 	Q_INT32 height();
 
 	bool scale();
-
+	bool cropLayers();
+	
 	Q_INT32 filterType();
 
 private slots:

@@ -149,6 +149,10 @@ bool DlgImageSize::scale()
 	return m_page -> radioScale -> isChecked();
 }
 
+bool DlgImageSize::cropLayers()
+{
+	return m_page -> chkCrop -> isChecked();
+}
 
 Q_INT32 DlgImageSize::filterType()
 {

@@ -45,6 +45,7 @@
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
 #include <kis_scale_visitor.h>
+#include <kis_transaction.h>
 
 #include "imagesize.h"
 #include "dlg_imagesize.h"
@@ -99,24 +100,24 @@ void ImageSize::slotImageSize()
 	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
 
 	if (dlgImageSize -> exec() == QDialog::Accepted) {
-		m_view -> updateCanvas(); // XXX: Check whether this
+/*		m_view -> updateCanvas(); // XXX: Check whether this
 					  // is necessary after
-					  // Adrian's changes
+					  // Adrian's changes*/
 		Q_INT32 w = dlgImageSize -> width();
 		Q_INT32 h = dlgImageSize -> height();
 
 		if (dlgImageSize -> scale()) {
-
 			Q_INT32 f = dlgImageSize -> filterType();
 			m_view -> scaleCurrentImage((double)w / ((double)(image -> width())),
 						    (double)h / ((double)(image -> height())),
 						    (enumFilterType)f);
 		}
 		else {
-			m_view -> resizeCurrentImage(w, h);
+			m_view -> resizeCurrentImage(w, h, dlgImageSize -> cropLayers());
 		}
 
 	}
+		
 	delete dlgImageSize;
 }
 
@@ -135,18 +136,22 @@ void ImageSize::slotLayerSize()
 	dlgImageSize -> setHeight(image -> height());
 	dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
 	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
-	dlgImageSize -> hideScaleBox();
 
 	if (dlgImageSize -> exec() == QDialog::Accepted) {
 		Q_INT32 w = dlgImageSize -> width();
 		Q_INT32 h = dlgImageSize -> height();
-		Q_INT32 f = dlgImageSize -> filterType();
 		if (dlgImageSize -> scale()) {
-			m_view -> scaleLayer((double)w / ((double)(image -> width())),
-					     (double)h / ((double)(image -> height())),
-					     (enumFilterType)f);
-		}
 
+			Q_INT32 f = dlgImageSize -> filterType();
+			if (dlgImageSize -> scale()) {
+				m_view -> scaleLayer((double)w / ((double)(image -> width())),
+						(double)h / ((double)(image -> height())),
+						(enumFilterType)f);
+			}
+		}
+		else {
+			m_view -> cropLayer(0, 0, w, h);
+		}
 	}
 	delete dlgImageSize;
 }

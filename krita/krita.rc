@@ -156,6 +156,14 @@
 <ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
 </ToolBar>
 
+<ToolBar name="layer actions" position="top"><Text>Layer Actions</Text>
+	<Action name="rotateLayerLeft90"/>
+	<Action name="rotateLayerRight90"/>
+	<Separator/>
+	<Action name="mirrorLayerX"/>
+	<Action name="mirrorLayerY"/>
+</ToolBar>
+
 <Menu name="menuimage_popup">
   <Action name="rename_current_image_tab"/>
   <Action name="add_new_image_tab"/>

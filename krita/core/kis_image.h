@@ -75,8 +75,8 @@ public:
 
 	QString nextLayerName() const;
 
-	void resize(Q_INT32 w, Q_INT32 h);
-	void resize(const QRect& rc);
+	void resize(Q_INT32 w, Q_INT32 h, bool cropLayers = false);
+	void resize(const QRect& rc, bool cropLayers = false);
 
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype = MITCHELL_FILTER);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);

@@ -101,7 +101,7 @@
 #include "kis_colorspace_registry.h"
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
-
+#include "kis_transaction.h"
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
@@ -483,11 +483,11 @@ void KisView::setupActions()
 	// layer transformations
 //        m_layerTransform = new KAction(i18n("Scale Layer..."), 0, this, SLOT(layerTransform()), actionCollection(), "transformlayer");
 	(void)new KAction(i18n("Rotate &180"), 0, this, SLOT(rotateLayer180()), actionCollection(), "rotateLayer180");
-	(void)new KAction(i18n("Rotate &270"), 0, this, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
-	(void)new KAction(i18n("Rotate &90"), 0, this, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerRight90");
+	(void)new KAction(i18n("Rotate &270"), "rotate_ccw", this, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
+	(void)new KAction(i18n("Rotate &90"), "rotate_cw", this, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerRight90");
 	(void)new KAction(i18n("Rotate &Custom..."), 0, this, SLOT(rotateLayerCustom()), actionCollection(), "rotateLayerCustom");
-	(void)new KAction(i18n("Mirror Along &X Axis"), 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
-	(void)new KAction(i18n("Mirror Along &Y Axis"), 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
+	(void)new KAction(i18n("Mirror Along &X Axis"), "view_left_right", this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
+	(void)new KAction(i18n("Mirror Along &Y Axis"), "view_top_bottom", this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
 
 	// color actions
 	(void)new KAction(i18n("Select Foreground Color..."), 0, this, SLOT(selectFGColor()), actionCollection(), "select_fgColor");
@@ -1380,7 +1380,15 @@ void KisView::mirrorLayerX()
 	KisLayerSP layer = currentImg() -> activeLayer();
 	if (!layer) return;
 
+	KisUndoAdapter * undo = 0;
+	KisTransaction * t = 0;
+	if ((undo = currentImg() -> undoAdapter()))
+		t = new KisTransaction(i18n("Mirror layer X"), layer.data());
+
 	layer->mirrorX();
+
+	if (undo) undo -> addCommand(t);
+	
 	m_doc -> setModified(true);
 	layersUpdated();
 	updateCanvas();
@@ -1392,7 +1400,15 @@ void KisView::mirrorLayerY()
 	KisLayerSP layer = currentImg() -> activeLayer();
 	if (!layer) return;
 
+	KisUndoAdapter * undo = 0;
+	KisTransaction * t = 0;
+	if ((undo = currentImg() -> undoAdapter()))
+		t = new KisTransaction(i18n("Mirror layer Y"), layer.data());
+
 	layer->mirrorY();
+
+	if (undo) undo -> addCommand(t);
+
 	m_doc -> setModified(true);
 	layersUpdated();
 	updateCanvas();
@@ -1405,8 +1421,15 @@ void KisView::scaleLayer(double sx, double sy, enumFilterType ftype)
 	KisLayerSP layer = currentImg() -> activeLayer();
 	if (!layer) return;
 
-	layer -> scale(sx, sy, m_progress, ftype);
+	KisUndoAdapter * undo = 0;
+	KisTransaction * t = 0;
+	if ((undo = currentImg() -> undoAdapter()))
+		t = new KisTransaction(i18n("Scale layer"), layer.data());
 
+	layer -> scale(sx, sy, m_progress, ftype);
+	
+	if (undo) undo -> addCommand(t);
+	
 	m_doc -> setModified(true);
 	layersUpdated();
 	resizeEvent(0);
@@ -1421,7 +1444,14 @@ void KisView::rotateLayer(double angle)
 	KisLayerSP layer = currentImg() -> activeLayer();
 	if (!layer) return;
 
+	KisUndoAdapter * undo = 0;
+	KisTransaction * t = 0;
+	if ((undo = currentImg() -> undoAdapter()))
+		t = new KisTransaction(i18n("Rotate layer"), layer.data());
+
 	layer -> rotate(angle, m_progress);
+
+	if (undo) undo -> addCommand(t);
 
 	m_doc -> setModified(true);
 	layersUpdated();
@@ -1437,13 +1467,45 @@ void KisView::shearLayer(double angleX, double angleY)
 	KisLayerSP layer = currentImg() -> activeLayer();
 	if (!layer) return;
 
+	KisUndoAdapter * undo = 0;
+	KisTransaction * t = 0;
+	if ((undo = currentImg() -> undoAdapter()))
+		t = new KisTransaction(i18n("Shear layer"), layer.data());
+
+
 	layer -> shear(angleX, angleY, m_progress);
+
+	if (undo) undo -> addCommand(t);
 
 	m_doc -> setModified(true);
 	layersUpdated();
 	resizeEvent(0);
 	updateCanvas();
 	canvasRefresh();
+}
+
+void KisView::cropLayer(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+	if (!currentImg()) return;
+
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
+
+	KisUndoAdapter * undo = 0;
+	KisTransaction * t = 0;
+	if ((undo = currentImg() -> undoAdapter()))
+		t = new KisTransaction(i18n("Mirror layer Y"), layer.data());
+
+	if (undo) undo -> addCommand(t);
+
+	layer -> crop(x, y, w, h);
+
+	m_doc -> setModified(true);
+	layersUpdated();
+	resizeEvent(0);
+	updateCanvas();
+	canvasRefresh();
+
 }
 
 void KisView::add_new_image_tab()
@@ -2436,11 +2498,11 @@ void KisView::layerToImage()
 	}
 }
 
-void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h)
+void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers)
 {
 	if (!currentImg()) return;
 
-	currentImg() -> resize(w, h);
+	currentImg() -> resize(w, h, cropLayers);
 	m_doc -> setModified(true);
 	resizeEvent(0);
 	layersUpdated();

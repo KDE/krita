@@ -288,7 +288,7 @@ void KisToolCrop::crop() {
 	KisImageSP img = m_subject -> currentImg();
 
 	if (img -> undoAdapter())
-		img -> undoAdapter() -> beginMacro("Crop");
+		img -> undoAdapter() -> beginMacro(i18n("Crop"));
 	
 	if (!img)
 		return;
@@ -341,7 +341,7 @@ void KisToolCrop::crop() {
 
 void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc) 
 {
-	KisTransaction * t = new KisTransaction("crop", layer.data());
+	KisTransaction * t = new KisTransaction(i18n("Crop"), layer.data());
 	
 	layer -> crop(rc);
 

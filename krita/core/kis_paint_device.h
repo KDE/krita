@@ -199,15 +199,9 @@ public:
         const KisImage *image() const;
         void setImage(KisImage *image);
 
-	// XXX: Do all rotations etc. use the visitor instead of the QMatrix-based code by now?
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
-
-	/**
-	   Apply the transformation matrix _in place_.
-	*/
-//	void transform(const QWMatrix & matrix);
 
 	/**
 	 * Mirror the device along the X axis
@@ -218,10 +212,6 @@ public:
 	 */
 	void mirrorY();
 
-	/**
-	 * XXX: Move this undo code back into the tiles/ module and wrap in transactions
-	 * CBR: not sure about that, but transaction system needs to be revisited
-	 */
 	KisMemento * getMemento() { return m_datamanager -> getMemento(); };
 	void rollback(KisMemento *memento) { m_datamanager -> rollback(memento); };
 	void rollforward(KisMemento *memento) { m_datamanager -> rollforward(memento); };

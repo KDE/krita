@@ -30,6 +30,8 @@ KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device)
 	m_memento = device -> getMemento();
 }
 
+
+
 KisTransaction::~KisTransaction()
 {
 	delete m_memento;

@@ -80,7 +80,7 @@ class KisFilterRegistry;
 
 class KisView
 	: public KoView,
-	  private KisCanvasSubject,
+	  public KisCanvasSubject,
 	  private KisCanvasControllerInterface,
 	  private KisToolControllerInterface
 {
@@ -167,7 +167,7 @@ public slots:
         void imgResizeToActiveLayer();
 	void add_new_image_tab();
 	void remove_current_image_tab();
-	void resizeCurrentImage(Q_INT32 w, Q_INT32 h);
+	void resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers = false);
 	void scaleCurrentImage(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
         void rotateCurrentImage(double angle);
         void shearCurrentImage(double angleX, double angleY);
@@ -182,7 +182,8 @@ public slots:
 	void scaleLayer(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
 	void rotateLayer(double angle);
 	void shearLayer(double angleX, double angleY);
-
+	/// Crop the current layer to the specified dimensions, do not move it the image origin.
+	void cropLayer(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	// settings action slots
 	void preferences();
 

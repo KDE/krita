@@ -269,7 +269,7 @@ bool KisPaintDevice::shouldDrawBorder() const
         return false;
 }
 
-QString KisPaintDevice::name()
+QString KisPaintDevice::name() const
 {
         return m_name;
 }

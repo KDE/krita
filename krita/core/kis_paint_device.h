@@ -117,7 +117,7 @@ public:
 	void convertTo(KisStrategyColorSpaceSP colorStrategy);
 	QImage convertToImage();
 
-        QString name();
+        QString name() const;
         void setName(const QString& name);
 
         /** 

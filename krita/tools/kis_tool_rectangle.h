@@ -1,7 +1,8 @@
 /*
- *  gradienttool.h - part of KImageShop
+ *  kis_tool_rectangle.h - part of KImageShop
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,30 +28,36 @@
 #include "kis_tool.h"
 
 class QPainter;
-class KisDoc;
-class KisView;
+
 class KisCanvas;
+class KisDoc;
+class KisPainter;
+class KisView;
 
 class RectangleTool : public KisTool {
+	typedef KisTool super;
+
 public:
 	RectangleTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~RectangleTool();
 
-	virtual void optionsDialog();
+	virtual QString settingsName() const;
 	virtual QDomElement saveSettings(QDomDocument& doc) const;
 	virtual bool loadSettings(QDomElement& elem);
 
 	virtual void setupAction(QObject *collection);
+	virtual void optionsDialog();
 
-	virtual void mousePress( QMouseEvent* event );
-	virtual void mouseMove( QMouseEvent* event );
-	virtual void mouseRelease( QMouseEvent* event );
+	virtual void mousePress(QMouseEvent *event);
+	virtual void mouseMove(QMouseEvent *event);
+	virtual void mouseRelease( QMouseEvent *event);
 
 public slots:
 	virtual void toolSelect();
     
 protected:
-	void drawRectangle(const QPoint&, const QPoint&);
+	virtual void draw(const QPoint&, const QPoint&);
+	virtual void draw(KisPainter *gc, const QRect& rc);
 
 protected:
 	int m_lineThickness;

@@ -2,6 +2,7 @@
  *  kis_tool_rectangle.cc - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +32,7 @@
 #include "kis_tool_rectangle.h"
 #include "kis_dlg_toolopts.h"
 
-RectangleTool::RectangleTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
+RectangleTool::RectangleTool(KisDoc *doc, KisCanvas *canvas) : super(doc)
 {
 	m_doc = doc;
 	m_dragging = false;
@@ -62,11 +63,11 @@ void RectangleTool::mouseMove(QMouseEvent *event)
 {
 	if (m_dragging) {
 		// erase old lines on canvas
-		drawRectangle(m_dragStart, m_dragEnd);
+		draw(m_dragStart, m_dragEnd);
 		// get current mouse position
 		m_dragEnd = event -> pos();
 		// draw new lines on canvas
-		drawRectangle(m_dragStart, m_dragEnd);
+		draw(m_dragStart, m_dragEnd);
 	}
 }
 
@@ -74,7 +75,7 @@ void RectangleTool::mouseRelease(QMouseEvent *event)
 {
 	if (m_dragging && event -> state() == LeftButton) {
 		// erase old lines on canvas
-		drawRectangle(m_dragStart, m_dragEnd);
+		draw(m_dragStart, m_dragEnd);
 		m_dragging = false;
 	}
     
@@ -105,11 +106,10 @@ void RectangleTool::mouseRelease(QMouseEvent *event)
 	m_final_lines = QRect(zoomed(topLeft), zoomed(bottomRight));
 
 	// draw final lines onto layer
-	KisPainter *p = m_view -> kisPainter();
-	p -> drawRectangle(m_final_lines);
+	draw(m_view -> kisPainter(), m_final_lines);	
 }
 
-void RectangleTool::drawRectangle(const QPoint& start, const QPoint& end )
+void RectangleTool::draw(const QPoint& start, const QPoint& end )
 {
     QPainter p;
     QPen pen;
@@ -126,6 +126,11 @@ void RectangleTool::drawRectangle(const QPoint& start, const QPoint& end )
                       end.x() - start.x(), 
                       end.y() - start.y()) );
     p.end();
+}
+
+void RectangleTool::draw(KisPainter *gc, const QRect& rc)
+{
+	gc -> drawRectangle(rc);
 }
 
 void RectangleTool::optionsDialog()
@@ -181,25 +186,10 @@ void RectangleTool::setupAction(QObject *collection)
 	toggle -> setExclusiveGroup("tools");
 }
 
-void RectangleTool::toolSelect()
-{
-	if (m_view) {
-		KisPainter *gc = m_view -> kisPainter();
-
-		gc -> setLineThickness(m_lineThickness);
-		gc -> setLineOpacity(m_opacity);
-		gc -> setFilledRectangle(m_fillSolid);
-		gc -> setGradientFill(m_useGradient);
-		gc -> setPatternFill(m_usePattern);
-
-		m_view -> activateTool(this);
-	}
-}
-
 QDomElement RectangleTool::saveSettings(QDomDocument& doc) const
 {
 	// rectangle tool element
-	QDomElement rectangleTool = doc.createElement("rectangleTool");
+	QDomElement rectangleTool = doc.createElement(settingsName());
 
 	rectangleTool.setAttribute("thickness", m_lineThickness);
 	rectangleTool.setAttribute("opacity", m_opacity);
@@ -212,7 +202,7 @@ QDomElement RectangleTool::saveSettings(QDomDocument& doc) const
 
 bool RectangleTool::loadSettings(QDomElement& elem)
 {
-	bool rc = elem.tagName() == "rectangleTool";
+	bool rc = elem.tagName() == settingsName();
 
 	if (rc) {
 		m_lineThickness = elem.attribute("thickness").toInt();
@@ -223,5 +213,25 @@ bool RectangleTool::loadSettings(QDomElement& elem)
 	}
 
 	return rc;
+}
+
+void RectangleTool::toolSelect()
+{
+	if (m_view) {
+		KisPainter *gc = m_view -> kisPainter();
+
+		gc -> setLineThickness(m_lineThickness);
+		gc -> setLineOpacity(m_opacity);
+		gc -> setFilledEllipse(m_usePattern);
+		gc -> setGradientFill(m_useGradient);
+		gc -> setPatternFill(m_fillSolid);
+
+		m_view -> activateTool(this);
+	}
+}
+
+QString RectangleTool::settingsName() const
+{
+	return "rectangleTool";
 }
 

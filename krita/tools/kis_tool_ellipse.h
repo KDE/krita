@@ -25,29 +25,27 @@
 #include <qpoint.h>
 
 #include "kis_tool.h"
+#include "kis_tool_rectangle.h"
 
-class KisDoc;
-class KisView;
 class KisCanvas;
+class KisDoc;
+class KisPainter;
+class KisView;
 
-class EllipseTool : public KisTool {
+class EllipseTool : public RectangleTool {
+	typedef RectangleTool super;
+
 public:
 	EllipseTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~EllipseTool();
 
+	virtual QString settingsName() const;
+
 	virtual void setupAction(QObject *collection);
-	virtual QDomElement saveSettings(QDomDocument& doc) const;
-	virtual bool loadSettings(QDomElement& elem);
-
-	virtual void optionsDialog();
-	virtual void toolSelect();
-
-	virtual void mousePress( QMouseEvent* event );
-	virtual void mouseMove( QMouseEvent* event );
-	virtual void mouseRelease( QMouseEvent* event );
 
 protected:
-	void drawEllipse(const QPoint& start, const QPoint& stop);
+	virtual void draw(const QPoint& start, const QPoint& stop);
+	virtual void draw(KisPainter *gc, const QRect& rc);
 
 protected:
 	int m_lineThickness;

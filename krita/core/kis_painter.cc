@@ -150,13 +150,14 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 	}
 	int d = m_device->depth();
 //XXX: possibly optimize with several pixels at a time
+//XXX: use rect iterators?
 	for(Q_INT32 i = 0; i <sh; i++)
 	{
-		KisHLineIterator srcIter = srcdev->createHLineIterator(sx, sy + i, sw, false);
-		KisHLineIterator dstIter = m_device->createHLineIterator(dx, dy + i, sw, true);
+		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, false);
+		KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
 		while( ! srcIter.isDone())
 		{
-		        m_device->colorStrategy()->bitBlt(d, (Q_UINT8 *)dstIter, d, m_device->colorStrategy(), (Q_UINT8 *)srcIter, d, opacity, 1, 1, op);
+		        m_device -> colorStrategy() -> bitBlt(d, (Q_UINT8 *)dstIter, d, srcdev -> colorStrategy(), (Q_UINT8 *)srcIter, d, opacity, 1, 1, op);
 			srcIter++;
 			dstIter++;
 		}

@@ -191,7 +191,7 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 		m_size*=2;
 		emit notifyProgressStage(this, i18n("Making fill outline..."), 0);
 		floodLine(startX, startY);
-		delete[] m_map;
+		delete m_map;
 
 		delete m_oldColor;
 	}

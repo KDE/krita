@@ -42,7 +42,8 @@ namespace {
 KisColorSpaceAlpha::KisColorSpaceAlpha() :
 	KisStrategyColorSpace("ALPHA", i18n("Alpha mask"),  TYPE_GRAY_8, icSigGrayData)
 {
-	m_maskColor = Qt::white;
+// 	kdDebug() << "Alpha mask created\n";
+	m_maskColor = Qt::red;
 	m_inverted = false;
 	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 0, ALPHA));
 }
@@ -133,7 +134,7 @@ bool KisColorSpaceAlpha::convertPixelsTo(QUANTUM * src, KisProfileSP /*srcProfil
 					 Q_UINT32 length, 
 					 Q_INT32 /*renderingIntent*/)
 {
- 	kdDebug() << "KisColorSpaceAlpha:: convertPixels for " << length << " pixels from " << name() << " to " << dstColorStrategy -> name() << "\n";
+//  	kdDebug() << "KisColorSpaceAlpha:: convertPixels for " << length << " pixels from " << name() << " to " << dstColorStrategy -> name() << "\n";
 
 	// No lcms trickery here, we are a QColor + opacity channel
 
@@ -144,7 +145,7 @@ bool KisColorSpaceAlpha::convertPixelsTo(QUANTUM * src, KisProfileSP /*srcProfil
 
 	while ( i < length ) {
 		
-		dstColorStrategy -> nativeColor(m_maskColor, *(src + i), (dst + j), dstProfile);
+		dstColorStrategy -> nativeColor(m_maskColor, OPACITY_OPAQUE - *(src + i), (dst + j), dstProfile);
 
 		i += 1;
 		j += size;

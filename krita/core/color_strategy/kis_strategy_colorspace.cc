@@ -61,12 +61,12 @@ bool KisStrategyColorSpace::convertPixelsTo(QUANTUM * src, KisProfileSP srcProfi
 					    Q_UINT32 length, 
 					    Q_INT32 renderingIntent)
 {
- 	kdDebug() << "convertPixels for " << length << " pixels from " << name() << " to " << dstColorStrategy -> name() << "\n";
-	kdDebug() << " src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
+//  	kdDebug() << "convertPixels for " << length << " pixels from " << name() << " to " << dstColorStrategy -> name() << "\n";
+// 	kdDebug() << " src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
 	cmsHTRANSFORM tf = 0;
 	
 	if (!m_transforms.contains(KisProfilePair(srcProfile, dstProfile))) {
-		kdDebug() << "Create new transform\n";
+// 		kdDebug() << "Create new transform\n";
 		tf = createTransform(dstColorStrategy,
 				     srcProfile,
 				     dstProfile,
@@ -75,7 +75,7 @@ bool KisStrategyColorSpace::convertPixelsTo(QUANTUM * src, KisProfileSP srcProfi
 		m_transforms[KisProfilePair(srcProfile, dstProfile)] = tf;				      
 	}
 	else {
-		kdDebug() << "Use cached transform\n";
+// 		kdDebug() << "Use cached transform\n";
 		tf = m_transforms[KisProfilePair(srcProfile, dstProfile)];
 	}
 
@@ -106,17 +106,11 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 {
 	if (rows <= 0 || cols <= 0)
 		return;
-	
-	// kdDebug() << name() << "::bitBlt. stride: " << stride
-// 		  << ", dststride: " << dststride
-// 		  << ", srcSpace: " << srcSpace -> name()
-// 		  << ", opacity: " << (Q_UINT8) opacity
-// 		  << ", rows: " << rows
-// 		  << ", cols: " << cols
-// 		  << ", op: " << op << "\n";
+// 	kdDebug() << name() << "::bitBlt. source color space: " << srcSpace -> name() << "\n";
 
 
  	if (m_name != srcSpace -> name()) {
+// 		kdDebug() << "compositing heterogenous color spaces: src = " << srcSpace -> name() << ", dst = " << m_name << "\n";
 		int len = depth() * rows * cols;
  		QUANTUM * convertedSrcPixels = new QUANTUM[len];
 		memset(convertedSrcPixels, 255, len * sizeof(QUANTUM));

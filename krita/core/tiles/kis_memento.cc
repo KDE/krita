@@ -46,7 +46,7 @@ KisMemento::~KisMemento()
 			delete deltile;
 		}
 		
-		// delete from the redo hastable
+		// delete from the redo hashtable
 		tile = m_redoHashTable[i];
 		
 		while(tile)
@@ -56,6 +56,6 @@ KisMemento::~KisMemento()
 			delete deltile;
 		}
 	}
-	delete m_hashTable;
-	delete m_redoHashTable;
+	delete [] m_hashTable;
+	delete [] m_redoHashTable;
 }

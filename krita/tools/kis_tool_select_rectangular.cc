@@ -183,6 +183,7 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 				rc = rc.normalize();
 				selection -> select(rc);
 				img -> notify(rc);
+				paintOutline();
 
 // 				KisPaintDeviceSP parent;
 // 				KisFloatingSelectionSP selection;

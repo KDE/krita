@@ -28,8 +28,6 @@
 #include "kis_basedocker.h"
 
 class WdgDockerTab;
-class QTabWidget;
-class QToolButton;
 
 class KisDockFrameDocker : public KisBaseDocker
 {
@@ -47,15 +45,11 @@ public:
 public slots:
 
 	void shade(bool toggle);
-
 	void slotPlaceChanged(QDockWindow::Place p);
 
 private:
         WdgDockerTab * m_page;
 	bool m_docked;
-/* 	QTabWidget * m_tabWidget; */
-/* 	QToolButton * m_toggleShade; */
-/* 	QPixmap image0; */
 };
 
 

@@ -39,6 +39,7 @@ KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
 					  // create a new one, instead
 		name)
 {
+// 	kdDebug() << "Selection created with color space type: " << colorStrategy() -> name() << "\n";
 	m_parentLayer = layer;
 	m_maskColor = Qt::white;
 	m_alpha = KisColorSpaceAlphaSP(dynamic_cast<KisColorSpaceAlpha*> (colorStrategy().data()));

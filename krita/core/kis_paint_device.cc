@@ -478,13 +478,13 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 
 	QUANTUM * data = m_datamanager -> readBytes(x1, y1, w, h);
 	image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
-	delete data;
+	delete[] data;
 
 	return image;
 #else
 
         QImage image;
-        QUANTUM  *data = new QUANTUM[depth() * w * h];
+        QUANTUM *data = new QUANTUM[depth() * w * h];
         QUANTUM *ptr=data;
 
         if (w < 0)
@@ -508,7 +508,7 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
         // XXX: determine whether to apply the monitor profile or based on the copy setting
 	image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
 
-        delete data;
+        delete[] data;
 
         return image;
 #endif
@@ -532,8 +532,6 @@ KisVLineIteratorPixel  &KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y
 KisSelectionSP KisPaintDevice::selection(){
 	if (!m_hasSelection) {
 		m_selection = new KisSelection(this, "layer selection for: " + name());
-
-		// AUTOLAYER: m_selection -> clear(QRect(0, 0, width(), height()));
 		m_selection -> setVisible(true);
 		m_hasSelection = true;
 		emit selectionCreated();

@@ -103,7 +103,8 @@ public:
 
 	virtual bool visit(KisPainter& gc, KisSelectionSP selection)
 	{
-		int OPACITY = 200;
+		int OPACITY = 200; // XXX: Hardcoded opacity of the
+				   // selection mas. make an option.
 
 		visit(gc, selection.data(), OPACITY);
 		return true; 
@@ -125,14 +126,15 @@ private:
 		sx = m_rc.x() - dev->getX();
 		sy = m_rc.y() - dev->getY();
 
-// 		kdDebug() << "Blitting: " << dev -> name() 
-// 			  << " dx: " << dx
-// 			  << " dy: " << dy
-// 			  << " sx: " << sx
-// 			  << " sy: " << sy
-// 			  << " w: " << w
-// 			  << " h " << h
-// 			  << "\n";
+//  		kdDebug() << "Blitting: " << dev -> name() 
+//  			  << " dx: " << dx
+//  			  << " dy: " << dy
+//  			  << " sx: " << sx
+//  			  << " sy: " << sy
+//  			  << " w: " << w
+//  			  << " h " << h
+//  			  << "\n";
+
 		gc.bitBlt(dx, dy, dev -> compositeOp(), dev, opacity, sx, sy, w, h);
 	}
 

@@ -25,6 +25,9 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kglobalsettings.h>
+
+
 #include <qlayout.h>
 
 #include "kis_basedocker.h"
@@ -41,9 +44,8 @@ KisBaseDocker::KisBaseDocker( QWidget* parent, const char* name)
 	setNewLine(true);
 	layout() -> setSpacing(0);
 	layout() -> setMargin(0);
-	QFont f;
-	f.setPointSize(8);
-	setFont(f);
+
+	setFont(KGlobalSettings::toolBarFont());
 }
 
 #include "kis_basedocker.moc"

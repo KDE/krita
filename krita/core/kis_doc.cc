@@ -631,7 +631,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 		}
 
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
-		kdDebug() << "Colorspace: " << cs << "\n";
+// 		kdDebug() << "Colorspace: " << cs << "\n";
 		if (cs == 0) return 0;
 		
 		if ((profileProductName = element.attribute("profile")).isNull()) {
@@ -975,7 +975,7 @@ bool KisDoc::slotNewImage()
 		KisLayerSP layer;
 		KisFillPainter painter;
 		
-		kdDebug() << dlg.colorStrategyName() << "\n";
+// 		kdDebug() << dlg.colorStrategyName() << "\n";
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance()->get(dlg.colorStrategyName());
 
 		if (!cs) return false;
@@ -986,7 +986,7 @@ bool KisDoc::slotNewImage()
 				   dlg.imgName());
 		img -> setResolution(dlg.imgResolution(), dlg.imgResolution()); // XXX needs to be added to dialog
 		img -> setDescription(dlg.imgDescription());
-		kdDebug() << "selected profile: " << dlg.profile() << "\n";
+// 		kdDebug() << "selected profile: " << dlg.profile() << "\n";
 		img -> setProfile(dlg.profile());
 
 		layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);

@@ -729,7 +729,15 @@ bool KisImage::pos(KisLayerSP layer, Q_INT32 position)
 	if (old == position)
 		return true;
 
-	qSwap(m_layers[old], m_layers[position]);
+	if (position < old) {
+		m_layers.erase(m_layers.begin() + old);
+		m_layers.insert(m_layers.begin() + position, layer);
+	}
+	else {
+		m_layers.insert(m_layers.begin() + position + 1, layer);
+		m_layers.erase(m_layers.begin() + old);
+	}
+
 	invalidate();
 	return true;
 }

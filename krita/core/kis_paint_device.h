@@ -130,6 +130,7 @@ public:
         Q_INT32 y() const;
         void setY(Q_INT32 y);
 
+	Q_INT32 depth() const;
         Q_INT32 width() const;
         Q_INT32 height() const;
 

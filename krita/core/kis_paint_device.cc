@@ -746,5 +746,10 @@ KisTileMgrSP KisPaintDevice::tiles() const
         return m_tiles;
 }
 
+Q_INT32 KisPaintDevice::depth() const
+{
+	return m_depth;
+}
+
 #include "kis_paint_device.moc"
 

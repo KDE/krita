@@ -27,6 +27,7 @@
 #include "kis_tool.h"
 #include "kis_undo.h"
 
+#if 0
 class MoveCommand : public KisCommand {
 public:
 	MoveCommand(KisDoc *doc, int layer, const QPoint& oldpos, const QPoint& newpos);
@@ -42,6 +43,7 @@ private:
 	QPoint m_newPos;
 	KisDoc *m_doc;
 };
+#endif
 
 class MoveTool : public KisTool {
 public:

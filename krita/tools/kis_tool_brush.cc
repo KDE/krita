@@ -31,22 +31,50 @@
 #include "kis_doc.h"
 #include "kis_dlg_toolopts.h"
 #include "kis_tool_brush.h"
+#include "kis_undo.h"
 #include "kis_util.h"
 #include "kis_view.h"
 #include "kis_vec.h"
 
+class BrushToolCmd : public KisCommand {
+public:
+	BrushToolCmd(KisDoc *doc);
+	virtual ~BrushToolCmd();
+
+	virtual void execute();
+	virtual void unexecute();
+};
+
+BrushToolCmd::BrushToolCmd(KisDoc *doc) : KisCommand(doc)
+{
+}
+
+BrushToolCmd::~BrushToolCmd()
+{
+}
+
+void BrushToolCmd::execute()
+{
+	kdDebug() << "BrushToolCmd::execute\n";
+}
+
+void BrushToolCmd::unexecute()
+{
+	kdDebug() << "BrushToolCmd::unexecute\n";
+}
+
 BrushTool::BrushTool(KisDoc *doc, KisBrush *brush) : KisTool(doc)
 {
-    m_doc = doc;
-    m_dragging = false;
-    m_dragdist = 0;
+	m_doc = doc;
+	m_dragging = false;
+	m_dragdist = 0;
 
-    // initialize brush tool settings
-    m_usePattern = false;
-    m_useGradient = false;
-    m_opacity = 255;
+	// initialize brush tool settings
+	m_usePattern = false;
+	m_useGradient = false;
+	m_opacity = 255;
 
-    setBrush(brush);
+	setBrush(brush);
 }
 
 BrushTool::~BrushTool() 
@@ -55,72 +83,78 @@ BrushTool::~BrushTool()
 
 void BrushTool::setBrush(KisBrush *brush)
 {
-    m_brush = brush;
+	m_brush = brush;
+	m_brushWidth = m_brush -> pixmap().width();
+	m_brushHeight = m_brush -> pixmap().height();
+	m_hotSpot  = m_brush -> hotSpot();
+	m_hotSpotX = m_brush -> hotSpot().x();
+	m_hotSpotY = m_brush -> hotSpot().y();
+	m_brushSize = QSize(m_brushWidth, m_brushHeight);
 
-    m_brushWidth = m_brush->pixmap().width();
-    m_brushHeight = m_brush->pixmap().height();
-    m_hotSpot  = m_brush->hotSpot();
-    m_hotSpotX = m_brush->hotSpot().x();
-    m_hotSpotY = m_brush->hotSpot().y();
-    m_brushSize = QSize(m_brushWidth, m_brushHeight);
+	// make custom cursor from brush pixmap
+	// if brush pixmap is of reasonable size
+	if (m_brushWidth < 33 && m_brushHeight < 33 && m_brushWidth > 9 && m_brushHeight > 9) {
+		QBitmap mask(m_brushWidth, m_brushHeight);
+		QPixmap pix(m_brush -> pixmap());
 
-    // make custom cursor from brush pixmap
-    // if brush pixmap is of reasonable size
-    if(m_brushWidth < 33 && m_brushHeight < 33 && m_brushWidth > 9 && m_brushHeight > 9) {
-        QBitmap mask(m_brushWidth, m_brushHeight);
-        QPixmap pix(m_brush->pixmap());
-        mask = pix.createHeuristicMask();
-        pix.setMask(mask);
-        m_view->kisCanvas()->setCursor(QCursor(pix));
-        m_cursor = QCursor(pix);
-    }
-    // use default brush cursor
-    else
-    {
-        m_view->kisCanvas()->setCursor(KisCursor::brushCursor());
-        m_cursor = KisCursor::brushCursor();
-    }
+		mask = pix.createHeuristicMask();
+		pix.setMask(mask);
+		m_view -> kisCanvas() -> setCursor(QCursor(pix));
+		m_cursor = QCursor(pix);
+	}
+	// use default brush cursor
+	else {
+		m_view -> kisCanvas() -> setCursor(KisCursor::brushCursor());
+		m_cursor = KisCursor::brushCursor();
+	}
 }
-
 
 void BrushTool::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_doc->current();
-    if (!img) return;
+	KisImage *img;
+	KisLayer *lay;
 
-    if(!img->getCurrentLayer())
-        return;
+	if (!(img = m_doc -> current()))
+		return;
 
-    if(!img->getCurrentLayer()->visible())
-        return;
+	if (!(lay = img -> getCurrentLayer()))
+		return;
 
-    if (e->button() != QMouseEvent::LeftButton)
-        return;
+	if (!lay -> visible())
+		return;
 
-    m_red = m_view->fgColor().R();
-    m_green = m_view->fgColor().G();
-    m_blue = m_view->fgColor().B();
+	if (e -> button() != QMouseEvent::LeftButton)
+		return;
 
-    m_alpha = (img->colorMode() == cm_RGBA);
-    m_spacing = m_brush->spacing();
-    if (m_spacing <= 0) m_spacing = 3;
+	m_red = m_view -> fgColor().R();
+	m_green = m_view -> fgColor().G();
+	m_blue = m_view -> fgColor().B();
+	m_alpha = img -> colorMode() == cm_RGBA;
+	m_spacing = m_brush -> spacing();
 
-    m_dragging = true;
+	if (m_spacing <= 0) 
+		m_spacing = 3;
 
-    QPoint pos = e->pos();
-    pos = zoomed(pos);
-    m_dragStart = pos;
-    m_dragdist = 0;
+	m_dragging = true;
 
-    if(paintMonochrome(pos))
-    {
-         img->markDirty(QRect(pos - m_hotSpot, m_brushSize));
-    }
+	QPoint pos = e -> pos();
+	pos = zoomed(pos);
+	m_dragStart = pos;
+	m_dragdist = 0;
+
+	if (paintMonochrome(pos)) {
+		KCommand *cmd = new BrushToolCmd(m_doc);
+		QRect rc(pos - m_hotSpot, m_brushSize);
+
+		img -> markDirty(rc);
+//		cmd -> markDirty(rc, lay);
+		m_doc -> addCommand(cmd);
+	}
 }
 
 bool BrushTool::paintCanvas(const QPoint& /* pos */)
 {
-    return true;
+	return true;
 }
 
 bool BrushTool::paintMonochrome(const QPoint& pos)
@@ -134,7 +168,7 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 	if (!clipRect.intersects(lay -> imageExtents()))
 		return false;
 
-	clipRect = clipRect.intersect(lay->imageExtents());
+	clipRect = clipRect.intersect(lay -> imageExtents());
 
 	int sx = clipRect.left() - startx;
 	int sy = clipRect.top() - starty;
@@ -175,7 +209,7 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 			lay -> setPixel(0, startx + x, starty + y, r);
 			lay -> setPixel(1, startx + x, starty + y, g);
 			lay -> setPixel(2, startx + x, starty + y, b);
- 
+
 			if (m_alpha) {
 				a = lay->pixel(3, startx + x, starty + y);
 
@@ -201,7 +235,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
 	if (!m_dragging)
 		return;
 
-	KisImage *img = m_doc->current();
+	KisImage *img = m_doc -> current();
 
 	if (!img) 
 		return;
@@ -209,13 +243,6 @@ void BrushTool::mouseMove(QMouseEvent *e)
 	QPoint pos = zoomed(e -> pos());
 	int mouseX = e -> x();
 	int mouseY = e -> y();
-
-#if 0
-	pos = zoomed(pos);
-	mouseX = zoomedX(mouseX);
-	mouseY = zoomedY(mouseY);
-#endif
-
 	KisVector end(mouseX, mouseY);
 	KisVector start(m_dragStart.x(), m_dragStart.y());
 	KisVector dragVec = end - start;
@@ -244,8 +271,14 @@ void BrushTool::mouseMove(QMouseEvent *e)
 
 		QPoint p(qRound(step.x()), qRound(step.y()));
 
-		if (paintMonochrome(p))
-			img -> markDirty(QRect(p - m_hotSpot, m_brushSize));
+		if (paintMonochrome(p)) {
+			KCommand *cmd = new BrushToolCmd(m_doc);
+			QRect rc(p - m_hotSpot, m_brushSize);
+
+			img -> markDirty(rc);
+//			cmd -> markDirty(rc, lay);
+			m_doc -> addCommand(cmd);
+		}
 
 		dist -= m_spacing;
 	}
@@ -266,7 +299,7 @@ void BrushTool::mouseRelease(QMouseEvent *e)
 
 bool BrushTool::paintColor(const QPoint& /*pos*/)
 {
-    return true;
+	return true;
 }
 
 void BrushTool::optionsDialog()
@@ -293,7 +326,7 @@ void BrushTool::optionsDialog()
 	m_useGradient = OptsDialog.brushToolTab()->useGradient();
 
 	if (old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_opacity != m_opacity)
-		m_doc->setModified( true );
+		m_doc -> setModified(true);
 }
 
 void BrushTool::setupAction(QObject *collection)

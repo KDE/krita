@@ -54,25 +54,51 @@
     KisDoc - constructor ko virtual method implemented
 */
 
-KisDoc::KisDoc( QWidget *parentWidget, const char *widgetName,
-    QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
+KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) 
+	: KoDocument(parentWidget, widgetName, parent, name, singleViewMode)
 {
 	bool loadPlugins = true;
 	setInstance(KisFactory::global(), loadPlugins);
-
+	m_command_history = new KCommandHistory(actionCollection(), false);
 	m_current_view = 0;
 	m_pCurrent = 0L;
 	m_pNewDialog = 0L;
 	m_pClipImage = 0L;
-
 	m_pSelection = new KisSelection(this);
 	m_pFrameBuffer = new KisFrameBuffer(this);
-
 	m_Images.setAutoDelete(false);
 
-	kdDebug(0) << "QPixmap::defaultDepth(): " << QPixmap::defaultDepth() << endl;
+	connect(m_command_history, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored));
+	connect(m_command_history, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted));
+}
 
+/*
+    KisDoc destructor - Note that since this is MDI, each image
+    in the list must be deleted to free up all memory.  While
+    there is only ONE Koffice "document", there are multiple
+    images you can load and work with in any session
+*/
+
+KisDoc::~KisDoc()
+{
+	KisImage *img = m_Images.first();
+
+	while (img) {
+		// disconnect old current image
+		if (img == m_pCurrent) {
+			QObject::disconnect(m_pCurrent, SIGNAL(updated()), this, SLOT(slotImageUpdated()));
+			QObject::disconnect(m_pCurrent, SIGNAL(updated(const QRect&)), this, SLOT(slotImageUpdated(const QRect&)));
+			QObject::disconnect(m_pCurrent, SIGNAL(layersUpdated()), this, SLOT(slotLayersUpdated()));
+		}
+
+		delete img;
+		img = m_Images.next();
+	}
+
+	delete m_pClipImage;
+	delete m_pSelection;
+	delete m_pFrameBuffer;
+	delete m_command_history;
 }
 
 /*
@@ -806,54 +832,6 @@ KisImage* KisDoc::current() const
 }
 
 /*
-    KisDoc destructor - Note that since this is MDI, each image
-    in the list must be deleted to free up all memory.  While
-    there is only ONE Koffice "document", there are multiple
-    images you can load and work with in any session
-*/
-
-KisDoc::~KisDoc()
-{
-    KisImage *img = m_Images.first();
-
-    while (img)
-    {
-        // disconnect old current image
-        if(img == m_pCurrent)
-        {
-            QObject::disconnect( m_pCurrent, SIGNAL( updated() ),
-	            this, SLOT( slotImageUpdated() ) );
-            QObject::disconnect( m_pCurrent, SIGNAL( updated( const QRect& ) ),
-	            this, SLOT( slotImageUpdated( const QRect& ) ) );
-            QObject::disconnect( m_pCurrent, SIGNAL( layersUpdated() ),
-                this, SLOT( slotLayersUpdated() ) );
-        }
-
-        delete img;
-        img = m_Images.next();
-    }
-
-    if(m_pClipImage != 0L)
-    {
-        delete m_pClipImage;
-        m_pClipImage = 0L;
-    }
-
-    if(m_pSelection != 0L)
-    {
-        delete m_pSelection;
-        m_pSelection = 0L;
-    }
-
-    if(m_pFrameBuffer != 0L)
-    {
-        delete m_pFrameBuffer;
-        m_pFrameBuffer = 0L;
-    }
-}
-
-
-/*
     Save current document (image) in a standard image format
     Note that only the current visible layer(s) will be saved
     usually one needs to merge all layers first, as with Gimp
@@ -1443,6 +1421,42 @@ void KisDoc::setTools(const ktvector& tools)
 
 	for (ktvector_size_type i = 0; i < tools.size(); i++)
 		m_tools.push_back(tools[i]);
+}
+
+void KisDoc::addCommand(KCommand *cmd)
+{
+	Q_ASSERT(cmd);
+	m_command_history -> addCommand(cmd, false);
+}
+
+int KisDoc::undoLimit() const
+{
+	return m_command_history -> undoLimit();
+}
+
+void KisDoc::setUndoLimit(int limit)
+{
+	m_command_history -> setUndoLimit(limit);
+}
+
+int KisDoc::redoLimit() const
+{
+	return m_command_history -> redoLimit();
+}
+
+void KisDoc::setRedoLimit(int limit)
+{
+	m_command_history -> setRedoLimit(limit);
+}
+
+void KisDoc::slotDocumentRestored()
+{
+	setModified(false);
+}
+
+void KisDoc::slotCommandExecuted()
+{
+	setModified(true);
 }
 
 #include "kis_doc.moc"

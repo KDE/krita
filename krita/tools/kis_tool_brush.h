@@ -72,3 +72,4 @@ protected:
 };
 
 #endif //__brushtool_h__
+

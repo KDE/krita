@@ -28,6 +28,7 @@
 #include "kis_tool_move.h"
 #include "kis_view.h"
 
+#if 0
 MoveCommand::MoveCommand(KisDoc *doc, int layer, const QPoint& oldpos, const QPoint& newpos)
   : KisCommand(i18n("Move layer"), doc)
 {
@@ -60,6 +61,7 @@ void MoveCommand::moveTo(const QPoint& pos)
 	img->markDirty( img->getCurrentLayer()->imageExtents() );
 	img->markDirty( oldRect );
 }
+#endif
 
 MoveTool::MoveTool(KisDoc *doc) : KisTool(doc)
 {

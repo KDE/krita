@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *                1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
+ *                2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -158,4 +159,14 @@ QImage KisUtil::roughScaleQImage(QImage & src, int width, int height)
     return dest;
 }
 
+QRect KisUtil::findBoundingTiles(const QRect& area)
+{
+	QRect rc;
+
+	rc.setLeft(area.left() / TILE_SIZE);
+	rc.setTop(area.top() / TILE_SIZE);
+	rc.setRight(area.right() / TILE_SIZE);
+	rc.setBottom(area.bottom() / TILE_SIZE);
+	return rc;
+}
 

@@ -149,8 +149,6 @@ public slots:
 	void zoom_out();
      
 	// edit action slots
-	void undo();
-	void redo();
 	void copy();
 	void cut();
 	void removeSelection();

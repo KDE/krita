@@ -27,6 +27,7 @@
 #include <qptrlist.h>
 #include <qobject.h>
 #include <qtimer.h>
+#include <qpixmap.h>
 
 #include <stdlib.h>
 
@@ -35,109 +36,211 @@
 #include "kis_color.h"
 
 class KisBrush;
-#include <X11/Xlib.h>  // for XImage
 
+class KisImage : public QObject {
+	Q_OBJECT
+	typedef QObject super;
+public:
+	KisImage(const QString& name, int width, int height, cMode cm = cm_RGBA, uchar bitDepth = 8);
+	virtual ~KisImage();
 
-class KisImage : public QObject
-{
-    Q_OBJECT
+	void upperLayer(unsigned int layer);
+	void lowerLayer(unsigned int layer);
+	void setFrontLayer(unsigned int layer);
+	void setBackgroundLayer(unsigned int layer);
 
- public:
-    
-    KisImage( const QString& name, int width, int height,
-    			  cMode cm = cm_RGBA, uchar bitDepth = 8 );
-    virtual ~KisImage();
+	void addLayer(const QRect& r, const KisColor& c, bool transparent, const QString& name);
+	void removeLayer(unsigned int layer);
 
-    int     height()       { return m_height; }
-    int     width()        { return m_width; }
-    QSize   size()         { return QSize( m_width, m_height); }
-    QRect   imageExtents() { return QRect(0, 0, m_width, m_height); }
+	KisLayer* layerPtr(KisLayer *layer);
 
-    QString name()         { return m_name; }
-    QString author()       { return m_author; }
-    QString email()        { return m_email; }
+	void markDirty(const QRect& rect);
 
-    cMode   colorMode()    { return m_cMode; } 
-    uchar   bitDepth()     { return m_bitDepth; }
+	void mergeAllLayers();
+	void mergeVisibleLayers();
+	void mergeLinkedLayers();
 
-    void setName(const QString& n)    { m_name = n; }
-    void setAuthor(const QString& a)  { m_author = a; }
-    void setEmail(const QString& e)  { m_email = e; }
-    
-    void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
-    void paintPixmap( QPainter *painter, QRect area);
+	void setAutoUpdate(bool autoEnable = true);
+	
+	void paintContent(QPainter& painter, const QRect& rect, bool transparent = false);
+	void paintPixmap(QPainter *painter, const QRect& area);
 
-    KisLayer* getCurrentLayer() { return m_pCurrentLay; }
-    int getCurrentLayerIndex() { return m_layers.find( m_pCurrentLay ); }
-    void setCurrentLayer( int _layer );
+	void setCurrentLayer(int layer);
 
-    void upperLayer( unsigned int _layer );
-    void lowerLayer( unsigned int _layer );
-    void setFrontLayer( unsigned int _layer );
-    void setBackgroundLayer( unsigned int _layer );
+	inline QPtrList<KisLayer> layerList();
 
-    void addLayer(const QRect& r, const KisColor& c, bool transparent, const QString& name);
-    void removeLayer( unsigned int _layer );
+	inline int height();
+	inline int width();
+	inline QSize size();
+	inline QRect imageExtents();
 
-    KisLayer* layerPtr( KisLayer *_layer );
-    QPtrList<KisLayer> layerList() { return m_layers; };
- 
-    void markDirty( QRect rect );
-     
-    void mergeAllLayers();
-    void mergeVisibleLayers();
-    void mergeLinkedLayers();
-    void mergeLayers(QPtrList<KisLayer>);
+	inline QString name();
+	inline QString author();
+	inline QString email();
 
-    bool bigEndian() { return mBigEndian; }
-    bool bigEndianBitOrder() { return mBigEndianBitOrder; }        
-    bool bigEndianByteOrder() { return mBigEndianByteOrder; }
+	inline cMode colorMode();
+	inline uchar bitDepth();
 
- signals:
-    void updated();
-    void updated( const QRect& rect );
-    void layersUpdated();
+	inline void setName(const QString& n);
+	inline void setAuthor(const QString& a);
+	inline void setEmail(const QString& e);
 
- protected slots:
-    void slotUpdateTimeOut();  
-    
- protected:
-    void compositeImage( QRect _rect );
-    void compositeTile( int x, int y, KisLayer *dstLay = 0, int dstTile = -1 );
-    void convertTileToPixmap( KisLayer *lay, int tileNo, QPixmap *pix );
-    void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay, 
-        KisLayer *dstLay, int dstTile );
-    void renderTileQuadrant( const KisLayer *srcLay, int srcTile, KisLayer *dstLay,
-	    int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
-    void setUpVisual();
-    void convertImageToPixmap( QImage *img, QPixmap *pix );
-        
- private:
-    enum dispVisual { unknown, rgb565, rgb888x } visual;
+	inline KisLayer* getCurrentLayer();
+	inline int getCurrentLayerIndex();
+	
+	inline bool bigEndian();
+	inline bool bigEndianBitOrder();
+	inline bool bigEndianByteOrder();
 
-    bool mBigEndianBitOrder;
-    bool mBigEndianByteOrder;  
-    bool mBigEndian;
-    
-    int               m_xTiles;
-    int               m_yTiles;
+signals:
+	void updated();
+	void updated(const QRect& rect);
+	void layersUpdated();
 
-    QImage            m_img;
-    QPtrList<KisLayer>   m_layers;
-    KisLayer         *m_pCurrentLay, *m_pComposeLay, *m_pBGLay;
+protected slots:
+	void slotUpdateTimeOut();
 
-    QPixmap    **m_ptiles;
-    char        *m_pImgData;
-    XImage      *m_pxi;
-    QString      m_name;
-    QString      m_author;
-    QString      m_email;
-    int          m_width;
-    int          m_height;
-    cMode        m_cMode;
-    uchar        m_bitDepth;
-    QMemArray<bool> m_dirty;
-    QTimer      *m_pUpdateTimer;
+protected:
+	void mergeLayers(QPtrList<KisLayer> layers);
+	void compositeImage(const QRect& rect = QRect());
+	void compositeTile( int x, int y, KisLayer *dstLay = 0, int dstTile = -1 );
+	void convertTileToPixmap( KisLayer *lay, int tileNo, QPixmap *pix );
+	void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay, 
+			KisLayer *dstLay, int dstTile );
+	void renderTileQuadrant( const KisLayer *srcLay, int srcTile, KisLayer *dstLay,
+			int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
+	void convertImageToPixmap( QImage *img, QPixmap *pix );
+
+private:
+	KisImage(const KisImage&);
+	KisImage& operator=(const KisImage&);
+
+	void resizePixmap(KisLayer *lay, const QRect& rect);
+	QRect findBoundingTiles(const QRect& area);
+
+private:
+	bool mBigEndianBitOrder;
+	bool mBigEndianByteOrder;  
+	bool mBigEndian;
+
+	int m_xTiles;
+	int m_yTiles;
+
+	QImage m_img;
+	QPtrList<KisLayer> m_layers;
+	KisLayer *m_pCurrentLay;
+       	KisLayer *m_pComposeLay;
+       	KisLayer *m_pBGLay;
+
+	QPixmap **m_ptiles;
+	char *m_pImgData;
+
+	QString m_name;
+	QString m_author;
+	QString m_email;
+
+	int m_width;
+	int m_height;
+
+	cMode m_cMode;
+	uchar m_bitDepth;
+	QMemArray<bool> m_dirty;
+
+	QPtrList<QPixmap> m_dirtyTiles;
+	bool m_autoUpdate;
+
+	QTimer* m_timer;
 };
 
+QPtrList<KisLayer> KisImage::layerList() 
+{ 
+	return m_layers; 
+}
+
+int KisImage::height()
+{ 
+	return m_height; 
+}
+
+int KisImage::width()        
+{ 
+	return m_width; 
+}
+
+QSize KisImage::size()         
+{ 
+	return QSize(m_width, m_height); 
+}
+
+QRect KisImage::imageExtents() 
+{ 
+	return QRect(0, 0, m_width, m_height); 
+}
+
+QString KisImage::name()         
+{ 
+	return m_name; 
+}
+
+QString KisImage::author()       
+{ 
+	return m_author; 
+}
+
+QString KisImage::email()        
+{ 
+	return m_email; 
+}
+
+cMode KisImage::colorMode()    
+{ 
+	return m_cMode; 
+} 
+
+uchar KisImage::bitDepth()     
+{ 
+	return m_bitDepth; 
+}
+
+void KisImage::setName(const QString& n)    
+{ 
+	m_name = n; 
+}
+
+void KisImage::setAuthor(const QString& a)  
+{ 
+	m_author = a; 
+}
+
+void KisImage::setEmail(const QString& e)  
+{ 
+	m_email = e; 
+}
+
+KisLayer* KisImage::getCurrentLayer() 
+{ 
+	return m_pCurrentLay; 
+}
+
+int KisImage::getCurrentLayerIndex() 
+{ 
+	return m_layers.find(m_pCurrentLay); 
+}
+
+bool KisImage::bigEndian() 
+{ 
+	return mBigEndian; 
+}
+
+bool KisImage::bigEndianBitOrder() 
+{ 
+	return mBigEndianBitOrder; 
+}
+
+bool KisImage::bigEndianByteOrder() 
+{ 
+	return mBigEndianByteOrder; 
+}
+
 #endif
+

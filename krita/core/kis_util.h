@@ -2,6 +2,7 @@
  *  kis_util.h - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,6 +46,7 @@ public:
     static QString writeFilters();
   
     static QImage roughScaleQImage(QImage & src, int width, int height);
+    static QRect findBoundingTiles(const QRect& area);
 };
 
 #endif

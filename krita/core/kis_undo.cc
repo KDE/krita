@@ -2,6 +2,7 @@
  *  kis_undo.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Michael Koch    <koch@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,9 +23,16 @@
 #include <klocale.h>
 #include "kis_undo.h"
 
-KisCommand::KisCommand(const QString& name, KisDoc *doc)
-  : KCommand(), m_pDoc(doc), m_name(name)
+KisCommand::KisCommand(KisDoc *doc)
 {
+	m_name = "";
+	m_doc = doc;
+}
+
+KisCommand::KisCommand(const QString& name, KisDoc *doc)
+{
+	m_name = name;
+	m_doc = doc;
 }
 
 KisCommand::~KisCommand()

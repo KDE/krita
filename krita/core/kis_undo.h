@@ -2,6 +2,7 @@
  *  kis_undo.h - part of KImageShop
  *
  *  Copyright (c) 1999 Michael Koch    <koch@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +29,7 @@ class KisDoc;
 
 class KisCommand : public KCommand {
 public:
+	KisCommand(KisDoc *doc);
 	KisCommand(const QString& name, KisDoc *doc);
 	virtual ~KisCommand();
 
@@ -36,9 +38,7 @@ public:
 	virtual QString name() const;
 
 protected:
-	KisDoc *m_pDoc;
-
-private:
+	KisDoc *m_doc;
 	QString m_name;
 };
 

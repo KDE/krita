@@ -71,10 +71,11 @@ public:
 
 	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);
 
-	/*
-	 * KOffice undo/redo.
-	 */
-	KCommandHistory* commandHistory() { return &m_commands; };
+	void addCommand(KCommand *cmd);
+	int undoLimit () const;
+	void setUndoLimit(int limit);
+	int redoLimit() const;
+	void setRedoLimit(int limit);
 
 	/*
 	 * Use QPainter p to paint a rectangular are of the current image.
@@ -219,6 +220,9 @@ public slots:
 	void setCurrentImage(const QString& name);
 	void slotRemoveImage(const QString& name);
 
+	void slotDocumentRestored();
+	void slotCommandExecuted();
+
 signals:
 	void docUpdated();
 	void docUpdated(const QRect& rect);
@@ -255,8 +259,9 @@ protected:
 	/* load tool settings */
 	void loadToolSettings(QDomElement& elem);
 
+private:
 	/* undo/redo */
-	KCommandHistory m_commands;
+	KCommandHistory *m_command_history;
 
 	/* list of images for the document - each document can have multiple
 	   images and each image must have at least one layer. however, a document

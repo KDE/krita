@@ -1,1 +1,1 @@
-SUBDIRS = example colorsfilters variations colorrange screenmode imagesize screenshot
+SUBDIRS = example colorsfilters variations colorrange imagesize screenshot

@@ -22,15 +22,16 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
+#include <config.h>
 
 KAboutData * newKrayonAboutData()
 {
 	KAboutData * aboutData = new KAboutData( "krita",
 			I18N_NOOP("Krita"),
-			"0.3.0",
+			VERSION,
 			I18N_NOOP("KOffice image manipulation application."),
 			KAboutData::License_GPL,
-			"(c) 1999-2002 The Krita team.\n(c) 2002-2003 Patrick Julien.",
+			I18N_NOOP("(c) 1999-2002 The Krita team.\n(c) 2002-2003 Patrick Julien."),
 			"",
 			"http://koffice.kde.org/krita",
 			"submit@bugs.kde.org");
@@ -45,4 +46,3 @@ KAboutData * newKrayonAboutData()
 }
 
 #endif // KRAYON_ABOUTDATA
-

@@ -28,6 +28,7 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_tool_move.h"
+#include "kis_tool_move.moc"
 
 KisToolMove::KisToolMove()
 {

@@ -26,6 +26,7 @@
 
 class KisToolMove : public KisToolNonPaint {
 	typedef KisToolNonPaint super;
+	Q_OBJECT
 
 public:
 	KisToolMove();

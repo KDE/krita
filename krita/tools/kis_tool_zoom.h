@@ -23,12 +23,13 @@
 
 class KisCanvasSubject;
 
-class KisZoomTool : public KisToolNonPaint {
+class KisToolZoom : public KisToolNonPaint {
 	typedef KisToolNonPaint super;
+	Q_OBJECT
 
 public:
-	KisZoomTool();
-	virtual ~KisZoomTool();
+	KisToolZoom();
+	virtual ~KisToolZoom();
 
 public:
 	virtual void update(KisCanvasSubject *subject);

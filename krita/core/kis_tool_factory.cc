@@ -50,7 +50,7 @@ void KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSubjec
 	if (m_tools.empty()) {
 		m_tools.push_back(new KisToolColorPicker);
 		m_tools.push_back(new KisToolMove);
-		m_tools.push_back(new KisZoomTool);
+		m_tools.push_back(new KisToolZoom);
 		m_tools.push_back(new KisToolRectangularSelect);
 	}
 

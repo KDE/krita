@@ -29,6 +29,7 @@
 #include "kis_image.h"
 #include "kis_selection.h"
 #include "kis_tool_select_rectangular.h"
+#include "kis_tool_select_rectangular.moc"
 #include "kis_undo_adapter.h"
 
 namespace {

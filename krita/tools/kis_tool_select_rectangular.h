@@ -26,6 +26,7 @@
 
 class KisToolRectangularSelect : public KisToolNonPaint {
 	typedef KisToolNonPaint super;
+	Q_OBJECT
 
 public:
 	KisToolRectangularSelect();

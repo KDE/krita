@@ -23,24 +23,25 @@
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_tool_zoom.h"
+#include "kis_tool_zoom.moc"
 
-KisZoomTool::KisZoomTool()
+KisToolZoom::KisToolZoom()
 {
 	m_subject = 0;
 	setCursor(KisCursor::zoomCursor());
 }
 
-KisZoomTool::~KisZoomTool()
+KisToolZoom::~KisToolZoom()
 {
 }
 
-void KisZoomTool::update(KisCanvasSubject *subject)
+void KisToolZoom::update(KisCanvasSubject *subject)
 {
 	m_subject = subject;
 	super::update(m_subject);
 }
 
-void KisZoomTool::mousePress(QMouseEvent *e)
+void KisToolZoom::mousePress(QMouseEvent *e)
 {
 	if (m_subject) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
@@ -52,7 +53,7 @@ void KisZoomTool::mousePress(QMouseEvent *e)
 	}
 }
 
-void KisZoomTool::setup(KActionCollection *collection)
+void KisToolZoom::setup(KActionCollection *collection)
 {
 	KToggleAction *toggle;
 

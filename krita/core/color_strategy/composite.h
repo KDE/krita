@@ -123,12 +123,12 @@ void compositeOver(Q_INT32 stride,
 				d[PIXEL_GREEN] = (d[PIXEL_GREEN] * dstAlpha + s[PIXEL_GREEN] * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
 				d[PIXEL_BLUE]  = (d[PIXEL_BLUE]  * dstAlpha + s[PIXEL_BLUE]  * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
 
-				d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * 255 + QUANTUM_MAX / 2) / QUANTUM_MAX;
+				d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
 
 				if (d[PIXEL_ALPHA] != 0) {
-					d[PIXEL_RED] = (d[PIXEL_RED] * 255) / d[PIXEL_ALPHA];
-					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * 255) / d[PIXEL_ALPHA];
-					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * 255) / d[PIXEL_ALPHA];
+					d[PIXEL_RED] = (d[PIXEL_RED] * QUANTUM_MAX) / d[PIXEL_ALPHA];
+					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * QUANTUM_MAX) / d[PIXEL_ALPHA];
+					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * QUANTUM_MAX) / d[PIXEL_ALPHA];
 				}
 			}
 
@@ -157,12 +157,12 @@ void compositeOver(Q_INT32 stride,
 				d[PIXEL_GREEN] = (d[PIXEL_GREEN] * dstAlpha + s[PIXEL_GREEN] * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
 				d[PIXEL_BLUE]  = (d[PIXEL_BLUE]  * dstAlpha + s[PIXEL_BLUE]  * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
 
-				d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * 255 + QUANTUM_MAX / 2) / QUANTUM_MAX;
+				d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
 
 				if (d[PIXEL_ALPHA] != 0) {
-					d[PIXEL_RED] = (d[PIXEL_RED] * 255) / d[PIXEL_ALPHA];
-					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * 255) / d[PIXEL_ALPHA];
-					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * 255) / d[PIXEL_ALPHA];
+					d[PIXEL_RED] = (d[PIXEL_RED] * QUANTUM_MAX) / d[PIXEL_ALPHA];
+					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * QUANTUM_MAX) / d[PIXEL_ALPHA];
+					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * QUANTUM_MAX) / d[PIXEL_ALPHA];
 				}
 			}
 		

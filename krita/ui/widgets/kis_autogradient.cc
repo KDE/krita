@@ -302,3 +302,5 @@ void KisAutogradient::slotChangedRightOpacity( int value )
 		segment -> setEndColor( Color( segment -> endColor().color(), (double)value / 100 ) );
 	gradientSlider -> repaint(false);
 }
+
+#include "kis_autogradient.moc"

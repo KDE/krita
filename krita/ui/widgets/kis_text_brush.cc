@@ -70,3 +70,5 @@ void KisTextBrush::rebuildTextBrush()
 	m_textBrushResource->updateBrush();
 	emit(activatedResource(m_textBrushResource));
 }
+
+#include "kis_text_brush.moc"

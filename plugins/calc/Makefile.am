@@ -27,10 +27,9 @@ kdelnkdir = $(kde_datadir)/koffice/pluginlnk
 
 SUBDIRS = pics
 
-####### Implicit rules
-
-
 ####### Build rules
+
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 
 messages: 
 #	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../calc.pot
@@ -38,12 +37,12 @@ messages:
 calc.h: calc.idl
 	rm -f calc.h
 	rm -f calc.cc
-	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) $(srcdir)/calc.idl
+	$(IDL) $(IDL_FLAGS) $(srcdir)/calc.idl
 
 kspread.h: $(top_srcdir)/kspread/kspread.idl
 	rm -f kspread.h
 	rm -f kspread.cc
-	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) $(top_srcdir)/kspread/kspread.idl
+	$(IDL) $(IDL_FLAGS) $(top_srcdir)/kspread/kspread.idl
 
 main.cc: main.h calc.h kspread.h
 calc.cc: calc.h

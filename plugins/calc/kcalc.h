@@ -62,7 +62,7 @@
 
 
 #ifdef HAVE_CONFIG_H
-#include "../config.h"
+#include <config.h>
 #endif
 
 // IMPORTANT this has to come after ../config.h

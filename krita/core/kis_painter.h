@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #if !defined KIS_PAINTER_H_
 #define KIS_PAINTER_H_
 
@@ -45,37 +46,7 @@
 #include "kis_pattern.h"
 
 class QRect;
-class KCommand;
-
-/*
-        KisTileCommand extends KCommand with an addTile method; I
-        haven't found a way to keep this private in the namespace of
-        kis_painter.cc and still declare m_transaction to be of type
-        KisTileCommand in kis_painter.h -- dynamically downcasting a
-        KCommand m_transaction just to keep everything private seems
-        excessive.
-*/
-class KisTileCommand : public KCommand {
-        typedef QMap<Q_INT32, KisTileSP> TileMap;
-
-public:
-        KisTileCommand(const QString& name, KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
-        KisTileCommand(const QString& name, KisPaintDeviceSP device, const QRect& rc);
-        KisTileCommand(const QString& name, KisPaintDeviceSP device);
-        virtual ~KisTileCommand();
-public:
-        virtual void execute();
-        virtual void unexecute();
-        virtual QString name() const;
-public:
-        void addTile(Q_INT32 tileNo, KisTileSP tile);
-private:
-        TileMap m_tiles;
-        TileMap m_originals;
-        QString m_name;
-        KisPaintDeviceSP m_device;
-        QRect m_rc;
-};
+class KisTileCommand;
 
 /*
   KisPainter contains the graphics primitives necessary to draw on a

@@ -54,9 +54,9 @@ KisFilterConfigurationWidget* KisPerChannelFilter::createConfigurationWidget(QWi
 	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );
 }
 
-KisFilterConfiguration* KisPerChannelFilter::configuration()
+KisFilterConfiguration* KisPerChannelFilter::configuration(KisFilterConfigurationWidget* nwidget)
 {
-	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) configurationWidget();
+	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*)nwidget;
 	KisPerChannelFilterConfiguration* co = new KisPerChannelFilterConfiguration( m_nbchannels , colorStrategy()->channelsInfo() );
 	if( widget == 0 )
 	{

@@ -71,14 +71,13 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 		m_view = (KisView*) parent;
 	}
 
-
-	KisBrightnessContrastFilter* kbc = new KisBrightnessContrastFilter(m_view);
+	KisFilterSP kbc = createFilter<KisBrightnessContrastFilter>(m_view);
 	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, kbc, SLOT(slotActivated()), actionCollection(), "brightnesscontrast");
-	KisGammaCorrectionFilter* kgc = new KisGammaCorrectionFilter(m_view);
+	KisFilterSP kgc = createFilter<KisGammaCorrectionFilter>(m_view);
 	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, kgc, SLOT(slotActivated()), actionCollection(), "gammacorrection");
-	KisColorAdjustmentFilter* kfca = new KisColorAdjustmentFilter(m_view);
+	KisFilterSP kfca = createFilter<KisColorAdjustmentFilter>(m_view);
 	(void) new KAction(i18n("&Color Adjustment..."), 0, 0, kfca, SLOT(slotActivated()), actionCollection(), "coloradjustment");
-	KisDesaturateFilter* kdf = new KisDesaturateFilter(m_view);
+	KisFilterSP kdf = createFilter<KisDesaturateFilter>(m_view);
 	(void) new KAction(i18n("&Desaturate"), 0, 0, kdf, SLOT(slotActivated()), actionCollection(), "desaturate");
 }
 
@@ -89,7 +88,7 @@ ColorsFilters::~ColorsFilters()
 //==================================================================
 
 KisColorAdjustmentFilter::KisColorAdjustmentFilter(KisView * view) : 
-	KisPerChannelFilter(view, "Color adjustment", -255, 255, 0)
+	KisPerChannelFilter(view, name(), -255, 255, 0)
 {
 }
 
@@ -124,7 +123,7 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceSP device, KisFilterConfigu
 //==================================================================
 
 KisGammaCorrectionFilter::KisGammaCorrectionFilter(KisView * view)
-	: KisPerChannelFilter(view, "Gamma adjustment", 1, 600, 1)
+	: KisPerChannelFilter(view, name(), 1, 600, 1)
 {
 }
 
@@ -155,7 +154,7 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceSP device, KisFilterConfigu
 //==================================================================
 
 KisDesaturateFilter::KisDesaturateFilter(KisView * view) 
-	: KisFilter("Desaturate", view)
+	: KisFilter(name(), view)
 {
 }
 

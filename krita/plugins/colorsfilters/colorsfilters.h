@@ -32,7 +32,7 @@ public:
 	KisDesaturateFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
-
+	static inline QString name() { return "Desaturate"; };
 };
 
 class KisGammaCorrectionFilter : public KisPerChannelFilter {
@@ -40,7 +40,7 @@ public:
 	KisGammaCorrectionFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
-
+	static inline QString name() { return "Gamma adjustment"; };
 };
 
 class KisColorAdjustmentFilter : public KisPerChannelFilter {
@@ -48,7 +48,7 @@ public:
 	KisColorAdjustmentFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
-
+	static inline QString name() { return "Color adjustment"; };
 };
 
 class ColorsFilters : public KParts::Plugin

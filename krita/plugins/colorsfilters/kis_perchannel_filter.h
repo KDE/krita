@@ -51,7 +51,7 @@ public:
 	KisPerChannelFilter(KisView * view, const QString& name, Q_INT32 min, Q_INT32 max, Q_INT32 initvalue );
 public:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration();
+	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
 private:
 	Q_INT32 m_min;
 	Q_INT32 m_max;

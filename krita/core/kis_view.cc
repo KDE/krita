@@ -365,9 +365,18 @@ void KisView::popupTabBarMenu( const QPoint& _point )
     static_cast<QPopupMenu*>(factory()->container("menuimage_popup",this))->popup(_point);
 }
 
-void KisView::moveImage( unsigned, unsigned )
+void KisView::moveImage( unsigned img , unsigned target)
 {
     //todo
+#if 0  //code from kspread adapt it.
+        QStringList vs = d->workbook->visibleSheets();
+
+    if( target >= vs.count() )
+        d->workbook->moveTable( vs[ img ], vs[ vs.count()-1 ], false );
+    else
+        d->workbook->moveTable( vs[ img ], vs[ target ], true );
+#endif
+    m_tabBar->moveTab( img, target );
 }
 
 void KisView::slotRename()

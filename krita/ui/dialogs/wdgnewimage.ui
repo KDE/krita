@@ -285,6 +285,15 @@
 </customwidgets>
 <tabstops>
     <tabstop>txtName</tabstop>
+    <tabstop>intWidth</tabstop>
+    <tabstop>intHeight</tabstop>
+    <tabstop>doubleResolution</tabstop>
+    <tabstop>cmbColorSpaces</tabstop>
+    <tabstop>cmbProfile</tabstop>
+    <tabstop>cmbDepth</tabstop>
+    <tabstop>cmbColor</tabstop>
+    <tabstop>sliderOpacity</tabstop>
+    <tabstop>txtDescription</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>

@@ -74,7 +74,9 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_colorspace_registry.h"
 #include "tiles/kistilemgr.h"
-
+#include "kis_profile.h"
+#include "kis_resource.h"
+#include "kis_resourceserver.h"
 #include "KIsDocIface.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
@@ -534,6 +536,14 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 	image.setAttribute("width", img -> width());
 	image.setAttribute("height", img -> height());
 	image.setAttribute("colorspacename", img -> colorStrategy() -> name());
+	kdDebug() << "Saving image with description " << img -> description() << "\n";
+	image.setAttribute("description", img -> description());
+	// XXX: Save profile as blob inside the image, instead of the product name.
+	if (img -> profile() -> valid())
+		image.setAttribute("profile", img -> profile() -> productName());
+	image.setAttribute("x-res", img -> xRes());
+	image.setAttribute("y-res", img -> yRes());
+
 	layers = img -> layers();
 
 	if (layers.size() > 0) {
@@ -560,14 +570,19 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 	QString name;
 	Q_INT32 width;
 	Q_INT32 height;
+	QString description;
+	QString profileProductName;
+	double xres;
+	double yres;
 	QString colorspacename;
 	Q_INT32 colorspace_int; // used to keep compatibility with old document
+	KisProfileSP profile;
 
 	if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
 		if ((name = element.attribute("name")).isNull())
 			return 0;
 
-		if (namePresent(name))
+		if (!namePresent(name))
 			name = nextImageName();
 
 		if ((attr = element.attribute("width")).isNull())
@@ -581,6 +596,33 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
 		if ((height = attr.toInt()) < 0 || height > cfg.maxImgHeight())
 			return 0;
+
+		description = element.attribute("description");
+
+		if ((attr = element.attribute("x-res")).isNull()) 
+			xres = 100.0;
+		else if ((xres = attr.toInt()) < 0 || xres > cfg.maxImgHeight())
+			xres = 100.0;
+		
+		if ((attr = element.attribute("y-res")).isNull()) 
+			yres = 100.0;
+		else if ((yres = attr.toInt()) < 0 || yres > cfg.maxImgHeight())
+			yres = 100.0;
+		
+		if ((profileProductName = element.attribute("profile")).isNull()) {
+			profile = new KisProfile();
+		}
+		else {
+			QPtrList<KisResource> resourceslist = KisFactory::rServer() -> profiles();
+			KisResource * resource;
+			for ( resource = resourceslist.first(); resource; resource = resourceslist.next() ) {
+				Q_ASSERT(dynamic_cast<KisProfile*>(resource));
+				profile = static_cast<KisProfile*>(resource);
+				if (profile -> productName() == profileProductName)
+					break;
+				profile = new KisProfile(); // Create invalid default profile.
+			}
+		}
 
 		if ((colorspacename = element.attribute("colorspacename")).isNull())
 		{
@@ -610,7 +652,11 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 				return 0;
 			}
 		}
+
 		img = new KisImage(this, width, height, KisColorSpaceRegistry::instance()->colorSpace(colorspacename), name);
+		img -> setDescription(description);
+		img -> setResolution(xres, yres);
+		img -> setProfile(profile);
 
 		for (node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
 			if (node.isElement()) {

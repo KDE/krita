@@ -32,6 +32,7 @@
 #include "kis_gradient.h"
 #include "kis_profile.h"
 
+// XXX: Encapsulate resources in shared pointers.
 class KisResourceServer : public QObject {
 	typedef QObject super;
 	Q_OBJECT

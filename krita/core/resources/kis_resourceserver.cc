@@ -51,7 +51,7 @@ KisResourceServer::~KisResourceServer()
 	m_pipebrushes.clear();
 	m_patterns.clear();
 	m_gradients.clear();
-	m_profiles.clear();
+//	m_profiles.clear(); // Profiles are encapsulated in shared pointers
 }
 
 

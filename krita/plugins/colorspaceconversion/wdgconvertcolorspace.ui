@@ -242,5 +242,13 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
         </widget>
     </grid>
 </widget>
+<tabstops>
+    <tabstop>cmbColorSpaces</tabstop>
+    <tabstop>cmbSourceProfile</tabstop>
+    <tabstop>cmbDestProfile</tabstop>
+    <tabstop>cmbDepth</tabstop>
+    <tabstop>chkAlpha</tabstop>
+    <tabstop>radioPerceptual</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

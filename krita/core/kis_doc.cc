@@ -373,7 +373,7 @@ DCOPObject *KisDoc::dcopObject()
 	return m_dcop;
 }
 
-bool KisDoc::initDoc(InitDocFlags flags, QWidget* /*parentWidget*/)
+bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
 	kdDebug() << "KisDoc::initDoc\n";
 	if (!init())
@@ -393,27 +393,30 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* /*parentWidget*/)
         QString file;
 	KoTemplateChooseDia::DialogType dlgtype;
 
-	if (flags != KoDocument::InitDocFileNew)
+ 	if (flags != KoDocument::InitDocFileNew) {
 		dlgtype = KoTemplateChooseDia::Everything;
-	else
-		dlgtype = KoTemplateChooseDia::OnlyTemplates;
+	} else {
+ 		dlgtype = KoTemplateChooseDia::OnlyTemplates;
+	}
 
 	KoTemplateChooseDia::ReturnType ret =
-		KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE,
-					    "*.kra", i18n("Krita"),
-					    dlgtype, "krita_template");
+		KoTemplateChooseDia::choose(KisFactory::global(), 
+					    file, 
+					    "application/x-krita",
+					    "*.kra", 
+					    i18n("Krita"),
+					    dlgtype, 
+					    "krita_template", 
+					    parentWidget);
 	setUndo(false);
 
 	if (ret == KoTemplateChooseDia::Template) {
-		kdDebug() << "Eek: template is hard-coded rgba" << endl;
-		KisConfig cfg;
-		QString name = nextImageName();
-		KisImageSP img = new KisImage(this, cfg.defImgWidth(), cfg.defImgHeight(), KisColorSpaceRegistry::singleton()->colorSpace("RGBA"), name);
-		img -> setResolution(100, 100); // XXX
-		KisLayerSP layer = new KisLayer(img, cfg.defLayerWidth(), cfg.defLayerHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 
-		layer -> setVisible(true);
-		addImage(img);
+		QFileInfo fileInfo( file );
+		QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kra" );
+		resetURL();
+		ok = loadNativeFormat( fileName );
+		emit imageListUpdated();
 		ok = true;
 	} else if (ret == KoTemplateChooseDia::File) {
 		KURL url( file );

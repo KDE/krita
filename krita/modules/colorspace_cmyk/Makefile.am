@@ -26,3 +26,4 @@ kritacmykplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFF
 kritacmykplugin_la_METASOURCES = AUTO
 
 
+SUBDIRS=templates

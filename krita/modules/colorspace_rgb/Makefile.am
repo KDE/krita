@@ -32,4 +32,4 @@ kritargbplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFI
 kritargbplugin_la_METASOURCES = AUTO
 #METASOURCES = AUTO # XXX: which of the two?
 
-
+SUBDIRS = templates

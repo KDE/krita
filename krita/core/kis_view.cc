@@ -1682,7 +1682,7 @@ void KisView::brushActivated(KisResource *brush)
 
 	if (m_brush )
 	{
-		if(item = m_brushMediator -> itemFor(m_brush))
+		if((item = m_brushMediator -> itemFor(m_brush)))
 		{
 			m_controlWidget -> slotSetBrush(item);
 		} else {

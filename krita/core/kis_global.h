@@ -152,7 +152,9 @@ enum CompositeOp {
 #if 0
 enum enumImgType {
 #endif
-// The following enum is keep to allow the loading of old documents in KisDoc::loadImage
+// The following enum is kept to allow the loading of old documents in KisDoc::loadImage
+// XXX: Before Koffice 1.4 release, remove. We do not need backwards compatibility since
+// we have no installed base.
 enum enumImgTypeDeprecated {
 	IMAGE_TYPE_UNKNOWN,
 	IMAGE_TYPE_INDEXED,

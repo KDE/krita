@@ -78,9 +78,9 @@ KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
 		if (rhs.m_mask)
 			m_mask = new KisMask(*rhs.m_mask);
 
-		m_hasSelection = false;
 		m_selection = 0;
 	}
+	m_hasSelection = false;
 }
 
 KisLayer::KisLayer(KisTileMgrSP tm, KisImage *img, const QString& name, QUANTUM opacity) : 

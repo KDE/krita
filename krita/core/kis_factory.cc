@@ -29,6 +29,8 @@
 #include "kis_resourceserver.h"
 #include "kis_doc.h"
 
+#define USE_TEMPLATES 0
+
 extern "C" 
 {
 	void* init_libkritapart()
@@ -83,30 +85,33 @@ KInstance* KisFactory::global()
 	if ( !s_global )
 	{
 		s_global = new KInstance(s_aboutData);
-
-		s_global->dirs()->addResourceType("kis",
+#if USE_TEMPLATES
+		s_global -> dirs() -> addResourceType("krita_template",
+					     KStandardDirs::kde_default("data") + "krita/templates");
+#endif
+		s_global -> dirs() -> addResourceType("kis",
 						  KStandardDirs::kde_default("data") + "krita/");
 
-		s_global->dirs()->addResourceType("kis_images",
+		s_global -> dirs() -> addResourceType("kis_images",
 						  KStandardDirs::kde_default("data") + "krita/images/");
 
-		s_global->dirs()->addResourceType("kis_brushes",
+		s_global -> dirs() -> addResourceType("kis_brushes",
 						  KStandardDirs::kde_default("data") + "krita/brushes/");
 
-		s_global->dirs()->addResourceType("kis_patterns",
+		s_global -> dirs() -> addResourceType("kis_patterns",
 						  KStandardDirs::kde_default("data") + "krita/patterns/");
 
-		s_global->dirs()->addResourceType("kis_gradients",
+		s_global -> dirs() -> addResourceType("kis_gradients",
 						  KStandardDirs::kde_default("data") + "krita/gradients/");
 
-		s_global->dirs()->addResourceType("kis_pics",
+		s_global -> dirs() -> addResourceType("kis_pics",
 						  KStandardDirs::kde_default("data") + "krita/pics/");
 
-		s_global->dirs()->addResourceType("toolbars",
+		s_global -> dirs() -> addResourceType("toolbars",
 						  KStandardDirs::kde_default("data") + "koffice/toolbar/");
 
 		// Tell the iconloader about share/apps/koffice/icons
-		s_global->iconLoader()->addAppDir("koffice");
+		s_global -> iconLoader() -> addAppDir("koffice");
 	}
 
 	return s_global;

@@ -26,3 +26,4 @@ kritagrayplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFF
 kritagrayplugin_la_METASOURCES = AUTO
 
 
+SUBDIRS=templates

@@ -16,6 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+#include <cfloat>
 #include <qimage.h>
 #include <qvaluevector.h>
 
@@ -24,50 +25,58 @@
 #include "kis_global.h"
 #include "kis_alpha_mask.h"
 
-KisAlphaMask::KisAlphaMask(const QImage& img) 
+KisAlphaMask::KisAlphaMask(const QImage& img, bool hasColor)
 {
-	m_scale = 1;
-	computeAlpha(img);
+	m_width = img.width();
+	m_height = img.height();
+
+	if (hasColor) {
+		copyAlpha(img);
+	}
+	else {
+		computeAlpha(img);
+	}
 }
 
-KisAlphaMask::KisAlphaMask(const QImage& img, double scale)
+KisAlphaMask::KisAlphaMask(const QImage& img)
 {
-	m_scale = scale;
-	QImage scaledImg = img.smoothScale((int)(img.width() * scale), 
-					   (int)(img.height() * scale));
-	computeAlpha(scaledImg);
+	m_width = img.width();
+	m_height = img.height();
+
+	if (!img.allGray()) {
+		copyAlpha(img);
+	}
+	else {
+		computeAlpha(img);
+	}
 }
 
-KisAlphaMask::KisAlphaMask(Q_INT32 width, Q_INT32 height, double scale)
+KisAlphaMask::KisAlphaMask(Q_INT32 width, Q_INT32 height)
 {
-	m_scale = scale;
-	m_scaledWidth = width;
-	m_scaledHeight = height;
+	m_width = width;
+	m_height = height;
+
 	m_data.resize(width * height, OPACITY_TRANSPARENT);
 }
 
 KisAlphaMask::~KisAlphaMask() 
-{}
+{
+}
 
 Q_INT32 KisAlphaMask::width() const
 {
-	return m_scaledWidth;
+	return m_width;
 }
 
 Q_INT32 KisAlphaMask::height() const
 {
-	return m_scaledHeight;
-}
-
-double KisAlphaMask::scale() const
-{
-	return m_scale;
+	return m_height;
 }
 
 QUANTUM KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
 {
-	if (y >= 0 && y < m_scaledHeight && x >= 0 && x < m_scaledWidth) {
-		return m_data[((y) * m_scaledWidth) + x];
+	if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
+		return m_data[(y * m_width) + x];
 	}
 	else {
 		kdDebug() << "oops \n";
@@ -77,8 +86,8 @@ QUANTUM KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
 
 void KisAlphaMask::setAlphaAt(Q_INT32 x, Q_INT32 y, QUANTUM alpha)
 {
-	if (y >= 0 && y < m_scaledHeight && x >= 0 && x < m_scaledWidth) {
-		m_data[((y) * m_scaledWidth) + x] = alpha;
+	if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
+		m_data[(y * m_width) + x] = alpha;
 	}
 	else {
 		kdDebug() << "oops \n";
@@ -87,8 +96,6 @@ void KisAlphaMask::setAlphaAt(Q_INT32 x, Q_INT32 y, QUANTUM alpha)
 
 void KisAlphaMask::copyAlpha(const QImage& img) 
 {
-	m_scaledWidth = img.width();
-	m_scaledHeight = img.height();
 	for (int y = 0; y < img.height(); y++) {
 		for (int x = 0; x < img.width(); x++) {
                         QRgb c = img.pixel(x,y);
@@ -101,9 +108,6 @@ void KisAlphaMask::copyAlpha(const QImage& img)
 
 void KisAlphaMask::computeAlpha(const QImage& img) 
 {
-	m_scaledWidth = img.width();
-	m_scaledHeight = img.height();
-
 	// The brushes are mostly grayscale on a white background,
 	// although some do have a colors. The alpha channel is seldom
 	// used, so we take the average gray value of this pixel of
@@ -112,17 +116,30 @@ void KisAlphaMask::computeAlpha(const QImage& img)
 	// completely transparent, but 255 corresponds to
 	// OPACITY_OPAQUE.
 
-	if (!img.allGray()) {
-		copyAlpha(img);
-	}
-	else {
-		// All gray -- any colour is alpha mask
-		for (int y = 0; y < img.height(); y++) {
-			for (int x = 0; x < img.width(); x++) {
-				m_data.push_back (255 - qRed(img.pixel(x,y)));
-			}
-			
+	for (int y = 0; y < img.height(); y++) {
+		for (int x = 0; x < img.width(); x++) {
+			m_data.push_back(255 - qRed(img.pixel(x, y)));
 		}
 	}
-	
 }
+
+KisAlphaMaskSP KisAlphaMask::interpolate(KisAlphaMaskSP mask1, KisAlphaMaskSP mask2, double t)
+{
+	Q_ASSERT((mask1 -> width() == mask2 -> width()) && (mask1 -> height() == mask2 -> height()));
+	Q_ASSERT(t > -DBL_EPSILON && t < 1 + DBL_EPSILON);
+
+	int width = mask1 -> width();
+	int height = mask1 -> height();
+	KisAlphaMaskSP outputMask = new KisAlphaMask(width, height);
+
+	for (int x = 0; x < width; x++) {
+		for (int y = 0; y < height; y++) {
+			QUANTUM d = static_cast<QUANTUM>((1 - t) * mask1 -> alphaAt(x, y) + t * mask2 -> alphaAt(x, y));
+			outputMask -> setAlphaAt(x, y, d);
+		}
+	}
+
+	return outputMask;
+}
+
+

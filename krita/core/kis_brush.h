@@ -67,7 +67,7 @@ public:
 	*/
 	virtual KisAlphaMaskSP mask(double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
 	// XXX: return non-tiled simple buffer
-	virtual KisLayerSP image(double pressure = PRESSURE_DEFAULT) const;
+	virtual KisLayerSP image(KisStrategyColorSpaceSP colorSpace, double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
 
 	void setHotSpot(KisPoint);
 	KisPoint hotSpot(double pressure = PRESSURE_DEFAULT) const;
@@ -84,15 +84,47 @@ public:
 	virtual enumBrushType brushType() const;
 
 protected:
-	void setImage(QImage& img) { m_img = img; };
+	void setImage(const QImage& img);
 	void setBrushType(enumBrushType type) { m_brushType = type; };
+	static double scaleForPressure(double pressure);
+
 private slots:
 	void ioData(KIO::Job *job, const QByteArray& data);
 	void ioResult(KIO::Job *job);
 
 private:
-	void createMasks(const QImage & img) const;
-	void createImages(const QImage & img) const;
+	class ScaledBrush {
+	public:
+		ScaledBrush();
+		ScaledBrush(KisAlphaMaskSP scaledMask, const QImage& scaledImage, double scale, double xScale, double yScale);
+
+		double scale() const { return m_scale; }
+		double xScale() const { return m_xScale; }
+		double yScale() const { return m_yScale; }
+		KisAlphaMaskSP mask() const { return m_mask; }
+		QImage image() const { return m_image; }
+
+	private:
+		KisAlphaMaskSP m_mask;
+		QImage m_image;
+		double m_scale;
+		double m_xScale;
+		double m_yScale;
+	};
+
+	void createScaledBrushes() const;
+
+	KisAlphaMaskSP scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const;
+	QImage scaleImage(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const;
+
+	static QImage scaleImage(const QImage& srcImage, int width, int height);
+	static QImage interpolate(const QImage& image1, const QImage& image2, double t);
+
+	static KisAlphaMaskSP scaleSinglePixelMask(double scale, QUANTUM maskValue, double subPixelX, double subPixelY);
+	static QImage scaleSinglePixelImage(double scale, QRgb pixel, double subPixelX, double subPixelY);
+
+	// Find the scaled brush(es) nearest to the given scale.
+	void findScaledBrushes(double scale, const ScaledBrush **aboveBrush, const ScaledBrush **belowBrush) const;
 
 	QByteArray m_data;
 	bool m_ownData;
@@ -101,13 +133,10 @@ private:
 	bool m_useColorAsMask;
 	bool m_hasColor;
 	QImage m_img;
-	mutable QValueVector<KisAlphaMaskSP> m_masks;
-	mutable QValueVector<KisLayerSP> m_images;
+	mutable QValueVector<ScaledBrush> m_scaledBrushes;
 
 	Q_UINT32 m_header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
 	Q_UINT32 m_version;      /*  brush file version #  */
-	Q_UINT32 m_width;        /*  width of brush  */
-	Q_UINT32 m_height;       /*  height of brush  */
 	Q_UINT32 m_bytes;        /*  depth of brush in bytes */
 	Q_UINT32 m_magic_number; /*  GIMP brush magic number  */
 

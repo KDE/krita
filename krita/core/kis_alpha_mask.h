@@ -24,30 +24,28 @@
 #include <ksharedptr.h>
 
 #include "kis_global.h"
+#include "kis_types.h"
 
 class KisAlphaMask : public KShared {
 	
  public:
 	/**
-	   Create an alpha mask based on the gray values of the
-	   specified QImage. If the QImage is not grayscale, you're
-	   buggered.
+	   Create an alpha mask based on the specified QImage. If the image is
+	   not a grayscale, the mask value is calculated from the effective grey
+	   level and alpha value.
 	*/
 	KisAlphaMask(const QImage& img);
 
 	/**
-	   Create an alpha mask based on the gray values of the
-	   specified QImage. If the QImage is not grayscale, you're
-	   buggered. The QImage is scaled using QImage::smoothScale,
-	   where the target w and h are computed by taking scale as a
-	   percentage.
+	   As above except quicker as the image does not need to be scanned
+	   to see if it has any colour pixels.
 	*/
-	KisAlphaMask(const QImage& img, double scale);
+	KisAlphaMask(const QImage& img, bool hasColor);
 
 	/**
 	   Create a transparent mask.
 	*/
-	KisAlphaMask(Q_INT32 width, Q_INT32 height, double scale);
+	KisAlphaMask(Q_INT32 width, Q_INT32 height);
 
 	virtual ~KisAlphaMask();
 
@@ -61,11 +59,6 @@ class KisAlphaMask : public KShared {
 	 */
    	Q_INT32 width() const;
 
-	/**
-	   @return the scale factor.
-	*/
-	double scale() const;
-	
 	/**
 	   @return the alpha value at the specified position.
 
@@ -83,16 +76,17 @@ class KisAlphaMask : public KShared {
 
 	void setAlphaAt(Q_INT32 x, Q_INT32 y, QUANTUM alpha);
 
-private:
+	// Create a new mask by interpolating between mask1 and mask2 as t
+	// goes from 0 to 1.
+	static KisAlphaMaskSP interpolate(KisAlphaMaskSP mask1, KisAlphaMaskSP mask2, double t);
 
+private:
 	void computeAlpha(const QImage& img);
 	void copyAlpha(const QImage& img);
 
 	QValueVector<QUANTUM> m_data;
-	double m_scale;
-	Q_INT32 m_scaledWidth;
-	Q_INT32 m_scaledHeight;
-
+	Q_INT32 m_width;
+	Q_INT32 m_height;
 };
 
 #endif // KIS_ALPHA_MASK_

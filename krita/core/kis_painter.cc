@@ -960,10 +960,7 @@ void KisPainter::paintAt(const KisPoint & pos,
 	splitCoordinate(pt.y(), &y, &yFraction);
 
 	if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
-		// XXX: No subpixel available for image brushes yet.
-		if (fabs(m_pressure - pressure) > DBL_EPSILON || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
-			m_dab = m_brush -> image(pressure);
-		}
+		m_dab = m_brush -> image(m_device -> colorStrategy(), pressure, xFraction, yFraction);
 	}
 	else {
 		KisAlphaMaskSP mask = m_brush -> mask(pressure, xFraction, yFraction);
@@ -1008,10 +1005,7 @@ void KisPainter::duplicateAt(const KisPoint &pos, const double pressure, const d
 	splitCoordinate(pt.y(), &y, &yFraction);
 
 	if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
-		// XXX: No subpixel available for image brushes yet.
-		if (fabs(m_pressure - pressure) > DBL_EPSILON || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
-			m_dab = m_brush -> image(pressure);
-		}
+		m_dab = m_brush -> image(m_device -> colorStrategy(), pressure, xFraction, yFraction);
 	}
 	else {
 		KisAlphaMaskSP mask = m_brush -> mask(pressure, xFraction, yFraction);
@@ -1096,9 +1090,7 @@ void KisPainter::penAt(const KisPoint & pos,
 	splitCoordinate(pt.y(), &y, &yFraction);
 
 	if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
-		if (fabs(m_pressure - pressure) > DBL_EPSILON || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
-			m_dab = m_brush -> image(pressure);
-		}
+		m_dab = m_brush -> image(m_device -> colorStrategy(), pressure);
 	}
 	else {
 		// Compute mask without sub-pixel positioning
@@ -1244,7 +1236,7 @@ void KisPainter::airBrushAt(const KisPoint &pos,
 	if (fabs(m_pressure - pressure) > DBL_EPSILON || m_brush -> brushType() == PIPE_MASK || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
 
 		if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
-			m_dab = m_brush -> image(pressure);
+			m_dab = m_brush -> image(m_device -> colorStrategy(), pressure);
 		}
 		else {
 			KisAlphaMaskSP mask = m_brush -> mask(pressure);

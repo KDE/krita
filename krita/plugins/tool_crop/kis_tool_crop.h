@@ -66,33 +66,35 @@ public:
 
 private:
 	void clearRect();
-	void paintOutline();
-	void paintOutline(QPainter& gc, const QRect& rc);
 	void cropLayer(KisLayerSP layer, QRect rc);
         QRegion handles(QRect rect);
         void paintOutlineWithHandles();
         void paintOutlineWithHandles(QPainter& gc, const QRect& rc);
         Q_INT32 mouseOnHandle (const QPoint currentViewPoint);
-        void cursor (Q_INT32 handle);
+        void setMoveResizeCursor (Q_INT32 handle);
 private slots:
 
 	void crop();
-	void setStartX(int x) { m_startPos.setX(x); paintOutline(); }
-	void setStartY(int y) { m_startPos.setY(y); paintOutline(); }
-	void setEndX(int x) { m_endPos.setX(x); paintOutline(); }
-	void setEndY(int y) { m_endPos.setY(y); paintOutline(); }
+	void setStartX(int x) { m_startPos.setX(x); paintOutlineWithHandles(); }
+	void setStartY(int y) { m_startPos.setY(y); paintOutlineWithHandles(); }
+	void setEndX(int x) { m_endPos.setX(x); paintOutlineWithHandles(); }
+	void setEndY(int y) { m_endPos.setY(y); paintOutlineWithHandles(); }
 
 private:
 	KisCanvasSubject *m_subject;
 	QPoint m_startPos;
-	QPoint m_endPos;
-	bool m_selecting;
+	QPoint m_oldStartPos;
+        QPoint m_endPos;
+	QPoint m_oldEndPos;
+        bool m_selecting;
 
 	QWidget * m_optWidget;
 
         Q_INT32 m_handleSize;
         QRegion m_handlesRegion;
-        bool m_handlesDrawn;
+        bool m_cropSelectionDrawn;
+        Q_INT32 m_dx, m_dy;
+        Q_INT32 m_type;
 
         enum handleType
         {

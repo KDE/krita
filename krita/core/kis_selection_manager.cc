@@ -416,41 +416,34 @@ void KisSelectionManager::clear()
 	r = r.normalize();
 
 
-// 	kdDebug() << "Normalized selection rect: "
-// 		  << r.x() << ", "
-// 		  << r.y() << ", "
-// 		  << r.width() << ", "
-// 		  << r.height() << "\n";
+//  	kdDebug() << "Normalized selection rect: "
+//  		  << r.x() << ", "
+//  		  << r.y() << ", "
+//  		  << r.width() << ", "
+//  		  << r.height() << "\n";
 
 	// XXX: make undoable
 
-	KisRectIterator layerIt = layer -> createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
-	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
+
+	KisRectIterator layerIt = layer -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
+ 	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
 
 	while (!layerIt.isDone()) {
-		KisPixel p = layer -> toPixel(layerIt);
-		KisPixel s = selection -> toPixel(selectionIt);
-		Q_UINT8 p_alpha, s_alpha;
-		p_alpha = p.alpha();
-		s_alpha = s.alpha();
-		kdDebug() << "Layer opacity: " << QString().setNum(p_alpha) << ", selectedness: " << QString().setNum(s_alpha) << "\n";
-		if (s_alpha > 0)
+ 		KisPixel p = layer -> toPixel(layerIt);
+ 		KisPixel s = selection -> toPixel(selectionIt);
+ 		Q_UINT8 p_alpha, s_alpha;
+ 		p_alpha = p.alpha();
+ 		s_alpha = s.alpha();
+		if (p_alpha < s_alpha)
+			p.alpha() = 0;
+		else
 			p.alpha() = p_alpha - s_alpha;
 
 		layerIt++;
-		selectionIt++;
+ 		selectionIt++;
 	}
 
 	KisPainter p(img -> activeDevice());
-
-
-
- 	p.bitBlt(r.x(), r.y(),
- 		 COMPOSITE_COPY_OPACITY, // XXX: Is a mere copy of transparency correct?
- 		 selection.data(),
- 		 r.x(), r.y(),
- 		 r.width(), r.height());
-	p.end();
 
 	layer -> removeSelection();
 	m_parent -> updateCanvas();

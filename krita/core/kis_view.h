@@ -49,7 +49,6 @@ class KisChannelView;
 class KisLabelBuilderProgress;
 class KisDoc;
 class KisGradient;
-class KisItemChooser;
 class KisListBox;
 class KisPattern;
 class KisResource;

@@ -66,7 +66,6 @@
 #include "kis_dlg_paintoffset.h"
 #include "kis_icon_item.h"
 #include "kis_image_magick_converter.h"
-#include "kis_itemchooser.h"
 #include "kis_factory.h"
 #include "kis_guide.h"
 #include "kis_painter.h"

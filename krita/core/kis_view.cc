@@ -2340,8 +2340,6 @@ void KisView::clipboardDataChanged()
 void KisView::imgUpdated(KisImageSP img, const QRect& rc)
 {
 	if (img == currentImg()) {
-
-		resizeEvent(0);
 		updateCanvas(rc);
 	}
 }

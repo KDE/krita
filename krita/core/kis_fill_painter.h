@@ -33,6 +33,7 @@
 #include <qstring.h>
 #include <qpainter.h>
 #include <qvaluevector.h>
+#include <qrect.h>
 
 #include <qcolor.h>
 #include <kcommand.h>
@@ -47,6 +48,7 @@
 #include "kis_iterators_infinite.h"
 #include "kis_selection.h"
 #include "kis_pixel.h"
+#include "kis_pattern.h"
 
 // XXX: Filling should set dirty rect.
 class KisFillPainter : public KisPainter
@@ -78,11 +80,11 @@ public:
         void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const QColor& c, QUANTUM opacity);
         void fillRect(const QRect& rc, const QColor& c, QUANTUM opacity);
 	/**
-	 * Fill a rectangle with a certain pattern. The pattern is given through a
-	 * KisIteratorInfiniteLinePixel set at the right point.
+	 * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
+	 * entire rectangle.
 	 **/
-	void fillRect(const QRect& rc, KisIteratorInfiniteLinePixel src);
-	void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, KisIteratorInfiniteLinePixel src);
+	void fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern& pattern);
+	void fillRect(const QRect& rc, KisPattern& pattern);
 
 	/**
 	 * Fills the enclosed area around the point with the set color. If there is a
@@ -124,6 +126,7 @@ private:
 	int m_size;
 	int m_currentPercent;
 	int m_width, m_height;
+	QRect m_rect;
 	bool* m_map;
 };
 
@@ -159,9 +162,9 @@ void KisFillPainter::fillRect(const QRect& rc, const QColor& c, QUANTUM opacity)
 }
 
 inline
-void KisFillPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, KisIteratorInfiniteLinePixel src)
+void KisFillPainter::fillRect(const QRect& rc, KisPattern& pattern)
 {
-	fillRect(QRect(x, y, w, h), src);
+	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), pattern);
 }
 
 inline

@@ -96,37 +96,31 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
 	}
 }
 
-#if 0 //AUTOLAYER
-void KisFillPainter::fillRect(const QRect& rc, KisIteratorInfiniteLinePixel src) {
-#if 0
-	KisIteratorLinePixel lineIt = m_device->iteratorPixelBegin( 0, rc.x(),
-			rc.x() + rc.width() - 1, rc.y());
-	KisIteratorLinePixel stopLine = m_device->iteratorPixelBegin( 0, 0,
-			-1, rc.y() + rc.height() - 1);
+void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern& pattern) {
+	KisLayerSP patternLayer = pattern.image(m_device->colorStrategy());
 
-	Q_INT32 depth = m_device -> depth();
+	int sx, sy, sw, sh;
 
-	while (lineIt < stopLine) {
-		KisIteratorPixel it = lineIt.begin();
-		// We know src is an InfiniteLine
-		KisIteratorPixel* srcLine = (KisIteratorPixel*)src;
-		KisIteratorPixel stop = lineIt.end();
-		while (it <= stop) {
-			KisPixel data = it;
-			KisPixel source = *srcLine;
-			for(int i = 0; i < depth; i++) {
-				data[i] = (QUANTUM) source[i];
-			}
-			++it;
-			srcLine->inc();
+	int y = y1;
+	sy = y % pattern.height();
+	while (y < y1 + h) {
+		int x = x1;
+		sx = x % pattern.width();
+		sh = QMIN(y + pattern.height() - (y1 + h), pattern.height());
+		if (sh <= 0)
+			sh = pattern.height();
+
+		while (x < x1 + w) {
+			sw = QMIN(x + pattern.width() - (x1 + w), pattern.width());
+			if (sw <= 0)
+				sw = pattern.width();
+			bitBlt(x, y, m_compositeOp, patternLayer.data(), m_opacity, sx, sy, sw, sh);
+			x += sw; sx = 0;
 		}
-		++src;
-		++lineIt;
-		delete srcLine;
+
+		y+=sh; sy = 0;
 	}
-#endif
 }
-#endif //AUTOLAYER
 
 // flood filling
 
@@ -134,7 +128,6 @@ void KisFillPainter::fillColor(int startX, int startY) {
 	genericFillStart(startX, startY);
 
 	// Now create a layer and fill it
-	// XXX: size of selection, not parent layer
 	KisLayerSP filled = new KisLayer(m_layer->colorStrategy(), "Fill Temporary Layer");
 	KisFillPainter painter(filled.data());
 	painter.fillRect(0, 0, m_width, m_height, m_paintColor);
@@ -144,21 +137,15 @@ void KisFillPainter::fillColor(int startX, int startY) {
 }
 
 void KisFillPainter::fillPattern(int startX, int startY) {
-#if 0
 	genericFillStart(startX, startY);
 
 	// Now create a layer and fill it
-	// XXX: size of selection, not parent layer
-	KisLayerSP filled = new KisLayer(m_layer->width(), m_layer->height(),
-		m_layer->colorStrategy(), "Fill Temporary Layer");
+	KisLayerSP filled = new KisLayer(m_layer->colorStrategy(), "Fill Temporary Layer");
 	KisFillPainter painter(filled.data());
-	painter.fillRect(QRect(0, 0, m_layer->width(), m_layer->height()), 
-		KisIteratorInfiniteLinePixel(m_pattern->image(m_layer->colorStrategy()).data(),
-			0, 0, 0) ); // XXX
+	painter.fillRect(0, 0, m_width, m_height, *m_pattern);
 	painter.end();
 
 	genericFillEnd(filled);
-#endif
 }
 
 void KisFillPainter::genericFillStart(int startX, int startY) {

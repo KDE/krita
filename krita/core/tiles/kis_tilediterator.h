@@ -35,6 +35,7 @@ protected:
 	Q_INT32 m_row;	// row in tilemgr
 	Q_INT32 m_col;	// col in tilemgr
 	Q_UINT8 *m_data;
+	Q_UINT8 *m_oldData;
 	Q_INT32 m_offset;
 	KisTile *m_tile;
 	bool m_writable;
@@ -42,7 +43,9 @@ protected:
 protected:
 	Q_UINT32 tileWidth() { return KisTile::WIDTH; };
 	Q_UINT32 tileHeight() { return KisTile::HEIGHT; };
-	KisTile *getTile(Q_INT32 col, Q_INT32 row) { return m_ktm->getTile(col, row, m_writable); };
+	Q_UINT32 xToCol(Q_UINT32 x) { return m_ktm->xToCol(x); };
+	Q_UINT32 yToRow(Q_UINT32 y) { return m_ktm->yToRow(y); };
+	void fetchTileData(Q_INT32 col, Q_INT32 row);
 	
 public:
 	KisTiledIterator( KisTiledDataManager *ktm);
@@ -59,7 +62,7 @@ public:
 	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
 	operator Q_UINT8 * ();
 
-	/// Returns a pointer to the pixel data as it was at the moment the iterator started.
+	/// Returns a pointer to the pixel data as it was at the moment tof he last memento creation.
 	Q_UINT8 * oldValue();
 };
 

@@ -137,9 +137,12 @@ private:
 private:
 
 	void ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, KisTile *refTile);
+	KisTile *getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def);
 	KisTile *getTile(Q_INT32 col, Q_INT32 row, bool writeAccess);
 	Q_UINT32 calcTileHash(Q_INT32 col, Q_INT32 row);
 	void updateExtent(Q_INT32 col, Q_INT32 row);
+	Q_UINT32 xToCol(Q_UINT32 x);
+	Q_UINT32 yToRow(Q_UINT32 y);
 };
 
 // during development the following line helps to check the interface is correct

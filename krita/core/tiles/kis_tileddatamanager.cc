@@ -96,6 +96,23 @@ KisTiledDataManager::~KisTiledDataManager()
 	delete m_defaultTile;
 }
 
+
+Q_UINT32 KisTiledDataManager::xToCol(Q_UINT32 x)
+{
+	// The hack with 16384 is to avoid negative division which is undefined in C++ and the most
+	// common result is not like what is desired.
+	// however the hack is not perfect either since for coords lower it gives the wrong result
+	return (x + 16384 * KisTile::WIDTH) / KisTile::WIDTH - 16384;
+}
+
+Q_UINT32 KisTiledDataManager::yToRow(Q_UINT32 y)
+{
+	// The hack with 16384 is to avoid negative division which is undefined in C++ and the most
+	// common result is not like what is desired.
+	// however the hack is not perfect either since for coords lower it gives the wrong result
+	return (y + 16384 * KisTile::HEIGHT) / KisTile::HEIGHT - 16384;
+}
+
 bool KisTiledDataManager::write(KoStore *store)
 {
 	char str[80];
@@ -381,6 +398,30 @@ KisTile *KisTiledDataManager::getTile(Q_INT32 col, Q_INT32 row, bool writeAccess
 		ensureTileMementoed(col, row, tileHash, tile);
 		
 	return tile;
+}
+
+KisTile *KisTiledDataManager::getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def)
+{
+	KisTile *tile = 0;
+	Q_UINT32 tileHash = calcTileHash(col, row);
+		
+	// Lookup tile in hash table of current memento
+	if(m_currentMemento)
+	{
+		tile = m_currentMemento->m_hashTable[tileHash];
+		while(tile != 0)
+		{
+			if(tile->getRow() == row && tile->getCol() == col)
+				break;
+		
+			tile = tile->getNext();
+		}
+	}
+	
+	if(! tile)
+		return def;
+	else
+		return tile;
 }
 
 Q_UINT8* KisTiledDataManager::pixel(Q_INT32 x, Q_INT32 y)

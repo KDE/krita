@@ -31,12 +31,9 @@ KisTiledHLineIterator::KisTiledHLineIterator( KisTiledDataManager *ndevice,  Q_I
 	m_y = y;
 	
 	// Find tile row,col matching x,y
-	// The hack with 16384 is to avoid negative division which is undefined in C++ and the most
-	// common result is not like what is desired.
-	// however the hack is not perfect either since for coords lower it gives the wrong result
-	m_row = (m_y + 16384 * tileHeight()) / tileHeight() - 16384;
-	m_leftCol = (m_x + 16384 * tileWidth()) / tileWidth() - 16384;
-	m_rightCol = (m_right + 16384 * tileWidth()) / tileWidth() - 16384;
+	m_row = yToRow(m_y);
+	m_leftCol = xToCol(m_x);
+	m_rightCol = xToCol(m_right);
 	m_col = m_leftCol;
 	
 	// calc limits within the tile
@@ -50,8 +47,7 @@ KisTiledHLineIterator::KisTiledHLineIterator( KisTiledDataManager *ndevice,  Q_I
 	
 	m_xInTile = m_leftInTile;
 	
-	m_tile = getTile(m_col, m_row);
-	m_data = m_tile -> data();
+	fetchTileData(m_col, m_row);
 	m_offset = m_depth * (m_yInTile * tileWidth() + m_xInTile);
 }
 ;
@@ -64,8 +60,7 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator ++ ()
 	if(m_xInTile >= m_rightInTile)
 	{
 		nextTile();
-		m_tile = getTile(m_col, m_row);
-		m_data = m_tile -> data();
+		fetchTileData(m_col, m_row);
 		m_xInTile =m_leftInTile;
 		m_offset = m_depth * (m_yInTile * tileWidth() + m_xInTile);
 	}

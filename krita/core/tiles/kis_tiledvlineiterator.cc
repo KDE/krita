@@ -31,12 +31,9 @@ KisTiledVLineIterator::KisTiledVLineIterator( KisTiledDataManager *ndevice,  Q_I
 	m_y = y;
 	
 	// Find tile row,col matching x,y
-	// The hack with 16384 is to avoid negative division which is undefined in C++ and the most
-	// common result is not like what is desired.
-	// however the hack is not perfect either since for coords lower it gives the wrong result
-	m_col = (m_x + 16384 * tileWidth()) / tileWidth() - 16384;
-	m_topRow = (m_y + 16384 * tileHeight()) / tileHeight() - 16384;
-	m_bottomRow = (m_bottom + 16384 * tileHeight()) / tileHeight() - 16384;
+	m_col = xToCol(m_x);
+	m_topRow = yToRow(m_y);
+	m_bottomRow = yToRow(m_bottom);
 	m_row = m_topRow;
 	
 	// calc limits within the tile
@@ -50,8 +47,7 @@ KisTiledVLineIterator::KisTiledVLineIterator( KisTiledDataManager *ndevice,  Q_I
 	
 	m_yInTile = m_topInTile;
 	
-	m_tile = getTile(m_col, m_row);
-	m_data = m_tile -> data();
+	fetchTileData(m_col, m_row);
 	m_offset = m_depth * (m_yInTile * tileWidth() + m_xInTile);
 }
 ;
@@ -64,8 +60,7 @@ KisTiledVLineIterator & KisTiledVLineIterator::operator ++ ()
 	if(m_yInTile >= m_bottomInTile)
 	{
 		nextTile();
-		m_tile = getTile(m_col, m_row);
-		m_data = m_tile -> data();
+		fetchTileData(m_col, m_row);
 		m_yInTile =m_topInTile;
 		m_offset = m_depth * (m_yInTile * tileWidth() + m_xInTile);
 	}

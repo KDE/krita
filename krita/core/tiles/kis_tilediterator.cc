@@ -44,5 +44,14 @@ KisTiledIterator::operator Q_UINT8 * ()
 
 Q_UINT8 * KisTiledIterator::oldValue ()
 {
-	// XXX: Implement!
+	return m_oldData + m_offset;
 }
+
+void KisTiledIterator::fetchTileData(Q_INT32 col, Q_INT32 row)
+{
+	KisTile *tile = m_ktm->getTile(col, row, m_writable);
+	m_data = tile->data();
+	
+	// set old data but default to current value
+	m_oldData = m_ktm->getOldTile(col, row, tile)->data();
+};

@@ -60,5 +60,10 @@ inline KisIteratorPixel::operator KisPixelRepresentation()
 	return KisPixelRepresentation( (QUANTUM*)(*this) );
 }
 
+inline KisQuantum KisIteratorPixel::operator[](int index)
+{
+	return KisPixelRepresentation( (QUANTUM*)(*this) )[index];
+}
+
 
 #endif

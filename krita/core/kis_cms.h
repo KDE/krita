@@ -21,7 +21,7 @@
 #ifndef __KIS_CMS_H_
 #define __KIS_CMS_H_
 
-#include <lcms.h>
+#include LCMS_HEADER
 
 #include <qptrdict.h>
 #include <qstring.h>

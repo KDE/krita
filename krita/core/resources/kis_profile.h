@@ -22,7 +22,7 @@
 #ifndef KIS_PROFILE_H
 #define KIS_PROFILE_H
 
-#include <lcms.h>
+#include LCMS_HEADER
 
 #include <qvaluevector.h>
 #include <qimage.h>

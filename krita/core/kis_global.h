@@ -18,7 +18,10 @@
  */
 #ifndef KISGLOBAL_H_
 #define KISGLOBAL_H_
-#include <lcms.h>
+
+#include <config.h>
+
+#include LCMS_HEADER
 #include <limits.h>
 #include <qglobal.h>
 #include <kglobal.h>

@@ -20,7 +20,9 @@
 
 #include <limits.h>
 #include <stdlib.h>
-#include <lcms.h>
+
+#include <config.h>
+#include LCMS_HEADER
 
 #include <qimage.h>
 

@@ -22,8 +22,8 @@
 
 #include <cfloat>
 #include <cmath>
-
-#include <lcms.h>
+#include <config.h>
+#include LCMS_HEADER
 
 #include <qimage.h>
 #include <qtextstream.h>

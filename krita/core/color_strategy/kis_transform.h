@@ -19,7 +19,7 @@
 #define KIS_TRANSFORM_H_
 
 #include "kis_global.h"
-#include <lcms.h>
+#include LCMS_HEADER
 
 class KisTransform {
 

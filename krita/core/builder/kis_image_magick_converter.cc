@@ -181,7 +181,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 			Q_INT32 w = TILE_WIDTH;
 			Q_INT32 h = TILE_HEIGHT;
 
-			m_img -> add(layer, -1);
+			m_img -> add(layer, 0);
 
 			for (Q_INT32 y = 0; y < m_img -> height(); y += TILE_HEIGHT) {
 				if ((y + h) > m_img -> height())

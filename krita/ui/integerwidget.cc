@@ -28,6 +28,20 @@
 
 #include "integerwidget.h"
 
+IntegerWidget::IntegerWidget( QWidget* parent, const char* name )
+  : QWidget( parent, name )
+{
+  layout = 0L;
+
+  spinBox = new KisSpinBox( 0, 100, 1, this, "spinbox" );
+  connect( spinBox, SIGNAL( valueChanged( int ) ), this, SLOT( setSliderValue( int ) ) );
+
+  slider = new QSlider( 0, 100, 1, 0, QSlider::Horizontal, this, "sld" );
+  connect( slider, SIGNAL( valueChanged( int ) ), spinBox, SLOT( setValue( int ) ) );
+
+  initGUI();
+}
+
 IntegerWidget::IntegerWidget( int min, int max, QWidget* parent, const char* name )
   : QWidget( parent, name )
 {

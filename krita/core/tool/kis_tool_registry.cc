@@ -70,3 +70,10 @@ vKisTool KisToolRegistry::createTools(KisCanvasSubject *subject) const
 
 	return tools;
 }
+
+KisTool * KisToolRegistry::createTool(KisCanvasSubject * subject, KisID & id) const
+{
+	KisToolFactorySP f = get(id);
+	KisTool * t = f -> createTool();
+	return t;
+}

@@ -24,25 +24,56 @@
 #include <qpixmap.h>
 #include <qimage.h>
 #include <qlabel.h>
+#include <qcolor.h>
+#include <qcursor.h>
 
 #include <knuminput.h>
 #include <klocale.h>
+#include <kdebug.h>
 
-#include "kis_types.h"
-
-#include "kis_layer.h"
-#include "kis_selection.h"
-#include "kis_paint_device.h"
-#include "kis_iterators_pixel.h"
+#include <kis_brush.h>
+#include <kis_canvas_observer.h>
+#include <kis_canvas_subject.h>
+#include <kis_cursor.h>
+#include <kis_filter.h>
+#include <kis_filter_registry.h>
+#include <kis_gradient.h>
+#include <kis_id.h>
+#include <kis_iterators_pixel.h>
+#include <kis_layer.h>
+#include <kis_paint_device.h>
+#include <kis_pattern.h>
+#include <kis_selection.h>
+#include <kis_selection_manager.h>
+#include <kis_tool_controller.h>
+#include <kis_tool.h>
+#include <kis_tool_registry.h>
+#include <kis_types.h>
+#include <kis_undo_adapter.h>
+#include <kis_view.h>
 
 #include "dlg_colorrange.h"
 #include "wdg_colorrange.h"
 
-
-DlgColorRange::DlgColorRange( KisLayerSP layer, QWidget *  parent, const char * name)
-	: super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok),
-	m_layer(layer)
+DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  parent, const char * name)
+	: super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok)
 {
+	m_layer = layer;
+	m_view = view;
+	
+	m_subject = view -> getCanvasSubject();
+	
+	m_canvasSubject = new ColorRangeCanvasSubject(m_view);
+	connect (m_canvasSubject, SIGNAL(sigColorPicked(QColor& )), this, SLOT(slotColorChanged(QColor& )));
+	KisID id = KisID("colorpicker", "");
+	m_picker = m_view -> toolRegistry() -> createTool((KisCanvasSubject*)m_canvasSubject, id);
+	
+	if (!m_picker) {
+		m_page -> bnPickerPlus -> hide();
+		m_page -> bnPicker -> hide();
+		m_page -> bnPickerMinus -> hide();
+		m_page -> cmbSelect -> removeItem(0);
+	}
 	m_page = new WdgColorRange(this, "color_range");
 	setCaption(i18n("Color Range"));
 	setMainWidget(m_page);
@@ -84,7 +115,7 @@ DlgColorRange::DlgColorRange( KisLayerSP layer, QWidget *  parent, const char * 
 	m_page -> bnLoad -> setEnabled(false);
 	m_page -> bnSaveColorRange -> setEnabled(false);
 	m_page -> cmbSelectionPreview -> setEnabled(false);
-        m_page -> sldrFuzziness->setValue( 150 );
+        m_page -> sldrFuzziness->setValue( 40 );
 
         if (m_layer) m_selection = m_layer -> selection();
         updatePreview();
@@ -103,35 +134,47 @@ void DlgColorRange::updatePreview()
 	
 	Q_INT32 x, y, w, h;
 	m_layer -> exactBounds(x, y, w, h);
-		
-	m_selection -> setMaskColor(Qt::blue);
-	QPixmap pix = QPixmap(m_selection -> convertToQImage(0, x, y, w, h).smoothScale(400, 400, QImage::ScaleMin));
-	m_selection -> setMaskColor(Qt::white); // XXX: Change when mask colour becomes configurable
+	QPixmap pix = QPixmap(m_selection -> convertToQImage(0, x, y, w, h).smoothScale(250, 250, QImage::ScaleMin));
 
 	m_page -> pixSelection -> setPixmap(pix);
 }
 
 void DlgColorRange::okClicked()
 {
-	accept();
+	hide();
 }
 
 
 void DlgColorRange::slotPickerPlusClicked()
 {
+	m_pickMode = PICK_PLUS;
+	m_picker -> activate();
+	m_page -> cmbSelect -> setCurrentItem(0);
+	m_canvasSubject -> setCanvasCursor(KisCursor::pickerPlusCursor());
 }
+
 
 void DlgColorRange::slotPickerClicked()
 {
+	m_pickMode = PICK;
+	m_page -> cmbSelect -> setCurrentItem(0);
+	m_picker -> activate();
+	m_canvasSubject -> setCanvasCursor(KisCursor::pickerCursor());
+}
+
+
+void DlgColorRange::slotPickerMinusClicked()
+{
+	m_pickMode = PICK_MINUS;
+	m_page -> cmbSelect -> setCurrentItem(0);
+	m_picker -> activate();
+	m_canvasSubject -> setCanvasCursor(KisCursor::pickerMinusCursor());
 }
 
 void DlgColorRange::slotLoad()
 {
 }
 
-void DlgColorRange::slotPickerMinusClicked()
-{
-}
 
 void DlgColorRange::slotSave()
 {
@@ -153,13 +196,26 @@ void DlgColorRange::slotSliderMoved(int value)
 	m_page -> intFuzziness -> setValue(value);
 }
 
-void DlgColorRange::slotSelectionTypeChanged(int /*index*/)
+void DlgColorRange::slotSelectionTypeChanged(int index)
 {
+	
+	if (index != 0) {
+		if (m_picker) m_picker -> clear();
+	}
 }
 
 void DlgColorRange::slotPreviewTypeChanged(int /*index*/)
 {
 }
 
-
+void DlgColorRange::slotColorChanged(const QColor & c)
+{
+	kdDebug() << "Color changed to " << c << "\n";
+	if (m_pickMode == PICK) {
+	}
+	else if (m_pickMode == PICK_PLUS) {
+	}
+	else if (m_pickMode == PICK_MINUS) {
+	}
+}
 #include "dlg_colorrange.moc"

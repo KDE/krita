@@ -55,6 +55,8 @@ public:
 	static QCursor eraserCursor();        // eraser tool cursor
 	static QCursor fillerCursor();        // filler tool cursor
 	static QCursor pickerCursor();        // color picker cursor
+	static QCursor pickerPlusCursor();        // color picker cursor
+	static QCursor pickerMinusCursor();        // color picker cursor
 	static QCursor colorChangerCursor();  // color changer tool cursor
 	static QCursor selectCursor();        // select cursor
 	static QCursor zoomCursor();          // zoom tool cursor

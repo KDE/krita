@@ -190,6 +190,9 @@ protected:
 
 	virtual void resizeEvent(QResizeEvent*);
 
+public:
+	KisCanvasSubject * getCanvasSubject() { return this; };
+	
 private:
 	// Implement KisCanvasSubject
 	virtual void attach(KisCanvasObserver *observer);
@@ -210,6 +213,12 @@ private:
 	virtual KoDocument *document() const;
 	// Sets the specified cursor; returns the previous cursor
 	virtual QCursor setCanvasCursor(const QCursor & cursor);
+
+public:
+
+	KisCanvasControllerInterface * getCanvasController() { return this; };
+
+
 private:
 	// Implement KisCanvasControllerInterface
 	virtual QWidget *canvas() const;

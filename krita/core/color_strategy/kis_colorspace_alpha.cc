@@ -112,9 +112,9 @@ QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q
 		// XXX: for previews of the mask, it is be handy to
 		// make this always black.
 
-		*( j + PIXEL_RED )   = 0;
-		*( j + PIXEL_GREEN ) = 0;
-		*( j + PIXEL_BLUE )  = 0;
+		*( j + PIXEL_RED )   = *( data + i );
+		*( j + PIXEL_GREEN ) = *( data + i );
+		*( j + PIXEL_BLUE )  = *( data + i );
 		*( j + PIXEL_ALPHA ) = *( data + i );
 
 		i += 1;

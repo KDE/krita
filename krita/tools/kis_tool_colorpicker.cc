@@ -32,6 +32,7 @@
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_colorpicker.moc"
 #include "kis_button_press_event.h"
+#include "kis_canvas_subject.h"
 
 KisToolColorPicker::KisToolColorPicker()
 {

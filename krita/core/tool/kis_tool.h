@@ -72,6 +72,9 @@ public:
 	virtual QWidget* optionWidget() = 0;
 	KRadioAction *action() const { return m_action; }
 
+public slots:
+	virtual void activate() = 0;
+	
 private:
 	KisTool(const KisTool&);
 	KisTool& operator=(const KisTool&);

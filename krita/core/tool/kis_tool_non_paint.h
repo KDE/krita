@@ -69,11 +69,11 @@ public:
 	virtual QWidget* createOptionWidget(QWidget* parent) ;
 	virtual QWidget* optionWidget();
 
+public slots:
+	virtual void activate();
+
 protected:
 	void notifyModified() const;
-
-protected slots:
-	virtual void activate();
 
 private:
 	QCursor m_cursor;

@@ -41,7 +41,8 @@ public:
 // 	static KisToolRegistry* instance();
 
 	vKisTool createTools(KisCanvasSubject *subject) const;
-
+	KisTool * createTool(KisCanvasSubject * subject, KisID & id) const;
+	
 // private:
 //     static KisToolRegistry *m_singleton;
 };

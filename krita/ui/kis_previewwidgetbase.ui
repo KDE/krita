@@ -21,68 +21,87 @@
     <property name="caption">
         <string>PreviewWidgetBase</string>
     </property>
-    <grid>
+    <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>unnamed</cstring>
+            <cstring>layout1</cstring>
         </property>
-        <widget class="QLayoutWidget" row="0" column="1">
+        <property name="geometry">
+            <rect>
+                <x>171</x>
+                <y>55</y>
+                <width>46</width>
+                <height>62</height>
+            </rect>
+        </property>
+        <vbox>
             <property name="name">
-                <cstring>layout1</cstring>
+                <cstring>unnamed</cstring>
             </property>
-            <vbox>
+            <widget class="QPushButton">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>m_zoomInButton</cstring>
                 </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>m_zoomInButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>+</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>m_zoomOutButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>-</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-        <widget class="KisPreviewView" row="0" column="0">
-            <property name="name">
-                <cstring>m_original</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>7</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-        </widget>
-        <widget class="KisPreviewView" row="0" column="2">
-            <property name="name">
-                <cstring>m_preview</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>7</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-        </widget>
-    </grid>
+                <property name="text">
+                    <string>+</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>m_zoomOutButton</cstring>
+                </property>
+                <property name="text">
+                    <string>-</string>
+                </property>
+            </widget>
+        </vbox>
+    </widget>
+    <widget class="KisPreviewView">
+        <property name="name">
+            <cstring>m_original</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>11</y>
+                <width>154</width>
+                <height>151</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+    </widget>
+    <widget class="KisPreviewView">
+        <property name="name">
+            <cstring>m_preview</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>223</x>
+                <y>11</y>
+                <width>154</width>
+                <height>151</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+    </widget>
 </widget>
 <customwidgets>
     <customwidget>
         <class>KisPreviewView</class>
-        <header location="local">kis_previewwidget.h</header>
+        <header location="local">kis_previewview.h</header>
         <sizehint>
             <width>-1</width>
             <height>-1</height>

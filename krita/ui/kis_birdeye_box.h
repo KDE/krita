@@ -20,7 +20,7 @@
 #ifndef KIS_BIRDEYE_BOX_H
 #define KIS_BIRDEYE_BOX_H
 
-#include "dialogs/wdgbirdeye.h"
+#include "wdgbirdeye.h"
 
 class QPixmap;
 

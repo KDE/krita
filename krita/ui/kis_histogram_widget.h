@@ -23,7 +23,7 @@
 
 #include "kis_types.h"
 #include "kis_channelinfo.h"
-#include "dialogs/wdghistogram.h"
+#include "wdghistogram.h"
 
 /**
  * The histogram widget takes a paint device or an image and

@@ -6,11 +6,10 @@ INCLUDES = -I$(srcdir)/../core \
   -I$(srcdir)/../core/tiles \
   -I$(srcdir)/../core/tool \
   -I$(srcdir)/../core/paintop \
-  -I$(srcdir)/ui/dialogs \
   $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
 
 noinst_LTLIBRARIES = libkisui.la
-libkisui_la_LIBADD = ./labels/libkislabel.la ./dialogs/libkisdialogs.la ./widgets/libkiswidgets.la
+libkisui_la_LIBADD = ./labels/libkislabel.la ./widgets/libkiswidgets.la
 libkisui_la_SOURCES = kis_dlg_preferences.cc \
     kis_dlg_progress.cc \
     kis_canvas.cc \
@@ -43,7 +42,18 @@ libkisui_la_SOURCES = kis_dlg_preferences.cc \
     kis_double_widget.cc \
     kis_dlg_apply_profile.cc \
     kis_dockframedocker.cc \
-    kis_basedocker.cc
+    kis_basedocker.cc \
+    kis_previewview.cc \
+    wdgmatrix.ui \
+    wdghistogram.ui \
+    kis_previewwidgetbase.ui \
+    wdgselectionoptions.ui \
+    kis_preview_dialog.ui \
+    wdgnewimage.ui \
+    wdgcolorsettings.ui \
+    wdgapplyprofile.ui \
+    wdgdockertab.ui
+
 
 noinst_HEADERS = kis_dlg_preferences.h \
     kis_dlg_progress.h \
@@ -76,9 +86,17 @@ noinst_HEADERS = kis_dlg_preferences.h \
     kis_double_widget.h \
     kis_dlg_apply_profile.h \
     kis_dockframedocker.h \
-    kis_basedocker.h
+    kis_basedocker.h \
+    wdgmatrix.h \
+    wdghistogram.h \
+    kis_previewwidgetbase.h \
+    wdgnewimage.h \
+    wdgcolorsettings.h \
+    wdgapplyprofile.h \
+    wdgdockertab.h
+
 
 libkisui_la_METASOURCES = AUTO
-SUBDIRS = labels dialogs widgets
+SUBDIRS = labels widgets
 
 

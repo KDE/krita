@@ -25,7 +25,7 @@
 #include <qcolor.h>
 
 #include "kis_global.h"
-#include "dialogs/wdgnewimage.h"
+#include "wdgnewimage.h"
 
 #include "kis_types.h"
 #include "kis_image.h"

@@ -39,7 +39,7 @@
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_dlg_preferences.h"
-#include "dialogs/wdgcolorsettings.h"
+#include "wdgcolorsettings.h"
 #include "kis_resourceserver.h"
 #include "kis_factory.h"
 #include "kis_colorspace_registry.h"

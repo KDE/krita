@@ -58,11 +58,10 @@ KisEmbossFilter::KisEmbossFilter(KisView * view) : KisFilter(name(), view)
 
 void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect, KisTileCommand* ktc)
 {
-#if 0 // AUTO_LAYERS
 	kdDebug() << "Embossfilter called!\n";
         
-        Q_INT32 width = src->width();
-        Q_INT32 height = src->height();
+        Q_INT32 x, y, width, height;
+	src.extent(x, y, width, height);
         
         // create a QUANTUM array that holds the data the filter works on
         
@@ -139,7 +138,6 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 		++lineIt;
 		++dstLineIt;
 	}
-#endif
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 
-#include "dialogs/wdgmatrix.h"
+#include "wdgmatrix.h"
 #include "kis_dlg_transform.h"
 
 /**

@@ -19,6 +19,7 @@
 #ifndef _KIS_AUTOBRUSH_H_
 #define _KIS_AUTOBRUSH_H_
 
+#include <qobject.h>
 #include "kis_wdg_autobrush.h"
 #include "kis_brush.h"
 

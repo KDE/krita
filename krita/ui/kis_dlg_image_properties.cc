@@ -33,7 +33,7 @@
 
 #include "kis_colorspace_registry.h"
 #include "kis_dlg_image_properties.h"
-#include "dialogs/wdgnewimage.h"
+#include "wdgnewimage.h"
 #include "kis_profile.h"
 #include "kis_resource.h"
 #include "kis_resourceserver.h"

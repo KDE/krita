@@ -27,62 +27,9 @@
 
 #include "kis_types.h"
 
-#include "dialogs/kis_previewwidgetbase.h"
+#include "kis_previewwidgetbase.h"
 
 class KisUndoAdapter;
-
-/**
- * A Widget simply displaying a preview layer
- **/
-class KisPreviewView : public QWidget
-{
-	Q_OBJECT
-
-public:
-        KisPreviewView(QWidget* parent = 0, const char * name = 0, WFlags f = 0);
-        void setSourceLayer(KisLayerSP s);
-        KisLayerSP getSourceLayer();
-        KisLayerSP getPreviewLayer();
-        double getZoom() { return m_zoom; }
-        QPoint getPos() { return m_pos; }
-        void updateView();
-
-public slots:
-	void setZoom(double zoom);
-        void zoomIn();
-        void zoomOut();
-        void updatedPreview();
-        void slotStartMoving(QPoint startDrag);
-        void slotMoving(QPoint zoomedPos);
-        void slotMoved(QPoint zoomedPos);
-signals:
-        /** The moving/creation of this widget has finished; effects could be applied to it now */
-        void updated();
-        void startMoving(QPoint);
-        /**
-         * The widget is currently moving its layer.
-         * @return the difference (in x and y) between the starting position and the current one
-         */
-        void moving(QPoint);
-        void moved(QPoint);
-protected:
-        virtual void paintEvent(QPaintEvent*);
-        virtual void mousePressEvent(QMouseEvent * e);
-        virtual void mouseMoveEvent(QMouseEvent * e);
-        virtual void mouseReleaseEvent(QMouseEvent * e);
-        virtual void resizeEvent(QResizeEvent *e);
-private:
-        void render(QPainter &painter, KisImageSP image);
-        void updateView(QPoint delta);
-        void clampDelta(QPoint& delta);
-
-        KisLayerSP m_sourcelayer, m_clippedview;
-        KisImageSP m_image;
-        KisUndoAdapter* m_undo;
-        QPoint m_startDrag, m_pos;
-        double m_zoom;
-        bool m_moving;
-};
 
 /**
  * A widget that can be used by plugins to show a preview of the effect of the

@@ -23,7 +23,7 @@
 #include <kdialogbase.h>
 
 #include "kis_global.h"
-#include "dialogs/wdgapplyprofile.h"
+#include "wdgapplyprofile.h"
 
 #include "kis_types.h"
 #include "kis_image.h"

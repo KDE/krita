@@ -15,9 +15,8 @@ INCLUDES = -I$(srcdir)/../core \
 	-I$(srcdir)/../core/paintop \
 	-I$(srcdir)/../ui \
 	-I$(srcdir)/../paintops \
-	-I$(srcdir)/../ui/dialogs \
 	-I$(srcdir)/../ui/widgets \
-	-I../ui/dialogs \
+	-I../ui \
 	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../core/strategy/ $(all_includes)
 
 kritadefaulttools_la_SOURCES = \

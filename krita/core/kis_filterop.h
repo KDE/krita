@@ -29,6 +29,18 @@ class KisPoint;
 class KisPainter;
 class KisFilterConfiguration;
 
+class KisFilterOpFactory  : public KisPaintOpFactory  {
+
+public:
+	KisFilterOpFactory() {}
+	virtual ~KisFilterOpFactory() {}
+
+	virtual KisPaintOp * createOp(KisPainter * painter);
+	virtual QString name() { return QString("filter"); }
+};
+
+
+
 class KisFilterOp : public KisPaintOp {
 
 	typedef KisPaintOp super;

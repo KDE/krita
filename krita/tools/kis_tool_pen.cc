@@ -35,7 +35,8 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
-#include "kis_penop.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
 
 KisToolPen::KisToolPen()
         : super(i18n("Pen"))
@@ -51,7 +52,7 @@ KisToolPen::~KisToolPen()
 void KisToolPen::initPaint(KisEvent *e)
 {
 	super::initPaint(e);
-	KisPaintOp * op = new KisPenOp(painter());
+	KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("pen", painter());
 	painter() -> setPaintOp(op); // Painter gets ownership
 }
 

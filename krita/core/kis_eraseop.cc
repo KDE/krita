@@ -33,6 +33,13 @@
 
 #include "kis_eraseop.h"
 
+KisPaintOp * KisEraseOpFactory::createOp(KisPainter * painter)
+{ 
+	KisPaintOp * op = new KisEraseOp(painter); 
+	return op; 
+}
+
+
 KisEraseOp::KisEraseOp(KisPainter * painter)
 	: super(painter)
 {

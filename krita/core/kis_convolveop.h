@@ -24,9 +24,22 @@
 #define KIS_CONVOLVEOP_H_
 
 #include "kis_paintop.h"
+#include "kis_types.h"
 
 class KisPoint;
 class KisPainter;
+
+
+class KisConvolveOpFactory : public KisPaintOpFactory  {
+
+public:
+	KisConvolveOpFactory() {}
+	virtual ~KisConvolveOpFactory() {}
+
+	virtual KisPaintOp * createOp(KisPainter * painter);
+	virtual QString name() { return QString("convolve"); }
+};
+
 
 class KisConvolveOp : public KisPaintOp {
 

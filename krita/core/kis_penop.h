@@ -24,9 +24,21 @@
 #define KIS_PENOP_H_
 
 #include "kis_paintop.h"
+#include "kis_types.h"
 
 class KisPoint;
 class KisPainter;
+
+class KisPenOpFactory  : public KisPaintOpFactory  {
+
+public:
+	KisPenOpFactory() {}
+	virtual ~KisPenOpFactory() {}
+
+	virtual KisPaintOp * createOp(KisPainter * painter);
+	virtual QString name() { return QString("pen"); }
+};
+
 
 class KisPenOp : public KisPaintOp {
 

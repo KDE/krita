@@ -80,8 +80,11 @@ typedef KisSharedPtrVector<KisHistogram> vKisHistogramSP;
 typedef vKisHistogramSP::iterator vKisHistogramSP_it;
 typedef vKisHistogramSP::const_iterator vKisHistogramSP_cit;
 
-class KisPaintOpMaker;
-typedef KSharedPtr<KisPaintOpMaker> KisPaintOpMakerSP;
+// class KisPaintOp;
+// typedef KSharedPtr<KisPaintOp> KisPaintOpSP;
+
+class KisPaintOpFactory;
+typedef KSharedPtr<KisPaintOpFactory> KisPaintOpFactorySP;
 
 class KisPluginRegistry;
 typedef KSharedPtr<KisPluginRegistry> KisPluginRegistrySP;

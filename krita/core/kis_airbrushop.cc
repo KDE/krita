@@ -22,7 +22,6 @@
 
 #include <qrect.h>
 
-
 #include <kdebug.h>
 
 #include "kis_vec.h"
@@ -34,6 +33,13 @@
 #include "kis_paintop.h"
 
 #include "kis_airbrushop.h"
+
+KisPaintOp * KisAirbrushOpFactory::createOp(KisPainter * painter)
+{ 
+	KisPaintOp * op = new KisAirbrushOp(painter); 
+	return op; 
+}
+
 
 KisAirbrushOp::KisAirbrushOp(KisPainter * painter)
 	: super(painter) 

@@ -36,7 +36,8 @@
 #include "kis_cmb_composite.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
-#include "kis_eraseop.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
 #include "kis_move_event.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
@@ -123,8 +124,7 @@ void KisToolSelectBrush::initPaint(KisEvent */*e*/)
 		m_painter -> setBrush(m_subject -> currentBrush());
 		m_painter -> setOpacity(OPACITY_TRANSPARENT);
 		m_painter -> setCompositeOp(COMPOSITE_OVER);
-
-		KisPaintOp * op = new KisEraseOp(painter());
+		KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("eraser", painter());
 		painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 	}
 	// Set the cursor -- ideally. this should be a mask created from the brush,

@@ -33,7 +33,8 @@
 #include "kis_tool_airbrush.h"
 #include "kis_view.h"
 #include "kis_event.h"
-#include "kis_airbrushop.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
 
 namespace {
 	Q_INT32 RATE = 100;
@@ -67,7 +68,7 @@ void KisToolAirBrush::initPaint(KisEvent *e)
 {
 	super::initPaint(e);
 	m_timer -> start( RATE );
-	KisPaintOp * op = new KisAirbrushOp(painter());
+	KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("airbrush", painter());
 	painter() -> setPaintOp(op); // Painter takes over ownership of paintop
 }
 

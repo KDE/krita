@@ -29,7 +29,8 @@
 
 #include "integerwidget.h"
 #include "kis_brush.h"
-#include "kis_brushop.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
 #include "kis_cmb_composite.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
@@ -59,7 +60,7 @@ void KisToolBrush::initPaint(KisEvent *e)
 {
 	super::initPaint(e);
 
-	KisPaintOp * op = new KisBrushOp(painter());
+	KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("paintbrush", painter());
 	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 }
 

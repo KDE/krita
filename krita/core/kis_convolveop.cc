@@ -32,6 +32,14 @@
 
 #include "kis_convolveop.h"
 
+
+KisPaintOp * KisConvolveOpFactory::createOp(KisPainter * painter)
+{ 
+	KisPaintOp * op = new KisConvolveOp(painter); 
+	return op; 
+}
+
+
 KisConvolveOp::KisConvolveOp(KisPainter * painter)
 	: super(painter) 
 {
@@ -46,4 +54,5 @@ void KisConvolveOp::paintAt(const KisPoint &/*pos*/,
 			    const double /*xTilt*/,
 			    const double /*yTilt*/)
 {
+	// XXX: use convolve painter here.}
 }

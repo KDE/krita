@@ -43,6 +43,8 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_filterop.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
 
 KisToolFilter::KisToolFilter() 
 	: super(i18n("Filter tool")), m_filterConfigurationWidget(0)
@@ -73,11 +75,14 @@ void KisToolFilter::setup(KActionCollection *collection)
 void KisToolFilter::initPaint(KisEvent *e) 
 {
 	super::initPaint(e);
-
-	KisFilterOp* op = new KisFilterOp(painter());
+	KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("filter", painter());
 	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 	painter() -> setFilter( m_filter );
-	op -> setFilterConfiguration( m_filter -> configuration( m_filterConfigurationWidget ) );
+	// XXX: Isn't there a better way to set the config? The filter config widget needs to
+	// to go into the tool options widget, and just the data carried over to the filter.
+	// I've got a bit of a problem with core classes having too much GUI about them.
+	// BSAR.
+	dynamic_cast<KisFilterOp *>(op) -> setFilterConfiguration( m_filter -> configuration( m_filterConfigurationWidget ) );
 }
 
 QWidget* KisToolFilter::createOptionWidget(QWidget* parent)

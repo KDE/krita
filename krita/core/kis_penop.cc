@@ -34,6 +34,14 @@
 
 #include "kis_penop.h"
 
+
+KisPaintOp * KisPenOpFactory::createOp(KisPainter * painter)
+{ 
+	KisPaintOp * op = new KisPenOp(painter); 
+	return op; 
+}
+
+
 KisPenOp::KisPenOp(KisPainter * painter)
 	: super(painter) 
 {

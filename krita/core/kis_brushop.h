@@ -24,10 +24,21 @@
 #define KIS_BRUSHOP_H_
 
 #include "kis_paintop.h"
+#include "kis_types.h"
 
 class KisPoint;
 class KisPainter;
 
+
+class KisBrushOpFactory : public KisPaintOpFactory  {
+
+public:
+	KisBrushOpFactory() {}
+	virtual ~KisBrushOpFactory() {}
+
+	virtual KisPaintOp * createOp(KisPainter * painter);
+	virtual QString name() { return QString("paintbrush"); }
+};
 
 class KisBrushOp : public KisPaintOp {
 

@@ -23,13 +23,16 @@
 #ifndef KIS_PAINTOP_H_
 #define KIS_PAINTOP_H_
 
+#include <ksharedptr.h>
+
 #include "kis_types.h"
 
 class KisPoint;
 class KisAlphaMask;
 class KisPainter;
 
-class KisPaintOp 
+
+class KisPaintOp
 {
 
 public:
@@ -56,4 +59,14 @@ protected:
 
 };
 
+class KisPaintOpFactory  : public KShared
+{
+       
+public:
+	KisPaintOpFactory() {};
+	virtual ~KisPaintOpFactory() {};
+	
+	virtual KisPaintOp * createOp(KisPainter * painter) = 0;
+	virtual QString name() { return QString("Abstract PaintOp"); }
+};
 #endif // KIS_PAINTOP_H_

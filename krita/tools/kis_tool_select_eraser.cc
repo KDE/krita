@@ -30,7 +30,8 @@
 
 #include "integerwidget.h"
 #include "kis_brush.h"
-#include "kis_brushop.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_cmb_composite.h"
@@ -79,7 +80,7 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 		// selection brush is an eraser. That's because
 		// transparent == selected in KisSelection until we
 		// have a proper alpha colour model.
-		KisPaintOp * op = new KisBrushOp(painter()); 
+		KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("paintbrush", painter());
 		painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 	}
 	// Set the cursor -- ideally. this should be a mask created from the brush,

@@ -21,36 +21,27 @@
 
 #include "kis_types.h"
 #include "kis_generic_registry.h"
+#include "kis_paintop.h"
 
-class KisPaintOp;
 class QStringList;
 
-class KisPaintOpMaker {
-	KisPaintOpMaker() {};
-	virtual ~KisPaintOpMaker() {};
-
-	KisPaintOp paintOp() = 0;
-};
-
-class KisPaintopRegistry : public KisGenericRegistry<KisPaintOpMakerSP> {
+class KisPaintOpRegistry : public KisGenericRegistry<KisPaintOpFactorySP> {
 
 public:
-	virtual ~KisPaintopRegistry();
+	virtual ~KisPaintOpRegistry();
+
+	KisPaintOp * paintOp(const QString & name, KisPainter * painter) const;
 
 public:
-	KisPaintOp paintOp(const QString& name) const;
-	QStringList listPaintopNames() const;
-
-public:
-	static KisPaintopRegistry* singleton();
+	static KisPaintOpRegistry* singleton();
 	
 private:
-	KisPaintopRegistry();
-	KisPaintopRegistry(const KisPaintopRegistry&);
-	KisPaintopRegistry operator=(const KisPaintopRegistry&);
+	KisPaintOpRegistry();
+	KisPaintOpRegistry(const KisPaintOpRegistry&);
+	KisPaintOpRegistry operator=(const KisPaintOpRegistry&);
 
 private:
-	static KisPaintopRegistry *m_singleton;
+	static KisPaintOpRegistry *m_singleton;
 };
 
 #endif // KIS_PAINTOP_REGISTRY_H_

@@ -24,9 +24,20 @@
 #define KIS_DUPLICATEOP_H_
 
 #include "kis_paintop.h"
+#include "kis_types.h"
 
 class KisPoint;
 class KisPainter;
+
+class KisDuplicateOpFactory  : public KisPaintOpFactory  {
+
+public:
+	KisDuplicateOpFactory() {}
+	virtual ~KisDuplicateOpFactory() {}
+
+	virtual KisPaintOp * createOp(KisPainter * painter);
+	virtual QString name() { return QString("duplicate"); }
+};
 
 class KisDuplicateOp : public KisPaintOp {
 

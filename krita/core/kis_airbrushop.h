@@ -24,9 +24,22 @@
 #define KIS_AIRBRUSHOP_H_
 
 #include "kis_paintop.h"
+#include "kis_types.h"
 
 class KisPoint;
 class KisPainter;
+
+class KisAirbrushOpFactory : public KisPaintOpFactory {
+
+public:
+	KisAirbrushOpFactory() {}
+	virtual ~KisAirbrushOpFactory() {}
+
+	virtual KisPaintOp * createOp(KisPainter * painter);
+	virtual QString name() { return QString("airbrush"); }
+};
+
+
 
 class KisAirbrushOp : public KisPaintOp {
 

@@ -34,6 +34,14 @@
 
 #include "kis_filterop.h"
 
+
+KisPaintOp * KisFilterOpFactory::createOp(KisPainter * painter)
+{ 
+	KisPaintOp * op = new KisFilterOp(painter); 
+	return op; 
+}
+
+
 KisFilterOp::KisFilterOp(KisPainter * painter)
 	: super(painter) 
 {

@@ -33,6 +33,12 @@
 
 #include "kis_brushop.h"
 
+KisPaintOp * KisBrushOpFactory::createOp(KisPainter * painter)
+{ 
+	KisPaintOp * op = new KisBrushOp(painter); 
+	return op; 
+}
+
 KisBrushOp::KisBrushOp(KisPainter * painter)
 	: super(painter) 
 {

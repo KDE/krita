@@ -26,6 +26,18 @@
 #include "kis_paintop.h"
 #include "kis_point.h"
 #include "kis_painter.h"
+#include "kis_types.h"
+
+class KisEraseOpFactory : public KisPaintOpFactory {
+
+public:
+	KisEraseOpFactory() {}
+	virtual ~KisEraseOpFactory() {}
+
+	virtual KisPaintOp * createOp(KisPainter * painter);
+	virtual QString name() { return QString("eraser"); }
+};
+
 
 class KisEraseOp : public KisPaintOp {
 

@@ -34,6 +34,13 @@
 
 #include "kis_duplicateop.h"
 
+KisPaintOp * KisDuplicateOpFactory::createOp(KisPainter * painter)
+{ 
+	KisPaintOp * op = new KisDuplicateOp(painter); 
+	return op; 
+}
+
+
 KisDuplicateOp::KisDuplicateOp(KisPainter * painter)
 	: super(painter) 
 {

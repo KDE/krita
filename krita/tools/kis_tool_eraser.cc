@@ -29,7 +29,8 @@
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
-#include "kis_eraseop.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
 
 #include "kis_tool_eraser.h"
 #include "kis_view.h"
@@ -48,8 +49,7 @@ KisToolEraser::~KisToolEraser()
 void KisToolEraser::initPaint(KisEvent *e)
 {
 	super::initPaint(e);
-
-	KisPaintOp * op = new KisEraseOp(painter());
+	KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("eraser", painter());
 	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 }
 

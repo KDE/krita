@@ -71,13 +71,20 @@ void KisToolPaste::mouseRelease(QMouseEvent *e)
 {
 	if (m_selection) {
 		KisImageSP owner = m_view -> currentImg();
+		KisPaintDeviceSP dev;
 		KisPainter gc;
 
 		m_move -> drag(e -> pos());
 		owner -> unsetSelection(false);
+		dev = owner -> activeDevice();
 		gc.begin(m_selection -> parent());
 		gc.beginTransaction(i18n("Paste Selection"));
-		gc.bitBlt(e -> x(), e -> y(), COMPOSITE_COPY, m_selection.data(), m_selection -> opacity(), 0, 0, m_selection -> width(), m_selection -> height());
+		gc.bitBlt(e -> x() - dev -> x(), 
+				e -> y() - dev -> y(), 
+				COMPOSITE_COPY, 
+				m_selection.data(), 
+				m_selection -> opacity(), 
+				0, 0, m_selection -> width(), m_selection -> height());
 		m_doc -> addCommand(gc.endTransaction());
 		m_selection = 0;
 		activate();

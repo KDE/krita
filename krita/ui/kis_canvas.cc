@@ -92,6 +92,7 @@ KisCanvas::KisCanvas(QWidget *parent, const char *name) : super(parent, name)
 {
 	setBackgroundMode(QWidget::NoBackground);
 	setMouseTracking(true);
+	setAcceptDrops(true);
 	m_enableMoveEventCompressionHint = true;
 	m_lastPressure = 0;
 
@@ -210,6 +211,16 @@ void KisCanvas::keyPressEvent(QKeyEvent *e)
 void KisCanvas::keyReleaseEvent(QKeyEvent *e)
 {
 	emit gotKeyReleaseEvent(e);
+}
+
+void KisCanvas::dragEnterEvent(QDragEnterEvent *e)
+{
+	emit gotDragEnterEvent(e);
+}
+
+void KisCanvas::dropEvent(QDropEvent *e)
+{
+	emit gotDropEvent(e);
 }
 
 void KisCanvas::moveEvent(KisMoveEvent *e)

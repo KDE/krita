@@ -106,7 +106,7 @@ public:
 public:
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
-	Q_INT32 importImage(bool createLayer, bool modal = false, const QString& filename = QString::null);
+	Q_INT32 importImage(bool createLayer, bool modal = false, const KURL& url = KURL());
 	/** This function return the active KisView
 		*/
 	static KisView* activeView();
@@ -271,6 +271,8 @@ private slots:
 	void canvasRefresh();
 	void canvasGotKeyPressEvent(QKeyEvent*);
 	void canvasGotKeyReleaseEvent(QKeyEvent*);
+	void canvasGotDragEnterEvent(QDragEnterEvent*);
+	void canvasGotDropEvent(QDropEvent*);
 
 	void docImageListUpdate();
 	void imgSelectionChanged(KisImageSP img);

@@ -53,6 +53,8 @@
 #include <kstatusbar.h>
 #include <kstdaction.h>
 #include <kinputdialog.h>
+#include <kurldrag.h>
+#include <kpopupmenu.h>
 
 // KOffice
 #include <koColor.h>
@@ -1508,15 +1510,15 @@ void KisView::slotEmbedImage(const QString& filename)
         importImage(false, true, filename);
 }
 
-Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filename)
+Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
 {
         KURL::List urls;
         Q_INT32 rc = 0;
 
-        if (filename.isEmpty())
+        if (urlArg.isEmpty())
                 urls = KFileDialog::getOpenURLs(QString::null, KisImageMagickConverter::readFilters(), 0, i18n("Import Image"));
         else
-                urls.push_back(filename);
+                urls.push_back(urlArg);
 
         if (urls.empty())
                 return 0;
@@ -2153,6 +2155,74 @@ void KisView::canvasGotKeyReleaseEvent(QKeyEvent *event)
                 currentTool() -> keyRelease(event);
 }
 
+void KisView::canvasGotDragEnterEvent(QDragEnterEvent *event)
+{
+	event -> accept(KURLDrag::canDecode(event));
+}
+
+void KisView::canvasGotDropEvent(QDropEvent *event)
+{
+	KURL::List urls;
+
+	if (KURLDrag::decode(event, urls))
+	{
+		if (urls.count() > 0) {
+			enum enumActionId {
+				addLayerId = 1,
+				addImageId,
+				addDocumentId,
+				cancelId
+			};
+
+			KPopupMenu popup(this, "drop_popup");
+
+			if (urls.count() == 1) {
+				if (currentImg() != 0) {
+					popup.insertItem(i18n("Insert as New Layer"), addLayerId);
+				}
+
+				popup.insertItem(i18n("Insert as New Image"), addImageId);
+				popup.insertSeparator();
+				popup.insertItem(i18n("Open in New Document"), addDocumentId);
+			}
+			else {
+				if (currentImg() != 0) {
+					popup.insertItem(i18n("Insert as New Layers"), addLayerId);
+				}
+
+				popup.insertItem(i18n("Insert as New Images"), addImageId);
+				popup.insertSeparator();
+				popup.insertItem(i18n("Open in New Documents"), addDocumentId);
+			}
+
+			popup.insertSeparator();
+			popup.insertItem(i18n("Cancel"), cancelId);
+
+			int actionId = popup.exec(QCursor::pos());
+
+			if (actionId >= 0 && actionId != cancelId) {
+				for (KURL::List::ConstIterator it = urls.begin (); it != urls.end (); it++) {
+					KURL url = *it;
+
+					switch (actionId) {
+					case addLayerId:
+						importImage(true, false, url);
+						break;
+					case addImageId:
+						importImage(false, false, url);
+						break;
+					case addDocumentId:
+						if (shell() != 0) {
+							shell() -> openDocument(url);
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
 void KisView::canvasRefresh()
 {
         m_canvas -> repaint();
@@ -2494,6 +2564,8 @@ void KisView::setupCanvas()
 	QObject::connect(m_canvas, SIGNAL(mouseWheelEvent(QWheelEvent*)), this, SLOT(canvasGotMouseWheelEvent(QWheelEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotKeyPressEvent(QKeyEvent*)), this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotKeyReleaseEvent(QKeyEvent*)), this, SLOT(canvasGotKeyReleaseEvent(QKeyEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotDragEnterEvent(QDragEnterEvent*)), this, SLOT(canvasGotDragEnterEvent(QDragEnterEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotDropEvent(QDropEvent*)), this, SLOT(canvasGotDropEvent(QDropEvent*)));
 }
 
 void KisView::projectionUpdated(KisImageSP img)

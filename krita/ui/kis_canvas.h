@@ -74,6 +74,8 @@ signals:
 	void mouseWheelEvent(QWheelEvent*);
 	void gotKeyPressEvent(QKeyEvent*);
 	void gotKeyReleaseEvent(QKeyEvent*);
+	void gotDragEnterEvent(QDragEnterEvent*);
+	void gotDropEvent(QDropEvent*);
 	void gotMoveEvent(KisMoveEvent *);
 	void gotButtonPressEvent(KisButtonPressEvent *);
 	void gotButtonReleaseEvent(KisButtonReleaseEvent *);
@@ -89,6 +91,8 @@ protected:
 	virtual void wheelEvent(QWheelEvent *event);
 	virtual void keyPressEvent(QKeyEvent *event);
 	virtual void keyReleaseEvent(QKeyEvent *event);
+	virtual void dragEnterEvent(QDragEnterEvent *event);
+	virtual void dropEvent(QDropEvent *event);
 	void moveEvent(KisMoveEvent *event);
 	void buttonPressEvent(KisButtonPressEvent *event);
 	void buttonReleaseEvent(KisButtonReleaseEvent *event);

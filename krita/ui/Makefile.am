@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir)/../core $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES = -I$(srcdir)/../core $(KOFFICE_INCLUDES) $(all_includes) $(KOPAINTER_INCLUDES)
 
 noinst_LTLIBRARIES = libkisui.la
 

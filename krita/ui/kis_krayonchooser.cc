@@ -29,7 +29,7 @@
 
 #include <kinstance.h>
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <qptrlist.h>
 
 #include "kis_factory.h"

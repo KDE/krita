@@ -1,5 +1,5 @@
 
-INCLUDES  = -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
+INCLUDES  = -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) $(KOPAINTER_INCLUDES)
 
 noinst_LTLIBRARIES = libkiscore.la
 

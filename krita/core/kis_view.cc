@@ -98,7 +98,7 @@
 
 // tools
 #include "kis_tool_factory.h"
-#include "kis_tool_paste.h"	
+#include "kis_tool_paste.h"
 
 KisView::KisView(KisDoc* doc, QWidget* parent, const char* name) : super(doc, parent, name)
 {
@@ -422,18 +422,18 @@ void KisView::setupActions()
 
 	// view actions
 	(void)new KAction(i18n("Zoom &in"), "viewmag+", 0, this, SLOT(zoom_in()), actionCollection(), "zoom_in");
-	(void)new KAction(i18n("Zoom &out"), "viewmag-", 0, this, SLOT(zoom_out()), actionCollection(), "zoom_out"); 
+	(void)new KAction(i18n("Zoom &out"), "viewmag-", 0, this, SLOT(zoom_out()), actionCollection(), "zoom_out");
 
 	// tool settings actions
 	(void)new KAction(i18n("&Gradient Dialog"), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
 
 	// tool actions
-	(void)new KAction(i18n("&Current Tool Properties..."), "configure", 0, this, SLOT(tool_properties()), 
+	(void)new KAction(i18n("&Current Tool Properties..."), "configure", 0, this, SLOT(tool_properties()),
 			  actionCollection(), "current_tool_properties");
 
 	// layer actions
 	(void)new KAction(i18n("&Add layer..."), 0, this, SLOT(insert_layer()), actionCollection(), "insert_layer");
-	(void)new KAction(i18n("&Remove layer..."), 0, this, SLOT(remove_layer()), actionCollection(), "remove_layer"); 
+	(void)new KAction(i18n("&Remove layer..."), 0, this, SLOT(remove_layer()), actionCollection(), "remove_layer");
 	(void)new KAction(i18n("&Link/Unlink layer..."), 0, this, SLOT(link_layer()), actionCollection(), "link_layer");
 	(void)new KAction(i18n("&Hide/Show layer..."), 0, this, SLOT(hide_layer()), actionCollection(), "hide_layer");
 	(void)new KAction(i18n("&Next layer..."), "forward", 0, this, SLOT(next_layer()), actionCollection(), "next_layer");
@@ -444,7 +444,7 @@ void KisView::setupActions()
 
 	// layer transformations - should be generic, for selection too
 	(void)new KAction(i18n("Scale layer smoothly"), 0, this, SLOT(layer_scale_smooth()), actionCollection(), "layer_scale_smooth");
-	(void)new KAction(i18n("Scale layer - keep palette"), 0, this, SLOT(layer_scale_rough()), actionCollection(), "layer_scale_rough"); 
+	(void)new KAction(i18n("Scale layer - keep palette"), 0, this, SLOT(layer_scale_rough()), actionCollection(), "layer_scale_rough");
 	(void)new KAction(i18n("Rotate &180"), 0, this, SLOT(layer_rotate180()), actionCollection(), "layer_rotate180");
 	(void)new KAction(i18n("Rotate &270"), 0, this, SLOT(layer_rotateleft90()), actionCollection(), "layer_rotateleft90");
 	(void)new KAction(i18n("Rotate &90"), 0, this, SLOT(layer_rotateright90()), actionCollection(), "layer_rotateright90");
@@ -464,7 +464,7 @@ void KisView::setupActions()
 	m_side_bar = new KToggleAction(i18n("Show/Hide Sidebar"), "ok", 0, this, SLOT(showSidebar()), actionCollection(), "show_sidebar");
 	m_float_side_bar = new KToggleAction(i18n("Dock/Undock Sidebar"), "attach", 0, this, SLOT(floatSidebar()), actionCollection(), "float_sidebar");
 	m_lsidebar = new KToggleAction(i18n("Left/Right Sidebar"), "view_right", 0, this, SLOT(leftSidebar()), actionCollection(), "left_sidebar");
-	(void)KStdAction::saveOptions(this, SLOT(saveOptions()), actionCollection(), "save_options"); 
+	(void)KStdAction::saveOptions(this, SLOT(saveOptions()), actionCollection(), "save_options");
 	(void)new KAction(i18n("Krayon Preferences"), "edit", 0, this, SLOT(preferences()), actionCollection(), "preferences");
 
 	// krayon box toolbar actions - these will be used only
@@ -885,9 +885,9 @@ void KisView::paintView(const QRect& rc)
 		clearCanvas(ur);
 		return;
 	}
-	
+
 	p.begin(m_pCanvas);
-	
+
 	// erase strip along left side
 	p.eraseRect(0, 0, xPaintOffset(), height());
 
@@ -1206,7 +1206,7 @@ void KisView::crop()
 
 	KisImage *img = m_doc -> currentImg();
 
-	if (!img) 
+	if (!img)
 		return;
 
 	QRect layerRect(0, 0, cImage.width(), cImage.height());
@@ -1377,7 +1377,7 @@ void KisView::zoom(int _x, int _y, float zf)
 void KisView::zoom_in(int x, int y)
 {
 	float zf = zoomFactor() * 2;
-    
+
 	zoom(x, y, zf);
 }
 
@@ -1477,12 +1477,12 @@ void KisView::layer_properties()
 {
 	KisImage *img = m_doc -> currentImg();
 
-	if (!img)  
+	if (!img)
 		return;
 
 	KisLayer *lay = img -> getCurrentLayer();
 
-	if (!lay)  
+	if (!lay)
 		return;
 
 	if (LayerPropertyDialog::editProperties(*(lay))) {
@@ -1503,7 +1503,7 @@ void KisView::insert_layer()
 	KisImage *img = m_doc -> currentImg();
 	uint indx;
 
-	if (!img) 
+	if (!img)
 		return;
 
 	NewLayerDialog dlg;
@@ -1554,7 +1554,7 @@ void KisView::hide_layer()
 	if (img) {
 		int indx = img -> getCurrentLayerIndex();
 		LayerTable *tbl = m_pLayerView -> layerTable();
-	       
+
 		tbl -> slotInverseVisibility(indx);
 		tbl -> updateTable();
 		tbl -> updateAllCells();
@@ -1591,14 +1591,14 @@ void KisView::next_layer()
 {
 	KisImage *img = m_doc -> currentImg();
 
-	if (!img) 
+	if (!img)
 		return;
 
 	int indx = img -> getCurrentLayerIndex();
 
 	if (indx == -1)
 		return;
-	
+
 	KisLayerSPLst layers = img -> layerList();
 
 	if (static_cast<uint>(indx) < layers.size() - 1) {
@@ -1634,7 +1634,7 @@ void KisView::previous_layer()
 {
 	KisImage *img = m_doc -> currentImg();
 
-	if (!img)  
+	if (!img)
 		return;
 
 	int indx = img -> getCurrentLayerIndex();

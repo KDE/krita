@@ -57,7 +57,7 @@ KisConfig * KisConfig::getNewConfig()
 }
 
 
-KisConfig::KisConfig() : QObject( 0L, "krayon config" )
+KisConfig::KisConfig() : QObject( 0L, "krita config" )
 {
     // load and init global settings only once
     if ( doInit )

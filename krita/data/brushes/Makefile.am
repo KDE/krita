@@ -1,5 +1,5 @@
 
-datadir = $(prefix)/share/apps/krayon/brushes
+datadir = $(prefix)/share/apps/krita/brushes
 
 data_DATA = brush_00.png brush_4.png brush_6.png brush_10.png \
 brush_15.png brush_19.png \

@@ -30,13 +30,10 @@
 #include "kis_resourceserver.h"
 #include "kis_doc.h"
 
-extern "C"
+extern "C" void* init_libkritapart()
 {
-    void* init_libkrayonpart()
-    {
-	    return new KisFactory;
-    }
-};
+	return new KisFactory;
+}
 
 KAboutData* KisFactory::s_aboutData = 0;
 KInstance* KisFactory::s_global = 0;
@@ -91,25 +88,25 @@ KInstance* KisFactory::global()
 	    s_global = new KInstance(s_aboutData);
 
 	    s_global->dirs()->addResourceType("kis",
-	        KStandardDirs::kde_default("data") + "krayon/");
+	        KStandardDirs::kde_default("data") + "krita/");
 
 	    s_global->dirs()->addResourceType("kis_images",
-	        KStandardDirs::kde_default("data") + "krayon/images/");
+	        KStandardDirs::kde_default("data") + "krita/images/");
 
 	    s_global->dirs()->addResourceType("kis_brushes",
-	        KStandardDirs::kde_default("data") + "krayon/brushes/");
+	        KStandardDirs::kde_default("data") + "krita/brushes/");
 
 	    s_global->dirs()->addResourceType("kis_pattern",
-            KStandardDirs::kde_default("data") + "krayon/patterns/");
+            KStandardDirs::kde_default("data") + "krita/patterns/");
 
 	    s_global->dirs()->addResourceType("kis_gradients",
-	        KStandardDirs::kde_default("data") + "krayon/gradients/");
+	        KStandardDirs::kde_default("data") + "krita/gradients/");
 
 	    s_global->dirs()->addResourceType("kis_pics",
-	        KStandardDirs::kde_default("data") + "krayon/pics/");
+	        KStandardDirs::kde_default("data") + "krita/pics/");
 
 	    s_global->dirs()->addResourceType("kis_plugins",
-	        KStandardDirs::kde_default("data") + "krayon/plugins/");
+	        KStandardDirs::kde_default("data") + "krita/plugins/");
 
 	    s_global->dirs()->addResourceType("toolbars",
 	        KStandardDirs::kde_default("data") + "koffice/toolbar/");

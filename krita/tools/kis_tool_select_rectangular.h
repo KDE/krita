@@ -38,7 +38,7 @@ public:
 	virtual void clearOld();
 	virtual bool willModify() const;
 
-	virtual void paintEvent(QPaintEvent *e);
+	virtual void paintEvent(QPaintEvent *event);
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);
@@ -46,6 +46,7 @@ public:
 protected:
 	void drawRect(const QPoint& start, const QPoint& end); 
 
+#if 0
 protected:
 	QPoint m_dragStart;
 	QPoint m_dragEnd;
@@ -63,6 +64,7 @@ private:
 	QRect m_imageRect;
 	bool m_dragFirst;
 	float m_dragdist;
+#endif
 };
 
 #endif //__selecttoolrectangular_h__

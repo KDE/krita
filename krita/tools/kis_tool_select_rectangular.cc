@@ -34,6 +34,7 @@
 
 RectangularSelectTool::RectangularSelectTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
+#if 0
 	m_dragging = false;
 	m_canvas = canvas;
 	m_drawn = false;
@@ -41,6 +42,7 @@ RectangularSelectTool::RectangularSelectTool(KisDoc *doc, KisCanvas *canvas) : K
 	m_dragEnd   = QPoint(-1,-1);
 	m_cursor = KisCursor::selectCursor();
 	m_moveSelectArea = false;
+#endif
 }
 
 RectangularSelectTool::~RectangularSelectTool()
@@ -49,6 +51,7 @@ RectangularSelectTool::~RectangularSelectTool()
 
 void RectangularSelectTool::clearOld()
 {
+#if 0
 	if(m_dragStart.x() != -1)
 		drawRect(m_dragStart, m_dragEnd); 
 
@@ -57,10 +60,12 @@ void RectangularSelectTool::clearOld()
 	QRect updateRect(0, 0, m_doc->current() -> width(), m_doc -> current() -> height());
 	m_view -> updateCanvas(updateRect);
 	m_selectRegion = QRegion();
+#endif
 }
 
 void RectangularSelectTool::mousePress(QMouseEvent *event)
 {
+#if 0
 	if (event -> button() == LeftButton && !m_moveSelectArea) {
 		clearOld();
 		// erase old rectangle
@@ -91,12 +96,13 @@ void RectangularSelectTool::mousePress(QMouseEvent *event)
 		m_oldDragPoint = event->pos();
 		setClipImage();
 	}
+#endif
 }
 
 
 void RectangularSelectTool::mouseMove( QMouseEvent* event )
 {
-
+#if 0
     if( m_dragging && !m_dragSelectArea )
     {
         drawRect( m_dragStart, m_dragEnd );
@@ -176,12 +182,13 @@ void RectangularSelectTool::mouseMove( QMouseEvent* event )
             m_dragdist = dist;
         m_dragStart = pos;
     }
+#endif
 }
 
 
 void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 {
-    
+#if 0 
     if( ( m_dragging ) && ( event->button() == LeftButton ) && ( !m_moveSelectArea ) )
     {
         m_dragging = false;
@@ -270,10 +277,12 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 	    m_doc -> setModified(true);
 	}
     }
+#endif
 }
 
 void RectangularSelectTool::drawRect(const QPoint& start, const QPoint& end)
 {
+#if 0
 	QPainter p;
 
 	p.begin(m_canvas);
@@ -290,14 +299,17 @@ void RectangularSelectTool::drawRect(const QPoint& start, const QPoint& end)
 				end.x() - start.x(), 
 				end.y() - start.y()));
 	p.end();
+#endif
 }
 
 void RectangularSelectTool::setupAction(QObject *collection)
 {
+#if 0
 	KToggleAction *toggle = new KToggleAction(i18n("&Rectangular select"), "rectangular", 0, this,  
 			SLOT(toolSelect()), collection, "tool_select_rectangular");
 
 	toggle -> setExclusiveGroup("tools");
+#endif
 }
 
 bool RectangularSelectTool::willModify() const
@@ -305,9 +317,12 @@ bool RectangularSelectTool::willModify() const
 	return false;
 }
 
-void RectangularSelectTool::paintEvent(QPaintEvent *)
+void RectangularSelectTool::paintEvent(QPaintEvent *event)
 {
+#if 0
 	if (m_dragStart.x() != -1)
 		drawRect(m_dragStart, m_dragEnd);
+#endif
 }
+
 

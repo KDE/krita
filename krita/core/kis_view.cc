@@ -123,7 +123,7 @@ KisView::KisView(KisDoc* doc, QWidget* parent, const char* name)
 	m_doc = doc;
 	m_zoomFactor = 1.0;
 	setInstance(KisFactory::global());
-	setXMLFile("krayon.rc");
+	setXMLFile("krita.rc");
 	m_pTool = 0;
 	m_dcop = 0;
 	dcopObject(); // build it

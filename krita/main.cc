@@ -32,18 +32,19 @@ static const KCmdLineOptions options[] =
 	{ 0, 0, 0 }
 };
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    KCmdLineArgs::init( argc, argv, newKrayonAboutData() );
-    KCmdLineArgs::addCmdLineOptions( options );
+	KCmdLineArgs::init(argc, argv, newKrayonAboutData());
+	KCmdLineArgs::addCmdLineOptions(options);
 
-    KoApplication app;
+	KoApplication app;
 
-    app.dcopClient()->attach();
-    app.dcopClient()->registerAs( "krayon" );
+	app.dcopClient() -> attach();
+	app.dcopClient() -> registerAs( "krita" );
 
-    if (!app.start())
-        return 1;
-    app.exec();
-    return 0;
+	if (!app.start())
+		return 1;
+
+	app.exec();
+	return 0;
 }

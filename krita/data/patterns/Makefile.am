@@ -1,5 +1,5 @@
 
-datadir = $(prefix)/share/apps/krayon/patterns
+datadir = $(prefix)/share/apps/krita/patterns
 
 data_DATA = Circle.png \
 Cloth.png \

@@ -93,10 +93,10 @@ bool KisDoc::initDoc()
 
 	ret = KoTemplateChooseDia::choose (KisFactory::global(),
 			templ,
-			"application/x-krayon", "*.kra",
+			"application/x-krita", "*.kra",
 			i18n("Krayon"),
 			KoTemplateChooseDia::NoTemplates,
-			"krayon_template");
+			"krita_template");
 
 	// create document from template - use default
 	// 512x512 RGBA image util we have real templates
@@ -173,11 +173,11 @@ QDomElement KisDoc::saveImages( QDomDocument &doc )
 
     QDomElement images = doc.createElement( "images" );
     images.setAttribute( "editor", "Krayon" );
-    images.setAttribute( "mime", "application/x-krayon" );
+    images.setAttribute( "mime", "application/x-krita" );
     images.setAttribute( "version", "1.2" );
 
     kdDebug(0) << "editor: " <<  "Krayon" << endl;
-    kdDebug(0) << "mime: " << "application/x-krayon"  << endl;
+    kdDebug(0) << "mime: " << "application/x-krita"  << endl;
 
     for ( QStringList::Iterator it = imageNames.begin(); it != imageNames.end(); ++it )
     {
@@ -410,7 +410,7 @@ bool KisDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
 	QDomElement images = doc.documentElement();
 
-	if (images.attribute("mime") != "application/x-krayon" && images.attribute("mime") != "application/vnd.kde.krayon") {
+	if (images.attribute("mime") != "application/x-krita" && images.attribute("mime") != "application/vnd.kde.krita") {
 		kdDebug(0) << "KisDoc::loadXML() no mime name error" << endl;
 		return false;
 	}
@@ -1531,7 +1531,7 @@ bool KisDoc::slotNewImage()
 
 QCString KisDoc::mimeType() const
 {
-    return "application/x-krayon";
+    return "application/x-krita";
 }
 
 

@@ -305,6 +305,7 @@ void PolygonalSelectTool::paintEvent(QPaintEvent *e)
 	QPen pen(Qt::DotLine);
 	float zF = m_view -> zoomFactor();
 
+	Q_ASSERT(m_view);
 	gc.setRasterOp(Qt::NotROP);
 	gc.setPen(pen);
 	gc.scale(zF, zF);

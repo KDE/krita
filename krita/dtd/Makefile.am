@@ -1,4 +1,4 @@
-dtd_DATA = krayon.dtd
+dtd_DATA = krita.dtd
 
-dtddir = $(kde_datadir)/krayon/dtd
+dtddir = $(kde_datadir)/krita/dtd
 

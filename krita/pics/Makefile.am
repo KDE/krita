@@ -10,9 +10,9 @@ data_DATA = deletelayer.png lowerlayer.png newlayer.png raiselayer.png \
         freehand.png rectangular.png handdrawn.png elliptical.png contiguous.png
 
 # directory for pixmaps
-datadir = $(kde_datadir)/krayon/pics
+datadir = $(kde_datadir)/krita/pics
 
-KDE_ICON = krayon
+KDE_ICON = krita
 
 
 

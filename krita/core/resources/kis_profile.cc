@@ -46,6 +46,14 @@ KisProfile::KisProfile(const QString& file, Q_UINT32 colorType)
 {
 }
 
+KisProfile::KisProfile(cmsHPROFILE profile, Q_UINT32 colorType)
+	: super (QString()),
+	  m_profile(profile),
+	  m_lcmsColorType(colorType)
+{
+	init();
+}
+
 KisProfile::~KisProfile()
 {
 	cmsCloseProfile(m_profile);
@@ -55,10 +63,15 @@ KisProfile::~KisProfile()
 bool KisProfile::loadAsync()
 {
 	cmsErrorAction(LCMS_ERROR_IGNORE);
-	
 
 	m_profile = cmsOpenProfileFromFile(filename().ascii(), "r");
 
+	return init();
+
+}
+
+bool KisProfile::init() 
+{
 //  	kdDebug() << "loading profile: " << filename() << "\n";
 	if (m_profile) {
 		m_colorSpaceSignature = cmsGetColorSpace(m_profile);
@@ -90,7 +103,6 @@ bool KisProfile::loadAsync()
 		return true;
 	}
 	emit ioFailed(this);
-
 	return true;
 }
 

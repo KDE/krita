@@ -474,12 +474,13 @@ KisProfileSP KisImage::profile() const
 
 void KisImage::setProfile(const KisProfileSP& profile)
 {
-	if (profile && profile -> valid() && profile -> colorSpaceSignature() == m_colorStrategy -> colorSpaceSignature()) {
+	if (profile && profile -> valid()) {
 		m_profile = profile;
 		m_projection -> setProfile(profile);
 	}
 	else {
 		m_profile = 0;
+		m_projection -> setProfile(profile);
 	}
 	emit(profileChanged(m_profile));
 }

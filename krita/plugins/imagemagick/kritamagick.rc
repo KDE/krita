@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritamagick" version="7">
+<MenuBar>
+    <Menu name="Filter"><text>&amp;Filter</text>
+	<Menu name="Magick filters"><text>&amp;Magick</text>
+	</Menu>
+    </Menu>
+</MenuBar>
+</kpartgui>

@@ -258,7 +258,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 	setInputDevice(INPUT_DEVICE_MOUSE);
 
-	m_monitorProfile = 0;
+	resetMonitorProfile();
 }
 
 
@@ -1998,6 +1998,7 @@ void KisView::preferences()
 {
 	PreferencesDialog::editPreferences();
 	resetMonitorProfile();
+	canvasRefresh();
 }
 
 

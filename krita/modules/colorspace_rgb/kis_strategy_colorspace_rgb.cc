@@ -66,7 +66,7 @@ void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, QUA
 	dst[PIXEL_ALPHA] = opacity;
 }
 
-void KisStrategyColorSpaceRGB::toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile)
+void KisStrategyColorSpaceRGB::toQColor(const QUANTUM *src, QColor *c, KisProfileSP /*profile*/)
 {
 	c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
 }
@@ -140,8 +140,8 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 	img = img.copy();
 #endif
 
-//  	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
-//  		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
+//   	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
+//   		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
 
 
 	if (srcProfile != 0 && dstProfile != 0) {

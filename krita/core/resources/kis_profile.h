@@ -42,6 +42,8 @@ class KisProfile : public KisResource, public KShared {
 public:
 	KisProfile(Q_UINT32 colorType);
 	KisProfile(const QString& file, Q_UINT32 colorType);
+	KisProfile(const cmsHPROFILE profile, Q_UINT32 colorType);
+
 	virtual ~KisProfile();
 
 	virtual bool loadAsync();
@@ -57,7 +59,7 @@ public:
 	cmsHPROFILE profile() const { return m_profile; }
 	Q_UINT32 colorType() { return m_lcmsColorType; }
 private:
-
+	bool init();
 	
 	cmsHPROFILE m_profile;
 	icColorSpaceSignature m_colorSpaceSignature;

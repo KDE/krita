@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=ImageMagick wrapper
+Comment=ImageMagick based import/export and file conversion
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritamagcik

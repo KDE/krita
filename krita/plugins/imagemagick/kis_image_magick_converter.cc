@@ -43,9 +43,6 @@
 #include "kis_image_magick_converter.h"
 #include "kis_colorspace_registry.h"
 #include "kis_iterators_pixel.h"
-#include "kis_strategy_colorspace.h"
-#include "kis_paint_device.h"
-#include "kis_profile.h"
 
 #include "../../../config.h"
 
@@ -57,69 +54,47 @@ namespace {
 	const PIXELTYPE PIXEL_RED = 2;
 	const PIXELTYPE PIXEL_ALPHA = 3;
 
-	/**
-	 * Make this more flexible -- although... ImageMagick 
-	 * isn't that flexible either.
-	 */
-	KisStrategyColorSpaceSP getColorSpaceForColorType(ColorspaceType type) {
-
-		if (type == GRAYColorspace) {
-			KisColorSpaceRegistry::instance() -> get("CMYK");
-		}
-		else if (type == CMYKColorspace) {
-			return KisColorSpaceRegistry::instance() -> get("GRAY");
-		}
-		else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {
-			return KisColorSpaceRegistry::instance() -> get("RGBA");
-		}
-		return 0;
-	
-	}
-
-	KisProfileSP getProfileForProfileInfo(const Image * image, KisStrategyColorSpaceSP cs) 
+#if 0 // AUTOLAYER
+	inline
+	void pp2tile(KisPixelDataSP pd, const PixelPacket *pp)
 	{
+		Q_INT32 i;
+		Q_INT32 j;
+		QUANTUM *pixel = pd -> data;
 
-		if (image->profiles == (HashmapInfo *) NULL)
-			return  0;
-    
-		const char *name;
-		const StringInfo *profile;
-
-		KisProfileSP p = 0;
-
-		ResetImageProfileIterator(image);
-		for (name = GetNextImageProfile(image); name != (char *) NULL; )
-		{
-			profile = GetImageProfile(image, name);
-			if (profile == (StringInfo *) NULL)
-				continue;
-			kdDebug() << "Found profile: " << name << "\n";
-
-			// XXX: Hardcoded for icc type -- is that correct for us?
-			if (QString::compare(name, "icc") == 0) {
-
-
-				cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile -> datum, (DWORD)profile -> length);
-
-				if (hProfile == (cmsHPROFILE) NULL) {
-					kdDebug() << "Could not construct profile from memory\n";
-					return 0;
-				}
-
-				if (cmsGetColorSpace(hProfile) != cs -> colorSpaceType()) {
-					kdDebug() << "Profile colorspace is not the same as image colorspace:"
-						  << cmsGetColorSpace(hProfile) << ", " << cs -> colorSpaceType() << "\n";
-				}
-
-				p = new KisProfile(hProfile, cs -> colorSpaceType());
+		for (j = 0; j < pd -> height; j++) {
+			for (i = 0; i < pd -> width; i++) {
+				pixel[PIXEL_RED] = Downscale(pp -> red);
+				pixel[PIXEL_GREEN] = Downscale(pp -> green);
+				pixel[PIXEL_BLUE] = Downscale(pp -> blue);
+				pixel[PIXEL_ALPHA] = OPACITY_OPAQUE - Downscale(pp -> opacity);
+// 				kdDebug() << (int)pixel[PIXEL_ALPHA] << " " << (int)pixel[PIXEL_RED] << " " << pp -> red << " " <<  pp -> green << " " << pp -> blue << " " << MaxRGB << " " << pp -> opacity << " " << ( pp -> opacity * QUANTUM_MAX ) / MaxRGB << endl;
+				pixel += pd -> depth;
+				pp++;
 			}
-			name = GetNextImageProfile(image);
 		}
-		return p;
-
 	}
 
+	inline
+	void tile2pp(PixelPacket *pp, const KisPixelDataSP pd)
+	{
+		Q_INT32 i;
+		Q_INT32 j;
+		QUANTUM *pixel = pd -> data;
 
+		for (j = 0; j < pd -> height; j++) {
+			for (i = 0; i < pd -> width; i++) {
+				pp -> red = Upscale(pixel[PIXEL_RED]);
+				pp -> green = Upscale(pixel[PIXEL_GREEN]);
+				pp -> blue = Upscale(pixel[PIXEL_BLUE]);
+				pp -> opacity = Upscale(OPACITY_OPAQUE - pixel[PIXEL_ALPHA]);
+				kdDebug() << pp -> opacity << " " << pixel[PIXEL_ALPHA] << endl;
+				pixel += pd -> depth;
+				pp++;
+			}
+		}
+	}
+#endif //AUTOLAYER
 	void InitGlobalMagick()
 	{
 		static bool init = false;
@@ -232,33 +207,12 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 	while ((image = RemoveFirstImageFromList(&images))) {
 		ViewInfo *vi = OpenCacheView(image);
 
-		// Determine image type -- rgb, grayscale or cmyk
-		KisStrategyColorSpaceSP cs = getColorSpaceForColorType(image -> colorspace);
-		if (cs == 0) {
-			kdDebug() << "Krita does not suport profile " << image -> colorspace << "\n";
-			CloseCacheView(vi);
-			DestroyExceptionInfo(&ei);
-			DestroyImageList(images);
-			DestroyImageInfo(ii);
-			emit notifyProgressError(this);
-			return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
-		}
-		kdDebug() << "Image has colorspace: " << cs -> name() << "\n";
-
-		KisProfileSP profile = getProfileForProfileInfo(image, cs);
- 		if (profile)
- 			kdDebug() << "Layer has profile: " << profile -> productName() << "\n";
-
-		if( ! m_img) {
-			m_img = new KisImage(m_adapter, image -> columns, image -> rows, cs, m_doc -> nextImageName());
- 			if (profile)
- 				m_img -> setProfile(profile);
-		}
+		if( ! m_img)
+			m_img = new KisImage(m_adapter, image -> columns, image -> rows,
+						KisColorSpaceRegistry::instance() -> get("RGBA"), m_doc -> nextImageName());
 
 		if (image -> columns && image -> rows) {
 			KisLayerSP layer = new KisLayer(m_img, m_img -> nextLayerName(), OPACITY_OPAQUE);
-			if (profile)
-				layer -> setProfile(profile);
 
 			m_img->add(layer, 0);
 

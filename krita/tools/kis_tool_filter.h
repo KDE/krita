@@ -36,7 +36,7 @@ class KisToolFilter : public KisToolFreeHand {
 	typedef KisToolFreeHand super;
 
 public:
-	KisToolFilter(KisView* view);
+	KisToolFilter();
 	virtual ~KisToolFilter();
   
 	virtual void setup(KActionCollection *collection);
@@ -50,7 +50,6 @@ protected:
 	virtual void initPaint(KisEvent *e);
 
 private:
-	KisView* m_view;
 	KisFilterSP m_filter;
 	KisFilterConfigurationWidget* m_filterConfigurationWidget;
 	QGridLayout* m_optionLayout;

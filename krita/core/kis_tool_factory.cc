@@ -67,7 +67,7 @@ KisToolFactory::~KisToolFactory()
 {
 }
 
-vKisTool KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSubject *subject, KisView *view)
+vKisTool KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSubject *subject)
 {
 	Q_ASSERT(actionCollection);
 	Q_ASSERT(subject);
@@ -80,7 +80,7 @@ vKisTool KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSu
 	tools.push_back(new KisToolPan);
 	tools.push_back(new KisToolBrush);
 	tools.push_back(new KisToolDuplicate);
-	tools.push_back(new KisToolFilter(view));
+	tools.push_back(new KisToolFilter);
 	tools.push_back(new KisToolAirBrush);
 	tools.push_back(new KisToolEraser);
 	tools.push_back(new KisToolLine);

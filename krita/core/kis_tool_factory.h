@@ -32,7 +32,7 @@ public:
 	~KisToolFactory();
 
 public:
-	vKisTool create(KActionCollection *actionCollection, KisCanvasSubject *subject, KisView *view);
+	vKisTool create(KActionCollection *actionCollection, KisCanvasSubject *subject);
 
 public:
 	static KisToolFactory *singleton();

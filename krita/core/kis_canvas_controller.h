@@ -22,6 +22,7 @@
 #include <qglobal.h>
 #include <qpoint.h>
 #include <qrect.h>
+#include "kis_types.h"
 
 class QWidget;
 class KisTool;

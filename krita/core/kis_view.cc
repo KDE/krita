@@ -83,7 +83,6 @@
 #include "kis_paint_device.h"
 #include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
-#include "kis_autobrush.h"
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
 #include "kis_ruler.h"
@@ -106,6 +105,10 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_colorspace_registry.h"
+
+// Widgets
+#include "kis_autobrush.h"
+#include "kis_text_brush.h"
 #include "kis_hsv_widget.h"
 #include "kis_rgb_widget.h"
 #include "kis_gray_widget.h"
@@ -307,10 +310,15 @@ void KisView::setupDockers()
 	m_resourcedocker -> plug(m_gradientMediator -> chooserWidget());
 	connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(gradientActivated(KisResource*)));
 
-	// Autocrush
+	// AutoBrush
 	m_autobrush = new KisAutobrush(m_resourcedocker, "autobrush", i18n("Autobrush"));
 	m_resourcedocker -> plug(m_autobrush);
 	connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
+	
+	// TextBrush
+	m_textBrush = new KisTextBrush(m_resourcedocker, "textbrush", i18n("Text Brush"));
+	m_resourcedocker -> plug(m_textBrush);
+	connect(m_textBrush, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
 
 	// Layers
         m_layerBox = new KisLayerBox(i18n("layer"), KisLayerBox::SHOWALL, m_layerchanneldocker);
@@ -1975,10 +1983,10 @@ void KisView::setupTools()
 	KisToolFactory *factory = KisToolFactory::singleton();
 	Q_ASSERT(factory);
 
-	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = factory -> create(actionCollection(), this, this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = factory -> create(actionCollection(), this, this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = factory -> create(actionCollection(), this, this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = factory -> create(actionCollection(), this, this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = factory -> create(actionCollection(), this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = factory -> create(actionCollection(), this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = factory -> create(actionCollection(), this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = factory -> create(actionCollection(), this);
 
 	qApp -> installEventFilter(this);
 	m_tabletEventTimer.start();
@@ -3156,6 +3164,16 @@ KoDocument *KisView::document() const
 KisProgressDisplayInterface *KisView::progressDisplay() const
 {
 	return m_progress;
+}
+
+KisFilterSP KisView::filterGet(const QString& name)
+{
+	return filterRegistry()->get( name );
+}
+
+QStringList KisView::filterList()
+{
+	return filterRegistry()->listKeys();
 }
 
 KisFilterRegistrySP KisView::filterRegistry() const

@@ -62,6 +62,7 @@ class KisPattern;
 class KisResource;
 class KisResourceMediator;
 class KisAutobrush;
+class KisTextBrush;
 class DockFrameDocker;
 class ColorDocker;
 class ControlFrame;
@@ -189,6 +190,8 @@ private:
 	virtual KisToolControllerInterface *toolController() const;
 	virtual KoDocument *document() const;
 	virtual KisProgressDisplayInterface *progressDisplay() const;
+	virtual KisFilterSP filterGet(const QString& name);
+	virtual QStringList filterList();
 
 private:
 	// Implement KisCanvasControllerInterface
@@ -423,10 +426,11 @@ private:
 	KisResourceMediator *m_patternMediator;
 	KisResourceMediator *m_gradientMediator;
 	KisAutobrush *m_autobrush;
+	KisTextBrush *m_textBrush;
 
-        // Current colours, brushes, patterns etc.
-        Q_INT32 m_xoff;
-        Q_INT32 m_yoff;
+	// Current colours, brushes, patterns etc.
+	Q_INT32 m_xoff;
+	Q_INT32 m_yoff;
 	KoColor m_fg;
 	KoColor m_bg;
 	KisBrush *m_brush;

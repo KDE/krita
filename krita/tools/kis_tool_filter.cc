@@ -30,9 +30,9 @@
 
 #include "kis_filter.h"
 #include "kis_filter_configuration_widget.h"
-#include "kis_filter_registry.h"
+// #include "kis_filter_registry.h"
 #include "kis_brush.h"
-#include "kis_view.h"
+#include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_image.h"
@@ -44,8 +44,8 @@
 #include "kis_move_event.h"
 #include "kis_filterop.h"
 
-KisToolFilter::KisToolFilter(KisView* view) 
-	: super(i18n("Filter tool")), m_view(view), m_filterConfigurationWidget(0)
+KisToolFilter::KisToolFilter() 
+	: super(i18n("Filter tool")), m_filterConfigurationWidget(0)
 {
 	setName("tool_filter");
 	m_subject = 0;
@@ -88,7 +88,7 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 	m_cbFilter = new QComboBox(m_optWidget);
 	QLabel* lbFilter = new QLabel(i18n("Filter : "), m_optWidget);
 
-	m_cbFilter ->insertStringList(m_view->filterRegistry()->listKeys() );
+	m_cbFilter ->insertStringList( canvasSubject() ->filterList() );
 	
 	m_optionLayout = new QGridLayout(m_optWidget, 3, 2);
 
@@ -110,7 +110,7 @@ QWidget* KisToolFilter::optionWidget()
 void KisToolFilter::changeFilter( const QString & string )
 {
 	kdDebug() << "KisToolFilter::changeFilter : change to " << string << endl;
-	m_filter = m_view -> filterRegistry() -> get( string );
+	m_filter =  canvasSubject() -> filterGet( string );
 	Q_ASSERT(m_filter != 0);
 	if( m_filterConfigurationWidget != 0 )
 	{

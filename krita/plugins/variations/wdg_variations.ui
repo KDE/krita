@@ -550,7 +550,7 @@
                 </rect>
             </property>
             <property name="text">
-                <string>More  Red</string>
+                <string>More Red</string>
             </property>
             <property name="alignment">
                 <set>AlignCenter</set>

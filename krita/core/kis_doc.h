@@ -86,6 +86,8 @@ public:
 	 */
 	KisImageSP newImage(const QString& name, int width, int height, cMode cm = cm_RGBA, uchar bitDepth = 8);
 
+	void addImage(KisImageSP img);
+
 	/*
 	 * Remove img from our list and delete it.
 	 */
@@ -195,6 +197,7 @@ public:
 
 	ktvector getTools() const;
 	void setTools(const ktvector& tools);
+	inline void setUndo(bool undo);
 
 #if 0
     /*
@@ -242,40 +245,27 @@ protected:
 	   views of the same data */
 	virtual KoView* createViewInstance(QWidget *parent, const char *name);
 
-	/* save images */
 	QDomElement saveImages(QDomDocument& doc);
-
-	/* save layers */
 	QDomElement saveLayers(QDomDocument& doc, KisImageSP img);
-
-	/* save channels */
 	QDomElement saveChannels(QDomDocument& doc, KisLayer* lay);
-
-	/* save tool settings */
 	QDomElement saveToolSettings(QDomDocument& doc) const;
 
-	/* load images */
 	bool loadImages(QDomElement& elem);
-
-	/* load layers */
 	bool loadLayers(QDomElement& elem, KisImageSP img);
-
-	/* load channels */
-	void loadChannels(QDomElement& elem, KisLayer* lay);
-
-	/* load tool settings */
+	void loadChannels(QDomElement& elem, KisLayerSP lay);
 	void loadToolSettings(QDomElement& elem);
+	bool loadImgSettings(QDomElement& elem);
 
 private:
+	bool m_undo;
 	/* undo/redo */
-	KCommandHistory *m_command_history;
+	KCommandHistory *m_cmdHistory;
 
 	/* list of images for the document - each document can have multiple
 	   images and each image must have at least one layer. however, a document
 	   can only have one current image, which is what is loaded and saved -
 	   the permanent data associated with it. This coresponds to an
 	   image, but that image is interchangeable */
-//	QPtrList <KisImage> m_Images;
 	KisImageSPLst m_images;
 
 	KisView *m_currentView;
@@ -286,8 +276,13 @@ private:
 	KisFrameBuffer *m_pFrameBuffer;
 
 	ktvector m_tools;
-        DCOPObject *dcop;
-
+	DCOPObject *dcop;
 };
 
+void KisDoc::setUndo(bool undo)
+{
+	m_undo = undo;
+}
+
 #endif // __kis_doc_h__
+

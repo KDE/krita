@@ -777,7 +777,7 @@ void KisImage::mergeLayers(KisLayerSPLst& layers)
 		}
 
 		if (m_activeLayer == *it)
-			m_activeLayer = m_layers.size() ? m_layers[0] : 0;
+			m_activeLayer = m_layers.empty() ? 0 : m_layers[0];
 
 		removeLayer(*it);
 		macro -> addCommand(new KisCommandLayerRm(this, *it));

@@ -92,15 +92,15 @@ class KisColorChooser : public QWidget
 
 class RGBWidget : public QWidget
 {
-  Q_OBJECT
+Q_OBJECT
  
  public:
     RGBWidget(QWidget *parent = 0L);
 
- public slots:
+public slots:
     void slotSetColor(const KoColor&);
 
- protected slots:
+protected slots:
     void slotRSliderChanged(int);
     void slotGSliderChanged(int);
     void slotBSliderChanged(int);
@@ -117,16 +117,16 @@ class RGBWidget : public QWidget
     void slotSInChanged(int);
     void slotVInChanged(int);
 
- signals:
+signals:
     void colorChanged(const KoColor&);
     void hueChanged(int h);
     void satChanged(int s);
     void valChanged(int v);
 
- protected:
+protected:
     virtual void resizeEvent(QResizeEvent *);
 
- protected:
+protected:
     ColorSlider *m_pRSlider, *m_pGSlider,   *m_pBSlider;
     ColorSlider *m_pHSlider, *m_pSSlider,   *m_pVSlider;
 

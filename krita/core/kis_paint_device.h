@@ -31,6 +31,7 @@
 #include "kis_tiles.h"
 #include "kis_tile.h"
 
+class KoStore;
 class KisPaintDevice;
 
 typedef KSharedPtr<KisPaintDevice> KisPaintDeviceSP;
@@ -69,6 +70,9 @@ public:
 
 	inline bool visible() const;
 	inline void setVisible(bool v);
+
+	bool writeToStore(KoStore *store);
+	bool loadFromStore(KoStore *store);
 
 protected:
 	uchar m_opacity;

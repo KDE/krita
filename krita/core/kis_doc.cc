@@ -583,9 +583,10 @@ bool KisDoc::loadLayers(QDomElement& element, KisImageSP img)
 			KisLayerSP lay = img -> getCurrentLayer();
 
 			Q_ASSERT(lay);
+
 			lay -> setOpacity(layer.attribute("opacity").toInt());
-			lay -> setVisible(layer.attribute("visible") == "true");
-			lay -> setLinked(layer.attribute("linked") == "true");
+			lay -> setVisible(layer.attribute("visible") == "1");
+			lay -> setLinked(layer.attribute("linked") == "1");
 
 			// load channels
 			loadChannels(layer, lay);
@@ -707,7 +708,6 @@ bool KisDoc::completeLoading(KoStore *store)
 			QString url = QString("images/%1/layers/%2.bin").arg(image).arg(layerName);
 
 			if (store -> open(url)) {
-				kdDebug(0) << "KisDoc::completeLoading() ch->loadFromStore()" << endl;
 				lay -> loadFromStore(store);
 				store -> close();
 			}
@@ -784,7 +784,7 @@ void KisDoc::renameImage(const QString& oldName, const QString& newName)
 	for (KisImageSPLstIterator it = m_images.begin(); it != m_images.end(); it++) {
 		if ((*it) -> name() == oldName) {
 			(*it) -> setName(newName);
-			return;
+			break;
 		}
 	}
     
@@ -802,8 +802,10 @@ QStringList KisDoc::images()
 {
 	QStringList lst;
 
-	for (KisImageSPLstIterator it = m_images.begin(); it != m_images.end(); it++)
+	for (KisImageSPLstIterator it = m_images.begin(); it != m_images.end(); it++) {
+		kdDebug() << "(*it) -> name() == " << (*it) -> name() << endl;
 		lst.append((*it) -> name());
+	}
     
 	return lst;
 }
@@ -1168,6 +1170,8 @@ KisImageSP KisDoc::newImage(const QString& n, int width, int height, cMode cm, u
 void KisDoc::addImage(KisImageSP img)
 {
 	m_images.push_back(img);
+	img -> markDirty(QRect(0, 0, img -> width(), img -> height()));
+	setCurrentImage(img);
 }
 
 void KisDoc::removeImage(KisImageSP img)

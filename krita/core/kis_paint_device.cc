@@ -18,10 +18,16 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <qcstring.h>
+#include <qdatastream.h>
+
 #include <kdebug.h>
+
+#include <koStore.h>
 
 #include "kis_global.h"
 #include "kis_paint_device.h"
+#include "kis_tile.h"
 
 KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uint bpp, const QRgb& defaultColor) :
 	m_tiles(width / TILE_SIZE, height / TILE_SIZE, bpp, defaultColor)
@@ -88,5 +94,48 @@ void KisPaintDevice::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y
 QRect KisPaintDevice::tileExtents() const
 {
 	return m_tileRect;
+}
+
+/*
+    append binary image data per channel per layer to save file
+*/
+ 
+bool KisPaintDevice::writeToStore(KoStore *store)
+{
+	const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(unsigned int);
+    
+	for (uint ty = 0; ty < yTiles(); ty++) 
+		for (uint tx = 0; tx < xTiles(); tx++) {
+			KisTile *src = m_tiles.getTile(tx, ty);
+			const char *p = reinterpret_cast<const char*>(src -> data());
+
+			if (store -> write(p, TILE_BYTES) != TILE_BYTES)
+				return false;
+		}
+
+	return true;
+}
+
+bool KisPaintDevice::loadFromStore(KoStore *store)
+{
+	const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(unsigned int);
+	const unsigned int MAXSIZE = TILE_BYTES * yTiles() * xTiles();
+	int nread;
+
+	for (uint ty = 0; ty < yTiles(); ty++) {
+		for (uint tx = 0; tx < xTiles(); tx++) {
+			KisTile *dst = m_tiles.getTile(tx, ty);
+			char *p = reinterpret_cast<char*>(dst -> data());
+
+			nread = store -> read(p, TILE_BYTES);
+
+			if (nread != TILE_BYTES) {
+				kdDebug() << "nread = " << nread << endl;
+				return false;
+			}
+		}
+	}
+
+	return true;
 }
 

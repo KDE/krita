@@ -211,6 +211,8 @@ void KisTabBar::slotRemove( )
 */
 void KisTabBar::slotImageListUpdated()
 {
+    kdDebug() << "KisTabBar::slotImageListUpdated\n";
+
     // clear list - this also repaints
     removeAllTabs();
 

@@ -30,7 +30,7 @@ class KisBrush;
 class KisDoc;
 
 class AirBrushTool : public KisTool {
-Q_OBJECT
+	Q_OBJECT
     
 public:
 	AirBrushTool(KisDoc *doc, KisBrush *brush);
@@ -48,6 +48,8 @@ public:
 	virtual void mouseRelease(QMouseEvent*);
 
 	bool paint(QPoint pos, bool timeout);
+
+protected slots:
 	void timeoutPaint();  
 
 protected:
@@ -55,14 +57,14 @@ protected:
 	QMemArray<int> m_brushArray; // array of points in brush
 	int nPoints;  // number of points marked in array
     
-    QPoint  pos; 
-    QPoint 	m_dragStart;
-    bool   	m_dragging;
-    float   m_dragdist;
-    int     density; 
-         
-    unsigned int brushWidth;
-    unsigned int brushHeight;
+	QPoint  pos; 
+	QPoint 	m_dragStart;
+	bool   	m_dragging;
+	float   m_dragdist;
+	int     density; 
+
+	unsigned int brushWidth;
+	unsigned int brushHeight;
 };
 
 #endif //__airbrushtool_h__

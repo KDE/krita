@@ -31,7 +31,6 @@
 #include "kis_image.h"
 #include "kis_floatingselection.h"
 #include "kis_tool_select_rectangular.h"
-#include "kis_tool_select_rectangular.moc"
 #include "kis_undo_adapter.h"
 
 namespace {
@@ -74,7 +73,7 @@ namespace {
 	}
 }
 
-KisToolRectangularSelect::KisToolRectangularSelect()
+KisToolSelectRectangular::KisToolSelectRectangular()
 {
 	setCursor(KisCursor::selectCursor());
 	m_subject = 0;
@@ -83,29 +82,29 @@ KisToolRectangularSelect::KisToolRectangularSelect()
 	m_endPos = QPoint(0, 0);
 }
 
-KisToolRectangularSelect::~KisToolRectangularSelect()
+KisToolSelectRectangular::~KisToolSelectRectangular()
 {
 }
 
-void KisToolRectangularSelect::update(KisCanvasSubject *subject)
+void KisToolSelectRectangular::update(KisCanvasSubject *subject)
 {
 	m_subject = subject;
 	super::update(m_subject);
 }
 
-void KisToolRectangularSelect::paint(QPainter& gc)
+void KisToolSelectRectangular::paint(QPainter& gc)
 {
 	if (m_selecting)
 		paintOutline(gc, QRect());
 }
 
-void KisToolRectangularSelect::paint(QPainter& gc, const QRect& rc)
+void KisToolSelectRectangular::paint(QPainter& gc, const QRect& rc)
 {
 	if (m_selecting)
 		paintOutline(gc, rc);
 }
 
-void KisToolRectangularSelect::clearSelection()
+void KisToolSelectRectangular::clearSelection()
 {
 	if (m_subject) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
@@ -124,7 +123,7 @@ void KisToolRectangularSelect::clearSelection()
 	}
 }
 
-void KisToolRectangularSelect::mousePress(QMouseEvent *e)
+void KisToolSelectRectangular::mousePress(QMouseEvent *e)
 {
 	if (m_subject) {
 		KisImageSP img = m_subject -> currentImg();
@@ -138,7 +137,7 @@ void KisToolRectangularSelect::mousePress(QMouseEvent *e)
 	}
 }
 
-void KisToolRectangularSelect::mouseMove(QMouseEvent *e)
+void KisToolSelectRectangular::mouseMove(QMouseEvent *e)
 {
 	if (m_subject && m_selecting) {
 
@@ -150,7 +149,7 @@ void KisToolRectangularSelect::mouseMove(QMouseEvent *e)
 	}
 }
 
-void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
+void KisToolSelectRectangular::mouseRelease(QMouseEvent *e)
 {
 	if (m_subject && m_selecting) {
 		if (m_startPos == m_endPos) {
@@ -199,7 +198,7 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 	}
 }
 
-void KisToolRectangularSelect::paintOutline()
+void KisToolSelectRectangular::paintOutline()
 {
 	if (m_subject) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
@@ -211,7 +210,7 @@ void KisToolRectangularSelect::paintOutline()
 	}
 }
 
-void KisToolRectangularSelect::paintOutline(QPainter& gc, const QRect&)
+void KisToolSelectRectangular::paintOutline(QPainter& gc, const QRect&)
 {
 	if (m_subject) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
@@ -233,7 +232,7 @@ void KisToolRectangularSelect::paintOutline(QPainter& gc, const QRect&)
 	}
 }
 
-void KisToolRectangularSelect::setup(KActionCollection *collection)
+void KisToolSelectRectangular::setup(KActionCollection *collection)
 {
 	KToggleAction *toggle = new KToggleAction(i18n("&Rectangular Select"), 
 			"rectangular", 
@@ -245,3 +244,4 @@ void KisToolRectangularSelect::setup(KActionCollection *collection)
 	toggle -> setExclusiveGroup("tools");
 }
 
+#include "kis_tool_select_rectangular.moc"

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,86 +51,92 @@ void KisToolPaste::enter(QEvent *)
 
 void KisToolPaste::leave(QEvent *)
 {
-	if (m_subject && m_selection) {
-		KisImageSP owner = m_subject -> currentImg();
-//		QRect rc(m_selection -> bounds());
+// 	if (m_subject && m_selection) {
+// 		KisImageSP owner = m_subject -> currentImg();
+// //		QRect rc(m_selection -> bounds());
 
-		Q_ASSERT(owner);
-		owner -> unsetSelection(false);
-		m_selection -> visible(false);
-		m_selection = 0;
-		owner -> notify(); //rc);
-	}
+// 		Q_ASSERT(owner);
+// 		owner -> unsetSelection(false);
+// 		m_selection -> visible(false);
+// 		m_selection = 0;
+// 		owner -> notify(); //rc);
+// 	}
 }
 
 void KisToolPaste::mouseRelease(QMouseEvent *e)
 {
-	if (m_subject && m_selection) {
-		KisImageSP owner = m_subject -> currentImg();
-		KisPaintDeviceSP dev;
-		KisPainter gc;
+// 	if (m_subject && m_selection) {
+// 		KisImageSP owner = m_subject -> currentImg();
+// 		KisPaintDeviceSP dev;
+// 		KisPainter gc;
 
-		drag(e -> pos());
-		owner -> unsetSelection(false);
-		dev = owner -> activeDevice();
-		gc.begin(m_selection -> parent());
-		gc.beginTransaction(i18n("Paste Selection"));
-		gc.bitBlt(e -> x() - dev -> x(), 
-				e -> y() - dev -> y(), 
-				COMPOSITE_COPY, 
-				m_selection.data(), 
-				m_selection -> opacity(), 
-				0, 0, m_selection -> width(), m_selection -> height());
+// 		drag(e -> pos());
+// 		owner -> unsetSelection(false);
+// 		dev = owner -> activeDevice();
+// 		gc.begin(m_selection -> parent());
+// 		gc.beginTransaction(i18n("Paste Selection"));
+// 		gc.bitBlt(e -> x() - dev -> x(), 
+// 				e -> y() - dev -> y(), 
+// 				COMPOSITE_COPY, 
+// 				m_selection.data(), 
+// 				m_selection -> opacity(), 
+// 				0, 0, m_selection -> width(), m_selection -> height());
 		
-		if (owner -> undoAdapter())
-			owner -> undoAdapter() -> addCommand(gc.endTransaction());
+// 		if (owner -> undoAdapter())
+// 			owner -> undoAdapter() -> addCommand(gc.endTransaction());
 
-		m_selection = 0;
-		activate();
-	}
+// 		m_selection = 0;
+// 		activate();
+// 	}
 }
 
 void KisToolPaste::mouseMove(QMouseEvent *e)
 {
-	if (!m_selection)
-		return;
+// 	if (!m_selection)
+// 		return;
 
-	if (m_justEntered) {
-		m_selection -> move(e -> x(), e -> y());
-		startDrag(e -> pos());
-		m_justEntered = false;
-	} else {
-		drag(e -> pos());
-	}
+// 	if (m_justEntered) {
+// 		m_selection -> move(e -> x(), e -> y());
+// 		startDrag(e -> pos());
+// 		m_justEntered = false;
+// 	} else {
+// 		drag(e -> pos());
+// 	}
 }
 
 void KisToolPaste::activate()
 {
-	super::activate();
-	m_toggle -> setChecked(true);
+// 	super::activate();
+// 	m_toggle -> setChecked(true);
 
-#if 0
-	if (!m_selection)
-		m_selection = m_doc -> clipboardSelection();
-#endif
+// #if 0
+// 	if (!m_selection)
+// 		m_selection = m_doc -> clipboardSelection();
+// #endif
 
-	if (m_subject && m_selection) {
-		KisImageSP owner = m_subject -> currentImg();
+// 	if (m_subject && m_selection) {
+// 		KisImageSP owner = m_subject -> currentImg();
 
-		if (owner) {
-			m_selection -> setImage(owner);
-			owner -> unsetSelection(false);
-			m_selection -> setParent(owner -> activeDevice());
-			owner -> setSelection(m_selection);
-			m_justEntered = true;
-			m_selection -> visible(true);
-		}
-	}
+// 		if (owner) {
+// 			m_selection -> setImage(owner);
+// 			owner -> unsetSelection(false);
+// 			m_selection -> setParent(owner -> activeDevice());
+// 			owner -> setSelection(m_selection);
+// 			m_justEntered = true;
+// 			m_selection -> visible(true);
+// 		}
+// 	}
 }
 
 void KisToolPaste::setup(KActionCollection *collection)
 {
-	m_toggle = new KToggleAction(i18n("&Paste Tool"), "editpaste", 0, this, SLOT(activateSelf()), collection, "tool_paste");
-	m_toggle -> setExclusiveGroup("tools");
+ 	KToggleAction * toggle = new KToggleAction(i18n("&Paste Tool"), 
+						   "editpaste", 
+						   0, 
+						   this, 
+						   SLOT(activate()), 
+						   collection, 
+						   "tool_paste");
+ 	toggle -> setExclusiveGroup("tools");
 }
 

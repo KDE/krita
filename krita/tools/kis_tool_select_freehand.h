@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2001 Toshitaka Fujioka <fujioka@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,20 +27,22 @@
 #include <qpointarray.h>
 
 #include "kis_tool.h"
+#include "kis_tool_non_paint.h"
 
-class KisDoc;
-class KisCanvas;
-class KisView;
 
-class FreehandSelectTool : public KisTool {
+class KisToolSelectFreehand : public KisToolNonPaint {
+
+	typedef KisToolNonPaint super;
+	Q_OBJECT
+
 public:
-	FreehandSelectTool(KisDoc *doc, KisCanvas *canvas);
-	virtual ~FreehandSelectTool();
-
-	virtual void setupAction(QObject *collection);
+	KisToolSelectFreehand();
+	virtual ~KisToolSelectFreehand();
 
 	virtual void clearOld();
 	virtual bool willModify() const;
+
+	virtual void setup(KActionCollection *collection);
 
 	virtual void paintEvent(QPaintEvent *e);
 	virtual void mousePress(QMouseEvent *event);
@@ -61,9 +64,12 @@ protected:
 	bool        m_dragging;
 	bool        m_drawn;   
 
-	KisCanvas   *m_canvas;
+// 	KisCanvas   *m_canvas;
 
 private:
+
+	KisCanvasSubject *m_subject;
+
 	QRect m_selectRect;
 	QPointArray m_pointArray;
 	uint m_index;

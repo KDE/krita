@@ -19,8 +19,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __ellipsetool_h__
-#define __ellipsetool_h__
+#ifndef __KIS_TOOL_ELLIPSE_H__
+#define __KIS_TOOL_ELLIPSE_H__
 
 #include <qpoint.h>
 
@@ -32,27 +32,31 @@ class KisDoc;
 class KisPainter;
 class KisView;
 
-class EllipseTool : public RectangleTool {
-	typedef RectangleTool super;
+class KisToolEllipse : public KisToolRectangle {
+
+	typedef KisToolRectangle super;
+	Q_OBJECT
 
 public:
-	EllipseTool(KisDoc *doc, KisCanvas *canvas);
-	virtual ~EllipseTool();
+	KisToolEllipse();
+	virtual ~KisToolEllipse();
 
 	virtual QString settingsName() const;
 
-	virtual void setupAction(QObject *collection);
+	virtual void setup(KActionCollection *collection);
 
 protected:
 	virtual void draw(const QPoint& start, const QPoint& stop);
 	virtual void draw(KisPainter *gc, const QRect& rc);
 
 protected:
+	KisCanvasSubject * m_subject;
+
 	int m_lineThickness;
 	QPoint  m_dragStart;
 	QPoint  m_dragEnd;
 	bool    m_dragging;
 };
 
-#endif //__linetool_h__
+#endif //__KIS_TOOL_ELLIPSE_H__
 

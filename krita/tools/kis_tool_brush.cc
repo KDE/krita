@@ -1,5 +1,5 @@
 /*
- *  kis_tool_brush.cc - part of Kria
+ *  kis_tool_brush.cc - part of Krita
  *
  *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -267,3 +267,4 @@ void KisToolBrush::slotSetCompositeMode(int compositeOp)
 }
 
 #include "kis_tool_brush.moc"
+

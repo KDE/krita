@@ -24,13 +24,16 @@
 #define KIS_TOOL_ERASER_H_
 
 #include "kis_tool_paint.h"
+#include "kis_types.h"
 
 class KisPainter;
 class QPoint;
 
 
 class KisToolEraser : public KisToolPaint {
+
 	typedef KisToolPaint super;
+	Q_OBJECT
 
 public:
 	KisToolEraser();

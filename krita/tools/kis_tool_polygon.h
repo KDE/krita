@@ -1,7 +1,8 @@
 /*
- *  polygontool.h - part of Krayon
+ *  kis_tool_polygon.h - part of Krayon
  *
  *  Copyright (c) 2001 Toshitaka Fujioka <fujioka@kde.org>
+ *  Copyright (c) 2004 Boudewijn Remot <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,28 +19,29 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __polygontool_h__
-#define __polygontool_h__
+#ifndef __KIS_TOOL_POLYGON__
+#define __KIS_TOOL_POLYGON__
 
 #include <qpoint.h>
 
 #include "kis_tool.h"
+#include "kis_tool_paint.h"
 
-class KisDoc;
-class KisView;
-class KisCanvas;
+class KisToolPolygon : public KisToolPaint {
 
-class PolyGonTool : public KisTool {
+	typedef KisToolPaint super;
+	Q_OBJECT
+
 public:
-	PolyGonTool(KisDoc *doc, KisCanvas *canvas);
-	virtual ~PolyGonTool();
+	KisToolPolygon();
+	virtual ~KisToolPolygon();
 
-	virtual void setupAction(QObject *collection);
-	virtual QDomElement saveSettings(QDomDocument& doc) const;
-	virtual bool loadSettings(QDomElement& elem);
+	virtual void setup(KActionCollection *collection);
+// 	virtual QDomElement saveSettings(QDomDocument& doc) const;
+// 	virtual bool loadSettings(QDomElement& elem);
 
-	virtual void toolSelect();
-	virtual void optionsDialog();
+// 	virtual void toolSelect();
+// 	virtual void optionsDialog();
 
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
@@ -50,22 +52,24 @@ protected:
 
 private:
 
-    int         lineThickness;
-    int         cornersValue;
-    int         sharpnessValue;
+	int lineThickness;
+	int cornersValue;
+	int sharpnessValue;
 
-    bool        checkPolygon;
-    bool        checkConcavePolygon;
+	bool checkPolygon;
+	bool checkConcavePolygon;
         
-    QPoint      m_dragStart;
-    QPoint      m_dragEnd;
-    QPoint      mStart;
-    QPoint      mFinish;
+	QPoint m_dragStart;
+	QPoint m_dragEnd;
+	QPoint mStart;
+	QPoint mFinish;
     
-    bool        m_dragging;
-    bool        m_done;
+	bool m_dragging;
+	bool m_done;
     
-    QPointArray drawPoints;
+	QPointArray drawPoints;
+
+	KisCanvasSubject * m_subject;
 };
 
-#endif //__polygontool_h__
+#endif //__KIS_TOOL_POLYGON__

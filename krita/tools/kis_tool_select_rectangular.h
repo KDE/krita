@@ -24,13 +24,14 @@
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 
-class KisToolRectangularSelect : public KisToolNonPaint {
+class KisToolSelectRectangular : public KisToolNonPaint {
+
 	typedef KisToolNonPaint super;
 	Q_OBJECT
 
 public:
-	KisToolRectangularSelect();
-	virtual ~KisToolRectangularSelect();
+	KisToolSelectRectangular();
+	virtual ~KisToolSelectRectangular();
 
 public:
 	virtual void update(KisCanvasSubject *subject);

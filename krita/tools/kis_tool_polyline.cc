@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,63 +24,75 @@
 #include <qstring.h>
 
 #include <kaction.h>
+#include <klocale.h>
 
 #include "kis_dlg_toolopts.h"
-#include "kis_canvas.h"
+#include "kis_canvas_controller.h"
+#include "kis_canvas_subject.h"
+
 #include "kis_doc.h"
 #include "kis_painter.h"
 #include "kis_tool_polyline.h"
 #include "kis_view.h"
 
-PolyLineTool::PolyLineTool(KisDoc *doc, KisCanvas *canvas) : super(doc, canvas)
+KisToolPolyLine::KisToolPolyLine() 
+	: super()
+{
+	m_subject = 0;
+}
+
+KisToolPolyLine::~KisToolPolyLine()
 {
 }
 
-PolyLineTool::~PolyLineTool()
+void KisToolPolyLine::mousePress(QMouseEvent *event)
 {
-}
+// 	KisView *view = getCurrentView();
+// 	KisPainter *p;
 
-void PolyLineTool::mousePress(QMouseEvent *event)
-{
-	KisView *view = getCurrentView();
-	KisPainter *p;
-
-	// start the polyline, and/or complete the 
-	// polyline segment
-	if (event -> button() == LeftButton) {
-		if (m_dragging) {
-			// erase old line on canvas
-			draw(m_dragStart, m_dragEnd);
-			m_dragEnd = event -> pos();
-			p = view -> kisPainter();
-			p -> drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()), zoomed(m_dragEnd.x()),   zoomed(m_dragEnd.y()));
-		}
+// 	// start the polyline, and/or complete the 
+// 	// polyline segment
+// 	if (event -> button() == LeftButton) {
+// 		if (m_dragging) {
+// 			// erase old line on canvas
+// 			draw(m_dragStart, m_dragEnd);
+// 			m_dragEnd = event -> pos();
+// 			p = view -> kisPainter();
+// 			p -> drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()), zoomed(m_dragEnd.x()),   zoomed(m_dragEnd.y()));
+// 		}
         
-		m_dragging = true;
-		m_dragStart = event -> pos();
-		m_dragEnd = event -> pos();
-	}
-	else {   
-		m_dragging = false;
-		m_dragEnd = event -> pos();
-		p = view -> kisPainter();
-		p -> drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()), zoomed(m_dragEnd.x()), zoomed(m_dragEnd.y()));
-	}    
+// 		m_dragging = true;
+// 		m_dragStart = event -> pos();
+// 		m_dragEnd = event -> pos();
+// 	}
+// 	else {   
+// 		m_dragging = false;
+// 		m_dragEnd = event -> pos();
+// 		p = view -> kisPainter();
+// 		p -> drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()), zoomed(m_dragEnd.x()), zoomed(m_dragEnd.y()));
+// 	}    
 }
 
-void PolyLineTool::mouseRelease(QMouseEvent * /*event*/)
+void KisToolPolyLine::mouseRelease(QMouseEvent * /*event*/)
 {
 }
 
-void PolyLineTool::setupAction(QObject *collection)
+void KisToolPolyLine::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Polyline Tool"), "polyline", 0, this, SLOT(toolSelect()), collection, "tool_polyline");
+	KToggleAction *toggle = new KToggleAction(i18n("&Polyline Tool"),
+						  "polyline", 
+						  0, 
+						  this, 
+						  SLOT(action()), 
+						  collection, 
+						  "tool_polyline");
 
 	toggle -> setExclusiveGroup("tools");
 }
 
-QString PolyLineTool::settingsName() const
+QString KisToolPolyLine::settingsName() const
 {
 	return "polylineTool";
 }
 
+#include "kis_tool_polyline.moc"

@@ -1,5 +1,5 @@
 /*
- *  kis_tool_pen.h - part of KImageShop
+ *  kis_tool_pen.h - part of KImageShop^WKrayon^WKrita
  *
  *  Copyright (c) 1999 Matthias Elter
  *
@@ -18,30 +18,27 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __pentool_h__
-#define __pentool_h__
+#ifndef __KIS_TOOL_PEN_H__
+#define __KIS_TOOL_PEN_H__
 
-#include <qpen.h>
-#include <qpoint.h>
-#include "kis_view.h"
-#include "kis_canvas.h"
 #include "kis_tool.h"
+#include "kis_tool_paint.h"
 
 class KisBrush;
 class KisDoc;
 class KisImageCmd;
 class KisFrameBuffer;
 
-class PenTool : public KisTool {
+class KisToolPen : public KisToolPaint {
+
+	typedef KisToolPaint super;
+	Q_OBJECT
+
 public:
-	PenTool(KisDoc *doc, KisCanvas *canvas, KisBrush *brush);
-	virtual ~PenTool();
+	KisToolPen();
+	virtual ~KisToolPen();
   
-	virtual void setupAction(QObject *collection);
-	virtual QDomElement saveSettings(QDomDocument& doc) const;
-	virtual bool loadSettings(QDomElement& elem);
-	virtual void optionsDialog();
-	virtual void setBrush(KisBrush *brush);
+	virtual void setup(KActionCollection *collection);
 
 	virtual void mousePress(QMouseEvent*); 
 	virtual void mouseMove(QMouseEvent*);
@@ -50,18 +47,16 @@ public:
 	bool paint(const QPoint& pos);
 
 protected:
-	KisImageCmd *m_cmd;
+	KisCanvasSubject *m_subject;
 
 	QPoint m_dragStart;
 	bool m_dragging;
 	float m_dragdist;
-
-	KisFrameBuffer *m_fb;
 
 	// tool options
 	int m_lineThickness;
 	int m_penColorThreshold;
 };
 
-#endif //__pentool_h__
+#endif //__KIS_TOOL_PEN_H__
 

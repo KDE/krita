@@ -1,5 +1,5 @@
 /*
- *  selecttool.h - part of KImageShop
+ *  kis_tool_select_contiguous.h - part of KImageShop^WKrayon^Krita
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
@@ -19,22 +19,23 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __selecttoolcontiguous_h__
-#define __selecttoolcontiguous_h__
+#ifndef __KIS_TOOL_SELECT_CONTIGUOUS_H__
+#define __KIS_TOOL_SELECT_CONTIGUOUS_H__
 
 #include <qpoint.h>
 #include "kis_tool.h"
+#include "kis_tool_non_paint.h"
 
-class KisDoc;
-class KisCanvas;
-class KisView;
+class KisToolSelectContiguous : public KisToolNonPaint {
 
-class ContiguousSelectTool : public KisTool {
+	typedef KisToolNonPaint super;
+	Q_OBJECT
+
 public:
-	ContiguousSelectTool(KisDoc *doc, KisCanvas *canvas);
-	virtual ~ContiguousSelectTool();
+	KisToolSelectContiguous();
+	virtual ~KisToolSelectContiguous();
 
-	virtual void setupAction(QObject *collection);
+	virtual void setup(KActionCollection *collection);
 
 	virtual void clearOld();
 	virtual bool willModify() const;
@@ -53,7 +54,10 @@ protected:
 	bool m_drawn;   
 	bool m_init;
 	QRect m_selectRect;
+
+private:
+	KisCanvasSubject *m_subject;
 };
 
-#endif //__selecttoolcontiguous_h__
+#endif //__KIS_TOOL_SELECT_CONTIGUOUS_H__
 

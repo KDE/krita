@@ -21,7 +21,6 @@
 #include "kis_canvas_subject.h"
 #include "kis_tool_controller.h"
 #include "kis_tool_paint.h"
-#include "kis_tool_paint.moc"
 
 KisToolPaint::KisToolPaint()
 {
@@ -128,3 +127,4 @@ void KisToolPaint::activate()
 	}
 }
 
+#include "kis_tool_paint.moc"

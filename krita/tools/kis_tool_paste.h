@@ -18,16 +18,14 @@
 #ifndef KIS_TOOL_PASTE_H_
 #define KIS_TOOL_PASTE_H_
 
-#include "kis_selection.h"
+#include "kis_floatingselection.h"
 #include "kis_tool_non_paint.h"
 #include "kis_tool_move.h"
 
-class KActionCollection;
-class KToggleAction;
-
 class KisToolPaste : public KisToolNonPaint {
-	Q_OBJECT
+
 	typedef KisToolNonPaint super;
+	Q_OBJECT
 
 public:
 	KisToolPaste();
@@ -46,11 +44,11 @@ protected slots:
 
 private:
 	KisCanvasSubject *m_subject;
-	KisSelectionSP m_clip;
+
+	KisFloatingSelectionSP m_clip;
 	bool m_justEntered;
 	QUANTUM m_oldOpacity;
-	KisSelectionSP m_selection;
-	KToggleAction *m_toggle;
+	KisFloatingSelectionSP m_selection;
 };
 
 #endif // KIS_TOOL_PASTE_H_

@@ -40,6 +40,7 @@ class KisCanvasSubject;
 
 
 class KisToolNonPaint : public KisTool {
+
 	Q_OBJECT
 	typedef KisTool super;
 

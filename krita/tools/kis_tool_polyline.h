@@ -30,19 +30,26 @@
 class KisDoc;
 class KisCanvas;
 
-class PolyLineTool : public LineTool {
-	typedef LineTool super;
+class KisToolPolyLine : public KisToolLine {
+
+	typedef KisToolLine super;
+	Q_OBJECT
 
 public:
-	PolyLineTool(KisDoc *doc, KisCanvas *canvas);
-	virtual ~PolyLineTool();
+	KisToolPolyLine();
+	virtual ~KisToolPolyLine();
 
 	QString settingsName() const;
 
-	virtual void setupAction(QObject *collection);
+	virtual void setup(KActionCollection *collection);
 
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);
+
+private:
+
+	KisCanvasSubject * m_subject;
+
 };
 
 #endif //__polylinetool_h__

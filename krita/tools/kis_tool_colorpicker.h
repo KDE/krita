@@ -30,6 +30,7 @@ class QCheckBox;
 class KisRGBWidget;
 
 class KisToolColorPicker : public KisToolNonPaint {
+
 	Q_OBJECT
 	typedef KisToolNonPaint super;
 

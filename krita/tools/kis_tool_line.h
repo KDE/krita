@@ -25,10 +25,21 @@
 
 #include "kis_tool_paint.h"
 
-class QPoint;
+#include "kis_global.h"
+#include "kis_types.h"
+
+class IntegerWidget;
+class KisBrush;
+class KisCmbComposite;
 class KisPainter;
 
+class QLabel;
+class QPoint;
+class QWidget;
+
 class KisToolLine : public KisToolPaint {
+
+	Q_OBJECT
 	typedef KisToolPaint super;
 
  public:

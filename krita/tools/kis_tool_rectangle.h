@@ -1,8 +1,9 @@
 /*
- *  kis_tool_rectangle.h - part of KImageShop
+ *  kis_tool_rectangle.h - part of KImageShop^WKrayon^WKrita
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,41 +20,40 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __rectangletool_h__
-#define __rectangletool_h__
+#ifndef __KIS_TOOL_RECTANGLE_H__
+#define __KIS_TOOL_RECTANGLE_H__
 
 #include <qpoint.h>
 #include <qrect.h>
 
 #include "kis_tool.h"
+#include "kis_tool_paint.h"
 
 class QPainter;
-
-class KisCanvas;
-class KisDoc;
 class KisPainter;
-class KisView;
 
-class RectangleTool : public KisToolInterface {
-	typedef KisToolInterface super;
+class KisToolRectangle : public KisToolPaint {
+
+	typedef KisToolPaint super;
+	Q_OBJECT
 
 public:
-	RectangleTool(KisDoc *doc, KisCanvas *canvas);
-	virtual ~RectangleTool();
+	KisToolRectangle();
+	virtual ~KisToolRectangle();
 
-	virtual QString settingsName() const;
-	virtual QDomElement saveSettings(QDomDocument& doc) const;
-	virtual bool loadSettings(QDomElement& elem);
+// 	virtual QString settingsName() const;
+// 	virtual QDomElement saveSettings(QDomDocument& doc) const;
+// 	virtual bool loadSettings(QDomElement& elem);
 
-	virtual void setupAction(QObject *collection);
-	virtual void optionsDialog();
+	virtual void setup(KActionCollection *collection);
+// 	virtual void optionsDialog();
 
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
-	virtual void mouseRelease( QMouseEvent *event);
+	virtual void mouseRelease(QMouseEvent *event);
 
 public slots:
-	virtual void toolSelect();
+//	virtual void toolSelect();
     
 protected:
 	virtual void draw(const QPoint&, const QPoint&);
@@ -67,7 +67,10 @@ protected:
 	QRect m_final_lines;
 
 	bool m_dragging;
+private:
+	KisCanvasSubject *m_subject;
+	
 };
 
-#endif //__linetool_h__
+#endif // __KIS_TOOL_RECTANGLE_H__
 

@@ -41,6 +41,7 @@ enum enumBrushMode {
 };
 
 class KisToolPaint : public KisTool {
+
 	Q_OBJECT
 	typedef KisTool super;
 

@@ -24,15 +24,25 @@
 
 #include "kis_tool_paint.h"
 
-class QPoint;
+#include "kis_global.h"
+#include "kis_types.h"
+
+class IntegerWidget;
+class KisBrush;
+class KisCmbComposite;
 class KisPainter;
-class KisPattern;
+
+class QLabel;
+class QPoint;
+class QWidget;
 
 
 class KisToolStamp : public KisToolPaint {
-	typedef KisToolPaint super;
 
- public:
+	typedef KisToolPaint super;
+	Q_OBJECT
+
+public:
 	KisToolStamp();
 	virtual ~KisToolStamp();
 

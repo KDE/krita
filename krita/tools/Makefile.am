@@ -13,21 +13,19 @@ libkistools_la_SOURCES = kis_tool_paint.cc \
 	kis_tool_eraser.cc \
 	kis_tool_line.cc \
 	kis_tool_stamp.cc \
-	kis_tool_airbrush.cc
-
-#  kis_tool_paste.cc
-#  kis_tool_select_freehand.cc 
-#  kis_tool_select_rectangular.cc 
-#  kis_tool_select_polygonal.cc 
-#  kis_tool_select_elliptical.cc 
-#  kis_tool_select_contiguous.cc 
-#  kis_tool_pen.cc 
-#  kis_tool_fill.cc
-#  kis_tool_rectangle.cc 
-#  kis_tool_ellipse.cc
-#  kis_tool_polyline.cc
-#  kis_tool_polygon.cc 
-#  kis_tool_colorchanger.cc  
+	kis_tool_airbrush.cc \
+        kis_tool_paste.cc \
+        kis_tool_select_freehand.cc \
+        kis_tool_select_polygonal.cc \
+        kis_tool_select_elliptical.cc \
+        kis_tool_select_contiguous.cc \
+        kis_tool_pen.cc \
+        kis_tool_fill.cc \
+        kis_tool_rectangle.cc \
+        kis_tool_ellipse.cc \
+        kis_tool_polyline.cc \
+        kis_tool_polygon.cc \
+        kis_tool_colorchanger.cc  
 
 libkistools_la_METASOURCES = AUTO
 

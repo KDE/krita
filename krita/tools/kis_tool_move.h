@@ -25,6 +25,7 @@
 #include "kis_tool_non_paint.h"
 
 class KisToolMove : public KisToolNonPaint {
+
 	typedef KisToolNonPaint super;
 	Q_OBJECT
 

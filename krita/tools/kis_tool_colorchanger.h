@@ -2,6 +2,7 @@
  *  kis_tool_colorchanger.h - part of Krayon
  *
  *  Copyright (c) 2000 John Califf
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,28 +19,32 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __colorchangertool_h__
-#define __colorchangertool_h__
+#ifndef __KIS_TOOL_COLORCHANGER_H__
+#define __KIS_TOOL_COLORCHANGER_H__
 
 #include <qpoint.h>
 
 #include "kis_view.h"
 #include "kis_tool.h"
+#include "kis_tool_paint.h"
 #include "kis_layer.h"
-#include "kis_framebuffer.h"
 
-class KisDoc;
 
-class ColorChangerTool : public KisTool {
+class KisToolColorChanger : public KisToolPaint {
+
+	typedef KisToolPaint super;
+	Q_OBJECT
+
 public:
-	ColorChangerTool(KisDoc *doc);
-	virtual ~ColorChangerTool();
+	KisToolColorChanger();
+	virtual ~KisToolColorChanger();
   
-	virtual void setupAction(QObject *collection);
-	virtual QDomElement saveSettings(QDomDocument& doc) const;
-	virtual bool loadSettings(QDomElement& elem);
-	virtual void optionsDialog();
-	virtual void setCursor();
+	virtual void setup(KActionCollection *collection);
+
+// 	virtual QDomElement saveSettings(QDomDocument& doc) const;
+// 	virtual bool loadSettings(QDomElement& elem);
+// 	virtual void optionsDialog();
+// 	virtual void setCursor();
 
 	virtual void mousePress(QMouseEvent*); 
 
@@ -47,22 +52,22 @@ public:
       
 protected:
                 
-    // new colors (desired)
-    int nRed;
-    int nGreen;
-    int nBlue;
+	// new colors (desired)
+	int nRed;
+	int nGreen;
+	int nBlue;
 
-    // source colors (existing)
+	// source colors (existing)
 
-    int fillOpacity;
-    bool layerAlpha;
+	int fillOpacity;
+	bool layerAlpha;
 
-    int toleranceRed;
-    int toleranceGreen;    
-    int toleranceBlue;
+	int toleranceRed;
+	int toleranceGreen;    
+	int toleranceBlue;
 
-    KisLayer *fLayer;
+	KisCanvasSubject * m_subject;
 };
 
-#endif //__colorchangertool_h__
+#endif //__KIS_TOOL_COLORCHANGER_H__
 

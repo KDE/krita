@@ -30,6 +30,7 @@ class KisPainter;
 class KisBrush;
 
 class KisToolAirBrush : public KisToolPaint {
+
 	Q_OBJECT
 	typedef KisToolPaint super;
     

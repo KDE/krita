@@ -1770,6 +1770,7 @@ void KisView::placeSidebarLeft()
 */
 void KisView::preferences()
 {
+	
 	PreferencesDialog::editPreferences();
 }
 

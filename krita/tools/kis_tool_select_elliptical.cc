@@ -1,8 +1,9 @@
 /*
- *  tool_select_elliptical.cc - part of Krayon
+ *  tool_select_elliptical.cc - part of Krayon^WKrita
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,54 +27,61 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_doc.h"
-#include "kis_canvas.h"
+#include "kis_canvas_subject.h"
+#include "kis_canvas_controller.h"
 #include "kis_tool_select_elliptical.h"
-#include "kis_view.h"
 
-EllipticalSelectTool::EllipticalSelectTool(KisDoc *doc, KisCanvas *canvas) : super(doc, canvas)
+KisToolSelectElliptical::KisToolSelectElliptical() : super()
+{
+	m_subject = 0;
+}
+
+
+KisToolSelectElliptical::~KisToolSelectElliptical()
 {
 }
 
-EllipticalSelectTool::~EllipticalSelectTool()
+void KisToolSelectElliptical::setup(KActionCollection *collection)
 {
-}
-
-void EllipticalSelectTool::setupAction(QObject *collection)
-{
-	KToggleAction *toggle = new KToggleAction(i18n("&Elliptical Select"), "elliptical" , 0, this, SLOT(toolSelect()),
-			collection, "tool_select_elliptical" );
+	KToggleAction *toggle = new KToggleAction(i18n("&Elliptical Select"), 
+						  "elliptical" , 
+						  0, 
+						  this, 
+						  SLOT(activate()),
+						  collection, 
+						  "tool_select_elliptical" );
 
 	toggle -> setExclusiveGroup("tools");
 }
 
-void EllipticalSelectTool::draw(const QPoint& start, const QPoint& end, QPaintEvent *e)
+void KisToolSelectElliptical::draw(const QPoint& start, const QPoint& end, QPaintEvent *e)
 {
-	KisView *view = getCurrentView();
-	QPainter gc(m_canvas);
-	QPen pen(Qt::DotLine);
-	float zF = view -> zoomFactor();
+// 	KisView *view = getCurrentView();
+// 	QPainter gc(m_canvas);
+// 	QPen pen(Qt::DotLine);
+// 	float zF = view -> zoomFactor();
 
-	gc.setRasterOp(Qt::NotROP);
-	gc.setPen(pen);
+// 	gc.setRasterOp(Qt::NotROP);
+// 	gc.setPen(pen);
  
-	if (e)
-		gc.setClipRect(e -> rect());
+// 	if (e)
+// 		gc.setClipRect(e -> rect());
    
-	gc.drawEllipse(
-			start.x() + view -> xPaintOffset() - static_cast<int>(zF * view -> xScrollOffset()),
-			start.y() + view -> yPaintOffset() - static_cast<int>(zF * view -> yScrollOffset()), 
-			end.x() - start.x(), 
-			end.y() - start.y());
+// 	gc.drawEllipse(
+// 			start.x() + view -> xPaintOffset() - static_cast<int>(zF * view -> xScrollOffset()),
+// 			start.y() + view -> yPaintOffset() - static_cast<int>(zF * view -> yScrollOffset()), 
+// 			end.x() - start.x(), 
+// 			end.y() - start.y());
 }
 
-QRegion::RegionType EllipticalSelectTool::regionType()
+QRegion::RegionType KisToolSelectElliptical::regionType()
 {
 	return QRegion::Ellipse;
 }
 
-void EllipticalSelectTool::setSelection(const QRect& rc, KisLayer *lay)
+void KisToolSelectElliptical::setSelection(const QRect& rc, KisLayer *lay)
 {
-	m_doc -> getSelection() -> setEllipticalSelection(rc, lay);
+// 	m_doc -> getSelection() -> setEllipticalSelection(rc, lay);
 }
 
+#include "kis_tool_select_elliptical.moc"

@@ -1,5 +1,5 @@
 /*
- *  kis_tool_fill.h - part of Krayon
+ *  kis_tool_fill.h - part of Krayon^Krita
  *
  *  Copyright (c) 2000 John Califf
  *
@@ -23,11 +23,8 @@
 
 #include <qpoint.h>
 
-#include "kis_view.h"
 #include "kis_tool.h"
-#include "kis_layer.h"
-
-class KisDoc;
+#include "kis_tool_paint.h"
 
 struct fillinfo
 {
@@ -43,21 +40,20 @@ struct fillpixelinfo
    int y, xl, xr, dy;
 };
 
-class FillTool : public KisTool {
+class KisToolFill : public KisToolPaint {
+
+	typedef KisToolPaint super;
+	Q_OBJECT
+
 public:
-	FillTool(KisDoc *doc);
-	virtual ~FillTool();
+
+	KisToolFill();
+	virtual ~KisToolFill();
   
-	virtual void setupAction(QObject *collection);
-	virtual QDomElement saveSettings(QDomDocument& doc) const;
-	virtual bool loadSettings(QDomElement& elem);
-	virtual void optionsDialog();
+	virtual void setup(KActionCollection *collection);
 
 	virtual void mousePress(QMouseEvent*); 
 
-	// set custom cursor.
-	virtual void setCursor();
-    
 	bool flood(int startX, int startY);
       
 protected:
@@ -82,8 +78,9 @@ protected:
 	int toleranceRed;
 	int toleranceGreen;    
 	int toleranceBlue;
+private:
+	KisCanvasSubject *m_subject;
 
-	KisLayer *fLayer;
 };
 
 #endif //__filltool_h__

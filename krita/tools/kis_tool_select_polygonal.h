@@ -1,5 +1,5 @@
 /*
- *  selecttool.h - part of Krayon
+ *  kis_tool_select_polygonal.h - part of Krayon^WKrita
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
@@ -26,18 +26,18 @@
 #include <qpointarray.h>
 
 #include "kis_tool.h"
+#include "kis_tool_non_paint.h"
 
+class KisToolSelectPolygonal : public KisToolNonPaint {
 
-class KisDoc;
-class KisCanvas;
-class KisView;
+	typedef KisToolNonPaint super;
+	Q_OBJECT
 
-class PolygonalSelectTool : public KisTool {
 public:
-	PolygonalSelectTool(KisDoc *doc, KisCanvas *canvas);
-	virtual ~PolygonalSelectTool();
+	KisToolSelectPolygonal();
+	virtual ~KisToolSelectPolygonal();
 
-	virtual void setupAction(QObject *collection);
+	virtual void setup(KActionCollection *collection);
 
 	virtual void clearOld();
 	virtual bool willModify() const;
@@ -54,6 +54,9 @@ protected:
 	void drawLine(const QPoint& start, const QPoint& end); 
  
 private:
+
+	KisCanvasSubject *m_subject;
+
 	QPoint m_dragStart;
 	QPoint m_dragEnd;
 

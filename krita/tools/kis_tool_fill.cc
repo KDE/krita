@@ -2,6 +2,7 @@
  *  kis_tool_fill.cc - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,60 +21,61 @@
 
 #include <kaction.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <koColor.h>
 
-#include "kis_doc.h"
-#include "kis_view.h"
-#include "kis_canvas.h"
-#include "kis_framebuffer.h"
+#include "kis_canvas_controller.h"
+#include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_tool_fill.h"
 #include "kis_dlg_toolopts.h"
 
-FillTool::FillTool(KisDoc *doc) : KisTool(doc)
+KisToolFill::KisToolFill() 
+	: super()
 {
-	// set custom cursor.
-	setCursor();
-	m_doc = doc;
+	m_subject = 0;
 
-	// initialize filler tool settings
-	m_opacity = 255;
-	m_usePattern  = false;
-	m_useGradient = false;
-	toleranceRed = 0;
-	toleranceGreen = 0;
-	toleranceBlue = 0;
-	layerAlpha = true;
+	// set custom cursor.
+	setCursor(KisCursor::fillerCursor());
+
+// 	// initialize filler tool settings
+// 	m_opacity = 255;
+// 	m_usePattern  = false;
+// 	m_useGradient = false;
+// 	toleranceRed = 0;
+// 	toleranceGreen = 0;
+// 	toleranceBlue = 0;
+// 	layerAlpha = true;
 }
 
-FillTool::~FillTool() 
+KisToolFill::~KisToolFill() 
 {
 }
 
 // floodfill based on GPL code in gpaint by Li-Cheng (Andy) Tai
-int FillTool::is_old_pixel_value(struct fillinfo *info, int x, int y)
+int KisToolFill::is_old_pixel_value(struct fillinfo *info, int x, int y)
 {
-	QRgb rgb = fLayer -> pixel(x, y);
-	unsigned char o_r = qRed(rgb);
-	unsigned char o_g = qGreen(rgb);
-	unsigned char o_b = qBlue(rgb);
+// 	QRgb rgb = fLayer -> pixel(x, y);
+// 	unsigned char o_r = qRed(rgb);
+// 	unsigned char o_g = qGreen(rgb);
+// 	unsigned char o_b = qBlue(rgb);
 
-	return o_r == info -> o_r && o_g == info->o_g && o_b == info->o_b;
+// 	return o_r == info -> o_r && o_g == info->o_g && o_b == info->o_b;
 }
 
-void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
+void KisToolFill::set_new_pixel_value(struct fillinfo *info, int x, int y)
 {
-	if(m_useGradient)
-		m_doc -> frameBuffer() -> setGradientToPixel(fLayer, x, y);
-	else if(m_usePattern)
-		m_doc -> frameBuffer() -> setPatternToPixel(fLayer, x, y, 0);
-	else
-		fLayer -> setPixel(x, y, qRgba(info -> r, info -> g, info -> b, m_opacity));
+// 	if(m_useGradient)
+// 		m_doc -> frameBuffer() -> setGradientToPixel(fLayer, x, y);
+// 	else if(m_usePattern)
+// 		m_doc -> frameBuffer() -> setPatternToPixel(fLayer, x, y, 0);
+// 	else
+// 		fLayer -> setPixel(x, y, qRgba(info -> r, info -> g, info -> b, m_opacity));
     
-	// alpha adjustment with either fill method
-//	if (layerAlpha)
-//		fLayer -> setPixel(3, x, y, m_opacity);
+// 	// alpha adjustment with either fill method
+// //	if (layerAlpha)
+// //		fLayer -> setPixel(3, x, y, m_opacity);
 }
 
 
@@ -81,7 +83,7 @@ void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
 
 /* algorithm based on SeedFill.c from GraphicsGems 1 */
 
-void FillTool::flood_fill(struct fillinfo *info, int x, int y)
+void KisToolFill::flood_fill(struct fillinfo *info, int x, int y)
 {
    struct fillpixelinfo stack[STACKSIZE];
    struct fillpixelinfo * sp = stack;
@@ -146,7 +148,7 @@ skip:
 #undef PUSH
 }   
    
-void FillTool::seed_flood_fill(int x, int y, const QRect& frect)
+void KisToolFill::seed_flood_fill(int x, int y, const QRect& frect)
 {
     struct fillinfo fillinfo;
    
@@ -169,167 +171,167 @@ void FillTool::seed_flood_fill(int x, int y, const QRect& frect)
 }
 
 
-bool FillTool::flood(int startX, int startY)
+bool KisToolFill::flood(int startX, int startY)
 {
-    int startx = startX;
-    int starty = startY;
-    QRgb srgb;
-    KisView *view = getCurrentView();
-    KisImage *img = m_doc->currentImg();
+//     int startx = startX;
+//     int starty = startY;
+//     QRgb srgb;
+//     KisView *view = getCurrentView();
+//     KisImage *img = m_doc->currentImg();
 
-    if (!img) return false;    
+//     if (!img) return false;    
 
-    KisLayer *lay = img->getCurrentLayer();
-    if (!lay) return false;
+//     KisLayer *lay = img->getCurrentLayer();
+//     if (!lay) return false;
 
-    if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	    return false;
+//     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
+// 	    return false;
     
-    layerAlpha = (img->colorMode() == cm_RGBA);
-    fLayer = lay;
+//     layerAlpha = (img->colorMode() == cm_RGBA);
+//     fLayer = lay;
     
-    // source color values of selected pixed
-    srgb = lay -> pixel(startx, starty);
-    sRed = qRed(srgb);
-    sGreen = qGreen(srgb);
-    sBlue = qBlue(srgb);
+//     // source color values of selected pixed
+//     srgb = lay -> pixel(startx, starty);
+//     sRed = qRed(srgb);
+//     sGreen = qGreen(srgb);
+//     sBlue = qBlue(srgb);
 
-    // new color values from color selector 
+//     // new color values from color selector 
 
-    nRed     = view->fgColor().R();
-    nGreen   = view->fgColor().G();
-    nBlue    = view->fgColor().B();
+//     nRed     = view->fgColor().R();
+//     nGreen   = view->fgColor().G();
+//     nBlue    = view->fgColor().B();
     
-    int left    = lay->imageExtents().left(); 
-    int top     = lay->imageExtents().top();    
-    int width   = lay->imageExtents().width();    
-    int height  = lay->imageExtents().height();    
+//     int left    = lay->imageExtents().left(); 
+//     int top     = lay->imageExtents().top();    
+//     int width   = lay->imageExtents().width();    
+//     int height  = lay->imageExtents().height();    
 
-    QRect floodRect(left, top, width, height);
+//     QRect floodRect(left, top, width, height);
     
-    kdDebug() << "floodRect.left() " << floodRect.left() 
-              << " floodRect.top() "  << floodRect.top() << endl;
+//     kdDebug() << "floodRect.left() " << floodRect.left() 
+//               << " floodRect.top() "  << floodRect.top() << endl;
 
-    /* set up gradient - if any.  this should only be done when the
-    currentImg layer is changed or when the fgColor or bgColor are changed,
-    or when the gradient is changed with the gradient settings dialog
-    or by selecting a prexisting gradient from the chooser.
-    Otherwise, it can get slow calculating gradients for every fill
-    operation when this calculation is not needed - when the gradient
-    array is already filled with currentImg values */
+//     /* set up gradient - if any.  this should only be done when the
+//     currentImg layer is changed or when the fgColor or bgColor are changed,
+//     or when the gradient is changed with the gradient settings dialog
+//     or by selecting a prexisting gradient from the chooser.
+//     Otherwise, it can get slow calculating gradients for every fill
+//     operation when this calculation is not needed - when the gradient
+//     array is already filled with currentImg values */
     
-    if(m_useGradient)
-    {
-        KoColor startColor(view->fgColor().R(),
-            view->fgColor().G(), view->fgColor().B());
-        KoColor endColor(view->bgColor().R(),
-            view->bgColor().G(), view->bgColor().B());        
+//     if(m_useGradient)
+//     {
+//         KoColor startColor(view->fgColor().R(),
+//             view->fgColor().G(), view->fgColor().B());
+//         KoColor endColor(view->bgColor().R(),
+//             view->bgColor().G(), view->bgColor().B());        
             
-        m_doc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
-    }
+//         m_doc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
+//     }
 
-    seed_flood_fill( startx, starty, floodRect);
+//     seed_flood_fill( startx, starty, floodRect);
       
-    /* refresh canvas so changes show up */
-    QRect updateRect(0, 0, img->width(), img->height());
-    img->markDirty(updateRect);
-    return true;
+//     /* refresh canvas so changes show up */
+//     QRect updateRect(0, 0, img->width(), img->height());
+//     img->markDirty(updateRect);
+//     return true;
 }
 
 
-void FillTool::mousePress(QMouseEvent *e)
+void KisToolFill::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_doc->currentImg();
-    if (!img) return;
+//     KisImage * img = m_doc->currentImg();
+//     if (!img) return;
 
-    if (e->button() != QMouseEvent::LeftButton
-    && e->button() != QMouseEvent::RightButton)
-        return;
+//     if (e->button() != QMouseEvent::LeftButton
+//     && e->button() != QMouseEvent::RightButton)
+//         return;
 
-    QPoint pos = e->pos();
-    pos = zoomed(pos);
+//     QPoint pos = e->pos();
+//     pos = zoomed(pos);
         
-    if( !img->getCurrentLayer()->visible() )
-        return;
+//     if( !img->getCurrentLayer()->visible() )
+//         return;
   
-    if( !img->getCurrentLayer()->imageExtents().contains(pos))
-        return;
+//     if( !img->getCurrentLayer()->imageExtents().contains(pos))
+//         return;
   
-    /*  need to fill with foreground color on left click,
-    transparent on middle click, and background color on right click,
-    need another paramater or nned to set color here and pass in */
+//     /*  need to fill with foreground color on left click,
+//     transparent on middle click, and background color on right click,
+//     need another paramater or nned to set color here and pass in */
     
-    if (e  ->button() == QMouseEvent::LeftButton)
-        flood(pos.x(), pos.y());
-    else if (e->button() == QMouseEvent::RightButton)
-        flood(pos.x(), pos.y());
+//     if (e  ->button() == QMouseEvent::LeftButton)
+//         flood(pos.x(), pos.y());
+//     else if (e->button() == QMouseEvent::RightButton)
+//         flood(pos.x(), pos.y());
 }
 
-void FillTool::optionsDialog()
-{
-    ToolOptsStruct ts;    
+// void KisToolFill::optionsDialog()
+// {
+//     ToolOptsStruct ts;    
     
-    ts.opacity          = m_opacity;
-    ts.usePattern       = m_usePattern;
-    ts.useGradient      = m_useGradient;
+//     ts.opacity          = m_opacity;
+//     ts.usePattern       = m_usePattern;
+//     ts.useGradient      = m_useGradient;
 
-    unsigned int old_opacity   = m_opacity;
-    bool old_usePattern   = m_usePattern;
-    bool old_useGradient  = m_useGradient;
+//     unsigned int old_opacity   = m_opacity;
+//     bool old_usePattern   = m_usePattern;
+//     bool old_useGradient  = m_useGradient;
 
-    ToolOptionsDialog OptsDialog(tt_filltool, ts);
+//     ToolOptionsDialog OptsDialog(tt_filltool, ts);
     
-    OptsDialog.exec();
+//     OptsDialog.exec();
     
-    if (OptsDialog.result() == QDialog::Rejected)
-	    return;
+//     if (OptsDialog.result() == QDialog::Rejected)
+// 	    return;
         
-    m_opacity     = OptsDialog.fillToolTab()->opacity();
-    m_usePattern      = OptsDialog.fillToolTab()->usePattern();
-    m_useGradient     = OptsDialog.fillToolTab()->useGradient();
+//     m_opacity     = OptsDialog.fillToolTab()->opacity();
+//     m_usePattern      = OptsDialog.fillToolTab()->usePattern();
+//     m_useGradient     = OptsDialog.fillToolTab()->useGradient();
 
-    // User change value ?
-    if (old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_opacity != m_opacity)
-	    // set filler tool settings
-            m_doc -> setModified( true );
-}
+//     // User change value ?
+//     if (old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_opacity != m_opacity)
+// 	    // set filler tool settings
+//             m_doc -> setModified( true );
+// }
 
-void FillTool::setCursor()
+
+void KisToolFill::setup(KActionCollection *collection)
 {
-	KisView *view = getCurrentView();
-
-	view -> kisCanvas() -> setCursor(KisCursor::fillerCursor());
-	m_cursor = KisCursor::fillerCursor();
-}
-
-void FillTool::setupAction(QObject *collection)
-{
-	KToggleAction *toggle = new KToggleAction(i18n("&Filler Tool"), "fill", 0, this, SLOT(toolSelect()), collection, "tool_fill");
+	KToggleAction *toggle = new KToggleAction(i18n("&Filler Tool"), 
+						  "fill",
+						  0, 
+						  this, 
+						  SLOT(activate()),
+						  collection,
+						  "tool_fill");
 
 	toggle -> setExclusiveGroup("tools");
 }
 
-QDomElement FillTool::saveSettings(QDomDocument& doc) const
-{
-	// filler tool element
-	QDomElement fillerTool = doc.createElement("fillerTool");
+// QDomElement KisToolFill::saveSettings(QDomDocument& doc) const
+// {
+// 	// filler tool element
+// 	QDomElement fillerTool = doc.createElement("fillerTool");
 
-	fillerTool.setAttribute("opacity", m_opacity);
-	fillerTool.setAttribute("fillWithPattern", static_cast<int>(m_usePattern));
-	fillerTool.setAttribute("fillWithGradient", static_cast<int>(m_useGradient));
-	return fillerTool;
-}
+// 	fillerTool.setAttribute("opacity", m_opacity);
+// 	fillerTool.setAttribute("fillWithPattern", static_cast<int>(m_usePattern));
+// 	fillerTool.setAttribute("fillWithGradient", static_cast<int>(m_useGradient));
+// 	return fillerTool;
+// }
 
-bool FillTool::loadSettings(QDomElement& elem)
-{
-	bool rc = elem.tagName() == "fillerTool";
+// bool KisToolFill::loadSettings(QDomElement& elem)
+// {
+// 	bool rc = elem.tagName() == "fillerTool";
 
-	if (rc) {
-		m_opacity = elem.attribute("opacity").toInt();
-		m_usePattern = static_cast<bool>(elem.attribute("fillWithPattern").toInt());
-		m_useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
-	}
+// 	if (rc) {
+// 		m_opacity = elem.attribute("opacity").toInt();
+// 		m_usePattern = static_cast<bool>(elem.attribute("fillWithPattern").toInt());
+// 		m_useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
+// 	}
 
-	return rc;
-}
+// 	return rc;
+// }
 
+#include "kis_tool_fill.moc"

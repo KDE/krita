@@ -211,7 +211,7 @@
                                 <cstring>checkBoxSamesize</cstring>
                             </property>
                             <property name="text">
-                                <string>equal</string>
+                                <string>Equal</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>
@@ -330,7 +330,7 @@
                                 <cstring>checkBoxSamefade</cstring>
                             </property>
                             <property name="text">
-                                <string>equal</string>
+                                <string>Equal</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>

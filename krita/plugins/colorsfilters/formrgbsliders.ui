@@ -223,7 +223,7 @@
                             <cstring>pushButtonOk</cstring>
                         </property>
                         <property name="text">
-                            <string>Ok</string>
+                            <string>&amp;OK</string>
                         </property>
                     </widget>
                     <spacer>
@@ -248,7 +248,7 @@
                             <cstring>pushButtonCancel</cstring>
                         </property>
                         <property name="text">
-                            <string>Cancel</string>
+                            <string>&amp;Cancel</string>
                         </property>
                     </widget>
                     <spacer>

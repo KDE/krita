@@ -74,7 +74,7 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 	KisFilterSP kbc = createFilter<KisBrightnessContrastFilter>(m_view);
 	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, kbc, SLOT(slotActivated()), actionCollection(), "brightnesscontrast");
 	KisFilterSP kac = createFilter<KisAutoContrast>(m_view);
-	(void) new KAction(i18n("&Auto contrast"), 0, 0, kac, SLOT(slotActivated()), actionCollection(), "autocontrast");
+	(void) new KAction(i18n("&Auto Contrast"), 0, 0, kac, SLOT(slotActivated()), actionCollection(), "autocontrast");
 	KisFilterSP kgc = createFilter<KisGammaCorrectionFilter>(m_view);
 	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, kgc, SLOT(slotActivated()), actionCollection(), "gammacorrection");
 	KisFilterSP kfca = createFilter<KisColorAdjustmentFilter>(m_view);

@@ -93,7 +93,7 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 	m_optWidget -> setCaption(i18n("Filter"));
 	QWidget* optionFreehandWidget = KisToolFreehand::createOptionWidget(m_optWidget);
 	m_cbFilter = new QComboBox(m_optWidget);
-	QLabel* lbFilter = new QLabel(i18n("Filter : "), m_optWidget);
+	QLabel* lbFilter = new QLabel(i18n("Filter:"), m_optWidget);
 
 	m_cbFilter ->insertStringList( m_subject ->filterList() );
 	

@@ -24,7 +24,7 @@
                 <cstring>grpPixelDimensions</cstring>
             </property>
             <property name="title">
-                <string>&amp;Rotate Image:</string>
+                <string>&amp;Rotate Image</string>
             </property>
             <grid>
                 <property name="name">

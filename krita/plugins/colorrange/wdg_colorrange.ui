@@ -132,7 +132,7 @@
                                         <cstring>chkInvert</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>in&amp;Vert</string>
+                                        <string>In&amp;vert</string>
                                     </property>
                                 </widget>
                             </grid>
@@ -329,7 +329,7 @@
                                 <cstring>lblSelectionPreview</cstring>
                             </property>
                             <property name="text">
-                                <string>Selection &amp;Preview</string>
+                                <string>Selection &amp;preview:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>cmbSelectionPreview</cstring>

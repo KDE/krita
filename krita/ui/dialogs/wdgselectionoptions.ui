@@ -21,7 +21,7 @@
                 <cstring>lblMaskColor</cstring>
             </property>
             <property name="text">
-                <string>&amp;Mask Color</string>
+                <string>&amp;Mask color:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>cmbMaskColor</cstring>
@@ -32,7 +32,7 @@
                 <cstring>lblOpacity</cstring>
             </property>
             <property name="text">
-                <string>&amp;Opacity</string>
+                <string>&amp;Opacity:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>sldrOpacity</cstring>

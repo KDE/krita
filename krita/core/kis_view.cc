@@ -263,9 +263,9 @@ void KisView::setupDockers()
         m_layerchanneldocker = new DockFrameDocker(this);
         m_layerchanneldocker -> setCaption(i18n("Layers/Channels/Paths"));
 
-        
+
 	m_shapesdocker = new DockFrameDocker(this);
-        m_shapesdocker -> setCaption(i18n("Brush shapes"));
+        m_shapesdocker -> setCaption(i18n("Brush Shapes"));
 
 	m_fillsdocker = new DockFrameDocker(this);
 	m_fillsdocker -> setCaption(i18n("Fills"));
@@ -307,7 +307,7 @@ void KisView::setupDockers()
 	m_autobrush = new KisAutobrush(m_shapesdocker, "autobrush", i18n("Autobrush"));
 	m_shapesdocker -> plug(m_autobrush);
 	connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
-	
+
 	// TextBrush
 	m_textBrush = new KisTextBrush(m_shapesdocker, "textbrush", i18n("Text Brush"));
 	m_shapesdocker -> plug(m_textBrush);
@@ -495,7 +495,7 @@ void KisView::updateStatusBarZoomLabel ()
         }
 }
 
-void KisView::updateStatusBarSelectionLabel() 
+void KisView::updateStatusBarSelectionLabel()
 {
 	if (m_statusBarSelectionLabel == 0) {
 		kdDebug() << "No selection label yet\n";
@@ -514,8 +514,8 @@ void KisView::updateStatusBarSelectionLabel()
 	}
 
 	m_statusBarSelectionLabel -> setText(i18n("No selection"));
-	
-							     
+
+
 }
 
 void KisView::setupStatusBar()
@@ -607,7 +607,7 @@ void KisView::setupActions()
         (void)new KAction(i18n("Reverse Foreground/Background Colors"), 0, this, SLOT(reverseFGAndBGColors()), actionCollection(), "reverse_fg_bg");
 
         // image actions
-        m_imgRename = new KAction(i18n("Rename Current Image"), 0, this, SLOT(slotRename()), actionCollection(), "rename_current_image_tab");
+        m_imgRename = new KAction(i18n("Rename Current Image..."), 0, this, SLOT(slotRename()), actionCollection(), "rename_current_image_tab");
         (void)new KAction(i18n("Add New Image..."), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
         m_imgRm = new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
         m_imgDup = new KAction(i18n("Duplicate Image"), 0, this, SLOT(duplicateCurrentImg()), actionCollection(), "duplicate_image");
@@ -885,7 +885,7 @@ void KisView::setInputDevice(enumInputDevice inputDevice)
 
 		currentTool() -> action() -> activate();
 	}
-	
+
 }
 
 enumInputDevice KisView::currentInputDevice() const
@@ -1041,7 +1041,7 @@ void KisView::imgUpdateGUI()
         m_imgFlatten -> setEnabled(n > 1);
         m_imgMergeVisible -> setEnabled(nvisible > 1 && nvisible != n);
         m_imgMergeLinked -> setEnabled(nlinked > 1);
-	
+
 	m_selectionManager -> updateGUI();
 }
 
@@ -1613,7 +1613,7 @@ void KisView::flattenImage()
 		bool doIt = true;
 
 		if (img -> nHiddenLayers() > 0) {
-			int answer = KMessageBox::warningYesNo(this, 
+			int answer = KMessageBox::warningYesNo(this,
 							       i18n("The image contains hidden layers that will be lost."),
 							       i18n("Flatten Image"),
 							       i18n("Flatten Image"),
@@ -1850,10 +1850,10 @@ void KisView::print(KPrinter& printer)
 	KisImageSP img;
 	printer.setFullPage(true);
 	gc.setClipping(false);
-	
+
 	QValueList< int >::iterator it = pagesList.begin();
 	QValueList< int >::iterator itEnd = pagesList.end();
-	
+
 	while(it != itEnd)
 	{
 		if (*it)
@@ -2646,9 +2646,9 @@ void KisView::layerToImage()
 
         if (img) {
 		KisLayerSP layer = img -> activeLayer();
-		
+
                 KisSelectionSP selection = layer-> selection();
-                
+
 
 //                 if (selection)
 //                         layer = selection.data();
@@ -2688,7 +2688,7 @@ void KisView::layerTransform()
 }
 
 
-void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h) 
+void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h)
 {
         if (!currentImg()) return;
 
@@ -2835,7 +2835,7 @@ void KisView::guiActivateEvent(KParts::GUIActivateEvent *event)
 
         super::guiActivateEvent(event);
 }
-		      
+
 void KisView::nBuilders(Q_INT32 size)
 {
         m_imgImport -> setEnabled(size == 0);

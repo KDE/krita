@@ -54,7 +54,7 @@
                             <cstring>lblScaleX</cstring>
                         </property>
                         <property name="text">
-                            <string>X scale</string>
+                            <string>X scale:</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="1" column="0">
@@ -62,7 +62,7 @@
                             <cstring>lblScaleY</cstring>
                         </property>
                         <property name="text">
-                            <string>Y scale</string>
+                            <string>Y scale:</string>
                         </property>
                     </widget>
                     <spacer row="2" column="0">
@@ -117,7 +117,7 @@
                             <cstring>lblShearHorizontal</cstring>
                         </property>
                         <property name="text">
-                            <string>Horizontal Shear</string>
+                            <string>Horizontal shear:</string>
                         </property>
                     </widget>
                     <widget class="KDoubleSpinBox" row="0" column="1">
@@ -143,7 +143,7 @@
                             <cstring>lblVerticalShear</cstring>
                         </property>
                         <property name="text">
-                            <string>Vertical Shear</string>
+                            <string>Vertical shear:</string>
                         </property>
                     </widget>
                     <spacer row="2" column="1">
@@ -181,7 +181,7 @@
                             <cstring>lblRotate</cstring>
                         </property>
                         <property name="text">
-                            <string>Degrees of Rotation</string>
+                            <string>Degrees of rotation:</string>
                         </property>
                     </widget>
                     <widget class="KIntSpinBox" row="0" column="1">
@@ -235,7 +235,7 @@
                             <cstring>lblM11</cstring>
                         </property>
                         <property name="text">
-                            <string>m11</string>
+                            <string>m11:</string>
                         </property>
                     </widget>
                     <widget class="KDoubleSpinBox" row="0" column="1">
@@ -298,7 +298,7 @@
                             <cstring>lblM21</cstring>
                         </property>
                         <property name="text">
-                            <string>m21</string>
+                            <string>m21:</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="1" column="0">
@@ -306,7 +306,7 @@
                             <cstring>lblM12</cstring>
                         </property>
                         <property name="text">
-                            <string>m12</string>
+                            <string>m12:</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="3" column="0">
@@ -314,7 +314,7 @@
                             <cstring>lblM22</cstring>
                         </property>
                         <property name="text">
-                            <string>m22</string>
+                            <string>m22:</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="4" column="0">
@@ -322,7 +322,7 @@
                             <cstring>lblDx</cstring>
                         </property>
                         <property name="text">
-                            <string>dx</string>
+                            <string>dx:</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="5" column="0">
@@ -330,7 +330,7 @@
                             <cstring>lblDy</cstring>
                         </property>
                         <property name="text">
-                            <string>dy</string>
+                            <string>dy:</string>
                         </property>
                     </widget>
                 </grid>

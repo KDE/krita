@@ -46,23 +46,23 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 	QGridLayout* grid = new QGridLayout( this, 3, 1, KDialog::marginHint(), KDialog::spacingHint());
 
 // 	// checkbutton
-// 	m_saveOnExit 
+// 	m_saveOnExit
 // 		= new QCheckBox( i18n( "Save and restore dialog geometries" ), this );
 // 	grid->addWidget( m_saveOnExit, 0, 0 );
 
 	QLabel* label;
-	label = new QLabel(this, i18n("Cursor shape"), this);
+	label = new QLabel(this, i18n("Cursor shape:"), this);
 	grid -> addWidget(label, 0, 0);
-       
+
 	m_cmbCursorShape = new QComboBox(this);
 // 	m_cmbCursorShape -> insertItem(*KisCursor::brushCursor().bitmap(), "Tool icon");
 // 	m_cmbCursorShape -> insertItem(*KisCursor::crossCursor().bitmap(), "Crosshair");
 // 	m_cmbCursorShape -> insertItem(*KisCursor::arrowCursor().bitmap(), "Arrow");
 // 	m_cmbCursorShape -> insertItem("Brush shape");
-	m_cmbCursorShape -> insertItem("Tool icon");
+	m_cmbCursorShape -> insertItem("Tool Icon");
 	m_cmbCursorShape -> insertItem("Crosshair");
 	m_cmbCursorShape -> insertItem("Arrow");
-	
+
 	KisConfig cfg;
 	m_cmbCursorShape -> setCurrentItem(cfg.defCursorStyle());
 
@@ -71,14 +71,14 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 
 
 	// only for testing it
-	/* KIntNumInput* i = new KIntNumInput( "a", 1, 100, 1, 1, 
+	/* KIntNumInput* i = new KIntNumInput( "a", 1, 100, 1, 1,
 	   QString::null, 10, true, this ); */
-        
+
 // 	KIntNumInput* i = new KIntNumInput(1, this, 10, "a");
 // 	i->setRange(1, 100, 1);
 // 	grid->addWidget( i, 1, 0 );
 
-	
+
 
 	grid->setRowStretch( 2, 1 );
 }
@@ -89,7 +89,7 @@ bool GeneralTab::saveOnExit()
 	return m_saveOnExit->isChecked();
 }
 
-enumCursorStyle GeneralTab::cursorStyle() 
+enumCursorStyle GeneralTab::cursorStyle()
 {
 	return (enumCursorStyle)m_cmbCursorShape -> currentItem();
 }
@@ -143,10 +143,10 @@ UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
 
 	QLabel *label;
 
-	label = new QLabel( i18n( "Undo depth totally" ), this );
+	label = new QLabel( i18n( "Undo depth totally:" ), this );
 	grid->addWidget( label, 0, 0 );
 
-	label = new QLabel( i18n( "Undo depth in memory" ), this );
+	label = new QLabel( i18n( "Undo depth in memory:" ), this );
 	grid->addWidget( label, 1, 0 );
 
 	grid->setRowStretch( 2, 1 );

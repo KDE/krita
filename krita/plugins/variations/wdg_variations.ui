@@ -197,7 +197,7 @@
                     <cstring>chkClipping</cstring>
                 </property>
                 <property name="text">
-                    <string>Show &amp;Clipping</string>
+                    <string>Show &amp;clipping</string>
                 </property>
             </widget>
             <widget class="QSlider" row="5" column="0" rowspan="1" colspan="2">

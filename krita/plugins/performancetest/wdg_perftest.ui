@@ -24,7 +24,7 @@
                 <cstring>grpPerfTest</cstring>
             </property>
             <property name="title">
-                <string>&amp;Performance Test:</string>
+                <string>&amp;Performance Test</string>
             </property>
             <grid>
                 <property name="name">

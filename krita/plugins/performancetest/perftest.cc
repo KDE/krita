@@ -102,7 +102,7 @@ void PerfTest::slotPerfTest()
 	if (!image) return;
 
 	DlgPerfTest * dlgPerfTest = new DlgPerfTest(m_view, "PerfTest");
-	dlgPerfTest -> setCaption(i18n("Performance test"));
+	dlgPerfTest -> setCaption(i18n("Performance Test"));
 	
 	QString report = QString("");
 

@@ -171,7 +171,7 @@ void KisToolSelectBrush::setup(KActionCollection *collection)
 QWidget* KisToolSelectBrush::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new WdgSelectionOptions(parent);
-	m_optWidget -> setCaption(i18n("Selection brush"));
+	m_optWidget -> setCaption(i18n("Selection Brush"));
 	return m_optWidget;
 }
 

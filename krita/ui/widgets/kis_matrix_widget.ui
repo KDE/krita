@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Matrix widget</string>
+        <string>Matrix Widget</string>
     </property>
     <grid>
         <property name="name">

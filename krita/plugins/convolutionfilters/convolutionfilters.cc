@@ -69,43 +69,43 @@ K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFact
 
 	
 	KisFilterSP kgbf = createFilter<KisGaussianBlurFilter>(view);
-	(void) new KAction(i18n("&Gaussian blur"), 0, 0, kgbf, SLOT(slotActivated()), actionCollection(), "convolution_blur");
+	(void) new KAction(i18n("&Gaussian Blur"), 0, 0, kgbf, SLOT(slotActivated()), actionCollection(), "convolution_blur");
 
 	KisFilterSP kgsf = createFilter<KisSharpenFilter>(view);
 	(void) new KAction(i18n("&Sharpen"), 0, 0, kgsf, SLOT(slotActivated()), actionCollection(), "convolution_sharpen");
 
 	KisFilterSP kmrf = createFilter<KisMeanRemovalFilter>(view);
-	(void) new KAction(i18n("&Mean removal"), 0, 0, kmrf, SLOT(slotActivated()), actionCollection(), "convolution_meanremoval");
+	(void) new KAction(i18n("&Mean Removal"), 0, 0, kmrf, SLOT(slotActivated()), actionCollection(), "convolution_meanremoval");
 
 	KisFilterSP kelf = createFilter<KisEmbossLaplascianFilter>(view);
-	(void) new KAction("Emboss laplascian", 0, 0, kelf, SLOT(slotActivated()), actionCollection(), "convolution_embosslaplascian");
+	(void) new KAction("Emboss Laplascian", 0, 0, kelf, SLOT(slotActivated()), actionCollection(), "convolution_embosslaplascian");
 
 	KisFilterSP keiadf = createFilter<KisEmbossInAllDirectionsFilter>(view);
-	(void) new KAction("Emboss in all direction", 0, 0, keiadf, SLOT(slotActivated()), actionCollection(), "convolution_embossalldirections");
+	(void) new KAction("Emboss in All Directions", 0, 0, keiadf, SLOT(slotActivated()), actionCollection(), "convolution_embossalldirections");
 	
 	KisFilterSP kehvf = createFilter<KisEmbossHorizontalVerticalFilter>(view);
-	(void) new KAction("Emboss horizontal and vertical", 0, 0, kehvf, SLOT(slotActivated()), actionCollection(), "convolution_embosshorzvertical");
+	(void) new KAction("Emboss Horizontal && Vertical", 0, 0, kehvf, SLOT(slotActivated()), actionCollection(), "convolution_embosshorzvertical");
 	
 	KisFilterSP kevf = createFilter<KisEmbossVerticalFilter>(view);
-	(void) new KAction("Emboss vertical only", 0, 0, kevf, SLOT(slotActivated()), actionCollection(), "convolution_embossverticalonly");
+	(void) new KAction("Emboss Vertical Only", 0, 0, kevf, SLOT(slotActivated()), actionCollection(), "convolution_embossverticalonly");
 	
 	KisFilterSP kehf = createFilter<KisEmbossHorizontalFilter>(view);
-	(void) new KAction("Emboss horizontal only", 0, 0, kehf, SLOT(slotActivated()), actionCollection(), "convolution_embosshorizontalonly");
+	(void) new KAction("Emboss Horizontal Only", 0, 0, kehf, SLOT(slotActivated()), actionCollection(), "convolution_embosshorizontalonly");
 	
 	KisFilterSP kedf = createFilter<KisEmbossDiagonalFilter>(view);
- 	(void) new KAction("Emboss in diagonal", 0, 0, kedf, SLOT(slotActivated()), actionCollection(), "convolution_embossdiagonal");
+ 	(void) new KAction("Emboss in Diagonal", 0, 0, kedf, SLOT(slotActivated()), actionCollection(), "convolution_embossdiagonal");
 	
 	KisFilterSP ktedf = createFilter<KisTopEdgeDetectionFilter>(view);
-	(void) new KAction("Top Edge detection", 0, 0, ktedf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectiontop");
+	(void) new KAction("Top Edge Detection", 0, 0, ktedf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectiontop");
 
 	KisFilterSP kredf = createFilter<KisRightEdgeDetectionFilter>(view);
-	(void) new KAction("Right Edge detection", 0, 0, kredf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionright");
+	(void) new KAction("Right Edge Detection", 0, 0, kredf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionright");
 	
 	KisFilterSP kbedf = createFilter<KisBottomEdgeDetectionFilter>(view);
-	(void) new KAction("Bottom Edge detection", 0, 0, kbedf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionbottom");
+	(void) new KAction("Bottom Edge Detection", 0, 0, kbedf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionbottom");
 	
 	KisFilterSP kledf = createFilter<KisLeftEdgeDetectionFilter>(view);
-	(void) new KAction("Left Edge detection", 0, 0, kledf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionleft");
+	(void) new KAction("Left Edge Detection", 0, 0, kledf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionleft");
 
 	KisFilterSP kccf = createFilter<KisCustomConvolutionFilter>(view);
 	(void) new KAction("Custom Convolution", 0, 0, kccf, SLOT(slotActivated()), actionCollection(), "convolution_custom");

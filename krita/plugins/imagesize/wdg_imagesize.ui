@@ -24,7 +24,7 @@
                 <cstring>grpPixelDimensions</cstring>
             </property>
             <property name="title">
-                <string>&amp;Pixel Dimensions:</string>
+                <string>&amp;Pixel Dimensions</string>
             </property>
             <grid>
                 <property name="name">
@@ -99,7 +99,7 @@
                         <cstring>lblOrignal</cstring>
                     </property>
                     <property name="text">
-                        <string>Original</string>
+                        <string>Original:</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="2" column="0">
@@ -107,7 +107,7 @@
                         <cstring>lblNew</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;New</string>
+                        <string>&amp;New:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>intWidth</cstring>
@@ -157,7 +157,7 @@
                         <cstring>lblPercent</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Percent</string>
+                        <string>&amp;Percent:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>intWidthPercent</cstring>
@@ -168,7 +168,7 @@
                         <cstring>chkConstrain</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Constrain Proportions</string>
+                        <string>&amp;Constrain proportions</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>

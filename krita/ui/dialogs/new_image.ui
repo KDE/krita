@@ -24,7 +24,7 @@
                 <cstring>lblName</cstring>
             </property>
             <property name="text">
-                <string>&amp;Name</string>
+                <string>&amp;Name:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>txtName</cstring>
@@ -43,7 +43,7 @@
                 <cstring>grpImage</cstring>
             </property>
             <property name="title">
-                <string>&amp;Image Size: </string>
+                <string>&amp;Image Size</string>
             </property>
             <grid>
                 <property name="name">
@@ -112,7 +112,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>Real media</string>
+                            <string>Real Media</string>
                         </property>
                     </item>
                     <property name="name">
@@ -127,7 +127,7 @@
                         <cstring>lblResolution</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Resolution</string>
+                        <string>&amp;Resolution:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>txtResolution</cstring>
@@ -138,7 +138,7 @@
                         <cstring>lblMode</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Mode</string>
+                        <string>&amp;Mode:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>cmbMode</cstring>
@@ -149,7 +149,7 @@
                         <cstring>lblHeight</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Height</string>
+                        <string>&amp;Height:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>txtHeight</cstring>
@@ -235,7 +235,7 @@
                         <cstring>lblWidth</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Width</string>
+                        <string>&amp;Width:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>txtWidth</cstring>
@@ -305,7 +305,7 @@
                         <cstring>radioForeground</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Foreground Color</string>
+                        <string>&amp;Foreground color</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="3" column="0">
@@ -321,7 +321,7 @@
                         <cstring>radioBackground</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Background Color</string>
+                        <string>&amp;Background color</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>

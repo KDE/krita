@@ -77,7 +77,7 @@
                 <cstring>buttonGroupBold</cstring>
             </property>
             <property name="title">
-                <string>Font bol&amp;dness</string>
+                <string>Font Bol&amp;dness</string>
             </property>
             <vbox>
                 <property name="name">
@@ -107,7 +107,7 @@
                         <cstring>radioButtonDemiBold</cstring>
                     </property>
                     <property name="text">
-                        <string>Demi Bold</string>
+                        <string>Demi bold</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -134,7 +134,7 @@
                         <cstring>radioButtonCustom</cstring>
                     </property>
                     <property name="text">
-                        <string>Custom Boldness</string>
+                        <string>Custom boldness</string>
                     </property>
                 </widget>
             </vbox>

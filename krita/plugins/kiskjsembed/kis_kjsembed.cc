@@ -64,7 +64,7 @@ KisKJSEmbed::KisKJSEmbed(QObject *parent, const char *name, const QStringList &)
 // 	win->show();
 	
 	initBindings();
-	(void) new KAction(i18n("&Load script..."), 0, 0, this, SLOT(slotLoadScript()), actionCollection(), "krita_scripts_load");
+	(void) new KAction(i18n("&Load Script..."), 0, 0, this, SLOT(slotLoadScript()), actionCollection(), "krita_scripts_load");
 	
 	m_scriptMenu = dynamic_cast<QPopupMenu*>(factory()->container("LoadedScripts",this));
 }

@@ -109,7 +109,7 @@ void KisToolSelectEraser::setup(KActionCollection *collection)
 QWidget* KisToolSelectEraser::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new WdgSelectionOptions(parent);
-	m_optWidget -> setCaption(i18n("Selection eraser"));
+	m_optWidget -> setCaption(i18n("Selection Eraser"));
 	return m_optWidget;
 }
 

@@ -284,7 +284,7 @@ QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
 
 	optionLayout -> addWidget(m_ckReverse, 5, 0);
 
-	m_lbAntiAliasThreshold = new QLabel(i18n("Anti-alias Threshold: "), m_optWidget);
+	m_lbAntiAliasThreshold = new QLabel(i18n("Anti-alias threshold:"), m_optWidget);
 
 	m_slAntiAliasThreshold = new KisDoubleWidget(0, 1, m_optWidget, "threshold_slider");
 	m_slAntiAliasThreshold -> setTickmarks(QSlider::Below);

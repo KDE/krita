@@ -66,8 +66,6 @@ void KisToolBrush::initPaint(KisEvent *e)
 
 void KisToolBrush::setup(KActionCollection *collection)
 {
-	kdDebug() << "KisToolBrush::setup" << endl;
-
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {

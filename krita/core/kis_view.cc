@@ -1166,7 +1166,7 @@ void KisView::dialog_gradient()
                 KisFrameBuffer *fb = m_doc->frameBuffer();
                 fb->setGradientEffect(static_cast<KImageEffect::GradientType>(type));
 
-                kdDebug() << "gradient type is " << type << endl;
+//                 kdDebug() << "gradient type is " << type << endl;
         }
         delete pGradientDialog;
 #endif
@@ -1521,7 +1521,7 @@ void KisView::scaleLayer(double sx, double sy, enumFilterType ftype)
 
 void KisView::rotateLayer(double angle)
 {
-	kdDebug() << "RotateLayer called: " << angle << "\n";
+// 	kdDebug() << "RotateLayer called: " << angle << "\n";
         if (!currentImg()) return;
 
 	KisLayerSP layer = currentImg() -> activeLayer();
@@ -2611,7 +2611,7 @@ void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h)
 void KisView::scaleCurrentImage(double sx, double sy, enumFilterType ftype)
 {
 	if (!currentImg()) return;
-	kdDebug() << "Going to scale image to (sx, sy): " << sx << ", " << sy << "\n";
+// 	kdDebug() << "Going to scale image to (sx, sy): " << sx << ", " << sy << "\n";
 	currentImg() -> scale(sx, sy, m_progress, ftype);
 	m_doc -> setModified(true);
 

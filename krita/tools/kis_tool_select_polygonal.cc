@@ -170,8 +170,8 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 	// 		m_doc -> getSelection() -> setPolygonalSelection(m_imageRect, points, m_doc -> currentImg() -> getCurrentLayer());
 			m_pointArray.putPoints(m_index++, 1, m_pointArray[0].x(), m_pointArray[0].y());
 
-			kdDebug() << "selectRect" << " left: "   << m_imageRect.left() << " top: "    << m_imageRect.top();
-			kdDebug()  << " right: "  << m_imageRect.right() << " bottom: " << m_imageRect.bottom() << endl;
+// 			kdDebug() << "selectRect" << " left: "   << m_imageRect.left() << " top: "    << m_imageRect.top();
+// 			kdDebug()  << " right: "  << m_imageRect.right() << " bottom: " << m_imageRect.bottom() << endl;
 
 			if (m_pointArray.size() > 1)
 				m_selectRegion = QRegion(m_pointArray, true);

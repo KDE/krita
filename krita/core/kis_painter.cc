@@ -160,7 +160,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 			Q_INT32 sw, Q_INT32 sh)
 {
 	if (srcdev == 0) {
-		kdDebug() << "bitBlt: source is null.\n";
+// 		kdDebug() << "bitBlt: source is null.\n";
 		return;
 	}
 

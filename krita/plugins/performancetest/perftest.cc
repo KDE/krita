@@ -145,7 +145,6 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
 
 	KisDoc * doc = m_view -> getDocument();
 	QStringList l = KisColorSpaceRegistry::singleton() -> listColorSpaceNames();
-	kdDebug() << "Number of color spaces: " << l.size() << "\n";
 	for (QStringList::Iterator it = l.begin(); it != l.end(); ++it) {
 		report = report.append( "  Testing blitting on " + *it + "\n");
  		KisImage * img = doc -> newImage("blit-test", 1000, 1000, KisColorSpaceRegistry::singleton() -> get(*it));

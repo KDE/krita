@@ -40,7 +40,7 @@ void KisBuilderMonitor::attach(KisBuilderSubject *subject)
 		connect(subject, SIGNAL(destroyed(QObject*)), this, SLOT(destroyed(QObject*)));
 		emit size(m_subjects.size());
 	} else {
-		kdDebug(DBG_AREA_CORE) << "Attaching already attached subject\n";
+// 		kdDebug(DBG_AREA_CORE) << "Attaching already attached subject\n";
 	}
 }
 
@@ -53,7 +53,7 @@ void KisBuilderMonitor::detach(KisBuilderSubject *subject)
 		m_subjects.erase(it);
 		emit size(m_subjects.size());
 	} else {
-		kdDebug(DBG_AREA_CORE) << "Detaching unattached subject.\n";
+// 		kdDebug(DBG_AREA_CORE) << "Detaching unattached subject.\n";
 	}
 }
 

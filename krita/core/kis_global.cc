@@ -49,7 +49,7 @@ Q_INT32 imgTypeDepth(const enumImgType& type)
 			n = 5;
 			break;
 		default:
-			kdDebug() << "depthForType: Unknow image type.\n";
+// 			kdDebug() << "depthForType: Unknow image type.\n";
 			n = -1;
 	}
 

@@ -35,7 +35,7 @@ KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 
 KisPaintOpRegistry::KisPaintOpRegistry()
 {
-	kdDebug() << " creating a KisPaintOpRegistry" << endl;
+// 	kdDebug() << " creating a KisPaintOpRegistry" << endl;
 	Q_ASSERT(KisPaintOpRegistry::m_singleton == 0);
 	KisPaintOpRegistry::m_singleton = this;
 

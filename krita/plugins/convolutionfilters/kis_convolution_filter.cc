@@ -32,7 +32,6 @@ KisConvolutionFilter::KisConvolutionFilter(const QString& name, KisView * view) 
 
 void KisConvolutionFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* , const QRect& /*rect*/, KisTileCommand* /*command*/)
 {
-	kdDebug() << device << endl;
 	KisConvolutionPainter painter( device );
 	kdDebug() << device << endl;
 	painter.beginTransaction(i18n("convolve"));

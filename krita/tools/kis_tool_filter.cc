@@ -114,7 +114,7 @@ QWidget* KisToolFilter::optionWidget()
 
 void KisToolFilter::changeFilter( const QString & string )
 {
-	kdDebug() << "KisToolFilter::changeFilter : change to " << string << endl;
+// 	kdDebug() << "KisToolFilter::changeFilter : change to " << string << endl;
 	m_filter =  m_subject -> filterGet( string );
 	Q_ASSERT(m_filter != 0);
 	if( m_filterConfigurationWidget != 0 )
@@ -123,10 +123,10 @@ void KisToolFilter::changeFilter( const QString & string )
 		delete m_filterConfigurationWidget;
 	}
 	m_filterConfigurationWidget = m_filter -> createConfigurationWidget( m_optWidget );
-	kdDebug() << "KisToolFilter::changeFilter m_filterConfigurationWidget = " << m_filterConfigurationWidget << endl;
+// 	kdDebug() << "KisToolFilter::changeFilter m_filterConfigurationWidget = " << m_filterConfigurationWidget << endl;
 	if( m_filterConfigurationWidget != 0 )
 	{
-		kdDebug() << "KisToolFilter::changeFilter add to layout manager" << endl;
+// 		kdDebug() << "KisToolFilter::changeFilter add to layout manager" << endl;
 		m_optionLayout -> addMultiCellWidget ( m_filterConfigurationWidget, 2, 2, 0, 1 );
 		m_filterConfigurationWidget->show();
 	}

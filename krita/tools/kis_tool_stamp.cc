@@ -98,7 +98,7 @@ void KisToolStamp::buttonPress(KisButtonPressEvent *e)
 		return;
 
 	if (!img -> colorMode() == cm_RGB && !img -> colorMode() == cm_RGBA) {
-		kdDebug(0) << "colormode is not RGB or RGBA!" << endl;
+// 		kdDebug(0) << "colormode is not RGB or RGBA!" << endl;
 		return;
 	}
 
@@ -110,12 +110,12 @@ void KisToolStamp::buttonPress(KisButtonPressEvent *e)
 	QImage qImage = *(m_pattern -> image());
 
 	if (qImage.isNull()) {
-		kdDebug(0) << "Stamptool::no pattern image!" << endl;
+// 		kdDebug(0) << "Stamptool::no pattern image!" << endl;
 		return;
 	}
 
 	if(qImage.depth() < 32) {
-		kdDebug(0) << "Stamptool::pattern less than 32 bit!" << endl;
+// 		kdDebug(0) << "Stamptool::pattern less than 32 bit!" << endl;
 		return;
 	}
 

@@ -57,11 +57,11 @@ KritaExample::KritaExample(QObject *parent, const char *name, const QStringList 
 	setInstance(KritaExampleFactory::instance());
 
 
-	//kdDebug() << "Example plugin. Class: " 
-	//	  << className() 
-	//	  << ", Parent: " 
-	//	  << parent -> className()
-	//	  << "\n";
+	kdDebug() << "Example plugin. Class: " 
+		  << className() 
+		  << ", Parent: " 
+		  << parent -> className()
+		  << "\n";
 
 	if ( !parent->inherits("KisView") )
 	{

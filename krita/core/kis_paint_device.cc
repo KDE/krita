@@ -329,7 +329,7 @@ void KisPaintDevice::rotate(double angle)
 void KisPaintDevice::transform(const QWMatrix & matrix)
 {
         if (tiles() == 0) {
-                kdDebug() << "No tilemgr.\n";
+//                 kdDebug() << "No tilemgr.\n";
                 return;
         }
 
@@ -344,9 +344,9 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
         // (this bit seems to be mostly from QImage.xForm)
         QWMatrix mat = QPixmap::trueMatrix( matrix, width(), height() );
         if ( mat.m12() == 0.0F && mat.m21() == 0.0F ) {
-                kdDebug() << "Scaling layer: " << m_name << "\n";
+//                 kdDebug() << "Scaling layer: " << m_name << "\n";
                 if ( mat.m11() == 1.0F && mat.m22() == 1.0F ) {
-                        kdDebug() << "Identity matrix, do nothing.\n";
+//                         kdDebug() << "Identity matrix, do nothing.\n";
                         return;
                 }
                 targetW = qRound( mat.m11() * width() );
@@ -354,7 +354,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
                 targetW = QABS( targetW );
                 targetH = QABS( targetH );
         } else {
-                kdDebug() << "Rotating or shearing layer " << m_name << "\n";
+//                 kdDebug() << "Rotating or shearing layer " << m_name << "\n";
                 QPointArray a( QRect(0, 0, width(), height()) );
                 a = mat.map( a );
                 QRect r = a.boundingRect().normalize();
@@ -373,7 +373,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
         bool invertible;
         QWMatrix targetMat = mat.invert( &invertible ); // invert matrix
         if ( targetH == 0 || targetW == 0 || !invertible ) {
-                kdDebug() << "Error, return null image\n";
+//                 kdDebug() << "Error, return null image\n";
                 return;
         }
 

@@ -93,7 +93,6 @@ void DlgHistogram::slotChannelSelected(const QString & channelName)
 			return;
 		}
 	}
-	kdDebug() << "Channel selected that does not exist, apparently.\n";
 }
 
 #include "dlg_histogram.moc"

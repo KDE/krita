@@ -45,11 +45,11 @@ KisKJSEmbed::KisKJSEmbed(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(KritaKJSEmbedFactory::instance());
 
-	//kdDebug() << "Example plugin. Class: " 
-	//	  << className() 
-	//	  << ", Parent: " 
-	//	  << parent -> className()
-	//	  << "\n";
+	kdDebug() << "KSJEmbed plugin. Class: " 
+		  << className() 
+		  << ", Parent: " 
+		  << parent -> className()
+		  << "\n";
 
 	if ( !parent->inherits("KisView") )
 	{

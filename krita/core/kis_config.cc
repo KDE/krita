@@ -37,7 +37,6 @@ KisConfig::KisConfig()
 	KApplication *app = KApplication::kApplication();
 	
 	Q_ASSERT(app);
-	kdDebug() << "App: " << app -> name() << "\n";
 
 	m_cfg = app -> config();
 
@@ -110,12 +109,10 @@ void KisConfig::defLayerHeight(Q_INT32 height)
 
 enumCursorStyle KisConfig::defCursorStyle() const
 {
-	kdDebug() << "Get cursor: " << m_cfg -> readNumEntry("cursorStyleDef") << "\n";
 	return (enumCursorStyle) m_cfg -> readNumEntry("cursorStyleDef", DEFAULT_CURSOR_STYLE);
 }
 
 void KisConfig::defCursorStyle(enumCursorStyle style)
 {
-	kdDebug() << "Set cursor: " << style  << "\n";
 	m_cfg -> writeEntry("cursorStyleDef", style);
 }

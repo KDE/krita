@@ -58,11 +58,11 @@ void KisHistogramWidget::setHistogram(KisHistogramSP histogram)
 	vBins::iterator it;
  	Q_UINT32 i = 0;
 	for( it = m_histogram -> begin(); it != m_histogram -> end(); ++it ) {
-		kdDebug() << "Value " 
-			  << QString().setNum(i)
-			  << ": " 
-			  <<  QString().setNum((*it)) 
-			  << "\n";
+// 		kdDebug() << "Value " 
+// 			  << QString().setNum(i)
+// 			  << ": " 
+// 			  <<  QString().setNum((*it)) 
+// 			  << "\n";
 		
  		p.drawLine(i, 0, i, (*it));
  		i++;

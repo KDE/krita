@@ -51,11 +51,11 @@ K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFact
 {
        	setInstance(KritaConvolutionFiltersFactory::instance());
 
-// 	kdDebug() << "ConvolutionFilters plugin. Class: " 
-// 		  << className() 
-// 		  << ", Parent: " 
-// 		  << parent -> className()
-// 		  << "\n";
+ 	kdDebug() << "ConvolutionFilters plugin. Class: " 
+ 		  << className() 
+ 		  << ", Parent: " 
+ 		  << parent -> className()
+ 		  << "\n";
 	KisView * view;
 	
 	if ( !parent->inherits("KisView") )

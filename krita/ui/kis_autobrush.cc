@@ -141,7 +141,7 @@ void KisAutobrush::paramChanged()
 		kas = new KisAutobrushRectShape(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
 	}
 	kas->createBrush(m_brsh);
-	kdDebug() << " brush size : " << m_brsh->width() << " " << m_brsh->height() << endl;
+// 	kdDebug() << " brush size : " << m_brsh->width() << " " << m_brsh->height() << endl;
 	QPixmap p;
 	p.convertFromImage(*m_brsh);
 	brushPreview->setPixmap(p);

@@ -207,7 +207,6 @@ void KisResourceServer::pipebrushLoadFailed(KisResource *r)
 
 void KisResourceServer::patternLoadFailed(KisResource *r)
 {
-	kdDebug() << "loading pattern failed\n";
 	delete r;
 	loadPattern();
 }

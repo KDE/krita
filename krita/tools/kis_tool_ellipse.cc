@@ -76,7 +76,7 @@ void KisToolEllipse::buttonPress(KisButtonPressEvent *event)
 
 void KisToolEllipse::move(KisMoveEvent *event)
 {
-        kdDebug (40001) << "KisToolEllipse::move" << event->pos () << endl;
+//         kdDebug (40001) << "KisToolEllipse::move" << event->pos () << endl;
 	if (m_dragging) {
 		// erase old lines on canvas
 		draw(m_dragStart, m_dragEnd);
@@ -132,10 +132,10 @@ void KisToolEllipse::draw(const KisPoint& start, const KisPoint& end )
             return;
 
         KisCanvasControllerInterface *controller = m_subject->canvasController ();
-        kdDebug (40001) << "KisToolEllipse::draw(" << start << "," << end << ")"
-                        << " windowToView: start=" << controller->windowToView (start)
-                        << " windowToView: end=" << controller->windowToView (end)
-                        << endl;
+//         kdDebug (40001) << "KisToolEllipse::draw(" << start << "," << end << ")"
+//                         << " windowToView: start=" << controller->windowToView (start)
+//                         << " windowToView: end=" << controller->windowToView (end)
+//                         << endl;
         QWidget *canvas = controller->canvas ();
         QPainter p (canvas);
 

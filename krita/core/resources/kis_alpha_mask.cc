@@ -79,7 +79,6 @@ QUANTUM KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
 		return m_data[(y * m_width) + x];
 	}
 	else {
-		kdDebug() << "oops \n";
 		return OPACITY_TRANSPARENT;
 	}
 }
@@ -88,9 +87,6 @@ void KisAlphaMask::setAlphaAt(Q_INT32 x, Q_INT32 y, QUANTUM alpha)
 {
 	if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
 		m_data[(y * m_width) + x] = alpha;
-	}
-	else {
-		kdDebug() << "oops \n";
 	}
 }
 

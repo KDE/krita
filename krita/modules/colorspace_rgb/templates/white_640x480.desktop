@@ -1,7 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Link
-URL=.source/transparent_640x480.kra
+URL=.source/white_640x480.kra
 Icon=.icon/empty.png
 Name=White 640x480
+Name[es]=640x480 blanco
+Name[pt]=Branca 640x480
+Name[pt_BR]=Branca 640x480
 Comment=Creates a white RGB image of 640 x 480 pixels.
+Comment[es]=Crea una imagen RGB de 640 x 480 píxeles.
+Comment[pt]=Cria uma imagem RGB branca com 640 x 480 pontos.
+Comment[pt_BR]=Cria uma imagem RGB branca com 640 x 480 pontos.

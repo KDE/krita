@@ -163,11 +163,11 @@ void KisFloatingSelection::copySelection(KisSelectionSP selection) {
 
 		super::move(r.x(), r.y());
 
-		kdDebug() << "Selection copied: "
-			  << r.x() << ", "
-			  << r.y() << ", "
-			  << r.width() << ", "
-			  << r.height() << "\n";
+// 		kdDebug() << "Selection copied: "
+// 			  << r.x() << ", "
+// 			  << r.y() << ", "
+// 			  << r.width() << ", "
+// 			  << r.height() << "\n";
 
 
 	}

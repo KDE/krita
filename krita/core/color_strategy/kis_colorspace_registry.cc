@@ -26,7 +26,7 @@ KisColorSpaceRegistry *KisColorSpaceRegistry::m_singleton = 0;
 
 KisColorSpaceRegistry::KisColorSpaceRegistry()
 {
-	kdDebug() << " creating a KisColorSpaceRegistry" << endl;
+// 	kdDebug() << " creating a KisColorSpaceRegistry" << endl;
 	Q_ASSERT(KisColorSpaceRegistry::m_singleton == 0);
 	KisColorSpaceRegistry::m_singleton = this;
 #if 0

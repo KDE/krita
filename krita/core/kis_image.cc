@@ -350,15 +350,15 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h)
 {
-	kdDebug() << "KisImage::resize. From: (" 
-		  << width()
-		  << ", " 
-		  << height()
-		  << ") to (" 
-		  << w 
-		  << ", " 
-		  << h 
-		  << ")\n";
+// 	kdDebug() << "KisImage::resize. From: (" 
+// 		  << width()
+// 		  << ", " 
+// 		  << height()
+// 		  << ") to (" 
+// 		  << w 
+// 		  << ", " 
+// 		  << h 
+// 		  << ")\n";
 
 	if (w != width() || h != height()) {
 		if (m_adapter && m_adapter -> undo()) {
@@ -385,11 +385,11 @@ void KisImage::resize(const QRect& rc)
 
 void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype) 
 {
-	kdDebug() << "KisImage::scale. SX: " 
-		  << sx
-		  << ", SY:" 
-		  << sy 
-		  << "\n";
+// 	kdDebug() << "KisImage::scale. SX: " 
+// 		  << sx
+// 		  << ", SY:" 
+// 		  << sy 
+// 		  << "\n";
 
 
 	if (m_layers.empty()) return; // Nothing to scale
@@ -400,9 +400,9 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 	w = (Q_INT32)(( width() * sx) + 0.5);
 	h = (Q_INT32)(( height() * sy) + 0.5); 
 	
-	kdDebug() << "Scaling from (" << m_projection -> width() 
-		  << ", " << m_projection -> height() 
-		  << "to: (" << w << ", " << h << ")\n";
+// 	kdDebug() << "Scaling from (" << m_projection -> width() 
+// 		  << ", " << m_projection -> height() 
+// 		  << "to: (" << w << ", " << h << ")\n";
 
 	vKisLayerSP_it it;
 	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {

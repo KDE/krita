@@ -44,7 +44,7 @@ QSize GradientView::sizeHint() const
 
 void GradientView::paintEvent( QPaintEvent */*_event*/ )
 {
-    kdDebug() << "GradientView::paintEvent\n";
+//     kdDebug() << "GradientView::paintEvent\n";
 
     //int w;
     int pos = 0;
@@ -77,7 +77,7 @@ void GradientView::paintEvent( QPaintEvent */*_event*/ )
 
 void GradientView::updatePixmap()
 {
-    kdDebug() << "GradientView::updatePixmap()\n";
+//     kdDebug() << "GradientView::updatePixmap()\n";
 
     int w, pos = 0;
     float index = 0.0;

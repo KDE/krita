@@ -276,11 +276,11 @@ void KisSelectionManager::copy()
 	QRect r = selection -> selectedRect();
 	r = r.normalize();
 
-	kdDebug() << "Selection rect: " 
-		  << r.x() << ", "
-		  << r.y() << ", "
-		  << r.width() << ", "
-		  << r.height() << "\n";
+// 	kdDebug() << "Selection rect: " 
+// 		  << r.x() << ", "
+// 		  << r.y() << ", "
+// 		  << r.width() << ", "
+// 		  << r.height() << "\n";
 
 	KisFloatingSelectionSP floatingSelection = new KisFloatingSelection(img -> activeDevice(), img, "copy", OPACITY_OPAQUE);
 	floatingSelection -> copySelection(selection);
@@ -345,20 +345,20 @@ void KisSelectionManager::clear()
 	KisSelectionSP selection = layer -> selection();
 	QRect r = selection -> selectedRect();
 
-	kdDebug() << "Selection rect: " 
-		  << r.x() << ", "
-		  << r.y() << ", "
-		  << r.width() << ", "
-		  << r.height() << "\n";
+// 	kdDebug() << "Selection rect: " 
+// 		  << r.x() << ", "
+// 		  << r.y() << ", "
+// 		  << r.width() << ", "
+// 		  << r.height() << "\n";
 
 	r = r.normalize();
 
 
-	kdDebug() << "Normalized selection rect: " 
-		  << r.x() << ", "
-		  << r.y() << ", "
-		  << r.width() << ", "
-		  << r.height() << "\n";
+// 	kdDebug() << "Normalized selection rect: " 
+// 		  << r.x() << ", "
+// 		  << r.y() << ", "
+// 		  << r.width() << ", "
+// 		  << r.height() << "\n";
 
 	// XXX: make undoable
 	KisPainter p(img -> activeDevice());

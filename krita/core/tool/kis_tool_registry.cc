@@ -30,7 +30,7 @@ KisToolRegistry * KisToolRegistry::m_singleton = 0;
 
 KisToolRegistry::KisToolRegistry()
 {
-	kdDebug() << " creating a KisToolRegistry" << endl;
+// 	kdDebug() << " creating a KisToolRegistry" << endl;
 	Q_ASSERT(KisToolRegistry::m_singleton == 0);
 	KisToolRegistry::m_singleton = this;
 

@@ -95,7 +95,6 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 			     "eraser_dab");
 
 	if (device -> alpha()) {
-		//kdDebug() << "Erase to inverted brush transparency.\n";
 		dab -> setOpacity(OPACITY_OPAQUE);
 		for (int y = 0; y < mask -> height(); y++) {
 			for (int x = 0; x < mask -> width(); x++) {
@@ -106,7 +105,6 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 		m_painter -> bitBlt( r.x(), r.y(), COMPOSITE_ERASE, dab.data() );
 
  	} else {
- 		//kdDebug() << "Erase to background colour.\n";
 		dab -> setOpacity(OPACITY_TRANSPARENT);
 		for (int y = 0; y < mask -> height(); y++) {
 			for (int x = 0; x < mask -> width(); x++) {

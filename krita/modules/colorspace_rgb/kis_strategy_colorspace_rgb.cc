@@ -46,7 +46,6 @@ KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
 
 KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
 {
-// 	kdDebug() << "KisStrategyColorSpaceRGB has been destroyed" << endl;
 }
 
 void KisStrategyColorSpaceRGB::nativeColor(const KoColor& c, QUANTUM *dst)
@@ -267,7 +266,7 @@ void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 stride,
 		compositeErase(stride, dst, dststride, src, srcstride, rows, cols, opacity);
 		break;
 	default:
-		kdDebug() << "Composite op " << op << " not Implemented yet.\n";
+		break;
 	}
 }
 

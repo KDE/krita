@@ -51,7 +51,7 @@ KisSelection::KisSelection(KisLayerSP layer, const QString& name)
 	m_alpha = KisColorSpaceAlphaSP(dynamic_cast<KisColorSpaceAlpha*> (colorStrategy().data()));
  	m_alpha -> setMaskColor(m_maskColor);
 #endif
-	kdDebug() << "Selection created with compositeOp " << compositeOp() << "\n";
+// 	kdDebug() << "Selection created with compositeOp " << compositeOp() << "\n";
 }
 
 KisSelection::KisSelection(KisLayerSP layer, const QString& name, KoColor color) 

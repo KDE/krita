@@ -1,7 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Link
-URL=.source/transparent_1024x768.kra
+URL=.source/white_1024x768.kra
 Icon=.icon/empty.png
 Name=White 1024 x 768
+Name[es]=1024 x 768 blanco
+Name[pt]=Branca 1024 x 768
+Name[pt_BR]=Branca 1024 x 768
 Comment=Creates a white RGB image of 1024 x 768 pixels.
+Comment[es]=Create una imagen RGB de 1024 x 768 píxeles.
+Comment[pt]=Cria uma imagem RGB branca com 1024 x 768 pontos.
+Comment[pt_BR]=Cria uma imagem RGB branca com 1024 x 768 pontos.

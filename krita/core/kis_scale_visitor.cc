@@ -49,7 +49,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 	scale_matrix.scale(xscale, yscale);
         scale_matrix = QPixmap::trueMatrix( scale_matrix, m_dev->width(), m_dev->height() );
         if ( scale_matrix.m11() == 1.0F && scale_matrix.m22() == 1.0F ) {
-                kdDebug() << "Identity matrix, do nothing.\n";
+//                 kdDebug() << "Identity matrix, do nothing.\n";
                 return;
         }
         targetW = qRound( scale_matrix.m11() * m_dev->width() );

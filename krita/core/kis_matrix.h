@@ -44,7 +44,7 @@ class KisMatrix
 			*/
 		void dump()
 		{
-			kdDebug() << "KisMatrixT::dump()" << endl;
+ 			kdDebug() << "KisMatrixT::dump()" << endl;
 			for(int i = 0; i < _H; i++)
 			{
 				for(int j = 0; j < _W; j++)

@@ -287,10 +287,15 @@ QString KisImage::nextLayerName() const
 
 void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
-	if (!adapter || !colorStrategy) {
-		kdDebug() << "no adapter or no color strategy\n";
+	if (!adapter) {
+		kdDebug() << "no color strategy\n";
+	}
+
+	if (!colorStrategy) {
+		kdDebug() << "no color strategy\n";
 		return;
 	}
+
 	m_adapter = adapter;
 	m_nserver = new KisNameServer(i18n("Layer %1"), 1);
 	m_name = name;

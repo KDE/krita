@@ -1,4 +1,6 @@
 Changelog
-
-2005-03-01 	* Restarted changelog on the occasion of the first binary release
-                
+	
+2004-05-01	* Fixed preview widget bug
+2004-05-01      * Added oilify plugin filter (michael thaler)
+2004-04-01      * Added raindrop plugin filter (michael thaler)
+2005-03-01 	* Restarted changelog on the occasion of the first binary release (boudewijn rempt)

@@ -63,7 +63,6 @@ KisToolAirBrush::~KisToolAirBrush()
 void KisToolAirBrush::timeoutPaint()
 {
 	if (m_painter) {
-		kdDebug() << "timeout airbrush\n";
 		m_painter -> airBrushAt(m_currentPos, m_pressure, m_xTilt, m_yTilt);
 		m_currentImage -> notify( m_painter -> dirtyRect() );
 	}
@@ -71,7 +70,6 @@ void KisToolAirBrush::timeoutPaint()
 
 void KisToolAirBrush::update(KisCanvasSubject *subject)
 {
-	kdDebug() << "Airbrush update\n";
 	m_subject = subject;
 	m_currentImage = subject -> currentImg();
 	
@@ -80,7 +78,6 @@ void KisToolAirBrush::update(KisCanvasSubject *subject)
 
 void KisToolAirBrush::mousePress(QMouseEvent *e)
 {
-	kdDebug() << "Airbrush mousepress\n";
 	if (!m_subject) return;
 	if (!m_currentImage) return;
 	if (!m_currentImage -> activeDevice()) return;

@@ -23,8 +23,13 @@
 #include <qstring.h>
 #include <qimage.h>
 #include <qvaluevector.h>
+#include <qtimer.h>
+#include <qmutex.h>
+
 #include <kurl.h>
+
 #include <koColor.h>
+
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_render.h"
@@ -153,27 +158,40 @@ signals:
 	void visibilityChanged(KisImageSP image, CHANNELTYPE type);
 	void update(KisImageSP image, const QRect& rc);
 
+private slots:
+	void slotUpdateDisplay();
+
 private:
 	KisImage& operator=(const KisImage& rhs);
 	void expand(KisPaintDeviceSP dev);
 	void init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
 
+	void startUpdateTimer();
+
 private:
 	KoCommandHistory *m_undoHistory;
 	KURL m_uri;
 	QString m_name;
+
 	Q_INT32 m_width;
 	Q_INT32 m_height;
 	Q_UINT32 m_depth;
+
 	Q_INT32 m_ntileCols;
 	Q_INT32 m_ntileRows;
+
 	double m_xres;
 	double m_yres;
+
 	KoUnit::Unit m_unit;
+
 	enumImgType m_type;
 	KoColorMap m_clrMap;
+
 	bool m_dirty;
+	QRect m_dirtyRect;
+
 	KisTileMgrSP m_shadow;
 	KisBackgroundSP m_bkg;
 	KisLayerSP m_projection;
@@ -193,6 +211,9 @@ private:
 	KisNameServer *m_nserver;
 	KisUndoAdapter *m_adapter;
 	KisGuideMgr m_guides;
+
+	QTimer * m_updateTimer;
+	QMutex m_displayMutex;
 };
 
 #endif // KIS_IMAGE_H_

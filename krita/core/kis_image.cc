@@ -44,6 +44,13 @@
 #include "visitors/kis_flatten.h"
 
 namespace {
+
+	const bool DISPLAY_TIMER = false; // Whether to repaint the
+					 // display every
+					 // DISPLAY_UPDATE_FREQUENCY
+					 // milliseconds
+	const int DISPLAY_UPDATE_FREQUENCY = 50; // in milliseconds
+
 	class KisResizeImageCmd : public KNamedCommand {
 		typedef KNamedCommand super;
 
@@ -132,6 +139,7 @@ KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height, c
 {
 	init(undoAdapter, width, height, imgType, name);
 	setName(name);
+	startUpdateTimer();
 }
 
 KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
@@ -161,7 +169,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_layers.reserve(rhs.m_layers.size());
 
 		for (vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); it++) {
-                    kdDebug() << "Adding layers " << endl;
 			KisLayerSP layer = new KisLayer(**it);
 
 			layer -> setImage(KisImageSP(this));
@@ -191,12 +198,15 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_maskClr = rhs.m_maskClr;
 		m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
 		m_guides = rhs.m_guides;
+		startUpdateTimer();
 	}
+
 }
 
 KisImage::~KisImage()
 {
 	delete m_nserver;
+	// Not necessary to destroy m_updateTimer
 }
 
 QString KisImage::name() const
@@ -1128,8 +1138,7 @@ void KisImage::expand(KisPaintDeviceSP dev)
 
 void KisImage::notify()
 {
-	invalidate(0, 0, width(), height());
-	emit update(KisImageSP(this), QRect(0, 0, width(), height()));
+	notify(0, 0, width(), height());
 }
 
 void KisImage::notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
@@ -1139,10 +1148,22 @@ void KisImage::notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
 
 void KisImage::notify(const QRect& rc)
 {
-    if (rc.isValid()) {
-	invalidate(rc);
-	emit update(KisImageSP(this), rc);
-    }
+	if (DISPLAY_TIMER) {
+		m_displayMutex.lock();
+		if (m_dirtyRect.isValid()) {
+			m_dirtyRect |= rc;
+		} else {
+			m_dirtyRect = rc;
+		}
+		m_displayMutex.unlock();
+	} else {
+		if (rc.isValid()) {
+			invalidate(rc);
+			emit update(KisImageSP(this), rc);
+		}
+	}
+
+ 
 }
 
 QRect KisImage::bounds() const
@@ -1163,6 +1184,28 @@ KisGuideMgr *KisImage::guides() const
 KisTileMgrSP KisImage::tiles() const
 {
 	return m_projection -> data();
+}
+
+void KisImage::slotUpdateDisplay() 
+{
+	if (m_dirtyRect.isValid()) {
+		m_displayMutex.lock();
+		QRect rect = m_dirtyRect;
+		m_dirtyRect = QRect();
+		m_displayMutex.unlock();
+
+		invalidate(rect);
+		emit update(KisImageSP(this), rect);
+	}
+}
+
+void KisImage::startUpdateTimer() 
+{
+	if (DISPLAY_TIMER) {
+		m_updateTimer = new QTimer(this);
+		connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateDisplay()) );
+		m_updateTimer -> start( DISPLAY_UPDATE_FREQUENCY );
+	}
 }
 
 #include "kis_image.moc"

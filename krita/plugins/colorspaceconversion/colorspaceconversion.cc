@@ -41,9 +41,6 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kistile.h>
-#include <kistilemgr.h>
-#include <kis_iterators_quantum.h>
 #include <kis_paint_device.h>
 #include <kis_colorspace_registry.h>
 #include "colorspaceconversion.h"

@@ -40,8 +40,6 @@
 #include <kis_types.h>
 #include <kis_view.h>
 #include <kis_plugin_registry.h>
-#include <kistile.h>
-#include <kistilemgr.h>
 
 #include "gray_plugin.h"
 

@@ -87,7 +87,7 @@ void KisPreviewView::setSourceLayer(KisLayerSP lay)
 	m_image = new KisImage(m_undo, w, h, lay->colorStrategy(), "preview");
 
 	m_image -> setProfile(lay -> profile());
-	m_clippedview = new KisLayer(m_image, w, h, m_image -> nextLayerName(), OPACITY_OPAQUE);
+	m_clippedview = new KisLayer(m_image, m_image -> nextLayerName(), OPACITY_OPAQUE);
 	gc.begin(m_clippedview.data());
 	
 	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, m_pos.x(), m_pos.y(), -1, -1);
@@ -137,14 +137,16 @@ void KisPreviewView::render(QPainter &painter, KisImageSP image)
 
 void KisPreviewView::clampDelta(QPoint& delta)
 {
-	if (delta.x() < 0)
-		delta.rx() = 0;
-	if (delta.y() < 0)
-		delta.ry() = 0;
-	if (delta.x() + size().width() / m_zoom >= m_sourcelayer -> width())
-		delta.rx() = m_sourcelayer -> width() - static_cast<int>(size().width() / m_zoom) - 1;
-	if (delta.y() + size().height() / m_zoom >= m_sourcelayer -> height())
-		delta.ry() = m_sourcelayer -> height() - static_cast<int>(size().height() / m_zoom) - 1;
+#if 0 //AUTOLAYER
+    if (delta.x() < 0)
+        delta.rx() = 0;
+    if (delta.y() < 0)
+        delta.ry() = 0;
+    if (delta.x() + size().width() / m_zoom >= m_sourcelayer -> width())
+        delta.rx() = m_sourcelayer -> width() - static_cast<int>(size().width() / m_zoom) - 1;
+    if (delta.y() + size().height() / m_zoom >= m_sourcelayer -> height())
+        delta.ry() = m_sourcelayer -> height() - static_cast<int>(size().height() / m_zoom) - 1;
+#endif // AUTOLAYER
 }
 
 void KisPreviewView::slotStartMoving(QPoint startDrag)

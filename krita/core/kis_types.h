@@ -60,12 +60,6 @@ typedef vKisSelectionSP::const_iterator vKisSelectionSP_cit;
 class KisBackground;
 typedef KSharedPtr<KisBackground> KisBackgroundSP;
 
-class KisTile;
-typedef KSharedPtr<KisTile> KisTileSP;
-typedef KisSharedPtrVector<KisTile> vKisTileSP;
-typedef vKisTileSP::iterator vKisTileSP_it;
-typedef vKisTileSP::const_iterator vKisTileSP_cit;
-
 class KisHistogram;
 typedef KSharedPtr<KisHistogram> KisHistogramSP;
 typedef KisSharedPtrVector<KisHistogram> vKisHistogramSP;
@@ -90,11 +84,8 @@ typedef KisSharedPtrVector<KisTool> vKisTool;
 typedef vKisTool::iterator vKisTool_it;
 typedef vKisTool::const_iterator vKisTool_cit;
 
-class KisTileMgr;
-typedef KSharedPtr<KisTileMgr> KisTileMgrSP;
-
-class KisPixelData;
-typedef KSharedPtr<KisPixelData> KisPixelDataSP;
+class KisDataManager;
+typedef KSharedPtr<KisDataManager> KisDataManagerSP;
 
 typedef QValueVector<QPoint> vKisSegments;
 

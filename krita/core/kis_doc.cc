@@ -70,7 +70,6 @@
 #include "builder/kis_image_magick_converter.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_colorspace_registry.h"
-#include "tiles/kistilemgr.h"
 #include "kis_profile.h"
 #include "kis_resource.h"
 #include "kis_resourceserver.h"
@@ -679,10 +678,8 @@ QDomElement KisDoc::saveLayer(QDomDocument& doc, KisLayerSP layer)
 	QDomElement layerElement = doc.createElement("layer");
 
 	layerElement.setAttribute("name", layer -> name());
-	layerElement.setAttribute("x", layer -> x());
-	layerElement.setAttribute("y", layer -> y());
-	layerElement.setAttribute("width", layer -> width());
-	layerElement.setAttribute("height", layer -> height());
+	layerElement.setAttribute("x", layer->getX());
+	layerElement.setAttribute("y", layer-> getY());
 	layerElement.setAttribute("opacity", layer -> opacity());
 	layerElement.setAttribute("visible", layer -> visible());
 	layerElement.setAttribute("linked", layer -> linked());
@@ -698,8 +695,6 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 	QString name;
 	Q_INT32 x;
 	Q_INT32 y;
-	Q_INT32 width;
-	Q_INT32 height;
 	Q_INT32 opacity;
 	bool visible;
 	bool linked;
@@ -718,18 +713,6 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
 	y = attr.toInt();
 
-	if ((attr = element.attribute("width")).isNull())
-		return 0;
-
-	if ((width = attr.toInt()) < 0 || x + width > cfg.maxImgWidth())
-		return 0;
-
-	if ((attr = element.attribute("height")).isNull())
-		return 0;
-
-	if ((height = attr.toInt()) < 0 || y + height > cfg.maxImgHeight())
-		return 0;
-
 	if ((attr = element.attribute("opacity")).isNull())
 		return 0;
 
@@ -745,7 +728,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 		return 0;
 
 	linked = attr == "0" ? false : true;
-	layer = new KisLayer(img, width, height, name, opacity);
+	layer = new KisLayer(img, name, opacity);
 	layer -> setLinked(linked);
 	layer -> setVisible(visible);
 	layer -> move(x, y);
@@ -834,7 +817,6 @@ bool KisDoc::completeLoading(KoStore *store)
 			IOCompletedStep();
 			(*it2) -> disconnect();
 		}
-
 	}
 
 	IODone();
@@ -923,12 +905,12 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 {
 	KisImageSP img = new KisImage(this, width, height, colorstrategy, name);
 
-	KisLayerSP layer = new KisLayer(img, width, height, img -> nextLayerName(), OPACITY_OPAQUE);
+	KisLayerSP layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
 
 	KisFillPainter painter;
 
 	painter.begin(layer.data());
-	painter.fillRect(0, 0, layer -> width(), layer -> height(), Qt::white, OPACITY_OPAQUE);
+	painter.fillRect(0, 0, width, height, Qt::white, OPACITY_OPAQUE);
 	painter.end();
 
 	img -> add(layer, -1);
@@ -1007,10 +989,10 @@ bool KisDoc::slotNewImage()
 		kdDebug() << "selected profile: " << dlg.profile() << "\n";
 		img -> setProfile(dlg.profile());
 
-		layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
+		layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
 
 		painter.begin(layer.data());
-		painter.fillRect(0, 0, layer -> width(), layer -> height(), c, opacity);
+		painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), c, opacity);
 		painter.end();
 
 		img -> add(layer, -1);
@@ -1044,18 +1026,17 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfileSP pro
 	// a second image is created, or selected, m_currentImage is
 	// set. Note that m_currentImage in KisDoc is a KisImage, while
 	// m_currentImage in KisImage is a KisPaintDevice.
-
 	if (!m_currentImage)
 		m_currentImage = m_images[0];
 
 	if (m_currentImage) {
-
 		x1 = CLAMP(rect.x(), 0, m_currentImage -> width());
 		y1 = CLAMP(rect.y(), 0, m_currentImage -> height());
 		x2 = CLAMP(rect.x() + rect.width(), 0, m_currentImage -> width());
 		y2 = CLAMP(rect.y() + rect.height(), 0, m_currentImage -> height());
 
 		m_currentImage -> renderToPainter(x1, y1, x2, y2, painter, profile);
+
 	}
 }
 
@@ -1171,7 +1152,7 @@ void KisDoc::setCurrentImage(KisImageSP img)
 	m_currentImage = img;
 }
 
-KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM devOpacity)
+KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, QUANTUM devOpacity)
 {
 	KisLayerSP layer;
 
@@ -1179,15 +1160,15 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 		return 0;
 
 	if (img) {
-		layer = new KisLayer(img, width, height, name, devOpacity);
+		layer = new KisLayer(img, name, devOpacity);
 
 		if (layer && img -> add(layer, -1)) {
 			layer = img -> activate(layer);
 
 			if (layer) {
-				KisFillPainter painter(layer.data());
-				painter.fillRect(0, 0, layer -> width(), layer -> height(), Qt::black, OPACITY_TRANSPARENT);
-				painter.end();
+// XXX: Autolayers had these two lines; the original code actually filled something using the painter
+// 				KisFillPainter painter(layer.data());
+// 				painter.end();
 
 				img -> top(layer);
 
@@ -1204,27 +1185,23 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 }
 
 KisLayerSP KisDoc::layerAdd(KisImageSP img,
-			    Q_INT32 width,
-			    Q_INT32 height,
 			    const QString& name,
 			    CompositeOp compositeOp,
 			    QUANTUM opacity,
-			    QPoint pos,
 			    KisStrategyColorSpaceSP colorstrategy)
 {
 	KisLayerSP layer;
 	if (!contains(img)) return 0;
 	if (img) {
-		layer = new KisLayer(width, height, colorstrategy, name);
+		layer = new KisLayer(colorstrategy, name);
 		layer -> setOpacity(opacity);
 		layer -> setCompositeOp(compositeOp);
-		layer -> move(pos);
 		if (layer && img -> add(layer, -1)) {
 			layer = img -> activate(layer);
 
 			if (layer) {
 				KisFillPainter painter(layer.data());
-				painter.fillRect(0, 0, layer -> width(), layer -> height(), Qt::black, OPACITY_TRANSPARENT);
+				painter.fillRect(0, 0, img->width(), img->height(), Qt::black, OPACITY_TRANSPARENT);
 				painter.end();
 				img -> top(layer);
 
@@ -1457,7 +1434,7 @@ bool KisDoc::importImage(const QString& filename)
 {
 	if (m_nserver == 0)
 		init();
-
+	
 	if (!filename.isEmpty()) {
 		KURL url(filename);
 

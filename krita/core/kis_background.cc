@@ -18,62 +18,33 @@
 #include "kis_global.h"
 #include "kis_background.h"
 #include "kis_image.h"
-#include "kistilemgr.h"
-#include "kistile.h"
+#include "tiles/kis_iterator.h"
 
-namespace {
-	void fillBgTile(KisTileSP tile, Q_INT32 nbc )
-	{
-		QUANTUM *p;
-		QUANTUM *q;
-
-		if (!tile)
-			return;
-
-		tile -> lock();
-		p = tile -> data();
-
-		for (Q_INT32 y = 0; y < tile -> height(); y++) {
-			for (Q_INT32 x = 0; x < tile -> width(); x++) {
-				QUANTUM v = 128 + 63 * ((x / 16 + y / 16) % 2);
-
-				v = upscale(v);
-				q = p + (y * tile -> width() + x) * tile -> depth();
-				for(Q_INT32 c = 0; c < nbc; c++)
-				{
-					q[c] = v;
-				}
-				q[nbc] = OPACITY_OPAQUE;
-			}
-		}
-
-		tile -> release();
-	}
-}
-
-KisBackground::KisBackground(KisImage *img, Q_INT32 width, Q_INT32 height) :
-	super(img, width, height, "background flyweight", OPACITY_OPAQUE)
+KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*/) :
+	super(img, "background flyweight", OPACITY_OPAQUE)
 {
-	KisTileMgrSP tm;
-	KisTileSP tile;
+	Q_INT32 y;
+        Q_UINT8 src[depth()]; // XXX: Change KoColor to KisColor
+	Q_UINT32 d = depth();
 
-	tm = tiles();
-	tile = tm -> tile(0, TILEMODE_WRITE);
 	Q_ASSERT( colorStrategy() != 0 );
-	fillBgTile(tile,  colorStrategy()->depth() - 1);
-
-	for (Q_UINT32 i = 0, k = 0; i < tm -> nrows(); i++)
-		for (Q_UINT32 j = 0; j < tm -> ncols(); j++, k++)
-			tm -> attach(tile, k);
-
+	
+	for (y = 0; y < 64; y++)
+	{
+		KisHLineIterator hiter = createHLineIterator(0, 64, y, false);
+		while( ! hiter.isDone())
+		{
+			QUANTUM v = 128 + 63 * ((hiter.x() / 16 + y / 16) % 2);
+			QColor c(v,v,v);
+			colorStrategy() -> nativeColor(c, OPACITY_OPAQUE, src);
+			
+			memcpy((Q_UINT8 *)hiter, src, d);
+			
+			hiter++;
+		}
+	}
 }
 
 KisBackground::~KisBackground()
 {
 }
-
-Q_INT32 KisBackground::tileNum(Q_INT32, Q_INT32) const
-{
-	return 0;
-}
-

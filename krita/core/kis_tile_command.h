@@ -26,10 +26,9 @@
 #include "kis_paint_device.h"
 
 class QRect;
+class KisMemento;
 
 class KisTileCommand : public KCommand {
-	typedef std::map<Q_INT32, KisTileSP> TileMap;
-
 public:
 	KisTileCommand(const QString& name, KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
 	KisTileCommand(const QString& name, KisPaintDeviceSP device, const QRect& rc);
@@ -42,15 +41,12 @@ public:
 	virtual QString name() const;
 
 public:
-	void addTile(Q_INT32 tileNo, KisTileSP tile);
-	KisTileSP tile(Q_INT32 tileNo);
 
 private:
-	TileMap m_tiles;
-	TileMap m_originals;
 	QString m_name;
 	KisPaintDeviceSP m_device;
 	QRect m_rc;
+	KisMemento *m_memento;
 };
 
 #endif // KIS_TILE_COMMAND_H_

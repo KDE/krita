@@ -49,3 +49,4 @@ KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const char *na
 KisOilPaintFilterPlugin::~KisOilPaintFilterPlugin()
 {
 }
+

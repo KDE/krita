@@ -98,8 +98,7 @@ void KisClipboard::clipboardDataChanged()
 			KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance()->get("RGBA");
 
 			m_clip =
-				new KisPaintDevice(qimg.width(), qimg.height(),
-						   cs,
+				new KisPaintDevice(cs,
 						   "KisClipboard created clipboard selection");
 
 			m_clip -> convertFromImage(qimg);

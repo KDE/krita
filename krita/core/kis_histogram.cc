@@ -42,7 +42,7 @@ KisHistogram::KisHistogram(KisLayerSP layer,
 	m_pixels = 0;
 	m_count = 0;
 	m_percentile = 100;
-	m_pixels = layer -> width() * layer -> height(); // XXX: extents once Casper is done.
+	m_pixels = 1; // AUTOLAYER: should use layer extends.
 
 	computeHistogramFor(initialChannel);
 }

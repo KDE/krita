@@ -44,9 +44,6 @@
 #include "kis_background.h"
 #include "kis_doc.h"
 #include "kis_nameserver.h"
-#include "kistile.h"
-#include "kistilemgr.h"
-#include "kispixeldata.h"
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
 #include "kis_scale_visitor.h"
@@ -184,7 +181,6 @@ KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,  
 	startUpdateTimer();
         m_dcop = 0L;
 	m_profile = 0;
-	m_pixmap = QPixmap(TILE_WIDTH, TILE_HEIGHT);
 }
 
 KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
@@ -199,8 +195,8 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_uri = rhs.m_uri;
 		m_name = QString::null;
 		m_depth = rhs.m_depth;
-		m_ntileCols = rhs.m_ntileCols;
-		m_ntileRows = rhs.m_ntileRows;
+		m_width = rhs.m_width;
+		m_height = rhs.m_height;
 		m_xres = rhs.m_xres;
 		m_yres = rhs.m_yres;
 		m_unit = rhs.m_unit;
@@ -208,11 +204,9 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_dirty = rhs.m_dirty;
 		m_adapter = rhs.m_adapter;
 		m_profile = rhs.m_profile;
-		if (rhs.m_shadow)
-			m_shadow = new KisTileMgr(*rhs.m_shadow);
 
 		m_bkg = new KisBackground(this, rhs.width(), rhs.height());
-		m_projection = new KisLayer(this, rhs.width(), rhs.height(), "projection", OPACITY_OPAQUE);
+		m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
 		m_layers.reserve(rhs.m_layers.size());
 
 		for (vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); it++) {
@@ -307,16 +301,14 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 
 	m_colorStrategy = colorStrategy;
 	m_bkg = new KisBackground(this, width, height);
-	m_projection = new KisLayer(this, width, height, "projection", OPACITY_OPAQUE);
+	m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
 	m_xres = 1.0;
 	m_yres = 1.0;
 	m_unit = KoUnit::U_PT;
 	m_dirty = false;
 	m_undoHistory = 0;
-	m_ntileCols = (width + TILE_WIDTH - 1) / TILE_WIDTH;
-	m_ntileRows = (height + TILE_HEIGHT - 1) / TILE_HEIGHT;
-
-	
+	m_width = width;
+	m_height = height;
 }
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h)
@@ -337,10 +329,10 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 			m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
 		}
 
-		m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
-		m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
+		m_width = w;
+		m_height = h;
 
-		m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
+		m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
  		m_bkg = new KisBackground(this, w, h);
 
 		if (m_adapter && m_adapter -> undo()) {
@@ -387,10 +379,10 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 
 		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
 		
-		m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
-		m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
+		m_width = w;
+		m_height = h;
 
-		m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
+		m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
 		m_bkg = new KisBackground(this, w, h);
 
 		undoAdapter()->endMacro();
@@ -420,10 +412,10 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 
 		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
 		
-		m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
-		m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
+		m_width = w;
+		m_height = h;
 
-		m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
+		m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
 		m_bkg = new KisBackground(this, w, h);
 
 		undoAdapter()->endMacro();
@@ -470,10 +462,10 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 
 		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
 		
-		m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
-		m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
+		m_width = w;
+		m_height = h;
 
-		m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
+		m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
 		m_bkg = new KisBackground(this, w, h);
 
 		undoAdapter()->endMacro();
@@ -550,12 +542,12 @@ void KisImage::setResolution(double xres, double yres)
 
 Q_INT32 KisImage::width() const
 {
-	return m_projection -> width();
+	return m_width;
 }
 
 Q_INT32 KisImage::height() const
 {
-	return m_projection -> height();
+	return m_height;
 }
 
 Q_UINT32 KisImage::depth() const
@@ -571,11 +563,6 @@ bool KisImage::alpha() const
 bool KisImage::empty() const
 {
 	return m_layers.size() > 0;
-}
-
-KisTileMgrSP KisImage::shadow() const
-{
-	return m_shadow;
 }
 
 vKisLayerSP KisImage::layers()
@@ -700,13 +687,11 @@ bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 	activate(layer);
 
 	m_layerStack.push_back(layer);
-	expand(layer.data());
 	return true;
 }
 
 void KisImage::rm(KisLayerSP layer)
 {
-	QRect rc;
 	vKisLayerSP_it it;
 
 	if (layer == 0)
@@ -733,10 +718,6 @@ void KisImage::rm(KisLayerSP layer)
 			activate(m_layerStack[0]);
 		}
 	}
-
-	rc = layer -> bounds();
-
-
 }
 
 bool KisImage::raise(KisLayerSP layer)
@@ -878,9 +859,9 @@ void KisImage::flatten()
 {
 	vKisLayerSP beforeLayers = m_layers;
 
-	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
+	KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
 	KisFillPainter painter(dst.data());
-	painter.fillRect(0, 0, dst -> width(), dst -> height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
+	painter.fillRect(0, 0, width(), height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers = layers();
 	KisMerge<isVisible, All> visitor(this);
@@ -899,9 +880,9 @@ void KisImage::mergeVisibleLayers()
 {
 	vKisLayerSP beforeLayers = m_layers;
 
-	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
+	KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
 	KisFillPainter painter(dst.data());
-	painter.fillRect(0, 0, dst -> width(), dst -> height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
+	painter.fillRect(0, 0, width(), height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers = layers();
 	KisMerge<isVisible, isVisible> visitor(this);
@@ -927,9 +908,10 @@ void KisImage::mergeLinkedLayers()
 {
 	vKisLayerSP beforeLayers = m_layers;
 
-	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
+	KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
 	KisFillPainter painter(dst.data());
-	painter.fillRect(0, 0, dst -> width(), dst -> height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
+	painter.fillRect(0, 0, width(), height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
+
 
 	vKisLayerSP mergeLayers = layers();
 	KisMerge<isLinked, isLinked> visitor(this);
@@ -957,9 +939,9 @@ void KisImage::mergeLayer(KisLayerSP l)
 
 	vKisLayerSP beforeLayers = m_layers;
 
-	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
+	KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
 	KisFillPainter painter(dst.data());
-	painter.fillRect(0, 0, dst -> width(), dst -> height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
+	painter.fillRect(0, 0, width(), height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers;
 
@@ -993,55 +975,17 @@ void KisImage::enableUndo(KoCommandHistory *history)
 	m_undoHistory = history;
 }
 
-Q_INT32 KisImage::tileNum(Q_INT32 xpix, Q_INT32 ypix) const
-{
-	Q_INT32 row;
-	Q_INT32 col;
-	Q_INT32 num;
-
-	if (xpix >= width() || ypix >= height())
-		return -1;
-
-	row = ypix / TILE_HEIGHT;
-	col = xpix / TILE_WIDTH;
-	num = row * m_ntileCols + col;
-	return num;
-}
-
-
 // Composite the specified tile onto the projection layer.
-void KisImage::renderToProjection(Q_INT32 tileno)
+void KisImage::renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	KisTileMgrSP tm = m_projection -> tiles();
-	KisTileSP dst;
 	KisPainter gc;
-	QPoint pt;
-
-	Q_ASSERT(tm);
-
-	if (tileno < 0)
-		return;
-
-	if (tileno >= (m_ntileCols * m_ntileRows)) {
-		m_ntileCols = (width() + TILE_WIDTH - 1) / TILE_WIDTH;
-		m_ntileRows = (height() + TILE_HEIGHT - 1) / TILE_HEIGHT;
-
-		if (tileno >= (m_ntileCols * m_ntileRows))
-			return;
-	}
-
-	dst = tm -> tile(tileno, TILEMODE_WRITE);
-	
-	if (!dst)
-		return;
 
 	gc.begin(m_projection.data());
 
-	tm -> tileCoord(dst, pt);
-	gc.bitBlt(pt.x(), pt.y(), COMPOSITE_COPY, m_bkg.data(), pt.x(), pt.y(), dst -> width(), dst -> height());
+	gc.bitBlt(x, y, COMPOSITE_COPY, m_bkg.data(), x, y, w, h);
 
 	if (!m_layers.empty()) {
-		KisFlatten<flattenAllVisible> visitor(pt.x(), pt.y(), dst -> width(), dst -> height());
+		KisFlatten<flattenAllVisible> visitor(x, y, w, h);
 
 		visitor(gc, m_layers);
 
@@ -1063,42 +1007,19 @@ void KisImage::renderToPainter(Q_INT32 x1,
 {
 	Q_INT32 x;
 	Q_INT32 y;
-	Q_INT32 tileno;
 
 	// Flatten the layers onto the projection layer of the current image
-	for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
-		for (x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
-			if ((tileno = tileNum(x, y)) < 0)
-				continue;
-			
-			renderToProjection(tileno);
-			
-			QImage img = projection() -> convertToQImage(profile, x, y, TILE_WIDTH, TILE_HEIGHT);
-
+	for (y = y1; y <= y2; y += RENDER_HEIGHT - (y % RENDER_HEIGHT)) {
+		for (x = x1; x <= x2; x += RENDER_WIDTH - (x % RENDER_WIDTH)) {
+			Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
+			Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
+			renderToProjection(x, y, w, h);
+			QImage img = projection() -> convertToQImage(profile, x, y, w, h);
 			if (!img.isNull()) {
-				// XXX: made obosolete by qt-copy patch 0005
-				// m_pixio.putImage(&m_pixmap, 0, 0, &img);
 				m_pixmap.convertFromImage(img);
-				Q_INT32 w = QMIN(x2 - x, TILE_WIDTH);
-				Q_INT32 h = QMIN(y2 - y, TILE_HEIGHT);
 				painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
 			}
 		}
-	}
-
-}
-
-
-void KisImage::expand(KisPaintDeviceSP dev)
-{
-	Q_INT32 w;
-	Q_INT32 h;
-
-	if (dev -> width() > width() || dev -> height() > height()) {
-		w = QMAX(dev -> width(), width());
-		h = QMAX(dev -> height(), height());
-		resize(w, h);
-
 	}
 }
 
@@ -1150,11 +1071,6 @@ KisUndoAdapter* KisImage::undoAdapter() const
 KisGuideMgr *KisImage::guides() const
 {
 	return const_cast<KisGuideMgr*>(&m_guides);
-}
-
-KisTileMgrSP KisImage::tiles() const
-{
-	return m_projection -> tiles();
 }
 
 void KisImage::slotUpdateDisplay()

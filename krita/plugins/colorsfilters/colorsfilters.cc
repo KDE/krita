@@ -40,8 +40,6 @@
 #include <kis_tile_command.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kistile.h>
-#include <kistilemgr.h>
 #include <kis_iterators_pixel.h>
 #include <kis_pixel.h>
 // #include <kmessagebox.h>

@@ -1,5 +1,5 @@
 /*
- *  kis_sidebar.cc - part of Krita
+ *  kis_controlframe.cc - part of Krita
  *
  *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>

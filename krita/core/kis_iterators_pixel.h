@@ -21,11 +21,11 @@
 #define KIS_ITERATORS_PIXEL_H_
 
 #include "kis_iterators.h"
-#include "kis_iterator_proxy.h"
 #include "kis_pixel.h"
 #include "kis_strategy_colorspace.h"
 
-/** FIXME: update this comment to be compatible with the last API change
+
+/**
  
 There are two functions to create an iterator : iteratorPixelBegin and
 iteratorPixelSelectionBegin, use the first if you don't care about
@@ -61,43 +61,50 @@ while( lineIt <) endLineIt )
 
 
  */
-
+ class KisIteratorUnit;
  
-// Proxy
-
-class KisIteratorLinePixel;
-
-class KisIteratorPixel : public KisIteratorProxy< KisIteratorUnit, KisIteratorLinePixel>
+class KisIteratorPixel : public KisIteratorUnit
 {
-	typedef KisIteratorProxy< KisIteratorUnit, KisIteratorLinePixel > parent;
-	public:
-		inline operator KisPixel ();
-		inline KisPixelRO oldValue();
-		inline KisQuantum operator[](int index);
-		KisIteratorPixel( KisIteratorUnit* it) : parent(it) { }
+public:
+	KisIteratorPixel( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos = 0, Q_INT32 nxpos = 0);
+public:
+	inline operator KisPixel();
+        inline KisPixelRO oldValue();
+	inline KisQuantum operator[](int index);
+	virtual ~KisIteratorPixel() {}
+private:
 };
 
-class KisIteratorLinePixel : public KisIteratorProxy<KisIteratorLine< KisIteratorPixel >, KisIteratorPixel>
+
+/**
+ * XXX: document
+ */
+class KisIteratorLinePixel : public KisIteratorLine<KisIteratorPixel>
 {
-	typedef KisIteratorProxy<KisIteratorLine<KisIteratorPixel>, KisIteratorPixel > parent;
-	public:
-		KisIteratorLinePixel( KisIteratorLine<KisIteratorPixel>* it) : parent(it) { }
-		inline operator KisIteratorPixel* () {  return (KisIteratorPixel*)(*m_proxyed); }
+public:
+	KisIteratorLinePixel( KisPaintDeviceSP ndevice, 
+			      KisTileCommand* command, 
+			      Q_INT32 nypos = 0,
+			      Q_INT32 nxstart = -1, 
+			      Q_INT32 nxend = -1);
+public:
+	virtual KisIteratorPixel operator*();
+	virtual operator KisIteratorPixel* ();
+	virtual KisIteratorPixel begin();
+	virtual KisIteratorPixel end();
 };
 
-// Functions
 inline KisPixelRO KisIteratorPixel::oldValue()
 {
-	return m_proxyed->oldValue();
-// 	return m_colorSpace -> toKisPixelRO( this->oldQuantumValue(), m_device -> profile());
+  return m_colorSpace -> toKisPixelRO( this->oldQuantumValue(), m_device -> profile());
 }
+
 /**
  * Return the current pixel
  */
 inline KisIteratorPixel::operator KisPixel()
 {
-	return m_proxyed->value();
-// 	return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile());
+	return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile());
 }
 
 /**
@@ -106,8 +113,7 @@ inline KisIteratorPixel::operator KisPixel()
  */
 inline KisQuantum KisIteratorPixel::operator[](int index)
 {
-	return (*m_proxyed)[index]; 
-// 	return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile())[index];
+	return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile())[index];
 }
 
 

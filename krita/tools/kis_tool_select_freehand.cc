@@ -117,7 +117,6 @@ void KisToolSelectFreehand::buttonPress(KisButtonPressEvent */*event*/)
 // 		setClipImage();
 // 	}
 // 	else if (event->button() == RightButton) {
-// 		// TODO
 // 		return;
 // 	}
 }
@@ -214,7 +213,6 @@ void KisToolSelectFreehand::move(KisMoveEvent */*event*/)
 void KisToolSelectFreehand::buttonRelease(KisButtonReleaseEvent */*event*/)
 {
 // 	if ( event->button() == RightButton ) {
-// 		// TODO
 // 		return;
 // 	}
 

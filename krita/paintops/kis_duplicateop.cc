@@ -55,13 +55,14 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 			     const double /*xTilt*/,
 			     const double /*yTilt*/)
 {
+#if 0 //AUTOLAYER
 	if (!m_painter) return;
 	
 	KisPaintDeviceSP device = m_painter -> device();
 	if (m_source) device = m_source;
 	if (!device) return;
 
-	KisBrush * brush = m_painter -> brush();
+	KisBrush * brush = m_painter->brush();
 	if (!brush) return;
 
 	KisPoint hotSpot = brush -> hotSpot(pressure);
@@ -156,5 +157,5 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 	m_painter -> bitBlt( x,  y,  m_painter -> compositeOp(), srcdev, m_painter -> opacity(), sx, sy, srcdev -> width(),srcdev -> width());
 
 	m_painter -> addDirtyRect(QRect(x, y, dab -> width(), dab -> height()));
-
+#endif //AUTOLAYER
 }

@@ -35,11 +35,9 @@
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
 #include "kis_painter.h"
-#include "kis_iterators_quantum.h"
 #include "kis_iterators_pixel.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "kistilemgr.h"
 #include "kis_colorspace_registry.h"
 #include "kis_dlg_apply_profile.h"
 #include "kis_config.h"
@@ -289,9 +287,8 @@ void KisSelectionManager::copy()
 // 		  << r.width() << ", "
 // 		  << r.height() << "\n";
 
-	KisPaintDeviceSP clip = new KisPaintDevice(r.width(), r.height(), 
-						img -> activeDevice() -> colorStrategy(), 
-						"Copy from " + img -> activeDevice() -> name() );
+	KisPaintDeviceSP clip = new KisPaintDevice(img -> activeDevice() -> colorStrategy(), 
+						   "Copy from " + img -> activeDevice() -> name() );
 	clip -> setCompositeOp(COMPOSITE_OVER);
 	clip -> setProfile(layer -> profile());
 
@@ -300,11 +297,11 @@ void KisSelectionManager::copy()
 	KisPainter gc;
 	gc.begin(clip);
 	// Copy image data
-	gc.bitBlt(0, 0, COMPOSITE_COPY, layer.data(), r.x() - layer -> x(), r.y() - layer -> y(), r.width(), r.height());
+	gc.bitBlt(0, 0, COMPOSITE_COPY, layer.data(), r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height());
 	// Apply selection mask.
-	selection -> invert(QRect(r.x() - layer -> x(), r.y() - layer -> y(), r.width(), r.height()));
-	gc.bitBlt(0, 0, COMPOSITE_COPY_OPACITY, selection.data(), r.x() - layer -> x(), r.y() - layer -> y(), r.width(), r.height());
-	selection -> invert(QRect(r.x() - layer -> x(), r.y() - layer -> y(), r.width(), r.height()));
+	selection -> invert(QRect(r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height()));
+	gc.bitBlt(0, 0, COMPOSITE_COPY_OPACITY, selection.data(), r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height());
+	selection -> invert(QRect(r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height()));
 	gc.end();
 
 //      kdDebug() << "Selection copied: "
@@ -331,12 +328,10 @@ KisLayerSP KisSelectionManager::paste()
 	KisPaintDeviceSP clip = m_clipboard -> clip();
 
 	if (clip) {
-
-
-		KisLayerSP layer = new KisLayer(img, clip -> width(), clip -> height(), img -> nextLayerName() + "(pasted)", OPACITY_OPAQUE);
+		KisLayerSP layer = new KisLayer(img, img -> nextLayerName() + "(pasted)", OPACITY_OPAQUE);
 		KisPainter gc;
 		gc.begin(layer.data());
-		gc.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), clip -> x(), clip -> y(), clip -> width(), clip -> height());
+		gc.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), clip->getX(), clip->getY(), 0, 0);
 		gc.end();
 		
 		KisConfig cfg;
@@ -359,7 +354,6 @@ KisLayerSP KisSelectionManager::paste()
 
 		return layer;
 	}
-
 	return 0;
 }
 
@@ -372,8 +366,9 @@ void KisSelectionManager::selectAll()
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
-	KisSelectionSP s = new KisSelection(KisPaintDeviceSP(layer.data()), "layer selection for: " + layer -> name());
-	s -> select(QRect(0, 0, layer -> width(), layer -> height()));
+	KisSelectionSP s = new KisSelection(KisPaintDeviceSP(layer), "layer selection for: " + layer -> name());
+	s -> select(QRect(0, 0, img -> width(), img -> height())); //AUTOLAYER perhaps use extent ??
+
 	s -> setVisible(true);
 
 	layer -> setSelection(s);
@@ -457,12 +452,13 @@ void KisSelectionManager::invert()
 
 	if (layer -> hasSelection()) {
 		KisSelectionSP s = layer -> selection();
-		s -> invert(QRect(0, 0, layer -> width(), layer -> height()));
+		// AUTOLAYER change the following
+		s -> invert(QRect(0, 0, 100, 100));
 	}
 	else {
 		selectAll();
 	}
-	m_parent -> updateCanvas(layer -> bounds());
+	m_parent -> updateCanvas(0, 0, img->width(),img->height());
 
 }
 

@@ -19,21 +19,10 @@
 
 #include "kis_iterators.h"
 
-KisIteratorUnit::KisIteratorUnit( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos, Q_INT32 nxpos, Q_INT8 inc)
-		: m_device (ndevice),
-		  m_colorSpace (ndevice -> colorStrategy()),
-		  m_command (command), 
-		  m_ktm( m_device->tiles()),
-		  m_depth( m_device->depth() ),
-		  m_ypos(nypos), 
-		  m_rownum(nypos / TILE_HEIGHT ), 
-		  m_ypos_intile( nypos % TILE_HEIGHT ),
-		  m_tilenum( m_ktm->ncols() * m_rownum + nxpos /  TILE_WIDTH ), 
-		  m_xintile( (nxpos % TILE_WIDTH ) * m_depth),
-			m_oldTileNeedRefresh (true),
-		  m_tileNeedRefresh (true), 
-		  m_tileNeedRefreshRW(true),
-			m_inc(inc)
+KisIteratorUnit::KisIteratorUnit( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos, Q_INT32 nxpos, Q_INT8 /*inc*/)
+:	m_device(ndevice),
+	m_command(command),
+	m_colorSpace(ndevice->colorStrategy()),
+	m_underlying_iterator(ndevice->createHLineIterator(nxpos,100,nypos,false)) //AUTOLAYER
 {
-	m_tile = m_ktm->tile( m_tilenum, TILEMODE_READ);
 }

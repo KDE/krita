@@ -26,8 +26,7 @@
 #include "kis_paint_device.h"
 #include "kis_tile_command.h"
 #include "kis_undo_adapter.h"
-#include <kistile.h>
-#include <kistilemgr.h>
+#include "tiles/kis_iterator.h"
 #include <kdebug.h>
 #include "kis_quantum.h"
 #include "kis_pixel.h"
@@ -42,7 +41,7 @@
 class KisIteratorUnit {
 
 public:
-	KisIteratorUnit( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos = 0, Q_INT32 nxpos = 0, Q_INT8 inc = 1);
+	KisIteratorUnit( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos, Q_INT32 nxpos, Q_INT8 inc);
 
 public:
 	//Increment operator
@@ -77,16 +76,12 @@ protected:
 
 protected:
 	KisPaintDeviceSP m_device;
-	KisStrategyColorSpaceSP m_colorSpace;
 	KisTileCommand* m_command;
-	KisTileMgrSP m_ktm;
-	const Q_INT32 m_depth, m_ypos, m_rownum, m_ypos_intile;
-	Q_INT32 m_tilenum, m_xintile;
-	bool m_oldTileNeedRefresh, m_tileNeedRefresh, m_tileNeedRefreshRW;
-	KisTileSP m_tile, m_oldTile;
-	Q_INT8 m_inc;
+	KisStrategyColorSpaceSP m_colorSpace;
+	KisHLineIterator m_underlying_iterator;
 	QUANTUM* m_data;
 	QUANTUM* m_oldData;
+	Q_INT32 m_x;
 };
 
 
@@ -101,13 +96,13 @@ class KisIteratorLine {
 public:
 	KisIteratorLine( KisPaintDeviceSP ndevice, 
 			 KisTileCommand* command, 
-			 Q_INT32 nypos = 0,
-			 Q_INT32 nxstart = -1, 
-			 Q_INT32 nxend = -1) :
+			 Q_INT32 nypos,
+			 Q_INT32 nxstart, 
+			 Q_INT32 nxend) :
 		m_device( ndevice ),
-		m_xstart( (nxstart < 0) ? 0 : nxstart  ),
-		m_xend( ( nxend < 0 ) ? ndevice->width()-1 : nxend ),
-		m_ypos( nypos ), m_command( command )
+		m_xstart(nxstart),
+		m_xend(nxend),
+		m_ypos(nypos), m_command( command )
 		{
 		}
 
@@ -179,31 +174,15 @@ inline KisIteratorUnit& KisIteratorUnit::operator++()
 }
 inline KisIteratorUnit& KisIteratorUnit::inc()
 {
-	Q_ASSERT( m_tile != 0 );
-	m_xintile+= m_inc;
-	if( m_xintile >= m_tile->width() * m_depth )
-	{
-		m_xintile =  0;
-		m_tilenum++;
-		m_tileNeedRefresh = true;
-		m_tileNeedRefreshRW = true;
-		m_oldTileNeedRefresh = true;
-	}
+	m_underlying_iterator++;
+	m_x++;
 	return *this;
 }
 
 inline KisIteratorUnit& KisIteratorUnit::dec()
 {
-	Q_ASSERT( m_tile != 0 );
-	m_xintile-=m_inc;
-	if( m_xintile < 0 )
-	{
-		m_xintile =  m_tile->width() * m_depth - m_inc;
-		m_tilenum--;
-		m_tileNeedRefresh = true;
-		m_tileNeedRefreshRW = true;
-		m_oldTileNeedRefresh = true;
-	}
+	m_underlying_iterator--;
+	m_x--;
 	return *this;
 }
 
@@ -216,67 +195,36 @@ inline KisIteratorUnit& KisIteratorUnit::operator--()
  */
 inline void KisIteratorUnit::skipPixel() 
 {
-	Q_ASSERT( m_tile != 0 );
-	m_xintile += m_depth;
-	if( m_xintile >= m_tile->width() * m_depth )
-	{
-		m_xintile -= m_tile->width() * m_depth;
-		m_tilenum++;
-		m_tileNeedRefresh = true;
-		m_tileNeedRefreshRW = true;
-	}
+	inc();
 }
 // Comparison operators
 inline bool KisIteratorUnit::operator<(const KisIteratorUnit& __rhs) const
 { 
-	return m_tilenum < __rhs.m_tilenum || (m_tilenum == __rhs.m_tilenum && m_xintile < __rhs.m_xintile); 
+	return m_x < __rhs.m_x; 
 }
 inline bool KisIteratorUnit::operator<=(const KisIteratorUnit& __rhs) const
 {
-	if( m_tilenum == __rhs.m_tilenum ) { 
-		return m_xintile <= __rhs.m_xintile; 
-	}
-	
-	return m_tilenum < __rhs.m_tilenum;
+	return m_x < __rhs.m_x;
 }
 inline bool KisIteratorUnit::operator==(const KisIteratorUnit& __rhs) const 
 { 
-	return m_tilenum == __rhs.m_tilenum && m_xintile == __rhs.m_xintile; 
+	return m_x == __rhs.m_x; 
 }
 
 inline KisIteratorUnit::operator QUANTUM*()
 {
-	if( m_tileNeedRefreshRW )
-	{
-		if( m_command && (m_tile = m_ktm->tile( m_tilenum , TILEMODE_NONE)) )
-		{
-			m_command->addTile( m_tilenum , m_tile);
-		}
-		if (!(m_tile = m_ktm->tile( m_tilenum, TILEMODE_RW)))
-			return 0;
-		m_data =  m_tile->data(0, m_ypos_intile);
-		m_tileNeedRefreshRW = false;
-	}
-	return m_data + m_xintile;
+	return (Q_UINT8 *)m_underlying_iterator;
 }
 
 
 inline KisIteratorUnit::operator QUANTUM ()
 {
-	if( m_tileNeedRefresh && m_tileNeedRefreshRW )
-	{
-		if( !(m_tile = (m_ktm->tile( m_tilenum, TILEMODE_READ) ) ) )
-		{
-			return 0;
-		}
-		m_data =  m_tile->data(0, m_ypos_intile);
-		m_tileNeedRefresh = false;
-	}
-	return *(m_data + m_xintile);
+	return *((Q_UINT8 *)m_underlying_iterator);
 }
 
 inline QUANTUM* KisIteratorUnit::oldQuantumValue()
 {
+#if 0 // AUTOLAYER
 	if( m_oldTileNeedRefresh )
 	{
 		m_oldTile = 0;
@@ -293,6 +241,8 @@ inline QUANTUM* KisIteratorUnit::oldQuantumValue()
 		m_oldTileNeedRefresh = false;
 	}
 	return (m_oldData + m_xintile);
+#endif  // AUTOLAYER
+return 0;
 }
 
 #endif

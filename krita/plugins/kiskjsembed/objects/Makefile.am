@@ -13,8 +13,8 @@ INCLUDES  = -I$(srcdir)/../ \
 
 noinst_LTLIBRARIES = libkiskjsembedobjects.la
 
-libkiskjsembedobjects_la_SOURCES = kis_paint_device_object.cc \
-	kis_objects_factory.cc
+libkiskjsembedobjects_la_SOURCES = kis_objects_factory.cc #kis_paint_device_object.ccg
+
 
 # kritakjsembedobjects_la_LIBADD = -lkjs
 

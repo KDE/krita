@@ -95,12 +95,12 @@ public:
 			Q_INT32 w;
 			Q_INT32 h;
 
-			sx = layer -> x();
-			sy = layer -> y();
-			dx = layer -> x();
-			dy = layer -> y();
-			w = layer -> width();
-			h = layer -> height();
+			sx = layer -> getX();
+			sy = layer ->getY();
+			dx = layer ->getX();
+			dy = layer ->getY();
+			w = 100; //AUTOLAYER layer -> width();
+			h = 100; // AUTOLAYER layer -> height();
 
 			if (sx < 0) {
 				w += sx;

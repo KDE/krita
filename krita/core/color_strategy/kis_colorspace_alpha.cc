@@ -31,7 +31,6 @@
 #include "kis_colorspace_registry.h"
 #include "kis_image.h"
 #include "kis_colorspace_alpha.h"
-#include "tiles/kispixeldata.h"
 #include "kis_iterators_pixel.h"
 #include "kis_selection.h"
 #include "kis_channelinfo.h"

@@ -79,7 +79,7 @@ void KisToolMove::buttonPress(KisButtonPressEvent *e)
 				}
 			}
 		}
-		else if (dev -> contains(pos)) {
+		else {
 			m_strategy.startDrag(pos);
 		}
 	}

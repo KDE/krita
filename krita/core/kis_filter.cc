@@ -47,7 +47,8 @@ void KisFilter::refreshPreview( )
 	m_dialog -> previewWidget -> slotRenewLayer();
 	KisLayerSP layer = m_dialog -> previewWidget -> getLayer();
 	KisFilterConfiguration* config = configuration(m_widget);
-	QRect rect(0, 0, layer -> width(), layer -> height());
+	//AUTOLAYER QRect rect(0, 0, layer -> width(), layer -> height());
+	QRect rect(0, 0, 1, 1);
 	process((KisPaintDeviceSP) layer, config, rect, 0 );
 	m_dialog->previewWidget -> slotUpdate();
 }
@@ -88,7 +89,8 @@ void KisFilter::slotActivated()
 	//Apply the filter
 	KisFilterConfiguration* config = configuration(m_widget);
 	KisTileCommand* ktc = new KisTileCommand(name(), (KisPaintDeviceSP)layer ); // Create a command
-	QRect rect(0, 0, layer->width(), layer->height());
+	//AUTOLAYER QRect rect(0, 0, layer->width(), layer->height());
+	QRect rect(0, 0, 1, 1);
 
 	process((KisPaintDeviceSP)layer, config, rect, ktc);
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,16 +15,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include "kis_memento.h"
+#include "kis_tile.h"
 
-#include "kis_global.h"
-#include "kis_types.h"
-#include "kispixeldata.h"
-#include "kistilemgr.h"
-#include "kistile.h"
-
-KisPixelData::~KisPixelData()
+KisMemento::KisMemento()
 {
-	if (owner)
-		delete[] data;
+	m_hashTable = new KisTile * [1024];
+	for(int i = 0; i < 1024; i++)
+		m_hashTable [i] = 0;
+	m_numTiles = 0;
 }
 
+KisMemento::~KisMemento()
+{
+	// Deep delete every tile
+	for(int i = 0; i < 1024; i++)
+	{
+		KisTile *tile = m_hashTable[i];
+		
+		while(tile)
+		{
+			KisTile *deltile = tile;
+			tile = tile->getNext();
+			delete deltile;
+		}
+	}
+	delete m_hashTable;
+}

@@ -112,70 +112,18 @@ public:
 private:
 	void visit(KisPainter& gc, KisPaintDeviceSP dev, Q_INT32 opacity)
 	{
-		Q_INT32 x1 = m_rc.x();
-		Q_INT32 y1 = m_rc.y();
-		Q_INT32 width = m_rc.width();
-		Q_INT32 height = m_rc.height();
+		Q_INT32 w = m_rc.width();
+		Q_INT32 h = m_rc.height();
+		Q_INT32 dx = m_rc.x();
+		Q_INT32 dy = m_rc.y();
 		Q_INT32 sx;
 		Q_INT32 sy;
-		Q_INT32 dx;
-		Q_INT32 dy;
-		Q_INT32 w;
-		Q_INT32 h;
-		QRect clip;
 
 		if (!m_test(dev))
 			return;
 
-		clip = dev -> clip();
-		sx = dev -> x();
-		sy = dev -> y();
-		w = dev -> width();
-		h = dev -> height();
-
-		if (!clip.isEmpty()) {
-			sx = sx + clip.x();
-			sy = sy + clip.y();
-			w = QMIN(clip.width(), w);
-			h = QMIN(clip.height(), w);
-		}
-
-		if (sx < 0) {
-			dx = 0;
-			sx = abs(sx);
-			w -= sx;
-		} else {
-			dx = sx;
-			sx = 0;
-		}
-
-		if (sy < 0) {
-			dy = 0;
-			sy = abs(sy);
-			h -= sy;
-		} else {
-			dy = sy;
-			sy = 0;
-		}
-
-		// TODO
-		h = height;
-		w = width;
-
-		if (dx <= dev -> x()) {
-			dx -= dev -> x();
-			sx -= dev -> x();
-		}
-
-		if (dy <= dev -> y()) {
-			dy -= dev -> y();
-			sy -= dev -> y();
-		}
-
-		sx = QMAX(sx + x1, 0);
-		sy = QMAX(sy + y1, 0);
-		dx = QMAX(dx + x1, dev -> x());
-		dy = QMAX(dy + y1, dev -> y());
+		sx = m_rc.x() - dev->getX();
+		sy = m_rc.y() - dev->getY();
 
 // 		kdDebug() << "Blitting: " << dev -> name() 
 // 			  << " dx: " << dx

@@ -50,12 +50,8 @@ public:
 	virtual DCOPObject *dcopObject();
 
 public:
-	// Implement KisRenderInterface
-	virtual Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix) const;
-	virtual KisTileMgrSP tiles() const;
-
 	// Composite the specified tile onto the projection layer.
-	virtual void renderToProjection(Q_INT32 tileno);
+	virtual void renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	virtual void renderToPainter(Q_INT32 x1,
 				     Q_INT32 y1,
 				     Q_INT32 x2,
@@ -117,7 +113,6 @@ public:
 	bool alpha() const;
 
 	bool empty() const;
-	KisTileMgrSP shadow() const;
 
 	vKisLayerSP layers();
 	const vKisLayerSP& layers() const;
@@ -183,7 +178,6 @@ private slots:
 
 private:
 	KisImage& operator=(const KisImage& rhs);
-	void expand(KisPaintDeviceSP dev);
 	void init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name);
 
 	void startUpdateTimer();
@@ -198,8 +192,8 @@ private:
 
 	Q_UINT32 m_depth;
 
-	Q_INT32 m_ntileCols;
-	Q_INT32 m_ntileRows;
+	Q_INT32 m_width;
+	Q_INT32 m_height;
 
 	double m_xres;
 	double m_yres;
@@ -211,7 +205,6 @@ private:
 	bool m_dirty;
 	QRect m_dirtyRect;
 
-	KisTileMgrSP m_shadow;
 	KisBackgroundSP m_bkg;
 	KisLayerSP m_projection;
 	vKisLayerSP m_layers;

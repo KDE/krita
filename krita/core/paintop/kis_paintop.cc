@@ -28,7 +28,7 @@
 #include "kis_point.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_global.h"
-#include "kistilemgr.h"
+#include "tiles/kis_iterator.h"
 
 KisPaintOp::KisPaintOp(KisPainter * painter) 
 {
@@ -44,36 +44,29 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 {
 	// XXX: According to the SeaShore source, the Gimp uses a temporary layer
 	// the size of the layer that is being painted on. Thas layer is cleared
-	// between painting actions. Our temporary layer is only just big enough to
-	// contain the brush mask, and for every paintAt, the dab is composited with
+	// between painting actions. Our temporary layer, dab, is for every paintAt, composited with
 	// the target layer.
-	KisLayerSP dab = new KisLayer(mask -> width(),
-				      mask -> height(),
-				      m_painter -> device() -> colorStrategy(),
-				      "dab");
+	KisLayerSP dab = new KisLayer(m_painter -> device() -> colorStrategy(), "dab");
 
 	KisStrategyColorSpaceSP colorStrategy = dab -> colorStrategy();
 	Q_INT32 maskWidth = mask -> width();
 	Q_INT32 maskHeight = mask -> height();
 	Q_INT32 dstDepth = dab -> depth();
-	QUANTUM *quantums = new QUANTUM[maskWidth * maskHeight * dstDepth];
-	QUANTUM *dst = quantums;
 
-	for (int y = 0; y < maskHeight; y++) {
-		for (int x = 0; x < maskWidth; x++) {
+	for (int y = 0; y < maskHeight; y++)
+	{
+		KisHLineIterator hiter = dab->createHLineIterator(0, maskWidth, y, false);
+		int x=0;
+		while(! hiter.isDone())
+		{
 			colorStrategy -> nativeColor(m_painter -> paintColor(), 
-						     mask -> alphaAt(x, y),
-						     dst);
-			dst += dstDepth;
+						     mask -> alphaAt(x++, y),
+						     (Q_UINT8 *)hiter);
+			hiter++;
 		}
 	}
 
-	KisTileMgrSP dabTiles = dab -> tiles();
-	dabTiles -> writePixelData(0, 0, maskWidth - 1, maskHeight - 1, quantums, maskWidth * dstDepth);
-	delete [] quantums;
-
 	return dab;
-
 }
 
 void KisPaintOp::splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction)

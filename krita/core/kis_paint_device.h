@@ -29,10 +29,10 @@
 #include "kis_types.h"
 #include "kis_render.h"
 #include "kis_image.h"
-#include "kistilemgr.h"
+#include "tiles/kis_datamanager.h"
 #include "kis_strategy_colorspace.h"
-#include "kispixeldata.h"
 #include "kis_scale_visitor.h"
+#include "kis_iterator.h"
 
 class QImage;
 class QSize;
@@ -41,7 +41,6 @@ class KoStore;
 class KisImage;
 class QWMatrix;
 class KisTileCommand;
-class KisIteratorLineQuantum;
 class KisIteratorLinePixel;
 class KisRotateVisitor;
 
@@ -53,38 +52,24 @@ class KisPaintDevice : public QObject, public KisRenderInterface {
         typedef KisRenderInterface super;
 
 public:
-	KisPaintDevice(Q_INT32 width, Q_INT32 height,
-			KisStrategyColorSpaceSP colorStrategy,
+	KisPaintDevice(KisStrategyColorSpaceSP colorStrategy,
 			const QString& name);
 	KisPaintDevice(KisImage *img,
-			Q_INT32 width, Q_INT32 height,
 			KisStrategyColorSpaceSP colorStrategy,
-			const QString& name);
-	KisPaintDevice(KisTileMgrSP tm,
-			KisImage *img,
 			const QString& name);
 	KisPaintDevice(const KisPaintDevice& rhs);
 	virtual ~KisPaintDevice();
 
 public:
         // Implement KisRenderInterface
-        virtual Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix) const;
-        virtual KisTileMgrSP tiles() const;
         virtual bool write(KoStore *store);
         virtual bool read(KoStore *store);
 
 public:
 	virtual void configure(KisImage *image, 
-			Q_INT32 width, Q_INT32 height, 
 			KisStrategyColorSpaceSP colorStrategy, 
 			const QString& name,
 			CompositeOp compositeOp);
-	/**
-	   The data() methods return a shared pointer to the tile manager.
-	*/
-private:
-        virtual KisTileMgrSP data();
-        virtual const KisTileMgrSP data() const;
 public:
         virtual bool shouldDrawBorder() const;
 
@@ -97,13 +82,10 @@ public:
         bool contains(Q_INT32 x, Q_INT32 y) const;
         bool contains(const QPoint& pt) const;
 
-        void setTiles(KisTileMgrSP mgr);
-
 	/** 
 	 *   Converts the paint device to a different colorspace
 	 */
 	virtual void convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile = 0, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
-
 
 	/**
 	 * Fill this paint device with the data from img;
@@ -140,9 +122,6 @@ public:
 	 */
         bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity, KisProfileSP profile = 0);
 
-        void maskBounds(Q_INT32 *x1, Q_INT32 *y1, Q_INT32 *x2, Q_INT32 *y2);
-        void maskBounds(QRect *rc);
-
         bool alpha() const;
 
 	KisStrategyColorSpaceSP colorStrategy() const;
@@ -165,21 +144,12 @@ public:
 	CompositeOp compositeOp() { return m_compositeOp; }
 	void setCompositeOp(CompositeOp compositeOp) { m_compositeOp = compositeOp; }
 
-        KisTileMgrSP shadow();
-        const KisTileMgrSP shadow() const;
-
-	// XXX?
-        QRect bounds() const;
-
-        Q_INT32 x() const;
+	Q_INT32 getX();
+	Q_INT32 getY();	 
         void setX(Q_INT32 x);
-
-        Q_INT32 y() const;
         void setY(Q_INT32 y);
 
 	Q_INT32 depth() const;
-        Q_INT32 width() const;
-        Q_INT32 height() const;
 
 	QRect clip() const;
         void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
@@ -188,10 +158,6 @@ public:
         KisImage *image();
         const KisImage *image() const;
         void setImage(KisImage *image);
-
-        void resize(Q_INT32 w, Q_INT32 h);
-        void resize(const QSize& size);
-        void resize();
 
 	// XXX: Do all rotations etc. use the visitor instead of the QMatrix-based code by now?
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
@@ -211,39 +177,28 @@ public:
 	 * Mirror the device along the Y axis
 	 */
 	void mirrorY();
+	
 
-        void expand(Q_INT32 w, Q_INT32 h);
-        void expand(const QSize& size);
-
-        void offsetBy(Q_INT32 x, Q_INT32 y);
+	/**
+	 * XXX: Move this undo code back into the tiles/ module and wrap in transactions
+	 */
+	KisMemento * getMemento() { return m_datamanager -> getMemento(); };
+	void rollback(KisMemento *memento) { m_datamanager -> rollback(memento); };
 
 	/** 
-	 * This function return an iterator which point on the first line of the
-	 * whole PaintDevice
+	 * This function return an iterator which points to the first pixel of an rectangle
 	 */
-	KisIteratorLineQuantum iteratorQuantumBegin(KisTileCommand* command) KDE_DEPRECATED;
-	KisIteratorLineQuantum iteratorQuantumBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart) KDE_DEPRECATED;
-
-	/**
-	 * This function return an iterator which point on the last line of the
-	 * whole PaintDevice
+	KisRectIterator & createRectIterator(Q_INT32 nleft, Q_INT32 ntop, Q_INT32 nw, Q_INT32 nh, bool writable);
+	
+	/** 
+	 * This function return an iterator which points to the first pixel of a horizontal line
 	 */
-	KisIteratorLineQuantum iteratorQuantumEnd(KisTileCommand* command) KDE_DEPRECATED;
-	KisIteratorLineQuantum iteratorQuantumEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend) KDE_DEPRECATED;
-
-	/**
-	 * This function return an iterator which point on the first line of the
-	 * part of PaintDevice which is selected
+	KisHLineIterator  & createHLineIterator(Q_INT32 x, Q_INT32 w, Q_INT32 y, bool writable);
+	
+	/** 
+	 * This function return an iterator which points to the first pixel of a horizontal line
 	 */
-	KisIteratorLineQuantum iteratorQuantumSelectionBegin(KisTileCommand* command) KDE_DEPRECATED;
-	KisIteratorLineQuantum iteratorQuantumSelectionBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart) KDE_DEPRECATED;
-
-	/**
-	 * This function return an iterator which point on the last line of the
-	 * part of PaintDevice which is selected
-	 */
-	KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command) KDE_DEPRECATED;
-	KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend) KDE_DEPRECATED;
+	KisVLineIterator  & createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
 	
 	/** 
 	 * This function return an iterator which points to the first pixel of the
@@ -305,26 +260,17 @@ signals:
 	void selectionCreated();
 	void profileChanged(KisProfileSP profile);
 
-protected:
-        void setWidth(Q_INT32 w);
-        void setHeight(Q_INT32 h);
+private:
+	KisPaintDevice& operator=(const KisPaintDevice&);
+	void init();
 
 private:
-        KisPaintDevice& operator=(const KisPaintDevice&);
-        void init();
-
-private:
-        KisImage *m_owner;
-        KisTileMgrSP m_tiles;
-        KisTileMgrSP m_shadow;
-        bool m_visible;
-        Q_INT32 m_x;
-        Q_INT32 m_y;
-        Q_INT32 m_offX;
-        Q_INT32 m_offY;
-        Q_INT32 m_offW;
-        Q_INT32 m_offH;
-        QString m_name;
+	KisImage *m_owner;
+	KisDataManager * m_datamanager;
+	Q_INT32 m_x;
+	Q_INT32 m_y;
+	bool m_visible;
+	QString m_name;
 	// Operation used to composite this layer with the layers _under_ this layer
 	CompositeOp m_compositeOp;
 	KisStrategyColorSpaceSP m_colorStrategy; 
@@ -341,14 +287,9 @@ private:
         
 };
 
-inline KisTileMgrSP KisPaintDevice::tiles() const
-{
-        return m_tiles;
-}
-
 inline Q_INT32 KisPaintDevice::depth() const
 {
-        return tiles()->depth();
+        return m_datamanager->getDepth();
 ;
 }
 
@@ -360,59 +301,25 @@ inline KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
         return m_colorStrategy;
 }
 
-inline KisTileMgrSP KisPaintDevice::data()
+
+inline Q_INT32 KisPaintDevice::getX()
 {
-	return m_tiles;
+	return m_x;
 }
 
-inline const KisTileMgrSP KisPaintDevice::data() const
+inline Q_INT32 KisPaintDevice::getY()
 {
-        return m_tiles;
-}
-
-inline KisTileMgrSP KisPaintDevice::shadow()
-{
-        return m_shadow;
-}
-
-inline const KisTileMgrSP KisPaintDevice::shadow() const
-{
-        return m_shadow;
-}
-
-inline QRect KisPaintDevice::bounds() const
-{
-        return QRect(m_x, m_y, width(), height());
-}
-
-inline Q_INT32 KisPaintDevice::x() const
-{
-        return m_x;
+	return m_y;
 }
 
 inline void KisPaintDevice::setX(Q_INT32 x)
 {
-        m_x = x;
-}
-
-inline Q_INT32 KisPaintDevice::y() const
-{
-        return m_y;
+	m_x = x;
 }
 
 inline void KisPaintDevice::setY(Q_INT32 y)
 {
-        m_y = y;
-}
-
-inline Q_INT32 KisPaintDevice::width() const
-{
-        return tiles()->width();
-}
-
-inline Q_INT32 KisPaintDevice::height() const
-{
-        return tiles()->height();
+	m_y = y;
 }
 
 inline const bool KisPaintDevice::visible() const
@@ -430,25 +337,21 @@ inline void KisPaintDevice::setVisible(bool v)
 
 inline QRect KisPaintDevice::clip() const
 {
-        return QRect(m_offX, m_offY, m_offW, m_offH);
+        return QRect(0, 0, 10, 10); // fix AUTOLAYER
 }
 
 inline void KisPaintDevice::clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const
 {
         if (offx && offy && offw && offh) {
-                *offx = m_offX;
-                *offy = m_offY;
-                *offw = m_offW;
-                *offh = m_offH;
+                *offx = 0;
+                *offy = 0;
+                *offw = 10;
+                *offh = 10;
         }
 }
 
 inline void KisPaintDevice::setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh)
 {
-        m_offX = offx;
-        m_offY = offy;
-        m_offW = offw;
-        m_offH = offh;
 }
 
 
@@ -467,19 +370,6 @@ inline void KisPaintDevice::setImage(KisImage *image)
         m_owner = image;
 }
 
-inline void KisPaintDevice::resize(const QSize& size)
-{
-        resize(size.width(), size.height());
-}
-
-inline void KisPaintDevice::resize()
-{
-        KisImageSP img = image();
-
-        if (img)
-                resize(img -> bounds().size());
-}
-
 inline bool KisPaintDevice::alpha() const
 {
         return colorStrategy()->alpha();
@@ -487,14 +377,9 @@ inline bool KisPaintDevice::alpha() const
 
 inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity, KisProfileSP profile)
 {
-	KisTileMgrSP tm = tiles();
-	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
-	QUANTUM *pix;
+	KisHLineIterator iter = createHLineIterator(x, 1, y, false);
 
-	if (!pd)
-		return false;
-
-	pix = pd -> data;
+	Q_UINT8 *pix = (Q_UINT8 *)iter;
 	
  	if (!pix) return false;
 
@@ -505,7 +390,8 @@ inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opac
 
 inline bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity, KisProfileSP profile)
 {
-	KisTileMgrSP tm = tiles();
+	KisHLineIterator iter = createHLineIterator(x, 1, y, false);
+	/*KisTileMgrSP tm = tiles();
 	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);
 	QUANTUM * pix;
 
@@ -514,16 +400,13 @@ inline bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUAN
 
 	pix = pd -> data;
 	Q_ASSERT(pix);
+	*/
+	colorStrategy() -> nativeColor(c, opacity, (QUANTUM*)(iter)); // profile
 
-	colorStrategy() -> nativeColor(c, opacity, pix); //profile
-
-	tm -> releasePixelData(pd);
+	//tm -> releasePixelData(pd);
 
 	return true;
-
-
 }
-
 
 #endif // KIS_PAINT_DEVICE_H_
 

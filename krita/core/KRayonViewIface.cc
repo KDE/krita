@@ -90,11 +90,6 @@ void KRayonViewIface::export_image()
     m_view->export_image();
 }
 
-void KRayonViewIface::imgResizeToActiveLayer()
-{
-    m_view->imgResizeToActiveLayer();
-}
-
 void KRayonViewIface::add_new_image_tab()
 {
     m_view->add_new_image_tab();

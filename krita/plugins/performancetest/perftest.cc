@@ -53,9 +53,6 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kistile.h>
-#include <kistilemgr.h>
-#include <kis_iterators_quantum.h>
 #include <kis_selection.h>
 #include <kis_colorspace_registry.h>
 #include <kis_strategy_colorspace.h>
@@ -65,6 +62,7 @@
 #include "perftest.h"
 
 #include "dlg_perftest.h"
+
 
 typedef KGenericFactory<PerfTest> PerfTestFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaperftest, PerfTestFactory( "krita" ) )
@@ -196,19 +194,17 @@ QString PerfTest::doBlit(CompositeOp op,
 	// ------------------------------------------------------------------------------
 	// Small
 
-	KisLayerSP small = new KisLayer(TILE_WIDTH / 2, TILE_HEIGHT /2, 
-					KisColorSpaceRegistry::instance() -> get(cspace),
-					"small blit");
+	KisLayerSP small = new KisLayer(KisColorSpaceRegistry::instance() -> get(cspace), "small blit");
 
 
 	KisFillPainter pf(small.data()) ;
-	pf.fillRect(0, 0, TILE_WIDTH/2, TILE_HEIGHT/2, Qt::black);
+	pf.fillRect(0, 0, 64/2, 64/2, Qt::black);
 	pf.end();
 
 	t.restart();
 	KisPainter p(img -> activeLayer().data());
 	for (Q_UINT32 i = 0; i < testCount; ++i) {
-		p.bitBlt(0, 0, op, small.data());
+		p.bitBlt(0, 0, op, small.data(),0,0,32, 32);
 	}
 	p.end();
 	
@@ -221,18 +217,16 @@ QString PerfTest::doBlit(CompositeOp op,
 
 	// ------------------------------------------------------------------------------
 	// Medium
-	KisLayerSP medium = new KisLayer(TILE_WIDTH * 3, TILE_HEIGHT * 3,
-					 KisColorSpaceRegistry::instance() -> get(cspace),
-					 "medium blit");
+	KisLayerSP medium = new KisLayer(KisColorSpaceRegistry::instance() -> get(cspace), "medium blit");
 		
 	pf.begin(medium.data()) ;
-	pf.fillRect(0, 0, TILE_WIDTH * 3, TILE_HEIGHT * 3, Qt::black);
+	pf.fillRect(0, 0, 64 * 3, 64 * 3, Qt::black);
 	pf.end();
 
 	t.restart();
 	p.begin(img -> activeLayer().data());
 	for (Q_UINT32 i = 0; i < testCount; ++i) {
-		p.bitBlt(0, 0, op, medium.data());
+		p.bitBlt(0, 0, op, medium.data(),0,0,96, 96);
 	}
 	p.end();
 
@@ -245,9 +239,7 @@ QString PerfTest::doBlit(CompositeOp op,
 
 	// ------------------------------------------------------------------------------
 	// Big
-	KisLayerSP big = new KisLayer(800, 800,
-				      KisColorSpaceRegistry::instance() -> get(cspace),
-				      "big blit");
+	KisLayerSP big = new KisLayer(KisColorSpaceRegistry::instance() -> get(cspace), "big blit");
 
 	pf.begin(big.data()) ;
 	pf.fillRect(0, 0, 800, 800, Qt::black);
@@ -256,7 +248,7 @@ QString PerfTest::doBlit(CompositeOp op,
 	t.restart();
 	p.begin(img -> activeLayer().data());
 	for (Q_UINT32 i = 0; i < testCount; ++i) {
-		p.bitBlt(0, 0, op, big.data());
+		p.bitBlt(0, 0, op, big.data(),0,0,800,800);
 
 	}
 	p.end();
@@ -270,9 +262,7 @@ QString PerfTest::doBlit(CompositeOp op,
 	// ------------------------------------------------------------------------------
 	// Outside
 
-	KisLayerSP outside = new KisLayer(500, 500,
-					  KisColorSpaceRegistry::instance() -> get(cspace),
-					  "outside blit");
+	KisLayerSP outside = new KisLayer(KisColorSpaceRegistry::instance() -> get(cspace), "outside blit");
 
 	pf.begin(outside.data()) ;
 	pf.fillRect(0, 0, 500, 500, Qt::lightGray);
@@ -281,7 +271,7 @@ QString PerfTest::doBlit(CompositeOp op,
 	t.restart();
 	p.begin(img -> activeLayer().data());
 	for (Q_UINT32 i = 0; i < testCount; ++i) {
-		p.bitBlt(600, 600, op, outside.data());
+		p.bitBlt(600, 600, op, outside.data(),0,0,500,500);
 
 	}
 	p.end();

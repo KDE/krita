@@ -46,8 +46,6 @@
 #include <kis_tile_command.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kistile.h>
-#include <kistilemgr.h>
 
 #include "kis_filter_configuration_widget.h"
 #include "kis_emboss_filter_configuration_widget.h"
@@ -60,6 +58,7 @@ KisEmbossFilter::KisEmbossFilter(KisView * view) : KisFilter(name(), view)
 
 void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect, KisTileCommand* ktc)
 {
+#if 0 // AUTO_LAYERS
 	kdDebug() << "Embossfilter called!\n";
         
         Q_INT32 width = src->width();
@@ -140,6 +139,7 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 		++lineIt;
 		++dstLineIt;
 	}
+#endif
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

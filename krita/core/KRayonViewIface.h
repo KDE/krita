@@ -53,7 +53,6 @@ public:
 
 	void slotImportImage();
 	void export_image();
-	void imgResizeToActiveLayer();
 	void add_new_image_tab();
 	void remove_current_image_tab();
 // 	void resizeCurrentImage();

@@ -167,7 +167,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_layerHide = 0;
         m_layerProperties = 0;
         m_layerSaveAs = 0;
-        m_layerResizeToImage = 0;
         m_layerToImage = 0;
 //        m_layerTransform = 0;
         m_layerRaise = 0;
@@ -705,7 +704,6 @@ void KisView::setupActions()
         m_layerProperties = new KAction(i18n("Layer Properties"), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
         (void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
         m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
-        m_layerResizeToImage = new KAction(i18n("Resize Layer to Image"), 0, this, SLOT(layerResizeToImage()), actionCollection(), "resizelayertoowner");
         m_layerToImage = new KAction(i18n("Layer to Image"), 0, this, SLOT(layerToImage()), actionCollection(), "layer_to_image");
 
         // layer transformations
@@ -1127,8 +1125,7 @@ void KisView::layerUpdateGUI(bool enable)
         }
 
         if (layer)
-                layerPos = img -> index(layer);
-
+                layerPos = img->index(layer);
         enable = enable && img && layer;
         m_layerDup -> setEnabled(enable);
         m_layerRm -> setEnabled(enable);
@@ -1136,7 +1133,6 @@ void KisView::layerUpdateGUI(bool enable)
         m_layerHide -> setEnabled(enable);
         m_layerProperties -> setEnabled(enable);
         m_layerSaveAs -> setEnabled(enable);
-        m_layerResizeToImage -> setEnabled(enable);
         m_layerToImage -> setEnabled(enable);
 //        m_layerTransform -> setEnabled(enable);
         m_layerRaise -> setEnabled(enable && nlayers > 1 && layerPos);
@@ -1397,18 +1393,6 @@ void KisView::slotImportImage()
 {
         if (importImage(false) > 0)
                 m_doc -> setModified(true);
-}
-
-void KisView::imgResizeToActiveLayer()
-{
-        KisImageSP img = currentImg();
-        KisLayerSP layer;
-
-        if (img && (layer = img -> activeLayer())) {
-                if (layer -> width() != img -> width() || layer -> height() != img -> height()) {
-                        img -> resize(layer -> width(), layer -> height());
-                }
-        }
 }
 
 void KisView::export_image()
@@ -2029,7 +2013,7 @@ void KisView::slotSetBGColor(const QColor& c)
         setBGColor(c);
 }
 
-void KisView::setupPrinter(KPrinter& printer)
+void KisView::setupPrinter(KPrinter& /*printer*/)
 {
 // XXX: If only printing were this simple, but it isn't, not by a long stretch
 #if 0
@@ -2048,7 +2032,7 @@ void KisView::setupPrinter(KPrinter& printer)
 #endif
 }
 
-void KisView::print(KPrinter& printer)
+void KisView::print(KPrinter& /*printer*/)
 {
 // XXX: If only printing would be this simple, but it isn't, not by a long stretch
 #if 0
@@ -2418,10 +2402,10 @@ void KisView::layerProperties()
 
                 if (layer) {
                         KisPaintPropertyDlg dlg(layer -> name(),
-                                                QPoint(layer -> x(),
-                                                       layer -> y()),
-                                                layer -> opacity(),
-                                                layer -> compositeOp());
+                                                QPoint(layer->getX(),
+                                                       layer->getY()),
+                                                layer->opacity(),
+                                                layer->compositeOp());
 
                         if (dlg.exec() == QDialog::Accepted) {
                                 QPoint pt = dlg.getPosition();
@@ -2429,8 +2413,8 @@ void KisView::layerProperties()
                                 bool changed = layer -> name() != dlg.getName()
                                         || layer -> opacity() != dlg.getOpacity()
                                         || layer -> compositeOp() != dlg.getCompositeOp()
-                                        || pt.x() != layer -> x()
-                                        || pt.y() != layer -> y();
+                                        || pt.x() != layer -> getX()
+                                        || pt.y() != layer -> getY();
 
 
                                 if (changed)
@@ -2441,8 +2425,8 @@ void KisView::layerProperties()
                                     || layer -> compositeOp() != dlg.getCompositeOp())
                                         m_doc -> setLayerProperties(img, layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
 
-                                if (pt.x() != layer -> x() || pt.y() != layer -> y())
-                                        KisStrategyMove(this).simpleMove(QPoint(layer -> x(), layer -> y()), pt);
+                                if (pt.x() != layer->getX() || pt.y() != layer->getY())
+                                        KisStrategyMove(this).simpleMove(QPoint(layer->getX(), layer->getY()), pt);
 
                                 if (changed)
                                         m_adapter -> endMacro();
@@ -2457,32 +2441,20 @@ void KisView::layerAdd()
 
         if (img) {
                 KisConfig cfg;
-                NewLayerDialog dlg(cfg.maxLayerWidth(),
-                                   img -> width(),
-                                   cfg.maxLayerHeight(),
-                                   img -> height(),
-                                   img -> colorStrategy() -> name(),
-                                   img -> nextLayerName(),
-                                   this);
+                NewLayerDialog dlg(img->colorStrategy()->name(), img->nextLayerName(), this);
 
                 dlg.exec();
 
                 if (dlg.result() == QDialog::Accepted) {
                         KisLayerSP layer = m_doc -> layerAdd(img,
-                                                             dlg.layerWidth(),
-                                                             dlg.layerHeight(),
                                                              dlg.layerName(),
                                                              dlg.compositeOp(),
                                                              dlg.opacity(),
-                                                             dlg.position(),
                                                              KisColorSpaceRegistry::instance() -> get(dlg.colorStrategyName()));
-
                         if (layer) {
                                 m_layerBox -> setCurrentItem(img -> index(layer));
                                 resizeEvent(0);
-                                updateCanvas(layer -> x(), layer -> y(), layer -> width(), layer -> height());
-                                cfg.defLayerWidth(dlg.layerWidth());
-                                cfg.defLayerHeight(dlg.layerHeight());
+                                updateCanvas(0, 0, img -> width(), img -> height());
                         } else {
                                 KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
                         }
@@ -2821,41 +2793,6 @@ void KisView::slotImageSizeChanged(KisImageSP img, Q_INT32 /*w*/, Q_INT32 /*h*/)
 	canvasRefresh();
 }
 
-void KisView::resizeLayer(Q_INT32 w, Q_INT32 h)
-{
-	KisImageSP img = currentImg();
-	if (img) {
-		KisLayerSP layer = img -> activeLayer();
-		if (layer) {
-			layer -> resize(w, h);
-			m_doc -> setModified(true);
-			layersUpdated();
-			resizeEvent(0);
-			canvasRefresh();
-		}
-	}
-}
-
-void KisView::layerResizeToImage()
-{
-        KisImageSP img = currentImg();
-
-        if (img) {
-                KisLayerSP layer = img -> activeLayer();
-
-                if (layer) {
-                        if (layer -> width() == img -> width() || layer -> height() == img -> height())
-                                return;
-
-                        layer -> resize(img -> width(), img -> height());
-			m_doc -> setModified(true);
-                        layersUpdated();
-                        resizeEvent(0);
-                        canvasRefresh();
-                }
-        }
-}
-
 void KisView::layerToImage()
 {
         KisImageSP img = currentImg();
@@ -2872,7 +2809,7 @@ void KisView::layerToImage()
                         img -> activeLayer();
 
                 if (layer) {
-                        KisImageSP dupedImg = new KisImage(m_adapter, layer -> width(), layer -> height(), img -> colorStrategy(), m_doc -> nextImageName());
+                        KisImageSP dupedImg = new KisImage(m_adapter, img->width(), img->height(), img -> colorStrategy(), m_doc -> nextImageName());
                         KisLayerSP duped = new KisLayer(*layer);
 
                         duped -> setName(dupedImg -> nextLayerName());

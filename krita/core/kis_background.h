@@ -28,9 +28,6 @@ class KisBackground : public KisLayer {
 public:
 	KisBackground(KisImage *img, Q_INT32 width, Q_INT32 height);
 	virtual ~KisBackground();
-
-public:
-	virtual Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix) const;
 };
 
 #endif // KIS_BACKGROUND_H_

@@ -29,13 +29,11 @@
 #include "kis_colorspace_registry.h"
 #include "kis_fill_painter.h"
 #include "kis_colorspace_alpha.h"
-#include "kis_iterators_quantum.h"
 #include "kis_iterators_pixel.h"
 
 
-KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name) 
- 	: super(layer -> width(),
-		layer -> height(),
+KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
+ 	: super(
 #if USE_ALPHA_MAP
  		new KisColorSpaceAlpha(), // Note that the alpha color
 					  // model has _state_, so we
@@ -54,11 +52,8 @@ KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
 // 	kdDebug() << "Selection created with compositeOp " << compositeOp() << "\n";
 }
 
-KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name, QColor color) 
- 	: super(layer -> width(),
-		layer -> height(),
-		layer -> colorStrategy(),
-		name)
+KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name, QColor color)
+	: super(layer -> colorStrategy(), name)
 {
 	m_parentLayer = layer;
 	m_maskColor = color;
@@ -110,21 +105,22 @@ void KisSelection::clear(QRect r)
 void KisSelection::invert(QRect r)
 {
 	// XXX: switch to proper iterators
-	KisTileCommand* ktc = new KisTileCommand("Invert", (KisPaintDeviceSP) this ); // Create a command
+// 	KisTileCommand* ktc = new KisTileCommand("Invert", (KisPaintDeviceSP) this ); // Create a command
 
-	KisIteratorLineQuantum lineIt = iteratorQuantumSelectionBegin(ktc, r.x(), r.x() + r.width() - 1, r.y() );
-	KisIteratorLineQuantum lastLine = iteratorQuantumSelectionEnd(ktc, r.x(), r.x() + r.width() - 1, r.y() + r.height() - 1);
-	while( lineIt <= lastLine )
-	{
-		KisIteratorQuantum quantumIt = *lineIt;
-		KisIteratorQuantum lastQuantum = lineIt.end();
-		while( quantumIt <= lastQuantum )
-		{
-			quantumIt = QUANTUM_MAX - quantumIt;
-			++quantumIt;
-		}
-		++lineIt;
-	}
+// 	KisIteratorLinePixel lineIt = iteratorPixelSelectionBegin(ktc, r.x(), r.x() + r.width() - 1, r.y() );
+// 	KisIteratorLinePixel lastLine = iteratorPixelSelectionEnd(ktc, r.x(), r.x() + r.width() - 1, r.y() + r.height() - 1);
+// 	while( lineIt <= lastLine )
+// 	{
+// 		KisIteratorPixel pixelIt = *lineIt;
+// 		KisIteratorPixel lastPixel = lineIt.end();
+// 		while( pixelIt <= lastPixel )
+// 		{
+// 			*pixelIt = QUANTUM_MAX - *pixelIt;
+// 			//AUTOLAYER do another invert that is colorspace specific
+// 			++pixelIt;
+// 		}
+// 		++lineIt;
+// 	}
 	m_selectedRect |= r;
 }
 

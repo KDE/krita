@@ -54,14 +54,12 @@
 #include "kis_tile_command.h"
 #include "kis_types.h"
 #include "kis_vec.h"
-#include "kispixeldata.h"
-#include "kistile.h"
-#include "kistilemgr.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_pixel.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterators_infinite.h"
+#include "kis_iterator.h"
 
 namespace {
 }
@@ -69,91 +67,36 @@ namespace {
 KisFillPainter::KisFillPainter() 
 	: super()
 { 
+    m_width = m_height = -1;
 }
 
 KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 {
+    m_width = m_height = -1;
 }
 
 // 'regular' filling
 
 void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const QColor& c, QUANTUM opacity)
 {
-        Q_INT32 x;
-        Q_INT32 y;
-        Q_INT32 x2 = x1 + w - 1;
-        Q_INT32 y2 = y1 + h - 1;
-        Q_INT32 rows;
-        Q_INT32 cols;
-        Q_INT32 dststride;
-        Q_INT32 stride;
-        KisTileSP tile;
-        QUANTUM src[8]; // XXX: Change QColor to KisColor, then use channelsize from color space
-        QUANTUM *dst;
-        KisTileMgrSP tm = m_device -> tiles();
-        Q_INT32 xmod;
-        Q_INT32 ymod;
-        Q_INT32 xdiff;
-        Q_INT32 ydiff;
 
-        m_device -> colorStrategy() -> nativeColor(c, opacity, src);
-        stride = m_device -> depth();
-        ydiff = y1 - TILE_HEIGHT * (y1 / TILE_HEIGHT);
+	Q_INT32 y;
+        Q_UINT8 src[m_device->depth()]; // XXX: Change QColor to KisColor, then use channelsize from color space
+	Q_UINT32 depth = m_device->depth();
+        m_device->colorStrategy()->nativeColor(c, opacity, src);
 
-        for (y = y1; y <= y2; y += TILE_HEIGHT - ydiff) {
-                xdiff = x1 - TILE_WIDTH * (x1 / TILE_WIDTH);
-
-                for (x = x1; x <= x2; x += TILE_WIDTH - xdiff) {
-                        ymod = (y % TILE_HEIGHT);
-                        xmod = (x % TILE_WIDTH);
-
-                        if (m_transaction && (tile = tm -> tile(x, y, TILEMODE_NONE)))
-                                m_transaction -> addTile(tm -> tileNum(x, y), tile);
-
-                        if (!(tile = tm -> tile(x, y, TILEMODE_WRITE)))
-                                continue;
-
-                        if (xmod > tile -> width())
-                                continue;
-
-                        if (ymod > tile -> height())
-                                continue;
-
-                        rows = tile -> height() - ymod;
-                        cols = tile -> width() - xmod;
-
-                        if (rows > y2 - y + 1)
-                                rows = y2 - y + 1;
-
-                        if (cols > x2 - x + 1)
-                                cols = x2 - x + 1;
-
-                        dststride = tile -> width() * tile -> depth();
-                        tile -> lock();
-                        dst = tile -> data(xmod, ymod);
-
-                        while (rows-- > 0) {
-                                QUANTUM *d = dst;
-
-                                for (Q_INT32 i = cols; i > 0; i--) {
-                                        memcpy(d, src, stride * sizeof(QUANTUM));
-                                        d += stride;
-                                }
-
-                                dst += dststride;
-                        }
-
-                        tile -> release();
-
-                        if (x > x1)
-                                xdiff = 0;
-                }
-
-                if (y > y1)
-                        ydiff = 0;
-        }
+	for (y = y1; y < y1 + h; y++)
+	{
+		KisHLineIterator hiter = m_device->createHLineIterator(x1, w, y, true);
+		while( ! hiter.isDone())
+		{
+			memcpy((Q_UINT8 *)hiter, src, depth);
+			hiter++;
+		}
+	}
 }
 
+#if 0 //AUTOLAYER
 void KisFillPainter::fillRect(const QRect& rc, KisIteratorInfiniteLinePixel src) {
 #if 0
 	KisIteratorLinePixel lineIt = m_device->iteratorPixelBegin( 0, rc.x(),
@@ -183,6 +126,7 @@ void KisFillPainter::fillRect(const QRect& rc, KisIteratorInfiniteLinePixel src)
 	}
 #endif
 }
+#endif //AUTOLAYER
 
 // flood filling
 
@@ -191,10 +135,9 @@ void KisFillPainter::fillColor(int startX, int startY) {
 
 	// Now create a layer and fill it
 	// XXX: size of selection, not parent layer
-	KisLayerSP filled = new KisLayer(m_layer->width(), m_layer->height(),
-		m_layer->colorStrategy(), "Fill Temporary Layer");
+	KisLayerSP filled = new KisLayer(m_layer->colorStrategy(), "Fill Temporary Layer");
 	KisFillPainter painter(filled.data());
-	painter.fillRect(0, 0, m_layer->width(), m_layer->height(), m_paintColor); // XXX
+	painter.fillRect(0, 0, m_width, m_height, m_paintColor);
 	painter.end();
 
 	genericFillEnd(filled);
@@ -224,20 +167,33 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 
 	m_layer = lay;
 
-	m_size = m_device -> width() * m_device -> height();
+	if (m_width < 0 || m_height < 0) {
+		if (lay->image()) {
+			m_width = lay->image()->width();
+			m_height = lay->image()->height();
+		} else {
+			kdDebug() << "KisFillPainter::genericFillStart: no size set, assuming 500x500"
+				  << endl;
+			m_width = m_height = 500;
+		}
+	}
+    
+	m_size = m_width * m_height;
+
 	if (lay -> hasSelection()) {
 		m_selection = lay -> selection();
 	} else {
 		// Create a selection from the surrounding area
 		m_selection = new KisSelection(lay, "Fill Temporary Selection");
-		m_selection -> clear(QRect(0, 0, lay -> width(), lay -> height()));
+		m_selection -> clear(QRect(0, 0, m_width, m_height));
 		m_oldColor = new QUANTUM[m_device->depth()];
-		KisIteratorLinePixel lineIt = m_layer -> iteratorPixelBegin( 0, startX,
-				m_layer -> width(), startY);
-		KisIteratorPixel pixel = *lineIt;
 
-		for (int i = 0; i < lay -> depth(); i++)
+		KisHLineIterator pixelIt = m_layer->createHLineIterator(startX, startX+1, startY, false);
+		KisPixel pixel((QUANTUM*)(pixelIt));
+		
+		for (int i = 0; i < lay -> depth(); i++) {
 			m_oldColor[i] = pixel[i];
+		}
 
 		m_cancelRequested = false;
 		m_currentPercent = 0;
@@ -255,51 +211,66 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 }
 
 void KisFillPainter::genericFillEnd(KisLayerSP filled) {
-	if (m_cancelRequested)
+    if (m_cancelRequested) {
+        m_width = m_height = -1;
 		return;
+    }
 	// use the selection as mask over our fill        
-	for (int y = 0; y < m_layer -> height(); y++) {
-		for (int x = 0; x < m_layer -> width(); x++) {
-			QColor c;
-			QUANTUM opacity;
-			filled -> pixel(x, y, &c, &opacity);
-			opacity = ((OPACITY_OPAQUE - m_selection -> selected(x, y)) * opacity)
-				/ QUANTUM_MAX;
-			filled -> setPixel(x, y, c, opacity); // XXX
-			++m_pixelsDone;
-		}
-		int progressPercent = (m_pixelsDone * 100) / m_size;
-		if (progressPercent > m_currentPercent) {
-			emit notifyProgress(this, progressPercent);
-			m_currentPercent = progressPercent;
+    for (int y = 0; y < m_height; y++) {
+	    KisHLineIterator line = filled->createHLineIterator(0, m_width, y, true);
+	    KisHLineIterator selectionIt = m_selection->createHLineIterator(0, m_width, y, true); 
+	    
+	    QUANTUM selectionOpacity;
+	    QColor notUsed;
 
-			if (m_cancelRequested) {
-				return;
-			}
-		}
-	}
-
-	bitBlt(0, 0, m_compositeOp, filled.data(), m_opacity, 0, 0,
-		   m_layer -> width(), m_layer -> height());
-	
-	emit notifyProgressDone(this);
+	    while(! line.isDone()) {
+		    QColor c;
+		    QUANTUM opacity;
+		    filled -> colorStrategy() -> toQColor((QUANTUM*) line, &c, &opacity);
+		    m_selection -> colorStrategy() -> toQColor((QUANTUM*) selectionIt,
+							       &notUsed, &selectionOpacity);
+		    opacity = ((OPACITY_OPAQUE - selectionOpacity) * opacity)
+			    / QUANTUM_MAX;
+		    filled -> colorStrategy() -> nativeColor(c, opacity, (QUANTUM*) line);
+		    ++m_pixelsDone;
+		    line++;
+		    selectionIt++;
+	    }
+	    int progressPercent = (m_pixelsDone * 100) / m_size;
+	    if (progressPercent > m_currentPercent) {
+		    emit notifyProgress(this, progressPercent);
+		    m_currentPercent = progressPercent;
+		    
+		    if (m_cancelRequested) {
+			    m_width = m_height = -1;
+			    return;
+		    }
+	    }
+    }
+    
+    bitBlt(0, 0, m_compositeOp, filled.data(), m_opacity, 0, 0,
+	   m_width, m_height);
+    
+    emit notifyProgressDone(this);
+    
+    m_width = m_height = 0;
 }
 
 void KisFillPainter::floodLine(int x, int y) {
+#if 0 //XXX AUTOLAYERS MERGE
 	int mostRight, mostLeft = x;
 	
-	KisIteratorLinePixel lineIt = m_layer->iteratorPixelBegin( 0, x, -1, y);
+	KisHLineIterator pixelIt = m_layer->createHLineIterator(x, m_width, y, false);
 
-	KisIteratorPixel pixelIt = *lineIt;
-	KisIteratorPixel lastPixel = lineIt.end();
+	int lastPixel = m_width;
 
-	if (difference(m_oldColor, pixelIt) == MIN_SELECTED) {
+	if (difference(m_oldColor, ((QUANTUM*)pixelIt)) == MIN_SELECTED) {
 		return;
 	}
 
 	mostRight = floodSegment(x, y, x, pixelIt, lastPixel, Right);
 
-	if (lastPixel < pixelIt) mostRight--;
+	if (lastPixel < pixelIt.x()) mostRight--;
 
 	if (x > 0) {
 		mostLeft--;
@@ -308,9 +279,9 @@ void KisFillPainter::floodLine(int x, int y) {
 		KisIteratorPixel lastPixel = lineIt2.begin();
 		KisIteratorPixel pixelIt = lineIt2.end();
 
-		mostLeft = floodSegment(x,y, mostLeft, pixelIt, lastPixel, Left);
+		mostLeft = floodSegment(x, y, mostLeft, pixelIt, lastPixel, Left);
 
-		if (pixelIt < lastPixel)
+		if (pixelIt.x() < lastPixel)
 			mostLeft++;
 	}
 
@@ -326,32 +297,40 @@ void KisFillPainter::floodLine(int x, int y) {
 
 	// yay for stack overflowing:
 	for (int i = mostLeft; i <= mostRight; i++) {
-		if (y > 0 && !m_map[(y-1)*m_device -> width() + i])
+		if (y > 0 && !m_map[(y-1)*m_width + i])
 			floodLine(i, y-1);
-		if (y < m_layer->height() - 1 && !m_map[(y+1)*m_device -> width() + i])
+		if (y < m_height - 1 && !m_map[(y+1)*m_width + i])
 			floodLine(i, y+1);
 	}
+#endif
 }
 
-int KisFillPainter::floodSegment(int x, int y, int most, KisIteratorPixel& it, KisIteratorPixel& lastPixel, Direction d) {
+int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIterator& it, int lastPixel, Direction d) {
+// XXX: Broken by AUTOLAYERS merge
+#if 0
 	bool stop = false;
 	QUANTUM diff;
+	KisHLineIterator selection = m_selection -> createHLineIterator(x, m_width - x, y, true);
+	QColor selectionColor = Qt::white; // This is the standard selection colour
+	KisStrategyColorSpaceSP colorStrategy = m_selection -> colorStrategy();
 
-	while( ( ( d == Right && it <= lastPixel) || (d == Left && lastPixel <= it)) && !stop)
+	while( ( ( d == Right && it.x() <= lastPixel) || (d == Left && lastPixel <= it.x())) && !stop)
 	{
-		if (m_map[y*m_device -> width() + x])
+		if (m_map[y*m_width + x])
 			break;
-		m_map[y*m_device -> width() + x] = true;
+		m_map[y*m_width + x] = true;
 		++m_pixelsDone;
-		KisPixel data = it;
+		KisPixel data = KisPixel((QUANTUM*)(it));
 		diff = difference(m_oldColor, data);
 		if (diff == MAX_SELECTED) {
-			m_selection -> setSelected(x, y, diff);
+			// m_selection -> setSelected(x, y, diff);
+			colorStrategy -> nativeColor(selectionColor, diff, (QUANTUM*) selection);
 			if (d == Right) {
 				++it;
+				it++; selection++;
 				x++; most++;
 			} else {
-				--it;
+				it--; selection--;
 				x--; most--;
 			}
 		} else {
@@ -360,13 +339,17 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisIteratorPixel& it, K
 	}
 	
 	return most;
+#endif
+	return 0;
 }
 
 /* RGB-only I fear */
 QUANTUM KisFillPainter::difference(QUANTUM* src, KisPixel dst)
 {
 	QUANTUM max = 0, diff = 0;
-	for (int i = 0; i < m_device->depth(); i++) {
+	int depth = m_device->depth();
+
+	for (int i = 0; i < depth; i++) {
 		// added extra (QUANTUM) casts just to be on the safe side until that is fixed
 		diff = QABS((QUANTUM)src[i] - (QUANTUM)dst[i]);
 		if (diff > max)

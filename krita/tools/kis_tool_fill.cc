@@ -116,8 +116,6 @@ void KisToolFill::buttonPress(KisButtonPressEvent *e)
 	int x, y;
 	x = e -> pos().floorX();
 	y= e -> pos().floorY();
-	if (x >= m_currentImage -> activeDevice() -> width() || x < 0) return;
-	if (y >= m_currentImage -> activeDevice() -> height() || y < 0) return;
 	flood(x, y);
 	notifyModified();
 }

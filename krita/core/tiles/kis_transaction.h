@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,24 +16,20 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef KISSCOPEDLOCK_H_
-#define KISSCOPEDLOCK_H_
+#ifndef KIS_TRANSACTION_H_
+#define KIS_TRANSACTION_H_
 
-class QMutex;
+public class KisTransaction {
 
-class KisScopedLock {
-public:
-	KisScopedLock(QMutex *lock, bool initialLock = true);
-	~KisScopedLock();
+	KisTransaction();
+	virtual ~KisTransaction();
+/*
+	// For consolidating transactions
+	virtual KisTransaction &operator+=(const KisTransaction &) = 0;
+	// For consolidating transactions
+	virtual KisTransaction &operator+(const KisTransaction &,
+					  const KisTransaction &) = 0;
+*/
+}
 
-public:
-	void lock();
-	void unlock();
-	void trylock();
-
-private:
-	QMutex *m_mutex;
-};
-
-#endif // KISSCOPEDLOCK_H_
-
+#endf // KIS_TRANSACTION_H_

@@ -27,9 +27,8 @@ class KisLayer : public KisPaintDevice {
 	Q_OBJECT
 
 public:
-	KisLayer(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name);
-	KisLayer(KisImage *img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity);
-	KisLayer(KisTileMgrSP tiles, KisImage *img, const QString& name, QUANTUM opacity);
+	KisLayer(KisStrategyColorSpaceSP colorStrategy, const QString& name);
+	KisLayer(KisImage *img, const QString& name, QUANTUM opacity);
 	KisLayer(const KisLayer& rhs);
 	virtual ~KisLayer();
 

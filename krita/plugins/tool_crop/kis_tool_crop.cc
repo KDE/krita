@@ -275,9 +275,7 @@ void KisToolCrop::crop() {
 
 void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc) 
 {
-	KisPaintDeviceSP tmp = new KisPaintDevice(rc.width(), rc.height(),
-						  layer -> colorStrategy(),
-						  "temp");
+	KisPaintDeviceSP tmp = new KisPaintDevice(layer -> colorStrategy(), "temp");
 	
 	KisPainter p(tmp.data());
 	p.bitBlt(0, 0, COMPOSITE_COPY,
@@ -288,10 +286,9 @@ void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc)
 		 rc.height());
 	p.end();
 	
-	layer -> resize(rc.width(), rc.height());
 	
 	p.begin(layer.data());
-	p.bitBlt(0, 0, COMPOSITE_COPY, tmp.data());
+	p.bitBlt(0, 0, COMPOSITE_COPY, tmp.data(), rc.x(), rc.y(), rc.width(), rc.height());
 }
 
 QWidget* KisToolCrop::createOptionWidget(QWidget* parent)

@@ -95,19 +95,6 @@ void KisBrushOp::paintAt(const KisPoint &pos,
 	}
 	m_painter -> setPressure(pressure);
 
-        // Draw correctly near the left and top edges
-        Q_INT32 sx = 0;
-        Q_INT32 sy = 0;
-        if (x < 0) {
-                sx = -x;
-                x = 0;
-        }
-        if (y < 0) {
-                sy = -y;
-                y = 0;
-        }
-
-	m_painter -> bitBlt( x,  y,  device -> compositeOp(), dab.data(), m_painter -> opacity(), sx, sy, dab -> width(), dab -> height());
-	m_painter -> addDirtyRect(QRect(x, y, dab -> width(), dab -> height()));
-
+	m_painter->bitBlt( x,  y,  m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), 0, 0, brush->width(), brush->height());
+	m_painter->addDirtyRect(QRect(x, y, brush->width(), brush->height()));
 }

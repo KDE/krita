@@ -30,10 +30,6 @@ public:
 	KisRenderInterface(const KisRenderInterface& rhs);
 	KisRenderInterface& operator=(const KisRenderInterface& rhs);
 	virtual ~KisRenderInterface();
-
-public:
-	virtual Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix) const = 0;
-	virtual KisTileMgrSP tiles() const = 0;
 };
 
 inline 

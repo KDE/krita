@@ -37,17 +37,11 @@ class NewLayerDialog : public KDialogBase {
 	Q_OBJECT
 
 public:
-	NewLayerDialog(Q_INT32 maxWidth, 
-		       Q_INT32 defWidth,
-		       Q_INT32 maxHeight, 
-		       Q_INT32 defHeight, 
-		       const QString colorSpaceName,
+	NewLayerDialog(const QString colorSpaceName,
 		       const QString & deviceName,
 		       QWidget *parent = 0,
 		       const char *name = 0);
 
-	Q_INT32 layerWidth() const { return m_width -> value(); };
-	Q_INT32 layerHeight() const { return m_height -> value(); };
 	QString layerName() const;
 	CompositeOp compositeOp() const;
 	Q_INT32 opacity() const;
@@ -55,12 +49,6 @@ public:
 	QString colorStrategyName() const;
 
 private:
-	QSpinBox *m_width;
-	QSpinBox *m_height;
-
-	KIntSpinBox *m_x;
-	KIntSpinBox *m_y;
-
 	KLineEdit *m_name;
 	KIntNumInput *m_opacity;
 	KisCmbComposite *m_cmbComposite;

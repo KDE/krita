@@ -93,7 +93,7 @@ KisBrush::KisBrush(const QString& filename,
 	dataPos += m_header_size + (width() * height() * m_bytes);
 }
 
-
+ 
 KisBrush::~KisBrush()
 {
 	m_scaledBrushes.clear();
@@ -210,7 +210,7 @@ KisLayerSP KisBrush::image(KisStrategyColorSpaceSP colorSpace, double pressure, 
 	int outputWidth = outputImage.width();
 	int outputHeight = outputImage.height();
 
-	KisLayer *layer = new KisLayer(outputWidth, outputHeight, colorSpace, "brush image");
+	KisLayer *layer = new KisLayer(colorSpace, "brush image");
 
 	for (int y = 0; y < outputHeight; y++) {
 		for (int x = 0; x < outputWidth; x++) {

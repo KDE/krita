@@ -43,25 +43,6 @@
  */
 #define NATIVE_MIMETYPE "application/x-kra"
 
-
-/**
- * Default size for a tile,  Usually, all
- * tiles are sqr(TILE_SIZE).  Only tiles
- * on the edge of an canvas are exempt from
- * this rule.
- */
-const int TILE_SIZE = 64;
-
-/**
- * Default width of a tile.
- */
-const int TILE_WIDTH = TILE_SIZE;
-
-/**
- * Default height of a tile.
- */
-const int TILE_HEIGHT = TILE_SIZE;
-
 /**
  * Size of a quantum -- this could be 8, 16, 32 or 64 -- but for now, only 8 is possible.
  */
@@ -77,8 +58,8 @@ const QUANTUM OPACITY_OPAQUE = QUANTUM_MAX;
 #endif
 
 const Q_INT32 IMG_DEFAULT_DEPTH = 4;
-const Q_INT32 RENDER_HEIGHT = TILE_SIZE * 4;
-const Q_INT32 RENDER_WIDTH = TILE_SIZE * 4;
+const Q_INT32 RENDER_HEIGHT = 128;
+const Q_INT32 RENDER_WIDTH = 128;
 
 enum enumInputDevice {
 	INPUT_DEVICE_UNKNOWN,

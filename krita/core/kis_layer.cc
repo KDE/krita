@@ -19,8 +19,6 @@
 #include <kdebug.h>
 
 #include "kis_global.h"
-#include "kistile.h"
-#include "kistilemgr.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
@@ -32,8 +30,8 @@
 static int numLayers = 0;
 #endif
 
-KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name) 
-	: super(width, height, colorStrategy, name),
+KisLayer::KisLayer(KisStrategyColorSpaceSP colorStrategy, const QString& name) 
+	: super(colorStrategy, name),
 	  m_opacity(OPACITY_OPAQUE),
 	  m_linked(false)
 {
@@ -43,8 +41,8 @@ KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorS
 #endif
 }
 
-KisLayer::KisLayer(KisImage *img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity)
-	: super(img, width, height, img -> colorStrategy(), name),
+KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity)
+	: super(img, img -> colorStrategy(), name),
 	  m_opacity(opacity),
 	  m_linked(false)
 {
@@ -73,17 +71,6 @@ KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
 	}
 }
 
-KisLayer::KisLayer(KisTileMgrSP tm, KisImage *img, const QString& name, QUANTUM opacity) : 
-	super(tm, img, name),
-	m_opacity(opacity),
-	m_linked(false)
-{
-#if DEBUG_LAYERS
-	numLayers++;
-	kdDebug() << "LAYER " << name << " CREATED total now = " << numLayers << endl;
-#endif
-}
-
 KisLayer::~KisLayer()
 {
 #if DEBUG_LAYERS
@@ -92,25 +79,7 @@ KisLayer::~KisLayer()
 #endif
 }
 
-// KisMaskSP KisLayer::createMask(Q_INT32 )
-// {
-// 	return 0;
-// }
-// 
-// KisMaskSP KisLayer::addMask(KisMaskSP )
-// {
-// 	return 0;
-// }
-// 
-// void KisLayer::applyMask(Q_INT32 )
-// {
-// }
-// 
-// 
-// KisMaskSP KisLayer::mask() const
-// {
-// 	return 0;
-// }
+
 
 void KisLayer::translate(Q_INT32 x, Q_INT32 y)
 {
@@ -119,10 +88,6 @@ void KisLayer::translate(Q_INT32 x, Q_INT32 y)
 	m_dy = y;
 }
 
-
-// void KisLayer::addAlpha()
-// {
-// }
 
 QUANTUM KisLayer::opacity() const
 {

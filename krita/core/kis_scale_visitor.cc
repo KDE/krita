@@ -99,7 +99,6 @@ double KisMitchellScaleFilterStrategy::valueAt(double t) const {
 
 void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, enumFilterType filterType) 
 {
-        
         //define filter supports
         const double filter_support=1.0;
         const double box_support=0.5;
@@ -144,6 +143,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                         break;
         }
         
+#if 0 //AUTOLAYER        
         // target image data
         Q_INT32 targetW;
         Q_INT32 targetH;
@@ -152,7 +152,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         // (this bit seems to be mostly from QImage.xForm)
         QWMatrix scale_matrix;
 	scale_matrix.scale(xscale, yscale);
-        scale_matrix = QPixmap::trueMatrix( scale_matrix, m_dev->width(), m_dev->height() );
+	scale_matrix = QPixmap::trueMatrix( scale_matrix, m_dev->width(), m_dev->height() );
         if ( scale_matrix.m11() == 1.0F && scale_matrix.m22() == 1.0F ) {
 //                 kdDebug() << "Identity matrix, do nothing.\n";
                 return;
@@ -317,6 +317,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         for(int y = 0; y < targetH; y++)
                 free(contribY[y].p);
         free(contribY);
+#endif //AUTOLAYER
         delete filterStrategy;
         
         //progress info

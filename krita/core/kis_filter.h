@@ -66,6 +66,8 @@ public:
 	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
 	inline const QString name() const { return m_name; };
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
+
+// XXX: Why is this commented out?
 // 	KisFilterConfigurationWidget* configurationWidget(QWidget* parent);
 	inline KisView* view();
 public slots:
@@ -73,9 +75,10 @@ public slots:
 	void slotActivated();
 
 protected:
+// XXX: Why is this commented out?
 // 	KisFilterConfigurationWidget* configurationWidget();
 
-	KisStrategyColorSpaceSP colorStrategy();
+  	KisStrategyColorSpaceSP colorStrategy();
 
 private slots:
 
@@ -96,12 +99,13 @@ inline KisView* KisFilter::view()
 
 inline KisStrategyColorSpaceSP KisFilter::colorStrategy()
 {
+	if (!m_view) return 0;
 	KisImageSP img = m_view -> currentImg();
+
 	if (!img) return 0;
-
 	KisLayerSP layer = img -> activeLayer();
-	if (!layer) return 0;
 
+	if (!layer) return 0;
 	return layer -> colorStrategy();
 }
 

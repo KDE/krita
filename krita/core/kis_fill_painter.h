@@ -97,6 +97,11 @@ public:
 	void fillPattern(int startX, int startY);
 
 	void setFillThreshold(int threshold);
+    
+    /** Sets the width of the layer */
+    void setWidth(int w) { m_width = w; }
+    /** Sets the height of the layer */
+    void setHeight(int h) { m_height = h; }
 private:
 	// for floodfill
 	/**
@@ -109,7 +114,7 @@ private:
 	void genericFillEnd(KisLayerSP filled);
 	typedef enum { Left, Right } Direction;
 	void floodLine(int x, int y);
-	int floodSegment(int x, int y, int most, KisIteratorPixel& it, KisIteratorPixel& lastPixel, Direction d);
+	int floodSegment(int x, int y, int most, KisHLineIterator& it, int lastPixel, Direction d);
 
 	KisSelectionSP m_selection;
 	KisPaintDeviceSP m_layer;
@@ -118,6 +123,7 @@ private:
 	int m_pixelsDone;
 	int m_size;
 	int m_currentPercent;
+	int m_width, m_height;
 	bool* m_map;
 };
 

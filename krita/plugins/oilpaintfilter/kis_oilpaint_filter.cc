@@ -46,8 +46,6 @@
 #include <kis_tile_command.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kistile.h>
-#include <kistilemgr.h>
 
 #include "kis_filter_configuration_widget.h"
 #include "kis_oilpaint_filter_configuration_widget.h"
@@ -60,6 +58,7 @@ KisOilPaintFilter::KisOilPaintFilter(KisView * view) : KisFilter(name(), view)
 
 void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect, KisTileCommand* ktc)
 {
+#if 0 // AUTO_LAYERS
 	kdDebug() << "Oilpaintfilter 2 called!\n";
         
         Q_INT32 width = src->width();
@@ -141,6 +140,7 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 		++lineIt;
 		++dstLineIt;
 	}
+#endif
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

@@ -32,7 +32,6 @@
 
 #include <kis_doc.h>
 #include <kis_image.h>
-#include <kis_iterators_quantum.h>
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
@@ -119,7 +118,6 @@ KritaConvolutionFilters::~KritaConvolutionFilters()
 KisGaussianBlurFilter::KisGaussianBlurFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
 	if (!colorStrategy()) return;
-
 	Q_INT32 imgdepth = colorStrategy()->depth();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 1, 2, 1 }, { 2, 4, 2 }, { 1, 2, 1} };

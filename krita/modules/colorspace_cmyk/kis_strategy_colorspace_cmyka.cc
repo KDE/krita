@@ -29,7 +29,6 @@
 #include "kis_image.h"
 #include "kis_colorspace_registry.h"
 #include "kis_strategy_colorspace_cmyka.h"
-#include "tiles/kispixeldata.h"
 #include "kis_iterators_pixel.h"
 
 #include "kis_resource.h"

@@ -20,8 +20,6 @@
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qspinbox.h>
-#include <qvbox.h>
 
 #include <klineedit.h>
 #include <klocale.h>
@@ -34,11 +32,7 @@
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paint_properties.h"
 
-NewLayerDialog::NewLayerDialog(Q_INT32 maxWidth, 
-			       Q_INT32 defWidth, 
-			       Q_INT32 maxHeight, 
-			       Q_INT32 defHeight,
-			       const QString colorSpaceName,
+NewLayerDialog::NewLayerDialog(const QString colorSpaceName,
 			       const QString & deviceName,
 			       QWidget *parent, 
 			       const char *name) 
@@ -81,41 +75,6 @@ NewLayerDialog::NewLayerDialog(Q_INT32 maxWidth,
 	m_cmbImageType -> setCurrentText(colorSpaceName);
 	grid -> addWidget(lbl, 3, 0);
 	grid -> addWidget(m_cmbImageType, 3, 1);
-
-	// Width
-	m_width = new QSpinBox( 1, maxWidth, 10, page);
-	m_width -> setValue(defWidth);
-	lbl = new QLabel(m_width, i18n("W&idth:"), page);
-	grid -> addWidget(lbl, 4, 0);
-	grid -> addWidget(m_width, 4, 1);
-
-	// Height
-	m_height = new QSpinBox(1, maxHeight, 10, page);
-	m_height -> setValue(defHeight);
-	lbl = new QLabel(m_height, i18n("&Height:"), page);
-	grid -> addWidget(lbl, 5, 0);
-	grid -> addWidget(m_height, 5, 1);
-
-	// Position
-	QGridLayout *gridInBox;
-	QGroupBox *grp;
-
-	grp = new QGroupBox(i18n("Position"), page);
-	gridInBox = new QGridLayout(grp, 3, 2, 12);
-	gridInBox -> setRowSpacing(0, 10);
-
-	lbl = new QLabel(i18n("X axis:"), grp);
-	m_x = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, 0, 10, grp);
-	gridInBox -> addWidget(lbl, 1, 0);
-	gridInBox -> addWidget(m_x, 1, 1);
-
-	lbl = new QLabel(i18n("Y axis:"), grp);
-	m_y = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, 0, 10, grp);
-	gridInBox -> addWidget(lbl, 2, 0);
-	gridInBox -> addWidget(m_y, 2, 1);
-
-	grid -> addMultiCellWidget(grp, 6, 7, 0, 1);
-
 }
 
 int NewLayerDialog::opacity() const
@@ -128,13 +87,6 @@ int NewLayerDialog::opacity() const
 	opacity = opacity * 255 / 100;
 	return upscale(opacity - 1);
 }
-
-
-QPoint NewLayerDialog::position() const
-{
-	return QPoint(m_x -> value(), m_y -> value());
-}
-
 
 CompositeOp NewLayerDialog::compositeOp() const
 {

@@ -52,9 +52,6 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_types.h"
 #include "kis_vec.h"
-#include "kispixeldata.h"
-#include "kistile.h"
-#include "kistilemgr.h"
 #include "kis_selection.h"
 #include "kis_gradient_painter.h"
 
@@ -531,6 +528,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
 	Q_ASSERT(repeatStrategy != 0);
 
+#if 0 //AUTOLAYER
 	KisLayerSP layer = new KisLayer(m_device -> width(), m_device -> height(), m_device -> colorStrategy(), "gradient");
 	KisPainter painter(layer.data());
 
@@ -602,7 +600,6 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 					for (int xOffset = -1; xOffset < 2; xOffset++) {
 
 						if (xOffset != 0 || yOffset != 0) {
-
 							int sampleX = x + xOffset;
 							int sampleY = y + yOffset;
 
@@ -720,6 +717,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 		}
 		bitBlt(0, 0, m_compositeOp, layer.data(), m_opacity, 0, 0, layer -> width(), layer -> height());
 	}
+#endif //AUTOLAYER
 	delete shapeStrategy;
 
 	emit notifyProgressDone(this);

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,35 +15,32 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#ifndef KISTILECACHE_H_
-#define KISTILECACHE_H_
+
+#ifndef KIS_MEMENTO_H_
+#define KIS_MEMENTO_H_
 
 #include <qglobal.h>
-#include <ksharedptr.h>
-#include "kistile.h"
 
-class KisTileCacheInterface : public KShared {
-	typedef KShared super;
+class KisTile;
+class KisTiledDataManager;
 
+class KisMemento
+{
 public:
-	KisTileCacheInterface();
-	virtual ~KisTileCacheInterface();
-
-public:
-	virtual void sizeHint(Q_INT32 nelements) = 0;
-	virtual void flush(KisTileSP tile) = 0;
-	virtual void insert(KisTileSP tile) = 0;
+	KisMemento();
+	~KisMemento();
+/*
+	// For consolidating transactions
+	virtual KisTransaction &operator+=(const KisTransaction &) = 0;
+	// For consolidating transactions
+	virtual KisTransaction &operator+(const KisTransaction &,
+				  const KisTransaction &) = 0;
+*/
+private:
+	friend class KisTiledDataManager;
+	KisTiledDataManager *originator;
+	KisTile **m_hashTable;	
+	Q_UINT32 m_numTiles;
 };
 
-inline
-KisTileCacheInterface::KisTileCacheInterface()
-{
-}
-
-inline
-KisTileCacheInterface::~KisTileCacheInterface()
-{
-}
-
-#endif // KISTILECACHE_H_
-
+#endif // KIS_MEMENTO_H_

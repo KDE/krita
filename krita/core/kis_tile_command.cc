@@ -15,20 +15,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 #include "kis_types.h"
 #include "kis_global.h"
-#include "tiles/kistile.h"
-#include "tiles/kistilemgr.h"
+#include "tiles/kis_tile.h"
+#include "tiles/kis_tileddatamanager.h"
 #include "kis_image.h"
 #include "kis_tile_command.h"
+#include "kis_memento.h"
 
 KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device,
 			       Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
 {
 	m_name = name;
 	m_device = device;
-	m_rc.setRect(x + m_device -> x(), y + m_device -> y(), width, height);
+	m_rc.setRect(x + m_device->getX(), y + m_device->getY(), width, height);
+	m_memento = device -> getMemento();
 }
 
 KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device, const QRect& rc)
@@ -36,54 +37,39 @@ KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device, con
 	m_name = name;
 	m_device = device;
 	m_rc = rc;
-	m_rc.moveBy(m_device -> x(), m_device -> y());
+	m_rc.moveBy(m_device->getX(), m_device->getY());
+	m_memento = device -> getMemento();
 }
 
 KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device)
 {
 	m_name = name;
 	m_device = device;
-	m_rc = device -> bounds();
-	m_rc.moveBy(m_device -> x(), m_device -> y());
+	//AUTOLAYER m_rc = device -> bounds();
+	m_rc.setRect(0, 0, 10, 10);
+	m_rc.moveBy(m_device->getX(), m_device->getY());
+	m_memento = device -> getMemento();
 }
 
 KisTileCommand::~KisTileCommand()
 {
-	for (TileMap::iterator it = m_tiles.begin(); it != m_tiles.end(); it++)
-		it -> second -> shareRelease();
+	delete m_memento;
 }
 
 void KisTileCommand::execute()
 {
-	KisTileMgrSP tm = m_device -> tiles();
 	KisImageSP img = m_device -> image();
-
-	for (TileMap::iterator it = m_originals.begin(); it != m_originals.end(); it++) {
-		tm -> attach(it -> second, it -> first);
-	}
-
+//AUTOLAYERS implement redo
 	if (img)
 		img -> notify(m_rc);
 }
 
 void KisTileCommand::unexecute()
 {
-	KisTileMgrSP tm = m_device -> tiles();
 	KisImageSP img = m_device -> image();
-	KisTileSP tmp;
-
-	if (m_originals.empty()) {
-		for (TileMap::iterator it = m_tiles.begin(); it != m_tiles.end(); it++) {
-			tmp = tm -> tile(it -> first, TILEMODE_NONE);
-			tm -> attach(it -> second, it -> first);
-			m_originals[it -> first] = tmp;
-		}
-	} else {
-		for (TileMap::iterator it = m_tiles.begin(); it != m_tiles.end(); it++) {
-			tm -> attach(it -> second, it -> first);
-		}
-	}
-
+	
+	m_device -> rollback(m_memento);
+	
 	if (img)
 		img -> notify(m_rc);
 }
@@ -92,22 +78,3 @@ QString KisTileCommand::name() const
 {
 	return m_name;
 }
-
-KisTileSP KisTileCommand::tile(Q_INT32 tileNo)
-{
-	if (m_tiles.count(tileNo) == 0) {
-		return  0;
-	}
-	return m_tiles[tileNo];
-}
-
-void KisTileCommand::addTile(Q_INT32 tileNo, KisTileSP tile)
-{
-	Q_ASSERT(tile);
-
-	if (m_tiles.count(tileNo) == 0) {
-		tile -> shareRef();
-		m_tiles[tileNo] = tile;
-	}
-}
-

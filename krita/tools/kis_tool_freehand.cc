@@ -130,9 +130,9 @@ void KisToolFreehand::initPaint(KisEvent *)
 		if (m_useTempLayer) {
 			// XXX ugly! hacky!
 			m_target = dynamic_cast<KisDoc*>(m_subject->document())->layerAdd(
-				currentImage(), device->width(), device->height(), "temp", OPACITY_OPAQUE);
+				currentImage(), "temp", OPACITY_OPAQUE);
 			KisFillPainter painter(m_target.data());
-			painter.eraseRect(0, 0, m_target -> width(), m_target -> height());
+			//painter.eraseRect(0, 0, m_target -> width(), m_target -> height());
 			painter.end();
 			m_target -> setCompositeOp(m_compositeOp);
 			dynamic_cast<KisLayer*>(m_target.data()) -> setVisible(true);
@@ -182,8 +182,11 @@ void KisToolFreehand::endPaint()
 				KisPainter painter( m_source );
 				painter.setCompositeOp(m_compositeOp);
 				painter.beginTransaction(m_transactionText);
+
+				//AUTOLAYER fix this by making a form of dirtyRect
 				painter.bitBlt(0, 0,  m_compositeOp, m_target, OPACITY_OPAQUE,
-					0, 0, m_source -> width() - 1, m_source -> width() - 1);
+					0, 0, 400, 400);
+
 				adapter -> addCommand(painter.endTransaction());
 				//currentImage() -> rm(dynamic_cast<KisLayer*>(m_target.data()));
 				dynamic_cast<KisDoc*>(m_subject->document())->layerRemove(

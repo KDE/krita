@@ -78,11 +78,11 @@ namespace {
 
 	void MoveCommand::moveTo(const QPoint& pos)
 	{
-		QRect rc;
+//		QRect rc;
 
-		rc.setRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
+//		rc.setRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
 		m_device -> move(pos.x(), pos.y());
-		rc |= QRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
+//		rc |= QRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
 //		m_img -> invalidate(); //rc);
 		m_controller -> updateCanvas(); //rc);
 	}
@@ -134,8 +134,8 @@ void KisStrategyMove::startDrag(const QPoint& pos)
 		m_doc -> setModified(true);
 		m_dragStart.setX(pos.x());
 		m_dragStart.setY(pos.y());
-		m_layerStart.setX(dev -> x());
-		m_layerStart.setY(dev -> y());
+		m_layerStart.setX(dev -> getX());
+		m_layerStart.setY(dev -> getY());
 		m_layerPosition = m_layerStart;
 	}
 }
@@ -154,13 +154,13 @@ void KisStrategyMove::drag(const QPoint& original)
 				return;
 
 			pos -= m_dragStart;
-			rc.setRect(dev -> x(), dev -> y(), dev -> width(), dev -> height());
-			dev -> move(dev -> x() + pos.x(), dev -> y() + pos.y());
-			rc = rc.unite(QRect(dev -> x(), dev -> y(), dev -> width(), dev -> height()));
-			rc.setX(QMAX(0, rc.x()));
-			rc.setY(QMAX(0, rc.y()));
+//			rc.setRect(dev -> x(), dev -> y(), dev -> width(), dev -> height());
+			dev -> move(dev ->getX() + pos.x(), dev->getY() + pos.y());
+//			rc = rc.unite(QRect(dev->getX(), dev->getY(), dev -> width(), dev -> height()));
+//			rc.setX(QMAX(0, rc.x()));
+//			rc.setY(QMAX(0, rc.y()));
 //			img -> invalidate(rc);
-			m_layerPosition = QPoint(dev -> x(), dev -> y());
+			m_layerPosition = QPoint(dev ->getX(), dev ->getY());
  			m_dragStart = original;
 #if 0
 			rc.setX(static_cast<Q_INT32>(rc.x() * m_subject -> zoom()));

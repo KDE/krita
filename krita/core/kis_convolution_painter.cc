@@ -52,9 +52,6 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_types.h"
 #include "kis_vec.h"
-#include "kispixeldata.h"
-#include "kistile.h"
-#include "kistilemgr.h"
 #include "kis_selection.h"
 #include "kis_convolution_painter.h"
 

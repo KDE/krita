@@ -42,9 +42,6 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kistile.h>
-#include <kistilemgr.h>
-#include <kis_iterators_quantum.h>
 
 #include "variations.h"
 #include "dlg_variations.h"

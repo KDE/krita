@@ -43,9 +43,6 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kistile.h>
-#include <kistilemgr.h>
-#include <kis_iterators_quantum.h>
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
 #include <kis_scale_visitor.h>
@@ -150,7 +147,7 @@ void ImageSize::slotLayerSize()
 					     (enumFilterType)f);
 		}
 		else {
-			m_view -> resizeLayer(w, h);
+			// AUTOLAYER should we crop layers ?
 		}
 		
 	}

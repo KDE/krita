@@ -29,6 +29,7 @@
 
 void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progress) 
 {
+#if 0 //AUTOLAYER
         const double pi=3.1415926535897932385;
         kdDebug() << "Rotating Code called! Going to rotate image by (angle): " << angle << "\n";
         
@@ -141,10 +142,13 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
         }
 
         emit notifyProgressDone(this);
+#endif // AUTOLAYER
+
 }
 
 void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress) 
 {
+#if 0 //AUTOLAYER
         kdDebug() << "Shear Code called! Going to shear image by xAngle " << angleX << " and yAngle " << angleY << "\n";
         const double pi=3.1415926535897932385;
         
@@ -173,10 +177,12 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
                 else if (deltaY != 0 && thetaX < 0 && thetaY < 0)
                         yCropImage(deltaY);
         }
+#endif //AUTOLAYER
 }
 
 Q_INT32 KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface *m_progress, Q_INT32 progressTotal, Q_INT32 progressCurrent)
 {
+#if 0 //AUTOLAYER
         kdDebug() << "xShearImage called, shear parameter " << shearX << "\n";        
         Q_INT32 width = m_dev->width();
         Q_INT32 height = m_dev->height();
@@ -259,10 +265,12 @@ Q_INT32 KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
         m_dev -> setTiles(tm); // Also sets width and height correctly
         return progressCurrent;
+#endif // AUTOLAYER
 }
 
 Q_INT32 KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface *m_progress, Q_INT32 progressTotal, Q_INT32 progressCurrent)
 {
+#if 0 // AUTOLAYER
         kdDebug() << "YShearImage called, shear paramter " << shearY << "\n";
         
         Q_INT32 width = m_dev->width();
@@ -347,10 +355,12 @@ Q_INT32 KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
         m_dev -> setTiles(tm); // Also sets width and height correctly
         return progressCurrent;
+#endif // AUTOLAYER
 }
 
 void KisRotateVisitor::xCropImage(double deltaX)
 {
+#if 0 // AUTOLAYER
         Q_INT32 width = m_dev->width();
         Q_INT32 height = m_dev->height();
         //calculate widht of the croped image
@@ -372,10 +382,12 @@ void KisRotateVisitor::xCropImage(double deltaX)
         kdDebug() << "write newData to the image!" << "\n";
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
         m_dev -> setTiles(tm); // Also sets width and height correctly
+#endif // AUTOLAYER
 }
 
 void KisRotateVisitor::yCropImage(double deltaY)
 {
+#if 0 //AUTOLAYER
         Q_INT32 width = m_dev->width();
         Q_INT32 height = m_dev->height();
         //calculate widht of the croped image
@@ -397,10 +409,12 @@ void KisRotateVisitor::yCropImage(double deltaY)
         kdDebug() << "write newData to the image!" << "\n";
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
         m_dev -> setTiles(tm); // Also sets width and height correctly
+#endif //AUTOLAYER
 }
 
 void KisRotateVisitor::rotateRight90()
 {
+#if 0 //AUTOLAYER
         kdDebug() << "rotateRight called!" << "\n";
         Q_INT32 width = m_dev->width();
         Q_INT32 height = m_dev->height();
@@ -448,11 +462,12 @@ void KisRotateVisitor::rotateRight90()
         kdDebug() << "write newData to the image!" << "\n";
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
         m_dev -> setTiles(tm); // Also sets width and height correctly
-
+#endif //AUTOLAYER
 }
 
 void KisRotateVisitor::rotateLeft90()
 {
+#if 0 //AUTOLAYER
         kdDebug() << "rotateLeft called!" << "\n";
         
         KisIteratorLinePixel lineIt = m_dev->iteratorPixelBegin( 0, 0, m_dev -> width(), 
@@ -483,10 +498,12 @@ m_dev->width(), m_dev->height());
         kdDebug() << "write newData to the image!" << "\n";
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
         m_dev -> setTiles(tm); // Also sets width and height correctly
+#endif //AUTOLAYER
 }
 
 void KisRotateVisitor::rotate180()
 {
+#if 0 //AUTOLAYER
         kdDebug() << "rotate180 called!" << "\n";
         Q_INT32 width = m_dev->width();
         Q_INT32 height = m_dev->height();
@@ -511,4 +528,5 @@ void KisRotateVisitor::rotate180()
         kdDebug() << "write newData to the image!" << "\n";
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
         m_dev -> setTiles(tm); // Also sets width and height correctly
+#endif //AUTOLAYER
 }

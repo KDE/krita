@@ -56,11 +56,7 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_vec.cc \
 	kis_rect.cc \
 	kis_iterators.cc \
-	kis_iterators_quantum.cc \
 	kis_iterators_pixel.cc \
-	kis_iterators_pixel_no_mask.cc \
-	kis_iterators_pixel_mask.cc \
-	kis_iterators_infinite.cc \
 	kis_histogram.cc \
 	KRayonViewIface.cc \
 	KRayonViewIface.skel \
@@ -77,8 +73,8 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_cms.cc \
 	kis_quantum_operations.cc \
 	kis_clipboard.cc \
-	kis_pixel.cc
-        
+	kis_pixel.cc 
+
 noinst_HEADERS = kis_paint_device.h \
 	kis_layer.h \
 	kis_image.h \
@@ -100,11 +96,7 @@ noinst_HEADERS = kis_paint_device.h \
 	kis_vec.h \
 	kis_rect.h \
 	kis_iterators.h \
-	kis_iterators_quantum.h \
 	kis_iterators_pixel.h \
-	kis_iterators_pixel_no_mask.h \
-	kis_iterators_pixel_mask.h \
-	kis_iterators_infinite.h \
 	kis_histogram.h \
 	kis_plugin_registry.h \
 	KRayonViewIface.h \

@@ -40,11 +40,9 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
-#include "kistile.h"
-#include "kistilemgr.h"
-#include "kispixeldata.h"
 #include "kis_image_magick_converter.h"
 #include "kis_colorspace_registry.h"
+#include "tiles/kis_iterator.h"
 
 #include "../../../config.h"
 
@@ -56,6 +54,7 @@ namespace {
 	const PIXELTYPE PIXEL_RED = 2;
 	const PIXELTYPE PIXEL_ALPHA = 3;
 
+#if 0 // AUTOLAYER
 	inline
 	void pp2tile(KisPixelDataSP pd, const PixelPacket *pp)
 	{
@@ -95,7 +94,7 @@ namespace {
 			}
 		}
 	}
-
+#endif //AUTOLAYER
 	void InitGlobalMagick()
 	{
 		static bool init = false;
@@ -124,7 +123,6 @@ namespace {
 	{
 		KApplication *app = KApplication::kApplication();
 
-		// TODO : Figure something out for above problems
 		Q_ASSERT(app);
 
 		if (app -> hasPendingEvents())
@@ -138,7 +136,6 @@ namespace {
 	{
 		KApplication *app = KApplication::kApplication();
 
-		// TODO : Figure something out for above problems
 		Q_ASSERT(app);
 
 		if (app -> hasPendingEvents())
@@ -202,63 +199,66 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		emit notifyProgressError(this);
 		return KisImageBuilder_RESULT_FAILURE;
 	}
-	m_img = new KisImage(m_adapter, 0, 0, KisColorSpaceRegistry::instance() -> get("RGBA"), m_doc -> nextImageName());
+// Autolayer removed the following line
+// 	m_img = new KisImage(m_adapter, 0, 0, KisColorSpaceRegistry::instance() -> get("RGBA"), m_doc -> nextImageName());
+
 	emit notifyProgressStage(this, i18n("Importing..."), 0);
 
+	m_img = 0;
+	
 	while ((image = RemoveFirstImageFromList(&images))) {
 		ViewInfo *vi = OpenCacheView(image);
 
+		if( ! m_img)
+			m_img = new KisImage(m_adapter, image -> columns, image -> rows,
+						KisColorSpaceRegistry::instance() -> get("RGBA"), m_doc -> nextImageName());
+
 		if (image -> columns && image -> rows) {
-			Q_INT32 totalTiles = ((image -> columns + TILE_WIDTH - 1) / TILE_WIDTH) * ((image -> rows + TILE_HEIGHT - 1) / TILE_HEIGHT);
-			Q_INT32 ntile = 0;
-			KisLayerSP layer = new KisLayer(m_img, image -> columns, image -> rows, m_img -> nextLayerName(), OPACITY_OPAQUE);
-			KisTileMgrSP tm = layer -> tiles();
-			Q_INT32 w = TILE_WIDTH;
-			Q_INT32 h = TILE_HEIGHT;
+			KisLayerSP layer = new KisLayer(m_img, m_img -> nextLayerName(), OPACITY_OPAQUE);
 
-			m_img -> add(layer, 0);
+			m_img->add(layer, 0);
 
-			for (Q_INT32 y = 0; y < m_img -> height(); y += TILE_HEIGHT) {
-				if ((y + h) > m_img -> height())
-					h = TILE_HEIGHT + m_img -> height() - (y + h);
+			for (Q_INT32 y = 0; y < image->rows; y ++)
+			{
+				const PixelPacket *pp = AcquireCacheView(vi, 0, y, image->columns, 1, &ei);
 
-				for (Q_INT32 x = 0; x < m_img -> width(); x += TILE_WIDTH) {
-					if ((x + w) > m_img -> width())
-						w = TILE_WIDTH + m_img -> width() - (x + w);
-
-					const PixelPacket *pp = AcquireCacheView(vi, x, y, w, h, &ei);
-					KisPixelDataSP pd = tm -> pixelData(x, y, x + w - 1, y + h - 1, TILEMODE_RW);
-
-					if (!pd || !pp) {
-						CloseCacheView(vi);
-						DestroyImageList(images);
-						DestroyImageInfo(ii);
-						DestroyExceptionInfo(&ei);
-						emit notifyProgressError(this);
-						return KisImageBuilder_RESULT_FAILURE;
-					}
-
-					pp2tile(pd, pp);
-					tm -> releasePixelData(pd);
-					w = TILE_WIDTH;
-					ntile++;
-					emit notifyProgress(this, ntile * 100 / totalTiles);
-
-					if (m_stop) {
-						CloseCacheView(vi);
-						DestroyImageList(images);
-						DestroyImageInfo(ii);
-						DestroyExceptionInfo(&ei);
-						m_img = 0;
-						return KisImageBuilder_RESULT_INTR;
-					}
-
+				if(!pp)
+				{
+					CloseCacheView(vi);
+					DestroyImageList(images);
+					DestroyImageInfo(ii);
+					DestroyExceptionInfo(&ei);
+					emit notifyProgressError(this);
+					return KisImageBuilder_RESULT_FAILURE;
 				}
 
-				h = TILE_HEIGHT;
+				KisHLineIterator hiter = layer->createHLineIterator(0, image->columns, y, true);
+				while(! hiter.isDone())
+				{
+					Q_UINT8 *ptr= (Q_UINT8 *)hiter;
+					// XXX: not colorstrategy and bitdepth independent
+					*(ptr++) = pp->blue;
+					*(ptr++) = pp->green;
+					*(ptr++) = pp->red;
+					*(ptr++) = OPACITY_OPAQUE - pp->opacity;
+			
+					pp++;	
+					hiter++;
+				}
+				
+				emit notifyProgress(this, y * 100 / image->rows);
+
+				if (m_stop) {
+					CloseCacheView(vi);
+					DestroyImageList(images);
+					DestroyImageInfo(ii);
+					DestroyExceptionInfo(&ei);
+					m_img = 0;
+					return KisImageBuilder_RESULT_INTR;
+				}
 			}
 		}
-
+		
 		emit notifyProgressDone(this);
 		CloseCacheView(vi);
 		DestroyImage(image);
@@ -308,6 +308,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildImage(const KURL& uri)
 #endif
 }
 
+
 KisImageSP KisImageMagickConverter::image()
 {
 	return m_img;
@@ -327,6 +328,7 @@ KisImageBuilder_Result buildFile(const KURL&, KisImageSP)
 
 KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLayerSP layer)
 {
+#if 0 //AUTOLAYER
 	Image *image;
 	ExceptionInfo ei;
 	ImageInfo *ii;
@@ -409,6 +411,8 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 	DestroyImage(image);
 	emit notifyProgressDone(this);
 	return KisImageBuilder_RESULT_OK;
+#endif // AUTOLAYER (below return is a hack)
+		return KisImageBuilder_RESULT_EMPTY;
 }
 
 void KisImageMagickConverter::ioData(KIO::Job *job, const QByteArray& data)

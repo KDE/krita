@@ -25,6 +25,14 @@
 
 class QStringList;
 
+
+/**
+ * This class will contain:
+ *  	- a registry of singleton color strategies
+ *	- a mapping of ImageMagick color model identifiers to color strategies
+ *      - a mapping of lcms color model identifiers to color strategies
+ *     -  a mapping of icm color model identifiers to color stratiegs
+ */
 class KisColorSpaceRegistry : public KisGenericRegistry<KisStrategyColorSpaceSP> {
 
 public:

@@ -89,29 +89,26 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 			mask -> width(),
 			mask -> height());
 
-	KisLayerSP dab = new KisLayer(mask -> width(),
-			     mask -> height(),
-			     device -> colorStrategy(),
-			     "eraser_dab");
+	KisLayerSP dab = new KisLayer(device -> colorStrategy(), "eraser_dab");
 
 	if (device -> alpha()) {
 		dab -> setOpacity(OPACITY_OPAQUE);
-		for (int y = 0; y < mask -> height(); y++) {
-			for (int x = 0; x < mask -> width(); x++) {
+		for (int y = 0; y < brush->height(); y++) {
+			for (int x = 0; x < brush->width(); x++) {
 				// the color doesn't matter, since we only composite the alpha
-				dab -> setPixel(x, y, m_painter -> paintColor(), QUANTUM_MAX - mask -> alphaAt(x, y));
+				dab->setPixel(x, y, m_painter -> paintColor(), QUANTUM_MAX - mask->alphaAt(x, y));
 			}
 		}
-		m_painter -> bitBlt( r.x(), r.y(), COMPOSITE_ERASE, dab.data() );
+		m_painter->bitBlt( r.x(), r.y(), COMPOSITE_ERASE, dab.data(), 0, 0, brush->width(), brush->height());
 
  	} else {
 		dab -> setOpacity(OPACITY_TRANSPARENT);
-		for (int y = 0; y < mask -> height(); y++) {
-			for (int x = 0; x < mask -> width(); x++) {
-				dab -> setPixel(x, y, m_painter -> backgroundColor(), mask -> alphaAt(x, y));
+		for (int y = 0; y < brush->height(); y++) {
+			for (int x = 0; x < brush->width(); x++) {
+				dab -> setPixel(x, y, m_painter -> backgroundColor(), mask->alphaAt(x, y));
 			}
 		}
-		m_painter -> bitBlt(r.x(), r.y(), COMPOSITE_OVER, dab.data() );
+		m_painter->bitBlt(r.x(), r.y(), COMPOSITE_OVER, dab.data(), 0, 0, mask -> width(), mask -> height());
  	}
 
 	m_painter -> addDirtyRect(r);

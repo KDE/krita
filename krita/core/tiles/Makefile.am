@@ -7,5 +7,5 @@ INCLUDES  = -I$(srcdir)/../ \
 
 noinst_LTLIBRARIES = libkistile.la
 
-libkistile_la_SOURCES = kis_scoped_lock.cc kistile.cc kistilemgr.cc kistilemediator.cc kispixeldata.cc
+libkistile_la_SOURCES = kis_tiledvlineiterator.cc kis_tiledhlineiterator.cc kis_tileddatamanager.cc kis_tile.cc kis_iterator.cc kis_memento.cc
 libkistile_la_METASOURCES = AUTO

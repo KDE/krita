@@ -46,8 +46,6 @@
 #include <kis_tile_command.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kistile.h>
-#include <kistilemgr.h>
 
 #include "kis_filter_configuration_widget.h"
 #include "kis_raindrops_filter_configuration_widget.h"
@@ -61,7 +59,8 @@ KisRainDropsFilter::KisRainDropsFilter(KisView * view) : KisFilter(name(), view)
 void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect, KisTileCommand* ktc)
 {
 	kdDebug() << "Raindropsfilter 2 called!\n";
-        
+
+#if 0 // AUTO_LAYERS
         Q_INT32 width = src->width();
         Q_INT32 height = src->height();
         
@@ -417,6 +416,7 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
 
         FreeBoolArray (BoolMatrix, Width);
         //emit notifyProgressDone(this);
+#endif // AUTO_LAYERS
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

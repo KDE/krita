@@ -77,14 +77,11 @@ private:
 
 
 public:
-	KisLayerSP layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM devOpacity);
+	KisLayerSP layerAdd(KisImageSP img, const QString& name, QUANTUM devOpacity);
 	KisLayerSP layerAdd(KisImageSP img,
-			    Q_INT32 width,
-			    Q_INT32 height,
 			    const QString& name,
 			    CompositeOp compositeOp,
 			    QUANTUM opacity,
-			    QPoint pos,
 			    KisStrategyColorSpaceSP colorstrategy);
 
 	KisLayerSP layerAdd(KisImageSP img, KisLayerSP layer, Q_INT32 position);

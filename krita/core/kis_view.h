@@ -183,7 +183,6 @@ public slots:
 	void slotImportImage();
 	void export_image();
 	void slotImageProperties();
-	void imgResizeToActiveLayer();
 	void add_new_image_tab();
 	void remove_current_image_tab();
 	void resizeCurrentImage(Q_INT32 w, Q_INT32 h);
@@ -198,7 +197,6 @@ public slots:
 	void rotateLayerCustom();
 	void mirrorLayerX();
 	void mirrorLayerY();
-	void resizeLayer(Q_INT32 w, Q_INT32 h);
 	void scaleLayer(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
         void rotateLayer(double angle);
         void shearLayer(double angleX, double angleY);
@@ -329,7 +327,6 @@ private slots:
 	void layerToggleLinked();
 	void layerProperties();
 
-	void layerResizeToImage();
 	void layerToImage();
 	void layerAdd();
 	void layerRemove();
@@ -429,7 +426,6 @@ private:
 	KAction *m_layerLower;
 	KAction *m_layerProperties;
 	KAction *m_layerRaise;
-	KAction *m_layerResizeToImage;
 	KAction *m_layerRm;
 	KAction *m_layerSaveAs;
 	KAction *m_layerToImage;

@@ -28,15 +28,11 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kistile.h"
-#include "kistilemgr.h"
 #include "kispixeldata.h"
 #include "kis_painter.h"
 #include "kis_undo_adapter.h"
-#include "kis_strategy_colorspace.h"
-#include "kis_colorspace_factory.h"
 #include "kis_iterators_quantum.h"
 #include "kis_iterators_pixel.h"
 
@@ -91,9 +87,6 @@ namespace {
 KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
 {
         init();
-        m_width = width;
-        m_height = height;
-        m_imgType = imgType;
         m_alpha = ::imgTypeHasAlpha(imgType);
         m_depth = ::imgTypeDepth(imgType);
         m_x = 0;
@@ -102,16 +95,12 @@ KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType&
         m_offY = 0;
         m_offW = 0;
         m_offH = 0;
-        m_tiles = new KisTileMgr(m_depth, width, height);
+        m_tiles = new KisTileMgr(m_depth, imgType, width, height);
         m_visible = true;
         m_owner = 0;
         m_name = name;
         m_projectionValid = false;
         m_compositeOp = COMPOSITE_OVER;
-
-        KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
-        Q_ASSERT(factory);
-        m_colorStrategy = factory -> create(m_imgType);
 }
 
 KisPaintDevice::KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
@@ -123,9 +112,6 @@ KisPaintDevice::KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, co
 KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& name)
 {
         init();
-        m_width = tm -> width();
-        m_height = tm -> height();
-        m_imgType = img -> imgType();
         m_depth = img -> depth();
         m_alpha = img -> alpha();
         m_x = 0;
@@ -140,10 +126,6 @@ KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& n
         m_name = name;
         m_projectionValid = false;
         m_compositeOp = COMPOSITE_OVER;
-
-        KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
-        Q_ASSERT(factory);
-        m_colorStrategy = factory -> create(m_imgType);
 }
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs)
@@ -160,20 +142,16 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs
                 m_visible = rhs.m_visible;
                 m_x = rhs.m_x;
                 m_y = rhs.m_y;
-                m_width = rhs.m_width;
-                m_height = rhs.m_height;
                 m_depth = rhs.m_depth;
                 m_offX = rhs.m_offX;
                 m_offY = rhs.m_offY;
                 m_offW = rhs.m_offW;
                 m_offH = rhs.m_offH;
                 m_quantumSize = rhs.m_quantumSize;
-                m_imgType = rhs.m_imgType;
                 m_alpha = rhs.m_alpha;
                 m_projectionValid = false;
                 m_name = rhs.m_name;
                 m_compositeOp = COMPOSITE_OVER;
-                m_colorStrategy = rhs.m_colorStrategy;
         }
 }
 
@@ -228,9 +206,6 @@ void KisPaintDevice::configure(KisImageSP image,
         if (image == 0 || name.isEmpty())
                 return;
 
-        m_width = width;
-        m_height = height;
-        m_imgType = imgType;
         m_depth = image -> depth();
         m_alpha = image -> alpha();
         m_x = 0;
@@ -239,17 +214,13 @@ void KisPaintDevice::configure(KisImageSP image,
         m_offY = 0;
         m_offW = 0;
         m_offH = 0;
-        m_tiles = new KisTileMgr(m_depth, width, height);
+        m_tiles = new KisTileMgr(m_depth, imgType, width, height);
         m_visible = true;
         m_owner = image;
         m_name = name;
         m_projectionValid = false;
         kdDebug() << "composite op: " << compositeOp << "\n";
         m_compositeOp = compositeOp;
-
-        KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
-        Q_ASSERT(factory);
-        m_colorStrategy = factory -> create(m_imgType);
 }
 
 void KisPaintDevice::update()
@@ -288,7 +259,7 @@ void KisPaintDevice::move(const QPoint& pt)
 
 bool KisPaintDevice::contains(Q_INT32 x, Q_INT32 y) const
 {
-        QRect rc(m_x, m_y, m_width, m_height);
+        QRect rc(m_x, m_y, width(), height());
 
         return rc.contains(x, y);
 }
@@ -334,192 +305,49 @@ bool KisPaintDevice::alpha() const
         return m_alpha;
 }
 
-enumImgType KisPaintDevice::type() const {
-        return m_imgType;
-}
-
 enumImgType KisPaintDevice::typeWithoutAlpha() const
 {
-        switch (m_imgType) {
-        case IMAGE_TYPE_INDEXEDA:
-                return IMAGE_TYPE_INDEXED;
-        case IMAGE_TYPE_GREYA:
-                return IMAGE_TYPE_GREY;
-        case IMAGE_TYPE_RGBA:
-                return IMAGE_TYPE_RGB;
-        case IMAGE_TYPE_CMYKA:
-                return IMAGE_TYPE_CMYK;
-        case IMAGE_TYPE_LABA:
-                return IMAGE_TYPE_LAB;
-        case IMAGE_TYPE_YUVA:
-                return IMAGE_TYPE_YUV;
-        default:
-                return m_imgType;
-        }
-
-        return m_imgType;
+	switch (type()) {
+		case IMAGE_TYPE_INDEXEDA:
+			return IMAGE_TYPE_INDEXED;
+		case IMAGE_TYPE_GREYA:
+			return IMAGE_TYPE_GREY;
+		case IMAGE_TYPE_RGBA:
+			return IMAGE_TYPE_RGB;
+		case IMAGE_TYPE_CMYKA:
+			return IMAGE_TYPE_CMYK;
+		case IMAGE_TYPE_LABA:
+			return IMAGE_TYPE_LAB;
+		case IMAGE_TYPE_YUVA:
+			return IMAGE_TYPE_YUV;
+		default:
+			return type();
+	}
 }
 
 enumImgType KisPaintDevice::typeWithAlpha() const
 {
-        switch (m_imgType) {
-                case IMAGE_TYPE_INDEXED:
-                        return IMAGE_TYPE_INDEXEDA;
-                case IMAGE_TYPE_GREY:
-                        return IMAGE_TYPE_GREYA;
-                case IMAGE_TYPE_RGB:
-                        return IMAGE_TYPE_RGBA;
-                case IMAGE_TYPE_CMYK:
-                        return IMAGE_TYPE_CMYKA;
-                case IMAGE_TYPE_LAB:
-                        return IMAGE_TYPE_LABA;
-                case IMAGE_TYPE_YUV:
-                        return IMAGE_TYPE_YUVA;
-                default:
-                        return m_imgType;
-        }
-
-        return m_imgType;
-
-}
-
-QImage KisPaintDevice::convertToImage()
-{
-	return m_colorStrategy -> convertToImage(data(), m_depth, 0, 0, m_width, m_height);
-}
-
-KisTileMgrSP KisPaintDevice::data()
-{
-	return m_tiles;
-}
-
-const KisTileMgrSP KisPaintDevice::data() const
-{
-        return m_tiles;
-}
-
-KisTileMgrSP KisPaintDevice::shadow()
-{
-        return m_shadow;
-}
-
-const KisTileMgrSP KisPaintDevice::shadow() const
-{
-        return m_shadow;
-}
-
-Q_INT32 KisPaintDevice::quantumSize() const
-{
-        return 0;
-}
-
-Q_INT32 KisPaintDevice::quantumSizeWithAlpha() const
-{
-        return 0;
-}
-
-QRect KisPaintDevice::bounds() const
-{
-        return QRect(m_x, m_y, m_width, m_height);
-}
-
-Q_INT32 KisPaintDevice::x() const
-{
-        return m_x;
-}
-
-void KisPaintDevice::setX(Q_INT32 x)
-{
-        m_x = x;
-}
-
-Q_INT32 KisPaintDevice::y() const
-{
-        return m_y;
-}
-
-void KisPaintDevice::setY(Q_INT32 y)
-{
-        m_y = y;
-}
-
-Q_INT32 KisPaintDevice::width() const
-{
-        return m_width;
-}
-
-Q_INT32 KisPaintDevice::height() const
-{
-        return m_height;
-}
-
-const bool KisPaintDevice::visible() const
-{
-        return m_visible;
-}
-
-void KisPaintDevice::visible(bool v)
-{
-        if (m_visible != v) {
-                m_visible = v;
-                emit visibilityChanged(this);
-        }
-}
-
-QRect KisPaintDevice::clip() const
-{
-        return QRect(m_offX, m_offY, m_offW, m_offH);
-}
-
-void KisPaintDevice::clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const
-{
-        if (offx && offy && offw && offh) {
-                *offx = m_offX;
-                *offy = m_offY;
-                *offw = m_offW;
-                *offh = m_offH;
-        }
-}
-
-void KisPaintDevice::setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh)
-{
-        m_offX = offx;
-        m_offY = offy;
-        m_offW = offw;
-        m_offH = offh;
-}
-
-bool KisPaintDevice::cmap(KoColorMap& cm)
-{
-        cm.clear();
-        return false;
-}
-
-KoColor KisPaintDevice::colorAt()
-{
-        return KoColor();
-}
-
-KisImageSP KisPaintDevice::image()
-{
-        return m_owner;
-}
-
-const KisImageSP KisPaintDevice::image() const
-{
-        return m_owner;
-}
-
-void KisPaintDevice::setImage(KisImageSP image)
-{
-        m_owner = image;
+	switch (type()) {
+		case IMAGE_TYPE_INDEXED:
+			return IMAGE_TYPE_INDEXEDA;
+		case IMAGE_TYPE_GREY:
+			return IMAGE_TYPE_GREYA;
+		case IMAGE_TYPE_RGB:
+			return IMAGE_TYPE_RGBA;
+		case IMAGE_TYPE_CMYK:
+			return IMAGE_TYPE_CMYKA;
+		case IMAGE_TYPE_LAB:
+			return IMAGE_TYPE_LABA;
+		case IMAGE_TYPE_YUV:
+			return IMAGE_TYPE_YUVA;
+		default:
+			return type();
+	}
 }
 
 void KisPaintDevice::init()
 {
         m_visible = false;
-        m_width = 0;
-        m_height = 0;
         m_depth = 0;
         m_alpha = false;
         m_quantumSize = 0;
@@ -622,31 +450,17 @@ void KisPaintDevice::data(KisTileMgrSP mgr)
         }
 
         m_tiles = mgr;
-        width(mgr -> width());
-        height(mgr -> height());
-}
-
-void KisPaintDevice::width(Q_INT32 w)
-{
-        m_width = w;
-}
-
-void KisPaintDevice::height(Q_INT32 h)
-{
-        m_height = h;
 }
 
 void KisPaintDevice::resize(Q_INT32 w, Q_INT32 h)
 {
         KisTileMgrSP old = data();
-        KisTileMgrSP tm = new KisTileMgr(old, old -> depth(), w, h);
+        KisTileMgrSP tm = new KisTileMgr(old, old -> depth(), type(), w, h);
         Q_INT32 oldW = width();
         Q_INT32 oldH = height();
         KisPainter gc;
 
         data(tm);
-        width(w);
-        height(h);
         gc.begin(this);
 
         if (oldW < w)
@@ -656,19 +470,6 @@ void KisPaintDevice::resize(Q_INT32 w, Q_INT32 h)
                 gc.eraseRect(0, oldH, w, h);
 
         gc.end();
-}
-
-void KisPaintDevice::resize(const QSize& size)
-{
-        resize(size.width(), size.height());
-}
-
-void KisPaintDevice::resize()
-{
-        KisImageSP img = image();
-
-        if (img)
-                resize(img -> bounds().size());
 }
 
 void KisPaintDevice::scale(double sx, double sy) 
@@ -763,7 +564,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
                 }
         }
 
-        KisTileMgrSP tm = new KisTileMgr(depth(), targetW, targetH);
+        KisTileMgrSP tm = new KisTileMgr(depth(), type(), targetW, targetH);
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * depth());
         data(tm); // Also sets width and height correctly
 
@@ -780,7 +581,7 @@ void KisPaintDevice::mirrorX()
 
         QUANTUM *line1 = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
         QUANTUM *line2 = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
-        KisTileMgrSP tm = new KisTileMgr(depth(), width(), height());
+        KisTileMgrSP tm = new KisTileMgr(depth(), type(), width(), height());
 
         int cutoff = static_cast<int>(height()/2);
 
@@ -808,7 +609,7 @@ void KisPaintDevice::mirrorY()
            should too */
         QUANTUM *pixel = new QUANTUM[depth() * sizeof(QUANTUM)]; // the right pixel
         QUANTUM *line = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
-        KisTileMgrSP tm = new KisTileMgr(depth(), width(), height());
+        KisTileMgrSP tm = new KisTileMgr(depth(), type(), width(), height());
         int cutoff = static_cast<int>(width()/2);
 
         for(int i = 0; i < height(); i++) {
@@ -854,13 +655,11 @@ void KisPaintDevice::offsetBy(Q_INT32 x, Q_INT32 y)
                 y = 0;
 
         KisTileMgrSP old = data();
-        KisTileMgrSP tm = new KisTileMgr(old -> depth(), x + old -> width(), y + old -> height());
+        KisTileMgrSP tm = new KisTileMgr(old -> depth(), type(), x + old -> width(), y + old -> height());
         KisPixelDataSP dst;
         KisPixelDataSP src;
 
         data(tm);
-        width(tm -> width());
-        height(tm -> height());
         src = old -> pixelData(0, 0, old -> width() - 1, old -> height() - 1, TILEMODE_READ);
         Q_ASSERT(src);
         dst = tm -> pixelData(x, y, x + old -> width() - 1, y + old -> height() - 1, TILEMODE_WRITE);
@@ -874,14 +673,14 @@ void KisPaintDevice::offsetBy(Q_INT32 x, Q_INT32 y)
 bool KisPaintDevice::write(KoStore *store)
 {
         KisTileMgrSP tm = data();
-        Q_INT32 totalBytes = m_height * m_width * m_depth * sizeof(QUANTUM);
+        Q_INT32 totalBytes = height() * width() * m_depth * sizeof(QUANTUM);
         Q_INT32 nbytes = 0;
 
         Q_ASSERT(store);
         Q_ASSERT(tm);
 
-        for (Q_INT32 y = 0; y < m_height; y += TILE_HEIGHT) {
-                for (Q_INT32 x = 0; x < m_width; x += TILE_WIDTH) {
+        for (Q_INT32 y = 0; y < height(); y += TILE_HEIGHT) {
+                for (Q_INT32 x = 0; x < width(); x += TILE_WIDTH) {
                         KisTileSP tile = tm -> tile(x, y, TILEMODE_READ);
                         Q_INT32 tileBytes = tile -> height() * tile -> width() * m_depth * sizeof(QUANTUM);
 
@@ -904,14 +703,14 @@ bool KisPaintDevice::write(KoStore *store)
 bool KisPaintDevice::read(KoStore *store)
 {
         KisTileMgrSP tm = data();
-        Q_INT32 totalBytes = m_height * m_width * m_depth * sizeof(QUANTUM);
+        Q_INT32 totalBytes = height() * width() * m_depth * sizeof(QUANTUM);
         Q_INT32 nbytes = 0;
 
         Q_ASSERT(store);
         Q_ASSERT(tm);
 
-        for (Q_INT32 y = 0; y < m_height; y += TILE_HEIGHT) {
-                for (Q_INT32 x = 0; x < m_width; x += TILE_WIDTH) {
+        for (Q_INT32 y = 0; y < height(); y += TILE_HEIGHT) {
+                for (Q_INT32 x = 0; x < width(); x += TILE_WIDTH) {
                         KisTileSP tile = tm -> tile(x, y, TILEMODE_WRITE);
                         Q_INT32 tileBytes = tile -> height() * tile -> width() * m_depth * sizeof(QUANTUM);
 
@@ -931,49 +730,70 @@ bool KisPaintDevice::read(KoStore *store)
         return true;
 }
 
-KisTileMgrSP KisPaintDevice::tiles() const
+void KisPaintDevice::convertTo(const enumImgType& imgType)
 {
-        return m_tiles;
-}
-
-Q_INT32 KisPaintDevice::depth() const
-{
-        return m_depth;
-}
-
-KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
-{
-        return m_colorStrategy;
+	if( imgType == type() )
+	{
+		return;
+	}
+	KisPaintDevice dst(width(), height(), imgType, "");
+	KisStrategyColorSpaceSP srcCS = colorStrategy();
+	KisStrategyColorSpaceSP dstCS = dst.colorStrategy();
+	KisIteratorLinePixel dstLIt = dst.iteratorPixelBegin(0);
+	KisIteratorLinePixel endLIt = dst.iteratorPixelEnd(0);
+	KisIteratorLinePixel srcLIt = this->iteratorPixelBegin(0);
+	while( dstLIt <= endLIt)
+	{
+		KisIteratorPixel dstIt = dstLIt.begin();
+		KisIteratorPixel endIt = endLIt.begin();
+		KisIteratorPixel srcIt = srcLIt.begin();
+		while(dstIt <= endIt )
+		{
+			KisPixelRepresentation srcPr = srcIt;
+			KisPixelRepresentation dstPr = dstIt;
+			srcCS->convertTo(srcPr, dstPr, dstCS);
+			++dstIt; ++srcIt;
+		}
+		++dstLIt; ++srcLIt;
+	}
+	data(dst.data());
 }
 
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumBegin(KisTileCommand* command)
 {
         return KisIteratorLineQuantum( this, command, 0);
 }
+
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
 {
         return KisIteratorLineQuantum( this, command, ystart, xstart, xend);
 }
+
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumEnd(KisTileCommand* command)
 {
         return KisIteratorLineQuantum( this, command, height() - 1);
 }
+
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
 {
         return KisIteratorLineQuantum( this, command, yend, xstart, xend);
 }
+
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionBegin(KisTileCommand* command)
 {
         return KisIteratorLineQuantum( this, command, 0);
 }
+
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
 {
         return KisIteratorLineQuantum( this, command, ystart,  xstart, xend);
 }
+
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionEnd(KisTileCommand* command)
 {
         return KisIteratorLineQuantum( this, command, height() - 1);
 }
+
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
 {
         return KisIteratorLineQuantum( this, command, yend, xstart, xend);
@@ -983,33 +803,42 @@ KisIteratorLinePixel KisPaintDevice::iteratorPixelBegin(KisTileCommand* command)
 {
         return KisIteratorLinePixel( this, command, 0);
 }
+
 KisIteratorLinePixel KisPaintDevice::iteratorPixelBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
 {
         return KisIteratorLinePixel( this, command, ystart, xstart, xend);
 }
+
 KisIteratorLinePixel KisPaintDevice::iteratorPixelEnd(KisTileCommand* command)
 {
         return KisIteratorLinePixel( this, command, height() - 1);
 }
+
 KisIteratorLinePixel KisPaintDevice::iteratorPixelEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
 {
         return KisIteratorLinePixel( this, command, yend, xstart, xend);
 }
+
 KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionBegin(KisTileCommand* command)
 {
         return KisIteratorLinePixel( this, command, 0);
 }
+
 KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
 {
         return KisIteratorLinePixel( this, command, ystart,  xstart, xend);
 }
+
 KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionEnd(KisTileCommand* command)
 {
         return KisIteratorLinePixel( this, command, height() - 1);
 }
+
 KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
 {
         return KisIteratorLinePixel( this, command, yend, xstart, xend);
 }
+
+
 #include "kis_paint_device.moc"
 

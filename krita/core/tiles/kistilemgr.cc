@@ -26,25 +26,27 @@
 #include "kistilemediator.h"
 #include "kistilemgr.h"
 
-KisTileMgr::KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height)
+KisTileMgr::KisTileMgr(Q_UINT32 depth,const enumImgType& imgType, Q_UINT32 width, Q_UINT32 height) :
+	m_width ( width ),
+	m_height ( height ),
+	m_depth ( depth ),
+	m_ntileRows ( (height + TILE_HEIGHT - 1) / TILE_HEIGHT),
+	m_ntileCols ( (width + TILE_WIDTH - 1) / TILE_WIDTH ),
+	m_mediator ( new KisTileMediator ),
+	m_imgType ( imgType )
 {
-	m_width = width;
-	m_height = height;
-	m_depth = depth;
-	m_ntileRows = (height + TILE_HEIGHT - 1) / TILE_HEIGHT;
-	m_ntileCols = (width + TILE_WIDTH - 1) / TILE_WIDTH;
-	m_mediator = new KisTileMediator;
 }
 
-KisTileMgr::KisTileMgr(KisTileMgr *tm, Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height)
+KisTileMgr::KisTileMgr(KisTileMgr *tm, Q_UINT32 depth, const enumImgType& imgType, Q_UINT32 width, Q_UINT32 height) :
+	m_width ( width ),
+	m_height ( height ),
+	m_depth ( depth ),
+	m_ntileRows ( (height + TILE_HEIGHT - 1) / TILE_HEIGHT ),
+	m_ntileCols ( (width + TILE_WIDTH - 1) / TILE_WIDTH ),
+	m_mediator ( new KisTileMediator ),
+	m_imgType ( imgType )
 {
 	Q_ASSERT(tm != this);
-	m_width = width;
-	m_height = height;
-	m_depth = depth;
-	m_ntileRows = (height + TILE_HEIGHT - 1) / TILE_HEIGHT;
-	m_ntileCols = (width + TILE_WIDTH - 1) / TILE_WIDTH;
-	m_mediator = new KisTileMediator;
 	duplicate(m_ntileRows * m_ntileCols, tm);
 }
 
@@ -58,6 +60,7 @@ KisTileMgr::KisTileMgr(const KisTileMgr& rhs) : KShared(rhs)
 		m_ntileCols = rhs.m_ntileCols;
 		m_mediator = new KisTileMediator;
 		m_tiles = rhs.m_tiles;
+		m_imgType = rhs.m_imgType;
 
 		for (vKisTileSP_it it = m_tiles.begin(); it != m_tiles.end(); it++)
 			(*it) -> shareRef();
@@ -261,36 +264,6 @@ void KisTileMgr::invalidateTiles(KisTileSP top)
 	row = static_cast<Q_INT32>(y * height() / TILE_HEIGHT);
 	num = row * m_ntileCols + col;
 	m_tiles[num] = invalidateTile(m_tiles[num], num);
-}
-
-Q_INT32 KisTileMgr::width() const
-{
-	return m_width;
-}
-
-Q_INT32 KisTileMgr::height() const
-{
-	return m_height;
-}
-
-Q_INT32 KisTileMgr::depth() const
-{
-	return m_depth;
-}
-
-Q_UINT32 KisTileMgr::nrows() const
-{
-	return m_ntileRows;
-}
-
-Q_UINT32 KisTileMgr::ncols() const
-{
-	return m_ntileCols;
-}
-
-bool KisTileMgr::empty() const
-{
-	return m_tiles.empty();
 }
 
 Q_UINT32 KisTileMgr::memSize()

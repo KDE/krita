@@ -1,4 +1,4 @@
-INCLUDES  = -I$(srcdir)/../ -I$(srcdir)/../visitors/  -I$(srcdir)/../tiles/ $(KOFFICE_INCLUDES) -I$(interfacedir) \
+INCLUDES  = -I$(srcdir)/../ -I$(srcdir)/../color_strategy -I$(srcdir)/../visitors/  -I$(srcdir)/../tiles/ $(KOFFICE_INCLUDES) -I$(interfacedir) \
 	$(KOPAINTER_INCLUDES) $(LIBMAGICK_CPPFLAGS)  $(all_includes)
 
 noinst_LTLIBRARIES = libkiscorebuilder.la

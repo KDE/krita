@@ -30,6 +30,10 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_render.h"
+#include "kis_image.h"
+#include "kistilemgr.h"
+#include "kis_strategy_colorspace.h"
+#include "kis_colorspace_factory.h"
 
 class QImage;
 class QSize;
@@ -102,6 +106,9 @@ public:
 
         void data(KisTileMgrSP mgr);
 
+	/** This function convert to a different colorspace
+		*/
+	void convertTo(const enumImgType& imgType);
 	QImage convertToImage();
 
         QString name();
@@ -251,9 +258,6 @@ signals:
         void positionChanged(KisPaintDeviceSP device);
         void ioProgress(Q_INT8 percentage);
 
-protected:
-        void width(Q_INT32 w);
-        void height(Q_INT32 h);
 
 private:
         KisPaintDevice& operator=(const KisPaintDevice&);
@@ -266,15 +270,12 @@ private:
         bool m_visible;
         Q_INT32 m_x;
         Q_INT32 m_y;
-        Q_INT32 m_width;
-        Q_INT32 m_height;
         Q_INT32 m_depth;
         Q_INT32 m_offX;
         Q_INT32 m_offY;
         Q_INT32 m_offW;
         Q_INT32 m_offH;
         Q_INT32 m_quantumSize;
-        enumImgType m_imgType;
         bool m_alpha;
         QPixmap m_projection;
         bool m_projectionValid;
@@ -284,6 +285,168 @@ private:
 	KisStrategyColorSpaceSP m_colorStrategy;
 };
 
+inline KisTileMgrSP KisPaintDevice::tiles() const
+{
+        return m_tiles;
+}
+
+inline Q_INT32 KisPaintDevice::depth() const
+{
+        return m_depth;
+}
+
+inline KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
+{
+        return KisColorSpaceFactoryInterface::singleton() -> create(type());
+}
+
+inline QImage KisPaintDevice::convertToImage()
+{
+	return colorStrategy() -> convertToImage(data(), m_depth, 0, 0, width(), height());
+}
+
+inline KisTileMgrSP KisPaintDevice::data()
+{
+	return m_tiles;
+}
+
+inline const KisTileMgrSP KisPaintDevice::data() const
+{
+        return m_tiles;
+}
+
+inline KisTileMgrSP KisPaintDevice::shadow()
+{
+        return m_shadow;
+}
+
+inline const KisTileMgrSP KisPaintDevice::shadow() const
+{
+        return m_shadow;
+}
+
+inline Q_INT32 KisPaintDevice::quantumSize() const
+{
+        return 0;
+}
+
+inline Q_INT32 KisPaintDevice::quantumSizeWithAlpha() const
+{
+        return 0;
+}
+
+inline QRect KisPaintDevice::bounds() const
+{
+        return QRect(m_x, m_y, width(), height());
+}
+
+inline Q_INT32 KisPaintDevice::x() const
+{
+        return m_x;
+}
+
+inline void KisPaintDevice::setX(Q_INT32 x)
+{
+        m_x = x;
+}
+
+inline Q_INT32 KisPaintDevice::y() const
+{
+        return m_y;
+}
+
+inline void KisPaintDevice::setY(Q_INT32 y)
+{
+        m_y = y;
+}
+
+inline Q_INT32 KisPaintDevice::width() const
+{
+        return data()->width();
+}
+
+inline Q_INT32 KisPaintDevice::height() const
+{
+        return data()->height();
+}
+
+inline const bool KisPaintDevice::visible() const
+{
+        return m_visible;
+}
+
+inline void KisPaintDevice::visible(bool v)
+{
+        if (m_visible != v) {
+                m_visible = v;
+                emit visibilityChanged(this);
+        }
+}
+
+inline QRect KisPaintDevice::clip() const
+{
+        return QRect(m_offX, m_offY, m_offW, m_offH);
+}
+
+inline void KisPaintDevice::clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const
+{
+        if (offx && offy && offw && offh) {
+                *offx = m_offX;
+                *offy = m_offY;
+                *offw = m_offW;
+                *offh = m_offH;
+        }
+}
+
+inline void KisPaintDevice::setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh)
+{
+        m_offX = offx;
+        m_offY = offy;
+        m_offW = offw;
+        m_offH = offh;
+}
+
+inline bool KisPaintDevice::cmap(KoColorMap& cm)
+{
+        cm.clear();
+        return false;
+}
+
+inline KoColor KisPaintDevice::colorAt()
+{
+        return KoColor();
+}
+
+inline KisImageSP KisPaintDevice::image()
+{
+        return m_owner;
+}
+
+inline const KisImageSP KisPaintDevice::image() const
+{
+        return m_owner;
+}
+
+inline void KisPaintDevice::setImage(KisImageSP image)
+{
+        m_owner = image;
+}
+
+inline void KisPaintDevice::resize(const QSize& size)
+{
+        resize(size.width(), size.height());
+}
+
+inline void KisPaintDevice::resize()
+{
+        KisImageSP img = image();
+
+        if (img)
+                resize(img -> bounds().size());
+}
+inline enumImgType KisPaintDevice::type() const {
+        return data()->type();
+}
 
 
 #endif // KIS_PAINT_DEVICE_H_

@@ -71,7 +71,7 @@ public:
           Create a KisTileMgr of width and height with the specified
           colour depth.
          */
-	KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
+	KisTileMgr(Q_UINT32 depth, const enumImgType& imgType, Q_UINT32 width, Q_UINT32 height);
 
         /**
           Create a new KisTileMgr of width and height with the
@@ -83,7 +83,7 @@ public:
           different depth.
          */
 	KisTileMgr(KisTileMgr *tm,
-                   Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
+                   Q_UINT32 depth, const enumImgType& imgType, Q_UINT32 width, Q_UINT32 height);
 
         /**
           Creates a new KisTileMgr based on rhs, shares a reference
@@ -177,10 +177,16 @@ public:
          */
 	Q_INT32 depth() const;
 
+	/** This function return the type of the KisTileMgr (RGBA, CMYKA...)
+		*/
+	enumImgType type() const;
+
         /**
            Total size in memory the data managed by this KisTileMgr 
         */
 	Q_UINT32 memSize();
+	
+	
 
         /**
            Puts the x/y coordinates of the top left (?) corner
@@ -236,7 +242,46 @@ private:
 	vKisTileSP m_tiles;
 	QMutex m_mutex;
 	KisTileMediator *m_mediator;
+	enumImgType m_imgType;
 };
+
+
+inline Q_INT32 KisTileMgr::width() const
+{
+	return m_width;
+}
+
+inline Q_INT32 KisTileMgr::height() const
+{
+	return m_height;
+}
+
+inline Q_INT32 KisTileMgr::depth() const
+{
+	return m_depth;
+}
+
+inline Q_UINT32 KisTileMgr::nrows() const
+{
+	return m_ntileRows;
+}
+
+inline Q_UINT32 KisTileMgr::ncols() const
+{
+	return m_ntileCols;
+}
+
+inline bool KisTileMgr::empty() const
+{
+	return m_tiles.empty();
+}
+
+inline enumImgType KisTileMgr::type() const
+{
+	return m_imgType;
+}
+
+
 
 #endif // KISTILEMGR_H_
 

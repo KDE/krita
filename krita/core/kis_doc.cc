@@ -52,6 +52,9 @@
 #include "kis_view.h"
 #include "KIsDocIface.h"
 
+// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
+static const char * CURRENT_DTD_VERSION = "1.2";
+
 class KisCommandImageAdd : public KisCommand {
 	typedef KisCommand super;
 
@@ -311,9 +314,9 @@ QDomDocument KisDoc::saveXML()
 
 	// FIXME: implement saving of non-RGB modes.
 
-	QDomDocument doc( "image" );
-	doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-	doc.appendChild( saveImages( doc ) );
+        // This creates the DOCTYPE stuff, as well as the document-element named <image>.
+        QDomDocument doc = createDomDocument( "image", CURRENT_DTD_VERSION );
+	doc.documentElement().appendChild( saveImages( doc ) );
 
 	setModified( false );
 	return doc;
@@ -471,7 +474,7 @@ QDomElement KisDoc::saveGradientsSettings( QDomDocument &doc )
 
 bool KisDoc::completeSaving(KoStore *store)
 {
-	if (!m_currentImg)    
+	if (!m_currentImg)
 		return false;
 
 	QStringList imageNames = images();
@@ -488,7 +491,7 @@ bool KisDoc::completeSaving(KoStore *store)
 			KisLayerSP lay = *it;
 			QString image = QString("image%1").arg(imageNumbers);
 			QString layerName;
-			
+
 			if (layerNumbers == 0)
 				layerName = QString::fromLatin1("background");
 			else
@@ -543,7 +546,7 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
 	kdDebug(0) << "KisDoc::loadXML() leaving succesfully" << endl;
 	return true;
 }
- 
+
 // load images
 bool KisDoc::loadImages(QDomElement& element)
 {
@@ -635,7 +638,7 @@ bool KisDoc::loadImgSettings(QDomElement& elem)
 
 	KisImageSP img = newImage(name, w, h, colorMode, bd);
 
-	if (!img) 
+	if (!img)
 		return false;
 
 	img -> setAuthor(elem.attribute("author"));
@@ -788,7 +791,7 @@ void KisDoc::renameImage(const QString& oldName, const QString& newName)
 			break;
 		}
 	}
-    
+
 	if (m_undo)
 		addCommand(new KisCommandImageMv(this, newName, oldName));
 
@@ -807,7 +810,7 @@ QStringList KisDoc::images()
 		kdDebug() << "(*it) -> name() == " << (*it) -> name() << endl;
 		lst.append((*it) -> name());
 	}
-    
+
 	return lst;
 }
 
@@ -846,7 +849,7 @@ const KisView* KisDoc::currentView() const
 
 QString KisDoc::currentImgName()
 {
-	if (m_currentImg) 
+	if (m_currentImg)
 		return m_currentImg -> name();
 
 	return QString("");
@@ -939,12 +942,12 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 	KisImageSP img = currentImg();
 	QImage cI;
 
-	if (!img) 
+	if (!img)
 		return false;
 
 	KisLayerSP lay = img -> getCurrentLayer();
 
-	if (!lay) 
+	if (!lay)
 		return false;
 
 	if (qimg -> depth() < 16) {
@@ -1056,12 +1059,12 @@ bool KisDoc::LayerToQtImage(QImage *qimg, const QRect& clipRect)
 
 	KisImageSP img = currentImg();
 
-	if (!img)  
+	if (!img)
 		return false;
 
 	KisLayerSP lay = img -> getCurrentLayer();
 
-	if (!lay)  
+	if (!lay)
 		return false;
 
 	// this may not always be zero, but for currentImg
@@ -1207,7 +1210,7 @@ void KisDoc::removeImage(KisImageSP img)
 			m_images.erase(it);
 			break;
 		}
-	
+
 
 	if (m_images.empty()) {
 		unsetCurrentImage();

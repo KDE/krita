@@ -72,7 +72,6 @@ protected:
 private:
         void render(QPainter &painter, KisImageSP image);
         void updateView(QPoint delta);
-        void clampDelta(QPoint& delta);
 
         KisLayerSP m_sourcelayer, m_clippedview;
         KisImageSP m_image;

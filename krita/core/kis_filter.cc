@@ -48,7 +48,9 @@ void KisFilter::refreshPreview( )
 	KisLayerSP layer = m_dialog -> previewWidget() -> getLayer();
 	KisFilterConfiguration* config = configuration(m_widget);
 	//AUTOLAYER QRect rect(0, 0, layer -> width(), layer -> height());
-	QRect rect(0, 0, 1, 1);
+	Q_INT32 x, y, w, h;
+	layer -> extent( x, y, w, h );
+	QRect rect = QRect(x, y, w, h);
 	process((KisPaintDeviceSP) layer, config, rect, 0 );
 	m_dialog->previewWidget() -> slotUpdate();
 }

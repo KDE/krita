@@ -70,7 +70,7 @@ void KisPreviewView::updateView(QPoint delta)
 	KisPaintDeviceSP pd(m_sourcelayer.data());
 
 	gc.begin(m_clippedview.data());
-	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, delta.x(), delta.y(), -1, -1);
+	gc.bitBlt(0, 0, COMPOSITE_COPY, pd, delta.x(), delta.y(), m_image->width(), m_image->height());
 	gc.end();
 }
 
@@ -87,18 +87,14 @@ void KisPreviewView::setSourceLayer(KisLayerSP lay)
 
 	m_image -> setProfile(lay -> profile());
 	m_clippedview = new KisLayer(m_image, m_image -> nextLayerName(), OPACITY_OPAQUE);
-	gc.begin(m_clippedview.data());
-	
-	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, m_pos.x(), m_pos.y(), -1, -1);
-	gc.end();
 	m_image -> add(m_clippedview, -1);
-	update();
+	updateView();
+	repaint(false);
 	emit updated();
 }
 
 void KisPreviewView::setZoom(double zoom) {
 	m_zoom = zoom;
-	clampDelta(m_pos);
 	setSourceLayer(m_sourcelayer); // so that it automatically resizes m_clippedview
 }
 
@@ -115,7 +111,7 @@ void KisPreviewView::zoomOut() {
 }
 
 void KisPreviewView::updatedPreview() {
-	update();
+	repaint(false);
 }
 
 void KisPreviewView::render(QPainter &painter, KisImageSP image)
@@ -134,20 +130,6 @@ void KisPreviewView::render(QPainter &painter, KisImageSP image)
 
 }
 
-void KisPreviewView::clampDelta(QPoint& delta)
-{
-#if 0 //AUTOLAYER
-    if (delta.x() < 0)
-        delta.rx() = 0;
-    if (delta.y() < 0)
-        delta.ry() = 0;
-    if (delta.x() + size().width() / m_zoom >= m_sourcelayer -> width())
-        delta.rx() = m_sourcelayer -> width() - static_cast<int>(size().width() / m_zoom) - 1;
-    if (delta.y() + size().height() / m_zoom >= m_sourcelayer -> height())
-        delta.ry() = m_sourcelayer -> height() - static_cast<int>(size().height() / m_zoom) - 1;
-#endif // AUTOLAYER
-}
-
 void KisPreviewView::slotStartMoving(QPoint startDrag)
 {
 	m_startDrag = startDrag;
@@ -157,15 +139,13 @@ void KisPreviewView::slotMoving(QPoint zoomedPos)
 {
 	QPoint delta = m_pos - (zoomedPos - m_startDrag);
 	m_moving = true;
-	clampDelta(delta);
 	updateView(delta);
-	update();
+	repaint(false);
 }
 
 void KisPreviewView::slotMoved(QPoint zoomedPos)
 {
 	m_pos -= zoomedPos - m_startDrag;
-	clampDelta(m_pos);
 	m_moving = false;
 
 	emit updated();
@@ -205,7 +185,6 @@ void KisPreviewView::mouseReleaseEvent(QMouseEvent * e)
 }
 
 void KisPreviewView::resizeEvent(QResizeEvent *) {
-	clampDelta(m_pos);
 	setSourceLayer(m_sourcelayer); // so that it automatically resizes m_clippedview
 }
 

@@ -51,6 +51,7 @@ public:
 
 	virtual void setupAction(QObject *collection) = 0;
 
+	virtual QString settingsName() const;
 	virtual QDomElement saveSettings(QDomDocument& doc) const;
 	virtual bool loadSettings(QDomElement& elem);
 

@@ -1,7 +1,8 @@
 /*
- *  kis_gradient.h - part of KImageShop
+ *  kis_painter.h - part of KImageShop
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,10 +42,10 @@ public:
     void clearRectangle(QRect & rect);
     void drawLine(int x1, int y1, int x2, int y2);
     void drawRectangle(int x, int y, int w, int h);
-    void drawRectangle(QRect & rectint);    
+    void drawRectangle(const QRect& rectint);    
     void drawEllipse(int x, int y, int w, int h);
-    void drawEllipse(QRect & rect);
-    void drawPolygon(QPointArray & points, QRect & rect);
+    void drawEllipse(const QRect& rect);
+    void drawPolygon(const QPointArray& points, const QRect& rect);
 
     void  setLineThickness(int t)    { lineThickness = t;}
     void  setLineOpacity(int o)      { lineOpacity = o;}

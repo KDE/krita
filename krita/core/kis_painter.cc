@@ -1,7 +1,8 @@
 /*
- *   kis_painter.cc - part of Krayon
+ *  kis_painter.cc - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -279,8 +280,7 @@ void KisPainter::drawLine(int x1, int y1, int x2, int y2)
         kdDebug() << "error drawing line" << endl;
 }
 
-
-void KisPainter::drawRectangle(QRect & rect)
+void KisPainter::drawRectangle(const QRect& rect)
 {
     QPainter p(&painterPixmap);
 
@@ -309,41 +309,17 @@ void KisPainter::drawRectangle(QRect & rect)
         kdDebug() << "error drawing rectangle" << endl;
 }
 
-
 void KisPainter::drawRectangle(int x, int y, int w, int h)
 {
-    QPainter p(&painterPixmap);
+	QRect rc(x, y, w, h);
 
-    // constructs a pen with the given line thickness
-    // color is always black - it is changed by krayon
-    // to the current fgColor when drawn to layer
-    QPen pen(Qt::black, lineThickness);
-    p.setPen(pen);
-    p.drawRect(x, y, w, h);
-
-    // constructs a brush with a solid pattern if
-    // we want to fill the rectangle
-    QBrush brush(Qt::black);
-    if(filledRectangle)
-        p.setBrush(brush);
-
-    QRect rect(x, y, w, h);
-
-    // account for line thickness in update rectangle
-    QRect ur(rect);
-    ur.setLeft(rect.left() - lineThickness);
-    ur.setTop(rect.top() - lineThickness);
-    ur.setRight(rect.right() + lineThickness);
-    ur.setBottom(rect.bottom() + lineThickness);
-
-    if(!toLayer(ur))
-        kdDebug() << "error drawing rectangle" << endl;
+	drawRectangle(rc);
 }
 
 /*
     draw ellipse inside given rectangle
 */
-void KisPainter::drawEllipse(QRect & rect)
+void KisPainter::drawEllipse(const QRect& rect)
 {
     QPainter p(&painterPixmap);
 
@@ -409,7 +385,7 @@ void KisPainter::drawEllipse(int x, int y, int w, int h)
 /*
     draw polygon
 */
-void KisPainter::drawPolygon(QPointArray & points, QRect & rect)
+void KisPainter::drawPolygon(const QPointArray& points, const QRect& rect)
 {
     QPainter p( &painterPixmap );
 

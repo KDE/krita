@@ -458,5 +458,10 @@ bool KisTool::setClip()
 	return false;
 }
 
+QString KisTool::settingsName() const
+{
+	return "tool";
+}
+
 #include "kis_tool.moc"
 

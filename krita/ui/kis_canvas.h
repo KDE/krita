@@ -53,6 +53,25 @@ protected:
 	virtual void wheelEvent(QWheelEvent *event);
 	virtual void keyPressEvent(QKeyEvent *event);
 	virtual void keyReleaseEvent(QKeyEvent *event);
+
+#ifdef Q_WS_X11
+	// On X11 systems, Qt throws away mouse move events if the application
+	// is unable to keep up with them. We override this behaviour so that
+	// we receive all move events, so that painting follows the mouse's motion
+	// accurately.
+	void initX11Support();
+	bool x11Event(XEvent *event);
+	int translateX11ButtonState(int state);
+
+	static bool X11SupportInitialised;
+
+	// Modifier masks for alt/meta - detected at run-time
+	static long X11AltMask;
+	static long X11MetaMask;
+
+	int m_lastRootX;
+	int m_lastRootY;
+#endif
 };
 
 #endif // KIS_CANVAS_H_

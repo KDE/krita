@@ -78,7 +78,7 @@ KritaExample::~KritaExample()
 {
 }
 
-KisFilterInvert::KisFilterInvert(KisView * view) : KisFilter(sname(), view)
+KisFilterInvert::KisFilterInvert(KisView * view) : KisFilter(name(), view)
 {
 }
 

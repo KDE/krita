@@ -20,15 +20,16 @@
 #define _KIS_AUTOGRADIENT_H_
 
 #include "kis_wdg_autogradient.h"
-#include "kis_brush.h"
+#include "kis_gradient.h"
 
-class KisAutogradientResource : public KisBrush
+class KisAutogradientResource : public KisGradient
 {
 	public:
-		KisAutogradientResource() : KisBrush("")
+		KisAutogradientResource() : KisGradient("")
 		{
-			setBrushType(MASK);
 		}
+	public:
+		void createSegment( QString interpolation, QString colorInterpolation, double startOffset, double endOffset, double middleOffset, QColor left, QColor right );
 	public:
 		virtual bool loadAsync() { return false; };
 };
@@ -41,7 +42,7 @@ class KisAutogradient : public KisWdgAutogradient
 	signals:
 		void activatedResource(KisResource *r);
 	private:
-		KisAutogradientResource* m_textBrushRessource;
+		KisAutogradientResource* m_autogradientResource;
 };
 
 #endif

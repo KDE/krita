@@ -19,7 +19,10 @@
 #ifndef _KIS_WDG_GRADIENT_SLIDER_H_
 #define _KIS_WDG_GRADIENT_SLIDER_H_
 
+#include <kpixmapio.h>
 #include <qwidget.h>
+
+class KisAutogradientResource;
 
 class KisGradientSliderWidget : public QWidget
 {
@@ -27,6 +30,12 @@ class KisGradientSliderWidget : public QWidget
 		KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, WFlags f = 0);
 	public:
 		virtual void paintEvent ( QPaintEvent * );
+		inline void setGradientResource( KisAutogradientResource* agr) { m_autogradientResource = agr; };
+	protected:
+		virtual void mouseReleaseEvent ( QMouseEvent * e );
+	private:
+		KPixmapIO m_pixmapIO;
+		KisAutogradientResource* m_autogradientResource;
 };
 
 #endif

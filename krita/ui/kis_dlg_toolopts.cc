@@ -46,7 +46,7 @@ ToolOptionsDialog::ToolOptionsDialog( tooltype tt, ToolOptsStruct ts,
 {
     setCaption( i18n("Current Tool Options") );
     QVBox *page = makeVBoxMainWidget();
-    QVBoxLayout* layout = new QVBoxLayout( page, 4 );
+    //QVBoxLayout* layout = new QVBoxLayout( page, 4 );
 
     // use tooltype enumerator -
     switch(tt)
@@ -57,57 +57,57 @@ ToolOptionsDialog::ToolOptionsDialog( tooltype tt, ToolOptsStruct ts,
         case tt_rectangletool:
 
             pLineToolTab = new LineToolTab(ts,page);
-            layout->addWidget(pLineToolTab);
+            //layout->addWidget(pLineToolTab);
             break;
 
         case tt_brushtool:
 
             pBrushToolTab = new BrushToolTab(ts,page);
-            layout->addWidget(pBrushToolTab);
+            //layout->addWidget(pBrushToolTab);
             break;
 
         case tt_airbrushtool:
 
             pAirBrushToolTab = new AirBrushToolTab(ts,page);
-            layout->addWidget(pAirBrushToolTab);
+            //layout->addWidget(pAirBrushToolTab);
             break;
 
         case tt_pentool:
 
             pPenToolTab = new PenToolTab(ts,page);
-            layout->addWidget(pPenToolTab);
+            //layout->addWidget(pPenToolTab);
             break;
 
         case tt_erasertool:
 
             pEraserToolTab = new EraserToolTab(ts,page);
-            layout->addWidget(pEraserToolTab);
+            //layout->addWidget(pEraserToolTab);
             break;
 
         case tt_filltool:
         case tt_colorchangertool:
 
             pFillToolTab = new FillToolTab(ts,page);
-            layout->addWidget(pFillToolTab);
+            //layout->addWidget(pFillToolTab);
             break;
 
         case tt_stamptool:
         case tt_pastetool:
 
             pStampToolTab = new StampToolTab(ts,page);
-            layout->addWidget(pStampToolTab);
+            //layout->addWidget(pStampToolTab);
             break;
 
         case tt_polygontool:
 
             pPolygonToolTab = new PolygonToolTab(ts, page);
-            layout->addWidget(pPolygonToolTab);
+            //layout->addWidget(pPolygonToolTab);
             break;
 
         default:
             // we really should show global option settings here
             pNullToolTab = new NullToolTab(ts,page);
-            layout->addWidget(pNullToolTab);
+            //layout->addWidget(pNullToolTab);
             break;
     }
 
@@ -132,7 +132,7 @@ NullToolTab::NullToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts,  _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
+    QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 4);
 
     mpThickness = new KIntNumInput( ts.lineThickness, this );
@@ -166,7 +166,7 @@ LineToolTab::LineToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts,  _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
+    QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 4);
 
     mpThickness = new KIntNumInput( ts.lineThickness, this );
@@ -205,7 +205,7 @@ FillToolTab::FillToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts, _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
+    QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
     mpOpacity = new KIntNumInput( ts.opacity, this );
@@ -234,7 +234,7 @@ PenToolTab::PenToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts, _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
+    QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 4);
 
     mpOpacity = new KIntNumInput( ts.opacity, this );
@@ -268,7 +268,7 @@ BrushToolTab::BrushToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts, _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
+    QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
     mpOpacity = new KIntNumInput( ts.opacity, this );
@@ -295,7 +295,7 @@ EraserToolTab::EraserToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts, _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
+    QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
     mpOpacity = new KIntNumInput( ts.opacity, this );
@@ -320,7 +320,7 @@ AirBrushToolTab::AirBrushToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts, _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
+    QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
     mpOpacity = new KIntNumInput( ts.opacity, this );
@@ -347,7 +347,7 @@ StampToolTab::StampToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts, _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
+    QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 2);
 
     mpOpacity = new KIntNumInput( ts.opacity, this );
@@ -368,7 +368,7 @@ PolygonToolTab::PolygonToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts, _parent, _name )
 {
-    QVBoxLayout *lout = new QVBoxLayout( this, 8 );
+    QVBoxLayout *lout = new QVBoxLayout( _parent, 8 );
     QGridLayout *grid = new QGridLayout( lout, 10, 30 );
 
     QButtonGroup *group = new QVButtonGroup( this );

@@ -34,23 +34,17 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, int opacity,
 {
 	QLabel *lbl;
         QVBox *page = makeVBoxMainWidget();
-	QGridLayout *layout = new QGridLayout(page, 4, 2, 15, 7);
 
-	m_name = new KLineEdit(deviceName, this);
-	layout -> addWidget(m_name, 0, 1);
+	m_name = new KLineEdit(deviceName, page);
 
-	lbl = new QLabel( m_name, i18n("Name:"), this);
-	layout -> addWidget(lbl, 0, 0);
+	lbl = new QLabel( m_name, i18n("Name:"), page);
 
-	m_opacity = new IntegerWidget(0, 100, this);
+	m_opacity = new IntegerWidget(0, 100, page);
 	m_opacity -> setValue(opacity * 100 / USHRT_MAX);
 	m_opacity -> setTickmarks(QSlider::Below);
 	m_opacity -> setTickInterval(13);
-	layout -> addWidget(m_opacity, 1, 1);
 
-	lbl = new QLabel(m_opacity, i18n("Opacity:"), this);
-	layout -> addWidget(lbl, 1, 0);
-	layout -> setRowStretch(2, 1);
+	lbl = new QLabel(m_opacity, i18n("Opacity:"), page);
 }
 
 KisPaintPropertyDlg::~KisPaintPropertyDlg()

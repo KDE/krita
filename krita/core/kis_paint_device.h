@@ -166,6 +166,8 @@ public:
         void resize(Q_INT32 w, Q_INT32 h);
         void resize(const QSize& size);
         void resize();
+	void scale(double sx, double sy);
+
 
 	/**
 	   Apply the transformation matrix _in place_.

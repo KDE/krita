@@ -39,7 +39,7 @@ public:
 	Q_INT32 imgHeight() const;
 
 private slots:
-	void imgTypeCliked(int id);
+	void imgTypeClicked(int id);
 
 private:
 	QSpinBox *m_widthSpin;

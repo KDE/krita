@@ -91,9 +91,6 @@ void KisAlphaMask::copyAlpha(const QImage& img)
 	m_scaledHeight = img.height();
 	for (int y = 0; y < img.height(); y++) {
 		for (int x = 0; x < img.width(); x++) {
-			// Wish it were this simple: this makes a mask, like the Gimp uses, but I like my
-			// own solution better, and so do my kids
-			// m_data.push_back(255 - qAlpha(img.pixel(x,y)));
                         QRgb c = img.pixel(x,y);
                         QUANTUM a = (qGray(c) * qAlpha(c)) / 255;
 			m_data.push_back(a);
@@ -114,10 +111,6 @@ void KisAlphaMask::computeAlpha(const QImage& img)
 	// invert it, because 255, 255, 255 is white, which is
 	// completely transparent, but 255 corresponds to
 	// OPACITY_OPAQUE.
-	//
-	// If the alpha value is not 255, or the r,g and b values are
-	// not the same, we have a real coloured brush, and are
-	// knackered for the nonce.
 
 	if (!img.allGray()) {
 		copyAlpha(img);

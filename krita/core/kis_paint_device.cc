@@ -384,6 +384,7 @@ enumImgType KisPaintDevice::typeWithAlpha() const
 
 QImage KisPaintDevice::convertToImage()
 {
+	return QImage();
 }
 
 KisTileMgrSP KisPaintDevice::data()
@@ -667,6 +668,14 @@ void KisPaintDevice::resize()
 
         if (img)
                 resize(img -> bounds().size());
+}
+
+void KisPaintDevice::scale(double sx, double sy) 
+{
+	QWMatrix m;
+	m.scale(sx, sy);
+	transform(m);
+
 }
 
 // XXX: also allow transform on part of paint device?

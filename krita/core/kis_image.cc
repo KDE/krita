@@ -272,6 +272,15 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height, cons
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h)
 {
+	kdDebug() << "KisImage::resize. From: (" 
+		  << m_width 
+		  << ", " 
+		  << m_height
+		  << ") to (" 
+		  << w 
+		  << ", " 
+		  << h 
+		  << ")\n";
 	if (m_adapter && m_adapter -> undo())
 		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, m_width, m_height));
 
@@ -287,6 +296,25 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 void KisImage::resize(const QRect& rc)
 {
 	resize(rc.width(), rc.height());
+}
+
+void KisImage::scale(double sx, double sy) 
+{
+	if (m_layers.empty()) return; // Nothing to scale
+
+	// New image size. XXX: Pass along to discourage rounding errors?
+	Q_INT32 w, h;	
+	w = (Q_INT32)(( m_width * sx) + 0.5);
+	h = (Q_INT32)(( m_height * sy) + 0.5); 
+	
+	vKisLayerSP_it it;
+	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
+		KisLayerSP layer = (*it);
+		kdDebug() << "Scaling layer " << layer -> name() << "\n";
+		layer -> scale(sx, sy);
+	}
+
+	// resize(w, h);
 }
 
 enumImgType KisImage::imgType() const
@@ -359,18 +387,20 @@ void KisImage::unit(const KoUnit::Unit& u)
 	m_unit = u;
 }
 
-void KisImage::resolution(double xres, double yres)
+double KisImage::xRes()
+{
+	return m_xres;
+}
+
+double KisImage::yRes()
+{
+	return m_yres;
+}
+
+void KisImage::setResolution(double xres, double yres)
 {
 	m_xres = xres;
 	m_yres = yres;
-}
-
-void KisImage::resolution(double *xres, double *yres)
-{
-	if (xres && yres) {
-		*xres = m_xres;
-		*yres = m_yres;
-	}
 }
 
 Q_INT32 KisImage::width() const
@@ -398,29 +428,29 @@ bool KisImage::empty() const
 	return m_layers.size() > 0;
 }
 
-bool KisImage::colorMap(KoColorMap& cm)
-{
-	if (m_clrMap.empty())
-		return false;
+// bool KisImage::colorMap(KoColorMap& cm)
+// {
+// 	if (m_clrMap.empty())
+// 		return false;
 
-	cm = m_clrMap;
-	return true;
-}
+// 	cm = m_clrMap;
+// 	return true;
+// }
 
-KisChannelSP KisImage::mask()
-{
-	return m_selectionMask;
-}
+// KisChannelSP KisImage::mask()
+// {
+// 	return m_selectionMask;
+// }
 
-KoColor KisImage::color() const
-{
-	return KoColor();
-}
+// KoColor KisImage::color() const
+// {
+// 	return KoColor();
+// }
 
-KoColor KisImage::transformColor() const
-{
-	return KoColor();
-}
+// KoColor KisImage::transformColor() const
+// {
+// 	return KoColor();
+// }
 
 KisTileMgrSP KisImage::shadow() const
 {

@@ -66,6 +66,7 @@ public:
 	QString nextLayerName() const;
 	void resize(Q_INT32 w, Q_INT32 h);
 	void resize(const QRect& rc);
+	void scale(double sx, double sy);
 	void enableUndo(KoCommandHistory *history);
 
 	enumImgType imgType() const;
@@ -78,8 +79,10 @@ public:
 	KoUnit::Unit unit() const;
 	void unit(const KoUnit::Unit& u);
 
-	void resolution(double xres, double yres);
-	void resolution(double *xres, double *yres);
+	// Resolution of the image == XXX: per inch?
+        double xRes();
+	double yRes();
+	void setResolution(double xres, double yres);
 
 	Q_INT32 width() const;
 	Q_INT32 height() const;
@@ -87,10 +90,10 @@ public:
 	Q_UINT32 depth() const;
 	bool alpha() const;
 	bool empty() const;
-	bool colorMap(KoColorMap& cm);
-	KisChannelSP mask();
-	KoColor color() const;
-	KoColor transformColor() const;
+// 	bool colorMap(KoColorMap& cm);
+// 	KisChannelSP mask();
+// 	KoColor color() const;
+// 	KoColor transformColor() const;
 	KisTileMgrSP shadow() const;
 
 	void activeComponent(CHANNELTYPE type, bool active);

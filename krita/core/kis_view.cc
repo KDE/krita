@@ -1578,16 +1578,16 @@ void KisView::mirrorLayerY()
 void KisView::scaleLayer(double sx, double sy)
 {
 	if (!currentImg()) return;
+
 	KisLayerSP layer = currentImg() -> activeLayer();
 	if (!layer) return;
-	QWMatrix m;
-	m.scale(sx, sy);
-	layer -> transform(m);
+
+	layer -> scale(sx, sy);
+
 	layersUpdated();
 	resizeEvent(0);
 	currentImg() -> invalidate();
 	updateCanvas();
-
 }
 
 void KisView::add_new_image_tab()
@@ -2492,49 +2492,26 @@ void KisView::layerTransform()
 
 void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h) 
 {
-        KisImageSP img = currentImg();
+        if (!currentImg()) return;
 
-        if (img) {
-                img -> resize(w, h);
-                img -> invalidate();
-                resizeEvent(0);
-                layersUpdated();
-                canvasRefresh();
-        }
+	currentImg() -> resize(w, h);
 
+	currentImg() -> invalidate();
+	resizeEvent(0);
+	layersUpdated();
+	canvasRefresh();
 }
 
 void KisView::scaleCurrentImage(double sx, double sy)
 {
 	if (!currentImg()) return;
-	
-	// New image size. XXX: Pass along to discourage rounding errors?
-	Q_INT32 w, h;	
-	w = (currentImg() -> width() * sx) + 0.5;
-	h = (currentImg() -> height() * sy) + 0.5; 
 
+	currentImg() -> scale(sx, sy);
 
-	// Check whether we need to make the image bigger
-	if (sx > 1 && sy > 1) {
-		resizeCurrentImage(w, h);
-	}
-	else if (sx > 1 && sy <= 1) {
-		resizeCurrentImage(w, currentImg() -> height());
-	}
-	else if (sx <= 1 && sy > 1) {
-		resizeCurrentImage(currentImg() -> width(), h);
-	}
-
-	// For every layer in the image, scale the layer
-	QWMatrix m = QWMatrix();
-	m.scale(sx, sy);
-
-	
-
-	// Make the image smaller only after we've scaled all layers
-	if (sx < 1 || sy < 1) {
-		resizeCurrentImage(w, h);
-	}
+	currentImg() -> invalidate();
+	resizeEvent(0);
+	layersUpdated();
+	canvasRefresh();
 }
 
 

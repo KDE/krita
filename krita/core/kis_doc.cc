@@ -28,6 +28,7 @@
 #include <qtl.h>
 #include <qstringlist.h>
 #include <qwidget.h>
+#include <qpaintdevicemetrics.h>
 
 // KDE
 #include <dcopobject.h>
@@ -392,6 +393,7 @@ bool KisDoc::initDoc()
 		KisConfig cfg;
 		QString name = nextImageName();
 		KisImageSP img = new KisImage(this, cfg.defImgWidth(), cfg.defImgHeight(), IMAGE_TYPE_RGBA, name);
+		img -> setResolution(100, 100); // XXX
 		KisLayerSP layer = new KisLayer(img, cfg.defLayerWidth(), cfg.defLayerHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 
 		layer -> visible(true);
@@ -1042,6 +1044,7 @@ bool KisDoc::slotNewImage()
 		KisPainter gc;
 
 		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), dlg.imgType(), nextImageName());
+		img -> setResolution(100.0, 100.0); // XXX needs to be added to dialog
 		layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 		gc.begin(layer.data());
 		gc.fillRect(0, 0, layer -> width(), layer -> height(), c, opacity);
@@ -1091,8 +1094,18 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 		if (transparent)
 			painter.eraseRect(rect);
 
-		if (zoomX != 1.0 || zoomY != 1.0)
-			painter.scale(zoomX, zoomY);
+
+#if 0
+  		// XXX: re-activate when rest of Krita uses the image's resolution
+		// Compute the zoom based on the resolution of the screen and the image
+ 		QPaintDeviceMetrics m = QPaintDeviceMetrics(painter.device());
+ 		
+ 		// XXX: also make dpi a config option?
+ 		zoomX = (m.logicalDpiX() / m_projection -> xRes()) * zoomX;
+ 		zoomY = (m.logicalDpiY() / m_projection -> yRes()) * zoomY;
+#endif
+ 		if (zoomX != 1.0 || zoomY != 1.0)
+ 			painter.scale(zoomX, zoomY);
 
 		for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
 			for (x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
@@ -1111,6 +1124,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
                                                      QMIN(x2 - x, RENDER_WIDTH),
                                                      QMIN(y2 - y, RENDER_HEIGHT));
 
+		// Draw rectangular selections.
 		if ((selection = m_projection -> selection())) {
 			QPen pen(Qt::DotLine);
 			QRect rc = selection -> bounds();

@@ -66,8 +66,8 @@ private slots:
 	void slotConstrainToggled(bool b);
 private:
 
-	void disconnectAll();
-	void connectAll();
+	void blockAll();
+	void unblockAll();
 
 	WdgImageSize * m_page;
 	double m_oldW, m_oldH;   // always in pixels

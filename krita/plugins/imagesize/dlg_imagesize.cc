@@ -54,7 +54,7 @@ DlgImageSize::DlgImageSize( QWidget *  parent,
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
 
-	connectAll();
+	unblockAll();
 
 
 	connect(this, SIGNAL(okClicked()),
@@ -83,13 +83,13 @@ DlgImageSize::~DlgImageSize()
 
 void DlgImageSize::setWidth(Q_UINT32 w) 
 {
-	disconnectAll();
+	blockAll();
 
 	m_page -> intWidth -> setValue(w);
 	m_oldW = w;
 	m_origW = w;
 
-	connectAll();
+	unblockAll();
 }
 
 void DlgImageSize::setMaximumWidth(Q_UINT32 w)
@@ -105,13 +105,13 @@ Q_INT32 DlgImageSize::width()
 
 void DlgImageSize::setHeight(Q_UINT32 h)
 {
-	disconnectAll();
+	blockAll();
 	
 	m_page -> intHeight -> setValue(h);
 	m_oldH = h;
 	m_origH = h;
 
-	connectAll();
+	unblockAll();
 }
 
 
@@ -153,7 +153,7 @@ void DlgImageSize::slotWidthChanged(int w)
 {
 	if (m_page -> chkConstrain -> isChecked()) {
 
-		disconnectAll();
+		blockAll();
 
 		if (m_page -> cmbScaleTypeW -> currentItem() == PERCENT) {
 			m_oldH = (m_origH * w) / 100.0;
@@ -180,7 +180,7 @@ void DlgImageSize::slotWidthChanged(int w)
 			}
 		}
 
-		connectAll();
+		unblockAll();
 	}
 	if (m_page -> cmbScaleTypeW -> currentItem() == PERCENT) {
 		m_oldW = (m_origW * w) / 100;
@@ -195,7 +195,7 @@ void DlgImageSize::slotHeightChanged(int h)
 {
 	if (m_page -> chkConstrain -> isChecked()) {
 
-		disconnectAll();
+		blockAll();
 
 		if (m_page -> cmbScaleTypeH -> currentItem() == PERCENT) {
 			m_oldW = (m_origW * h) / 100.0;
@@ -221,7 +221,7 @@ void DlgImageSize::slotHeightChanged(int h)
 			}
 		}
 
-		connectAll();
+		unblockAll();
 	}
 
 	if (m_page -> cmbScaleTypeH -> currentItem() == PERCENT) {
@@ -235,7 +235,7 @@ void DlgImageSize::slotHeightChanged(int h)
 
 void DlgImageSize::slotScaleTypeWChanged(int i)
 {
-	disconnectAll();
+	blockAll();
 
 	if (i == PERCENT) {
 		m_page -> intWidth -> setValue((int)round((m_oldW / m_origW) * 100));
@@ -244,13 +244,13 @@ void DlgImageSize::slotScaleTypeWChanged(int i)
 		m_page -> intWidth -> setValue((int)round(m_oldW));
 	}
 
-	connectAll();
+	unblockAll();
 }
 
 void DlgImageSize::slotScaleTypeHChanged(int i)
 {
 
-	disconnectAll();
+	blockAll();
 
 	if (i == PERCENT) {
 		m_page -> intHeight -> setValue((int)round((m_oldH / m_origH) * 100));
@@ -259,7 +259,7 @@ void DlgImageSize::slotScaleTypeHChanged(int i)
 		m_page -> intHeight -> setValue((int)round(m_oldH));
 	}
 
-	connectAll();
+	unblockAll();
 }
 
 void DlgImageSize::slotConstrainToggled(bool b) 
@@ -268,17 +268,18 @@ void DlgImageSize::slotConstrainToggled(bool b)
 	m_origH = m_oldH;
 }
 
-void DlgImageSize::disconnectAll()
+void DlgImageSize::blockAll()
 {
+	// XXX: more efficient to use blockSignals?
 	m_page -> intWidth -> disconnect();
 	m_page -> intHeight -> disconnect();
 	m_page -> cmbScaleTypeW -> disconnect();
 	m_page -> cmbScaleTypeH -> disconnect();
 }
 
-void DlgImageSize::connectAll()
+void DlgImageSize::unblockAll()
 {
-
+	// XXX: more efficient to use blockSignals?
 	connect (m_page -> intWidth, SIGNAL(valueChanged(int)),
 		 this, SLOT(slotWidthChanged(int)));
 

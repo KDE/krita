@@ -109,7 +109,7 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 max
 		break;
 	}
 
-	connect(grp, SIGNAL(clicked(int)), SLOT(imgTypeCliked(int)));
+	connect(grp, SIGNAL(clicked(int)), SLOT(imgTypeClicked(int)));
 
 	layout -> addWidget(grp);
 
@@ -127,7 +127,7 @@ KisDlgCreateImg::~KisDlgCreateImg()
 {
 }
 
-void KisDlgCreateImg::imgTypeCliked(int id)
+void KisDlgCreateImg::imgTypeClicked(int id)
 {
 	m_type = static_cast<enumImgType>(id);
 }

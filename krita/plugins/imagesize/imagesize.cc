@@ -94,10 +94,8 @@ void ImageSize::slotImageSize()
 	dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
 	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
 
-	double x, y;
-	image -> resolution(&x, &y);
-	dlgImageSize -> setXRes(x);
-	dlgImageSize -> setYRes(y);
+	dlgImageSize -> setXRes(image -> xRes());
+	dlgImageSize -> setYRes(image -> yRes());
 		
 	if (dlgImageSize -> exec() == QDialog::Accepted) {
 		Q_INT32 w = dlgImageSize -> width();
@@ -132,10 +130,8 @@ void ImageSize::slotLayerSize()
 	dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
 	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
 
-	double x, y;
-	image -> resolution(&x, &y);
-	dlgImageSize -> setXRes(x);
-	dlgImageSize -> setYRes(y);
+	dlgImageSize -> setXRes(image -> xRes());
+	dlgImageSize -> setYRes(image -> yRes());
 		
 	if (dlgImageSize -> exec() == QDialog::Accepted) {
 		Q_INT32 w = dlgImageSize -> width();

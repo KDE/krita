@@ -51,6 +51,7 @@ public:
 	virtual ~KisTool();
 
 public:
+
 	virtual void paint(QPainter& gc) = 0;
 	virtual void paint(QPainter& gc, const QRect& rc) = 0;
 	virtual void clear() = 0;

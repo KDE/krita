@@ -81,7 +81,8 @@ void ColorRange::slotActivated()
 {
 	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
 	if (!layer) return;
-	
+
+	// XXX: Non-modal dialog, it must somehow be deleted when hidden.		
 	DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");
 
 	dlgColorRange -> show();

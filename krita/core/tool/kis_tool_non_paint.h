@@ -47,9 +47,11 @@ public:
 	KisToolNonPaint();
 	virtual ~KisToolNonPaint();
 
+// CanvasObserver
 public:
 	virtual void update(KisCanvasSubject *subject);
 
+// KisTool
 public:
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);

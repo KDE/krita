@@ -52,6 +52,9 @@ public:
 			
 	/**
 	 * Returns if the pixel is selected or not. This is much faster than first building a KisPixel
+	 *
+	 * XXX: This is not correct! Selectedness is not a bool, but a range, and filters should be
+	 * able to handle that.
 	 */
 	inline bool isSelected() const {if(m_selectionIterator) return*(m_selectionIterator->rawData()); else return true;};
 	

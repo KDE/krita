@@ -73,6 +73,7 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 	
 	m_subject = view -> getCanvasSubject();
 	
+	
 	m_canvasSubject = new ColorRangeCanvasSubject(this, m_view);
 	KisID id = KisID("colorpicker", "");
 	m_picker = m_view -> toolRegistry() -> createTool((KisCanvasSubject*)m_canvasSubject, id);
@@ -83,6 +84,8 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 		m_page -> bnPickerMinus -> hide();
 		m_page -> cmbSelect -> removeItem(0);
 	}
+
+	
 	m_page = new WdgColorRange(this, "color_range");
 	setCaption(i18n("Color Range"));
 	setMainWidget(m_page);
@@ -91,6 +94,9 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 	connect(this, SIGNAL(okClicked()),
 		this, SLOT(okClicked()));
 
+	connect(this, SIGNAL(cancelClicked()),
+		this, SLOT(cancelClicked()));
+		
 	connect(m_page -> bnPickerPlus, SIGNAL(clicked()),
 		this, SLOT(slotPickerPlusClicked()));
 
@@ -126,14 +132,33 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 	m_page -> cmbSelectionPreview -> setEnabled(false);
         m_page -> sldrFuzziness->setValue( 40 );
 
-        if (m_layer) m_selection = m_layer -> selection();
+        if (m_layer)
+		m_selection = m_layer -> selection();
+	else {
+		// Show message box? Without a layer no selections...
+		hide();
+		return;
+	}
+		
+        m_transaction = new KisTransaction(i18n("Select by Color Range"), m_selection.data());
         updatePreview();
-	
+
+
+        if (m_picker) {
+        	m_oldCursor = m_subject -> setCanvasCursor(KisCursor::pickerCursor());
+		m_picker -> update(m_canvasSubject);
+		m_pickMode = PICK;
+		m_page -> cmbSelect -> setCurrentItem(0);
+		m_picker -> activate();
+		m_subject -> setCanvasCursor(KisCursor::pickerCursor());
+	}
 }
 
 DlgColorRange::~DlgColorRange()
 {
 	delete m_page;
+	delete m_picker;
+	delete m_canvasSubject;
 }
 
 
@@ -151,8 +176,17 @@ void DlgColorRange::updatePreview()
 void DlgColorRange::okClicked()
 {
 	hide();
+	m_subject -> setCanvasCursor(m_oldCursor);
+		m_subject -> undoAdapter() -> addCommand(m_transaction);
 }
 
+void DlgColorRange::cancelClicked()
+{
+	hide();
+	m_subject -> setCanvasCursor(m_oldCursor);
+	m_transaction -> unexecute();
+	// Restore the old selection.
+}
 
 void DlgColorRange::slotPickerPlusClicked()
 {

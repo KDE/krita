@@ -43,6 +43,7 @@
 #include <kis_pattern.h>
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
+#include <kis_transaction.h>
 #include <kis_tool_controller.h>
 #include <kis_tool.h>
 #include <kis_tool_registry.h>
@@ -66,8 +67,8 @@ public:
 	ColorRangeCanvasSubject(DlgColorRange * parent, KisView * view) : m_parent(parent), m_view(view) { m_subject = m_view -> getCanvasSubject(); };
 	virtual ~ColorRangeCanvasSubject() {};
 
-	virtual void attach(KisCanvasObserver *observer) { m_subject -> attach(observer); };
-	virtual void detach(KisCanvasObserver *observer) {m_subject -> detach(observer); };
+	virtual void attach(KisCanvasObserver *observer) { observer -> update(this); };
+	virtual void detach(KisCanvasObserver *observer) { observer -> update(this); };
 	virtual void notify() { m_subject -> notify() ;};
 	virtual KisImageSP currentImg() const { return m_subject -> currentImg(); };
 	virtual QString currentImgName() const { return m_subject -> currentImgName(); };
@@ -126,7 +127,8 @@ public slots:
 private slots:
 
 	void okClicked();
-
+	void cancelClicked();
+	
 	void slotPickerPlusClicked();
 	void slotPickerClicked();
 	void slotLoad();
@@ -153,6 +155,8 @@ private:
 	KisTool * m_picker;
 	ColorRangeCanvasSubject * m_canvasSubject;
 	int m_pickMode;
+	QCursor m_oldCursor;
+	KisTransaction * m_transaction;
 };
 
 #endif // DLG_COLORRANGE

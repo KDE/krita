@@ -44,7 +44,6 @@
 #include <kis_iterators_pixel.h>
 #include <kis_profile.h>
 #include <kis_strategy_colorspace.h>
-#include <kis_image_builder.h>
 #include "kis_magick_converter.h"
 #include "../../../config.h"
 

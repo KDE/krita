@@ -105,9 +105,8 @@ void DlgColorRange::updatePreview()
 	m_layer -> exactBounds(x, y, w, h);
 		
 	m_selection -> setMaskColor(Qt::blue);
-	QPixmap pix = QPixmap(m_selection -> convertToQImage(0, x, y, w, h));
+	QPixmap pix = QPixmap(m_selection -> convertToQImage(0, x, y, w, h).smoothScale(400, 400, QImage::ScaleMin));
 	m_selection -> setMaskColor(Qt::white); // XXX: Change when mask colour becomes configurable
-// 	createMask(m_selection, m_layer).smoothScale(400, 400, QImage::ScaleMin));
 
 	m_page -> pixSelection -> setPixmap(pix);
 }

@@ -20,10 +20,11 @@
 
 #include <qobject.h>
 #include <qvaluevector.h>
+
 #include <kio/job.h>
+
 #include "kis_types.h"
 #include "kis_global.h"
-#include "kis_image_builder.h"
 #include "kis_progress_subject.h"
 
 class QString;

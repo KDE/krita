@@ -68,6 +68,9 @@ public:
 			       const QString& name,
 			       CompositeOp compositeOp);
 
+	/**
+	   The data() methods return a shared pointer to the tile manager.
+	*/
         virtual KisTileMgrSP data();
         virtual const KisTileMgrSP data() const;
 

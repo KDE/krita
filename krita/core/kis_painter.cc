@@ -672,7 +672,7 @@ void KisPainter::paintAt(const QPoint & pos,
 		computeDab(mask);
 		m_pressure = pressure;
 	}
-	bitBlt( x,  y,  COMPOSITE_NORMAL, m_dab.data() );
+	bitBlt( x,  y,  COMPOSITE_NORMAL, m_dab.data(), 0, 0, m_brushWidth, m_brushHeight );
 
 	m_dirtyRect = QRect(x,
 			    y,

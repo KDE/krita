@@ -132,7 +132,6 @@ void KisStrategyColorSpaceRGB::render(KisImageSP image, QPainter& painter, Q_INT
 		}
 		// kpixmapio has a nasty bug on powerpc that shows up as rendering errors
 		m_pixmap = QPixmap(img);
-
 #else
 		img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * CHAR_BIT, 0, 0, QImage::LittleEndian);
 		//m_pixio.putImage(&m_pixmap, 0, 0, &img);

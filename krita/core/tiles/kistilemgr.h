@@ -106,9 +106,6 @@ public:
 
         /**
            Create or duplicate a tile at location xpix/ypix.
-          
-           XXX: Not sure what 'mode' is. Presumbly related to the
-           TILEMODE constants.
          */
 	KisTileSP tile(Q_INT32 xpix, Q_INT32 ypix, Q_INT32 mode);
 
@@ -116,9 +113,6 @@ public:
            Create or duplicate a tile with identity tilenum; tilenum
            is computed from the x/y coordinates of the tile in the
            image
-         
-           XXX: Not sure what 'mode' is. Presumbly related to the
-           TILEMODE constants.
          */
 	KisTileSP tile(Q_INT32 tilenum, Q_INT32 mode);
 
@@ -215,25 +209,20 @@ public:
         */
 	void releasePixelData(KisPixelDataSP pd);
 
-        /**
-           Read the area defined by x1, y2, x2, y2 into the buffer. Stride is number of bytes
-           that a pixel takes in the buffer.
-        */
-
 	void readPixelData(KisPixelDataSP pd);
 
         /**
            Commit the pixel data in buffer.
         */
-
 	void writePixelData(KisPixelDataSP pd);
 
 	Q_INT32 tileNum(Q_UINT32 xpix, Q_UINT32 ypix) const;
 
-private:
-	KisTileMgr& operator=(const KisTileMgr&);
 	void readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
 	void writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
+
+private:
+	KisTileMgr& operator=(const KisTileMgr&);
 	void allocate(Q_INT32 ntiles);
 	void duplicate(Q_INT32 ntiles, KisTileMgr *tm);
 	KisTileSP invalidateTile(KisTileSP tile, Q_INT32 tilenum);

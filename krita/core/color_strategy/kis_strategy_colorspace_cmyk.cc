@@ -276,44 +276,41 @@ void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 stride,
 	if (rows <= 0 || cols <= 0)
 		return;
 	switch (op) {
-		case COMPOSITE_COPY:
-                        tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
-		case COMPOSITE_CLEAR:
-                        tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
-		case COMPOSITE_OVER:
-			while (rows-- > 0) {
-				d = dst;
-				s = src;
-				for (i = cols; i > 0; i--, d += stride, s += stride) {
-        				// XXX: this is probably incorrect. CMYK simulates ink; layers of
-					// ink over ink until a certain maximum, QUANTUM_MAX arbitrarily
-					// is reached. We invert the opacity because opacity_transparent
-					// and opacity_opaque were designed for RGB, which works the other
-					// way around.
-					alpha = (QUANTUM_MAX - opacity) + (QUANTUM_MAX - alpha);
-					if (alpha >= OPACITY_OPAQUE) // OPAQUE is CMYK transparent
-						continue;
-					if (s[PIXEL_CYAN] > alpha) {
-						d[PIXEL_CYAN] = d[PIXEL_CYAN] + (s[PIXEL_CYAN] - alpha);
-					}
-					if (s[PIXEL_MAGENTA] > alpha) {
-        					d[PIXEL_MAGENTA] = d[PIXEL_MAGENTA] + (s[PIXEL_MAGENTA] - alpha);
-					}
-					if (s[PIXEL_YELLOW] > alpha) {
-        					d[PIXEL_YELLOW] = d[PIXEL_YELLOW]  + (s[PIXEL_YELLOW] - alpha);
-					}
-					if (s[PIXEL_BLACK] > alpha) {
-        					d[PIXEL_BLACK] = d[PIXEL_BLACK] + (s[PIXEL_BLACK] - alpha);
-					}
-					d[PIXEL_ALPHA] = alpha; // XXX: this is certainly incorrect.
+	case COMPOSITE_COPY:
+		tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
+	case COMPOSITE_CLEAR:
+		tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
+	case COMPOSITE_OVER:
+	default:
+		while (rows-- > 0) {
+			d = dst;
+			s = src;
+			for (i = cols; i > 0; i--, d += stride, s += stride) {
+				// XXX: this is probably incorrect. CMYK simulates ink; layers of
+				// ink over ink until a certain maximum, QUANTUM_MAX arbitrarily
+				// is reached. We invert the opacity because opacity_transparent
+				// and opacity_opaque were designed for RGB, which works the other
+				// way around.
+				alpha = (QUANTUM_MAX - opacity) + (QUANTUM_MAX - alpha);
+				if (alpha >= OPACITY_OPAQUE) // OPAQUE is CMYK transparent
+					continue;
+				if (s[PIXEL_CYAN] > alpha) {
+					d[PIXEL_CYAN] = d[PIXEL_CYAN] + (s[PIXEL_CYAN] - alpha);
 				}
-				dst += dststride;
-				src += srcstride;
+				if (s[PIXEL_MAGENTA] > alpha) {
+					d[PIXEL_MAGENTA] = d[PIXEL_MAGENTA] + (s[PIXEL_MAGENTA] - alpha);
+				}
+				if (s[PIXEL_YELLOW] > alpha) {
+					d[PIXEL_YELLOW] = d[PIXEL_YELLOW]  + (s[PIXEL_YELLOW] - alpha);
+				}
+				if (s[PIXEL_BLACK] > alpha) {
+					d[PIXEL_BLACK] = d[PIXEL_BLACK] + (s[PIXEL_BLACK] - alpha);
+				}
+				d[PIXEL_ALPHA] = alpha; // XXX: this is certainly incorrect.
 			}
-			break;
-		default:
-			kdDebug() << "Not Implemented.\n";
-			return;
+			dst += dststride;
+			src += srcstride;
+		}
 	}
 
 }

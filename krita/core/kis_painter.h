@@ -114,6 +114,7 @@ public:
 	// The methods below are 'higher' level than the above methods. They need brushes, colors etc.
 	// set before they can be called. The methods do not directly tell the image to update, but
 	// you can call dirtyRect() to get the rect that needs to be notified by your painting code.
+	// Call will reset it!
 	QRect dirtyRect();
 
 	// ------------------------------------------------------------------------------------------

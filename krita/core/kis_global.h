@@ -63,7 +63,7 @@ const int TILE_HEIGHT = TILE_SIZE;
  * Size of a quantum -- this could be 8, 16, 32 or 64 -- but for now, only 8 is possible.
  */
 #if !defined(QUANTUM_DEPTH)
-#define QUANTUM_DEPTH 8
+#define QUANTUM_DEPTH 8 // bits, i.e., one byte per channel
 #endif
 
 #if (QUANTUM_DEPTH == 8)

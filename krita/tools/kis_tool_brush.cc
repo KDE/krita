@@ -203,10 +203,6 @@ KDialog *KisToolBrush::options(QWidget * parent)
         ts.useGradient = false; //m_useGradient;
         ts.opacity = OPACITY_OPAQUE; //m_opacity;
 
-//         bool old_usePattern = m_usePattern;
-//         bool old_useGradient = m_useGradient;
-//         unsigned int old_opacity = m_opacity;
-
         ToolOptionsDialog * d = new ToolOptionsDialog(tt_brushtool, ts, parent);
 
 	return d;

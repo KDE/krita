@@ -71,7 +71,7 @@ void KisFilter::slotActivated()
 
 	if( m_widget != 0)
 	{
-		m_dialog->previewWidget->slotSetPreview( layer );
+		m_dialog->previewWidget->slotSetLayer( layer );
 		connect(m_dialog->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
 		QGridLayout *widgetLayout = new QGridLayout((QWidget *)m_dialog->container, 1, 1);
 		widgetLayout -> addWidget(m_widget, 0 , 0);

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PreviewWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>360</width>
-            <height>158</height>
+            <width>388</width>
+            <height>173</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -18,88 +18,167 @@
             <height>150</height>
         </size>
     </property>
-    <widget class="QLayoutWidget">
+    <property name="caption">
+        <string>PreviewWidgetBase</string>
+    </property>
+    <grid>
         <property name="name">
-            <cstring>layout2</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>355</width>
-                <height>152</height>
-            </rect>
-        </property>
-        <hbox>
+        <widget class="QLayoutWidget" row="0" column="1">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>layout1</cstring>
             </property>
-            <widget class="QWidget">
+            <vbox>
                 <property name="name">
-                    <cstring>m_originalWidget</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>0</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>150</width>
-                        <height>150</height>
-                    </size>
-                </property>
-            </widget>
-            <widget class="QLayoutWidget">
-                <property name="name">
-                    <cstring>layout1</cstring>
-                </property>
-                <vbox>
+                <widget class="QPushButton">
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>m_zoomInButton</cstring>
                     </property>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>pushButton1</cstring>
-                        </property>
-                        <property name="text">
-                            <string>+</string>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>pushButton2</cstring>
-                        </property>
-                        <property name="text">
-                            <string>-</string>
-                        </property>
-                    </widget>
-                </vbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>m_previewWidget</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>0</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>150</width>
-                        <height>150</height>
-                    </size>
-                </property>
-            </widget>
-        </hbox>
-    </widget>
+                    <property name="text">
+                        <string>+</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>m_zoomOutButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>-</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="KisPreviewView" row="0" column="0">
+            <property name="name">
+                <cstring>m_original</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+        </widget>
+        <widget class="KisPreviewView" row="0" column="2">
+            <property name="name">
+                <cstring>m_preview</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+        </widget>
+    </grid>
 </widget>
+<customwidgets>
+    <customwidget>
+        <class>KisPreviewView</class>
+        <header location="local">kis_previewwidget.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+        <signal>moved(QPoint)</signal>
+        <signal>moving(QPoint)</signal>
+        <signal>startMoving(QPoint)</signal>
+        <slot access="public" specifier="">zoomIn()</slot>
+        <slot access="public" specifier="">slot()</slot>
+        <slot access="public" specifier="">zoomOut()</slot>
+        <slot access="public" specifier="">slot()</slot>
+        <slot access="public" specifier="">slot()</slot>
+        <slot access="public" specifier="">slotMoving(QPoint)</slot>
+        <slot access="public" specifier="">slotMoved(QPoint)</slot>
+        <slot access="public" specifier="">slot()</slot>
+        <slot access="public" specifier="">slotStartMoving(QPoint)</slot>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>m_original</sender>
+        <signal>moving(QPoint)</signal>
+        <receiver>m_preview</receiver>
+        <slot>slotMoving(QPoint)</slot>
+    </connection>
+    <connection>
+        <sender>m_original</sender>
+        <signal>moved(QPoint)</signal>
+        <receiver>m_preview</receiver>
+        <slot>slotMoved(QPoint)</slot>
+    </connection>
+    <connection>
+        <sender>m_original</sender>
+        <signal>startMoving(QPoint)</signal>
+        <receiver>m_preview</receiver>
+        <slot>slotStartMoving(QPoint)</slot>
+    </connection>
+    <connection>
+        <sender>m_preview</sender>
+        <signal>moving(QPoint)</signal>
+        <receiver>m_original</receiver>
+        <slot>slotMoving(QPoint)</slot>
+    </connection>
+    <connection>
+        <sender>m_preview</sender>
+        <signal>moved(QPoint)</signal>
+        <receiver>m_original</receiver>
+        <slot>slotMoved(QPoint)</slot>
+    </connection>
+    <connection>
+        <sender>m_preview</sender>
+        <signal>startMoving(QPoint)</signal>
+        <receiver>m_original</receiver>
+        <slot>slotStartMoving(QPoint)</slot>
+    </connection>
+    <connection>
+        <sender>m_zoomInButton</sender>
+        <signal>clicked()</signal>
+        <receiver>m_original</receiver>
+        <slot>zoomIn()</slot>
+    </connection>
+    <connection>
+        <sender>m_zoomInButton</sender>
+        <signal>clicked()</signal>
+        <receiver>m_preview</receiver>
+        <slot>zoomIn()</slot>
+    </connection>
+    <connection>
+        <sender>m_zoomOutButton</sender>
+        <signal>clicked()</signal>
+        <receiver>m_original</receiver>
+        <slot>zoomOut()</slot>
+    </connection>
+    <connection>
+        <sender>m_zoomOutButton</sender>
+        <signal>clicked()</signal>
+        <receiver>m_preview</receiver>
+        <slot>zoomOut()</slot>
+    </connection>
+</connections>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kispreviewview.h</includehint>
+    <includehint>kispreviewview.h</includehint>
+</includehints>
 </UI>

@@ -103,7 +103,7 @@
 #include "kis_view.h"
 #include "kis_rect.h"
 #include "KRayonViewIface.h"
-
+#include "kis_dlg_preferences.h"
 #include "labels/kis_label_builder_progress.h"
 #include "labels/kis_label_cursor_pos.h"
 #include "labels/kis_label_io_progress.h"
@@ -1770,7 +1770,7 @@ void KisView::placeSidebarLeft()
 */
 void KisView::preferences()
 {
-//	PreferencesDialog::editPreferences();
+	PreferencesDialog::editPreferences();
 }
 
 void KisView::viewColorDocker()

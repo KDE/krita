@@ -22,6 +22,8 @@
 
 #include <stdlib.h>
 
+#include <qlayout.h>
+
 #include <kglobalsettings.h>
 #include <kdualcolorbutton.h>
 #include <kstandarddirs.h>
@@ -51,14 +53,36 @@ ControlFrame::ControlFrame( QWidget* parent, const char* name )
 	  + KStandardDirs::kde_default("data")
 	  + "krayon/patterns/wizard.png";
 	*/
-
 	setFrameStyle(Panel | Raised);
 	setLineWidth(1);
+
+	QBoxLayout * l = new QHBoxLayout(this);
+	
 	
 	m_pColorButton = new KDualColorButton(this);
+	l -> addWidget(m_pColorButton);
+	l -> insertSpacing(0, 2);
+
 	m_pBrushWidget = new KisIconWidget(this);
+	l -> addWidget(m_pBrushWidget);
+	l -> insertSpacing(1, 2);
+
 	m_pPatternWidget = new KisIconWidget(this);
+	l -> addWidget(m_pPatternWidget);
+	l -> insertSpacing(2, 2);
+
 	m_pGradientWidget = new KisGradientWidget(this);
+	l -> addWidget(m_pGradientWidget);
+	l -> insertSpacing(3, 2);
+
+	l -> addItem(new QSpacerItem(1, 1));
+
+	m_pColorButton -> setFixedSize( 34, 34 );
+	m_pBrushWidget -> setFixedSize( 34, 34 );
+	m_pPatternWidget -> setFixedSize( 34, 34 );
+	m_pGradientWidget -> setFixedSize( 34, 34 );
+
+
 	connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this,
 		SLOT(slotFGColorSelected(const QColor &)));
 	
@@ -95,21 +119,6 @@ void ControlFrame::slotSetPattern(KoIconItem *item)
 {
 	if (item)
 		m_pPatternWidget -> slotSetItem(*item);
-}
-
-void ControlFrame::resizeEvent ( QResizeEvent * )
-{
-	int iw = 34;
-	int sp = (width() - iw * 5)/6;
-	int x = sp;
-
-	m_pColorButton->setGeometry( x, 4, iw, iw );
-	x += (sp + iw);
-	m_pBrushWidget->setGeometry( x, 4, iw, iw );
-	x += (sp + iw);
-	m_pPatternWidget->setGeometry(x, 4, iw, iw );
-	x += (sp + iw);
-	m_pGradientWidget->setGeometry(x, 4, iw, iw );
 }
 
 void ControlFrame::slotSetFGColor(const KoColor& c)

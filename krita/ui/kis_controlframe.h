@@ -67,9 +67,6 @@ signals:
 	void bgColorChanged(const KoColor& c);
 	void activeColorChanged(ActiveColor ac);
 
-protected:
-	virtual void resizeEvent(QResizeEvent *e);
-
 protected slots:
 	void slotFGColorSelected(const QColor& c);
 	void slotBGColorSelected(const QColor& c);

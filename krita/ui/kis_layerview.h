@@ -74,7 +74,7 @@ class LayerTable : public QGridView
 
 public:
 
-    enum action { VISIBLE, SELECTION, LINKING, PROPERTIES, ADDLAYER, REMOVELAYER, ADDMASK, REMOVEMASK, UPPERLAYER, LOWERLAYER, FRONTLAYER, BACKLAYER };
+    enum action { VISIBLE, SELECTION, LINKING, PROPERTIES, ADDLAYER, REMOVELAYER, ADDMASK, REMOVEMASK, UPPERLAYER, LOWERLAYER, FRONTLAYER, BACKLAYER, LEVEL };
 
     // these are not used
     LayerTable(QWidget* _parent = 0, const char* _name = 0 );
@@ -105,6 +105,7 @@ public slots:
     void slotLowerLayer();
     void slotFrontLayer();
     void slotBackgroundLayer();
+    void slotAboutToShow();
 
     void slotDocUpdated();
 

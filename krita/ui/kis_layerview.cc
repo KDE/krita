@@ -195,7 +195,7 @@ void LayerTable::init( KisDoc* doc)
 
     m_contextmenu->insertItem( i18n( "Visible" ), VISIBLE );
     m_contextmenu->insertItem( i18n( "Selection"), SELECTION );
-    m_contextmenu->insertItem( i18n( "Level" ), submenu );
+    m_contextmenu -> insertItem(i18n("Level"), submenu, LEVEL);
     m_contextmenu->insertItem( i18n( "Linked"), LINKING );
     m_contextmenu->insertItem( i18n( "Properties"), PROPERTIES );
 
@@ -206,231 +206,195 @@ void LayerTable::init( KisDoc* doc)
     m_contextmenu->insertItem( i18n( "Add Mask" ), ADDMASK );
     m_contextmenu->insertItem( i18n( "Remove Mask"), REMOVEMASK );
 
-    connect( m_contextmenu, SIGNAL( activated( int ) ),
-        SLOT( slotMenuAction( int ) ) );
-    connect( submenu, SIGNAL( activated( int ) ),
-        SLOT( slotMenuAction( int ) ) );
-    connect( doc, SIGNAL( layersUpdated()),
-        this, SLOT( slotDocUpdated () ) );
+    connect(m_contextmenu, SIGNAL(activated(int)), SLOT(slotMenuAction(int)));
+    connect(m_contextmenu, SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
+    connect(submenu, SIGNAL(activated(int)), SLOT(slotMenuAction(int)));
+    connect(doc, SIGNAL(layersUpdated()), this, SLOT(slotDocUpdated()));
 }
-
 
 void LayerTable::slotDocUpdated()
 {
-    updateTable();
-    updateAllCells();
-    if(pLayerView) pLayerView->showScrollBars();
+	updateTable();
+	updateAllCells();
+
+	if(pLayerView) 
+		pLayerView -> showScrollBars();
 }
 
-
-void LayerTable::paintCell( QPainter* painter, int row, int )
+void LayerTable::paintCell(QPainter *painter, int row, int /*col*/)
 {
-    if( row == m_selected )
-    {
-        painter->fillRect( 0, 0,
-            cellWidth() - 1, cellHeight() - 1, gray);
-    }
-    else
-    {
-        painter->fillRect( 0, 0,
-            cellWidth() - 1, cellHeight() - 1, lightGray);
-    }
+	KisImage *img = m_doc -> current();
+	KisLayer *lay = img -> layerList().at(row);
 
-    style().drawPrimitive( QStyle::PE_Panel, painter,
-                           QRect( mVisibleRect.x(), mVisibleRect.y(),
-                                  mVisibleRect.width(), mVisibleRect.height() ),
-                           colorGroup() ); //, true );
+	if (!lay)
+		return;
 
-    QPoint pt = QPoint(mVisibleRect.left() + 2, mVisibleRect.top() + 2);
-    if( m_doc->current()->layerList().at(row)->visible() )
-    {
-        painter->drawPixmap( pt, *mVisibleIcon );
-    }
-    else
-    {
-        painter->drawPixmap( pt, *mNovisibleIcon );
-    }
+	if (row == m_selected)
+		painter -> fillRect(0, 0, cellWidth() - 1, cellHeight() - 1, gray);
+	else
+		painter -> fillRect(0, 0, cellWidth() - 1, cellHeight() - 1, lightGray);
 
-    style().drawPrimitive( QStyle::PE_Panel, painter,
-                           QRect( mLinkedRect.x(), mLinkedRect.y(),
-                                  mLinkedRect.width(), mLinkedRect.height() ),
-                           colorGroup() ); // , true );
+	style().drawPrimitive(QStyle::PE_Panel, painter, QRect(mVisibleRect.x(), mVisibleRect.y(), mVisibleRect.width(), mVisibleRect.height()), colorGroup());
+	QPoint pt(mVisibleRect.left() + 2, mVisibleRect.top() + 2);
 
-    pt = QPoint(mLinkedRect.left() + 2, mLinkedRect.top() + 2);
-    if( m_doc->current()->layerList().at(row)->linked() )
-    {
-        painter->drawPixmap( pt, *mLinkedIcon );
-    }
-    else
-    {
-        painter->drawPixmap( pt, *mUnlinkedIcon );
-    }
+	if (lay -> visible())
+		painter -> drawPixmap(pt, *mVisibleIcon);
+	else
+		painter -> drawPixmap(pt, *mNovisibleIcon);
 
-    style().drawPrimitive( QStyle::PE_Panel, painter,
-                           QRect( mPreviewRect.x(), mPreviewRect.y(),
-                                  mPreviewRect.width(), mPreviewRect.height() ),
-                           colorGroup() ); //, true );
+	style().drawPrimitive(QStyle::PE_Panel, painter, QRect(mLinkedRect.x(), mLinkedRect.y(), mLinkedRect.width(), mLinkedRect.height()), colorGroup());
+	pt = QPoint(mLinkedRect.left() + 2, mLinkedRect.top() + 2);
 
-    painter->drawRect(0, 0, cellWidth() - 1, cellHeight() - 1);
-    painter->drawText(iheight * 3 + 3*3, 20,
-        m_doc->current()->layerList().at(row)->name());
+	if (lay -> linked())
+		painter -> drawPixmap(pt, *mLinkedIcon);
+	else
+		painter -> drawPixmap(pt, *mUnlinkedIcon);
+
+	style().drawPrimitive(QStyle::PE_Panel, painter, QRect(mPreviewRect.x(), mPreviewRect.y(), mPreviewRect.width(), mPreviewRect.height()), colorGroup());
+	painter -> drawRect(0, 0, cellWidth() - 1, cellHeight() - 1);
+	painter -> drawText(iheight * 3 + 3*3, 20, lay -> name());
 }
-
-
 
 void LayerTable::updateTable()
 {
-    if( m_doc->current() )
-    {
-        m_items = m_doc->current()->layerList().count();
-        setNumRows( m_items );
-        setNumCols( 1 );
-    }
-    else
-    {
-        m_items = 0;
-        setNumRows( 0 );
-        setNumCols( 0 );
-    }
+	KisImage *img = m_doc -> current();
 
-    resize( sizeHint() );
-    if(pLayerView) pLayerView->showScrollBars();
-    repaint();
+	if (img) {
+		m_items = img -> layerList().count();
+		setNumRows(m_items);
+		setNumCols(1);
+	}
+	else {
+		m_items = 0;
+		setNumRows(0);
+		setNumCols(0);
+	}
+
+	resize(sizeHint());
+
+	if (pLayerView) 
+		pLayerView -> showScrollBars();
+
+	repaint();
 }
 
-
-void LayerTable::update_contextmenu( int indx )
+void LayerTable::update_contextmenu(int indx)
 {
-    m_contextmenu->setItemChecked( VISIBLE,
-        m_doc->current()->layerList().at(indx)->visible() );
-    m_contextmenu->setItemChecked( LINKING,
-        m_doc->current()->layerList().at(indx)->linked() );
+	KisImage *img = m_doc -> current();
+
+	if (static_cast<unsigned int>(indx) < img -> layerList().count()) {
+		KisLayer *lay = img -> layerList().at(indx);
+
+		m_contextmenu -> setItemChecked(VISIBLE, lay -> visible());
+		m_contextmenu -> setItemChecked(LINKING, lay -> linked());
+	}
 }
 
-/*
-    makes this the current layer and highlites in gray
-*/
-void LayerTable::selectLayer( int indx )
+void LayerTable::selectLayer(int indx)
 {
-    int currentSel = m_selected;
-    m_selected = -1;
+	KisImage *img = m_doc -> current();
+	int currentSel = m_selected;
 
-    updateCell( currentSel, 0 );
-    m_selected = indx;
-    m_doc->current()->setCurrentLayer( m_selected );
-    updateCell( m_selected, 0 );
+	m_selected = -1;
+	updateCell(currentSel, 0);
+	m_selected = indx;
+	img -> setCurrentLayer(m_selected);
+	updateCell(m_selected, 0);
 }
 
-
-void LayerTable::slotInverseVisibility( int indx )
+void LayerTable::slotInverseVisibility(int indx)
 {
-  KisImage *img = m_doc->current();
-  img->layerList().at(indx)->setVisible(!img->layerList().at(indx)->visible());
-  updateCell( indx, 0 );
+	KisImage *img = m_doc -> current();
+	KisLayer *lay = img -> layerList().at(indx);
 
-  img->markDirty(img->layerList().at( indx )->imageExtents() );
-
-  m_doc->setModified( true );
+	lay -> setVisible(!img -> layerList().at(indx) -> visible());
+	updateCell(indx, 0);
+	img -> markDirty(lay -> imageExtents());
+	m_doc -> setModified(true);
 }
 
-
-void LayerTable::slotInverseLinking( int indx )
+void LayerTable::slotInverseLinking(int indx)
 {
-    KisImage *img = m_doc->current();
-    img->layerList().at(indx)->setLinked(!img->layerList().at(indx)->linked());
-    updateCell( indx, 0 );
+	KisImage *img = m_doc -> current();
+	KisLayer *lay = img -> layerList().at(indx);
 
-    m_doc->setModified( true );
+	lay -> setLinked(!lay -> linked());
+	updateCell(indx, 0);
+	m_doc -> setModified(true);
 }
 
-
-void LayerTable::slotMenuAction( int id )
+void LayerTable::slotMenuAction(int id)
 {
-    switch( id )
-    {
-        case VISIBLE:
-            slotInverseVisibility( m_selected );
-            break;
-        case LINKING:
-            slotInverseLinking( m_selected );
-            break;
-        case PROPERTIES:
-            slotProperties();
-            break;
-        case ADDLAYER:
-            slotAddLayer();
-            break;
-        case REMOVELAYER:
-            slotRemoveLayer();
-            break;
-        case UPPERLAYER:
-            slotRaiseLayer();
-            break;
-        case LOWERLAYER:
-            slotLowerLayer();
-            break;
-        case FRONTLAYER:
-            slotFrontLayer();
-            break;
-        case BACKLAYER:
-            slotBackgroundLayer();
-            break;
-        default:
-            break;
-    }
+	switch(id) {
+		case VISIBLE:
+			slotInverseVisibility(m_selected);
+			break;
+		case LINKING:
+			slotInverseLinking(m_selected);
+			break;
+		case PROPERTIES:
+			slotProperties();
+			break;
+		case ADDLAYER:
+			slotAddLayer();
+			break;
+		case REMOVELAYER:
+			slotRemoveLayer();
+			break;
+		case UPPERLAYER:
+			slotRaiseLayer();
+			break;
+		case LOWERLAYER:
+			slotLowerLayer();
+			break;
+		case FRONTLAYER:
+			slotFrontLayer();
+			break;
+		case BACKLAYER:
+			slotBackgroundLayer();
+			break;
+		default:
+			break;
+	}
 }
-
 
 QSize LayerTable::sizeHint() const
 {
-    if(pLayerView)
-        return QSize( CELLWIDTH, pLayerView->getFrame()->height());
-    else
-        return QSize( CELLWIDTH, iheight * 5 );
-}
+	int h = pLayerView ? pLayerView -> getFrame() -> height() : iheight * 5;
 
+	return QSize(CELLWIDTH, h);
+}
 
 void LayerTable::mousePressEvent( QMouseEvent *ev)
 {
-    int row = rowAt( ev->pos().y() );
-    QPoint localPoint( ev->pos().x() % cellWidth(),
-        ev->pos().y() % cellHeight() );
+	int row = rowAt(ev -> pos().y());
+	QPoint localPoint(ev -> pos().x() % cellWidth(), ev -> pos().y() % cellHeight());
 
-    if( ev->button() & LeftButton )
-    {
-        if( mVisibleRect.contains( localPoint ) )
-        {
-            slotInverseVisibility( row );
-        }
-        else if( mLinkedRect.contains( localPoint ) )
-        {
-            slotInverseLinking( row );
-        }
-        else if( row != -1 )
-        {
-            selectLayer( row );
-        }
-    }
-    else if( ev->button() & RightButton )
-    {
-        if( row != -1)
-        {
-            selectLayer( row );
-            update_contextmenu( row );
-            m_contextmenu->popup( mapToGlobal( ev->pos() ) );
-        }
-    }
+	if (ev -> button() & LeftButton) {
+		if (mVisibleRect.contains(localPoint)) {
+		       	slotInverseVisibility(row);
+		}
+		else if (mLinkedRect.contains(localPoint)) {
+			slotInverseLinking( row );
+		}
+		else if (row != -1) {
+			selectLayer( row );
+		}
+	}
+	else if (ev -> button() & RightButton) {
+		if (row != -1) {
+			selectLayer(row);
+			update_contextmenu(row);
+			m_contextmenu -> popup(mapToGlobal(ev -> pos()));
+		}
+	}
 }
-
 
 void LayerTable::mouseDoubleClickEvent( QMouseEvent *ev )
 {
-    if( ev->button() & LeftButton )
-    {
-        slotProperties();
-    }
+	if (ev -> button() & LeftButton)
+		slotProperties();
 }
-
 
 void LayerTable::slotAddLayer()
 {
@@ -575,6 +539,17 @@ void LayerTable::slotProperties()
     }
 }
 
+void LayerTable::slotAboutToShow()
+{
+	KisImage *img = m_doc -> current();
+	bool activate = static_cast<unsigned int>(m_selected) < img -> layerList().count();
+
+	m_contextmenu -> setItemEnabled(VISIBLE, activate);
+	m_contextmenu -> setItemEnabled(LEVEL, activate);
+	m_contextmenu -> setItemEnabled(LINKING, activate);
+	m_contextmenu -> setItemEnabled(PROPERTIES, activate);
+}
+
 LayerPropertyDialog::LayerPropertyDialog( QString layername,
     uchar opacity,  QWidget *parent, const char *name )
     : QDialog( parent, name, true )
@@ -629,7 +604,6 @@ bool LayerPropertyDialog::editProperties( KisLayer &layer )
 
     return false;
 }
-
 
 #include "kis_layerview.moc"
 

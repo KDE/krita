@@ -28,56 +28,27 @@ KisIteratorQuantum::KisIteratorQuantum( KisPaintDeviceSP ndevice, KisTileCommand
 
 }
 
-QUANTUM KisIteratorQuantum::operator*()
-{
-	if( m_tileNeedRefresh && m_tileNeedRefreshRW )
-	{
-		if( !(m_tile = (m_ktm->tile( m_tilenum, TILEMODE_READ) ) ) )
-		{
-			return 0;
-		}
-		m_data =  m_tile->data(0, m_ypos_intile);
-		m_tileNeedRefresh = false;
-	}
-	return *(m_data + m_xintile);
-}
 
-KisIteratorQuantum::operator QUANTUM* ()
-{
-	if( m_tileNeedRefreshRW )
-	{
-		if( (m_tile = m_ktm->tile( m_tilenum , TILEMODE_NONE)) )
-		{
-			m_command->addTile( m_tilenum , m_tile);
-		}
-		if (!(m_tile = m_ktm->tile( m_tilenum, TILEMODE_RW)))
-			return 0;
-		m_data =  m_tile->data(0, m_ypos_intile);
-		m_tileNeedRefreshRW = false;
-	}
-	return m_data + m_xintile;
-}
-
-
-KisIteratorLineQuantum::KisIteratorLineQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command, int nypos) :
-	KisIteratorLine<KisIteratorQuantum>( ndevice, command, nypos)
+KisIteratorLineQuantum::KisIteratorLineQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos,
+						Q_INT32 nxstart, Q_INT32 nxend) :
+	KisIteratorLine<KisIteratorQuantum>( ndevice, command, nypos, nxstart, nxend)
 {
 }
 
 KisIteratorQuantum KisIteratorLineQuantum::operator*()
 {
-	return KisIteratorQuantum( m_device, m_command, ypos, 0 );
+	return KisIteratorQuantum( m_device, m_command, m_ypos, m_xstart );
 }
 KisIteratorLineQuantum::operator KisIteratorQuantum* ()
 {
-	return new KisIteratorQuantum( m_device, m_command, ypos, 0 );
+	return new KisIteratorQuantum( m_device, m_command, m_ypos, m_xstart );
 }
 
 KisIteratorQuantum KisIteratorLineQuantum::begin()
 {
-	return KisIteratorQuantum( m_device, m_command, ypos, 0 );
+	return KisIteratorQuantum( m_device, m_command, m_ypos, m_xstart );
 }
 KisIteratorQuantum KisIteratorLineQuantum::end()
 {
-	return KisIteratorQuantum( m_device, m_command, ypos, m_device->width() - 1 );
+	return KisIteratorQuantum( m_device, m_command, m_ypos, m_xend );
 }

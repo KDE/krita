@@ -35,9 +35,6 @@ extern "C" int kdemain(int argc, char **argv)
 
 	KoApplication app;
 
-	app.dcopClient() -> attach();
-	app.dcopClient() -> registerAs("krita");
-
 	if (!app.start())
 		return 1;
 

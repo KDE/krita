@@ -113,7 +113,7 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 // 		kdDebug() << "compositing heterogenous color spaces: src = " << srcSpace -> name() << ", dst = " << m_name << "\n";
 		int len = depth() * rows * cols;
  		QUANTUM * convertedSrcPixels = new QUANTUM[len];
-		memset(convertedSrcPixels, 255, len * sizeof(QUANTUM));
+		memset(convertedSrcPixels, 0, len * sizeof(QUANTUM));
 
 		// XXX: Set profiles
    		srcSpace -> convertPixelsTo(src, 0,

@@ -145,21 +145,54 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 			Q_INT32 sw, Q_INT32 sh)
 {
 	if (srcdev == 0) {
-// 		kdDebug() << "bitBlt: source is null.\n";
 		return;
 	}
-	int d = m_device->depth();
-//XXX: possibly optimize with several pixels at a time
-//XXX: use rect iterators?
-	for(Q_INT32 i = 0; i <sh; i++)
-	{
-		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, false);
-		KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
-		while( ! srcIter.isDone())
+
+	int dstDepth = m_device -> depth();
+	int srcDepth = srcdev -> depth();
+
+
+	// A small optimization at the cost of some memory which makes
+	// it possible to benefit from optimizations at the backend
+	// and in the conversion code inside the color strategies.
+	// Used only when we bitBlt small rects.
+	if ((sw * sh) <= (RENDER_WIDTH * RENDER_HEIGHT)) {
+
+		QUANTUM * src = srcdev -> readBytes(sx, sy, sw, sh);
+		QUANTUM * dst = m_device -> readBytes(dx, dy, sw, sh);
+		m_device -> colorStrategy () -> bitBlt(dstDepth,
+						       dst, dstDepth * sw,
+						       srcdev -> colorStrategy(), src, srcDepth * sw,
+						       opacity, 
+						       sh, sw, 
+						       op,
+						       srcdev -> profile(),
+						       m_device -> profile());
+		m_device -> writeBytes(dst, dx, dy, sw, sh);
+		delete[] src;
+		delete[] dst;
+
+	}
+	else {
+		for(Q_INT32 i = 0; i <sh; i++)
 		{
-		        m_device -> colorStrategy() -> bitBlt(d, (Q_UINT8 *)dstIter, d, srcdev -> colorStrategy(), (Q_UINT8 *)srcIter, d, opacity, 1, 1, op);
-			srcIter++;
-			dstIter++;
+			// Use line iterators because the rect iterators do not guarantee that they will 
+			// return corresponding pixels for source and destination.
+			KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, false);
+			KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
+			while( ! srcIter.isDone())
+			{
+				m_device -> colorStrategy() -> bitBlt(dstDepth, 
+								      (Q_UINT8 *)dstIter, srcDepth, 
+								      srcdev -> colorStrategy(), (Q_UINT8 *)srcIter, dstDepth, 
+								      opacity, 
+								      1, 1, 
+								      op,
+								      srcdev -> profile(),
+								      m_device -> profile());
+				srcIter++;
+				dstIter++;
+			}
 		}
 	}
 }

@@ -176,7 +176,7 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 		m_oldColor = new QUANTUM[m_device->pixelSize()];
 
 		KisHLineIteratorPixel pixelIt = m_layer->createHLineIterator(startX, startY, startX+1, false);
-		KisPixel pixel = pixelIt.value();
+		KisPixel pixel = pixelIt.pixel();
 
 		for (int i = 0; i < lay -> pixelSize(); i++) {
 			m_oldColor[i] = pixel[i];
@@ -301,7 +301,7 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& 
 			break;
 		m_map[y*m_width + x] = true;
 		++m_pixelsDone;
-		KisPixel data = it.value();
+		KisPixel data = it.pixel();
 		diff = difference(m_oldColor, data);
 		if (diff == MAX_SELECTED) {
 			// m_selection -> setSelected(x, y, diff);

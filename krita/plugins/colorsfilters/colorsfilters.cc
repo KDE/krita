@@ -100,8 +100,8 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 	Q_INT32 depth = src->nChannels() - 1;
 	while( ! rectIt.isDone() )
 	{
-		KisPixelRO data = rectIt.oldPixelValue();
-		KisPixel dstData = rectIt.value();
+		KisPixelRO data = rectIt.oldPixel();
+		KisPixel dstData = rectIt.pixel();
 		for( int i = 0; i < depth; i++)
 		{
 			KisQuantum d = rectIt[ configPC->channel( i ) ];
@@ -162,7 +162,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	Q_INT32 maxvalue = 0;
 	while( ! rectIt.isDone() )
 	{
-		KisPixel data = rectIt.value();
+		KisPixel data = rectIt.pixel();
 		Q_INT32 lightness = ( QMAX(QMAX(data[0], data[1]), data[2])
 				+ QMIN(QMIN(data[0], data[1]), data[2]) ) / 2;
 		histo[ lightness ] ++;
@@ -187,8 +187,8 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
 	while( ! rectIt.isDone() )
 	{
-		KisPixel srcData = rectIt.value();
-		KisPixel dstData = rectIt.value();
+		KisPixel srcData = rectIt.pixel();
+		KisPixel dstData = rectIt.pixel();
 
 		// Iterate through all channels except alpha
 		// XXX: Check for off-by-one errors
@@ -217,8 +217,8 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 // 	Q_INT32 depth = device->nChannels() - 1;
 	while( ! rectIt.isDone() )
 	{
-		KisPixelRO srcData = rectIt.oldPixelValue();
-		KisPixel dstData = rectIt.value();
+		KisPixelRO srcData = rectIt.oldPixel();
+		KisPixel dstData = rectIt.pixel();
 		/* I thought of using the HSV model, but GIMP seems to use
 		HSL for desaturating. Better use the gimp model for now
 				(HSV produces a lighter image than HSL) */

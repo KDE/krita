@@ -115,9 +115,9 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 		
 		while( !srcLit.isDone() )
 		{
-			KisPixel srcP= srcLit.value();
-			KisPixel dabP = dabLit.value();
-			KisPixel devP = devLit.value();
+			KisPixel srcP= srcLit.pixel();
+			KisPixel dabP = dabLit.pixel();
+			KisPixel devP = devLit.pixel();
 			for( Q_INT32 i = 0; i < device -> colorStrategy() -> nColorChannels(); i++) {
 				QUANTUM devQ = (QUANTUM) devP[ i ];
 				QUANTUM dabQ = (QUANTUM) dabP[ i ];

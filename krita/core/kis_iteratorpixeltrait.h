@@ -41,8 +41,8 @@ public:
 	/**
 	 * Return the current pixel
 	 */
- 	inline KisPixel value() { return m_device->toPixel(m_underlyingIterator->rawData()); };
-        inline KisPixelRO oldPixelValue() { return m_device->toPixelRO( this->oldQuantumValue()); };
+ 	inline KisPixel pixel() { return m_device->toPixel(m_underlyingIterator->rawData()); };
+        inline KisPixelRO oldPixel() { return m_device->toPixelRO( m_underlyingIterator->oldRawData()); };
 
 	/**
 	 * Return one channel from the current kispixel. Does not check whether
@@ -50,9 +50,6 @@ public:
 	 */
 	inline KisQuantum operator[](int index)
 			{ return m_device -> toPixel(m_underlyingIterator->rawData())[index]; };
-
-protected:
-	inline QUANTUM* oldQuantumValue() { return m_underlyingIterator->oldRawData(); };
 	
 protected:
 	KisPaintDevice *m_device;

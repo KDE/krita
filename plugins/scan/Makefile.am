@@ -4,8 +4,8 @@ kwordrc_DATA = scan-kword.rc
 krayonrcdir = $(kde_datadir)/krayon/kpartplugins
 krayonrc_DATA = scan-krayon.rc
 
-killustratorrcdir = $(kde_datadir)/killustrator/kpartplugins
-killustratorrc_DATA = scan-killustrator.rc
+killustratorrcdir = $(kde_datadir)/kontour/kpartplugins
+killustratorrc_DATA = scan-kontour.rc
 
 kpresenterrcdir = $(kde_datadir)/kpresenter/kpartplugins
 kpresenterrc_DATA = scan-kpresenter.rc

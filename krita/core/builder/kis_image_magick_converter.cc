@@ -20,6 +20,7 @@
 #include <string.h>
 #include <magick/api.h>
 #include <qstring.h>
+#include <kdeversion.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -241,7 +242,11 @@ KisImageBuilder_Result KisImageMagickConverter::buildImage(const KURL& uri)
 	if (uri.isEmpty())
 		return KisImageBuilder_RESULT_NO_URI;
 
+#if KDE_IS_VERSION( 3, 1, 90 )
 	if (!KIO::NetAccess::exists(uri, false, qApp -> mainWidget()))
+#else
+	if (!KIO::NetAccess::exists(uri, false))
+#endif
 		return KisImageBuilder_RESULT_NOT_EXIST;
 
 	if (!uri.isLocalFile()) {

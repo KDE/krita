@@ -28,6 +28,10 @@ public:
 public:
 	virtual void setCurrentTool(KisTool *tool) = 0;
 	virtual KisTool *currentTool() const = 0;
+
+private:
+	KisToolControllerInterface(const KisToolControllerInterface&);
+	KisToolControllerInterface& operator=(const KisToolControllerInterface&);
 };
 
 #endif // KIS_TOOL_CONTROLLER_H_

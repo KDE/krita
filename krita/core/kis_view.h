@@ -69,9 +69,12 @@ class KisLayerBox;
 class KisView : public KoView,
 	private KisCanvasSubject,
 	private KisCanvasControllerInterface,
-	private KisToolControllerInterface {
+	private KisToolControllerInterface 
+{
+
 	Q_OBJECT
-		typedef KoView super;
+
+	typedef KoView super;
 	typedef std::list<KisCanvasObserver*> vKisCanvasObserver;
 	typedef vKisCanvasObserver::iterator vKisCanvasObserver_it;
 	typedef vKisCanvasObserver::const_iterator vKisCanvasObserver_cit;
@@ -90,7 +93,6 @@ public:
 	virtual void updateReadWrite(bool readwrite);
 	virtual void guiActivateEvent(KParts::GUIActivateEvent *event);
 
-	virtual void resize(Q_INT32 w, Q_INT32 h);
 
 public:
 	Q_INT32 docWidth() const;
@@ -110,7 +112,7 @@ signals:
 	void cursorEnter();
 	void cursorLeave();
 
-	public slots:
+public slots:
 	void dialog_gradient();
 	void slotSetFGColor(const KoColor& c);
 	void slotSetBGColor(const KoColor& c);
@@ -124,25 +126,33 @@ signals:
 	void imgResizeToActiveLayer();
 	void add_new_image_tab();
 	void remove_current_image_tab();
+	void resizeCurrentImage(Q_INT32 w, Q_INT32 h);
+	void scaleCurrentImage(double sx, double sy);
 
 	// tool action slots
 	void tool_properties();
 
-	// settings action slots
-	void preferences();
+	// Layer action slots
 	void copy();
 	void cut();
 	void removeSelection();
 	void paste();
 	void copySelectionToNewLayer();
-	void layer_rotate180();
-	void layer_rotateleft90();
-	void layer_rotateright90();
-	void layer_rotate_custom();
-	void layer_mirrorX();
-	void layer_mirrorY();
+	void rotateLayer180();
+	void rotateLayerLeft90();
+	void rotateLayerRight90();
+	void rotateLayerCustom();
+	void mirrorLayerX();
+	void mirrorLayerY();
+	void resizeLayer(Q_INT32 w, Q_INT32 h);
+	void scaleLayer(double sx, double sy);
 	void selectAll();
 	void unSelectAll();
+
+
+	// settings action slots
+	void preferences();
+
 protected:
 	virtual void resizeEvent(QResizeEvent*);
 
@@ -253,7 +263,7 @@ private slots:
 	void layerSelected(int n);
 	void layerToggleLinked();
 	void layerProperties();
-	void layerResize();
+
 	void layerResizeToImage();
 	void layerToImage();
 	void layerTransform();
@@ -269,7 +279,6 @@ private slots:
 	void layerLevel(int n);
 	void layersUpdated();
 	void layersUpdated(KisImageSP img);
-	void layerTransform(bool smooth);
 
 	QPoint mapToScreen(const QPoint& pt);
 	void merge_all_layers();
@@ -333,7 +342,6 @@ private:
 	KAction *m_layerLower;
 	KAction *m_layerProperties;
 	KAction *m_layerRaise;
-	KAction *m_layerResize;
 	KAction *m_layerResizeToImage;
 	KAction *m_layerRm;
 	KAction *m_layerSaveAs;

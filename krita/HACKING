@@ -50,6 +50,14 @@ Class naming
 	The only exception to this rule are interfaces.
 	Example: kis_tool.h/KisToolInterface.
 
+Function naming
+
+	Functions should be named in camelBackedFashion, to conform to Qt's standards.
+	If you encounter functions in c_style_like_this, feel free to rename. Also:
+	verbNoun -- i.e., rotateLayer, not layer_rotate. The latter is a true c-ism,
+	introduced by a language that needs to prefix the 'class' name to every function
+	in order to have something that not quite OO.
+
 Designer
 
 	Krita doesn't use .ui files. Yet. When we get down to the great UI redesign,

@@ -35,12 +35,10 @@ public:
 	
 private slots:
 
-	void slotActivated();
+	void slotImageSize();
+	void slotLayerSize();
 
 private:
-
-	void imageResize(Q_INT32 w, Q_INT32 h);
-	void imageScale(Q_INT32 w, Q_INT32 h);
 
 	KisView * m_view;
 	KisPainter * m_painter;

@@ -41,10 +41,9 @@ public:
 
 	KisDlgTransform( QWidget *  parent = 0,
 			 const char * name = 0);
+	virtual ~KisDlgTransform();
 
-	QWMatrix & matrix();
-
- private:
+private:
 	WdgMatrix * m_page;
 };
 

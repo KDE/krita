@@ -64,12 +64,12 @@ class KRayonViewIface : public KoViewIface
 	// settings action slots
 	void preferences();
 
-	void layer_rotate180();
-	void layer_rotateleft90();
-	void layer_rotateright90();
-	void layer_rotate_custom();
-	void layer_mirrorX();
-	void layer_mirrorY();
+	void rotateLayer180();
+	void rotateLayerLeft90();
+	void rotateLayerRight90();
+	void rotateLayerCustom();
+	void mirrorLayerX();
+	void mirrorLayerY();
 
  private:
 	KisView *m_view;

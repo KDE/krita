@@ -120,32 +120,32 @@ void KRayonViewIface::preferences()
     m_view->preferences();
 }
 
-void KRayonViewIface::layer_rotate180()
+void KRayonViewIface::rotateLayer180()
 {
-    m_view->layer_rotate180();
+    m_view->rotateLayer180();
 }
 
-void KRayonViewIface::layer_rotateleft90()
+void KRayonViewIface::rotateLayerLeft90()
 {
-    m_view->layer_rotateleft90();
+    m_view->rotateLayerLeft90();
 }
 
-void KRayonViewIface::layer_rotateright90()
+void KRayonViewIface::rotateLayerRight90()
 {
-    m_view->layer_rotateright90();
+    m_view->rotateLayerRight90();
 }
 
-void KRayonViewIface::layer_rotate_custom()
+void KRayonViewIface::rotateLayerCustom()
 {
-    m_view->layer_rotate_custom();
+    m_view->rotateLayerCustom();
 }
 
-void KRayonViewIface::layer_mirrorX()
+void KRayonViewIface::mirrorLayerX()
 {
-    m_view->layer_mirrorX();
+    m_view->mirrorLayerX();
 }
 
-void KRayonViewIface::layer_mirrorY()
+void KRayonViewIface::mirrorLayerY()
 {
-    m_view->layer_mirrorY();
+    m_view->mirrorLayerY();
 }

@@ -42,7 +42,7 @@ KisDlgTransform::KisDlgTransform( QWidget *  parent,
 	resize(m_page -> sizeHint());
 }
 
-QWMatrix & KisDlgTransform::matrix()
+KisDlgTransform::~KisDlgTransform()
 {
 	delete m_page;
 }

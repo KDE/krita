@@ -142,7 +142,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_layerHide = 0;
         m_layerProperties = 0;
         m_layerSaveAs = 0;
-        m_layerResize = 0;
         m_layerResizeToImage = 0;
         m_layerToImage = 0;
         m_layerTransform = 0;
@@ -226,20 +225,6 @@ DCOPObject* KisView::dcopObject()
                 m_dcop = new KRayonViewIface(this);
 
         return m_dcop;
-}
-
-void KisView::resize(Q_INT32 w, Q_INT32 h) 
-{
-        KisImageSP img = currentImg();
-
-        if (img) {
-                img -> resize(w, h);
-                img -> invalidate();
-                resizeEvent(0);
-                layersUpdated();
-                canvasRefresh();
-        }
-
 }
 
 void KisView::setupDockers()
@@ -525,18 +510,17 @@ void KisView::setupActions()
         m_layerProperties = new KAction(i18n("Layer Properties..."), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
         (void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
         m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(save_layer_as_image()), actionCollection(), "save_layer_as_image");
-        m_layerResize = new KAction(i18n("Resize Layer..."), 0, this, SLOT(layerResize()), actionCollection(), "resizelayer");
         m_layerResizeToImage = new KAction(i18n("Resize Layer to Image"), 0, this, SLOT(layerResizeToImage()), actionCollection(), "resizelayertoowner");
         m_layerToImage = new KAction(i18n("Layer to Image"), 0, this, SLOT(layerToImage()), actionCollection(), "layer_to_image");
 
         // layer transformations - should be generic, for selection too
         m_layerTransform = new KAction(i18n("Scale Layer..."), 0, this, SLOT(layerTransform()), actionCollection(), "transformlayer");
-        (void)new KAction(i18n("Rotate &180"), 0, this, SLOT(layer_rotate180()), actionCollection(), "layer_rotate180");
-        (void)new KAction(i18n("Rotate &270"), 0, this, SLOT(layer_rotateleft90()), actionCollection(), "layer_rotateleft90");
-        (void)new KAction(i18n("Rotate &90"), 0, this, SLOT(layer_rotateright90()), actionCollection(), "layer_rotateright90");
-        (void)new KAction(i18n("Rotate &Custom..."), 0, this, SLOT(layer_rotate_custom()), actionCollection(), "layer_rotate_custom");
-        (void)new KAction(i18n("Mirror Along &X Axis"), 0, this, SLOT(layer_mirrorX()), actionCollection(), "layer_mirrorX");
-        (void)new KAction(i18n("Mirror Along &Y Axis"), 0, this, SLOT(layer_mirrorY()), actionCollection(), "layer_mirrorY");
+        (void)new KAction(i18n("Rotate &180"), 0, this, SLOT(rotateLayer180()), actionCollection(), "rotateLayer180");
+        (void)new KAction(i18n("Rotate &270"), 0, this, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
+        (void)new KAction(i18n("Rotate &90"), 0, this, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerRight90");
+        (void)new KAction(i18n("Rotate &Custom..."), 0, this, SLOT(rotateLayerCustom()), actionCollection(), "rotateLayerCustom");
+        (void)new KAction(i18n("Mirror Along &X Axis"), 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
+        (void)new KAction(i18n("Mirror Along &Y Axis"), 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
 
         // color actions
         (void)new KAction(i18n("Select Foreground Color..."), 0, this, SLOT(selectFGColor()), actionCollection(), "select_fgColor");
@@ -839,7 +823,6 @@ void KisView::layerUpdateGUI(bool enable)
         m_layerHide -> setEnabled(enable);
         m_layerProperties -> setEnabled(enable);
         m_layerSaveAs -> setEnabled(enable);
-        m_layerResize -> setEnabled(enable);
         m_layerResizeToImage -> setEnabled(enable);
         m_layerToImage -> setEnabled(enable);
         m_layerTransform -> setEnabled(enable);
@@ -1510,57 +1493,8 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filena
         return rc;
 }
 
-void KisView::layerTransform(bool )
-{
-#if 0
-        KisImageSP img = m_doc->currentImg();
-        if (!img)  return;
 
-        KisLayerSP lay = img->getCurrentLayer();
-        if (!lay)  return;
-
-        KisFrameBuffer *fb = m_doc->frameBuffer();
-        if (!fb)  return;
-
-        NewLayerDialog *pNewLayerDialog = new NewLayerDialog();
-        pNewLayerDialog->exec();
-        if(!pNewLayerDialog->result() == QDialog::Accepted)
-                return;
-
-        QRect srcR(lay->imageExtents());
-
-        // only get the part of the layer which is inside the
-        // image boundaries - layer can be bigger or can overlap
-        srcR = srcR.intersect(img->imageExtents());
-
-        bool ok;
-
-        if(smooth)
-                ok = fb->scaleSmooth(srcR,
-                                     pNewLayerDialog->width(), pNewLayerDialog->height());
-        else
-                ok = fb->scaleRough(srcR,
-                                    pNewLayerDialog->width(), pNewLayerDialog->height());
-
-        if(!ok)
-        {
-                kdDebug() << "layer_transform() failed" << endl;
-        }
-        else
-        {
-                // bring new scaled layer to front
-                uint indx = img->layerList().size() - 1;
-                img->setCurrentLayer(indx);
-                img->markDirty(img->getCurrentLayer()->imageExtents());
-                layerSelected(indx);
-                layersUpdated();
-
-                m_doc->setModified(true);
-        }
-#endif
-}
-
-void KisView::layer_rotate180()
+void KisView::rotateLayer180()
 {
         if (!currentImg()) return;
         KisLayerSP layer = currentImg() -> activeLayer();
@@ -1577,7 +1511,7 @@ void KisView::layer_rotate180()
         updateCanvas();
 }
 
-void KisView::layer_rotateleft90()
+void KisView::rotateLayerLeft90()
 {
         if (!currentImg()) return;
         KisLayerSP layer = currentImg() -> activeLayer();
@@ -1594,7 +1528,7 @@ void KisView::layer_rotateleft90()
 
 }
 
-void KisView::layer_rotateright90()
+void KisView::rotateLayerRight90()
 {
         if (!currentImg()) return;
         KisLayerSP layer = currentImg() -> activeLayer();
@@ -1603,7 +1537,7 @@ void KisView::layer_rotateright90()
 
         QWMatrix m;
         m.rotate(90);
-        layer->transform(m);
+        layer -> transform(m);
 
         layersUpdated();
         resizeEvent(0);
@@ -1612,12 +1546,12 @@ void KisView::layer_rotateright90()
 
 }
 
-void KisView::layer_rotate_custom()
+void KisView::rotateLayerCustom()
 {
-
+	// XXX
 }
 
-void KisView::layer_mirrorX()
+void KisView::mirrorLayerX()
 {
         if (!currentImg()) return;
         KisLayerSP layer = currentImg() -> activeLayer();
@@ -1629,7 +1563,7 @@ void KisView::layer_mirrorX()
         updateCanvas();
 }
 
-void KisView::layer_mirrorY()
+void KisView::mirrorLayerY()
 {
         if (!currentImg()) return;
         KisLayerSP layer = currentImg() -> activeLayer();
@@ -1639,6 +1573,21 @@ void KisView::layer_mirrorY()
         layersUpdated();
         currentImg() -> invalidate();
         updateCanvas();
+}
+
+void KisView::scaleLayer(double sx, double sy)
+{
+	if (!currentImg()) return;
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
+	QWMatrix m;
+	m.scale(sx, sy);
+	layer -> transform(m);
+	layersUpdated();
+	resizeEvent(0);
+	currentImg() -> invalidate();
+	updateCanvas();
+
 }
 
 void KisView::add_new_image_tab()
@@ -2471,29 +2420,9 @@ void KisView::imgUpdated(KisImageSP img, const QRect& rc)
         }
 }
 
-void KisView::layerResize()
+void KisView::resizeLayer(Q_INT32 w, Q_INT32 h)
 {
-// XXX: use new dialog
-//         KisImageSP img = currentImg();
-
-//         if (img) {
-//                 KisLayerSP layer = img -> activeLayer();
-
-//                 if (layer) {
-//                         KisConfig cfg;
-//                         KisDlgDimension dlg(cfg.maxLayerWidth(), layer -> width(), cfg.maxLayerHeight(), layer -> height(), this);
-
-//                         if (dlg.exec() == QDialog::Accepted) {
-//                                 QSize size = dlg.getSize();
-
-//                                 layer -> resize(size.width(), size.height());
-//                                 img -> invalidate();
-//                                 layersUpdated();
-//                                 resizeEvent(0);
-//                                 canvasRefresh();
-//                         }
-//                 }
-//         }
+	// XXX
 }
 
 void KisView::layerResizeToImage()
@@ -2559,6 +2488,56 @@ void KisView::layerTransform()
 //              updateCanvas();
 //      }
 }
+
+
+void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h) 
+{
+        KisImageSP img = currentImg();
+
+        if (img) {
+                img -> resize(w, h);
+                img -> invalidate();
+                resizeEvent(0);
+                layersUpdated();
+                canvasRefresh();
+        }
+
+}
+
+void KisView::scaleCurrentImage(double sx, double sy)
+{
+	if (!currentImg()) return;
+	
+	// New image size. XXX: Pass along to discourage rounding errors?
+	Q_INT32 w, h;	
+	w = (currentImg() -> width() * sx) + 0.5;
+	h = (currentImg() -> height() * sy) + 0.5; 
+
+
+	// Check whether we need to make the image bigger
+	if (sx > 1 && sy > 1) {
+		resizeCurrentImage(w, h);
+	}
+	else if (sx > 1 && sy <= 1) {
+		resizeCurrentImage(w, currentImg() -> height());
+	}
+	else if (sx <= 1 && sy > 1) {
+		resizeCurrentImage(currentImg() -> width(), h);
+	}
+
+	// For every layer in the image, scale the layer
+	QWMatrix m = QWMatrix();
+	m.scale(sx, sy);
+
+	
+
+	// Make the image smaller only after we've scaled all layers
+	if (sx < 1 || sy < 1) {
+		resizeCurrentImage(w, h);
+	}
+}
+
+
 
 QPoint KisView::viewToWindow(const QPoint& pt)
 {

@@ -4,7 +4,10 @@
     <Menu name="Image"><text>Image</text>
 	<Separator/>
 	<Action name="imagesize"/>
+    </Menu>
+    <Menu name="Layer"><text>Layer</text>
 	<Separator/>
+	<Action name="layersize">
     </Menu>
 </MenuBar>
 </kpartgui>

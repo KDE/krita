@@ -55,13 +55,15 @@
 typedef KGenericFactory<ImageSize> ImageSizeFactory;
 K_EXPORT_COMPONENT_FACTORY( imagesize, ImageSizeFactory( "krita" ) )
 
+// XXX: this plugin could also provide layer scaling/resizing
 ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)
 {
 	setInstance(ImageSizeFactory::instance());
 	kdDebug() << "ImageSize\n";
 
-	(void) new KAction(i18n("&Image Size..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "imagesize");
+	(void) new KAction(i18n("&Image Size..."), 0, 0, this, SLOT(slotImageSize()), actionCollection(), "imagesize");
+	(void) new KAction(i18n("&Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "layersize");
 	
 	if ( !parent->inherits("KisView") )
 	{
@@ -76,13 +78,14 @@ ImageSize::~ImageSize()
 	m_view = 0;
 }
 
-void ImageSize::slotActivated()
+void ImageSize::slotImageSize()
 {
 	KisImageSP image = m_view -> currentImg();
 
 	if (!image) return;
 
 	DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "ImageSize");
+	dlgImageSize -> setCaption(i18n("Image Size"));
 
 	KisConfig cfg;
 
@@ -101,44 +104,53 @@ void ImageSize::slotActivated()
 		Q_INT32 h = dlgImageSize -> height();
 		
 		if (dlgImageSize -> scale()) {
-			imageScale(w, h);
+			m_view -> scaleCurrentImage((double)w / ((double)(image -> width())), 
+						    (double)h / ((double)(image -> height())));
 		}
 		else {
-			imageResize(w, h);
+			m_view -> resizeCurrentImage(w, h);
 		}
 		
 	}
 	delete dlgImageSize;
 }
 
-void ImageSize::imageResize(Q_INT32 w, Q_INT32 h)
+void ImageSize::slotLayerSize()
 {
-	kdDebug() << "Resizing to: Width: " << w << ", Height: " << h << "\n";
+	KisImageSP image = m_view -> currentImg();
 
-	if (m_view) {
-#if 1
-		m_view -> resize(w, h);
-#else
-		// XXX: this doesn't work -- but why?
-		KisImageSP image = m_view -> currentImg();
+	if (!image) return;
 
-		if (image) {
+	DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "LayerSize");
+	dlgImageSize -> setCaption("Layer Size");
+// 	dlgImageSize -> chkConstrain -> setCaption("Resample layer");
 
-                        image -> resize(w, h);
-                        image -> invalidate();
-			m_view -> refresh();
-                }
-#endif
- 	}
-}
+	KisConfig cfg;
 
-void ImageSize::imageScale(Q_INT32 w,  Q_INT32 h) 
-{
-	if (m_view) {
-		// XXX
+	dlgImageSize -> setWidth(image -> width());
+	dlgImageSize -> setHeight(image -> height());
+	dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
+	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
+
+	double x, y;
+	image -> resolution(&x, &y);
+	dlgImageSize -> setXRes(x);
+	dlgImageSize -> setYRes(y);
+		
+	if (dlgImageSize -> exec() == QDialog::Accepted) {
+		Q_INT32 w = dlgImageSize -> width();
+		Q_INT32 h = dlgImageSize -> height();
+		
+		if (dlgImageSize -> scale()) {
+			m_view -> scaleLayer((double)w / ((double)(image -> width())), (double)h / ((double)(image -> height())));
+		}
+		else {
+			m_view -> resizeLayer(w, h);
+		}
+		
 	}
+	delete dlgImageSize;
 }
-
 
 #include "imagesize.moc"
 

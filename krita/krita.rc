@@ -60,13 +60,13 @@
   <Action name="save_layer_as_image"/>
   <Action name="layer_to_image"/>
   <Separator/>
-  <Action name="layer_rotateright90"/>
-  <Action name="layer_rotate180"/>
-  <Action name="layer_rotateleft90"/>
-  <!--Action name="layer_rotate_custom"/-->
+  <Action name="rotateLayerRight90"/>
+  <Action name="rotateLayer180"/>
+  <Action name="rotateLayerLeft90"/>
+  <!--Action name="rotateLayerCustom"/-->
   <Separator/>
-  <Action name="layer_mirrorX"/>
-  <Action name="layer_mirrorY"/>
+  <Action name="mirrorLayerX"/>
+  <Action name="mirrorLayerY"/>
   <Separator/>
   <Action name="layer_properties"/>
   <Separator/>

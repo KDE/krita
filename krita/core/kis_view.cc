@@ -1500,8 +1500,8 @@ void KisView::canvasGotPaintEvent(QPaintEvent *event)
 void KisView::canvasGotMousePressEvent(QMouseEvent *e)
 {
 	if (m_tool) {
-		Q_INT32 x = e -> pos().x() - canvasXOffset() + static_cast<Q_INT32>(zoom() * m_hScroll -> value());
-		Q_INT32 y = e -> pos().y() - canvasYOffset() + static_cast<Q_INT32>(zoom() * m_vScroll -> value());
+		Q_INT32 x = static_cast<Q_INT32>((e -> pos().x() - canvasXOffset() + horzValue() * zoom()) / zoom());
+		Q_INT32 y = static_cast<Q_INT32>((e -> pos().y() - canvasYOffset() + vertValue() * zoom()) / zoom());
 		QMouseEvent ev(QEvent::MouseButtonPress, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
 
 		m_tool -> mousePress(&ev);
@@ -1511,8 +1511,8 @@ void KisView::canvasGotMousePressEvent(QMouseEvent *e)
 void KisView::canvasGotMouseMoveEvent(QMouseEvent *e)
 {
 	if (m_tool) {
-		Q_INT32 x = e -> pos().x() - canvasXOffset() + static_cast<Q_INT32>(zoom() * m_hScroll -> value());
-		Q_INT32 y = e -> pos().y() - canvasYOffset() + static_cast<Q_INT32>(zoom() * m_vScroll -> value());
+		Q_INT32 x = static_cast<Q_INT32>((e -> pos().x() - canvasXOffset() + horzValue() * zoom()) / zoom());
+		Q_INT32 y = static_cast<Q_INT32>((e -> pos().y() - canvasYOffset() + vertValue() * zoom()) / zoom());
 		QMouseEvent ev(QEvent::MouseButtonPress, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
 
 		if (zoom() >= 1.0 / 4.0) {
@@ -1527,8 +1527,8 @@ void KisView::canvasGotMouseMoveEvent(QMouseEvent *e)
 void KisView::canvasGotMouseReleaseEvent(QMouseEvent *e)
 {
 	if (m_tool) {
-		Q_INT32 x = e -> pos().x() - canvasXOffset() + static_cast<Q_INT32>(zoom() * m_hScroll -> value());
-		Q_INT32 y = e -> pos().y() - canvasYOffset() + static_cast<Q_INT32>(zoom() * m_vScroll -> value());
+		Q_INT32 x = static_cast<Q_INT32>((e -> pos().x() - canvasXOffset() + horzValue() * zoom()) / zoom());
+		Q_INT32 y = static_cast<Q_INT32>((e -> pos().y() - canvasYOffset() + vertValue() * zoom()) / zoom());
 		QMouseEvent ev(QEvent::MouseButtonPress, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
 
 		m_tool -> mouseRelease(&ev);

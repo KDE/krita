@@ -23,6 +23,8 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kscan.h>
+#include <koDocument.h>
+#include <koView.h>
 
 #include "scan_factory.h"
 #include "scan.moc"
@@ -49,14 +51,19 @@ void Scan::slotScan()
     }
     
     connect(dlg, SIGNAL(finalImage(const QString &)), this, SLOT(slotShowImage(const QString &)));
-    
     dlg->show();
-    
-    kdDebug() << "READY!" << endl;
 }
 
 void Scan::slotShowImage(const QString &file)
 {
-    // Deal with KoDoc..
-    kdDebug() << "LOAD !!!!: " << file << endl;
+    KoView *view = dynamic_cast<KoView *>(parent());
+    if(!view)
+	return;
+
+    KoDocument *doc = view->koDocument();
+
+    if(!doc)
+	return;
+	
+    emit doc->embeddImage(file);
 }

@@ -73,10 +73,10 @@ protected:
 class KisToolColorChangerFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolColorChangerFactory() : super() {};
+	KisToolColorChangerFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolColorChangerFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolColorChanger(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolColorChanger(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Color changer"); }
 };
 

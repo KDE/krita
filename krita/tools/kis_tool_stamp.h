@@ -87,10 +87,10 @@ protected:
 class KisToolStampFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolStampFactory() : super() {};
+	KisToolStampFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolStampFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolStamp(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolStamp(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Stamp tool"); }
 };
 

@@ -37,6 +37,7 @@
 #include "kis_canvas_subject.h"
 #include "kis_global.h"
 #include "kis_tool_controller.h"
+#include "kis_tool_registry.h"
 #include "kis_types.h"
 #include "kis_scale_visitor.h"
 
@@ -126,6 +127,7 @@ public: // KoView implementation
 	Q_INT32 importImage(bool createLayer, bool modal = false, const KURL& url = KURL());
 
 	KisFilterRegistrySP filterRegistry() const;
+	KisToolRegistry * toolRegistry() const { return m_toolRegistry; }
 
 	void updateStatusBarSelectionLabel();
 
@@ -456,6 +458,8 @@ private:
 	QTabletEvent::TabletDevice m_lastTabletEventDevice;
 	KisFilterRegistrySP m_filterRegistry;
 	QPixmap m_canvasPixmap;
+
+	KisToolRegistry * m_toolRegistry;
 	
 private:
 	mutable KisImageSP m_current;

@@ -90,10 +90,10 @@ private:
 class KisToolSelectFreehandFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectFreehandFactory() : super() {};
+	KisToolSelectFreehandFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectFreehandFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolSelectFreehand(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectFreehand(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Freehand select tool"); }
 };
 

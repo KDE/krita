@@ -93,10 +93,10 @@ private:
 class KisToolSelectPolygonalFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectPolygonalFactory() {};
+	KisToolSelectPolygonalFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectPolygonalFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolSelectPolygonal(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectPolygonal(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Polygonal select tool"); }
 };
 

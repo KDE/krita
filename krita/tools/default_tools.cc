@@ -83,36 +83,38 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
  		  << parent -> className()
  		  << "\n";
 
- 	if ( parent->inherits("KisPluginRegistry") )
+ 	if ( parent->inherits("KisView") )
  	{
-		KisToolRegistry * r = KisToolRegistry::singleton();
+		KisView * view = (KisView*) parent;
 
-		r -> add(new KisToolFillFactory());
-		r -> add(new KisToolGradientFactory());
-		r -> add(new KisToolPenFactory());
-		r -> add(new KisToolSelectFreehandFactory());
-		r -> add(new KisToolAirbrushFactory());
-		r -> add(new KisToolFilterFactory());
-		r -> add(new KisToolPolygonFactory());
-		r -> add(new KisToolSelectPolygonalFactory());
-		r -> add(new KisToolBrushFactory());
-		r -> add(new KisToolPolyLineFactory());
-		r -> add(new KisToolSelectRectangularFactory());
-		r -> add(new KisToolColorPickerFactory());
-		r -> add(new KisToolLineFactory());
-		r -> add(new KisToolSelectBrushFactory());
-		r -> add(new KisToolTextFactory());
-		r -> add(new KisToolDuplicateFactory());
-		r -> add(new KisToolMoveFactory());
-		r -> add(new KisToolSelectContiguousFactory());
-		r -> add(new KisToolZoomFactory());
-		r -> add(new KisToolEllipseFactory());
-		r -> add(new KisToolRectangleFactory());
-		r -> add(new KisToolPanFactory());
-		r -> add(new KisToolSelectEllipticalFactory());
-		r -> add(new KisToolEraserFactory());
-		r -> add(new KisToolPasteFactory());
-		r -> add(new KisToolSelectEraserFactory());
+		KisToolRegistry * r = view -> toolRegistry();
+		
+		r -> add(new KisToolFillFactory(actionCollection()));
+		r -> add(new KisToolGradientFactory(actionCollection()));
+		r -> add(new KisToolPenFactory(actionCollection()));
+		r -> add(new KisToolSelectFreehandFactory(actionCollection()));
+		r -> add(new KisToolAirbrushFactory(actionCollection()));
+		r -> add(new KisToolFilterFactory(actionCollection()));
+		r -> add(new KisToolPolygonFactory(actionCollection()));
+		r -> add(new KisToolSelectPolygonalFactory(actionCollection()));
+		r -> add(new KisToolBrushFactory(actionCollection()));
+		r -> add(new KisToolPolyLineFactory(actionCollection()));
+		r -> add(new KisToolSelectRectangularFactory(actionCollection()));
+		r -> add(new KisToolColorPickerFactory(actionCollection()));
+		r -> add(new KisToolLineFactory(actionCollection()));
+		r -> add(new KisToolSelectBrushFactory(actionCollection()));
+		r -> add(new KisToolTextFactory(actionCollection()));
+		r -> add(new KisToolDuplicateFactory(actionCollection()));
+		r -> add(new KisToolMoveFactory(actionCollection()));
+		r -> add(new KisToolSelectContiguousFactory(actionCollection()));
+		r -> add(new KisToolZoomFactory(actionCollection()));
+		r -> add(new KisToolEllipseFactory(actionCollection()));
+		r -> add(new KisToolRectangleFactory(actionCollection()));
+		r -> add(new KisToolPanFactory(actionCollection()));
+		r -> add(new KisToolSelectEllipticalFactory(actionCollection()));
+		r -> add(new KisToolEraserFactory(actionCollection()));
+		r -> add(new KisToolPasteFactory(actionCollection()));
+		r -> add(new KisToolSelectEraserFactory(actionCollection()));
  	}
 	
 }

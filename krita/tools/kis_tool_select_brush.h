@@ -57,10 +57,10 @@ protected:
 class KisToolSelectBrushFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectBrushFactory() : super() {};
+	KisToolSelectBrushFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectBrushFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolSelectBrush(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectBrush(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Brush select tool"); }
 };
 

@@ -1,9 +1,9 @@
-#kritarcdir = $(kde_datadir)/krita/kpartplugins
-#kritarc_DATA = kritadefaulttools.rc
+kritarcdir = $(kde_datadir)/krita/kpartplugins
+kritarc_DATA = kritadefaulttools.rc
 
 kde_services_DATA = kritadefaulttools.desktop
 
-#EXTRA_DIST = $(kritarc_DATA)
+EXTRA_DIST = $(kritarc_DATA)
 
 
 # all_includes must remain last!

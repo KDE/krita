@@ -58,10 +58,10 @@ private:
 class KisToolAirbrushFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolAirbrushFactory() : super() {};
+	KisToolAirbrushFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolAirbrushFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolAirbrush(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolAirbrush(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Airbrush tool"); }
 };
 

@@ -61,10 +61,10 @@ private:
 class KisToolTextFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolTextFactory() : super() {};
+	KisToolTextFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolTextFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolText(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolText(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Text tool"); }
 };
 

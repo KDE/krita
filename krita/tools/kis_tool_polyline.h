@@ -58,10 +58,10 @@ private:
 class KisToolPolyLineFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolPolyLineFactory() : super() {};
+	KisToolPolyLineFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolPolyLineFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolPolyLine(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolPolyLine(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Polyline tool"); }
 };
 

@@ -54,10 +54,10 @@ private:
 class KisToolPanFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolPanFactory() : super() {};
+	KisToolPanFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolPanFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolPan(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolPan(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Pan tool"); }
 };
 

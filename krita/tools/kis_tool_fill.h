@@ -35,6 +35,7 @@ class KisCmbComposite;
 class KisPixelRepresentation;
 class KisIteratorPixel;
 class KisIteratorInfinitePixel;
+class KActionCollection;
 
 class KisToolFill : public KisToolPaint {
 
@@ -87,11 +88,12 @@ private:
 class KisToolFillFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolFillFactory() : super() {};
+	KisToolFillFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolFillFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolFill(); }
+	virtual KisTool * createTool() { KisToolFill * t = new KisToolFill(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Fill tool"); }
+
 };
 
 

@@ -81,10 +81,10 @@ protected:
 class KisToolEllipseFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolEllipseFactory() : super() {};
+	KisToolEllipseFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolEllipseFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolEllipse(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolEllipse(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Ellipse tool"); }
 };
 

@@ -74,10 +74,10 @@ private:
 class KisToolPolygonFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolPolygonFactory() : super() {};
+	KisToolPolygonFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolPolygonFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolPolygon(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolPolygon(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Polygon tool"); }
 };
 

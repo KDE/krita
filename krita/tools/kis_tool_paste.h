@@ -57,10 +57,10 @@ private:
 class KisToolPasteFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolPasteFactory() : super() {};
+	KisToolPasteFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolPasteFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolPaste(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolPaste(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Paste tool"); }
 };
 

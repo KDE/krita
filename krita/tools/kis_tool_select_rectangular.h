@@ -61,10 +61,10 @@ private:
 class KisToolSelectRectangularFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectRectangularFactory() : super() {};
+	KisToolSelectRectangularFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectRectangularFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolSelectRectangular(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectRectangular(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Rectangular select tool"); }
 };
 

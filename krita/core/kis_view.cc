@@ -144,6 +144,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_inputDevice = INPUT_DEVICE_UNKNOWN;
 
 	m_selectionManager = new KisSelectionManager(this, doc);
+	m_toolRegistry = new KisToolRegistry();
 
         m_doc = doc;
         m_adapter = adapter;
@@ -1868,13 +1869,10 @@ void KisView::print(KPrinter& printer)
 
 void KisView::setupTools()
 {
-	KisToolRegistry * reg = KisToolRegistry::singleton();
-	Q_ASSERT(reg);
-
-	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = reg -> createTools(actionCollection(), this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = reg -> createTools(actionCollection(), this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = reg -> createTools(actionCollection(), this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = reg -> createTools(actionCollection(), this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = m_toolRegistry -> createTools(this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = m_toolRegistry -> createTools(this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = m_toolRegistry -> createTools(this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = m_toolRegistry -> createTools(this);
 
 	qApp -> installEventFilter(this);
 	m_tabletEventTimer.start();

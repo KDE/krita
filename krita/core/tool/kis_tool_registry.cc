@@ -26,32 +26,17 @@
 #include "kis_tool_factory.h"
 #include "kis_canvas_subject.h"
 
-KisToolRegistry * KisToolRegistry::m_singleton = 0;
-
 KisToolRegistry::KisToolRegistry()
 {
-// 	kdDebug() << " creating a KisToolRegistry" << endl;
-	Q_ASSERT(KisToolRegistry::m_singleton == 0);
-	KisToolRegistry::m_singleton = this;
-
+ 	kdDebug() << " creating a KisToolRegistry" << endl;
 }
 
 KisToolRegistry::~KisToolRegistry()
 {
 }
 
-KisToolRegistry* KisToolRegistry::singleton()
+vKisTool KisToolRegistry::createTools(KisCanvasSubject *subject) const
 {
-	if(KisToolRegistry::m_singleton == 0)
-	{
-		KisToolRegistry::m_singleton = new KisToolRegistry();
-	}
-	return KisToolRegistry::m_singleton;
-}
-
-vKisTool KisToolRegistry::createTools(KActionCollection *actionCollection, KisCanvasSubject *subject) const
-{
-	Q_ASSERT(actionCollection);
 	Q_ASSERT(subject);
 
 	vKisTool tools;
@@ -64,7 +49,6 @@ vKisTool KisToolRegistry::createTools(KActionCollection *actionCollection, KisCa
 		
 		KisTool * tool = f -> createTool();
 
-		tool -> setup(actionCollection);
 		subject -> attach(tool);
 		tools.push_back(tool);
 	}

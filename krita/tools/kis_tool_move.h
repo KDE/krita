@@ -52,10 +52,10 @@ private:
 class KisToolMoveFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolMoveFactory() : super() {};
+	KisToolMoveFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolMoveFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolMove(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolMove(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Move tool"); }
 };
 

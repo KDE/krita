@@ -62,10 +62,10 @@ private:
 class KisToolSelectEllipticalFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectEllipticalFactory() : super() {};
+	KisToolSelectEllipticalFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectEllipticalFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolSelectElliptical(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectElliptical(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Elliptical select tool"); }
 };
 

@@ -64,10 +64,10 @@ protected:
 class KisToolDuplicateFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolDuplicateFactory() : super() {};
+	KisToolDuplicateFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolDuplicateFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolDuplicate(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolDuplicate(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Duplicate tool"); }
 };
 

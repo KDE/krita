@@ -83,10 +83,10 @@ class KisToolLine : public KisToolPaint {
 class KisToolLineFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolLineFactory() : super() {};
+	KisToolLineFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolLineFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolLine(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolLine(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Line tool"); }
 };
 

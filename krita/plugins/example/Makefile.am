@@ -13,9 +13,9 @@ INCLUDES  = -I$(srcdir)/../../core \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
-kde_module_LTLIBRARIES = kritaexample.la
-
 kritaexample_la_SOURCES = example.cc
+
+kde_module_LTLIBRARIES = kritaexample.la
 noinst_HEADERS = example.h
 
 kritaexample_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

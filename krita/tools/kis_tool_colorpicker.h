@@ -61,10 +61,10 @@ private:
 class KisToolColorPickerFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolColorPickerFactory() : super() {};
+	KisToolColorPickerFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolColorPickerFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolColorPicker(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolColorPicker(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Color picker"); }
 };
 

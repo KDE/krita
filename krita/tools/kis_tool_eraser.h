@@ -47,10 +47,10 @@ protected:
 class KisToolEraserFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolEraserFactory() : super() {};
+	KisToolEraserFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolEraserFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolEraser(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolEraser(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Eraser tool"); }
 };
 

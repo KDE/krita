@@ -86,10 +86,10 @@ protected:
 class KisToolRectangleFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolRectangleFactory() : super() {};
+	KisToolRectangleFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolRectangleFactory(){};
 	
-	virtual KisTool * createTool() { return new KisToolRectangle(); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolRectangle(); t -> setup(m_actionCollection); return t; }
 	virtual QString name() { return i18n("Rectangle tool"); }
 };
 

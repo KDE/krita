@@ -20,18 +20,21 @@
 #define KIS_TOOL_FACTORY_H_
 
 #include "kis_types.h"
-
+#include "kactioncollection.h"
 
 class KisToolFactory  : public KShared
 {
        
 public:
-	KisToolFactory() {};
+	KisToolFactory(KActionCollection * ac) { m_actionCollection = ac; }
 	virtual ~KisToolFactory() {};
 	
 	virtual KisTool * createTool() = 0;
 	virtual QString name() { return QString("Abstract Tool"); }
 
+protected:
+
+	KActionCollection * m_actionCollection;
 };
 
 #endif // KIS_TOOL_FACTORY_H_

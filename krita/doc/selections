@@ -26,7 +26,9 @@ Selections can be changed using tools that are clones of the usual
 painting tools: brush, eraser, polygon, etc. 
 
 TODO: * implement most of these, the polygon, circle, rectangle tools
-        should fill by default.
+        should fill by default. XXX: make it easier to leverage the
+	code for the standard tools: after all, the only difference
+	is which layer they should paint on.
 
 XXX: Fill-by-default should be an option for the polygon, circle,
      rectangle painting tools, too.

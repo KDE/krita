@@ -90,6 +90,6 @@ void KisPenOp::paintAt(const KisPoint &pos,
 	
 	m_painter -> setPressure(pressure);
 
-	m_painter->bitBlt( x,  y,  m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), 0, 0, brush->width(), brush->height());
+	m_painter->bltSelection( x,  y,  m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), 0, 0, brush->width(), brush->height());
 	m_painter->addDirtyRect(QRect(x, y, brush->width(), brush->height()));
 }

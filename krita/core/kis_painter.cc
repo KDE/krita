@@ -213,20 +213,20 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 	if (m_device == 0) return;
 
 
-	kdDebug() << "KisPainter::bltSelection rect "
-			  << " dx: " << dx
-			  << " dy: " << dy
-			  << " sx: " << sx
-			  << " sy: " << sy
-			  << " w: " << sw
-			  << " h " << sh
-			  << " layer: " << srcdev -> name()
-			  << " onto: " << m_device -> name()
-			  << "\n";
+//	kdDebug() << "KisPainter::bltSelection rect "
+//			  << " dx: " << dx
+//			  << " dy: " << dy
+//			  << " sx: " << sx
+//			  << " sy: " << sy
+//			  << " w: " << sw
+//			  << " h " << sh
+//			  << " layer: " << srcdev -> name()
+//			  << " onto: " << m_device -> name()
+//			  << "\n";
 
 
 	if (!m_device -> hasSelection()) {
-		kdDebug() << "No selection, doing ordinary blit\n";
+//		kdDebug() << "No selection, doing ordinary blit\n";
 		bitBlt(dx, dy, op, srcdev, opacity, sx, sy, sw, sh);
 		return;
 	}
@@ -237,16 +237,16 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 	//r.setRect(selection -> getX(), selection -> getY(), r.width(), r.height());
 
 	if (!r.intersects(QRect(dx, dy, sw, sh))) {
-		kdDebug() << "Blitting outside selection rect\n";
+//		kdDebug() << "Blitting outside selection rect\n";
 		return;
 	}
 
-	kdDebug() << "KisPainter::bltSelection selection rect: "
-			  << " x: " << r.x()
-			  << " y: " << r.y()
-			  << " w: " << r.width()
-			  << " h " << r.height()
-			  << "\n";
+//	kdDebug() << "KisPainter::bltSelection selection rect: "
+//			  << " x: " << r.x()
+//			  << " y: " << r.y()
+//			  << " w: " << r.width()
+//			  << " h " << r.height()
+//			  << "\n";
 
 	int dstDepth = m_pixelSize;
 	int srcDepth = srcdev -> pixelSize();

@@ -99,7 +99,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 				dab->setPixel(x, y, m_painter -> paintColor(), QUANTUM_MAX - mask->alphaAt(x, y));
 			}
 		}
-		m_painter->bitBlt( r.x(), r.y(), COMPOSITE_ERASE, dab.data(), 0, 0, brush->width(), brush->height());
+		m_painter->bltSelection( r.x(), r.y(), COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, 0, 0, brush->width(), brush->height());
 
  	} else {
 		dab -> setOpacity(OPACITY_TRANSPARENT);
@@ -108,7 +108,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 				dab -> setPixel(x, y, m_painter -> backgroundColor(), mask->alphaAt(x, y));
 			}
 		}
-		m_painter->bitBlt(r.x(), r.y(), COMPOSITE_OVER, dab.data(), 0, 0, mask -> width(), mask -> height());
+		m_painter->bltSelection(r.x(), r.y(), COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE, 0, 0, mask -> width(), mask -> height());
  	}
 
 	m_painter -> addDirtyRect(r);

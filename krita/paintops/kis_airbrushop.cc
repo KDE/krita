@@ -122,6 +122,6 @@ void KisAirbrushOp::paintAt(const KisPoint &pos,
 		m_painter -> setPressure(pressure); // Cache pressure in the current painter.
 	}
 
-	m_painter->bitBlt( x,  y,  COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE / 50, 0, 0, brush->width(), brush->height());
+	m_painter->bltSelection( x,  y,  COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE / 50, 0, 0, brush->width(), brush->height());
 	m_painter->addDirtyRect(QRect(x, y, brush->width(), brush->height()));
 }

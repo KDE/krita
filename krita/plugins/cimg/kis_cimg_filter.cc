@@ -582,7 +582,7 @@ bool KisCImgFilter::process()
                 // Next step
                 img = dest;
         }
-
+	emit notifyProgressDone(this);
         // Save result and end program
         //-----------------------------
         if (visuflow) dest.mul(flow.get_norm_pointwise()).normalize(0,255);

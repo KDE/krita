@@ -76,7 +76,24 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	//with the actual pixel data.
 
 	Emboss(newData, width, height, embossdepth, view() -> progressDisplay());
-	dst -> writeBytes( newData, x, y, width, height);
+
+
+	//dst -> writeBytes( newData, x, y, width, height);
+	Q_INT32 pixelSize = dst -> pixelSize();
+	QUANTUM * ptr = newData;
+	for(Q_INT32 y2 = y; y2 < y + height; y2++)
+	{
+		KisHLineIteratorPixel hiter = dst -> createHLineIterator(x, y2, width, true);
+		while(! hiter.isDone())
+		{
+			if (hiter.isSelected()) {
+				    memcpy(hiter.rawData(), ptr , pixelSize);
+			}
+			ptr += pixelSize;
+			hiter++;
+		}
+	}
+
 
 	delete[] newData;
 }
@@ -130,9 +147,9 @@ void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d, KisPro
            Bits[i+1] = Gray;
            Bits[ i ] = Gray;
            }
-           //emit notifyProgress(this, (int) (((double)h * 100.0) / Height));
+           emit notifyProgress(this, (int) (((double)h * 100.0) / Height));
        }
-    //emit notifyProgressDone(this);
+    emit notifyProgressDone(this);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

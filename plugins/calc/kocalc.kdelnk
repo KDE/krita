@@ -17,6 +17,7 @@ MiniIcon=calc.xpm
 Slot=open
 Menu=Extra
 Name=Calculator
+Name[br]=Jederez
 Name[ca]=Calculadora
 Name[cs]=Kalkulaèka
 Name[da]=Regnemaskine

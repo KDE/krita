@@ -95,24 +95,28 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
 	}
 }
 
-void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern& pattern) {
-	KisLayerSP patternLayer = pattern.image(m_device->colorStrategy());
+void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern * pattern) {
+	if (!pattern) return;
+	if (!pattern -> valid()) return;
+	if (!m_device) return;
+
+	KisLayerSP patternLayer = pattern -> image(m_device->colorStrategy());
 
 	int sx, sy, sw, sh;
 
 	int y = y1;
-	sy = y % pattern.height();
+	sy = y % pattern -> height();
 	while (y < y1 + h) {
 		int x = x1;
-		sx = x % pattern.width();
-		sh = QMIN(y + pattern.height() - (y1 + h), pattern.height());
+		sx = x % pattern -> width();
+		sh = QMIN(y + pattern -> height() - (y1 + h), pattern -> height());
 		if (sh <= 0)
-			sh = pattern.height();
+			sh = pattern -> height();
 
 		while (x < x1 + w) {
-			sw = QMIN(x + pattern.width() - (x1 + w), pattern.width());
+			sw = QMIN(x + pattern -> width() - (x1 + w), pattern -> width());
 			if (sw <= 0)
-				sw = pattern.width();
+				sw = pattern -> width();
 			bitBlt(x, y, m_compositeOp, patternLayer.data(), m_opacity, sx, sy, sw, sh);
 			x += sw; sx = 0;
 		}
@@ -141,7 +145,7 @@ void KisFillPainter::fillPattern(int startX, int startY) {
 	// Now create a layer and fill it
 	KisLayerSP filled = new KisLayer(m_layer->colorStrategy(), "Fill Temporary Layer");
 	KisFillPainter painter(filled.data());
-	painter.fillRect(0, 0, m_width, m_height, *m_pattern);
+	painter.fillRect(0, 0, m_width, m_height, m_pattern);
 	painter.end();
 
 	genericFillEnd(filled);
@@ -267,8 +271,11 @@ void KisFillPainter::floodLine(int x, int y) {
 		if (pixelIt.x() < lastPixel)
 			mostLeft++;
 	}
+	int progressPercent = 0;
+	if (m_pixelsDone > 0 && m_size > 0)
+		progressPercent = (m_pixelsDone * 100) / m_size;
 
-	int progressPercent = (m_pixelsDone * 100) / m_size;
+
 	if (progressPercent > m_currentPercent) {
 		emit notifyProgress(this, progressPercent);
 		m_currentPercent = progressPercent;

@@ -402,6 +402,8 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 			p.eraseRect(0, 0, 1000, 1000);
 // 			p.paintEllipse(500, 1000, 100, 0, 0);
 			p.setPaintColor(Qt::yellow);
+			KisResourceServer * r = new KisResourceServer;
+			p.setPattern((KisPattern*)r -> patterns().first());
 			p.setFillThreshold(15);
 			p.setCompositeOp(COMPOSITE_OVER);
 			p.fillPattern(0,0);

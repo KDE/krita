@@ -230,7 +230,7 @@ public:
 	void setBrush(KisBrush* brush) { m_brush = brush; }
 	KisBrush * brush() const { return m_brush; }
 
-	void setPattern(KisPattern& pattern) { m_pattern = &pattern; }
+	void setPattern(KisPattern * pattern) { m_pattern = pattern; }
 	KisPattern * pattern() const { return m_pattern; }
 
 	void setPaintColor(const QColor& color) {m_paintColor = color; }

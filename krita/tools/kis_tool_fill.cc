@@ -85,7 +85,7 @@ bool KisToolFill::flood(int startX, int startY)
 	painter.setOpacity(OPACITY_OPAQUE); // XXX: make a selector for this?
 	painter.setFillThreshold(m_threshold);
 	painter.setCompositeOp(m_compositeOp);
-	painter.setPattern(*(m_subject -> currentPattern()));
+	painter.setPattern(m_subject -> currentPattern());
 	
 	KisProgressDisplayInterface *progress = m_subject -> progressDisplay();
 	if (progress) {

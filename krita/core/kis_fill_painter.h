@@ -79,14 +79,13 @@ public:
 	 */
         void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const QColor& c, QUANTUM opacity);
         void fillRect(const QRect& rc, const QColor& c, QUANTUM opacity);
+
 	/**
 	 * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
 	 * entire rectangle.
-	 **/
-//	void fillRect(const QRect& rc, KisIteratorInfiniteLinePixel src);
-//	void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, KisIteratorInfiniteLinePixel src);
-	void fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern& pattern);
-	void fillRect(const QRect& rc, KisPattern& pattern);
+	 */
+	void fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern * pattern);
+	void fillRect(const QRect& rc, KisPattern * pattern);
 
 	/**
 	 * Fills the enclosed area around the point with the set color. If there is a
@@ -102,10 +101,12 @@ public:
 
 	void setFillThreshold(int threshold);
     
-    /** Sets the width of the layer */
-    void setWidth(int w) { m_width = w; }
-    /** Sets the height of the layer */
-    void setHeight(int h) { m_height = h; }
+	/** Sets the width of the layer */
+	void setWidth(int w) { m_width = w; }
+
+	/** Sets the height of the layer */
+	void setHeight(int h) { m_height = h; }
+
 private:
 	// for floodfill
 	/**

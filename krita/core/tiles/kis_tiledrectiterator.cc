@@ -21,26 +21,6 @@
 #include "kis_global.h"
 #include "kis_iterator.h"
 
-KisTiledIterator::KisTiledIterator( KisTiledDataManager *ndevice)
-{
-	m_ktm = ndevice;
-	m_x = 0;
-	m_y = 0;
-	m_row = 0;
-	m_col = 0;
-	m_depth = m_ktm -> getDepth();
-}
-
-KisTiledIterator::~KisTiledIterator( )
-{
-}
-
-KisTiledIterator::operator Q_UINT8 * ()
-{
-	return m_data + m_offset;
-}
-
-
 KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  Q_INT32 nleft,
 						Q_INT32 ntop, Q_INT32 nw, Q_INT32 nh, bool writable) :
 	KisTiledIterator(ndevice),
@@ -52,6 +32,7 @@ KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  Q_INT
 	m_writable = writable;
 	m_x = nleft;
 	m_y  = ntop;
+	m_beyondEnd = (m_w == 0) || (m_h == 0);
 	
 	// Find tile row,col matching x,y
 	// The hack with 16384 is to avoid negative division which is undefined in C++ and the most
@@ -99,7 +80,9 @@ KisTiledRectIterator & KisTiledRectIterator::operator ++ (int )
 	{
 		if (m_yInTile >= m_bottomInTile)
 		{
-			nextTile();			
+			nextTile();
+			if(m_beyondEnd)
+				return *this;
 			m_yInTile = m_topInTile;
 			m_x = m_col * tileWidth() + m_leftInTile;
 			m_y = m_row * tileHeight() + m_topInTile;
@@ -129,11 +112,11 @@ void KisTiledRectIterator::nextTile()
 	if(m_col >= m_rightCol)
 	{
 		// needs to switch row
-		m_col = m_leftCol;
 		if(m_row >= m_bottomRow)
 			m_beyondEnd = true;
 		else
 		{
+			m_col = m_leftCol;
 			m_row++;
 			// The row has now changed, so recalc vertical limits
 			if(m_row == m_topRow)
@@ -142,7 +125,7 @@ void KisTiledRectIterator::nextTile()
 				m_topInTile = 0;
 	
 			if(m_row == m_bottomRow)
-				m_bottomInTile = m_top + m_h - m_bottomRow * tileHeight();
+				m_bottomInTile = m_top + m_h - 1 - m_bottomRow * tileHeight();
 			else
 				m_bottomInTile = tileHeight() - 1;
 		}
@@ -157,7 +140,7 @@ void KisTiledRectIterator::nextTile()
 		m_leftInTile = 0;
 
 	if(m_col == m_rightCol)
-		m_rightInTile = m_left + m_w - m_rightCol * tileWidth();
+		m_rightInTile = m_left + m_w - 1 - m_rightCol * tileWidth();
 	else
 		m_rightInTile = tileWidth() - 1;
 }
@@ -170,5 +153,5 @@ KisTiledRectIterator & KisTiledRectIterator::operator -- (int)
 
 bool KisTiledRectIterator::isDone()
 {
-	return m_y == m_bottomRow;
+	return m_beyondEnd;
 }

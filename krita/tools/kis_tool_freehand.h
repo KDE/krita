@@ -70,6 +70,8 @@ protected:
 	virtual void initPaint(const QPoint & pos);
 	virtual void endPaint();
 
+	KisImageSP currentImage();
+
 protected:
 	QPoint m_dragStart;
 	float m_dragDist;

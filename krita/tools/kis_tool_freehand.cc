@@ -72,7 +72,7 @@ void KisToolFreeHand::mousePress(QMouseEvent *e)
 
 	if (!m_currentImage -> activeDevice()) return;
 
-		if (e->button() == QMouseEvent::LeftButton) {
+	if (e->button() == QMouseEvent::LeftButton) {
 		m_mode = PAINT;
 		initPaint(e -> pos());
 		paintAt(e->pos(), PRESSURE_DEFAULT, 0, 0);
@@ -86,7 +86,7 @@ void KisToolFreeHand::mouseRelease(QMouseEvent* e)
 {
 	if (e->button() == QMouseEvent::LeftButton && m_mode == PAINT) {
 		endPaint();
-        }
+	}
 }
 
 
@@ -99,7 +99,7 @@ void KisToolFreeHand::mouseMove(QMouseEvent *e)
 
 void KisToolFreeHand::tabletEvent(QTabletEvent *e)
 {
-         if (e->device() == QTabletEvent::Stylus) {
+	if (e->device() == QTabletEvent::Stylus) {
 		 if (!m_currentImage -> activeDevice()) {
 			 e -> accept();
 			 return;
@@ -129,7 +129,7 @@ void KisToolFreeHand::tabletEvent(QTabletEvent *e)
 		 } else if (pressure >= PRESSURE_THRESHOLD && m_mode == PAINT_STYLUS) {
 			 paintLine(m_dragStart, e -> pos(), pressure, e -> xTilt(), e -> yTilt());
 		 }
-         }
+	}
 	 e -> accept();
 }
 
@@ -221,6 +221,11 @@ void KisToolFreeHand::slotSetOpacity(int opacityPerCent)
 void KisToolFreeHand::slotSetCompositeMode(int compositeOp)
 {
 	m_compositeOp = (CompositeOp)compositeOp;
+}
+
+KisImageSP KisToolFreeHand::currentImage()
+{
+	return m_currentImage;
 }
 
 #include "kis_tool_freehand.moc"

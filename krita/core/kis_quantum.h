@@ -32,6 +32,10 @@ class KisQuantum {
 			// TODO: the stuff concerning the selection should be put theres
 			return ( *m_quantum = q );
 		};
+		inline QUANTUM operator-=(QUANTUM q)
+		{
+			return ((*this) = *this - q);
+		}
 	private:
 		QUANTUM* m_quantum;
 };

@@ -26,6 +26,7 @@
 
 #include "kis_image.h"
 #include "kis_strategy_colorspace_cmyk.h"
+#include "kis_strategy_colorspace_rgb.h"
 #include "tiles/kispixeldata.h"
 #include "kis_iterators_pixel.h"
 
@@ -326,3 +327,26 @@ void KisStrategyColorSpaceCMYK::computeDuplicatePixel(KisIteratorPixel* dst, Kis
 	dstPR.alpha() =( dabPR.alpha() * (srcPR.alpha()) ) / QUANTUM_MAX;
 }
 
+    // XXX: these algorithms aren't the best. See www.littlecms.com
+    // for a suitable library, or the posting by Leo Rosenthol for
+    // a better, but slower algorithm at
+    // http://lists.kde.org/?l=koffice-devel&m=106698241227054&w=2
+
+void KisStrategyColorSpaceCMYK::convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst)
+{
+	KisPixelRepresentationCMYK srccmyk(src);
+	dst.red() = QUANTUM_MAX - (srccmyk.cyan() + srccmyk.black());
+	dst.green() = QUANTUM_MAX - (srccmyk.magenta() + srccmyk.black());
+	dst.blue() = QUANTUM_MAX - (srccmyk.yellow() + srccmyk.black());
+}
+void KisStrategyColorSpaceCMYK::convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst)
+{
+	KisPixelRepresentationCMYK dstcmyk(dst);
+	dstcmyk.cyan() = QUANTUM_MAX - src.red();
+	dstcmyk.magenta() = QUANTUM_MAX - src.green();
+	dstcmyk.yellow() = QUANTUM_MAX - src.blue();
+	dstcmyk.black() = QMIN(dstcmyk.cyan(), QMIN( dstcmyk.magenta(), dstcmyk.yellow() ) );
+	dstcmyk.cyan() -= dstcmyk.black();
+	dstcmyk.magenta() -= dstcmyk.black();
+	dstcmyk.yellow() -= dstcmyk.black();
+}

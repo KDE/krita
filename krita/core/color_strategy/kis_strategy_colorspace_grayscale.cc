@@ -28,6 +28,7 @@
 
 #include "kis_image.h"
 #include "kis_strategy_colorspace_grayscale.h"
+#include "kis_strategy_colorspace_rgb.h"
 #include "tiles/kispixeldata.h"
 #include "kis_iterators_pixel.h"
 
@@ -186,7 +187,6 @@ void KisStrategyColorSpaceGrayscale::tileBlt(Q_INT32 stride,
 				       CompositeOp op) const
 {
 	kdDebug() << "KisStrategyColorSpaceGrayscale Compositing with: " << op <<" " << stride << " dst=" << dst << " " << dststride << " " << " src=" << src << " " << srcstride << " " << opacity << " " << rows << " " << cols << endl;
-		QUANTUM alpha = OPACITY_OPAQUE;
 	QUANTUM *d;
 	QUANTUM *s;
 	Q_INT32 i;
@@ -270,6 +270,22 @@ void KisStrategyColorSpaceGrayscale::computeDuplicatePixel(KisIteratorPixel* dst
 	KisPixelRepresentationGrayscale srcPR(*src);
 	dstPR.gray() = ( (QUANTUM_MAX - dabPR.gray()) * (srcPR.gray()) ) / QUANTUM_MAX;
 	dstPR.alpha() =( dabPR.alpha() * (srcPR.alpha()) ) / QUANTUM_MAX;
+}
+
+void KisStrategyColorSpaceGrayscale::convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst)
+{
+	KisPixelRepresentationGrayscale prg(src);
+	dst.red() = prg.gray();
+	dst.green() = prg.gray();
+	dst.blue() = prg.gray();
+	dst.alpha() = prg.alpha();
+}
+
+void KisStrategyColorSpaceGrayscale::convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst)
+{
+	KisPixelRepresentationGrayscale prg(dst);
+	prg.gray() = (src.red() + src.green() + src.blue() ) / 3;
+	prg.alpha() = src.alpha();
 }
 
 

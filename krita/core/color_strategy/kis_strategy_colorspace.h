@@ -26,6 +26,8 @@
 
 class QPainter;
 class KisIteratorPixel;
+class KisPixelRepresentation;
+class KisPixelRepresentationRGB;
 
 /** 
  * This class give some basic information about a channel.
@@ -65,6 +67,16 @@ public:
 
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
 
+	/** This function is used to convert a KisPixelRepresentation to an other color strategy.
+		* When implementing a color space, there is no need to implement a conversion to all strategy,
+		* if there is no direct conversion facilities, the function should use the conversion to/from RGBA
+		*/
+	virtual void convertTo(KisPixelRepresentation& src, KisPixelRepresentation& dst,  KisStrategyColorSpaceSP cs);
+	/** This function convert a pixel to RGBA */
+	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst) =0;
+	/** This function convert a pixel from RGBA */
+	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst) =0;
+	
 	virtual QImage convertToImage(KisImageSP image, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const = 0;
 	virtual QImage convertToImage(KisTileMgrSP tm, Q_UINT32 depth, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) const = 0;
 

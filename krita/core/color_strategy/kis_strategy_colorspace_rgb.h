@@ -29,6 +29,7 @@
 class KisPixelRepresentationRGB : public KisPixelRepresentation {
 public:
 	inline KisPixelRepresentationRGB( const KisPixelRepresentation& pr) : KisPixelRepresentation(pr) { };
+	inline KisPixelRepresentationRGB( ) : KisPixelRepresentation(4) { };
 public:
 	inline KisQuantum red() { return (*this)[PIXEL_RED]; };
 	inline KisQuantum green() { return (*this)[PIXEL_GREEN]; };
@@ -76,6 +77,9 @@ public:
 			Q_INT32 cols, 
 			CompositeOp op) const;
 	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src);
+
+	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst);
+	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst);
 
 private:
 	KPixmapIO m_pixio;

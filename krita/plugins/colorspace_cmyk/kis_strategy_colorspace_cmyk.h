@@ -110,6 +110,8 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 			     Q_INT32 cols, 
 			     CompositeOp op) const;
 	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src);
+	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst);
+	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst);
 
  private:
 

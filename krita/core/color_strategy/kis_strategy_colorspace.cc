@@ -16,6 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kis_strategy_colorspace.h"
+#include "kis_strategy_colorspace_rgb.h"
 
 KisStrategyColorSpace::KisStrategyColorSpace()
 {
@@ -25,3 +26,9 @@ KisStrategyColorSpace::~KisStrategyColorSpace()
 {
 }
 
+void KisStrategyColorSpace::convertTo(KisPixelRepresentation& src, KisPixelRepresentation& dst,  KisStrategyColorSpaceSP cs)
+{
+	 KisPixelRepresentationRGB intermediaire;
+	 this->convertToRGBA(src, intermediaire);
+	 cs->convertFromRGBA(intermediaire, dst);
+}

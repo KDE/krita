@@ -330,4 +330,20 @@ void KisStrategyColorSpaceRGB::computeDuplicatePixel(KisIteratorPixel* dst, KisI
 	dstPR.alpha() =( dabPR.alpha() * (srcPR.alpha()) ) / QUANTUM_MAX;
 }
 
+void KisStrategyColorSpaceRGB::convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst)
+{
+	for(int i = 0; i < MAX_CHANNEL_RGBA; i++)
+	{
+		dst[i] = src[i];
+	}
+}
+
+void KisStrategyColorSpaceRGB::convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst)
+{
+	for(int i = 0; i < MAX_CHANNEL_RGBA; i++)
+	{
+		dst[i] = src[i];
+	}
+}
+
 

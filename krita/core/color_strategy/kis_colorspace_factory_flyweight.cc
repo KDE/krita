@@ -54,9 +54,11 @@ KisStrategyColorSpaceSP KisColorSpaceFactoryFlyweight::create(enumImgType imgTyp
 
 	switch (imgType) {
 	case IMAGE_TYPE_RGB:
+	case IMAGE_TYPE_RGBA:
 		p = new KisStrategyColorSpaceRGB;
 		break;
 	case IMAGE_TYPE_CMYK:
+	case IMAGE_TYPE_CMYKA:
 		p = new KisStrategyColorSpaceCMYK;
 		break;
 	default:

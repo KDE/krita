@@ -141,7 +141,7 @@ void KisToolBrush::initPaint(const QPoint & pos)
 	m_painter -> setPaintColor(m_subject -> fgColor());
 	m_painter -> setBrush(m_subject -> currentBrush());
 
-	// Set the cursor -- ideally. this should be a pixmap created from the brush,
+	// Set the cursor -- ideally. this should be a mask created from the brush,
 	// now that X11 can handle colored cursors.
 #if 0
 	// Setting cursors has no effect until the tool is selected again; this

@@ -311,7 +311,11 @@ bool KisPaintDevice::alpha() const
         return m_alpha;
 }
 
-enumImgType KisPaintDevice::type() const
+enumImgType KisPaintDevice::type() const {
+	return m_imgType;
+}
+
+enumImgType KisPaintDevice::typeWithoutAlpha() const
 {
         switch (m_imgType) {
         case IMAGE_TYPE_INDEXEDA:
@@ -514,7 +518,7 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
         data = pd -> data;
         Q_ASSERT(data);
 
-        switch (m_alpha ? typeWithAlpha() : type()) {
+        switch (m_alpha ? typeWithAlpha() : typeWithoutAlpha()) {
         case IMAGE_TYPE_INDEXEDA:
         case IMAGE_TYPE_INDEXED:
                 break; // TODO
@@ -549,7 +553,7 @@ bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM op
         data = pd -> data;
         Q_ASSERT(data);
 
-        switch (m_alpha ? typeWithAlpha() : type()) {
+        switch (m_alpha ? typeWithAlpha() : typeWithoutAlpha()) {
         case IMAGE_TYPE_INDEXEDA:
         case IMAGE_TYPE_INDEXED:
                 break; // TODO

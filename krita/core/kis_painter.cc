@@ -617,7 +617,6 @@ float KisPainter::paintLine(const QPoint & pos1,
 		return dist;
 	else
 		return 0;
-
 }
 
 void KisPainter::paintAt(const QPoint & pos,
@@ -649,7 +648,6 @@ void KisPainter::paintAt(const QPoint & pos,
 	m_brushWidth = mask -> width();
 	m_brushHeight = mask -> height();
 	computeDab(mask);
-	m_lastPressure = calibratedPressure;
 
 	bitBlt( x,  y,  COMPOSITE_NORMAL, m_dab.data() );
 
@@ -661,12 +659,101 @@ void KisPainter::paintAt(const QPoint & pos,
 
 
 float KisPainter::eraseLine(const QPoint &pos1,
-			const QPoint &pos2,
-			const Q_INT32 pressure,
-			const Q_INT32 xTilt,
-			const Q_INT32 yTilt,
-			const float savedDist)
+			    const QPoint &pos2,
+			    const Q_INT32 pressure,
+			    const Q_INT32 xTilt,
+			    const Q_INT32 yTilt,
+			    const float savedDist)
 {
+	Q_INT32 spacing = m_brush -> spacing();
+
+	if (spacing <= 0) {
+		spacing = m_brushWidth;
+	}
+
+	Q_INT32 x1, y1, x2, y2;
+
+	x1 = pos1.x();
+	y1 = pos1.y();
+
+	x2 = pos2.x();
+	y2 = pos2.y();
+
+	QRect r;
+
+	if (x1 < x2 ) {
+		if (y1 < y2) {
+			r = QRect(x1, y1, x2 - x1 + m_dab -> width(), y2 - y1 + m_dab -> height());
+		}
+		else {
+			r = QRect(x1, y2, x2 - x1 + m_dab -> width(), y1 - y2 + m_dab -> height());
+		}
+	}
+	else {
+		if (y1 < y2) {
+			r = QRect(x2, y1, x1 - x2 + m_dab -> width(), y2 - y1 + m_dab -> height());
+		}
+		else {
+			r = QRect(x2, y2, x1 - x2 + m_dab -> width(), y1 - y2 + m_dab -> height());
+		}
+	}
+
+	KisVector end(x2, y2);
+	KisVector start(x1, y1);
+
+	KisVector dragVec = end - start;
+
+	float newDist = dragVec.length();
+	float dist = savedDist + newDist;
+	float l_savedDist = savedDist;
+
+	if (static_cast<int>(dist) < spacing) {
+		m_dirtyRect = QRect();
+		return dist;
+	}
+
+	double length, ilength;
+	double x, y, z;
+	x = dragVec.x();
+	y = dragVec.y();
+	z = dragVec.z();
+	length = x * x + y * y + z * z;
+	length = sqrt (length);
+
+	if (length)
+	{
+		ilength = 1/length;
+		x *= ilength;
+		y *= ilength;
+		z *= ilength;
+	}
+
+	dragVec.setX(x);
+	dragVec.setY(y);
+	dragVec.setZ(z);
+
+	KisVector step = start;
+
+	while (dist >= spacing) {
+		if (l_savedDist > 0) {
+			step += dragVec * (spacing - l_savedDist);
+			l_savedDist -= spacing;
+		}
+		else {
+			step += dragVec * spacing;
+		}
+		QPoint p(qRound(step.x()), qRound(step.y()));
+		// Fix this: paintAt does not always have to compute the dirtyRect
+		eraseAt(p, pressure, xTilt, yTilt);
+		dist -= spacing;
+	}
+
+	m_dirtyRect = r;
+
+	if (dist > 0)
+		return dist;
+	else
+		return 0;
 }
 
 void KisPainter::eraseAt(const QPoint &pos,
@@ -674,6 +761,52 @@ void KisPainter::eraseAt(const QPoint &pos,
 			 const Q_INT32 /*xTilt*/,
 			 const Q_INT32 /*yTilt*/) 
 {
+	
+	
+	Q_INT32 calibratedPressure = pressure / 2;
+
+	KisAlphaMask * mask = m_brush -> mask(calibratedPressure);
+	m_brushWidth = mask -> width();
+	m_brushHeight = mask -> height();
+
+	if (m_device -> alpha()) {
+		// Erase to inverted brush transparency
+		m_dab = new KisLayer(mask -> width(),
+				     mask -> height(),
+				     m_device -> typeWithAlpha(),
+				     "eraser_dab");
+		m_dab -> setOpacity(OPACITY_OPAQUE);
+		for (int y = 0; y < mask -> height(); y++) {
+			for (int x = 0; x < mask -> width(); x++) {
+				// the color doesn't matter, since we only composite the alpha
+				m_dab -> setPixel(x, y, m_paintColor, QUANTUM_MAX - mask -> alphaAt(x, y));
+			}
+		}
+		bitBlt( pos.x() - m_hotSpotX,  pos.y() - m_hotSpotY,  COMPOSITE_ERASE, m_dab.data() );
+		
+		m_dirtyRect = QRect(pos.x() - m_hotSpotX,
+				    pos.y() - m_hotSpotY,
+				    m_dab -> width(),
+				    m_dab -> height());
+ 	} else {
+ 		// Erase to background colour
+		m_dab = new KisLayer(mask -> width(),
+				     mask -> height(),
+				     m_device -> typeWithAlpha(),
+				     "eraser_dab");
+		m_dab -> setOpacity(OPACITY_TRANSPARENT);
+		for (int y = 0; y < mask -> height(); y++) {
+			for (int x = 0; x < mask -> width(); x++) {
+				m_dab -> setPixel(x, y, m_backgroundColor, mask -> alphaAt(x, y));
+			}
+		}
+		bitBlt( pos.x() - m_hotSpotX,  pos.y() - m_hotSpotY,  COMPOSITE_NORMAL, m_dab.data() );
+		
+		m_dirtyRect = QRect(pos.x() - m_hotSpotX,
+				    pos.y() - m_hotSpotY,
+				    m_dab -> width(),
+				    m_dab -> height());	
+ 	}
 }
 
 void KisPainter::setBrush(KisBrush* brush)
@@ -688,8 +821,6 @@ void KisPainter::setBrush(KisBrush* brush)
 	m_hotSpotX = m_hotSpot.x();
 	m_hotSpotY = m_hotSpot.y();
 
-	computeDab(mask);
-
 }
 
 void KisPainter::computeDab(KisAlphaMask* mask)
@@ -698,9 +829,10 @@ void KisPainter::computeDab(KisAlphaMask* mask)
 	// the size of the layer that is being painted on. Thas layer is cleared
 	// between painting actions. Our temporary layer is only just big enough to 
 	// contain the brush mask.
+
 	m_dab = new KisLayer(mask -> width(),
 			     mask -> height(),
-			     m_device -> image() -> imgType(),
+			     m_device -> typeWithAlpha(),
 			     "dab");
 	m_dab -> setOpacity(OPACITY_TRANSPARENT);
 	for (int y = 0; y < mask -> height(); y++) {

@@ -75,122 +75,93 @@ void KisToolEraser::mousePress(QMouseEvent *e)
 }
 
 void KisToolEraser::mouseMove(QMouseEvent *e) {
+	if (m_mode == ERASE) {
+		eraseLine(m_dragStart, e -> pos(), 128, 0, 0);
+	}
 }
 
 void KisToolEraser::mouseRelease(QMouseEvent *e) {
+	if (e->button() == QMouseEvent::LeftButton && m_mode == ERASE) {
+		endErase();
+        }
+
 }
 
 void KisToolEraser::tabletEvent(QTabletEvent *e) {
+         if (e->device() == QTabletEvent::Eraser) {
+		 if (!m_subject) {
+			 e -> accept();
+			 return;
+		 }
+
+		 if (!m_subject -> currentBrush()) {
+			 e->accept();
+			 return;
+		 }
+
+		 Q_INT32 pressure = e -> pressure();
+
+		 if (pressure < 5 && m_mode == ERASE_STYLUS) {
+			 endErase();
+		 }
+		 else if (pressure >= 5 && m_mode == HOVER) {
+			 m_mode = ERASE_STYLUS;
+			 initErase(e -> pos());
+			 m_painter -> eraseAt(e -> pos(), e->pressure(), e->xTilt(), e->yTilt());
+			 // XXX: Get the rect that should be updated
+			 m_currentImage -> notify( m_painter -> dirtyRect() );
+
+		 }
+		 else if (pressure >= 5 && m_mode == ERASE_STYLUS) {
+			 eraseLine(m_dragStart, e -> pos(), pressure, e -> xTilt(), e -> yTilt());
+		 }
+         }
+	 e -> accept();
 }
 
 void KisToolEraser::initErase(const QPoint & pos) {
+	m_dragStart = pos;
+	m_dragDist = 0;
+
+	// Create painter
+	KisPaintDeviceSP device;
+	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
+		if (m_painter)
+			delete m_painter;
+		m_painter = new KisPainter( device );
+		m_painter -> beginTransaction(i18n("erase"));
+	}
+
+	m_painter -> setPaintColor(m_subject -> fgColor());
+	m_painter -> setBackgroundColor(m_subject -> bgColor());
+	m_painter -> setBrush(m_subject -> currentBrush());
+
 }
 
 void KisToolEraser::endErase() {
+	m_mode = HOVER;
+	KisPaintDeviceSP device;
+	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
+		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+		if (adapter && m_painter) {
+			// If painting in mouse release, make sure painter
+			// is destructed or end()ed
+			adapter -> addCommand(m_painter->endTransaction());
+		}
+		delete m_painter;
+		m_painter = 0;
+	}
 }
 
-void KisToolEraser::erase(const QPoint& pos)
+void KisToolEraser::eraseLine(const QPoint & pos1,
+			     const QPoint & pos2,
+			     const Q_INT32 pressure,
+			     const Q_INT32 xtilt,
+			     const Q_INT32 ytilt)
 {
-// 	if (!m_brush) 
-// 		return false;
-
-// 	KisImageSP img = m_doc -> currentImg();
-
-// 	if (!img)	
-// 		return false;
-	
-// 	KisLayerSP lay = img -> getCurrentLayer();
-
-// 	if (!lay)   
-// 		return false;
-
-// 	if (!img -> colorMode() == cm_RGB && !img -> colorMode() == cm_RGBA)
-// 		return false;
-
-// 	int startx = (pos - m_brush -> hotSpot()).x();
-// 	int starty = (pos - m_brush -> hotSpot()).y();
-
-// 	QRect clipRect(startx, starty, m_brush -> width(), m_brush -> height());
-
-// 	if (!clipRect.intersects(lay -> imageExtents()))
-// 		return false;
-
-// 	clipRect = clipRect.intersect(lay -> imageExtents());
-
-// 	int sx = clipRect.left() - startx;
-// 	int sy = clipRect.top() - starty;
-// 	int ex = clipRect.right() - startx;
-// 	int ey = clipRect.bottom() - starty;
-
-// 	uchar *sl;
-// 	uchar bv, invbv;
-
-// 	bool alpha = img -> colorMode() == cm_RGBA;
-// 	QRgb rgb;
-// 	uchar r, g, b, a;
-
-// 	if (alpha) {
-// 		uchar a;
-// 		int   v;
-
-// 		for (int y = sy; y <= ey; y++) {
-// 			sl = m_brush -> scanline(y);
-
-// 			for (int x = sx; x <= ex; x++) {
-// 				bv = *(sl + x);
-
-// 				if (bv == 0) 
-// 					continue;
-
-// 				rgb = lay -> pixel(startx + x, starty + y);
-// 				r = qRed(rgb);
-// 				g = qGreen(rgb);
-// 				b = qBlue(rgb);
-// 				a = qAlpha(rgb);
-// 				v = a - bv;
-
-// 				if (v < 0) 
-// 					v = 0;
-
-// 				if (v > 255) 
-// 					v = 255;
-
-// 				a = (uchar)v;
-// 				lay -> setPixel(startx + x, starty + y, qRgba(r, g, b, a), m_cmd);
-// 			}
-// 		}
-// 	}
-// 	else {   // no alpha channel -> erase to background color
-// 		KisView *view = getCurrentView();
-// 		int red = view -> bgColor().R();
-// 		int green = view -> bgColor().G();
-// 		int blue = view -> bgColor().B();
-
-// 		for (int y = sy; y <= ey; y++) {
-// 			sl = m_brush -> scanline(y);
-
-// 			for (int x = sx; x <= ex; x++) {
-// 				rgb = lay -> pixel(startx + x, starty + y);
-// 				r = qRed(rgb);
-// 				g = qGreen(rgb);
-// 				b = qBlue(rgb);
-
-// 				bv = *(sl + x);
-
-// 				if (bv == 0) 
-// 					continue;
-
-// 				invbv = 255 - bv;
-
-// 				b = ((blue * bv) + (b * invbv)) / CHANNEL_MAX;
-// 				g = ((green * bv) + (g * invbv)) / CHANNEL_MAX;
-// 				r = ((red * bv) + (r * invbv)) / CHANNEL_MAX;
-// 				lay -> setPixel(startx + x, starty + y, qRgb(r, g, b), m_cmd);
-// 			}
-// 		}
-// 	}
-
-// 	return true;
+	m_dragDist = m_painter -> eraseLine(pos1, pos2, pressure, xtilt, ytilt, m_dragDist);
+	m_currentImage -> notify( m_painter -> dirtyRect() );
+	m_dragStart = pos2;
 }
 
 void KisToolEraser::setup(KActionCollection *collection)

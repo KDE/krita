@@ -1250,4 +1250,39 @@ void compositeNormal(Q_INT32 stride,
 
 }
 
+void compositeErase(Q_INT32 stride,
+		    QUANTUM *dst, 
+		    Q_INT32 dststride,
+		    QUANTUM *src, 
+		    Q_INT32 srcstride,
+		    Q_INT32 rows, 
+		    Q_INT32 cols, 
+		    QUANTUM /*opacity*/ = OPACITY_OPAQUE)
+{
+	QUANTUM *d;
+	QUANTUM *s;
+	Q_INT32 i;
+
+	while (rows-- > 0) {
+		d = dst;
+		s = src;
+
+		for (i = cols; i > 0; i--, d += stride, s += stride) {
+			if (d[PIXEL_ALPHA] < s[PIXEL_ALPHA]) {
+				continue;
+			}
+			else {
+				d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
+			}
+
+		}
+
+		dst += dststride;
+		src += srcstride;
+	}
+
+
+}
+
+
 #endif

@@ -49,9 +49,12 @@ KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
 	insertItem(i18n("Clear"));
 	insertItem(i18n("Dissolve"));
 	insertItem(i18n("Displace"));
+#if 0
 	insertItem(i18n("Modulate"));
 	insertItem(i18n("Threshold"));
+#endif
 	insertItem(i18n("No composition"));
+#if 0
 	insertItem(i18n("Darken"));
 	insertItem(i18n("Lighten"));
 	insertItem(i18n("Hue"));
@@ -60,6 +63,7 @@ KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
 	insertItem(i18n("Luminize"));
 	insertItem(i18n("Screen"));
 	insertItem(i18n("Overlay"));
+#endif
 	insertItem(i18n("Copy cyan"));
 	insertItem(i18n("Copy magenta"));
 	insertItem(i18n("Copy yellow"));

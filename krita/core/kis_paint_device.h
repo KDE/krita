@@ -109,7 +109,8 @@ public:
         void maskBounds(QRect *rc);
 
         bool alpha() const;
-        enumImgType type() const;
+	enumImgType type() const;
+        enumImgType typeWithoutAlpha() const;
         enumImgType typeWithAlpha() const;
 
 	CompositeOp compositeOp() { return m_compositeOp; }

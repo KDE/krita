@@ -159,6 +159,7 @@ public:
 	void setPattern(KisPattern& pattern) { m_pattern = &pattern; }
 	void setGradient(KisGradient& gradient) { m_gradient = &gradient; }
 	void setPaintColor(const KoColor& color) {m_paintColor = color; }
+	void setBackgroundColor(const KoColor& color) {m_backgroundColor = color; }
 	void setFillColor(const KoColor& color) { m_fillColor = color; }
 	void setOpacity(QUANTUM opacity) { m_opacity = opacity; }
 
@@ -186,6 +187,7 @@ private:
 
 	KisLayerSP m_dab;
 	KoColor m_paintColor;
+	KoColor m_backgroundColor;
 	KoColor m_fillColor;
 
 	KisBrush *m_brush;

@@ -22,7 +22,7 @@
 #define KIS_TOOL_POLYLINE_H_
 
 #include <qpoint.h>
-#include <qpointarray.h> 
+#include <qvaluevector.h>
 
 #include "kis_tool.h"
 #include "kis_tool_rectangle.h"
@@ -73,6 +73,9 @@ protected:
 	bool m_dragging;
 	KisImageSP m_currentImage;
 private:
+        typedef QValueVector<KisPoint> KisPointVector;
+        KisPointVector * m_points;
+        bool m_polyLineStarted;
 };
 
 

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="6">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="7">
 
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
@@ -250,5 +250,11 @@
   <Action name="current_tool_properties"/>  
         
 </ToolBar>
+
+<Menu name="menuimage_popup">
+  <Action name="rename_current_image_tab"/>
+  <Action name="add_new_image_tab"/>
+  <Action name="remove_current_image_tab"/>
+</Menu>
 
 </kpartgui>

@@ -35,6 +35,7 @@
 #include <qdockarea.h>
 #include <qstringlist.h>
 #include <qstyle.h>
+#include <qpopupmenu.h>
 
 // KDE
 #include <dcopobject.h>
@@ -350,7 +351,73 @@ void KisView::setupTabBar()
 		updateTabBar();
 		connect(m_tabBar, SIGNAL(tabChanged(const QString&)), SLOT(selectImage(const QString&)));
 		connect(m_doc, SIGNAL(imageListUpdated()), SLOT(updateTabBar()));
+                connect( m_tabBar, SIGNAL( doubleClicked() ), this, SLOT( slotRename() ) );
+                connect( m_tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ), this, SLOT( moveImage( unsigned, unsigned ) ) );
+                connect( m_tabBar, SIGNAL( contextMenu( const QPoint& ) ), this, SLOT( popupTabBarMenu( const QPoint& ) ) );
 	}
+}
+
+void KisView::popupTabBarMenu( const QPoint& _point )
+{
+    if ( !m_doc->isReadWrite() || !factory() )
+        return;
+    static_cast<QPopupMenu*>(factory()->container("menuimage_popup",this))->popup(_point);
+}
+
+void KisView::moveImage( unsigned, unsigned )
+{
+    //todo
+}
+
+void KisView::slotRename()
+{
+    //todo
+#if 0 //code from kis_tabbar
+        int i = 1;
+    QString imgName;
+
+    QStringList::Iterator it;
+    for ( it = tabsList.begin(); it != tabsList.end(); ++it )
+    {
+        if (i == activeTab)
+	        imgName = *it;
+        i++;
+    }
+
+    bool ok;
+    QString activeName = imgName;
+    QString newName = KLineEditDlg::getText( i18n("Image Name"), i18n("Enter name:"), activeName, &ok, this );
+
+    // Have a different name ?
+    if ( ok ) // User pushed an OK button.
+    {
+        if ( (newName.stripWhiteSpace()).isEmpty() ) // Image name is empty.
+        {
+            KNotifyClient::beep();
+            KMessageBox::information( this, i18n("Image name cannot be empty."), i18n("Change Image Name") );
+            // Recursion
+            renameTab();
+            return;
+        }
+        else if ( newName != activeName ) // Image name changed.
+        {
+             for ( QStringList::Iterator it = tabsList.begin(); it != tabsList.end(); ++it )
+             {
+                 // Is the name already used
+                 if ( (*it) == newName )
+                 {
+                     KNotifyClient::beep();
+                     KMessageBox::information( this, i18n("This name is already used."), i18n("Change Image Name") );
+                     // Recursion
+                     renameTab();
+                     return;
+                 }
+             }
+             m_pDoc->renameImage(imgName, newName);
+             m_pDoc->setModified( true );
+        }
+    }
+#endif
 }
 
 void KisView::updateStatusBarZoomLabel ()
@@ -466,6 +533,7 @@ void KisView::setupActions()
 	(void)new KAction(i18n("Reverse Foreground/Background Colors"), 0, this, SLOT(reverseFGAndBGColors()), actionCollection(), "reverse_fg_bg");
 
 	// image actions
+        m_imgRename = new KAction(i18n("Rename Current Image"), 0, this, SLOT(slotRename()), actionCollection(), "rename_current_image_tab");
 	(void)new KAction(i18n("Add New Image..."), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
 	m_imgRm = new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
 	m_imgResize = new KAction(i18n("Resize Image..."), 0, this, SLOT(imageResize()), actionCollection(), "resize_image");

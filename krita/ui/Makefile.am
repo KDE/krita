@@ -5,7 +5,7 @@ INCLUDES = -I$(srcdir)/../core $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_i
 noinst_LTLIBRARIES = libkisui.la
 libkisui_la_LIBADD = ./labels/libkislabel.la ./dialogs/libkisdialogs.la
 libkisui_la_SOURCES = integerwidget.cc kis_dlg_preferences.cc kis_dlg_builder_progress.cc \
-    kis_tabbar.cc  kis_canvas.cc \
+    kis_canvas.cc \
     kis_iconwidget.cc \
     kis_gradientwidget.cc kis_previewwidget.cc \
     kis_channelview.cc gradientview.cc \

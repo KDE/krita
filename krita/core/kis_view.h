@@ -224,6 +224,9 @@ private slots:
 	void fillSelectionBg();
 	void fillSelectionFg();
 	void paste_into();
+    void popupTabBarMenu( const QPoint& );
+    void moveImage( unsigned, unsigned );
+    void slotRename();
 
 
 	void canvasGotMousePressEvent(QMouseEvent *e);
@@ -345,7 +348,7 @@ private:
 	KAction *m_selectionRm;
 	KAction *m_selectionSelectAll;
 	KAction *m_selectionSelectNone;
-
+    KAction *m_imgRename;
 	DCOPObject *m_dcop;
 
         // Widgets

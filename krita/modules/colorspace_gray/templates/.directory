@@ -1,3 +1,6 @@
 [Desktop Entry]
 Name=Grayscale
+Name[en_GB]=Greyscale
+Name[pt]=Tons de Cinzento
+Name[pt_BR]=Tons de Cinzento
 X-KDE-DefaultTab=true

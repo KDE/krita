@@ -2,6 +2,7 @@
 <kpartgui library="libkofficescan" version="1">
 <MenuBar>
     <Menu name="Insert"><text>&amp;Insert</text>
+	<Separator/>
 	<Action name="scan_image"/>
     </Menu>
 </MenuBar>

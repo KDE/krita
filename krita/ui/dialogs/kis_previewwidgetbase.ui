@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>PreviewWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -17,9 +17,6 @@
             <width>360</width>
             <height>150</height>
         </size>
-    </property>
-    <property name="caption">
-        <string>PreviewWidgetBase</string>
     </property>
     <widget class="QLayoutWidget">
         <property name="name">

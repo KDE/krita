@@ -41,6 +41,7 @@ public:
 	virtual void clearOld();
 	virtual bool willModify() const;
 
+	virtual void paintEvent(QPaintEvent *e);
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);
@@ -63,18 +64,19 @@ protected:
 	KisCanvas   *m_canvas;
 
 private:
+	QRect m_selectRect;
+	QPointArray m_pointArray;
+	uint m_index;
 
-    QRect       m_selectRect;
-    QPointArray m_pointArray;
-    uint        m_index;
-
-    bool        moveSelectArea;
-    bool        dragSelectArea;
-    QPoint      m_hotSpot, oldDragPoint;
-    QRegion     m_selectRegion;
-    QRect       m_imageRect;
-    bool        dragFirst;
-    float       m_dragdist;
+	bool moveSelectArea;
+	bool dragSelectArea;
+	QPoint m_hotSpot;
+       	QPoint oldDragPoint;
+	QRegion m_selectRegion;
+	QRect m_imageRect;
+	bool dragFirst;
+	float m_dragdist;
 };
 
 #endif //__selecttoolfreehand_h__
+

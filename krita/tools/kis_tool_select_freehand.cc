@@ -53,239 +53,224 @@ FreehandSelectTool::~FreehandSelectTool()
 {
 }
 
-
 void FreehandSelectTool::start( QPoint p )
 {
-    mStart = p;
+	mStart = p;
 }
-
 
 void FreehandSelectTool::finish( QPoint p )
 {
-    mFinish = p;
-    drawLine( mStart, mFinish );
-    m_pointArray.putPoints( m_index, 1, mFinish.x(),mFinish.y() );
+	mFinish = p;
+	drawLine(mStart, mFinish);
+	m_pointArray.putPoints(m_index, 1, mFinish.x(), mFinish.y());
 }
-
 
 void FreehandSelectTool::clearOld()
 {
-//   if (m_doc->isEmpty()) return;
-
-   // clear everything in 
-   QRect updateRect(0, 0, m_doc->current()->width(), m_doc->current()->height());
-   m_view->updateCanvas(updateRect);
-   m_selectRegion = QRegion();
-
-   m_dragStart = QPoint(-1,-1);
-   m_dragEnd =   QPoint(-1,-1);
+	m_dragStart = QPoint(-1,-1);
+	m_dragEnd = QPoint(-1,-1);
+	m_index = 0;
+	m_pointArray.resize(0);
+	
+	// clear everything in 
+	QRect updateRect(0, 0, m_doc->current()->width(), m_doc->current()->height());
+	m_view->updateCanvas(updateRect);
+	m_selectRegion = QRegion();
 }
 
 void FreehandSelectTool::mousePress( QMouseEvent* event )
 {
-//    if ( m_doc->isEmpty() )
-//        return;
+	// start the freehand line.
+	if (event -> button() == LeftButton && !moveSelectArea) {
+		m_dragging = true;
+		clearOld();
+		start( event->pos() );
 
-    // start the freehand line.
-    if( event->button() == LeftButton && !moveSelectArea ) {
-        m_dragging = true;
-        clearOld();
-        start( event->pos() );
-        
-        m_dragStart = event->pos();
-        m_dragEnd = event->pos();
-        dragSelectArea = false;
-    }
-    else if( event->button() == LeftButton && moveSelectArea ) {
-        dragSelectArea = true;
-        dragFirst = true;
-        m_dragStart = event->pos();
-        m_dragdist = 0;
+		m_dragStart = event->pos();
+		m_dragEnd = event->pos();
+		dragSelectArea = false;
+	}
+	else if (event -> button() == LeftButton && moveSelectArea) {
+		dragSelectArea = true;
+		dragFirst = true;
+		m_dragStart = event->pos();
+		m_dragdist = 0;
 
-        m_hotSpot = event->pos();
-        int x = zoomed( m_hotSpot.x() );
-        int y = zoomed( m_hotSpot.y() );
+		m_hotSpot = event->pos();
+		int x = zoomed( m_hotSpot.x() );
+		int y = zoomed( m_hotSpot.y() );
 
-        m_hotSpot = QPoint( x - m_imageRect.topLeft().x(), y - m_imageRect.topLeft().y() );
+		m_hotSpot = QPoint( x - m_imageRect.topLeft().x(), y - m_imageRect.topLeft().y() );
 
-        oldDragPoint = event->pos();
-        setClipImage();
-    }
-    else if( event->button() == RightButton ) {
-        // TODO
-        return;
-    }
+		oldDragPoint = event->pos();
+		setClipImage();
+	}
+	else if (event->button() == RightButton) {
+		// TODO
+		return;
+	}
 }
 
 
 void FreehandSelectTool::mouseMove( QMouseEvent* event )
 {
-//    if (m_doc->isEmpty()) return;
+	if (event -> button() == RightButton) 
+		return;
 
-    if( event->button() == RightButton ) return;
+	if (m_dragging && !dragSelectArea) {
+		m_dragEnd = event->pos();
+		m_pointArray.putPoints( m_index, 1, m_dragStart.x(),m_dragStart.y() );
+		++m_index;
+		drawLine(m_dragStart, m_dragEnd);
+		m_dragStart = m_dragEnd;
+	}
+	else if (!m_dragging && !dragSelectArea) {
+		if (!m_selectRegion.isNull() && m_selectRegion.contains(event -> pos())) {
+			setMoveCursor();
+			moveSelectArea = true;
+		}
+		else {
+			setSelectCursor();
+			moveSelectArea = false;
+		}
+	}
+	else if (dragSelectArea) {
+		if (dragFirst) {
+			// remove select image
+			m_doc->getSelection()->erase();
+			clearOld();
+			m_view->slotUpdateImage();
+			dragFirst = false;
+		}
 
-    if( m_dragging && !dragSelectArea ) {
-        m_dragEnd = event->pos();
+		int spacing = 10;
+		float zF = m_view->zoomFactor();
+		QPoint pos = event->pos();
+		int mouseX = pos.x();
+		int mouseY = pos.y();
 
-        m_pointArray.putPoints( m_index, 1, m_dragStart.x(),m_dragStart.y() );
-        ++m_index;
+		KisVector end( mouseX, mouseY );
+		KisVector start( m_dragStart.x(), m_dragStart.y() );
 
-        drawLine( m_dragStart, m_dragEnd );
-        m_dragStart = m_dragEnd;
-    }
-    else if ( !m_dragging && !dragSelectArea ) {
-        if ( !m_selectRegion.isNull() && m_selectRegion.contains( event->pos() ) ) {
-            setMoveCursor();
-            moveSelectArea = true;
-        }
-        else {
-            setSelectCursor();
-            moveSelectArea = false;
-        }
-    }
-    else if ( dragSelectArea ) {
-        if ( dragFirst ) {
-            // remove select image
-            m_doc->getSelection()->erase();
+		KisVector dragVec = end - start;
+		float saved_dist = m_dragdist;
+		float new_dist = dragVec.length();
+		float dist = saved_dist + new_dist;
 
-            // refresh canvas
-            clearOld();
-            m_view->slotUpdateImage();
-            dragFirst = false;
-        }
+		if ( (int)dist < spacing ) {
+			m_dragdist += new_dist;
+			m_dragStart = pos;
+			return;
+		}
+		else
+			m_dragdist = 0;
 
-        int spacing = 10;
-        float zF = m_view->zoomFactor();
-        QPoint pos = event->pos();
-        int mouseX = pos.x();
-        int mouseY = pos.y();
+		dragVec.normalize();
+		KisVector step = start;
 
-        KisVector end( mouseX, mouseY );
-        KisVector start( m_dragStart.x(), m_dragStart.y() );
+		while ( dist >= spacing ) {
+			if ( saved_dist > 0 ) {
+				step += dragVec * ( spacing - saved_dist );
+				saved_dist -= spacing;
+			}
+			else
+				step += dragVec * spacing;
 
-        KisVector dragVec = end - start;
-        float saved_dist = m_dragdist;
-        float new_dist = dragVec.length();
-        float dist = saved_dist + new_dist;
+			QPoint p( qRound( step.x() ), qRound( step.y() ) );
 
-        if ( (int)dist < spacing ) {
-            m_dragdist += new_dist;
-            m_dragStart = pos;
-            return;
-        }
-        else
-            m_dragdist = 0;
+			QRect ur( zoomed( oldDragPoint.x() ) - m_hotSpot.x() - m_view->xScrollOffset(),
+					zoomed( oldDragPoint.y() ) - m_hotSpot.y() - m_view->yScrollOffset(),
+					(int)( m_clipPixmap.width() * ( zF > 1.0 ? zF : 1.0 ) ),
+					(int)( m_clipPixmap.height() * ( zF > 1.0 ? zF : 1.0 ) ) );
 
-        dragVec.normalize();
-        KisVector step = start;
+			m_view->updateCanvas( ur );
 
-        while ( dist >= spacing ) {
-            if ( saved_dist > 0 ) {
-                step += dragVec * ( spacing - saved_dist );
-                saved_dist -= spacing;
-            }
-            else
-                step += dragVec * spacing;
+			dragSelectImage( p, m_hotSpot );
 
-            QPoint p( qRound( step.x() ), qRound( step.y() ) );
+			oldDragPoint = p;
+			dist -= spacing;
+		}
 
-            QRect ur( zoomed( oldDragPoint.x() ) - m_hotSpot.x() - m_view->xScrollOffset(),
-                      zoomed( oldDragPoint.y() ) - m_hotSpot.y() - m_view->yScrollOffset(),
-                      (int)( m_clipPixmap.width() * ( zF > 1.0 ? zF : 1.0 ) ),
-                      (int)( m_clipPixmap.height() * ( zF > 1.0 ? zF : 1.0 ) ) );
-
-            m_view->updateCanvas( ur );
-
-            dragSelectImage( p, m_hotSpot );
-
-            oldDragPoint = p;
-            dist -= spacing;
-        }
-
-        if ( dist > 0 ) 
-            m_dragdist = dist;
-        m_dragStart = pos;
-    }
+		if ( dist > 0 ) 
+			m_dragdist = dist;
+		m_dragStart = pos;
+	}
 }
 
 
 void FreehandSelectTool::mouseRelease( QMouseEvent* event )
 {
-    if( event->button() == RightButton ) {
-        // TODO
-        return;
-    }
+	if ( event->button() == RightButton ) {
+		// TODO
+		return;
+	}
 
-    if ( !moveSelectArea ) {
-        // stop drawing freehand.
-        m_dragging = false;
+	if ( !moveSelectArea ) {
+		// stop drawing freehand.
+		m_dragging = false;
 
-        m_imageRect = getDrawRect( m_pointArray );
-        QPointArray points = zoomPointArray( m_pointArray );
+		m_imageRect = getDrawRect( m_pointArray );
+		QPointArray points = zoomPointArray( m_pointArray );
 
-        // need to connect start and end positions to close the freehand line.
-        finish( event->pos() );
-        
-        // we need a bounding rectangle and a point array of 
-        // points in the freehand line        
+		// need to connect start and end positions to close the freehand line.
+		finish( event->pos() );
 
-        m_doc->getSelection()->setPolygonalSelection( m_imageRect, points, m_doc->current()->getCurrentLayer() );
+		// we need a bounding rectangle and a point array of 
+		// points in the freehand line        
 
-        kdDebug(0) << "selectRect" 
-                   << " left: "   << m_imageRect.left() 
-                   << " top: "    << m_imageRect.top()
-                   << " right: "  << m_imageRect.right() 
-                   << " bottom: " << m_imageRect.bottom()
-                   << endl;
+		m_doc->getSelection()->setPolygonalSelection( m_imageRect, points, m_doc->current()->getCurrentLayer() );
 
-        if ( m_pointArray.size() > 1 )
-            m_selectRegion = QRegion( m_pointArray, true );
-        else
-            m_selectRegion = QRegion();
+		kdDebug(0) << "selectRect" 
+			<< " left: "   << m_imageRect.left() 
+			<< " top: "    << m_imageRect.top()
+			<< " right: "  << m_imageRect.right() 
+			<< " bottom: " << m_imageRect.bottom()
+			<< endl;
 
-        // Initialize
-        m_index = 0;
-        m_pointArray.resize( 0 );
-    }
-    else {
-        // Initialize
-        dragSelectArea = false;
-        m_selectRegion = QRegion();
-        setSelectCursor();
-        moveSelectArea = false;
+		if ( m_pointArray.size() > 1 )
+			m_selectRegion = QRegion( m_pointArray, true );
+		else
+			m_selectRegion = QRegion();
 
-        QPoint pos = event->pos();
+		// Initialize
+//		m_index = 0;
+//		m_pointArray.resize( 0 );
+	}
+	else {
+		// Initialize
+		dragSelectArea = false;
+		m_selectRegion = QRegion();
+		setSelectCursor();
+		moveSelectArea = false;
 
-        KisImage *img = m_doc->current();
-        if ( !img )
-            return;
-        if( !img->getCurrentLayer()->visible() )
-            return;
-        if( pasteClipImage( zoomed( pos ) - m_hotSpot ) )
-            img->markDirty( QRect( zoomed( pos ) - m_hotSpot, m_clipPixmap.size() ) );
-    }
+		QPoint pos = event->pos();
+
+		KisImage *img = m_doc->current();
+		if ( !img )
+			return;
+		if( !img->getCurrentLayer()->visible() )
+			return;
+		if( pasteClipImage( zoomed( pos ) - m_hotSpot ) )
+			img->markDirty( QRect( zoomed( pos ) - m_hotSpot, m_clipPixmap.size() ) );
+	}
 }
 
 
 void FreehandSelectTool::drawLine( const QPoint& start, const QPoint& end )
 {
-    QPainter p;
-    
-    p.begin( m_canvas );
-    p.setRasterOp( Qt::NotROP );
-    p.setPen( QPen( Qt::DotLine ) );
-    float zF = m_view->zoomFactor();
+	QPainter p;
 
-    p.drawLine( QPoint( start.x() + m_view->xPaintOffset() 
-                          - (int)(zF * m_view->xScrollOffset()),
-                        start.y() + m_view->yPaintOffset() 
-                           - (int)(zF * m_view->yScrollOffset())), 
-                QPoint( end.x() + m_view->xPaintOffset() 
-                          - (int)(zF * m_view->xScrollOffset()),
-                        end.y() + m_view->yPaintOffset() 
-                           - (int)(zF * m_view->yScrollOffset())) );
+	p.begin( m_canvas );
+	p.setRasterOp( Qt::NotROP );
+	p.setPen( QPen( Qt::DotLine ) );
+	float zF = m_view->zoomFactor();
 
-    p.end();
+	p.drawLine(start.x() + m_view->xPaintOffset() - (int)(zF * m_view->xScrollOffset()),
+			start.y() + m_view->yPaintOffset() - (int)(zF * m_view->yScrollOffset()),
+			end.x() + m_view->xPaintOffset() - (int)(zF * m_view->xScrollOffset()),
+			end.y() + m_view->yPaintOffset() - (int)(zF * m_view->yScrollOffset()));
+
+	p.end();
 }
 
 void FreehandSelectTool::setupAction(QObject *collection)
@@ -300,3 +285,22 @@ bool FreehandSelectTool::willModify() const
 {
 	return false;
 }
+
+void FreehandSelectTool::paintEvent(QPaintEvent *e)
+{
+	if (m_pointArray.size() > 1) {
+		QPainter gc(m_canvas);
+		QPen pen(Qt::DotLine);
+		float zF = m_view -> zoomFactor();
+
+		Q_ASSERT(m_view);
+		gc.setRasterOp(Qt::NotROP);
+		gc.setPen(pen);
+		gc.scale(zF, zF);
+		gc.translate(m_view -> xPaintOffset() - m_view -> xScrollOffset(), m_view -> yPaintOffset() - m_view -> yScrollOffset());
+		gc.setClipRect(e -> rect());
+		gc.drawPolyline(m_pointArray);
+		gc.drawLine(m_pointArray[m_pointArray.size() - 1], m_pointArray[0]);
+	}
+}
+

@@ -123,141 +123,146 @@ bool BrushTool::paintCanvas(const QPoint& /* pos */)
     return true;
 }
 
-
 bool BrushTool::paintMonochrome(const QPoint& pos)
 {
-    KisImage * img = m_doc->current();
-    KisLayer *lay = img->getCurrentLayer();
+	KisImage *img = m_doc -> current();
+	KisLayer *lay = img -> getCurrentLayer();
+	int startx = pos.x() - m_hotSpotX;
+	int starty = pos.y() - m_hotSpotY;
+	QRect clipRect(startx, starty, m_brushWidth, m_brushHeight);
 
-    int startx = pos.x() - m_hotSpotX;
-    int starty = pos.y() - m_hotSpotY;
+	if (!clipRect.intersects(lay -> imageExtents()))
+		return false;
 
-    QRect clipRect(startx, starty, m_brushWidth, m_brushHeight);
+	clipRect = clipRect.intersect(lay->imageExtents());
 
-    if (!clipRect.intersects(lay->imageExtents()))
-        return false;
+	int sx = clipRect.left() - startx;
+	int sy = clipRect.top() - starty;
+	int ex = clipRect.right() - startx;
+	int ey = clipRect.bottom() - starty;
+	int invopacity = 255 - m_opacity;
 
-    clipRect = clipRect.intersect(lay->imageExtents());
+	uchar *sl;
+	uchar bv, invbv;
+	uchar r, g, b, a;
+	int   v;
 
-    int sx = clipRect.left() - startx;
-    int sy = clipRect.top() - starty;
-    int ex = clipRect.right() - startx;
-    int ey = clipRect.bottom() - starty;
+	for (int y = sy; y <= ey; y++) {
+		sl = m_brush -> scanline(y);
 
-    uchar *sl;
-    uchar bv, invbv;
-    uchar r, g, b, a;
-    int   v;
+		for (int x = sx; x <= ex; x++) {
+			r = lay -> pixel(0, startx + x, starty + y);
+			g = lay -> pixel(1, startx + x, starty + y);
+			b = lay -> pixel(2, startx + x, starty + y);
 
-    for (int y = sy; y <= ey; y++)
-    {
-        sl = m_brush->scanline(y);
+			bv = *(sl + x);
 
-        for (int x = sx; x <= ex; x++)
-	    {
-	        r = lay->pixel(0, startx + x, starty + y);
-	        g = lay->pixel(1, startx + x, starty + y);
-	        b = lay->pixel(2, startx + x, starty + y);
+			if (bv == 0) 
+				continue;
 
-	        bv = *(sl + x);
-	        if (bv == 0) continue;
+			invbv = 255 - bv;
+#if 0
+			b = ((m_blue * bv) + (b * invbv)) / 255;
+			g = ((m_green * bv) + (g * invbv)) / 255;
+			r = ((m_red * bv) + (r * invbv)) / 255;
+			lay -> setPixel(0, startx + x, starty + y, r);
+			lay -> setPixel(1, startx + x, starty + y, g);
+			lay -> setPixel(2, startx + x, starty + y, b);
+#endif
+			b = (m_blue * m_opacity + r * invopacity) / 255;
+			g = (m_green * m_opacity + g * invopacity) / 255;
+			r = (m_red * m_opacity + r * invopacity) / 255;
+			lay -> setPixel(0, startx + x, starty + y, r);
+			lay -> setPixel(1, startx + x, starty + y, g);
+			lay -> setPixel(2, startx + x, starty + y, b);
+ 
+			if (m_alpha) {
+				a = lay->pixel(3, startx + x, starty + y);
 
-	        invbv = 255 - bv;
+				v = a + bv;
 
-            b = ((m_blue * bv) + (b * invbv))/255;
-	        g = ((m_green * bv) + (g * invbv))/255;
-	        r = ((m_red * bv) + (r * invbv))/255;
+				if (v < 0) 
+					v = 0;
 
-	        lay->setPixel(0, startx + x, starty + y, r);
-	        lay->setPixel(1, startx + x, starty + y, g);
-	        lay->setPixel(2, startx + x, starty + y, b);
+				if (v > 255) 
+					v = 255;
 
-            if (m_alpha)
-	        {
-	            a = lay->pixel(3, startx + x, starty + y);
+				a = (uchar) v;
+				lay->setPixel(3, startx + x, starty + y, a);
+			}
+		}
+	}
 
-		        v = a + bv;
-		        if (v < 0 ) v = 0;
-		        if (v > 255 ) v = 255;
-		        a = (uchar) v;
-
-		        lay->setPixel(3, startx + x, starty + y, a);
-	        }
-	    }
-    }
-
-    return true;
+	return true;
 }
-
-
 
 void BrushTool::mouseMove(QMouseEvent *e)
 {
-    KisImage * img = m_doc->current();
-    if (!img) return;
+	if (!m_dragging)
+		return;
 
-    if(m_dragging)
-    {
-        QPoint pos = e->pos();
-        int mouseX = e->x();
-        int mouseY = e->y();
+	KisImage *img = m_doc->current();
 
-        pos = zoomed(pos);
-        mouseX = zoomedX(mouseX);
-        mouseY = zoomedY(mouseY);
+	if (!img) 
+		return;
 
-        KisVector end(mouseX, mouseY);
-        KisVector start(m_dragStart.x(), m_dragStart.y());
+	QPoint pos = zoomed(e -> pos());
+	int mouseX = e -> x();
+	int mouseY = e -> y();
 
-        KisVector dragVec = end - start;
-        float saved_dist = m_dragdist;
-        float new_dist = dragVec.length();
-        float dist = saved_dist + new_dist;
+#if 0
+	pos = zoomed(pos);
+	mouseX = zoomedX(mouseX);
+	mouseY = zoomedY(mouseY);
+#endif
 
-        if ((int)dist < m_spacing)
-	    {
-	        m_dragdist += new_dist;
-	        m_dragStart = pos;
-	        return;
-	    }
-        else
-	        m_dragdist = 0;
+	KisVector end(mouseX, mouseY);
+	KisVector start(m_dragStart.x(), m_dragStart.y());
+	KisVector dragVec = end - start;
+	float saved_dist = m_dragdist;
+	float new_dist = dragVec.length();
+	float dist = saved_dist + new_dist;
 
-        dragVec.normalize();
-        KisVector step = start;
+	if (static_cast<int>(dist) < m_spacing) {
+		m_dragdist += new_dist;
+		m_dragStart = pos;
+		return;
+	}
+	else
+		m_dragdist = 0;
 
-        while (dist >= m_spacing)
-	    {
-	        if (saved_dist > 0)
-	        {
-	            step += dragVec * (m_spacing-saved_dist);
-	            saved_dist -= m_spacing;
-	        }
-	        else
-	            step += dragVec * m_spacing;
+	dragVec.normalize();
+	KisVector step = start;
 
-	        QPoint p(qRound(step.x()), qRound(step.y()));
+	while (dist >= m_spacing) {
+		if (saved_dist > 0) {
+			step += dragVec * (m_spacing - saved_dist);
+			saved_dist -= m_spacing;
+		}
+		else
+			step += dragVec * m_spacing;
 
-	        if (paintMonochrome(p))
-               img->markDirty(QRect(p - m_hotSpot, m_brushSize));
+		QPoint p(qRound(step.x()), qRound(step.y()));
 
- 	        dist -= m_spacing;
-	    }
+		if (paintMonochrome(p))
+			img -> markDirty(QRect(p - m_hotSpot, m_brushSize));
 
-        if (dist > 0) m_dragdist = dist;
-        m_dragStart = pos;
-    }
+		dist -= m_spacing;
+	}
+
+	if (dist > 0) 
+		m_dragdist = dist;
+
+	m_dragStart = pos;
 }
-
 
 void BrushTool::mouseRelease(QMouseEvent *e)
 {
-    if (e->button() != LeftButton)
-        return;
+	if (e -> button() != LeftButton)
+		return;
 
-    m_dragging = false;
+	m_dragging = false;
 }
-
 
 bool BrushTool::paintColor(const QPoint& /*pos*/)
 {
@@ -266,39 +271,34 @@ bool BrushTool::paintColor(const QPoint& /*pos*/)
 
 void BrushTool::optionsDialog()
 {
-    ToolOptsStruct ts;
+	ToolOptsStruct ts;
 
-    ts.usePattern       = m_usePattern;
-    ts.useGradient      = m_useGradient;
-    ts.opacity          = m_opacity;
+	ts.usePattern = m_usePattern;
+	ts.useGradient = m_useGradient;
+	ts.opacity = m_opacity;
 
-    bool old_usePattern   = m_usePattern;
-    bool old_useGradient  = m_useGradient;
-    unsigned int  old_opacity      = m_opacity;
+	bool old_usePattern = m_usePattern;
+	bool old_useGradient = m_useGradient;
+	unsigned int old_opacity = m_opacity;
 
-    ToolOptionsDialog OptsDialog(tt_brushtool, ts);
+	ToolOptionsDialog OptsDialog(tt_brushtool, ts);
 
-    OptsDialog.exec();
+	OptsDialog.exec();
 
-    if(OptsDialog.result() == QDialog::Rejected)
-        return;
-        
-    m_opacity      = OptsDialog.brushToolTab()->opacity();
-    m_usePattern   = OptsDialog.brushToolTab()->usePattern();
-    m_useGradient  = OptsDialog.brushToolTab()->useGradient();
+	if(OptsDialog.result() == QDialog::Rejected)
+		return;
 
-    // User change value ?
-    if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_opacity != m_opacity ) {
-	    // set brush tool settings
-	    m_doc->setModified( true );
-    }
+	m_opacity = OptsDialog.brushToolTab()->opacity();
+	m_usePattern = OptsDialog.brushToolTab()->usePattern();
+	m_useGradient = OptsDialog.brushToolTab()->useGradient();
+
+	if (old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_opacity != m_opacity)
+		m_doc->setModified( true );
 }
 
 void BrushTool::setupAction(QObject *collection)
 {
-	m_toggle = new KToggleAction(i18n("&Brush tool"), "paintbrush", 0, this, SLOT(toolSelect()),
-			collection, "tool_brush");
-
+	m_toggle = new KToggleAction(i18n("&Brush tool"), "paintbrush", 0, this, SLOT(toolSelect()), collection, "tool_brush");
 	m_toggle -> setExclusiveGroup("tools");
 }
 
@@ -332,3 +332,4 @@ void BrushTool::toolSelect()
 
 	m_toggle -> setChecked(true);
 }
+

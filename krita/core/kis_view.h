@@ -68,6 +68,7 @@ class KisResource;
 class KisResourceMediator;
 class KisAutobrush;
 class KisTextBrush;
+class KisAutogradient;
 class DockFrameDocker;
 class ColorDocker;
 class ControlFrame;
@@ -423,6 +424,7 @@ private:
 	KisResourceMediator *m_gradientMediator;
 	KisAutobrush *m_autobrush;
 	KisTextBrush *m_textBrush;
+	KisAutogradient* m_autogradient;
 
 	// Current colours, brushes, patterns etc.
 	Q_INT32 m_xoff;

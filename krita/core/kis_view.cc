@@ -110,6 +110,7 @@
 // Widgets
 #include "kis_autobrush.h"
 #include "kis_text_brush.h"
+#include "kis_autogradient.h"
 #include "kis_hsv_widget.h"
 #include "kis_rgb_widget.h"
 #include "kis_gray_widget.h"
@@ -325,6 +326,11 @@ void KisView::setupDockers()
 	m_gradient = dynamic_cast<KisGradient*>(m_gradientMediator -> currentResource());
 	m_fillsdocker -> plug(m_gradientMediator -> chooserWidget());
 	connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(gradientActivated(KisResource*)));
+
+	// Autogradient
+	m_autogradient = new KisAutogradient(m_fillsdocker, "autogradient", i18n("Autogradient"));
+	m_fillsdocker -> plug(m_autogradient);
+	connect(m_autogradient, SIGNAL(activatedResource(KisResource*)), this, SLOT(gradientActivated(KisResource*)));
 
 	// Layers
         m_layerBox = new KisLayerBox(i18n("layer"), KisLayerBox::SHOWALL, m_layerchanneldocker);

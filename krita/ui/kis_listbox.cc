@@ -224,10 +224,11 @@ void KisListBoxView::slotClicked(QListBoxItem *item, const QPoint& pos)
 
 	if (item) {
 		KisListBoxItem *p = dynamic_cast<KisListBoxItem*>(item);
+		int m = n - m_lst -> topItem();
 
-		if (p -> intersectVisibleRect(pos, n))
+		if (p -> intersectVisibleRect(pos, m))
 			slotMenuAction(VISIBLE);
-		else if (p -> intersectLinkedRect(pos, n))
+		else if (p -> intersectLinkedRect(pos, m))
 			slotMenuAction(LINKING);
 	}
 	

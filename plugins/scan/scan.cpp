@@ -49,8 +49,12 @@ void Scan::slotScan()
     {
 	scanDialog = KScanDialog::getScanDialog();
 	if ( scanDialog )
+	{
+	    scanDialog->setMinimumSize(300, 300);
+
 	    connect(scanDialog, SIGNAL(finalImage(const QImage &, int)), 
 		    this, SLOT(slotShowImage(const QImage &)));
+	}
 	else
         {
 	    KMessageBox::sorry(0L, i18n("No Scan-Service available"), 

@@ -534,7 +534,6 @@ void KisView::updateReadWrite(bool readwrite)
 	selectionUpdateGUI(readwrite);
 }
 
-inline
 void KisView::clearCanvas(const QRect& rc)
 {
 	QPainter gc(m_canvas);
@@ -575,13 +574,11 @@ QString KisView::currentImgName() const
 	return QString::null;
 }
 
-inline
 Q_INT32 KisView::horzValue() const
 {
 	return m_hScroll -> value();
 }
 
-inline
 Q_INT32 KisView::vertValue() const
 {
 	return m_vScroll -> value();
@@ -648,7 +645,6 @@ void KisView::paintView(const QRect& rc)
 	}
 }
 
-inline
 void KisView::updateCanvas()
 {
 	QRect rc(0, 0, m_canvas -> width(), m_canvas -> height());
@@ -656,7 +652,6 @@ void KisView::updateCanvas()
 	updateCanvas(rc);
 }
 
-inline
 void KisView::updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	QRect rc(x, y, w, h);

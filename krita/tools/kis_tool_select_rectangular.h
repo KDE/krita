@@ -22,8 +22,12 @@
 #define __selecttoolrectangular_h__
 
 #include <qpoint.h>
+#include <qrect.h>
+#include <qregion.h>
+
 #include "kis_tool.h"
 
+class QPaintEvent;
 class KisDoc;
 class KisCanvas;
 class KisView;
@@ -44,27 +48,29 @@ public:
 	virtual void mouseRelease(QMouseEvent *event);
 
 protected:
-	void drawRect(const QPoint& start, const QPoint& end); 
+	void drawRect(const QPoint& start, const QPoint& end, QPaintEvent *e = 0);
+	void dragSelectArea(QMouseEvent *event);
 
-#if 0
 protected:
+	bool m_dragging;
+	bool m_moving;
+	bool m_cleared;
+	bool m_firstTimeMoving;
+	bool m_drawn;   
+
 	QPoint m_dragStart;
 	QPoint m_dragEnd;
-	bool m_dragging;
-	bool m_drawn;   
-	bool m_init;
-	QRect m_selectRect;
+
+	QRect m_imageRect;
 
 private:
-	bool m_moveSelectArea;
 	bool m_dragSelectArea;
 	QPoint m_hotSpot;
 	QPoint m_oldDragPoint;
 	QRegion m_selectRegion;
-	QRect m_imageRect;
 	bool m_dragFirst;
 	float m_dragdist;
-#endif
 };
 
 #endif //__selecttoolrectangular_h__
+

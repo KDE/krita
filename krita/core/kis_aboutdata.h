@@ -43,6 +43,11 @@ KAboutData * newKrayonAboutData()
 	aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
 	aboutData->addAuthor("Patrick Julien", 0, "freak@codepimps.org");
 	aboutData->addAuthor("Boudewijn Rempt", 0, "boud@valdyas.org");
+	aboutData->addAuthor("Sven Langkamp", 0, "longamp@reallygood.de");
+	aboutData->addAuthor("Cyrille Berger", 0, "cyb@lepi.org");
+	aboutData->addAuthor("Adrian Page", 0, "Adrian.Page@tesco.net");
+	aboutData->addAuthor("Roger Larsson", 0, "roger.larsson@norran.net");
+	aboutData->addAuthor("Bart Coppens", 0, "kde@bartcoppens.be");
 	return aboutData;
 }
 

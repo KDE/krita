@@ -93,9 +93,8 @@ void Recorder::start()
   m_id = 0;
   
   KOM::EventTypeSeq seq;
-  seq.length(2);
-  seq[0] = CORBA::string_dup( "UserEvent/*" );
-  seq[1] = CORBA::string_dup( KOffice::View::eventNewPart );
+  seq.append( "UserEvent/*" );
+  seq.append( KOffice::View::eventNewPart );
 
   CORBA::String_var str = komapp_orb->object_to_string( m_vView );
   m_mapObjects[ str.in() ] = m_id;
@@ -142,8 +141,7 @@ void Recorder::play()
   m_mapIds[ m_id ] = KOM::Base::_duplicate( m_vView );
 
   KOM::EventTypeSeq seq;
-  seq.length(1);
-  seq[0] = CORBA::string_dup( KOffice::View::eventNewPart );
+  seq.append( KOffice::View::eventNewPart );
   
   m_vView->installFilter( this, "eventFilter", seq, KOM::Base::FM_READ );
   
@@ -161,13 +159,13 @@ void Recorder::play()
     
     cerr << "SENDING=" << e->m_strType << endl;
     
-    it->second->receive( e->m_strType, e->m_any );
+    it->second->receive( e->m_strType.ascii(), e->m_any );
   }
   
   stop();
 }
   
-CORBA::Boolean Recorder::eventFilter( KOM::Base_ptr _obj, const char* _type,
+bool Recorder::eventFilter( KOM::Base_ptr _obj, const QCString &_type,
 				      const CORBA::Any& _value )
 {
   cerr << "GOT Event " << _type << endl;
@@ -186,9 +184,8 @@ CORBA::Boolean Recorder::eventFilter( KOM::Base_ptr _obj, const char* _type,
 	m_mapIds[ m_id ] = KOM::Base::_duplicate( event.view );
 	
 	KOM::EventTypeSeq seq;
-	seq.length(2);
-	seq[0] = CORBA::string_dup( "UserEvent/*" );
-	seq[1] = CORBA::string_dup( KOffice::View::eventNewPart );
+	seq.append( "UserEvent/*" );
+	seq.append( KOffice::View::eventNewPart );
 
 	event.view->installFilter( this, "eventFilter", seq, KOM::Base::FM_READ );
       }
@@ -197,8 +194,7 @@ CORBA::Boolean Recorder::eventFilter( KOM::Base_ptr _obj, const char* _type,
 	m_mapIds[ ++m_id ] = KOM::Base::_duplicate( event.view );
 
 	KOM::EventTypeSeq seq;
-	seq.length(1);
-	seq[0] = CORBA::string_dup( KOffice::View::eventNewPart );
+	seq.append( KOffice::View::eventNewPart );
 
 	event.view->installFilter( this, "eventFilter", seq, KOM::Base::FM_READ );
       }

@@ -67,7 +67,7 @@ QString util_cellName( int _col, int _row )
 
 QString util_rangeName( KSpread::Range _area )
 {
-  QString result( _area.table.in() );
+  QString result( _area.table );
   result += "!";
   result += util_cellName( _area.left, _area.top );
   result += ":";
@@ -165,13 +165,12 @@ void Calculator::open()
   g_calc->show();
 
   KOM::EventTypeSeq seq;
-  seq.length(1);
-  seq[0] = CORBA::string_dup( KSpread::View::eventSelectionChanged );
+  seq.append( KSpread::View::eventSelectionChanged );
 
   m_vView->installFilter( this, "eventFilter", seq, KOM::Base::FM_READ );
 }
 
-CORBA::Boolean Calculator::eventFilter( KOM::Base_ptr _obj, const char* _type,
+bool Calculator::eventFilter( KOM::Base_ptr _obj, const QCString &_type,
 					const CORBA::Any& _value )
 {
   if ( strcmp( _type, KSpread::View::eventSelectionChanged ) == 0L )
@@ -197,10 +196,10 @@ CORBA::Boolean Calculator::eventFilter( KOM::Base_ptr _obj, const char* _type,
 	return false;
 
       KSpread::Cell c;
-      c.table = CORBA::string_dup( event.range.table );
+      c.table = event.range.table;
       c.x = event.range.left;
       c.y = event.range.top;
-      CORBA::Double d;
+      double d;
       try
       {
 	d = table->value( c );
@@ -219,7 +218,7 @@ CORBA::Boolean Calculator::eventFilter( KOM::Base_ptr _obj, const char* _type,
 
     QRect r;
     r.setCoords( event.range.left, event.range.top, event.range.right, event.range.bottom );
-    g_calc->setData( r, event.range.table.in() );
+    g_calc->setData( r, event.range.table );
 	
     g_calc->setLabel( str );
   }
@@ -235,7 +234,7 @@ void QtCalculator::useData()
   KSpread::Book_var book = view->book();
   if ( CORBA::is_nil( book ) )
     return;
-  KSpread::Table_var table = book->table( table_name );
+  KSpread::Table_var table = book->table( table_name.ascii() );
   if ( CORBA::is_nil( table ) )
     return;
 
@@ -248,10 +247,10 @@ void QtCalculator::useData()
     {
       bool ok = true;
       KSpread::Cell c;
-      c.table = CORBA::string_dup( table_name.data() );
+      c.table = table_name.data();
       c.x = x;
       c.y = y;
-      CORBA::Double d;
+      double d;
       try
       {
 	d = table->value( c );

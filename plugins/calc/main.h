@@ -59,7 +59,7 @@ public:
 
   virtual void open();
   
-  virtual CORBA::Boolean eventFilter( ::KOM::Base_ptr obj, const char* type,
+  virtual bool eventFilter( ::KOM::Base_ptr obj, const QCString &type,
 				      const CORBA::Any& value );
 
   OpenParts::View_ptr view() { return m_vView; }

@@ -62,7 +62,7 @@ public:
   virtual void stop();
   virtual void play();
   
-  virtual CORBA::Boolean eventFilter( ::KOM::Base_ptr obj, const char* type, const CORBA::Any& value );
+  virtual bool eventFilter( ::KOM::Base_ptr obj, const QCString &type, const CORBA::Any& value );
 
 protected:
   enum Status { ST_STOP, ST_START, ST_PLAY };

@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir)/../core $(KOFFICE_INCLUDES) $(all_includes) $(KOPAINTER_INCLUDES)
+INCLUDES = -I$(srcdir)/../core $(KOFFICE_INCLUDES) $(all_includes) $(KOPAINTER_INCLUDES) $(LIBMAGICK_CPPFLAGS)
 
 noinst_LTLIBRARIES = libkisui.la
 

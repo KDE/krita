@@ -42,12 +42,12 @@
 #include "kis_matrix.h"
 #include "kis_progress_subject.h"
 #include "kis_painter.h"
-
+#include <koffice_export.h>
 class KisGradient;
 
 
 // XXX: Need to set dirtyRect in KisPainter
-class KisGradientPainter : public KisPainter
+class KRITACORE_EXPORT KisGradientPainter : public KisPainter
 {
 
 	typedef KisPainter super;

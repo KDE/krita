@@ -22,7 +22,7 @@
 #define KIS_CMB_COMPOSITE_H_
 
 #include "kis_global.h"
-
+#include <koffice_export.h>
 #include "qcombobox.h"
 
 /**
@@ -36,7 +36,7 @@
  * But that's for later...
  */
 
-class KisCmbComposite : public QComboBox
+class KRITAUI_EXPORT KisCmbComposite : public QComboBox
 {
 	typedef QComboBox super;
 

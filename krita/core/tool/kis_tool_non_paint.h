@@ -28,6 +28,7 @@
 #include "kis_brush.h"
 #include "kis_pattern.h"
 #include "kis_gradient.h"
+#include <koffice_export.h>
 
 class QEvent;
 class QKeyEvent;
@@ -37,7 +38,7 @@ class KDialog;
 class KisCanvasSubject;
 
 
-class KisToolNonPaint : public KisTool {
+class KRITACORE_EXPORT KisToolNonPaint : public KisTool {
 
 	Q_OBJECT
 	typedef KisTool super;

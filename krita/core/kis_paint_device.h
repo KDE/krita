@@ -33,6 +33,7 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_scale_visitor.h"
 //#include "kis_iterators_pixel.h"
+#include <koffice_export.h>
 
 class QImage;
 class QSize;
@@ -49,7 +50,7 @@ class KisHLineIteratorPixel;
 /**
  * Class modelled on QPaintDevice.
  */
-class KisPaintDevice : public QObject, public KisRenderInterface {
+class KRITACORE_EXPORT KisPaintDevice : public QObject, public KisRenderInterface {
         Q_OBJECT
         typedef KisRenderInterface super;
 

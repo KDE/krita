@@ -20,12 +20,10 @@
 
 // defined in kis_dlg_new.cc
 
-#ifndef KDE_USE_FINAL
 const int MAXIMAGEWIDTH = 32767;
 const int INITIALWIDTH = 512;
 const int MAXIMAGEHEIGHT = 32767;
 const int INITIALHEIGHT = 512;
-#endif
 
 #include <qbuttongroup.h>
 #include <qpushbutton.h>

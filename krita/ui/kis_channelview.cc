@@ -376,7 +376,7 @@ void ChannelTable::slotProperties()
 
 ChannelPropertyDialog::ChannelPropertyDialog( QString _channelname,
     uchar _opacity, QWidget *_parent, const char *_name )
-    : QDialog( _parent, _name, true )
+    : KDialogBase( _parent, _name, true, "", Ok | Cancel )
 {
     QGridLayout *layout = new QGridLayout( this, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
@@ -396,18 +396,6 @@ ChannelPropertyDialog::ChannelPropertyDialog( QString _channelname,
     layout->addWidget( lblOpacity, 1, 0 );
 
     layout->setRowStretch( 2, 1 );
-
-    QHBox *buttons = new QHBox( this );
-    layout->addMultiCellWidget( buttons, 3, 4, 0, 1 );
-
-    (void) new QWidget( buttons );
-
-    QPushButton *pbOk = new QPushButton( i18n( "&OK" ), buttons );
-    pbOk->setDefault( true );
-    QObject::connect( pbOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
-
-    QPushButton *pbCancel = new QPushButton( i18n( "&Cancel" ), buttons );
-    QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 
 

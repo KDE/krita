@@ -31,6 +31,7 @@
 #include <qdialog.h>
 #include <qgridview.h>
 #include <qrect.h>
+#include <kdialogbase.h>
 
 class KisDoc;
 class KisView;
@@ -52,7 +53,7 @@ public:
     ~KisChannelView();
     void showScrollBars();
     ChannelTable *channelTable() { return channeltable; }
-    QHBox *getFrame() { return frame; };
+    QHBox *getFrame() const { return frame; };
 
 private:
     void initGUI();
@@ -116,7 +117,7 @@ private:
     QRect mVisibleRect, mLinkedRect, mPreviewRect;
 };
 
-class ChannelPropertyDialog : QDialog
+class ChannelPropertyDialog : public KDialogBase
 {
     Q_OBJECT
 

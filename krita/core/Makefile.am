@@ -8,6 +8,7 @@ INCLUDES  = -I$(srcdir)/builder \
 	-I$(srcdir)/../ui/dialogs \
 	-I../ui/dialogs \
 	-I$(srcdir)/../ui/widgets \
+	-I../ui/widgets \
 	-I$(srcdir)/../tools \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) \

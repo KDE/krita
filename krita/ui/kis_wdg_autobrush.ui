@@ -95,7 +95,7 @@
                         <cstring>textLabelShape</cstring>
                     </property>
                     <property name="text">
-                        <string>Shape :</string>
+                        <string>Shape:</string>
                     </property>
                 </widget>
                 <widget class="QComboBox">
@@ -144,7 +144,7 @@
                                         <cstring>textLabel2</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Width :</string>
+                                        <string>Width:</string>
                                     </property>
                                 </widget>
                                 <spacer>
@@ -184,7 +184,7 @@
                                         <cstring>textLabel2_2</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Heigth :</string>
+                                        <string>Height:</string>
                                     </property>
                                 </widget>
                                 <spacer>
@@ -231,7 +231,7 @@
                 <cstring>textLabelFade</cstring>
             </property>
             <property name="text">
-                <string>Fade :</string>
+                <string>Fade:</string>
             </property>
         </widget>
         <widget class="QLayoutWidget">
@@ -263,7 +263,7 @@
                                         <cstring>textLabelHorizontal</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Horizontal :</string>
+                                        <string>Horizontal:</string>
                                     </property>
                                 </widget>
                                 <spacer>
@@ -303,7 +303,7 @@
                                         <cstring>textLabel2_2_2</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Vertical :</string>
+                                        <string>Vertical:</string>
                                     </property>
                                 </widget>
                                 <spacer>

@@ -21,7 +21,7 @@
 #define __my_app_h__
 
 #include <komApplication.h>
-#include <komBase.h>
+#include <komPlugin.h>
 #include <kom.h>
 
 #include "openparts.h"
@@ -52,7 +52,7 @@ public:
   KOM::Plugin_ptr create( const KOM::Component_ptr _comp );
 };
 
-class Recorder : virtual public KOMComponent,
+class Recorder : virtual public KOMPlugin,
 		 virtual public MakroRecorder::Recorder_skel
 {
 public:

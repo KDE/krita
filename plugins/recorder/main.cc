@@ -59,6 +59,7 @@ KOM::Plugin_ptr Factory::create( const KOM::Component_ptr _comp )
 }
 
 Recorder::Recorder( OpenParts::View_ptr _view )
+: KOMPlugin( _view )
 {
   cerr << "Created MakroRecorder" << endl;
   

@@ -248,7 +248,7 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height, cons
 	Q_INT32 n;
 
 	m_adapter = adapter;
-	m_nserver = new KisNameServer(i18n("Layer %1"), 0);
+	m_nserver = new KisNameServer(i18n("Layer %1"), 1);
 	n = ::imgTypeDepth(imgType);
 	m_active.resize(n);
 	m_visible.resize(n);

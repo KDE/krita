@@ -23,7 +23,7 @@
 
 class KisNameServer {
 public:
-	KisNameServer(const QString& prefix, Q_INT32 seed = 0);
+	KisNameServer(const QString& prefix, Q_INT32 seed = 1);
 	~KisNameServer();
 
 	QString name();

@@ -426,7 +426,7 @@ bool KisDoc::init()
 	connect(m_cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
 	connect(m_cmdHistory, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
 	m_undo = true;
-	m_nserver = new KisNameServer(i18n("Image %1"), 0);
+	m_nserver = new KisNameServer(i18n("Image %1"), 1);
 	return true;
 }
 QDomDocument KisDoc::saveXML()

@@ -139,13 +139,13 @@ void KisStrategyColorSpaceRGB::render(KisImageSP projection, QPainter& painter, 
 }
 
 void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
-	QUANTUM *dst,
-	Q_INT32 dststride,
-	QUANTUM *src,
-	Q_INT32 srcstride,
-	Q_INT32 rows, 
-	Q_INT32 cols, 
-	CompositeOp op) const
+				       QUANTUM *dst,
+				       Q_INT32 dststride,
+				       QUANTUM *src,
+				       Q_INT32 srcstride,
+				       Q_INT32 rows, 
+				       Q_INT32 cols, 
+				       CompositeOp op) const
 {
 	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
 	QUANTUM *d;
@@ -190,10 +190,10 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 						continue;
 					}
 
-					d[PIXEL_RED] = (d[PIXEL_RED] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_RED] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_RED]   = (d[PIXEL_RED] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_RED] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
 					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_GREEN] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_BLUE] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_BLUE]  = (d[PIXEL_BLUE] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_BLUE] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					alpha          = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
 					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
 				}
 
@@ -215,11 +215,22 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 						continue;
 					}
 
-					d[PIXEL_RED] = (d[PIXEL_RED] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_RED] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					if (s[PIXEL_ALPHA] == OPACITY_OPAQUE) {
+						memcpy(d, s, stride * sizeof(QUANTUM));
+						continue;
+					}
+
+					d[PIXEL_RED]   = (d[PIXEL_RED] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_RED] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
 					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_GREEN] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_BLUE] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-// 					alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
-// 					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_BLUE]  = (d[PIXEL_BLUE] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_BLUE] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+
+					if (d[PIXEL_ALPHA] + s[PIXEL_ALPHA] > OPACITY_OPAQUE) {
+						d[PIXEL_ALPHA] = OPACITY_OPAQUE;
+					}
+					else {
+						d[PIXEL_ALPHA] = d[PIXEL_ALPHA] + s[PIXEL_ALPHA];
+					}
+					
 				}
 
 				dst += dststride;
@@ -229,20 +240,19 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 			break;
 		default:
 			kdDebug() << "Not Implemented.\n";
-			abort();
 			return;
 	}
 }
 
 void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
-			QUANTUM *dst, 
-			Q_INT32 dststride,
-			QUANTUM *src, 
-			Q_INT32 srcstride,
-			QUANTUM opacity,
-			Q_INT32 rows, 
-			Q_INT32 cols, 
-			CompositeOp op) const
+				       QUANTUM *dst, 
+				       Q_INT32 dststride,
+				       QUANTUM *src, 
+				       Q_INT32 srcstride,
+				       QUANTUM opacity,
+				       Q_INT32 rows, 
+				       Q_INT32 cols, 
+				       CompositeOp op) const
 {
 	if (opacity == OPACITY_OPAQUE)
 		return tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);

@@ -1,12 +1,16 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
+## The common lib, shared between the part, the plugins, and the filters
+lib_LTLIBRARIES = libkritacommon.la
+libkritacommon_la_SOURCES = dummycommon.cc
+libkritacommon_la_LDFLAGS = $(all_libraries) -version-info 1:0 -no-undefined
+libkritacommon_la_LIBADD = core/libkritacore.la ui/libkisui.la tools/libkistools.la $(LIB_KOFFICEUI) $(LIB_KOPAINTER)
+
 ## The part
-lib_LTLIBRARIES = 
 kde_module_LTLIBRARIES = libkritapart.la
 libkritapart_la_SOURCES = dummy.cc
-
-libkritapart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkritapart_la_LIBADD = core/libkiscore.la ui/libkisui.la $(LIB_KOFFICEUI) $(LIB_KOPAINTER) tools/libkistools.la
+libkritapart_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+libkritapart_la_LIBADD = libkritacommon.la
 
 METASOURCES = AUTO
 
@@ -28,8 +32,13 @@ rc_DATA = krita.rc krita_readonly.rc
 
 SUBDIRS = ui core tools . dtd plugins data pics 
 
-# "[The file dummy.c is] needed to compile libkritapart.la, which has no source files to itself
-# but everything in static libs." (David Faure)
+# Needed to compile libkritacommon.la, which has no source files to itself
+# but everything in static libs.
+dummycommon.cc:
+	echo > dummycommon.cc
+
+# Needed to compile libkritapart.la, which has no source files to itself
+# but everything in libkritacommon.la and static libs.
 dummy.cc:
 	echo > dummy.cc
 

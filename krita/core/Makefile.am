@@ -14,17 +14,17 @@ INCLUDES  = -I$(srcdir)/builder \
 
 #CXXFLAGS = -shared -fPIC
 
-   
-noinst_LTLIBRARIES = libkiscore.la
+noinst_LTLIBRARIES = libkritacore.la
 
-libkiscore_la_LIBADD = tiles/libkistile.la helper/libkishelper.la \
+libkritacore_la_LIBADD = tiles/libkistile.la helper/libkishelper.la \
 	builder/libkiscorebuilder.la \
 	strategy/libkisstrategy.la \
-	color_strategy/libkiscolor_strategy.la
+	color_strategy/libkiscolor_strategy.la \
+	$(LIB_KOPAINTER)
 
 # kis_pluginserver.cc 
 
-libkiscore_la_SOURCES = kis_paint_device.cc \
+libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_layer.cc \
 	kis_channel.cc \
 	kis_mask.cc \
@@ -68,6 +68,6 @@ libkiscore_la_SOURCES = kis_paint_device.cc \
 	KIsImageIface.cc \
 	KIsImageIface.skel
 
-libkiscore_la_METASOURCES = AUTO
-libkiscore_la_LDFLAGS = $(KDE_RPATH)
+libkritacore_la_METASOURCES = AUTO
+libkritacore_la_LDFLAGS = $(all_libraries)
 SUBDIRS = helper tiles builder strategy color_strategy 

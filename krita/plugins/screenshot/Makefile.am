@@ -16,7 +16,7 @@ kritascreenshot_la_SOURCES = screenshot.cpp ksnapshot.cpp regiongrabber.cpp ksna
 noinst_HEADERS = screenshot.h ksnapshot.h regiongrabber.h ksnapshotwidget.h ksnapshotwidget.ui.h
 
 kritascreenshot_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritascreenshot_la_LIBADD = $(LIB_KPARTS) $(LIB_KIO) $(LIB_KOFFICECORE)
+kritascreenshot_la_LIBADD = $(LIB_KOFFICECORE)
 
 kritascreenshot_la_METASOURCES = AUTO
 

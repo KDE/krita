@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaraindropsfilter" version="4">
+  <MenuBar>
+    <Menu name="Filter"><text>&amp;Filter</text>
+      <Action name="raindrops_filter"/>
+    </Menu>
+  </MenuBar>
+</kpartgui>

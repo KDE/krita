@@ -145,7 +145,7 @@ void KisAutobrush::paramChanged()
 	QPixmap p;
 	p.convertFromImage(*m_brsh);
 	brushPreview->setPixmap(p);
-	brushPreview->adjustSize ();
+	//brushPreview->adjustSize ();
 	KisAutobrushResource * resource = new KisAutobrushResource(*m_brsh);
 	emit(activatedResource(resource));
 	delete kas;

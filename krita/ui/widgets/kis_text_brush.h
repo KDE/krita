@@ -56,7 +56,7 @@ signals:
 private slots:
 	void rebuildTextBrush();
 private:
-	KisTextBrushResource* m_textBrushRessource;
+	KisTextBrushResource* m_textBrushResource;
 };
 
 

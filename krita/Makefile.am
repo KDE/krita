@@ -28,6 +28,8 @@ rc_DATA = krita.rc krita_readonly.rc
 
 SUBDIRS = core ui tools . dtd plugins data pics 
 
+# "[The file dummy.c is] needed to compile libkritapart.la, which has no source files to itself
+# but everything in static libs." (David Faure)
 dummy.cc:
 	echo > dummy.cc
 

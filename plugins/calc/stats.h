@@ -3,10 +3,10 @@
 
     KCalc, a scientific calculator for the X window system using the
     Qt widget libraries, available at no cost at http://www.troll.no
-   
+
     Copyright (C) 1996 Bernd Johannes Wuebben
                        wuebben@math.cornell.edu
-    
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -63,15 +63,15 @@ private:
 
 };
 
-class MyList : public  QList<CALCAMNT> 
+class MyList : public  QList<CALCAMNT>
 {
 
 public:
 
   MyList() : QList<CALCAMNT>() {};
-  
+
 protected:
-  int compareItems(GCI item1,GCI item2);
+  int compareItems(Item item1,Item item2);
 };
 
 

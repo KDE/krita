@@ -3,10 +3,10 @@
 
     KCalc, a scientific calculator for the X window system using the
     Qt widget libraries, available at no cost at http://www.troll.no
-   
+
     Copyright (C) 1996 Bernd Johannes Wuebben
                        wuebben@math.cornell.edu
-    
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -46,7 +46,7 @@ void KStats::clearAll(){
   data.clear();
 
 }
- 
+
 void KStats::enterData(CALCAMNT _data){
 
   CALCAMNT *newdata;
@@ -68,17 +68,17 @@ void KStats::clearLast(){
  data.removeLast();
 #ifdef DEBUG_STATS
 printf("count %d\n",data.count());
-#endif   
+#endif
 
 
 }
- 
+
 CALCAMNT KStats::sum(){
 
   CALCAMNT result = 0.0;
   CALCAMNT *dp;
   for ( dp=data.first(); dp != 0; dp=data.next() ){
-    
+
     result += *dp;
 
   }
@@ -93,22 +93,22 @@ CALCAMNT KStats::sum(){
 CALCAMNT KStats::min()
 {
   printf("MIIINNNN\n");
-  
+
   if ( data.count() == 0 )
     return 0.0;
-  
+
   printf("1\n");
-  
+
   CALCAMNT result = *(data.first());
   printf("result=%f\n",result);
-  
+
   CALCAMNT *dp = data.next();
   for ( ; dp != 0; dp=data.next() )
     if ( *dp < result )
       result = *dp;
-  
+
   printf("Return\n");
-  
+
   return result;
 }
 
@@ -116,7 +116,7 @@ CALCAMNT KStats::max()
 {
   if ( data.count() == 0 )
     return 0.0;
-  
+
   CALCAMNT result = *(data.first());
   CALCAMNT *dp = data.next();
   for ( ; dp != 0; dp=data.next() )
@@ -131,7 +131,7 @@ CALCAMNT KStats::mul(){
   CALCAMNT result = 1.0;
   CALCAMNT *dp;
   for ( dp=data.first(); dp != 0; dp=data.next() ){
-    
+
     result *= *dp;
 
   }
@@ -166,17 +166,17 @@ CALCAMNT KStats::median(){
     error_flag = TRUE;
     return 0.0;
   }
-  
+
   if ( bound == 1)
     return *list.at(0);
 
   if( bound % 2){  // odd
-     
+
     index = (bound - 1 ) / 2 + 1;
     result =  *list.at(index - 1 );
   }
   else { // even
-    
+
     index = bound / 2;
     result = ((*list.at(index - 1))  + (*list.at(index)))/2;
  }
@@ -196,7 +196,7 @@ CALCAMNT KStats::std_kernel(){
 
   CALCAMNT *dp;
   for ( dp=data.first(); dp != 0; dp=data.next() ){
-    
+
     result += (*dp - _mean) * (*dp - _mean);
 
   }
@@ -215,7 +215,7 @@ CALCAMNT KStats::sum_of_squares(){
   CALCAMNT result = 0.0;
   CALCAMNT *dp;
   for ( dp=data.first(); dp != 0; dp=data.next() ){
-    
+
     result += (*dp) * (*dp);
 
   }
@@ -236,7 +236,7 @@ CALCAMNT KStats::mean(){
     error_flag = TRUE;
     return 0.0;
   }
-  
+
   result = sum()/data.count();
 
 #ifdef DEBUG_STATS
@@ -260,7 +260,7 @@ CALCAMNT KStats::std(){
 
     return 0.0;
   }
-  
+
   result = SQRT(std_kernel());
 
 #ifdef DEBUG_STATS
@@ -285,7 +285,7 @@ CALCAMNT KStats::sample_std(){
     error_flag = TRUE;
     return 0.0;
   }
-  
+
   result = SQRT(std_kernel());
   result = result/(data.count() - 1);
 #ifdef DEBUG_STATS
@@ -311,11 +311,11 @@ bool KStats::error(){
 
 }
 
-int MyList::compareItems(GCI item_1, GCI item_2){
-  
+int MyList::compareItems(Item item_1, Item item_2){
+
   CALCAMNT *item1;
   CALCAMNT *item2;
-  
+
   item1 = (CALCAMNT*) item_1;
   item2 = (CALCAMNT*) item_2;
 

@@ -44,7 +44,7 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 	Q_ASSERT(rserver);
 	m_activeItem = 0;
 
-	QPtrList<KisResource> resouceslist;
+	QPtrList<KisResource> resourceslist;
 	KisResource *resource;
 
 	if (mediateOn & MEDIATE_BRUSHES) {
@@ -59,12 +59,12 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 			this,
 			SLOT(resourceServerLoadedResource(KisResource*)));
 
-		resouceslist = rserver -> brushes();
-		for ( resource = resouceslist.first(); resource; resource = resouceslist.next() )
+		resourceslist = rserver -> brushes();
+		for ( resource = resourceslist.first(); resource; resource = resourceslist.next() )
 			resourceServerLoadedResource(resource);
 
-		resouceslist = rserver -> pipebrushes();
-		for ( resource = resouceslist.first(); resource; resource = resouceslist.next() )
+		resourceslist = rserver -> pipebrushes();
+		for ( resource = resourceslist.first(); resource; resource = resourceslist.next() )
 			resourceServerLoadedResource(resource);
 	}
 	if (mediateOn & MEDIATE_PATTERNS) {
@@ -74,8 +74,8 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 			this,
 			SLOT(resourceServerLoadedResource(KisResource*)));
 
-		resouceslist = rserver -> patterns();
-		for ( resource = resouceslist.first(); resource; resource = resouceslist.next() )
+		resourceslist = rserver -> patterns();
+		for ( resource = resourceslist.first(); resource; resource = resourceslist.next() )
 			resourceServerLoadedResource(resource);
 			
 	}
@@ -86,8 +86,8 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 			this,
 			SLOT(resourceServerLoadedResource(KisResource*)));
 
-		resouceslist = rserver -> gradients();
-		for ( resource = resouceslist.first(); resource; resource = resouceslist.next() )
+		resourceslist = rserver -> gradients();
+		for ( resource = resourceslist.first(); resource; resource = resourceslist.next() )
 			resourceServerLoadedResource(resource);
 	}
 

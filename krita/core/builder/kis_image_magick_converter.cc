@@ -47,7 +47,14 @@
 
 #include "../../../config.h"
 
+
 namespace {
+
+	const PIXELTYPE PIXEL_BLUE = 0;
+	const PIXELTYPE PIXEL_GREEN = 1;
+	const PIXELTYPE PIXEL_RED = 2;
+	const PIXELTYPE PIXEL_ALPHA = 3;
+
 	inline
 	void pp2tile(KisPixelDataSP pd, const PixelPacket *pp)
 	{

@@ -598,7 +598,6 @@ void KisView::setupActions()
         m_imgExport = new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
         m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
         m_imgResizeToLayer = new KAction(i18n("Resize Image to Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
-
         // view actions
         m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
         m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
@@ -804,7 +803,6 @@ void KisView::setCurrentTool(KisTool *tool)
 
         if (oldTool)
         {
-		kdDebug() << "oldTool\n";
                 if (oldTool -> optionWidget())
 			if (m_toolcontroldocker) m_toolcontroldocker -> unplug(oldTool -> optionWidget());
                 oldTool -> clear();
@@ -812,8 +810,6 @@ void KisView::setCurrentTool(KisTool *tool)
         }
 
         if (tool) {
-
-		kdDebug() << "tool is not 0\n";
                 m_inputDeviceToolMap[currentInputDevice()] = tool;
                 tool -> cursor(m_canvas);
 
@@ -829,11 +825,10 @@ void KisView::setCurrentTool(KisTool *tool)
 		tool -> action() -> setChecked( true );
 
 	} else {
-		kdDebug() << "tool == 0\n";
 		m_inputDeviceToolMap[currentInputDevice()] = 0;
 		m_canvas -> setCursor(KisCursor::arrowCursor());
 	}
-	kdDebug() << "Current tool set\n";
+
 }
 
 KisTool *KisView::currentTool() const

@@ -59,6 +59,7 @@
 #include "kistilemgr.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
+#include "kis_pixel.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterators_infinite.h"
 
@@ -87,7 +88,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
         Q_INT32 dststride;
         Q_INT32 stride;
         KisTileSP tile;
-        QUANTUM src[MAXCHANNELS];
+        QUANTUM src[8]; // XXX: Change KoColor to KisColor, then use channelsize from color space
         QUANTUM *dst;
         KisTileMgrSP tm = m_device -> tiles();
         Q_INT32 xmod;
@@ -164,8 +165,8 @@ void KisFillPainter::fillRect(const QRect& rc, KisIteratorInfiniteLinePixel src)
 		KisIteratorPixel* srcLine = (KisIteratorPixel*)src;
 		KisIteratorPixel stop = lineIt.end();
 		while (it <= stop) {
-			KisPixelRepresentation data = it;
-			KisPixelRepresentation source = *srcLine;
+			KisPixel data = it;
+			KisPixel source = *srcLine;
 			for(int i = 0; i < depth; i++) {
 				data[i] = (QUANTUM) source[i];
 			}
@@ -300,7 +301,7 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisIteratorPixel* it, K
 
 	while( ( ( d == Right && *it <= *lastPixel) || (d == Left && *lastPixel <= *it)) && !stop)
 	{
-		KisPixelRepresentation data = *it;
+		KisPixel data = *it;
 		diff = difference(m_oldColor, data);
 		if (diff == MAX_SELECTED) {
 			m_selection -> setSelected(x, y, diff);
@@ -321,7 +322,7 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisIteratorPixel* it, K
 }
 
 /* RGB-only I fear */
-QUANTUM KisFillPainter::difference(QUANTUM* src, KisPixelRepresentation dst)
+QUANTUM KisFillPainter::difference(QUANTUM* src, KisPixel dst)
 {
 	QUANTUM max = 0, diff = 0;
 	for (int i = 0; i < m_device->depth(); i++) {

@@ -316,13 +316,13 @@ void KisSelectionManager::copy()
 }
 
 
-void KisSelectionManager::paste()
+KisLayerSP KisSelectionManager::paste()
 {
         KisImageSP img = m_parent -> currentImg();
-        if (!img) return;
+        if (!img) return 0;
 
 	KisLayerSP layer = img -> activeLayer();
-	if (!layer) return;
+	if (!layer) return 0;
 
 	KisPaintDeviceSP clip = m_doc -> clipboard();
 
@@ -337,6 +337,8 @@ void KisSelectionManager::paste()
 		m_doc -> layerAdd(img, layer, img -> index(layer));
 		layer -> move(0,0);
 		img -> notify();
+
+		return layer;
 	}
 	else {
 		QClipboard *cb = QApplication::clipboard();
@@ -351,10 +353,12 @@ void KisSelectionManager::paste()
 			layer -> convertFromImage(qimg);
 			m_doc -> layerAdd(img, layer, img -> index(layer));
 			layer -> move(0,0);
-			img -> notify();			
-		}
+			img -> notify();	
 
+			return layer;
+		}
 	}
+	return 0;
 }
 
 

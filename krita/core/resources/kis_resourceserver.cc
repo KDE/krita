@@ -36,11 +36,13 @@ KisResourceServer::KisResourceServer()
 	m_pipebrushes.setAutoDelete(true);
 	m_patterns.setAutoDelete(true);
 	m_gradients.setAutoDelete(true);
+	m_profiles.setAutoDelete(true);
 
 	loadBrushes();
 	loadpipeBrushes();
 	loadPatterns();
 	loadGradients();
+	loadProfiles();
 }
 
 KisResourceServer::~KisResourceServer()
@@ -49,6 +51,7 @@ KisResourceServer::~KisResourceServer()
 	m_pipebrushes.clear();
 	m_patterns.clear();
 	m_gradients.clear();
+	m_profiles.clear();
 }
 
 
@@ -77,6 +80,14 @@ void KisResourceServer::loadGradients()
 	loadGradient();
 }
 
+
+void KisResourceServer::loadProfiles()
+{
+	m_profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.icm");
+	m_profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.ICM");
+	loadProfile();
+}
+
 void KisResourceServer::loadBrush()
 {
 	if (!m_brushFilenames.empty()) {
@@ -85,6 +96,7 @@ void KisResourceServer::loadBrush()
 
 		m_brushFilenames.pop_front();
 		brush = new KisBrush(front);
+
 		connect(brush, SIGNAL(loadComplete(KisResource*)), SLOT(brushLoaded(KisResource*)));
 		connect(brush, SIGNAL(ioFailed(KisResource*)), SLOT(brushLoadFailed(KisResource*)));
 
@@ -141,6 +153,24 @@ void KisResourceServer::loadGradient()
 	}
 }
 
+
+void KisResourceServer::loadProfile()
+{
+	if (!m_profileFilenames.empty()) {
+		QString front = *m_profileFilenames.begin();
+		m_profileFilenames.pop_front();
+		KisProfile * profile = new KisProfile(front);
+
+		kdDebug() << "Going to load: " << front << "\n";
+
+		connect(profile, SIGNAL(loadComplete(KisResource*)), SLOT(profileLoaded(KisResource*)));
+		connect(profile, SIGNAL(ioFailed(KisResource*)), SLOT(profileLoadFailed(KisResource*)));
+
+		if (!profile -> loadAsync())
+			loadProfile();
+	}
+}
+
 void KisResourceServer::brushLoaded(KisResource *br)
 {
 	if (br && br -> valid()) {
@@ -193,6 +223,19 @@ void KisResourceServer::gradientLoaded(KisResource *gradient)
 	loadGradient();
 }
 
+
+void KisResourceServer::profileLoaded(KisResource *profile)
+{
+	if (profile && profile -> valid()) {
+		m_profiles.append(profile);
+		emit loadedProfile(profile);
+	} else {
+		delete profile;
+	}
+
+	loadProfile();
+}
+
 void KisResourceServer::brushLoadFailed(KisResource *r)
 {
 	delete r;
@@ -215,6 +258,13 @@ void KisResourceServer::gradientLoadFailed(KisResource *r)
 {
 	delete r;
 	loadGradient();
+}
+
+
+void KisResourceServer::profileLoadFailed(KisResource *r)
+{
+	delete r;
+	loadProfile();
 }
 
 QPtrList<KisResource> KisResourceServer::brushes()
@@ -250,5 +300,15 @@ QPtrList<KisResource> KisResourceServer::gradients()
 	return m_gradients;
 }
 
+
+QPtrList<KisResource> KisResourceServer::profiles()
+{
+	kdDebug()<< "Call to profiles\n";
+	if (m_profiles.isEmpty())
+		
+		loadProfiles();
+
+	return m_profiles;
+}
 #include "kis_resourceserver.moc"
 

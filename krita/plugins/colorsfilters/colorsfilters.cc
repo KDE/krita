@@ -43,7 +43,7 @@
 #include <kistile.h>
 #include <kistilemgr.h>
 #include <kis_iterators_pixel.h>
-
+#include <kis_pixel.h>
 // #include <kmessagebox.h>
 
 #include "colorsfilters.h"
@@ -108,8 +108,8 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 		KisIteratorPixel lastPixel = lineIt.end();
 		while( pixelIt <= lastPixel )
 		{
-			KisPixelRepresentationReadOnly data = pixelIt.oldValue();
-			KisPixelRepresentation dstData = dstPixelIt;
+			KisPixelRO data = pixelIt.oldValue();
+			KisPixel dstData = dstPixelIt;
 			for( int i = 0; i < depth; i++)
 			{
 				KisQuantum d = pixelIt[ configPC->channel( i ) ];
@@ -148,7 +148,7 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 		KisIteratorPixel lastPixel = lineIt.end();
 		while( pixelIt <= lastPixel )
 		{
-			KisPixelRepresentation data = pixelIt;
+			KisPixel data = pixelIt;
 			for( int i = 0; i < depth; i++)
 			{
 				QUANTUM sd = pixelIt.oldValue()[ configPC->channel( i ) ];
@@ -172,12 +172,13 @@ KisAutoContrast::KisAutoContrast(KisView* view) : KisFilter(name(), view)
 }
 void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* , const QRect& rect, KisTileCommand* ktc)
 {
-	// TODO: make colorspace independant function using the converting facilities
-	if(colorStrategy()->name() != "RGBA")
-		return;
-	KisIteratorLinePixel lineIt = src->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel lastLine = src->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
-// 	Q_INT32 depth = device->depth() - 1;
+
+	KisIteratorLinePixel lineIt = src -> iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
+	KisIteratorLinePixel lastLine = src -> iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
+
+	// Number of channels in this device except alpha
+ 	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
+
 	Q_INT32 histo[QUANTUM_MAX+1];
 	for( Q_INT32 i = 0; i < QUANTUM_MAX+1; i++)
 	{
@@ -191,7 +192,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 		KisIteratorPixel lastPixel = lineIt.end();
 		while( pixelIt <= lastPixel )
 		{
-			KisPixelRepresentation data = pixelIt;
+			KisPixel data = pixelIt;
 			Q_INT32 lightness = ( QMAX(QMAX(data[0], data[1]), data[2])
 					+ QMIN(QMIN(data[0], data[1]), data[2]) ) / 2; 
 			histo[ lightness ] ++;
@@ -224,13 +225,14 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 		KisIteratorPixel lastPixel = lineIt2.end();
 		while( pixelIt <= lastPixel )
 		{
-			KisPixelRepresentationRGB srcData = KisPixelRepresentationRGB(pixelIt);
-			KisPixelRepresentationRGB dstData = KisPixelRepresentationRGB(dstPixelIt);
-// 			kdDebug() << data.red() << " " << data.green() << " " << data.blue() << endl;
-			dstData.red() = (QUANTUM)QMIN(QUANTUM_MAX, QMAX(0, (srcData.red() - start) * factor) );
-			dstData.green() = (QUANTUM)QMIN(QUANTUM_MAX, QMAX(0, (srcData.green() - start) * factor) );
-			dstData.blue() = (QUANTUM)QMIN(QUANTUM_MAX, QMAX(0, (srcData.blue() - start) * factor) );
-// 			kdDebug() << data.red() << " " << data.green() << " " << data.blue() << endl;
+			KisPixel srcData = pixelIt;
+			KisPixel dstData = dstPixelIt;
+
+			// Iterate through all channels except alpha
+			// XXX: Check for off-by-one errors
+			for (int i = 0; i < depth; ++i) {
+				dstData[i] = (QUANTUM) QMIN ( QUANTUM_MAX, QMAX(0, (srcData[i] - start) * factor) );
+			}
 			++dstPixelIt;
 			++pixelIt;
 		}
@@ -263,8 +265,8 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 		KisIteratorPixel lastPixel = lineIt.end();
 		while( pixelIt <= lastPixel )
 		{
-			KisPixelRepresentationReadOnly srcData = pixelIt.oldValue();
-			KisPixelRepresentation dstData = dstPixelIt;
+			KisPixelRO srcData = pixelIt.oldValue();
+			KisPixel dstData = dstPixelIt;
 			/* I thought of using the HSV model, but GIMP seems to use
 			HSL for desaturating. Better use the gimp model for now 
 					(HSV produces a lighter image than HSL) */

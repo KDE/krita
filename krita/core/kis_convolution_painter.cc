@@ -95,14 +95,14 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 	KisIteratorLinePixel curLit = src -> iteratorPixelSelectionBegin( m_transaction );
 	KisIteratorLinePixel dstLit = m_device -> iteratorPixelSelectionBegin( m_transaction );
 	KisIteratorLinePixel afterLit = src -> iteratorPixelSelectionBegin( m_transaction );
-	KisPixelRepresentationReadOnly pixels[9];
+	KisPixelRO pixels[9];
 	++afterLit;
 	{
 		KisIteratorPixel curIt = curLit.begin();
 		KisIteratorPixel dstIt = dstLit.begin();
 		KisIteratorPixel afterIt = afterLit.begin();
 		// Corner : left top
-		KisPixelRepresentation currentPixel = dstIt;
+		KisPixel currentPixel = dstIt;
 		++dstIt;
 		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldValue();
 		++curIt;
@@ -135,7 +135,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		{
 			currentPixel = dstIt;
 			++dstIt;
-			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRepresentationReadOnly));
+			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRO));
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
 			++curIt;
 			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
@@ -187,7 +187,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		KisIteratorPixel curIt = curLit.begin();
 		KisIteratorPixel afterIt = afterLit.begin();
 		// Body : left border
-		KisPixelRepresentation currentPixel = dstIt;
+		KisPixel currentPixel = dstIt;
 		++dstIt;
 		pixels[ CONVOLUTION_PIXEL_TOP ] = beforeIt.oldValue();
 		++beforeIt;
@@ -218,7 +218,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		{
 			currentPixel = dstIt;
 			++dstIt;
-			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRepresentationReadOnly));
+			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRO));
 			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
 			++beforeIt;
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
@@ -267,7 +267,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		++beforeIt;
 		pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
 		++beforeIt;
-		KisPixelRepresentation currentPixel = dstIt;
+		KisPixel currentPixel = dstIt;
 		++dstIt;
 		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldValue();
 		++curIt;
@@ -296,7 +296,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		{
 			currentPixel = dstIt;
 			++dstIt;
-			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRepresentationReadOnly));
+			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRO));
 			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
 			++beforeIt;
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();

@@ -32,6 +32,8 @@ class QCheckBox;
 class KURLRequester;
 
 
+
+
 /**
  *  "General"-tab for preferences dialog
  */
@@ -41,7 +43,7 @@ class GeneralTab : public QWidget
 
 public:
 
-	GeneralTab( QWidget *_parent = 0, const char *_name = 0 );
+	GeneralTab( QWidget *parent = 0, const char *name = 0 );
 
 	bool saveOnExit();
 	enumCursorStyle cursorStyle();
@@ -52,6 +54,9 @@ private:
 	QComboBox *m_cmbCursorShape;
 };
 
+
+//=======================
+
 /**
  *  "Directories"-tab for preferences dialog
  */
@@ -61,7 +66,7 @@ class DirectoriesTab : public QWidget
 
 public:
 
-	DirectoriesTab( QWidget *_parent = 0, const char *_name = 0 );
+	DirectoriesTab( QWidget *parent = 0, const char *name = 0 );
 
 private slots:
 
@@ -72,9 +77,7 @@ private:
 	KURLRequester *m_pLineEdit, *m_pGimpGradients;
 };
 
-/* jwc - undo-redo not working yet - still we can show the 
-   options and keep them in mind.  Harmless as the actions don't
-   do anything yet */
+//=======================
 
 class UndoRedoTab : public QWidget
 {
@@ -82,12 +85,25 @@ class UndoRedoTab : public QWidget
 
 public:
 
-	UndoRedoTab( QWidget *_parent = 0, const char *_name = 0 );
+	UndoRedoTab( QWidget *parent = 0, const char *name = 0 );
+};
+
+//=======================
+
+class ColorSettingsTab : public QWidget
+{
+	Q_OBJECT
+
+public:
+	
+	ColorSettingsTab( QWidget *parent = 0, const char * name = 0 );
 };
 
 
+//=======================
+
 /**
- *  Preferences dialog of KImageShop
+ *  Preferences dialog of KImageShop^WKrayon^WKrita
  */
 class PreferencesDialog : public KDialogBase
 {
@@ -99,14 +115,15 @@ public:
 
 protected:
 
-	PreferencesDialog( QWidget *_parent = 0, const char *_name = 0 );
+	PreferencesDialog( QWidget *parent = 0, const char *name = 0 );
 	~PreferencesDialog();
 
 protected:
 
-	GeneralTab     *m_general;
-	DirectoriesTab *m_directories;
-	UndoRedoTab    *m_undoRedo; 
+	GeneralTab* m_general;
+	DirectoriesTab* m_directories;
+	UndoRedoTab* m_undoRedo; 
+	ColorSettingsTab* m_colorSettingsTag;
 };
 
 #endif

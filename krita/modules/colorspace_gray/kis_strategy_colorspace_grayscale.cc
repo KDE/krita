@@ -20,9 +20,11 @@
 
 #include <limits.h>
 #include <stdlib.h>
+#include <lcms.h>
 
 #include <qimage.h>
 
+#include <klocale.h>
 #include <kdebug.h>
 
 #include "kis_image.h"
@@ -35,12 +37,15 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_GRAYSCALEA = 2;
 }
 
-KisChannelInfo KisStrategyColorSpaceGrayscale::channelInfo[1] = { KisChannelInfo("Gray", 0) };
+KisChannelInfo KisStrategyColorSpaceGrayscale::channelInfo[2] = { KisChannelInfo(i18n("gray"), 0, COLOR),
+								  KisChannelInfo(i18n("alpha"), 1, ALPHA)};
 
 KisStrategyColorSpaceGrayscale::KisStrategyColorSpaceGrayscale() :
-	KisStrategyColorSpace("Grayscale + Alpha")
+	KisStrategyColorSpace("Grayscale + Alpha", TYPE_GRAY_8)
 {
+//	setProfile(cmsCreateGrayProfile());
 }
+
 
 KisStrategyColorSpaceGrayscale::~KisStrategyColorSpaceGrayscale()
 {
@@ -54,30 +59,6 @@ void KisStrategyColorSpaceGrayscale::nativeColor(const KoColor& c, QUANTUM *dst)
 void KisStrategyColorSpaceGrayscale::nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst)
 {
 	dst[PIXEL_GRAY] = upscale((c.R() + c.G() + c.B() )/3);
-	dst[PIXEL_GRAY_ALPHA] = opacity;
-}
-
-void KisStrategyColorSpaceGrayscale::nativeColor(const QColor& c, QUANTUM *dst)
-{
-	KoColor k = KoColor( c );
-	dst[PIXEL_GRAY] = upscale((k.R() + k.G() + k.B() )/3);
-}
-
-void KisStrategyColorSpaceGrayscale::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst)
-{
-	KoColor k = KoColor( c );
-	dst[PIXEL_GRAY] = upscale((k.R() + k.G() + k.B() )/3);
-	dst[PIXEL_GRAY_ALPHA] = opacity;
-}
-
-void KisStrategyColorSpaceGrayscale::nativeColor(QRgb rgb, QUANTUM *dst)
-{
-	dst[PIXEL_GRAY] = upscale((qRed(rgb) + qGreen(rgb) + qBlue(rgb) )/3);
-}
-
-void KisStrategyColorSpaceGrayscale::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst)
-{
-	dst[PIXEL_GRAY] = upscale((qRed(rgb) + qGreen(rgb) + qBlue(rgb) )/3);
 	dst[PIXEL_GRAY_ALPHA] = opacity;
 }
 
@@ -106,7 +87,13 @@ Q_INT32 KisStrategyColorSpaceGrayscale::depth() const
 	return MAX_CHANNEL_GRAYSCALEA;
 }
 
-QImage KisStrategyColorSpaceGrayscale::convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
+Q_INT32 KisStrategyColorSpaceGrayscale::nColorChannels() const
+{
+	return MAX_CHANNEL_GRAYSCALE;
+}
+
+
+QImage KisStrategyColorSpaceGrayscale::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
 {
 	QImage img(width, height, 32, 0, QImage::LittleEndian);
 
@@ -116,6 +103,11 @@ QImage KisStrategyColorSpaceGrayscale::convertToImage(const QUANTUM *data, Q_INT
 	while ( i < stride * height ) {
 		QUANTUM q = *( data + i + PIXEL_GRAY );
 
+		// XXX: Moved here to get rid of these global constant
+		const PIXELTYPE PIXEL_BLUE = 0;
+		const PIXELTYPE PIXEL_GREEN = 1;
+		const PIXELTYPE PIXEL_RED = 2;
+		const PIXELTYPE PIXEL_ALPHA = 3;
 		*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_GRAY_ALPHA );
 		*( j + PIXEL_RED )   = q;
 		*( j + PIXEL_GREEN ) = q;
@@ -179,7 +171,7 @@ void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 stride,
 					int srcAlpha = (s[PIXEL_GRAY_ALPHA] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
 					int dstAlpha = (d[PIXEL_GRAY_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
 					d[PIXEL_GRAY]   = (d[PIXEL_GRAY]   * dstAlpha + s[PIXEL_GRAY]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_GRAY_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					d[PIXEL_GRAY_ALPHA] = (d[PIXEL_GRAY_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
 					if (d[PIXEL_GRAY_ALPHA] != 0) {
 						d[PIXEL_GRAY] = (d[PIXEL_GRAY] * QUANTUM_MAX) / d[PIXEL_GRAY_ALPHA];
 					}
@@ -202,7 +194,7 @@ void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 stride,
 					int srcAlpha = s[PIXEL_GRAY_ALPHA];
 					int dstAlpha = (d[PIXEL_GRAY_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
 					d[PIXEL_GRAY]   = (d[PIXEL_GRAY]   * dstAlpha + s[PIXEL_GRAY]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_GRAY_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					d[PIXEL_GRAY_ALPHA] = (d[PIXEL_GRAY_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
 					if (d[PIXEL_GRAY_ALPHA] != 0) {
 						d[PIXEL_GRAY] = (d[PIXEL_GRAY] * QUANTUM_MAX) / d[PIXEL_GRAY_ALPHA];
 					}
@@ -214,30 +206,4 @@ void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 stride,
 
 	}
 }
-
-void KisStrategyColorSpaceGrayscale::computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src)
-{
-	KisPixelRepresentationGrayscale dstPR(*dst);
-	KisPixelRepresentationGrayscale dabPR(*dab);
-	KisPixelRepresentationGrayscale srcPR(*src);
-	dstPR.gray() = ( (QUANTUM_MAX - dabPR.gray()) * (srcPR.gray()) ) / QUANTUM_MAX;
-	dstPR.alpha() =( dabPR.alpha() * (srcPR.alpha()) ) / QUANTUM_MAX;
-}
-
-void KisStrategyColorSpaceGrayscale::convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst)
-{
-	KisPixelRepresentationGrayscale prg(src);
-	dst.red() = prg.gray();
-	dst.green() = prg.gray();
-	dst.blue() = prg.gray();
-	dst.alpha() = prg.alpha();
-}
-
-void KisStrategyColorSpaceGrayscale::convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst)
-{
-	KisPixelRepresentationGrayscale prg(dst);
-	prg.gray() = (src.red() + src.green() + src.blue() ) / 3;
-	prg.alpha() = src.alpha();
-}
-
 

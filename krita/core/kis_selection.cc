@@ -18,8 +18,8 @@
 
 #include <qimage.h>
 
-#include "kdebug.h"
-
+#include <kdebug.h>
+#include <klocale.h>
 #include <koColor.h>
 
 #include "kis_layer.h"

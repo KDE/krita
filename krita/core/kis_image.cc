@@ -396,8 +396,8 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 
 	if (m_layers.empty()) return; // Nothing to scale
         Q_INT32 w, h;
-        w = width()*QABS(cos(angle*pi/180)) + height()*QABS(sin(angle*pi/180)) + 1;
-        h = height()*QABS(cos(angle*pi/180)) + width()*QABS(sin(angle*pi/180)) + 1;
+        w = (Q_INT32)( width()*QABS(cos(angle*pi/180)) + height()*QABS(sin(angle*pi/180)) + 1 );
+        h = (Q_INT32)( height()*QABS(cos(angle*pi/180)) + width()*QABS(sin(angle*pi/180)) + 1 );
 	if (w != width() || h != height()) {
 
 		undoAdapter() -> beginMacro("Rotate image");
@@ -435,17 +435,17 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
         
         if(angleX != 0 || angleY != 0){
                 double deltaY=height()*QABS(tan(angleX*pi/180)*tan(angleY*pi/180));
-                w = width() + QABS(height()*tan(angleX*pi/180));
+                w = (Q_INT32) ( width() + QABS(height()*tan(angleX*pi/180)) );
                 //ugly fix for the problem of having two extra pixels if only a shear along one
                 //axis is done. This has to be fixed in the cropping code in KisRotateVisitor!
                 if (angleX == 0 || angleY == 0)
-                        h = height() + QABS(w*tan(angleY*pi/180));
+                        h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180)) );
                 else if (angleX > 0 && angleY > 0)
-                        h = height() + QABS(w*tan(angleY*pi/180))- 2 * deltaY + 2;
+                        h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180))- 2 * deltaY + 2 );
                 else if (angleX < 0 && angleY < 0)
-                        h = height() + QABS(w*tan(angleY*pi/180))- 2 * deltaY + 2;
+                        h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180))- 2 * deltaY + 2 );
                 else 
-                        h = height() + QABS(w*tan(angleY*pi/180));
+                        h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180)) );
         }
         
 	if (w != width() || h != height()) {

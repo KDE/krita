@@ -20,43 +20,46 @@
 #include <kdebug.h>
 
 #include "kis_strategy_colorspace.h"
-#include "kis_pixel_representation.h"
+#include "kis_pixel.h"
 #include "kis_global.h"
+#include "kis_factory.h"
 
-KisStrategyColorSpace::KisStrategyColorSpace(const QString& name) : m_name(name)
-{
-
+KisStrategyColorSpace::KisStrategyColorSpace(const QString& name, Q_UINT32 cmType) 
+	: m_name(name),
+	  m_cmType(cmType)
+{	
 }
 
 KisStrategyColorSpace::~KisStrategyColorSpace()
 {
+	TransformMap::iterator it;
+	for ( it = m_transforms.begin(); it != m_transforms.end(); ++it ) {
+		cmsDeleteTransform(it.data());
+        }
+	m_transforms.clear();
 }
 
-void KisStrategyColorSpace::convertTo(KisPixelRepresentation& src, KisPixelRepresentation& dst,  KisStrategyColorSpaceSP cs)
+void KisStrategyColorSpace::convertTo(KisPixel& /*src*/, KisPixel& /*dst*/,  KisStrategyColorSpaceSP /*cs*/)
 {
-	 KisPixelRepresentationRGB intermediate;
-
-	 this->convertToRGBA(src, intermediate);
-	 cs->convertFromRGBA(intermediate, dst);
+	// XXX: Call convertPixels
 }
-
 
 
 void KisStrategyColorSpace::convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 numPixels)
 {
-	//kdDebug() << "Converting " << srcLen << " pixels from " << srcSpace -> name() << " to " << name() << "\n";
+ 	if (!m_transforms.contains(srcSpace -> colorModelType())) {
+ 		cmsHTRANSFORM tf = cmsCreateTransform(srcSpace -> getProfile(), 
+						      srcSpace -> colorModelType(), 
+						      getProfile(),
+						      m_cmType, 
+						      INTENT_PERCEPTUAL,
+						      0);
+		m_transforms[srcSpace -> colorModelType()] = tf;
+ 	}
 
-	Q_INT32 srcPixelSize = srcSpace -> depth();
-	Q_INT32 dstPixelSize = depth();
+	cmsHTRANSFORM tf = m_transforms[srcSpace -> colorModelType()];
 
-	KoColor c;
-	QUANTUM opacity = OPACITY_OPAQUE;
-
-	for (Q_UINT32 i = 0, s = 0, d = 0; i < numPixels; i++, s += srcPixelSize, d += dstPixelSize) {
-		srcSpace -> toKoColor(&src[s], &c, &opacity);
-		nativeColor(c, opacity, &dst[d]);
-
-	}
+	cmsDoTransform(tf, src, dst, numPixels);
 }
 
 void KisStrategyColorSpace::bitBlt(Q_INT32 stride,

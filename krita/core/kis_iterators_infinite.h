@@ -24,7 +24,7 @@
 #include "kis_types.h"
 #include "kis_iterators.h"
 #include "kis_iterators_pixel.h"
-#include "kis_pixel_representation.h"
+#include "kis_pixel.h"
 #include "color_strategy/kis_strategy_colorspace.h"
 
 /**
@@ -44,18 +44,18 @@ public:
 		Q_INT32 nypos = 0,
 		Q_INT32 nxpos = 0);
 	/**
-	 * This is a very special constructor. It takes a KisPixelRepresentation and a 
+	 * This is a very special constructor. It takes a KisPixel and a 
 	 * KisStrategyColorspaceSP as argument, and creates an iterator that only returns
 	 * this pixel. Note that it internally creates a new KisLayer, so this might be very
 	 * slow. Usage: to be able to switch easily from a pattern to a color.
 	 **/
-	KisIteratorInfinitePixel(KisStrategyColorSpaceSP s, KisPixelRepresentation p);
+	KisIteratorInfinitePixel(KisStrategyColorSpaceSP s, KisPixel p);
 public:
 	inline virtual KisIteratorInfinitePixel& inc();
 	inline virtual KisIteratorInfinitePixel& dec();
 	virtual ~KisIteratorInfinitePixel();
 private:
-	static KisPaintDeviceSP constructPixel(KisStrategyColorSpaceSP s, KisPixelRepresentation p);
+	static KisPaintDeviceSP constructPixel(KisStrategyColorSpaceSP s, KisPixel p);
 	bool m_isPixel;
 };
 

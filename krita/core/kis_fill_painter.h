@@ -46,6 +46,7 @@
 #include "kis_painter.h"
 #include "kis_iterators_infinite.h"
 #include "kis_selection.h"
+#include "kis_pixel.h"
 
 // XXX: Filling should set dirty rect.
 class KisFillPainter : public KisPainter
@@ -103,7 +104,7 @@ private:
 	 * 255 (actually should be MIN_SELECTED to MAX_SELECTED?). Only 0 and 255 are
 	 * returned when anti-aliasing is off
 	 **/
-	QUANTUM difference(QUANTUM* src, KisPixelRepresentation dst);
+	QUANTUM difference(QUANTUM* src, KisPixel dst);
 	void genericFillStart(int startX, int startY);
 	void genericFillEnd(KisLayerSP filled);
 	typedef enum { Left, Right } Direction;

@@ -33,6 +33,8 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_selection.h"
+#include "kis_selection_manager.h"
 
 KisToolMove::KisToolMove()
 {
@@ -57,13 +59,29 @@ void KisToolMove::buttonPress(KisButtonPressEvent *e)
 	if (m_subject && e -> button() == QMouseEvent::LeftButton) {
 		QPoint pos = e -> pos().floorQPoint();
 		KisImageSP img = m_subject -> currentImg();
-		KisPaintDeviceSP dev;
+		KisLayerSP dev;
 
-		if (!img || !(dev = img -> activeDevice()))
+		if (!img || !(dev = img -> activeLayer()))
 			return;
 
-		if (dev -> contains(pos))
+		if (dev -> hasSelection()) {
+			QRect r = dev -> selection() -> selectedRect();
+
+			if (r.contains(pos)) {
+				// XXX: Put in undo macro
+				m_subject -> selectionManager() -> copy();
+				m_subject -> selectionManager() -> clear();
+				dev = m_subject -> selectionManager() -> paste();
+				if (dev) {
+					dev -> move(r.x(), r.y());
+					img -> activate(dev);
+					m_strategy.startDrag(pos);
+				}
+			}
+		}
+		else if (dev -> contains(pos)) {
 			m_strategy.startDrag(pos);
+		}
 	}
 }
 

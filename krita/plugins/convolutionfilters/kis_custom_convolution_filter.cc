@@ -50,7 +50,7 @@ KisFilterConfiguration* KisCustomConvolutionFilter::configuration(KisFilterConfi
 		{
 			amatrixes[i] = KisMatrix3x3(mat, 1, 127);
 		}
-		int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
+// 		int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} }; // XXX: (BSAR) Unused.
 		amatrixes[imgdepth - 1] = KisMatrix3x3(mat, 1, 0);
 		return new KisCustomConvolutionConfiguration( amatrixes );
 	} else {

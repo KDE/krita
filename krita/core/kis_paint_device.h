@@ -118,7 +118,7 @@ public:
 	/**
 	 * Create an RGBA QImage from a rectangle in the paint device.
 	 */
-	virtual QImage convertToImage(Q_INT32 x = 0, Q_INT32 y = 0, Q_INT32 w = -1, Q_INT32 h = -1);
+	virtual QImage convertToQImage(Q_INT32 x = 0, Q_INT32 y = 0, Q_INT32 w = -1, Q_INT32 h = -1);
 
         virtual QString name() const;
         virtual void setName(const QString& name);

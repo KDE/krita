@@ -109,7 +109,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         const double Lanczos3_support=3.0;
         const double Mitchell_support=2.0;
         
-        double fwidth;
+        double fwidth = 0;
         
         KisScaleFilterStrategy *filterStrategy = 0;
         

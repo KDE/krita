@@ -6,15 +6,17 @@ INCLUDES  = -I$(srcdir)/.. \
 noinst_LTLIBRARIES = libkisdialogs.la
 libkisdialogs_la_SOURCES = dummy.cc \
 	wdgmatrix.ui \
-	new_image.ui \
 	wdghistogram.ui \
 	kis_previewwidgetbase.ui \
 	wdgselectionoptions.ui \
-	kis_preview_dialog.ui 
+	kis_preview_dialog.ui \
+	wdgnewimage.ui \
+	wdgcolorsettings.ui
 
 noinst_HEADERS = wdgmatrix.h \
 	wdghistogram.h \
-	new_image.h \
-	kis_previewwidgetbase.h
+	kis_previewwidgetbase.h \
+	wdgnewimage.h \
+	wdgcolorsettings.h
 
 METASOURCES = AUTO

@@ -17,12 +17,14 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+#include <lcms.h>
 #include <limits.h>
 #include <stdlib.h>
 
 #include <qimage.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "kis_colorspace_registry.h"
 #include "kis_image.h"
@@ -30,15 +32,16 @@
 #include "tiles/kispixeldata.h"
 #include "kis_iterators_pixel.h"
 #include "kis_selection.h"
+#include "kis_channelinfo.h"
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_ALPHA = 1;
 }
 
-KisChannelInfo KisColorSpaceAlpha::channelInfo[1] = { KisChannelInfo("Alpha", 0) };
+KisChannelInfo KisColorSpaceAlpha::channelInfo[1] = { KisChannelInfo(i18n("alpha"), 0, ALPHA) };
 
 KisColorSpaceAlpha::KisColorSpaceAlpha() :
-	KisStrategyColorSpace("alpha mask")
+	KisStrategyColorSpace("alpha mask", TYPE_GRAY_8)
 {
 	m_maskColor = KoColor::white();
 	m_inverted = false;
@@ -54,26 +57,6 @@ void KisColorSpaceAlpha::nativeColor(const KoColor& /*c*/, QUANTUM *dst)
 }
 
 void KisColorSpaceAlpha::nativeColor(const KoColor& /*c*/, QUANTUM opacity, QUANTUM *dst)
-{
-	dst[PIXEL_MASK] = opacity;
-}
-
-void KisColorSpaceAlpha::nativeColor(const QColor& /*c*/, QUANTUM *dst)
-{
-	dst[PIXEL_MASK] = OPACITY_OPAQUE;
-}
-
-void KisColorSpaceAlpha::nativeColor(const QColor& /*c*/, QUANTUM opacity, QUANTUM *dst)
-{
-	dst[PIXEL_MASK] = opacity;
-}
-
-void KisColorSpaceAlpha::nativeColor(QRgb /*rgb*/, QUANTUM *dst)
-{
-	dst[PIXEL_MASK] = OPACITY_OPAQUE;
-}
-
-void KisColorSpaceAlpha::nativeColor(QRgb /*rgb*/, QUANTUM opacity, QUANTUM *dst)
 {
 	dst[PIXEL_MASK] = opacity;
 }
@@ -108,7 +91,7 @@ Q_INT32 KisColorSpaceAlpha::depth() const
 	return MAX_CHANNEL_ALPHA;
 }
 
-QImage KisColorSpaceAlpha::convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
+QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
 {
 // 	kdDebug() << "KisColorSpaceAlpha::convertToImage. W:" << width
 // 		  << ", H: " << height
@@ -123,6 +106,10 @@ QImage KisColorSpaceAlpha::convertToImage(const QUANTUM *data, Q_INT32 width, Q_
 		*( j + PIXEL_MASK ) = *( data + i );
 		// XXX: for previews of the mask, it would be handy to
 		// make this always black.
+		PIXELTYPE PIXEL_BLUE = 0;
+		PIXELTYPE PIXEL_GREEN = 1;
+		PIXELTYPE PIXEL_RED = 2;
+
 		*( j + PIXEL_RED )   = m_maskColor.R();
 		*( j + PIXEL_GREEN ) = m_maskColor.G();
 		*( j + PIXEL_BLUE )  = m_maskColor.B();
@@ -235,23 +222,4 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 		}
 
 	}
-}
-
-void KisColorSpaceAlpha::computeDuplicatePixel(KisIteratorPixel* , KisIteratorPixel* , KisIteratorPixel* )
-{
-// 	KisPixelRepresentationGrayscale dstPR(*dst);
-// 	KisPixelRepresentationGrayscale dabPR(*dab);
-// 	KisPixelRepresentationGrayscale srcPR(*src);
-// 	dstPR.gray() = ( (QUANTUM_MAX - dabPR.gray()) * (srcPR.gray()) ) / QUANTUM_MAX;
-// 	dstPR.alpha() =( dabPR.alpha() * (srcPR.alpha()) ) / QUANTUM_MAX;
-}
-
-void KisColorSpaceAlpha::convertToRGBA(KisPixelRepresentation& , KisPixelRepresentationRGB& )
-{
-// 	XXX
-}
-
-void KisColorSpaceAlpha::convertFromRGBA(KisPixelRepresentationRGB& , KisPixelRepresentation& )
-{
-//     XXXX
 }

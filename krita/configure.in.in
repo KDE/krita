@@ -8,3 +8,59 @@ KDE_CHECK_LIB(Xi, XOpenDisplay, [
 	AC_DEFINE(HAVE_XINPUTEXT, 1, [Define if you have the X11 Input Extension])
 	])
 AC_SUBST(LIB_XINPUTEXT)
+
+# Check for lcms
+have_lcms_header='no'
+KDE_CHECK_HEADER(lcms/lcms.h,have_lcms_header='yes',,)
+if test "$have_lcms_header" = 'yes'
+then
+        LCMS_LIBS='-llcms'
+        AC_DEFINE(LCMS_HEADER, <lcms/lcms.h>, [The correct header])
+else
+        # Alternative! Debian does it this way...
+        KDE_CHECK_HEADER(lcms.h,have_lcms_header='yes',,)
+        if test "$have_lcms_header" = 'yes'
+        then
+                LCMS_LIBS='-llcms'
+                AC_DEFINE(LCMS_HEADER, <lcms.h>, [The correct header])
+
+                # Try to find the full path of lcms.h
+                for a in $includedir $prefix/include /usr/include /usr/local/include $kde_extra_includes; do
+                        for b in lcms.h lcms/lcms.h ; do
+                                if test -d "$a"  && test -f "$a/$b" ; then
+                                        LCMSHDR="$a/$b"
+                                fi
+                        done
+                done
+                # Check if lcms.h was found. If not then it means that we didn't search
+                # the right dirs since the kde check already found a usable lcms.h
+                if test -n "$LCMSHDR" ; then
+                        # Get lcms version
+                        lcms_ver_line=`cat $LCMSHDR | grep '^// Version' `
+                        if test -z "$lcms_ver_line" ; then
+                                # Some versions of lcms have the version in /* */
+                                lcms_ver_line=`cat $LCMSHDR | grep '^/\* Version' `
+                        fi
+                        lcms_ver=`echo "$lcms_ver_line" | head -1 | cut -d ' ' -f 3 `
+
+                        # Get major and minor version numbers
+                        lcms_var_maj=`echo $lcms_ver | cut -d . -f 1`
+
+                        # Some versions have a character attached to the end of minor version
+                        lcms_var_min=`echo $lcms_ver | cut -d . -f 2 | sed 's,[^0-9],,g'`
+
+                        if test "$lcms_var_maj" -gt 1 || test "$lcms_var_min" -lt 9 ; then
+                                LCMS_LIBS=''
+                fi
+        fi
+        else
+                LCMS_LIBS=''
+        fi
+fi
+
+if test -z "$LCMS_LIBS"; then
+        DO_NOT_COMPILE="$DO_NOT_COMPILE krita"
+fi
+
+AC_SUBST(LCMS_LIBS)
+

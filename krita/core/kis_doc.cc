@@ -1153,8 +1153,9 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect)
 					continue;
 
 				m_currentImage -> renderToProjection(tileno);
-				QImage img = m_currentImage -> projection() -> convertToImage(x, y, TILE_WIDTH, TILE_HEIGHT);
+				QImage img = m_currentImage -> projection() -> convertToQImage(x, y, TILE_WIDTH, TILE_HEIGHT);
 				if (!img.isNull()) {
+                                        // XXX: made obosolete by qt-copy patch 0005
 					m_pixio.putImage(&m_pixmap, 0, 0, &img);
 					Q_INT32 w = QMIN(x2 - x, TILE_WIDTH);
 					Q_INT32 h = QMIN(y2 - y, TILE_HEIGHT);
@@ -1528,7 +1529,7 @@ void KisDoc::setClipboard(KisPaintDeviceSP selection)
 	m_clipboard = selection;
 
 	if (selection) {
-		QImage qimg = selection -> convertToImage();
+		QImage qimg = selection -> convertToQImage();
 		QClipboard *cb = QApplication::clipboard();
 
 		cb -> setImage(qimg);

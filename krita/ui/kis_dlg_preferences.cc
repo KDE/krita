@@ -38,6 +38,9 @@
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_dlg_preferences.h"
+#include "dialogs/wdgcolorsettings.h"
+#include "kis_resourceserver.h"
+#include "kis_factory.h"
 
 GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 	: QWidget( _parent, _name )
@@ -152,6 +155,25 @@ UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
 	grid->setRowStretch( 2, 1 );
 }
 
+ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
+	: QWidget(parent, name)
+{
+	QGridLayout * l = new QGridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
+	WdgColorSettings * wcs = new WdgColorSettings(this);
+	l -> addWidget( wcs, 0, 0);
+
+	QPtrList<KisResource> resourceslist = KisFactory::rServer() -> profiles();
+	KisResource * resource;
+	for ( resource = resourceslist.first(); resource; resource = resourceslist.next() ) {
+		kdDebug() << "Adding profile: " << resource -> filename() << "\n";
+		wcs -> cmbMonitorProfile -> insertItem(resource -> name());
+		wcs -> cmbImportProfile -> insertItem(resource -> name());
+		wcs -> cmbPrintProfile -> insertItem(resource -> name());
+	}
+			
+	
+}
+
 
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 	: KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default | Apply, Ok, parent, name, true, true )
@@ -166,6 +188,9 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 
 	vbox = addVBoxPage( i18n( "Undo/Redo") );
 	m_undoRedo = new UndoRedoTab( vbox );
+
+	vbox = addVBoxPage( i18n( "Color settings") );
+	m_colorSettingsTag = new ColorSettingsTab( vbox );
 }
 
 PreferencesDialog::~PreferencesDialog()

@@ -32,9 +32,6 @@ class QLabel;
 class QCheckBox;
 class IntegerWidget;
 class KisCmbComposite;
-class KisPixelRepresentation;
-class KisIteratorPixel;
-class KisIteratorInfinitePixel;
 class KActionCollection;
 
 class KisToolFill : public KisToolPaint {

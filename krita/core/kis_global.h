@@ -18,7 +18,7 @@
  */
 #ifndef KISGLOBAL_H_
 #define KISGLOBAL_H_
-
+#include <lcms.h>
 #include <limits.h>
 #include <qglobal.h>
 #include <kglobal.h>
@@ -73,7 +73,6 @@ const QUANTUM OPACITY_TRANSPARENT = 0;
 const QUANTUM OPACITY_OPAQUE = QUANTUM_MAX;
 #endif
 
-const QUANTUM MAXCHANNELS = 8; // Imagetype 'wet' needs 8 channels
 const Q_INT32 IMG_DEFAULT_DEPTH = 4;
 const Q_INT32 RENDER_HEIGHT = TILE_SIZE * 4;
 const Q_INT32 RENDER_WIDTH = TILE_SIZE * 4;
@@ -180,14 +179,6 @@ enum enumPaintStyles {
 // If QUANTUM changes size, this should change, too.
 typedef Q_UINT8 PIXELTYPE;
 
-// XXX: Move the PIXELTYPE constants to their respective color
-// strategies. The RGB types are unfortunately enough used
-// all over the place.
-const PIXELTYPE PIXEL_UNDEF = 255;
-const PIXELTYPE PIXEL_BLUE = 0;
-const PIXELTYPE PIXEL_GREEN = 1;
-const PIXELTYPE PIXEL_RED = 2;
-const PIXELTYPE PIXEL_ALPHA = 3;
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 

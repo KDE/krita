@@ -138,9 +138,9 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 		KisIteratorPixel devUit = * devLit;
 		while ( srcUit <= srcUitend )
 		{
-			KisPixelRepresentation srcP = srcUit;
-			KisPixelRepresentation dabP = dabUit;
-			KisPixelRepresentation devP = devUit;
+			KisPixel srcP = srcUit;
+			KisPixel dabP = dabUit;
+			KisPixel devP = devUit;
 			for( Q_INT32 i = 0; i < stop; i++)
 			{
 				srcUit[ i ] = ( devUit[ i ] * (QUANTUM_MAX - dabUit[ i ]) ) / QUANTUM_MAX;
@@ -154,7 +154,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	}
 // 	kdDebug() << "applying filter to the square" << endl;
 	filter -> process( srcdev, m_filterConfiguration, QRect(0, 0, srcdev -> width(), srcdev -> height()), 0 );
-	
+// XXX: Why was this commented out, and by whom?	
 // 	KisIteratorLinePixel srcLit2 = srcdev->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
 // 	KisIteratorLinePixel srcLitend2 = srcdev->iteratorPixelSelectionEnd( 0, sx, sw - 1, sh - 1);
 // 	while ( srcLit <= srcLitend )
@@ -163,7 +163,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 // 		KisIteratorPixel srcUitend = srcLit2.end();
 // 		while ( srcUit <= srcUitend )
 // 		{
-// 			KisPixelRepresentation srcP = srcUit;
+// 			KisPixel srcP = srcUit;
 // 			for( Q_INT32 i = 0; i < device->depth(); i++)
 // 			{
 // 				kdDebug() << " srcUit[ " << i << " ] = " << srcUit[i] << endl;

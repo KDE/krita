@@ -69,6 +69,7 @@ public:
 
 protected:
 	KisPaintDeviceSP m_device;
+	KisStrategyColorSpaceSP m_colorSpace;
 	KisTileCommand* m_command;
 	KisTileMgrSP m_ktm;
 	const Q_INT32 m_depth, m_ypos, m_rownum, m_ypos_intile;

@@ -24,19 +24,12 @@
 
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
-#include "kis_pixel_representation.h"
+#include "kis_pixel.h"
 
 // XXX: move into namespace.
 const PIXELTYPE PIXEL_GRAY = 0;
 const PIXELTYPE PIXEL_GRAY_ALPHA = 1;
 
-class KisPixelRepresentationGrayscale : public KisPixelRepresentation {
-public:
-	inline KisPixelRepresentationGrayscale( const KisPixelRepresentation& pr) : KisPixelRepresentation(pr) { };
-public:
-	inline KisQuantum gray() { return (*this)[PIXEL_GRAY]; };
-	inline KisQuantum alpha() { return (*this)[PIXEL_GRAY_ALPHA]; };
-};
 
 class KisStrategyColorSpaceGrayscale : public KisStrategyColorSpace {
 public:
@@ -44,21 +37,22 @@ public:
 	virtual ~KisStrategyColorSpaceGrayscale();
 
 public:
+
 	virtual void nativeColor(const KoColor& c, QUANTUM *dst);
 	virtual void nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst);
-	virtual void nativeColor(const QColor& c, QUANTUM *dst);
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst);
-	virtual void nativeColor(QRgb rgb, QUANTUM *dst);
-	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst);
-	
+
 	virtual void toKoColor(const QUANTUM *src, KoColor *c);
 	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity);
+
+	virtual KisPixelRO toKisPixelRO(QUANTUM *src) { return KisPixelRO (src, src + PIXEL_GRAY_ALPHA); }
+	virtual KisPixel toKisPixel(QUANTUM *src) { return KisPixel (src, src + PIXEL_GRAY_ALPHA); }
 
 	virtual KisChannelInfo* channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
+	virtual Q_INT32 nColorChannels() const;
 	
-	virtual QImage convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const;
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const;
 
 
 	virtual void bitBlt(Q_INT32 stride,
@@ -70,12 +64,9 @@ public:
 			    Q_INT32 rows, 
 			    Q_INT32 cols, 
 			    CompositeOp op);
-	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src);
-	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst);
-	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst);
 
 private:
-	static KisChannelInfo channelInfo[1];
+	static KisChannelInfo channelInfo[2];
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_

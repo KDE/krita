@@ -84,7 +84,7 @@ KisPluginRegistry::~KisPluginRegistry()
 {
 }
 
-void KisPluginRegistry::registerColorStrategy(const QString & name, KisStrategyColorSpaceSP colorspace)
+void KisPluginRegistry::registerColorStrategy(const QString & /*name*/, KisStrategyColorSpaceSP colorspace)
 {
 // 	kdDebug() << "Adding color strategy: " << name << "\n";
 	KisColorSpaceRegistry::singleton() -> add(colorspace);

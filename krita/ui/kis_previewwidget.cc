@@ -212,7 +212,7 @@ void KisPreviewWidget::render(QPainter &painter, KisImageSP image, double zoomX,
 			Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
 			Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
 
-			QImage img = image -> projection() -> convertToImage(x, y, w, h);
+			QImage img = image -> projection() -> convertToQImage(x, y, w, h);
 
 			if (!img.isNull()) {
 				m_pixio.putImage(&m_pixmap, 0, 0, &img);

@@ -607,8 +607,8 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstCS)
 		KisIteratorPixel srcIt = srcLIt.begin();
 		while(dstIt <= endIt )
 		{
-			KisPixelRepresentation srcPr = srcIt;
-			KisPixelRepresentation dstPr = dstIt;
+			KisPixel srcPr = srcIt;
+			KisPixel dstPr = dstIt;
 			srcCS->convertTo(srcPr, dstPr, dstCS);
 			++dstIt; ++srcIt;
 		}
@@ -643,7 +643,7 @@ void KisPaintDevice::convertFromImage(const QImage& img)
 	}
 }
 
-QImage KisPaintDevice::convertToImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+QImage KisPaintDevice::convertToQImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	if (w < 0) {
 		w = width();
@@ -708,7 +708,7 @@ QImage KisPaintDevice::convertToImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h
 		pd -> data = new QUANTUM[pd -> depth * pd -> width * pd -> height];
 		tiles() -> readPixelData(pd);
 
-		image = colorStrategy() -> convertToImage(pd -> data, pd -> width, pd -> height, pd -> stride);
+		image = colorStrategy() -> convertToQImage(pd -> data, pd -> width, pd -> height, pd -> stride);
 	}
 
 	return image;

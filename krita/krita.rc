@@ -38,7 +38,6 @@
 
 <Menu name="Image"><text>&amp;Image</text>
     <Menu name="Mode"><text>&amp;Mode</text>
-            <Action name="bitmap"/>
     </Menu>
 
   <Separator/>
@@ -85,6 +84,8 @@
   <Action name="mirrorLayerY"/>
   <Separator/>
   <Action name="layer_properties"/>
+  <Menu name="Mode"><text>&amp;Mode</text>
+  </Menu>
   <Separator/>
   <Action name="flatten_image"/>
   <Action name="merge_layer"/>

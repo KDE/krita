@@ -49,11 +49,13 @@ public:
 	 * the resource has been loaded and valid flag is set to true.
 	 */
 	virtual bool loadAsync() = 0;
+
 	/**
 	 * Save this resource asynchronously.  The signal saveComplete is emitted when
 	 * the resource has been saved.
 	 */
 	virtual bool saveAsync() = 0;
+
 	/**
 	 * Returns a QImage representing this resource.  This image could be null.
 	 */

@@ -56,7 +56,6 @@
 typedef KGenericFactory<ImageSize> ImageSizeFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaimagesize, ImageSizeFactory( "krita" ) )
 
-// XXX: this plugin could also provide layer scaling/resizing
 ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)
 {

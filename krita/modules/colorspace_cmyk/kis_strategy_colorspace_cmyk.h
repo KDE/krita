@@ -22,11 +22,9 @@
 #include <qmap.h>
 
 #include <koColor.h>
-
+#include "kis_pixel.h"
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
-#include "kis_pixel_representation.h"
-
 
 // XXX: Move into namespace
 
@@ -36,69 +34,28 @@ const PIXELTYPE PIXEL_YELLOW = 2;
 const PIXELTYPE PIXEL_BLACK = 3;
 const PIXELTYPE PIXEL_CMYK_ALPHA = 4;
 
-class KisPixelRepresentationCMYK : public KisPixelRepresentation {
-public:
-	inline KisPixelRepresentationCMYK( const KisPixelRepresentation& pr) : KisPixelRepresentation(pr) { };
-public:
-	inline KisQuantum cyan() { return (*this)[PIXEL_CYAN]; };
-	inline KisQuantum magenta() { return (*this)[PIXEL_MAGENTA]; };
-	inline KisQuantum yellow() { return (*this)[PIXEL_YELLOW]; };
-	inline KisQuantum black() { return (*this)[PIXEL_BLACK]; };
-	inline KisQuantum alpha() { return (*this)[PIXEL_CMYK_ALPHA]; };
-};
-
-
-/**
-   This class implements the conversion of the Krita images that
-   contain cmy + transparency data to rbg for screen rendering.
-
-*/
-
-class CMYK {
- public:
-	QUANTUM c;
-	QUANTUM m;
-	QUANTUM y;
-	QUANTUM k;
-
-	bool operator< (const CMYK &) const;
-};
-
-inline bool CMYK::operator<(const CMYK &other) const
-{ return c < other.c; }
-
-
-class RGB {
- public:
-	QUANTUM r;
-	QUANTUM g;
-	QUANTUM b;
-};
-
-// Map cmyka to rgba
-typedef QMap<CMYK, RGB> ColorLUT;
-
 class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
  public:
 	KisStrategyColorSpaceCMYK();
 	virtual ~KisStrategyColorSpaceCMYK();
 
  public:
+
 	virtual void nativeColor(const KoColor& c, QUANTUM *dst);
 	virtual void nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst);
-	virtual void nativeColor(const QColor& c, QUANTUM *dst);
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst);
-	virtual void nativeColor(QRgb rgb, QUANTUM *dst);
-	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst);
 
 	virtual void toKoColor(const QUANTUM *src, KoColor *c);
 	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity);
 
+	virtual KisPixelRO toKisPixelRO(QUANTUM *src) { return KisPixelRO (src, src + PIXEL_CMYK_ALPHA); }
+	virtual KisPixel toKisPixel(QUANTUM *src) { return KisPixel (src, src + PIXEL_CMYK_ALPHA); }
+
 	virtual KisChannelInfo* channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
+	virtual Q_INT32 nColorChannels() const;
 	
-	virtual QImage convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const;
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const;
 
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst, 
@@ -110,13 +67,8 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 			    Q_INT32 cols, 
 			    CompositeOp op);
 
-	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src);
-	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst);
-	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst);
-
  private:
-        static ColorLUT m_rgbLUT;
-	static KisChannelInfo channelInfo[4];
+	static KisChannelInfo channelInfo[5];
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_CMYK_H_

@@ -17,15 +17,22 @@
  */
 #include <limits.h>
 #include <stdlib.h>
+#include <lcms.h>
 
 #include <qimage.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "kis_image.h"
 #include "kis_strategy_colorspace_cmyk.h"
 #include "tiles/kispixeldata.h"
 #include "kis_iterators_pixel.h"
+
+#include "kis_resource.h"
+#include "kis_resourceserver.h"
+#include "kis_resource_mediator.h"
+#include "kis_profile.h"
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_CMYK = 4;
@@ -33,17 +40,19 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_CMYKA = 5;
 }
 
-// Init static data
-ColorLUT KisStrategyColorSpaceCMYK::m_rgbLUT = ColorLUT();
-KisChannelInfo KisStrategyColorSpaceCMYK::channelInfo[4] = { KisChannelInfo("Cyan", 4), 
-							     KisChannelInfo("Magenta", 3), 
-							     KisChannelInfo("Yellow", 2), 
-							     KisChannelInfo("Black", 1) };
+
+KisChannelInfo KisStrategyColorSpaceCMYK::channelInfo[5] = { KisChannelInfo(i18n("cyan"), 0, COLOR), 
+							     KisChannelInfo(i18n("magenta"), 1, COLOR),
+							     KisChannelInfo(i18n("yellow"), 2, COLOR), 
+							     KisChannelInfo(i18n("black"), 3, COLOR),
+							     KisChannelInfo(i18n("alpha"), 4, ALPHA)};
 
 
 KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() : 
-	KisStrategyColorSpace("CMYKA")
+	KisStrategyColorSpace("CMYKA", TYPE_CMYK_8)
 {
+// 	setProfile(cmsCreateNullProfile());
+
 }
 
 KisStrategyColorSpaceCMYK::~KisStrategyColorSpaceCMYK()
@@ -60,7 +69,7 @@ void KisStrategyColorSpaceCMYK::nativeColor(const KoColor& c, QUANTUM *dst)
 
 void KisStrategyColorSpaceCMYK::nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst)
 {
-#ifdef DEBUG_COLORCONVERSION
+#if 0
 	kdDebug() << "KisStrategyColorSpaceCMYK::nativeColor: "
 		  << "R: " << c.R()
 		  << ", G: " << c.G()
@@ -76,49 +85,6 @@ void KisStrategyColorSpaceCMYK::nativeColor(const KoColor& c, QUANTUM opacity, Q
 	dst[PIXEL_MAGENTA] = upscale( c.M() );
 	dst[PIXEL_YELLOW] = upscale( c.Y() );
 	dst[PIXEL_BLACK] = upscale( c.K() );
-	dst[PIXEL_CMYK_ALPHA] = opacity;
-}
-
-void KisStrategyColorSpaceCMYK::nativeColor(const QColor& c, QUANTUM *dst)
-{
-	KoColor k = KoColor( c );
-
-	dst[PIXEL_CYAN] = upscale( k.C() );
-	dst[PIXEL_MAGENTA] = upscale( k.M() );
-	dst[PIXEL_YELLOW] = upscale( k.Y() );
-	dst[PIXEL_BLACK] = upscale( k.K() );
-}
-
-void KisStrategyColorSpaceCMYK::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst)
-{
-	KoColor k = KoColor( c );
-
-	dst[PIXEL_CYAN] = upscale( k.C() );
-	dst[PIXEL_MAGENTA] = upscale( k.M() );
-	dst[PIXEL_YELLOW] = upscale( k.Y() );
-	dst[PIXEL_BLACK] = upscale( k.K() );
-	dst[PIXEL_CMYK_ALPHA] = opacity;
-
-}
-
-void KisStrategyColorSpaceCMYK::nativeColor(QRgb rgb, QUANTUM *dst)
-{
-	KoColor k = KoColor(QColor( rgb ));
-
-	dst[PIXEL_CYAN] = upscale( k.C() );
-	dst[PIXEL_MAGENTA] = upscale( k.M() );
-	dst[PIXEL_YELLOW] = upscale( k.Y() );
-	dst[PIXEL_BLACK] = upscale( k.K() );
-}
-
-void KisStrategyColorSpaceCMYK::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst)
-{
-	KoColor k = KoColor(QColor( rgb ));
-
-	dst[PIXEL_CYAN] = upscale( k.C() );
-	dst[PIXEL_MAGENTA] = upscale( k.M() );
-	dst[PIXEL_YELLOW] = upscale( k.Y() );
-	dst[PIXEL_BLACK] = upscale( k.K() );
 	dst[PIXEL_CMYK_ALPHA] = opacity;
 }
 
@@ -148,66 +114,18 @@ Q_INT32 KisStrategyColorSpaceCMYK::depth() const
 	return MAX_CHANNEL_CMYKA;
 }
 
-QImage KisStrategyColorSpaceCMYK::convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
+Q_INT32 KisStrategyColorSpaceCMYK::nColorChannels() const
+{
+	return MAX_CHANNEL_CMYK;
+}
+
+QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
 {
 	QImage img(width, height, 32, 0, QImage::LittleEndian);
 	Q_INT32 i = 0;
 	uchar *j = img.bits();
 
-	while ( i < stride * height ) {
-		
-		RGB r;
-		// Check in LUT whether k already exists; if so, grab it, else
-		CMYK c;
-		c.c = *( data + i + PIXEL_CYAN );
-		c.m = *( data + i + PIXEL_MAGENTA );
-		c.y = *( data + i + PIXEL_YELLOW );
-		c.k = *( data + i + PIXEL_BLACK );
-#if 0
-		if ( m_rgbLUT.contains ( c ) ) {
-			r =  m_rgbLUT[c];
-		}
-		else {
-#endif
-			// Accessing the rgba of KoColor automatically converts
-			// from cmyk to rgb and caches the result.
-			KoColor k = KoColor(downscale(c.c),
-					    downscale(c.m),
-					    downscale(c.y),
-					    downscale(c.k));
-#if 0
-			// Store as little as possible
-			r.r =  k.R();
-			r.g =  k.G();
-			r.b =  k.B();
-			m_rgbLUT[c] = r;
-
-		}
-#endif
-
-#if DEBUG_COLORCONVERSION		
-		kdDebug() << "KisStrategyColorSpaceCMYK::convertToImage "
-			  << "R: " << r.r
-			  << ", G: " << r.g
-			  << ", B: " << r.b
-			  << " -- " 
-			  << " C: " << c.c
-			  << ", M: " << c.m
-			  << ", Y: " << c.y
-			  << ", K: " << c.k
-			  << ", opacity: " << *(data + i + PIXEL_CMYK_ALPHA)
-			  << "\n";
-#endif
-		// fix the pixel in QImage.
-		*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_CMYK_ALPHA );
-		*( j + PIXEL_RED )   = r.r;
-		*( j + PIXEL_GREEN ) =  r.g;
-		*( j + PIXEL_BLUE )  =  r.b;
-		
-		i += MAX_CHANNEL_CMYKA;
-		j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
-		
-	}
+	// XXX: Convert using littlecms
 
 	return img;
 }
@@ -276,7 +194,7 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 				if (s[PIXEL_BLACK] > alpha) {
 					d[PIXEL_BLACK] = d[PIXEL_BLACK] + (s[PIXEL_BLACK] - alpha);
 				}
-				d[PIXEL_ALPHA] = alpha; // XXX: this is certainly incorrect.
+				d[PIXEL_CMYK_ALPHA] = alpha; // XXX: this is certainly incorrect.
 			}
 			dst += dststride;
 			src += srcstride;
@@ -285,40 +203,3 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 
 }
 
-void KisStrategyColorSpaceCMYK::computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src)
-{
-	KisPixelRepresentationCMYK dstPR(*dst);
-	KisPixelRepresentationCMYK dabPR(*dab);
-	KisPixelRepresentationCMYK srcPR(*src);
-	dstPR.cyan() = ( (QUANTUM_MAX - dabPR.cyan()) * (srcPR.cyan()) ) / QUANTUM_MAX;
-	dstPR.magenta() = ( (QUANTUM_MAX - dabPR.magenta()) * (srcPR.magenta()) ) / QUANTUM_MAX;
-	dstPR.yellow() = ( (QUANTUM_MAX - dabPR.yellow()) * (srcPR.yellow()) ) / QUANTUM_MAX;
-	dstPR.black() = ( (QUANTUM_MAX - dabPR.black()) * (srcPR.black()) ) / QUANTUM_MAX;
-	dstPR.alpha() =( dabPR.alpha() * (srcPR.alpha()) ) / QUANTUM_MAX;
-}
-
-// XXX: these algorithms aren't the best. See www.littlecms.com
-// for a suitable library, or the posting by Leo Rosenthol for
-// a better, but slower algorithm at
-// http://lists.kde.org/?l=koffice-devel&m=106698241227054&w=2
-
-// XXX: (bsar) No need to implement bad algorithms again when we have 
-// the same bad implementation already in koColor.
-void KisStrategyColorSpaceCMYK::convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst)
-{
-	KisPixelRepresentationCMYK srccmyk(src);
-	dst.red() = QUANTUM_MAX - (srccmyk.cyan() + srccmyk.black());
-	dst.green() = QUANTUM_MAX - (srccmyk.magenta() + srccmyk.black());
-	dst.blue() = QUANTUM_MAX - (srccmyk.yellow() + srccmyk.black());
-}
-void KisStrategyColorSpaceCMYK::convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst)
-{
-	KisPixelRepresentationCMYK dstcmyk(dst);
-	dstcmyk.cyan() = QUANTUM_MAX - src.red();
-	dstcmyk.magenta() = QUANTUM_MAX - src.green();
-	dstcmyk.yellow() = QUANTUM_MAX - src.blue();
-	dstcmyk.black() = QMIN(dstcmyk.cyan(), QMIN( dstcmyk.magenta(), dstcmyk.yellow() ) );
-	dstcmyk.cyan() -= dstcmyk.black();
-	dstcmyk.magenta() -= dstcmyk.black();
-	dstcmyk.yellow() -= dstcmyk.black();
-}

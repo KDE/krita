@@ -24,7 +24,12 @@
 
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
-#include "kis_pixel_representation.h"
+#include "kis_pixel.h"
+
+const PIXELTYPE PIXEL_BLUE = 0;
+const PIXELTYPE PIXEL_GREEN = 1;
+const PIXELTYPE PIXEL_RED = 2;
+const PIXELTYPE PIXEL_ALPHA = 3;
 
 class KisStrategyColorSpaceRGB : public KisStrategyColorSpace {
 public:
@@ -34,24 +39,19 @@ public:
 public:
 	virtual void nativeColor(const KoColor& c, QUANTUM *dst);
 	virtual void nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst);
-	virtual void nativeColor(const QColor& c, QUANTUM *dst);
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst);
-	virtual void nativeColor(QRgb rgb, QUANTUM *dst);
-	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst);
-	
+
 	virtual void toKoColor(const QUANTUM *src, KoColor *c);
 	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity);
+
+	virtual KisPixelRO toKisPixelRO(QUANTUM *src) { return KisPixelRO (src, src + PIXEL_ALPHA); }
+	virtual KisPixel toKisPixel(QUANTUM *src) { return KisPixel (src, src + PIXEL_ALPHA); }
 
 	virtual KisChannelInfo* channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
+	virtual Q_INT32 nColorChannels() const;
 	
-	virtual QImage convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const;
-
-	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src);
-
-	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst);
-	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst);
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const;
 
 protected:
 

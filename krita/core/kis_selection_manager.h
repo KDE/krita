@@ -53,7 +53,7 @@ public slots:
 
 	void cut();
 	void copy();
-	void paste();
+	KisLayerSP paste();
 	void selectAll();
 	void unSelectAll();
 	void clear();

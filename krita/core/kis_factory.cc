@@ -18,6 +18,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+#include <lcms.h>
+
 #include <kinstance.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -40,6 +42,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
 	(void)global();
 	s_rserver = new KisResourceServer;
+	s_rserver -> profiles();
 }
 
 KisFactory::~KisFactory()
@@ -100,7 +103,7 @@ KInstance* KisFactory::global()
 		s_global -> dirs() -> addResourceType("toolbars",
 						  KStandardDirs::kde_default("data") + "koffice/toolbar/");
 
-		s_global -> dirs() -> addResourceType("imc_profiles",
+		s_global -> dirs() -> addResourceType("kis_profiles",
 						  KStandardDirs::kde_default("data") + "krita/profiles/");
 
 		// Tell the iconloader about share/apps/koffice/icons

@@ -39,14 +39,11 @@
 #include "integerwidget.h"
 #include "kis_cmb_composite.h"
 #include "kis_tool_fill.h"
-#include "kis_iterators_pixel.h"
 #include "color_strategy/kis_strategy_colorspace.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_pattern.h"
-#include "kis_iterators_infinite.h"
-#include "kis_selection.h"
 #include "kis_fill_painter.h"
 
 KisToolFill::KisToolFill() 

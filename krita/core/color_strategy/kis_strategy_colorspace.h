@@ -19,7 +19,7 @@
 #ifndef KIS_STRATEGY_COLORSPACE_H_
 #define KIS_STRATEGY_COLORSPACE_H_
 
-#include <map>
+#include <qmap.h>
 #include <qcolor.h>
 
 #include <ksharedptr.h>
@@ -31,14 +31,20 @@
 
 class QPainter;
 class KisIteratorPixel;
-class KisPixelRepresentation;
-class KisPixelRepresentationRGB;
+class KisPixel;
+class KisPixelRO;
 
 class KisStrategyColorSpace : public KShared {
 
 
 public:
-	KisStrategyColorSpace(const QString& name);
+	/**
+	 * Create a new colorspace strategy.
+	 * 
+	 * @param name The user-friendly name of this strategy
+	 * @param cmType The littlecms colorstrategy type we wrap.
+	 */
+	KisStrategyColorSpace(const QString& name, Q_UINT32 cmType);
 	virtual ~KisStrategyColorSpace();
 
 public:
@@ -47,46 +53,46 @@ public:
         // the colorspace managed by this strategy. 
 	virtual void nativeColor(const KoColor& c, QUANTUM *dst) = 0;
 	virtual void nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
-	virtual void nativeColor(const QColor& c, QUANTUM *dst) = 0;
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
-	virtual void nativeColor(QRgb rgb, QUANTUM *dst) = 0;
-	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst) = 0;
 
 	virtual void toKoColor(const QUANTUM *src, KoColor *c) = 0;
 	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity) = 0;
 
+	virtual KisPixelRO toKisPixelRO(QUANTUM *src) = 0;
+	virtual KisPixel toKisPixel(QUANTUM *src) = 0;
+
 	// XXX: make this a proper vector. Pointers to arrays are _so_ seventies, and
 	// Stroustrup assures us a vector is as effecient a mem array anyway.
 	virtual KisChannelInfo * channels() const = 0;
+	
+	virtual Q_UINT32 colorModelType() { return m_cmType; };
 
+	/**
+	 * The total number of channels for a single pixel in this color model
+	 */
 	virtual Q_INT32 depth() const = 0;
+	
+	/**
+	 * The total number of color channels (excludes alpha and substance) for a single
+	 * pixel in this color model.
+	 */
+	virtual Q_INT32 nColorChannels() const = 0;
+
+	/**
+	 * Whether this color model has a channel of type ALPHA
+	 */
 	virtual bool alpha() const = 0;
+
+	/**
+	 * The user-friendly name of this color model.
+	 */
 	inline QString name() const { return m_name; };
 
 	/**
 	 * This function is used to convert a KisPixelRepresentation to another color strategy.
-	 * When implementing a color space, there is no need to implement a conversion to all strategies,
-	 * if there is no direct conversion facilities, the function should use the conversion to/from RGBA
-	 *
-	 * XXX: bsar. RGBA is a bad choice for an intermediate format. Use koColor; which can be expanded to use
-	 * littleCms.
 	 */
-	virtual void convertTo(KisPixelRepresentation& src, KisPixelRepresentation& dst,  KisStrategyColorSpaceSP cs);
-
-
-	// XXX: convertToRGBA and convertFromRGBA must use LAB or XYZ; furthermore, they should
-	// use koColor for now, and littlecms later. XXX2: Now that we have toKoColor, these are deprecated
-
-	/** This function converts a pixel to RGBA */
-	virtual void convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst) KDE_DEPRECATED = 0;
-
-	/** This function converts a pixel from RGBA */
-	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst) KDE_DEPRECATED = 0;
+	virtual void convertTo(KisPixel& src, KisPixel& dst,  KisStrategyColorSpaceSP cs);
 	
-	virtual QImage convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const = 0;
-
-	
-	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src) =0;
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const = 0;
 
 	/**
 	 * Compose two arrays of pixels together. If source and target
@@ -110,6 +116,8 @@ protected:
 	 * Convert a byte array of srcLen pixels *src in the color space
 	 * srcSpace to the current color model and put the converted
 	 * bytes into the prepared byte array *dst.
+	 *
+	 * This uses littlecms by default with default icm profiles.
 	 */
 	virtual void convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 srcLen);
 
@@ -127,15 +135,34 @@ protected:
 			    Q_INT32 rows, 
 			    Q_INT32 cols, 
 			    CompositeOp op) = 0;
+
+	/**
+	 * Set the icm profile for conversion between color spaces
+	 * 
+	 * XXX: make user-definable for certain transforms. Maybe
+	 * only in the switch color space dialog for the whole image.
+	 */
+	void setProfile(cmsHPROFILE profile) { m_profile = profile; }
+
+	/**
+	 * Get the icm profile for conversion between color spaces.
+	 */
+	cmsHPROFILE getProfile() { return m_profile; }
+
 private:
 
 	KisStrategyColorSpace(const KisStrategyColorSpace&);
-
 	KisStrategyColorSpace& operator=(const KisStrategyColorSpace&);
+	
+	QString m_name;    // The user-friendly name
+	Q_UINT32 m_cmType; // The colorspace type as defined by littlecms
+	
+	typedef QMap<Q_UINT32, cmsHTRANSFORM>  TransformMap;
+	TransformMap m_transforms; // Cache for existing transforms
 
-private:
+ 	cmsHPROFILE m_profile; // THe default profile for this color strategy
 
-	QString m_name;
+	
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_H_

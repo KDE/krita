@@ -1,0 +1,368 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgColorSettings</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgColorSettings</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>665</width>
+            <height>626</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Color Settings</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Color settings</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget" row="0" column="0">
+                    <property name="name">
+                        <cstring>layout6</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout5</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>default working color model:</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>default Monitor profile:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>cmbMonitorProfile</cstring>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>The icm profile for your calibrated monitor.</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel3</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>default &amp;Import profile:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>cmbImportProfile</cstring>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>The icm profile that is applied to all imported images that do not already contain an embedded profile.</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>lbldefaultprinterspace</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>default printer color space:</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel4</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>default &amp;Printer profile:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>cmbPrintProfile</cstring>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>The icm profile for your calibrated printer</string>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout4</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QComboBox">
+                                    <property name="name">
+                                        <cstring>cmbWorkingColorspace</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QComboBox">
+                                    <item>
+                                        <property name="text">
+                                            <string>None</string>
+                                        </property>
+                                    </item>
+                                    <property name="name">
+                                        <cstring>cmbMonitorProfile</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QComboBox">
+                                    <item>
+                                        <property name="text">
+                                            <string>None</string>
+                                        </property>
+                                    </item>
+                                    <property name="name">
+                                        <cstring>cmbImportProfile</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QComboBox">
+                                    <property name="name">
+                                        <cstring>cmbPrintingColorspace</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QComboBox">
+                                    <item>
+                                        <property name="text">
+                                            <string>None</string>
+                                        </property>
+                                    </item>
+                                    <property name="name">
+                                        <cstring>cmbPrintProfile</cstring>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QGroupBox" row="2" column="0">
+                    <property name="name">
+                        <cstring>grpDescription</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="title">
+                        <string>Description</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>lblDescription</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="textFormat">
+                                <enum>RichText</enum>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignTop|AlignLeft</set>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QLayoutWidget" row="1" column="0">
+                    <property name="name">
+                        <cstring>layout5</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout4</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>chkBlackpoint</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Use Blackpoint compensation</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>chk</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Dither 8-bit images</string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>chkAskOpen</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Ask for profile when opening</string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>chkAskPaste</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Ask for profile when pasting</string>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget class="QButtonGroup">
+                            <property name="name">
+                                <cstring>grpIntent</cstring>
+                            </property>
+                            <property name="title">
+                                <string>&amp;Rendering intent</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string></string>
+                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QRadioButton" row="2" column="0">
+                                    <property name="name">
+                                        <cstring>radioSaturation</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Saturation</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+S</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Best for graphs and charts</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Hue and saturation maintained with lightness
+sacrificed to maintain saturation. White point
+changed to result in neutral grays. Intended for
+business graphics (make it colorful charts,
+graphs, overheads, ...)
+
+If adequate table is present in profile,
+then, it is used. Else reverts to perceptual
+intent.</string>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton" row="3" column="0">
+                                    <property name="name">
+                                        <cstring>radioAbsoluteColorimetric</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Absolute colorimetric</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+A</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Best for spot colours</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Within the destination device gamut; hue,
+lightness and saturation are maintained. Outside
+the gamut; hue and lightness are maintained,
+saturation is sacrificed. White point for source
+and destination; unchanged. Intended for spot
+colors (Pantone, TruMatch, logo colors, ...)</string>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton" row="1" column="0">
+                                    <property name="name">
+                                        <cstring>radioRelativeColorimetric</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Relative colorimetric</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+R</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Within and outside gamut; same as Absolute
+Colorimetric. White point changed to result in
+neutral grays.
+
+If adequate table is present in profile,
+then, it is used. Else reverts to perceptual
+intent.</string>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>radioPerceptual</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Perceptual</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+P</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>For images</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Hue hopefully maintained (but not required),
+lightness and saturation sacrificed to maintain
+the perceived color. White point changed to
+result in neutral grays. Intended for images.</string>
+                                    </property>
+                                </widget>
+                            </grid>
+                        </widget>
+                    </hbox>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

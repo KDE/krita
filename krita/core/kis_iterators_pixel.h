@@ -21,7 +21,9 @@
 #define KIS_ITERATORS_PIXEL_H_
 
 #include "kis_iterators.h"
-#include "kis_pixel_representation.h"
+#include "kis_pixel.h"
+#include "kis_strategy_colorspace.h"
+
 
 /**
  
@@ -64,8 +66,8 @@ class KisIteratorPixel : public KisIteratorUnit
 public:
 	KisIteratorPixel( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos = 0, Q_INT32 nxpos = 0);
 public:
-	inline operator KisPixelRepresentation();
-	inline KisPixelRepresentationReadOnly oldValue();
+	inline operator KisPixel();
+	inline KisPixelRO oldValue();
 	inline KisQuantum operator[](int index);
 	virtual ~KisIteratorPixel() {}
 private:
@@ -90,19 +92,26 @@ public:
 	virtual KisIteratorPixel end();
 };
 
-inline KisPixelRepresentationReadOnly KisIteratorPixel::oldValue()
+inline KisPixelRO KisIteratorPixel::oldValue()
 {
-	return KisPixelRepresentationReadOnly( this->oldQuantumValue());
+	return m_colorSpace -> toKisPixelRO( this->oldQuantumValue());
 }
 
-inline KisIteratorPixel::operator KisPixelRepresentation()
+/**
+ * Return the current pixel
+ */
+inline KisIteratorPixel::operator KisPixel()
 {
-	return KisPixelRepresentation( (QUANTUM*)(*this) );
+	return m_colorSpace -> toKisPixel((QUANTUM*)(*this));
 }
 
+/**
+ * Return one channel from the current kispixel. Does not check whether
+ * channel index actually exists in this colorspace.
+ */
 inline KisQuantum KisIteratorPixel::operator[](int index)
 {
-	return KisPixelRepresentation( (QUANTUM*)(*this) )[index];
+	return m_colorSpace -> toKisPixel((QUANTUM*)(*this))[index];
 }
 
 

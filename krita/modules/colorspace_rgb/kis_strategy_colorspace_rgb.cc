@@ -19,10 +19,12 @@
 
 #include <limits.h>
 #include <stdlib.h>
+#include <lcms.h>
 
 #include <qimage.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "kis_image.h"
 #include "kis_strategy_colorspace_rgb.h"
@@ -36,15 +38,16 @@ namespace {
 }
 
 // XXX: Why no alpha channel?
-KisChannelInfo KisStrategyColorSpaceRGB::channelInfo[4] = { KisChannelInfo("Red", 2), 
-							    KisChannelInfo("Green", 1), 
-							    KisChannelInfo("Blue", 0), 
-							    KisChannelInfo("Alpha", 3) };
+KisChannelInfo KisStrategyColorSpaceRGB::channelInfo[4] = { KisChannelInfo(i18n("red"), 2, COLOR), 
+							    KisChannelInfo(i18n("green"), 1, COLOR), 
+							    KisChannelInfo(i18n("blue"), 0, COLOR), 
+							    KisChannelInfo(i18n("alpha"), 3, ALPHA) };
 
 
 KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
-	KisStrategyColorSpace("RGBA")
+	KisStrategyColorSpace("RGBA", TYPE_RGBA_8)
 {
+	setProfile(cmsCreate_sRGBProfile());
 }
 
 KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
@@ -63,36 +66,6 @@ void KisStrategyColorSpaceRGB::nativeColor(const KoColor& c, QUANTUM opacity, QU
 	dst[PIXEL_RED] = upscale(c.R());
 	dst[PIXEL_GREEN] = upscale(c.G());
 	dst[PIXEL_BLUE] = upscale(c.B());
-	dst[PIXEL_ALPHA] = opacity;
-}
-
-void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM *dst)
-{
-	dst[PIXEL_RED] = upscale(c.red());
-	dst[PIXEL_GREEN] = upscale(c.green());
-	dst[PIXEL_BLUE] = upscale(c.blue());
-}
-
-void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst)
-{
-	dst[PIXEL_RED] = upscale(c.red());
-	dst[PIXEL_GREEN] = upscale(c.green());
-	dst[PIXEL_BLUE] = upscale(c.blue());
-	dst[PIXEL_ALPHA] = opacity;
-}
-
-void KisStrategyColorSpaceRGB::nativeColor(QRgb rgb, QUANTUM *dst)
-{
-	dst[PIXEL_RED] = qRed(rgb);
-	dst[PIXEL_GREEN] = qGreen(rgb);
-	dst[PIXEL_BLUE] = qBlue(rgb);
-}
-
-void KisStrategyColorSpaceRGB::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst)
-{
-	dst[PIXEL_RED] = qRed(rgb);
-	dst[PIXEL_GREEN] = qGreen(rgb);
-	dst[PIXEL_BLUE] = qBlue(rgb);
 	dst[PIXEL_ALPHA] = opacity;
 }
 
@@ -122,7 +95,12 @@ Q_INT32 KisStrategyColorSpaceRGB::depth() const
 	return MAX_CHANNEL_RGBA;
 }
 
-QImage KisStrategyColorSpaceRGB::convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
+Q_INT32 KisStrategyColorSpaceRGB::nColorChannels() const
+{
+	return MAX_CHANNEL_RGB;
+}
+
+QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
 {
 	QImage img;
 	
@@ -273,29 +251,3 @@ void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 stride,
 	}
 }
 
-void KisStrategyColorSpaceRGB::computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src)
-{
-	KisPixelRepresentationRGB dstPR(*dst);
-	KisPixelRepresentationRGB dabPR(*dab);
-	KisPixelRepresentationRGB srcPR(*src);
-	dstPR.red() = ( (QUANTUM_MAX - dabPR.red()) * (srcPR.red()) ) / QUANTUM_MAX;
-	dstPR.green() = ( (QUANTUM_MAX - dabPR.green()) * (srcPR.green()) ) / QUANTUM_MAX;
-	dstPR.blue() = ( (QUANTUM_MAX - dabPR.blue()) * (srcPR.blue()) ) / QUANTUM_MAX;
-	dstPR.alpha() =( dabPR.alpha() * (srcPR.alpha()) ) / QUANTUM_MAX;
-}
-
-void KisStrategyColorSpaceRGB::convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst)
-{
-	for(int i = 0; i < MAX_CHANNEL_RGBA; i++)
-	{
-		dst[i] = src[i];
-	}
-}
-
-void KisStrategyColorSpaceRGB::convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst)
-{
-	for(int i = 0; i < MAX_CHANNEL_RGBA; i++)
-	{
-		dst[i] = src[i];
-	}
-}

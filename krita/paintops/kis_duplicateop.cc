@@ -140,7 +140,15 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 		KisIteratorPixel devUit = * devLit;
 		while( srcUit <= srcUitend )
 		{
-			device -> colorStrategy() -> computeDuplicatePixel( &srcUit, &dabUit, &devUit);
+			// XXX: Fix this when alpha is set in KisPixel
+			
+			//device -> colorStrategy() -> computeDuplicatePixel( &srcUit, &dabUit, &devUit);
+			/*
+			for (int i = 0; i < depth; ++i) {
+				dstPR[i] = ( (QUANTUM_MAX - dabPR[i]) * (srcPR[i) ) / QUANTUM_MAX;
+			}
+			dstPR.alpha() = ( dabPR.alpha() * srcPR.alpha() ) / QUANTUM_MAX;
+			*/
 			++srcUit; ++dabUit; ++devUit;
 		}
 		++srcLit; ++dabLit; ++devLit;

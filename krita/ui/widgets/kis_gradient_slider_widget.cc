@@ -49,7 +49,7 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
 	
 	QPixmap pixmap(TILE_WIDTH, device->height());
  	for (int x = 0; x < device -> width(); x += TILE_WIDTH) {
-		QImage img = device -> convertToImage(x, 0, TILE_WIDTH, device->height() );
+		QImage img = device -> convertToQImage(x, 0, TILE_WIDTH, device->height() );
 		if (!img.isNull()) {
 			m_pixmapIO.putImage(&pixmap, 0, 0, &img);
 			painter.drawPixmap(x + 6, 6, pixmap, 0, 0, pixmap.width(), pixmap.height());

@@ -21,7 +21,9 @@
 
 #include "kis_global.h"
 
-
+/**
+ * An editable wrapper around the byte values for a single colour channel.
+ */
 class KisQuantum {
 	public:
 		inline KisQuantum(QUANTUM* q) : m_quantum(q) { };

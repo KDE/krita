@@ -32,7 +32,12 @@ class KisPattern;
 class KisToolControllerInterface;
 class KisUndoAdapter;
 class KisProgressDisplayInterface;
+class KisSelectionManager;
 
+/**
+ * The canvas subject is the subset of operations that are directy available to
+ * tools.
+ */
 class KisCanvasSubject {
 public:
 	KisCanvasSubject();
@@ -59,7 +64,7 @@ public:
 	virtual KisProgressDisplayInterface *progressDisplay() const = 0;
 	virtual KisFilterSP filterGet(const QString& name) = 0;
 	virtual QStringList filterList() = 0;
-
+	virtual KisSelectionManager * selectionManager() = 0;
 private:
 	KisCanvasSubject(const KisCanvasSubject&);
 	KisCanvasSubject& operator=(const KisCanvasSubject&);

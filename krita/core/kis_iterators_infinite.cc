@@ -24,7 +24,7 @@
 #include "kis_types.h"
 #include "kis_iterators.h"
 #include "kis_iterators_pixel.h"
-#include "kis_pixel_representation.h"
+#include "kis_pixel.h"
 #include "color_strategy/kis_strategy_colorspace.h"
 
 KisIteratorInfinitePixel::KisIteratorInfinitePixel(KisPaintDeviceSP plane , KisTileCommand* command, Q_INT32 nypos, Q_INT32 nxpos)
@@ -32,7 +32,7 @@ KisIteratorInfinitePixel::KisIteratorInfinitePixel(KisPaintDeviceSP plane , KisT
    m_isPixel(false)
 { ; }
 
-KisIteratorInfinitePixel::KisIteratorInfinitePixel(KisStrategyColorSpaceSP s, KisPixelRepresentation p)
+KisIteratorInfinitePixel::KisIteratorInfinitePixel(KisStrategyColorSpaceSP s, KisPixel p)
  : KisIteratorPixel ( constructPixel(s, p) , 0, 0, 0 ),
    m_isPixel(true)
 { ; }
@@ -42,10 +42,10 @@ KisIteratorInfinitePixel::~KisIteratorInfinitePixel() {
 		delete m_device;
 }
 
-KisPaintDeviceSP KisIteratorInfinitePixel::constructPixel(KisStrategyColorSpaceSP s, KisPixelRepresentation p) {
+KisPaintDeviceSP KisIteratorInfinitePixel::constructPixel(KisStrategyColorSpaceSP s, KisPixel p) {
 	KisLayerSP l = new KisLayer(1, 1, s, "InfinitePixelIterator pixel");
 	KisIteratorPixel it((KisPaintDeviceSP)l, 0, 0, 0);
-	KisPixelRepresentation data = it;
+	KisPixel data = it;
 	for (int i = 0; i < l->depth(); i++)
 		data[i] = (QUANTUM) p[i]; // explicit (QUANTUM) cast to prevent weirdness
 	return (KisPaintDeviceSP)l;

@@ -143,14 +143,14 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
         }
 }
 
-void KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface *m_progress)
+void KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface */*m_progress*/)
 {
         kdDebug() << "xShearImage called, shear parameter " << shearX << "\n";        
         Q_INT32 width = m_dev->width();
         Q_INT32 height = m_dev->height();
         
         //calculate widht of the sheared image
-        Q_INT32 targetW = width + QABS(height*shearX);
+        Q_INT32 targetW = (Q_INT32)(width + QABS(height*shearX));
         Q_INT32 targetH = height;
         KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
         QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
@@ -167,7 +167,7 @@ void KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface *m
                 for (Q_INT32 y=0; y < height; y++){
                         //calculate displacement
                         displacement = (height-y)*shearX;
-                        displacementInt = floor(displacement);
+                        displacementInt = (Q_INT32)(floor(displacement));
                         weight=displacement-displacementInt;
                         //read a row from the image
                         m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
@@ -179,7 +179,7 @@ void KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface *m
                                 currentPos = (y*targetW+x+displacementInt) * m_dev -> depth(); // try to be at least a little efficient
                                 for(int channel = 0; channel < m_dev -> depth(); channel++){
                                         pixel[channel]=tempRow[x*m_dev -> depth()+channel];
-                                        left[channel]=weight*pixel[channel];
+                                        left[channel]= (Q_INT32)(weight*pixel[channel]);
                                         pixel[channel]=pixel[channel]-left[channel]+oleft[channel];
                                         newData[currentPos  + channel]=pixel[channel];
                                         oleft[channel]=left[channel];
@@ -190,7 +190,7 @@ void KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface *m
                 for (Q_INT32 y=0; y < height; y++){
                         //calculate displacement
                         displacement = y*QABS(shearX);
-                        displacementInt = floor(displacement);
+                        displacementInt = (Q_INT32)(floor(displacement));
                         weight=displacement-displacementInt;
                         //read a row from the image
                         m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
@@ -202,7 +202,7 @@ void KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface *m
                                 currentPos = (y*targetW+x+displacementInt) * m_dev -> depth(); // try to be at least a little efficient
                                 for(int channel = 0; channel < m_dev -> depth(); channel++){
                                         pixel[channel]=tempRow[x*m_dev -> depth()+channel];
-                                        left[channel]=weight*pixel[channel];
+                                        left[channel]= (Q_INT32)(weight*pixel[channel]);
                                         pixel[channel]=pixel[channel]-left[channel]+oleft[channel];
                                         newData[currentPos  + channel]=pixel[channel];
                                         oleft[channel]=left[channel];
@@ -216,18 +216,18 @@ void KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface *m
         m_dev -> setTiles(tm); // Also sets width and height correctly
 }
 
-void KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface *m_progress)
+void KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface */*m_progress*/)
 {
         kdDebug() << "YShearImage called, shear paramter " << shearY << "\n";
 
-        const double pi=3.1415926535897932385;
+        //const double pi=3.1415926535897932385; // Appears to be unused. BSAR.
         
         Q_INT32 width = m_dev->width();
         Q_INT32 height = m_dev->height();
         
         //calculate widht of the sheared image
         Q_INT32 targetW = width;
-        Q_INT32 targetH = height + QABS(width*shearY); ;
+        Q_INT32 targetH = (Q_INT32)(height + QABS(width*shearY));
         KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
         QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
         
@@ -245,7 +245,7 @@ void KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface *m
                 for (Q_INT32 x=0; x < width; x++){
                         //calculate displacement
                         displacement = x*shearY;
-                        displacementInt = floor(displacement);
+                        displacementInt = (Q_INT32)(floor(displacement));
                         weight=displacement-displacementInt;
                         //read a column from the image
                         m_dev -> tiles() -> readPixelData(x, 0, x, height - 1, tempCol, m_dev -> depth());
@@ -257,7 +257,7 @@ void KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface *m
                                 currentPos = ((y+displacementInt)*targetW+x) * m_dev -> depth(); // try to be at least a little efficient
                                 for(int channel = 0; channel < m_dev -> depth(); channel++){
                                         pixel[channel]=tempCol[y*m_dev -> depth()+channel];
-                                        left[channel]=weight*pixel[channel];
+                                        left[channel] = (Q_INT32)(weight*pixel[channel]);
                                         pixel[channel]=pixel[channel]-left[channel]+oleft[channel];
                                         newData[currentPos  + channel]=pixel[channel];
                                         oleft[channel]=left[channel];
@@ -268,7 +268,7 @@ void KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface *m
                 for (Q_INT32 x=0; x < width; x++){
                         //calculate displacement
                         displacement = (width-x)*QABS(shearY);
-                        displacementInt = floor(displacement);
+                        displacementInt = (Q_INT32)(floor(displacement));
                         weight=displacement-displacementInt;
                         //read a column from the image
                         m_dev -> tiles() -> readPixelData(x, 0, x, height - 1, tempCol, m_dev -> depth());
@@ -280,7 +280,7 @@ void KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface *m
                                 currentPos = ((y+displacementInt)*targetW+x) * m_dev -> depth(); // try to be at least a little efficient
                                 for(int channel = 0; channel < m_dev -> depth(); channel++){
                                         pixel[channel]=tempCol[y*m_dev -> depth()+channel];
-                                        left[channel]=weight*pixel[channel];
+                                        left[channel] = (Q_INT32)(weight*pixel[channel]);
                                         pixel[channel]=pixel[channel]-left[channel]+oleft[channel];
                                         newData[currentPos  + channel]=pixel[channel];
                                         oleft[channel]=left[channel];
@@ -299,7 +299,7 @@ void KisRotateVisitor::xCropImage(double deltaX)
         Q_INT32 width = m_dev->width();
         Q_INT32 height = m_dev->height();
         //calculate widht of the croped image
-        Q_INT32 targetW = width -2 * deltaX + 2;
+        Q_INT32 targetW = (Q_INT32)(width -2 * deltaX + 2);
         Q_INT32 targetH = height;
         KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
         QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
@@ -307,7 +307,7 @@ void KisRotateVisitor::xCropImage(double deltaX)
         Q_INT32 currentPos;
         for(Q_INT32 y=0; y < height; y++){
                 m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
-                for(Q_INT32 x=deltaX; x < (width-deltaX) + 1; x++){
+                for(Q_INT32 x = (Q_INT32)deltaX; x < (Q_INT32)((width - deltaX) + 1); x++){
                         currentPos = (y*targetW+x) * m_dev -> depth();
                         for(int channel = 0; channel < m_dev -> depth(); channel++){
                                 newData[currentPos - (int)deltaX*m_dev -> depth() + channel]=tempRow[x*m_dev -> depth()+channel];
@@ -325,12 +325,12 @@ void KisRotateVisitor::yCropImage(double deltaY)
         Q_INT32 height = m_dev->height();
         //calculate widht of the croped image
         Q_INT32 targetW = width;
-        Q_INT32 targetH = height - 2 * deltaY + 2;
+        Q_INT32 targetH = (Q_INT32)(height - 2 * deltaY + 2);
         KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
         QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
         QUANTUM *tempRow = new QUANTUM[width * m_dev -> depth() * sizeof(QUANTUM)];
         Q_INT32 currentPos;
-        for(Q_INT32 y=deltaY; y < (height-deltaY); y++){
+        for(Q_INT32 y = (Q_INT32)deltaY; y < (Q_INT32)(height - deltaY); y++){
                 m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
                 for(Q_INT32 x=0; x < width; x++){
                         currentPos = (y*targetW+x) * m_dev -> depth();

@@ -1,0 +1,259 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>NewImage</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>NewImage</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>519</width>
+            <height>541</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>New Image</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>lblName</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>txtName</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>txtName</cstring>
+            </property>
+            <property name="text">
+                <string>untitled-1</string>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>grpImage</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Image Size</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>lblResolution</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Resolution:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>txtResolution</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>lblHeight</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Height:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>txtHeight</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0" rowspan="2" colspan="1">
+                    <property name="name">
+                        <cstring>lblWidth</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Width:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>txtWidth</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="3" column="1">
+                    <property name="name">
+                        <cstring>intResolution</cstring>
+                    </property>
+                    <property name="value">
+                        <number>100</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>2000</number>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="0" column="1">
+                    <property name="name">
+                        <cstring>intWidth</cstring>
+                    </property>
+                    <property name="value">
+                        <number>1600</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>10000</number>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="1" column="1" rowspan="2" colspan="1">
+                    <property name="name">
+                        <cstring>intHeight</cstring>
+                    </property>
+                    <property name="value">
+                        <number>1200</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>10000</number>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>grpMode</cstring>
+            </property>
+            <property name="title">
+                <string>Mode</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0" rowspan="2" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Color space:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>cmbColorSpace</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="1">
+                    <property name="name">
+                        <cstring>cmbColorSpace</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="2" column="1">
+                    <property name="name">
+                        <cstring>cmbProfile</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Profile:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>cmbProfile</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Depth:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>cmbDepth</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="3" column="1">
+                    <item>
+                        <property name="text">
+                            <string>8 bits/channel</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbDepth</cstring>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>chkAlpa</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Alpha transparency</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="3" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>grpContents</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Contents</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QTextEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>txtDescription</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Description:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Canvas color:</string>
+                    </property>
+                </widget>
+                <widget class="KColorCombo" row="0" column="1">
+                    <property name="name">
+                        <cstring>cmbColor</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<tabstops>
+    <tabstop>txtName</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>kcolorcombo.h</includehint>
+</includehints>
+</UI>

@@ -183,19 +183,19 @@ void KisTiledDataManager::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h)
 	h = m_extentMaxY - m_extentMinY + 1;
 }
 
-
+/*
 void printRect(const QString & s, const QRect & r)
 {
 	kdDebug() << "crop: " << s << ": (" << r.x() << "," << r.y() << "," << r.width() << "," << r.height() << ")\n";
-}
+}*/
 
 void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	QRect newRect = QRect(x, y, w, h).normalize();
-	printRect("newRect", newRect);
+	//printRect("newRect", newRect);
 	
 	QRect oldRect = QRect(m_extentMinX, m_extentMinY, m_extentMaxX - m_extentMinX + 1, m_extentMaxY - m_extentMinY + 1).normalize();
-	printRect("oldRect", oldRect);
+	//printRect("oldRect", oldRect);
 	
 	// Do nothing if the desired size is bigger than we currently are: that is handled by the autoextending automatically
 	if (newRect.contains(oldRect)) return;
@@ -210,10 +210,10 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 		
 		while(tile)
 		{
-			kdDebug() << "Tile: " << tile -> getCol() << ", " << tile -> getRow() << "\n";
+			//kdDebug() << "Tile: " << tile -> getCol() << ", " << tile -> getRow() << "\n";
 			
 			QRect tileRect = QRect(tile -> getCol() * KisTile::WIDTH, tile -> getRow() * KisTile::HEIGHT, KisTile::WIDTH, KisTile::HEIGHT);
-			printRect("tileRect", tileRect);
+			//printRect("tileRect", tileRect);
 			
 			if (newRect.contains(tileRect)) {
 				// Completely inside, do nothing
@@ -224,11 +224,11 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 				ensureTileMementoed(tile -> getCol(), tile -> getRow(), tileHash, tile);
 			
 				if (newRect.intersects(tileRect)) {
-					kdDebug() << "Partially inside, clear the non-intersecting bits\n";
+					//kdDebug() << "Partially inside, clear the non-intersecting bits\n";
 
 					// Create the intersection of the tile and new rect
 					QRect intersection = newRect.intersect(tileRect);
-					printRect("intersection", intersection);
+					//printRect("intersection", intersection);
 					intersection.setRect(intersection.x() - tileRect.x(), intersection.y() - tileRect.y(), intersection.width(), intersection.height());
 
 					// This can be done a lot more efficiently, no doubt, by clearing runs of pixels to the left and the right of
@@ -245,7 +245,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 					tile = tile->getNext();
 				}
 				else {
-					kdDebug() << "Completely outside, delete this tile. It had already been mementoed\n";
+					//kdDebug() << "Completely outside, delete this tile. It had already been mementoed\n";
  					KisTile *deltile = tile;
  					tile = tile->getNext();
  					
@@ -254,9 +254,6 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 					else 
 						m_hashTable[tileHash] = tile;
  					delete deltile;
-// 					memset(tile -> data(0,0), 0, KisTile::HEIGHT * KisTile::WIDTH * m_pixelSize);
-// 					previousTile = tile;
-// 					tile = tile->getNext();
 
 				}
 			}

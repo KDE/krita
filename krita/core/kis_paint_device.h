@@ -33,7 +33,7 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_scale_visitor.h"
 #include "kis_pixel.h"
-
+#include "kis_canvas_controller.h"
 #include <koffice_export.h>
 
 class QImage;
@@ -46,6 +46,8 @@ class KisRotateVisitor;
 class KisRectIteratorPixel;
 class KisVLineIteratorPixel;
 class KisHLineIteratorPixel;
+class KNamedCommand;
+
 
 /**
  * Class modelled on QPaintDevice.
@@ -74,7 +76,8 @@ public:
 
         virtual void move(Q_INT32 x, Q_INT32 y);
         virtual void move(const QPoint& pt);
-
+	virtual KNamedCommand * moveCommand(KisCanvasControllerInterface * c, Q_INT32 x, Q_INT32 y);
+	
 	virtual const bool visible() const;
         virtual void setVisible(bool v);
 

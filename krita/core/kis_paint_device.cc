@@ -37,7 +37,61 @@
 #include "kis_scale_visitor.h"
 #include "kis_rotate_visitor.h"
 #include "kis_profile.h"
+#include "kis_canvas_controller.h"
 
+
+namespace {
+
+class MoveCommand : public KNamedCommand {
+	typedef KNamedCommand super;
+
+public:
+	MoveCommand(KisCanvasControllerInterface * controller,  KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
+	virtual ~MoveCommand();
+
+	virtual void execute();
+	virtual void unexecute();
+
+private:
+	void moveTo(const QPoint& pos);
+
+private:
+	KisPaintDeviceSP m_device;
+	KisCanvasControllerInterface * m_controller;
+	QPoint m_oldPos;
+	QPoint m_newPos;
+};
+
+MoveCommand::MoveCommand(KisCanvasControllerInterface * controller, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
+	super(i18n("Moved layer"))
+{
+	m_controller = controller;
+	m_device = device;
+	m_oldPos = oldpos;
+	m_newPos = newpos;
+}
+
+MoveCommand::~MoveCommand()
+{
+}
+
+void MoveCommand::execute()
+{
+	moveTo(m_newPos);
+}
+
+void MoveCommand::unexecute()
+{
+	moveTo(m_oldPos);
+}
+
+void MoveCommand::moveTo(const QPoint& pos)
+{
+	m_device -> move(pos.x(), pos.y());
+	m_controller -> updateCanvas();
+}
+
+}
 
 KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QString& name) :
 	KShared()
@@ -145,6 +199,13 @@ void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
 void KisPaintDevice::move(const QPoint& pt)
 {
         move(pt.x(), pt.y());
+}
+
+KNamedCommand * KisPaintDevice::moveCommand(KisCanvasControllerInterface * c, Q_INT32 x, Q_INT32 y)
+{
+	KNamedCommand * cmd = new MoveCommand(c, this, QPoint(m_x, m_y), QPoint(x, y));
+	cmd -> execute();
+	return cmd;
 }
 
 bool KisPaintDevice::shouldDrawBorder() const

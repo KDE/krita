@@ -90,7 +90,7 @@ void KisTile::allocate()
 
 KisTile * KisTile::getNext()
 {
-   return m_nextTile;
+	return m_nextTile;
 }
 
 void KisTile::setNext(KisTile *n)

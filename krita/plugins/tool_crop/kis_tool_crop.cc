@@ -96,7 +96,6 @@ void KisToolCrop::clearRect()
 		m_startPos = QPoint(0, 0);
 		m_endPos = QPoint(0, 0);
 
-
 		((WdgToolCrop*)m_optWidget) -> intStartX -> setValue(m_startPos.x());
 		((WdgToolCrop*)m_optWidget) -> intStartY -> setValue(m_startPos.y());
 		((WdgToolCrop*)m_optWidget) -> intEndX -> setValue(m_endPos.x());
@@ -313,8 +312,9 @@ void KisToolCrop::crop() {
 	if (((WdgToolCrop *)m_optWidget) -> cmbType -> currentItem() == 0) {
 		KisLayerSP layer = img -> activeLayer();
 		cropLayer(layer, rc);
-		layer -> move(rc.x(), rc.y());
-		
+		KNamedCommand * cmd = layer -> moveCommand(m_subject -> canvasController(),  -rc.x(), -rc.y());
+		if (m_subject -> undoAdapter()) m_subject -> undoAdapter() -> addCommand(cmd);
+		img -> notify();
 	}
 	else {
 		vKisLayerSP layers = img -> layers();
@@ -322,11 +322,12 @@ void KisToolCrop::crop() {
 		for ( it = layers.begin(); it != layers.end(); ++it ) {
 			KisLayerSP layer = (*it);
 			cropLayer(layer, rc);
+			KNamedCommand * cmd = layer -> moveCommand(m_subject -> canvasController(),  -rc.x(), -rc.y());
+			if (m_subject -> undoAdapter()) m_subject -> undoAdapter() -> addCommand(cmd);
 		}
-		//img -> resize(rc);
-
+		img -> resize(rc);
+		img -> notify(QRect(0, 0, rc.width(), rc.height()));
 	}
-	img -> notify(); //rc
 
 	if (img -> undoAdapter())
 		img -> undoAdapter() -> endMacro();
@@ -346,20 +347,6 @@ void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc)
 
 	m_subject -> undoAdapter() -> addCommand(t);
 	
-// 	KisPaintDeviceSP tmp = new KisPaintDevice(layer -> colorStrategy(), "temp");
-// 	
-// 	KisPainter p(tmp.data());
-// 	p.bitBlt(0, 0, COMPOSITE_COPY,
-// 		 layer.data(),
-// 		 rc.x(),
-// 		 rc.y(),
-// 		 rc.width(),
-// 		 rc.height());
-// 	p.end();
-// 
-// 	
-// 	p.begin(layer.data());
-// 	p.bitBlt(0, 0, COMPOSITE_COPY, tmp.data(), rc.x(), rc.y(), rc.width(), rc.height());
 }
 
 QWidget* KisToolCrop::createOptionWidget(QWidget* parent)

@@ -77,6 +77,7 @@ public:
 
 	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
 
+	void setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 public:
 

@@ -18,6 +18,8 @@
 
 #include <qvaluevector.h>
 
+#include <kdebug.h>
+
 #include <koStore.h>
 
 #include "kis_tileddatamanager.h"
@@ -127,8 +129,8 @@ bool KisTiledDataManager::write(KoStore *store)
 		while(tile)
 		{
 			sprintf(str, "%d,%d,%d,%d\n", tile->getCol() * KisTile::WIDTH,
-								tile->getRow() * KisTile::HEIGHT,
-								KisTile::WIDTH, KisTile::HEIGHT);
+							tile->getRow() * KisTile::HEIGHT,
+							KisTile::WIDTH, KisTile::HEIGHT);
 			store->write(str,strlen(str));
 
 			store->write((char *)tile->m_data, KisTile::HEIGHT * KisTile::WIDTH * m_pixelSize);
@@ -180,6 +182,96 @@ void KisTiledDataManager::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h)
 	w = m_extentMaxX - m_extentMinX + 1;
 	h = m_extentMaxY - m_extentMinY + 1;
 }
+
+
+void printRect(const QString & s, const QRect & r)
+{
+	kdDebug() << "crop: " << s << ": (" << r.x() << "," << r.y() << "," << r.width() << "," << r.height() << ")\n";
+}
+
+void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+	QRect newRect = QRect(x, y, w, h).normalize();
+	printRect("newRect", newRect);
+	
+	QRect oldRect = QRect(m_extentMinX, m_extentMinY, m_extentMaxX - m_extentMinX + 1, m_extentMaxY - m_extentMinY + 1).normalize();
+	printRect("oldRect", oldRect);
+	
+	// Do nothing if the desired size is bigger than we currently are: that is handled by the autoextending automatically
+	if (newRect.contains(oldRect)) return;
+
+	// Loop through all tiles, if a tile is wholly outside the extent, add to the memento, then delete it,
+	// if the tile is partially outside the extent, clear the outside pixels to black transparent (XXX: use the
+	// default pixel for this when avaiable).
+	for(int i = 0; i < 1024; i++)
+	{
+		KisTile *tile = m_hashTable[i];
+		KisTile *previousTile = 0;
+		
+		while(tile)
+		{
+			kdDebug() << "Tile: " << tile -> getCol() << ", " << tile -> getRow() << "\n";
+			
+			QRect tileRect = QRect(tile -> getCol() * KisTile::WIDTH, tile -> getRow() * KisTile::HEIGHT, KisTile::WIDTH, KisTile::HEIGHT);
+			printRect("tileRect", tileRect);
+			
+			if (newRect.contains(tileRect)) {
+				// Completely inside, do nothing
+				previousTile = tile;
+				tile = tile->getNext();
+			}
+			else {
+				Q_UINT32 tileHash = calcTileHash(tileRect.x(), tileRect.y());
+				ensureTileMementoed(tileRect.x(), tileRect.y(), tileHash, tile);
+			
+				if (newRect.intersects(tileRect)) {
+					kdDebug() << "Partially inside, clear the non-intersecting bits\n";
+
+					// Create the intersection of the tile and new rect
+					QRect intersection = newRect.intersect(tileRect);
+					printRect("intersection", intersection);
+					intersection.setRect(intersection.x() - tileRect.x(), intersection.y() - tileRect.y(), intersection.width(), intersection.height());
+
+					// This can be done a lot more efficiently, no doubt, by clearing runs of pixels to the left and the right of
+					// the intersecting line.
+					for (int y = 0; y < KisTile::HEIGHT; ++y) {
+						for (int x = 0; x < KisTile::WIDTH; ++x) {
+							if (!intersection.contains(x,y)) {
+								Q_UINT8 * ptr = tile -> data(x, y);
+								memset(ptr, 0, m_pixelSize);
+							}
+						}
+					}
+					previousTile = tile;
+					tile = tile->getNext();
+				}
+				else {
+					kdDebug() << "Completely outside, delete this tile. It had already been mementoed\n";
+ 					KisTile *deltile = tile;
+ 					tile = tile->getNext();
+ 					
+ 					if (previousTile)
+						previousTile -> setNext(tile);
+					else 
+						m_hashTable[i] = 0;
+ 					delete deltile;
+// 					memset(tile -> data(0,0), 0, KisTile::HEIGHT * KisTile::WIDTH * m_pixelSize);
+// 					previousTile = tile;
+// 					tile = tile->getNext();
+
+				}
+			}
+		}
+	}
+	
+	// Set the extent correctly
+	m_extentMinX = x;
+	m_extentMinY = y;
+	m_extentMaxX = x + w + 1;
+	m_extentMaxY = y + h + 1;
+}
+
+
 
 void KisTiledDataManager::clear(Q_INT32, Q_INT32, Q_INT32, Q_INT32, Q_UINT8)
 {

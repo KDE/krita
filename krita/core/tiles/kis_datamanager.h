@@ -20,6 +20,7 @@
 
 #include <qglobal.h>
 #include <qvaluevector.h>
+#include <qrect.h>
 
 class KoStore;
 
@@ -95,6 +96,18 @@ public:
 	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
 						 { return ACTUAL_DATAMGR::extent(x, y, w, h); };
 
+
+
+public:
+
+	/**
+	  * Crop or extend the data to x, y, w, h.
+	  */
+	void setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+						 { return ACTUAL_DATAMGR::setExtent(x, y, w, h); };
+
+	void setExtent(const QRect & rect) { setExtent(rect.x(), rect.y(), rect.width(), rect.height()); };
+						 
 public:
 
 	/**
@@ -110,6 +123,7 @@ public:
 	void clear(Q_INT32 x, Q_INT32 y,
 		   Q_INT32 w, Q_INT32 h,
 		   Q_UINT8 * def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); };
+
 
 
 public:

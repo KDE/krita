@@ -84,6 +84,9 @@ public:
 	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
 	QRect extent() const;
 
+	void crop(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) { m_datamanager -> setExtent(x, y, w, h); };
+	void crop(QRect r) { m_datamanager -> setExtent(r); };
+	
 	Q_UINT8 * readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	void writeBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 

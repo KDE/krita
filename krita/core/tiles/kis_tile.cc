@@ -35,7 +35,7 @@ KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row)
 	m_row = row;
 	allocate();
 
-	//HACK
+	//HACK: This should use a settable default pixel.
 	memset(m_data, 0, WIDTH * HEIGHT * m_pixelSize);
 
 }

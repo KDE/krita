@@ -43,41 +43,11 @@
 #include <kis_button_press_event.h>
 #include <kis_button_release_event.h>
 #include <kis_move_event.h>
+#include <kis_transaction.h>
 
 #include "kis_tool_crop.h"
 #include "wdg_tool_crop.h"
 
-namespace {
-	class CropCmd : public KNamedCommand {
-		typedef KNamedCommand super;
-
-	public:
-		CropCmd();
-		virtual ~CropCmd();
-
-	public:
-		virtual void execute();
-		virtual void unexecute();
-
-	private:
-	};
-
-	CropCmd::CropCmd() : super(i18n("Crop"))
-	{
-	}
-
-	CropCmd::~CropCmd()
-	{
-	}
-
-	void CropCmd::execute()
-	{
-	}
-
-	void CropCmd::unexecute()
-	{
-	}
-}
 
 KisToolCrop::KisToolCrop()
 {
@@ -318,6 +288,9 @@ void KisToolCrop::crop() {
 
 	KisImageSP img = m_subject -> currentImg();
 
+	if (img -> undoAdapter())
+		img -> undoAdapter() -> beginMacro("Crop");
+	
 	if (!img)
 		return;
 
@@ -340,7 +313,7 @@ void KisToolCrop::crop() {
 	if (((WdgToolCrop *)m_optWidget) -> cmbType -> currentItem() == 0) {
 		KisLayerSP layer = img -> activeLayer();
 		cropLayer(layer, rc);
-		//layer -> move(rc.x(), rc.y());
+		layer -> move(rc.x(), rc.y());
 		
 	}
 	else {
@@ -350,13 +323,13 @@ void KisToolCrop::crop() {
 			KisLayerSP layer = (*it);
 			cropLayer(layer, rc);
 		}
-		img -> resize(rc);
+		//img -> resize(rc);
 
 	}
-	img -> notify(rc);
+	img -> notify(); //rc
 
 	if (img -> undoAdapter())
-		img -> undoAdapter() -> addCommand(new CropCmd());
+		img -> undoAdapter() -> endMacro();
 
 	((WdgToolCrop*)m_optWidget) -> intStartX -> setValue(0);
 	((WdgToolCrop*)m_optWidget) -> intStartY -> setValue(0);
@@ -367,20 +340,26 @@ void KisToolCrop::crop() {
 
 void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc) 
 {
-	KisPaintDeviceSP tmp = new KisPaintDevice(layer -> colorStrategy(), "temp");
+	KisTransaction * t = new KisTransaction("crop", layer.data());
 	
-	KisPainter p(tmp.data());
-	p.bitBlt(0, 0, COMPOSITE_COPY,
-		 layer.data(),
-		 rc.x(),
-		 rc.y(),
-		 rc.width(),
-		 rc.height());
-	p.end();
+	layer -> crop(rc);
 
+	m_subject -> undoAdapter() -> addCommand(t);
 	
-	p.begin(layer.data());
-	p.bitBlt(0, 0, COMPOSITE_COPY, tmp.data(), rc.x(), rc.y(), rc.width(), rc.height());
+// 	KisPaintDeviceSP tmp = new KisPaintDevice(layer -> colorStrategy(), "temp");
+// 	
+// 	KisPainter p(tmp.data());
+// 	p.bitBlt(0, 0, COMPOSITE_COPY,
+// 		 layer.data(),
+// 		 rc.x(),
+// 		 rc.y(),
+// 		 rc.width(),
+// 		 rc.height());
+// 	p.end();
+// 
+// 	
+// 	p.begin(layer.data());
+// 	p.bitBlt(0, 0, COMPOSITE_COPY, tmp.data(), rc.x(), rc.y(), rc.width(), rc.height());
 }
 
 QWidget* KisToolCrop::createOptionWidget(QWidget* parent)

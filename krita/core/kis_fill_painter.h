@@ -45,7 +45,7 @@
 #include "kis_matrix.h"
 #include "kis_progress_subject.h"
 #include "kis_painter.h"
-#include "kis_iterators_infinite.h"
+//#include "kis_iterators_infinite.h"
 #include "kis_selection.h"
 #include "kis_pixel.h"
 #include "kis_pattern.h"
@@ -83,6 +83,8 @@ public:
 	 * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
 	 * entire rectangle.
 	 **/
+//	void fillRect(const QRect& rc, KisIteratorInfiniteLinePixel src);
+//	void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, KisIteratorInfiniteLinePixel src);
 	void fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern& pattern);
 	void fillRect(const QRect& rc, KisPattern& pattern);
 
@@ -116,7 +118,7 @@ private:
 	void genericFillEnd(KisLayerSP filled);
 	typedef enum { Left, Right } Direction;
 	void floodLine(int x, int y);
-	int floodSegment(int x, int y, int most, KisHLineIterator& it, int lastPixel, Direction d);
+	int floodSegment(int x, int y, int most, KisHLineIteratorPixel& it, int lastPixel, Direction d);
 
 	KisSelectionSP m_selection;
 	KisPaintDeviceSP m_layer;
@@ -161,11 +163,13 @@ void KisFillPainter::fillRect(const QRect& rc, const QColor& c, QUANTUM opacity)
         fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
 }
 
+/*
 inline
 void KisFillPainter::fillRect(const QRect& rc, KisPattern& pattern)
 {
 	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), pattern);
 }
+*/
 
 inline
 void KisFillPainter::setFillThreshold(int threshold)

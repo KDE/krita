@@ -66,8 +66,8 @@ class KisHLineIterator : private ACTUAL_HLINEITERATOR
 {
 public:
 	/// Constructor, but use factory method in paint device instead.
-	KisHLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 w, Q_INT32  y, bool writable) :
-				ACTUAL_HLINEITERATOR((ACTUAL_DATAMGR * )dm, x, w, y, writable) {};
+	KisHLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32 w, bool writable) :
+				ACTUAL_HLINEITERATOR((ACTUAL_DATAMGR * )dm, x, y, w, writable) {};
 
 public:	
 	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy

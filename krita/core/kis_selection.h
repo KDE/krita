@@ -26,14 +26,6 @@
 
 class QColor;
 
-// Note: this is intentionally not namespaced, because it's meant for all of Krita
-// that wants to determine selectedness.
-#if (QUANTUM_DEPTH == 8)
-// XXX: swap when special color strategy for selections is done?
-const QUANTUM MAX_SELECTED = OPACITY_TRANSPARENT;
-const QUANTUM MIN_SELECTED = OPACITY_OPAQUE;
-#endif
-
 #define USE_ALPHA_MAP 0
 
 /**

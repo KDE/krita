@@ -115,7 +115,7 @@ class KisTiledHLineIterator : public KisTiledIterator
 
 public:
 	/// do not call constructor directly use factory method in KisDataManager instead.
-	KisTiledHLineIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32  w, Q_INT32 y, bool writable);
+	KisTiledHLineIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32 w, bool writable);
 	
 	~KisTiledHLineIterator();
 

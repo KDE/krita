@@ -20,37 +20,13 @@
 #ifndef _KIS_ITERATORS_PIXEL_MASK_H_
 #define _KIS_ITERATORS_PIXEL_MASK_H_
 
-#include "kis_iterators.h"
+#include "kis_iteratorpixeltrait.h"
 
-class KisIteratorPixelMask : public KisIteratorUnit
+class KisIteratorPixelMask : public KisIteratorPixelTrait <KisHLineIterator>
 {
 public:
 	KisIteratorPixelMask( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos = 0, Q_INT32 nxpos = 0);
 	virtual ~KisIteratorPixelMask() {}
-public:
-	inline operator KisPixel();
-	inline KisPixelRO oldValue();
-	inline KisQuantum operator[](int index);
-private:
-};
-
-
-/**
- * XXX: document
- */
-class KisIteratorLinePixelMask : public KisIteratorLine<KisIteratorPixel>
-{
-public:
-	KisIteratorLinePixelMask( KisPaintDeviceSP ndevice, 
-			      KisTileCommand* command, 
-			      Q_INT32 nypos = 0,
-			      Q_INT32 nxstart = -1, 
-			      Q_INT32 nxend = -1);
-public:
-	virtual KisIteratorPixel operator*();
-	virtual operator KisIteratorPixel* ();
-	virtual KisIteratorPixel begin();
-	virtual KisIteratorPixel end();
 };
 
 #endif

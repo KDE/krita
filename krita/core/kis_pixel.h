@@ -26,7 +26,6 @@
 #include "kis_profile.h"
 #include "kis_quantum.h"
 #include "kis_strategy_colorspace.h"
-#include "kis_selection.h"
 
 class QColor;
 

@@ -62,35 +62,27 @@ void KisHistogram::computeHistogramFor(const KisChannelInfo & channel)
 		// XXX: not implemented yet
 	}
 	else {
-		// Get plain iterators
-		// XXX: refactor when iterator refactoring done...
-
-		KisIteratorLinePixel lineIt = m_layer -> iteratorPixelSelectionBegin(0);
-		KisIteratorLinePixel lastLine = m_layer -> iteratorPixelSelectionEnd(0);
+		Q_INT32 x,y,w,h;
+		m_layer->extent(x,y,w,h);
+ 		KisRectIteratorPixel srcIt = m_layer->createRectIterator(x,y,w,h, false);
+		
 		Q_INT32 depth = m_layer -> depth();
-		while( lineIt <= lastLine )
+		while( ! srcIt.isDone() )
 		{
-			KisIteratorPixel pixelIt = *lineIt;
-			KisIteratorPixel lastPixel = lineIt.end();
-			while( pixelIt <= lastPixel )
+			for( int i = 0; i < depth; i++)
 			{
-				for( int i = 0; i < depth; i++)
-				{
- 					// Do computing
- 					if (i == channel.pos()) {
- 						KisQuantum datum = pixelIt[channel.pos()];
-// 						m_values[datum] = m_values[datum]++;
-// 						if (datum > m_max) m_max = datum;
+				// Do computing
+				if (i == channel.pos()) {
+					KisQuantum datum = srcIt[channel.pos()];
+// 					m_values[datum] = m_values[datum]++;
+// 					if (datum > m_max) m_max = datum;
 // 						if (datum < m_min) m_min = datum;
-// 						total += datum;
- 						m_count++;
- 					}
-				}
-				++pixelIt;
+// 					total += datum;
+ 					m_count++;
+ 				}
 			}
-			++lineIt;
+			srcIt++;
 		}
-
 	}
 	m_mean = total / m_count;
 #if 0

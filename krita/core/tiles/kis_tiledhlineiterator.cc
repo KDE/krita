@@ -21,7 +21,7 @@
 #include "kis_global.h"
 #include "kis_iterator.h"
 
-KisTiledHLineIterator::KisTiledHLineIterator( KisTiledDataManager *ndevice,  Q_INT32 x, Q_INT32 w, Q_INT32 y, bool writable) :
+KisTiledHLineIterator::KisTiledHLineIterator( KisTiledDataManager *ndevice,  Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable) :
 	KisTiledIterator(ndevice),
 	m_right(x+w-1)
 {

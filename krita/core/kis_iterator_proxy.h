@@ -25,23 +25,6 @@ class KisIteratorProxy {
 	typedef KisIteratorProxy<_iT, _beType> thisType;
 	public:
 		KisIteratorProxy(_iT* proxyed) : m_proxyed(proxyed) { };
-	public:
-		inline _iT& operator++() { return m_proxyed->inc(); }
-		inline _iT& operator--() { return m_proxyed->dec(); }
-		inline bool operator<(const thisType& __rhs) const
-		{ 
-			return *m_proxyed < *(__rhs.m_proxyed);
-		}
-		inline bool operator==(const thisType& __rhs) const 
-		{ 
-			return *m_proxyed == *(__rhs.m_proxyed);
-		}
-		inline bool operator<=(const thisType& __rhs) const
-		{ 
-			return *m_proxyed <= *(__rhs.m_proxyed);
-		}
-		inline _beType begin() { return m_proxyed->begin(); }
-		inline _beType end() { return m_proxyed->end(); }
 	protected:
 		_iT* m_proxyed;
 };

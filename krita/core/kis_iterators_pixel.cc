@@ -21,33 +21,20 @@
 #include "kis_global.h"
 #include "kis_paint_device.h"
 
-KisIteratorPixel::KisIteratorPixel( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos, Q_INT32 nxpos) :
-	KisIteratorUnit( ndevice, command, nypos, nxpos, ndevice->depth() )
-{
-
-}
-
-
-KisIteratorLinePixel::KisIteratorLinePixel( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos,
-						Q_INT32 nxstart, Q_INT32 nxend) :
-	KisIteratorLine<KisIteratorPixel>( ndevice, command, nypos, nxstart, nxend)
+KisHLineIteratorPixel::KisHLineIteratorPixel( KisPaintDeviceSP ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable) :
+	KisIteratorPixelTrait <KisHLineIterator> ( ndevice, this ),
+	KisHLineIterator(dm, x, y, w, writable)
 {
 }
 
-KisIteratorPixel KisIteratorLinePixel::operator*()
+KisVLineIteratorPixel::KisVLineIteratorPixel( KisPaintDeviceSP ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable) :
+	KisIteratorPixelTrait <KisVLineIterator> ( ndevice, this ),
+	KisVLineIterator(dm, x, y, h, writable)
 {
-	return KisIteratorPixel( m_device, m_command, m_ypos, m_xstart );
-}
-KisIteratorLinePixel::operator KisIteratorPixel* ()
-{
-	return new KisIteratorPixel( m_device, m_command, m_ypos, m_xstart );
 }
 
-KisIteratorPixel KisIteratorLinePixel::begin()
+KisRectIteratorPixel::KisRectIteratorPixel( KisPaintDeviceSP ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, bool writable) :
+	KisIteratorPixelTrait <KisRectIterator> ( ndevice, this ),
+	KisRectIterator(dm, x, y, w, h, writable)
 {
-	return KisIteratorPixel( m_device, m_command, m_ypos, m_xstart );
-}
-KisIteratorPixel KisIteratorLinePixel::end()
-{
-	return KisIteratorPixel( m_device, m_command, m_ypos, m_xend );
 }

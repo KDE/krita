@@ -31,7 +31,7 @@ KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*
 	
 	for (y = 0; y < 64; y++)
 	{
-		KisHLineIterator hiter = createHLineIterator(0, 64, y, false);
+		KisHLineIteratorPixel hiter = createHLineIterator(0, y, 64, false);
 		while( ! hiter.isDone())
 		{
 			QUANTUM v = 128 + 63 * ((hiter.x() / 16 + y / 16) % 2);

@@ -41,6 +41,7 @@
 #include "kis_colorspace_registry.h"
 #include "kis_dlg_apply_profile.h"
 #include "kis_config.h"
+#include "kis_global.h"
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	: m_parent(parent),

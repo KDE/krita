@@ -547,7 +547,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 	emit notifyProgressStage(this, i18n("Rendering gradient..."), 0);
 
 	for (int y = starty; y < height; y++) {
-		KisHLineIterator iter = layer -> createHLineIterator( startx, width, y, true);
+		KisHLineIterator iter = layer -> createHLineIterator( startx, y, width, true);
 		for (int x = 0; x < width; x++) {
 
 			double t = shapeStrategy -> valueAt( x, y);
@@ -707,7 +707,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 			// apply mask...
 			KisSelectionSP selection = m_device -> selection();
 			for (int y = 0; y < height; y++) {
-				KisHLineIterator iter = layer -> createHLineIterator( startx, width, starty, true);
+				KisHLineIterator iter = layer -> createHLineIterator( startx, starty, width, true);
 				for (int x = 0; x < width; x++) {
 					QColor c;
 					QUANTUM opacity;

@@ -55,7 +55,6 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_tile_command.cc \
 	kis_vec.cc \
 	kis_rect.cc \
-	kis_iterators.cc \
 	kis_iterators_pixel.cc \
 	kis_histogram.cc \
 	KRayonViewIface.cc \
@@ -95,7 +94,7 @@ noinst_HEADERS = kis_paint_device.h \
 	kis_tile_command.h \
 	kis_vec.h \
 	kis_rect.h \
-	kis_iterators.h \
+	kis_iteratorpixeltrait.h \
 	kis_iterators_pixel.h \
 	kis_histogram.h \
 	kis_plugin_registry.h \

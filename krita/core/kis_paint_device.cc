@@ -34,8 +34,6 @@
 #include "kis_undo_adapter.h"
 #include "tiles/kis_iterator.h"
 #include "kis_iterators_pixel.h"
-#include "kis_iterators_pixel_no_mask.h"
-#include "kis_iterators_pixel_mask.h"
 #include "kis_scale_visitor.h"
 #include "kis_rotate_visitor.h"
 #include "kis_profile.h"
@@ -170,14 +168,14 @@ void KisPaintDevice::scale(double xscale, double yscale, KisProgressDisplayInter
         visitor.scale(xscale, yscale, m_progress, ftype);
 }
 
-void KisPaintDevice::rotate(double angle, KisProgressDisplayInterface *m_progress) 
+void KisPaintDevice::rotate(double angle, KisProgressDisplayInterface *m_progress)
 {
         KisRotateVisitor visitor;
         accept(visitor);
         visitor.rotate(angle, m_progress);
 }
 
-void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress) 
+void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress)
 {
         KisRotateVisitor visitor;
         accept(visitor);
@@ -345,7 +343,7 @@ bool KisPaintDevice::write(KoStore *store)
 {
 	bool retval = m_datamanager->write(store);
 	emit ioProgress(100);
-	
+
         return retval;
 }
 
@@ -353,7 +351,7 @@ bool KisPaintDevice::read(KoStore *store)
 {
 	bool retval = m_datamanager->read(store);
 	emit ioProgress(100);
-	
+
         return retval;
 }
 
@@ -362,7 +360,7 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 #if 0 //AUTOLAYER
 
 	// XXX:  Given the way lcms works, we'd better not do
-	// this with iterators but with the largest chunks of 
+	// this with iterators but with the largest chunks of
 	// contiguous bytes we can get.
 	KisPaintDevice dst(width(), height(), dstColorStrategy, "");
 	dst.setProfile(dstProfile);
@@ -440,7 +438,7 @@ KisProfileSP KisPaintDevice::profile() const
 }
 
 
-void KisPaintDevice::setProfile(KisProfileSP profile) 
+void KisPaintDevice::setProfile(KisProfileSP profile)
 {
 	if (profile -> colorSpaceSignature() == colorStrategy() -> colorSpaceSignature() && profile -> valid()) {
 		m_profile = profile;
@@ -458,11 +456,11 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile)
 	Q_INT32 w;
 	Q_INT32 h;
 
-	x1 = - getX();	
-	y1 = - getY();	
+	x1 = - getX();
+	y1 = - getY();
 	w = image()->width();
 	h = image()->height();
-	
+
 	convertToQImage(dstProfile, x1, y1, w, h);
 }
 
@@ -481,7 +479,7 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 	// XXX: Isn't this a very slow copy?
         for(Q_INT32 y=y1; y <y1+h;y++)
         {
-                KisHLineIterator hiter = createHLineIterator(x1, w, y, false);
+                KisHLineIteratorPixel hiter = createHLineIterator(x1, y, w, false);
                 while(! hiter.isDone())
                 {
                         memcpy(ptr, (Q_UINT8 *)hiter, depth());
@@ -490,86 +488,25 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
                         hiter++;
                 }
         }
-
 	// XXX: determine whether to apply the monitor profile or based on the copy setting
 	image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
 	delete data;
 	return image;
 }
 
-KisRectIterator &KisPaintDevice::createRectIterator(Q_INT32 nleft, Q_INT32 ntop, Q_INT32 nw, Q_INT32 nh, bool writable)
+KisRectIteratorPixel &KisPaintDevice::createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable)
 {
-        return *(new KisRectIterator(m_datamanager,nleft, ntop, nw, nh, writable));
+        return *(new KisRectIteratorPixel(this, m_datamanager, left, top, w, h, writable));
 }
 
-KisHLineIterator  &KisPaintDevice::createHLineIterator(Q_INT32 x, Q_INT32 w, Q_INT32 y, bool writable)
+KisHLineIteratorPixel  &KisPaintDevice::createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable)
 {
-        return *(new KisHLineIterator(m_datamanager,x, w, y, writable));
+        return *(new KisHLineIteratorPixel(this, m_datamanager, x, y, w, writable));
 }
 
-KisVLineIterator  &KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable)
+KisVLineIteratorPixel  &KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable)
 {
-        return *(new KisVLineIterator(m_datamanager,x, y, h, writable));
-}
-
-KisIteratorLinePixel KisPaintDevice::iteratorPixelBegin(KisTileCommand* command)
-{
-// XXX: broken by autolayer merge
-// 	return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, 0) );
-}
-
-KisIteratorLinePixel KisPaintDevice::iteratorPixelBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
-{
-// 	return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, ystart, xstart, xend) );
-}
-
-KisIteratorLinePixel KisPaintDevice::iteratorPixelEnd(KisTileCommand* command)
-{
-
-// XXX: Too broken to fix for me (bsar)
-//AUTOLAYER        return KisIteratorLinePixel( this, command, height() - 1);
-//         return KisIteratorLinePixel( this, command, 1000);
-}
-
-KisIteratorLinePixel KisPaintDevice::iteratorPixelEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
-{
-// 	return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, yend, xstart, xend) );
-}
-
-KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionBegin(KisTileCommand* command)
-{
-// 	if(hasSelection())
-// 	{
-// 		return KisIteratorLinePixel( new KisIteratorLinePixelMask( this, command, 0) );
-// 	} else {
-// 		return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, 0) );
-// 	}
-}
-
-KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
-{
-// 	if(hasSelection())
-// 	{
-// 		return KisIteratorLinePixel( new KisIteratorLinePixelMask( this, command, ystart, xstart, xend) );
-// 	} else {
-// 		return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, ystart, xstart, xend) );
-// 	}
-}
-
-KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionEnd(KisTileCommand* command)
-{
-// XXX: broken by autolayer merge
-//         KisIteratorLinePixel( this, command, 1000);
-}
-
-KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
-{
-// 	if(hasSelection())
-// 	{
-// 		return KisIteratorLinePixel( new KisIteratorLinePixelMask( this, command, yend, xstart, xend) );
-// 	} else {
-// 		return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, yend, xstart, xend) );
-// 	}
+        return *(new KisVLineIteratorPixel(this, m_datamanager, x, y, h, writable));
 }
 
 KisSelectionSP KisPaintDevice::selection(){
@@ -582,7 +519,7 @@ KisSelectionSP KisPaintDevice::selection(){
 		emit selectionCreated();
 	}
 	return m_selection;
- 
+
 }
 
 void KisPaintDevice::setSelection(KisSelectionSP selection)
@@ -604,7 +541,7 @@ void KisPaintDevice::addSelection(KisSelectionSP /*selection*/)
 // {
 // // 	m_selection = m_selection - selection;
 // 	emit selectionChanged();
-// 
+//
 // }
 
 

@@ -41,12 +41,3 @@ KisIteratorLinePixelNoMask::operator KisIteratorPixel* ()
 {
 	return new KisIteratorPixel(new KisIteratorPixelNoMask( m_device, m_command, m_ypos, m_xstart ));
 }
-
-KisIteratorPixel KisIteratorLinePixelNoMask::begin()
-{
-	return KisIteratorPixel(new KisIteratorPixelNoMask( m_device, m_command, m_ypos, m_xstart ));
-}
-KisIteratorPixel KisIteratorLinePixelNoMask::end()
-{
-	return KisIteratorPixel(new KisIteratorPixelNoMask( m_device, m_command, m_ypos, m_xend ));
-}

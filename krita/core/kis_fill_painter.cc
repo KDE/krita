@@ -58,7 +58,7 @@
 #include "kis_fill_painter.h"
 #include "kis_pixel.h"
 #include "kis_iterators_pixel.h"
-#include "kis_iterators_infinite.h"
+//#include "kis_iterators_infinite.h"
 #include "kis_iterator.h"
 
 namespace {
@@ -87,7 +87,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
 
 	for (y = y1; y < y1 + h; y++)
 	{
-		KisHLineIterator hiter = m_device->createHLineIterator(x1, w, y, true);
+		KisHLineIterator hiter = m_device->createHLineIterator(x1, y, w, true);
 		while( ! hiter.isDone())
 		{
 			memcpy((Q_UINT8 *)hiter, src, depth);
@@ -175,7 +175,7 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 		m_selection -> clear(QRect(0, 0, m_width, m_height));
 		m_oldColor = new QUANTUM[m_device->depth()];
 
-		KisHLineIterator pixelIt = m_layer->createHLineIterator(startX, startX+1, startY, false);
+		KisHLineIterator pixelIt = m_layer->createHLineIterator(startX, startY, startX+1, false);
 		KisPixel pixel((QUANTUM*)(pixelIt));
 		
 		for (int i = 0; i < lay -> depth(); i++) {
@@ -204,8 +204,8 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
     }
 	// use the selection as mask over our fill        
     for (int y = 0; y < m_height; y++) {
-	    KisHLineIterator line = filled->createHLineIterator(0, m_width, y, true);
-	    KisHLineIterator selectionIt = m_selection->createHLineIterator(0, m_width, y, true); 
+	    KisHLineIteratorPixel line = filled->createHLineIterator(0, y, m_width, true);
+	    KisHLineIteratorPixel selectionIt = m_selection->createHLineIterator(0, y, m_width, true); 
 	    
 	    QUANTUM selectionOpacity;
 	    QColor notUsed;
@@ -246,7 +246,7 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
 void KisFillPainter::floodLine(int x, int y) {
 	int mostRight, mostLeft = x;
 	
-	KisHLineIterator pixelIt = m_layer->createHLineIterator(x, m_width, y, false);
+	KisHLineIteratorPixel pixelIt = m_layer->createHLineIterator(x, y, m_width, false);
 
 	int lastPixel = m_width;
 
@@ -261,7 +261,7 @@ void KisFillPainter::floodLine(int x, int y) {
 	if (x > 0) {
 		mostLeft--;
 
-		KisHLineIterator pixelIt = m_layer->createHLineIterator(x - 1, m_width - 1, y, false);
+		KisHLineIteratorPixel pixelIt = m_layer->createHLineIterator(x - 1, y, m_width - 1, false);
 		int lastPixel = 0;
 
 		mostLeft = floodSegment(x,y, mostLeft, pixelIt, lastPixel, Left);
@@ -289,10 +289,10 @@ void KisFillPainter::floodLine(int x, int y) {
 	}
 }
 
-int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIterator& it, int lastPixel, Direction d) {
+int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& it, int lastPixel, Direction d) {
 	bool stop = false;
 	QUANTUM diff;
-	KisHLineIterator selection = m_selection -> createHLineIterator(x, m_width - x, y, true);
+	KisHLineIteratorPixel selection = m_selection -> createHLineIterator(x, y, m_width - x, true);
 	QColor selectionColor = Qt::white; // This is the standard selection colour
 	KisStrategyColorSpaceSP colorStrategy = m_selection -> colorStrategy();
 

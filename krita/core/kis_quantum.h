@@ -31,26 +31,32 @@ class KisQuantum {
 		inline KisQuantum(QUANTUM* q, KisQuantumOperation* op = new KisQuantumOperationLinear()) : m_quantum(q), m_op(op) { };
 	public:
 		inline operator QUANTUM() { return *m_quantum; };
+
 		inline QUANTUM operator=(QUANTUM q)
 		{
 			return *m_quantum = m_op->operation(q);
 		};
+
 		inline QUANTUM operator-=(QUANTUM q)
 		{
 			return (*this = *this - q);
 		}
+
 		inline QUANTUM operator+=(QUANTUM q)
 		{
 			return (*this = *this + q);
 		}
-		/** This operator allow to acces to a neighbour quantum, it's mean to be used
-			* inside a pixel
-			*/
+
+		/** 
+		 * This operator allow to acces to a neighbour quantum, it's mean to be used
+		 * inside a pixel
+		 */
 		KisQuantum operator[](int index) {
 			return KisQuantum( m_quantum + index );
 		}
 	private:
 		QUANTUM* m_quantum;
+
 		KisQuantumOperation* m_op;
 };
 

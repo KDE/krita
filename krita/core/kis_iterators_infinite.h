@@ -22,7 +22,7 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_iterators.h"
+#include "kis_iteratorpixeltrait.h"
 #include "kis_iterators_pixel_no_mask.h"
 #include "kis_pixel.h"
 #include "color_strategy/kis_strategy_colorspace.h"
@@ -51,42 +51,10 @@ public:
 	 **/
 	KisIteratorInfinitePixel(KisStrategyColorSpaceSP s, KisPixel p);
 public:
-	inline virtual KisIteratorInfinitePixel& inc();
-	inline virtual KisIteratorInfinitePixel& dec();
 	virtual ~KisIteratorInfinitePixel();
 private:
 	static KisPaintDeviceSP constructPixel(KisStrategyColorSpaceSP s, KisPixel p);
 	bool m_isPixel;
-};
-
-
-/**
- * This iterates over the lines of a KisPaintDeviceSP as if it was an endless plane. Note
- * that the end() function will only return the end of the 'pattern', since an endless
- * plane doesn't really has an end.
- **/
-class KisIteratorInfiniteLinePixel : public KisIteratorLinePixelNoMask
-{
-public:
-	/**
-	 * Constructor for a lineiterator of a plane. The plane argument is the PaintDevice
-	 * we'll treat like a plane, for example the result of KisPattern's
-	 * image(KisStrategyColorSpaceSP) function. Because it acts like it's infinite,
-	 * there is no nxwidth parameter.
-	 **/
-	KisIteratorInfiniteLinePixel( KisPaintDeviceSP plane,
-		KisTileCommand* command, 
-		Q_INT32 nypos = 0,
-		Q_INT32 nxstart = -1);
-public:
-	KisIteratorPixel operator*();
-	operator KisIteratorPixel* ();
-	inline virtual KisIteratorInfiniteLinePixel& inc();
-	inline virtual KisIteratorInfiniteLinePixel& dec();
-	virtual KisIteratorPixel begin();
-	virtual ~KisIteratorInfiniteLinePixel() {}
-private:
-	KisPaintDeviceSP m_plane;
 };
 
 #endif /* KIS_ITERATORS_INFINITE_H_ */

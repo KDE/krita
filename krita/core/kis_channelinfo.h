@@ -22,9 +22,11 @@
 #include "ksharedptr.h"
 
 enum enumChannelType {
-	COLOR,
-	ALPHA,
-	SUBSTANCE
+	COLOR, // The channel represents a color
+	ALPHA, // The channel represents the opacity of a pixel
+	SUBSTANCE, // The channel represents a real-world substance like pigments or medium
+	SUBSTRATE, // The channel represents a real-world painting substrate like a canvas
+	SELECTION  // The channel represents the degree of selectedness of a pixel
 };
 
 /** 
@@ -35,8 +37,8 @@ enum enumChannelType {
 class KisChannelInfo : public KShared {
 public:
 	KisChannelInfo() { };
-	KisChannelInfo( const QString & name, Q_INT32 npos, enumChannelType channelType)
-		: m_name (name), m_pos (npos), m_size(1), m_channelType(channelType) { };
+	KisChannelInfo( const QString & name, Q_INT32 npos, enumChannelType channelType, Q_INT32 size = 1)
+		: m_name (name), m_pos (npos), m_channelType(channelType), m_size(size) { };
 public:
 	/**
 	 * User-friendly name for this channel for presentation purposes in the gui
@@ -61,8 +63,8 @@ public:
 private:
 	QString m_name;
 	Q_INT32 m_pos;
-	Q_INT32 m_size;
 	enumChannelType m_channelType;
+	Q_INT32 m_size;
 };
 
 #endif // KIS_CHANNELINFO_H_

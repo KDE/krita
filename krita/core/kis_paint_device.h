@@ -32,7 +32,7 @@
 #include "tiles/kis_datamanager.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_scale_visitor.h"
-#include "kis_iterator.h"
+#include "kis_iterators_pixel.h"
 
 class QImage;
 class QSize;
@@ -41,7 +41,6 @@ class KoStore;
 class KisImage;
 class QWMatrix;
 class KisTileCommand;
-class KisIteratorLinePixel;
 class KisRotateVisitor;
 
 /**
@@ -83,7 +82,6 @@ public:
         bool contains(const QPoint& pt) const;
 
 	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
-
 	/** 
 	 *   Converts the paint device to a different colorspace
 	 */
@@ -200,46 +198,18 @@ public:
 	/** 
 	 * This function return an iterator which points to the first pixel of an rectangle
 	 */
-	KisRectIterator & createRectIterator(Q_INT32 nleft, Q_INT32 ntop, Q_INT32 nw, Q_INT32 nh, bool writable);
+	KisRectIteratorPixel & createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable);
 	
 	/** 
 	 * This function return an iterator which points to the first pixel of a horizontal line
 	 */
-	KisHLineIterator  & createHLineIterator(Q_INT32 x, Q_INT32 w, Q_INT32 y, bool writable);
+	KisHLineIteratorPixel  & createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable);
 	
 	/** 
 	 * This function return an iterator which points to the first pixel of a horizontal line
 	 */
-	KisVLineIterator  & createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
+	KisVLineIteratorPixel  & createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
 	
-	/** 
-	 * This function return an iterator which points to the first pixel of the
-	 * whole PaintDevice
-	 */
-	KisIteratorLinePixel iteratorPixelBegin(KisTileCommand* command);
-	KisIteratorLinePixel iteratorPixelBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart);
-
-	/**
-	 * This function return an iterator which points to the last pixel of the
-	 * whole PaintDevice
-	 */
-	KisIteratorLinePixel iteratorPixelEnd(KisTileCommand* command);
-	KisIteratorLinePixel iteratorPixelEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
-
-	/**
-	 * This function return an iterator which points to the first pixel of the
-	 * part of PaintDevice which is selected
-	 */
-	KisIteratorLinePixel iteratorPixelSelectionBegin(KisTileCommand* command);
-	KisIteratorLinePixel iteratorPixelSelectionBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart);
-
-	/**
-	 * This function return an iterator which points to the last pixel of the
-	 * part of PaintDevice which is selected
-	 */
-	KisIteratorLinePixel iteratorPixelSelectionEnd(KisTileCommand* command);
-	KisIteratorLinePixel iteratorPixelSelectionEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
-
 	// Selection stuff. XXX: is it necessary to make the actual
 	// selection object available outside the layer? YYY: yes, so
 	// selection tools can act on it.
@@ -389,7 +359,7 @@ inline bool KisPaintDevice::alpha() const
 
 inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity, KisProfileSP profile)
 {
-	KisHLineIterator iter = createHLineIterator(x, 1, y, false);
+	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
 
 	Q_UINT8 *pix = (Q_UINT8 *)iter;
 	
@@ -402,7 +372,7 @@ inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opac
 
 inline bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity, KisProfileSP profile)
 {
-	KisHLineIterator iter = createHLineIterator(x, 1, y, true);
+	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
 	
 	colorStrategy() -> nativeColor(c, opacity, (QUANTUM*)(iter)); // profile
 

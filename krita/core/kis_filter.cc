@@ -89,8 +89,11 @@ void KisFilter::slotActivated()
 	//Apply the filter
 	KisFilterConfiguration* config = configuration(m_widget);
 	KisTileCommand* ktc = new KisTileCommand(name(), (KisPaintDeviceSP)layer ); // Create a command
-	//AUTOLAYER QRect rect(0, 0, layer->width(), layer->height());
-	QRect rect(0, 0, 1, 1);
+
+	// XXX: AUTOLAYER (temporary fix, BSAR)
+	Q_INT32 x, y, w, h;
+	layer -> extent( x, y, w, h );
+	QRect rect = QRect(x, y, w, h);
 
 	process((KisPaintDeviceSP)layer, config, rect, ktc);
 

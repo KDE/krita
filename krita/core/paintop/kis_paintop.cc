@@ -28,7 +28,6 @@
 #include "kis_point.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_global.h"
-#include "tiles/kis_iterator.h"
 
 KisPaintOp::KisPaintOp(KisPainter * painter) 
 {
@@ -55,7 +54,7 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 
 	for (int y = 0; y < maskHeight; y++)
 	{
-		KisHLineIterator hiter = dab->createHLineIterator(0, maskWidth, y, false);
+		KisHLineIteratorPixel hiter = dab->createHLineIterator(0, y, maskWidth, false);
 		int x=0;
 		while(! hiter.isDone())
 		{

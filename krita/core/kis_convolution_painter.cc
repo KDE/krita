@@ -88,27 +88,30 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 	// XXX: add checking of selections
 
 	Q_INT32 depth = src -> colorStrategy() -> depth();
-	KisIteratorLinePixel beforeLit = src -> iteratorPixelSelectionBegin( m_transaction );
-	KisIteratorLinePixel curLit = src -> iteratorPixelSelectionBegin( m_transaction );
-	KisIteratorLinePixel dstLit = m_device -> iteratorPixelSelectionBegin( m_transaction );
-	KisIteratorLinePixel afterLit = src -> iteratorPixelSelectionBegin( m_transaction );
+	Q_INT32 x, y, top, left, w, h;
+	src->extent(left, top, w, h);
+	
+	Q_INT32 above=top;
+	Q_INT32 below=top+1;
+	Q_INT32 dstY=top;
+	y=top;
+	
 	KisPixelRO pixels[9];
-	++afterLit;
 	{
-		KisIteratorPixel curIt = curLit.begin();
-		KisIteratorPixel dstIt = dstLit.begin();
-		KisIteratorPixel afterIt = afterLit.begin();
+		KisHLineIteratorPixel curIt = src->createHLineIterator(y,left,w,false);
+		KisHLineIteratorPixel dstIt = src->createHLineIterator(dstY,left,w,true);
+		KisHLineIteratorPixel afterIt = src->createHLineIterator(below,left,w,false);
 		// Corner : left top
 		KisPixel currentPixel = dstIt;
-		++dstIt;
+		dstIt++;
 		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldValue();
-		++curIt;
+		curIt++;
 		pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
-		++curIt;
+		curIt++;
 		pixels[ CONVOLUTION_PIXEL_BOTTOM ] = afterIt.oldValue();
-		++afterIt;
+		afterIt++;
 		pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
-		++afterIt;
+		afterIt++;
 		for(int i = 0; i < depth; i++)
 		{
 			int sum = matrix[i][1][1] + matrix[i][1][2] + matrix[i][2][1] + matrix[i][2][2];
@@ -127,16 +130,16 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 			sums[i] = matrix[i][1][1] + matrix[i][1][0] + matrix[i][1][2] + matrix[i][2][0] +  matrix[i][2][1] + matrix[i][2][2];
 			sums[i] = (sums[i] == 0) ? 1 : sums[i];
 		}
-		KisIteratorPixel endIt = curLit.end();
-		while( curIt <= endIt )
+		
+		while( ! curIt.isDone() )
 		{
 			currentPixel = dstIt;
-			++dstIt;
+			dstIt++;
 			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRO));
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
-			++curIt;
+			curIt++;
 			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
-			++afterIt;
+			afterIt++;
 			for(int i = 0; i < depth; i++)
 			{
 				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
@@ -163,6 +166,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 									  * matrix[i].sum() / matrix[i].factor() / sum + matrix[i].offset() ) );
 		}
 	}
+	
 	// Body
 	int rightSums[depth];
 	int leftSums[depth];
@@ -173,31 +177,31 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		leftSums[i] = matrix[i][1][1] + matrix[i][0][0] + matrix[i][0][1] + matrix[i][1][0] + matrix[i][2][0] + matrix[i][2][1];
 		leftSums[i] = (leftSums[i] == 0) ? 1 : leftSums[i];
 	}
-	++curLit;
-	++dstLit;
-	++afterLit;
-	KisIteratorLinePixel endLit = src -> iteratorPixelSelectionEnd( m_transaction );
-	while( curLit < endLit )
+	y++;
+	dstY++;
+	below++;
+	while( y < top+h )
 	{
-		KisIteratorPixel beforeIt = beforeLit.begin();
-		KisIteratorPixel dstIt = dstLit.begin();
-		KisIteratorPixel curIt = curLit.begin();
-		KisIteratorPixel afterIt = afterLit.begin();
+		KisHLineIteratorPixel beforeIt = src->createHLineIterator(left, above, w, false);
+		KisHLineIteratorPixel curIt = src->createHLineIterator(left, y, w, false);
+		KisHLineIteratorPixel dstIt = src->createHLineIterator(left, dstY, w, true);
+		KisHLineIteratorPixel afterIt = src->createHLineIterator(left, below, w, false);
+		
 		// Body : left border
 		KisPixel currentPixel = dstIt;
-		++dstIt;
+		dstIt++;
 		pixels[ CONVOLUTION_PIXEL_TOP ] = beforeIt.oldValue();
-		++beforeIt;
+		beforeIt++;
 		pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
-		++beforeIt;
+		beforeIt++;
 		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldValue();
-		++curIt;
+		curIt++;
 		pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
-		++curIt;
+		curIt++;
 		pixels[ CONVOLUTION_PIXEL_BOTTOM ] = afterIt.oldValue();
-		++afterIt;
+		afterIt++;
 		pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
-		++afterIt;
+		afterIt++;
 		for(int i = 0; i < depth; i++)
 		{
 			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
@@ -210,18 +214,17 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 									* matrix[i].sum() / matrix[i].factor() / rightSums[i] + matrix[i].offset() ) );
 		}
 		// Body : body
-		KisIteratorPixel endIt = curLit.end();
-		while( curIt <= endIt )
+		while( ! curIt.isDone() )
 		{
 			currentPixel = dstIt;
-			++dstIt;
+			dstIt++;
 			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRO));
 			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
-			++beforeIt;
+			beforeIt++;
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
-			++curIt;
+			curIt++;
 			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
-			++afterIt;
+			afterIt++;
 			for(int i = 0; i < depth; i++)
 			{
 				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
@@ -250,26 +253,27 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 									  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][2][1] )
 									* matrix[i].sum() / matrix[i].factor() / leftSums[i] + matrix[i].offset() ) );
 		}
-		++beforeLit;
-		++curLit;
-		++dstLit;
-		++afterLit;
+		above++;
+		y++;
+		dstY++;
+		below++;
 	}
 	{
-		KisIteratorPixel beforeIt = beforeLit.begin();
-		KisIteratorPixel curIt = curLit.begin();
-		KisIteratorPixel dstIt = dstLit.begin();
+		KisHLineIteratorPixel beforeIt = src->createHLineIterator(left, above, w, false);
+		KisHLineIteratorPixel curIt = src->createHLineIterator(left, y, w, false);
+		KisHLineIteratorPixel dstIt = src->createHLineIterator(left, dstY, w, true);
+		
 		// Corner : left bottom
 		pixels[ CONVOLUTION_PIXEL_TOP ] = beforeIt.oldValue();
-		++beforeIt;
+		beforeIt++;
 		pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
-		++beforeIt;
+		beforeIt++;
 		KisPixel currentPixel = dstIt;
-		++dstIt;
+		dstIt++;
 		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldValue();
-		++curIt;
+		curIt++;
 		pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
-		++curIt;
+		curIt++;
 		for(int i = 0; i < depth; i++)
 		{
 			int sum = matrix[i][1][1] + matrix[i][0][1] + matrix[i][0][2] + matrix[i][1][2];
@@ -288,16 +292,15 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 			sums[i] = matrix[i][1][1] + matrix[i][1][0] + matrix[i][1][2] + matrix[i][0][0] +  matrix[i][0][1] + matrix[i][0][2];
 			sums[i] = (sums[i] == 0) ? 1 : sums[i];
 		}
-		KisIteratorPixel endIt = curLit.end();
-		while( curIt <= endIt )
+		while( ! curIt.isDone() )
 		{
 			currentPixel = dstIt;
-			++dstIt;
+			dstIt++;
 			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRO));
 			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
-			++beforeIt;
+			beforeIt++;
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
-			++curIt;
+			curIt++;
 			for(int i = 0; i < depth; i++)
 			{
 				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
@@ -310,6 +313,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 										/ matrix[i].factor() / sums[i] + matrix[i].offset() ) );
 			}
 		}
+	
 	// Corner : right bottom
 		currentPixel = dstIt;
 		for(int i = 0; i < depth; i++)

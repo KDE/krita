@@ -34,7 +34,7 @@
 #include "kis_vec.h"
 #include "kis_view.h"
 
-KisToolEraser::KisToolEraser() 
+KisToolEraser::KisToolEraser()
 	: super(),
 	  m_mode ( HOVER),
 	  m_dragDist ( 0 )
@@ -45,7 +45,7 @@ KisToolEraser::KisToolEraser()
 	m_currentImage = 0;
 }
 
-KisToolEraser::~KisToolEraser() 
+KisToolEraser::~KisToolEraser()
 {
 }
 
@@ -126,8 +126,7 @@ void KisToolEraser::initErase(const QPoint & pos) {
 	// Create painter
 	KisPaintDeviceSP device;
 	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
-		if (m_painter)
-			delete m_painter;
+            delete m_painter;
 		m_painter = new KisPainter( device );
 		m_painter -> beginTransaction(i18n("erase"));
 	}
@@ -166,10 +165,10 @@ void KisToolEraser::eraseLine(const QPoint & pos1,
 
 void KisToolEraser::setup(KActionCollection *collection)
 {
-	
+
         KToggleAction *toggle;
-	toggle = new KToggleAction(i18n("&Eraser Tool"), 
-				   "eraser", 0, this, 
+	toggle = new KToggleAction(i18n("&Eraser Tool"),
+				   "eraser", 0, this,
 				   SLOT(activate()), collection,
 				   "tool_eraser");
 	toggle -> setExclusiveGroup("tools");

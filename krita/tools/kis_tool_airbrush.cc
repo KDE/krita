@@ -72,7 +72,7 @@ void KisToolAirBrush::update(KisCanvasSubject *subject)
 {
 	m_subject = subject;
 	m_currentImage = subject -> currentImg();
-	
+
 	super::update(m_subject);
 }
 
@@ -137,7 +137,7 @@ void KisToolAirBrush::tabletEvent(QTabletEvent *e)
 		 m_pressure = pressure;
 		 m_xTilt = e -> xTilt();
 		 m_yTilt = e -> yTilt();
-			 
+
          }
 	 e -> accept();
 }
@@ -153,8 +153,7 @@ void KisToolAirBrush::initPaint(const QPoint & pos)
 	// Create painter
 	KisPaintDeviceSP device;
 	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
-		if (m_painter)
-			delete m_painter;
+            delete m_painter;
 		m_painter = new KisPainter( device );
 		m_painter -> beginTransaction(i18n("airbrush"));
 	}
@@ -173,7 +172,7 @@ void KisToolAirBrush::initPaint(const QPoint & pos)
 	m_timer -> start( RATE );
 }
 
-void KisToolAirBrush::endPaint() 
+void KisToolAirBrush::endPaint()
 {
 	m_mode = HOVER;
 	m_timer -> stop();
@@ -209,9 +208,9 @@ void KisToolAirBrush::paintLine(const QPoint & pos1,
 void KisToolAirBrush::setup(KActionCollection *collection)
 {
 	KToggleAction * toggle;
-	toggle = new KToggleAction(i18n("&Airbrush Tool"), 
-				   "airbrush", 0, this, 
-				   SLOT(activate()), collection, 
+	toggle = new KToggleAction(i18n("&Airbrush Tool"),
+				   "airbrush", 0, this,
+				   SLOT(activate()), collection,
 				   "tool_airbrush");
 	toggle -> setExclusiveGroup("tools");
 }
@@ -219,7 +218,7 @@ void KisToolAirBrush::setup(KActionCollection *collection)
 
 KDialog * KisToolAirBrush::optionsDialog(QWidget * parent)
 {
-	
+
         ToolOptsStruct ts;
 
         ts.usePattern = false; //m_usePattern;

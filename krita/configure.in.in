@@ -38,7 +38,7 @@ else
 fi
 
 
-ac_link='$LIBTOOL_SHELL --mode=link ${CXX-g++} -o conftest $CXXFLAGS $all_includes $CPPFLAGS $LDFLAGS conftest.$ac_ext -llcms 1>&5'
+ac_link='$LIBTOOL_SHELL --mode=link ${CXX-g++} -o conftest $CXXFLAGS $all_includes $CPPFLAGS $LDFLAGS $all_libraries conftest.$ac_ext -llcms 1>&5'
 
 if AC_TRY_EVAL(ac_link) && test -s conftest; then
     	AC_MSG_RESULT(yes)

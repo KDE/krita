@@ -204,29 +204,29 @@ public:
 	 * This function return an iterator which point on the first line of the
 	 * whole PaintDevice
 	 */
-	KisIteratorLineQuantum iteratorQuantumBegin(KisTileCommand* command);
-	KisIteratorLineQuantum iteratorQuantumBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart);
+	KisIteratorLineQuantum iteratorQuantumBegin(KisTileCommand* command) KDE_DEPRECATED;
+	KisIteratorLineQuantum iteratorQuantumBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart) KDE_DEPRECATED;
 
 	/**
 	 * This function return an iterator which point on the last line of the
 	 * whole PaintDevice
 	 */
-	KisIteratorLineQuantum iteratorQuantumEnd(KisTileCommand* command);
-	KisIteratorLineQuantum iteratorQuantumEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
+	KisIteratorLineQuantum iteratorQuantumEnd(KisTileCommand* command) KDE_DEPRECATED;
+	KisIteratorLineQuantum iteratorQuantumEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend) KDE_DEPRECATED;
 
 	/**
 	 * This function return an iterator which point on the first line of the
 	 * part of PaintDevice which is selected
 	 */
-	KisIteratorLineQuantum iteratorQuantumSelectionBegin(KisTileCommand* command);
-	KisIteratorLineQuantum iteratorQuantumSelectionBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart);
+	KisIteratorLineQuantum iteratorQuantumSelectionBegin(KisTileCommand* command) KDE_DEPRECATED;
+	KisIteratorLineQuantum iteratorQuantumSelectionBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart) KDE_DEPRECATED;
 
 	/**
 	 * This function return an iterator which point on the last line of the
 	 * part of PaintDevice which is selected
 	 */
-	KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command);
-	KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
+	KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command) KDE_DEPRECATED;
+	KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend) KDE_DEPRECATED;
 	
 		/** 
 	 * This function return an iterator which point on the first line of the

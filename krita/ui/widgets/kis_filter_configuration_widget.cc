@@ -24,3 +24,5 @@ KisFilterConfigurationWidget::KisFilterConfigurationWidget(KisFilter* nfilter, Q
 {
 }
 
+
+#include "kis_filter_configuration_widget.moc"

@@ -30,9 +30,9 @@
 #include "integerwidget.h"
 #include "kis_cmb_composite.h"
 
-KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, 
-					 const QPoint& pos, 
-					 Q_INT32 opacity, 
+KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName,
+					 const QPoint& pos,
+					 Q_INT32 opacity,
 					 CompositeOp compositeOp,
 					 QWidget *parent, const char *name, WFlags f)
 	: super(parent, name, f, name, Ok | Cancel)
@@ -61,7 +61,7 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName,
 	m_name = new KLineEdit(deviceName, page);
 	grid -> addWidget(lbl, 0, 0);
 	grid -> addWidget(m_name, 0, 1);
-
+        connect( m_name, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 	lbl = new QLabel(i18n("Opacity:"), page);
 #if 0
 	IntegerWidget *m_opacity = new IntegerWidget(0, 100, page);
@@ -95,10 +95,17 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName,
 	gridInBox -> addWidget(m_y, 2, 1);
 
 	grid -> addMultiCellWidget(grp, 3, 4, 0, 1);
+
+        slotNameChanged( m_name->text() );
 }
 
 KisPaintPropertyDlg::~KisPaintPropertyDlg()
 {
+}
+
+void KisPaintPropertyDlg::slotNameChanged( const QString &_text )
+{
+    enableButtonOK( !_text.isEmpty() );
 }
 
 QString KisPaintPropertyDlg::getName() const

@@ -48,3 +48,5 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget( KisFilter* nfilter, QW
 		widgetLayout -> addWidget( m_integerWidgets[i], i , 1);
 	}
 }
+
+#include "kis_multi_integer_filter_widget.moc"

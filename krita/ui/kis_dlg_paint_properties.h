@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_DLG_LAYER_PROPERTIES_H_
+#ifndef KIS_DLG_LAYER_PROPERTIES_H_
 #define KIS_DLG_LAYER_PROPERTIES_H_
 
 #include <kdialogbase.h>
@@ -30,11 +30,10 @@ class KisCmbComposite;
 
 class KisPaintPropertyDlg : public KDialogBase {
 	typedef KDialogBase super;
-
 public:
-	KisPaintPropertyDlg(const QString& deviceName, 
-			    const QPoint& pos, 
-			    Q_INT32 opacity, 
+	KisPaintPropertyDlg(const QString& deviceName,
+			    const QPoint& pos,
+			    Q_INT32 opacity,
 			    CompositeOp compositeOp,
 			    QWidget *parent = 0, const char *name = 0, WFlags f = 0);
 	virtual ~KisPaintPropertyDlg();
@@ -43,6 +42,9 @@ public:
 	Q_INT32 getOpacity() const;
 	CompositeOp getCompositeOp() const;
 	QPoint getPosition() const;
+public slots:
+void slotNameChanged( const QString & );
+
 
 private:
 	KLineEdit *m_name;

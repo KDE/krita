@@ -138,3 +138,5 @@ void KisAutobrush::spinBoxVerticalChanged(int a)
 		spinBoxHorizontal->setValue(a);
 	this->paramChanged();
 }
+
+#include "kis_autobrush.moc"

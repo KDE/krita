@@ -195,7 +195,7 @@ void KisView::setupSideBar()
 
 	connect(m_layerBox, SIGNAL(itemToggleVisible()), SLOT(layerToggleVisible()));
 	connect(m_layerBox, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
-	connect(m_layerBox, SIGNAL(itemToggleLinked(int)), SLOT(layerToggleLinked(int)));
+	connect(m_layerBox, SIGNAL(itemToggleLinked()), SLOT(layerToggleLinked()));
 	connect(m_layerBox, SIGNAL(itemProperties()), SLOT(layerProperties()));
 	connect(m_layerBox, SIGNAL(itemAdd()), SLOT(layerAdd()));
 	connect(m_layerBox, SIGNAL(itemRemove()), SLOT(layerRemove()));
@@ -1621,21 +1621,20 @@ void KisView::canvasRefresh()
 	updateCanvas();
 }
 
-void KisView::layerToggleVisible(int n)
+void KisView::layerToggleVisible()
 {
 	KisImageSP img = currentImg();
 
 	if (img) {
-		vKisLayerSP l = img -> layers();
+		KisLayerSP layer = img -> activeLayer();
 
-		if (n >= 0 && static_cast<Q_UINT32>(n) < l.size()) {
-			KisLayerSP layer = l[n];
-
+		if (layer) {
 			layer -> visible(!layer -> visible());
 			img -> invalidate(vertValue(), horzValue(), width(), height());
 			m_doc -> setModified(true);
 			resizeEvent(0);
 			updateCanvas();
+			layersUpdated();
 		}
 	}
 }
@@ -1664,6 +1663,7 @@ void KisView::layerToggleLinked()
 		if (layer) {
 			layer -> linked(!layer -> linked());
 			m_doc -> setModified(true);
+			layersUpdated();
 		}
 	}
 }

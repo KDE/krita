@@ -167,7 +167,7 @@ private slots:
 	void canvasRefresh();
 	void docImageListUpdate();
 	void floatSidebar();
-	void layerToggleVisible(int n);
+	void layerToggleVisible();
 	void layerSelected(int n);
 	void layerToggleLinked();
 	void layerProperties();

@@ -20,7 +20,6 @@
 #include <math.h>
 
 #include <stdlib.h>
-#include <vector>
 
 #include <qslider.h>
 #include <qpoint.h>
@@ -57,31 +56,33 @@
 typedef KGenericFactory<ColorsFilters> ColorsFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( colorsfilters, ColorsFiltersFactory( "krita" ) )
 
+namespace {
+	inline QUANTUM processColor( QUANTUM d, int s)
+	{
+		if( d < -s  ) return 0;
+		else if( d > QUANTUM_MAX - s) return QUANTUM_MAX;
+		else return d + s;
+	}
+}
+
 ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringList &)
 		: KParts::Plugin(parent, name)
 {
-		setInstance(ColorsFiltersFactory::instance());
+	setInstance(ColorsFiltersFactory::instance());
 
-		(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, this, SLOT(slotBrightnessContrastActivated()), actionCollection(), "brightnesscontrast");
-		(void) new KAction(i18n("&Gamma correction..."), 0, 0, this, SLOT(slotGammaActivated()), actionCollection(), "gammacorrection");
-		(void) new KAction(i18n("&Color adjustment..."), 0, 0, this, SLOT(slotColorActivated()), actionCollection(), "coloradjustment");
-		if ( !parent->inherits("KisView") )
-		{
-				m_view = 0;
-		} else {
-			m_view = (KisView*) parent;
-		}
+	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, this, SLOT(slotBrightnessContrastActivated()), actionCollection(), "brightnesscontrast");
+	(void) new KAction(i18n("&Gamma correction..."), 0, 0, this, SLOT(slotGammaActivated()), actionCollection(), "gammacorrection");
+	(void) new KAction(i18n("&Color adjustment..."), 0, 0, this, SLOT(slotColorActivated()), actionCollection(), "coloradjustment");
+	if ( !parent->inherits("KisView") )
+	{
+		m_view = 0;
+	} else {
+		m_view = (KisView*) parent;
+	}
 }
 
 ColorsFilters::~ColorsFilters()
 {
-}
-
-inline QUANTUM processColor( QUANTUM d, int s)
-{
-	if( d < -s  ) return 0;
-	else if( d > QUANTUM_MAX - s) return QUANTUM_MAX;
-	else return d + s;
 }
 
 void ColorsFilters::slotColorActivated()

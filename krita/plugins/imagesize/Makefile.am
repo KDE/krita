@@ -12,12 +12,12 @@ INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)../../tools $(KOFFICE_INCLUDES) \
 	 -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
-kde_module_LTLIBRARIES = imagesize.la
+kde_module_LTLIBRARIES = kritaimagesize.la
 
-imagesize_la_SOURCES = wdg_imagesize.ui imagesize.cc dlg_imagesize.cc
+kritaimagesize_la_SOURCES = wdg_imagesize.ui imagesize.cc dlg_imagesize.cc
 noinst_HEADERS = wdg_imagesize.h dlg_imagesize.h imagesize.h
 
-imagesize_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-imagesize_la_LIBADD =  ../../libkritacommon.la $(LIB_KOFFICECORE) $(LIB_KOPAINTER)
+kritaimagesize_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+kritaimagesize_la_LIBADD =  ../../libkritacommon.la $(LIB_KOFFICECORE) $(LIB_KOPAINTER)
 
-imagesize_la_METASOURCES = AUTO
+kritaimagesize_la_METASOURCES = AUTO

@@ -12,12 +12,12 @@ INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)../../tools $(KOFFICE_INCLUDES) \
 	 -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
-kde_module_LTLIBRARIES = variations.la
+kde_module_LTLIBRARIES = kritavariations.la
 
-variations_la_SOURCES = variations.cc dlg_variations.cc wdg_variations.ui 
+kritavariations_la_SOURCES = variations.cc dlg_variations.cc wdg_variations.ui 
 noinst_HEADERS = wdg_variations.h
 
-variations_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-variations_la_LIBADD =  ../../libkritacommon.la $(LIB_KOFFICECORE) $(LIB_KOPAINTER)
+kritavariations_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+kritavariations_la_LIBADD =  ../../libkritacommon.la $(LIB_KOFFICECORE) $(LIB_KOPAINTER)
 
-variations_la_METASOURCES = AUTO
+kritavariations_la_METASOURCES = AUTO

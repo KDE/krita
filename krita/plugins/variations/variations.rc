@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="variations" version="6">
+<kpartgui library="kritavariations" version="6">
 <MenuBar>
     <Menu name="Adjust"><text>Adjust</text>
 	<Seperator/>

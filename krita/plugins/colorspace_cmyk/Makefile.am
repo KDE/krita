@@ -14,12 +14,12 @@ INCLUDES  = -I$(srcdir)/../../core \
 	$(KOPAINTER_INCLUDES) \
 	$(all_includes)
 
-kde_module_LTLIBRARIES = cmykplugin.la
+kde_module_LTLIBRARIES = kritacmykplugin.la
 
-cmykplugin_la_SOURCES = cmyk_plugin.cc kis_strategy_colorspace_cmyk.cc
+kritacmykplugin_la_SOURCES = cmyk_plugin.cc kis_strategy_colorspace_cmyk.cc
 noinst_HEADERS = cmyk_plugin.h kis_strategy_colorspace_cmyk.h
 
-cmykplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-cmykplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+kritacmykplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+kritacmykplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
 
-cmykplugin_la_METASOURCES = AUTO
+kritacmykplugin_la_METASOURCES = AUTO

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="colorsfilters" version="6">
+<kpartgui library="kritacolorsfilters" version="6">
 <MenuBar>
     <Menu name="Adjust"><text>Adjust</text>
 	<Separator/>

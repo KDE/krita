@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="histogram" version="6">
+<kpartgui library="kritahistogram" version="6">
 <MenuBar>
     <Menu name="Layer"><text>&amp;Layer</text>
 	<Separator/>

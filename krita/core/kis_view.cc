@@ -92,7 +92,6 @@
 #include "kis_tool_non_paint.h"
 #include "kis_types.h"
 #include "kis_undo_adapter.h"
-#include "kis_util.h"
 #include "kis_view.h"
 #include "kis_rect.h"
 #include "KRayonViewIface.h"

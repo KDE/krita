@@ -435,30 +435,6 @@ bool KisImage::empty() const
 	return m_layers.size() > 0;
 }
 
-// bool KisImage::colorMap(KoColorMap& cm)
-// {
-// 	if (m_clrMap.empty())
-// 		return false;
-
-// 	cm = m_clrMap;
-// 	return true;
-// }
-
-// KisChannelSP KisImage::mask()
-// {
-// 	return m_selectionMask;
-// }
-
-// KoColor KisImage::color() const
-// {
-// 	return KoColor();
-// }
-
-// KoColor KisImage::transformColor() const
-// {
-// 	return KoColor();
-// }
-
 KisTileMgrSP KisImage::shadow() const
 {
 	return m_shadow;

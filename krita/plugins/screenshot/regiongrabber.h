@@ -27,43 +27,43 @@ class QTimer;
 
 class SizeTip : public QLabel
 {
-  public:
-    SizeTip( QWidget *parent, const char *name=0 );
-    ~SizeTip() {}
+public:
+	SizeTip( QWidget *parent, const char *name=0 );
+	~SizeTip() {}
 
-  void setTip( const QRect &rect );
-  void positionTip( const QRect &rect );
+	void setTip( const QRect &rect );
+	void positionTip( const QRect &rect );
 };
 
 class RegionGrabber : public QWidget
 {
-  Q_OBJECT
+	Q_OBJECT
 
-  public:
-    RegionGrabber();
-    ~RegionGrabber();
+public:
+	RegionGrabber();
+	~RegionGrabber();
 
-  protected slots:
-    void initGrabber();
-    void updateSizeTip();
+protected slots:
+	void initGrabber();
+	void updateSizeTip();
 
-  signals:
-    void regionGrabbed( const QPixmap & );
+	signals:
+	void regionGrabbed( const QPixmap & );
 
-  protected:
-    void mousePressEvent( QMouseEvent *e );
-    void mouseReleaseEvent( QMouseEvent *e );
-    void mouseMoveEvent( QMouseEvent *e );
-    void keyPressEvent( QKeyEvent *e );
+protected:
+	void mousePressEvent( QMouseEvent *e );
+	void mouseReleaseEvent( QMouseEvent *e );
+	void mouseMoveEvent( QMouseEvent *e );
+	void keyPressEvent( QKeyEvent *e );
 
-    void drawRubber();
+	void drawRubber();
 
-    bool mouseDown;
-    QRect grabRect;
-    QPixmap pixmap;
+	bool mouseDown;
+	QRect grabRect;
+	QPixmap pixmap;
 
-    SizeTip *sizeTip;
-    QTimer *tipTimer;
+	SizeTip *sizeTip;
+	QTimer *tipTimer;
 };
 
 #endif // REGIONGRABBER_H

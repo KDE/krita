@@ -28,23 +28,23 @@
 */
    
 struct KisPixelData : public KShared {
-    KisPixelData();
-    virtual ~KisPixelData();
+	KisPixelData();
+	virtual ~KisPixelData();
     
-    KisTileMgrSP mgr; // The KisTileMgr that 'owns' this block of data
-    KisTileSP tile;  // The tile this data belongs to -- if any?
-    Q_INT32 mode; // ???
-    Q_INT32 x1; // In image coordinates, not tile coordinages
-    Q_INT32 y1;
-    Q_INT32 x2;
-    Q_INT32 y2;
-    QUANTUM *data; // Pointer to the pixeldata -- just a plain sequence of 
-                   // bytes
-    bool owner; // Whether the data will be managed by somebody else
-    Q_INT32 width;
-    Q_INT32 height; 
-    Q_INT32 stride; // The number of bytes one line of pixels takes
-    Q_INT32 depth; // The number of bytes each pixel takes
+	KisTileMgrSP mgr; // The KisTileMgr that 'owns' this block of data
+	KisTileSP tile;  // The tile this data belongs to -- if any?
+	Q_INT32 mode; // ???
+	Q_INT32 x1; // In image coordinates, not tile coordinages
+	Q_INT32 y1;
+	Q_INT32 x2;
+	Q_INT32 y2;
+	QUANTUM *data; // Pointer to the pixeldata -- just a plain sequence of 
+	// bytes
+	bool owner; // Whether the data will be managed by somebody else
+	Q_INT32 width;
+	Q_INT32 height; 
+	Q_INT32 stride; // The number of bytes one line of pixels takes
+	Q_INT32 depth; // The number of bytes each pixel takes
 };
 
 inline

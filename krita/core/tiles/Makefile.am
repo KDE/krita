@@ -2,6 +2,6 @@ INCLUDES  = -I$(srcdir)/../ -I$(srcdir)/../helper $(KOFFICE_INCLUDES) -I$(interf
 
 noinst_LTLIBRARIES = libkistile.la
 
-libkistile_la_SOURCES = kistile.cpp kistilemgr.cpp kistilemediator.cpp kispixeldata.cpp
+libkistile_la_SOURCES = kistile.cc kistilemgr.cc kistilemediator.cc kispixeldata.cc
 libkistile_la_METASOURCES = AUTO
 

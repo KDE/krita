@@ -26,7 +26,6 @@
 
 #include "kis_factory.h"
 #include "kis_aboutdata.h"
-//#include "kis_pluginserver.h"
 #include "kis_resourceserver.h"
 #include "kis_doc.h"
 
@@ -37,7 +36,6 @@ extern "C" void* init_libkritapart()
 
 KAboutData* KisFactory::s_aboutData = 0;
 KInstance* KisFactory::s_global = 0;
-//KisPluginServer* KisFactory::s_pserver = 0;
 KisResourceServer* KisFactory::s_rserver = 0;
 
 KisFactory::KisFactory( QObject* parent, const char* name )
@@ -46,14 +44,11 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 	s_aboutData = newKrayonAboutData();
 
 	(void)global();
-//	s_pserver = new KisPluginServer;
 	s_rserver = new KisResourceServer;
 }
 
 KisFactory::~KisFactory()
 {
-//	delete s_pserver;
-//	s_pserver = 0L;
 	delete s_rserver;
 	s_rserver = 0L;
 	delete s_aboutData;
@@ -105,9 +100,6 @@ KInstance* KisFactory::global()
 		s_global->dirs()->addResourceType("kis_pics",
 						  KStandardDirs::kde_default("data") + "krita/pics/");
 
-//		s_global->dirs()->addResourceType("kis_plugins",
-//						  KStandardDirs::kde_default("data") + "krita/plugins/");
-
 		s_global->dirs()->addResourceType("toolbars",
 						  KStandardDirs::kde_default("data") + "koffice/toolbar/");
 
@@ -122,11 +114,6 @@ KAboutData* KisFactory::aboutData()
 {
 	return s_aboutData;
 }
-
-//KisPluginServer* KisFactory::pServer()
-//{
-//	return s_pserver;
-//}
 
 KisResourceServer* KisFactory::rServer()
 {

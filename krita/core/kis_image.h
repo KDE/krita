@@ -90,10 +90,6 @@ public:
 	Q_UINT32 depth() const;
 	bool alpha() const;
 	bool empty() const;
-// 	bool colorMap(KoColorMap& cm);
-// 	KisChannelSP mask();
-// 	KoColor color() const;
-// 	KoColor transformColor() const;
 	KisTileMgrSP shadow() const;
 
 	void activeComponent(CHANNELTYPE type, bool active);

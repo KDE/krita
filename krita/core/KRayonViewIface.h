@@ -33,9 +33,9 @@ class KisView;
 class KRayonViewIface : public KoViewIface
 {
 	K_DCOP
-		public:
+public:
 	KRayonViewIface( KisView *view_ );
- k_dcop:
+	k_dcop:
 	void copy();
 	void cut();
 	void removeSelection();
@@ -68,7 +68,7 @@ class KRayonViewIface : public KoViewIface
 	void mirrorLayerX();
 	void mirrorLayerY();
 
- private:
+private:
 	KisView *m_view;
 };
 

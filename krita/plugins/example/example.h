@@ -27,12 +27,12 @@ class KisView;
 
 class KritaExample : public KParts::Plugin
 {
-		Q_OBJECT
-		public:
+	Q_OBJECT
+public:
 	KritaExample(QObject *parent, const char *name, const QStringList &);
 	virtual ~KritaExample();
 	
-		private slots:
+private slots:
 	void slotActivated();
 	void slotIteratorsActivated();
 	KisView* m_view;

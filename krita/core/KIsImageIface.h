@@ -29,9 +29,9 @@ class KisImage;
 class KIsImageIface : virtual public DCOPObject
 {
 	K_DCOP
-		public:
+public:
 	KIsImageIface( KisImage *img_ );
- k_dcop:
+k_dcop:
 	QString name()const;
 	int height() const;
 	int width() const;
@@ -40,7 +40,8 @@ class KIsImageIface : virtual public DCOPObject
 
 	void setName(const QString& name);
 
- private:
+private:
+
 	KisImage *m_img;
 };
 

@@ -26,7 +26,7 @@ class QCursor;
 class KisCursor
 {
 
- public:
+public:
 
 	KisCursor();
 

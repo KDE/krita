@@ -48,20 +48,21 @@
 typedef KGenericFactory<KritaExample> KritaExampleFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaexample, KritaExampleFactory( "krita" ) )
 
-KritaExample::KritaExample(QObject *parent, const char *name, const QStringList &)
+	KritaExample::KritaExample(QObject *parent, const char *name, const QStringList &)
 		: KParts::Plugin(parent, name)
 {
-		setInstance(KritaExampleFactory::instance());
+       	setInstance(KritaExampleFactory::instance());
 
-		(void) new KAction(i18n("&Invert..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "krita_example");
-		(void) new KAction(i18n("&Invert (iterators)..."), 0, 0, this, SLOT(slotIteratorsActivated()), actionCollection(), "krita_example_iterators");
-		if ( !parent->inherits("KisView") )
-		{
-				//kdError() << "KritaExempleFactory: KisView expected. Parent is " << parent->className() << endl;
-				m_view = 0;
-		} else {
-			this->m_view = (KisView*) parent;
-		}
+	(void) new KAction(i18n("&Invert..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "krita_example");
+	(void) new KAction(i18n("&Invert (iterators)..."), 0, 0, this, SLOT(slotIteratorsActivated()), actionCollection(), "krita_example_iterators");
+
+	if ( !parent->inherits("KisView") )
+	{
+		//kdError() << "KritaExempleFactory: KisView expected. Parent is " << parent->className() << endl;
+		m_view = 0;
+	} else {
+		this->m_view = (KisView*) parent;
+	}
 }
 
 KritaExample::~KritaExample()
@@ -78,6 +79,7 @@ void KritaExample::slotIteratorsActivated()
 	KisIteratorLineQuantum lineIt = lay->iteratorQuantumSelectionBegin(ktc);
 	KisIteratorLineQuantum lastLine = lay->iteratorQuantumSelectionEnd(ktc);
 	Q_INT32 depth = ::imgTypeDepth( lay->typeWithoutAlpha() );
+
 	while( lineIt <= lastLine )
 	{
 		KisIteratorQuantum quantumIt = *lineIt;
@@ -108,6 +110,7 @@ void KritaExample::slotActivated()
 	int nbchannel = ::imgTypeDepth( lay->typeWithoutAlpha() ); // get the number of channel whithout alpha
 	KisTileMgrSP ktm = lay->data();
 	KisTileSP tile;
+
 	for(int i = 0; i < ktm->nrows() * ktm->ncols(); i++)
 	{
 		if( (tile = ktm->tile( i , TILEMODE_NONE)) )

@@ -32,7 +32,7 @@
 
 class KisVector2D
 {
- public:
+public:
 	KisVector2D();
 	KisVector2D(double x, double y);
 	KisVector2D(const QPoint& p);
@@ -78,9 +78,9 @@ class KisVector2D
 
 	// This ought to be:
 	//const double epsilon = DBL_EPSILON;
-	#define epsilon DBL_EPSILON
+#define epsilon DBL_EPSILON
 
- private:
+private:
 	double m_x;
 	double m_y;
 };
@@ -93,12 +93,12 @@ inline KisVector2D::KisVector2D(double x, double y)
 
 inline KisVector2D::KisVector2D(const QPoint& p)
 {
-  m_x=p.x(); m_y=p.y();
+	m_x=p.x(); m_y=p.y();
 }
 
 inline KisVector2D::KisVector2D(const KisPoint& p)
 {
-  m_x=p.x(); m_y=p.y();
+	m_x=p.x(); m_y=p.y();
 }
 
 inline bool KisVector2D::isNull() const
@@ -207,7 +207,7 @@ inline KisPoint KisVector2D::toKisPoint() const
 
 class KisVector3D
 {
- public:
+public:
 	KisVector3D();
 	KisVector3D(double x, double y, double z = 0);
 	KisVector3D(int x, int y, int z = 0);
@@ -252,7 +252,7 @@ class KisVector3D
 	friend inline KisVector3D operator/(const KisVector3D &, long);
 	friend inline KisVector3D operator/(const KisVector3D &, double);
    
- private:
+private:
 	double m_x;
 	double m_y;
 	double m_z;

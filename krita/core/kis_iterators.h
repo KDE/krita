@@ -137,7 +137,7 @@ protected:
  *   class KisIteratorLineQuantum :
  *      public KisIteratorLine<KisIteratorQuantum>
  */
-template< typename _iTp>
+template< typename _iTp> 
 class KisIteratorLine {
 public:
 	 KisIteratorLine( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos = 0,

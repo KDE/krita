@@ -31,7 +31,8 @@ class KAboutData;
 class KisFactory : public KoFactory
 {
 	Q_OBJECT
-		public:
+
+public:
 	KisFactory( QObject* parent = 0, const char* name = 0 );
 	~KisFactory();
 
@@ -45,12 +46,10 @@ class KisFactory : public KoFactory
 
 	static KAboutData        *aboutData();
 	static KInstance         *global();
-//	static KisPluginServer   *pServer();
 	static KisResourceServer *rServer();
 
- private:
+private:
 	static KInstance           *s_global;
-//	static KisPluginServer     *s_pserver;
 	static KisResourceServer   *s_rserver;
 	static KAboutData          *s_aboutData;
 };

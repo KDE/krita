@@ -43,7 +43,6 @@
 
 #include "kis_doc.h"
 #include "kis_view.h"
-#include "kis_util.h"
 #include "kis_channelview.h"
 #include "kis_factory.h"
 #include "integerwidget.h"

@@ -16,30 +16,47 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #include <kaction.h>
 #include <klocale.h>
+#include "kis_canvas_controller.h"
+#include "kis_canvas_subject.h"
+#include "kis_cursor.h"
 #include "kis_tool_zoom.h"
-#include "kis_view.h"
 
-KisZoomTool::KisZoomTool(KisView *view, KisDoc *doc) : super(view, doc)
+KisZoomTool::KisZoomTool()
 {
-	m_view = view;
+	m_subject = 0;
 	setCursor(KisCursor::zoomCursor());
+}
+
+KisZoomTool::~KisZoomTool()
+{
+}
+
+void KisZoomTool::update(KisCanvasSubject *subject)
+{
+	m_subject = subject;
+	super::update(m_subject);
 }
 
 void KisZoomTool::mousePress(QMouseEvent *e)
 {
-	if (e -> button() == Qt::LeftButton)
-		m_view -> zoomIn();
-	else if (e -> button() == Qt::RightButton)
-		m_view -> zoomOut();
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> controller();
+	
+		if (e -> button() == Qt::LeftButton)
+			controller -> zoomIn();
+		else if (e -> button() == Qt::RightButton)
+			controller -> zoomOut();
+	}
 }
 
-void KisZoomTool::setup()
+void KisZoomTool::setup(KActionCollection *collection)
 {
 	KToggleAction *toggle;
 
-	toggle = new KToggleAction(i18n("&Zoom Tool"), "viewmag", 0, this, SLOT(activateSelf()), m_view -> actionCollection(), "tool_zoom");
+	toggle = new KToggleAction(i18n("&Zoom Tool"), "viewmag", 0, this, SLOT(activate()), collection, "tool_zoom");
 	toggle -> setExclusiveGroup("tools");
 }
 

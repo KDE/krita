@@ -17,19 +17,13 @@
  */
 
 #include <kaction.h>
+#include "kis_canvas_subject.h"
 #include "kis_tool.h"
-#include "kis_tool_factory.h"
-
-#if 0
-// Working tools -- note that the 'paste' tool is added in the KisView, not here.
-#include "kis_tool_select_rectangular.h"
-#include "kis_tool_move.h"
-#include "kis_tool_zoom.h"
 #include "kis_tool_colorpicker.h"
-#include "kis_tool_test.h"
-#include "kis_tool_qpen.h"
-#include "kis_tool_brush.h"
-#endif
+#include "kis_tool_factory.h"
+#include "kis_tool_move.h"
+#include "kis_tool_select_rectangular.h"
+#include "kis_tool_zoom.h"
 
 namespace {
 	KisToolFactory moveMe; // XXX Where to create singletons in Krita?!?
@@ -44,63 +38,32 @@ KisToolFactory::KisToolFactory()
 
 KisToolFactory::~KisToolFactory()
 {
+	for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); it++)
+		delete *it;
 }
 
 void KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSubject *subject)
 {
-#if 0
-    vKisTool tools;
+	Q_ASSERT(actionCollection);
+	Q_ASSERT(subject);
 
-    Q_ASSERT(view);
-    Q_ASSERT(doc);
-    tools.reserve(25);
+	if (m_tools.empty()) {
+		m_tools.push_back(new KisToolColorPicker);
+		m_tools.push_back(new KisToolMove);
+		m_tools.push_back(new KisZoomTool);
+		m_tools.push_back(new KisToolRectangularSelect);
+	}
 
-#if 0
-    // painting tools
-    tools.push_back(new AirBrushTool(doc, brush));
-    tools.push_back(new PenTool(doc, canvas, brush));
-    tools.push_back(new EraserTool(doc, brush));
-#endif
+	for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); it++) {
+		KisTool *tool = *it;
 
-    tools.push_back( new KisToolTest( view, doc ));
-    tools.push_back( new KisToolQPen( view, doc ));
-    tools.push_back( new KisToolBrush( view, doc ));
-    tools.push_back( new KisToolColorPicker( view, doc ));
+		if (tool) {
+			tool -> setup(actionCollection);
+			subject -> attach(tool);
+		}
+	}
 
-#if 0
-    tools.push_back(new ColorChangerTool(doc));
-    tools.push_back(new FillTool(doc));
-    tools.push_back(new StampTool(doc, canvas, pattern));
-
-    // Positioning tools
-#endif
-    tools.push_back(new KisZoomTool(view, doc));
-    tools.push_back(new KisToolMove(view, doc));
-
-    // selection tools
-#if 0
-    tools.push_back(new FreehandSelectTool(doc, canvas));
-#endif
-    tools.push_back(new KisToolRectangularSelect(view, doc));
-#if 0
-    tools.push_back(new PolygonalSelectTool(doc, canvas));
-    tools.push_back(new EllipticalSelectTool(doc, canvas));
-    tools.push_back(new ContiguousSelectTool(doc, canvas));
-
-    // drawing tools
-    tools.push_back(new LineTool(doc, canvas));
-    tools.push_back(new PolyLineTool(doc, canvas));
-    tools.push_back(new PolyGonTool(doc, canvas));
-    tools.push_back(new RectangleTool(doc, canvas));
-    tools.push_back(new EllipseTool(doc, canvas));
-#endif
-
-    for (vKisTool_it it = tools.begin(); it != tools.end(); it++)
-        (*it) -> setup();
-
-    return tools;
-
-#endif
+	subject -> notify();
 }
 
 KisToolFactory *KisToolFactory::singleton()

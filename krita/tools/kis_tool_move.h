@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *                1999 Michael Koch    <koch@kde.org>
- *                2002 Patrick Julien  <freak@codepimps.org>
+ *                2003 Patrick Julien  <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,9 +17,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #if !defined KIS_TOOL_MOVE_H_
 #define KIS_TOOL_MOVE_H_
 
+#include "kis_strategy_move.h"
 #include "kis_tool_non_paint.h"
 
 class KisToolMove : public KisToolNonPaint {
@@ -30,14 +32,17 @@ public:
 	virtual ~KisToolMove();
 
 public:
-	virtual void setup();
+	virtual void update(KisCanvasSubject *subject);
+
+public:
+	virtual void setup(KActionCollection *collection);
 	virtual void mousePress(QMouseEvent *e);
 	virtual void mouseMove(QMouseEvent *e);
 	virtual void mouseRelease(QMouseEvent *e);
-	virtual void keyPress(QKeyEvent *e);
 
 private:
 	KisCanvasSubject *m_subject;
+	KisStrategyMove m_strategy;
 };
 
 #endif // KIS_TOOL_MOVE_H_

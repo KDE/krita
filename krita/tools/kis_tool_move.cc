@@ -21,21 +21,17 @@
 #include <stdlib.h>
 #include <qpoint.h>
 #include <kaction.h>
-#include <kcommand.h>
 #include <klocale.h>
 #include <koColor.h>
-
-#include "kis_doc.h"
+#include "kis_canvas_subject.h"
+#include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
-#include "kis_strategy_move.h"
-#include "kis_view.h"
 #include "kis_tool_move.h"
 
 KisToolMove::KisToolMove()
 {
-	m_view = view;
-	m_doc = doc;
+	m_subject = 0;
 	setCursor(KisCursor::moveCursor());
 }
 
@@ -43,74 +39,49 @@ KisToolMove::~KisToolMove()
 {
 }
 
+void KisToolMove::update(KisCanvasSubject *subject)
+{
+	m_subject = subject;
+	m_strategy.reset(subject);
+	super::update(subject);
+}
+
 void KisToolMove::mousePress(QMouseEvent *e)
 {
-	QPoint pos = e -> pos();
-	KisImageSP img = m_view -> currentImg();
-	KisPaintDeviceSP dev;
+	if (m_subject && e -> button() == QMouseEvent::LeftButton) {
+		QPoint pos = e -> pos();
+		KisImageSP img = m_subject -> currentImg();
+		KisPaintDeviceSP dev;
 
-	if (!img || !(dev = img -> activeDevice()))
-		return;
+		if (!img || !(dev = img -> activeDevice()))
+			return;
 
-	if (e -> button() == QMouseEvent::LeftButton && dev -> contains(pos))
-		startDrag(pos);
+		if (dev -> contains(pos))
+			m_strategy.startDrag(pos);
+	}
 }
 
 void KisToolMove::mouseMove(QMouseEvent *e)
 {
-	drag(e -> pos());
+	if (m_subject)
+		m_strategy.drag(e -> pos());
 }
 
 void KisToolMove::mouseRelease(QMouseEvent *e)
 {
-	if (e -> button() == QMouseEvent::LeftButton)
-		endDrag(e -> pos());
+	if (m_subject && e -> button() == QMouseEvent::LeftButton)
+		m_strategy.endDrag(e -> pos());
 }
 
-void KisToolMove::keyPress(QKeyEvent *e)
+void KisToolMove::setup(KActionCollection *collection)
 {
-	Q_INT32 dx = 0;
-	Q_INT32 dy = 0;
-	KisImageSP img;
-	KisPaintDeviceSP dev;
-
-	if (!(img = m_view -> currentImg()))
-		return;
-
-	if (!(dev = img -> activeDevice()))
-		return;
-
-	switch (e -> key()) {
-	case Qt::Key_Home:
-		dx = -dev -> x();
-		dy = -dev -> y();
-		break;
-	case Qt::Key_Left:
-		dx = -1;
-		break;
-	case Qt::Key_Right:
-		dx = 1;
-		break;
-	case Qt::Key_Up:
-		dy = -1;
-		break;
-	case Qt::Key_Down:
-		dy = 1;
-		break;
-	default:
-		return;
-	}
-
-}
-
-void KisToolMove::setup()
-{
-	KToggleAction *toggle;
-
-	toggle = new KToggleAction(i18n("&Move"), "move", 0, this,
-                                   SLOT(activateSelf()),
-                                   m_view -> actionCollection(),
-                                   "tool_move");
+	KToggleAction *toggle = new KToggleAction(i18n("&Move"), 
+			"move", 
+			0, 
+			this,
+			SLOT(activate()),
+			collection,
+			"tool_move");
 	toggle -> setExclusiveGroup("tools");
 }
 

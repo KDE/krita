@@ -21,18 +21,24 @@
 
 #include "kis_tool_non_paint.h"
 
+class KisCanvasSubject;
+
 class KisZoomTool : public KisToolNonPaint {
 	typedef KisToolNonPaint super;
 
 public:
-	KisZoomTool(KisView *view, KisDoc *doc);
+	KisZoomTool();
+	virtual ~KisZoomTool();
 
 public:
+	virtual void update(KisCanvasSubject *subject);
+
+public:
+	virtual void setup(KActionCollection *collection);
 	virtual void mousePress(QMouseEvent *e);
-	virtual void setup();
 
 private:
-	KisView *m_view;
+	KisCanvasSubject *m_subject;
 };
 
 #endif // KIS_ZOOM_TOOL_H_

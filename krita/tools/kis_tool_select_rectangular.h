@@ -28,11 +28,14 @@ class KisToolRectangularSelect : public KisToolNonPaint {
 	typedef KisToolNonPaint super;
 
 public:
-	KisToolRectangularSelect(KisDoc *doc);
+	KisToolRectangularSelect();
 	virtual ~KisToolRectangularSelect();
 
 public:
-	virtual void setup();
+	virtual void update(KisCanvasSubject *subject);
+
+public:
+	virtual void setup(KActionCollection *collection);
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
 	virtual void mousePress(QMouseEvent *e);
@@ -45,7 +48,7 @@ private:
 	void paintOutline(QPainter& gc, const QRect& rc);
 
 private:
-	KisDoc *m_doc;
+	KisCanvasSubject *m_subject;
 	QPoint m_startPos;
 	QPoint m_endPos;
 	bool m_selecting;

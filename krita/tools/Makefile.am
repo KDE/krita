@@ -5,15 +5,12 @@ noinst_LTLIBRARIES = libkistools.la
 
 libkistools_la_SOURCES = kis_tool_paint.cc \
 	kis_tool_non_paint.cc \
-	kis_tool_colorpicker.cc
+	kis_tool_colorpicker.cc \
+	kis_tool_move.cc \
+	kis_tool_select_rectangular.cc \
+	kis_tool_zoom.cc
 
 #	kis_tool_paste.cc
-
-#kis_tool_move.cc \
-#kis_tool_select_rectangular.cc 
-#	kis_tool_zoom.cc \
-#	kis_tool_qpen.cc \
-#	kis_tool_test.cc \
 #	kis_tool_brush.cc
 #
 #  kis_tool_select_freehand.cc kis_tool_select_rectangular.cc kis_tool_select_polygonal.cc 

@@ -92,7 +92,7 @@ void KisToolNonPaint::keyRelease(QKeyEvent *)
 {
 }
 
-KDialog *KisToolNonPaint::options()
+KDialog *KisToolNonPaint::options(QWidget * /*parent*/)
 {
 	return 0;
 }

@@ -28,14 +28,21 @@ class KisCanvasSubject;
 
 class KisStrategyMove {
 public:
-	KisStrategyMove(KoDocument *doc, KisCanvasControllerInterface *controller, KisCanvasSubject *subject);
+	KisStrategyMove();
+	explicit KisStrategyMove(KisCanvasSubject *subject);
 	virtual ~KisStrategyMove();
 
 public:
+	void reset(KisCanvasSubject *subject);
 	void startDrag(const QPoint& pos);
 	void drag(const QPoint& pos);
 	void endDrag(const QPoint& pos, bool undo = true);
 	void simpleMove(const QPoint& pt1, const QPoint& pt2);
+	void simpleMove(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2);
+
+private:
+	KisStrategyMove(const KisStrategyMove&);
+	KisStrategyMove& operator=(const KisStrategyMove&);
 
 private:
 	KoDocument *m_doc; 

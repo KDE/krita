@@ -394,8 +394,8 @@ void KisView::setupActions()
 	m_imgResizeToLayer = new KAction(i18n("Resize Image to Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
 
 	// view actions
-	m_zoomIn = KStdAction::zoomIn(this, SLOT(zoomIn()), actionCollection(), "zoom_in");
-	m_zoomOut = KStdAction::zoomOut(this, SLOT(zoomOut()), actionCollection(), "zoom_out");
+	m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
+	m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
 
 	// tool settings actions
 	(void)new KAction(i18n("&Gradient Dialog..."), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
@@ -701,6 +701,11 @@ void KisView::paintView(const QRect& rc)
 	} else {
 		clearCanvas(rc);
 	}
+}
+
+QWidget *KisView::canvas() const
+{
+	return m_canvas;
 }
 
 void KisView::updateCanvas()
@@ -1060,11 +1065,21 @@ void KisView::zoomOut(Q_INT32 x, Q_INT32 y)
 
 void KisView::zoomIn()
 {
+	slotZoomIn();
+}
+
+void KisView::zoomOut()
+{
+	slotZoomOut();
+}
+
+void KisView::slotZoomIn()
+{
 	if (zoom() <= KISVIEW_MAX_ZOOM)
 		zoomUpdateGUI(-1, -1, zoom() * 2);
 }
 
-void KisView::zoomOut()
+void KisView::slotZoomOut()
 {
 	if (zoom() >= KISVIEW_MIN_ZOOM)
 		zoomUpdateGUI(-1, -1, zoom() / 2);
@@ -1695,14 +1710,10 @@ void KisView::print(KPrinter& printer)
 
 void KisView::setupTools()
 {
-	// TODO Bind the tools to this view here.
+	KisToolFactory *factory = KisToolFactory::singleton();
 
-//	m_toolSet = toolFactory(this, m_doc);
-        // Why is the paste tool local to the view,
-        // instead of added by the toolfactory?
-	//m_paste = 0; // TODO new KisToolPaste(this, m_doc);
-//	m_toolSet.push_back(m_paste);
-//	m_paste -> setup();
+	Q_ASSERT(factory);
+	factory -> create(actionCollection(), this);
 }
 
 void KisView::canvasGotPaintEvent(QPaintEvent *event)
@@ -1958,7 +1969,7 @@ void KisView::layerProperties()
 					m_doc -> layerProperties(img, layer, dlg.getOpacity(), dlg.getName());
 
 				if (pt.x() != layer -> x() || pt.y() != layer -> y())
-					KisStrategyMove(m_doc, this, this).simpleMove(QPoint(layer -> x(), layer -> y()), pt);
+					KisStrategyMove(this).simpleMove(QPoint(layer -> x(), layer -> y()), pt);
 
 				if (changed)
 					m_adapter -> endMacro();
@@ -2171,11 +2182,6 @@ void KisView::scrollV(int value)
 {
 	m_vRuler -> updateVisibleArea(0, value);
 	canvasRefresh();
-}
-
-QWidget *KisView::canvas()
-{
-	return m_canvas;
 }
 
 int KisView::canvasXOffset() const

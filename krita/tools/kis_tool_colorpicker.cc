@@ -76,7 +76,7 @@ void KisToolColorPicker::setup(KActionCollection *collection)
 {
 	KToggleAction *toggle;
 
-	toggle = new KToggleAction(i18n("&Color Picker"), "colorpicker", 0, this, SLOT(activateSelf()), collection, "tool_colorpicker");
+	toggle = new KToggleAction(i18n("&Color Picker"), "colorpicker", 0, this, SLOT(activate()), collection, "tool_colorpicker");
 	toggle -> setExclusiveGroup("tools");
 }
 

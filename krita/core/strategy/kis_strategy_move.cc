@@ -53,7 +53,7 @@ namespace {
 	};
 
 	MoveCommand::MoveCommand(KisCanvasControllerInterface *controller, KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
-		super(i18n("Move Painting Device"))
+		super(i18n("Moved Painting Device"))
 	{
 		m_controller = controller;
 		m_img = img;
@@ -88,43 +88,61 @@ namespace {
 	}
 }
 
-KisStrategyMove::KisStrategyMove(KoDocument *doc, KisCanvasControllerInterface *controller, KisCanvasSubject *subject)
+KisStrategyMove::KisStrategyMove()
 {
-	m_doc = doc;
-	m_controller = controller;
-	m_subject = subject;
-	m_dragging = false;
+	reset(0);
+}
+
+KisStrategyMove::KisStrategyMove(KisCanvasSubject *subject)
+{
+	reset(subject);
 }
 
 KisStrategyMove::~KisStrategyMove()
 {
 }
 
+void KisStrategyMove::reset(KisCanvasSubject *subject)
+{
+	m_subject = subject;
+	m_dragging = false;
+
+	if (m_subject) {
+		m_doc = subject -> document();
+		m_controller = subject -> controller();
+	} else {
+		m_doc = 0;
+		m_controller = 0;
+	}
+}
+
 void KisStrategyMove::startDrag(const QPoint& pos)
 {
-	KisImageSP img;
-	KisPaintDeviceSP dev;
+	if (m_subject) {
+		KisImageSP img;
+		KisPaintDeviceSP dev;
 
-	if (!(img = m_subject -> currentImg()))
-		return;
+		if (!(img = m_subject -> currentImg()))
+			return;
 
-	dev = img -> activeDevice();
+		dev = img -> activeDevice();
 
-	if (!dev || !dev -> visible())
-		return;
+		if (!dev || !dev -> visible())
+			return;
 
-	m_dragging = true;
-	m_doc -> setModified(true);
-	m_dragStart.setX(pos.x());
-	m_dragStart.setY(pos.y());
-	m_layerStart.setX(dev -> x());
-	m_layerStart.setY(dev -> y());
-	m_layerPosition = m_layerStart;
+		m_dragging = true;
+		m_doc -> setModified(true);
+		m_dragStart.setX(pos.x());
+		m_dragStart.setY(pos.y());
+		m_layerStart.setX(dev -> x());
+		m_layerStart.setY(dev -> y());
+		m_layerPosition = m_layerStart;
+	}
 }
 
 void KisStrategyMove::drag(const QPoint& original)
 {
-	if (m_dragging) {
+	if (m_subject && m_dragging) {
 		KisImageSP img = m_subject -> currentImg();
 		KisPaintDeviceSP dev;
 
@@ -157,7 +175,7 @@ void KisStrategyMove::drag(const QPoint& original)
 
 void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
 {
-	if (m_dragging) {
+	if (m_subject && m_dragging) {
 		KisImageSP img = m_subject -> currentImg();
 		KisPaintDeviceSP dev;
 
@@ -182,5 +200,11 @@ void KisStrategyMove::simpleMove(const QPoint& pt1, const QPoint& pt2)
 {
 	startDrag(pt1);
 	endDrag(pt2);
+}
+
+void KisStrategyMove::simpleMove(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2)
+{
+	startDrag(QPoint(x1, y1));
+	endDrag(QPoint(x2, y2));
 }
 

@@ -70,7 +70,6 @@ public:
 
 public:
 	virtual bool eventFilter(QObject *o, QEvent *e);
-	virtual QWidget *canvas();
 	virtual int canvasXOffset() const;
 	virtual int canvasYOffset() const;
 	virtual DCOPObject* dcopObject();
@@ -83,16 +82,6 @@ public:
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, bool modal = false, const QString& filename = QString::null);
-	void zoomIn(Q_INT32 x, Q_INT32 y);
-	void zoomOut(Q_INT32 x, Q_INT32 y);
-	Q_INT32 horzValue() const;
-	Q_INT32 vertValue() const;
-	QPoint viewToWindow(const QPoint& pt);
-	QRect viewToWindow(const QRect& rc);
-	void viewToWindow(Q_INT32 *x, Q_INT32 *y);
-	QPoint windowToView(const QPoint& pt);
-	QRect windowToView(const QRect& rc);
-	void windowToView(Q_INT32 *x, Q_INT32 *y);
 
 signals:
 	void bgColorChanged(const KoColor& c);
@@ -110,8 +99,6 @@ public slots:
 	void dialog_channels();
 	void slotSetBGColor(const KoColor& c);
 	void slotSetFGColor(const KoColor& c);
-	void zoomIn();
-	void zoomOut();
      
 	void next_layer();
 	void previous_layer();
@@ -134,6 +121,7 @@ protected:
 	virtual void resizeEvent(QResizeEvent*);
 
 private:
+	// Implement KisCanvasSubject
 	virtual void attach(KisCanvasObserver *observer);
 	virtual void detach(KisCanvasObserver *observer);
 	virtual void notify();
@@ -152,11 +140,25 @@ private:
 	virtual KoDocument *document() const;
 
 private:
+	// Implement KisCanvasControllerInterface
 	virtual void activateTool(KisTool *tool);
 	virtual KisTool *currentTool() const;
+	virtual QWidget *canvas() const;
+	virtual Q_INT32 horzValue() const;
+	virtual Q_INT32 vertValue() const;
 	virtual void updateCanvas();
 	virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	virtual void updateCanvas(const QRect& rc);
+	virtual void zoomIn();
+	virtual void zoomIn(Q_INT32 x, Q_INT32 y);
+	virtual void zoomOut();
+	virtual void zoomOut(Q_INT32 x, Q_INT32 y);
+	virtual QPoint viewToWindow(const QPoint& pt);
+	virtual QRect viewToWindow(const QRect& rc);
+	virtual void viewToWindow(Q_INT32 *x, Q_INT32 *y);
+	virtual QPoint windowToView(const QPoint& pt);
+	virtual QRect windowToView(const QRect& rc);
+	virtual void windowToView(Q_INT32 *x, Q_INT32 *y);
 
 private:
 	void clearCanvas(const QRect& rc);
@@ -260,6 +262,8 @@ private slots:
 	void showSidebar();
 	void slotInsertImageAsLayer();
 	void imgUpdated(KisImageSP img, const QRect& rc);
+	void slotZoomIn();
+	void slotZoomOut();
 
 private:
 	KisDoc *m_doc;

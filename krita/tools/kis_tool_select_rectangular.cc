@@ -23,10 +23,11 @@
 #include <kaction.h>
 #include <kcommand.h>
 #include <klocale.h>
-
-#include "kis_doc.h"
+#include "kis_canvas_controller.h"
+#include "kis_canvas_subject.h"
+#include "kis_cursor.h"
+#include "kis_image.h"
 #include "kis_selection.h"
-#include "kis_view.h"
 #include "kis_tool_select_rectangular.h"
 #include "kis_undo_adapter.h"
 
@@ -70,11 +71,10 @@ namespace {
 	}
 }
 
-KisToolRectangularSelect::KisToolRectangularSelect(KisView *view, KisDoc *doc) : super(view, doc)
+KisToolRectangularSelect::KisToolRectangularSelect()
 {
 	setCursor(KisCursor::selectCursor());
-	m_view = view;
-	m_doc = doc;
+	m_subject = 0;
 	m_selecting = false;
 	m_startPos = QPoint(0, 0);
 	m_endPos = QPoint(0, 0);
@@ -82,6 +82,12 @@ KisToolRectangularSelect::KisToolRectangularSelect(KisView *view, KisDoc *doc) :
 
 KisToolRectangularSelect::~KisToolRectangularSelect()
 {
+}
+
+void KisToolRectangularSelect::update(KisCanvasSubject *subject)
+{
+	m_subject = subject;
+	super::update(m_subject);
 }
 
 void KisToolRectangularSelect::paint(QPainter& gc)
@@ -98,53 +104,70 @@ void KisToolRectangularSelect::paint(QPainter& gc, const QRect& rc)
 
 void KisToolRectangularSelect::clearSelection()
 {
-	KisImageSP img = m_view -> currentImg();
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> controller();
+		KisImageSP img = m_subject -> currentImg();
 
-	if (img) {
-		img -> unsetSelection();
-		m_view -> updateCanvas();
+		Q_ASSERT(controller);
+
+		if (img) {
+			img -> unsetSelection();
+			controller -> updateCanvas();
+		}
+
+		m_startPos = QPoint(0, 0);
+		m_endPos = QPoint(0, 0);
+		m_selecting = false;
 	}
-
-	m_startPos = QPoint(0, 0);
-	m_endPos = QPoint(0, 0);
-	m_selecting = false;
 }
 
 void KisToolRectangularSelect::mousePress(QMouseEvent *e)
 {
-	KisImageSP img = m_view -> currentImg();
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> controller();
+		KisImageSP img = m_subject -> currentImg();
 
-	if (img && img -> activeDevice() && e -> button() == LeftButton) {
-		clearSelection();
-		m_startPos = m_view -> windowToView(e -> pos());
-		m_endPos = m_view -> windowToView(e -> pos());
-		m_selecting = true;
+		Q_ASSERT(controller);
+
+		if (img && img -> activeDevice() && e -> button() == LeftButton) {
+			clearSelection();
+			m_startPos = controller -> windowToView(e -> pos());
+			m_endPos = controller -> windowToView(e -> pos());
+			m_selecting = true;
+		}
 	}
 }
 
 void KisToolRectangularSelect::mouseMove(QMouseEvent *e)
 {
-	if (m_selecting) {
+	if (m_subject && m_selecting) {
+		KisCanvasControllerInterface *controller = m_subject -> controller();
+
+		Q_ASSERT(controller);
+
 		if (m_startPos != m_endPos)
 			paintOutline();
 
-		m_endPos = m_view -> windowToView(e -> pos());
+		m_endPos = controller -> windowToView(e -> pos());
 		paintOutline();
 	}
 }
 
 void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 {
-	if (m_selecting) {
+	if (m_subject && m_selecting) {
 		if (m_startPos == m_endPos) {
 			clearSelection();
 		} else {
-			KisImageSP img = m_view -> currentImg();
+			KisCanvasControllerInterface *controller = m_subject -> controller();
+			KisImageSP img = m_subject -> currentImg();
+
+			Q_ASSERT(controller);
 
 			if (!img)
 				return;
 
-			m_startPos = m_view -> viewToWindow(m_startPos);
+			m_startPos = controller -> viewToWindow(m_startPos);
 			m_endPos = e -> pos();
 
 			if (m_endPos.y() < 0)
@@ -184,44 +207,54 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 
 void KisToolRectangularSelect::paintOutline()
 {
-	QWidget *canvas = m_view -> canvas();
-	QPainter gc(canvas);
-	QRect rc;
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> controller();
+		QWidget *canvas = controller -> canvas();
+		QPainter gc(canvas);
+		QRect rc;
 
-	paintOutline(gc, rc);
+		paintOutline(gc, rc);
+	}
 }
 
 void KisToolRectangularSelect::paintOutline(QPainter& gc, const QRect&)
 {
-	RasterOp op = gc.rasterOp();
-	QPen old = gc.pen();
-	QPen pen(Qt::DotLine);
-	QPoint start;
-	QPoint end;
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> controller();
+		RasterOp op = gc.rasterOp();
+		QPen old = gc.pen();
+		QPen pen(Qt::DotLine);
+		QPoint start;
+		QPoint end;
 
-	start = m_view -> viewToWindow(m_startPos);
-	end = m_view -> viewToWindow(m_endPos);
-	start.setX(start.x() - m_view -> horzValue());
-	start.setY(start.y() - m_view -> vertValue());
-	end.setX(end.x() - m_view -> horzValue());
-	end.setY(end.y() - m_view -> vertValue());
-	end.setX((end.x() - start.x()));
-	end.setY((end.y() - start.y()));
-	start *= m_view -> zoom();
-	end *= m_view -> zoom();
-	gc.setRasterOp(Qt::NotROP);
-	gc.setPen(pen);
-	gc.drawRect(start.x(), start.y(), end.x(), end.y());
-	gc.setRasterOp(op);
-	gc.setPen(old);
+		Q_ASSERT(controller);
+		start = controller -> viewToWindow(m_startPos);
+		end = controller -> viewToWindow(m_endPos);
+		start.setX(start.x() - controller -> horzValue());
+		start.setY(start.y() - controller -> vertValue());
+		end.setX(end.x() - controller -> horzValue());
+		end.setY(end.y() - controller -> vertValue());
+		end.setX((end.x() - start.x()));
+		end.setY((end.y() - start.y()));
+		start *= m_subject -> zoomFactor();
+		end *= m_subject -> zoomFactor();
+		gc.setRasterOp(Qt::NotROP);
+		gc.setPen(pen);
+		gc.drawRect(start.x(), start.y(), end.x(), end.y());
+		gc.setRasterOp(op);
+		gc.setPen(old);
+	}
 }
 
-void KisToolRectangularSelect::setup()
+void KisToolRectangularSelect::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle;
-
-	toggle = new KToggleAction(i18n("&Rectangular Select"), "rectangular", 0, this,
-			SLOT(activateSelf()), m_view -> actionCollection(), "tool_select_rectangular");
+	KToggleAction *toggle = new KToggleAction(i18n("&Rectangular Select"), 
+			"rectangular", 
+			0, 
+			this,
+			SLOT(activate()), 
+			collection, 
+			"tool_select_rectangular");
 	toggle -> setExclusiveGroup("tools");
 }
 

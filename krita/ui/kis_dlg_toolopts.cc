@@ -26,119 +26,91 @@
 #include <qspinbox.h>
 #include <qcheckbox.h>
 #include <qvbuttongroup.h>
-#include <qvgroupbox.h> 
-
+#include <qvgroupbox.h>
+#include <qradiobutton.h>
 #include <klocale.h>
 #include <kdebug.h>
-
+#include <knuminput.h>
 #include "kis_dlg_toolopts.h"
 #include "kis_dlg_toolopts_polygon_preview.h"
-
+#include <qvbox.h>
 /*
     ToolOptionsDialog constructor.  This widget shows options for only
     one tool at a time - the current tool in use.  There will be another
     KDialog with an iconview selector for all tools, accessed from the
-    setting menu for setting all tool opts int one place. 
+    setting menu for setting all tool opts int one place.
 */
 ToolOptionsDialog::ToolOptionsDialog( tooltype tt, ToolOptsStruct ts,
     QWidget *parent, const char *name )
-    : KDialog( parent, name, true )
+    : KDialogBase( parent, name, true, "", Ok | Cancel )
 {
     setCaption( i18n("Current Tool Options") );
-    QVBoxLayout* layout = new QVBoxLayout( this, 4 );
-    
-    // use tooltype enumerator - 
+    QVBox *page = makeVBoxMainWidget();
+    QVBoxLayout* layout = new QVBoxLayout( page, 4 );
+
+    // use tooltype enumerator -
     switch(tt)
     {
-        case tt_linetool:    
+        case tt_linetool:
         case tt_polylinetool:
-        case tt_ellipsetool:    
+        case tt_ellipsetool:
         case tt_rectangletool:
-        
-            pLineToolTab = new LineToolTab(ts, 
-                static_cast<QWidget *>(this));
-            layout->addWidget(pLineToolTab);    
+
+            pLineToolTab = new LineToolTab(ts,page);
+            layout->addWidget(pLineToolTab);
             break;
-            
+
         case tt_brushtool:
 
-            pBrushToolTab = new BrushToolTab(ts, 
-                static_cast<QWidget *>(this));
-            layout->addWidget(pBrushToolTab);    
+            pBrushToolTab = new BrushToolTab(ts,page);
+            layout->addWidget(pBrushToolTab);
             break;
 
         case tt_airbrushtool:
 
-            pAirBrushToolTab = new AirBrushToolTab(ts, 
-                static_cast<QWidget *>(this));
-            layout->addWidget(pAirBrushToolTab);    
+            pAirBrushToolTab = new AirBrushToolTab(ts,page);
+            layout->addWidget(pAirBrushToolTab);
             break;
 
         case tt_pentool:
 
-            pPenToolTab = new PenToolTab(ts, 
-                static_cast<QWidget *>(this));
-            layout->addWidget(pPenToolTab);    
+            pPenToolTab = new PenToolTab(ts,page);
+            layout->addWidget(pPenToolTab);
             break;
 
         case tt_erasertool:
 
-            pEraserToolTab = new EraserToolTab(ts, 
-                static_cast<QWidget *>(this));
-            layout->addWidget(pEraserToolTab);    
+            pEraserToolTab = new EraserToolTab(ts,page);
+            layout->addWidget(pEraserToolTab);
             break;
 
         case tt_filltool:
         case tt_colorchangertool:
 
-            pFillToolTab = new FillToolTab(ts, 
-                static_cast<QWidget *>(this));
-            layout->addWidget(pFillToolTab);    
+            pFillToolTab = new FillToolTab(ts,page);
+            layout->addWidget(pFillToolTab);
             break;
 
         case tt_stamptool:
         case tt_pastetool:
-        
-            pStampToolTab = new StampToolTab(ts, 
-                static_cast<QWidget *>(this));
-            layout->addWidget(pStampToolTab);    
+
+            pStampToolTab = new StampToolTab(ts,page);
+            layout->addWidget(pStampToolTab);
             break;
 
         case tt_polygontool:
 
-            pPolygonToolTab = new PolygonToolTab(ts, 
-                static_cast<QWidget *>(this));
-            layout->addWidget(pPolygonToolTab);    
+            pPolygonToolTab = new PolygonToolTab(ts, page);
+            layout->addWidget(pPolygonToolTab);
             break;
 
         default:
             // we really should show global option settings here
-            pNullToolTab = new NullToolTab(ts, 
-                static_cast<QWidget *>(this));
-            layout->addWidget(pNullToolTab);                    
+            pNullToolTab = new NullToolTab(ts,page);
+            layout->addWidget(pNullToolTab);
             break;
     }
-    
-    QHBoxLayout* buttons = new QHBoxLayout( layout, 3 );
-    buttons->addStretch( 3 );
 
-    QPushButton *ok, *cancel, *save;
-    ok = new QPushButton( i18n("&OK"), this );
-    ok->setDefault( true );
-    ok->setMinimumSize( ok->sizeHint() );
-    connect( ok, SIGNAL(clicked()), SLOT(accept()) );
-    buttons->addWidget( ok );
-
-    cancel = new QPushButton( i18n("&Cancel"), this );
-    cancel->setMinimumSize( cancel->sizeHint() );
-    connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
-    buttons->addWidget( cancel );
-
-    save = new QPushButton( i18n("&Save"), this );
-    save->setMinimumSize( save->sizeHint() );
-    connect( save, SIGNAL(clicked()), SLOT(reject()) );
-    buttons->addWidget( save );
- 
     resize( 1, 1 );
 }
 
@@ -160,7 +132,7 @@ NullToolTab::NullToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts,  _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
+    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 4);
 
     mpThickness = new KIntNumInput( ts.lineThickness, this );
@@ -188,13 +160,13 @@ NullToolTab::NullToolTab( ToolOptsStruct ts,
 /*
     LineToolTab - for lines, circle, ellipses, polylines,
     rectangles, pologons.  All Qt drawing primitives except
-    text, which needs its own dialog for font selection 
+    text, which needs its own dialog for font selection
 */
 LineToolTab::LineToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts,  _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
+    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 4);
 
     mpThickness = new KIntNumInput( ts.lineThickness, this );
@@ -220,20 +192,20 @@ LineToolTab::LineToolTab( ToolOptsStruct ts,
     mpUseGradient = new QCheckBox( i18n("Fill with gradient"), this );
     mpUseGradient->setChecked( ts.useGradient );
     grid->addWidget( mpUseGradient, 4, 0 );
-    
+
 }
 
 
 /*
     FillToolTab - for lines, circle, ellipses, polylines,
     rectangles, pologons.  All Qt drawing primitives except
-    text, which needs its own dialog for font selection 
+    text, which needs its own dialog for font selection
 */
 FillToolTab::FillToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts, _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
+    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
     mpOpacity = new KIntNumInput( ts.opacity, this );
@@ -256,13 +228,13 @@ FillToolTab::FillToolTab( ToolOptsStruct ts,
 /*
     PenToolTab - for lines, circle, ellipses, polylines,
     rectangles, pologons.  All Qt drawing primitives except
-    text, which needs its own dialog for font selection 
+    text, which needs its own dialog for font selection
 */
 PenToolTab::PenToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts, _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
+    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 4);
 
     mpOpacity = new KIntNumInput( ts.opacity, this );
@@ -290,13 +262,13 @@ PenToolTab::PenToolTab( ToolOptsStruct ts,
 /*
     BrushToolTab - for lines, circle, ellipses, polylines,
     rectangles, pologons.  All Qt drawing primitives except
-    text, which needs its own dialog for font selection 
+    text, which needs its own dialog for font selection
 */
 BrushToolTab::BrushToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts, _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
+    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
     mpOpacity = new KIntNumInput( ts.opacity, this );
@@ -317,13 +289,13 @@ BrushToolTab::BrushToolTab( ToolOptsStruct ts,
 /*
     EraserToolTab - for lines, circle, ellipses, polylines,
     rectangles, pologons.  All Qt drawing primitives except
-    text, which needs its own dialog for font selection 
+    text, which needs its own dialog for font selection
 */
 EraserToolTab::EraserToolTab( ToolOptsStruct ts,
     QWidget *_parent, const char *_name  )
     : KisToolTab(ts, _parent, _name )
 {
-    QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
+    QVBoxLayout* lout = new QVBoxLayout( this, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
     mpOpacity = new KIntNumInput( ts.opacity, this );

@@ -1,7 +1,7 @@
 #ifndef __GRADIENTDLG_H__
 #define __GRADIENTDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class KisGradient;
 class IntegerWidget;
@@ -17,16 +17,16 @@ class GradientTab : public QWidget
 
 public:
 
-	GradientTab(KisGradient *_gradient, 
+	GradientTab(KisGradient *_gradient,
         QWidget *_parent = 0, const char *_name = 0);
-    
-    int gradientOpacity(); 
-    int gradientOffset(); 
-    int gradientMode();
-    int gradientBlend(); 
-    int gradientType(); 
-    int gradientRepeat();
-    
+
+    int gradientOpacity()const;
+    int gradientOffset()const;
+    int gradientMode()const;
+    int gradientBlend()const;
+    int gradientType()const;
+    int gradientRepeat()const;
+
 private:
 
     IntegerWidget *opacity;
@@ -40,20 +40,20 @@ private:
 
 // a dialog specifically designed to hold the gradient widget
 
-class GradientDialog : public KDialog
+class GradientDialog : public KDialogBase
 {
     Q_OBJECT
 
 public:
 
-	GradientDialog(KisGradient *_gradient, 
+	GradientDialog(KisGradient *_gradient,
         QWidget *_parent = 0, const char *_name = 0, bool modal = true);
-    
-    GradientTab *gradientTab () { return pGradientTab; }
-    
+
+    GradientTab *gradientTab ()const { return pGradientTab; }
+
 private:
 
-    GradientTab *pGradientTab;    
+    GradientTab *pGradientTab;
 };
 
 #endif

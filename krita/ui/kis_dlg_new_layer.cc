@@ -20,7 +20,7 @@
 
 // defined in kis_dlg_new.cc
 
-#ifndef KDE_USE_FINAL 
+#ifndef KDE_USE_FINAL
 const int MAXIMAGEWIDTH = 32767;
 const int INITIALWIDTH = 512;
 const int MAXIMAGEHEIGHT = 32767;
@@ -33,50 +33,34 @@ const int INITIALHEIGHT = 512;
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <qlineedit.h>
 
 #include <klocale.h>
+#include <qvbox.h>
 
 #include "kis_dlg_new_layer.h"
 
 NewLayerDialog::NewLayerDialog( QWidget *parent, const char *name )
-    : KDialog( parent, name, true )
+    : KDialogBase ( parent, name, true, "", Ok | Cancel )
 {
     setCaption( i18n("New Image") );
+    QVBox *page = makeVBoxMainWidget();
 
-    QVBoxLayout* layout = new QVBoxLayout( this, 3 );
+    QGridLayout* grid = new QGridLayout( page, 2, 2);
 
-    QGridLayout* grid = new QGridLayout( layout, 2, 2);
-
-    m_width = new QSpinBox( 1, MAXIMAGEWIDTH, 10, this );
+    m_width = new QSpinBox( 1, MAXIMAGEWIDTH, 10, page );
     m_width->setValue( INITIALWIDTH );
-    QLabel* wlabel = new QLabel( m_width, i18n("W&idth:"), this );
+    QLabel* wlabel = new QLabel( m_width, i18n("W&idth:"), page );
 
     grid->addWidget( wlabel, 0, 0 );
     grid->addWidget( m_width, 0, 1 );
 
-    m_height = new QSpinBox( 1, MAXIMAGEHEIGHT, 10, this );
+    m_height = new QSpinBox( 1, MAXIMAGEHEIGHT, 10, page );
     m_height->setValue( INITIALHEIGHT );
-    QLabel* hlabel = new QLabel( m_height, i18n("&Height:"), this );
+    QLabel* hlabel = new QLabel( m_height, i18n("&Height:"), page );
 
     grid->addWidget( hlabel, 1, 0 );
     grid->addWidget( m_height, 1, 1 );
-
-    QHBoxLayout* buttons = new QHBoxLayout( layout );
-
-    buttons->addStretch( 1 );
-
-    QPushButton *ok, *cancel;
-    ok = new QPushButton( i18n("&OK"), this );
-    ok->setDefault( true );
-    ok->setMinimumSize( ok->sizeHint() );
-    connect( ok, SIGNAL(clicked()), SLOT(accept()) );
-    buttons->addWidget( ok );
-
-    cancel = new QPushButton( i18n("&Cancel"), this );
-    cancel->setMinimumSize( cancel->sizeHint() );
-    connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
-    buttons->addWidget( cancel );
-
     resize( 1, 1 );
 }
 

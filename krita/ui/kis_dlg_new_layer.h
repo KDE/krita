@@ -21,12 +21,12 @@
 #ifndef __newlayerdialog_h__
 #define __newlayerdialog_h__
 
-#include <qspinbox.h>
-#include <qlineedit.h>
+#include <kdialogbase.h>
 
-#include <kdialog.h>
+class QSpinBox;
+class QLineEdit;
 
-class NewLayerDialog : public KDialog
+class NewLayerDialog : public KDialogBase
 {
   Q_OBJECT
 
@@ -34,9 +34,9 @@ public:
 
   NewLayerDialog( QWidget *parent = 0, const char *name = 0 );
 
-  QString name() { return m_name->text(); };
-  int width() { return m_width->value(); };
-  int height() { return m_height->value(); };
+  QString name()const { return m_name->text(); };
+  int width()const { return m_width->value(); };
+  int height()const { return m_height->value(); };
 
 private:
 

@@ -3,7 +3,7 @@
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
- *      
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -24,7 +24,8 @@
 #include <qevent.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
-
+#include <qspinbox.h>
+#include <qlineedit.h>
 // KDE
 #include <dcopobject.h>
 #include <kaction.h>
@@ -98,7 +99,7 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_dlgPatternToggle = 0;
 	m_dlgLayersToggle = 0;
 	m_dlgChannelsToggle = 0;
-	m_hScroll = 0; 
+	m_hScroll = 0;
 	m_vScroll = 0;
 	m_dcop = 0;
 	m_xoff = 0;
@@ -266,7 +267,7 @@ void KisView::setupTabBar()
 	m_tabRight = new KPushButton(this);
 	m_tabLast = new KPushButton(this);
 	m_tabFirst -> setPixmap(QPixmap(BarIcon("tab_first")));
-	m_tabLeft -> setPixmap(QPixmap(BarIcon("tab_left"))); 
+	m_tabLeft -> setPixmap(QPixmap(BarIcon("tab_left")));
 	m_tabRight -> setPixmap(QPixmap(BarIcon("tab_right")));
 	m_tabLast -> setPixmap(QPixmap(BarIcon("tab_last")));
 	QObject::connect(m_tabFirst, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollFirst()));
@@ -444,8 +445,8 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_vScroll -> setRange(0, static_cast<int>((docH - drawH) / zoom()));
 		m_vScroll -> setGeometry(width() - tbarBtnW - rsideW, ruler, tbarBtnW, height() - (ruler + tbarBtnH));
 		m_hScroll -> setRange(0, static_cast<int>((docW - drawW) / zoom()));
-		m_hScroll -> setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset) / 2, 
-				height() - tbarBtnH, 
+		m_hScroll -> setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset) / 2,
+				height() - tbarBtnH,
 				(width() - rsideW -lsideW - tbarOffset) / 2,
 				tbarBtnH);
 		m_canvas -> setGeometry(ruler + lsideW, ruler, drawW - tbarBtnW, drawH);
@@ -527,7 +528,7 @@ void KisView::paintView(const QRect& rc)
 		QPainter gc(m_canvas);
 		QRect ur = rc;
 		Q_INT32 xt;
-		Q_INT32 yt; 
+		Q_INT32 yt;
 
 		if (canvasXOffset())
 			gc.eraseRect(0, 0, static_cast<Q_INT32>(canvasXOffset() * zoom()), height());
@@ -851,10 +852,10 @@ void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 		x = static_cast<Q_INT32>(x * zf - width() / 2);
 		y = static_cast<Q_INT32>(y * zf - height() / 2);
 
-		if (x < 0) 
+		if (x < 0)
 			x = 0;
 
-		if (y < 0) 
+		if (y < 0)
 			y = 0;
 
 		scrollTo(x, y);
@@ -1031,7 +1032,7 @@ void KisView::previous_layer()
 }
 
 void KisView::slotImportImage()
-{	
+{
 	if (importImage(false) > 0)
 		m_doc -> setModified(true);
 }
@@ -1070,19 +1071,19 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 	switch (ib.buildImage()) {
 	case KisImageBuilder_RESULT_NO_URI:
 	case KisImageBuilder_RESULT_NOT_LOCAL:
-		KNotifyClient::event("cannotopenfile"); 
+		KNotifyClient::event("cannotopenfile");
 		return 0;
 	case KisImageBuilder_RESULT_NOT_EXIST:
 		KMessageBox::error(this, i18n("File does not exist."), i18n("Error Loading File"));
-		KNotifyClient::event("cannotopenfile"); 
+		KNotifyClient::event("cannotopenfile");
 		return 0;
 	case KisImageBuilder_RESULT_BAD_FETCH:
 		KMessageBox::error(this, i18n("Unable to download file."), i18n("Error Loading File"));
-		KNotifyClient::event("cannotopenfile"); 
+		KNotifyClient::event("cannotopenfile");
 		return 0;
 	case KisImageBuilder_RESULT_EMPTY:
 		KMessageBox::error(this, i18n("Empty file."), i18n("Error Loading File"));
-		KNotifyClient::event("cannotopenfile"); 
+		KNotifyClient::event("cannotopenfile");
 		break;
 	case KisImageBuilder_RESULT_OK:
 		break;
@@ -1362,7 +1363,7 @@ void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
 
 void KisView::setActiveBrush(KoIconItem *brush)
 {
-	m_brush = dynamic_cast<KisBrush*>(brush);	
+	m_brush = dynamic_cast<KisBrush*>(brush);
 #if 0
 	Q_ASSERT(b);
 	m_pBrush = b;
@@ -1640,7 +1641,7 @@ void KisView::layerToggleVisible()
 }
 
 void KisView::layerSelected(int n)
-{	
+{
 	KisImageSP img = currentImg();
 
 	layerUpdateGUI(img -> activateLayer(n));
@@ -1729,7 +1730,7 @@ void KisView::layerRemove()
 
 	if (img) {
 		KisLayerSP layer = img -> activeLayer();
-		
+
 		if (layer) {
 			Q_INT32 n = img -> index(layer);
 

@@ -1,7 +1,7 @@
 /*
  *  kis_dlg_toolopts.h - part of Krayon
  *
- *  Copyright (c) 2001 John Califf 
+ *  Copyright (c) 2001 John Califf
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,19 +21,14 @@
 #ifndef __tooloptionsdialog_h__
 #define __tooloptionsdialog_h__
 
-#include <qlineedit.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-
-#include <kdialog.h>
-#include <knuminput.h>
+#include <kdialogbase.h>
 
 class QVBoxLayout;
 class QRadioButton;
 class KIntNumInput;
+class QCheckBox;
 
-enum tooltype 
+enum tooltype
 {
     tt_linetool,
     tt_rectangletool,
@@ -56,15 +51,15 @@ struct ToolOptsStruct
 {
     int lineThickness;
     int lineOpacity;
-    
+
     int penThreshold;
     int penOpacity;
-    
+
     int opacity;
 
     int polygonCorners;
     int polygonSharpness;
-    
+
     bool fillShapes;
     bool usePattern;
     bool useGradient;
@@ -81,22 +76,22 @@ public:
 
     KisToolTab(ToolOptsStruct ts, QWidget *parent = 0, const char *name = 0 );
 
-    int  thickness()    { return mpThickness->value(); };
-    int  opacity()      { return mpOpacity->value(); };
-    int  penThreshold() { return mpPenThreshold->value(); };
-    int  density()      { return mpDensity->value(); };
-    int  granularuty()  { return mpGranularity->value(); };
-    int  corners()      { return mpCorners->value(); };
-    int  sharpness()    { return mpSharpness->value(); };
-    
-    bool solid()        { return mpSolid->isChecked(); };
-    bool usePattern()   { return mpUsePattern->isChecked(); };
-    bool useGradient()  { return mpUseGradient->isChecked(); };
-    bool blendPattern() { return mpBlendPattern->isChecked(); };
-    bool blendGradient(){ return mpBlendGradient->isChecked(); };
-    bool convexPolygon()  { return mpConvexPolygon->isChecked(); };
-    bool concavePolygon() { return mpConcavePolygon->isChecked(); };
-    
+    int  thickness()const    { return mpThickness->value(); };
+    int  opacity()const      { return mpOpacity->value(); };
+    int  penThreshold()const { return mpPenThreshold->value(); };
+    int  density()const      { return mpDensity->value(); };
+    int  granularuty()const  { return mpGranularity->value(); };
+    int  corners()const      { return mpCorners->value(); };
+    int  sharpness()const    { return mpSharpness->value(); };
+
+    bool solid()const        { return mpSolid->isChecked(); };
+    bool usePattern()const   { return mpUsePattern->isChecked(); };
+    bool useGradient()const  { return mpUseGradient->isChecked(); };
+    bool blendPattern()const { return mpBlendPattern->isChecked(); };
+    bool blendGradient()const{ return mpBlendGradient->isChecked(); };
+    bool convexPolygon()const  { return mpConvexPolygon->isChecked(); };
+    bool concavePolygon()const { return mpConcavePolygon->isChecked(); };
+
 protected:
 
     KIntNumInput  *mpThickness;
@@ -106,7 +101,7 @@ protected:
     KIntNumInput  *mpGranularity;
     KIntNumInput  *mpCorners;
     KIntNumInput  *mpSharpness;
-        
+
     QCheckBox *mpSolid;
     QCheckBox *mpUsePattern;
     QCheckBox *mpUseGradient;
@@ -123,7 +118,7 @@ class NullToolTab : public KisToolTab
 
 public:
 
-    NullToolTab( ToolOptsStruct ts,  QWidget *parent = 0, 
+    NullToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
         const char *name = 0 );
 };
 
@@ -134,7 +129,7 @@ class LineToolTab : public KisToolTab
 
 public:
 
-    LineToolTab( ToolOptsStruct ts,  QWidget *parent = 0, 
+    LineToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
         const char *name = 0 );
 };
 
@@ -145,7 +140,7 @@ class PenToolTab : public KisToolTab
 
 public:
 
-    PenToolTab( ToolOptsStruct ts,  QWidget *parent = 0, 
+    PenToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
         const char *name = 0 );
 };
 
@@ -156,7 +151,7 @@ class BrushToolTab : public KisToolTab
 
 public:
 
-    BrushToolTab( ToolOptsStruct ts,  QWidget *parent = 0, 
+    BrushToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
         const char *name = 0 );
 };
 
@@ -167,7 +162,7 @@ class EraserToolTab : public KisToolTab
 
 public:
 
-    EraserToolTab( ToolOptsStruct ts,  QWidget *parent = 0, 
+    EraserToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
         const char *name = 0 );
 };
 
@@ -178,7 +173,7 @@ class AirBrushToolTab : public KisToolTab
 
 public:
 
-    AirBrushToolTab( ToolOptsStruct ts,  QWidget *parent = 0, 
+    AirBrushToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
         const char *name = 0 );
 };
 
@@ -189,7 +184,7 @@ class FillToolTab : public KisToolTab
 
 public:
 
-    FillToolTab( ToolOptsStruct ts,  QWidget *parent = 0, 
+    FillToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
         const char *name = 0 );
 };
 
@@ -200,7 +195,7 @@ class StampToolTab : public KisToolTab
 
 public:
 
-    StampToolTab( ToolOptsStruct ts,  QWidget *parent = 0, 
+    StampToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
         const char *name = 0 );
 };
 
@@ -211,19 +206,19 @@ class PolygonToolTab : public KisToolTab
 
 public:
 
-    PolygonToolTab( ToolOptsStruct ts,  QWidget *parent = 0, 
+    PolygonToolTab( ToolOptsStruct ts,  QWidget *parent = 0,
 
         const char *name = 0 );
 private:
     PolygonPreview *preview;
 
 private slots:
-    void slotConvexPolygon(); 
-    void slotConcavePolygon(); 
+    void slotConvexPolygon();
+    void slotConcavePolygon();
 };
 
 
-class ToolOptionsDialog : public KDialog
+class ToolOptionsDialog : public KDialogBase
 {
   Q_OBJECT
 
@@ -231,32 +226,32 @@ public:
 
     ToolOptionsDialog( tooltype tt, ToolOptsStruct ts,
         QWidget *parent = 0, const char *name = 0 );
-    
-    NullToolTab *nullToolTab()      
+
+    NullToolTab *nullToolTab()const
         { return pNullToolTab; }
 
-    LineToolTab *lineToolTab()      
-        { return pLineToolTab; }    
+    LineToolTab *lineToolTab()const
+        { return pLineToolTab; }
 
-    PenToolTab  *penToolTab()       
+    PenToolTab  *penToolTab()const
         { return pPenToolTab; }
 
-    BrushToolTab *brushToolTab()    
+    BrushToolTab *brushToolTab()const
         { return pBrushToolTab; }
 
-    AirBrushToolTab *airBrushToolTab() 
-        { return pAirBrushToolTab; }    
+    AirBrushToolTab *airBrushToolTab()const
+        { return pAirBrushToolTab; }
 
-    EraserToolTab *eraserToolTab()  
+    EraserToolTab *eraserToolTab()const
         { return pEraserToolTab; }
 
-    FillToolTab *fillToolTab()      
+    FillToolTab *fillToolTab()const
         { return pFillToolTab; }
 
-    StampToolTab *stampToolTab()      
+    StampToolTab *stampToolTab()const
         { return pStampToolTab; }
 
-    PolygonToolTab *polygonToolTab()      
+    PolygonToolTab *polygonToolTab()const
         { return pPolygonToolTab; }
 
 private:
@@ -265,10 +260,10 @@ private:
     LineToolTab     *pLineToolTab;
     PenToolTab      *pPenToolTab;
     BrushToolTab    *pBrushToolTab;
-    AirBrushToolTab *pAirBrushToolTab;    
+    AirBrushToolTab *pAirBrushToolTab;
     EraserToolTab   *pEraserToolTab;
     FillToolTab     *pFillToolTab;
-    StampToolTab    *pStampToolTab;    
+    StampToolTab    *pStampToolTab;
     PolygonToolTab  *pPolygonToolTab;
 };
 

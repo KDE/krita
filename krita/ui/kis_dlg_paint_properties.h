@@ -18,17 +18,16 @@
 #if !defined KIS_DLG_LAYER_PROPERTIES_H_
 #define KIS_DLG_LAYER_PROPERTIES_H_
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
-class QString;
 class QWidget;
 class KIntSpinBox;
 class KLineEdit;
 class KisPaintDevice;
 class IntegerWidget;
 
-class KisPaintPropertyDlg : public KDialog {
-	typedef KDialog super;
+class KisPaintPropertyDlg : public KDialogBase {
+	typedef KDialogBase super;
 
 public:
 	KisPaintPropertyDlg(const QString& deviceName, int opacity, QWidget *parent = 0, const char *name = 0, WFlags f = 0);

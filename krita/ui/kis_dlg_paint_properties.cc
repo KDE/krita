@@ -24,14 +24,17 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kpushbutton.h>
+#include <qvbox.h>
 
 #include "kis_dlg_paint_properties.h"
 #include "integerwidget.h"
 
-KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, int opacity, QWidget *parent, const char *name, WFlags f) : super(parent, name, f)
+KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, int opacity, QWidget *parent, const char *name, WFlags f)
+    : super(parent, name, f, "", Ok | Cancel)
 {
-	QGridLayout *layout = new QGridLayout(this, 4, 2, 15, 7);
 	QLabel *lbl;
+        QVBox *page = makeVBoxMainWidget();
+	QGridLayout *layout = new QGridLayout(page, 4, 2, 15, 7);
 
 	m_name = new KLineEdit(deviceName, this);
 	layout -> addWidget(m_name, 0, 1);
@@ -48,18 +51,6 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, int opacity,
 	lbl = new QLabel(m_opacity, i18n("Opacity:"), this);
 	layout -> addWidget(lbl, 1, 0);
 	layout -> setRowStretch(2, 1);
-
-	QHBox *buttons = new QHBox(this);
-	layout -> addMultiCellWidget(buttons, 3, 4, 0, 1);
-
-	(void) new QWidget(buttons);
-
-	KPushButton *btn = new KPushButton(i18n("&OK"), buttons);
-	btn -> setDefault(true);
-	connect(btn, SIGNAL(clicked()), SLOT(accept()));
-
-	btn = new KPushButton(i18n("&Cancel"), buttons);
-	connect(btn, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
 KisPaintPropertyDlg::~KisPaintPropertyDlg()

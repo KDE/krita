@@ -27,11 +27,11 @@
 #include <qgroupbox.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
-
+#include <qvbox.h>
 #include <klocale.h>
 
 #include "integerwidget.h"
-#include "blendchooser.h" 
+#include "blendchooser.h"
 #include "kis_gradient.h"
 #include "kis_dlg_gradient.h"
 
@@ -39,8 +39,8 @@
 #undef Below
 #undef Above
 
-GradientTab::GradientTab( KisGradient *_gradient, 
-    QWidget *_parent,  const char *_name ) 
+GradientTab::GradientTab( KisGradient *_gradient,
+    QWidget *_parent,  const char *_name )
     : QWidget( _parent, _name )
 {
     QWidget *area = (QWidget *)this;
@@ -54,7 +54,7 @@ GradientTab::GradientTab( KisGradient *_gradient,
     opacity->setTickInterval( 10 );
     layout->addWidget( opacity, 0, 1 );
 
-    QLabel *lblOpacity = new QLabel( opacity, 
+    QLabel *lblOpacity = new QLabel( opacity,
         i18n( "Opacity:" ), area );
     layout->addWidget( lblOpacity, 0, 0 );
 
@@ -138,43 +138,44 @@ GradientTab::GradientTab( KisGradient *_gradient,
     opacity->setMinimumWidth(gradient->sizeHint().width());
 }
 
-int GradientTab::gradientOpacity()   { return opacity->value(); }
-int GradientTab::gradientOffset()    { return offset->value(); }
-int GradientTab::gradientMode()      { return mode->currentItem(); }
-int GradientTab::gradientBlend()     { return blend->currentItem(); }
-int GradientTab::gradientType()      { return gradient->currentItem(); }
-int GradientTab::gradientRepeat()    { return repeat->currentItem(); }
+int GradientTab::gradientOpacity()const
+{
+    return opacity->value();
+}
+
+int GradientTab::gradientOffset() const
+{
+    return offset->value();
+}
+
+int GradientTab::gradientMode() const
+{
+    return mode->currentItem();
+}
+
+int GradientTab::gradientBlend() const
+{
+    return blend->currentItem();
+}
+
+int GradientTab::gradientType() const
+{
+    return gradient->currentItem();
+}
+
+int GradientTab::gradientRepeat() const
+{
+    return repeat->currentItem();
+}
 
 GradientDialog::GradientDialog( KisGradient *_gradient,
     QWidget *_parent,  const char *_name, bool _modal)
-    : KDialog( _parent, _name, _modal)
+    : KDialogBase( _parent, _name, _modal, "", Ok | Cancel)
 {
     setCaption( i18n( "Gradients Options" ) );
-    QVBoxLayout* layout = new QVBoxLayout( this, 4 );
+    QVBox *page = makeVBoxMainWidget();
 
-    pGradientTab = new GradientTab(_gradient, static_cast<QWidget *>(this));
-    layout->addWidget(pGradientTab);    
-     
-    QHBoxLayout* buttons = new QHBoxLayout( layout, 3 );
-    buttons->addStretch( 3 );
-
-    QPushButton *ok, *cancel, *save;
-    ok = new QPushButton( i18n("&OK"), this );
-    ok->setDefault( true );
-    ok->setMinimumSize( ok->sizeHint() );
-    connect( ok, SIGNAL(clicked()), SLOT(accept()) );
-    buttons->addWidget( ok );
-
-    cancel = new QPushButton( i18n("&Cancel"), this );
-    cancel->setMinimumSize( cancel->sizeHint() );
-    connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
-    buttons->addWidget( cancel );
-
-    save = new QPushButton( i18n("&Save"), this );
-    save->setMinimumSize( save->sizeHint() );
-    connect( save, SIGNAL(clicked()), SLOT(reject()) );
-    buttons->addWidget( save );
-   
+    pGradientTab = new GradientTab(_gradient, page);
     resize(1,1);
 }
 

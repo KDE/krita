@@ -29,7 +29,7 @@ KisHLineIteratorPixel::KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataMa
 {
 	if(sel_dm)
 		KisIteratorPixelTrait <KisHLineIterator>::setSelectionIterator(
-				new KisHLineIterator(sel_dm, x - offsetx, y - offsety, w, writable));
+				new KisHLineIterator(sel_dm, x - offsetx, y - offsety, w, false));
 }
 
 KisVLineIteratorPixel::KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
@@ -39,7 +39,7 @@ KisVLineIteratorPixel::KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataMa
 {
 	if(sel_dm)
 		KisIteratorPixelTrait <KisVLineIterator>::setSelectionIterator(
-				new KisVLineIterator(sel_dm, x - offsetx, y - offsety, h, writable));
+				new KisVLineIterator(sel_dm, x - offsetx, y - offsety, h, false));
 }
 
 KisRectIteratorPixel::KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
@@ -49,5 +49,5 @@ KisRectIteratorPixel::KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataMana
 {
 	if(sel_dm)
 		KisIteratorPixelTrait <KisRectIterator>::setSelectionIterator(
-				new KisRectIterator(sel_dm, x - offsetx, y - offsety, w, h, writable));
+				new KisRectIterator(sel_dm, x - offsetx, y - offsety, w, h, false));
 }

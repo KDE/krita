@@ -341,12 +341,12 @@ void KisGuideMgr::load(const QDomElement& element)
 		double pos;
 		Qt::Orientation orient;
 
-		if ((attr = e.attribute("pos")) == QString::null)
+		if ((attr = e.attribute("pos")).isNull())
 			return;
 
 		pos = attr.toDouble();
 
-		if ((attr = e.attribute("orient")) == QString::null)
+		if ((attr = e.attribute("orient")).isNull())
 			return;
 
 		orient = static_cast<Qt::Orientation>(attr.toInt());

@@ -502,7 +502,7 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
 	if (attr.toInt() > 1)
 		return false;
 
-	if ((attr = root.attribute("depth")) == QString::null)
+	if ((attr = root.attribute("depth")).isNull())
 		return false;
 
 	m_conversionDepth = attr.toInt();
@@ -578,29 +578,29 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 	Q_INT32 colorspace_int; // used to keep compatibility with old document
 
 	if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
-		if ((name = element.attribute("name")) == QString::null)
+		if ((name = element.attribute("name")).isNull())
 			return 0;
 
 		if (namePresent(name))
 			name = nextImageName();
 
-		if ((attr = element.attribute("width")) == QString::null)
+		if ((attr = element.attribute("width")).isNull())
 			return 0;
 
 		if ((width = attr.toInt()) < 0 || width > cfg.maxImgWidth())
 			return 0;
 
-		if ((attr = element.attribute("height")) == QString::null)
+		if ((attr = element.attribute("height")).isNull())
 			return 0;
 
 		if ((height = attr.toInt()) < 0 || height > cfg.maxImgHeight())
 			return 0;
 
-		if ((colorspacename = element.attribute("colorspacename")) == QString::null)
+		if ((colorspacename = element.attribute("colorspacename")).isNull())
 		{
 			// TODO: This code is used for compatibility with old files,
 			// it should be removed before alpha
-			if ((attr = element.attribute("colorspace")) == QString::null)
+			if ((attr = element.attribute("colorspace")).isNull())
 				return 0;
 			colorspace_int = attr.toInt();
 // 			kdDebug() << "colorspace_int = " << colorspace_int << endl;
@@ -696,43 +696,43 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 	bool linked;
 	KisLayerSP layer;
 
-	if ((name = element.attribute("name")) == QString::null)
+	if ((name = element.attribute("name")).isNull())
 		return 0;
 
-	if ((attr = element.attribute("x")) == QString::null)
+	if ((attr = element.attribute("x")).isNull())
 		return 0;
 
 	x = attr.toInt();
 
-	if ((attr = element.attribute("y")) == QString::null)
+	if ((attr = element.attribute("y")).isNull())
 		return 0;
 
 	y = attr.toInt();
 
-	if ((attr = element.attribute("width")) == QString::null)
+	if ((attr = element.attribute("width")).isNull())
 		return 0;
 
 	if ((width = attr.toInt()) < 0 || x + width > cfg.maxImgWidth())
 		return 0;
 
-	if ((attr = element.attribute("height")) == QString::null)
+	if ((attr = element.attribute("height")).isNull())
 		return 0;
 
 	if ((height = attr.toInt()) < 0 || y + height > cfg.maxImgHeight())
 		return 0;
 
-	if ((attr = element.attribute("opacity")) == QString::null)
+	if ((attr = element.attribute("opacity")).isNull())
 		return 0;
 
 	if ((opacity = attr.toInt()) < 0 || opacity > QUANTUM_MAX)
 		return 0;
 
-	if ((attr = element.attribute("visible")) == QString::null)
+	if ((attr = element.attribute("visible")).isNull())
 		return 0;
 
 	visible = attr == "0" ? false : true;
 
-	if ((attr = element.attribute("linked")) == QString::null)
+	if ((attr = element.attribute("linked")).isNull())
 		return 0;
 
 	linked = attr == "0" ? false : true;
@@ -770,32 +770,32 @@ KisChannelSP KisDoc::loadChannel(const QDomElement& element, KisImageSP img)
 	Q_INT32 opacity;
 	KisChannelSP channel;
 
-	if ((name = element.attribute("name")) == QString::null)
+	if ((name = element.attribute("name")).isNull())
 		return 0;
 
-	if ((attr = element.attribute("x")) == QString::null)
+	if ((attr = element.attribute("x")).isNull())
 		return 0;
 
 	x = attr.toInt();
 
-	if ((attr = element.attribute("y")) == QString::null)
+	if ((attr = element.attribute("y")).isNull())
 		return 0;
 
 	y = attr.toInt();
 
-	if ((attr = element.attribute("width")) == QString::null)
+	if ((attr = element.attribute("width")).isNull())
 		return 0;
 
 	if ((width = attr.toInt()) < 0 || x + width > cfg.maxImgWidth())
 		return 0;
 
-	if ((attr = element.attribute("height")) == QString::null)
+	if ((attr = element.attribute("height")).isNull())
 		return 0;
 
 	if ((height = attr.toInt()) < 0 || y + height > cfg.maxImgHeight())
 		return 0;
 
-	if ((attr = element.attribute("opacity")) == QString::null)
+	if ((attr = element.attribute("opacity")).isNull())
 		return 0;
 
 	if ((opacity = attr.toInt()) < 0 || opacity > QUANTUM_MAX)

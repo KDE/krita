@@ -152,6 +152,7 @@ KisAlphaMaskSP KisBrush::mask(double pressure, double subPixelX, double subPixel
 KisLayerSP KisBrush::image(double pressure) const
 {
 	if (m_images.isEmpty()) {
+		// XXX: this takes far too long.
 		createImages(m_img);
 	}
 

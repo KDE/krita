@@ -152,6 +152,7 @@ enum enumImgType {
 
 enum enumPaintOp {
 	PAINTOP_BRUSH,
+	PAINTOP_PEN,
 	PAINTOP_ERASE,
 	PAINTOP_AIRBRUSH,
 	PAINTOP_CONVOLVE };

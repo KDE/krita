@@ -585,12 +585,12 @@ QRect KisPainter::dirtyRect() {
 
 
 double KisPainter::paintLine(const enumPaintOp paintOp,
-			    const KisPoint & pos1,
-			    const KisPoint & pos2,
-			    const double pressure,
-			    const double xTilt,
-			    const double yTilt,
-			    const double inSavedDist)
+			     const KisPoint & pos1,
+			     const KisPoint & pos2,
+			     const double pressure,
+			     const double xTilt,
+			     const double yTilt,
+			     const double inSavedDist)
 {
 	if (!m_device) return 0;
 
@@ -605,6 +605,9 @@ double KisPainter::paintLine(const enumPaintOp paintOp,
 			break;
 		case PAINTOP_ERASE:
 			eraseAt(pos1, pressure, xTilt, yTilt);
+			break;
+		case PAINTOP_PEN:
+			penAt(pos1, pressure, xTilt, yTilt);
 			break;
 		default:
 			kdDebug() << "Paint operation not implemented yet.\n";
@@ -678,6 +681,9 @@ double KisPainter::paintLine(const enumPaintOp paintOp,
 		case PAINTOP_AIRBRUSH:
 			airBrushAt(p, pressure, xTilt, yTilt);
 			break;
+		case PAINTOP_PEN:
+			penAt(p, pressure, xTilt, yTilt);
+			break;
 		default:
 			kdDebug() << "Paint operation not implemented yet.\n";
 		}
@@ -743,7 +749,8 @@ void KisPainter::paintRect (const enumPaintOp paintOp,
 
 
 //
-// Ellipse code derived from zSprite2 Game Engine
+// Ellipse code derived from zSprite2 Game Engine. 
+// XXX: copyright attribution needed? BSAR.
 //
 
 void KisPainter::paintEllipsePixel (const enumPaintOp paintOp,
@@ -859,8 +866,6 @@ void KisPainter::paintEllipse (const enumPaintOp paintOp,
     }
 }
 
-
-
 void KisPainter::paintAt(const KisPoint & pos,
 			 const double pressure,
                          const double /*xTilt*/,
@@ -923,6 +928,59 @@ void KisPainter::paintAt(const KisPoint & pos,
 
 	m_dirtyRect |= QRect(x, y, m_dab -> width(), m_dab -> height());
 }
+
+void KisPainter::penAt(const KisPoint & pos,
+			 const double pressure,
+                         const double /*xTilt*/,
+                         const double /*yTilt*/)
+{
+
+	if (!m_device) return;
+
+	KisPoint hotSpot = m_brush -> hotSpot(pressure);
+	KisPoint pt = pos - hotSpot;
+
+	// Split the coordinates into integer plus fractional parts. The integer
+	// is where the dab will be positioned and the fractional part determines
+	// the sub-pixel positioning.
+	Q_INT32 x;
+	double xFraction;
+	Q_INT32 y;
+	double yFraction;
+
+	splitCoordinate(pt.x(), &x, &xFraction);
+	splitCoordinate(pt.y(), &y, &yFraction);
+
+	if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
+		if (fabs(m_pressure - pressure) > DBL_EPSILON || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
+			m_dab = m_brush -> image(pressure);
+		}
+	}
+	else {
+		// Compute mask without sub-pixel positioning
+		KisAlphaMaskSP mask = m_brush -> mask(pressure);
+		computeDab(mask);
+	}
+
+	m_pressure = pressure;
+
+        // Draw correctly near the left and top edges
+        Q_INT32 sx = 0;
+        Q_INT32 sy = 0;
+        if (x < 0) {
+                sx = -x;
+                x = 0;
+        }
+        if (y < 0) {
+                sy = -y;
+                y = 0;
+        }
+
+	bitBlt( x,  y,  m_compositeOp, m_dab.data(), m_opacity, sx, sy, m_dab -> width(), m_dab -> height());
+
+	m_dirtyRect |= QRect(x, y, m_dab -> width(), m_dab -> height());
+}
+
 
 void KisPainter::eraseAt(const KisPoint &pos,
 			 const double pressure,
@@ -1068,114 +1126,6 @@ void KisPainter::airBrushAt(const KisPoint &pos,
 
 	m_dirtyRect |= QRect(x, y, m_dab -> width(), m_dab -> height());
 
-#if 0
-	KisView *view = getCurrentView();
-	KisImage *img = m_doc->currentImg();
-
-	if (!img)	    return false;
-
-	KisLayer *lay = img->getCurrentLayer();
-	if (!lay)       return false;
-
-	if (!m_brush)  return false;
-
-	if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-		return false;
-
-	if(!m_dragging) return false;
-
-	int hotX = m_brush->hotSpot().x();
-	int hotY = m_brush->hotSpot().y();
-
-	int startx = pos.x() - hotX;
-	int starty = pos.y() - hotY;
-
-	QRect clipRect(startx, starty, m_brush->width(), m_brush->height());
-	if (!clipRect.intersects(lay->imageExtents()))
-		return false;
-
-	clipRect = clipRect.intersect(lay->imageExtents());
-
-	int sx = clipRect.left() - startx;
-	int sy = clipRect.top() - starty;
-	int ex = clipRect.right() - startx;
-	int ey = clipRect.bottom() - starty;
-
-	uchar *sl;
-	uchar bv, invbv;
-	uchar r, g, b, a;
-	int   v;
-
-	int red   = view->fgColor().R();
-	int green = view->fgColor().G();
-	int blue  = view->fgColor().B();
-
-	bool alpha = (img->colorMode() == cm_RGBA);
-
-	for (int y = sy; y <= ey; y++) {
-		sl = m_brush->scanline(y);
-
-		for (int x = sx; x <= ex; x++) {
-			/* get a truly ??? random number and divide it by
-			   desired density - if x is that number, paint
-			   a pixel from brush there this turn */
-			int nRandom = KApplication::random();
-
-			bool paintPoint = false;
-
-			if ((nRandom % density) == ((x - sx) % density))
-				paintPoint = true;
-
-			// don't keep painting over points already painted
-			// this makes image too dark and grany, eventually -
-			// that effect is good with the regular brush tool,
-			// but not with an airbrush or with the pen tool
-			if (timeout && (m_brushArray[brushWidth * (y-sy) + (x-sx) ] > 0))
-				paintPoint = false;
-
-			if (paintPoint) {
-				QRgb rgb = lay -> pixel(startx + x, starty + y);
-
-				r = qRed(rgb);
-				g = qGreen(rgb);
-				b = qBlue(rgb);
-				bv = *(sl + x);
-
-				if (bv == 0)
-					continue;
-
-				invbv = 255 - bv;
-				b = ((blue * bv) + (b * invbv))/255;
-				g = ((green * bv) + (g * invbv))/255;
-				r = ((red * bv) + (r * invbv))/255;
-
-				if (alpha) {
-					a = qAlpha(rgb);
-					v = a + bv;
-
-					if (v < 0)
-						v = 0;
-
-					if (v > 255)
-						v = 255;
-
-					a = (uchar)v;
-				}
-
-				rgb = alpha ? qRgba(r, g, b, a) : qRgb(r, g, b);
-				lay -> setPixel(startx + x, starty + y, rgb);
-
-				// add this point to points already painted
-				if (timeout) {
-					m_brushArray[brushWidth * (y-sy) + (x-sx)] = 1;
-					nPoints++;
-				}
-			}
-		}
-	}
-
-	return true;
-#endif
 }
 
 

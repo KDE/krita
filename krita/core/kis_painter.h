@@ -176,6 +176,16 @@ public:
 		     const double /*xTilt*/,
 		     const double /*yTilt*/);
 
+
+	/** Draw a spot at whole pixel positions, i.e. hard, using the
+	 * currently set brush and color
+	 */
+	void penAt(const KisPoint &pos,
+		   const double pressure,
+		   const double /*xTilt*/,
+		   const double /*yTilt*/);
+	
+
 	/**
 	 * Erase to the background color or transparency (depending on the type of the paint device)
 	 * using the currently set brush.

@@ -1,1 +1,1 @@
-SUBDIRS = example
+SUBDIRS = example colorsfilters

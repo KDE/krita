@@ -109,15 +109,15 @@ public:
 		}
 
         // Comparison operators
-	bool operator<(const KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& __rhs)
-		{ return m_tilenum < __rhs.m_tilenum || ( m_tilenum == __rhs.m_tilenum && m_xintile < __rhs.m_tile ); }
-	bool operator<=(const KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& __rhs)
+	bool operator<(const KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& __rhs) const
+		{ return m_tilenum < __rhs.m_tilenum || (m_tilenum == __rhs.m_tilenum && m_xintile < __rhs.m_tilenum); }
+	bool operator<=(const KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& __rhs) const
 		{
 			if( m_tilenum == __rhs.m_tilenum )
 			{ return m_xintile <= __rhs.m_xintile; }
 			return m_tilenum < __rhs.m_tilenum;
 		}
-	bool operator==(const KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& __rhs) 
+	bool operator==(const KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& __rhs) const
 		{ return m_tilenum == __rhs.m_tilenum && m_xintile == __rhs.m_xintile; }
 
 protected:
@@ -159,11 +159,11 @@ public:
 	 KisIteratorLine< _iTp>& operator++() { m_ypos++; return *this; }
 	 KisIteratorLine< _iTp>& operator--() { m_ypos--; return *this; }
 // Comparaison operators
-	 bool operator<(const KisIteratorLine< _iTp>& __rhs)
+	 bool operator<(const KisIteratorLine< _iTp>& __rhs) const
 		 { return this->m_ypos < __rhs.m_ypos; }
-	 bool operator==(const KisIteratorLine< _iTp>& __rhs) 
+	 bool operator==(const KisIteratorLine< _iTp>& __rhs) const 
 		 { return this->m_ypos == __rhs.m_ypos; }
-	 bool operator<=(const KisIteratorLine< _iTp>& __rhs)
+	 bool operator<=(const KisIteratorLine< _iTp>& __rhs) const
 		 { return this->m_ypos <= __rhs.m_ypos; }
 	 virtual _iTp begin() =0;
 	 virtual _iTp end() =0;

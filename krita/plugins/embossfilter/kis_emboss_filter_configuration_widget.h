@@ -22,7 +22,6 @@
 #include <vector> 
 
 #include "kis_filter_configuration_widget.h"
-#include "kis_emboss_filter_configuration_widget.h"
 #include "kis_emboss_filter_configuration_base_widget.h"
 
 class KisEmbossFilterConfigurationWidget : public KisFilterConfigurationWidget

@@ -546,6 +546,10 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
 	emit notifyProgressStage(this, i18n("Rendering gradient..."), 0);
 
+	//If the device has a selection only iterate of that selection
+	if( m_device -> hasSelection() )
+		m_device -> selection() -> extent( startx, starty, width, height);
+
 	for (int y = starty; y < height; y++) {
 		KisHLineIterator iter = layer -> createHLineIterator( startx, y, width, true);
 		for (int x = 0; x < width; x++) {
@@ -591,8 +595,8 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
 		//QImage distanceImage(layer -> width(), layer -> height(), 32);
 
-		for (int y = 0; y < layer -> height(); y++) {
-			for (int x = 0; x < layer -> width(); x++) {
+		for (int y = starty; y < height; y++) {
+			for (int x = startx; x < width; x++) {
 
 				double maxDistance = 0;
 
@@ -608,7 +612,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 							int sampleX = x + xOffset;
 							int sampleY = y + yOffset;
 
-							if (sampleX >= 0 && sampleX < layer -> width() && sampleY >=0 && sampleY < layer -> height()) {
+							if (sampleX >= startx && sampleX < width && sampleY >= starty && sampleY < height) {
 								QColor color;
 								QUANTUM opacity;
 
@@ -699,25 +703,31 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
 		layer = antiAliasedLayer;
 	}
-
-	//distanceImage.save("distance.png",  "PNG");
 #endif
 	if (!m_cancelRequested) {
 		if (m_device -> hasSelection()) {
 			// apply mask...
+			QColor c, selectionColor;
+			QUANTUM opacity, selectionOpacity;
+
 			KisSelectionSP selection = m_device -> selection();
-			for (int y = 0; y < height; y++) {
-				KisHLineIterator iter = layer -> createHLineIterator( startx, starty, width, true);
-				for (int x = 0; x < width; x++) {
-					QColor c;
-					QUANTUM opacity;
-					layer -> colorStrategy() -> toQColor( (QUANTUM*)iter, &c, &opacity);
-					opacity = ((OPACITY_OPAQUE - selection -> selected(iter.x(), iter.x())) * opacity) / QUANTUM_MAX;
-					layer -> colorStrategy() -> nativeColor( c, opacity, (QUANTUM*)(iter)); // XXX: we need a setOpacity in KisPaintDevice!
-					}
+			for (int y = starty; y < height; y++) 
+			{
+				KisHLineIteratorPixel iter = layer->createHLineIterator(startx, y, width, true);
+				KisHLineIteratorPixel selectionIter = selection->createHLineIterator(startx, y, height, false); 
+			
+				while(! iter.isDone())
+				{
+					layer -> colorStrategy() -> toQColor((QUANTUM*) iter, &c, &opacity);
+					selection -> colorStrategy() -> toQColor((QUANTUM*) selectionIter, &selectionColor, &selectionOpacity);
+					opacity = (selectionOpacity * opacity) / QUANTUM_MAX;
+					layer -> colorStrategy() -> nativeColor(c, opacity, (QUANTUM*) iter);
+					iter++;
+					selectionIter++;
 				}
 			}
-		bitBlt(0, 0, m_compositeOp, layer.data(), m_opacity, 0, 0, width, height);
+		}
+		bitBlt(startx, starty, m_compositeOp, layer.data(), m_opacity, 0, 0, width, height);
 	}
 	delete shapeStrategy;
 

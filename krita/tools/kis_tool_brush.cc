@@ -74,12 +74,11 @@ void KisToolBrush::paintLine(const QPoint & pos1,
 void KisToolBrush::setup(KActionCollection *collection)
 {
 	kdDebug() << "KisToolBrush::setup" << endl;
-        KToggleAction *toggle;
-        toggle = new KToggleAction(i18n("&Brush"),
-				   "paintbrush", 0, this,
-                                   SLOT(activate()), collection,
-                                   "tool_brush");
-        toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Brush"),
+					       "paintbrush", 0, this,
+					       SLOT(activate()), collection,
+					       "tool_brush");
+	radio -> setExclusiveGroup("tools");
 }
 
 

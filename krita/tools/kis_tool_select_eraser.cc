@@ -187,12 +187,11 @@ void KisToolSelectEraser::paintLine(const QPoint & pos1,
 
 void KisToolSelectEraser::setup(KActionCollection *collection)
 {
-        KToggleAction *toggle;
-        toggle = new KToggleAction(i18n("&Selecteraser"),
-				   "selecteraser", 0, this,
-                                   SLOT(activate()), collection,
-                                   "tool_select_eraser");
-        toggle -> setExclusiveGroup("selection_tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Selecteraser"),
+					       "selecteraser", 0, this,
+					       SLOT(activate()), collection,
+					       "tool_select_eraser");
+	radio -> setExclusiveGroup("selection_tools");
 }
 
 QWidget* KisToolSelectEraser::createoptionWidget(QWidget* parent)

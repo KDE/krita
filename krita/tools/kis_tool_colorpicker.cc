@@ -89,10 +89,8 @@ void KisToolColorPicker::mousePress(QMouseEvent *e)
 
 void KisToolColorPicker::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle;
-
-	toggle = new KToggleAction(i18n("&Color Picker"), "colorpicker", 0, this, SLOT(activate()), collection, "tool_colorpicker");
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Color Picker"), "colorpicker", 0, this, SLOT(activate()), collection, "tool_colorpicker");
+	radio -> setExclusiveGroup("tools");
 }
 
 void KisToolColorPicker::update(KisCanvasSubject *subject)

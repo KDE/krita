@@ -234,14 +234,14 @@ void KisToolSelectRectangular::paintOutline(QPainter& gc, const QRect&)
 
 void KisToolSelectRectangular::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Rectangular Select"), 
-			"rectangular", 
-			0, 
-			this,
-			SLOT(activate()), 
-			collection, 
-			"tool_select_rectangular");
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Rectangular Select"), 
+					       "rectangular", 
+					       0, 
+					       this,
+					       SLOT(activate()), 
+					       collection, 
+					       "tool_select_rectangular");
+	radio -> setExclusiveGroup("tools");
 }
 
 #include "kis_tool_select_rectangular.moc"

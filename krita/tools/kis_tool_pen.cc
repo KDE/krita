@@ -202,12 +202,11 @@ void KisToolPen::paintLine(const QPoint & pos1,
 
 void KisToolPen::setup(KActionCollection *collection)
 {
-        KToggleAction *toggle;
-        toggle = new KToggleAction(i18n("&Pen"),
-				   "pencil", 0, this,
-                                   SLOT(activate()), collection,
-                                   "tool_pen");
-        toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Pen"),
+					       "pencil", 0, this,
+					       SLOT(activate()), collection,
+					       "tool_pen");
+	radio -> setExclusiveGroup("tools");
 }
 
 QWidget* KisToolPen::createoptionWidget(QWidget* parent)

@@ -187,12 +187,11 @@ void KisToolSelectBrush::paintLine(const QPoint & pos1,
 
 void KisToolSelectBrush::setup(KActionCollection *collection)
 {
-        KToggleAction *toggle;
-        toggle = new KToggleAction(i18n("&Selectbrush"),
-				   "selectbrush", 0, this,
-                                   SLOT(activate()), collection,
-                                   "tool_select_brush");
-        toggle -> setExclusiveGroup("selection_tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Selectbrush"),
+					       "selectbrush", 0, this,
+					       SLOT(activate()), collection,
+					       "tool_select_brush");
+	radio -> setExclusiveGroup("selection_tools");
 }
 
 QWidget* KisToolSelectBrush::createoptionWidget(QWidget* parent)

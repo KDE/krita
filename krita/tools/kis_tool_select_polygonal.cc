@@ -297,15 +297,14 @@ void KisToolSelectPolygonal::drawLine( const QPoint& start, const QPoint& end )
 
 void KisToolSelectPolygonal::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Polygonal Select"),
-						  "polygonal" , 
-						  0, 
-						  this, 
-						  SLOT(activate()),
-						  collection, 
-						  "tool_select_polygonal");
-
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Polygonal Select"),
+					       "polygonal" , 
+					       0, 
+					       this, 
+					       SLOT(activate()),
+					       collection, 
+					       "tool_select_polygonal");
+	radio -> setExclusiveGroup("tools");
 }
 
 bool KisToolSelectPolygonal::willModify() const

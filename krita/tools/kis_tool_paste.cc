@@ -130,13 +130,13 @@ void KisToolPaste::activate()
 
 void KisToolPaste::setup(KActionCollection *collection)
 {
- 	KToggleAction * toggle = new KToggleAction(i18n("&Paste Tool"), 
-						   "editpaste", 
-						   0, 
-						   this, 
-						   SLOT(activate()), 
-						   collection, 
-						   "tool_paste");
- 	toggle -> setExclusiveGroup("tools");
+ 	KRadioAction * radio = new KRadioAction(i18n("&Paste Tool"), 
+						"editpaste", 
+						0, 
+						this, 
+						SLOT(activate()), 
+						collection, 
+						"tool_paste");
+ 	radio -> setExclusiveGroup("tools");
 }
 

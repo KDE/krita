@@ -194,15 +194,14 @@ void KisToolRectangle::draw(const QPoint& start, const QPoint& end )
 
 void KisToolRectangle::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Rectangle Tool"),
-						  "rectangle",
-						  0,
-						  this,
-						  SLOT(activate()),
-						  collection,
-						  "tool_rectangle");
-
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Rectangle Tool"),
+					       "rectangle",
+					       0,
+					       this,
+					       SLOT(activate()),
+					       collection,
+					       "tool_rectangle");
+	radio -> setExclusiveGroup("tools");
 }
 
 // QDomElement KisToolRectangle::saveSettings(QDomDocument& doc) const

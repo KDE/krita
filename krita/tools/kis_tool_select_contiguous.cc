@@ -173,15 +173,14 @@ void KisToolSelectContiguous::drawRect( const QPoint& start, const QPoint& end )
 
 void KisToolSelectContiguous::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Contiguous Select"), 
-						  "contiguous" , 
-						  0, 
-						  this, 
-						  SLOT(activate()), 
-						  collection, 
-						  "tool_select_contiguous" );
-
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Contiguous Select"), 
+					       "contiguous" , 
+					       0, 
+					       this, 
+					       SLOT(activate()), 
+					       collection, 
+					       "tool_select_contiguous" );
+	radio -> setExclusiveGroup("tools");
 }
 
 bool KisToolSelectContiguous::willModify() const

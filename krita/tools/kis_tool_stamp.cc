@@ -446,12 +446,11 @@ void KisToolStamp::tabletEvent(QTabletEvent */*event*/)
 
 void KisToolStamp::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Stamp (Pattern) Tool"),
-						  "stamp", 0, this, 
-						  SLOT(activate()), collection,
-						  "tool_stamp");
-
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Stamp (Pattern) Tool"),
+					       "stamp", 0, this, 
+					       SLOT(activate()), collection,
+					       "tool_stamp");
+	radio -> setExclusiveGroup("tools");
 
 }
 

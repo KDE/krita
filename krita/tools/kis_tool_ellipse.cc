@@ -138,15 +138,14 @@ void KisToolEllipse::draw(const QPoint& start, const QPoint& end )
 
 void KisToolEllipse::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Ellipse Tool"),
-						  "ellipse",
-						  0,
-						  this,
-						  SLOT(activate()),
-						  collection,
-						  "tool_ellipse");
-
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Ellipse Tool"),
+					       "ellipse",
+					       0,
+					       this,
+					       SLOT(activate()),
+					       collection,
+					       "tool_ellipse");
+	radio -> setExclusiveGroup("tools");
 }
 
 #include "kis_tool_ellipse.moc"

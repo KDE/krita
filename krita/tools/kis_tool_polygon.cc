@@ -234,14 +234,14 @@ void KisToolPolygon::drawPolygon(const QPoint& start, const QPoint& end)
 
 void KisToolPolygon::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Polygon Tool"), 
-						  "polygon",
-						  0, 
-						  this, 
-						  SLOT(activate()),
-						  collection, 
-						  "tool_polygon");
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Polygon Tool"), 
+					       "polygon",
+					       0, 
+					       this, 
+					       SLOT(activate()),
+					       collection, 
+					       "tool_polygon");
+	radio -> setExclusiveGroup("tools");
 }
 
 // void KisToolPolygon::toolSelect()

@@ -224,15 +224,14 @@ void KisToolColorChanger::mousePress(QMouseEvent *e)
 
 void KisToolColorChanger::setup(KActionCollection *collection)
 {
-	KToggleAction * toggle = new KToggleAction(i18n("Color Changer"), 
-						   "colorize", 
-						   0, 
-						   this, 
-						   SLOT(activate()), 
-						   collection, 
-						   "tool_colorchanger");
-
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction * radio = new KRadioAction(i18n("Color Changer"), 
+						"colorize", 
+						0, 
+						this, 
+						SLOT(activate()), 
+						collection, 
+						"tool_colorchanger");
+	radio -> setExclusiveGroup("tools");
 }
 
 // QDomElement KisToolColorChanger::saveSettings(QDomDocument& doc) const

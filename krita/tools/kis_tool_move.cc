@@ -77,13 +77,13 @@ void KisToolMove::mouseRelease(QMouseEvent *e)
 
 void KisToolMove::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Move"), 
-			"move", 
-			0, 
-			this,
-			SLOT(activate()),
-			collection,
-			"tool_move");
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Move"), 
+					       "move", 
+					       0, 
+					       this,
+					       SLOT(activate()),
+					       collection,
+					       "tool_move");
+	radio -> setExclusiveGroup("tools");
 }
 

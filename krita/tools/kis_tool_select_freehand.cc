@@ -285,7 +285,7 @@ void KisToolSelectFreehand::drawLine( const QPoint& start, const QPoint& end )
 
 void KisToolSelectFreehand::setup(KActionCollection *collection)
 {
-	KToggleAction *p = new KToggleAction(i18n("&Freehand Select"), 
+	KRadioAction *p = new KRadioAction(i18n("&Freehand Select"), 
 					     "freehand", 
 					     0, 
 					     this,  

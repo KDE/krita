@@ -43,15 +43,14 @@ KisToolSelectElliptical::~KisToolSelectElliptical()
 
 void KisToolSelectElliptical::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Elliptical Select"), 
-						  "elliptical" , 
-						  0, 
-						  this, 
-						  SLOT(activate()),
-						  collection, 
-						  "tool_select_elliptical" );
-
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Elliptical Select"), 
+					       "elliptical" , 
+					       0, 
+					       this, 
+					       SLOT(activate()),
+					       collection, 
+					       "tool_select_elliptical" );
+	radio -> setExclusiveGroup("tools");
 }
 
 void KisToolSelectElliptical::draw(const QPoint& start, const QPoint& end, QPaintEvent *e)

@@ -165,13 +165,11 @@ void KisToolEraser::eraseLine(const QPoint & pos1,
 
 void KisToolEraser::setup(KActionCollection *collection)
 {
-
-        KToggleAction *toggle;
-	toggle = new KToggleAction(i18n("&Eraser Tool"),
-				   "eraser", 0, this,
-				   SLOT(activate()), collection,
-				   "tool_eraser");
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Eraser Tool"),
+					       "eraser", 0, this,
+					       SLOT(activate()), collection,
+					       "tool_eraser");
+	radio -> setExclusiveGroup("tools");
 }
 
 #include "kis_tool_eraser.moc"

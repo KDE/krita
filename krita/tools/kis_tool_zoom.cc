@@ -136,9 +136,7 @@ void KisToolZoom::paintOutline(QPainter& gc, const QRect&)
 
 void KisToolZoom::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle;
-
-	toggle = new KToggleAction(i18n("&Zoom Tool"), "viewmag", 0, this, SLOT(activate()), collection, "tool_zoom");
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Zoom Tool"), "viewmag", 0, this, SLOT(activate()), collection, "tool_zoom");
+	radio -> setExclusiveGroup("tools");
 }
 

@@ -206,12 +206,11 @@ void KisToolAirBrush::paintLine(const QPoint & pos1,
 
 void KisToolAirBrush::setup(KActionCollection *collection)
 {
-	KToggleAction * toggle;
-	toggle = new KToggleAction(i18n("&Airbrush Tool"),
-				   "airbrush", 0, this,
-				   SLOT(activate()), collection,
-				   "tool_airbrush");
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction * radio = new KRadioAction(i18n("&Airbrush Tool"),
+						"airbrush", 0, this,
+						SLOT(activate()), collection,
+						"tool_airbrush");
+	radio -> setExclusiveGroup("tools");
 }
 
 

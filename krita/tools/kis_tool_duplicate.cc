@@ -66,12 +66,11 @@ void KisToolDuplicate::mousePress(QMouseEvent *e)
 
 void KisToolDuplicate::setup(KActionCollection *collection)
 {
-        KToggleAction *toggle;
-        toggle = new KToggleAction(i18n("&Duplicate"),
-   "duplicate a part of image", 0, this,
-                                   SLOT(activate()), collection,
-                                   "tool_duplicate");
-        toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Duplicate"),
+					       "duplicate a part of image", 0, this,
+					       SLOT(activate()), collection,
+					       "tool_duplicate");
+	radio -> setExclusiveGroup("tools");
 }
 
 void KisToolDuplicate::initPaint(const QPoint & pos)

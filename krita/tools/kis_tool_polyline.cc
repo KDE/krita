@@ -78,15 +78,14 @@ void KisToolPolyLine::mouseRelease(QMouseEvent * /*event*/)
 
 void KisToolPolyLine::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Polyline Tool"),
-						  "polyline", 
-						  0, 
-						  this, 
-						  SLOT(activate()), 
-						  collection, 
-						  "tool_polyline");
-
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Polyline Tool"),
+					       "polyline", 
+					       0, 
+					       this, 
+					       SLOT(activate()), 
+					       collection, 
+					       "tool_polyline");
+	radio -> setExclusiveGroup("tools");
 }
 
 QString KisToolPolyLine::settingsName() const

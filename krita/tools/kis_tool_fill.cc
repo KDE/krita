@@ -298,15 +298,14 @@ void KisToolFill::mousePress(QMouseEvent *e)
 
 void KisToolFill::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Filler Tool"), 
-						  "fill",
-						  0, 
-						  this, 
-						  SLOT(activate()),
-						  collection,
-						  "tool_fill");
-
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Filler Tool"), 
+					       "fill",
+					       0, 
+					       this, 
+					       SLOT(activate()),
+					       collection,
+					       "tool_fill");
+	radio -> setExclusiveGroup("tools");
 }
 
 // QDomElement KisToolFill::saveSettings(QDomDocument& doc) const

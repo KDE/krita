@@ -218,12 +218,11 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
 
 void KisToolLine::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Line Tool"),
-						  "line", 0, this,
-						  SLOT(activate()), collection,
-						  "tool_line");
-
-	toggle -> setExclusiveGroup("tools");
+	KRadioAction *radio = new KRadioAction(i18n("&Line Tool"),
+					       "line", 0, this,
+					       SLOT(activate()), collection,
+					       "tool_line");
+	radio -> setExclusiveGroup("tools");
 }
 
 #include "kis_tool_line.moc"

@@ -1158,7 +1158,7 @@ void KisView::slotImportImage()
 
 void KisView::export_image()
 {
-	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::writeFilters(), this, i18n("Export Image"));
+	KURL url = KFileDialog::getSaveURL(QString::null, KisImageMagickConverter::writeFilters(), this, i18n("Export Image"));
 	KisImageSP img = currentImg();
 	KisLayerSP dst;
 
@@ -1224,7 +1224,7 @@ void KisView::slotInsertImageAsLayer()
 
 void KisView::save_layer_as_image()
 {
-	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::writeFilters(), this, i18n("Export Layer"));
+	KURL url = KFileDialog::getSaveURL(QString::null, KisImageMagickConverter::writeFilters(), this, i18n("Export Layer"));
 	KisImageSP img = currentImg();
 
 	if (url.isEmpty())
@@ -1276,7 +1276,7 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filena
 	Q_INT32 rc = 0;
 
 	if (filename.isEmpty())
-		urls = KFileDialog::getOpenURLs(QString::null, KisUtil::readFilters(), 0, i18n("Import Image"));
+		urls = KFileDialog::getOpenURLs(QString::null, KisImageMagickConverter::readFilters(), 0, i18n("Import Image"));
 	else
 		urls.push_back(filename);
 

@@ -51,6 +51,10 @@ public:
 	KisImageBuilder_Result buildFile(const KURL& uri, KisLayerSP layer);
 	KisImageSP image();
 
+public:
+	static QString readFilters();
+	static QString writeFilters();
+
 private slots:
 	void ioData(KIO::Job *job, const QByteArray& data);
 	void ioResult(KIO::Job *job);

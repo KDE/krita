@@ -19,11 +19,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-#include <list>
-
-#include <Magick++.h>
-
 #include <kdebug.h>
 #include <kimageio.h>
 #include <kglobal.h>
@@ -32,13 +27,9 @@
 #include "kis_global.h"
 #include "kis_util.h"
 
-using namespace std;
-using namespace Magick;
-
 // A number which can be added to any image coordinate to make it positive
 // Used to make numbers round towards + or - infinity regardless of sign
 const long BIGNUM = (TILE_SIZE*10000);
-
 
 void KisUtil::printRect( const QRect& r, const QString& name )
 {
@@ -121,49 +112,6 @@ QString KisUtil::channelIdtoString(cId cid)
 	}
 }
 #endif
-
-/**
- * @name readFilters
- * @return Provide a list of file formats the application can read.
- */
-QString KisUtil::readFilters()
-{
-	typedef list<CoderInfo> ci;
-	typedef list<CoderInfo>::iterator ci_it;
-
-	list<CoderInfo> coders;
-	QString s = " ";
-	QString name;
-	QString description;
-
-	coderInfoList(&coders, CoderInfo::TrueMatch, CoderInfo::AnyMatch, CoderInfo::AnyMatch);
-
-	for (ci_it it = coders.begin(); it != coders.end(); it++) {
-		name = (*it).name().c_str();
-		s += "*." + name.lower() + " *." + name + " ";
-	}
-
-	s += "|" + i18n("All pictures");
-	s += "\n";
-
-	for (ci_it it = coders.begin(); it != coders.end(); it++) {
-		name = (*it).name().c_str();
-		description = (*it).description().c_str();
-
-		if (!description.contains('/')) {
-			s += "*." + name.lower() + " *." + name + "|";
-			s += i18n(description.latin1());
-			s += "\n";
-		}
-	}
-
-	return s;
-}
-
-QString KisUtil::writeFilters()
-{
-	return KisUtil::readFilters();
-}
 
 /*
     roughScaleQImage - scale a qimage keeping palette, no anti-aliasing

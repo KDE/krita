@@ -67,7 +67,6 @@
 #include "kis_selection.h"
 #include "kis_command.h"
 #include "kis_view.h"
-#include "kis_util.h"
 #include "builder/kis_builder_subject.h"
 #include "builder/kis_builder_monitor.h"
 #include "builder/kis_image_magick_converter.h"

@@ -21,6 +21,7 @@
 #include <magick/api.h>
 #include <qstring.h>
 #include <kapplication.h>
+#include <klocale.h>
 #include <kurl.h>
 #include <kio/netaccess.h>
 #include <koColor.h>
@@ -411,6 +412,86 @@ void KisImageMagickConverter::ioTotalSize(KIO::Job * /*job*/, KIO::filesize_t si
 void KisImageMagickConverter::intr()
 {
 	m_stop = true;
+}
+
+/**
+ * @name readFilters
+ * @return Provide a list of file formats the application can read.
+ */
+QString KisImageMagickConverter::readFilters()
+{
+	QString s;
+	QString all;
+	QString name;
+	QString description;
+	ExceptionInfo ei;
+	const MagickInfo *mi;
+
+	GetExceptionInfo(&ei);
+	mi = GetMagickInfo("*", &ei);
+
+	if (!mi)
+		return s;
+
+	for (; mi; mi = reinterpret_cast<const MagickInfo*>(mi -> next)) {
+		if (mi -> stealth)
+			continue;
+
+		if (mi -> decoder) {
+			name = mi -> name;
+			description = mi -> description;
+
+			if (!description.isEmpty() && !description.contains('/')) {
+				all += "*." + name.lower() + " *." + name + " ";
+				s += "*." + name.lower() + " *." + name + "|";
+				s += i18n(description.latin1());
+				s += "\n";
+			}
+		}
+	}
+
+	all += "|" + i18n("All Images");
+	all += "\n";
+	DestroyExceptionInfo(&ei);
+	return all + s;
+}
+
+QString KisImageMagickConverter::writeFilters()
+{
+	QString s;
+	QString all;
+	QString name;
+	QString description;
+	ExceptionInfo ei;
+	const MagickInfo *mi;
+
+	GetExceptionInfo(&ei);
+	mi = GetMagickInfo("*", &ei);
+
+	if (!mi)
+		return s;
+
+	for (; mi; mi = reinterpret_cast<const MagickInfo*>(mi -> next)) {
+		if (mi -> stealth)
+			continue;
+
+		if (mi -> encoder) {
+			name = mi -> name;
+			description = mi -> description;
+
+			if (!description.isEmpty() && !description.contains('/')) {
+				all += "*." + name.lower() + " *." + name + " ";
+				s += "*." + name.lower() + " *." + name + "|";
+				s += i18n(description.latin1());
+				s += "\n";
+			}
+		}
+	}
+
+	all += "|" + i18n("All Images");
+	all += "\n";
+	DestroyExceptionInfo(&ei);
+	return all + s;
 }
 
 #include "kis_image_magick_converter.moc"

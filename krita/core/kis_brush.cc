@@ -31,7 +31,6 @@
 #include <kdebug.h>
 
 #include "kis_brush.h"
-#include "kis_util.h"
 
 #define THUMB_SIZE 30
 

@@ -21,7 +21,7 @@
 
 #include <qcursor.h>
 #include "kis_tool.h"
-
+#include <koffice_export.h>
 class QEvent;
 class QKeyEvent;
 class QPaintEvent;
@@ -38,7 +38,7 @@ enum enumBrushMode {
 	HOVER
 };
 
-class KisToolPaint : public KisTool {
+class KRITACORE_EXPORT KisToolPaint : public KisTool {
 
 	Q_OBJECT
 	typedef KisTool super;

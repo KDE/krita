@@ -22,10 +22,10 @@
 #include "kis_types.h"
 #include "kis_generic_registry.h"
 #include "kis_paintop.h"
-
+#include <koffice_export.h>
 class QStringList;
 
-class KisPaintOpRegistry : public KisGenericRegistry<KisPaintOpFactorySP> {
+class KRITACORE_EXPORT KisPaintOpRegistry : public KisGenericRegistry<KisPaintOpFactorySP> {
 
 public:
 	virtual ~KisPaintOpRegistry();

@@ -219,14 +219,12 @@ public:
            Read the area defined by x1, y2, x2, y2 into the buffer. Stride is number of bytes
            that a pixel takes in the buffer.
         */
-	void readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
 
 	void readPixelData(KisPixelDataSP pd);
 
         /**
            Commit the pixel data in buffer.
         */
-	void writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
 
 	void writePixelData(KisPixelDataSP pd);
 
@@ -234,6 +232,8 @@ public:
 
 private:
 	KisTileMgr& operator=(const KisTileMgr&);
+	void readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
+	void writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
 	void allocate(Q_INT32 ntiles);
 	void duplicate(Q_INT32 ntiles, KisTileMgr *tm);
 	KisTileSP invalidateTile(KisTileSP tile, Q_INT32 tilenum);

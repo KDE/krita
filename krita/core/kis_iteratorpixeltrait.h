@@ -28,7 +28,7 @@ template< typename _iTp>
 class KisIteratorPixelTrait
 {
 public:
-	KisIteratorPixelTrait(KisPaintDeviceSP ndevice, _iTp *underlyingIterator)
+	KisIteratorPixelTrait(KisPaintDevice *ndevice, _iTp *underlyingIterator)
 	:	m_device(ndevice),
 		m_colorSpace(ndevice->colorStrategy()),
 		m_underlyingIterator(underlyingIterator)
@@ -56,7 +56,7 @@ protected:
 	inline QUANTUM* oldQuantumValue() { return m_underlyingIterator -> oldValue(); };
 	
 protected:
-	KisPaintDeviceSP m_device;
+	KisPaintDevice *m_device;
 	KisStrategyColorSpaceSP m_colorSpace;
 
 	_iTp *m_underlyingIterator;

@@ -39,7 +39,8 @@
 #include "kis_profile.h"
 
 
-KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QString& name)
+KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QString& name) :
+	KShared()
 {
 	init();
 	m_x = 0;
@@ -55,14 +56,15 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QStr
 	m_profile = 0;
 }
 
-KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrategy, const QString& name)
+KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrategy, const QString& name) :
+	KShared()
 {
         init();
         configure(img, colorStrategy, name, COMPOSITE_OVER);
 	m_profile = 0;
 }
 
-KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs)
+KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(rhs)
 {
         if (this != &rhs) {
                 m_owner = 0;

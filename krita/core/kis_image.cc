@@ -183,7 +183,7 @@ KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,  
 	m_profile = 0;
 }
 
-KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
+KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 {
 #if DEBUG_IMAGES
 	numImages++;

@@ -27,7 +27,6 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_render.h"
 #include "kis_image.h"
 #include "tiles/kis_datamanager.h"
 #include "kis_strategy_colorspace.h"
@@ -51,9 +50,8 @@ class KisHLineIteratorPixel;
 /**
  * Class modelled on QPaintDevice.
  */
-class KRITACORE_EXPORT KisPaintDevice : public QObject, public KisRenderInterface {
-        Q_OBJECT
-        typedef KisRenderInterface super;
+class  KRITACORE_EXPORT KisPaintDevice : public QObject, public KShared {
+	Q_OBJECT
 
 public:
 	KisPaintDevice(KisStrategyColorSpaceSP colorStrategy,

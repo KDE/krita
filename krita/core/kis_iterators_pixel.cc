@@ -22,19 +22,19 @@
 #include "kis_global.h"
 #include "kis_paint_device.h"
 
-KisHLineIteratorPixel::KisHLineIteratorPixel( KisPaintDeviceSP ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable) :
+KisHLineIteratorPixel::KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable) :
 	KisHLineIterator(dm, x, y, w, writable),
 	KisIteratorPixelTrait <KisHLineIterator> ( ndevice, this )
 {
 }
 
-KisVLineIteratorPixel::KisVLineIteratorPixel( KisPaintDeviceSP ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable) :
+KisVLineIteratorPixel::KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable) :
 	KisVLineIterator(dm, x, y, h, writable),
 	KisIteratorPixelTrait <KisVLineIterator> ( ndevice, this )
 {
 }
 
-KisRectIteratorPixel::KisRectIteratorPixel( KisPaintDeviceSP ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, bool writable) :
+KisRectIteratorPixel::KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, bool writable) :
 	KisRectIterator(dm, x, y, w, h, writable),
 	KisIteratorPixelTrait <KisRectIterator> ( ndevice, this )
 {

@@ -28,7 +28,7 @@ KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*
 	Q_UINT32 d = depth();
 
 	Q_ASSERT( colorStrategy() != 0 );
-	
+
 	for (y = 0; y < 64; y++)
 	{
 		KisHLineIteratorPixel hiter = createHLineIterator(0, y, 64, false);

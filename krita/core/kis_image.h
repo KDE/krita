@@ -28,7 +28,6 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_render.h"
 #include "kis_guide.h"
 #include "kis_scale_visitor.h"
 #include "resources/kis_profile.h"
@@ -39,7 +38,7 @@ class KisUndoAdapter;
 class KisPainter;
 class DCOPObject;
 
-class KRITACORE_EXPORT KisImage : public QObject, public KisRenderInterface {
+class KRITACORE_EXPORT KisImage : public QObject, public KShared {
 	Q_OBJECT
 
 public:

@@ -60,7 +60,7 @@ void Scan::slotScan()
 	}
     }
 
-    dlg->show();
+    scanDialog->show();
 }
 
 void Scan::slotShowImage(const QImage &img)

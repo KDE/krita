@@ -12,7 +12,7 @@ kpresenterrc_DATA = scan-kpresenter.rc
 
 EXTRA_DIST = $(kwordrc_DATA) $(krayonrc_DATA) $(killustratorrc_DATA) $(kpresenterrc_DATA)
 
-INCLUDES = $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 lib_LTLIBRARIES = libkofficescan.la
 
 libkofficescan_la_SOURCES = scan_factory.cpp scan.cpp

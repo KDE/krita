@@ -38,20 +38,28 @@ KisAlphaMask::KisAlphaMask(const QImage& img, double scale)
 	computeAlpha(scaledImg);
 }
 
+KisAlphaMask::KisAlphaMask(Q_INT32 width, Q_INT32 height, double scale)
+{
+	m_scale = scale;
+	m_scaledWidth = width;
+	m_scaledHeight = height;
+	m_data.resize(width * height, OPACITY_TRANSPARENT);
+}
+
 KisAlphaMask::~KisAlphaMask() 
 {}
 
-Q_INT32 KisAlphaMask::width() 
+Q_INT32 KisAlphaMask::width() const
 {
 	return m_scaledWidth;
 }
 
-Q_INT32 KisAlphaMask::height() 
+Q_INT32 KisAlphaMask::height() const
 {
 	return m_scaledHeight;
 }
 
-double KisAlphaMask::scale()
+double KisAlphaMask::scale() const
 {
 	return m_scale;
 }
@@ -67,6 +75,15 @@ QUANTUM KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
 	}
 }
 
+void KisAlphaMask::setAlphaAt(Q_INT32 x, Q_INT32 y, QUANTUM alpha)
+{
+	if (y >= 0 && y < m_scaledHeight && x >= 0 && x < m_scaledWidth) {
+		m_data[((y) * m_scaledWidth) + x] = alpha;
+	}
+	else {
+		kdDebug() << "oops \n";
+	}
+}
 
 void KisAlphaMask::copyAlpha(const QImage& img) 
 {

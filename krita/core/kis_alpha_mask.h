@@ -21,9 +21,11 @@
 #include <qimage.h>
 #include <qvaluevector.h>
 
+#include <ksharedptr.h>
+
 #include "kis_global.h"
 
-class KisAlphaMask {
+class KisAlphaMask : public KShared {
 	
  public:
 	/**
@@ -42,22 +44,27 @@ class KisAlphaMask {
 	*/
 	KisAlphaMask(const QImage& img, double scale);
 
+	/**
+	   Create a transparent mask.
+	*/
+	KisAlphaMask(Q_INT32 width, Q_INT32 height, double scale);
+
 	virtual ~KisAlphaMask();
 
 	/**
 	   @return the number of alpha values in a scanline.
 	*/
-	Q_INT32 height();
+	Q_INT32 height() const;
 
 	/**
 	   @return the number of lines in the mask.
 	 */
-   	Q_INT32 width();
+   	Q_INT32 width() const;
 
 	/**
 	   @return the scale factor.
 	*/
-	double scale();
+	double scale() const;
 	
 	/**
 	   @return the alpha value at the specified position.
@@ -74,12 +81,14 @@ class KisAlphaMask {
 	*/
 	QUANTUM alphaAt(Q_INT32 x, Q_INT32 y) const;
 
+	void setAlphaAt(Q_INT32 x, Q_INT32 y, QUANTUM alpha);
+
 private:
 
 	void computeAlpha(const QImage& img);
 	void copyAlpha(const QImage& img);
 
-	QValueVector<Q_INT32> m_data;
+	QValueVector<QUANTUM> m_data;
 	double m_scale;
 	Q_INT32 m_scaledWidth;
 	Q_INT32 m_scaledHeight;

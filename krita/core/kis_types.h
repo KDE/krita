@@ -91,5 +91,8 @@ typedef KSharedPtr<KisGuide> KisGuideSP;
 class KisMemento;
 typedef KSharedPtr<KisMemento> KisMementoSP;
 
+class KisAlphaMask;
+typedef KSharedPtr<KisAlphaMask> KisAlphaMaskSP;
+
 #endif // KISTYPES_H_
 

@@ -56,9 +56,9 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
         for(Q_INT32 targetY=0; targetY<targetH; targetY++){
                 for(Q_INT32 targetX=0; targetX<targetW; targetX++){
                         doubleSourceX=centerX+(targetX-centerX)*cosTheta-(targetY-centerY)*sinTheta;
-                        intSourceX=trunc(doubleSourceX);
+                        intSourceX=int(doubleSourceX);
                         doubleSourceY=centerX+(targetY-centerY)*sinTheta+(targetX-centerY)*cosTheta;
-                        intSourceY=trunc(doubleSourceY);
+                        intSourceY=int(doubleSourceY);
                         
                         //calculate weights
                         if(doubleSourceY > 0){

@@ -49,6 +49,15 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 
 	if (mediateOn & MEDIATE_BRUSHES) {
 		m_chooser = new KisBrushChooser(chooserParent, chooserName);
+		connect(rserver,
+			SIGNAL(loadedBrush(KisResource*)),
+			this,
+			SLOT(resourceServerLoadedResource(KisResource*)));
+
+		connect(rserver,
+			SIGNAL(loadedpipeBrush(KisResource*)),
+			this,
+			SLOT(resourceServerLoadedResource(KisResource*)));
 
 		resouceslist = rserver -> brushes();
 		for ( resource = resouceslist.first(); resource; resource = resouceslist.next() )
@@ -60,6 +69,10 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 	}
 	if (mediateOn & MEDIATE_PATTERNS) {
 		m_chooser = new KisPatternChooser(chooserParent, chooserName);
+		connect(rserver,
+			SIGNAL(loadedPattern(KisResource*)),
+			this,
+			SLOT(resourceServerLoadedResource(KisResource*)));
 
 		resouceslist = rserver -> patterns();
 		for ( resource = resouceslist.first(); resource; resource = resouceslist.next() )
@@ -68,6 +81,10 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 	}
 	if (mediateOn & MEDIATE_GRADIENTS) {
 		m_chooser = new KisGradientChooser(chooserParent, chooserName);
+		connect(rserver,
+			SIGNAL(loadedGradient(KisResource*)),
+			this,
+			SLOT(resourceServerLoadedResource(KisResource*)));
 
 		resouceslist = rserver -> gradients();
 		for ( resource = resouceslist.first(); resource; resource = resouceslist.next() )

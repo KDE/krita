@@ -1,0 +1,2 @@
+KDE_CHECK_HEADER(kjsembed/jsproxy_imp.h, have_kjsembed=yes, have_kjsembed=no)
+AM_CONDITIONAL(use_kjsembed, test x$have_kjsembed = xyes)

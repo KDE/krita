@@ -46,6 +46,7 @@
 #include "kis_move_event.h"
 #include "kis_pattern.h"
 #include "kis_iterators_infinite.h"
+#include "kis_selection.h"
 
 KisToolFill::KisToolFill() 
 	: super()
@@ -89,6 +90,10 @@ bool KisToolFill::flood(int startX, int startY)
 	if (!m_usePattern)
 		m_replaceWithIt = new KisIteratorInfinitePixel(m_lay->colorStrategy(), m_color);
 
+	m_useSelection = m_lay -> hasSelection();
+	if (m_useSelection)
+		m_selection = m_lay -> selection();
+
 	floodLine(startX, startY);
 
 	if (!m_usePattern)
@@ -123,11 +128,11 @@ int KisToolFill::floodSegment(int x, int y, int most, KisIteratorPixel* src, Kis
 	{
 		KisPixelRepresentation data = *it;
 		KisPixelRepresentation source = *src;
-		if (difference(m_oldColor, data, m_threshold, m_depth) == 0) {
-			for( int i = 0; i < m_depth; i++)
-			{
-				data[i] = (QUANTUM) source[i]; // explicit (QUANTUM) cast to prevent weirdness
-			}
+		if (difference(m_oldColor, data, m_threshold, m_depth) == 0 || m_useSelection) {
+			if (!m_useSelection || m_selection -> selected(x,y) < OPACITY_OPAQUE)
+				for( int i = 0; i < m_depth; i++) {
+					data[i] = (QUANTUM) source[i]; // explicit (QUANTUM) cast to prevent weirdness
+				}
 			m_map[y*m_lay->width()+x] = true;
 			if (d == Right) {
 				it->inc();
@@ -138,8 +143,19 @@ int KisToolFill::floodSegment(int x, int y, int most, KisIteratorPixel* src, Kis
 				src->dec();
 				x--; most--;
 			}
-		} else {
+		} else if (!m_useSelection) {
 			stop = true;
+		} else {
+			m_map[y*m_lay->width()+x] = true;
+			if (d == Right) {
+				it->inc();
+				src->inc();
+				x++; most++;
+			} else {
+				it->dec();
+				src->dec();
+				x--; most--;
+			}
 		}
 	}
 	
@@ -147,6 +163,8 @@ int KisToolFill::floodSegment(int x, int y, int most, KisIteratorPixel* src, Kis
 }
 
 void KisToolFill::floodLine(int x, int y) {
+	if (m_useSelection)
+		x = 0;
 	int mostRight, mostLeft = x;
 	
 	KisIteratorLinePixel lineIt = m_lay->iteratorPixelSelectionBegin( m_ktc, x,-1, y);
@@ -162,10 +180,14 @@ void KisToolFill::floodLine(int x, int y) {
 
 	if (!m_oldColor) {
 		m_oldColor = new QUANTUM[m_depth];
-		for (int i = 0; i < m_depth; i++)
-			m_oldColor[i] = pixelIt[i];
-	} else {
-		if (difference(m_oldColor, pixelIt, m_threshold, m_depth) != 0)
+		if (!m_useSelection) {
+			for (int i = 0; i < m_depth; i++)
+				m_oldColor[i] = pixelIt[i];
+		} else {
+			for (int i = 0; i < m_depth; i++)
+				m_oldColor[i] = 0; // we won't use this anyway with m_useSelection == true
+		}
+	} else if (difference(m_oldColor, pixelIt, m_threshold, m_depth) != 0 && !m_useSelection) {
 			return;
 	}
 

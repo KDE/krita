@@ -74,9 +74,10 @@ private:
 	KisPainter *m_painter;
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;
-	bool *m_map, m_samplemerged, m_usePattern;
+	bool *m_map, m_samplemerged, m_usePattern, m_useSelection;
 	KisIteratorInfinitePixel *m_replaceWithIt; // so we can 'cache' the color iterator
-	
+	KisSelectionSP m_selection;
+
 	QWidget *m_optWidget;
 	QLabel *m_lbThreshold;
 	IntegerWidget *m_slThreshold;

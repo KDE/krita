@@ -8,9 +8,9 @@
 *****************************************************************************/
 void FormBCDialog::slotBrightnessValueChanged(int v)
 {
-    this->textLabelBrightnessValue->setText(QString().setNum(v));
+    textLabelBrightnessValue->setText(QString().setNum(v));
 }
 void FormBCDialog::slotContrastValueChanged(int v)
 {
-    this->textLabelContrastValue->setText(QString().setNum(v));
+    textLabelContrastValue->setText(QString().setNum(v));
 }

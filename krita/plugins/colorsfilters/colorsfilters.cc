@@ -69,7 +69,7 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 		{
 				m_view = 0;
 		} else {
-			this->m_view = (KisView*) parent;
+			m_view = (KisView*) parent;
 		}
 }
 
@@ -86,7 +86,7 @@ inline QUANTUM processColor( QUANTUM d, int s)
 
 void ColorsFilters::slotColorActivated()
 {
-	KisDoc* kD = (KisDoc*) this->m_view->koDocument();
+	KisDoc* kD = (KisDoc*) m_view->koDocument();
 	if( kD->imageNum(0) == 0 )
 		return;
 	KisLayerSP lay = kD->imageNum(0)->activeLayer();
@@ -95,7 +95,7 @@ void ColorsFilters::slotColorActivated()
 	KisTileSP tile;
 	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB)
 	{
-		FormRGBSliders* frsd = new FormRGBSliders( this->m_view, "Color adjustment", TRUE);
+		FormRGBSliders* frsd = new FormRGBSliders( m_view, "Color adjustment", TRUE);
 		frsd->setMinValue(-255);
 		frsd->setMaxValue(255);
 		frsd->setPrecision(1);
@@ -130,7 +130,7 @@ void ColorsFilters::slotColorActivated()
 		kD->imageNum(0)->undoAdapter()->addCommand( ktc );
 		kD->imageNum(0)->notify();
 	} else if( lay->typeWithoutAlpha() == IMAGE_TYPE_CMYK) {
-		FormCMYBSliders* frsd = new FormCMYBSliders( this->m_view, "Color adjustment", TRUE);
+		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Color adjustment", TRUE);
 		frsd->setMinValue(-255);
 		frsd->setMaxValue(255);
 		frsd->setPrecision(1);
@@ -170,7 +170,7 @@ void ColorsFilters::slotColorActivated()
 }
 void ColorsFilters::slotGammaActivated()
 {
-	KisDoc* kD = (KisDoc*) this->m_view->koDocument();
+	KisDoc* kD = (KisDoc*) m_view->koDocument();
 	if( kD->imageNum(0) == 0 )
 		return;
 	KisLayerSP lay = kD->imageNum(0)->activeLayer();
@@ -179,7 +179,7 @@ void ColorsFilters::slotGammaActivated()
 	KisTileSP tile;
 	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB)
 	{
-		FormRGBSliders* frsd = new FormRGBSliders( this->m_view, "Gamma Correction", TRUE);
+		FormRGBSliders* frsd = new FormRGBSliders( m_view, "Gamma Correction", TRUE);
 		frsd->setMinValue(1);
 		frsd->setMaxValue(600);
 		frsd->setPrecision(100);
@@ -214,7 +214,7 @@ void ColorsFilters::slotGammaActivated()
 		kD->imageNum(0)->undoAdapter()->addCommand( ktc );
 		kD->imageNum(0)->notify();
 	} else if( lay->typeWithoutAlpha() == IMAGE_TYPE_CMYK) {
-		FormCMYBSliders* frsd = new FormCMYBSliders( this->m_view, "Gamma Correction", TRUE);
+		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Gamma Correction", TRUE);
 		frsd->setMinValue(1);
 		frsd->setMaxValue(600);
 		frsd->setPrecision(100);
@@ -255,10 +255,10 @@ void ColorsFilters::slotGammaActivated()
 void ColorsFilters::slotBrightnessContrastActivated()
 {
 	//Get the new values
-	FormBCDialog* fbcd = new FormBCDialog( this->m_view, "Brightness / Contrast", TRUE);
+	FormBCDialog* fbcd = new FormBCDialog( m_view, "Brightness / Contrast", TRUE);
 	if( fbcd->exec() ==  QDialog::Rejected )
 		return;
-	KisDoc* kD = (KisDoc*) this->m_view->koDocument();
+	KisDoc* kD = (KisDoc*) m_view->koDocument();
 	if( kD->imageNum(0) == 0 )
 		return;
 	int bright = fbcd->sliderBrightness->value();

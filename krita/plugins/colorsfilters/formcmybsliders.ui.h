@@ -11,70 +11,70 @@
 
 void FormCMYBSliders::slotCyanValueChanged( int v )
 {
-    this->textCyanValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
+    textCyanValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
 }
 
 
 void FormCMYBSliders::slotYellowValueChanged( int v )
 {
-  this->textYellowValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
+  textYellowValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
 }
 
 
 void FormCMYBSliders::slotMagentaValueChanged( int v )
 {
-  this->textMagentaValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
+  textMagentaValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
 }
 
 void FormCMYBSliders::slotBlackValueChanged( int v )
 {
-  this->textBlackValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
+  textBlackValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
 }
 
 void FormCMYBSliders::setMaxValue( int eV )
 {
-    this->sliderMagenta->setMaxValue(eV);
-    this->sliderCyan->setMaxValue(eV);
-    this->sliderYellow->setMaxValue(eV);
+    sliderMagenta->setMaxValue(eV);
+    sliderCyan->setMaxValue(eV);
+    sliderYellow->setMaxValue(eV);
 }
 
 
 void FormCMYBSliders::setMinValue( int eV )
 {
-    this->sliderMagenta->setMinValue(eV);
-    this->sliderCyan->setMinValue(eV);
-    this->sliderYellow->setMinValue(eV);
+    sliderMagenta->setMinValue(eV);
+    sliderCyan->setMinValue(eV);
+    sliderYellow->setMinValue(eV);
 }
 
 
 void FormCMYBSliders::setPrecision( int eP )
 {
     if( eP <= 0) return;
-    this->precision = eP;
+    precision = eP;
 }
 
 
 float FormCMYBSliders::getMagentaValue()
 {
-    return  this->sliderMagenta->value()  / precision;
+    return  sliderMagenta->value()  / precision;
 }
 
 
 float FormCMYBSliders::getYellowValue()
 {
-    return  this->sliderYellow->value()  / precision;
+    return  sliderYellow->value()  / precision;
 }
 
 
 float FormCMYBSliders::getCyanValue()
 {
-    this->sliderCyan->value() / precision;
+    sliderCyan->value() / precision;
 }
 
 
 float FormCMYBSliders::getBlackValue()
 {
-    this->sliderBlack->value() / precision;
+    sliderBlack->value() / precision;
 }
 
 void FormCMYBSliders::init()
@@ -85,16 +85,16 @@ void FormCMYBSliders::init()
 
 void FormCMYBSliders::setInitValue( int v )
 {
-    this->sliderCyan->setValue(v * precision);
-    this->sliderMagenta->setValue(v * precision);
-    this->sliderYellow->setValue(v * precision);
+    sliderCyan->setValue(v * precision);
+    sliderMagenta->setValue(v * precision);
+    sliderYellow->setValue(v * precision);
 }
 
 
 void FormCMYBSliders::recalculTickInterval()
 {
-    int tickInterval = ( this->sliderYellow->maxValue() - this->sliderYellow->minValue() ) / 20;
-    this->sliderCyan->setTickInterval( tickInterval );
-    this->sliderMagenta->setTickInterval( tickInterval );
-    this->sliderYellow->setTickInterval( tickInterval );
+    int tickInterval = ( sliderYellow->maxValue() - sliderYellow->minValue() ) / 20;
+    sliderCyan->setTickInterval( tickInterval );
+    sliderMagenta->setTickInterval( tickInterval );
+    sliderYellow->setTickInterval( tickInterval );
 }

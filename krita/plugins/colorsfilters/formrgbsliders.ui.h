@@ -11,60 +11,60 @@
 
 void FormRGBSliders::slotRedValueChanged( int v )
 {
-    this->textRedValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
+    textRedValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
 }
 
 
 void FormRGBSliders::slotBlueValueChanged( int v )
 {
-  this->textBlueValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
+  textBlueValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
 }
 
 
 void FormRGBSliders::slotGreenValueChanged( int v )
 {
-  this->textGreenValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
+  textGreenValue->setText(QString().setNum( round(10*(((float)v) / precision))/10 ));
 }
 
 
 void FormRGBSliders::setMaxValue( int eV )
 {
-    this->sliderGreen->setMaxValue(eV);
-    this->sliderRed->setMaxValue(eV);
-    this->sliderBlue->setMaxValue(eV);
+    sliderGreen->setMaxValue(eV);
+    sliderRed->setMaxValue(eV);
+    sliderBlue->setMaxValue(eV);
 }
 
 
 void FormRGBSliders::setMinValue( int eV )
 {
-    this->sliderGreen->setMinValue(eV);
-    this->sliderRed->setMinValue(eV);
-    this->sliderBlue->setMinValue(eV);
+    sliderGreen->setMinValue(eV);
+    sliderRed->setMinValue(eV);
+    sliderBlue->setMinValue(eV);
 }
 
 
 void FormRGBSliders::setPrecision( int eP )
 {
     if( eP <= 0) return;
-    this->precision = eP;
+    precision = eP;
 }
 
 
 float FormRGBSliders::getGreenValue()
 {
-    return  this->sliderGreen->value()  / precision;
+    return  sliderGreen->value()  / precision;
 }
 
 
 float FormRGBSliders::getBlueValue()
 {
-    return  this->sliderBlue->value()  / precision;
+    return  sliderBlue->value()  / precision;
 }
 
 
 float FormRGBSliders::getRedValue()
 {
-    return  this->sliderRed->value()  / precision;
+    return  sliderRed->value()  / precision;
 }
 
 
@@ -76,16 +76,16 @@ void FormRGBSliders::init()
 
 void FormRGBSliders::setInitValue( int v )
 {
-    this->sliderRed->setValue(v * precision);
-    this->sliderGreen->setValue(v * precision);
-    this->sliderBlue->setValue(v * precision);
+    sliderRed->setValue(v * precision);
+    sliderGreen->setValue(v * precision);
+    sliderBlue->setValue(v * precision);
 }
 
 
 void FormRGBSliders::recalculTickInterval()
 {
-    int tickInterval = ( this->sliderBlue->maxValue() - this->sliderBlue->minValue() ) / 20;
-    this->sliderRed->setTickInterval( tickInterval );
-    this->sliderGreen->setTickInterval( tickInterval );
-    this->sliderBlue->setTickInterval( tickInterval );
+    int tickInterval = ( sliderBlue->maxValue() - sliderBlue->minValue() ) / 20;
+    sliderRed->setTickInterval( tickInterval );
+    sliderGreen->setTickInterval( tickInterval );
+    sliderBlue->setTickInterval( tickInterval );
 }

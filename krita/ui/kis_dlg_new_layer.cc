@@ -43,7 +43,7 @@ const int INITIALHEIGHT = 512;
 NewLayerDialog::NewLayerDialog( QWidget *parent, const char *name )
     : KDialogBase ( parent, name, true, "", Ok | Cancel )
 {
-    setCaption( i18n("New Image") );
+    setCaption( i18n("New Layer") );
     QVBox *page = makeVBoxMainWidget();
 
     QGridLayout* grid = new QGridLayout( page, 2, 2);

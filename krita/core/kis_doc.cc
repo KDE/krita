@@ -252,6 +252,7 @@ bool KisDoc::initDoc()
 		KisImageSP img = new KisImage(this, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, IMG_DEFAULT_DEPTH, 0, IMAGE_TYPE_RGBA, name);
 		KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_DEPTH, img -> nextLayerName(), OPACITY_OPAQUE);
 
+		layer -> visible(true);
 		emit imageListUpdated();
 		setModified(true);
 		ok = true;
@@ -1085,6 +1086,7 @@ bool KisDoc::slotNewImage()
 	gc.end();
 	img -> add(layer, -1);
 	img -> invalidate();
+	layer -> visible(true);
 	addImage(img);
 	emit layersUpdated();
 	return true;

@@ -1712,6 +1712,7 @@ void KisView::layerAdd()
 					img -> top(layer);
 					img -> invalidate();
 					m_doc -> setModified(true);
+					layer -> visible(true);
 					layersUpdated();
 					m_layerBox -> setCurrentItem(img -> index(layer));
 					resizeEvent(0);

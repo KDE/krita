@@ -28,11 +28,14 @@ KisLayer::KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString&
 	: super(img, width, height, img -> imgType(), name)
 {
 	m_linked = false;
+	m_opacity = opacity;
 }
 
 KisLayer::KisLayer(KisTileMgr tiles, KisImageSP img, const QString& name, QUANTUM opacity)
 	: super(img, img -> width(), img -> height(), img -> imgType(), name)
 {
+	m_linked = false;
+	m_opacity = opacity;
 }
 
 KisLayer::~KisLayer()

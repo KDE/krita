@@ -134,16 +134,12 @@ void KisListBox::slotMenuAction(int mnuId)
 	switch (mnuId) {
 		case VISIBLE:
 			emit itemToggleVisible();
-			p -> toggleVisible();
-			m_contextMnu -> setItemChecked(VISIBLE, p -> visible());
 			break;
 		case SELECTION:
 			emit itemSelected(n);
 			break;
 		case LINKING:
 			emit itemToggleLinked();
-			p -> toggleLinked();
-			m_contextMnu -> setItemChecked(LINKING, p -> linked());
 			break;
 		case PROPERTIES:
 			emit itemProperties();
@@ -264,12 +260,8 @@ void KisListBox::insertItem(const QString& name, bool visible, bool linked)
 {
 	KisListBoxItem *p = new KisListBoxItem(name, m_lst, m_flags);
 
-	if (!visible)
-		p -> toggleVisible();
-
-	if (linked)
-		p -> toggleLinked();
-
+	p -> setVisible(visible);
+	p -> setLinked(linked);
 	m_lst -> insertItem(p);
 	m_lst -> setCurrentItem(p);
 }
@@ -381,6 +373,7 @@ void KisListBoxItem::paint(QPainter *gc)
 
 	m_parent -> style().drawPrimitive(QStyle::PE_Panel, gc, m_visibleRect, m_parent -> colorGroup());
 	pt = QPoint(m_visibleRect.left() + 2, m_visibleRect.top() + 2);
+	printf("m_visible = %d\n", m_visible);
 	pix = m_visible ? &m_visiblePix : &m_invisiblePix;
 	gc -> drawPixmap(pt, *pix, QRect(0, 0, m_visibleRect.width(), m_visibleRect.height()));
 

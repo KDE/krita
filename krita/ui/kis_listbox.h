@@ -102,10 +102,12 @@ public:
 	virtual int width() const;
 	virtual void paint(QPainter *gc);
 
-	inline bool visible();
-	inline bool linked();
-	inline void toggleVisible();
-	inline void toggleLinked();
+	bool visible();
+	bool linked();
+	void toggleVisible();
+	void toggleLinked();
+	void setVisible(bool v);
+	void setLinked(bool v);
 	
 	bool intersectVisibleRect(const QPoint& pos, int yOffset) const;
 	bool intersectLinkedRect(const QPoint& pos, int yOffset) const;
@@ -133,24 +135,40 @@ private:
 	KisListBox::flags m_flags;
 };
 
+inline
 bool KisListBoxItem::visible()
 {
 	return m_visible;
 }
 
+inline
 bool KisListBoxItem::linked()
 {
 	return m_linked;
 }
 
+inline
 void KisListBoxItem::toggleVisible()
 {
 	m_visible = !m_visible;
 }
 
+inline
 void KisListBoxItem::toggleLinked()
 {
 	m_linked = !m_linked;
+}
+
+inline
+void KisListBoxItem::setVisible(bool v)
+{
+	m_visible = v;
+}
+
+inline
+void KisListBoxItem::setLinked(bool v)
+{
+	m_linked = v;
 }
 
 #endif // KIS_LISTBOX_H

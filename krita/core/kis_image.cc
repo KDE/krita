@@ -957,7 +957,7 @@ void KisImage::copyTile(KisTileSP dst, KisTileSP src)
 
 void KisImage::renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y)
 {
-	if (!dst)
+	if (!tm || !dst)
 		return;
 
 	if (dst -> width() == TILE_WIDTH && dst -> height() == TILE_HEIGHT) {
@@ -1001,7 +1001,6 @@ void KisImage::renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y)
 		gc.drawImage(x, y, image);
 		dst -> release();
 	}
-
 }
 
 void KisImage::expand(KisPaintDeviceSP dev)

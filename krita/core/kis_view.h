@@ -66,13 +66,14 @@ class ControlFrame;
 class KisUndoAdapter;
 class KisRect;
 class KisPoint;
+class KisDlgColorRange;
 
 class KisView : public KoView,
-		private KisCanvasSubject,
-		private KisCanvasControllerInterface,
-		private KisToolControllerInterface {
+	private KisCanvasSubject,
+	private KisCanvasControllerInterface,
+	private KisToolControllerInterface {
 	Q_OBJECT
-	typedef KoView super;
+		typedef KoView super;
 	typedef std::list<KisCanvasObserver*> vKisCanvasObserver;
 	typedef vKisCanvasObserver::iterator vKisCanvasObserver_it;
 	typedef vKisCanvasObserver::const_iterator vKisCanvasObserver_cit;
@@ -103,7 +104,7 @@ signals:
 	void cursorEnter();
 	void cursorLeave();
 
-public slots:
+	public slots:
 	void dialog_gradient();
 	void slotSetFGColor(const KoColor& c);
 	void slotSetBGColor(const KoColor& c);
@@ -124,7 +125,7 @@ public slots:
 
 	// settings action slots
 	void preferences();
-    void copy();
+	void copy();
 	void cut();
 	void removeSelection();
 	void paste();
@@ -201,6 +202,7 @@ private:
 	void updateGuides();
 	void imgUpdateGUI();
 	void fillSelection(const KoColor& c, QUANTUM opacity);
+
 	void layerUpdateGUI(bool enable);
 	void paintView(const KisRect& rc);
 	void selectionUpdateGUI(bool enable);
@@ -219,15 +221,16 @@ private:
 	void zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf);
 
 private slots:
+
 	void clipboardDataChanged();
 	void duplicateCurrentImg();
 	void fillSelectionBg();
 	void fillSelectionFg();
+	void selectColorRange();
 	void paste_into();
-    void popupTabBarMenu( const QPoint& );
-    void moveImage( unsigned, unsigned );
-    void slotRename();
-
+	void popupTabBarMenu( const QPoint& );
+	void moveImage( unsigned, unsigned );
+	void slotRename();
 
 	void canvasGotMousePressEvent(QMouseEvent *e);
 	void canvasGotMouseMoveEvent(QMouseEvent *e);
@@ -348,18 +351,23 @@ private:
 	KAction *m_selectionRm;
 	KAction *m_selectionSelectAll;
 	KAction *m_selectionSelectNone;
-    KAction *m_imgRename;
+	KAction *m_selectionColorRange;
+	KAction *m_imgRename;
 	DCOPObject *m_dcop;
 
         // Widgets
 	QScrollBar *m_hScroll; // XXX: the sizing of the scrollthumbs
 	QScrollBar *m_vScroll; // is not right yet.
 
-        //Dockers
+        // Dockers
 	DockFrameDocker *m_layerchanneldocker;
 	DockFrameDocker *m_resourcedocker;
 	DockFrameDocker *m_toolcontroldocker;
+	DockFrameDocker *m_historydocker;
 	ColorDocker *m_colordocker;
+
+	// Dialogs
+	KisDlgColorRange * m_colorrange;
 
 	QWidget *m_paletteChooser;
 	QWidget *m_gradientChooser;

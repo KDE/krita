@@ -3,6 +3,7 @@
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
+ *                2003-2004 Boudewijn Rempt <boud@valdyas.org>
  *                2004 Clarence Dang <dang@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -98,14 +99,19 @@
 #include "kis_undo_adapter.h"
 #include "kis_util.h"
 #include "kis_view.h"
+#include "kis_rect.h"
+#include "KRayonViewIface.h"
+
 #include "labels/kis_label_builder_progress.h"
 #include "labels/kis_label_cursor_pos.h"
 #include "labels/kis_label_io_progress.h"
+
 #include "strategy/kis_strategy_move.h"
+
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
-#include "kis_rect.h"
-#include "KRayonViewIface.h"
+
+#include "kis_dlg_colorrange.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
@@ -172,10 +178,14 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_yoff = 0;
 	m_fg = KoColor::black();
 	m_bg = KoColor::white();
+
 	m_layerchanneldocker = 0;
 	m_resourcedocker = 0;
 	m_toolcontroldocker = 0;
 	m_colordocker = 0;
+	
+	m_colorrange = 0;
+	
 	m_paletteChooser = 0;
 	m_gradientChooser = 0;
 	m_imageChooser = 0;
@@ -216,106 +226,103 @@ KisView::~KisView()
 
 DCOPObject* KisView::dcopObject()
 {
-    if (!m_dcop)
-        m_dcop = new KRayonViewIface(this);
+	if (!m_dcop)
+		m_dcop = new KRayonViewIface(this);
 
-    return m_dcop;
+	return m_dcop;
 }
 
 void KisView::setupDockers()
 {
-	KStatusBar *sb = statusBar();
+
 	KisResourceServer *rserver = KisFactory::rServer();
 
-	if (sb) {
-		m_layerchanneldocker = new DockFrameDocker(this);
-		m_layerchanneldocker  -> setCaption(i18n("Layers/Channels"));
-		m_resourcedocker = new DockFrameDocker(this);
-		m_resourcedocker  -> setCaption(i18n("Brushes/Pattern"));
-		m_toolcontroldocker = new DockFrameDocker(this);
-		m_toolcontroldocker  -> setCaption(i18n("Tool Properties"));
-		m_colordocker = new ColorDocker(this);
-		m_colordocker  -> setCaption(i18n("Color Manager"));
+	m_layerchanneldocker = new DockFrameDocker(this);
+	m_layerchanneldocker -> setCaption(i18n("Layers/Channels/Paths"));
 
-		m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
-							 m_resourcedocker, "brush_chooser", this);
-		m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
-		m_resourcedocker -> plug(m_brushMediator -> chooserWidget());
-		connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
+	m_resourcedocker = new DockFrameDocker(this);
+	m_resourcedocker -> setCaption(i18n("Brushes/Patterns/Gradients"));
 
-		m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
-							    m_resourcedocker, "pattern chooser", this);
-		m_pattern = dynamic_cast<KisPattern*>(m_patternMediator -> currentResource());
-		m_resourcedocker -> plug(m_patternMediator -> chooserWidget());
-		connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
+	m_toolcontroldocker = new DockFrameDocker(this);
+	m_toolcontroldocker -> setCaption(i18n("Navigator/Info/Options"));
 
-//  		m_gradientChooser = new QWidget(this);
-//  		m_gradient = new KisGradient;
-//  		m_gradientChooser -> setCaption(i18n("Gradients"));
-//  		m_sideBar -> plug(m_gradientChooser);
+	m_colordocker = new ColorDocker(this);
+	m_colordocker -> setCaption(i18n("Color Manager"));
 
-//  		m_paletteChooser = new QWidget(this);
-//  		m_paletteChooser -> setCaption(i18n("Palettes"));
-//  		m_sideBar -> plug(m_paletteChooser);
+	m_historydocker = new DockFrameDocker(this);
+	m_historydocker -> setCaption(i18n("History/Actions"));
 
-		m_layerBox = new KisListBox(i18n("layer"), KisListBox::SHOWALL, m_layerchanneldocker);
-		m_layerBox -> setCaption(i18n("Layers"));
+	m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
+						  m_resourcedocker, "brush_chooser", this);
+	m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
+	m_resourcedocker -> plug(m_brushMediator -> chooserWidget());
+	connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
 
-		connect(m_layerBox, SIGNAL(itemToggleVisible()), SLOT(layerToggleVisible()));
-		connect(m_layerBox, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
-		connect(m_layerBox, SIGNAL(itemToggleLinked()), SLOT(layerToggleLinked()));
-		connect(m_layerBox, SIGNAL(itemProperties()), SLOT(layerProperties()));
-		connect(m_layerBox, SIGNAL(itemAdd()), SLOT(layerAdd()));
-		connect(m_layerBox, SIGNAL(itemRemove()), SLOT(layerRemove()));
-		connect(m_layerBox, SIGNAL(itemAddMask(int)), SLOT(layerAddMask(int)));
-		connect(m_layerBox, SIGNAL(itemRmMask(int)), SLOT(layerRmMask(int)));
-		connect(m_layerBox, SIGNAL(itemRaise()), SLOT(layerRaise()));
-		connect(m_layerBox, SIGNAL(itemLower()), SLOT(layerLower()));
-		connect(m_layerBox, SIGNAL(itemFront()), SLOT(layerFront()));
-		connect(m_layerBox, SIGNAL(itemBack()), SLOT(layerBack()));
-		connect(m_layerBox, SIGNAL(itemLevel(int)), SLOT(layerLevel(int)));
+	m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
+						    m_resourcedocker, "pattern chooser", this);
+	m_pattern = dynamic_cast<KisPattern*>(m_patternMediator -> currentResource());
+	m_resourcedocker -> plug(m_patternMediator -> chooserWidget());
+	connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
 
-		m_layerchanneldocker -> plug(m_layerBox);
-		layersUpdated();
+	m_layerBox = new KisListBox(i18n("layer"), KisListBox::SHOWALL, m_layerchanneldocker);
+	m_layerBox -> setCaption(i18n("Layers"));
 
-  		m_channelView = new KisChannelView(m_doc, this);
-  		m_channelView -> setCaption(i18n("Channels"));
-  		m_layerchanneldocker -> plug(m_channelView);
+	connect(m_layerBox, SIGNAL(itemToggleVisible()), SLOT(layerToggleVisible()));
+	connect(m_layerBox, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
+	connect(m_layerBox, SIGNAL(itemToggleLinked()), SLOT(layerToggleLinked()));
+	connect(m_layerBox, SIGNAL(itemProperties()), SLOT(layerProperties()));
+	connect(m_layerBox, SIGNAL(itemAdd()), SLOT(layerAdd()));
+	connect(m_layerBox, SIGNAL(itemRemove()), SLOT(layerRemove()));
+	connect(m_layerBox, SIGNAL(itemAddMask(int)), SLOT(layerAddMask(int)));
+	connect(m_layerBox, SIGNAL(itemRmMask(int)), SLOT(layerRmMask(int)));
+	connect(m_layerBox, SIGNAL(itemRaise()), SLOT(layerRaise()));
+	connect(m_layerBox, SIGNAL(itemLower()), SLOT(layerLower()));
+	connect(m_layerBox, SIGNAL(itemFront()), SLOT(layerFront()));
+	connect(m_layerBox, SIGNAL(itemBack()), SLOT(layerBack()));
+	connect(m_layerBox, SIGNAL(itemLevel(int)), SLOT(layerLevel(int)));
 
-//  		m_pathView = new QWidget(this);
-//  		m_pathView -> setCaption(i18n("Paths"));
-//  		m_sideBar -> plug(m_pathView);
+	m_layerchanneldocker -> plug(m_layerBox);
+	layersUpdated();
 
-		m_controlWidget = new ControlFrame(m_toolcontroldocker);
-		m_controlWidget -> setCaption(i18n("General"));
-		m_toolcontroldocker -> plug(m_controlWidget);
+	m_channelView = new KisChannelView(m_doc, this);
+	m_channelView -> setCaption(i18n("Channels"));
+	m_layerchanneldocker -> plug(m_channelView);
 
-		m_controlWidget -> slotSetBGColor(m_bg);
-		m_controlWidget -> slotSetFGColor(m_fg);
-		connect(m_controlWidget, SIGNAL(fgColorChanged(const KoColor&)), SLOT(slotSetFGColor(const KoColor&)));
-        	connect(m_controlWidget, SIGNAL(bgColorChanged(const KoColor&)), SLOT(slotSetBGColor(const KoColor&)));
-		connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetFGColor(const KoColor&)));
-		connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetBGColor(const KoColor&)));
-		m_colordocker -> slotSetBGColor(m_bg);
-		m_colordocker -> slotSetFGColor(m_fg);
-		connect(this , SIGNAL(fgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetFGColor(const KoColor&)));
-		connect(this , SIGNAL(bgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetBGColor(const KoColor&)));
-		connect(m_colordocker, SIGNAL(fgColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
-		connect(m_colordocker, SIGNAL(bgColorChanged(const KoColor&)), this, SLOT(slotSetBGColor(const KoColor&)));
+	m_controlWidget = new ControlFrame(m_toolcontroldocker);
+	m_controlWidget -> setCaption(i18n("General"));
+	m_toolcontroldocker -> plug(m_controlWidget);
 
-		rserver -> loadBrushes();
-		rserver -> loadpipeBrushes();
-		rserver -> loadPatterns();
+	m_controlWidget -> slotSetBGColor(m_bg);
+	m_controlWidget -> slotSetFGColor(m_fg);
+	connect(m_controlWidget, SIGNAL(fgColorChanged(const KoColor&)), SLOT(slotSetFGColor(const KoColor&)));
+	connect(m_controlWidget, SIGNAL(bgColorChanged(const KoColor&)), SLOT(slotSetBGColor(const KoColor&)));
+	connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetFGColor(const KoColor&)));
+	connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetBGColor(const KoColor&)));
+	m_colordocker -> slotSetBGColor(m_bg);
+	m_colordocker -> slotSetFGColor(m_fg);
+	connect(this , SIGNAL(fgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetFGColor(const KoColor&)));
+	connect(this , SIGNAL(bgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetBGColor(const KoColor&)));
+	connect(m_colordocker, SIGNAL(fgColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
+	connect(m_colordocker, SIGNAL(bgColorChanged(const KoColor&)), this, SLOT(slotSetBGColor(const KoColor&)));
 
-		// TODO Here should be a better check
-		if ( mainWindow()->isDockEnabled( DockBottom))
-		{
-			viewControlDocker();
-			viewLayerChannelDocker();
-			viewResourceDocker();
-			mainWindow()->setDockEnabled( DockBottom, false);
-		}
+	rserver -> loadBrushes();
+	rserver -> loadpipeBrushes();
+	rserver -> loadPatterns();
+
+	// TODO Here should be a better check
+	if ( mainWindow() -> isDockEnabled( DockBottom))
+	{
+		viewControlDocker();
+		viewLayerChannelDocker();
+		viewResourceDocker();
+		viewColorDocker();
+		// Frankly, I'm not really satisfied with the
+		// behaviour of the dockers. I wish they would dock
+		// onto each other, instead of onto the main window.
+		mainWindow() -> setDockEnabled( DockBottom, false);
+		mainWindow() -> setDockEnabled( DockTop, false);
 	}
+
 }
 
 void KisView::setupScrollBars()
@@ -360,69 +367,69 @@ void KisView::setupTabBar()
 
 void KisView::popupTabBarMenu( const QPoint& _point )
 {
-    if ( !m_doc->isReadWrite() || !factory() )
-        return;
-    static_cast<QPopupMenu*>(factory()->container("menuimage_popup",this))->popup(_point);
+	if ( !m_doc->isReadWrite() || !factory() )
+		return;
+	static_cast<QPopupMenu*>(factory()->container("menuimage_popup",this))->popup(_point);
 }
 
 void KisView::moveImage( unsigned img , unsigned target)
 {
-    //todo
+	//todo
 #if 0  //code from kspread adapt it.
         QStringList vs = d->workbook->visibleSheets();
 
-    if( target >= vs.count() )
-        d->workbook->moveTable( vs[ img ], vs[ vs.count()-1 ], false );
-    else
-        d->workbook->moveTable( vs[ img ], vs[ target ], true );
+	if( target >= vs.count() )
+		d->workbook->moveTable( vs[ img ], vs[ vs.count()-1 ], false );
+	else
+		d->workbook->moveTable( vs[ img ], vs[ target ], true );
 #endif
-    m_tabBar->moveTab( img, target );
+	m_tabBar->moveTab( img, target );
 }
 
 void KisView::slotRename()
 {
-    bool ok;
-    QString activeName = currentImgName();
-    QString newName = KLineEditDlg::getText( i18n("Image Name"), i18n("Enter name:"), activeName, &ok, this );
+	bool ok;
+	QString activeName = currentImgName();
+	QString newName = KLineEditDlg::getText( i18n("Image Name"), i18n("Enter name:"), activeName, &ok, this );
 
-    // Have a different name ?
-    if ( ok ) // User pushed an OK button.
-    {
-        if ( (newName.stripWhiteSpace()).isEmpty() ) // Image name is empty.
-        {
-            KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Image name cannot be empty."), i18n("Change Image Name") );
-            // Recursion
-            slotRename();
-            return;
-        }
-        else if ( newName != activeName ) // Image name changed.
-        {
-            if ( m_doc->findImage(newName) )
-            {
-                KNotifyClient::beep();
-                KMessageBox::information( this, i18n("This name is already used."), i18n("Change Image Name") );
-                // Recursion
-                slotRename();
-                return;
-            }
-            m_doc->renameImage(activeName, newName);
-            m_doc->setModified( true );
-        }
-    }
+	// Have a different name ?
+	if ( ok ) // User pushed an OK button.
+	{
+		if ( (newName.stripWhiteSpace()).isEmpty() ) // Image name is empty.
+		{
+			KNotifyClient::beep();
+			KMessageBox::information( this, i18n("Image name cannot be empty."), i18n("Change Image Name") );
+			// Recursion
+			slotRename();
+			return;
+		}
+		else if ( newName != activeName ) // Image name changed.
+		{
+			if ( m_doc->findImage(newName) )
+			{
+				KNotifyClient::beep();
+				KMessageBox::information( this, i18n("This name is already used."), i18n("Change Image Name") );
+				// Recursion
+				slotRename();
+				return;
+			}
+			m_doc->renameImage(activeName, newName);
+			m_doc->setModified( true );
+		}
+	}
 }
 
 void KisView::updateStatusBarZoomLabel ()
 {
-    if (zoom () >= 1)
-        m_statusBarZoomLabel->setText(i18n ("Zoom %1:1").arg (zoom ()));
-    else if (zoom () > 0)
-        m_statusBarZoomLabel->setText(i18n ("Zoom 1:%1").arg (1 / zoom ()));
-    else
-    {
-        kdError () << "KisView::updateStatusBarZoomLabel() with 0 zoom" << endl;
-        m_statusBarZoomLabel->setText(QString::null);
-    }
+	if (zoom () >= 1)
+		m_statusBarZoomLabel->setText(i18n ("Zoom %1:1").arg (zoom ()));
+	else if (zoom () > 0)
+		m_statusBarZoomLabel->setText(i18n ("Zoom 1:%1").arg (1 / zoom ()));
+	else
+	{
+		kdError () << "KisView::updateStatusBarZoomLabel() with 0 zoom" << endl;
+		m_statusBarZoomLabel->setText(QString::null);
+	}
 }
 
 void KisView::setupStatusBar()
@@ -475,7 +482,13 @@ void KisView::setupActions()
 	m_selectionSelectAll = KStdAction::selectAll(this, SLOT(selectAll()), actionCollection(), "select_all");
 	m_selectionSelectNone = KStdAction::deselect(this, SLOT(unSelectAll()), actionCollection(), "select_none");
 	m_selectionFillFg = new KAction(i18n("Fill with Foreground Color"), 0, this, SLOT(fillSelectionFg()), actionCollection(), "fill_fgcolor");
-	m_selectionFillBg = new KAction(i18n("Fill with Background Color"), 0, this, SLOT(fillSelectionBg()), actionCollection(), "fill_bgcolor");
+	m_selectionFillBg = new KAction(i18n("Fill with Background Color"), 0, this, 
+					SLOT(fillSelectionBg()), actionCollection(), 
+					"fill_bgcolor");
+	m_selectionColorRange = new KAction(i18n("Color Range"), 0, this, 
+					    SLOT(selectColorRange()), actionCollection(), 
+					    "color_range");
+
 
 	// import/export actions
 	m_imgImport = new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
@@ -603,9 +616,9 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_vScroll -> setValue(0);
 		m_hScroll -> setRange(0, docW - drawW);
 		m_hScroll -> setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset) / 2,
-				height() - scrollBarExtent,
-				(width() - rsideW -lsideW - tbarOffset) / 2,
-				scrollBarExtent);
+					 height() - scrollBarExtent,
+					 (width() - rsideW -lsideW - tbarOffset) / 2,
+					 scrollBarExtent);
 		m_hScroll -> show();
 
  		if (m_tabBar)
@@ -626,9 +639,9 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_vScroll -> setGeometry(width() - scrollBarExtent - rsideW, ruler, scrollBarExtent, height() - (ruler + tbarBtnH));
 		m_hScroll -> setRange(0, docW - drawW);
 		m_hScroll -> setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset) / 2,
-				height() - scrollBarExtent,
-				(width() - rsideW -lsideW - tbarOffset) / 2,
-				scrollBarExtent);
+					 height() - scrollBarExtent,
+					 (width() - rsideW -lsideW - tbarOffset) / 2,
+					 scrollBarExtent);
 		m_vScroll -> show();
 		m_hScroll -> show();
 
@@ -1037,6 +1050,22 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 	}
 }
 
+void KisView::selectColorRange()
+{
+	KisImageSP img = currentImg();
+
+	if (img) {
+		m_colorrange = new KisDlgColorRange(this);
+		// Create preview pixmap
+		
+		if (m_colorrange -> exec() == QDialog::Accepted) {
+			// bla
+		}
+		delete m_colorrange;
+		m_colorrange = 0; // KPresenter sometimes uses 0, sometimes 0L in this context -- why?
+	}
+}
+
 void KisView::selectAll()
 {
 	KisImageSP img = currentImg();
@@ -1150,9 +1179,9 @@ void KisView::zoomTo(const KisRect& r)
 			zf = KISVIEW_MIN_ZOOM;
 		}
 		else
-		if (zf > KISVIEW_MAX_ZOOM) {
-			zf = KISVIEW_MAX_ZOOM;
-		}
+			if (zf > KISVIEW_MAX_ZOOM) {
+				zf = KISVIEW_MAX_ZOOM;
+			}
 
 		Q_INT32 cx = qRound(r.center().x());
 		Q_INT32 cy = qRound(r.center().y());
@@ -1206,9 +1235,9 @@ void KisView::slotZoomOut()
 }
 
 /*
-    dialog_gradient - invokes a GradientDialog which is
-    now an options dialog.  Gradients can be used by many tools
-    and are not a tool in themselves.
+  dialog_gradient - invokes a GradientDialog which is
+  now an options dialog.  Gradients can be used by many tools
+  and are not a tool in themselves.
 */
 void KisView::dialog_gradient()
 {
@@ -1320,28 +1349,28 @@ void KisView::export_image()
 		m_buildProgress -> changeSubject(&ib);
 
 		switch (ib.buildFile(url, dst)) {
-			case KisImageBuilder_RESULT_UNSUPPORTED:
-				KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
-				break;
-			case KisImageBuilder_RESULT_INVALID_ARG:
-				KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving File"));
-				break;
-			case KisImageBuilder_RESULT_NO_URI:
-			case KisImageBuilder_RESULT_NOT_LOCAL:
-				KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving File"));
-				break;
-			case KisImageBuilder_RESULT_BAD_FETCH:
-				KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));
-				break;
-			case KisImageBuilder_RESULT_EMPTY:
-				KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
-				break;
-			case KisImageBuilder_RESULT_FAILURE:
-				KMessageBox::error(this, i18n("Error saving file."), i18n("Error Saving File"));
-				break;
-			case KisImageBuilder_RESULT_OK:
-			default:
-				break;
+		case KisImageBuilder_RESULT_UNSUPPORTED:
+			KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_INVALID_ARG:
+			KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_NO_URI:
+		case KisImageBuilder_RESULT_NOT_LOCAL:
+			KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_BAD_FETCH:
+			KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_EMPTY:
+			KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_FAILURE:
+			KMessageBox::error(this, i18n("Error saving file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_OK:
+		default:
+			break;
 		}
 	}
 }
@@ -1369,28 +1398,28 @@ void KisView::save_layer_as_image()
 		Q_ASSERT(dst);
 
 		switch (ib.buildFile(url, dst)) {
-			case KisImageBuilder_RESULT_UNSUPPORTED:
-				KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
-				break;
-			case KisImageBuilder_RESULT_INVALID_ARG:
-				KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving File"));
-				break;
-			case KisImageBuilder_RESULT_NO_URI:
-			case KisImageBuilder_RESULT_NOT_LOCAL:
-				KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving File"));
-				break;
-			case KisImageBuilder_RESULT_BAD_FETCH:
-				KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));
-				break;
-			case KisImageBuilder_RESULT_EMPTY:
-				KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
-				break;
-			case KisImageBuilder_RESULT_FAILURE:
-				KMessageBox::error(this, i18n("Error saving file."), i18n("Error Saving File"));
-				break;
-			case KisImageBuilder_RESULT_OK:
-			default:
-				break;
+		case KisImageBuilder_RESULT_UNSUPPORTED:
+			KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_INVALID_ARG:
+			KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_NO_URI:
+		case KisImageBuilder_RESULT_NOT_LOCAL:
+			KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_BAD_FETCH:
+			KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_EMPTY:
+			KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_FAILURE:
+			KMessageBox::error(this, i18n("Error saving file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_OK:
+		default:
+			break;
 		}
 	}
 }
@@ -1428,35 +1457,35 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filena
 			m_buildProgress -> changeSubject(&ib);
 
 		switch (ib.buildImage(url)) {
-			case KisImageBuilder_RESULT_UNSUPPORTED:
-				KMessageBox::error(this, i18n("No coder for the type of file %1.").arg(url.path()), i18n("Error Importing File"));
-				continue;
-			case KisImageBuilder_RESULT_NO_URI:
-			case KisImageBuilder_RESULT_NOT_LOCAL:
-				KNotifyClient::event(this -> winId(), "cannotopenfile");
-				continue;
-			case KisImageBuilder_RESULT_NOT_EXIST:
-				KMessageBox::error(this, i18n("File %1 does not exist.").arg(url.path()), i18n("Error Importing File"));
-				KNotifyClient::event(this -> winId(), "cannotopenfile");
-				continue;
-			case KisImageBuilder_RESULT_BAD_FETCH:
-				KMessageBox::error(this, i18n("Unable to download file %1.").arg(url.path()), i18n("Error Importing File"));
-				KNotifyClient::event(this -> winId(), "cannotopenfile");
-				continue;
-			case KisImageBuilder_RESULT_EMPTY:
-				KMessageBox::error(this, i18n("Empty file: %1").arg(url.path()), i18n("Error Importing File"));
-				KNotifyClient::event(this -> winId(), "cannotopenfile");
-				continue;
-			case KisImageBuilder_RESULT_FAILURE:
-				m_buildProgress -> changeSubject(0);
-				KMessageBox::error(this, i18n("Error loading file %1.").arg(url.path()), i18n("Error Importing File"));
-				KNotifyClient::event(this -> winId(), "cannotopenfile");
-				continue;
-			case KisImageBuilder_RESULT_PROGRESS:
-				break;
-			case KisImageBuilder_RESULT_OK:
-			default:
-				break;
+		case KisImageBuilder_RESULT_UNSUPPORTED:
+			KMessageBox::error(this, i18n("No coder for the type of file %1.").arg(url.path()), i18n("Error Importing File"));
+			continue;
+		case KisImageBuilder_RESULT_NO_URI:
+		case KisImageBuilder_RESULT_NOT_LOCAL:
+			KNotifyClient::event(this -> winId(), "cannotopenfile");
+			continue;
+		case KisImageBuilder_RESULT_NOT_EXIST:
+			KMessageBox::error(this, i18n("File %1 does not exist.").arg(url.path()), i18n("Error Importing File"));
+			KNotifyClient::event(this -> winId(), "cannotopenfile");
+			continue;
+		case KisImageBuilder_RESULT_BAD_FETCH:
+			KMessageBox::error(this, i18n("Unable to download file %1.").arg(url.path()), i18n("Error Importing File"));
+			KNotifyClient::event(this -> winId(), "cannotopenfile");
+			continue;
+		case KisImageBuilder_RESULT_EMPTY:
+			KMessageBox::error(this, i18n("Empty file: %1").arg(url.path()), i18n("Error Importing File"));
+			KNotifyClient::event(this -> winId(), "cannotopenfile");
+			continue;
+		case KisImageBuilder_RESULT_FAILURE:
+			m_buildProgress -> changeSubject(0);
+			KMessageBox::error(this, i18n("Error loading file %1.").arg(url.path()), i18n("Error Importing File"));
+			KNotifyClient::event(this -> winId(), "cannotopenfile");
+			continue;
+		case KisImageBuilder_RESULT_PROGRESS:
+			break;
+		case KisImageBuilder_RESULT_OK:
+		default:
+			break;
 		}
 
 		if (!(img = ib.image()))
@@ -1496,50 +1525,50 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filena
 void KisView::layerTransform(bool )
 {
 #if 0
-    KisImageSP img = m_doc->currentImg();
-    if (!img)  return;
+	KisImageSP img = m_doc->currentImg();
+	if (!img)  return;
 
-    KisLayerSP lay = img->getCurrentLayer();
-    if (!lay)  return;
+	KisLayerSP lay = img->getCurrentLayer();
+	if (!lay)  return;
 
-    KisFrameBuffer *fb = m_doc->frameBuffer();
-    if (!fb)  return;
+	KisFrameBuffer *fb = m_doc->frameBuffer();
+	if (!fb)  return;
 
-    NewLayerDialog *pNewLayerDialog = new NewLayerDialog();
-    pNewLayerDialog->exec();
-    if(!pNewLayerDialog->result() == QDialog::Accepted)
-        return;
+	NewLayerDialog *pNewLayerDialog = new NewLayerDialog();
+	pNewLayerDialog->exec();
+	if(!pNewLayerDialog->result() == QDialog::Accepted)
+		return;
 
-    QRect srcR(lay->imageExtents());
+	QRect srcR(lay->imageExtents());
 
-    // only get the part of the layer which is inside the
-    // image boundaries - layer can be bigger or can overlap
-    srcR = srcR.intersect(img->imageExtents());
+	// only get the part of the layer which is inside the
+	// image boundaries - layer can be bigger or can overlap
+	srcR = srcR.intersect(img->imageExtents());
 
-    bool ok;
+	bool ok;
 
-    if(smooth)
-        ok = fb->scaleSmooth(srcR,
-            pNewLayerDialog->width(), pNewLayerDialog->height());
-    else
-        ok = fb->scaleRough(srcR,
-            pNewLayerDialog->width(), pNewLayerDialog->height());
+	if(smooth)
+		ok = fb->scaleSmooth(srcR,
+				     pNewLayerDialog->width(), pNewLayerDialog->height());
+	else
+		ok = fb->scaleRough(srcR,
+				    pNewLayerDialog->width(), pNewLayerDialog->height());
 
-    if(!ok)
-    {
-        kdDebug() << "layer_transform() failed" << endl;
-    }
-    else
-    {
-        // bring new scaled layer to front
-        uint indx = img->layerList().size() - 1;
-        img->setCurrentLayer(indx);
-        img->markDirty(img->getCurrentLayer()->imageExtents());
-	layerSelected(indx);
-	layersUpdated();
+	if(!ok)
+	{
+		kdDebug() << "layer_transform() failed" << endl;
+	}
+	else
+	{
+		// bring new scaled layer to front
+		uint indx = img->layerList().size() - 1;
+		img->setCurrentLayer(indx);
+		img->markDirty(img->getCurrentLayer()->imageExtents());
+		layerSelected(indx);
+		layersUpdated();
 
-        m_doc->setModified(true);
-    }
+		m_doc->setModified(true);
+	}
 #endif
 }
 
@@ -1632,16 +1661,16 @@ void KisView::add_new_image_tab()
 
 void KisView::remove_current_image_tab()
 {
-    if ( m_doc->nimages() == 1 )
-        return;
+	if ( m_doc->nimages() == 1 )
+		return;
 
-    KisImageSP current = currentImg();
+	KisImageSP current = currentImg();
 
-    if (current) {
-        disconnectCurrentImg();
-        m_current = 0;
-        m_doc -> removeImage(current);
-    }
+	if (current) {
+		disconnectCurrentImg();
+		m_current = 0;
+		m_doc -> removeImage(current);
+	}
 }
 
 void KisView::imageResize()
@@ -1734,8 +1763,8 @@ void KisView::placeSidebarLeft()
 }
 
 /*
-    preferences - the main Krayon preferences dialog - modeled
-    after the konqueror prefs dialog - quite nice compound dialog
+  preferences - the main Krayon preferences dialog - modeled
+  after the konqueror prefs dialog - quite nice compound dialog
 */
 void KisView::preferences()
 {
@@ -1792,9 +1821,9 @@ void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
 {
 	kdDebug() << "scroll to " << x << "," << y << endl;
 
-    // this needs to update the scrollbar values and
-    // let resizeEvent() handle the repositioning
-    // with showScrollBars()
+	// this needs to update the scrollbar values and
+	// let resizeEvent() handle the repositioning
+	// with showScrollBars()
 }
 
 void KisView::brushActivated(KisResource *brush)
@@ -2000,25 +2029,25 @@ void KisView::canvasGotMouseReleaseEvent(QMouseEvent *e)
 
 void KisView::canvasGotTabletEvent(QTabletEvent *e)
 {
-    KisImageSP img = currentImg();
-    if (img ) {
-        if ( m_tool ) {
-            // Compute offset between screen coordinates and (zoomed) canvas coordinates.
-	    QPoint p = viewToWindow(e -> pos());
-            // Synthesize a new tablet event.
-            // Pity I haven't got a tablet that's got tilt, too
-            QTabletEvent ev(e -> type(),
-                            p,
-                            e -> globalPos(),
-                            e -> device(),
-                            e -> pressure(),
-                            e -> xTilt(),
-                            e -> yTilt(),
-                            e -> uniqueId());
+	KisImageSP img = currentImg();
+	if (img ) {
+		if ( m_tool ) {
+			// Compute offset between screen coordinates and (zoomed) canvas coordinates.
+			QPoint p = viewToWindow(e -> pos());
+			// Synthesize a new tablet event.
+			// Pity I haven't got a tablet that's got tilt, too
+			QTabletEvent ev(e -> type(),
+					p,
+					e -> globalPos(),
+					e -> device(),
+					e -> pressure(),
+					e -> xTilt(),
+					e -> yTilt(),
+					e -> uniqueId());
 
-            m_tool->tabletEvent( &ev );
-        }
-    }
+			m_tool->tabletEvent( &ev );
+		}
+	}
 }
 
 void KisView::canvasGotEnterEvent(QEvent *e)

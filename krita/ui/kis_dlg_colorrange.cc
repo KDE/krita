@@ -1,5 +1,5 @@
 /*
- *  kis_dlg_transform.cc - part of Krita
+ *  kis_dlg_colorrange.cc - part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -18,34 +18,40 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-
-#include <qwmatrix.h>
-
 #include <klocale.h>
 
-#include "dialogs/wdgmatrix.h"
-#include "kis_dlg_transform.h"
+#include "kis_dlg_colorrange.h"
+#include "dialogs/colorrange.h"
 
-/**
-   This is a temporary dialog that allows the user to enter the
-   parameters that define a rotation,scaling, shearing or a raw
-   QWMatrix.
-*/
 
-KisDlgTransform::KisDlgTransform( QWidget *  parent,
-				  const char * name)
-	: super (parent, name, true, "", Ok | Cancel)
+KisDlgColorRange::KisDlgColorRange( QWidget *  parent,
+				    const char * name)
+	: super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok)
 {
-	m_page = new WdgMatrix(this);
-	setCaption(i18n("Transform the current layer"));
+	m_previewPix = QPixmap();
+	m_page = new ColorRange(this, "color_range");
+	setCaption(i18n("Color Range"));
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
+
+	connect(this, SIGNAL(okClicked()),
+		this, SLOT(okClicked()));
 }
 
-QWMatrix & KisDlgTransform::matrix()
+KisDlgColorRange::~KisDlgColorRange()
 {
 	delete m_page;
 }
 
-#include "kis_dlg_transform.moc"
+void KisDlgColorRange::setPixmap(QPixmap pix) 
+{
+	m_previewPix = pix;
+	m_previewPix.detach();
+}
 
+void KisDlgColorRange::okClicked()
+{
+	accept();
+}
+
+#include "kis_dlg_colorrange.moc"

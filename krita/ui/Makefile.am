@@ -20,7 +20,9 @@ libkisui_la_SOURCES = integerwidget.cc kis_dlg_preferences.cc kis_dlg_builder_pr
     kis_color_widget.cc \
     kis_rgb_widget.cc kis_hsv_widget.cc \
     kis_gray_widget.cc \
+    kis_dlg_colorrange.cc \
     kis_previewwidgetbase.ui
+
 
 #    blendchooser.cc
 #    kis_dlg_gradient.cc 

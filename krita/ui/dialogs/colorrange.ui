@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>447</width>
+            <width>459</width>
             <height>344</height>
         </rect>
     </property>
@@ -198,7 +198,7 @@
                                 <cstring>txtFuzziness</cstring>
                             </property>
                             <property name="text">
-                                <string>100</string>
+                                <string></string>
                             </property>
                             <property name="alignment">
                                 <set>AlignRight</set>
@@ -215,7 +215,7 @@
                                 <string>&amp;Fuzziness:</string>
                             </property>
                             <property name="buddy" stdset="0">
-                                <cstring>slider1</cstring>
+                                <cstring>txtFuzziness</cstring>
                             </property>
                         </widget>
                         <widget class="QSlider" row="2" column="0" rowspan="1" colspan="4">
@@ -358,10 +358,10 @@
                                 <cstring>lblSelectionPreview</cstring>
                             </property>
                             <property name="text">
-                                <string>Selecetion &amp;Preview</string>
+                                <string>Selection &amp;Preview</string>
                             </property>
                             <property name="buddy" stdset="0">
-                                <cstring>comboBox3</cstring>
+                                <cstring>cmbSelectionPreview</cstring>
                             </property>
                         </widget>
                         <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="2">

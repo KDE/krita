@@ -30,6 +30,7 @@
 #include <knuminput.h>
 
 #include "kis_dlg_paint_properties.h"
+#include "kis_global.h"
 #include "kis_paint_device.h"
 #include "integerwidget.h"
 
@@ -45,7 +46,7 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, int opacity,
 	layout -> addWidget(lbl, 0, 0);
 
 	m_opacity = new IntegerWidget(0, 100, this);
-	m_opacity -> setValue(opacity);
+	m_opacity -> setValue(opacity * 100 / CHANNEL_MAX);
 	m_opacity -> setTickmarks(QSlider::Below);
 	m_opacity -> setTickInterval(13);
 	layout -> addWidget(m_opacity, 1, 1);

@@ -172,6 +172,11 @@ void RectangularSelectTool::mouseMove( QMouseEvent* event )
 
 void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 {
+	KisImage *img = m_doc -> current();
+
+	if (!img) 
+		return;
+
 	if (event -> button() == LeftButton && m_dragging && !m_moving) {
 		m_dragging = false;
 		m_drawn = true;
@@ -206,14 +211,9 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 		else
 			m_selectRegion = QRegion();
 
-		KisImage *img = m_doc -> current();
-
-		if(!img) 
-			return;
-
 		KisLayer *lay = img -> getCurrentLayer();
 
-		if(!lay) 
+		if (!lay) 
 			return;
         
 		// if there are several partially overlapping or interior
@@ -250,11 +250,6 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 		setSelectCursor();
 
 		QPoint pos = event -> pos();
-
-		KisImage *img = m_doc -> current();
-
-		if (!img)
-			return;
 
 		if (!img -> getCurrentLayer() -> visible())
 			return;

@@ -106,7 +106,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 KisImage::~KisImage()
 {
 	delete m_nserver;
-	printf("KisImage::~KisImage\n");
 }
 
 QString KisImage::name() const

@@ -31,6 +31,7 @@ public:
 
 public:
 	virtual void activate();
+	virtual void clear();
 	virtual void enter(QEvent *e);
 	virtual void leave(QEvent *e);
 	virtual void mousePress(QMouseEvent *e);

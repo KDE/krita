@@ -35,6 +35,11 @@ KisToolPaste::~KisToolPaste()
 	delete m_move;
 }
 
+void KisToolPaste::clear()
+{
+	leave(0);
+}
+
 void KisToolPaste::enter(QEvent *)
 {
 	activate();
@@ -44,11 +49,14 @@ void KisToolPaste::leave(QEvent *)
 {
 	if (m_selection) {
 		KisImageSP owner = m_view -> currentImg();
+		QRect rc(m_selection -> bounds());
 
 		Q_ASSERT(owner);
 		m_selection -> visible(false);
 		owner -> unsetSelection(false);
 		m_selection = 0;
+		owner -> invalidate(rc);
+		m_view -> updateCanvas(rc);
 	}
 }
 
@@ -62,13 +70,12 @@ void KisToolPaste::mouseRelease(QMouseEvent *e)
 		KisImageSP owner = m_view -> currentImg();
 		KisPainter gc;
 
-//		m_selection -> opacity(m_oldOpacity);
 		m_move -> drag(e -> pos());
 		owner -> unsetSelection(false);
 		gc.begin(m_selection -> parent());
 		gc.bitBlt(e -> x(), e -> y(), COMPOSITE_COPY, m_selection.data(), m_selection -> opacity(), 0, 0, m_selection -> width(), m_selection -> height());
 		m_selection = 0;
-		enter(0);
+		activate();
 	}
 }
 
@@ -96,9 +103,7 @@ void KisToolPaste::activate()
 
 		if (owner) {
 			m_selection -> setImage(owner);
-//			m_oldOpacity = m_selection -> opacity();
-//			m_selection -> opacity(OPACITY_OPAQUE / 2);
-			owner -> unsetSelection();
+			owner -> unsetSelection(false);
 			m_selection -> setParent(owner -> activeDevice());
 			owner -> setSelection(m_selection);
 			m_justEntered = true;

@@ -152,8 +152,8 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 						  Q_INT32 renderingIntent)
 
 {
-	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
-		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
+// 	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
+// 		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
 
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
 
@@ -161,14 +161,14 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 
 
 	if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
-		//kdDebug() << "Going to use default transform\n";
+// 		kdDebug() << "Going to use default transform\n";
 		cmsDoTransform(m_defaultToRGB,
 			       const_cast<QUANTUM *> (data),
 			       img.bits(),
 			       width * height);
 	}
 	else {
-		//kdDebug() << "Going to transform with profiles\n";
+// 		kdDebug() << "Going to transform with profiles\n";
 		// Do a nice calibrated conversion
 		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile,
 				img.bits(), dstCS, dstProfile,

@@ -173,11 +173,6 @@ bool KisTiledDataManager::read(KoStore *store)
 	return true;
 }
 
-Q_UINT32 KisTiledDataManager::pixelSize()
-{
-	return m_pixelSize;
-}
-
 void KisTiledDataManager::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
 {
 	x = m_extentMinX;
@@ -442,7 +437,7 @@ Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
  	if (h < 0)
 		h = 0;
 
- 	Q_UINT8 * data = new Q_UINT8[w * h * pixelSize()];
+ 	Q_UINT8 * data = new Q_UINT8[w * h * m_pixelSize];
 	Q_UINT8 * ptr = data;
 
  	// XXX: Isn't this a very slow copy?
@@ -452,9 +447,9 @@ Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
 		KisTiledHLineIterator hiter = KisTiledHLineIterator(this, x, y2, w, false);
 		while(! hiter.isDone())
 		{
-			memcpy(ptr, (Q_UINT8 *)hiter, pixelSize());
+			memcpy(ptr, (Q_UINT8 *)hiter, m_pixelSize);
 
-			ptr += pixelSize();
+			ptr += m_pixelSize;
 			++hiter;
 		}
 	}
@@ -485,9 +480,9 @@ void KisTiledDataManager::writeBytes(Q_UINT8 * bytes,
 		KisTiledHLineIterator hiter = KisTiledHLineIterator(this, x, y2, w, true);
 		while(! hiter.isDone())
 		{
-			memcpy((Q_UINT8 *)hiter, ptr , pixelSize());
+			memcpy((Q_UINT8 *)hiter, ptr , m_pixelSize);
 
-			ptr += pixelSize();
+			ptr += m_pixelSize;
 			++hiter;
 		}
 	}

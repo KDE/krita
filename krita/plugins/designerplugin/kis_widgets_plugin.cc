@@ -3,20 +3,19 @@
  *
  * Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
 #include "kis_widgets_plugin.h"
@@ -35,14 +34,14 @@ KisWidgetInfo::KisWidgetInfo(QString nincludeFile, QString ntoolTip, QString nwh
 
 KisWidgetsPlugin::KisWidgetsPlugin()
 {
-	m_widgetsMap.insert(widgetInfoMap::value_type("KisCmbImageType", 
+	m_widgetsMap.insert(widgetInfoMap::value_type("KisCmbImageType",
 		KisWidgetInfo("kis_cmb_imagetype.h", "a combobox displaying the colorspaces", "", false)));
-	m_widgetsMap.insert(widgetInfoMap::value_type("KisCmbComposite", 
+	m_widgetsMap.insert(widgetInfoMap::value_type("KisCmbComposite",
 		KisWidgetInfo("kis_cmb_composite.h", "a combobox displaying the composite operations",
 		"", false)));
-	m_widgetsMap.insert(widgetInfoMap::value_type("KisFilterConfigurationWidget", 
+	m_widgetsMap.insert(widgetInfoMap::value_type("KisFilterConfigurationWidget",
 		KisWidgetInfo("kis_filter_configuration_widget.h", "a widget for configuring a filter", "", true)));
-	m_widgetsMap.insert(widgetInfoMap::value_type("KisPreviewWidget", 
+	m_widgetsMap.insert(widgetInfoMap::value_type("KisPreviewWidget",
 		KisWidgetInfo("kis_previewwidget.h", "a widget which display a preview of an action", "", true)));
 	new KInstance("kiswidgets");
 }

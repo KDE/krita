@@ -53,6 +53,7 @@ public:
 
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rc, KisTileCommand* ktc);
 	static inline QString name() { return "Wet & Sticky Engine"; };
+	virtual bool supportsPainting() { return false; }
 
 
 public:

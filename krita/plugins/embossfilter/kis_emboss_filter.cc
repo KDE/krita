@@ -1,26 +1,25 @@
-/* 
+/*
  * This file is part of Krita
  *
  * Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
  * ported from digikam, Copyright 2004 by Gilles Caulier,
- * Original Emboss algorithm copyrighted 2004 by 
+ * Original Emboss algorithm copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
- * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
 #include <stdlib.h>
@@ -68,12 +67,12 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
         
 	// create a QUANTUM array that holds the data the filter works on
 	QUANTUM * newData = src -> readBytes( x, y, width, height);
-        
+
 	//read the filter configuration values from the KisFilterConfiguration object
 	Q_UINT32 embossdepth = ((KisEmbossFilterConfiguration*)configuration)->depth();
-        
+
 	kdDebug() << "depth:" << embossdepth << "\n";
-        
+
 	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
 	//with the actual pixel data.
 
@@ -85,16 +84,16 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
 
-/* Function to apply the Emboss effect                                             
- *                                                                                  
- * data             => The image data in RGBA mode.                            
- * Width            => Width of image.                          
- * Height           => Height of image.                          
- * d                => Emboss value                                                  
- *                                                                                
- * Theory           => This is an amazing effect. And the theory is very simple to 
- *                     understand. You get the diference between the colors and    
- *                     increase it. After this, get the gray tone            
+/* Function to apply the Emboss effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * d                => Emboss value
+ *
+ * Theory           => This is an amazing effect. And the theory is very simple to
+ *                     understand. You get the diference between the colors and
+ *                     increase it. After this, get the gray tone
  */
 
 void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d, KisProgressDisplayInterface *m_progress)
@@ -112,22 +111,22 @@ void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d, KisPro
     int    i = 0, j = 0;
     int    R = 0, G = 0, B = 0;
     uchar  Gray = 0;
-    
+
     bool m_cancel = false; //make it compile...
-    
+
     for (int h = 0 ; !m_cancelRequested && (h < Height) ; ++h)
        {
        for (int w = 0 ; !m_cancelRequested && (w < Width) ; ++w)
            {
            i = h * LineWidth + 4 * w;
            j = (h + Lim_Max (h, 1, Height)) * LineWidth + 4 * (w + Lim_Max (w, 1, Width));
-               
+
            R = abs ((int)((Bits[i+2] - Bits[j+2]) * Depth + 128));
            G = abs ((int)((Bits[i+1] - Bits[j+1]) * Depth + 128));
            B = abs ((int)((Bits[ i ] - Bits[ j ]) * Depth + 128));
 
            Gray = LimitValues ((R + G + B) / 3);
-           
+
            Bits[i+2] = Gray;
            Bits[i+1] = Gray;
            Bits[ i ] = Gray;
@@ -136,47 +135,47 @@ void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d, KisPro
        }
     //emit notifyProgressDone(this);
 }
-       
-// This method have been ported from Pieter Z. Voloshyn algorithm code.   
-    
-/* This function limits the max and min values     
- * defined by the developer                                    
- *                                                                              
- * Now               => Original value                                      
- * Up                => Increments                                              
- * Max               => Maximum value                                          
- *                                                                                  
- * Theory            => This function is used in some functions to limit the        
- *                      "for step". E.g. I have a picture with 309 pixels (width), and  
- *                      my "for step" is 5. All the code go alright until reachs the  
- *                      w = 305, because in the next step w will go to 310, but we want  
- *                      to analize all the pixels. So, this function will reduce the 
- *                      "for step", when necessary, until reach the last possible value  
+
+// This method have been ported from Pieter Z. Voloshyn algorithm code.
+
+/* This function limits the max and min values
+ * defined by the developer
+ *
+ * Now               => Original value
+ * Up                => Increments
+ * Max               => Maximum value
+ *
+ * Theory            => This function is used in some functions to limit the
+ *                      "for step". E.g. I have a picture with 309 pixels (width), and
+ *                      my "for step" is 5. All the code go alright until reachs the
+ *                      w = 305, because in the next step w will go to 310, but we want
+ *                      to analize all the pixels. So, this function will reduce the
+ *                      "for step", when necessary, until reach the last possible value
  */
- 
+
 int KisEmbossFilter::Lim_Max (int Now, int Up, int Max)
 {
     --Max;
     while (Now > Max - Up)
         --Up;
     return (Up);
-}    
+}
 
-// This method have been ported from Pieter Z. Voloshyn algorithm code.  
- 
-/* This function limits the RGB values                        
- *                                                                         
- * ColorValue        => Here, is an RGB value to be analized                   
- *                                                                             
- * Theory            => A color is represented in RGB value (e.g. 0xFFFFFF is     
- *                      white color). But R, G and B values has 256 values to be used   
- *                      so, this function analize the value and limits to this range   
- */   
-                     
+// This method have been ported from Pieter Z. Voloshyn algorithm code.
+
+/* This function limits the RGB values
+ *
+ * ColorValue        => Here, is an RGB value to be analized
+ *
+ * Theory            => A color is represented in RGB value (e.g. 0xFFFFFF is
+ *                      white color). But R, G and B values has 256 values to be used
+ *                      so, this function analize the value and limits to this range
+ */
+
 uchar KisEmbossFilter::LimitValues (int ColorValue)
 {
     if (ColorValue > 255)        // MAX = 255
-        ColorValue = 255;        
+        ColorValue = 255;
     if (ColorValue < 0)          // MIN = 0
         ColorValue = 0;
     return ((uchar) ColorValue);

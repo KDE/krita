@@ -37,7 +37,7 @@ KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row)
 
 	//HACK
 	memset(m_data, 0, WIDTH * HEIGHT * m_pixelSize);
-/**
+/*
 // XXX: This code causes an alarm clock and a valgrind crash:
 
 

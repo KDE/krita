@@ -44,25 +44,25 @@ KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  Q_INT
 	m_col = m_leftCol;
 
 	// calc limits within the tile
-	m_topInTile = m_top - m_topRow * tileHeight();
+	m_topInTile = m_top - m_topRow * KisTile::HEIGHT;
 
 	if(m_row == m_bottomRow)
-		m_bottomInTile = m_top + m_h - 1 - m_bottomRow * tileHeight();
+		m_bottomInTile = m_top + m_h - 1 - m_bottomRow * KisTile::HEIGHT;
 	else
-		m_bottomInTile = tileHeight() - 1;
+		m_bottomInTile = KisTile::HEIGHT - 1;
 
-	m_leftInTile = m_left - m_leftCol * tileWidth();
+	m_leftInTile = m_left - m_leftCol * KisTile::WIDTH;
 
 	if(m_col == m_rightCol)
-		m_rightInTile = m_left + m_w - 1 - m_rightCol * tileWidth();
+		m_rightInTile = m_left + m_w - 1 - m_rightCol * KisTile::WIDTH;
 	else
-		m_rightInTile = tileWidth() - 1;
+		m_rightInTile = KisTile::WIDTH - 1;
 
 	m_xInTile = m_leftInTile;
 	m_yInTile = m_topInTile;
 
 	fetchTileData(m_col, m_row);
-	m_offset = m_pixelSize * (m_yInTile * tileWidth() + m_xInTile);
+	m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 }
 
 KisTiledRectIterator::~KisTiledRectIterator( )
@@ -81,8 +81,8 @@ KisTiledRectIterator & KisTiledRectIterator::operator ++ (int )
 			if(m_beyondEnd)
 				return *this;
 			m_yInTile = m_topInTile;
-			m_x = m_col * tileWidth() + m_leftInTile;
-			m_y = m_row * tileHeight() + m_topInTile;
+			m_x = m_col * KisTile::WIDTH + m_leftInTile;
+			m_y = m_row * KisTile::HEIGHT + m_topInTile;
 			fetchTileData(m_col, m_row);
 		}
 		else
@@ -92,7 +92,7 @@ KisTiledRectIterator & KisTiledRectIterator::operator ++ (int )
 			m_yInTile++;
 		}
 		m_xInTile =m_leftInTile;
-		m_offset = m_pixelSize * (m_yInTile * tileWidth() + m_xInTile);
+		m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 	}
 	else
 	{
@@ -116,14 +116,14 @@ void KisTiledRectIterator::nextTile()
 			m_row++;
 			// The row has now changed, so recalc vertical limits
 			if(m_row == m_topRow)
-				m_topInTile = m_top - m_topRow * tileHeight();
+				m_topInTile = m_top - m_topRow * KisTile::HEIGHT;
 			else
 				m_topInTile = 0;
 
 			if(m_row == m_bottomRow)
-				m_bottomInTile = m_top + m_h - 1 - m_bottomRow * tileHeight();
+				m_bottomInTile = m_top + m_h - 1 - m_bottomRow * KisTile::HEIGHT;
 			else
-				m_bottomInTile = tileHeight() - 1;
+				m_bottomInTile = KisTile::HEIGHT - 1;
 		}
 	}
 	else
@@ -131,14 +131,14 @@ void KisTiledRectIterator::nextTile()
 
 	// No matter what the column has now changed, so recalc horizontal limits
 	if(m_col == m_leftCol)
-		m_leftInTile = m_left - m_leftCol * tileWidth();
+		m_leftInTile = m_left - m_leftCol * KisTile::WIDTH;
 	else
 		m_leftInTile = 0;
 
 	if(m_col == m_rightCol)
-		m_rightInTile = m_left + m_w - 1 - m_rightCol * tileWidth();
+		m_rightInTile = m_left + m_w - 1 - m_rightCol * KisTile::WIDTH;
 	else
-		m_rightInTile = tileWidth() - 1;
+		m_rightInTile = KisTile::WIDTH - 1;
 }
 
 

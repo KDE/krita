@@ -90,13 +90,23 @@ void KisFilter::slotActivated()
 	KisTileCommand* ktc = new KisTileCommand(name(), (KisPaintDeviceSP)layer ); // Create a command
 
 	QRect rect = layer -> extent();
-
+	enableProgress();
 	process((KisPaintDeviceSP)layer, config, rect, ktc);
-
+	disableProgress();
 	img->undoAdapter()->addCommand( ktc );
 	img->notify();
 	delete m_dialog;
 	m_dialog = 0;
 	delete config;
 }
+
+void KisFilter::enableProgress() {
+	m_progressEnabled = true;
+}
+
+void KisFilter::disableProgress() {
+	m_progressEnabled = false;
+}
+
+
 #include "kis_filter.moc"

@@ -32,7 +32,7 @@
 
 #include "kis_basedocker.h"
 
-KisBaseDocker::KisBaseDocker( QWidget* parent, const char* name) 
+KisBaseDocker::KisBaseDocker( QWidget* parent, const char* name)
 	: QDockWindow( QDockWindow::OutsideDock, parent ,name )
 {
 	setCloseMode( QDockWindow::Always );

@@ -34,6 +34,8 @@ class KisUndoAdapter;
 class KisProgressDisplayInterface;
 class KisSelectionManager;
 class QWidget;
+class KisFilterRegistry;
+
 /**
  * The canvas subject is the subset of operations that are directy available to
  * tools.
@@ -63,6 +65,7 @@ public:
 	virtual KoDocument *document() const = 0;
 	virtual KisProgressDisplayInterface *progressDisplay() const = 0;
 	virtual KisSelectionManager * selectionManager() = 0;
+	virtual KisFilterRegistry * filterRegistry() const = 0;
 	virtual KisFilterSP filterGet(const QString& name) = 0;
 	virtual QStringList filterList() = 0;
 private:

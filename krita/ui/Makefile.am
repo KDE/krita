@@ -44,6 +44,7 @@ libkisui_la_SOURCES = kis_dlg_preferences.cc \
     kis_previewdialog.cc \
     kis_birdeye_box.cc \
     kis_paint_box.cc \
+    kis_filter_box.cc \
     wdgmatrix.ui \
     wdghistogram.ui \
     kis_previewwidgetbase.ui \
@@ -87,6 +88,7 @@ noinst_HEADERS = kis_dlg_preferences.h \
     kis_dlg_apply_profile.h \
     kis_dockframedocker.h \
     kis_basedocker.h \
+    kis_filter_box.h \
     wdgmatrix.h \
     wdghistogram.h \
     kis_previewwidgetbase.h \

@@ -144,6 +144,13 @@ private:
 	Q_UINT32 yToRow(Q_UINT32 y);
 };
 
+
+inline Q_UINT32 KisTiledDataManager::pixelSize()
+{
+	return m_pixelSize;
+}
+
+
 // during development the following line helps to check the interface is correct
 // it should be safe to keep it here even during normal compilation
 #include "kis_datamanager.h"

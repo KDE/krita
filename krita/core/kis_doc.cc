@@ -1027,6 +1027,8 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfileSP pro
 	if (!m_currentImage)
 		m_currentImage = m_images[0];
 
+// 	kdDebug() << "paintContent profile: " << profile << "\n";
+
 	if (m_currentImage) {
 		x1 = CLAMP(rect.x(), 0, m_currentImage -> width());
 		y1 = CLAMP(rect.y(), 0, m_currentImage -> height());

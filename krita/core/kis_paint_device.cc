@@ -488,6 +488,7 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 		h = 0;
 
 	QUANTUM * data = m_datamanager -> readBytes(x1, y1, w, h);
+// 	kdDebug() << "convertToQImage. My profile: " << m_profile << ", destination profile: " << dstProfile << "\n";
 	QImage image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
 	delete[] data;
 

@@ -91,6 +91,7 @@ class KisBirdEyeBox;
 class KisPaintBox;
 class KisToolRegistry;
 class KisFilterRegistry;
+class KisFilterBox;
 
 class KisView
 	: public KoView,
@@ -459,6 +460,7 @@ private:
 	QWidget *m_imageChooser;
 
 	KisPaintBox *m_paintBox;
+	KisFilterBox * m_filterBox;
 	ControlFrame *m_controlWidget;
 	KisBirdEyeBox * m_birdEyeBox;
 	KisChannelView *m_channelView;

@@ -3,20 +3,19 @@
  *
  * Copyright (c) 2004 Michael Thaler
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
 
@@ -57,15 +56,15 @@ ShearImage::ShearImage(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(ShearImageFactory::instance());
 
-// 	kdDebug() << "RotateImage plugin. Class: " 
-// 		  << className() 
-// 		  << ", Parent: " 
+// 	kdDebug() << "RotateImage plugin. Class: "
+// 		  << className()
+// 		  << ", Parent: "
 // 		  << parent -> className()
 // 		  << "\n";
 
 	(void) new KAction(i18n("&Shear Image..."), 0, 0, this, SLOT(slotShearImage()), actionCollection(), "shearimage");
 	(void) new KAction(i18n("&Shear Layer..."), 0, 0, this, SLOT(slotShearLayer()), actionCollection(), "shearlayer");
-	
+
 	if ( !parent->inherits("KisView") )
 	{
 		m_view = 0;
@@ -87,9 +86,9 @@ void ShearImage::slotShearImage()
 
 	DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearImage");
 	dlgShearImage -> setCaption(i18n("Shear Image"));
-	
+
         if (dlgShearImage -> exec() == QDialog::Accepted) {
-		Q_INT32 angleX = dlgShearImage -> angleX();	
+		Q_INT32 angleX = dlgShearImage -> angleX();
                 Q_INT32 angleY = dlgShearImage -> angleY();
                 m_view -> shearCurrentImage(angleX, angleY);
 	}
@@ -104,7 +103,7 @@ void ShearImage::slotShearLayer()
 
 	DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearLayer");
 	dlgShearImage -> setCaption("Shear Layer");
-	
+
 	if (dlgShearImage -> exec() == QDialog::Accepted) {
                 Q_INT32 angleX = dlgShearImage -> angleX();
                 Q_INT32 angleY = dlgShearImage -> angleY();

@@ -34,6 +34,10 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_types.h"
+#include "kis_config.h"
+#include "kis_colorspace_registry.h"
+#include "kis_profile.h"
+
 #include "color_strategy/kis_strategy_colorspace.h"
 
 #include "kis_previewview.h"
@@ -130,7 +134,12 @@ void KisPreviewView::render(QPainter &painter, KisImageSP image)
 		painter.scale(m_zoom, m_zoom);
 
 	// XXX: Do we always need to render the complete image?
-	image -> renderToPainter(0, 0, image -> width(), image -> height(), painter);
+	KisConfig cfg;
+	QString monitorProfileName = cfg.monitorProfile();
+
+	KisProfileSP monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
+
+	image -> renderToPainter(0, 0, image -> width(), image -> height(), painter, monitorProfile);
 
 }
 

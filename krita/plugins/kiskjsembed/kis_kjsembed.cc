@@ -3,20 +3,19 @@
  *
  * Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
 #include "kis_kjsembed.h"
@@ -32,7 +31,7 @@
 
 
 // KJSEmbed
-#include <kjsembed/jsconsolewidget.h> 
+#include <kjsembed/jsconsolewidget.h>
 #include <kjsembed/kjsembedpart.h>
 
 // Krita
@@ -64,9 +63,9 @@ KisKJSEmbed::KisKJSEmbed(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(KritaKJSEmbedFactory::instance());
 
-	kdDebug() << "KSJEmbed plugin. Class: " 
-		  << className() 
-		  << ", Parent: " 
+	kdDebug() << "KSJEmbed plugin. Class: "
+		  << className()
+		  << ", Parent: "
 		  << parent -> className()
 		  << "\n";
 
@@ -93,7 +92,7 @@ KisKJSEmbed::KisKJSEmbed(QObject *parent, const char *name, const QStringList &)
  	m_jsConsoleWidget -> show();
  	m_jsConsoleWidget -> setCaption("Console");
  	m_consoleDocker -> plug( m_jsConsoleWidget );
-#endif	
+#endif
   	KToggleAction * show = new KToggleAction(i18n( "&Script console" ), 0, 0,
  						 actionCollection(), "view_krita_script_console" );
 #if 0
@@ -101,9 +100,9 @@ KisKJSEmbed::KisKJSEmbed(QObject *parent, const char *name, const QStringList &)
   	connect(m_consoleDocker, SIGNAL(visibleChange(bool)), SLOT(viewConsoleDocker(bool)));
 #endif
 	connect(show, SIGNAL(toggled(bool)), SLOT(viewConsoleDocker(bool)));
-	
+
 	(void) new KAction(i18n("&Load Script..."), 0, 0, this, SLOT(slotLoadScript()), actionCollection(), "krita_scripts_load");
-	
+
 }
 
 KisKJSEmbed::~KisKJSEmbed()

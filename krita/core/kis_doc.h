@@ -20,12 +20,15 @@
 #ifndef KIS_DOC_H_
 #define KIS_DOC_H_
 
+#include <kdebug.h>
+
 #include <koDocument.h>
 
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
+
 #include <koffice_export.h>
 class QImage;
 class QString;
@@ -62,8 +65,9 @@ public:
 	// elsewhere. This may affect KOffice compatibility.
 	virtual void paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/) 
 	{
-	  paintContent(painter, rect, 0);
+		paintContent(painter, rect, 0);
 	}
+	
 	
 	virtual void paintContent(QPainter& painter, const QRect& rect, KisProfileSP profile);
 	virtual QDomDocument saveXML();

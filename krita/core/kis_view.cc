@@ -119,6 +119,7 @@
 #include "kis_rgb_widget.h"
 #include "kis_gray_widget.h"
 #include "kis_paint_box.h"
+#include "kis_filter_box.h"
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
@@ -597,6 +598,12 @@ void KisView::setupDockers()
 	}
 	attach(m_graywidget);
 
+
+	// Filters
+	m_filterBox = new KisFilterBox(this, this, "filter box");
+	m_paintboxdocker -> plug( m_filterBox, "Painting filters" );
+	m_filterBox -> init();
+
 	if ( cfg.paletteStyle() == PALETTE_DOCKER || cfg.paletteStyle() == PALETTE_TOOLBOX ) {
 		// TODO Here should be a better check
 		if ( mainWindow() -> isDockEnabled( DockBottom)) {
@@ -776,7 +783,6 @@ KisProfileSP KisView::monitorProfile()
 	if (m_monitorProfile == 0) {
 		resetMonitorProfile();
 	}
-
 	return m_monitorProfile;
 }
 

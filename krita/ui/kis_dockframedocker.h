@@ -36,7 +36,7 @@ class KisDockFrameDocker : public KisBaseDocker
 public:
         KisDockFrameDocker ( QWidget* parent = 0, const char* name = 0 );
         ~KisDockFrameDocker();
-        
+
         void plug(QWidget *w);
         void unplug(QWidget *w);
         void showPage(QWidget *w);

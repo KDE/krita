@@ -106,7 +106,6 @@ typedef KSharedPtr<KisColorSpaceAlpha> KisColorSpaceAlphaSP;
 class KisFilter;
 typedef KSharedPtr<KisFilter> KisFilterSP;
 
-
 class KisProfile;
 typedef KSharedPtr<KisProfile> KisProfileSP;
 typedef KisSharedPtrVector<KisProfile> vKisProfileSP;

@@ -34,7 +34,10 @@ class KisTileCommand;
 class KisFilterConfigurationWidget;
 class KisPreviewDialog;
 
-
+/**
+ * Convenience function that creates an instance of a filter and adds it to the
+ * filter registry of the specified view.
+ */
 template<class F>
 KisFilterSP createFilter(KisView* view)
 {
@@ -50,44 +53,61 @@ KisFilterSP createFilter(KisView* view)
 }
 
 
+
+/**
+ * Empty interface for passing filter configuration data
+ * from the configuration widget to the filter.
+ */
 class KisFilterConfiguration {
 };
 
+
+
+/**
+ * Basic interface of a Krita filter.
+ */
 class KisFilter : public KisProgressSubject, public KShared {
 	Q_OBJECT
 public:
+
 	KisFilter(const QString& name, KisView * view);
 	virtual ~KisFilter() {}
 
 public:
+
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&, KisTileCommand* ) = 0;
+
 	void process(KisPaintDeviceSP, KisFilterConfiguration*, const QRect&, KisTileCommand* );
 
 public:
 	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+
+	virtual bool supportsPainting() = 0;
+	virtual void enableProgress();
+	virtual void disableProgress();
+
 	inline const QString name() const { return m_name; };
+
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
+
 	virtual void cancel() { m_cancelRequested = true; }
-// XXX: Why is this commented out?
-// 	KisFilterConfigurationWidget* configurationWidget(QWidget* parent);
+
 	inline KisView* view();
+
 public slots:
 
 	void slotActivated();
-
-protected:
-// XXX: Why is this commented out?
-// 	KisFilterConfigurationWidget* configurationWidget();
-
-  	KisStrategyColorSpaceSP colorStrategy();
-protected:
-	bool m_cancelRequested;
 
 private slots:
 
 	void refreshPreview();
 
-private:
+protected:
+
+  	KisStrategyColorSpaceSP colorStrategy();
+	bool m_cancelRequested;
+	bool m_progressEnabled;
+
 	QString m_name;
 	KisView * m_view;
 	KisFilterConfigurationWidget* m_widget;

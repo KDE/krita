@@ -59,31 +59,31 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
         m_lst = new KListBox(this);
 
         hbox = new QHBox(this);
-        hbox -> setMargin(4);
-        hbox -> setSpacing(4);
+        hbox -> setMargin(2);
+        hbox -> setSpacing(2);
         hbox -> setMaximumHeight(30);
 
         btn = new QToolButton(hbox);
         btn -> setPixmap(BarIcon("newlayer"));
-        btn -> setFixedSize(24, 24);
+        btn -> setFixedSize(16, 16);
         QToolTip::add(btn, i18n("Create new %1").arg(label));
 
         m_btnRm = new QToolButton(hbox);
         m_btnRm -> setPixmap(BarIcon("deletelayer"));
-        m_btnRm -> setFixedSize(24, 24);
+        m_btnRm -> setFixedSize(16, 16);
         QToolTip::add(m_btnRm, i18n("Remove current %1").arg(label));
 
         m_btnRaise = new QToolButton(hbox);
         m_btnRaise -> setPixmap(BarIcon("raiselayer"));
         QToolTip::add(m_btnRaise, i18n("Upper current %1").arg(label));
         m_btnRaise -> setEnabled(false);
-        m_btnRaise -> setFixedSize(24, 24);
+        m_btnRaise -> setFixedSize(16, 16);
 
         m_btnLower = new QToolButton(hbox);
         m_btnLower -> setPixmap(BarIcon("lowerlayer"));
         m_btnLower -> setEnabled(false);
         QToolTip::add(m_btnLower, i18n("Lower current %1").arg(label));
-        m_btnLower -> setFixedSize(24, 24);
+        m_btnLower -> setFixedSize(16, 16);
 
         QWidget * spacer = new QWidget(hbox);
         hbox -> setStretchFactor(spacer, 10);

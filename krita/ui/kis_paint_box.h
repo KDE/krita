@@ -39,7 +39,6 @@ class QString;
  * filters, or whatever thing looks like the stuff you find in a
  * painter's chest.
  *
- * XXX: Rename file, too.
  */
 class KisPaintBox : public KisBaseDocker {
 

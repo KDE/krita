@@ -61,6 +61,7 @@ private:
 	Q_INT32 m_pixelSize;
 	KisTile *m_nextTile;
 
+public:
 	static const Q_INT32 WIDTH;
 	static const Q_INT32 HEIGHT;
 };

@@ -43,7 +43,7 @@
 #include "wdgdockertab.h"
 
 
-KisDockFrameDocker::KisDockFrameDocker( QWidget* parent, const char* name ) 
+KisDockFrameDocker::KisDockFrameDocker( QWidget* parent, const char* name )
 	: KisBaseDocker( parent, name )
 {
 	QDockWindow::boxLayout() -> setSpacing(0);

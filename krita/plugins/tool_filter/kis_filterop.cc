@@ -123,7 +123,9 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	p.bitBlt( 0,  0,  COMPOSITE_COPY, m_source, OPACITY_OPAQUE, x, y, maskWidth, maskHeight );
 
 	// Filter the paint device
+	filter -> disableProgress();
 	filter -> process( tmpDev,  m_filterConfiguration, QRect( 0, 0, maskWidth, maskHeight ),  0 );
+	filter -> enableProgress();
 
 	// Apply the mask on the paint device (filter before mask because edge pixels may be important)
 

@@ -41,8 +41,6 @@ protected:
 	bool m_writable;
 
 protected:
-	Q_UINT32 tileWidth() { return KisTile::WIDTH; };
-	Q_UINT32 tileHeight() { return KisTile::HEIGHT; };
 	Q_UINT32 xToCol(Q_UINT32 x) { return m_ktm->xToCol(x); };
 	Q_UINT32 yToRow(Q_UINT32 y) { return m_ktm->yToRow(y); };
 	void fetchTileData(Q_INT32 col, Q_INT32 row);

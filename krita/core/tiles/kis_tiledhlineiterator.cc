@@ -37,18 +37,18 @@ KisTiledHLineIterator::KisTiledHLineIterator( KisTiledDataManager *ndevice,  Q_I
 	m_col = m_leftCol;
 
 	// calc limits within the tile
-	m_yInTile = m_y - m_row * tileHeight();
-	m_leftInTile = m_x - m_leftCol * tileWidth();
+	m_yInTile = m_y - m_row * KisTile::HEIGHT;
+	m_leftInTile = m_x - m_leftCol * KisTile::WIDTH;
 
 	if(m_col == m_rightCol)
-		m_rightInTile = m_right - m_rightCol * tileWidth();
+		m_rightInTile = m_right - m_rightCol * KisTile::WIDTH;
 	else
-		m_rightInTile = tileWidth() - 1;
+		m_rightInTile = KisTile::WIDTH - 1;
 
 	m_xInTile = m_leftInTile;
 
 	fetchTileData(m_col, m_row);
-	m_offset = m_pixelSize * (m_yInTile * tileWidth() + m_xInTile);
+	m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 }
 ;
 KisTiledHLineIterator::~KisTiledHLineIterator( )
@@ -62,7 +62,7 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator ++ ()
 		nextTile();
 		fetchTileData(m_col, m_row);
 		m_xInTile =m_leftInTile;
-		m_offset = m_pixelSize * (m_yInTile * tileWidth() + m_xInTile);
+		m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 	}
 	else
 	{
@@ -82,9 +82,9 @@ void KisTiledHLineIterator::nextTile()
 		m_leftInTile = 0;
 
 		if(m_col == m_rightCol)
-			m_rightInTile = m_right - m_rightCol * tileWidth();
+			m_rightInTile = m_right - m_rightCol * KisTile::WIDTH;
 		else
-			m_rightInTile = tileWidth() - 1;
+			m_rightInTile = KisTile::WIDTH - 1;
 	}
 }
 
@@ -107,7 +107,7 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator+=(int n)
 		m_x += n;
 	}
 	fetchTileData(m_col, m_row);
-	m_offset = m_pixelSize * (m_yInTile * tileWidth() + m_xInTile);
+	m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 
 	return *this;
 }

@@ -225,8 +225,6 @@ void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 stride,
 	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
 	QUANTUM *d;
 	QUANTUM *s;
-	QUANTUM alpha;
-	Q_INT32 i;
 
 	if (rows <= 0 || cols <= 0)
 		return;

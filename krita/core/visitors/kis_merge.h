@@ -73,9 +73,8 @@ public:
 
 	virtual bool visit(KisPainter& gc, vKisLayerSP& layers)
 	{
-		for (Q_INT32 i = layers.size() - 1; i >= 0; i--) {
+ 		for (Q_INT32 i = layers.size() - 1; i >= 0; i--) {
 			KisLayerSP& layer = layers[i];
-
 			visit(gc, layer);
 		}
 
@@ -88,37 +87,14 @@ public:
 			return false;
 
 		if (m_mergeTest(layer.data())) {
-			Q_INT32 sx;
-			Q_INT32 sy;
-			Q_INT32 dx;
-			Q_INT32 dy;
-			Q_INT32 w;
-			Q_INT32 h;
+			Q_INT32 x, y, w, h;
+			x = y = 0;
+			w = m_img -> width();
+			h = m_img -> height();
 
-			sx = layer -> getX();
-			sy = layer ->getY();
-			dx = layer ->getX();
-			dy = layer ->getY();
-			w = 100; //AUTOLAYER layer -> width();
-			h = 100; // AUTOLAYER layer -> height();
+			// layer -> extent( x, y, w, y );
 
-			if (sx < 0) {
-				w += sx;
-				sx *= -1;
-				dx = 0;
-			} else {
-				sx = 0;
-			}
-
-			if (sy < 0) {
-				h += sy;
-				sy *= -1;
-				dy = 0;
-			} else {
-				sy = 0;
-			}
-
-			gc.bitBlt(dx, dy, layer -> compositeOp() , layer.data(), layer -> opacity(), sx, sy, w, h);
+			gc.bitBlt(x, y, layer -> compositeOp() , layer.data(), layer -> opacity(), x, y, w, h);
 
 			if (!m_haveFoundInsertionPlace) {
 

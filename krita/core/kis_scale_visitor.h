@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the free software
  *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
+
 #ifndef KIS_SCALE_VISITOR_H_
 #define KIS_SCALE_VISITOR_H_
 
@@ -32,6 +33,65 @@ enum enumFilterType {
 	FILTER,
 	LANCZOS3_FILTER,
 	MITCHELL_FILTER
+};
+
+class KisScaleFilterStrategy {
+	public:
+		KisScaleFilterStrategy() {}
+		virtual ~KisScaleFilterStrategy() {}
+
+		virtual double valueAt(double t) const = 0;
+};
+
+class KisSimpleScaleFilterStrategy : public KisScaleFilterStrategy {
+	public:
+		virtual ~KisSimpleScaleFilterStrategy() {}
+
+		virtual double valueAt(double t) const;
+};
+
+class KisBoxScaleFilterStrategy : public KisScaleFilterStrategy {
+	public:
+		virtual ~KisBoxScaleFilterStrategy() {}
+
+		virtual double valueAt(double t) const;
+};
+
+class KisTriangleScaleFilterStrategy : public KisScaleFilterStrategy {
+	public:
+		virtual ~KisTriangleScaleFilterStrategy() {}
+
+		virtual double valueAt(double t) const;
+};
+
+class KisBellScaleFilterStrategy : public KisScaleFilterStrategy {
+	public:
+		virtual ~KisBellScaleFilterStrategy() {}
+
+		virtual double valueAt(double t) const;
+};
+
+class KisBSplineScaleFilterStrategy : public KisScaleFilterStrategy {
+	public:
+		virtual ~KisBSplineScaleFilterStrategy() {}
+
+		virtual double valueAt(double t) const;
+};
+
+class KisLanczos3ScaleFilterStrategy : public KisScaleFilterStrategy {
+	public:
+		virtual ~KisLanczos3ScaleFilterStrategy() {}
+
+		virtual double valueAt(double t) const;
+        private:
+                double sinc(double x) const; 
+};
+
+class KisMitchellScaleFilterStrategy : public KisScaleFilterStrategy {
+	public:
+		virtual ~KisMitchellScaleFilterStrategy() {}
+
+		virtual double valueAt(double t) const;
 };
 
 class KisScaleVisitor : public KisProgressSubject {
@@ -66,17 +126,7 @@ private:
 	 * Returns -1 if error, 0 otherwise.
 	 */
                 
-        int calc_x_contrib(CLIST *contribX, double xcale, double fwidth, int dstwidth, int srcwidth, double (KisScaleVisitor::*filterf)(double), Q_INT32 i);
-
-	/* scaling filter function definitions */
-	double filter(double t);
-	double box_filter(double t);
-	double triangle_filter(double t);
-	double bell_filter(double t);
-	double B_spline_filter(double t);
-	double sinc(double x);
-	double Lanczos3_filter(double t);
-	double Mitchell_filter(double t);
+        int calc_x_contrib(CLIST *contribX, double xcale, double fwidth, int dstwidth, int srcwidth, KisScaleFilterStrategy *filterStrategy, Q_INT32 i);
 
         CLIST * contrib;  //array of contribution lists
 

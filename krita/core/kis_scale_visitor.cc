@@ -24,6 +24,79 @@
 #include "kis_scale_visitor.h"
 #include "kis_progress_display_interface.h"
 
+double KisSimpleScaleFilterStrategy::valueAt(double t) const {
+        /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
+        if(t < 0.0) t = -t;
+        if(t < 1.0) return((2.0 * t - 3.0) * t * t + 1.0);
+        return(0.0);
+}
+
+double KisBoxScaleFilterStrategy::valueAt(double t) const {
+        if((t > -0.5) && (t <= 0.5)) return(1.0);
+        return(0.0);
+}
+
+double KisTriangleScaleFilterStrategy::valueAt(double t) const {
+        if(t < 0.0) t = -t;
+        if(t < 1.0) return(1.0 - t);
+        return(0.0);
+}
+
+double KisBellScaleFilterStrategy::valueAt(double t) const {
+        if(t < 0) t = -t;
+        if(t < .5) return(.75 - (t * t));
+        if(t < 1.5) {
+                t = (t - 1.5);
+                return(.5 * (t * t));
+        }
+        return(0.0);
+}
+
+double KisBSplineScaleFilterStrategy::valueAt(double t) const {
+        double tt;
+
+        if(t < 0) t = -t;
+        if(t < 1) {
+                tt = t * t;
+                return((.5 * tt * t) - tt + (2.0 / 3.0));
+        } else if(t < 2) {
+                t = 2 - t;
+                return((1.0 / 6.0) * (t * t * t));
+        }
+        return(0.0);
+}
+
+double KisLanczos3ScaleFilterStrategy::valueAt(double t) const {
+        if(t < 0) t = -t;
+        if(t < 3.0) return(sinc(t) * sinc(t/3.0));
+        return(0.0);
+}
+
+double KisLanczos3ScaleFilterStrategy::sinc(double x) const {
+        const double pi=3.1415926535897932385;
+        x *= pi;
+        if(x != 0) return(sin(x) / x);
+        return(1.0);
+}
+
+double KisMitchellScaleFilterStrategy::valueAt(double t) const {
+        const double B=1.0/3.0;
+        const double C=1.0/3.0;
+        double tt;
+
+        tt = t * t;
+        if(t < 0) t = -t;
+        if(t < 1.0) {
+                t = (((12.0 - 9.0 * B - 6.0 * C) * (t * tt)) + ((-18.0 + 12.0 * B + 6.0 * C) * tt) + (6.0 - 2 * B));
+                return(t / 6.0);
+        } else if(t < 2.0) {
+                t = (((-1.0 * B - 6.0 * C) * (t * tt)) + ((6.0 * B + 30.0 * C) * tt) + ((-12.0 * B - 48.0 * C) * t) + (8.0 * B + 24 * C));
+                return(t / 6.0);
+                }
+        return(0.0);
+}
+
+
 void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, enumFilterType filterType) 
 {
         
@@ -35,9 +108,41 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         const double B_spline_support=2.0;
         const double Lanczos3_support=3.0;
         const double Mitchell_support=2.0;
-       	
-        double (KisScaleVisitor::*filterf)(double) = &KisScaleVisitor::Mitchell_filter; //pointer to filter function
+        
         double fwidth;
+        
+        KisScaleFilterStrategy *filterStrategy = 0;
+        
+        switch(filterType){
+                case BOX_FILTER: 
+                        filterStrategy = new KisBoxScaleFilterStrategy();
+                        fwidth=box_support;
+                        break;
+                case TRIANGLE_FILTER: 
+                        filterStrategy = new KisTriangleScaleFilterStrategy();
+                        fwidth=triangle_support;
+                        break;
+                case BELL_FILTER: 
+                        filterStrategy = new KisBellScaleFilterStrategy();
+                        fwidth=bell_support;
+                        break;
+                case B_SPLINE_FILTER:
+                        filterStrategy = new KisBSplineScaleFilterStrategy();
+                        fwidth=B_spline_support;
+                        break;
+                case FILTER: 
+                        filterStrategy = new KisSimpleScaleFilterStrategy();
+                        fwidth=filter_support;
+                        break;
+                case LANCZOS3_FILTER: 
+                        filterStrategy = new KisLanczos3ScaleFilterStrategy();
+                        fwidth=Lanczos3_support;
+                        break;
+                case MITCHELL_FILTER: 
+                        filterStrategy = new KisMitchellScaleFilterStrategy();
+                        fwidth=Mitchell_support;
+                        break;
+        }
         
         // target image data
         Q_INT32 targetW;
@@ -56,18 +161,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         targetH = qRound( scale_matrix.m22() * m_dev->height() );
         targetW = QABS( targetW );
         targetH = QABS( targetH );
-
-        //set filter type
-        switch(filterType){
-                case BOX_FILTER: filterf=&KisScaleVisitor::box_filter; fwidth=box_support; break;
-                case TRIANGLE_FILTER: filterf=&KisScaleVisitor::triangle_filter; fwidth=triangle_support; break;
-                case BELL_FILTER: filterf=&KisScaleVisitor::bell_filter; fwidth=bell_support; break;
-                case B_SPLINE_FILTER: filterf=&KisScaleVisitor::B_spline_filter; fwidth=B_spline_support; break;
-                case FILTER: filterf=&KisScaleVisitor::filter; fwidth=filter_support; break;
-                case LANCZOS3_FILTER: filterf=&KisScaleVisitor::Lanczos3_filter; fwidth=Lanczos3_support; break;
-                case MITCHELL_FILTER: filterf=&KisScaleVisitor::Mitchell_filter; fwidth=Mitchell_support; break;
-        }
-         
+ 
         KisTileMgrSP tm = new KisTileMgr(m_dev -> colorStrategy() -> depth(), targetW, targetH);
         QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
         int n;				/* pixel number */
@@ -108,7 +202,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                         right = floor(center + m_width);
                         for(int xx = (int)left; xx <= right; xx++) {
                                 weight[0] = center - (double) xx;
-                                weight[0] = (this->*filterf)(weight[0] / fscale) / fscale;
+                                weight[0] = filterStrategy->valueAt(weight[0] / fscale) / fscale;
                                 if(xx < 0) {
                                         n = -xx;
                                 } else if(xx >= m_dev -> height()) {
@@ -130,7 +224,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                         right = floor(center + fwidth);
                         for(int xx = (int)left; xx <= right; xx++) {
                                 weight[0] = center - (double) xx;
-                                weight[0] = (this->*filterf)(weight[0]);
+                                weight[0] = filterStrategy->valueAt(weight[0]);
                                 if(xx < 0) {
                                         n = -xx;
                                 } else if(xx >= m_dev -> height()) {
@@ -156,7 +250,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                         break;
                 }
                 
-                calc_x_contrib(&contribX, xscale, fwidth, targetW, m_dev -> width(), filterf, x);
+                calc_x_contrib(&contribX, xscale, fwidth, targetW, m_dev -> width(), filterStrategy, x);
                 /* Apply horz filter to make dst column in tmp. */
                 for(int y = 0; y < m_dev -> height(); y++)
                 {
@@ -223,7 +317,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         for(int y = 0; y < targetH; y++)
                 free(contribY[y].p);
         free(contribY);
-
+        delete filterStrategy;
+        
         //progress info
         emit notifyProgressDone(this);
         
@@ -231,7 +326,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         return;
 }
 
-int KisScaleVisitor::calc_x_contrib(CLIST *contribX, double xscale, double fwidth, int /*dstwidth*/, int srcwidth, double (KisScaleVisitor::*filterf)(double), Q_INT32 x)
+int KisScaleVisitor::calc_x_contrib(CLIST *contribX, double xscale, double fwidth, int /*dstwidth*/, int srcwidth, KisScaleFilterStrategy* filterStrategy, Q_INT32 x)
 {
         //CLIST* contribX: receiver of contrib info
         //double xscale: horizontal zooming scale
@@ -261,7 +356,7 @@ int KisScaleVisitor::calc_x_contrib(CLIST *contribX, double xscale, double fwidt
                 for(int xx = (int)left; xx <= right; ++xx)
                 {
                         weight = center - (double) xx;
-                        weight = (this->*filterf)(weight / fscale) / fscale;
+                        weight = filterStrategy->valueAt(weight / fscale) / fscale;
                         if(xx < 0)
                                 n = -xx;
                         else if(xx >= srcwidth)
@@ -286,7 +381,7 @@ int KisScaleVisitor::calc_x_contrib(CLIST *contribX, double xscale, double fwidt
                 for(int xx = (int)left; xx <= right; ++xx)
                 {
                         weight = center - (double) xx;
-                        weight = (this->*filterf)(weight);
+                        weight = filterStrategy->valueAt(weight);
                         if(xx < 0) {
                                 n = -xx;
                         } else if(xx >= srcwidth) {
@@ -301,85 +396,3 @@ int KisScaleVisitor::calc_x_contrib(CLIST *contribX, double xscale, double fwidt
         }
         return 0;
 } /* calc_x_contrib */
-
-/* Filter function definitions */
-
-double KisScaleVisitor::filter(double t)
-{
-        /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
-        if(t < 0.0) t = -t;
-        if(t < 1.0) return((2.0 * t - 3.0) * t * t + 1.0);
-        return(0.0);
-}
-
-double KisScaleVisitor::box_filter(double t)
-{
-        if((t > -0.5) && (t <= 0.5)) return(1.0);
-        return(0.0);
-}
-
-double KisScaleVisitor::triangle_filter(double t)
-{
-        if(t < 0.0) t = -t;
-        if(t < 1.0) return(1.0 - t);
-        return(0.0);
-}
-
-double KisScaleVisitor::bell_filter(double t)
-{
-        if(t < 0) t = -t;
-        if(t < .5) return(.75 - (t * t));
-        if(t < 1.5) {
-                t = (t - 1.5);
-                return(.5 * (t * t));
-        }
-        return(0.0);
-}
-
-double KisScaleVisitor::B_spline_filter(double t)
-{
-        double tt;
-
-        if(t < 0) t = -t;
-        if(t < 1) {
-                tt = t * t;
-                return((.5 * tt * t) - tt + (2.0 / 3.0));
-        } else if(t < 2) {
-                t = 2 - t;
-                return((1.0 / 6.0) * (t * t * t));
-        }
-        return(0.0);
-}
-
-double KisScaleVisitor::sinc(double x)
-{
-        const double pi=3.1415926535897932385;
-        x *= pi;
-        if(x != 0) return(sin(x) / x);
-        return(1.0);
-}
-
-double KisScaleVisitor::Lanczos3_filter(double t)
-{
-        if(t < 0) t = -t;
-        if(t < 3.0) return(sinc(t) * sinc(t/3.0));
-        return(0.0);
-}
-
-double KisScaleVisitor::Mitchell_filter(double t)
-{
-        const double B=1.0/3.0;
-        const double C=1.0/3.0;
-        double tt;
-
-        tt = t * t;
-        if(t < 0) t = -t;
-        if(t < 1.0) {
-                t = (((12.0 - 9.0 * B - 6.0 * C) * (t * tt)) + ((-18.0 + 12.0 * B + 6.0 * C) * tt) + (6.0 - 2 * B));
-                return(t / 6.0);
-        } else if(t < 2.0) {
-                t = (((-1.0 * B - 6.0 * C) * (t * tt)) + ((6.0 * B + 30.0 * C) * tt) + ((-12.0 * B - 48.0 * C) * t) + (8.0 * B + 24 * C));
-                return(t / 6.0);
-                }
-        return(0.0);
-}

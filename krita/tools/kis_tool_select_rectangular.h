@@ -40,9 +40,9 @@ public:
 	virtual void setup(KActionCollection *collection);
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
-	virtual void mousePress(QMouseEvent *e);
-	virtual void mouseMove(QMouseEvent *e);
-	virtual void mouseRelease(QMouseEvent *e);
+	virtual void buttonPress(KisButtonPressEvent *e);
+	virtual void move(KisMoveEvent *e);
+	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 private:
 	void clearSelection();

@@ -61,28 +61,17 @@ void KisToolNonPaint::leave(QEvent *)
 {
 }
 
-void KisToolNonPaint::mousePress(QMouseEvent *)
+void KisToolNonPaint::buttonPress(KisButtonPressEvent *)
 {
 }
 
-void KisToolNonPaint::mouseMove(QMouseEvent *)
+void KisToolNonPaint::move(KisMoveEvent *)
 {
 }
 
-void KisToolNonPaint::mouseRelease(QMouseEvent *)
+void KisToolNonPaint::buttonRelease(KisButtonReleaseEvent *)
 {
 }
-
-void KisToolNonPaint::tabletEvent(QTabletEvent * /*e*/)
-{
-//     kdDebug() << "received tablet event at position ("
-//               << e->pos().x()
-//               << ", "
-//               << e->pos().y()
-//               << ")"
-//               << endl;
-}
-
 
 void KisToolNonPaint::keyPress(QKeyEvent *)
 {

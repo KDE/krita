@@ -656,7 +656,9 @@ void KisPainter::paintPolyline (const enumPaintOp paintOp,
 void KisPainter::paintRect (const enumPaintOp paintOp,
                             const KisPoint &startPoint,
                             const KisPoint &endPoint,
-                            const double pressure)
+                            const double pressure,
+			    const double /*xTilt*/,
+			    const double /*yTilt*/)
 {
     KoRect normalizedRect = KisRect (startPoint, endPoint).normalize ();
 
@@ -765,11 +767,13 @@ void KisPainter::paintEllipseInternal (const enumPaintOp paintOp,
 }
 
 void KisPainter::paintEllipse (const enumPaintOp paintOp,
-                               const QPoint &startPoint,
-                               const QPoint &endPoint,
-                               const double pressure)
+                               const KisPoint &startPoint,
+                               const KisPoint &endPoint,
+                               const double pressure,
+			       const double /*xTilt*/,
+			       const double /*yTilt*/)
 {
-    QRect normalizedRect = QRect (startPoint, endPoint).normalize ();
+    QRect normalizedRect = QRect (startPoint.floorQPoint(), endPoint.floorQPoint()).normalize ();
 
     const int x1 = normalizedRect.left (),
               x2 = normalizedRect.right (),

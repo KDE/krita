@@ -45,7 +45,7 @@ public:
 	virtual void setup(KActionCollection *collection);
 	virtual void update(KisCanvasSubject *subject);
 
-	virtual void mousePress(QMouseEvent*); 
+	virtual void buttonPress(KisButtonPressEvent*); 
 
 	bool flood(int startX, int startY);
       

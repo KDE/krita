@@ -49,10 +49,9 @@ class KisToolLine : public KisToolPaint {
 	virtual void setup(KActionCollection *collection);
 	virtual void update(KisCanvasSubject *subject);
 
-	virtual void mousePress(QMouseEvent *event);
-	virtual void mouseMove(QMouseEvent *event);
-	virtual void mouseRelease(QMouseEvent *event);
-	virtual void tabletEvent(QTabletEvent *event);
+	virtual void buttonPress(KisButtonPressEvent *event);
+	virtual void move(KisMoveEvent *event);
+	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
@@ -62,13 +61,13 @@ class KisToolLine : public KisToolPaint {
 	void paintLine();
 	void paintLine(QPainter& gc, const QRect& rc);
 
-	QPoint straightLine(QPoint point);
+	KisPoint straightLine(KisPoint point);
 
 
 	bool m_dragging;
 
-	QPoint m_startPos;
-	QPoint m_endPos;
+	KisPoint m_startPos;
+	KisPoint m_endPos;
 
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;

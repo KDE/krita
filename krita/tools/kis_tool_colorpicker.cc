@@ -32,6 +32,7 @@
 #include "kis_rgb_widget.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_colorpicker.moc"
+#include "kis_button_press_event.h"
 
 KisToolColorPicker::KisToolColorPicker()
 {
@@ -48,7 +49,7 @@ KisToolColorPicker::~KisToolColorPicker()
 {
 }
 
-void KisToolColorPicker::mousePress(QMouseEvent *e)
+void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 {
 	if (m_subject) {
 		KisImageSP img;
@@ -68,7 +69,7 @@ void KisToolColorPicker::mousePress(QMouseEvent *e)
 		if (!dev || !dev -> visible())
 			return;
 
-		pos = e -> pos();
+		pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
 
 		if (!dev -> contains(pos))
 			return;

@@ -33,6 +33,9 @@
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
 #include "kis_tool_rectangle.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolRectangle::KisToolRectangle()
 	: super(),
@@ -60,9 +63,9 @@ void KisToolRectangle::update (KisCanvasSubject *subject)
             m_currentImage = m_subject->currentImg ();
 }
 
-void KisToolRectangle::mousePress(QMouseEvent *event)
+void KisToolRectangle::buttonPress(KisButtonPressEvent *event)
 {
-        kdDebug (40001) << "KisToolRectangle::mousePress" << event->pos () << endl;
+	kdDebug (40001) << "KisToolRectangle::buttonPress" << event->pos () << endl;
 	if (event -> button() == LeftButton) {
 		m_dragging = true;
 		m_dragStart = event -> pos();
@@ -70,9 +73,9 @@ void KisToolRectangle::mousePress(QMouseEvent *event)
 	}
 }
 
-void KisToolRectangle::mouseMove(QMouseEvent *event)
+void KisToolRectangle::move(KisMoveEvent *event)
 {
-        kdDebug (40001) << "KisToolRectangle::mouseMove" << event->pos () << endl;
+	kdDebug (40001) << "KisToolRectangle::move" << event->pos () << endl;
 	if (m_dragging) {
 		// erase old lines on canvas
 		draw(m_dragStart, m_dragEnd);
@@ -83,58 +86,58 @@ void KisToolRectangle::mouseMove(QMouseEvent *event)
 	}
 }
 
-void KisToolRectangle::mouseRelease(QMouseEvent *event)
+void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
 {
-        if (!m_subject)
-            return;
+	if (!m_subject)
+		return;
 
 	if (m_dragging && event -> button() == LeftButton) {
 		// erase old lines on canvas
 		draw(m_dragStart, m_dragEnd);
 		m_dragging = false;
 
-                m_dragEnd = event->pos ();
-                if (m_dragStart == m_dragEnd)
-                        return;
+		m_dragEnd = event -> pos();
+		if (m_dragStart == m_dragEnd)
+			return;
 
-                if (!m_currentImage)
-                        return;
+		if (!m_currentImage)
+			return;
 
-                KisPaintDeviceSP device = m_currentImage->activeDevice ();;
-                KisPainter painter (device);
-                painter.beginTransaction (i18n ("rectangle"));
+		KisPaintDeviceSP device = m_currentImage->activeDevice ();
+		KisPainter painter (device);
+		painter.beginTransaction (i18n ("rectangle"));
 
-                painter.setPaintColor(m_subject -> fgColor());
-                painter.setBrush(m_subject -> currentBrush());
-                //painter.setOpacity(m_opacity);
-                //painter.setCompositeOp(m_compositeOp);
+		painter.setPaintColor(m_subject -> fgColor());
+		painter.setBrush(m_subject -> currentBrush());
+		//painter.setOpacity(m_opacity);
+		//painter.setCompositeOp(m_compositeOp);
 
-                painter.paintRect(PAINTOP_BRUSH, m_dragStart, m_dragEnd, PRESSURE_DEFAULT);
-                m_currentImage -> notify( painter.dirtyRect() );
+		painter.paintRect(PAINTOP_BRUSH, m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
+		m_currentImage -> notify( painter.dirtyRect() );
 
-                KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-                if (adapter) {
-                        adapter -> addCommand(painter.endTransaction());
-                }
-        }
+		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+		if (adapter) {
+			adapter -> addCommand(painter.endTransaction());
+		}
+	}
 }
 
-void KisToolRectangle::draw(const QPoint& start, const QPoint& end )
+void KisToolRectangle::draw(const KisPoint& start, const KisPoint& end )
 {
-        if (!m_subject)
-            return;
+	if (!m_subject)
+		return;
 
-        KisCanvasControllerInterface *controller = m_subject->canvasController ();
-        kdDebug (40001) << "KisToolRectangle::draw(" << start << "," << end << ")"
-                        << " windowToView: start=" << controller->windowToView (start)
-                        << " windowToView: end=" << controller->windowToView (end)
-                        << endl;
-        QWidget *canvas = controller->canvas ();
-        QPainter p (canvas);
+	KisCanvasControllerInterface *controller = m_subject->canvasController ();
+	kdDebug (40001) << "KisToolRectangle::draw(" << start << "," << end << ")"
+			<< " windowToView: start=" << controller->windowToView (start)
+			<< " windowToView: end=" << controller->windowToView (end)
+			<< endl;
+	QWidget *canvas = controller->canvas ();
+	QPainter p (canvas);
 
-        p.setRasterOp (Qt::NotROP);
-        p.drawRect (QRect (controller->windowToView (start), controller->windowToView (end)));
-        p.end ();
+	p.setRasterOp (Qt::NotROP);
+	p.drawRect (QRect (controller->windowToView (start).floorQPoint(), controller->windowToView (end).floorQPoint()));
+	p.end ();
 }
 
 //void KisToolRectangle::draw(KisPainter *gc, const QRect& rc)

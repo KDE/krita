@@ -23,11 +23,11 @@
 
 #include "kis_tool_paint.h"
 
-class QPoint;
 class QTimer;
 
 class KisPainter;
 class KisBrush;
+class KisPoint;
 
 class KisToolAirBrush : public KisToolPaint {
 
@@ -42,22 +42,21 @@ class KisToolAirBrush : public KisToolPaint {
 
 	virtual void update(KisCanvasSubject *subject);
 
-	virtual void mousePress(QMouseEvent *e); 
-	virtual void mouseMove(QMouseEvent *e);
-	virtual void mouseRelease(QMouseEvent *e);
-	virtual void tabletEvent(QTabletEvent *e);
+	virtual void buttonPress(KisButtonPressEvent *e); 
+	virtual void move(KisMoveEvent *e);
+	virtual void buttonRelease(KisButtonReleaseEvent *e);
 	
  protected slots:
 	void timeoutPaint();  
 
  private:
 
-	virtual void paintLine(const QPoint & pos1,
-			       const QPoint & pos2,
+	virtual void paintLine(const KisPoint & pos1,
+			       const KisPoint & pos2,
 			       const double pressure,
 			       const double xtilt,
 			       const double ytilt);
-	virtual void initPaint(const QPoint & pos);
+	virtual void initPaint(const KisPoint & pos);
 	virtual void endPaint();
 
 	enumBrushMode m_mode;
@@ -65,10 +64,10 @@ class KisToolAirBrush : public KisToolPaint {
 
 	QTimer * m_timer;
     
-	QPoint m_dragStart;
-	float m_dragDist;
+	KisPoint m_dragStart;
+	double m_dragDist;
 
-	QPoint m_currentPos;
+	KisPoint m_currentPos;
 	double m_pressure;
 	double m_xTilt;
 	double m_yTilt;

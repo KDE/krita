@@ -32,8 +32,6 @@
 class QEvent;
 class QKeyEvent;
 class QPaintEvent;
-class QMouseEvent;
-class QTabletEvent;
 class QRect;
 class KDialog;
 class KisCanvasSubject;
@@ -59,10 +57,9 @@ public:
 
 	virtual void enter(QEvent *e);
 	virtual void leave(QEvent *e);
-	virtual void mousePress(QMouseEvent *e);
-	virtual void mouseMove(QMouseEvent *e);
-	virtual void mouseRelease(QMouseEvent *e);
-        virtual void tabletEvent(QTabletEvent *e);
+	virtual void buttonPress(KisButtonPressEvent *e);
+	virtual void move(KisMoveEvent *e);
+	virtual void buttonRelease(KisButtonReleaseEvent *e);
 	virtual void keyPress(QKeyEvent *e);
 	virtual void keyRelease(QKeyEvent *e);
 

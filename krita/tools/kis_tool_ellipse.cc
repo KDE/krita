@@ -33,6 +33,9 @@
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
 #include "kis_tool_ellipse.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolEllipse::KisToolEllipse()
         : super(),
@@ -60,9 +63,9 @@ void KisToolEllipse::update (KisCanvasSubject *subject)
             m_currentImage = m_subject->currentImg ();
 }
 
-void KisToolEllipse::mousePress(QMouseEvent *event)
+void KisToolEllipse::buttonPress(KisButtonPressEvent *event)
 {
-        kdDebug (40001) << "KisToolEllipse::mousePress" << event->pos () << endl;
+        kdDebug (40001) << "KisToolEllipse::buttonPress" << event->pos () << endl;
 	if (event -> button() == LeftButton) {
 		m_dragging = true;
 		m_dragStart = event -> pos();
@@ -70,9 +73,9 @@ void KisToolEllipse::mousePress(QMouseEvent *event)
 	}
 }
 
-void KisToolEllipse::mouseMove(QMouseEvent *event)
+void KisToolEllipse::move(KisMoveEvent *event)
 {
-        kdDebug (40001) << "KisToolEllipse::mouseMove" << event->pos () << endl;
+        kdDebug (40001) << "KisToolEllipse::move" << event->pos () << endl;
 	if (m_dragging) {
 		// erase old lines on canvas
 		draw(m_dragStart, m_dragEnd);
@@ -83,7 +86,7 @@ void KisToolEllipse::mouseMove(QMouseEvent *event)
 	}
 }
 
-void KisToolEllipse::mouseRelease(QMouseEvent *event)
+void KisToolEllipse::buttonRelease(KisButtonReleaseEvent *event)
 {
         if (!m_subject)
             return;
@@ -109,7 +112,7 @@ void KisToolEllipse::mouseRelease(QMouseEvent *event)
                 //painter.setOpacity(m_opacity);
                 //painter.setCompositeOp(m_compositeOp);
 
-                painter.paintEllipse(PAINTOP_BRUSH, m_dragStart, m_dragEnd, PRESSURE_DEFAULT);
+                painter.paintEllipse(PAINTOP_BRUSH, m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
                 m_currentImage -> notify( painter.dirtyRect() );
 
                 KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
@@ -119,7 +122,7 @@ void KisToolEllipse::mouseRelease(QMouseEvent *event)
         }
 }
 
-void KisToolEllipse::draw(const QPoint& start, const QPoint& end )
+void KisToolEllipse::draw(const KisPoint& start, const KisPoint& end )
 {
         if (!m_subject)
             return;
@@ -133,7 +136,7 @@ void KisToolEllipse::draw(const QPoint& start, const QPoint& end )
         QPainter p (canvas);
 
         p.setRasterOp (Qt::NotROP);
-        p.drawEllipse (QRect (controller->windowToView (start), controller->windowToView (end)));
+        p.drawEllipse (QRect (controller->windowToView (start).floorQPoint(), controller->windowToView (end).floorQPoint()));
         p.end ();
 }
 

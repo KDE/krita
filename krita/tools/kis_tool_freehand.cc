@@ -34,7 +34,9 @@
 #include "kis_view.h"
 #include "integerwidget.h"
 #include "kis_cmb_composite.h"
-
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolFreeHand::KisToolFreeHand()
 		: super(),
@@ -64,39 +66,37 @@ void KisToolFreeHand::update(KisCanvasSubject *subject)
 	m_currentImage = m_subject -> currentImg();
 }
 
-void KisToolFreeHand::mousePress(QMouseEvent *e)
+void KisToolFreeHand::buttonPress(KisButtonPressEvent *e)
 {
-	if (!m_subject) return;
+        if (!m_subject) return;
 
-	if (!m_subject->currentBrush()) return;
+        if (!m_subject -> currentBrush()) return;
 
 	if (!m_currentImage -> activeDevice()) return;
 
-	if (e->button() == QMouseEvent::LeftButton) {
+        if (e -> button() == QMouseEvent::LeftButton) {
 		m_mode = PAINT;
 		initPaint(e -> pos());
-		paintAt(e->pos(), PRESSURE_DEFAULT, 0, 0);
+		paintAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
 		// XXX: get the rect that should be notified
 		m_currentImage -> notify( m_painter -> dirtyRect() );
-	}
+         }
 }
 
-
-void KisToolFreeHand::mouseRelease(QMouseEvent* e)
+void KisToolFreeHand::buttonRelease(KisButtonReleaseEvent* e)
 {
-	if (e->button() == QMouseEvent::LeftButton && m_mode == PAINT) {
+	if (e -> button() == QMouseEvent::LeftButton && m_mode == PAINT) {
 		endPaint();
-	}
+        }
 }
 
-
-void KisToolFreeHand::mouseMove(QMouseEvent *e)
+void KisToolFreeHand::move(KisMoveEvent *e)
 {
 	if (m_mode == PAINT) {
-		paintLine(m_dragStart, e -> pos(), PRESSURE_DEFAULT, 0, 0);
+		paintLine(m_dragStart, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
 	}
 }
-
+/*
 void KisToolFreeHand::tabletEvent(QTabletEvent *e)
 {
 	if (e->device() == QTabletEvent::Stylus) {
@@ -132,9 +132,9 @@ void KisToolFreeHand::tabletEvent(QTabletEvent *e)
 	}
 	 e -> accept();
 }
+*/
 
-
-void KisToolFreeHand::initPaint(const QPoint & pos)
+void KisToolFreeHand::initPaint(const KisPoint & pos)
 {
 
 	if (!m_currentImage -> activeDevice()) return;

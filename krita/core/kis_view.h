@@ -67,6 +67,9 @@ class KisUndoAdapter;
 class KisRect;
 class KisPoint;
 class KisLayerBox;
+class KisButtonPressEvent;
+class KisButtonReleaseEvent;
+class KisMoveEvent;
 
 class KisView : public KoView,
 	private KisCanvasSubject,
@@ -236,6 +239,7 @@ private:
 	void setupTools();
 	void zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf);
 	void setInputDevice(enumInputDevice inputDevice);
+	enumInputDevice currentInputDevice() const;
 	KisTool *findTool(QString toolName, enumInputDevice inputDevice = INPUT_DEVICE_UNKNOWN) const;
 
 private slots:
@@ -249,10 +253,9 @@ private slots:
 	void moveImage( unsigned, unsigned );
 	void slotRename();
 
-	void canvasGotMousePressEvent(QMouseEvent *e);
-	void canvasGotMouseMoveEvent(QMouseEvent *e);
-	void canvasGotMouseReleaseEvent(QMouseEvent *e);
-	void canvasGotTabletEvent(QTabletEvent *e);
+	void canvasGotMoveEvent(KisMoveEvent *e);
+	void canvasGotButtonPressEvent(KisButtonPressEvent *e);
+	void canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e);
 	void canvasGotPaintEvent(QPaintEvent *e);
 	void canvasGotEnterEvent(QEvent *e);
 	void canvasGotLeaveEvent(QEvent *e);

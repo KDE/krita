@@ -31,6 +31,9 @@
 #include "kis_painter.h"
 #include "kis_tool_stamp.h"
 #include "kis_view.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolStamp::KisToolStamp() : 
 	super()
@@ -81,7 +84,7 @@ void KisToolStamp::setPattern(KisPattern *pattern)
    into the currentImg layer
  */
 
-void KisToolStamp::mousePress(QMouseEvent *e)
+void KisToolStamp::buttonPress(KisButtonPressEvent *e)
 {
 
 	if (e->button() != QMouseEvent::LeftButton) 
@@ -337,7 +340,7 @@ bool KisToolStamp::stampMonochrome(QPoint /*pos*/)
 }
 #endif
 
-void KisToolStamp::mouseMove(QMouseEvent *e)
+void KisToolStamp::move(KisMoveEvent *e)
 {
 #if 0
 	KisView *view = getCurrentView();
@@ -430,20 +433,13 @@ void KisToolStamp::mouseMove(QMouseEvent *e)
 }
 
 
-void KisToolStamp::mouseRelease(QMouseEvent *e)
+void KisToolStamp::buttonRelease(KisButtonReleaseEvent *e)
 {
 	if (e -> button() != LeftButton)
 		return;
 
 	m_dragging = false;
 }
-
-void KisToolStamp::tabletEvent(QTabletEvent */*event*/) 
-{
-	// Nothing yet -- I'm not sure how to handle this, perhaps
-	// have thick-thin lines for pressure.
-}
-
 
 void KisToolStamp::setup(KActionCollection *collection)
 {

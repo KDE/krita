@@ -59,6 +59,9 @@
 
 #include "kis_canvas.h"
 #include "kis_cursor.h"
+#include "kis_move_event.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -75,6 +78,7 @@ KisCanvas::KisCanvas(QWidget *parent, const char *name) : super(parent, name)
 	setBackgroundMode(QWidget::NoBackground);
 	setMouseTracking(true);
 	m_enableMoveEventCompressionHint = true;
+	m_lastPressure = 0;
 
 #ifdef Q_WS_X11
 	if (!X11SupportInitialised) {
@@ -106,38 +110,84 @@ void KisCanvas::paintEvent(QPaintEvent *e)
 
 void KisCanvas::mousePressEvent(QMouseEvent *e)
 {
-	emit mousePressed(e);
+	KisButtonPressEvent ke(INPUT_DEVICE_MOUSE, e -> pos(), e -> globalPos(), PRESSURE_DEFAULT, 0, 0, e -> button(), e -> state());
+	buttonPressEvent(&ke);
 }
 
 void KisCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-	emit mouseReleased(e);
+	KisButtonReleaseEvent ke(INPUT_DEVICE_MOUSE, e -> pos(), e -> globalPos(), PRESSURE_DEFAULT, 0, 0, e -> button(), e -> state());
+	buttonReleaseEvent(&ke);
 }
 
 void KisCanvas::mouseMoveEvent(QMouseEvent *e)
 {
-	emit mouseMoved(e);
+	KisMoveEvent ke(INPUT_DEVICE_MOUSE, e -> pos(), e -> globalPos(), PRESSURE_DEFAULT, 0, 0, e -> state());
+	moveEvent(&ke);
 }
 
-void KisCanvas::tabletEvent( QTabletEvent *e )
+void KisCanvas::tabletEvent(QTabletEvent *e)
 {
-    emit gotTabletEvent( e );
+	enumInputDevice device;
 
-#ifdef Q_WS_X11
-    // Fix the problem that when you change from using a tablet device to the mouse,
-    // the first mouse button event is not recognised. This is because we handle 
-    // X11 core mouse move events directly so Qt does not get to see them. This breaks
-    // the tablet event accept/ignore mechanism, causing Qt to consume the first
-    // mouse button event it sees, instead of a mouse move. 'Ignoring' tablet move events
-    // stops Qt from stealing the next mouse button event. This does not affect the 
-    // tablet aware tools as they do not care about mouse moves while the tablet device is
-    // drawing.
-    if (e -> type() == QEvent::TabletMove) {
-	    e -> ignore();
-    }
+	switch (e -> device()) {
+	default:
+	case QTabletEvent::NoDevice:
+	case QTabletEvent::Stylus:
+		device = INPUT_DEVICE_STYLUS;
+		break;
+	case QTabletEvent::Puck:
+		device = INPUT_DEVICE_PUCK;
+		break;
+	case QTabletEvent::Eraser:
+		device = INPUT_DEVICE_ERASER;
+		break;
+	}
+
+	double pressure = e -> pressure() / 255.0;
+#if 1
+	// Use pressure threshold to detect 'left button' press/release
+	if (pressure >= PRESSURE_THRESHOLD && m_lastPressure < PRESSURE_THRESHOLD) {
+		KisButtonPressEvent ke(device, e -> pos(), e -> globalPos(), pressure, e -> xTilt(), e -> yTilt(), Qt::LeftButton, Qt::NoButton);
+		buttonPressEvent(&ke);
+	} else if (pressure < PRESSURE_THRESHOLD && m_lastPressure >= PRESSURE_THRESHOLD) {
+		KisButtonReleaseEvent ke(device, e -> pos(), e -> globalPos(), pressure, e -> xTilt(), e -> yTilt(), Qt::LeftButton, Qt::NoButton);
+		buttonReleaseEvent(&ke);
+	}
+#else
+	// Note: Qt doesn't provide button or state for tablet events.
+
+	if (e -> type() == QEvent::TabletPress) {
+		KisButtonPressEvent ke(device, e -> pos(), e -> globalPos(), e -> pressure() / 255.0, e -> xTilt(), e -> yTilt(), Qt::LeftButton, Qt::NoButton);
+		buttonPressEvent(&ke);
+	}
+	else
+	if (e -> type() == QEvent::TabletRelease) {
+		KisButtonReleaseEvent ke(device, e -> pos(), e -> globalPos(), e -> pressure() / 255.0, e -> xTilt(), e -> yTilt(), Qt::LeftButton, Qt::NoButton);
+		buttonReleaseEvent(&ke);
+	}
 #endif
-}
+	else {
+		KisMoveEvent ke(device, e -> pos(), e -> globalPos(), pressure, e -> xTilt(), e -> yTilt(), Qt::NoButton);
+		moveEvent(&ke);
+#ifdef Q_WS_X11
+		// Fix the problem that when you change from using a tablet device to the mouse,
+		// the first mouse button event is not recognised. This is because we handle 
+		// X11 core mouse move events directly so Qt does not get to see them. This breaks
+		// the tablet event accept/ignore mechanism, causing Qt to consume the first
+		// mouse button event it sees, instead of a mouse move. 'Ignoring' tablet move events
+		// stops Qt from stealing the next mouse button event. This does not affect the 
+		// tablet aware tools as they do not care about mouse moves while the tablet device is
+		// drawing.
+		if (e -> type() == QEvent::TabletMove) {
+			e -> ignore();
+		}
+#endif
+	}
 
+	m_lastPressure = pressure;
+}
+  
 void KisCanvas::enterEvent(QEvent *e)
 {
 	emit gotEnterEvent(e);
@@ -163,6 +213,21 @@ void KisCanvas::keyReleaseEvent(QKeyEvent *e)
 	emit gotKeyReleaseEvent(e);
 }
 
+void KisCanvas::moveEvent(KisMoveEvent *e)
+{
+	emit gotMoveEvent(e);
+}
+
+void KisCanvas::buttonPressEvent(KisButtonPressEvent *e)
+{
+	emit gotButtonPressEvent(e);
+}
+
+void KisCanvas::buttonReleaseEvent(KisButtonReleaseEvent *e)
+{
+	emit gotButtonReleaseEvent(e);
+}
+
 #ifdef Q_WS_X11
 
 void KisCanvas::initX11Support()
@@ -171,7 +236,7 @@ void KisCanvas::initX11Support()
 	X11SupportInitialised = true;
 
 	// Look at the modifier mapping and get the correct masks for alt/meta
-	XModifierKeymap *map = XGetModifierMapping(qt_xdisplay());
+	XModifierKeymap *map = XGetModifierMapping(x11Display());
 
 	if (map) {
 		int mapIndex = 0;
@@ -180,7 +245,7 @@ void KisCanvas::initX11Support()
 			for (int i = 0; i < map -> max_keypermod; i++) {
 				if (map -> modifiermap[mapIndex]) {
 
-					KeySym sym = XKeycodeToKeysym(qt_xdisplay(), map -> modifiermap[mapIndex], 0);
+					KeySym sym = XKeycodeToKeysym(x11Display(), map -> modifiermap[mapIndex], 0);
 
 					if (X11AltMask == 0 && (sym == XK_Alt_L || sym == XK_Alt_R)) {
 						X11AltMask = 1 << maskIndex;
@@ -227,11 +292,11 @@ int KisCanvas::translateX11ButtonState(int state)
 
 bool KisCanvas::x11Event(XEvent *event)
 {
-	if (event->type == MotionNotify) {
+	if (event -> type == MotionNotify) {
 		// Mouse move
 		if (!m_enableMoveEventCompressionHint) {
 
-			XMotionEvent motion = event->xmotion;
+			XMotionEvent motion = event -> xmotion;
 			QPoint globalPos(motion.x_root, motion.y_root);
 
 			if (globalPos.x() != m_lastRootX || globalPos.y() != m_lastRootY) {

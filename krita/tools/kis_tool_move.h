@@ -38,9 +38,9 @@ public:
 
 public:
 	virtual void setup(KActionCollection *collection);
-	virtual void mousePress(QMouseEvent *e);
-	virtual void mouseMove(QMouseEvent *e);
-	virtual void mouseRelease(QMouseEvent *e);
+	virtual void buttonPress(KisButtonPressEvent *e);
+	virtual void move(KisMoveEvent *e);
+	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 private:
 	KisCanvasSubject *m_subject;

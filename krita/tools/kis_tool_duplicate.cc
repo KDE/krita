@@ -33,6 +33,9 @@
 #include "kis_tool_duplicate.h"
 #include "kis_painter.h"
 #include "kis_vec.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolDuplicate::KisToolDuplicate() 
 	: super(), m_isOffsetNotUptodate(true), m_position(QPoint(-1,-1))
@@ -52,14 +55,14 @@ void KisToolDuplicate::activate()
 	super::activate();
 }
 
-void KisToolDuplicate::mousePress(QMouseEvent *e)
+void KisToolDuplicate::buttonPress(KisButtonPressEvent *e)
 {
 	if (e -> button() == RightButton) {
 		m_position = e->pos();
 		m_isOffsetNotUptodate = true;
 	} else {
 		if (m_position != QPoint(-1, -1)) {
-			super::mousePress(e);
+			super::buttonPress(e);
 		}
 	}
 }
@@ -79,9 +82,9 @@ void KisToolDuplicate::setup(KActionCollection *collection)
 	}
 }
 
-void KisToolDuplicate::initPaint(const QPoint & pos)
+void KisToolDuplicate::initPaint(const KisPoint & pos)
 {
-	kdDebug() << "initPaint(const QPoint & pos)" << endl;
+	kdDebug() << "initPaint(const KisPoint & pos)" << endl;
 	if( m_position != QPoint(-1,-1))
 	{
 		if(m_isOffsetNotUptodate)
@@ -94,11 +97,11 @@ void KisToolDuplicate::initPaint(const QPoint & pos)
 	}
 }
 
-void KisToolDuplicate::paintLine(const QPoint & pos1,
-			     const QPoint & pos2,
-			     const double pressure,
-			     const double xtilt,
-			     const double ytilt)
+void KisToolDuplicate::paintLine(const KisPoint & pos1,
+				 const KisPoint & pos2,
+				 const double pressure,
+				 const double xtilt,
+				 const double ytilt)
 {
 	if (!currentImage() -> activeDevice()) return;
 
@@ -107,10 +110,10 @@ void KisToolDuplicate::paintLine(const QPoint & pos1,
 	m_dragStart = pos2;
 }
 
-void KisToolDuplicate::paintAt(const QPoint &pos,
-		     const double pressure,
-		     const double xtilt,
-		     const double ytilt)
+void KisToolDuplicate::paintAt(const KisPoint &pos,
+			       const double pressure,
+			       const double xtilt,
+			       const double ytilt)
 {
 	if( m_position != QPoint(-1,-1))
 	{

@@ -33,6 +33,9 @@
 #include "kis_painter.h"
 #include "kis_tool_polyline.h"
 #include "kis_view.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolPolyLine::KisToolPolyLine() 
 	: super()
@@ -45,7 +48,7 @@ KisToolPolyLine::~KisToolPolyLine()
 {
 }
 
-void KisToolPolyLine::mousePress(QMouseEvent *event)
+void KisToolPolyLine::buttonPress(KisButtonPressEvent *event)
 {
 // 	KisView *view = getCurrentView();
 // 	KisPainter *p;
@@ -73,7 +76,7 @@ void KisToolPolyLine::mousePress(QMouseEvent *event)
 // 	}    
 }
 
-void KisToolPolyLine::mouseRelease(QMouseEvent * /*event*/)
+void KisToolPolyLine::buttonRelease(KisButtonReleaseEvent * /*event*/)
 {
 }
 

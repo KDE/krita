@@ -40,9 +40,9 @@ public:
 	virtual void clearOld();
 	virtual bool willModify() const;
 
-	virtual void mousePress(QMouseEvent *event);
-	virtual void mouseMove(QMouseEvent *event);
-	virtual void mouseRelease(QMouseEvent *event);
+	virtual void buttonPress(KisButtonPressEvent *event);
+	virtual void move(KisMoveEvent *event);
+	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 protected:
 	void drawRect(const QPoint&, const QPoint&); 

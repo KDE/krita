@@ -40,6 +40,9 @@
 #include "kis_tool_fill.h"
 #include "kis_iterators.h"
 #include "color_strategy/kis_strategy_colorspace.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolFill::KisToolFill() 
 	: super()
@@ -174,13 +177,13 @@ void KisToolFill::floodLine(int x, int y, Q_INT32 depth, KisLayerSP lay,
 	}
 }
 
-void KisToolFill::mousePress(QMouseEvent *e)
+void KisToolFill::buttonPress(KisButtonPressEvent *e)
 {
 	if (!m_subject) return;
 	if (!m_currentImage -> activeDevice()) return;
 	if (e->button() != QMouseEvent::LeftButton) return;
 
-	flood(e->x(), e->y());
+	flood(e -> pos().floorX(), e -> pos().floorY());
 }
 
 QWidget* KisToolFill::createoptionWidget(QWidget* parent)

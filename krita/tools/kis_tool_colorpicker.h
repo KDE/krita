@@ -41,7 +41,7 @@ public:
 public:
 	virtual void update(KisCanvasSubject *subject);
 	virtual void setup(KActionCollection *collection);
-	virtual void mousePress(QMouseEvent *e);
+	virtual void buttonPress(KisButtonPressEvent *e);
 	virtual QWidget* createoptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 

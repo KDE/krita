@@ -36,6 +36,9 @@
 #include "kis_floatingselection.h"
 #include "kis_tool_select_rectangular.h"
 #include "kis_undo_adapter.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 namespace {
 	class RectSelectCmd : public KNamedCommand {
@@ -128,33 +131,33 @@ void KisToolSelectRectangular::clearSelection()
 	}
 }
 
-void KisToolSelectRectangular::mousePress(QMouseEvent *e)
+void KisToolSelectRectangular::buttonPress(KisButtonPressEvent *e)
 {
 	if (m_subject) {
 		KisImageSP img = m_subject -> currentImg();
 
 		if (img && img -> activeDevice() && e -> button() == LeftButton) {
 			clearSelection();
-			m_startPos = e -> pos();
-			m_endPos = e -> pos();
+			m_startPos = e -> pos().floorQPoint();
+			m_endPos = e -> pos().floorQPoint();
 			m_selecting = true;
 		}
 	}
 }
 
-void KisToolSelectRectangular::mouseMove(QMouseEvent *e)
+void KisToolSelectRectangular::move(KisMoveEvent *e)
 {
 	if (m_subject && m_selecting) {
 
 		if (m_startPos != m_endPos)
 			paintOutline();
 
-		m_endPos = e -> pos(); //controller -> windowToView(e -> pos());
+		m_endPos = e -> pos().floorQPoint(); //controller -> windowToView(e -> pos());
 		paintOutline();
 	}
 }
 
-void KisToolSelectRectangular::mouseRelease(QMouseEvent *e)
+void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 {
 	if (m_subject && m_selecting) {
 		if (m_startPos == m_endPos) {
@@ -165,7 +168,7 @@ void KisToolSelectRectangular::mouseRelease(QMouseEvent *e)
 			if (!img)
 				return;
 
-			m_endPos = e -> pos();
+			m_endPos = e -> pos().floorQPoint();
 
 			if (m_endPos.y() < 0)
 				m_endPos.setY(0);

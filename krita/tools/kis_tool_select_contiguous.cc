@@ -66,7 +66,7 @@ void KisToolSelectContiguous::clearOld()
 // 	m_dragEnd =   QPoint(-1,-1);
 }
 
-void KisToolSelectContiguous::mousePress( QMouseEvent* event )
+void KisToolSelectContiguous::buttonPress(KisButtonPressEvent *event)
 {
 //  //   if ( m_doc->isEmpty() )
 // //        return;
@@ -90,7 +90,7 @@ void KisToolSelectContiguous::mousePress( QMouseEvent* event )
 }
 
 
-void KisToolSelectContiguous::mouseMove( QMouseEvent* event )
+void KisToolSelectContiguous::move(KisMoveEvent *event)
 {
 // //    if ( m_doc->isEmpty() )
 // //        return;
@@ -104,7 +104,7 @@ void KisToolSelectContiguous::mouseMove( QMouseEvent* event )
 }
 
 
-void KisToolSelectContiguous::mouseRelease( QMouseEvent* event )
+void KisToolSelectContiguous::buttonRelease(KisButtonReleaseEvent *event)
 {
 // //    if ( m_doc->isEmpty() )
 // //        return;

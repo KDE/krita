@@ -36,6 +36,9 @@
 #include "kis_tool_select_polygonal.h"
 #include "kis_vec.h"
 #include "kis_undo_adapter.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 namespace {
 	class PolygonSelectCmd : public KNamedCommand {
@@ -119,7 +122,7 @@ void KisToolSelectPolygonal::paint(QPainter& gc, const QRect& rc)
 		paintOutline(gc, rc);
 }
 
-void KisToolSelectPolygonal::mousePress( QMouseEvent* event )
+void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 {
 	// start the polyline, and/or complete the segment
 	if (event -> button() == LeftButton) {
@@ -128,14 +131,14 @@ void KisToolSelectPolygonal::mousePress( QMouseEvent* event )
 			drawLine(m_dragStart, m_dragEnd);
 		
 			// get currentImg position
-			m_dragEnd = event -> pos();
+			m_dragEnd = event -> pos().floorQPoint();
 			
 			// draw new and final line for this segment
 			drawLine(m_dragStart, m_dragEnd);
 		} 
 		else {
 			clearSelection();
-			m_start = event -> pos();
+			m_start = event -> pos().floorQPoint();
 			m_pointArray.resize(m_index = 0);
 			m_pointArray.putPoints(m_index++, 1, m_start.x(), m_start.y());
 		}
@@ -144,13 +147,13 @@ void KisToolSelectPolygonal::mousePress( QMouseEvent* event )
 		// so it can be passed to the selection class to determine
 		// selection area and bounds.
 		m_dragging = true;
-		m_dragStart = event -> pos();
-		m_dragEnd = event -> pos();
+		m_dragStart = event -> pos().floorQPoint();
+		m_dragEnd = event -> pos().floorQPoint();
 		m_pointArray.putPoints(m_index++, 1, m_dragStart.x(), m_dragStart.y());
 	} 
 	else if (event -> button() == Qt::RightButton || event -> button() == Qt::MidButton) {   
 		m_dragging = false;
-		finish(event -> pos());
+		finish(event -> pos().floorQPoint());
 
 		m_pointArray.putPoints(m_index++, 1, m_finish.x(), m_finish.y());
 // 		m_imageRect = getDrawRect(m_pointArray);
@@ -180,18 +183,18 @@ void KisToolSelectPolygonal::mousePress( QMouseEvent* event )
 	}
 }
 
-void KisToolSelectPolygonal::mouseMove( QMouseEvent* event )
+void KisToolSelectPolygonal::move(KisMoveEvent *event)
 {
 // 	KisView *view = getCurrentView();
 
 	if (m_dragging) {
 		drawLine(m_dragStart, m_dragEnd);
-		m_dragEnd = event->pos();
+		m_dragEnd = event->pos().floorQPoint();
 		drawLine(m_dragStart, m_dragEnd);
 	}
 }
 
-void KisToolSelectPolygonal::mouseRelease(QMouseEvent *event)
+void KisToolSelectPolygonal::buttonRelease(KisButtonReleaseEvent *event)
 {
 }
 

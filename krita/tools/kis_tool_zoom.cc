@@ -25,6 +25,9 @@
 #include "kis_cursor.h"
 #include "kis_tool_zoom.h"
 #include "kis_tool_zoom.moc"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolZoom::KisToolZoom()
 {
@@ -58,43 +61,43 @@ void KisToolZoom::paint(QPainter& gc, const QRect& rc)
 		paintOutline(gc, rc);
 }
 
-void KisToolZoom::mousePress(QMouseEvent *e)
+void KisToolZoom::buttonPress(KisButtonPressEvent *e)
 {
 	if (m_subject && !m_dragging) {
 		if (e -> button() == Qt::LeftButton) {
-			m_startPos = e -> pos();
-			m_endPos = e -> pos();
+			m_startPos = e -> pos().floorQPoint();
+			m_endPos = e -> pos().floorQPoint();
 			m_dragging = true;
 		}
 		else if (e -> button() == Qt::RightButton) {
 
 			KisCanvasControllerInterface *controller = m_subject -> canvasController();
-			controller -> zoomOut(e -> pos().x(), e -> pos().y());
+			controller -> zoomOut(e -> pos().floorX(), e -> pos().floorY());
 		}
 	}
 }
 
-void KisToolZoom::mouseMove(QMouseEvent *e)
+void KisToolZoom::move(KisMoveEvent *e)
 {
 	if (m_subject && m_dragging) {
 		if (m_startPos != m_endPos)
 			paintOutline();
 
-		m_endPos = e -> pos();
+		m_endPos = e -> pos().floorQPoint();
 		paintOutline();
 	}
 }
 
-void KisToolZoom::mouseRelease(QMouseEvent *e)
+void KisToolZoom::buttonRelease(KisButtonReleaseEvent *e)
 {
 	if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
 
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
-		m_endPos = e -> pos();
+		m_endPos = e -> pos().floorQPoint();
 		m_dragging = false;
 
 		if (m_startPos == m_endPos) {
-			controller -> zoomIn(e -> pos().x(), e -> pos().y());
+			controller -> zoomIn(m_endPos.x(), m_endPos.y());
 		} else {
 			controller -> zoomTo(QRect(m_startPos, m_endPos));
 		}

@@ -45,7 +45,7 @@ public:
 // 	virtual bool loadSettings(QDomElement& elem);
 // 	virtual void setCursor();
 
-	virtual void mousePress(QMouseEvent*); 
+	virtual void buttonPress(KisButtonPressEvent*); 
 
 	bool changeColors(int startx, int starty);
       

@@ -101,6 +101,10 @@
 #include "strategy/kis_strategy_move.h"
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
+#include "kis_rect.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 // Dialog boxes
 #include "kis_dlg_builder_progress.h"
@@ -692,7 +696,7 @@ void KisView::setCurrentTool(KisTool *tool)
         }
 
         if (tool) {
-                m_inputDeviceToolMap[m_inputDevice] = tool;
+                m_inputDeviceToolMap[currentInputDevice()] = tool;
                 tool -> cursor(m_canvas);
 
                 if(tool -> createoptionWidget(m_toolcontroldocker)){
@@ -702,14 +706,14 @@ void KisView::setCurrentTool(KisTool *tool)
                 m_canvas -> enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
                 notify();
 	} else {
-		m_inputDeviceToolMap[m_inputDevice] = 0;
+		m_inputDeviceToolMap[currentInputDevice()] = 0;
 		m_canvas -> setCursor(KisCursor::arrowCursor());
 	}
 }
 
 KisTool *KisView::currentTool() const
 {
-	InputDeviceToolMap::const_iterator it = m_inputDeviceToolMap.find(m_inputDevice);
+	InputDeviceToolMap::const_iterator it = m_inputDeviceToolMap.find(currentInputDevice());
 
 	if (it != m_inputDeviceToolMap.end()) {
 		return (*it).second;
@@ -721,7 +725,7 @@ KisTool *KisView::currentTool() const
 KisTool *KisView::findTool(QString toolName, enumInputDevice inputDevice) const
 {
 	if (inputDevice == INPUT_DEVICE_UNKNOWN) {
-		inputDevice = m_inputDevice;
+		inputDevice = currentInputDevice();
 	}
 
 	KisTool *tool = 0;
@@ -795,6 +799,11 @@ void KisView::setInputDevice(enumInputDevice inputDevice)
 
 		currentTool() -> action() -> activate();
 	}
+}
+
+enumInputDevice KisView::currentInputDevice() const
+{
+	return m_inputDevice;
 }
 
 Q_INT32 KisView::horzValue() const
@@ -1948,124 +1957,103 @@ void KisView::canvasGotPaintEvent(QPaintEvent *event)
         paintView(r);
 }
 
-void KisView::canvasGotMousePressEvent(QMouseEvent *e)
+void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
-                QPoint pt = mapToScreen(e -> pos());
-                KisGuideMgr *mgr = img -> guides();
+	if (img) {
+		QPoint pt = mapToScreen(e -> pos().floorQPoint());
+		KisGuideMgr *mgr = img -> guides();
 
-                m_lastGuidePoint = mapToScreen(e -> pos());
-                m_currentGuide = 0;
+		m_lastGuidePoint = mapToScreen(e -> pos().floorQPoint());
+		m_currentGuide = 0;
 
-                if ((e -> state() & ~ShiftButton) == Qt::NoButton) {
-                        KisGuideSP gd = mgr -> find(static_cast<Q_INT32>(pt.x() / zoom()), static_cast<Q_INT32>(pt.y() / zoom()), QMAX(2.0, 2.0 / zoom()));
+		if ((e -> state() & ~Qt::ShiftButton) == Qt::NoButton) {
+			KisGuideSP gd = mgr -> find(static_cast<Q_INT32>(pt.x() / zoom()), static_cast<Q_INT32>(pt.y() / zoom()), QMAX(2.0, 2.0 / zoom()));
 
-                        if (gd) {
-                                m_currentGuide = gd;
+			if (gd) {
+				m_currentGuide = gd;
 
-                                if ((e -> button() == Qt::RightButton) || ((e -> button() & Qt::ShiftButton) == Qt::ShiftButton)) {
-                                        if (gd -> isSelected())
-                                                mgr -> unselect(gd);
-                                        else
-                                                mgr -> select(gd);
-                                } else {
-                                        if (!gd -> isSelected()) {
-                                                mgr -> unselectAll();
-                                                mgr -> select(gd);
-                                        }
-                                }
+				if ((e -> button() == Qt::RightButton) || ((e -> button() & Qt::ShiftButton) == Qt::ShiftButton)) {
+					if (gd -> isSelected())
+						mgr -> unselect(gd);
+					else
+						mgr -> select(gd);
+				} else {
+					if (!gd -> isSelected()) {
+						mgr -> unselectAll();
+						mgr -> select(gd);
+					}
+				}
 
-                                updateGuides();
-                                return;
-                        }
-                }
-        }
+				updateGuides();
+				return;
+			}
+		}
+	}
 
-        if (currentTool()) {
-                QPoint p = viewToWindow(e -> pos());
-                QMouseEvent ev(QEvent::MouseButtonPress, p, e -> globalPos(), e -> button(), e -> state());
+	if (e -> device() == currentInputDevice() && currentTool()) {
+		KisPoint p = viewToWindow(e -> pos());
+		KisButtonPressEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> button(), e -> state());
 
-                currentTool() -> mousePress(&ev);
-        }
+		currentTool() -> buttonPress(&ev);
+	}
 }
 
-void KisView::canvasGotMouseMoveEvent(QMouseEvent *e)
+void KisView::canvasGotMoveEvent(KisMoveEvent *e)
 {
-	if (m_inputDevice != INPUT_DEVICE_MOUSE && m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
+	if (e -> device() == INPUT_DEVICE_MOUSE && currentInputDevice() != INPUT_DEVICE_MOUSE && m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
 		setInputDevice(INPUT_DEVICE_MOUSE);
 	}
 
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        m_hRuler -> updatePointer(e -> pos().x() - canvasXOffset(), e -> pos().y() - canvasYOffset());
-        m_vRuler -> updatePointer(e -> pos().x() - canvasXOffset(), e -> pos().y() - canvasYOffset());
+	m_hRuler -> updatePointer(e -> pos().floorX() - canvasXOffset(), e -> pos().floorY() - canvasYOffset());
+	m_vRuler -> updatePointer(e -> pos().floorX() - canvasXOffset(), e -> pos().floorY() - canvasYOffset());
 
-        QPoint wp = viewToWindow(e -> pos());
+	KisPoint wp = viewToWindow(e -> pos());
 
-        if (img && m_currentGuide) {
-                QPoint p = mapToScreen(e -> pos());
-                KisGuideMgr *mgr = img -> guides();
+	if (img && m_currentGuide) {
+		QPoint p = mapToScreen(e -> pos().floorQPoint());
+		KisGuideMgr *mgr = img -> guides();
 
-                if (((e -> state() & Qt::LeftButton) == Qt::LeftButton) && mgr -> hasSelected()) {
-                        eraseGuides();
-                        p -= m_lastGuidePoint;
+              if (((e -> state() & Qt::LeftButton) == Qt::LeftButton) && mgr -> hasSelected()) {
+                      eraseGuides();
+                      p -= m_lastGuidePoint;
 
-                        if (p.x())
-                                mgr -> moveSelectedByX(p.x() / zoom());
+                      if (p.x())
+                              mgr -> moveSelectedByX(p.x() / zoom());
 
-                        if (p.y())
-                                mgr -> moveSelectedByY(p.y() / zoom());
+                      if (p.y())
+                              mgr -> moveSelectedByY(p.y() / zoom());
 
-                        m_doc -> setModified(true);
-                        paintGuides();
-                }
-        } else if (currentTool()) {
-                QMouseEvent ev(QEvent::MouseButtonPress, wp, e -> globalPos(), e -> button(), e -> state());
+			m_doc -> setModified(true);
+			paintGuides();
+		}
+	} else if (e -> device() == currentInputDevice() && currentTool()) {
+		KisMoveEvent ev(e -> device(), wp, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> state());
 
-                currentTool() -> mouseMove(&ev);
-        }
+		currentTool() -> move(&ev);
+	}
 
-        m_lastGuidePoint = mapToScreen(e -> pos());
-        emit cursorPosition(wp.x(), wp.y());
+	m_lastGuidePoint = mapToScreen(e -> pos().floorQPoint());
+	emit cursorPosition(wp.floorX(), wp.floorY());
 }
 
-void KisView::canvasGotMouseReleaseEvent(QMouseEvent *e)
+void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img && m_currentGuide) {
-                m_currentGuide = 0;
-        } else if (currentTool()) {
-                QPoint p = viewToWindow(e -> pos());
-                QMouseEvent ev(QEvent::MouseButtonPress, p, e -> globalPos(), e -> button(), e -> state());
+	if (img && m_currentGuide) {
+		m_currentGuide = 0;
+	} else if (e -> device() == currentInputDevice() && currentTool()) {
+		KisPoint p = viewToWindow(e -> pos());
+		KisButtonReleaseEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> button(), e -> state());
 
-                currentTool() -> mouseRelease(&ev);
-        }
-}
-
-void KisView::canvasGotTabletEvent(QTabletEvent *e)
-{
-        KisImageSP img = currentImg();
-        if (img ) {
-                if ( currentTool() ) {
-                        // Compute offset between screen coordinates and (zoomed) canvas coordinates.
-                        QPoint p = viewToWindow(e -> pos());
-                        // Synthesize a new tablet event.
-                        // Pity I haven't got a tablet that's got tilt, too
-                        QTabletEvent ev(e -> type(),
-                                        p,
-                                        e -> globalPos(),
-                                        e -> device(),
-                                        e -> pressure(),
-                                        e -> xTilt(),
-                                        e -> yTilt(),
-                                        e -> uniqueId());
-
-                        currentTool() -> tabletEvent( &ev );
-                }
-        }
+		if (currentTool()) {
+			currentTool() -> buttonRelease(&ev);
+		}
+	}
 }
 
 void KisView::canvasGotEnterEvent(QEvent *e)
@@ -2427,16 +2415,15 @@ void KisView::setupCanvas()
 {
         m_canvas = new KisCanvas(this, "kis_canvas");
 
-        QObject::connect(m_canvas, SIGNAL(mousePressed(QMouseEvent*)), this, SLOT(canvasGotMousePressEvent(QMouseEvent*)));
-        QObject::connect(m_canvas, SIGNAL(mouseMoved(QMouseEvent*)), this, SLOT(canvasGotMouseMoveEvent(QMouseEvent*)));
-        QObject::connect(m_canvas, SIGNAL(mouseReleased(QMouseEvent*)), this, SLOT(canvasGotMouseReleaseEvent(QMouseEvent*)));
-        QObject::connect(m_canvas, SIGNAL(gotTabletEvent(QTabletEvent*)), this, SLOT(canvasGotTabletEvent(QTabletEvent*)));
-        QObject::connect(m_canvas, SIGNAL(gotPaintEvent(QPaintEvent*)), this, SLOT(canvasGotPaintEvent(QPaintEvent*)));
-        QObject::connect(m_canvas, SIGNAL(gotEnterEvent(QEvent*)), this, SLOT(canvasGotEnterEvent(QEvent*)));
-        QObject::connect(m_canvas, SIGNAL(gotLeaveEvent(QEvent*)), this, SLOT(canvasGotLeaveEvent(QEvent*)));
-        QObject::connect(m_canvas, SIGNAL(mouseWheelEvent(QWheelEvent*)), this, SLOT(canvasGotMouseWheelEvent(QWheelEvent*)));
-        QObject::connect(m_canvas, SIGNAL(gotKeyPressEvent(QKeyEvent*)), this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
-        QObject::connect(m_canvas, SIGNAL(gotKeyReleaseEvent(QKeyEvent*)), this, SLOT(canvasGotKeyReleaseEvent(QKeyEvent*)));
+        QObject::connect(m_canvas, SIGNAL(gotButtonPressEvent(KisButtonPressEvent*)), this, SLOT(canvasGotButtonPressEvent(KisButtonPressEvent*)));
+        QObject::connect(m_canvas, SIGNAL(gotButtonReleaseEvent(KisButtonReleaseEvent*)), this, SLOT(canvasGotButtonReleaseEvent(KisButtonReleaseEvent*)));
+        QObject::connect(m_canvas, SIGNAL(gotMoveEvent(KisMoveEvent*)), this, SLOT(canvasGotMoveEvent(KisMoveEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotPaintEvent(QPaintEvent*)), this, SLOT(canvasGotPaintEvent(QPaintEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotEnterEvent(QEvent*)), this, SLOT(canvasGotEnterEvent(QEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotLeaveEvent(QEvent*)), this, SLOT(canvasGotLeaveEvent(QEvent*)));
+	QObject::connect(m_canvas, SIGNAL(mouseWheelEvent(QWheelEvent*)), this, SLOT(canvasGotMouseWheelEvent(QWheelEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotKeyPressEvent(QKeyEvent*)), this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotKeyReleaseEvent(QKeyEvent*)), this, SLOT(canvasGotKeyReleaseEvent(QKeyEvent*)));
 }
 
 void KisView::projectionUpdated(KisImageSP img)
@@ -2798,7 +2785,7 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
 	case QEvent::MouseButtonPress:
 	case QEvent::MouseMove:
 	case QEvent::MouseButtonRelease:
-		if (m_inputDevice != INPUT_DEVICE_MOUSE && m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
+		if (currentInputDevice() != INPUT_DEVICE_MOUSE && m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
 			setInputDevice(INPUT_DEVICE_MOUSE);
 		}
 		break;
@@ -2812,7 +2799,6 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
                 QPoint pt = mapFromGlobal(me -> globalPos());
                 KisImageSP img = currentImg();
                 KisGuideMgr *mgr;
-                QMouseEvent *m;
 
                 if (!img)
                         return super::eventFilter(o, e);
@@ -2841,9 +2827,8 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
                         } else if (m_currentGuide) {
                                 if (flag) {
                                         // moved an existing guide.
-                                        m = new QMouseEvent(QEvent::MouseMove, pt, me -> globalPos(), me -> button(), me -> state());
-                                        canvasGotMouseMoveEvent(m);
-                                        delete m;
+					KisMoveEvent kme(currentInputDevice(), pt, me -> globalPos(), PRESSURE_DEFAULT, 0, 0, me -> state());
+					canvasGotMoveEvent(&kme);
                                 } else {
                                         //  moved a guide out of the frame, destroy it
                                         leaveEvent(0);
@@ -2859,9 +2844,8 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
                         paintGuides();
                         m_currentGuide = 0;
                         enterEvent(0);
-                        m = new QMouseEvent(QEvent::MouseMove, pt, me -> globalPos(), Qt::NoButton, Qt::NoButton);
-                        canvasGotMouseMoveEvent(m);
-                        delete m;
+			KisMoveEvent kme(currentInputDevice(), pt, me -> globalPos(), PRESSURE_DEFAULT, 0, 0, Qt::NoButton);
+			canvasGotMoveEvent(&kme);
                 }
         }
 

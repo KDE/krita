@@ -33,6 +33,9 @@
 #include "kis_tool_eraser.h"
 #include "kis_vec.h"
 #include "kis_view.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolEraser::KisToolEraser()
 	: super(),
@@ -60,34 +63,34 @@ void KisToolEraser::update(KisCanvasSubject *subject)
 }
 
 
-void KisToolEraser::mousePress(QMouseEvent *e)
+void KisToolEraser::buttonPress(KisButtonPressEvent *e)
 {
         if (!m_subject) return;
 
         if (!m_subject->currentBrush()) return;
 
-        if (e->button() == QMouseEvent::LeftButton) {
+        if (e -> button() == QMouseEvent::LeftButton) {
 		m_mode = ERASE;
 		initErase(e -> pos());
-		m_painter -> eraseAt(e->pos(), PRESSURE_DEFAULT, 0, 0);
+		m_painter -> eraseAt(e->pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
 		// XXX: get the rect that should be notified
 		m_currentImage -> notify( m_painter -> dirtyRect() );
          }
 }
 
-void KisToolEraser::mouseMove(QMouseEvent *e) {
+void KisToolEraser::move(KisMoveEvent *e) {
 	if (m_mode == ERASE) {
-		eraseLine(m_dragStart, e -> pos(), PRESSURE_DEFAULT, 0, 0);
+		eraseLine(m_dragStart, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
 	}
 }
 
-void KisToolEraser::mouseRelease(QMouseEvent *e) {
-	if (e->button() == QMouseEvent::LeftButton && m_mode == ERASE) {
+void KisToolEraser::buttonRelease(KisButtonReleaseEvent *e) {
+	if (e -> button() == QMouseEvent::LeftButton && m_mode == ERASE) {
 		endErase();
         }
 
 }
-
+#if 0
 void KisToolEraser::tabletEvent(QTabletEvent *e) {
          if (e->device() == QTabletEvent::Eraser) {
 		 if (!m_subject) {
@@ -119,8 +122,8 @@ void KisToolEraser::tabletEvent(QTabletEvent *e) {
          }
 	 e -> accept();
 }
-
-void KisToolEraser::initErase(const QPoint & pos) {
+#endif
+void KisToolEraser::initErase(const KisPoint & pos) {
 	m_dragStart = pos;
 	m_dragDist = 0;
 
@@ -153,11 +156,11 @@ void KisToolEraser::endErase() {
 	}
 }
 
-void KisToolEraser::eraseLine(const QPoint & pos1,
-			     const QPoint & pos2,
-			     const double pressure,
-			     const double xtilt,
-			     const double ytilt)
+void KisToolEraser::eraseLine(const KisPoint & pos1,
+			      const KisPoint & pos2,
+			      const double pressure,
+			      const double xtilt,
+			      const double ytilt)
 {
 	m_dragDist = m_painter -> paintLine(PAINTOP_ERASE, pos1, pos2, pressure, xtilt, ytilt, m_dragDist);
 	m_currentImage -> notify( m_painter -> dirtyRect() );

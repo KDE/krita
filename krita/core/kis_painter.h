@@ -146,9 +146,11 @@ public:
 			const double yTilt,
 			const double savedDist = -1);
         void paintRect(const enumPaintOp paintOp,
-                          const KisPoint &startPoint,
-                          const KisPoint &endPoint,
-                          const double pressure);
+		       const KisPoint &startPoint,
+		       const KisPoint &endPoint,
+		       const double pressure,
+		       const double xTilt,
+		       const double yTilt);
 
 private:
         void paintEllipsePixel (const enumPaintOp paintOp,
@@ -166,9 +168,11 @@ private:
 
 public:
         void paintEllipse(const enumPaintOp paintOp,
-                          const QPoint &startPoint,
-                          const QPoint &endPoint,
-                          const double pressure);
+                          const KisPoint &startPoint,
+                          const KisPoint &endPoint,
+                          const double pressure,
+			  const double /*xTilt*/,
+			  const double /*yTilt*/);
 
 	/** Draw a spot at pos using the currently set brush and color */
 	void paintAt(const KisPoint &pos,
@@ -199,10 +203,10 @@ public:
 	 * Duplicate a part of the image
 	 */
 	void duplicateAt(const KisPoint &pos,
-					const double pressure,
-					const double /*xTilt*/,
-					const double /*yTilt*/);
-	void setDuplicateOffset(const QPoint offset);
+			 const double pressure,
+			 const double /*xTilt*/,
+			 const double /*yTilt*/);
+	void setDuplicateOffset(const KisPoint offset);
 	/**
 	 * Paint a filled circle at pos with pressure dependent alpha and
 	 * 'ragged' edges. Meant to simulate the true effect of an airbrush.
@@ -257,7 +261,7 @@ private:
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
-	QPoint m_duplicateOffset;
+	KisPoint m_duplicateOffset;
 	QUANTUM m_opacity;
 	CompositeOp m_compositeOp;
 
@@ -265,7 +269,7 @@ private:
 };
 
 inline
-void KisPainter::setDuplicateOffset(const QPoint offset)
+void KisPainter::setDuplicateOffset(const KisPoint offset)
 {
 	m_duplicateOffset = offset;
 }

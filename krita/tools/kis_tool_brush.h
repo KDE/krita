@@ -22,8 +22,8 @@
 #define KIS_TOOL_BRUSH_H_
 
 #include "kis_tool_freehand.h"
-#include <qthread.h>
 
+class KisPoint;
 
 class KisToolBrush : public KisToolFreeHand {
 	Q_OBJECT
@@ -37,13 +37,13 @@ public:
 
 protected:
 
-	virtual void paintAt(const QPoint &pos,
+	virtual void paintAt(const KisPoint &pos,
 			     const double pressure,
 			     const double /*xTilt*/,
 			     const double /*yTilt*/);
 
-	virtual void paintLine(const QPoint & pos1,
-			       const QPoint & pos2,
+	virtual void paintLine(const KisPoint & pos1,
+			       const KisPoint & pos2,
 			       const double pressure,
 			       const double xtilt,
 			       const double ytilt);

@@ -36,6 +36,9 @@
 #include "kis_tool_select_freehand.h"
 #include "kis_view.h"
 #include "kis_vec.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolSelectFreehand::KisToolSelectFreehand() : super()
 {
@@ -86,7 +89,7 @@ void KisToolSelectFreehand::clearOld()
 // 	m_selectRegion = QRegion();
 }
 
-void KisToolSelectFreehand::mousePress( QMouseEvent* event )
+void KisToolSelectFreehand::buttonPress(KisButtonPressEvent *event)
 {
 // 	// start the freehand line.
 // 	if (event -> button() == LeftButton && !moveSelectArea) {
@@ -120,7 +123,7 @@ void KisToolSelectFreehand::mousePress( QMouseEvent* event )
 }
 
 
-void KisToolSelectFreehand::mouseMove( QMouseEvent* event )
+void KisToolSelectFreehand::move(KisMoveEvent *event)
 {
 // 	if (event -> button() == RightButton) 
 // 		return;
@@ -208,7 +211,7 @@ void KisToolSelectFreehand::mouseMove( QMouseEvent* event )
 }
 
 
-void KisToolSelectFreehand::mouseRelease( QMouseEvent* event )
+void KisToolSelectFreehand::buttonRelease(KisButtonReleaseEvent *event)
 {
 // 	if ( event->button() == RightButton ) {
 // 		// TODO

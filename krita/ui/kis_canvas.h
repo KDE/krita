@@ -21,6 +21,14 @@
 
 #include <qwidget.h>
 
+#include "kis_point.h"
+#include "kis_vec.h"
+#include "kis_global.h"
+
+class KisMoveEvent;
+class KisButtonPressEvent;
+class KisButtonReleaseEvent;
+
 class KisCanvas : public QWidget {
 	Q_OBJECT
 	typedef QWidget super;
@@ -36,16 +44,15 @@ public:
 	void enableMoveEventCompressionHint(bool enableMoveCompression) { m_enableMoveEventCompressionHint = enableMoveCompression; }
 
 signals:
-	void mousePressed(QMouseEvent*);
-	void mouseMoved(QMouseEvent*);
-	void mouseReleased(QMouseEvent*);
-	void gotTabletEvent(QTabletEvent*);
 	void gotPaintEvent(QPaintEvent*);
 	void gotEnterEvent(QEvent*);
 	void gotLeaveEvent(QEvent*);
 	void mouseWheelEvent(QWheelEvent*);
 	void gotKeyPressEvent(QKeyEvent*);
 	void gotKeyReleaseEvent(QKeyEvent*);
+	void gotMoveEvent(KisMoveEvent *);
+	void gotButtonPressEvent(KisButtonPressEvent *);
+	void gotButtonReleaseEvent(KisButtonReleaseEvent *);
 
 protected:
 	virtual void paintEvent(QPaintEvent *event);
@@ -58,8 +65,12 @@ protected:
 	virtual void wheelEvent(QWheelEvent *event);
 	virtual void keyPressEvent(QKeyEvent *event);
 	virtual void keyReleaseEvent(QKeyEvent *event);
+	void moveEvent(KisMoveEvent *event);
+	void buttonPressEvent(KisButtonPressEvent *event);
+	void buttonReleaseEvent(KisButtonReleaseEvent *event);
 
 	bool m_enableMoveEventCompressionHint;
+	double m_lastPressure;
 
 #ifdef Q_WS_X11
 	// On X11 systems, Qt throws away mouse move events if the application

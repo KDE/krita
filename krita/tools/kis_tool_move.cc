@@ -30,6 +30,9 @@
 #include "kis_paint_device.h"
 #include "kis_tool_move.h"
 #include "kis_tool_move.moc"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolMove::KisToolMove()
 {
@@ -49,10 +52,10 @@ void KisToolMove::update(KisCanvasSubject *subject)
 	super::update(subject);
 }
 
-void KisToolMove::mousePress(QMouseEvent *e)
+void KisToolMove::buttonPress(KisButtonPressEvent *e)
 {
 	if (m_subject && e -> button() == QMouseEvent::LeftButton) {
-		QPoint pos = e -> pos();
+		QPoint pos = e -> pos().floorQPoint();
 		KisImageSP img = m_subject -> currentImg();
 		KisPaintDeviceSP dev;
 
@@ -64,16 +67,16 @@ void KisToolMove::mousePress(QMouseEvent *e)
 	}
 }
 
-void KisToolMove::mouseMove(QMouseEvent *e)
+void KisToolMove::move(KisMoveEvent *e)
 {
 	if (m_subject)
-		m_strategy.drag(e -> pos());
+		m_strategy.drag(e -> pos().floorQPoint());
 }
 
-void KisToolMove::mouseRelease(QMouseEvent *e)
+void KisToolMove::buttonRelease(KisButtonReleaseEvent *e)
 {
 	if (m_subject && e -> button() == QMouseEvent::LeftButton)
-		m_strategy.endDrag(e -> pos());
+		m_strategy.endDrag(e -> pos().floorQPoint());
 }
 
 void KisToolMove::setup(KActionCollection *collection)

@@ -52,10 +52,9 @@ public:
 /* 	virtual bool shouldRepaint(); */
 /* 	virtual void setPattern(KisPattern *pattern); */
 
-	virtual void mousePress(QMouseEvent *event);
-	virtual void mouseMove(QMouseEvent *event);
-	virtual void mouseRelease(QMouseEvent *event);
-	virtual void tabletEvent(QTabletEvent *event);
+	virtual void buttonPress(KisButtonPressEvent *event);
+	virtual void move(KisMoveEvent *event);
+	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 /* 	void setOpacity(int opacity); */
 /* 	bool stampMonochrome(QPoint pos); */

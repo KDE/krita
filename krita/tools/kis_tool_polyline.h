@@ -43,8 +43,8 @@ public:
 
 	virtual void setup(KActionCollection *collection);
 
-	virtual void mousePress(QMouseEvent *event);
-	virtual void mouseRelease(QMouseEvent *event);
+	virtual void buttonPress(KisButtonPressEvent *event);
+	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 private:
 

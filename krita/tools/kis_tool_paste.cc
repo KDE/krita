@@ -64,7 +64,7 @@ void KisToolPaste::leave(QEvent *)
 // 	}
 }
 
-void KisToolPaste::mouseRelease(QMouseEvent *e)
+void KisToolPaste::buttonRelease(KisButtonReleaseEvent *e)
 {
 // 	if (m_subject && m_selection) {
 // 		KisImageSP owner = m_subject -> currentImg();
@@ -91,7 +91,7 @@ void KisToolPaste::mouseRelease(QMouseEvent *e)
 // 	}
 }
 
-void KisToolPaste::mouseMove(QMouseEvent *e)
+void KisToolPaste::move(KisMoveEvent *e)
 {
 // 	if (!m_selection)
 // 		return;

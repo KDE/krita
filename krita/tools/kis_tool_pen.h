@@ -23,13 +23,13 @@
 
 #include "kis_tool_paint.h"
 
-class QPoint;
 class QWidget;
 class QLabel;
 class KisPainter;
 class IntegerWidget;
 class KisCmbComposite;
 class KisBrush;
+class KisPoint;
 
 /**
  * Hard-edged pen-like tool. Funny: the icon is a pencil, and the effect
@@ -49,10 +49,9 @@ public:
 
 	virtual void update(KisCanvasSubject *subject);
 
-	virtual void mousePress(QMouseEvent *e);
-	virtual void mouseMove(QMouseEvent *e);
-	virtual void mouseRelease(QMouseEvent *e);
-	virtual void tabletEvent(QTabletEvent *e);
+	virtual void buttonPress(KisButtonPressEvent *e); 
+	virtual void move(KisMoveEvent *e);
+	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 	virtual QWidget* createoptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
@@ -62,13 +61,13 @@ public slots:
 	virtual void slotSetCompositeMode(int);
 
 private:
-	virtual void paintLine(const QPoint & pos1,
-			       const QPoint & pos2,
+	virtual void paintLine(const KisPoint & pos1,
+			       const KisPoint & pos2,
 			       const double pressure,
 			       const double xtilt,
 			       const double ytilt);
 
-	virtual void initPaint(const QPoint & pos);
+	virtual void initPaint(const KisPoint & pos);
 	virtual void endPaint();
 
 	enumBrushMode m_mode;
@@ -76,8 +75,8 @@ private:
 	QUANTUM m_opacity;
 	CompositeOp m_compositeOp;
 
-        QPoint m_dragStart;
-        float m_dragDist;
+        KisPoint m_dragStart;
+        double m_dragDist;
 
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;

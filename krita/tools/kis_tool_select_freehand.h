@@ -44,9 +44,9 @@ public:
 	virtual void setup(KActionCollection *collection);
 
 	virtual void paintEvent(QPaintEvent *e);
-	virtual void mousePress(QMouseEvent *event);
-	virtual void mouseMove(QMouseEvent *event);
-	virtual void mouseRelease(QMouseEvent *event);
+	virtual void buttonPress(KisButtonPressEvent *event);
+	virtual void move(KisMoveEvent *event);
+	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 	void start( QPoint p );
 	void finish( QPoint p ); 

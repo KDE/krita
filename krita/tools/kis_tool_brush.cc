@@ -48,16 +48,16 @@ KisToolBrush::~KisToolBrush()
 {
 }
 
-void KisToolBrush::paintAt(const QPoint &pos,
-		     const double pressure,
-		     const double xTilt,
-		     const double yTilt)
+void KisToolBrush::paintAt(const KisPoint &pos,
+			   const double pressure,
+			   const double xTilt,
+			   const double yTilt)
 {
 	painter()->paintAt(pos, pressure, xTilt, yTilt);
 }
 
-void KisToolBrush::paintLine(const QPoint & pos1,
-			     const QPoint & pos2,
+void KisToolBrush::paintLine(const KisPoint & pos1,
+			     const KisPoint & pos2,
 			     const double pressure,
 			     const double xtilt,
 			     const double ytilt)

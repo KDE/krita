@@ -137,7 +137,7 @@ bool KisToolColorChanger::changeColors(int startX, int startY)
 }
 
 
-void KisToolColorChanger::mousePress(QMouseEvent *e)
+void KisToolColorChanger::buttonPress(KisButtonPressEvent *e)
 {
 //     KisImage * img = m_doc->currentImg();
 //     if (!img) return;

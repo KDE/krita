@@ -32,6 +32,7 @@ class KisCanvas;
 class KisDoc;
 class KisPainter;
 class KisView;
+class KisRect;
 
 class KisToolEllipse : public KisToolPaint {
 
@@ -54,19 +55,19 @@ public:
 
 	virtual void setup(KActionCollection *collection);
 
-	virtual void mousePress(QMouseEvent *event);
-	virtual void mouseMove(QMouseEvent *event);
-	virtual void mouseRelease(QMouseEvent *event);
+	virtual void buttonPress(KisButtonPressEvent *event);
+	virtual void move(KisMoveEvent *event);
+	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 protected:
-	virtual void draw(const QPoint& start, const QPoint& stop);
+	virtual void draw(const KisPoint& start, const KisPoint& stop);
 	//virtual void draw(KisPainter *gc, const QRect& rc);
 
 protected:
 	int m_lineThickness;
 
-	QPoint m_dragStart;
-	QPoint m_dragEnd;
+	KisPoint m_dragStart;
+	KisPoint m_dragEnd;
 	QRect m_final_lines;
 
 	bool m_dragging;

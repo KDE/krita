@@ -35,6 +35,9 @@
 #include "integerwidget.h"
 #include "kis_cmb_composite.h"
 #include "kis_brush.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 
 KisToolPen::KisToolPen()
@@ -70,77 +73,38 @@ void KisToolPen::update(KisCanvasSubject *subject)
 	super::update(m_subject);
 }
 
-void KisToolPen::mousePress(QMouseEvent *e)
+void KisToolPen::buttonPress(KisButtonPressEvent *e)
 {
         if (!m_subject) return;
 
-        if (!m_subject->currentBrush()) return;
+        if (!m_subject -> currentBrush()) return;
 
 	if (!m_currentImage -> activeDevice()) return;
 
-        if (e->button() == QMouseEvent::LeftButton) {
+        if (e -> button() == QMouseEvent::LeftButton) {
 		m_mode = PAINT;
 		initPaint(e -> pos());
-		m_painter -> penAt(e->pos(), PRESSURE_DEFAULT, 0, 0);
+		m_painter -> penAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
 		// XXX: get the rect that should be notified
 		m_currentImage -> notify( m_painter -> dirtyRect() );
          }
 }
 
-
-void KisToolPen::mouseRelease(QMouseEvent* e)
+void KisToolPen::buttonRelease(KisButtonReleaseEvent* e)
 {
-	if (e->button() == QMouseEvent::LeftButton && m_mode == PAINT) {
+	if (e -> button() == QMouseEvent::LeftButton && m_mode == PAINT) {
 		endPaint();
         }
 }
 
-
-void KisToolPen::mouseMove(QMouseEvent *e)
+void KisToolPen::move(KisMoveEvent *e)
 {
 	if (m_mode == PAINT) {
-		paintLine(m_dragStart, e -> pos(), PRESSURE_DEFAULT, 0, 0);
+		paintLine(m_dragStart, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
 	}
 }
 
-void KisToolPen::tabletEvent(QTabletEvent *e)
-{
-         if (e->device() == QTabletEvent::Stylus) {
-		 if (!m_currentImage -> activeDevice()) {
-			 e -> accept();
-			 return;
-		 }
-
-		 if (!m_subject) {
-			 e -> accept();
-			 return;
-		 }
-
-		 if (!m_subject -> currentBrush()) {
-			 e->accept();
-			 return;
-		 }
-
-		 double pressure = e -> pressure() / 255.0;
-
-		 if (pressure < PRESSURE_THRESHOLD && m_mode == PAINT_STYLUS) {
-			 endPaint();
-		 } else if (pressure >= PRESSURE_THRESHOLD && m_mode == HOVER) {
-			 m_mode = PAINT_STYLUS;
-			 initPaint(e -> pos());
-			 m_painter -> penAt(e -> pos(), pressure, e->xTilt(), e->yTilt());
-			 // XXX: Get the rect that should be updated
-			 m_currentImage -> notify( m_painter -> dirtyRect() );
-
-		 } else if (pressure >= PRESSURE_THRESHOLD && m_mode == PAINT_STYLUS) {
-			 paintLine(m_dragStart, e -> pos(), pressure, e -> xTilt(), e -> yTilt());
-		 }
-         }
-	 e -> accept();
-}
-
-
-void KisToolPen::initPaint(const QPoint & pos)
+void KisToolPen::initPaint(const KisPoint & pos)
 {
 
 	if (!m_currentImage -> activeDevice()) return;
@@ -187,8 +151,8 @@ void KisToolPen::endPaint()
 	}
 }
 
-void KisToolPen::paintLine(const QPoint & pos1,
-			     const QPoint & pos2,
+void KisToolPen::paintLine(const KisPoint & pos1,
+			     const KisPoint & pos2,
 			     const double pressure,
 			     const double xtilt,
 			     const double ytilt)

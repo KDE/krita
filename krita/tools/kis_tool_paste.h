@@ -35,8 +35,8 @@ public:
 	virtual void clear();
 	virtual void enter(QEvent *e);
 	virtual void leave(QEvent *e);
-	virtual void mouseMove(QMouseEvent *e);
-	virtual void mouseRelease(QMouseEvent *e);
+	virtual void move(KisMoveEvent *e);
+	virtual void buttonRelease(KisButtonReleaseEvent *e);
 	virtual void setup(KActionCollection *collection);
 
 protected slots:

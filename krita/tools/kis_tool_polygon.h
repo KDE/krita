@@ -22,8 +22,6 @@
 #ifndef __KIS_TOOL_POLYGON__
 #define __KIS_TOOL_POLYGON__
 
-#include <qpoint.h>
-
 #include "kis_tool.h"
 #include "kis_tool_paint.h"
 
@@ -42,12 +40,12 @@ public:
 
 // 	virtual void toolSelect();
 
-	virtual void mousePress(QMouseEvent *event);
-	virtual void mouseMove(QMouseEvent *event);
-	virtual void mouseRelease(QMouseEvent *event);
+	virtual void buttonPress(KisButtonPressEvent *event);
+	virtual void move(KisMoveEvent *event);
+	virtual void buttonRelease(KisButtonReleaseEvent *event);
     
 protected:
-	void drawPolygon( const QPoint&, const QPoint& );
+	void drawPolygon( const KisPoint&, const KisPoint& );
 
 private:
 
@@ -58,10 +56,10 @@ private:
 	bool checkPolygon;
 	bool checkConcavePolygon;
         
-	QPoint m_dragStart;
-	QPoint m_dragEnd;
-	QPoint mStart;
-	QPoint mFinish;
+	KisPoint m_dragStart;
+	KisPoint m_dragEnd;
+	KisPoint mStart;
+	KisPoint mFinish;
     
 	bool m_dragging;
 	bool m_done;

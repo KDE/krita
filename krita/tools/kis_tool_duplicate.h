@@ -24,6 +24,8 @@
 #include "kis_tool.h"
 #include "kis_tool_freehand.h"
 
+class KisButtonPressEvent;
+
 class KisToolDuplicate : public KisToolFreeHand {
 
 	typedef KisToolFreeHand super;
@@ -34,29 +36,28 @@ public:
 	virtual ~KisToolDuplicate();
   
 	virtual void setup(KActionCollection *collection);
-	virtual void mousePress(QMouseEvent *e);
+	virtual void buttonPress(KisButtonPressEvent *e);
 	
-	virtual void paintAt(const QPoint &pos,
-		     const double pressure,
-		     const double /*xTilt*/,
-		     const double /*yTilt*/);
-
+	virtual void paintAt(const KisPoint &pos,
+			     const double pressure,
+			     const double xTilt,
+			     const double yTilt);
 	
-	virtual void paintLine(const QPoint & pos1,
-			       const QPoint & pos2,
+	virtual void paintLine(const KisPoint & pos1,
+			       const KisPoint & pos2,
 			       const double pressure,
-			       const double xtilt,
-			       const double ytilt);
+			       const double xTilt,
+			       const double yTilt);
 
 
 protected slots:
 	virtual void activate();
 protected:
-	virtual void initPaint(const QPoint & pos);
+	virtual void initPaint(const KisPoint & pos);
  // Tool starting duplicate
- QPoint m_offset; // This member give the offset from the click position to the point where we take the duplication
+ KisPoint m_offset; // This member give the offset from the click position to the point where we take the duplication
  bool m_isOffsetNotUptodate; // Tells if the offset is update
- QPoint m_position; // Give the position of the last alt-click
+ KisPoint m_position; // Give the position of the last alt-click
 };
 
 #endif //__KIS_TOOL_DUPLICATE_H__

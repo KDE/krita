@@ -27,8 +27,6 @@
 #include "kis_types.h"
 
 class KisPainter;
-class QPoint;
-
 
 class KisToolEraser : public KisToolPaint {
 
@@ -43,26 +41,25 @@ public:
 
 	virtual void update(KisCanvasSubject *subject);
 
-	virtual void mousePress(QMouseEvent *e); 
-	virtual void mouseMove(QMouseEvent *e);
-	virtual void mouseRelease(QMouseEvent *e);
-	virtual void tabletEvent(QTabletEvent *e);
+	virtual void buttonPress(KisButtonPressEvent *e);
+	virtual void move(KisMoveEvent *e);
+	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 private:
 
-	virtual void initErase(const QPoint & pos);
-	virtual void eraseLine(const QPoint & pos1,
-			       const QPoint & pos2,
+	virtual void initErase(const KisPoint & pos);
+	virtual void eraseLine(const KisPoint & pos1,
+			       const KisPoint & pos2,
 			       const double pressure,
-			       const double xtilt,
-			       const double ytilt);
+			       const double xTilt,
+			       const double yTilt);
 	virtual void endErase();
 
 	enumBrushMode m_mode;
 	KisPainter *m_painter;
 
-        QPoint m_dragStart;
-        float m_dragDist;
+        KisPoint m_dragStart;
+        double m_dragDist;
 
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;

@@ -32,6 +32,9 @@
 #include "kis_painter.h"
 #include "kis_tool_line.h"
 #include "kis_view.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolLine::KisToolLine()
 	: super(),
@@ -44,8 +47,8 @@ KisToolLine::KisToolLine()
 
 	m_painter = 0;
 	m_currentImage = 0;
-	m_startPos = QPoint(0, 0);
-	m_endPos = QPoint(0, 0);
+	m_startPos = KisPoint(0, 0);
+	m_endPos = KisPoint(0, 0);
 }
 
 KisToolLine::~KisToolLine()
@@ -73,7 +76,7 @@ void KisToolLine::paint(QPainter& gc, const QRect& rc)
 		paintLine(gc, rc);
 }
 
-void KisToolLine::mousePress(QMouseEvent *e)
+void KisToolLine::buttonPress(KisButtonPressEvent *e)
 {
 	if (!m_subject) return;
 
@@ -87,7 +90,7 @@ void KisToolLine::mousePress(QMouseEvent *e)
 	}
 }
 
-void KisToolLine::mouseMove(QMouseEvent *e)
+void KisToolLine::move(KisMoveEvent *e)
 {
 	if (m_dragging) {
 		if (m_startPos != m_endPos)
@@ -101,7 +104,7 @@ void KisToolLine::mouseMove(QMouseEvent *e)
 	}
 }
 
-void KisToolLine::mouseRelease(QMouseEvent *e)
+void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
 {
 	if (m_dragging && e -> button() == QMouseEvent::LeftButton) {
 		m_dragging = false;
@@ -154,25 +157,19 @@ void KisToolLine::mouseRelease(QMouseEvent *e)
 
 }
 
-void KisToolLine::tabletEvent(QTabletEvent */*event*/)
+KisPoint KisToolLine::straightLine(KisPoint point)
 {
-	// Nothing yet -- I'm not sure how to handle this, perhaps
-	// have thick-thin lines for pressure.
-}
-
-QPoint KisToolLine::straightLine(QPoint point)
-{
-	QPoint comparison = point - m_startPos;
-	QPoint result;
-
-	if (abs(comparison.x()) > abs(comparison.y())) {
+	KisPoint comparison = point - m_startPos;
+	KisPoint result;
+	
+	if ( fabs(comparison.x()) > fabs(comparison.y())) {
 		result.setX(point.x());
 		result.setY(m_startPos.y());
 	} else {
 		result.setX( m_startPos.x() );
 		result.setY( point.y() );
 	}
-
+	
 	return result;
 }
 
@@ -195,8 +192,8 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
 		RasterOp op = gc.rasterOp();
 		QPen old = gc.pen();
 		QPen pen(Qt::SolidLine);
-		QPoint start;
-		QPoint end;
+		KisPoint start;
+		KisPoint end;
 
 //		Q_ASSERT(controller);
 		start = controller -> windowToView(m_startPos);
@@ -211,7 +208,7 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
 // 		end *= m_subject -> zoomFactor();
 		gc.setRasterOp(Qt::NotROP);
 		gc.setPen(pen);
-		gc.drawLine(start.x(), start.y(), end.x(), end.y());
+		gc.drawLine(start.floorQPoint(), end.floorQPoint());
 		gc.setRasterOp(op);
 		gc.setPen(old);
 	}

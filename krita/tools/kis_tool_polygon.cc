@@ -34,6 +34,9 @@
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
 #include "kis_tool_polygon.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 KisToolPolygon::KisToolPolygon() : 
 	super()
@@ -59,7 +62,7 @@ KisToolPolygon::~KisToolPolygon()
 {
 }
 
-void KisToolPolygon::mousePress(QMouseEvent *event)
+void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
 {
 // 	if (event -> button() == LeftButton) {
 // 		m_dragging = true;
@@ -68,7 +71,7 @@ void KisToolPolygon::mousePress(QMouseEvent *event)
 // 	}
 }
 
-void KisToolPolygon::mouseMove(QMouseEvent *event)
+void KisToolPolygon::move(KisMoveEvent *event)
 {
 // 	if (m_dragging) {
 // 		// erase old polygon on canvas
@@ -80,7 +83,7 @@ void KisToolPolygon::mouseMove(QMouseEvent *event)
 // 	}
 }
 
-void KisToolPolygon::mouseRelease(QMouseEvent *event)
+void KisToolPolygon::buttonRelease(KisButtonReleaseEvent *event)
 {
 // 	if (m_dragging && event -> state() == LeftButton) {
 // 		KisView *view = getCurrentView();
@@ -97,7 +100,7 @@ void KisToolPolygon::mouseRelease(QMouseEvent *event)
 // 	}
 }
 
-void KisToolPolygon::drawPolygon(const QPoint& start, const QPoint& end)
+void KisToolPolygon::drawPolygon(const KisPoint& start, const KisPoint& end)
 {
 // 	KisView *view = getCurrentView();
 // 	QPainter p;

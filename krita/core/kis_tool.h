@@ -26,10 +26,8 @@
 class QCursor;
 class QEvent;
 class QKeyEvent;
-class QMouseEvent;
 class QPainter;
 class QRect;
-class QTabletEvent;
 class QWidget;
 class KActionCollection;
 class KRadioAction;
@@ -38,6 +36,9 @@ class KoColor;
 class KisBrush;
 class KisGradient;
 class KisPattern;
+class KisButtonPressEvent;
+class KisButtonReleaseEvent;
+class KisMoveEvent;
 
 class KisTool : public QObject, public KisCanvasObserver {
 	Q_OBJECT
@@ -56,10 +57,9 @@ public:
 
 	virtual void enter(QEvent *e) = 0;
 	virtual void leave(QEvent *e) = 0;
-	virtual void mousePress(QMouseEvent *e) = 0;
-	virtual void mouseMove(QMouseEvent *e) = 0;
-	virtual void mouseRelease(QMouseEvent *e) = 0;
-	virtual void tabletEvent(QTabletEvent *e) = 0;
+	virtual void buttonPress(KisButtonPressEvent *e) = 0;
+	virtual void move(KisMoveEvent *e) = 0;
+	virtual void buttonRelease(KisButtonReleaseEvent *e) = 0;
 	virtual void keyPress(QKeyEvent *e) = 0;
 	virtual void keyRelease(QKeyEvent *e) = 0;
 

@@ -32,6 +32,9 @@
 #include "kis_painter.h"
 #include "kis_tool_airbrush.h"
 #include "kis_view.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
+#include "kis_move_event.h"
 
 namespace {
 	Q_INT32 RATE = 100;
@@ -76,7 +79,7 @@ void KisToolAirBrush::update(KisCanvasSubject *subject)
 	super::update(m_subject);
 }
 
-void KisToolAirBrush::mousePress(QMouseEvent *e)
+void KisToolAirBrush::buttonPress(KisButtonPressEvent *e)
 {
 	if (!m_subject) return;
 	if (!m_currentImage) return;
@@ -85,28 +88,34 @@ void KisToolAirBrush::mousePress(QMouseEvent *e)
 	if (e->button() == QMouseEvent::LeftButton) {
 		m_mode = PAINT;
 		initPaint(e -> pos());
-		m_painter -> airBrushAt(e -> pos(), PRESSURE_DEFAULT, 0, 0);
+		m_painter -> airBrushAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
 		m_currentImage -> notify( m_painter -> dirtyRect() );
 		m_currentPos = e -> pos();
+		m_pressure = e -> pressure();
+		m_xTilt = e -> xTilt();
+		m_yTilt = e -> yTilt();
 	}
 }
 
 
-void KisToolAirBrush::mouseRelease(QMouseEvent *e)
+void KisToolAirBrush::buttonRelease(KisButtonReleaseEvent *e)
 {
 	if (e->button() == QMouseEvent::LeftButton && m_mode == PAINT ) {
 		endPaint();
 	}
 }
 
-void KisToolAirBrush::mouseMove(QMouseEvent *e)
+void KisToolAirBrush::move(KisMoveEvent *e)
 {
 	if (m_mode == PAINT) {
-		paintLine(m_dragStart, e -> pos(), PRESSURE_DEFAULT, 0, 0);
+		paintLine(m_dragStart, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
 		m_currentPos = e -> pos();
+		m_pressure = e -> pressure();
+		m_xTilt = e -> xTilt();
+		m_yTilt = e -> yTilt();
 	}
 }
-
+#if 0
 void KisToolAirBrush::tabletEvent(QTabletEvent *e)
 {
          if (e->device() == QTabletEvent::Stylus) {
@@ -141,8 +150,8 @@ void KisToolAirBrush::tabletEvent(QTabletEvent *e)
          }
 	 e -> accept();
 }
-
-void KisToolAirBrush::initPaint(const QPoint & pos)
+#endif
+void KisToolAirBrush::initPaint(const KisPoint & pos)
 {
 	if (!m_currentImage) return;
 	if (!m_currentImage -> activeDevice()) return;
@@ -191,8 +200,8 @@ void KisToolAirBrush::endPaint()
 	}
 }
 
-void KisToolAirBrush::paintLine(const QPoint & pos1,
-				const QPoint & pos2,
+void KisToolAirBrush::paintLine(const KisPoint & pos1,
+				const KisPoint & pos2,
 				const double pressure,
 				const double xtilt,
 				const double ytilt)

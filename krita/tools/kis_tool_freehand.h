@@ -22,9 +22,7 @@
 #define KIS_TOOL_FREEHAND_H_
 
 #include "kis_tool_paint.h"
-#include <qthread.h>
 
-class QPoint;
 class QWidget;
 class QLabel;
 class KisPainter;
@@ -43,10 +41,9 @@ public:
 
 	virtual void update(KisCanvasSubject *subject);
 
-	virtual void mousePress(QMouseEvent *e);
-	virtual void mouseMove(QMouseEvent *e);
-	virtual void mouseRelease(QMouseEvent *e);
-	virtual void tabletEvent(QTabletEvent *e);
+	virtual void buttonPress(KisButtonPressEvent *e); 
+	virtual void move(KisMoveEvent *e);
+	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 	virtual QWidget* createoptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
@@ -56,26 +53,25 @@ public slots:
 	virtual void slotSetCompositeMode(int);
 
 protected:
-	virtual void paintAt(const QPoint &pos,
-		     const double pressure,
-		     const double /*xTilt*/,
-		     const double /*yTilt*/) =0;
+	virtual void paintAt(const KisPoint &pos,
+			     const double pressure,
+			     const double xTilt,
+			     const double yTilt) =0;
 
-	virtual void paintLine(const QPoint & pos1,
-			       const QPoint & pos2,
+	virtual void paintLine(const KisPoint & pos1,
+			       const KisPoint & pos2,
 			       const double pressure,
 			       const double xtilt,
 			       const double ytilt) =0;
 	inline KisPainter * painter() { return m_painter; };
-	virtual void initPaint(const QPoint & pos);
+	virtual void initPaint(const KisPoint & pos);
 	virtual void endPaint();
 
 	KisImageSP currentImage();
 
 protected:
-	QPoint m_dragStart;
-	float m_dragDist;
-
+	KisPoint m_dragStart;
+	double m_dragDist;
 
 private:
 	enumBrushMode m_mode;

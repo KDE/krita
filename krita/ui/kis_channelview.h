@@ -42,7 +42,7 @@ class IntegerWidget;
 class ChannelTable;
 class KisChannel;
 class QHBox;
-class KoFrameButton;
+class QToolButton;
 
 class KisChannelView : public QWidget
 {
@@ -61,10 +61,10 @@ private:
     QHBox *frame;
     QHBox *buttons;
 
-    KoFrameButton *pbAddChannel;
-    KoFrameButton *pbRemoveChannel;
-    KoFrameButton *pbUp;
-    KoFrameButton *pbDown;
+    QToolButton * pbAddChannel;
+    QToolButton * pbRemoveChannel;
+    QToolButton * pbUp;
+    QToolButton * pbDown;
 };
 
 class ChannelTable : public QGridView {

@@ -1,1 +1,1 @@
-SUBDIRS = example colorsfilters variations colorrange
+SUBDIRS = example colorsfilters variations colorrange screenmode

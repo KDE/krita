@@ -16,7 +16,7 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_colordocker.cc \
     kis_color_widget.cc \
     kis_controlframe.cc \
-    kis_listbox.cc \
+    kis_layerbox.cc \
     kis_dlg_create_img.cc \
     kis_dlg_dimension.cc \
     kis_dlg_new_layer.cc \
@@ -35,6 +35,7 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_previewwidget.cc \
     kis_rgb_widget.cc \
     kis_hsv_widget.cc 
+#    kis_histogram.cc
 
 
 #    blendchooser.cc

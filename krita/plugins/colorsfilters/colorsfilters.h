@@ -27,19 +27,20 @@ class KisView;
 
 class ColorsFilters : public KParts::Plugin
 {
-		Q_OBJECT
-	public:
-		ColorsFilters(QObject *parent, const char *name, const QStringList &);
-		virtual ~ColorsFilters();
+	Q_OBJECT
+public:
+	ColorsFilters(QObject *parent, const char *name, const QStringList &);
+	virtual ~ColorsFilters();
 	
-	private slots:
-		void slotColorActivated();
-		void slotBrightnessContrastActivated();
-		void slotGammaActivated();
-		void slotDesaturate();
-	private:
-		KisView* m_view;
-		KisPainter *m_painter;
+private slots:
+        void slotColorActivated();
+	void slotBrightnessContrastActivated();
+	void slotGammaActivated();
+	void slotDesaturate();
+
+private:
+	KisView* m_view;
+	KisPainter *m_painter;
 
 };
 

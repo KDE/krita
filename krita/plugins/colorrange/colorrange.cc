@@ -58,6 +58,7 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)
 {
 	setInstance(ColorRangeFactory::instance());
+	kdDebug() << "Colorrange\n";
 
 	(void) new KAction(i18n("&ColorRange..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange");
 	

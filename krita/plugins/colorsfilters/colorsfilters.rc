@@ -2,7 +2,7 @@
 <kpartgui library="colorsfilters" version="6">
 <MenuBar>
     <Menu name="Adjust"><text>Adjust</text>
-	<Seperator/>
+	<Separator/>
 	<Action name="brightnesscontrast"/>
 	<Action name="gammacorrection"/>
 	<Action name="coloradjustment"/>

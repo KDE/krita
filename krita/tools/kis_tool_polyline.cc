@@ -83,7 +83,7 @@ void KisToolPolyLine::setup(KActionCollection *collection)
 						  "polyline", 
 						  0, 
 						  this, 
-						  SLOT(action()), 
+						  SLOT(activate()), 
 						  collection, 
 						  "tool_polyline");
 

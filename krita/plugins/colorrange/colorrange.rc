@@ -2,9 +2,9 @@
 <kpartgui library="colorrange" version="6">
 <MenuBar>
     <Menu name="Select"><text>Select</text>
-	<Seperator/>
+	<Separator/>
 	<Action name="colorrange"/>
-	<Seperator/>
+	<Separator/>
     </Menu>
 </MenuBar>
 </kpartgui>

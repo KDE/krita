@@ -55,7 +55,6 @@ class KisChannelView;
 class KisLabelBuilderProgress;
 class KisDoc;
 class KisGradient;
-class KisListBox;
 class KisPattern;
 class KisResource;
 class KisResourceMediator;
@@ -65,7 +64,7 @@ class ControlFrame;
 class KisUndoAdapter;
 class KisRect;
 class KisPoint;
-
+class KisLayerBox;
 
 class KisView : public KoView,
 	private KisCanvasSubject,
@@ -383,7 +382,7 @@ private:
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
-	KisListBox *m_layerBox;
+	KisLayerBox *m_layerBox;
 	KisTool *m_tool;
 	bool m_clipboardHasImage;
 	KisGuideSP m_currentGuide;

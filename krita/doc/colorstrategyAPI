@@ -1,0 +1,23 @@
+This is a working document. It list the places where pixels are mangled and requested functions to do it in an colorstrategy independent way
+
+The purpose is to find out which functions an API in colorstrategy must have to support pixelmangling in a colorstretegy independent manner.
+
+====================
+Requested functions:
+
+a function that take X number of pixels and associated weights and produce a weighted average.
+
+
+
+====================
+Usecases:
+
+plugins/convolutionfilters:
+---------------------
+The plugin creates matrices for each of the color channels. That would
+be wrong.  A single matrix would be enough telling how to mix the colors.
+Another matrix telling how to mix the alpha is ok though.
+
+core/kis_convolution_painter.cc:
+---------------------
+The convolution painter assume that we know how to mix several colors into one. That won't hold for hsv and lab, and is slightly inaccurate for the other colorstrategies as well.

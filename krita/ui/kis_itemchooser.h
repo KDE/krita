@@ -23,7 +23,6 @@
 #include <qframe.h>
 
 #include <koIconChooser.h>
-#include "kfloatingdialog.h"
 
 class QHBox;
 class QLabel;
@@ -37,8 +36,8 @@ class KisCmbComposite;
 
 typedef QPtrList<KoIconItem> vKoIconItem;
 
-class KisItemChooser : public KFloatingDialog {
-	typedef KFloatingDialog super;
+class KisItemChooser : public QWidget {
+	typedef QWidget super;
 	Q_OBJECT
 
 public:

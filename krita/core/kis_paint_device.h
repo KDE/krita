@@ -214,9 +214,11 @@ public:
 
 	/**
 	 * XXX: Move this undo code back into the tiles/ module and wrap in transactions
+	 * CBR: not sure about that, but transaction system needs to be revisited
 	 */
 	KisMemento * getMemento() { return m_datamanager -> getMemento(); };
 	void rollback(KisMemento *memento) { m_datamanager -> rollback(memento); };
+	void rollforward(KisMemento *memento) { m_datamanager -> rollforward(memento); };
 
 	/** 
 	 * This function return an iterator which points to the first pixel of an rectangle

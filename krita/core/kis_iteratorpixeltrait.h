@@ -55,35 +55,12 @@ public:
         inline operator QUANTUM*() { return (Q_UINT8 *)m_underlyingIterator; };
 
 protected:
-	inline QUANTUM* oldQuantumValue()
-{
-	return m_underlyingIterator -> oldValue();
-
-#if 0 // AUTOLAYER
-	if( m_oldTileNeedRefresh )
-	{
-		m_oldTile = 0;
-		if( m_command)
-		{
-			m_oldTile = (m_command->tile(m_tilenum));
-		}
-		if( m_oldTile == 0)
-		{
-			if( !(m_oldTile = (m_ktm->tile( m_tilenum, TILEMODE_READ) ) ) )
-				return 0;
-		}
-		m_oldData =  m_oldTile->data(0, m_ypos_intile);
-		m_oldTileNeedRefresh = false;
-	}
-	return (m_oldData + m_xintile);
-#endif  // AUTOLAYER
-};
+	inline QUANTUM* oldQuantumValue() { return m_underlyingIterator -> oldValue(); };
 	
 protected:
 	KisPaintDeviceSP m_device;
 	KisStrategyColorSpaceSP m_colorSpace;
-	QUANTUM* m_data;
-	QUANTUM* m_oldData;
+
 	_iTp *m_underlyingIterator;
 };
 

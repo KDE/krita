@@ -21,8 +21,13 @@
 KisMemento::KisMemento()
 {
 	m_hashTable = new KisTile * [1024];
+	m_redoHashTable = new KisTile * [1024];
+	
 	for(int i = 0; i < 1024; i++)
+	{
 		m_hashTable [i] = 0;
+		m_redoHashTable [i] = 0;
+	}
 	m_numTiles = 0;
 }
 
@@ -33,6 +38,17 @@ KisMemento::~KisMemento()
 	{
 		KisTile *tile = m_hashTable[i];
 		
+		// delete from the normal hashtable
+		while(tile)
+		{
+			KisTile *deltile = tile;
+			tile = tile->getNext();
+			delete deltile;
+		}
+		
+		// delete from the redo hastable
+		tile = m_redoHashTable[i];
+		
 		while(tile)
 		{
 			KisTile *deltile = tile;
@@ -41,4 +57,5 @@ KisMemento::~KisMemento()
 		}
 	}
 	delete m_hashTable;
+	delete m_redoHashTable;
 }

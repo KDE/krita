@@ -207,26 +207,99 @@ KisMemento *KisTiledDataManager::getMemento()
 }
 
 void KisTiledDataManager::rollback(KisMemento *memento)
-{
-	// Rollback means restoring all of the tiles in the memento to us.	
+{	
+	// Rollback means restoring all of the tiles in the memento to our hashtable.	
+	
+	// But first clear the memento redo hashtable.
+	// This is nessesary as new changes might have been done since last rollback (automatic filters)
+	for(int i = 0; i < 1024; i++)
+	{
+		KisTile *tile = memento->m_redoHashTable[i];
+		
+		while(tile)
+		{
+			KisTile *deltile = tile;
+			tile = tile->getNext();
+			delete deltile;
+		}
+		memento->m_redoHashTable[i]=0;
+	}
+
+	// Now on to the real rollback
 	for(int i = 0; i < 1024; i++)
 	{
 		KisTile *tile = memento->m_hashTable[i];
 		
 		while(tile)
 		{
-			// We have a memento-tile, now remove the corresponding one and replace by a copy of the memento-tile
+			// The memento has a tile stored that we need to roll back
+			// Now find the corresponding one in our hashtable
 			KisTile *curTile = m_hashTable[i];
+			KisTile *preTile = 0;
 			while(curTile)
 			{
 				if(curTile->getRow() == tile->getRow() && curTile->getCol() == tile->getCol())
 				{
-				
 					break;
 				}
+				preTile = curTile;
 				curTile = curTile->getNext();
 			}
-			// install a copy of the memento tile
+			
+			// Remove it from our hashtable
+			if(preTile)
+				preTile->setNext(curTile->getNext());
+			else
+				m_hashTable[i]= 0;
+				
+			// And put it in the redo hashtable of the memento
+			curTile->setNext(memento->m_redoHashTable[i]);
+			memento->m_redoHashTable[i] = curTile;
+			
+			// Put a copy of the memento tile into our hashtable
+			curTile = new KisTile(*tile);
+			curTile->setNext(m_hashTable[i]);
+			m_hashTable[i] = curTile;
+			
+			tile = tile->getNext();
+		}
+	}
+}
+
+void KisTiledDataManager::rollforward(KisMemento *memento)
+{
+	// Rollforwarf means restoring all of the tiles in the memento's redo to our hashtable.	
+	
+	for(int i = 0; i < 1024; i++)
+	{
+		KisTile *tile = memento->m_redoHashTable[i];
+		
+		while(tile)
+		{
+			// The memento has a tile stored that we need to roll forward
+			// Now find the corresponding one in our hashtable
+			KisTile *curTile = m_hashTable[i];
+			KisTile *preTile = 0;
+			while(curTile)
+			{
+				if(curTile->getRow() == tile->getRow() && curTile->getCol() == tile->getCol())
+				{
+					break;
+				}
+				preTile = curTile;
+				curTile = curTile->getNext();
+			}
+			
+			// Remove it from our hashtable
+			if(preTile)
+				preTile->setNext(curTile->getNext());
+			else
+				m_hashTable[i]= 0;
+				
+			// And delete it (it's equal to the one stored in the memento's undo)
+			delete curTile;
+			
+			// Put a copy of the memento tile into our hashtable
 			curTile = new KisTile(*tile);
 			curTile->setNext(m_hashTable[i]);
 			m_hashTable[i] = curTile;
@@ -300,9 +373,12 @@ KisTile *KisTiledDataManager::getTile(Q_INT32 col, Q_INT32 row, bool writeAccess
 			updateExtent(col, row);
 		}
 		else
-			// If only read access it is enough to share a default tile
+			// If only read access then it's enough to share a default tile
 			tile = m_defaultTile;
 	}
+		
+	if(writeAccess)
+		ensureTileMementoed(col, row, tileHash, tile);
 		
 	return tile;
 }

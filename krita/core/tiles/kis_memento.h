@@ -41,6 +41,7 @@ private:
 	KisTiledDataManager *originator;
 	KisTile **m_hashTable;	
 	Q_UINT32 m_numTiles;
+	KisTile **m_redoHashTable;	
 };
 
 #endif // KIS_MEMENTO_H_

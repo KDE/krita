@@ -59,7 +59,9 @@ KisTileCommand::~KisTileCommand()
 void KisTileCommand::execute()
 {
 	KisImageSP img = m_device -> image();
-//AUTOLAYERS implement redo
+	
+	m_device->rollforward(m_memento);
+	
 	if (img)
 		img -> notify(m_rc);
 }

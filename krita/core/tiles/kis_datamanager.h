@@ -64,6 +64,15 @@ public:
 	 * their creation, as mementos only store incremental changes
 	 */
 	void rollback(KisMemento *memento) { ACTUAL_DATAMGR::rollback(memento); };
+	
+	/**
+	 * Restores the image data to the state at the time of the rollback call of the memento.
+	 *
+	 * Note that rollforward must only be called when an rollback have previously been performed, and
+	 * no intermittent actions have been performed (though it's ok to rollback other mementos and
+	 * roll them forward again)
+	 */
+	void rollforward(KisMemento *memento) { ACTUAL_DATAMGR::rollforward(memento); };
 
 public:
 	/**

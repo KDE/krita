@@ -16,6 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kis_label_cursor_pos.h"
+#include "kis_label_cursor_pos.moc"
 
 KisLabelCursorPos::KisLabelCursorPos(QWidget *parent, const char *name, WFlags f) : super(parent, name, f)
 {

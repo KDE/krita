@@ -74,6 +74,7 @@ KisCanvas::KisCanvas(QWidget *parent, const char *name) : super(parent, name)
 {
 	setBackgroundMode(QWidget::NoBackground);
 	setMouseTracking(true);
+	m_enableMoveEventCompressionHint = true;
 
 #ifdef Q_WS_X11
 	if (!X11SupportInitialised) {
@@ -214,22 +215,28 @@ bool KisCanvas::x11Event(XEvent *event)
 {
 	if (event->type == MotionNotify) {
 		// Mouse move
-		XMotionEvent motion = event->xmotion;
-		QPoint globalPos(motion.x_root, motion.y_root);
+		if (!m_enableMoveEventCompressionHint) {
 
-		if (globalPos.x() != m_lastRootX || globalPos.y() != m_lastRootY) {
+			XMotionEvent motion = event->xmotion;
+			QPoint globalPos(motion.x_root, motion.y_root);
 
-			int state = translateX11ButtonState(motion.state);
-			QPoint pos(motion.x, motion.y);
-			QMouseEvent e(QEvent::MouseMove, pos, globalPos, Qt::NoButton, state);
+			if (globalPos.x() != m_lastRootX || globalPos.y() != m_lastRootY) {
 
-			mouseMoveEvent(&e);
+				int state = translateX11ButtonState(motion.state);
+				QPoint pos(motion.x, motion.y);
+				QMouseEvent e(QEvent::MouseMove, pos, globalPos, Qt::NoButton, state);
+
+				mouseMoveEvent(&e);
+			}
+
+			m_lastRootX = globalPos.x();
+			m_lastRootY = globalPos.y();
+
+			return true;
 		}
-		
-		m_lastRootX = globalPos.x();
-		m_lastRootY = globalPos.y();
-
-		return true;
+		else {
+			return false;
+		}
 	}
 	else {
 		return false;

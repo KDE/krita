@@ -30,6 +30,11 @@ public:
 	virtual ~KisCanvas();
 	void showScrollBars();
     
+	// When enabled, the canvas may throw away move events if the application
+	// is unable to keep up with them, i.e. intermediate move events in the event
+	// queue are skipped.
+	void enableMoveEventCompressionHint(bool enableMoveCompression) { m_enableMoveEventCompressionHint = enableMoveCompression; }
+
 signals:
 	void mousePressed(QMouseEvent*);
 	void mouseMoved(QMouseEvent*);
@@ -53,6 +58,8 @@ protected:
 	virtual void wheelEvent(QWheelEvent *event);
 	virtual void keyPressEvent(QKeyEvent *event);
 	virtual void keyReleaseEvent(QKeyEvent *event);
+
+	bool m_enableMoveEventCompressionHint;
 
 #ifdef Q_WS_X11
 	// On X11 systems, Qt throws away mouse move events if the application

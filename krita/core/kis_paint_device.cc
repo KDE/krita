@@ -421,10 +421,10 @@ void KisPaintDevice::scale(double xscale, double yscale)
                                 weight[0] = (this->*filterf)(weight[0]);
                                 if(xx < 0) {
                                         n = -xx;
-                                        } else if(xx >= height()) {
-                                                n = (height() - xx) + height() - 1;
-                                        } else {
-                                                n = xx;
+                                } else if(xx >= height()) {
+                                        n = (height() - xx) + height() - 1;
+                                } else {
+                                        n = xx;
                                 }
                                 k = contribY[y].n++;
                                 contribY[y].p[k].m_pixel = n;
@@ -436,7 +436,7 @@ void KisPaintDevice::scale(double xscale, double yscale)
 
         for(int x = 0; x < targetW; x++)
         {
-                calc_x_contrib(&contribX, xscale, fwidth, targetW, height(), filterf, x);
+                calc_x_contrib(&contribX, xscale, fwidth, targetW, width(), filterf, x);
                 /* Apply horz filter to make dst column in tmp. */
                 for(int y = 0; y < height(); y++)
                 {

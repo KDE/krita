@@ -28,4 +28,16 @@ KisColorWidget::~KisColorWidget()
 {
 }
 
+void KisColorWidget::slotSetFGColor(const KoColor& c)
+{
+	m_fgColor = c;
+	update();
+}
+
+void KisColorWidget::slotSetBGColor(const KoColor& c)
+{
+	m_bgColor = c;
+	update();
+}
+
 #include "kis_color_widget.moc"

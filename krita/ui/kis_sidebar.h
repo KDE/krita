@@ -40,6 +40,7 @@ class KoColorChooser;
 class ControlFrame;
 class KisRGBWidget;
 class KisHSVWidget;
+class KisGrayWidget;
 
 enum ActiveColor { ac_Foreground, ac_Background};
 
@@ -126,11 +127,15 @@ signals:
 protected slots:
         void slotFGColorSelected(const KoColor& c);
         void slotBGColorSelected(const KoColor& c);
+        void slotCurrentChanged(QWidget*);
 
 private:
         QTabWidget *m_tabwidget;
         KisRGBWidget *m_rgbChooser;
         KisHSVWidget *m_hsvChooser;
+        KisGrayWidget *m_grayChooser;
+        KoColor m_fgColor;
+        KoColor m_bgColor;
 };
 
 #endif

@@ -39,10 +39,6 @@ public:
 	KisRGBWidget(QWidget *parent = 0L);
 	virtual ~KisRGBWidget() {}
 
-public slots:
-	virtual void slotSetFGColor(const KoColor& c);
-	virtual void slotSetBGColor(const KoColor& c);
-
 protected slots:
 	virtual void slotRChanged(int r);
 	virtual void slotGChanged(int g);

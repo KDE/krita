@@ -95,20 +95,6 @@ KisRGBWidget::KisRGBWidget(QWidget *parent) : super(parent)
 	connect(mBIn, SIGNAL(valueChanged(int)), this, SLOT(slotBChanged(int)));
 }
 
-void KisRGBWidget::slotSetFGColor(const KoColor& c)
-{
-	m_fgColor = c;
-	m_ColorButton->setCurrent(KDualColorButton::Foreground);
-	update();
-}
-
-void KisRGBWidget::slotSetBGColor(const KoColor& c)
-{
-	m_bgColor = c;
-	m_ColorButton->setCurrent(KDualColorButton::Background);
-	update();
-}
-
 void KisRGBWidget::slotRChanged(int r)
 {
 	if (m_ColorButton->current() == KDualColorButton::Foreground){

@@ -33,8 +33,8 @@ public:
 	virtual ~KisColorWidget();
 
 public slots:
-	virtual void slotSetFGColor(const KoColor& c) = 0;
-	virtual void slotSetBGColor(const KoColor& c) = 0;
+	virtual void slotSetFGColor(const KoColor& c);
+	virtual void slotSetBGColor(const KoColor& c);
 
 signals:
 	void fgColorChanged(const KoColor& c);
@@ -43,6 +43,8 @@ signals:
 protected:
 	KoColor m_fgColor;
 	KoColor m_bgColor;
+
+	virtual void update() = 0;
 };
 
 #endif

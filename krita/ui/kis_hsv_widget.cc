@@ -94,21 +94,6 @@ KisHSVWidget::KisHSVWidget(QWidget *parent) : super(parent)
 	connect(mSIn, SIGNAL(valueChanged(int)), this, SLOT(slotSChanged(int)));
 	connect(mVIn, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
 }
-
-void KisHSVWidget::slotSetFGColor(const KoColor& c)
-{
-	m_fgColor = c;
-	m_ColorButton->setCurrent(KDualColorButton::Foreground);
-	update();
-}
-
-void KisHSVWidget::slotSetBGColor(const KoColor& c)
-{
-	m_bgColor = c;
-	m_ColorButton->setCurrent(KDualColorButton::Background);
-	update();
-}
-
 void KisHSVWidget::slotHChanged(int h)
 {
 	if (m_ColorButton->current() == KDualColorButton::Foreground){

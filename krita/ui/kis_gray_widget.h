@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#ifndef KIS_HSV_WIDGET_H
-#define KIS_HSV_WIDGET_H
+#ifndef KIS_GRAY_WIDGET_H
+#define KIS_GRAY_WIDGET_H
 
 #include "kis_color_widget.h"
 
@@ -30,19 +30,17 @@ class QLabel;
 class QSpinBox;
 class KDualColorButton;
 
-class KisHSVWidget : public KisColorWidget
+class KisGrayWidget : public KisColorWidget
 {
 	Q_OBJECT
 	typedef KisColorWidget super;
 
 public:
-	KisHSVWidget(QWidget *parent = 0L);
-	virtual ~KisHSVWidget() {}
+	KisGrayWidget(QWidget *parent = 0L);
+	virtual ~KisGrayWidget() {}
 
 protected slots:
-	virtual void slotHChanged(int r);
-	virtual void slotSChanged(int g);
-	virtual void slotVChanged(int b);
+	virtual void slotChanged(int v);
 
 	void slotFGColorSelected(const QColor& c);
 	void slotBGColorSelected(const QColor& c);
@@ -51,15 +49,9 @@ private:
 	void update();
 
 private:
-	KoColorSlider *mHSlider;
-	KoColorSlider *mSSlider;
-	KoColorSlider *mVSlider;
-	QLabel *mHLabel;
-	QLabel *mSLabel;
-	QLabel *mVLabel;
-	QSpinBox *mHIn;
-	QSpinBox *mSIn;
-	QSpinBox *mVIn;
+	KoColorSlider *mSlider;
+	QLabel *mLabel;
+	QSpinBox *mIn;
 	KDualColorButton *m_ColorButton;
 };
 

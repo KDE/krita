@@ -492,19 +492,19 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 	return image;
 }
 
-KisRectIteratorPixel &KisPaintDevice::createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable)
+KisRectIteratorPixel KisPaintDevice::createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable)
 {
-        return *(new KisRectIteratorPixel(this, m_datamanager, left, top, w, h, writable));
+        return KisRectIteratorPixel(this, m_datamanager, left, top, w, h, writable);
 }
 
-KisHLineIteratorPixel  &KisPaintDevice::createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable)
+KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable)
 {
-        return *(new KisHLineIteratorPixel(this, m_datamanager, x, y, w, writable));
+        return KisHLineIteratorPixel(this, m_datamanager, x, y, w, writable);
 }
 
-KisVLineIteratorPixel  &KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable)
+KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable)
 {
-        return *(new KisVLineIteratorPixel(this, m_datamanager, x, y, h, writable));
+        return KisVLineIteratorPixel(this, m_datamanager, x, y, h, writable);
 }
 
 KisSelectionSP KisPaintDevice::selection(){

@@ -228,17 +228,17 @@ public:
 	/** 
 	 * This function return an iterator which points to the first pixel of an rectangle
 	 */
-	KisRectIteratorPixel & createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable);
+	KisRectIteratorPixel createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable);
 	
 	/** 
 	 * This function return an iterator which points to the first pixel of a horizontal line
 	 */
-	KisHLineIteratorPixel  & createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable);
+	KisHLineIteratorPixel  createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable);
 	
 	/** 
 	 * This function return an iterator which points to the first pixel of a vertical line
 	 */
-	KisVLineIteratorPixel  & createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
+	KisVLineIteratorPixel  createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
 	
 	// Selection stuff. XXX: is it necessary to make the actual
 	// selection object available outside the layer? YYY: yes, so

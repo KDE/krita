@@ -57,7 +57,7 @@ public:
 	Q_INT32 x() { return m_x; };
 	
 	// cirrent y position
-	Q_INT32 y() { return m_x; };
+	Q_INT32 y() { return m_y; };
 	
 	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
 	operator Q_UINT8 * ();

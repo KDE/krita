@@ -53,10 +53,7 @@ void KisPaintDevice::setPixel(uint x, uint y, const uchar *src, KisImageCmd *cmd
 
 	if (cmd) {
 		if (tile && !cmd -> hasTile(tile)) {
-			kdDebug() << "Tile is not in command\n";
-
 			if (tile -> cow()) {
-				kdDebug() << "Tile is COW\n";
 				KisTileSP tileCopy = new KisTile(*tile);
 
 				tile -> setCow(false);	

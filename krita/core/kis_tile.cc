@@ -111,7 +111,7 @@ void KisTile::initTile()
 {
 	m_data = new uchar[size()];
 	qFill(m_data, m_data + size(), m_defaultColor);
-	memset(m_data, rand() % 255, size());
+//	memset(m_data, rand() % 255, size());
 }
 
 void KisTile::move(int x, int y)

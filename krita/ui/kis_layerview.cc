@@ -529,15 +529,18 @@ void LayerTable::updateAllCells()
 
 void LayerTable::slotProperties()
 {
-    if( LayerPropertyDialog::editProperties(
-        *( m_doc->currentImg()->layerList().at(m_selected))))
-    {
-        QRect uR = m_doc->currentImg()->layerList().at( m_selected )->imageExtents();
-        updateCell( m_selected, 0 );
-        m_doc->currentImg()->markDirty( uR );
+	if (m_selected > m_doc->currentImg()->layerList().size())
+		return;
 
-        m_doc->setModified( true );
-    }
+	if( LayerPropertyDialog::editProperties(
+				*( m_doc->currentImg()->layerList().at(m_selected))))
+	{
+		QRect uR = m_doc->currentImg()->layerList().at( m_selected )->imageExtents();
+		updateCell( m_selected, 0 );
+		m_doc->currentImg()->markDirty( uR );
+
+		m_doc->setModified( true );
+	}
 }
 
 void LayerTable::slotAboutToShow()

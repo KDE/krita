@@ -154,7 +154,6 @@ bool BrushTool::paint(const QPoint& pos)
 
 	uchar bv, invbv;
 	int bpp = lay -> bpp();
-//	uchar src2[4] = {(uchar)m_blue, (uchar)m_green, (uchar)m_red, CHANNEL_MAX}; // TODO FIXME
 	uchar src2[MAX_CHANNELS];
 	uchar dst[MAX_CHANNELS];
 
@@ -165,12 +164,21 @@ bool BrushTool::paint(const QPoint& pos)
 
 	if (img -> colorMode() == cm_RGBA) {
 		for (int y = sy; y <= ey; y++) {
-			for (int x = sx; x <= ex; x++) {
-				//			uchar *sl = m_brush -> scanline(y); // XXX If use pattern use sl instead of simple color
-				uchar *src = lay -> pixel(startx + x, starty + y);
+			uchar *sl = m_brush -> scanline(y);
 
-				for (int w = 0; w < bpp; w++)
-					dst[w] = (src[w] * invopacity + src2[w] * opacity) / CHANNEL_MAX;
+			for (int x = sx; x <= ex; x++) {
+				uchar *src = lay -> pixel(startx + x, starty + y);
+				bv = *(sl + x);
+
+				if (bv == 0)
+					continue;
+
+				invbv = CHANNEL_MAX - bv;
+
+				for (int w = 0; w < bpp; w++) {
+					dst[w] = (src2[w] * bv + src[w] * invbv) / CHANNEL_MAX;
+					dst[w] = (dst[w] * opacity + src[w] * invopacity) / CHANNEL_MAX;
+				}
 
 				src += bpp;
 				lay -> setPixel(startx + x, starty + y, dst, m_cmd);
@@ -179,7 +187,11 @@ bool BrushTool::paint(const QPoint& pos)
 	} else {
 		for (int y = sy; y <= ey; y++) {
 			for (int x = sx; x <= ex; x++) {
-				memcpy(dst, src2, bpp);
+				uchar *src = lay -> pixel(startx + x, starty + y);
+
+				for (int w = 0; w < bpp; w++)
+					dst[w] = (src2[w] * bv + src[w] * invbv) / CHANNEL_MAX;
+
 				lay -> setPixel(startx + x, starty + y, dst, m_cmd);
 			}
 		}
@@ -194,8 +206,14 @@ void BrushTool::mouseMove(QMouseEvent *e)
 		return;
 
 	KisImageSP img = m_doc -> currentImg();
+	KisPaintDeviceSP device; 
 
 	if (!img) 
+		return;
+
+	device = img -> getCurrentPaintDevice();
+
+	if (!device || !device -> visible())
 		return;
 
 	QPoint pos = zoomed(e -> pos());
@@ -246,9 +264,19 @@ void BrushTool::mouseRelease(QMouseEvent *e)
 	if (e -> button() != LeftButton)
 		return;
 
-	m_dragging = false;
-	m_doc -> addCommand(m_cmd);
-	m_cmd = 0;
+	KisImageSP img = m_doc -> currentImg();
+	KisPaintDeviceSP device; 
+
+	if (!img) 
+		return;
+
+	device = img -> getCurrentPaintDevice();
+
+	if (device && device -> visible()) {
+		m_dragging = false;
+		m_doc -> addCommand(m_cmd);
+		m_cmd = 0;
+	}
 }
 
 bool BrushTool::paintColor(const QPoint& /*pos*/)

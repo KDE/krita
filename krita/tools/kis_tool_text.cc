@@ -78,6 +78,9 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 			return;
 		QFontMetrics metrics(m_font);
 		QRect boundingRect = metrics.boundingRect(text).normalize();
+		int xB = - boundingRect.x();
+		int yB = - boundingRect.y();
+
 		if (boundingRect.x() < 0 || boundingRect.y() < 0)
 			boundingRect.moveBy(- boundingRect.x(), - boundingRect.y());
 
@@ -87,10 +90,7 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 			paint.fillRect(boundingRect, Qt::white);
 			paint.setFont(m_font);
 			paint.setBrush(QBrush(Qt::black));
-			// some boundingRect magic that doesn't quite work:
-			int flags = Qt::SingleLine|Qt::AlignCenter ;
-			paint.drawText(paint.boundingRect(boundingRect, flags, text),
-				flags, text);
+			paint.drawText(xB, yB, text);
 		}
 		QImage image = pixels.convertToImage();
 
@@ -123,9 +123,6 @@ QWidget* KisToolText::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
 	m_optWidget->setCaption(i18n("Text"));
-
-	// set a 'standard' font
-	m_font = m_optWidget->font();
 
 	m_lbFont = new QLabel(i18n("Font: "), m_optWidget);
 	m_lbFontName = new KSqueezedTextLabel(QString(m_font.family() + ", %1")

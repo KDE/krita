@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -545,7 +546,7 @@ float KisPainter::paintLine(const enumPaintOp paintOp,
 	float savedDist = inSavedDist;
 
 	if (savedDist < 0) {
-		// pos1 is the start of the line, rather than this being a 
+		// pos1 is the start of the line, rather than this being a
 		// continuation of an existing line, so always paint it.
 		switch(paintOp) {
 		case PAINTOP_BRUSH:
@@ -613,7 +614,7 @@ float KisPainter::paintLine(const enumPaintOp paintOp,
 		else {
 			step += dragVec * spacing;
 		}
-		
+
 		KisVector2D sp = start + KisVector2D(step.x() / xScale, step.y() / yScale);
 
 		QPoint p(qRound(sp.x()), qRound(sp.y()));
@@ -640,6 +641,146 @@ float KisPainter::paintLine(const enumPaintOp paintOp,
 	else
 		return 0;
 }
+
+void KisPainter::paintRect (const enumPaintOp paintOp,
+                            const QPoint &startPoint,
+                            const QPoint &endPoint,
+                            const Q_INT32 pressure)
+{
+    QRect normalizedRect = QRect (startPoint, endPoint).normalize ();
+
+    for (int x = normalizedRect.left (); x <= normalizedRect.right (); x++)
+    {
+        paintAt (QPoint (x, normalizedRect.top ()), pressure, 0, 0);
+        paintAt (QPoint (x, normalizedRect.bottom ()), pressure, 0, 0);
+    }
+
+    for (int y = normalizedRect.top (); y <= normalizedRect.bottom (); y++)
+    {
+        paintAt (QPoint (normalizedRect.left (), y), pressure, 0, 0);
+        paintAt (QPoint (normalizedRect.right (), y), pressure, 0, 0);
+    }
+}
+
+
+//
+// Ellipse code derived from zSprite2 Game Engine
+//
+
+void KisPainter::paintEllipsePixel (const enumPaintOp paintOp,
+                                    bool invert,
+                                    int xc, int yc, int x1, int y1, int x2, int y2,
+                                    const Q_INT32 pressure)
+{
+    if (invert)
+    {
+        paintAt (QPoint (y1 + xc, x1 + yc), pressure, 0, 0);
+        paintAt (QPoint (y2 + xc, x2 + yc), pressure, 0, 0);
+
+    }
+    else
+    {
+        paintAt (QPoint (x1 + xc, y1 + yc), pressure, 0, 0);
+        paintAt (QPoint (x2 + xc, y2 + yc), pressure, 0, 0);
+    }
+}
+
+void KisPainter::paintEllipseSymmetry (const enumPaintOp paintOp,
+                                       double ratio, bool invert,
+                                       int x, int y, int xc, int yc,
+                                       const Q_INT32 pressure)
+{
+    int x_start, x_end, x_out;
+    int y_start, y_end, y_out;
+
+    x_start = (int) (x * ratio);
+    x_end = (int) ((x + 1) * ratio);
+    y_start = (int) (y * ratio);
+    y_end = (int) ((y + 1) * ratio);
+
+    for (x_out = x_start; x_out < x_end; x_out++)
+    {
+        paintEllipsePixel (paintOp, invert, xc, yc, -x_out, -y, x_out, -y, pressure);
+        paintEllipsePixel (paintOp, invert, xc, yc, -x_out, y, x_out, y, pressure);
+    }
+
+    for (y_out = y_start; y_out < y_end; y_out++)
+    {
+        paintEllipsePixel (paintOp, invert, xc, yc, -y_out, -x, y_out, -x, pressure);
+        paintEllipsePixel (paintOp, invert, xc, yc, -y_out, x, y_out, x, pressure);
+    }
+}
+
+void KisPainter::paintEllipseInternal (const enumPaintOp paintOp,
+                                       double ratio, bool invert,
+                                       int xc, int yc, int radius,
+                                       const Q_INT32 pressure)
+{
+    int x, y, d;
+    unsigned char mask, exist_color;
+
+    y = radius;
+    d = 3 - 2 * radius;
+
+    for (x = 0; x < y;)
+    {
+        paintEllipseSymmetry (paintOp, ratio, invert, x, y, xc, yc, pressure);
+
+        if  (d < 0)
+        {
+                d += (4 * x + 6);
+        }
+        else
+        {
+                d += (4 * (x - y) + 10);
+                y--;
+        }
+
+        x++;
+    }
+
+    if (x == y)
+        paintEllipseSymmetry (paintOp, ratio, invert, x, y, xc, yc, pressure);
+}
+
+void KisPainter::paintEllipse (const enumPaintOp paintOp,
+                               const QPoint &startPoint,
+                               const QPoint &endPoint,
+                               const Q_INT32 pressure)
+{
+    QRect normalizedRect = QRect (startPoint, endPoint).normalize ();
+
+    const int x1 = normalizedRect.left (),
+              x2 = normalizedRect.right (),
+              y1 = normalizedRect.top (),
+              y2 = normalizedRect.bottom ();
+
+    const double ratio = (double) (x2 - x1 + 1) / (y2 - y1 + 1);
+    bool invert = false;
+
+    if (x1 == x2 || y1 == y2)
+    {
+        paintLine (paintOp,
+                   normalizedRect.topLeft (), normalizedRect.bottomLeft (),
+                   pressure, 0, 0);
+        return;
+    }
+
+    if (x2 - x1 < y2 - y1)
+    {
+        paintEllipseInternal (paintOp, 1 / ratio, true,
+                              (x1 + x2) / 2, (y1 + y2) / 2, (x2 - x1 + 1) / 2,
+                              pressure);
+    }
+    else
+    {
+        paintEllipseInternal (paintOp, ratio, false,
+                              (x1 + x2) / 2, (y1 + y2) / 2, (y2 - y1 + 1) / 2,
+                              pressure);
+    }
+}
+
+
 
 void KisPainter::paintAt(const QPoint & pos,
 			 const Q_INT32 pressure,
@@ -683,7 +824,7 @@ void KisPainter::paintAt(const QPoint & pos,
 
 		m_pressure = pressure;
 	}
-        
+
         // Draw correctly near the left and top edges
         Q_INT32 sx = 0;
         Q_INT32 sy = 0;
@@ -695,7 +836,7 @@ void KisPainter::paintAt(const QPoint & pos,
                 sy = -y;
                 y = 0;
         }
-        
+
 	bitBlt( x,  y,  m_compositeOp, m_dab.data(), m_opacity, sx, sy, m_dab -> width(), m_dab -> height());
 
 	m_dirtyRect |= QRect(x, y, m_dab -> width(), m_dab -> height());
@@ -704,7 +845,7 @@ void KisPainter::paintAt(const QPoint & pos,
 void KisPainter::eraseAt(const QPoint &pos,
 			 const Q_INT32 pressure,
 			 const Q_INT32 /*xTilt*/,
-			 const Q_INT32 /*yTilt*/) 
+			 const Q_INT32 /*yTilt*/)
 {
 // Erasing is traditionally in paint applications one of two things:
 // either it is painting in the 'background' color, or it is replacing
@@ -715,7 +856,7 @@ void KisPainter::eraseAt(const QPoint &pos,
 // eraser rubber is a pretty useful too for making sharp to fuzzy lines
 // in the graphite layer, or equally useful: for smudging skin tones.
 //
-// A smudge tool for Krita is in the making, but when working with 
+// A smudge tool for Krita is in the making, but when working with
 // a tablet, the eraser tip should be at least as functional as a rubber eraser.
 // That means that only after repeated or forceful application should all the
 // 'paint' or 'graphite' be removed from the surface -- a kind of pressure
@@ -725,9 +866,9 @@ void KisPainter::eraseAt(const QPoint &pos,
 // kinds of material. Layers are just a hack for this; putting your ink work
 // in one layer and your pencil in another is not the same as really working
 // with the combination.
- 
+
 	if (!m_device) return;
-	
+
 	KisAlphaMask *mask = m_brush -> mask(pressure);
 	QPoint hotSpot = m_brush -> hotSpot(pressure);
 
@@ -806,7 +947,7 @@ void KisPainter::airBrushAt(const QPoint &pos,
 // Anyway, it's exactly twenty years ago that I have held a real
 // airbrush, for the first and up to now the last time...
 //
-	
+
 	// For now: use the current brush shape -- it beats calculating
 	// ellipes and cones, and it shows the working of the timer.
 	if (!m_device) return;
@@ -828,7 +969,7 @@ void KisPainter::airBrushAt(const QPoint &pos,
 
 		m_pressure = pressure;
 	}
-        
+
         // Draw correctly near the left and top edges
         Q_INT32 sx = 0;
         Q_INT32 sy = 0;
@@ -918,7 +1059,7 @@ void KisPainter::airBrushAt(const QPoint &pos,
 				b = qBlue(rgb);
 				bv = *(sl + x);
 
-				if (bv == 0) 
+				if (bv == 0)
 					continue;
 
 				invbv = 255 - bv;
@@ -930,10 +1071,10 @@ void KisPainter::airBrushAt(const QPoint &pos,
 					a = qAlpha(rgb);
 					v = a + bv;
 
-					if (v < 0) 
+					if (v < 0)
 						v = 0;
 
-					if (v > 255) 
+					if (v > 255)
 						v = 255;
 
 					a = (uchar)v;
@@ -965,7 +1106,7 @@ void KisPainter::computeDab(KisAlphaMask* mask)
 {
 	// XXX: According to the SeaShore source, the Gimp uses a temporary layer
 	// the size of the layer that is being painted on. Thas layer is cleared
-	// between painting actions. Our temporary layer is only just big enough to 
+	// between painting actions. Our temporary layer is only just big enough to
 	// contain the brush mask, and for every paintAt, the dab is composited with
 	// the target layer.
 	m_dab = new KisLayer(mask -> width(),

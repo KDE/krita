@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -118,7 +119,7 @@ public:
 	QRect dirtyRect();
 
 	// ------------------------------------------------------------------------------------------
-	// Draw a line between pos1 and pos2 using the currently set brush and color. 
+	// Draw a line between pos1 and pos2 using the currently set brush and color.
 	// If savedDist is less than zero, the brush is painted at pos1 before being
 	// painted along the line using the spacing setting.
 	// @Return the drag distance, that is the remains of the distance between p1 and p2 not covered
@@ -130,6 +131,30 @@ public:
 			const Q_INT32 xTilt,
 			const Q_INT32 yTilt,
 			const float savedDist = -1);
+        void paintRect(const enumPaintOp paintOp,
+                          const QPoint &startPoint,
+                          const QPoint &endPoint,
+                          const Q_INT32 pressure);
+
+private:
+        void paintEllipsePixel (const enumPaintOp paintOp,
+                                bool invert,
+                                int xc, int yc, int x1, int y1, int x2, int y2,
+                                const Q_INT32 pressure);
+        void paintEllipseSymmetry (const enumPaintOp paintOp,
+                                   double ratio, bool invert,
+                                   int x, int y, int xc, int yc,
+                                   const Q_INT32 pressure);
+        void paintEllipseInternal (const enumPaintOp paintOp,
+                                   double ratio, bool invert,
+                                   int xc, int yc, int radius,
+                                   const Q_INT32 pressure);
+
+public:
+        void paintEllipse(const enumPaintOp paintOp,
+                          const QPoint &startPoint,
+                          const QPoint &endPoint,
+                          const Q_INT32 pressure);
 
 	// Draw a spot at pos using the currently set brush and color
 	void paintAt(const QPoint &pos,

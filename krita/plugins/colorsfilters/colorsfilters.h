@@ -32,7 +32,7 @@ public:
 	KisDesaturateFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
-	static inline QString name() { return "Desaturate"; };
+	static inline QString name() { return i18n("Desaturate"); };
 };
 
 class KisGammaCorrectionFilter : public KisPerChannelFilter {
@@ -40,7 +40,7 @@ public:
 	KisGammaCorrectionFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
-	static inline QString name() { return "Gamma adjustment"; };
+	static inline QString name() { return i18n("Gamma Adjustment"); };
 };
 
 class KisColorAdjustmentFilter : public KisPerChannelFilter {
@@ -48,7 +48,7 @@ public:
 	KisColorAdjustmentFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
-	static inline QString name() { return "Color adjustment"; };
+	static inline QString name() { return i18n("Color Adjustment"); };
 };
 
 class KisAutoContrast : public KisFilter {
@@ -56,7 +56,7 @@ public:
 	KisAutoContrast(KisView* view);
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
-	static inline QString name() { return "Auto contrast"; };
+	static inline QString name() { return i18n("Auto Contrast"); };
 };
 
 class ColorsFilters : public KParts::Plugin

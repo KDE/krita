@@ -506,12 +506,12 @@ KisPaintDeviceSP KisImage::activeDevice()
 
 const KisLayerSP KisImage::activeLayer() const
 {
-	return m_selection ? m_selection : m_activeLayer;
+	return m_selection ? static_cast<KisLayerSP>(m_selection) : m_activeLayer;
 }
 
 KisLayerSP KisImage::activeLayer()
 {
-	return m_selection ? m_selection : m_activeLayer;
+	return m_selection ? static_cast<KisLayerSP>(m_selection) : m_activeLayer;
 }
 
 KisLayerSP KisImage::activate(KisLayerSP layer)

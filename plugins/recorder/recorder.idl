@@ -1,0 +1,16 @@
+#ifndef __recorder_idl__
+#define __recorder_idl__
+
+#include <kom.idl>
+
+module MakroRecorder
+{
+	interface Recorder : KOM::Plugin
+	{
+		slot void play();
+		slot void start();
+		slot void stop();
+	};
+};
+
+#endif

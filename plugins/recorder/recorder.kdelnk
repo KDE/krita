@@ -1,0 +1,34 @@
+# KDE Config File
+[KDE Desktop Entry]
+Name=MakroRecorder
+Exec=makro_recorder --server
+Comment=Torben's Makro Recorder
+RepoID=IDL:KOM/PluginFactory:1.0,
+ActivationMode=shared
+Type=GUIPlugin
+Icon=unknown.xpm
+MiniIcon=unknown.xpm
+Interfaces=IDL:OpenParts/View:1.0,
+MenuEntries=Start,Stop,Play
+ToolBarEntries=Start,Stop,Play
+[Start]
+Icon=unknown.xpm
+MiniIcon=unknown.xpm
+Slot=start
+Menu=Extra
+Name=Start Makro Recording
+Name[de]=Starte Makro Aufzeichnung
+[Stop]
+Icon=unknown.xpm
+MiniIcon=unknown.xpm
+Slot=stop
+Menu=Extra
+Name=Stop Makro Recording
+Name[de]=Beende Makro Aufzeichnung
+[Play]
+Icon=unknown.xpm
+MiniIcon=unknown.xpm
+Slot=play
+Menu=Extra
+Name=Playback Makro
+Name[de]=Spiele Makro ab

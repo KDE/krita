@@ -37,7 +37,8 @@
 #include "kis_undo_adapter.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_colorspace_factory.h"
-#include "kis_iterators.h"
+#include "kis_iterators_quantum.h"
+#include "kis_iterators_pixel.h"
 
 namespace {
         class KisResizeDeviceCmd : public KNamedCommand {
@@ -978,5 +979,37 @@ KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionEnd(KisTileComman
         return KisIteratorLineQuantum( this, command, yend, xstart, xend);
 }
 
+KisIteratorLinePixel KisPaintDevice::iteratorPixelBegin(KisTileCommand* command)
+{
+        return KisIteratorLinePixel( this, command, 0);
+}
+KisIteratorLinePixel KisPaintDevice::iteratorPixelBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
+{
+        return KisIteratorLinePixel( this, command, ystart, xstart, xend);
+}
+KisIteratorLinePixel KisPaintDevice::iteratorPixelEnd(KisTileCommand* command)
+{
+        return KisIteratorLinePixel( this, command, height() - 1);
+}
+KisIteratorLinePixel KisPaintDevice::iteratorPixelEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
+{
+        return KisIteratorLinePixel( this, command, yend, xstart, xend);
+}
+KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionBegin(KisTileCommand* command)
+{
+        return KisIteratorLinePixel( this, command, 0);
+}
+KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
+{
+        return KisIteratorLinePixel( this, command, ystart,  xstart, xend);
+}
+KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionEnd(KisTileCommand* command)
+{
+        return KisIteratorLinePixel( this, command, height() - 1);
+}
+KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
+{
+        return KisIteratorLinePixel( this, command, yend, xstart, xend);
+}
 #include "kis_paint_device.moc"
 

@@ -37,8 +37,9 @@ class QPoint;
 class KoStore;
 class KisImage;
 class QWMatrix;
-class KisIteratorLineQuantum;
 class KisTileCommand;
+class KisIteratorLineQuantum;
+class KisIteratorLinePixel;
 
 /**
  * Class modelled on QPaintDevice.
@@ -215,6 +216,34 @@ public:
 	 */
 	KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command);
 	KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
+	
+		/** 
+	 * This function return an iterator which point on the first line of the
+	 * whole PaintDevice
+	 */
+	KisIteratorLinePixel iteratorPixelBegin(KisTileCommand* command);
+	KisIteratorLinePixel iteratorPixelBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart);
+
+	/**
+	 * This function return an iterator which point on the last line of the
+	 * whole PaintDevice
+	 */
+	KisIteratorLinePixel iteratorPixelEnd(KisTileCommand* command);
+	KisIteratorLinePixel iteratorPixelEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
+
+	/**
+	 * This function return an iterator which point on the first line of the
+	 * part of PaintDevice which is selected
+	 */
+	KisIteratorLinePixel iteratorPixelSelectionBegin(KisTileCommand* command);
+	KisIteratorLinePixel iteratorPixelSelectionBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart);
+
+	/**
+	 * This function return an iterator which point on the last line of the
+	 * part of PaintDevice which is selected
+	 */
+	KisIteratorLinePixel iteratorPixelSelectionEnd(KisTileCommand* command);
+	KisIteratorLinePixel iteratorPixelSelectionEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
 
 signals:
 
@@ -254,6 +283,8 @@ private:
 	CompositeOp m_compositeOp;
 	KisStrategyColorSpaceSP m_colorStrategy;
 };
+
+
 
 #endif // KIS_PAINT_DEVICE_H_
 

@@ -60,6 +60,8 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_vec.cc \
 	kis_rect.cc \
 	kis_iterators.cc \
+	kis_iterators_quantum.cc \
+	kis_iterators_pixel.cc \
 	kis_histogram.cc \
 	kis_plugin_registry.cc \
 	KRayonViewIface.cc \

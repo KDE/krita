@@ -17,38 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kdebug.h>
-
-#include "kis_global.h"
 #include "kis_iterators.h"
 
-KisIteratorQuantum::KisIteratorQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos, Q_INT32 nxpos) :
-	KisIteratorUnit<QUANTUM, KisIteratorQuantum, 1>( ndevice, command, nypos, nxpos)
+KisIteratorUnit::KisIteratorUnit( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos, Q_INT32 nxpos, Q_INT8 inc)
+		: m_device (ndevice),
+		  m_command (command), 
+		  m_ktm( m_device->data()),
+		  m_depth(::imgTypeDepth( m_device->typeWithoutAlpha() ) +1),
+		  m_ypos(nypos), 
+		  m_rownum(nypos / TILE_HEIGHT ), 
+		  m_ypos_intile( nypos % TILE_HEIGHT ),
+		  m_tilenum( m_ktm->ncols() * m_rownum + nxpos /  TILE_WIDTH ), 
+		  m_xintile( (nxpos % TILE_WIDTH ) * m_depth),
+		  m_tileNeedRefresh (true), 
+		  m_tileNeedRefreshRW(true),
+			m_inc(inc)
 {
-
-}
-
-
-KisIteratorLineQuantum::KisIteratorLineQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos,
-						Q_INT32 nxstart, Q_INT32 nxend) :
-	KisIteratorLine<KisIteratorQuantum>( ndevice, command, nypos, nxstart, nxend)
-{
-}
-
-KisIteratorQuantum KisIteratorLineQuantum::operator*()
-{
-	return KisIteratorQuantum( m_device, m_command, m_ypos, m_xstart );
-}
-KisIteratorLineQuantum::operator KisIteratorQuantum* ()
-{
-	return new KisIteratorQuantum( m_device, m_command, m_ypos, m_xstart );
-}
-
-KisIteratorQuantum KisIteratorLineQuantum::begin()
-{
-	return KisIteratorQuantum( m_device, m_command, m_ypos, m_xstart );
-}
-KisIteratorQuantum KisIteratorLineQuantum::end()
-{
-	return KisIteratorQuantum( m_device, m_command, m_ypos, m_xend );
 }

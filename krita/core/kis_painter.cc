@@ -58,7 +58,7 @@
 #include "kispixeldata.h"
 #include "kistile.h"
 #include "kistilemgr.h"
-#include "kis_iterators.h"
+#include "kis_iterators_pixel.h"
 
 KisPainter::KisPainter()
 {
@@ -928,19 +928,20 @@ void KisPainter::duplicateAt(const KisPoint &pos, const double pressure, const d
 	if( srcPoint.y() < 0)
 		srcPoint.setY(0);
 	
-	KisIteratorLineQuantum srcLit = srcdev->iteratorQuantumSelectionBegin( 0, sx, sx + sw - 1, sy);
-	KisIteratorLineQuantum dabLit = m_dab.data()->iteratorQuantumSelectionBegin( 0, sx, sx + sw - 1, sy);
-	KisIteratorLineQuantum srcLitend = srcdev->iteratorQuantumSelectionEnd( 0, sx, sx + sw - 1, sy + sh - 1);
-	KisIteratorLineQuantum devLit = m_device->iteratorQuantumSelectionBegin( m_transaction, srcPoint.x(), srcPoint.x() + sw - 1, srcPoint.y());
+	KisIteratorLinePixel srcLit = srcdev->iteratorPixelSelectionBegin( 0, sx, sx + sw - 1, sy);
+	KisIteratorLinePixel dabLit = m_dab.data()->iteratorPixelSelectionBegin( 0, sx, sx + sw - 1, sy);
+	KisIteratorLinePixel srcLitend = srcdev->iteratorPixelSelectionEnd( 0, sx, sx + sw - 1, sy + sh - 1);
+	KisIteratorLinePixel devLit = m_device->iteratorPixelSelectionBegin( m_transaction, srcPoint.x(), srcPoint.x() + sw - 1, srcPoint.y());
 	while ( srcLit <= srcLitend )
 	{
-		KisIteratorQuantum srcUit = *srcLit;
-		KisIteratorQuantum dabUit = *dabLit;
-		KisIteratorQuantum srcUitend = srcLit.end();
-		KisIteratorQuantum devUit = * devLit;
+		KisIteratorPixel srcUit = *srcLit;
+		KisIteratorPixel dabUit = *dabLit;
+		KisIteratorPixel srcUitend = srcLit.end();
+		KisIteratorPixel devUit = * devLit;
 		while( srcUit <= srcUitend )
 		{
 			m_device -> colorStrategy() -> computeDuplicatePixel( &srcUit, &dabUit, &devUit);
+			++srcUit; ++dabUit; ++devUit;
 		}
 		++srcLit; ++dabLit; ++devLit;
 	}

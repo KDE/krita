@@ -43,113 +43,29 @@
  * For instance :
  *    XXX
  */
-template< typename _Tp, typename _Tpu, int sizeOfTp = 1 >
 class KisIteratorUnit {
 
 public:
-	KisIteratorUnit( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos = 0, Q_INT32 nxpos = 0)
-		: m_device (ndevice),
-		  m_command (command), 
-		  m_ktm( m_device->data()),
-		  m_depth(::imgTypeDepth( m_device->typeWithoutAlpha() ) +1),
-		  m_ypos(nypos), 
-		  m_rownum(nypos / TILE_HEIGHT ), 
-		  m_ypos_intile( nypos % TILE_HEIGHT ),
-		  m_tilenum( m_ktm->ncols() * m_rownum + nxpos /  TILE_WIDTH ), 
-		  m_xintile( (nxpos % TILE_WIDTH ) * m_depth),
-		  m_tileNeedRefresh (true), 
-		  m_tileNeedRefreshRW(true) {
-
-//			kdDebug() << "nxpos=" << nxpos << " TILE_WIDTH=" <<TILE_WIDTH << " nxpos /  TILE_WIDTH=" << nxpos /  TILE_WIDTH << " m_ktm->ncols() * m_rownum=" << m_ktm->ncols() * m_rownum << " m_tilenum=" << m_tilenum << endl;
-	}
-
-	virtual ~KisIteratorUnit() {
-	}
+	KisIteratorUnit( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos = 0, Q_INT32 nxpos = 0, Q_INT8 inc = 1);
 
 public:
-	virtual _Tp operator*() = 0;
-
-	virtual  operator _Tp * ()  = 0;
-
-//	virtual _Tp* operator->() const = 0;
-
 	//Increment operator
-	inline KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& operator++()
-	{
-		return inc();
-	}
-	inline KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& inc()
-	{
-		Q_ASSERT( m_tile != 0 );
-		m_xintile+=sizeOfTp;
-		if( m_xintile >= m_tile->width() * m_depth )
-    	{
-			m_xintile =  0;
-			m_tilenum++;
-			m_tileNeedRefresh = true;
-			m_tileNeedRefreshRW = true;
-		}
-		return *this;
-	}
-
-	inline KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& operator--()
-	{
-		Q_ASSERT( m_tile != 0 );
-		m_xintile-=sizeOfTp;
-		if( m_xintile < 0 )
-		{
-			m_xintile =  m_tile->width() * m_depth - sizeOfTp;
-			m_tilenum--;
-			m_tileNeedRefresh = true;
-			m_tileNeedRefreshRW = true;
-		}
-		return *this;
-	}
-
+	inline KisIteratorUnit& operator++();
+	inline KisIteratorUnit& inc();
+	inline KisIteratorUnit& operator--();
 	/**
 	 * This function increments the position of the iterator by one pixel.
 	 */
-	inline void skipPixel() 
-	{
-		Q_ASSERT( m_tile != 0 );
-		m_xintile += m_depth;
-		if( m_xintile >= m_tile->width() * m_depth )
-		{
-			m_xintile -= m_tile->width() * m_depth;
-			m_tilenum++;
-			m_tileNeedRefresh = true;
-			m_tileNeedRefreshRW = true;
-		}
-	}
-
-	// Use for debugging purpose
-	void print_pos() 
-	{
-		kdDebug() << "m_tilenum=" << m_tilenum << " m_xintile=" << m_xintile << endl;
-	}
-
-        // Comparison operators
-	bool operator<(const KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& __rhs) const
-	{ 
-		return m_tilenum < __rhs.m_tilenum || (m_tilenum == __rhs.m_tilenum && m_xintile < __rhs.m_tilenum); 
-	}
-
-	bool operator<=(const KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& __rhs) const
-	{
-		if( m_tilenum == __rhs.m_tilenum ) { 
-			return m_xintile <= __rhs.m_xintile; 
-		}
-		
-		return m_tilenum < __rhs.m_tilenum;
-	}
-	
-	bool operator==(const KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& __rhs) const 
-	{ 
-		return m_tilenum == __rhs.m_tilenum && m_xintile == __rhs.m_xintile; 
-	}
-
+	inline void skipPixel();
+  // Comparison operators
+	inline bool operator<(const KisIteratorUnit& __rhs) const;
+	inline bool operator<=(const KisIteratorUnit& __rhs) const;
+	inline bool operator==(const KisIteratorUnit& __rhs) const;
 protected:
-
+	//Data access operators
+	operator QUANTUM () ;
+	operator QUANTUM*();
+protected:
 	KisPaintDeviceSP m_device;
 	KisTileCommand* m_command;
 	KisTileMgrSP m_ktm;
@@ -157,6 +73,9 @@ protected:
 	Q_INT32 m_tilenum, m_xintile;
 	bool m_tileNeedRefresh, m_tileNeedRefreshRW;;
 	KisTileSP m_tile;
+private:
+	Q_INT8 m_inc;
+	QUANTUM* m_data;
 };
 
 
@@ -179,7 +98,6 @@ public:
 		m_xend( ( nxend < 0 ) ? ndevice->width()-1 : nxend ),
 		m_ypos( nypos ), m_command( command )
 	{
-//			kdDebug() << "nxend=" << nxend << " m_xend=" << m_xend << " nxstart=" << nxstart << " m_xstart=" << m_xstart << endl;
 	}
 	
 	virtual ~KisIteratorLine()
@@ -222,56 +140,71 @@ protected:
 };
 
 
-
-/**
- * XXX: document
- */
-class KisIteratorQuantum : public KisIteratorUnit<QUANTUM, KisIteratorQuantum,1>
+inline KisIteratorUnit& KisIteratorUnit::operator++()
 {
-public:
-	KisIteratorQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos = 0, Q_INT32 nxpos = 0);
-public:
-	virtual QUANTUM operator*() ;
-	virtual operator QUANTUM * ()  ;
-//		virtual QUANTUM* operator->() const;
-	QUANTUM* m_data;
-	;
-};
-
-
-/**
- * XXX: document
- */
-class KisIteratorLineQuantum : public KisIteratorLine<KisIteratorQuantum>
+	return inc();
+}
+inline KisIteratorUnit& KisIteratorUnit::inc()
 {
-public:
-	KisIteratorLineQuantum( KisPaintDeviceSP ndevice, 
-				KisTileCommand* command, 
-				Q_INT32 nypos = 0,
-				Q_INT32 nxstart = -1, 
-				Q_INT32 nxend = -1);
-public:
-	virtual KisIteratorQuantum operator*();
-	virtual operator KisIteratorQuantum* ();
-	virtual KisIteratorQuantum begin();
-	virtual KisIteratorQuantum end();
-};
-
-inline QUANTUM KisIteratorQuantum::operator*()
-{
-	if( m_tileNeedRefresh && m_tileNeedRefreshRW )
-	{
-		if( !(m_tile = (m_ktm->tile( m_tilenum, TILEMODE_READ) ) ) )
+	Q_ASSERT( m_tile != 0 );
+	m_xintile+= m_inc;
+	if( m_xintile >= m_tile->width() * m_depth )
 		{
-			return 0;
-		}
-		m_data =  m_tile->data(0, m_ypos_intile);
-		m_tileNeedRefresh = false;
+		m_xintile =  0;
+		m_tilenum++;
+		m_tileNeedRefresh = true;
+		m_tileNeedRefreshRW = true;
 	}
-	return *(m_data + m_xintile);
+	return *this;
 }
 
-inline KisIteratorQuantum::operator QUANTUM* ()
+inline KisIteratorUnit& KisIteratorUnit::operator--()
+{
+	Q_ASSERT( m_tile != 0 );
+	m_xintile-=m_inc;
+	if( m_xintile < 0 )
+	{
+		m_xintile =  m_tile->width() * m_depth - m_inc;
+		m_tilenum--;
+		m_tileNeedRefresh = true;
+		m_tileNeedRefreshRW = true;
+	}
+	return *this;
+}
+/**
+	* This function increments the position of the iterator by one pixel.
+	*/
+inline void KisIteratorUnit::skipPixel() 
+{
+	Q_ASSERT( m_tile != 0 );
+	m_xintile += m_depth;
+	if( m_xintile >= m_tile->width() * m_depth )
+	{
+		m_xintile -= m_tile->width() * m_depth;
+		m_tilenum++;
+		m_tileNeedRefresh = true;
+		m_tileNeedRefreshRW = true;
+	}
+}
+// Comparison operators
+inline bool KisIteratorUnit::operator<(const KisIteratorUnit& __rhs) const
+{ 
+	return m_tilenum < __rhs.m_tilenum || (m_tilenum == __rhs.m_tilenum && m_xintile < __rhs.m_tilenum); 
+}
+inline bool KisIteratorUnit::operator<=(const KisIteratorUnit& __rhs) const
+{
+	if( m_tilenum == __rhs.m_tilenum ) { 
+		return m_xintile <= __rhs.m_xintile; 
+	}
+	
+	return m_tilenum < __rhs.m_tilenum;
+}
+inline bool KisIteratorUnit::operator==(const KisIteratorUnit& __rhs) const 
+{ 
+	return m_tilenum == __rhs.m_tilenum && m_xintile == __rhs.m_xintile; 
+}
+
+inline KisIteratorUnit::operator QUANTUM*()
 {
 	if( m_tileNeedRefreshRW )
 	{
@@ -285,6 +218,21 @@ inline KisIteratorQuantum::operator QUANTUM* ()
 		m_tileNeedRefreshRW = false;
 	}
 	return m_data + m_xintile;
+}
+
+
+inline KisIteratorUnit::operator QUANTUM ()
+{
+	if( m_tileNeedRefresh && m_tileNeedRefreshRW )
+	{
+		if( !(m_tile = (m_ktm->tile( m_tilenum, TILEMODE_READ) ) ) )
+		{
+			return 0;
+		}
+		m_data =  m_tile->data(0, m_ypos_intile);
+		m_tileNeedRefresh = false;
+	}
+	return *(m_data + m_xintile);
 }
 
 

@@ -164,8 +164,8 @@ public:
         Q_INT32 width() const;
         Q_INT32 height() const;
 
-        void setClip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
-        QRect clip() const;
+	QRect clip() const;
+        void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
         void setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh);
 
         bool cmap(KoColorMap& cm);
@@ -381,7 +381,7 @@ inline const bool KisPaintDevice::visible() const
         return m_visible;
 }
 
-inline void KisPaintDevice::visible(bool v)
+inline void KisPaintDevice::setVisible(bool v)
 {
         if (m_visible != v) {
                 m_visible = v;

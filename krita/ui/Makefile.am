@@ -1,6 +1,6 @@
 KDE_OPTIONS = nofinal
 
-INCLUDES = -I$(srcdir)/../core -I$(srcdir)/../core/compositeop -I$(srcdir)/../core/color_strategy -I$(srcdir)/../core/tiles $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
+INCLUDES = -I ${srcdir}/dialogs -I$(srcdir)/../core -I$(srcdir)/../core/compositeop -I$(srcdir)/../core/color_strategy -I$(srcdir)/../core/tiles $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
 
 noinst_LTLIBRARIES = libkisui.la
 libkisui_la_LIBADD = ./labels/libkislabel.la ./dialogs/libkisdialogs.la ./widgets/libkiswidgets.la

@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "klocale.h"
+
 #include "kis_convolution_filter.h"
 
 #include "kis_painter.h"
@@ -32,7 +34,7 @@ void KisConvolutionFilter::process(KisPaintDeviceSP device, KisFilterConfigurati
 	kdDebug() << device << endl;
 	KisPainter painter( device );
 	kdDebug() << device << endl;
-	painter.beginTransaction(command);
+	painter.beginTransaction(i18n("convolve"));
 	KisMatrix3x3* amatrixes = matrixes();
 	painter.applyConvolutionColorTransformation(amatrixes);
 	delete amatrixes;

@@ -12,7 +12,7 @@ kritapics_DATA = deletelayer.png lowerlayer.png newlayer.png raiselayer.png \
 # directory for pixmaps
 kritapicsdir = $(kde_datadir)/krita/pics
 
-#KDE_ICON = krita
+KDE_ICON = krita
 
 
 

@@ -135,7 +135,7 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
 			m_painter -> setOpacity(m_opacity);
 			m_painter -> setCompositeOp(m_compositeOp);
 
-			m_painter -> paintLine(PAINTOP_BRUSH, m_startPos, m_endPos, PRESSURE_DEFAULT, 0, 0);
+			m_painter -> paintLine(PAINTOP_BRUSH, m_startPos, PRESSURE_DEFAULT, 0, 0, m_endPos, PRESSURE_DEFAULT, 0, 0);
 			m_currentImage -> notify( m_painter -> dirtyRect() );
 
 			/* remove remains of the line drawn while moving */

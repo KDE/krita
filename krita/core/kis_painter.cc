@@ -519,10 +519,13 @@ QRect KisPainter::dirtyRect() {
 
 double KisPainter::paintLine(const enumPaintOp paintOp,
 			     const KisPoint & pos1,
+			     const double pressure1,
+			     const double xTilt1,
+			     const double yTilt1,
 			     const KisPoint & pos2,
-			     const double pressure,
-			     const double xTilt,
-			     const double yTilt,
+			     const double pressure2,
+			     const double xTilt2,
+			     const double yTilt2,
 			     const double inSavedDist)
 {
 	if (!m_device) return 0;
@@ -534,16 +537,16 @@ double KisPainter::paintLine(const enumPaintOp paintOp,
 		// continuation of an existing line, so always paint it.
 		switch(paintOp) {
 		case PAINTOP_BRUSH:
-			paintAt(pos1, pressure, xTilt, yTilt);
+			paintAt(pos1, pressure1, xTilt1, yTilt1);
 			break;
 		case PAINTOP_ERASE:
-			eraseAt(pos1, pressure, xTilt, yTilt);
+			eraseAt(pos1, pressure1, xTilt1, yTilt1);
 			break;
 		case PAINTOP_DUPLICATE:
-			duplicateAt(pos1, pressure, xTilt, yTilt);
+			duplicateAt(pos1, pressure1, xTilt1, yTilt1);
 			break;
 		case PAINTOP_PEN:
-			penAt(pos1, pressure, xTilt, yTilt);
+			penAt(pos1, pressure1, xTilt1, yTilt1);
 			break;
 		default:
 			kdDebug() << "Paint operation not implemented yet.\n";
@@ -551,8 +554,10 @@ double KisPainter::paintLine(const enumPaintOp paintOp,
 		savedDist = 0;
 	}
 
-	double xSpacing = m_brush -> xSpacing(pressure);
-	double ySpacing = m_brush -> ySpacing(pressure);
+	// XXX: The spacing should vary as the pressure changes along the line.
+	// This is a quick simplification.
+	double xSpacing = m_brush -> xSpacing((pressure1 + pressure2) / 2);
+	double ySpacing = m_brush -> ySpacing((pressure1 + pressure2) / 2);
 
 	if (xSpacing <= DBL_EPSILON) {
 		xSpacing = 1;
@@ -605,7 +610,18 @@ double KisPainter::paintLine(const enumPaintOp paintOp,
 			step += dragVec * spacing;
 		}
 
-		KisPoint p = (start + KisVector2D(step.x() / xScale, step.y() / yScale)).toKisPoint();
+		KisPoint p(start.x() + (step.x() / xScale), start.y() + (step.y() / yScale));
+
+		double distanceMoved = step.length();
+		double t = 0;
+
+		if (newDist > DBL_EPSILON) {
+			t = distanceMoved / newDist;
+		}
+
+		double pressure = (1 - t) * pressure1 + t * pressure2;
+		double xTilt = (1 - t) * xTilt1 + t * xTilt2;
+		double yTilt = (1 - t) * yTilt1 + t * yTilt2;
 
 		switch(paintOp) {
 		case PAINTOP_BRUSH:
@@ -652,19 +668,22 @@ void KisPainter::paintPolyline (const enumPaintOp paintOp,
 
     for (int i = index; i < index + numPoints - 1; i++)
     {
-        paintLine (paintOp, points [index], points [index + 1],
+        paintLine (paintOp, points [index], 0/*pressure*/, 0, 0, points [index + 1],
                    0/*pressure*/, 0, 0);
     }
 }
 
 double KisPainter::paintBezierCurve(const enumPaintOp paintOp,
 				    const KisPoint &pos1,
+				    const double pressure1,
+				    const double xTilt1,
+				    const double yTilt1,
 				    const KisPoint &control1,
 				    const KisPoint &control2,
 				    const KisPoint &pos2,
-				    const double pressure,
-				    const double xTilt,
-				    const double yTilt,
+				    const double pressure2,
+				    const double xTilt2,
+				    const double yTilt2,
 				    const double savedDist)
 {
 	double newDistance;
@@ -672,7 +691,7 @@ double KisPainter::paintBezierCurve(const enumPaintOp paintOp,
 	double d2 = pointToLineDistance(control2, pos1, pos2);
 
 	if (d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD) {
-		newDistance = paintLine(paintOp, pos1, pos2, pressure, xTilt, yTilt, savedDist);
+		newDistance = paintLine(paintOp, pos1, pressure1, xTilt1, yTilt1, pos2, pressure2, xTilt2, yTilt2, savedDist);
 	} else {
 		// Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508
 		KisVector2D p1 = pos1;
@@ -690,8 +709,12 @@ double KisPainter::paintBezierCurve(const enumPaintOp paintOp,
 		KisVector2D l1 = p1;
 		KisVector2D r4 = p4;
 
-		newDistance = paintBezierCurve(paintOp, l1.toKisPoint(), l2.toKisPoint(), l3.toKisPoint(), l4.toKisPoint(), pressure, xTilt, yTilt, savedDist);
-		newDistance = paintBezierCurve(paintOp, r1.toKisPoint(), r2.toKisPoint(), r3.toKisPoint(), r4.toKisPoint(), pressure, xTilt, yTilt, newDistance);
+		double midPressure = (pressure1 + pressure2) / 2;
+		double midXTilt = (xTilt1 + xTilt2) / 2;
+		double midYTilt = (yTilt1 + yTilt2) / 2;
+
+		newDistance = paintBezierCurve(paintOp, l1.toKisPoint(), pressure1, xTilt1, yTilt1, l2.toKisPoint(), l3.toKisPoint(), l4.toKisPoint(), midPressure, midXTilt, midYTilt, savedDist);
+		newDistance = paintBezierCurve(paintOp, r1.toKisPoint(), midPressure, midXTilt, midYTilt, r2.toKisPoint(), r3.toKisPoint(), r4.toKisPoint(), pressure2, xTilt2, yTilt2, newDistance);
 	}
 
 	return newDistance;
@@ -701,31 +724,47 @@ void KisPainter::paintRect (const enumPaintOp paintOp,
                             const KisPoint &startPoint,
                             const KisPoint &endPoint,
                             const double pressure,
-			    const double /*xTilt*/,
-			    const double /*yTilt*/)
+			    const double xTilt,
+			    const double yTilt)
 {
     KoRect normalizedRect = KisRect (startPoint, endPoint).normalize ();
 
     paintLine (paintOp,
                normalizedRect.topLeft (),
+	       pressure,
+	       xTilt,
+	       yTilt,
                normalizedRect.topRight (),
                pressure,
-               0, 0);
+               xTilt, 
+	       yTilt);
     paintLine (paintOp,
                normalizedRect.topRight (),
+	       pressure,
+	       xTilt,
+	       yTilt,
                normalizedRect.bottomRight (),
                pressure,
-               0, 0);
+               xTilt,
+	       yTilt);
     paintLine (paintOp,
                normalizedRect.bottomRight (),
+	       pressure,
+	       xTilt,
+	       yTilt,
                normalizedRect.bottomLeft (),
                pressure,
-               0, 0);
+               xTilt,
+	       yTilt);
     paintLine (paintOp,
                normalizedRect.bottomLeft (),
+	       pressure,
+	       xTilt,
+	       yTilt,
                normalizedRect.topLeft (),
                pressure,
-               0, 0);
+               xTilt,
+	       yTilt);
 }
 
 
@@ -833,24 +872,24 @@ void KisPainter::paintEllipse (const enumPaintOp paintOp,
 	KisPoint p2(center.x() - lx, r.top());
 	KisPoint p3(center.x(), r.top());
 
-	double distance = paintBezierCurve(paintOp, p0, p1, p2, p3, pressure, xTilt, yTilt);
+	double distance = paintBezierCurve(paintOp, p0, pressure, xTilt, yTilt, p1, p2, p3, pressure, xTilt, yTilt);
 
 	KisPoint p4(center.x() + lx, r.top());
 	KisPoint p5(r.right(), center.y() - ly);
 	KisPoint p6(r.right(), center.y());
 
-	distance = paintBezierCurve(paintOp, p3, p4, p5, p6, pressure, xTilt, yTilt, distance);
+	distance = paintBezierCurve(paintOp, p3, pressure, xTilt, yTilt, p4, p5, p6, pressure, xTilt, yTilt, distance);
 
 	KisPoint p7(r.right(), center.y() + ly);
 	KisPoint p8(center.x() + lx, r.bottom());
 	KisPoint p9(center.x(), r.bottom());
 
-	distance = paintBezierCurve(paintOp, p6, p7, p8, p9, pressure, xTilt, yTilt, distance);
+	distance = paintBezierCurve(paintOp, p6, pressure, xTilt, yTilt, p7, p8, p9, pressure, xTilt, yTilt, distance);
 
 	KisPoint p10(center.x() - lx, r.bottom());
 	KisPoint p11(r.left(), center.y() + ly);
 
-	paintBezierCurve(paintOp, p9, p10, p11, p0, pressure, xTilt, yTilt, distance);
+	paintBezierCurve(paintOp, p9, pressure, xTilt, yTilt, p10, p11, p0, pressure, xTilt, yTilt, distance);
 #else
     QRect normalizedRect = QRect (startPoint.floorQPoint(), endPoint.floorQPoint()).normalize ();
 
@@ -865,7 +904,9 @@ void KisPainter::paintEllipse (const enumPaintOp paintOp,
     if (x1 == x2 || y1 == y2)
     {
         paintLine (paintOp,
-                   normalizedRect.topLeft (), normalizedRect.bottomLeft (),
+                   normalizedRect.topLeft (),
+		   pressure, 0, 0,
+		   normalizedRect.bottomLeft (),
                    pressure, 0, 0);
         return;
     }

@@ -140,12 +140,15 @@ public:
 	 * because the currenlty set brush has a spacing greater than that distance.
 	 */
 	double paintLine(const enumPaintOp paintOp,
-			const KisPoint &pos1,
-			const KisPoint &pos2,
-			const double pressure,
-			const double xTilt,
-			const double yTilt,
-			const double savedDist = -1);
+			 const KisPoint &pos1,
+			 const double pressure1,
+			 const double xTilt1,
+			 const double yTilt1,
+			 const KisPoint &pos2,
+			 const double pressure2,
+			 const double xTilt2,
+			 const double yTilt2,
+			 const double savedDist = -1);
 	/**
 	 * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.
 	 * If savedDist is less than zero, the brush is painted at pos1 before being
@@ -155,12 +158,15 @@ public:
 	 */
 	double paintBezierCurve(const enumPaintOp paintOp,
 				const KisPoint &pos1,
+				const double pressure1,
+				const double xTilt1,
+				const double yTilt1,
 				const KisPoint &control1,
 				const KisPoint &control2,
 				const KisPoint &pos2,
-				const double pressure,
-				const double xTilt,
-				const double yTilt,
+				const double pressure2,
+				const double xTilt2,
+				const double yTilt2,
 				const double savedDist = -1);
         void paintRect(const enumPaintOp paintOp,
 		       const KisPoint &startPoint,

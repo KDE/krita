@@ -65,7 +65,7 @@ void KisToolPen::paintLine(const KisPoint & pos1,
 			   const double xtilt2,
 			   const double ytilt2)
 {
-	m_dragDist = painter() -> paintLine(PAINTOP_PEN, pos1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
+	m_dragDist = painter() -> paintLine(PAINTOP_PEN, pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
 }
 
 void KisToolPen::setup(KActionCollection *collection)

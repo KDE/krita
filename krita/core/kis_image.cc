@@ -288,8 +288,10 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 	m_height = h;
 	m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
 	m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
-	m_bkg = new KisBackground(this, m_width, m_height);
-	m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
+	//m_bkg = new KisBackground(this, m_width, m_height);
+	//m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
+	m_bkg -> resize(w, h);
+	m_projection -> resize(w, h);
 	invalidate();
 }
 
@@ -315,6 +317,12 @@ void KisImage::scale(double sx, double sy)
 	}
 
 	// resize(w, h);
+	m_width = w;
+	m_height = h;
+	// Scale projection
+	m_projection -> scale(sx, sy);
+
+	invalidate();
 }
 
 enumImgType KisImage::imgType() const

@@ -33,7 +33,6 @@
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kispixeldata.h"
-#include "kis_layer.h"
 #include "kis_image_magick_converter.h"
 
 namespace {

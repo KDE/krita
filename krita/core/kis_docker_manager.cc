@@ -21,7 +21,6 @@
 #include <qclipboard.h>
 #include <qdockwindow.h>
 #include <qwidget.h>
-#include <qtoolbox.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -65,7 +64,7 @@ KisDockerManager::KisDockerManager(KisView * view, KActionCollection * ac)
 {
 	m_tabs = new KisGenericRegistry<QWidget*>();
 	m_dockWindows = new KisGenericRegistry<KisDockFrameDocker*>();
-	m_toolBoxes = new KisGenericRegistry<QToolBox*>();
+	m_toolBoxes = new KisGenericRegistry<KisPaintBox*>();
 	m_sliders = new KisGenericRegistry<KoTabbedToolDock*>();
 
 	// XXX: Old way, moved from KisView
@@ -107,17 +106,46 @@ KisDockerManager::~KisDockerManager()
 
 }
 
-void KisDockerManager::addDockerTab(QWidget * tab, const QString & docker, enumDockerStyle docktype)
+void KisDockerManager::addDockerTab(QWidget * tab, const KisID & docker, enumDockerStyle docktype)
 {
 	m_tabs -> add(KisID(tab -> name(), tab -> caption()), tab);
 	
 	if (docktype == DOCKER_DOCKER) {
+		if (m_dockWindows -> exists(docker)) {
+			KisDockFrameDocker * d = m_dockWindows -> get(docker);
+			d -> plug(tab);
+		}
+		else {
+			KisDockFrameDocker * d = new KisDockFrameDocker(m_view);
+			d -> setCaption(docker.name());
+			m_dockWindows -> add(docker, d);
+			d -> plug(tab);
+		}
 	}
 	else if (docktype == DOCKER_SLIDER) {
+		if (m_sliders -> exists(docker)) {
+			KoTabbedToolDock * d = m_sliders -> get(docker);
+			d -> plug(tab);
+		}
+		else {
+			KoTabbedToolDock * d = new KoTabbedToolDock(m_view);
+			d -> setCaption(docker.name());
+			m_sliders -> add(docker, d);
+			d -> plug(tab);
+		}
 	}
 	else if (docktype == DOCKER_TOOLBOX) {
+		if (m_toolBoxes -> exists(docker)) {
+			KisPaintBox * d = m_toolBoxes -> get(docker);
+			d -> plug(tab);
+		}
+		else {
+			KisPaintBox * d = new KisPaintBox(m_view);
+			d -> setCaption(docker.name());
+			m_toolBoxes -> add(docker, d);
+			d -> plug(tab);
+		}
 	}
-	
 }
 
 void KisDockerManager::unsetToolOptionWidget(KisTool * oldTool)

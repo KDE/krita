@@ -52,14 +52,21 @@ Menus
 Selections
 
 * On change to a layer without a selection, do not show selection.
-* Filters generally work on the selection rect, not on just the
-  selected pixels.
+* Select freehand (drawing a shape and selecting the contents) does not work
+* Magic wand does not work
+* Select by color(range) does not work
+* Other selection menu options are not implemented either, except for 
+  invert.
+* The shape tools should (with filled as default) also be available as 
+  selection tools.
   
+Gradients
+
+* Selecting an autogradient should update the control box
 
 Painting
 
-* Painting should check image borders, because the current situation
-  creates way big layers with just a dash of the mouse.
+* The shapes tools should offer a filled shape option
 
 Color models
 
@@ -77,3 +84,10 @@ Flatten
 Filters
 
 * Autocontrast does not use the progress bar and is not cancelable.
+
+Import/Export
+
+* The image magick build should be ported to the fileformat framework
+  and put in its own plugin (KisFileFormat, KisFileFormatRegistry)
+* The image magick plugin should use KisAnnotation to preserve image
+  data on roundtrips.

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>WdgRotateImage</class>
 <widget class="QWidget">
     <property name="name">
@@ -37,9 +37,6 @@
                     <property name="text">
                         <string>90 &amp;degrees</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
@@ -48,9 +45,6 @@
                     <property name="text">
                         <string>180 d&amp;egrees</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+E</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
@@ -58,9 +52,6 @@
                     </property>
                     <property name="text">
                         <string>270 de&amp;grees</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+G</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -77,9 +68,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Custom:</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+C</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>
@@ -179,9 +167,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Update</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+U</string>
                     </property>
                 </widget>
             </vbox>
@@ -293,9 +278,6 @@
                     <property name="text">
                         <string>C&amp;lockwise</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+L</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -306,9 +288,6 @@
                     </property>
                     <property name="text">
                         <string>Cou&amp;nter-clockwise</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
                     </property>
                 </widget>
             </grid>

@@ -23,8 +23,8 @@ class KisTool;
 
 class KisToolControllerInterface {
 public:
-	KisToolControllerInterface();
-	virtual ~KisToolControllerInterface();
+	KisToolControllerInterface() {};
+	virtual ~KisToolControllerInterface() {};
 
 public:
 	virtual void setCurrentTool(KisTool *tool) = 0;

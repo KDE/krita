@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>WdgColorSettings</class>
 <widget class="QWidget">
     <property name="name">
@@ -266,9 +266,6 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
                             </property>
                             <property name="text">
                                 <string>&amp;Relative colorimetric</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+R</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Within and outside gamut; same as Absolute

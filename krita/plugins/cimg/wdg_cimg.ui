@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>WdgCImg</class>
 <widget class="QWidget">
     <property name="name">
@@ -25,9 +25,6 @@
             </property>
             <property name="text">
                 <string>&amp;Refresh preview</string>
-            </property>
-            <property name="accel">
-                <string>Alt+R</string>
             </property>
         </widget>
         <widget class="QLabel" row="0" column="1" rowspan="1" colspan="2">

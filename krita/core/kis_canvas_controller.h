@@ -31,8 +31,8 @@ class KisPoint;
 
 class KisCanvasControllerInterface {
 public:
-	KisCanvasControllerInterface();
-	virtual ~KisCanvasControllerInterface();
+	KisCanvasControllerInterface() {};
+	virtual ~KisCanvasControllerInterface() {};
 
 public:
 	virtual QWidget *canvas() const = 0;

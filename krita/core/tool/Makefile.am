@@ -11,13 +11,9 @@ noinst_LTLIBRARIES = libkistool.la
 libkistool_la_SOURCES =  \
 	kis_tool.cc \
 	kis_tool_registry.cc \
-	kis_tool_controller.cc \
 	kis_tool_paint.cc \
 	kis_tool_freehand.cc \
 	kis_tool_non_paint.cc
-
-noinst_HEADERS = \
-	kis_tool_controller.h
 
 libkistool_la_METASOURCES = AUTO
 

@@ -34,7 +34,6 @@ class KisDockFrameDocker;
 class KoTabbedToolDock;
 class KoToolDockManager;
 class QWidget;
-class QToolBox;
 class KisTool;
 class KisPattern;
 class KisBrush;
@@ -62,6 +61,20 @@ class KisResourceMediator;
  *
  * There are three kinds of dockers: sliding dockers, shading
  * dockers and toolboxes.
+ *
+ * Tabs are created by calling addDockerTab with a widget (the tab)
+ * and a KisID (a combination of language-independent identifying
+ * string and a caption). If there is already a docker with the
+ * identifying string, then the tab is added to that docker,
+ * otherwise a new docker is created.
+ *
+ * On application shutdown, the configuration is saved. Next time
+ * on startup, if a tab is added, we first look in the saved configuation,
+ * and if a tab and docker is present with the specified identifying
+ * string, then we restore that tab in that place, otherwise in the
+ * specified place.
+ *
+ * XXX: for post 1.4: make sure we can drag & drop widgets.
  */
 class KRITACORE_EXPORT KisDockerManager : public QObject {
 
@@ -72,7 +85,7 @@ public:
 	KisDockerManager(KisView * view, KActionCollection * ac);
 	virtual ~KisDockerManager();
 
-	void addDockerTab(QWidget * tab, const QString & docker, enumDockerStyle docktype);
+	void addDockerTab(QWidget * tab, const KisID & docker, enumDockerStyle docktype);
 
 	void setToolOptionWidget(KisTool * oldTool, KisTool * newTool);
 	void unsetToolOptionWidget(KisTool * oldTool);
@@ -82,7 +95,7 @@ private:
 
 	KisGenericRegistry<QWidget*> * m_tabs;
 	KisGenericRegistry<KisDockFrameDocker*> * m_dockWindows;
-	KisGenericRegistry<QToolBox*> * m_toolBoxes;
+	KisGenericRegistry<KisPaintBox*> * m_toolBoxes;
 	KisGenericRegistry<KoTabbedToolDock*> * m_sliders;
 
 	KisView * m_view;

@@ -70,7 +70,6 @@ public:
 
 protected:
 	void notifyModified() const;
-	KisCanvasSubject* canvasSubject();
 
 protected slots:
 	virtual void activate();
@@ -82,11 +81,6 @@ protected:
 	KisCanvasSubject *m_subject;
 	QString m_name;
 };
-
-inline KisCanvasSubject* KisToolPaint::canvasSubject()
-{
-	return m_subject;
-}
 
 #endif // KIS_TOOL_PAINT_H_
 

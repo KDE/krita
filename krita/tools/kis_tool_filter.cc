@@ -88,7 +88,7 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 	m_cbFilter = new QComboBox(m_optWidget);
 	QLabel* lbFilter = new QLabel(i18n("Filter : "), m_optWidget);
 
-	m_cbFilter ->insertStringList( canvasSubject() ->filterList() );
+	m_cbFilter ->insertStringList( m_subject ->filterList() );
 	
 	m_optionLayout = new QGridLayout(m_optWidget, 3, 2);
 
@@ -110,7 +110,7 @@ QWidget* KisToolFilter::optionWidget()
 void KisToolFilter::changeFilter( const QString & string )
 {
 	kdDebug() << "KisToolFilter::changeFilter : change to " << string << endl;
-	m_filter =  canvasSubject() -> filterGet( string );
+	m_filter =  m_subject -> filterGet( string );
 	Q_ASSERT(m_filter != 0);
 	if( m_filterConfigurationWidget != 0 )
 	{

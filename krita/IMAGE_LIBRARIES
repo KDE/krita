@@ -220,7 +220,7 @@ Disadvantages:
 	- Development seems to have stopped in 2000
 
 
-Antigrain (http://www.antigrain.com/)
+* Antigrain (http://www.antigrain.com/)
 
 Antigrain is a graphics lib that specializes in high-quality anti-aliasing. It can be 
 useful to mine for algorithms, but is mainly a library to render vector data to bitmaps,
@@ -237,3 +237,21 @@ Disadvantages:
 	- Not a complete 2D library
 	- self-admittedly complex and hard to use.
 	- No support for greater bit-depths.
+
+* The Visualization Toolkit (VTK, http://public.kitware.com/VTK/)
+
+A very big C++ library for 2d and 3d image processing and visualisation. It's
+too big to easily evaluate for me.
+
+Advantages
+	
+	- It is used in other Qt applications, like Julius
+	- Probably very good
+
+Disadvantages
+
+	- The book is very expensive
+	- Uses its own make equivalent, CMake
+	- Very large
+
+* Java Advanced Imaging

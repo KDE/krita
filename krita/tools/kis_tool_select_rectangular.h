@@ -1,4 +1,6 @@
 /*
+ *  kis_tool_select_rectangular.h - part of Krita
+ *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
  *
@@ -17,7 +19,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_TOOL_SELECT_RECTANGULAR_H_
+#ifndef KIS_TOOL_SELECT_RECTANGULAR_H_
 #define KIS_TOOL_SELECT_RECTANGULAR_H_
 
 #include <qpoint.h>
@@ -33,10 +35,8 @@ public:
 	KisToolSelectRectangular();
 	virtual ~KisToolSelectRectangular();
 
-public:
 	virtual void update(KisCanvasSubject *subject);
 
-public:
 	virtual void setup(KActionCollection *collection);
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);

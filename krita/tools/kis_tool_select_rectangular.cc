@@ -1,4 +1,6 @@
 /*
+ *  kis_tool_select_rectangular.cc -- part of Krita
+ *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *                2001 John Califf <jcaliff@compuzone.net>
  *                2002 Patrick Julien <freak@codepimps.org>
@@ -18,6 +20,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+
 #include <qpainter.h>
 #include <qpen.h>
 
@@ -25,6 +28,7 @@
 #include <kaction.h>
 #include <kcommand.h>
 #include <klocale.h>
+
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"

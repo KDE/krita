@@ -26,19 +26,11 @@
 #include "kis_tool.h"
 #include "kis_tool_paint.h"
 
-struct fillinfo
-{
-   int left;
-   int right;
-   int top;
-   int bottom;
-   unsigned char o_r, o_g, o_b, r, g, b;
-};
-
-struct fillpixelinfo
-{
-   int y, xl, xr, dy;
-};
+class KisPainter;
+class QWidget;
+class QLabel;
+class IntegerWidget;
+class KisCmbComposite;
 
 class KisToolFill : public KisToolPaint {
 
@@ -51,36 +43,36 @@ public:
 	virtual ~KisToolFill();
   
 	virtual void setup(KActionCollection *collection);
+	virtual void update(KisCanvasSubject *subject);
 
 	virtual void mousePress(QMouseEvent*); 
 
 	bool flood(int startX, int startY);
       
-protected:
-	// from gpaint
-	int is_old_pixel_value(struct fillinfo *info, int x, int y);  
-	void set_new_pixel_value(struct fillinfo *info, int x, int y);      
-	void flood_fill(struct fillinfo *info, int x, int y);
-	void seed_flood_fill(int x, int y, const QRect& frect);    
+	virtual QWidget* createoptionWidget(QWidget* parent);
+	virtual QWidget* optionWidget();
 
-	// new colors (desired)
-	int nRed;
-	int nGreen;
-	int nBlue;
+public slots:
+	virtual void slotSetThreshold(int);
+	virtual void slotSetCompositeMode(int);
 
-	// source colors (existing)
-	int sRed;
-	int sGreen;
-	int sBlue;
-
-	bool layerAlpha;
-
-	int toleranceRed;
-	int toleranceGreen;    
-	int toleranceBlue;
 private:
+	QUANTUM difference(QUANTUM* src, QUANTUM* dst, QUANTUM threshold, int depth);
+	void floodLine(int x, int y, Q_INT32 depth, KisLayerSP lay, KisTileCommand* ktc,
+	 QUANTUM* color);
+	int m_threshold;
+	QUANTUM* m_oldColor;
+	KisPainter *m_painter;
 	KisCanvasSubject *m_subject;
-
+	KisImageSP m_currentImage;
+	bool *m_map, m_samplemerged;
+	
+	QWidget *m_optWidget;
+	QLabel *m_lbThreshold;
+	IntegerWidget *m_slThreshold;
+	QLabel *m_lbComposite;
+	KisCmbComposite *m_cmbComposite;
+	CompositeOp m_compositeOp;
 };
 
 #endif //__filltool_h__

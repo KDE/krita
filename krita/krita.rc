@@ -111,6 +111,8 @@
 </Menu>
 
  <Menu name="View"><text>&amp;View</text>
+  <Action name="fullscreen"/>
+  <Separator/>
   <Action name="view_newview"/>
   <ActionList name="view_closeallviews"/>
   <Separator/>

@@ -36,7 +36,7 @@ class KisTileMediator;
 #define TILEMODE_RW (TILEMODE_READ|TILEMODE_WRITE)
 
 /**
- * KisTileMgr manages the imagedata that for implementations of KisRenderInterface.
+ * KisTileMgr manages the imagedata for implementations of KisRenderInterface.
  * Those are:
  *
  * KisPaintDevices

@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,22 +38,26 @@ public:
 	KisToolSelectPolygonal();
 	virtual ~KisToolSelectPolygonal();
 
+	virtual void update(KisCanvasSubject *subject);
+
 	virtual void setup(KActionCollection *collection);
-
-	virtual void clearOld();
-	virtual bool willModify() const;
-
-	virtual void paintEvent(QPaintEvent *e);
+	virtual void paint(QPainter& gc);
+	virtual void paint(QPainter& gc, const QRect& rc);
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);
 
+
+private:
+
+	virtual void clearSelection();
+	void paintOutline();
+	void paintOutline(QPainter& gc, const QRect& rc);
+
+	void drawLine(const QPoint& start, const QPoint& end); 
 	void start(QPoint p);
 	void finish(QPoint p); 
 
-protected:
-	void drawLine(const QPoint& start, const QPoint& end); 
- 
 private:
 
 	KisCanvasSubject *m_subject;
@@ -70,8 +75,9 @@ private:
 	QPointArray m_pointArray;
 	int m_index;
 
-	bool moveSelectArea;
-	bool dragSelectArea;
+// 	bool moveSelectArea;
+// 	bool dragSelectArea;
+	bool m_selecting;
 	QPoint m_hotSpot;
 	QPoint m_oldDragPoint;
 	QRegion m_selectRegion;

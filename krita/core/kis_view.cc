@@ -465,6 +465,10 @@ void KisView::setupActions()
         KStdAction::redisplay(this, SLOT(canvasRefresh()), actionCollection(), "refresh_canvas");
         (void)new KAction(i18n("Reset Button"), "stop", 0, this, SLOT(reset()), actionCollection(), "panic_button");
 
+
+	m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
+	connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
+
         // selection actions
         m_selectionCut = KStdAction::cut(this, SLOT(cut()), actionCollection(), "cut");
         m_selectionCopy = KStdAction::copy(this, SLOT(copy()), actionCollection(), "copy");
@@ -541,6 +545,9 @@ void KisView::setupActions()
         (void)new KAction(i18n( "&Tool Properties" ), 0, this, SLOT( viewControlDocker() ), actionCollection(), "view_control_docker" );
         (void)new KAction(i18n( "&Layers/Channels" ), 0, this, SLOT( viewLayerChannelDocker() ), actionCollection(), "view_layer_docker" );
         (void)new KAction(i18n( "&Brushes/Pattern" ), 0, this, SLOT( viewResourceDocker() ), actionCollection(), "view_resource_docker" );
+
+
+
 }
 
 void KisView::reset()
@@ -1696,6 +1703,24 @@ void KisView::viewResourceDocker()
                 mainWindow()->addDockWindow( m_resourcedocker, DockRight );
                 m_resourcedocker->show();
         }
+}
+
+
+void KisView::slotUpdateFullScreen(bool toggle)
+{
+//	this->setWindowState( this->windowState() & ~toggle );
+	kdDebug() << "Full screen called.\n";
+
+        if (isFullScreen()) {
+		kdDebug() << "Already full-screen\n";
+                qApp -> mainWidget() -> showNormal();
+	}
+	else {
+		kdDebug() << "Going to full-screen\n";
+		qApp -> mainWidget() -> showFullScreen();
+	}
+
+
 }
 
 Q_INT32 KisView::docWidth() const

@@ -38,8 +38,8 @@ struct KisPixelData : public KShared {
 	Q_INT32 y1;
 	Q_INT32 x2;
 	Q_INT32 y2;
-	QUANTUM *data; // Pointer to the pixeldata -- just a plain sequence of 
-	// bytes
+	QUANTUM *data; // Pointer to the pixeldata -- just a plain
+		       // sequence of bytes
 	bool owner; // Whether the data will be managed by somebody else
 	Q_INT32 width;
 	Q_INT32 height; 

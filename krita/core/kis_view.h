@@ -300,10 +300,13 @@ private slots:
 	void imgUpdated(KisImageSP img, const QRect& rc);
 	void slotZoomIn();
 	void slotZoomOut();
+
 	void viewColorDocker();
 	void viewControlDocker();
 	void viewLayerChannelDocker();
 	void viewResourceDocker();
+	void slotUpdateFullScreen(bool toggle);
+
 	void updateTabBar();
 
 private:
@@ -357,7 +360,8 @@ private:
 	KAction *m_selectionToNewLayer;
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
-;
+	KAction *m_fullScreen;
+
 	DCOPObject *m_dcop;
 
         // Widgets

@@ -93,6 +93,7 @@ void KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSubjec
 		m_tools.push_back(new KisToolPolyLine);
 		m_tools.push_back(new KisToolPolygon);
 		m_tools.push_back(new KisToolColorChanger);
+		m_tools.push_back(new KisToolFill);
 	}
 
 	for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); it++) {

@@ -98,7 +98,7 @@ public:
 		m_xintile-=sizeOfTp;
 		if( m_xintile < 0 )
 		{
-			m_xintile =  m_tile->width() - sizeOfTp;
+			m_xintile =  m_tile->width() * m_depth - sizeOfTp;
 			m_tilenum--;
 			m_tileNeedRefresh = true;
 			m_tileNeedRefreshRW = true;

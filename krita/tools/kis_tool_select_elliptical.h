@@ -26,27 +26,35 @@
 #include <qpoint.h>
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
-#include "kis_tool_select_rectangular.h"
 
+class KisToolSelectElliptical : public KisToolNonPaint {
 
-class KisToolSelectElliptical : public KisToolSelectRectangular {
-
-	typedef KisToolSelectRectangular super;
+	typedef KisToolNonPaint super;
 	Q_OBJECT
 
 public:
 	KisToolSelectElliptical();
 	virtual ~KisToolSelectElliptical();
 	
-	virtual void setup(KActionCollection *collection);
+	virtual void update(KisCanvasSubject *subject);
 
-protected:
-	virtual void draw(const QPoint& start, const QPoint& end, QPaintEvent *e = 0);
-	virtual QRegion::RegionType regionType();
-	virtual void setSelection(const QRect& rc, KisLayer *lay);
+	virtual void setup(KActionCollection *collection);
+	virtual void paint(QPainter& gc);
+	virtual void paint(QPainter& gc, const QRect& rc);
+	virtual void mousePress(QMouseEvent *e);
+	virtual void mouseMove(QMouseEvent *e);
+	virtual void mouseRelease(QMouseEvent *e);
 
 private:
-	KisCanvasSubject * m_subject;
+	void clearSelection();
+	void paintOutline();
+	void paintOutline(QPainter& gc, const QRect& rc);
+
+private:
+	KisCanvasSubject *m_subject;
+	QPoint m_startPos;
+	QPoint m_endPos;
+	bool m_selecting;
 };
 
 #endif //__KIS_TOOL_SELECT_ELLIPTICAL_H__

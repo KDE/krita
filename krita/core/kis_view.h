@@ -187,6 +187,7 @@ private slots:
 	void merge_visible_layers();
 	void merge_linked_layers();
 	void save_layer_as_image();
+	void projectionUpdated(KisImageSP img);
 	void reset();
 	void selectImage(const QString&);
 	void setActiveBrush(KoIconItem *brush);

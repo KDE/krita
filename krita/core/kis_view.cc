@@ -121,6 +121,7 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	setInstance(KisFactory::global());
 
 	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
+	connect(m_doc, SIGNAL(projectionUpdated(KisImageSP)), SLOT(projectionUpdated(KisImageSP)));
 
 #if 0
 	m_pTool = 0;
@@ -1633,10 +1634,8 @@ void KisView::layerProperties()
 		if (layer) {
 			KisPaintPropertyDlg dlg(layer -> name(), layer -> opacity());
 
-			if (dlg.exec() == QDialog::Accepted && (layer -> name() != dlg.getName() || layer -> opacity() != dlg.getOpacity())) {
+			if (dlg.exec() == QDialog::Accepted && (layer -> name() != dlg.getName() || layer -> opacity() != dlg.getOpacity()))
 				m_doc -> layerProperties(img, layer, dlg.getOpacity(), dlg.getName());
-				updateCanvas();
-			}
 		}
 	}
 }
@@ -1846,4 +1845,11 @@ void KisView::setupCanvas()
 	QObject::connect(m_canvas, SIGNAL(mouseWheelEvent(QWheelEvent*)), this, SLOT(canvasGotMouseWheelEvent(QWheelEvent*)));
 }
 
+void KisView::projectionUpdated(KisImageSP img)
+{
+	if (img == currentImg())
+		updateCanvas();
+}
+
 #include "kis_view.moc"
+

@@ -1393,6 +1393,7 @@ void KisDoc::layerProperties(KisImageSP img, KisLayerSP layer, QUANTUM opacity, 
 		img -> invalidate();
 		setModified(true);
 		emit layersUpdated(img);
+		emit projectionUpdated(img);
 	}
 }
 

@@ -126,8 +126,9 @@ private slots:
 signals:
 	void docUpdated();
 	void docUpdated(const QRect& rect);
-	void layersUpdated(KisImageSP img);
 	void imageListUpdated();
+	void layersUpdated(KisImageSP img);
+	void projectionUpdated(KisImageSP img);
 
 protected:
 	// Overide KoDocument

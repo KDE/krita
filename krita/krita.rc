@@ -20,6 +20,27 @@
   <Action name="revert"/>
  </Menu>
 
+ <Menu name="View"><text>&amp;View</text>
+  <Action name="fullscreen"/>
+  <Separator/>
+  <Action name="view_newview"/>
+  <ActionList name="view_closeallviews"/>
+  <Separator/>
+  <ActionList name="view_split"/>
+  <Action name="zoom_in"/>
+  <Action name="zoom_out"/>
+  <Separator/>
+  <Action name="view_color_docker"/>
+  <Action name="view_control_docker"/>
+  <Action name="view_layer_docker"/>
+  <Action name="view_resource_docker"/>
+  <Separator/>
+  <Action name="view_ruler"/>
+  <Separator/>
+  <Action name="refresh_canvas"/>
+ </Menu>
+
+
 <Menu name="Image"><text>&amp;Image</text>
     <Menu name="Mode"><text>&amp;Mode</text>
             <Action name="bitmap"/>
@@ -40,7 +61,7 @@
 </Menu>
 
 
-<Menu name="Layer"><text>&amp;Layer</text>
+<Menu name="Layer"><text>La&amp;yer</text>
   <Action name="insert_layer"/>
   <Action name="remove_layer"/>
   <Action name="duplicate_layer"/>
@@ -73,7 +94,7 @@
   <Action name="merge_linked_layers"/>
 </Menu>
 
-<Menu name="Select"><text>&amp;Select</text>
+<Menu name="Select"><text>Se&amp;lect</text>
     <Action name="select_all"/>
     <Action name="select_none"/>
     <Action name="reselect"/>
@@ -110,31 +131,9 @@
   <Action name="use_entire_image"/>
 </Menu>
 
- <Menu name="View"><text>&amp;View</text>
-  <Action name="fullscreen"/>
-  <Separator/>
-  <Action name="view_newview"/>
-  <ActionList name="view_closeallviews"/>
-  <Separator/>
-  <ActionList name="view_split"/>
-  <Action name="zoom_in"/>
-  <Action name="zoom_out"/>
-  <Separator/>
-  <Action name="view_color_docker"/>
-  <Action name="view_control_docker"/>
-  <Action name="view_layer_docker"/>
-  <Action name="view_resource_docker"/>
-  <Separator/>
-  <Action name="view_ruler"/>
-  <Separator/>
-  <Action name="refresh_canvas"/>
- </Menu>
-
-
 <Menu name="settings"><text>Settings</text>
+  <Separator group="settings_show"/>
   <Action name="preferences"/>
-  <Action name="save_options"/>
-  <Separator/> -->
 </Menu>
 
 </MenuBar>
@@ -149,23 +148,6 @@
   <Action name="crop"/>
   <Action name="scrap_selection"/>
   <Action name="paste_special"/>
-  <Separator/>
-  <Action name="fill_selection"/>
-  <Action name="apply_gradient_to_selection"/>
-  <Action name="apply_tile_to_selection"/>
-  <Separator/>
-  <Action name="mask_from_selection"/>
-  <Action name="pattern_from_selection"/>
-  <Separator/>
-  <Action name="flip_selection"/>
-</ToolBar>
-
-<ToolBar name="settings" position="top"><Text>Settings</Text>
-  <Action name="show_sidebar"/>
-  <Action name="float_sidebar"/>
-  <Action name="left_sidebar"/>
-  <Action name="preferences"/>
-  <Action name="blending_properties"/>
 </ToolBar>
 
 <ToolBar name="navigation" position="top"><Text>Navigation</Text>

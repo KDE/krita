@@ -46,48 +46,53 @@
 BaseDocker::BaseDocker( QWidget* parent, const char* name) : QDockWindow( QDockWindow::OutsideDock, parent ,name )
 {
         setCloseMode( QDockWindow::Always );
+
+	QFont f;
+	f.setPointSize(8);
+	setFont(f);
+
 }
 
 ControlFrame::ControlFrame( QWidget* parent, const char* name )
-    : QFrame( parent, name )
+	: QFrame( parent, name )
 {
-    /*
-    QString defaultPattern = getenv("KDEDIR") + QString("/")
-        + KStandardDirs::kde_default("data")
-        + "krayon/patterns/wizard.png";
-    */
+	/*
+	  QString defaultPattern = getenv("KDEDIR") + QString("/")
+	  + KStandardDirs::kde_default("data")
+	  + "krayon/patterns/wizard.png";
+	*/
 
-    setFrameStyle(Panel | Raised);
-    setLineWidth(1);
-
-    m_pColorButton = new KDualColorButton(this);
-    m_pBrushWidget = new KisIconWidget(this);
-    m_pPatternWidget = new KisIconWidget(this);
-    m_pGradientWidget = new KisGradientWidget(this);
-    connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this,
-	    SLOT(slotFGColorSelected(const QColor &)));
-
-    connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this,
-	    SLOT(slotBGColorSelected(const QColor &)));
-
-    connect(m_pColorButton, SIGNAL(currentChanged(KDualColorButton::DualColor)),
-        this, SLOT(slotActiveColorChanged(KDualColorButton::DualColor )));
+	setFrameStyle(Panel | Raised);
+	setLineWidth(1);
+	
+	m_pColorButton = new KDualColorButton(this);
+	m_pBrushWidget = new KisIconWidget(this);
+	m_pPatternWidget = new KisIconWidget(this);
+	m_pGradientWidget = new KisGradientWidget(this);
+	connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this,
+		SLOT(slotFGColorSelected(const QColor &)));
+	
+	connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this,
+		SLOT(slotBGColorSelected(const QColor &)));
+	
+	connect(m_pColorButton, SIGNAL(currentChanged(KDualColorButton::DualColor)),
+		this, SLOT(slotActiveColorChanged(KDualColorButton::DualColor )));
 }
 
 ActiveColor ControlFrame::activeColor()
 {
-    if (m_pColorButton->current() == KDualColorButton::Foreground)
-	    return ac_Foreground;
-    else
-	    return ac_Background;
+	if (m_pColorButton->current() == KDualColorButton::Foreground)
+		return ac_Foreground;
+	else
+		return ac_Background;
 }
 
 void ControlFrame::slotActiveColorChanged(KDualColorButton::DualColor s)
 {
-    if(s == KDualColorButton::Foreground)
-	    slotFGColorSelected(m_pColorButton->currentColor());
-    else
-	    slotBGColorSelected(m_pColorButton->currentColor());
+	if(s == KDualColorButton::Foreground)
+		slotFGColorSelected(m_pColorButton->currentColor());
+	else
+		slotBGColorSelected(m_pColorButton->currentColor());
 }
 
 void ControlFrame::slotSetBrush(KoIconItem *item)
@@ -104,61 +109,61 @@ void ControlFrame::slotSetPattern(KoIconItem *item)
 
 void ControlFrame::resizeEvent ( QResizeEvent * )
 {
-    int iw = 34;
-    int sp = (width() - iw * 5)/6;
-    int x = sp;
+	int iw = 34;
+	int sp = (width() - iw * 5)/6;
+	int x = sp;
 
-    m_pColorButton->setGeometry( x, 4, iw, iw );
-    x += (sp + iw);
-    m_pBrushWidget->setGeometry( x, 4, iw, iw );
-    x += (sp + iw);
-    m_pPatternWidget->setGeometry(x, 4, iw, iw );
-    x += (sp + iw);
-    m_pGradientWidget->setGeometry(x, 4, iw, iw );
+	m_pColorButton->setGeometry( x, 4, iw, iw );
+	x += (sp + iw);
+	m_pBrushWidget->setGeometry( x, 4, iw, iw );
+	x += (sp + iw);
+	m_pPatternWidget->setGeometry(x, 4, iw, iw );
+	x += (sp + iw);
+	m_pGradientWidget->setGeometry(x, 4, iw, iw );
 }
 
 void ControlFrame::slotSetFGColor(const KoColor& c)
 {
-    disconnect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-    disconnect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+	disconnect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+	disconnect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 
-    m_pColorButton->setCurrent(KDualColorButton::Foreground);
-    m_pColorButton->setForeground( c.color() );
+	m_pColorButton->setCurrent(KDualColorButton::Foreground);
+	m_pColorButton->setForeground( c.color() );
     
-    connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-    connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+	connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+	connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 }
 
 void ControlFrame::slotSetBGColor(const KoColor& c)
 {
-    disconnect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-    disconnect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+	disconnect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+	disconnect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
     
-    m_pColorButton->setCurrent(KDualColorButton::Background);
-    m_pColorButton->setBackground( c.color() );
+	m_pColorButton->setCurrent(KDualColorButton::Background);
+	m_pColorButton->setBackground( c.color() );
     
-    connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-    connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+	connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+	connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 }
 
 void ControlFrame::slotFGColorSelected(const QColor& c)
 {
-    emit fgColorChanged( KoColor(c) );
+	emit fgColorChanged( KoColor(c) );
 }
 
 void ControlFrame::slotBGColorSelected(const QColor& c)
 {
-    emit bgColorChanged( KoColor(c) );
+	emit bgColorChanged( KoColor(c) );
 }
 
 DockFrameDocker::DockFrameDocker( QWidget* parent, const char* name ) : BaseDocker( parent, name )
 {
-    kdDebug() << "DockFrameDocker::DockFrameDocker" << endl;
+	kdDebug() << "DockFrameDocker::DockFrameDocker" << endl;
 
-    setWidget( m_tabwidget = new QTabWidget( this ) );
+	setWidget( m_tabwidget = new QTabWidget( this ) );
     
-    m_tabwidget -> setFixedSize( 200, 175 );
-    kdDebug() << "DockFrameDocker::DockFrameDocker leaving" << endl;
+	m_tabwidget -> setFixedSize( 200, 175 );
+	kdDebug() << "DockFrameDocker::DockFrameDocker leaving" << endl;
 }
 
 DockFrameDocker::~DockFrameDocker()

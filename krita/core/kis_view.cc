@@ -867,6 +867,7 @@ void KisView::paintView(const KisRect& r)
 
                                 m_doc -> setProjection(img);
                                 m_doc -> paintContent(gc, wr, false, 1.0, 1.0);
+				m_doc -> setProjection(0);
 
                                 if (currentTool())
                                         currentTool() -> paint(gc, wr);
@@ -1903,6 +1904,7 @@ void KisView::print(KPrinter& printer)
 		Q_ASSERT(img);
 		m_doc -> setProjection(img);
 		m_doc -> paintContent(gc, img -> bounds());
+		m_doc -> setProjection(0);
 	}
 }
 

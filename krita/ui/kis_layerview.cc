@@ -37,7 +37,6 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
-#include <knuminput.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 

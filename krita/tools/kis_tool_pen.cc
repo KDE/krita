@@ -117,37 +117,33 @@ void PenTool::mousePress(QMouseEvent *e)
 	}
 }
 
-bool PenTool::paint(QPoint pos)
+bool PenTool::paint(const QPoint& pos)
 {
 	KisView *view = getCurrentView();
-	KisImage * img = m_doc->currentImg();
-	KisLayer *lay = img->getCurrentLayer();
-	KisFrameBuffer *m_fb = m_doc->frameBuffer();
+	KisImageSP img = m_doc -> currentImg();
+//	KisPaintDeviceSP device = img -> getCurrentPaintDevice();
+	KisLayerSP device = img -> getCurrentLayer();
+	KisFrameBuffer *m_fb = m_doc -> frameBuffer();
+	int startx = (pos - m_brush -> hotSpot()).x();
+	int starty = (pos - m_brush -> hotSpot()).y();
+	QRect clipRect(startx, starty, m_brush -> width(), m_brush -> height());
 
-	int startx = (pos - m_brush->hotSpot()).x();
-	int starty = (pos - m_brush->hotSpot()).y();
-
-	QRect clipRect(startx, starty, m_brush->width(), m_brush->height());
-
-	if (!clipRect.intersects(lay->imageExtents()))
+	if (!clipRect.intersects(device -> imageExtents()))
 		return false;
 
-	clipRect = clipRect.intersect(lay->imageExtents());
+	clipRect = clipRect.intersect(device -> imageExtents());
 
 	int sx = clipRect.left() - startx;
 	int sy = clipRect.top() - starty;
 	int ex = clipRect.right() - startx;
 	int ey = clipRect.bottom() - starty;
-
+	int red = view -> fgColor().R();
+	int green = view -> fgColor().G();
+	int blue = view -> fgColor().B();
+	bool alpha = img -> colorMode() == cm_RGBA;
 	uchar *sl;
 	uchar bv;
 	uchar r, g, b;
-
-	int red = view->fgColor().R();
-	int green = view->fgColor().G();
-	int blue = view->fgColor().B();
-
-	bool alpha = (img->colorMode() == cm_RGBA);
 
 	for (int y = sy; y <= ey; y++) {
 		sl = m_brush -> scanline(y);
@@ -155,7 +151,6 @@ bool PenTool::paint(QPoint pos)
 		for (int x = sx; x <= ex; x++) {
 			// no color blending with pen tool (only with brush)
 			// alpha blending only (maybe)
-
 			bv = *(sl + x);
 
 			if (bv < m_penColorThreshold) 
@@ -167,11 +162,10 @@ bool PenTool::paint(QPoint pos)
 
 			if (!m_usePattern)
 				// use foreround color
-				lay -> setPixel(startx + x, starty + y, alpha ? qRgb(r, g, b) : qRgba(r, g, b, bv), m_cmd);
-			else {
+				device -> setPixel(startx + x, starty + y, alpha ? qRgb(r, g, b) : qRgba(r, g, b, bv), m_cmd);
+			else
 				// map pattern to pen pixel
-				m_fb -> setPatternToPixel(lay, startx + x, starty + y, 0);
-			}
+				m_fb -> setPatternToPixel(device, startx + x, starty + y, 0);
 		}
 	}
 
@@ -180,72 +174,70 @@ bool PenTool::paint(QPoint pos)
 
 void PenTool::mouseMove(QMouseEvent *e)
 {
-    KisImage * img = m_doc->currentImg();
+	if(m_dragging) {
+		KisImageSP img = m_doc -> currentImg();
+		int spacing = m_brush->spacing();
 
-    int spacing = m_brush->spacing();
-    if (spacing <= 0) spacing = 1;
+		if (spacing <= 0) 
+			spacing = 1;
 
-    if(m_dragging)
-    {
-        QPoint pos = e->pos();
-        int mouseX = e->x();
-        int mouseY = e->y();
+		QPoint pos = e -> pos();
+		int mouseX = e -> x();
+		int mouseY = e -> y();
 
-        pos = zoomed(pos);
-        mouseX = zoomed(mouseX);
-        mouseY = zoomed(mouseY);
+		pos = zoomed(pos);
+		mouseX = zoomed(mouseX);
+		mouseY = zoomed(mouseY);
 
-        KisVector end(mouseX, mouseY);
-        KisVector start(m_dragStart.x(), m_dragStart.y());
+		KisVector end(mouseX, mouseY);
+		KisVector start(m_dragStart.x(), m_dragStart.y());
+		KisVector dragVec = end - start;
+		float saved_dist = m_dragdist;
+		float new_dist = dragVec.length();
+		float dist = saved_dist + new_dist;
 
-        KisVector dragVec = end - start;
-        float saved_dist = m_dragdist;
-        float new_dist = dragVec.length();
-        float dist = saved_dist + new_dist;
+		if ((int)dist < spacing) {
+			// save for next movevent
+			m_dragdist += new_dist;
+			m_dragStart = pos;
+			return;
+		}
+		
+		m_dragdist = 0;
+		dragVec.normalize();
+		KisVector step = start;
 
-        if ((int)dist < spacing)
-	    {
-            // save for next movevent
-	        m_dragdist += new_dist;
-	        m_dragStart = pos;
-	        return;
-	    }
-        else
-	        m_dragdist = 0;
+		while (dist >= spacing) {
+			if (saved_dist > 0) {
+				step += dragVec * (spacing-saved_dist);
+				saved_dist -= spacing;
+			}
+			else
+				step += dragVec * spacing;
 
-        dragVec.normalize();
-        KisVector step = start;
+			QPoint p(qRound(step.x()), qRound(step.y()));
 
-        while (dist >= spacing)
-	    {
-	        if (saved_dist > 0)
-	        {
-	            step += dragVec * (spacing-saved_dist);
-	            saved_dist -= spacing;
-	        }
-	        else
-	            step += dragVec * spacing;
+			if (paint(p))
+				img -> markDirty(QRect(p - m_brush -> hotSpot(), m_brush -> size()));
 
-	        QPoint p(qRound(step.x()), qRound(step.y()));
+			dist -= spacing;
+		}
 
-	        if (paint(p))
-               img->markDirty(QRect(p - m_brush->hotSpot(), m_brush->size()));
+		//save for next movevent
+		if (dist > 0) 
+			m_dragdist = dist;
 
- 	        dist -= spacing;
-	    }
-        //save for next movevent
-        if (dist > 0) m_dragdist = dist;
-        m_dragStart = pos;
-    }
+		m_dragStart = pos;
+	}
 }
-
 
 void PenTool::mouseRelease(QMouseEvent *e)
 {
-	if (e->button() != LeftButton)
+	if (e -> button() != LeftButton)
 		return;
 
 	m_dragging = false;
+	Q_ASSERT(m_doc && m_cmd);
 	m_doc -> addCommand(m_cmd);
 	m_cmd = 0;
 }
@@ -285,7 +277,7 @@ void PenTool::optionsDialog()
 
 void PenTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction( i18n("&Pen tool"), "pencil", 0, this, SLOT(toolSelect()), collection, "tool_pen");
+	KToggleAction *toggle = new KToggleAction(i18n("&Pen tool"), "pencil", 0, this, SLOT(toolSelect()), collection, "tool_pen");
 
 	toggle -> setExclusiveGroup("tools");
 }

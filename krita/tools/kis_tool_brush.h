@@ -21,6 +21,7 @@
 #ifndef __brushtool_h__
 #define __brushtool_h__
 
+#include <qcursor.h>
 #include <qpoint.h>
 
 #include "kis_tool.h"
@@ -45,7 +46,7 @@ public:
 	virtual void optionsDialog();
 	virtual void setBrush(KisBrush *brush);
 	
-	bool paintMonochrome(const QPoint& pos);
+	virtual bool paint(const QPoint& pos);
 	bool paintColor(const QPoint& pos);
 	bool paintCanvas(const QPoint& pos);
 
@@ -55,6 +56,9 @@ public:
 
 public slots:
 	virtual void toolSelect();
+
+protected:
+	virtual QCursor defaultCursor() const;
 
 protected:
 	KToggleAction *m_toggle;

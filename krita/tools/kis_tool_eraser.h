@@ -2,6 +2,7 @@
  *  kis_tool_eraser.h - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,8 +28,11 @@
 
 class KisBrush;
 class KisDoc;
+class BrushTool;
 
-class EraserTool : public KisTool {
+class EraserTool : public BrushTool {
+	typedef BrushTool super;
+
 public:
 	EraserTool(KisDoc *doc, KisBrush *brush);
 	virtual ~EraserTool();
@@ -37,19 +41,12 @@ public:
 	virtual QDomElement saveSettings(QDomDocument& doc) const;
 	virtual bool loadSettings(QDomElement& elem);
 
-	virtual void optionsDialog();
-
+	virtual bool paint(const QPoint& pos);
 	virtual void mousePress(QMouseEvent*); 
-	virtual void mouseMove(QMouseEvent*);
-	virtual void mouseRelease(QMouseEvent*);
-
-	void setBrush(KisBrush *_brush);
-	bool paint(QPoint pos);
 
 protected:
-	QPoint  m_dragStart;
-	bool    m_dragging;
-	float   m_dragdist;
+	QCursor defaultCursor() const;
 };
 
 #endif
+

@@ -50,6 +50,7 @@ BrushTool::BrushTool(KisDoc *doc, KisBrush *brush) : super(doc)
 	m_usePattern = false;
 	m_useGradient = false;
 	m_opacity = CHANNEL_MAX;
+	m_cmd = 0;
 	setBrush(brush);
 }
 
@@ -81,7 +82,7 @@ void BrushTool::setBrush(KisBrush *brush)
 	// use default brush cursor
 	else {
 		m_doc -> setCanvasCursor(KisCursor::brushCursor());
-		m_cursor = KisCursor::brushCursor();
+		m_cursor = defaultCursor();
 	}
 }
 
@@ -119,7 +120,7 @@ void BrushTool::mousePress(QMouseEvent *e)
 	Q_ASSERT(m_cmd == 0);
 	m_cmd = new KisImageCmd(i18n("Paint"), img, device);
 
-	if (paintMonochrome(pos)) {
+	if (paint(pos)) {
 		QRect rc(pos - m_hotSpot, m_brushSize);
 
 		img -> markDirty(rc);
@@ -131,9 +132,9 @@ bool BrushTool::paintCanvas(const QPoint& /* pos */)
 	return true;
 }
 
-bool BrushTool::paintMonochrome(const QPoint& pos)
+bool BrushTool::paint(const QPoint& pos)
 {
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 	KisLayer *lay = img -> getCurrentLayer();
 	int startx = pos.x() - m_hotSpotX;
 	int starty = pos.y() - m_hotSpotY;
@@ -203,7 +204,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
 	if (!m_dragging)
 		return;
 
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 
 	if (!img) 
 		return;
@@ -236,7 +237,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
 
 		QPoint p(qRound(step.x()), qRound(step.y()));
 
-		if (paintMonochrome(p)) {
+		if (paint(p)) {
 			QRect rc(p - m_hotSpot, m_brushSize);
 
 			img -> markDirty(rc);
@@ -329,6 +330,12 @@ void BrushTool::toolSelect()
 	if (view)
 		view -> activateTool(this);
 
-	m_toggle -> setChecked(true);
+	if (m_toggle)
+		m_toggle -> setChecked(true);
+}
+
+QCursor BrushTool::defaultCursor() const
+{
+	return KisCursor::brushCursor();
 }
 

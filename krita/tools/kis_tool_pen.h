@@ -47,7 +47,7 @@ public:
 	virtual void mouseMove(QMouseEvent*);
 	virtual void mouseRelease(QMouseEvent*);
 
-	bool paint(QPoint pos);
+	bool paint(const QPoint& pos);
 
 protected:
 	KisImageCmd *m_cmd;

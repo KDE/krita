@@ -161,7 +161,7 @@ void KisToolFreeHand::endPaint()
 QWidget* KisToolFreeHand::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
-	m_optWidget -> setCaption(i18n("Brush"));
+	m_optWidget -> setCaption(m_transactionText);
 	
 	m_lbOpacity = new QLabel(i18n("Opacity: "), m_optWidget);
 	m_slOpacity = new IntegerWidget( 0, 100, m_optWidget, "int_widget");

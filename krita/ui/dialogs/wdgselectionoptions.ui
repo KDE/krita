@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WdgSelectionOptions</class>
 <widget class="QWidget">
     <property name="name">
@@ -11,6 +11,9 @@
             <width>427</width>
             <height>153</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>WdgSelectionOptions</string>
     </property>
     <grid>
         <property name="name">
@@ -38,32 +41,12 @@
                 <cstring>sldrOpacity</cstring>
             </property>
         </widget>
-        <widget class="KColorCombo" row="1" column="1">
+        <widget class="KColorCombo" row="1" column="1" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>cmbMaskColor</cstring>
             </property>
         </widget>
-        <widget class="QSlider" row="0" column="1">
-            <property name="name">
-                <cstring>sldrOpacity</cstring>
-            </property>
-            <property name="maxValue">
-                <number>256</number>
-            </property>
-            <property name="lineStep">
-                <number>25</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Below</enum>
-            </property>
-            <property name="tickInterval">
-                <number>25</number>
-            </property>
-        </widget>
-        <spacer row="3" column="1">
+        <spacer row="3" column="2">
             <property name="name">
                 <cstring>spacer1</cstring>
             </property>
@@ -80,7 +63,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="2">
+        <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>grpAction</cstring>
             </property>
@@ -111,6 +94,37 @@
                     </property>
                 </widget>
             </hbox>
+        </widget>
+        <widget class="QSlider" row="0" column="1">
+            <property name="name">
+                <cstring>sldrOpacity</cstring>
+            </property>
+            <property name="maxValue">
+                <number>256</number>
+            </property>
+            <property name="lineStep">
+                <number>25</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>Below</enum>
+            </property>
+            <property name="tickInterval">
+                <number>25</number>
+            </property>
+        </widget>
+        <widget class="QRadioButton" row="0" column="3">
+            <property name="name">
+                <cstring>radioInvert</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Invert mask</string>
+            </property>
+            <property name="accel">
+                <string>Alt+I</string>
+            </property>
         </widget>
     </grid>
 </widget>

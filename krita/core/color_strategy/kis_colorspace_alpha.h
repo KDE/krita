@@ -60,6 +60,7 @@ public:
 	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst);
 
 	virtual void setMaskColor(KoColor c) { m_maskColor = c; }
+	virtual void setInverted(bool b) { m_inverted = b; }
 
 protected:
 
@@ -77,6 +78,7 @@ private:
 	static ChannelInfo channelInfo[1];
 
 	KoColor m_maskColor;
+	bool m_inverted;
 };
 
 #endif // KIS_COLORSPACE_ALPHA_H_

@@ -30,12 +30,14 @@
 #include "kis_fill_painter.h"
 #include "kis_colorspace_alpha.h"
 
-// XXX: This needs to be a 8-bits one-channel color strategy that 
-// can compose with any other color strategy.
+
 KisSelection::KisSelection(KisLayerSP layer, const QString& name) 
  	: super(layer -> width(),
 		layer -> height(),
-		KisColorSpaceRegistry::singleton() -> colorSpace("alpha mask"), 
+		new KisColorSpaceAlpha(), // Note that the alpha color
+					  // model has _state_, so we
+					  // create a new one, instead
+					  // of sharing.
 		name)
 {
 	m_parentLayer = layer;

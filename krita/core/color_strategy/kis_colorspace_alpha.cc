@@ -41,6 +41,7 @@ KisColorSpaceAlpha::KisColorSpaceAlpha() :
 	KisStrategyColorSpace("alpha mask")
 {
 	m_maskColor = KoColor::white();
+	m_inverted = false;
 }
 
 KisColorSpaceAlpha::~KisColorSpaceAlpha()
@@ -79,13 +80,18 @@ void KisColorSpaceAlpha::nativeColor(QRgb /*rgb*/, QUANTUM opacity, QUANTUM *dst
 
 void KisColorSpaceAlpha::toKoColor(const QUANTUM */*src*/, KoColor *c)
 {
-	c = &m_maskColor;
+	c -> setRGB(m_maskColor.R(), m_maskColor.G(), m_maskColor.B());
 }
 
 void KisColorSpaceAlpha::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity)
 {
-	c = &m_maskColor;
-	*opacity = src[PIXEL_MASK];
+	c -> setRGB(m_maskColor.R(), m_maskColor.G(), m_maskColor.B());
+	if (m_inverted) {
+		*opacity = OPACITY_OPAQUE - src[PIXEL_MASK];
+	}
+	else {
+		*opacity = src[PIXEL_MASK];
+	}
 }
 
 ChannelInfo* KisColorSpaceAlpha::channelsInfo() const

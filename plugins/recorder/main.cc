@@ -25,17 +25,15 @@ Factory::Factory( CORBA::Object_ptr _obj ) : KOM::PluginFactory_skel( _obj )
 {
 }
 
-KOM::Plugin_ptr Factory::create( const KOM::RequestedInterfaces& ifaces )
+KOM::Plugin_ptr Factory::create( const KOM::Component_ptr _comp )
 {
-  if ( ifaces.length() == 0 )
+  CORBA::Object_var obj = _comp->getInterface( "IDL:OpenParts/View:1.0" );
+  if ( CORBA::is_nil( obj ) )
     return 0L;
-  if ( strcmp( ifaces[0].repoid.in(), "IDL:OpenParts/View:1.0" ) != 0L )
+  OpenParts::View_var view = OpenParts::View::_narrow( obj );
+  if( CORBA::is_nil( view ) )
     return 0L;
-  
-  OpenParts::View_var view = OpenParts::View::_narrow( ifaces[0].obj );
-  if ( CORBA::is_nil( view ) )
-    return 0L;
-  
+    
   cerr << "CREATING MakroRecorder" << endl;
   
   return KOM::Plugin::_duplicate( new Recorder( view ) );
@@ -69,7 +67,7 @@ void Recorder::start()
   seq.length(1);
   seq[0] = CORBA::string_dup( "UserEvent/KSpread/*" );
   
-  m_vView->installFilter( this, "eventFilter", seq );
+  m_vView->installFilter( this, "eventFilter", seq, KOM::Base::FM_READ );
 
   m_status = ST_START;
 }

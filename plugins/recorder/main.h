@@ -27,10 +27,10 @@ public:
   Factory( const CORBA::ORB::ObjectTag &_tag );
   Factory( CORBA::Object_ptr _obj );
 
-  KOM::Plugin_ptr create( const KOM::RequestedInterfaces& ifaces );
+  KOM::Plugin_ptr create( const KOM::Component_ptr _comp );
 };
 
-class Recorder : virtual public KOMBase,
+class Recorder : virtual public KOMComponent,
 		 virtual public MakroRecorder::Recorder_skel
 {
 public:

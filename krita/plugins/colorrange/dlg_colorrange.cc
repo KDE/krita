@@ -82,6 +82,7 @@ DlgColorRange::DlgColorRange( QWidget *  parent,
 	m_page -> bnLoad -> setEnabled(false);
 	m_page -> bnSaveColorRange -> setEnabled(false);
 	m_page -> cmbSelectionPreview -> setEnabled(false);
+        m_page -> sldrFuzziness->setValue( 150 );
 }
 
 DlgColorRange::~DlgColorRange()
@@ -89,7 +90,7 @@ DlgColorRange::~DlgColorRange()
 	delete m_page;
 }
 
-void DlgColorRange::setLayer(KisLayerSP layer) 
+void DlgColorRange::setLayer(KisLayerSP layer)
 {
 	m_layer = layer;
 }
@@ -100,7 +101,7 @@ void DlgColorRange::setSelection(KisSelectionSP selection)
 	int w, h;
 	w = m_page -> pixSelection -> width();
 	h = m_page -> pixSelection -> height();
-	
+
 	// XXX: hardcoded size
 	QPixmap pix = QPixmap(m_selection -> maskImage().scale(400, 350, QImage::ScaleMin));
 
@@ -113,31 +114,31 @@ void DlgColorRange::okClicked()
 }
 
 
-void DlgColorRange::slotPickerPlusClicked() 
+void DlgColorRange::slotPickerPlusClicked()
 {
 }
 
-void DlgColorRange::slotPickerClicked() 
+void DlgColorRange::slotPickerClicked()
 {
 }
 
-void DlgColorRange::slotLoad() 
+void DlgColorRange::slotLoad()
 {
 }
 
-void DlgColorRange::slotPickerMinusClicked() 
+void DlgColorRange::slotPickerMinusClicked()
 {
 }
 
-void DlgColorRange::slotSave() 
+void DlgColorRange::slotSave()
 {
 }
 
-void DlgColorRange::slotInvertClicked() 
+void DlgColorRange::slotInvertClicked()
 {
 }
 
-void DlgColorRange::slotFuzzinessChanged(int value) 
+void DlgColorRange::slotFuzzinessChanged(int value)
 {
 	m_page -> sldrFuzziness -> setValue(value);
 }
@@ -147,7 +148,7 @@ void DlgColorRange::slotSliderMoved(int value)
 	m_page -> intFuzziness -> setValue(value);
 }
 
-void DlgColorRange::slotSelectionTypeChanged(int /*index*/) 
+void DlgColorRange::slotSelectionTypeChanged(int /*index*/)
 {
 }
 

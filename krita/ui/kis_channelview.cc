@@ -20,9 +20,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-// only for debug
-#include <iostream.h>
-
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -48,8 +45,6 @@
 #include "kis_channelview.h"
 #include "kis_factory.h"
 #include "integerwidget.h"
-
-//#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
 KisChannelView::KisChannelView( KisDoc *_doc, QWidget *_parent, const char *_name )
   : QWidget( _parent, _name )

@@ -33,6 +33,7 @@
 #include "kis_paint_device.h"
 
 class KisLayer;
+class KisImageCmd;
 
 typedef KSharedPtr<KisLayer> KisLayerSP;
 typedef QValueVector<KisLayerSP> KisLayerSPLst;
@@ -69,11 +70,9 @@ signals:
 	void layerPropertiesChanged();
 
 public:
-	uchar    m_current;
 	bool     m_linked;
 	uchar    m_bitDepth;
-    
-	QRect    m_imgRect;
+	cMode m_cMode;
 };
 
 #endif // __kis_layer_h__

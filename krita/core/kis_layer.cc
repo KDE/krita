@@ -30,10 +30,7 @@
 KisLayer::KisLayer(const QString& name, uint width, uint height, uint bpp, cMode cm, const QRgb& defaultColor) : super(name, width, height, bpp, defaultColor)
 {
 	m_cMode = cm;
-	m_visible = true;
 	m_linked = false;
-	m_current = 0;
-	m_opacity= 255;
 }
 
 KisLayer::~KisLayer()

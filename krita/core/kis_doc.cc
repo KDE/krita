@@ -1250,39 +1250,8 @@ bool KisDoc::slotNewImage()
 
 	kdDebug() << "KisDoc::slotNewImage: w: "<< w << "h: " << h << endl;
 
-	QString name; 
-	QString desiredName;
-	int n = 1;
-	unsigned int runs = 0;
-
-	/* don't allow duplicate image names if some images have
-	   been removed leaving "holes" in name sequence */
-
-#if 0
-	do {
-		KisImageSP currentImg;
-
-		desiredName = i18n("image %1").arg(n);
-
-		for (KisImageSPLstIterator it = m_images.begin(); it != m_images.end(); it++) {
-			currentImg = *it;
-		}
-
-		KisImageSP currentImg = m_images.begin();
-
-		while (currentImg != m_images.end()) {
-			if (currentImg -> name() == desiredName)
-				n++;
-
-			currentImg = m_images.next();
-		}
-
-		runs++;
-	} while(runs < m_images.count());
-#endif
-
-	n = m_images.size() + 1;
-	name = i18n("image %1").arg(n);
+	int n = m_images.size() + 1;
+	QString	name = i18n("image %1").arg(n);
 
 	if (!(img = newImage(name, w, h, cm, 8)))
 		return false;

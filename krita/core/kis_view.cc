@@ -539,10 +539,10 @@ void KisView::slotTabSelected(const QString& name)
 
 void KisView::slotRefreshPainter()
 {
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 
 	if(img) {
-		KisLayer *lay = img -> getCurrentLayer();
+		KisLayerSP lay = img -> getCurrentLayer();
 
 		if(lay) {
 			QRect extents(lay -> imageExtents());
@@ -804,7 +804,7 @@ void KisView::scrollV(int)
 */
 void KisView::slotUpdateImage()
 {
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 
 	if (img) {
 		QRect updateRect(0, 0, img -> width(), img -> height());
@@ -841,7 +841,7 @@ void KisView::slotDocUpdated()
 
 void KisView::slotDocUpdated(const QRect& rc)
 {
-	KisImage* img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 	QRect ur = rc;
 	QPainter p;
 	float zF = zoomFactor();
@@ -881,7 +881,7 @@ void KisView::clearCanvas(const QRect& rc)
 
 void KisView::paintView(const QRect& rc)
 {
-	KisImage* img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 	QRect ur = rc;
 	QPainter p;
 	float zF = zoomFactor();
@@ -1197,7 +1197,7 @@ void KisView::crop()
 	// keep old image - user can remove it later if he wants
 	// by removing its layer or may want to keep the original.
 
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 
 	if (!img)
 		return;
@@ -1238,7 +1238,7 @@ void KisView::crop()
 
 void KisView::selectAll()
 {
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 
 	if (img) {
 		QRect rc = img -> getCurrentLayer() -> imageExtents();
@@ -1468,12 +1468,12 @@ void KisView::dialog_channels()
 
 void KisView::layer_properties()
 {
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 
 	if (!img)
 		return;
 
-	KisLayer *lay = img -> getCurrentLayer();
+	KisLayerSP lay = img -> getCurrentLayer();
 
 	if (!lay)
 		return;
@@ -1493,7 +1493,7 @@ void KisView::layer_properties()
 */
 void KisView::insert_layer()
 {
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 	uint indx;
 
 	if (!img)
@@ -1542,7 +1542,7 @@ void KisView::remove_layer()
 
 void KisView::hide_layer()
 {
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 
 	if (img) {
 		int indx = img -> getCurrentLayerIndex();
@@ -1562,7 +1562,7 @@ void KisView::hide_layer()
 
 void KisView::link_layer()
 {
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 
 	if (img) {
 		int indx = img -> getCurrentLayerIndex();
@@ -1582,7 +1582,7 @@ void KisView::link_layer()
 
 void KisView::next_layer()
 {
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 
 	if (!img)
 		return;
@@ -1625,7 +1625,7 @@ void KisView::next_layer()
 */
 void KisView::previous_layer()
 {
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 
 	if (!img)
 		return;
@@ -1814,10 +1814,10 @@ void KisView::layer_scale_rough()
 
 void KisView::layerScale(bool smooth)
 {
-    KisImage * img = m_doc->currentImg();
+    KisImageSP img = m_doc->currentImg();
     if (!img)  return;
 
-    KisLayer *lay = img->getCurrentLayer();
+    KisLayerSP lay = img->getCurrentLayer();
     if (!lay)  return;
 
     KisFrameBuffer *fb = m_doc->frameBuffer();
@@ -2221,7 +2221,7 @@ void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
 {
 	QRect layerRect(0, 0, loadedImg.width(), loadedImg.height());
 	QString layerName(u.fileName());
-	KisImage *newimg = m_doc -> newImage(layerName, layerRect.width(), layerRect.height());
+	KisImageSP newimg = m_doc -> newImage(layerName, layerRect.width(), layerRect.height());
 
 	// add background for layer - should this always be white?
 	bgMode bg = bm_White; // bm_Transparent, bm_ForegroundColor, bm_BackgroundColor
@@ -2243,7 +2243,7 @@ void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
 
 void KisView::addHasNewLayer(QImage& loadedImg, KURL& u)
 {
-	KisImage *img = m_doc -> currentImg();
+	KisImageSP img = m_doc -> currentImg();
 	QRect layerRect(0, 0, loadedImg.width(), loadedImg.height());
 	QString layerName(u.fileName());
 	uint indx;

@@ -148,3 +148,4 @@ protected:
 };
 
 #endif // __kis_layerview_h__
+

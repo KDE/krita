@@ -2,6 +2,7 @@
  *  kis_global.h - part of KImageShop
  *
  *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +27,10 @@
 
 class KisTool;
 
+const int CHANNEL_MIN = 0;
 const int CHANNEL_MAX = 255;
+const int OPACITY_TRANSPARENT = 0;
+const int OPACITY_OPAQUE = 255;
 
 // size for graphic blocks - must be a power of 2
 const int TILE_SIZE = 64;

@@ -4,6 +4,8 @@
  *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
  *                1999-2000 Matthias ELter  <elter@kde.org>
  *
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -30,6 +32,7 @@
 #include "kis_paint_device.h"
 
 class KisChannel;
+class KisImageCmd;
 
 typedef KSharedPtr<KisChannel> KisChannelSP;
 typedef QValueVector<KisChannelSP> KisChannelSPLst;
@@ -42,6 +45,8 @@ class KisChannel : public KisPaintDevice {
 public:
 	KisChannel(cId id, const QString& name, uint width, uint height, const QRgb& defaultColor);
 	virtual ~KisChannel();
+
+	virtual void setPixel(uint x, uint y, const uchar *pixel, KisImageCmd *cmd);
 
 	cId channelId() const { return m_id; }
 	int width() const { return m_imgRect.width(); }

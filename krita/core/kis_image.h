@@ -70,7 +70,7 @@ public:
 	void setFrontLayer(unsigned int layer);
 	void setBackgroundLayer(unsigned int layer);
 
-	void addLayer(const QRect& r, const KoColor& c, bool transparent, const QString& name);
+	void addLayer(const QRect& rc, const KoColor& c, bool transparent, const QString& name);
 	void addLayer(KisLayerSP layer);
 	void removeLayer(KisLayerSPLstIterator it);
 	void removeLayer(unsigned int layer);
@@ -80,12 +80,17 @@ public:
 	void mergeVisibleLayers();
 	void mergeLinkedLayers();
 
-	//	KisLayer* layerPtr(KisLayer *layer);
 	int getCurrentLayerIndex() const;
 	void setCurrentLayer(int layer);
 	void setCurrentLayer(KisLayerSP layer);
 
 	inline KisLayerSPLst layerList();
+
+	void addChannel(const QRect& rc, uchar opacity, const QString& name);
+	void addChannel(KisChannelSP channel);
+	void removeChannel(KisChannelSPLstIterator it);
+	void removeChannel(unsigned int channel);
+	void removeChannel(KisChannelSP channel);
 
 	void markDirty(const QRect& rect);
 
@@ -135,7 +140,7 @@ private:
 	void addCommand(KCommand *cmd);
 	void renderTile(KisTileSP dst, const KisTileSP src, const KisPaintDevice *srcDevice);
 	void renderBg(KisPaintDevice *srcDevice, int tileNo);
-	void resizeImage(KisLayerSP lay, const QRect& rect);
+	void resizeImage(KisPaintDevice *device, const QRect& rect);
 	void resizePixmap(bool dirty);
 	void destroyPixmap();
 	QRect findBoundingTiles(const QRect& area);

@@ -39,6 +39,8 @@ KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uch
 {
 	m_name = name;
 	m_imgRect = m_tileRect = QRect(0, 0, width, height);
+	m_visible = true;
+	m_opacity = 255;
 }
 
 KisPaintDevice::~KisPaintDevice()
@@ -85,6 +87,23 @@ bool KisPaintDevice::pixel(uint x, uint y, uchar **val)
 
 	*val = tile -> data(x % TILE_SIZE, y % TILE_SIZE);
 	return true;
+}
+
+void KisPaintDevice::setPixel(uint x, uint y, const QRgb& rgb, KisImageCmd *cmd)
+{
+	// TODO
+}
+
+bool KisPaintDevice::pixel(uint x, uint y, QRgb *rgb)
+{
+	// TODO
+	return false;
+}
+
+QRgb KisPaintDevice::rgb(uint x, uint y)
+{
+	// TODO
+	return 0;
 }
 
 void KisPaintDevice::resize(uint width, uint height, uchar bpp)

@@ -54,6 +54,10 @@ public:
 	virtual bool pixel(uint x, uint y, uchar **val);
 	virtual uchar *pixel(uint x, uint y);
 
+	virtual void setPixel(uint x, uint y, const QRgb& rgb, KisImageCmd *cmd = 0);
+	virtual bool pixel(uint x, uint y, QRgb *rgb);
+	virtual QRgb rgb(uint x, uint y);
+
 	virtual void resize(uint width, uint height, uchar bpp);
 	
 	inline KisTileSP getTile(unsigned int x, unsigned int y);
@@ -91,7 +95,6 @@ protected:
 	QRect m_imgRect;
 	QString m_name;
 	KisTiles m_tiles;
-	cMode m_cMode;
 };
 
 uint KisPaintDevice::xTiles() const

@@ -25,7 +25,6 @@
 
 #include <kaction.h>
 #include <kapplication.h>
-#include <kdebug.h>
 
 #include "kis_brush.h"
 #include "kis_canvas.h"
@@ -124,6 +123,10 @@ void BrushTool::mousePress(QMouseEvent *e)
 		QRect rc(pos - m_hotSpot, m_brushSize);
 
 		img -> markDirty(rc);
+	}
+	else {
+		delete m_cmd;
+		m_cmd = 0;
 	}
 }
 

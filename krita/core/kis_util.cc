@@ -193,5 +193,7 @@ int KisUtil::calcNumChannels(cMode cm)
 		case cm_CMYKA:
 			return 5;
 	}
+
+	return 0;
 }
 

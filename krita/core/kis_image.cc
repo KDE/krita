@@ -20,10 +20,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <limits.h>
-
 #include <qpainter.h>
-
 #include <qthread.h>
 #include <qptrqueue.h>
 #include <qmutex.h>
@@ -232,7 +229,7 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 	m_bitDepth(bd)
 {
 	QRect tileExtents = KisUtil::findTileExtents(QRect(0, 0, m_width, m_height));
-	QRgb defaultColor = qRgba(0, 0, 0, 255);
+	QRgb defaultColor = qRgba(CHANNEL_MIN, CHANNEL_MIN, CHANNEL_MIN, OPACITY_OPAQUE);
 
 	m_xTiles = tileExtents.width() / TILE_SIZE;
 	m_yTiles = tileExtents.height() / TILE_SIZE;
@@ -249,7 +246,7 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 	resizePixmap(false);
 	m_bpp = KisUtil::calcNumChannels(cm);
 
-	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * m_bpp);
+	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * m_bpp, m_bpp == 1 ? QImage::LittleEndian : QImage::IgnoreEndian);
 
 	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, m_bpp, cm, defaultColor);
 	m_composeLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE), m_bpp);
@@ -306,12 +303,12 @@ inline void KisImage::renderTile(KisTileSP dst, const KisTileSP src, const KisPa
 				db = qBlue(*drgb);
 				da = qAlpha(*drgb);
 
-				opacity = sa && da ? (da * src_opacity) / CHANNEL_MAX : 0;
-				inverseOpacity = CHANNEL_MAX - opacity;
+				opacity = sa && da ? (da * src_opacity) / OPACITY_OPAQUE : 0;
+				inverseOpacity = OPACITY_OPAQUE - opacity;
 				dr = ((dr * da / CHANNEL_MAX) * inverseOpacity + sr * opacity) / CHANNEL_MAX;
 				dg = ((dg * da / CHANNEL_MAX) * inverseOpacity + sg * opacity) / CHANNEL_MAX;
 				db = ((db * da / CHANNEL_MAX) * inverseOpacity + sb * opacity) / CHANNEL_MAX;
-				da = sa + da - (sa * da) / CHANNEL_MAX;
+				da = sa + da - (sa * da) / OPACITY_OPAQUE;
 				*drgb = qRgba(dr, dg, db, da);
 
 				drgb++;
@@ -328,7 +325,7 @@ inline void KisImage::renderTile(KisTileSP dst, const KisTileSP src, const KisPa
 				dg = qGreen(*drgb);
 				db = qBlue(*drgb);
 
-				inverseOpacity = CHANNEL_MAX - src_opacity;
+				inverseOpacity = OPACITY_OPAQUE - src_opacity;
 				dr = (dr * inverseOpacity + sr * src_opacity) / CHANNEL_MAX;
 				dg = (dg * inverseOpacity + sg * src_opacity) / CHANNEL_MAX;
 				db = (db * inverseOpacity + sb * src_opacity) / CHANNEL_MAX;
@@ -407,19 +404,17 @@ void KisImage::addLayer(KisLayerSP layer)
 	}
 }
 
-void KisImage::addLayer(const QRect& rect, const KoColor& c, bool tr, const QString& name)
+void KisImage::addLayer(const QRect& rect, const KoColor& c, bool /*tr*/, const QString& name)
 {
 	KisLayerSP lay;
 	QRgb defaultColor;
 
 	if (getCurrentLayer())
-		defaultColor = qRgba(255, 255, 255, 0);
+		defaultColor = qRgba(CHANNEL_MAX, CHANNEL_MAX, CHANNEL_MAX, OPACITY_TRANSPARENT);
 	else
 		defaultColor = c.color().rgb();
 	
-	lay = new KisLayer(name, m_width, m_height, m_bpp, m_cMode, defaultColor);
-	lay -> allocateRect(rect, m_bpp);
-//	lay -> clear(c, tr);
+	lay = new KisLayer(name, rect.width(), rect.height(), m_bpp, m_cMode, defaultColor);
 	m_layers.push_back(lay);
 	m_activeLayer = lay;
 	resizeImage(lay, rect);
@@ -431,8 +426,6 @@ void KisImage::addLayer(const QRect& rect, const KoColor& c, bool tr, const QStr
 void KisImage::removeLayer(KisLayerSPLstIterator it)
 {
 	KisLayerSP lay = *it;
-
-	kdDebug() << "KisImage::removeLayer Iterator\n";
 
 	if (m_activeLayer == lay) {
 		if (m_layers.empty())
@@ -449,8 +442,6 @@ void KisImage::removeLayer(KisLayerSPLstIterator it)
 
 void KisImage::removeLayer(unsigned int layer)
 {
-	kdDebug() << "KisImage::removeLayer unsigned int\n";
-
 	if (layer >= m_layers.size())
 		return;
 
@@ -460,8 +451,6 @@ void KisImage::removeLayer(unsigned int layer)
 void KisImage::removeLayer(KisLayerSP layer)
 {
 	KisLayerSPLstIterator it;
-
-	kdDebug() << "KisImage::removeLayer KisLayerSP\n";
 
 	if ((it = qFind(m_layers.begin(), m_layers.end(), layer)) != m_layers.end()) {
 		removeLayer(it);
@@ -632,7 +621,7 @@ void KisImage::compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y
 
 	memcpy(dst -> data(), m_bgLayer -> getTile(0, 0) -> data(), dst -> size());
 
-	for (KisLayerSPLstIterator it = m_layers.begin(); it != m_layers.end(); it++) {
+	for (KisLayerSPLstConstIterator it = m_layers.begin(); it != m_layers.end(); it++) {
 		KisLayerSP lay = *it;
 
 		if (lay && lay -> visible()) {
@@ -640,6 +629,17 @@ void KisImage::compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y
 
 			if (src)
 				renderTile(dst, src, lay);
+		}
+	}
+
+	for (KisChannelSPLstConstIterator it = m_channels.begin(); it != m_channels.end(); it++) {
+		KisChannelSP chan = *it;
+
+		if (chan && chan -> visible()) {
+			KisTileSP src = chan -> getTile(x, y);
+
+			if (src)
+				renderTile(dst, src, chan);
 		}
 	}
 }
@@ -774,7 +774,7 @@ void KisImage::mergeLayers(KisLayerSPLst& layers)
 		rc = rc.unite((*it) -> imageExtents());	
 
 	it = layers.begin();
-	a = new KisLayer((*it) -> name(), m_width, m_height, m_bpp, m_cMode, qRgba(255, 255, 255, 255));
+	a = new KisLayer((*it) -> name(), m_width, m_height, m_bpp, m_cMode, qRgba(CHANNEL_MAX, CHANNEL_MAX, CHANNEL_MAX, OPACITY_OPAQUE));
 	a -> allocateRect(rc, m_bpp);
 	macro -> addCommand(new KisCommandLayerAdd(this, a));
 
@@ -813,10 +813,10 @@ void KisImage::mergeLayers(KisLayerSPLst& layers)
 	compositeImage(rc);
 }
 
-void KisImage::resizeImage(KisLayerSP lay, const QRect& rect)
+void KisImage::resizeImage(KisPaintDevice *device, const QRect& rect)
 {
-	int tmpXTiles = lay -> xTiles();
-	int tmpYTiles = lay -> yTiles();
+	int tmpXTiles = device -> xTiles();
+	int tmpYTiles = device -> yTiles();
 
 	m_timer -> stop();
 
@@ -942,7 +942,7 @@ void KisImage::renderBg(KisPaintDevice *srcDevice, int tileNo)
 		for (int x = 0; x < TILE_SIZE; x++) {
 			uchar v = 128 + 63 * ((x / 16 + y / 16) % 2);
 
-			*(ptr + (y * TILE_SIZE) + x) = qRgba(v, v, v, CHANNEL_MAX);
+			*(ptr + (y * TILE_SIZE) + x) = qRgba(v, v, v, OPACITY_OPAQUE);
 		}
 
 	compositeImage();
@@ -968,6 +968,63 @@ int KisImage::getCurrentLayerIndex() const
 	}
 
 	return -1;
+}
+
+void KisImage::addChannel(const QRect& rc, uchar opacity, const QString& name)
+{
+	QRgb defaultColor = qRgba(CHANNEL_MAX, CHANNEL_MAX, CHANNEL_MAX, opacity);
+	KisChannelSP chan = new KisChannel(ci_Black, name, m_width, m_height, qGray(defaultColor));
+
+	m_channels.push_back(chan);
+	m_activeChannel = chan;
+	resizeImage(chan, rc);
+#if 0
+	if (m_doUndo)
+		addCommand(new KisCommandLayerAdd(this, lay));
+#endif
+}
+
+void KisImage::addChannel(KisChannelSP channel)
+{
+	if (qFind(m_channels.begin(), m_channels.end(), channel) == m_channels.end()) {
+		m_channels.push_back(channel);
+		m_activeChannel = channel;
+		compositeImage(QRect(0, 0, m_width, m_height), true);
+		emit layersUpdated();
+	}
+}
+
+void KisImage::removeChannel(KisChannelSPLstIterator it)
+{
+	KisChannelSP channel = *it;
+
+	if (m_activeChannel == channel) {
+		if (m_channels.empty())
+			m_activeChannel = 0;
+		else
+			m_activeChannel = m_channels[0];
+	}
+
+	m_channels.erase(it);
+}
+
+void KisImage::removeChannel(unsigned int channel)
+{
+	if (channel >= m_layers.size())
+		return;
+
+	removeChannel(m_channels.begin() + channel);
+}
+
+void KisImage::removeChannel(KisChannelSP channel)
+{
+	KisChannelSPLstIterator it;
+
+	if ((it = qFind(m_channels.begin(), m_channels.end(), channel)) != m_channels.end()) {
+		removeChannel(it);
+		compositeImage(QRect(0, 0, m_width, m_height), true);
+		emit layersUpdated();
+	}
 }
 
 #include "kis_image.moc"

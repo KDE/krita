@@ -27,6 +27,7 @@
 #include "kis_view.h"
 #include "kis_tool_memento.h"
 #include "kis_strategy_move.h"
+#include "kis_undo_adapter.h"
 
 namespace {
 	class MoveCommand : public KNamedCommand {
@@ -164,8 +165,10 @@ void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
 
 			if (undo) {
 				KCommand *cmd = new MoveCommand(m_view, img, img -> activeDevice(), m_layerStart, m_layerPosition);
+				KisUndoAdapter *adapter = img -> undoAdapter();
 
-				m_doc -> addCommand(cmd);
+				if (adapter)
+					adapter -> addCommand(cmd);
 			}
 
 			dev -> anchor();

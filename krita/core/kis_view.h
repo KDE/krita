@@ -50,13 +50,14 @@ class KisResource;
 class KisResourceMediator;
 class KisSideBar;
 class KisTabBar;
+class KisUndoAdapter;
 
 class KisView : public KoView {
 	Q_OBJECT
 	typedef KoView super;
 
 public:
-	KisView(KisDoc *doc, QWidget *parent = 0, const char *name = 0);
+	KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent = 0, const char *name = 0);
 	virtual ~KisView();
 
 public:
@@ -320,6 +321,7 @@ private:
 	KisGuideSP m_currentGuide;
 	QPoint m_lastGuidePoint;
 	KisResourceMediator *m_brushMediator;
+	KisUndoAdapter *m_adapter;
 
 private:
 	mutable KisImageSP m_current;

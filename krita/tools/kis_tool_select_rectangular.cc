@@ -17,15 +17,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #include <qpainter.h>
 #include <qpen.h>
 #include <kaction.h>
 #include <kcommand.h>
 #include <klocale.h>
+
 #include "kis_doc.h"
 #include "kis_selection.h"
 #include "kis_view.h"
 #include "kis_tool_select_rectangular.h"
+#include "kis_undo_adapter.h"
 
 namespace {
 	class RectSelectCmd : public KNamedCommand {
@@ -168,7 +171,9 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 					selection = new KisSelection(parent, img, "rectangular selection tool frame", OPACITY_OPAQUE);
 					selection -> setBounds(rc);
 					img -> setSelection(selection);
-					m_doc -> addCommand(new RectSelectCmd(selection));
+
+					if (img -> undoAdapter())
+						img -> undoAdapter() -> addCommand(new RectSelectCmd(selection));
 				}
 			}
 		}

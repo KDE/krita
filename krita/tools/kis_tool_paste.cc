@@ -23,6 +23,7 @@
 #include "kis_doc.h"
 #include "kis_painter.h"
 #include "kis_tool_paste.h"
+#include "kis_undo_adapter.h"
 #include "kis_view.h"
 
 KisToolPaste::KisToolPaste(KisView *view, KisDoc *doc) : super(view, doc), KisStrategyMove(view, doc)
@@ -51,7 +52,7 @@ void KisToolPaste::leave(QEvent *)
 {
 	if (m_selection) {
 		KisImageSP owner = m_view -> currentImg();
-		QRect rc(m_selection -> bounds());
+//		QRect rc(m_selection -> bounds());
 
 		Q_ASSERT(owner);
 		owner -> unsetSelection(false);
@@ -79,7 +80,10 @@ void KisToolPaste::mouseRelease(QMouseEvent *e)
 				m_selection.data(), 
 				m_selection -> opacity(), 
 				0, 0, m_selection -> width(), m_selection -> height());
-		m_doc -> addCommand(gc.endTransaction());
+		
+		if (owner -> undoAdapter())
+			owner -> undoAdapter() -> addCommand(gc.endTransaction());
+
 		m_selection = 0;
 		activate();
 	}

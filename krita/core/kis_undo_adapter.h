@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 1999 Michael Koch    <koch@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,27 +16,41 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include <qstring.h>
-#include "kis_command.h"
+#if !defined KIS_UNDO_ADAPTER_H_
+#define KIS_UNDO_ADAPTER_H_
 
-KisCommand::KisCommand(KisUndoAdapter *adapter)
+#include <qglobal.h>
+
+class QString;
+class KCommand;
+
+class KisUndoAdapter {
+public:
+	KisUndoAdapter();
+	virtual ~KisUndoAdapter();
+
+public:
+	virtual void addCommand(KCommand *cmd) = 0;
+	virtual void setUndo(bool undo) = 0;
+	virtual bool undo() const = 0;
+	virtual void beginMacro(const QString& macroName) = 0;
+	virtual void endMacro() = 0;
+	virtual bool inMacro() const = 0;
+
+private:
+	KisUndoAdapter(const KisUndoAdapter&);
+	KisUndoAdapter& operator=(const KisUndoAdapter&);
+};
+
+inline
+KisUndoAdapter::KisUndoAdapter()
 {
-	m_name = "";
-	m_undoAdapter = adapter;
 }
 
-KisCommand::KisCommand(const QString& name, KisUndoAdapter *adapter)
-{
-	m_name = name;
-	m_undoAdapter = adapter;
-}
-
-KisCommand::~KisCommand()
+inline
+KisUndoAdapter::~KisUndoAdapter()
 {
 }
 
-QString KisCommand::name() const
-{
-	return m_name;
-}
+#endif // KIS_UNDO_ADAPTER_H_
 

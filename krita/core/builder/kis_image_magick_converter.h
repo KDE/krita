@@ -30,6 +30,7 @@ class QString;
 class KURL;
 class KisDoc;
 class KisNameServer;
+class KisUndoAdapter;
 
 /**
  * Build a KisImage representation of an image file.
@@ -39,7 +40,7 @@ class KisImageMagickConverter : public KisBuilderSubject {
 	Q_OBJECT
 
 public:
-	KisImageMagickConverter(KisDoc *doc);
+	KisImageMagickConverter(KisDoc *doc, KisUndoAdapter *adapter);
 	virtual ~KisImageMagickConverter();
 
 public:
@@ -63,12 +64,13 @@ private slots:
 private:
 	KisImageMagickConverter(const KisImageMagickConverter&);
 	KisImageMagickConverter& operator=(const KisImageMagickConverter&);
-	void init(KisDoc *doc);
+	void init(KisDoc *doc, KisUndoAdapter *adapter);
 	KisImageBuilder_Result decode(const KURL& uri, bool isBlob);
 
 private:
 	KisImageSP m_img;
 	KisDoc *m_doc;
+	KisUndoAdapter *m_adapter;
 	QValueVector<Q_UINT8> m_data;
 	KIO::TransferJob *m_job;
 	KIO::filesize_t m_size;

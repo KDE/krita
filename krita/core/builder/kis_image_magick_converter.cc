@@ -30,6 +30,7 @@
 #include "kis_doc.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_undo_adapter.h"
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kispixeldata.h"
@@ -113,10 +114,10 @@ namespace {
 	}
 }
 
-KisImageMagickConverter::KisImageMagickConverter(KisDoc *doc)
+KisImageMagickConverter::KisImageMagickConverter(KisDoc *doc, KisUndoAdapter *adapter)
 {
 	InitGlobalMagick();
-	init(doc);
+	init(doc, adapter);
 	SetMonitorHandler(monitor);
 	m_stop = false;
 }
@@ -165,7 +166,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		return KisImageBuilder_RESULT_FAILURE;
 	}
 
-	m_img = new KisImage(m_doc, 0, 0, IMAGE_TYPE_RGBA, m_doc -> nextImageName());
+	m_img = new KisImage(m_adapter, 0, 0, IMAGE_TYPE_RGBA, m_doc -> nextImageName());
 	emit notify(this, KisImageBuilder_STEP_TILING, 0);
 
 	while ((image = RemoveFirstImageFromList(&images))) {
@@ -263,9 +264,10 @@ KisImageSP KisImageMagickConverter::image()
 	return m_img;
 }
 
-void KisImageMagickConverter::init(KisDoc *doc)
+void KisImageMagickConverter::init(KisDoc *doc, KisUndoAdapter *adapter)
 {
 	m_doc = doc;
+	m_adapter = adapter;
 	m_job = 0;
 }
 

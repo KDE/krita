@@ -24,6 +24,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_image.h"
+#include "kis_undo_adapter.h"
 
 class QImage;
 class QString;
@@ -34,7 +35,7 @@ class KMacroCommand;
 class KisView;
 class KisNameServer;
 
-class KisDoc : public KoDocument {
+class KisDoc : public KoDocument, private KisUndoAdapter {
 	typedef KoDocument super;
 	Q_OBJECT
 
@@ -54,6 +55,14 @@ public:
 	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);
 	virtual QDomDocument saveXML();
 
+private:
+	virtual void addCommand(KCommand *cmd);
+	virtual void setUndo(bool undo);
+	virtual bool undo() const;
+	virtual void beginMacro(const QString& macroName);
+	virtual void endMacro();
+	virtual bool inMacro() const;
+
 public:
 	KisLayerSP layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM devOpacity);
 	KisLayerSP layerAdd(KisImageSP img, const QString& name, KisSelectionSP selection);
@@ -65,16 +74,10 @@ public:
 	void layerPrev(KisImageSP img, KisLayerSP layer);
 	void layerProperties(KisImageSP img, KisLayerSP layer, QUANTUM opacity, const QString& name);
 
-	void beginMacro(const QString& macroName);
-	void endMacro();
-	bool inMacro() const;
-	void addCommand(KCommand *cmd);
 	Q_INT32 undoLimit() const;
 	void setUndoLimit(Q_INT32 limit);
 	Q_INT32 redoLimit() const;
 	void setRedoLimit(Q_INT32 limit);
-	void setUndo(bool undo);
-	bool undo() const;
 
 	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, enumImgType type);
 	void addImage(KisImageSP img);

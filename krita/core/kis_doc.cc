@@ -2,7 +2,7 @@
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
  *  Copyright (c) 2001 Toshitaka Fujioka  <fujioka@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2002, 2003 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -82,7 +82,9 @@ namespace {
 		typedef KisCommand super;
 
 	public:
-		KisCommandImageAdd(KisDoc *doc, KisImageSP img) : super(i18n("Add Image"), doc)
+		KisCommandImageAdd(KisDoc *doc,
+			KisUndoAdapter *adapter, 
+			KisImageSP img) : super(i18n("Add Image"), adapter)
 		{
 			m_doc = doc;
 			m_img = img;
@@ -94,16 +96,16 @@ namespace {
 
 		virtual void execute()
 		{
-			m_doc -> setUndo(false);
+			adapter() -> setUndo(false);
 			m_doc -> addImage(m_img);
-			m_doc -> setUndo(true);
+			adapter() -> setUndo(true);
 		}
 
 		virtual void unexecute()
 		{
-			m_doc -> setUndo(false);
+			adapter() -> setUndo(false);
 			m_doc -> removeImage(m_img);
-			m_doc -> setUndo(true);
+			adapter() -> setUndo(true);
 		}
 
 	private:
@@ -115,7 +117,10 @@ namespace {
 		typedef KisCommand super;
 
 	public:
-		KisCommandImageMv(KisDoc *doc, const QString& name, const QString& oldName) : super(i18n("Rename Image"), doc)
+		KisCommandImageMv(KisDoc *doc, 
+				KisUndoAdapter *adapter, 
+				const QString& name, 
+				const QString& oldName) : super(i18n("Rename Image"), adapter)
 		{
 			m_doc = doc;
 			m_name = name;
@@ -128,16 +133,16 @@ namespace {
 
 		virtual void execute()
 		{
-			m_doc -> setUndo(false);
+			adapter() -> setUndo(false);
 			m_doc -> renameImage(m_oldName, m_name);
-			m_doc -> setUndo(true);
+			adapter() -> setUndo(true);
 		}
 
 		virtual void unexecute()
 		{
-			m_doc -> setUndo(false);
+			adapter() -> setUndo(false);
 			m_doc -> renameImage(m_name, m_oldName);
-			m_doc -> setUndo(true);
+			adapter() -> setUndo(true);
 		}
 
 	private:
@@ -150,7 +155,9 @@ namespace {
 		typedef KisCommand super;
 
 	public:
-		KisCommandImageRm(KisDoc *doc, KisImageSP img) : super(i18n("Remove Image"), doc)
+		KisCommandImageRm(KisDoc *doc, 
+				KisUndoAdapter *adapter,
+				KisImageSP img) : super(i18n("Remove Image"), adapter)
 		{
 			m_doc = doc;
 			m_img = img;
@@ -162,16 +169,16 @@ namespace {
 
 		virtual void execute()
 		{
-			m_doc -> setUndo(false);
+			adapter() -> setUndo(false);
 			m_doc -> removeImage(m_img);
-			m_doc -> setUndo(true);
+			adapter() -> setUndo(true);
 		}
 
 		virtual void unexecute()
 		{
-			m_doc -> setUndo(false);
+			adapter() -> setUndo(false);
 			m_doc -> addImage(m_img);
-			m_doc -> setUndo(true);
+			adapter() -> setUndo(true);
 		}
 
 	private:
@@ -183,7 +190,10 @@ namespace {
 		typedef KisCommand super;
 
 	public:
-		LayerAddCmd(KisDoc *doc, KisImageSP img, KisLayerSP layer) : super(i18n("Add Layer"), doc)
+		LayerAddCmd(KisDoc *doc, 
+				KisUndoAdapter *adapter, 
+				KisImageSP img, 
+				KisLayerSP layer) : super(i18n("Add Layer"), adapter)
 		{
 			m_doc = doc;
 			m_img = img;
@@ -197,16 +207,16 @@ namespace {
 
 		virtual void execute()
 		{
-			m_doc -> setUndo(false);
+			adapter() -> setUndo(false);
 			m_doc -> layerAdd(m_img, m_layer, m_index);
-			m_doc -> setUndo(true);
+			adapter() -> setUndo(true);
 		}
 
 		virtual void unexecute()
 		{
-			m_doc -> setUndo(false);
+			adapter() -> setUndo(false);
 			m_doc -> layerRemove(m_img, m_layer);
-			m_doc -> setUndo(true);
+			adapter() -> setUndo(true);
 		}
 
 	private:
@@ -220,9 +230,13 @@ namespace {
 		typedef KNamedCommand super;
 
 	public:
-		LayerRmCmd(KisDoc *doc, KisImageSP img, KisLayerSP layer) : super(i18n("Remove Layer"))
+		LayerRmCmd(KisDoc *doc, 
+				KisUndoAdapter *adapter, 
+				KisImageSP img, 
+				KisLayerSP layer) : super(i18n("Remove Layer"))
 		{
 			m_doc = doc;
+			m_adapter = adapter;
 			m_img = img;
 			m_layer = layer;
 			m_index = img -> index(layer);
@@ -234,20 +248,21 @@ namespace {
 
 		virtual void execute()
 		{
-			m_doc -> setUndo(false);
+			m_adapter -> setUndo(false);
 			m_doc -> layerRemove(m_img, m_layer);
-			m_doc -> setUndo(true);
+			m_adapter -> setUndo(true);
 		}
 
 		virtual void unexecute()
 		{
-			m_doc -> setUndo(false);
+			m_adapter -> setUndo(false);
 			m_doc -> layerAdd(m_img, m_layer, m_index);
-			m_doc -> setUndo(true);
+			m_adapter -> setUndo(true);
 		}
 
 	private:
 		KisDoc *m_doc;
+		KisUndoAdapter *m_adapter;
 		KisImageSP m_img;
 		KisLayerSP m_layer;
 		Q_INT32 m_index;
@@ -257,11 +272,17 @@ namespace {
 		typedef KNamedCommand super;
 
 	public:
-		LayerPropsCmd(KisLayerSP layer, KisImageSP img, KisDoc *doc, const QString& name, Q_INT32 opacity) : super(i18n("Layer Property Changes"))
+		LayerPropsCmd(KisLayerSP layer, 
+			KisImageSP img, 
+			KisDoc *doc, 
+			KisUndoAdapter *adapter,
+			const QString& name, 
+			Q_INT32 opacity) : super(i18n("Layer Property Changes"))
 		{
 			m_layer = layer;
 			m_img = img;
 			m_doc = doc;
+			m_adapter = adapter;
 			m_name = name;
 			m_opacity = opacity;
 		}
@@ -276,9 +297,9 @@ namespace {
 			QString name = m_layer -> name();
 			Q_INT32 opacity = m_layer -> opacity();
 
-			m_doc -> setUndo(false);
+			m_adapter -> setUndo(false);
 			m_doc -> layerProperties(m_img, m_layer, m_opacity, m_name);
-			m_doc -> setUndo(true);
+			m_adapter -> setUndo(true);
 			m_name = name;
 			m_opacity = opacity;
 			m_img -> notify();
@@ -290,6 +311,7 @@ namespace {
 		}
 
 	private:
+		KisUndoAdapter *m_adapter;
 		KisLayerSP m_layer; 
 		KisImageSP m_img; 
 		KisDoc *m_doc; 
@@ -863,7 +885,7 @@ void KisDoc::renameImage(const QString& oldName, const QString& newName)
 			(*it) -> setName(newName);
 
 			if (m_undo)
-				addCommand(new KisCommandImageMv(this, newName, oldName));
+				addCommand(new KisCommandImageMv(this, this, newName, oldName));
 
 			emit imageListUpdated();
 			break;
@@ -932,7 +954,7 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 	m_images.push_back(img);
 
 	if (m_undo)
-		addCommand(new KisCommandImageAdd(this, img));
+		addCommand(new KisCommandImageAdd(this, this, img));
 
 	return img;
 }
@@ -945,7 +967,7 @@ void KisDoc::addImage(KisImageSP img)
 	m_images.push_back(img);
 
 	if (m_undo)
-		addCommand(new KisCommandImageAdd(this, img));
+		addCommand(new KisCommandImageAdd(this, this, img));
 
 	img -> invalidate();
 	emit imageListUpdated();
@@ -967,7 +989,7 @@ void KisDoc::removeImage(KisImageSP img)
 	emit docUpdated();
 
 	if (m_undo)
-		addCommand(new KisCommandImageRm(this, img));
+		addCommand(new KisCommandImageRm(this, this, img));
 }
 
 void KisDoc::removeImage(const QString& name)
@@ -1006,7 +1028,7 @@ bool KisDoc::slotNewImage()
 
 KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 {
-	return new KisView(this, parent, name);
+	return new KisView(this, this, parent, name);
 }
 
 void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
@@ -1192,7 +1214,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 				img -> top(layer);
 				
 				if (m_undo)
-					addCommand(new LayerAddCmd(this, img, layer)); 
+					addCommand(new LayerAddCmd(this, this, img, layer)); 
 				
 				img -> invalidate();
 				setModified(true);
@@ -1222,7 +1244,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisSelectionSP 
 		setModified(true);
 	
 		if (m_undo)
-			addCommand(new LayerAddCmd(this, img, layer)); 
+			addCommand(new LayerAddCmd(this, this, img, layer)); 
 
 		img -> invalidate(layer -> bounds());
 		layer -> move(selection -> x(), selection -> y());
@@ -1248,7 +1270,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, KisLayerSP l, Q_INT32 position)
 	img -> pos(l, position);
 
 	if (m_undo)
-		addCommand(new LayerAddCmd(this, img, l)); 
+		addCommand(new LayerAddCmd(this, this, img, l)); 
 
 	img -> invalidate(l -> bounds());
 	l -> visible(true);
@@ -1270,7 +1292,7 @@ void KisDoc::layerRemove(KisImageSP img, KisLayerSP layer)
 		img -> rm(layer);
 
 		if (m_undo)
-			addCommand(new LayerRmCmd(this, img, layer));
+			addCommand(new LayerRmCmd(this, this, img, layer));
 
 		img -> invalidate(layer -> bounds());
 		emit layersUpdated(img);
@@ -1396,7 +1418,7 @@ void KisDoc::layerProperties(KisImageSP img, KisLayerSP layer, QUANTUM opacity, 
 
 			layer -> setName(name);
 			layer -> opacity(opacity);
-			addCommand(new LayerPropsCmd(layer, img, this, oldname, oldopacity));
+			addCommand(new LayerPropsCmd(layer, img, this, this, oldname, oldopacity));
 		} else {
 			layer -> setName(name);
 			layer -> opacity(opacity);
@@ -1469,7 +1491,7 @@ bool KisDoc::importImage(const QString& filename)
 
 	if (!filename.isEmpty()) {
 		KURL url(filename);
-		KisImageMagickConverter ib(this);
+		KisImageMagickConverter ib(this, this);
 
 		if (url.isEmpty())
 			return false;

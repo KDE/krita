@@ -47,9 +47,14 @@ namespace {
 		typedef KNamedCommand super;
 
 	public:
-		KisResizeImageCmd(KisDoc *doc, KisImageSP img, Q_INT32 width, Q_INT32 height, Q_INT32 oldWidth, Q_INT32 oldHeight) : super(i18n("Resize Image"))
+		KisResizeImageCmd(KisUndoAdapter *adapter, 
+			KisImageSP img, 
+			Q_INT32 width, 
+			Q_INT32 height, 
+			Q_INT32 oldWidth, 
+			Q_INT32 oldHeight) : super(i18n("Resize Image"))
 		{
-			m_doc = doc;
+			m_adapter = adapter;
 			m_img = img;
 			m_before = QSize(oldWidth, oldHeight);
 			m_after = QSize(width, height);
@@ -62,22 +67,22 @@ namespace {
 	public:
 		virtual void execute()
 		{
-			m_doc -> setUndo(false);
+			m_adapter -> setUndo(false);
 			m_img -> resize(m_after.width(), m_after.height());
-			m_doc -> setUndo(true);
+			m_adapter -> setUndo(true);
 			m_img -> notify();
 		}
 
 		virtual void unexecute()
 		{
-			m_doc -> setUndo(false);
+			m_adapter -> setUndo(false);
 			m_img -> resize(m_before.width(), m_before.height());
-			m_doc -> setUndo(true);
+			m_adapter -> setUndo(true);
 			m_img -> notify();
 		}
 
 	private:
-		KisDoc *m_doc;
+		KisUndoAdapter *m_adapter;
 		KisImageSP m_img;
 		QSize m_before; 
 		QSize m_after;
@@ -87,9 +92,9 @@ namespace {
 		typedef KNamedCommand super;
 	
 	public:
-		KisSelectionSet(KisDoc *doc, KisImageSP img, KisSelectionSP selection) : super(i18n("Set Selection"))
+		KisSelectionSet(KisUndoAdapter *adapter, KisImageSP img, KisSelectionSP selection) : super(i18n("Set Selection"))
 		{
-			m_doc = doc;
+			m_adapter = adapter;
 			m_img = img;
 			m_selection = selection;
 		}
@@ -101,30 +106,30 @@ namespace {
 	public:
 		virtual void execute()
 		{
-			m_doc -> setUndo(false);
+			m_adapter -> setUndo(false);
 			m_img -> unsetSelection(false);
-			m_doc -> setUndo(true);
+			m_adapter -> setUndo(true);
 			m_img -> notify();
 		}
 
 		virtual void unexecute()
 		{
-			m_doc -> setUndo(false);
+			m_adapter -> setUndo(false);
 			m_img -> setSelection(m_selection);
-			m_doc -> setUndo(true);
+			m_adapter -> setUndo(true);
 			m_img -> notify();
 		}
 
 	private:
-		KisDoc *m_doc;
+		KisUndoAdapter *m_adapter;
 		KisImageSP m_img;
 		KisSelectionSP m_selection;
 	};
 }
 
-KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
+KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
 {
-	init(doc, width, height, imgType, name);
+	init(undoAdapter, width, height, imgType, name);
 	setName(name);
 }
 
@@ -145,7 +150,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_type = rhs.m_type;
 		m_clrMap = rhs.m_clrMap;
 		m_dirty = rhs.m_dirty;
-		m_doc = rhs.m_doc;
+		m_adapter = rhs.m_adapter;
 
 		if (rhs.m_shadow)
 			m_shadow = new KisTileMgr(*rhs.m_shadow);
@@ -213,11 +218,11 @@ QString KisImage::nextLayerName() const
 	return m_nserver -> name();
 }
 
-void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
+void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
 {
 	Q_INT32 n;
 
-	m_doc = doc;
+	m_adapter = adapter;
 	m_nserver = new KisNameServer(i18n("Layer %1"), 0);
 	n = ::imgTypeDepth(imgType);
 	m_active.resize(n);
@@ -243,8 +248,8 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgTyp
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h)
 {
-	if (m_doc && m_doc -> undo())
-		m_doc -> addCommand(new KisResizeImageCmd(m_doc, this, w, h, m_width, m_height));
+	if (m_adapter && m_adapter -> undo())
+		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, m_width, m_height));
 
 	m_width = w;
 	m_height = h;
@@ -1073,19 +1078,19 @@ void KisImage::unsetSelection(bool commit)
 		QRect rc = m_selection -> bounds();
 
 		if (commit) {
-			bool inMacro = m_doc -> inMacro();
+			bool inMacro = m_adapter -> inMacro();
 
-			if (m_doc -> undo()) {
+			if (m_adapter -> undo()) {
 				if (!inMacro)
-					m_doc -> beginMacro(i18n("Anchor Selection"));
+					m_adapter -> beginMacro(i18n("Anchor Selection"));
 
-				m_doc -> addCommand(new KisSelectionSet(m_doc, this, m_selection));
+				m_adapter -> addCommand(new KisSelectionSet(m_adapter, this, m_selection));
 			}
 
 			m_selection -> commit();
 
-			if (m_doc -> undo() && !inMacro)
-				m_doc -> endMacro();
+			if (m_adapter -> undo() && !inMacro)
+				m_adapter -> endMacro();
 		}
 
 		m_selection = 0;
@@ -1135,9 +1140,9 @@ QRect KisImage::bounds() const
 	return QRect(0, 0, width(), height());
 }
 
-KisDoc* KisImage::document() const
+KisUndoAdapter* KisImage::undoAdapter() const
 {
-	return m_doc;
+	return m_adapter;
 }
 
 KisGuideMgr *KisImage::guides() const

@@ -28,16 +28,16 @@
 #include "kistilemgr.h"
 #include "kispixeldata.h"
 #include "kis_painter.h"
-#include "kis_doc.h"
+#include "kis_undo_adapter.h"
 
 namespace {
 	class KisResizeDeviceCmd : public KNamedCommand {
 		typedef KNamedCommand super;
 
 	public:
-		KisResizeDeviceCmd(KisDoc *doc, KisPaintDeviceSP dev, KisTileMgrSP before, KisTileMgrSP after) : super(i18n("Resize"))
+		KisResizeDeviceCmd(KisUndoAdapter *adapter, KisPaintDeviceSP dev, KisTileMgrSP before, KisTileMgrSP after) : super(i18n("Resize"))
 		{
-			m_doc = doc;
+			m_adapter = adapter;
 			m_dev = dev;
 			m_before = before;
 			m_after = after;
@@ -52,9 +52,9 @@ namespace {
 		{
 			KisImageSP owner;
 
-			m_doc -> setUndo(false);
+			m_adapter -> setUndo(false);
 			m_dev -> data(m_after);
-			m_doc -> setUndo(true);
+			m_adapter -> setUndo(true);
 			owner = m_dev -> image();
 			owner -> notify();
 		}
@@ -63,15 +63,15 @@ namespace {
 		{
 			KisImageSP owner;
 
-			m_doc -> setUndo(false);
+			m_adapter -> setUndo(false);
 			m_dev -> data(m_before);
-			m_doc -> setUndo(true);
+			m_adapter -> setUndo(true);
 			owner = m_dev -> image();
 			owner -> notify();
 		}
 
 	private:
-		KisDoc *m_doc;
+		KisUndoAdapter *m_adapter;
 		KisPaintDeviceSP m_dev;
 		KisTileMgrSP m_before; 
 		KisTileMgrSP m_after;
@@ -570,7 +570,7 @@ void KisPaintDevice::data(KisTileMgrSP mgr)
 	Q_ASSERT(mgr);
 
 	if (m_owner) {
-		KisDoc *doc = m_owner -> document();
+		KisUndoAdapter *doc = m_owner -> undoAdapter();
 
 		if (doc && doc -> undo())
 			doc -> addCommand(new KisResizeDeviceCmd(doc, this, m_tiles, mgr));

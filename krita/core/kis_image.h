@@ -32,14 +32,14 @@
 
 class KCommandHistory;
 class KisNameServer;
-class KisDoc;
+class KisUndoAdapter;
 class KisPainter;
 
 class KisImage : public QObject, public KisRenderInterface {
 	Q_OBJECT
 
 public:
-	KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
+	KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	KisImage(const KisImage& rhs);
 	virtual ~KisImage();
 
@@ -142,7 +142,7 @@ public:
 	void notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
 	void notify(const QRect& rc);
 
-	KisDoc *document() const;
+	KisUndoAdapter *undoAdapter() const;
 	KisGuideMgr *guides() const;
 
 signals:
@@ -156,7 +156,7 @@ signals:
 private:
 	KisImage& operator=(const KisImage& rhs);
 	void expand(KisPaintDeviceSP dev);
-	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
+	void init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
 
 private:
@@ -191,7 +191,7 @@ private:
 	bool m_maskInverted;
 	KoColor m_maskClr;
 	KisNameServer *m_nserver;
-	KisDoc *m_doc;
+	KisUndoAdapter *m_adapter;
 	KisGuideMgr m_guides;
 };
 

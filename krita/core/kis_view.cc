@@ -81,6 +81,7 @@
 #include "kis_tool_factory.h"
 #include "kis_tool_paste.h"
 #include "kis_view.h"
+#include "kis_undo_adapter.h"
 #include "kis_util.h"
 #include "kis_paint_device_visitor.h"
 #include "builder/kis_builder_subject.h"
@@ -95,7 +96,7 @@
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
 
-KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, parent, name)
+KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name) : super(doc, parent, name)
 {
 	if (!doc -> isReadWrite())
 		setXMLFile("krita_readonly.rc");
@@ -103,6 +104,7 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 		setXMLFile("krita.rc");
 
 	m_doc = doc;
+	m_adapter = adapter;
 	m_canvas = 0;
 	m_tabBar = 0;
 	m_tabFirst = 0;
@@ -863,8 +865,8 @@ void KisView::removeSelection()
 				QRect ur;
 				KisPainter gc(parent);
 
-				Q_ASSERT(!m_doc -> inMacro());
-				m_doc -> beginMacro(i18n("Remove Selection"));
+				Q_ASSERT(!m_adapter -> inMacro());
+				m_adapter -> beginMacro(i18n("Remove Selection"));
 				img -> unsetSelection(true);
 				ur = rc;
 			
@@ -873,8 +875,8 @@ void KisView::removeSelection()
 
 				gc.beginTransaction("remove selection on parent");
 				gc.eraseRect(rc);
-				m_doc -> addCommand(gc.end());
-				m_doc -> endMacro();
+				m_adapter -> addCommand(gc.end());
+				m_adapter -> endMacro();
 				m_doc -> setModified(true);
 				img -> invalidate(rc);
 				updateCanvas(ur);
@@ -963,7 +965,7 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 			rc.moveBy(-rc.x(), -rc.y());
 			gc.beginTransaction(i18n("Fill Selection."));
 			gc.fillRect(rc, c, opacity);
-			m_doc -> addCommand(gc.endTransaction());
+			m_adapter -> addCommand(gc.endTransaction());
 			gc.end();
 			img -> invalidate(ur);
 			m_doc -> setModified(true);
@@ -1204,7 +1206,7 @@ void KisView::export_image()
 	Q_ASSERT(img);
 
 	if (img) {
-		KisImageMagickConverter ib(m_doc);
+		KisImageMagickConverter ib(m_doc, m_adapter);
 		img = new KisImage(*img);
 
 		if (img -> nlayers() == 1) {
@@ -1269,7 +1271,7 @@ void KisView::save_layer_as_image()
 	Q_ASSERT(img);
 
 	if (img) {
-		KisImageMagickConverter ib(m_doc);
+		KisImageMagickConverter ib(m_doc, m_adapter);
 		KisLayerSP dst = img -> activeLayer();
 
 		Q_ASSERT(dst);
@@ -1319,7 +1321,7 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filena
 	if (urls.empty())
 		return 0;
 
-	KisImageMagickConverter ib(m_doc);
+	KisImageMagickConverter ib(m_doc, m_adapter);
 	KisImageSP img;
 
 	m_imgBuilderMgr -> attach(&ib);
@@ -1925,7 +1927,7 @@ void KisView::layerProperties()
 				changed = changed || layer -> opacity() != dlg.getOpacity() || pt.x() != layer -> x() || pt.y() != layer -> y();
 
 				if (changed)
-					m_doc -> beginMacro(i18n("Property changes"));
+					m_adapter -> beginMacro(i18n("Property changes"));
 
 				if (layer -> name() != dlg.getName() || layer -> opacity() != dlg.getOpacity())
 					m_doc -> layerProperties(img, layer, dlg.getOpacity(), dlg.getName());
@@ -1934,7 +1936,7 @@ void KisView::layerProperties()
 					KisStrategyMove(this, m_doc).simpleMove(QPoint(layer -> x(), layer -> y()), pt);
 
 				if (changed)
-					m_doc -> endMacro();
+					m_adapter -> endMacro();
 			}
 		}
 	}
@@ -2337,7 +2339,7 @@ void KisView::layerToImage()
 			img -> activeLayer();
 
 		if (layer) {
-			KisImageSP dupedImg = new KisImage(m_doc, layer -> width(), layer -> height(), img -> nativeImgType(), m_doc -> nextImageName());
+			KisImageSP dupedImg = new KisImage(m_adapter, layer -> width(), layer -> height(), img -> nativeImgType(), m_doc -> nextImageName());
 			KisLayerSP duped = new KisLayer(*layer);
 
 			duped -> setName(dupedImg -> nextLayerName());

@@ -16,18 +16,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #if !defined KIS_COMMAND_H_
 #define KIS_COMMAND_H_
 
 #include <qstring.h>
 #include <kcommand.h>
 
-class KisDoc;
+class KisUndoAdapter;
 
 class KisCommand : public KCommand {
+	typedef KCommand super;
+
 public:
-	KisCommand(KisDoc *doc);
-	KisCommand(const QString& name, KisDoc *doc);
+	KisCommand(KisUndoAdapter *undoAdapter);
+	KisCommand(const QString& name, KisUndoAdapter *undoAdapter);
 	virtual ~KisCommand();
 
 	virtual void execute() = 0;
@@ -35,10 +38,18 @@ public:
 	virtual QString name() const;
 
 protected:
-	KisDoc *m_doc;
+	KisUndoAdapter *adapter() const;
+
+private:
+	KisUndoAdapter *m_undoAdapter;
 	QString m_name;
 };
 
-#endif // KIS_COMMAND_H_
+inline
+KisUndoAdapter *KisCommand::adapter() const
+{
+	return m_undoAdapter;
+}
 
+#endif // KIS_COMMAND_H_
 

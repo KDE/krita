@@ -20,12 +20,12 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <koColor.h>
-#include "kis_doc.h"
 #include "kis_global.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
+#include "kis_undo_adapter.h"
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kispixeldata.h"
@@ -87,7 +87,7 @@ KisSelection::~KisSelection()
 void KisSelection::commit()
 {
 	if (m_parent) {
-		KisDoc *doc = image() -> document();
+		KisUndoAdapter *adapter = image() -> undoAdapter();
 		KisImageSP img;
 		KisPainter gc;
 		QRect rc = clip();
@@ -129,7 +129,7 @@ void KisSelection::commit()
 		Q_ASSERT(w <= width());
 		Q_ASSERT(h <= height());
 		gc.bitBlt(x() - m_parent -> x(), y() - m_parent -> y(), COMPOSITE_COPY, this, opacity(), pt.x(), pt.y(), w, h);
-		doc -> addCommand(gc.endTransaction());
+		adapter -> addCommand(gc.endTransaction());
 		gc.end();
 	}
 }
@@ -145,15 +145,15 @@ void KisSelection::move(Q_INT32 x, Q_INT32 y)
 
 	if (m_clearOnMove && m_firstMove && m_parent) {
 		KisPainter gc(m_parent);
-		KisDoc *doc = image() -> document();
+		KisUndoAdapter *adapter = image() -> undoAdapter();
 
-		doc -> beginMacro(i18n("Move Selection"));
-		doc -> addCommand(new KisResetFirstMoveCmd(this));
+		adapter -> beginMacro(i18n("Move Selection"));
+		adapter -> addCommand(new KisResetFirstMoveCmd(this));
 		gc.beginTransaction("clear the parent's background from KisSelection::move");
 		gc.eraseRect(this -> x() - m_parent -> x(), this -> y() - m_parent -> y(), width(), height());
 		m_firstMove = false;
 		m_parent -> invalidate(rc);
-		doc -> addCommand(gc.endTransaction());
+		adapter -> addCommand(gc.endTransaction());
 	}
 
 	super::move(x, y);
@@ -252,11 +252,10 @@ KisPaintDeviceSP KisSelection::parent() const
 
 void KisSelection::anchor()
 {
-	KisDoc *doc;
-
 	if (m_firstMove == false) {
-		doc = m_parent -> image() -> document();
-		doc -> endMacro();
+		KisUndoAdapter *adapter = m_parent -> image() -> undoAdapter();
+
+		adapter -> endMacro();
 	}
 
 	super::anchor();

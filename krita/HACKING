@@ -71,3 +71,6 @@ Files and classes
 	It's preferred (and strongly preferred) to have only one class per .h/.cpp file.
 	(Which is logical, because otherwise you won't be able to keep to the naming scheme.)
 
+Spaces
+
+	Keep the source airy and open: put spaces around -> and * and the like.

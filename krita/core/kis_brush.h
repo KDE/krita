@@ -40,7 +40,8 @@ enum enumBrushType {
 	MASK,
 	IMAGE,
 	PIPE_MASK,
-	PIPE_IMAGE
+	PIPE_IMAGE,
+	AIRBRUSH
 };
 
 class KisBrush : public KisResource {

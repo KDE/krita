@@ -1,5 +1,5 @@
 /*
- *  kis_tool_airbrush.cc - part of Krayon^WKrita
+ *  kis_tool_airbrush.cc - part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
@@ -21,17 +21,18 @@
 #include <qevent.h>
 #include <qtimer.h>
 
-#include <kdebug.h>
 #include <kaction.h>
 #include <kcommand.h>
+#include <kdebug.h>
 #include <klocale.h>
 
+#include "kis_brush.h"
 #include "kis_cursor.h"
 #include "kis_dlg_toolopts.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
-#include "kis_view.h"
 #include "kis_tool_airbrush.h"
+#include "kis_view.h"
 
 namespace {
 	Q_INT32 RATE = 100;
@@ -61,11 +62,16 @@ KisToolAirBrush::~KisToolAirBrush()
 
 void KisToolAirBrush::timeoutPaint()
 {
-	if (m_painter) m_painter -> airBrushAt(m_currentPos, m_pressure, m_xTilt, m_yTilt);
+	if (m_painter) {
+		kdDebug() << "timeout airbrush\n";
+		m_painter -> airBrushAt(m_currentPos, m_pressure, m_xTilt, m_yTilt);
+		m_currentImage -> notify( m_painter -> dirtyRect() );
+	}
 }
 
 void KisToolAirBrush::update(KisCanvasSubject *subject)
 {
+	kdDebug() << "Airbrush update\n";
 	m_subject = subject;
 	m_currentImage = subject -> currentImg();
 	
@@ -74,6 +80,7 @@ void KisToolAirBrush::update(KisCanvasSubject *subject)
 
 void KisToolAirBrush::mousePress(QMouseEvent *e)
 {
+	kdDebug() << "Airbrush mousepress\n";
 	if (!m_subject) return;
 	if (!m_currentImage) return;
 	if (!m_currentImage -> activeDevice()) return;
@@ -155,6 +162,7 @@ void KisToolAirBrush::initPaint(const QPoint & pos)
 		m_painter -> beginTransaction(i18n("airbrush"));
 	}
 
+	m_painter -> setBrush(m_subject -> currentBrush());
 	m_painter -> setPaintColor(m_subject -> fgColor());
 
 	// Set the cursor -- ideally. this should be a mask created from the brush,
@@ -165,7 +173,7 @@ void KisToolAirBrush::initPaint(const QPoint & pos)
 	setCursor(KisCursor::brushCursor());
 #endif
 
-	m_timer -> start( RATE);
+	m_timer -> start( RATE );
 }
 
 void KisToolAirBrush::endPaint() 
@@ -206,7 +214,7 @@ void KisToolAirBrush::setup(KActionCollection *collection)
 	KToggleAction * toggle;
 	toggle = new KToggleAction(i18n("&Airbrush Tool"), 
 				   "airbrush", 0, this, 
-				   SLOT(active()), collection, 
+				   SLOT(activate()), collection, 
 				   "tool_airbrush");
 	toggle -> setExclusiveGroup("tools");
 }

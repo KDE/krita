@@ -158,8 +158,8 @@ void KisToolBrush::initPaint(const QPoint & pos)
 
 	m_painter -> setPaintColor(m_subject -> fgColor());
 	m_painter -> setBrush(m_subject -> currentBrush());
-	m_painter->setOpacity(m_opacity);
-	m_painter->setCompositeOp(m_compositeOp);
+	m_painter -> setOpacity(m_opacity);
+	m_painter -> setCompositeOp(m_compositeOp);
 
 	// Set the cursor -- ideally. this should be a mask created from the brush,
 	// now that X11 can handle colored cursors.

@@ -27,6 +27,7 @@ class QPoint;
 class QTimer;
 
 class KisPainter;
+class KisBrush;
 
 class KisToolAirBrush : public KisToolPaint {
 	Q_OBJECT
@@ -46,6 +47,7 @@ class KisToolAirBrush : public KisToolPaint {
 	virtual void tabletEvent(QTabletEvent *e);
 	
 	virtual KDialog * optionsDialog(QWidget * parent);
+
 
  protected slots:
 	void timeoutPaint();  
@@ -75,6 +77,12 @@ class KisToolAirBrush : public KisToolPaint {
 
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;
+
+	KisBrush *m_dummyBrush; // The airbrush doesn't use a real
+				// brush-shape, but still needs a way
+				// to get the initial size info into
+				// KisPainter.
+       
 };
 
 #endif // KIS_TOOL_AIRBRUSH_H

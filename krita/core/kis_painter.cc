@@ -625,6 +625,9 @@ float KisPainter::paintLine(const enumPaintOp paintOp,
 		case PAINTOP_ERASE:
 			eraseAt(p, pressure, xTilt, yTilt);
 			break;
+		case PAINTOP_AIRBRUSH:
+			airBrushAt(p, pressure, xTilt, yTilt);
+			break;
 		default:
 			kdDebug() << "Paint operation not implemented yet.\n";
 		}
@@ -739,7 +742,7 @@ void KisPainter::eraseAt(const QPoint &pos,
 			     "eraser_dab");
 
 	if (m_device -> alpha()) {
-		kdDebug() << "Erase to inverted brush transparency.\n";
+		//kdDebug() << "Erase to inverted brush transparency.\n";
 		m_dab -> setOpacity(OPACITY_OPAQUE);
 		for (int y = 0; y < mask -> height(); y++) {
 			for (int x = 0; x < mask -> width(); x++) {
@@ -749,7 +752,7 @@ void KisPainter::eraseAt(const QPoint &pos,
 		}
 		bitBlt( r.x(), r.y(), COMPOSITE_ERASE, m_dab.data() );
  	} else {
- 		kdDebug() << "Erase to background colour.\n";
+ 		//kdDebug() << "Erase to background colour.\n";
 		m_dab -> setOpacity(OPACITY_TRANSPARENT);
 		for (int y = 0; y < mask -> height(); y++) {
 			for (int x = 0; x < mask -> width(); x++) {
@@ -803,6 +806,44 @@ void KisPainter::airBrushAt(const QPoint &pos,
 // Anyway, it's exactly twenty years ago that I have held a real
 // airbrush, for the first and up to now the last time...
 //
+	
+	// For now: use the current brush shape -- it beats calculating
+	// ellipes and cones, and it shows the working of the timer.
+	if (!m_device) return;
+
+	QPoint hotSpot = m_brush -> hotSpot(pressure);
+	Q_INT32 x = pos.x() - hotSpot.x();
+	Q_INT32 y = pos.y() - hotSpot.y();
+
+	// This is going to be sloooooow!
+	if (m_pressure != pressure || m_brush -> brushType() == PIPE_MASK || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
+
+		if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
+			m_dab = m_brush -> image(pressure);
+		}
+		else {
+			KisAlphaMask * mask = m_brush -> mask(pressure);
+			computeDab(mask);
+		}
+
+		m_pressure = pressure;
+	}
+        
+        // Draw correctly near the left and top edges
+        Q_INT32 sx = 0;
+        Q_INT32 sy = 0;
+        if (x < 0) {
+                sx = -x;
+                x = 0;
+        }
+        if (y < 0) {
+                sy = -y;
+                y = 0;
+        }
+
+	bitBlt( x,  y,  COMPOSITE_OVER, m_dab.data(), OPACITY_OPAQUE / 50, sx, sy, m_dab -> width(), m_dab -> height());
+
+	m_dirtyRect |= QRect(x, y, m_dab -> width(), m_dab -> height());
 
 #if 0
 	KisView *view = getCurrentView();

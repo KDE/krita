@@ -41,6 +41,7 @@ PolyLineTool::~PolyLineTool()
 
 void PolyLineTool::mousePress(QMouseEvent *event)
 {
+	KisView *view = getCurrentView();
 	KisPainter *p;
 
 	// start the polyline, and/or complete the 
@@ -50,7 +51,7 @@ void PolyLineTool::mousePress(QMouseEvent *event)
 			// erase old line on canvas
 			draw(m_dragStart, m_dragEnd);
 			m_dragEnd = event -> pos();
-			p = m_view -> kisPainter();
+			p = view -> kisPainter();
 			p -> drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()), zoomed(m_dragEnd.x()),   zoomed(m_dragEnd.y()));
 		}
         
@@ -61,7 +62,7 @@ void PolyLineTool::mousePress(QMouseEvent *event)
 	else {   
 		m_dragging = false;
 		m_dragEnd = event -> pos();
-		p = m_view -> kisPainter();
+		p = view -> kisPainter();
 		p -> drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()), zoomed(m_dragEnd.x()), zoomed(m_dragEnd.y()));
 	}    
 }

@@ -48,6 +48,7 @@ KoColor ColorPicker::pick(KisImageSP img, KisPaintDeviceSP device, int x, int y)
 void ColorPicker::mousePress(QMouseEvent *e)
 {
 	if (e->button() == QMouseEvent::LeftButton || e->button() == QMouseEvent::RightButton) {
+		KisView *view = getCurrentView();
 		KisImageSP img = m_doc -> currentImg();
 		KisPaintDeviceSP layer;
 
@@ -67,9 +68,9 @@ void ColorPicker::mousePress(QMouseEvent *e)
 		KoColor pickedColor = pick(img, layer, pos.x(), pos.y());
 
 		if (e -> button() == QMouseEvent::LeftButton)
-			m_view -> setSetFGColor(pickedColor);
+			view -> setSetFGColor(pickedColor);
 		else 
-			m_view -> setSetBGColor(pickedColor);
+			view -> setSetBGColor(pickedColor);
 	}
 }
 

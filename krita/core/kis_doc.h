@@ -97,6 +97,8 @@ public:
 	 * Return apointer to the current view.
 	 */
 	KisView* currentView();
+	const KisView* currentView() const;
+
 
 	/*
 	 * Return apointer to the current image.
@@ -198,6 +200,8 @@ public:
 	ktvector getTools() const;
 	void setTools(const ktvector& tools);
 	inline void setUndo(bool undo);
+
+	void setCanvasCursor(const QCursor& cursor);
 
 #if 0
     /*

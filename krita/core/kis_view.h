@@ -125,6 +125,8 @@ public:
 	void setSetFGColor(const KoColor& c);
 	void setSetBGColor(const KoColor& c);
 
+	void setCanvasCursor(const QCursor& cursor);
+
 signals:
 	void bgColorChanged(const KoColor&);
 	void fgColorChanged(const KoColor&);     
@@ -237,8 +239,6 @@ protected:
 
 protected:
    	// krayon box floating dialog actions
-	ktvector m_tools;
-
 	KToggleAction *m_dialog_colors, *m_dialog_krayons, *m_dialog_brushes,
                  *m_dialog_patterns, *m_dialog_layers, *m_dialog_channels;
 

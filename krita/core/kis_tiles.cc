@@ -18,8 +18,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <assert.h>
-#include <stdlib.h>
+#include <qtl.h>
 
 #include <kdebug.h>
 
@@ -27,7 +26,7 @@
 #include "kis_tiles.h"
 #include "kis_tile.h"
 
-KisTiles::KisTiles(unsigned int width, unsigned int height, unsigned int bpp, const QRgb& defaultColor)
+KisTiles::KisTiles(uint width, uint height, uint bpp, const QRgb& defaultColor)
 {
 	m_defaultColor = defaultColor;
 	init(width, height, bpp);
@@ -38,55 +37,93 @@ KisTiles::~KisTiles()
 	cleanup();
 }
 
-KisTile* KisTiles::getTile(unsigned int x, unsigned int y) const
+KisTileSP KisTiles::setTile(uint x, uint y, KisTileSP tile)
 {
-	if (y > yTiles() || x > xTiles())
+	if (!intersects(x, y))
 		return 0;
-	
-	return m_tiles[y * m_xTiles + x];
+
+	int tileNo = getTileNo(x, y);
+	KisTileSP oldTile = m_tiles[tileNo];
+
+	m_tiles[tileNo] = tile;
+	return oldTile;
 }
 
-void KisTiles::markDirty(unsigned int x, unsigned int y)
+KisTileSP KisTiles::getTile(uint x, uint y)
 {
-	if (y > yTiles() || x > xTiles())
-		return;
+	if (!intersects(x, y))
+		return 0;
+
+	int tileNo = getTileNo(x, y);
+
+	if (!m_tiles[tileNo])
+		m_tiles[tileNo] = new KisTile(TILE_SIZE, TILE_SIZE, m_bpp, m_defaultColor);
 	
-	m_tiles[y * m_xTiles + x] -> setDirty(true);
+	return m_tiles[tileNo];
 }
 
-bool KisTiles::isDirty(unsigned int x, unsigned int y)
+KisTileSP KisTiles::takeTile(uint x, uint y)
 {
-	if (y > yTiles() || x > xTiles())
+	if (!intersects(x, y))
+		return 0;
+
+	int tileNo = getTileNo(x, y);
+	KisTileSP tile = m_tiles[tileNo];
+
+	m_tiles[tileNo] = 0;
+	return tile;
+}
+
+bool KisTiles::swapTile(uint x1, uint y1, uint x2, uint y2)
+{
+	if (!intersects(x1, y1) || !intersects(x2, y2))
 		return false;
 
-	return m_tiles[y * m_xTiles + x] -> dirty();
+	int tileNo1 = getTileNo(x1, y1);
+	int tileNo2 = getTileNo(x2, y2);
+
+	qSwap(m_tiles[tileNo1], m_tiles[tileNo2]);
+	return true;
 }
 
-void KisTiles::resize(unsigned int width, unsigned int height, unsigned int bpp)
+void KisTiles::markDirty(uint x, uint y)
+{
+	if (!intersects(x, y))
+		return;
+	
+	m_tiles[getTileNo(x, y)] -> setDirty(true);
+}
+
+bool KisTiles::isDirty(uint x, uint y)
+{
+	if (!intersects(x, y))
+		return false;
+
+	int tileNo = getTileNo(x, y);
+	KisTileSP tile = m_tiles[tileNo];
+
+	return tile ? tile -> dirty() : false;
+}
+
+void KisTiles::resize(uint width, uint height, uint bpp)
 {
 	cleanup();
 	init(width, height, bpp);
 }
 
-void KisTiles::init(unsigned int width, unsigned int height, unsigned int bpp)
+void KisTiles::init(uint width, uint height, uint bpp)
 {
 	m_xTiles = width;
 	m_yTiles = height;
 	m_bpp = bpp;
-	m_tiles = new KisTile*[m_xTiles * m_yTiles];
-
-	for (unsigned int y = 0; y < m_yTiles; y++)
-		for (unsigned int x = 0; x < m_xTiles; x++)
-			m_tiles[y * m_xTiles + x] = new KisTile(TILE_SIZE, TILE_SIZE, bpp, m_defaultColor);
+	m_tiles.clear();
+	m_tiles.resize(m_xTiles * m_yTiles);
+	qFill(m_tiles.begin(), m_tiles.end(), static_cast<KisTile*>(0));
 }
 
 void KisTiles::cleanup()
 {
-	for (unsigned int y = 0; y < m_yTiles; y++)
-		for (unsigned int x = 0; x < m_xTiles; x++)
-			delete m_tiles[y * m_xTiles + x];
-
-	delete[] m_tiles;
+	m_tiles.clear();
 	m_xTiles = 0;
 	m_yTiles = 0;
 }

@@ -32,10 +32,11 @@
 
 ColorChangerTool::ColorChangerTool(KisDoc *doc) : KisTool(doc)
 {
+
 	// set custom cursor.
 	setCursor();
 	m_doc = doc;
-
+	KisView *view = getCurrentView();
 	// initialize color changer settings
 	m_opacity = 255;
 	m_usePattern  = false;
@@ -48,12 +49,12 @@ ColorChangerTool::ColorChangerTool(KisDoc *doc) : KisTool(doc)
 	layerAlpha = true;
     
 	// get currentImg colors
-	KoColor startColor( m_view->fgColor().R(), m_view->fgColor().G(), m_view->fgColor().B() );
-	KoColor endColor( m_view->bgColor().R(), m_view->bgColor().G(), m_view->bgColor().B() );        
+	KoColor startColor( view->fgColor().R(), view->fgColor().G(), view->fgColor().B() );
+	KoColor endColor( view->bgColor().R(), view->bgColor().G(), view->bgColor().B() );        
     
 	// prepare for painting with pattern
 	if( m_usePattern )
-		m_doc->frameBuffer()->setPattern( m_view->currentPattern() );
+		m_doc->frameBuffer()->setPattern( view->currentPattern() );
 
 	// prepare for painting with gradient
 	m_doc->frameBuffer()->setGradientPaint( m_useGradient, startColor, endColor );
@@ -71,7 +72,7 @@ bool ColorChangerTool::changeColors(int startX, int startY)
 	int sGreen;
 	int sBlue;
 	QRgb srgb;
-
+	KisView *view = getCurrentView();
 	KisImage *img = m_doc -> currentImg();
 
 	if (!img) 
@@ -95,9 +96,9 @@ bool ColorChangerTool::changeColors(int startX, int startY)
 	sBlue = qBlue(srgb);
 
 	// new color values from color selector 
-	nRed     = m_view->fgColor().R();
-	nGreen   = m_view->fgColor().G();
-	nBlue    = m_view->fgColor().B();
+	nRed     = view->fgColor().R();
+	nGreen   = view->fgColor().G();
+	nBlue    = view->fgColor().B();
 
 	int left    = lay->imageExtents().left(); 
 	int top     = lay->imageExtents().top();    
@@ -110,17 +111,15 @@ bool ColorChangerTool::changeColors(int startX, int startY)
 
 	// prepare for painting with gradient
 	if (m_useGradient) {
-		KoColor startColor(m_view->fgColor().R(),
-				m_view->fgColor().G(), m_view->fgColor().B());
-		KoColor endColor(m_view->bgColor().R(),
-				m_view->bgColor().G(), m_view->bgColor().B());        
+		KoColor startColor(view->fgColor().R(), view->fgColor().G(), view->fgColor().B());
+		KoColor endColor(view->bgColor().R(), view->bgColor().G(), view->bgColor().B());        
 
 		m_doc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
 	}
 
 	// prepare for painting with pattern
 	if (m_usePattern)
-		m_doc->frameBuffer()->setPattern(m_view->currentPattern());
+		m_doc->frameBuffer()->setPattern(view->currentPattern());
 
 	// this does the painting
 	if (!m_doc->frameBuffer()->changeColors(qRgba(sRed, sGreen, sBlue, m_opacity), 
@@ -199,16 +198,17 @@ void ColorChangerTool::optionsDialog()
 
 	// User change value ?
 	if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_m_opacity != m_opacity ) {
+		KisView *view = getCurrentView();
 		// note that gradients amd patterns are not associated with a
 		// particular tool, unlike the other options
 
 		// get currentImg colors
-		KoColor startColor( m_view->fgColor().R(), m_view->fgColor().G(), m_view->fgColor().B() );
-		KoColor endColor( m_view->bgColor().R(), m_view->bgColor().G(), m_view->bgColor().B() );        
+		KoColor startColor( view->fgColor().R(), view->fgColor().G(), view->fgColor().B() );
+		KoColor endColor( view->bgColor().R(), view->bgColor().G(), view->bgColor().B() );        
 
 		// prepare for painting with pattern
 		if( m_usePattern )
-			m_doc->frameBuffer()->setPattern( m_view->currentPattern() );
+			m_doc->frameBuffer()->setPattern( view->currentPattern() );
 
 		// prepare for painting with gradient
 		m_doc->frameBuffer()->setGradientPaint( m_useGradient, startColor, endColor );
@@ -220,7 +220,7 @@ void ColorChangerTool::optionsDialog()
 
 void ColorChangerTool::setCursor()
 {
-	m_view -> kisCanvas() -> setCursor(KisCursor::colorChangerCursor());
+	m_doc -> setCanvasCursor(KisCursor::colorChangerCursor());
 	m_cursor = KisCursor::colorChangerCursor();
 }
 

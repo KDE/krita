@@ -79,12 +79,14 @@ void PolyGonTool::mouseMove(QMouseEvent *event)
 void PolyGonTool::mouseRelease(QMouseEvent *event)
 {
 	if (m_dragging && event -> state() == LeftButton) {
+		KisView *view = getCurrentView();
+
 		// erase old polygon on canvas
 		drawPolygon(m_dragStart, m_dragEnd);
 		m_dragging = false;
 
 		// draw final polygon onto layer 
-		KisPainter *p = m_view -> kisPainter();
+		KisPainter *p = view -> kisPainter();
 		QRect rect = getDrawRect(drawPoints);
 		QPointArray points = zoomPointArray(drawPoints);
 		p -> drawPolygon(points, rect);
@@ -93,6 +95,7 @@ void PolyGonTool::mouseRelease(QMouseEvent *event)
 
 void PolyGonTool::drawPolygon(const QPoint& start, const QPoint& end)
 {
+	KisView *view = getCurrentView();
 	QPainter p;
 	QPen pen;
 
@@ -101,13 +104,13 @@ void PolyGonTool::drawPolygon(const QPoint& start, const QPoint& end)
 	p.setPen(pen);
 	p.setRasterOp(Qt::NotROP);
 
-	float zF = m_view -> zoomFactor();
+	float zF = view -> zoomFactor();
 	double angle = 2 * M_PI / cornersValue;
 	float dx = (float) ::fabs(start.x() - end.x());
 	float dy = (float) ::fabs(start.y() - end.y());
 	float radius = (dx > dy ? dx / 2.0 : dy / 2.0);
-	float xoff = start.x() + (start.x() < end.x() ? radius : -radius) + m_view -> xPaintOffset() - (int)(zF * m_view -> xScrollOffset());
-	float yoff = start.y() + (start.y() < end.y() ? radius : -radius) + m_view -> yPaintOffset() - (int)(zF * m_view -> yScrollOffset());
+	float xoff = start.x() + (start.x() < end.x() ? radius : -radius) + view -> xPaintOffset() - (int)(zF * view -> xScrollOffset());
+	float yoff = start.y() + (start.y() < end.y() ? radius : -radius) + view -> yPaintOffset() - (int)(zF * view -> yScrollOffset());
 	float xoff_draw = start.x() + (start.x() < end.x() ? radius : -radius);
 	float yoff_draw = start.y() + (start.y() < end.y() ? radius : -radius);
 	QPointArray points(checkConcavePolygon ? cornersValue * 2 : cornersValue);
@@ -211,7 +214,8 @@ void PolyGonTool::optionsDialog()
 			|| old_useRegions != m_useRegions || old_cornersValue != cornersValue
 			|| old_sharpnessValue != sharpnessValue || old_checkPolygon != checkPolygon
 			|| old_checkConcavePolygon != checkConcavePolygon) {    
-		KisPainter *p = m_view -> kisPainter();
+		KisView *view = getCurrentView();
+		KisPainter *p = view -> kisPainter();
 
 		Q_ASSERT(p);
 		p->setLineThickness(lineThickness);
@@ -234,15 +238,17 @@ void PolyGonTool::setupAction(QObject *collection)
 
 void PolyGonTool::toolSelect()
 {
-	if (m_view) {
-		KisPainter *gc = m_view -> kisPainter();
+	KisView *view = getCurrentView();
+
+	if (view) {
+		KisPainter *gc = view -> kisPainter();
 
 		gc -> setLineThickness(lineThickness);
 		gc -> setLineOpacity(m_opacity);
 		gc -> setPatternFill(m_usePattern);
 		gc -> setGradientFill(m_useGradient);
 
-		m_view -> activateTool(this);
+		view -> activateTool(this);
 	}
 }
 

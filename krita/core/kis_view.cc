@@ -829,6 +829,7 @@ void KisView::slotDocUpdated()
 
 	m_pCanvas -> repaint();
 	slotRefreshPainter();
+	//kdDebug() << "KisView::slotDocUpdated\n";
 }
 
 /*
@@ -838,38 +839,41 @@ void KisView::slotDocUpdated()
     is given, so only update that rectangle's contents.
 */
 
-void KisView::slotDocUpdated(const QRect& rect)
+void KisView::slotDocUpdated(const QRect& rc)
 {
-	KisImage *img;
+	KisImage* img = m_doc -> currentImg();
+	QRect ur = rc;
 	QPainter p;
-	int xt;
-	int yt;
+	float zF = zoomFactor();
 
-	if (!(img = m_doc -> currentImg()))
+	if (!img)
 		return;
 
-	QRect ur = rect;
-
-	ur = ur.intersect(img->imageExtents());
+	p.begin(m_pCanvas);
+	ur.moveBy(static_cast<int>((xPaintOffset() + m_pHorz -> value()) * zF),  static_cast<int>(((yPaintOffset() + m_pVert -> value()) * zF)));
+	ur = ur.intersect(img -> imageExtents());
 	ur.setBottom(ur.bottom() + 1);
 	ur.setRight(ur.right() + 1);
-	xt = xPaintOffset() + ur.x() - m_pHorz -> value();
-	yt = yPaintOffset() + ur.y() - m_pVert -> value();
 
-	p.begin(m_pCanvas);
-	p.setClipRect(ur);
-	Q_ASSERT(p.hasClipping());
-	p.scale(zoomFactor(), zoomFactor());
+	int xt = xPaintOffset() - m_pHorz -> value();
+	int yt = yPaintOffset() - m_pVert -> value();
+
 	p.translate(xt, yt);
-	koDocument() -> paintEverything(p, ur, false, this);
+	p.scale(zF, zF);
+	m_doc -> paintContent(p, ur);
 	p.end();
+
+	if (m_pTool && !m_pTool -> willModify()) {
+		QPaintEvent ev(ur, false);
+
+		m_pTool -> paintEvent(&ev);
+	}
 }
 
 void KisView::clearCanvas(const QRect& rc)
 {
 	QPainter p;
 
-	kdDebug(0) << "No curent image" << endl;
 	p.begin(m_pCanvas);
 	p.eraseRect(rc);
 	p.end();
@@ -880,6 +884,7 @@ void KisView::paintView(const QRect& rc)
 	KisImage* img = m_doc -> currentImg();
 	QRect ur = rc;
 	QPainter p;
+	float zF = zoomFactor();
 
 	if (!img) {
 		clearCanvas(ur);
@@ -887,34 +892,22 @@ void KisView::paintView(const QRect& rc)
 	}
 
 	p.begin(m_pCanvas);
-
-	// erase strip along left side
 	p.eraseRect(0, 0, xPaintOffset(), height());
-
-	// erase strip along top
 	p.eraseRect(xPaintOffset(), 0, width(), yPaintOffset());
-
-	// erase area to the below - account for zoomed width of doc
 	p.eraseRect(xPaintOffset(), yPaintOffset() + static_cast<int>(docHeight() * zoomFactor()), width(), height());
-
-	// erase area to right - account for zoomed height of doc
 	p.eraseRect(xPaintOffset() + static_cast<int>(docWidth() * zoomFactor()), yPaintOffset(), width(), height());
 
-	// scale the paint device only after clearing border areas
-	p.scale(zoomFactor(), zoomFactor());
-
-	ur.moveBy(- xPaintOffset() + m_pHorz -> value(), - yPaintOffset() + m_pVert -> value());
+	ur.moveBy(static_cast<int>((xPaintOffset() + m_pHorz -> value()) * zF),  
+			static_cast<int>(((yPaintOffset() + m_pVert -> value()) *zF)));
 	ur = ur.intersect(img -> imageExtents());
 	ur.setBottom(ur.bottom() + 1);
 	ur.setRight(ur.right() + 1);
 
-	if (ur.top() > img -> height() || ur.left() > img -> width())
-		return;
-
-	int xt = xPaintOffset() + ur.x() - m_pHorz -> value();
-	int yt = yPaintOffset() + ur.y() - m_pVert -> value();
+	int xt = xPaintOffset() - m_pHorz -> value();
+	int yt = yPaintOffset() - m_pVert -> value();
 
 	p.translate(xt, yt);
+	p.scale(zoomFactor(), zoomFactor());
 	m_doc -> paintContent(p, ur);
 	p.end();
 
@@ -936,12 +929,18 @@ void KisView::updateCanvas(const QRect& rc)
 
 	// reduce size of update rectangle by inverse of zoom factor
 	// only do this at higher/lower zooms.
-	if(zoomFactor() > 1.0 || zoomFactor() < 1.0) {
+	if (zoomFactor() > 1.0 || zoomFactor() < 1.0) {
+		int urL = ur.left();
+		int urT = ur.top();
 		int urW = ur.width();
 		int urH = ur.height();
 
+		urL = (int)((float)(urL) / zoomFactor());
+		urT = (int)((float)(urT) / zoomFactor());
 		urW = (int)((float)(urW) / zoomFactor());
 		urH = (int)((float)(urH) / zoomFactor());
+		ur.setLeft(urL);
+		ur.setTop(urT);
 		ur.setWidth(urW);
 		ur.setHeight(urH);
 	}
@@ -959,17 +958,11 @@ void KisView::canvasGotPaintEvent(QPaintEvent *e)
 	// reduce size of update rectangle by inverse of zoom factor
 	// also reduce offset into image by same factor (1/zoomFactor())
 	if (zoomFactor() > 1.0 || zoomFactor() < 1.0) {
-		int urL = ur.left();
-		int urT = ur.top();
 		int urW = ur.width();
 		int urH = ur.height();
 
-		urL = (int)((float)(urL) / zoomFactor());
-		urT = (int)((float)(urT) / zoomFactor());
 		urW = (int)((float)(urW) / zoomFactor());
 		urH = (int)((float)(urH) / zoomFactor());
-		ur.setLeft(urL);
-		ur.setTop(urT);
 		ur.setWidth(urW);
 		ur.setHeight(urH);
 	}
@@ -2063,17 +2056,22 @@ int KisView::docHeight()
 
 void KisView::slotSetPaintOffset()
 {
-    // dialog to set x and y paint offsets needed
-    if(xPaintOffset() == 0)
-    {
-        m_xPaintOffset = 20;
-        m_yPaintOffset = 20;
-    }
-    else
-    {
-        m_xPaintOffset = 0;
-        m_yPaintOffset = 0;
-    }
+	// dialog to set x and y paint offsets needed
+	if(xPaintOffset() == 0)
+	{
+		m_xPaintOffset = 20;
+		m_yPaintOffset = 20;
+	}
+	else
+	{
+		m_xPaintOffset = 0;
+		m_yPaintOffset = 0;
+	}
+
+	KisCanvas *canvas = kisCanvas();
+
+	paintView(QRect(0, 0, canvas -> width(), canvas -> height()));
+	slotUpdateImage();
 }
 
 
@@ -2261,29 +2259,36 @@ void KisView::addHasNewLayer(QImage& loadedImg, KURL& u)
 
 void KisView::setupTools()
 {
-	if (!m_tools.empty())
-		return;
+	ktvector tools;
 
-	m_tools = m_doc -> getTools();
+	tools = m_doc -> getTools();
 
-	if (m_tools.empty()) {
-		m_tools = ::toolFactory(m_pCanvas, m_pBrush, m_pPattern, m_doc);
+	if (tools.empty()) {
+		tools = ::toolFactory(m_pCanvas, m_pBrush, m_pPattern, m_doc);
 		m_paste = new PasteTool(m_doc, m_pCanvas);
-		m_tools.push_back(m_paste);
+		tools.push_back(m_paste);
 	}
 
-	for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
-		KisTool *p = m_tools[i];
+	for (ktvector_size_type i = 0; i < tools.size(); i++) {
+		KisTool *p = tools[i];
 
 		Q_ASSERT(p);
 		p -> setupAction(actionCollection());
 	}
 
 	if (m_doc -> viewCount() < 1)
-		m_doc -> setTools(m_tools);
+		m_doc -> setTools(tools);
 
-	m_tools[0] -> toolSelect();
-	activateTool(m_tools[0]);
+	tools[0] -> toolSelect();
+	activateTool(tools[0]);
+}
+
+void KisView::setCanvasCursor(const QCursor& cursor)
+{
+	KisCanvas *canvas = kisCanvas();
+
+	Q_ASSERT(canvas);
+	canvas -> setCursor(cursor);
 }
 
 #include "kis_view.moc"

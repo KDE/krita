@@ -18,8 +18,10 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <limits.h>
 #include <string.h>
+#include <stdlib.h>
+
+#include <qtl.h>
 
 #include <kdebug.h>
 
@@ -39,11 +41,40 @@ KisTile::KisTile(unsigned int width, unsigned int height, unsigned int bpp, cons
 		initTile();
 }
 
+KisTile::KisTile(const KisTile& tile)
+{
+	if (this != &tile)
+		copyTile(tile);
+}
+
+KisTile& KisTile::operator=(const KisTile& tile)
+{
+	if (this != &tile)
+		copyTile(tile);
+
+	return *this;
+}
+
 KisTile::~KisTile()
 {
 	delete[] m_data;
 }
 	
+void KisTile::copyTile(const KisTile& tile)
+{
+	m_dirty = tile.m_dirty;
+	m_width = tile.m_width;
+	m_height = tile.m_height;
+	m_bpp = tile.m_bpp;
+	m_data = 0;
+	m_defaultColor = tile.m_defaultColor;
+
+	if (tile.m_data) {
+		m_data = new unsigned int[m_width * m_height];
+		memcpy(m_data, tile.m_data, m_width * m_height * sizeof(unsigned int));
+	}
+}
+
 void KisTile::setDirty(bool dirty)
 {
 	m_dirty = dirty;
@@ -52,21 +83,15 @@ void KisTile::setDirty(bool dirty)
 unsigned int* KisTile::data()
 {
 	if (!m_data)
-		initTile();
+		m_data = new unsigned int[m_width * m_height];
 
-	return m_data;
-}
-
-const unsigned int* KisTile::data() const
-{
 	return m_data;
 }
 
 void KisTile::initTile()
 {
-	uint a = qAlpha(m_defaultColor);
-
 	m_data = new unsigned int[m_width * m_height];
-	memset(m_data, a, m_width * m_height * sizeof(unsigned int));
+	qFill(m_data, m_data + m_width * m_height, m_defaultColor);
+	memset(m_data, rand() % 255, m_width * m_height * sizeof(unsigned int));
 }
 

@@ -84,9 +84,9 @@ void StampTool::setOpacity(int /* opacity */)
 }
 
 /*
-    On mouse press, the image is stamped or pasted
-    into the currentImg layer
-*/
+   On mouse press, the image is stamped or pasted
+   into the currentImg layer
+ */
 
 void StampTool::mousePress(QMouseEvent *e)
 {
@@ -141,94 +141,95 @@ void StampTool::mousePress(QMouseEvent *e)
 
 
 /*
-    Stamp to canvas - stamp the pattern only onto canvas -
-    it will not affect the layer or image
-*/
+   Stamp to canvas - stamp the pattern only onto canvas -
+   it will not affect the layer or image
+ */
 
 bool StampTool::stampToCanvas(QPoint pos)
 {
-    KisImage* img = m_doc->currentImg();
-    KisLayer *lay = img->getCurrentLayer();
-    float zF = m_view->zoomFactor();
+	KisView *view = getCurrentView();
+	KisImage* img = m_doc->currentImg();
+	KisLayer *lay = img->getCurrentLayer();
+	float zF = view->zoomFactor();
 
-    int pX = pos.x();
-    int pY = pos.y();
-    pX = (int)(pX / zF);
-    pY = (int)(pY / zF);
-    pos = QPoint(pX, pY);
+	int pX = pos.x();
+	int pY = pos.y();
+	pX = (int)(pX / zF);
+	pY = (int)(pY / zF);
+	pos = QPoint(pX, pY);
 
-    QPainter p;
-    p.begin(m_canvas);
-    p.scale(zF, zF);
+	QPainter p;
+	p.begin(m_canvas);
+	p.scale(zF, zF);
 
-    QRect ur(pos.x() - mHotSpotX, pos.y()- mHotSpotY,
-        patternWidth, patternHeight);
+	QRect ur(pos.x() - mHotSpotX, pos.y()- mHotSpotY,
+			patternWidth, patternHeight);
 
-    /* check image bounds.  The image extents are a rectangle
-    containing all the layers that contribute to it, or
-    maybe just a rectangle containing the currentImg layer in
-    terms of canvas coords.  This is unclear... */
+	/* check image bounds.  The image extents are a rectangle
+	   containing all the layers that contribute to it, or
+	   maybe just a rectangle containing the currentImg layer in
+	   terms of canvas coords.  This is unclear... */
 
-    ur = ur.intersect(img->imageExtents());
+	ur = ur.intersect(img->imageExtents());
 
-    if (ur.top()    > img->height()
-    || ur.left()    > img->width()
-    || ur.bottom()  < 0
-    || ur.right()   < 0)
-    {
-        p.end();
-        return false;
-    }
+	if (ur.top()    > img->height()
+			|| ur.left()    > img->width()
+			|| ur.bottom()  < 0
+			|| ur.right()   < 0)
+	{
+		p.end();
+		return false;
+	}
 
-    /* check the layer bounds. There may be several different
-    layers visible at once and we only want to draw on the
-    currentImg layer - which usually is also the topmost one
-    Note:  This is probably unnecessary because intersects
-    imageExtents() above is probably the same, but I'm not sure.
-    Better to be safe... */
+	/* check the layer bounds. There may be several different
+	   layers visible at once and we only want to draw on the
+	   currentImg layer - which usually is also the topmost one
+Note:  This is probably unnecessary because intersects
+imageExtents() above is probably the same, but I'm not sure.
+Better to be safe... */
 
-    if (!ur.intersects(lay->layerExtents()))
-    {
-        p.end();
-        return false;
-    }
-    ur = ur.intersect(lay->layerExtents());
+	if (!ur.intersects(lay->layerExtents()))
+	{
+		p.end();
+		return false;
+	}
+	ur = ur.intersect(lay->layerExtents());
 
-    int startX = 0;
-    int startY = 0;
+	int startX = 0;
+	int startY = 0;
 
-    if(patternWidth > ur.right())
-        startX = patternWidth - ur.right();
-    if(patternHeight > ur.bottom())
-        startY = patternHeight - ur.bottom();
+	if(patternWidth > ur.right())
+		startX = patternWidth - ur.right();
+	if(patternHeight > ur.bottom())
+		startY = patternHeight - ur.bottom();
 
-    // paranioa
-    if(startX < 0) startX = 0;
-    if(startY < 0) startY = 0;
-    if(startX > patternWidth)  startX = patternWidth;
-    if(startY > patternHeight) startY = patternHeight;
+	// paranioa
+	if(startX < 0) startX = 0;
+	if(startY < 0) startY = 0;
+	if(startX > patternWidth)  startX = patternWidth;
+	if(startY > patternHeight) startY = patternHeight;
 
-    int xt = m_view->xPaintOffset() - m_view->xScrollOffset();
-    int yt = m_view->yPaintOffset() - m_view->yScrollOffset();
+	int xt = view->xPaintOffset() - view->xScrollOffset();
+	int yt = view->yPaintOffset() - view->yScrollOffset();
 
-    p.translate(xt, yt);
+	p.translate(xt, yt);
+	p.drawPixmap( ur.left(), ur.top(),
+			m_pattern->pixmap(),
+			startX, startY,
+			ur.width(), ur.height());
 
-    p.drawPixmap( ur.left(), ur.top(),
-                  m_pattern->pixmap(),
-                  startX, startY,
-                  ur.width(), ur.height());
+	p.end();
 
-    p.end();
-
-    return true;
+	return true;
 }
 
 /*
-    stamp the pattern into the layer
-*/
+   stamp the pattern into the layer
+ */
 
 bool StampTool::stampColor(QPoint pos)
 {
+	KisView *view = getCurrentView();
 	KisImage *img = m_doc->currentImg();
 	KisLayer *lay = img->getCurrentLayer();
 	QImage  *qimg = m_pattern->image();
@@ -253,9 +254,9 @@ bool StampTool::stampColor(QPoint pos)
 	int   v = 255;
 	int   bv = 0;
 
-	int red     = m_view->fgColor().R();
-	int green   = m_view->fgColor().G();
-	int blue    = m_view->fgColor().B();
+	int red     = view->fgColor().R();
+	int green   = view->fgColor().G();
+	int blue    = view->fgColor().B();
 
 	bool colorBlending = false;
 	bool grayscale = false;
@@ -300,7 +301,7 @@ bool StampTool::stampColor(QPoint pos)
 
 				if (v > 255) 
 					v = 255;
-				
+
 				a = (uchar) v;
 			}
 
@@ -337,102 +338,98 @@ bool StampTool::stampColor(QPoint pos)
 
 bool StampTool::stampMonochrome(QPoint /*pos*/)
 {
-    return true;
+	return true;
 }
 
 
 void StampTool::mouseMove(QMouseEvent *e)
 {
-    KisImage * img = m_doc->currentImg();
-    if(!img) return;
+	KisView *view = getCurrentView();
+	KisImage * img = m_doc->currentImg();
+	if(!img) return;
 
-    KisLayer *lay = img->getCurrentLayer();
-    if (!lay)  return;
+	KisLayer *lay = img->getCurrentLayer();
+	if (!lay)  return;
 
-    float zF = m_view->zoomFactor();
+	float zF = view->zoomFactor();
 
-    QPoint pos = e->pos();
-    int mouseX = e->x();
-    int mouseY = e->y();
+	QPoint pos = e->pos();
+	int mouseX = e->x();
+	int mouseY = e->y();
 
-    KisVector end(mouseX, mouseY);
-    KisVector start(m_dragStart.x(), m_dragStart.y());
+	KisVector end(mouseX, mouseY);
+	KisVector start(m_dragStart.x(), m_dragStart.y());
 
-    KisVector dragVec = end - start;
-    float saved_dist = m_dragdist;
-    float new_dist = dragVec.length();
-    float dist = saved_dist + new_dist;
+	KisVector dragVec = end - start;
+	float saved_dist = m_dragdist;
+	float new_dist = dragVec.length();
+	float dist = saved_dist + new_dist;
 
-    if ((int)dist < spacing)
-    {
-        m_dragdist += new_dist;
-        m_dragStart = pos;
-        return;
-    }
-    else
-    {
-        m_dragdist = 0;
-    }
+	if ((int)dist < spacing) {
+		m_dragdist += new_dist;
+		m_dragStart = pos;
+		return;
+	}
+	else {
+		m_dragdist = 0;
+	}
 
-    dragVec.normalize();
-    KisVector step = start;
+	dragVec.normalize();
+	KisVector step = start;
 
-    while (dist >= spacing)
-    {
-        if (saved_dist > 0)
-        {
-            step += dragVec * (spacing-saved_dist);
-            saved_dist -= spacing;
-        }
-        else
-            step += dragVec * spacing;
+	while (dist >= spacing) {
+		if (saved_dist > 0) {
+			step += dragVec * (spacing-saved_dist);
+			saved_dist -= spacing;
+		}
+		else
+			step += dragVec * spacing;
 
-        QPoint p(qRound(step.x()), qRound(step.y()));
+		QPoint p(qRound(step.x()), qRound(step.y()));
 
-        if(m_dragging)
-        {
-            /* mouse button is down. Actually draw the
-            image into the layer so long as spacing is
-            less than distance moved */
+		if (m_dragging) {
+			/* mouse button is down. Actually draw the
+			   image into the layer so long as spacing is
+			   less than distance moved */
 
-            if (stampColor(zoomed(p) - mHotSpot))
-            {
-	            img->markDirty(QRect(zoomed(p) - mHotSpot, mPatternSize));
-            }
-        }
-        else
-        {
-            /* Button is not down. Refresh canvas from the layer
-            and then blit the image to the canvas without affecting
-            the layer at all ! No need for double buffer!!!
-            Refresh first - markDirty relies on timer,
-            so we need force by directly updating the canvas. */
+			if (stampColor(zoomed(p) - mHotSpot))
+			{
+				img->markDirty(QRect(zoomed(p) - mHotSpot, mPatternSize));
+			}
+		}
+		else
+		{
+			/* Button is not down. Refresh canvas from the layer
+			   and then blit the image to the canvas without affecting
+			   the layer at all ! No need for double buffer!!!
+			   Refresh first - markDirty relies on timer,
+			   so we need force by directly updating the canvas. */
 
-            QRect ur(zoomed(oldp.x()) - mHotSpotX - m_view->xScrollOffset(),
-                zoomed(oldp.y()) - mHotSpotY - m_view->yScrollOffset(),
-                (int)(patternWidth  * (zF > 1.0 ? zF : 1.0)),
-                (int)(patternHeight * (zF > 1.0 ? zF : 1.0)));
+			QRect ur(zoomed(oldp.x()) - mHotSpotX + view->xPaintOffset() - view->xScrollOffset(),
+					zoomed(oldp.y()) - mHotSpotY + view->yPaintOffset() - view->yScrollOffset(),
+					(int)(patternWidth  * (zF > 1.0 ? zF : 1.0)),
+					(int)(patternHeight * (zF > 1.0 ? zF : 1.0)));
 
-            m_view->updateCanvas(ur);
+			view->updateCanvas(ur);
 
-            // after old spot is refreshed, stamp image into canvas
-            // at currentImg location. This may be slow or messy if updates
-            // rely on a timer - need threads and semaphores here to let
-            // us know when old marking has been replaced with image
-            // if timer is used, but the timer is not used for this.
+			// after old spot is refreshed, stamp image into canvas
+			// at currentImg location. This may be slow or messy if updates
+			// rely on a timer - need threads and semaphores here to let
+			// us know when old marking has been replaced with image
+			// if timer is used, but the timer is not used for this.
 
-             if(!stampToCanvas(p /*- mHotSpot*/))
-             {
-                 // kdDebug(0) << "off canvas!" << endl;
-             }
-        }
+			if(!stampToCanvas(p /*- mHotSpot*/))
+			{
+				// kdDebug(0) << "off canvas!" << endl;
+			}
+		}
 
-        oldp = p;
-        dist -= spacing;
-    }
+		oldp = p;
+		dist -= spacing;
+	}
 
-    if (dist > 0) m_dragdist = dist;
-    m_dragStart = pos;
+	if (dist > 0) m_dragdist = dist;
+	m_dragStart = pos;
 }
 
 
@@ -460,11 +457,11 @@ void StampTool::optionsDialog()
 
 	if (OptsDialog.result() == QDialog::Rejected)
 		return;
-        
+
 	m_opacity = OptsDialog.stampToolTab() -> opacity();
 	m_useGradient = OptsDialog.stampToolTab() -> useGradient();
 
-        if (old_useGradient != m_useGradient || old_opacity != m_opacity)
+	if (old_useGradient != m_useGradient || old_opacity != m_opacity)
 		m_doc -> setModified(true);
 }
 
@@ -493,7 +490,7 @@ QDomElement StampTool::saveSettings(QDomDocument& doc) const
 
 bool StampTool::loadSettings(QDomElement& elem)
 {
-        bool rc = elem.tagName() == "stampTool";
+	bool rc = elem.tagName() == "stampTool";
 
 	if (rc) {
 		m_opacity = elem.attribute("opacity").toInt();

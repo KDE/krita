@@ -102,6 +102,7 @@ void MoveTool::mousePress( QMouseEvent *e )
 
 void MoveTool::mouseMove( QMouseEvent *e )
 {
+	KisView *view = getCurrentView();
 	KisImage* img = m_doc->currentImg();
 	if (!img) return;
 
@@ -119,7 +120,7 @@ void MoveTool::mouseMove( QMouseEvent *e )
 		m_layerPosition = img->getCurrentLayer()->imageExtents().topLeft();
 		m_dragStart = e->pos();
 
-		m_view->slotRefreshPainter();
+		view->slotRefreshPainter();
 	}
 }
 
@@ -148,7 +149,9 @@ void MoveTool::mouseRelease(QMouseEvent *e )
 
 void MoveTool::setCursor()
 {
-	m_view->kisCanvas()->setCursor( KisCursor::moveCursor() );
+	KisView *view = getCurrentView();
+
+	view->kisCanvas()->setCursor( KisCursor::moveCursor() );
 	m_cursor = KisCursor::moveCursor();
 }
 

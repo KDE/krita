@@ -825,9 +825,18 @@ bool KisDoc::isEmpty() const
     currentView - pointer to currentImg view for this doc
 */
 
-KisView *KisDoc::currentView()
+KisView* KisDoc::currentView()
 {
-	return m_currentView;
+	const QPtrList<KoView>& v = views();
+
+	return v.count() ? dynamic_cast<KisView*>(v.getFirst()) : m_currentView;
+}
+
+const KisView* KisDoc::currentView() const
+{
+	const QPtrList<KoView>& v = views();
+
+	return v.count() ? dynamic_cast<KisView*>(v.getFirst()) : m_currentView;
 }
 
 /*
@@ -1443,6 +1452,18 @@ void KisDoc::slotDocumentRestored()
 void KisDoc::slotCommandExecuted()
 {
 	setModified(true);
+}
+
+void KisDoc::setCanvasCursor(const QCursor& cursor)
+{
+	QPtrList<KoView> l = views();
+
+	for (KoView *view = l.first(); view; view = l.next()) {
+		KisView *p = dynamic_cast<KisView*>(view);
+
+		if (p)
+			p -> setCanvasCursor(cursor);
+	}
 }
 
 #include "kis_doc.moc"

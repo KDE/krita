@@ -49,12 +49,13 @@ RectangularSelectTool::~RectangularSelectTool()
 
 void RectangularSelectTool::clearOld()
 {
+	KisView *view = getCurrentView();
 	QRect rc;
 
 	draw(m_dragStart, m_dragEnd); 
 	m_cleared = true;
 	rc.setRect(0, 0, m_doc -> currentImg() -> width(), m_doc -> currentImg() -> height());
-	m_view -> updateCanvas(rc);
+	view -> updateCanvas(rc);
 	m_selectRegion = QRegion();
 	m_dragEnd = m_dragStart = QPoint(0, 0);
 }
@@ -91,8 +92,9 @@ void RectangularSelectTool::mousePress(QMouseEvent *event)
 
 void RectangularSelectTool::dragSelectArea(QMouseEvent *event)
 {
+	KisView *view = getCurrentView();
 	int spacing = 10;
-	float zF = m_view -> zoomFactor();
+	float zF = view -> zoomFactor();
 	QPoint pos = event -> pos();
 	int mouseX = pos.x();
 	int mouseY = pos.y();
@@ -110,7 +112,7 @@ void RectangularSelectTool::dragSelectArea(QMouseEvent *event)
 	if (m_firstTimeMoving) {
 		m_doc -> getSelection() -> erase();
 		clearOld();
-		m_view -> slotUpdateImage();
+		view -> slotUpdateImage();
 		m_firstTimeMoving = false;
 	}
 
@@ -133,12 +135,12 @@ void RectangularSelectTool::dragSelectArea(QMouseEvent *event)
 			step += dragVec * spacing;
 
 		QPoint p(qRound(step.x()), qRound(step.y()));
-		QRect ur(zoomed(m_oldDragPoint.x()) - m_hotSpot.x() - m_view->xScrollOffset(),
-				zoomed( m_oldDragPoint.y() ) - m_hotSpot.y() - m_view->yScrollOffset(),
+		QRect ur(zoomed(m_oldDragPoint.x()) - m_hotSpot.x() - view->xScrollOffset(),
+				zoomed( m_oldDragPoint.y() ) - m_hotSpot.y() - view->yScrollOffset(),
 				(int)(m_clipPixmap.width() * (zF > 1.0 ? zF : 1.0)),
 				(int)(m_clipPixmap.height() * (zF > 1.0 ? zF : 1.0)));
 
-		m_view -> updateCanvas(ur);
+		view -> updateCanvas(ur);
 		dragSelectImage(p, m_hotSpot);
 		m_oldDragPoint = p;
 		dist -= spacing * 2;
@@ -265,8 +267,9 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 
 void RectangularSelectTool::draw(const QPoint& start, const QPoint& end, QPaintEvent *e)
 {
+	KisView *view = getCurrentView();
 	QPainter gc(m_canvas);
-	float zF = m_view -> zoomFactor();
+	float zF = view -> zoomFactor();
 
 	gc.setRasterOp(Qt::NotROP);
 	gc.setPen(QPen(Qt::DotLine));
@@ -274,8 +277,8 @@ void RectangularSelectTool::draw(const QPoint& start, const QPoint& end, QPaintE
 	if (e)
 		gc.setClipRect(e -> rect());
 
-	gc.drawRect(start.x() + m_view -> xPaintOffset() - (int)(zF * m_view -> xScrollOffset()),
-				start.y() + m_view -> yPaintOffset() - (int)(zF * m_view -> yScrollOffset()), 
+	gc.drawRect(start.x() + view -> xPaintOffset() - (int)(zF * view -> xScrollOffset()),
+				start.y() + view -> yPaintOffset() - (int)(zF * view -> yScrollOffset()), 
 				end.x() - start.x(), 
 				end.y() - start.y());
 }

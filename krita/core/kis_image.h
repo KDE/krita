@@ -132,7 +132,7 @@ private:
 	KisImage& operator=(const KisImage&);
 
 	void addCommand(KCommand *cmd);
-	void renderTile(KisTile *dst, const KisTile *src, const KisPaintDevice *srcDevice);
+	void renderTile(KisTileSP dst, const KisTileSP src, const KisPaintDevice *srcDevice);
 	void renderBg(KisPaintDevice *srcDevice, int tileNo);
 	void resizeImage(KisLayerSP lay, const QRect& rect);
 	void resizePixmap(bool dirty);

@@ -121,6 +121,11 @@ void KisPainter::drawLine(int x1, int y1, int x2, int y2)
 	p.setPen(pen);
 	p.drawLine(x1, y1, x2, y2);
 
+	x1 += m_view -> xPaintOffset();
+	x2 += m_view -> xPaintOffset();
+	y1 += m_view -> yPaintOffset();
+	y2 += m_view -> yPaintOffset();
+
 	/* establish rectangle with values ascending from
 	   left to right and top to bottom for copying into
 	   layer image - not needed with rectangle and ellipse */

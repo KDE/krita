@@ -76,29 +76,32 @@ void LineTool::mouseRelease(QMouseEvent *event)
 		m_dragging = false;
 	}
     
-	KisPainter *p = m_view -> kisPainter();
+	KisView *view = getCurrentView();
+	KisPainter *p = view -> kisPainter();
 	
 	p -> drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()), zoomed(m_dragEnd.x()), zoomed(m_dragEnd.y()));
 }
 
 void LineTool::draw(const QPoint& start, const QPoint& end)
 {
+	KisView *view = getCurrentView();
 	QPainter gc(m_canvas);
-	float zF = m_view -> zoomFactor();
+	float zF = view -> zoomFactor();
 	QPen pen;
 
 	pen.setWidth(m_lineThickness);
 	gc.setPen(pen);    
 	gc.setRasterOp(Qt::NotROP);
 	gc.drawLine(
-			start.x() + m_view -> xPaintOffset() - static_cast<int>(zF * m_view -> xScrollOffset()),
-			start.y() + m_view -> yPaintOffset() - static_cast<int>(zF * m_view -> yScrollOffset()),
-			end.x() + m_view -> xPaintOffset() - static_cast<int>(zF * m_view -> xScrollOffset()),
-			end.y() + m_view -> yPaintOffset() - static_cast<int>(zF * m_view -> yScrollOffset()));
+			start.x() + view -> xPaintOffset() - static_cast<int>(zF * view -> xScrollOffset()),
+			start.y() + view -> yPaintOffset() - static_cast<int>(zF * view -> yScrollOffset()),
+			end.x() + view -> xPaintOffset() - static_cast<int>(zF * view -> xScrollOffset()),
+			end.y() + view -> yPaintOffset() - static_cast<int>(zF * view -> yScrollOffset()));
 }
 
 void LineTool::optionsDialog()
 {
+	KisView *view = getCurrentView();
 	ToolOptsStruct ts;    
 
 	ts.usePattern = m_usePattern;
@@ -129,7 +132,7 @@ void LineTool::optionsDialog()
 	// User change value ?
 	if (old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_opacity != m_opacity || 
 			old_lineThickness != m_lineThickness || old_useRegions != m_useRegions ) {    
-		KisPainter *p = m_view -> kisPainter();
+		KisPainter *p = view -> kisPainter();
 
 		p -> setLineThickness(m_lineThickness);
 		p -> setLineOpacity(m_opacity);
@@ -150,14 +153,16 @@ void LineTool::setupAction(QObject *collection)
 
 void LineTool::toolSelect()
 {
-	if (m_view) {
-		KisPainter *gc = m_view -> kisPainter();
+	KisView *view = getCurrentView();
+
+	if (view) {
+		KisPainter *gc = view -> kisPainter();
 
 		gc -> setLineThickness(m_lineThickness);
 		gc -> setLineOpacity(m_opacity);
 		gc -> setPatternFill(m_usePattern);
 		gc -> setGradientFill(m_useGradient);
-		m_view -> activateTool(this);
+		view -> activateTool(this);
 	}
 }
 

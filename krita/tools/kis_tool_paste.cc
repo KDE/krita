@@ -133,6 +133,7 @@ void PasteTool::mousePress(QMouseEvent *e)
 
 bool PasteTool::pasteColor(QPoint pos)
 {
+	KisView *view = getCurrentView();
 	KisImage *img = m_doc->currentImg();
 	if (!img)   return false;
 
@@ -162,9 +163,9 @@ bool PasteTool::pasteColor(QPoint pos)
 	int   v = 255;
 	int   bv = 0;
 
-	int red     = m_view->fgColor().R();
-	int green   = m_view->fgColor().G();
-	int blue    = m_view->fgColor().B();
+	int red     = view->fgColor().R();
+	int green   = view->fgColor().G();
+	int blue    = view->fgColor().B();
 
 	bool grayscale = false;
 	bool colorBlending = false;
@@ -231,13 +232,14 @@ bool PasteTool::pasteMonochrome(QPoint /* pos */)
 
 bool PasteTool::pasteToCanvas(QPoint pos)
 {
+	KisView *view = getCurrentView();
 	KisImage* img = m_doc->currentImg();
 	if (!img) return false;
 
 	KisLayer *lay = img->getCurrentLayer();
 	if (!lay) return false;
 
-	float zF = m_view->zoomFactor();
+	float zF = view->zoomFactor();
 
 	int pX = pos.x();
 	int pY = pos.y();
@@ -294,8 +296,8 @@ bool PasteTool::pasteToCanvas(QPoint pos)
 	if(startX > clipPix.width())  startX = clipPix.width();
 	if(startY > clipPix.height()) startY = clipPix.height();
 
-	int xt = m_view->xPaintOffset() - m_view->xScrollOffset();
-	int yt = m_view->yPaintOffset() - m_view->yScrollOffset();
+	int xt = view->xPaintOffset() - view->xScrollOffset();
+	int yt = view->yPaintOffset() - view->yScrollOffset();
 
 	p.translate(xt, yt);
 
@@ -312,12 +314,13 @@ bool PasteTool::pasteToCanvas(QPoint pos)
 
 void PasteTool::mouseMove(QMouseEvent *e)
 {
+	KisView *view = getCurrentView();
 	KisImage * img = m_doc->currentImg();
 	if (!img) return;
 
 	int spacing = 10;
 
-	float zF = m_view->zoomFactor();
+	float zF = view->zoomFactor();
 
 	QPoint pos = e->pos();
 	int mouseX = e->x();
@@ -376,12 +379,12 @@ void PasteTool::mouseMove(QMouseEvent *e)
 			   Refresh first - markDirty relies on timer,
 			   so we need force by directly updating the canvas. */
 
-			QRect ur(zoomed(oldp.x()) - mHotSpotX - m_view->xScrollOffset(),
-					zoomed(oldp.y()) - mHotSpotY - m_view->yScrollOffset(),
+			QRect ur(zoomed(oldp.x()) - mHotSpotX - view->xScrollOffset(),
+					zoomed(oldp.y()) - mHotSpotY - view->yScrollOffset(),
 					(int)(clipPix.width() * (zF > 1.0 ? zF : 1.0)),
 					(int)(clipPix.height() * (zF > 1.0 ? zF : 1.0)));
 
-			m_view->updateCanvas(ur);
+			view->updateCanvas(ur);
 
 			/* after old spot is refreshed, stamp image into canvas
 			   at currentImg location. This may be slow or messy as updates
@@ -421,13 +424,15 @@ void PasteTool::setupAction(QObject *collection)
 
 void PasteTool::toolSelect()
 {
-	if (!m_view)
+	KisView *view = getCurrentView();
+
+	if (!view)
 		return;
 
 	if(m_doc -> getClipImage()) {
 		setClip();
-		m_view -> activateTool(this);
-		m_view -> slotUpdateImage();
+		view -> activateTool(this);
+		view -> slotUpdateImage();
 	}
 	else
 		KMessageBox::sorry(NULL, i18n("Nothing to paste!"), "", false);

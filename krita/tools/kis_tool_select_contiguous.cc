@@ -49,15 +49,17 @@ void ContiguousSelectTool::clearOld()
 {
 //   if (m_doc->isEmpty()) return;
         
-   if(m_dragStart.x() != -1)
-        drawRect( m_dragStart, m_dragEnd ); 
+	KisView *view = getCurrentView();
 
-    QRect updateRect(0, 0, m_doc->currentImg()->width(), 
-        m_doc->currentImg()->height());
-    m_view->updateCanvas(updateRect);
+	if(m_dragStart.x() != -1)
+		drawRect( m_dragStart, m_dragEnd ); 
 
-    m_dragStart = QPoint(-1,-1);
-    m_dragEnd =   QPoint(-1,-1);
+	QRect updateRect(0, 0, m_doc->currentImg()->width(), 
+			m_doc->currentImg()->height());
+	view->updateCanvas(updateRect);
+
+	m_dragStart = QPoint(-1,-1);
+	m_dragEnd =   QPoint(-1,-1);
 }
 
 void ContiguousSelectTool::mousePress( QMouseEvent* event )
@@ -147,21 +149,22 @@ void ContiguousSelectTool::mouseRelease( QMouseEvent* event )
 
 void ContiguousSelectTool::drawRect( const QPoint& start, const QPoint& end )
 {
-    QPainter p, pCanvas;
+	KisView *view = getCurrentView();
+	QPainter p, pCanvas;
 
-    p.begin( m_canvas );
-    p.setRasterOp( Qt::NotROP );
-    p.setPen( QPen( Qt::DotLine ) );
+	p.begin( m_canvas );
+	p.setRasterOp( Qt::NotROP );
+	p.setPen( QPen( Qt::DotLine ) );
 
-    float zF = m_view->zoomFactor();
-    
-    p.drawRect( QRect(start.x() + m_view->xPaintOffset() 
-                                - (int)(zF * m_view->xScrollOffset()),
-                      start.y() + m_view->yPaintOffset() 
-                                - (int)(zF * m_view->yScrollOffset()), 
-                      end.x() - start.x(), 
-                      end.y() - start.y()) );
-    p.end();
+	float zF = view->zoomFactor();
+
+	p.drawRect( QRect(start.x() + view->xPaintOffset() 
+				- (int)(zF * view->xScrollOffset()),
+				start.y() + view->yPaintOffset() 
+				- (int)(zF * view->yScrollOffset()), 
+				end.x() - start.x(), 
+				end.y() - start.y()) );
+	p.end();
 }
 
 void ContiguousSelectTool::setupAction(QObject *collection)

@@ -102,21 +102,22 @@ void BrushTool::setBrush(KisBrush *brush)
 
 		mask = pix.createHeuristicMask();
 		pix.setMask(mask);
-		m_view -> kisCanvas() -> setCursor(QCursor(pix));
+		m_doc -> setCanvasCursor(QCursor(pix));
 		m_cursor = QCursor(pix);
 	}
 	// use default brush cursor
 	else {
-		m_view -> kisCanvas() -> setCursor(KisCursor::brushCursor());
+		m_doc -> setCanvasCursor(KisCursor::brushCursor());
 		m_cursor = KisCursor::brushCursor();
 	}
 }
 
 void BrushTool::mousePress(QMouseEvent *e)
 {
+	KisView *view = getCurrentView();
 	KisImage *img;
 	KisPaintDevice *device; 
-	QPoint pos = e -> pos();
+	QPoint pos = zoomed(e -> pos());
 
 	if (e -> button() != QMouseEvent::LeftButton)
 		return;
@@ -130,9 +131,9 @@ void BrushTool::mousePress(QMouseEvent *e)
 	if (!device -> visible())
 		return;
 
-	m_red = m_view -> fgColor().R();
-	m_green = m_view -> fgColor().G();
-	m_blue = m_view -> fgColor().B();
+	m_red = view -> fgColor().R();
+	m_green = view -> fgColor().G();
+	m_blue = view -> fgColor().B();
 	m_alpha = img -> colorMode() == cm_RGBA;
 	m_spacing = m_brush -> spacing();
 
@@ -140,7 +141,6 @@ void BrushTool::mousePress(QMouseEvent *e)
 		m_spacing = 3;
 
 	m_dragging = true;
-	pos = zoomed(pos);
 	m_dragStart = pos;
 	m_dragdist = 0;
 
@@ -234,7 +234,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
 		return;
 
 	QPoint pos = zoomed(e -> pos());
-	KisVector end(e -> x(), e -> y());
+	KisVector end(pos.x(), pos.y());
 	KisVector start(m_dragStart.x(), m_dragStart.y());
 	KisVector dragVec = end - start;
 	float saved_dist = m_dragdist;
@@ -347,8 +347,10 @@ bool BrushTool::loadSettings(QDomElement& elem)
 
 void BrushTool::toolSelect()
 {
-	if (m_view)
-		m_view -> activateTool(this);
+	KisView *view = getCurrentView();
+
+	if (view)
+		view -> activateTool(this);
 
 	m_toggle -> setChecked(true);
 }

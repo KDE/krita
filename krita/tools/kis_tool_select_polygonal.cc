@@ -68,6 +68,8 @@ void PolygonalSelectTool::finish(QPoint p)
 
 void PolygonalSelectTool::clearOld()
 {
+	KisView *view = getCurrentView();
+
 	m_dragStart = QPoint(-1,-1);
 	m_dragEnd = QPoint(-1,-1);
 	m_index = 0;
@@ -75,7 +77,7 @@ void PolygonalSelectTool::clearOld()
 	
 	// clear everything in 
 	QRect updateRect(0, 0, m_doc->currentImg()->width(), m_doc->currentImg()->height());
-	m_view->updateCanvas(updateRect);
+	view->updateCanvas(updateRect);
 	m_selectRegion = QRegion();
 }
 
@@ -159,6 +161,8 @@ void PolygonalSelectTool::mousePress( QMouseEvent* event )
 
 void PolygonalSelectTool::mouseMove( QMouseEvent* event )
 {
+	KisView *view = getCurrentView();
+
 	if (m_dragging) {
 		drawLine(m_dragStart, m_dragEnd);
 		m_dragEnd = event->pos();
@@ -181,12 +185,12 @@ void PolygonalSelectTool::mouseMove( QMouseEvent* event )
 
 			// refresh canvas
 			clearOld();
-			m_view->slotUpdateImage();
+			view->slotUpdateImage();
 			m_dragFirst = false;
 		}
 
 		int spacing = 10;
-		float zF = m_view->zoomFactor();
+		float zF = view->zoomFactor();
 		QPoint pos = event->pos();
 		int mouseX = pos.x();
 		int mouseY = pos.y();
@@ -220,12 +224,12 @@ void PolygonalSelectTool::mouseMove( QMouseEvent* event )
 
 			QPoint p( qRound( step.x() ), qRound( step.y() ) );
 
-			QRect ur( zoomed( m_oldDragPoint.x() ) - m_hotSpot.x() - m_view->xScrollOffset(),
-					zoomed( m_oldDragPoint.y() ) - m_hotSpot.y() - m_view->yScrollOffset(),
+			QRect ur( zoomed( m_oldDragPoint.x() ) - m_hotSpot.x() - view->xScrollOffset(),
+					zoomed( m_oldDragPoint.y() ) - m_hotSpot.y() - view->yScrollOffset(),
 					(int)( m_clipPixmap.width() * ( zF > 1.0 ? zF : 1.0 ) ),
 					(int)( m_clipPixmap.height() * ( zF > 1.0 ? zF : 1.0 ) ) );
 
-			m_view->updateCanvas( ur );
+			view->updateCanvas( ur );
 
 			dragSelectImage( p, m_hotSpot );
 
@@ -267,21 +271,22 @@ void PolygonalSelectTool::mouseRelease(QMouseEvent *event)
 
 void PolygonalSelectTool::drawLine( const QPoint& start, const QPoint& end )
 {
+	KisView *view = getCurrentView();
 	QPainter p;
 
 	p.begin( m_canvas );
 	p.setRasterOp( Qt::NotROP );
 	p.setPen( QPen( Qt::DotLine ) );
-	float zF = m_view->zoomFactor();
+	float zF = view->zoomFactor();
 
-	p.drawLine( QPoint( start.x() + m_view->xPaintOffset() 
-				- (int)(zF * m_view->xScrollOffset()),
-				start.y() + m_view->yPaintOffset() 
-				- (int)(zF * m_view->yScrollOffset())), 
-			QPoint( end.x() + m_view->xPaintOffset() 
-				- (int)(zF * m_view->xScrollOffset()),
-				end.y() + m_view->yPaintOffset() 
-				- (int)(zF * m_view->yScrollOffset())) );
+	p.drawLine( QPoint( start.x() + view->xPaintOffset() 
+				- (int)(zF * view->xScrollOffset()),
+				start.y() + view->yPaintOffset() 
+				- (int)(zF * view->yScrollOffset())), 
+			QPoint( end.x() + view->xPaintOffset() 
+				- (int)(zF * view->xScrollOffset()),
+				end.y() + view->yPaintOffset() 
+				- (int)(zF * view->yScrollOffset())) );
 
 	p.end();
 }
@@ -301,15 +306,16 @@ bool PolygonalSelectTool::willModify() const
 
 void PolygonalSelectTool::paintEvent(QPaintEvent *e)
 {
+	KisView *view = getCurrentView();
 	QPainter gc(m_canvas);
 	QPen pen(Qt::DotLine);
-	float zF = m_view -> zoomFactor();
+	float zF = view -> zoomFactor();
 
-	Q_ASSERT(m_view);
+	Q_ASSERT(view);
 	gc.setRasterOp(Qt::NotROP);
 	gc.setPen(pen);
 	gc.scale(zF, zF);
-	gc.translate(m_view -> xPaintOffset() - m_view -> xScrollOffset(), m_view -> yPaintOffset() - m_view -> yScrollOffset());
+	gc.translate(view -> xPaintOffset() - view -> xScrollOffset(), view -> yPaintOffset() - view -> yScrollOffset());
 	gc.setClipRect(e -> rect());
 	gc.drawPolyline(m_pointArray);
 }

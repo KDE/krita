@@ -64,12 +64,12 @@ void PenTool::setBrush(KisBrush *_brush)
         QPixmap pix(m_brush->pixmap());
         mask = pix.createHeuristicMask();
         pix.setMask(mask);
-        m_view->kisCanvas()->setCursor(QCursor(pix));
+	m_doc -> setCanvasCursor(QCursor(pix));
         m_cursor = QCursor(pix);
     }
     else
     {
-        m_view->kisCanvas()->setCursor(KisCursor::penCursor());
+	m_doc -> setCanvasCursor(KisCursor::penCursor());
         m_cursor = KisCursor::penCursor();
     }
 }
@@ -114,6 +114,7 @@ void PenTool::mousePress(QMouseEvent *e)
 
 bool PenTool::paint(QPoint pos)
 {
+	KisView *view = getCurrentView();
 	KisImage * img = m_doc->currentImg();
 	KisLayer *lay = img->getCurrentLayer();
 	KisFrameBuffer *m_fb = m_doc->frameBuffer();
@@ -137,9 +138,9 @@ bool PenTool::paint(QPoint pos)
 	uchar bv;
 	uchar r, g, b;
 
-	int red = m_view->fgColor().R();
-	int green = m_view->fgColor().G();
-	int blue = m_view->fgColor().B();
+	int red = view->fgColor().R();
+	int green = view->fgColor().G();
+	int blue = view->fgColor().B();
 
 	bool alpha = (img->colorMode() == cm_RGBA);
 

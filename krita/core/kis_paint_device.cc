@@ -119,7 +119,6 @@ bool KisPaintDevice::writeToStore(KoStore *store)
 bool KisPaintDevice::loadFromStore(KoStore *store)
 {
 	const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(unsigned int);
-	const unsigned int MAXSIZE = TILE_BYTES * yTiles() * xTiles();
 	int nread;
 
 	for (uint ty = 0; ty < yTiles(); ty++) {

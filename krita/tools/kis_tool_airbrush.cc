@@ -80,7 +80,7 @@ void AirBrushTool::setBrush(KisBrush *brush)
 		<< endl;
 
 	// set custom cursor
-	m_view->kisCanvas()->setCursor( KisCursor::airbrushCursor() );
+	m_doc -> setCanvasCursor(KisCursor::airbrushCursor() );
 	m_cursor = KisCursor::airbrushCursor();
 }
 
@@ -118,7 +118,9 @@ void AirBrushTool::mousePress(QMouseEvent *e)
 
 bool AirBrushTool::paint(QPoint pos, bool timeout)
 {
-	KisImage * img = m_doc->currentImg();
+	KisView *view = getCurrentView();
+	KisImage *img = m_doc->currentImg();
+
 	if (!img)	    return false;
 
 	KisLayer *lay = img->getCurrentLayer();
@@ -153,9 +155,9 @@ bool AirBrushTool::paint(QPoint pos, bool timeout)
 	uchar r, g, b, a;
 	int   v;
 
-	int red   = m_view->fgColor().R();
-	int green = m_view->fgColor().G();
-	int blue  = m_view->fgColor().B();
+	int red   = view->fgColor().R();
+	int green = view->fgColor().G();
+	int blue  = view->fgColor().B();
 
 	bool alpha = (img->colorMode() == cm_RGBA);
 

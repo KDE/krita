@@ -81,6 +81,9 @@ public:
 	void setSelectCursor();
 	void setMoveCursor();
 
+	KisView* getCurrentView();
+	const KisView* getCurrentView() const;
+
 public slots:
 	virtual void toolSelect();
 
@@ -94,7 +97,7 @@ protected:
 	QPointArray zoomPointArray(const QPointArray& points) const;
 
 	void setClipImage();
-	void dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot) const;
+	void dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot);
 	bool pasteClipImage(const QPoint& pos);
 
 private:
@@ -103,7 +106,6 @@ private:
 
 protected:
 	KisDoc *m_doc;
-	KisView *m_view;
 	KisPattern *m_pattern;
 	KisBrush *m_brush;
 	KisCanvas *m_canvas;
@@ -122,6 +124,8 @@ private:
 	bool m_paintWithPattern; 
 	bool m_paintWithGradient;
 };
+
+
 
 #endif
 

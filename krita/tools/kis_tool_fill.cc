@@ -174,8 +174,9 @@ bool FillTool::flood(int startX, int startY)
     int startx = startX;
     int starty = startY;
     QRgb srgb;
-    
+    KisView *view = getCurrentView();
     KisImage *img = m_doc->currentImg();
+
     if (!img) return false;    
 
     KisLayer *lay = img->getCurrentLayer();
@@ -195,9 +196,9 @@ bool FillTool::flood(int startX, int startY)
 
     // new color values from color selector 
 
-    nRed     = m_view->fgColor().R();
-    nGreen   = m_view->fgColor().G();
-    nBlue    = m_view->fgColor().B();
+    nRed     = view->fgColor().R();
+    nGreen   = view->fgColor().G();
+    nBlue    = view->fgColor().B();
     
     int left    = lay->imageExtents().left(); 
     int top     = lay->imageExtents().top();    
@@ -219,10 +220,10 @@ bool FillTool::flood(int startX, int startY)
     
     if(m_useGradient)
     {
-        KoColor startColor(m_view->fgColor().R(),
-            m_view->fgColor().G(), m_view->fgColor().B());
-        KoColor endColor(m_view->bgColor().R(),
-            m_view->bgColor().G(), m_view->bgColor().B());        
+        KoColor startColor(view->fgColor().R(),
+            view->fgColor().G(), view->fgColor().B());
+        KoColor endColor(view->bgColor().R(),
+            view->bgColor().G(), view->bgColor().B());        
             
         m_doc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
     }
@@ -295,7 +296,9 @@ void FillTool::optionsDialog()
 
 void FillTool::setCursor()
 {
-	m_view -> kisCanvas() -> setCursor(KisCursor::fillerCursor());
+	KisView *view = getCurrentView();
+
+	view -> kisCanvas() -> setCursor(KisCursor::fillerCursor());
 	m_cursor = KisCursor::fillerCursor();
 }
 

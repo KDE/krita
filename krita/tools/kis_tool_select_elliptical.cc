@@ -49,9 +49,10 @@ void EllipticalSelectTool::setupAction(QObject *collection)
 
 void EllipticalSelectTool::draw(const QPoint& start, const QPoint& end, QPaintEvent *e)
 {
+	KisView *view = getCurrentView();
 	QPainter gc(m_canvas);
 	QPen pen(Qt::DotLine);
-	float zF = m_view -> zoomFactor();
+	float zF = view -> zoomFactor();
 
 	gc.setRasterOp(Qt::NotROP);
 	gc.setPen(pen);
@@ -60,8 +61,8 @@ void EllipticalSelectTool::draw(const QPoint& start, const QPoint& end, QPaintEv
 		gc.setClipRect(e -> rect());
    
 	gc.drawEllipse(
-			start.x() + m_view -> xPaintOffset() - static_cast<int>(zF * m_view -> xScrollOffset()),
-			start.y() + m_view -> yPaintOffset() - static_cast<int>(zF * m_view -> yScrollOffset()), 
+			start.x() + view -> xPaintOffset() - static_cast<int>(zF * view -> xScrollOffset()),
+			start.y() + view -> yPaintOffset() - static_cast<int>(zF * view -> yScrollOffset()), 
 			end.x() - start.x(), 
 			end.y() - start.y());
 }

@@ -51,6 +51,7 @@ EllipseTool::~EllipseTool()
 
 void EllipseTool::draw(const QPoint& start, const QPoint& end)
 {
+	KisView *view = getCurrentView();
 	QPainter p;
 	QPen pen;
 
@@ -58,11 +59,11 @@ void EllipseTool::draw(const QPoint& start, const QPoint& end)
 	p.begin(m_canvas);
 	p.setPen(pen);
 	p.setRasterOp(Qt::NotROP);
-	float zF = m_view -> zoomFactor();
+	float zF = view -> zoomFactor();
 
 	p.drawEllipse( 
-			QRect(start.x() + m_view->xPaintOffset() - (int)(zF * m_view->xScrollOffset()),
-				start.y() + m_view->yPaintOffset() - (int)(zF * m_view->yScrollOffset()), 
+			QRect(start.x() + view->xPaintOffset() - (int)(zF * view->xScrollOffset()),
+				start.y() + view->yPaintOffset() - (int)(zF * view->yScrollOffset()), 
 				end.x() - start.x(), 
 				end.y() - start.y()));
 	p.end();

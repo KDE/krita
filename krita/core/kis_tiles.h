@@ -23,52 +23,68 @@
 
 #include <qcolor.h>
 
-class KisTile;
+#include "kis_tile.h"
 
 class KisTiles {
 public:
-	KisTiles(unsigned int width, unsigned int height, unsigned int bpp, const QRgb& defaultColor);
+	KisTiles(uint width, uint height, uint bpp, const QRgb& defaultColor);
 	~KisTiles();
 	
-	inline unsigned int xTiles() const;
-	inline unsigned int yTiles() const;
-	inline unsigned int bpp() const;
+	inline uint xTiles() const;
+	inline uint yTiles() const;
+	inline uint bpp() const;
 
-	KisTile* getTile(unsigned int x, unsigned int y) const;
+	KisTileSP setTile(uint x, uint y, KisTileSP tile);
+	KisTileSP getTile(uint x, uint y);
+	KisTileSP takeTile(uint x, uint y);
+	bool swapTile(uint x1, uint y1, uint x2, uint y2);
 
-	void markDirty(unsigned int x, unsigned int y);
-	bool isDirty(unsigned int x, unsigned int y);
+	void markDirty(uint x, uint y);
+	bool isDirty(uint x, uint y);
 
-	void resize(unsigned int width, unsigned int height, unsigned int bpp);
+	void resize(uint width, uint height, uint bpp);
+
+	inline uint getTileNo(uint x, uint y);
+	inline bool intersects(uint x, uint y);
 
 private:
 	KisTiles(const KisTiles&);
 	KisTiles& operator=(const KisTiles&);
 
-	void init(unsigned int width, unsigned int height, unsigned int bpp);
+	void init(uint width, uint height, uint bpp);
 	void cleanup();
 
 private:
-	KisTile **m_tiles;
-	unsigned int m_xTiles;
-	unsigned int m_yTiles;
-	unsigned int m_bpp;
+	KisTileSPLst m_tiles;
+	uint m_xTiles;
+	uint m_yTiles;
+	uint m_bpp;
 	QRgb m_defaultColor;
 };
 
-unsigned int KisTiles::xTiles() const
+uint KisTiles::xTiles() const
 { 
 	return m_xTiles; 
 }
 
-unsigned int KisTiles::yTiles() const 
+uint KisTiles::yTiles() const 
 { 
 	return m_yTiles; 
 }
 
-unsigned int KisTiles::bpp() const
+uint KisTiles::bpp() const
 {
 	return m_bpp;
+}
+
+uint KisTiles::getTileNo(uint x, uint y)
+{
+	return y * xTiles() + x;
+}
+
+bool KisTiles::intersects(uint x, uint y)
+{
+	return !(y > yTiles() || x > xTiles());
 }
 
 #endif // KIS_TILES_

@@ -39,18 +39,22 @@ ZoomTool::~ZoomTool()
 
 void ZoomTool::mousePress(QMouseEvent *e)
 {
+	KisView *view = getCurrentView();
+
 	if (e -> button() != LeftButton && e -> button() != RightButton)
 		return;
 
 	if (e -> button() == LeftButton)
-		m_view -> zoom_in();
+		view -> zoom_in();
 	else
-		m_view -> zoom_out();
+		view -> zoom_out();
 }
 
 void ZoomTool::setCursor()
 {
-	m_view -> kisCanvas() -> setCursor(KisCursor::zoomCursor());
+	KisView *view = getCurrentView();
+
+	view -> kisCanvas() -> setCursor(KisCursor::zoomCursor());
 	m_cursor = KisCursor::zoomCursor();
 }
 

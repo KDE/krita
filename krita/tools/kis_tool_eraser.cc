@@ -54,6 +54,7 @@ EraserTool::~EraserTool()
 
 void EraserTool::setBrush(KisBrush *_brush)
 {
+	KisView *view = getCurrentView();
 	m_brush = _brush;
 
 	int w = m_brush->pixmap().width();
@@ -65,11 +66,12 @@ void EraserTool::setBrush(KisBrush *_brush)
 		QPixmap pix(m_brush->pixmap());
 		mask = pix.createHeuristicMask();
 		pix.setMask(mask);
-		m_view->kisCanvas()->setCursor(QCursor(pix));
+		view->kisCanvas()->setCursor(QCursor(pix));
+		view->kisCanvas()->setCursor(QCursor(pix));
 		m_cursor = QCursor(pix);
 	}
 	else {
-		m_view->kisCanvas()->setCursor(KisCursor::eraserCursor());
+		view->kisCanvas()->setCursor(KisCursor::eraserCursor());
 		m_cursor = KisCursor::eraserCursor();
 	}
 }
@@ -174,9 +176,10 @@ bool EraserTool::paint(QPoint pos)
 	{
 		kdDebug() << "EraserTool::paint\n";
 
-		int red = m_view->bgColor().R();
-		int green = m_view->bgColor().G();
-		int blue = m_view->bgColor().B();
+		KisView *view = getCurrentView();
+		int red = view->bgColor().R();
+		int green = view->bgColor().G();
+		int blue = view->bgColor().B();
 
 		for (int y = sy; y <= ey; y++) {
 			sl = m_brush->scanline(y);

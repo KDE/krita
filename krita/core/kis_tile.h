@@ -22,22 +22,32 @@
 #define KIS_TILE_
 
 #include <qcolor.h>
+#include <qvaluevector.h>
+
 #include <ksharedptr.h>
+
+class KisTile;
+
+typedef KSharedPtr<KisTile> KisTileSP;
+typedef QValueVector<KisTileSP> KisTileSPLst;
+typedef KisTileSPLst::iterator KisTileSPLstIterator;
+typedef KisTileSPLst::const_iterator KisTileSPLstConstIterator;
 
 class KisTile : public KShared {
 public:
 	KisTile(unsigned int width, unsigned int height, unsigned int bpp, const QRgb& defaultColor, bool dirty = false);
-	~KisTile();
-				
+	KisTile(const KisTile& tile);
+	KisTile& operator=(const KisTile& tile);
+	virtual ~KisTile();
+
+	void copyTile(const KisTile& tile);
 	void setDirty(bool dirty);
 	inline bool dirty() const;
 	inline unsigned int bpp();
 	unsigned int* data();
-	const unsigned int* data() const;
+	inline const unsigned int* data() const;
 
 private:
-	KisTile(const KisTile&);
-	KisTile& operator=(const KisTile&);
 	void initTile();
 
 private:
@@ -57,6 +67,11 @@ bool KisTile::dirty() const
 unsigned int KisTile::bpp()
 {
 	return m_bpp;
+}
+
+const unsigned int* KisTile::data() const
+{
+	return m_data;
 }
 
 #endif // KIS_TILE_

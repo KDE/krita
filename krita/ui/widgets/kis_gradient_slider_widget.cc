@@ -41,7 +41,7 @@ KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* na
 	m_selectedSegment(0),
 	m_drag(0)
 {
-	setMinimumHeight(50);
+	setMinimumHeight(30);
 
 	m_segmentMenu = new KPopupMenu();
 	m_segmentMenu -> insertItem(i18n("Split Segment"), SPLIT_SEGMENT);

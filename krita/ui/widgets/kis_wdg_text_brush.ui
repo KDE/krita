@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>197</width>
-            <height>87</height>
+            <width>317</width>
+            <height>89</height>
         </rect>
     </property>
     <property name="caption">
@@ -77,7 +77,7 @@
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
-                                    <hsizetype>7</hsizetype>
+                                    <hsizetype>5</hsizetype>
                                     <vsizetype>5</vsizetype>
                                     <horstretch>0</horstretch>
                                     <verstretch>0</verstretch>
@@ -118,7 +118,7 @@
                 <enum>Horizontal</enum>
             </property>
             <property name="sizeType">
-                <enum>Expanding</enum>
+                <enum>Minimum</enum>
             </property>
             <property name="sizeHint">
                 <size>
@@ -135,7 +135,7 @@
                 <enum>Vertical</enum>
             </property>
             <property name="sizeType">
-                <enum>Expanding</enum>
+                <enum>Minimum</enum>
             </property>
             <property name="sizeHint">
                 <size>

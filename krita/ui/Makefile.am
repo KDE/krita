@@ -44,12 +44,12 @@ libkisui_la_SOURCES = kis_dlg_preferences.cc \
     kis_dockframedocker.cc \
     kis_basedocker.cc \
     kis_previewview.cc \
+    kis_previewdialog.cc \
     kis_birdeye_box.cc \
     wdgmatrix.ui \
     wdghistogram.ui \
     kis_previewwidgetbase.ui \
     wdgselectionoptions.ui \
-    kis_preview_dialog.ui \
     wdgnewimage.ui \
     wdgcolorsettings.ui \
     wdgapplyprofile.ui \
@@ -92,6 +92,7 @@ noinst_HEADERS = kis_dlg_preferences.h \
     wdgmatrix.h \
     wdghistogram.h \
     kis_previewwidgetbase.h \
+    kis_previewdialog.h \
     wdgnewimage.h \
     wdgcolorsettings.h \
     wdgapplyprofile.h \

@@ -9,7 +9,6 @@ Scaling
 	- replace the structs CONTRIB and CLIST by some STL or Qt
 	  container.
 	- use iterators to access pixels.
-        - Preview dialog should use KDialogBase
         - Decide on more user-friendly names for the scaling algs.
 
 Core

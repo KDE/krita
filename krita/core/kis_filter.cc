@@ -25,7 +25,7 @@
 #include "kis_tile_command.h"
 #include "kis_undo_adapter.h"
 #include "kis_filter_configuration_widget.h"
-#include "kis_preview_dialog.h"
+#include "kis_previewdialog.h"
 #include "kis_previewwidget.h"
 
 KisFilter::KisFilter(const QString& name, KisView * view) :
@@ -44,13 +44,13 @@ void KisFilter::refreshPreview( )
 {
 	if( m_dialog == 0 )
 		return;
-	m_dialog -> previewWidget -> slotRenewLayer();
-	KisLayerSP layer = m_dialog -> previewWidget -> getLayer();
+	m_dialog -> previewWidget() -> slotRenewLayer();
+	KisLayerSP layer = m_dialog -> previewWidget() -> getLayer();
 	KisFilterConfiguration* config = configuration(m_widget);
 	//AUTOLAYER QRect rect(0, 0, layer -> width(), layer -> height());
 	QRect rect(0, 0, 1, 1);
 	process((KisPaintDeviceSP) layer, config, rect, 0 );
-	m_dialog->previewWidget -> slotUpdate();
+	m_dialog->previewWidget() -> slotUpdate();
 }
 
 KisFilterConfigurationWidget* KisFilter::createConfigurationWidget(QWidget* )
@@ -67,16 +67,16 @@ void KisFilter::slotActivated()
 	if (!layer) return;
 
 	// Create the config dialog
-	m_dialog = new KisPreviewDialog( (QWidget*) m_view, name().ascii(), true);
-	m_widget = createConfigurationWidget( (QWidget*)m_dialog->container );
+	m_dialog = new KisPreviewDialog( (QWidget*) m_view, name().ascii(), true, name());
+	m_widget = createConfigurationWidget( (QWidget*)m_dialog->container() );
 
 	if( m_widget != 0)
 	{
-		m_dialog->previewWidget->slotSetLayer( layer );
-		connect(m_dialog->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
-		QGridLayout *widgetLayout = new QGridLayout((QWidget *)m_dialog->container, 1, 1);
+		m_dialog->previewWidget()->slotSetLayer( layer );
+		connect(m_dialog->previewWidget(), SIGNAL(updated()), this, SLOT(refreshPreview()));
+		QGridLayout *widgetLayout = new QGridLayout((QWidget *)m_dialog->container(), 1, 1);
 		widgetLayout -> addWidget(m_widget, 0 , 0);
-		m_dialog->container->setMinimumSize(m_widget->minimumSize());
+		m_dialog->container()->setMinimumSize(m_widget->minimumSize());
 		refreshPreview();
 		m_dialog -> setFixedSize(m_dialog -> minimumSize());
 		if(m_dialog->exec() == QDialog::Rejected )

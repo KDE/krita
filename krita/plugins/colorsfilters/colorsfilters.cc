@@ -71,8 +71,8 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 	setInstance(ColorsFiltersFactory::instance());
 
 	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, this, SLOT(slotBrightnessContrastActivated()), actionCollection(), "brightnesscontrast");
-	(void) new KAction(i18n("&Gamma correction..."), 0, 0, this, SLOT(slotGammaActivated()), actionCollection(), "gammacorrection");
-	(void) new KAction(i18n("&Color adjustment..."), 0, 0, this, SLOT(slotColorActivated()), actionCollection(), "coloradjustment");
+	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, this, SLOT(slotGammaActivated()), actionCollection(), "gammacorrection");
+	(void) new KAction(i18n("&Color Adjustment..."), 0, 0, this, SLOT(slotColorActivated()), actionCollection(), "coloradjustment");
 	if ( !parent->inherits("KisView") )
 	{
 		m_view = 0;

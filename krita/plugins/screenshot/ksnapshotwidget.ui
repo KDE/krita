@@ -35,7 +35,7 @@
             <property name="whatsThis" stdset="0">
                 <string>This is a thumbnail of the current snapshot.
 
-The image can be dragged to another application or document to copy the full screenshot there. Try it with the Konqueror file manager!</string>
+The image can be dragged to another application or document to copy the full screenshot there. Try it with the Konqueror file manager.</string>
             </property>
         </widget>
         <widget class="KPushButton" row="0" column="3">

@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>WdgToolCrop</string>
+        <string>Crop</string>
     </property>
     <grid>
         <property name="name">

@@ -174,7 +174,7 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
                         <cstring>lblConvert</cstring>
                     </property>
                     <property name="text">
-                        <string>color &amp;Space:</string>
+                        <string>&amp;Target Color Space:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>cmbColorSpaces</cstring>

@@ -118,6 +118,8 @@ KritaConvolutionFilters::~KritaConvolutionFilters()
 
 KisGaussianBlurFilter::KisGaussianBlurFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
+	if (!colorStrategy()) return;
+
 	Q_INT32 imgdepth = colorStrategy()->depth();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 1, 2, 1 }, { 2, 4, 2 }, { 1, 2, 1} };

@@ -68,7 +68,7 @@ void KisToolAirbrush::initPaint(KisEvent *e)
 {
 	super::initPaint(e);
 	m_timer -> start( RATE );
-	KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("airbrush", painter());
+	KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("airbrush", painter());
 	painter() -> setPaintOp(op); // Painter takes over ownership of paintop
 }
 

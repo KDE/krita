@@ -33,7 +33,7 @@ const PIXELTYPE PIXEL_GRAY_ALPHA = 1;
 
 class KisStrategyColorSpaceGrayscale : public KisStrategyColorSpace {
 public:
-	KisStrategyColorSpaceGrayscale();
+	KisStrategyColorSpaceGrayscale(bool alpha);
 	virtual ~KisStrategyColorSpaceGrayscale();
 
 public:
@@ -47,7 +47,7 @@ public:
 	virtual KisPixelRO toKisPixelRO(QUANTUM *src) { return KisPixelRO (src, src + PIXEL_GRAY_ALPHA); }
 	virtual KisPixel toKisPixel(QUANTUM *src) { return KisPixel (src, src + PIXEL_GRAY_ALPHA); }
 
-	virtual KisChannelInfo* channels() const;
+	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const;
@@ -66,7 +66,8 @@ public:
 			    CompositeOp op);
 
 private:
-	static KisChannelInfo channelInfo[2];
+	vKisChannelInfoSP m_channels;
+	bool m_alpha;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_

@@ -46,18 +46,6 @@ typedef KisSharedPtrVector<KisPaintDevice> vKisPaintDeviceSP;
 typedef vKisPaintDeviceSP::iterator vKisPaintDeviceSP_it;
 typedef vKisPaintDeviceSP::const_iterator vKisPaintDeviceSP_cit;
 
-class KisChannel;
-typedef KSharedPtr<KisChannel> KisChannelSP;
-typedef KisSharedPtrVector<KisChannel> vKisChannelSP;
-typedef vKisChannelSP::iterator vKisChannelSP_it;
-typedef vKisChannelSP::const_iterator vKisChannelSP_cit;
-
-class KisMask;
-typedef KSharedPtr<KisMask> KisMaskSP;
-typedef KisSharedPtrVector<KisMask> vKisMaskSP;
-typedef vKisMaskSP::iterator vKisMaskSP_it;
-typedef vKisMaskSP::const_iterator vKisMaskSP_cit;
-
 class KisLayer;
 typedef KSharedPtr<KisLayer> KisLayerSP;
 typedef KisSharedPtrVector<KisLayer> vKisLayerSP;
@@ -133,5 +121,14 @@ typedef KSharedPtr<KisFilter> KisFilterSP;
 
 class KisFilterRegistry;
 typedef KSharedPtr<KisFilterRegistry> KisFilterRegistrySP;
+
+class KisProfile;
+typedef KSharedPtr<KisProfile> KisProfileSP;
+
+class KisChannelInfo;
+typedef KSharedPtr<KisChannelInfo> KisChannelInfoSP;
+typedef KisSharedPtrVector<KisChannelInfo> vKisChannelInfoSP;
+typedef vKisChannelInfoSP::iterator vKisChannelInfoSP_it;
+typedef vKisChannelInfoSP::const_iterator vKischannelInfoSP_cit;
 
 #endif // KISTYPES_H_

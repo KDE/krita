@@ -24,6 +24,8 @@
 #include "kis_global.h"
 #include "kis_factory.h"
 
+KisStrategyColorSpace::KisStrategyColorSpace() {}
+
 KisStrategyColorSpace::KisStrategyColorSpace(const QString& name, Q_UINT32 cmType) 
 	: m_name(name),
 	  m_cmType(cmType)

@@ -40,14 +40,12 @@ public:
 			 const char* name = 0);
 	~DlgColorspaceConversion();
 
+	WdgConvertColorSpace * m_page;
 
 private slots:
 
 	void okClicked();
 
-private:
-
-	WdgConvertColorSpace * m_page;
 };
 
 #endif // DLG_COLORSPACECONVERSION

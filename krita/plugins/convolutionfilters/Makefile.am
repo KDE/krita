@@ -8,6 +8,7 @@ INCLUDES  = \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tiles \
+	-I$(srcdir)/../../core/resources \
 	-I$(srcdir)/../../core/tool \
 	-I$(srcdir)/../../core/paintop \
 	-I$(srcdir)/../../ui \
@@ -23,7 +24,6 @@ kritaconvolutionfilters_la_SOURCES = kis_custom_convolution_filter_configuration
 	kis_custom_convolution_filter.cc \
 	convolutionfilters.cc \
 	kis_convolution_filter.cc
-   
 
 noinst_HEADERS = convolutionfilters.h \
 	kis_custom_convolution_filter_configuration_widget.h \

@@ -35,6 +35,7 @@
 #include "kis_render.h"
 #include "kis_guide.h"
 #include "kis_scale_visitor.h"
+#include "kis_profile.h"
 
 class KoCommandHistory;
 class KisNameServer;
@@ -66,6 +67,9 @@ public:
 	QString name() const;
 	void setName(const QString& name);
 
+	QString description() const;
+	void setDescription(const QString& description);
+
 	QString nextLayerName() const;
 
 	void resize(Q_INT32 w, Q_INT32 h);
@@ -76,6 +80,13 @@ public:
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
                 
 	void convertTo(KisStrategyColorSpaceSP colorStrategy);
+	void convertTo(KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile);
+
+	// Get the profile associated with this image
+	KisProfileSP profile() const;
+
+	// Set the profile associated with this image
+	void setProfile(const KisProfileSP& profile);
 
 	void enableUndo(KoCommandHistory *history);
  
@@ -96,14 +107,15 @@ public:
 	Q_INT32 height() const;
 
 	Q_UINT32 depth() const;
+	void setDepth(Q_UINT32 depth) { m_depth = depth; }
+
 	bool alpha() const;
+
 	bool empty() const;
 	KisTileMgrSP shadow() const;
 
 	vKisLayerSP layers();
 	const vKisLayerSP& layers() const;
-	vKisChannelSP channels();
-	const vKisChannelSP& channels() const;
 
 	// Get the active painting device
 	KisPaintDeviceSP activeDevice();
@@ -138,21 +150,6 @@ public:
 	 */
 	void mergeLayer(KisLayerSP l);
 	
-	// Channels
-	KisChannelSP activeChannel();
-	KisChannelSP activate(KisChannelSP channel);
-	KisChannelSP activateChannel(Q_INT32 n);
-	KisChannelSP unsetActiveChannel();
-	Q_INT32 index(KisChannelSP channel);
-	KisChannelSP channel(const QString& name);
-	KisChannelSP channel(Q_UINT32 npos);
-	bool add(KisChannelSP channel, Q_INT32 position);
-	void rm(KisChannelSP channel);
-	bool raise(KisChannelSP channel);
-	bool lower(KisChannelSP channel);
-	bool pos(KisChannelSP channel, Q_INT32 position);
-	Q_INT32 nchannels() const;
-
 	QRect bounds() const;
 
 	void notify();
@@ -166,8 +163,6 @@ public:
 
 signals:
 	void activeLayerChanged(KisImageSP image);
-	void activeChannelChanged(KisImageSP image);
-	void alphaChanged(KisImageSP image);
 	void activeSelectionChanged(KisImageSP image);
 	void selectionCreated(KisImageSP image);
 	void selectionChanged(KisImageSP image);
@@ -191,6 +186,9 @@ private:
 	KoCommandHistory *m_undoHistory;
 	KURL m_uri;
 	QString m_name;
+	QString m_description;
+
+	KisProfileSP m_profile;
 
 	Q_UINT32 m_depth;
 
@@ -212,17 +210,11 @@ private:
 	KisBackgroundSP m_bkg;
 	KisLayerSP m_projection;
 	vKisLayerSP m_layers;
-	vKisChannelSP m_channels;
 	vKisLayerSP m_layerStack;
 	KisLayerSP m_activeLayer;
-	KisChannelSP m_activeChannel;
 
 	QBitArray m_visible;
 	QBitArray m_active;
-	bool m_alpha;
-	bool m_maskEnabled;
-	bool m_maskInverted;
-	KoColor m_maskClr;
 	KisNameServer *m_nserver;
 	KisUndoAdapter *m_adapter;
 	KisGuideMgr m_guides;

@@ -54,7 +54,7 @@ public:
 	
 	void registerColorStrategy(const QString & name, KisStrategyColorSpaceSP colorspace);
 
-	static KisPluginRegistry * singleton();
+	static KisPluginRegistry * instance();
 
 private:
 	QStringList availablePlugins();

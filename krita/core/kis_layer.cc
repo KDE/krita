@@ -23,8 +23,6 @@
 #include "kistilemgr.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_channel.h"
-#include "kis_mask.h"
 #include "kis_selection.h"
 #include "kis_painter.h"
 
@@ -75,9 +73,6 @@ KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
 		m_dx = rhs.m_dx;
 		m_dy = rhs.m_dy;
 
-		if (rhs.m_mask)
-			m_mask = new KisMask(*rhs.m_mask);
-
 		m_selection = 0;
 	}
 	m_hasSelection = false;
@@ -101,26 +96,6 @@ KisLayer::~KisLayer()
 	numLayers--;
 	kdDebug() << "LAYER " << name() << " DESTROYED total now = " << numLayers << endl;
 #endif
-}
-
-KisMaskSP KisLayer::createMask(Q_INT32 )
-{
-	return 0;
-}
-
-KisMaskSP KisLayer::addMask(KisMaskSP )
-{
-	return 0;
-}
-
-void KisLayer::applyMask(Q_INT32 )
-{
-}
-
-
-KisMaskSP KisLayer::mask() const
-{
-	return 0;
 }
 
 KisSelectionSP KisLayer::selection(){
@@ -179,12 +154,6 @@ void KisLayer::translate(Q_INT32 x, Q_INT32 y)
 }
 
 	
-
-void KisLayer::addAlpha()
-{
-}
-
-
 QUANTUM KisLayer::opacity() const
 {
 	return m_opacity;

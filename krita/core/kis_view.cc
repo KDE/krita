@@ -2310,7 +2310,7 @@ void KisView::layerAdd()
                                                              dlg.compositeOp(),
                                                              dlg.opacity(),
                                                              dlg.position(),
-                                                             KisColorSpaceRegistry::singleton()->colorSpace(dlg.colorStrategyName()));
+                                                             KisColorSpaceRegistry::instance()->colorSpace(dlg.colorStrategyName()));
 
                         if (layer) {
                                 m_layerBox -> setCurrentItem(img -> index(layer));

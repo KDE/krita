@@ -33,7 +33,7 @@ const PIXELTYPE PIXEL_ALPHA = 3;
 
 class KisStrategyColorSpaceRGB : public KisStrategyColorSpace {
 public:
-	KisStrategyColorSpaceRGB();
+	KisStrategyColorSpaceRGB(bool alpha);
 	virtual ~KisStrategyColorSpaceRGB();
 
 public:
@@ -46,7 +46,7 @@ public:
 	virtual KisPixelRO toKisPixelRO(QUANTUM *src) { return KisPixelRO (src, src + PIXEL_ALPHA); }
 	virtual KisPixel toKisPixel(QUANTUM *src) { return KisPixel (src, src + PIXEL_ALPHA); }
 
-	virtual KisChannelInfo* channels() const;
+	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const;
@@ -66,7 +66,8 @@ protected:
 			    CompositeOp op);
 
 private:
-	static KisChannelInfo channelInfo[4];
+	vKisChannelInfoSP m_channels;
+	bool m_alpha;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_H_

@@ -25,7 +25,7 @@
 #include <koColor.h>
 
 #include "kis_global.h"
-#include "kis_cmb_imagetype.h"
+#include "dialogs/wdgnewimage.h"
 
 class QButtonGroup;
 
@@ -35,7 +35,11 @@ class KisDlgCreateImg : public KDialogBase {
 	Q_OBJECT
 
 public:
-	KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, QString colorStrategyName, QWidget *parent = 0, const char *name = 0);
+	KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, 
+			Q_INT32 maxHeight, Q_INT32 defHeight, 
+			QString colorStrategyName, 
+			QString imageName,
+			QWidget *parent = 0, const char *name = 0);
 	virtual ~KisDlgCreateImg();
 
 public:
@@ -44,32 +48,17 @@ public:
 	QString colorStrategyName() const;
 	Q_INT32 imgWidth() const;
 	Q_INT32 imgHeight() const;
+	QString imgName() const;
+	double imgResolution() const;
+	QString imgDescription() const;
+	KisProfileSP profile() const;
 
 private:
-	QSpinBox *m_widthSpin;
-	QSpinBox *m_heightSpin;
-	QUANTUM m_opacity;
-	KisCmbImageType *m_cmbImageType;
-	QButtonGroup *m_grp;
+
+	WdgNewImage * m_page;
 };
 
-inline
-Q_INT32 KisDlgCreateImg::imgWidth() const
-{
-	return m_widthSpin -> value();
-}
 
-inline
-Q_INT32 KisDlgCreateImg::imgHeight() const
-{
-	return m_heightSpin -> value();
-}
-
-inline
-QString KisDlgCreateImg:: colorStrategyName() const
-{
-	return m_cmbImageType -> currentText ();
-}
 
 #endif // KIS_DLG_CREATE_IMG_H_
 

@@ -33,7 +33,7 @@ public:
 	virtual ~KisFilterRegistry();
 
 // public:
-// 	static KisFilterRegistry* singleton();
+// 	static KisFilterRegistry* instance();
 
 // private:
 // 	KisFilterRegistry(const KisFilterRegistry&) { };

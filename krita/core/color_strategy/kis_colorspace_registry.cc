@@ -35,7 +35,7 @@ KisColorSpaceRegistry::~KisColorSpaceRegistry()
 {
 }
 
-KisColorSpaceRegistry* KisColorSpaceRegistry::singleton()
+KisColorSpaceRegistry* KisColorSpaceRegistry::instance()
 {
 	if(KisColorSpaceRegistry::m_singleton == 0)
 	{

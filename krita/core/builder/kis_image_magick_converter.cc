@@ -199,7 +199,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		emit notifyProgressError(this);
 		return KisImageBuilder_RESULT_FAILURE;
 	}
-	m_img = new KisImage(m_adapter, 0, 0, KisColorSpaceRegistry::singleton()->colorSpace("RGBA"), m_doc -> nextImageName());
+	m_img = new KisImage(m_adapter, 0, 0, KisColorSpaceRegistry::instance()->colorSpace("RGBA"), m_doc -> nextImageName());
 	emit notifyProgressStage(this, i18n("Importing..."), 0);
 
 	while ((image = RemoveFirstImageFromList(&images))) {

@@ -9,6 +9,7 @@ INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/compositeop \
 	-I$(srcdir)/../../core/tiles \
 	-I$(srcdir)/../../core/tool \
+	-I$(srcdir)/../../core/resources \
 	-I$(srcdir)/../../ui \
 	-I../../ui \
 	$(KOFFICE_INCLUDES) \

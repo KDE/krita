@@ -41,18 +41,29 @@ namespace {
 }
 
 
-KisChannelInfo KisStrategyColorSpaceCMYK::channelInfo[5] = { KisChannelInfo(i18n("cyan"), 0, COLOR), 
-							     KisChannelInfo(i18n("magenta"), 1, COLOR),
-							     KisChannelInfo(i18n("yellow"), 2, COLOR), 
-							     KisChannelInfo(i18n("black"), 3, COLOR),
-							     KisChannelInfo(i18n("alpha"), 4, ALPHA)};
 
 
-KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() : 
-	KisStrategyColorSpace("CMYKA", TYPE_CMYK_8)
+KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK(bool alpha) :
+	KisStrategyColorSpace()
 {
 // 	setProfile(cmsCreateNullProfile());
+	m_alpha = alpha;
 
+	m_channels.push_back(new KisChannelInfo(i18n("cyan"), 0, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("magenta"), 1, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("yellow"), 2, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("black"), 3, COLOR));
+
+
+	if (alpha) {
+		m_name = "CMYK/Alpha";
+		// Custom definition for cmyka
+		m_cmType = (COLORSPACE_SH(PT_CMYK) | CHANNELS_SH(4) | BYTES_SH(1) | EXTRA_SH(1));
+		m_channels.push_back(new KisChannelInfo(i18n("alpha"), 4, ALPHA));
+	} else {
+		m_name = "CMYK";
+		m_cmType = TYPE_CMYK_8;
+	}
 }
 
 KisStrategyColorSpaceCMYK::~KisStrategyColorSpaceCMYK()
@@ -85,7 +96,10 @@ void KisStrategyColorSpaceCMYK::nativeColor(const KoColor& c, QUANTUM opacity, Q
 	dst[PIXEL_MAGENTA] = upscale( c.M() );
 	dst[PIXEL_YELLOW] = upscale( c.Y() );
 	dst[PIXEL_BLACK] = upscale( c.K() );
-	dst[PIXEL_CMYK_ALPHA] = opacity;
+
+	if (m_alpha)
+		dst[PIXEL_CMYK_ALPHA] = opacity;
+       
 }
 
 void KisStrategyColorSpaceCMYK::toKoColor(const QUANTUM *src, KoColor *c)
@@ -96,22 +110,28 @@ void KisStrategyColorSpaceCMYK::toKoColor(const QUANTUM *src, KoColor *c)
 void KisStrategyColorSpaceCMYK::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity)
 {
 	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
-	*opacity = src[PIXEL_CMYK_ALPHA];
+	if (m_alpha)
+		*opacity = src[PIXEL_CMYK_ALPHA];
+	else
+		*opacity = OPACITY_OPAQUE;
 }
 
-KisChannelInfo* KisStrategyColorSpaceCMYK::channels() const
+vKisChannelInfoSP KisStrategyColorSpaceCMYK::channels() const
 {
-	return channelInfo;
+	return m_channels;
 }
 
 bool KisStrategyColorSpaceCMYK::alpha() const
 {
-	return true;
+	return m_alpha;
 }
 
 Q_INT32 KisStrategyColorSpaceCMYK::depth() const
 {
-	return MAX_CHANNEL_CMYKA;
+	if (m_alpha)
+		return MAX_CHANNEL_CMYKA;
+	else
+		return MAX_CHANNEL_CMYK;
 }
 
 Q_INT32 KisStrategyColorSpaceCMYK::nColorChannels() const
@@ -194,7 +214,9 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 				if (s[PIXEL_BLACK] > alpha) {
 					d[PIXEL_BLACK] = d[PIXEL_BLACK] + (s[PIXEL_BLACK] - alpha);
 				}
-				d[PIXEL_CMYK_ALPHA] = alpha; // XXX: this is certainly incorrect.
+				if (m_alpha) {
+					d[PIXEL_CMYK_ALPHA] = alpha; // XXX: this is certainly incorrect.
+				}
 			}
 			dst += dststride;
 			src += srcstride;

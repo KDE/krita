@@ -144,7 +144,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs
                 m_offY = rhs.m_offY;
                 m_offW = rhs.m_offW;
                 m_offH = rhs.m_offH;
-                m_quantumSize = rhs.m_quantumSize;
                 m_name = rhs.m_name;
                 m_compositeOp = COMPOSITE_OVER;
 		m_colorStrategy = rhs.m_colorStrategy;
@@ -262,7 +261,6 @@ void KisPaintDevice::maskBounds(QRect *rc)
 void KisPaintDevice::init()
 {
         m_visible = false;
-        m_quantumSize = 0;
         m_offX = 0;
         m_offY = 0;
         m_offW = 0;

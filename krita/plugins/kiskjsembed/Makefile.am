@@ -13,6 +13,7 @@ INCLUDES  = -I$(srcdir)/../../ \
 	-I$(srcdir)/../../core/tiles \
 	-I$(srcdir)/../../ui \
 	-I$(srcdir)/../../tool \
+	-I$(srcdir)/../../core/resources \
 	-I$(srcdir)/../../ui/widgets \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
@@ -23,7 +24,7 @@ kritakjsembed_la_SOURCES = kis_kjsembed.cc \
 	kis_script.cc \
 	kis_function_base.cc \
 	kis_object_base.cc
-	
+
 noinst_HEADERS = kis_kjsembed.h kis_script.h kis_function_base.h
 
 kritakjsembed_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

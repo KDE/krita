@@ -34,6 +34,7 @@ class KisResource : public QObject {
 	Q_OBJECT
 
 public:
+
 	/**
 	 * Creates a new KisResource object using @p filename.  No file is opened
 	 * in the constructor, you have to call loadAsync.

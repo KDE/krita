@@ -44,18 +44,18 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
 
 	KisStrategyColorSpaceSP cs = layer->colorStrategy();
 	// Create the form
-	KisChannelInfo *cis = cs->channels();
+	vKisChannelInfoSP cis = cs->channels();
 	Q_INT32 depth = cs->depth();
 	m_ccfcws = new KisCustomConvolutionFilterConfigurationBaseWidget*[depth];
 	m_pos = new int[depth];
 	for(Q_INT32 i = 0; i < depth; i++)
 	{
-		m_pos[i] = cis[i].pos();
+		m_pos[i] = cis[i] -> pos();
 		m_ccfcws[i] = new KisCustomConvolutionFilterConfigurationBaseWidget((QWidget*)this);
 		connect(m_ccfcws[i]->matrixWidget, SIGNAL(valueChanged()), filter(), SLOT(refreshPreview()));
 		connect((QObject*)m_ccfcws[i]->spinBoxFactor, SIGNAL(valueChanged(int)), filter(), SLOT(refreshPreview()));
 		connect((QObject*)m_ccfcws[i]->spinBoxOffset, SIGNAL(valueChanged(int)), filter(), SLOT(refreshPreview()));
-		tabWidget->addTab(m_ccfcws[i], cis[ i ].name() );
+		tabWidget->addTab(m_ccfcws[i], cis[ i ] -> name() );
 	}
 }
 

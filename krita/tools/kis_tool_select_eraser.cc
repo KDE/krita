@@ -80,7 +80,7 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 		// selection brush is an eraser. That's because
 		// transparent == selected in KisSelection until we
 		// have a proper alpha colour model.
-		KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("paintbrush", painter());
+		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", painter());
 		painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 	}
 	// Set the cursor -- ideally. this should be a mask created from the brush,

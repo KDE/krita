@@ -54,6 +54,8 @@ public:
 	Q_INT32 gradientCount() const { return m_gradients.count(); }
 	Q_INT32 profileCount() const { return m_profiles.count(); }
 
+	
+	// XXX (BSAR): Does this mean the the lists are copied for every call?
 	QPtrList<KisResource> brushes();
 	QPtrList<KisResource> pipebrushes();
 	QPtrList<KisResource> patterns();

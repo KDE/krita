@@ -76,7 +76,7 @@ void KisToolFilter::initPaint(KisEvent *e)
 {
 	setUseTempLayer( true );
 	super::initPaint(e);
-	KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("filter", painter());
+	KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("filter", painter());
 	op -> setSource ( m_source );
 	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 	painter() -> setFilter( m_filter );

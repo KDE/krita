@@ -160,13 +160,13 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
 	QString report = QString("* bitBlt test\n");
 
 	KisDoc * doc = m_view -> getDocument();
-	QStringList l = KisColorSpaceRegistry::singleton() -> listColorSpaceNames();
+	QStringList l = KisColorSpaceRegistry::instance() -> listColorSpaceNames();
 
 
 	for (QStringList::Iterator it = l.begin(); it != l.end(); ++it) {
 		report = report.append( "  Testing blitting on " + *it + "\n");
 
- 		KisImage * img = doc -> newImage("blt-" + *it, 1000, 1000, KisColorSpaceRegistry::singleton() -> get(*it));
+ 		KisImage * img = doc -> newImage("blt-" + *it, 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
 		doc -> addImage(img);
 
 		report = report.append(doBlit(COMPOSITE_OVER, *it, OPACITY_OPAQUE, testCount, img));
@@ -197,7 +197,7 @@ QString PerfTest::doBlit(CompositeOp op,
 	// Small
 
 	KisLayerSP small = new KisLayer(TILE_WIDTH / 2, TILE_HEIGHT /2, 
-					KisColorSpaceRegistry::singleton() -> get(cspace),
+					KisColorSpaceRegistry::instance() -> get(cspace),
 					"small blit");
 
 
@@ -222,7 +222,7 @@ QString PerfTest::doBlit(CompositeOp op,
 	// ------------------------------------------------------------------------------
 	// Medium
 	KisLayerSP medium = new KisLayer(TILE_WIDTH * 3, TILE_HEIGHT * 3,
-					 KisColorSpaceRegistry::singleton() -> get(cspace),
+					 KisColorSpaceRegistry::instance() -> get(cspace),
 					 "medium blit");
 		
 	pf.begin(medium.data()) ;
@@ -246,7 +246,7 @@ QString PerfTest::doBlit(CompositeOp op,
 	// ------------------------------------------------------------------------------
 	// Big
 	KisLayerSP big = new KisLayer(800, 800,
-				      KisColorSpaceRegistry::singleton() -> get(cspace),
+				      KisColorSpaceRegistry::instance() -> get(cspace),
 				      "big blit");
 
 	pf.begin(big.data()) ;
@@ -271,7 +271,7 @@ QString PerfTest::doBlit(CompositeOp op,
 	// Outside
 
 	KisLayerSP outside = new KisLayer(500, 500,
-					  KisColorSpaceRegistry::singleton() -> get(cspace),
+					  KisColorSpaceRegistry::instance() -> get(cspace),
 					  "outside blit");
 
 	pf.begin(outside.data()) ;
@@ -301,13 +301,13 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 	QString report = QString("* Fill test\n");
 
 	KisDoc * doc = m_view -> getDocument();
-	QStringList l = KisColorSpaceRegistry::singleton() -> listColorSpaceNames();
+	QStringList l = KisColorSpaceRegistry::instance() -> listColorSpaceNames();
 
 
 	for (QStringList::Iterator it = l.begin(); it != l.end(); ++it) {
 		report = report.append( "  Testing blitting on " + *it + "\n");
 
- 		KisImage * img = doc -> newImage("fill-" + *it, 1000, 1000, KisColorSpaceRegistry::singleton() -> get(*it));
+ 		KisImage * img = doc -> newImage("fill-" + *it, 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
 		doc -> addImage(img);
 		KisLayerSP l = img -> activeLayer();
 

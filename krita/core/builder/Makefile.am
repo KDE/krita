@@ -2,6 +2,7 @@ INCLUDES  = -I$(srcdir)/../ \
 	-I$(srcdir)/../color_strategy \
 	-I$(srcdir)/../compositeop \
 	-I$(srcdir)/../visitors/ \
+	-I$(srcdir)/../resources/ \
 	-I$(srcdir)/../tiles/ \
 	-I$(srcdir)/../../ui/ \
 	-I../../ui/ \

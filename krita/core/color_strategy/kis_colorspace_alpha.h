@@ -47,7 +47,7 @@ public:
 	virtual KisPixelRO toKisPixelRO(QUANTUM *src) { return KisPixelRO (src, src); }
 	virtual KisPixel toKisPixel(QUANTUM *src) { return KisPixel (src, src); }
 
-	virtual KisChannelInfo* channels() const;
+	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const { return 0; };
@@ -69,7 +69,7 @@ protected:
 			    CompositeOp op);
 
 private:
-	static KisChannelInfo channelInfo[1];
+	vKisChannelInfoSP m_channels;
 
 	KoColor m_maskColor;
 	bool m_inverted;

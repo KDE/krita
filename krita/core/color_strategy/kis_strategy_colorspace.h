@@ -38,6 +38,7 @@ class KisStrategyColorSpace : public KShared {
 
 
 public:
+	KisStrategyColorSpace();
 	/**
 	 * Create a new colorspace strategy.
 	 * 
@@ -59,10 +60,9 @@ public:
 
 	virtual KisPixelRO toKisPixelRO(QUANTUM *src) = 0;
 	virtual KisPixel toKisPixel(QUANTUM *src) = 0;
-
-	// XXX: make this a proper vector. Pointers to arrays are _so_ seventies, and
-	// Stroustrup assures us a vector is as effecient a mem array anyway.
-	virtual KisChannelInfo * channels() const = 0;
+	
+	// Return a vector describing all the channels this color model has.
+	virtual vKisChannelInfoSP channels() const = 0;
 	
 	virtual Q_UINT32 colorModelType() { return m_cmType; };
 
@@ -110,6 +110,20 @@ public:
 			    Q_INT32 cols, 
 			    CompositeOp op);
 
+	/**
+	 * Set the icm profile for conversion between color spaces
+	 * 
+	 * XXX: make user-definable for certain transforms. Maybe
+	 * only in the switch color space dialog for the whole image.
+	 */
+	void setProfile(cmsHPROFILE profile) { m_profile = profile; }
+
+	/**
+	 * Get the icm profile for conversion between color spaces.
+	 */
+	cmsHPROFILE getProfile() { return m_profile; }
+
+
 protected:
 
 	/**
@@ -136,24 +150,7 @@ protected:
 			    Q_INT32 cols, 
 			    CompositeOp op) = 0;
 
-	/**
-	 * Set the icm profile for conversion between color spaces
-	 * 
-	 * XXX: make user-definable for certain transforms. Maybe
-	 * only in the switch color space dialog for the whole image.
-	 */
-	void setProfile(cmsHPROFILE profile) { m_profile = profile; }
 
-	/**
-	 * Get the icm profile for conversion between color spaces.
-	 */
-	cmsHPROFILE getProfile() { return m_profile; }
-
-private:
-
-	KisStrategyColorSpace(const KisStrategyColorSpace&);
-	KisStrategyColorSpace& operator=(const KisStrategyColorSpace&);
-	
 	QString m_name;    // The user-friendly name
 	Q_UINT32 m_cmType; // The colorspace type as defined by littlecms
 	
@@ -162,6 +159,11 @@ private:
 
  	cmsHPROFILE m_profile; // THe default profile for this color strategy
 
+private:
+
+	KisStrategyColorSpace(const KisStrategyColorSpace&);
+	KisStrategyColorSpace& operator=(const KisStrategyColorSpace&);
+	
 	
 };
 

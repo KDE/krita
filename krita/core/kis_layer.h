@@ -38,12 +38,6 @@ public:
 	virtual void setVisible(bool v);
 
 public:
-	// XXX: Masks were already out of order before I started on
-	// Krita, and I don't know what they were for.
-	KisMaskSP createMask(Q_INT32 maskType);
-	KisMaskSP addMask(KisMaskSP mask);
-	void applyMask(Q_INT32 mode);
-	KisMaskSP mask() const;
 
 	// Selection stuff. XXX: is it necessary to make the actual
 	// selection object available outside the layer? YYY: yes, so
@@ -68,7 +62,6 @@ public:
 	void removeSelection();
 
 	void translate(Q_INT32 x, Q_INT32 y);
-	void addAlpha();
 
 	QUANTUM opacity() const;
 	void setOpacity(QUANTUM val);
@@ -84,8 +77,6 @@ signals:
 private:
 	QUANTUM m_opacity;
 	bool m_preserveTransparency;
-
-	KisMaskSP m_mask;
 
 	bool m_initial;
 	bool m_linked;

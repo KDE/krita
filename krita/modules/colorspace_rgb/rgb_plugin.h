@@ -37,6 +37,8 @@ public:
 private:
 
 	KisStrategyColorSpaceSP m_StrategyColorSpaceRGB;
+	KisStrategyColorSpaceSP m_StrategyColorSpaceRGBA;
 };
+
 
 #endif // RGB_PLUGIN_H_

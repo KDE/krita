@@ -27,16 +27,17 @@
 #include <qvaluevector.h>
 #include <qimage.h>
 
+#include <ksharedptr.h>
 #include <kio/job.h>
 
 #include "kis_resource.h"
 
-
-class KisProfile : public KisResource {
+class KisProfile : public KisResource, public KShared {
 	typedef KisResource super;
 	Q_OBJECT
 
 public:
+	KisProfile();
 	KisProfile(const QString& file);
 	virtual ~KisProfile();
 

@@ -52,7 +52,7 @@ KisToolPen::~KisToolPen()
 void KisToolPen::initPaint(KisEvent *e)
 {
 	super::initPaint(e);
-	KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("pen", painter());
+	KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("pen", painter());
 	painter() -> setPaintOp(op); // Painter gets ownership
 }
 

@@ -56,7 +56,7 @@ KisPaintOpRegistry::~KisPaintOpRegistry()
 {
 }
 
-KisPaintOpRegistry* KisPaintOpRegistry::singleton()
+KisPaintOpRegistry* KisPaintOpRegistry::instance()
 {
 	if(KisPaintOpRegistry::m_singleton == 0)
 	{

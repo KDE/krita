@@ -1,5 +1,6 @@
 INCLUDES  = -I$(srcdir)/.. \
 	-I$(srcdir)/../tiles \
+	-I$(srcdir)/../resources \
 	-I$(srcdir)/../../ui \
 	$(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 

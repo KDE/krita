@@ -58,7 +58,6 @@
 #include "kis_types.h"
 #include "kis_config.h"
 #include "kis_global.h"
-#include "kis_channel.h"
 #include "kis_dlg_create_img.h"
 #include "kis_doc.h"
 #include "kis_factory.h"
@@ -67,7 +66,6 @@
 #include "kis_nameserver.h"
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
-#include "kis_mask.h"
 #include "kis_command.h"
 #include "kis_view.h"
 #include "builder/kis_builder_subject.h"
@@ -529,7 +527,6 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 {
 	QDomElement image = doc.createElement("IMAGE");
 	vKisLayerSP layers;
-	vKisChannelSP channels;
 
 	Q_ASSERT(img);
 	image.setAttribute("name", img -> name());
@@ -548,16 +545,6 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 			elem.appendChild(saveLayer(doc, *it));
 	}
 
-	channels = img -> channels();
-
-	if (channels.size() > 0) {
-		QDomElement elem = doc.createElement("CHANNELS");
-
-		image.appendChild(elem);
-
-		for (vKisChannelSP_it it = channels.begin(); it != channels.end(); it++)
-			elem.appendChild(saveChannel(doc, *it));
-	}
 
 	// TODO Image colormap if any
 	return image;
@@ -623,7 +610,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 				return 0;
 			}
 		}
-		img = new KisImage(this, width, height, KisColorSpaceRegistry::singleton()->colorSpace(colorspacename), name);
+		img = new KisImage(this, width, height, KisColorSpaceRegistry::instance()->colorSpace(colorspacename), name);
 
 		for (node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
 			if (node.isElement()) {
@@ -639,15 +626,6 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
 					if (img -> nlayers()) {
 						img -> activateLayer(0);
-					}
-				} else if (node.nodeName() == "CHANNELS") {
-					for (child = node.firstChild(); !child.isNull(); child = child.nextSibling()) {
-						KisChannelSP channel = loadChannel(child.toElement(), img);
-
-						if (!channel)
-							return 0;
-
-						img -> add(channel, -1);
 					}
 				} else if (node.nodeName() == "COLORMAP") {
 					// TODO
@@ -675,7 +653,6 @@ QDomElement KisDoc::saveLayer(QDomDocument& doc, KisLayerSP layer)
 	layerElement.setAttribute("opacity", layer -> opacity());
 	layerElement.setAttribute("visible", layer -> visible());
 	layerElement.setAttribute("linked", layer -> linked());
-	// TODO : Layer mask
 	return layerElement;
 }
 
@@ -742,69 +719,6 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 	return layer;
 }
 
-QDomElement KisDoc::saveChannel(QDomDocument& doc, KisChannelSP channel)
-{
-	QDomElement channelElement = doc.createElement("CHANNEL");
-
-	channelElement.setAttribute("name", channel -> name());
-	channelElement.setAttribute("x", channel -> x());
-	channelElement.setAttribute("y", channel -> y());
-	channelElement.setAttribute("width", channel -> width());
-	channelElement.setAttribute("height", channel -> height());
-	channelElement.setAttribute("opacity", channel -> opacity());
-	return channelElement;
-}
-
-KisChannelSP KisDoc::loadChannel(const QDomElement& element, KisImageSP img)
-{
-	KisConfig cfg;
-	QString attr;
-	QDomNode node;
-	QDomNode child;
-	QString name;
-	Q_INT32 x;
-	Q_INT32 y;
-	Q_INT32 width;
-	Q_INT32 height;
-	Q_INT32 opacity;
-	KisChannelSP channel;
-
-	if ((name = element.attribute("name")).isNull())
-		return 0;
-
-	if ((attr = element.attribute("x")).isNull())
-		return 0;
-
-	x = attr.toInt();
-
-	if ((attr = element.attribute("y")).isNull())
-		return 0;
-
-	y = attr.toInt();
-
-	if ((attr = element.attribute("width")).isNull())
-		return 0;
-
-	if ((width = attr.toInt()) < 0 || x + width > cfg.maxImgWidth())
-		return 0;
-
-	if ((attr = element.attribute("height")).isNull())
-		return 0;
-
-	if ((height = attr.toInt()) < 0 || y + height > cfg.maxImgHeight())
-		return 0;
-
-	if ((attr = element.attribute("opacity")).isNull())
-		return 0;
-
-	if ((opacity = attr.toInt()) < 0 || opacity > QUANTUM_MAX)
-		return 0;
-
-	channel = new KisChannel(img, width, height, name, KoColor::black());
-	channel -> opacity(opacity);
-	channel -> move(x, y);
-	return channel;
-}
 
 bool KisDoc::completeSaving(KoStore *store)
 {
@@ -816,7 +730,7 @@ bool KisDoc::completeSaving(KoStore *store)
 	KisImageSP img;
 
 	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
-		totalSteps += (*it) -> nlayers() + (*it) -> nchannels();
+		totalSteps += (*it) -> nlayers();
 		img = new KisImage(**it);
 		img -> setName((*it) -> name());
 		images.push_back(img);
@@ -826,7 +740,6 @@ bool KisDoc::completeSaving(KoStore *store)
 
 	for (vKisImageSP_it it = images.begin(); it != images.end(); it++) {
 		vKisLayerSP layers = (*it) -> layers();
-		vKisChannelSP channels = (*it) -> channels();
 
 		for (vKisLayerSP_it it2 = layers.begin(); it2 != layers.end(); it2++) {
 			connect(*it2, SIGNAL(ioProgress(Q_INT8)), this, SLOT(slotIOProgress(Q_INT8)));
@@ -844,30 +757,10 @@ bool KisDoc::completeSaving(KoStore *store)
 				store -> close();
 			}
 
-			// TODO Mask
 			IOCompletedStep();
 			(*it2) -> disconnect();
 		}
 
-		for (vKisChannelSP_it it2 = channels.begin(); it2 != channels.end(); it2++) {
-			connect(*it2, SIGNAL(ioProgress(Q_INT8)), this, SLOT(slotIOProgress(Q_INT8)));
-			location = external ? QString::null : uri;
-			location += (*it) -> name() + "/channels/" + (*it2) -> name();
-
-			if (store -> open(location)) {
-				if (!(*it2) -> write(store)) {
-					(*it2) -> disconnect();
-					store -> close();
-					IODone();
-					return false;
-				}
-
-				store -> close();
-			}
-
-			IOCompletedStep();
-			(*it2) -> disconnect();
-		}
 	}
 
 	IODone();
@@ -882,13 +775,12 @@ bool KisDoc::completeLoading(KoStore *store)
 	Q_INT32 totalSteps = 0;
 
 	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++)
-		totalSteps += (*it) -> nlayers() + (*it) -> nchannels();
+		totalSteps += (*it) -> nlayers();
 
 	setIOSteps(totalSteps);
 
 	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
 		vKisLayerSP layers = (*it) -> layers();
-		vKisChannelSP channels = (*it) -> channels();
 
 		for (vKisLayerSP_it it2 = layers.begin(); it2 != layers.end(); it2++) {
 			connect(*it2, SIGNAL(ioProgress(Q_INT8)), this, SLOT(slotIOProgress(Q_INT8)));
@@ -906,30 +798,10 @@ bool KisDoc::completeLoading(KoStore *store)
 				store -> close();
 			}
 
-			// TODO Mask
 			IOCompletedStep();
 			(*it2) -> disconnect();
 		}
 
-		for (vKisChannelSP_it it2 = channels.begin(); it2 != channels.end(); it2++) {
-			connect(*it2, SIGNAL(ioProgress(Q_INT8)), this, SLOT(slotIOProgress(Q_INT8)));
-			location = external ? QString::null : uri;
-			location += (*it) -> name() + "/channels/" + (*it2) -> name();
-
-			if (store -> open(location)) {
-				if (!(*it2) -> read(store)) {
-					(*it2) -> disconnect();
-					store -> close();
-					IODone();
-					return false;
-				}
-
-				store -> close();
-			}
-
-			IOCompletedStep();
-			(*it2) -> disconnect();
-		}
 	}
 
 	IODone();
@@ -1075,7 +947,10 @@ void KisDoc::removeImage(const QString& name)
 bool KisDoc::slotNewImage()
 {
 	KisConfig cfg;
-	KisDlgCreateImg dlg(cfg.maxImgWidth(), cfg.defImgWidth(), cfg.maxImgHeight(), cfg.defImgHeight(), "RGBA");
+	KisDlgCreateImg dlg(cfg.maxImgWidth(), cfg.defImgWidth(), 
+			    cfg.maxImgHeight(), cfg.defImgHeight(), 
+			    "RGBA",
+			    nextImageName());
 
 	if (dlg.exec() == QDialog::Accepted) {
 		QString name;
@@ -1085,8 +960,13 @@ bool KisDoc::slotNewImage()
 		KisLayerSP layer;
 		KisFillPainter painter;
 
-		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), KisColorSpaceRegistry::singleton()->colorSpace(dlg.colorStrategyName()), nextImageName());
-		img -> setResolution(100.0, 100.0); // XXX needs to be added to dialog
+		img = new KisImage(this, dlg.imgWidth(), 
+				   dlg.imgHeight(), 
+				   KisColorSpaceRegistry::instance()->colorSpace(dlg.colorStrategyName()), 
+				   dlg.imgName());
+		img -> setResolution(dlg.imgResolution(), dlg.imgResolution()); // XXX needs to be added to dialog
+		img -> setDescription(dlg.imgDescription());
+		img -> setProfile(dlg.profile());
 
 		layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 
@@ -1551,7 +1431,7 @@ void KisDoc::clipboardDataChanged()
 		if (!qimg.isNull()) {
 			m_clipboard =
 				new KisPaintDevice(qimg.width(), qimg.height(),
-						   KisColorSpaceRegistry::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
+						   KisColorSpaceRegistry::instance()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
 						   "KisDoc created clipboard selection");
 
 			m_clipboard -> convertFromImage(qimg);

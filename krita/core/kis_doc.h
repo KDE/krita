@@ -176,8 +176,6 @@ private:
 	KisImageSP loadImage(const QDomElement& elem);
 	QDomElement saveLayer(QDomDocument& doc, KisLayerSP layer);
 	KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
-	QDomElement saveChannel(QDomDocument& doc, KisChannelSP channel);
-	KisChannelSP loadChannel(const QDomElement& elem, KisImageSP img);
 	bool init();
 
 	void setIOSteps(Q_INT32 nsteps);

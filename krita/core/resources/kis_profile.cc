@@ -32,6 +32,13 @@
 
 #include "kis_profile.h"
 
+#include "ksharedptr.h"
+
+KisProfile::KisProfile()
+	: super(QString())
+{
+}
+
 KisProfile::KisProfile(const QString& file) : super(file)
 {
 }

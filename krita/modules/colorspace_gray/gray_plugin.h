@@ -39,6 +39,7 @@ private:
 
 	KisView* m_view;
 	KisStrategyColorSpaceSP m_StrategyColorSpaceGray;
+	KisStrategyColorSpaceSP m_StrategyColorSpaceGrayA;
 };
 
 #endif // GRAY_PLUGIN_H_

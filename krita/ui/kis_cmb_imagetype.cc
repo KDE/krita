@@ -29,7 +29,7 @@
 KisCmbImageType::KisCmbImageType(QWidget * parent, const char * name) 
 	: super( false, parent, name )
 {
-	insertStringList(KisColorSpaceRegistry::singleton()->listColorSpaceNames());
+	insertStringList(KisColorSpaceRegistry::instance()->listColorSpaceNames());
 }
 
 KisCmbImageType::~KisCmbImageType()

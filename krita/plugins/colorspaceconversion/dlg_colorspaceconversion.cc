@@ -18,34 +18,48 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include <config.h>
-
-#include <math.h>
-
-#include <iostream>
-
-using namespace std;
-
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qcombobox.h>
+#include <qptrlist.h>
 
 #include <klocale.h>
 #include <knuminput.h>
 #include <kdebug.h>
 
+#include <kis_factory.h>
+#include <kis_colorspace_registry.h>
+#include <kis_resourceserver.h>
+
 #include "dlg_colorspaceconversion.h"
 #include "wdgconvertcolorspace.h"
 
 DlgColorspaceConversion::DlgColorspaceConversion( QWidget *  parent,
-			    const char * name)
+						  const char * name)
 	: super (parent, name, true, i18n("Image Size"), Ok | Cancel, Ok)
 {
 	m_page = new WdgConvertColorSpace(this, "colorspace_conversion");
 
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
+
+	m_page -> cmbColorSpaces -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
+
+	QPtrList<KisResource> resourceslist = KisFactory::rServer() -> profiles();
+	KisResource * resource;
+	KisProfile * profile;
+	for ( resource = resourceslist.first(); resource; resource = resourceslist.next() ) {
+		kdDebug() << "Adding profile: " << resource -> filename() << "\n";
+		Q_ASSERT(dynamic_cast<KisProfile*>(resource));
+		profile = static_cast<KisProfile*>(resource);
+
+		m_page -> cmbSourceProfile -> insertItem(profile -> productName());
+		m_page -> cmbDestProfile -> insertItem(profile -> productName());
+	}
+	// XXX: Until we have implemented high bit depth images
+	m_page -> cmbDepth -> setEnabled(false);
+	
 
 	connect(this, SIGNAL(okClicked()),
 		this, SLOT(okClicked()));

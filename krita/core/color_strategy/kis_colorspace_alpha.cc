@@ -33,18 +33,19 @@
 #include "kis_iterators_pixel.h"
 #include "kis_selection.h"
 #include "kis_channelinfo.h"
+#include "kis_types.h"
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_ALPHA = 1;
 }
-
-KisChannelInfo KisColorSpaceAlpha::channelInfo[1] = { KisChannelInfo(i18n("alpha"), 0, ALPHA) };
 
 KisColorSpaceAlpha::KisColorSpaceAlpha() :
 	KisStrategyColorSpace("alpha mask", TYPE_GRAY_8)
 {
 	m_maskColor = KoColor::white();
 	m_inverted = false;
+
+	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 0, ALPHA));
 }
 
 KisColorSpaceAlpha::~KisColorSpaceAlpha()
@@ -77,13 +78,13 @@ void KisColorSpaceAlpha::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opac
 	}
 }
 
-KisChannelInfo* KisColorSpaceAlpha::channels() const
+vKisChannelInfoSP KisColorSpaceAlpha::channels() const
 {
-	return channelInfo;
+	return m_channels;
 }
 bool KisColorSpaceAlpha::alpha() const
 {
-	return true;
+	return true; // Of course!
 }
 
 Q_INT32 KisColorSpaceAlpha::depth() const

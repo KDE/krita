@@ -151,9 +151,6 @@ public:
         KisTileMgrSP shadow();
         const KisTileMgrSP shadow() const;
 
-        Q_INT32 quantumSize() const;
-        Q_INT32 quantumSizeWithAlpha() const;
-
 	// XXX?
         QRect bounds() const;
 
@@ -285,7 +282,6 @@ private:
         Q_INT32 m_offY;
         Q_INT32 m_offW;
         Q_INT32 m_offH;
-        Q_INT32 m_quantumSize;
         QString m_name;
 	// Operation used to composite this layer with the layers _under_ this layer
 	CompositeOp m_compositeOp;
@@ -330,16 +326,6 @@ inline KisTileMgrSP KisPaintDevice::shadow()
 inline const KisTileMgrSP KisPaintDevice::shadow() const
 {
         return m_shadow;
-}
-
-inline Q_INT32 KisPaintDevice::quantumSize() const
-{
-        return 0;
-}
-
-inline Q_INT32 KisPaintDevice::quantumSizeWithAlpha() const
-{
-        return 0;
 }
 
 inline QRect KisPaintDevice::bounds() const

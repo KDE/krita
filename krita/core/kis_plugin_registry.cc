@@ -75,7 +75,7 @@ KisPluginRegistry::KisPluginRegistry()
 
 
 
-KisPluginRegistry *KisPluginRegistry::singleton()
+KisPluginRegistry *KisPluginRegistry::instance()
 {
 	return KisPluginRegistry::m_singleton;
 }
@@ -87,7 +87,7 @@ KisPluginRegistry::~KisPluginRegistry()
 void KisPluginRegistry::registerColorStrategy(const QString & /*name*/, KisStrategyColorSpaceSP colorspace)
 {
 // 	kdDebug() << "Adding color strategy: " << name << "\n";
-	KisColorSpaceRegistry::singleton() -> add(colorspace);
+	KisColorSpaceRegistry::instance() -> add(colorspace);
 }
 
 #include "kis_plugin_registry.moc"

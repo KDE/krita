@@ -34,7 +34,7 @@ public:
 	KisStrategyColorSpaceSP colorSpace(const QString& name) const;
 	QStringList listColorSpaceNames() const;
 public:
-	static KisColorSpaceRegistry* singleton();
+	static KisColorSpaceRegistry* instance();
 	
 private:
 	KisColorSpaceRegistry();

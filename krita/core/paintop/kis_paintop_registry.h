@@ -33,7 +33,7 @@ public:
 	KisPaintOp * paintOp(const QString & name, KisPainter * painter) const;
 
 public:
-	static KisPaintOpRegistry* singleton();
+	static KisPaintOpRegistry* instance();
 	
 private:
 	KisPaintOpRegistry();

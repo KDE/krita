@@ -7,6 +7,7 @@ EXTRA_DIST = $(kritarc_DATA)
 INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core/compositeop \
+	-I$(srcdir)/../../core/resources \
 	-I$(srcdir)/../../core/tiles \
 	-I$(srcdir)/../../core/tool \
 	-I$(srcdir)/../../core/paintop \

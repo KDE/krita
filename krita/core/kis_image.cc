@@ -39,9 +39,7 @@
 #include "kis_fill_painter.h"
 #include "kis_layer.h"
 #include "kis_background.h"
-#include "kis_channel.h"
 #include "kis_doc.h"
-#include "kis_mask.h"
 #include "kis_nameserver.h"
 #include "kistile.h"
 #include "kistilemgr.h"
@@ -49,6 +47,7 @@
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
 #include "kis_scale_visitor.h"
+#include "kis_profile.h"
 
 #define DEBUG_IMAGES 0
 
@@ -219,23 +218,9 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 			m_activeLayer = layer;
 		}
 
-		m_channels.reserve(rhs.m_channels.size());
-
-		for (vKisChannelSP_cit it = rhs.m_channels.begin(); it != rhs.m_channels.end(); it++) {
-			KisChannelSP channel = new KisChannel(**it);
-
-			channel -> setImage(this);
-			m_channels.push_back(channel);
-			m_activeChannel = channel;
-		}
-
 
 		m_visible = rhs.m_visible;
 		m_active = rhs.m_active;
-		m_alpha = rhs.m_alpha;
-		m_maskEnabled = rhs.m_maskEnabled;
-		m_maskInverted = rhs.m_maskInverted;
-		m_maskClr = rhs.m_maskClr;
 		m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
 		m_guides = rhs.m_guides;
 		startUpdateTimer();
@@ -273,6 +258,18 @@ void KisImage::setName(const QString& name)
 		m_name = name;
 }
 
+QString KisImage::description() const
+{
+	return m_description;
+}
+
+void KisImage::setDescription(const QString& description)
+{
+	if (!description.isEmpty())
+		m_description = description;
+}
+
+
 QString KisImage::nextLayerName() const
 {
 	if (m_nserver -> currentSeed() == 0) {
@@ -301,9 +298,6 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 	m_yres = 1.0;
 	m_unit = KoUnit::U_PT;
 	m_dirty = false;
-	m_maskEnabled = false;
-	m_maskInverted = false;
-	m_alpha = false;
 	m_undoHistory = 0;
 	m_ntileCols = (width + TILE_WIDTH - 1) / TILE_WIDTH;
 	m_ntileRows = (height + TILE_HEIGHT - 1) / TILE_HEIGHT;
@@ -482,6 +476,23 @@ void KisImage::convertTo( KisStrategyColorSpaceSP colorStrategy)
 	m_projection -> convertTo(colorStrategy);
 }
 
+void KisImage::convertTo(KisStrategyColorSpaceSP colorStrategy, KisProfileSP /*profile*/)
+{
+	// XXX: Implement
+	convertTo(colorStrategy);
+}
+
+KisProfileSP KisImage::profile() const
+{
+	return m_profile;
+}
+
+void KisImage::setProfile(const KisProfileSP& profile) 
+{
+	if (profile -> valid())
+		m_profile = profile;
+}
+
 KURL KisImage::uri() const
 {
 	return m_uri;
@@ -536,7 +547,7 @@ Q_UINT32 KisImage::depth() const
 
 bool KisImage::alpha() const
 {
-	return m_alpha;
+	return m_colorStrategy -> alpha();
 }
 
 bool KisImage::empty() const
@@ -559,24 +570,9 @@ const vKisLayerSP& KisImage::layers() const
 	return m_layers;
 }
 
-vKisChannelSP KisImage::channels()
-{
-	return m_channels;
-}
-
-const vKisChannelSP& KisImage::channels() const
-{
-	return m_channels;
-}
-
 KisPaintDeviceSP KisImage::activeDevice()
 {
-	if (m_activeChannel)
-		return m_activeChannel.data();
-
 	if (m_activeLayer) {
-		if (m_activeLayer -> mask())
-			return m_activeLayer -> mask().data();
 		return m_activeLayer.data();
 	}
 
@@ -666,8 +662,6 @@ KisLayerSP KisImage::layer(Q_UINT32 npos)
 
 bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 {
-	bool alpha = false;
-
 	if (layer == 0)
 		return false;
 
@@ -679,23 +673,13 @@ bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 
 	layer -> setImage(KisImageSP(this));
 
-	if (layer -> mask())
-		layer -> mask() -> setImage(KisImageSP(this));
-
 	if (position == -1) {
 		// Add to bottom of layer stack
 		position = m_layers.size();
 	}
 
-	if (m_layers.size() == 1 && m_layers[0] -> alpha())
-		alpha = true;
-
 	m_layers.insert(m_layers.begin() + position, layer);
 	activate(layer);
-// 	layer -> update();
-
-	if (alpha)
-		emit alphaChanged(KisImageSP(this));
 
 	m_layerStack.push_back(layer);
 	expand(layer.data());
@@ -734,8 +718,7 @@ void KisImage::rm(KisLayerSP layer)
 
 	rc = layer -> bounds();
 
-	if (m_layers.size() == 1 && m_layers[0] -> alpha())
-		emit alphaChanged(KisImageSP(this));
+
 }
 
 bool KisImage::raise(KisLayerSP layer)
@@ -986,192 +969,6 @@ void KisImage::mergeLayer(KisLayerSP l)
 
 }
 
-
-KisChannelSP KisImage::activeChannel()
-{
-	return m_activeChannel;
-}
-
-KisChannelSP KisImage::activate(KisChannelSP channel)
-{
-	if (m_channels.empty() || !channel)
-		return 0;
-
-	if (qFind(m_channels.begin(), m_channels.end(), channel) == m_channels.end())
-		channel = m_channels[0];
-
-	if (channel != m_activeChannel) {
-		m_activeChannel = channel;
-		emit activeChannelChanged(KisImageSP(this));
-	}
-
-	return channel;
-}
-
-KisChannelSP KisImage::activateChannel(Q_INT32 n)
-{
-	if (n < 0 || static_cast<Q_UINT32>(n) > m_channels.size())
-		return 0;
-
-	return activate(m_channels[n]);
-}
-
-KisChannelSP KisImage::unsetActiveChannel()
-{
-	KisChannelSP channel = activeChannel();
-
-	if (channel) {
-		m_activeChannel = 0;
-		emit activeChannelChanged(KisImageSP(this));
-
-		if (!m_layerStack.empty()) {
-			KisLayerSP layer = *m_layerStack.begin();
-
-			activate(layer);
-		}
-	}
-
-	return channel;
-}
-
-Q_INT32 KisImage::index(KisChannelSP channel)
-{
-	for (Q_UINT32 i = 0; i < m_channels.size(); i++) {
-		if (m_channels[i] == channel)
-			return i;
-	}
-
-	return -1;
-}
-
-KisChannelSP KisImage::channel(const QString& name)
-{
-	for (vKisChannelSP_it it = m_channels.begin(); it != m_channels.end(); it++) {
-		if ((*it) -> name() == name)
-			return *it;
-	}
-
-	return 0;
-
-}
-
-KisChannelSP KisImage::channel(Q_UINT32 npos)
-{
-	if (npos >= m_channels.size())
-		return 0;
-
-	return m_channels[npos];
-}
-
-bool KisImage::add(KisChannelSP channel, Q_INT32 position)
-{
-	if (channel == 0)
-		return false;
-
-	if (channel -> image() && channel -> image() != KisImageSP(this))
-		return false;
-
-	if (qFind(m_channels.begin(), m_channels.end(), channel) != m_channels.end())
-		return false;
-
-	if (position == -1) {
-		KisChannelSP active = activeChannel();
-
-		position = active ? index(active) : 0;
-	}
-
-	m_channels.insert(m_channels.begin() + position, channel);
-	activate(channel);
-
-// 	if (channel -> visible())
-// 		channel -> update();
-
-	expand(channel.data());
-	return true;
-}
-
-void KisImage::rm(KisChannelSP channel)
-{
-	vKisChannelSP_it it;
-
-	if (channel == 0)
-		return;
-
-	it = qFind(m_channels.begin(), m_channels.end(), channel);
-
-	if (it == m_channels.end())
-		return;
-
-	m_channels.erase(it);
-
-	if (channel == activeChannel()) {
-		if (m_channels.empty())
-			unsetActiveChannel();
-		else
-			activate(m_channels[0]);
-	}
-}
-
-bool KisImage::raise(KisChannelSP channel)
-{
-	Q_INT32 position;
-
-	if (channel == 0)
-		return false;
-
-	position = index(channel);
-
-	if (position == 0)
-		return false;
-
-	return pos(channel, position - 1);
-}
-
-bool KisImage::lower(KisChannelSP channel)
-{
-	Q_INT32 position;
-	Q_INT32 size;
-
-	if (channel == 0)
-		return false;
-
-	position = index(channel);
-	size = m_channels.size();
-
-	if (position == size - 1)
-		return false;
-
-	return pos(channel, position + 1);
-}
-
-bool KisImage::pos(KisChannelSP channel, Q_INT32 position)
-{
-	Q_INT32 old;
-	Q_INT32 nchannels;
-
-	if (channel == 0)
-		return false;
-
-	old = index(channel);
-
-	if (old < 0)
-		return false;
-
-	nchannels = m_channels.size();
-	position = CLAMP(position, 0, nchannels - 1);
-
-	if (position == old)
-		return true;
-
-	qSwap(m_channels[old], m_channels[position]);
-// 	channel -> update();
-	return true;
-}
-
-Q_INT32 KisImage::nchannels() const
-{
-	return m_channels.size();
-}
 
 void KisImage::enableUndo(KoCommandHistory *history)
 {

@@ -347,7 +347,7 @@ KisLayerSP KisSelectionManager::paste()
 		if (!qimg.isNull()) {
 			KisLayerSP layer =
 				new KisLayer(qimg.width(), qimg.height(),
-					     KisColorSpaceRegistry::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
+					     KisColorSpaceRegistry::instance()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
 					     "KisDoc created clipboard selection");
 
 			layer -> convertFromImage(qimg);

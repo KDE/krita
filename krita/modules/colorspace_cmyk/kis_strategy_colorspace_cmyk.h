@@ -24,6 +24,7 @@
 #include <koColor.h>
 #include "kis_pixel.h"
 #include "kis_global.h"
+#include "kis_types.h"
 #include "kis_strategy_colorspace.h"
 
 // XXX: Move into namespace
@@ -36,7 +37,7 @@ const PIXELTYPE PIXEL_CMYK_ALPHA = 4;
 
 class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
  public:
-	KisStrategyColorSpaceCMYK();
+	KisStrategyColorSpaceCMYK(bool alpha);
 	virtual ~KisStrategyColorSpaceCMYK();
 
  public:
@@ -50,7 +51,7 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 	virtual KisPixelRO toKisPixelRO(QUANTUM *src) { return KisPixelRO (src, src + PIXEL_CMYK_ALPHA); }
 	virtual KisPixel toKisPixel(QUANTUM *src) { return KisPixel (src, src + PIXEL_CMYK_ALPHA); }
 
-	virtual KisChannelInfo* channels() const;
+	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const;
@@ -68,7 +69,8 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 			    CompositeOp op);
 
  private:
-	static KisChannelInfo channelInfo[5];
+	vKisChannelInfoSP m_channels;
+	bool m_alpha;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_CMYK_H_

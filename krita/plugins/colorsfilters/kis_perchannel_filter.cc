@@ -21,14 +21,16 @@
 #include <kdebug.h>
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_strategy_colorspace.h"
+#include "kis_types.h"
 
-KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(Q_INT32 nbintegers, KisChannelInfo* ci)
+KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(Q_INT32 nbintegers, vKisChannelInfoSP ci)
 {
 	m_values = new Q_INT32[ nbintegers ];
 	m_channels = new Q_INT32[ nbintegers ];
+
 	for( Q_INT32 i = 0; i < nbintegers; i++ )
 	{
-		m_channels[ i ] = ci[ i ].pos();
+		m_channels[ i ] = ci[ i ] -> pos();
 		m_values[ i ] = 0;
 	}
 }
@@ -45,10 +47,12 @@ KisPerChannelFilter::KisPerChannelFilter(KisView * view, const QString& name, Q_
 KisFilterConfigurationWidget* KisPerChannelFilter::createConfigurationWidget(QWidget* parent)
 {
 	vKisIntegerWidgetParam param;
-	m_nbchannels = colorStrategy()->depth() - colorStrategy()->alpha();
+
+	m_nbchannels = colorStrategy() -> nColorChannels();
+
 	for(Q_INT32 i = 0; i < m_nbchannels; i++)
 	{
-		KisChannelInfo* cI = &colorStrategy()->channels()[i];
+		KisChannelInfoSP cI = colorStrategy() -> channels()[i];
 		param.push_back( KisIntegerWidgetParam( m_min, m_max, m_initvalue, cI->name().ascii() ) );
 	}
 	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );

@@ -164,11 +164,14 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 
 	QPtrList<KisResource> resourceslist = KisFactory::rServer() -> profiles();
 	KisResource * resource;
+	KisProfile * profile;
 	for ( resource = resourceslist.first(); resource; resource = resourceslist.next() ) {
 		kdDebug() << "Adding profile: " << resource -> filename() << "\n";
-		wcs -> cmbMonitorProfile -> insertItem(resource -> name());
-		wcs -> cmbImportProfile -> insertItem(resource -> name());
-		wcs -> cmbPrintProfile -> insertItem(resource -> name());
+		Q_ASSERT(dynamic_cast<KisProfile*>(resource));
+		profile = static_cast<KisProfile*>(resource);
+		wcs -> cmbMonitorProfile -> insertItem(profile -> productName());
+		wcs -> cmbImportProfile -> insertItem(profile -> productName());
+		wcs -> cmbPrintProfile -> insertItem(profile -> productName());
 	}
 			
 	

@@ -29,14 +29,16 @@ class KisPerChannelFilterConfiguration
 	: public KisFilterConfiguration 
 {
 public:
-	KisPerChannelFilterConfiguration(Q_INT32 nbchannels, KisChannelInfo* ci);
+	KisPerChannelFilterConfiguration(Q_INT32 nbchannels, vKisChannelInfoSP ci);
+
 public:
-	/** This function return the value at index i
-		*/
+
+	// This function return the value at index i
 	inline Q_INT32& valueFor(Q_INT32 i) { return m_values[i]; };
-	/** This function return the channel number at index i
-		*/
+	
+	// This function return the channel number at index i
 	inline Q_INT32 channel(Q_INT32 i) { return m_channels[i]; };
+
 private:
 	Q_INT32* m_values;
 	Q_INT32* m_channels;

@@ -19,6 +19,7 @@
 #define KIS_CHANNELINFO_H_
 
 #include "qstring.h"
+#include "ksharedptr.h"
 
 enum enumChannelType {
 	COLOR,
@@ -31,7 +32,7 @@ enum enumChannelType {
  * that is, one of the components that makes up a particular 
  * pixel.
  */
-class KisChannelInfo {
+class KisChannelInfo : public KShared {
 public:
 	KisChannelInfo() { };
 	KisChannelInfo( const QString & name, Q_INT32 npos, enumChannelType channelType)

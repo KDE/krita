@@ -34,7 +34,7 @@ KisFilterRegistry::~KisFilterRegistry()
 {
 }
 
-// KisFilterRegistry* KisFilterRegistry::singleton()
+// KisFilterRegistry* KisFilterRegistry::instance()
 // {
 // 	if(KisFilterRegistry::m_singleton == 0)
 // 	{

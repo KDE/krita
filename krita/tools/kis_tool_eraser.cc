@@ -49,7 +49,7 @@ KisToolEraser::~KisToolEraser()
 void KisToolEraser::initPaint(KisEvent *e)
 {
 	super::initPaint(e);
-	KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("eraser", painter());
+	KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("eraser", painter());
 	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 }
 

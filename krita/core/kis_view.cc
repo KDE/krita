@@ -76,20 +76,14 @@
 #include "kis_filter_registry.h"
 #include "kis_guide.h"
 #include "kis_gradient.h"
-#include "kis_icon_item.h"
 #include "kis_image_magick_converter.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_layer.h"
-#include "kis_layerbox.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
-#include "kis_resource_mediator.h"
-#include "kis_resourceserver.h"
 #include "kis_ruler.h"
 #include "kis_selection.h"
-#include "kis_birdeye_box.h"
-#include "kis_controlframe.h"
 #include "kis_tool.h"
 #include "kis_tool_registry.h"
 #include "kis_tool_non_paint.h"
@@ -108,16 +102,6 @@
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
 
-// Widgets
-#include "kis_autobrush.h"
-#include "kis_text_brush.h"
-#include "kis_autogradient.h"
-#include "kis_hsv_widget.h"
-#include "kis_rgb_widget.h"
-#include "kis_gray_widget.h"
-#include "kis_palette_widget.h"
-#include "kis_paint_box.h"
-#include "kis_filter_box.h"
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
@@ -129,7 +113,7 @@
 
 // Action managers
 #include "kis_selection_manager.h"
-
+#include "kis_docker_manager.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
@@ -195,38 +179,17 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_vScroll = 0;
 
 	m_dcop = 0;
-	m_xoff = 0;
-	m_yoff = 0;
+	
 	m_fg = Qt::black;
 	m_bg = Qt::white;
 
 
-	m_layerchannelslider = 0;
-	m_shapesslider = 0;
-	m_fillsslider = 0;
-	m_toolcontrolslider = 0;
-	m_colorslider = 0;
-
-	m_layerchanneldocker = 0;
-	m_shapesdocker = 0;
-	m_fillsdocker = 0;
-	m_toolcontroldocker = 0;
-	m_colordocker = 0;
-
-	m_hsvwidget = 0;
-	m_rgbwidget = 0;
-	m_graywidget = 0;
-	m_palettewidget = 0;
-
-	m_paletteChooser = 0;
-	m_gradientChooser = 0;
-	m_imageChooser = 0;
 	m_brush = 0;
 	m_pattern = 0;
 	m_gradient = 0;
-	m_layerBox = 0;
+	
 	m_currentGuide = 0;
-	m_brushMediator = 0;
+	
 	m_progress = 0;
 	m_statusBarZoomLabel = 0;
 	m_statusBarSelectionLabel = 0;
@@ -234,6 +197,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 	setInstance(KisFactory::global());
 
+	setupTools();
 	setupCanvas();
 	setupRulers();
 	setupScrollBars();
@@ -249,18 +213,12 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	connect(m_doc, SIGNAL(currentImageUpdated(KisImageSP)), SLOT(currentImageUpdated(KisImageSP)));
 	connect(this, SIGNAL(embeddImage(const QString&)), SLOT(slotEmbedImage(const QString&)));
 
-	setupTools();
-	setupDockers();
-
-	KisConfig cfg;
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_slidersSetup = false;
-	}
+	m_dockerManager = new KisDockerManager(this, actionCollection());
 
 	setInputDevice(INPUT_DEVICE_MOUSE);
 
 	resetMonitorProfile();
-
+	layersUpdated();
 
 }
 
@@ -269,10 +227,6 @@ KisView::~KisView()
 {
 	delete m_dcop;
 
-	KisConfig cfg;
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		delete m_toolDockManager;
-	}
 
 }
 
@@ -286,362 +240,6 @@ DCOPObject* KisView::dcopObject()
 
 
 
-void KisView::setupDockers()
-{
-	KisResourceServer *rserver = KisFactory::rServer();
-
-	KisConfig cfg;
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-
-		m_toolDockManager = new KoToolDockManager(this);
-
-		// Tools
-		m_toolcontrolslider = m_toolDockManager -> createTabbedToolDock("info");
-		m_toolcontrolslider -> setCaption(i18n("Navigator/Info/Options"));
-		KToggleAction * show = new KToggleAction(i18n( "&Navigator/Info/Tool Options" ), 0, 0,
-							 actionCollection(), "view_control_docker" );
-		connect(show, SIGNAL(toggled(bool)), m_toolcontrolslider, SLOT(makeVisible(bool)));
-		connect(m_toolcontrolslider, SIGNAL(visibleChange(bool)), SLOT(viewControlSlider(bool)));
-
-		// Layers
-		m_layerchannelslider = m_toolDockManager -> createTabbedToolDock("layers/channels");
-		m_layerchannelslider -> setCaption(i18n("Layers/Channels" ));
-		show = new KToggleAction(i18n( "&Layers/Channels" ), 0, 0, actionCollection(), "view_layer_docker" );
-		connect(show, SIGNAL(toggled(bool)), m_layerchannelslider, SLOT(makeVisible(bool)));
-		connect(m_layerchannelslider, SIGNAL(visibleChange(bool)), SLOT(viewLayerChannelSlider(bool)));
-
-		// Shapes
-		m_shapesslider = m_toolDockManager -> createTabbedToolDock("shapes");
-		m_shapesslider -> setCaption(i18n("Brush Shapes"));
-		show = new KToggleAction(i18n( "&Shapes" ), 0, 0, actionCollection(), "view_shapes_docker" );
-		connect(show, SIGNAL(toggled(bool)), m_shapesslider, SLOT(makeVisible(bool)));
-		connect(m_shapesslider, SIGNAL(visibleChange(bool)), SLOT(viewShapesSlider(bool)));
-
-		// Fills
-		m_fillsslider = m_toolDockManager -> createTabbedToolDock("fills");
-		m_fillsslider -> setCaption(i18n("Fills"));
-
-		show = new KToggleAction(i18n( "&Fills" ), 0, 0, actionCollection(), "view_fills_docker" );
-		connect(show, SIGNAL(toggled(bool)), m_fillsslider, SLOT(makeVisible(bool)));
-		connect(m_fillsslider, SIGNAL(visibleChange(bool)), SLOT(viewFillsSlider(bool)));
-
-		// Colors
-		m_colorslider = m_toolDockManager -> createTabbedToolDock("color");
-		m_colorslider -> setCaption(i18n("Color Manager"));
-		show = new KToggleAction(i18n( "&Colors" ), 0, 0, actionCollection(), "view_color_docker" );
-		connect(show, SIGNAL(toggled(bool)), m_colorslider, SLOT(makeVisible(bool)));
-		connect(m_colorslider, SIGNAL(visibleChange(bool)), SLOT(viewColorSlider(bool)));
-
-	}
-
-	if ( cfg.paletteStyle() == PALETTE_DOCKER ) {
-
-		m_shapesdocker = new KisDockFrameDocker(this);
-		m_shapesdocker -> setCaption(i18n("Brush Shapes"));
-
-		m_fillsdocker = new KisDockFrameDocker(this);
-		m_fillsdocker -> setCaption(i18n("Fills"));
-
-		(void)new KAction(i18n( "&Shapes" ), 0, this, SLOT( viewShapesDocker() ), actionCollection(), "view_shapes_docker" );
-		(void)new KAction(i18n( "&Fills" ), 0, this, SLOT( viewFillsDocker() ), actionCollection(), "view_fills_docker" );
-
-	}
-	if ( cfg.paletteStyle() == PALETTE_DOCKER || cfg.paletteStyle() == PALETTE_TOOLBOX ) {
-
-		m_toolcontroldocker = new KisDockFrameDocker(this);
-		m_toolcontroldocker -> setCaption(i18n("Navigator/Info/Options"));
-
-		m_colordocker = new KisDockFrameDocker(this);
-		m_colordocker -> setCaption(i18n("Color Manager"));
-
-		m_layerchanneldocker = new KisDockFrameDocker(this);
-		m_layerchanneldocker -> setCaption(i18n("Layers/Channels"));
-
-
-		(void)new KAction(i18n( "&Layers/Channels" ), 0, this, SLOT( viewLayerChannelDocker() ), actionCollection(), "view_layer_docker" );
-		(void)new KAction(i18n( "&Color Manager" ), 0, this, SLOT( viewColorDocker() ), actionCollection(), "view_color_docker" );
-		(void)new KAction(i18n( "&Tool Properties" ), 0, this, SLOT( viewControlDocker() ), actionCollection(), "view_control_docker" );
-
-	}
-
-	// No matter what the docker style, we always have a paint box
-	m_paintboxdocker = new KisPaintBox( this );
-	m_paintboxdocker -> setCaption( i18n( "Tools" ) );
-	(void)new KAction(i18n( "&Tools" ), 0, this, SLOT( viewPaintBoxDocker() ), actionCollection(), "view_paintop_docker" );
-
-
-	// ---------------------------------------------------------------------
-	// Control box
-
-	m_controlWidget = new ControlFrame(m_toolcontroldocker);
-	m_controlWidget -> setCaption(i18n("General"));
-
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_toolcontrolslider -> plug( m_controlWidget );
-	}
-	else {
-		m_toolcontroldocker -> plug(m_controlWidget);
-	}
-
-
-	m_controlWidget -> slotSetBGColor(m_bg);
-	m_controlWidget -> slotSetFGColor(m_fg);
-	connect(m_controlWidget, SIGNAL(fgColorChanged(const QColor&)), SLOT(slotSetFGColor(const QColor&)));
-	connect(m_controlWidget, SIGNAL(bgColorChanged(const QColor&)), SLOT(slotSetBGColor(const QColor&)));
-	connect(this, SIGNAL(fgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetFGColor(const QColor&)));
-	connect(this, SIGNAL(bgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetBGColor(const QColor&)));
-
-	// ---------------------------------------------------------------------
-	// Bird's eye box
-	m_birdEyeBox = new KisBirdEyeBox(m_toolcontroldocker);
-	m_birdEyeBox -> setCaption(i18n("Overview"));
-
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_toolcontrolslider -> plug ( m_birdEyeBox );
-	}
-	else {
-		m_toolcontroldocker -> plug(m_birdEyeBox);
-	}
-
-
-	// ---------------------------------------------------------------------
-	// Layers
-
-	m_layerBox = new KisLayerBox(i18n("Layer"), KisLayerBox::SHOWALL, m_layerchanneldocker);
-	m_layerBox -> setCaption(i18n("Layers"));
-
-	connect(m_layerBox, SIGNAL(itemToggleVisible()), SLOT(layerToggleVisible()));
-	connect(m_layerBox, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
-	connect(m_layerBox, SIGNAL(itemToggleLinked()), SLOT(layerToggleLinked()));
-	connect(m_layerBox, SIGNAL(itemProperties()), SLOT(layerProperties()));
-	connect(m_layerBox, SIGNAL(itemAdd()), SLOT(layerAdd()));
-	connect(m_layerBox, SIGNAL(itemRemove()), SLOT(layerRemove()));
-	connect(m_layerBox, SIGNAL(itemAddMask(int)), SLOT(layerAddMask(int)));
-	connect(m_layerBox, SIGNAL(itemRmMask(int)), SLOT(layerRmMask(int)));
-	connect(m_layerBox, SIGNAL(itemRaise()), SLOT(layerRaise()));
-	connect(m_layerBox, SIGNAL(itemLower()), SLOT(layerLower()));
-	connect(m_layerBox, SIGNAL(itemFront()), SLOT(layerFront()));
-	connect(m_layerBox, SIGNAL(itemBack()), SLOT(layerBack()));
-	connect(m_layerBox, SIGNAL(itemLevel(int)), SLOT(layerLevel(int)));
-
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_layerchannelslider -> plug( m_layerBox );
-	}
-	else {
-		m_layerchanneldocker -> plug(m_layerBox);
-	}
-
-	layersUpdated();
-
-
-	// Channels
-	m_channelView = new KisChannelView(m_doc, this);
-	m_channelView -> setCaption(i18n("Channels"));
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_layerchannelslider -> plug( m_channelView );
-	}
-	else {
-		m_layerchanneldocker -> plug(m_channelView);
-	}
-
-
-	// ---------------------------------------------------------------------
-	// Shapes
-
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
-						  m_shapesslider, "brush_chooser", this);
-		m_shapesslider -> plug( m_brushMediator -> chooserWidget());
-
-
-	}
-	else if ( cfg.paletteStyle() == PALETTE_TOOLBOX ) {
-		m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
-						  m_paintboxdocker, "brush_chooser", this);
-		m_paintboxdocker -> plug( m_brushMediator -> chooserWidget());
-	}
-	else {
-		m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
-						  m_shapesdocker, "brush_chooser", this);
-		m_shapesdocker -> plug(m_brushMediator -> chooserWidget());
-	}
-
-	m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
-	connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
-
-
-	// AutoBrush
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_autobrush = new KisAutobrush(m_shapesslider, "autobrush", i18n("Autobrush"));
-		m_shapesslider -> plug( m_autobrush );
-	}
-	else if ( cfg.paletteStyle() == PALETTE_TOOLBOX ) {
-		m_autobrush = new KisAutobrush(m_paintboxdocker, "autobrush", i18n("Autobrush"));
-		m_paintboxdocker -> plug( m_autobrush );
-	}
-	else {
-		m_autobrush = new KisAutobrush(m_shapesdocker, "autobrush", i18n("Autobrush"));
-		m_shapesdocker -> plug(m_autobrush);
-	}
-	connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
-
-	// TextBrush
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_textBrush = new KisTextBrush(m_shapesslider, "textbrush", i18n("Text Brush"));
-		m_shapesslider -> plug(m_textBrush);
-	}
-	else if ( cfg.paletteStyle() == PALETTE_TOOLBOX ) {
-		m_textBrush = new KisTextBrush(m_paintboxdocker, "textbrush", i18n("Text Brush"));
-		m_paintboxdocker -> plug(m_textBrush);
-	}
-	else {
-		m_textBrush = new KisTextBrush(m_shapesdocker, "textbrush", i18n("Text Brush"));
-		m_shapesdocker -> plug(m_textBrush);
-	}
-	connect(m_textBrush, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
-
-	// ---------------------------------------------------------------------
-	// Fills
-
-
-	// Setup patterns
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
-							    m_fillsslider, "pattern chooser", this);
-		m_fillsslider -> plug(m_patternMediator -> chooserWidget());
-	}
-	else if ( cfg.paletteStyle() == PALETTE_TOOLBOX ) {
-		m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
-						    m_paintboxdocker, "pattern chooser", this);
-		m_paintboxdocker -> plug(m_patternMediator -> chooserWidget());
-
-	}
-	else {
-		m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
-						    m_fillsdocker, "pattern chooser", this);
-		m_fillsdocker -> plug(m_patternMediator -> chooserWidget());
-	}
-	m_pattern = dynamic_cast<KisPattern*>(m_patternMediator -> currentResource());
-	connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
-
-	// Setup gradients
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_gradientMediator = new KisResourceMediator(MEDIATE_GRADIENTS, rserver, i18n("Gradients"),
-							     m_fillsslider, "gradient chooser", this);
-		m_fillsslider -> plug(m_gradientMediator -> chooserWidget());
-
-	}
-	else if ( cfg.paletteStyle() == PALETTE_TOOLBOX ) {
-		m_gradientMediator = new KisResourceMediator(MEDIATE_GRADIENTS, rserver, i18n("Gradients"),
-							     m_paintboxdocker, "gradient chooser", this);
-		m_paintboxdocker -> plug(m_gradientMediator -> chooserWidget());
-	}
-	else {
-		m_gradientMediator = new KisResourceMediator(MEDIATE_GRADIENTS, rserver, i18n("Gradients"),
-							     m_fillsdocker, "gradient chooser", this);
-		m_fillsdocker -> plug(m_gradientMediator -> chooserWidget());
-	}
-	m_gradient = dynamic_cast<KisGradient*>(m_gradientMediator -> currentResource());
-	connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(gradientActivated(KisResource*)));
-
-	// Autogradient
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_autogradient = new KisAutogradient(m_fillsslider, "autogradient", i18n("Autogradient"));
-		m_fillsslider -> plug(m_autogradient);
-	}
-	else if ( cfg.paletteStyle() == PALETTE_TOOLBOX ) {
-		m_autogradient = new KisAutogradient(m_paintboxdocker, "autogradient", i18n("Autogradient"));
-		m_paintboxdocker -> plug(m_autogradient);
-	}
-	else {
-		m_autogradient = new KisAutogradient(m_fillsdocker, "autogradient", i18n("Autogradient"));
-		m_fillsdocker -> plug(m_autogradient);
-	}
-	connect(m_autogradient, SIGNAL(activatedResource(KisResource*)), this, SLOT(gradientActivated(KisResource*)));
-
-
-	// ---------------------------------------------------------------------
-	// Colors
-
-
-	m_hsvwidget = new KisHSVWidget(this, "hsv");
-	m_hsvwidget -> setCaption(i18n("HSV"));
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_colorslider -> plug( m_hsvwidget );
-	}
-	else {
-		m_colordocker -> plug(m_hsvwidget);
-	}
-	attach(m_hsvwidget);
-
-	m_rgbwidget = new KisRGBWidget(this, "rgb");
-	m_rgbwidget -> setCaption(i18n("RGB"));
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_colorslider -> plug(m_rgbwidget);
-	}
-	else {
-		m_colordocker -> plug(m_rgbwidget);
-	}
-	attach(m_rgbwidget);
-
-	m_graywidget = new KisGrayWidget(this, "gray");
-	m_graywidget -> setCaption(i18n("Gray"));
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		m_colorslider -> plug(m_graywidget );
-	}
-	else {
-		m_colordocker -> plug(m_graywidget);
-	}
-	attach(m_graywidget);
-
-	m_palettewidget = new KisPaletteWidget(this);
-	m_palettewidget -> setCaption(i18n("Palettes"));
-
-	connect(rserver, SIGNAL(loadedPalette(KisResource*)), m_palettewidget, SLOT(slotAddPalette(KisResource*)));
-	rserver->loadPalettes();
-	connect(m_palettewidget, SIGNAL(colorSelected(const QColor &)), this, SLOT(slotSetFGColor(const QColor &)));
-
-	if (cfg.paletteStyle() == PALETTE_SLIDER) {
-		m_colorslider -> plug(m_palettewidget);
-	}
-	else {
-		m_colordocker -> plug(m_palettewidget);
-	}
-
-
-#if 0
-	// Filters XXX: Disable for the release.
-	m_filterBox = new KisFilterBox(this, this, "filter box");
-	m_paintboxdocker -> plug( m_filterBox, "Painting filters" );
-	m_filterBox -> init();
-#endif
-
-	if ( cfg.paletteStyle() == PALETTE_DOCKER || cfg.paletteStyle() == PALETTE_TOOLBOX ) {
-		// TODO Here should be a better check
-		if ( mainWindow() -> isDockEnabled( DockBottom)) {
-			viewControlDocker();
-			viewLayerChannelDocker();
-			viewPaintBoxDocker();
-			viewColorDocker();
-
-			mainWindow() -> setDockEnabled( DockBottom, false);
-			mainWindow() -> setDockEnabled( DockTop, false);
-
-		}
-	}
-
-	if ( cfg.paletteStyle() == PALETTE_DOCKER ) {
-
-		// TODO Here should be a better check
-		if ( mainWindow() -> isDockEnabled( DockBottom))
-		{
-			viewShapesDocker();
-			viewFillsDocker();
-
-		}
-	}
-
-}
 
 void KisView::setupScrollBars()
 {
@@ -854,12 +452,6 @@ void KisView::setupActions()
 {
 	m_selectionManager -> setup(actionCollection());
 
-
-	// navigation actions
-	KStdAction::redisplay(this, SLOT(canvasRefresh()), actionCollection(), "refresh_canvas");
-	(void)new KAction(i18n("Reset Button"), "stop", 0, this, SLOT(reset()), actionCollection(), "panic_button");
-
-
 	m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
 	connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
 
@@ -872,9 +464,6 @@ void KisView::setupActions()
 	// view actions
 	m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
 	m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
-
-	// tool settings actions
-	(void)new KAction(i18n("&Gradient Dialog..."), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
 
 	// layer actions
 	m_layerAdd = new KAction(i18n("&Add Layer..."), 0, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
@@ -914,17 +503,12 @@ void KisView::setupActions()
 	m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
 	m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(mergeLinkedLayers()), actionCollection(), "merge_linked_layers");
 	m_imgMergeLayer = new KAction(i18n("&Merge Layer"), 0, this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
+	
 	// setting actions
 	KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
 	m_RulerAction = new KToggleAction( i18n( "Show Rulers" ), 0, this, SLOT( showRuler() ), actionCollection(), "view_ruler" );
 	m_RulerAction->setChecked( true );
-}
-
-void KisView::reset()
-{
-	zoomUpdateGUI(0, 0, 1.0);
-	canvasRefresh();
 }
 
 void KisView::resizeEvent(QResizeEvent *)
@@ -950,8 +534,8 @@ void KisView::resizeEvent(QResizeEvent *)
 	docW = static_cast<Q_INT32>(ceil(docWidth() * zoom()));
 	docH = static_cast<Q_INT32>(ceil(docHeight() * zoom()));
 
-	drawH = height() - rulerThickness - tbarBtnH - canvasYOffset();
-	drawW = width() - rulerThickness - canvasXOffset();
+	drawH = height() - rulerThickness - tbarBtnH;
+	drawW = width() - rulerThickness;
 
 	if (drawH < docH) {
 		// Will need vert scrollbar
@@ -1039,12 +623,12 @@ void KisView::resizeEvent(QResizeEvent *)
 	if (m_vScroll -> isVisible())
 		m_vRuler -> updateVisibleArea(0, m_vScroll -> value());
 	else
-		m_vRuler -> updateVisibleArea(0, -canvasYOffset());
+		m_vRuler -> updateVisibleArea(0, 0);
 
 	if (m_hScroll -> isVisible())
 		m_hRuler -> updateVisibleArea(m_hScroll -> value(), 0);
 	else
-		m_hRuler -> updateVisibleArea(-canvasXOffset(), 0);
+		m_hRuler -> updateVisibleArea(0, 0);
 
 	if( m_RulerAction->isChecked() )
 	{
@@ -1069,17 +653,11 @@ void KisView::clearCanvas(const QRect& rc)
 void KisView::setCurrentTool(KisTool *tool)
 {
 	KisTool *oldTool = currentTool();
-	KisConfig cfg;
+
+	m_dockerManager ->setToolOptionWidget(oldTool, tool);
+	
 	if (oldTool)
 	{
-		if (oldTool -> optionWidget())
-			if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-				if (m_toolcontrolslider) m_toolcontrolslider -> unplug(oldTool -> optionWidget());
-			}
-			else {
-				if (m_toolcontroldocker) m_toolcontroldocker -> unplug(oldTool -> optionWidget());
-			}
-
 		oldTool -> clear();
 		oldTool -> action() -> setChecked( false );
 	}
@@ -1087,23 +665,6 @@ void KisView::setCurrentTool(KisTool *tool)
 	if (tool) {
 		m_inputDeviceToolMap[currentInputDevice()] = tool;
 		tool -> cursor(m_canvas);
-
-		if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-			if(tool -> createOptionWidget(m_toolcontrolslider)){
-				if (m_toolcontrolslider) {
-					m_toolcontrolslider -> plug(tool -> optionWidget());
-					m_toolcontrolslider -> showPage(tool -> optionWidget());
-				}
-			}
-		}
-		else {
-			if(tool -> createOptionWidget(m_toolcontroldocker)){
-				if (m_toolcontroldocker) {
-					m_toolcontroldocker -> plug(tool -> optionWidget());
-					m_toolcontroldocker -> showPage(tool -> optionWidget());
-				}
-			}
-		}
 
 		m_canvas -> enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
 
@@ -1170,14 +731,7 @@ void KisView::setInputDevice(enumInputDevice inputDevice)
 		KisTool *oldTool = currentTool();
 		if (oldTool)
 		{
-			if (oldTool -> optionWidget()) {
-				if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-					if (m_toolcontrolslider) m_toolcontrolslider -> unplug(oldTool -> optionWidget());
-				}
-				else {
-					if (m_toolcontroldocker) m_toolcontroldocker -> unplug(oldTool -> optionWidget());
-				}
-			}
+			m_dockerManager -> unsetToolOptionWidget(oldTool);
 			oldTool -> clear();
 		}
 
@@ -1260,7 +814,7 @@ void KisView::paintView(const KisRect& r)
 				if (zoom() < 1.0 || zoom() > 1.0) {
 					gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
 				}
-				gc.translate((canvasXOffset() - horzValue()) / zoom(), (canvasYOffset() - vertValue()) / zoom());
+				gc.translate((horzValue()) / zoom(), (vertValue()) / zoom());
 
 				m_doc -> setCurrentImage(img);
 				m_doc -> paintContent(gc, wr, monitorProfile());
@@ -1277,19 +831,7 @@ void KisView::paintView(const KisRect& r)
 		clearCanvas(r.qRect());
 		m_canvas -> update(r.qRect());
 	}
-
-	KisConfig cfg;
-	if ( cfg.paletteStyle() == PALETTE_SLIDER ) {
-		if (!m_slidersSetup) {
-			m_colorslider -> restore(); //move(w, h); h+=100; // XXX Remember last position
-			m_fillsslider -> restore(); //move(w, h); h+=100; // XXX Remember last position
-			m_shapesslider -> restore(); //move(w, h); h+=100; // XXX Remember last position
-			m_layerchannelslider -> restore(); //move(w, h); h+=100; // XXX Remember last position
-			m_toolcontrolslider -> restore(); //move(w, h); h+=100; // XXX Remember last position
-			m_slidersSetup = true;
-		}
-	}
-
+// 
 }
 
 QWidget *KisView::canvas() const
@@ -1536,33 +1078,6 @@ void KisView::slotZoomOut()
 {
 	if (zoom() >= KISVIEW_MIN_ZOOM)
 		zoomUpdateGUI(-1, -1, zoom() / 2);
-}
-
-/*
-  dialog_gradient - invokes a GradientDialog which is
-  now an options dialog.  Gradients can be used by many tools
-  and are not a tool in themselves.
-*/
-void KisView::dialog_gradient()
-{
-#if 0
-	GradientDialog *pGradientDialog = new GradientDialog(m_gradient);
-	pGradientDialog -> exec();
-
-	if (pGradientDialog->result() == QDialog::Accepted) {
-		/* set m_pGradient here and update gradientwidget in sidebar
-		   to show sample of gradient selected. Also update effect for
-		   the framebuffer's gradient, which is used in painting */
-
-		int type = pGradientDialog->gradientTab()->gradientType();
-		m_gradient->setEffect(static_cast<KImageEffect::GradientType>(type));
-
-		KisFrameBuffer *fb = m_doc->frameBuffer();
-		fb->setGradientEffect(static_cast<KImageEffect::GradientType>(type));
-
-	}
-	delete pGradientDialog;
-#endif
 }
 
 void KisView::next_layer()
@@ -1822,7 +1337,7 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
 				layer -> setImage(current);
 				layer -> setName(current -> nextLayerName());
 				m_doc -> layerAdd(current, layer, 0);
-				m_layerBox -> setCurrentItem(img -> index(layer));
+				emit currentLayerChanged(img -> index(layer));
 			}
 			resizeEvent(0);
 			updateCanvas();
@@ -2004,10 +1519,6 @@ void KisView::mergeLayer()
 	}
 }
 
-/*
-  preferences - the main Krayon preferences dialog - modeled
-  after the konqueror prefs dialog - quite nice compound dialog
-*/
 void KisView::preferences()
 {
 	PreferencesDialog::editPreferences();
@@ -2015,85 +1526,6 @@ void KisView::preferences()
 	canvasRefresh();
 }
 
-
-void KisView::viewColorSlider(bool v)
-{
-	((KToggleAction*)actionCollection()->action("view_color_docker")) -> setChecked(v);
-}
-
-void KisView::viewControlSlider(bool v)
-{
-	((KToggleAction*)actionCollection()->action("view_control_docker")) -> setChecked(v);
-}
-
-void KisView::viewLayerChannelSlider(bool v)
-{
-	((KToggleAction*)actionCollection()->action("view_layer_docker")) -> setChecked(v);}
-
-void KisView::viewFillsSlider(bool v)
-{
-	((KToggleAction*)actionCollection()->action("view_fills_docker")) -> setChecked(v);}
-
-
-void KisView::viewShapesSlider(bool v)
-{
-	((KToggleAction*)actionCollection()->action("view_shapes_docker")) -> setChecked(v);
-}
-
-void KisView::viewColorDocker()
-{
-	if( m_colordocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_colordocker, DockRight );
-		m_colordocker->show();
-	}
-}
-
-void KisView::viewControlDocker()
-{
-	if( m_toolcontroldocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_toolcontroldocker, DockRight );
-		m_toolcontroldocker->show();
-	}
-}
-
-void KisView::viewLayerChannelDocker()
-{
-	if( m_layerchanneldocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_layerchanneldocker, DockRight );
-		m_layerchanneldocker->show();
-	}
-}
-
-void KisView::viewFillsDocker()
-{
-	if( m_fillsdocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_fillsdocker, DockRight );
-		m_shapesdocker->show();
-	}
-}
-
-
-void KisView::viewShapesDocker()
-{
-	if( m_shapesdocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_shapesdocker, DockRight );
-		m_shapesdocker->show();
-	}
-}
-
-void KisView::viewPaintBoxDocker()
-{
-	if ( m_paintboxdocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_paintboxdocker, DockRight );
-		m_paintboxdocker->show();
-	}
-}
 
 void KisView::showRuler()
 {
@@ -2150,46 +1582,36 @@ void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
 
 void KisView::brushActivated(KisResource *brush)
 {
-	KisIconItem *item;
 
 	m_brush = dynamic_cast<KisBrush*>(brush);
 
 	if (m_brush )
 	{
-		if((item = m_brushMediator -> itemFor(m_brush)))
-		{
-			if (m_controlWidget) m_controlWidget -> slotSetBrush(item);
-		} else {
-			if (m_controlWidget) m_controlWidget -> slotSetBrush( new KisIconItem(m_brush) );
-		}
+		emit brushChanged(m_brush);
 		notify();
 	}
 }
 
 void KisView::patternActivated(KisResource *pattern)
 {
-	KisIconItem *item;
 
 	m_pattern = dynamic_cast<KisPattern*>(pattern);
 
-	if (m_pattern && (item = m_patternMediator -> itemFor(m_pattern)))
-		if (m_controlWidget) m_controlWidget -> slotSetPattern(item);
-
-	if (m_pattern)
+	if (m_pattern) {
+		emit patternChanged(m_pattern);
 		notify();
+	}
 }
 
 void KisView::gradientActivated(KisResource *gradient)
 {
-	KisIconItem *item;
 
 	m_gradient = dynamic_cast<KisGradient*>(gradient);
 
-	if (m_gradient && (item = m_gradientMediator -> itemFor(m_gradient)))
-		if (m_controlWidget) m_controlWidget -> slotSetGradient(item);
-
-	if (m_gradient)
+	if (m_gradient) {
+		emit gradientChanged(m_gradient);
 		notify();
+	}
 }
 
 void KisView::setBGColor(const QColor& c)
@@ -2363,8 +1785,8 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
 
 	KisImageSP img = currentImg();
 
-	m_hRuler -> updatePointer(e -> pos().floorX() - canvasXOffset(), e -> pos().floorY() - canvasYOffset());
-	m_vRuler -> updatePointer(e -> pos().floorX() - canvasXOffset(), e -> pos().floorY() - canvasYOffset());
+	m_hRuler -> updatePointer(e -> pos().floorX(), e -> pos().floorY());
+	m_vRuler -> updatePointer(e -> pos().floorX(), e -> pos().floorY());
 
 	KisPoint wp = viewToWindow(e -> pos());
 
@@ -2657,7 +2079,7 @@ void KisView::layerAdd()
 							     dlg.opacity(),
 							     KisColorSpaceRegistry::instance() -> get(dlg.colorStrategyID()));
 			if (layer) {
-				m_layerBox -> setCurrentItem(img -> index(layer));
+				emit currentLayerChanged(img -> index(layer));
 				resizeEvent(0);
 				updateCanvas(0, 0, img -> width(), img -> height());
 			} else {
@@ -2678,7 +2100,7 @@ void KisView::layerRemove()
 			Q_INT32 n = img -> index(layer);
 
 			m_doc -> layerRemove(img, layer);
-			m_layerBox -> setCurrentItem(n - 1);
+			emit currentLayerChanged(n - 1);
 			resizeEvent(0);
 			updateCanvas();
 			layerUpdateGUI(img -> activeLayer() != 0);
@@ -2777,19 +2199,9 @@ void KisView::layersUpdated()
 	if (!layer) return;
 
 	layerUpdateGUI(img && layer);
-	m_layerBox -> setUpdatesEnabled(false);
-	m_layerBox -> clear();
 
-	if (img) {
-		vKisLayerSP l = img -> layers();
+	m_dockerManager -> resetLayerBox(img, layer);
 
-		for (vKisLayerSP_it it = l.begin(); it != l.end(); it++)
-			m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked());
-
-		m_layerBox -> setCurrentItem(img -> index(layer));
-	}
-
-	m_layerBox -> setUpdatesEnabled(true);
 }
 
 void KisView::layersUpdated(KisImageSP img)
@@ -2874,15 +2286,6 @@ void KisView::scrollV(int value)
 		}
 }
 
-int KisView::canvasXOffset() const
-{
-	return static_cast<Q_INT32>(ceil(m_xoff * zoom()));
-}
-
-int KisView::canvasYOffset() const
-{
-	return static_cast<Q_INT32>(ceil(m_yoff * zoom()));
-}
 
 void KisView::setupCanvas()
 {
@@ -3082,8 +2485,8 @@ QPoint KisView::viewToWindow(const QPoint& pt)
 {
 	QPoint converted;
 
-	converted.rx() = static_cast<int>((pt.x() + horzValue() - canvasXOffset()) / zoom());
-	converted.ry() = static_cast<int>((pt.y() + vertValue() - canvasYOffset()) / zoom());
+	converted.rx() = static_cast<int>((pt.x() + horzValue()) / zoom());
+	converted.ry() = static_cast<int>((pt.y() + vertValue()) / zoom());
 
 	return converted;
 }
@@ -3092,8 +2495,8 @@ KisPoint KisView::viewToWindow(const KisPoint& pt)
 {
 	KisPoint converted;
 
-	converted.setX((pt.x() + horzValue() - canvasXOffset()) / zoom());
-	converted.setY((pt.y() + vertValue() - canvasYOffset()) / zoom());
+	converted.setX((pt.x() + horzValue()) / zoom());
+	converted.setY((pt.y() + vertValue()) / zoom());
 
 	return converted;
 }
@@ -3134,8 +2537,8 @@ void KisView::viewToWindow(Q_INT32 *x, Q_INT32 *y)
 QPoint KisView::windowToView(const QPoint& pt)
 {
 	QPoint p;
-	p.setX(static_cast<int>(pt.x() * zoom() + canvasXOffset() - horzValue()));
-	p.setY(static_cast<int>(pt.y() * zoom() + canvasYOffset() - vertValue()));
+	p.setX(static_cast<int>(pt.x() * zoom() - horzValue()));
+	p.setY(static_cast<int>(pt.y() * zoom() - vertValue()));
 
 	return p;
 }
@@ -3143,8 +2546,8 @@ QPoint KisView::windowToView(const QPoint& pt)
 KisPoint KisView::windowToView(const KisPoint& pt)
 {
 	KisPoint p;
-	p.setX(pt.x() * zoom() + canvasXOffset() - horzValue());
-	p.setY(pt.y() * zoom() + canvasYOffset() - vertValue());
+	p.setX(pt.x() * zoom() - horzValue());
+	p.setY(pt.y() * zoom() - vertValue());
 
 	return p;
 }
@@ -3303,7 +2706,7 @@ void KisView::eraseGuides()
 		KisGuideMgr *mgr = img -> guides();
 
 		if (mgr)
-			mgr -> erase(&m_canvasPixmap, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
+			mgr -> erase(&m_canvasPixmap, this, horzValue(), vertValue(), zoom());
 	}
 }
 
@@ -3315,7 +2718,7 @@ void KisView::paintGuides()
 		KisGuideMgr *mgr = img -> guides();
 
 		if (mgr)
-			mgr -> paint(&m_canvasPixmap, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
+			mgr -> paint(&m_canvasPixmap, this, horzValue(), vertValue(), zoom());
 	}
 }
 
@@ -3329,8 +2732,8 @@ QPoint KisView::mapToScreen(const QPoint& pt)
 {
 	QPoint converted;
 
-	converted.rx() = pt.x() + horzValue() - canvasXOffset();
-	converted.ry() = pt.y() + vertValue() - canvasYOffset();
+	converted.rx() = pt.x() + horzValue();
+	converted.ry() = pt.y() + vertValue();
 	return converted;
 }
 

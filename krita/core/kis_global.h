@@ -85,10 +85,10 @@ enum enumCursorStyle {
 };
 
 
-enum enumPaletteStyle {
-	PALETTE_SLIDER,
-	PALETTE_DOCKER,
-	PALETTE_TOOLBOX
+enum enumDockerStyle {
+	DOCKER_SLIDER,
+	DOCKER_DOCKER,
+	DOCKER_TOOLBOX
 };
 
 /*

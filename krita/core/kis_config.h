@@ -36,8 +36,8 @@ public:
 	enumCursorStyle defCursorStyle() const;
 	void defCursorStyle(enumCursorStyle style);
 
-	enumPaletteStyle paletteStyle() const;
-	void setPaletteStyle( enumPaletteStyle style );
+	enumDockerStyle dockerStyle() const;
+	void setDockerStyle( enumDockerStyle style );
 
 	QString monitorProfile() const;
 	void setMonitorProfile(QString monitorProfile);

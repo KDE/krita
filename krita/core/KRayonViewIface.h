@@ -43,9 +43,6 @@ public:
 	void selectAll();
 	void unSelectAll();
 
-	// dialog action slots
-	void dialog_gradient();
-
 	// layer action slots
 	void next_layer();
 	void previous_layer();

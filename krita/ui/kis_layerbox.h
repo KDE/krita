@@ -40,23 +40,22 @@ class KisLayerBox : public QFrame {
         Q_OBJECT
 
 public:
-        enum action {VISIBLE, SELECTION, LINKING, PROPERTIES, ADD, REMOVE,
-ADDMASK, REMOVEMASK, RAISE, LOWER, FRONT, BACK, LEVEL};
-        enum flags {SHOWVISIBLE = 1, SHOWLINKED = (1 << 1), SHOWPREVIEW = (1 <<
-2), SHOWMASK = (1 << 3), SHOWALL =
-(SHOWMASK|SHOWPREVIEW|SHOWLINKED|SHOWVISIBLE)};
+        enum action {VISIBLE, SELECTION, LINKING, PROPERTIES, ADD, REMOVE, ADDMASK, REMOVEMASK, RAISE, LOWER, FRONT, BACK, LEVEL};
+        enum flags {SHOWVISIBLE = 1, SHOWLINKED = (1 << 1), SHOWPREVIEW = (1 << 2), SHOWMASK = (1 << 3), SHOWALL = (SHOWMASK|SHOWPREVIEW|SHOWLINKED|SHOWVISIBLE)};
 
-        KisLayerBox(const QString& label, flags f = SHOWALL, QWidget *parent =
-0, const char *name = 0);
+        KisLayerBox(const QString& label, flags f = SHOWALL, QWidget *parent = 0, const char *name = 0);
         virtual ~KisLayerBox();
 
         void insertItem(const QString& name, bool visible = true, bool linked =
 false);
-        void setCurrentItem(int n);
-        int getCurrentItem() const;
+	int getCurrentItem() const;
         void setTopItem(int n);
         void clear();
         void setSelected(int index);
+
+public slots:
+
+	void slotSetCurrentItem(int n);
 
 signals:
         void itemToggleVisible();
@@ -84,6 +83,8 @@ private slots:
         void slotRmClicked();
         void slotRaiseClicked();
         void slotLowerClicked();
+        
+        
 
 private:
         flags m_flags;

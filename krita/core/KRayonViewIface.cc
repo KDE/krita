@@ -65,11 +65,6 @@ void KRayonViewIface::unSelectAll()
 // 	m_view->unSelectAll();
 }
 
-void KRayonViewIface::dialog_gradient()
-{
-	m_view->dialog_gradient();
-}
-
 
 void KRayonViewIface::next_layer()
 {

@@ -30,7 +30,7 @@ KisCmbIDList::KisCmbIDList(QWidget * parent, const char * name)
 	: super( false, parent, name )
 {
 	connect(this, SIGNAL(activated(int)), this, SLOT(slotIDActivated(int)));
-	connect(this, SIGNAL(highlighted(int)), this, SLOT(slotIDHightlighted(int)));
+	connect(this, SIGNAL(highlighted(int)), this, SLOT(slotIDHighlighted(int)));
 }
 
 KisCmbIDList::~KisCmbIDList()
@@ -74,7 +74,7 @@ void KisCmbIDList::setCurrentText(const QString & s)
 		}
 }
 
-void KisCmbIDList::slotIDActivated(Q_UINT32 i)
+void KisCmbIDList::slotIDActivated(int i)
 {
 	if (i > m_list.count()) return;
 
@@ -82,7 +82,7 @@ void KisCmbIDList::slotIDActivated(Q_UINT32 i)
 
 }
 
-void KisCmbIDList::slotIDHighlighted(Q_UINT32 i)
+void KisCmbIDList::slotIDHighlighted(int i)
 {
 	if (i > m_list.count()) return;
 

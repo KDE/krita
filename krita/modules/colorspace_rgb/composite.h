@@ -17,9 +17,8 @@
  *   02111-1307, USA.
  *
 
- All compositing code except for the 'OVER' operator is derived from
- GraphicsMagick/magick/composite.c and is subject to the following
- license and copyright:
+ Some code is derived from GraphicsMagick/magick/composite.c and is 
+ subject to the following license and copyright:
 
   Copyright (C) 2002 GraphicsMagick Group, an organization dedicated
   to making software imaging solutions freely available.
@@ -47,6 +46,10 @@
   Group shall not be used in advertising or otherwise to promote the
   sale, use or other dealings in GraphicsMagick without prior written
   authorization from the GraphicsMagick Group.
+
+ Other code is derived from gwenview/src/qxcfi.* - this is released under
+  the terms of the LGPL
+
  */
 
 #ifndef COMPOSITE_H_
@@ -69,6 +72,13 @@
  *
  * XXX: Except for Over, none of the operators uses the opacity parameter
  */
+
+
+inline int INT_MULT(int a, int b)
+{
+	int c = a * b * 0x80;
+	return ((c >> 8) + c ) >> 8;
+}
 
 // Straight from image.h
 

@@ -56,8 +56,8 @@ signals:
 
 private slots:
 
-	void slotIDActivated(Q_UINT32 i);
-	void slotIDHighlighted(Q_UINT32 i);
+	void slotIDActivated(int i);
+	void slotIDHighlighted(int i);
 
 private:
 

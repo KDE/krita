@@ -1,6 +1,11 @@
 Krita TODO
 
 
+Zooming
+
+	- Zooming & moving of paint devices is still broken in all
+	  possible ways: painting, filtering, filling...
+
 Scaling
 
 	- replace calloc and free by new and delete.
@@ -56,7 +61,6 @@ User Interface
 	* Allow guides to be disabled. Allow diagonal guides (useful
 	  for perspective drawings)
         * Create templates for often-used image formats. Add save-as-template
-        * Check OASIS file saving.
         * Fix gimp XCF import/export (ImageMagick hacking...)
 	* Fix imports to import metadata and image files in non-rgb encodings -> move import
 	  export code to color strategies.

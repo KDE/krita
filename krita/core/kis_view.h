@@ -41,10 +41,6 @@
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
 
-#include "kotooldockmanager.h"
-#include "kotooldockbase.h"
-#include "kis_dockframedocker.h"
-#include "kis_basedocker.h"
 #include "kis_id.h"
 
 class QButton;
@@ -65,34 +61,21 @@ class KisCanvasObserver;
 class KisRuler;
 class KisBrush;
 class KisCanvas;
-class KisChannelView;
 class KisLabelProgress;
 class KisDoc;
 class KisGradient;
 class KisPattern;
 class KisResource;
-class KisResourceMediator;
-class KisAutobrush;
-class KisTextBrush;
-class KisAutogradient;
-class ControlFrame;
 class KisUndoAdapter;
 class KisRect;
 class KisPoint;
-class KisLayerBox;
 class KisButtonPressEvent;
 class KisButtonReleaseEvent;
 class KisMoveEvent;
-class KisHSVWidget;
-class KisRGBWidget;
-class KisPaletteWidget;
-class KisGrayWidget;
 class KisSelectionManager;
-class KisBirdEyeBox;
-class KisPaintBox;
+class KisDockerManager;
 class KisToolRegistry;
 class KisFilterRegistry;
-class KisFilterBox;
 
 
 class KisView
@@ -105,6 +88,7 @@ class KisView
 	Q_OBJECT
 
 	typedef KoView super;
+	
 	typedef std::list<KisCanvasObserver*> vKisCanvasObserver;
 	typedef vKisCanvasObserver::iterator vKisCanvasObserver_it;
 	typedef vKisCanvasObserver::const_iterator vKisCanvasObserver_cit;
@@ -120,9 +104,7 @@ public:
 
 public: // KoView implementation
 	virtual bool eventFilter(QObject *o, QEvent *e);
- 	virtual int canvasXOffset() const;
- 	virtual int canvasYOffset() const;
-
+ 	
 	virtual DCOPObject* dcopObject();
 
 	virtual void print(KPrinter &printer);
@@ -133,18 +115,13 @@ public: // KoView implementation
 
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
-	Q_INT32 importImage(bool createLayer, bool modal = false, const KURL& url = KURL());
 
-	KoToolDockManager * toolDockManager() { return m_toolDockManager; }
 	void updateStatusBarSelectionLabel();
 
-	/**
-	 * Reset the monitor profile to the new settings.
-	 */
-	void resetMonitorProfile();
-
 public: // Plugin access API. XXX: This needs redesign.
-
+	
+	Q_INT32 importImage(bool createLayer, bool modal = false, const KURL& url = KURL());
+	
 	virtual KisImageSP currentImg() const;
 
 	virtual void updateCanvas();
@@ -160,17 +137,22 @@ public: // Plugin access API. XXX: This needs redesign.
 
 	KisSelectionManager * selectionManager() { return m_selectionManager; }
 
-
 signals:
 	void bgColorChanged(const QColor& c);
 	void fgColorChanged(const QColor& c);
+	
+	void brushChanged(KisBrush * brush);
+	void gradientChanged(KisGradient * gradient);
+	void patternChanged(KisPattern * pattern);
+
+	void currentLayerChanged(int layer);
+	
 	void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
 	void cursorEnter();
 	void cursorLeave();
 
 
 public slots:
-	void dialog_gradient();
 	void slotSetFGColor(const QColor& c);
 	void slotSetBGColor(const QColor& c);
 
@@ -273,6 +255,12 @@ private:
 	 * he monitor.
 	 */
 	KisProfileSP monitorProfile();
+	
+	/**
+	 * Reset the monitor profile to the new settings.
+	 */
+	void resetMonitorProfile();
+
 
 	bool selectColor(QColor& result);
 	void selectImage(KisImageSP img);
@@ -281,7 +269,6 @@ private:
 	void setupCanvas();
 	void setupRulers();
 	void setupScrollBars();
-	void setupDockers();
 	void setupTabBar();
 	void setupStatusBar();
 	void setupTools();
@@ -296,27 +283,8 @@ private:
 
 	KisTool *findTool(QString toolName, enumInputDevice inputDevice = INPUT_DEVICE_UNKNOWN) const;
 
-private slots:
-
-	void duplicateCurrentImg();
-	void popupTabBarMenu( const QPoint& );
-	void moveImage( unsigned, unsigned );
-	void slotRename();
-
-	void canvasGotMoveEvent(KisMoveEvent *e);
-	void canvasGotButtonPressEvent(KisButtonPressEvent *e);
-	void canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e);
-	void canvasGotPaintEvent(QPaintEvent *e);
-	void canvasGotEnterEvent(QEvent *e);
-	void canvasGotLeaveEvent(QEvent *e);
-	void canvasGotMouseWheelEvent(QWheelEvent *e);
-	void canvasRefresh();
-	void canvasGotKeyPressEvent(QKeyEvent*);
-	void canvasGotKeyReleaseEvent(QKeyEvent*);
-	void canvasGotDragEnterEvent(QDragEnterEvent*);
-	void canvasGotDropEvent(QDropEvent*);
-
-	void docImageListUpdate();
+public slots:
+	
 	void layerToggleVisible();
 	void layerSelected(int n);
 	void layerToggleLinked();
@@ -333,10 +301,6 @@ private slots:
 	void layerFront();
 	void layerBack();
 	void layerLevel(int n);
-
-	void layersUpdated(KisImageSP img);
-
-	QPoint mapToScreen(const QPoint& pt);
 	void flattenImage();
 	void mergeVisibleLayers();
 	void mergeLayer();
@@ -346,7 +310,6 @@ private slots:
 	void selectFGColor();
 	void selectBGColor();
 	void reverseFGAndBGColors();
-	void reset();
 	void selectImage(const QString&);
 	void brushActivated(KisResource *brush);
 	void patternActivated(KisResource *pattern);
@@ -366,28 +329,40 @@ private slots:
 	void updateTabBar();
 	void showRuler();
 
-
- 	void viewColorSlider(bool v = true);
- 	void viewControlSlider(bool v = true);
- 	void viewLayerChannelSlider(bool v = true);
- 	void viewShapesSlider(bool v = true);
- 	void viewFillsSlider(bool v = true);
-
-	void viewColorDocker();
-	void viewControlDocker();
-	void viewLayerChannelDocker();
-	void viewShapesDocker();
-	void viewFillsDocker();
-	void viewPaintBoxDocker();
+	void duplicateCurrentImg();
 
 
+	
+private slots:
 
+	void popupTabBarMenu( const QPoint& );
+	void moveImage( unsigned, unsigned );
+	void slotRename();
+
+	void canvasGotMoveEvent(KisMoveEvent *e);
+	void canvasGotButtonPressEvent(KisButtonPressEvent *e);
+	void canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e);
+	void canvasGotPaintEvent(QPaintEvent *e);
+	void canvasGotEnterEvent(QEvent *e);
+	void canvasGotLeaveEvent(QEvent *e);
+	void canvasGotMouseWheelEvent(QWheelEvent *e);
+	void canvasRefresh();
+	void canvasGotKeyPressEvent(QKeyEvent*);
+	void canvasGotKeyReleaseEvent(QKeyEvent*);
+	void canvasGotDragEnterEvent(QDragEnterEvent*);
+	void canvasGotDropEvent(QDropEvent*);
+
+	void docImageListUpdate();
+	void layersUpdated(KisImageSP img);
+
+	QPoint mapToScreen(const QPoint& pt);
 private:
 	KisDoc *m_doc;
 	KisCanvas *m_canvas;
 
 	KisSelectionManager * m_selectionManager;
-
+	KisDockerManager * m_dockerManager;
+	
         // Fringe benefits
 	KoTabBar *m_tabBar;
 	QButton *m_tabFirst;
@@ -410,6 +385,7 @@ private:
 	KAction *m_imgResizeToLayer;
 	KAction *m_imgRm;
 	KAction *m_imgScan;
+	
 	KAction *m_layerAdd;
 	KAction *m_layerBottom;
 	KAction *m_layerDup;
@@ -422,11 +398,13 @@ private:
 	KAction *m_layerSaveAs;
 	KAction *m_layerToImage;
 	KAction *m_layerTop;
-//	KAction *m_layerTransform;
+	
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
+	
 	KAction *m_fullScreen;
 	KAction *m_imgProperties;
+	
 	KToggleAction *m_RulerAction;
 
 	DCOPObject *m_dcop;
@@ -436,63 +414,23 @@ private:
 	QScrollBar *m_vScroll; // is not right yet.
 	int m_scrollX;
 	int m_scrollY;
-
-	KisHSVWidget *m_hsvwidget;
-	KisRGBWidget *m_rgbwidget;
-	KisGrayWidget *m_graywidget;
-	KisPaletteWidget *m_palettewidget;
-
-        // Dockers
-	KoTabbedToolDock *m_layerchannelslider;
-	KoTabbedToolDock *m_shapesslider;
-	KoTabbedToolDock *m_fillsslider;
-	KoTabbedToolDock *m_toolcontrolslider;
-	KoTabbedToolDock *m_colorslider;
-
-	KisDockFrameDocker *m_layerchanneldocker;
-	KisDockFrameDocker *m_shapesdocker;
-	KisDockFrameDocker *m_fillsdocker;
-	KisDockFrameDocker *m_toolcontroldocker;
-	KisDockFrameDocker *m_colordocker;
-
-	KisPaintBox *m_paintboxdocker;
-	// Dialogs
-	QWidget *m_paletteChooser;
-	QWidget *m_gradientChooser;
-	QWidget *m_imageChooser;
-
-	KisPaintBox *m_paintBox;
-	KisFilterBox * m_filterBox;
-	ControlFrame *m_controlWidget;
-	KisBirdEyeBox * m_birdEyeBox;
-	KisChannelView *m_channelView;
-	QWidget *m_pathView;
-	KisLabelProgress *m_progress;
-
-	KisResourceMediator *m_brushMediator;
-	KisResourceMediator *m_patternMediator;
-	KisResourceMediator *m_gradientMediator;
-	KisAutobrush *m_autobrush;
-	KisTextBrush *m_textBrush;
-	KisAutogradient* m_autogradient;
-
-	// Current colours, brushes, patterns etc.
-	Q_INT32 m_xoff;
-	Q_INT32 m_yoff;
-	QColor m_fg;
-	QColor m_bg;
-	KisBrush *m_brush;
-	KisPattern *m_pattern;
-	KisGradient *m_gradient;
-	KisLayerBox *m_layerBox;
 	KisGuideSP m_currentGuide;
 	QPoint m_lastGuidePoint;
 	KisUndoAdapter *m_adapter;
 	vKisCanvasObserver m_observers;
-
 	QLabel *m_statusBarZoomLabel;
 	QLabel *m_statusBarSelectionLabel;
 	QLabel *m_statusBarProfileLabel;
+	KisLabelProgress *m_progress;
+
+	// Current colours, brushes, patterns etc.
+	
+	QColor m_fg;
+	QColor m_bg;
+	
+	KisBrush *m_brush;
+	KisPattern *m_pattern;
+	KisGradient *m_gradient;
 
 	enumInputDevice m_inputDevice;
 	InputDeviceToolMap m_inputDeviceToolMap;
@@ -502,8 +440,6 @@ private:
 	QTabletEvent::TabletDevice m_lastTabletEventDevice;
 	QPixmap m_canvasPixmap;
 
-	KoToolDockManager * m_toolDockManager;
-	bool m_slidersSetup;
 	// Monitorprofile for this view
 	KisProfileSP m_monitorProfile;
 
@@ -521,6 +457,12 @@ public:
 private:
 	KisFilterRegistry * m_filterRegistry;
 	KisToolRegistry * m_toolRegistry;
+
+protected:
+
+	friend class KisSelectionManager;
+	friend class KisDockerManager;
+	
 };
 
 #endif // KIS_VIEW_H_

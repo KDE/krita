@@ -147,7 +147,7 @@ void KisLayerBox::slotMenuAction(int mnuId)
         KisLayerBoxItem *p;
 
         if (n == -1 && mnuId != ADD) {
-                setCurrentItem(n);
+                slotSetCurrentItem(n);
                 return;
         }
 
@@ -273,7 +273,7 @@ void KisLayerBox::slotDoubleClicked(QListBoxItem * /*item*/)
         slotMenuAction(PROPERTIES);
 }
 
-void KisLayerBox::setCurrentItem(int n)
+void KisLayerBox::slotSetCurrentItem(int n)
 {
         m_lst -> setSelected(n, true);
 }
@@ -318,6 +318,7 @@ void KisLayerBox::slotLowerClicked()
 {
         slotMenuAction(LOWER);
 }
+
 
 int KisLayerBox::getCurrentItem() const
 {

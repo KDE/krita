@@ -513,9 +513,6 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
  		KisImage * img = doc -> newImage("filter-" + (*it).name(), 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
 		doc -> addImage(img);
 		KisLayerSP l = img -> activeLayer();
-// 		KisFillPainter p(l.data());
-// 		p.fillPattern(0, 0);
-// 		p.end();
 
 		QTime t;
 
@@ -529,7 +526,7 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
 
 		}
  		
-		//doc -> removeImage(img);
+		doc -> removeImage(img);
 
 	}
 	return report;

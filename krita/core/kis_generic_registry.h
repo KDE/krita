@@ -31,9 +31,8 @@ template<typename _T>
 class KisGenericRegistry {
 	typedef std::map<KisID, _T> storageMap;
 public:
-	virtual ~KisGenericRegistry() { };
-protected:
 	KisGenericRegistry() { };
+	virtual ~KisGenericRegistry() { };
 public:
 	void add(_T item)
 	{
@@ -41,6 +40,12 @@ public:
 		kdDebug() << "Added " << item -> id().name() << "\n";
 	}
 
+	void add(KisID id, _T item)
+	{
+		m_storage.insert(typename storageMap::value_type(id, item));
+		kdDebug() << "Added: " << id.id() << "\n";
+	}
+	
 	_T get(const KisID& name) const
 	{
 		_T p;

@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <config.h>
 
-KAboutData * newKrayonAboutData()
+KAboutData * newKritaAboutData()
 {
 	KAboutData * aboutData = new KAboutData( "krita",
 			I18N_NOOP("Krita"),
@@ -52,4 +52,4 @@ KAboutData * newKrayonAboutData()
 	return aboutData;
 }
 
-#endif // KRAYON_ABOUTDATA
+#endif // KIS_ABOUT_DATA_H_

@@ -30,7 +30,7 @@ static const KCmdLineOptions options[] = {
 
 extern "C" int kdemain(int argc, char **argv)
 {
-	KCmdLineArgs::init(argc, argv, newKrayonAboutData());
+	KCmdLineArgs::init(argc, argv, newKritaAboutData());
 	KCmdLineArgs::addCmdLineOptions(options);
 
 	KoApplication app;

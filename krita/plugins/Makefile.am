@@ -1,1 +1,1 @@
-SUBDIRS = example colorsfilters variations colorrange imagesize screenshot histogram colorspace_cmyk
+SUBDIRS = example colorsfilters variations colorrange imagesize screenshot histogram colorspace_cmyk 

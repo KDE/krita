@@ -29,9 +29,12 @@
 #include "kis_resourceserver.h"
 #include "kis_doc.h"
 
-extern "C" void* init_libkritapart()
+extern "C" 
 {
-	return new KisFactory;
+	void* init_libkritapart()
+	{
+		return new KisFactory;
+	}
 }
 
 KAboutData* KisFactory::s_aboutData = 0;
@@ -41,7 +44,7 @@ KisResourceServer* KisFactory::s_rserver = 0;
 KisFactory::KisFactory( QObject* parent, const char* name )
 	: KoFactory( parent, name )
 {
-	s_aboutData = newKrayonAboutData();
+	s_aboutData = newKritaAboutData();
 
 	(void)global();
 	s_rserver = new KisResourceServer;
@@ -57,10 +60,9 @@ KisFactory::~KisFactory()
 	s_global = 0L;
 }
 
-/*
-  Create the document
-*/
-
+/**
+ * Create the document
+ */
 KParts::Part* KisFactory::createPartObject( QWidget *parentWidget,
 					    const char *widgetName, QObject* parent,
 					    const char* name, const char* classname, const QStringList & )

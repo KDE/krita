@@ -44,6 +44,7 @@ namespace KoChart
         virtual ~Part();
 
         virtual void setData( const Data &d ) = 0;
+        virtual void setCanChangeValue(bool b )=0;
 
         virtual WizardExtension *wizardExtension();
     private:

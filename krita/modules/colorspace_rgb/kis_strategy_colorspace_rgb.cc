@@ -36,7 +36,10 @@ namespace {
 }
 
 // XXX: Why no alpha channel?
-ChannelInfo KisStrategyColorSpaceRGB::channelInfo[4] = { ChannelInfo("Red", 2), ChannelInfo("Green", 1), ChannelInfo("Blue", 0), ChannelInfo("Alpha", 3) };
+KisChannelInfo KisStrategyColorSpaceRGB::channelInfo[4] = { KisChannelInfo("Red", 2), 
+							    KisChannelInfo("Green", 1), 
+							    KisChannelInfo("Blue", 0), 
+							    KisChannelInfo("Alpha", 3) };
 
 
 KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
@@ -104,7 +107,7 @@ void KisStrategyColorSpaceRGB::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM
 	*opacity = src[PIXEL_ALPHA];
 }
 
-ChannelInfo* KisStrategyColorSpaceRGB::channels() const
+KisChannelInfo* KisStrategyColorSpaceRGB::channels() const
 {
 	return channelInfo;
 }

@@ -84,9 +84,10 @@ public:
 	/**
 	   The data() methods return a shared pointer to the tile manager.
 	*/
+private:
         virtual KisTileMgrSP data();
         virtual const KisTileMgrSP data() const;
-
+public:
         virtual bool shouldDrawBorder() const;
 
         virtual void move(Q_INT32 x, Q_INT32 y);

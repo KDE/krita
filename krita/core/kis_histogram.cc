@@ -24,13 +24,13 @@
 #include "kis_iterators_pixel.h"
 
 KisHistogram::KisHistogram(KisLayerSP layer, 
-			   const ChannelInfo & initialChannel, 
+			   const KisChannelInfo & initialChannel, 
 			   const enumHistogramType type)
 {
 	m_layer = layer;
 	m_type = type;
 
-	// XXX: size needs to come from ChannelInfo, is determined by
+	// XXX: size needs to come from KisChannelInfo, is determined by
 	// the channel depth.
 	Q_INT32 bincount = QUANTUM_MAX + 1;
  	m_values = vBins(bincount, 0);
@@ -51,7 +51,7 @@ KisHistogram::~KisHistogram()
 {
 }
 
-void KisHistogram::computeHistogramFor(const ChannelInfo & channel)
+void KisHistogram::computeHistogramFor(const KisChannelInfo & channel)
 {
 	Q_UINT32 total = 0;
 	//Q_UINT32 total_white = 0;

@@ -30,7 +30,8 @@
 #include "kis_custom_convolution_filter_configuration_base_widget.h"
 #include "kis_matrix_widget.h"
 
-KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigurationWidget( KisFilter* nfilter, QWidget * parent, const char * name) : KisFilterConfigurationWidget( nfilter, parent, name )
+KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigurationWidget( KisFilter* nfilter, QWidget * parent, const char * name) 
+	: KisFilterConfigurationWidget( nfilter, parent, name )
 {
 	QGridLayout *widgetLayout = new QGridLayout(this, 1, 1);
 	QTabWidget* tabWidget = new QTabWidget(this, "tabWidget");
@@ -43,7 +44,7 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
 
 	KisStrategyColorSpaceSP cs = layer->colorStrategy();
 	// Create the form
-	ChannelInfo *cis = cs->channels();
+	KisChannelInfo *cis = cs->channels();
 	Q_INT32 depth = cs->depth();
 	m_ccfcws = new KisCustomConvolutionFilterConfigurationBaseWidget*[depth];
 	m_pos = new int[depth];

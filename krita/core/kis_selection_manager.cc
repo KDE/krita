@@ -38,6 +38,7 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kistilemgr.h"
+#include "kis_colorspace_registry.h"
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	: m_parent(parent),
@@ -52,7 +53,6 @@ KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	  m_clear(0),
 	  m_reselect(0),
 	  m_invert(0),
-	  m_pasteInto(0),
 	  m_toNewLayer(0),
 	  m_feather(0),
 	  m_border(0),
@@ -96,14 +96,6 @@ void KisSelectionManager::setup(KActionCollection * collection)
 				  SLOT(paste()),
 				  collection,
 				  "paste");
-
-
-        m_pasteInto =
-		new KAction(i18n("Paste Into"),
-			    "paste_into", 0,
-			    this, SLOT(paste_into()),
-			    collection, "paste_into");
-
 
         m_selectAll =
 		KStdAction::selectAll(this,
@@ -239,7 +231,6 @@ void KisSelectionManager::updateGUI()
 	m_clear -> setEnabled(enable);
 	m_reselect -> setEnabled(m_previousSelection != 0);
 	m_invert -> setEnabled(enable);
-	m_pasteInto -> setEnabled(img != 0 && m_clipboardHasImage);
 	m_toNewLayer -> setEnabled(enable);
 	m_feather -> setEnabled(enable);
 	m_border -> setEnabled(enable);
@@ -336,7 +327,7 @@ void KisSelectionManager::paste()
 	KisPaintDeviceSP clip = m_doc -> clipboard();
 
 	if (clip) {
-		KisLayerSP layer = new KisLayer(img, clip -> width(), clip -> height(), clip -> name(), OPACITY_OPAQUE);
+		KisLayerSP layer = new KisLayer(img, clip -> width(), clip -> height(), img -> nextLayerName() + "(pasted)", OPACITY_OPAQUE);
 		
 		KisPainter gc;
 		gc.begin(layer.data());
@@ -346,6 +337,23 @@ void KisSelectionManager::paste()
 		m_doc -> layerAdd(img, layer, img -> index(layer));
 		layer -> move(0,0);
 		img -> notify();
+	}
+	else {
+		QClipboard *cb = QApplication::clipboard();
+		QImage qimg = cb -> image();
+
+		if (!qimg.isNull()) {
+			KisLayerSP layer =
+				new KisLayer(qimg.width(), qimg.height(),
+					     KisColorSpaceRegistry::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
+					     "KisDoc created clipboard selection");
+
+			layer -> convertFromImage(qimg);
+			m_doc -> layerAdd(img, layer, img -> index(layer));
+			layer -> move(0,0);
+			img -> notify();			
+		}
+
 	}
 }
 
@@ -451,29 +459,6 @@ void KisSelectionManager::invert()
 
 }
 
-void KisSelectionManager::paste_into()
-{
-	// XXX Still broken
-//         KisImageSP img = m_parent -> currentImg();
-
-//         Q_ASSERT(!QApplication::clipboard() -> image().isNull());
-
-//         if (img) {
-//                 KisFloatingSelectionSP fsel = m_doc -> clipboardFloatingSelection();
-//                 KisLayerSP layer = m_doc -> layerAdd(img, img -> nextLayerName(), fsel);
-
-//                 img -> unsetFloatingSelection(false);
-
-//                 if (layer) {
-//                         layer -> setX(0);
-//                         layer -> setY(0);
-//                         m_parent -> updateCanvas();
-//                 }
-//         }
-}
-
-
-
 void KisSelectionManager::copySelectionToNewLayer()
 {
         KisImageSP img = m_parent -> currentImg();
@@ -483,18 +468,7 @@ void KisSelectionManager::copySelectionToNewLayer()
 	if (!layer) return;
 
 	copy();
-
-// 	KisFloatingSelectionSP s = img -> floatingSelection();
-
-// 	img -> unsetFloatingSelection(false);
-
-// 	if (s && m_doc -> layerAdd(img, img -> nextLayerName(), s))
-// 		m_parent -> layersUpdated();
-// 	else
-// 		img -> setFloatingSelection(s);
-
-// 	layer -> removeSelection();
-
+	paste();
 }
 
 

@@ -23,8 +23,6 @@
 #include "kis_filter.h"
 #include <kdebug.h>
 
-class ChannelInfo;
-
 class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration {
 public:
 	KisBrightnessContrastFilterConfiguration(Q_INT32 nbrightness, Q_INT32 ncontrast);

@@ -35,7 +35,7 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_GRAYSCALEA = 2;
 }
 
-ChannelInfo KisStrategyColorSpaceGrayscale::channelInfo[1] = { ChannelInfo("Gray", 0) };
+KisChannelInfo KisStrategyColorSpaceGrayscale::channelInfo[1] = { KisChannelInfo("Gray", 0) };
 
 KisStrategyColorSpaceGrayscale::KisStrategyColorSpaceGrayscale() :
 	KisStrategyColorSpace("Grayscale + Alpha")
@@ -92,7 +92,7 @@ void KisStrategyColorSpaceGrayscale::toKoColor(const QUANTUM *src, KoColor *c, Q
 	*opacity = src[PIXEL_GRAY_ALPHA];
 }
 
-ChannelInfo* KisStrategyColorSpaceGrayscale::channels() const
+KisChannelInfo* KisStrategyColorSpaceGrayscale::channels() const
 {
 	return channelInfo;
 }

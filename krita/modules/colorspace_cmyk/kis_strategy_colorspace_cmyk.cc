@@ -35,10 +35,10 @@ namespace {
 
 // Init static data
 ColorLUT KisStrategyColorSpaceCMYK::m_rgbLUT = ColorLUT();
-ChannelInfo KisStrategyColorSpaceCMYK::channelInfo[4] = { ChannelInfo("Cyan", 4), 
-							  ChannelInfo("Magenta", 3), 
-							  ChannelInfo("Yellow", 2), 
-							  ChannelInfo("Black", 1) };
+KisChannelInfo KisStrategyColorSpaceCMYK::channelInfo[4] = { KisChannelInfo("Cyan", 4), 
+							     KisChannelInfo("Magenta", 3), 
+							     KisChannelInfo("Yellow", 2), 
+							     KisChannelInfo("Black", 1) };
 
 
 KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() : 
@@ -133,7 +133,7 @@ void KisStrategyColorSpaceCMYK::toKoColor(const QUANTUM *src, KoColor *c, QUANTU
 	*opacity = src[PIXEL_CMYK_ALPHA];
 }
 
-ChannelInfo* KisStrategyColorSpaceCMYK::channels() const
+KisChannelInfo* KisStrategyColorSpaceCMYK::channels() const
 {
 	return channelInfo;
 }

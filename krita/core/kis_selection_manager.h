@@ -59,7 +59,6 @@ public slots:
 	void clear();
 	void reselect();
 	void invert();
-	void paste_into();
 	void copySelectionToNewLayer();
 	void feather();
 	void border();
@@ -88,7 +87,6 @@ private:
 	KAction *m_clear;
 	KAction *m_reselect;
 	KAction *m_invert;
-	KAction *m_pasteInto;
 	KAction *m_toNewLayer;
 	KAction *m_feather;
 	KAction *m_border;

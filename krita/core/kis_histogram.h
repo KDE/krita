@@ -40,12 +40,12 @@ class KisHistogram : public KShared {
 
 public:
 	KisHistogram(KisLayerSP layer, 
-		     const ChannelInfo & initialChannel, 
+		     const KisChannelInfo & initialChannel, 
 		     const enumHistogramType type);
 
 	virtual ~KisHistogram();
 
-	void computeHistogramFor(const ChannelInfo & channel);
+	void computeHistogramFor(const KisChannelInfo & channel);
 
 	/**
 	 * Returns an iterator over the values comprising this histogram

@@ -24,26 +24,32 @@
  * This class gives some basic information about a channel,
  * that is, one of the components that makes up a particular 
  * pixel.
- *
- * XXX: refactor name to conform to Krita guidelines.
  */
-class ChannelInfo {
+class KisChannelInfo {
 	public:
-		ChannelInfo() { };
-		ChannelInfo( const QString & name, Q_INT32 npos ) : m_name (name), m_pos (npos) { };
+		KisChannelInfo() { };
+		KisChannelInfo( const QString & name, Q_INT32 npos)
+		  : m_name (name), m_pos (npos) { };
 	public:
 		/**
 		 * User-friendly name for this channel for presentation purposes in the gui
 		 */
 		inline QString name() const { return m_name; };
+
 		/** 
 		 * returns the position of the channel in the pixel
 		 */
 		inline Q_INT32 pos() const { return m_pos; };
 
+		/**
+		 * returns the number of bytes this channel takes
+                 */
+                inline Q_INT32 size() const { return m_size; };
+	
 	private:
 		QString m_name;
 		Q_INT32 m_pos;
+		Q_INT32 m_size;
 };
 
 #endif // KIS_CHANNELINFO_H_

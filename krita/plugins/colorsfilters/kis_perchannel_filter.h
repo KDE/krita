@@ -23,13 +23,13 @@
 #include "kis_filter.h"
 #include <kdebug.h>
 
-class ChannelInfo;
+class KisChannelInfo;
 
 class KisPerChannelFilterConfiguration 
 	: public KisFilterConfiguration 
 {
 public:
-	KisPerChannelFilterConfiguration(Q_INT32 nbchannels, ChannelInfo* ci);
+	KisPerChannelFilterConfiguration(Q_INT32 nbchannels, KisChannelInfo* ci);
 public:
 	/** This function return the value at index i
 		*/

@@ -147,8 +147,6 @@ public:
 		return false;
 	}
 
-	// The laye
-
 	// The layer the merged layer should be inserted above, or 0 if
 	// the merged layer should go to the bottom of the stack.
 	KisLayerSP insertMergedAboveLayer() const { return m_insertMergedAboveLayer; }

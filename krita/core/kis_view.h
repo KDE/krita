@@ -323,6 +323,7 @@ private slots:
 	QPoint mapToScreen(const QPoint& pt);
 	void flattenImage();
 	void mergeVisibleLayers();
+	void mergeLayer();
 	void mergeLinkedLayers();
 	void nBuilders(Q_INT32 size);
 	void saveLayerAsImage();
@@ -378,6 +379,7 @@ private:
 	KAction *m_imgFlatten;
 	KAction *m_imgMergeLinked;
 	KAction *m_imgMergeVisible;
+	KAction *m_imgMergeLayer;
 	KAction *m_imgRename;
 	KAction *m_imgResizeToLayer;
 	KAction *m_imgRm;

@@ -950,6 +950,43 @@ void KisImage::mergeLinkedLayers()
 	}
 }
 
+void KisImage::mergeLayer(KisLayerSP l) 
+{
+	if (bottom(l)) return;
+
+	vKisLayerSP beforeLayers = m_layers;
+
+	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
+	KisFillPainter painter(dst.data());
+	painter.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
+
+	vKisLayerSP mergeLayers;
+
+	mergeLayers.push_back(l);
+	mergeLayers.push_back(layer(index(l) + 1));
+
+
+	KisMerge<isLinked, isLinked> visitor(this);
+	visitor(painter, mergeLayers);
+
+	int insertIndex = -1;
+
+	if (visitor.insertMergedAboveLayer() != 0) {
+		insertIndex = index(visitor.insertMergedAboveLayer());
+	}
+
+	add(dst, insertIndex);
+
+	notify();
+	notifyLayersChanged();
+
+	if (m_adapter && m_adapter -> undo()) {
+		m_adapter -> addCommand(new KisChangeLayersCmd(m_adapter, this, beforeLayers, m_layers, i18n("Merge Linked Layers")));
+	}
+
+}
+
+
 KisChannelSP KisImage::activeChannel()
 {
 	return m_activeChannel;

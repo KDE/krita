@@ -40,7 +40,7 @@ public:
 	virtual ~KisHistogramWidget();
 
 	void setHistogram(KisHistogramSP histogram);
-	void setChannels(ChannelInfo * channels, Q_INT32 channelCount);
+	void setChannels(KisChannelInfo * channels, Q_INT32 channelCount);
 	
 private:
 

@@ -22,7 +22,7 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_strategy_colorspace.h"
 
-KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(Q_INT32 nbintegers, ChannelInfo* ci)
+KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(Q_INT32 nbintegers, KisChannelInfo* ci)
 {
 	m_values = new Q_INT32[ nbintegers ];
 	m_channels = new Q_INT32[ nbintegers ];
@@ -48,7 +48,7 @@ KisFilterConfigurationWidget* KisPerChannelFilter::createConfigurationWidget(QWi
 	m_nbchannels = colorStrategy()->depth() - colorStrategy()->alpha();
 	for(Q_INT32 i = 0; i < m_nbchannels; i++)
 	{
-		ChannelInfo* cI = &colorStrategy()->channels()[i];
+		KisChannelInfo* cI = &colorStrategy()->channels()[i];
 		param.push_back( KisIntegerWidgetParam( m_min, m_max, m_initvalue, cI->name().ascii() ) );
 	}
 	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );

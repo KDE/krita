@@ -54,7 +54,7 @@ public:
 	virtual void toKoColor(const QUANTUM *src, KoColor *c);
 	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity);
 
-	virtual ChannelInfo* channels() const;
+	virtual KisChannelInfo* channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
 	
@@ -75,7 +75,7 @@ public:
 	virtual void convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst);
 
 private:
-	static ChannelInfo channelInfo[1];
+	static KisChannelInfo channelInfo[1];
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_

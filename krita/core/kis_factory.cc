@@ -29,8 +29,6 @@
 #include "kis_resourceserver.h"
 #include "kis_doc.h"
 
-#define USE_TEMPLATES 1
-
 extern "C" 
 {
 	void* init_libkritapart()
@@ -85,10 +83,10 @@ KInstance* KisFactory::global()
 	if ( !s_global )
 	{
 		s_global = new KInstance(s_aboutData);
-#if USE_TEMPLATES
+
 		s_global -> dirs() -> addResourceType("krita_template",
 					     KStandardDirs::kde_default("data") + "krita/templates");
-#endif
+
 		s_global -> dirs() -> addResourceType("kis",
 						  KStandardDirs::kde_default("data") + "krita/");
 
@@ -109,6 +107,9 @@ KInstance* KisFactory::global()
 
 		s_global -> dirs() -> addResourceType("toolbars",
 						  KStandardDirs::kde_default("data") + "koffice/toolbar/");
+
+		s_global -> dirs() -> addResourceType("imc_profiles",
+						  KStandardDirs::kde_default("data") + "krita/profiles/");
 
 		// Tell the iconloader about share/apps/koffice/icons
 		s_global -> iconLoader() -> addAppDir("koffice");

@@ -185,6 +185,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_imgFlatten = 0;
         m_imgMergeVisible = 0;
         m_imgMergeLinked = 0;
+	m_imgMergeLayer = 0;
 
         m_hScroll = 0;
         m_vScroll = 0;
@@ -643,7 +644,7 @@ void KisView::setupActions()
         m_imgFlatten = new KAction(i18n("Flatten Image"), 0, this, SLOT(flattenImage()), actionCollection(), "flatten_image");
         m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
         m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(mergeLinkedLayers()), actionCollection(), "merge_linked_layers");
-
+	m_imgMergeLayer = new KAction(i18n("&Merge Layer"), 0, this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
         // setting actions
         KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
@@ -1083,8 +1084,11 @@ void KisView::imgUpdateGUI()
         }
 
         m_imgFlatten -> setEnabled(n > 1);
+
         m_imgMergeVisible -> setEnabled(nvisible > 1 && nvisible != n);
         m_imgMergeLinked -> setEnabled(nlinked > 1);
+
+	m_imgMergeLayer -> setEnabled(n > 1);
 
 	m_selectionManager -> updateGUI();
 }
@@ -1704,6 +1708,19 @@ void KisView::mergeLinkedLayers()
 
 	if (img) {
 		img -> mergeLinkedLayers();
+	}
+}
+
+void KisView::mergeLayer() 
+{
+	KisImageSP img = currentImg();
+	if (!img) return;
+
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
+
+	if (!img -> bottom(layer)) {
+		img -> mergeLayer(layer);
 	}
 }
 

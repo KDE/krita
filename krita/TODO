@@ -93,6 +93,70 @@ User Interface
 	  for perspective drawings)
         * Create templates for often-used image formats. Add save-as-template
         * Check OASIS file saving.
+        * Fix gimp XCF import/export (ImageMagick hacking...)
+
+
+Profiles
+
+	* Add profiles to krita/data/profiles (done)
+
+	* Create a KisProfile resource in krita/core/resources
+
+	* Implement the attached preferences tab & add to kis_dlg_preferences (Query: 
+      should there be separate settings for every color model? If so, we need 
+      to add settings loading and saving to the color strategy modules).
+
+	* Store preferences in settings
+
+	* Add an input profile combobox to the import image & scan dialogs
+
+	* Add an export profile combobox to the export image/print dialogs
+
+    	* Add a step in KisDoc::paintContent where the default monitor profile
+      is applied to the QImage at line 1157.
+
+    * Add loading and saving of profiles associated with images in .krita 
+      files.
+
+    * Retrieve profiles from imported images (tiff, png and jpg can have
+      them, for instance embedded by a calibrated scanner).
+
+    * Export profiles in tiff, png and jpg (this and the previous item
+      depend on ImageMagick or GraphicsMagick supporting this in some way.)
+	
+    * Support out-of-gamut warning indications for parts of an image 
+      containing unprintable colours (no idea how to implement this).
+
+
+Color conversions
+
+    * Replace koColor with KisColor, where KisColor is a combination of a
+      byte array and a pointer to a color model
+
+    * Precreate all littlecms transforms inside the color model constructors.
+
+    * Remove the convertToRGBA and convertFromRGBA methods (and all calls to
+      them).
+	  
+    * Rework the nativeColor, toKoColor, convertTo methods to use KisColor and
+      littlecms for transforms.
+
+    * In KisStrategyColorSpaceCMYK::convertToImage, use littlecms transform 
+      instead of homegrown code to return an RGB QImage (and rename this
+	  method to convertToQImage, since that's what it is, and do that 
+      everywhere).
+
+
+    * Make color strategies, filters and other plugins that act directly on 
+      channel data instead of using KisPainter to bitBlt templates.
+
+    * Add UI for depth choice
+
+    * Add UI for display settings for high bit depths -- we have upscale
+      and downscale, but that's not enough. I want, as in OpenEXR, to be
+      able 
+
+
 Tools
 
 	* All tools must have a tool options tab (#Boudewijn, Adrian, Cyrille)
@@ -137,6 +201,8 @@ Plugins
           objects.
         * Rename all plugins to have a krita prefix. 
         * Move all color strategies and tools to plugins. (#Boudewijn)
+
+     
 
 
 That's more or less all for version 1,0; afterwards I propose to move to:

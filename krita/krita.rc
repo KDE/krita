@@ -9,7 +9,6 @@
   <Action name="copy"/>
   <Action name="copy_merged"/>
   <Action name="paste"/>
-  <Action name="paste_into"/>
   <Action name="clear"/>
   <Separator/>
   <Action name="revert"/>
@@ -88,6 +87,7 @@
   <Action name="layer_properties"/>
   <Separator/>
   <Action name="flatten_image"/>
+  <Action name="merge_layer"/>
   <Action name="merge_visible_layers"/>
   <Action name="merge_linked_layers"/>
 </Menu>
@@ -141,10 +141,7 @@
 </ToolBar>
 
 <ToolBar name="navigation" position="top"><Text>Navigation</Text>
-  <Action name="previous_layer"/>
   <Action name="refresh_canvas"/>
-  <Action name="next_layer"/>
-  <Action name="panic_button"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
 </ToolBar>

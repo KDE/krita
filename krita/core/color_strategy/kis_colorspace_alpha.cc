@@ -35,7 +35,7 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_ALPHA = 1;
 }
 
-ChannelInfo KisColorSpaceAlpha::channelInfo[1] = { ChannelInfo("Alpha", 0) };
+KisChannelInfo KisColorSpaceAlpha::channelInfo[1] = { KisChannelInfo("Alpha", 0) };
 
 KisColorSpaceAlpha::KisColorSpaceAlpha() :
 	KisStrategyColorSpace("alpha mask")
@@ -94,7 +94,7 @@ void KisColorSpaceAlpha::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opac
 	}
 }
 
-ChannelInfo* KisColorSpaceAlpha::channels() const
+KisChannelInfo* KisColorSpaceAlpha::channels() const
 {
 	return channelInfo;
 }

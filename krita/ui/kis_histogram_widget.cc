@@ -38,10 +38,10 @@ KisHistogramWidget::~KisHistogramWidget()
 {
 }
 
-void KisHistogramWidget::setChannels(ChannelInfo * channels, Q_INT32 channelCount) 
+void KisHistogramWidget::setChannels(KisChannelInfo * channels, Q_INT32 channelCount) 
 {
 	for (int i = 0; i < channelCount; i++) {
-		ChannelInfo channel = channels[i];
+		KisChannelInfo channel = channels[i];
 		cmbChannel -> insertItem(channel.name());
 	}
 }

@@ -132,6 +132,11 @@ public:
 	void mergeVisibleLayers();
 	void mergeLinkedLayers();
 
+	/**
+	 * Merge the specified layer with the layer 
+	 * below this layer, remove the specified layer.
+	 */
+	void mergeLayer(KisLayerSP l);
 	
 	// Channels
 	KisChannelSP activeChannel();

@@ -32,6 +32,7 @@
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
 #include <koColor.h>
+#include <kdebug.h>
 
 KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, name)
 {
@@ -89,6 +90,7 @@ KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, na
 	connect(mVIn, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
 
 	setFixedSize(mGrid -> minimumSize());
+	locked = false;
 }
 
 void KisHSVWidget::slotHChanged(int h)
@@ -125,6 +127,7 @@ void KisHSVWidget::slotSChanged(int s)
 
 void KisHSVWidget::slotVChanged(int v)
 {
+	locked = true;
 	if (m_ColorButton->current() == KDualColorButton::Foreground){
 		m_fgColor.setHSV(m_fgColor.H(), m_fgColor.S(), v);
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
@@ -137,10 +140,12 @@ void KisHSVWidget::slotVChanged(int v)
 		if(m_subject)
 			m_subject->setBGColor(m_bgColor.color());
 	}
+	locked = false;
 }
 
 void KisHSVWidget::slotWheelChanged(const KoColor& c)
 {
+	locked = true;
 	if (m_ColorButton->current() == KDualColorButton::Foreground){
 		m_fgColor.setHSV(c.H(), c.S(), m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
@@ -153,13 +158,17 @@ void KisHSVWidget::slotWheelChanged(const KoColor& c)
 		if(m_subject)
 			m_subject->setBGColor(m_bgColor.color());
 	}
+	locked = false;
 }
 
 void KisHSVWidget::update(KisCanvasSubject *subject)
 {
-	m_subject = subject;
-	m_fgColor = subject->fgColor();
-	m_bgColor = subject->bgColor();
+	if( !locked )
+	{
+		m_subject = subject;
+		m_fgColor = subject->fgColor();
+		m_bgColor = subject->bgColor();
+	}
 
 	KoColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
 
@@ -182,7 +191,7 @@ void KisHSVWidget::update(KisCanvasSubject *subject)
 	m_VSelector->setValue(v);
 	m_VSelector->updateContents();
 	m_VSelector->blockSignals(false);
-	m_VSelector->repaint();
+	m_VSelector->repaint(false);
 
 	m_colorwheel->blockSignals(true);
 	m_colorwheel->slotSetValue(color);

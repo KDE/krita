@@ -75,6 +75,8 @@ private:
 
 	KoColor m_fgColor;
 	KoColor m_bgColor;
+
+	bool locked;
 };
 
 #endif

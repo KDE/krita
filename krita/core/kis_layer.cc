@@ -24,8 +24,8 @@
 #include "kis_mask.h"
 #include "kis_selection.h"
 
-KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name) : 
-	super(width, height, imgType, name),
+KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name) : 
+	super(width, height, colorStrategy, name),
 	m_opacity(OPACITY_OPAQUE),
 	m_linked(false),
 	m_hasSelection(false),
@@ -34,7 +34,7 @@ KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, co
 }
 
 KisLayer::KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity)
-	: super(img, width, height, img -> imgType(), name),
+	: super(img, width, height, img -> colorStrategy(), name),
 	  m_opacity(opacity),
 	  m_linked(false),
 	  m_hasSelection(false),

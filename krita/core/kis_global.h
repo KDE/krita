@@ -145,7 +145,11 @@ enum CompositeOp {
 	COMPOSITE_UNDEF,
 };
 
+#if 0
 enum enumImgType {
+#endif
+// The following enum is keep to allow the loading of old document in KisDoc::loadImage
+enum enumImgTypeDeprecated {
 	IMAGE_TYPE_UNKNOWN,
 	IMAGE_TYPE_INDEXED,
 	IMAGE_TYPE_INDEXEDA,
@@ -217,8 +221,10 @@ const PIXELTYPE PIXEL_INDEXED_ALPHA = 1;
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((QUANTUM) (257UL*(value)))
 
+#if 0
 Q_INT32 imgTypeDepth(const enumImgType& type);
 bool imgTypeHasAlpha(const enumImgType& type);
+#endif
 
 #define USEITERATORSFORPO 1
 

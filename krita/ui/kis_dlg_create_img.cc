@@ -24,10 +24,11 @@
 #include <qspinbox.h>
 #include <klocale.h>
 #include <koUnitWidgets.h>
+
 #include "kis_dlg_create_img.h"
 
-KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, enumImgType defImgType, QWidget *parent, const char *name)
-	: super(parent, name, true, "", Ok | Cancel), m_type(defImgType), m_opacity(OPACITY_OPAQUE)
+KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, QString colorStrategyName, QWidget *parent, const char *name)
+	: super(parent, name, true, "", Ok | Cancel), m_opacity(OPACITY_OPAQUE)
 {
 	QWidget *page = new QWidget(this);
 	QLabel *lbl;
@@ -38,7 +39,7 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 max
 
 	setMainWidget(page);
 	layout = new QVBoxLayout(page, 3);
-	grid = new QGridLayout(layout, 2, 2);
+	grid = new QGridLayout(layout, 3, 2);
 	setCaption(i18n("New Image"));
 	m_widthSpin = new QSpinBox(1, maxWidth, 10, page);
 	m_widthSpin -> setValue(defWidth);
@@ -54,6 +55,13 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 max
 	grid -> addWidget(lbl, 1, 0);
 	grid -> addWidget(m_heightSpin, 1, 1);
 
+	lbl = new QLabel(i18n("Layer type:"), page);
+	m_cmbImageType = new KisCmbImageType(page);
+	m_cmbImageType -> setCurrentText(colorStrategyName);
+	grid -> addWidget(lbl, 2, 0);
+	grid -> addWidget(m_cmbImageType, 2, 1);
+
+#if 0
 	grp = new QButtonGroup(2, QGroupBox::Horizontal, i18n("Color Mode"), page);
 	grp -> setExclusive(true);
 	
@@ -108,10 +116,10 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 max
 		labRadio -> setChecked(true);
 		break;
 	}
-
 	connect(grp, SIGNAL(clicked(int)), SLOT(imgTypeClicked(int)));
 
 	layout -> addWidget(grp);
+#endif
 
 	grp = new QButtonGroup(2, QGroupBox::Horizontal, i18n("Background"), page);
 	grp -> setExclusive(true);
@@ -125,11 +133,6 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 max
 
 KisDlgCreateImg::~KisDlgCreateImg()
 {
-}
-
-void KisDlgCreateImg::imgTypeClicked(int id)
-{
-	m_type = static_cast<enumImgType>(id);
 }
 
 #include "kis_dlg_create_img.moc"

@@ -60,7 +60,7 @@ namespace {
 	};
 }
 
-KisFloatingSelection::KisFloatingSelection(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name) : super(width, height, imgType, name)
+KisFloatingSelection::KisFloatingSelection(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name) : super(width, height, colorStrategy, name)
 {
 	m_clearOnMove = true;
 	visible(false);
@@ -165,7 +165,7 @@ void KisFloatingSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 w
 		KisPainter gc;
 
 		// TODO if the parent is linked... copy from all linked layers?!?
-		configure(m_img, width, height, m_img -> imgType(), m_name, COMPOSITE_OVER);
+		configure(m_img, width, height, m_img -> colorStrategy(), m_name, COMPOSITE_OVER);
 		gc.begin(this);
 		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, parentX - m_parent -> x(), parentY - m_parent -> y(), width, height);
 		super::move(parentX, parentY);

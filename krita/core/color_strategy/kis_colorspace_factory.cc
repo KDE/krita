@@ -23,6 +23,7 @@ KisColorSpaceFactory *KisColorSpaceFactory::m_singleton = 0;
 
 KisColorSpaceFactory::KisColorSpaceFactory()
 {
+	kdDebug() << " creating a KisColorSpaceFactory" << endl;
 	Q_ASSERT(KisColorSpaceFactory::m_singleton == 0);
 	KisColorSpaceFactory::m_singleton = this;
 }
@@ -41,17 +42,7 @@ KisColorSpaceFactory *KisColorSpaceFactory::singleton()
 	return KisColorSpaceFactory::m_singleton;
 }
 
-
-KisStrategyColorSpaceSP KisColorSpaceFactory::create(const KisPaintDeviceSP& device)
-{
-	KisStrategyColorSpaceSP p;
-
-	if (device != 0)
-		p = create(device -> type());
-
-	return p;
-}
-
+#if 0
 KisStrategyColorSpaceSP KisColorSpaceFactory::create(enumImgType imgType)
 {
 
@@ -65,7 +56,7 @@ KisStrategyColorSpaceSP KisColorSpaceFactory::create(enumImgType imgType)
 		return colorSpace("RGBA");
 		break;
 	default:
-		kdDebug() << "Color space strategy not accessible by create." << endl;
+		kdDebug() << "Color space strategy not accessible by create ; " << imgType << endl;
 		abort();
 		break;
 	}
@@ -76,23 +67,36 @@ void KisColorSpaceFactory::add(enumImgType, KisStrategyColorSpaceSP )
 {
 	kdDebug() << "KisColorSpaceFactoryFlyweight::add(enumImgType , KisStrategyColorSpaceSP ) is deprecated" << endl;
 }
+#endif
 
 KisStrategyColorSpaceSP KisColorSpaceFactory::colorSpace(const QString& name) const
 {
+	kdDebug() << "Requesting colorspace : <" << name << ">" << endl;
 	KisStrategyColorSpaceSP p;
 	acFlyweights_cit it = m_flyweights.find(name);
 
 	if (it != m_flyweights.end()) {
 		p = it -> second;
-		Q_ASSERT(p);
 	}
-
+	Q_ASSERT(p);
 	return p;
 }
 
 void KisColorSpaceFactory::add(KisStrategyColorSpaceSP colorspace)
 {
-	kdDebug() << "add a new colorspace : " << colorspace->name() << endl;
+	kdDebug() << "add a new colorspace : <" << colorspace->name() << "> " << endl;
 	m_flyweights.insert(acFlyweights::value_type( colorspace->name(),colorspace));
 }
 
+QStringList KisColorSpaceFactory::listColorSpaceNames() const
+{
+	QStringList list;
+	acFlyweights_cit it = m_flyweights.begin();
+	acFlyweights_cit endit = m_flyweights.end();
+	while( it != endit )
+	{
+		list.append(it->first);
+		++it;
+	}
+	return list;
+}

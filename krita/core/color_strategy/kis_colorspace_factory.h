@@ -25,6 +25,8 @@
 #include <qstring.h>
 #include <kdemacros.h>
 
+class QStringList;
+
 class KisColorSpaceFactory {
 	typedef std::map<QString, KisStrategyColorSpaceSP> acFlyweights;
 	typedef acFlyweights::iterator acFlyweights_it;
@@ -33,13 +35,15 @@ class KisColorSpaceFactory {
 public:
 	virtual ~KisColorSpaceFactory();
 
+#if 0
 public:
-	KisStrategyColorSpaceSP create(const KisPaintDeviceSP& device) KDE_DEPRECATED;
 	KisStrategyColorSpaceSP create(enumImgType imgType) KDE_DEPRECATED;
 	void add(enumImgType imgType, KisStrategyColorSpaceSP colorspace) KDE_DEPRECATED ;
+#endif
 public:
 	void add(KisStrategyColorSpaceSP colorspace);
 	KisStrategyColorSpaceSP colorSpace(const QString& name) const;
+	QStringList listColorSpaceNames() const;
 public:
 	static KisColorSpaceFactory *singleton();
 

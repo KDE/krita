@@ -25,6 +25,8 @@
 #include <qvaluelist.h>
 #include <ksharedptr.h>
 #include "kistile.h"
+#include "kis_types.h"
+#include "kis_strategy_colorspace.h"
 
 class QPoint;
 struct KisPixelData;
@@ -71,7 +73,7 @@ public:
           Create a KisTileMgr of width and height with the specified
           colour depth.
          */
-	KisTileMgr(Q_UINT32 depth, const enumImgType& imgType, Q_UINT32 width, Q_UINT32 height);
+	KisTileMgr(KisStrategyColorSpaceSP colorStrategy, Q_UINT32 width, Q_UINT32 height);
 
         /**
           Create a new KisTileMgr of width and height with the
@@ -82,8 +84,7 @@ public:
           than width and height, nor what happens when tm has a
           different depth.
          */
-	KisTileMgr(KisTileMgr *tm,
-                   Q_UINT32 depth, const enumImgType& imgType, Q_UINT32 width, Q_UINT32 height);
+	KisTileMgr(KisTileMgr *tm, KisStrategyColorSpaceSP colorStrategy, Q_UINT32 width, Q_UINT32 height);
 
         /**
           Creates a new KisTileMgr based on rhs, shares a reference
@@ -176,10 +177,9 @@ public:
            managed by this KisTileMgr
          */
 	Q_INT32 depth() const;
-
-	/** This function return the type of the KisTileMgr (RGBA, CMYKA...)
+	/** Return the color space that can interpret the data
 		*/
-	enumImgType type() const;
+	KisStrategyColorSpaceSP colorStrategy() const;
 
         /**
            Total size in memory the data managed by this KisTileMgr 
@@ -236,13 +236,12 @@ private:
 private:
 	Q_UINT32 m_width;
 	Q_UINT32 m_height;
-	Q_UINT32 m_depth;
+	KisStrategyColorSpaceSP m_colorStrategy;
 	Q_UINT32 m_ntileRows;
 	Q_UINT32 m_ntileCols;
 	vKisTileSP m_tiles;
 	QMutex m_mutex;
 	KisTileMediator *m_mediator;
-	enumImgType m_imgType;
 };
 
 
@@ -258,7 +257,12 @@ inline Q_INT32 KisTileMgr::height() const
 
 inline Q_INT32 KisTileMgr::depth() const
 {
-	return m_depth;
+	return colorStrategy()->depth();
+}
+
+inline KisStrategyColorSpaceSP KisTileMgr::colorStrategy() const
+{
+	return m_colorStrategy;
 }
 
 inline Q_UINT32 KisTileMgr::nrows() const
@@ -276,12 +280,4 @@ inline bool KisTileMgr::empty() const
 	return m_tiles.empty();
 }
 
-inline enumImgType KisTileMgr::type() const
-{
-	return m_imgType;
-}
-
-
-
 #endif // KISTILEMGR_H_
-

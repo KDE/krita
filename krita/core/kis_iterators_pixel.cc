@@ -22,7 +22,7 @@
 #include "kis_paint_device.h"
 
 KisIteratorPixel::KisIteratorPixel( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos, Q_INT32 nxpos) :
-	KisIteratorUnit( ndevice, command, nypos, nxpos, ::imgTypeDepth( ndevice->typeWithoutAlpha() ) + 1 )
+	KisIteratorUnit( ndevice, command, nypos, nxpos, ndevice->depth() )
 {
 
 }

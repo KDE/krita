@@ -53,6 +53,8 @@ public:
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst);
 	
 	virtual ChannelInfo* channelsInfo() const;
+	virtual bool alpha() const;
+	virtual Q_INT32 depth() const;
 	
 	virtual void render(KisImageSP image, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
 

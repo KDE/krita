@@ -48,12 +48,12 @@ KisPluginRegistry::~KisPluginRegistry()
 {
 }
 
-void KisPluginRegistry::registerColorStrategy(const QString & name, enumImgType imgType, KisStrategyColorSpaceSP colorspace)
+void KisPluginRegistry::registerColorStrategy(const QString & name, KisStrategyColorSpaceSP colorspace)
 {
 	kdDebug() << "Adding color strategy\n";
-	KisColorSpaceFactory *factory = KisColorSpaceFactory::singleton();
-        Q_ASSERT(factory);
-	factory -> add(imgType, colorspace);
+/*	KisColorSpaceFactory *factory = KisColorSpaceFactory::singleton();
+	Q_ASSERT(factory);
+	factory -> add(imgType, colorspace);*/
 }
 
 void KisPluginRegistry::registerTool(const QString & /*name*/, KisToolSP /*tool*/)

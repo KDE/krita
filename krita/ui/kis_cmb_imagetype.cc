@@ -23,24 +23,12 @@
 #include <klocale.h>
 
 #include "kis_cmb_imagetype.h"
+#include "kis_colorspace_factory.h"
 
 KisCmbImageType::KisCmbImageType(QWidget * parent, const char * name) 
 	: super( false, parent, name )
 {
-
-	insertItem(i18n("Unknown"));
-	insertItem(i18n("Indexed"));
-	insertItem(i18n("Indexed + alpha"));
-	insertItem(i18n("Grayscale"));
-	insertItem(i18n("Grayscale + alpha"));
-	insertItem(i18n("RGB"));
-	insertItem(i18n("RGBA"));
-	insertItem(i18n("CMYK"));
-	insertItem(i18n("CMYKA"));
-	insertItem(i18n("LAB"));
-	insertItem(i18n("LABA"));
-	insertItem(i18n("YUV"));
-	insertItem(i18n("YUVA"));
+	insertStringList(KisColorSpaceFactory::singleton()->listColorSpaceNames());
 }
 
 KisCmbImageType::~KisCmbImageType()

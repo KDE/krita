@@ -41,7 +41,7 @@ NewLayerDialog::NewLayerDialog(Q_INT32 maxWidth,
 			       Q_INT32 defWidth, 
 			       Q_INT32 maxHeight, 
 			       Q_INT32 defHeight,
-			       enumImgType imageType,
+			       const QString colorSpaceName,
 			       const QString & deviceName,
 			       QWidget *parent, 
 			       const char *name) 
@@ -81,7 +81,7 @@ NewLayerDialog::NewLayerDialog(Q_INT32 maxWidth,
 	// Layer type
 	lbl = new QLabel(i18n("Layer type:"), page);
 	m_cmbImageType = new KisCmbImageType(page);
-	m_cmbImageType -> setCurrentItem((int)imageType);
+	m_cmbImageType -> setCurrentText(colorSpaceName);
 	grid -> addWidget(lbl, 3, 0);
 	grid -> addWidget(m_cmbImageType, 3, 1);
 
@@ -144,9 +144,9 @@ CompositeOp NewLayerDialog::compositeOp() const
 	return (CompositeOp)m_cmbComposite -> currentItem();
 }
 
-enumImgType NewLayerDialog::imageType() const
+QString NewLayerDialog::colorStrategyName() const
 {
-	return (enumImgType)m_cmbImageType -> currentItem();
+	return m_cmbImageType -> currentText ();
 }
 
 QString NewLayerDialog::layerName() const

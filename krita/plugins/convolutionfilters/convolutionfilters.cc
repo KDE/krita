@@ -169,7 +169,7 @@ void KritaConvolutionFilters::slotTopEdgeDetectionActivated()
 Q_INT32 KritaConvolutionFilters::depth()
 {
 	KisImageSP img = this->m_view->currentImg();
-	return ::imgTypeDepth( img->activeDevice()->typeWithoutAlpha() ) + 1;
+	return img->activeDevice()->depth();
 	
 }
 

@@ -45,7 +45,8 @@ class KisImage : public QObject, public KisRenderInterface {
 	Q_OBJECT
 
 public:
-	KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
+	KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,
+			KisStrategyColorSpaceSP colorStrategy, const QString& name);
 	KisImage(const KisImage& rhs);
 	virtual ~KisImage();
 	virtual DCOPObject *dcopObject();
@@ -67,12 +68,10 @@ public:
 	void resize(Q_INT32 w, Q_INT32 h);
 	void resize(const QRect& rc);
 	void scale(double sx, double sy);
-	void convertTo(const enumImgType& type);
+	void convertTo(KisStrategyColorSpaceSP colorStrategy);
 	void enableUndo(KoCommandHistory *history);
-
-	enumImgType imgType() const;
-	enumImgType nativeImgType() const;
-	enumImgType imgTypeWithAlpha() const;
+ 
+	KisStrategyColorSpaceSP colorStrategy() const;
 
 	KURL uri() const;
 	void uri(const KURL& uri);
@@ -167,7 +166,7 @@ private slots:
 private:
 	KisImage& operator=(const KisImage& rhs);
 	void expand(KisPaintDeviceSP dev);
-	void init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
+	void init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name);
 	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
 
 	void startUpdateTimer();
@@ -187,7 +186,7 @@ private:
 
 	KoUnit::Unit m_unit;
 
-	enumImgType m_type;
+	KisStrategyColorSpaceSP m_colorStrategy;
 	KoColorMap m_clrMap;
 
 	bool m_dirty;

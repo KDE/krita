@@ -23,7 +23,7 @@ KisIteratorUnit::KisIteratorUnit( KisPaintDeviceSP ndevice, KisTileCommand* comm
 		: m_device (ndevice),
 		  m_command (command), 
 		  m_ktm( m_device->data()),
-		  m_depth(::imgTypeDepth( m_device->typeWithoutAlpha() ) +1),
+		  m_depth( m_device->depth() ),
 		  m_ypos(nypos), 
 		  m_rownum(nypos / TILE_HEIGHT ), 
 		  m_ypos_intile( nypos % TILE_HEIGHT ),

@@ -22,30 +22,28 @@
 #include <kdialogbase.h>
 #include <koColor.h>
 #include "kis_global.h"
+#include "kis_cmb_imagetype.h"
 
 class KisDlgCreateImg : public KDialogBase {
 	typedef KDialogBase super;
 	Q_OBJECT
 
 public:
-	KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, enumImgType defImgType, QWidget *parent = 0, const char *name = 0);
+	KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, QString colorStrategyName, QWidget *parent = 0, const char *name = 0);
 	virtual ~KisDlgCreateImg();
 
 public:
 	KoColor backgroundColor() const;
 	QUANTUM backgroundOpacity() const;
-	enumImgType imgType() const;
+	QString colorStrategyName() const;
 	Q_INT32 imgWidth() const;
 	Q_INT32 imgHeight() const;
-
-private slots:
-	void imgTypeClicked(int id);
 
 private:
 	QSpinBox *m_widthSpin;
 	QSpinBox *m_heightSpin;
-	enumImgType m_type;
 	QUANTUM m_opacity;
+	KisCmbImageType *m_cmbImageType;
 };
 
 inline
@@ -61,9 +59,9 @@ Q_INT32 KisDlgCreateImg::imgHeight() const
 }
 
 inline
-enumImgType KisDlgCreateImg::imgType() const
+QString KisDlgCreateImg:: colorStrategyName() const
 {
-	return m_type;
+	return m_cmbImageType -> currentText ();
 }
 
 inline

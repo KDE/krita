@@ -37,6 +37,7 @@
 #include <qstringlist.h>
 #include <qstyle.h>
 #include <qpopupmenu.h>
+#include <qvaluelist.h>
 
 // KDE
 #include <dcopobject.h>
@@ -1921,28 +1922,24 @@ void KisView::setupPrinter(KPrinter& printer)
 
 void KisView::print(KPrinter& printer)
 {
-        QPainter gc(&printer);
-        Q_INT32 from = printer.fromPage();
-        Q_INT32 to = printer.toPage();
-        KisImageSP img;
-
-        printer.setFullPage(true);
-        gc.setClipping(false);
-
-        if (!from && !to) {
-                from = printer.minPage();
-                to = printer.maxPage();
-        }
-
-        for (Q_INT32 i = from; i < to; i++) {
-                if (i)
-                        printer.newPage();
-
-                img = m_doc -> imageNum(i - 1);
-                Q_ASSERT(img);
-                m_doc -> setProjection(img);
-                m_doc -> paintContent(gc, img -> bounds());
-        }
+	QPainter gc(&printer);
+	QValueList< int > pagesList = printer.pageList();
+	KisImageSP img;
+	printer.setFullPage(true);
+	gc.setClipping(false);
+	
+	QValueList< int >::iterator it = pagesList.begin();
+	QValueList< int >::iterator itEnd = pagesList.end();
+	
+	while(it != itEnd)
+	{
+		if (*it)
+			printer.newPage();
+		img = m_doc -> imageNum(*it - 1);
+		Q_ASSERT(img);
+		m_doc -> setProjection(img);
+		m_doc -> paintContent(gc, img -> bounds());
+	}
 }
 
 void KisView::setupTools()
@@ -2264,7 +2261,7 @@ void KisView::layerAdd()
                                    cfg.defLayerWidth(),
                                    cfg.maxLayerHeight(),
                                    cfg.defLayerHeight(),
-                                   img -> imgType(),
+                                   img -> colorStrategy() -> name(),
                                    img -> nextLayerName(),
                                    this);
 
@@ -2278,7 +2275,7 @@ void KisView::layerAdd()
                                                              dlg.compositeOp(),
                                                              dlg.opacity(),
                                                              dlg.position(),
-                                                             dlg.imageType());
+                                                             KisColorSpaceFactory::singleton()->colorSpace(dlg.colorStrategyName()));
 
                         if (layer) {
                                 m_layerBox -> setCurrentItem(img -> index(layer));
@@ -2640,7 +2637,7 @@ void KisView::layerToImage()
                         img -> activeLayer();
 
                 if (layer) {
-                        KisImageSP dupedImg = new KisImage(m_adapter, layer -> width(), layer -> height(), img -> nativeImgType(), m_doc -> nextImageName());
+                        KisImageSP dupedImg = new KisImage(m_adapter, layer -> width(), layer -> height(), img -> colorStrategy(), m_doc -> nextImageName());
                         KisLayerSP duped = new KisLayer(*layer);
 
                         duped -> setName(dupedImg -> nextLayerName());

@@ -100,7 +100,7 @@ void ColorsFilters::slotColorActivated()
 	KisTileCommand* ktc = new KisTileCommand(i18n("Color adjustment"), (KisPaintDeviceSP)lay ); // Create a command
 	KisTileMgrSP ktm = lay->data();
 	KisTileSP tile;
-	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB)
+	if( lay->colorStrategy()->name() == "RGBA")
 	{
 		FormRGBSliders* frsd = new FormRGBSliders( m_view, "Color adjustment", TRUE);
 
@@ -138,7 +138,7 @@ void ColorsFilters::slotColorActivated()
 		}
 		m_view->currentImg()->undoAdapter()->addCommand( ktc );
 		m_view->currentImg()->notify();
-	} else if( lay->typeWithoutAlpha() == IMAGE_TYPE_CMYK) {
+	} else if( lay->colorStrategy()->name() == "CMYKA") {
 		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Color adjustment", TRUE);
 		frsd->setCaption(i18n("Color adjustment"));
 		frsd->setMinValue(-255);
@@ -183,7 +183,7 @@ void ColorsFilters::slotDesaturate()
 {
 	KisLayerSP lay = m_view->currentImg()->activeLayer();
 	KisTileCommand* ktc = new KisTileCommand("Desaturate", (KisPaintDeviceSP)lay ); // Create a command
-	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB) {
+	if( lay->colorStrategy()->name() == "RGBA") {
 		KisIteratorLinePixel lineIt = lay->iteratorPixelSelectionBegin(ktc);
 		KisIteratorLinePixel lastLine = lay->iteratorPixelSelectionEnd(ktc);
 		while( lineIt <= lastLine )
@@ -218,7 +218,7 @@ void ColorsFilters::slotGammaActivated()
 	KisTileCommand* ktc = new KisTileCommand(i18n("Gamma Correction"), (KisPaintDeviceSP)lay ); // Create a command
 	KisTileMgrSP ktm = lay->data();
 	KisTileSP tile;
-	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB)
+	if( lay->colorStrategy()->name() == "RGBA")
 	{
 		FormRGBSliders* frsd = new FormRGBSliders( m_view, "Gamma Correction", TRUE);
 		frsd->setCaption(i18n("Gamma Correction"));
@@ -255,7 +255,7 @@ void ColorsFilters::slotGammaActivated()
 		}
 		m_view->currentImg()->undoAdapter()->addCommand( ktc );
 		m_view->currentImg()->notify();
-	} else if( lay->typeWithoutAlpha() == IMAGE_TYPE_CMYK) {
+	} else if( lay->colorStrategy()->name() == "CMYA") {
 		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Gamma Correction", TRUE);
 		frsd->setCaption(i18n("Gamma Correction"));
 		frsd->setMinValue(1);
@@ -306,7 +306,7 @@ void ColorsFilters::slotBrightnessContrastActivated()
 	int contrast = 100+fbcd->sliderContrast->value();
 	KisLayerSP lay = m_view->currentImg()->activeLayer();
 	KisTileCommand* ktc = new KisTileCommand(i18n("Brightness / Contrast"), (KisPaintDeviceSP)lay ); // Create a command
-	int nbchannel = ::imgTypeDepth( lay->typeWithoutAlpha() ); // get the number of channel whithout alpha
+	int nbchannel = lay->depth() - 1; // get the number of channel whithout alpha
 	KisTileMgrSP ktm = lay->data();
 	KisTileSP tile;
 	for(unsigned int i = 0; i < ktm->nrows() * ktm->ncols(); i++)

@@ -59,7 +59,7 @@ void KisPreviewWidget::slotSetPreview(KisLayerSP lay)
 
 	/* left original image */
 	KisImageSP img1;
-	img1 = new KisImage(m_undo, SIZE, SIZE, lay->type(), "previewOriginal");
+	img1 = new KisImage(m_undo, SIZE, SIZE, lay->colorStrategy(), "previewOriginal");
 	layerNew1 = new KisLayer(img1, SIZE, SIZE, img1 -> nextLayerName(), OPACITY_OPAQUE);
 	gc.begin(layerNew1.data());
 	
@@ -70,7 +70,7 @@ void KisPreviewWidget::slotSetPreview(KisLayerSP lay)
 
 	/* right preview image */
 	KisImageSP img2;
-	img2 = new KisImage(m_undo, SIZE, SIZE, lay->type(), "previewPreview");
+	img2 = new KisImage(m_undo, SIZE, SIZE, lay->colorStrategy(), "previewPreview");
 	layerNew2 = new KisLayer(img2, SIZE, SIZE, img2 -> nextLayerName(), OPACITY_OPAQUE);
 	gc.begin(layerNew2.data());
 	gc.bitBlt(0, 0, COMPOSITE_OVER, pd);
@@ -186,12 +186,11 @@ void KisPreviewWidget::render(QPainter &painter, KisImageSP image, double zoomX,
 	Q_INT32 x2 = image -> width();
 	Q_INT32 y2 = image -> height();
 	Q_INT32 tileno;
-	KisColorSpaceFactory *factory = KisColorSpaceFactory::singleton();
 
 	if (!image)
 		return;
 
-	KisStrategyColorSpaceSP colorstate = factory->create(image->nativeImgType());
+	KisStrategyColorSpaceSP colorstate = image->colorStrategy();
 		
 	if (zoomX != 1.0 || zoomY != 1.0)
 		painter.scale(zoomX, zoomY);

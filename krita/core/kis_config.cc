@@ -27,10 +27,10 @@ namespace {
 	const Q_INT32 IMG_HEIGHT_MAX = USHRT_MAX;
 	const Q_INT32 IMG_DEFAULT_WIDTH = 512;
 	const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
-	const enumImgType IMG_DEFAULT_TYPE = IMAGE_TYPE_RGBA;
+// 	const enumImgType IMG_DEFAULT_TYPE = IMAGE_TYPE_RGBA;
 }
 
-std::map<enumImgType, QString> KisConfig::m_imgTypeName;
+// std::map<enumImgType, QString> KisConfig::m_imgTypeName;
 
 KisConfig::KisConfig()
 {
@@ -39,9 +39,9 @@ KisConfig::KisConfig()
 	Q_ASSERT(app);
 	m_cfg = app -> sessionConfig();
 
-	if (m_imgTypeName.empty()) {
+/*	if (m_imgTypeName.empty()) {
 		setupImgTypeNames();
-	}
+	}*/
 }
 
 KisConfig::~KisConfig()
@@ -89,15 +89,15 @@ Q_INT32 KisConfig::defLayerHeight() const
 	return m_cfg -> readNumEntry("layerHeightDef", IMG_DEFAULT_HEIGHT);
 }
 
-enumImgType KisConfig::defImgType() const
-{
-	return imgType(m_cfg -> readEntry("imgTypeDef", imgTypeName(IMG_DEFAULT_TYPE)));
-}
+// enumImgType KisConfig::defImgType() const
+// {
+// 	return imgType(m_cfg -> readEntry("imgTypeDef", imgTypeName(IMG_DEFAULT_TYPE)));
+// }
 
-void KisConfig::defImgType(enumImgType type)
-{
-	m_cfg -> writeEntry("imgTypeDef", imgTypeName(type));
-}
+// void KisConfig::defImgType(enumImgType type)
+// {
+// 	m_cfg -> writeEntry("imgTypeDef", imgTypeName(type));
+// }
 
 void KisConfig::defImgWidth(Q_INT32 width)
 {
@@ -119,6 +119,7 @@ void KisConfig::defLayerHeight(Q_INT32 height)
 	m_cfg -> writeEntry("layerHeightDef", height);
 }
 
+#if 0
 void KisConfig::setupImgTypeNames() const
 {
 	m_imgTypeName[IMAGE_TYPE_UNKNOWN] = "Unknown";
@@ -162,5 +163,5 @@ enumImgType KisConfig::imgType(const QString& name) const
 
 	return type;
 }
-
+#endif
 

@@ -53,11 +53,18 @@ class KisPaintDevice : public QObject, public KisRenderInterface {
         typedef KisRenderInterface super;
 
 public:
-        KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
-        KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
-        KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& name);
-        KisPaintDevice(const KisPaintDevice& rhs);
-        virtual ~KisPaintDevice();
+	KisPaintDevice(Q_INT32 width, Q_INT32 height,
+			KisStrategyColorSpaceSP colorStrategy,
+			const QString& name);
+	KisPaintDevice(KisImageSP img,
+			Q_INT32 width, Q_INT32 height,
+			KisStrategyColorSpaceSP colorStrategy,
+			const QString& name);
+	KisPaintDevice(KisTileMgrSP tm,
+			KisImageSP img,
+			const QString& name);
+	KisPaintDevice(const KisPaintDevice& rhs);
+	virtual ~KisPaintDevice();
 
 public:
         // Implement KisRenderInterface
@@ -72,11 +79,11 @@ public:
         virtual bool read(KoStore *store);
 
 public:
-        virtual void configure(KisImageSP image, 
-			       Q_INT32 width, Q_INT32 height, 
-			       const enumImgType& imgType, 
-			       const QString& name,
-			       CompositeOp compositeOp);
+	virtual void configure(KisImageSP image, 
+			Q_INT32 width, Q_INT32 height, 
+			KisStrategyColorSpaceSP colorStrategy, 
+			const QString& name,
+			CompositeOp compositeOp);
 
 	/**
 	   The data() methods return a shared pointer to the tile manager.
@@ -108,7 +115,7 @@ public:
 
 	/** This function convert to a different colorspace
 		*/
-	void convertTo(const enumImgType& imgType);
+	void convertTo(KisStrategyColorSpaceSP colorStrategy);
 	QImage convertToImage();
 
         QString name();
@@ -133,9 +140,6 @@ public:
         void maskBounds(QRect *rc);
 
         bool alpha() const;
-	enumImgType type() const;
-        enumImgType typeWithoutAlpha() const;
-        enumImgType typeWithAlpha() const;
 
 	KisStrategyColorSpaceSP colorStrategy() const;
 
@@ -290,13 +294,13 @@ inline KisTileMgrSP KisPaintDevice::tiles() const
 
 inline Q_INT32 KisPaintDevice::depth() const
 {
-        return ::imgTypeDepth(type());
+        return data()->depth();
 ;
 }
 
 inline KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
 {
-        return KisColorSpaceFactory::singleton() -> create(type());
+        return m_colorStrategy;
 }
 
 inline QImage KisPaintDevice::convertToImage()
@@ -443,13 +447,10 @@ inline void KisPaintDevice::resize()
         if (img)
                 resize(img -> bounds().size());
 }
-inline enumImgType KisPaintDevice::type() const {
-        return data()->type();
-}
 
 inline bool KisPaintDevice::alpha() const
 {
-        return ::imgTypeHasAlpha(type());
+        return colorStrategy()->alpha();
 }
 
 #endif // KIS_PAINT_DEVICE_H_

@@ -389,7 +389,7 @@ void KisBrush::createImages(const QImage & img) const
 		QImage scaledImage = img.smoothScale(static_cast<int>(img.width() * scale + 0.5),
 						     static_cast<int>(img.height() * scale + 0.5));
 		KisLayer *layer = new KisLayer(scaledImage.width(), scaledImage.height(),
-					       IMAGE_TYPE_RGBA, "brush image");
+					       KisColorSpaceFactory::singleton()->colorSpace("RGBA"), "brush image");
 
 		for (int y = 0; y < scaledImage.height(); y++) {
 			for (int x = 0; x < scaledImage.width(); x++) {

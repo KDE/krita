@@ -137,9 +137,9 @@ namespace {
 	};
 }
 
-KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
+KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
-	init(undoAdapter, width, height, imgType, name);
+	init(undoAdapter, width, height, colorStrategy, name);
 	setName(name);
 	startUpdateTimer();
         m_dcop = 0L;
@@ -158,7 +158,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_xres = rhs.m_xres;
 		m_yres = rhs.m_yres;
 		m_unit = rhs.m_unit;
-		m_type = rhs.m_type;
+		m_colorStrategy = rhs.m_colorStrategy;
 		m_clrMap = rhs.m_clrMap;
 		m_dirty = rhs.m_dirty;
 		m_adapter = rhs.m_adapter;
@@ -241,18 +241,18 @@ QString KisImage::nextLayerName() const
 	return m_nserver -> name();
 }
 
-void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
+void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
 	Q_INT32 n;
 
 	m_adapter = adapter;
 	m_nserver = new KisNameServer(i18n("Layer %1"), 1);
-	n = ::imgTypeDepth(imgType);
+	n = colorStrategy->depth();
 	m_active.resize(n);
 	m_visible.resize(n);
 	m_name = name;
 	m_depth = n;
-	m_type = imgType;
+	m_colorStrategy = colorStrategy;
 	m_bkg = new KisBackground(this, width, height);
 	m_projection = new KisLayer(this, width, height, "projection", OPACITY_OPAQUE);
 	m_xres = 1.0;
@@ -320,65 +320,15 @@ void KisImage::scale(double sx, double sy)
 	invalidate();
 }
 
-void KisImage::convertTo(const enumImgType& type)
+void KisImage::convertTo( KisStrategyColorSpaceSP colorStrategy)
 {
 	if (m_layers.empty()) return; // Nothing to convert
 	vKisLayerSP_it it;
 	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-		(*it) -> convertTo(type);
+		(*it) -> convertTo(colorStrategy);
 	}
-	m_projection -> convertTo(type);
+	m_projection -> convertTo(colorStrategy);
 	invalidate();
-}
-
-
-enumImgType KisImage::imgType() const
-{
-	switch (m_type) {
-	case IMAGE_TYPE_INDEXED:
-		return IMAGE_TYPE_INDEXEDA;
-	case IMAGE_TYPE_GREY:
-		return IMAGE_TYPE_GREYA;
-	case IMAGE_TYPE_RGB:
-		return IMAGE_TYPE_RGBA;
-	case IMAGE_TYPE_CMYK:
-		return IMAGE_TYPE_CMYKA;
-	case IMAGE_TYPE_LAB:
-		return IMAGE_TYPE_LABA;
-	case IMAGE_TYPE_YUV:
-		return IMAGE_TYPE_YUVA;
-	default:
-		return m_type;
-	}
-
-	return m_type;
-}
-
-enumImgType KisImage::nativeImgType() const
-{
-	return alpha() ? imgTypeWithAlpha() : imgType();
-}
-
-enumImgType KisImage::imgTypeWithAlpha() const
-{
-	switch (m_type) {
-	case IMAGE_TYPE_INDEXEDA:
-		return IMAGE_TYPE_INDEXED;
-	case IMAGE_TYPE_GREYA:
-		return IMAGE_TYPE_GREY;
-	case IMAGE_TYPE_RGBA:
-		return IMAGE_TYPE_RGB;
-	case IMAGE_TYPE_CMYKA:
-		return IMAGE_TYPE_CMYK;
-	case IMAGE_TYPE_LABA:
-		return IMAGE_TYPE_LAB;
-	case IMAGE_TYPE_YUVA:
-		return IMAGE_TYPE_YUV;
-	default:
-		return m_type;
-	}
-
-	return m_type;
 }
 
 KURL KisImage::uri() const
@@ -997,6 +947,7 @@ void KisImage::enableUndo(KoCommandHistory *history)
 
 PIXELTYPE KisImage::pixelFromChannel(CHANNELTYPE type) const
 {
+#if 0
 	PIXELTYPE i = PIXEL_UNDEF;
 
 	switch (type) {
@@ -1033,6 +984,7 @@ PIXELTYPE KisImage::pixelFromChannel(CHANNELTYPE type) const
 	}
 
 	return i;
+#endif
 }
 
 Q_INT32 KisImage::tileNum(Q_INT32 xpix, Q_INT32 ypix) const
@@ -1239,6 +1191,12 @@ void KisImage::startUpdateTimer()
 		m_updateTimer -> start( DISPLAY_UPDATE_FREQUENCY );
 	}
 }
+
+KisStrategyColorSpaceSP KisImage::colorStrategy() const
+{
+	return m_colorStrategy;
+}
+
 
 #include "kis_image.moc"
 

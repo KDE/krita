@@ -1006,7 +1006,7 @@ void KisPainter::duplicateAt(const KisPoint &pos, const double pressure, const d
 		srcPoint.setX(0);
 	if( srcPoint.y() < 0)
 		srcPoint.setY(0);
-	KisPaintDevice* srcdev = new KisPaintDevice(sw, sh, m_dab.data()->type(), "");
+	KisPaintDevice* srcdev = new KisPaintDevice(sw, sh, m_dab.data()->colorStrategy(), "");
 	
 	KisIteratorLinePixel srcLit = srcdev->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
 	KisIteratorLinePixel dabLit = m_dab.data()->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
@@ -1122,7 +1122,7 @@ void KisPainter::eraseAt(const KisPoint &pos,
 
 	m_dab = new KisLayer(mask -> width(),
 			     mask -> height(),
-			     m_device -> typeWithAlpha(),
+			     m_device -> colorStrategy(),
 			     "eraser_dab");
 
 	if (m_device -> alpha()) {
@@ -1246,7 +1246,7 @@ void KisPainter::computeDab(KisAlphaMaskSP mask)
 	// the target layer.
 	m_dab = new KisLayer(mask -> width(),
 			     mask -> height(),
-			     m_device -> typeWithAlpha(),
+			     m_device -> colorStrategy(),
 			     "dab");
 
 	KisStrategyColorSpaceSP colorStrategy = m_dab -> colorStrategy();
@@ -1309,7 +1309,7 @@ double KisPainter::pointToLineDistance(const KisPoint& p, const KisPoint& l0, co
 
 void KisPainter::applyConvolutionColorTransformation(KisMatrix3x3* matrix)
 {
-	Q_INT32 depth = ::imgTypeDepth( m_device->typeWithoutAlpha() ) + 1;
+	Q_INT32 depth = m_device->colorStrategy()->depth();
 	KisIteratorLinePixel beforeLit = m_device->iteratorPixelSelectionBegin( m_transaction );
 	KisIteratorLinePixel curLit = m_device->iteratorPixelSelectionBegin( m_transaction );
 	KisIteratorLinePixel afterLit = m_device->iteratorPixelSelectionBegin( m_transaction );

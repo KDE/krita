@@ -74,7 +74,7 @@ public:
 			    CompositeOp compositeOp,
 			    QUANTUM opacity,
 			    QPoint pos,
-			    enumImgType type);
+			    KisStrategyColorSpaceSP colorstrategy);
 	KisLayerSP layerAdd(KisImageSP img, const QString& name, KisFloatingSelectionSP selection);
 	KisLayerSP layerAdd(KisImageSP img, KisLayerSP layer, Q_INT32 position);
 	void layerRemove(KisImageSP img, KisLayerSP layer);
@@ -94,7 +94,7 @@ public:
 	Q_INT32 redoLimit() const;
 	void setRedoLimit(Q_INT32 limit);
 
-	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, enumImgType type);
+	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorstrategy);
 	void addImage(KisImageSP img);
 	void removeImage(KisImageSP img);
 	void removeImage(const QString& name);

@@ -72,7 +72,7 @@ KisToolFill::~KisToolFill()
 bool KisToolFill::flood(int startX, int startY)
 {
 	KisLayerSP lay = m_currentImage->activeLayer();
-	Q_INT32 depth = ::imgTypeDepth( lay->typeWithoutAlpha() );
+	Q_INT32 depth = lay->depth();
 	KisTileCommand* ktc = new KisTileCommand("Fill", (KisPaintDeviceSP)lay );
 	QUANTUM* color = new QUANTUM[depth];
 	m_map = new bool[lay->width()*lay->height()];

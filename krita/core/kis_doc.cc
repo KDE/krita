@@ -391,7 +391,7 @@ bool KisDoc::initDoc()
 		kdDebug() << "Eek: template is hard-coded rgba" << endl;
 		KisConfig cfg;
 		QString name = nextImageName();
-		KisImageSP img = new KisImage(this, cfg.defImgWidth(), cfg.defImgHeight(), IMAGE_TYPE_RGBA, name);
+		KisImageSP img = new KisImage(this, cfg.defImgWidth(), cfg.defImgHeight(), KisColorSpaceFactory::singleton()->colorSpace("RGBA"), name);
 		img -> setResolution(100, 100); // XXX
 		KisLayerSP layer = new KisLayer(img, cfg.defLayerWidth(), cfg.defLayerHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 
@@ -504,7 +504,7 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 	image.setAttribute("mime", "application/x-kra");
 	image.setAttribute("width", img -> width());
 	image.setAttribute("height", img -> height());
-	image.setAttribute("colorspace", img -> nativeImgType());
+	image.setAttribute("colorspacename", img -> colorStrategy() -> name());
 	layers = img -> layers();
 
 	if (layers.size() > 0) {
@@ -541,7 +541,8 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 	QString name;
 	Q_INT32 width;
 	Q_INT32 height;
-	Q_INT32 colorspace;
+	QString colorspacename;
+	Q_INT32 colorspace_int; // used to keep compatibility with old document
 
 	if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
 		if ((name = element.attribute("name")) == QString::null)
@@ -562,13 +563,35 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 		if ((height = attr.toInt()) < 0 || height > cfg.maxImgHeight())
 			return 0;
 
-		if ((attr = element.attribute("colorspace")) == QString::null)
-			return 0;
-
-		if ((colorspace = attr.toInt()) == IMAGE_TYPE_UNKNOWN || colorspace < IMAGE_TYPE_UNKNOWN || colorspace > IMAGE_TYPE_YUVA)
-			return 0;
-
-		img = new KisImage(this, width, height, static_cast<enumImgType>(colorspace), name);
+		if ((colorspacename = element.attribute("colorspacename")) == QString::null)
+		{
+			// TODO: This code is used for compatibility with old files,
+			// it should be removed before alpha
+			if ((attr = element.attribute("colorspace")) == QString::null)
+				return 0;
+			colorspace_int = attr.toInt();
+			kdDebug() << "colorspace_int = " << colorspace_int << endl;
+			if( colorspace_int <= IMAGE_TYPE_UNKNOWN || colorspace_int > IMAGE_TYPE_YUVA)
+				return 0;
+			switch(colorspace_int)
+			{
+					case IMAGE_TYPE_GREYA:
+					case IMAGE_TYPE_GREY:
+						colorspacename = "Grayscale + Alpha";
+						break;
+					case IMAGE_TYPE_RGB:
+					case IMAGE_TYPE_RGBA:
+						colorspacename = "RGBA";
+						break;
+					case IMAGE_TYPE_CMYK:
+					case IMAGE_TYPE_CMYKA:
+						colorspacename = "CMYKA";
+						break;
+					default:
+						return 0;
+			}
+		}
+		img = new KisImage(this, width, height, KisColorSpaceFactory::singleton()->colorSpace(colorspacename), name);
 
 		for (node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
 			if (node.isElement()) {
@@ -959,9 +982,9 @@ bool KisDoc::contains(KisImageSP img) const
 	return qFind(m_images.begin(), m_images.end(), img) != m_images.end();
 }
 
-KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, enumImgType type)
+KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorstrategy)
 {
-	KisImageSP img = new KisImage(this, width, height, type, name);
+	KisImageSP img = new KisImage(this, width, height, colorstrategy, name);
 
 	m_images.push_back(img);
 
@@ -1015,7 +1038,7 @@ void KisDoc::removeImage(const QString& name)
 bool KisDoc::slotNewImage()
 {
 	KisConfig cfg;
-	KisDlgCreateImg dlg(cfg.maxImgWidth(), cfg.defImgWidth(), cfg.maxImgHeight(), cfg.defImgHeight(), cfg.defImgType());
+	KisDlgCreateImg dlg(cfg.maxImgWidth(), cfg.defImgWidth(), cfg.maxImgHeight(), cfg.defImgHeight(), "RGBA");
 
 	if (dlg.exec() == QDialog::Accepted) {
 		QString name;
@@ -1025,7 +1048,7 @@ bool KisDoc::slotNewImage()
 		KisLayerSP layer;
 		KisPainter gc;
 
-		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), dlg.imgType(), nextImageName());
+		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), KisColorSpaceFactory::singleton()->colorSpace(dlg.colorStrategyName()), nextImageName());
 		img -> setResolution(100.0, 100.0); // XXX needs to be added to dialog
 		layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 		gc.begin(layer.data());
@@ -1037,10 +1060,8 @@ bool KisDoc::slotNewImage()
 		cfg.defImgHeight(dlg.imgHeight());
 		cfg.defLayerWidth(dlg.imgWidth());
 		cfg.defLayerHeight(dlg.imgHeight());
-		cfg.defImgType(dlg.imgType());
 		return true;
 	}
-
 	return false;
 }
 
@@ -1065,9 +1086,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 		m_projection = m_images[0];
 
 	if (m_projection) {
-		KisColorSpaceFactory *factory = KisColorSpaceFactory::singleton();
-		Q_ASSERT(factory);
-		colorstate = factory -> create(m_projection -> nativeImgType());
+		colorstate = m_projection -> colorStrategy();
 
 		x1 = CLAMP(rect.x(), 0, m_projection -> width());
 		y1 = CLAMP(rect.y(), 0, m_projection -> height());
@@ -1267,12 +1286,12 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img,
 			    CompositeOp compositeOp,
 			    QUANTUM opacity,
 			    QPoint pos,
-			    enumImgType type)
+			    KisStrategyColorSpaceSP colorstrategy)
 {
 	KisLayerSP layer;
 	if (!contains(img)) return 0;
 	if (img) {
-		layer = new KisLayer(width, height, type, name);
+		layer = new KisLayer(width, height, colorstrategy, name);
 		layer -> setOpacity(opacity);
 		layer -> setCompositeOp(compositeOp);
 		layer -> move(pos);
@@ -1535,7 +1554,7 @@ void KisDoc::clipboardDataChanged()
 
 		if (!qimg.isNull()) {
 			m_clipboard = new KisFloatingSelection(qimg.width(), qimg.height(),
-					qimg.hasAlphaBuffer() ? IMAGE_TYPE_RGBA : IMAGE_TYPE_RGB,
+					KisColorSpaceFactory::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
 					"KisDoc created clipboard selection");
 
 			m_clipboard -> fromImage(qimg);

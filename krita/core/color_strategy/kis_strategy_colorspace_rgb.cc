@@ -49,6 +49,7 @@ KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
 
 KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
 {
+	kdDebug() << "KisStrategyColorSpaceRGB has been destroyed" << endl;
 	delete[] m_buf;
 }
 
@@ -101,6 +102,17 @@ ChannelInfo* KisStrategyColorSpaceRGB::channelsInfo() const
 {
 	return channelInfo;
 }
+
+bool KisStrategyColorSpaceRGB::alpha() const
+{
+	return true;
+}
+
+Q_INT32 KisStrategyColorSpaceRGB::depth() const
+{
+	return MAX_CHANNEL_RGBA;
+}
+
 
 void KisStrategyColorSpaceRGB::render(KisImageSP image, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
 {

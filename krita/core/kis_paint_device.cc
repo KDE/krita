@@ -84,27 +84,28 @@ namespace {
         };
 }
 
-KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
+KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
-        init();
-        m_x = 0;
-        m_y = 0;
-        m_offX = 0;
-        m_offY = 0;
-        m_offW = 0;
-        m_offH = 0;
-        m_tiles = new KisTileMgr(::imgTypeDepth(imgType), imgType, width, height);
-        m_visible = true;
-        m_owner = 0;
-        m_name = name;
-        m_projectionValid = false;
-        m_compositeOp = COMPOSITE_OVER;
+	init();
+	m_x = 0;
+	m_y = 0;
+	m_offX = 0;
+	m_offY = 0;
+	m_offW = 0;
+	m_offH = 0;
+	m_tiles = new KisTileMgr(colorStrategy, width, height);
+	m_visible = true;
+	m_owner = 0;
+	m_name = name;
+	m_projectionValid = false;
+	m_compositeOp = COMPOSITE_OVER;
+	m_colorStrategy = colorStrategy;
 }
 
-KisPaintDevice::KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
+KisPaintDevice::KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
         init();
-        configure(img, width, height, imgType, name, COMPOSITE_OVER);
+        configure(img, width, height, colorStrategy, name, COMPOSITE_OVER);
 }
 
 KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& name)
@@ -193,26 +194,27 @@ void KisPaintDevice::invalidate()
 
 void KisPaintDevice::configure(KisImageSP image,
                                Q_INT32 width, Q_INT32 height,
-                               const enumImgType& imgType,
+                               KisStrategyColorSpaceSP colorStrategy,
                                const QString& name,
                                CompositeOp compositeOp)
 {
-        if (image == 0 || name.isEmpty())
-                return;
+	if (image == 0 || name.isEmpty())
+		return;
 
-        m_x = 0;
-        m_y = 0;
-        m_offX = 0;
-        m_offY = 0;
-        m_offW = 0;
-        m_offH = 0;
-        m_tiles = new KisTileMgr(::imgTypeDepth(imgType), imgType, width, height);
-        m_visible = true;
-        m_owner = image;
-        m_name = name;
-        m_projectionValid = false;
-        kdDebug() << "composite op: " << compositeOp << "\n";
-        m_compositeOp = compositeOp;
+	m_x = 0;
+	m_y = 0;
+	m_offX = 0;
+	m_offY = 0;
+	m_offW = 0;
+	m_offH = 0;
+	m_tiles = new KisTileMgr(colorStrategy, width, height);
+	m_visible = true;
+	m_owner = image;
+	m_name = name;
+	m_projectionValid = false;
+	kdDebug() << "composite op: " << compositeOp << "\n";
+	m_compositeOp = compositeOp;
+	m_colorStrategy = colorStrategy;
 }
 
 void KisPaintDevice::update()
@@ -292,46 +294,6 @@ void KisPaintDevice::maskBounds(QRect *rc)
         rc -> setRect(x1, y1, x2 - x1, y2 - y1);
 }
 
-enumImgType KisPaintDevice::typeWithoutAlpha() const
-{
-	switch (type()) {
-		case IMAGE_TYPE_INDEXEDA:
-			return IMAGE_TYPE_INDEXED;
-		case IMAGE_TYPE_GREYA:
-			return IMAGE_TYPE_GREY;
-		case IMAGE_TYPE_RGBA:
-			return IMAGE_TYPE_RGB;
-		case IMAGE_TYPE_CMYKA:
-			return IMAGE_TYPE_CMYK;
-		case IMAGE_TYPE_LABA:
-			return IMAGE_TYPE_LAB;
-		case IMAGE_TYPE_YUVA:
-			return IMAGE_TYPE_YUV;
-		default:
-			return type();
-	}
-}
-
-enumImgType KisPaintDevice::typeWithAlpha() const
-{
-	switch (type()) {
-		case IMAGE_TYPE_INDEXED:
-			return IMAGE_TYPE_INDEXEDA;
-		case IMAGE_TYPE_GREY:
-			return IMAGE_TYPE_GREYA;
-		case IMAGE_TYPE_RGB:
-			return IMAGE_TYPE_RGBA;
-		case IMAGE_TYPE_CMYK:
-			return IMAGE_TYPE_CMYKA;
-		case IMAGE_TYPE_LAB:
-			return IMAGE_TYPE_LABA;
-		case IMAGE_TYPE_YUV:
-			return IMAGE_TYPE_YUVA;
-		default:
-			return type();
-	}
-}
-
 void KisPaintDevice::init()
 {
         m_visible = false;
@@ -347,8 +309,8 @@ void KisPaintDevice::init()
 
 bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
 {
-        // XXX: this should use the colour strategies!
-
+        // XXX: this should use the colour strategies! klur
+#if 0
         KisTileMgrSP tm = data();
         KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
         QUANTUM *data;
@@ -380,14 +342,15 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
                 kdDebug() << "Not Implemented.\n";
                 break;
         }
-
+#endif
         return true;
 }
 
 bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)
 {
 
-        // XXX: this should use the colour strategies!
+        // XXX: this should use the colour strategies! reklur
+#if 0
         KisTileMgrSP tm = data();
         KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);
         QUANTUM *data;
@@ -421,6 +384,7 @@ bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM op
 
         tm -> releasePixelData(pd);
         return true;
+#endif
 }
 
 void KisPaintDevice::data(KisTileMgrSP mgr)
@@ -440,7 +404,7 @@ void KisPaintDevice::data(KisTileMgrSP mgr)
 void KisPaintDevice::resize(Q_INT32 w, Q_INT32 h)
 {
         KisTileMgrSP old = data();
-        KisTileMgrSP tm = new KisTileMgr(old, old -> depth(), type(), w, h);
+        KisTileMgrSP tm = new KisTileMgr(colorStrategy(), w, h);
         Q_INT32 oldW = width();
         Q_INT32 oldH = height();
         KisPainter gc;
@@ -549,7 +513,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
                 }
         }
 
-        KisTileMgrSP tm = new KisTileMgr(depth(), type(), targetW, targetH);
+        KisTileMgrSP tm = new KisTileMgr(colorStrategy(), targetW, targetH);
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * depth());
         data(tm); // Also sets width and height correctly
 
@@ -566,7 +530,7 @@ void KisPaintDevice::mirrorX()
 
         QUANTUM *line1 = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
         QUANTUM *line2 = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
-        KisTileMgrSP tm = new KisTileMgr(depth(), type(), width(), height());
+        KisTileMgrSP tm = new KisTileMgr(colorStrategy(), width(), height());
 
         int cutoff = static_cast<int>(height()/2);
 
@@ -594,7 +558,7 @@ void KisPaintDevice::mirrorY()
            should too */
         QUANTUM *pixel = new QUANTUM[depth() * sizeof(QUANTUM)]; // the right pixel
         QUANTUM *line = new QUANTUM[width() * depth() * sizeof(QUANTUM)];
-        KisTileMgrSP tm = new KisTileMgr(depth(), type(), width(), height());
+        KisTileMgrSP tm = new KisTileMgr(colorStrategy(), width(), height());
         int cutoff = static_cast<int>(width()/2);
 
         for(int i = 0; i < height(); i++) {
@@ -640,7 +604,7 @@ void KisPaintDevice::offsetBy(Q_INT32 x, Q_INT32 y)
                 y = 0;
 
         KisTileMgrSP old = data();
-        KisTileMgrSP tm = new KisTileMgr(old -> depth(), type(), x + old -> width(), y + old -> height());
+        KisTileMgrSP tm = new KisTileMgr(colorStrategy(), x + old -> width(), y + old -> height());
         KisPixelDataSP dst;
         KisPixelDataSP src;
 
@@ -715,15 +679,14 @@ bool KisPaintDevice::read(KoStore *store)
         return true;
 }
 
-void KisPaintDevice::convertTo(const enumImgType& imgType)
+void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstCS)
 {
-	if( imgType == type() )
+	KisPaintDevice dst(width(), height(), dstCS, "");
+	KisStrategyColorSpaceSP srcCS = colorStrategy();
+	if(srcCS == dstCS)
 	{
 		return;
 	}
-	KisPaintDevice dst(width(), height(), imgType, "");
-	KisStrategyColorSpaceSP srcCS = colorStrategy();
-	KisStrategyColorSpaceSP dstCS = dst.colorStrategy();
 	KisIteratorLinePixel dstLIt = dst.iteratorPixelBegin(0);
 	KisIteratorLinePixel endLIt = dst.iteratorPixelEnd(0);
 	KisIteratorLinePixel srcLIt = this->iteratorPixelBegin(0);

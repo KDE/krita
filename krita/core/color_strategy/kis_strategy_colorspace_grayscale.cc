@@ -50,6 +50,7 @@ KisStrategyColorSpaceGrayscale::KisStrategyColorSpaceGrayscale() :
 
 KisStrategyColorSpaceGrayscale::~KisStrategyColorSpaceGrayscale()
 {
+	kdDebug() << "KisStrategyColorSpaceGrayscale has been destroyed" << endl;
 	delete[] m_buf;
 }
 
@@ -91,6 +92,15 @@ void KisStrategyColorSpaceGrayscale::nativeColor(QRgb rgb, QUANTUM opacity, QUAN
 ChannelInfo* KisStrategyColorSpaceGrayscale::channelsInfo() const
 {
 	return channelInfo;
+}
+bool KisStrategyColorSpaceGrayscale::alpha() const
+{
+	return true;
+}
+
+Q_INT32 KisStrategyColorSpaceGrayscale::depth() const
+{
+	return MAX_CHANNEL_GRAYSCALEA;
 }
 
 void KisStrategyColorSpaceGrayscale::render(KisImageSP image, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)

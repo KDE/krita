@@ -44,7 +44,7 @@ public:
 	KisPluginRegistry();
 	virtual ~KisPluginRegistry();
 
-	void registerColorStrategy(const QString & name, enumImgType imgType, KisStrategyColorSpaceSP colorspace);
+	void registerColorStrategy(const QString & name, KisStrategyColorSpaceSP colorspace);
 	void registerTool(const QString & name, KisToolSP tool);
 
 	static KisPluginRegistry * singleton();

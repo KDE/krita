@@ -166,8 +166,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		emit notify(this, KisImageBuilder_STEP_ERROR, 0);
 		return KisImageBuilder_RESULT_FAILURE;
 	}
-
-	m_img = new KisImage(m_adapter, 0, 0, IMAGE_TYPE_RGBA, m_doc -> nextImageName());
+	m_img = new KisImage(m_adapter, 0, 0, KisColorSpaceFactory::singleton()->colorSpace("RGBA"), m_doc -> nextImageName());
 	emit notify(this, KisImageBuilder_STEP_TILING, 0);
 
 	while ((image = RemoveFirstImageFromList(&images))) {

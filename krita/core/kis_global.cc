@@ -18,6 +18,7 @@
 #include <kdebug.h>
 #include "kis_global.h"
 
+#if 0
 Q_INT32 imgTypeDepth(const enumImgType& type)
 {
 	Q_INT32 n;
@@ -60,4 +61,4 @@ bool imgTypeHasAlpha(const enumImgType& type)
 	Q_ASSERT(type != IMAGE_TYPE_UNKNOWN);
 	return static_cast<Q_INT32>(type) % 2 == 0;
 }
-
+#endif

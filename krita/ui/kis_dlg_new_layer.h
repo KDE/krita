@@ -41,7 +41,7 @@ public:
 		       Q_INT32 defWidth,
 		       Q_INT32 maxHeight, 
 		       Q_INT32 defHeight, 
-		       enumImgType imageType,
+		       const QString colorSpaceName,
 		       const QString & deviceName,
 		       QWidget *parent = 0,
 		       const char *name = 0);
@@ -52,7 +52,7 @@ public:
 	CompositeOp compositeOp() const;
 	Q_INT32 opacity() const;
 	QPoint position() const;
-	enumImgType imageType() const;
+	QString colorStrategyName() const;
 
 private:
 	QSpinBox *m_width;

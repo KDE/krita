@@ -34,25 +34,25 @@ public:
 	Q_INT32 defLayerWidth() const;
 	Q_INT32 maxLayerHeight() const;
 	Q_INT32 defLayerHeight() const;
-	enumImgType defImgType() const;
+// 	enumImgType defImgType() const;
 
 	void defImgWidth(Q_INT32 width);
 	void defImgHeight(Q_INT32 height);
 	void defLayerWidth(Q_INT32 width);
 	void defLayerHeight(Q_INT32 height);
-	void defImgType(enumImgType imgType);
+// 	void defImgType(enumImgType imgType);
 
 private:
 	KisConfig(const KisConfig&);
 	KisConfig& operator=(const KisConfig&);
 
-	QString imgTypeName(enumImgType imgType) const;
-	enumImgType imgType(const QString& name) const;
-	void setupImgTypeNames() const;
+// 	QString imgTypeName(enumImgType imgType) const;
+// 	enumImgType imgType(const QString& name) const;
+// 	void setupImgTypeNames() const;
 
 private:
 	mutable KConfig *m_cfg;
-	static std::map<enumImgType, QString> m_imgTypeName;
+// 	static std::map<enumImgType, QString> m_imgTypeName;
 };
 
 #endif // KIS_CONFIG_H_

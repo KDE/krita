@@ -64,7 +64,7 @@ void KisHistogram::computeHistogramFor(const ChannelInfo & channel)
 
 		KisIteratorLinePixel lineIt = m_layer -> iteratorPixelSelectionBegin(0);
 		KisIteratorLinePixel lastLine = m_layer -> iteratorPixelSelectionEnd(0);
-		Q_INT32 depth = ::imgTypeDepth( m_layer -> typeWithAlpha() );
+		Q_INT32 depth = m_layer -> depth();
 		while( lineIt <= lastLine )
 		{
 			KisIteratorPixel pixelIt = *lineIt;

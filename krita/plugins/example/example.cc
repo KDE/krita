@@ -82,7 +82,7 @@ void KritaExample::slotIteratorsActivated()
 	KisTileCommand* ktc = new KisTileCommand("Invert", (KisPaintDeviceSP)lay ); // Create a command
 	KisIteratorLineQuantum lineIt = lay->iteratorQuantumSelectionBegin(ktc);
 	KisIteratorLineQuantum lastLine = lay->iteratorQuantumSelectionEnd(ktc);
-	Q_INT32 depth = ::imgTypeDepth( lay->typeWithoutAlpha() );
+	Q_INT32 depth = lay->depth() - 1;
 	while( lineIt <= lastLine )
 	{
 		KisIteratorQuantum quantumIt = *lineIt;
@@ -106,7 +106,7 @@ void KritaExample::slotActivated()
 {
 	KisLayerSP lay = m_view->currentImg()->activeLayer();
 	KisTileCommand* ktc = new KisTileCommand("Invert", (KisPaintDeviceSP)lay ); // Create a command
-	int nbchannel = ::imgTypeDepth( lay->typeWithoutAlpha() ); // get the number of channel whithout alpha
+	int nbchannel = lay->depth() - 1; // get the number of channel whithout alpha
 	KisTileMgrSP ktm = lay->data();
 	KisTileSP tile;
 

@@ -33,6 +33,7 @@
 #include <qspinbox.h>
 #include <qdockarea.h>
 #include <qstringlist.h> 
+#include <qstyle.h>
 
 // KDE
 #include <dcopobject.h>
@@ -478,9 +479,10 @@ void KisView::resizeEvent(QResizeEvent *)
 	Q_INT32 rsideW = 0;
 	Q_INT32 lsideW = 0;
 	Q_INT32 ruler = 20;
+	Q_INT32 scrollBarExtent = style().pixelMetric(QStyle::PM_ScrollBarExtent);
 	Q_INT32 tbarOffset = 64;
-	Q_INT32 tbarBtnH = 16;
-	Q_INT32 tbarBtnW = 16;
+	Q_INT32 tbarBtnH = scrollBarExtent;
+	Q_INT32 tbarBtnW = scrollBarExtent;
 	Q_INT32 drawH;
 	Q_INT32 drawW;
 	Q_INT32 docW;
@@ -502,7 +504,7 @@ void KisView::resizeEvent(QResizeEvent *)
 
 	if (drawH < docH) {
 		// Will need vert scrollbar
-		drawW -= tbarBtnW;
+		drawW -= scrollBarExtent;
 	}
 
 	m_vScroll -> setEnabled(docH > drawH);
@@ -523,9 +525,9 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_vScroll -> setValue(0);
 		m_hScroll -> setRange(0, docW - drawW);
 		m_hScroll -> setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset) / 2,
-				height() - tbarBtnH,
+				height() - scrollBarExtent,
 				(width() - rsideW -lsideW - tbarOffset) / 2,
-				tbarBtnH);
+				scrollBarExtent);
 		m_hScroll -> show();
 
  		if (m_tabBar)
@@ -535,7 +537,7 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_hScroll -> hide();
 		m_hScroll -> setValue(0);
 		m_vScroll -> setRange(0, docH - drawH);
-		m_vScroll -> setGeometry(width() - tbarBtnW - rsideW, ruler, tbarBtnW, height() - (ruler + tbarBtnH));
+		m_vScroll -> setGeometry(width() - scrollBarExtent - rsideW, ruler, scrollBarExtent, height() - (ruler + tbarBtnH));
 		m_vScroll -> show();
 
  		if (m_tabBar)
@@ -543,12 +545,12 @@ void KisView::resizeEvent(QResizeEvent *)
 	} else {
 		// we need both scrollbars
 		m_vScroll -> setRange(0, docH - drawH);
-		m_vScroll -> setGeometry(width() - tbarBtnW - rsideW, ruler, tbarBtnW, height() - (ruler + tbarBtnH));
+		m_vScroll -> setGeometry(width() - scrollBarExtent - rsideW, ruler, scrollBarExtent, height() - (ruler + tbarBtnH));
 		m_hScroll -> setRange(0, docW - drawW);
 		m_hScroll -> setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset) / 2,
-				height() - tbarBtnH,
+				height() - scrollBarExtent,
 				(width() - rsideW -lsideW - tbarOffset) / 2,
-				tbarBtnH);
+				scrollBarExtent);
 		m_vScroll -> show();
 		m_hScroll -> show();
 

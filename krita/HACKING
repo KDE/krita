@@ -43,7 +43,9 @@ Getter/setter
 Class naming
 
 	If you use a well-known design pattern, name the class according to the design
-	pattern.
+	pattern. All files should start with 'kis_', all classes with the 'Kis' prefix.
+	In filenames, separate words with an underscore; in classnames use capital letters. 
+	Example: kis_new_class.h/KisNewClass.
 
 Designer
 

@@ -272,10 +272,35 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
                 //draw handles
                 m_handlesRegion = handles(QRect(start, end));
                 //add outline rectangle to the region
-                m_handlesRegion += QRect( start.x(), start.y(), 1, QABS( end.y()-start.y() ) );
-                m_handlesRegion += QRect( end.x(), start.y(), 1, QABS( end.y()-start.y() ) );
-                m_handlesRegion += QRect( start.x(), start.y(), QABS( end.x() - start.x() ), 1 );
-                m_handlesRegion += QRect( start.x(), end.y(), QABS( end.x() - start.x() ), 1 );
+
+                Q_INT32 startx;
+                Q_INT32 starty;
+                Q_INT32 endx;
+                Q_INT32 endy;
+                if(start.x()<=end.x())
+                {
+                        startx=start.x();
+                        endx=end.x();
+                }
+                else
+                {
+                        startx=end.x();
+                        endx=start.x();
+                }
+                if(start.y()<=end.y())
+                {
+                        starty=start.y();
+                        endy=end.y();
+                }
+                else
+                {
+                        starty=end.y();
+                        endy=start.y();
+                }
+                m_handlesRegion += QRect( startx, starty, 1, QABS( endy-starty ) );
+                m_handlesRegion += QRect( endx, starty, 1, QABS( endy-starty ) );
+                m_handlesRegion += QRect( startx, starty, QABS( endx - startx ), 1 );
+                m_handlesRegion += QRect( startx, endy, QABS( endx - startx ), 1 );
                 QMemArray <QRect> rects = m_handlesRegion.rects (); 
                 for (QMemArray <QRect>::ConstIterator it = rects.begin (); 
                         it != rects.end ();
@@ -397,17 +422,31 @@ QRegion KisToolCrop::handles(QRect rect)
         QRegion handlesRegion;
 
         //add handle at the lower right corner
-        handlesRegion += QRect( rect.width() - m_handleSize, rect.height() - m_handleSize, m_handleSize, m_handleSize );
+        handlesRegion += QRect( QABS( rect.width() ) - m_handleSize, QABS( rect.height() ) - m_handleSize, m_handleSize, m_handleSize );
         //add handle at the upper right corner
-        handlesRegion += QRect( rect.width() - m_handleSize, 0, m_handleSize, m_handleSize );
+        handlesRegion += QRect( QABS( rect.width() ) - m_handleSize, 0, m_handleSize, m_handleSize );
         //add rectangle at the lower left corner
-        handlesRegion += QRect( 0, rect.height() - m_handleSize, m_handleSize, m_handleSize );
+        handlesRegion += QRect( 0, QABS( rect.height() ) - m_handleSize, m_handleSize, m_handleSize );
         //add rectangle at the upper left corner
         handlesRegion += QRect( 0, 0, m_handleSize, m_handleSize );
 
         //move the handles to the correct position
-        handlesRegion.translate ( rect.x(), rect.y() );
-
+        if( rect.width() >= 0 && rect.height() >= 0)
+        {
+                handlesRegion.translate ( rect.x(), rect.y() );
+        }
+        else if( rect.width() < 0 && rect.height() >= 0)
+        {
+                handlesRegion.translate ( rect.x() - QABS( rect.width() ), rect.y() );
+        }
+        else if( rect.width() >= 0 && rect.height() < 0)
+        {
+                handlesRegion.translate ( rect.x(), rect.y() - QABS( rect.height() ) );
+        }
+        else if( rect.width() < 0 && rect.height() < 0)
+        {
+                handlesRegion.translate ( rect.x() - QABS( rect.width() ), rect.y() - QABS( rect.height() ) );
+        }
         return handlesRegion;
 }
 
@@ -418,10 +457,30 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         QPoint start = controller -> windowToView(m_startPos);
         QPoint end = controller -> windowToView(m_endPos);
 
-        Q_INT32 startx = start.x();
-        Q_INT32 starty = start.y();
-        Q_INT32 endx = end.x();
-        Q_INT32 endy = end.y();
+        Q_INT32 startx;
+                Q_INT32 starty;
+                Q_INT32 endx;
+                Q_INT32 endy;
+                if(start.x()<=end.x())
+                {
+                        startx=start.x();
+                        endx=end.x();
+                }
+                else
+                {
+                        startx=end.x();
+                        endx=start.x();
+                }
+                if(start.y()<=end.y())
+                {
+                        starty=start.y();
+                        endy=end.y();
+                }
+                else
+                {
+                        starty=end.y();
+                        endy=start.y();
+                }
 
         if ( QRect ( startx, starty, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
         {
@@ -448,17 +507,15 @@ void KisToolCrop::cursor (Q_INT32 handle)
         {
         case (UpperLeft):
         case (LowerRight):
-                kdDebug() << "setCursor(KisCursor::sizeFDiagCursor()) called" << endl;
-                setCursor(KisCursor::sizeFDiagCursor());
+                m_subject -> setCanvasCursor(KisCursor::sizeFDiagCursor());
                 return;
         case (LowerLeft):
         case (UpperRight):
-                kdDebug() << "setCursor(KisCursor::sizeBDiagCursor()) called" << endl;
-                setCursor(KisCursor::sizeBDiagCursor());
+                m_subject -> setCanvasCursor(KisCursor::moveCursor());
                 return;
         }
         kdDebug() << "setCursor(KisCursor::selectCursor()) called" << endl;
-        setCursor(KisCursor::selectCursor());
+        m_subject -> setCanvasCursor(KisCursor::selectCursor());
         return;
 }
 

@@ -814,7 +814,7 @@ void KisView::paintView(const KisRect& r)
 				if (zoom() < 1.0 || zoom() > 1.0) {
 					gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
 				}
-				gc.translate((horzValue()) / zoom(), (vertValue()) / zoom());
+				gc.translate((-horzValue()) / zoom(), (-vertValue()) / zoom());
 
 				m_doc -> setCurrentImage(img);
 				m_doc -> paintContent(gc, wr, monitorProfile());

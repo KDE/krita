@@ -68,13 +68,13 @@ float FormCMYBSliders::getYellowValue()
 
 float FormCMYBSliders::getCyanValue()
 {
-    sliderCyan->value() / precision;
+    return sliderCyan->value() / precision;
 }
 
 
 float FormCMYBSliders::getBlackValue()
 {
-    sliderBlack->value() / precision;
+    return sliderBlack->value() / precision;
 }
 
 void FormCMYBSliders::init()

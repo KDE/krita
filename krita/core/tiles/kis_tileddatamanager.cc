@@ -338,15 +338,15 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 				curTile = curTile->getNext();
 			}
 
-			// Remove it from our hashtable
-			if(preTile)
-				preTile->setNext(curTile->getNext());
-			else
-				m_hashTable[i]= 0;
-
-			// And put it in the redo hashtable of the memento
 			if(curTile)
 			{
+				// Remove it from our hashtable
+				if(preTile)
+					preTile->setNext(curTile->getNext());
+				else
+					m_hashTable[i]= curTile->getNext();
+
+				// And put it in the redo hashtable of the memento
 				curTile->setNext(memento->m_redoHashTable[i]);
 				memento->m_redoHashTable[i] = curTile;
 			}
@@ -393,14 +393,17 @@ void KisTiledDataManager::rollforward(KisMemento *memento)
 				curTile = curTile->getNext();
 			}
 
-			// Remove it from our hashtable
-			if(preTile)
-				preTile->setNext(curTile->getNext());
-			else
-				m_hashTable[i]= 0;
+			if (curTile)
+			{
+				// Remove it from our hashtable
+				if(preTile)
+					preTile->setNext(curTile->getNext());
+				else
+					m_hashTable[i]= curTile->getNext();
 
-			// And delete it (it's equal to the one stored in the memento's undo)
-			delete curTile;
+				// And delete it (it's equal to the one stored in the memento's undo)
+				delete curTile;
+			}
 
 			// Put a copy of the memento tile into our hashtable
 			curTile = new KisTile(*tile);
@@ -432,7 +435,7 @@ void KisTiledDataManager::rollforward(KisMemento *memento)
 		if(preTile)
 			preTile->setNext(curTile->getNext());
 		else
-			m_hashTable[tileHash] = 0;
+			m_hashTable[tileHash] = curTile->getNext();
 
 		// And delete it (it's equal to the one stored in the memento's undo)
 		delete curTile;

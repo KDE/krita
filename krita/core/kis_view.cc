@@ -1778,7 +1778,6 @@ void KisView::mergeLinkedLayers()
 */
 void KisView::preferences()
 {
-
         PreferencesDialog::editPreferences();
 }
 

@@ -17,11 +17,15 @@
  */
 
 #include <qwidget.h>
+
 #include <kdebug.h>
+
+
+#include "kis_config.h"
+#include "kis_cursor.h"
 #include "kis_canvas_subject.h"
 #include "kis_tool_controller.h"
 #include "kis_tool_non_paint.h"
-#include "kis_tool_non_paint.moc"
 
 KisToolNonPaint::KisToolNonPaint()
 {
@@ -100,7 +104,22 @@ void KisToolNonPaint::cursor(QWidget *w) const
 
 void KisToolNonPaint::setCursor(const QCursor& cursor)
 {
-	m_cursor = cursor;
+        KisConfig cfg;
+
+        switch (cfg.defCursorStyle()) {
+        case CURSOR_STYLE_TOOLICON:
+                m_cursor = cursor;
+                break;
+        case CURSOR_STYLE_CROSSHAIR:
+                m_cursor = KisCursor::crossCursor();
+                break;
+        case CURSOR_STYLE_POINTER:
+                m_cursor = KisCursor::arrowCursor();
+                break;
+        default:
+                m_cursor = KisCursor::crossCursor();
+        }
+
 }
 
 void KisToolNonPaint::activate()
@@ -113,3 +132,4 @@ void KisToolNonPaint::activate()
 	}
 }
 
+#include "kis_tool_non_paint.moc"

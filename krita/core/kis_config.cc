@@ -16,9 +16,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <limits.h>
-#include <map>
+
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
+
 #include "kis_global.h"
 #include "kis_config.h"
 
@@ -27,21 +29,16 @@ namespace {
 	const Q_INT32 IMG_HEIGHT_MAX = USHRT_MAX;
 	const Q_INT32 IMG_DEFAULT_WIDTH = 512;
 	const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
-// 	const enumImgType IMG_DEFAULT_TYPE = IMAGE_TYPE_RGBA;
+	const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
 }
-
-// std::map<enumImgType, QString> KisConfig::m_imgTypeName;
 
 KisConfig::KisConfig()
 {
 	KApplication *app = KApplication::kApplication();
 
 	Q_ASSERT(app);
-	m_cfg = app -> sessionConfig();
+	m_cfg = app -> config();
 
-/*	if (m_imgTypeName.empty()) {
-		setupImgTypeNames();
-	}*/
 }
 
 KisConfig::~KisConfig()
@@ -89,16 +86,6 @@ Q_INT32 KisConfig::defLayerHeight() const
 	return m_cfg -> readNumEntry("layerHeightDef", IMG_DEFAULT_HEIGHT);
 }
 
-// enumImgType KisConfig::defImgType() const
-// {
-// 	return imgType(m_cfg -> readEntry("imgTypeDef", imgTypeName(IMG_DEFAULT_TYPE)));
-// }
-
-// void KisConfig::defImgType(enumImgType type)
-// {
-// 	m_cfg -> writeEntry("imgTypeDef", imgTypeName(type));
-// }
-
 void KisConfig::defImgWidth(Q_INT32 width)
 {
 	m_cfg -> writeEntry("imgWidthDef", width);
@@ -119,49 +106,14 @@ void KisConfig::defLayerHeight(Q_INT32 height)
 	m_cfg -> writeEntry("layerHeightDef", height);
 }
 
-#if 0
-void KisConfig::setupImgTypeNames() const
+enumCursorStyle KisConfig::defCursorStyle() const
 {
-	m_imgTypeName[IMAGE_TYPE_UNKNOWN] = "Unknown";
-	m_imgTypeName[IMAGE_TYPE_INDEXED] = "Indexed";
-	m_imgTypeName[IMAGE_TYPE_INDEXEDA] = "IndexedA";
-	m_imgTypeName[IMAGE_TYPE_GREY] = "GreyScale";
-	m_imgTypeName[IMAGE_TYPE_GREYA] = "GreyScaleA";
-	m_imgTypeName[IMAGE_TYPE_RGB] = "RGB";
-	m_imgTypeName[IMAGE_TYPE_RGBA] = "RGBA";
-	m_imgTypeName[IMAGE_TYPE_CMYK] = "CMYK";
-	m_imgTypeName[IMAGE_TYPE_CMYKA] = "CMYKA";
-	m_imgTypeName[IMAGE_TYPE_LAB] = "LAB";
-	m_imgTypeName[IMAGE_TYPE_LABA] = "LABA";
-	m_imgTypeName[IMAGE_TYPE_YUV] = "YUV";
-	m_imgTypeName[IMAGE_TYPE_YUVA] = "YUVA";
+	kdDebug() << "Get cursor: " << m_cfg -> readNumEntry("cursorStyleDef", DEFAULT_CURSOR_STYLE) << "\n";
+	return (enumCursorStyle) m_cfg -> readNumEntry("cursorStyleDef", DEFAULT_CURSOR_STYLE);
 }
 
-QString KisConfig::imgTypeName(enumImgType imgType) const
+void KisConfig::defCursorStyle(enumCursorStyle style)
 {
-	QString name = "Unknown";
-	std::map<enumImgType, QString>::const_iterator it = m_imgTypeName.find(imgType);
-
-	if (it != m_imgTypeName.end()) {
-		name = (*it).second;
-	}
-
-	return name;
+	kdDebug() << "Set cursor: " << style  << "\n";
+	m_cfg -> writeEntry("cursorStyleDef", style);
 }
-
-enumImgType KisConfig::imgType(const QString& name) const
-{
-	enumImgType type = IMAGE_TYPE_UNKNOWN;
-	std::map<enumImgType, QString>::const_iterator it;
-
-	for (it = m_imgTypeName.begin(); it != m_imgTypeName.end(); it++) {
-		if ((*it).second == name) {
-			type = (*it).first;
-			break;
-		}
-	}
-
-	return type;
-}
-#endif
-

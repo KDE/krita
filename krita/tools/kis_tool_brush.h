@@ -32,7 +32,7 @@ class KisToolBrush : public KisToolFreeHand {
 public:
 	KisToolBrush();
 	virtual ~KisToolBrush();
-
+	virtual void update(KisCanvasSubject *subject);
 	virtual void setup(KActionCollection *collection);
 
 protected:

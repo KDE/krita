@@ -89,6 +89,13 @@ enum enumInputDevice {
 	INPUT_DEVICE_PUCK	// Wacom puck
 };
 
+enum enumCursorStyle {
+	CURSOR_STYLE_TOOLICON,
+	CURSOR_STYLE_CROSSHAIR,
+	CURSOR_STYLE_POINTER,
+	CURSOR_STYLE_OUTLINE
+};
+
 /*
  * Most wacom pads have 512 levels of pressure; Qt only supports 256, and even 
  * this is downscaled to 127 levels because the line would be too jittery, and
@@ -148,7 +155,7 @@ enum CompositeOp {
 #if 0
 enum enumImgType {
 #endif
-// The following enum is keep to allow the loading of old document in KisDoc::loadImage
+// The following enum is keep to allow the loading of old documents in KisDoc::loadImage
 enum enumImgTypeDeprecated {
 	IMAGE_TYPE_UNKNOWN,
 	IMAGE_TYPE_INDEXED,
@@ -166,6 +173,8 @@ enum enumImgTypeDeprecated {
 	IMAGE_TYPE_WET,
 	IMAGE_TYPE_SELECTION_MASK
 };
+
+
 
 enum enumPaintOp {
 	PAINTOP_BRUSH,

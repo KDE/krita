@@ -28,32 +28,30 @@ public:
 
 	Q_INT32 maxImgWidth() const;
 	Q_INT32 defImgWidth() const;
+	void defImgWidth(Q_INT32 width);
+
 	Q_INT32 maxImgHeight() const;
 	Q_INT32 defImgHeight() const;
+	void defImgHeight(Q_INT32 height);
+
 	Q_INT32 maxLayerWidth() const;
 	Q_INT32 defLayerWidth() const;
+	void defLayerWidth(Q_INT32 width);
+
 	Q_INT32 maxLayerHeight() const;
 	Q_INT32 defLayerHeight() const;
-// 	enumImgType defImgType() const;
-
-	void defImgWidth(Q_INT32 width);
-	void defImgHeight(Q_INT32 height);
-	void defLayerWidth(Q_INT32 width);
 	void defLayerHeight(Q_INT32 height);
-// 	void defImgType(enumImgType imgType);
+
+	enumCursorStyle defCursorStyle() const;
+	void defCursorStyle(enumCursorStyle style);
+	
 
 private:
 	KisConfig(const KisConfig&);
 	KisConfig& operator=(const KisConfig&);
 
-// 	QString imgTypeName(enumImgType imgType) const;
-// 	enumImgType imgType(const QString& name) const;
-// 	void setupImgTypeNames() const;
-
 private:
 	mutable KConfig *m_cfg;
-// 	static std::map<enumImgType, QString> m_imgTypeName;
 };
 
 #endif // KIS_CONFIG_H_
-

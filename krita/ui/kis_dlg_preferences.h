@@ -25,6 +25,8 @@
 
 #include <kdialogbase.h>
 
+#include "kis_global.h"
+
 class QLineEdit;
 class QCheckBox;
 class KURLRequester;
@@ -42,10 +44,12 @@ public:
 	GeneralTab( QWidget *_parent = 0, const char *_name = 0 );
 
 	bool saveOnExit();
+	enumCursorStyle cursorStyle();
 
 private:
 
 	QCheckBox *m_saveOnExit;
+	QComboBox *m_cmbCursorShape;
 };
 
 /**
@@ -98,7 +102,7 @@ protected:
 	PreferencesDialog( QWidget *_parent = 0, const char *_name = 0 );
 	~PreferencesDialog();
 
-private:
+protected:
 
 	GeneralTab     *m_general;
 	DirectoriesTab *m_directories;

@@ -48,6 +48,13 @@ KisToolBrush::~KisToolBrush()
 {
 }
 
+void KisToolBrush::update(KisCanvasSubject *subject)
+{
+	super::update(subject);
+	setCursor(KisCursor::brushCursor());
+}
+
+
 void KisToolBrush::paintAt(const KisPoint &pos,
 			   const double pressure,
 			   const double xTilt,

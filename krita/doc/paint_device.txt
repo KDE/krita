@@ -94,27 +94,3 @@ sizeof(QUANTUM)
 
         KisTileMgrSP tm = new KisTileMgr(depth, width, height);
 	tm -> writePixelData(x1, y1, x2, y2, newData, stride);
-
-** Caveat
-
-The writePixelData and readPixelData methods I present here are
-actually private. Or should be. You should create a KisPixelData
-structure and use that, but that's a lot more code:
-
-	KisPixelDataSP pd = new KisPixelData;
-	pd -> mgr = 0;
-	pd -> tile = 0;
-	pd -> mode = TILEMODE_READ;
-	pd -> x1 = x;
-	pd -> x2 = x + width - 1;
-	pd -> y1 = y;
-	pd -> y2 = y + height - 1;
-	pd -> width = pd -> x2 - pd -> x1 + 1;
-	pd -> height = pd -> y2 - pd -> y1 + 1;
-	pd -> depth = depth
-	pd -> stride = pd -> depth * pd -> width;
-	pd -> owner = false;
-	pd -> data = buf;
-
-	tilemgr -> readPixelData(pd);
-

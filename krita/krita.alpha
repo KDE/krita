@@ -1,0 +1,139 @@
+I still think a decent alpha is quite a long way away, but it can't
+hurt to think about what we need to do before we're there -- and who
+knows, maybe we're closer than I thought. I'm not sure how we can go
+about releasing an alpha separately from KOffice, but no doubt we'll
+be able to find a formula.
+
+Anyway... This is the feature set I think we minimally need in order
+to be able to call Krita an alpha.
+
+UI
+	- Session management (restore state of dockers, brushes, 
+	  colours, etc.)
+	- Brushes, patterns and gradients should always be presented
+	  in the same order.
+	- Menu options to be consolidated and ordered.
+	- Dialogs ui-fied.
+	- Preferences dialog (needed to set max undo levels)
+	- Krita now considers creating the image upon startup an undoable
+	  step; that needs to change, because if you start Krita and
+	  close it immediately, you don't want to be asked whether
+	  you want to save the empty image.
+	- Fix the scrollbars
+	- Investigate the issues with zooming; compare Krita zooming
+	  strategies to KOffice zooming.
+
+RESOURCES
+	
+	- Gradients (either Gimp gradients, which was planned, or
+	  something better. Should use the ResourceMediator.)
+	- Remove the code duplication in KisResourceMediator with 
+	  something a little cleverer.
+
+TOOLS
+
+	- subpixel positioning for the Brush tool
+	- a Pen tool that does what the Brush tool does now
+	- Clone/Stamp tool
+	- Airbrush
+	- Shapes (Ellipses, Rectangles -- we already have a Line tool)
+	- Selection tools (freehand, circle, fuzzy)
+	- Smudge/convolve tool (perhaps subsume under a filter tool that
+	  can use any filter definition to work like a tool, see Perico
+	  for an example)
+	- Text tool
+	- Support more than one active tool.
+        - fill (using colour, gradient, pattern)
+ 
+IMAGE
+
+	- transform (code is present, but doesn't work, and I don't
+	  know why. What I do know is that it's horribly bit-depths
+	  and colour-strategy dependent because it's copied from
+	  QPixmap.)
+	- smoothscale (to be copied from QImage).
+	- cut & paste from clipboard.
+	
+CORE
+
+	- Layers should render onto a generic RGBA buffer before being
+	  composited for display.
+	- Timer-based redisplay (no explicit notify necessary anymore. 
+	  The timer based redisplay should go in KisImage. KisPainter
+	  should pass the dirty rects to KisImage, KisImage should
+	  start the redisplay for the normalized set of dirty rects
+	  every timer event; when it takes to long, cancel the
+	  redisplay -- this is also in some measure how the Gimp
+	  works).
+	- Fix the CMYK colour strategy (important, because that will
+	  force us to never hardcode for RGBA).
+	- Extend painter with painting/filling with patterns and
+	  gradients.
+	- Extend the composite ops with support for opacity.
+	- Support for channels and masks
+	- Audit the core code for 8-bit and rgba assumptions and
+	  flag those (or fix, if easy).
+	- Remove abort()s.
+	
+PLUGINS
+	- A blur/sharpen plugin is pretty basic, and would help define 
+	  the plugin interface more accurately.
+	- A red-eye plugin would give us instant happy users.
+
+
+CODE
+	- Remove all unused code so we have a clean slate to continue
+	  with.
+
+Notes:
+
+	I think we can stay with 8 bits for the alpha, but we should
+	strive for 8, 16 and 32 bits per channel for the 1.0 release. 
+	This may well need some redesign.
+	 
+	An alpha can be buggy as hell, as far as I am concerned, but
+	the UI basics need to work, because without a working UI,
+	nobody will take the trouble of testing. And for a decent
+	test, the basic features need to be there, so we can see
+	how they interact, and so people can see what it's going
+	to be like.
+
+	KOffice is moving towards the OASIS file format. However, from
+	a cursory inspection of the OASIS documents, it doesn't define
+	a raster graphics file format. XCF can support everything
+	Krita can do right now. I'm not sure whether it can support
+	images with a channel depth > 8 bit, but it's no doubt
+	extensible. As soon as we have more advanced capabilities,
+	like images that support the wet & sticky model, we will have to 
+	move beyond XCF. So I propose to retain, for the moment, our
+	own file format. It's not terribly urgent until we have something
+	that's nearly usable anyway.
+
+Long term plans:
+
+	If we can get these features working relatively bug-free, on
+	images with 8, 16 and 32 bits channel depth, I think we have
+	enough for a 1.0 release as part of KOffice.
+
+	After that, I really want to start stretching the flexibility
+	of Krita's design. There are all kinds of cool things done,
+	like Salesin's research on watercolour or the Dab project, and
+	I think that there's an opportunity to make Krita into
+	something that's unique, instead of being to the Gimp what
+	Paintshop is to Photoshop.
+
+Conclusion:
+
+	It may look like a laundry list we'll never get washed, but
+	if you look at what's been done since October, I'm not so sure
+	we couldn't have an alpha in September.
+
+	On that tack: I wouldn't mind hosting a hack-weekend or
+	perhaps a hack-midweek for Krita developers at my place in
+	Deventer, the Netherlands, Europe, this summer. If people
+	don't mind sleeping on an inflatable mattress, I can easily
+	feed and house the entire current Krita team. I can probably
+	provide half a dozen computers that run KDE and are networked,
+	and a long table to put them on and work at. And history shows
+	that a hackathon now and then can really propel a project
+	forward.

@@ -100,6 +100,7 @@ public:
         
         void plug(QWidget *w);
         void unplug(QWidget *w);
+        void showPage(QWidget *w);
 private:
         QTabWidget *m_tabwidget;
 };

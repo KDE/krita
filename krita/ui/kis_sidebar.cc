@@ -172,6 +172,11 @@ void DockFrameDocker::unplug(QWidget *w)
         m_tabwidget -> removePage(w);
 }
 
+void DockFrameDocker::showPage(QWidget *w)
+{
+        m_tabwidget-> showPage(w);
+}
+
 ColorDocker::ColorDocker( QWidget* parent, const char* name ) : BaseDocker( parent, name )
 {
         kdDebug() << "ColorDocker::ColorDocker" << endl;

@@ -604,10 +604,13 @@ void KisView::setCurrentTool(KisTool *tool)
 		m_tool = tool;
 		m_tool -> cursor(m_canvas);
 
-		if(tool -> createoptionWidget(m_toolcontroldocker))
+		if(tool -> createoptionWidget(m_toolcontroldocker)){
 			m_toolcontroldocker -> plug(tool -> optionWidget());
+			m_toolcontroldocker -> showPage(tool -> optionWidget());
+		}
 		notify();
-	} else {
+	}
+	else{
 		m_tool = 0;
 		m_canvas -> setCursor(KisCursor::arrowCursor());
 	}

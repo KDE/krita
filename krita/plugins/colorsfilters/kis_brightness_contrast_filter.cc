@@ -22,6 +22,7 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
+#include "tiles/kis_iterator.h"
 
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration(Q_INT32 nbrightness, Q_INT32 ncontrast) :
 	m_brightness(nbrightness),
@@ -57,30 +58,22 @@ KisFilterConfiguration* KisBrightnessContrastFilter::configuration(KisFilterConf
 void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
 {
 	KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
-	KisIteratorLinePixel srcLineIt = src->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel dstLineIt = dst->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel lastLine = src->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
+
+	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 	Q_INT32 depth = src->depth() - 1;
 	double contrast = (100.0 + configBC->contrast()) / 100;
 	contrast *= contrast;
-	while( srcLineIt <= lastLine )
+	while( ! srcIt.isDone()  )
 	{
-		KisIteratorPixel srcPixelIt = *srcLineIt;
-		KisIteratorPixel dstPixelIt = *dstLineIt;
-		KisIteratorPixel lastPixel = srcLineIt.end();
-		while( srcPixelIt <= lastPixel )
+		for( int i = 0; i < depth; i++)
 		{
-			for( int i = 0; i < depth; i++)
-			{
 			// change the brightness
-				int nd = srcPixelIt.oldValue()[ i ] + configBC->brightness();
-				nd = (int)(((nd - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2);
-				dstPixelIt[i] = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
-			}
-			++srcPixelIt;
-			++dstPixelIt;
+			int nd = srcIt.oldValue()[ i ] + configBC->brightness();
+			nd = (int)(((nd - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2);
+			dstIt[i] = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
 		}
-		++srcLineIt;
-		++dstLineIt;
+		srcIt++;
+		dstIt++;
 	}
 }

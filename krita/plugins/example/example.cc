@@ -82,25 +82,16 @@ KisFilterInvert::KisFilterInvert(KisView * view) : KisFilter(name(), view)
 
 void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect, KisTileCommand* ktc)
 {
-	KisIteratorLinePixel lineIt = src->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel dstLineIt = dst->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel lastLine = src->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
+	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 	Q_INT32 depth = src->depth() - 1;
-	while( lineIt <= lastLine )
+	while( ! srcIt.isDone() )
 	{
-		KisIteratorPixel quantumIt = lineIt.begin();
-		KisIteratorPixel dstQuantumIt = *dstLineIt;
-		KisIteratorPixel lastQuantum = lineIt.end();
-		while( quantumIt <= lastQuantum )
+		for( int i = 0; i < depth; i++)
 		{
-			for( int i = 0; i < depth; i++)
-			{
-				dstQuantumIt[i] = QUANTUM_MAX - quantumIt.oldValue()[i];
-			}
-			++quantumIt;
-			++dstQuantumIt;
+			dstIt[i] = QUANTUM_MAX - srcIt.oldValue()[i];
 		}
-		++lineIt;
-		++dstLineIt;
+		srcIt++;
+		dstIt++;
 	}
 }

@@ -95,32 +95,21 @@ KisColorAdjustmentFilter::KisColorAdjustmentFilter(KisView * view) :
 void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
 {
 	KisPerChannelFilterConfiguration* configPC = (KisPerChannelFilterConfiguration*) config;
-	KisIteratorLinePixel lineIt = src->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel dstLineIt = dst->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel lastLine = src->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
+	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
 	Q_INT32 depth = src->depth() - 1;
-	while( lineIt <= lastLine )
+	while( ! rectIt.isDone() )
 	{
-		KisIteratorPixel pixelIt = *lineIt;
-		KisIteratorPixel dstPixelIt = *dstLineIt;
-		KisIteratorPixel lastPixel = lineIt.end();
-		while( pixelIt <= lastPixel )
+		KisPixelRO data = rectIt.oldValue();
+		KisPixel dstData = rectIt;
+		for( int i = 0; i < depth; i++)
 		{
-			KisPixelRO data = pixelIt.oldValue();
-			KisPixel dstData = dstPixelIt;
-			for( int i = 0; i < depth; i++)
-			{
-				KisQuantum d = pixelIt[ configPC->channel( i ) ];
-				Q_INT32 s = configPC->valueFor( i );
-				if( d < -s  ) dstData[ configPC->channel( i ) ] = 0;
-				else if( d > QUANTUM_MAX - s) dstData[ configPC->channel( i ) ] = QUANTUM_MAX;
-				else dstData[ configPC->channel( i ) ] = d + s;
-			}
-			++pixelIt;
-			++dstPixelIt;
+			KisQuantum d = rectIt[ configPC->channel( i ) ];
+			Q_INT32 s = configPC->valueFor( i );
+			if( d < -s  ) dstData[ configPC->channel( i ) ] = 0;
+			else if( d > QUANTUM_MAX - s) dstData[ configPC->channel( i ) ] = QUANTUM_MAX;
+			else dstData[ configPC->channel( i ) ] = d + s;
 		}
-		++lineIt;
-		++dstLineIt;
+		rectIt++;
 	}
 }
 
@@ -135,29 +124,17 @@ KisGammaCorrectionFilter::KisGammaCorrectionFilter(KisView * view)
 void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
 {
 	KisPerChannelFilterConfiguration* configPC = (KisPerChannelFilterConfiguration*) config;
-	KisIteratorLinePixel lineIt = src->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel dstLineIt = dst->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel lastLine = src->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
+	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
 	Q_INT32 depth = src->depth() - 1;
-	while( lineIt <= lastLine )
+	while( ! rectIt.isDone() )
 	{
-		KisIteratorPixel pixelIt = *lineIt;
-		KisIteratorPixel dstPixelIt = *dstLineIt;
-		KisIteratorPixel lastPixel = lineIt.end();
-		while( pixelIt <= lastPixel )
+		for( int i = 0; i < depth; i++)
 		{
-			KisPixel data = pixelIt;
-			for( int i = 0; i < depth; i++)
-			{
-				QUANTUM sd = pixelIt.oldValue()[ configPC->channel( i ) ];
-				KisQuantum dd = dstPixelIt[ configPC->channel( i ) ];
-				dd = (QUANTUM)( QUANTUM_MAX * pow( ((float)sd)/QUANTUM_MAX, 1.0 / configPC->valueFor( i ) ) );
-			}
-			++pixelIt;
-			++dstPixelIt;
+			QUANTUM sd = rectIt.oldValue()[ configPC->channel( i ) ];
+			KisQuantum dd = rectIt[ configPC->channel( i ) ];
+			dd = (QUANTUM)( QUANTUM_MAX * pow( ((float)sd)/QUANTUM_MAX, 1.0 / configPC->valueFor( i ) ) );
 		}
-		++lineIt;
-		++dstLineIt;
+		rectIt++;
 	}
 }
 
@@ -170,9 +147,7 @@ KisAutoContrast::KisAutoContrast(KisView* view) : KisFilter(name(), view)
 }
 void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* , const QRect& rect, KisTileCommand* ktc)
 {
-
-	KisIteratorLinePixel lineIt = src -> iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel lastLine = src -> iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
+	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), false);
 
 	// Number of channels in this device except alpha
  	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
@@ -184,26 +159,20 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 // 		kdDebug() << histo[i] << endl;
 	}
 	Q_INT32 maxvalue = 0;
-	while( lineIt <= lastLine )
+	while( ! rectIt.isDone() )
 	{
-		KisIteratorPixel pixelIt = *lineIt;
-		KisIteratorPixel lastPixel = lineIt.end();
-		while( pixelIt <= lastPixel )
-		{
-			KisPixel data = pixelIt;
-			Q_INT32 lightness = ( QMAX(QMAX(data[0], data[1]), data[2])
-					+ QMIN(QMIN(data[0], data[1]), data[2]) ) / 2; 
-			histo[ lightness ] ++;
+		KisPixel data = rectIt;
+		Q_INT32 lightness = ( QMAX(QMAX(data[0], data[1]), data[2])
+				+ QMIN(QMIN(data[0], data[1]), data[2]) ) / 2; 
+		histo[ lightness ] ++;
 // 			kdDebug() << " histo[ " << lightness << " ] = " << histo[ lightness ] << " " << maxvalue << endl;
-			if( histo[ lightness ] > maxvalue )
-			{
-// 				kdDebug() << lightness << endl;
-// 				kdDebug() << " change max value from " << maxvalue << " to " << histo[ lightness ] << endl;
-				maxvalue = histo[ lightness ];
-			}
-			++pixelIt;
+		if( histo[ lightness ] > maxvalue )
+		{
+// 			kdDebug() << lightness << endl;
+// 			kdDebug() << " change max value from " << maxvalue << " to " << histo[ lightness ] << endl;
+			maxvalue = histo[ lightness ];
 		}
-		++lineIt;
+		rectIt++;
 	}
 // 	kdDebug() << maxvalue << endl;
 	Q_INT32 start;
@@ -214,30 +183,19 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	for( end = QUANTUM_MAX; histo[end] < maxvalue * 0.1; end--) { /*kdDebug() << end << endl;*/ }
 	double factor = QUANTUM_MAX / (double) (end - start);
 // 	kdDebug() << "end=" << end << " start=" << start << " factor=" << factor << endl;
-	KisIteratorLinePixel lineIt2 = src->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel dstLineIt = dst->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	while( lineIt2 <= lastLine )
+	rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
+	while( ! rectIt.isDone() )
 	{
-		KisIteratorPixel pixelIt = *lineIt2;
-		KisIteratorPixel dstPixelIt = *dstLineIt;
-		KisIteratorPixel lastPixel = lineIt2.end();
-		while( pixelIt <= lastPixel )
-		{
-			KisPixel srcData = pixelIt;
-			KisPixel dstData = dstPixelIt;
+		KisPixel srcData = rectIt;
+		KisPixel dstData = rectIt;
 
-			// Iterate through all channels except alpha
-			// XXX: Check for off-by-one errors
-			for (int i = 0; i < depth; ++i) {
-				dstData[i] = (QUANTUM) QMIN ( QUANTUM_MAX, QMAX(0, (srcData[i] - start) * factor) );
-			}
-			++dstPixelIt;
-			++pixelIt;
+		// Iterate through all channels except alpha
+		// XXX: Check for off-by-one errors
+		for (int i = 0; i < depth; ++i) {
+			dstData[i] = (QUANTUM) QMIN ( QUANTUM_MAX, QMAX(0, (srcData[i] - start) * factor) );
 		}
-		++dstLineIt;
-		++lineIt2;
+		rectIt++;
 	}
-
 }
 
 
@@ -250,33 +208,25 @@ KisDesaturateFilter::KisDesaturateFilter(KisView * view)
 
 void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect,KisTileCommand* ktc)
 {
+
 	if(colorStrategy()->name() != "RGBA")
 		return;
-	KisIteratorLinePixel lineIt = src->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel dstLineIt = dst->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel lastLine = src->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
+		
+	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
 // 	Q_INT32 depth = device->depth() - 1;
-	while( lineIt <= lastLine )
+	while( ! rectIt.isDone() )
 	{
-		KisIteratorPixel pixelIt = *lineIt;
-		KisIteratorPixel dstPixelIt = *dstLineIt;
-		KisIteratorPixel lastPixel = lineIt.end();
-		while( pixelIt <= lastPixel )
-		{
-			KisPixelRO srcData = pixelIt.oldValue();
-			KisPixel dstData = dstPixelIt;
-			/* I thought of using the HSV model, but GIMP seems to use
-			HSL for desaturating. Better use the gimp model for now 
-					(HSV produces a lighter image than HSL) */
-			Q_INT32 lightness = ( QMAX(QMAX(srcData[0], srcData[1]), srcData[2])
-					+ QMIN(QMIN(srcData[0], srcData[1]), srcData[2]) ) / 2; 
-			dstPixelIt[0] = lightness;
-			dstPixelIt[1] = lightness;
-			dstPixelIt[2] = lightness;
-			++pixelIt;
-			++dstPixelIt;
-		}
-		++lineIt;
-		++dstLineIt;
+		KisPixelRO srcData = rectIt.oldValue();
+		KisPixel dstData = KisPixel((Q_UINT8 *)rectIt);
+		/* I thought of using the HSV model, but GIMP seems to use
+		HSL for desaturating. Better use the gimp model for now 
+				(HSV produces a lighter image than HSL) */
+		Q_INT32 lightness = ( QMAX(QMAX(srcData[0], srcData[1]), srcData[2])
+				+ QMIN(QMIN(srcData[0], srcData[1]), srcData[2]) ) / 2; 
+		rectIt[0] = lightness;
+		rectIt[1] = lightness;
+		rectIt[2] = lightness;
+		
+		rectIt++;
 	}
 }

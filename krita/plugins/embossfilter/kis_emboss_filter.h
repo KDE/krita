@@ -26,28 +26,28 @@
 
 class KisEmbossFilterConfiguration : public KisFilterConfiguration 
 {
-	public:
-                KisEmbossFilterConfiguration(Q_UINT32 depth) : m_depth(depth) {};
-	public:
-                inline Q_UINT32 depth() { return m_depth; };
-        private:
-                Q_UINT32 m_depth;
+public:
+	KisEmbossFilterConfiguration(Q_UINT32 depth) : m_depth(depth) {};
+public:
+	inline Q_UINT32 depth() { return m_depth; };
+private:
+	Q_UINT32 m_depth;
 };
 
 class KisEmbossFilter : public KisFilter 
 {
-        public:
-                KisEmbossFilter(KisView * view);
-        public:
-	       virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
-                static inline QString name() { return "Emboss"; };
-        public:
-		virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-		virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
-        private:
-                void Emboss(QUANTUM* data, int Width, int Height, int d);
-                inline int Lim_Max (int Now, int Up, int Max);
-                inline uchar LimitValues (int ColorValue);
+public:
+	KisEmbossFilter(KisView * view);
+public:
+	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
+	static inline QString name() { return "Emboss"; };
+public:
+	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
+	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+private:
+	void Emboss(QUANTUM* data, int Width, int Height, int d);
+	inline int Lim_Max (int Now, int Up, int Max);
+	inline uchar LimitValues (int ColorValue);
 };
 
 #endif

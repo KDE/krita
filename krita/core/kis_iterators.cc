@@ -17,24 +17,27 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kdebug.h>
+
 #include "kis_global.h"
 #include "kis_iterators.h"
 #include <kistile.h>
 #include <kistilemgr.h>
 
-KisIteratorPixelQuantum::KisIteratorPixelQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos) :
-	KisIteratorPixel<QUANTUM, 1>( ndevice, command, nypos)
+KisIteratorQuantum::KisIteratorQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos) :
+	KisIteratorUnit<QUANTUM, KisIteratorQuantum, 1>( ndevice, command, nypos)
 {
 
 }
-QUANTUM KisIteratorPixelQuantum::KisIteratorPixelQuantum::operator*() const
+
+QUANTUM KisIteratorQuantum::operator*() const
 {
 	KisTileMgrSP ktm = m_device->data();
 	KisTileSP tile;
 	int depth = ::imgTypeDepth( m_device->typeWithoutAlpha() ) +1;
 	int x = xpos / depth;
 	int num = ktm->tileNum(x, ypos);
-	if( tile = ktm->tile( num, TILEMODE_READ) ) // Lent si on veut juste lire
+	if( tile = ktm->tile( num, TILEMODE_READ) ) // slow if only for reading the content
 	{
 		m_command->addTile( num, tile);
 	}
@@ -44,34 +47,38 @@ QUANTUM KisIteratorPixelQuantum::KisIteratorPixelQuantum::operator*() const
 	q += xpos % depth;
 	return *q;
 }
-QUANTUM* KisIteratorPixelQuantum::KisIteratorPixelQuantum::operator->() const
+
+KisIteratorQuantum::operator QUANTUM * ()  const
 {
 	KisTileMgrSP ktm = m_device->data();
 	KisTileSP tile;
 	int depth = ::imgTypeDepth( m_device->typeWithoutAlpha() ) +1;
 	int x = xpos / depth;
 	int num = ktm->tileNum(x, ypos);
-	if( tile = ktm->tile( num, TILEMODE_RW) ) // Lent si on veut juste lire
+
+	if( (tile = ktm->tile( num , TILEMODE_NONE)) )
 	{
 		m_command->addTile( num , tile);
 	}
-	int xt = x / tile->width();
-	int yt = ypos / tile->height();
+	if (!(tile = ktm->tile( num, TILEMODE_RW)))
+		return 0;
+	int xt = x % tile->width();
+	int yt = ypos % tile->height();
 	QUANTUM* q = tile->data(xt, yt);
 	q += xpos % depth;
 	return q;
 }
 
 KisIteratorLineQuantum::KisIteratorLineQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command) :
-	KisIteratorLine<KisIteratorPixelQuantum>( ndevice, command)
+	KisIteratorLine<KisIteratorQuantum, KisIteratorLineQuantum>( ndevice, command)
 {
 }
 
-KisIteratorPixelQuantum KisIteratorLineQuantum::operator*() const
+KisIteratorQuantum KisIteratorLineQuantum::operator*() const
 {
-	return KisIteratorPixelQuantum( m_device, m_command, ypos );
+	return KisIteratorQuantum( m_device, m_command, ypos );
 }
-KisIteratorPixelQuantum* KisIteratorLineQuantum::operator->() const
+KisIteratorLineQuantum::operator KisIteratorQuantum ()  const
 {
-	return new KisIteratorPixelQuantum( m_device, m_command, ypos );
+	return KisIteratorQuantum( m_device, m_command, ypos );
 }

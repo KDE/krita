@@ -27,37 +27,54 @@
 #include "kis_tile_command.h"
 #include "kis_undo_adapter.h"
 
-template< typename _Tp, int sizeOfTp = 1 >
-class KisIteratorPixel {
+#include <kdebug.h>
+
+/** _Tp is a Unit
+	* _Tpu is a KisIteratorUnit
+	*  sizeOfTp is the size of unit
+	* For instance :
+	*
+	*/
+template< typename _Tp, typename _Tpu, int sizeOfTp = 1 >
+class KisIteratorUnit {
 	public:
-		KisIteratorPixel( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos) : m_device (ndevice),
-			 xstart(0), ystart(0), xend( ndevice->width() * (::imgTypeDepth( m_device->typeWithoutAlpha() ) +1 ) ),
-			 yend(ndevice->height()), ypos(nypos), m_command (command)
+		KisIteratorUnit( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos) : m_device (ndevice),
+			 xstart(0), ystart(0), xend( ndevice->width() * (::imgTypeDepth( m_device->typeWithoutAlpha() ) +1 ) - 1 ),
+			 yend(ndevice->height() - 1), xpos(0),ypos(nypos), m_command (command)
 		{
 		}
-		virtual ~KisIteratorPixel()
+		virtual ~KisIteratorUnit()
 		{
 		}
 	public:
-		virtual _Tp operator*() const = 0;
-		virtual _Tp* operator->() const = 0;
+		virtual _Tp operator*() const =0;
+		virtual  operator _Tp * ()  const =0;
+//		virtual _Tp* operator->() const = 0;
 	//Incrementation operator
-		KisIteratorPixel< _Tp, sizeOfTp>& operator++() { xpos+sizeOfTp; return *this; }
-		KisIteratorPixel< _Tp, sizeOfTp>& operator--() { xpos-sizeOfTp; return *this; }
+		KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& operator++()  { xpos+=sizeOfTp; return *this; }
+		KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& operator--() { xpos-=sizeOfTp; return *this; }
 // Comparaison operators
-	inline bool operator<(const KisIteratorPixel< _Tp, sizeOfTp>& __rhs)
+	bool operator<(const KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& __rhs)
 	{ return this->xpos < __rhs.xpos; }
-	inline bool operator==(const KisIteratorPixel< _Tp, sizeOfTp>& __rhs) 
+	bool operator<=(const KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& __rhs)
+	{ return this->xpos <= __rhs.xpos; }
+	bool operator==(const KisIteratorUnit< _Tp, _Tpu, sizeOfTp>& __rhs) 
 	{ return this->xpos == __rhs.xpos; }
 	
-	KisIteratorPixel< _Tp, sizeOfTp> begin() {
-		KisIteratorPixel< _Tp, sizeOfTp> it( m_device, m_command, ypos);
+	_Tpu begin() {
+		_Tpu it = createBlankIterator();
 		it.xpos = it.xstart;
+		return it;
 	}
-	KisIteratorPixel< _Tp, sizeOfTp> end() {
-		KisIteratorPixel< _Tp, sizeOfTp> it( m_device, m_command, ypos);
+	_Tpu end() {
+		_Tpu it =createBlankIterator();
 		it.xpos = it.xend;
+		return it;
 	}
+	protected:
+		/** This function is used to create a new _Tpu
+			*/
+		virtual _Tpu createBlankIterator() =0;
 	protected:
 		KisPaintDeviceSP m_device;
 		const Q_INT32 xstart, ystart, xend, yend, ypos;
@@ -66,12 +83,18 @@ class KisIteratorPixel {
 };
 
 
-
-template< typename _iTp>
+/** _iTp is a KisIteratorUnit
+	* _iTl is a KisIteratorLine
+	* For instance :
+	*   class KisIteratorLineQuantum :
+	*      public KisIteratorLine<KisIteratorQuantum, KisIteratorLineQuantum>
+	*
+	*/
+template< typename _iTp, typename _iTl>
 class KisIteratorLine {
 	public:
 		KisIteratorLine( KisPaintDeviceSP ndevice, KisTileCommand* command) : m_device (ndevice), xstart(0), ystart(0),
-			xend(ndevice->width()), yend(ndevice->height()), ypos(0), m_command (command)
+			xend(ndevice->width()-1), yend(ndevice->height()-1), ypos(0), m_command (command)
 		{
 		}
 		virtual ~KisIteratorLine()
@@ -79,24 +102,31 @@ class KisIteratorLine {
 		}
 	public:
 		virtual _iTp operator*() const =0;
-		virtual _iTp* operator->() const =0;
+		virtual operator _iTp ()  const =0;
 	//Incrementation operator
-		KisIteratorLine< _iTp>& operator++() { ypos++; return *this; }
-		KisIteratorLine< _iTp>& operator--() { ypos--; return *this; }
+		KisIteratorLine< _iTp, _iTl>& operator++() { ypos++; return *this; }
+		KisIteratorLine< _iTp, _iTl>& operator--() { ypos--; return *this; }
 // Comparaison operators
-	inline bool operator<(const KisIteratorLine< _iTp>& __rhs)
+	bool operator<(const KisIteratorLine< _iTp, _iTl>& __rhs)
 	{ return this->ypos < __rhs.ypos; }
-	inline bool operator==(const KisIteratorLine< _iTp>& __rhs) 
+	bool operator==(const KisIteratorLine< _iTp, _iTl>& __rhs) 
 	{ return this->ypos == __rhs.ypos; }
-	
-	KisIteratorLine< _iTp> begin() {
-		KisIteratorLine< _iTp> it( m_device, m_command);
+	bool operator<=(const KisIteratorLine< _iTp, _iTl>& __rhs)
+	{ return this->ypos <= __rhs.ypos; }
+	_iTl begin() {
+		_iTl it = createBlankIterator();
 		it.ypos = it.ystart;
+		return it;
 	}
-	KisIteratorLine< _iTp> end() {
-		KisIteratorLine< _iTp> it( m_device, m_command);
+	_iTl end() {
+		_iTl it = createBlankIterator();
 		it.ypos = it.yend;
+		return it;
 	}
+	protected:
+		/** This function is used to create a new _iTl
+			*/
+		virtual _iTl createBlankIterator() =0;
 	protected:
 		KisPaintDeviceSP m_device;
 		const Q_INT32 xstart, ystart, xend, yend;
@@ -104,22 +134,32 @@ class KisIteratorLine {
 		KisTileCommand* m_command;
 };
 
-class KisIteratorPixelQuantum : public KisIteratorPixel<QUANTUM, 1>
+class KisIteratorQuantum : public KisIteratorUnit<QUANTUM, KisIteratorQuantum,1>
 {
 	public:
-		KisIteratorPixelQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos);
+		KisIteratorQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos);
 	public:
 		virtual QUANTUM operator*() const;
-		virtual QUANTUM* operator->() const;
+		virtual operator QUANTUM * ()  const;
+//		virtual QUANTUM* operator->() const;
+	protected:
+		virtual inline KisIteratorQuantum createBlankIterator() {
+			return KisIteratorQuantum(m_device, m_command, ypos);
+		}
+ ;
 };
 
-class KisIteratorLineQuantum : public KisIteratorLine<KisIteratorPixelQuantum>
+class KisIteratorLineQuantum : public KisIteratorLine<KisIteratorQuantum, KisIteratorLineQuantum>
 {
 	public:
 		KisIteratorLineQuantum( KisPaintDeviceSP ndevice, KisTileCommand* command);
 	public:
-		virtual KisIteratorPixelQuantum operator*() const;
-		virtual KisIteratorPixelQuantum* operator->() const;
+		virtual KisIteratorQuantum operator*() const;
+		virtual operator KisIteratorQuantum ()  const;
+	protected:
+		virtual inline KisIteratorLineQuantum createBlankIterator() {
+			return KisIteratorLineQuantum(m_device, m_command);
+		} ;
 };
 
 #endif

@@ -1473,6 +1473,7 @@ void KisView::layer_rotate180()
 
 	layersUpdated();
 	resizeEvent(0);
+	currentImg() -> invalidate();
 	updateCanvas();
 }
 
@@ -1483,11 +1484,12 @@ void KisView::layer_rotateleft90()
 	if (!layer) return;
 
 	QWMatrix m;
-	m.rotate(270);
+	m.rotate(45);
 	layer->transform(m);
 
 	layersUpdated();
 	resizeEvent(0);
+	currentImg() -> invalidate();
 	updateCanvas();
 
 }
@@ -1505,6 +1507,7 @@ void KisView::layer_rotateright90()
 
 	layersUpdated();
 	resizeEvent(0);
+	currentImg() -> invalidate();
 	updateCanvas();
 
 }

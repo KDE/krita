@@ -650,91 +650,53 @@ void KisPaintDevice::resize()
 
 // XXX: also allow transform on part of paint device?
 void KisPaintDevice::transform(const QWMatrix & matrix)
-{	
-	// Can only handle 8 bits per channel for the moment
-	if (QUANTUM_DEPTH != 8) {
-		kdDebug() << "Transform only supports 8 bits per channel.\n";
-		return;
-	}
-
+{
 	if (data() == 0) {
 		kdDebug() << "No tilemgr.\n";
 		return;
 	}
 
-	// Code mostly copied from QImage.xForm
-
-	// source image data
-	Q_INT32 ws = width();
-	Q_INT32 hs = height();
-	Q_INT32 sbpl = ws * depth(); // Bytes per line
-	QUANTUM * oldData = new QUANTUM[ws * hs * depth() * sizeof(QUANTUM)];
-	memset(oldData, ws * hs * depth() * sizeof(QUANTUM), 255);
-	//data() -> readPixelData(0, 0, ws - 1, hs - 1, oldData, ws * depth());
+	/* No, we're NOT duplicating the entire image, at the moment krita uses
+	   too much memory already */
+	QUANTUM *origPixel = new QUANTUM[depth() * sizeof(QUANTUM)];
 
 	// target image data
-	Q_INT32 wd;
-	Q_INT32 hd;
-	
-	Q_INT32 bpp = depth() * 8; // bits, not bytes, per pixel
+	Q_INT32 targetW;
+	Q_INT32 targetH;
 
 	// compute size of target image
-	QWMatrix mat = QPixmap::trueMatrix( matrix, ws, hs );
+	// (this bit seems to be mostly from QImage.xForm)
+	QWMatrix mat = QPixmap::trueMatrix( matrix, width(), height() );
 	if ( mat.m12() == 0.0F && mat.m21() == 0.0F ) {
 		kdDebug() << "Scaling.\n";
 		if ( mat.m11() == 1.0F && mat.m22() == 1.0F ) { 
 			kdDebug() << "Identity matrix, do nothing.\n";
 			return;
 		}
-		wd = qRound( mat.m11() * ws );
-		hd = qRound( mat.m22() * hs );
-		wd = QABS( wd );
-		hd = QABS( hd );
+		targetW = qRound( mat.m11() * width() );
+		targetH = qRound( mat.m22() * height() );
+		targetW = QABS( targetW );
+		targetH = QABS( targetH );
 	} else {
 		kdDebug() << "rotation or shearing\n";
-		QPointArray a( QRect(0, 0, ws, hs) );
+		QPointArray a( QRect(0, 0, width(), height()) );
 		a = mat.map( a );
 		QRect r = a.boundingRect().normalize();
-		wd = r.width();
-		hd = r.height();
+		targetW = r.width();
+		targetH = r.height();
 	}
 	
 	// Create target pixel buffer which we'll read into a tile manager
 	// when done.
-	QUANTUM * newData = new QUANTUM[wd * hd * depth() * sizeof(QUANTUM)];
-	memset(newData, wd * hd * depth() * sizeof(QUANTUM), 255);
+	QUANTUM * newData = new QUANTUM[targetW * targetH * depth() * sizeof(QUANTUM)];
+	memset(newData, targetW * targetH * depth() * sizeof(QUANTUM), 255);
 
 	bool invertible;
-	QWMatrix trueMat = mat.invert( &invertible ); // invert matrix
-	if ( hd == 0 || wd == 0 || !invertible ) {
+	QWMatrix targetMat = mat.invert( &invertible ); // invert matrix
+	if ( targetH == 0 || targetW == 0 || !invertible ) {
 		kdDebug() << "Error, return null image\n";
 		return;
 	}
-
-	Q_INT32 dbpl = wd * depth(); // destination bytes per line
-
-	// Now start the transformation. This is taken from qt_xForm_helper
-	int xoffset = 0;
-	int bitDepth = bpp; // Confusing!
-	int dHeight = hd;
-	int sWidth = ws;
-	int sHeight = hs;
-	//int dWidth = wd;
-	
-	int m11 = (int)(trueMat.m11()*65536.0);
-	int m12 = (int)(trueMat.m12()*65536.0);
-	int m21 = (int)(trueMat.m21()*65536.0);
-	int m22 = (int)(trueMat.m22()*65536.0);
-	int dx  = (int)(trueMat.dx() *65536.0);
-	int dy  = (int)(trueMat.dy() *65536.0);
-
-	int m21ydx = dx + (xoffset<<16) + QABS(m11)/2;
-	int m22ydy = dy + QABS(m22)/2;
-	
-	uint trigx;
-	uint trigy;
-	uint maxws = sWidth << 16;
-	uint maxhs = sHeight << 16;
 
 	// I would have thought that one would take the source pixels,
 	// do the computation, and write the target pixels.
@@ -742,75 +704,37 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 	// pixels, and computes what should be there from the source
 	// pixels. I doubt I will ever completely understand this
 	// stuff.
-	QUANTUM * sptr = oldData;
-	QUANTUM * dptr = newData;
+	// BC: I guess this makes it easier to make the transform anti-aliased,
+	// as you can easily take the weighted mean of the square the destination
+	// pixel has it's origin in.
 
-	//For each target line of pixels
-	for (Q_INT32 y = 0; y < dHeight; y++) {
-		kdDebug() << "Handling line " << y << " with bit depth " << bitDepth << ".\n";
-		trigx = m21ydx;
-		trigy = m22ydy;
-		QUANTUM * maxp = newData + dbpl;
-		switch ( bitDepth ) {
-		case 8: // 8 bits, 1 channel (GRAY)
-			while ( dptr < maxp ) {
-				if ( trigx < maxws && trigy < maxhs )
-					*dptr = *(sptr+sbpl*(trigy>>16)+(trigx>>16));
-				trigx += m11;
-				trigy += m12;
-				dptr++;
+	/* For each target line of target pixels, the original pixel is located (in the
+	   surrounding of)
+	   x = m11*x' + m21*y' + dx
+           y = m22*y' + m12*x' + dy
+	*/
+
+	for (Q_INT32 y = 0; y < targetH; y++) {
+		/* at the moment, just round the original coordinates; but the unrounded
+		   values should be used for AA */
+		for (Q_INT32 x = 0; x < targetW; x++) {
+			Q_INT32 orX = qRound(targetMat.m11() * x + targetMat.m21() * y + targetMat.dx());
+			Q_INT32 orY = qRound(targetMat.m22() * y + targetMat.m12() * x + targetMat.dy());
+
+			if (!(orX < 0 || orY < 0 || orX >= width() || orY >= height())) {
+				data() -> readPixelData(orX, orY, orX, orY, origPixel, depth());
+				int currentPos = (y*targetW+x) * depth(); // try to be at least a little efficient
+				for(int i = 0; i < depth(); i++)
+					newData[currentPos + i] = origPixel[i];
 			}
-			break;
-		case 16: // 16 bits, 2 channels (GRAYA)
-			while ( dptr < maxp ) {
-				if ( trigx < maxws && trigy < maxhs )
-					*((ushort*)dptr) = *((ushort *)(sptr+sbpl*(trigy>>16) + ((trigx>>16)<<1)));
-				trigx += m11;
-				trigy += m12;
-				dptr++;
-				dptr++;
-			}
-			break;
-		case 24: // 24 bits, 3 channels (RGB)
-			QUANTUM *p2;
-			while ( dptr < maxp ) {
-				if ( trigx < maxws && trigy < maxhs ) {
-					p2 = sptr+sbpl*(trigy>>16) + ((trigx>>16)*3);
-					dptr[0] = p2[0];
-					dptr[1] = p2[1];
-					dptr[2] = p2[2];
-				}
-				trigx += m11;
-				trigy += m12;
-				dptr += 3;
-			}
-			break;
-		case 32: // 32 bits, 4 channels (RGBA / CMYK)
-			while ( dptr < maxp ) {
-				if ( trigx < maxws && trigy < maxhs )
-					*((uint*)dptr) = *((uint *)(sptr+sbpl*(trigy>>16) + ((trigx>>16)<<2)));
-				trigx += m11;
-				trigy += m12;
-				dptr += 4;
-			}
-			
-			break;
-		case 40: // 40 bits, 5 channgels (CMYKA)
-		default:
-			kdDebug() << "Bit depth " << bitDepth << " not implemented\n";
-			delete[] oldData;
-			delete[] newData;
-			return;
 		}
-		m21ydx += m21;
-		m22ydy += m22;
 	}
 	
-        KisTileMgrSP tm = new KisTileMgr(depth(), wd, hd);
-	tm -> writePixelData(0, 0, wd - 1, hd - 1, newData, wd * depth());
+        KisTileMgrSP tm = new KisTileMgr(depth(), targetW, targetH);
+	tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * depth());
 	data(tm); // Also set width and height correctly
 
-	delete[] oldData;
+	delete[] origPixel;
 	delete[] newData;
 
 }

@@ -24,6 +24,10 @@
 #include <kio/job.h>
 
 #include "kis_resource.h"
+#include "kis_alpha_mask.h"
+#include "kis_global.h"
+#include "kis_layer.h"
+#include "kis_point.h"
 
 class QPoint;
 class QImage;
@@ -40,6 +44,9 @@ public:
 	virtual bool saveAsync();
 	virtual QImage img();
 
+	/** returns a KisLayerSP made with colorSpace as the Colorspace strategy **/
+	KisLayerSP image(KisStrategyColorSpaceSP colorSpace);
+
 private slots:
 	void ioData(KIO::Job *job, const QByteArray& data);
 	void ioResult(KIO::Job *job);
@@ -47,6 +54,7 @@ private slots:
 private:
 	QByteArray m_data;
 	QImage m_img;
+	QMap<QString, KisLayerSP> m_colorspaces;
 };
 
 #endif

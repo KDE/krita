@@ -45,7 +45,8 @@ public:
 public:
 	//Increment operator
 	inline KisIteratorUnit& operator++();
-	inline KisIteratorUnit& inc();
+	inline virtual KisIteratorUnit& inc();
+	inline virtual KisIteratorUnit& dec();
 	inline KisIteratorUnit& operator--();
 	/**
 	 * This function increments the position of the iterator by one pixel.
@@ -60,7 +61,10 @@ public:
 	inline operator QUANTUM () ;
 	inline operator QUANTUM*();
 	inline QUANTUM* oldQuantumValue();
-private:
+
+	virtual ~KisIteratorUnit() {}
+
+protected:
 	KisPaintDeviceSP m_device;
 	KisTileCommand* m_command;
 	KisTileMgrSP m_ktm;
@@ -104,8 +108,12 @@ public:
 	 virtual operator _iTp* () = 0;
 
 	 //Increment operator
-	 KisIteratorLine< _iTp>& operator++() { m_ypos++; return *this; }
-	 KisIteratorLine< _iTp>& operator--() { m_ypos--; return *this; }
+	 KisIteratorLine< _iTp>& operator++() { return inc(); }
+	 KisIteratorLine< _iTp>& operator--() { return dec(); }
+
+	 //Overridable operator functionality
+	 inline virtual KisIteratorLine< _iTp>& inc() { m_ypos++; return *this; }
+	 inline virtual KisIteratorLine< _iTp>& dec() { m_ypos--; return *this; }
 
    // Comparison operators
 	 bool operator<(const KisIteratorLine< _iTp>& __rhs) const
@@ -153,7 +161,7 @@ inline KisIteratorUnit& KisIteratorUnit::inc()
 	return *this;
 }
 
-inline KisIteratorUnit& KisIteratorUnit::operator--()
+inline KisIteratorUnit& KisIteratorUnit::dec()
 {
 	Q_ASSERT( m_tile != 0 );
 	m_xintile-=m_inc;
@@ -166,6 +174,11 @@ inline KisIteratorUnit& KisIteratorUnit::operator--()
 		m_oldTileNeedRefresh = true;
 	}
 	return *this;
+}
+
+inline KisIteratorUnit& KisIteratorUnit::operator--()
+{
+	return dec();
 }
 /**
 	* This function increments the position of the iterator by one pixel.

@@ -26,6 +26,7 @@
 #include <kcommand.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qcheckbox.h>
 
 #include <koColor.h>
 
@@ -43,6 +44,8 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_pattern.h"
+#include "kis_iterators_infinite.h"
 
 KisToolFill::KisToolFill() 
 	: super()
@@ -51,6 +54,7 @@ KisToolFill::KisToolFill()
 	m_subject = 0;
 	m_oldColor = 0;
 	m_threshold = 15;
+	m_usePattern = false;
 	m_samplemerged = false;
 
 	// set custom cursor.
@@ -71,23 +75,29 @@ KisToolFill::~KisToolFill()
 
 bool KisToolFill::flood(int startX, int startY)
 {
-	KisLayerSP lay = m_currentImage->activeLayer();
-	Q_INT32 depth = lay->depth();
-	KisTileCommand* ktc = new KisTileCommand("Fill", (KisPaintDeviceSP)lay );
-	QUANTUM* color = new QUANTUM[depth];
-	m_map = new bool[lay->width()*lay->height()];
-	for (int i = 0; i < lay->width()*lay->height(); i++)
+	m_lay = m_currentImage->activeLayer();
+	m_depth = m_lay->depth();
+	m_ktc = new KisTileCommand("Fill", (KisPaintDeviceSP)m_lay );
+	m_color = new QUANTUM[m_depth];
+	m_map = new bool[m_lay->width()*m_lay->height()];
+	for (int i = 0; i < m_lay->width()*m_lay->height(); i++)
 		m_map[i] = false;
 
 	// opacity?
-	lay->colorStrategy()->nativeColor(m_subject -> fgColor(), color);
+	m_lay->colorStrategy()->nativeColor(m_subject -> fgColor(), QUANTUM_MAX, m_color);
+	// set up the 'cached' color iterator if necessary, speeds things up...
+	if (!m_usePattern)
+		m_replaceWithIt = new KisIteratorInfinitePixel(m_lay->colorStrategy(), m_color);
 
-	floodLine(startX, startY, depth, lay, ktc, color);
+	floodLine(startX, startY);
 
-	m_currentImage->undoAdapter()->addCommand( ktc );
+	if (!m_usePattern)
+		delete m_replaceWithIt;
+
+	m_currentImage->undoAdapter()->addCommand( m_ktc );
 	m_currentImage->notify();
 
-	delete[] color;
+	delete[] m_color;
 	delete[] m_oldColor; m_oldColor = 0;
 	delete[] m_map;
 	return true;
@@ -98,81 +108,100 @@ QUANTUM KisToolFill::difference(QUANTUM* src, KisPixelRepresentation dst, QUANTU
 {
 	QUANTUM max = 0, diff = 0;
 	for (int i = 0; i < depth; i++) {
- 		diff = QABS(src[i] - dst[i]);
-//		diff = QABS(src[i] - (*(reinterpret_cast<QUANTUM**>(&dst)))[i]); // Hack, see mailing list.
+		// added extra (QUANTUM) casts just to be on the safe side until that is fixed
+		diff = QABS((QUANTUM)src[i] - (QUANTUM)dst[i]);
 		if (diff > max)
 			max = diff;
 	}
-	return (diff > threshold) ? 255 : 0;
+	return (max > threshold) ? 255 : 0;
 }
 
-void KisToolFill::floodLine(int x, int y, Q_INT32 depth, KisLayerSP lay,
-							KisTileCommand* ktc, QUANTUM* color) {
+int KisToolFill::floodSegment(int x, int y, int most, KisIteratorPixel* src, KisIteratorPixel* it, KisIteratorPixel* lastPixel, Direction d) {
 	bool stop = false;
-	int mostRight = x, mostLeft = x;
-	
-	KisIteratorLinePixel lineIt = lay->iteratorPixelSelectionBegin( ktc, x,-1, y);
 
-	KisIteratorPixel pixelIt = *lineIt;
-	KisIteratorPixel lastPixel = lineIt.end();
-	if (!m_oldColor) {
-		m_oldColor = new QUANTUM[depth];
-		for (int i = 0; i < depth; i++)
-			m_oldColor[i] = pixelIt[i];
-	} else {
-		if (difference(m_oldColor, pixelIt, m_threshold, depth) != 0)
-			return;
-	}
-
-	while( pixelIt <= lastPixel && !stop)
+	while( ( ( d == Right && *it <= *lastPixel) || (d == Left && *lastPixel <= *it)) && !stop)
 	{
-		KisPixelRepresentation data = pixelIt;
-		if (difference(m_oldColor, data, m_threshold, depth) == 0) {
-			for( int i = 0; i < depth; i++)
+		KisPixelRepresentation data = *it;
+		KisPixelRepresentation source = *src;
+		if (difference(m_oldColor, data, m_threshold, m_depth) == 0) {
+			for( int i = 0; i < m_depth; i++)
 			{
-				data[i] = color[i];
+				data[i] = (QUANTUM) source[i]; // explicit (QUANTUM) cast to prevent weirdness
 			}
-			m_map[y*lay->width()+mostRight] = true;
-			mostRight++;
+			m_map[y*m_lay->width()+x] = true;
+			if (d == Right) {
+				it->inc();
+				src->inc();
+				x++; most++;
+			} else {
+				it->dec();
+				src->dec();
+				x--; most--;
+			}
 		} else {
 			stop = true;
 		}
-		++pixelIt;
 	}
-	if (lastPixel < pixelIt) mostRight--;
-	stop = false;
-	delete lineIt;
-	if (x > 0) {
-		KisIteratorLinePixel lineIt2 = lay->iteratorPixelSelectionBegin(ktc, 0,x-1, y);
-		KisIteratorPixel lastPixel = lineIt2.begin();
-		KisIteratorPixel pixelIt = lineIt2.end();
-		if (difference(m_oldColor, pixelIt, m_threshold, depth) == 0) {
-			mostLeft--;
-			while( lastPixel <= pixelIt && !stop)
-			{
-				KisPixelRepresentation data = pixelIt;
-				if (difference(m_oldColor, data, m_threshold, depth) == 0) {
-					for( int i = 0; i < depth; i++)
-					{
-						data[i] = color[i];
-					}
-					m_map[y*lay->width()+mostLeft] = true;
-					mostLeft--;
-				} else {
-					stop = true;
-				}
-				--pixelIt;
-			}
-			if (pixelIt < lastPixel) mostLeft++;
-		}
-		delete lineIt;
+	
+	return most;
+}
+
+void KisToolFill::floodLine(int x, int y) {
+	int mostRight, mostLeft = x;
+	
+	KisIteratorLinePixel lineIt = m_lay->iteratorPixelSelectionBegin( m_ktc, x,-1, y);
+
+	KisIteratorPixel pixelIt = *lineIt;
+	KisIteratorPixel lastPixel = lineIt.end();
+
+	if (m_usePattern) {
+		m_replaceWithIt = new KisIteratorInfinitePixel(
+			(KisPaintDeviceSP)(m_subject->currentPattern()->image(m_lay->colorStrategy())),
+			0, y, x );
 	}
 
+	if (!m_oldColor) {
+		m_oldColor = new QUANTUM[m_depth];
+		for (int i = 0; i < m_depth; i++)
+			m_oldColor[i] = pixelIt[i];
+	} else {
+		if (difference(m_oldColor, pixelIt, m_threshold, m_depth) != 0)
+			return;
+	}
+
+	mostRight = floodSegment(x, y, x, m_replaceWithIt, &pixelIt, &lastPixel, Right);
+	
+	if (lastPixel < pixelIt) mostRight--;
+	
+	delete lineIt;
+
+	if (x > 0) {
+		mostLeft--;
+		if (m_usePattern) {
+			delete m_replaceWithIt;
+			m_replaceWithIt = new KisIteratorInfinitePixel(
+				(KisPaintDeviceSP)(m_subject->currentPattern()->image(m_lay->colorStrategy())), 0, y, x - 1);
+		}
+		KisIteratorLinePixel lineIt2 = m_lay->iteratorPixelSelectionBegin(m_ktc, 0,x-1, y);
+		KisIteratorPixel lastPixel = lineIt2.begin();
+		KisIteratorPixel pixelIt = lineIt2.end();
+	
+		mostLeft = floodSegment(x,y, mostLeft, m_replaceWithIt, &pixelIt, &lastPixel, Left);
+	
+		if (pixelIt < lastPixel)
+			mostLeft++;
+		delete lineIt;
+	}
+	
+	if (m_usePattern)
+		delete m_replaceWithIt;
+
+	// yay for stack overflowing:
 	for (int i = mostLeft; i <= mostRight; i++) {
-		if (y > 0 && ! m_map[(y-1)*lay->width()+i])
-			floodLine(i, y-1, depth, lay, ktc, color);
-		if (y < lay->height() - 1 && ! m_map[(y+1)*lay->width()+i])
-			floodLine(i, y+1, depth, lay, ktc, color);
+		if (y > 0 && ! m_map[(y-1)*m_lay->width()+i])
+			floodLine(i, y-1);
+		if (y < m_lay->height() - 1 && ! m_map[(y+1)*m_lay->width()+i])
+			floodLine(i, y+1);
 	}
 }
 
@@ -202,13 +231,19 @@ QWidget* KisToolFill::createoptionWidget(QWidget* parent)
 	m_cmbComposite = new KisCmbComposite(m_optWidget);
 	connect(m_cmbComposite, SIGNAL(activated(int)), this, SLOT(slotSetCompositeMode(int)));
 
-	QGridLayout *optionLayout = new QGridLayout(m_optWidget, 4, 2);
+	m_checkUsePattern = new QCheckBox("Use pattern", m_optWidget);
+	m_checkUsePattern->setChecked(m_usePattern);
+	connect(m_checkUsePattern, SIGNAL(stateChanged(int)), this, SLOT(slotSetUsePattern(int)));
+
+	QGridLayout *optionLayout = new QGridLayout(m_optWidget, 4, 3);
 
 	optionLayout -> addWidget(m_lbThreshold, 1, 0);
 	optionLayout -> addWidget(m_slThreshold, 1, 1);
 
 	optionLayout -> addWidget(m_lbComposite, 2, 0);
 	optionLayout -> addWidget(m_cmbComposite, 2, 1);
+
+	optionLayout -> addWidget(m_checkUsePattern, 3, 0);
 
 	return m_optWidget;
 }
@@ -226,6 +261,13 @@ void KisToolFill::slotSetThreshold(int threshold)
 void KisToolFill::slotSetCompositeMode(int compositeOp)
 {
 	m_compositeOp = (CompositeOp)compositeOp;
+}
+
+void KisToolFill::slotSetUsePattern(int state)
+{
+	if (state == QButton::NoChange)
+		return;
+	m_usePattern = (state == QButton::On);
 }
 
 void KisToolFill::setup(KActionCollection *collection)

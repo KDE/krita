@@ -29,9 +29,12 @@
 class KisPainter;
 class QWidget;
 class QLabel;
+class QCheckBox;
 class IntegerWidget;
 class KisCmbComposite;
 class KisPixelRepresentation;
+class KisIteratorPixel;
+class KisIteratorInfinitePixel;
 
 class KisToolFill : public KisToolPaint {
 
@@ -56,23 +59,30 @@ public:
 public slots:
 	virtual void slotSetThreshold(int);
 	virtual void slotSetCompositeMode(int);
+	virtual void slotSetUsePattern(int);
 
 private:
 	QUANTUM difference(QUANTUM* src, KisPixelRepresentation dst, QUANTUM threshold, int depth);
-	void floodLine(int x, int y, Q_INT32 depth, KisLayerSP lay, KisTileCommand* ktc,
-	 QUANTUM* color);
+	typedef enum { Left, Right } Direction;
+	void floodLine(int x, int y);
+	int floodSegment(int x, int y, int most, KisIteratorPixel* src, KisIteratorPixel* it, KisIteratorPixel* lastPixel, Direction d);
 	int m_threshold;
-	QUANTUM* m_oldColor;
+	KisTileCommand* m_ktc;
+	Q_INT32 m_depth;
+	KisLayerSP m_lay;
+	QUANTUM* m_oldColor, *m_color;
 	KisPainter *m_painter;
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;
-	bool *m_map, m_samplemerged;
+	bool *m_map, m_samplemerged, m_usePattern;
+	KisIteratorInfinitePixel *m_replaceWithIt; // so we can 'cache' the color iterator
 	
 	QWidget *m_optWidget;
 	QLabel *m_lbThreshold;
 	IntegerWidget *m_slThreshold;
 	QLabel *m_lbComposite;
 	KisCmbComposite *m_cmbComposite;
+	QCheckBox *m_checkUsePattern;
 	CompositeOp m_compositeOp;
 };
 

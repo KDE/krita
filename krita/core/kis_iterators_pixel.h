@@ -34,6 +34,7 @@ public:
 	inline operator KisPixelRepresentation();
 	inline KisPixelRepresentationReadOnly oldValue();
 	inline KisQuantum operator[](int index);
+	virtual ~KisIteratorPixel() {}
 private:
 };
 

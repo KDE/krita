@@ -23,8 +23,8 @@ Core
 	* Loading and saving of selections
 	* Painting of gradients
         X loading Gimp gradients
-	* Fill with pattern (#Bart)
-	* Non-rectangular fill (#Bart)
+	* Colorspace-aware difference between pixel function
+	* Anti-aliased filling (requires some simple colorspace function to merge 2 Pixels)
 	* Load/save configuration of everything user-settable.
 	* Add filtering with image kernels (3 * 3 blocks of pixels)
 	* Scaling of images (#Boudewijn, Bart)

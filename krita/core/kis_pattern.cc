@@ -29,10 +29,13 @@
 #include <qsize.h>
 #include <qimage.h>
 #include <qvaluevector.h>
+#include <qmap.h>
 
 #include <kdebug.h>
 
 #include "kis_pattern.h"
+#include "kis_layer.h"
+#include "kis_colorspace_registry.h"
 
 namespace {
 	struct GimpPatternHeader {
@@ -215,6 +218,39 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 
 // 	kdDebug() << "pattern loaded\n";
 	emit loadComplete(this);
+}
+
+KisLayerSP KisPattern::image(KisStrategyColorSpaceSP colorSpace) {
+	QMap<QString, KisLayerSP>::const_iterator it = m_colorspaces.find(colorSpace->name());
+	if (it != m_colorspaces.end())
+		return (*it);
+	Q_INT32 width = m_img.width();
+	Q_INT32 height = m_img.height();
+	KisLayerSP layer = new KisLayer(width, height, colorSpace, "pattern image");
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			QRgb pixel = m_img.pixel(x, y);
+			int red = qRed(pixel);
+			int green = qGreen(pixel);
+			int blue = qBlue(pixel);
+			int alpha = qAlpha(pixel);
+
+			// Scaled images are in pre-multiplied alpha form so
+			// divide by alpha.
+			if (alpha != 0) {
+				red = (red * 255) / alpha;
+				green = (green * 255) / alpha;
+				blue = (blue * 255) / alpha;
+			}
+
+			KoColor colour = KoColor(red, green, blue);
+			QUANTUM a = (alpha * OPACITY_OPAQUE) / 255;
+
+			layer -> setPixel(x, y, colour, a);
+		}
+	}
+	m_colorspaces[colorSpace->name()] = layer;
+	return layer;
 }
 
 #include "kis_pattern.moc"

@@ -36,6 +36,7 @@ public:
 	using KisIteratorUnit::operator QUANTUM;
 	operator KisQuantum ()  ;
 	QUANTUM operator=(QUANTUM q);
+	virtual ~KisIteratorQuantum() {}
 };
 
 

@@ -208,7 +208,8 @@ private:
 	virtual KisCanvasControllerInterface *canvasController() const;
 	virtual KisToolControllerInterface *toolController() const;
 	virtual KoDocument *document() const;
-
+	// Sets the specified cursor; returns the previous cursor
+	virtual QCursor setCanvasCursor(const QCursor & cursor);
 private:
 	// Implement KisCanvasControllerInterface
 	virtual QWidget *canvas() const;

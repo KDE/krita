@@ -2859,5 +2859,11 @@ KisFilterRegistry * KisView::filterRegistry() const
 	return m_filterRegistry;
 };
 
+QCursor KisView::setCanvasCursor(const QCursor & cursor)
+{
+	QCursor oldCursor = m_canvas -> cursor();
+	m_canvas -> setCursor(cursor);
+	return oldCursor;
+}
 
 #include "kis_view.moc"

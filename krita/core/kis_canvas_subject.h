@@ -36,6 +36,7 @@ class KisProgressDisplayInterface;
 class KisSelectionManager;
 class QWidget;
 class KisFilterRegistry;
+class QCursor;
 
 /**
  * The canvas subject is the subset of operations that are directy available to
@@ -69,6 +70,7 @@ public:
 	virtual KisFilterRegistry * filterRegistry() const = 0;
 	virtual KisFilterSP filterGet(const KisID& id) = 0;
 	virtual KisIDList filterList() = 0;
+	virtual QCursor setCanvasCursor(const QCursor &) = 0;
 private:
 	KisCanvasSubject(const KisCanvasSubject&);
 	KisCanvasSubject& operator=(const KisCanvasSubject&);

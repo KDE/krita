@@ -31,6 +31,7 @@ class KisGradient;
 class KisPattern;
 class KisToolControllerInterface;
 class KisUndoAdapter;
+class KisProgressDisplayInterface;
 
 class KisCanvasSubject {
 public:
@@ -55,6 +56,7 @@ public:
 	virtual KisCanvasControllerInterface *canvasController() const = 0;
 	virtual KisToolControllerInterface *toolController() const = 0;
 	virtual KoDocument *document() const = 0;
+	virtual KisProgressDisplayInterface *progressDisplay() const = 0;
 
 private:
 	KisCanvasSubject(const KisCanvasSubject&);

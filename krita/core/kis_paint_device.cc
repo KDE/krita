@@ -269,42 +269,31 @@ void KisPaintDevice::init()
 	m_colorStrategy = 0;
 }
 
-bool KisPaintDevice::pixel(Q_INT32 /*x*/, Q_INT32 /*y*/, KoColor * /*c*/, QUANTUM * /*opacity*/)
+bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
 {
         // XXX: this should use the colour strategies!
-#if 0
-        KisTileMgrSP tm = data();
-        KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
-        QUANTUM *data;
-        Q_INT32 tmp;
+#if 1
+	// A hack for the moment
+	if (colorStrategy() -> depth() == 4) {
+		KisTileMgrSP tm = data();
+		KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
+		QUANTUM *data;
+		Q_INT32 tmp;
 
-        if (!pd)
-                return false;
+		if (!pd)
+			return false;
 
-        *opacity = OPACITY_OPAQUE;
-        data = pd -> data;
-        Q_ASSERT(data);
+		data = pd -> data;
+		Q_ASSERT(data);
 
-        switch (alpha() ? typeWithAlpha() : typeWithoutAlpha()) {
-        case IMAGE_TYPE_INDEXEDA:
-        case IMAGE_TYPE_INDEXED:
-                break; // TODO
-        case IMAGE_TYPE_GREYA:
-                *opacity = data[PIXEL_GRAY_ALPHA];
-        case IMAGE_TYPE_GREY:
-                tmp = downscale(data[PIXEL_GRAY]);
-                c -> setRGB(tmp, tmp, tmp);
-                break;
-        case IMAGE_TYPE_RGBA:
-                *opacity = data[PIXEL_ALPHA];
-        case IMAGE_TYPE_RGB:
-                c -> setRGB(downscale(data[PIXEL_RED]), downscale(data[PIXEL_GREEN]), downscale(data[PIXEL_BLUE]));
-                break;
-        default:
-                kdDebug() << "Not Implemented.\n";
-                return false;
-        }
-        return true;
+		*opacity = data[PIXEL_ALPHA];
+		c -> setRGB(downscale(data[PIXEL_RED]), downscale(data[PIXEL_GREEN]), downscale(data[PIXEL_BLUE]));
+
+		return true;
+	}
+	else {
+		return false;
+	}
 #endif
 	return false;
 }

@@ -21,10 +21,12 @@
 
 #include <qlabel.h>
 
-class KProgress;
-class KisProgressSubject;
+#include "kis_progress_display_interface.h"
 
-class KisLabelProgress : public QLabel {
+class QToolButton;
+class KProgress;
+
+class KisLabelProgress : public QLabel, public KisProgressDisplayInterface {
 	Q_OBJECT
 	typedef QLabel super;
 
@@ -33,9 +35,10 @@ public:
 	virtual ~KisLabelProgress();
 
 public:
-	void changeSubject(KisProgressSubject *subject);
+	// Implements KisProgressDisplayInterface
+	void setSubject(KisProgressSubject *subject, bool modal, bool canCancel);
 
-public slots:
+private slots:
 	virtual void update(KisProgressSubject *subject, int percent);
 	virtual void updateStage(KisProgressSubject *subject, const QString& stage, int percent);
 	virtual void done(KisProgressSubject *subject);
@@ -46,8 +49,12 @@ private slots:
 	void cancelPressed();
 
 private:
+	void reset();
+
 	KisProgressSubject *m_subject;
 	KProgress *m_bar;
+	QToolButton *m_cancelButton;
+	bool m_modal;
 };
 
 #endif // KIS_LABEL_PROGRESS_H_

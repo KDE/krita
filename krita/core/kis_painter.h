@@ -44,6 +44,8 @@
 #include "kis_paint_device.h"
 #include "kis_point.h"
 #include "kis_matrix.h"
+#include "kis_progress_subject.h"
+
 //#include "kis_gradient.h"
 //#include "kis_brush.h"
 //#include "kis_pattern.h"
@@ -66,11 +68,16 @@ class KisGradient;
   in one undoable step.
 
  */
-class KisPainter {
+class KisPainter : public KisProgressSubject {
+	typedef KisProgressSubject super;
 public:
         KisPainter();
         KisPainter(KisPaintDeviceSP device);
         ~KisPainter();
+
+private:
+	// Implement KisProgressSubject
+	virtual void cancel();
 
 public:
         /**
@@ -245,6 +252,24 @@ public:
 		*/
 	void applyConvolutionColorTransformation(KisMatrix3x3* matrix);
 
+	enum enumGradientShape {
+		GradientShapeLinear,
+		GradientShapeBiLinear,
+		GradientShapeRadial
+	};
+
+	enum enumGradientRepeat {
+		GradientRepeatNone,
+		GradientRepeatForwards,
+		GradientRepeatAlternate
+	};
+
+	bool paintGradient(const KisPoint& gradientVectorStart,
+			   const KisPoint& gradientVectorEnd,
+			   enumGradientShape shape,
+			   enumGradientRepeat repeat,
+			   double antiAliasThreshold,
+			   bool reverseGradient = false);
 
 	// ------------------------------------------------------------------------------------------
 	// Set the parameters for the higher level graphics primitives.
@@ -296,6 +321,7 @@ private:
 	CompositeOp m_compositeOp;
 
 	double m_pressure;
+	bool m_cancelRequested;
 };
 
 inline

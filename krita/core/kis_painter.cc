@@ -40,6 +40,8 @@
 
 #include <kdebug.h>
 #include <kcommand.h>
+#include <klocale.h>
+
 #include <koColor.h>
 
 #include "kis_brush.h"
@@ -59,6 +61,272 @@
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kis_iterators_pixel.h"
+
+namespace {
+
+	class GradientShapeStrategy {
+	public:
+		GradientShapeStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+		virtual ~GradientShapeStrategy() {}
+
+		virtual double valueAt(double x, double y) const = 0;
+
+	protected:
+		KisPoint m_gradientVectorStart;
+		KisPoint m_gradientVectorEnd;
+	};
+
+	GradientShapeStrategy::GradientShapeStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+		: m_gradientVectorStart(gradientVectorStart), m_gradientVectorEnd(gradientVectorEnd)
+	{
+	}
+
+
+	class LinearGradientStrategy : public GradientShapeStrategy {
+		typedef GradientShapeStrategy super;
+	public:
+		LinearGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+
+		virtual double valueAt(double x, double y) const;
+
+	protected:
+		double m_normalisedVectorX;
+		double m_normalisedVectorY;
+		double m_vectorLength;
+	};
+
+	LinearGradientStrategy::LinearGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+		: super(gradientVectorStart, gradientVectorEnd)
+	{
+		double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+		double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+
+		m_vectorLength = sqrt((dx * dx) + (dy * dy));
+
+		if (m_vectorLength < DBL_EPSILON) {
+			m_normalisedVectorX = 0;
+			m_normalisedVectorY = 0;
+		}
+		else {
+			m_normalisedVectorX = dx / m_vectorLength;
+			m_normalisedVectorY = dy / m_vectorLength;
+		}
+	}
+
+	double LinearGradientStrategy::valueAt(double x, double y) const
+	{
+		double vx = x - m_gradientVectorStart.x();
+		double vy = y - m_gradientVectorStart.y();
+
+		// Project the vector onto the normalised gradient vector.
+		double t = vx * m_normalisedVectorX + vy * m_normalisedVectorY;
+
+		if (m_vectorLength < DBL_EPSILON) {
+			t = 0;
+		}
+		else {
+			// Scale to 0 to 1 over the gradient vector length.
+			t /= m_vectorLength;
+		}
+
+		return t;
+	}
+
+
+	class BiLinearGradientStrategy : public LinearGradientStrategy {
+		typedef LinearGradientStrategy super;
+	public:
+		BiLinearGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+
+		virtual double valueAt(double x, double y) const;
+	};
+
+	BiLinearGradientStrategy::BiLinearGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+		: super(gradientVectorStart, gradientVectorEnd)
+	{
+	}
+
+	double BiLinearGradientStrategy::valueAt(double x, double y) const
+	{
+		double t = super::valueAt(x, y);
+
+		// Reflect
+		if (t < -DBL_EPSILON) {
+			t = -t;
+		}
+
+		return t;
+	}
+
+
+	class RadialGradientStrategy : public GradientShapeStrategy {
+		typedef GradientShapeStrategy super;
+	public:
+		RadialGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd);
+
+		virtual double valueAt(double x, double y) const;
+
+	protected:
+		double m_radius;
+	};
+
+	RadialGradientStrategy::RadialGradientStrategy(const KisPoint& gradientVectorStart, const KisPoint& gradientVectorEnd)
+		: super(gradientVectorStart, gradientVectorEnd)
+	{
+		double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+		double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+
+		m_radius = sqrt((dx * dx) + (dy * dy));
+	}
+
+	double RadialGradientStrategy::valueAt(double x, double y) const
+	{
+		double dx = x - m_gradientVectorStart.x();
+		double dy = y - m_gradientVectorStart.y();
+
+		double distance = sqrt((dx * dx) + (dy * dy));
+
+		double t;
+
+		if (m_radius < DBL_EPSILON) {
+			t = 0;
+		}
+		else {
+			t = distance / m_radius;
+		}
+
+		return t;
+	}
+
+
+	class GradientRepeatStrategy {
+	public:
+		GradientRepeatStrategy() {}
+		virtual ~GradientRepeatStrategy() {}
+
+		virtual double valueAt(double t) const = 0;
+	};
+
+
+	class GradientRepeatNoneStrategy : public GradientRepeatStrategy {
+	public:
+		static GradientRepeatNoneStrategy *instance();
+
+		virtual double valueAt(double t) const;
+
+	private:
+		GradientRepeatNoneStrategy() {}
+
+		static GradientRepeatNoneStrategy *m_instance;
+	};
+
+	GradientRepeatNoneStrategy *GradientRepeatNoneStrategy::m_instance = 0;
+
+	GradientRepeatNoneStrategy *GradientRepeatNoneStrategy::instance()
+	{
+		if (m_instance == 0) {
+			m_instance = new GradientRepeatNoneStrategy();
+		}
+
+		return m_instance;
+	}
+
+	// Output is clamped to 0 to 1.
+	double GradientRepeatNoneStrategy::valueAt(double t) const
+	{
+		double value = t;
+
+		if (t < DBL_EPSILON) {
+			value = 0;
+		}
+		else
+		if (t > 1 - DBL_EPSILON) {
+			value = 1;
+		}
+
+		return value;
+	}
+
+
+	class GradientRepeatForwardsStrategy : public GradientRepeatStrategy {
+	public:
+		static GradientRepeatForwardsStrategy *instance();
+
+		virtual double valueAt(double t) const;
+
+	private:
+		GradientRepeatForwardsStrategy() {}
+
+		static GradientRepeatForwardsStrategy *m_instance;
+	};
+
+	GradientRepeatForwardsStrategy *GradientRepeatForwardsStrategy::m_instance = 0;
+
+	GradientRepeatForwardsStrategy *GradientRepeatForwardsStrategy::instance()
+	{
+		if (m_instance == 0) {
+			m_instance = new GradientRepeatForwardsStrategy();
+		}
+
+		return m_instance;
+	}
+
+	// Output is 0 to 1, 0 to 1, 0 to 1...
+	double GradientRepeatForwardsStrategy::valueAt(double t) const
+	{
+		int i = static_cast<int>(t);
+
+		if (t < DBL_EPSILON) {
+			i--;
+		}
+
+		double value = t - i;
+
+		return value;
+	}
+
+
+	class GradientRepeatAlternateStrategy : public GradientRepeatStrategy {
+	public:
+		static GradientRepeatAlternateStrategy *instance();
+
+		virtual double valueAt(double t) const;
+
+	private:
+		GradientRepeatAlternateStrategy() {}
+
+		static GradientRepeatAlternateStrategy *m_instance;
+	};
+
+	GradientRepeatAlternateStrategy *GradientRepeatAlternateStrategy::m_instance = 0;
+
+	GradientRepeatAlternateStrategy *GradientRepeatAlternateStrategy::instance()
+	{
+		if (m_instance == 0) {
+			m_instance = new GradientRepeatAlternateStrategy();
+		}
+
+		return m_instance;
+	}
+
+	// Output is 0 to 1, 1 to 0, 0 to 1, 1 to 0...
+	double GradientRepeatAlternateStrategy::valueAt(double t) const
+	{
+		if (t < 0) {
+			t = -t;
+		}
+
+		int i = static_cast<int>(t);
+
+                double value = t - i;
+
+		if (i % 2 == 1) {
+			value = 1 - value;
+		}
+
+		return value;
+	}
+}
 
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
@@ -1554,3 +1822,232 @@ void KisPainter::applyConvolutionColorTransformation(KisMatrix3x3* matrix)
 		}
 	}
 }
+
+bool KisPainter::paintGradient(const KisPoint& gradientVectorStart,
+			       const KisPoint& gradientVectorEnd,
+			       enumGradientShape shape,
+			       enumGradientRepeat repeat,
+			       double antiAliasThreshold,
+			       bool reverseGradient)
+{
+	m_cancelRequested = false;
+
+	GradientShapeStrategy *shapeStrategy = 0;
+
+	switch (shape) {
+	case GradientShapeLinear:
+		shapeStrategy = new LinearGradientStrategy(gradientVectorStart, gradientVectorEnd);
+		break;
+	case GradientShapeBiLinear:
+		shapeStrategy = new BiLinearGradientStrategy(gradientVectorStart, gradientVectorEnd);
+		break;
+	case GradientShapeRadial:
+		shapeStrategy = new RadialGradientStrategy(gradientVectorStart, gradientVectorEnd);
+		break;
+	}
+
+	Q_ASSERT(shapeStrategy != 0);
+
+	GradientRepeatStrategy *repeatStrategy = 0;
+
+	switch (repeat) {
+	case GradientRepeatNone:
+		repeatStrategy = GradientRepeatNoneStrategy::instance();
+		break;
+	case GradientRepeatForwards:
+		repeatStrategy = GradientRepeatForwardsStrategy::instance();
+		break;
+	case GradientRepeatAlternate:
+		repeatStrategy = GradientRepeatAlternateStrategy::instance();
+		break;
+	}
+
+	Q_ASSERT(repeatStrategy != 0);
+
+	KisLayerSP layer = new KisLayer(m_device -> width(), m_device -> height(), m_device -> colorStrategy(), "gradient");
+	KisPainter painter(layer.data());
+
+	int totalPixels = layer -> width() * layer -> height();
+
+	if (antiAliasThreshold < 1 - DBL_EPSILON) {
+		totalPixels *= 2;
+	}
+
+	int pixelsProcessed = 0;
+	int lastProgressPercent = 0;
+
+	emit notifyProgressStage(this, i18n("Rendering gradient..."), 0);
+
+	for (int x = 0; x < layer -> width(); x++) {
+		for (int y = 0; y < layer -> height(); y++) {
+
+			double t = shapeStrategy -> valueAt(x, y);
+			t = repeatStrategy -> valueAt(t);
+
+			if (reverseGradient) {
+				t = 1 - t;
+			}
+
+			KoColor color;
+			QUANTUM opacity;
+
+			m_gradient -> colorAt(t, &color, &opacity);
+			layer ->setPixel(x, y, color, opacity);
+
+			pixelsProcessed++;
+
+			int progressPercent = (pixelsProcessed * 100) / totalPixels;
+
+			if (progressPercent > lastProgressPercent) {
+				emit notifyProgress(this, progressPercent);
+				lastProgressPercent = progressPercent;
+
+				if (m_cancelRequested) {
+					break;
+				}
+			}
+		}
+
+		if (m_cancelRequested) {
+			break;
+		}
+	}
+
+	if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
+
+		KisLayerSP antiAliasedLayer = new KisLayer(*layer);
+
+		emit notifyProgressStage(this, i18n("Anti-aliasing gradient..."), lastProgressPercent);
+
+		//QImage distanceImage(layer -> width(), layer -> height(), 32);
+
+		for (int y = 0; y < layer -> height(); y++) {
+			for (int x = 0; x < layer -> width(); x++) {
+
+				double maxDistance = 0;
+
+				KoColor thisPixel;
+				QUANTUM thisPixelOpacity;
+
+				layer -> pixel(x, y, &thisPixel, &thisPixelOpacity);
+
+				for (int yOffset = -1; yOffset < 2; yOffset++) {
+					for (int xOffset = -1; xOffset < 2; xOffset++) {
+
+						if (xOffset != 0 || yOffset != 0) {
+
+							int sampleX = x + xOffset;
+							int sampleY = y + yOffset;
+
+							if (sampleX >= 0 && sampleX < layer -> width() && sampleY >=0 && sampleY < layer -> height()) {
+								KoColor color;
+								QUANTUM opacity;
+
+								layer -> pixel(sampleX, sampleY, &color, &opacity);
+
+								double dRed = (color.R() * opacity - thisPixel.R() * thisPixelOpacity) / 65535.0;
+								double dGreen = (color.G() * opacity - thisPixel.G() * thisPixelOpacity) / 65535.0;
+								double dBlue = (color.B() * opacity - thisPixel.B() * thisPixelOpacity) / 65535.0;
+
+								#define SQRT_3 1.7320508
+
+								double distance = sqrt(dRed * dRed + dGreen * dGreen + dBlue * dBlue) / SQRT_3;
+
+								if (distance > maxDistance) {
+									maxDistance = distance;
+								}
+							}
+						}
+					}
+				}
+
+				//int distCol = (int)(maxDistance * 255 + 0.5);
+				//distanceImage.setPixel(x, y, qRgb(distCol, distCol, distCol));
+
+				if (maxDistance > antiAliasThreshold) {
+					const int numSamples = 4;
+
+					int totalRed = 0;
+					int totalGreen = 0;
+					int totalBlue = 0;
+					int totalOpacity = 0;
+
+					for (int ySample = 0; ySample < numSamples; ySample++) {
+						for (int xSample = 0; xSample < numSamples; xSample++) {
+
+							double sampleWidth = 1.0 / numSamples;
+
+							double sampleX = x - 0.5 + (sampleWidth / 2) + xSample * sampleWidth;
+							double sampleY = y - 0.5 + (sampleWidth / 2) + ySample * sampleWidth;
+
+							double t = shapeStrategy -> valueAt(sampleX, sampleY);
+							t = repeatStrategy -> valueAt(t);
+
+							if (reverseGradient) {
+								t = 1 - t;
+							}
+
+							KoColor color;
+							QUANTUM opacity;
+
+							m_gradient -> colorAt(t, &color, &opacity);
+
+							totalRed += color.R();
+							totalGreen += color.G();
+							totalBlue += color.B();
+							totalOpacity += opacity;
+						}
+					}
+
+					int red = totalRed / (numSamples * numSamples);
+					int green = totalGreen / (numSamples * numSamples);
+					int blue = totalBlue / (numSamples * numSamples);
+					int opacity = totalOpacity / (numSamples * numSamples);
+
+					KoColor color(red, green,  blue);
+
+					antiAliasedLayer ->setPixel(x, y, color, opacity);
+				}
+
+				pixelsProcessed++;
+
+				int progressPercent = (pixelsProcessed * 100) / totalPixels;
+
+				if (progressPercent > lastProgressPercent) {
+					emit notifyProgress(this, progressPercent);
+					lastProgressPercent = progressPercent;
+
+					if (m_cancelRequested) {
+						break;
+					}
+				}
+			}
+
+			if (m_cancelRequested) {
+				break;
+			}
+		}
+
+		layer = antiAliasedLayer;
+	}
+
+	//distanceImage.save("distance.png",  "PNG");
+
+	if (!m_cancelRequested) {
+		// apply mask...
+
+		bitBlt(0, 0, m_compositeOp, layer.data(), m_opacity, 0, 0, layer -> width(), layer -> height());
+	}
+
+	delete shapeStrategy;
+
+	emit notifyProgressDone(this);
+
+	return !m_cancelRequested;
+}
+
+void KisPainter::cancel()
+{
+	m_cancelRequested = true;
+}
+

@@ -193,6 +193,7 @@ private:
 	virtual KisCanvasControllerInterface *canvasController() const;
 	virtual KisToolControllerInterface *toolController() const;
 	virtual KoDocument *document() const;
+	virtual KisProgressDisplayInterface *progressDisplay() const;
 
 private:
 	// Implement KisCanvasControllerInterface

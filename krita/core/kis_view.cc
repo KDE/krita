@@ -1412,7 +1412,7 @@ void KisView::export_image()
                 Q_ASSERT(dst);
 
                 //m_imgBuilderMgr -> attach(&ib);
-                m_progress -> changeSubject(&ib);
+                m_progress -> setSubject(&ib, true, true);
 
                 switch (ib.buildFile(url, dst)) {
                 case KisImageBuilder_RESULT_UNSUPPORTED:
@@ -1520,7 +1520,7 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
                 if (modal)
                         dlg.show();
                 else
-                        m_progress -> changeSubject(&ib);
+                        m_progress -> setSubject(&ib, false, true);
 
                 switch (ib.buildImage(url)) {
                 case KisImageBuilder_RESULT_UNSUPPORTED:
@@ -1543,7 +1543,7 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
                         KNotifyClient::event(this -> winId(), "cannotopenfile");
                         continue;
                 case KisImageBuilder_RESULT_FAILURE:
-                        m_progress -> changeSubject(0);
+                        m_progress -> setSubject(0, true, true);
                         KMessageBox::error(this, i18n("Error loading file %1.").arg(url.path()), i18n("Error Importing File"));
                         KNotifyClient::event(this -> winId(), "cannotopenfile");
                         continue;
@@ -3124,6 +3124,11 @@ KisToolControllerInterface *KisView::toolController() const
 KoDocument *KisView::document() const
 {
         return koDocument();
+}
+
+KisProgressDisplayInterface *KisView::progressDisplay() const
+{
+	return m_progress;
 }
 
 void KisView::windowActivationChange ( bool oldActive )

@@ -42,7 +42,8 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_pattern_chooser.cc \
     kis_gradient_chooser.cc \
     kis_colorwheel.cc \
-    kis_progress_subject.cc
+    kis_progress_subject.cc \
+    kis_double_widget.cc
 
 #    kis_dlg_paintoffset.cc 
 
@@ -80,7 +81,8 @@ noinst_HEADERS = integerwidget.h \
     kis_pattern_chooser.h \
     kis_gradient_chooser.h \
     kis_colorwheel.h \
-    kis_progress_subject.h
+    kis_progress_subject.h \
+    kis_double_widget.h
 
 libkisui_la_METASOURCES = AUTO
 SUBDIRS = labels dialogs widgets

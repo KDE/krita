@@ -154,7 +154,7 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 
 	QUANTUM *d;
 	QUANTUM *s;
-	Q_INT32 i;
+ 	Q_INT32 i;
 	Q_INT32 linesize;
 
 	if (rows <= 0 || cols <= 0)
@@ -179,10 +179,6 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 		}
 		return;
 	case COMPOSITE_ERASE:
-		QUANTUM *d;
-		QUANTUM *s;
-		Q_INT32 i;
-		
 		while (rows-- > 0) {
 			d = dst;
 			s = src;

@@ -64,14 +64,12 @@ public:
 
 	QImage maskImage() const;
 
-	void selectAll();
 
-	void clear();
+	void select(QRect r);
 
-	// Clear the selection and set the mask to color c
-	// Note: it is intentional to deep-copy the color
-	// since the selection will want to own its own copy.
-	void clear(const KoColor c);
+	void invert(QRect r);
+	
+	void clear(QRect r);
 
 	// Keep the selection but set the mask to color c
 	// Note: it is intentional to deep-copy the color
@@ -80,8 +78,8 @@ public:
 
 	/**
 	 * Set the area that encloses all selected pixels. This
-	 * will over the lifetime of the selection grow, never
-	 * shrink.
+	 * will over the lifetime of the selection grow, and 
+	 * only shrink when the entire selected rect is cleared.
 	 */
 	void setSelectedRect(QRect r) { m_selectedRect |= r; }
 	QRect selectedRect();

@@ -29,6 +29,8 @@
 #include "kis_colorspace_registry.h"
 #include "kis_fill_painter.h"
 #include "kis_colorspace_alpha.h"
+#include "kis_iterators_quantum.h"
+#include "kis_iterators_pixel.h"
 
 
 KisSelection::KisSelection(KisLayerSP layer, const QString& name) 
@@ -84,26 +86,42 @@ QImage KisSelection::maskImage() const
 	return QImage();
 }
 
-void KisSelection::selectAll()
+void KisSelection::select(QRect r)
 {
 	KisFillPainter painter(this);
-	painter.fillRect(0, 0, width(), height(), m_maskColor, MAX_SELECTED);
+	painter.fillRect(r, m_maskColor, MAX_SELECTED);
 	//m_selectedRect = painter -> dirtyRect(); // XXX: use this when fill supports it.
-	m_selectedRect = QRect(0, 0, width(), height());
+	m_selectedRect |= r;
 }
 
-void KisSelection::clear() 
+void KisSelection::clear(QRect r) 
 {
 	KisFillPainter painter(this);
-	painter.fillRect(0, 0, width(), height(), m_maskColor, MIN_SELECTED);
-	m_selectedRect = QRect();
+	painter.fillRect(r, m_maskColor, MIN_SELECTED);
+	if (r.contains(m_selectedRect, true)) {
+		    m_selectedRect = QRect();
+	}
 }
 
-void KisSelection::clear(KoColor c) 
+void KisSelection::invert(QRect r)
 {
-	KisFillPainter painter(this);
-	painter.fillRect(0, 0, width(), height(), c, MIN_SELECTED);
+	// XXX: switch to proper iterators
+	KisTileCommand* ktc = new KisTileCommand("Invert", (KisPaintDeviceSP) this ); // Create a command
 
+	KisIteratorLineQuantum lineIt = iteratorQuantumSelectionBegin(ktc, r.x(), r.x() + r.width() - 1, r.y() );
+	KisIteratorLineQuantum lastLine = iteratorQuantumSelectionEnd(ktc, r.x(), r.x() + r.width() - 1, r.y() + r.height() - 1);
+	while( lineIt <= lastLine )
+	{
+		KisIteratorQuantum quantumIt = *lineIt;
+		KisIteratorQuantum lastQuantum = lineIt.end();
+		while( quantumIt <= lastQuantum )
+		{
+			quantumIt = QUANTUM_MAX - quantumIt;
+			++quantumIt;
+		}
+		++lineIt;
+	}
+	m_selectedRect |= r;
 }
 
 void KisSelection::setMaskColor(KoColor c)

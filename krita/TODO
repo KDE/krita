@@ -14,7 +14,9 @@ Items with a hash have work started on them.
 Core
 
 	* Discontinuous selections (A byte-map mask for a whole image) (#Boudewijn)
-	* Channels
+	* Channels showing (note that we don't do Gimp-type grayscale
+	  mask channels, just showing/hiding the various color
+	  channels.
 	* Histogram computations (#Boudewijn)
 	* Adjustment layers (Layers that dynamically apply a filter to
 	  the layer they are linked to, these do not store actual
@@ -24,7 +26,8 @@ Core
 	* Painting of gradients
         X loading Gimp gradients
 	* Colorspace-aware difference between pixel function
-	* Anti-aliased filling (requires some simple colorspace function to merge 2 Pixels)
+	* Anti-aliased filling (requires some simple colorspace
+	  function to merge 2 Pixels)
 	* Load/save configuration of everything user-settable.
 	* Add filtering with image kernels (3 * 3 blocks of pixels)
 	* Scaling of images (#Boudewijn, Bart)
@@ -39,8 +42,7 @@ Core
 User Interface
 
 	* Replace krita ruler with koruler.	
-	* Allow choice between crosshair-cursor, brush-shape outline cursor
-	  and iconic cursor.
+	* Create brush-shape outline cursor
 	* All dialogs ui-fied (#Boudewijn, Sven, Casper)
 	* Tabs in dockers drag-and-droppable (vector of docker
 	  windows, create new docker if tab dropped outside existing

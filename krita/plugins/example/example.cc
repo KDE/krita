@@ -82,7 +82,7 @@ KisFilterInvert::KisFilterInvert(KisView * view) : KisFilter(name(), view)
 {
 }
 
-void KisFilterInvert::process(KisPaintDeviceSP device, KisFilterConfiguration* /*config*/, const QRect& rect,KisTileCommand* ktc)
+void KisFilterInvert::process(KisPaintDeviceSP device, KisFilterConfiguration* /*config*/, const QRect& rect, KisTileCommand* ktc)
 {
 	KisIteratorLineQuantum lineIt = device->iteratorQuantumSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
 	KisIteratorLineQuantum lastLine = device->iteratorQuantumSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);

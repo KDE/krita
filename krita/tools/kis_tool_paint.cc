@@ -109,7 +109,6 @@ void KisToolPaint::setCursor(const QCursor& cursor)
 
 void KisToolPaint::activate()
 {
-	kdDebug() << "Activate called " << name() << "\n";
 	if (m_subject) {
 		KisToolControllerInterface *controller = m_subject -> toolController();
 
@@ -118,7 +117,6 @@ void KisToolPaint::activate()
 	}
 
 	KisConfig cfg;
-	kdDebug() << "Cursor style: " << cfg.defCursorStyle() << "\n";
 
 	switch (cfg.defCursorStyle()) {
 	case CURSOR_STYLE_TOOLICON:

@@ -255,13 +255,11 @@ void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 	
 }
 
-
 void KisSelectionManager::cut()
 {
         copy();
         clear();
 }
-
 
 void KisSelectionManager::copy()
 {
@@ -305,7 +303,7 @@ void KisSelectionManager::selectAll()
 	
 
 	KisSelectionSP s = new KisSelection(layer, "layer selection for: " + layer -> name());
-	s -> selectAll();
+	s -> select(QRect(0, 0, layer -> width(), layer -> height()));
 	s -> setVisible(true);
 
 	layer -> setSelection(s);
@@ -371,6 +369,21 @@ void KisSelectionManager::reselect()
 
 void KisSelectionManager::invert()
 {
+        KisImageSP img = m_parent -> currentImg();
+	if (!img) return;
+
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
+	
+	if (layer -> hasSelection()) {
+		KisSelectionSP s = layer -> selection();
+		s -> invert(QRect(0, 0, layer -> width(), layer -> height()));
+	}
+	else {
+		selectAll();
+	}
+	m_parent -> updateCanvas(layer -> bounds());
+
 }
 
 void KisSelectionManager::paste_into()

@@ -221,7 +221,7 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 	} else {
 		// Create a selection from the surrounding area
 		m_selection = new KisSelection(lay, "Fill Temporary Selection");
-		m_selection -> clear();
+		m_selection -> clear(QRect(0, 0, lay -> width(), lay -> height()));
 		m_oldColor = new QUANTUM[m_device->depth()];
 		KisIteratorPixel pixel(m_device, 0, startY, startX);
 		for (int i = 0; i < lay -> depth(); i++)

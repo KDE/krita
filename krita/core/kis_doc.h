@@ -68,15 +68,11 @@ public:
 	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, enumImgType type, Q_INT32 depth);
 	void addImage(KisImageSP img);
 	void removeImage(KisImageSP img);
-	KisView* currentView();
-	const KisView* currentView() const;
+	void removeImage(const QString& name);
 
-	KisImageSP currentImg() const;
-	KisImageSP imageNum(Q_UINT32 num);
-	QString currentImgName();
-
-	void setCurrentImage(KisImageSP img);
-	void unsetCurrentImage();
+	KisImageSP imageNum(Q_UINT32 num) const;
+	KisImageSP findImage(const QString& name);
+	bool contains(KisImageSP img) const;
 
 	bool empty() const;
 	QStringList images();
@@ -95,10 +91,11 @@ public:
 	void clearSelection();
 	bool hasSelection();
 
-	QRect getImageRect();
-	void setImage(const QString& imageName); // for print, save file and load file.
+//	QRect getImageRect();
+//	void setImage(const QString& imageName); // for print, save file and load file.
 
 	QString nextImageName() const;
+	void setProjection(KisImageSP img);
 
 public slots:
 	void slotImageUpdated();
@@ -106,8 +103,6 @@ public slots:
 	void slotLayersUpdated();
 
 	bool slotNewImage();
-	void setCurrentImage(const QString& name);
-	void slotRemoveImage(const QString& name);
 
 	void slotDocumentRestored();
 	void slotCommandExecuted();
@@ -130,7 +125,7 @@ protected:
 	// Overide KoDocument
 	virtual KoView* createViewInstance(QWidget *parent, const char *name);
 
-protected:
+private:
 	QDomElement saveImages(QDomDocument& doc);
 	QDomElement saveLayers(QDomDocument& doc, KisImageSP img);
 	QDomElement saveChannels(QDomDocument& doc, KisLayer* lay);
@@ -146,7 +141,7 @@ private:
 	bool m_undo;
 	KCommandHistory *m_cmdHistory;
 	vKisImageSP m_images;
-	KisImageSP m_currentImg;
+	KisImageSP m_projection;
 	QImage *m_clip;
 	KisSelection *m_selection;
 	DCOPObject *m_dcop;

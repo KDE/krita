@@ -198,7 +198,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 
 KisDoc::~KisDoc()
 {
-	unsetCurrentImage();
+//	unsetCurrentImage();
 	delete m_clip;
 //	delete m_selection;
 	delete m_cmdHistory;
@@ -248,7 +248,6 @@ bool KisDoc::initDoc()
 		KisImageSP img = new KisImage(this, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, IMG_DEFAULT_DEPTH, 0, IMAGE_TYPE_RGBA, name);
 		KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_DEPTH, i18n("background"), 0);
 
-		setCurrentImage(img);
 		emit imageListUpdated();
 		setModified(true);
 		ok = true;
@@ -267,9 +266,10 @@ bool KisDoc::initDoc()
 
 QDomElement KisDoc::saveImages(QDomDocument& doc)
 {
+	QDomElement images = doc.createElement("images");
+#if 0
 	QStringList imageNames = images();
 	QString tmp_currentImageName = currentImgName();
-	QDomElement images = doc.createElement("images");
 
 	images.setAttribute("editor", "Krita");
 	images.setAttribute("mime", "application/x-krita");
@@ -295,6 +295,7 @@ QDomElement KisDoc::saveImages(QDomDocument& doc)
 
 	setImage(tmp_currentImageName);
 	images.appendChild(saveToolSettings(doc));
+#endif
 	return images;
 }
 
@@ -587,7 +588,6 @@ bool KisDoc::loadImgSettings(QDomElement& /*elem*/)
 	if (!loadLayers(elem, img))
 		return false;
 
-	setCurrentImage(img);
 	return true;
 #endif
 	return false;
@@ -667,65 +667,11 @@ bool KisDoc::completeLoading(KoStore * /*store*/)
 
 		imageNumbers++;
 		m_currentImg -> markDirty(QRect(0, 0, m_currentImg -> width(), m_currentImg -> height()));
-		setCurrentImage(m_currentImg);
 	}
 
 	return true;
 #endif
 	return false;
-}
-
-void KisDoc::setCurrentImage(KisImageSP img)
-{
-	unsetCurrentImage();
-	m_currentImg = img;
-
-	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
-		return;
-
-	if (m_currentImg) {
-		// connect new currentImg image
-#if 0
-		QObject::connect(m_currentImg, SIGNAL(updated()), this, SLOT(slotImageUpdated()));
-		QObject::connect(m_currentImg, SIGNAL(updated(const QRect&)), this, SLOT(slotImageUpdated(const QRect&)));
-		QObject::connect(m_currentImg, SIGNAL(layersUpdated()), this, SLOT(slotLayersUpdated()));
-#endif
-	}
-
-	// signal to tabbar for images - kis_view.cc
-	emit imageListUpdated();
-	// signal to currentImg image - kis_image.cc
-	emit layersUpdated();
-	// signal to view to update contents - kis_view.cc
-	emit docUpdated();
-}
-
-/*
-    setCurrentImage - by name
-*/
-
-void KisDoc::setCurrentImage(const QString& name)
-{
-	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
-		if ((*it) -> name() == name) {
-			setCurrentImage(*it);
-			return;
-		}
-	}
-}
-
-void KisDoc::unsetCurrentImage()
-{
-	if (m_currentImg) {
-		QObject::disconnect(m_currentImg, SIGNAL(activeLayerChanged(KisImageSP)), this, SLOT(slotActiveLayerChanged(KisImageSP)));
-		QObject::disconnect(m_currentImg, SIGNAL(alphaChanged(KisImageSP)), this, SLOT(slotAlphaChanged(KisImageSP)));
-		QObject::disconnect(m_currentImg, SIGNAL(selectionChanged(KisImageSP)), this, SLOT(slotSelectionChanged(KisImageSP)));
-		QObject::disconnect(m_currentImg, SIGNAL(visibilityChanged(KisImageSP, CHANNELTYPE)), this, SLOT(slotVisibilityChanged(KisImageSP, CHANNELTYPE)));
-		QObject::disconnect(m_currentImg, SIGNAL(update(KisImageSP, Q_UINT32, Q_UINT32, Q_UINT32, Q_UINT32)), 
-				this, SLOT(slotUpdate(KisImageSP, Q_UINT32, Q_UINT32, Q_UINT32, Q_UINT32)));
-	}
-
-	m_currentImg = 0;
 }
 
 /*
@@ -762,29 +708,7 @@ bool KisDoc::isEmpty() const
 	return m_images.size() == 0;
 }
 
-KisView* KisDoc::currentView()
-{
-	const QPtrList<KoView>& v = views();
-
-	return v.count() ? dynamic_cast<KisView*>(v.getFirst()) : 0;
-}
-
-const KisView* KisDoc::currentView() const
-{
-	const QPtrList<KoView>& v = views();
-
-	return v.count() ? dynamic_cast<KisView*>(v.getFirst()) : 0;
-}
-
-QString KisDoc::currentImgName()
-{
-	if (m_currentImg)
-		return m_currentImg -> name();
-
-	return QString();
-}
-
-KisImageSP KisDoc::imageNum(unsigned int num)
+KisImageSP KisDoc::imageNum(unsigned int num) const
 {
 	if (m_images.empty() || num > m_images.size())
 		return 0;
@@ -792,9 +716,20 @@ KisImageSP KisDoc::imageNum(unsigned int num)
 	return m_images[num];
 }
 
-KisImageSP KisDoc::currentImg() const
+KisImageSP KisDoc::findImage(const QString& name)
 {
-	return m_currentImg;
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
+		if ((*it) -> name() == name) {
+			return *it;
+		}
+	}
+
+	return 0;
+}
+
+bool KisDoc::contains(KisImageSP img) const
+{
+	return qFind(m_images.begin(), m_images.end(), img);
 }
 
 /*
@@ -1071,7 +1006,9 @@ void KisDoc::addImage(KisImageSP img)
 {
 	m_images.push_back(img);
 	img -> invalidate();
-	setCurrentImage(img);
+	emit imageListUpdated();
+	emit layersUpdated();
+	emit docUpdated();
 }
 
 void KisDoc::removeImage(KisImageSP img)
@@ -1081,27 +1018,20 @@ void KisDoc::removeImage(KisImageSP img)
 	if (it != m_images.end())
 		m_images.erase(it);
 
-	if (m_images.empty()) {
-		unsetCurrentImage();
-		emit imageListUpdated();
-		emit layersUpdated();
-		emit docUpdated();
-	} else {
-		setCurrentImage(*m_images.begin());
-	}
+	emit imageListUpdated();
+	emit layersUpdated();
+	emit docUpdated();
 
 //	if (m_undo)
 //		addCommand(new KisCommandImageRm(this, img));
 }
 
-void KisDoc::slotRemoveImage(const QString& name)
+void KisDoc::removeImage(const QString& name)
 {
-	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
-		if ((*it) -> name() == name) {
-			removeImage(*it);
-			return;
-		}
-	}
+	KisImageSP img = findImage(name);
+
+	if (img)
+		removeImage(img);
 }
 
 bool KisDoc::slotNewImage()
@@ -1139,7 +1069,6 @@ bool KisDoc::slotNewImage()
 		img -> addLayer(QRect(0, 0, w, h), KoColor::white(), false, i18n("background"));
 
 	img -> markDirty(QRect(0, 0, w, h));
-	setCurrentImage(img);
 	emit layersUpdated();
 	return true;
 #endif
@@ -1150,7 +1079,6 @@ bool KisDoc::slotNewImage()
 	img -> add(layer, -1);
 	img -> invalidate();
 	addImage(img);
-	setCurrentImage(img);
 	emit layersUpdated();
 	return true;
 }
@@ -1168,8 +1096,8 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 	if (zoomX != 1.0 || zoomY != 1.0)
 		painter.scale(zoomX, zoomY);
 
-	if (m_currentImg) {
-		QPixmap projection = m_currentImg -> pixmap();
+	if (m_projection) {
+		QPixmap projection = m_projection -> pixmap();
 
 		if (!projection.isNull())
 			painter.drawPixmap(rect.topLeft(), projection, rect);
@@ -1191,20 +1119,23 @@ void KisDoc::slotLayersUpdated()
 	emit layersUpdated();
 }
 
+#if 0
 QRect KisDoc::getImageRect()
 {
 	return QRect(0, 0, m_currentImg -> width(), m_currentImg -> height());
 }
+#endif
 
+#if 0
 void KisDoc::setImage(const QString& imageName)
 {
 	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
 		if ((*it) -> name() == imageName) {
-			setCurrentImage((*it));
 			return;
 		}
 	}
 }
+#endif
 
 void KisDoc::addCommand(KCommand *cmd)
 {
@@ -1274,29 +1205,29 @@ bool KisDoc::loadNativeFormat(const QString& file)
 
 void KisDoc::slotActiveLayerChanged(KisImageSP img)
 {
-	Q_ASSERT(img == m_currentImg);
 }
 
 void KisDoc::slotAlphaChanged(KisImageSP img)
 {
-	Q_ASSERT(img == m_currentImg);
 }
 
 void KisDoc::slotSelectionChanged(KisImageSP img)
 {
-	Q_ASSERT(img == m_currentImg);
 }
 
 void KisDoc::slotVisibilityChanged(KisImageSP img, CHANNELTYPE ctype)
 {
-	Q_ASSERT(img == m_currentImg);
 }
 
 void KisDoc::slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
 {
 	QRect rc(x, y, w, h);
 
-	Q_ASSERT(img == m_currentImg);
 	emit docUpdated(rc);
+}
+
+void KisDoc::setProjection(KisImageSP img)
+{
+	m_projection = img;
 }
 

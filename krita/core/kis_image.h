@@ -65,8 +65,8 @@ public:
 	KURL uri() const;
 	void uri(const KURL& uri);
 
-	enumUnit unit() const;
-	void unit(const enumUnit& u);
+	KoUnit::Unit unit() const;
+	void unit(const KoUnit::Unit& u);
 
 	void resolution(double xres, double yres);
 	void resolution(double *xres, double *yres);
@@ -155,7 +155,7 @@ private:
 	QUANTUM m_opacity;
 	double m_xres;
 	double m_yres;
-	enumUnit m_unit;
+	KoUnit::Unit m_unit;
 	enumImgType m_type;
 	KoColorMap m_clrMap;
 	bool m_dirty;

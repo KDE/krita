@@ -195,7 +195,7 @@ void KisTabBar::slotRemove( )
 	        {
 	            QString img = *it;
 	            kdDebug()<<"Removing: "<<img.latin1()<<endl;
-	            m_pDoc->slotRemoveImage(img);
+	            m_pDoc->removeImage(img);
 
                     m_pDoc->setModified( true );
 	            return;
@@ -230,8 +230,8 @@ void KisTabBar::slotImageListUpdated()
     // note that currentImg() is the image pointer
     // and currentImage() is the name of that image
 
-    if(m_pDoc->currentImg())
-        setActiveTab(m_pDoc->currentImgName());
+    if(m_pView->currentImg())
+        setActiveTab(m_pView->currentImgName());
 }
 
 

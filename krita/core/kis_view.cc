@@ -38,11 +38,15 @@
 #include <kruler.h>
 #include <kstdaction.h>
 
+// KOffice
+#include <koColor.h>
+
 // Local
 #include "kis_doc.h"
 #include "kis_canvas.h"
 #include "kis_dlg_paintoffset.h"
 #include "kis_image_builder.h"
+#include "kis_factory.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_sidebar.h"
@@ -73,7 +77,6 @@
 
 // core classes
 #include "kis_brush.h"
-#include "kis_factory.h"
 #include "kis_framebuffer.h"
 #include "kis_gradient.h"
 #include "kis_krayon.h"
@@ -141,12 +144,12 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_dcop = 0;
 	m_xoff = 0;
 	m_yoff = 0;
-
+	m_fg = KoColor::black();
+	m_bg = KoColor::white();
+	setInstance(KisFactory::global());
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 
 #if 0
-	m_zoomFactor = 1.0;
-	setInstance(KisFactory::global());
 	m_pTool = 0;
 	dcopObject();
 
@@ -155,11 +158,7 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	QObject::connect(this, SIGNAL(embeddImage(const QString&)), this, SLOT(slotEmbeddImage(const QString&)));
 	connect(m_doc, SIGNAL(layersUpdated()), SLOT(layersUpdated()));
 
-	m_fg = KoColor::black();
-	m_bg = KoColor::white();
 
-	m_xoff = 0;
-	m_yoff = 0;
 
 	m_pTool     = 0;
 	m_pBrush    = 0;
@@ -167,7 +166,6 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_pGradient = 0;
 	m_pPatternChooser = 0;
 
-	setupPainter();
 	slotSetBrush(m_pBrush);
 	slotSetPattern(m_pPattern);
 #endif
@@ -194,29 +192,6 @@ DCOPObject* KisView::dcopObject()
 #endif
 	return 0;
 }
-
-/*
-    Set up painter object for use of QPainter methods to draw
-    into KisLayer memory.  Note:  The painter object should be
-    attached to the image, not view.  It needs to be moved.
-    The reason for this is that the painter paints on the image,
-    and has nothing to do with the canvas or the view. If there
-    are multiple views then the same painter paints images which
-    are shown in each view.
-
-    Even better, the currentImg image should be set by the view and not
-    by the document.  Each view could show a different currentImg
-    image.  Curently each view shows the same image, which is very
-    limiting, although it's more compliant with koffice standards.
-    The best solution is to have a painter for each image, which would
-    take more memory, but detaches it from either document or view.
-*/
-
-void KisView::setupPainter()
-{
-//	m_pPainter = new KisPainter(m_doc, this);
-}
-
 
 /*
     SideBar - has tabs for brushes, layers, channels, etc.
@@ -349,23 +324,25 @@ void KisView::setupRulers()
 {
 	m_hRuler = new KRuler(Qt::Horizontal, this);
 	m_vRuler = new KRuler(Qt::Vertical, this);
-	m_hRuler -> setGeometry(20, 0, width()-20, 20);
-	m_vRuler -> setGeometry(0, 20, 20, height()-20);
+	m_hRuler -> setGeometry(20, 0, width() - 20, 20);
+	m_vRuler -> setGeometry(0, 20, 20, height() - 20);
 	m_vRuler -> setRulerMetricStyle(KRuler::Pixel);
 	m_hRuler -> setRulerMetricStyle(KRuler::Pixel);
 	m_vRuler -> setFrameStyle(QFrame::Panel | QFrame::Raised);
 	m_hRuler -> setFrameStyle(QFrame::Panel | QFrame::Raised);
 	m_hRuler -> setLineWidth(1);
 	m_vRuler -> setLineWidth(1);
-	//m_hRuler->setShowEndLabel(true);
-	//m_vRuler->setShowEndLabel(true);
+	m_hRuler -> setShowEndLabel(true);
+	m_vRuler -> setShowEndLabel(true);
+	m_hRuler -> setShowPointer(true);
+	m_vRuler -> setShowPointer(true);
 }
 
 void KisView::setupTabBar()
 {
 	m_tabBar = new KisTabBar(this, m_doc);
 	m_tabBar -> slotImageListUpdated();
-	QObject::connect(m_tabBar, SIGNAL(tabSelected(const QString&)), m_doc, SLOT(setCurrentImage(const QString&)));
+	connect(m_tabBar, SIGNAL(tabSelected(const QString&)), SLOT(selectImage(const QString&)));
 	QObject::connect(m_doc, SIGNAL(imageListUpdated()), m_tabBar, SLOT(slotImageListUpdated()));
 	m_tabFirst = new KPushButton(this);
 	m_tabLeft = new KPushButton(this);
@@ -401,8 +378,8 @@ void KisView::setupActions()
 	(void)new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
 
 	// view actions
-	m_zoomIn = new KAction(i18n("Zoom &In"), "viewmag+", 0, this, SLOT(zoom_in()), actionCollection(), "zoom_in");
-	m_zoomOut = new KAction(i18n("Zoom &Out"), "viewmag-", 0, this, SLOT(zoom_out()), actionCollection(), "zoom_out");
+	m_zoomIn = new KAction(i18n("Zoom &In"), "viewmag+", 0, this, SLOT(zoomIn()), actionCollection(), "zoom_in");
+	m_zoomOut = new KAction(i18n("Zoom &Out"), "viewmag-", 0, this, SLOT(zoomOut()), actionCollection(), "zoom_out");
 
 	// tool settings actions
 	(void)new KAction(i18n("&Gradient Dialog..."), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
@@ -504,7 +481,7 @@ void KisView::slotTabSelected(const QString& )
 void KisView::slotRefreshPainter()
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 
 	if(img) {
 		KisLayerSP lay = img -> getCurrentLayer();
@@ -619,7 +596,8 @@ void KisView::resizeEvent(QResizeEvent *)
 
 	m_vRuler -> setRange(0, docH + static_cast<Q_INT32>(100 * zoom()));
 	m_hRuler -> setRange(0, docW + static_cast<Q_INT32>(100 * zoom()));
-//	m_hScroll -> setLineStep(1 + setLineStep<Q_INT32>(10 * zoom()));
+	m_vScroll -> setLineStep(static_cast<Q_INT32>(100 * zoom()));
+	m_hScroll -> setLineStep(static_cast<Q_INT32>(100 * zoom()));
 
 	if (m_vScroll -> isVisible())
 		m_vRuler -> setOffset(m_vScroll -> value());
@@ -650,7 +628,7 @@ void KisView::updateReadWrite(bool /*readwrite*/)
 void KisView::slotUpdateImage()
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 
 	if (img) {
 		QRect updateRect(0, 0, img -> width(), img -> height());
@@ -691,7 +669,7 @@ void KisView::slotDocUpdated()
 void KisView::slotDocUpdated(const QRect& )
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 	QRect ur = rc;
 	QPainter p;
 	float zF = zoom();
@@ -729,6 +707,23 @@ void KisView::clearCanvas(const QRect& rc)
 	gc.eraseRect(rc);
 }
 
+KisImageSP KisView::currentImg() const
+{
+	if (m_current && m_doc -> contains(m_current))
+		return m_current;
+
+	m_current = m_doc -> imageNum(0);
+	return m_current;
+}
+
+QString KisView::currentImgName() const
+{
+	if (m_current)
+		return m_current -> name();
+
+	return QString::null;
+}
+
 inline
 Q_INT32 KisView::horzValue() const
 {
@@ -743,7 +738,7 @@ Q_INT32 KisView::vertValue() const
 
 void KisView::paintView(const QRect& rc)
 {
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 
 	if (img) {
 		QPainter gc(m_canvas);
@@ -782,6 +777,7 @@ void KisView::paintView(const QRect& rc)
 		if (xt || yt)
 			gc.translate(xt, yt);
 
+		m_doc -> setProjection(img);
 		m_doc -> paintContent(gc, ur, false, 1.0, 1.0);
 	} else {
 		clearCanvas(rc);
@@ -962,7 +958,7 @@ void KisView::crop()
 	// keep old image - user can remove it later if he wants
 	// by removing its layer or may want to keep the original.
 
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 
 	if (!img)
 		return;
@@ -1004,7 +1000,7 @@ void KisView::crop()
 void KisView::selectAll()
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 
 	if (img) {
 		QRect rc = img -> getCurrentLayer() -> imageExtents();
@@ -1022,96 +1018,37 @@ void KisView::unSelectAll()
 //	m_doc -> clearSelection();
 }
 
-/*--------------------------
-       Zooming
----------------------------*/
-
+void KisView::zoomUpdateGUI(Q_INT32 , Q_INT32 , double zf)
+{
+	Q_ASSERT(m_zoomIn);
+	Q_ASSERT(m_zoomOut);
+	setZoom(zf);
+	m_zoomIn -> setEnabled(zf <= KISVIEW_MAX_ZOOM);
+	m_zoomOut -> setEnabled(zf >= KISVIEW_MIN_ZOOM);
 
 #if 0
-void KisView;::zoom(int , int , float )
-{
-	/* Avoid divide by zero errors by disallowing a zoom
-	   factor of zero, which is impossible anyway, as it would
-	   make the image infinitely small in size. */
-	if (zf == 0) zf = 1;
-
-	/* Set a reasonable lower limit for a zoom factor of 1/8.
-	   At this level a 1600x1600 image would be 200 x 200 in size.
-	   Extremely low zooms, like extremely high ones, can be very
-	   expensive in terms of processor cycles and degrade performace,
-	   although not nearly as much as extrmely high zooms.*/
-	if (zf < 0.15) zf = 1.0/8.0;
-
-	/* Set a reasonable upper limit for a zoom factor of 16. At this
-	   level each pixel in the layer is shown as a 16x16 rectangle.
-	   Zoom levels higher than this serve no useful purpose and are
-	 *VERY* expensive.  It's possible to accidentally set a very high
-	 zoom by continuing to click on the image with the zoom tool
-	 without this limit. */
-	else if(zf > 16.0) zf = 16.0;
-
-	setZoomFactor(zf);
-
-	// clear everything
-	QPainter p;
-	p.begin(m_canvas);
-	p.eraseRect(0, 0, width(), height());
-	p.end();
-
-	// adjust scaling of rulers to zoom factor
-	if(zf > 3.0)
-	{
-		// 8 / 16 pixels per mark at 8.0 / 16.0 zoom factors
-		m_hRuler->setPixelPerMark((int)(zf * 1.0));
-		m_vRuler->setPixelPerMark((int)(zf * 1.0));
+	if (zf > 3.0) {
+		m_hRuler -> setPixelPerMark(static_cast<int>(zf * 1.0));
+		m_vRuler -> setPixelPerMark(static_cast<int>(zf * 1.0));
+	} else if (zf < 0.3) {
+		m_hRuler -> setPixelPerMark(static_cast<int>(zf * 0.1));
+		m_vRuler -> setPixelPerMark(static_cast<int>(zf * 0.1));
+	} else {
+		m_hRuler -> setPixelPerMark(static_cast<int>(zf * 10.0));
+		m_vRuler -> setPixelPerMark(static_cast<int>(zf * 10.0));
 	}
-	else
-	{
-		// to pixels per mark at zoom factor of 1.0
-		m_hRuler->setPixelPerMark((int)(zf * 10.0));
-		m_vRuler->setPixelPerMark((int)(zf * 10.0));
-	}
+#endif
 
-	// Kruler - lacks sane builtin limits at tiny sizes
-	// this causes hangups - avoid tiny rulers
+	m_hRuler -> setShowTinyMarks(zf > 0.4);
+	m_vRuler -> setShowTinyMarks(zf > 0.4);
+	m_hRuler -> setShowLittleMarks(zf > 0.3);
+	m_vRuler -> setShowLittleMarks(zf > 0.3);
+	m_hRuler -> setShowMediumMarks(zf > 0.2);
+	m_vRuler -> setShowMediumMarks(zf > 0.2);
 
-	if(zf > 3.0)
-	{
-		m_hRuler->setValuePerLittleMark(1);
-		m_vRuler->setValuePerLittleMark(1);
-	}
-	else
-	{
-		m_hRuler->setValuePerLittleMark(10);
-		m_vRuler->setValuePerLittleMark(10);
-	}
-
-	// zoom factor of 1/4
-	if(zf < 0.30)
-	{
-		m_hRuler->setShowLittleMarks(false);
-		m_vRuler->setShowLittleMarks(false);
-	}
-	// zoom factor of 1/2 or greater
-	else
-	{
-		m_hRuler->setShowLittleMarks(true);
-		m_vRuler->setShowLittleMarks(true);
-	}
-
-	// zoom factor of 1/8 - lowest possible
-	if(zf < 0.20)
-	{
-		m_hRuler->setShowMediumMarks(false);
-		m_vRuler->setShowMediumMarks(false);
-	}
-	// zoom factor of 1/4 or greater
-	else
-	{
-		m_hRuler->setShowMediumMarks(true);
-		m_vRuler->setShowMediumMarks(true);
-	}
-
+	resizeEvent(0);
+	updateCanvas();
+#if 0
 	/* scroll to the point clicked on and update the canvas.
 	   Currently scrollTo() doesn't do anything but the zoomed view
 	   does have the same offset as the prior view so it
@@ -1124,56 +1061,27 @@ void KisView;::zoom(int , int , float )
 	if (y < 0) y = 0;
 
 	scrollTo(QPoint(x, y));
-
-	m_canvas->update();
-
-	/* at low zoom levels mark everything dirty and redraw the
-	   entire image to insure that the previous image is erased
-	   completely from border areas.  Otherwise screen artificats
-	   can be seen.*/
-
-	if(zf < 1.0) slotUpdateImage();
-}
-#endif
-
-void KisView::zoom_in(int , int )
-{
-#if 0
-	float zf = zoom() * 2;
-
-	zoom(x, y, zf);
 #endif
 }
 
-void KisView::zoom_out(int , int )
+void KisView::zoomIn(Q_INT32 x, Q_INT32 y)
 {
-#if 0
-	float zf = zoom() / 2;
-
-	zoom(x, y, zf);
-#endif
+	zoomUpdateGUI(x, y, zoom() * 2);
 }
 
-void KisView::zoom_in()
+void KisView::zoomOut(Q_INT32 x, Q_INT32 y)
 {
-	Q_ASSERT(m_zoomIn);
-	Q_ASSERT(m_zoomOut);
-	setZoom(zoom() * 2);
-	m_zoomIn -> setEnabled(zoom() <= KISVIEW_MAX_ZOOM);
-	m_zoomOut -> setEnabled(zoom() >= KISVIEW_MIN_ZOOM);
-	resizeEvent(0);
-	updateCanvas();
+	zoomUpdateGUI(x, y, zoom() / 2);
 }
 
-void KisView::zoom_out()
+void KisView::zoomIn()
 {
-	Q_ASSERT(m_zoomIn);
-	Q_ASSERT(m_zoomOut);
-	setZoom(zoom() / 2);
-	m_zoomIn -> setEnabled(zoom() <= KISVIEW_MAX_ZOOM);
-	m_zoomOut -> setEnabled(zoom() >= KISVIEW_MIN_ZOOM);
-	resizeEvent(0);
-	updateCanvas();
+	zoomUpdateGUI(-1, -1, zoom() * 2);
+}
+
+void KisView::zoomOut()
+{
+	zoomUpdateGUI(-1, -1, zoom() / 2);
 }
 
 /*
@@ -1278,7 +1186,7 @@ void KisView::insert_layer()
 void KisView::remove_layer()
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 	int i;
 
 	if (img && (i = img -> getCurrentLayerIndex()) != -1)
@@ -1294,7 +1202,7 @@ void KisView::remove_layer()
 void KisView::hide_layer()
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 	int i;
 
 	if (img && (i = img -> getCurrentLayerIndex()) != -1)
@@ -1310,7 +1218,7 @@ void KisView::hide_layer()
 void KisView::link_layer()
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 	int i;
 
 	if (img && (i = img -> getCurrentLayerIndex()) != -1)
@@ -1326,7 +1234,7 @@ void KisView::link_layer()
 void KisView::next_layer()
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 
 	if (!img)
 		return;
@@ -1371,7 +1279,7 @@ void KisView::next_layer()
 void KisView::previous_layer()
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 
 	if (!img)
 		return;
@@ -1405,10 +1313,8 @@ void KisView::previous_layer()
 
 void KisView::slotImportImage()
 {	
-	if (importImage(false) > 0) {
+	if (importImage(false) > 0)
 		m_doc -> setModified(true);
-		resizeEvent(0);
-	}
 }
 
 void KisView::export_image()
@@ -1418,10 +1324,8 @@ void KisView::export_image()
 
 void KisView::slotInsertImageAsLayer()
 {
-	if (importImage(true) > 0) {
+	if (importImage(true) > 0)
 		m_doc -> setModified(true);
-		resizeEvent(0);
-	}
 }
 
 void KisView::save_layer_as_image()
@@ -1467,9 +1371,9 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 
 	img = ib.image();
 
-	if (createLayer) {
+	if (createLayer && currentImg()) {
 		vKisLayerSP v = img -> layers();
-		KisImageSP current = m_doc -> currentImg();
+		KisImageSP current = currentImg();
 		Q_INT32 rc = v.size();
 
 		for (vKisLayerSP_it it = v.begin(); it != v.end(); it++) {
@@ -1483,6 +1387,7 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 	}
 
 	m_doc -> addImage(img);
+	selectImage(img);
 	return 1;
 }
 
@@ -1632,9 +1537,9 @@ void KisView::add_new_image_tab()
 void KisView::remove_current_image_tab()
 {
 #if 0
-    if (m_doc->currentImg())
+    if (currentImg())
     {
-        m_doc->removeImage(m_doc->currentImg());
+        m_doc->removeImage(currentImg());
         slotUpdateImage();
         slotRefreshPainter();
 
@@ -1647,7 +1552,7 @@ void KisView::remove_current_image_tab()
 void KisView::merge_all_layers()
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 
 	if (img) {
 		img -> mergeAllLayers();
@@ -1662,9 +1567,9 @@ void KisView::merge_all_layers()
 void KisView::merge_visible_layers()
 {
 #if 0
-    if (m_doc->currentImg())
+    if (currentImg())
     {
-        m_doc->currentImg()->mergeVisibleLayers();
+        currentImg()->mergeVisibleLayers();
         slotUpdateImage();
         slotRefreshPainter();
 
@@ -1677,9 +1582,9 @@ void KisView::merge_visible_layers()
 void KisView::merge_linked_layers()
 {
 #if 0
-    if (m_doc->currentImg())
+    if (currentImg())
     {
-        m_doc->currentImg()->mergeLinkedLayers();
+        currentImg()->mergeLinkedLayers();
         slotUpdateImage();
         slotRefreshPainter();
 
@@ -1765,18 +1670,12 @@ void KisView::preferences()
 
 Q_INT32 KisView::docWidth() const
 {
-	if (m_doc -> currentImg()) 
-		return m_doc -> currentImg() -> width();
-
-	return 0;
+	return currentImg() ? currentImg() -> width() : 0;
 }
 
 Q_INT32 KisView::docHeight() const
 {
-	if (m_doc -> currentImg()) 
-		return m_doc -> currentImg() -> height();
-
-	return 0;
+	return currentImg() ? currentImg() -> height() : 0;
 }
 
 void KisView::scrollTo(QPoint )
@@ -1824,30 +1723,21 @@ void KisView::slotSetPattern(KisPattern*  )
 #endif
 }
 
-
-void KisView::setSetFGColor(const KoColor&)
+void KisView::setBGColor(const KoColor& c)
 {
-#if 0
-	emit fgColorChanged(c);
-	m_fg = c;
-#endif
-}
-
-void KisView::setSetBGColor(const KoColor&)
-{
-#if 0
 	emit bgColorChanged(c);
 	m_bg = c;
-#endif
 }
 
-/*
-    The new foreground color should show up in the color selector
-    via signal sent to colorselector
-*/
-void KisView::slotSetFGColor(const KoColor&)
+void KisView::setFGColor(const KoColor& c)
 {
-//	m_fg = c;
+	emit fgColorChanged(c);
+	m_fg = c;
+}
+
+void KisView::slotSetFGColor(const KoColor& c)
+{
+	m_fg = c;
 }
 
 /*
@@ -1867,7 +1757,7 @@ void KisView::setupPrinter(KPrinter& )
     int count = 0;
     QStringList imageList = m_doc->images();
     for (QStringList::Iterator it = imageList.begin(); it != imageList.end(); ++it) {
-        if (*it == m_doc->currentImg()->name())
+        if (*it == currentImg()->name())
             break;
         ++count;
     }
@@ -1942,7 +1832,7 @@ void KisView::appendToDocImgList(const QSize& , const KURL& )
 #if 0
 void KisView::addHasNewLayer(const QSize& , const KURL& )
 {
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 	QRect layerRect(0, 0, size.width(), size.height());
 	QString layerName(i18n("Layer %1").arg(img -> nLayers()));
 	uint indx;
@@ -2104,7 +1994,7 @@ void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 void KisView::layerToggleVisible(int )
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 	KisLayerSPLst l = img -> layerList();
 	KisLayerSP lay = l[n];
 
@@ -2117,7 +2007,7 @@ void KisView::layerToggleVisible(int )
 void KisView::layerSelected(int )
 {	
 #if 0
-	KisImage *img = m_doc -> currentImg();
+	KisImage *img = currentImg();
 
 	img -> setCurrentLayer(n);
 #endif
@@ -2125,6 +2015,7 @@ void KisView::layerSelected(int )
 
 void KisView::docImageListUpdate()
 {
+	zoomUpdateGUI(0, 0, 1.0);
 	resizeEvent(0);
 	updateCanvas();
 }
@@ -2132,7 +2023,7 @@ void KisView::docImageListUpdate()
 void KisView::layerToggleLinked(int)
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 	KisLayerSPLst l = img -> layerList();
 	KisLayerSP lay = l[n];
 
@@ -2144,7 +2035,7 @@ void KisView::layerToggleLinked(int)
 void KisView::layerProperties(int /*n*/)
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 	KisLayerSP lay = img -> getCurrentLayer();
 	KisPaintPropertyDlg dlg(lay -> name(), lay -> opacity());
 
@@ -2160,7 +2051,7 @@ void KisView::layerProperties(int /*n*/)
 void KisView::layerAdd()
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 	int indx;
 
 	if (!img)
@@ -2190,7 +2081,7 @@ void KisView::layerAdd()
 void KisView::layerRemove(int )
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 
 	if (img) {
 		img -> removeLayer(n);
@@ -2213,7 +2104,7 @@ void KisView::layerRmMask(int /*n*/)
 void KisView::layerRaise(int )
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 	int npos;
 
 	if (img) {
@@ -2227,7 +2118,7 @@ void KisView::layerRaise(int )
 void KisView::layerLower(int )
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 	int npos;
 
 	if (img) {
@@ -2241,7 +2132,7 @@ void KisView::layerLower(int )
 void KisView::layerFront(int )
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 
 	if (img)
 		img -> setFrontLayer(n);
@@ -2252,7 +2143,7 @@ void KisView::layerFront(int )
 void KisView::layerBack(int )
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 
 	if (img)
 		img -> setBackgroundLayer(n);
@@ -2266,7 +2157,7 @@ void KisView::layerLevel(int /*n*/)
 void KisView::layersUpdated()
 {
 #if 0
-	KisImageSP img = m_doc -> currentImg();
+	KisImageSP img = currentImg();
 
 	if (img) {
 		KisLayerSPLst l = img -> layerList();
@@ -2284,6 +2175,21 @@ void KisView::layersUpdated()
 #endif
 }
 
+void KisView::selectImage(const QString& name)
+{
+	m_current = m_doc -> findImage(name);
+	resizeEvent(0);
+	updateCanvas();
+}
+
+void KisView::selectImage(KisImageSP img)
+{
+	m_current = img;
+	resizeEvent(0);
+	updateCanvas();
+	m_tabBar -> slotImageListUpdated();
+}
+
 void KisView::setPaintOffset()
 {
 	KisDlgPaintOffset dlg(m_xoff, m_yoff, this, "dlg_paint_offset");
@@ -2297,15 +2203,15 @@ void KisView::setPaintOffset()
 	}
 }
 
-void KisView::scrollH(int)
+void KisView::scrollH(int value)
 {
-	m_hRuler -> setOffset(m_hScroll -> value());
+	m_hRuler -> setOffset(value);
 	m_canvas -> repaint();
 }
 
-void KisView::scrollV(int)
+void KisView::scrollV(int value)
 {
-	m_vRuler -> setOffset(m_vScroll -> value());
+	m_vRuler -> setOffset(value);
 	m_canvas -> repaint();
 }
 

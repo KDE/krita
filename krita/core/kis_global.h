@@ -23,6 +23,9 @@
 
 #include <limits.h>
 #include <qglobal.h>
+#include <kglobal.h>
+#include <koGlobal.h>
+#include <koUnit.h>
 
 /**
  * Mime type for this app - not same as file type, but file types
@@ -99,11 +102,6 @@ enum enumImgType {
 	IMAGE_TYPE_LABA,
 	IMAGE_TYPE_YUV,
 	IMAGE_TYPE_YUVA };
-
-enum enumUnit {
-	UNIT_MM,
-	UNIT_INCH
-};
 
 typedef Q_UINT8 CHANNELTYPE;
 typedef Q_UINT8 PIXELTYPE;

@@ -42,11 +42,9 @@ class KisGradient;
 class KisGridViewFrame;
 class KisPainter;
 class KisSideBar;
-
 class KisBrushChooser;
 class KisPatternChooser;
 class KisKrayonChooser;
-
 class KisKrayon;
 class KisBrush;
 class KisPattern;
@@ -73,25 +71,25 @@ public:
 	virtual void updateReadWrite(bool readwrite);
 
 public:  
+	KoColor bgColor();
+	KisImageSP currentImg() const;
+	QString currentImgName() const;
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, const QString& filename = QString::null);
+	KoColor fgColor();
 	void updateCanvas();
 	void updateCanvas(const QRect& rc);
-//	void zoom(int x, int y, float zf);
-	void zoom_in(int x, int y);
-	void zoom_out(int x, int y);
+	void setBGColor(const KoColor& c);
+	void setFGColor(const KoColor& c);
+	void zoomIn(Q_INT32 x, Q_INT32 y);
+	void zoomOut(Q_INT32 x, Q_INT32 y);
 
 //	void setActiveTool(KisTool *tool);
 //	KisTool* getActiveTool();
 
-	void setupPainter();
-	void setupDialogs();
-	void setupTools();
 
 
-	KoColor fgColor();
-	KoColor bgColor();
 
 	KisPainter  *kisPainter();
 	KisPattern  *currentPattern();
@@ -108,18 +106,20 @@ public:
 	void save_layer_image(bool mergeLayers);
 
 
-	void setSetFGColor(const KoColor& c);
-	void setSetBGColor(const KoColor& c);
 
 	void setCanvasCursor(const QCursor& cursor);
 
 signals:
-	void bgColorChanged(const KoColor&);
-	void fgColorChanged(const KoColor&);     
+	void bgColorChanged(const KoColor& c);
+	void fgColorChanged(const KoColor& c);     
 
 public slots:
 	void slotRefreshPainter();
+	void slotSetBGColor(const KoColor& c);
+	void slotSetFGColor(const KoColor& c);
 	void slotUpdateImage();
+	void zoomIn();
+	void zoomOut();
 
 	void slotDocUpdated();
 	void slotDocUpdated(const QRect&);
@@ -127,15 +127,10 @@ public slots:
 	void slotSetKrayon(KisKrayon *);
 	void slotSetBrush(KisBrush *);
 	void slotSetPattern(KisPattern *);
-	void slotSetFGColor(const KoColor& c);
-	void slotSetBGColor(const KoColor& c);
 
 	void slotTabSelected(const QString& name);
 
 	void slotHalt(); // for the faint of heart
-    
-	void zoom_in();
-	void zoom_out();
      
 	// edit action slots
 	void copy();
@@ -207,22 +202,25 @@ private:
 	void clearCanvas(const QRect& rc);
 	Q_INT32 horzValue() const;
 	void paintView(const QRect& rc);
+	void selectImage(KisImageSP img);
 	void setupActions();
 	void setupCanvas();
 	void setupRulers();
 	void setupScrollBars();
 	void setupSideBar();
 	void setupTabBar();
+	void setupTools();
 	Q_INT32 vertValue() const;
+	void zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf);
 
 private slots:
-	void canvasGotMousePressEvent(QMouseEvent *);
-	void canvasGotMouseMoveEvent(QMouseEvent *);
-	void canvasGotMouseReleaseEvent(QMouseEvent *);
-	void canvasGotPaintEvent(QPaintEvent *);
-	void canvasGotEnterEvent(QEvent *);
-	void canvasGotLeaveEvent(QEvent *);
-	void canvasGotMouseWheelEvent(QWheelEvent *);
+	void canvasGotMousePressEvent(QMouseEvent *e);
+	void canvasGotMouseMoveEvent(QMouseEvent *e);
+	void canvasGotMouseReleaseEvent(QMouseEvent *e);
+	void canvasGotPaintEvent(QPaintEvent *e);
+	void canvasGotEnterEvent(QEvent *e);
+	void canvasGotLeaveEvent(QEvent *e);
+	void canvasGotMouseWheelEvent(QWheelEvent *e);
 	void docImageListUpdate();
 	void layerToggleVisible(int n);
 	void layerSelected(int n);
@@ -238,9 +236,10 @@ private slots:
 	void layerBack(int n);
 	void layerLevel(int n);
 	void layersUpdated();
+	void selectImage(const QString&);
 	void setPaintOffset();
-	void scrollH(int);
-	void scrollV(int);
+	void scrollH(int value);
+	void scrollV(int value);
 
 private:
 	KisDoc *m_doc;
@@ -269,10 +268,13 @@ private:
 	DCOPObject *m_dcop;
 	Q_INT32 m_xoff;
 	Q_INT32 m_yoff;    
+	KoColor m_fg;
+	KoColor m_bg;
 
+private:
+	mutable KisImageSP m_current;
 #if 0
 	// krayon box (sidebar)
-
 	KisDoc *m_doc;  // always needed
 	KisToolSP m_pTool; // current active tool
 	KisToolSP m_paste; // The special paste tool
@@ -282,7 +284,6 @@ private:
 	KisBrush      *m_pBrush;    // current brush for this view
 	KisPattern    *m_pPattern;  // current pattern for this view 
 	KisGradient   *m_pGradient; // current gradient   
-	KisImage      *m_pImage;    // current image for this view
 
 	// sidebar dock widgets
 	KisKrayonChooser     *m_pKrayonChooser;    
@@ -295,14 +296,8 @@ private:
 
 	// krayon and kde objects
 	KisPainter          *m_pPainter;
-	KoColor            m_fg;
-	KoColor m_bg;
-
-	// normal variables
-	float	    m_zoomFactor;
-
+	KisListBoxView *m_layerView;
 #endif
-//	KisListBoxView *m_layerView;
 
 };
 

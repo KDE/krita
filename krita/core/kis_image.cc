@@ -109,7 +109,7 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, 
 	m_depth = depth;
 	m_xres = 1.0;
 	m_yres = 1.0;
-	m_unit = UNIT_MM;
+	m_unit = KoUnit::U_PT;
 	m_type = imgType;
 	m_dirty = false;
 	m_construct = false;
@@ -189,12 +189,12 @@ void KisImage::uri(const KURL& uri)
 		m_uri = uri;
 }
 
-enumUnit KisImage::unit() const
+KoUnit::Unit KisImage::unit() const
 {
 	return m_unit;
 }
 
-void KisImage::unit(const enumUnit& u)
+void KisImage::unit(const KoUnit::Unit& u)
 {
 	m_unit = u;
 }

@@ -100,7 +100,7 @@ void KisToolBrush::setup()
 	KToggleAction *toggle;
 	toggle = new KToggleAction(i18n("&Brush"), "Brush", 0, this,
                                    SLOT(activateSelf()),
-                                   m_view -> actionCollection(), "tool_brush
+                                   m_view -> actionCollection(), "tool_brush");
 	toggle -> setExclusiveGroup("tools");
 }
 

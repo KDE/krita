@@ -10,7 +10,6 @@ INCLUDES  = -I$(srcdir)/builder \
 	$(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/strategy \
 	-I$(srcdir)/color_strategy \
-	-I${srcdir}/capability_mediator \
 	 $(all_includes)
 
 #CXXFLAGS = -shared -fPIC
@@ -21,8 +20,7 @@ noinst_LTLIBRARIES = libkiscore.la
 libkiscore_la_LIBADD = tiles/libkistile.la helper/libkishelper.la \
 	builder/libkiscorebuilder.la \
 	strategy/libkisstrategy.la \
-	color_strategy/libkiscolor_strategy.la \
-	capability_mediator/libkiscapabilitymediator.la
+	color_strategy/libkiscolor_strategy.la
 
 libkiscore_la_SOURCES = kis_paint_device.cc \
 	kis_layer.cc \
@@ -71,4 +69,4 @@ libkiscore_la_SOURCES = kis_paint_device.cc \
 
 libkiscore_la_METASOURCES = AUTO
 libkiscore_la_LDFLAGS = $(KDE_RPATH)
-SUBDIRS = helper tiles builder strategy color_strategy capability_mediator
+SUBDIRS = helper tiles builder strategy color_strategy 

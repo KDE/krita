@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="7">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="8">
 
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
@@ -198,6 +198,7 @@
   <Action name="tool_brush"/>
   <Action name="tool_airbrush"/>
   <Action name="tool_eraser"/>
+  <Action name="tool_duplicate"/>
 
   <Action name="tool_line"/>
   <Action name="tool_polyline"/>

@@ -188,6 +188,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_yoff = 0;
         m_fg = KoColor::black();
         m_bg = KoColor::white();
+	m_clipboardHasImage = false;
 
         m_layerchanneldocker = 0;
         m_resourcedocker = 0;

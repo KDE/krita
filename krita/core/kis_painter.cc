@@ -994,9 +994,8 @@ void KisPainter::duplicateAt(const KisPoint &pos, const double pressure, const d
 	if( srcPoint.x() >=m_device->width() || srcPoint.y() >=m_device->height() )
 		return;
 		
-	KisPaintDevice* srcdev = new KisPaintDevice( m_dab.data()->width(), m_dab.data()->height(), m_dab.data()->type(), "");
-	Q_INT32 sw = srcdev->width();
-	Q_INT32 sh = srcdev->height();
+	Q_INT32 sw = m_dab->width();
+	Q_INT32 sh = m_dab->height();
 	if( srcPoint.x() + sw > m_device->width() )
 		sw = m_device->width() - srcPoint.x();
 	if( srcPoint.y() + sh > m_device->height() )
@@ -1007,10 +1006,11 @@ void KisPainter::duplicateAt(const KisPoint &pos, const double pressure, const d
 		srcPoint.setX(0);
 	if( srcPoint.y() < 0)
 		srcPoint.setY(0);
+	KisPaintDevice* srcdev = new KisPaintDevice(sw, sh, m_dab.data()->type(), "");
 	
-	KisIteratorLinePixel srcLit = srcdev->iteratorPixelSelectionBegin( 0, sx, sx + sw - 1, sy);
-	KisIteratorLinePixel dabLit = m_dab.data()->iteratorPixelSelectionBegin( 0, sx, sx + sw - 1, sy);
-	KisIteratorLinePixel srcLitend = srcdev->iteratorPixelSelectionEnd( 0, sx, sx + sw - 1, sy + sh - 1);
+	KisIteratorLinePixel srcLit = srcdev->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
+	KisIteratorLinePixel dabLit = m_dab.data()->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
+	KisIteratorLinePixel srcLitend = srcdev->iteratorPixelSelectionEnd( 0, sx, sw - 1, sh - 1);
 	KisIteratorLinePixel devLit = m_device->iteratorPixelSelectionBegin( m_transaction, srcPoint.x(), srcPoint.x() + sw - 1, srcPoint.y());
 	while ( srcLit <= srcLitend )
 	{

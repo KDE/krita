@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>WdgWSPaintOp</class>
 <widget class="QWidget">
     <property name="name">
@@ -11,9 +11,6 @@
             <width>600</width>
             <height>433</height>
         </rect>
-    </property>
-    <property name="caption">
-        <string>Form1</string>
     </property>
     <widget class="QGroupBox">
         <property name="name">
@@ -39,7 +36,7 @@
                     <cstring>lblDryingRate</cstring>
                 </property>
                 <property name="text">
-                    <string>&amp;Drying Rate:</string>
+                    <string>&amp;Drying rate:</string>
                 </property>
                 <property name="buddy" stdset="0">
                     <cstring>intDryingRate</cstring>
@@ -50,10 +47,7 @@
                     <cstring>chkLiquid</cstring>
                 </property>
                 <property name="text">
-                    <string>&amp;Liquid content</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+L</string>
+                    <string>&amp;Liquid content:</string>
                 </property>
                 <property name="checked">
                     <bool>true</bool>
@@ -91,7 +85,7 @@
                     <cstring>lblMiscibility</cstring>
                 </property>
                 <property name="text">
-                    <string>&amp;Miscibility</string>
+                    <string>&amp;Miscibility:</string>
                 </property>
                 <property name="buddy" stdset="0">
                     <cstring>intMiscibility</cstring>
@@ -232,7 +226,7 @@
                 </rect>
             </property>
             <property name="text">
-                <string>Paint Canvas Attributes</string>
+                <string>Paint canvas attributes</string>
             </property>
             <property name="accel">
                 <string></string>
@@ -263,10 +257,7 @@
                     <cstring>chkGravity</cstring>
                 </property>
                 <property name="text">
-                    <string>Paint &amp;Gravity</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+G</string>
+                    <string>Paint &amp;gravity</string>
                 </property>
             </widget>
             <widget class="QLabel" row="1" column="0">

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>WdgColorSettings</class>
 <widget class="QWidget">
     <property name="name">
@@ -24,7 +24,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Color settings</string>
+                <string>Color Settings</string>
             </property>
             <grid>
                 <property name="name">
@@ -51,7 +51,7 @@
                                         <cstring>textLabel1_2</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>default working color model:</string>
+                                        <string>Default working color model:</string>
                                     </property>
                                 </widget>
                                 <widget class="QLabel">
@@ -59,7 +59,7 @@
                                         <cstring>textLabel1</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>default &amp;Monitor profile (always for RGB):</string>
+                                        <string>Default &amp;monitor profile (always for RGB):</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>cmbMonitorProfile</cstring>
@@ -73,7 +73,7 @@
                                         <cstring>textLabel3</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>default &amp;Import profile:</string>
+                                        <string>Default &amp;import profile:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>cmbImportProfile</cstring>
@@ -87,7 +87,7 @@
                                         <cstring>lbldefaultprinterspace</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>default printer color space:</string>
+                                        <string>Default printer color space:</string>
                                     </property>
                                 </widget>
                                 <widget class="QLabel">
@@ -95,7 +95,7 @@
                                         <cstring>textLabel4</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>default &amp;Printer profile:</string>
+                                        <string>Default &amp;printer profile:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>cmbPrintProfile</cstring>
@@ -204,7 +204,7 @@
                         <cstring>grpIntent</cstring>
                     </property>
                     <property name="title">
-                        <string>&amp;Rendering intent</string>
+                        <string>&amp;Rendering Intent</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string></string>

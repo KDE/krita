@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>WdgApplyProfile</class>
 <widget class="QWidget">
     <property name="name">
@@ -20,9 +20,6 @@
             <verstretch>0</verstretch>
         </sizepolicy>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -32,7 +29,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Apply profile</string>
+                <string>Apply Profile</string>
             </property>
             <grid>
                 <property name="name">
@@ -83,7 +80,7 @@
                         <cstring>grpRenderIntent</cstring>
                     </property>
                     <property name="title">
-                        <string>&amp;Rendering intent</string>
+                        <string>&amp;Rendering Intent</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string></string>
@@ -100,7 +97,7 @@
                                 <cstring>radioRelativeColorimetric</cstring>
                             </property>
                             <property name="text">
-                                <string>Relative Colorimetric</string>
+                                <string>Relative colorimetric</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Within and outside gamut; same as Absolute Colorimetric. White point changed to result in neutral grays.</string>
@@ -122,7 +119,7 @@
                                 <cstring>radioButton4</cstring>
                             </property>
                             <property name="text">
-                                <string>Absolute Colorimetric</string>
+                                <string>Absolute colorimetric</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Within the destination device gamut; hue, lightness and saturation are maintained. Outside the gamut; hue and lightness are maintained, saturation is sacrificed. White point for source and destination; unchanged. Intended for spot colors (Pantone, TruMatch, logo colors, ...)</string>

@@ -32,7 +32,7 @@ KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
 	: super(parent, name, true, "", Ok | Cancel)
 {
 
-	setCaption(i18n("Apply image profile to clipboard data"));
+	setCaption(i18n("Apply Image Profile to Clipboard Data"));
 	m_page = new WdgApplyProfile(this);
 
 	setMainWidget(m_page);

@@ -46,7 +46,7 @@
                         <cstring>lblShearAngelY</cstring>
                     </property>
                     <property name="text">
-                        <string>Shear Angle Y:</string>
+                        <string>Shear angle Y:</string>
                     </property>
                 </widget>
                 <widget class="KIntNumInput" row="1" column="1">
@@ -65,7 +65,7 @@
                         <cstring>lblShearAngleX</cstring>
                     </property>
                     <property name="text">
-                        <string>Shear Angle X:</string>
+                        <string>Shear angle X:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>intWidth</cstring>

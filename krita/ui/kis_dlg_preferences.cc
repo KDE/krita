@@ -242,7 +242,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 // 	vbox = addVBoxPage( i18n( "Undo/Redo") );
 // 	m_undoRedo = new UndoRedoTab( vbox );
 
-	vbox = addVBoxPage( i18n( "Color settings") );
+	vbox = addVBoxPage( i18n( "Color Settings") );
 	m_colorSettings = new ColorSettingsTab( vbox );
 }
 

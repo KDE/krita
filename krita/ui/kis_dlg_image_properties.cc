@@ -46,7 +46,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 	: super(parent, name, true, "", Ok | Cancel)
 {
 
-	setCaption(i18n("Image properties"));
+	setCaption(i18n("Image Properties"));
 	m_page = new WdgNewImage(this);
 
 	m_image = image;

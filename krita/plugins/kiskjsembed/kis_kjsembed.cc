@@ -93,7 +93,7 @@ KisKJSEmbed::KisKJSEmbed(QObject *parent, const char *name, const QStringList &)
  	m_jsConsoleWidget -> setCaption("Console");
  	m_consoleDocker -> plug( m_jsConsoleWidget );
 #endif
-  	KToggleAction * show = new KToggleAction(i18n( "&Script console" ), 0, 0,
+  	KToggleAction * show = new KToggleAction(i18n( "&Script Console" ), 0, 0,
  						 actionCollection(), "view_krita_script_console" );
 #if 0
   	connect(show, SIGNAL(toggled(bool)), m_consoleDocker, SLOT(makeVisible(bool)));

@@ -62,8 +62,8 @@ ColorspaceConversion::ColorspaceConversion(QObject *parent, const char *name, co
  		  << parent -> className()
  		  << "\n";
 
-	(void) new KAction(i18n("&Convert image type..."), 0, 0, this, SLOT(slotImgColorspaceConversion()), actionCollection(), "imgcolorspaceconversion");
-	(void) new KAction(i18n("&Convert layer type..."), 0, 0, this, SLOT(slotLayerColorspaceConversion()), actionCollection(), "layercolorspaceconversion");
+	(void) new KAction(i18n("&Convert Image Type..."), 0, 0, this, SLOT(slotImgColorspaceConversion()), actionCollection(), "imgcolorspaceconversion");
+	(void) new KAction(i18n("&Convert Layer Type..."), 0, 0, this, SLOT(slotLayerColorspaceConversion()), actionCollection(), "layercolorspaceconversion");
 
 	if ( !parent->inherits("KisView") )
 	{
@@ -86,7 +86,7 @@ void ColorspaceConversion::slotImgColorspaceConversion()
 
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
 
-	dlgColorspaceConversion -> setCaption(i18n("Convert all layers from ") + image -> colorStrategy() -> name());
+	dlgColorspaceConversion -> setCaption(i18n("Convert All Layers From ") + image -> colorStrategy() -> name());
 
 	dlgColorspaceConversion -> fillCmbSrcProfile(image -> colorStrategy() -> name());
 
@@ -118,7 +118,7 @@ void ColorspaceConversion::slotLayerColorspaceConversion()
 	if (!dev) return;
 
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
-	dlgColorspaceConversion -> setCaption(i18n("Convert current layer from") + dev -> colorStrategy() -> name());
+	dlgColorspaceConversion -> setCaption(i18n("Convert Current Layer From") + dev -> colorStrategy() -> name());
 	dlgColorspaceConversion -> fillCmbSrcProfile(dev -> colorStrategy() -> name());
 
 	KisProfileSP p = dev -> profile();

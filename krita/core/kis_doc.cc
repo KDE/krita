@@ -132,8 +132,8 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_pSelection = new KisSelection(this);
 	m_pFrameBuffer = new KisFrameBuffer(this);
 
-	connect(m_command_history, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored));
-	connect(m_command_history, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted));
+	connect(m_command_history, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
+	connect(m_command_history, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
 
         if (name)
             dcopObject();

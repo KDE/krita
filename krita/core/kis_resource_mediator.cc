@@ -16,7 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <koIconChooser.h>
+
 #include "kis_brush.h"
+#include "kis_pattern.h"
+
 #include "kis_icon_item.h"
 #include "kis_itemchooser.h"
 #include "kis_resource.h"
@@ -24,12 +27,12 @@
 #include "kis_resource_mediator.h"
 
 KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
-			KisResourceServer *rserver,
-			const QString& chooserCaption,
-			QWidget *chooserParent,
-			const char *chooserName,
-			QObject *parent,
-			const char *name) : super(parent, name)
+					 KisResourceServer *rserver,
+					 const QString& chooserCaption,
+					 QWidget *chooserParent,
+					 const char *chooserName,
+					 QObject *parent,
+					 const char *name) : super(parent, name)
 {
 	Q_ASSERT(rserver);
 	m_activeItem = 0;
@@ -43,6 +46,12 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
                         SIGNAL(loadedBrush(KisBrush*)),
                         this,
                         SLOT(resourceServerLoadedBrush(KisBrush*)));
+
+	if (mediateOn & MEDIATE_PATTERNS)
+		connect(rserver,
+                        SIGNAL(loadedPattern(KisPattern*)),
+                        this,
+                        SLOT(resourceServerLoadedPattern(KisPattern*)));
 
 	m_chooser -> setCaption(chooserCaption);
 }
@@ -93,15 +102,29 @@ void KisResourceMediator::setActiveItem(KoIconItem *item)
 	}
 }
 
-void KisResourceMediator::resourceServerLoadedBrush(KisBrush *brush)
+void KisResourceMediator::resourceServerLoadedBrush(KisBrush *resource)
 {
-	if (brush && brush -> valid()) {
-		KisIconItem *item = new KisIconItem(brush);
+	if (resource && resource -> valid()) {
+		KisIconItem *item = new KisIconItem(resource);
 
-		m_items[brush] = item;
-		item -> setSpacing(brush -> spacing());
+		m_items[resource] = item;
+		item -> setSpacing(resource -> spacing());
+
 		m_chooser -> addItem(item);
-		emit addedResource(brush);
+		emit addedResource(resource);
+	}
+}
+
+void KisResourceMediator::resourceServerLoadedPattern(KisPattern *resource)
+{
+	if (resource && resource -> valid()) {
+		KisIconItem *item = new KisIconItem(resource);
+
+		m_items[resource] = item;
+		item -> setSpacing(resource -> spacing());
+
+		m_chooser -> addItem(item);
+		emit addedResource(resource);
 	}
 }
 

@@ -261,7 +261,7 @@ private slots:
 	void reset();
 	void selectImage(const QString&);
 	void brushActivated(KisResource *brush);
-	void setActivePattern(KoIconItem *pattern);
+	void patternActivated(KisResource *pattern);
 	void setPaintOffset();
 	void scrollH(int value);
 	void scrollTo(Q_INT32 x, Q_INT32 y);
@@ -341,15 +341,17 @@ private:
 	QScrollBar *m_hScroll; // XXX: the sizing of the scrollthumbs
 	QScrollBar *m_vScroll; // is not right yet.
 	KisSideBar *m_sideBar;
-	KisItemChooser *m_patternChooser;
+
 	QWidget *m_paletteChooser;    
 	QWidget *m_gradientChooser;
 	QWidget *m_imageChooser;
+
 	KisChannelView *m_channelView;
 	QWidget *m_pathView;    
 	KisBuilderMonitor *m_imgBuilderMgr;
 	KisLabelBuilderProgress *m_buildProgress;
 	KisResourceMediator *m_brushMediator;
+	KisResourceMediator *m_patternMediator;
 
         // Current colours, brushes, patterns etc.
         Q_INT32 m_xoff;

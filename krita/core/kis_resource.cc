@@ -17,11 +17,13 @@
  */
 #include "kis_resource.h"
 
+
 KisResource::KisResource(const QString& filename)
 {
 	m_filename = filename;
 	m_valid = false;
 	m_dirty = false;
+	m_spacing = 7;
 }
 
 KisResource::~KisResource()

@@ -30,7 +30,6 @@ KisResourceServer::KisResourceServer()
 {
 	m_brushes.setAutoDelete(true);
 	m_patterns.setAutoDelete(true);
-	loadPatterns();
 }
 
 KisResourceServer::~KisResourceServer()
@@ -41,14 +40,13 @@ KisResourceServer::~KisResourceServer()
 
 void KisResourceServer::loadBrushes()
 {
-	m_brushFilnames += KisFactory::global() -> dirs() -> findAllResources("kis_brushes", "*.gbr");
+	m_brushFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_brushes", "*.gbr");
 	loadBrush();
 }
 
 void KisResourceServer::loadPatterns()
 {
 	QStringList formats;
-	QStringList lst;
 	QStringList list = QImage::inputFormatList();
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); it++)
@@ -56,42 +54,42 @@ void KisResourceServer::loadPatterns()
 
 	for (QStringList::Iterator it = formats.begin(); it != formats.end(); it++) {
 		QStringList l = KisFactory::global() -> dirs() -> findAllResources("kis_pattern", *it, false, true);
-
-		lst += l;
+		m_patternFilenames  += l;
 	}
 
-	for (QStringList::Iterator it = lst.begin(); it != lst.end(); it++)
-		loadPattern(*it);
+	loadPattern();
 }
 
 void KisResourceServer::loadBrush()
 {
-	if (!m_brushFilnames.empty()) {
-		QString front = *m_brushFilnames.begin();
+	if (!m_brushFilenames.empty()) {
+		QString front = *m_brushFilenames.begin();
 		KisBrush *brush;
 
-		m_brushFilnames.pop_front();
+		m_brushFilenames.pop_front();
 		brush = new KisBrush(front);
 		connect(brush, SIGNAL(loadComplete(KisResource*)), SLOT(brushLoaded(KisResource*)));
-		connect(brush, SIGNAL(ioFailed(KisResource*)), SLOT(resourceLoadFailed(KisResource*)));
+		connect(brush, SIGNAL(ioFailed(KisResource*)), SLOT(brushLoadFailed(KisResource*)));
 
 		if (!brush -> loadAsync())
 			loadBrush();
 	}
 }
 
-const KisPattern *KisResourceServer::loadPattern(const QString& filename)
-{
-	KisPattern *pattern = new KisPattern( filename );
+void KisResourceServer::loadPattern()
+{	
+	if (!m_patternFilenames.empty()) {
+		QString front = *m_patternFilenames.begin();
+		KisPattern *pattern;
+		m_patternFilenames.pop_front();
+		pattern = new KisPattern(front);
 
-	if (pattern -> isValid()) {
-		m_patterns.append(pattern);
-	} else {
-		delete pattern;
-		pattern = 0;
+		connect(pattern, SIGNAL(loadComplete(KisResource*)), SLOT(patternLoaded(KisResource*)));
+		connect(pattern, SIGNAL(ioFailed(KisResource*)), SLOT(patternLoadFailed(KisResource*)));
+
+		if (!pattern -> loadAsync())
+			loadPattern();
 	}
-
-	return pattern;
 }
 
 void KisResourceServer::brushLoaded(KisResource *br)
@@ -107,11 +105,30 @@ void KisResourceServer::brushLoaded(KisResource *br)
 	loadBrush();
 }
 
-void KisResourceServer::resourceLoadFailed(KisResource *r)
+void KisResourceServer::patternLoaded(KisResource *pat)
+{
+	if (pat && pat -> valid()) {
+		m_patterns.append(pat);
+		Q_ASSERT(dynamic_cast<KisPattern*>(pat));
+		emit loadedPattern(static_cast<KisPattern*>(pat));
+	} else {
+		delete pat;
+	}
+
+	loadPattern();
+}
+void KisResourceServer::brushLoadFailed(KisResource *r)
 {
 	delete r;
 	loadBrush();
 }
+
+void KisResourceServer::patternLoadFailed(KisResource *r)
+{
+	delete r;
+	loadPattern();
+}
+
 
 QPtrList<KisResource> KisResourceServer::brushes()
 { 
@@ -121,8 +138,11 @@ QPtrList<KisResource> KisResourceServer::brushes()
 	return m_brushes; 
 }
 
-QPtrList<KoIconItem> KisResourceServer::patterns() const 
+QPtrList<KisResource> KisResourceServer::patterns()
 { 
+	if (m_patterns.isEmpty())
+		loadPatterns();
+
 	return m_patterns; 
 }
 

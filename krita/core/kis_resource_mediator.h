@@ -24,12 +24,14 @@
 
 class KoIconItem;
 class KisBrush;
+class KisPattern;
 class KisItemChooser;
 class KisIconItem;
 class KisResource;
 class KisResourceServer;
 
 #define	MEDIATE_BRUSHES 1
+#define MEDIATE_PATTERNS 2
 
 class KisResourceMediator : public QObject {
 	Q_OBJECT
@@ -37,12 +39,12 @@ class KisResourceMediator : public QObject {
 
 public:
 	KisResourceMediator(Q_INT32 mediateOn, 
-			KisResourceServer *rserver, 
-			const QString& chooserCaption,
-			QWidget *chooserParent = 0, 
-			const char *chooserName = 0,
-			QObject *parent = 0, 
-			const char *name = 0); 
+			    KisResourceServer *rserver, 
+			    const QString& chooserCaption,
+			    QWidget *chooserParent = 0, 
+			    const char *chooserName = 0,
+			    QObject *parent = 0, 
+			    const char *name = 0); 
 	virtual ~KisResourceMediator();
 
 public:
@@ -58,7 +60,8 @@ signals:
 
 private slots:
 	void setActiveItem(KoIconItem *item);
-	void resourceServerLoadedBrush(KisBrush *brush);
+	void resourceServerLoadedBrush(KisBrush *resource);
+	void resourceServerLoadedPattern(KisPattern *resource);
 
 private:
 	KisItemChooser *m_chooser;

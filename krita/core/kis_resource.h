@@ -55,7 +55,7 @@ public:
 	virtual bool saveAsync() = 0;
 	/**
 	 * Returns a QImage representing this resource.  This image could be null.
-	 */
+w	 */
 	virtual QImage img() const = 0;
 	/**
 	 * Returns a QImage representing frame @p n in this resource.  This image could be null.
@@ -77,6 +77,9 @@ public:
 	void setValid(bool valid);
 	Q_INT32 width() const;
 	Q_INT32 height() const;
+	void setSpacing(Q_INT32 s) { m_spacing = s; }
+	Q_INT32 spacing() const { return m_spacing; }
+
 
 protected:
 	void setWidth(Q_INT32 w);
@@ -98,6 +101,8 @@ private:
 	bool m_valid;
 	Q_INT32 m_width;
 	Q_INT32 m_height;
+	Q_INT32 m_spacing;
+
 };
 
 #endif // KIS_RESOURCE_H_

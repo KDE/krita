@@ -24,7 +24,6 @@
 #include <qsize.h>
 #include <qvaluevector.h>
 #include <kio/job.h>
-#include "kis_krayon.h"
 #include "kis_resource.h"
 #include "kis_alpha_mask.h"
 
@@ -54,10 +53,11 @@ public:
 	// XXX: Obviously meant for animated brushes, but because the
 	// number of frames is not known, and there is no way to
 	// retrieve that, we cannot use this at the moment.
+	// It's also better to let the brush determine the next frame;
+	// make it more intelligent.
 	virtual QImage frame(Q_INT32 n) const;
 
-	void setSpacing(Q_INT32 s) { m_spacing = s; }
-	Q_INT32 spacing() const { return m_spacing; }
+
 	void setHotSpot(QPoint);
 	QPoint hotSpot() const { return m_hotSpot; }
 
@@ -71,12 +71,10 @@ private slots:
 
 private:
 	QValueVector<Q_UINT8> m_data;
-	Q_INT32 m_spacing;
 	QPoint m_hotSpot;
 	QImage m_img;
 	KisAlphaMask *m_mask;
 	
 };
-
 #endif // KIS_BRUSH_
 

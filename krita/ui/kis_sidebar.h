@@ -33,7 +33,7 @@ class KDualColorButton;
 class KoIconItem;
 class KisIconWidget;
 class KisGradientWidget;
-class KisKrayon;
+
 class KisBrush;
 class KisPattern;
 class KisColorChooser;
@@ -58,7 +58,7 @@ public slots:
 	void slotSetBGColor(const KoColor& c);
 
 	void slotSetBrush(KoIconItem *item);
-	void slotSetPattern(KisPattern& pattern);
+	void slotSetPattern(KoIconItem *item);
 
 signals:
 	void fgColorChanged(const KoColor& c);
@@ -149,7 +149,7 @@ public slots:
 	void slotSetBGColor(const KoColor&);
 
 	void slotSetBrush(KoIconItem *item);
-	void slotSetPattern(KisPattern&);
+	void slotSetPattern(KoIconItem *item);
 
 	void slotActivateTab(const QString& tab) { m_dockFrame->slotActivateTab(tab); }
 	void slotHideChooserFrame();

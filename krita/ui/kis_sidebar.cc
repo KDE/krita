@@ -31,7 +31,7 @@
 #include <koFrameButton.h>
 
 #include "kis_sidebar.h"
-#include "kis_krayonwidget.h"
+
 #include "kis_iconwidget.h"
 #include "kis_gradientwidget.h"
 #include "kis_previewwidget.h"
@@ -168,10 +168,12 @@ void KisSideBar::slotSetBrush(KoIconItem *item)
 	m_pControlFrame -> slotSetBrush(item);
 }
 
-void KisSideBar::slotSetPattern( KisPattern& b )
+void KisSideBar::slotSetPattern(KoIconItem *item)
 {
-    m_pControlFrame->slotSetPattern(b);
+	m_pControlFrame -> slotSetPattern(item);
 }
+
+
 
 void KisSideBar::slotHideChooserFrame( )
 {
@@ -231,9 +233,10 @@ void ControlFrame::slotSetBrush(KoIconItem *item)
 		m_pBrushWidget -> slotSetItem(*item);
 }
 
-void ControlFrame::slotSetPattern(KisPattern& b)
+void ControlFrame::slotSetPattern(KoIconItem *item)
 {
-    m_pPatternWidget->slotSetItem(b);
+	if (item)
+		m_pPatternWidget -> slotSetItem(*item);
 }
 
 void ControlFrame::resizeEvent ( QResizeEvent * )

@@ -6,7 +6,7 @@ libkisui_la_SOURCES = integerwidget.cc kis_dlg_preferences.cc kis_dlg_builder_pr
     kfloatingdialog.cc \
     kis_tabbar.cc  kis_canvas.cc \
     kis_iconwidget.cc \
-    kis_gradientwidget.cc kis_previewwidget.cc kis_krayonwidget.cc \
+    kis_gradientwidget.cc kis_previewwidget.cc \
     kis_channelview.cc gradientview.cc \
     kis_dlg_toolopts.cc kis_dlg_toolopts_polygon_preview.cc \
     kis_sidebar.cc kis_listbox.cc \

@@ -168,7 +168,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_fg = KoColor::black();
 	m_bg = KoColor::white();
 	m_sideBar = 0;
-	m_patternChooser = 0;
 	m_paletteChooser = 0;
 	m_gradientChooser = 0;
 	m_imageChooser = 0;
@@ -224,16 +223,17 @@ void KisView::setupSideBar()
 	if (sb) {
 		m_sideBar = new KisSideBar(this, "kis_sidebar");
 
-		m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"), m_sideBar -> dockFrame(), "brush_chooser", this);
+		m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
+							  m_sideBar -> dockFrame(), "brush_chooser", this);
 		m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
 		m_sideBar -> plug(m_brushMediator -> chooserWidget());
 		connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
 
-		m_patternChooser = new KisItemChooser(KisFactory::rServer() -> patterns(), true, m_sideBar -> dockFrame(), "pattern_chooser");
-		//	m_pPattern = m_patternChooser -> currentPattern();
-		QObject::connect(m_patternChooser, SIGNAL(selected(KoIconItem*)), this, SLOT(setActivePattern(KoIconItem*)));
-		m_patternChooser -> setCaption(i18n("Patterns"));
-		m_sideBar -> plug(m_patternChooser);
+		m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
+							    m_sideBar -> dockFrame(), "pattern chooser", this);
+		m_pattern = dynamic_cast<KisPattern*>(m_patternMediator -> currentResource());
+		m_sideBar ->plug(m_patternMediator -> chooserWidget());
+		connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
 
 		m_gradientChooser = new QWidget(this);
 		//	m_gradient = new KisGradient;
@@ -283,6 +283,7 @@ void KisView::setupSideBar()
 		m_sidebarToggle -> setChecked(true);
 
 		rserver -> loadBrushes();
+		rserver -> loadPatterns();
 	}
 }
 
@@ -1124,10 +1125,7 @@ void KisView::dialog_brushes()
 
 void KisView::dialog_patterns()
 {
-	if (m_dlgPatternToggle -> isChecked())
-		m_sideBar -> plug(m_patternChooser);
-	else
-		m_sideBar -> unplug(m_patternChooser);
+//	m_PatternChooser -> setDocked(m_dlgPatternToggle -> isChecked());
 }
 
 void KisView::dialog_layers()
@@ -1634,10 +1632,15 @@ void KisView::brushActivated(KisResource *brush)
 		notify();
 }
 
-void KisView::setActivePattern(KoIconItem *pattern)
+void KisView::patternActivated(KisResource *pattern)
 {
+	KisIconItem *item;
+
+	Q_ASSERT(m_sideBar);
 	m_pattern = dynamic_cast<KisPattern*>(pattern);
-	m_sideBar -> slotSetPattern(*m_pattern);
+
+	if (m_pattern && (item = m_patternMediator -> itemFor(m_pattern)))
+		m_sideBar -> slotSetPattern(item);
 
         if (m_pattern)
 		notify();

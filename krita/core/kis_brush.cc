@@ -39,8 +39,6 @@
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
 
-#define SPACING_DEFAULT 7
-
 namespace {
 	struct GimpBrushHeader {
 		Q_UINT32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
@@ -56,12 +54,10 @@ namespace {
 KisBrush::KisBrush(const QString& filename) : super(filename)
 {
 	m_mask = 0;
-	m_spacing = SPACING_DEFAULT;
 }
 
 KisBrush::~KisBrush()
 {
-	delete m_mask;
 }
 
 bool KisBrush::loadAsync()
@@ -225,7 +221,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 	setWidth(m_img.width());
 	setHeight(m_img.height());
 	m_mask = new KisAlphaMask(m_img);
-	kdDebug() << "Brush: " << &name[0] << " spacing: " << m_spacing << "\n";
+	kdDebug() << "Brush: " << &name[0] << " spacing: " << spacing() << "\n";
 	setValid(true);
 	emit loadComplete(this);
 }

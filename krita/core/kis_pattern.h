@@ -22,37 +22,51 @@
 #define __kis_pattern_h__
 
 #include <qsize.h>
-#include "kis_krayon.h"
+
+#include <kio/job.h>
+
+#include <koIconChooser.h>
+
+#include "kis_resource.h"
+#include "kis_resource.h"
 
 class QPoint;
 class QPixmap;
 class QImage;
 
-class KisPattern : public KisKrayon {
+class KisPattern : public KisResource {
+	typedef KisResource super;
+	Q_OBJECT
+
 public:
-    KisPattern(QString file);
-    KisPattern(int formula);
-    virtual ~KisPattern();
+	KisPattern(const QString& file);
+	virtual ~KisPattern();
 
-    bool isValid()	const { return m_valid; }
-    void setSpacing(int s) { m_spacing = s; }
-    int  spacing() const { return m_spacing; }
-    QPoint hotSpot() const { return m_hotSpot; }
-    bool tileSymmetric() const { return m_TileSymmetric; }
-    
+	virtual bool loadAsync();
+	virtual bool saveAsync();
+	virtual QImage img() const;
+	virtual QImage frame(Q_INT32 n) const;
+
+	bool isValid() const { return m_valid; }
+	QPoint hotSpot() const { return m_hotSpot; }
+
+	QPixmap& pixmap() const;
+	QPixmap& thumbPixmap() const;
+
+private slots:
+	void ioData(KIO::Job *job, const QByteArray& data);
+	void ioResult(KIO::Job *job);
+
 private:
-    void loadViaQImage(QString file);
-    void loadViaFormula(int formula);
-    void readPatternInfo(QString file);
+	QByteArray m_data;	
+	QPoint m_hotSpot;
 
-    QPoint m_hotSpot;
-    
-    bool m_valid;
-    bool m_TileSymmetric;            
-
-    int  m_spacing;
-    int  m_TileWidth;
-    int  m_TileHeight;
+	bool m_valid;
+	bool m_validThumb;
+	
+	QImage m_img;
+        QPixmap *m_pixmap;
+        QPixmap *m_thumbPixmap;
 
 };
 

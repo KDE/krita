@@ -40,8 +40,10 @@ public:
 public:
 	Q_INT32 brushCount() const { return m_brushes.count(); }
 	Q_INT32 patternCount() const { return m_patterns.count(); }
+
 	QPtrList<KisResource> brushes();
-	QPtrList<KoIconItem> patterns() const;
+	QPtrList<KisResource> patterns();
+
 	void loadBrushes();
 	void loadPatterns();
 
@@ -51,16 +53,21 @@ signals:
 	
 private:
 	void loadBrush();
-	const KisPattern *loadPattern(const QString& filename);
+	void loadPattern();
 
 private slots:
 	void brushLoaded(KisResource *r);
-	void resourceLoadFailed(KisResource *br);
+	void brushLoadFailed(KisResource *br);
+
+	void patternLoaded(KisResource *r);
+	void patternLoadFailed(KisResource *br);
 
 private:
-	QPtrList<KoIconItem> m_patterns;
-	QStringList m_brushFilnames;
+	QPtrList<KisResource> m_patterns;
+	QStringList m_brushFilenames;
+
 	QPtrList<KisResource> m_brushes;
+	QStringList m_patternFilenames;
 };
 
 #endif // KIS_RESOURCESERVER_H_

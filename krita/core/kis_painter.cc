@@ -89,8 +89,6 @@ void KisPainter::end()
 
 	if (m_dst && m_dst -> mgr)
 		m_dst -> mgr -> releasePixelData(m_dst);
-
-	m_dst = 0;
 }
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
@@ -131,8 +129,6 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 	QUANTUM *s;
 	QUANTUM alpha;
 
-	prepareEzPaint();
-
 	if (sw == -1)
 		sw = src -> width;
 
@@ -141,6 +137,8 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 
 	if (sw < 0 || sh < 0)
 		return;
+
+	prepareEzPaint();
 
 	// TODO switch on the image type then go for the composite
 	// TODO Implement all composites for all image depths
@@ -155,6 +153,14 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 						continue;
 
 					if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT) {
+						d[PIXEL_RED] = s[PIXEL_RED];
+						d[PIXEL_GREEN] = s[PIXEL_GREEN];
+						d[PIXEL_BLUE] = s[PIXEL_BLUE];
+						d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
+						continue;
+					}
+
+					if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT || (d[PIXEL_ALPHA] == OPACITY_OPAQUE && s[PIXEL_ALPHA] == OPACITY_OPAQUE)) {
 						d[PIXEL_RED] = s[PIXEL_RED];
 						d[PIXEL_GREEN] = s[PIXEL_GREEN];
 						d[PIXEL_BLUE] = s[PIXEL_BLUE];
@@ -186,6 +192,9 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 			kdDebug() << "Not Implemented.\n";
 			break;
 	}
+
+	m_dst -> mgr -> releasePixelData(m_dst);
+	m_dst = 0;
 }
 
 void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileSP srctile, Q_INT32 rows, Q_INT32 cols, CompositeOp op)
@@ -206,6 +215,20 @@ void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileS
 
 				for (i = cols; i > 0; i--, d += stride, s += stride)
 					memcpy(d, s, stride * sizeof(QUANTUM));
+
+				dst += dststride;
+				src += srcstride;
+			}
+			break;
+		case COMPOSITE_CLEAR:
+			while (rows-- > 0) {
+				d = dst;
+				s = src;
+
+				for (i = cols; i > 0; i--, d += stride, s += stride)
+					memset(d, 0, stride * sizeof(QUANTUM));
+
+				dst += dststride;
 			}
 			break;
 		case COMPOSITE_OVER:
@@ -242,201 +265,7 @@ void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileS
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP srcdev, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
-	Q_INT32 x;
-	Q_INT32 y;
-	Q_INT32 sx2 = sx;
-	Q_INT32 dx2;
-	Q_INT32 dy2;
-	Q_INT32 rows;
-	Q_INT32 cols;
-	KisTileSP tile;
-	KisTileSP dsttile;
-	KisTileSP srctile;
-	QUANTUM *dst;
-	QUANTUM *src;
-	KisTileMgrSP dsttm = m_device -> data();
-	KisTileMgrSP srctm = srcdev -> data();
-	Q_INT32 sxmod;
-	Q_INT32 symod;
-	Q_INT32 dxmod;
-	Q_INT32 dymod;
-	Q_INT32 xxtra;
-	Q_INT32 yxtra;
-	Q_INT32 nrows;
-	Q_INT32 ncols;
-
-	if (sw == -1)
-		sw = dsttm -> width();
-
-	if (sh == -1)
-		sh = dsttm -> height();
-
-	dx2 = dx + sw - 1;
-	dy2 = dy + sh - 1;
-	symod = (sy % TILE_HEIGHT);
-	sxmod = (sx % TILE_WIDTH);
-
-	for (y = dy; y <= dy2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
-		sx = sx2;
-
-		for (x = dx; x <= dx2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
-			dsttile = dsttm -> tile(x, y, TILEMODE_WRITE);
-			srctile = srctm -> tile(sx, sy, TILEMODE_READ);
-
-			if (!dsttile || !srctile)
-				continue;
-
-			dsttile -> lock();
-			srctile -> lock();
-			dymod = dy % TILE_HEIGHT;
-			dxmod = dx % TILE_WIDTH;
-			symod = sy % TILE_HEIGHT;
-			sxmod = sx % TILE_WIDTH;
-
-			if (dymod > symod) {
-				rows = dsttile -> height() - dymod;
-				yxtra = dsttile -> height() - rows;
-			} else {
-				rows = dsttile -> height() - symod;
-				yxtra = rows - dsttile -> height();
-			}
-
-			if (rows > dy2 - y + 1)
-				rows = dy2 - y + 1;
-
-			if (dxmod > sxmod) {
-				cols = dsttile -> width() - dxmod;
-				xxtra = dsttile -> width() - cols;
-			} else {
-				cols = dsttile -> width() - sxmod;
-				xxtra = cols - dsttile -> width();
-			}
-
-			if (cols > dx2 - x + 1)
-				cols = dx2 - x + 1;
-
-			if (cols < 0 || rows < 0) {
-				dsttile -> release();
-				srctile -> release();
-				continue;
-			}
-
-			dst = dsttile -> data(dxmod, dymod);
-			src = srctile -> data(sxmod, symod);
-			tileBlt(dst, dsttile, src, srctile, rows, cols, op);
-
-			if (yxtra > 0) {
-				tile = dsttm -> tile(x, y + TILE_HEIGHT - (y % TILE_HEIGHT) + 1, TILEMODE_WRITE);
-
-				if (tile) {
-					tile -> lock();
-					nrows = QMIN(tile -> height(), dymod);
-					dst = tile -> data(dxmod, 0);
-					src = srctile -> data(abs(QMIN(xxtra, 0)), rows);
-					tileBlt(dst, tile, src, srctile, nrows, cols, op);
-					tile -> release();
-				}
-			} else if (yxtra < 0) {
-				tile = srctm -> tile(sx, sy + TILE_HEIGHT - (sy % TILE_HEIGHT) + 1, TILEMODE_READ);
-
-				if (tile) {
-					tile -> lock();
-					nrows = QMIN(tile -> height(), symod);
-					dst = dsttile -> data(dxmod, rows);
-					src = tile -> data(sxmod, 0);
-					tileBlt(dst, dsttile, src, tile, nrows, cols, op);
-					tile -> release();
-				}
-			}
-
-			if (xxtra > 0) {
-				tile = dsttm -> tile(x + TILE_WIDTH - (x % TILE_WIDTH) + 1, y, TILEMODE_WRITE);
-
-				if (tile) {
-					tile -> lock();
-					ncols = QMIN(tile -> width(), dxmod);
-					dst = tile -> data(0, dymod);
-					src = srctile -> data(cols, abs(QMIN(yxtra, 0)));
-					tileBlt(dst, tile, src, srctile, rows, ncols, op);
-					tile -> release();
-				}
-			} else if (xxtra < 0) {
-				tile = srctm -> tile(sx + TILE_WIDTH - (sx % TILE_WIDTH) + 1, sy, TILEMODE_READ);
-
-				if (tile) {
-					tile -> lock();
-					ncols = QMIN(tile -> width(), sxmod);
-					dst = dsttile -> data(cols, dymod);
-					src = tile -> data(0, symod);
-					tileBlt(dst, dsttile, src, tile, rows, ncols, op);
-					tile -> release();
-				}
-			}
-
-			if (yxtra > 0 && xxtra > 0) {
-				tile = dsttm -> tile(x + TILE_WIDTH - (x % TILE_WIDTH) + 1, y + TILE_HEIGHT - (y % TILE_HEIGHT) + 1, TILEMODE_WRITE);
-
-				if (tile) {
-					tile -> lock();
-					dymod = QMIN(tile -> height(), dymod);
-					dxmod = QMIN(tile -> width(), dxmod);
-					dst = tile -> data();
-					src = srctile -> data(cols, rows);
-					tileBlt(dst, tile, src, srctile, dymod, dxmod, op);
-					tile -> release();
-				}
-			} else if (yxtra < 0 && xxtra < 0) {
-				tile = srctm -> tile(sx + TILE_WIDTH - (sx % TILE_WIDTH) + 1, sy + TILE_HEIGHT - (sy % TILE_HEIGHT) + 1, TILEMODE_READ);
-
-				if (tile) {
-					tile -> lock();
-					symod = QMIN(tile -> height(), symod);
-					sxmod = QMIN(tile -> width(), sxmod);
-					dst = dsttile -> data(cols, rows);
-					src = tile -> data();
-					tileBlt(dst, dsttile, src, tile, symod, sxmod, op);
-					tile -> release();
-				}
-			} else if (yxtra > 0 && xxtra < 0) {
-				KisTileSP srctile = srctm -> tile(sx + TILE_WIDTH - (sx % TILE_WIDTH) + 1, sy, TILEMODE_READ);
-				tile = dsttm -> tile(x, y + TILE_HEIGHT - (y % TILE_HEIGHT) + 1, TILEMODE_WRITE);
-
-				if (srctile && tile) {
-					srctile -> lock();
-					tile -> lock();
-					yxtra = QMIN(tile -> height(), yxtra);
-					xxtra = QMIN(tile -> width(), -xxtra);
-					dst = tile -> data(tile -> width() - xxtra, 0);
-					src = srctile -> data(0, srctile -> height() - yxtra);
-					tileBlt(dst, tile, src, srctile, yxtra, QMIN(xxtra, srctile -> width()), op);
-					tile -> release();
-					srctile -> release();
-				}
-			} else if (yxtra < 0 && xxtra > 0) {
-				KisTileSP srctile = srctm -> tile(sx, sy + TILE_HEIGHT - (sy % TILE_HEIGHT) + 1, TILEMODE_READ);
-				tile = dsttm -> tile(x + TILE_WIDTH - (x % TILE_WIDTH) + 1, y, TILEMODE_WRITE);
-
-				if (srctile && tile) {
-					srctile -> lock();
-					tile -> lock();
-					yxtra = QMIN(tile -> height(), -yxtra);
-					xxtra = QMIN(srctile -> width(), xxtra);
-					dst = tile -> data(0, tile -> height() - yxtra);
-					src = srctile -> data(srctile -> width() - xxtra, 0);
-					tileBlt(dst, tile, src, srctile, yxtra, QMIN(xxtra, tile -> width()), op);
-					tile -> release();
-					srctile -> release();
-				}
-			}
-
-			dsttile -> valid(false);
-			dsttile -> release();
-			srctile -> release();
-			sx += TILE_WIDTH;
-		}
-
-		sy += TILE_HEIGHT;
-	}
+	bitBlt(dx, dy, op, srcdev, OPACITY_OPAQUE, sx, sy, sw, sh);
 }
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
@@ -553,23 +382,216 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 	}
 }
 
-void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP srcdev, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
-	KisTileMgrSP tm = src -> data();
-	KisPixelDataSP pd;
-
-	if (!tm)
-		return;
+	Q_INT32 x;
+	Q_INT32 y;
+	Q_INT32 sx2 = sx;
+	Q_INT32 dx2;
+	Q_INT32 dy2;
+	Q_INT32 rows;
+	Q_INT32 cols;
+	KisTileSP tile;
+	KisTileSP dsttile;
+	KisTileSP srctile;
+	QUANTUM *dst;
+	QUANTUM *src;
+	KisTileMgrSP dsttm = m_device -> data();
+	KisTileMgrSP srctm = srcdev -> data();
+	Q_INT32 sxmod;
+	Q_INT32 symod;
+	Q_INT32 dxmod;
+	Q_INT32 dymod;
+	Q_INT32 xxtra;
+	Q_INT32 yxtra;
+	Q_INT32 nrows;
+	Q_INT32 ncols;
 
 	if (sw == -1)
-		sw = tm -> width();
+		sw = dsttm -> width();
 
 	if (sh == -1)
-		sh = tm -> height();
+		sh = dsttm -> height();
 
-	pd = tm -> pixelData(sx, sy, sx + sw - 1, sy + sh - 1, TILEMODE_READ);
-	Q_ASSERT(pd);
-	bitBlt(dx, dy, op, pd, opacity, 0, 0, pd -> width, pd -> height);
+	dx2 = dx + sw - 1;
+	dy2 = dy + sh - 1;
+
+	if (dx2 > srcdev -> x() + srcdev -> width() - 1)
+		dx2 = srcdev -> x() + srcdev -> width() - 1;
+	
+	if (dy2 > srcdev -> y() + srcdev -> height() - 1)
+		dy2 = srcdev -> y() + srcdev -> height() - 1;
+
+	symod = (sy % TILE_HEIGHT);
+	sxmod = (sx % TILE_WIDTH);
+
+	for (y = dy; y <= dy2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
+		sx = sx2;
+
+		for (x = dx; x <= dx2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
+			dsttile = dsttm -> tile(x, y, TILEMODE_RW);
+			srctile = srctm -> tile(sx, sy, TILEMODE_READ);
+
+			if (!dsttile || !srctile)
+				continue;
+
+			dsttile -> lock();
+			srctile -> lock();
+			dymod = dy % TILE_HEIGHT;
+			dxmod = dx % TILE_WIDTH;
+			symod = sy % TILE_HEIGHT;
+			sxmod = sx % TILE_WIDTH;
+
+			if (dymod > symod) {
+				rows = dsttile -> height() - dymod;
+				yxtra = dsttile -> height() - rows;
+			} else {
+				rows = dsttile -> height() - symod;
+				yxtra = rows - dsttile -> height();
+			}
+
+			if (rows > dy2 - y + 1)
+				rows = dy2 - y + 1;
+
+			if (dxmod > sxmod) {
+				cols = dsttile -> width() - dxmod;
+				xxtra = dsttile -> width() - cols;
+			} else {
+				cols = dsttile -> width() - sxmod;
+				xxtra = cols - dsttile -> width();
+			}
+
+			if (cols > dx2 - x + 1)
+				cols = dx2 - x + 1;
+
+			if (cols <= 0 || rows <= 0) {
+				dsttile -> release();
+				srctile -> release();
+#if 0
+				printf("dx = %d.  sx = %d.  w = %d.  h = %d.\n", dx, sx, sw, sh);
+				printf("cols = %d.  rows = %d.\n", cols, rows);
+				printf("sxmod = %d.  dxmod = %d.  symod = %d.  dymod = %d.\n", sxmod, dxmod, symod, dymod);
+				printf("xxtra = %d.\n", xxtra);
+#endif
+				continue;
+			}
+
+			dst = dsttile -> data(dxmod, dymod);
+			src = srctile -> data(sxmod, symod);
+			tileBlt(dst, dsttile, src, srctile, rows, cols, op);
+
+			if (yxtra > 0) {
+				tile = dsttm -> tile(x, y + TILE_HEIGHT - (y % TILE_HEIGHT) + 1, TILEMODE_RW);
+
+				if (tile) {
+					tile -> lock();
+					nrows = QMIN(tile -> height(), dymod);
+					dst = tile -> data(dxmod, 0);
+					src = srctile -> data(abs(QMIN(xxtra, 0)), rows);
+					tileBlt(dst, tile, src, srctile, nrows, cols, op);
+					tile -> release();
+				}
+			} else if (yxtra < 0) {
+				tile = srctm -> tile(sx, sy + TILE_HEIGHT - (sy % TILE_HEIGHT) + 1, TILEMODE_READ);
+
+				if (tile) {
+					tile -> lock();
+					nrows = QMIN(tile -> height(), symod);
+					dst = dsttile -> data(dxmod, rows);
+					src = tile -> data(sxmod, 0);
+					tileBlt(dst, dsttile, src, tile, nrows, cols, op);
+					tile -> release();
+				}
+			}
+
+			if (xxtra > 0) {
+				tile = dsttm -> tile(x + TILE_WIDTH - (x % TILE_WIDTH) + 1, y, TILEMODE_RW);
+
+				if (tile) {
+					tile -> lock();
+					ncols = QMIN(tile -> width(), dxmod);
+					dst = tile -> data(0, dymod);
+					src = srctile -> data(cols, abs(QMIN(yxtra, 0)));
+					tileBlt(dst, tile, src, srctile, rows, ncols, op);
+					tile -> release();
+				}
+			} else if (xxtra < 0) {
+				tile = srctm -> tile(sx + TILE_WIDTH - (sx % TILE_WIDTH) + 1, sy, TILEMODE_READ);
+
+				if (tile) {
+					tile -> lock();
+					ncols = QMIN(tile -> width(), sxmod);
+					dst = dsttile -> data(cols, dymod);
+					src = tile -> data(0, symod);
+					tileBlt(dst, dsttile, src, tile, rows, ncols, op);
+					tile -> release();
+				}
+			}
+
+			if (yxtra > 0 && xxtra > 0) {
+				tile = dsttm -> tile(x + TILE_WIDTH - (x % TILE_WIDTH) + 1, y + TILE_HEIGHT - (y % TILE_HEIGHT) + 1, TILEMODE_RW);
+
+				if (tile) {
+					tile -> lock();
+					dymod = QMIN(tile -> height(), dymod);
+					dxmod = QMIN(tile -> width(), dxmod);
+					dst = tile -> data();
+					src = srctile -> data(cols, rows);
+					tileBlt(dst, tile, src, srctile, dymod, dxmod, op);
+					tile -> release();
+				}
+			} else if (yxtra < 0 && xxtra < 0) {
+				tile = srctm -> tile(sx + TILE_WIDTH - (sx % TILE_WIDTH) + 1, sy + TILE_HEIGHT - (sy % TILE_HEIGHT) + 1, TILEMODE_READ);
+
+				if (tile) {
+					tile -> lock();
+					symod = QMIN(tile -> height(), symod);
+					sxmod = QMIN(tile -> width(), sxmod);
+					dst = dsttile -> data(cols, rows);
+					src = tile -> data();
+					tileBlt(dst, dsttile, src, tile, symod, sxmod, op);
+					tile -> release();
+				}
+			} else if (yxtra > 0 && xxtra < 0) {
+				KisTileSP srctile = srctm -> tile(sx + TILE_WIDTH - (sx % TILE_WIDTH) + 1, sy, TILEMODE_READ);
+				tile = dsttm -> tile(x, y + TILE_HEIGHT - (y % TILE_HEIGHT) + 1, TILEMODE_RW);
+
+				if (srctile && tile) {
+					srctile -> lock();
+					tile -> lock();
+					yxtra = QMIN(tile -> height(), yxtra);
+					xxtra = QMIN(tile -> width(), -xxtra);
+					dst = tile -> data(tile -> width() - xxtra, 0);
+					src = srctile -> data(0, srctile -> height() - yxtra);
+					tileBlt(dst, tile, src, srctile, yxtra, QMIN(xxtra, srctile -> width()), op);
+					tile -> release();
+					srctile -> release();
+				}
+			} else if (yxtra < 0 && xxtra > 0) {
+				KisTileSP srctile = srctm -> tile(sx, sy + TILE_HEIGHT - (sy % TILE_HEIGHT) + 1, TILEMODE_READ);
+				tile = dsttm -> tile(x + TILE_WIDTH - (x % TILE_WIDTH) + 1, y, TILEMODE_RW);
+
+				if (srctile && tile) {
+					srctile -> lock();
+					tile -> lock();
+					yxtra = QMIN(tile -> height(), -yxtra);
+					xxtra = QMIN(srctile -> width(), xxtra);
+					dst = tile -> data(0, tile -> height() - yxtra);
+					src = srctile -> data(srctile -> width() - xxtra, 0);
+					tileBlt(dst, tile, src, srctile, yxtra, QMIN(xxtra, tile -> width()), op);
+					tile -> release();
+					srctile -> release();
+				}
+			}
+
+			dsttile -> valid(false);
+			dsttile -> release();
+			srctile -> release();
+			sx += TILE_WIDTH;
+		}
+
+		sy += TILE_HEIGHT;
+	}
 }
 
 void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c)
@@ -659,6 +681,8 @@ void KisPainter::fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity)
 
 void KisPainter::prepareEzPaint()
 {
+	end();
+
 	if (m_device && !m_dst) {
 		KisTileMgrSP tm = m_device -> data();
 

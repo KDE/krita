@@ -44,8 +44,8 @@ public:
 	virtual ~KisTileMgr();
 
 public:
-	void attach(KisTileSP tile, Q_INT32 tilenum);
-	void detach(KisTileSP tile, Q_INT32 tilenum);
+	void attach(KisTileSP tile, Q_INT32 tilenum, bool keepold = true);
+	void detach(KisTileSP tile, Q_INT32 tilenum, bool keepold = true);
 
 	KisTileSP tile(Q_INT32 xpix, Q_INT32 ypix, Q_INT32 mode);
 	KisTileSP tile(Q_INT32 tilenum, Q_INT32 mode);

@@ -24,7 +24,7 @@
 #include <kdialogbase.h>
 
 class QSpinBox;
-class QLineEdit;
+#include <qlineedit.h>
 
 class NewLayerDialog : public KDialogBase
 {

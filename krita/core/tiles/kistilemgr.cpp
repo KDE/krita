@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <stdlib.h>
 #include <string.h>
 #include <qpoint.h>
 #include <kdebug.h>
@@ -41,7 +42,7 @@ KisTileMgr::~KisTileMgr()
 	delete m_mediator;
 }
 
-void KisTileMgr::attach(KisTileSP tile, Q_INT32 tilenum)
+void KisTileMgr::attach(KisTileSP tile, Q_INT32 tilenum, bool)
 {
 	if (m_tiles.empty())
 		allocate(m_ntileRows * m_ntileCols);
@@ -53,11 +54,21 @@ void KisTileMgr::attach(KisTileSP tile, Q_INT32 tilenum)
 			validate(tile);
 
 		m_mediator -> attach(tile, this, tilenum);
+
+#if !defined(NDEBUG)
+		if (tilenum < 0 || static_cast<Q_UINT32>(tilenum) >= m_tiles.size()) {
+			kdDebug(DBG_AREA_TILES) << "Attaching tile to out of range tile number.\n";
+			kdDebug(DBG_AREA_TILES) << "m_tiles.size() = " << m_tiles.size() << endl;
+			kdDebug(DBG_AREA_TILES) << "tilenum = " << tilenum << endl;
+			abort();
+		}
+#endif
+		
 		m_tiles[tilenum] = tile;
 	}
 }
 
-void KisTileMgr::detach(KisTileSP tile, Q_INT32 tilenum)
+void KisTileMgr::detach(KisTileSP tile, Q_INT32 tilenum, bool)
 {
 	if (m_tiles.empty())
 		allocate(m_ntileRows * m_ntileCols);
@@ -68,6 +79,15 @@ void KisTileMgr::detach(KisTileSP tile, Q_INT32 tilenum)
 
 		m_mediator -> detach(tile, this, tilenum);
 		prev = 0; // TODO Get the previous tile that was in this spot.  Right now, the tile is lost when we assign.
+
+#if !defined(NDEBUG)
+		if (tilenum < 0 || static_cast<Q_UINT32>(tilenum) >= m_tiles.size()) {
+			kdDebug(DBG_AREA_TILES) << "Detaching tile to out of range tile number.\n";
+			kdDebug(DBG_AREA_TILES) << "m_tiles.size() = " << m_tiles.size() << endl;
+			kdDebug(DBG_AREA_TILES) << "tilenum = " << tilenum << endl;
+			abort();
+		}
+#endif
 		m_tiles[tilenum] = prev;
 	}
 }

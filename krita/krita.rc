@@ -43,8 +43,6 @@
   <Action name="remove_current_image_tab"/>
   <Action name="duplicate_image"/>  
   <Separator/>
-  <Action name="scale_image"/>
-  <Separator/>
   <Action name="merge_all_layers"/>
   <Action name="merge_visible_layers"/>
   <Action name="merge_linked_layers"/>

@@ -102,7 +102,7 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 			KisImageSP img = m_view -> currentImg();
 			
 			m_startPos /= m_view -> zoom();
-			m_endPos = e -> pos();
+			m_endPos = e -> pos() / m_view -> zoom();
 
 			if (m_endPos.y() < 0)
 				m_endPos.setY(0);

@@ -27,7 +27,6 @@
 #include <qpainter.h>
 #include <qscrollbar.h>
 #include <qspinbox.h>
-#include <qlineedit.h>
 
 // KDE
 #include <dcopobject.h>
@@ -48,6 +47,7 @@
 #include <koView.h>
 
 // Local
+#include "kis_types.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_canvas.h"
@@ -70,6 +70,8 @@
 #include "kis_tool_factory.h"
 #include "kis_view.h"
 #include "kis_util.h"
+#include "kis_paint_device_visitor.h"
+#include "visitors/kis_merge.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
@@ -107,6 +109,12 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_selectionRm = 0;
 	m_selectionSelectAll = 0;
 	m_selectionSelectNone = 0;
+	m_imgRm = 0;
+	m_imgDup = 0;
+	m_imgExport = 0;
+	m_imgMergeAll = 0;
+	m_imgMergeVisible = 0;
+	m_imgMergeLinked = 0;
 	m_sidebarToggle = 0;
 	m_floatsidebarToggle  = 0;
 	m_lsidebarToggle = 0;
@@ -227,7 +235,10 @@ void KisView::setupSideBar()
 	m_sideBar -> plug(m_channelView);
 
 	m_sideBar -> slotActivateTab(i18n("Brushes"));
-//	m_sideBar -> setActiveBrush(*m_pBrush);
+
+	if (m_brush)
+		m_sideBar -> slotSetBrush(*m_brush);
+
 	m_sideBar -> slotSetBGColor(m_bg);
 	m_sideBar -> slotSetFGColor(m_fg);
 	connect(m_sideBar, SIGNAL(fgColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
@@ -306,7 +317,7 @@ void KisView::setupActions()
 
 	// import/export actions
 	(void)new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
-	(void)new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
+	m_imgExport = new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
 
 	// view actions
 	m_zoomIn = new KAction(i18n("Zoom &In"), "viewmag+", 0, this, SLOT(zoomIn()), actionCollection(), "zoom_in");
@@ -346,10 +357,11 @@ void KisView::setupActions()
 
 	// image actions
 	(void)new KAction(i18n("Add New Image..."), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
-	(void)new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
-	(void)new KAction(i18n("Merge &All Layers"), 0, this, SLOT(merge_all_layers()), actionCollection(), "merge_all_layers");
-	(void)new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(merge_visible_layers()), actionCollection(), "merge_visible_layers");
-	(void)new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(merge_linked_layers()), actionCollection(), "merge_linked_layers");
+	m_imgRm = new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
+	m_imgDup = new KAction(i18n("Duplicate Image"), 0, this, SLOT(duplicateCurrentImg()), actionCollection(), "duplicate_image");
+	m_imgMergeAll = new KAction(i18n("Merge &All Layers"), 0, this, SLOT(merge_all_layers()), actionCollection(), "merge_all_layers");
+	m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(merge_visible_layers()), actionCollection(), "merge_visible_layers");
+	m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(merge_linked_layers()), actionCollection(), "merge_linked_layers");
 
 	// setting actions
 	(void)new KAction(i18n("Paint Offset..."), "paint_offet", this, SLOT(setPaintOffset()), actionCollection(), "paint_offset");
@@ -570,13 +582,13 @@ void KisView::paintView(const QRect& rc)
 			ur.setTop(0);
 
 		if (canvasXOffset())
-			gc.eraseRect(0, 0, static_cast<Q_INT32>(canvasXOffset() * zoom()), height());
+			gc.eraseRect(0, 0, canvasXOffset(), height());
 
 		if (canvasYOffset())
 			gc.eraseRect(static_cast<Q_INT32>(canvasXOffset() * zoom()), 0, width(), static_cast<Q_INT32>(canvasYOffset() * zoom()));
 
 		gc.eraseRect(static_cast<Q_INT32>(canvasXOffset() * zoom()), static_cast<Q_INT32>(docHeight() * zoom()) - canvasYOffset(), width(), height());
-		gc.eraseRect(static_cast<Q_INT32>(docWidth() * zoom()) - canvasXOffset(), static_cast<Q_INT32>(canvasYOffset() * zoom()), width(), height());
+		gc.eraseRect(static_cast<Q_INT32>(docWidth() * zoom()) - canvasXOffset() - 1, static_cast<Q_INT32>(canvasYOffset() * zoom()), width(), height());
 		xt = -canvasXOffset() + horzValue();
 		yt = -canvasYOffset() + vertValue();
 		ur.moveBy(xt, yt);
@@ -587,10 +599,14 @@ void KisView::paintView(const QRect& rc)
 		if (img -> height() * zoom() < ur.bottom())
 			ur.setHeight(img -> height());
 
-		Q_ASSERT(ur.width() <= docWidth());
-		Q_ASSERT(ur.height() <= docHeight());
+		if (ur.x() > docWidth())
+			return;
+
+		if (ur.y() > docHeight())
+			return;
+
 		ur.setBottom(ur.bottom() + 1);
-		ur.setRight(ur.right() + 1);
+		ur.setRight(ur.right() - 1);
 		xt = canvasXOffset() - horzValue();
 		yt = canvasYOffset() - vertValue();
 
@@ -673,6 +689,7 @@ void KisView::layerUpdateGUI(bool enable)
 	m_layerProperties -> setEnabled(enable);
 	m_layerNext -> setEnabled(enable);
 	m_layerPrev -> setEnabled(enable);
+	imgUpdateGUI();
 }
 
 void KisView::selectionUpdateGUI(bool enable)
@@ -739,13 +756,27 @@ void KisView::removeSelection()
 				rc.setHeight(clip.height());
 			}
 
-			img -> unsetSelection();
-			gc.fillRect(rc, KoColor::black(), OPACITY_TRANSPARENT);
+			img -> unsetSelection(false);
+			gc.fillRect(clip, KoColor::black(), OPACITY_TRANSPARENT);
 			gc.end();
 			m_doc -> setModified(true);
-			updateCanvas();
+			img -> invalidate(rc);
+			updateCanvas(rc);
 		}
 	}
+}
+
+void KisView::imgUpdateGUI()
+{
+	const KisImageSP img = currentImg();
+	const vKisLayerSP& layers = img -> layers();
+
+	m_imgRm -> setEnabled(img != 0);
+	m_imgDup -> setEnabled(img != 0);
+	m_imgExport -> setEnabled(img != 0);
+	m_imgMergeAll -> setEnabled(img && layers.size() > 1);
+	m_imgMergeVisible -> setEnabled(img && layers.size() > 1);
+	m_imgMergeLinked -> setEnabled(img && layers.size() > 1);
 }
 
 void KisView::fillSelectionBg()
@@ -760,14 +791,12 @@ void KisView::fillSelectionFg()
 
 void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 {
-#if 0
 	KisImageSP img = currentImg();
 
 	if (img) {
 		KisSelectionSP selection = img -> selection();
 
 		if (selection) {
-			KisPaintDeviceSP parent = selection -> parent();
 			QRect rc = selection -> bounds();
 			QRect clip = selection -> clip();
 			KisPainter gc(selection.data());
@@ -781,41 +810,13 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 
 			clip.setX(0);
 			clip.setY(0);
-			gc.fillRect(clip, c, opacity);
+			gc.fillRect(QRect(0, 0, 15, 15), c, opacity);
 			gc.end();
-			rc |= selection -> bounds();
 			img -> invalidate(rc);
 			m_doc -> setModified(true);
-			updateCanvas();
+			updateCanvas(rc);
 		}
 	}
-#endif
-	KisImageSP img = currentImg();
-
-	if (img) {
-		KisSelectionSP selection = img -> selection();
-
-		if (selection) {
-			KisPaintDeviceSP parent = selection -> parent();
-			QRect rc = selection -> bounds();
-			QRect clip = selection -> clip();
-			KisPainter gc(parent);
-
-			if (!clip.isEmpty()) {
-				rc.setX(rc.x() + clip.x());
-				rc.setY(rc.y() + clip.y());
-				rc.setWidth(clip.width());
-				rc.setHeight(clip.height());
-			}
-
-			img -> unsetSelection();
-			gc.fillRect(rc, c, opacity);
-			gc.end();
-			m_doc -> setModified(true);
-			updateCanvas();
-		}
-	}
-
 }
 
 void KisView::crop()
@@ -1086,7 +1087,25 @@ void KisView::slotImportImage()
 
 void KisView::export_image()
 {
-//	exportImage(true);
+#if 0
+	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::writeFilters(), 0, i18n("Image File for Layer"));
+
+	if (!url.isEmpty()) {
+		if (mergeLayers) {
+			/* merge should not always remove layers -
+			   merged into another but should have an option
+			   for keeping old layers and merging into a new
+			   one created for that purpose with a Yes/No dialog
+			   to confirm, at least. */
+			merge_all_layers();
+		}
+
+		//  save as standard image file (jpg, png, xpm, ppm,
+		//  bmp, tiff, but NO gif due to patent restrictions)
+		if (!m_doc -> saveAsQtImage(url.path(), mergeLayers))
+			kdDebug(0) << "Can't save doc as image" << endl;
+	}
+#endif
 }
 
 void KisView::slotInsertImageAsLayer()
@@ -1097,7 +1116,6 @@ void KisView::slotInsertImageAsLayer()
 
 void KisView::save_layer_as_image()
 {
-//	exportImage(false);
 }
 
 void KisView::slotEmbedImage(const QString &)
@@ -1137,6 +1155,7 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 		KNotifyClient::event("cannotopenfile");
 		break;
 	case KisImageBuilder_RESULT_OK:
+	default:
 		break;
 	}
 
@@ -1167,30 +1186,6 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 	m_doc -> addImage(img);
 	selectImage(img);
 	return 1;
-}
-
-Q_INT32 KisView::exportImage(bool,  const QString&)
-{
-#if 0
-	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::writeFilters(), 0, i18n("Image File for Layer"));
-
-	if (!url.isEmpty()) {
-		if (mergeLayers) {
-			/* merge should not always remove layers -
-			   merged into another but should have an option
-			   for keeping old layers and merging into a new
-			   one created for that purpose with a Yes/No dialog
-			   to confirm, at least. */
-			merge_all_layers();
-		}
-
-		//  save as standard image file (jpg, png, xpm, ppm,
-		//  bmp, tiff, but NO gif due to patent restrictions)
-		if (!m_doc -> saveAsQtImage(url.path(), mergeLayers))
-			kdDebug(0) << "Can't save doc as image" << endl;
-	}
-#endif
-	return 0;
 }
 
 void KisView::layer_scale_smooth()
@@ -1303,40 +1298,50 @@ void KisView::remove_current_image_tab()
 
 void KisView::merge_all_layers()
 {
-#if 0
 	KisImageSP img = currentImg();
 
 	if (img) {
-		img -> mergeAllLayers();
-		m_doc -> setModified(true);
-	}
-#endif
-}
+		KisLayerSP dst = new KisLayer(img, img -> width(), img -> height(), img -> nextLayerName(), OPACITY_OPAQUE);
+		KisPainter gc(dst.data());
+		KisMerge<flattenAll> visitor(img, false);
+		vKisLayerSP layers = img -> layers();
 
+		visitor(gc, layers);
+		img -> add(dst, -1);
+		layersUpdated();
+	}
+}
 
 void KisView::merge_visible_layers()
 {
-#if 0
-    if (currentImg())
-    {
-        currentImg()->mergeVisibleLayers();
+	KisImageSP img = currentImg();
 
-        m_doc->setModified(true);
-    }
-#endif
+	if (img) {
+		KisLayerSP dst = new KisLayer(img, img -> width(), img -> height(), img -> nextLayerName(), OPACITY_OPAQUE);
+		KisPainter gc(dst.data());
+		KisMerge<flattenAllVisible> visitor(img, false);
+		vKisLayerSP layers = img -> layers();
+
+		visitor(gc, layers);
+		img -> add(dst, -1);
+		layersUpdated();
+	}
 }
-
 
 void KisView::merge_linked_layers()
 {
-#if 0
-    if (currentImg())
-    {
-        currentImg()->mergeLinkedLayers();
+	KisImageSP img = currentImg();
 
-        m_doc->setModified(true);
-    }
-#endif
+	if (img) {
+		KisLayerSP dst = new KisLayer(img, img -> width(), img -> height(), img -> nextLayerName(), OPACITY_OPAQUE);
+		KisPainter gc(dst.data());
+		KisMerge<flattenAllLinked> visitor(img, false);
+		vKisLayerSP layers = img -> layers();
+
+		visitor(gc, layers);
+		img -> add(dst, -1);
+		layersUpdated();
+	}
 }
 
 void KisView::showMenubar()
@@ -1614,7 +1619,7 @@ void KisView::layerToggleVisible()
 
 		if (layer) {
 			layer -> visible(!layer -> visible());
-			img -> invalidate(vertValue(), horzValue(), width(), height());
+			img -> invalidate();
 			m_doc -> setModified(true);
 			resizeEvent(0);
 			updateCanvas();
@@ -1640,6 +1645,8 @@ void KisView::docImageListUpdate()
 
 	if (!currentImg())
 		layersUpdated();
+
+	imgUpdateGUI();
 }
 
 void KisView::layerToggleLinked()
@@ -1943,6 +1950,10 @@ void KisView::disconnectCurrentImg() const
 {
 	if (m_current)
 		m_current -> disconnect(this);
+}
+
+void KisView::duplicateCurrentImg()
+{
 }
 
 KoColor KisView::bgColor()

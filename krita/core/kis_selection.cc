@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the free software
  *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
+#include <kdebug.h>
 #include <koColor.h>
 #include "kis_global.h"
 #include "kis_image.h"
@@ -41,25 +42,24 @@ KisSelection::~KisSelection()
 
 void KisSelection::commit()
 {
-#if 0
 	KisPainter gc(m_parent);
-	QRect clip = this -> clip();
+	QRect rc = clip();
 	Q_INT32 w;
 	Q_INT32 h;
 
 	w = width();
 	h = height();
 
-	if (!clip.isEmpty()) {
-		w = clip.width();
-		h = clip.height();
+	if (!rc.isEmpty()) {
+		w = rc.width();
+		h = rc.height();
 	}
 
 	Q_ASSERT(w <= width());
 	Q_ASSERT(h <= height());
-//	gc.fillRect(x() + clip.x(), y() + clip.y(), w, h, KoColor::red());
-//	gc.bitBlt(x() + clip.x(), y() + clip.y(), COMPOSITE_COPY, this, 0, 0, w, h);
-#endif
+//	gc.fillRect(m_rc, KoColor::red(), OPACITY_OPAQUE);
+	// TODO Go over each tile... if src == dst, then don't do anything.  Just drop the share count.
+//	gc.bitBlt(m_rc.x(), m_rc.y(), COMPOSITE_COPY, this, opacity(), rc.x(), rc.y(), rc.width(), rc.height());
 }
 
 bool KisSelection::shouldDrawBorder() const
@@ -96,42 +96,57 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 	Q_INT32 offset;
 	Q_INT32 clipX;
 	Q_INT32 clipY;
+	Q_INT32 k;
 
-	configure(m_img, parentX + width, parentY + height, m_img -> imgType(), m_name);
+	configure(m_img, parentX + width + 1, parentY + height + 1, m_img -> imgType(), m_name);
 	tm2 = data();
 	Q_ASSERT(tm2);
-	offset = tm1 -> tileNum(parentX, parentY);
+	kdDebug(DBG_AREA_CORE) << "selection -> (parentX = " << parentX << ", parentY = " << parentY << ", width = " << width << ", height = " << height << ")\n";
 
-	for (y = parentY; y < height; y += TILE_HEIGHT) {
-		for (x = parentX; x < width; x += TILE_WIDTH) {
+	for (y = parentY, k = 0; y < height; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
+		offset = tm1 -> tileNum(parentX, y);
+
+		for (x = parentX; x < width; x += TILE_WIDTH - (x % TILE_WIDTH), k++) {
 			tileno = tm1 -> tileNum(x, y);
 
 			if (tileno < 0)
 				continue;
 
-			tile = tm1 -> tile(tileno, TILEMODE_READ);
+			tile = new KisTile(4, 0, 0);
+//			tile = tm1 -> tile(tileno, TILEMODE_READ);
 			Q_ASSERT(tile);
 
+#if 0
 			if (tile) {
-//				tile -> shareRef();
-				tm2 -> attach(tile, tileno - offset);
+				tile -> shareRef();
+				tm2 -> attach(tile, k);
 			}
+#else
+			tm2 -> attach(tile, k);
+#endif
+
 		}
 	}
 
 	m_rc.setRect(parentX, parentY, width, height);
-	clipX = parentX - parentX / TILE_WIDTH * TILE_WIDTH;
-	clipY = parentY - parentY / TILE_HEIGHT * TILE_HEIGHT;
+	clipX = parentX - parentX / TILE_WIDTH * TILE_WIDTH + 1;
+	clipY = parentY - parentY / TILE_HEIGHT * TILE_HEIGHT + 1;
+	width -= clipX - parentX;
+	height -= clipY - parentY;
 	setClip(clipX, clipY, width, height);
+	kdDebug(DBG_AREA_CORE) << "selection clip -> (x = " << clipX << ", y = " << clipY << ", width = " << width << ", height = " << height << ")\n";
 	
-#if 0
+#if 1
 	{
 		// tile -> shareRef() above sets "Copy on write" flag.
 		// however, it doesn't seem to be working very well righ now, so
 		// just use a Painter to transfer the data.
 		KisPainter gc(this);
+		KisPainter g2(m_parent);
 
-		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, parentX, parentY, width, height);
+//		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, parentX, parentY, width, height);
+//		gc.fillRect(clipX, clipY, width, height, KoColor::red(), OPACITY_OPAQUE);
+		g2.fillRect(m_rc.x(), m_rc.y(), m_rc.width(), m_rc.height(), KoColor::green(), OPACITY_OPAQUE);
 	}
 #endif
 

@@ -17,6 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <stdlib.h>
 #include <qpoint.h>
 #include <kaction.h>
 #include <kcommand.h>
@@ -29,7 +30,6 @@
 #include "kis_view.h"
 #include "kis_tool_memento.h"
 #include "kis_tool_move.h"
-#include "kis_tool_move.moc"
 
 namespace {
 	class MoveCommand : public KNamedCommand {
@@ -155,16 +155,17 @@ void KisToolMove::mouseMove(QMouseEvent *e)
 			pos -= m_dragStart;
 			rc.setRect(dev -> x(), dev -> y(), dev -> width(), dev -> height());
 			dev -> move(dev -> x() + pos.x(), dev -> y() + pos.y());
-			rc |= QRect(dev -> x(), dev -> y(), dev -> width(), dev -> height());
+			rc = rc.unite(QRect(dev -> x(), dev -> y(), dev -> width(), dev -> height()));
+			rc.setX(QMAX(0, rc.x()));
+			rc.setY(QMAX(0, rc.y()));
 			img -> invalidate(rc);
-
 			m_layerPosition = QPoint(dev -> x(), dev -> y());
 			m_dragStart = e -> pos();
 			rc.setX(static_cast<Q_INT32>(rc.x() * m_view -> zoom()));
 			rc.setY(static_cast<Q_INT32>(rc.y() * m_view -> zoom()));
 			rc.setWidth(static_cast<Q_INT32>(rc.width() * m_view -> zoom()));
 			rc.setHeight(static_cast<Q_INT32>(rc.height() * m_view -> zoom()));
-			m_view -> updateCanvas(); //rc);
+			m_view -> updateCanvas(rc);
 		}
 	}
 }
@@ -207,3 +208,4 @@ void KisToolMove::cursor(QWidget *w) const
 		w -> setCursor(m_cursor);
 }
 
+#include "kis_tool_move.moc"

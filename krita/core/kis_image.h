@@ -36,6 +36,9 @@ class KisPainter;
 
 class KisImage : public QObject, public KisRenderInterface {
 	Q_OBJECT
+	typedef QValueVector<QPixmap> vQPixmap;
+	typedef vQPixmap::iterator vQPixmap_it;
+	typedef vQPixmap::const_iterator vQPixmap_cit;
 
 public:
 	KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name);
@@ -82,8 +85,6 @@ public:
 	bool empty() const;
 	bool colorMap(KoColorMap& cm);
 	KisChannelSP mask();
-	KoColor foreground() const;
-	KoColor background() const;
 	KoColor color() const;
 	KoColor transformColor() const;
 	KisTileMgrSP shadow();
@@ -96,8 +97,10 @@ public:
 
 	void flush();
 
-	vKisLayerSP layers() const;
-	vKisChannelSP channels() const;
+	vKisLayerSP layers();
+	const vKisLayerSP& layers() const;
+	vKisChannelSP channels();
+	const vKisChannelSP& channels() const;
 
 	KisPaintDeviceSP activeDevice();
 
@@ -134,7 +137,7 @@ public:
 	KisLayerSP corrolateLayer(Q_INT32 x, Q_INT32 y);
 
 	void setSelection(KisSelectionSP selection);
-	void unsetSelection();
+	void unsetSelection(bool commit = true);
 	KisSelectionSP selection() const;
 
 signals:
@@ -148,13 +151,10 @@ signals:
 private:
 	KisImage(const KisImage& rhs);
 	KisImage& operator=(const KisImage& rhs);
-	void copyTile(KisTileSP dst, KisTileSP src);
-	void renderLayer(KisPainter& gc, KisLayerSP layer);
 	void expand(KisPaintDeviceSP dev);
 	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name);
 	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
-	void renderProjection();
-	void rengerBg();
+	void renderProjection(QPixmap& dst, KisTileSP src);
 
 private:
 	KisDoc *m_doc;
@@ -167,6 +167,7 @@ private:
 	Q_INT32 m_height;
 	Q_UINT32 m_depth;
 	Q_INT32 m_ntileCols;
+	Q_INT32 m_ntileRows;
 	QUANTUM m_opacity;
 	double m_xres;
 	double m_yres;
@@ -175,7 +176,8 @@ private:
 	KoColorMap m_clrMap;
 	bool m_dirty;
 	KisTileMgrSP m_shadow;
-	bool m_construct;
+	KisBackgroundSP m_bkg;
+	vQPixmap m_projectionPixmaps;
 	QPixmap m_pixmapProjection;
 	KisLayerSP m_projection;
 	vKisLayerSP m_layers;
@@ -192,7 +194,6 @@ private:
 	bool m_maskInverted;
 	KoColor m_maskClr;
 	KisNameServer *m_nserver;
-	KisTileSP m_bgTile;
 };
 
 #endif // KIS_IMAGE_H_

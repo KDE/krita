@@ -105,3 +105,13 @@ void KisLayer::linked(bool l)
 	m_linked = l;
 }
 
+const bool KisLayer::visible() const
+{
+	return super::visible() && m_opacity != OPACITY_TRANSPARENT;
+}
+
+void KisLayer::visible(bool v)
+{
+	super::visible(v);
+}
+

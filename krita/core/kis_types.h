@@ -31,8 +31,8 @@ typedef vKisImageSP::const_iterator vKisImageSP_cit;
 class KisPaintDevice;
 typedef KSharedPtr<KisPaintDevice> KisPaintDeviceSP;
 typedef QValueVector<KisPaintDeviceSP> vKisPaintDeviceSP;
-typedef vKisImageSP::iterator vKisImageSP_it;
-typedef vKisImageSP::const_iterator vKisImageSP_cit;
+typedef vKisPaintDeviceSP::iterator vKisPaintDeviceSP_it;
+typedef vKisPaintDeviceSP::const_iterator vKisPaintDeviceSP_cit;
 
 class KisChannel;
 typedef KSharedPtr<KisChannel> KisChannelSP;
@@ -51,6 +51,9 @@ typedef KSharedPtr<KisLayer> KisLayerSP;
 typedef QValueVector<KisLayerSP> vKisLayerSP;
 typedef vKisLayerSP::iterator vKisLayerSP_it;
 typedef vKisLayerSP::const_iterator vKisLayerSP_cit;
+
+class KisBackground;
+typedef KSharedPtr<KisBackground> KisBackgroundSP;
 
 class KisSelection;
 typedef KSharedPtr<KisSelection> KisSelectionSP;

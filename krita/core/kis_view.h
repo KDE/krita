@@ -77,7 +77,6 @@ public:
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, const QString& filename = QString::null);
-	Q_INT32 exportImage(bool mergeLayers,  const QString& filename = QString::null);
 	void updateCanvas();
 	void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	void updateCanvas(const QRect& rc);
@@ -126,11 +125,13 @@ private:
 	void clearCanvas(const QRect& rc);
 	void connectCurrentImg() const;
 	void disconnectCurrentImg() const;
+	void duplicateCurrentImg();
+	void imgUpdateGUI();
 	void fillSelection(const KoColor& c, QUANTUM opacity);
 	Q_INT32 horzValue() const;
 	void layerUpdateGUI(bool enable);
-	void selectionUpdateGUI(bool enable);
 	void paintView(const QRect& rc);
+	void selectionUpdateGUI(bool enable);
 	bool selectColor(KoColor& result);
 	void selectImage(KisImageSP img);
 	void setupActions();
@@ -227,6 +228,12 @@ private:
 	KRuler *m_vRuler;
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
+	KAction *m_imgRm;
+	KAction *m_imgDup;
+	KAction *m_imgExport;
+	KAction *m_imgMergeAll;
+	KAction *m_imgMergeVisible;
+	KAction *m_imgMergeLinked;
 	KAction *m_layerRm;
 	KAction *m_layerLink;
 	KAction *m_layerHide;

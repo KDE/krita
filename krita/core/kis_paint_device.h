@@ -53,12 +53,16 @@ public:
 
 public:
 	virtual void configure(KisImageSP image, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
+	virtual KisTileMgrSP data();
+	virtual const KisTileMgrSP data() const;
 	virtual bool shouldDrawBorder() const;
 	virtual void duplicate(KisPaintDevice& rhs, bool addAlpha);
 	virtual void move(Q_INT32 x, Q_INT32 y);
 	virtual void move(const QPoint& pt);
 	virtual void update();
 	virtual void update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	virtual const bool visible() const;
+	virtual void visible(bool v);
 
 public:
 	bool contains(Q_INT32 x, Q_INT32 y) const;
@@ -68,14 +72,11 @@ public:
 	void mergeShadow();
 	KoColor pixel(Q_INT32 x, Q_INT32 y);
 	void pixel(Q_INT32 x, Q_INT32 y, const KoColor& c);
-	void fill(const KoColor& clr);
 	void maskBounds(Q_INT32 *x1, Q_INT32 *y1, Q_INT32 *x2, Q_INT32 *y2);
 	void maskBounds(QRect *rc);
 	bool alpha() const;
 	enumImgType type() const;
 	enumImgType typeWithAlpha() const;
-	KisTileMgrSP data();
-	const KisTileMgrSP data() const;
 	KisTileMgrSP shadow();
 	const KisTileMgrSP shadow() const;
 	Q_INT32 quantumSize() const;
@@ -87,8 +88,6 @@ public:
 	void setY(Q_INT32 y);
 	Q_INT32 width() const;
 	Q_INT32 height() const;
-	const bool visible() const;
-	void visible(bool v);
 	void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
 	QRect clip() const;
 	void setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh);

@@ -28,6 +28,7 @@
 #include <koUnit.h>
 
 #define DBG_AREA_TILES 40001
+#define DBG_AREA_CORE 41000
 
 /**
  * Mime type for this app - not same as file type, but file types

@@ -51,6 +51,7 @@
 #include "kis_layer.h"
 #include "kis_nameserver.h"
 #include "kis_painter.h"
+#include "kis_selection.h"
 #include "kis_undo.h"
 #include "kis_view.h"
 
@@ -1046,21 +1047,63 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 	return new KisView(this, parent, name);
 }
 
+#include "kis_timer.h"
+
 void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
 {
-	if (transparent)
-		painter.eraseRect(rect);
-
-	if (zoomX != 1.0 || zoomY != 1.0)
-		painter.scale(zoomX, zoomY);
-
 	if (m_projection) {
-		QPixmap projection = m_projection -> pixmap(0);
+		QPixmap pixmap;
+		Q_INT32 x1 = rect.x();
+		Q_INT32 y1 = rect.y();
+		Q_INT32 x2 = x1 + rect.width() - 1;
+		Q_INT32 y2 = y1 + rect.height() - 1;
+		Q_INT32 tileno;
 
-		if (!projection.isNull())
-			painter.drawPixmap(rect.topLeft(), projection, rect);
+		if (transparent)
+			painter.eraseRect(rect);
 
-		// TODO : Use QPainter here to draw whatever is left (outlines, borders)
+		if (zoomX != 1.0 || zoomY != 1.0)
+			painter.scale(zoomX, zoomY);
+
+		for (Q_INT32 y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
+			for (Q_INT32 x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
+				if ((tileno = m_projection -> tileNum(x, y)) < 0)
+					continue;
+
+				pixmap = m_projection -> pixmap(tileno);
+
+				if (!pixmap.isNull()) {
+					painter.drawPixmap(x, y, pixmap, x % TILE_WIDTH, y % TILE_HEIGHT, 
+							rect.width() - (x % TILE_WIDTH) + 1, 
+							rect.height() - (y % TILE_HEIGHT) + 1);
+				}
+			}	
+		}
+#if 0
+		// TODO : Use QPainter here to draw whatever is left (outlines, borders) until KisPainter gets the missing functionality
+		{
+			KisSelectionSP selection = m_projection -> selection();
+
+			if (selection) {
+				QPen pen(Qt::DotLine);
+				QRect rc = selection -> bounds();
+				QRect clip = selection -> clip();
+
+				if (!clip.isEmpty()) {
+					rc.setX(rc.x() + clip.x());
+					rc.setY(rc.y() + clip.y());
+					rc.setWidth(clip.width());
+					rc.setHeight(clip.height());
+				}
+
+	//			painter.setClipRect(rect);
+				painter.setPen(pen);
+				painter.drawRect(rc);
+			}
+		}
+		
+#endif
+
 	}
 }
 

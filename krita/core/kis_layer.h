@@ -32,6 +32,10 @@ public:
 	virtual ~KisLayer();
 
 public:
+	virtual const bool visible() const;
+	virtual void visible(bool v);
+
+public:
 	KisMaskSP createMask(Q_INT32 maskType);
 	KisMaskSP addMask(KisMaskSP mask);
 	void applyMask(Q_INT32 mode);

@@ -50,7 +50,7 @@ void KisPaintDevice::invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 
 	for (y1 = y; y1 < dy; y1 += TILE_HEIGHT)
 		for (x1 = x; x1 < dx; x1 += TILE_WIDTH)
-			m_tiles -> invalidate(x1, y1);
+			data() -> invalidate(x1, y1);
 }
 
 void KisPaintDevice::invalidate(const QRect& rc)
@@ -177,11 +177,6 @@ void KisPaintDevice::mergeShadow()
 	maskBounds(&rc);
 	shadow = m_shadow -> pixelData(rc.left(), rc.top(), rc.right(), rc.bottom(), TILEMODE_READ);
 //	m_owner -> apply(this, shadow, OPACITY_OPAQUE, COMPOSITE_COPY, rc.x(), rc.y());
-}
-
-void KisPaintDevice::fill(const KoColor& )
-{
-
 }
 
 void KisPaintDevice::maskBounds(Q_INT32 *, Q_INT32 *, Q_INT32 *, Q_INT32 *)

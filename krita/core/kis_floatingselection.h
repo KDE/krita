@@ -33,6 +33,7 @@ class KisFloatingSelection : public KisLayer {
 	typedef KisLayer super;
 
 public:
+// 	KisFloatingSelection(KisLayerSP src, const QString & name);
 	KisFloatingSelection(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name);
 	KisFloatingSelection(KisPaintDeviceSP parent, KisImage *img, const QString& name, QUANTUM opacity);
 	virtual ~KisFloatingSelection();
@@ -46,8 +47,6 @@ public:
 public:
 	void commit();
 
-// XXX: duplicate of KisPaintDevice::convertToImage
-// 	QImage toImage();
 	void setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_INT32 height);
 	void setBounds(const QRect& rc);
 	KisPaintDeviceSP parent() const;

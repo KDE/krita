@@ -44,7 +44,6 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_progress_subject.cc \
     kis_double_widget.cc
 
-#    kis_dlg_paintoffset.cc 
 
 noinst_HEADERS = integerwidget.h \
     kis_dlg_preferences.h \
@@ -59,7 +58,6 @@ noinst_HEADERS = integerwidget.h \
     kis_layerbox.h \
     kis_dlg_create_img.h \
     kis_dlg_new_layer.h \
-    kis_dlg_paintoffset.h \
     kis_dlg_paint_properties.h \
     kis_dlg_transform.h \
     kis_dockframedocker.h \

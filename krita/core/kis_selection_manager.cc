@@ -19,6 +19,7 @@
 #include <qclipboard.h>
 #include <qapplication.h>
 
+#include <kdebug.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kstdaction.h>
@@ -35,6 +36,7 @@
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	: m_parent(parent),
 	  m_doc(doc),
+	  m_previousSelection(0),
 	  m_clipboardHasImage(false),
 	  m_copy(0),
 	  m_cut(0),
@@ -198,13 +200,8 @@ void KisSelectionManager::setup(KActionCollection * collection)
 			      this, SLOT(save()),
 			      collection, "save_selection");
 
-
-
-
         QClipboard *cb = QApplication::clipboard();
         connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
-
-	
 
 }
 
@@ -217,18 +214,36 @@ void KisSelectionManager::clipboardDataChanged()
 
 void KisSelectionManager::updateGUI(bool enable)
 {
+	kdDebug() << "KisSelectionManager::updateGUI(" << enable << ")\n";
+
         KisImageSP img = m_parent -> currentImg();
 
-        enable = enable && img && img -> activeSelection() && img -> activeSelection() -> parent();
+        enable = enable && img && img -> activeSelection(); // XXX: don't see the idea behind this: && img -> activeSelection() -> parent();
 
-        m_cut -> setEnabled(enable);
-        m_copy -> setEnabled(enable);
-        m_toNewLayer -> setEnabled(enable);
-        m_paste -> setEnabled(img != 0 && m_clipboardHasImage);
-        m_pasteInto -> setEnabled(img != 0 && m_clipboardHasImage);
-        m_clear -> setEnabled(enable);
-        m_selectAll -> setEnabled(img != 0);
-        m_deselect -> setEnabled(enable);
+	kdDebug() << "Becomes: " << enable << "\n";
+
+	m_copy -> setEnabled(enable);
+	m_cut -> setEnabled(enable);
+	m_paste -> setEnabled(img != 0 && m_clipboardHasImage);
+	m_selectAll -> setEnabled(img != 0);
+	m_deselect -> setEnabled(enable);
+	m_clear -> setEnabled(enable);
+	m_reselect -> setEnabled(m_previousSelection != 0);
+	m_invert -> setEnabled(enable);
+	m_pasteInto -> setEnabled(img != 0 && m_clipboardHasImage);
+	m_toNewLayer -> setEnabled(enable);
+	m_feather -> setEnabled(enable);
+	m_border -> setEnabled(enable);
+	m_expand -> setEnabled(enable);
+	m_smooth -> setEnabled(enable);
+	m_contract -> setEnabled(enable);
+	m_grow -> setEnabled(enable);
+	m_similar -> setEnabled(enable);
+	m_transform -> setEnabled(enable);
+	m_load -> setEnabled(false); // XXX: not implemented yet
+	m_save -> setEnabled(false); // XXX: not implemented yet
+
+
 }
 
 void KisSelectionManager::imgSelectionChanged(KisImageSP img)

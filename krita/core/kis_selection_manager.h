@@ -74,6 +74,7 @@ private:
 
 	KisView * m_parent;
 	KisDoc * m_doc;
+	KisSelectionSP m_previousSelection;
 
 	bool m_clipboardHasImage;
 

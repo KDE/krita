@@ -156,11 +156,6 @@ public slots:
 	void scaleCurrentImage(double sx, double sy);
 
 	// Layer action slots
-// 	void copy();
-// 	void cut();
-// 	void removeSelection();
-// 	void paste();
-// 	void copySelectionToNewLayer();
 	void rotateLayer180();
 	void rotateLayerLeft90();
 	void rotateLayerRight90();
@@ -169,8 +164,6 @@ public slots:
 	void mirrorLayerY();
 	void resizeLayer(Q_INT32 w, Q_INT32 h);
 	void scaleLayer(double sx, double sy);
-// 	void selectAll();
-// 	void unSelectAll();
 
 	// settings action slots
 	void preferences();
@@ -241,13 +234,11 @@ private:
 
 	void layerUpdateGUI(bool enable);
 	void paintView(const KisRect& rc);
-// 	void selectionUpdateGUI(bool enable);
 	bool selectColor(KoColor& result);
 	void selectImage(KisImageSP img);
 
 	void setupActions();
 	void setupCanvas();
-// 	void setupClipboard();
 	void setupRulers();
 	void setupScrollBars();
 	void setupDockers();
@@ -265,7 +256,6 @@ private:
 
 private slots:
 
-// 	void clipboardDataChanged();
 	void duplicateCurrentImg();
 	void popupTabBarMenu( const QPoint& );
 	void moveImage( unsigned, unsigned );
@@ -285,7 +275,6 @@ private slots:
 	void canvasGotDropEvent(QDropEvent*);
 
 	void docImageListUpdate();
-// 	void imgSelectionChanged(KisImageSP img);
 	void layerToggleVisible();
 	void layerSelected(int n);
 	void layerToggleLinked();
@@ -383,14 +372,6 @@ private:
 	KAction *m_layerToImage;
 	KAction *m_layerTop;
 	KAction *m_layerTransform;
-// 	KAction *m_selectionCopy;
-// 	KAction *m_selectionCut;
-// 	KAction *m_selectionPaste;
-// 	KAction *m_selectionPasteInto;
-// 	KAction *m_selectionRm;
-// 	KAction *m_selectionSelectAll;
-// 	KAction *m_selectionSelectNone;
-// 	KAction *m_selectionToNewLayer;
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
 	KAction *m_fullScreen;
@@ -441,7 +422,6 @@ private:
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
 	KisLayerBox *m_layerBox;
-// 	bool m_clipboardHasImage;
 	KisGuideSP m_currentGuide;
 	QPoint m_lastGuidePoint;
 	KisUndoAdapter *m_adapter;

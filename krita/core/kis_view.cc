@@ -171,15 +171,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_layerTop = 0;
         m_layerBottom = 0;
 
-//         m_selectionCut = 0;
-//         m_selectionCopy = 0;
-//         m_selectionPaste = 0;
-//         m_selectionPasteInto = 0;
-//         m_selectionToNewLayer = 0;
-//         m_selectionRm = 0;
-//         m_selectionSelectAll = 0;
-//         m_selectionSelectNone = 0;
-
         m_imgRm = 0;
         m_imgDup = 0;
         m_imgImport = 0;
@@ -198,7 +189,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_yoff = 0;
         m_fg = KoColor::black();
         m_bg = KoColor::white();
-// 	m_clipboardHasImage = false;
 
         m_layerchanneldocker = 0;
         m_resourcedocker = 0;
@@ -245,11 +235,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         setupTools();
 
 	setInputDevice(INPUT_DEVICE_MOUSE);
-
-//         selectionUpdateGUI(false);
-
-//         setupClipboard();
-//         clipboardDataChanged();
 
 }
 
@@ -381,9 +366,6 @@ void KisView::setupDockers()
                 viewLayerChannelDocker();
                 viewResourceDocker();
                 viewColorDocker();
-                // Frankly, I'm not really satisfied with the
-                // behaviour of the dockers. I wish they would dock
-                // onto each other, instead of onto the main window.
                 mainWindow() -> setDockEnabled( DockBottom, false);
                 mainWindow() -> setDockEnabled( DockTop, false);
         }
@@ -535,18 +517,6 @@ void KisView::setupActions()
 	m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
 	connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
 
-
-//         // selection actions
-//         m_selectionCut = KStdAction::cut(this, SLOT(cut()), actionCollection(), "cut");
-//         m_selectionCopy = KStdAction::copy(this, SLOT(copy()), actionCollection(), "copy");
-//         m_selectionPaste = KStdAction::paste(this, SLOT(paste()), actionCollection(), "paste");
-//         m_selectionPasteInto = new KAction(i18n("Paste Into"), "paste_into", 0, this, SLOT(paste_into()), actionCollection(), "paste_into");
-
-//         m_selectionRm = new KAction(i18n("Remove Selection"), "remove", 0, this, SLOT(removeSelection()), actionCollection(), "remove");
-//         m_selectionToNewLayer = new KAction(i18n("Copy Selection to New Layer"), "copy_selection_to_new_layer", 0,  this, SLOT(copySelectionToNewLayer()), actionCollection(), "copy to layer");
-//         m_selectionSelectAll = KStdAction::selectAll(this, SLOT(selectAll()), actionCollection(), "select_all");
-//         m_selectionSelectNone = KStdAction::deselect(this, SLOT(unSelectAll()), actionCollection(), "select_none");
-
         // import/export actions
         m_imgImport = new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
         m_imgExport = new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
@@ -576,7 +546,7 @@ void KisView::setupActions()
         m_layerResizeToImage = new KAction(i18n("Resize Layer to Image"), 0, this, SLOT(layerResizeToImage()), actionCollection(), "resizelayertoowner");
         m_layerToImage = new KAction(i18n("Layer to Image"), 0, this, SLOT(layerToImage()), actionCollection(), "layer_to_image");
 
-        // layer transformations - should be generic, for selection too
+        // layer transformations
         m_layerTransform = new KAction(i18n("Scale Layer..."), 0, this, SLOT(layerTransform()), actionCollection(), "transformlayer");
         (void)new KAction(i18n("Rotate &180"), 0, this, SLOT(rotateLayer180()), actionCollection(), "rotateLayer180");
         (void)new KAction(i18n("Rotate &270"), 0, this, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
@@ -600,7 +570,6 @@ void KisView::setupActions()
         m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(mergeLinkedLayers()), actionCollection(), "merge_linked_layers");
 
         // setting actions
-//         (void)new KAction(i18n("Paint Offset..."), "paint_offset", this, SLOT(setPaintOffset()), actionCollection(), "paint_offset");
         KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
         //docker actions
@@ -989,125 +958,6 @@ void KisView::layerUpdateGUI(bool enable)
         imgUpdateGUI();
 }
 
-// void KisView::selectionUpdateGUI(bool enable)
-// {
-//         KisImageSP img = currentImg();
-
-//         enable = enable && img && img -> activeSelection() && img -> activeSelection() -> parent();
-
-//         m_selectionCut -> setEnabled(enable);
-//         m_selectionCopy -> setEnabled(enable);
-//         m_selectionToNewLayer -> setEnabled(enable);
-//         m_selectionPaste -> setEnabled(img != 0 && m_clipboardHasImage);
-//         m_selectionPasteInto -> setEnabled(img != 0 && m_clipboardHasImage);
-//         m_selectionRm -> setEnabled(enable);
-// //         m_selectionFillBg -> setEnabled(enable);
-// //         m_selectionFillFg -> setEnabled(enable);
-//         m_selectionSelectAll -> setEnabled(img != 0);
-//         m_selectionSelectNone -> setEnabled(enable);
-// }
-
-// void KisView::cut()
-// {
-//         copy();
-//         removeSelection();
-// }
-
-// void KisView::copy()
-// {
-//         KisImageSP img = currentImg();
-
-//         if (img) {
-//                 KisSelectionSP selection = img -> activeSelection();
-
-//                 if (selection) {
-// 			// create a floating selection from selection
-
-// //                         selection -> clearParentOnMove(false);
-// //                         m_doc -> setClipboardSelection(selection);
-// //                         imgSelectionChanged(currentImg());
-//                 }
-//         }
-// }
-
-// void KisView::paste()
-// {
-// //      Q_ASSERT(!QApplication::clipboard() -> image().isNull());
-// //      activateTool(m_paste);
-// }
-
-// void KisView::paste_into()
-// {
-//         KisImageSP img = currentImg();
-
-//         Q_ASSERT(!QApplication::clipboard() -> image().isNull());
-
-//         if (img) {
-//                 KisFloatingSelectionSP fsel = m_doc -> clipboardFloatingSelection();
-//                 KisLayerSP layer = m_doc -> layerAdd(img, img -> nextLayerName(), fsel);
-
-//                 img -> unsetFloatingSelection(false);
-
-//                 if (layer) {
-//                         layer -> setX(0);
-//                         layer -> setY(0);
-//                         updateCanvas(layer -> bounds());
-//                 }
-//         }
-// }
-
-// void KisView::removeSelection()
-// {
-//         KisImageSP img = currentImg();
-
-//         if (img) {
-// 		// XXX: for every selected pixel, make pixel in parent layer transparent.
-
-// //                 KisFloatingSelectionSP selection = img -> selection();
-
-// //                 if (selection) {
-// //                         KisPaintDeviceSP parent = selection -> parent();
-
-// //                         if (parent) {
-// //                                 QRect rc = selection -> bounds();
-// //                                 QRect ur;
-// //                                 KisPainter gc(parent);
-
-// //                                 m_adapter -> beginMacro(i18n("Remove Selection"));
-// 		img -> removeActiveSelection(); // commit=true
-// //                                 ur = rc;
-
-// //                                 if (parent -> x() || parent -> y())
-// //                                         rc.moveBy(-parent -> x(), -parent -> y());
-
-// //                                 gc.beginTransaction("remove selection on parent");
-// //                                 gc.eraseRect(rc);
-// //                                 m_adapter -> addCommand(gc.end());
-// //                                 m_adapter -> endMacro();
-// //                                 m_doc -> setModified(true);
-// //                                 updateCanvas(ur);
-// //                         }
-// //                 }
-// 	}
-// }
-
-// void KisView::copySelectionToNewLayer()
-// {
-//         KisImageSP img = currentImg();
-
-//         if (img) {
-//                 KisSelectionSP selection = img -> activeSelection();
-// 		//XXX: Create new layer, transfer all selected pixels to new layer
-
-// 		img -> removeActiveSelection(); // XXX: commit==false
-
-// //                 if (selection && m_doc -> layerAdd(img, img -> nextLayerName(), selection))
-// //                         layersUpdated();
-// //                 else
-// //                         img -> setSelection(selection);
-//         }
-// }
-
 
 void KisView::imgUpdateGUI()
 {
@@ -1149,35 +999,6 @@ void KisView::updateTabBar()
                 m_tabBar->setActiveTab(currentImgName());
 }
 
-// void KisView::selectAll()
-// {
-//         KisImageSP img = currentImg();
-
-//         if (img) {
-//                  KisPaintDeviceSP dev;
-
-//                  img -> removeActiveSelection();
-//                  dev = img -> activeDevice();
-
-//                  if (dev) {
-// //                         KisFloatingSelectionSP selection = new KisFloatingSelection(dev, img, "Selection box from KisView", OPACITY_OPAQUE);
-
-// //                         selection -> setBounds(dev -> bounds());
-// //                         img -> setSelection(selection);
-// 			 updateCanvas();
-//                  }
-//          }
-// }
-
-// void KisView::unSelectAll()
-// {
-//         KisImageSP img = currentImg();
-
-//         if (img) {
-//                  img -> removeActiveSelection();
-//                  updateCanvas();
-//         }
-// }
 
 void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 {
@@ -2524,19 +2345,6 @@ void KisView::selectImage(KisImageSP img)
         m_selectionManager -> updateGUI(m_current && m_current -> activeSelection());
 }
 
-// void KisView::setPaintOffset()
-// {
-//         KisDlgPaintOffset dlg(m_xoff, m_yoff, this, "dlg_paint_offset");
-
-//         dlg.exec();
-
-//         if (dlg.result() == QDialog::Accepted && (dlg.xoff() != m_xoff || dlg.yoff() != m_yoff)) {
-//                 m_xoff = dlg.xoff();
-//                 m_yoff = dlg.yoff();
-//                 resizeEvent(0);
-//         }
-// }
-
 void KisView::scrollH(int value)
 {
         m_hRuler -> updateVisibleArea(value, 0);
@@ -2620,16 +2428,12 @@ void KisView::reverseFGAndBGColors()
         setBGColor(oldFg);
 }
 
-// void KisView::imgSelectionChanged(KisImageSP img)
-// {
-//         if (img == currentImg())
-//                 selectionUpdateGUI(img -> activeSelection() != 0);
-// }
-
 void KisView::connectCurrentImg() const
 {
         if (m_current) {
                 connect(m_current, SIGNAL(activeSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
+		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
+
 		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), SLOT(imgUpdated(KisImageSP)));
                 connect(m_current, SIGNAL(update(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
 		connect(m_current, SIGNAL(layersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
@@ -2656,17 +2460,6 @@ void KisView::duplicateCurrentImg()
         }
 }
 
-// void KisView::setupClipboard()
-// {
-//         QClipboard *cb = QApplication::clipboard();
-
-//         connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
-// }
-
-// void KisView::clipboardDataChanged()
-// {
-//         m_clipboardHasImage = !QApplication::clipboard() -> image().isNull();
-// }
 
 void KisView::imgUpdated(KisImageSP img, const QRect& rc)
 {

@@ -22,6 +22,7 @@
 #include <map>
 
 #include <qstring.h>
+#include <qstringlist.h>
 
 #include <kdebug.h>
 

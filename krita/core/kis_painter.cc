@@ -537,6 +537,8 @@ float KisPainter::paintLine(const QPoint & pos1,
 			    const Q_INT32 yTilt,
 			    const float savedDist)
 {
+	if (!m_device) return 0;
+
 	// XXX: this is copy-paste from paint-at, and I don't like it.
 	Q_INT32 calibratedPressure = pressure / 2;
 	KisAlphaMask * mask = m_brush -> mask(calibratedPressure);
@@ -653,7 +655,7 @@ void KisPainter::paintAt(const QPoint & pos,
 	// composite temporary layer into target layer
 	// @see: doc/brush.txt
 
-
+	if (!m_device) return;
 
 #if 0
         kdDebug() << "paint: " << pos.x() << ", " << pos.y() << endl;
@@ -686,6 +688,8 @@ float KisPainter::eraseLine(const QPoint &pos1,
 			    const Q_INT32 yTilt,
 			    const float savedDist)
 {
+	if (!m_device) return 0;
+
 	Q_INT32 spacing = m_brush -> spacing();
 
 	if (spacing <= 0) {
@@ -782,7 +786,7 @@ void KisPainter::eraseAt(const QPoint &pos,
 			 const Q_INT32 /*xTilt*/,
 			 const Q_INT32 /*yTilt*/) 
 {
-	
+	if (!m_device) return;
 	
 	Q_INT32 calibratedPressure = pressure / 2;
 

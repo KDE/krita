@@ -60,6 +60,8 @@ void KisToolBrush::mousePress(QMouseEvent *e)
 
         if (!m_subject->currentBrush()) return;
 
+	if (!m_currentImage -> activeDevice()) return;
+
         if (e->button() == QMouseEvent::LeftButton) {
 		m_mode = PAINT;
 		initPaint(e -> pos());
@@ -88,6 +90,11 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
 void KisToolBrush::tabletEvent(QTabletEvent *e)
 {
          if (e->device() == QTabletEvent::Stylus) {
+		 if (!m_currentImage -> activeDevice()) {
+			 e -> accept();
+			 return;
+		 }
+
 		 if (!m_subject) {
 			 e -> accept();
 			 return;
@@ -121,6 +128,8 @@ void KisToolBrush::tabletEvent(QTabletEvent *e)
 
 void KisToolBrush::initPaint(const QPoint & pos)
 {
+
+	if (!m_currentImage -> activeDevice()) return;
 	m_dragStart = pos;
 	m_dragDist = 0;
 
@@ -168,6 +177,7 @@ void KisToolBrush::paintLine(const QPoint & pos1,
 			     const Q_INT32 xtilt,
 			     const Q_INT32 ytilt)
 {
+	if (!m_currentImage -> activeDevice()) return;
 
 	m_dragDist = m_painter -> paintLine(pos1, pos2, pressure, xtilt, ytilt, m_dragDist);
 	m_currentImage -> notify( m_painter -> dirtyRect() );

@@ -58,7 +58,8 @@
 #include <kis_painter.h>
 #include <kis_fill_painter.h>
 #include <kis_id.h>
-
+#include <kis_paint_device.h>
+#include <kis_iterators_pixel.h>
 #include "perftest.h"
 
 #include "dlg_perftest.h"
@@ -143,7 +144,15 @@ void PerfTest::slotPerfTest()
 		if (dlgPerfTest -> page() -> chkFilter-> isChecked()) {
 			report = report.append(filterTest(testCount));
 		}
-
+		if (dlgPerfTest -> page() -> chkReadBytes -> isChecked()) {
+			report = report.append(readBytesTest(testCount));
+		}
+		if (dlgPerfTest -> page() -> chkWriteBytes-> isChecked()) {
+			report = report.append(writeBytesTest(testCount));
+		}
+		if (dlgPerfTest -> page() -> chkIterators -> isChecked()) {
+			report = report.append(iteratorTest(testCount));
+		}
 		KDialogBase * d = new KDialogBase(m_view, "", true, "", KDialogBase::Ok);
 		d -> setCaption("Performance test results");
 		QTextEdit * e = new QTextEdit(d);
@@ -542,13 +551,95 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
 
 QString PerfTest::readBytesTest(Q_UINT32 testCount)
 {
-	return QString("Read bytes test");
+	QString report = QString("* Read bytes test");
+
+	// On default tiles
+	KisDoc * doc = m_view -> getDocument();
+	KisImage * img = doc -> newImage("Readbytes ", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA","")));
+	doc -> addImage(img);
+	KisLayerSP l = img -> activeLayer();
+
+	QTime t;
+	t.restart();
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		Q_UINT8 * newData;
+		newData = l -> readBytes( 0, 0, 1000, 1000);
+		delete[] newData;
+	}
+
+	report = report.append(QString("    read 1000 x 1000 pixels %1 times from empty image: %2\n").arg(testCount).arg(t.elapsed()));
+
+	// On tiles with data
+
+	KisFillPainter p(l.data());
+	p.fillRect(0, 0, 1000, 1000, Qt::blue);
+	p.end();
+
+	t.restart();
+	
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		Q_UINT8 * newData;
+		newData = l -> readBytes( 0, 0, 1000, 1000);
+		delete[] newData;
+	}
+
+	report = report.append(QString("    read 1000 x 1000 pixels %1 times from filled image: %2\n").arg(testCount).arg(t.elapsed()));
+	
+	doc -> removeImage(img);
+	return report;
 }
 
 
 QString PerfTest::writeBytesTest(Q_UINT32 testCount)
 {
-	return QString("Write bytes test");
+	QString report = QString("* Write bytes test");
+	
+	// On default tiles
+	KisDoc * doc = m_view -> getDocument();
+	KisImage * img = doc -> newImage("Writebytes ", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+	doc -> addImage(img);
+	KisLayerSP l = img -> activeLayer();
+	KisFillPainter p(l.data());
+	p.fillRect(0, 0, 1000, 1000, Qt::blue);
+	p.end();
+
+	
+	Q_UINT8 * data = l -> readBytes(0, 0, 1000, 1000);
+	
+	int pixelSize = l -> pixelSize();
+	
+	QTime t;
+	t.restart();
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		l -> writeBytes(data, 0, 0, 1000, 1000);
+/**
+		Q_UINT8 * ptr = data;
+
+ 		int adv;
+
+		// XXX: Isn't this a very slow copy?
+		for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
+		{
+			KisHLineIterator hiter = l -> createHLineIterator(0, y2, 1000, true);
+			while(! hiter.isDone())
+			{
+	 			adv = hiter.nConseqHPixels();
+	 			memcpy(hiter.rawData(), ptr , adv * pixelSize);
+	
+	 			ptr += adv * pixelSize;
+	 			hiter += adv;
+	//			memcpy(hiter.rawData(), ptr, pixelSize);
+	//			++hiter;
+	//			ptr += pixelSize;
+			}
+		}
+*/
+	}
+	delete[] data;
+	report = report.append(QString("    written 1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+	return report;
+
+
 }
 
 QString PerfTest::iteratorTest(Q_UINT32 testCount)

@@ -245,6 +245,7 @@ void DlgColorRange::slotSelectionTypeChanged(int index)
 	if (index != 0) {
 		if (m_picker) m_picker -> clear();
 	}
+	
 }
 
 void DlgColorRange::slotPreviewTypeChanged(int /*index*/)

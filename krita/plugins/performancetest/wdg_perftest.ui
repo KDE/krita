@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WdgPerfTest</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>377</width>
-            <height>450</height>
+            <height>485</height>
         </rect>
     </property>
     <property name="caption">
@@ -185,6 +185,39 @@
                     </property>
                     <property name="maxValue">
                         <number>1000000</number>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="13" column="0">
+                    <property name="name">
+                        <cstring>chkReadBytes</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Read bytes</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="14" column="0">
+                    <property name="name">
+                        <cstring>chkWriteBytes</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Write bytes</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="15" column="0">
+                    <property name="name">
+                        <cstring>chkIterators</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Iterators</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
                     </property>
                 </widget>
             </grid>

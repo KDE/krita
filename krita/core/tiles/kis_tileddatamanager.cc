@@ -626,7 +626,7 @@ void KisTiledDataManager::writeBytes(Q_UINT8 * bytes,
 			adv = hiter.nConseqHPixels();
 			memcpy(hiter.rawData(), ptr , adv * m_pixelSize);
 
-			ptr += adv * hiter.nConseqHPixels();
+			ptr += adv * m_pixelSize;
 			hiter += adv;
 		}
 	}

@@ -149,6 +149,8 @@ public:
 	void notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
 	void notify(const QRect& rc);
 
+	KisDoc *document() const;
+
 signals:
 	void activeLayerChanged(KisImageSP image);
 	void activeChannelChanged(KisImageSP image);
@@ -201,6 +203,7 @@ private:
 	KoColor m_maskClr;
 	KisNameServer *m_nserver;
 	KPixmapIO m_pixmapIO;
+	KisDoc *m_doc;
 };
 
 #endif // KIS_IMAGE_H_

@@ -19,8 +19,11 @@
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qsize.h>
 #include <qtl.h>
+#include <kcommand.h>
 #include <kdebug.h>
+#include <klocale.h>
 #include <kpixmapio.h>
 #include "kis_image.h"
 #include "kis_paint_device.h"
@@ -37,6 +40,48 @@
 #include "kistilemgr.h"
 #include "kispixeldata.h"
 #include "visitors/kis_flatten.h"
+
+namespace {
+	class KisResizeImageCmd : public KNamedCommand {
+		typedef KNamedCommand super;
+
+	public:
+		KisResizeImageCmd(KisDoc *doc, KisImageSP img, Q_INT32 width, Q_INT32 height, Q_INT32 oldWidth, Q_INT32 oldHeight) : super(i18n("Resize Image"))
+		{
+			m_doc = doc;
+			m_img = img;
+			m_before = QSize(oldWidth, oldHeight);
+			m_after = QSize(width, height);
+		}
+
+		virtual ~KisResizeImageCmd()
+		{
+		}
+
+	public:
+		virtual void execute()
+		{
+			m_doc -> setUndo(false);
+			m_img -> resize(m_after.width(), m_after.height());
+			m_doc -> setUndo(true);
+			m_img -> notify();
+		}
+
+		virtual void unexecute()
+		{
+			m_doc -> setUndo(false);
+			m_img -> resize(m_before.width(), m_before.height());
+			m_doc -> setUndo(true);
+			m_img -> notify();
+		}
+
+	private:
+		KisDoc *m_doc;
+		KisImageSP m_img;
+		QSize m_before; 
+		QSize m_after;
+	};
+}
 
 KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name)
 {
@@ -151,10 +196,11 @@ void KisImage::setEmail(const QString& email)
 	m_email = email;
 }
 
-void KisImage::init(KisDoc *, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name)
+void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name)
 {
 	Q_INT32 n;
 
+	m_doc = doc;
 	m_nserver = new KisNameServer("Layer %1", 0);
 	n = ::imgTypeDepth(imgType);
 	m_active.resize(n);
@@ -182,12 +228,11 @@ void KisImage::init(KisDoc *, Q_INT32 width, Q_INT32 height, QUANTUM opacity, co
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h)
 {
-	if (m_width < w)
-		m_width = w;
+	if (m_doc && m_doc -> undo())
+		m_doc -> addCommand(new KisResizeImageCmd(m_doc, this, w, h, m_width, m_height));
 
-	if (m_height < h)
-		m_height = h;
-
+	m_width = w;
+	m_height = h;
 	m_projection = new KisLayer(this, m_width, m_height, "image projection", OPACITY_OPAQUE);
 	m_bkg = new KisBackground(this, m_width, m_height);
 	m_projectionPixmaps.clear();
@@ -1087,6 +1132,11 @@ void KisImage::notify(const QRect& rc)
 QRect KisImage::bounds() const
 {
 	return QRect(0, 0, width(), height());
+}
+
+KisDoc* KisImage::document() const
+{
+	return m_doc;
 }
 
 #include "kis_image.moc"

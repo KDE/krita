@@ -17,6 +17,7 @@
  */
 #include <qrect.h>
 #include <kcommand.h>
+#include <klocale.h>
 #include <kdebug.h>
 #include "kis_global.h"
 #include "kis_types.h"
@@ -25,6 +26,55 @@
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kispixeldata.h"
+#include "kis_doc.h"
+
+namespace {
+	class KisResizeDeviceCmd : public KNamedCommand {
+		typedef KNamedCommand super;
+
+	public:
+		KisResizeDeviceCmd(KisDoc *doc, KisPaintDeviceSP dev, KisTileMgrSP before, KisTileMgrSP after) : super(i18n("Resize"))
+		{
+			m_doc = doc;
+			m_dev = dev;
+			m_before = before;
+			m_after = after;
+		}
+
+		virtual ~KisResizeDeviceCmd()
+		{
+		}
+
+	public:
+		virtual void execute()
+		{
+			KisImageSP owner;
+
+			m_doc -> setUndo(false);
+			m_dev -> data(m_after);
+			m_doc -> setUndo(true);
+			owner = m_dev -> image();
+			owner -> notify();
+		}
+
+		virtual void unexecute()
+		{
+			KisImageSP owner;
+
+			m_doc -> setUndo(false);
+			m_dev -> data(m_before);
+			m_doc -> setUndo(true);
+			owner = m_dev -> image();
+			owner -> notify();
+		}
+
+	private:
+		KisDoc *m_doc;
+		KisPaintDeviceSP m_dev;
+		KisTileMgrSP m_before; 
+		KisTileMgrSP m_after;
+	};
+}
 
 KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
 {
@@ -522,10 +572,18 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opaci
 
 void KisPaintDevice::data(KisTileMgrSP mgr)
 {
-	// TODO : undo/redo
-	//
 	Q_ASSERT(mgr);
+
+	if (m_owner) {
+		KisDoc *doc = m_owner -> document();
+
+		if (doc && doc -> undo())
+			doc -> addCommand(new KisResizeDeviceCmd(doc, this, m_tiles, mgr));
+	}
+
 	m_tiles = mgr;
+	width(mgr -> width());
+	height(mgr -> height());
 }
 
 void KisPaintDevice::width(Q_INT32 w)

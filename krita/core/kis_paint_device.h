@@ -70,6 +70,7 @@ public:
 public:
 	bool contains(Q_INT32 x, Q_INT32 y) const;
 	bool contains(const QPoint& pt) const;
+	void data(KisTileMgrSP mgr);
 	QString name();
 	void setName(const QString& name);
 	bool pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity);
@@ -104,7 +105,6 @@ signals:
 	void positionChanged(KisPaintDeviceSP device);
 
 protected:
-	void data(KisTileMgrSP mgr);
 	void width(Q_INT32 w);
 	void height(Q_INT32 h);
 

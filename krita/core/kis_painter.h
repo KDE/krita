@@ -35,6 +35,7 @@
 #include <qpainter.h>
 
 #include <koColor.h>
+#include <kcommand.h>
 
 #include "kis_global.h"
 #include "kis_types.h"
@@ -45,16 +46,45 @@
 
 class QRect;
 class KCommand;
-class KMacroCommand;
+
+/*
+        KisTileCommand extends KCommand with an addTile method; I
+        haven't found a way to keep this private in the namespace of
+        kis_painter.cc and still declare m_transaction to be of type
+        KisTileCommand in kis_painter.h -- dynamically downcasting a
+        KCommand m_transaction just to keep everything private seems
+        excessive.
+*/
+class KisTileCommand : public KCommand {
+        typedef QMap<Q_INT32, KisTileSP> TileMap;
+
+public:
+        KisTileCommand(const QString& name, KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
+        KisTileCommand(const QString& name, KisPaintDeviceSP device, const QRect& rc);
+        KisTileCommand(const QString& name, KisPaintDeviceSP device);
+        virtual ~KisTileCommand();
+public:
+        virtual void execute();
+        virtual void unexecute();
+        virtual QString name() const;
+public:
+        void addTile(Q_INT32 tileNo, KisTileSP tile);
+private:
+        TileMap m_tiles;
+        TileMap m_originals;
+        QString m_name;
+        KisPaintDeviceSP m_device;
+        QRect m_rc;
+};
 
 /*
   KisPainter contains the graphics primitives necessary to draw on a
   KisPaintDevice. This is the same kind of abstraction as used in Qt
   itself, where you have QPainter and QPaintDevice.
-  
+
   However, KisPainter works on a tiled image and supports different
   colour models, and that's a lot more complicated.
- 
+
   Note that I currently think that it's necessary to call anchor,
   invalidate and updateCanvas to make sure the painted bits show up on
   the screen; I don't know why, I don't know whether that's true, but
@@ -66,131 +96,100 @@ class KMacroCommand;
  */
 class KisPainter {
 public:
-	KisPainter();
-	KisPainter(KisPaintDeviceSP device);
-	~KisPainter();
+        KisPainter();
+        KisPainter(KisPaintDeviceSP device);
+        ~KisPainter();
 
 public:
         // Start painting on the specified device.
         void begin(KisPaintDeviceSP device);
 
-        // ??? 
-	KCommand *end();
+        // ???
+        KCommand *end();
 
         // ???
-	void beginTransaction(KMacroCommand *command);
+        void beginTransaction(const QString& customName = QString::null);
 
         // ???
-	void beginTransaction(const QString& customName = QString::null);
-
-        // ???
-	KCommand *endTransaction();
-
+        KCommand *endTransaction();
 
         // The current paint device.
-	KisPaintDeviceSP device() const;
+        KisPaintDeviceSP device() const;
 
         // ----------------------------------------------------------------------------------------
         // Native paint methods that are tile aware, undo/redo-able,
         // use the color strategies and the composite operations.
 
         // Blast the specified region from src onto the current paint device.
-	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src,
+        void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src,
                     Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 
         // Overloaded version of the previous, differs in that it is possible to specify
         // a value for opacity
-	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src,
-                    QUANTUM opacity, 
+        void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src,
+                    QUANTUM opacity,
                     Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 
-	void eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h);
-	void eraseRect(const QRect& rc);
+        void eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h);
+        void eraseRect(const QRect& rc);
 
         // Fill a rectangle with a certain color
-	void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c);
-	void fillRect(const QRect& rc, const KoColor& c);
-	void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity);
-	void fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity);
-
-	// Draw a point with the specified brush in the specified color at x, y
-	// XXX: brush, color, gradient, pattern etc. should be set
-	// as in QPainter.
-	void drawPoint(Q_INT32 x, Q_INT32 y, const KoColor &c, const KisBrush &brush);
-	void drawPoint(const QPoint &p,  const KoColor &c, const KisBrush &brush);
-
-
-        // ----------------------------------------------------------------------------------------
-        // QPainter-using methods.
-
-        // XXX: we actually use QPainter for everything.
-        // XXX: we even use QPixmaps, for added sluggishness.
-        // XXX: we don't even think about compositing.
-        // XXX: let alone colour strategies.
-
-        void drawPolyline ( const QPointArray & polyline, 
-                            const QColor & c );
-
-        // ----------------------------------------------------------------------------------------
+        void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c);
+        void fillRect(const QRect& rc, const KoColor& c);
+        void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity);
+        void fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity);
 
 private:
-	void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src,
-                     KisTileSP srctile, Q_INT32 rows, Q_INT32 cols, 
+        void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src,
+                     KisTileSP srctile, Q_INT32 rows, Q_INT32 cols,
                      CompositeOp op);
-	void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src,
-                     KisTileSP srctile, QUANTUM opacity, Q_INT32 rows, Q_INT32 cols, 
+        void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src,
+                     KisTileSP srctile, QUANTUM opacity, Q_INT32 rows, Q_INT32 cols,
                      CompositeOp op);
-	KisPainter(const KisPainter&);
-	KisPainter& operator=(const KisPainter&);
+
+        KisPainter(const KisPainter&);
+        KisPainter& operator=(const KisPainter&);
 
 private:
-	KisPaintDeviceSP m_device;	
-	KMacroCommand *m_transaction;
-
-
+        KisPaintDeviceSP m_device;
+        KisTileCommand  *m_transaction;
 };
 
 inline
 void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c)
 {
-	fillRect(x, y, w, h, c, OPACITY_OPAQUE);
+        fillRect(x, y, w, h, c, OPACITY_OPAQUE);
 }
 
 inline
 void KisPainter::fillRect(const QRect& rc, const KoColor& c)
 {
-	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE);
+        fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE);
 }
 
 inline
 void KisPainter::eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
 {
-	fillRect(x1, y1, w, h, KoColor::black(), OPACITY_TRANSPARENT);
+        fillRect(x1, y1, w, h, KoColor::black(), OPACITY_TRANSPARENT);
 }
 
 inline
 void KisPainter::eraseRect(const QRect& rc)
 {
-	fillRect(rc, KoColor::black(), OPACITY_TRANSPARENT);
+        fillRect(rc, KoColor::black(), OPACITY_TRANSPARENT);
 }
 
 inline
 void KisPainter::fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity)
 {
-	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
-}
-
-inline
-void KisPainter::drawPoint(const QPoint &p,  const KoColor &c, const KisBrush &brush) 
-{
-	drawPoint(p.x(), p.y(), c, brush);
+        fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
 }
 
 
 inline
 KisPaintDeviceSP KisPainter::device() const
 {
-	return m_device;
+        return m_device;
 }
 
 #endif // KIS_PAINTER_H_

@@ -23,6 +23,7 @@
 
 #include <kcommand.h>
 
+#include "kis_painter.h"
 #include "kis_tool.h"
 #include "kis_tool_paint.h"
 
@@ -53,6 +54,7 @@ private:
 
 	enumBrushMode m_mode;
 	KMacroCommand *m_macro;
+	KisPainter *m_painter;
 };
 #endif // KIS_TOOL_BRUSH_H_
 

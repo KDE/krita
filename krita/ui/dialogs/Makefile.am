@@ -17,4 +17,4 @@ noinst_HEADERS = wdgmatrix.h \
 	new_image.h \
 	kis_previewwidgetbase.h
 
-libkisdialogs_la_METASOURCES = AUTO
+METASOURCES = AUTO

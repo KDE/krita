@@ -1912,7 +1912,7 @@ void KisView::layerAdd()
 					gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
 					gc.end();
 					img -> top(layer);
-					img -> invalidate(layer -> x(), layer -> y(), layer -> width(), layer -> height());
+					img -> invalidate();
 					m_doc -> setModified(true);
 					layersUpdated();
 					m_layerBox -> setCurrentItem(img -> index(layer));
@@ -2030,6 +2030,7 @@ void KisView::layersUpdated()
 void KisView::selectImage(const QString& name)
 {
 	m_current = m_doc -> findImage(name);
+	layersUpdated();
 	resizeEvent(0);
 	updateCanvas();
 }
@@ -2037,6 +2038,7 @@ void KisView::selectImage(const QString& name)
 void KisView::selectImage(KisImageSP img)
 {
 	m_current = img;
+	layersUpdated();
 	resizeEvent(0);
 	updateCanvas();
 	m_tabBar -> slotImageListUpdated();

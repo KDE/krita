@@ -1,0 +1,260 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgCImg</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgCImg</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>215</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>CImg configuration</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>grpSmooth</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Smoothing</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KDoubleNumInput" row="0" column="1">
+                    <property name="name">
+                        <cstring>numDetail</cstring>
+                    </property>
+                    <property name="value">
+                        <number>0.1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="1" column="1">
+                    <property name="name">
+                        <cstring>numGradient</cstring>
+                    </property>
+                    <property name="value">
+                        <number>0.9</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="2" column="1">
+                    <property name="name">
+                        <cstring>numTimeStep</cstring>
+                    </property>
+                    <property name="value">
+                        <number>20</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>500</number>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="3" column="1">
+                    <property name="name">
+                        <cstring>numBlur</cstring>
+                    </property>
+                    <property name="value">
+                        <number>1.4</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>10</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>textLabel5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Blurring iterations</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Blur</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Time step</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Gradient factor</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Detail factor</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="4" column="1">
+                    <property name="name">
+                        <cstring>numBlurIterations</cstring>
+                    </property>
+                    <property name="value">
+                        <number>1</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>16</number>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>grpPrecision</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Mathematical precision</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel6</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Angular step</string>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="0" column="1">
+                    <property name="name">
+                        <cstring>numAngularStep</cstring>
+                    </property>
+                    <property name="value">
+                        <number>45</number>
+                    </property>
+                    <property name="minValue">
+                        <number>5</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>90</number>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="1" column="1">
+                    <property name="name">
+                        <cstring>numIntegralStep</cstring>
+                    </property>
+                    <property name="value">
+                        <number>0.8</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0.1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>10</number>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="2" column="1">
+                    <property name="name">
+                        <cstring>numGaussian</cstring>
+                    </property>
+                    <property name="value">
+                        <number>3</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0.1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>10</number>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>chkNormalize</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Normalize picture</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>chkLinearInterpolation</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Use linear interpolation</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel7</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Integral step</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel8</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Gaussian</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </hbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<tabstops>
+    <tabstop>numDetail</tabstop>
+    <tabstop>numGradient</tabstop>
+    <tabstop>numTimeStep</tabstop>
+    <tabstop>numBlur</tabstop>
+    <tabstop>numAngularStep</tabstop>
+    <tabstop>numIntegralStep</tabstop>
+    <tabstop>numGaussian</tabstop>
+    <tabstop>chkLinearInterpolation</tabstop>
+    <tabstop>chkNormalize</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

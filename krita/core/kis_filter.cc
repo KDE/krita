@@ -16,11 +16,15 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+
+
 #include "kis_filter.h"
 
 #include <qlayout.h>
 #include <qframe.h>
+#include <qcursor.h>
 
+#include "kis_cursor.h"
 #include "kis_filter_registry.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
@@ -88,6 +92,9 @@ void KisFilter::slotActivated()
 		}
 	}
 
+	QCursor oldCursor = m_view -> cursor();
+	m_view -> setCursor(KisCursor::waitCursor());
+
 	//Apply the filter
 	KisFilterConfiguration* config = configuration(m_widget);
 
@@ -109,6 +116,9 @@ void KisFilter::slotActivated()
 	disableProgress();
 
 	img->notify();
+	
+	m_view -> setCursor(oldCursor);
+
 	delete m_dialog;
 	m_dialog = 0;
 	delete config;

@@ -1,0 +1,104 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgSelectionOptions</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgSelectionOptions</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>398</width>
+            <height>91</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <spacer row="1" column="0">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>201</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout1</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>lblMaskColor</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Mask Color</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>cmbMaskColor</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>lblOpacity</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Opacity</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>sldrOpacity</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorCombo" row="1" column="1">
+                    <property name="name">
+                        <cstring>cmbMaskColor</cstring>
+                    </property>
+                </widget>
+                <widget class="QSlider" row="0" column="1">
+                    <property name="name">
+                        <cstring>sldrOpacity</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>256</number>
+                    </property>
+                    <property name="lineStep">
+                        <number>25</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>25</number>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcolorcombo.h</includehint>
+</includehints>
+</UI>

@@ -58,7 +58,7 @@
 #include "kispixeldata.h"
 #include "kistile.h"
 #include "kistilemgr.h"
-	
+#include "kis_selection.h"
 #include "kis_gradient_painter.h"
 
 namespace {
@@ -704,7 +704,23 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 	//distanceImage.save("distance.png",  "PNG");
 
 	if (!m_cancelRequested) {
-		// apply mask...
+		KisLayer * l = dynamic_cast<KisLayer*>(m_device.data());
+		if (l -> hasSelection()) {
+			// apply mask...
+			KisSelectionSP selection = l -> selection();
+			for (int y = 0; y < layer -> height(); y++) {
+				for (int x = 0; x < layer -> width(); x++) {
+					KoColor c;
+					QUANTUM opacity;
+					layer -> pixel(x, y, &c, &opacity);
+					opacity = OPACITY_OPAQUE - selection -> selected(x, y);
+					layer -> setPixel(x, y, c, opacity); // XXX: we need a setOpacity in KisPaintDevice!
+					
+				}
+			}
+
+			
+		}
 
 		bitBlt(0, 0, m_compositeOp, layer.data(), m_opacity, 0, 0, layer -> width(), layer -> height());
 	}

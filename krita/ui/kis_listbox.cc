@@ -20,6 +20,8 @@
 
 #include <qbutton.h>
 #include <qbrush.h>
+#include <qfont.h>
+#include <qfontmetrics.h>
 #include <qhbox.h>
 #include <qlayout.h>
 #include <qpainter.h>
@@ -31,6 +33,7 @@
 #include <qwidget.h>
 
 #include <kdebug.h>
+#include <kglobal.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
 #include <kicontheme.h>
@@ -174,6 +177,7 @@ void KisListBoxView::slotMenuAction(int mnuId)
 			break;
 	}
 
+	m_btnRm -> setEnabled(m_lst -> count());
 	m_lst -> triggerUpdate(false);
 }
 
@@ -206,7 +210,9 @@ void KisListBoxView::slotSelectionChanged(QListBoxItem *item)
 {
 	int n = m_lst -> currentItem();
 
-	slotMenuAction(SELECTION);
+	if (item)
+		slotMenuAction(SELECTION);
+
 	m_btnRm -> setEnabled(item != 0);
 	m_btnRaise -> setEnabled(item && item != m_lst -> item(0));
 	m_btnLower -> setEnabled(item && n != -1 && static_cast<uint>(n) != m_lst -> count() - 1);
@@ -343,7 +349,10 @@ int KisListBoxItem::height(const QListBox * /*lb*/) const
 
 int KisListBoxItem::width(const QListBox *lb) const
 {
-	m_size.setWidth(lb -> width());
+	const QFont& font = lb -> font();
+	QFontMetrics fm(font);
+
+	m_size.setWidth(kMax(fm.maxWidth() * m_label.length(), static_cast<uint>(lb -> width())));
 	return m_size.width();
 }
 

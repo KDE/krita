@@ -425,14 +425,12 @@ void KisImage::removeLayer(KisLayerSPLstIterator it)
 		addCommand(new KisCommandLayerRm(this, lay));
 
 	m_layers.erase(it);
-	kdDebug() << 2 << endl;
 	emit layersUpdated();
 }
 
 void KisImage::removeLayer(unsigned int layer)
 {
 	if (layer >= m_layers.size()) {
-		kdDebug() << 1 << endl;
 		return;
 	}
 

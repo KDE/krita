@@ -2305,13 +2305,13 @@ void KisView::slotLayerAdd()
 void KisView::slotLayerRemove(int n)
 {
 	KisImageSP img = m_doc -> currentImg();
-	KisLayerSPLst l = img -> layerList();
 
-	if (l.size()) {
+	if (img) {
 		img -> removeLayer(n);
 		m_doc -> setModified(true);
 		slotUpdateImage();
 		slotRefreshPainter();
+		m_layerView -> setSelected(n - 1);
 	}
 }
 

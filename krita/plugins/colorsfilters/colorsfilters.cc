@@ -42,6 +42,7 @@
 #include <kis_view.h>
 #include <kistile.h>
 #include <kistilemgr.h>
+#include <kis_iterators.h>
 
 // #include <kmessagebox.h>
 
@@ -73,6 +74,7 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, this, SLOT(slotBrightnessContrastActivated()), actionCollection(), "brightnesscontrast");
 	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, this, SLOT(slotGammaActivated()), actionCollection(), "gammacorrection");
 	(void) new KAction(i18n("&Color Adjustment..."), 0, 0, this, SLOT(slotColorActivated()), actionCollection(), "coloradjustment");
+	(void) new KAction(i18n("&Desaturate"), 0, 0, this, SLOT(slotDesaturate()), actionCollection(), "desaturate");
 	if ( !parent->inherits("KisView") )
 	{
 		m_view = 0;
@@ -177,6 +179,46 @@ void ColorsFilters::slotColorActivated()
 		kD->imageNum(0)->notify();
 	}
 }
+
+void ColorsFilters::slotDesaturate()
+{
+	KisDoc* kD = (KisDoc*) m_view->koDocument();
+	if( kD->imageNum(0) == 0 )
+		return;
+	KisLayerSP lay = kD->imageNum(0)->activeLayer();
+	KisTileCommand* ktc = new KisTileCommand("Desaturate", (KisPaintDeviceSP)lay ); // Create a command
+	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB) {
+		KisIteratorLineQuantum lineIt = lay->iteratorQuantumSelectionBegin(ktc);
+		KisIteratorLineQuantum lastLine = lay->iteratorQuantumSelectionEnd(ktc);
+		while( lineIt <= lastLine )
+		{
+			KisIteratorQuantum quantumIt = *lineIt;
+			KisIteratorQuantum lastQuantum = lineIt.end();
+			while( quantumIt <= lastQuantum )
+			{
+				QUANTUM* data = quantumIt;
+				/* I thought of using the HSV model, but GIMP seems to use
+				   HSL for desaturating. Better use the gimp model for now 
+				   (HSV produces a lighter image than HSL) */
+				Q_INT32 lightness = ( QMAX(QMAX(data[0], data[1]), data[2])
+				                    +QMIN(QMIN(data[0], data[1]), data[2])) / 2; 
+				data[0] = lightness;
+				data[1] = lightness;
+				data[2] = lightness;
+				++quantumIt;
+				++quantumIt;
+				++quantumIt;
+				++quantumIt;
+			}
+			++lineIt;
+		}
+		kD->imageNum(0)->undoAdapter()->addCommand( ktc );
+		kD->imageNum(0)->notify();
+	} else {
+		kdDebug() << "Colorsfilters: desaturate not yet supported for this type" << endl;
+	}
+}
+
 void ColorsFilters::slotGammaActivated()
 {
 	KisDoc* kD = (KisDoc*) m_view->koDocument();

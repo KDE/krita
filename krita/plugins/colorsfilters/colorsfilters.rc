@@ -6,6 +6,7 @@
 	<Action name="brightnesscontrast"/>
 	<Action name="gammacorrection"/>
 	<Action name="coloradjustment"/>
+	<Action name="desaturate"/>
     </Menu>
 </MenuBar>
 </kpartgui>

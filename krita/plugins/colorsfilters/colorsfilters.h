@@ -36,6 +36,7 @@ class ColorsFilters : public KParts::Plugin
 		void slotColorActivated();
 		void slotBrightnessContrastActivated();
 		void slotGammaActivated();
+		void slotDesaturate();
 	private:
 		KisView* m_view;
 		KisPainter *m_painter;

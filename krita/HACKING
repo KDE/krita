@@ -47,6 +47,9 @@ Class naming
 	In filenames, separate words with an underscore; in classnames use capital letters. 
 	Example: kis_new_class.h/KisNewClass.
 
+	The only exception to this rule are interfaces.
+	Example: kis_tool.h/KisToolInterface.
+
 Designer
 
 	Krita doesn't use .ui files. Yet. When we get down to the great UI redesign,
@@ -62,3 +65,4 @@ Namespaces
 	commands. For the rest, some classes have a 'Kis' prefix, others don't. This should
 	be made consistent, and we might want to use namespaces to keep all of Krita
 	inside.
+

@@ -72,7 +72,7 @@ public:
 	// Keep the selection but set the mask to color c
 	// Note: it is intentional to deep-copy the color
 	// since the selection will want to own its own copy.
-	void changeMaskColor(const KoColor c);
+	void setMaskColor(const KoColor c);
 
 private:
 	KisLayerSP m_parentLayer;

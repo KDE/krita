@@ -29,66 +29,60 @@
 #include "kis_iterators_pixel.h"
 
 namespace {
-	const Q_INT32 MAX_CHANNEL_GRAYSCALE = 1;
-	const Q_INT32 MAX_CHANNEL_GRAYSCALEA = 2;
+	const Q_INT32 MAX_CHANNEL_ALPHAMASK = 1;
 }
 
 ChannelInfo KisColorSpaceAlphaMask::channelInfo[1] = { ChannelInfo("Alpha", 0) };
 
-KisColorSpaceAlphaMask::KisStrategyColorSpaceGrayscale(KoColor maskColor) :
-	KisStrategyColorSpace("Grayscale + Alpha")
+KisColorSpaceAlphaMask::KisColorSpaceAlphaMask() :
+	KisStrategyColorSpace("alpha mask")
 {
-	m_maskColor = maskColor;
+	m_maskColor = KoColor::black();
 }
 
 KisColorSpaceAlphaMask::~KisColorSpaceAlphaMask()
 {
 }
 
-void KisColorSpaceAlphaMask::nativeColor(const KoColor& c, QUANTUM *dst)
+void KisColorSpaceAlphaMask::nativeColor(const KoColor& /*c*/, QUANTUM *dst)
 {
-	dst[PIXEL_GRAY] = upscale((c.R() + c.G() + c.B() )/3);
+	dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
-void KisColorSpaceAlphaMask::nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst)
+void KisColorSpaceAlphaMask::nativeColor(const KoColor& /*c*/, QUANTUM opacity, QUANTUM *dst)
 {
-	dst[PIXEL_GRAY] = upscale((c.R() + c.G() + c.B() )/3);
-	dst[PIXEL_GRAY_ALPHA] = opacity;
+	dst[PIXEL_MASK] = opacity;
 }
 
-void KisColorSpaceAlphaMask::nativeColor(const QColor& c, QUANTUM *dst)
+void KisColorSpaceAlphaMask::nativeColor(const QColor& /*c*/, QUANTUM *dst)
 {
-	KoColor k = KoColor( c );
-	dst[PIXEL_GRAY] = upscale((k.R() + k.G() + k.B() )/3);
+	dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
-void KisColorSpaceAlphaMask::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst)
+void KisColorSpaceAlphaMask::nativeColor(const QColor& /*c*/, QUANTUM opacity, QUANTUM *dst)
 {
-	KoColor k = KoColor( c );
-	dst[PIXEL_GRAY] = upscale((k.R() + k.G() + k.B() )/3);
-	dst[PIXEL_GRAY_ALPHA] = opacity;
+	dst[PIXEL_MASK] = opacity;
 }
 
-void KisColorSpaceAlphaMask::nativeColor(QRgb rgb, QUANTUM *dst)
+void KisColorSpaceAlphaMask::nativeColor(QRgb /*rgb*/, QUANTUM *dst)
 {
-	dst[PIXEL_GRAY] = upscale((qRed(rgb) + qGreen(rgb) + qBlue(rgb) )/3);
+	dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
-void KisColorSpaceAlphaMask::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst)
+void KisColorSpaceAlphaMask::nativeColor(QRgb /*rgb*/, QUANTUM opacity, QUANTUM *dst)
 {
-	dst[PIXEL_GRAY] = upscale((qRed(rgb) + qGreen(rgb) + qBlue(rgb) )/3);
-	dst[PIXEL_GRAY_ALPHA] = opacity;
+	dst[PIXEL_MASK] = opacity;
 }
 
-void KisColorSpaceAlphaMask::toKoColor(const QUANTUM *src, KoColor *c)
+void KisColorSpaceAlphaMask::toKoColor(const QUANTUM */*src*/, KoColor *c)
 {
-	c -> setRGB(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
+	c = &m_maskColor;
 }
 
 void KisColorSpaceAlphaMask::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity)
 {
-	c -> setRGB(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
-	*opacity = src[PIXEL_GRAY_ALPHA];
+	c = &m_maskColor;
+	*opacity = src[PIXEL_MASK];
 }
 
 ChannelInfo* KisColorSpaceAlphaMask::channelsInfo() const
@@ -102,7 +96,7 @@ bool KisColorSpaceAlphaMask::alpha() const
 
 Q_INT32 KisColorSpaceAlphaMask::depth() const
 {
-	return MAX_CHANNEL_GRAYSCALEA;
+	return MAX_CHANNEL_ALPHAMASK;
 }
 
 QImage KisColorSpaceAlphaMask::convertToImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
@@ -113,14 +107,14 @@ QImage KisColorSpaceAlphaMask::convertToImage(const QUANTUM *data, Q_INT32 width
 	uchar *j = img.bits();
 
 	while ( i < stride * height ) {
-		QUANTUM q = *( data + i + PIXEL_GRAY );
-
-		*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_GRAY_ALPHA );
-		*( j + PIXEL_RED )   = q;
-		*( j + PIXEL_GREEN ) = q;
-		*( j + PIXEL_BLUE )  = q;
+		*( j + PIXEL_MASK ) = *( data + i );
+		// XXX: for previews of the mask, it would be handy to
+		// make this always black.
+		*( j + PIXEL_RED )   = m_maskColor.R();
+		*( j + PIXEL_GREEN ) = m_maskColor.G();
+		*( j + PIXEL_BLUE )  = m_maskColor.B();
 		
-		i += MAX_CHANNEL_GRAYSCALEA;
+		i += MAX_CHANNEL_ALPHAMASK;
 		j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
 		
 	}
@@ -129,114 +123,108 @@ QImage KisColorSpaceAlphaMask::convertToImage(const QUANTUM *data, Q_INT32 width
 }
 
 void KisColorSpaceAlphaMask::bitBlt(Q_INT32 stride,
-					    QUANTUM *dst, 
-					    Q_INT32 dststride,
-					    QUANTUM *src, 
-					    Q_INT32 srcstride,
-					    QUANTUM opacity,
-					    Q_INT32 rows, 
-					    Q_INT32 cols, 
-					    CompositeOp op)
+				    QUANTUM *dst, 
+				    Q_INT32 dststride,
+				    QUANTUM *src, 
+				    Q_INT32 srcstride,
+				    QUANTUM opacity,
+				    Q_INT32 rows, 
+				    Q_INT32 cols, 
+				    CompositeOp op)
 {
-	QUANTUM *d;
-	QUANTUM *s;
-	Q_INT32 i;
-	Q_INT32 linesize;
+// 	QUANTUM *d;
+// 	QUANTUM *s;
+// 	Q_INT32 i;
+// 	Q_INT32 linesize;
 
-	if (rows <= 0 || cols <= 0)
-		return;
-	switch (op) {
-	case COMPOSITE_COPY:
-		linesize = stride * sizeof(QUANTUM) * cols;
-		d = dst;
-		s = src;
-		while (rows-- > 0) {
-			memcpy(d, s, linesize);
-			d += dststride;
-			s += srcstride;
-		}
-		return;
-	case COMPOSITE_CLEAR:
-		linesize = stride * sizeof(QUANTUM) * cols;
-		d = dst;
-		while (rows-- > 0) {
-			memset(d, 0, linesize);
-			d += dststride;
-		}
-		return;
-	case COMPOSITE_OVER:
-	default:
-		if (opacity == OPACITY_TRANSPARENT) 
-			return;
-		if (opacity != OPACITY_OPAQUE) {
-			while (rows-- > 0) {
-				d = dst;
-				s = src;
-				for (i = cols; i > 0; i--, d += stride, s += stride) {
-					if (s[PIXEL_GRAY_ALPHA] == OPACITY_TRANSPARENT)
-						continue;
-					int srcAlpha = (s[PIXEL_GRAY_ALPHA] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					int dstAlpha = (d[PIXEL_GRAY_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_GRAY]   = (d[PIXEL_GRAY]   * dstAlpha + s[PIXEL_GRAY]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_GRAY_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					if (d[PIXEL_GRAY_ALPHA] != 0) {
-						d[PIXEL_GRAY] = (d[PIXEL_GRAY] * QUANTUM_MAX) / d[PIXEL_GRAY_ALPHA];
-					}
-				}
-				dst += dststride;
-				src += srcstride;
-			}
-		}
-		else {
-			while (rows-- > 0) {
-				d = dst;
-				s = src;
-				for (i = cols; i > 0; i--, d += stride, s += stride) {
-					if (s[PIXEL_GRAY_ALPHA] == OPACITY_TRANSPARENT)
-						continue;
-					if (d[PIXEL_GRAY_ALPHA] == OPACITY_TRANSPARENT || s[PIXEL_GRAY_ALPHA] == OPACITY_OPAQUE) {
-						memcpy(d, s, stride * sizeof(QUANTUM));
-						continue;
-					}
-					int srcAlpha = s[PIXEL_GRAY_ALPHA];
-					int dstAlpha = (d[PIXEL_GRAY_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_GRAY]   = (d[PIXEL_GRAY]   * dstAlpha + s[PIXEL_GRAY]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_GRAY_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					if (d[PIXEL_GRAY_ALPHA] != 0) {
-						d[PIXEL_GRAY] = (d[PIXEL_GRAY] * QUANTUM_MAX) / d[PIXEL_GRAY_ALPHA];
-					}
-				}
-				dst += dststride;
-				src += srcstride;
-			}
-		}
+// 	if (rows <= 0 || cols <= 0)
+// 		return;
+// 	switch (op) {
+// 	case COMPOSITE_COPY:
+// 		linesize = stride * sizeof(QUANTUM) * cols;
+// 		d = dst;
+// 		s = src;
+// 		while (rows-- > 0) {
+// 			memcpy(d, s, linesize);
+// 			d += dststride;
+// 			s += srcstride;
+// 		}
+// 		return;
+// 	case COMPOSITE_CLEAR:
+// 		linesize = stride * sizeof(QUANTUM) * cols;
+// 		d = dst;
+// 		while (rows-- > 0) {
+// 			memset(d, 0, linesize);
+// 			d += dststride;
+// 		}
+// 		return;
+// 	case COMPOSITE_OVER:
+// 	default:
+// 		if (opacity == OPACITY_TRANSPARENT) 
+// 			return;
+// 		if (opacity != OPACITY_OPAQUE) {
+// 			while (rows-- > 0) {
+// 				d = dst;
+// 				s = src;
+// 				for (i = cols; i > 0; i--, d += stride, s += stride) {
+// 					if (s[PIXEL_GRAY_ALPHA] == OPACITY_TRANSPARENT)
+// 						continue;
+// 					int srcAlpha = (s[PIXEL_GRAY_ALPHA] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
+// 					int dstAlpha = (d[PIXEL_GRAY_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
+// 					d[PIXEL_GRAY]   = (d[PIXEL_GRAY]   * dstAlpha + s[PIXEL_GRAY]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+// 					d[PIXEL_GRAY_ALPHA] = (d[PIXEL_MASK] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
+// 					if (d[PIXEL_GRAY_ALPHA] != 0) {
+// 						d[PIXEL_GRAY] = (d[PIXEL_GRAY] * QUANTUM_MAX) / d[PIXEL_GRAY_ALPHA];
+// 					}
+// 				}
+// 				dst += dststride;
+// 				src += srcstride;
+// 			}
+// 		}
+// 		else {
+// 			while (rows-- > 0) {
+// 				d = dst;
+// 				s = src;
+// 				for (i = cols; i > 0; i--, d += stride, s += stride) {
+// 					if (s[PIXEL_GRAY_ALPHA] == OPACITY_TRANSPARENT)
+// 						continue;
+// 					if (d[PIXEL_GRAY_ALPHA] == OPACITY_TRANSPARENT || s[PIXEL_GRAY_ALPHA] == OPACITY_OPAQUE) {
+// 						memcpy(d, s, stride * sizeof(QUANTUM));
+// 						continue;
+// 					}
+// 					int srcAlpha = s[PIXEL_GRAY_ALPHA];
+// 					int dstAlpha = (d[PIXEL_GRAY_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
+// 					d[PIXEL_GRAY]   = (d[PIXEL_GRAY]   * dstAlpha + s[PIXEL_GRAY]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+// 					d[PIXEL_GRAY_ALPHA] = (d[PIXEL_MASK] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
+// 					if (d[PIXEL_GRAY_ALPHA] != 0) {
+// 						d[PIXEL_GRAY] = (d[PIXEL_GRAY] * QUANTUM_MAX) / d[PIXEL_GRAY_ALPHA];
+// 					}
+// 				}
+// 				dst += dststride;
+// 				src += srcstride;
+// 			}
+// 		}
 
-	}
+// 	}
 }
 
-void KisColorSpaceAlphaMask::computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src)
+void KisColorSpaceAlphaMask::computeDuplicatePixel(KisIteratorPixel* , KisIteratorPixel* , KisIteratorPixel* )
 {
-	KisPixelRepresentationGrayscale dstPR(*dst);
-	KisPixelRepresentationGrayscale dabPR(*dab);
-	KisPixelRepresentationGrayscale srcPR(*src);
-	dstPR.gray() = ( (QUANTUM_MAX - dabPR.gray()) * (srcPR.gray()) ) / QUANTUM_MAX;
-	dstPR.alpha() =( dabPR.alpha() * (srcPR.alpha()) ) / QUANTUM_MAX;
+// 	KisPixelRepresentationGrayscale dstPR(*dst);
+// 	KisPixelRepresentationGrayscale dabPR(*dab);
+// 	KisPixelRepresentationGrayscale srcPR(*src);
+// 	dstPR.gray() = ( (QUANTUM_MAX - dabPR.gray()) * (srcPR.gray()) ) / QUANTUM_MAX;
+// 	dstPR.alpha() =( dabPR.alpha() * (srcPR.alpha()) ) / QUANTUM_MAX;
 }
 
-void KisColorSpaceAlphaMask::convertToRGBA(KisPixelRepresentation& src, KisPixelRepresentationRGB& dst)
+void KisColorSpaceAlphaMask::convertToRGBA(KisPixelRepresentation& , KisPixelRepresentationRGB& )
 {
-	KisPixelRepresentationGrayscale prg(src);
-	dst.red() = prg.gray();
-	dst.green() = prg.gray();
-	dst.blue() = prg.gray();
-	dst.alpha() = prg.alpha();
+// 	XXX
 }
 
-void KisColorSpaceAlphaMask::convertFromRGBA(KisPixelRepresentationRGB& src, KisPixelRepresentation& dst)
+void KisColorSpaceAlphaMask::convertFromRGBA(KisPixelRepresentationRGB& , KisPixelRepresentation& )
 {
-	KisPixelRepresentationGrayscale prg(dst);
-	prg.gray() = (src.red() + src.green() + src.blue() ) / 3;
-	prg.alpha() = src.alpha();
+//     XXXX
 }
 
 

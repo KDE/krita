@@ -61,12 +61,12 @@ KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
 	insertItem(i18n("Luminize"));
 	insertItem(i18n("Screen"));
 	insertItem(i18n("Overlay"));
-#endif
 	insertItem(i18n("Copy Cyan"));
 	insertItem(i18n("Copy Magenta"));
 	insertItem(i18n("Copy Yellow"));
 	insertItem(i18n("Copy Black"));
-	
+#endif
+	insertItem(i18n("Erase"));
 }
 
 KisCmbComposite::~KisCmbComposite()

@@ -171,7 +171,6 @@ signals:
 	void activeSelectionChanged(KisImageSP image);
 	void selectionCreated(KisImageSP image);
 	void floatingSelectionChanged(KisImageSP image);
-	void visibilityChanged(KisImageSP image, CHANNELTYPE type);
 	void update(KisImageSP image, const QRect& rc);
 	void layersChanged(KisImageSP image);
 

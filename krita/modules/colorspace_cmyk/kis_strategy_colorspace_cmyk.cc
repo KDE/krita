@@ -137,10 +137,12 @@ ChannelInfo* KisStrategyColorSpaceCMYK::channelsInfo() const
 {
 	return channelInfo;
 }
+
 bool KisStrategyColorSpaceCMYK::alpha() const
 {
 	return true;
 }
+
 Q_INT32 KisStrategyColorSpaceCMYK::depth() const
 {
 	return MAX_CHANNEL_CMYKA;

@@ -47,7 +47,7 @@
  * on the edge of an canvas are exempt from
  * this rule.
  */
-const int TILE_SIZE = 512;//64;
+const int TILE_SIZE = 64;
 
 /**
  * Default width of a tile.
@@ -176,43 +176,16 @@ enum enumPaintStyles {
 	PAINTSTYLE_SOFT };
 		
 // If QUANTUM changes size, this should change, too.
-typedef Q_UINT8 CHANNELTYPE;
 typedef Q_UINT8 PIXELTYPE;
 
-const CHANNELTYPE REDCHANNEL = 0;
-const CHANNELTYPE GREENCHANNEL = 1;
-const CHANNELTYPE BLUECHANNEL = 2;
-const CHANNELTYPE GRAYCHANNEL = 3;
-const CHANNELTYPE INDEXEDCHANNEL = 4;
-const CHANNELTYPE ALPHACHANNEL = 5;
-
+// XXX: Move the PIXELTYPE constants to their respective color
+// strategies. The RGB types are unfortunately enough used
+// all over the place.
 const PIXELTYPE PIXEL_UNDEF = 255;
-
-const PIXELTYPE PIXEL_GRAY = 0;
-const PIXELTYPE PIXEL_GRAY_ALPHA = 1;
-
 const PIXELTYPE PIXEL_BLUE = 0;
 const PIXELTYPE PIXEL_GREEN = 1;
 const PIXELTYPE PIXEL_RED = 2;
 const PIXELTYPE PIXEL_ALPHA = 3;
-
-const PIXELTYPE PIXEL_WET_RED = 0;
-const PIXELTYPE PIXEL_WET_MYTH_RED = 1;
-const PIXELTYPE PIXEL_WET_GREEN = 2;
-const PIXELTYPE PIXEL_WET_MYTH_GREEN = 3;
-const PIXELTYPE PIXEL_WET_BLUE = 4;
-const PIXELTYPE PIXEL_WET_MYTH_BLUE = 5;
-const PIXELTYPE PIXEL_WET_WATER = 6;
-const PIXELTYPE PIXEL_WET_HEIGHT = 7;
-
-const PIXELTYPE PIXEL_CYAN = 0;
-const PIXELTYPE PIXEL_MAGENTA = 1;
-const PIXELTYPE PIXEL_YELLOW = 2;
-const PIXELTYPE PIXEL_BLACK = 3;
-const PIXELTYPE PIXEL_CMYK_ALPHA = 4;
-
-const PIXELTYPE PIXEL_INDEXED = 0;
-const PIXELTYPE PIXEL_INDEXED_ALPHA = 1;
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
@@ -223,8 +196,6 @@ const PIXELTYPE PIXEL_INDEXED_ALPHA = 1;
 Q_INT32 imgTypeDepth(const enumImgType& type);
 bool imgTypeHasAlpha(const enumImgType& type);
 #endif
-
-#define USEITERATORSFORPO 1
 
 #endif // KISGLOBAL_H_
 

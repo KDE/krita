@@ -263,18 +263,6 @@ void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 stride,
 		compositeOverlay(stride, dst, dststride, src, srcstride, rows, cols, opacity);
 		break;
 #endif
-	case COMPOSITE_COPY_CYAN:
-		compositeCopyCyan(stride, dst, dststride, src, srcstride, rows, cols, opacity);
-		break;
-	case COMPOSITE_COPY_MAGENTA:
-		compositeCopyMagenta(stride, dst, dststride, src, srcstride, rows, cols, opacity);
-		break;
-	case COMPOSITE_COPY_YELLOW:
-		compositeCopyYellow(stride, dst, dststride, src, srcstride, rows, cols, opacity);
-		break;
-	case COMPOSITE_COPY_BLACK:
-		compositeCopyBlack(stride, dst, dststride, src, srcstride, rows, cols, opacity);
-		break;
 	case COMPOSITE_ERASE:
 		compositeErase(stride, dst, dststride, src, srcstride, rows, cols, opacity);
 		break;

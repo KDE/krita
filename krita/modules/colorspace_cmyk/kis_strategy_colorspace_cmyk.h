@@ -28,6 +28,14 @@
 #include "kis_pixel_representation.h"
 
 
+// XXX: Move into namespace
+
+const PIXELTYPE PIXEL_CYAN = 0;
+const PIXELTYPE PIXEL_MAGENTA = 1;
+const PIXELTYPE PIXEL_YELLOW = 2;
+const PIXELTYPE PIXEL_BLACK = 3;
+const PIXELTYPE PIXEL_CMYK_ALPHA = 4;
+
 class KisPixelRepresentationCMYK : public KisPixelRepresentation {
 public:
 	inline KisPixelRepresentationCMYK( const KisPixelRepresentation& pr) : KisPixelRepresentation(pr) { };

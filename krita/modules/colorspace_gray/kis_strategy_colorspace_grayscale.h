@@ -26,6 +26,10 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_pixel_representation.h"
 
+// XXX: move into namespace.
+const PIXELTYPE PIXEL_GRAY = 0;
+const PIXELTYPE PIXEL_GRAY_ALPHA = 1;
+
 class KisPixelRepresentationGrayscale : public KisPixelRepresentation {
 public:
 	inline KisPixelRepresentationGrayscale( const KisPixelRepresentation& pr) : KisPixelRepresentation(pr) { };

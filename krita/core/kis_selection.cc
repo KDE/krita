@@ -26,17 +26,20 @@
 #include "kis_types.h"
 #include "kis_colorspace_registry.h"
 #include "kis_fill_painter.h"
+#include "kis_colorspace_alphamask.h"
 
 // XXX: This needs to be a 8-bits one-channel color strategy that 
 // can compose with any other color strategy.
 KisSelection::KisSelection(KisLayerSP layer, const QString& name) 
  	: super(layer -> width(),
 		layer -> height(),
+		// KisColorSpaceRegistry::singleton() -> colorSpace("alpha mask"), 
 		layer -> colorStrategy(),
 		name)
 {
 	m_parentLayer = layer;
 	m_maskColor = KoColor::white();
+// 	dynamic_cast<KisColorSpaceAlphaMask*> (colorStrategy().data()) -> setMaskColor(m_maskColor);
 }
 
 KisSelection::KisSelection(KisLayerSP layer, const QString& name, KoColor color) 
@@ -89,7 +92,7 @@ void KisSelection::clear(KoColor c)
 
 }
 
-void KisSelection::changeMaskColor(KoColor c)
+void KisSelection::setMaskColor(KoColor c)
 {
 	// For all pixels in the selection, change only the color.
 	kdDebug() << "KisSelection::changeMaskColor not implemented.\n";

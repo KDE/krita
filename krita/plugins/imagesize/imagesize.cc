@@ -101,6 +101,7 @@ void ImageSize::slotActivated()
 		Q_INT32 h = dlgImageSize -> height();
 		
 		if (dlgImageSize -> scale()) {
+			imageScale(w, h);
 		}
 		else {
 			imageResize(w, h);
@@ -112,15 +113,29 @@ void ImageSize::slotActivated()
 
 void ImageSize::imageResize(Q_INT32 w, Q_INT32 h)
 {
+	kdDebug() << "Resizing to: Width: " << w << ", Height: " << h << "\n";
+
 	if (m_view) {
+#if 1
+		m_view -> resize(w, h);
+#else
+		// XXX: this doesn't work -- but why?
 		KisImageSP image = m_view -> currentImg();
 
 		if (image) {
-			kdDebug() << "Resizing to: Width: " << w << ", Height: " << h << "\n";
+
                         image -> resize(w, h);
                         image -> invalidate();
 			m_view -> refresh();
                 }
+#endif
+ 	}
+}
+
+void ImageSize::imageScale(Q_INT32 w,  Q_INT32 h) 
+{
+	if (m_view) {
+		// XXX
 	}
 }
 

@@ -228,6 +228,20 @@ DCOPObject* KisView::dcopObject()
         return m_dcop;
 }
 
+void KisView::resize(Q_INT32 w, Q_INT32 h) 
+{
+        KisImageSP img = currentImg();
+
+        if (img) {
+                img -> resize(w, h);
+                img -> invalidate();
+                resizeEvent(0);
+                layersUpdated();
+                canvasRefresh();
+        }
+
+}
+
 void KisView::setupDockers()
 {
 

@@ -90,6 +90,8 @@ public:
 	virtual void updateReadWrite(bool readwrite);
 	virtual void guiActivateEvent(KParts::GUIActivateEvent *event);
 
+	virtual void resize(Q_INT32 w, Q_INT32 h);
+
 public:
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;

@@ -30,6 +30,7 @@
 #include "kfloatingdialog.h"
 
 class KDualColorButton;
+class KoIconItem;
 class KisIconWidget;
 class KisGradientWidget;
 class KisKrayon;
@@ -56,7 +57,7 @@ public slots:
 	void slotSetFGColor(const KoColor& c);
 	void slotSetBGColor(const KoColor& c);
 
-	void slotSetBrush(KisBrush& brush);
+	void slotSetBrush(KoIconItem *item);
 	void slotSetPattern(KisPattern& pattern);
 
 signals:
@@ -147,7 +148,7 @@ public slots:
 	void slotSetFGColor(const KoColor&);
 	void slotSetBGColor(const KoColor&);
 
-	void slotSetBrush(KisBrush&);
+	void slotSetBrush(KoIconItem *item);
 	void slotSetPattern(KisPattern&);
 
 	void slotActivateTab(const QString& tab) { m_dockFrame->slotActivateTab(tab); }

@@ -43,6 +43,8 @@ public:
 
 	KoIconItem *currentItem();
 	void setCurrent(KoIconItem *item);
+
+public slots:
 	void addItem(KoIconItem *item);
 	void addItem(const vKoIconItem& items);
 

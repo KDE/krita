@@ -1,0 +1,49 @@
+/*
+ *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
+ *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.g
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+#if !defined KIS_ICON_ITEM_H_
+#define KIS_ICON_ITEM_H_
+
+#include <koIconChooser.h>
+class KisResource;
+
+class KisIconItem : public KoIconItem {
+public:
+	KisIconItem(KisResource *r);
+	virtual ~KisIconItem();
+
+public:
+	virtual QPixmap& pixmap() const;
+	virtual QPixmap& thumbPixmap() const;
+
+public:
+	virtual int spacing() const { return m_spacing; }
+	virtual void setSpacing(int spacing) { m_spacing = spacing; }
+
+public:
+	KisResource *resource() const;
+
+private:
+	KisResource *m_r;
+	QPixmap *m_pixmap;
+	QPixmap *m_thumb;
+	Q_INT32 m_spacing;
+};
+
+#endif // KIS_ICON_ITEM_H_
+

@@ -47,11 +47,12 @@
 // KOffice
 #include <koCanvasRuler.h>
 #include <koColor.h>
+#include <koMainWindow.h>
 #include <koView.h>
 
 // Local
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_brush.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_canvas.h"
@@ -61,6 +62,7 @@
 #include "kis_dlg_dimension.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paintoffset.h"
+#include "kis_icon_item.h"
 #include "kis_image_magick_converter.h"
 #include "kis_itemchooser.h"
 #include "kis_factory.h"
@@ -68,6 +70,8 @@
 #include "kis_layer.h"
 #include "kis_listbox.h"
 #include "kis_dlg_paint_properties.h"
+#include "kis_paint_device.h"
+#include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
 #include "kis_selection.h"
 #include "kis_sidebar.h"
@@ -147,7 +151,6 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_floatsidebarToggle  = 0;
 	m_lsidebarToggle = 0;
 	m_dlgColorsToggle = 0;
-       	m_dlgCrayonToggle = 0;
 	m_dlgBrushToggle = 0;
 	m_dlgPatternToggle = 0;
 	m_dlgLayersToggle = 0;
@@ -160,18 +163,16 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_fg = KoColor::black();
 	m_bg = KoColor::white();
 	m_sideBar = 0;
-	m_brushChooser = 0;
-	m_crayonChooser = 0;
 	m_patternChooser = 0;
 	m_paletteChooser = 0;
 	m_gradientChooser = 0;
 	m_imageChooser = 0;
 	m_brush = 0;
-	m_crayon = 0;
 	m_pattern = 0;
 	m_gradient = 0;
 	m_layerBox = 0;
 	m_currentGuide = 0;
+	m_brushMediator = 0;
 	m_imgBuilderMgr = new KisBuilderMonitor(this);
 	m_buildProgress = 0;
 	setInstance(KisFactory::global());
@@ -213,15 +214,15 @@ DCOPObject* KisView::dcopObject()
 void KisView::setupSideBar()
 {
 	KStatusBar *sb = statusBar();
+	KisResourceServer *rserver = KisFactory::rServer();
 
 	if (sb) {
 		m_sideBar = new KisSideBar(this, "kis_sidebar");
-
-		m_brushChooser = new KisItemChooser(KisFactory::rServer() -> brushes(), true, m_sideBar -> dockFrame(), "brush_chooser");
-		m_brush = dynamic_cast<KisBrush*>(m_brushChooser -> currentItem());
-		QObject::connect(m_brushChooser, SIGNAL(selected(KoIconItem*)), this, SLOT(setActiveBrush(KoIconItem*)));
-		m_brushChooser -> setCaption(i18n("Brushes"));
-		m_sideBar -> plug(m_brushChooser);
+		m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"), m_sideBar -> dockFrame(), "brush_chooser", this);
+		m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
+		m_sideBar -> plug(m_brushMediator -> chooserWidget());
+		connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
+		rserver -> loadBrushes();
 
 		m_patternChooser = new KisItemChooser(KisFactory::rServer() -> patterns(), true, m_sideBar -> dockFrame(), "pattern_chooser");
 		//	m_pPattern = m_patternChooser -> currentPattern();
@@ -233,12 +234,6 @@ void KisView::setupSideBar()
 		//	m_gradient = new KisGradient;
 		m_gradientChooser -> setCaption(i18n("Gradients"));
 		m_sideBar -> plug(m_gradientChooser);
-
-#if 0
-		m_imageChooser = new QWidget(this);
-		m_imageChooser -> setCaption(i18n("Images"));
-		m_sideBar -> plug(m_imageChooser);
-#endif
 
 		m_paletteChooser = new QWidget(this);
 		m_paletteChooser -> setCaption(i18n("Palettes"));
@@ -268,10 +263,11 @@ void KisView::setupSideBar()
 		m_channelView -> setCaption(i18n("Channels"));
 		m_sideBar -> plug(m_channelView);
 
-		m_sideBar -> slotActivateTab(i18n("Brushes"));
+		m_pathView = new QWidget(this);
+		m_pathView -> setCaption(i18n("Paths"));
+		m_sideBar -> plug(m_pathView);
 
-		if (m_brush)
-			m_sideBar -> slotSetBrush(*m_brush);
+		m_sideBar -> slotActivateTab(i18n("Brushes"));
 
 		m_sideBar -> slotSetBGColor(m_bg);
 		m_sideBar -> slotSetFGColor(m_fg);
@@ -450,7 +446,6 @@ void KisView::setupActions()
 	// crayon box toolbar actions - these will be used only
 	// to dock and undock wideget in the crayon box
 	m_dlgColorsToggle = new KToggleAction(i18n("&Colors"), "color_dialog", 0, this, SLOT(dialog_colors()), actionCollection(), "colors_dialog");
-	m_dlgCrayonToggle = new KToggleAction(i18n("C&rayons"), "krayon_box", 0, this, SLOT(dialog_crayons()), actionCollection(), "crayons_dialog");
 	m_dlgBrushToggle = new KToggleAction(i18n("Brushes"), "brush_dialog", 0, this, SLOT(dialog_brushes()), actionCollection(), "brushes_dialog");
 	m_dlgPatternToggle = new KToggleAction(i18n("Patterns"), "pattern_dialog", 0, this, SLOT(dialog_patterns()), actionCollection(), "patterns_dialog");
 	m_dlgLayersToggle = new KToggleAction(i18n("Layers"), "layer_dialog", 0, this, SLOT(dialog_layers()), actionCollection(), "layers_dialog");
@@ -1113,43 +1108,33 @@ void KisView::dialog_colors()
 {
 }
 
-void KisView::dialog_crayons()
-{
-}
-
 void KisView::dialog_brushes()
 {
-	m_brushChooser -> setDocked(m_dlgBrushToggle -> isChecked());
+//	m_brushChooser -> setDocked(m_dlgBrushToggle -> isChecked());
 }
 
 void KisView::dialog_patterns()
 {
-#if 0
-	if (m_dialog_patterns -> isChecked())
-		m_sideBar -> plug(m_pPatternChooser);
+	if (m_dlgPatternToggle -> isChecked())
+		m_sideBar -> plug(m_patternChooser);
 	else
-		m_sideBar -> unplug(m_pPatternChooser);
-#endif
+		m_sideBar -> unplug(m_patternChooser);
 }
 
 void KisView::dialog_layers()
 {
-#if 0
-	if(m_dialog_layers -> isChecked())
+	if (m_dlgLayersToggle -> isChecked())
 		m_sideBar -> plug(m_layerBox);
 	else
 		m_sideBar -> unplug(m_layerBox);
-#endif
 }
 
 void KisView::dialog_channels()
 {
-#if 0
-	if (m_dialog_channels -> isChecked())
-		m_sideBar -> plug(m_pChannelView);
+	if (m_dlgChannelsToggle -> isChecked())
+		m_sideBar -> plug(m_channelView);
 	else
-		m_sideBar -> unplug(m_pChannelView);
-#endif
+		m_sideBar -> unplug(m_channelView);
 }
 
 void KisView::next_layer()
@@ -1626,16 +1611,15 @@ void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
     // with showScollBars()
 }
 
-void KisView::setActiveBrush(KoIconItem *brush)
+void KisView::brushActivated(KisResource *brush)
 {
-	m_brush = dynamic_cast<KisBrush*>(brush);
-	m_sideBar -> slotSetBrush(*m_brush);
-}
+	KisIconItem *item;
 
-void KisView::setActiveCrayon(KoIconItem *crayon)
-{
-	m_crayon = dynamic_cast<KisKrayon*>(crayon);
-	m_sideBar -> slotSetKrayon(*m_crayon);
+	Q_ASSERT(m_sideBar);
+	m_brush = dynamic_cast<KisBrush*>(brush);
+
+	if (m_brush && (item = m_brushMediator -> itemFor(m_brush)))
+		m_sideBar -> slotSetBrush(item);
 }
 
 void KisView::setActivePattern(KoIconItem *pattern)
@@ -2552,7 +2536,6 @@ QPoint KisView::mapToScreen(const QPoint& pt)
 
 	converted.rx() = pt.x() + horzValue() - canvasXOffset();
 	converted.ry() = pt.y() + vertValue() - canvasYOffset();
-//	converted *= zoom();
 	return converted;
 }
 

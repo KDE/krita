@@ -2,6 +2,7 @@
  *  kis_resourceserver.h - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
+ *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,37 +18,49 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#if !defined KIS_RESOURCESERVER_H_
+#define KIS_RESOURCESERVER_H_
 
-#ifndef __kis_resourceserver_h__
-#define __kis_resourceserver_h__
-
+#include <qobject.h>
 #include <qptrlist.h>
 #include <qstring.h>
 
+#include "kis_resource.h"
 #include "kis_brush.h"
 #include "kis_pattern.h"
 
-class KisResourceServer
-{
+class KisResourceServer : public QObject {
+	typedef QObject super;
+	Q_OBJECT
 
 public:
+	KisResourceServer();
+	virtual ~KisResourceServer();
 
-  KisResourceServer();
-  virtual ~KisResourceServer();
+public:
+	Q_INT32 brushCount() const { return m_brushes.count(); }
+	Q_INT32 patternCount() const { return m_patterns.count(); }
+	QPtrList<KisResource> brushes();
+	QPtrList<KoIconItem> patterns() const;
+	void loadBrushes();
+	void loadPatterns();
 
-  int brushCount() { return m_brushes.count(); }
-  int patternCount() { return m_patterns.count(); }
+signals:
+	void loadedBrush(KisBrush *br);
+	void loadedPattern(KisPattern *pat);
+	
+private:
+	void loadBrush();
+	const KisPattern *loadPattern(const QString& filename);
 
-  QPtrList<KoIconItem> brushes() { return m_brushes; }
-  QPtrList<KoIconItem> patterns() { return m_patterns; }
+private slots:
+	void brushLoaded(KisResource *br);
 
- protected:
-  const KisBrush* loadBrush( const QString& filename );
-  const KisPattern* loadPattern( const QString& filename );
- 
- private:
-  QPtrList<KoIconItem>  m_brushes;
-  QPtrList<KoIconItem>  m_patterns;
+private:
+	QPtrList<KoIconItem> m_patterns;
+	QStringList m_brushFilnames;
+	QPtrList<KisResource> m_brushes;
 };
 
-#endif // __kis_resourceserver_h__
+#endif // KIS_RESOURCESERVER_H_
+

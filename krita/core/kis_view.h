@@ -42,12 +42,13 @@ class KisBuilderMonitor;
 class KisCanvas;
 class KisChannelView;
 class KisLabelBuilderProgress;
-class KisKrayon;
 class KisDoc;
 class KisGradient;
 class KisItemChooser;
 class KisListBox;
 class KisPattern;
+class KisResource;
+class KisResourceMediator;
 class KisSideBar;
 class KisTabBar;
 
@@ -107,7 +108,6 @@ signals:
 public slots:
 	void dialog_gradient();
 	void dialog_colors();
-	void dialog_crayons();
 	void dialog_brushes();
 	void dialog_patterns();
 	void dialog_layers();
@@ -228,8 +228,7 @@ private slots:
 	void reverseFGAndBGColors();
 	void reset();
 	void selectImage(const QString&);
-	void setActiveBrush(KoIconItem *brush);
-	void setActiveCrayon(KoIconItem *);
+	void brushActivated(KisResource *brush);
 	void setActivePattern(KoIconItem *pattern);
 	void setPaintOffset();
 	void scrollH(int value);
@@ -291,7 +290,6 @@ private:
 	KToggleAction *m_floatsidebarToggle; 
 	KToggleAction *m_lsidebarToggle;
 	KToggleAction *m_dlgColorsToggle;
-       	KToggleAction *m_dlgCrayonToggle; 
 	KToggleAction *m_dlgBrushToggle;
 	KToggleAction *m_dlgPatternToggle; 
 	KToggleAction *m_dlgLayersToggle; 
@@ -304,18 +302,16 @@ private:
 	KoColor m_fg;
 	KoColor m_bg;
 	KisSideBar *m_sideBar;
-	KisItemChooser *m_brushChooser;
-	KisItemChooser *m_crayonChooser;    
 	KisItemChooser *m_patternChooser;
 	QWidget *m_paletteChooser;    
 	QWidget *m_gradientChooser;
 	QWidget *m_imageChooser;
 	KisBrush *m_brush;
-	KisKrayon *m_crayon;
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
 	KisListBox *m_layerBox;
 	KisChannelView *m_channelView;
+	QWidget *m_pathView;    
 	KisToolSP m_tool;
 	KisToolSP m_paste;
 	vKisToolSP m_toolSet;
@@ -324,6 +320,7 @@ private:
 	KisLabelBuilderProgress *m_buildProgress;
 	KoCanvasGuideSP m_currentGuide;
 	QPoint m_lastGuidePoint;
+	KisResourceMediator *m_brushMediator;
 
 private:
 	mutable KisImageSP m_current;

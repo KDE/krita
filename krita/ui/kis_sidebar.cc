@@ -163,9 +163,9 @@ void KisSideBar::slotControlBGColorSelected(const KoColor& c)
   emit bgColorChanged( c );
 }
 
-void KisSideBar::slotSetBrush( KisBrush& b )
+void KisSideBar::slotSetBrush(KoIconItem *item)
 {
-    m_pControlFrame->slotSetBrush(b);
+	m_pControlFrame -> slotSetBrush(item);
 }
 
 void KisSideBar::slotSetPattern( KisPattern& b )
@@ -225,10 +225,10 @@ void ControlFrame::slotActiveColorChanged(KDualColorButton::DualColor s)
 	    emit activeColorChanged(ac_Background);
 }
 
-void ControlFrame::slotSetBrush(KisBrush& b)
+void ControlFrame::slotSetBrush(KoIconItem *item)
 {
-	// XXX
-//    m_pBrushWidget->slotSetItem(b);
+	if (item)
+		m_pBrushWidget -> slotSetItem(*item);
 }
 
 void ControlFrame::slotSetPattern(KisPattern& b)

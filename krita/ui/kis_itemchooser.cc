@@ -52,7 +52,7 @@ KisItemChooser::KisItemChooser(const vKoIconItem& items, bool spacing, QWidget *
 		m_chooser -> addItem(itr.current());
 }
 
-KisItemChooser::KisItemChooser(bool spacing, QWidget *parent, const char *name)
+KisItemChooser::KisItemChooser(bool spacing, QWidget *parent, const char *name) : super(parent, name)
 {
 	m_doSpacing = spacing;
 
@@ -137,3 +137,4 @@ void KisItemChooser::addItem(const vKoIconItem& items)
 }
 
 #include "kis_itemchooser.moc"
+

@@ -32,7 +32,7 @@
 
 #include <kis_doc.h>
 #include <kis_image.h>
-#include <kis_iterators_quantum.h>
+#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
@@ -71,7 +71,7 @@ KritaExample::KritaExample(QObject *parent, const char *name, const QStringList 
 	}
 
 	KisFilterSP kfi = createFilter<KisFilterInvert>(m_view);
-	(void) new KAction(i18n("&Invert..."), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "krita_example");
+	(void) new KAction(i18n("&Invert"), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "krita_example");
 }
 
 KritaExample::~KritaExample()
@@ -82,24 +82,28 @@ KisFilterInvert::KisFilterInvert(KisView * view) : KisFilter(name(), view)
 {
 }
 
-void KisFilterInvert::process(KisPaintDeviceSP device, KisFilterConfiguration* /*config*/, const QRect& rect, KisTileCommand* ktc)
+void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect, KisTileCommand* ktc)
 {
-	KisIteratorLineQuantum lineIt = device->iteratorQuantumSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLineQuantum lastLine = device->iteratorQuantumSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
-	Q_INT32 depth = device->depth() - 1;
+	// TODO: this function assume that there is an alpha channel
+	KisIteratorLinePixel lineIt = src->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
+	KisIteratorLinePixel dstLineIt = dst->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
+	KisIteratorLinePixel lastLine = src->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
+	Q_INT32 depth = src->depth() - 1;
 	while( lineIt <= lastLine )
 	{
-		KisIteratorQuantum quantumIt = *lineIt;
-		KisIteratorQuantum lastQuantum = lineIt.end();
+		KisIteratorPixel quantumIt = *lineIt;
+		KisIteratorPixel dstQuantumIt = *dstLineIt;
+		KisIteratorPixel lastQuantum = lineIt.end();
 		while( quantumIt <= lastQuantum )
 		{
 			for( int i = 0; i < depth; i++)
 			{
-				quantumIt = QUANTUM_MAX - quantumIt;
-				++quantumIt;
+				dstQuantumIt[i] = QUANTUM_MAX - quantumIt.oldValue()[i];
 			}
 			++quantumIt;
+			++dstQuantumIt;
 		}
 		++lineIt;
+		++dstLineIt;
 	}
 }

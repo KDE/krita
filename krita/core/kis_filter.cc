@@ -19,6 +19,7 @@
 #include "kis_filter.h"
 
 #include <qlayout.h>
+#include <qframe.h>
 
 #include "kis_filter_registry.h"
 #include "kis_tile_command.h"
@@ -72,8 +73,9 @@ void KisFilter::slotActivated()
 	{
 		m_dialog->previewWidget->slotSetPreview( layer );
 		connect(m_dialog->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
-		QVBoxLayout* layout = new QVBoxLayout((QWidget *)m_dialog->container);
-		layout->addWidget( m_widget );
+		QGridLayout *widgetLayout = new QGridLayout((QWidget *)m_dialog->container, 1, 1);
+		widgetLayout -> addWidget(m_widget, 0 , 0);
+		m_dialog->container->setMinimumSize(m_widget->minimumSize());
 		refreshPreview();
 		m_dialog -> setFixedSize(m_dialog -> minimumSize());
 		if(m_dialog->exec() == QDialog::Rejected )

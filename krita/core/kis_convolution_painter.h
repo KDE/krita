@@ -56,9 +56,10 @@ public:
 
 	// XXX: add params to paint only in a certain rect
 	// XXX: this name is a bit long... paintConvolution?
-	void applyConvolutionColorTransformation(KisMatrix3x3* matrix);
+		void applyConvolutionColorTransformation(KisMatrix3x3* matrix);
+		void applyConvolutionColorTransformation(KisMatrix3x3* matrix, KisPaintDeviceSP src);
 
-private:
+	private:
 
 
 

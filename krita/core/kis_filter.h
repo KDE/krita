@@ -58,14 +58,15 @@ public:
 	KisFilter(const QString& name, KisView * view);
 
 public:
-	virtual void process(KisPaintDeviceSP, KisFilterConfiguration*, const QRect&, KisTileCommand* ) = 0;
+	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&, KisTileCommand* ) = 0;
+	void process(KisPaintDeviceSP, KisFilterConfiguration*, const QRect&, KisTileCommand* );
 	
 public:
 	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
 	inline const QString name() const { return m_name; };
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
 // 	KisFilterConfigurationWidget* configurationWidget(QWidget* parent);
-
+	inline KisView* view();
 public slots:
 
 	void slotActivated();
@@ -85,16 +86,11 @@ private:
 	KisFilterConfigurationWidget* m_widget;
 	KisPreviewDialog* m_dialog;
 };
-/*
-inline KisFilterConfigurationWidget* KisFilter::configurationWidget()
-{
-	return m_widget;
-}
 
-inline KisFilterConfigurationWidget* KisFilter::configurationWidget(QWidget* parent)
+inline KisView* KisFilter::view()
 {
-	return (m_widget = createConfigurationWidget(parent) );
-}*/
+	return m_view;
+}
 
 
 inline KisStrategyColorSpaceSP KisFilter::colorStrategy()
@@ -102,6 +98,11 @@ inline KisStrategyColorSpaceSP KisFilter::colorStrategy()
 	// XXX: is this wise? Isn't it better to check whether view, image
 	// and layer aren't empty? BSAR.
 	return m_view -> currentImg() -> activeLayer() -> colorStrategy();
+}
+
+inline void KisFilter::process(KisPaintDeviceSP dev, KisFilterConfiguration* config, const QRect& rect, KisTileCommand* ktc)
+{
+	process( dev, dev, config, rect, ktc);
 }
 
 

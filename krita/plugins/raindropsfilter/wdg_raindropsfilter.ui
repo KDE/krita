@@ -1,0 +1,216 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgRainDropsFilter</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgRainDropsFilter</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>493</width>
+            <height>157</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Image Size</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QButtonGroup" row="1" column="0">
+            <property name="name">
+                <cstring>grpPixelDimensions</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Raindrops</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Number:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Fish eyes:</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="0" column="2">
+                    <property name="name">
+                        <cstring>dropSizeSpinBox</cstring>
+                    </property>
+                    <property name="value">
+                        <number>80</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>200</number>
+                    </property>
+                </widget>
+                <widget class="QSlider" row="1" column="1">
+                    <property name="name">
+                        <cstring>numberSlider</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>500</number>
+                    </property>
+                    <property name="value">
+                        <number>150</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="2" column="2">
+                    <property name="name">
+                        <cstring>fishEyesSpinBox</cstring>
+                    </property>
+                    <property name="value">
+                        <number>30</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>lblAngle</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Drop size:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intWidth</cstring>
+                    </property>
+                </widget>
+                <widget class="QSlider" row="0" column="1">
+                    <property name="name">
+                        <cstring>dropSizeSlider</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>200</number>
+                    </property>
+                    <property name="value">
+                        <number>80</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="1" column="2">
+                    <property name="name">
+                        <cstring>numberSpinBox</cstring>
+                    </property>
+                    <property name="value">
+                        <number>150</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>500</number>
+                    </property>
+                </widget>
+                <widget class="QSlider" row="2" column="1">
+                    <property name="name">
+                        <cstring>fishEyesSlider</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                    <property name="value">
+                        <number>30</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>dropSizeSlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>dropSizeSpinBox</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>dropSizeSpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>dropSizeSlider</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>numberSlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>numberSpinBox</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>numberSpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>numberSlider</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>fishEyesSlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>fishEyesSpinBox</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>fishEyesSpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>fishEyesSlider</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>numberSpinBox</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

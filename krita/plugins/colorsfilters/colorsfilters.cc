@@ -49,8 +49,6 @@
 #include "colorsfilters.h"
 #include "kis_brightness_contrast_filter.h"
 
-#define min(x,y) ((x)<(y)?(x):(y))
-
 typedef KGenericFactory<ColorsFilters> ColorsFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorsfilters, ColorsFiltersFactory( "krita" ) )
 
@@ -59,38 +57,43 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 {
 	setInstance(ColorsFiltersFactory::instance());
 
-// 	kdDebug() << "ColorsFilters plugin. Class: " 
-// 		  << className() 
-// 		  << ", Parent: " 
-// 		  << parent -> className()
-// 		  << "\n";
+ 	kdDebug() << "ColorsFilters plugin. Class: " 
+ 		  << className() 
+ 		  << ", Parent: " 
+ 		  << parent -> className()
+ 		  << "\n";
 
 
-	KisBrightnessContrastFilter* kbc = new KisBrightnessContrastFilter();
-	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, kbc, SLOT(slotActivated()), actionCollection(), "brightnesscontrast");
-	KisGammaCorrectionFilter* kgc = new KisGammaCorrectionFilter();
-	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, kgc, SLOT(slotActivated()), actionCollection(), "gammacorrection");
-	KisColorAdjustementFilter* kfca = new KisColorAdjustementFilter();
-	(void) new KAction(i18n("&Color Adjustment..."), 0, 0, kfca, SLOT(slotActivated()), actionCollection(), "coloradjustment");
-	KisDesaturateFilter* kdf = new KisDesaturateFilter();
-	(void) new KAction(i18n("&Desaturate"), 0, 0, kdf, SLOT(slotActivated()), actionCollection(), "desaturate");
 	if ( !parent->inherits("KisView") )
 	{
-		m_view = 0;
+		return;
 	} else {
 		m_view = (KisView*) parent;
 	}
+
+
+	KisBrightnessContrastFilter* kbc = new KisBrightnessContrastFilter(m_view);
+	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, kbc, SLOT(slotActivated()), actionCollection(), "brightnesscontrast");
+	KisGammaCorrectionFilter* kgc = new KisGammaCorrectionFilter(m_view);
+	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, kgc, SLOT(slotActivated()), actionCollection(), "gammacorrection");
+	KisColorAdjustmentFilter* kfca = new KisColorAdjustmentFilter(m_view);
+	(void) new KAction(i18n("&Color Adjustment..."), 0, 0, kfca, SLOT(slotActivated()), actionCollection(), "coloradjustment");
+	KisDesaturateFilter* kdf = new KisDesaturateFilter(m_view);
+	(void) new KAction(i18n("&Desaturate"), 0, 0, kdf, SLOT(slotActivated()), actionCollection(), "desaturate");
 }
 
 ColorsFilters::~ColorsFilters()
 {
 }
 
-KisColorAdjustementFilter::KisColorAdjustementFilter() : KisPerChannelFilter("Color adjustment", -255, 255, 0)
+//==================================================================
+
+KisColorAdjustmentFilter::KisColorAdjustmentFilter(KisView * view) : 
+	KisPerChannelFilter(view, "Color adjustment", -255, 255, 0)
 {
 }
 
-void KisColorAdjustementFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
+void KisColorAdjustmentFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
 {
 	KisPerChannelFilterConfiguration* configPC = (KisPerChannelFilterConfiguration*) config;
 	KisIteratorLinePixel lineIt = device->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
@@ -117,7 +120,11 @@ void KisColorAdjustementFilter::process(KisPaintDeviceSP device, KisFilterConfig
 	}
 }
 
-KisGammaCorrectionFilter::KisGammaCorrectionFilter() : KisPerChannelFilter("Gamma adjustement", 1, 600, 1)
+
+//==================================================================
+
+KisGammaCorrectionFilter::KisGammaCorrectionFilter(KisView * view)
+	: KisPerChannelFilter(view, "Gamma adjustment", 1, 600, 1)
 {
 }
 
@@ -145,17 +152,20 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceSP device, KisFilterConfigu
 	}
 }
 
-KisDesaturateFilter::KisDesaturateFilter() : KisFilter("Desaturate")
+//==================================================================
+
+KisDesaturateFilter::KisDesaturateFilter(KisView * view) 
+	: KisFilter("Desaturate", view)
 {
 }
 
-void KisDesaturateFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
+void KisDesaturateFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* /*config*/, const QRect& rect,KisTileCommand* ktc)
 {
 	if(colorStrategy()->name() != "RGBA")
 		return;
 	KisIteratorLinePixel lineIt = device->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
 	KisIteratorLinePixel lastLine = device->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
-	Q_INT32 depth = device->depth() - 1;
+// 	Q_INT32 depth = device->depth() - 1;
 	while( lineIt <= lastLine )
 	{
 		KisIteratorPixel pixelIt = *lineIt;

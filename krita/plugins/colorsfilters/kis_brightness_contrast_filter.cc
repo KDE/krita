@@ -29,7 +29,7 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
 {
 }
 
-KisBrightnessContrastFilter::KisBrightnessContrastFilter( ) : KisFilter( "Brightness / Contrast" )
+KisBrightnessContrastFilter::KisBrightnessContrastFilter(KisView * view ) : KisFilter( "Brightness / Contrast", view )
 {
 	
 }

@@ -371,7 +371,7 @@ DCOPObject *KisDoc::dcopObject()
 	return m_dcop;
 }
 
-bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
+bool KisDoc::initDoc(InitDocFlags flags, QWidget* /*parentWidget*/)
 {
 	kdDebug() << "KisDoc::initDoc\n";
 	if (!init())

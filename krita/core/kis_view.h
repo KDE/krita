@@ -98,10 +98,6 @@ public:
 	KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent = 0, const char *name = 0);
 	virtual ~KisView();
 
-public:
-	// XXX: DO NOT USE. REMOVE ASAP.
-	static KisView* activeView();
-
 
 public: // KoView implementation
 	virtual bool eventFilter(QObject *o, QEvent *e);
@@ -170,13 +166,6 @@ public slots:
 protected:
 
 	virtual void resizeEvent(QResizeEvent*);
-
-	// XXX: DO NOT USE. REMOVE ASAP.
-	static void setActiveView(KisView* view);
-
-protected slots:
-
-	virtual void windowActivationChange ( bool oldActive );
 
 private:
 	// Implement KisCanvasSubject
@@ -343,7 +332,6 @@ private slots:
 	void showRuler();
 
 private:
-	static KisView* m_activeView;
 	KisDoc *m_doc;
 	KisCanvas *m_canvas;
 
@@ -460,17 +448,5 @@ private:
 	mutable KisImageSP m_current;
 };
 
-// XXX: Remove these functions. Only used from the filters,
-// which already have their view as parent because they
-// are KPart plugins loaded by the default system.
-// DO NOT USE FROM OTHER CODE.
-inline void KisView::setActiveView(KisView* view)
-{
-	KisView::m_activeView = view;
-}
-inline KisView* KisView::activeView()
-{
-	return m_activeView;
-}
 #endif // KIS_VIEW_H_
 

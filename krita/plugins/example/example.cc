@@ -54,12 +54,24 @@ KritaExample::KritaExample(QObject *parent, const char *name, const QStringList 
 		: KParts::Plugin(parent, name)
 {
 	setInstance(KritaExampleFactory::instance());
+
+
 	//kdDebug() << "Example plugin. Class: " 
 	//	  << className() 
 	//	  << ", Parent: " 
 	//	  << parent -> className()
 	//	  << "\n";
-	KisFilterInvert* kfi = new KisFilterInvert();
+
+	if ( !parent->inherits("KisView") )
+	{
+		return;
+	} else {
+		m_view = (KisView*) parent;
+	}
+
+
+	KisFilterInvert* kfi = new KisFilterInvert(m_view);
+
 	(void) new KAction(i18n("&Invert..."), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "krita_example");
 }
 
@@ -67,11 +79,11 @@ KritaExample::~KritaExample()
 {
 }
 
-KisFilterInvert::KisFilterInvert() : KisFilter("Invert")
+KisFilterInvert::KisFilterInvert(KisView * view) : KisFilter("Invert", view)
 {
 }
 
-void KisFilterInvert::process(KisPaintDeviceSP device, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
+void KisFilterInvert::process(KisPaintDeviceSP device, KisFilterConfiguration* /*config*/, const QRect& rect,KisTileCommand* ktc)
 {
 	KisIteratorLineQuantum lineIt = device->iteratorQuantumSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
 	KisIteratorLineQuantum lastLine = device->iteratorQuantumSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);

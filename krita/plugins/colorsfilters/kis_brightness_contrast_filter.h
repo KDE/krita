@@ -41,7 +41,7 @@ private:
 class KisBrightnessContrastFilter : public KisFilter
 {
 public:
-	KisBrightnessContrastFilter( );
+	KisBrightnessContrastFilter(KisView * view);
 public:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
 	virtual KisFilterConfiguration* configuration();

@@ -27,10 +27,10 @@
 #include "kis_preview_dialog.h"
 #include "kis_previewwidget.h"
 
-KisFilter::KisFilter(const QString& name) :
-	m_name(name)
+KisFilter::KisFilter(const QString& name, KisView * view) :
+	m_name(name),
+	m_view(view)
 {
-//	KisFilterRegistry::singleton()->add( this );
 }
 
 KisFilterConfiguration* KisFilter::configuration()
@@ -40,12 +40,12 @@ KisFilterConfiguration* KisFilter::configuration()
 
 void KisFilter::refreshPreview( )
 {
-	m_dialog->previewWidget->slotRenewLayer();
-	KisLayerSP layer = m_dialog->previewWidget->getLayer();
+	m_dialog -> previewWidget -> slotRenewLayer();
+	KisLayerSP layer = m_dialog -> previewWidget -> getLayer();
 	KisFilterConfiguration* config = configuration();
-	QRect rect(0, 0, layer->width(), layer->height());
+	QRect rect(0, 0, layer -> width(), layer -> height());
 	process((KisPaintDeviceSP) layer, config, rect, 0 );
-	m_dialog->previewWidget->slotUpdate();
+	m_dialog->previewWidget -> slotUpdate();
 }
 
 KisFilterConfigurationWidget* KisFilter::createConfigurationWidget(QWidget* )
@@ -54,13 +54,15 @@ KisFilterConfigurationWidget* KisFilter::createConfigurationWidget(QWidget* )
 }
 
 void KisFilter::slotActivated()
-{
-	KisView* view = KisView::activeView();
-	KisImageSP img = view->currentImg();
-	KisLayerSP layer = img->activeLayer();
+{;
+	KisImageSP img = m_view -> currentImg();
+	if (!img) return;
+
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
 
 	// Create the config dialog
-	m_dialog = new KisPreviewDialog( (QWidget*)view, name().ascii(), true);
+	m_dialog = new KisPreviewDialog( (QWidget*) m_view, name().ascii(), true);
 	m_widget = createConfigurationWidget( (QWidget*)m_dialog->container );
 
 	if( m_widget != 0)

@@ -124,7 +124,7 @@ void KisToolSelectEraser::endPaint()
 	m_mode = HOVER;
 	KisPaintDeviceSP device;
 	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
-		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+// 		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
 // 		if (adapter && m_painter) {
 // 			// If painting in mouse release, make sure painter
 // 			// is destructed or end()ed

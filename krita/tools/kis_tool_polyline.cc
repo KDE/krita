@@ -48,7 +48,7 @@ KisToolPolyLine::~KisToolPolyLine()
 {
 }
 
-void KisToolPolyLine::buttonPress(KisButtonPressEvent *event)
+void KisToolPolyLine::buttonPress(KisButtonPressEvent */*event*/)
 {
 // 	KisView *view = getCurrentView();
 // 	KisPainter *p;

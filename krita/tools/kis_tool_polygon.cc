@@ -62,7 +62,7 @@ KisToolPolygon::~KisToolPolygon()
 {
 }
 
-void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
+void KisToolPolygon::buttonPress(KisButtonPressEvent */*event*/)
 {
 // 	if (event -> button() == LeftButton) {
 // 		m_dragging = true;
@@ -71,7 +71,7 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
 // 	}
 }
 
-void KisToolPolygon::move(KisMoveEvent *event)
+void KisToolPolygon::move(KisMoveEvent */*event*/)
 {
 // 	if (m_dragging) {
 // 		// erase old polygon on canvas
@@ -83,7 +83,7 @@ void KisToolPolygon::move(KisMoveEvent *event)
 // 	}
 }
 
-void KisToolPolygon::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolPolygon::buttonRelease(KisButtonReleaseEvent */*event*/)
 {
 // 	if (m_dragging && event -> state() == LeftButton) {
 // 		KisView *view = getCurrentView();
@@ -100,7 +100,7 @@ void KisToolPolygon::buttonRelease(KisButtonReleaseEvent *event)
 // 	}
 }
 
-void KisToolPolygon::drawPolygon(const KisPoint& start, const KisPoint& end)
+void KisToolPolygon::drawPolygon(const KisPoint& start, const KisPoint& /*end*/)
 {
 // 	KisView *view = getCurrentView();
 // 	QPainter p;

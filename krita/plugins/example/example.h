@@ -28,12 +28,17 @@ class KritaExample : public KParts::Plugin
 public:
 	KritaExample(QObject *parent, const char *name, const QStringList &);
 	virtual ~KritaExample();
+
+private:
+
+	KisView * m_view;
+
 };
 
 class KisFilterInvert : public KisFilter 
 {
 public:
-	KisFilterInvert();
+	KisFilterInvert(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
 };

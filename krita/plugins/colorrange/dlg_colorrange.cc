@@ -147,11 +147,11 @@ void DlgColorRange::slotSliderMoved(int value)
 	m_page -> intFuzziness -> setValue(value);
 }
 
-void DlgColorRange::slotSelectionTypeChanged(int index) 
+void DlgColorRange::slotSelectionTypeChanged(int /*index*/) 
 {
 }
 
-void DlgColorRange::slotPreviewTypeChanged(int index) 
+void DlgColorRange::slotPreviewTypeChanged(int /*index*/)
 {
 }
 

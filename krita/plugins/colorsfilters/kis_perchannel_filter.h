@@ -25,7 +25,9 @@
 
 class ChannelInfo;
 
-class KisPerChannelFilterConfiguration : public KisFilterConfiguration {
+class KisPerChannelFilterConfiguration 
+	: public KisFilterConfiguration 
+{
 public:
 	KisPerChannelFilterConfiguration(Q_INT32 nbchannels, ChannelInfo* ci);
 public:
@@ -42,10 +44,11 @@ private:
 
 /** This class is generic for filters that affect channel separately
 	*/
-class KisPerChannelFilter : public KisFilter
+class KisPerChannelFilter 
+	: public KisFilter
 {
 public:
-	KisPerChannelFilter( const QString& name, Q_INT32 min, Q_INT32 max, Q_INT32 initvalue );
+	KisPerChannelFilter(KisView * view, const QString& name, Q_INT32 min, Q_INT32 max, Q_INT32 initvalue );
 public:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
 	virtual KisFilterConfiguration* configuration();

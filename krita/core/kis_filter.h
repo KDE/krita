@@ -39,7 +39,7 @@ class KisFilterConfiguration {
 class KisFilter : public QObject, public KShared {
 	Q_OBJECT
 public:
-	KisFilter(const QString& name);
+	KisFilter(const QString& name, KisView * view);
 
 public:
 	virtual void process(KisPaintDeviceSP, KisFilterConfiguration*, const QRect&, KisTileCommand* ) = 0;
@@ -65,6 +65,7 @@ private slots:
 
 private:
 	QString m_name;
+	KisView * m_view;
 	KisFilterConfigurationWidget* m_widget;
 	KisPreviewDialog* m_dialog;
 };
@@ -76,10 +77,9 @@ inline KisFilterConfigurationWidget* KisFilter::configurationWidget()
 
 inline KisStrategyColorSpaceSP KisFilter::colorStrategy()
 {
-	// XXX: This is really ugly, calling a static on kisview to get the
-	// current view. Besides, since the filters are plugins, and are added
-	// to the view, they have the view already as their parent.
-	return KisView::activeView()->currentImg()->activeLayer()->colorStrategy();
+	// XXX: is this wise? Isn't it better to check whether view, image
+	// and layer aren't empty? BSAR.
+	return m_view -> currentImg() -> activeLayer() -> colorStrategy();
 }
 
 

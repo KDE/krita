@@ -23,75 +23,76 @@
 #include <kparts/plugin.h>
 #include "kis_convolution_filter.h"
 #include "kis_matrix.h"
+#include "kis_view.h"
 
 class KisView;
 
 class KisGaussianBlurFilter : public KisConvolutionFilter {
 public:
-	KisGaussianBlurFilter();
+	KisGaussianBlurFilter(KisView * view);
 public:
 	virtual KisMatrix3x3* matrixes();
 };
 
 class KisSharpenFilter : public KisConvolutionFilter {
 public:
-	KisSharpenFilter();
+	KisSharpenFilter(KisView * view);
 public:
 	virtual KisMatrix3x3* matrixes();
 };
 
 class KisMeanRemovalFilter : public KisConvolutionFilter {
 public:
-	KisMeanRemovalFilter();
+	KisMeanRemovalFilter(KisView * view);
 public:
 	virtual KisMatrix3x3* matrixes();
 };
 
 class KisEmbossLaplascianFilter : public KisConvolutionFilter {
 public:
-	KisEmbossLaplascianFilter();
+	KisEmbossLaplascianFilter(KisView * view);
 public:
 	virtual KisMatrix3x3* matrixes();
 };
 
 class KisEmbossInAllDirectionsFilter : public KisConvolutionFilter {
 public:
-	KisEmbossInAllDirectionsFilter();
+	KisEmbossInAllDirectionsFilter(KisView * view);
 public:
 	virtual KisMatrix3x3* matrixes();
 };
 
 class KisEmbossHorizontalVerticalFilter : public KisConvolutionFilter {
 public:
-	KisEmbossHorizontalVerticalFilter();
+	KisEmbossHorizontalVerticalFilter(KisView * view);
 public:
 	virtual KisMatrix3x3* matrixes();
 };
 
 class KisEmbossVerticalFilter : public KisConvolutionFilter {
 public:
-	KisEmbossVerticalFilter();
+	KisEmbossVerticalFilter(KisView * view);
 public:
 	virtual KisMatrix3x3* matrixes();
 };
 
 class KisEmbossHorizontalFilter : public KisConvolutionFilter {
 public:
-	KisEmbossHorizontalFilter();
+	KisEmbossHorizontalFilter(KisView * view);
 public:
 	virtual KisMatrix3x3* matrixes();
 };
 
 class KisEmbossDiagonalFilter : public KisConvolutionFilter {
 public:
-	KisEmbossDiagonalFilter();
+	KisEmbossDiagonalFilter(KisView * view);
 public:
 	virtual KisMatrix3x3* matrixes();
 };
 
 class KisTopEdgeDetectionFilter : public KisConvolutionFilter {
 public:
-	KisTopEdgeDetectionFilter();
+	KisTopEdgeDetectionFilter(KisView * view);
 public:
 	virtual KisMatrix3x3* matrixes();
 };

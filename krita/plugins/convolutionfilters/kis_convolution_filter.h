@@ -22,10 +22,11 @@
 
 #include "kis_filter.h"
 #include "kis_matrix.h"
+#include "kis_view.h"
 
 class KisConvolutionFilter : public KisFilter {
 public:
-	KisConvolutionFilter(const QString& name);
+	KisConvolutionFilter(const QString& name, KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
 protected:

@@ -33,13 +33,13 @@ KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(Q_INT32 nbint
 	}
 }
 
-KisPerChannelFilter::KisPerChannelFilter( const QString& name, Q_INT32 min, Q_INT32 max, Q_INT32 initvalue ) : KisFilter( name ),
-	m_min (min),
-	m_max (max),
-	m_initvalue (initvalue),
-	m_nbchannels ( 0 )
+KisPerChannelFilter::KisPerChannelFilter(KisView * view, const QString& name, Q_INT32 min, Q_INT32 max, Q_INT32 initvalue )
+	: KisFilter( name, view ),
+	  m_min (min),
+	  m_max (max),
+	  m_initvalue (initvalue),
+	  m_nbchannels ( 0 )
 {
-	
 }
 
 KisFilterConfigurationWidget* KisPerChannelFilter::createConfigurationWidget(QWidget* parent)

@@ -127,8 +127,6 @@
 // sent to a receiver if it does not accept the tablet event.
 #define MOUSE_CHANGE_EVENT_DELAY 100
 
-KisView* KisView::m_activeView = 0;
-
 KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name) : super(doc, parent, name)
 {
         if (!doc -> isReadWrite())
@@ -1132,7 +1130,7 @@ void KisView::fillSelectionFg()
         fillSelection(fgColor(), OPACITY_OPAQUE);
 }
 
-void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
+void KisView::fillSelection(const KoColor& /*c*/, QUANTUM /*opacity*/)
 {
         KisImageSP img = currentImg();
 
@@ -3152,15 +3150,6 @@ KisProgressDisplayInterface *KisView::progressDisplay() const
 {
 	return m_progress;
 }
-
-void KisView::windowActivationChange ( bool oldActive )
-{
-	if(isActiveWindow())
-	{
-		KisView::setActiveView(this);
-	}
-}
-
 
 #include "kis_view.moc"
 

@@ -56,27 +56,41 @@ K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFact
 // 		  << ", Parent: " 
 // 		  << parent -> className()
 // 		  << "\n";
+	KisView * view;
 	
-	KisGaussianBlurFilter* kgbf = new KisGaussianBlurFilter();
+	if ( !parent->inherits("KisView") )
+	{
+		return;
+	} else {
+		view = (KisView*) parent;
+	}
+
+
+	
+	KisGaussianBlurFilter* kgbf = new KisGaussianBlurFilter(view);
 	(void) new KAction(i18n("&Gaussian blur"), 0, 0, kgbf, SLOT(slotActivated()), actionCollection(), "convolution_blur");
-	KisSharpenFilter* kgsf = new KisSharpenFilter();
+
+	KisSharpenFilter* kgsf = new KisSharpenFilter(view);
 	(void) new KAction(i18n("&Sharpen"), 0, 0, kgsf, SLOT(slotActivated()), actionCollection(), "convolution_sharpen");
-	KisMeanRemovalFilter* kmrf = new KisMeanRemovalFilter();
+
+	KisMeanRemovalFilter* kmrf = new KisMeanRemovalFilter(view);
 	(void) new KAction(i18n("&Mean removal"), 0, 0, kmrf, SLOT(slotActivated()), actionCollection(), "convolution_meanremoval");
-	KisEmbossLaplascianFilter* kelf = new KisEmbossLaplascianFilter();
+
+	KisEmbossLaplascianFilter* kelf = new KisEmbossLaplascianFilter(view);
 	(void) new KAction("Emboss laplascian", 0, 0, kelf, SLOT(slotActivated()), actionCollection(), "convolution_embosslaplascian");
-	KisEmbossInAllDirectionsFilter* keiadf = new KisEmbossInAllDirectionsFilter();
+
+	KisEmbossInAllDirectionsFilter* keiadf = new KisEmbossInAllDirectionsFilter(view);
 	(void) new KAction("Emboss in all direction", 0, 0, keiadf, SLOT(slotActivated()), actionCollection(), "convolution_embossalldirections");
-	KisEmbossHorizontalVerticalFilter* kehvf = new KisEmbossHorizontalVerticalFilter();
+	KisEmbossHorizontalVerticalFilter* kehvf = new KisEmbossHorizontalVerticalFilter(view);
  	(void) new KAction("Emboss horizontal and vertical", 0, 0, kehvf, SLOT(slotActivated()), actionCollection(), "convolution_embosshorzvertical");
-	KisEmbossVerticalFilter* kevf = new KisEmbossVerticalFilter();
+	KisEmbossVerticalFilter* kevf = new KisEmbossVerticalFilter(view);
 	(void) new KAction("Emboss vertical only", 0, 0, kevf, SLOT(slotActivated()), actionCollection(), "convolution_embossverticalonly");
-	KisEmbossHorizontalFilter* kehf = new KisEmbossHorizontalFilter();
+	KisEmbossHorizontalFilter* kehf = new KisEmbossHorizontalFilter(view);
 	(void) new KAction("Emboss horizontal only", 0, 0, kehf, SLOT(slotActivated()), actionCollection(), "convolution_embosshorizontalonly");
-	KisEmbossDiagonalFilter* kedf = new KisEmbossDiagonalFilter();
+	KisEmbossDiagonalFilter* kedf = new KisEmbossDiagonalFilter(view);
  	(void) new KAction("Emboss in diagonal", 0, 0, kedf, SLOT(slotActivated()), actionCollection(), "convolution_embossdiagonal");
 	
-	KisTopEdgeDetectionFilter* ktedf = new KisTopEdgeDetectionFilter();
+	KisTopEdgeDetectionFilter* ktedf = new KisTopEdgeDetectionFilter(view);
 	(void) new KAction("Top Edge detection", 0, 0, ktedf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectiontop");
 
 }
@@ -85,7 +99,7 @@ KritaConvolutionFilters::~KritaConvolutionFilters()
 {
 }
 
-KisGaussianBlurFilter::KisGaussianBlurFilter() : KisConvolutionFilter("Gaussian blur")
+KisGaussianBlurFilter::KisGaussianBlurFilter(KisView * view) : KisConvolutionFilter("Gaussian blur", view)
 {
 }
 
@@ -103,7 +117,8 @@ KisMatrix3x3* KisGaussianBlurFilter::matrixes()
 	return amatrixes;
 }
 
-KisSharpenFilter::KisSharpenFilter() : KisConvolutionFilter("Sharpen")
+
+KisSharpenFilter::KisSharpenFilter(KisView * view) : KisConvolutionFilter("Sharpen", view)
 {
 }
 
@@ -121,7 +136,7 @@ KisMatrix3x3* KisSharpenFilter::matrixes()
 	return amatrixes;
 }
 
-KisMeanRemovalFilter::KisMeanRemovalFilter() : KisConvolutionFilter("Mean Removal")
+KisMeanRemovalFilter::KisMeanRemovalFilter(KisView * view) : KisConvolutionFilter("Mean Removal", view)
 {
 }
 
@@ -139,7 +154,7 @@ KisMatrix3x3* KisMeanRemovalFilter::matrixes()
 	return amatrixes;
 }
 
-KisEmbossLaplascianFilter::KisEmbossLaplascianFilter() : KisConvolutionFilter("Emboss laplascian")
+KisEmbossLaplascianFilter::KisEmbossLaplascianFilter(KisView * view) : KisConvolutionFilter("Emboss laplascian", view)
 {
 }
 
@@ -157,7 +172,8 @@ KisMatrix3x3* KisEmbossLaplascianFilter::matrixes()
 	return amatrixes;
 }
 
-KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter() : KisConvolutionFilter("Emboss in all directions")
+KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter(KisView * view) 
+	: KisConvolutionFilter("Emboss in all directions", view)
 {
 }
 
@@ -175,7 +191,8 @@ KisMatrix3x3* KisEmbossInAllDirectionsFilter::matrixes()
 	return amatrixes;
 }
 
-KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter() : KisConvolutionFilter("Emboss horizontal and vertical")
+KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter(KisView * view) 
+	: KisConvolutionFilter("Emboss horizontal and vertical", view)
 {
 }
 
@@ -193,7 +210,7 @@ KisMatrix3x3* KisEmbossHorizontalVerticalFilter::matrixes()
 	return amatrixes;
 }
 
-KisEmbossVerticalFilter::KisEmbossVerticalFilter() : KisConvolutionFilter("Emboss vertical only")
+KisEmbossVerticalFilter::KisEmbossVerticalFilter(KisView * view) : KisConvolutionFilter("Emboss vertical only", view)
 {
 }
 
@@ -211,7 +228,8 @@ KisMatrix3x3* KisEmbossVerticalFilter::matrixes()
 	return amatrixes;
 }
 
-KisEmbossHorizontalFilter::KisEmbossHorizontalFilter() : KisConvolutionFilter("Emboss horizontal only")
+KisEmbossHorizontalFilter::KisEmbossHorizontalFilter(KisView * view) : 
+	KisConvolutionFilter("Emboss horizontal only", view)
 {
 }
 
@@ -229,7 +247,7 @@ KisMatrix3x3* KisEmbossHorizontalFilter::matrixes()
 	return amatrixes;
 }
 
-KisEmbossDiagonalFilter::KisEmbossDiagonalFilter() : KisConvolutionFilter("Emboss diagonal")
+KisEmbossDiagonalFilter::KisEmbossDiagonalFilter(KisView * view) : KisConvolutionFilter("Emboss diagonal", view)
 {
 }
 
@@ -248,7 +266,7 @@ KisMatrix3x3* KisEmbossDiagonalFilter::matrixes()
 }
 
 
-KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter() : KisConvolutionFilter("Top Edge detections")
+KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter(KisView * view) : KisConvolutionFilter("Top Edge detections", view)
 {
 }
 

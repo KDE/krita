@@ -29,7 +29,7 @@ class KisView;
 
 class KisDesaturateFilter : public KisFilter {
 public:
-	KisDesaturateFilter();
+	KisDesaturateFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
 
@@ -37,15 +37,15 @@ public:
 
 class KisGammaCorrectionFilter : public KisPerChannelFilter {
 public:
-	KisGammaCorrectionFilter();
+	KisGammaCorrectionFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
 
 };
 
-class KisColorAdjustementFilter : public KisPerChannelFilter {
+class KisColorAdjustmentFilter : public KisPerChannelFilter {
 public:
-	KisColorAdjustementFilter();
+	KisColorAdjustmentFilter(KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
 
@@ -60,7 +60,6 @@ public:
 private:
 	KisView* m_view;
 	KisPainter *m_painter;
-
 };
 
 #endif

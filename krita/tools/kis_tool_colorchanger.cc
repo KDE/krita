@@ -68,7 +68,7 @@ KisToolColorChanger::~KisToolColorChanger()
 {
 }
 
-bool KisToolColorChanger::changeColors(int startX, int startY)
+bool KisToolColorChanger::changeColors(int /*startX*/, int /*startY*/)
 {
 // 	int startx = startX;
 // 	int starty = startY;
@@ -138,7 +138,7 @@ bool KisToolColorChanger::changeColors(int startX, int startY)
 }
 
 
-void KisToolColorChanger::buttonPress(KisButtonPressEvent *e)
+void KisToolColorChanger::buttonPress(KisButtonPressEvent */*e*/)
 {
 //     KisImage * img = m_doc->currentImg();
 //     if (!img) return;

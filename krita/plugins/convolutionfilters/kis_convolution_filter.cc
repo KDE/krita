@@ -23,8 +23,8 @@
 
 #include "kis_painter.h"
 
-KisConvolutionFilter::KisConvolutionFilter(const QString& name) :
-	KisFilter( name )
+KisConvolutionFilter::KisConvolutionFilter(const QString& name, KisView * view) :
+	KisFilter( name, view )
 {
 	
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -127,7 +127,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		{
 			currentPixel = curIt;
 			++curIt;
-			memmove( pixels, pixels + 1, 9 * sizeof(KisPixelRepresentationReadOnly));
+			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRepresentationReadOnly));
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
 			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
 			++afterIt;
@@ -201,7 +201,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		{
 			currentPixel = curIt;
 			++curIt;
-			memmove( pixels, pixels + 1, 9 * sizeof(KisPixelRepresentationReadOnly));
+			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRepresentationReadOnly));
 			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
 			++beforeIt;
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
@@ -271,7 +271,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		{
 			currentPixel = curIt;
 			++curIt;
-			memmove( pixels, pixels + 1, 9 * sizeof(KisPixelRepresentationReadOnly));
+			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRepresentationReadOnly));
 			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
 			++beforeIt;
 			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
@@ -293,9 +293,9 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 			int sum = matrix[i][1][1] + matrix[i][0][0] + matrix[i][0][1] + matrix[i][1][0];
 			sum = (sum == 0) ? 1 : sum;
 			currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX, ( currentPixel[ i ] * matrix[i][1][1]
-									  + pixels[ CONVOLUTION_PIXEL_BOTTOM - 1 ][i] * matrix[i][0][0]
-									  + pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][0][1]
-									  + pixels[ CONVOLUTION_PIXEL_RIGHT - 1 ][i] * matrix[i][1][0] ) * matrix[i].sum()
+									  + pixels[ CONVOLUTION_PIXEL_LEFTTOP + 1 ][i] * matrix[i][0][0]
+									  + pixels[ CONVOLUTION_PIXEL_TOP + 1 ][i] * matrix[i][0][1]
+									  + pixels[ CONVOLUTION_PIXEL_LEFT + 1 ][i] * matrix[i][1][0] ) * matrix[i].sum()
 							   / matrix[i].factor() / sum + matrix[i].offset() ) );
 		}
 	}

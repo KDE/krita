@@ -84,7 +84,7 @@
                             <cstring>textLabelCyan</cstring>
                         </property>
                         <property name="text">
-                            <string>Cyan :</string>
+                            <string>Cyan:</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="3" column="0">
@@ -92,7 +92,7 @@
                             <cstring>textLabelBlack</cstring>
                         </property>
                         <property name="text">
-                            <string>Black :</string>
+                            <string>Black:</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="3" column="2">
@@ -157,7 +157,7 @@
                             <cstring>textLabelMagenta</cstring>
                         </property>
                         <property name="text">
-                            <string>Magenta :</string>
+                            <string>Magenta:</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="2" column="2">
@@ -239,7 +239,7 @@
                             <cstring>textLabelYellow</cstring>
                         </property>
                         <property name="text">
-                            <string>Yellow :</string>
+                            <string>Yellow:</string>
                         </property>
                     </widget>
                 </grid>

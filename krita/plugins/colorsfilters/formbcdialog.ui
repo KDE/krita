@@ -121,7 +121,7 @@
                             <cstring>textLabelContrastLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>Contrast :</string>
+                            <string>Contrast:</string>
                         </property>
                     </widget>
                     <widget class="QSlider" row="1" column="1">
@@ -149,7 +149,7 @@
                             <cstring>textLabelBrightnessLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>Brightness :</string>
+                            <string>Brightness:</string>
                         </property>
                     </widget>
                 </grid>

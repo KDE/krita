@@ -32,7 +32,7 @@
                         <cstring>labelText</cstring>
                     </property>
                     <property name="text">
-                        <string>Text :</string>
+                        <string>Text:</string>
                     </property>
                 </widget>
                 <widget class="KLineEdit">
@@ -62,7 +62,7 @@
                         <cstring>textLabelFont</cstring>
                     </property>
                     <property name="text">
-                        <string>Font :</string>
+                        <string>Font:</string>
                     </property>
                 </widget>
                 <widget class="KFontCombo">
@@ -195,7 +195,7 @@
                                 <cstring>textLabelSize</cstring>
                             </property>
                             <property name="text">
-                                <string>Size :</string>
+                                <string>Size:</string>
                             </property>
                         </widget>
                         <widget class="QSpinBox">
@@ -264,7 +264,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="text">
-                                <string>Amount :</string>
+                                <string>Amount:</string>
                             </property>
                         </widget>
                         <widget class="QSpinBox">

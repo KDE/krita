@@ -61,7 +61,7 @@
                                 <cstring>textLabelFactor</cstring>
                             </property>
                             <property name="text">
-                                <string>Factor :</string>
+                                <string>Factor:</string>
                             </property>
                         </widget>
                         <widget class="QSpinBox">
@@ -101,7 +101,7 @@
                                 <cstring>textLabelOffset</cstring>
                             </property>
                             <property name="text">
-                                <string>Offset :</string>
+                                <string>Offset:</string>
                             </property>
                         </widget>
                         <widget class="QSpinBox">

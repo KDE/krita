@@ -115,7 +115,7 @@
                             <cstring>textLabelBlue</cstring>
                         </property>
                         <property name="text">
-                            <string>Blue :</string>
+                            <string>Blue:</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="1" column="0">
@@ -123,7 +123,7 @@
                             <cstring>textLabelGreen</cstring>
                         </property>
                         <property name="text">
-                            <string>Green :</string>
+                            <string>Green:</string>
                         </property>
                     </widget>
                     <widget class="QSlider" row="0" column="1">
@@ -151,7 +151,7 @@
                             <cstring>textLabelRed</cstring>
                         </property>
                         <property name="text">
-                            <string>Red :</string>
+                            <string>Red:</string>
                         </property>
                     </widget>
                     <widget class="QSlider" row="1" column="1">

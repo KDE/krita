@@ -47,11 +47,11 @@ namespace {
 		typedef KNamedCommand super;
 
 	public:
-		KisResizeImageCmd(KisUndoAdapter *adapter, 
-			KisImageSP img, 
-			Q_INT32 width, 
-			Q_INT32 height, 
-			Q_INT32 oldWidth, 
+		KisResizeImageCmd(KisUndoAdapter *adapter,
+			KisImageSP img,
+			Q_INT32 width,
+			Q_INT32 height,
+			Q_INT32 oldWidth,
 			Q_INT32 oldHeight) : super(i18n("Resize Image"))
 		{
 			m_adapter = adapter;
@@ -84,13 +84,13 @@ namespace {
 	private:
 		KisUndoAdapter *m_adapter;
 		KisImageSP m_img;
-		QSize m_before; 
+		QSize m_before;
 		QSize m_after;
 	};
 
 	class KisSelectionSet : public KNamedCommand {
 		typedef KNamedCommand super;
-	
+
 	public:
 		KisSelectionSet(KisUndoAdapter *adapter, KisImageSP img, KisSelectionSP selection) : super(i18n("Set Selection"))
 		{
@@ -160,10 +160,11 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_layers.reserve(rhs.m_layers.size());
 
 		for (vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); it++) {
+                    kdDebug() << "Adding layers " << endl;
 			KisLayerSP layer = new KisLayer(**it);
 
 			layer -> setImage(KisImageSP(this));
-			m_layers.push_back(layer);	
+			m_layers.push_back(layer);
 			m_layerStack.push_back(layer);
 			m_activeLayer = layer;
 		}
@@ -180,7 +181,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 
 		if (rhs.m_selectionMask)
 			m_selectionMask = new KisChannel(*m_selectionMask);
-		
+
 		m_visible = rhs.m_visible;
 		m_active = rhs.m_active;
 		m_alpha = rhs.m_alpha;
@@ -462,7 +463,7 @@ const vKisChannelSP& KisImage::channels() const
 	return m_channels;
 }
 
-KisPaintDeviceSP KisImage::activeDevice() 
+KisPaintDeviceSP KisImage::activeDevice()
 {
 	if (m_selection)
 		return m_selection.data();
@@ -563,7 +564,7 @@ bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 
 	if (layer == 0)
 		return false;
-	
+
 	if (layer -> image() && layer -> image() != KisImageSP(this))
 		return false;
 
@@ -729,7 +730,7 @@ bool KisImage::pos(KisLayerSP layer, Q_INT32 position)
 	if (old == position)
 		return true;
 
-	qSwap(m_layers[old], m_layers[position]);	
+	qSwap(m_layers[old], m_layers[position]);
 	invalidate();
 	return true;
 }
@@ -1031,7 +1032,7 @@ void KisImage::validate(Q_INT32 tileno)
 	if (tileno < 0)
 		return;
 
-	if (tileno >= (m_ntileCols * m_ntileRows)) { 
+	if (tileno >= (m_ntileCols * m_ntileRows)) {
 		m_ntileCols = (width() + TILE_WIDTH - 1) / TILE_WIDTH;
 		m_ntileRows = (height() + TILE_HEIGHT - 1) / TILE_HEIGHT;
 
@@ -1044,7 +1045,7 @@ void KisImage::validate(Q_INT32 tileno)
 
 	if (!dst || dst -> valid())
 		return;
-	
+
 	gc.begin(m_projection.data());
 	tm -> tileCoord(dst, pt);
 	gc.bitBlt(pt.x(), pt.y(), COMPOSITE_COPY, m_bkg.data(), pt.x(), pt.y(), dst -> width(), dst -> height());

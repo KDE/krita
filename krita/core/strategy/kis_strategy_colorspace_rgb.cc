@@ -104,8 +104,10 @@ void KisStrategyColorSpaceRGB::render(KisImageSP projection, QPainter& painter, 
 		pd -> owner = false;
 		pd -> data = m_buf;
 		tm -> readPixelData(pd);
-		img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * CHAR_BIT, 0, 0, QImage::LittleEndian);
-		m_pixio.putImage(&m_pixmap, 0, 0, &img);
+
+                img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * CHAR_BIT, 0, 0, QImage::LittleEndian);
+
+                m_pixio.putImage(&m_pixmap, 0, 0, &img);
 		painter.drawPixmap(x, y, m_pixmap, 0, 0, width, height);
 	}
 }

@@ -73,6 +73,7 @@
 #include "builder/kis_image_magick_converter.h"
 #include "strategy/kis_strategy_colorspace.h"
 #include "strategy/kis_strategy_colorspace_rgb.h"
+#include "strategy/kis_strategy_colorspace_cmyk.h"
 #include "tiles/kistilemgr.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
@@ -83,7 +84,7 @@ namespace {
 
 	public:
 		KisCommandImageAdd(KisDoc *doc,
-			KisUndoAdapter *adapter, 
+			KisUndoAdapter *adapter,
 			KisImageSP img) : super(i18n("Add Image"), adapter)
 		{
 			m_doc = doc;
@@ -117,9 +118,9 @@ namespace {
 		typedef KisCommand super;
 
 	public:
-		KisCommandImageMv(KisDoc *doc, 
-				KisUndoAdapter *adapter, 
-				const QString& name, 
+		KisCommandImageMv(KisDoc *doc,
+				KisUndoAdapter *adapter,
+				const QString& name,
 				const QString& oldName) : super(i18n("Rename Image"), adapter)
 		{
 			m_doc = doc;
@@ -155,7 +156,7 @@ namespace {
 		typedef KisCommand super;
 
 	public:
-		KisCommandImageRm(KisDoc *doc, 
+		KisCommandImageRm(KisDoc *doc,
 				KisUndoAdapter *adapter,
 				KisImageSP img) : super(i18n("Remove Image"), adapter)
 		{
@@ -190,9 +191,9 @@ namespace {
 		typedef KisCommand super;
 
 	public:
-		LayerAddCmd(KisDoc *doc, 
-				KisUndoAdapter *adapter, 
-				KisImageSP img, 
+		LayerAddCmd(KisDoc *doc,
+				KisUndoAdapter *adapter,
+				KisImageSP img,
 				KisLayerSP layer) : super(i18n("Add Layer"), adapter)
 		{
 			m_doc = doc;
@@ -230,9 +231,9 @@ namespace {
 		typedef KNamedCommand super;
 
 	public:
-		LayerRmCmd(KisDoc *doc, 
-				KisUndoAdapter *adapter, 
-				KisImageSP img, 
+		LayerRmCmd(KisDoc *doc,
+				KisUndoAdapter *adapter,
+				KisImageSP img,
 				KisLayerSP layer) : super(i18n("Remove Layer"))
 		{
 			m_doc = doc;
@@ -272,11 +273,11 @@ namespace {
 		typedef KNamedCommand super;
 
 	public:
-		LayerPropsCmd(KisLayerSP layer, 
-			KisImageSP img, 
-			KisDoc *doc, 
+		LayerPropsCmd(KisLayerSP layer,
+			KisImageSP img,
+			KisDoc *doc,
 			KisUndoAdapter *adapter,
-			const QString& name, 
+			const QString& name,
 			Q_INT32 opacity) : super(i18n("Layer Property Changes"))
 		{
 			m_layer = layer;
@@ -312,10 +313,10 @@ namespace {
 
 	private:
 		KisUndoAdapter *m_adapter;
-		KisLayerSP m_layer; 
-		KisImageSP m_img; 
-		KisDoc *m_doc; 
-		QString m_name; 
+		KisLayerSP m_layer;
+		KisImageSP m_img;
+		KisDoc *m_doc;
+		QString m_name;
 		Q_INT32 m_opacity;
 	};
 }
@@ -378,6 +379,7 @@ bool KisDoc::initDoc()
 			dlgtype, "krita_template");
 
 	if (ret == KoTemplateChooseDia::Template) {
+		kdDebug() << "Eek: template is hard-coded rgba" << endl;
 		KisConfig cfg;
 		QString name = nextImageName();
 		KisImageSP img = new KisImage(this, cfg.defImgWidth(), cfg.defImgHeight(), IMAGE_TYPE_RGBA, name);
@@ -425,6 +427,12 @@ void KisDoc::setupColorspaces()
 
 	m_colorspaces[IMAGE_TYPE_RGB] = p;
 	m_colorspaces[IMAGE_TYPE_RGBA] = p;
+
+        KisStrategyColorSpaceSP p2 = new KisStrategyColorSpaceCMYK;
+
+        m_colorspaces[IMAGE_TYPE_CMYK] = p2;
+        m_colorspaces[IMAGE_TYPE_CMYKA] = p2;
+
 }
 
 QDomDocument KisDoc::saveXML()
@@ -1047,6 +1055,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 		m_projection = m_images[0];
 
 	if (m_projection) {
+
 		if (!(colorstate = m_colorspaces[m_projection -> nativeImgType()]))
 			return;
 
@@ -1218,7 +1227,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 				img -> top(layer);
 
 				if (m_undo)
-					addCommand(new LayerAddCmd(this, this, img, layer)); 
+					addCommand(new LayerAddCmd(this, this, img, layer));
 				img -> invalidate();
 				setModified(true);
 				layer -> visible(true);
@@ -1247,7 +1256,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisSelectionSP 
 		setModified(true);
 
 		if (m_undo)
-			addCommand(new LayerAddCmd(this, this, img, layer)); 
+			addCommand(new LayerAddCmd(this, this, img, layer));
 
 		img -> invalidate(layer -> bounds());
 		layer -> move(selection -> x(), selection -> y());
@@ -1273,7 +1282,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, KisLayerSP l, Q_INT32 position)
 	img -> pos(l, position);
 
 	if (m_undo)
-		addCommand(new LayerAddCmd(this, this, img, l)); 
+		addCommand(new LayerAddCmd(this, this, img, l));
 	img -> invalidate(l -> bounds());
 	l -> visible(true);
 	emit layersUpdated(img);

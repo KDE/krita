@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
+ *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,20 +15,55 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_STRATEGY_COLORSPACE_RGB_H_
-#define KIS_STRATEGY_COLORSPACE_RGB_H_
+#if !defined KIS_STRATEGY_COLORSPACE_CMYK_H_
+#define KIS_STRATEGY_COLORSPACE_CMYK_H_
 
 #include <qcolor.h>
 #include <qpixmap.h>
+#include <qmap.h>
+
 #include <kpixmapio.h>
 #include <koColor.h>
+
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
 
-class KisStrategyColorSpaceRGB : public KisStrategyColorSpace {
+/**
+   This class implements the conversion of the Krita images that contain cmy + transparency
+   data to rbg for screen rendering.
+
+ */
+
+class CMYK {
+ public:
+    QUANTUM c;
+    QUANTUM m;
+    QUANTUM y;
+    QUANTUM k;
+
+    bool operator< (const CMYK &) const;
+};
+
+inline bool CMYK::operator<(const CMYK &other) const
+{ return c < other.c; }
+
+
+class RGB {
+ public:
+    QUANTUM r;
+    QUANTUM g;
+    QUANTUM b;
+};
+
+// Map cmyka to rgba
+//   Todo: pre-multiply the rgb with the alpha value. But then, the rest of
+//         Krita needs to know about that, too.
+typedef QMap<CMYK, RGB> ColorLUT;
+
+class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 public:
-	KisStrategyColorSpaceRGB();
-	virtual ~KisStrategyColorSpaceRGB();
+	KisStrategyColorSpaceCMYK();
+	virtual ~KisStrategyColorSpaceCMYK();
 
 public:
 	virtual void nativeColor(const KoColor& c, QUANTUM *dst);
@@ -40,9 +75,13 @@ public:
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
 
 private:
+
 	KPixmapIO m_pixio;
 	QPixmap m_pixmap;
+
 	QUANTUM *m_buf;
+
+        static ColorLUT m_rgbLUT;
 };
 
-#endif // KIS_STRATEGY_COLORSPACE_RGB_H_
+#endif // KIS_STRATEGY_COLORSPACE_CMYK_H_

@@ -32,12 +32,16 @@ public:
 	virtual ~KisStrategyColorSpace();
 
 public:
+        // The nativeColor methods take a given color and fill *dst with 
+        // the tuple that describes the colour for this particular strategy.
+        
 	virtual void nativeColor(const KoColor& c, QUANTUM *dst) = 0;
 	virtual void nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
 	virtual void nativeColor(const QColor& c, QUANTUM *dst) = 0;
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst) = 0;
+
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
 
 private:

@@ -668,6 +668,15 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 		return;
 	}
 
+        QString s;
+        kdDebug() << "CMKA: " << s.sprintf("%02x %02x %02x %02x %02x",
+                                           src[PIXEL_CYAN],
+                                           src[PIXEL_MAGENTA],
+                                           src[PIXEL_YELLOW],
+                                           src[PIXEL_BLACK],
+                                           src[PIXEL_CMYK_ALPHA]) << endl;
+
+
 	stride = m_device -> image() -> depth();
 
         ydiff = y1 - TILE_HEIGHT * (y1 / TILE_HEIGHT);

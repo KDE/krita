@@ -40,10 +40,10 @@ struct KisPixelData : public KShared {
     Q_INT32 y2;
     QUANTUM *data; // Pointer to the pixeldata -- just a plain sequence of 
                    // bytes
-    bool owner; // XXX
+    bool owner; // Whether the data will be managed by somebody else
     Q_INT32 width;
     Q_INT32 height; 
-    Q_INT32 stride; // The number of bytes, or QUANTUM's each pixel takes
+    Q_INT32 stride; // The number of bytes each scanline takes
     Q_INT32 depth; // Color depth, I guess. XXX
 };	
 

@@ -22,6 +22,7 @@
 #include "kis_paint_device.h"
 #include "kis_strategy_colorspace_cmyk.h"
 #include "kis_strategy_colorspace_rgb.h"
+#include "kis_strategy_colorspace_grayscale.h"
 
 namespace {
 	KisColorSpaceFactoryFlyweight moveMe; // XXX Where should we create singletons in Krita?!?
@@ -53,6 +54,10 @@ KisStrategyColorSpaceSP KisColorSpaceFactoryFlyweight::create(enumImgType imgTyp
 		return p;
 
 	switch (imgType) {
+	case IMAGE_TYPE_GREYA:
+	case IMAGE_TYPE_GREY:
+		p = new KisStrategyColorSpaceGrayscale;
+		break;
 	case IMAGE_TYPE_RGB:
 	case IMAGE_TYPE_RGBA:
 		p = new KisStrategyColorSpaceRGB;

@@ -74,6 +74,7 @@
 #include "builder/kis_builder_monitor.h"
 #include "builder/kis_image_magick_converter.h"
 #include "color_strategy/kis_strategy_colorspace.h"
+#include "color_strategy/kis_strategy_colorspace_grayscale.h"
 #include "color_strategy/kis_strategy_colorspace_rgb.h"
 #include "color_strategy/kis_strategy_colorspace_cmyk.h"
 #include "tiles/kistilemgr.h"
@@ -435,6 +436,11 @@ bool KisDoc::init()
 // XXX: wasn't this done in the colourspace strategy factory?
 void KisDoc::setupColorspaces()
 {
+	KisStrategyColorSpaceSP p1 = new KisStrategyColorSpaceGrayscale;
+
+	m_colorspaces[IMAGE_TYPE_GREY] = p1;
+	m_colorspaces[IMAGE_TYPE_GREYA] = p1;
+	
 	KisStrategyColorSpaceSP p = new KisStrategyColorSpaceRGB;
 
 	m_colorspaces[IMAGE_TYPE_RGB] = p;

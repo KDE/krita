@@ -1,3 +1,3 @@
 
-SUBDIRS = toolbar
+SUBDIRS = locolor
 

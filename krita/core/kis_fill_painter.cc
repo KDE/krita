@@ -257,7 +257,6 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
 }
 
 void KisFillPainter::floodLine(int x, int y) {
-#if 0 //XXX AUTOLAYERS MERGE
 	int mostRight, mostLeft = x;
 	
 	KisHLineIterator pixelIt = m_layer->createHLineIterator(x, m_width, y, false);
@@ -275,11 +274,10 @@ void KisFillPainter::floodLine(int x, int y) {
 	if (x > 0) {
 		mostLeft--;
 
-		KisIteratorLinePixel lineIt2 = m_layer->iteratorPixelBegin(0, 0, x-1, y);
-		KisIteratorPixel lastPixel = lineIt2.begin();
-		KisIteratorPixel pixelIt = lineIt2.end();
+		KisHLineIterator pixelIt = m_layer->createHLineIterator(x - 1, m_width - 1, y, false);
+		int lastPixel = 0;
 
-		mostLeft = floodSegment(x, y, mostLeft, pixelIt, lastPixel, Left);
+		mostLeft = floodSegment(x,y, mostLeft, pixelIt, lastPixel, Left);
 
 		if (pixelIt.x() < lastPixel)
 			mostLeft++;
@@ -302,12 +300,9 @@ void KisFillPainter::floodLine(int x, int y) {
 		if (y < m_height - 1 && !m_map[(y+1)*m_width + i])
 			floodLine(i, y+1);
 	}
-#endif
 }
 
 int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIterator& it, int lastPixel, Direction d) {
-// XXX: Broken by AUTOLAYERS merge
-#if 0
 	bool stop = false;
 	QUANTUM diff;
 	KisHLineIterator selection = m_selection -> createHLineIterator(x, m_width - x, y, true);
@@ -326,7 +321,6 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIterator& it, i
 			// m_selection -> setSelected(x, y, diff);
 			colorStrategy -> nativeColor(selectionColor, diff, (QUANTUM*) selection);
 			if (d == Right) {
-				++it;
 				it++; selection++;
 				x++; most++;
 			} else {
@@ -339,8 +333,6 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIterator& it, i
 	}
 	
 	return most;
-#endif
-	return 0;
 }
 
 /* RGB-only I fear */

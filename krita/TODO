@@ -27,7 +27,8 @@ Core
         X loading Gimp gradients
 	* Colorspace-aware difference between pixel function
 	* Anti-aliased filling (requires some simple colorspace
-	  function to merge 2 Pixels)
+	  function to merge 2 Pixels) -> also, make fill use
+	  the new cancelable progress meter the gradient tool uses.
 	* Load/save configuration of everything user-settable.
 	* Add filtering with image kernels (3 * 3 blocks of pixels)
 	* Scaling of images (#Boudewijn, Bart, Michael)
@@ -69,7 +70,7 @@ User Interface
           image menu item.
 	* Allow guides to be disabled. Allow diagonal guides (useful
 	  for perspective drawings)
-        * Create templates for often-used image formats.
+        * Create templates for often-used image formats. Add save-as-template
         * Check OASIS file saving.
 Tools
 

@@ -22,15 +22,6 @@ lists the design problems, and as such, is different from the TODO.
   * Check several methods in e.g. KisPaintDevice that suppose 8-bit
     RGBA, and extend them where necessary.    
 
-* Rendering. It isn't possible, yet, to effectively render layers of
-  different image types, or rather, colour strategies. But that would
-  be a nice thing to have, for instance to combine layers with single 
-  colours as spot colour masks, or to combine different types of
-  natural media layers. All that is needed is to render the layers to 
-  a common format -- common sense suggests 8-bit RGBA, and compose
-  the results before rendering to a pixmap. The latter step could then
-  be offloaded to, say, OpenGL, where possible.
-
 * Coupling of UI and core. Try to trace the tortuous path from
   settings in the brush icon view to the final settings in KisBrush.
   There is way too much coupling, and, worse, manual synching between

@@ -91,8 +91,8 @@ public:
         virtual void move(Q_INT32 x, Q_INT32 y);
         virtual void move(const QPoint& pt);
 
-        virtual void update();
-        virtual void update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+//         virtual void update();
+//         virtual void update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 	virtual const bool visible() const;
         virtual void setVisible(bool v);
@@ -289,7 +289,6 @@ private:
         Q_INT32 m_offW;
         Q_INT32 m_offH;
         Q_INT32 m_quantumSize;
-        QPixmap m_projection;
         QString m_name;
 	// Operation used to composite this layer with the layers _under_ this layer
 	CompositeOp m_compositeOp;

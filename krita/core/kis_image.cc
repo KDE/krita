@@ -358,6 +358,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 		  << ", " 
 		  << h 
 		  << ")\n";
+
 	if (w != width() || h != height()) {
 		if (m_adapter && m_adapter -> undo()) {
 			m_adapter -> beginMacro("Resize image");
@@ -366,10 +367,10 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 
 		m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
 		m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
-	// 	m_bkg = new KisBackground(this, w, h);
+
 		m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
-		m_bkg -> resize(w, h);
-	// 	m_projection -> resize(w, h);
+ 		m_bkg -> resize(w, h);
+
 		if (m_adapter && m_adapter -> undo()) {
 			m_adapter -> endMacro();
 		}
@@ -383,6 +384,13 @@ void KisImage::resize(const QRect& rc)
 
 void KisImage::scale(double sx, double sy) 
 {
+	kdDebug() << "KisImage::scale. SX: " 
+		  << sx
+		  << ", SY:" 
+		  << sy 
+		  << "\n";
+
+
 	if (m_layers.empty()) return; // Nothing to scale
 
 	undoAdapter()->beginMacro("Scale image");
@@ -391,14 +399,27 @@ void KisImage::scale(double sx, double sy)
 	w = (Q_INT32)(( width() * sx) + 0.5);
 	h = (Q_INT32)(( height() * sy) + 0.5); 
 	
+	kdDebug() << "Scaling from (" << m_projection -> width() 
+		  << ", " << m_projection -> height() 
+		  << "to: (" << w << ", " << h << ")\n";
+
 	vKisLayerSP_it it;
 	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
 		KisLayerSP layer = (*it);
 		layer -> scale(sx, sy);
 	}
 
-	// Scale projection.
-	m_projection -> scale(sx, sy);
+
+	if (w != width() || h != height()) {
+		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
+		
+		m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
+		m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
+
+		m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
+ 		m_bkg -> resize(w, h);
+	}
+
 	undoAdapter()->endMacro();
 
 }
@@ -452,12 +473,12 @@ void KisImage::setResolution(double xres, double yres)
 
 Q_INT32 KisImage::width() const
 {
-	return m_projection->width();
+	return m_projection -> width();
 }
 
 Q_INT32 KisImage::height() const
 {
-	return m_projection->height();
+	return m_projection -> height();
 }
 
 Q_UINT32 KisImage::depth() const
@@ -629,7 +650,7 @@ bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 
 	m_layers.insert(m_layers.begin() + position, layer);
 	activate(layer);
-	layer -> update();
+// 	layer -> update();
 
 	if (alpha)
 		emit alphaChanged(KisImageSP(this));
@@ -991,8 +1012,8 @@ bool KisImage::add(KisChannelSP channel, Q_INT32 position)
 	m_channels.insert(m_channels.begin() + position, channel);
 	activate(channel);
 
-	if (channel -> visible())
-		channel -> update();
+// 	if (channel -> visible())
+// 		channel -> update();
 
 	expand(channel.data());
 	return true;
@@ -1072,7 +1093,7 @@ bool KisImage::pos(KisChannelSP channel, Q_INT32 position)
 		return true;
 
 	qSwap(m_channels[old], m_channels[position]);
-	channel -> update();
+// 	channel -> update();
 	return true;
 }
 

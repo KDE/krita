@@ -181,26 +181,26 @@ void KisPaintDevice::configure(KisImage *image,
 	m_colorStrategy = colorStrategy;
 }
 
-void KisPaintDevice::update()
-{
-        update(0, 0, width(), height());
-}
+// void KisPaintDevice::update()
+// {
+//         update(0, 0, width(), height());
+// }
 
-void KisPaintDevice::update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
-{
-        if (x < m_offX)
-                x = m_offX;
+// void KisPaintDevice::update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+// {
+//         if (x < m_offX)
+//                 x = m_offX;
 
-        if (y < m_offY)
-                y = m_offY;
+//         if (y < m_offY)
+//                 y = m_offY;
 
-        if (w > m_offW)
-                w = m_offW;
+//         if (w > m_offW)
+//                 w = m_offW;
 
-        if (h > m_offH)
-                h = m_offH;
+//         if (h > m_offH)
+//                 h = m_offH;
 
-}
+// }
 
 void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
 {
@@ -402,6 +402,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 
         KisTileMgrSP tm = new KisTileMgr(colorStrategy() -> depth(), targetW, targetH);
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * depth());
+
         setTiles(tm); // Also sets width and height correctly
 
         delete[] origPixel;
@@ -773,4 +774,3 @@ KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionEnd(KisTileCommand* c
 
 
 #include "kis_paint_device.moc"
-

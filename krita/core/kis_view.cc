@@ -1510,6 +1510,7 @@ void KisView::scaleLayer(double sx, double sy)
 	layersUpdated();
 	resizeEvent(0);
 	updateCanvas();
+	canvasRefresh();
 }
 
 void KisView::add_new_image_tab()
@@ -2582,7 +2583,8 @@ void KisView::scaleCurrentImage(double sx, double sy)
 	m_doc -> setModified(true);
 
 	resizeEvent(0);
-	layersUpdated();
+ 	layersUpdated();
+	updateCanvas();
 	canvasRefresh();
 }
 

@@ -1,10 +1,10 @@
-Koffice is based on KDE (www.kde.org) which is needed to run Koffice.
+KOffice is based on KDE (www.kde.org) which is needed to run KOffice.
 You need kdelibs and kdebase installed if you want to compile and 
 run koffice. Look in the kdelibs sourcedir for the file COMPILING
 for help. Also look at the website as there are many helpfiles 
 available.
 
-Koffice is a collection of office applications linked together by a
+KOffice is a collection of office applications linked together by a
 common basis. This common basis assures that all office application
 can work together. You can, for instance, insert a spreadsheet in 
 your thesis without leaving your document. Editing the spreadsheet

@@ -85,6 +85,24 @@ void KisToolSelectBrush::initPaint(KisEvent */*e*/)
 #endif
 }
 
+void KisToolSelectBrush::endPaint() 
+{
+	m_mode = HOVER;
+	KisSelectionSP selection;
+	if (m_currentImage && (selection = m_currentImage -> activeLayer() -> selection())) {
+		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+		if (adapter && m_painter) {
+			// If painting in mouse release, make sure painter
+			// is destructed or end()ed
+			adapter -> addCommand(m_painter->endTransaction());
+		}
+		delete m_painter;
+		m_painter = 0;
+		notifyModified();
+	}
+}
+
+
 void KisToolSelectBrush::setup(KActionCollection *collection)
 {
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));

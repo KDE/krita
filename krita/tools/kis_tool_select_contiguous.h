@@ -26,6 +26,10 @@
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 
+/**
+ * The 'magic wand' selection tool -- in fact just 
+ * a floodfill that only creates a selection.
+ */
 class KisToolSelectContiguous : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;

@@ -108,8 +108,12 @@ void KisToolFill::buttonPress(KisButtonPressEvent *e)
 	if (!m_subject) return;
 	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 	if (e->button() != QMouseEvent::LeftButton) return;
-	
-	flood(e -> pos().floorX(), e -> pos().floorY());
+	int x, y;
+	x = e -> pos().floorX();
+	y= e -> pos().floorY();
+	if (x >= m_currentImage -> activeDevice() -> width() || x < 0) return;
+	if (y >= m_currentImage -> activeDevice() -> height() || y < 0) return;
+	flood(x, y);
 	notifyModified();
 }
 

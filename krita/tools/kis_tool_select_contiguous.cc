@@ -42,7 +42,8 @@ KisToolSelectContiguous::KisToolSelectContiguous() : super()
 	m_init  = true;
 	m_dragStart = QPoint(-1,-1);
 	m_dragEnd = QPoint(-1,-1);
-	setCursor(KisCursor::brushCursor());
+	//XXX : make wizard cursor from tool icon.
+	setCursor(KisCursor::arrowCursor());
 }
 
 KisToolSelectContiguous::~KisToolSelectContiguous()
@@ -177,7 +178,7 @@ void KisToolSelectContiguous::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("Tool &Contiguous Select"), 
-					    "contiguous" , 
+					    "wizard" , 
 					    0, 
 					    this, 
 					    SLOT(activate()), 

@@ -29,6 +29,8 @@
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 
+// This is KisToolSelectBrush, but filled when the mouse 
+// button is released.
 class KisToolSelectFreehand : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;

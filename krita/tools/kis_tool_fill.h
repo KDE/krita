@@ -63,7 +63,6 @@ public slots:
 
 private:
 	int m_threshold;
-	KisTileCommand* m_ktc;
 	Q_INT32 m_depth;
 	KisLayerSP m_lay;
 	QUANTUM* m_oldColor, *m_color;

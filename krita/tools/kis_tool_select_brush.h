@@ -45,6 +45,7 @@ public:
 protected:
 
 	virtual void initPaint(KisEvent *e);
+	virtual void endPaint();
 };
 #endif // KIS_TOOL_SELECT_BRUSH_H_
 

@@ -145,8 +145,7 @@ void KisToolFreeHand::initPaint(KisEvent *)
 void KisToolFreeHand::endPaint() 
 {
 	m_mode = HOVER;
-	KisPaintDeviceSP device;
-	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
+	if (m_currentImage) { 
 		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
 		if (adapter && m_painter) {
 			// If painting in mouse release, make sure painter

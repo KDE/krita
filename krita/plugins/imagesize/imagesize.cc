@@ -73,6 +73,7 @@ ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
 
 ImageSize::~ImageSize()
 {
+	m_view = 0;
 }
 
 void ImageSize::slotActivated()
@@ -96,8 +97,8 @@ void ImageSize::slotActivated()
 	dlgImageSize -> setYRes(y);
 		
 	if (dlgImageSize -> exec() == QDialog::Accepted) {
-		int w = dlgImageSize -> width();
-		int h = dlgImageSize -> height();
+		Q_INT32 w = dlgImageSize -> width();
+		Q_INT32 h = dlgImageSize -> height();
 		
 		if (dlgImageSize -> scale()) {
 		}
@@ -109,7 +110,7 @@ void ImageSize::slotActivated()
 	delete dlgImageSize;
 }
 
-void ImageSize::imageResize(Q_UINT32 w, Q_UINT32 h)
+void ImageSize::imageResize(Q_INT32 w, Q_INT32 h)
 {
 	if (m_view) {
 		KisImageSP image = m_view -> currentImg();

@@ -61,8 +61,8 @@ DlgImageSize::DlgImageSize( QWidget *  parent,
 		this, SLOT(okClicked()));
 
 
-	connect(m_page -> chkConstrain, SIGNAL(toggled()),
-		this, SLOT(slotConstrainToggled));
+	connect(m_page -> chkConstrain, SIGNAL(toggled(bool)),
+		this, SLOT(slotConstrainToggled(bool)));
 
 
 	// Still unimplemented
@@ -98,9 +98,9 @@ void DlgImageSize::setMaximumWidth(Q_UINT32 w)
 	m_maxW = w;
 }
 
-Q_UINT32 DlgImageSize::width()
+Q_INT32 DlgImageSize::width()
 {
-	return (Q_UINT32)round(m_oldW);
+	return (Q_INT32)round(m_oldW);
 }
 
 void DlgImageSize::setHeight(Q_UINT32 h)
@@ -122,9 +122,9 @@ void DlgImageSize::setMaximumHeight(Q_UINT32 h)
 }
 
 
-Q_UINT32 DlgImageSize::height()
+Q_INT32 DlgImageSize::height()
 {
-	return (Q_UINT32)round(m_oldH);
+	return (Q_INT32)round(m_oldH);
 }
 
 void DlgImageSize::setXRes(double x)
@@ -262,7 +262,7 @@ void DlgImageSize::slotScaleTypeHChanged(int i)
 	connectAll();
 }
 
-void DlgImageSize::slotConstrainToggled() 
+void DlgImageSize::slotConstrainToggled(bool b) 
 {
 	m_origW = m_oldW;
 	m_origH = m_oldH;

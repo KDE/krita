@@ -44,11 +44,11 @@ public:
 
 	void setWidth(Q_UINT32 w);
 	void setMaximumWidth(Q_UINT32 w);
-	Q_UINT32 width();
+	Q_INT32 width();
 	
 	void setHeight(Q_UINT32 h);
 	void setMaximumHeight(Q_UINT32 h);
-	Q_UINT32 height();
+	Q_INT32 height();
 	
 	void setXRes(double x);
 	void setYRes(double y);
@@ -63,7 +63,7 @@ private slots:
 	void slotHeightChanged(int h);
 	void slotScaleTypeWChanged(int i);
 	void slotScaleTypeHChanged(int i);
-	void slotConstrainToggled();
+	void slotConstrainToggled(bool b);
 private:
 
 	void disconnectAll();

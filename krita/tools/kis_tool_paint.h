@@ -31,6 +31,12 @@ class QRect;
 class KDialog;
 class KisCanvasSubject;
 
+
+enum enumBrushMode {
+	PAINT,
+	HOVER
+};
+
 class KisToolPaint : public KisTool {
 	Q_OBJECT
 	typedef KisTool super;

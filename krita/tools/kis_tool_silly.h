@@ -16,8 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_TOOL_BRUSH_H_
-#define KIS_TOOL_BRUSH_H_
+#if !defined KIS_TOOL_SILLY_H_
+#define KIS_TOOL_SILLY_H_
 
 #include <qpoint.h>
 
@@ -27,12 +27,12 @@
 #include "kis_tool.h"
 #include "kis_tool_paint.h"
 
-class KisToolBrush : public KisToolPaint {
+class KisToolSilly : public KisToolPaint {
 	typedef KisToolPaint super;
 
 public:
-	KisToolBrush();
-	virtual ~KisToolBrush();
+	KisToolSilly();
+	virtual ~KisToolSilly();
 
         virtual void setup(KActionCollection *collection);
 	virtual void mousePress(QMouseEvent *e);
@@ -52,7 +52,6 @@ private:
 
 	enumBrushMode m_mode;
 	KisPainter *m_painter;
-
 	KisLayerSP m_dab;
 
 	QPoint m_hotSpot;
@@ -70,5 +69,5 @@ private:
 	bool m_usePattern;
 	bool m_useGradient;
 };
-#endif // KIS_TOOL_BRUSH_H_
+#endif // KIS_TOOL_SILLY_H_
 

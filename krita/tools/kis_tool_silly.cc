@@ -30,14 +30,14 @@
 #include "kis_selection.h"
 #include "kis_doc.h"
 #include "kis_view.h"
-#include "kis_tool_brush.h"
+#include "kis_tool_silly.h"
 #include "kis_tool_paint.h"
 #include "kis_layer.h"
 #include "kis_alpha_mask.h"
 #include "kis_cursor.h"
 
 
-KisToolBrush::KisToolBrush()
+KisToolSilly::KisToolSilly()
         : super(),
           m_mode( HOVER ),
 	  m_hotSpotX ( 0 ),
@@ -55,11 +55,11 @@ KisToolBrush::KisToolBrush()
 	m_dab = 0;
 }
 
-KisToolBrush::~KisToolBrush()
+KisToolSilly::~KisToolSilly()
 {
 }
 
-void KisToolBrush::mousePress(QMouseEvent *e)
+void KisToolSilly::mousePress(QMouseEvent *e)
 {
         if (!m_subject) return;
 
@@ -75,7 +75,7 @@ void KisToolBrush::mousePress(QMouseEvent *e)
 }
 
 
-void KisToolBrush::mouseRelease(QMouseEvent* e)
+void KisToolSilly::mouseRelease(QMouseEvent* e)
 {
 	if (e->button() == QMouseEvent::LeftButton && m_mode == PAINT) {
 		endPaint();
@@ -83,71 +83,15 @@ void KisToolBrush::mouseRelease(QMouseEvent* e)
 }
 
 
-void KisToolBrush::mouseMove(QMouseEvent *e)
+void KisToolSilly::mouseMove(QMouseEvent *e)
 {
          if (m_mode == PAINT) {
-		 QPoint pos = e -> pos();
-		 KisVector end(pos.x(), pos.y());
-		 KisVector start(m_dragStart.x(), m_dragStart.y());
-		 KisVector dragVec = end - start;
-		 float savedDist = m_dragDist;
-		 float newDist = dragVec.length();
-		 float dist = savedDist + newDist;
-
-		 if (static_cast<int>(dist) < m_spacing) {
-			 m_dragDist += newDist;
-			 m_dragStart = pos;
-			 return;
-		 }
-		 
-		 m_dragDist = 0;
-#if 0
-		 dragVec.normalize(); // XX: enabling this gives a link error, so copied the relevant code below.
-#endif
-		 double length, ilength;
-		 double x, y, z;
-		 x = dragVec.x();
-		 y = dragVec.y();
-		 z = dragVec.z();
-		 length = x * x + y * y + z * z;
-		 length = sqrt (length);
-  
-		 if (length)
-		 {
-			 ilength = 1/length;
-			 x *= ilength;
-			 y *= ilength;
-			 z *= ilength;
-		 }
-
-		 dragVec.setX(x);
-		 dragVec.setY(y);
-		 dragVec.setZ(z);
-
-		 KisVector step = start;
-
-		 while (dist >= m_spacing) {
-			 if (savedDist > 0) {
-				 step += dragVec * (m_spacing - savedDist);
-				 savedDist -= m_spacing;
-			 }
-			 else {
-				 step += dragVec * m_spacing;
-			 }
-			 QPoint p(qRound(step.x()), qRound(step.y()));
-			 paint(p, 128, 0, 0);
-			 dist -= m_spacing;
-		 }
-		 
-		 if (dist > 0) 
-			 m_dragDist = dist;
-
-		 m_dragStart = pos;
+		 paint (e->pos(), 128, 0, 0);
          }
 }
 
 
-void KisToolBrush::tabletEvent(QTabletEvent *e)
+void KisToolSilly::tabletEvent(QTabletEvent *e)
 {
          if (e->device() == QTabletEvent::Stylus) {
                  paint(e->pos(), e->pressure(), e->xTilt(), e->yTilt());
@@ -155,7 +99,7 @@ void KisToolBrush::tabletEvent(QTabletEvent *e)
 }
 
 
-void KisToolBrush::initPaint() 
+void KisToolSilly::initPaint() 
 {
 	// Create painter
 	m_mode = PAINT;
@@ -208,7 +152,7 @@ void KisToolBrush::initPaint()
         }
 }
 
-void KisToolBrush::endPaint() 
+void KisToolSilly::endPaint() 
 {
 	m_mode = HOVER;
 	KisImageSP currentImage = m_subject -> currentImg();
@@ -228,7 +172,7 @@ void KisToolBrush::endPaint()
 }
 
 
-void KisToolBrush::paint(const QPoint & pos,
+void KisToolSilly::paint(const QPoint & pos,
                          const Q_INT32 /*pressure*/,
                          const Q_INT32 /*xTilt*/,
                          const Q_INT32 /*yTilt*/)
@@ -246,7 +190,8 @@ void KisToolBrush::paint(const QPoint & pos,
         // Blit the temporary KisPaintDevice onto the current layer
         KisPaintDeviceSP device = currentImage -> activeDevice();
         if (device) {
-                m_painter->bitBlt( x,  y,  COMPOSITE_NORMAL, m_dab.data() );
+		// OVER instead of NORMAL
+                m_painter->bitBlt( x,  y,  COMPOSITE_OVER, m_dab.data() );
         }
         currentImage->invalidate( x,  y,
                                   m_dab -> width(),
@@ -258,12 +203,13 @@ void KisToolBrush::paint(const QPoint & pos,
 }
 
 
-void KisToolBrush::setup(KActionCollection *collection)
+void KisToolSilly::setup(KActionCollection *collection)
 {
         KToggleAction *toggle;
-        toggle = new KToggleAction(i18n("&Brush"), "Brush", 0, this,
+        toggle = new KToggleAction(i18n("&Silly Brush"), "Silly Brush", 
+				   0, this,
                                    SLOT(activate()), collection,
-                                   "tool_brush");
+                                   "tool_silly");
         toggle -> setExclusiveGroup("tools");
 }
 

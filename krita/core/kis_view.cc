@@ -1708,6 +1708,24 @@ void KisView::shearLayer(double angleX, double angleY)
 	canvasRefresh();
 }
 
+void KisView::rainDropsFilter(Q_UINT32 dropSize, Q_UINT32 number, Q_UINT32 fishEyes)
+{
+        if (!currentImg()) return;
+
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
+
+	layer -> rainDropsFilter(dropSize, number, fishEyes, m_progress);
+
+	m_doc -> setModified(true);
+	layersUpdated();
+	resizeEvent(0);
+	updateCanvas();
+	canvasRefresh();
+}
+
+
+
 void KisView::add_new_image_tab()
 {
         m_doc -> slotNewImage();

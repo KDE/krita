@@ -194,7 +194,8 @@ public slots:
 	void scaleLayer(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
         void rotateLayer(double angle);
         void shearLayer(double angleX, double angleY);
-
+        void rainDropsFilter(Q_UINT32 dropSize, Q_UINT32 number, Q_UINT32 fishEyes);
+        
 	// settings action slots
 	void preferences();
 

@@ -44,6 +44,7 @@ class KisTileCommand;
 class KisIteratorLineQuantum;
 class KisIteratorLinePixel;
 class KisRotateVisitor;
+class KisRainDropsFilterVisitor;
 
 /**
  * Class modelled on QPaintDevice.
@@ -197,6 +198,7 @@ public:
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
+        void rainDropsFilter(Q_UINT32 dropSize, Q_UINT32 number, Q_UINT32 fishEyes, KisProgressDisplayInterface *m_progress);
         
 	/**
 	   Apply the transformation matrix _in place_.
@@ -332,7 +334,8 @@ private:
 
 	void accept(KisScaleVisitor &);
 	void accept(KisRotateVisitor &);
-
+        void accept(KisRainDropsFilterVisitor &);
+        
 	// Whether there is a selection valid for this layer
 	bool m_hasSelection;
 	// Contains the actual selection. For now, there can be only

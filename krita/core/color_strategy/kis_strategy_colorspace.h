@@ -54,6 +54,9 @@ public:
 	virtual void nativeColor(QRgb rgb, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst) = 0;
 
+	virtual void toKoColor(const QUANTUM *src, KoColor *c) = 0;
+	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity) = 0;
+
 	// XXX: make this a proper vector. Pointers to arrays are _so_ seventies, and
 	// Stroustrup assures us a vector is as effecient a mem array anyway.
 	virtual ChannelInfo * channelsInfo() const = 0;

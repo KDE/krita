@@ -98,6 +98,17 @@ void KisStrategyColorSpaceRGB::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *d
 	dst[PIXEL_ALPHA] = opacity;
 }
 
+void KisStrategyColorSpaceRGB::toKoColor(const QUANTUM *src, KoColor *c)
+{
+	c -> setRGB(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
+}
+
+void KisStrategyColorSpaceRGB::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity)
+{
+	c -> setRGB(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
+	*opacity = src[PIXEL_ALPHA];
+}
+
 ChannelInfo* KisStrategyColorSpaceRGB::channelsInfo() const
 {
 	return channelInfo;

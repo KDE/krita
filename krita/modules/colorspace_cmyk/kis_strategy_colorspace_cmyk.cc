@@ -115,6 +115,17 @@ void KisStrategyColorSpaceCMYK::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *
 	dst[PIXEL_CMYK_ALPHA] = opacity;
 }
 
+void KisStrategyColorSpaceCMYK::toKoColor(const QUANTUM *src, KoColor *c)
+{
+	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
+}
+
+void KisStrategyColorSpaceCMYK::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity)
+{
+	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
+	*opacity = src[PIXEL_CMYK_ALPHA];
+}
+
 ChannelInfo* KisStrategyColorSpaceCMYK::channelsInfo() const
 {
 	return channelInfo;

@@ -271,27 +271,19 @@ void KisPaintDevice::init()
 
 bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity) const
 {
-        // XXX: this should use the colour strategies!
-	// A hack for the moment
-	if (colorStrategy() -> depth() == 4) {
-		KisTileMgrSP tm = data();
-		KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
-		QUANTUM *data;
+	KisTileMgrSP tm = data();
+	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
+	QUANTUM *data;
 
-		if (!pd)
-			return false;
-
-		data = pd -> data;
-		Q_ASSERT(data);
-
-		*opacity = data[PIXEL_ALPHA];
-		c -> setRGB(downscale(data[PIXEL_RED]), downscale(data[PIXEL_GREEN]), downscale(data[PIXEL_BLUE]));
-
-		return true;
-	}
-	else {
+	if (!pd)
 		return false;
-	}
+
+	data = pd -> data;
+	Q_ASSERT(data);
+
+	colorStrategy() -> toKoColor(data, c, opacity);
+
+	return true;
 }
 
 bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)

@@ -85,6 +85,9 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 	virtual void nativeColor(QRgb rgb, QUANTUM *dst);
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst);
 
+	virtual void toKoColor(const QUANTUM *src, KoColor *c);
+	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity);
+
 	virtual ChannelInfo* channelsInfo() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;

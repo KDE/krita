@@ -17,12 +17,15 @@ krita_la_LIBADD = ../lib/kofficecore/libkofficecore.la $(LIB_KOPAINTER)
 
 ## The executable
 bin_PROGRAMS = krita
-krita_SOURCES = dummy.cc
+krita_SOURCES = dummmmy.cc
 krita_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 krita_LDADD = krita.la
 
 dummy.cc:
 	echo > dummy.cc
+
+dummmmy.cc:
+	echo > dummmmy.cc
 
 kdelnk_DATA = krita.desktop
 kdelnkdir = $(kde_appsdir)/Office

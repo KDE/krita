@@ -161,7 +161,7 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 				img = m_view -> currentImg();
 				Q_ASSERT(img);
 				parent = img -> activeDevice();
-				selection = new KisSelection(parent, img, "rectangular selection tool box", OPACITY_OPAQUE);
+				selection = new KisSelection(parent, img, "rectangular selection tool frame", OPACITY_OPAQUE);
 				selection -> setBounds(rc);
 				img -> setSelection(selection);
 				m_doc -> addCommand(new RectSelectCmd(selection));

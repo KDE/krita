@@ -151,9 +151,6 @@ KisTileSP KisTileMgr::tile(Q_INT32 tilenum, Q_INT32 mode)
 	if (!tile)
 		return tile;
 
-	if (mode & TILEMODE_READ) {
-	}
-
 	if (mode & TILEMODE_WRITE) {
 		if (tile -> shareCount() > 0) {
 			KisTileSP tileNew = new KisTile(*tile);
@@ -571,10 +568,6 @@ void KisTileMgr::duplicate(Q_INT32 ntiles, KisTileMgr *tm)
 
 		for (j = 0; j < ncols; j++, k++) {
 			t = tm -> tile(j * TILE_WIDTH, i * TILE_HEIGHT, TILEMODE_READ);
-
-			if (!t)
-				continue;
-			
 			w = j == ncols - 1 ? rightTile : TILE_WIDTH;
 
 			if (t) {

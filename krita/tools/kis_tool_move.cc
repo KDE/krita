@@ -53,7 +53,6 @@ namespace {
 		KisImageSP m_img;
 	};
 
-
 	MoveCommand::MoveCommand(KisView *view, KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
 		super(i18n("Move Painting Device"))
 	{
@@ -243,6 +242,8 @@ void KisToolMove::endDrag(const QPoint& pos, bool undo)
 
 			m_doc -> addCommand(cmd);
 		}
+
+		dev -> anchor();
 	}
 }
 

@@ -751,6 +751,7 @@ void KisView::copy()
 		KisSelectionSP selection = img -> selection();
 
 		if (selection) {
+			selection -> clearParentOnMove(false);
 			m_doc -> setClipboardSelection(selection);
 			imgSelectionChanged(currentImg());
 		}

@@ -30,6 +30,7 @@ class QString;
 class DCOPObject;
 class KCommand;
 class KCommandHistory;
+class KMacroCommand;
 class KisView;
 class KisNameServer;
 
@@ -68,6 +69,8 @@ public:
 	void layerPrev(KisImageSP img, KisLayerSP layer);
 	void layerProperties(KisImageSP img, KisLayerSP layer, QUANTUM opacity, const QString& name);
 
+	void beginMacro(const QString& macroName);
+	void endMacro();
 	void addCommand(KCommand *cmd);
 	Q_INT32 undoLimit() const;
 	void setUndoLimit(Q_INT32 limit);
@@ -145,6 +148,7 @@ private:
 	bool m_pushedClipboard;
 	DCOPObject *m_dcop;
 	KisNameServer *m_nserver;
+	KMacroCommand *m_currentMacro;
 };
 
 #endif // KIS_DOC_H_

@@ -3,6 +3,7 @@ INCLUDES  = -I$(srcdir)/builder -I$(srcdir)/visitors/ -I$(srcdir)/helper/ -I$(sr
 
 noinst_LTLIBRARIES = libkiscore.la
 
+libkiscore_la_LIBADD = tiles/libkistile.la helper/libkishelper.la builder/libkiscorebuilder.la
 libkiscore_la_SOURCES = kis_paint_device.cc kis_layer.cc kis_channel.cc kis_mask.cc kis_image.cc kis_doc.cc\
 	kis_view.cc kis_factory.cc kis_pluginserver.cc kis_resourceserver.cc \
 	kis_brush.cc kis_krayon.cc kis_pattern.cc kis_util.cc kis_nameserver.cc \

@@ -81,6 +81,44 @@ namespace {
 		QSize m_before; 
 		QSize m_after;
 	};
+
+	class KisSelectionSet : public KNamedCommand {
+		typedef KNamedCommand super;
+	
+	public:
+		KisSelectionSet(KisDoc *doc, KisImageSP img, KisSelectionSP selection) : super(i18n("Set Selection"))
+		{
+			m_doc = doc;
+			m_img = img;
+			m_selection = selection;
+		}
+
+		virtual ~KisSelectionSet()
+		{
+		}
+
+	public:
+		virtual void execute()
+		{
+			m_doc -> setUndo(false);
+			m_img -> unsetSelection(false);
+			m_doc -> setUndo(true);
+			m_img -> notify();
+		}
+
+		virtual void unexecute()
+		{
+			m_doc -> setUndo(false);
+			m_img -> setSelection(m_selection);
+			m_doc -> setUndo(true);
+			m_img -> notify();
+		}
+
+	private:
+		KisDoc *m_doc;
+		KisImageSP m_img;
+		KisSelectionSP m_selection;
+	};
 }
 
 KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name)
@@ -1062,8 +1100,17 @@ void KisImage::unsetSelection(bool commit)
 	if (m_selection) {
 		QRect rc = m_selection -> bounds();
 
-		if (commit)
+		if (commit) {
+			if (m_doc -> undo()) {
+				m_doc -> beginMacro(i18n("Anchor Selection"));
+				m_doc -> addCommand(new KisSelectionSet(m_doc, this, m_selection));
+			}
+
 			m_selection -> commit();
+
+			if (m_doc -> undo())
+				m_doc -> endMacro();
+		}
 
 		m_selection = 0;
 		invalidate(rc);

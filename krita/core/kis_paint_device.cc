@@ -26,6 +26,7 @@
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kispixeldata.h"
+#include "kis_painter.h"
 #include "kis_doc.h"
 
 namespace {
@@ -594,6 +595,83 @@ void KisPaintDevice::width(Q_INT32 w)
 void KisPaintDevice::height(Q_INT32 h)
 {
 	m_height = h;
+}
+
+void KisPaintDevice::resize(Q_INT32 w, Q_INT32 h)
+{
+	KisTileMgrSP old = data();
+	KisTileMgrSP tm = new KisTileMgr(old, old -> depth(), w, h);
+	Q_INT32 oldW = width();
+	Q_INT32 oldH = height();
+	KisPainter gc;
+
+	data(tm);
+	width(w);
+	height(h);
+	gc.begin(this);
+
+	if (oldW < w)
+		gc.eraseRect(oldW, 0, w, h);
+
+	if (oldH < h)
+		gc.eraseRect(0, oldH, w, h);
+
+	gc.end();
+}
+
+void KisPaintDevice::resize(const QSize& size)
+{
+	resize(size.width(), size.height());
+}
+
+void KisPaintDevice::resize()
+{
+	KisImageSP img = image();
+
+	if (img)
+		resize(img -> bounds().size());
+}
+
+void KisPaintDevice::expand(Q_INT32 w, Q_INT32 h)
+{
+	w = QMAX(w, width());
+	h = QMAX(h, height());
+	resize(w, h);
+}
+
+void KisPaintDevice::expand(const QSize& size)
+{
+	expand(size.width(), size.height());
+}
+	
+void KisPaintDevice::anchor()
+{
+}
+
+void KisPaintDevice::offsetBy(Q_INT32 x, Q_INT32 y)
+{
+	if (x < 0)
+		x = 0;
+
+	if (y < 0)
+		y = 0;
+
+	KisTileMgrSP old = data();
+	KisTileMgrSP tm = new KisTileMgr(old -> depth(), x + old -> width(), y + old -> height());
+	KisPixelDataSP dst;
+	KisPixelDataSP src;
+
+	data(tm);
+	width(tm -> width());
+	height(tm -> height());
+	src = old -> pixelData(0, 0, old -> width() - 1, old -> height() - 1, TILEMODE_READ);
+	Q_ASSERT(src);
+	dst = tm -> pixelData(x, y, x + old -> width() - 1, y + old -> height() - 1, TILEMODE_WRITE);
+	Q_ASSERT(dst);
+	memcpy(dst -> data, src -> data, sizeof(QUANTUM) * src -> width * src -> height * src -> depth);
+	tm -> releasePixelData(dst);
+	m_x -= x;
+	m_y -= y;
 }
 
 #include "kis_paint_device.moc"

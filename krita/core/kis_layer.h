@@ -20,9 +20,6 @@
 
 #include "kis_paint_device.h"
 
-class QSize;
-class QRect;
-
 class KisLayer : public KisPaintDevice {
 	typedef KisPaintDevice super;
 
@@ -44,10 +41,6 @@ public:
 
 	void translate(Q_INT32 x, Q_INT32 y);
 	void addAlpha();
-
-	void resize(Q_INT32 w, Q_INT32 h);
-	void resize(const QRect& rc);
-	void resize();
 
 	KisMaskSP mask() const;
 

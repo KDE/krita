@@ -30,6 +30,7 @@
 #include "kis_render.h"
 
 class QImage;
+class QSize;
 class QPoint;
 class KoStore;
 class KisImage;
@@ -66,6 +67,7 @@ public:
 	virtual void update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	virtual const bool visible() const;
 	virtual void visible(bool v);
+	virtual void anchor();
 
 public:
 	bool contains(Q_INT32 x, Q_INT32 y) const;
@@ -99,6 +101,12 @@ public:
 	KisImageSP image();
 	const KisImageSP image() const;
 	void setImage(KisImageSP image);
+	void resize(Q_INT32 w, Q_INT32 h);
+	void resize(const QSize& size);
+	void resize();
+	void expand(Q_INT32 w, Q_INT32 h);
+	void expand(const QSize& size);
+	void offsetBy(Q_INT32 x, Q_INT32 y);
 
 signals:
 	void visibilityChanged(KisPaintDeviceSP device);

@@ -15,20 +15,54 @@
  *  along with this program; if not, write to the free software
  *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
+#include <stdlib.h>
+#include <kcommand.h>
 #include <kdebug.h>
+#include <klocale.h>
 #include <koColor.h>
+#include "kis_doc.h"
 #include "kis_global.h"
-#include "kis_paint_device.h"
 #include "kis_image.h"
+#include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kispixeldata.h"
 
-KisSelection::KisSelection(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name) 
-	: super(width, height, imgType, name)
+namespace {
+	class KisResetFirstMoveCmd : public KNamedCommand {
+		typedef KNamedCommand super;
+
+	public:
+		KisResetFirstMoveCmd(KisSelectionSP selection) : super("reset selection first move flag")
+		{
+			m_selection = selection;
+		}
+
+		virtual ~KisResetFirstMoveCmd()
+		{
+		}
+
+	public:
+		virtual void execute()
+		{
+			m_selection -> clearParentOnMove(false);
+		}
+
+		virtual void unexecute()
+		{
+			m_selection -> clearParentOnMove(true);
+		}
+
+	private:
+		KisSelectionSP m_selection;
+	};
+}
+
+KisSelection::KisSelection(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name) : super(width, height, imgType, name)
 {
+	m_clearOnMove = true;
 	visible(false);
 	setName(name);
 }
@@ -42,6 +76,7 @@ KisSelection::KisSelection(KisPaintDeviceSP parent, KisImageSP img, const QStrin
 	m_img = img;
 	m_name = name;
 	m_firstMove = true;
+	m_clearOnMove = true;
 	connect(m_parent, SIGNAL(visibilityChanged(KisPaintDeviceSP)), SLOT(parentVisibilityChanged(KisPaintDeviceSP)));
 }
 
@@ -51,31 +86,41 @@ KisSelection::~KisSelection()
 
 void KisSelection::commit()
 {
-#if 1
 	if (m_parent) {
-		KisPainter gc(m_parent);
+		KisDoc *doc = image() -> document();
+		KisImageSP img;
+		KisPainter gc;
 		QRect rc = clip();
-		Q_INT32 w;
-		Q_INT32 h;
-
-		w = width();
-		h = height();
+		Q_INT32 w = width();
+		Q_INT32 h = height();
 
 		if (!rc.isEmpty()) {
 			w = rc.width();
 			h = rc.height();
 		}
 
+		img = m_parent -> image();
+
+		if (x() < m_parent -> x() || y() < m_parent -> y())
+			m_parent -> offsetBy(abs(m_parent -> x() - x()), abs(m_parent -> y() - y()));
+
+		if (img -> width() < x() + w)
+			w = img -> width() - x();
+
+		if (img -> height() < y() + h)
+			h = img -> height() - y();
+
+		if (x() + w > m_parent -> x() + m_parent -> width() || y() + h > m_parent -> y() + m_parent -> height())
+			m_parent -> expand(x() + w - m_parent -> x(), y() + h - m_parent -> y());
+
+		gc.begin(m_parent);
+		gc.beginTransaction("copy selection to parent");
 		Q_ASSERT(w <= width());
 		Q_ASSERT(h <= height());
-		// TODO Go over each tile... if src == dst, then don't do anything.  Just drop the share count.
-		gc.bitBlt(m_rc.x() - m_parent -> x(), m_rc.y() - m_parent -> y(), 
-				COMPOSITE_COPY, this, opacity(), 
-				0, 0,
-				m_rc.width(),
-				m_rc.height());
+		gc.bitBlt(x() - m_parent -> x(), y() - m_parent -> y(), COMPOSITE_COPY, this, opacity(), 0, 0, w, h);
+		doc -> addCommand(gc.endTransaction());
+		gc.end();
 	}
-#endif
 }
 
 bool KisSelection::shouldDrawBorder() const
@@ -85,117 +130,57 @@ bool KisSelection::shouldDrawBorder() const
 
 void KisSelection::move(Q_INT32 x, Q_INT32 y)
 {
-#if 0
-	// Should selections be allowed to move?!?
 	QRect rc = clip();
 
-	if (m_firstMove && m_parent) {
+	if (m_clearOnMove && m_firstMove && m_parent) {
 		KisPainter gc(m_parent);
+		KisDoc *doc = image() -> document();
 
-		// push_undo_fill
-		gc.eraseRect(m_rc);
+		doc -> beginMacro(i18n("Move Selection"));
+		doc -> addCommand(new KisResetFirstMoveCmd(this));
+		gc.beginTransaction("clear the parent's background from KisSelection::move");
+		gc.eraseRect(this -> x() - m_parent -> x(), this -> y() - m_parent -> y(), width(), height());
 		m_firstMove = false;
 		m_parent -> invalidate(rc);
+		doc -> addCommand(gc.endTransaction());
 	}
 
-#endif
 	super::move(x, y);
-//	rc |= bounds();
-//	invalidate(rc);
 }
 
 void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_INT32 height)
 {
-#if 1
 	if (m_img) {
+		KisPainter gc;
+
+		// TODO if the parent is linked... copy from all linked layers?!?
 		configure(m_img, width, height, m_img -> imgType(), m_name);
-
-		KisPainter gc(this);
-
-		kdDebug(DBG_AREA_CORE) << "selection -> (parentX = " << parentX << ", parentY = " << parentY 
-			<< ", width = " << width << ", height = " << height << ")\n";
+		gc.begin(this);
 		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, parentX - m_parent -> x(), parentY - m_parent -> y(), width, height);
-		m_rc.setRect(parentX, parentY, width, height);
 		super::move(parentX, parentY);
 	}
-#endif
-
-#if 0
-	KisTileMgrSP tm1 = m_parent -> data();
-	KisTileMgrSP tm2;
-	KisTileSP tile;
-	Q_INT32 tileno;
-	Q_INT32 x;
-	Q_INT32 y;
-	Q_INT32 offset;
-	Q_INT32 clipX;
-	Q_INT32 clipY;
-	Q_INT32 k;
-
-	configure(m_img, width, height, m_img -> imgType(), m_name);
-	tm2 = data();
-	Q_ASSERT(tm2);
-	kdDebug(DBG_AREA_CORE) << "selection -> (parentX = " << parentX << ", parentY = " << parentY << ", width = " << width << ", height = " << height << ")\n";
-
-	for (y = parentY, k = 0; y < parentY + height; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
-		offset = tm1 -> tileNum(parentX, y);
-
-		for (x = parentX; x < width + parentX; x += TILE_WIDTH - (x % TILE_WIDTH), k++) {
-			tileno = tm1 -> tileNum(x, y);
-
-			if (tileno < 0)
-				continue;
-
-			tile = tm1 -> tile(tileno, TILEMODE_READ);
-			Q_ASSERT(tile);
-
-			if (tile)
-				tm2 -> attach(tile, k);
-		}
-	}
-
-	m_rc.setRect(parentX, parentY, width, height);
-	clipX = parentX - parentX / TILE_WIDTH * TILE_WIDTH + 1;
-	clipY = parentY - parentY / TILE_HEIGHT * TILE_HEIGHT + 1;
-	width -= clipX - parentX;
-	height -= clipY - parentY;
-	setClip(clipX, clipY, width, height);
-	kdDebug(DBG_AREA_CORE) << "selection clip -> (x = " << clipX << ", y = " << clipY << ", width = " << width << ", height = " << height << ")\n";
-	
-#if 0
-	{
-		// tile -> shareRef() above sets "Copy on write" flag.
-		// however, it doesn't seem to be working very well righ now, so
-		// just use a Painter to transfer the data.
-		KisPainter gc(this);
-		KisPainter g2(m_parent);
-
-		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, parentX, parentY, width, height);
-//		gc.fillRect(clipX, clipY, width, height, KoColor::red(), OPACITY_OPAQUE);
-//		g2.fillRect(m_rc.x(), m_rc.y(), m_rc.width(), m_rc.height(), KoColor::green(), OPACITY_OPAQUE);
-	}
-#endif
-
-	parentX = parentX / TILE_WIDTH * TILE_WIDTH;
-	parentY = parentY / TILE_HEIGHT * TILE_HEIGHT;
-	super::move(parentX, parentY);
-#endif
 }
 
 void KisSelection::fromImage(const QImage& img)
 {
 	KoColor c;
 	QRgb rgb;
+	Q_INT32 opacity;
 
-	if (!img.isNull()) {
-		for (Q_INT32 y = 0; y < height(); y++) {
-			for (Q_INT32 x = 0; x < width(); x++) {
-				rgb = img.pixel(x, y);
+	if (img.isNull())
+		return;
 
-				// TODO pixel opacity
-				c.setRGB(upscale(qRed(rgb)), upscale(qGreen(rgb)), upscale(qBlue(rgb)));
-				pixel(x, y, c, OPACITY_OPAQUE);
-			}
+	for (Q_INT32 y = 0; y < height(); y++) {
+		for (Q_INT32 x = 0; x < width(); x++) {
+			rgb = img.pixel(x, y);
+			c.setRGB(upscale(qRed(rgb)), upscale(qGreen(rgb)), upscale(qBlue(rgb)));
+
+			if (img.hasAlphaBuffer())
+				opacity = qAlpha(rgb);
+			else
+				opacity = OPACITY_OPAQUE;
+
+			pixel(x, y, c, opacity);
 		}
 	}
 }
@@ -252,6 +237,24 @@ void KisSelection::setParent(KisPaintDeviceSP parent)
 KisPaintDeviceSP KisSelection::parent() const
 {
 	return m_parent;
+}
+
+void KisSelection::anchor()
+{
+	KisDoc *doc;
+
+	if (m_firstMove == false) {
+		doc = m_parent -> image() -> document();
+		doc -> endMacro();
+	}
+
+	super::anchor();
+}
+
+void KisSelection::clearParentOnMove(bool f)
+{
+	m_clearOnMove = f;
+	m_firstMove = true;
 }
 
 #include "kis_selection.moc"

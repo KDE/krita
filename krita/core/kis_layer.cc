@@ -23,7 +23,6 @@
 #include "kis_layer.h"
 #include "kis_channel.h"
 #include "kis_mask.h"
-#include "kis_painter.h"
 
 KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name) : super(width, height, imgType, name)
 {
@@ -85,41 +84,6 @@ void KisLayer::translate(Q_INT32 x, Q_INT32 y)
 
 void KisLayer::addAlpha()
 {
-}
-
-void KisLayer::resize(Q_INT32 w, Q_INT32 h)
-{
-	KisTileMgrSP old = data();
-	KisTileMgrSP tm = new KisTileMgr(old, old -> depth(), w, h);
-	Q_INT32 oldW = width();
-	Q_INT32 oldH = height();
-	KisPainter gc;
-
-	data(tm);
-	width(w);
-	height(h);
-	gc.begin(this);
-
-	if (oldW < w)
-		gc.eraseRect(oldW, 0, w, h);
-
-	if (oldH < h)
-		gc.eraseRect(0, oldH, w, h);
-
-	gc.end();
-}
-
-void KisLayer::resize(const QRect& rc)
-{
-	resize(rc.width(), rc.height());
-}
-
-void KisLayer::resize()
-{
-	KisImageSP img = image();
-
-	if (img)
-		resize(img -> bounds());
 }
 
 KisMaskSP KisLayer::mask() const

@@ -82,6 +82,9 @@
   <Action name="layer_properties"/>  
 </Menu>
 
+<Menu name="Channel"><Text>Channel</Text>
+</Menu>
+
 <Menu name="Tools"><Text>Tools</Text>
   <Action name="tool_move"/>
   <Action name="tool_zoom"/>

@@ -255,6 +255,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	QPixmap::setDefaultOptimization(QPixmap::BestOptim);
 	m_nserver = 0;
 	m_pushedClipboard = false;
+	m_currentMacro = 0;
 
 	if (name)
 		dcopObject();
@@ -966,14 +967,32 @@ void KisDoc::slotImageUpdated(const QRect& rect)
 	emit docUpdated(rect);
 }
 
+void KisDoc::beginMacro(const QString& macroName)
+{
+	if (!m_currentMacro)
+		m_currentMacro = new KMacroCommand(macroName);
+}
+
+void KisDoc::endMacro()
+{
+	if (m_undo && m_currentMacro) {
+		m_cmdHistory -> addCommand(m_currentMacro, false);
+		m_currentMacro = 0;
+	}
+}
+
 void KisDoc::addCommand(KCommand *cmd)
 {
 	Q_ASSERT(cmd);
 
-	if (m_undo)
-		m_cmdHistory -> addCommand(cmd, false);
-	else
+	if (m_undo) {
+		if (m_currentMacro)
+			m_currentMacro -> addCommand(cmd);
+		else
+			m_cmdHistory -> addCommand(cmd, false);
+	} else {
 		delete cmd;
+	}
 }
 
 void KisDoc::setUndo(bool undo)

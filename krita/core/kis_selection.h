@@ -37,6 +37,7 @@ public:
 	// Overide KisLayer
 	virtual bool shouldDrawBorder() const;
 	virtual void move(Q_INT32 x, Q_INT32 y);
+	virtual void anchor();
 
 public:
 	void commit();
@@ -46,6 +47,7 @@ public:
 	void setBounds(const QRect& rc);
 	KisPaintDeviceSP parent() const;
 	void setParent(KisPaintDeviceSP parent);
+	void clearParentOnMove(bool f);
 
 private slots:
 	void parentVisibilityChanged(KisPaintDeviceSP parent);
@@ -57,6 +59,7 @@ private:
 	QString m_name;
 	QRect m_rc;
 	bool m_firstMove;
+	bool m_clearOnMove;
 };
 
 #endif // KIS_SELECTION_H_

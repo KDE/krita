@@ -5,9 +5,7 @@ kde_module_LTLIBRARIES = libkritapart.la
 libkritapart_la_SOURCES = dummy.cc
 
 libkritapart_la_LDFLAGS = $(KDE_PLUGIN)
-libkritapart_la_LIBADD = core/libkiscore.la core/helper/libkishelper.la core/tiles/libkistile.la \
-	ui/libkisui.la ../lib/kofficeui/libkofficeui.la ../lib/kopainter/libkopainter.la tools/libkistools.la \
-	core/builder/libkiscorebuilder.la
+libkritapart_la_LIBADD = core/libkiscore.la ui/libkisui.la ../lib/kofficeui/libkofficeui.la ../lib/kopainter/libkopainter.la tools/libkistools.la
 
 METASOURCES = AUTO
 

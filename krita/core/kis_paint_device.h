@@ -34,6 +34,7 @@
 #include "kistilemgr.h"
 #include "kis_strategy_colorspace.h"
 #include "kispixeldata.h"
+#include "kis_scale_visitor.h"
 
 class QImage;
 class QSize;
@@ -44,6 +45,7 @@ class QWMatrix;
 class KisTileCommand;
 class KisIteratorLineQuantum;
 class KisIteratorLinePixel;
+class KisScaleVisitor;
 
 /**
  * Class modelled on QPaintDevice.
@@ -51,19 +53,6 @@ class KisIteratorLinePixel;
 class KisPaintDevice : public QObject, public KisRenderInterface {
         Q_OBJECT
         typedef KisRenderInterface super;
-
-	/* Structs for the image rescaling routine */
-	struct CONTRIB {
-		Q_INT32 m_pixel;
-		double m_weight;
-	};
- 
-	struct CLIST {
-		Q_INT32  n;  //number of contributors
-		CONTRIB *p; //pointer to list of contributions
-	};
-
-
 
 public:
 	KisPaintDevice(Q_INT32 width, Q_INT32 height,
@@ -290,26 +279,6 @@ private:
         KisPaintDevice& operator=(const KisPaintDevice&);
         void init();
 
-	/**
-	 * calc_x_contrib()
-	 *       
-	 * Calculates the filter weights for a single target column.
-	 * contribX->p must be freed afterwards.
-	 *
-	 * Returns -1 if error, 0 otherwise.
-	 */
-	int calc_x_contrib(CLIST *contribX, double xcale, double fwidth, int dstwidth, int srcwidth, double (KisPaintDevice::*filterf)(double), Q_INT32 i);
-
-	/* scaling filter function definitions */
-	double filter(double t);
-	double box_filter(double t);
-	double triangle_filter(double t);
-	double bell_filter(double t);
-	double B_spline_filter(double t);
-	double sinc(double x);
-	double Lanczos3_filter(double t);
-	double Mitchell_filter(double t);
-
 private:
         KisImage *m_owner;
         KisTileMgrSP m_tiles;
@@ -327,10 +296,7 @@ private:
 	CompositeOp m_compositeOp;
 	KisStrategyColorSpaceSP m_colorStrategy; 
 
-        
-	CLIST * contrib;  //array of contribution lists
-
-
+        void accept(KisScaleVisitor &);
 
 };
 

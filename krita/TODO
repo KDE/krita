@@ -30,6 +30,7 @@ Scaling
 	  there is just an addition line right of it. So the image is
 	  not scaled to the actual target width
 	- use iterators to access pixels.
+        - Preview dialog should use KDialogBase
 
 Core
 

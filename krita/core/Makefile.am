@@ -72,8 +72,8 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_filter.cc \
 	kis_plugin_registry.cc \
 	kis_filter_registry.cc \
-	kis_selection_manager.cc
-
+	kis_selection_manager.cc \
+	kis_scale_visitor.cc
 
 noinst_HEADERS = kis_paint_device.h \
 	kis_layer.h \
@@ -111,8 +111,9 @@ noinst_HEADERS = kis_paint_device.h \
 	kis_matrix.h \
 	kis_filter.h \
 	kis_filter_registry.h \
-	kis_selection_manager.h
-
+	kis_selection_manager.h \
+        kis_scale_visitor.h
+        
 libkritacore_la_METASOURCES = AUTO
 libkritacore_la_LDFLAGS = $(all_libraries)
 SUBDIRS = tiles builder strategy color_strategy paintop resources tool

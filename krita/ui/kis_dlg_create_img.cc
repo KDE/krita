@@ -22,7 +22,9 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+
 #include <klocale.h>
+
 #include <koUnitWidgets.h>
 
 #include "kis_dlg_create_img.h"

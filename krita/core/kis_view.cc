@@ -1618,9 +1618,6 @@ void KisView::viewControlDocker()
         if( m_toolcontroldocker->isVisible() == false )
         {
                 mainWindow()->addDockWindow( m_toolcontroldocker, DockRight );
-		m_toolcontroldocker -> undock();
-		m_toolcontroldocker -> move(mainWindow() -> x() + 50,
-					    mainWindow() -> y() + mainWindow() -> height() - 150);
                 m_toolcontroldocker->show();
         }
 }

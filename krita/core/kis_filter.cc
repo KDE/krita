@@ -75,6 +75,7 @@ void KisFilter::slotActivated()
 		QVBoxLayout* layout = new QVBoxLayout((QWidget *)m_dialog->container);
 		layout->addWidget( m_widget );
 		refreshPreview();
+		m_dialog -> setFixedSize(m_dialog -> minimumSize());
 		if(m_dialog->exec() == QDialog::Rejected )
 		{
 			delete m_dialog;

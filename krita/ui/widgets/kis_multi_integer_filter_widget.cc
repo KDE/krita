@@ -20,6 +20,7 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+
 #include "kis_filter.h"
 
 KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, const char* nname) :
@@ -34,19 +35,28 @@ KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT
 KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget( KisFilter* nfilter, QWidget * parent, const char * name, const char * caption, vKisIntegerWidgetParam iwparam) : KisFilterConfigurationWidget( nfilter, parent, name )
 {
 	Q_INT32 m_nbintegerWidgets = iwparam.size();
+
 	this->setCaption(caption);
-	QGridLayout *widgetLayout = new QGridLayout(this, m_nbintegerWidgets, 2);
-	//Initialize the integerwidget
+
+	QGridLayout *widgetLayout = new QGridLayout(this, m_nbintegerWidgets + 1, 2);
+
 	m_integerWidgets = new IntegerWidget*[ m_nbintegerWidgets ];
+
 	for( Q_INT32 i = 0; i < m_nbintegerWidgets; ++i)
 	{
 		m_integerWidgets[i] = new IntegerWidget( iwparam[i].min, iwparam[i].max, this, iwparam[i].name);
-		m_integerWidgets[i]->setValue( iwparam[i].initvalue );
+		m_integerWidgets[i] -> setValue( iwparam[i].initvalue );
+
 		connect(m_integerWidgets[i], SIGNAL(valueChanged( int )), filter(), SLOT(refreshPreview()));
+
 		QLabel* lbl = new QLabel(iwparam[i].name, this);
 		widgetLayout -> addWidget( lbl, i , 0);
+
 		widgetLayout -> addWidget( m_integerWidgets[i], i , 1);
 	}
+	QSpacerItem * sp = new QSpacerItem(1, 1);
+	widgetLayout -> addItem(sp, m_nbintegerWidgets, 0);
+
 }
 
 #include "kis_multi_integer_filter_widget.moc"

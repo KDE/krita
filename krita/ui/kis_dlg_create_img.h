@@ -21,7 +21,9 @@
 #include <qspinbox.h>
 
 #include <kdialogbase.h>
+
 #include <koColor.h>
+
 #include "kis_global.h"
 #include "kis_cmb_imagetype.h"
 

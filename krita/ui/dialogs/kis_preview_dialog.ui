@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KisPreviewDialog</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>541</width>
-            <height>312</height>
+            <height>466</height>
         </rect>
     </property>
     <property name="caption">
@@ -18,43 +18,11 @@
     <property name="sizeGripEnabled">
         <bool>true</bool>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout3</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QFrame">
-                    <property name="name">
-                        <cstring>container</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>151</width>
-                            <height>150</height>
-                        </size>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
-                    </property>
-                </widget>
-                <widget class="KisPreviewWidget">
-                    <property name="name">
-                        <cstring>previewWidget</cstring>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QLayoutWidget">
+        <widget class="QLayoutWidget" row="2" column="0">
             <property name="name">
                 <cstring>Layout1</cstring>
             </property>
@@ -118,15 +86,37 @@
                 </widget>
             </hbox>
         </widget>
-    </vbox>
+        <widget class="KisPreviewWidget" row="0" column="0">
+            <property name="name">
+                <cstring>previewWidget</cstring>
+            </property>
+        </widget>
+        <widget class="QFrame" row="1" column="0">
+            <property name="name">
+                <cstring>container</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>151</width>
+                    <height>150</height>
+                </size>
+            </property>
+            <property name="frameShape">
+                <enum>GroupBoxPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+        </widget>
+    </grid>
 </widget>
 <customwidgets>
     <customwidget>
         <class>KisPreviewWidget</class>
         <header location="local">kis_previewwidget.h</header>
         <sizehint>
-            <width>350</width>
-            <height>150</height>
+            <width>-1</width>
+            <height>-1</height>
         </sizehint>
         <container>0</container>
         <sizepolicy>
@@ -136,54 +126,7 @@
             <verstretch>0</verstretch>
         </sizepolicy>
         <pixmap>image0</pixmap>
-        <signal>destroyed()</signal>
-        <signal>destroyed(QObject*)</signal>
         <signal>updated()</signal>
-        <slot access="public" specifier="">deleteLater()</slot>
-        <slot access="private" specifier="">cleanupEventFilter(QObject*)</slot>
-        <slot access="public" specifier="">setEnabled(bool)</slot>
-        <slot access="public" specifier="">setDisabled(bool)</slot>
-        <slot access="public" specifier="">setCaption(const QString&amp;)</slot>
-        <slot access="public" specifier="">setIcon(const QPixmap&amp;)</slot>
-        <slot access="public" specifier="">setIconText(const QString&amp;)</slot>
-        <slot access="public" specifier="">setMouseTracking(bool)</slot>
-        <slot access="public" specifier="">setFocus()</slot>
-        <slot access="public" specifier="">clearFocus()</slot>
-        <slot access="public" specifier="">setUpdatesEnabled(bool)</slot>
-        <slot access="public" specifier="">update()</slot>
-        <slot access="public" specifier="">update(int,int,int,int)</slot>
-        <slot access="public" specifier="">update(const QRect&amp;)</slot>
-        <slot access="public" specifier="">repaint()</slot>
-        <slot access="public" specifier="">repaint(bool)</slot>
-        <slot access="public" specifier="">repaint(int,int,int,int)</slot>
-        <slot access="public" specifier="">repaint(int,int,int,int,bool)</slot>
-        <slot access="public" specifier="">repaint(const QRect&amp;)</slot>
-        <slot access="public" specifier="">repaint(const QRect&amp;,bool)</slot>
-        <slot access="public" specifier="">repaint(const QRegion&amp;)</slot>
-        <slot access="public" specifier="">repaint(const QRegion&amp;,bool)</slot>
-        <slot access="public" specifier="">show()</slot>
-        <slot access="public" specifier="">hide()</slot>
-        <slot access="public" specifier="">setShown(bool)</slot>
-        <slot access="public" specifier="">setHidden(bool)</slot>
-        <slot access="public" specifier="">iconify()</slot>
-        <slot access="public" specifier="">showMinimized()</slot>
-        <slot access="public" specifier="">showMaximized()</slot>
-        <slot access="public" specifier="">showFullScreen()</slot>
-        <slot access="public" specifier="">showNormal()</slot>
-        <slot access="public" specifier="">polish()</slot>
-        <slot access="public" specifier="">constPolish()</slot>
-        <slot access="public" specifier="">close()</slot>
-        <slot access="public" specifier="">raise()</slot>
-        <slot access="public" specifier="">lower()</slot>
-        <slot access="public" specifier="">stackUnder(QWidget*)</slot>
-        <slot access="public" specifier="">move(int,int)</slot>
-        <slot access="public" specifier="">move(const QPoint&amp;)</slot>
-        <slot access="public" specifier="">resize(int,int)</slot>
-        <slot access="public" specifier="">resize(const QSize&amp;)</slot>
-        <slot access="public" specifier="">setGeometry(int,int,int,int)</slot>
-        <slot access="public" specifier="">setGeometry(const QRect&amp;)</slot>
-        <slot access="public" specifier="">adjustSize()</slot>
-        <slot access="private" specifier="">focusProxyDestroyed()</slot>
         <slot access="protected" specifier="">languageChange()</slot>
         <slot access="protected" specifier="">init()</slot>
         <slot access="protected" specifier="">destroy()</slot>
@@ -192,27 +135,6 @@
         <slot access="public" specifier="">slotUpdate()</slot>
         <slot access="private" specifier="">zoomIn()</slot>
         <slot access="private" specifier="">zoomOut()</slot>
-        <property type="CString">name</property>
-        <property type="Bool">enabled</property>
-        <property type="Rect">geometry</property>
-        <property type="SizePolicy">sizePolicy</property>
-        <property type="Size">minimumSize</property>
-        <property type="Size">maximumSize</property>
-        <property type="Size">sizeIncrement</property>
-        <property type="Size">baseSize</property>
-        <property type="Color">paletteForegroundColor</property>
-        <property type="Color">paletteBackgroundColor</property>
-        <property type="Pixmap">paletteBackgroundPixmap</property>
-        <property type="Palette">palette</property>
-        <property type="BackgroundOrigin">backgroundOrigin</property>
-        <property type="Font">font</property>
-        <property type="Cursor">cursor</property>
-        <property type="String">caption</property>
-        <property type="Pixmap">icon</property>
-        <property type="String">iconText</property>
-        <property type="Bool">mouseTracking</property>
-        <property type="FocusPolicy">focusPolicy</property>
-        <property type="Bool">acceptDrops</property>
     </customwidget>
 </customwidgets>
 <images>

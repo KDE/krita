@@ -95,5 +95,65 @@ private:
 	QImage m_img;
 };
 
+inline
+Q_INT32 KisTile::width() const
+{
+	return m_width;
+}
+
+inline
+void KisTile::width(Q_INT32 w)
+{
+	m_width = w;
+}
+
+inline
+Q_INT32 KisTile::height() const
+{
+	return m_height;
+}
+
+inline
+void KisTile::height(Q_INT32 h)
+{
+	m_height = h;
+}
+
+inline
+Q_INT32 KisTile::depth() const
+{
+	return m_depth;
+}
+
+inline
+Q_INT32 KisTile::size() const
+{
+	return m_width * m_height * m_depth;
+}
+
+inline
+bool KisTile::valid() const
+{
+	return m_valid;
+}
+
+inline
+void KisTile::valid(bool valid)
+{
+	m_valid = valid;
+}
+
+inline
+bool KisTile::dirty() const
+{
+	return m_dirty;
+}
+
+inline
+void KisTile::dirty(bool val)
+{
+	m_dirty = val;
+}
+
 #endif // KISTILE_H_
 

@@ -43,11 +43,12 @@ public:
 
 public:
 	// Implement KisRenderInterface
+	virtual Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix) const;
 	virtual void invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	virtual void invalidate(const QRect& rc);
 	virtual void invalidate();
-	virtual QPixmap pixmap();
-	virtual QPixmap recreatePixmap();
+	virtual QPixmap pixmap(Q_INT32 tileNo);
+	virtual QPixmap recreatePixmap(Q_INT32 tileNo);
 
 public:
 	QString name() const;
@@ -165,6 +166,7 @@ private:
 	Q_INT32 m_width;
 	Q_INT32 m_height;
 	Q_UINT32 m_depth;
+	Q_INT32 m_ntileCols;
 	QUANTUM m_opacity;
 	double m_xres;
 	double m_yres;
@@ -174,7 +176,6 @@ private:
 	bool m_dirty;
 	KisTileMgrSP m_shadow;
 	bool m_construct;
-	enumImgType m_projType;
 	QPixmap m_pixmapProjection;
 	KisLayerSP m_projection;
 	vKisLayerSP m_layers;

@@ -1055,7 +1055,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 		painter.scale(zoomX, zoomY);
 
 	if (m_projection) {
-		QPixmap projection = m_projection -> pixmap();
+		QPixmap projection = m_projection -> pixmap(0);
 
 		if (!projection.isNull())
 			painter.drawPixmap(rect.topLeft(), projection, rect);
@@ -1074,24 +1074,6 @@ void KisDoc::slotImageUpdated(const QRect& rect)
 	emit docUpdated(rect);
 }
 
-#if 0
-QRect KisDoc::getImageRect()
-{
-	return QRect(0, 0, m_currentImg -> width(), m_currentImg -> height());
-}
-#endif
-
-#if 0
-void KisDoc::setImage(const QString& imageName)
-{
-	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
-		if ((*it) -> name() == imageName) {
-			return;
-		}
-	}
-}
-#endif
-
 void KisDoc::addCommand(KCommand *cmd)
 {
 	Q_ASSERT(cmd);
@@ -1103,22 +1085,22 @@ void KisDoc::setUndo(bool undo)
 	m_undo = undo;
 }
 
-int KisDoc::undoLimit() const
+Q_INT32 KisDoc::undoLimit() const
 {
 	return m_cmdHistory -> undoLimit();
 }
 
-void KisDoc::setUndoLimit(int limit)
+void KisDoc::setUndoLimit(Q_INT32 limit)
 {
 	m_cmdHistory -> setUndoLimit(limit);
 }
 
-int KisDoc::redoLimit() const
+Q_INT32 KisDoc::redoLimit() const
 {
 	return m_cmdHistory -> redoLimit();
 }
 
-void KisDoc::setRedoLimit(int limit)
+void KisDoc::setRedoLimit(Q_INT32 limit)
 {
 	m_cmdHistory -> setRedoLimit(limit);
 }

@@ -35,10 +35,7 @@ public:
 	~KisPainter();
 
 public:
-	void begin(KisTileSP tile);
 	void begin(KisPaintDeviceSP device);
-	void begin(KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-	void begin(KisPaintDeviceSP device, const QRect& rc);
 	void end();
 	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
@@ -50,14 +47,18 @@ public:
 	void fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity);
 
 private:
+	void begin(KisTileSP tile);
 	void begin(KisPixelDataSP pd);
 	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, QUANTUM opacity, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
+	void prepareEzPaint();
+	void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileSP srctile, Q_INT32 rows, Q_INT32 cols, CompositeOp op);
 	KisPainter(const KisPainter&);
 	KisPainter& operator=(const KisPainter&);
 
 private:
 	KisPixelDataSP m_dst;
+	KisPaintDeviceSP m_device;	
 };
 
 #endif // KIS_PAINTER_H_-

@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
+#include <assert.h>
 #include <string.h>
 #include <qtl.h>
 #include "kis_types.h"
@@ -39,9 +39,13 @@ KisTile::KisTile(KisTile& rhs) : super(rhs)
 		m_hints = rhs.m_hints;
 		allocate();
 		rhs.shareRelease();
-		rhs.lock();
-		memcpy(m_data, rhs.m_data, size());
-		rhs.release();
+
+		if (rhs.m_data) {
+			rhs.lock();
+			memcpy(m_data, rhs.m_data, m_width * m_height * m_depth * sizeof(QUANTUM));
+			rhs.release();
+			m_img = QImage(width(), height(), 32);
+		}
 	}
 }
 	
@@ -113,60 +117,15 @@ QUANTUM *KisTile::data(Q_INT32 xoff, Q_INT32 yoff)
 {
 	Q_INT32 offset = yoff * m_width + xoff;
 
+	assert(xoff >= 0);
+	assert(yoff >= 0);
+	assert(yoff <= height());
+	assert(xoff <= width());
+
 	if (!m_data)
 		allocate();
 
 	return m_data + offset * m_depth;
-}
-
-Q_INT32 KisTile::width() const
-{
-	return m_width;
-}
-
-void KisTile::width(Q_INT32 w)
-{
-	m_width = w;
-}
-
-Q_INT32 KisTile::height() const
-{
-	return m_height;
-}
-
-void KisTile::height(Q_INT32 h)
-{
-	m_height = h;
-}
-
-Q_INT32 KisTile::depth() const
-{
-	return m_depth;
-}
-
-Q_INT32 KisTile::size() const
-{
-	return m_width * m_height * m_depth;
-}
-
-bool KisTile::valid() const
-{
-	return m_valid;
-}
-
-void KisTile::valid(bool valid)
-{
-	m_valid = valid;
-}
-
-bool KisTile::dirty() const
-{
-	return m_dirty;
-}
-
-void KisTile::dirty(bool val)
-{
-	m_dirty = val;
 }
 
 Q_INT32 KisTile::rowHint(Q_INT32 row) const
@@ -254,13 +213,16 @@ QImage KisTile::convertToImage()
 {
 	QUANTUM *pixel = data();
 
+	Q_ASSERT(m_img.width() == width());
+	Q_ASSERT(m_img.height() == height());
+
 	// TODO : Get convertToImage out of here...
 	// TODO : use some kind of proxy to access
 	// TODO : color info.  Also this proxy would support
 	// TODO : all image formats.  Only RGB/RGBA is supported
 	// TODO : here.
-	for (Q_INT32 j = 0; j < m_img.height(); j++) {
-		for (Q_INT32 i = 0; i < m_img.width(); i++) {
+	for (Q_INT32 j = 0; j < height(); j++) {
+		for (Q_INT32 i = 0; i < width(); i++) {
 			Q_UINT8 red = downscale(pixel[PIXEL_RED]);
 			Q_UINT8 green = downscale(pixel[PIXEL_GREEN]);
 			Q_UINT8 blue = downscale(pixel[PIXEL_BLUE]);

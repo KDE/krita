@@ -163,7 +163,7 @@ void KisToolMove::mouseMove(QMouseEvent *e)
 			rc.setY(static_cast<Q_INT32>(rc.y() * m_view -> zoom()));
 			rc.setWidth(static_cast<Q_INT32>(rc.width() * m_view -> zoom()));
 			rc.setHeight(static_cast<Q_INT32>(rc.height() * m_view -> zoom()));
-			m_view -> updateCanvas(rc);
+			m_view -> updateCanvas(); //rc);
 		}
 	}
 }

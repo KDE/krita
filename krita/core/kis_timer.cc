@@ -18,12 +18,14 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <iostream.h>
+#include <sys/time.h>
+#include <iostream>
 #include "kis_timer.h"
 
-struct timeval KisTimer::tv1, KisTimer::tv2;
-struct timezone KisTimer::tz;
+using namespace std;
 
+struct timeval tv1, tv2;
+struct timezone tz;
 
 void KisTimer::start()
 {

@@ -144,7 +144,7 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, 
 			break;
 		default:
 			kdDebug() << "KisImage::init  Unknow image type.\n";
-			break;
+			return;
 	}
 	
 	m_active.resize(n);
@@ -162,7 +162,6 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, 
 	m_type = imgType;
 	m_dirty = false;
 	m_construct = false;
-	m_projType = imgType;
 	m_maskEnabled = false;
 	m_maskInverted = false;
 	m_alpha = false;
@@ -170,6 +169,7 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, 
 	m_undoHistory = 0;
 	m_bgTile = new KisTile(depth);
 	renderBgTile(m_bgTile);
+	m_ntileCols = (width + TILE_WIDTH - 1) / TILE_WIDTH;
 }
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h)
@@ -920,43 +920,89 @@ PIXELTYPE KisImage::pixelFromChannel(CHANNELTYPE type) const
 	return i;
 }
 
+Q_INT32 KisImage::tileNum(Q_INT32 xpix, Q_INT32 ypix) const
+{
+	Q_INT32 row;
+	Q_INT32 col;
+	Q_INT32 num;
+
+	if (xpix >= m_width || ypix >= m_height)
+		return -1;
+
+	row = ypix / TILE_HEIGHT;
+	col = xpix / TILE_WIDTH;
+	num = row * m_ntileCols + col;
+	return num;
+}
+
 void KisImage::invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	for (vKisLayerSP_it it = m_layers.begin(); it != m_layers.end(); it++)
-		(*it) -> invalidate(x, y, w, h);
-
-	for (vKisChannelSP_it it = m_channels.begin(); it != m_channels.end(); it++)
-		(*it) -> invalidate(x, y, w, h);
-
+	m_projection -> invalidate(x, y, w, h);
 	m_construct = true;
 }
 
 void KisImage::invalidate(const QRect& rc)
 {
-	for (vKisLayerSP_it it = m_layers.begin(); it != m_layers.end(); it++)
-		(*it) -> invalidate(rc);
-
-	for (vKisChannelSP_it it = m_channels.begin(); it != m_channels.end(); it++)
-		(*it) -> invalidate(rc);
-
+	m_projection -> invalidate(rc);
 	m_construct = true;
 }
 
 void KisImage::invalidate()
 {
-	for (vKisLayerSP_it it = m_layers.begin(); it != m_layers.end(); it++)
-		(*it) -> invalidate();
-
-	for (vKisChannelSP_it it = m_channels.begin(); it != m_channels.end(); it++)
-		(*it) -> invalidate();
-
+	m_projection -> invalidate();
 	m_construct = true;
 }
 
-QPixmap KisImage::pixmap()
+QPixmap KisImage::pixmap(Q_INT32 tileNo)
 {
 	if (m_construct)
-		return recreatePixmap();
+		return recreatePixmap(tileNo);
+
+	return m_pixmapProjection;
+}
+
+QPixmap KisImage::recreatePixmap(Q_INT32)
+{
+	KisTileMgrSP tm = m_projection -> data();
+
+	if (width() > m_pixmapProjection.width() || height() > m_pixmapProjection.height()) {
+		m_pixmapProjection.resize(width(), height());
+		invalidate();
+	}
+
+	rengerBg();
+
+	if (m_layers.size()) {
+		KisPainter gc(m_projection.data());
+
+		for (Q_INT32 i = m_layers.size() - 1; i >= 0; i--) {
+			KisLayerSP layer = m_layers[i];
+
+			renderLayer(gc, layer.data());
+		}
+
+		if (m_selection)
+			renderLayer(gc, m_selection.data());
+	}
+
+	renderProjection();
+
+	if (m_selection) {
+		QPainter gc(&m_pixmapProjection);
+		QPen pen(Qt::DotLine);
+		QRect rc = m_selection -> bounds();
+		QRect clip = m_selection -> clip();
+
+		if (!clip.isEmpty()) {
+			rc.setX(rc.x() + clip.x());
+			rc.setY(rc.y() + clip.y());
+			rc.setWidth(clip.width());
+			rc.setHeight(clip.height());
+		}
+
+		gc.setPen(pen);
+		gc.drawRect(rc);
+	}
 
 	return m_pixmapProjection;
 }
@@ -1047,8 +1093,12 @@ void KisImage::renderLayer(KisPainter& gc, KisLayerSP layer)
 	Q_INT32 dy;
 	Q_INT32 w;
 	Q_INT32 h;
-	QRect clip = layer -> clip();
+	QRect clip;
 
+	if (!layer -> visible() || layer -> opacity() == OPACITY_TRANSPARENT)
+		return;
+
+	clip = layer -> clip();
 	sx = layer -> x();
 	sy = layer -> y();
 	w = layer -> width();
@@ -1094,69 +1144,24 @@ void KisImage::renderLayer(KisPainter& gc, KisLayerSP layer)
 		gc.bitBlt(dx, dy, COMPOSITE_OVER, layer.data(), layer -> opacity(), sx, sy, w, h);
 }
 
-QPixmap KisImage::recreatePixmap()
-{
-	KisTileMgrSP tm = m_projection -> data();
-
-	if (width() > m_pixmapProjection.width() || height() > m_pixmapProjection.height()) {
-		m_pixmapProjection.resize(width(), height());
-		invalidate();
-	}
-
-	rengerBg();
-
-	if (m_layers.size()) {
-		KisPainter gc(m_projection.data());
-
-		for (Q_INT32 i = m_layers.size() - 1; i >= 0; i--) {
-			KisLayerSP layer = m_layers[i];
-
-			if (layer -> visible() && layer -> opacity() != OPACITY_TRANSPARENT)
-				renderLayer(gc, layer.data());
-		}
-
-		if (m_selection)
-			renderLayer(gc, m_selection.data());
-	}
-
-	renderProjection();
-
-	if (m_selection) {
-		QPainter gc(&m_pixmapProjection);
-		QPen pen(Qt::DotLine);
-		QRect rc = m_selection -> bounds();
-		QRect clip = m_selection -> clip();
-
-		if (!clip.isEmpty()) {
-			rc.setX(rc.x() + clip.x());
-			rc.setY(rc.y() + clip.y());
-			rc.setWidth(clip.width());
-			rc.setHeight(clip.height());
-		}
-
-		gc.setPen(pen);
-		gc.drawRect(rc);
-	}
-
-	return m_pixmapProjection;
-}
-
 void KisImage::renderProjection()
 {
 	KisTileMgrSP tm = m_projection -> data();
 	QImage image;
 	QPainter gc(&m_pixmapProjection);
-	Q_UINT32 x;
-	Q_UINT32 y;
+	Q_INT32 x;
+	Q_INT32 y;
 
-	for (y = 0; y < tm -> height(); y += TILE_HEIGHT) {
-		for (x = 0; x < tm -> width(); x += TILE_WIDTH) {
+	for (y = 0; y < m_height; y += TILE_HEIGHT) {
+		for (x = 0; x < m_width; x += TILE_WIDTH) {
 			KisTileSP src = tm -> tile(x, y, TILEMODE_READ);
 
-			src -> lock();
-			image = src -> convertToImage();
-			gc.drawImage(x, y, image);
-			src -> release();
+			if (src) {
+				src -> lock();
+				image = src -> convertToImage();
+				gc.drawImage(x, y, image);
+				src -> release();
+			}
 		}
 	}
 

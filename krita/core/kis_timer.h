@@ -21,19 +21,14 @@
 #ifndef __kis_timer_h__
 #define __kis_timer_h__
 
-#include <sys/time.h>
-
 class KisTimer
 {
  public:
   KisTimer() {}
+  ~KisTimer() {}
   
   static void start();
   static void stop( const char* text );
-
- private:
-  static struct timeval tv1, tv2;
-  static struct timezone tz;
 };                  
 
 #endif

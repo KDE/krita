@@ -53,7 +53,7 @@ void KisTileMgr::attach(KisTileSP tile, Q_INT32 tilenum)
 			validate(tile);
 
 		m_mediator -> attach(tile, this, tilenum);
-		m_tiles[tilenum] = tile.data();
+		m_tiles[tilenum] = tile;
 	}
 }
 
@@ -313,8 +313,12 @@ KisPixelDataSP KisTileMgr::pixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32
 	tilenum1 = tileNum(x1, y1);
 	tilenum2 = tileNum(x2, y2);
 
-	if (tilenum1 < 0 || tilenum2 < 0)
+	if (tilenum1 < 0 || tilenum2 < 0) {
+		kdDebug(DBG_AREA_TILES) << "KisTileMgr::pixelData : Invalid tile number.\n";
+		kdDebug(DBG_AREA_TILES) << "tilenum1 = " << tilenum1 << endl;
+		kdDebug(DBG_AREA_TILES) << "tilenum2 = " << tilenum2 << endl;
 		return 0;
+	}
 
 	pd = new KisPixelData;
 	pd -> mgr = this;

@@ -31,11 +31,12 @@ public:
 	virtual ~KisRenderInterface();
 
 public:
+	virtual Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix) const = 0;
 	virtual void invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
 	virtual void invalidate(const QRect& rc) = 0;
 	virtual void invalidate() = 0;
-	virtual QPixmap pixmap() = 0;
-	virtual QPixmap recreatePixmap() = 0;
+	virtual QPixmap pixmap(Q_INT32 tileNo) = 0;
+	virtual QPixmap recreatePixmap(Q_INT32 tileNo) = 0;
 };
 
 inline 

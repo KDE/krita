@@ -754,6 +754,7 @@ void KisView::fillSelectionFg()
 
 void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 {
+#if 0
 	KisImageSP img = currentImg();
 
 	if (img) {
@@ -782,6 +783,33 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 			updateCanvas();
 		}
 	}
+#endif
+	KisImageSP img = currentImg();
+
+	if (img) {
+		KisSelectionSP selection = img -> selection();
+
+		if (selection) {
+			KisPaintDeviceSP parent = selection -> parent();
+			QRect rc = selection -> bounds();
+			QRect clip = selection -> clip();
+			KisPainter gc(parent);
+
+			if (!clip.isEmpty()) {
+				rc.setX(rc.x() + clip.x());
+				rc.setY(rc.y() + clip.y());
+				rc.setWidth(clip.width());
+				rc.setHeight(clip.height());
+			}
+
+			img -> unsetSelection();
+			gc.fillRect(rc, c, opacity);
+			gc.end();
+			m_doc -> setModified(true);
+			updateCanvas();
+		}
+	}
+
 }
 
 void KisView::crop()

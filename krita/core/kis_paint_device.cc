@@ -34,6 +34,11 @@ KisPaintDevice::~KisPaintDevice()
 {
 }
 
+Q_INT32 KisPaintDevice::tileNum(Q_INT32, Q_INT32) const
+{
+	return 0;
+}
+
 void KisPaintDevice::invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	Q_INT32 dx = x + w;
@@ -58,12 +63,12 @@ void KisPaintDevice::invalidate()
 	invalidate(0, 0, width(), height());
 }
 
-QPixmap KisPaintDevice::pixmap()
+QPixmap KisPaintDevice::pixmap(Q_INT32)
 {
 	return QPixmap();
 }
 
-QPixmap KisPaintDevice::recreatePixmap()
+QPixmap KisPaintDevice::recreatePixmap(Q_INT32)
 {
 	return QPixmap();
 }

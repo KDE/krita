@@ -36,6 +36,7 @@
 #include "kis_selection_manager.h"
 #include "kis_painter.h"
 #include "kis_iterators_pixel.h"
+#include <kis_iteratorpixeltrait.h>
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_colorspace_registry.h"
@@ -301,6 +302,7 @@ void KisSelectionManager::copy()
 	gc.bitBlt(0, 0, COMPOSITE_COPY, layer.data(), r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height());
 	// Apply selection mask.
 	selection -> invert(QRect(r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height()));
+
 	gc.bitBlt(0, 0, COMPOSITE_COPY_OPACITY, selection.data(), r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height());
 	selection -> invert(QRect(r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height()));
 	gc.end();
@@ -421,7 +423,28 @@ void KisSelectionManager::clear()
 // 		  << r.height() << "\n";
 
 	// XXX: make undoable
+
+	KisRectIterator layerIt = layer -> createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
+	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
+
+	while (!layerIt.isDone()) {
+		KisPixel p = layer -> toPixel(layerIt);
+		KisPixel s = selection -> toPixel(selectionIt);
+		Q_UINT8 p_alpha, s_alpha;
+		p_alpha = p.alpha();
+		s_alpha = s.alpha();
+		kdDebug() << "Layer opacity: " << QString().setNum(p_alpha) << ", selectedness: " << QString().setNum(s_alpha) << "\n";
+		if (s_alpha > 0)
+			p.alpha() = p_alpha - s_alpha;
+
+		layerIt++;
+		selectionIt++;
+	}
+
 	KisPainter p(img -> activeDevice());
+
+
+
  	p.bitBlt(r.x(), r.y(),
  		 COMPOSITE_COPY_OPACITY, // XXX: Is a mere copy of transparency correct?
  		 selection.data(),

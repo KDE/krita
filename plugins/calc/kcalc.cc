@@ -1767,7 +1767,7 @@ void QtCalculator::clear_status_label(){
   status_timer->stop();
 }
 
-void QtCalculator::setStatusLabel(char* string){
+void QtCalculator::setStatusLabel(const QString& string){
 
   statusERRORLabel->setText(string);
   status_timer->start(3000,TRUE);

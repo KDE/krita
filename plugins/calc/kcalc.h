@@ -209,8 +209,8 @@ public:
     QtCalculator( Calculator* _corba, QWidget *parent=0, const char *name=0 );
     ~QtCalculator();
    
-    void QtCalculator::keyPressEvent( QKeyEvent *e );    
-    void QtCalculator::keyReleaseEvent( QKeyEvent *e );
+    void keyPressEvent( QKeyEvent *e );    
+    void keyReleaseEvent( QKeyEvent *e );
     void  closeEvent( QCloseEvent *e );
     void writeSettings();
     void readSettings();
@@ -245,7 +245,7 @@ public slots:
     void selection_timed_out();
     void clear_buttons();
     void clear_status_label();
-    void setStatusLabel(char*);
+    void setStatusLabel(const QString&);
     void EnterDigit(int data);
     void EnterDecimal();
     void EnterStackFunction(int data);

@@ -48,10 +48,6 @@ class KRayonViewIface : public KoViewIface
 	void dialog_gradient();
 
 	// layer action slots
-	void insert_layer();
-	void remove_layer();
-	void link_layer();
-	void hide_layer();
 	void next_layer();
 	void previous_layer();
 

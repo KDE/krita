@@ -1,9 +1,10 @@
 /*
- *  kis_tool_rectangle.cc - part of Krayon
+ *  kis_tool_rectangle.cc - part of Krita
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,13 +35,11 @@
 #include "kis_tool_rectangle.h"
 #include "kis_dlg_toolopts.h"
 
-KisToolRectangle::KisToolRectangle() 
-	: super()
+KisToolRectangle::KisToolRectangle()
+	: super(),
+          m_dragging (false),
+          m_currentImage (0)
 {
-	m_subject = 0;
-
-// 	m_dragging = false;
-
 // 	// initialize rectangle tool settings
 // 	m_lineThickness = 4;
 // 	m_opacity = 255;
@@ -53,97 +52,101 @@ KisToolRectangle::~KisToolRectangle()
 {
 }
 
+void KisToolRectangle::update (KisCanvasSubject *subject)
+{
+        kdDebug (40001) << "KisToolRectangle::update(" << subject << ")" << endl;
+        super::update (subject);
+        if (m_subject)
+            m_currentImage = m_subject->currentImg ();
+}
+
 void KisToolRectangle::mousePress(QMouseEvent *event)
 {
-// 	if (event -> button() == LeftButton) {
-// 		m_dragging = true;
-// 		m_dragStart = event -> pos();
-// 		m_dragEnd = event -> pos();
-// 	}
+        kdDebug (40001) << "KisToolRectangle::mousePress" << event->pos () << endl;
+	if (event -> button() == LeftButton) {
+		m_dragging = true;
+		m_dragStart = event -> pos();
+		m_dragEnd = event -> pos();
+	}
 }
 
 void KisToolRectangle::mouseMove(QMouseEvent *event)
 {
-// 	if (m_dragging) {
-// 		// erase old lines on canvas
-// 		draw(m_dragStart, m_dragEnd);
-// 		// get current mouse position
-// 		m_dragEnd = event -> pos();
-// 		// draw new lines on canvas
-// 		draw(m_dragStart, m_dragEnd);
-// 	}
+        kdDebug (40001) << "KisToolRectangle::mouseMove" << event->pos () << endl;
+	if (m_dragging) {
+		// erase old lines on canvas
+		draw(m_dragStart, m_dragEnd);
+		// get current mouse position
+		m_dragEnd = event -> pos();
+		// draw new lines on canvas
+		draw(m_dragStart, m_dragEnd);
+	}
 }
 
 void KisToolRectangle::mouseRelease(QMouseEvent *event)
 {
-// 	KisView *view = getCurrentView();
+        if (!m_subject)
+            return;
 
-// 	if (m_dragging && event -> state() == LeftButton) {
-// 		// erase old lines on canvas
-// 		draw(m_dragStart, m_dragEnd);
-// 		m_dragging = false;
-// 	}
-    
-// 	// get topLeft and bottomRight.
-// 	int maxX = 0, maxY = 0;
-// 	int minX = 0, minY = 0;
+	if (m_dragging && event -> button() == LeftButton) {
+		// erase old lines on canvas
+		draw(m_dragStart, m_dragEnd);
+		m_dragging = false;
 
-// 	if (m_dragStart.x() > m_dragEnd.x()) {
-// 		maxX = m_dragStart.x();
-// 		minX = m_dragEnd.x();
-// 	}
-// 	else {
-// 		maxX = m_dragEnd.x();
-// 		minX = m_dragStart.x();
-// 	}
+                m_dragEnd = event->pos ();
+                if (m_dragStart == m_dragEnd)
+                        return;
 
-// 	if (m_dragStart.y() > m_dragEnd.y()) {
-// 		maxY = m_dragStart.y();
-// 		minY = m_dragEnd.y();
-// 	}
-// 	else {
-// 		maxY = m_dragEnd.y();
-// 		minY = m_dragStart.y();
-// 	}
+                if (!m_currentImage)
+                        return;
 
-// 	QPoint topLeft = QPoint(minX, minY);
-// 	QPoint bottomRight = QPoint(maxX, maxY);
-// 	m_final_lines = QRect(zoomed(topLeft), zoomed(bottomRight));
+                KisPaintDeviceSP device = m_currentImage->activeDevice ();;
+                KisPainter painter (device);
+                painter.beginTransaction (i18n ("rectangle"));
 
-// 	// draw final lines onto layer
-// 	draw(view -> kisPainter(), m_final_lines);	
+                painter.setPaintColor(m_subject -> fgColor());
+                painter.setBrush(m_subject -> currentBrush());
+                //painter.setOpacity(m_opacity);
+                //painter.setCompositeOp(m_compositeOp);
+
+                painter.paintRect(PAINTOP_BRUSH, m_dragStart, m_dragEnd, PRESSURE_DEFAULT);
+                m_currentImage -> notify( painter.dirtyRect() );
+
+                KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+                if (adapter) {
+                        adapter -> addCommand(painter.endTransaction());
+                }
+        }
 }
 
 void KisToolRectangle::draw(const QPoint& start, const QPoint& end )
 {
-// 	KisView *view = getCurrentView();
-// 	QPainter p;
-// 	QPen pen;
-// 	pen.setWidth(m_lineThickness);
+        if (!m_subject)
+            return;
 
-// 	p.begin(m_canvas);
-// 	p.setPen(pen);
-// 	p.setRasterOp( Qt::NotROP );
-// 	float zF = view->zoomFactor();
-// 	p.drawRect(QRect(start.x() + view->xPaintOffset() 
-// 				- (int)(zF * view->xScrollOffset()),
-// 				start.y() + view->yPaintOffset() 
-// 				- (int)(zF * view->yScrollOffset()), 
-// 				end.x() - start.x(), 
-// 				end.y() - start.y()) );
-// 	p.end();
+        KisCanvasControllerInterface *controller = m_subject->canvasController ();
+        kdDebug (40001) << "KisToolRectangle::draw(" << start << "," << end << ")"
+                        << " windowToView: start=" << controller->windowToView (start)
+                        << " windowToView: end=" << controller->windowToView (end)
+                        << endl;
+        QWidget *canvas = controller->canvas ();
+        QPainter p (canvas);
+
+        p.setRasterOp (Qt::NotROP);
+        p.drawRect (QRect (controller->windowToView (start), controller->windowToView (end)));
+        p.end ();
 }
 
-void KisToolRectangle::draw(KisPainter *gc, const QRect& rc)
-{
+//void KisToolRectangle::draw(KisPainter *gc, const QRect& rc)
+//{
 // 	gc -> drawRectangle(rc);
-}
+//}
 
 // void KisToolRectangle::optionsDialog()
 // {
 // 	kdDebug() << "KisToolRectangle::optionsDialog\n";
 
-// 	ToolOptsStruct ts;    
+// 	ToolOptsStruct ts;
 // 	KisView *view = getCurrentView();
 
 // 	ts.usePattern = m_usePattern;
@@ -163,7 +166,7 @@ void KisToolRectangle::draw(KisPainter *gc, const QRect& rc)
 // 	ToolOptionsDialog OptsDialog(tt_linetool, ts);
 
 // 	OptsDialog.exec();
-    
+
 // 	if (OptsDialog.result() == QDialog::Rejected)
 // 		return;
 
@@ -171,12 +174,12 @@ void KisToolRectangle::draw(KisPainter *gc, const QRect& rc)
 // 	m_opacity = OptsDialog.lineToolTab()->opacity();
 // 	m_usePattern = OptsDialog.lineToolTab()->usePattern();
 // 	m_useGradient = OptsDialog.lineToolTab()->useGradient();
-// 	m_fillSolid = OptsDialog.lineToolTab()->solid();  
+// 	m_fillSolid = OptsDialog.lineToolTab()->solid();
 
 // 	// User change value ?
-// 	if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient 
+// 	if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient
 // 			|| old_opacity != m_opacity || old_lineThickness != m_lineThickness
-// 			|| old_fillSolid != m_fillSolid) {    
+// 			|| old_fillSolid != m_fillSolid) {
 // 		KisPainter *p = view -> kisPainter();
 
 // 		p -> setLineThickness(m_lineThickness);
@@ -192,12 +195,12 @@ void KisToolRectangle::draw(KisPainter *gc, const QRect& rc)
 
 void KisToolRectangle::setup(KActionCollection *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Rectangle Tool"), 
-						  "rectangle", 
-						  0, 
-						  this, 
+	KToggleAction *toggle = new KToggleAction(i18n("&Rectangle Tool"),
+						  "rectangle",
+						  0,
+						  this,
 						  SLOT(activate()),
-						  collection, 
+						  collection,
 						  "tool_rectangle");
 
 	toggle -> setExclusiveGroup("tools");

@@ -4,6 +4,7 @@
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +29,7 @@
 
 #include "kis_tool.h"
 #include "kis_tool_paint.h"
+#include "kis_types.h"
 
 class QPainter;
 class KisPainter;
@@ -40,6 +42,16 @@ class KisToolRectangle : public KisToolPaint {
 public:
 	KisToolRectangle();
 	virtual ~KisToolRectangle();
+
+        //
+        // KisCanvasObserver interface
+        //
+
+        virtual void update (KisCanvasSubject *subject);
+
+        //
+        // KisToolPaint interface
+        //
 
 // 	virtual QString settingsName() const;
 // 	virtual QDomElement saveSettings(QDomDocument& doc) const;
@@ -54,10 +66,10 @@ public:
 
 public slots:
 //	virtual void toolSelect();
-    
+
 protected:
 	virtual void draw(const QPoint&, const QPoint&);
-	virtual void draw(KisPainter *gc, const QRect& rc);
+	//virtual void draw(KisPainter *gc, const QRect& rc);
 
 protected:
 	int m_lineThickness;
@@ -67,9 +79,8 @@ protected:
 	QRect m_final_lines;
 
 	bool m_dragging;
-private:
-	KisCanvasSubject *m_subject;
-	
+	KisImageSP m_currentImage;
+
 };
 
 #endif // __KIS_TOOL_RECTANGLE_H__

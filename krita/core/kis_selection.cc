@@ -22,11 +22,36 @@
 
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name) 
 {
+	m_name = name;
 	m_layer = layer;
-	m_mask = new MaskVector(layer -> width() * layer -> height(), OPACITY_TRANSPARENT);
+	m_mask = new MaskVector(layer -> width() * layer -> height(), 0); // XXX: Make constant?
 }
 
 KisSelection::~KisSelection() 
 {
 	delete m_mask;
+}
+
+QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y) 
+{
+	if (y < m_layer -> height() && y >= 0 && x < m_layer -> width() && x >= 0) {
+		return 0;//*m_mask[m_layer -> width() * y + x];
+	}
+	else {
+		return 0;
+	}
+}
+
+QUANTUM KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
+{
+	if (y < m_layer -> height() && y >= 0 && x < m_layer -> width() && x >= 0) {
+		//Q_INT32 s_previous = m_mask[m_layer -> width() * y + x];
+		// Is QvalueVector smart enough to see that this isn't an insertion?
+		// m_mask[m_layer -> width() * y + x] = s;
+		return 0; //s_previous;
+	}
+	else {
+		return 0;
+	}
+	
 }

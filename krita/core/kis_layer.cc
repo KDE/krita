@@ -23,18 +23,25 @@
 #include "kis_layer.h"
 #include "kis_channel.h"
 #include "kis_mask.h"
+#include "kis_selection.h"
 
-KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name) : super(width, height, imgType, name)
+KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name) : 
+	super(width, height, imgType, name),
+	m_opacity(OPACITY_OPAQUE),
+	m_linked(false),
+	m_hasSelection(false),
+	m_selection(0)
 {
-	m_linked = false;
-	m_opacity = OPACITY_OPAQUE;
 }
 
 KisLayer::KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity)
-	: super(img, width, height, img -> imgType(), name)
+	: super(img, width, height, img -> imgType(), name),
+	  m_opacity(opacity),
+	  m_linked(false),
+	  m_hasSelection(false),
+	  m_selection(0)
+
 {
-	m_linked = false;
-	m_opacity = opacity;
 }
 
 KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
@@ -49,17 +56,24 @@ KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
 
 		if (rhs.m_mask)
 			m_mask = new KisMask(*rhs.m_mask);
+
+		m_hasSelection = false;
+		m_selection = 0;
 	}
 }
 
-KisLayer::KisLayer(KisTileMgrSP tm, KisImageSP img, const QString& name, QUANTUM opacity) : super(tm, img, name)
+KisLayer::KisLayer(KisTileMgrSP tm, KisImageSP img, const QString& name, QUANTUM opacity) : 
+	super(tm, img, name),
+	m_opacity(opacity),
+	m_linked(false),
+	m_hasSelection(false),
+	m_selection(0)
 {
-	m_linked = false;
-	m_opacity = opacity;
 }
 
 KisLayer::~KisLayer()
 {
+	delete m_selection;
 }
 
 KisMaskSP KisLayer::createMask(Q_INT32 )
@@ -76,20 +90,60 @@ void KisLayer::applyMask(Q_INT32 )
 {
 }
 
+
+KisMaskSP KisLayer::mask() const
+{
+	return 0;
+}
+
+
+
+
+bool KisLayer::hasSelection() const
+{
+	return m_hasSelection;
+}
+
+
+void KisLayer::removeSelection()
+{
+	delete m_selection;
+	m_selection = 0;
+	m_hasSelection = false;
+}
+
+QUANTUM KisLayer::selected(Q_INT32 x, Q_INT32 y) const
+{
+	if (m_hasSelection) {
+		return m_selection -> selected(x, y);
+	}
+	else {
+		return 0;
+	}
+}
+
+
+QUANTUM KisLayer::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s) 
+{
+	if (!m_hasSelection) {
+		m_selection = new KisSelection(this, "layer selection for: " + name());
+	}
+	return m_selection -> setSelected(x, y, s);
+}
+
+
 void KisLayer::translate(Q_INT32 x, Q_INT32 y)
 {
 	m_dx = x;
 	m_dy = y;
 }
 
+	
+
 void KisLayer::addAlpha()
 {
 }
 
-KisMaskSP KisLayer::mask() const
-{
-	return 0;
-}
 
 QUANTUM KisLayer::opacity() const
 {

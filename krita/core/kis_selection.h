@@ -30,6 +30,10 @@
  * and an array or QPointArray's that represent the boundaries of the areas of a
  * possibly discontinuous selection. The points in the point array 'walk around'
  * the selected area clock-wise.
+ *
+ * Other types of selection could store a rect, a circle, a path -- whatever. Optimisation,
+ * not implemented yet.
+ *
  */
 class KisSelection {
 
@@ -37,15 +41,20 @@ public:
 	KisSelection(KisPaintDeviceSP layer, const QString& name);
 	virtual ~KisSelection();
 
-	void setSelected(Q_UINT8 s, Q_UINT32 x, Q_UINT32 y);
-	Q_UINT8 isSelected(Q_UINT32 x, Q_UINT32 y);
+	// Returns selectedness, or 0 if invalid coordinates
+	QUANTUM selected(Q_INT32 x, Q_INT32 y);
+
+	// Sets selectedness, and returns previous selectedness or 0
+	// if invalid coordinates.
+	QUANTUM setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
 
 private:
 	KisPaintDeviceSP m_layer;
 	// XXX: check whether the STL vector is faster/better match.
 	// a big chunk of memory is _not_ an alternative.
-	typedef QValueVector<Q_UINT8> MaskVector;
+	typedef QValueVector<QUANTUM> MaskVector;
 	MaskVector * m_mask;
+	QString m_name;
 };
 
 #endif // KIS_FLOATINGSELECTION_H_

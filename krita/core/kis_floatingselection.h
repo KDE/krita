@@ -26,7 +26,7 @@
 
 /**
  * The floating selection (formerly just 'selection') is a special layer that contains
- * a copy of the pixels from another layer.
+ * a cutout of the pixels from another layer.
  */
 class KisFloatingSelection : public KisLayer {
 	Q_OBJECT

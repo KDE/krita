@@ -88,7 +88,6 @@ void ColorRange::slotActivated()
 	if (dlgColorRange -> exec() == QDialog::Accepted) {
 		// Retrieve changes made by dialog
 		// Apply changes to layer (selection)
-		KisSelection * selection = new KisSelection((KisPaintDeviceSP)layer, "ColorRangeSelection");
 		// Iterate through the pixels of the layer
 		
 		// If the pixel matches the criteria from the dialog, set the pixel selected

@@ -20,6 +20,8 @@
 
 #include "kis_paint_device.h"
 
+class KisSelection;
+
 class KisLayer : public KisPaintDevice {
 	typedef KisPaintDevice super;
 
@@ -35,14 +37,39 @@ public:
 	virtual void visible(bool v);
 
 public:
+	// XXX: Masks were already out of order before I started on
+	// Krita, and I don't know what they were for.x
 	KisMaskSP createMask(Q_INT32 maskType);
 	KisMaskSP addMask(KisMaskSP mask);
 	void applyMask(Q_INT32 mode);
+	KisMaskSP mask() const;
 
+	// Selection stuff. XXX: is it necessary to make the actual
+	// selection object available outside the layer?
+
+	/** Whether there is a valid selection for this layer. */
+	bool hasSelection() const;
+
+	/** Removes the current selection for this layer. */
+	void removeSelection();
+
+	/**
+	 * Returns the selection state for the pixel designated by X
+	 * and Y: a pixel can be fully selected (QUANTUM_MASK) or not
+	 * selected at all (0).
+	 */
+	QUANTUM selected(Q_INT32 x, Q_INT32 y) const;
+
+	/**
+	 * Sets pixel x,y to selection state s; returns the previous
+	 * state. If the layer has no valid selection, creates a new
+	 * valid selection.
+	 */
+	QUANTUM setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
+	
 	void translate(Q_INT32 x, Q_INT32 y);
 	void addAlpha();
 
-	KisMaskSP mask() const;
 
 	QUANTUM opacity() const;
 	void setOpacity(QUANTUM val);
@@ -58,6 +85,14 @@ private:
 	bool m_linked;
 	Q_INT32 m_dx;
 	Q_INT32 m_dy;
+
+	// Whether there is a selection valid for this layer
+	bool m_hasSelection;
+
+	// Contains the actual selection. For now, there can be only
+	// one selection per layer. XXX: is this a limitation? 
+	KisSelection * m_selection;
+
 };
 
 #endif // KIS_LAYER_H_

@@ -27,14 +27,6 @@
 
 class QRect;
 
-/*
-        KisTileCommand extends KCommand with an addTile method; I
-        haven't found a way to keep this private in the namespace of
-        kis_painter.cc and still declare m_transaction to be of type
-        KisTileCommand in kis_painter.h -- dynamically downcasting a
-        KCommand m_transaction just to keep everything private seems
-        excessive.
-*/
 class KisTileCommand : public KCommand {
 	typedef std::map<Q_INT32, KisTileSP> TileMap;
 

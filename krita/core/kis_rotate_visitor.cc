@@ -402,7 +402,7 @@ void KisRotateVisitor::rotateRight90()
 
 	Q_INT32 pixelSize = m_dev -> pixelSize();
 	
-	x = 0;
+	x = rw;
 	for (y = ry; y < rh; ++y) {
 		KisHLineIterator hit = m_dev -> createHLineIterator(rx, y, rw, true);
 		KisVLineIterator vit = m_dev -> createVLineIterator(x, ry, rh, false);
@@ -411,7 +411,7 @@ void KisRotateVisitor::rotateRight90()
 			++hit;
 			++vit;
 		}
-		x = x + 1;
+		x = x - 1;
 		qApp -> processEvents();
 	}
 	m_dev -> crop(ry, rx, rh, rw);
@@ -424,7 +424,7 @@ void KisRotateVisitor::rotateLeft90()
 
 	Q_INT32 pixelSize = m_dev -> pixelSize();
 	
-	x = rw;
+	x = 0;
 	for (y = ry; y < rh; ++y) {
 		KisHLineIterator hit = m_dev -> createHLineIterator(rx, y, rw, true);
 		KisVLineIterator vit = m_dev -> createVLineIterator(x, ry, rh, false);
@@ -433,7 +433,7 @@ void KisRotateVisitor::rotateLeft90()
 			++hit;
 			++vit;
 		}
-		x = x - 1;
+		x = x + 1;
 		qApp -> processEvents();
 	}
 	m_dev -> crop(ry, rx, rh, rw);

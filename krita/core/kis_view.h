@@ -176,7 +176,6 @@ public slots:
 	void rotateLayer180();
 	void rotateLayerLeft90();
 	void rotateLayerRight90();
-	void rotateLayerCustom();
 	void mirrorLayerX();
 	void mirrorLayerY();
 	void scaleLayer(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);

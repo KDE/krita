@@ -25,7 +25,10 @@
 
 #include <kdialogbase.h>
 
+#include <kis_global.h>
+
 #include "wdg_rotateimage.h"
+
 
 class DlgRotateImage: public KDialogBase {
 	typedef KDialogBase super;
@@ -40,10 +43,14 @@ public:
 	void setAngle(Q_UINT32 w);
 	Q_INT32 angle();
 
+	void setDirection (enumRotationDirection direction);
+	enumRotationDirection direction();
+	
 private slots:
 
 	void okClicked();
-        
+	void resetPreview();
+
 private:
 
 	WdgRotateImage * m_page;

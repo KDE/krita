@@ -91,6 +91,12 @@ enum enumDockerStyle {
 	DOCKER_TOOLBOX
 };
 
+
+enum enumRotationDirection {
+	CLOCKWISE,
+	COUNTERCLOCKWISE,
+};
+
 /*
  * Most wacom pads have 512 levels of pressure; Qt only supports 256, and even
  * this is downscaled to 127 levels because the line would be too jittery, and

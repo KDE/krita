@@ -76,14 +76,7 @@
   <Action name="insert_image_as_layer"/>
   <Action name="save_layer_as_image"/>
   <Action name="layer_to_image"/>
-  <Separator/>
-  <Menu name="Rotate"><text>&amp;Rotate Layer</text>
-	  <Action name="rotateLayerRight90"/>
-	  <Action name="rotateLayer180"/>
-	  <Action name="rotateLayerLeft90"/>
-	  <Action name="rotateLayerCustom"/>
-  </Menu>
-  <Separator/>
+<Separator/>
   <Action name="mirrorLayerX"/>
   <Action name="mirrorLayerY"/>
   <Separator/>

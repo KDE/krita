@@ -59,25 +59,80 @@ DlgRotateImage::~DlgRotateImage()
 	delete m_page;
 }
 
-void DlgRotateImage::setAngle(Q_UINT32 angle) 
+void DlgRotateImage::setAngle(Q_UINT32 angle)
 {
-	m_page -> intAngle -> setValue(angle);
+	if (angle == 90) {
+		m_page -> radio90 -> setChecked(true);
+	}
+	else if (angle == 180) {
+		m_page -> radio180 -> setChecked(true);
+	}
+	else if (angle == 270) {
+		m_page -> radio270 -> setChecked(true);
+	}
+	else {
+		m_page -> radioCustom -> setChecked(true);
+		m_page -> intCustom -> setValue(angle);
+	}
+
+	if (m_oldAngle != angle)
+		resetPreview();
+	
 	m_oldAngle = angle;
-
+ 
 }
-
+ 
 Q_INT32 DlgRotateImage::angle()
 {
-	return (Q_INT32)qRound(m_page -> intAngle -> value());
+	double angle = 0;
+	if (m_page -> radio90 -> isChecked()) {
+		angle = 90;
+	}
+	else if (m_page -> radio180 -> isChecked()) {
+		angle = 180;
+	}
+	else if (m_page -> radio270 -> isChecked()) {
+		angle = 270;
+	}
+	else {
+		angle = qRound(m_page -> intCustom -> value());
+	}
+	if (m_page -> radioCW -> isChecked()) {
+		return angle;
+	}
+	else {
+		return -angle;
+	}
 }
 
-// SLOTS
+void DlgRotateImage::setDirection (enumRotationDirection direction)
+{
+	if (direction == CLOCKWISE) {
+		m_page -> radioCW -> setChecked(true);
+	}
+	else if (direction== COUNTERCLOCKWISE) {
+		m_page -> radioCCW -> setChecked(true);
+	}
+}
+
+enumRotationDirection DlgRotateImage::direction()
+{
+	if (m_page -> radioCCW -> isChecked()) {
+		return COUNTERCLOCKWISE;
+	}
+	else {
+		return CLOCKWISE;
+	}
+}
 
 void DlgRotateImage::okClicked()
 {
 	accept();
 }
 
-//#include "dlg_rotateimage.moc"
+void DlgRotateImage::resetPreview()
+{
+	// Code to update preview here.
+}
 
 #include "dlg_rotateimage.moc"

@@ -480,12 +480,6 @@ void KisView::setupActions()
 	m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
 	m_layerToImage = new KAction(i18n("Layer to Image"), 0, this, SLOT(layerToImage()), actionCollection(), "layer_to_image");
 
-	// layer transformations
-//        m_layerTransform = new KAction(i18n("Scale Layer..."), 0, this, SLOT(layerTransform()), actionCollection(), "transformlayer");
-	(void)new KAction(i18n("Rotate &180"), 0, this, SLOT(rotateLayer180()), actionCollection(), "rotateLayer180");
-	(void)new KAction(i18n("Rotate &270"), "rotate_ccw", this, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
-	(void)new KAction(i18n("Rotate &90"), "rotate_cw", this, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerRight90");
-	(void)new KAction(i18n("Rotate &Custom..."), 0, this, SLOT(rotateLayerCustom()), actionCollection(), "rotateLayerCustom");
 	(void)new KAction(i18n("Mirror Along &X Axis"), "view_left_right", this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
 	(void)new KAction(i18n("Mirror Along &Y Axis"), "view_top_bottom", this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
 
@@ -1367,11 +1361,6 @@ void KisView::rotateLayerLeft90()
 void KisView::rotateLayerRight90()
 {
 	rotateLayer( 90 );
-}
-
-void KisView::rotateLayerCustom()
-{
-	// XXX
 }
 
 void KisView::mirrorLayerX()
@@ -2523,7 +2512,7 @@ void KisView::scaleCurrentImage(double sx, double sy, enumFilterType ftype)
 void KisView::rotateCurrentImage(double angle)
 {
 	if (!currentImg()) return;
-	currentImg() -> rotate(angle,m_progress);
+	currentImg() -> rotate(angle, m_progress);
 	m_doc -> setModified(true);
 	resizeEvent(0);
 	layersUpdated();

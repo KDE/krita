@@ -40,7 +40,6 @@
 #include "kis_iterators_pixel_mask.h"
 #include "kis_scale_visitor.h"
 #include "kis_rotate_visitor.h"
-#include "kis_raindrops_filter_visitor.h"
 #include "kis_oilpaint_filter_visitor.h"
 #include "kis_profile.h"
 
@@ -310,11 +309,6 @@ void KisPaintDevice::accept(KisRotateVisitor& visitor)
         visitor.visitKisPaintDevice(this);
 }
 
-void KisPaintDevice::accept(KisRainDropsFilterVisitor& visitor)
-{
-        visitor.visitKisPaintDevice(this);
-}
-
 void KisPaintDevice::accept(KisOilPaintFilterVisitor& visitor)
 {
         visitor.visitKisPaintDevice(this);
@@ -339,13 +333,6 @@ void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInter
         KisRotateVisitor visitor;
         accept(visitor);
         visitor.shear(angleX, angleY, m_progress);
-}
-
-void KisPaintDevice::rainDropsFilter(Q_UINT32 dropSize, Q_UINT32 number, Q_UINT32 fishEyes, KisProgressDisplayInterface *m_progress) 
-{
-        KisRainDropsFilterVisitor visitor;
-        accept(visitor);
-        visitor.rainDropsFilter(dropSize, number, fishEyes, m_progress);
 }
 
 void KisPaintDevice::oilPaintFilter(Q_UINT32 brushSize, Q_UINT32 smooth, KisProgressDisplayInterface *m_progress) 

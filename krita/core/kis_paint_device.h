@@ -44,7 +44,6 @@ class KisTileCommand;
 class KisIteratorLineQuantum;
 class KisIteratorLinePixel;
 class KisRotateVisitor;
-class KisRainDropsFilterVisitor;
 class KisOilPaintFilterVisitor;
 
 /**
@@ -199,7 +198,6 @@ public:
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
-        void rainDropsFilter(Q_UINT32 dropSize, Q_UINT32 number, Q_UINT32 fishEyes, KisProgressDisplayInterface *m_progress);
         void oilPaintFilter(Q_UINT32 brushSize, Q_UINT32 smooth, KisProgressDisplayInterface *m_progress);
         
 	/**
@@ -336,7 +334,6 @@ private:
 
 	void accept(KisScaleVisitor &);
 	void accept(KisRotateVisitor &);
-        void accept(KisRainDropsFilterVisitor &);
         void accept(KisOilPaintFilterVisitor &);
         
 	// Whether there is a selection valid for this layer

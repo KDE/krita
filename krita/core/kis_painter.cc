@@ -59,11 +59,6 @@
 KisPainter::KisPainter()
 
 {
-	m_hotSpotX = 0;
-	m_hotSpotY = 0;
-	m_brushWidth = 0;
-	m_brushHeight = 0;
-
 	m_transaction = 0;
 
 	m_dab = 0;
@@ -526,7 +521,9 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 }
 
 QRect KisPainter::dirtyRect() {
-	return m_dirtyRect;
+	QRect r = m_dirtyRect;
+	m_dirtyRect = QRect();
+	return r;
 }
 
 
@@ -540,82 +537,50 @@ float KisPainter::paintLine(const enumPaintOp paintOp,
 {
 	if (!m_device) return 0;
 
-	// XXX: this is copy-paste from paint-at, and I don't like it.
-	Q_INT32 calibratedPressure = pressure / 2;
-	KisAlphaMask * mask = m_brush -> mask(calibratedPressure);
-	m_brushWidth = mask -> width();
-	m_brushHeight = mask -> height();
-	computeDab(mask);
+	Q_INT32 xSpacing = m_brush -> xSpacing(pressure);
+	Q_INT32 ySpacing = m_brush -> ySpacing(pressure);
 
-
-	Q_INT32 spacing = m_brush -> spacing();
-
-	if (spacing <= 0) {
-		spacing = 1;
+	if (xSpacing <= 0) {
+		xSpacing = 1;
+	}
+	if (ySpacing <= 0) {
+		ySpacing = 1;
 	}
 
-	Q_INT32 x1, y1, x2, y2;
-
-	x1 = pos1.x();
-	y1 = pos1.y();
-
-	x2 = pos2.x();
-	y2 = pos2.y();
-
-	QRect r;
-
-	if (x1 < x2 ) {
-		if (y1 < y2) {
-			r = QRect(x1, y1, x2 - x1 + m_dab -> width(), y2 - y1 + m_dab -> height());
-		}
-		else {
-			r = QRect(x1, y2, x2 - x1 + m_dab -> width(), y1 - y2 + m_dab -> height());
-		}
+	double xScale = 1;
+	double yScale = 1;
+	double spacing;
+	// Scale x or y so that we effectively have a square brush
+	// and calculate distance in that coordinate space. We reverse this scaling
+	// before drawing the brush. This produces the correct spacing in both
+	// x and y directions, even if the brush's aspect ratio is not 1:1.
+	if (xSpacing > ySpacing) {
+		yScale = (double)xSpacing / ySpacing;
+		spacing = xSpacing;
 	}
 	else {
-		if (y1 < y2) {
-			r = QRect(x2, y1, x1 - x2 + m_dab -> width(), y2 - y1 + m_dab -> height());
-		}
-		else {
-			r = QRect(x2, y2, x1 - x2 + m_dab -> width(), y1 - y2 + m_dab -> height());
-		}
+		xScale = (double)ySpacing / xSpacing;
+		spacing = ySpacing;
 	}
 
-	KisVector end(x2, y2);
-	KisVector start(x1, y1);
+	KisVector2D end(pos2);
+	KisVector2D start(pos1);
 
-	KisVector dragVec = end - start;
+	KisVector2D dragVec = end - start;
+
+	dragVec.setX(dragVec.x() * xScale);
+	dragVec.setY(dragVec.y() * yScale);
 
 	float newDist = dragVec.length();
 	float dist = savedDist + newDist;
 	float l_savedDist = savedDist;
 
 	if (static_cast<int>(dist) < spacing) {
-		m_dirtyRect = QRect();
 		return dist;
 	}
 
-	double length, ilength;
-	double x, y, z;
-	x = dragVec.x();
-	y = dragVec.y();
-	z = dragVec.z();
-	length = x * x + y * y + z * z;
-	length = sqrt (length);
-
-	if (length)
-	{
-		ilength = 1/length;
-		x *= ilength;
-		y *= ilength;
-		z *= ilength;
-	}
-
-	dragVec.setX(x);
-	dragVec.setY(y);
-	dragVec.setZ(z);
-
-	KisVector step = start;
+	dragVec.normalize();
+	KisVector2D step(0, 0);
 
 	while (dist >= spacing) {
 		if (l_savedDist > 0) {
@@ -625,8 +590,11 @@ float KisPainter::paintLine(const enumPaintOp paintOp,
 		else {
 			step += dragVec * spacing;
 		}
-		QPoint p(qRound(step.x()), qRound(step.y()));
-		// Fix this: paintAt does not always have to compute the dirtyRect
+		
+		KisVector2D sp = start + KisVector2D(step.x() / xScale, step.y() / yScale);
+
+		QPoint p(qRound(sp.x()), qRound(sp.y()));
+
 		switch(paintOp) {
 		case PAINTOP_BRUSH:
 			paintAt(p, pressure, xTilt, yTilt);
@@ -640,8 +608,6 @@ float KisPainter::paintLine(const enumPaintOp paintOp,
 
 		dist -= spacing;
 	}
-
-	m_dirtyRect = r;
 
 	if (dist > 0)
 		return dist;
@@ -668,24 +634,19 @@ void KisPainter::paintAt(const QPoint & pos,
 
 	if (!m_device) return;
 
-	Q_INT32 x = pos.x() - m_hotSpotX;
-	Q_INT32 y = pos.y() - m_hotSpotY;
-	Q_INT32 calibratedPressure = pressure / 2;
+	QPoint hotSpot = m_brush -> hotSpot(pressure);
+	Q_INT32 x = pos.x() - hotSpot.x();
+	Q_INT32 y = pos.y() - hotSpot.y();
 
 	// This is going to be sloooooow!
 	if (m_pressure != pressure || m_brush -> brushType() == PIPE_MASK || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
-		KisAlphaMask * mask = m_brush -> mask(calibratedPressure);
-		m_brushWidth = mask -> width();
-		m_brushHeight = mask -> height();
+		KisAlphaMask * mask = m_brush -> mask(pressure);
 		computeDab(mask);
 		m_pressure = pressure;
 	}
-	bitBlt( x,  y,  m_brush -> compositeOp(), m_dab.data(), m_brush -> opacity(), 0, 0, m_brushWidth, m_brushHeight );
+	bitBlt( x,  y,  m_brush -> compositeOp(), m_dab.data(), m_brush -> opacity(), 0, 0, m_dab -> width(), m_dab -> height());
 
-	m_dirtyRect = QRect(x,
-			    y,
-			    m_dab -> width(),
-			    m_dab -> height());
+	m_dirtyRect |= QRect(x, y, m_dab -> width(), m_dab -> height());
 }
 
 void KisPainter::eraseAt(const QPoint &pos,
@@ -695,18 +656,21 @@ void KisPainter::eraseAt(const QPoint &pos,
 {
 	if (!m_device) return;
 	
-	Q_INT32 calibratedPressure = pressure / 2;
+	KisAlphaMask *mask = m_brush -> mask(pressure);
+	QPoint hotSpot = m_brush -> hotSpot(pressure);
 
-	KisAlphaMask * mask = m_brush -> mask(calibratedPressure);
-	m_brushWidth = mask -> width();
-	m_brushHeight = mask -> height();
+	QRect r = QRect(pos.x() - hotSpot.x(),
+			pos.y() - hotSpot.y(),
+			mask -> width(),
+			mask -> height());
+
+	m_dab = new KisLayer(mask -> width(),
+			     mask -> height(),
+			     m_device -> typeWithAlpha(),
+			     "eraser_dab");
 
 	if (m_device -> alpha()) {
 		kdDebug() << "Erase to inverted brush transparency.\n";
-		m_dab = new KisLayer(mask -> width(),
-				     mask -> height(),
-				     m_device -> typeWithAlpha(),
-				     "eraser_dab");
 		m_dab -> setOpacity(OPACITY_OPAQUE);
 		for (int y = 0; y < mask -> height(); y++) {
 			for (int x = 0; x < mask -> width(); x++) {
@@ -714,40 +678,24 @@ void KisPainter::eraseAt(const QPoint &pos,
 				m_dab -> setPixel(x, y, m_paintColor, QUANTUM_MAX - mask -> alphaAt(x, y));
 			}
 		}
-		bitBlt( pos.x() - m_hotSpotX,  pos.y() - m_hotSpotY,  COMPOSITE_ERASE, m_dab.data() );
-		
-		m_dirtyRect = QRect(pos.x() - m_hotSpotX,
-				    pos.y() - m_hotSpotY,
-				    m_dab -> width(),
-				    m_dab -> height());
+		bitBlt( r.x(), r.y(), COMPOSITE_ERASE, m_dab.data() );
  	} else {
  		kdDebug() << "Erase to background colour.\n";
-		m_dab = new KisLayer(mask -> width(),
-				     mask -> height(),
-				     m_device -> typeWithAlpha(),
-				     "eraser_dab");
 		m_dab -> setOpacity(OPACITY_TRANSPARENT);
 		for (int y = 0; y < mask -> height(); y++) {
 			for (int x = 0; x < mask -> width(); x++) {
 				m_dab -> setPixel(x, y, m_backgroundColor, mask -> alphaAt(x, y));
 			}
 		}
-		bitBlt( pos.x() - m_hotSpotX,  pos.y() - m_hotSpotY,  COMPOSITE_OVER, m_dab.data() );
-		
-		m_dirtyRect = QRect(pos.x() - m_hotSpotX,
-				    pos.y() - m_hotSpotY,
-				    m_dab -> width(),
-				    m_dab -> height());	
+		bitBlt(r.x(), r.y(), COMPOSITE_OVER, m_dab.data() );
  	}
+
+	m_dirtyRect |= r;
 }
 
 void KisPainter::setBrush(KisBrush* brush)
 {
 	m_brush = brush;
-	m_hotSpot = m_brush -> hotSpot();
-	m_hotSpotX = m_hotSpot.x();
-	m_hotSpotY = m_hotSpot.y();
-
 }
 
 void KisPainter::computeDab(KisAlphaMask* mask)
@@ -767,3 +715,4 @@ void KisPainter::computeDab(KisAlphaMask* mask)
 		}
 	}
 }
+

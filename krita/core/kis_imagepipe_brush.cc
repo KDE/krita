@@ -78,7 +78,7 @@ QImage KisImagePipeBrush::img()
 	return m_brushes.at(m_currentBrush - 1) -> img();
 }
 
-KisAlphaMask *KisImagePipeBrush::mask(Q_INT32 scale)
+KisAlphaMask *KisImagePipeBrush::mask(Q_INT32 pressure) const
 {
 	if (m_brushes.isEmpty()) return 0;
 	// XXX: This does not follow the instructions in the 'parasite'
@@ -86,27 +86,8 @@ KisAlphaMask *KisImagePipeBrush::mask(Q_INT32 scale)
 		m_currentBrush = 0;
 	}
 	m_currentBrush++;
-	return m_brushes.at(m_currentBrush - 1) -> mask(scale);
+	return m_brushes.at(m_currentBrush - 1) -> mask(pressure);
 }
-
-void KisImagePipeBrush::setHotSpot(QPoint pt)
-{
-	Q_INT32 x = pt.x();
-	Q_INT32 y = pt.y();
-
-	if (x < 0)
-		x = 0;
-	else if (x >= width())
-		x = width() - 1;
-
-	if (y < 0)
-		y = 0;
-	else if (y >= height())
-		y = height() - 1;
-
-	m_hotSpot = QPoint(x, y);
-}
-
 
 void KisImagePipeBrush::setParasite(const QString& parasite)
 {
@@ -179,6 +160,9 @@ void KisImagePipeBrush::ioResult(KIO::Job * /*job*/)
 		else {
 			m_brushType = PIPE_IMAGE;
 		}
+		setSpacing(m_brushes.at(m_brushes.count() - 1) -> spacing());
+		setWidth(m_brushes.at(0) -> width());
+		setHeight(m_brushes.at(0) -> height());
 	}
 
 	emit loadComplete(this);

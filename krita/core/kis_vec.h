@@ -22,18 +22,182 @@
 #define __kis_vec_h__
 
 #include <math.h>
+#include <cfloat>
+#include <qpoint.h>
 
 /*
- * 2D/3D vector class
+ * vector classes
  */
 
-class KisVector
+class KisVector2D
 {
  public:
-	KisVector();
-	KisVector(double x, double y, double z = 0);
-	KisVector(int x, int y, int z = 0);
-	KisVector(long x, long y, long z = 0);
+	KisVector2D();
+	KisVector2D(double x, double y);
+	KisVector2D(const QPoint& p);
+
+	bool isNull()	const;
+
+	double length() const;
+
+	double	 x() const;
+	double	 y() const;
+	void   setX(double);
+	void   setY(double);
+
+	KisVector2D &normalize();
+	double  dotProduct(const KisVector2D &) const;
+
+	KisVector2D &operator+=(const KisVector2D &);
+	KisVector2D &operator-=(const KisVector2D &);
+	KisVector2D &operator*=(int);
+	KisVector2D &operator*=(long);
+	KisVector2D &operator*=(double);
+	KisVector2D &operator/=(int);
+	KisVector2D &operator/=(long);
+	KisVector2D &operator/=(double);
+
+	friend inline bool operator==(const KisVector2D &, const KisVector2D &);
+	friend inline bool operator!=(const KisVector2D &, const KisVector2D &);
+	friend inline KisVector2D operator+(const KisVector2D &, const KisVector2D &);
+	friend inline KisVector2D operator-(const KisVector2D &, const KisVector2D &);
+	friend inline KisVector2D operator*(const KisVector2D &, int);
+	friend inline KisVector2D operator*(int, const KisVector2D &);
+	friend inline KisVector2D operator*(const KisVector2D &, long);
+	friend inline KisVector2D operator*(long, const KisVector2D &);
+	friend inline KisVector2D operator*(const KisVector2D &, double);
+	friend inline KisVector2D operator*(double, const KisVector2D &);
+	friend inline KisVector2D operator-(const KisVector2D &);
+	friend inline KisVector2D operator/(const KisVector2D &, int);
+	friend inline KisVector2D operator/(const KisVector2D &, long);
+	friend inline KisVector2D operator/(const KisVector2D &, double);
+   
+	// This ought to be:
+	//const double epsilon = DBL_EPSILON;
+	#define epsilon DBL_EPSILON
+
+ private:
+	double m_x;
+	double m_y;
+};
+
+inline KisVector2D::KisVector2D()
+{ m_x=0; m_y=0; }
+
+inline KisVector2D::KisVector2D(double x, double y)
+{ m_x=x; m_y=y; }
+
+inline KisVector2D::KisVector2D(const QPoint& p)
+{
+  m_x=p.x(); m_y=p.y();
+}
+
+inline bool KisVector2D::isNull() const
+{ return fabs(m_x) < epsilon && fabs(m_y) < epsilon; }
+
+inline double KisVector2D::length() const
+{  return (sqrt(m_x*m_x + m_y*m_y)); }
+
+inline double KisVector2D::dotProduct(const KisVector2D &v) const
+{ return m_x*v.m_x + m_y*v.m_y; }
+
+inline double KisVector2D::x() const
+{ return m_x; }
+
+inline double KisVector2D::y() const
+{ return m_y; }
+
+inline void KisVector2D::setX(double x)
+{ m_x=x; }
+
+inline void KisVector2D::setY(double y)
+{ m_y=y; }
+
+inline KisVector2D &KisVector2D::operator+=(const KisVector2D &v)
+{ m_x+=v.m_x; m_y+=v.m_y; return *this; }
+
+inline KisVector2D &KisVector2D::operator-=(const KisVector2D &v)
+{ m_x-=v.m_x; m_y-=v.m_y; return *this; }
+
+inline KisVector2D &KisVector2D::operator*=(int c)
+{ m_x*=c; m_y*=c; return *this; }
+
+inline KisVector2D &KisVector2D::operator*=(long c)
+{ m_x*=c; m_y*=c; return *this; }
+
+inline KisVector2D &KisVector2D::operator*=(double c)
+{ m_x*=c; m_y*=c; return *this; }
+
+inline bool operator==(const KisVector2D &v1, const KisVector2D &v2)
+{ return fabs(v1.m_x - v2.m_x) < epsilon && fabs(v1.m_y - v2.m_y) < epsilon; }
+
+inline bool operator!=(const KisVector2D &v1, const KisVector2D &v2)
+{ return !(v1 == v2); }
+
+inline KisVector2D operator+(const KisVector2D &v1, const KisVector2D &v2)
+{ return KisVector2D(v1.m_x+v2.m_x, v1.m_y+v2.m_y); }
+
+inline KisVector2D operator-(const KisVector2D &v1, const KisVector2D &v2)
+{ return KisVector2D(v1.m_x-v2.m_x, v1.m_y-v2.m_y); }
+
+inline KisVector2D operator*(const KisVector2D &v, int c)
+{ return KisVector2D((v.m_x*c), (v.m_y*c)); }
+
+inline KisVector2D operator*(int c, const KisVector2D &v)
+{ return KisVector2D((v.m_x*c), (v.m_y*c)); }
+
+inline KisVector2D operator*(const KisVector2D &v, long c)
+{ return KisVector2D((v.m_x*c), (v.m_y*c)); }
+
+inline KisVector2D operator*(long c, const KisVector2D &v)
+{ return KisVector2D((v.m_x*c), (v.m_y*c)); }
+
+inline KisVector2D operator*(const KisVector2D &v, double c)
+{ return KisVector2D(v.m_x*c, v.m_y*c); }
+
+inline KisVector2D operator*(double c, const KisVector2D &v)
+{ return KisVector2D(v.m_x*c, v.m_y*c); }
+
+inline KisVector2D operator-(const KisVector2D &v)
+{ return KisVector2D(-v.m_x, -v.m_y); }
+
+inline KisVector2D &KisVector2D::operator/=(int c)
+{
+	if (!c == 0)
+	{
+		m_x/=c;
+		m_y/=c;
+	}
+	return *this;
+}
+
+inline KisVector2D &KisVector2D::operator/=(long c)
+{
+	if (!c == 0)
+	{
+		m_x/=c;
+		m_y/=c;
+	}
+	return *this;
+}
+
+inline KisVector2D &KisVector2D::operator/=(double c)
+{
+	if (!c == 0)
+	{
+		m_x/=c;
+		m_y/=c;
+	}
+	return *this;
+}
+
+class KisVector3D
+{
+ public:
+	KisVector3D();
+	KisVector3D(double x, double y, double z = 0);
+	KisVector3D(int x, int y, int z = 0);
+	KisVector3D(long x, long y, long z = 0);
 
 	bool isNull()	const;
 
@@ -46,33 +210,33 @@ class KisVector
 	void   setY(double);
 	void   setZ(double);
 
-	KisVector &normalize();
-	KisVector &crossProduct(const KisVector &);
-	double  dotProduct(const KisVector &) const;
+	KisVector3D &normalize();
+	KisVector3D &crossProduct(const KisVector3D &);
+	double  dotProduct(const KisVector3D &) const;
 
-	KisVector &operator+=(const KisVector &);
-	KisVector &operator-=(const KisVector &);
-	KisVector &operator*=(int);
-	KisVector &operator*=(long);
-	KisVector &operator*=(double);
-	KisVector &operator/=(int);
-	KisVector &operator/=(long);
-	KisVector &operator/=(double);
+	KisVector3D &operator+=(const KisVector3D &);
+	KisVector3D &operator-=(const KisVector3D &);
+	KisVector3D &operator*=(int);
+	KisVector3D &operator*=(long);
+	KisVector3D &operator*=(double);
+	KisVector3D &operator/=(int);
+	KisVector3D &operator/=(long);
+	KisVector3D &operator/=(double);
 
-	friend inline bool operator==(const KisVector &, const KisVector &);
-	friend inline bool operator!=(const KisVector &, const KisVector &);
-	friend inline KisVector operator+(const KisVector &, const KisVector &);
-	friend inline KisVector operator-(const KisVector &, const KisVector &);
-	friend inline KisVector operator*(const KisVector &, int);
-	friend inline KisVector operator*(int, const KisVector &);
-	friend inline KisVector operator*(const KisVector &, long);
-	friend inline KisVector operator*(long, const KisVector &);
-	friend inline KisVector operator*(const KisVector &, double);
-	friend inline KisVector operator*(double, const KisVector &);
-	friend inline KisVector operator-(const KisVector &);
-	friend inline KisVector operator/(const KisVector &, int);
-	friend inline KisVector operator/(const KisVector &, long);
-	friend inline KisVector operator/(const KisVector &, double);
+	friend inline bool operator==(const KisVector3D &, const KisVector3D &);
+	friend inline bool operator!=(const KisVector3D &, const KisVector3D &);
+	friend inline KisVector3D operator+(const KisVector3D &, const KisVector3D &);
+	friend inline KisVector3D operator-(const KisVector3D &, const KisVector3D &);
+	friend inline KisVector3D operator*(const KisVector3D &, int);
+	friend inline KisVector3D operator*(int, const KisVector3D &);
+	friend inline KisVector3D operator*(const KisVector3D &, long);
+	friend inline KisVector3D operator*(long, const KisVector3D &);
+	friend inline KisVector3D operator*(const KisVector3D &, double);
+	friend inline KisVector3D operator*(double, const KisVector3D &);
+	friend inline KisVector3D operator-(const KisVector3D &);
+	friend inline KisVector3D operator/(const KisVector3D &, int);
+	friend inline KisVector3D operator/(const KisVector3D &, long);
+	friend inline KisVector3D operator/(const KisVector3D &, double);
    
  private:
 	double m_x;
@@ -80,94 +244,94 @@ class KisVector
 	double m_z;
 };
 
-inline KisVector::KisVector()
+inline KisVector3D::KisVector3D()
 { m_x=0; m_y=0; m_z=0; }
 
-inline KisVector::KisVector(double x, double y, double z)
+inline KisVector3D::KisVector3D(double x, double y, double z)
 { m_x=x; m_y=y; m_z=z; }
 
-inline KisVector::KisVector(int x, int y, int z)
+inline KisVector3D::KisVector3D(int x, int y, int z)
 { m_x=static_cast<double>(x); m_y=static_cast<double>(y); m_z=static_cast<double>(z); }
 
-inline KisVector::KisVector(long x, long y, long z)
+inline KisVector3D::KisVector3D(long x, long y, long z)
 { m_x=static_cast<double>(x); m_y=static_cast<double>(y); m_z=static_cast<double>(z); }
 
-inline bool KisVector::isNull() const
-{ return m_x == 0 && m_y == 0 && m_z == 0; }
+inline bool KisVector3D::isNull() const
+{ return fabs(m_x) < epsilon && fabs(m_y) < epsilon && fabs(m_z) < epsilon; }
 
-inline double KisVector::length() const
+inline double KisVector3D::length() const
 {  return (sqrt(m_x*m_x + m_y*m_y + m_z*m_z)); }
 
-inline double KisVector::dotProduct(const KisVector &v) const
+inline double KisVector3D::dotProduct(const KisVector3D &v) const
 { return m_x*v.m_x + m_y*v.m_y + m_z*v.m_z; }
 
-inline double KisVector::x() const
+inline double KisVector3D::x() const
 { return m_x; }
 
-inline double KisVector::y() const
+inline double KisVector3D::y() const
 { return m_y; }
 
-inline double KisVector::z() const
+inline double KisVector3D::z() const
 { return m_z; }
 
-inline void KisVector::setX(double x)
+inline void KisVector3D::setX(double x)
 { m_x=x; }
 
-inline void KisVector::setY(double y)
+inline void KisVector3D::setY(double y)
 { m_y=y; }
 
-inline void KisVector::setZ(double z)
+inline void KisVector3D::setZ(double z)
 { m_z=z; }
 
-inline KisVector &KisVector::operator+=(const KisVector &v)
+inline KisVector3D &KisVector3D::operator+=(const KisVector3D &v)
 { m_x+=v.m_x; m_y+=v.m_y; m_z+=v.m_z; return *this; }
 
-inline KisVector &KisVector::operator-=(const KisVector &v)
+inline KisVector3D &KisVector3D::operator-=(const KisVector3D &v)
 { m_x-=v.m_x; m_y-=v.m_y; m_z-=v.m_z; return *this; }
 
-inline KisVector &KisVector::operator*=(int c)
+inline KisVector3D &KisVector3D::operator*=(int c)
 { m_x*=c; m_y*=c; m_z*=c; return *this; }
 
-inline KisVector &KisVector::operator*=(long c)
+inline KisVector3D &KisVector3D::operator*=(long c)
 { m_x*=c; m_y*=c; m_z*=c; return *this; }
 
-inline KisVector &KisVector::operator*=(double c)
+inline KisVector3D &KisVector3D::operator*=(double c)
 { m_x*=c; m_y*=c; m_z*=c; return *this; }
 
-inline bool operator==(const KisVector &v1, const KisVector &v2)
-{ return v1.m_x == v2.m_x && v1.m_y == v2.m_y && v1.m_z == v2.m_z; }
+inline bool operator==(const KisVector3D &v1, const KisVector3D &v2)
+{ return fabs(v1.m_x - v2.m_x) < epsilon && fabs(v1.m_y - v2.m_y) < epsilon && fabs(v1.m_z - v2.m_z) < epsilon; }
 
-inline bool operator!=(const KisVector &v1, const KisVector &v2)
-{ return v1.m_x != v2.m_x || v1.m_y != v2.m_y || v1.m_z != v2.m_z; }
+inline bool operator!=(const KisVector3D &v1, const KisVector3D &v2)
+{ return !(v1 == v2); }
 
-inline KisVector operator+(const KisVector &v1, const KisVector &v2)
-{ return KisVector(v1.m_x+v2.m_x, v1.m_y+v2.m_y, v1.m_z+v2.m_z); }
+inline KisVector3D operator+(const KisVector3D &v1, const KisVector3D &v2)
+{ return KisVector3D(v1.m_x+v2.m_x, v1.m_y+v2.m_y, v1.m_z+v2.m_z); }
 
-inline KisVector operator-(const KisVector &v1, const KisVector &v2)
-{ return KisVector(v1.m_x-v2.m_x, v1.m_y-v2.m_y, v1.m_z-v2.m_z); }
+inline KisVector3D operator-(const KisVector3D &v1, const KisVector3D &v2)
+{ return KisVector3D(v1.m_x-v2.m_x, v1.m_y-v2.m_y, v1.m_z-v2.m_z); }
 
-inline KisVector operator*(const KisVector &v, int c)
-{ return KisVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
+inline KisVector3D operator*(const KisVector3D &v, int c)
+{ return KisVector3D((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
 
-inline KisVector operator*(int c, const KisVector &v)
-{ return KisVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
+inline KisVector3D operator*(int c, const KisVector3D &v)
+{ return KisVector3D((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
 
-inline KisVector operator*(const KisVector &v, long c)
-{ return KisVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
+inline KisVector3D operator*(const KisVector3D &v, long c)
+{ return KisVector3D((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
 
-inline KisVector operator*(long c, const KisVector &v)
-{ return KisVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
+inline KisVector3D operator*(long c, const KisVector3D &v)
+{ return KisVector3D((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
 
-inline KisVector operator*(const KisVector &v, double c)
-{ return KisVector(v.m_x*c, v.m_y*c, v.m_z*c); }
+inline KisVector3D operator*(const KisVector3D &v, double c)
+{ return KisVector3D(v.m_x*c, v.m_y*c, v.m_z*c); }
 
-inline KisVector operator*(double c, const KisVector &v)
-{ return KisVector(v.m_x*c, v.m_y*c, v.m_z*c); }
+inline KisVector3D operator*(double c, const KisVector3D &v)
+{ return KisVector3D(v.m_x*c, v.m_y*c, v.m_z*c); }
 
-inline KisVector operator-(const KisVector &v)
-{ return KisVector(-v.m_x, -v.m_y, -v.m_z); }
+inline KisVector3D operator-(const KisVector3D &v)
+{ return KisVector3D(-v.m_x, -v.m_y, -v.m_z); }
 
-inline KisVector &KisVector::operator/=(int c)
+inline KisVector3D &KisVector3D::operator/=(int c)
 {
 	if (!c == 0)
 	{
@@ -178,7 +342,7 @@ inline KisVector &KisVector::operator/=(int c)
 	return *this;
 }
 
-inline KisVector &KisVector::operator/=(long c)
+inline KisVector3D &KisVector3D::operator/=(long c)
 {
 	if (!c == 0)
 	{
@@ -189,7 +353,7 @@ inline KisVector &KisVector::operator/=(long c)
 	return *this;
 }
 
-inline KisVector &KisVector::operator/=(double c)
+inline KisVector3D &KisVector3D::operator/=(double c)
 {
 	if (!c == 0)
 	{
@@ -199,4 +363,5 @@ inline KisVector &KisVector::operator/=(double c)
 	}
 	return *this;
 }
+
 #endif

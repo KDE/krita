@@ -65,7 +65,7 @@ void KisToolBrush::mousePress(QMouseEvent *e)
         if (e->button() == QMouseEvent::LeftButton) {
 		m_mode = PAINT;
 		initPaint(e -> pos());
-		m_painter -> paintAt(e->pos(), 128, 0, 0);
+		m_painter -> paintAt(e->pos(), PRESSURE_DEFAULT, 0, 0);
 		// XXX: get the rect that should be notified
 		m_currentImage -> notify( m_painter -> dirtyRect() );
          }
@@ -83,7 +83,7 @@ void KisToolBrush::mouseRelease(QMouseEvent* e)
 void KisToolBrush::mouseMove(QMouseEvent *e)
 {
 	if (m_mode == PAINT) {
-		paintLine(m_dragStart, e -> pos(), 128, 0, 0);
+		paintLine(m_dragStart, e -> pos(), PRESSURE_DEFAULT, 0, 0);
 	}
 }
 

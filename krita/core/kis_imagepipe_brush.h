@@ -53,10 +53,7 @@ public:
 	/**
 	   @return the next mask in the pipe.
 	*/
-	virtual KisAlphaMask *mask(Q_INT32 scale = PRESSURE_LEVELS / 2);
-
-	void setHotSpot(QPoint);
-	QPoint hotSpot() const { return m_hotSpot; }
+	virtual KisAlphaMask *mask(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 
 	virtual enumBrushType brushType() const;
 
@@ -72,11 +69,10 @@ private:
 	QString m_parasite; // This contains some kind of instructions on how to use the brush
 			  // That I haven't decoded yet.
 	Q_UINT32 m_numOfBrushes;
-	Q_UINT32 m_currentBrush;
+	mutable Q_UINT32 m_currentBrush;
 
 	QValueVector<Q_UINT8> m_data;
-	QPoint m_hotSpot;
-	QPtrList<KisBrush> m_brushes;
+	mutable QPtrList<KisBrush> m_brushes;
 
 	enumBrushType m_brushType;
 	

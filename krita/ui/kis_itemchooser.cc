@@ -143,9 +143,9 @@ void KisItemChooser::init(bool spacing)
 
 	if (spacing) {
 		m_lbSpacing = new QLabel(i18n("Spacing: "), this);
-		m_slSpacing = new IntegerWidget( 1, 100, this, "int_widget" );
+		m_slSpacing = new IntegerWidget( 1, 1000, this, "int_widget" );
 		m_slSpacing -> setTickmarks(QSlider::Below);
-		m_slSpacing -> setTickInterval(10);
+		m_slSpacing -> setTickInterval(100);
 		QObject::connect(m_slSpacing, SIGNAL(valueChanged(int)), this, SLOT(slotSetItemSpacing(int)));
 
 		m_lbOpacity = new QLabel(i18n("Opacity: "), this);

@@ -48,7 +48,7 @@ namespace {
 		Q_UINT32 height;       /*  height of brush  */
 		Q_UINT32 bytes;        /*  depth of brush in bytes */
 		Q_UINT32 magic_number; /*  GIMP brush magic number  */
-		Q_UINT32 spacing;      /*  brush spacing  */
+		Q_UINT32 spacing;      /*  brush spacing as % of width & height, 0 - 1000 */
 	};
 }
 
@@ -98,11 +98,13 @@ QImage KisBrush::img()
 	return m_img;
 }
 
-KisAlphaMask *KisBrush::mask(Q_INT32 scale)
+KisAlphaMask *KisBrush::mask(Q_INT32 pressure) const
 {
 	if (m_masks.isEmpty()) {
 		createMasks(m_img);
 	}
+
+	Q_INT32 scale = (pressure * PRESSURE_LEVELS) / PRESSURE_MAX;
 
 	if (scale >= PRESSURE_LEVELS || (uint)scale >= m_masks.count())
 		scale = m_masks.count() - 1;
@@ -128,6 +130,13 @@ void KisBrush::setHotSpot(QPoint pt)
 		y = height() - 1;
 
 	m_hotSpot = QPoint(x, y);
+}
+
+QPoint KisBrush::hotSpot(Q_INT32 pressure) const
+{
+	KisAlphaMask *msk = mask(pressure);
+	QPoint p(msk -> width() / 2, msk -> height() / 2);
+	return p;
 }
 
 enumBrushType KisBrush::brushType() const {
@@ -174,19 +183,25 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 	bh.magic_number = ntohl(bh.magic_number);
 	m_magic_number = bh.magic_number;
 
-	bh.spacing = ntohl(bh.spacing);
+	if (bh.version == 1) {
+		// No spacing in version 1 files so use Gimp default
+		bh.spacing = 25;
+	}
+	else {
+		bh.spacing = ntohl(bh.spacing);
+	
+		if (bh.spacing > 1000) {
+			emit ioFailed(this);
+			return;
+		}
+	}
+
+	setSpacing(bh.spacing);
 
 	if (bh.header_size > m_data.size() || bh.header_size == 0) {
 		emit ioFailed(this);
 		return;
 	}
-
-        if (bh.spacing > m_width || bh.spacing > m_height) {
-                setSpacing(m_width);
-        }
-        else {
-                setSpacing(bh.spacing / 10);
-        }
 
 	name.resize(bh.header_size - sizeof(GimpBrushHeader));
 	memcpy(&name[0], &m_data[sizeof(GimpBrushHeader)], name.size());
@@ -202,8 +217,6 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		emit ioFailed(this);
 		return;
 	}
-
-
 
 	k = bh.header_size;
 
@@ -254,7 +267,8 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 }
 
 
-void KisBrush::createMasks(const QImage & img) {
+void KisBrush::createMasks(const QImage & img) const
+{
 	if (!m_masks.isEmpty())
 		m_masks.clear();
 
@@ -263,9 +277,20 @@ void KisBrush::createMasks(const QImage & img) {
 		// 100 levels, 50 smaller, 50 bigger, smallest image is 0%, biggest 200$, value 50
 		// is 100%, so 0-50 describes 0-100%, compute x & y: 50 becomes 1, 0 becomes 0.01,
 		// every step is 2%
-		scale += 0.02;
+		//scale += 0.02;
+		scale += 1.0 / (PRESSURE_LEVELS / 2);
 		m_masks.append(new KisAlphaMask(img, scale));
 	}
+}
+
+Q_INT32 KisBrush::xSpacing(Q_INT32 pressure) const
+{
+	return (mask(pressure) -> width() * m_spacing) / 100;
+}
+
+Q_INT32 KisBrush::ySpacing(Q_INT32 pressure) const
+{
+	return (mask(pressure) -> height() * m_spacing) / 100;
 }
 
 #include "kis_brush.moc"

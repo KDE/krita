@@ -62,10 +62,15 @@ public:
 	   @return a mask computed from the grey-level values of the
 	   pixels in the brush.
 	*/
-	virtual KisAlphaMask *mask(Q_INT32 scale = PRESSURE_LEVELS / 2);
+	virtual KisAlphaMask *mask(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 
 	void setHotSpot(QPoint);
-	QPoint hotSpot() const { return m_hotSpot; }
+	QPoint hotSpot(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+
+	void setSpacing(Q_INT32 s) { m_spacing = s; }
+	Q_INT32 spacing() const { return m_spacing; }
+	Q_INT32 xSpacing(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+	Q_INT32 ySpacing(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 
 	virtual enumBrushType brushType() const;
 
@@ -75,12 +80,13 @@ private slots:
 	void ioResult(KIO::Job *job);
 
 private:
-	void createMasks(const QImage & img);
+	void createMasks(const QImage & img) const;
 
 	QValueVector<Q_UINT8> m_data;
 	QPoint m_hotSpot;
+	Q_INT32 m_spacing;
 	QImage m_img;
-	QPtrList<KisAlphaMask> m_masks;
+	mutable QPtrList<KisAlphaMask> m_masks;
 
 	Q_UINT32 m_header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
 	Q_UINT32 m_version;      /*  brush file version #  */

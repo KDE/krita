@@ -84,6 +84,9 @@ const Q_INT32 RENDER_WIDTH = TILE_SIZE * 4;
  * the amount of masks take too much memory otherwise.
  */
 const Q_INT32 PRESSURE_LEVELS=127;
+const Q_INT32 PRESSURE_MIN = 0;
+const Q_INT32 PRESSURE_MAX = 255;
+const Q_INT32 PRESSURE_DEFAULT = (PRESSURE_MAX - PRESSURE_MIN) / 2;
 
 enum CompositeOp {
 	COMPOSITE_OVER,

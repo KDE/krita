@@ -146,7 +146,7 @@ void KisResourceMediator::resourceServerLoadedPattern(KisPattern *resource)
 		KisIconItem *item = new KisIconItem(resource);
 
 		m_items[resource] = item;
-		item -> setSpacing(resource -> spacing());
+		//item -> setSpacing(resource -> spacing());
 
 		m_chooser -> addItem(item);
 		emit addedResource(resource);

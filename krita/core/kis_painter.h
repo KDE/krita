@@ -184,13 +184,6 @@ private:
 	KisGradient *m_gradient;
 	QUANTUM m_opacity;
 
-	QPoint m_hotSpot;
-        Q_INT32 m_hotSpotX;
-        Q_INT32 m_hotSpotY;
-
-        Q_INT32 m_brushWidth;
-        Q_INT32 m_brushHeight;
-
 	Q_INT32 m_pressure;
 };
 

@@ -20,14 +20,30 @@
 
 #include "kis_vec.h"
 
-KisVector& KisVector::normalize()
+KisVector2D& KisVector2D::normalize()
+{
+	double length, ilength;
+  
+	length = m_x*m_x + m_y*m_y;
+	length = sqrt (length);
+  
+	if (length > epsilon)
+	{
+		ilength = 1/length;
+		m_x *= ilength;
+		m_y *= ilength;
+	}
+	return *this;
+}
+
+KisVector3D& KisVector3D::normalize()
 {
 	double length, ilength;
   
 	length = m_x*m_x + m_y*m_y + m_z*m_z;
 	length = sqrt (length);
   
-	if (length)
+	if (length > epsilon)
 	{
 		ilength = 1/length;
 		m_x *= ilength;
@@ -37,7 +53,7 @@ KisVector& KisVector::normalize()
 	return *this;
 }
 
-KisVector& KisVector::crossProduct(const KisVector &v)
+KisVector3D& KisVector3D::crossProduct(const KisVector3D &v)
 {
 	double x,y,z;
   

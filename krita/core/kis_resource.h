@@ -69,8 +69,8 @@ public:
 	void setValid(bool valid);
 	Q_INT32 width() const;
 	Q_INT32 height() const;
-	void setSpacing(Q_INT32 s) { m_spacing = s; }
-	Q_INT32 spacing() const { return m_spacing; }
+	virtual void setSpacing(Q_INT32) {}
+	virtual Q_INT32 spacing() const { return 1; }
 	void setOpacity(QUANTUM o) { m_opacity = o; }
 	QUANTUM opacity() const { return m_opacity; }
 	void setCompositeOp(CompositeOp op) { m_compositeOp = op; }
@@ -97,7 +97,6 @@ private:
 	bool m_valid;
 	Q_INT32 m_width;
 	Q_INT32 m_height;
-	Q_INT32 m_spacing;
 	QUANTUM m_opacity;
 	CompositeOp m_compositeOp;
 };

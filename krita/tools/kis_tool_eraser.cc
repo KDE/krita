@@ -68,7 +68,7 @@ void KisToolEraser::mousePress(QMouseEvent *e)
         if (e->button() == QMouseEvent::LeftButton) {
 		m_mode = ERASE;
 		initErase(e -> pos());
-		m_painter -> eraseAt(e->pos(), 128, 0, 0);
+		m_painter -> eraseAt(e->pos(), PRESSURE_DEFAULT, 0, 0);
 		// XXX: get the rect that should be notified
 		m_currentImage -> notify( m_painter -> dirtyRect() );
          }
@@ -76,7 +76,7 @@ void KisToolEraser::mousePress(QMouseEvent *e)
 
 void KisToolEraser::mouseMove(QMouseEvent *e) {
 	if (m_mode == ERASE) {
-		eraseLine(m_dragStart, e -> pos(), 128, 0, 0);
+		eraseLine(m_dragStart, e -> pos(), PRESSURE_DEFAULT, 0, 0);
 	}
 }
 

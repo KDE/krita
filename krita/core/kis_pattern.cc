@@ -281,11 +281,11 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 
 	setValid(true);
 
-	int meanSize = (width() + height())/2;
+	//int meanSize = (width() + height())/2;
 
-	setSpacing(meanSize / 4);
-	if(spacing() < 1)  setSpacing(1);
-	if(spacing() > 20) setSpacing(20);
+	//setSpacing(meanSize / 4);
+	//if(spacing() < 1)  setSpacing(1);
+	//if(spacing() > 20) setSpacing(20);
 
 	// default hotspot
 	m_hotSpot = QPoint(width()/2, height()/2);

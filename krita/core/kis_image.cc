@@ -1104,8 +1104,6 @@ Q_INT32 KisImage::tileNum(Q_INT32 xpix, Q_INT32 ypix) const
 // Composite the specified tile onto the projection layer.
 void KisImage::renderToProjection(Q_INT32 tileno)
 {
-	kdDebug() << "renderToProjection tile: " << tileno << "\n";
-
 	KisTileMgrSP tm = m_projection -> data();
 	KisTileSP dst;
 	KisPainter gc;

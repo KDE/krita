@@ -36,9 +36,14 @@ class KisResourceServer : public QObject {
 	Q_OBJECT
 
 public:
-	/** Create a resource server for a particular resource type */
 	KisResourceServer();
 	virtual ~KisResourceServer();
+	
+
+	void loadBrushes();
+	void loadpipeBrushes();
+	void loadPatterns();
+	void loadGradients();
 
 public:
 	Q_INT32 brushCount() const { return m_brushes.count(); }
@@ -51,10 +56,7 @@ public:
 	QPtrList<KisResource> patterns();
 	QPtrList<KisResource> gradients();
 
-	void loadBrushes();
-	void loadpipeBrushes();
-	void loadPatterns();
-	void loadGradients();
+
 
 signals:
 	void loadedBrush(KisResource *br);
@@ -63,10 +65,15 @@ signals:
 	void loadedGradient(KisResource *pat);
 
 private:
+
 	void loadBrush();
 	void loadpipeBrush();
 	void loadPattern();
 	void loadGradient();
+
+
+	KisResourceServer(const KisResourceServer&);
+	KisResourceServer& operator=(const KisResourceServer&);
 
 private slots:
 	void brushLoaded(KisResource *r);
@@ -93,6 +100,8 @@ private:
 
 	QPtrList<KisResource> m_gradients;
 	QStringList m_gradientFilenames;
+
+
 };
 
 #endif // KIS_RESOURCESERVER_H_

@@ -36,6 +36,7 @@ KisResourceServer::KisResourceServer()
 	m_pipebrushes.setAutoDelete(true);
 	m_patterns.setAutoDelete(true);
 	m_gradients.setAutoDelete(true);
+
 }
 
 KisResourceServer::~KisResourceServer()
@@ -45,6 +46,7 @@ KisResourceServer::~KisResourceServer()
 	m_patterns.clear();
 	m_gradients.clear();
 }
+
 
 void KisResourceServer::loadBrushes()
 {

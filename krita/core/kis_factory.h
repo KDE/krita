@@ -24,7 +24,6 @@
 #include <koFactory.h>
 
 class KInstance;
-class KisResourceServer;
 class KAboutData;
 
 class KisFactory : public KoFactory
@@ -44,11 +43,9 @@ public:
 
 	static KAboutData        *aboutData();
 	static KInstance         *global();
-	static KisResourceServer *rServer();
 
 private:
 	static KInstance           *s_global;
-	static KisResourceServer   *s_rserver;
 	static KAboutData          *s_aboutData;
 };
 

@@ -250,7 +250,7 @@ DCOPObject* KisView::dcopObject()
 void KisView::setupDockers()
 {
 
-        KisResourceServer *rserver = KisFactory::rServer();
+        m_resourceServer = new KisResourceServer();
 
         m_layerchanneldocker = new DockFrameDocker(this);
         m_layerchanneldocker -> setCaption(i18n("Layers/Channels/Paths"));
@@ -282,28 +282,41 @@ void KisView::setupDockers()
         m_historydocker = new DockFrameDocker(this);
         m_historydocker -> setCaption(i18n("History/Actions"));
 
-        m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
+
+	// Setup all brushes
+        m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, m_resourceServer, i18n("Brushes"),
                                                   m_resourcedocker, "brush_chooser", this);
         m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
         m_resourcedocker -> plug(m_brushMediator -> chooserWidget());
         connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
 
-        m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
+
+	// Setup patterns
+        m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, m_resourceServer, i18n("Patterns"),
                                                     m_resourcedocker, "pattern chooser", this);
         m_pattern = dynamic_cast<KisPattern*>(m_patternMediator -> currentResource());
         m_resourcedocker -> plug(m_patternMediator -> chooserWidget());
         connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
 
-	m_gradientMediator = new KisResourceMediator(MEDIATE_GRADIENTS, rserver, i18n("Gradients"),
+
+	// Setup gradients
+	m_gradientMediator = new KisResourceMediator(MEDIATE_GRADIENTS, m_resourceServer, i18n("Gradients"),
 						    m_resourcedocker, "gradient chooser", this);
 	m_gradient = dynamic_cast<KisGradient*>(m_gradientMediator -> currentResource());
 	m_resourcedocker -> plug(m_gradientMediator -> chooserWidget());
 	connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(gradientActivated(KisResource*)));
 
+	m_resourceServer -> loadBrushes();
+        m_resourceServer -> loadpipeBrushes();
+        m_resourceServer -> loadPatterns();
+        m_resourceServer -> loadGradients();
+
+	// Autocrush
 	m_autobrush = new KisAutobrush(m_resourcedocker, "autobrush", i18n("Autobrush"));
 	m_resourcedocker -> plug(m_autobrush);
 	connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
 
+	// Layers
         m_layerBox = new KisLayerBox(i18n("layer"), KisLayerBox::SHOWALL, m_layerchanneldocker);
         m_layerBox -> setCaption(i18n("Layers"));
 
@@ -324,10 +337,13 @@ void KisView::setupDockers()
         m_layerchanneldocker -> plug(m_layerBox);
         layersUpdated();
 
+
+	// Channels
         m_channelView = new KisChannelView(m_doc, this);
         m_channelView -> setCaption(i18n("Channels"));
         m_layerchanneldocker -> plug(m_channelView);
 
+	// Control box
         m_controlWidget = new ControlFrame(m_toolcontroldocker);
         m_controlWidget -> setCaption(i18n("General"));
         m_toolcontroldocker -> plug(m_controlWidget);
@@ -338,11 +354,6 @@ void KisView::setupDockers()
         connect(m_controlWidget, SIGNAL(bgColorChanged(const KoColor&)), SLOT(slotSetBGColor(const KoColor&)));
         connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetFGColor(const KoColor&)));
         connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetBGColor(const KoColor&)));
-
-        rserver -> loadBrushes();
-        rserver -> loadpipeBrushes();
-        rserver -> loadPatterns();
-        rserver -> loadGradients();
 
         // TODO Here should be a better check
         if ( mainWindow() -> isDockEnabled( DockBottom))

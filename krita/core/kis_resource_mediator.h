@@ -36,6 +36,13 @@ class KisResourceServer;
 #define MEDIATE_PATTERNS 2
 #define MEDIATE_GRADIENTS 4
 
+
+/**
+ * A resource mediator manages access to resources like
+ * gradients. brushes, patterns and palettes.
+ * For every view, a new resource mediator is created for every
+ * resource type.
+ */
 class KisResourceMediator : public QObject {
 	Q_OBJECT
 	typedef QObject super;

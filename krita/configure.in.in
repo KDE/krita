@@ -2,3 +2,9 @@ dnl Don't compile krita when ImageMagick isn't available (for now)
 if test -z "$LIBMAGICK_LIBS"; then
   DO_NOT_COMPILE="$DO_NOT_COMPILE krita"
 fi
+
+KDE_CHECK_LIB(Xi, XOpenDisplay, [
+	LIB_XINPUTEXT="-lXi"
+	AC_DEFINE(HAVE_XINPUTEXT, 1, [Define if you have the X11 Input Extension])
+	])
+AC_SUBST(LIB_XINPUTEXT)

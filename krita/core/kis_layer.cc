@@ -42,15 +42,6 @@ KisLayer::~KisLayer()
 {
 }
 
-void KisLayer::copy(const KisPaintDevice& , bool )
-{
-}
-
-bool KisLayer::checkScaling(Q_INT32 , Q_INT32 )
-{
-	return false;
-}
-
 KisMaskSP KisLayer::createMask(Q_INT32 )
 {
 	return 0;
@@ -70,18 +61,6 @@ void KisLayer::translate(Q_INT32 , Q_INT32 )
 }
 
 void KisLayer::addAlpha()
-{
-}
-
-void KisLayer::scaleFactor(double , double )
-{
-}
-
-void KisLayer::scale(Q_INT32 , Q_INT32 , Q_INT32 , bool )
-{
-}
-
-void KisLayer::scale(const QSize& , Q_INT32 , bool )
 {
 }
 

@@ -145,7 +145,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, Q
 	src -> release();
 }
 
-void KisPainter::drawTile(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisTileSP src, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
 	Q_INT32 x;
 	Q_INT32 y;

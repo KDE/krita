@@ -91,7 +91,7 @@ public:
 	bool activeComponent(CHANNELTYPE type);
 
 	void visibleComponent(CHANNELTYPE pixel, bool active);
-	bool visibleComponent(CHANNELTYPE pixel);
+	bool visibleComponent(CHANNELTYPE pixel) const;
 
 	void flush();
 
@@ -146,7 +146,7 @@ private:
 	void copyTile(KisTileSP dst, KisTileSP src);
 	void expand(KisPaintDeviceSP dev);
 	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name);
-	PIXELTYPE pixelFromChannel(CHANNELTYPE type);
+	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
 	void renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y);
 
 private:

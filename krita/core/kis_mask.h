@@ -25,15 +25,7 @@ class KisMask : public KisChannel {
 
 public:
 	KisMask(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, const KoColor& color);
-	KisMask(const KisMask& rhs);
 	virtual ~KisMask();
-
-public:
-	KisMask& operator=(const KisMask& rhs);
-
-public:
-	// Overide KisPaintDevice
-	virtual void duplicate(const KisPaintDevice& rhs, bool addAlpha);
 
 public:
 	KisLayerSP layer() const;

@@ -93,6 +93,8 @@ signals:
 
 private:
 	void init();
+	KisPaintDevice(const KisPaintDevice&);
+	KisPaintDevice& operator=(const KisPaintDevice&);
 
 protected:
 	KisImageSP m_owner;
@@ -102,7 +104,6 @@ protected:
 	Q_INT32 m_width;
 	Q_INT32 m_height;
 	Q_INT32 m_depth;
-	Q_INT32 m_opacity;
 	Q_INT32 m_offX;
 	Q_INT32 m_offY;
 	Q_INT32 m_quantumSize;

@@ -25,15 +25,7 @@ class KisChannel : public KisPaintDevice {
 
 public:
 	KisChannel(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, const KoColor& color);
-	KisChannel(const KisChannel& rhs);
 	virtual ~KisChannel();
-
-public:
-	KisChannel& operator=(const KisChannel& rhs);
-
-public:
-	// Overide KisPaintDevice
-	virtual void duplicate(const KisPaintDevice& rhs, bool addAlpha);
 
 public:
 	QUANTUM opacity() const;

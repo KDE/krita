@@ -122,19 +122,19 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, 
 
 	switch (imgType) {
 		case IMAGE_TYPE_INDEXED:
+		case IMAGE_TYPE_GREY:
 			n = 1;
 			break;
 		case IMAGE_TYPE_INDEXEDA:
+		case IMAGE_TYPE_GREYA:
 			n = 2;
 			break;
 		case IMAGE_TYPE_RGB:
-		case IMAGE_TYPE_GREY:
 		case IMAGE_TYPE_LAB:
 		case IMAGE_TYPE_YUV:
 		case IMAGE_TYPE_CMYK:
 			n = 3;
 			break;
-		case IMAGE_TYPE_GREYA:
 		case IMAGE_TYPE_RGBA:
 		case IMAGE_TYPE_LABA:
 		case IMAGE_TYPE_YUVA:
@@ -369,14 +369,11 @@ void KisImage::visibleComponent(CHANNELTYPE type, bool value)
 	}
 }
 
-bool KisImage::visibleComponent(CHANNELTYPE type)
+bool KisImage::visibleComponent(CHANNELTYPE type) const
 {
 	PIXELTYPE i = pixelFromChannel(type);
 
-	if (i != PIXEL_UNDEF)
-		return m_visible[i];
-
-	return false;
+	return i != PIXEL_UNDEF && m_visible[i];
 }
 
 void KisImage::flush()
@@ -895,7 +892,7 @@ void KisImage::enableUndo(KCommandHistory *history)
 	m_undoHistory = history;
 }
 
-PIXELTYPE KisImage::pixelFromChannel(CHANNELTYPE type)
+PIXELTYPE KisImage::pixelFromChannel(CHANNELTYPE type) const
 {
 	PIXELTYPE i = PIXEL_UNDEF;
 
@@ -925,7 +922,9 @@ PIXELTYPE KisImage::pixelFromChannel(CHANNELTYPE type)
 					break;
 				default:
 					i = PIXEL_ALPHA;
+					break;
 			}
+			break;
 		default:
 			break;
 	}
@@ -1016,7 +1015,7 @@ void KisImage::renderTile(KisTileMgrSP tm, KisTileSP dst, Q_INT32 x, Q_INT32 y)
 					if (layer -> opacity() == OPACITY_OPAQUE)
 						gc.bitBlt(0, 0, COMPOSITE_OVER, src, 0, 0, src -> width(), src -> height());
 					else
-						gc.drawTile(0, 0, COMPOSITE_OVER, src, layer -> opacity(), 0, 0, src -> width(), src -> height());
+						gc.bitBlt(0, 0, COMPOSITE_OVER, src, layer -> opacity(), 0, 0, src -> width(), src -> height());
 
 					src -> valid(true);
 				}

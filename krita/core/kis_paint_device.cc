@@ -321,7 +321,6 @@ void KisPaintDevice::init()
 	m_width = 0;
 	m_height = 0;
 	m_depth = 0;
-	m_opacity = 0;
 	m_alpha = false;
 	m_quantumSize = 0;
 	m_offX = 0;

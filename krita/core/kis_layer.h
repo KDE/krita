@@ -32,21 +32,12 @@ public:
 	virtual ~KisLayer();
 
 public:
-	// Overide KisPaintDevice
-	virtual void copy(const KisPaintDevice& rhs, bool addAlpha);
-
-public:
-	bool checkScaling(Q_INT32 width, Q_INT32 height);
 	KisMaskSP createMask(Q_INT32 maskType);
 	KisMaskSP addMask(KisMaskSP mask);
 	void applyMask(Q_INT32 mode);
 
 	void translate(Q_INT32 x, Q_INT32 y);
 	void addAlpha();
-
-	void scaleFactor(double wfactor, double hfactor);
-	void scale(Q_INT32 width, Q_INT32 height, Q_INT32 interpolation, bool localOrigin);
-	void scale(const QSize& size, Q_INT32 interpolation, bool localOrigin);
 
 	void resize(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	void resize(const QRect& rc);

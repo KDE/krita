@@ -67,12 +67,11 @@ QMutex *KisTile::mutex()
 
 void KisTile::lock()
 {
+#if 0
 	m_mutex.lock();
 	m_nref++;
 
 	if (m_nref == 1) {
-	//	if (tile->listhead)
-	//		tile_cache_flush (tile);
 	}
 
 	if (m_data == 0) {
@@ -81,12 +80,6 @@ void KisTile::lock()
 	}
 		
 	m_mutex.unlock();
-
-#if 0
-	if (!tile->valid) {
-		/* an invalid tile should never be shared, so this should work */
-		tile_manager_validate ((TileManager*) tile->tlink->tm, tile);
-	}
 #endif
 }
 
@@ -96,6 +89,7 @@ void KisTile::lockAsync()
 
 void KisTile::release()
 {
+#if 0
 	m_mutex.lock();
 	m_nref--;
 
@@ -108,6 +102,7 @@ void KisTile::release()
 		m_cache -> insert(this);
 
 	m_mutex.unlock();
+#endif
 }
 
 void KisTile::allocate()

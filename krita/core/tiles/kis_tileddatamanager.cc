@@ -99,21 +99,6 @@ KisTiledDataManager::~KisTiledDataManager()
 }
 
 
-Q_UINT32 KisTiledDataManager::xToCol(Q_UINT32 x)
-{
-	// The hack with 16384 is to avoid negative division which is undefined in C++ and the most
-	// common result is not like what is desired.
-	// however the hack is not perfect either since for coords lower it gives the wrong result
-	return (x + 16384 * KisTile::WIDTH) / KisTile::WIDTH - 16384;
-}
-
-Q_UINT32 KisTiledDataManager::yToRow(Q_UINT32 y)
-{
-	// The hack with 16384 is to avoid negative division which is undefined in C++ and the most
-	// common result is not like what is desired.
-	// however the hack is not perfect either since for coords lower it gives the wrong result
-	return (y + 16384 * KisTile::HEIGHT) / KisTile::HEIGHT - 16384;
-}
 
 bool KisTiledDataManager::write(KoStore *store)
 {
@@ -545,13 +530,41 @@ KisTile *KisTiledDataManager::getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def)
 Q_UINT8* KisTiledDataManager::pixel(Q_INT32 x, Q_INT32 y)
 {
 	// XXX: Optimize by using the tiles directly
-	return readBytes(x, y, 1, 1);
+	//return readBytes(x, y, 1, 1);
+	
+	Q_UINT32 row = yToRow(y);
+	Q_UINT32 col = xToCol(x);
+	
+	// calc limits within the tile
+	Q_INT32 yInTile = y - row * KisTile::HEIGHT;
+	Q_INT32 xInTile = x - col * KisTile::WIDTH;
+	
+	Q_INT32 offset = m_pixelSize * (yInTile * KisTile::WIDTH + xInTile);
+
+	KisTile *tile = getTile(col, row, false);
+
+	return tile -> data() + offset;
+	
 }
 
 void KisTiledDataManager::setPixel(Q_INT32 x, Q_INT32 y, Q_UINT8 * data)
 {
 	// XXX: Optimize by using the tiles directly
-	writeBytes(data, x, y, 1, 1);
+	// writeBytes(data, x, y, 1, 1);
+	
+	Q_UINT32 row = yToRow(y);
+	Q_UINT32 col = xToCol(x);
+
+
+	// calc limits within the tile
+	Q_INT32 yInTile = y - row * KisTile::HEIGHT;
+	Q_INT32 xInTile = x - col * KisTile::WIDTH;
+
+	Q_INT32 offset = m_pixelSize * (yInTile * KisTile::WIDTH + xInTile);
+	
+	KisTile *tile = getTile(col, row, true);
+
+	memcpy(tile -> data() + offset, data, m_pixelSize);
 }
 
 
@@ -567,7 +580,7 @@ Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
 
  	Q_UINT8 * data = new Q_UINT8[w * h * m_pixelSize];
 	Q_UINT8 * ptr = data;
-
+	int adv;
  	// XXX: Isn't this a very slow copy?
 	for(Q_INT32 y2 = y; y2 < y + h; y2++)
 	{
@@ -575,10 +588,11 @@ Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
 		KisTiledHLineIterator hiter = KisTiledHLineIterator(this, x, y2, w, false);
 		while(! hiter.isDone())
 		{
-			memcpy(ptr, hiter.rawData(), m_pixelSize);
+			adv = hiter.nConseqHPixels();
+			memcpy(ptr, hiter.rawData(), m_pixelSize * adv);
 
-			ptr += m_pixelSize;
-			++hiter;
+			ptr += m_pixelSize * adv;
+			hiter += adv;
 		}
 	}
 
@@ -601,6 +615,7 @@ void KisTiledDataManager::writeBytes(Q_UINT8 * bytes,
 		h = 0;
 	Q_UINT8 * ptr = bytes;
 
+	int adv;
 
 	// XXX: Isn't this a very slow copy?
 	for(Q_INT32 y2 = y; y2 < y + h; y2++)
@@ -608,10 +623,11 @@ void KisTiledDataManager::writeBytes(Q_UINT8 * bytes,
 		KisTiledHLineIterator hiter = KisTiledHLineIterator(this, x, y2, w, true);
 		while(! hiter.isDone())
 		{
-			memcpy(hiter.rawData(), ptr , m_pixelSize);
+			adv = hiter.nConseqHPixels();
+			memcpy(hiter.rawData(), ptr , adv * m_pixelSize);
 
-			ptr += m_pixelSize;
-			++hiter;
+			ptr += adv * hiter.nConseqHPixels();
+			hiter += adv;
 		}
 	}
 }

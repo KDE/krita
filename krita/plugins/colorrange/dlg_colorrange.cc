@@ -55,16 +55,25 @@
 #include "dlg_colorrange.h"
 #include "wdg_colorrange.h"
 
+void ColorRangeCanvasSubject::setBGColor(const QColor& c) 
+{ 
+	m_parent -> slotColorChanged(c);
+}
+void ColorRangeCanvasSubject::setFGColor(const QColor& c) 
+{ 
+	m_parent -> slotColorChanged(c); 
+}
+
+
 DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  parent, const char * name)
-	: super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok)
+	: super (parent, name, false, i18n("Color Range"), Ok | Cancel, Ok)
 {
 	m_layer = layer;
 	m_view = view;
 	
 	m_subject = view -> getCanvasSubject();
 	
-	m_canvasSubject = new ColorRangeCanvasSubject(m_view);
-	connect (m_canvasSubject, SIGNAL(sigColorPicked(QColor& )), this, SLOT(slotColorChanged(QColor& )));
+	m_canvasSubject = new ColorRangeCanvasSubject(this, m_view);
 	KisID id = KisID("colorpicker", "");
 	m_picker = m_view -> toolRegistry() -> createTool((KisCanvasSubject*)m_canvasSubject, id);
 	

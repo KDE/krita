@@ -137,13 +137,14 @@ public:
 
 public:
 	/**
-	 * Get a copy of a single pixel
+	 * Get a read-only pointer to the spcified pixel. The result of writing to this pointer is
+	 * unspecified.
 	 */
   	Q_UINT8* pixel(Q_INT32 x, Q_INT32 y)
   		{ return ACTUAL_DATAMGR::pixel(x, y);};
 
 	/**
-	 * write the specified data to x, y. There is no checking on pixelSize!
+	 * Write the specified data to x, y. There is no checking on pixelSize!
 	 */
 	void setPixel(Q_INT32 x, Q_INT32 y, Q_UINT8 * data)
 		{ ACTUAL_DATAMGR::setPixel(x, y, data);};

@@ -455,8 +455,15 @@ QString PerfTest::pixelTest(Q_UINT32 testCount)
 			}
  		}
 		report = report.append(QString("    written 1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+
 		doc -> removeImage(img);
+
+	
+		
 	}
+
+	
+
 
 	return report;
 
@@ -533,5 +540,20 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
 	
 }
 
+QString PerfTest::readBytesTest(Q_UINT32 testCount)
+{
+	return QString("Read bytes test");
+}
+
+
+QString PerfTest::writeBytesTest(Q_UINT32 testCount)
+{
+	return QString("Write bytes test");
+}
+
+QString PerfTest::iteratorTest(Q_UINT32 testCount)
+{
+	return QString("Iterator test");
+}
 
 #include "perftest.moc"

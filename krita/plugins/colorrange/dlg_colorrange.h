@@ -56,15 +56,14 @@
 class KisTool;
 class KisView;
 class KisCanvasSubject;
+class DlgColorRange;
 
 // A little hack around CanvasSubject to make sure we get the colour, and not the view.
-class ColorRangeCanvasSubject: public QObject, public KisCanvasSubject  {
-
-	Q_OBJECT
+class ColorRangeCanvasSubject: public KisCanvasSubject  {
 	
 public:
 		
-	ColorRangeCanvasSubject(KisView * view) : m_view(view) { m_subject = m_view -> getCanvasSubject(); };
+	ColorRangeCanvasSubject(DlgColorRange * parent, KisView * view) : m_parent(parent), m_view(view) { m_subject = m_view -> getCanvasSubject(); };
 	virtual ~ColorRangeCanvasSubject() {};
 
 	virtual void attach(KisCanvasObserver *observer) { m_subject -> attach(observer); };
@@ -73,9 +72,9 @@ public:
 	virtual KisImageSP currentImg() const { return m_subject -> currentImg(); };
 	virtual QString currentImgName() const { return m_subject -> currentImgName(); };
 	virtual QColor bgColor() const { return QColor(); };
-	virtual void setBGColor(const QColor& c) { emit sigColorPicked(c); };
+	virtual void setBGColor(const QColor& c);
 	virtual QColor fgColor() const { return QColor(); };
-	virtual void setFGColor(const QColor& c) { emit sigColorPicked(c);};
+	virtual void setFGColor(const QColor& c);
 	virtual KisBrush *currentBrush() const { return 0; };
 	virtual KisPattern *currentPattern() const { return 0; };
 	virtual KisGradient *currentGradient() const { return 0; };
@@ -91,15 +90,11 @@ public:
 	virtual KisFilterSP filterGet(const KisID& id) { return m_subject -> filterGet(id); };
 	virtual KisIDList filterList() {return m_subject -> filterList(); };
 
-signals:
-
-	void sigColorPicked(const QColor&);
-	
 private:
 
+	DlgColorRange * m_parent;
 	KisView * m_view;
 	KisCanvasSubject * m_subject;
-
  
 };
 
@@ -125,6 +120,9 @@ public:
 	DlgColorRange(KisView * view, KisLayerSP layer, QWidget * parent = 0, const char* name = 0);
 	~DlgColorRange();
 
+public slots:
+	void slotColorChanged(const QColor & c);
+
 private slots:
 
 	void okClicked();
@@ -141,7 +139,6 @@ private slots:
 	void slotPreviewTypeChanged(int index);
 	void updatePreview();
 
-	void slotColorChanged(const QColor & c);
 	
 private:
 	QImage createMask(KisSelectionSP selection, KisLayerSP layer);

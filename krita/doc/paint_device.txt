@@ -1,0 +1,10 @@
+Paint devices and painters
+
+Krita's core consists of paint devices and painters:
+
+KisPaintDevice
+KisPainter
+
+These classes are looely modelled on QPaintDevice and QPainter.
+Note that the individual pixel() and setPixel() methods in KisPaintDevice
+are not efficient.

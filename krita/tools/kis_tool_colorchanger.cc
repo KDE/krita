@@ -226,7 +226,7 @@ void ColorChangerTool::setCursor()
 
 void ColorChangerTool::setupAction(QObject *collection)
 {
-	KToggleAction * toggle = new KToggleAction(i18n("Color changer"), "colorize", 0, this, SLOT(toolSelect()), collection, "tool_colorchanger");
+	KToggleAction * toggle = new KToggleAction(i18n("Color Changer"), "colorize", 0, this, SLOT(toolSelect()), collection, "tool_colorchanger");
 
 	toggle -> setExclusiveGroup("tools");
 }

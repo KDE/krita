@@ -41,7 +41,7 @@ EllipticalSelectTool::~EllipticalSelectTool()
 
 void EllipticalSelectTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Elliptical select"), "elliptical" , 0, this, SLOT(toolSelect()),
+	KToggleAction *toggle = new KToggleAction(i18n("&Elliptical Select"), "elliptical" , 0, this, SLOT(toolSelect()),
 			collection, "tool_select_elliptical" );
 
 	toggle -> setExclusiveGroup("tools");

@@ -146,7 +146,7 @@ void LineTool::optionsDialog()
 
 void LineTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Line tool"), "line", 0, this, SLOT(toolSelect()), collection, "tool_line");
+	KToggleAction *toggle = new KToggleAction(i18n("&Line Tool"), "line", 0, this, SLOT(toolSelect()), collection, "tool_line");
 
 	toggle -> setExclusiveGroup("tools");
 }

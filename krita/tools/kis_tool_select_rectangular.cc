@@ -285,7 +285,7 @@ void RectangularSelectTool::draw(const QPoint& start, const QPoint& end, QPaintE
 
 void RectangularSelectTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Rectangular select"), "rectangular", 0, this,  
+	KToggleAction *toggle = new KToggleAction(i18n("&Rectangular Select"), "rectangular", 0, this,  
 			SLOT(toolSelect()), collection, "tool_select_rectangular");
 
 	toggle -> setExclusiveGroup("tools");

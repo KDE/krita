@@ -330,7 +330,7 @@ void BrushTool::optionsDialog()
 
 void BrushTool::setupAction(QObject *collection)
 {
-	m_toggle = new KToggleAction(i18n("&Brush tool"), "paintbrush", 0, this, SLOT(toolSelect()), collection, "tool_brush");
+	m_toggle = new KToggleAction(i18n("&Brush Tool"), "paintbrush", 0, this, SLOT(toolSelect()), collection, "tool_brush");
 	m_toggle -> setExclusiveGroup("tools");
 }
 

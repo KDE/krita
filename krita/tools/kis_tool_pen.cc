@@ -277,7 +277,7 @@ void PenTool::optionsDialog()
 
 void PenTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Pen tool"), "pencil", 0, this, SLOT(toolSelect()), collection, "tool_pen");
+	KToggleAction *toggle = new KToggleAction(i18n("&Pen Tool"), "pencil", 0, this, SLOT(toolSelect()), collection, "tool_pen");
 
 	toggle -> setExclusiveGroup("tools");
 }

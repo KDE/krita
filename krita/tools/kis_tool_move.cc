@@ -157,7 +157,7 @@ void MoveTool::setCursor()
 
 void MoveTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Move tool"), "move", 0, this, SLOT(toolSelect()), collection, "tool_move");
+	KToggleAction *toggle = new KToggleAction(i18n("&Move Tool"), "move", 0, this, SLOT(toolSelect()), collection, "tool_move");
 
         toggle -> setExclusiveGroup("tools");
 }

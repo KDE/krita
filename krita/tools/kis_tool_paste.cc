@@ -426,7 +426,7 @@ void PasteTool::mouseRelease(QMouseEvent *e)
 
 void PasteTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Paste tool"), "editpaste", 0, this, SLOT(toolSelect()), collection, "tool_paste");
+	KToggleAction *toggle = new KToggleAction(i18n("&Paste Tool"), "editpaste", 0, this, SLOT(toolSelect()), collection, "tool_paste");
 
 	toggle -> setExclusiveGroup("tools");
 }

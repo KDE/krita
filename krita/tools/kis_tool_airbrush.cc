@@ -346,7 +346,7 @@ void AirBrushTool::optionsDialog()
 
 void AirBrushTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Airbrush tool"), "airbrush", 0, this, 
+	KToggleAction *toggle = new KToggleAction(i18n("&Airbrush Tool"), "airbrush", 0, this, 
 			SLOT(toolSelect()), collection, "tool_airbrush");
 
 	toggle -> setExclusiveGroup("tools");

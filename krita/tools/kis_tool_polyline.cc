@@ -73,7 +73,7 @@ void PolyLineTool::mouseRelease(QMouseEvent * /*event*/)
 
 void PolyLineTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Polyline tool"), "polyline", 0, this, SLOT(toolSelect()), collection, "tool_polyline");
+	KToggleAction *toggle = new KToggleAction(i18n("&Polyline Tool"), "polyline", 0, this, SLOT(toolSelect()), collection, "tool_polyline");
 
 	toggle -> setExclusiveGroup("tools");
 }

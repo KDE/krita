@@ -304,7 +304,7 @@ void FillTool::setCursor()
 
 void FillTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Filler tool"), "fill", 0, this, SLOT(toolSelect()), collection, "tool_fill");
+	KToggleAction *toggle = new KToggleAction(i18n("&Filler Tool"), "fill", 0, this, SLOT(toolSelect()), collection, "tool_fill");
 
 	toggle -> setExclusiveGroup("tools");
 }

@@ -76,7 +76,7 @@ void ColorPicker::mousePress(QMouseEvent *e)
 
 void ColorPicker::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Color picker"), "colorpicker", 0, this, SLOT(toolSelect()), collection, "tool_colorpicker");
+	KToggleAction *toggle = new KToggleAction(i18n("&Color Picker"), "colorpicker", 0, this, SLOT(toolSelect()), collection, "tool_colorpicker");
 
 	toggle -> setExclusiveGroup("tools");
 }

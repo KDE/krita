@@ -188,7 +188,7 @@ void RectangleTool::optionsDialog()
 
 void RectangleTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Rectangle tool"), "rectangle", 0, this, SLOT(toolSelect()), collection, "tool_rectangle");
+	KToggleAction *toggle = new KToggleAction(i18n("&Rectangle Tool"), "rectangle", 0, this, SLOT(toolSelect()), collection, "tool_rectangle");
 
 	toggle -> setExclusiveGroup("tools");
 }

@@ -417,7 +417,7 @@ void KisView::setupActions()
 	(void)KStdAction::copy(this, SLOT(copy()), actionCollection(), "copy");
 	(void)KStdAction::paste(this, SLOT(paste()), actionCollection(), "paste_special");
 	(void)new KAction(i18n("Remove selection"), "remove", 0, this, SLOT(removeSelection()), actionCollection(), "remove");
-	(void)new KAction(i18n("Copy selection to new layer"), "crop", 0,  this, SLOT(crop()), actionCollection(), "crop");
+	(void)new KAction(i18n("Copy Selection to new Layer"), "crop", 0,  this, SLOT(crop()), actionCollection(), "crop");
 	(void)KStdAction::selectAll(this, SLOT(selectAll()), actionCollection(), "select_all");
 	(void)new KAction(i18n("Select None"), 0, this, SLOT(unSelectAll()), actionCollection(), "select_none");
 
@@ -437,19 +437,19 @@ void KisView::setupActions()
 			  actionCollection(), "current_tool_properties");
 
 	// layer actions
-	(void)new KAction(i18n("&Add layer..."), 0, this, SLOT(slotLayerAdd()), actionCollection(), "insert_layer");
-	(void)new KAction(i18n("&Remove layer..."), 0, this, SLOT(remove_layer()), actionCollection(), "remove_layer");
-	(void)new KAction(i18n("&Link/Unlink layer..."), 0, this, SLOT(link_layer()), actionCollection(), "link_layer");
+	(void)new KAction(i18n("&Add Layer..."), 0, this, SLOT(slotLayerAdd()), actionCollection(), "insert_layer");
+	(void)new KAction(i18n("&Remove Layer..."), 0, this, SLOT(remove_layer()), actionCollection(), "remove_layer");
+	(void)new KAction(i18n("&Link/Unlink Layer..."), 0, this, SLOT(link_layer()), actionCollection(), "link_layer");
 	(void)new KAction(i18n("&Hide/Show layer..."), 0, this, SLOT(hide_layer()), actionCollection(), "hide_layer");
-	(void)new KAction(i18n("&Next layer..."), "forward", 0, this, SLOT(next_layer()), actionCollection(), "next_layer");
-	(void)new KAction(i18n("&Previous layer..."), "back", 0, this, SLOT(previous_layer()), actionCollection(), "previous_layer");
+	(void)new KAction(i18n("&Next Layer..."), "forward", 0, this, SLOT(next_layer()), actionCollection(), "next_layer");
+	(void)new KAction(i18n("&Previous Payer..."), "back", 0, this, SLOT(previous_layer()), actionCollection(), "previous_layer");
 	(void)new KAction(i18n("Layer Properties..."), 0, this, SLOT(layer_properties()), actionCollection(), "layer_properties");
-	(void)new KAction(i18n("I&nsert image as layer..."), 0, this, SLOT(insert_image_as_layer()), actionCollection(), "insert_image_as_layer");
-	(void)new KAction(i18n("Save layer as image..."), 0, this, SLOT(save_layer_as_image()), actionCollection(), "save_layer_as_image");
+	(void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(insert_image_as_layer()), actionCollection(), "insert_image_as_layer");
+	(void)new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(save_layer_as_image()), actionCollection(), "save_layer_as_image");
 
 	// layer transformations - should be generic, for selection too
-	(void)new KAction(i18n("Scale layer smoothly"), 0, this, SLOT(layer_scale_smooth()), actionCollection(), "layer_scale_smooth");
-	(void)new KAction(i18n("Scale layer - keep palette"), 0, this, SLOT(layer_scale_rough()), actionCollection(), "layer_scale_rough");
+	(void)new KAction(i18n("Scale Layer Smoothly"), 0, this, SLOT(layer_scale_smooth()), actionCollection(), "layer_scale_smooth");
+	(void)new KAction(i18n("Scale Layer - Keep Palette"), 0, this, SLOT(layer_scale_rough()), actionCollection(), "layer_scale_rough");
 	(void)new KAction(i18n("Rotate &180"), 0, this, SLOT(layer_rotate180()), actionCollection(), "layer_rotate180");
 	(void)new KAction(i18n("Rotate &270"), 0, this, SLOT(layer_rotateleft90()), actionCollection(), "layer_rotateleft90");
 	(void)new KAction(i18n("Rotate &90"), 0, this, SLOT(layer_rotateright90()), actionCollection(), "layer_rotateright90");
@@ -458,11 +458,11 @@ void KisView::setupActions()
 	(void)new KAction(i18n("Mirror &Y"), 0, this, SLOT(layer_mirrorY()), actionCollection(), "layer_mirrorY");
 
 	// image actions
-	(void)new KAction(i18n("Add new image"), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
-	(void)new KAction(i18n("Remove current image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
-	(void)new KAction(i18n("Merge &all layers"), 0, this, SLOT(merge_all_layers()), actionCollection(), "merge_all_layers");
-	(void)new KAction(i18n("Merge &visible layers"), 0, this, SLOT(merge_visible_layers()), actionCollection(), "merge_visible_layers");
-	(void)new KAction(i18n("Merge &linked layers"), 0, this, SLOT(merge_linked_layers()), actionCollection(), "merge_linked_layers");
+	(void)new KAction(i18n("Add new Image"), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
+	(void)new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
+	(void)new KAction(i18n("Merge &All Layers"), 0, this, SLOT(merge_all_layers()), actionCollection(), "merge_all_layers");
+	(void)new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(merge_visible_layers()), actionCollection(), "merge_visible_layers");
+	(void)new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(merge_linked_layers()), actionCollection(), "merge_linked_layers");
 
 	// setting actions
 	(void)new KToggleAction(i18n("Toggle Paint Offset"), "remove_view", 0, this, SLOT(slotSetPaintOffset()), actionCollection(), "toggle_paint_offset");
@@ -1653,7 +1653,7 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 		KMimeType::Ptr mt = KMimeType::findByURL(url, 0, true);
 
 		kdDebug() << "Can't create QImage from file" << endl;
-		KMessageBox::error(this, i18n("Could not import file of type\n%1").arg(mt -> name()), i18n("Missing import filter"));
+		KMessageBox::error(this, i18n("Could not import file of type\n%1").arg(mt -> name()), i18n("Missing Import Filter"));
 		return -1;
 	}
 
@@ -1682,7 +1682,7 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 		fileImage = buffer;
 
 		if (fileImage.depth() < 16) {
-			KMessageBox::error(this, i18n("Image cannot be converted to 16 bit."), i18n("Error loading file"));
+			KMessageBox::error(this, i18n("Image cannot be converted to 16 bit."), i18n("Error Loading File"));
 			kdDebug() << "newImage can't be converted to 16 bit" << endl;
 			return -1;
 		}

@@ -182,7 +182,7 @@ void KisTabBar::slotRemove( )
 {
     int ret = KMessageBox::warningContinueCancel( this,
 				  i18n("You are going to remove the active image.\nDo you want to continue?"),
-				  i18n("Remove image"), i18n("&Remove"));
+				  i18n("Remove Image"), i18n("&Remove"));
 
     if ( ret == KMessageBox::Continue )
     {
@@ -369,7 +369,7 @@ void KisTabBar::renameTab()
         if ( (newName.stripWhiteSpace()).isEmpty() ) // Image name is empty.
         {
             KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Image name cannot be empty."), i18n("Change image name") );
+            KMessageBox::information( this, i18n("Image name cannot be empty."), i18n("Change Image Name") );
             // Recursion
             renameTab();
             return;
@@ -382,7 +382,7 @@ void KisTabBar::renameTab()
                  if ( (*it) == newName )
                  {
                      KNotifyClient::beep();
-                     KMessageBox::information( this, i18n("This name is already used."), i18n("Change image name") );
+                     KMessageBox::information( this, i18n("This name is already used."), i18n("Change Image Name") );
                      // Recursion
                      renameTab();
                      return;

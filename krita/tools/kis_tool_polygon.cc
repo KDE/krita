@@ -231,7 +231,7 @@ void PolyGonTool::optionsDialog()
 
 void PolyGonTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Polygon tool"), "polygon", 0, this, SLOT(toolSelect()), collection, "tool_polygon");
+	KToggleAction *toggle = new KToggleAction(i18n("&Polygon Tool"), "polygon", 0, this, SLOT(toolSelect()), collection, "tool_polygon");
 
 	toggle -> setExclusiveGroup("tools");
 }

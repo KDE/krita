@@ -280,7 +280,7 @@ void FreehandSelectTool::drawLine( const QPoint& start, const QPoint& end )
 
 void FreehandSelectTool::setupAction(QObject *collection)
 {
-	KToggleAction *p = new KToggleAction(i18n("&Freehand select"), "freehand", 0, this,  SLOT(toolSelect()),
+	KToggleAction *p = new KToggleAction(i18n("&Freehand Select"), "freehand", 0, this,  SLOT(toolSelect()),
 			collection, "tool_select_freehand");
 
 	p -> setExclusiveGroup("tools");

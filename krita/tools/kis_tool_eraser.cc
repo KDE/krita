@@ -195,7 +195,7 @@ bool EraserTool::loadSettings(QDomElement& elem)
 
 void EraserTool::setupAction(QObject *collection)
 {
-	m_toggle = new KToggleAction(i18n("&Eraser tool"), "eraser", 0, this, SLOT(toolSelect()), collection, "tool_eraser");
+	m_toggle = new KToggleAction(i18n("&Eraser Tool"), "eraser", 0, this, SLOT(toolSelect()), collection, "tool_eraser");
 	m_toggle -> setExclusiveGroup("tools");
 }
 

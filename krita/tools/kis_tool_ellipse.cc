@@ -76,7 +76,7 @@ void EllipseTool::draw(KisPainter *gc, const QRect& rc)
 
 void EllipseTool::setupAction(QObject *collection)
 {
-	KToggleAction *toggle = new KToggleAction(i18n("&Ellipse tool"), "ellipse", 0, this, SLOT(toolSelect()), collection, "tool_ellipse");
+	KToggleAction *toggle = new KToggleAction(i18n("&Ellipse Tool"), "ellipse", 0, this, SLOT(toolSelect()), collection, "tool_ellipse");
 
 	toggle -> setExclusiveGroup("tools");
 }

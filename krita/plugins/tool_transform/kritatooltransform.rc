@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritatooltransform" version="1">
+
+
+<ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
+<Separator/>
+  <Action name="tool_transform"/>
+</ToolBar>
+
+
+</kpartgui>

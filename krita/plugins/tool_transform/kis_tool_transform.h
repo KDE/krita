@@ -1,0 +1,96 @@
+/*
+ *  kis_tool_transform.h - part of Krita
+ *
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+#ifndef KIS_TOOL_TRANSFORM_H_
+#define KIS_TOOL_TRANSFORM_H_
+
+#include <qpoint.h>
+#include <kis_tool.h>
+#include <kis_tool_non_paint.h>
+#include <kis_tool_factory.h>
+
+/**
+ * Transform tool
+ *
+ */
+class KisToolTransform : public KisToolNonPaint {
+
+	typedef KisToolNonPaint super;
+	Q_OBJECT
+
+public:
+	KisToolTransform();
+	virtual ~KisToolTransform();
+
+	virtual void update(KisCanvasSubject *subject);
+
+	virtual QWidget* createOptionWidget(QWidget* parent);
+	virtual QWidget* optionWidget();
+
+	virtual void setup(KActionCollection *collection);
+
+	virtual void clear();
+	virtual void paint(QPainter& gc);
+	virtual void paint(QPainter& gc, const QRect& rc);
+	virtual void buttonPress(KisButtonPressEvent *e);
+	virtual void move(KisMoveEvent *e);
+	virtual void buttonRelease(KisButtonReleaseEvent *e);
+
+private:
+	void clearRect();
+	void paintOutline();
+	void paintOutline(QPainter& gc, const QRect& rc);
+	void transform();
+
+private slots:
+
+	void setStartX(int x) { m_startPos.setX(x); }
+	void setStartY(int y) { m_startPos.setY(y); }
+	void setEndX(int x) { m_endPos.setX(x); }
+	void setEndY(int y) { m_endPos.setY(y); }
+
+protected slots:
+	virtual void activate();
+
+private:
+	KisCanvasSubject *m_subject;
+	QPoint m_startPos;
+	QPoint m_endPos;
+	bool m_selecting;
+
+	QWidget * m_optWidget;
+
+
+};
+
+class KisToolTransformFactory : public KisToolFactory {
+	typedef KisToolFactory super;
+public:
+	KisToolTransformFactory(KActionCollection * ac ) : super(ac) {};
+	virtual ~KisToolTransformFactory(){};
+
+	virtual KisTool * createTool() { KisTool * t = new KisToolTransform(); t -> setup(m_ac); return t;}
+	virtual QString name() { return i18n("Transform tool"); }
+};
+
+
+
+#endif // KIS_TOOL_TRANSFORM_H_
+

@@ -266,24 +266,16 @@ KisImageBuilder_Result KisImageMagickConverter::buildImage(const KURL& uri)
 	if (uri.isEmpty())
 		return KisImageBuilder_RESULT_NO_URI;
 
-#if KDE_IS_VERSION( 3, 1, 90 )
-	if (!KIO::NetAccess::exists(uri, false, qApp -> mainWidget()))
-#else
-	if (!KIO::NetAccess::exists(uri, false))
-#endif
+	if (!KIO::NetAccess::exists(uri, false, qApp -> mainWidget())) {
 		return KisImageBuilder_RESULT_NOT_EXIST;
+	}
 
 #if 1
 	// We're not set up to handle asynchronous loading at the moment.
 	KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
 	QString tmpFile;
 
-#if KDE_IS_VERSION( 3, 1, 90 )
-	if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget()))
-#else
-       	if (KIO::NetAccess::download(uri, tmpFile))
-#endif
-	{
+	if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {
 		result = decode(tmpFile, false);
 		KIO::NetAccess::removeTempFile(tmpFile);
 	}

@@ -135,23 +135,23 @@ NullToolTab::NullToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 4);
 
-    mpThickness = new KIntNumInput( ts.lineThickness, this );
+    mpThickness = new KIntNumInput( ts.lineThickness, _parent );
     mpThickness->setRange( 1, 16, 1 );
     mpThickness->setLabel( i18n( "Line thickness:" ) );
 
     grid->addWidget( mpThickness, 0, 0 );
 
-    mpOpacity = new KIntNumInput( ts.lineOpacity, this );
+    mpOpacity = new KIntNumInput( ts.lineOpacity, _parent );
     mpOpacity->setRange( 0, 255, 32 );
     mpOpacity->setLabel( i18n( "Opacity:" ) );
 
     grid->addWidget( mpOpacity, 1, 0 );
 
-    mpSolid = new QCheckBox( i18n("Fill interior regions"), this );
+    mpSolid = new QCheckBox( i18n("Fill interior regions"), _parent );
     mpSolid->setChecked( ts.fillShapes );
     grid->addWidget( mpSolid, 2, 0 );
 
-    mpUsePattern = new QCheckBox( i18n("Use current pattern"), this );
+    mpUsePattern = new QCheckBox( i18n("Use current pattern"), _parent );
     mpUsePattern->setChecked( ts.usePattern );
     grid->addWidget( mpUsePattern, 3, 0 );
 }
@@ -169,27 +169,27 @@ LineToolTab::LineToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 4);
 
-    mpThickness = new KIntNumInput( ts.lineThickness, this );
+    mpThickness = new KIntNumInput( ts.lineThickness, _parent );
     mpThickness->setRange( 1, 16, 1 );
     mpThickness->setLabel( i18n( "Thickness:" ) );
 
     grid->addWidget( mpThickness, 0, 0 );
 
-    mpOpacity = new KIntNumInput( ts.lineOpacity, this );
+    mpOpacity = new KIntNumInput( ts.lineOpacity, _parent );
     mpOpacity->setRange( 0, 255, 32 );
     mpOpacity->setLabel( i18n( "Opacity:" ) );
 
     grid->addWidget( mpOpacity, 1, 0 );
 
-    mpSolid = new QCheckBox( i18n("Fill interior regions"), this );
+    mpSolid = new QCheckBox( i18n("Fill interior regions"), _parent );
     mpSolid->setChecked( ts.fillShapes );
     grid->addWidget( mpSolid, 2, 0 );
 
-    mpUsePattern = new QCheckBox( i18n("Use current pattern"), this );
+    mpUsePattern = new QCheckBox( i18n("Use current pattern"), _parent );
     mpUsePattern->setChecked( ts.usePattern );
     grid->addWidget( mpUsePattern, 3, 0 );
 
-    mpUseGradient = new QCheckBox( i18n("Fill with gradient"), this );
+    mpUseGradient = new QCheckBox( i18n("Fill with gradient"), _parent );
     mpUseGradient->setChecked( ts.useGradient );
     grid->addWidget( mpUseGradient, 4, 0 );
 
@@ -208,17 +208,17 @@ FillToolTab::FillToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
-    mpOpacity = new KIntNumInput( ts.opacity, this );
+    mpOpacity = new KIntNumInput( ts.opacity, _parent );
     mpOpacity->setRange( 0, 255, 32 );
     mpOpacity->setLabel( i18n( "Opacity:" ) );
 
     grid->addWidget( mpOpacity, 0, 0 );
 
-    mpUsePattern = new QCheckBox( i18n("Fill with pattern"), this );
+    mpUsePattern = new QCheckBox( i18n("Fill with pattern"), _parent );
     mpUsePattern->setChecked( ts.usePattern );
     grid->addWidget( mpUsePattern, 1, 0 );
 
-    mpUseGradient = new QCheckBox( i18n("Fill with gradient"), this );
+    mpUseGradient = new QCheckBox( i18n("Fill with gradient"), _parent );
     mpUseGradient->setChecked( ts.useGradient );
     grid->addWidget( mpUseGradient, 2, 0 );
 
@@ -237,23 +237,23 @@ PenToolTab::PenToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 4);
 
-    mpOpacity = new KIntNumInput( ts.opacity, this );
+    mpOpacity = new KIntNumInput( ts.opacity, _parent );
     mpOpacity->setRange( 0, 255, 32 );
     mpOpacity->setLabel( i18n( "Opacity:" ) );
 
     grid->addWidget( mpOpacity, 0, 0 );
 
-    mpPenThreshold = new KIntNumInput( ts.penThreshold, this );
+    mpPenThreshold = new KIntNumInput( ts.penThreshold, _parent );
     mpPenThreshold->setRange( 0, 255, 32 );
     mpPenThreshold->setLabel( i18n( "Paint threshold:" ) );
 
     grid->addWidget( mpPenThreshold, 1, 0 );
 
-    mpUsePattern = new QCheckBox( i18n("Paint with pattern"), this );
+    mpUsePattern = new QCheckBox( i18n("Paint with pattern"), _parent );
     mpUsePattern->setChecked( ts.usePattern );
     grid->addWidget( mpUsePattern, 2, 0 );
 
-    mpUseGradient = new QCheckBox( i18n("Paint with gradient"), this );
+    mpUseGradient = new QCheckBox( i18n("Paint with gradient"), _parent );
     mpUseGradient->setChecked( ts.useGradient );
     grid->addWidget( mpUseGradient, 3, 0 );
 
@@ -271,17 +271,17 @@ BrushToolTab::BrushToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
-    mpOpacity = new KIntNumInput( ts.opacity, this );
+    mpOpacity = new KIntNumInput( ts.opacity, _parent );
     mpOpacity->setRange( 0, 255, 32 );
     mpOpacity->setLabel( i18n( "Opacity:" ) );
 
     grid->addWidget( mpOpacity, 0, 0 );
 
-    mpUseGradient = new QCheckBox( i18n("Blend with current gradient"), this );
+    mpUseGradient = new QCheckBox( i18n("Blend with current gradient"), _parent );
     mpUseGradient->setChecked( ts.useGradient );
     grid->addWidget( mpUseGradient, 1, 0 );
 
-    mpUsePattern = new QCheckBox( i18n("Blend with current pattern"), this );
+    mpUsePattern = new QCheckBox( i18n("Blend with current pattern"), _parent );
     mpUsePattern->setChecked( ts.usePattern );
     grid->addWidget( mpUsePattern, 2, 0 );
 }
@@ -298,17 +298,17 @@ EraserToolTab::EraserToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
-    mpOpacity = new KIntNumInput( ts.opacity, this );
+    mpOpacity = new KIntNumInput( ts.opacity, _parent);
     mpOpacity->setRange( 0, 255, 32 );
     mpOpacity->setLabel( i18n( "Opacity:" ) );
 
     grid->addWidget( mpOpacity, 0, 0 );
 
-    mpUseGradient = new QCheckBox( i18n("Blend with current gradient"), this );
+    mpUseGradient = new QCheckBox( i18n("Blend with current gradient"), _parent );
     mpUseGradient->setChecked( ts.fillShapes );
     grid->addWidget( mpUseGradient, 1, 0 );
 
-    mpUsePattern = new QCheckBox( i18n("Blend with current pattern"), this );
+    mpUsePattern = new QCheckBox( i18n("Blend with current pattern"), _parent );
     mpUsePattern->setChecked( ts.usePattern );
     grid->addWidget( mpUsePattern, 2, 0 );
 }
@@ -323,17 +323,17 @@ AirBrushToolTab::AirBrushToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
-    mpOpacity = new KIntNumInput( ts.opacity, this );
+    mpOpacity = new KIntNumInput( ts.opacity, _parent );
     mpOpacity->setRange( 0, 255, 32 );
     mpOpacity->setLabel( i18n( "Opacity:" ) );
 
     grid->addWidget( mpOpacity, 0, 0 );
 
-    mpUseGradient = new QCheckBox( i18n("Use current gradient"), this );
+    mpUseGradient = new QCheckBox( i18n("Use current gradient"), _parent );
     mpUseGradient->setChecked( ts.useGradient );
     grid->addWidget( mpUseGradient, 1, 0 );
 
-    mpUsePattern = new QCheckBox( i18n("Use current pattern"), this );
+    mpUsePattern = new QCheckBox( i18n("Use current pattern"), _parent );
     mpUsePattern->setChecked( ts.usePattern );
     grid->addWidget( mpUsePattern, 2, 0 );
 }
@@ -350,13 +350,13 @@ StampToolTab::StampToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( _parent, 4 );
     QGridLayout* grid = new QGridLayout(lout, 2, 2);
 
-    mpOpacity = new KIntNumInput( ts.opacity, this );
+    mpOpacity = new KIntNumInput( ts.opacity, _parent );
     mpOpacity->setRange( 0, 255, 32 );
     mpOpacity->setLabel( i18n( "Opacity:" ) );
 
     grid->addWidget( mpOpacity, 0, 0 );
 
-    mpUseGradient = new QCheckBox( i18n("Blend with current gradient"), this );
+    mpUseGradient = new QCheckBox( i18n("Blend with current gradient"), _parent );
     mpUseGradient->setChecked( ts.useGradient );
     grid->addWidget( mpUseGradient, 1, 0 );
 }
@@ -383,12 +383,12 @@ PolygonToolTab::PolygonToolTab( ToolOptsStruct ts,
 
     grid->addWidget( group, 0, 0 );
 
-    mpCorners = new KIntNumInput( ts.polygonCorners, this );
+    mpCorners = new KIntNumInput( ts.polygonCorners, _parent );
     mpCorners->setRange( 3, 100, 1 );
     mpCorners->setLabel( i18n( "Corners:" ) );
     grid->addWidget( mpCorners, 1, 0 );
 
-    mpSharpness = new KIntNumInput( ts.polygonSharpness, this );
+    mpSharpness = new KIntNumInput( ts.polygonSharpness, _parent );
     mpSharpness->setRange( 0, 100, 1 );
     mpSharpness->setLabel( i18n( "Sharpness:" ) );
     grid->addWidget( mpSharpness, 2, 0 );
@@ -396,26 +396,26 @@ PolygonToolTab::PolygonToolTab( ToolOptsStruct ts,
     if ( !ts.concavePolygon )
         mpSharpness->setEnabled( false );
 
-    mpThickness = new KIntNumInput( ts.lineThickness, this );
+    mpThickness = new KIntNumInput( ts.lineThickness, _parent );
     mpThickness->setRange( 1, 16, 1 );
     mpThickness->setLabel( i18n( "Thickness:" ) );
     grid->addWidget( mpThickness, 3, 0 );
 
-    mpOpacity = new KIntNumInput( ts.lineOpacity, this );
+    mpOpacity = new KIntNumInput( ts.lineOpacity, _parent );
     mpOpacity->setRange( 0, 255, 32 );
     mpOpacity->setLabel( i18n( "Opacity:" ) );
     grid->addWidget( mpOpacity, 4, 0 );
 
 
-    mpSolid = new QCheckBox( i18n("Fill interior regions"), this );
+    mpSolid = new QCheckBox( i18n("Fill interior regions"), _parent );
     mpSolid->setChecked( ts.fillShapes );
     grid->addWidget( mpSolid, 5, 0 );
 
-    mpUsePattern = new QCheckBox( i18n("Use current pattern"), this );
+    mpUsePattern = new QCheckBox( i18n("Use current pattern"),_parent );
     mpUsePattern->setChecked( ts.usePattern );
     grid->addWidget( mpUsePattern, 6, 0 );
 
-    mpUseGradient = new QCheckBox( i18n("Fill with gradient"), this );
+    mpUseGradient = new QCheckBox( i18n("Fill with gradient"), _parent );
     mpUseGradient->setChecked( ts.useGradient );
     grid->addWidget( mpUseGradient, 7, 0 );
 

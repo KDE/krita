@@ -63,7 +63,6 @@ class KoTabBar;
 class KisCanvasObserver;
 class KisRuler;
 class KisBrush;
-class KisBuilderMonitor;
 class KisCanvas;
 class KisChannelView;
 class KisLabelProgress;
@@ -339,7 +338,6 @@ private slots:
 	void mergeVisibleLayers();
 	void mergeLayer();
 	void mergeLinkedLayers();
-	void nBuilders(Q_INT32 size);
 	void saveLayerAsImage();
 	void currentImageUpdated(KisImageSP img);
 	void selectFGColor();
@@ -465,7 +463,6 @@ private:
 	KisBirdEyeBox * m_birdEyeBox;
 	KisChannelView *m_channelView;
 	QWidget *m_pathView;
-	KisBuilderMonitor *m_imgBuilderMgr;
 	KisLabelProgress *m_progress;
 
 	KisResourceMediator *m_brushMediator;

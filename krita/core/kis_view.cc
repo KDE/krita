@@ -66,8 +66,6 @@
 #include "kotabbar.h"
 
 // Local
-#include "builder/kis_builder_monitor.h"
-#include "builder/kis_builder_subject.h"
 #include "kis_brush.h"
 #include "kis_canvas.h"
 #include "kis_channelview.h"
@@ -228,7 +226,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_layerBox = 0;
 	m_currentGuide = 0;
 	m_brushMediator = 0;
-	m_imgBuilderMgr = new KisBuilderMonitor(this);
 	m_progress = 0;
 	m_statusBarZoomLabel = 0;
 	m_statusBarSelectionLabel = 0;
@@ -250,7 +247,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
 	connect(m_doc, SIGNAL(currentImageUpdated(KisImageSP)), SLOT(currentImageUpdated(KisImageSP)));
 	connect(this, SIGNAL(embeddImage(const QString&)), SLOT(slotEmbedImage(const QString&)));
-	connect(m_imgBuilderMgr, SIGNAL(size(Q_INT32)), SLOT(nBuilders(Q_INT32)));
 
 	setupTools();
 	setupDockers();
@@ -1642,7 +1638,6 @@ void KisView::export_image()
 		dst = img -> layer(0);
 		Q_ASSERT(dst);
 
-		//m_imgBuilderMgr -> attach(&ib);
 		m_progress -> setSubject(&ib, true, true);
 
 		switch (ib.buildFile(url, dst)) {
@@ -3182,14 +3177,6 @@ void KisView::guiActivateEvent(KParts::GUIActivateEvent *event)
 	super::guiActivateEvent(event);
 }
 
-void KisView::nBuilders(Q_INT32 size)
-{
-	m_imgImport -> setEnabled(size == 0);
-	m_imgExport -> setEnabled(size == 0);
-
-	if (m_imgScan)
-		m_imgScan -> setEnabled(size == 0);
-}
 
 bool KisView::eventFilter(QObject *o, QEvent *e)
 {

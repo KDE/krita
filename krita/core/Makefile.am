@@ -44,13 +44,13 @@ libkritacore_la_SOURCES = kis_paint_device.cc kis_layer.cc kis_image.cc \
 
 
 noinst_HEADERS = kis_paint_device.h kis_layer.h kis_image.h kis_doc.h \
-	kis_view.h kis_factory.h kis_nameserver.h kis_cursor.h kis_selection.h \
-	kis_command.h kis_background.h kis_global.h kis_config.h kis_guide.h \
-	kis_canvas_subject.h kis_canvas_controller.h kis_canvas_observer.h kis_transaction.h \
-	kis_vec.h kis_rect.h kis_iteratorpixeltrait.h kis_iterators_pixel.h \
-	kis_histogram.h KRayonViewIface.h KIsDocIface.h KIsImageIface.h \
-	kis_matrix.h kis_selection_manager.h kis_scale_visitor.h kis_rotate_visitor.h \
-	kis_cms.h kis_quantum_operations.h kis_filter.h kis_filter_registry.h 
+		kis_view.h kis_factory.h kis_nameserver.h kis_cursor.h kis_selection.h \
+		kis_command.h kis_background.h kis_global.h kis_config.h kis_guide.h \
+		kis_canvas_subject.h kis_canvas_controller.h kis_canvas_observer.h kis_transaction.h \
+		kis_vec.h kis_rect.h kis_iteratorpixeltrait.h kis_iterators_pixel.h \
+		kis_histogram.h KRayonViewIface.h KIsDocIface.h KIsImageIface.h 	kis_matrix.h \
+	kis_selection_manager.h kis_scale_visitor.h kis_rotate_visitor.h 	kis_cms.h \
+	kis_quantum_operations.h kis_filter.h kis_filter_registry.h
 
 
 libkritacore_la_METASOURCES = AUTO

@@ -10,7 +10,7 @@ INCLUDES  = -I$(srcdir)/../ \
 	$(KOPAINTER_INCLUDES) $(LIBMAGICK_CPPFLAGS)  $(all_includes)
 
 noinst_LTLIBRARIES = libkiscorebuilder.la
-libkiscorebuilder_la_SOURCES = kis_image_magick_converter.cc kis_builder_subject.cc kis_builder_monitor.cc
+libkiscorebuilder_la_SOURCES = kis_image_magick_converter.cc
 
 libkiscorebuilder_la_METASOURCES = AUTO
 libkiscorebuilder_la_LDFLAGS = $(LIBMAGICK_LDFLAGS) $(KDE_RPATH) $(LIBMAGICK_RPATH)

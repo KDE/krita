@@ -34,15 +34,5 @@ enum KisImageBuilder_Result {
 	KisImageBuilder_RESULT_PATH = 500
 };
 
-enum KisImageBuilder_Step {
-	KisImageBuilder_STEP_PREP,
-	KisImageBuilder_STEP_LOADING,
-	KisImageBuilder_STEP_SAVING,
-	KisImageBuilder_STEP_DECODING,
-	KisImageBuilder_STEP_TILING,
-	KisImageBuilder_STEP_DONE,
-	KisImageBuilder_STEP_ERROR
-};
-
 #endif // KIS_IMAGE_BUILDER_H_
 

@@ -21,3 +21,29 @@ Another matrix telling how to mix the alpha is ok though.
 core/kis_convolution_painter.cc:
 ---------------------
 The convolution painter assume that we know how to mix several colors into one. That won't hold for hsv and lab, and is slightly inaccurate for the other colorstrategies as well.
+
+
+core/builder/kis_image_magick_builder.cc:
+---------------------
+(this file will be moved to a plugin soon)
+The builder is hardcoded to rgba because it needs to convert between ImageMagick
+pixel packets and Krita pixels. Currently the code is like:
+
+	KisHLineIteratorPixel hiter = layer -> createHLineIterator(0, y, image->columns, true);
+	while(! hiter.isDone())
+	{
+		Q_UINT8 *ptr= hiter.rawData();
+		// XXX: not colorstrategy and bitdepth independent
+		*(ptr++) = pp->blue;
+		*(ptr++) = pp->green;
+		*(ptr++) = pp->red;
+		*(ptr++) = OPACITY_OPAQUE - pp->opacity;
+
+		pp++;
+		hiter++;
+	}
+
+The traditional way of solving in Krita would be to add a toImageMagickImage
+and fromImageMagick method analogous to the toQImage and fromQImage methods,
+or to add nativeColor and toPixelPacket methods -- but this is not extensible,
+for instance when we want to support openExr.

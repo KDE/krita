@@ -1,0 +1,74 @@
+Import/Export & ImageMagick
+
+Import/Export is currently hardcoded to use ImageMagick and the RGB colormodel.
+Additionally, export is broken and even when working, only supported exporting
+to images with one layer.
+
+Kimgio is not suitable for Krita since it only supports importing images as one 
+QImage.
+
+The new design should support plugins instead of hardcoded filters, so we can
+add an ImageMagick plugin, an openExr plugin or any other kind of image readers.
+
+Issues:
+
+        * conflicts -- more than one plugin might want to support JPEG, for instance.
+        * configuration -- compression settings, optional flattening, adding
+          profiles, colorspace conversion
+        * identification -- no sane way to distinguish a particular type of tiff from
+          another type, for instance.
+        * colormodel integration -- basically, there are cmyk, rgb and grayscale
+          images in a variety of bit depths (e.g., openexr supports 16 bit and half).
+          Colorspaces must interpret the file data to build Krita pixels and must
+          unpack krita pixels to a format a file exporter (e.g, ImageMagick pixel
+          packets) can work with. This means that plugins can depend on the presence
+          of other plugins.
+
+Notes
+
+        Rename the KOffice filter. It is not hardcoded ImageMagick import
+        anymore.
+
+        Patrick already designed something like this using a list of
+        image builders. However, this does not support a solution to any
+        of the issues above, just enabling/disabling import/export -- and 
+        it wasn't finished.
+ 
+Design
+
+KisFileFormat
+
+        bool read
+        bool write
+        bool supportsMultiLayer
+
+        qstring extension
+        qstring description
+
+        write
+        read
+
+        QWidget configWidget
+
+KisImpExpModule
+
+        qstring name
+        qstring description
+
+        qstringlist readFilters
+        qstringlist writeFilters
+
+        KisFileFormat getFileFormatFor(qstring extension)
+
+KisFileFormatRegistry
+
+        The format registry merges the filter lists from all registered
+        imp/exp modules and logs conflicts. I don't think it's useful
+        to let users select between conflicting filter implementations
+        (although it could be KisConfig option).
+
+        qstringlist readFilters
+        qstringlist writeFilters
+
+        KisFileFormat getFileFormatFor(qstring extension)
+

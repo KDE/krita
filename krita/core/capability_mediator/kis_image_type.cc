@@ -31,8 +31,7 @@ KisImageType::KisImageType() : super()
 {
 }
 
-KisImageType::KisImageType(QString label,
-			   QString description) 
+KisImageType::KisImageType(const QString& label, const QString& description) 
 	: super( label , description ),
 	  m_bitsPerChannel( DEFAULT_BIT_DEPTH ),
 	  m_bytesPerChannel( DEFAULT_BYTE_DEPTH ),

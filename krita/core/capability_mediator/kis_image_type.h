@@ -45,8 +45,7 @@ class KisImageType : public KisAbstractCapability {
  public:
 
 	KisImageType();
-	KisImageType(QString label,
-		     QString description);
+	KisImageType(const QString& label, const QString& description);
 	virtual ~KisImageType();
 
 	virtual Q_UINT8 bitsPerChannel() const { return m_bitsPerChannel; };

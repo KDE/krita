@@ -31,7 +31,7 @@
 // Irix has a different (and better) XInput tablet driver to
 // the XFree/xorg driver. Qt needs a separate code path for that
 // and so would we.
-#if !defined(Q_OS_IRIX)
+#if !defined(Q_OS_IRIX) && 0
 #define EXTENDED_X11_TABLET_SUPPORT
 #endif
 

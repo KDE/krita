@@ -1,7 +1,7 @@
 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = -lkom
+LDADD = -lkom -lkofficecore $(LIBMICO)
 
 ####### Files
 
@@ -15,8 +15,8 @@ METASOURCES =	main.moc
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES) recorder.h recorder.cc
 
-idl_DATA = 
-idl_HEADERS = 
+idl_DATA =
+idl_HEADERS =
 
 kdelnk_DATA = recorder.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/pluginlnk
@@ -28,7 +28,7 @@ SUBDIRS = pics
 
 ####### Build rules
 
-messages: 
+messages:
 #	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../recorder.pot
 
 recorder.h: recorder.idl

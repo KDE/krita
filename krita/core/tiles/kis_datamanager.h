@@ -50,9 +50,9 @@ public:
 public:
 
 	/**
-	 * Reguest a memento from the data manager.
-	 *
-	 * Any write actions on the datamanger builds undo data into this memento
+	 * Reguest a memento from the data manager. There is only one memento active
+	 * at any given moment for a given paint device and all and any
+	 * write actions on the datamanger builds undo data into this memento
 	 * necessary to rollback the transaction.
 	 */
 	KisMemento *getMemento() { return ACTUAL_DATAMGR::getMemento(); };
@@ -73,6 +73,11 @@ public:
 	 * roll them forward again)
 	 */
 	void rollforward(KisMemento *memento) { ACTUAL_DATAMGR::rollforward(memento); };
+
+	/**
+	 * Closes the current memento. No more undo data is stored.
+	 */
+	void closeMemento() { return ACTUAL_DATAMGR::closeMemento(); };
 
 public:
 	/**

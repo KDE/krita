@@ -219,7 +219,7 @@ public:
 	KisMemento * getMemento() { return m_datamanager -> getMemento(); };
 	void rollback(KisMemento *memento) { m_datamanager -> rollback(memento); };
 	void rollforward(KisMemento *memento) { m_datamanager -> rollforward(memento); };
-
+	void closeMemento() { m_datamanager -> closeMemento(); };
 	/**
 	 * This function return an iterator which points to the first pixel of an rectangle
 	 */

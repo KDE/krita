@@ -213,6 +213,12 @@ KisMemento *KisTiledDataManager::getMemento()
 	return m_currentMemento;
 }
 
+void KisTiledDataManager::closeMemento()
+{
+	// No undo information will be stored anymore.
+	m_currentMemento = 0;
+}
+
 void KisTiledDataManager::rollback(KisMemento *memento)
 {
 	// Rollback means restoring all of the tiles in the memento to our hashtable.

@@ -93,6 +93,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildImage(const KURL& uri)
 	try {
 		mimglist mimages;
 		KisImageSP img;
+		QString name;
 
 		if (uri.isEmpty())
 			return KisImageBuilder_RESULT_NO_URI;

@@ -741,9 +741,9 @@ bool KisDoc::completeLoading(KoStore * /*store*/)
 	return false;
 }
 
-bool KisDoc::namePresent(const QString& name)
+bool KisDoc::namePresent(const QString& name) const
 {
-	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++)
+	for (vKisImageSP_cit it = m_images.begin(); it != m_images.end(); it++)
 		if ((*it) -> name() == name)
 			return true;
 
@@ -875,11 +875,7 @@ bool KisDoc::slotNewImage()
 		KisLayerSP layer;
 		KisPainter gc;
 
-		do {
-			name = nextImageName();
-		} while (namePresent(name));
-
-		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), OPACITY_OPAQUE, dlg.colorSpace(), name);
+		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), OPACITY_OPAQUE, dlg.colorSpace(), nextImageName());
 		layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 		gc.begin(layer.data());
 		gc.fillRect(0, 0, layer -> width(), layer -> height(), c, opacity);
@@ -1016,7 +1012,13 @@ void KisDoc::slotCommandExecuted()
 
 QString KisDoc::nextImageName() const
 {
-	return m_nserver -> name();
+	QString name;
+       
+	do {
+		name = m_nserver -> name();
+	} while (namePresent(name));
+
+	return name;
 }
 
 bool KisDoc::loadNativeFormat(const QString& file)

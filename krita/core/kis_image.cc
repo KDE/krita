@@ -146,7 +146,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_maskEnabled = rhs.m_maskEnabled;
 		m_maskInverted = rhs.m_maskInverted;
 		m_maskClr = rhs.m_maskClr;
-		m_nserver = new KisNameServer("Layer %1", rhs.m_nserver -> currentSeed() + 1);
+		m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
 	}
 }
 
@@ -170,7 +170,7 @@ QString KisImage::nextLayerName() const
 {
 	if (m_nserver -> currentSeed() == 0) {
 		m_nserver -> number();
-		return "background";
+		return i18n("background");
 	}
 
 	return m_nserver -> name();
@@ -201,7 +201,7 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity,
 	Q_INT32 n;
 
 	m_doc = doc;
-	m_nserver = new KisNameServer("Layer %1", 0);
+	m_nserver = new KisNameServer(i18n("Layer %1"), 0);
 	n = ::imgTypeDepth(imgType);
 	m_active.resize(n);
 	m_visible.resize(n);
@@ -543,7 +543,6 @@ bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 	if (qFind(m_layers.begin(), m_layers.end(), layer) != m_layers.end())
 		return false;
 
-//	undo_push_layer_add 
 	layer -> setImage(KisImageSP(this));
 
 	if (layer -> mask())
@@ -586,7 +585,6 @@ void KisImage::rm(KisLayerSP layer)
 	if (it == m_layers.end())
 		return;
 
-//	undo_push_layer_remove
 	m_layers.erase(it);
 	it = qFind(m_layerStack.begin(), m_layerStack.end(), layer);
 
@@ -702,7 +700,6 @@ bool KisImage::pos(KisLayerSP layer, Q_INT32 position)
 	if (old == position)
 		return true;
 
-	//undo_push_layer_reposition (gimage, layer);
 	qSwap(m_layers[old], m_layers[position]);	
 	invalidate();
 	return true;
@@ -803,8 +800,6 @@ bool KisImage::add(KisChannelSP channel, Q_INT32 position)
 	if (qFind(m_channels.begin(), m_channels.end(), channel) != m_channels.end())
 		return false;
 
-	//undo_push_channel_add
-
 	if (position == -1) {
 		KisChannelSP active = activeChannel();
 
@@ -833,7 +828,6 @@ void KisImage::rm(KisChannelSP channel)
 	if (it == m_channels.end())
 		return;
 
-	//undo_push_channel_remove
 	m_channels.erase(it);
 
 	if (channel == activeChannel()) {
@@ -895,7 +889,6 @@ bool KisImage::pos(KisChannelSP channel, Q_INT32 position)
 	if (position == old)
 		return true;
 
-	//undo_push_channel_reposition (gimage, channel);
 	qSwap(m_channels[old], m_channels[position]);
 	channel -> update();
 	return true;
@@ -1085,8 +1078,13 @@ KisSelectionSP KisImage::selection() const
 
 void KisImage::expand(KisPaintDeviceSP dev)
 {
+	Q_INT32 w;
+	Q_INT32 h;
+
 	if (dev -> width() >= width() || dev -> height() >= height()) {
-		resize(dev -> width(), dev -> height());
+		w = QMAX(dev -> width(), width());
+		h = QMAX(dev -> height(), height());
+		resize(w, h);
 		invalidate();
 	}
 }

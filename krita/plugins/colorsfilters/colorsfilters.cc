@@ -55,7 +55,7 @@
 #define min(x,y) ((x)<(y)?(x):(y))
 
 typedef KGenericFactory<ColorsFilters> ColorsFiltersFactory;
-K_EXPORT_COMPONENT_FACTORY( colorsfilters, ColorsFiltersFactory( "colorsfilters_plugin" ) )
+K_EXPORT_COMPONENT_FACTORY( colorsfilters, ColorsFiltersFactory( "krita" ) )
 
 ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringList &)
 		: KParts::Plugin(parent, name)

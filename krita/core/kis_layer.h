@@ -67,23 +67,8 @@ public:
 	/** Removes the current selection for this layer. */
 	void removeSelection();
 
-// 	/**
-// 	 * Returns the selection state for the pixel designated by X
-// 	 * and Y: a pixel can be fully selected (QUANTUM_MASK) or not
-// 	 * selected at all (0).
-// 	 */
-// 	QUANTUM selected(Q_INT32 x, Q_INT32 y) const;
-
-// 	/**
-// 	 * Sets pixel x,y to selection state s; returns the previous
-// 	 * state. If the layer has no valid selection, creates a new
-// 	 * valid selection.
-// 	 */
-// 	QUANTUM setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
-	
 	void translate(Q_INT32 x, Q_INT32 y);
 	void addAlpha();
-
 
 	QUANTUM opacity() const;
 	void setOpacity(QUANTUM val);

@@ -171,28 +171,6 @@ void KisLayer::removeSelection()
 	emit selectionChanged();
 }
 
-// QUANTUM KisLayer::selected(Q_INT32 x, Q_INT32 y) const
-// {
-// 	if (m_hasSelection) {
-// 		return m_selection -> selected(x, y);
-// 	}
-// 	else {
-// 		return 0;
-// 	}
-// }
-
-
-// QUANTUM KisLayer::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s) 
-// {
-// 	if (!m_hasSelection) {
-// 		m_selection = new KisSelection(this, "layer selection for: " + name());
-// 		m_hasSelection = true;
-// 	}
-// 	return m_selection -> setSelected(x, y, s);
-// }
-
-
-
 void KisLayer::translate(Q_INT32 x, Q_INT32 y)
 {
 	m_dx = x;

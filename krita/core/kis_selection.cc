@@ -101,14 +101,12 @@ void KisSelection::setMaskColor(KoColor c)
 	m_maskColor = c;
 }
 
-void KisSelection::dump() {
-	KoColor c;
-	QUANTUM opacity;
-
-	for (int i = 0; i < height(); i++) {
-		for (int j = 0; j < width(); j++) {
-			pixel(j, i, &c, &opacity);
-			kdDebug() << "Color: " << c.R() << ", " << c.G() << "," << c.B() << ", opacity: " << opacity << "\n";
-		}
+QRect KisSelection::selectedRect() 
+{ 
+	if (m_selectedRect.isValid()) {
+		return m_selectedRect;
+	}
+	else {
+		return QRect(0, 0, width(), height());
 	}
 }

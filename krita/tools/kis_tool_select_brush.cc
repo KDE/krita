@@ -22,23 +22,27 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwidget.h>
+#include <qrect.h>
 
 #include <kdebug.h>
 #include <kaction.h>
 #include <kcommand.h>
 #include <klocale.h>
 
-#include "kis_painter.h"
 #include "integerwidget.h"
 #include "kis_brush.h"
-#include "kis_eraseop.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
 #include "kis_cmb_composite.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
-#include "kis_tool_select_brush.h"
-#include "kis_view.h"
+#include "kis_eraseop.h"
+#include "kis_move_event.h"
+#include "kis_painter.h"
 #include "kis_selection.h"
+#include "kis_tool_select_brush.h"
 #include "kis_types.h"
+#include "kis_view.h"
 #include "wdgselectionoptions.h"
 
 KisToolSelectBrush::KisToolSelectBrush()
@@ -50,6 +54,53 @@ KisToolSelectBrush::KisToolSelectBrush()
 
 KisToolSelectBrush::~KisToolSelectBrush()
 {
+}
+
+// XXX: Cut & Paste antipattern, and all that just to pass
+// the dirty rect to the selection
+void KisToolSelectBrush::buttonPress(KisButtonPressEvent *e)
+{
+        if (!m_subject) return;
+
+        if (!m_subject -> currentBrush()) return;
+
+	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
+
+        if (e -> button() == QMouseEvent::LeftButton) {
+
+		initPaint(e);
+
+		paintAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
+
+		m_prevPos = e -> pos();
+		m_prevPressure = e -> pressure();
+		m_prevXTilt = e -> xTilt();
+		m_prevYTilt = e -> yTilt();
+
+		QRect dirtyRect = m_painter -> dirtyRect();
+		m_currentImage -> activeLayer() -> selection() -> setSelectedRect(dirtyRect);
+		m_currentImage -> notify(dirtyRect);
+
+         }
+}
+
+// XXX: Cut & Paste antipattern, and all that just to pass
+// the dirty rect to the selection
+
+void KisToolSelectBrush::move(KisMoveEvent *e)
+{
+	if (m_mode == PAINT) {
+		paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
+
+		m_prevPos = e -> pos();
+		m_prevPressure = e -> pressure();
+		m_prevXTilt = e -> xTilt();
+		m_prevYTilt = e -> yTilt();
+
+		QRect dirtyRect = m_painter -> dirtyRect();
+		m_currentImage -> activeLayer() -> selection() -> setSelectedRect(dirtyRect);
+		m_currentImage -> notify(dirtyRect);
+	}
 }
 
 

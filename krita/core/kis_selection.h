@@ -18,6 +18,8 @@
 #ifndef KIS_SELECTION_H_
 #define KIS_SELECTION_H_
 
+#include <qrect.h>
+
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
@@ -73,11 +75,20 @@ public:
 	// Note: it is intentional to deep-copy the color
 	// since the selection will want to own its own copy.
 	void setMaskColor(const KoColor c);
-	void dump();
+
+	/**
+	 * Set the area that encloses all selected pixels. This
+	 * will over the lifetime of the selection grow, never
+	 * shrink.
+	 */
+	void setSelectedRect(QRect r) { m_selectedRect |= r; }
+	QRect selectedRect();
+
 private:
 	KisLayerSP m_parentLayer;
 	KisColorSpaceAlphaSP m_alpha;
 	KoColor m_maskColor;
+	QRect m_selectedRect;
 };
 
 #endif // KIS_SELECTION_H_

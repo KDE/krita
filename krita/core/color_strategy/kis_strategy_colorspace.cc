@@ -53,7 +53,7 @@ void KisStrategyColorSpace::convertPixels(QUANTUM * src, KisStrategyColorSpaceSP
 
 	for (Q_UINT32 s = 0, d = 0; s <= srcLen; s += srcPixelSize, d += dstPixelSize) {
 		srcSpace -> toKoColor(&src[s], &c, &opacity);
-		nativeColor(KoColor::white(), opacity, &dst[d]);
+		nativeColor(c, opacity, &dst[d]);
 
 	}
 }

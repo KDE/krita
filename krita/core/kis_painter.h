@@ -66,6 +66,7 @@ class KisPattern;
  */
 class KisPainter : public KisProgressSubject {
 	typedef KisProgressSubject super;
+
 public:
         KisPainter();
         KisPainter(KisPaintDeviceSP device);

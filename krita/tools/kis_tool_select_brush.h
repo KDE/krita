@@ -38,6 +38,8 @@ public:
 	KisToolSelectBrush();
 	virtual ~KisToolSelectBrush();
 
+	virtual void buttonPress(KisButtonPressEvent *e); 
+	virtual void move(KisMoveEvent *e);
 	virtual void setup(KActionCollection *collection);
 	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();

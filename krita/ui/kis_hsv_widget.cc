@@ -35,7 +35,8 @@ KisHSVWidget::KisHSVWidget(QWidget *parent) : super(parent)
 {  
 	m_ColorButton = new KDualColorButton(this);
 	m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
-	QGridLayout *mGrid = new QGridLayout(this, 4, 5, 5, 2);
+	QGridLayout *mGrid = new QGridLayout(this, 5, 5, 5, 2);
+	QSpacerItem *m_spacer= new QSpacerItem ( 0, 0);
 
 	m_colorwheel = new KisColorWheel(this);
 	m_colorwheel->setFixedSize( 120, 120); 
@@ -73,6 +74,7 @@ KisHSVWidget::KisHSVWidget(QWidget *parent) : super(parent)
 	mGrid->addWidget(mSIn, 2, 2);
 	mGrid->addWidget(mVIn, 3, 2);
 	mGrid->addMultiCellWidget(m_VSelector, 0, 0, 4, 4);
+	mGrid->addItem(m_spacer, 4, 0);
 
 	connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
@@ -154,18 +156,26 @@ void KisHSVWidget::update()
 	int s = color.S();
 	int v = color.V();
 
-	disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-	disconnect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
-	
+	m_ColorButton->blockSignals(true);
 	m_ColorButton->setForeground( m_fgColor.color() );
 	m_ColorButton->setBackground( m_bgColor.color() );
-
-	connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-	connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+	m_ColorButton->blockSignals(false);
 
 	mHIn->setValue(h);
 	mSIn->setValue(s);
 	mVIn->setValue(v);
+
+	m_VSelector->blockSignals(true);
+	m_VSelector->setHue(h);
+	m_VSelector->setSaturation(s);
+	m_VSelector->setValue(v);
+	m_VSelector->updateContents();
+	m_VSelector->blockSignals(false);
+	m_VSelector->repaint();
+
+	m_colorwheel->blockSignals(true);
+	m_colorwheel->slotSetValue(color);
+	m_colorwheel->blockSignals(false);
 }
 
 void KisHSVWidget::slotFGColorSelected(const QColor& c)

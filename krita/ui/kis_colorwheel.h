@@ -38,6 +38,9 @@ public:
 signals:
 	void valueChanged(const KoColor& c);
 
+public slots:
+	virtual void slotSetValue(const KoColor& c);
+
 protected:
 	virtual void drawWheel( QPixmap *pixmap );
 	virtual void resizeEvent( QResizeEvent * );

@@ -37,7 +37,7 @@ KisStrategyColorSpaceSP KisColorSpaceFactoryFlyweight::create(const KisPaintDevi
 {
 	KisStrategyColorSpaceSP p;
 
-	if (device == 0)
+	if (device != 0)
 		p = create(device -> type());
 
 	return p;

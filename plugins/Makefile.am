@@ -1,1 +1,1 @@
-SUBDIRS = scan
+SUBDIRS = $(SCANDIR)

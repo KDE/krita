@@ -1,0 +1,13 @@
+dnl only compile the scan plugin if kscan.h was found (recent kdelibs)
+AC_MSG_CHECKING([for kscan.h (kdelibs>2.1)])
+AC_FIND_FILE(kscan.h, $kde_includes, ac_kscan_includes)
+ 
+if test -n "$ac_kscan_includes" && test -r "$ac_kscan_includes/kscan.h"; then
+  SCANDIR=scan
+  AC_SUBST(SCANDIR)
+  AC_MSG_RESULT([found in $ac_kscan_includes])
+else
+  SCANDIR=
+  AC_SUBST(SCANDIR)
+  AC_MSG_RESULT([not found -- kscan plugin will not be built)])
+fi

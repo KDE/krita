@@ -200,6 +200,7 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 				dst += dststride;
 				src += srcstride;
 			}
+			break;
 		case COMPOSITE_NORMAL:
 			while (rows-- > 0) {
 				d = dst;

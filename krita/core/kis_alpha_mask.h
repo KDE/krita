@@ -18,12 +18,10 @@
 #if !defined KIS_ALPHA_MASK_
 #define KIS_ALPHA_MASK_
 
-#include <qvaluevector.h>
 #include <qimage.h>
+#include <qvaluevector.h>
 
 #include "kis_global.h"
-
-
 
 class KisAlphaMask {
 	
@@ -31,12 +29,17 @@ class KisAlphaMask {
 	/**
 	   Create an alpha mask based on the gray values of the
 	   specified QImage. If the QImage is not grayscale, you're
+	   buggered.
+	*/
+	KisAlphaMask(const QImage& img);
+
+	/**
+	   Create an alpha mask based on the gray values of the
+	   specified QImage. If the QImage is not grayscale, you're
 	   buggered. The QImage is scaled using QImage::smoothScale,
 	   where the target w and h are computed by taking scale as a
 	   percentage.
 	*/
-
-	KisAlphaMask(const QImage& img);
 	KisAlphaMask(const QImage& img, double scale);
 
 	virtual ~KisAlphaMask();
@@ -69,19 +72,17 @@ class KisAlphaMask {
 	   Q_INT32 alphaPos). That would be fastest, or we could
 	   provide an iterator over the mask, that would be nice, too.
 	*/
-	QUANTUM alphaAt(Q_INT32 x, Q_INT32 y);
+	QUANTUM alphaAt(Q_INT32 x, Q_INT32 y) const;
 
 private:
 
-	void computeAlpha();
-	void copyAlpha();
+	void computeAlpha(const QImage& img);
+	void copyAlpha(const QImage& img);
 
 	QValueVector<Q_INT32> m_data;
 	double m_scale;
 	Q_INT32 m_scaledWidth;
 	Q_INT32 m_scaledHeight;
-	QImage m_img;
-	bool m_valid;
 
 };
 

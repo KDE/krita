@@ -94,7 +94,7 @@ public:
 			sy = 0;
 		}
 
-		gc.bitBlt(QMAX(dx, 0), QMAX(dy, 0), layer -> compositeOp(), layer.data(), layer -> opacity(), sx, sy, w, h);
+		gc.bitBlt(QMAX(dx, 0), QMAX(dy, 0), COMPOSITE_OVER, layer.data(), layer -> opacity(), sx, sy, w, h);
 		return true;
 	}
 

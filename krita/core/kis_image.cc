@@ -182,6 +182,7 @@ KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,  
 	startUpdateTimer();
         m_dcop = 0L;
 	m_profile = 0;
+	m_pixmap = QPixmap(TILE_WIDTH, TILE_HEIGHT);
 }
 
 KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
@@ -227,6 +228,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_active = rhs.m_active;
 		m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
 		m_guides = rhs.m_guides;
+		m_pixmap = rhs.m_pixmap;
 		startUpdateTimer();
 	}
 
@@ -1044,6 +1046,37 @@ void KisImage::renderToProjection(Q_INT32 tileno)
 	}
 
 	gc.end();
+}
+
+void KisImage::renderToPainter(Q_INT32 x1,
+			       Q_INT32 y1,
+			       Q_INT32 x2,
+			       Q_INT32 y2,
+			       QPainter &painter)
+{
+	Q_INT32 x;
+	Q_INT32 y;
+	Q_INT32 tileno;
+
+	// Flatten the layers onto the projection layer of the current image
+	for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
+		for (x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
+			if ((tileno = tileNum(x, y)) < 0)
+				continue;
+			
+			renderToProjection(tileno);
+			QImage img = projection() -> convertToQImage(x, y, TILE_WIDTH, TILE_HEIGHT);
+			if (!img.isNull()) {
+				// XXX: made obosolete by qt-copy patch 0005
+				// m_pixio.putImage(&m_pixmap, 0, 0, &img);
+				m_pixmap.convertFromImage(img);
+				Q_INT32 w = QMIN(x2 - x, TILE_WIDTH);
+				Q_INT32 h = QMIN(y2 - y, TILE_HEIGHT);
+				painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
+			}
+		}
+	}
+
 }
 
 

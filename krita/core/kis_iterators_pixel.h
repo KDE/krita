@@ -94,7 +94,7 @@ public:
 
 inline KisPixelRO KisIteratorPixel::oldValue()
 {
-	return m_colorSpace -> toKisPixelRO( this->oldQuantumValue());
+	return m_colorSpace -> toKisPixelRO( this->oldQuantumValue(), m_device -> profile());
 }
 
 /**
@@ -102,7 +102,7 @@ inline KisPixelRO KisIteratorPixel::oldValue()
  */
 inline KisIteratorPixel::operator KisPixel()
 {
-	return m_colorSpace -> toKisPixel((QUANTUM*)(*this));
+	return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile());
 }
 
 /**
@@ -111,7 +111,7 @@ inline KisIteratorPixel::operator KisPixel()
  */
 inline KisQuantum KisIteratorPixel::operator[](int index)
 {
-	return m_colorSpace -> toKisPixel((QUANTUM*)(*this))[index];
+	return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile())[index];
 }
 
 

@@ -60,6 +60,11 @@ public:
 
 	// Composite the specified tile onto the projection layer.
 	virtual void renderToProjection(Q_INT32 tileno);
+	virtual void renderToPainter(Q_INT32 x1,
+				     Q_INT32 y1,
+				     Q_INT32 x2,
+				     Q_INT32 y2,
+				     QPainter &painter);
 
 	KisLayerSP projection() const;
 
@@ -223,7 +228,7 @@ private:
 	QMutex m_displayMutex;
 	DCOPObject *m_dcop;
 
-	
+	QPixmap m_pixmap;
 
 };
 

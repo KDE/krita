@@ -56,23 +56,24 @@ void KisStrategyColorSpace::convertTo(KisPixel& /*src*/, KisPixel& /*dst*/,  Kis
 }
 
 
-void KisStrategyColorSpace::convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 numPixels)
+void KisStrategyColorSpace::convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcColorSpace, KisProfileSP srcProfile,
+					  QUANTUM * dst, KisProfileSP dstProfile, Q_UINT32 srcLen)
 {
-	kdDebug() << "convertPixels for " << numPixels << " pixels.\n";
+	kdDebug() << "convertPixels for " << srcLen << " pixels.\n";
 
- 	if (!m_transforms.contains(srcSpace -> colorSpaceType())) {
- 		cmsHTRANSFORM tf = cmsCreateTransform(srcSpace -> profile(), 
-						      srcSpace -> colorSpaceType(), 
-						      profile(),
-						      m_cmType, 
-						      INTENT_PERCEPTUAL,
-						      0);
-		m_transforms[srcSpace -> colorSpaceType()] = tf;
- 	}
+//  	if (!m_transforms.contains(srcSpace -> colorSpaceType())) {
+//  		cmsHTRANSFORM tf = cmsCreateTransform(srcSpace -> profile(), 
+// 						      srcSpace -> colorSpaceType(), 
+// 						      profile(),
+// 						      m_cmType, 
+// 						      INTENT_PERCEPTUAL,
+// 						      0);
+// 		m_transforms[srcSpace -> colorSpaceType()] = tf;
+//  	}
 
-	cmsHTRANSFORM tf = m_transforms[srcSpace -> colorSpaceType()];
+// 	cmsHTRANSFORM tf = m_transforms[srcSpace -> colorSpaceType()];
 
-	cmsDoTransform(tf, src, dst, numPixels);
+// 	cmsDoTransform(tf, src, dst, numPixels);
 }
 
 void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
@@ -84,7 +85,9 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 				   QUANTUM opacity,
 				   Q_INT32 rows, 
 				   Q_INT32 cols, 
-				   CompositeOp op)
+				   CompositeOp op,
+				   KisProfileSP srcProfile,
+				   KisProfileSP dstProfile)
 {
 	if (rows <= 0 || cols <= 0)
 		return;
@@ -103,7 +106,10 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
  		QUANTUM * convertedSrcPixels = new QUANTUM[len];
 		memset(convertedSrcPixels, 255, len * sizeof(QUANTUM));
 
-  		convertPixels(src, srcSpace, convertedSrcPixels, (rows * cols * srcSpace -> depth()));
+		// XXX: Set profiles
+  		convertPixels(src, srcSpace, 0, 
+			      convertedSrcPixels, 0,
+			      (rows * cols * srcSpace -> depth()));
  		srcstride = (srcstride / srcSpace -> depth()) * depth();
 
 		bitBlt(stride,
@@ -141,7 +147,7 @@ void KisStrategyColorSpace::resetProfiles()
 	if (!m_profileFilenames.empty()) {
 		KisProfile * profile = 0;
 		for ( QStringList::Iterator it = m_profileFilenames.begin(); it != m_profileFilenames.end(); ++it ) {
-			profile = new KisProfile(*it);
+			profile = new KisProfile(*it, colorSpaceType());
 			profile -> loadAsync();
 			if (profile -> valid() && profile -> colorSpaceSignature() == m_colorSpaceSignature) {
 				m_profiles.push_back(profile);

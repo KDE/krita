@@ -43,15 +43,18 @@ public:
 	virtual void toKoColor(const QUANTUM *src, KoColor *c);
 	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity);
 
-	virtual KisPixelRO toKisPixelRO(QUANTUM *src) { return KisPixelRO (src, src + PIXEL_CMYK_ALPHA); }
-	virtual KisPixel toKisPixel(QUANTUM *src) { return KisPixel (src, src + PIXEL_CMYK_ALPHA); }
+	virtual KisPixelRO toKisPixelRO(QUANTUM *src, KisProfileSP profile = 0) 
+	{ return KisPixelRO (src, src + PIXEL_CMYK_ALPHA, this, profile); }
+	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0) 
+	{ return KisPixel (src, src + PIXEL_CMYK_ALPHA, this, profile); }
 
 	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const;
 	
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride);
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+					KisProfileSP srcProfile = 0, KisProfileSP dstProfile = 0);
 
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst, 

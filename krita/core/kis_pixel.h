@@ -21,11 +21,10 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-
+#include "kis_profile.h"
 #include "kis_quantum.h"
 
 // XXX: Template these classes to byte, int, float, double
-// XXX: Separate the alpha channel for the other channels on construction.
 // XXX: Separate color channels from substance channels (wetness, thickness, grainyness) on construction
 
 /**
@@ -55,6 +54,10 @@
  * something worse.
  * 
  * After alpha, the substance channels will come.
+ *
+ * Note: once you start working with color management a sequence of bytes that happens to
+ * encode R, G and B values is still meaningless. You cannot know what _color_ the bytes
+ * represent unless you also have a profile. So KisPixel must know about the profile, too.
  */
 
 
@@ -64,15 +67,9 @@
  */
 class KisPixelRO {
 public:
-	KisPixelRO() 
-		: m_channels(0) {}
-
-	KisPixelRO(QUANTUM* channels) 
-		: m_channels(channels) {}
-
-	KisPixelRO(QUANTUM* channels, QUANTUM* alpha)
-		: m_channels(channels), m_alpha(alpha) {}
-
+	
+	KisPixelRO(QUANTUM * channels = 0, QUANTUM* alpha = 0, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0)
+		: m_channels(channels), m_alpha(alpha), m_colorStrategy(colorStrategy), m_profile(profile) {}
 
 public:
 
@@ -81,10 +78,14 @@ public:
 	QUANTUM alpha() { return m_alpha[0]; }
 	KisStrategyColorSpaceSP colorStrategy() { return m_colorStrategy; }
 
+	void setProfile(KisProfileSP profile) { m_profile = profile; }
+	KisProfileSP profile() { return m_profile; }
+
 private:
 	QUANTUM* m_channels;
 	QUANTUM* m_alpha;
 	KisStrategyColorSpaceSP m_colorStrategy;
+	KisProfileSP m_profile;
 };
 
 
@@ -96,12 +97,20 @@ class KisPixel {
 
 public:
 
-	KisPixel(QUANTUM* channels) : m_channels(channels) {}
+	/**
+	 * Create a new pixel with the specified number of channels and alpha channels.
+	 */
+	KisPixel(int nbChannels, int nbAlphaChannels = 1, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0) 
+		: m_channels(new QUANTUM(nbChannels)), 
+		  m_alpha(new QUANTUM(nbAlphaChannels)), 
+		  m_colorStrategy(colorStrategy), 
+		  m_profile(profile) { };
 
-	KisPixel(int nbchannel) : m_channels(new QUANTUM(nbchannel)) { }
-
-	KisPixel(QUANTUM* channels, QUANTUM* alpha)
-		: m_channels(channels), m_alpha(alpha) {}
+	/**
+	 * Create a read/write pixel for existing channel data.
+	 */
+	KisPixel(QUANTUM * channels, QUANTUM* alpha = 0, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0)
+		  : m_channels(channels), m_alpha(alpha), m_colorStrategy(colorStrategy), m_profile(profile) {}
 
 public:
 
@@ -109,10 +118,14 @@ public:
 	KisQuantum alpha() { return KisQuantum(m_alpha); };
 	KisStrategyColorSpaceSP colorStrategy() { return m_colorStrategy; };
 
+	void setProfile(KisProfileSP profile) { m_profile = profile; }
+	KisProfileSP profile() { return m_profile; }
+
 private:
 	QUANTUM* m_channels;
 	QUANTUM* m_alpha;
 	KisStrategyColorSpaceSP m_colorStrategy;
+	KisProfileSP m_profile;
 };
 
 

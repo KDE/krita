@@ -34,12 +34,15 @@
 
 #include "ksharedptr.h"
 
-KisProfile::KisProfile()
-	: super(QString())
+KisProfile::KisProfile(Q_UINT32 colorType)
+	: super(QString()),
+	  m_lcmsColorType(colorType)
 {
 }
 
-KisProfile::KisProfile(const QString& file) : super(file)
+KisProfile::KisProfile(const QString& file, Q_UINT32 colorType) 
+	: super(file),
+	  m_lcmsColorType(colorType)
 {
 }
 
@@ -71,10 +74,10 @@ bool KisProfile::loadAsync()
 
 		m_productInfo = cmsTakeProductInfo(m_profile);
 // 		kdDebug() << "\tInfo: " << m_productInfo << "\n";
-#if (LCMS_MAJOR_VERSION > 1) || (LCMS_MAJOR_VERSION == 1 && LCMS_MINOR_VERSION >= 12)
+// #if (LCMS_MAJOR_VERSION > 1) || (LCMS_MAJOR_VERSION == 1 && LCMS_MINOR_VERSION >= 12)
 		m_manufacturer = cmsTakeManufacturer(m_profile);
 // 		kdDebug() << "\tManufacturer: " << m_manufacturer << "\n";
-#endif
+// #endif
 // 		kdDebug() << "\tCopyright: " << cmsTakeCopyright(m_profile) << "\n";
 
 // 		kdDebug() << "\tModel: " << cmsTakeModel(m_profile) << "\n";

@@ -44,14 +44,15 @@ public:
 	virtual void toKoColor(const QUANTUM *src, KoColor *c);
 	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity);
 
-	virtual KisPixelRO toKisPixelRO(QUANTUM *src) { return KisPixelRO (src, src); }
-	virtual KisPixel toKisPixel(QUANTUM *src) { return KisPixel (src, src); }
+	virtual KisPixelRO toKisPixelRO(QUANTUM *src, KisProfileSP profile = 0) { return KisPixelRO (src, src, this, profile); }
+	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0) { return KisPixel (src, src, this, profile); }
 
 	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const { return 0; };
-	virtual QImage convertToQImage(const QUANTUM *data, bool applyMonitorProfile, Q_INT32 width, Q_INT32 height, Q_INT32 stride);
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
+				       KisProfileSP srcProfile = 0, KisProfileSP dstProfile = 0);
 
 	virtual void setMaskColor(KoColor c) { m_maskColor = c; }
 	virtual void setInverted(bool b) { m_inverted = b; }

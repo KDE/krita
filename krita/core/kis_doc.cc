@@ -334,8 +334,7 @@ namespace {
 }
 
 KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) :
-	super(parentWidget, widgetName, parent, name, singleViewMode),
-	m_pixmap(RENDER_WIDTH, RENDER_HEIGHT)
+	super(parentWidget, widgetName, parent, name, singleViewMode)
 {
 
 	m_undo = false;
@@ -1034,14 +1033,10 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 
 void KisDoc::paintContent(QPainter& painter, const QRect& rect)
 {
-	Q_INT32 x;
-	Q_INT32 y;
 	Q_INT32 x1;
 	Q_INT32 y1;
 	Q_INT32 x2;
 	Q_INT32 y2;
-	Q_INT32 tileno;
-
 
 	// Only happens if there's actually only one image. As soon as
 	// a second image is created, or selected, m_currentImage is
@@ -1058,25 +1053,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect)
 		x2 = CLAMP(rect.x() + rect.width(), 0, m_currentImage -> width());
 		y2 = CLAMP(rect.y() + rect.height(), 0, m_currentImage -> height());
 
-
-		// Flatten the layers onto the projection layer of the current image
-		for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
-			for (x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
-				if ((tileno = m_currentImage -> tileNum(x, y)) < 0)
-					continue;
-
-				m_currentImage -> renderToProjection(tileno);
-				QImage img = m_currentImage -> projection() -> convertToQImage(x, y, TILE_WIDTH, TILE_HEIGHT);
-				if (!img.isNull()) {
-                                        // XXX: made obosolete by qt-copy patch 0005
-					// m_pixio.putImage(&m_pixmap, 0, 0, &img);
-					m_pixmap.convertFromImage(img);
-					Q_INT32 w = QMIN(x2 - x, TILE_WIDTH);
-					Q_INT32 h = QMIN(y2 - y, TILE_HEIGHT);
-					painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
-				}
-			}
-		}
+		m_currentImage -> renderToPainter(x1, y1, x2, y2, painter);
 	}
 }
 

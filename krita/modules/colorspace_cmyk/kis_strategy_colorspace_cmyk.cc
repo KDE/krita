@@ -105,10 +105,12 @@ Q_INT32 KisStrategyColorSpaceCMYK::nColorChannels() const
 	return MAX_CHANNEL_CMYK;
 }
 
-QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride)
+QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
+                                                        KisProfileSP srcProfile, KisProfileSP dstProfile)
+
 {
 	kdDebug() << "convertToQImage: (" << width << ", " << height << ")\n";
-
+#if 0
 	// Determine rgb profile to use in this transform
 	KisConfig cfg;
 	QString monitorProfileName = cfg.monitorProfile();
@@ -169,7 +171,7 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
  		}
 	}
 	
-
+#endif
 
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
 	
@@ -188,7 +190,7 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 		Q_INT32 i = 0;
 		uchar *j = img.bits();
 		
-		while ( i < stride * height ) {
+		while ( i < width * height * depth() ) {
 			QUANTUM k = *( data + i + PIXEL_BLACK );
 			QUANTUM c = *( data + i + PIXEL_CYAN );
 			QUANTUM m = *( data + i + PIXEL_MAGENTA );

@@ -36,6 +36,12 @@ class KisIteratorPixel;
 class KisPixel;
 class KisPixelRO;
 
+
+struct KisProfilePair {
+  KisProfileSP srcProfile;
+  KisProfileSP dstProfile;
+};
+
 // XXX: This class contains a default profile as state data,
 //      and there is currently no way to use the profile associated
 //      with the image here.
@@ -65,8 +71,8 @@ public:
 	virtual void toKoColor(const QUANTUM *src, KoColor *c) = 0;
 	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity) = 0;
 
-	virtual KisPixelRO toKisPixelRO(QUANTUM *src) = 0;
-	virtual KisPixel toKisPixel(QUANTUM *src) = 0;
+	virtual KisPixelRO toKisPixelRO(QUANTUM *src, KisProfileSP profile) = 0;
+	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile) = 0;
 	
 	// Return a vector describing all the channels this color model has.
 	virtual vKisChannelInfoSP channels() const = 0;
@@ -97,7 +103,15 @@ public:
 	 */
 	virtual void convertTo(KisPixel& src, KisPixel& dst, KisStrategyColorSpaceSP srcColorSpace);
 	
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) = 0;
+	/**
+	 * Convert the pixels in data to  (8-bit BGRA) QImage using the specified profiles.
+	 * The pixels are supposed to be encoded in this color model.
+	 *
+	 * @param data A pointer to a contiguous memory region containing width * height pixels
+	 * @param width in pixels
+	 * @param height in pixels
+	 */
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, KisProfileSP srcProfile, KisProfileSP dstProfile) = 0;
 
 	/**
 	 * Compose two arrays of pixels together. If source and target
@@ -113,7 +127,9 @@ public:
 			    QUANTUM opacity,
 			    Q_INT32 rows, 
 			    Q_INT32 cols, 
-			    CompositeOp op);
+			    CompositeOp op,
+			    KisProfileSP srcProfile = 0,
+			    KisProfileSP dstProfile = 0);
 
 
 	void setColorSpaceType(Q_UINT32 type) { m_cmType = type; }
@@ -134,7 +150,7 @@ public:
 	/**
 	 * Get the icm profile for conversion between color spaces.
 	 */
-	cmsHPROFILE profile() { return m_profile; }
+	cmsHPROFILE defaultProfile() { return m_profile; }
 
 
 	/**
@@ -168,10 +184,9 @@ protected:
 	 * Convert a byte array of srcLen pixels *src in the color space
 	 * srcSpace to the current color model and put the converted
 	 * bytes into the prepared byte array *dst.
-	 *
-	 * This uses littlecms by default with default icm profiles.
 	 */
-	virtual void convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcColorSpace, QUANTUM * dst, Q_UINT32 srcLen);
+	virtual void convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcColorSpace, KisProfileSP srcProfile,
+				   QUANTUM * dst, KisProfileSP dstProfile, Q_UINT32 srcLen);
 
 	
 	/**
@@ -196,7 +211,7 @@ private:
 	Q_UINT32 m_cmType; // The colorspace type as defined by littlecms
 	icColorSpaceSignature m_colorSpaceSignature; // The colorspace signature as defined in icm/icc files
 
-	typedef QMap<Q_UINT32, cmsHTRANSFORM>  TransformMap;
+	typedef QMap<KisProfilePair, cmsHTRANSFORM>  TransformMap;
 	TransformMap m_transforms; // Cache for existing transforms
 
 	cmsHTRANSFORM m_displayTransform;

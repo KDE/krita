@@ -93,34 +93,38 @@ Q_INT32 KisColorSpaceAlpha::depth() const
 	return MAX_CHANNEL_ALPHA;
 }
 
-QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, bool applyMonitorProfile, Q_INT32 width, Q_INT32 height, Q_INT32 stride)
+// XXX: We convert the alpha space to create a mask for display in selection previews
+// etc. No need to actually use the profiles here to create a 
+QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
+					   KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/)
 {
-// 	kdDebug() << "KisColorSpaceAlpha::convertToImage. W:" << width
-// 		  << ", H: " << height
-// 		  << ", stride: " << stride << "\n";
 
 	QImage img(width, height, 32, 0, QImage::LittleEndian);
 
 	Q_INT32 i = 0;
 	uchar *j = img.bits();
 
-	while ( i < stride * height ) {
-		*( j + PIXEL_MASK ) = *( data + i );
-		// XXX: for previews of the mask, it would be handy to
-		// make this always black.
+	while ( i < width * height * depth()) {
+
+		// Temporary copy until I figure out something better
+		
 		PIXELTYPE PIXEL_BLUE = 0;
 		PIXELTYPE PIXEL_GREEN = 1;
 		PIXELTYPE PIXEL_RED = 2;
+		PIXELTYPE PIXEL_ALPHA = 3;
+
+		// XXX: for previews of the mask, it would be handy to
+		// make this always black.
 
 		*( j + PIXEL_RED )   = m_maskColor.R();
 		*( j + PIXEL_GREEN ) = m_maskColor.G();
 		*( j + PIXEL_BLUE )  = m_maskColor.B();
+		*( j + PIXEL_ALPHA ) = *( data + i );
 		
 		i += MAX_CHANNEL_ALPHA;
 		j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
 		
 	}
-
 	return img;
 }
 

@@ -668,7 +668,7 @@ void KisPaintDevice::setProfile(KisProfileSP profile)
 }
 
 
-QImage KisPaintDevice::convertToQImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+QImage KisPaintDevice::convertToQImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, KisProfileSP dstProfile)
 {
 	if (w < 0) {
 		w = width();
@@ -724,7 +724,7 @@ QImage KisPaintDevice::convertToQImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 
 		pd -> width = pd -> x2 - pd -> x1 + 1;
 		pd -> height = pd -> y2 - pd -> y1 + 1;
 		pd -> depth = depth();
-		pd -> stride = pd -> depth * pd -> width;
+ 		pd -> stride = pd -> depth * pd -> width;
 
 		// XXX: The previous code used a statically allocated buffer
 		// of size RENDER_WIDTH * RENDER_HEIGHT * depth. We could do
@@ -733,8 +733,11 @@ QImage KisPaintDevice::convertToQImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 
 		pd -> data = new QUANTUM[pd -> depth * pd -> width * pd -> height];
 		tiles() -> readPixelData(pd);
 
+
 		// XXX: determine whether to apply the monitor profile or based on the copy setting
-		image = colorStrategy() -> convertToQImage(pd -> data, pd -> width, pd -> height, pd -> stride);
+		image = colorStrategy() -> convertToQImage(pd -> data, 
+							   pd -> width, pd -> height,
+							   m_profile, dstProfile);// , pd -> stride);
 	}
 
 	return image;

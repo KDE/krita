@@ -44,7 +44,6 @@ KisPreviewView::KisPreviewView(QWidget* parent, const char * name, WFlags f)
 	  m_pos(QPoint(0,0)), m_zoom(1.0)
 {
 	m_moving = false;
-	m_pixmap = QPixmap(size().width(), size().height());
 	updateView(m_pos);
 }
 
@@ -81,8 +80,6 @@ void KisPreviewView::setSourceLayer(KisLayerSP lay)
 	KisPainter gc;
 	KisPaintDeviceSP pd(m_sourcelayer.data());
     
-	m_pixmap = QPixmap(size().width(), size().height());
-
 	Q_INT32 w = static_cast<Q_INT32>(size().width() / m_zoom);
 	Q_INT32 h = static_cast<Q_INT32>(size().height() / m_zoom);
 	m_image = new KisImage(m_undo, w, h, lay->colorStrategy(), "preview");
@@ -124,41 +121,15 @@ void KisPreviewView::render(QPainter &painter, KisImageSP image)
 	if( image == 0 ) // This is usefull only for Qt/Designer
 		return;
 
-	Q_INT32 x1 = 0;
-	Q_INT32 y1 = 0;
-	Q_INT32 x2 = image -> width();
-	Q_INT32 y2 = image -> height();
-	Q_INT32 tileno;
-
 	if (!image)
 		return;
 
 	if (m_zoom != 1.0)
 		painter.scale(m_zoom, m_zoom);
 
-	for (Q_INT32 y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
-		for (Q_INT32 x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
-			if ((tileno = image -> tileNum(x, y)) < 0)
-				continue;
+	// XXX: Do we always need to render the complete image?
+	image -> renderToPainter(0, 0, image -> width(), image -> height(), painter);
 
-			image -> renderToProjection(tileno);
-		}
-	}
-	// XXX: Doesn't this have the same bug as we had in kis_doc:;paintContent?
-	for (Q_INT32 y = y1; y < y2; y += RENDER_HEIGHT)
-		for (Q_INT32 x = x1; x < x2; x += RENDER_WIDTH) {
-			Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
-			Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
-
-			QImage img = image -> projection() -> convertToQImage(x, y, w, h);
-
-			if (!img.isNull()) {
-				// XXX: made obosolete by qt-copy patch 0005
-				// m_pixio.putImage(&m_pixmap, 0, 0, &img);
-				m_pixmap.convertFromImage(img);
-				painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
-			}
-		}
 }
 
 void KisPreviewView::clampDelta(QPoint& delta)

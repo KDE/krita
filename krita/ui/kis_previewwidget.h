@@ -23,10 +23,7 @@
 #define __kis_previewwidget_h__
 
 #include <qwidget.h>
-#include <qpixmap.h>
 #include <qsize.h>
-
-#include <kpixmapio.h>
 
 #include "kis_types.h"
 
@@ -83,8 +80,6 @@ private:
         KisImageSP m_image;
         KisUndoAdapter* m_undo;
         QPoint m_startDrag, m_pos;
-        QPixmap m_pixmap;
-        KPixmapIO m_pixio;
         double m_zoom;
         bool m_moving;
 };

@@ -46,6 +46,9 @@ KisStrategyColorSpaceGrayscale::KisStrategyColorSpaceGrayscale() :
 
 	m_channels.push_back(new KisChannelInfo(i18n("gray"), 0, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 1, ALPHA));
+
+
+
 }
 
 
@@ -55,12 +58,13 @@ KisStrategyColorSpaceGrayscale::~KisStrategyColorSpaceGrayscale()
 
 void KisStrategyColorSpaceGrayscale::nativeColor(const KoColor& c, QUANTUM *dst)
 {
-	dst[PIXEL_GRAY] = upscale((c.R() + c.G() + c.B() )/3);
+	// Use qGray for a better rgb -> gray formula: (r*11 + g*16 + b*5)/32.
+	dst[PIXEL_GRAY] = upscale(qGray(c.R(), c.G(), c.B()));
 }
 
 void KisStrategyColorSpaceGrayscale::nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst)
 {
-	dst[PIXEL_GRAY] = upscale((c.R() + c.G() + c.B() )/3);
+	dst[PIXEL_GRAY] = upscale(qGray(c.R(), c.G(), c.B()));
 	dst[PIXEL_GRAY_ALPHA] = opacity;
 }
 
@@ -97,33 +101,41 @@ Q_INT32 KisStrategyColorSpaceGrayscale::nColorChannels() const
 }
 
 
-QImage KisStrategyColorSpaceGrayscale::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride)
+QImage KisStrategyColorSpaceGrayscale::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
+						       KisProfileSP srcProfile, KisProfileSP dstProfile)
 {
+
+
 	QImage img(width, height, 32, 0, QImage::LittleEndian);
 
-	Q_INT32 i = 0;
-	uchar *j = img.bits();
-
-	while ( i < stride * height ) {
-		QUANTUM q = *( data + i + PIXEL_GRAY );
-
-		// XXX: Moved here to get rid of these global constants
-		const PIXELTYPE PIXEL_BLUE = 0;
-		const PIXELTYPE PIXEL_GREEN = 1;
-		const PIXELTYPE PIXEL_RED = 2;
-		const PIXELTYPE PIXEL_ALPHA = 3;
-
-		*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_GRAY_ALPHA );
-		*( j + PIXEL_RED )   = q;
-		*( j + PIXEL_GREEN ) = q;
-		*( j + PIXEL_BLUE )  = q;
+	// No profiles
+	if (srcProfile == 0 && dstProfile == 0 && defaultProfile() == 0) {
+		Q_INT32 i = 0;
+		uchar *j = img.bits();
 		
-		i += MAX_CHANNEL_GRAYSCALEA;
+		while ( i < width * height * depth()) {
+			QUANTUM q = *( data + i + PIXEL_GRAY );
+
+			// XXX: Temporarily moved here to get rid of these global constants
+			const PIXELTYPE PIXEL_BLUE = 0;
+			const PIXELTYPE PIXEL_GREEN = 1;
+			const PIXELTYPE PIXEL_RED = 2;
+			const PIXELTYPE PIXEL_ALPHA = 3;
+
+			*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_GRAY_ALPHA );
+			*( j + PIXEL_RED )   = q;
+			*( j + PIXEL_GREEN ) = q;
+			*( j + PIXEL_BLUE )  = q;
 		
-		j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
-		
+			i += MAX_CHANNEL_GRAYSCALEA;
+			
+			j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
+		}
+		return img;
 	}
 
+
+	// Create display transform if not present
 	return img;
 }
 

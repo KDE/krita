@@ -113,7 +113,8 @@ Q_INT32 KisStrategyColorSpaceCMYKA::nColorChannels() const
 	return MAX_CHANNEL_CMYK;
 }
 
-QImage KisStrategyColorSpaceCMYKA::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride)
+QImage KisStrategyColorSpaceCMYKA::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
+							KisProfileSP srcProfile, KisProfileSP dstProfile)
 {
 
 	kdDebug() << "convertToQImage: (" << width << ", " << height << ")\n";
@@ -122,7 +123,7 @@ QImage KisStrategyColorSpaceCMYKA::convertToQImage(const QUANTUM *data, Q_INT32 
         Q_INT32 i = 0;
         uchar *j = img.bits();
 
-        while ( i < stride * height ) {
+        while ( i < width * height * depth() ) {
                 QUANTUM k = *( data + i + PIXEL_BLACK );
 		QUANTUM c = *( data + i + PIXEL_CYAN );
 		QUANTUM m = *( data + i + PIXEL_MAGENTA );

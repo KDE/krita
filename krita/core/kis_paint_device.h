@@ -117,8 +117,14 @@ public:
 
 	/**
 	 * Create an RGBA QImage from a rectangle in the paint device.
+	 *
+	 * x, y left-top point of the rect of pixels
+	 * w, h width and height in pixels
+	 * profile RGB profile to use in conversion. May be 0, in which
+	 * case it's up to the colour strategy to choose a profile (most 
+	 * like sRGB).
 	 */
-	virtual QImage convertToQImage(Q_INT32 x = 0, Q_INT32 y = 0, Q_INT32 w = -1, Q_INT32 h = -1);
+	virtual QImage convertToQImage(Q_INT32 x = 0, Q_INT32 y = 0, Q_INT32 w = -1, Q_INT32 h = -1, KisProfileSP dstProfile = 0);
 
         virtual QString name() const;
         virtual void setName(const QString& name);

@@ -100,8 +100,11 @@ Q_INT32 KisStrategyColorSpaceRGB::nColorChannels() const
 	return MAX_CHANNEL_RGB;
 }
 
-QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride)
+QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+                                KisProfileSP srcProfile, KisProfileSP dstProfile )
+
 {
+
 	QImage img;
 	
 #ifdef __BIG_ENDIAN__
@@ -109,7 +112,7 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 	Q_INT32 i = 0;
 	uchar *j = img.bits();
 	
-	while ( i < stride * height ) {
+	while ( i < width * height * depth()) {
 
 		// Swap the bytes
 		*( j + 0)  = *( data + i + PIXEL_ALPHA );
@@ -124,8 +127,6 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 	}
 	
 #else
-	(void)stride; // Kill warning
-
 	img = QImage(const_cast<QUANTUM *>(data), width, height, 32, 0, 0, QImage::LittleEndian);
 
 	// XXX: The previous version of this code used the quantum data directly

@@ -40,8 +40,8 @@ class KisProfile : public KisResource, public KShared {
 	Q_OBJECT
 
 public:
-	KisProfile();
-	KisProfile(const QString& file);
+	KisProfile(Q_UINT32 colorType);
+	KisProfile(const QString& file, Q_UINT32 colorType);
 	virtual ~KisProfile();
 
 	virtual bool loadAsync();
@@ -54,10 +54,11 @@ public:
 	QString productDescription() const { return m_productDescription; }
 	QString productInfo() const { return m_productInfo; }
 	QString manufacturer() const { return m_manufacturer; }
-
 	cmsHPROFILE profile() const { return m_profile; }
+	Q_UINT32 colorType() { return m_lcmsColorType; }
 private:
 
+	
 	cmsHPROFILE m_profile;
 	icColorSpaceSignature m_colorSpaceSignature;
 	icProfileClassSignature m_deviceClass;
@@ -65,6 +66,8 @@ private:
 	QString m_productDescription;
 	QString m_productInfo;
 	QString m_manufacturer;
+	Q_UINT32 m_lcmsColorType;
+
 
 };
 

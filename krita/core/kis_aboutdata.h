@@ -42,6 +42,7 @@ KAboutData * newKrayonAboutData()
 	aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
 	aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
 	aboutData->addAuthor("Patrick Julien", 0, "freak@codepimps.org");
+	aboutData->addAuthor("Boudewijn Rempt", 0, "boud@valdyas.org");
 	return aboutData;
 }
 

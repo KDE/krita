@@ -99,15 +99,8 @@ void KisToolBrush::paint(const QPoint & pos,
 
 	if (!currentImage) return;
 
-	QImage mask;
 	// Retrieve the mask of the brush used
 	QImage img = m_brush->img();
-	if (img.hasAlphaBuffer()) {
-		mask = img.createAlphaMask();
-	}
-	else {
-		mask = img.createHeuristicMask(true);
-	}
 #if 0
 	kdDebug() << "mask depth: " << mask.depth() << endl;
 #endif
@@ -153,9 +146,9 @@ void KisToolBrush::paint(const QPoint & pos,
         KisPaintDeviceSP device = currentImage -> activeDevice();
         if (device) {
 		KisPainter p( device );
-		p.beginTransaction( "Brush" );
+		//p.beginTransaction( "Brush" );
 		p.bitBlt( pos.x(),  pos.y(),  COMPOSITE_OVER, tmpLayer.data());
-		p.endTransaction();
+		//p.endTransaction();
 		device->anchor();
 	}
         currentImage->invalidate( pos.x(),  pos.y(),  tmpLayer->width(),  tmpLayer->height() );

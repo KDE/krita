@@ -37,10 +37,10 @@ public:
 
 protected:
 
-		virtual void paintAt(const QPoint &pos,
-		     const double pressure,
-		     const double /*xTilt*/,
-		     const double /*yTilt*/);
+	virtual void paintAt(const QPoint &pos,
+			     const double pressure,
+			     const double /*xTilt*/,
+			     const double /*yTilt*/);
 
 	virtual void paintLine(const QPoint & pos1,
 			       const QPoint & pos2,

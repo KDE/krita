@@ -13,7 +13,6 @@ libkistools_la_SOURCES = kis_tool_paint.cc \
 	kis_tool_brush.cc \
 	kis_tool_eraser.cc \
 	kis_tool_line.cc \
-	kis_tool_stamp.cc \
 	kis_tool_airbrush.cc \
         kis_tool_paste.cc \
         kis_tool_select_freehand.cc \

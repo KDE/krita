@@ -67,7 +67,7 @@ void KisToolDuplicate::mousePress(QMouseEvent *e)
 void KisToolDuplicate::setup(KActionCollection *collection)
 {
 	KRadioAction *radio = new KRadioAction(i18n("&Duplicate"),
-					       "duplicate a part of image", 0, this,
+					       "stamp", 0, this,
 					       SLOT(activate()), collection,
 					       "tool_duplicate");
 	radio -> setExclusiveGroup("tools");

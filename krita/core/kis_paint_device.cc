@@ -40,8 +40,7 @@ KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uch
 {
 	m_name = name;
 	m_imgRect = QRect(0, 0, width, height);
-	m_tileRect = KisUtil::findTileExtents(m_imgRect);
-	resize(m_tileRect.width(), m_tileRect.height(), bpp);
+	resize(m_imgRect.width(), m_imgRect.height(), bpp);
 	m_visible = true;
 	m_opacity = 255;
 }
@@ -112,8 +111,10 @@ bool KisPaintDevice::pixel(uint x, uint y, QRgb *rgb)
 
 QRgb KisPaintDevice::rgb(uint x, uint y)
 {
-	// TODO
-	return 0;
+	QRgb rgb;
+
+	pixel(x, y, &rgb);
+	return true;
 }
 
 void KisPaintDevice::resize(uint width, uint height, uchar bpp)
@@ -122,7 +123,6 @@ void KisPaintDevice::resize(uint width, uint height, uchar bpp)
       	m_imgRect.setHeight(height);
 	m_tileRect = KisUtil::findTileExtents(m_imgRect);
 	m_tiles.resize(m_tileRect.width() / TILE_SIZE, m_tileRect.height() / TILE_SIZE, bpp);
-	m_tiles.resize(width / TILE_SIZE, height / TILE_SIZE, bpp);
 }
 
 void KisPaintDevice::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const

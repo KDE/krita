@@ -936,9 +936,8 @@ bool KisDoc::saveAsQtImage(const QString& file, bool wholeImage)
 
 bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 {
-	return false;
-#if 0
 	KisImageSP img = currentImg();
+	QImage cI;
 
 	if (!img) 
 		return false;
@@ -948,31 +947,28 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 	if (!lay) 
 		return false;
 
-	if(qimg->depth() < 16)
-	{
-		QImage cI = qimg->smoothScale(qimg->width(), qimg->height());
+	if (qimg -> depth() < 16) {
+		cI = qimg -> smoothScale(qimg -> width(), qimg -> height());
 		qimg = &cI;
 	}
 
-	if(qimg->depth() < 32)
-	{
+	if (qimg -> depth() < 32) {
 		kdDebug() << "qimg depth is less than 32" << endl;
-		kdDebug() << "qimg depth is: " << qimg->depth() << endl;
-
-		qimg->convertDepth(32);
+		kdDebug() << "qimg depth is: " << qimg -> depth() << endl;
+		qimg -> convertDepth(32);
 	}
 
-	qimg->setAlphaBuffer(true);
+	qimg -> setAlphaBuffer(true);
 
-	bool layerGrayScale = false;
-	bool qimageGrayScale = false;
+//	bool layerGrayScale = false;
+//	bool qimageGrayScale = false;
 
 	int startx = 0;
 	int starty = 0;
 
-	QRect clipRect(startx, starty, qimg->width(), qimg->height());
+	QRect clipRect(startx, starty, qimg -> width(), qimg -> height());
 
-	if (!clipRect.intersects(lay->imageExtents()))
+	if (!clipRect.intersects(lay -> imageExtents()))
 		return false;
 
 	clipRect = clipRect.intersect(lay->imageExtents());
@@ -983,14 +979,14 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 	int ey = clipRect.bottom() - starty;
 
 	uchar *sl;
-	uchar r;
+//	uchar r;
 
 //	bool alpha = (img->colorMode() == cm_RGBA);
 
 	lay -> resize(qimg -> width(), qimg -> height(), 4);
 
 	for (int y = sy; y <= ey; y++) {
-		sl = qimg->scanLine(y);
+		sl = qimg -> scanLine(y);
 
 		for (int x = sx; x <= ex; x++) {
 			QRgb *p = (QRgb*)qimg -> scanLine(y) + x;
@@ -1043,7 +1039,6 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 	}
 
 	return true;
-#endif
 }
 
 
@@ -1057,8 +1052,6 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 
 bool KisDoc::LayerToQtImage(QImage *qimg, const QRect& clipRect)
 {
-	return false; // BPP
-#if 0
 	QRect clip;
 
 	KisImageSP img = currentImg();
@@ -1090,30 +1083,29 @@ bool KisDoc::LayerToQtImage(QImage *qimg, const QRect& clipRect)
 	int ex = clip.right();
 	int ey = clip.bottom();
 	uchar *sl;
-	uchar r, g, b;
-	uchar a = 255;
-	uint rgba;
+//	uchar r, g, b;
+//	uchar a = 255;
+//	uint rgba;
 
-	bool alpha = (img->colorMode() == cm_RGBA);
+//	bool alpha = (img->colorMode() == cm_RGBA);
 
 	for (int y = sy; y <= ey; y++) {
-		sl = qimg->scanLine(y);
+		sl = qimg -> scanLine(y);
 
 		for (int x = sx; x <= ex; x++) {
-			lay -> pixel(startx + x, starty + y, &rgba);
-			r = qRed(rgba);
-			g = qGreen(rgba);
-			b = qBlue(rgba);
-			a = qAlpha(rgba);
+			QRgb *p = (QRgb*)qimg -> scanLine(y) + x;
+			uchar color[MAX_CHANNELS];
 
-			uint *p = (uint *)qimg->scanLine(y - sy) + (x - sx);
-			*p = alpha ? qRgba(r, g, b, a) : qRgb(r, g, b);
+			color[PIXEL_RED] = qRed(*p);
+			color[PIXEL_GREEN] = qGreen(*p);
+			color[PIXEL_BLUE] = qBlue(*p);
+			color[PIXEL_ALPHA] = qAlpha(*p);
+
+			lay -> setPixel(startx + x, starty + y, color);
 		}
 	}
 
 	return true;
-#endif
-
 }
 
 /*

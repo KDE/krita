@@ -18,7 +18,6 @@
 */
 
 #include "kis_widgets_plugin.h"
-#include <kdebug.h>
 #include "kis_cmb_imagetype.h"
 #include "kis_cmb_composite.h"
 #include "integerwidget.h"
@@ -35,7 +34,6 @@ KisWidgetInfo::KisWidgetInfo(QString nincludeFile, QString ntoolTip, QString nwh
 
 KisWidgetsPlugin::KisWidgetsPlugin()
 {
-	kdDebug() << "KisWidgetsPlugin::KisWidgetsPlugin()" << endl;
 	m_widgetsMap.insert(widgetInfoMap::value_type("IntegerWidget", 
 		KisWidgetInfo("integerwidget.h", "a combobox displaying the colorspaces", "", false)));
 	m_widgetsMap.insert(widgetInfoMap::value_type("KisCmbImageType", 

@@ -43,6 +43,7 @@ public:
 
 public:
 	void addTile(Q_INT32 tileNo, KisTileSP tile);
+	KisTileSP tile(Q_INT32 tileNo);
 
 private:
 	TileMap m_tiles;

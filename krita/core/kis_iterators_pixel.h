@@ -32,6 +32,7 @@ public:
 	KisIteratorPixel( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos = 0, Q_INT32 nxpos = 0);
 public:
 	inline operator KisPixelRepresentation();
+	inline KisPixelRepresentationReadOnly oldValue();
 	inline KisQuantum operator[](int index);
 private:
 };
@@ -54,6 +55,11 @@ public:
 	virtual KisIteratorPixel begin();
 	virtual KisIteratorPixel end();
 };
+
+inline KisPixelRepresentationReadOnly KisIteratorPixel::oldValue()
+{
+	return KisPixelRepresentationReadOnly( this->oldQuantumValue());
+}
 
 inline KisIteratorPixel::operator KisPixelRepresentation()
 {

@@ -29,8 +29,10 @@ KisIteratorUnit::KisIteratorUnit( KisPaintDeviceSP ndevice, KisTileCommand* comm
 		  m_ypos_intile( nypos % TILE_HEIGHT ),
 		  m_tilenum( m_ktm->ncols() * m_rownum + nxpos /  TILE_WIDTH ), 
 		  m_xintile( (nxpos % TILE_WIDTH ) * m_depth),
+			m_oldTileNeedRefresh (true),
 		  m_tileNeedRefresh (true), 
 		  m_tileNeedRefreshRW(true),
 			m_inc(inc)
 {
+	m_tile = m_ktm->tile( m_tilenum, TILEMODE_READ);
 }

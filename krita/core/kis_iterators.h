@@ -31,17 +31,10 @@
 #include <kdebug.h>
 
 /** 
- * These template classes can be used to iterate over the pixel data in
- * a given paint device, reading and writing data.
- *
- * XXX: expand with kernel support (x*y matrix of pixels, reading and writing 
- * for convolutions etc.)
- *
- * _Tp is a Unit
- * _Tpu is a KisIteratorUnit
- *  sizeOfTp is the size of unit
- * For instance :
- *    XXX
+ * These classe can be used to iterate over the pixel data in
+ * a given paint device, reading and writing data. This class is useless
+ * as she provide no public way to access data, you should use one of
+ * the children class : KisIteratorPixel or KisIteratorQuantum
  */
 class KisIteratorUnit {
 
@@ -63,19 +56,20 @@ public:
 	inline bool operator==(const KisIteratorUnit& __rhs) const;
 protected:
 	//Data access operators
-	operator QUANTUM () ;
-	operator QUANTUM*();
-protected:
+	inline operator QUANTUM () ;
+	inline operator QUANTUM*();
+	inline QUANTUM* oldQuantumValue();
+private:
 	KisPaintDeviceSP m_device;
 	KisTileCommand* m_command;
 	KisTileMgrSP m_ktm;
 	const Q_INT32 m_depth, m_ypos, m_rownum, m_ypos_intile;
 	Q_INT32 m_tilenum, m_xintile;
-	bool m_tileNeedRefresh, m_tileNeedRefreshRW;;
-	KisTileSP m_tile;
-private:
+	bool m_oldTileNeedRefresh, m_tileNeedRefresh, m_tileNeedRefreshRW;
+	KisTileSP m_tile, m_oldTile;
 	Q_INT8 m_inc;
 	QUANTUM* m_data;
+	QUANTUM* m_oldData;
 };
 
 
@@ -99,13 +93,12 @@ public:
 		m_ypos( nypos ), m_command( command )
 	{
 	}
-	
+
 	virtual ~KisIteratorLine()
 	{
 	}
 
 public:
-
 	 virtual _iTp operator*()  = 0;
 	 virtual operator _iTp* () = 0;
 
@@ -113,7 +106,7 @@ public:
 	 KisIteratorLine< _iTp>& operator++() { m_ypos++; return *this; }
 	 KisIteratorLine< _iTp>& operator--() { m_ypos--; return *this; }
 
-         // Comparison operators
+   // Comparison operators
 	 bool operator<(const KisIteratorLine< _iTp>& __rhs) const
 	 { 
 		 return this->m_ypos < __rhs.m_ypos; 
@@ -154,6 +147,7 @@ inline KisIteratorUnit& KisIteratorUnit::inc()
 		m_tilenum++;
 		m_tileNeedRefresh = true;
 		m_tileNeedRefreshRW = true;
+		m_oldTileNeedRefresh = true;
 	}
 	return *this;
 }
@@ -168,6 +162,7 @@ inline KisIteratorUnit& KisIteratorUnit::operator--()
 		m_tilenum--;
 		m_tileNeedRefresh = true;
 		m_tileNeedRefreshRW = true;
+		m_oldTileNeedRefresh = true;
 	}
 	return *this;
 }
@@ -189,7 +184,7 @@ inline void KisIteratorUnit::skipPixel()
 // Comparison operators
 inline bool KisIteratorUnit::operator<(const KisIteratorUnit& __rhs) const
 { 
-	return m_tilenum < __rhs.m_tilenum || (m_tilenum == __rhs.m_tilenum && m_xintile < __rhs.m_tilenum); 
+	return m_tilenum < __rhs.m_tilenum || (m_tilenum == __rhs.m_tilenum && m_xintile < __rhs.m_xintile); 
 }
 inline bool KisIteratorUnit::operator<=(const KisIteratorUnit& __rhs) const
 {
@@ -235,5 +230,24 @@ inline KisIteratorUnit::operator QUANTUM ()
 	return *(m_data + m_xintile);
 }
 
+inline QUANTUM* KisIteratorUnit::oldQuantumValue()
+{
+	if( m_oldTileNeedRefresh )
+	{
+		m_oldTile = 0;
+		if( m_command)
+		{
+			m_oldTile = (m_command->tile(m_tilenum));
+		}
+		if( m_oldTile == 0)
+		{
+			if( !(m_oldTile = (m_ktm->tile( m_tilenum, TILEMODE_READ) ) ) )
+				return 0;
+		}
+		m_oldData =  m_oldTile->data(0, m_ypos_intile);
+		m_oldTileNeedRefresh = false;
+	}
+	return (m_oldData + m_xintile);
+}
 
 #endif

@@ -22,6 +22,17 @@
 #ifndef _KIS_PIXEL_REPRESENTATION_H_
 #define _KIS_PIXEL_REPRESENTATION_H_
 
+class KisPixelRepresentationReadOnly {
+public:
+	KisPixelRepresentationReadOnly() : m_channels(0) { }
+  KisPixelRepresentationReadOnly(QUANTUM* channels) : m_channels(channels) {}
+	public:
+		QUANTUM operator[](int index) { return m_channels[index]; };
+ private:
+  QUANTUM* m_channels;
+};
+
+
 class KisPixelRepresentation {
 public:
   KisPixelRepresentation(QUANTUM* channels) : m_channels(channels) {}

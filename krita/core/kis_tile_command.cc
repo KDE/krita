@@ -96,6 +96,14 @@ QString KisTileCommand::name() const
 	return m_name;
 }
 
+KisTileSP KisTileCommand::tile(Q_INT32 tileNo)
+{
+	if (m_tiles.count(tileNo) == 0) {
+		return  0;
+	}
+	return m_tiles[tileNo];
+}
+
 void KisTileCommand::addTile(Q_INT32 tileNo, KisTileSP tile)
 {
 	Q_ASSERT(tile);

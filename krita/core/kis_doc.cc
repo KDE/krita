@@ -35,9 +35,11 @@
 #include <kcommand.h>
 #include <kdebug.h>
 #include <kimageio.h>
+#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
+#include <knotifyclient.h>
 #include <klocale.h>
 
 // KOffice
@@ -51,6 +53,7 @@
 // Local
 #include "kis_types.h"
 #include "kis_config.h"
+#include "kis_dlg_builder_progress.h"
 #include "kis_global.h"
 #include "kis_channel.h"
 #include "kis_dlg_create_img.h"
@@ -64,7 +67,11 @@
 #include "kis_selection.h"
 #include "kis_command.h"
 #include "kis_view.h"
-#include "kistilemgr.h"
+#include "kis_util.h"
+#include "builder/kis_builder_subject.h"
+#include "builder/kis_builder_monitor.h"
+#include "builder/kis_image_magick_converter.h"
+#include "tiles/kistilemgr.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -334,11 +341,9 @@ bool KisDoc::initDoc()
 	QString templ;
 	KoTemplateChooseDia::ReturnType ret;
 
-	ok = init();
-
-	if (!ok)
+	if (!init())
 		return false;
-	
+
 	ret = KoTemplateChooseDia::choose(KisFactory::global(), templ, "application/x-kra", "*.kra",
 			i18n("Krita"), KoTemplateChooseDia::NoTemplates, "krita_template");
 
@@ -828,7 +833,8 @@ bool KisDoc::completeLoading(KoStore *store)
 }
 
 bool KisDoc::namePresent(const QString& name) const
-{ for (vKisImageSP_cit it = m_images.begin(); it != m_images.end(); it++)
+{ 
+	for (vKisImageSP_cit it = m_images.begin(); it != m_images.end(); it++)
 		if ((*it) -> name() == name)
 			return true;
 
@@ -1427,6 +1433,27 @@ void KisDoc::slotIOProgress(Q_INT8 percentage)
 		app -> processEvents();
 
 	emit ioProgress(percentage);
+}
+
+bool KisDoc::importImage(const QString& filename)
+{
+	if (m_nserver == 0)
+		init();
+
+	if (!filename.isEmpty()) {
+		KURL url(filename);
+		KisImageMagickConverter ib(this);
+
+		if (url.isEmpty())
+			return false;
+
+		if (ib.buildImage(url) == KisImageBuilder_RESULT_OK) {
+			addImage(ib.image());
+			return true;
+		} 
+	}
+
+	return false;
 }
 
 #include "kis_doc.moc"

@@ -1277,6 +1277,8 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filena
 
 	if (filename.isEmpty())
 		urls = KFileDialog::getOpenURLs(QString::null, KisUtil::readFilters(), 0, i18n("Import Image"));
+	else
+		urls.push_back(filename);
 
 	if (urls.empty())
 		return 0;

@@ -97,6 +97,8 @@ public:
 	void setClipboardSelection(KisSelectionSP selection);
 	KisSelectionSP clipboardSelection();
 
+	bool importImage(const QString& filename);
+
 public slots:
 	void slotImageUpdated();
 	void slotImageUpdated(const QRect& rect);

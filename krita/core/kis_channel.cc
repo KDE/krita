@@ -32,3 +32,12 @@ KisChannel::~KisChannel()
 {
 }
 
+QUANTUM KisChannel::opacity() const
+{
+	return QUANTUM_MAX;
+}
+
+void KisChannel::opacity(QUANTUM)
+{
+}
+

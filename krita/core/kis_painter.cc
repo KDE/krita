@@ -827,11 +827,11 @@ double KisPainter::paintLine(const enumPaintOp paintOp,
 	double xSpacing = m_brush -> xSpacing((pressure1 + pressure2) / 2);
 	double ySpacing = m_brush -> ySpacing((pressure1 + pressure2) / 2);
 
-	if (xSpacing <= DBL_EPSILON) {
-		xSpacing = 1;
+	if (xSpacing < 0.5) {
+		xSpacing = 0.5;
 	}
-	if (ySpacing <= DBL_EPSILON) {
-		ySpacing = 1;
+	if (ySpacing < 0.5) {
+		ySpacing = 0.5;
 	}
 
 	double xScale = 1;

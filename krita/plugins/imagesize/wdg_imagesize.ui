@@ -306,7 +306,7 @@
                 <bool>true</bool>
             </property>
             <property name="toolTip" stdset="0">
-                <string>If checked, the image will be scaled, if unchecked cropped or enlarged to the new size without changing the contents.</string>
+                <string>If checked, the image will be scaled; if unchecked, the image will be cropped or enlarged to the new size without changing the contents.</string>
             </property>
         </widget>
     </grid>

@@ -75,8 +75,8 @@ void KisToolRectangularSelect::mousePress(QMouseEvent *e)
 {
 	if (e -> button() == LeftButton) {
 		clearSelection();
-		m_startPos = e -> pos();
-		m_endPos = e -> pos();
+		m_startPos = e -> pos() * m_view -> zoom();
+		m_endPos = e -> pos() * m_view -> zoom();
 		m_selecting = true;
 	}
 }
@@ -101,6 +101,7 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 		} else {
 			KisImageSP img = m_view -> currentImg();
 			
+			m_startPos /= m_view -> zoom();
 			m_endPos = e -> pos();
 
 			if (img) {
@@ -114,7 +115,6 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 				selection = new KisSelection(parent, img, "rectangular selection tool box", OPACITY_OPAQUE);
 				selection -> setBounds(rc);
 				img -> setSelection(selection);
-				img -> invalidate(rc);
 			}
 		}
 

@@ -29,7 +29,7 @@
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
-#include "kis_selection.h"
+#include "kis_floatingselection.h"
 #include "kis_tool_select_rectangular.h"
 #include "kis_tool_select_rectangular.moc"
 #include "kis_undo_adapter.h"
@@ -39,7 +39,7 @@ namespace {
 		typedef KNamedCommand super;
 
 	public:
-		RectSelectCmd(KisSelectionSP selection);
+		RectSelectCmd(KisFloatingSelectionSP selection);
 		virtual ~RectSelectCmd();
 
 	public:
@@ -47,11 +47,11 @@ namespace {
 		virtual void unexecute();
 
 	private:
-		KisSelectionSP m_selection;
+		KisFloatingSelectionSP m_selection;
 		KisImageSP m_owner;
 	};
 
-	RectSelectCmd::RectSelectCmd(KisSelectionSP selection) : super(i18n("Rectangular Selection"))
+	RectSelectCmd::RectSelectCmd(KisFloatingSelectionSP selection) : super(i18n("Rectangular Selection"))
 	{
 		m_selection = selection;
 		m_owner = selection -> image();
@@ -177,7 +177,7 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 
 			if (img) {
 				KisPaintDeviceSP parent;
-				KisSelectionSP selection;
+				KisFloatingSelectionSP selection;
 
                                 QRect rc(m_startPos, m_endPos);
 
@@ -185,7 +185,7 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 
 				if (parent) {
 					rc = rc.normalize();
-					selection = new KisSelection(parent, img, "rectangular selection tool frame", OPACITY_OPAQUE);
+					selection = new KisFloatingSelection(parent, img, "rectangular selection tool frame", OPACITY_OPAQUE);
 					selection -> setBounds(rc);
 					img -> setSelection(selection);
 

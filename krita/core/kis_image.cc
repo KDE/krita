@@ -38,7 +38,7 @@
 #include "kis_doc.h"
 #include "kis_mask.h"
 #include "kis_nameserver.h"
-#include "kis_selection.h"
+#include "kis_floatingselection.h"
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kispixeldata.h"
@@ -47,9 +47,9 @@
 namespace {
 
 	const bool DISPLAY_TIMER = false; // Whether to repaint the
-					 // display every
-					 // DISPLAY_UPDATE_FREQUENCY
-					 // milliseconds
+	// display every
+	// DISPLAY_UPDATE_FREQUENCY
+	// milliseconds
 	const int DISPLAY_UPDATE_FREQUENCY = 50; // in milliseconds
 
 	class KisResizeImageCmd : public KNamedCommand {
@@ -57,38 +57,38 @@ namespace {
 
 	public:
 		KisResizeImageCmd(KisUndoAdapter *adapter,
-			KisImageSP img,
-			Q_INT32 width,
-			Q_INT32 height,
-			Q_INT32 oldWidth,
-			Q_INT32 oldHeight) : super(i18n("Resize Image"))
-		{
-			m_adapter = adapter;
-			m_img = img;
-			m_before = QSize(oldWidth, oldHeight);
-			m_after = QSize(width, height);
-		}
+				  KisImageSP img,
+				  Q_INT32 width,
+				  Q_INT32 height,
+				  Q_INT32 oldWidth,
+				  Q_INT32 oldHeight) : super(i18n("Resize Image"))
+			{
+				m_adapter = adapter;
+				m_img = img;
+				m_before = QSize(oldWidth, oldHeight);
+				m_after = QSize(width, height);
+			}
 
 		virtual ~KisResizeImageCmd()
-		{
-		}
+			{
+			}
 
 	public:
 		virtual void execute()
-		{
-			m_adapter -> setUndo(false);
-			m_img -> resize(m_after.width(), m_after.height());
-			m_adapter -> setUndo(true);
-			m_img -> notify();
-		}
+			{
+				m_adapter -> setUndo(false);
+				m_img -> resize(m_after.width(), m_after.height());
+				m_adapter -> setUndo(true);
+				m_img -> notify();
+			}
 
 		virtual void unexecute()
-		{
-			m_adapter -> setUndo(false);
-			m_img -> resize(m_before.width(), m_before.height());
-			m_adapter -> setUndo(true);
-			m_img -> notify();
-		}
+			{
+				m_adapter -> setUndo(false);
+				m_img -> resize(m_before.width(), m_before.height());
+				m_adapter -> setUndo(true);
+				m_img -> notify();
+			}
 
 	private:
 		KisUndoAdapter *m_adapter;
@@ -101,38 +101,38 @@ namespace {
 		typedef KNamedCommand super;
 
 	public:
-		KisSelectionSet(KisUndoAdapter *adapter, KisImageSP img, KisSelectionSP selection) : super(i18n("Set Selection"))
-		{
-			m_adapter = adapter;
-			m_img = img;
-			m_selection = selection;
-		}
+		KisSelectionSet(KisUndoAdapter *adapter, KisImageSP img, KisFloatingSelectionSP selection) : super(i18n("Set Floating Selection"))
+			{
+				m_adapter = adapter;
+				m_img = img;
+				m_selection = selection;
+			}
 
 		virtual ~KisSelectionSet()
-		{
-		}
+			{
+			}
 
 	public:
 		virtual void execute()
-		{
-			m_adapter -> setUndo(false);
-			m_img -> unsetSelection(false);
-			m_adapter -> setUndo(true);
-			m_img -> notify();
-		}
+			{
+				m_adapter -> setUndo(false);
+				m_img -> unsetSelection(false);
+				m_adapter -> setUndo(true);
+				m_img -> notify();
+			}
 
 		virtual void unexecute()
-		{
-			m_adapter -> setUndo(false);
-			m_img -> setSelection(m_selection);
-			m_adapter -> setUndo(true);
-			m_img -> notify();
-		}
+			{
+				m_adapter -> setUndo(false);
+				m_img -> setSelection(m_selection);
+				m_adapter -> setUndo(true);
+				m_img -> notify();
+			}
 
 	private:
 		KisUndoAdapter *m_adapter;
 		KisImageSP m_img;
-		KisSelectionSP m_selection;
+		KisFloatingSelectionSP m_selection;
 	};
 }
 
@@ -146,7 +146,7 @@ KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height, c
 
 KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 {
-    m_dcop = 0L;
+	m_dcop = 0L;
 	if (this != &rhs) {
 		m_undoHistory = rhs.m_undoHistory;
 		m_uri = rhs.m_uri;
@@ -979,36 +979,36 @@ PIXELTYPE KisImage::pixelFromChannel(CHANNELTYPE type) const
 	PIXELTYPE i = PIXEL_UNDEF;
 
 	switch (type) {
-		case REDCHANNEL:
-			i = PIXEL_RED;
+	case REDCHANNEL:
+		i = PIXEL_RED;
+		break;
+	case GREENCHANNEL:
+		i = PIXEL_GREEN;
+		break;
+	case BLUECHANNEL:
+		i = PIXEL_BLUE;
+		break;
+	case GRAYCHANNEL:
+		i = PIXEL_GRAY;
+		break;
+	case INDEXEDCHANNEL:
+		i = PIXEL_INDEXED;
+		break;
+	case ALPHACHANNEL:
+		switch (imgType()) {
+		case IMAGE_TYPE_GREY:
+			i = PIXEL_GRAY_ALPHA;
 			break;
-		case GREENCHANNEL:
-			i = PIXEL_GREEN;
-			break;
-		case BLUECHANNEL:
-			i = PIXEL_BLUE;
-			break;
-		case GRAYCHANNEL:
-			i = PIXEL_GRAY;
-			break;
-		case INDEXEDCHANNEL:
-			i = PIXEL_INDEXED;
-			break;
-		case ALPHACHANNEL:
-			switch (imgType()) {
-				case IMAGE_TYPE_GREY:
-					i = PIXEL_GRAY_ALPHA;
-					break;
-				case IMAGE_TYPE_INDEXED:
-					i = PIXEL_INDEXED_ALPHA;
-					break;
-				default:
-					i = PIXEL_ALPHA;
-					break;
-			}
+		case IMAGE_TYPE_INDEXED:
+			i = PIXEL_INDEXED_ALPHA;
 			break;
 		default:
+			i = PIXEL_ALPHA;
 			break;
+		}
+		break;
+	default:
+		break;
 	}
 
 	return i;
@@ -1093,7 +1093,7 @@ void KisImage::validate(Q_INT32 tileno)
 	dst -> valid(true);
 }
 
-void KisImage::setSelection(KisSelectionSP selection)
+void KisImage::setSelection(KisFloatingSelectionSP selection)
 {
 	if (m_selection != selection) {
 		unsetSelection();
@@ -1130,7 +1130,7 @@ void KisImage::unsetSelection(bool commit)
 	}
 }
 
-KisSelectionSP KisImage::selection() const
+KisFloatingSelectionSP KisImage::selection() const
 {
 	return m_selection;
 }

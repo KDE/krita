@@ -1,3 +1,6 @@
+* Create a history/action docker
+* Add scriptability
+* Figure out a way to have 1, 8, 16, 24 and 64 bits per channel.
 * Fix speed of painting.
 * Move composite ops and paint ops to capability framework
 * Add tranform dialog (scale, shear etc.) and debug transform code.
@@ -16,6 +19,10 @@
 	e.g. KisPainter.
 * Make pipe brushes pay attention to the instructions in the 'parasite'
 * Use patterns and gradients while painting
+* Add auto-scroll when painting/erasing etc.
+* Add a 'hard' pen tool
+* Make toolbox conform to Karbon
+* Fix composite ops and make conformant to photoshop/gimp instead of ImageMagick
 
 User interface
 
@@ -28,6 +35,8 @@ User interface
         * gradient dialog
         * the progressbar in the statusbar gets mad sometimes, 
           appearing twice
+        * More coordination with Karbon's Rob Buis. We really should
+	  use the same code for our UI.
 
 Tools
 
@@ -41,14 +50,15 @@ Core
 
         * Add support for natural media-like painting
         * Add support for filters
-        * There's something broken about channels, I guess
+        * channels, masks are broken
+	* Adjustment layers
 
 To investigate
 
         * plugins -- what are they, how should they work,
-          what's the interface to Krita
+          what's the interface to Krita -> Done by Cyrille.
         * graphics algorithms. One cannot steal from the Gimp
-          forever
+          forever.
 
 
 Old TODO, parts of it seem pretty obsolete, and others are more of a 'redo'

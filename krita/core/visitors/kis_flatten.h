@@ -24,7 +24,7 @@
 #include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
 #include "kis_layer.h"
-#include "kis_selection.h"
+#include "kis_floatingselection.h"
 
 struct flattenAll {
 	const bool operator()(const KisPaintDeviceSP) const
@@ -98,7 +98,7 @@ public:
 		return true; 
 	}
 
-	virtual bool visit(KisPainter& gc, KisSelectionSP selection)
+	virtual bool visit(KisPainter& gc, KisFloatingSelectionSP selection)
 	{
 		visit(gc, selection.data(), selection -> opacity());
 		return true;

@@ -74,7 +74,7 @@ public:
 			    QUANTUM opacity,
 			    QPoint pos,
 			    enumImgType type);
-	KisLayerSP layerAdd(KisImageSP img, const QString& name, KisSelectionSP selection);
+	KisLayerSP layerAdd(KisImageSP img, const QString& name, KisFloatingSelectionSP selection);
 	KisLayerSP layerAdd(KisImageSP img, KisLayerSP layer, Q_INT32 position);
 	void layerRemove(KisImageSP img, KisLayerSP layer);
 	void layerRaise(KisImageSP img, KisLayerSP layer);
@@ -112,8 +112,8 @@ public:
 	QString nextImageName() const;
 	void setProjection(KisImageSP img);
 
-	void setClipboardSelection(KisSelectionSP selection);
-	KisSelectionSP clipboardSelection();
+	void setClipboardSelection(KisFloatingSelectionSP selection);
+	KisFloatingSelectionSP clipboardSelection();
 
 	bool importImage(const QString& filename);
 
@@ -159,7 +159,7 @@ private:
 	KoCommandHistory *m_cmdHistory;
 	vKisImageSP m_images;
 	KisImageSP m_projection;
-	KisSelectionSP m_clipboard;
+	KisFloatingSelectionSP m_clipboard;
 	bool m_pushedClipboard;
 	DCOPObject *m_dcop;
 	KisNameServer *m_nserver;

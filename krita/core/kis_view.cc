@@ -90,7 +90,7 @@
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
 #include "kis_ruler.h"
-#include "kis_selection.h"
+#include "kis_floatingselection.h"
 #include "kis_sidebar.h"
 #include "kis_tool.h"
 #include "kis_tool_factory.h"
@@ -873,7 +873,7 @@ void KisView::copy()
 	KisImageSP img = currentImg();
 
 	if (img) {
-		KisSelectionSP selection = img -> selection();
+		KisFloatingSelectionSP selection = img -> selection();
 
 		if (selection) {
 			selection -> clearParentOnMove(false);
@@ -896,7 +896,7 @@ void KisView::paste_into()
 	Q_ASSERT(!QApplication::clipboard() -> image().isNull());
 
 	if (img) {
-		KisSelectionSP selection = m_doc -> clipboardSelection();
+		KisFloatingSelectionSP selection = m_doc -> clipboardSelection();
 		KisLayerSP layer = m_doc -> layerAdd(img, img -> nextLayerName(), selection);
 
 		img -> unsetSelection(false);
@@ -915,7 +915,7 @@ void KisView::removeSelection()
 	KisImageSP img = currentImg();
 
 	if (img) {
-		KisSelectionSP selection = img -> selection();
+		KisFloatingSelectionSP selection = img -> selection();
 
 		if (selection) {
 			KisPaintDeviceSP parent = selection -> parent();
@@ -950,7 +950,7 @@ void KisView::copySelectionToNewLayer()
 	KisImageSP img = currentImg();
 
 	if (img) {
-		KisSelectionSP selection = img -> selection();
+		KisFloatingSelectionSP selection = img -> selection();
 
 		img -> unsetSelection(false);
 
@@ -1031,7 +1031,7 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 	KisImageSP img = currentImg();
 
 	if (img) {
-		KisSelectionSP selection = img -> selection();
+		KisFloatingSelectionSP selection = img -> selection();
 
 		if (selection) {
 			QRect rc = selection -> bounds();
@@ -1077,7 +1077,7 @@ void KisView::selectAll()
 		dev = img -> activeDevice();
 
 		if (dev) {
-			KisSelectionSP selection = new KisSelection(dev, img, "Selection box from KisView", OPACITY_OPAQUE);
+			KisFloatingSelectionSP selection = new KisFloatingSelection(dev, img, "Selection box from KisView", OPACITY_OPAQUE);
 
 			selection -> setBounds(dev -> bounds());
 			img -> setSelection(selection);
@@ -2565,7 +2565,7 @@ void KisView::layerToImage()
 	KisImageSP img = currentImg();
 
 	if (img) {
-		KisSelectionSP selection = img -> selection();
+		KisFloatingSelectionSP selection = img -> selection();
 		KisLayerSP layer;
 
 		if (selection)

@@ -28,7 +28,7 @@
 
 #include <koColor.h>
 
-#include "kis_selection.h"
+#include "kis_floatingselection.h"
 #include "kis_gradient.h"
 
 //#define DEBUG_COLORS

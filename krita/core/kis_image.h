@@ -48,7 +48,7 @@ public:
 	KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	KisImage(const KisImage& rhs);
 	virtual ~KisImage();
-    virtual DCOPObject *dcopObject();
+	virtual DCOPObject *dcopObject();
 
 public:
 	// Implement KisRenderInterface
@@ -140,9 +140,9 @@ public:
 	bool boundsLayer();
 	KisLayerSP correlateLayer(Q_INT32 x, Q_INT32 y);
 
-	void setSelection(KisSelectionSP selection);
+	void setSelection(KisFloatingSelectionSP selection);
 	void unsetSelection(bool commit = true);
-	KisSelectionSP selection() const;
+	KisFloatingSelectionSP selection() const;
 	QRect bounds() const;
 
 	void notify();
@@ -202,7 +202,7 @@ private:
 	vKisLayerSP m_layerStack;
 	KisLayerSP m_activeLayer;
 	KisChannelSP m_activeChannel;
-	KisSelectionSP m_selection;
+	KisFloatingSelectionSP m_selection;
 	KisChannelSP m_selectionMask;
 	QBitArray m_visible;
 	QBitArray m_active;
@@ -216,7 +216,7 @@ private:
 
 	QTimer * m_updateTimer;
 	QMutex m_displayMutex;
-    DCOPObject *m_dcop;
+	DCOPObject *m_dcop;
 };
 
 #endif // KIS_IMAGE_H_

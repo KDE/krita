@@ -56,8 +56,8 @@ typedef vKisLayerSP::const_iterator vKisLayerSP_cit;
 class KisBackground;
 typedef KSharedPtr<KisBackground> KisBackgroundSP;
 
-class KisSelection;
-typedef KSharedPtr<KisSelection> KisSelectionSP;
+class KisFloatingSelection;
+typedef KSharedPtr<KisFloatingSelection> KisFloatingSelectionSP;
 
 class KisTile;
 typedef KSharedPtr<KisTile> KisTileSP;

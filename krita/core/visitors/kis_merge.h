@@ -25,7 +25,7 @@
 #include "kis_painter.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_selection.h"
+#include "kis_floatingselection.h"
 
 template <typename cond_t>
 class KisMerge : public KisPaintDeviceVisitor {
@@ -98,7 +98,7 @@ public:
 		return true;
 	}
 
-	virtual bool visit(KisPainter&, KisSelectionSP)
+	virtual bool visit(KisPainter&, KisFloatingSelectionSP)
 	{
 		return false;
 	}

@@ -29,7 +29,7 @@
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
-#include "kis_selection.h"
+
 #include "kis_tool_eraser.h"
 #include "kis_vec.h"
 #include "kis_view.h"

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  this program is free software; you can redistribute it and/or modify
  *  it under the terms of the gnu general public license as published by
@@ -18,49 +18,27 @@
 #if !defined KIS_SELECTION_H_
 #define KIS_SELECTION_H_
 
-#include <qimage.h>
-#include <qrect.h>
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
 
-class KisSelection : public KisLayer {
-	Q_OBJECT
-	typedef KisLayer super;
+/**
+ * KisSelection contains a byte-map representation of a layer, where
+ * the value of a byte signifies whether a corresponding pixel is selected, or not,
+ * and an array or QPointArray's that represent the boundaries of the areas of a
+ * possibly discontinuous selection. The points in the point array 'walk around'
+ * the selected area clock-wise.
+ */
+class KisSelection {
 
 public:
-	KisSelection(Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
-	KisSelection(KisPaintDeviceSP parent, KisImageSP img, const QString& name, QUANTUM opacity);
+	KisSelection(KisPaintDeviceSP layer, const QString& name);
 	virtual ~KisSelection();
 
-public:
-	// Overide KisLayer
-	virtual bool shouldDrawBorder() const;
-	virtual void move(Q_INT32 x, Q_INT32 y);
-	virtual void anchor();
-
-public:
-	void commit();
-	void fromImage(const QImage& img);
-	QImage toImage();
-	void setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_INT32 height);
-	void setBounds(const QRect& rc);
-	KisPaintDeviceSP parent() const;
-	void setParent(KisPaintDeviceSP parent);
-	void clearParentOnMove(bool f);
-
-private slots:
-	void parentVisibilityChanged(KisPaintDeviceSP parent);
-
 private:
-	KisPaintDeviceSP m_parent;
-	KisImageSP m_img;
-	QImage m_clipImg;
-	QString m_name;
-	QRect m_rc;
-	bool m_firstMove;
-	bool m_clearOnMove;
+	KisPaintDeviceSP m_layer;
+	
 };
 
-#endif // KIS_SELECTION_H_
+#endif // KIS_FLOATINGSELECTION_H_
 

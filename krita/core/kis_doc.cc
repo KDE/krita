@@ -66,7 +66,7 @@
 #include "kis_nameserver.h"
 #include "kis_painter.h"
 #include "kis_mask.h"
-#include "kis_selection.h"
+#include "kis_floatingselection.h"
 #include "kis_command.h"
 #include "kis_view.h"
 #include "builder/kis_builder_subject.h"
@@ -1073,7 +1073,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 	Q_INT32 x2;
 	Q_INT32 y2;
 	Q_INT32 tileno;
-	KisSelectionSP selection;
+	KisFloatingSelectionSP selection;
 	KisStrategyColorSpaceSP colorstate;
 
 	if (!m_projection)
@@ -1303,7 +1303,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img,
 }
 
 
-KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisSelectionSP selection)
+KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisFloatingSelectionSP selection)
 {
 	KisLayerSP layer;
 
@@ -1512,7 +1512,7 @@ void KisDoc::setLayerProperties(KisImageSP img,
 	}
 }
 
-void KisDoc::setClipboardSelection(KisSelectionSP selection)
+void KisDoc::setClipboardSelection(KisFloatingSelectionSP selection)
 {
 	m_clipboard = selection;
 
@@ -1525,7 +1525,7 @@ void KisDoc::setClipboardSelection(KisSelectionSP selection)
 	}
 }
 
-KisSelectionSP KisDoc::clipboardSelection()
+KisFloatingSelectionSP KisDoc::clipboardSelection()
 {
 	return m_clipboard;
 }
@@ -1537,7 +1537,7 @@ void KisDoc::clipboardDataChanged()
 		QImage qimg = cb -> image();
 
 		if (!qimg.isNull()) {
-			m_clipboard = new KisSelection(qimg.width(), qimg.height(),
+			m_clipboard = new KisFloatingSelection(qimg.width(), qimg.height(),
 					qimg.hasAlphaBuffer() ? IMAGE_TYPE_RGBA : IMAGE_TYPE_RGB,
 					"KisDoc created clipboard selection");
 

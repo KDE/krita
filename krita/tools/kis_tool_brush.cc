@@ -32,12 +32,10 @@
 #include "kis_tool_brush.h"
 #include "kis_layer.h"
 
-KisToolBrush::KisToolBrush(KisView *view, KisDoc *doc) 
-	: super(view, doc),
+KisToolBrush::KisToolBrush() 
+	: super(),
 	  m_mode( HOVER )
 {
-	m_view = view;
-	m_doc = doc;
 }
 
 KisToolBrush::~KisToolBrush()
@@ -51,39 +49,29 @@ void KisToolBrush::mouseRelease(QMouseEvent* /*e*/)
 
 void KisToolBrush::mousePress(QMouseEvent *e)
 {
-	if (!m_brush) return;
+	if (!m_subject) return;
 
-	if (e->button() == QMouseEvent::LeftButton) {
-		m_mode = PAINT;
-	} else if (e->button() == QMouseEvent::MidButton) {
-		m_mode = SMUDGE;
-	} else if (e->button() == QMouseEvent::RightButton) {
-		m_mode = ERASE;
-	} else {
-		m_mode = HOVER;
-	}
+ 	if (!m_subject->currentBrush()) return;
+
+ 	if (e->button() == QMouseEvent::LeftButton) {
+ 		m_mode = PAINT;
+ 	}
 }
 
 void KisToolBrush::mouseMove(QMouseEvent *e)
 {
-	if (m_mode == PAINT) {
-		paint(e->pos(), 128, 0, 0);
-	} else if (m_mode == SMUDGE) {
-		smudge(e->pos(), 128, 0, 0);
-	} else if (m_mode == ERASE) {
-		erase(e->pos(), 128, 0, 0);
-	}
+ 	if (m_mode == PAINT) {
+ 		paint(e->pos(), 128, 0, 0);
+ 	}
 	
 }
 
 
 void KisToolBrush::tabletEvent(QTabletEvent *e)
 {
-	if (e->device() == QTabletEvent::Stylus) {
-		paint(e->pos(), e->pressure(), e->xTilt(), e->yTilt());
-	} else if (e->device() == QTabletEvent::Eraser) {
-		smudge(e->pos(), e->pressure(), e->xTilt(), e->yTilt());
-	}
+ 	if (e->device() == QTabletEvent::Stylus) {
+ 		paint(e->pos(), e->pressure(), e->xTilt(), e->yTilt());
+ 	}
 }
 
 
@@ -95,50 +83,75 @@ void KisToolBrush::paint(const QPoint & pos,
 #if 0
 	kdDebug() << "paint: " << pos.x() << ", " << pos.y() << endl;
 #endif
-	KisImageSP currentImage = m_view -> currentImg();
+	KisImageSP currentImage = m_subject -> currentImg();
 
 	if (!currentImage) return;
 
 	// Retrieve the mask of the brush used
-	QImage img = m_brush->img();
+	QImage img = m_subject -> currentBrush() -> img();
 #if 0
 	kdDebug() << "mask depth: " << mask.depth() << endl;
 #endif
 	// Mess with the default mask according to pressure, tilt and whatnot
 
 
-	// Create a temporary, transparent KisPaintDevice (see http://ww.levien.com/gimp/brush-arch.html)
-	// Maybe create a special KisPaintDevice for this, and not use the generic KisLayer
-	KisLayerSP tmpLayer = new KisLayer(img.width(), img.height(), currentImage->imgType(), "dab");
+	// Create a temporary, transparent KisPaintDevice (see
+	// http://ww.levien.com/gimp/brush-arch.html) Maybe create a
+	// special KisPaintDevice for this, and not use the generic
+	// KisLayer
+	KisLayerSP tmpLayer = new KisLayer(img.width(), img.height(), 
+					   currentImage->imgType(), "dab");
+	tmpLayer->opacity(OPACITY_TRANSPARENT);
 
-	// Position the brush mask inside the temporary buffer; this means computing alpha values
-	// for the edges, to give it a 'soft' appearance
+	// Position the brush mask inside the temporary buffer; this
+	// means computing alpha values for the edges, to give it a
+	// 'soft' appearance
 
-	// Put the pixels into the temporary KisPaintDevice with the current color
-	// We will use this paintdevice as an image to composite with, so we can
-	// use setPixel with impunity.
-	// XXX: cache this, because it's always the same.
+	// Put the pixels into the temporary KisPaintDevice with the
+	// current color We will use this paintdevice as an image to
+	// composite with, so we can use setPixel with impunity. XXX:
+	// cache this, because it's always the same.
 	for (int x = 0; x < img.width(); x++) {
 		for (int y = 0; y < img.height(); y++) {
 #if 0
-			kdDebug() << "pixel: " << x << ", " << y << ", color: " 
-				  << "R:" << qRed(img.pixel(x, y))
+			kdDebug() << "pixel: " << x << ", " << y << ", color:" 
+				  << " R:" << qRed(img.pixel(x, y))
 				  << " G:" << qGreen(img.pixel(x, y))
 				  << " B:" << qBlue(img.pixel(x, y))
 				  << " A:" << qAlpha(img.pixel(x, y))
 				  << endl;
 #endif
-			// The brushes are mostly grayscale on a white background, although some do
-			// have a colors. The alpha channel is seldom used, so we take the average
-			// gray value of this pixel of the brush as the setting for the opacitiy. 
-			// We need to invert it, because 255, 255, 255 is white, which is completely
-			// transparent, but 255 corresponds to OPACITY_OPAQUE. 255 + 2.
+			// The brushes are mostly grayscale on a white
+			// background, although some do have a colors.
+			// The alpha channel is seldom used, so we
+			// take the average gray value of this pixel
+			// of the brush as the setting for the
+			// opacitiy. We need to invert it, because
+			// 255, 255, 255 is white, which is completely
+			// transparent, but 255 corresponds to
+			// OPACITY_OPAQUE.
 			//
-			// If the alpha value is not 255, or the r,g and b values are not the same,
-			// we have a real coloured brush, and are knackered for the nonce.
+			// If the alpha value is not 255, or the r,g
+			// and b values are not the same, we have a
+			// real coloured brush, and are knackered for
+			// the nonce.
 			QRgb c = img.pixel(x,y);
-			QUANTUM a = (255 - qRed(c) + 255 - qGreen(c) + 255 - qBlue(c)) / 3;
-			tmpLayer->setPixel(x, y, m_color, a);
+  			QUANTUM a = ((255 - qRed(c))
+ 				     + (255 - qGreen(c))
+ 				     + (255 - qBlue(c))) / 3;
+// 			if (qRed(c) == 255 && qGreen(c) == 255 && qBlue(c) == 255 ) {
+// 				tmpLayer->setPixel(x, y, m_subject -> fgColor(), OPACITY_TRANSPARENT);
+// 			}
+// 			else {
+// 				KoColor k = m_subject -> fgColor();
+
+// 				k.setRGB(k.R() * (QUANTUM_MAX - a + k.R() * a) / QUANTUM_MAX,
+// 					 k.G() * (QUANTUM_MAX - a + k.G() * a) / QUANTUM_MAX,
+// 					 k.B() * (QUANTUM_MAX - a + k.B() * a) / OPACITY_OPAQUE);
+
+			tmpLayer->setPixel(x, y, m_subject -> fgColor(), a);
+// 			}
+
 		}
 	}
 	// Blit the temporary KisPaintDevice onto the current layer
@@ -146,36 +159,24 @@ void KisToolBrush::paint(const QPoint & pos,
         KisPaintDeviceSP device = currentImage -> activeDevice();
         if (device) {
 		KisPainter p( device );
-		//p.beginTransaction( "Brush" );
-		p.bitBlt( pos.x(),  pos.y(),  COMPOSITE_OVER, tmpLayer.data());
-		//p.endTransaction();
+		p.bitBlt( pos.x(),  pos.y(),  COMPOSITE_NORMAL, tmpLayer.data());
 		device->anchor();
 	}
-        currentImage->invalidate( pos.x(),  pos.y(),  tmpLayer->width(),  tmpLayer->height() );
-	m_view->updateCanvas(pos.x(),  pos.y(),  tmpLayer->width(),  tmpLayer->height());
+        currentImage->invalidate( pos.x(),  pos.y(),  
+				  tmpLayer->width(),  
+				  tmpLayer->height() );
+	m_subject -> canvasController() -> updateCanvas(pos.x(),  pos.y(),  
+							tmpLayer->width(),  
+							tmpLayer->height());
 }
 
-void KisToolBrush::smudge(const QPoint & /*pos*/, 
-			  const Q_INT32 /*pressure*/,
-			  const Q_INT32 /*xTilt*/,
-			  const Q_INT32 /*yTilt*/)
-{
-	kdDebug() << "smudge" << endl;
-}
-	
-void KisToolBrush::erase(const QPoint & /*pos*/, 
-			 const Q_INT32 /*pressure*/,
-			 const Q_INT32 /*xTilt*/,
-			 const Q_INT32 /*yTilt*/)
-{
-	kdDebug() << "erase" << endl;
-}
 
-void KisToolBrush::setup()
+void KisToolBrush::setup(KActionCollection *collection)
 {
 	KToggleAction *toggle;
 	toggle = new KToggleAction(i18n("&Brush"), "Brush", 0, this,
-			SLOT(activateSelf()), m_view -> actionCollection(), "tool_brush");
+				   SLOT(activate()), collection, 
+				   "tool_brush");
 	toggle -> setExclusiveGroup("tools");
 }
 

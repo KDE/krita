@@ -25,8 +25,6 @@
 
 enum enumBrushMode {
 	PAINT,
-	SMUDGE,
-	ERASE,
 	HOVER
 };
 
@@ -34,10 +32,10 @@ class KisToolBrush : public KisToolPaint {
 	typedef KisToolPaint super;
 
 public:
-	KisToolBrush(KisView *view, KisDoc *doc);
+	KisToolBrush();
 	virtual ~KisToolBrush();
 
-        virtual void setup();
+        virtual void setup(KActionCollection *collection);
 	virtual void mousePress(QMouseEvent *e);
 	virtual void mouseMove(QMouseEvent *e);
 	virtual void mouseRelease(QMouseEvent *e);
@@ -49,19 +47,6 @@ private:
 			   const Q_INT32 pressure,
 			   const Q_INT32 xtilt,
 			   const Q_INT32 ytilt);
-
-	virtual void smudge(const QPoint & pos, 
-			    const Q_INT32 pressure,
-			    const Q_INT32 xtilt,
-			    const Q_INT32 ytilt);
-	
-	virtual void erase(const QPoint & pos, 
-			   const Q_INT32 pressure,
-			   const Q_INT32 xtilt,
-			   const Q_INT32 ytilt);
-
-	KisView *m_view;
-	KisDoc *m_doc;
 
 	enumBrushMode m_mode;
 };

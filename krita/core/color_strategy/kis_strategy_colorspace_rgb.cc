@@ -196,6 +196,30 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 				dst += dststride;
 				src += srcstride;
 			}
+		case COMPOSITE_NORMAL:
+			while (rows-- > 0) {
+				d = dst;
+				s = src;
+
+				for (i = cols; i > 0; i--, d += stride, s += stride) {
+					if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
+						continue;
+
+					if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT || (d[PIXEL_ALPHA] == OPACITY_OPAQUE && s[PIXEL_ALPHA] == OPACITY_OPAQUE)) {
+						memcpy(d, s, stride * sizeof(QUANTUM));
+						continue;
+					}
+
+					d[PIXEL_RED] = (d[PIXEL_RED] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_RED] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_GREEN] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_BLUE] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+// 					alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
+// 					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
+				}
+
+				dst += dststride;
+				src += srcstride;
+			}
 
 			break;
 		default:

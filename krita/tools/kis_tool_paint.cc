@@ -32,6 +32,11 @@ KisToolPaint::~KisToolPaint()
 {
 }
 
+void KisToolPaint::update(KisCanvasSubject *subject)
+{
+	m_subject = subject;
+}
+
 void KisToolPaint::paint(QPainter&)
 {
 }
@@ -87,7 +92,7 @@ void KisToolPaint::keyRelease(QKeyEvent *)
 {
 }
 
-KDialog *KisToolPaint::options()
+KDialog *KisToolPaint::options(QWidget * /*parent*/)
 {
 	return 0;
 }

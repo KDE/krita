@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 #if !defined KIS_TOOL_PAINT_H_
 #define KIS_TOOL_PAINT_H_
 
@@ -39,6 +40,8 @@ public:
 	virtual ~KisToolPaint();
 	
 public:
+	virtual void update(KisCanvasSubject *subject);
+
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
 	virtual void clear();
@@ -55,13 +58,15 @@ public:
 
 	virtual void cursor(QWidget *w) const;
 	virtual void setCursor(const QCursor& cursor);
-	virtual KDialog *options();
+	virtual KDialog *options(QWidget *parent);
 
 protected slots:
 	virtual void activate();
 	
 private:
 	QCursor m_cursor;
+
+protected:
 	KisCanvasSubject *m_subject;
 };
 

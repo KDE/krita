@@ -23,12 +23,9 @@
 
 #include <kio/job.h>
 
-#include <koIconChooser.h>
-
 #include "kis_resource.h"
 
 class QPoint;
-class QPixmap;
 class QImage;
 
 class KisPattern : public KisResource {
@@ -43,27 +40,13 @@ public:
 	virtual bool saveAsync();
 	virtual QImage img();
 
-	bool isValid() const { return m_valid; }
-	QPoint hotSpot() const { return m_hotSpot; }
-
-	QPixmap& pixmap() const;
-	QPixmap& thumbPixmap() const;
-
 private slots:
 	void ioData(KIO::Job *job, const QByteArray& data);
 	void ioResult(KIO::Job *job);
 
 private:
 	QByteArray m_data;
-	QPoint m_hotSpot;
-
-	bool m_valid;
-	bool m_validThumb;
-
 	QImage m_img;
-        QPixmap *m_pixmap;
-        QPixmap *m_thumbPixmap;
-
 };
 
 #endif

@@ -1,13 +1,13 @@
 
-toolbar_DATA = alignBlock.xpm alignCenter.xpm alignRight.xpm bold.xpm \
-	cancel.xpm clipart-from-file.xpm clipart.xpm delete-table-col.xpm \
-	delete-table-row.xpm insert-table-col.xpm insert-table-row.xpm \
-	neonpen.xpm ok.xpm part-kchart.xpm part-kformula.xpm \
-	part-killustrator.xpm part-kimage.xpm part-kspread.xpm part-kword.xpm \
-	part-unspecif.xpm text-bold.xpm \
-	text-italic.xpm text-underlined.xpm \
-	picture.xpm clipart.xpm parts.xpm \
-	italic.xpm underl.xpm alignLeft.xpm
+toolbar_DATA = alignBlock.png alignCenter.png alignRight.png bold.png \
+	cancel.png clipart-from-file.png clipart.png delete-table-col.png \
+	delete-table-row.png insert-table-col.png insert-table-row.png \
+	neonpen.png ok.png part-kchart.png part-kformula.png \
+	part-killustrator.png part-kimage.png part-kspread.png part-kword.png \
+	part-unspecif.png text-bold.png \
+	text-italic.png text-underlined.png \
+	picture.png clipart.png parts.png \
+	italic.png underl.png alignLeft.png
 
 toolbardir = $(kde_datadir)/koffice/toolbar
 

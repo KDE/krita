@@ -1,0 +1,9 @@
+if test -z "$LIBMAGICK_LIBS"; then
+  echo ""
+  echo "You're missing ImageMagick. krita will not be compiled."
+  echo "You can download ImageMagick from"
+  echo "http://www.imagemagick.org/"
+  echo ""
+  all_tests=bad
+fi
+

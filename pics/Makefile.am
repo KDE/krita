@@ -1,5 +1,3 @@
 
 SUBDIRS = toolbar
 
-messages:
-

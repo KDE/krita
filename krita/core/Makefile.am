@@ -1,6 +1,6 @@
 # all_includes must remain last!
 INCLUDES  = -I$(srcdir)/builder/ -I$(srcdir)/visitors/ -I$(srcdir)/helper/ -I$(srcdir)/tiles/ -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) \
-	 -I$(interfacedir) $(KOPAINTER_INCLUDES) -I$(srcdir)/strategy/ $(all_includes) -I$(srcdir)/color_strategy
+	 -I$(interfacedir) $(KOPAINTER_INCLUDES) -I$(srcdir)/strategy/ -I$(srcdir)/color_strategy $(all_includes)
 
 noinst_LTLIBRARIES = libkiscore.la
 

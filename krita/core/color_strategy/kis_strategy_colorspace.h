@@ -51,6 +51,23 @@ public:
         virtual void composite(QUANTUM *dst, QUANTUM *src, Q_INT32 opacity, CompositeOp op) const = 0;
 
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
+	virtual void tileBlt(Q_INT32 stride,
+			QUANTUM *dst, 
+			Q_INT32 dststride,
+			QUANTUM *src, 
+			Q_INT32 srcstride,
+			Q_INT32 rows, 
+			Q_INT32 cols, 
+			CompositeOp op) const = 0;
+	virtual void tileBlt(Q_INT32 stride,
+			QUANTUM *dst, 
+			Q_INT32 dststride,
+			QUANTUM *src, 
+			Q_INT32 srcstride,
+			QUANTUM opacity,
+			Q_INT32 rows, 
+			Q_INT32 cols, 
+			CompositeOp op) const = 0;
 
 private:
 	KisStrategyColorSpace(const KisStrategyColorSpace&);

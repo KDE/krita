@@ -39,12 +39,14 @@
 #include <koColor.h>
 
 #include "kis_types.h"
+#include "kis_colorspace_factory.h"
 #include "kis_global.h"
 #include "kis_image.h"
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
+#include "kis_strategy_colorspace.h"
 #include "kispixeldata.h"
 #include "kis_layer.h"
 #include "kis_brush.h"
@@ -216,121 +218,47 @@ KCommand *KisPainter::endTransaction()
 	return command;
 }
 
-void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile,
-                         QUANTUM *src, KisTileSP srctile,
-                         QUANTUM opacity, Q_INT32 rows, Q_INT32 cols, CompositeOp op)
+void KisPainter::tileBlt(QUANTUM *dst, 
+		KisTileSP dsttile,
+		QUANTUM *src, 
+		KisTileSP srctile,
+		QUANTUM opacity, 
+		Q_INT32 rows, 
+		Q_INT32 cols, 
+		CompositeOp op)
 {
-	if (opacity == OPACITY_OPAQUE)
-		return tileBlt(dst, dsttile, src, srctile, rows, cols, op);
-
 	Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
 	Q_INT32 srcstride = srctile -> width() * srctile -> depth();
 	Q_INT32 stride = m_device -> image() -> depth();
-	QUANTUM *d;
-	QUANTUM *s;
-	QUANTUM alpha;
-	QUANTUM invAlpha;
-	Q_INT32 i;
+	KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+	KisStrategyColorSpaceSP strategy;
 
-	if (rows <= 0 || cols <= 0)
-		return;
+	Q_ASSERT(factory);
+	strategy = factory -> create(m_device);
 
-	switch (op) {
-		case COMPOSITE_OVER:
-			while (rows-- > 0) {
-				d = dst;
-				s = src;
-
-				for (i = cols; i > 0; i--, d += stride, s += stride) {
-					if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
-						continue;
-
-					alpha = (s[PIXEL_ALPHA] * opacity) / QUANTUM_MAX;
-					invAlpha = QUANTUM_MAX - alpha;
-					d[PIXEL_RED] = (d[PIXEL_RED] * invAlpha + s[PIXEL_RED] * alpha) / QUANTUM_MAX;
-					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * invAlpha + s[PIXEL_GREEN] * alpha) / QUANTUM_MAX;
-					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * invAlpha + s[PIXEL_BLUE] * alpha) / QUANTUM_MAX;
-					alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
-				}
-
-				dst += dststride;
-				src += srcstride;
-			}
-
-			break;
-		default:
-			kdDebug() << "Not Implemented.\n";
-			return;
-	}
+	if (strategy)
+		strategy -> tileBlt(stride, dst, dststride, src, srcstride, opacity, rows, cols, op);
 }
 
-void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile,
-                         QUANTUM *src, KisTileSP srctile,
-                         Q_INT32 rows, Q_INT32 cols, CompositeOp op)
+void KisPainter::tileBlt(QUANTUM *dst, 
+		KisTileSP dsttile,
+		QUANTUM *src, 
+		KisTileSP srctile,
+		Q_INT32 rows, 
+		Q_INT32 cols, 
+		CompositeOp op)
 {
 	Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
 	Q_INT32 srcstride = srctile -> width() * srctile -> depth();
 	Q_INT32 stride = m_device -> image() -> depth();
-	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
-	QUANTUM *d;
-	QUANTUM *s;
-	QUANTUM alpha;
-	Q_INT32 i;
+	KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+	KisStrategyColorSpaceSP strategy;
 
-	if (rows <= 0 || cols <= 0)
-		return;
+	Q_ASSERT(factory);
+	strategy = factory -> create(m_device);
 
-	switch (op) {
-		case COMPOSITE_COPY:
-			d = dst;
-			s = src;
-
-			while (rows-- > 0) {
-				memcpy(d, s, linesize);
-				d += dststride;
-				s += srcstride;
-			}
-			break;
-		case COMPOSITE_CLEAR:
-			d = dst;
-			s = src;
-
-			while (rows-- > 0) {
-				memset(d, 0, linesize);
-				d += dststride;
-			}
-			break;
-		case COMPOSITE_OVER:
-			while (rows-- > 0) {
-				d = dst;
-				s = src;
-
-				for (i = cols; i > 0; i--, d += stride, s += stride) {
-					if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
-						continue;
-
-					if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT || (d[PIXEL_ALPHA] == OPACITY_OPAQUE && s[PIXEL_ALPHA] == OPACITY_OPAQUE)) {
-						memcpy(d, s, stride * sizeof(QUANTUM));
-						continue;
-					}
-
-					d[PIXEL_RED] = (d[PIXEL_RED] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_RED] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_GREEN] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_BLUE] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
-					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
-				}
-
-				dst += dststride;
-				src += srcstride;
-			}
-
-			break;
-		default:
-			kdDebug() << "Not Implemented.\n";
-			return;
-	}
+	if (strategy)
+		strategy -> tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
 }
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
@@ -636,49 +564,13 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 	Q_INT32 xdiff;
 	Q_INT32 ydiff;
 	KisTileCommand *tc;
+	KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+	KisStrategyColorSpaceSP strategy;
 
-	switch (m_device -> image() -> imgType()) {
-	case IMAGE_TYPE_GREY:
-	case IMAGE_TYPE_GREYA:
-		src[PIXEL_GRAY] = upscale(c.R());
-		src[PIXEL_GRAY_ALPHA] = opacity;
-		break;
-	case IMAGE_TYPE_INDEXED:
-	case IMAGE_TYPE_INDEXEDA:
-		src[PIXEL_INDEXED] = upscale(c.R());
-		src[PIXEL_INDEXED_ALPHA] = opacity;
-		break;
-	case IMAGE_TYPE_RGB:
-	case IMAGE_TYPE_RGBA:
-		src[PIXEL_RED] = upscale(c.R());
-		src[PIXEL_GREEN] = upscale(c.G());
-		src[PIXEL_BLUE] = upscale(c.B());
-		src[PIXEL_ALPHA] = opacity;
-		break;
-	case IMAGE_TYPE_CMYK:
-	case IMAGE_TYPE_CMYKA:
-		src[PIXEL_CYAN] = upscale(c.C());
-		src[PIXEL_MAGENTA] = upscale(c.M());
-		src[PIXEL_YELLOW] = upscale(c.Y());
-		src[PIXEL_BLACK] = upscale(c.K());
-		src[PIXEL_CMYK_ALPHA] = opacity;
-		break;
-	default:
-		kdDebug() << "Not Implemented.\n";
-		return;
-	}
-
-        QString s;
-        kdDebug() << "CMKA: " << s.sprintf("%02x %02x %02x %02x %02x",
-                                           src[PIXEL_CYAN],
-                                           src[PIXEL_MAGENTA],
-                                           src[PIXEL_YELLOW],
-                                           src[PIXEL_BLACK],
-                                           src[PIXEL_CMYK_ALPHA]) << endl;
-
-
+	Q_ASSERT(factory);
+	strategy = factory -> create(m_device);
+	strategy -> nativeColor(c, opacity, src);
 	stride = m_device -> image() -> depth();
-
         ydiff = y1 - TILE_HEIGHT * (y1 / TILE_HEIGHT);
 
 	if (m_transaction) {
@@ -741,7 +633,7 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 
 }
 
-void KisPainter::drawPoint(Q_INT32 x, Q_INT32 y, const KoColor &c, const KisBrush &brush) 
+void KisPainter::drawPoint(Q_INT32 /*x*/, Q_INT32 /*y*/, const KoColor& /*c*/, const KisBrush& /*brush*/) 
 {
 }
 

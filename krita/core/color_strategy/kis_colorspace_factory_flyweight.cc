@@ -23,6 +23,8 @@
 #include "kis_strategy_colorspace_cmyk.h"
 #include "kis_strategy_colorspace_rgb.h"
 
+KisColorSpaceFactoryFlyweight moveMe;
+
 KisColorSpaceFactoryFlyweight::KisColorSpaceFactoryFlyweight()
 {
 }

@@ -280,3 +280,27 @@ void KisStrategyColorSpaceCMYK::render(KisImageSP projection,
         painter.drawPixmap(x, y, m_pixmap, 0, 0, width, height);
     }
 }
+
+void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 /*stride*/,
+			QUANTUM * /*dst*/, 
+			Q_INT32 /*dststride*/,
+			QUANTUM * /*src*/, 
+			Q_INT32 /*srcstride*/,
+			Q_INT32 /*rows*/, 
+			Q_INT32 /*cols*/, 
+			CompositeOp /*op*/) const
+{
+}
+
+void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 /*stride*/,
+			QUANTUM * /*dst*/, 
+			Q_INT32 /*dststride*/,
+			QUANTUM * /*src*/, 
+			Q_INT32 /*srcstride*/,
+			QUANTUM /*opacity*/,
+			Q_INT32 /*rows*/,
+			Q_INT32 /*cols*/,
+			CompositeOp /*op*/) const
+{
+}
+

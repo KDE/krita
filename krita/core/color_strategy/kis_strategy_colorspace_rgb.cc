@@ -15,14 +15,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <limits.h>
 
+#include <limits.h>
+#include <stdlib.h>
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
-
 #include <kdebug.h>
-
 #include "kis_image.h"
 #include "kis_strategy_colorspace_rgb.h"
 #include "tiles/kispixeldata.h"
@@ -99,12 +98,12 @@ void KisStrategyColorSpaceRGB::composite(QUANTUM *dst, QUANTUM *src, Q_INT32 opa
 
 	switch (op) {
 	case COMPOSITE_CLEAR:
-		if ( opacity == OPACITY_OPAQUE ) {
+		if (opacity == OPACITY_OPAQUE) {
 			memset(d, 0, MAX_CHANNEL_RGBA);
 		}
 		break;
 	case COMPOSITE_COPY:
-		if ( opacity == OPACITY_OPAQUE ) {
+		if (opacity == OPACITY_OPAQUE) {
 			memcpy(d, s, MAX_CHANNEL_RGBA);
 		}
 		break;
@@ -112,23 +111,21 @@ void KisStrategyColorSpaceRGB::composite(QUANTUM *dst, QUANTUM *src, Q_INT32 opa
 		if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
 			break;
 
-		if ( opacity == OPACITY_OPAQUE ) {
+		if (opacity == OPACITY_OPAQUE) {
 			if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT ||
-			    (d[PIXEL_ALPHA] == OPACITY_OPAQUE && s[PIXEL_ALPHA] == OPACITY_OPAQUE))
-			{
+			    (d[PIXEL_ALPHA] == OPACITY_OPAQUE && s[PIXEL_ALPHA] == OPACITY_OPAQUE)) {
 				memcpy(d, s, MAX_CHANNEL_RGBA * sizeof(QUANTUM));
 				break;
 			}
 		}
+
 		alpha = (s[PIXEL_ALPHA] * opacity) / QUANTUM_MAX;
 		invAlpha = QUANTUM_MAX - alpha;
-
 		d[PIXEL_RED] = (d[PIXEL_RED] * invAlpha + s[PIXEL_RED] * alpha) / QUANTUM_MAX;
 		d[PIXEL_GREEN] = (d[PIXEL_GREEN] * invAlpha + s[PIXEL_GREEN] * alpha) / QUANTUM_MAX;
 		d[PIXEL_BLUE] = (d[PIXEL_BLUE] * invAlpha + s[PIXEL_BLUE] * alpha) / QUANTUM_MAX;
 		alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
 		d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
-
 		break;
 	case COMPOSITE_IN:
 	case COMPOSITE_ATOP:
@@ -179,9 +176,8 @@ void KisStrategyColorSpaceRGB::render(KisImageSP projection, QPainter& painter, 
 #ifdef __BIG_ENDIAN__
 		img = QImage(pd->width,  pd->height, 32, 0, QImage::LittleEndian);
 		Q_INT32 i = 0;
-		
 		uchar *j = img.bits();
-		QString s;
+
 		while ( i < pd ->stride * pd -> height ) {
 			
 			// Swap the bytes			
@@ -204,4 +200,127 @@ void KisStrategyColorSpaceRGB::render(KisImageSP projection, QPainter& painter, 
 	}
 }
 
+void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
+	QUANTUM *dst, 
+	Q_INT32 dststride,
+	QUANTUM *src, 
+	Q_INT32 srcstride,
+	Q_INT32 rows, 
+	Q_INT32 cols, 
+	CompositeOp op) const
+{
+	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
+	QUANTUM *d;
+	QUANTUM *s;
+	QUANTUM alpha;
+	Q_INT32 i;
+
+	if (rows <= 0 || cols <= 0)
+		return;
+
+	switch (op) {
+		case COMPOSITE_COPY:
+			d = dst;
+			s = src;
+
+			while (rows-- > 0) {
+				memcpy(d, s, linesize);
+				d += dststride;
+				s += srcstride;
+			}
+			break;
+		case COMPOSITE_CLEAR:
+			d = dst;
+			s = src;
+
+			while (rows-- > 0) {
+				memset(d, 0, linesize);
+				d += dststride;
+			}
+			break;
+		case COMPOSITE_OVER:
+			while (rows-- > 0) {
+				d = dst;
+				s = src;
+
+				for (i = cols; i > 0; i--, d += stride, s += stride) {
+					if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
+						continue;
+
+					if (d[PIXEL_ALPHA] == OPACITY_TRANSPARENT || (d[PIXEL_ALPHA] == OPACITY_OPAQUE && s[PIXEL_ALPHA] == OPACITY_OPAQUE)) {
+						memcpy(d, s, stride * sizeof(QUANTUM));
+						continue;
+					}
+
+					d[PIXEL_RED] = (d[PIXEL_RED] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_RED] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_GREEN] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_BLUE] * s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
+				}
+
+				dst += dststride;
+				src += srcstride;
+			}
+
+			break;
+		default:
+			kdDebug() << "Not Implemented.\n";
+			abort();
+			return;
+	}
+}
+
+void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
+			QUANTUM *dst, 
+			Q_INT32 dststride,
+			QUANTUM *src, 
+			Q_INT32 srcstride,
+			QUANTUM opacity,
+			Q_INT32 rows, 
+			Q_INT32 cols, 
+			CompositeOp op) const
+{
+	if (opacity == OPACITY_OPAQUE)
+		return tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
+
+	QUANTUM *d;
+	QUANTUM *s;
+	QUANTUM alpha;
+	QUANTUM invAlpha;
+	Q_INT32 i;
+
+	if (rows <= 0 || cols <= 0)
+		return;
+
+	switch (op) {
+		case COMPOSITE_OVER:
+			while (rows-- > 0) {
+				d = dst;
+				s = src;
+
+				for (i = cols; i > 0; i--, d += stride, s += stride) {
+					if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
+						continue;
+
+					alpha = (s[PIXEL_ALPHA] * opacity) / QUANTUM_MAX;
+					invAlpha = QUANTUM_MAX - alpha;
+					d[PIXEL_RED] = (d[PIXEL_RED] * invAlpha + s[PIXEL_RED] * alpha) / QUANTUM_MAX;
+					d[PIXEL_GREEN] = (d[PIXEL_GREEN] * invAlpha + s[PIXEL_GREEN] * alpha) / QUANTUM_MAX;
+					d[PIXEL_BLUE] = (d[PIXEL_BLUE] * invAlpha + s[PIXEL_BLUE] * alpha) / QUANTUM_MAX;
+					alpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - s[PIXEL_ALPHA]) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
+					d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - alpha) + s[PIXEL_ALPHA]) / QUANTUM_MAX;
+				}
+
+				dst += dststride;
+				src += srcstride;
+			}
+
+			break;
+		default:
+			kdDebug() << "Not Implemented.\n";
+			abort();
+			return;
+	}
+}
 

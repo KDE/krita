@@ -780,12 +780,15 @@ void KisView::setCurrentTool(KisTool *tool)
 
         if (oldTool)
         {
+		kdDebug() << "oldTool\n";
                 if (oldTool -> optionWidget())
                         m_toolcontroldocker -> unplug(oldTool -> optionWidget());
                 oldTool -> clear();
         }
 
         if (tool) {
+
+		kdDebug() << "tool is not 0\n";
                 m_inputDeviceToolMap[currentInputDevice()] = tool;
                 tool -> cursor(m_canvas);
 
@@ -796,6 +799,7 @@ void KisView::setCurrentTool(KisTool *tool)
                 m_canvas -> enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
                 notify();
 	} else {
+		kdDebug() << "tool == 0\n";
 		m_inputDeviceToolMap[currentInputDevice()] = 0;
 		m_canvas -> setCursor(KisCursor::arrowCursor());
 	}
@@ -1275,7 +1279,6 @@ void KisView::imgResizeToActiveLayer()
         if (img && (layer = img -> activeLayer())) {
                 if (layer -> width() != img -> width() || layer -> height() != img -> height()) {
                         img -> resize(layer -> width(), layer -> height());
-                        canvasRefresh();
                 }
         }
 }
@@ -2598,9 +2601,11 @@ void KisView::imgUpdated(KisImageSP img)
 
 void KisView::slotImageSizeChanged(KisImageSP img, Q_INT32 /*w*/, Q_INT32 /*h*/)
 {
+
 	if (img == currentImg()) {
 		resizeEvent(0);
 	}
+	canvasRefresh();
 }
 
 void KisView::resizeLayer(Q_INT32 w, Q_INT32 h)

@@ -21,6 +21,8 @@
 #include <qevent.h>
 #include "kis_global.h"
 
+#include "kis_point.h"
+
 class KisEvent {
 public:
 	enum enumEventType {

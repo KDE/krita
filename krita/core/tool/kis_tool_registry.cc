@@ -48,7 +48,6 @@ vKisTool KisToolRegistry::createTools(KisCanvasSubject *subject) const
 		KisToolFactorySP f = get(*it);
 		
 		KisTool * tool = f -> createTool();
-
 		subject -> attach(tool);
 		tools.push_back(tool);
 	}

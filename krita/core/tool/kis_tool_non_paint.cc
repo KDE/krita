@@ -110,6 +110,7 @@ void KisToolNonPaint::setCursor(const QCursor& cursor)
 
 void KisToolNonPaint::activate()
 {
+	kdDebug() << "Activated tool " << name() << "\n";
 	if (m_subject) {
 		KisToolControllerInterface *controller = m_subject -> toolController();
 

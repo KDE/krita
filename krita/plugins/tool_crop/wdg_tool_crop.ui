@@ -1,0 +1,232 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgToolCrop</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgToolCrop</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>415</width>
+            <height>128</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>WdgToolCrop</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout11</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout7</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout1</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Start X:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>isbX</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KIntSpinBox">
+                                    <property name="name">
+                                        <cstring>intStartX</cstring>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>1000000000</number>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout2</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>End X:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>isbWidth</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KIntSpinBox">
+                                    <property name="name">
+                                        <cstring>intEndX</cstring>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>1000000000</number>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout8</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout3</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel3</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Start Y:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>isbY</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KIntSpinBox">
+                                    <property name="name">
+                                        <cstring>intStartY</cstring>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>1000000000</number>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout4</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel4</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>End Y:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>isbHeight</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KIntSpinBox">
+                                    <property name="name">
+                                        <cstring>intEndY</cstring>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+        <spacer row="2" column="0">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget" row="1" column="0">
+            <property name="name">
+                <cstring>layout9</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox">
+                    <item>
+                        <property name="text">
+                            <string>Layer</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Image</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbType</cstring>
+                    </property>
+                    <property name="currentItem">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>bnCrop</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Crop</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>intStartX</tabstop>
+    <tabstop>intStartY</tabstop>
+    <tabstop>intEndX</tabstop>
+    <tabstop>intEndY</tabstop>
+    <tabstop>cmbType</tabstop>
+    <tabstop>bnCrop</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

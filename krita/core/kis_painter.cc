@@ -57,7 +57,17 @@
 #include "kistilemgr.h"
 
 KisPainter::KisPainter()
+{
+	init();
+}
 
+KisPainter::KisPainter(KisPaintDeviceSP device)
+{
+	init();
+        begin(device);
+}
+
+void KisPainter::init()
 {
 	m_transaction = 0;
 
@@ -65,14 +75,8 @@ KisPainter::KisPainter()
 	m_brush = 0;
 	m_pattern= 0;
 	m_gradient = 0;
-	m_opacity = OPACITY_TRANSPARENT;
+	m_opacity = OPACITY_OPAQUE;
 	m_compositeOp = COMPOSITE_OVER;
-}
-
-KisPainter::KisPainter(KisPaintDeviceSP device)
-{
-        m_transaction = 0;
-        begin(device);
 }
 
 KisPainter::~KisPainter()

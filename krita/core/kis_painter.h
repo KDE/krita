@@ -173,6 +173,8 @@ private:
                      KisTileSP srctile, QUANTUM opacity, Q_INT32 rows, Q_INT32 cols,
                      CompositeOp op);
 
+	void init();
+
         KisPainter(const KisPainter&);
         KisPainter& operator=(const KisPainter&);
 

@@ -29,6 +29,7 @@
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
+#include "kis_eraseop.h"
 
 #include "kis_tool_eraser.h"
 #include "kis_view.h"
@@ -44,25 +45,14 @@ KisToolEraser::~KisToolEraser()
 {
 }
 
-void KisToolEraser::paintAt(const KisPoint & pos,
-			    const double pressure,
-			    const double xtilt,
-			    const double ytilt)
+void KisToolEraser::initPaint(KisEvent *e)
 {
-	painter() -> eraseAt(pos, pressure, xtilt, ytilt);
+	super::initPaint(e);
+
+	KisPaintOp * op = new KisEraseOp(painter());
+	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 }
 
-void KisToolEraser::paintLine(const KisPoint & pos1,
-			      const double pressure1,
-			      const double xtilt1,
-			      const double ytilt1,
-			      const KisPoint & pos2,
-			      const double pressure2,
-			      const double xtilt2,
-			      const double ytilt2)
-{
-	m_dragDist = painter() -> paintLine(PAINTOP_ERASE, pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
-}
 
 void KisToolEraser::setup(KActionCollection *collection)
 {

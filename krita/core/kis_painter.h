@@ -46,6 +46,7 @@
 #include "kis_matrix.h"
 #include "kis_filter.h"
 #include "kis_progress_subject.h"
+#include "kis_paintop.h"
 
 class QRect;
 class KisTileCommand;
@@ -71,6 +72,20 @@ public:
         KisPainter(KisPaintDeviceSP device);
         virtual ~KisPainter();
 
+	/**
+	 * The methods below are 'higher' level than the above methods. They need brushes, colors etc.
+	 * set before they can be called. The methods do not directly tell the image to update, but
+	 * you can call dirtyRect() to get the rect that needs to be notified by your painting code.
+	 *
+	 * Call will reset it!
+	*/
+	QRect dirtyRect();
+
+	/**
+	 * Add the r to the current dirty rect.
+	 */
+	QRect addDirtyRect(QRect r) { m_dirtyRect |= r; return m_dirtyRect; }
+
 private:
 	// Implement KisProgressSubject
 	virtual void cancel() { m_cancelRequested = true; }
@@ -95,13 +110,19 @@ public:
         // begin a transaction with the given command
         void beginTransaction( KisTileCommand* command);
 
+	// Return the current transcation
+	KisTileCommand  * transaction() { return m_transaction; }
+
+
         // The current paint device.
-        KisPaintDeviceSP device() const;
+        KisPaintDeviceSP device() const { return m_device; } 
+
+
+	// ------------------------------------------------------------------------------------------
+	//  Native paint methods that are tile aware, undo/redo-able,
+        // use the color strategies and the composite operations.
 
 	/**
-         * Native paint methods that are tile aware, undo/redo-able,
-         * use the color strategies and the composite operations.
-	 *
 	 * Blast the specified region from src onto the current paint device.
 	 */
         void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src,
@@ -115,6 +136,8 @@ public:
                     QUANTUM opacity,
                     Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 
+
+
         void eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h);
         void eraseRect(const QRect& rc);
 
@@ -126,16 +149,11 @@ public:
         void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity);
         void fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity);
 
-	/**
-	 * The methods below are 'higher' level than the above methods. They need brushes, colors etc.
-	 * set before they can be called. The methods do not directly tell the image to update, but
-	 * you can call dirtyRect() to get the rect that needs to be notified by your painting code.
-	 * Call will reset it!
-	*/
-	QRect dirtyRect();
 
-        void paintPolyline (const enumPaintOp paintOp,
-                            const QValueVector <KisPoint> &points,
+	/**
+	 * Paint a line that connects the dots in points
+	 */
+        void paintPolyline (const QValueVector <KisPoint> &points,
                             int index = 0, int numPoints = -1);
 
 	/**
@@ -145,8 +163,7 @@ public:
 	 * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
 	 * because the currenlty set brush has a spacing greater than that distance.
 	 */
-	double paintLine(const enumPaintOp paintOp,
-			 const KisPoint &pos1,
+	double paintLine(const KisPoint &pos1,
 			 const double pressure1,
 			 const double xTilt1,
 			 const double yTilt1,
@@ -162,8 +179,7 @@ public:
 	 * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
 	 * because the currenlty set brush has a spacing greater than that distance.
 	 */
-	double paintBezierCurve(const enumPaintOp paintOp,
-				const KisPoint &pos1,
+	double paintBezierCurve(const KisPoint &pos1,
 				const double pressure1,
 				const double xTilt1,
 				const double yTilt1,
@@ -174,121 +190,101 @@ public:
 				const double xTilt2,
 				const double yTilt2,
 				const double savedDist = -1);
-        void paintRect(const enumPaintOp paintOp,
-		       const KisPoint &startPoint,
+
+
+        void paintRect(const KisPoint &startPoint,
 		       const KisPoint &endPoint,
 		       const double pressure,
 		       const double xTilt,
 		       const double yTilt);
 
-private:
-        void paintEllipsePixel (const enumPaintOp paintOp,
-                                bool invert,
-                                int xc, int yc, int x1, int y1, int x2, int y2,
-                                const double pressure);
-        void paintEllipseSymmetry (const enumPaintOp paintOp,
-                                   double ratio, bool invert,
-                                   int x, int y, int xc, int yc,
-                                   const double pressure);
-        void paintEllipseInternal (const enumPaintOp paintOp,
-                                   double ratio, bool invert,
-                                   int xc, int yc, int radius,
-                                   const double pressure);
 
-public:
-        void paintEllipse(const enumPaintOp paintOp,
-                          const KisPoint &startPoint,
+        void paintEllipse(const KisPoint &startPoint,
                           const KisPoint &endPoint,
                           const double pressure,
 			  const double /*xTilt*/,
 			  const double /*yTilt*/);
 
-	/** Draw a spot at pos using the currently set brush and color */
+
+	/** Draw a spot at pos using the currently set paint op, brush and color */
 	void paintAt(const KisPoint &pos,
 		     const double pressure,
 		     const double /*xTilt*/,
 		     const double /*yTilt*/);
 
 
-	/** Draw a spot at whole pixel positions, i.e. hard, using the
-	 * currently set brush and color
-	 */
-	void penAt(const KisPoint &pos,
-		   const double pressure,
-		   const double /*xTilt*/,
-		   const double /*yTilt*/);
-	
-
-	/**
-	 * Erase to the background color or transparency (depending on the type of the paint device)
-	 * using the currently set brush.
-	 */
-	void eraseAt(const KisPoint &pos,
-		     const double pressure,
-		     const double /*xTilt*/,
-		     const double /*yTilt*/);
-
-	/**
-	 * Duplicate a part of the image
-	 */
-	void filterAt(const KisPoint &pos,
-			 const double pressure,
-			 const double /*xTilt*/,
-			 const double /*yTilt*/);
-	void setFilter(KisFilterSP filter);
-	/***
-		* Applya filter to a point
-		*/
-	void duplicateAt(const KisPoint &pos,
-			 const double pressure,
-			 const double /*xTilt*/,
-			 const double /*yTilt*/);
-	void setDuplicateOffset(const KisPoint offset);
-	/**
-	 * Paint a filled circle at pos with pressure dependent alpha and
-	 * 'ragged' edges. Meant to simulate the true effect of an airbrush.
-	 */
-	void airBrushAt(const KisPoint &pos,
-			const double pressure,
-			const double /*xTilt*/,
-			const double /*yTilt*/);
-
-	/** This fonction apply a convolution transformation to the PainterDevice.
-		* @param const KisMatrix3x3* matrix is a pointer to an array of KisMatrix3x3, this array
-		* should have the same size as the number of channels (including alpha)
-		*/
-	void applyConvolutionColorTransformation(KisMatrix3x3* matrix);
-
 	// ------------------------------------------------------------------------------------------
 	// Set the parameters for the higher level graphics primitives.
-	void setBrush(KisBrush* brush);
-	void setPattern(KisPattern& pattern) { m_pattern = &pattern; }
-	void setPaintColor(const KoColor& color) {m_paintColor = color; }
-	void setBackgroundColor(const KoColor& color) {m_backgroundColor = color; }
-	void setFillColor(const KoColor& color) { m_fillColor = color; }
-	void setOpacity(QUANTUM opacity) { m_opacity = opacity; }
-	void setCompositeOp(CompositeOp op) { m_compositeOp = op; }
 
+	void setBrush(KisBrush* brush) { m_brush = brush; }
+	KisBrush * brush() const { return m_brush; }
+
+	void setPattern(KisPattern& pattern) { m_pattern = &pattern; }
+	KisPattern * pattern() const { return m_pattern; }
+
+	void setPaintColor(const KoColor& color) {m_paintColor = color; }
+	KoColor paintColor() const { return m_paintColor; }
+
+	void setBackgroundColor(const KoColor& color) {m_backgroundColor = color; }
+	KoColor backgroundColor() const { return m_backgroundColor; }
+
+	void setFillColor(const KoColor& color) { m_fillColor = color; }
+	KoColor fillColor() const { return m_fillColor; }
+
+	void setOpacity(QUANTUM opacity) { m_opacity = opacity; }
+	QUANTUM opacity() const { return m_opacity; }
+
+	void setCompositeOp(CompositeOp op) { m_compositeOp = op; }
+	CompositeOp compositeOp() const { return m_compositeOp; }
+
+	void setFilter(KisFilterSP filter) { m_filter = filter; }
+	KisFilterSP filter() { return m_filter; }
+
+	void setDuplicateOffset(const KisPoint offset) { m_duplicateOffset = offset; }
+	KisPoint duplicateOffset(){ return m_duplicateOffset; }
+
+	void setPressure(double pressure) { m_pressure = pressure; }
+	double pressure() { return m_pressure; }
+	
+	void setPaintOp(KisPaintOp * paintOp) { m_paintOp = paintOp; }
+	KisPaintOp * paintOp() const { return m_paintOp; }
+
+	void setDab(KisPaintDeviceSP dab) { m_dab = dab; }
+	KisPaintDeviceSP dab() const { return m_dab; }
 
 protected:
+
+	void init();
+        KisPainter(const KisPainter&);
+        KisPainter& operator=(const KisPainter&);
+
+	static double pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1);
+
         void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src,
                      KisTileSP srctile, Q_INT32 rows, Q_INT32 cols,
                      CompositeOp op);
+
+
         void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src,
                      KisTileSP srctile, QUANTUM opacity, Q_INT32 rows, Q_INT32 cols,
                      CompositeOp op);
 
-	void init();
 
-        KisPainter(const KisPainter&);
-        KisPainter& operator=(const KisPainter&);
 
-	void computeDab(KisAlphaMaskSP mask);
+private:
 
-	// Split the coordinate into whole + fraction, where fraction is always >= 0.
-	static void splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction);
+        void paintEllipsePixel (bool invert,
+                                int xc, int yc, int x1, int y1, int x2, int y2,
+                                const double pressure);
 
-	static double pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1);
+        void paintEllipseSymmetry (double ratio, bool invert,
+                                   int x, int y, int xc, int yc,
+                                   const double pressure);
+
+        void paintEllipseInternal (double ratio, bool invert,
+                                   int xc, int yc, int radius,
+                                   const double pressure);
+
 
 protected:
         KisPaintDeviceSP m_device;
@@ -296,7 +292,6 @@ protected:
 
 	QRect m_dirtyRect;
 
-	KisLayerSP m_dab;
 	KoColor m_paintColor;
 	KoColor m_backgroundColor;
 	KoColor m_fillColor;
@@ -306,22 +301,12 @@ protected:
 	QUANTUM m_opacity;
 	CompositeOp m_compositeOp;
 	KisFilterSP m_filter;
-
+	KisPaintOp * m_paintOp;
 	double m_pressure;
 	bool m_cancelRequested;
+	KisPaintDeviceSP m_dab;
 };
 
-inline
-void KisPainter::setDuplicateOffset(const KisPoint offset)
-{
-	m_duplicateOffset = offset;
-}
-
-inline
-void KisPainter::setFilter(KisFilterSP filter)
-{
-	m_filter = filter;
-}
 
 inline
 void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c)
@@ -353,12 +338,6 @@ void KisPainter::fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity)
         fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
 }
 
-
-inline
-KisPaintDeviceSP KisPainter::device() const
-{
-        return m_device;
-}
 
 #endif // KIS_PAINTER_H_
 

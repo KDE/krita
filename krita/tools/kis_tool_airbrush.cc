@@ -33,6 +33,7 @@
 #include "kis_tool_airbrush.h"
 #include "kis_view.h"
 #include "kis_event.h"
+#include "kis_airbrushop.h"
 
 namespace {
 	Q_INT32 RATE = 100;
@@ -57,7 +58,7 @@ KisToolAirBrush::~KisToolAirBrush()
 void KisToolAirBrush::timeoutPaint()
 {
 	if (currentImage() && painter()) {
-		painter() -> airBrushAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
+		painter() -> paintAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
 		currentImage() -> notify(painter() -> dirtyRect());
 	}
 }
@@ -66,32 +67,14 @@ void KisToolAirBrush::initPaint(KisEvent *e)
 {
 	super::initPaint(e);
 	m_timer -> start( RATE );
+	KisPaintOp * op = new KisAirbrushOp(painter());
+	painter() -> setPaintOp(op); // Painter takes over ownership of paintop
 }
 
 void KisToolAirBrush::endPaint()
 {
 	m_timer -> stop();
 	super::endPaint();
-}
-
-void KisToolAirBrush::paintAt(const KisPoint & pos,
-			      const double pressure,
-			      const double xtilt,
-			      const double ytilt)
-{
-	painter() -> airBrushAt(pos, pressure, xtilt, ytilt);
-}
-
-void KisToolAirBrush::paintLine(const KisPoint & pos1,
-				const double pressure1,
-				const double xtilt1,
-				const double ytilt1,
-				const KisPoint & pos2,
-				const double pressure2,
-				const double xtilt2,
-				const double ytilt2)
-{
-	m_dragDist = painter() -> paintLine(PAINTOP_AIRBRUSH, pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
 }
 
 void KisToolAirBrush::setup(KActionCollection *collection)

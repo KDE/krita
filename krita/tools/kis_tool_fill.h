@@ -1,7 +1,7 @@
 /*
  *  kis_tool_fill.h - part of Krayon^Krita
  *
- *  Copyright (c) 2000 John Califf
+ *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

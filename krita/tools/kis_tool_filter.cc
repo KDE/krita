@@ -37,6 +37,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_filterop.h"
 
 KisToolFilter::KisToolFilter(KisView* view) 
 	: super(i18n("Filter tool")), m_view(view)
@@ -64,24 +65,11 @@ void KisToolFilter::setup(KActionCollection *collection)
 	}
 }
 
-void KisToolFilter::paintLine(const KisPoint & pos1,
-				 const double pressure1,
-				 const double xtilt1,
-				 const double ytilt1,
-				 const KisPoint & pos2,
-				 const double pressure2,
-				 const double xtilt2,
-				 const double ytilt2)
+void KisToolFilter::initPaint(KisEvent *e) 
 {
-	painter()->setFilter( m_view->filterRegistry()->get( "Invert" ) );
-	m_dragDist = painter() -> paintLine(PAINTOP_FILTER, pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
-}
+	super::initPaint(e);
 
-void KisToolFilter::paintAt(const KisPoint &pos,
-			       const double pressure,
-			       const double xtilt,
-			       const double ytilt)
-{
-	painter()->setFilter( m_view->filterRegistry()->get( "Invert" ) );
-	painter() -> filterAt( pos, pressure, xtilt, ytilt);
+	KisPaintOp * op = new KisFilterOp(painter());
+	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
+	painter()->setFilter( m_view->filterRegistry()->get( "Invert" ) ); // XXX: put this in config widget
 }

@@ -144,7 +144,7 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceSP device, KisFilterConfigu
 			for( int i = 0; i < depth; i++)
 			{
 				KisQuantum d = pixelIt[ configPC->channel( i ) ];
-				d = ( QUANTUM_MAX * pow( ((float)d)/QUANTUM_MAX, 1.0 / configPC->valueFor( i ) ) );
+				d = (QUANTUM)( QUANTUM_MAX * pow( ((float)d)/QUANTUM_MAX, 1.0 / configPC->valueFor( i ) ) );
 			}
 			++pixelIt;
 		}

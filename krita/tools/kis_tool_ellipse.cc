@@ -36,6 +36,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_brushop.h"
 
 KisToolEllipse::KisToolEllipse()
         : super(),
@@ -111,8 +112,10 @@ void KisToolEllipse::buttonRelease(KisButtonReleaseEvent *event)
                 painter.setBrush(m_subject -> currentBrush());
                 //painter.setOpacity(m_opacity);
                 //painter.setCompositeOp(m_compositeOp);
+		KisPaintOp * op = new KisBrushOp(&painter); // XXX: make selectable in option widget
+		painter.setPaintOp(op); // Painter takes ownership
 
-                painter.paintEllipse(PAINTOP_BRUSH, m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
+                painter.paintEllipse(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
                 m_currentImage -> notify( painter.dirtyRect() );
 		notifyModified();
 

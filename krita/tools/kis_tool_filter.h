@@ -37,20 +37,9 @@ public:
 	virtual ~KisToolFilter();
   
 	virtual void setup(KActionCollection *collection);
-	
-	virtual void paintAt(const KisPoint &pos,
-			     const double pressure,
-			     const double xTilt,
-			     const double yTilt);
-	
-	virtual void paintLine(const KisPoint & pos1,
-			       const double pressure1,
-			       const double xTilt1,
-			       const double yTilt1,
-			       const KisPoint & pos2,
-			       const double pressure2,
-			       const double xTilt2,
-			       const double yTilt2);
+
+protected:
+	virtual void initPaint(KisEvent *e);
 private:
 	KisView* m_view;
 };

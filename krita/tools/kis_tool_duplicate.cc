@@ -36,6 +36,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_duplicateop.h"
 
 KisToolDuplicate::KisToolDuplicate() 
 	: super(i18n("Duplicate")), m_isOffsetNotUptodate(true), m_position(QPoint(-1,-1))
@@ -94,20 +95,11 @@ void KisToolDuplicate::initPaint(KisEvent *e)
 		}
 		super::initPaint(e);
 		painter() -> setDuplicateOffset( m_offset );
+		KisPaintOp * op = new KisDuplicateOp(painter());
+		painter() -> setPaintOp(op);
 	}
 }
 
-void KisToolDuplicate::paintLine(const KisPoint & pos1,
-				 const double pressure1,
-				 const double xtilt1,
-				 const double ytilt1,
-				 const KisPoint & pos2,
-				 const double pressure2,
-				 const double xtilt2,
-				 const double ytilt2)
-{
-	m_dragDist = painter() -> paintLine(PAINTOP_DUPLICATE, pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
-}
 
 void KisToolDuplicate::paintAt(const KisPoint &pos,
 			       const double pressure,
@@ -121,7 +113,7 @@ void KisToolDuplicate::paintAt(const KisPoint &pos,
 			m_offset = pos - m_position;
 			m_isOffsetNotUptodate = false;
 		}
-		painter() -> duplicateAt( pos, pressure, xtilt, ytilt);
+		painter() -> paintAt( pos, pressure, xtilt, ytilt);
 	}
 }
 

@@ -35,6 +35,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_brushop.h"
 
 KisToolLine::KisToolLine()
 	: super(),
@@ -134,8 +135,9 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
 			m_painter -> setBrush(m_subject -> currentBrush());
 			m_painter -> setOpacity(m_opacity);
 			m_painter -> setCompositeOp(m_compositeOp);
-
-			m_painter -> paintLine(PAINTOP_BRUSH, m_startPos, PRESSURE_DEFAULT, 0, 0, m_endPos, PRESSURE_DEFAULT, 0, 0);
+			KisPaintOp * op = new KisBrushOp(m_painter); // XXX: make selectable in option widget
+			m_painter -> setPaintOp(op); // Painter takes ownership
+			m_painter -> paintLine(m_startPos, PRESSURE_DEFAULT, 0, 0, m_endPos, PRESSURE_DEFAULT, 0, 0);
 			m_currentImage -> notify( m_painter -> dirtyRect() );
 			notifyModified();
 

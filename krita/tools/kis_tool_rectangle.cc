@@ -36,6 +36,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_brushop.h"
 
 KisToolRectangle::KisToolRectangle()
 	: super(),
@@ -106,13 +107,15 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
 		KisPaintDeviceSP device = m_currentImage->activeDevice ();
 		KisPainter painter (device);
 		painter.beginTransaction (i18n ("rectangle"));
-
+		
+		KisPaintOp * op = new KisBrushOp(&painter); // XXX: add all paintops to the config widget
+		painter.setPaintOp(op);
 		painter.setPaintColor(m_subject -> fgColor());
 		painter.setBrush(m_subject -> currentBrush());
 		//painter.setOpacity(m_opacity);
 		//painter.setCompositeOp(m_compositeOp);
 
-		painter.paintRect(PAINTOP_BRUSH, m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
+		painter.paintRect(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
 		m_currentImage -> notify( painter.dirtyRect() );
 		notifyModified();
 
@@ -141,62 +144,6 @@ void KisToolRectangle::draw(const KisPoint& start, const KisPoint& end )
 	p.end ();
 }
 
-//void KisToolRectangle::draw(KisPainter *gc, const QRect& rc)
-//{
-// 	gc -> drawRectangle(rc);
-//}
-
-// void KisToolRectangle::optionsDialog()
-// {
-// 	kdDebug() << "KisToolRectangle::optionsDialog\n";
-
-// 	ToolOptsStruct ts;
-// 	KisView *view = getCurrentView();
-
-// 	ts.usePattern = m_usePattern;
-// 	ts.useGradient = m_useGradient;
-// 	ts.lineThickness = m_lineThickness;
-// 	ts.opacity = m_opacity;
-// 	ts.fillShapes = m_fillSolid;
-
-// 	kdDebug() << "m_opacity = " << m_opacity << endl;
-
-// 	bool old_usePattern = m_usePattern;
-// 	bool old_useGradient = m_useGradient;
-// 	int  old_lineThickness = m_lineThickness;
-// 	unsigned int old_opacity = m_opacity;
-// 	bool old_fillSolid = m_fillSolid;
-
-// 	ToolOptionsDialog OptsDialog(tt_linetool, ts);
-
-// 	OptsDialog.exec();
-
-// 	if (OptsDialog.result() == QDialog::Rejected)
-// 		return;
-
-// 	m_lineThickness = OptsDialog.lineToolTab()->thickness();
-// 	m_opacity = OptsDialog.lineToolTab()->opacity();
-// 	m_usePattern = OptsDialog.lineToolTab()->usePattern();
-// 	m_useGradient = OptsDialog.lineToolTab()->useGradient();
-// 	m_fillSolid = OptsDialog.lineToolTab()->solid();
-
-// 	// User change value ?
-// 	if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient
-// 			|| old_opacity != m_opacity || old_lineThickness != m_lineThickness
-// 			|| old_fillSolid != m_fillSolid) {
-// 		KisPainter *p = view -> kisPainter();
-
-// 		p -> setLineThickness(m_lineThickness);
-// 		p -> setLineOpacity(m_opacity);
-// 		p -> setFilledRectangle(m_fillSolid);
-// 		p -> setPatternFill(m_usePattern);
-// 		p -> setGradientFill(m_useGradient);
-
-// 		// set rectangle tool settings
-// 		m_doc -> setModified(true);
-// 	}
-// }
-
 void KisToolRectangle::setup(KActionCollection *collection)
 {
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
@@ -213,56 +160,6 @@ void KisToolRectangle::setup(KActionCollection *collection)
 		m_ownAction = true;
 	}
 }
-
-// QDomElement KisToolRectangle::saveSettings(QDomDocument& doc) const
-// {
-// 	// rectangle tool element
-// 	QDomElement rectangleTool = doc.createElement(settingsName());
-
-// 	rectangleTool.setAttribute("thickness", m_lineThickness);
-// 	rectangleTool.setAttribute("opacity", m_opacity);
-// 	rectangleTool.setAttribute("fillInteriorRegions", static_cast<int>(m_fillSolid));
-// 	rectangleTool.setAttribute("useCurrentPattern", static_cast<int>(m_usePattern));
-// 	rectangleTool.setAttribute("fillWithGradient", static_cast<int>(m_useGradient));
-// 	return rectangleTool;
-
-// }
-
-// bool KisToolRectangle::loadSettings(QDomElement& elem)
-// {
-// 	bool rc = elem.tagName() == settingsName();
-
-// 	if (rc) {
-// 		m_lineThickness = elem.attribute("thickness").toInt();
-// 		m_opacity = elem.attribute("opacity").toInt();
-// 		m_fillSolid = static_cast<bool>(elem.attribute("fillInteriorRegions").toInt());
-// 		m_usePattern = static_cast<bool>(elem.attribute("useCurrentPattern").toInt());
-// 		m_useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
-// 	}
-
-// 	return rc;
-// }
-
-// void KisToolRectangle::toolSelect()
-// {
-// 	KisView *view = getCurrentView();
-
-// 	if (view) {
-// 		KisPainter *gc = view -> kisPainter();
-
-// 		gc -> setLineThickness(m_lineThickness);
-// 		gc -> setLineOpacity(m_opacity);
-// 		gc -> setFilledRectangle(m_fillSolid);
-// 		gc -> setPatternFill(m_usePattern);
-// 		gc -> setGradientFill(m_useGradient);
-// 		view -> activateTool(this);
-// 	}
-// }
-
-// QString KisToolRectangle::settingsName() const
-// {
-// 	return "rectangleTool";
-// }
 
 
 #include "kis_tool_rectangle.h"

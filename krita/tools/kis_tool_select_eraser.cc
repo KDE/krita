@@ -36,7 +36,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
-
+#include "kis_eraseop.h"
 
 KisToolSelectEraser::KisToolSelectEraser()
         : super(),
@@ -136,11 +136,11 @@ void KisToolSelectEraser::endPaint()
 	}
 }
 
-void KisToolSelectEraser::paintLine(const KisPoint & pos1,
-				   const KisPoint & pos2,
-				   const double pressure,
-				   const double xtilt,
-				   const double ytilt)
+void KisToolSelectEraser::paintLine(const KisPoint & /*pos1*/,
+				    const KisPoint & pos2,
+				    const double /*pressure*/,
+				    const double /*xtilt*/,
+				    const double /*ytilt*/)
 {
 	if (!m_currentImage -> activeDevice()) return;
 

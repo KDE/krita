@@ -134,7 +134,8 @@ bool KisToolColorChanger::changeColors(int /*startX*/, int /*startY*/)
 
 // 	/* refresh canvas so changes show up */
 // 	img->markDirty(ur);
-// 	return true;
+//
+ 	return false;
 }
 
 

@@ -40,6 +40,8 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 
+#include "kis_eraseop.h"
+
 #include "wdgselectionoptions.h"
 
 KisToolSelectBrush::KisToolSelectBrush()
@@ -80,7 +82,7 @@ void KisToolSelectBrush::buttonPress(KisButtonPressEvent *e)
         if (e -> button() == QMouseEvent::LeftButton) {
                 m_mode = PAINT;
                 initPaint(e -> pos());
-                m_painter -> penAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
+                m_painter -> paintAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
                 // XXX: get the rect that should be notified
                 m_currentImage -> notify( m_painter -> dirtyRect() );
          }
@@ -150,8 +152,7 @@ void KisToolSelectBrush::paintLine(const KisPoint & pos1,
 	// XXX: make conform to latest version in kis_brush.cc
 
 
-	m_dragDist = m_painter -> paintLine(PAINTOP_ERASE, 
-					    pos1, pressure, xtilt, ytilt,
+	m_dragDist = m_painter -> paintLine(pos1, pressure, xtilt, ytilt,
 					    pos2, pressure, xtilt, ytilt,
 					    m_dragDist);
 
@@ -159,6 +160,14 @@ void KisToolSelectBrush::paintLine(const KisPoint & pos1,
 
 	m_currentImage -> notify( m_painter -> dirtyRect() );
 	m_dragStart = pos2;
+}
+
+void KisToolSelectBrush::paintAt(const KisPoint &pos,
+			   const double pressure,
+			   const double xTilt,
+			   const double yTilt)
+{
+	m_painter -> paintAt(pos, pressure, xTilt, yTilt);
 }
 
 

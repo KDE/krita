@@ -37,19 +37,7 @@ public:
 
 protected:
 
-	virtual void paintAt(const KisPoint &pos,
-			     const double pressure,
-			     const double xTilt,
-			     const double yTilt);
-
-	virtual void paintLine(const KisPoint & pos1,
-			       const double pressure1,
-			       const double xtilt1,
-			       const double ytilt1,
-			       const KisPoint & pos2,
-			       const double pressure2,
-			       const double xtilt2,
-			       const double ytilt2);
+	virtual void initPaint(KisEvent *e);
 };
 #endif // KIS_TOOL_BRUSH_H_
 

@@ -110,8 +110,8 @@ void KisColorWheel::slotSetValue(const KoColor& c)
 	QPoint center(size/2, size/2);
 
 	int xVal, yVal;
-	xVal = sin(c.H() * pi /180) * c.S() / 255 * (size/2) + center.x();
-	yVal = cos(c.H() * pi /180) * c.S() / 255 * (size/2) + center.y();
+	xVal = (int)(sin(c.H() * pi /180) * c.S() / 255 * (size/2) + center.x());
+	yVal = (int)(cos(c.H() * pi /180) * c.S() / 255 * (size/2) + center.y());
 	setValues( xVal, yVal );
 }
 

@@ -100,7 +100,7 @@ void KisToolPolygon::buttonRelease(KisButtonReleaseEvent */*event*/)
 // 	}
 }
 
-void KisToolPolygon::drawPolygon(const KisPoint& start, const KisPoint& /*end*/)
+void KisToolPolygon::drawPolygon(const KisPoint& /*start*/, const KisPoint& /*end*/)
 {
 // 	KisView *view = getCurrentView();
 // 	QPainter p;

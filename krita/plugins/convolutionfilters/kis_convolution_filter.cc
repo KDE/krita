@@ -22,6 +22,7 @@
 #include "kis_convolution_filter.h"
 
 #include "kis_painter.h"
+#include "kis_convolution_painter.h"
 
 KisConvolutionFilter::KisConvolutionFilter(const QString& name, KisView * view) :
 	KisFilter( name, view )
@@ -29,10 +30,10 @@ KisConvolutionFilter::KisConvolutionFilter(const QString& name, KisView * view) 
 	
 }
 
-void KisConvolutionFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* , const QRect& rect, KisTileCommand* command)
+void KisConvolutionFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* , const QRect& /*rect*/, KisTileCommand* /*command*/)
 {
 	kdDebug() << device << endl;
-	KisPainter painter( device );
+	KisConvolutionPainter painter( device );
 	kdDebug() << device << endl;
 	painter.beginTransaction(i18n("convolve"));
 	KisMatrix3x3* amatrixes = matrixes();

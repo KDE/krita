@@ -44,18 +44,10 @@ public:
 			     const double xTilt,
 			     const double yTilt);
 	
-	virtual void paintLine(const KisPoint & pos1,
-			       const double pressure1,
-			       const double xTilt1,
-			       const double yTilt1,
-			       const KisPoint & pos2,
-			       const double pressure2,
-			       const double xTilt2,
-			       const double yTilt2);
-
 
 protected slots:
 	virtual void activate();
+
 protected:
 	virtual void initPaint(KisEvent *e);
 

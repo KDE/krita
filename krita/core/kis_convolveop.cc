@@ -1,9 +1,9 @@
 /*
- *  kis_tool_eraser.h - part of Krita
- *
- *  Copyright (c) 1999 Matthias Elter
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
+ *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,27 +19,31 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include <qrect.h>
 
-#if !defined KIS_TOOL_ERASER_H_
-#define KIS_TOOL_ERASER_H_
+#include <kdebug.h>
 
-#include "kis_tool_freehand.h"
+#include "kis_brush.h"
+#include "kis_global.h"
+#include "kis_paint_device.h"
+#include "kis_painter.h"
+#include "kis_types.h"
+#include "kis_paintop.h"
 
-class KisToolEraser : public KisToolFreeHand {
+#include "kis_convolveop.h"
 
-	typedef KisToolFreeHand super;
-	Q_OBJECT
+KisConvolveOp::KisConvolveOp(KisPainter * painter)
+	: super(painter) 
+{
+}
 
-public:
-	KisToolEraser();
-	virtual ~KisToolEraser();
-  
-	virtual void setup(KActionCollection *collection);
+KisConvolveOp::~KisConvolveOp() 
+{
+}
 
-protected:
-
-	virtual void initPaint(KisEvent *e);
-};
-
-#endif // KIS_TOOL_ERASER_H_
-
+void KisConvolveOp::paintAt(const KisPoint &/*pos*/,
+			    const double /*pressure*/,
+			    const double /*xTilt*/,
+			    const double /*yTilt*/)
+{
+}

@@ -76,7 +76,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP device, KisFilterConf
 				else if( d > QUANTUM_MAX - configBC->brightness() ) d = QUANTUM_MAX;
 				else d += configBC->brightness();
 			// change the contrast
-				int nd = ((d - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2;
+				int nd = (int)(((d - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2);
 				if( nd > QUANTUM_MAX ) d = QUANTUM_MAX;
 				else d = nd;
 			}

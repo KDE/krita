@@ -35,7 +35,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
-
+#include "kis_penop.h"
 
 KisToolPen::KisToolPen()
         : super(i18n("Pen"))
@@ -48,24 +48,11 @@ KisToolPen::~KisToolPen()
 {
 }
 
-void KisToolPen::paintAt(const KisPoint &pos,
-			 const double pressure,
-			 const double xTilt,
-			 const double yTilt)
+void KisToolPen::initPaint(KisEvent *e)
 {
-	painter() -> penAt(pos, pressure, xTilt, yTilt);
-}
-
-void KisToolPen::paintLine(const KisPoint & pos1,
-			   const double pressure1,
-			   const double xtilt1,
-			   const double ytilt1,
-			   const KisPoint & pos2,
-			   const double pressure2,
-			   const double xtilt2,
-			   const double ytilt2)
-{
-	m_dragDist = painter() -> paintLine(PAINTOP_PEN, pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
+	super::initPaint(e);
+	KisPaintOp * op = new KisPenOp(painter());
+	painter() -> setPaintOp(op); // Painter gets ownership
 }
 
 void KisToolPen::setup(KActionCollection *collection)

@@ -57,7 +57,7 @@ protected:
 	virtual void paintAt(const KisPoint &pos,
 			     const double pressure,
 			     const double xTilt,
-			     const double yTilt) =0;
+			     const double yTilt);
 
 	virtual void paintLine(const KisPoint & pos1,
 			       const double pressure1,
@@ -66,7 +66,10 @@ protected:
 			       const KisPoint & pos2,
 			       const double pressure2,
 			       const double xtilt2,
-			       const double ytilt2) =0;
+			       const double ytilt2);
+
+	// XXX: why not make this a protected member attribute for the
+	// use of subclasses? BSAR.
 	inline KisPainter * painter() { return m_painter; };
 	virtual void initPaint(KisEvent *e);
 	virtual void endPaint();

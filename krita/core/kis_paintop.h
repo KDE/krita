@@ -1,9 +1,9 @@
 /*
- *  kis_tool_eraser.h - part of Krita
- *
- *  Copyright (c) 1999 Matthias Elter
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
+ *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,26 +20,40 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_TOOL_ERASER_H_
-#define KIS_TOOL_ERASER_H_
+#ifndef KIS_PAINTOP_H_
+#define KIS_PAINTOP_H_
 
-#include "kis_tool_freehand.h"
+#include "kis_types.h"
 
-class KisToolEraser : public KisToolFreeHand {
+class KisPoint;
+class KisAlphaMask;
+class KisPainter;
 
-	typedef KisToolFreeHand super;
-	Q_OBJECT
+class KisPaintOp 
+{
 
 public:
-	KisToolEraser();
-	virtual ~KisToolEraser();
-  
-	virtual void setup(KActionCollection *collection);
+
+        KisPaintOp(KisPainter * painter);
+	virtual ~KisPaintOp();
+
+	virtual void paintAt(const KisPoint &pos,
+			     const double pressure,
+			     const double /*xTilt*/,
+			     const double /*yTilt*/) = 0;
 
 protected:
 
-	virtual void initPaint(KisEvent *e);
+	virtual KisLayerSP computeDab(KisAlphaMaskSP mask);
+
+
+	/**
+	 * Split the coordinate into whole + fraction, where fraction is always >= 0.
+	 */
+	virtual void splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction);
+
+	KisPainter * m_painter;
+
 };
 
-#endif // KIS_TOOL_ERASER_H_
-
+#endif // KIS_PAINTOP_H_

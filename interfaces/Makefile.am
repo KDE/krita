@@ -1,4 +1,4 @@
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kchart/kdchart -I$(interfacedir) $(all_includes)
 
 lib_LTLIBRARIES = libkochart.la
 

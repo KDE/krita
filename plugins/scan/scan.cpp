@@ -67,9 +67,7 @@ void Scan::slotScan()
 	}
     }
 
-#ifdef KSCANDIALOG_HAS_SETUP
     if ( scanDialog->setup() )
-#endif
         scanDialog->show();
 }
 

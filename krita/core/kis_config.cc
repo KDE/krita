@@ -20,6 +20,9 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <config.h>
+
+#include LCMS_HEADER
 
 #include "kis_global.h"
 #include "kis_config.h"
@@ -116,3 +119,114 @@ void KisConfig::defCursorStyle(enumCursorStyle style)
 {
 	m_cfg -> writeEntry("cursorStyleDef", style);
 }
+
+
+QString KisConfig::monitorProfile() const
+{
+	return m_cfg -> readEntry("monitorProfile", "None");
+}
+
+void KisConfig::setMonitorProfile(QString monitorProfile)
+{
+	m_cfg -> writeEntry("monitorProfile", monitorProfile);
+}
+
+
+QString KisConfig::workingColorSpace() const
+{
+	return m_cfg -> readEntry("workingColorSpace", "RGBA");
+}
+
+void KisConfig::setWorkingColorSpace(QString workingColorSpace)
+{
+	m_cfg -> writeEntry(workingColorSpace, workingColorSpace);
+}
+
+
+QString KisConfig::importProfile() const
+{
+	return m_cfg -> readEntry("importProfile", "None");
+}
+
+void KisConfig::setImportProfile(QString importProfile)
+{
+	m_cfg -> writeEntry("importProfile", importProfile);
+}
+
+
+QString KisConfig::printerColorSpace() const
+{
+	return m_cfg -> readEntry("printerColorSpace", "CMYK");
+}
+
+void KisConfig::setPrinterColorSpace(QString printerColorSpace)
+{
+	m_cfg -> writeEntry("printerColorSpace", printerColorSpace);
+}
+
+
+QString KisConfig::printerProfile() const
+{
+	return m_cfg -> readEntry("printerProfile", "None");
+}
+
+void KisConfig::setPrinterProfile(QString printerProfile)
+{
+	m_cfg -> writeEntry("printerProfile", printerProfile);
+}
+
+
+bool KisConfig::useBlackPointCompensation() const
+{
+	return m_cfg -> readBoolEntry("useBlackPointCompensation", false);
+}
+
+void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation)
+{
+	m_cfg -> writeEntry("useBlackPointCompensation", useBlackPointCompensation);
+}
+
+
+bool KisConfig::dither8Bit() const
+{
+	return m_cfg -> readBoolEntry("dither8Bit", false);
+}
+
+void KisConfig::setDither8Bit(bool dither8Bit)
+{
+	m_cfg -> writeEntry("dither8Bit", dither8Bit);
+}
+
+
+bool KisConfig::askProfileOnOpen() const
+{
+	return m_cfg -> readBoolEntry("askProfileOnOpen", true);
+}
+
+void KisConfig::setAskProfileOnOpen(bool askProfileOnOpen)
+{
+	m_cfg -> writeEntry("askProfileOnOpen", askProfileOnOpen);
+}
+
+
+bool KisConfig::askProfileOnPaste() const
+{
+	return m_cfg -> readBoolEntry("askProfileOnPaste", true);
+}
+
+void KisConfig::setAskProfileOnPaste(bool askProfileOnPaste)
+{
+	m_cfg -> writeEntry("askProfileOnPaste", askProfileOnPaste);
+}
+
+
+Q_INT32 KisConfig::renderIntent() const
+{
+	return m_cfg -> readNumEntry("renderIntent", INTENT_PERCEPTUAL);
+}
+
+void KisConfig::setRenderIntent(Q_INT32 renderIntent)
+{
+	m_cfg -> writeEntry("renderIntent", renderIntent);
+}
+

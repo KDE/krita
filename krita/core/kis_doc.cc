@@ -1073,7 +1073,8 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect)
 				QImage img = m_currentImage -> projection() -> convertToQImage(x, y, TILE_WIDTH, TILE_HEIGHT);
 				if (!img.isNull()) {
                                         // XXX: made obosolete by qt-copy patch 0005
-					m_pixio.putImage(&m_pixmap, 0, 0, &img);
+					// m_pixio.putImage(&m_pixmap, 0, 0, &img);
+					m_pixmap.convertFromImage(img);
 					Q_INT32 w = QMIN(x2 - x, TILE_WIDTH);
 					Q_INT32 h = QMIN(y2 - y, TILE_HEIGHT);
 					painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);

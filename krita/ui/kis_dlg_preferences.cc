@@ -28,6 +28,7 @@
 #include <qcursor.h>
 #include <qpixmap.h>
 #include <qbitmap.h>
+#include <qbuttongroup.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -41,6 +42,7 @@
 #include "dialogs/wdgcolorsettings.h"
 #include "kis_resourceserver.h"
 #include "kis_factory.h"
+#include "kis_colorspace_registry.h"
 
 GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 	: QWidget( _parent, _name )
@@ -158,20 +160,37 @@ UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 	: QWidget(parent, name)
 {
+	// XXX: Make sure only profiles that fit the specified color model
+	// are shown in the profile combos
+
 	QGridLayout * l = new QGridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
-	WdgColorSettings * wcs = new WdgColorSettings(this);
-	l -> addWidget( wcs, 0, 0);
+	m_page = new WdgColorSettings(this);
+	l -> addWidget( m_page, 0, 0);
+
+	KisConfig cfg;
+	
+	m_page -> cmbWorkingColorSpace -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
+	m_page -> cmbWorkingColorSpace -> setCurrentText(cfg.workingColorSpace());
+
+	m_page -> cmbPrintingColorSpace -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
+	m_page -> cmbPrintingColorSpace -> setCurrentText(cfg.printerColorSpace());
 
 	vKisProfileSP profileList = KisFactory::rServer() -> profiles();
         vKisProfileSP::iterator it;
-
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-		wcs -> cmbMonitorProfile -> insertItem((*it) -> productName());
-		wcs -> cmbImportProfile -> insertItem((*it) -> productName());
-		wcs -> cmbPrintProfile -> insertItem((*it) -> productName());
+		m_page -> cmbMonitorProfile -> insertItem((*it) -> productName());
+		m_page -> cmbImportProfile -> insertItem((*it) -> productName());
+		m_page -> cmbPrintProfile -> insertItem((*it) -> productName());
 	}
-			
-	
+	m_page -> cmbMonitorProfile -> setCurrentText(cfg.monitorProfile());
+	m_page -> cmbImportProfile -> setCurrentText(cfg.importProfile());
+	m_page -> cmbPrintProfile -> setCurrentText(cfg.printerProfile());
+	m_page -> chkBlackpoint -> setChecked(cfg.useBlackPointCompensation());
+	m_page -> chkDither8Bit -> setChecked(cfg.dither8Bit());
+	m_page -> chkAskOpen -> setChecked(cfg.askProfileOnOpen());
+	m_page -> chkAskPaste -> setChecked(cfg.askProfileOnPaste());
+	m_page -> grpIntent -> setButton(cfg.renderIntent());
+
 }
 
 
@@ -183,14 +202,14 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 	vbox = addVBoxPage( i18n( "General") );
 	m_general = new GeneralTab( vbox );
 
-	vbox = addVBoxPage( i18n( "Directories") );
-	m_directories = new DirectoriesTab( vbox );
+// 	vbox = addVBoxPage( i18n( "Directories") );
+// 	m_directories = new DirectoriesTab( vbox );
 
-	vbox = addVBoxPage( i18n( "Undo/Redo") );
-	m_undoRedo = new UndoRedoTab( vbox );
+// 	vbox = addVBoxPage( i18n( "Undo/Redo") );
+// 	m_undoRedo = new UndoRedoTab( vbox );
 
 	vbox = addVBoxPage( i18n( "Color settings") );
-	m_colorSettingsTag = new ColorSettingsTab( vbox );
+	m_colorSettings = new ColorSettingsTab( vbox );
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -206,6 +225,21 @@ void PreferencesDialog::editPreferences()
 	{
  		KisConfig cfg;
  		cfg.defCursorStyle(dialog -> m_general -> cursorStyle());
+
+		// Color settings
+		cfg.setMonitorProfile( dialog -> m_colorSettings -> m_page -> cmbMonitorProfile -> currentText());
+		cfg.setWorkingColorSpace( dialog -> m_colorSettings -> m_page -> cmbWorkingColorSpace -> currentText());
+		cfg.setImportProfile( dialog -> m_colorSettings -> m_page -> cmbImportProfile -> currentText());
+		cfg.setPrinterColorSpace( dialog -> m_colorSettings -> m_page -> cmbPrintingColorSpace -> currentText());
+		cfg.setPrinterProfile( dialog -> m_colorSettings -> m_page -> cmbPrintProfile -> currentText());
+
+		cfg.setUseBlackPointCompensation( dialog -> m_colorSettings -> m_page -> chkBlackpoint -> isChecked());
+		cfg.setDither8Bit( dialog -> m_colorSettings -> m_page -> chkDither8Bit -> isChecked());
+		cfg.setAskProfileOnOpen( dialog -> m_colorSettings -> m_page -> chkAskOpen -> isChecked());
+		cfg.setAskProfileOnPaste( dialog -> m_colorSettings -> m_page -> chkAskPaste -> isChecked());
+		cfg.setRenderIntent( dialog -> m_colorSettings -> m_page -> grpIntent -> selectedId());
+
+
 	}
 }
 

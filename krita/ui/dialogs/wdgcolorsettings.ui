@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WdgColorSettings</class>
 <widget class="QWidget">
     <property name="name">
@@ -59,7 +59,7 @@
                                         <cstring>textLabel1</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>default Monitor profile:</string>
+                                        <string>default Monitor profile (always for RGB):</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>cmbMonitorProfile</cstring>
@@ -116,7 +116,7 @@
                                 </property>
                                 <widget class="QComboBox">
                                     <property name="name">
-                                        <cstring>cmbWorkingColorspace</cstring>
+                                        <cstring>cmbWorkingColorSpace</cstring>
                                     </property>
                                 </widget>
                                 <widget class="QComboBox">
@@ -141,7 +141,7 @@
                                 </widget>
                                 <widget class="QComboBox">
                                     <property name="name">
-                                        <cstring>cmbPrintingColorspace</cstring>
+                                        <cstring>cmbPrintingColorSpace</cstring>
                                     </property>
                                 </widget>
                                 <widget class="QComboBox">
@@ -228,7 +228,7 @@
                                 </widget>
                                 <widget class="QCheckBox">
                                     <property name="name">
-                                        <cstring>chk</cstring>
+                                        <cstring>chkDither8Bit</cstring>
                                     </property>
                                     <property name="text">
                                         <string>Dither 8-bit images</string>

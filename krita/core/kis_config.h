@@ -45,6 +45,37 @@ public:
 	enumCursorStyle defCursorStyle() const;
 	void defCursorStyle(enumCursorStyle style);
 
+	QString monitorProfile() const;
+	void setMonitorProfile(QString monitorProfile);
+
+	QString workingColorSpace() const;
+	void setWorkingColorSpace(QString workingColorSpace);
+
+	QString importProfile() const;
+	void setImportProfile(QString importProfile);
+
+	QString printerColorSpace() const;
+	void setPrinterColorSpace(QString printerColorSpace);
+
+	QString printerProfile() const;
+	void setPrinterProfile(QString printerProfile);
+
+	bool useBlackPointCompensation() const;
+	void setUseBlackPointCompensation(bool useBlackPointCompensation);
+
+	bool dither8Bit() const;
+	void setDither8Bit(bool dither8Bit);
+
+	bool askProfileOnOpen() const;
+	void setAskProfileOnOpen(bool askProfileOnOpen);
+
+	bool askProfileOnPaste() const;
+	void setAskProfileOnPaste(bool askProfileOnPaste);
+
+	Q_INT32 renderIntent() const;
+	void setRenderIntent(Q_INT32 renderIntent);
+
+
 private:
 	KisConfig(const KisConfig&);
 	KisConfig& operator=(const KisConfig&);

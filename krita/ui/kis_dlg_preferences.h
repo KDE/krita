@@ -30,7 +30,7 @@
 class QLineEdit;
 class QCheckBox;
 class KURLRequester;
-
+class WdgColorSettings;
 
 
 
@@ -97,6 +97,10 @@ class ColorSettingsTab : public QWidget
 public:
 	
 	ColorSettingsTab( QWidget *parent = 0, const char * name = 0 );
+
+public:
+
+	WdgColorSettings * m_page;
 };
 
 
@@ -123,7 +127,7 @@ protected:
 	GeneralTab* m_general;
 	DirectoriesTab* m_directories;
 	UndoRedoTab* m_undoRedo; 
-	ColorSettingsTab* m_colorSettingsTag;
+	ColorSettingsTab* m_colorSettings;
 };
 
 #endif

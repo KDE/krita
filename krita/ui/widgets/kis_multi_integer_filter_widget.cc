@@ -37,7 +37,7 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget( KisFilter* nfilter, QW
 	this->setCaption(caption);
 	QGridLayout *widgetLayout = new QGridLayout(this, m_nbintegerWidgets, 2);
 	//Initialize the integerwidget
-	m_integerWidgets = new (IntegerWidget*)[ m_nbintegerWidgets ];
+	m_integerWidgets = new IntegerWidget*[ m_nbintegerWidgets ];
 	for( Q_INT32 i = 0; i < m_nbintegerWidgets; ++i)
 	{
 		m_integerWidgets[i] = new IntegerWidget( iwparam[i].min, iwparam[i].max, this, iwparam[i].name);

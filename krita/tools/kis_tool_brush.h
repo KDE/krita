@@ -20,6 +20,9 @@
 #define KIS_TOOL_BRUSH_H_
 
 #include <qpoint.h>
+
+#include <kcommand.h>
+
 #include "kis_tool.h"
 #include "kis_tool_paint.h"
 
@@ -49,6 +52,7 @@ private:
 			   const Q_INT32 ytilt);
 
 	enumBrushMode m_mode;
+	KMacroCommand *m_macro;
 };
 #endif // KIS_TOOL_BRUSH_H_
 

@@ -55,32 +55,6 @@ class KMacroCommand;
   However, KisPainter works on a tiled image and supports different
   colour models, and that's a lot more complicated.
  
-  Usage: 
-
-    KisImageSP img = m_view -> currentImg();
-    if (img) {
-        KisPaintDeviceSP device = img -> activeDevice();
-        if (device) {
-            KisPainter *p = new KisPainter();
-            p->begin(device);
-            // Do your painting, frex:
-            p->fillRect( x,  y,  10,  10,  KoColor(QColor( "red" )) );
-            // Finish painting -- at least that's true with QPainter,
-            // here, it might have something do with transactions.
-            p->end();
-            // Register do/undo information
-            m_doc -> addCommand(new TestCmd(img));
-            // This somehow, despite being an empty method, makes
-            // sure the window gets updated.
-            device->anchor();
-         }
-
-    }
-    // ???
-    img -> invalidate(QRect( x,  y,  10,  10 ));
-    // ???
-    m_view -> updateCanvas();
-
   Note that I currently think that it's necessary to call anchor,
   invalidate and updateCanvas to make sure the painted bits show up on
   the screen; I don't know why, I don't know whether that's true, but

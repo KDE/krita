@@ -36,15 +36,30 @@ KisToolBrush::KisToolBrush()
 	: super(),
 	  m_mode( HOVER )
 {
+	m_macro = 0;
 }
 
 KisToolBrush::~KisToolBrush()
 {
 }
 
-void KisToolBrush::mouseRelease(QMouseEvent* /*e*/)
+void KisToolBrush::mouseRelease(QMouseEvent* e)
 {
-	m_mode = HOVER;
+ 	if (e->button() == QMouseEvent::LeftButton) {
+		m_mode = HOVER;
+		KisImageSP currentImage = m_subject -> currentImg();
+		KisPaintDeviceSP device;
+		if (currentImage && (device = currentImage -> activeDevice())) {
+			KisUndoAdapter *adapter = currentImage -> undoAdapter();
+			if (adapter) {
+				// If painting in mouse release, make sure painter is destructed or end()ed
+				adapter -> addCommand(m_macro);
+			} else {
+				delete m_macro;
+			}
+			m_macro = 0;
+		}
+	}
 }
 
 void KisToolBrush::mousePress(QMouseEvent *e)
@@ -55,6 +70,18 @@ void KisToolBrush::mousePress(QMouseEvent *e)
 
  	if (e->button() == QMouseEvent::LeftButton) {
  		m_mode = PAINT;
+		KisImageSP currentImage = m_subject -> currentImg();
+		KisPaintDeviceSP device;
+		if (currentImage && (device = currentImage -> activeDevice())) {
+// 			KisPainter p( device );
+			if (m_macro) {
+				delete m_macro;
+				m_macro = 0;
+			}
+			
+			m_macro = new KMacroCommand("brush");
+// 			p.beginTransaction(m_macro);
+		}
 		paint(e->pos(), 128, 0, 0);
  	}
 }
@@ -91,7 +118,7 @@ void KisToolBrush::paint(const QPoint & pos,
 	// Retrieve the mask of the brush used
 	QImage img = m_subject -> currentBrush() -> img();
 #if 0
-s	kdDebug() << "mask depth: " << mask.depth() << endl;
+	kdDebug() << "mask depth: " << mask.depth() << endl;
 #endif
 	// Mess with the default mask according to pressure, tilt and whatnot
 
@@ -147,8 +174,9 @@ s	kdDebug() << "mask depth: " << mask.depth() << endl;
 
         KisPaintDeviceSP device = currentImage -> activeDevice();
         if (device) {
-		KisPainter p( device );
-		p.bitBlt( pos.x(),  pos.y(),  COMPOSITE_NORMAL, tmpLayer.data());
+		KisPainter gc( device );
+		gc.beginTransaction(m_macro);
+		gc.bitBlt( pos.x(),  pos.y(),  COMPOSITE_NORMAL, tmpLayer.data() );
 		device->anchor();
 	}
         currentImage->invalidate( pos.x(),  pos.y(),  

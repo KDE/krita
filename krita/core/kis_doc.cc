@@ -463,8 +463,8 @@ QDomDocument KisDoc::saveXML()
 
 bool KisDoc::loadOasis( const QDomDocument&, KoOasisStyles&, KoStore* )
 {
-    //todo
-    return true;
+	//todo
+	return true;
 }
 
 bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
@@ -1081,7 +1081,6 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 		m_projection = m_images[0];
 
 	if (m_projection) {
-
 		if (!(colorstate = m_colorspaces[m_projection -> nativeImgType()]))
 			return;
 

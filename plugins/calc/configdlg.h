@@ -38,8 +38,8 @@
 #include <qpainter.h>
 #include <qlabel.h>
 #include <qframe.h>
+#include <qspinbox.h>
 
-#include <kspinbox.h>
 #include <kcolordlg.h>
 #include "kcalc.h"
 
@@ -113,8 +113,8 @@ private:
   QGroupBox *gbox;
   QCheckBox *cb;  
   QCheckBox *cb2;
-  KNumericSpinBox* precspin;
-  KNumericSpinBox* precspin2;  
+  QSpinBox* precspin;
+  QSpinBox* precspin2;  
   QCheckBox *mybox;
   QCheckBox *frame3d;
 

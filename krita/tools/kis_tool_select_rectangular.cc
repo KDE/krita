@@ -104,6 +104,12 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 			m_startPos /= m_view -> zoom();
 			m_endPos = e -> pos();
 
+			if (m_endPos.y() > img -> height())
+				m_endPos.setY(img -> height());
+
+			if (m_endPos.x() > img -> width())
+				m_endPos.setX(img -> width());
+
 			if (img) {
 				KisPaintDeviceSP parent;
 				KisSelectionSP selection;

@@ -88,7 +88,8 @@ public:
 	Q_INT32 height() const;
 	const bool visible() const;
 	void visible(bool v);
-	void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh);
+	void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
+	QRect clip() const;
 	void setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh);
 	bool cmap(KoColorMap& cm);
 	KoColor colorAt();

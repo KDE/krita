@@ -36,17 +36,12 @@ KisTile::KisTile(KisTile& rhs) : super(rhs)
 		m_width = rhs.m_width;
 		m_height = rhs.m_height;
 		m_valid = rhs.valid();
-		allocate();
 		m_hints = rhs.m_hints;
+		allocate();
 		rhs.shareRelease();
-
-		if (rhs.m_data) {
-			memcpy(m_data, rhs.m_data, size());
-		} else {
-			rhs.lock();
-			memcpy(m_data, rhs.m_data, size());
-			rhs.release();
-		}
+		rhs.lock();
+		memcpy(m_data, rhs.m_data, size());
+		rhs.release();
 	}
 }
 	

@@ -1047,11 +1047,19 @@ void KisImage::renderLayer(KisPainter& gc, KisLayerSP layer)
 	Q_INT32 dy;
 	Q_INT32 w;
 	Q_INT32 h;
+	QRect clip = layer -> clip();
 
 	sx = layer -> x();
 	sy = layer -> y();
 	w = layer -> width();
 	h = layer -> height();
+
+	if (!clip.isEmpty()) {
+		sx = sx + clip.x();
+		sy = sy + clip.y();
+		w = clip.width();
+		h = clip.height();
+	}
 
 	if (sx < 0) {
 		dx = 0;
@@ -1116,9 +1124,18 @@ QPixmap KisImage::recreatePixmap()
 	if (m_selection) {
 		QPainter gc(&m_pixmapProjection);
 		QPen pen(Qt::DotLine);
+		QRect rc = m_selection -> bounds();
+		QRect clip = m_selection -> clip();
+
+		if (!clip.isEmpty()) {
+			rc.setX(rc.x() + clip.x());
+			rc.setY(rc.y() + clip.y());
+			rc.setWidth(clip.width());
+			rc.setHeight(clip.height());
+		}
 
 		gc.setPen(pen);
-		gc.drawRect(m_selection -> x(), m_selection -> y(), m_selection -> width(), m_selection -> height());
+		gc.drawRect(rc);
 	}
 
 	return m_pixmapProjection;

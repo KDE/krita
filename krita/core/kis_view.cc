@@ -738,7 +738,15 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 		if (selection) {
 			KisPaintDeviceSP parent = selection -> parent();
 			QRect rc = selection -> bounds();
+			QRect clip = selection -> clip();
 			KisPainter gc(parent);
+
+			if (!clip.isEmpty()) {
+				rc.setX(rc.x() + clip.x());
+				rc.setY(rc.y() + clip.y());
+				rc.setWidth(clip.width());
+				rc.setHeight(clip.height());
+			}
 
 			img -> unsetSelection();
 			gc.fillRect(rc, c, opacity);

@@ -26,6 +26,7 @@
 KisSelection::KisSelection(KisPaintDeviceSP parent, KisImageSP img, const QString& name, QUANTUM opacity) : super(img, 0, 0, name, opacity)
 {
 	Q_ASSERT(parent);
+	Q_ASSERT(parent -> visible());
 	Q_ASSERT(img);
 	m_parent = parent;
 	m_img = img;
@@ -47,7 +48,7 @@ bool KisSelection::shouldDrawBorder() const
 
 void KisSelection::move(Q_INT32 x, Q_INT32 y)
 {
-	QRect rc = bounds();
+	QRect rc = clip();
 
 	if (m_firstMove) {
 		KisPainter gc(m_parent);
@@ -72,8 +73,10 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 	Q_INT32 x;
 	Q_INT32 y;
 	Q_INT32 offset;
+	Q_INT32 clipX;
+	Q_INT32 clipY;
 
-	configure(m_img, width, height, m_img -> imgType(), m_name);
+	configure(m_img, parentX + width, parentY + height, m_img -> imgType(), m_name);
 	tm2 = data();
 	Q_ASSERT(tm2);
 	offset = tm1 -> tileNum(parentX, parentY);
@@ -95,6 +98,11 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 	}
 
 	m_rc.setRect(parentX, parentY, width, height);
+	clipX = parentX - parentX / TILE_WIDTH * TILE_WIDTH;
+	clipY = parentY - parentY / TILE_HEIGHT * TILE_HEIGHT;
+	setClip(clipX, clipY, width, height);
+	parentX = parentX / TILE_WIDTH * TILE_WIDTH;
+	parentY = parentY / TILE_HEIGHT * TILE_HEIGHT;
 	super::move(parentX, parentY);
 }
 

@@ -135,7 +135,7 @@ void KisPaintDevice::move(const QPoint& pt)
 
 bool KisPaintDevice::contains(Q_INT32 x, Q_INT32 y) const
 {
-	QRect rc(m_x + m_offX, m_y + m_offY, m_width - m_offW, m_height - m_offH);
+	QRect rc(m_x, m_y, m_width, m_height);
 
 	return rc.contains(x, y);
 }
@@ -323,7 +323,12 @@ void KisPaintDevice::visible(bool v)
 	}
 }
 
-void KisPaintDevice::clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh)
+QRect KisPaintDevice::clip() const
+{
+	return QRect(m_offX, m_offY, m_offW, m_offH);
+}
+
+void KisPaintDevice::clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const
 {
 	if (offx && offy && offw && offh) {
 		*offx = m_offX;

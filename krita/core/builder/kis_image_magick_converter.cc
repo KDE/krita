@@ -273,6 +273,23 @@ KisImageBuilder_Result KisImageMagickConverter::buildImage(const KURL& uri)
 #endif
 		return KisImageBuilder_RESULT_NOT_EXIST;
 
+#if 1
+	// We're not set up to handle asynchronous loading at the moment.
+	KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
+	QString tmpFile;
+
+#if KDE_IS_VERSION( 3, 1, 90 )
+	if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget()))
+#else
+       	if (KIO::NetAccess::download(uri, tmpFile))
+#endif
+	{
+		result = decode(tmpFile, false);
+		KIO::NetAccess::removeTempFile(tmpFile);
+	}
+
+	return result;
+#else
 	if (!uri.isLocalFile()) {
 		if (m_job)
 			return KisImageBuilder_RESULT_BUSY;
@@ -286,6 +303,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildImage(const KURL& uri)
 	}
 
 	return decode(uri, false);
+#endif
 }
 
 KisImageSP KisImageMagickConverter::image()

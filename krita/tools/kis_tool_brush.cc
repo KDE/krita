@@ -160,8 +160,35 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
 {
 	if (m_mode == PAINT) {
   		QPoint pos = e -> pos();
-		KisVector end(pos.x(), pos.y());
-		KisVector start(m_dragStart.x(), m_dragStart.y());
+		Q_INT32 x1, y1, x2, y2;
+
+		x1 = m_dragStart.x();
+		y1 = m_dragStart.y();
+
+		x2 = pos.x();
+		y2 = pos.y();
+
+		QRect r;
+		if (x1 < x2 ) {
+			if (y1 < y2) {
+				r = QRect(x1, y1, x2 - x1 + m_brushWidth, y2 - y1 + m_brushHeight);
+			}
+			else {
+				r = QRect(x1, y2, x2 - x1 + m_brushWidth, y1 - y2 + m_brushHeight);
+			}
+		}
+		else {
+			if (y1 < y2) {
+				r = QRect(x2, y1, x1 - x2 + m_brushWidth, y2 - y1 + m_brushHeight);
+			}
+			else {
+				r = QRect(x2, y2, x1 - x2 + m_brushWidth, y1 - y2 + m_brushHeight);
+			}
+		}
+
+		KisVector end(x2, y2);
+		KisVector start(x1, y1);
+
 		KisVector dragVec = end - start;
 		float savedDist = m_dragDist;
 		float newDist = dragVec.length();
@@ -209,15 +236,11 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
 			}
 			QPoint p(qRound(step.x()), qRound(step.y()));
 			paint(p, 128, 0, 0);
-			m_currentImage -> notify(p.x(),
-					       p.y(),
-					       m_dab -> width(),
-					       m_dab -> height());
-
-			kdDebug() << "paint: (" << p.x() << "," << p.y() << ")\n";
 			dist -= m_spacing;
 		}
+		m_currentImage -> notify(r);
 
+		
 		if (dist > 0)
 			m_dragDist = dist;
 
@@ -256,10 +279,23 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
 		x2 = e->pos().x();
 		y2 = e->pos().y();
 
-
-		QRect r = QRect(x1, y1, x2 - x1, y2 - y1);
-		kdDebug() << "Painting on: (" << x1 << "," << y1 << ") - (" << x2 - x1 << "," << y2 - y1 << ")\n";
-		r.normalize();
+		QRect r;
+		if (x1 < x2 ) {
+			if (y1 < y2) {
+				r = QRect(x1, y1, x2 - x1 + m_brushWidth, y2 - y1 + m_brushHeight);
+			}
+			else {
+				r = QRect(x1, y2, x2 - x1 + m_brushWidth, y1 - y2 + m_brushHeight);
+			}
+		}
+		else {
+			if (y1 < y2) {
+				r = QRect(x2, y1, x1 - x2 + m_brushWidth, y2 - y1 + m_brushHeight);
+			}
+			else {
+				r = QRect(x2, y2, x1 - x2 + m_brushWidth, y1 - y2 + m_brushHeight);
+			}
+		}
 
 		m_x1 = x2;
 		m_y1 = y2;
@@ -342,7 +378,7 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
 				paint(QPoint(x1, y1), 128, 0, 0);
 			
 			}
-			m_currentImage -> notify();
+			m_currentImage -> notify(r);
 		}
 	}
 }
@@ -406,9 +442,13 @@ void KisToolBrush::initPaint()
 
 	m_spacing = brush -> spacing();
 	if (m_spacing <= 0) {
-		m_spacing = brush -> width();
+		m_spacing = m_brushWidth;
 	}
 	
+	if (m_spacing > m_brushWidth || m_spacing > m_brushHeight) {
+		m_spacing = m_brushWidth;
+	}
+
 	// Set the cursor -- ideally. this should be a pixmap created from the brush,
 	// now that X11 can handle colored cursors.
 

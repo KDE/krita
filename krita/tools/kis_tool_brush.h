@@ -28,9 +28,9 @@
 #include "kis_tool_paint.h"
 
 #define noSPOTTYLINE
-#define noSLOWLINE
+#define SLOWLINE
 #define noTRACERLINE
-#define PERICOLINE
+#define noPERICOLINE
 
 class KisToolBrush : public KisToolPaint {
 	typedef KisToolPaint super;
@@ -81,13 +81,9 @@ private:
 
         Q_INT32 m_spacing;
 
-
 #if defined PERICOLINE
 	Q_INT32 m_x1, m_y1;
 #endif
-
-	bool m_usePattern;
-	bool m_useGradient;
 
 #if defined SLOWLINE
         QPoint m_dragStart;
@@ -99,6 +95,10 @@ private:
 #endif
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;
+
+	bool m_usePattern;
+	bool m_useGradient;
+
 };
 #endif // KIS_TOOL_BRUSH_H_
 

@@ -14,10 +14,10 @@ noinst_HEADERS = main.h recorder.h
 
 METASOURCES =	main.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES) recorder.h recorder.cc
 
 idl_DATA = 
-idl_HEADERS =  
+idl_HEADERS = 
 
 kdelnk_DATA = recorder.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/pluginlnk
@@ -29,16 +29,13 @@ SUBDIRS = pics
 
 ####### Build rules
 
-install-exec-local:
-	$(INSTALL_SCRIPT) makro_recorder $(bindir)/makro_recorder
-
 messages: 
 #	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../recorder.pot
 
 recorder.h: recorder.idl
 	rm -f recorder.h
 	rm -f recorder.cc
-	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) recorder.idl
+	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) $(srcdir)/recorder.idl
 
 main.cc: main.h recorder.h
 recorder.cc: recorder.h

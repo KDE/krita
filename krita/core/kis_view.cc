@@ -790,7 +790,7 @@ void KisView::paintView(const QRect& rc)
 
 void KisView::updateCanvas()
 {
-	QRect rc(0, 0, docWidth(), docHeight());
+	QRect rc(0, 0, m_canvas -> width(), m_canvas -> height());
 
 	updateCanvas(rc);
 }

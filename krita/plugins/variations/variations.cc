@@ -51,7 +51,7 @@
 #include "dlg_variations.h"
 
 typedef KGenericFactory<Variations> VariationsFactory;
-K_EXPORT_COMPONENT_FACTORY( variations, VariationsFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( kritavariations, VariationsFactory( "krita" ) )
 
 Variations::Variations(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)

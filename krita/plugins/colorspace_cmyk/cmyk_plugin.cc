@@ -49,7 +49,7 @@
 #include "kis_strategy_colorspace_cmyk.h"
 
 typedef KGenericFactory<CMYKPlugin> CMYKPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( cmykplugin, CMYKPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( kritacmykplugin, CMYKPluginFactory( "krita" ) )
 
 
 CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)

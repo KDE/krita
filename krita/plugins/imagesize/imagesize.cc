@@ -53,7 +53,7 @@
 #include "dlg_imagesize.h"
 
 typedef KGenericFactory<ImageSize> ImageSizeFactory;
-K_EXPORT_COMPONENT_FACTORY( imagesize, ImageSizeFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( kritaimagesize, ImageSizeFactory( "krita" ) )
 
 // XXX: this plugin could also provide layer scaling/resizing
 ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)

@@ -55,7 +55,7 @@
 #define min(x,y) ((x)<(y)?(x):(y))
 
 typedef KGenericFactory<ColorsFilters> ColorsFiltersFactory;
-K_EXPORT_COMPONENT_FACTORY( colorsfilters, ColorsFiltersFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( kritacolorsfilters, ColorsFiltersFactory( "krita" ) )
 
 namespace {
 	inline QUANTUM processColor( QUANTUM d, int s)

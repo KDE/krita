@@ -55,7 +55,7 @@
 #include "kis_histogram.h"
 
 typedef KGenericFactory<Histogram> HistogramFactory;
-K_EXPORT_COMPONENT_FACTORY( histogram, HistogramFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( kritahistogram, HistogramFactory( "krita" ) )
 
 Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)

@@ -1,0 +1,1 @@
+SUBDIRS = . brushes images patterns

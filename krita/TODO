@@ -1,0 +1,49 @@
+Krayon is the KOffice image manipulation application.
+It does not aim to be a direct competitor to the GIMP,
+but to integrate well with the other KOffice applications,
+to be easy to use and yet powerfull.
+
+We are curently in a beta developement stage but
+work towards a 1.0 release that comes with all basic
+image manipulation features.
+
+The following feature list aims to give us an idea of what
+we want to have in the 1.0 release:
+
+- color modes: Indexed, Greyscale, RGB and RGBA.
+- layers/channels
+- layer masks
+- plugin filter API
+- plugin tool API
+- basic image manipulation (contrast/brightness/saturation etc.)
+- scale images
+- zooming
+- native XML file format
+- basic import/export filters (png/jpg/tif/gif)
+- basic plugin filters (blur/sharpen etc.)
+- basic image transformations (rotate, mirror)
+- move tool
+- crop tool
+- basic text tool
+- color picker tool
+- fill tool (fill with color or pattern)
+- gradient tool
+- pen (paint brush or pattern)
+- brush (paint brush or pattern)
+- airbrush (paint brush or pattern)
+- eraser
+- blur/sharpen with brush tool 
+- fullscreen editing mode
+- Rules a la gimp 
+- Rotate layouts
+- Saves channel information to file
+- Undo/Redo
+
+BUGS
+
+- Selection tools don't get redrawed when they need to (except for rectangle select now)
+- opacity is totally broken, it sort of almost works for a white background, but nothing else
+- Paint offset causes mispaint
+- Save in tool propeties does not work
+- New for modified document does not give error
+

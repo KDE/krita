@@ -33,3 +33,18 @@ QString KIsImageIface::name()const
 {
     return m_img->name();
 }
+
+int KIsImageIface::height() const
+{
+    return m_img->height();
+}
+
+int KIsImageIface::width() const
+{
+    return m_img->width();
+}
+
+QSize KIsImageIface::size() const
+{
+    return m_img->size();
+}

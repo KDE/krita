@@ -44,3 +44,24 @@ DCOPRef KIsDocIface::image( int num )
 		    img->dcopObject()->objId() );
 
 }
+
+int KIsDocIface::undoLimit () const
+{
+    return m_doc->undoLimit();
+}
+
+void KIsDocIface::setUndoLimit(int limit)
+{
+    m_doc->setUndoLimit(limit);
+}
+
+int KIsDocIface::redoLimit() const
+{
+    return m_doc->redoLimit();
+}
+
+void KIsDocIface::setRedoLimit(int limit)
+{
+    m_doc->setRedoLimit(limit);
+}
+

@@ -33,6 +33,9 @@ public:
     KIsImageIface( KisImage *img_ );
 k_dcop:
     QString name()const;
+    int height() const;
+    int width() const;
+    QSize size() const;
 
 private:
     KisImage *m_img;

@@ -36,6 +36,12 @@ k_dcop:
     QString currentImageName()const ;
     virtual DCOPRef image( int num );
 
+    virtual int undoLimit () const;
+    virtual void setUndoLimit(int limit);
+    virtual int redoLimit() const;
+    virtual void setRedoLimit(int limit);
+
+
 private:
     KisDoc *m_doc;
 };

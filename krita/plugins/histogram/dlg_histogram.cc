@@ -65,8 +65,8 @@ void DlgHistogram::setLayer(KisLayerSP layer)
 	// XXX: depth() - 1: compensate for the alpha channel which isn't in channels info.
 	// We need to rationalize Krita here: the typeWithAlpha, typeWithoutAlpha, ChannelsWithAlpha
 	// and WithoutAlpha are very confusing.
-	m_page -> setChannels(layer -> colorStrategy() -> channelsInfo(), layer -> depth() - 1);
-	ChannelInfo channel = layer -> colorStrategy() -> channelsInfo()[0];
+	m_page -> setChannels(layer -> colorStrategy() -> channels(), layer -> depth() - 1);
+	ChannelInfo channel = layer -> colorStrategy() -> channels()[0];
 	KisHistogramSP histogram = new KisHistogram(layer, channel, LINEAR);
 	setHistogram(histogram);
 
@@ -84,7 +84,7 @@ void DlgHistogram::okClicked()
 
 void DlgHistogram::slotChannelSelected(const QString & channelName)
 {
-	ChannelInfo * channels = m_layer -> colorStrategy() -> channelsInfo();
+	ChannelInfo * channels = m_layer -> colorStrategy() -> channels();
 	for (int i = 0; i < m_layer -> depth() - 1; i++) {
 		ChannelInfo channel = channels[i];
 		if (channel.name() == channelName) {

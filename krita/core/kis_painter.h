@@ -121,7 +121,7 @@ public:
 	// ------------------------------------------------------------------------------------------
 	//  Native paint methods that are tile aware, undo/redo-able,
         // use the color strategies and the composite operations.
-
+			
 	/**
 	 * Blast the specified region from src onto the current paint device.
 	 */
@@ -129,7 +129,10 @@ public:
 		    CompositeOp op, 
 		    KisPaintDeviceSP src,
                     Q_INT32 sx = 0, Q_INT32 sy = 0, 
-		    Q_INT32 sw = -1, Q_INT32 sh = -1);
+		    Q_INT32 sw = -1, Q_INT32 sh = -1)
+		{
+			bitBlt(dx, dy, op, src, OPACITY_OPAQUE, sx, sy, sw, sh);
+		}
 
         /**
 	 * Overloaded version of the previous, differs in that it is possible to specify
@@ -141,7 +144,6 @@ public:
                     QUANTUM opacity,
                     Q_INT32 sx = 0, Q_INT32 sy = 0, 
 		    Q_INT32 sw = -1, Q_INT32 sh = -1);
-
 
 	/**
 	 * Paint a line that connects the dots in points
@@ -252,12 +254,6 @@ protected:
         KisPainter& operator=(const KisPainter&);
 
 	static double pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1);
-
-//         void tileBlt(QUANTUM *dst, KisTileSP dsttile, 
-// 		     KisStrategyColorSpaceSP srcSpace, QUANTUM *src, KisTileSP srctile, 
-// 		     Q_INT32 rows, Q_INT32 cols,
-//                      CompositeOp op);
-
 
         void tileBlt(QUANTUM *dst, 
 		     KisTileSP dsttile, 

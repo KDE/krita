@@ -133,7 +133,7 @@ void KisStrategyColorSpaceCMYK::toKoColor(const QUANTUM *src, KoColor *c, QUANTU
 	*opacity = src[PIXEL_CMYK_ALPHA];
 }
 
-ChannelInfo* KisStrategyColorSpaceCMYK::channelsInfo() const
+ChannelInfo* KisStrategyColorSpaceCMYK::channels() const
 {
 	return channelInfo;
 }

@@ -94,7 +94,7 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 	virtual void toKoColor(const QUANTUM *src, KoColor *c);
 	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity);
 
-	virtual ChannelInfo* channelsInfo() const;
+	virtual ChannelInfo* channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
 	

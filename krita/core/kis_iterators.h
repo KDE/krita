@@ -99,49 +99,49 @@ public:
 		m_xstart( (nxstart < 0) ? 0 : nxstart  ),
 		m_xend( ( nxend < 0 ) ? ndevice->width()-1 : nxend ),
 		m_ypos( nypos ), m_command( command )
-	{
-	}
+		{
+		}
 
 	virtual ~KisIteratorLine()
-	{
-	}
+		{
+		}
 
 public:
-	 virtual _iTp operator*()  = 0;
-	 virtual operator _iTp* () = 0;
+	virtual _iTp operator*()  = 0;
+	virtual operator _iTp* () = 0;
 
-	 //Increment operator
-	 KisIteratorLine< _iTp>& operator++() { return inc(); }
-	 KisIteratorLine< _iTp>& operator--() { return dec(); }
+	//Increment operator
+	KisIteratorLine< _iTp>& operator++() { return inc(); }
+	KisIteratorLine< _iTp>& operator--() { return dec(); }
 
-	 //Overridable operator functionality
-	 inline virtual KisIteratorLine< _iTp>& inc() { m_ypos++; return *this; }
-	 inline virtual KisIteratorLine< _iTp>& dec() { m_ypos--; return *this; }
+	//Overridable operator functionality
+	inline virtual KisIteratorLine< _iTp>& inc() { m_ypos++; return *this; }
+	inline virtual KisIteratorLine< _iTp>& dec() { m_ypos--; return *this; }
 
-   // Comparison operators
-	 bool operator<(const KisIteratorLine< _iTp>& __rhs) const
-	 { 
-		 return this->m_ypos < __rhs.m_ypos; 
-	 }
+	// Comparison operators
+	bool operator<(const KisIteratorLine< _iTp>& __rhs) const
+		{ 
+			return this->m_ypos < __rhs.m_ypos; 
+		}
 
-	 bool operator==(const KisIteratorLine< _iTp>& __rhs) const 
-	 { 
-		 return this->m_ypos == __rhs.m_ypos; 
-	 }
+	bool operator==(const KisIteratorLine< _iTp>& __rhs) const 
+		{ 
+			return this->m_ypos == __rhs.m_ypos; 
+		}
 
-	 bool operator<=(const KisIteratorLine< _iTp>& __rhs) const
-	 { 
-		 return this->m_ypos <= __rhs.m_ypos; 
-	 }
+	bool operator<=(const KisIteratorLine< _iTp>& __rhs) const
+		{ 
+			return this->m_ypos <= __rhs.m_ypos; 
+		}
 
-	 virtual _iTp begin() =0;
-	 virtual _iTp end() =0;
+	virtual _iTp begin() =0;
+	virtual _iTp end() =0;
 
 protected:
-	 KisPaintDeviceSP m_device;
-	 const Q_INT32 m_xstart, m_xend;
-	 Q_INT32 m_ypos;
-	 KisTileCommand* m_command;
+	KisPaintDeviceSP m_device;
+	const Q_INT32 m_xstart, m_xend;
+	Q_INT32 m_ypos;
+	KisTileCommand* m_command;
 };
 
 
@@ -154,7 +154,7 @@ inline KisIteratorUnit& KisIteratorUnit::inc()
 	Q_ASSERT( m_tile != 0 );
 	m_xintile+= m_inc;
 	if( m_xintile >= m_tile->width() * m_depth )
-		{
+	{
 		m_xintile =  0;
 		m_tilenum++;
 		m_tileNeedRefresh = true;
@@ -184,8 +184,8 @@ inline KisIteratorUnit& KisIteratorUnit::operator--()
 	return dec();
 }
 /**
-	* This function increments the position of the iterator by one pixel.
-	*/
+ * This function increments the position of the iterator by one pixel.
+ */
 inline void KisIteratorUnit::skipPixel() 
 {
 	Q_ASSERT( m_tile != 0 );

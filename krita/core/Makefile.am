@@ -34,9 +34,9 @@ libkritacore_la_LIBADD = tiles/libkistile.la \
 
 libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_layer.cc \
-	kis_channel.cc \
-	kis_mask.cc \
 	kis_image.cc \
+	kis_mask.cc \
+	kis_channel.cc \
 	kis_doc.cc \
 	kis_view.cc \
 	kis_factory.cc \
@@ -81,11 +81,11 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 
 noinst_HEADERS = kis_paint_device.h \
 	kis_layer.h \
-	kis_channel.h \
-	kis_mask.h \
 	kis_image.h \
 	kis_doc.h \
 	kis_view.h \
+	kis_mask.h \
+	kis_channel.h \
 	kis_factory.h \
 	kis_nameserver.h \
 	kis_painter.h \

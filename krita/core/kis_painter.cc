@@ -152,20 +152,10 @@ void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile,
         m_device -> colorStrategy() -> bitBlt(stride, dst, dststride, srcSpace, src, srcstride, opacity, rows, cols, op);
 }
 
-
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, 
 			CompositeOp op,
                         KisPaintDeviceSP srcdev,
-                        Q_INT32 sx, Q_INT32 sy, 
-			Q_INT32 sw, Q_INT32 sh)
-{
-        bitBlt(dx, dy, op, srcdev, OPACITY_OPAQUE, sx, sy, sw, sh);
-}
-
-void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, 
-			CompositeOp op,
-                        KisPaintDeviceSP srcdev,
-                        QUANTUM opacity, 
+                        QUANTUM opacity,
 			Q_INT32 sx, Q_INT32 sy, 
 			Q_INT32 sw, Q_INT32 sh)
 {

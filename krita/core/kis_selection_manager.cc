@@ -24,6 +24,8 @@
 #include <klocale.h>
 #include <kstdaction.h>
 
+#include <koColor.h>
+
 #include "kis_types.h"
 #include "kis_view.h"
 #include "kis_doc.h"
@@ -31,6 +33,7 @@
 #include "kis_selection.h"
 #include "kis_floatingselection.h"
 #include "kis_selection_manager.h"
+#include "kis_painter.h"
 
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
@@ -214,13 +217,9 @@ void KisSelectionManager::clipboardDataChanged()
 
 void KisSelectionManager::updateGUI(bool enable)
 {
-// 	kdDebug() << "KisSelectionManager::updateGUI(" << enable << ")\n";
-
         KisImageSP img = m_parent -> currentImg();
 
         enable = enable && img && img -> activeLayer() -> hasSelection(); // XXX: don't see the idea behind this: && img -> activeSelection() -> parent();
-
-// 	kdDebug() << "Becomes: " << enable << "\n";
 
 	m_copy -> setEnabled(enable);
 	m_cut -> setEnabled(enable);
@@ -240,8 +239,8 @@ void KisSelectionManager::updateGUI(bool enable)
 	m_grow -> setEnabled(enable);
 	m_similar -> setEnabled(enable);
 	m_transform -> setEnabled(enable);
-	m_load -> setEnabled(false); // XXX: not implemented yet
-	m_save -> setEnabled(false); // XXX: not implemented yet
+	m_load -> setEnabled(enable);
+	m_save -> setEnabled(enable);
 
 
 }
@@ -272,24 +271,30 @@ void KisSelectionManager::copy()
 	if (!layer -> hasSelection()) return;
 
 	KisSelectionSP selection = layer -> selection();
+	QRect r = selection -> selectedRect();
+	r = r.normalize();
 
-//                 KisSelectionSP selection = img -> activeLayer() -> selection();
+	kdDebug() << "Selection rect: " 
+		  << r.x() << ", "
+		  << r.y() << ", "
+		  << r.width() << ", "
+		  << r.height() << "\n";
 
-//                 if (selection) {
-// 			// create a floating selection from selection
+	KisFloatingSelectionSP floatingSelection = new KisFloatingSelection(img -> activeDevice(), img, "copy", OPACITY_OPAQUE);
+	floatingSelection -> copySelection(selection);
 
-//                         selection -> clearParentOnMove(false);
-//                         m_doc -> setClipboardSelection(selection);
-//                         imgSelectionChanged(currentImg());
- 
+	floatingSelection -> clearParentOnMove(false);
+	m_doc -> setClipboardFloatingSelection(floatingSelection);
+	
+	imgSelectionChanged(m_parent -> currentImg());
 
 }
 
 
 void KisSelectionManager::paste()
 {
-//      Q_ASSERT(!QApplication::clipboard() -> image().isNull());
-//      activateTool(m_paste);
+// 	Q_ASSERT(!QApplication::clipboard() -> image().isNull());
+// 	activateTool(m_paste);
 }
 
 
@@ -327,9 +332,32 @@ void KisSelectionManager::unSelectAll()
 void KisSelectionManager::clear()
 {
         KisImageSP img = m_parent -> currentImg();
+        if (!img) return;
 
-        if (img) {
-		// XXX: for every selected pixel, make pixel in parent layer transparent.
+
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
+
+	if (!layer -> hasSelection()) return;
+
+	KisSelectionSP selection = layer -> selection();
+	QRect r = selection -> selectedRect();
+
+
+	kdDebug() << "Selection rect: " 
+		  << r.x() << ", "
+		  << r.y() << ", "
+		  << r.width() << ", "
+		  << r.height() << "\n";
+
+	r = r.normalize();
+
+
+	kdDebug() << "Normalized selection rect: " 
+		  << r.x() << ", "
+		  << r.y() << ", "
+		  << r.width() << ", "
+		  << r.height() << "\n";
 
 //                 KisFloatingSelectionSP selection = img -> selection();
 
@@ -356,7 +384,7 @@ void KisSelectionManager::clear()
 //                                 updateCanvas(ur);
 //                         }
 //                 }
-	}
+// 	}
 }
 
 
@@ -417,8 +445,34 @@ void KisSelectionManager::copySelectionToNewLayer()
 	if (!layer) return;
 
 	KisSelectionSP selection = layer -> selection();
-	//XXX: Create new layer, transfer all selected pixels to new layer
-	
+	QRect r = selection -> selectedRect();
+
+	KisLayerSP newLayer = new KisLayer(r.width(), r.height(), layer -> colorStrategy(), img -> nextLayerName());
+
+	KisPainter p(newLayer.data());
+	p.bitBlt(0, 0, COMPOSITE_COPY, layer.data(), r.x(), r.y(), r.width(), r.height());
+	p.end();
+
+	KoColor c1;
+	KoColor c2;
+	QUANTUM opacity1;
+	QUANTUM opacity2;
+
+	int dx = r.x();
+	int dy = r.y();
+
+	for (int x = 0; x < newLayer -> width(); x++) {
+		for (int y = 0; y < newLayer -> height(); y++) {
+			newLayer -> pixel(x, y, &c1, &opacity1);
+			selection -> pixel(dx + x, dy + y, &c2, &opacity2);
+			newLayer -> setPixel(x, y, c1, &opacity1 - &opacity2);
+		}
+	}
+
+	layer -> removeSelection();
+	img -> add(layer, img -> nlayers() + 1);
+	m_parent -> layersUpdated();
+
 // 		img -> removeActiveSelection(); // XXX: commit==false
 	
 //                 if (selection && m_doc -> layerAdd(img, img -> nextLayerName(), selection))

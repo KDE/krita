@@ -98,7 +98,7 @@ public:
         virtual void setVisible(bool v);
 
         /**
-         * Reimplemented by KisSelection; here it does nothing useful, but it
+         * Reimplemented by KisFloatingSelection; here it does nothing useful, but it
          * cannot be abstract, because otherwise this class would be abstract.
          */
         virtual void anchor();
@@ -111,21 +111,21 @@ public:
 	/** 
 	 *   Converts the paint device to a different colorspace
 	 */
-	void convertTo(KisStrategyColorSpaceSP colorStrategy);
+	virtual void convertTo(KisStrategyColorSpaceSP colorStrategy);
 
 
 	/**
 	 * Fill this paint device with the data from img;
 	 */
-	void convertFromImage(const QImage& img);
+	virtual void convertFromImage(const QImage& img);
 
 	/**
 	 * Create an RGBA QImage from a rectangle in the paint device.
 	 */
-	QImage convertToImage(Q_INT32 x = 0, Q_INT32 y = 0, Q_INT32 w = -1, Q_INT32 h = -1);
+	virtual QImage convertToImage(Q_INT32 x = 0, Q_INT32 y = 0, Q_INT32 w = -1, Q_INT32 h = -1);
 
-        QString name() const;
-        void setName(const QString& name);
+        virtual QString name() const;
+        virtual void setName(const QString& name);
 
         /** 
 	 * fill c and opacity with the values found at x and y
@@ -234,29 +234,29 @@ public:
 	KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command) KDE_DEPRECATED;
 	KisIteratorLineQuantum iteratorQuantumSelectionEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend) KDE_DEPRECATED;
 	
-		/** 
-	 * This function return an iterator which point on the first line of the
+	/** 
+	 * This function return an iterator which points to the first pixel of the
 	 * whole PaintDevice
 	 */
 	KisIteratorLinePixel iteratorPixelBegin(KisTileCommand* command);
 	KisIteratorLinePixel iteratorPixelBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart);
 
 	/**
-	 * This function return an iterator which point on the last line of the
+	 * This function return an iterator which points to the last pixel of the
 	 * whole PaintDevice
 	 */
 	KisIteratorLinePixel iteratorPixelEnd(KisTileCommand* command);
 	KisIteratorLinePixel iteratorPixelEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
 
 	/**
-	 * This function return an iterator which point on the first line of the
+	 * This function return an iterator which points to the first pixel of the
 	 * part of PaintDevice which is selected
 	 */
 	KisIteratorLinePixel iteratorPixelSelectionBegin(KisTileCommand* command);
 	KisIteratorLinePixel iteratorPixelSelectionBegin(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 ystart);
 
 	/**
-	 * This function return an iterator which point on the last line of the
+	 * This function return an iterator which points to the last pixel of the
 	 * part of PaintDevice which is selected
 	 */
 	KisIteratorLinePixel iteratorPixelSelectionEnd(KisTileCommand* command);

@@ -94,7 +94,7 @@ void KisColorSpaceAlpha::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opac
 	}
 }
 
-ChannelInfo* KisColorSpaceAlpha::channelsInfo() const
+ChannelInfo* KisColorSpaceAlpha::channels() const
 {
 	return channelInfo;
 }

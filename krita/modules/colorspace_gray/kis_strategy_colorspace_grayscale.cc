@@ -92,7 +92,7 @@ void KisStrategyColorSpaceGrayscale::toKoColor(const QUANTUM *src, KoColor *c, Q
 	*opacity = src[PIXEL_GRAY_ALPHA];
 }
 
-ChannelInfo* KisStrategyColorSpaceGrayscale::channelsInfo() const
+ChannelInfo* KisStrategyColorSpaceGrayscale::channels() const
 {
 	return channelInfo;
 }

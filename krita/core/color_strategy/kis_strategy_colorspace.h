@@ -57,7 +57,7 @@ public:
 
 	// XXX: make this a proper vector. Pointers to arrays are _so_ seventies, and
 	// Stroustrup assures us a vector is as effecient a mem array anyway.
-	virtual ChannelInfo * channelsInfo() const = 0;
+	virtual ChannelInfo * channels() const = 0;
 
 	virtual Q_INT32 depth() const = 0;
 	virtual bool alpha() const = 0;

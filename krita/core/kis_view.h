@@ -131,6 +131,7 @@ public: // KoView implementation
 	virtual void updateCanvas(const QRect& rc);
 	virtual void updateCanvas(const KisRect& rc);
 	
+	void layersUpdated();
 signals:
 	void bgColorChanged(const KoColor& c);
 	void fgColorChanged(const KoColor& c);
@@ -293,7 +294,7 @@ private slots:
 	void layerFront();
 	void layerBack();
 	void layerLevel(int n);
-	void layersUpdated();
+
 	void layersUpdated(KisImageSP img);
 
 	QPoint mapToScreen(const QPoint& pt);

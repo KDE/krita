@@ -48,7 +48,7 @@ KisFilterConfigurationWidget* KisPerChannelFilter::createConfigurationWidget(QWi
 	m_nbchannels = colorStrategy()->depth() - colorStrategy()->alpha();
 	for(Q_INT32 i = 0; i < m_nbchannels; i++)
 	{
-		ChannelInfo* cI = &colorStrategy()->channelsInfo()[i];
+		ChannelInfo* cI = &colorStrategy()->channels()[i];
 		param.push_back( KisIntegerWidgetParam( m_min, m_max, m_initvalue, cI->name().ascii() ) );
 	}
 	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );
@@ -57,7 +57,7 @@ KisFilterConfigurationWidget* KisPerChannelFilter::createConfigurationWidget(QWi
 KisFilterConfiguration* KisPerChannelFilter::configuration(KisFilterConfigurationWidget* nwidget)
 {
 	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*)nwidget;
-	KisPerChannelFilterConfiguration* co = new KisPerChannelFilterConfiguration( m_nbchannels , colorStrategy()->channelsInfo() );
+	KisPerChannelFilterConfiguration* co = new KisPerChannelFilterConfiguration( m_nbchannels , colorStrategy()->channels() );
 	if( widget == 0 )
 	{
 		for(Q_INT32 i = 0; i < m_nbchannels; i++)

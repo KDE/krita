@@ -132,7 +132,7 @@ void KisSelection::setMaskColor(KoColor c)
 
 QRect KisSelection::selectedRect() 
 { 
-	if (m_selectedRect.isNull()) {
+	if (!m_selectedRect.isNull()) {
 		return m_selectedRect;
 	}
 	else {

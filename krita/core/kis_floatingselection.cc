@@ -30,6 +30,8 @@
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kispixeldata.h"
+#include "kis_iterators_quantum.h"
+#include "kis_iterators_pixel.h"
 
 namespace {
 	class KisResetFirstMoveCmd : public KNamedCommand {
@@ -61,7 +63,9 @@ namespace {
 	};
 }
 
-KisFloatingSelection::KisFloatingSelection(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name) : super(width, height, colorStrategy, name)
+
+KisFloatingSelection::KisFloatingSelection(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name)
+	: super(width, height, colorStrategy, name)
 {
 	m_clearOnMove = true;
 	m_endMacroOnAnchor = false;
@@ -69,12 +73,14 @@ KisFloatingSelection::KisFloatingSelection(Q_INT32 width, Q_INT32 height, KisStr
 	setName(name);
 }
 
-KisFloatingSelection::KisFloatingSelection(KisPaintDeviceSP parent, KisImage *img, const QString& name, QUANTUM opacity) : super(img, 0, 0, name, opacity)
+KisFloatingSelection::KisFloatingSelection(KisPaintDeviceSP parent, KisImage *img, const QString& name, QUANTUM opacity) 
+	: super(img, 0, 0, name, opacity)
 {
 	Q_ASSERT(parent);
 	Q_ASSERT(parent -> visible());
 	Q_ASSERT(img);
 	m_parent = parent;
+	m_selectionMask = 0;
 	m_img = img;
 	m_name = name;
 	m_firstMove = true;
@@ -137,6 +143,62 @@ void KisFloatingSelection::commit()
 	}
 }
 
+void KisFloatingSelection::copySelection(KisSelectionSP selection) {
+	m_selectionMask = selection;
+	if (m_img) {
+		KisPainter gc;
+
+		// TODO if the parent is linked... copy from all linked layers?!?
+		QRect r = selection -> selectedRect();
+
+		configure(m_img, r.width(), r.height(), m_img -> colorStrategy(), m_name, COMPOSITE_OVER);
+
+
+		gc.begin(this);
+		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, r.x() - m_parent -> x(), r.y() - m_parent -> y(), r.width(), r.height());
+
+		// XXX: switch to proper iterators
+		KisTileCommand* ktc = new KisTileCommand("apply mask", (KisPaintDeviceSP) this ); // Create a command
+		
+		KoColor c;
+		QUANTUM opacity;
+		Q_INT32 x = 0;
+		Q_INT32 y = 0;
+
+		KisIteratorLineQuantum lineIt = selection -> iteratorQuantumSelectionBegin(ktc, r.x(), r.x() + r.width() - 1, r.y() );
+		KisIteratorLineQuantum lastLine = selection -> iteratorQuantumSelectionEnd(ktc, r.x(), r.x() + r.width() - 1, r.y() + r.height() - 1);
+		while( lineIt <= lastLine )
+		{
+			KisIteratorQuantum quantumIt = *lineIt;
+			KisIteratorQuantum lastQuantum = lineIt.end();
+			while( quantumIt <= lastQuantum )
+			{
+				// XXX: roundabout way of setting opacity
+				pixel(x, y, &c, &opacity);
+				if ((opacity - quantumIt) < OPACITY_TRANSPARENT) {
+					setPixel(x, y, c, OPACITY_TRANSPARENT);
+				}
+				else {
+					setPixel(x, y, c, opacity - quantumIt);
+				}
+				++quantumIt; // the alphamask has just one byte per pixel.
+				++x;
+			}
+			++lineIt;
+			x = 0;
+			++y;
+		}
+		super::move(r.x(), r.y());
+	}
+	kdDebug() << "Selection copied: "
+		  << r.x() << ", "
+		  << r.y() << ", "
+		  << r.width() << ", "
+		  << r.height() << "\n";
+
+
+}
+
 bool KisFloatingSelection::shouldDrawBorder() const
 {
 	return true;
@@ -160,24 +222,6 @@ void KisFloatingSelection::move(Q_INT32 x, Q_INT32 y)
 	}
 
 	super::move(x, y);
-}
-
-void KisFloatingSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_INT32 height)
-{
-	if (m_img) {
-		KisPainter gc;
-
-		// TODO if the parent is linked... copy from all linked layers?!?
-		configure(m_img, width, height, m_img -> colorStrategy(), m_name, COMPOSITE_OVER);
-		gc.begin(this);
-		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, parentX - m_parent -> x(), parentY - m_parent -> y(), width, height);
-		super::move(parentX, parentY);
-	}
-}
-
-void KisFloatingSelection::setBounds(const QRect& rc)
-{
-	setBounds(rc.x(), rc.y(), rc.width(), rc.height());
 }
 
 void KisFloatingSelection::parentVisibilityChanged(KisPaintDeviceSP parent)
@@ -211,6 +255,41 @@ void KisFloatingSelection::clearParentOnMove(bool f)
 {
 	m_clearOnMove = f;
 	m_firstMove = true;
+}
+
+QImage KisFloatingSelection::toImage()
+{
+	KisTileMgrSP tm = data();
+	KisPixelDataSP raw;
+	Q_INT32 stride;
+	QUANTUM *src;
+
+	if (tm) {
+		if (tm -> width() == 0 || tm -> height() == 0)
+			return QImage();
+
+		raw = tm -> pixelData(0, 0, tm -> width() - 1, tm -> height() - 1, TILEMODE_READ);
+
+		if (raw == 0)
+			return QImage();
+
+		if (m_clipImg.width() != tm -> width() || m_clipImg.height() != tm -> height())
+			m_clipImg.create(tm -> width(), tm -> height(), 32);
+
+		stride = tm -> depth();
+		src = raw -> data;
+
+		for (Q_INT32 y = 0; y < tm -> height(); y++) {
+			for (Q_INT32 x = 0; x < tm -> width(); x++) {
+				// XXX Different img formats
+				// XXX Alpha channel
+				m_clipImg.setPixel(x, y, qRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE])));
+				src += stride;
+			}
+		}
+	}
+
+	return m_clipImg;
 }
 
 #include "kis_floatingselection.moc"

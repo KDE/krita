@@ -1,3 +1,4 @@
+
 /*
  *  kis_tool_select_rectangular.cc -- part of Krita
  *
@@ -183,22 +184,29 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 				m_endPos.setX(img -> width());
 
 			if (img) {
-				KisPaintDeviceSP parent;
-				KisFloatingSelectionSP selection;
+				KisLayerSP layer = img -> activeLayer();
+				KisSelectionSP selection = layer -> selection();
+				QRect rc(m_startPos, m_endPos);
+				rc = rc.normalize();
+				selection -> select(rc);
+				img -> notify(rc);
 
-                                QRect rc(m_startPos, m_endPos);
+// 				KisPaintDeviceSP parent;
+// 				KisFloatingSelectionSP selection;
 
-				parent = img -> activeDevice();
+//                                 QRect rc(m_startPos, m_endPos);
 
-				if (parent) {
-					rc = rc.normalize();
-					selection = new KisFloatingSelection(parent, img, "rectangular selection tool frame", OPACITY_OPAQUE);
-					selection -> setBounds(rc);
-					img -> setFloatingSelection(selection);
+// 				parent = img -> activeDevice();
 
-					if (img -> undoAdapter())
-						img -> undoAdapter() -> addCommand(new RectSelectCmd(selection));
-				}
+// 				if (parent) {
+// 					rc = rc.normalize();
+// 					selection = new KisFloatingSelection(parent, img, "rectangular selection tool frame", OPACITY_OPAQUE);
+// 					selection -> setBounds(rc);
+// 					img -> setFloatingSelection(selection);
+
+// 					if (img -> undoAdapter())
+// 						img -> undoAdapter() -> addCommand(new RectSelectCmd(selection));
+// 				}
 			}
 		}
 

@@ -23,6 +23,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
+#include "kis_selection.h"
 
 /**
  * The floating selection (formerly just 'selection') is a special layer that contains
@@ -33,7 +34,6 @@ class KisFloatingSelection : public KisLayer {
 	typedef KisLayer super;
 
 public:
-// 	KisFloatingSelection(KisLayerSP src, const QString & name);
 	KisFloatingSelection(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name);
 	KisFloatingSelection(KisPaintDeviceSP parent, KisImage *img, const QString& name, QUANTUM opacity);
 	virtual ~KisFloatingSelection();
@@ -47,17 +47,21 @@ public:
 public:
 	void commit();
 
-	void setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_INT32 height);
-	void setBounds(const QRect& rc);
+	void copySelection(KisSelectionSP selectionMask);
+
 	KisPaintDeviceSP parent() const;
 	void setParent(KisPaintDeviceSP parent);
 	void clearParentOnMove(bool f);
+
+	QImage toImage();
 
 private slots:
 	void parentVisibilityChanged(KisPaintDeviceSP parent);
 
 private:
+
 	KisPaintDeviceSP m_parent;
+	KisSelectionSP m_selectionMask;
 	KisImage *m_img;
 	QImage m_clipImg;
 	QString m_name;

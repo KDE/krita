@@ -28,7 +28,6 @@
 
 class QPoint;
 struct KisPixelData;
-typedef KSharedPtr<KisPixelData> KisPixelDataSP;
 class KisTileMediator;
 
 #define TILEMODE_NONE 0

@@ -55,6 +55,8 @@ public:
 	virtual void invalidate();
 	virtual QPixmap pixmap(Q_INT32);
 	virtual QPixmap recreatePixmap(Q_INT32);
+	virtual bool write(KoStore *store);
+	virtual bool read(KoStore *store);
 
 public:
 	virtual void configure(KisImageSP image, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
@@ -111,6 +113,7 @@ public:
 signals:
 	void visibilityChanged(KisPaintDeviceSP device);
 	void positionChanged(KisPaintDeviceSP device);
+	void ioProgress(Q_INT8 percentage);
 
 protected:
 	void width(Q_INT32 w);

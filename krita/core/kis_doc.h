@@ -49,16 +49,12 @@ public:
 	virtual DCOPObject* dcopObject();
 	virtual bool initDoc();
 	virtual bool isEmpty() const;
-	virtual bool loadNativeFormat(const QString& file);
 	virtual bool loadXML(QIODevice *, const QDomDocument& doc);
 	virtual QCString mimeType() const;
 	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);
 	virtual QDomDocument saveXML();
 
 public:
-	KoColor foreground() const;
-	KoColor background() const;
-
 	KisLayerSP layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM devOpacity);
 	KisLayerSP layerAdd(KisImageSP img, const QString& name, KisSelectionSP selection);
 	KisLayerSP layerAdd(KisImageSP img, KisLayerSP layer, Q_INT32 position);
@@ -104,19 +100,9 @@ public:
 public slots:
 	void slotImageUpdated();
 	void slotImageUpdated(const QRect& rect);
-
 	bool slotNewImage();
-
 	void slotDocumentRestored();
 	void slotCommandExecuted();
-
-private slots:
-	// Slots for KisImage
-	void slotActiveLayerChanged(KisImageSP img);
-	void slotAlphaChanged(KisImageSP img);
-	void slotVisibilityChanged(KisImageSP img, CHANNELTYPE ctype);
-	void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
-	void clipboardDataChanged();
 
 signals:
 	void docUpdated();
@@ -124,21 +110,28 @@ signals:
 	void imageListUpdated();
 	void layersUpdated(KisImageSP img);
 	void projectionUpdated(KisImageSP img);
+	void ioProgress(Q_INT8 percentage);
+	void ioSteps(Q_INT32 steps);
+	void ioCompletedStep();
+	void ioDone();
 
 protected:
 	// Overide KoDocument
 	virtual KoView* createViewInstance(QWidget *parent, const char *name);
 
+private slots:
+	void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
+	void clipboardDataChanged();
+	void slotIOProgress(Q_INT8 percentage);
+
 private:
-	QDomElement saveImages(QDomDocument& doc);
-	QDomElement saveLayers(QDomDocument& doc, KisImageSP img);
-	QDomElement saveChannels(QDomDocument& doc, KisLayer* lay);
-	QDomElement saveToolSettings(QDomDocument& doc) const;
-	bool loadImages(QDomElement& elem);
-	bool loadLayers(QDomElement& elem, KisImageSP img);
-	void loadChannels(QDomElement& elem, KisLayerSP lay);
-	void loadToolSettings(QDomElement& elem);
-	bool loadImgSettings(QDomElement& elem);
+	QDomElement saveImage(QDomDocument& doc, KisImageSP img);
+	KisImageSP loadImage(const QDomElement& elem);
+	QDomElement saveLayer(QDomDocument& doc, KisLayerSP layer);
+	KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
+	QDomElement saveChannel(QDomDocument& doc, KisChannelSP channel);
+	KisChannelSP loadChannel(const QDomElement& elem, KisImageSP img);
+	bool init();
 
 private:
 	bool m_undo;
@@ -150,6 +143,7 @@ private:
 	DCOPObject *m_dcop;
 	KisNameServer *m_nserver;
 	KMacroCommand *m_currentMacro;
+	Q_INT32 m_conversionDepth;
 };
 
 #endif // KIS_DOC_H_

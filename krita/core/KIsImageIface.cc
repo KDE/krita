@@ -44,11 +44,6 @@ int KIsImageIface::width() const
     return m_img->width();
 }
 
-QSize KIsImageIface::size() const
-{
-    return m_img->size();
-}
-
 bool KIsImageIface::alpha() const
 {
     return m_img->alpha();
@@ -63,25 +58,4 @@ void KIsImageIface::setName(const QString& name)
 {
     m_img->setName( name );
 }
-
-QString KIsImageIface::author() const
-{
-    return m_img->author();
-}
-
-void KIsImageIface::setAuthor(const QString& author)
-{
-    m_img->setAuthor( author );
-}
-
-QString KIsImageIface::email() const
-{
-    return m_img->email();
-}
-
-void KIsImageIface::setEmail(const QString& email)
-{
-    m_img->setEmail( email );
-}
-
 

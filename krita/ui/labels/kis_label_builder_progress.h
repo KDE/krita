@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#if !defined KIS_LABEL_BUILDER_PROCESS_H_
-#define KIS_LABEL_BUILDER_PROCESS_H_
+#if !defined KIS_LABEL_BUILDER_PROGRESS_H_
+#define KIS_LABEL_BUILDER_PROGRESS_H_
 
 #include <qlabel.h>
 #include "builder/kis_builder_types.h"
@@ -47,5 +47,5 @@ private:
 	KProgress *m_bar;
 };
 
-#endif // KIS_LABEL_BUILDER_PROCESS_H_
+#endif // KIS_LABEL_BUILDER_PROGRESS_H_
 

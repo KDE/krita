@@ -23,7 +23,6 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 #include <kpixmapio.h>
-#include <ksharedptr.h>
 #include <kurl.h>
 #include <koColor.h>
 #include "kis_global.h"
@@ -42,7 +41,7 @@ class KisImage : public QObject, public KisRenderInterface {
 	typedef vQPixmap::const_iterator vQPixmap_cit;
 
 public:
-	KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name);
+	KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	KisImage(const KisImage& rhs);
 	virtual ~KisImage();
 
@@ -162,7 +161,7 @@ signals:
 private:
 	KisImage& operator=(const KisImage& rhs);
 	void expand(KisPaintDeviceSP dev);
-	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name);
+	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
 	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
 	void renderProjection(QPixmap& dst, KisTileSP src);
 
@@ -177,7 +176,6 @@ private:
 	Q_UINT32 m_depth;
 	Q_INT32 m_ntileCols;
 	Q_INT32 m_ntileRows;
-	QUANTUM m_opacity;
 	double m_xres;
 	double m_yres;
 	KoUnit::Unit m_unit;

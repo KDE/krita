@@ -19,6 +19,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <koStore.h>
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_image.h"
@@ -672,6 +673,55 @@ void KisPaintDevice::offsetBy(Q_INT32 x, Q_INT32 y)
 	tm -> releasePixelData(dst);
 	m_x -= x;
 	m_y -= y;
+}
+
+bool KisPaintDevice::write(KoStore *store)
+{
+	KisTileMgrSP tm = data();
+	KisPixelDataSP pd;
+	Q_INT32 nline;
+
+	Q_ASSERT(store);
+	Q_ASSERT(tm);
+	nline = width() * sizeof(QUANTUM) * m_depth;
+
+	for (Q_INT32 y = 0; y < height(); y++) {
+		pd = tm -> pixelData(-m_x, y - m_y, width() - m_x - 1, y - m_y, TILEMODE_READ);
+		Q_ASSERT(pd);
+		Q_ASSERT(pd -> data);
+
+		if (store -> write(reinterpret_cast<char*>(pd -> data), nline) != nline)
+			return false;
+
+		emit ioProgress(y * 100 / height());
+	}
+
+	return true;
+}
+
+bool KisPaintDevice::read(KoStore *store)
+{
+	KisTileMgrSP tm = data();
+	KisPixelDataSP pd;
+	Q_INT32 nline;
+
+	Q_ASSERT(store);
+	Q_ASSERT(tm);
+	nline = width() * sizeof(QUANTUM) * m_depth;
+
+	for (Q_INT32 y = 0; y < height(); y++) {
+		pd = tm -> pixelData(-m_x, y - m_y, width() - m_x - 1, y - m_y, TILEMODE_WRITE);
+		Q_ASSERT(pd);
+		Q_ASSERT(pd -> data);
+
+		if (store -> read(reinterpret_cast<char*>(pd -> data), nline) != nline)
+			return false;
+
+		tm -> releasePixelData(pd);
+		emit ioProgress(y * 100 / height());
+	}
+
+	return true;
 }
 
 #include "kis_paint_device.moc"

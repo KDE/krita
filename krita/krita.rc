@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="5">
 
 <MenuBar>
- <Menu name="Edit"><text>Edit</text>
+ <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -26,7 +26,7 @@
   <Action name="pattern_from_selection"/>
  </Menu>
 
- <Menu name="View"><text>View</text>
+ <Menu name="View"><text>&amp;View</text>
   <Action name="view_newview"/>
   <ActionList name="view_closeallviews"/>
   <Separator/>
@@ -37,7 +37,7 @@
   <Action name="refresh_canvas"/>
  </Menu>
 
-<Menu name="Image"><text>Image</text>
+<Menu name="Image"><text>&amp;Image</text>
   <Action name="import_image"/>
   <Action name="export_image"/>
   <Separator/>
@@ -52,7 +52,7 @@
   <Action name="merge_linked_layers"/>
 </Menu>
 
-<Menu name="Layer"><text>Layer</text>
+<Menu name="Layer"><text>&amp;Layer</text>
   <Action name="insert_layer"/>
   <Action name="remove_layer"/>
   <Action name="duplicate_layer"/>  
@@ -82,10 +82,10 @@
   <Action name="layer_properties"/>  
 </Menu>
 
-<Menu name="Channel"><Text>Channel</Text>
+<Menu name="Channel"><Text>Cha&amp;nnel</Text>
 </Menu>
 
-<Menu name="Tools"><Text>Tools</Text>
+<Menu name="Tools"><Text>&amp;Tools</Text>
   <Menu name="Transform"><Text>Transform</Text>
     <Action name="tool_move"/>
     <Action name="tool_zoom"/>
@@ -115,20 +115,20 @@
   <Action name="tool_gradient"/>  
 </Menu>
 
-<Menu name="Color"><text>Color</text>
+<Menu name="Color"><text>C&amp;olor</text>
   <Action name="select_fgColor"/>
   <Action name="select_bgColor"/>
   <Separator/>  
   <Action name="reverse_fg_bg"/>
 </Menu>
 
-<Menu name="Brush"><text>Brush</text>
+<Menu name="Brush"><text>&amp;Brush</text>
   <Action name="new_brush"/>
   <Action name="edit_brush_as_image"/>
   <Action name="brush_from_selection"/>
 </Menu>
 
-<Menu name="Pattern"><text>Pattern</text>
+<Menu name="Pattern"><text>&amp;Pattern</text>
   <Action name="new_pattern"/>
   <Action name="edit_pattern"/>
   <Separator/>
@@ -136,7 +136,7 @@
   <Action name="pattern_paint"/>
 </Menu>
 
-<Menu name="Effects"><text>Effects</text>
+<Menu name="Effects"><text>Effe&amp;cts</text>
   <Action name="use_selection"/>
   <Action name="use_entire_image"/>
 </Menu>

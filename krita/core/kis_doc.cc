@@ -31,6 +31,7 @@
 
 // KDE
 #include <dcopobject.h>
+#include <kapplication.h>
 #include <kcommand.h>
 #include <kdebug.h>
 #include <kimageio.h>
@@ -38,7 +39,6 @@
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <klocale.h>
-#include <ksharedptr.h>
 
 // KOffice
 #include <koFilterManager.h>
@@ -66,7 +66,7 @@
 #include "kis_view.h"
 #include "kistilemgr.h"
 
-static const char *CURRENT_DTD_VERSION = "1.2";
+static const char *CURRENT_DTD_VERSION = "1.3";
 
 namespace {
 	class KisCommandImageAdd : public KisCommand {
@@ -328,35 +328,24 @@ DCOPObject *KisDoc::dcopObject()
 	return 0;
 }
 
-QDomDocument KisDoc::saveXML()
-{
-	// FIXME: implement saving of non-RGB modes.
-        // This creates the DOCTYPE stuff, as well as the document-element named <image>.
-	QDomDocument doc = createDomDocument("image", CURRENT_DTD_VERSION);
-
-	doc.documentElement().appendChild(saveImages(doc));
-	setModified(false);
-	return doc;
-}
-
 bool KisDoc::initDoc()
 {
 	bool ok = false;
 	QString templ;
 	KoTemplateChooseDia::ReturnType ret;
 
-	m_cmdHistory = new KCommandHistory(actionCollection(), false);
-	connect(m_cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
-	connect(m_cmdHistory, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
-	m_undo = true;
-	m_nserver = new KisNameServer(i18n("Image %1"), 0);
-	ret = KoTemplateChooseDia::choose(KisFactory::global(), templ, "application/x-krita", "*.kra",
+	ok = init();
+
+	if (!ok)
+		return false;
+	
+	ret = KoTemplateChooseDia::choose(KisFactory::global(), templ, "application/x-kra", "*.kra",
 			i18n("Krita"), KoTemplateChooseDia::NoTemplates, "krita_template");
 
 	if (ret == KoTemplateChooseDia::Template) {
 		KisConfig cfg;
 		QString name = nextImageName();
-		KisImageSP img = new KisImage(this, cfg.defImgWidth(), cfg.defImgHeight(), OPACITY_OPAQUE, IMAGE_TYPE_RGBA, name);
+		KisImageSP img = new KisImage(this, cfg.defImgWidth(), cfg.defImgHeight(), IMAGE_TYPE_RGBA, name);
 		KisLayerSP layer = new KisLayer(img, cfg.defLayerWidth(), cfg.defLayerHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 
 		layer -> visible(true);
@@ -372,423 +361,468 @@ bool KisDoc::initDoc()
 			emit imageListUpdated();
 	}
 
+	setModified(false);
 	return ok;
 }
 
-QDomElement KisDoc::saveImages(QDomDocument& doc)
+bool KisDoc::init()
 {
-	QDomElement images = doc.createElement("images");
-#if 0
-	QStringList imageNames = images();
-	QString tmp_currentImageName = currentImgName();
-
-	images.setAttribute("editor", "Krita");
-	images.setAttribute("mime", "application/x-krita");
-	images.setAttribute("version", "1.3");
-
-	for (QStringList::Iterator it = imageNames.begin(); it != imageNames.end(); it++) {
-		setImage(*it);
-		KisImageSP img = m_currentImg;
-
-		// image element
-		QDomElement image = doc.createElement("image");
-
-		image.setAttribute("name", img -> name());
-		image.setAttribute("author", img -> author());
-		image.setAttribute("email", img -> email());
-		image.setAttribute("width", img -> width());
-		image.setAttribute("height", img -> height());
-		image.setAttribute("depth", img -> depth());
-		image.setAttribute("type", img -> imgType());
-		images.appendChild(image);
-		image.appendChild(saveLayers(doc, img));
+	if (m_cmdHistory) {
+		delete m_cmdHistory;
+		m_cmdHistory = 0;
 	}
 
-	setImage(tmp_currentImageName);
-	images.appendChild(saveToolSettings(doc));
-#endif
-	return images;
-}
-
-// save layers
-QDomElement KisDoc::saveLayers(QDomDocument& doc, KisImageSP)
-{
-	// layers element - variable
-	QDomElement layersElement = doc.createElement("layers");
-
-#if 0
-	// layer elements
-	kdDebug(0) << "layer elements" << endl;
-	KisLayerSPLst layers = img -> layerList();
-
-	for (KisLayerSPLstIterator it = layers.begin(); it != layers.end(); it++) {
-		KisLayerSP lay = *it;
-		QDomElement layer = doc.createElement( "layer" );
-
-		layer.setAttribute("name", lay -> name());
-		layer.setAttribute("x", lay -> imageExtents().x());
-		layer.setAttribute("y", lay -> imageExtents().y());
-		layer.setAttribute("width", lay -> imageExtents().width());
-		layer.setAttribute("height", lay -> imageExtents().height());
-		layer.setAttribute("opacity", static_cast<int>(lay -> opacity()));
-
-		kdDebug(0) << "name: " <<  lay -> name() << endl;
-		kdDebug(0) << "x: " << lay -> imageExtents().x() << endl;
-		kdDebug(0) << "y: " << lay -> imageExtents().y() << endl;
-		kdDebug(0) << "width: " << lay -> imageExtents().width() << endl;
-		kdDebug(0) << "height: " << lay -> imageExtents().height() << endl;
-		kdDebug(0) << "opacity: " <<  static_cast<int>(lay -> opacity()) << endl;
-
-		layer.setAttribute("visible", lay -> visible());
-		layer.setAttribute("linked", lay -> linked());
-		layer.setAttribute("bitDepth", static_cast<int>(lay -> depth()) );
-		layer.setAttribute("cMode", static_cast<int>(lay -> colorMode()) );
-
-		kdDebug(0) << "bitDepth: " <<  static_cast<int>(lay -> depth())  << endl;
-		kdDebug(0) << "colorMode: " <<  static_cast<int>(lay -> colorMode())  << endl;
-
-		layersElement.appendChild(layer);
-		layer.appendChild(saveChannels(doc, lay));
-	}
-#endif
-
-	return layersElement;
-}
-
-// save channels
-QDomElement KisDoc::saveChannels( QDomDocument &doc, KisLayer * /*lay*/ )
-{
-    // channels element - variable, normally maximum of 4 channels
-    QDomElement channels = doc.createElement( "channels" );
-
-    // XXX
-#if 0
-    kdDebug(0) << "channel elements" << endl;
-
-    // channel elements
-    for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel() )
-    {
-        QDomElement channel = doc.createElement( "channel" );
-
-        channel.setAttribute( "cId", static_cast<int>(ch->channelId()) );
-        channel.setAttribute( "bitDepth", static_cast<int>(ch->bitDepth()) );
-
-        kdDebug(0) << "cId: " <<  static_cast<int>(ch->channelId())  << endl;
-        kdDebug(0) << "bitDepth: " <<  static_cast<int>(ch->bitDepth())  << endl;
-
-        channels.appendChild( channel );
-    } // end of channels loop
-#endif
-
-    return channels;
-}
-
-QDomElement KisDoc::saveToolSettings(QDomDocument& doc) const
-{
-	QDomElement tool = doc.createElement("tool");
-
-	return tool;
-}
-
-#if 0
-// save Gradients settings
-QDomElement KisDoc::saveGradientsSettings( QDomDocument &doc )
-{
-    // gradients element
-    QDomElement gradients = doc.createElement( "gradients" );
-
-    gradients.setAttribute( "opacity", gradientsSettings.opacity );
-    gradients.setAttribute( "offset", gradientsSettings.offset );
-    gradients.setAttribute( "mode", gradientsSettings.mode );
-    gradients.setAttribute( "blend", gradientsSettings.blend );
-    gradients.setAttribute( "gradient", gradientsSettings.gradient );
-    gradients.setAttribute( "repeat", gradientsSettings.repeat );
-
-    return gradients;
-}
-
-#endif
-
-/*
-    Save extra, document-specific data outside xml format as defined by
-    DTD for this document type.  It is appended to the saved
-    xml document in gzipped format using the store methods of koffice
-    common code koffice/lib/store/ as an internal file, not a real,
-    separate file in the filesystem.
-
-    In this case it's the binary image data
-    Krayon can only handle rgb and rgba formats for now,
-    by channel for each layer of the image saved in binary format
-
-    ko virtual method implemented
-*/
-
-bool KisDoc::completeSaving(KoStore * /*store*/)
-{
-#if 0
-	if (!m_currentImg)
-		return false;
-
-	QStringList imageNames = images();
-	QString tmp_currentImageName = currentImgName();
-	uint imageNumbers = 1;
-
-	for (QStringList::Iterator it = imageNames.begin(); it != imageNames.end(); it++) {
-		setImage(*it);
-
-		KisLayerSPLst layers = m_currentImg -> layerList();
-		uint layerNumbers = 0;
-
-		for (KisLayerSPLstIterator it = layers.begin(); it != layers.end(); it++) {
-			KisLayerSP lay = *it;
-			QString image = QString("image%1").arg(imageNumbers);
-			QString layerName;
-
-			if (layerNumbers == 0)
-				layerName = QString::fromLatin1("background");
-			else
-				layerName = QString("layer%1").arg(layerNumbers);
-
-			QString url = QString("images/%1/layers/%2.bin").arg(image).arg(layerName);
-
-			if (store -> open(url)) {
-				lay -> writeToStore(store);
-				store -> close();
-			}
-
-			layerNumbers++;
-		}
-
-		imageNumbers++;
+	if (m_nserver) {
+		delete m_nserver;
+		m_nserver = 0;
 	}
 
-	setImage(tmp_currentImageName);
+	m_cmdHistory = new KCommandHistory(actionCollection(), false);
+	connect(m_cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
+	connect(m_cmdHistory, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
+	m_undo = true;
+	m_nserver = new KisNameServer(i18n("Image %1"), 0);
 	return true;
-#endif
-	return false;
 }
 
-/*
-    loadXML - reimplements ko method
-*/
+QDomDocument KisDoc::saveXML()
+{
+	QDomDocument doc = createDomDocument("DOC", CURRENT_DTD_VERSION);
+	QDomElement root = doc.documentElement();
+
+	root.setAttribute("editor", "Krita");
+	root.setAttribute("depth", sizeof(QUANTUM));
+	root.setAttribute("syntaxVersion", "1");
+
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++)
+		root.appendChild(saveImage(doc, *it));
+
+	return doc;
+}
 
 bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
 {
-	kdDebug(0) << "KisDoc::loadXML() entering" << endl;
+	QDomElement root;
+	QString attr;
+	QDomNode node;
+	KisImageSP img;
 
-	if (doc.doctype().name() != "image") {
-		kdDebug(0) << "KisDoc::loadXML() no doctype name error" << endl;
-		return false;
-	}
-
-	QDomElement images = doc.documentElement();
-
-	if (images.attribute("mime") != "application/x-krita" && images.attribute("mime") != "application/vnd.kde.krita") {
-		kdDebug(0) << "KisDoc::loadXML() no mime name error" << endl;
-		return false;
-	}
-
-	// load images
-	if (!loadImages(images))
+	if (!init())
 		return false;
 
-	kdDebug(0) << "KisDoc::loadXML() leaving succesfully" << endl;
-	return true;
-}
-
-// load images
-bool KisDoc::loadImages(QDomElement& element)
-{
-	for (QDomElement elem = element.firstChild().toElement(); !elem.isNull(); elem = elem.nextSibling().toElement()) {
-		if (elem.tagName() == "image")
-			return loadImgSettings(elem);
-		else if (elem.tagName() == "tool")
-			loadToolSettings(elem);
-	}
-
-	return true;
-}
-
-// load layers
-bool KisDoc::loadLayers(QDomElement& /*element*/, KisImageSP /*img*/)
-{
-	return false;
-#if 0
-	QDomElement layers = element.namedItem("layers").toElement();
-
-	if (layers.isNull()) {
-		kdDebug(0) << "KisDoc::loadXML(): layers.isNull() error!" << endl;
-		return false;
-	}
-
-	for (QDomNode l = layers.firstChild(); !l.isNull(); l = l.nextSibling()) {
-		QDomElement layer = l.toElement();
-
-		if (layer.tagName() == "layer") {
-			QString layerName = layer.attribute("name");
-			int w = layer.attribute("width").toInt();
-			int h = layer.attribute("height").toInt();
-			int x = layer.attribute("x").toInt();
-			int y = layer.attribute("y").toInt();
-
-			img -> addLayer(QRect(x, y, w, h), KoColor::white(), true, layerName);
-			img -> markDirty(QRect(x, y, w, h));
-
-			KisLayerSP lay = img -> getCurrentLayer();
-
-			Q_ASSERT(lay);
-
-			lay -> setOpacity(layer.attribute("opacity").toInt());
-			lay -> setVisible(layer.attribute("visible") == "1");
-			lay -> setLinked(layer.attribute("linked") == "1");
-
-			// load channels
-			loadChannels(layer, lay);
-		}
-	}
-
-	slotLayersUpdated();
-	return true;
-#endif
-}
-
-// load channels
-void KisDoc::loadChannels(QDomElement& /*element*/, KisLayerSP /*lay*/)
-{
-#if 0
-	QDomElement channels = element.namedItem("channels").toElement();
-
-	if (channels.isNull())
-		return;
-
-	// channel elements
-	for (QDomNode c = channels.firstChild(); !c.isNull(); c = c.nextSibling()) {
-		QDomElement channel = c.toElement();
-
-		if (channel.tagName() == "channel") {
-			kdDebug(0) << "channel" << endl;
-			// TODO
-		}
-	}
-#endif
-}
-
-bool KisDoc::loadImgSettings(QDomElement& /*elem*/)
-{
-#if 0
-	QString name = elem.attribute("name");
-	int w = elem.attribute("width").toInt();
-	int h = elem.attribute("height").toInt();
-	int cm = elem.attribute("cMode").toInt();
-	int bd = elem.attribute("bitDepth").toInt();
-	cMode colorMode = static_cast<cMode>(cm);
-
-	kdDebug(0) << "name: " << name << endl;
-	kdDebug(0) << "width: " << w << endl;
-	kdDebug(0) << "height: " << w << endl;
-	kdDebug(0) << "cMode: " << cm << endl;
-	kdDebug(0) << "bitDepth: " << bd << endl;
-
-	KisImageSP img = newImage(name, w, h, colorMode, bd);
-
-	if (!img)
+	if (doc.doctype().name() != "DOC")
 		return false;
 
-	img -> setAuthor(elem.attribute("author"));
-	img -> setEmail(elem.attribute("email" ));
+	root = doc.documentElement();
+	attr = root.attribute("syntaxVersion");
 
-	if (!loadLayers(elem, img))
+	if (attr.toInt() > 1)
 		return false;
 
-	return true;
-#endif
-	return false;
-}
+	if ((attr = root.attribute("depth")) == QString::null)
+		return false;
 
-// load tool settings
-void KisDoc::loadToolSettings(QDomElement& /*elem*/)
-{
-#if 0
-	KisTool *p;
+	m_conversionDepth = attr.toInt();
 
-	kdDebug() << "KisDoc::loadToolSettings\n";
-	Q_ASSERT(m_tools.size());
+	for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
+		if (node.isElement()) { 
+			if (node.nodeName() == "IMAGE") {
+				QDomElement elem = node.toElement();
 
-	for (QDomElement tool = elem.firstChild().toElement(); !tool.isNull(); tool = tool.nextSibling().toElement()) {
-		for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
-			p = m_tools[i];
-			Q_ASSERT(p);
-			kdDebug() << "TAGNAME = " << tool.tagName() << endl;
+				if (!(img = loadImage(elem)))
+					return false;
 
-			if (p && p -> loadSettings(tool)) {
-				kdDebug() << "Loaded Settings\n\n";
-				break;
+				m_images.push_back(img);
+			} else {
+				kdDebug(DBG_AREA_CORE) << "KisDoc::loadXML nodeName == " << node.nodeName() << endl;
+				return false;
 			}
 		}
 	}
-#endif
+
+	return true;
 }
 
-#if 0
-// load Gradients settings
-void KisDoc::loadGradientsSettings( QDomElement &elem )
+QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 {
-    gradientsSettings.opacity = elem.attribute( "opacity" ).toInt();
-    gradientsSettings.offset = elem.attribute( "offset" ).toInt();
-    gradientsSettings.mode = elem.attribute( "mode" );
-    gradientsSettings.blend = elem.attribute( "blend" );
-    gradientsSettings.gradient = elem.attribute( "gradient" );
-    gradientsSettings.repeat = elem.attribute( "repeat" );
+	QDomElement image = doc.createElement("IMAGE");
+	vKisLayerSP layers;
+	vKisChannelSP channels;
+
+	Q_ASSERT(img);
+	image.setAttribute("name", img -> name());
+	image.setAttribute("mime", "application/x-kra");
+	image.setAttribute("width", img -> width());
+	image.setAttribute("height", img -> height());
+	image.setAttribute("colorspace", img -> nativeImgType());
+	layers = img -> layers();
+
+	if (layers.size() > 0) {
+		QDomElement elem = doc.createElement("LAYERS");
+
+		image.appendChild(elem);
+
+		for (vKisLayerSP_it it = layers.begin(); it != layers.end(); it++)
+			elem.appendChild(saveLayer(doc, *it));
+	}
+
+	channels = img -> channels();
+
+	if (channels.size() > 0) {
+		QDomElement elem = doc.createElement("CHANNELS");
+
+		image.appendChild(elem);
+
+		for (vKisChannelSP_it it = channels.begin(); it != channels.end(); it++)
+			elem.appendChild(saveChannel(doc, *it));
+	}
+
+	// TODO Image colormap if any
+	return image;
 }
-#endif
 
-bool KisDoc::completeLoading(KoStore * /*store*/)
+KisImageSP KisDoc::loadImage(const QDomElement& element)
 {
-#if 0
-	QStringList imageNames = images(); // XXX why go by image names?
-	QString tmp_currentImageName = currentImgName();
-	uint imageNumbers = 1;
+	KisConfig cfg;
+	QString attr;
+	QDomNode node;
+	QDomNode child;
+	KisImageSP img;
+	QString name;
+	Q_INT32 width;
+	Q_INT32 height;
+	Q_INT32 colorspace;
 
-	for (QStringList::Iterator it = imageNames.begin(); it != imageNames.end(); it++) {
-		setImage(*it);
-		Q_ASSERT(*it == m_currentImg -> name());
+	if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
+		if ((name = element.attribute("name")) == QString::null)
+			return 0;
 
-		KisLayerSPLst layers = m_currentImg -> layerList();
-		uint layerNumbers = 0;
+		if (namePresent(name))
+			name = nextImageName();
 
-		for (KisLayerSPLstIterator it = layers.begin(); it != layers.end(); it++) {
-			KisLayerSP lay = *it;
-			QString image = QString("image%1").arg(imageNumbers);
-			QString layerName;
+		if ((attr = element.attribute("width")) == QString::null)
+			return 0;
 
-			if (layerNumbers == 0)
-				layerName = QString::fromLatin1("background");
-			else
-				layerName = QString("layer%1").arg(layerNumbers);
+		if ((width = attr.toInt()) < 0 || width > cfg.maxImgWidth())
+			return 0;
 
-			QString url = QString("images/%1/layers/%2.bin").arg(image).arg(layerName);
+		if ((attr = element.attribute("height")) == QString::null)
+			return 0;
 
-			if (store -> open(url)) {
-				lay -> loadFromStore(store);
+		if ((height = attr.toInt()) < 0 || height > cfg.maxImgHeight())
+			return 0;
+
+		if ((attr = element.attribute("colorspace")) == QString::null)
+			return 0;
+
+		if ((colorspace = attr.toInt()) == IMAGE_TYPE_UNKNOWN || colorspace < IMAGE_TYPE_UNKNOWN || colorspace > IMAGE_TYPE_YUVA)
+			return 0;
+
+		img = new KisImage(this, width, height, static_cast<enumImgType>(colorspace), name);
+
+		for (node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
+			if (node.isElement()) { 
+				if (node.nodeName() == "LAYERS") {
+					for (child = node.firstChild(); !child.isNull(); child = child.nextSibling()) {
+						KisLayerSP layer = loadLayer(child.toElement(), img);
+
+						if (!layer)
+							return false;
+
+						img -> add(layer, -1);
+					}
+				} else if (node.nodeName() == "CHANNELS") {
+					for (child = node.firstChild(); !child.isNull(); child = child.nextSibling()) {
+						KisChannelSP channel = loadChannel(child.toElement(), img);
+
+						if (!channel)
+							return false;
+
+						img -> add(channel, -1);
+					}
+				} else if (node.nodeName() == "COLORMAP") {
+					// TODO
+				} else {
+					kdDebug(DBG_AREA_CORE) << "KisDoc::loadImage nodeName == " << node.nodeName() << endl;
+				}
+			}
+		}
+	} else {
+		// TODO Try to import it
+	}
+
+	return img;
+}
+
+QDomElement KisDoc::saveLayer(QDomDocument& doc, KisLayerSP layer)
+{
+	QDomElement layerElement = doc.createElement("layer");
+
+	layerElement.setAttribute("name", layer -> name());
+	layerElement.setAttribute("x", layer -> x());
+	layerElement.setAttribute("y", layer -> y());
+	layerElement.setAttribute("width", layer -> width());
+	layerElement.setAttribute("height", layer -> height());
+	layerElement.setAttribute("opacity", layer -> opacity());
+	layerElement.setAttribute("visible", layer -> visible());
+	layerElement.setAttribute("linked", layer -> linked());
+	// TODO : Layer mask
+	return layerElement;
+}
+
+KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
+{
+	KisConfig cfg;
+	QString attr;
+	QDomNode node;
+	QDomNode child;
+	QString name;
+	Q_INT32 x;
+	Q_INT32 y;
+	Q_INT32 width;
+	Q_INT32 height;
+	Q_INT32 opacity;
+	bool visible;
+	bool linked;
+	KisLayerSP layer;
+
+	if ((name = element.attribute("name")) == QString::null)
+		return 0;
+
+	if ((attr = element.attribute("x")) == QString::null)
+		return 0;
+
+	x = attr.toInt();
+
+	if ((attr = element.attribute("y")) == QString::null)
+		return 0;
+
+	y = attr.toInt();
+
+	if ((attr = element.attribute("width")) == QString::null)
+		return 0;
+
+	if ((width = attr.toInt()) < 0 || x + width > cfg.maxImgWidth())
+		return 0;
+
+	if ((attr = element.attribute("height")) == QString::null)
+		return 0;
+
+	if ((height = attr.toInt()) < 0 || y + height > cfg.maxImgHeight())
+		return 0;
+
+	if ((attr = element.attribute("opacity")) == QString::null)
+		return 0;
+
+	if ((opacity = attr.toInt()) < 0 || opacity > QUANTUM_MAX)
+		return 0;
+
+	if ((attr = element.attribute("visible")) == QString::null)
+		return 0;
+
+	visible = attr == "0" ? false : true;
+	
+	if ((attr = element.attribute("linked")) == QString::null)
+		return 0;
+
+	linked = attr == "0" ? false : true;
+	layer = new KisLayer(img, width, height, name, opacity);
+	layer -> linked(linked);
+	layer -> visible(visible);
+	layer -> move(x, y);
+	return layer;
+}
+
+QDomElement KisDoc::saveChannel(QDomDocument& doc, KisChannelSP channel)
+{
+	QDomElement channelElement = doc.createElement("CHANNEL");
+
+	channelElement.setAttribute("name", channel -> name());
+	channelElement.setAttribute("x", channel -> x());
+	channelElement.setAttribute("y", channel -> y());
+	channelElement.setAttribute("width", channel -> width());
+	channelElement.setAttribute("height", channel -> height());
+	channelElement.setAttribute("opacity", channel -> opacity());
+	return channelElement;
+}
+
+KisChannelSP KisDoc::loadChannel(const QDomElement& element, KisImageSP img)
+{
+	KisConfig cfg;
+	QString attr;
+	QDomNode node;
+	QDomNode child;
+	QString name;
+	Q_INT32 x;
+	Q_INT32 y;
+	Q_INT32 width;
+	Q_INT32 height;
+	Q_INT32 opacity;
+	KisChannelSP channel;
+
+	if ((name = element.attribute("name")) == QString::null)
+		return 0;
+
+	if ((attr = element.attribute("x")) == QString::null)
+		return 0;
+
+	x = attr.toInt();
+
+	if ((attr = element.attribute("y")) == QString::null)
+		return 0;
+
+	y = attr.toInt();
+
+	if ((attr = element.attribute("width")) == QString::null)
+		return 0;
+
+	if ((width = attr.toInt()) < 0 || x + width > cfg.maxImgWidth())
+		return 0;
+
+	if ((attr = element.attribute("height")) == QString::null)
+		return 0;
+
+	if ((height = attr.toInt()) < 0 || y + height > cfg.maxImgHeight())
+		return 0;
+
+	if ((attr = element.attribute("opacity")) == QString::null)
+		return 0;
+
+	if ((opacity = attr.toInt()) < 0 || opacity > QUANTUM_MAX)
+		return 0;
+
+	channel = new KisChannel(img, width, height, name, KoColor::black());
+	channel -> opacity(opacity);
+	channel -> move(x, y);
+	return channel;
+}
+
+bool KisDoc::completeSaving(KoStore *store)
+{
+	QString uri = url().url();
+	QString location;
+	bool external = isStoredExtern();
+	Q_INT32 totalSteps = 0;
+
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++)
+		totalSteps += (*it) -> nlayers() + (*it) -> nchannels();
+
+	emit ioSteps(totalSteps);
+
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
+		vKisLayerSP layers = (*it) -> layers();
+		vKisChannelSP channels = (*it) -> channels();
+
+		for (vKisLayerSP_it it2 = layers.begin(); it2 != layers.end(); it2++) {
+			connect(*it2, SIGNAL(ioProgress(Q_INT8)), this, SLOT(slotIOProgress(Q_INT8)));
+			location = external ? QString::null : uri;
+			location += (*it) -> name() + "/layers/" + (*it2) -> name();
+
+			if (store -> open(location)) {
+				if (!(*it2) -> write(store)) {
+					(*it2) -> disconnect();
+					store -> close();
+					emit ioDone();
+					return false;
+				}
+
 				store -> close();
 			}
 
-			// TODO Load Channels
-			layerNumbers++;
+			// TODO Mask
+			emit ioCompletedStep();
+			(*it2) -> disconnect();
 		}
 
-		imageNumbers++;
-		m_currentImg -> markDirty(QRect(0, 0, m_currentImg -> width(), m_currentImg -> height()));
+		for (vKisChannelSP_it it2 = channels.begin(); it2 != channels.end(); it2++) {
+			connect(*it2, SIGNAL(ioProgress(Q_INT8)), this, SLOT(slotIOProgress(Q_INT8)));
+			location = external ? QString::null : uri;
+			location += (*it) -> name() + "/channels/" + (*it2) -> name();
+
+			if (store -> open(location)) {
+				if (!(*it2) -> write(store)) {
+					(*it2) -> disconnect();
+					store -> close();
+					emit ioDone();
+					return false;
+				}
+
+				store -> close();
+			}
+
+			emit ioCompletedStep();
+			(*it2) -> disconnect();
+		}
 	}
 
+	emit ioDone();
 	return true;
-#endif
-	return false;
+}
+
+bool KisDoc::completeLoading(KoStore *store)
+{
+	QString uri = url().url();
+	QString location;
+	bool external = isStoredExtern();
+	Q_INT32 totalSteps = 0;
+
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++)
+		totalSteps += (*it) -> nlayers() + (*it) -> nchannels();
+
+	emit ioSteps(totalSteps);
+
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
+		vKisLayerSP layers = (*it) -> layers();
+		vKisChannelSP channels = (*it) -> channels();
+
+		for (vKisLayerSP_it it2 = layers.begin(); it2 != layers.end(); it2++) {
+			connect(*it2, SIGNAL(ioProgress(Q_INT8)), this, SLOT(slotIOProgress(Q_INT8)));
+			location = external ? QString::null : uri;
+			location += (*it) -> name() + "/layers/" + (*it2) -> name();
+
+			if (store -> open(location)) {
+				if (!(*it2) -> read(store)) {
+					(*it2) -> disconnect();
+					store -> close();
+					emit ioDone();
+					return false;
+				}
+
+				store -> close();
+			}
+
+			// TODO Mask
+			emit ioCompletedStep();
+			(*it2) -> disconnect();
+		}
+
+		for (vKisChannelSP_it it2 = channels.begin(); it2 != channels.end(); it2++) {
+			connect(*it2, SIGNAL(ioProgress(Q_INT8)), this, SLOT(slotIOProgress(Q_INT8)));
+			location = external ? QString::null : uri;
+			location += (*it) -> name() + "/channels/" + (*it2) -> name();
+
+			if (store -> open(location)) {
+				if (!(*it2) -> read(store)) {
+					(*it2) -> disconnect();
+					store -> close();
+					emit ioDone();
+					return false;
+				}
+
+				store -> close();
+			}
+
+			emit ioCompletedStep();
+			(*it2) -> disconnect();
+		}
+	}
+
+	emit ioDone();
+	return true;
 }
 
 bool KisDoc::namePresent(const QString& name) const
-{
-	for (vKisImageSP_cit it = m_images.begin(); it != m_images.end(); it++)
+{ for (vKisImageSP_cit it = m_images.begin(); it != m_images.end(); it++)
 		if ((*it) -> name() == name)
 			return true;
 
@@ -856,7 +890,7 @@ bool KisDoc::contains(KisImageSP img) const
 
 KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, enumImgType type)
 {
-	KisImageSP img = new KisImage(this, width, height, OPACITY_OPAQUE, type, name);
+	KisImageSP img = new KisImage(this, width, height, type, name);
 
 	m_images.push_back(img);
 
@@ -920,7 +954,7 @@ bool KisDoc::slotNewImage()
 		KisLayerSP layer;
 		KisPainter gc;
 
-		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), OPACITY_OPAQUE, dlg.colorSpace(), nextImageName());
+		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), dlg.colorSpace(), nextImageName());
 		layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 		gc.begin(layer.data());
 		gc.fillRect(0, 0, layer -> width(), layer -> height(), c, opacity);
@@ -1072,6 +1106,7 @@ void KisDoc::slotDocumentRestored()
 
 void KisDoc::slotCommandExecuted()
 {
+	setModified(true);
 }
 
 QString KisDoc::nextImageName() const
@@ -1083,24 +1118,6 @@ QString KisDoc::nextImageName() const
 	} while (namePresent(name));
 
 	return name;
-}
-
-bool KisDoc::loadNativeFormat(const QString& file)
-{
-	kdDebug() << "KisDoc::loadNativeFormat : " << file << endl;
-	return false;
-}
-
-void KisDoc::slotActiveLayerChanged(KisImageSP)
-{
-}
-
-void KisDoc::slotAlphaChanged(KisImageSP)
-{
-}
-
-void KisDoc::slotVisibilityChanged(KisImageSP, CHANNELTYPE)
-{
 }
 
 void KisDoc::slotUpdate(KisImageSP, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
@@ -1392,6 +1409,18 @@ void KisDoc::clipboardDataChanged()
 bool KisDoc::undo() const
 {
 	return m_undo;
+}
+
+void KisDoc::slotIOProgress(Q_INT8 percentage)
+{
+	KApplication *app = KApplication::kApplication();
+
+	Q_ASSERT(app);
+
+	if (app -> hasPendingEvents())
+		app -> processEvents();
+
+	emit ioProgress(percentage);
 }
 
 #include "kis_doc.moc"

@@ -35,6 +35,11 @@
  */
 #define APP_MIMETYPE "application/x-krita"
 
+/**
+ * Mime type for native file format 
+ */
+#define NATIVE_MIMETYPE "application/x-kra"
+
 
 /**
  * Default size for a tile,  Usually, all

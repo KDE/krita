@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kpixmapio.h>
+#include "KIsImageIface.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_visitor.h"
@@ -121,9 +122,9 @@ namespace {
 	};
 }
 
-KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name)
+KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
 {
-	init(doc, width, height, opacity, imgType, name);
+	init(doc, width, height, imgType, name);
 	setName(name);
 }
 
@@ -140,7 +141,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_depth = rhs.m_depth;
 		m_ntileCols = rhs.m_ntileCols;
 		m_ntileRows = rhs.m_ntileRows;
-		m_opacity = rhs.m_opacity;
 		m_xres = rhs.m_xres;
 		m_yres = rhs.m_yres;
 		m_unit = rhs.m_unit;
@@ -235,7 +235,7 @@ void KisImage::setEmail(const QString& email)
 	m_email = email;
 }
 
-void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name)
+void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
 {
 	Q_INT32 n;
 
@@ -258,7 +258,6 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity,
 	m_maskEnabled = false;
 	m_maskInverted = false;
 	m_alpha = false;
-	m_opacity = opacity;
 	m_undoHistory = 0;
 	m_ntileCols = (width + TILE_WIDTH - 1) / TILE_WIDTH;
 	m_ntileRows = (height + TILE_HEIGHT - 1) / TILE_HEIGHT;

@@ -21,7 +21,6 @@
 #include <magick/api.h>
 #include <qstring.h>
 #include <kapplication.h>
-#include <ksharedptr.h>
 #include <kurl.h>
 #include <kio/netaccess.h>
 #include <koColor.h>
@@ -160,7 +159,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		return KisImageBuilder_RESULT_FAILURE;
 	}
 
-	m_img = new KisImage(m_doc, 0, 0, OPACITY_OPAQUE, IMAGE_TYPE_RGBA, m_doc -> nextImageName());
+	m_img = new KisImage(m_doc, 0, 0, IMAGE_TYPE_RGBA, m_doc -> nextImageName());
 	emit notify(this, KisImageBuilder_STEP_TILING, 0);
 
 	while ((image = RemoveFirstImageFromList(&images))) {

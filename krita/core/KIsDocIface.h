@@ -33,7 +33,6 @@ class KIsDocIface : virtual public KoDocumentIface
 public:
     KIsDocIface( KisDoc *doc_ );
 k_dcop:
-    QString currentImageName()const ;
     virtual DCOPRef image( int num );
 
     virtual int undoLimit () const;

@@ -35,15 +35,10 @@ k_dcop:
     QString name()const;
     int height() const;
     int width() const;
-    QSize size() const;
     bool alpha() const;
     bool empty() const;
 
     void setName(const QString& name);
-    QString author() const;
-    void setAuthor(const QString& author);
-    QString email() const;
-    void setEmail(const QString& email);
 
 private:
     KisImage *m_img;

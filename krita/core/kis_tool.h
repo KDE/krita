@@ -22,7 +22,6 @@
 #include <qevent.h>
 #include <qobject.h>
 #include <qstring.h>
-#include <ksharedptr.h>
 #include "kis_types.h"
 #include "kis_cursor.h"
 

@@ -19,7 +19,6 @@
 #define KIS_BUILDER_TYPES_
 
 #include <qvaluelist.h>
-#include <ksharedptr.h>
 #include "builder/kis_image_builder.h"
 
 class KisBuilderSubject;

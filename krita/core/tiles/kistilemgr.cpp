@@ -371,6 +371,8 @@ KisPixelDataSP KisTileMgr::pixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32
 	tilenum2 = tileNum(x2, y2);
 
 	if (tilenum1 < 0 || tilenum2 < 0) {
+		kdDebug(DBG_AREA_TILES) << "x1 = " << x1 << " y1 = " << y1 << endl;
+		kdDebug(DBG_AREA_TILES) << "x2 = " << x2 << " y2 = " << y2 << endl;
 		kdDebug(DBG_AREA_TILES) << "KisTileMgr::pixelData : Invalid tile number.\n";
 		kdDebug(DBG_AREA_TILES) << "tilenum1 = " << tilenum1 << endl;
 		kdDebug(DBG_AREA_TILES) << "tilenum2 = " << tilenum2 << endl;

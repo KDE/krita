@@ -29,11 +29,6 @@ KIsDocIface::KIsDocIface( KisDoc *doc_ )
     m_doc = doc_;
 }
 
-QString KIsDocIface::currentImageName() const
-{
-    return m_doc->currentImgName();
-}
-
 DCOPRef KIsDocIface::image( int num )
 {
     KisImage *img=m_doc->imageNum(num);

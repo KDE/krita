@@ -102,11 +102,26 @@ void KisToolPaint::cursor(QWidget *w) const
 
 void KisToolPaint::setCursor(const QCursor& cursor)
 {
+	m_toolCursor = cursor;
+
+}
+
+void KisToolPaint::activate()
+{
+	kdDebug() << "Activate called " << name() << "\n";
+	if (m_subject) {
+		KisToolControllerInterface *controller = m_subject -> toolController();
+
+		if (controller)
+			controller -> setCurrentTool(this);
+	}
+
 	KisConfig cfg;
+	kdDebug() << "Cursor style: " << cfg.defCursorStyle() << "\n";
 
 	switch (cfg.defCursorStyle()) {
 	case CURSOR_STYLE_TOOLICON:
-		m_cursor = cursor;
+		m_cursor = m_toolCursor;
 		break;
 	case CURSOR_STYLE_CROSSHAIR:
 		m_cursor = KisCursor::crossCursor();
@@ -116,16 +131,6 @@ void KisToolPaint::setCursor(const QCursor& cursor)
 		break;
 	default:
 		m_cursor = KisCursor::crossCursor();
-	}
-}
-
-void KisToolPaint::activate()
-{
-	if (m_subject) {
-		KisToolControllerInterface *controller = m_subject -> toolController();
-
-		if (controller)
-			controller -> setCurrentTool(this);
 	}
 }
 

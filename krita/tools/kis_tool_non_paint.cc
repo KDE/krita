@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -104,11 +105,23 @@ void KisToolNonPaint::cursor(QWidget *w) const
 
 void KisToolNonPaint::setCursor(const QCursor& cursor)
 {
+	m_toolCursor = cursor;
+}
+
+void KisToolNonPaint::activate()
+{
+	if (m_subject) {
+		KisToolControllerInterface *controller = m_subject -> toolController();
+
+		if (controller)
+			controller -> setCurrentTool(this);
+	}
+
         KisConfig cfg;
 
         switch (cfg.defCursorStyle()) {
         case CURSOR_STYLE_TOOLICON:
-                m_cursor = cursor;
+                m_cursor = m_toolCursor;
                 break;
         case CURSOR_STYLE_CROSSHAIR:
                 m_cursor = KisCursor::crossCursor();
@@ -120,16 +133,7 @@ void KisToolNonPaint::setCursor(const QCursor& cursor)
                 m_cursor = KisCursor::crossCursor();
         }
 
-}
 
-void KisToolNonPaint::activate()
-{
-	if (m_subject) {
-		KisToolControllerInterface *controller = m_subject -> toolController();
-
-		if (controller)
-			controller -> setCurrentTool(this);
-	}
 }
 
 #include "kis_tool_non_paint.moc"

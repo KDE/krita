@@ -98,7 +98,8 @@ QUANTUM KisToolFill::difference(QUANTUM* src, KisPixelRepresentation dst, QUANTU
 {
 	QUANTUM max = 0, diff = 0;
 	for (int i = 0; i < depth; i++) {
-		diff = QABS(src[i] - dst[i]);
+// 		diff = QABS(src[i] - dst[i]);
+		diff = QABS(src[i] - (*(reinterpret_cast<QUANTUM**>(&dst)))[i]); // Hack, see mailing list.
 		if (diff > max)
 			max = diff;
 	}

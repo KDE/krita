@@ -698,6 +698,7 @@ void KisView::clearCanvas(const QRect& rc)
 
 void KisView::setCurrentTool(KisTool *tool)
 {
+	kdDebug() << "setCurrentTool called.\n";
 	KisTool *oldTool = currentTool();
 
         if (oldTool)

@@ -73,6 +73,7 @@ protected slots:
 
 private:
 	QCursor m_cursor;
+	QCursor m_toolCursor;
 	KisCanvasSubject *m_subject;
 	QWidget m_optWidget;
 };

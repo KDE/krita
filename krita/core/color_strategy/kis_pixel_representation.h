@@ -38,7 +38,7 @@ public:
 	KisPixelRepresentation(QUANTUM* channels) : m_channels(channels) {}
 	KisPixelRepresentation(int nbchannel) : m_channels(new QUANTUM(nbchannel)) { }
 public:
-	KisQuantum operator[](int index) { return KisQuantum(m_channels + index ); };
+	KisQuantum operator[](int index) { return KisQuantum(&m_channels[index]); };
 private:
 	QUANTUM* m_channels;
 };

@@ -37,7 +37,7 @@ class KisToolFreeHand : public KisToolPaint {
 	typedef KisToolPaint super;
 
 public:
-	KisToolFreeHand(QString transactionText);
+	KisToolFreeHand(const QString transactionText);
 	virtual ~KisToolFreeHand();
 
 	virtual void update(KisCanvasSubject *subject);
@@ -94,5 +94,5 @@ private:
 	QLabel *m_lbComposite;
 	KisCmbComposite *m_cmbComposite;
 };
-#endif // KIS_TOOL_BRUSH_H_
+#endif // KIS_TOOL_FREEHAND_H_
 

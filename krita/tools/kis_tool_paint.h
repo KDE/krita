@@ -73,9 +73,10 @@ protected slots:
 
 private:
 	QCursor m_cursor;
-
+	QCursor m_toolCursor;
 protected:
 	KisCanvasSubject *m_subject;
+	QString m_name;
 };
 
 #endif // KIS_TOOL_PAINT_H_

@@ -4,7 +4,7 @@
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
+ *  Copyright (c) 2004 Clarence Dang <dang@k.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ void KisToolRectangle::buttonPress(KisButtonPressEvent *event)
 
 void KisToolRectangle::move(KisMoveEvent *event)
 {
-	kdDebug (40001) << "KisToolRectangle::move" << event->pos () << endl;
+// 	kdDebug (40001) << "KisToolRectangle::move" << event->pos () << endl;
 	if (m_dragging) {
 		// erase old lines on canvas
 		draw(m_dragStart, m_dragEnd);
@@ -128,10 +128,10 @@ void KisToolRectangle::draw(const KisPoint& start, const KisPoint& end )
 		return;
 
 	KisCanvasControllerInterface *controller = m_subject->canvasController ();
-	kdDebug (40001) << "KisToolRectangle::draw(" << start << "," << end << ")"
-			<< " windowToView: start=" << controller->windowToView (start)
-			<< " windowToView: end=" << controller->windowToView (end)
-			<< endl;
+// 	kdDebug (40001) << "KisToolRectangle::draw(" << start << "," << end << ")"
+// 			<< " windowToView: start=" << controller->windowToView (start)
+// 			<< " windowToView: end=" << controller->windowToView (end)
+// 			<< endl;
 	QWidget *canvas = controller->canvas ();
 	QPainter p (canvas);
 

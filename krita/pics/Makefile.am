@@ -7,7 +7,8 @@ kritapics_DATA = deletelayer.png lowerlayer.png newlayer.png raiselayer.png \
         gradient.png line.png polyline.png polygon.png \
         rectangle.png ellipse.png \
         visible.png novisible.png linked.png unlinked.png \
-        freehand.png rectangular.png handdrawn.png elliptical.png contiguous.png selectbrush.png
+        freehand.png rectangular.png handdrawn.png elliptical.png contiguous.png selectbrush.png \
+        pan_tool.png	
 
 # directory for pixmaps
 kritapicsdir = $(kde_datadir)/krita/pics

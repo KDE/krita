@@ -80,7 +80,7 @@ void KisToolPan::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Pan Tool"), "hand", 0, this, SLOT(activate()), collection, name());
+		m_action = new KRadioAction(i18n("&Pan Tool"), "pan_tool", 0, this, SLOT(activate()), collection, name());
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

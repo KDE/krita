@@ -50,6 +50,7 @@ public:
 	virtual DCOPObject* dcopObject();
 	virtual bool initDoc();
 	virtual bool isEmpty() const;
+    virtual bool loadOasis( const QDomDocument&, KoOasisStyles& );
 	virtual bool loadXML(QIODevice *, const QDomDocument& doc);
 	virtual QCString mimeType() const;
 	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);
@@ -65,13 +66,13 @@ private:
 
 public:
 	KisLayerSP layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM devOpacity);
-	KisLayerSP layerAdd(KisImageSP img, 
-			    Q_INT32 width, 
-			    Q_INT32 height, 
-			    const QString& name, 
-			    CompositeOp compositeOp, 
-			    QUANTUM opacity, 
-			    QPoint pos, 
+	KisLayerSP layerAdd(KisImageSP img,
+			    Q_INT32 width,
+			    Q_INT32 height,
+			    const QString& name,
+			    CompositeOp compositeOp,
+			    QUANTUM opacity,
+			    QPoint pos,
 			    enumImgType type);
 	KisLayerSP layerAdd(KisImageSP img, const QString& name, KisSelectionSP selection);
 	KisLayerSP layerAdd(KisImageSP img, KisLayerSP layer, Q_INT32 position);
@@ -81,9 +82,9 @@ public:
 	void layerNext(KisImageSP img, KisLayerSP layer);
 	void layerPrev(KisImageSP img, KisLayerSP layer);
 	// Set the layerproperties
-	void setLayerProperties(KisImageSP img, 
-			     KisLayerSP layer, 
-			     QUANTUM opacity, 
+	void setLayerProperties(KisImageSP img,
+			     KisLayerSP layer,
+			     QUANTUM opacity,
 			     CompositeOp compositeOp,
 			     const QString& name);
 

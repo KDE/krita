@@ -302,9 +302,9 @@ namespace {
 			CompositeOp compositeOp = m_layer -> compositeOp();
 
 			m_adapter -> setUndo(false);
-			m_doc -> setLayerProperties(m_img, 
+			m_doc -> setLayerProperties(m_img,
 						    m_layer,
-						    m_opacity, 
+						    m_opacity,
 						    m_compositeOp,
 						    m_name);
 			m_adapter -> setUndo(true);
@@ -458,6 +458,12 @@ QDomDocument KisDoc::saveXML()
 		root.appendChild(saveImage(doc, *it));
 
 	return doc;
+}
+
+bool KisDoc::loadOasis( const QDomDocument&, KoOasisStyles& )
+{
+    //todo
+    return true;
 }
 
 bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
@@ -1249,14 +1255,14 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 	return layer;
 }
 
-KisLayerSP KisDoc::layerAdd(KisImageSP img, 
-			    Q_INT32 width, 
+KisLayerSP KisDoc::layerAdd(KisImageSP img,
+			    Q_INT32 width,
 			    Q_INT32 height,
-			    const QString& name, 
-			    CompositeOp compositeOp, 
-			    QUANTUM opacity, 
+			    const QString& name,
+			    CompositeOp compositeOp,
+			    QUANTUM opacity,
 			    QPoint pos,
-			    enumImgType type) 
+			    enumImgType type)
 {
 	KisLayerSP layer;
 	if (!contains(img)) return 0;
@@ -1467,9 +1473,9 @@ void KisDoc::layerPrev(KisImageSP img, KisLayerSP layer)
 	}
 }
 
-void KisDoc::setLayerProperties(KisImageSP img, 
-				KisLayerSP layer, 
-				QUANTUM opacity, 
+void KisDoc::setLayerProperties(KisImageSP img,
+				KisLayerSP layer,
+				QUANTUM opacity,
 				CompositeOp compositeOp,
 				const QString& name)
 {

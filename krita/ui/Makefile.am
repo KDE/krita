@@ -3,7 +3,6 @@ INCLUDES = -I$(srcdir)/../core $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_i
 noinst_LTLIBRARIES = libkisui.la
 
 libkisui_la_SOURCES = integerwidget.cc kis_dlg_preferences.cc \
-    kis_dlg_gradient.cc  \
     kfloatingdialog.cc kfloatingtabdialog.cc \
     kis_tabbar.cc  kis_canvas.cc \
     kis_brushwidget.cc kis_patternwidget.cc \
@@ -14,5 +13,6 @@ libkisui_la_SOURCES = integerwidget.cc kis_dlg_preferences.cc \
     kis_itemchooser.cc kis_dlg_paint_properties.cc kis_dlg_paintoffset.cc \
     kis_dlg_new_layer.cc kis_dlg_create_img.cc kis_dlg_dimension.cc
 #    blendchooser.cc
+#    kis_dlg_gradient.cc 
 
 libkisui_la_METASOURCES = AUTO

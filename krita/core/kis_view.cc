@@ -53,6 +53,7 @@
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_canvas.h"
+#include "kis_config.h"
 #include "kis_channelview.h"
 #include "kis_dlg_dimension.h"
 #include "kis_dlg_new_layer.h"
@@ -631,14 +632,14 @@ void KisView::paintView(const QRect& rc)
 		xt = canvasXOffset() - horzValue();
 		yt = canvasYOffset() - vertValue();
 
-//		if (zoom() < 1.0 || zoom() > 1.0)
-//			gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvas -> width() * zoom()), static_cast<Q_INT32>(m_canvas -> height() * zoom()));
+		if (zoom() < 1.0 || zoom() > 1.0)
+			gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvas -> width() * zoom()), static_cast<Q_INT32>(m_canvas -> height() * zoom()));
 
 		if (xt || yt)
 			gc.translate(xt, yt);
 
 		m_doc -> setProjection(img);
-		m_doc -> paintContent(gc, ur, false, zoom(), zoom());
+		m_doc -> paintContent(gc, ur, false, 1.0, 1.0);
 
 		if (m_tool)
 			m_tool -> paint(gc, ur);
@@ -667,9 +668,10 @@ void KisView::updateCanvas(const QRect& rc)
 {
 	QRect ur = rc;
 
-	ur.setX(ur.x() - horzValue());
-	ur.setY(ur.y() - vertValue());
+	ur.setX(ur.x() - static_cast<Q_INT32>(horzValue() * zoom()));
+	ur.setY(ur.y() - static_cast<Q_INT32>(vertValue() * zoom()));
 
+#if 0
 	if (zoom() > 1.0 || zoom() < 1.0) {
 		Q_INT32 urL = ur.left();
 		Q_INT32 urT = ur.top();
@@ -685,6 +687,7 @@ void KisView::updateCanvas(const QRect& rc)
 		ur.setWidth(urW);
 		ur.setHeight(urH);
 	}
+#endif
 
 	paintView(ur);
 }
@@ -1165,6 +1168,45 @@ void KisView::slotInsertImageAsLayer()
 
 void KisView::save_layer_as_image()
 {
+	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::writeFilters(), this, i18n("Export Layer"));
+	KisImageSP img = currentImg();
+
+	if (url.isEmpty())
+		return;
+
+	Q_ASSERT(img);
+
+	if (img) {
+		KisImageMagickConverter ib(m_doc);
+		KisLayerSP dst = img -> activeLayer();
+
+		Q_ASSERT(dst);
+
+		switch (ib.buildFile(url, dst)) {
+			case KisImageBuilder_RESULT_UNSUPPORTED:
+				KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving file"));
+				break;
+			case KisImageBuilder_RESULT_INVALID_ARG:
+				KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving file"));
+				break;
+			case KisImageBuilder_RESULT_NO_URI:
+			case KisImageBuilder_RESULT_NOT_LOCAL:
+				KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving file"));
+				break;
+			case KisImageBuilder_RESULT_BAD_FETCH:
+				KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));
+				break;
+			case KisImageBuilder_RESULT_EMPTY:
+				KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
+				break;
+			case KisImageBuilder_RESULT_FAILURE:
+				KMessageBox::error(this, i18n("Error Saving File."), i18n("Error Saving File"));
+				break;
+			case KisImageBuilder_RESULT_OK:
+			default:
+				break;
+		}
+	}
 }
 
 void KisView::slotEmbedImage(const QString &)
@@ -1339,7 +1381,8 @@ void KisView::imageResize()
 	KisImageSP img = currentImg();
 
 	if (img) {
-		KisDlgDimension dlg(IMG_WIDTH_MAX, img -> width(), IMG_HEIGHT_MAX, img -> height(), this);
+		KisConfig cfg;
+		KisDlgDimension dlg(cfg.maxImgWidth(), img -> width(), cfg.maxImgHeight(), img -> height(), this);
 
 		if (dlg.exec() == QDialog::Accepted) {
 			QSize size = dlg.getSize();
@@ -1747,7 +1790,8 @@ void KisView::layerAdd()
 	KisImageSP img = currentImg();
 
 	if (img) {
-		NewLayerDialog dlg(IMG_WIDTH_MAX, IMG_DEFAULT_WIDTH, IMG_HEIGHT_MAX, IMG_DEFAULT_HEIGHT, this);
+		KisConfig cfg;
+		NewLayerDialog dlg(cfg.maxLayerWidth(), cfg.defLayerWidth(), cfg.maxLayerHeight() , cfg.defLayerHeight(), this);
 
 		dlg.exec();
 
@@ -2077,7 +2121,8 @@ void KisView::layerResize()
 		KisLayerSP layer = img -> activeLayer();
 
 		if (layer) {
-			KisDlgDimension dlg(IMG_WIDTH_MAX, layer -> width(), IMG_HEIGHT_MAX, layer -> height(), this);
+			KisConfig cfg;
+			KisDlgDimension dlg(cfg.maxLayerWidth(), layer -> width(), cfg.maxLayerHeight(), layer -> height(), this);
 
 			if (dlg.exec() == QDialog::Accepted) {
 				QSize size = dlg.getSize();
@@ -2116,6 +2161,76 @@ void KisView::layerScale()
 {
 }
 
+QPoint KisView::viewToWindow(const QPoint& pt)
+{
+	QPoint r = pt;
+
+	if (zoom() < 1.0 || zoom() > 1.0) {
+		r.setX(r.x() + horzValue());
+		r.setY(r.y() + vertValue());
+		r /= zoom();
+	}
+
+	return r;
+}
+
+QRect KisView::viewToWindow(const QRect& rc)
+{
+	QRect r = rc;
+
+	if (zoom() < 1.0 || zoom() > 1.0) {
+		r.setX(static_cast<Q_INT32>((r.x() + horzValue()) * zoom()));
+		r.setY(static_cast<Q_INT32>((r.y() + vertValue()) * zoom()));
+		r.setWidth(static_cast<Q_INT32>(r.width() * zoom()));
+		r.setHeight(static_cast<Q_INT32>(r.height() * zoom()));
+	}
+
+	return r;
+}
+
+void KisView::viewToWindow(Q_INT32 *x, Q_INT32 *y)
+{
+	if (zoom() < 1.0 || zoom() > 1.0) {
+		*x += horzValue();
+		*y += vertValue();
+		*x /= static_cast<Q_INT32>(zoom());
+		*y /= static_cast<Q_INT32>(zoom());
+	}
+}
+
+QPoint KisView::windowToView(const QPoint& pt)
+{
+	QPoint r = pt;
+
+	if (zoom() < 1.0 || zoom() > 1.0) {
+		r *= zoom();
+		r.setX(r.x() - horzValue());
+		r.setY(r.y() - vertValue());
+	}
+
+	return r;
+}
+
+QRect KisView::windowToView(const QRect& rc)
+{
+	QRect r;
+
+	r.setX(static_cast<Q_INT32>(rc.x() * zoom()) - horzValue());
+	r.setY(static_cast<Q_INT32>(rc.y() * zoom()) - vertValue());
+	r.setWidth(static_cast<Q_INT32>(rc.width() * zoom()));
+	r.setHeight(static_cast<Q_INT32>(rc.height() * zoom()));
+	return r;
+}
+
+void KisView::windowToView(Q_INT32 *x, Q_INT32 *y)
+{
+	if (x && y) {
+		*x *= static_cast<Q_INT32>(zoom());
+		*y *= static_cast<Q_INT32>(zoom());
+		*x -= horzValue();
+		*y -= vertValue();
+	}
+}
 
 #include "kis_view.moc"
 

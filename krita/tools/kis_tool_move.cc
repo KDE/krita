@@ -217,12 +217,14 @@ void KisToolMove::drag(const QPoint& original)
 			rc.setY(QMAX(0, rc.y()));
 			img -> invalidate(rc);
 			m_layerPosition = QPoint(dev -> x(), dev -> y());
-			m_dragStart = original;
+ 			m_dragStart = original;
+#if 0
 			rc.setX(static_cast<Q_INT32>(rc.x() * m_view -> zoom()));
 			rc.setY(static_cast<Q_INT32>(rc.y() * m_view -> zoom()));
 			rc.setWidth(static_cast<Q_INT32>(rc.width() * m_view -> zoom()));
 			rc.setHeight(static_cast<Q_INT32>(rc.height() * m_view -> zoom()));
-			m_view -> updateCanvas(rc);
+#endif
+			m_view -> updateCanvas(); //rc);
 		}
 	}
 }

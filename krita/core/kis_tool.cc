@@ -15,30 +15,5 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#if !defined KIS_CONFIG_H_
-#define KIS_CONFIG_H_
-
-class KisConfig {
-public:
-	KisConfig();
-	~KisConfig();
-
-	Q_INT32 maxImgWidth() const;
-	Q_INT32 defImgWidth() const;
-	Q_INT32 maxImgHeight() const;
-	Q_INT32 defImgHeight() const;
-	Q_INT32 maxLayerWidth() const;
-	Q_INT32 defLayerWidth() const;
-	Q_INT32 maxLayerHeight() const;
-	Q_INT32 defLayerHeight() const;
-
-private:
-	KisConfig(const KisConfig&);
-	KisConfig& operator=(const KisConfig&);
-
-private:
-	mutable KConfig *m_cfg;
-};
-
-#endif // KIS_CONFIG_H_
-
+#include "kis_tool.h"
+#include "kis_tool.moc"

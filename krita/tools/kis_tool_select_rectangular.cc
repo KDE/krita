@@ -109,8 +109,8 @@ void KisToolRectangularSelect::mousePress(QMouseEvent *e)
 {
 	if (e -> button() == LeftButton) {
 		clearSelection();
-		m_startPos = e -> pos() * m_view -> zoom();
-		m_endPos = e -> pos() * m_view -> zoom();
+		m_startPos = m_view -> windowToView(e -> pos());
+		m_endPos = m_view -> windowToView(e -> pos());
 		m_selecting = true;
 	}
 }
@@ -121,8 +121,7 @@ void KisToolRectangularSelect::mouseMove(QMouseEvent *e)
 		if (m_startPos != m_endPos)
 			paintOutline();
 
-		m_endPos = e -> pos();
-		m_endPos *= m_view -> zoom();
+		m_endPos = m_view -> windowToView(e -> pos());
 		paintOutline();
 	}
 }
@@ -138,8 +137,8 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 			if (!img)
 				return;
 			
-			m_startPos /= m_view -> zoom();
-			m_endPos = e -> pos() / m_view -> zoom();
+			m_startPos = m_view -> viewToWindow(m_startPos);
+			m_endPos = e -> pos();
 
 			if (m_endPos.y() < 0)
 				m_endPos.setY(0);

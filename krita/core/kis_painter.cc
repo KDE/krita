@@ -18,6 +18,7 @@
  */
 #include <stdlib.h>
 #include <string.h>
+#include <qmap.h>
 #include <kdebug.h>
 #include <kcommand.h>
 #include <koColor.h>
@@ -83,6 +84,8 @@ namespace {
 
 	KisTileCommand::~KisTileCommand()
 	{
+		for (TileMap::iterator it = m_tiles.begin(); it != m_tiles.end(); it++)
+			(*it) -> shareRelease();
 	}
 
 	void KisTileCommand::execute()

@@ -66,6 +66,9 @@ KisTileMgr::KisTileMgr(const KisTileMgr& rhs) : KShared(rhs)
 
 KisTileMgr::~KisTileMgr()
 {
+	for (vKisTileSP_it it = m_tiles.begin(); it != m_tiles.end(); it++)
+		(*it) -> shareRelease();
+
 	m_mediator -> detachAll(this);
 	delete m_mediator;
 }

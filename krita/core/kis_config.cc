@@ -1,9 +1,5 @@
 /*
- *  kis_config.cc - part of Krayon
- *
- *  Global configuration classes for KImageShop
- *
- *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,204 +15,67 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-
+#include <kapplication.h>
 #include <kconfig.h>
-#include <kglobal.h>
-#include <kglobalsettings.h>
-#include <klocale.h>
-
+#include "kis_global.h"
 #include "kis_config.h"
 
-
-// define static attributes and members
-
-bool KisConfig::doInit 	= true;
-KConfig * KisConfig::kc	= 0L;
-QPtrList<KisConfig> KisConfig::instanceList;
-QFont KisConfig::m_smallFont;
-QFont KisConfig::m_tinyFont;
-QStringList KisConfig::m_blendList;
-
-
-KisConfig * KisConfig::getNewConfig()
-{
-    if ( doInit )
-    {
-        return ( new KisConfig() );
-    }
-    else
-    {
-        if ( instanceList.count() == 0 )
-        {
-            return ( new KisConfig() );
-        }
-
-        return ( new KisConfig( *instanceList.first() ) );
-    }
+namespace {
+	const Q_INT32 IMG_WIDTH_MAX = QUANTUM_MAX;
+	const Q_INT32 IMG_HEIGHT_MAX = QUANTUM_MAX;
+	const Q_INT32 IMG_DEFAULT_WIDTH = 512;
+	const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
 }
 
-
-KisConfig::KisConfig() : QObject( 0L, "krita config" )
+KisConfig::KisConfig()
 {
-    // load and init global settings only once
-    if ( doInit )
-    {
-        initStatic();
-    }
+	KApplication *app = KApplication::kApplication();
 
-    instanceList.append( this );
-
-    // now load all the settings for the config objects
-    loadConfig();
+	Q_ASSERT(app);
+	m_cfg = app -> sessionConfig();
 }
-
-
-KisConfig::KisConfig( const KisConfig& /*config*/ )
-  : QObject()
-{
-    instanceList.append( this );
-
-    // ...
-}
-
 
 KisConfig::~KisConfig()
 {
-    instanceList.remove( this );
-
-    // when the last document is closed, save the global settings
-    if ( instanceList.isEmpty() )
-        saveGlobalSettings();
-
-    // ...
 }
 
-
-void KisConfig::initStatic()
+Q_INT32 KisConfig::maxImgWidth() const
 {
-    kc = KGlobal::config();
-
-    instanceList.clear();
-    instanceList.setAutoDelete( false );
-
-    loadGlobalSettings();
-
-    (void) m_blendList.append( i18n("Normal") );
-    (void) m_blendList.append( i18n("Dissolve") );
-    (void) m_blendList.append( i18n("Behind") );
-    (void) m_blendList.append( i18n("Multiply") );
-    (void) m_blendList.append( i18n("Screen") );
-    (void) m_blendList.append( i18n("Overlay") );
-    (void) m_blendList.append( i18n("Difference") );
-    (void) m_blendList.append( i18n("Addition") );
-    (void) m_blendList.append( i18n("Subtract") );
-    (void) m_blendList.append( i18n("Darken Only") );
-    (void) m_blendList.append( i18n("Lighten Only") );
-    (void) m_blendList.append( i18n("Hue") );
-    (void) m_blendList.append( i18n("Saturation") );
-    (void) m_blendList.append( i18n("Color") );
-    (void) m_blendList.append( i18n("Value") );
-
-    doInit = false;
+	return m_cfg -> readNumEntry("imgWidthMax", IMG_WIDTH_MAX);
 }
 
-
-// a convenience method - load all document specific configuration
-void KisConfig::loadConfig()
+Q_INT32 KisConfig::defImgWidth() const
 {
-    loadDialogSettings();
-    // ...
+	return m_cfg -> readNumEntry("imgWidthDef", IMG_DEFAULT_WIDTH);
 }
 
-
-// save all document specific configuration
-void KisConfig::saveConfig()
+Q_INT32 KisConfig::maxImgHeight() const
 {
-    saveDialogSettings();
-    // ...
+	return m_cfg -> readNumEntry("imgHeightMax", IMG_HEIGHT_MAX);
 }
 
-
-void KisConfig::saveAll()
+Q_INT32 KisConfig::defImgHeight() const
 {
-    KisConfig *config = 0L;
-    for ( config = instanceList.first(); config; config = instanceList.next() )
-    {
-        config->saveConfig();
-    }
-
-    saveGlobalSettings();
+	return m_cfg -> readNumEntry("imgWidthDef", IMG_DEFAULT_HEIGHT);
 }
 
-
-void KisConfig::loadGlobalSettings()
+Q_INT32 KisConfig::maxLayerWidth() const
 {
-    // read some fonts
-    QFont font = KGlobalSettings::generalFont();
-    font.setPointSize( 10 );
-    m_smallFont = kc->readFontEntry( "Small Font", &font );
-
-    font = KGlobalSettings::generalFont();
-    font.setPointSize( 8 );
-    m_tinyFont = kc->readFontEntry( "Tiny Font", &font );
-
-  // ...
+	return m_cfg -> readNumEntry("layerWidthMax", IMG_WIDTH_MAX);
 }
 
-
-void KisConfig::saveGlobalSettings()
+Q_INT32 KisConfig::defLayerWidth() const
 {
-    kc->setGroup( "General Settings" );
-
-    kc->writeEntry( "Small Font", m_smallFont );
-    kc->writeEntry( "Tiny Font", m_tinyFont );
-
-  // ...
+	return m_cfg -> readNumEntry("layerWidthDef", IMG_DEFAULT_WIDTH);
 }
 
-
-void KisConfig::loadDialogSettings()
+Q_INT32 KisConfig::maxLayerHeight() const
 {
-  //m_pLayerDlgConfig->loadConfig( kc );
-  // ...
+	return m_cfg -> readNumEntry("layerHeightMax", IMG_HEIGHT_MAX);
 }
 
-
-void KisConfig::saveDialogSettings()
+Q_INT32 KisConfig::defLayerHeight() const
 {
-  //m_pLayerDlgConfig->saveConfig( kc );
-  // ...
+	return m_cfg -> readNumEntry("layerWidthDef", IMG_DEFAULT_HEIGHT);
 }
 
-
-const QStringList& KisConfig::blendings()
-{
-    if ( doInit ) KisConfig::initStatic();
-
-    return KisConfig::m_blendList;
-}
-
-// The base configuration class
-
-
-
-void BaseKFDConfig::loadConfig( KConfig *_config )
-{
-  m_docked = _config->readBoolEntry( "Docked", true );
-  m_posX   = _config->readUnsignedNumEntry( "PositionX", 0 );
-  m_posY   = _config->readUnsignedNumEntry( "PositionY", 0 );
-}
-
-void BaseKFDConfig::saveConfig( KConfig *_config )
-{
-  // TODO: save the right values
-
-  _config->writeEntry( "Docked", false );
-  _config->writeEntry( "PositionX", 50 );
-  _config->writeEntry( "PositionY", 50 );
-
-  _config->sync();
-}
-
-#include "kis_config.moc"

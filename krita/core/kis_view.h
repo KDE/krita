@@ -86,6 +86,12 @@ public:
 	void zoomOut(Q_INT32 x, Q_INT32 y);
 	Q_INT32 horzValue() const;
 	Q_INT32 vertValue() const;
+	QPoint viewToWindow(const QPoint& pt);
+	QRect viewToWindow(const QRect& rc);
+	void viewToWindow(Q_INT32 *x, Q_INT32 *y);
+	QPoint windowToView(const QPoint& pt);
+	QRect windowToView(const QRect& rc);
+	void windowToView(Q_INT32 *x, Q_INT32 *y);
 
 signals:
 	void bgColorChanged(const KoColor& c);

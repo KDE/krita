@@ -50,6 +50,7 @@
 
 // Local
 #include "kis_types.h"
+#include "kis_config.h"
 #include "kis_global.h"
 #include "kis_channel.h"
 #include "kis_dlg_create_img.h"
@@ -308,9 +309,10 @@ bool KisDoc::initDoc()
 			i18n("Krita"), KoTemplateChooseDia::NoTemplates, "krita_template");
 
 	if (ret == KoTemplateChooseDia::Template) {
+		KisConfig cfg;
 		QString name = nextImageName();
-		KisImageSP img = new KisImage(this, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, OPACITY_OPAQUE, IMAGE_TYPE_RGBA, name);
-		KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_DEPTH, img -> nextLayerName(), OPACITY_OPAQUE);
+		KisImageSP img = new KisImage(this, cfg.defImgWidth(), cfg.defImgHeight(), OPACITY_OPAQUE, IMAGE_TYPE_RGBA, name);
+		KisLayerSP layer = new KisLayer(img, cfg.defLayerWidth(), cfg.defLayerHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 
 		layer -> visible(true);
 		addImage(img);
@@ -850,7 +852,8 @@ void KisDoc::removeImage(const QString& name)
 
 bool KisDoc::slotNewImage()
 {
-	KisDlgCreateImg dlg(IMG_WIDTH_MAX, IMG_DEFAULT_WIDTH, IMG_HEIGHT_MAX, IMG_DEFAULT_HEIGHT);
+	KisConfig cfg;
+	KisDlgCreateImg dlg(cfg.maxImgWidth() , cfg.defImgWidth(), cfg.maxImgHeight(), cfg.defImgHeight());
 
 	if (dlg.exec() == QDialog::Accepted) {
 		QUANTUM opacity = dlg.backgroundOpacity();

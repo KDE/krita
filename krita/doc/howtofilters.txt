@@ -1,0 +1,30 @@
+The goal of this howto is to explain how to create a filter for krita
+
+
+2) using Qt/Designer for the ConfigurationWidget
+
+Just copy the following in a file named (for instance) myfiltercw.ui :
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>Form1</class>
+<widget class="KisFilterConfigurationWidget">
+    <property name="name">
+        <cstring>kisFilterConfigurationWidget1</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>359</width>
+            <height>251</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>kisFilterConfigurationWidget1</string>
+    </property>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
+
+And then open Qt/Designer
+
+NOTE: it would be nicer if I knew how to copy (using autoconf/automake) this file in $(QTDIR)/tools/designer/templates

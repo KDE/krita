@@ -984,6 +984,8 @@ void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 	m_vRuler -> setShowMediumMarks(zf > 0.2);
 
 	if (x < 0 || y < 0) {
+		bool vvisible = m_vScroll -> isVisible();
+		bool hvisible = m_hScroll -> isVisible();
 		QRect ur(0, 0, m_canvas -> width(), m_canvas -> height());
 
 		resizeEvent(0);
@@ -1006,7 +1008,8 @@ void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 			ur.setHeight(urH);
 		}
 
-		updateCanvas(ur);
+		if (vvisible == m_vScroll -> isVisible() || hvisible == m_hScroll -> isVisible())
+			updateCanvas(ur);
 	} else {
 		x = static_cast<Q_INT32>(x * zf - width() / 2);
 		y = static_cast<Q_INT32>(y * zf - height() / 2);

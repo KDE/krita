@@ -304,7 +304,6 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_dcop = 0;
 	setInstance(KisFactory::global(), true);
 	m_cmdHistory = 0;
-	QPixmap::setDefaultOptimization(QPixmap::BestOptim);
 	m_nserver = 0;
 	m_pushedClipboard = false;
 	m_currentMacro = 0;

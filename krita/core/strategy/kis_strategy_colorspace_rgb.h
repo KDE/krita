@@ -19,6 +19,7 @@
 #define KIS_STRATEGY_COLORSPACE_RGB_H_
 
 #include <qcolor.h>
+#include <qpixmap.h>
 #include <kpixmapio.h>
 #include <koColor.h>
 #include "kis_global.h"
@@ -40,6 +41,7 @@ public:
 
 private:
 	KPixmapIO m_pixio;
+	QPixmap m_pixmap;
 	QUANTUM *m_buf;
 };
 

@@ -28,7 +28,7 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_RGBA = 4;
 }
 
-KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB()
+KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() : 	m_pixmap(RENDER_WIDTH * 2, RENDER_HEIGHT * 2)
 {
 	m_buf = new QUANTUM[RENDER_WIDTH * RENDER_HEIGHT * MAX_CHANNEL_RGBA];
 }
@@ -89,7 +89,6 @@ void KisStrategyColorSpaceRGB::render(KisImageSP projection, QPainter& painter, 
 		KisTileMgrSP tm = projection -> tiles();
 		KisPixelDataSP pd = new KisPixelData;
 		QImage img;
-		QPixmap pixmap(RENDER_WIDTH, RENDER_HEIGHT); // XXX This should be a member, but need to squash a bug in KPixmapIO first.
 
 		pd -> mgr = 0;
 		pd -> tile = 0;
@@ -106,8 +105,8 @@ void KisStrategyColorSpaceRGB::render(KisImageSP projection, QPainter& painter, 
 		pd -> data = m_buf;
 		tm -> readPixelData(pd);
 		img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * CHAR_BIT, 0, 0, QImage::LittleEndian);
-		m_pixio.putImage(&pixmap, 0, 0, &img);
-		painter.drawPixmap(x, y, pixmap, 0, 0, width, height);
+		m_pixio.putImage(&m_pixmap, 0, 0, &img);
+		painter.drawPixmap(x, y, m_pixmap, 0, 0, width, height);
 	}
 }
 

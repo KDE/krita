@@ -1,6 +1,6 @@
 dnl First check for ImageMagick...
 
-KDE_FIND_PATH(Magick++-config, MAGICK_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
+KDE_FIND_PATH(Magick-config, MAGICK_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
   AC_MSG_WARN([Could not find ImageMagick anywhere, check http://www.imagemagick.org/ for ImageMagick >= 5.5.2.])
 ])
 

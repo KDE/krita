@@ -30,6 +30,7 @@
 #include <qtooltip.h>
 #include <qwidget.h>
 
+#include <kdebug.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
 #include <kicontheme.h>
@@ -106,8 +107,8 @@ KisListBoxView::KisListBoxView(const QString& label, flags f, QWidget *parent, c
 	connect(m_lst, SIGNAL(returnPressed(QListBoxItem*)), SLOT(slotDoubleClicked(QListBoxItem*)));
 	connect(btn, SIGNAL(clicked()), SLOT(slotAddClicked()));
 	connect(m_btnRm, SIGNAL(clicked()), SLOT(slotRmClicked()));
-	connect(m_btnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked()));
-	connect(m_btnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
+	connect(m_btnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
+	connect(m_btnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
 }
 
 KisListBoxView::~KisListBoxView()
@@ -136,6 +137,7 @@ void KisListBoxView::slotMenuAction(int mnuId)
 		case LINKING:
 			emit itemToggleLinked(n);
 			p -> toggleLinked();
+			m_contextMnu -> setItemChecked(LINKING, p -> visible());
 			break;
 		case PROPERTIES:
 			emit itemProperties(n);
@@ -178,22 +180,25 @@ void KisListBoxView::slotAboutToShow()
 
 	m_contextMnu -> setItemEnabled(VISIBLE, enabled);
 	m_contextMnu -> setItemEnabled(SELECTION, enabled);
-	m_contextMnu -> setItemEnabled(LEVEL, enabled);
+	m_contextMnu -> setItemEnabled(LEVEL, m_lst -> count() > 1);
 	m_contextMnu -> setItemEnabled(LINKING, enabled);
 	m_contextMnu -> setItemEnabled(PROPERTIES, enabled);
 	m_contextMnu -> setItemEnabled(REMOVE, enabled);
 	m_contextMnu -> setItemEnabled(ADDMASK, enabled);
 	m_contextMnu -> setItemEnabled(REMOVEMASK, enabled);
-	m_contextMnu -> setItemEnabled(LEVEL, enabled);
+	m_contextMnu -> setItemEnabled(RAISE, m_lst -> item(m_lst -> currentItem()) != m_lst -> firstItem());
 }
 
 void KisListBoxView::slotShowContextMenu(QListBoxItem *item, const QPoint& pos)
 {
 	m_lst -> setCurrentItem(item);
 	m_contextMnu -> popup(pos);
+	m_btnRm -> setEnabled(item != 0);
+	m_btnRaise -> setEnabled(item != 0);
+	m_btnLower -> setEnabled(item != 0);
 }
 
-void KisListBoxView::slotSelectionChanged(QListBoxItem *item)
+void KisListBoxView::slotSelectionChanged(QListBoxItem * /*item*/)
 {
 	slotMenuAction(SELECTION);
 }
@@ -201,10 +206,6 @@ void KisListBoxView::slotSelectionChanged(QListBoxItem *item)
 void KisListBoxView::slotClicked(QListBoxItem *item, const QPoint& pos)
 {
 	int n = m_lst -> currentItem();
-
-	m_btnRm -> setEnabled(item != 0);
-	m_btnRaise -> setEnabled(item != 0);
-	m_btnLower -> setEnabled(item != 0);
 
 	if (item) {
 		KisListBoxItem *p = dynamic_cast<KisListBoxItem*>(item);
@@ -223,8 +224,13 @@ void KisListBoxView::slotDoubleClicked(QListBoxItem * /*item*/)
 
 void KisListBoxView::setCurrentItem(int n)
 {
-	m_lst -> setTopItem(n);
-	m_lst -> triggerUpdate(false);
+	if (n != -1) {
+		m_lst -> setTopItem(n);
+		m_lst -> triggerUpdate(false);
+		m_btnRm -> setEnabled(true);
+		m_btnRaise -> setEnabled(true);
+		m_btnLower -> setEnabled(true);
+	}
 }
 
 void KisListBoxView::setTopItem(int n)
@@ -235,7 +241,10 @@ void KisListBoxView::setTopItem(int n)
 
 void KisListBoxView::insertItem(const QString& name)
 {
-	m_lst -> insertItem(new KisListBoxItem(name, m_lst, m_flags));
+	KisListBoxItem *p = new KisListBoxItem(name, m_lst, m_flags);
+
+	m_lst -> insertItem(p);
+	m_lst -> setCurrentItem(p);
 }
 
 void KisListBoxView::clear()
@@ -263,12 +272,12 @@ void KisListBoxView::slotLowerClicked()
 	slotMenuAction(LOWER);
 }
 
-KisListBoxItem::KisListBoxItem(const QString& label, QListBox *parent, int flags)
+KisListBoxItem::KisListBoxItem(const QString& label, QListBox *parent, KisListBoxView::flags f)
 {
-	init(label, parent, flags);
+	init(label, parent, f);
 }
 
-void KisListBoxItem::init(const QString& label, QListBox *parent, int flags)
+void KisListBoxItem::init(const QString& label, QListBox *parent, KisListBoxView::flags f)
 {
 	KIconLoader il;
 
@@ -283,6 +292,7 @@ void KisListBoxItem::init(const QString& label, QListBox *parent, int flags)
 	m_parent = parent;
 	m_visible = true;
 	m_linked = false;
+	m_flags = f;
 }
 
 KisListBoxItem::~KisListBoxItem()

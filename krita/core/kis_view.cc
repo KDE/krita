@@ -273,7 +273,7 @@ void KisView::setupSideBar()
 	m_pPaletteChooser -> setCaption(i18n("Palettes"));
 	m_pSideBar -> plug(m_pPaletteChooser);
 
-	m_layerView = new KisListBoxView("Layers", KisListBoxView::SHOWALL, m_pSideBar);
+	m_layerView = new KisListBoxView("Layer", KisListBoxView::SHOWALL, m_pSideBar);
 	m_layerView -> setCaption(i18n("Layers"));
 
 	connect(m_layerView, SIGNAL(itemToggleVisible(int)), SLOT(slotLayerToggleVisible(int)));
@@ -2371,17 +2371,20 @@ void KisView::slotLayerLevel(int /*n*/)
 void KisView::slotLayersUpdated()
 {
 	KisImageSP img = m_doc -> currentImg();
-	KisLayerSPLst l = img -> layerList();
 
-	m_layerView -> setUpdatesEnabled(false);
-	m_layerView -> clear();
+	if (img) {
+		KisLayerSPLst l = img -> layerList();
 
-	for (KisLayerSPLstConstIterator it = l.begin(); it != l.end(); it++)
-		m_layerView -> insertItem((*it) -> name());
+		m_layerView -> setUpdatesEnabled(false);
+		m_layerView -> clear();
 
-	m_layerView -> setUpdatesEnabled(true);
-	m_layerView -> repaint();
-	m_doc -> setModified(true);
+		for (KisLayerSPLstConstIterator it = l.begin(); it != l.end(); it++)
+			m_layerView -> insertItem((*it) -> name());
+
+		m_layerView -> setUpdatesEnabled(true);
+		m_layerView -> repaint();
+		m_doc -> setModified(true);
+	}
 }
 
 #include "kis_view.moc"

@@ -349,16 +349,16 @@ DCOPObject* KisImage::dcopObject()
 
 void KisImage::upperLayer(unsigned int layer)
 {
-	if (layer + 1 < m_layers.size()) {
-		qSwap(m_layers[layer], m_layers[layer + 1]);
+	if (layer > 0) {
+		qSwap(m_layers[layer], m_layers[layer - 1]);
 		emit layersUpdated();
 	}
 }
 
 void KisImage::lowerLayer(unsigned int layer)
 {
-	if (layer > 0) {
-		qSwap(m_layers[layer], m_layers[layer - 1]);
+	if (layer + 1 < m_layers.size()) {
+		qSwap(m_layers[layer], m_layers[layer + 1]);
 		emit layersUpdated();
 	}
 }

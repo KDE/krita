@@ -91,7 +91,7 @@ class KisListBoxItem : public QListBoxItem {
 	typedef QListBoxItem super;
 
 public:
-	KisListBoxItem(const QString& label, QListBox *parent, int flags = 0);
+	KisListBoxItem(const QString& label, QListBox *parent, KisListBoxView::flags f = KisListBoxView::SHOWALL);
 	virtual ~KisListBoxItem();
 
 	virtual int height(const QListBox *lb) const;
@@ -110,7 +110,7 @@ public:
 	bool intersectPreviewRect(const QPoint& pos, int yOffset) const;
 
 private:
-	void init(const QString& label, QListBox *parent, int flags);
+	void init(const QString& label, QListBox *parent, KisListBoxView::flags f);
 	QPixmap loadPixmap(const QString& filename, const KIconLoader& il);
 	bool intersectRect(const QRect& rc, const QPoint& pos, int yOffset) const;
 
@@ -128,6 +128,7 @@ private:
 	QWidget *m_parent;
 	bool m_visible;
 	bool m_linked;
+	KisListBoxView::flags m_flags;
 };
 
 bool KisListBoxItem::visible()

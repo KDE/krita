@@ -5,6 +5,7 @@
  *                2001 John Califf
  *                2004 Boudewijn Rempt <boud@valdyas.org>
  *                2004 Adrian Page <adrian@pagenet.plus.com>
+ *                2004 Sven Langkamp <longamp@reallygood.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,15 +37,15 @@
 #define PREVIEW_WIDTH 64
 #define PREVIEW_HEIGHT 64
 
-KisGradient::RGBColorInterpolationStrategy *KisGradient::RGBColorInterpolationStrategy::m_instance = 0;
-KisGradient::HSVCWColorInterpolationStrategy *KisGradient::HSVCWColorInterpolationStrategy::m_instance = 0;
-KisGradient::HSVCCWColorInterpolationStrategy *KisGradient::HSVCCWColorInterpolationStrategy::m_instance = 0;
+KisGradientSegment::RGBColorInterpolationStrategy *KisGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
+KisGradientSegment::HSVCWColorInterpolationStrategy *KisGradientSegment::HSVCWColorInterpolationStrategy::m_instance = 0;
+KisGradientSegment::HSVCCWColorInterpolationStrategy *KisGradientSegment::HSVCCWColorInterpolationStrategy::m_instance = 0;
 
-KisGradient::LinearInterpolationStrategy *KisGradient::LinearInterpolationStrategy::m_instance = 0;
-KisGradient::CurvedInterpolationStrategy *KisGradient::CurvedInterpolationStrategy::m_instance = 0;
-KisGradient::SineInterpolationStrategy *KisGradient::SineInterpolationStrategy::m_instance = 0;
-KisGradient::SphereIncreasingInterpolationStrategy *KisGradient::SphereIncreasingInterpolationStrategy::m_instance = 0;
-KisGradient::SphereDecreasingInterpolationStrategy *KisGradient::SphereDecreasingInterpolationStrategy::m_instance = 0;
+KisGradientSegment::LinearInterpolationStrategy *KisGradientSegment::LinearInterpolationStrategy::m_instance = 0;
+KisGradientSegment::CurvedInterpolationStrategy *KisGradientSegment::CurvedInterpolationStrategy::m_instance = 0;
+KisGradientSegment::SineInterpolationStrategy *KisGradientSegment::SineInterpolationStrategy::m_instance = 0;
+KisGradientSegment::SphereIncreasingInterpolationStrategy *KisGradientSegment::SphereIncreasingInterpolationStrategy::m_instance = 0;
+KisGradientSegment::SphereDecreasingInterpolationStrategy *KisGradientSegment::SphereDecreasingInterpolationStrategy::m_instance = 0;
 
 KisGradient::KisGradient(const QString& file) : super(file)
 {
@@ -159,72 +160,25 @@ void KisGradient::ioResult(KIO::Job * /*job*/)
 
 		segmentFields >> interpolationType >> colorInterpolationType;
 
-		enum {
-			INTERP_LINEAR = 0,
-			INTERP_CURVED,
-			INTERP_SINE,
-			INTERP_SPHERE_INCREASING,
-			INTERP_SPHERE_DECREASING
-		};
-
-		enum {
-			COLOR_INTERP_RGB,
-			COLOR_INTERP_HSV_CCW,
-			COLOR_INTERP_HSV_CW
-		};
-
-		InterpolationStrategy *interpolator = 0;
-
-		switch (interpolationType) {
-		case INTERP_LINEAR:
-			interpolator = LinearInterpolationStrategy::instance();
-			break;
-		case INTERP_CURVED:
-			interpolator = CurvedInterpolationStrategy::instance();
-			break;
-		case INTERP_SINE:
-			interpolator = SineInterpolationStrategy::instance();
-			break;
-		case INTERP_SPHERE_INCREASING:
-			interpolator = SphereIncreasingInterpolationStrategy::instance();
-			break;
-		case INTERP_SPHERE_DECREASING:
-			interpolator = SphereDecreasingInterpolationStrategy::instance();
-			break;
-		}
-
-		ColorInterpolationStrategy *colorInterpolator = 0;
-
-		switch (colorInterpolationType) {
-		case COLOR_INTERP_RGB:
-			colorInterpolator = RGBColorInterpolationStrategy::instance();
-			break;
-		case COLOR_INTERP_HSV_CCW:
-			colorInterpolator = HSVCCWColorInterpolationStrategy::instance();
-			break;
-		case COLOR_INTERP_HSV_CW:
-			colorInterpolator = HSVCWColorInterpolationStrategy::instance();
-			break;
-		}
-
-		if (interpolator == 0 || colorInterpolator ==0) {
-			emit ioFailed(this);
-			return;
-		}
-
 		KoColor leftRgb((int)(leftRed * 255 + 0.5), (int)(leftGreen * 255 + 0.5), (int)(leftBlue * 255 + 0.5));
 		KoColor rightRgb((int)(rightRed * 255 + 0.5), (int)(rightGreen * 255 + 0.5), (int)(rightBlue * 255 + 0.5));
 
 		Color leftColor(leftRgb.color(), leftAlpha);
 		Color rightColor(rightRgb.color(), rightAlpha);
 
-		Segment *segment = new Segment(interpolator, colorInterpolator, leftOffset, middleOffset, rightOffset, leftColor, rightColor);
+		KisGradientSegment *segment = new KisGradientSegment(interpolationType, colorInterpolationType, leftOffset, middleOffset, rightOffset, leftColor, rightColor);
+
+		if ( !segment -> isValid() ) {
+			emit ioFailed(this);
+			delete segment;
+			return;
+		}
 
 		m_segments.push_back(segment);
 	}
 
 	if (!m_segments.isEmpty()) {
-		m_img = generatePreview();
+		m_img = generatePreview(PREVIEW_WIDTH, PREVIEW_HEIGHT);
 		setValid(true);
 		emit loadComplete(this);
 	}
@@ -233,7 +187,7 @@ void KisGradient::ioResult(KIO::Job * /*job*/)
 	}
 }
 
-const KisGradient::Segment *KisGradient::segmentAt(double t) const
+KisGradientSegment *KisGradient::segmentAt(double t) const
 {
 	if (t < DBL_EPSILON) {
 		t = 0;
@@ -245,7 +199,7 @@ const KisGradient::Segment *KisGradient::segmentAt(double t) const
 
 	Q_ASSERT(m_segments.count() != 0);
 
-	const Segment *segment = 0;
+	KisGradientSegment *segment = 0;
 
 	for (uint i = 0; i < m_segments.count(); i++) {
 		if (t > m_segments[i] -> startOffset() - DBL_EPSILON && t < m_segments[i] -> endOffset() + DBL_EPSILON) {
@@ -259,7 +213,7 @@ const KisGradient::Segment *KisGradient::segmentAt(double t) const
 
 void KisGradient::colorAt(double t, QColor *color, QUANTUM *opacity) const
 {
-	const Segment *segment = segmentAt(t);
+	const KisGradientSegment *segment = segmentAt(t);
 	Q_ASSERT(segment != 0);
 
 	if (segment) {
@@ -269,9 +223,9 @@ void KisGradient::colorAt(double t, QColor *color, QUANTUM *opacity) const
 	}
 }
 
-QImage KisGradient::generatePreview() const
+QImage KisGradient::generatePreview(int width, int height) const
 {
-	QImage img(PREVIEW_WIDTH, PREVIEW_HEIGHT, 32);
+	QImage img(width, height, 32);
 
 	for (int y = 0; y < img.height(); y++) {
 		for (int x = 0; x < img.width(); x++) {
@@ -299,10 +253,41 @@ QImage KisGradient::generatePreview() const
 	return img;
 }
 
-KisGradient::Segment::Segment(InterpolationStrategy *interpolator, ColorInterpolationStrategy *colorInterpolator, double startOffset, double middleOffset, double endOffset, const Color& startColor, const Color& endColor)
+KisGradientSegment::KisGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const Color& startColor, const Color& endColor)
 {
-	m_interpolator = interpolator;
-	m_colorInterpolator = colorInterpolator;
+	m_interpolator = 0;
+
+	switch (interpolationType) {
+	case INTERP_LINEAR:
+		m_interpolator = LinearInterpolationStrategy::instance();
+		break;
+	case INTERP_CURVED:
+		m_interpolator = CurvedInterpolationStrategy::instance();
+		break;
+	case INTERP_SINE:
+		m_interpolator = SineInterpolationStrategy::instance();
+		break;
+	case INTERP_SPHERE_INCREASING:
+		m_interpolator = SphereIncreasingInterpolationStrategy::instance();
+		break;
+	case INTERP_SPHERE_DECREASING:
+		m_interpolator = SphereDecreasingInterpolationStrategy::instance();
+		break;
+	}
+
+	m_colorInterpolator = 0;
+
+	switch (colorInterpolationType) {
+	case COLOR_INTERP_RGB:
+		m_colorInterpolator = RGBColorInterpolationStrategy::instance();
+		break;
+	case COLOR_INTERP_HSV_CCW:
+		m_colorInterpolator = HSVCCWColorInterpolationStrategy::instance();
+		break;
+	case COLOR_INTERP_HSV_CW:
+		m_colorInterpolator = HSVCWColorInterpolationStrategy::instance();
+		break;
+	}
 
 	if (startOffset < DBL_EPSILON) {
 		m_startOffset = 0;
@@ -350,27 +335,73 @@ KisGradient::Segment::Segment(InterpolationStrategy *interpolator, ColorInterpol
 	m_endColor = endColor;
 }
 
-const KisGradient::Color& KisGradient::Segment::startColor() const
+const Color& KisGradientSegment::startColor() const
 {
 	return m_startColor;
 }
 
-const KisGradient::Color& KisGradient::Segment::endColor() const
+const Color& KisGradientSegment::endColor() const
 {
 	return m_endColor;
 }
 
-double KisGradient::Segment::startOffset() const
+double KisGradientSegment::startOffset() const
 {
 	return m_startOffset;
 }
 
-double KisGradient::Segment::endOffset() const
+double KisGradientSegment::endOffset() const
 {
 	return m_endOffset;
 }
 
-KisGradient::Color KisGradient::Segment::colorAt(double t) const
+int KisGradientSegment::interpolation() const
+{
+	return m_interpolator -> type();
+}
+
+void KisGradientSegment::setInterpolation(int interpolationType)
+{
+	switch (interpolationType) {
+	case INTERP_LINEAR:
+		m_interpolator = LinearInterpolationStrategy::instance();
+		break;
+	case INTERP_CURVED:
+		m_interpolator = CurvedInterpolationStrategy::instance();
+		break;
+	case INTERP_SINE:
+		m_interpolator = SineInterpolationStrategy::instance();
+		break;
+	case INTERP_SPHERE_INCREASING:
+		m_interpolator = SphereIncreasingInterpolationStrategy::instance();
+		break;
+	case INTERP_SPHERE_DECREASING:
+		m_interpolator = SphereDecreasingInterpolationStrategy::instance();
+		break;
+	}
+}
+
+int KisGradientSegment::colorInterpolation() const
+{
+	return m_colorInterpolator -> type();
+}
+
+void KisGradientSegment::setColorInterpolation(int colorInterpolationType)
+{
+	switch (colorInterpolationType) {
+	case COLOR_INTERP_RGB:
+		m_colorInterpolator = RGBColorInterpolationStrategy::instance();
+		break;
+	case COLOR_INTERP_HSV_CCW:
+		m_colorInterpolator = HSVCCWColorInterpolationStrategy::instance();
+		break;
+	case COLOR_INTERP_HSV_CW:
+		m_colorInterpolator = HSVCWColorInterpolationStrategy::instance();
+		break;
+	}
+}
+
+Color KisGradientSegment::colorAt(double t) const
 {
 	Q_ASSERT(t > m_startOffset - DBL_EPSILON && t < m_endOffset + DBL_EPSILON);
 
@@ -390,7 +421,14 @@ KisGradient::Color KisGradient::Segment::colorAt(double t) const
 	return color;
 }
 
-KisGradient::RGBColorInterpolationStrategy *KisGradient::RGBColorInterpolationStrategy::instance()
+bool KisGradientSegment::isValid() const
+{
+	if (m_interpolator == 0 || m_colorInterpolator ==0)
+		return false;
+	return true;
+}
+
+KisGradientSegment::RGBColorInterpolationStrategy *KisGradientSegment::RGBColorInterpolationStrategy::instance()
 {
 	if (m_instance == 0) {
 		m_instance = new RGBColorInterpolationStrategy();
@@ -399,7 +437,7 @@ KisGradient::RGBColorInterpolationStrategy *KisGradient::RGBColorInterpolationSt
 	return m_instance;
 }
 
-KisGradient::Color KisGradient::RGBColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
+Color KisGradientSegment::RGBColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
 {
 	int red = static_cast<int>(start.color().red() + t * (end.color().red() - start.color().red()) + 0.5);
 	int green = static_cast<int>(start.color().green() + t * (end.color().green() - start.color().green()) + 0.5);
@@ -409,7 +447,7 @@ KisGradient::Color KisGradient::RGBColorInterpolationStrategy::colorAt(double t,
 	return Color(QColor(red, green, blue), alpha);
 }
 
-KisGradient::HSVCWColorInterpolationStrategy *KisGradient::HSVCWColorInterpolationStrategy::instance()
+KisGradientSegment::HSVCWColorInterpolationStrategy *KisGradientSegment::HSVCWColorInterpolationStrategy::instance()
 {
 	if (m_instance == 0) {
 		m_instance = new HSVCWColorInterpolationStrategy();
@@ -418,7 +456,7 @@ KisGradient::HSVCWColorInterpolationStrategy *KisGradient::HSVCWColorInterpolati
 	return m_instance;
 }
 
-KisGradient::Color KisGradient::HSVCWColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
+Color KisGradientSegment::HSVCWColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
 {
 	KoColor sc = KoColor(start.color());
 	KoColor ec = KoColor(end.color());
@@ -443,7 +481,7 @@ KisGradient::Color KisGradient::HSVCWColorInterpolationStrategy::colorAt(double 
 	return Color(KoColor(h, s, v, KoColor::csHSV).color(), alpha);
 }
 
-KisGradient::HSVCCWColorInterpolationStrategy *KisGradient::HSVCCWColorInterpolationStrategy::instance()
+KisGradientSegment::HSVCCWColorInterpolationStrategy *KisGradientSegment::HSVCCWColorInterpolationStrategy::instance()
 {
 	if (m_instance == 0) {
 		m_instance = new HSVCCWColorInterpolationStrategy();
@@ -452,7 +490,7 @@ KisGradient::HSVCCWColorInterpolationStrategy *KisGradient::HSVCCWColorInterpola
 	return m_instance;
 }
 
-KisGradient::Color KisGradient::HSVCCWColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
+Color KisGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
 {
 	KoColor sc = KoColor(start.color());
 	KoColor se = KoColor(end.color());
@@ -477,7 +515,7 @@ KisGradient::Color KisGradient::HSVCCWColorInterpolationStrategy::colorAt(double
 	return Color(KoColor(h, s, v, KoColor::csHSV).color(), alpha);
 }
 
-KisGradient::LinearInterpolationStrategy *KisGradient::LinearInterpolationStrategy::instance()
+KisGradientSegment::LinearInterpolationStrategy *KisGradientSegment::LinearInterpolationStrategy::instance()
 {
 	if (m_instance == 0) {
 		m_instance = new LinearInterpolationStrategy();
@@ -486,7 +524,7 @@ KisGradient::LinearInterpolationStrategy *KisGradient::LinearInterpolationStrate
 	return m_instance;
 }
 
-double KisGradient::LinearInterpolationStrategy::calcValueAt(double t, double middle)
+double KisGradientSegment::LinearInterpolationStrategy::calcValueAt(double t, double middle)
 {
 	Q_ASSERT(t > -DBL_EPSILON && t < 1 + DBL_EPSILON);
 	Q_ASSERT(middle > -DBL_EPSILON && middle < 1 + DBL_EPSILON);
@@ -513,17 +551,17 @@ double KisGradient::LinearInterpolationStrategy::calcValueAt(double t, double mi
 	return value;
 }
 
-double KisGradient::LinearInterpolationStrategy::valueAt(double t, double middle) const
+double KisGradientSegment::LinearInterpolationStrategy::valueAt(double t, double middle) const
 {
 	return calcValueAt(t, middle);
 }
 
-KisGradient::CurvedInterpolationStrategy::CurvedInterpolationStrategy()
+KisGradientSegment::CurvedInterpolationStrategy::CurvedInterpolationStrategy()
 {
 	m_logHalf = log(0.5);
 }
 
-KisGradient::CurvedInterpolationStrategy *KisGradient::CurvedInterpolationStrategy::instance()
+KisGradientSegment::CurvedInterpolationStrategy *KisGradientSegment::CurvedInterpolationStrategy::instance()
 {
 	if (m_instance == 0) {
 		m_instance = new CurvedInterpolationStrategy();
@@ -532,7 +570,7 @@ KisGradient::CurvedInterpolationStrategy *KisGradient::CurvedInterpolationStrate
 	return m_instance;
 }
 
-double KisGradient::CurvedInterpolationStrategy::valueAt(double t, double middle) const
+double KisGradientSegment::CurvedInterpolationStrategy::valueAt(double t, double middle) const
 {
 	Q_ASSERT(t > -DBL_EPSILON && t < 1 + DBL_EPSILON);
 	Q_ASSERT(middle > -DBL_EPSILON && middle < 1 + DBL_EPSILON);
@@ -548,7 +586,7 @@ double KisGradient::CurvedInterpolationStrategy::valueAt(double t, double middle
 	return value;
 }
 
-KisGradient::SineInterpolationStrategy *KisGradient::SineInterpolationStrategy::instance()
+KisGradientSegment::SineInterpolationStrategy *KisGradientSegment::SineInterpolationStrategy::instance()
 {
 	if (m_instance == 0) {
 		m_instance = new SineInterpolationStrategy();
@@ -557,7 +595,7 @@ KisGradient::SineInterpolationStrategy *KisGradient::SineInterpolationStrategy::
 	return m_instance;
 }
 
-double KisGradient::SineInterpolationStrategy::valueAt(double t, double middle) const
+double KisGradientSegment::SineInterpolationStrategy::valueAt(double t, double middle) const
 {
 	double lt = LinearInterpolationStrategy::calcValueAt(t, middle);
 	double value = (sin(-M_PI_2 + M_PI * lt) + 1.0) / 2.0;
@@ -565,7 +603,7 @@ double KisGradient::SineInterpolationStrategy::valueAt(double t, double middle) 
 	return value;
 }
 
-KisGradient::SphereIncreasingInterpolationStrategy *KisGradient::SphereIncreasingInterpolationStrategy::instance()
+KisGradientSegment::SphereIncreasingInterpolationStrategy *KisGradientSegment::SphereIncreasingInterpolationStrategy::instance()
 {
 	if (m_instance == 0) {
 		m_instance = new SphereIncreasingInterpolationStrategy();
@@ -574,7 +612,7 @@ KisGradient::SphereIncreasingInterpolationStrategy *KisGradient::SphereIncreasin
 	return m_instance;
 }
 
-double KisGradient::SphereIncreasingInterpolationStrategy::valueAt(double t, double middle) const
+double KisGradientSegment::SphereIncreasingInterpolationStrategy::valueAt(double t, double middle) const
 {
 	double lt = LinearInterpolationStrategy::calcValueAt(t, middle) - 1;
 	double value = sqrt(1 - lt * lt);
@@ -582,7 +620,7 @@ double KisGradient::SphereIncreasingInterpolationStrategy::valueAt(double t, dou
 	return value;
 }
 
-KisGradient::SphereDecreasingInterpolationStrategy *KisGradient::SphereDecreasingInterpolationStrategy::instance()
+KisGradientSegment::SphereDecreasingInterpolationStrategy *KisGradientSegment::SphereDecreasingInterpolationStrategy::instance()
 {
 	if (m_instance == 0) {
 		m_instance = new SphereDecreasingInterpolationStrategy();
@@ -591,7 +629,7 @@ KisGradient::SphereDecreasingInterpolationStrategy *KisGradient::SphereDecreasin
 	return m_instance;
 }
 
-double KisGradient::SphereDecreasingInterpolationStrategy::valueAt(double t, double middle) const
+double KisGradientSegment::SphereDecreasingInterpolationStrategy::valueAt(double t, double middle) const
 {
 	double lt = LinearInterpolationStrategy::calcValueAt(t, middle);
 	double value = 1 - sqrt(1 - lt * lt);

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *                2004 Sven Langkamp <longamp@reallygood.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +30,7 @@ class KisAutogradientResource : public KisGradient
 		{
 		}
 	public:
-		void createSegment( QString interpolation, QString colorInterpolation, double startOffset, double endOffset, double middleOffset, QColor left, QColor right );
+		void createSegment( int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, QColor left, QColor right );
 	public:
 		virtual bool loadAsync() { return false; };
 };
@@ -38,11 +39,17 @@ class KisAutogradient : public KisWdgAutogradient
 {
 	Q_OBJECT
 	public:
-		KisAutogradient(QWidget *parent, const char* name, const QString& caption);
+		KisAutogradient(QWidget *parent, const char* name, const QString& caption);;
 	signals:
 		void activatedResource(KisResource *r);
 	private:
 		KisAutogradientResource* m_autogradientResource;
+	private slots:
+		void slotSelectedSegment(KisGradientSegment* segment);
+		void slotChangedInterpolation(int type);
+		void slotChangedColorInterpolation(int type);
+		void slotChangedLeftColor( const QColor& color);
+		void slotChangedRightColor( const QColor& color);
 };
 
 #endif

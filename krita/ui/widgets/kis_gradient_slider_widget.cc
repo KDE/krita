@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *                2004 Sven Langkamp <longamp@reallygood.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,10 +30,11 @@
 
 #include "kis_autogradient.h"
 
-KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* name, WFlags f ) : QWidget( parent, name, f)
+KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* name, WFlags f )
+	: QWidget( parent, name, f), 
+	m_currentSegment(0)
 {
-	setMinimumHeight(20);
-	setMaximumHeight(20);
+	setMinimumHeight(30);
 }
 
 void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
@@ -40,21 +42,13 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
 	QWidget::paintEvent( pe );
 	QPainter painter( this );
 	painter.setPen( Qt::black );
-	painter.drawRect( 5, 5, width() - 10, 10 );
-	KisStrategyColorSpaceSP colorSpace = KisColorSpaceRegistry::instance()->get("RGBA");
-	KisPaintDeviceSP device = new KisLayer( width() - 12, 8, colorSpace, " gradient preview " );
-	KisGradientPainter gradientPainter( device );
-	gradientPainter.setGradient(*m_autogradientResource );
-	gradientPainter.paintGradient(QPoint(0, 3), QPoint( device -> width() - 1, 3), KisGradientPainter::GradientShapeLinear, KisGradientPainter::GradientRepeatNone, 0.20, false );
-	
-	QPixmap pixmap(TILE_WIDTH, device->height());
- 	for (int x = 0; x < device -> width(); x += TILE_WIDTH) {
-		QImage img = device -> convertToQImage(x, 0, TILE_WIDTH, device->height() );
-		if (!img.isNull()) {
-			m_pixmapIO.putImage(&pixmap, 0, 0, &img);
-			painter.drawPixmap(x + 6, 6, pixmap, 0, 0, pixmap.width(), pixmap.height());
-		}
- 	}
+	painter.drawRect( 5, 5, width() - 10, height()-15 );
+	QImage img = m_autogradientResource -> generatePreview(width()-12, height()-17);
+	QPixmap pixmap(img.width(), img.height());
+	if (!img.isNull()) {
+		m_pixmapIO.putImage(&pixmap, 0, 0, &img);
+		painter.drawPixmap(6, 6, pixmap, 0, 0, pixmap.width(), pixmap.height());
+	}
 }
 
 void KisGradientSliderWidget::mouseReleaseEvent ( QMouseEvent * e )
@@ -64,4 +58,10 @@ void KisGradientSliderWidget::mouseReleaseEvent ( QMouseEvent * e )
 		return;
 	double t = (e->x() - 5.0) / (width() - 10.0);
 	kdDebug() << "clicked y=" << e->y() << " x=" << e->x() << " t=" << t << endl;
+	KisGradientSegment* segment = m_autogradientResource -> segmentAt(t);
+	if(segment != 0)
+		m_currentSegment = segment;
+		emit sigSelectedSegment(segment);
 }
+
+#include "kis_gradient_slider_widget.moc"

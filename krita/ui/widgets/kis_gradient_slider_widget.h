@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *                2004 Sven Langkamp <longamp@reallygood.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,19 +24,25 @@
 #include <qwidget.h>
 
 class KisAutogradientResource;
+class KisGradientSegment;
 
 class KisGradientSliderWidget : public QWidget
 {
+	Q_OBJECT
 	public:
 		KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, WFlags f = 0);
 	public:
 		virtual void paintEvent ( QPaintEvent * );
-		inline void setGradientResource( KisAutogradientResource* agr) { m_autogradientResource = agr; };
+		inline void setGradientResource( KisAutogradientResource* agr) { m_autogradientResource = agr; }
+		KisGradientSegment* currentSegment() { return m_currentSegment; };
+	signals:
+		void sigSelectedSegment(KisGradientSegment*);
 	protected:
 		virtual void mouseReleaseEvent ( QMouseEvent * e );
 	private:
 		KPixmapIO m_pixmapIO;
 		KisAutogradientResource* m_autogradientResource;
+		KisGradientSegment* m_currentSegment;
 };
 
 #endif

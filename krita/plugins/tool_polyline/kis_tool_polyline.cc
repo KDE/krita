@@ -120,9 +120,9 @@ void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
                         {
                                 start = (*it);
                         } else {
-                        end = (*it);
-                        painter.paintLine(start, PRESSURE_DEFAULT, 0, 0, end, PRESSURE_DEFAULT, 0, 0);
-                        start = end;
+                                end = (*it);
+                                painter.paintLine(start, PRESSURE_DEFAULT, 0, 0, end, PRESSURE_DEFAULT, 0, 0);
+                                start = end;
                         }
                 }
                 m_points -> clear();

@@ -23,6 +23,7 @@
 #include <kpixmapio.h>
 #include <qwidget.h>
 
+class KPopupMenu;
 class KisAutogradientResource;
 class KisGradientSegment;
 
@@ -34,13 +35,16 @@ class KisGradientSliderWidget : public QWidget
 	public:
 		virtual void paintEvent ( QPaintEvent * );
 		void setGradientResource( KisAutogradientResource* agr);
-		KisGradientSegment* currentSegment() { return m_currentSegment; };
+		KisGradientSegment* selectedSegment() { return m_selectedSegment; };
 	signals:
 		void sigSelectedSegment(KisGradientSegment*);
 	protected:
 		virtual void mousePressEvent( QMouseEvent * e );
 		virtual void mouseReleaseEvent ( QMouseEvent * e );
 		virtual void mouseMoveEvent( QMouseEvent * e );
+		virtual void contextMenuEvent( QContextMenuEvent * e );
+	private slots:
+		void slotMenuAction(int id);
 	private:
 		enum {
 			NO_DRAG,
@@ -48,10 +52,19 @@ class KisGradientSliderWidget : public QWidget
 			RIGHT_DRAG,
 			MIDDLE_DRAG
 		};
+
+		enum {
+			SPLIT_SEGMENT,
+			DUPLICATE_SEGMENT,
+			MIRROR_SEGMENT,
+			REMOVE_SEGMENT
+		};
 		
 		KPixmapIO m_pixmapIO;
 		KisAutogradientResource* m_autogradientResource;
 		KisGradientSegment* m_currentSegment;
+		KisGradientSegment* m_selectedSegment;
+		KPopupMenu* m_segmentMenu;
 		int m_drag;
 };
 

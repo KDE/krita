@@ -32,20 +32,21 @@ class KisAutogradientResource : public KisGradient
 	public:
 		void createSegment( int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, QColor left, QColor right );
 		const QValueVector<double> getHandlePositions() const;
+		const QValueVector<double> getMiddleHandlePositions() const;
 
 		/** 
 		 * Moves the StartOffset of the specified segment to the specified value
-		 * and corrects the EndOffset of the previous segment.
-		 * If the Segment is the first Segment the StartOffset will be set to 0.0 .
+		 * and corrects the endoffset of the previous segment.
+		 * If the segment is the first Segment the startoffset will be set to 0.0 .
 		 * The offset will maximally be moved till the middle of the current or the previous
 		 * segment
 		 */
 		void moveSegmentStartOffset( KisGradientSegment* segment, double t);
 
 		/** 
-		 * Moves the EndOffset of the specified segment to the specified value
-		 * and corrects the StartOffset of the following segment.
-		 * If the Segment is the last Segment the EndOffset will be set to 1.0 .
+		 * Moves the endoffset of the specified segment to the specified value
+		 * and corrects the startoffset of the following segment.
+		 * If the segment is the last segment the endoffset will be set to 1.0 .
 		 * The offset will maximally be moved till the middle of the current or the following
 		 * segment
 		 */
@@ -53,9 +54,27 @@ class KisAutogradientResource : public KisGradient
 
 		/** 
 		 * Moves the Middle of the specified segment to the specified value
-		 * The offset will maximally be moved till the EndOffset or StartOffset of the segment
+		 * The offset will maximally be moved till the endoffset or startoffset of the segment
 		 */
 		void moveSegmentMiddleOffset( KisGradientSegment* segment, double t);
+
+
+		void splitSegment( KisGradientSegment* segment );
+		void duplicateSegment( KisGradientSegment* segment );
+		void mirrorSegment( KisGradientSegment* segment );
+
+		/** 
+		 * Removes the specific segment from the gradient.
+		 * @return The segment which will be at the place of the old segment.
+		 * 0 if the segment is not in the gradient or it is not possible to remove the segment.
+		 */
+		KisGradientSegment* removeSegment( KisGradientSegment* segment );
+
+		/** 
+		 * Checks if it's possible to remove an segment(at least two segments in the gradient)
+		 * @return true if it's possible to remove an segment
+		 */
+		bool removeSegmentPossible() const;
 	public:
 		virtual bool loadAsync() { return false; };
 };

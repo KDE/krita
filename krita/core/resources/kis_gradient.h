@@ -83,7 +83,9 @@ class KisGradientSegment {
 		void setStartOffset(double t);
 		void setMiddleOffset(double t);
 		void setEndOffset(double t);
-		
+
+		double length() { return m_length; }
+
 		int interpolation() const;
 		int colorInterpolation() const;
 		

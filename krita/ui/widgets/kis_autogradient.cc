@@ -48,6 +48,17 @@ const QValueVector<double> KisAutogradientResource::getHandlePositions() const
 	return handlePositions;
 }
 
+const QValueVector<double> KisAutogradientResource::getMiddleHandlePositions() const
+{
+	QValueVector<double> middleHandlePositions;
+
+	for (uint i = 0; i < m_segments.count(); i++)
+	{
+		middleHandlePositions.push_back(m_segments[i] -> middleOffset());
+	}
+	return middleHandlePositions;
+}
+
 void KisAutogradientResource::moveSegmentStartOffset( KisGradientSegment* segment, double t)
 {
 	QValueVector<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
@@ -111,14 +122,111 @@ void KisAutogradientResource::moveSegmentMiddleOffset( KisGradientSegment* segme
 	}
 }
 
+void KisAutogradientResource::splitSegment( KisGradientSegment* segment )
+{
+	Q_ASSERT(segment != 0);
+	QValueVector<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
+	if ( it != m_segments.end() )
+	{
+		KisGradientSegment* newSegment = new KisGradientSegment(
+				segment -> interpolation(), segment -> colorInterpolation(),
+				segment  -> startOffset(),
+				( segment -> middleOffset() - segment -> startOffset() ) / 2 + segment -> startOffset(),
+				segment -> middleOffset(), 
+				segment -> startColor(),
+				segment -> colorAt( segment -> middleOffset() ) );
+		m_segments.insert( it, newSegment );
+		segment -> setStartColor( segment -> colorAt( segment -> middleOffset() ) );	
+		segment -> setStartOffset( segment -> middleOffset() );
+		segment -> setMiddleOffset( ( segment -> endOffset() - segment -> startOffset() ) / 2 + segment -> startOffset() );
+	}
+}
+
+void KisAutogradientResource::duplicateSegment( KisGradientSegment* segment )
+{
+	Q_ASSERT(segment != 0);
+	QValueVector<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
+	if ( it != m_segments.end() )
+	{
+		double middlePostionPercentage = ( segment -> middleOffset() - segment -> startOffset() ) / segment -> length();
+		double center = segment -> startOffset() + segment -> length() / 2;
+		KisGradientSegment* newSegment = new KisGradientSegment(
+				segment -> interpolation(), segment -> colorInterpolation(),
+				segment  -> startOffset(),
+				segment -> length() / 2 * middlePostionPercentage + segment -> startOffset(),
+				center, segment -> startColor(),
+				segment -> endColor() );
+		m_segments.insert( it, newSegment );
+		segment -> setStartOffset( center );
+		segment -> setMiddleOffset( segment -> length() * middlePostionPercentage  + segment -> startOffset() );
+	}
+}
+
+void KisAutogradientResource::mirrorSegment( KisGradientSegment* segment )
+{
+	Q_ASSERT(segment != 0);
+	Color tmpColor = segment -> startColor();
+	segment -> setStartColor( segment -> endColor() );
+	segment -> setEndColor( tmpColor );
+	segment -> setMiddleOffset( segment -> endOffset() - ( segment -> middleOffset() - segment -> startOffset() ) );
+
+	if( segment -> interpolation() == INTERP_SPHERE_INCREASING )
+		segment -> setInterpolation( INTERP_SPHERE_DECREASING );
+	else if( segment -> interpolation() == INTERP_SPHERE_DECREASING )
+		segment -> setInterpolation( INTERP_SPHERE_INCREASING );
+
+	if( segment -> colorInterpolation() == COLOR_INTERP_HSV_CW )
+		segment -> setColorInterpolation( COLOR_INTERP_HSV_CCW );
+	else if( segment -> colorInterpolation() == COLOR_INTERP_HSV_CCW )
+		segment -> setColorInterpolation( COLOR_INTERP_HSV_CW );
+}
+
+KisGradientSegment* KisAutogradientResource::removeSegment( KisGradientSegment* segment )
+{
+	Q_ASSERT(segment != 0);
+	if( m_segments.count() < 2 )
+		return 0;
+	QValueVector<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
+	if ( it != m_segments.end() )
+	{
+		double middlePostionPercentage;
+		KisGradientSegment* nextSegment;
+		if( it == m_segments.begin() )
+		{
+			nextSegment = (*(it+1));
+			middlePostionPercentage = ( nextSegment -> middleOffset() - nextSegment -> startOffset() ) / nextSegment -> length();
+			nextSegment -> setStartOffset( segment -> startOffset() );
+			nextSegment -> setMiddleOffset( middlePostionPercentage * nextSegment -> length() + nextSegment -> startOffset() );
+		}
+		else
+		{
+			nextSegment = (*(it-1));
+			middlePostionPercentage = ( nextSegment -> middleOffset() - nextSegment -> startOffset() ) / nextSegment -> length();
+			nextSegment -> setEndOffset( segment -> endOffset() );
+			nextSegment -> setMiddleOffset( middlePostionPercentage * nextSegment -> length() + nextSegment -> startOffset() );
+		}
+
+		delete segment;
+		m_segments.erase( it );
+		return nextSegment;
+	}
+	return 0;
+}
+
+bool KisAutogradientResource::removeSegmentPossible() const
+{
+	if( m_segments.count() < 2 )
+		return false;
+	return true;
+}
+
 /****************************** KisAutogradient ******************************/
 
 KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QString& caption) : KisWdgAutogradient(parent, name)
 {
 	setCaption(caption);
 	m_autogradientResource = new KisAutogradientResource();
-	m_autogradientResource->createSegment( INTERP_LINEAR, COLOR_INTERP_RGB, 0.0, 0.5, 0.25, Qt::black, Qt::white );
-	m_autogradientResource->createSegment( INTERP_LINEAR, COLOR_INTERP_RGB, 0.5, 1.0, 0.75, Qt::black, Qt::white );
+	m_autogradientResource->createSegment( INTERP_LINEAR, COLOR_INTERP_RGB, 0.0, 1.0, 0.5, Qt::black, Qt::white );
 	connect(gradientSlider, SIGNAL( sigSelectedSegment( KisGradientSegment* ) ), SLOT( slotSelectedSegment(KisGradientSegment*) ));
 	gradientSlider->setGradientResource( m_autogradientResource );
 	connect(comboBoxColorInterpolationType, SIGNAL( activated(int) ), SLOT( slotChangedColorInterpolation(int) ));
@@ -138,7 +246,7 @@ void KisAutogradient::slotSelectedSegment(KisGradientSegment* segment)
 
 void KisAutogradient::slotChangedInterpolation(int type)
 {
-	KisGradientSegment* segment = gradientSlider -> currentSegment();
+	KisGradientSegment* segment = gradientSlider -> selectedSegment();
 	if(segment)
 		segment -> setInterpolation( type );
 	gradientSlider -> repaint();
@@ -146,7 +254,7 @@ void KisAutogradient::slotChangedInterpolation(int type)
 
 void KisAutogradient::slotChangedColorInterpolation(int type)
 {
-	KisGradientSegment* segment = gradientSlider -> currentSegment();
+	KisGradientSegment* segment = gradientSlider -> selectedSegment();
 	if(segment)
 		segment -> setColorInterpolation( type );
 	gradientSlider -> repaint();
@@ -154,7 +262,7 @@ void KisAutogradient::slotChangedColorInterpolation(int type)
 
 void KisAutogradient::slotChangedLeftColor( const QColor& color)
 {
-	KisGradientSegment* segment = gradientSlider -> currentSegment();
+	KisGradientSegment* segment = gradientSlider -> selectedSegment();
 	if(segment)
 		segment -> setStartColor( Color( color, 1 ) );
 	gradientSlider -> repaint();
@@ -162,7 +270,7 @@ void KisAutogradient::slotChangedLeftColor( const QColor& color)
 
 void KisAutogradient::slotChangedRightColor( const QColor& color)
 {
-	KisGradientSegment* segment = gradientSlider -> currentSegment();
+	KisGradientSegment* segment = gradientSlider -> selectedSegment();
 	if(segment)
 		segment -> setEndColor( Color( color, 1 ) );
 	gradientSlider -> repaint();

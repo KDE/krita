@@ -83,7 +83,7 @@ void KisTileMediator::detach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum)
 {
 	KisScopedLock l(&KisTileMediator::m_mutex);
 
-	KisTileMediator::m_instance -> detach(tile, mgr, tilenum);
+	return KisTileMediator::m_instance -> detach(tile, mgr, tilenum);
 }
 
 Q_INT32 KisTileMediator::tileNum(KisTileSP tile, KisTileMgrSP mgr)
@@ -128,7 +128,7 @@ void KisTileMediatorSingleton::detach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 
 				it = l.erase(it);
 		}
 
-		if (l.empty())
+		if (l.empty()) 
 			m_links.erase(tile);
 	}
 }

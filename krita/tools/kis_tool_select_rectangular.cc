@@ -115,6 +115,7 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 				KisSelectionSP selection;
 				QRect rc(m_startPos.x(), m_startPos.y(), m_endPos.x() - m_startPos.x(), m_endPos.y() - m_startPos.y());
 
+				rc = rc.normalize();
 				img = m_view -> currentImg();
 				Q_ASSERT(img);
 				parent = img -> activeDevice();

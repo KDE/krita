@@ -37,8 +37,36 @@ KisSelection::KisSelection(KisPaintDeviceSP parent, KisImageSP img, const QStrin
 
 KisSelection::~KisSelection()
 {
-	// push_undo_bitBlt
-	// commit tiles to parent
+}
+
+void KisSelection::commit()
+{
+	KisPainter gc(m_parent);
+	QRect clip = this -> clip();
+	Q_INT32 sx;
+	Q_INT32 sy;
+	Q_INT32 dx;
+	Q_INT32 dy;
+	Q_INT32 w;
+	Q_INT32 h;
+
+	sx = x();
+	sy = y();
+	dx = x();
+	dy = y();
+	w = width();
+	h = height();
+
+	if (!clip.isEmpty()) {
+		sx = sx + clip.x();
+		sy = sy + clip.y();
+		w = clip.width();
+		h = clip.height();
+	}
+
+	Q_ASSERT(w <= width());
+	Q_ASSERT(h <= height());
+	gc.bitBlt(dx + clip.x(), dy + clip.y(), COMPOSITE_COPY, this, 0, 0, w, h);
 }
 
 bool KisSelection::shouldDrawBorder() const
@@ -91,7 +119,7 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 			tile = tm1 -> tile(tileno, TILEMODE_READ);
 
 			if (tile) {
-//				tile -> shareRef();
+				tile -> shareRef();
 				tm2 -> attach(tile, tileno - offset);
 			}
 		}
@@ -104,6 +132,18 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 	parentX = parentX / TILE_WIDTH * TILE_WIDTH;
 	parentY = parentY / TILE_HEIGHT * TILE_HEIGHT;
 	super::move(parentX, parentY);
+	
+#if 1
+	{
+		// tile -> shareRef() above sets "Copy on write" flag.
+		// however, it doesn't seem to be working very well righ now, so
+		// just use a Painter to transfer the data.
+		KisPainter gc(this);
+
+		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, clipX, clipY, width, height);
+	}
+#endif
+
 }
 
 void KisSelection::setBounds(const QRect& rc)

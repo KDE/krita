@@ -30,11 +30,12 @@ public:
 	virtual ~KisSelection();
 
 public:
-	// Overide
+	// Overide KisLayer
 	virtual bool shouldDrawBorder() const;
 	virtual void move(Q_INT32 x, Q_INT32 y);
 
 public:
+	void commit();
 	void setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_INT32 height);
 	void setBounds(const QRect& rc);
 	KisPaintDeviceSP parent() const;

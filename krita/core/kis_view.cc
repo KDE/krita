@@ -715,7 +715,31 @@ void KisView::paste()
 
 void KisView::removeSelection()
 {
-	fillSelection(KoColor::black(), OPACITY_TRANSPARENT);
+	KisImageSP img = currentImg();
+
+	if (img) {
+		KisSelectionSP selection = img -> selection();
+
+		if (selection) {
+			KisPaintDeviceSP parent = selection -> parent();
+			QRect rc = selection -> bounds();
+			QRect clip = selection -> clip();
+			KisPainter gc(parent);
+
+			if (!clip.isEmpty()) {
+				rc.setX(rc.x() + clip.x());
+				rc.setY(rc.y() + clip.y());
+				rc.setWidth(clip.width());
+				rc.setHeight(clip.height());
+			}
+
+			img -> unsetSelection();
+			gc.fillRect(rc, KoColor::black(), OPACITY_TRANSPARENT);
+			gc.end();
+			m_doc -> setModified(true);
+			updateCanvas();
+		}
+	}
 }
 
 void KisView::fillSelectionBg()
@@ -739,7 +763,7 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 			KisPaintDeviceSP parent = selection -> parent();
 			QRect rc = selection -> bounds();
 			QRect clip = selection -> clip();
-			KisPainter gc(parent);
+			KisPainter gc(selection.data());
 
 			if (!clip.isEmpty()) {
 				rc.setX(rc.x() + clip.x());
@@ -748,9 +772,12 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 				rc.setHeight(clip.height());
 			}
 
-			img -> unsetSelection();
-			gc.fillRect(rc, c, opacity);
+			clip.setX(0);
+			clip.setY(0);
+			gc.fillRect(clip, c, opacity);
 			gc.end();
+			rc |= selection -> bounds();
+			img -> invalidate(rc);
 			m_doc -> setModified(true);
 			updateCanvas();
 		}
@@ -822,7 +849,10 @@ void KisView::selectAll()
 	KisImageSP img = currentImg();
 
 	if (img) {
-		KisPaintDeviceSP dev = img -> activeDevice();
+		KisPaintDeviceSP dev;
+	       
+		img -> unsetSelection();
+		dev = img -> activeDevice();
 
 		if (dev) {
 			KisSelectionSP selection = new KisSelection(dev, img, "Selection box from KisView", OPACITY_OPAQUE);

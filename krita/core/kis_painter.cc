@@ -87,7 +87,7 @@ void KisPainter::begin(KisPixelDataSP pd)
 
 void KisPainter::begin(KisPaintDeviceSP device)
 {
-	begin(device, device -> x(), device -> y(), device -> width(), device -> height());
+	begin(device, 0, 0, device -> width(), device -> height());
 }
 
 void KisPainter::begin(KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)

@@ -32,7 +32,6 @@
 #include "kis_selection.h"
 #include "kistile.h"
 #include "kistilemgr.h"
-#include "kispixeldata.h"
 
 namespace {
 	void renderBgTile(KisTileSP tile)
@@ -985,6 +984,7 @@ void KisImage::unsetSelection()
 	if (m_selection) {
 		QRect rc = m_selection -> bounds();
 
+		m_selection -> commit();
 		m_selection = 0;
 		invalidate(rc);
 		emit selectionChanged(this);

@@ -43,19 +43,33 @@ KisTileMgr::~KisTileMgr()
 
 void KisTileMgr::attach(KisTileSP tile, Q_INT32 tilenum)
 {
-	KisScopedLock l(tile -> mutex());
+	if (m_tiles.empty())
+		allocate(m_ntileRows * m_ntileCols);
 
-	if (tile -> shareCount() > 0 && !tile -> valid())
-		validate(tile);
+	if (tile) {
+		KisScopedLock l(tile -> mutex());
 
-	m_mediator -> attach(tile, this, tilenum);
+		if (tile -> shareCount() > 0 && !tile -> valid())
+			validate(tile);
+
+		m_mediator -> attach(tile, this, tilenum);
+		m_tiles[tilenum] = tile.data();
+	}
 }
 
 void KisTileMgr::detach(KisTileSP tile, Q_INT32 tilenum)
 {
-	KisScopedLock l(tile -> mutex());
+	if (m_tiles.empty())
+		allocate(m_ntileRows * m_ntileCols);
 
-	m_mediator -> detach(tile, this, tilenum);
+	if (tile) {
+		KisScopedLock l(tile -> mutex());
+		KisTileSP prev;
+
+		m_mediator -> detach(tile, this, tilenum);
+		prev = 0; // TODO Get the previous tile that was in this spot.  Right now, the tile is lost when we assign.
+		m_tiles[tilenum] = prev;
+	}
 }
 
 KisTileSP KisTileMgr::tile(Q_INT32 xpix, Q_INT32 ypix, Q_INT32 mode)
@@ -98,8 +112,6 @@ KisTileSP KisTileMgr::tile(Q_INT32 tilenum, Q_INT32 mode)
 			tile -> writeRef();
 			tile -> dirty(true);
 		}
-
-		tile -> lock();
 	}
 
 	return tile;
@@ -448,23 +460,24 @@ void KisTileMgr::allocate(Q_INT32 ntiles)
 	Q_INT32 i;
 	Q_INT32 j;
 	Q_INT32 k;
+	KisTileSP t;
 
 	m_tiles.resize(ntiles);
 	nrows = m_ntileRows;
 	ncols = m_ntileCols;
 	rightTile = m_width - ((ncols - 1) * TILE_WIDTH);
-	bottomTile = m_height - ((nrows -1) * TILE_HEIGHT);
+	bottomTile = m_height - ((nrows - 1) * TILE_HEIGHT);
 
 	for (i = 0, k = 0; i < nrows; i++) {
 		for (j = 0; j < ncols; j++, k++) {
-			m_tiles[k] = new KisTile(depth(), 0, 0);
-			attach(m_tiles[k], k);
+			t = new KisTile(depth(), 0, 0);
+			attach(t, k);
 
 			if (j == ncols - 1)
-				m_tiles[k] -> width(rightTile);
+				t -> width(rightTile);
 
 			if (i == nrows - 1)
-				m_tiles[k] -> height(bottomTile);
+				t -> height(bottomTile);
 		}
 	}
 }
@@ -484,7 +497,7 @@ Q_INT32 KisTileMgr::tileNum(Q_UINT32 xpix, Q_UINT32 ypix) const
 	return num;
 }
 
-KisTileSP KisTileMgr::invalidateTile(KisTileSP tile, Q_INT32 tilenum)
+KisTileSP KisTileMgr::invalidateTile(KisTileSP tile, Q_INT32)
 {
 	KisScopedLock l(tile -> mutex());
 

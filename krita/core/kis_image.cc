@@ -498,11 +498,9 @@ KisProfileSP KisImage::profile() const
 void KisImage::setProfile(const KisProfileSP& profile) 
 {
 	if (profile && profile -> valid() && profile -> colorSpaceSignature() == m_colorStrategy -> colorSpaceSignature()) {
-		kdDebug() << "KisImage::setProfile: " << profile -> productName() << "\n";
 		m_profile = profile;
 	}
 	else {
-		kdDebug() << "KisImage::setProfile: empty profile\n";
 		m_profile = 0;
 	}
 	emit(profileChanged(m_profile));

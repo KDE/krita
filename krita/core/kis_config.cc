@@ -123,7 +123,7 @@ void KisConfig::defCursorStyle(enumCursorStyle style)
 
 QString KisConfig::monitorProfile() const
 {
-	kdDebug () << "Profile: " << m_cfg -> readEntry("monitorProfile", "None") << "\n";
+//	kdDebug () << "Profile: " << m_cfg -> readEntry("monitorProfile", "None") << "\n";
 	return m_cfg -> readEntry("monitorProfile", "None");
 }
 

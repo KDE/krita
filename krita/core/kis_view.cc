@@ -583,11 +583,11 @@ void KisView::resetMonitorProfile()
 	QString monitorProfileName = cfg.monitorProfile();
 
 	m_monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
-	if (m_monitorProfile) {
-		kdDebug() << "Monitor profile: " << m_monitorProfile -> productName() << "\n";
-	} else {
-		kdDebug() << "Empty monitor profile " << monitorProfileName << "\n";
-	}
+// 	if (m_monitorProfile) {
+// 		kdDebug() << "Monitor profile: " << m_monitorProfile -> productName() << "\n";
+// 	} else {
+// 		kdDebug() << "Empty monitor profile " << monitorProfileName << "\n";
+// 	}
 	
 }
 

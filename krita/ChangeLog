@@ -1,32 +1,4 @@
-24-09-2004
-	* Oops... I'd forgotten we even had a changelog. cvs2changlog.pl,
-	anyone?
-22-01-2004
-	* Fixed spacing tool, fixed cursors for paint tools, restarted
-	eraser tool, fixed some toolbar icons.
-21-01-2004
-	* Krita now can load and use the Gimp's pipe-line (.gih) brushes
-20-01-2004
-	* Krita now honours the pressure sensititivy of a graphics tablet
-19-01-2004
-	* Krita now loads the Gimp's pattern (.pat) files.
-04-04-2004
-	* Added Everaldo's wonderful icons.
-01-01-2004
-	* The brushes now cache their alpha mask; made a start
-	(but it's going too slow) with adding hotspot, spacing
-	and in-betweening to kis_tool_brush. When that's done,
-	the brush is fine, and I'll start making a real fun 
-	paint tool.
-23-12-2003
-	* Added undo/redo to kis_tool_brush that seems to work
-	* Changed kispainter to not use KMacroCommands to aggregate
-   	  transactions.
-	* Removed silly test tools.
-xx-11-2003
-	* Added a semi-working brush tool
-14-10-2003
-	* Added support for QTabletEvents to the tools
-	* Added a silly test tool that puts red squares on the 
-          page
-        * Added a pen tool that uses QPainter
+Changelog
+
+2005-03-01 	* Restarted changelog on the occasion of the first binary release
+                

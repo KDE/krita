@@ -509,6 +509,7 @@ void KisDockerManager::setupDockers()
 		if ( m_view -> mainWindow() -> isDockEnabled( DockBottom)) {
 			viewControlDocker();
 			viewLayerChannelDocker();
+			m_layerchanneldocker -> shade(true);
 			viewPaintBoxDocker();
 			viewColorDocker();
 

@@ -337,7 +337,7 @@ void KisToolGradient::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("Tool &Gradient"),
-					    "gradient", Qt::Key_G, this,
+					    "blend", Qt::Key_G, this,
 					    SLOT(activate()), collection,
 					    name());
 		m_action -> setExclusiveGroup("tools");

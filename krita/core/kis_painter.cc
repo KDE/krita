@@ -41,7 +41,6 @@
 #include <koColor.h>
 
 #include "kis_brush.h"
-#include "kis_colorspace_factory.h"
 #include "kis_global.h"
 #include "kis_gradient.h"
 #include "kis_image.h"
@@ -126,14 +125,7 @@ void KisPainter::tileBlt(QUANTUM *dst,
         Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
         Q_INT32 srcstride = srctile -> width() * srctile -> depth();
         Q_INT32 stride = m_device -> image() -> depth();
-        KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
-        KisStrategyColorSpaceSP strategy;
-
-        Q_ASSERT(factory);
-        strategy = factory -> create(m_device);
-
-        if (strategy)
-                strategy -> tileBlt(stride, dst, dststride, src, srcstride, opacity, rows, cols, op);
+        m_device -> colorStrategy() -> tileBlt(stride, dst, dststride, src, srcstride, opacity, rows, cols, op);
 }
 
 void KisPainter::tileBlt(QUANTUM *dst,
@@ -147,14 +139,7 @@ void KisPainter::tileBlt(QUANTUM *dst,
         Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
         Q_INT32 srcstride = srctile -> width() * srctile -> depth();
         Q_INT32 stride = m_device -> image() -> depth();
-        KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
-        KisStrategyColorSpaceSP strategy;
-
-        Q_ASSERT(factory);
-        strategy = factory -> create(m_device);
-
-        if (strategy)
-                strategy -> tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
+        m_device -> colorStrategy() -> tileBlt(stride, dst, dststride, src, srcstride, rows, cols, op);
 }
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
@@ -462,12 +447,8 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
         Q_INT32 ymod;
         Q_INT32 xdiff;
         Q_INT32 ydiff;
-        KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
-        KisStrategyColorSpaceSP strategy;
 
-        Q_ASSERT(factory);
-        strategy = factory -> create(m_device);
-        strategy -> nativeColor(c, opacity, src);
+        m_device -> colorStrategy() -> nativeColor(c, opacity, src);
         stride = m_device -> image() -> depth();
         ydiff = y1 - TILE_HEIGHT * (y1 / TILE_HEIGHT);
 

@@ -65,10 +65,10 @@ namespace {
 
 		for (j = 0; j < pd -> height; j++) {
 			for (i = 0; i < pd -> width; i++) {
-				pp -> red = pixel[PIXEL_RED];
-				pp -> green = pixel[PIXEL_GREEN];
-				pp -> blue = pixel[PIXEL_BLUE];
-				pp -> opacity = OPACITY_OPAQUE - pixel[PIXEL_ALPHA];
+				pp -> red = Upscale(pixel[PIXEL_RED]);
+				pp -> green = Upscale(pixel[PIXEL_GREEN]);
+				pp -> blue = Upscale(pixel[PIXEL_BLUE]);
+				pp -> opacity = OPACITY_OPAQUE - Upscale(pixel[PIXEL_ALPHA]);
 				pixel += pd -> depth;
 				pp++;
 			}

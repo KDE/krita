@@ -298,7 +298,7 @@ private slots:
 	void layersUpdated(KisImageSP img);
 
 	QPoint mapToScreen(const QPoint& pt);
-	void mergeAllLayers();
+	void flattenImage();
 	void mergeVisibleLayers();
 	void mergeLinkedLayers();
 	void nBuilders(Q_INT32 size);
@@ -347,7 +347,7 @@ private:
 	KAction *m_imgDup;
 	KAction *m_imgExport;
 	KAction *m_imgImport;
-	KAction *m_imgMergeAll;
+	KAction *m_imgFlatten;
 	KAction *m_imgMergeLinked;
 	KAction *m_imgMergeVisible;
 	KAction *m_imgRename;

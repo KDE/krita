@@ -102,8 +102,6 @@
 #include "labels/kis_label_cursor_pos.h"
 #include "labels/kis_label_io_progress.h"
 #include "strategy/kis_strategy_move.h"
-#include "visitors/kis_flatten.h"
-#include "visitors/kis_merge.h"
 #include "kis_rect.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
@@ -181,7 +179,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_imgExport = 0;
         m_imgScan = 0;
         m_imgResizeToLayer = 0;
-        m_imgMergeAll = 0;
+        m_imgFlatten = 0;
         m_imgMergeVisible = 0;
         m_imgMergeLinked = 0;
         m_hScroll = 0;
@@ -557,7 +555,7 @@ void KisView::setupActions()
         (void)new KAction(i18n("Add New Image..."), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
         m_imgRm = new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
         m_imgDup = new KAction(i18n("Duplicate Image"), 0, this, SLOT(duplicateCurrentImg()), actionCollection(), "duplicate_image");
-        m_imgMergeAll = new KAction(i18n("Merge &All Layers"), 0, this, SLOT(mergeAllLayers()), actionCollection(), "merge_all_layers");
+        m_imgFlatten = new KAction(i18n("Flatten Image"), 0, this, SLOT(flattenImage()), actionCollection(), "flatten_image");
         m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
         m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(mergeLinkedLayers()), actionCollection(), "merge_linked_layers");
 
@@ -1074,25 +1072,12 @@ void KisView::imgUpdateGUI()
         m_imgResizeToLayer -> setEnabled(img && img -> activeLayer());
 
         if (img) {
-                const vKisLayerSP& layers = img -> layers();
-
-                n = layers.size();
-
-                for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); it++) {
-                        const KisLayerSP& layer = *it;
-
-                        if (layer -> linked())
-                                nlinked++;
-
-                        if (layer -> visible())
-                                nvisible++;
-
-                        if (nlinked > 1 && nvisible > 1)
-                                break;
-                }
+		n = img -> nlayers();
+		nvisible = n - img -> nHiddenLayers();
+		nlinked = img -> nLinkedLayers();
         }
 
-        m_imgMergeAll -> setEnabled(n > 1);
+        m_imgFlatten -> setEnabled(n > 1);
         m_imgMergeVisible -> setEnabled(nvisible > 1);
         m_imgMergeLinked -> setEnabled(nlinked > 1);
 }
@@ -1409,22 +1394,12 @@ void KisView::export_image()
 
         if (img) {
                 KisImageMagickConverter ib(m_doc, m_adapter);
+
                 img = new KisImage(*img);
+		img -> flatten();
 
-                if (img -> nlayers() == 1) {
-                        dst = img -> layer(0);
-                        Q_ASSERT(dst);
-                } else {
-                        dst = new KisLayer(img, img -> width(), img -> height(), "layer for exporting", OPACITY_OPAQUE);
-
-                        KisPainter gc;
-                        KisMerge<flattenAll> visitor(img, true);
-                        vKisLayerSP layers = img -> layers();
-
-                        gc.begin(dst.data());
-                        visitor(gc, layers);
-                        gc.end();
-                }
+                dst = img -> layer(0);
+                Q_ASSERT(dst);
 
                 m_imgBuilderMgr -> attach(&ib);
                 m_buildProgress -> changeSubject(&ib);
@@ -1720,59 +1695,47 @@ void KisView::remove_current_image_tab()
         }
 }
 
-
-void KisView::mergeAllLayers()
+void KisView::flattenImage()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
-                KisLayerSP dst = new KisLayer(img, img -> width(), img -> height(), img -> nextLayerName(), OPACITY_OPAQUE);
-                KisPainter gc(dst.data());
-                gc.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
-                vKisLayerSP layers = img -> layers();
-                KisMerge<flattenAll> visitor(img, false);
+	if (img) {
+		bool doIt = true;
 
-                visitor(gc, layers);
-                img -> add(dst, -1);
-                layersUpdated();
-                updateCanvas();
-        }
+		if (img -> nHiddenLayers() > 0) {
+			int answer = KMessageBox::warningYesNo(this, 
+							       i18n("The image contains hidden layers that will be lost."),
+							       i18n("Flatten Image"),
+							       i18n("Flatten Image"),
+							       i18n("Cancel"));
+
+			if (answer != KMessageBox::Yes) {
+				doIt = false;
+			}
+		}
+
+		if (doIt) {
+			img -> flatten();
+		}
+	}
 }
 
 void KisView::mergeVisibleLayers()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
-                KisLayerSP dst = new KisLayer(img, img -> width(), img -> height(), img -> nextLayerName(), OPACITY_OPAQUE);
-                KisPainter gc(dst.data());
-                gc.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
-                KisMerge<flattenAllVisible> visitor(img, false);
-                vKisLayerSP layers = img -> layers();
-
-                visitor(gc, layers);
-                img -> add(dst, -1);
-                layersUpdated();
-                updateCanvas();
-        }
+	if (img) {
+		img -> mergeVisibleLayers();
+	}
 }
 
 void KisView::mergeLinkedLayers()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
-                KisLayerSP dst = new KisLayer(img, img -> width(), img -> height(), img -> nextLayerName(), OPACITY_OPAQUE);
-                KisPainter gc(dst.data());
-                gc.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
-                KisMerge<flattenAllLinked> visitor(img, false);
-                vKisLayerSP layers = img -> layers();
-
-                visitor(gc, layers);
-                img -> add(dst, -1);
-                layersUpdated();
-                updateCanvas();
-        }
+	if (img) {
+		img -> mergeLinkedLayers();
+	}
 }
 
 /*
@@ -2621,6 +2584,7 @@ void KisView::connectCurrentImg() const
         if (m_current) {
                 connect(m_current, SIGNAL(selectionChanged(KisImageSP)), SLOT(imgSelectionChanged(KisImageSP)));
                 connect(m_current, SIGNAL(update(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
+		connect(m_current, SIGNAL(layersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
         }
 }
 

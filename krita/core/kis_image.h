@@ -122,6 +122,14 @@ public:
 	bool bottom(KisLayerSP layer);
 	bool pos(KisLayerSP layer, Q_INT32 position);
 	Q_INT32 nlayers() const;
+	Q_INT32 nHiddenLayers() const;
+	Q_INT32 nLinkedLayers() const;
+
+	// Merge all visible layers and discard hidden ones.
+	void flatten();
+
+	void mergeVisibleLayers();
+	void mergeLinkedLayers();
 
 	KisChannelSP activeChannel();
 	KisChannelSP activate(KisChannelSP channel);
@@ -149,6 +157,8 @@ public:
 	void notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
 	void notify(const QRect& rc);
 
+	void notifyLayersChanged();
+
 	KisUndoAdapter *undoAdapter() const;
 	KisGuideMgr *guides() const;
 
@@ -159,6 +169,7 @@ signals:
 	void selectionChanged(KisImageSP image);
 	void visibilityChanged(KisImageSP image, CHANNELTYPE type);
 	void update(KisImageSP image, const QRect& rc);
+	void layersChanged(KisImageSP image);
 
 private slots:
 	void slotUpdateDisplay();

@@ -27,13 +27,37 @@
 #include "kis_layer.h"
 #include "kis_floatingselection.h"
 
-template <typename cond_t>
+struct All {
+	const bool operator()(const KisPaintDeviceSP) const
+	{
+		return true;
+	}
+};
+
+struct isVisible {
+	const bool operator()(const KisPaintDeviceSP dev) const
+	{
+		return dev -> visible();
+	}
+};
+
+struct isLinked {
+	const bool operator()(const KisPaintDeviceSP dev) const
+	{
+		const KisLayer *layer = dynamic_cast<const KisLayer*>(dev.data());
+
+		return layer && layer -> linked();
+	}
+};
+
+template <typename merge_cond_t, typename remove_cond_t>
 class KisMerge : public KisPaintDeviceVisitor {
 public:
-	KisMerge(KisImageSP img, bool keepOld)
+	KisMerge(KisImageSP img)
 	{
-		m_keepOld = keepOld;
 		m_img = img;
+		m_insertMergedAboveLayer = 0;
+		m_haveFoundInsertionPlace = false;
 	}
 
 public:
@@ -52,8 +76,7 @@ public:
 		for (Q_INT32 i = layers.size() - 1; i >= 0; i--) {
 			KisLayerSP& layer = layers[i];
 
-			if (!visit(gc, layer))
-				return false;
+			visit(gc, layer);
 		}
 
 		return true;
@@ -64,43 +87,56 @@ public:
 		if (m_img -> index(layer) < 0)
 			return false;
 
-		if (!m_test(layer.data()))
-			return false;
+		if (m_mergeTest(layer.data())) {
+			Q_INT32 sx;
+			Q_INT32 sy;
+			Q_INT32 dx;
+			Q_INT32 dy;
+			Q_INT32 w;
+			Q_INT32 h;
 
-		if (!m_keepOld)
+			sx = layer -> x();
+			sy = layer -> y();
+			dx = layer -> x();
+			dy = layer -> y();
+			w = layer -> width();
+			h = layer -> height();
+
+			if (sx < 0) {
+				w += sx;
+				sx *= -1;
+				dx = 0;
+			} else {
+				sx = 0;
+			}
+
+			if (sy < 0) {
+				h += sy;
+				sy *= -1;
+				dy = 0;
+			} else {
+				sy = 0;
+			}
+
+			gc.bitBlt(dx, dy, layer -> compositeOp() , layer.data(), layer -> opacity(), sx, sy, w, h);
+
+			if (!m_haveFoundInsertionPlace) {
+
+				if (m_img -> index(layer) != m_img -> nlayers() - 1) {
+					m_insertMergedAboveLayer = m_img -> layer(m_img -> index(layer) + 1);
+				}
+				else {
+					m_insertMergedAboveLayer = 0;
+				}
+
+				m_haveFoundInsertionPlace = true;
+			}
+		}
+
+		if (m_removeTest(layer.data())) {
 			m_img -> rm(layer);
-
-		Q_INT32 sx;
-		Q_INT32 sy;
-		Q_INT32 dx;
-		Q_INT32 dy;
-		Q_INT32 w;
-		Q_INT32 h;
-
-		sx = layer -> x();
-		sy = layer -> y();
-		dx = layer -> x();
-		dy = layer -> y();
-		w = layer -> width();
-		h = layer -> height();
-
-		if (sx < 0) {
-			w += sx;
-			sx *= -1;
-			dx = 0;
-		} else {
-			sx = 0;
 		}
 
-		if (sy < 0) {
-			h += sy;
-			sy *= -1;
-			dy = 0;
-		} else {
-			sy = 0;
-		}
-
-		gc.bitBlt(dx, dy, layer -> compositeOp() , layer.data(), layer -> opacity(), sx, sy, w, h);
 		return true;
 	}
 
@@ -109,11 +145,17 @@ public:
 		return false;
 	}
 
+	// The layer the merged layer should be inserted above, or 0 if
+	// the merged layer should go to the bottom of the stack.
+	KisLayerSP insertMergedAboveLayer() const { return m_insertMergedAboveLayer; }
+
 private:
 	KisImageSP m_img;
-	cond_t m_test;
+	merge_cond_t m_mergeTest;
+	remove_cond_t m_removeTest;
 	QRect m_rc;
-	bool m_keepOld;
+	KisLayerSP m_insertMergedAboveLayer;
+	bool m_haveFoundInsertionPlace;
 };
 
 #endif // KIS_MERGE_H_

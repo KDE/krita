@@ -46,6 +46,7 @@
 #include "kistilemgr.h"
 #include "kispixeldata.h"
 #include "visitors/kis_flatten.h"
+#include "visitors/kis_merge.h"
 
 namespace {
 	// Whether to repaint the display every
@@ -135,6 +136,65 @@ namespace {
 		KisImageSP m_img;
 		KisFloatingSelectionSP m_selection;
 	};
+
+	class KisChangeLayersCmd : public KNamedCommand {
+		typedef KNamedCommand super;
+
+	public:
+		KisChangeLayersCmd(KisUndoAdapter *adapter, KisImageSP img, vKisLayerSP& beforeLayers, vKisLayerSP& afterLayers, const QString& name) : super(name)
+			{
+				m_adapter = adapter;
+				m_img = img;
+				m_beforeLayers = beforeLayers;
+				m_afterLayers = afterLayers;
+			}
+
+		virtual ~KisChangeLayersCmd()
+			{
+			}
+
+	public:
+		virtual void execute()
+			{
+				m_adapter -> setUndo(false);
+
+				for (vKisLayerSP::const_iterator it = m_beforeLayers.begin(); it != m_beforeLayers.end(); it++) {
+					m_img -> rm(*it);
+				}
+
+				for (vKisLayerSP::const_iterator it = m_afterLayers.begin(); it != m_afterLayers.end(); it++) {
+					m_img -> add(*it, -1);
+				}
+
+				m_adapter -> setUndo(true);
+				m_img -> notify();
+				m_img -> notifyLayersChanged();
+			}
+
+		virtual void unexecute()
+			{
+				m_adapter -> setUndo(false);
+
+				for (vKisLayerSP::const_iterator it = m_afterLayers.begin(); it != m_afterLayers.end(); it++) {
+					m_img -> rm(*it);
+				}
+
+				for (vKisLayerSP::const_iterator it = m_beforeLayers.begin(); it != m_beforeLayers.end(); it++) {
+					m_img -> add(*it, -1);
+				}
+
+				m_adapter -> setUndo(true);
+				m_img -> notify();
+				m_img -> notifyLayersChanged();
+			}
+
+	private:
+		KisUndoAdapter *m_adapter;
+		KisImageSP m_img;
+		vKisLayerSP m_beforeLayers;
+		vKisLayerSP m_afterLayers;
+	};
+
 }
 
 KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
@@ -278,10 +338,10 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 		  << ", " 
 		  << h 
 		  << ")\n";
-	if(undoAdapter() != 0)
-		undoAdapter()->beginMacro("Resize image");
-	if (m_adapter && m_adapter -> undo())
+	if (m_adapter && m_adapter -> undo()) {
+		m_adapter -> beginMacro("Resize image");
 		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
+	}
 
 	m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
 	m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
@@ -289,8 +349,9 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 	m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
  	m_bkg -> resize(w, h);
 // 	m_projection -> resize(w, h);
-	if(undoAdapter() != 0)
-		undoAdapter()->endMacro();
+	if (m_adapter && m_adapter -> undo()) {
+		m_adapter -> endMacro();
+	}
 	invalidate();
 }
 
@@ -743,6 +804,113 @@ Q_INT32 KisImage::nlayers() const
 	return m_layers.size();
 }
 
+Q_INT32 KisImage::nHiddenLayers() const
+{
+	Q_INT32 n = 0;
+
+	for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); it++) {
+		const KisLayerSP& layer = *it;
+
+		if (!layer -> visible()) {
+			n++;
+		}
+	}
+
+	return n;
+}
+
+Q_INT32 KisImage::nLinkedLayers() const
+{
+	Q_INT32 n = 0;
+
+	for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); it++) {
+		const KisLayerSP& layer = *it;
+
+		if (layer -> linked()) {
+			n++;
+		}
+	}
+
+	return n;
+}
+
+void KisImage::flatten()
+{
+	vKisLayerSP beforeLayers = m_layers;
+
+	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
+	KisPainter gc(dst.data());
+	gc.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
+
+	vKisLayerSP mergeLayers = layers();
+	KisMerge<isVisible, All> visitor(this);
+	visitor(gc, mergeLayers);
+	add(dst, -1);
+
+	notify();
+	notifyLayersChanged();
+
+	if (m_adapter && m_adapter -> undo()) {
+		m_adapter -> addCommand(new KisChangeLayersCmd(m_adapter, this, beforeLayers, m_layers, i18n("Flatten Image")));
+	}
+}
+
+void KisImage::mergeVisibleLayers()
+{
+	vKisLayerSP beforeLayers = m_layers;
+
+	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
+	KisPainter gc(dst.data());
+	gc.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
+
+	vKisLayerSP mergeLayers = layers();
+	KisMerge<isVisible, isVisible> visitor(this);
+	visitor(gc, mergeLayers);
+
+	int insertIndex = -1;
+
+	if (visitor.insertMergedAboveLayer() != 0) {
+		insertIndex = index(visitor.insertMergedAboveLayer());
+	}
+
+	add(dst, insertIndex);
+
+	notify();
+	notifyLayersChanged();
+
+	if (m_adapter && m_adapter -> undo()) {
+		m_adapter -> addCommand(new KisChangeLayersCmd(m_adapter, this, beforeLayers, m_layers, i18n("Merge Visible Layers")));
+	}
+}
+
+void KisImage::mergeLinkedLayers()
+{
+	vKisLayerSP beforeLayers = m_layers;
+
+	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
+	KisPainter gc(dst.data());
+	gc.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
+
+	vKisLayerSP mergeLayers = layers();
+	KisMerge<isLinked, isLinked> visitor(this);
+	visitor(gc, mergeLayers);
+
+	int insertIndex = -1;
+
+	if (visitor.insertMergedAboveLayer() != 0) {
+		insertIndex = index(visitor.insertMergedAboveLayer());
+	}
+
+	add(dst, insertIndex);
+
+	notify();
+	notifyLayersChanged();
+
+	if (m_adapter && m_adapter -> undo()) {
+		m_adapter -> addCommand(new KisChangeLayersCmd(m_adapter, this, beforeLayers, m_layers, i18n("Merge Linked Layers")));
+	}
+}
+
 KisChannelSP KisImage::activeChannel()
 {
 	return m_activeChannel;
@@ -1150,6 +1318,11 @@ void KisImage::notify(const QRect& rc)
 	}
 
 
+}
+
+void KisImage::notifyLayersChanged()
+{
+	emit layersChanged(KisImageSP(this));
 }
 
 QRect KisImage::bounds() const

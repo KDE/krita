@@ -147,6 +147,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs
                 m_projectionValid = false;
                 m_name = rhs.m_name;
                 m_compositeOp = COMPOSITE_OVER;
+		m_colorStrategy = rhs.m_colorStrategy;
         }
 }
 
@@ -305,6 +306,7 @@ void KisPaintDevice::init()
         m_x = 0;
         m_y = 0;
         m_projectionValid = false;
+	m_colorStrategy = 0;
 }
 
 bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)

@@ -97,6 +97,11 @@ KDialog *KisToolPaint::options(QWidget * /*parent*/)
 	return 0;
 }
 
+QWidget* KisToolPaint::optionWidget(QWidget* parent)
+{
+	return 0;
+}
+
 void KisToolPaint::cursor(QWidget *w) const
 {
 	if (w)

@@ -18,6 +18,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <qevent.h>
+#include <qlabel.h>
+#include <qwidget.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -205,4 +207,14 @@ KDialog *KisToolBrush::options(QWidget * parent)
         ToolOptionsDialog * d = new ToolOptionsDialog(tt_brushtool, ts, parent);
 
 	return d;
+}
+
+QWidget* KisToolBrush::optionWidget(QWidget* parent)
+{
+	//Put the Widget code here
+	m_optWidget = new QWidget(parent);
+	m_optWidget -> setCaption(i18n("Brush"));
+	QLabel *test = new QLabel(i18n("Properties"), m_optWidget);
+
+	return m_optWidget;
 }

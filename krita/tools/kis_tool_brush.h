@@ -24,6 +24,8 @@
 #include "kis_tool_paint.h"
 
 class QPoint;
+class QWidget;
+class QLabel;
 class KisPainter;
 
 class KisToolBrush : public KisToolPaint {
@@ -43,6 +45,7 @@ public:
 	virtual void tabletEvent(QTabletEvent *e);
 
 	virtual KDialog *options(QWidget * parent);
+	virtual QWidget* optionWidget(QWidget* parent);
 
 private:
 	virtual void paintLine(const QPoint & pos1,
@@ -62,6 +65,7 @@ private:
 
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;
+	QWidget *m_optWidget;
 
 };
 #endif // KIS_TOOL_BRUSH_H_

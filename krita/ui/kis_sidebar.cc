@@ -141,7 +141,7 @@ DockFrameDocker::DockFrameDocker( QWidget* parent, const char* name ) : BaseDock
 
     setWidget( m_tabwidget = new QTabWidget( this ) );
     
-    m_tabwidget -> setFixedSize( 200, 250 );
+    m_tabwidget -> setFixedSize( 200, 200 );
     kdDebug() << "DockFrameDocker::DockFrameDocker leaving" << endl;
 }
 
@@ -194,7 +194,10 @@ ToolControlDocker::ToolControlDocker( QWidget* parent, const char* name ) : Base
 {
         kdDebug() << "ToolControlDocker::ToolControlDocker" << endl;
 
+        m_tabwidget = new QTabWidget(this);
+        m_tabwidget -> setFixedSize(200,100);
         m_controlframe  = new ControlFrame(this);
+        m_tabwidget-> addTab( m_controlframe , i18n("General"));
 
         // connect control frame
         connect(m_controlframe, SIGNAL(fgColorChanged(const KoColor &)),
@@ -203,9 +206,8 @@ ToolControlDocker::ToolControlDocker( QWidget* parent, const char* name ) : Base
                 this, SLOT(slotControlBGColorSelected(const KoColor &)));
         connect(m_controlframe, SIGNAL(activeColorChanged(ActiveColor)),
                 this, SLOT(slotControlActiveColorChanged(ActiveColor)));
-                
-        m_controlframe -> setFixedSize(200,50);
-        setWidget(m_controlframe);
+
+        setWidget(m_tabwidget);
 
         kdDebug() << "ToolControlDocker::ToolControlDocker leaving" << endl;
 }
@@ -257,6 +259,16 @@ void ToolControlDocker::slotSetBrush(KoIconItem *item)
 void ToolControlDocker::slotSetPattern(KoIconItem *item)
 {
         m_controlframe -> slotSetPattern(item);
+}
+
+void ToolControlDocker::plug (QWidget* w)
+{
+        m_tabwidget-> addTab( w , w -> caption());
+}
+
+void ToolControlDocker::unplug(QWidget *w)
+{
+        m_tabwidget -> removePage(w);
 }
 
 #include "kis_sidebar.moc"

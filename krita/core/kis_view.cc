@@ -297,7 +297,8 @@ void KisView::setupDockers()
 
 		// TODO Here should be a better check
 		if ( mainWindow()->isDockEnabled( DockBottom))
-		{                
+		{      
+			viewControlDocker();          
 			viewLayerChannelDocker();
 			viewResourceDocker();
 			mainWindow()->setDockEnabled( DockBottom, false);
@@ -592,6 +593,9 @@ void KisView::setCurrentTool(KisTool *tool)
 	if (tool) {
 		m_tool = tool;
 		m_tool -> cursor(m_canvas);
+
+		if(tool -> optionWidget(m_toolcontroldocker))
+				m_toolcontroldocker -> plug(tool -> optionWidget(m_toolcontroldocker));
 		notify();
 	} else {
 		m_tool = 0;

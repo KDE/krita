@@ -131,6 +131,8 @@ class ToolControlDocker : public BaseDocker {
 public:
         ToolControlDocker(QWidget *parent = 0, const char *name = 0);
         ~ToolControlDocker();
+        void plug(QWidget *w);
+        void unplug(QWidget *w);
 
 public slots:
         void slotColorSelected(const KoColor&);
@@ -150,7 +152,8 @@ protected slots:
         void slotControlBGColorSelected(const KoColor&);
 
 private:
-        ControlFrame *m_controlframe; 
+        ControlFrame *m_controlframe;
+        QTabWidget *m_tabwidget;
 };
 
 #endif

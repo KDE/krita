@@ -47,7 +47,7 @@ class KisToolPaint : public KisTool {
 public:
 	KisToolPaint();
 	virtual ~KisToolPaint();
-	
+
 public:
 	virtual void update(KisCanvasSubject *subject);
 
@@ -68,6 +68,7 @@ public:
 	virtual void cursor(QWidget *w) const;
 	virtual void setCursor(const QCursor& cursor);
 	virtual KDialog *options(QWidget *parent);
+	virtual QWidget* optionWidget(QWidget* parent);
 
 protected slots:
 	virtual void activate();

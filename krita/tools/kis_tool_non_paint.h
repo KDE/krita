@@ -68,6 +68,7 @@ public:
 	virtual void cursor(QWidget *w) const;
 	virtual void setCursor(const QCursor& cursor);
 	virtual KDialog *options(QWidget *parent);
+	virtual QWidget* optionWidget(QWidget* parent);
 
 protected slots:
 	virtual void activate();
@@ -75,6 +76,7 @@ protected slots:
 private:
 	QCursor m_cursor;
 	KisCanvasSubject *m_subject;
+	QWidget m_optWidget;
 };
 
 #endif // KIS_TOOL_NON_PAINT_H_

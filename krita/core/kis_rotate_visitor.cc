@@ -80,3 +80,8 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
         
         delete newData;
 }
+
+void KisRotateVisitor::shear(double angle, KisProgressDisplayInterface *m_progress) 
+{
+        kdDebug() << "Shear Code called! Going to shear image by (angle): " << angle << "\n";
+}

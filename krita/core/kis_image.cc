@@ -450,6 +450,28 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 
 }
 
+void KisImage::shear(double angle, KisProgressDisplayInterface *m_progress) 
+{
+	//kdDebug() << "KisImage::rotate. ANGLE: " 
+	//	  << angle
+	//	  << "\n";
+
+
+	if (m_layers.empty()) return; // Nothing to scale
+
+        //fix undo
+	undoAdapter()->beginMacro("Shear image");
+	
+	vKisLayerSP_it it;
+	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
+		KisLayerSP layer = (*it);
+		layer -> shear(angle, m_progress);
+	}
+
+	undoAdapter()->endMacro();
+
+}
+
 void KisImage::convertTo( KisStrategyColorSpaceSP colorStrategy)
 {
 	if (m_layers.empty()) return; // Nothing to convert

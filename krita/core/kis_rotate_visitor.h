@@ -34,6 +34,7 @@ public:
         ~KisRotateVisitor();
         void visitKisPaintDevice(KisPaintDevice* dev);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
+        void shear(double angle, KisProgressDisplayInterface *m_progress);
 private:
         KisPaintDevice* m_dev;
         

@@ -333,6 +333,13 @@ void KisPaintDevice::rotate(double angle, KisProgressDisplayInterface *m_progres
         visitor.rotate(angle, m_progress);
 }
 
+void KisPaintDevice::shear(double angle, KisProgressDisplayInterface *m_progress) 
+{
+        KisRotateVisitor visitor;
+        accept(visitor);
+        visitor.shear(angle, m_progress);
+}
+
 // XXX: also allow transform on part of paint device?
 void KisPaintDevice::transform(const QWMatrix & matrix)
 {

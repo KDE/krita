@@ -1592,6 +1592,22 @@ void KisView::rotateLayer(double angle)
 	canvasRefresh();
 }
 
+void KisView::shearLayer(double angle)
+{
+        if (!currentImg()) return;
+
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
+
+	layer -> shear(angle, m_progress);
+
+	m_doc -> setModified(true);
+	layersUpdated();
+	resizeEvent(0);
+	updateCanvas();
+	canvasRefresh();
+}
+
 void KisView::add_new_image_tab()
 {
         m_doc -> slotNewImage();
@@ -2717,6 +2733,17 @@ void KisView::rotateCurrentImage(double angle)
 {
 	if (!currentImg()) return;
 	currentImg() -> rotate(angle,m_progress);
+	m_doc -> setModified(true);
+	resizeEvent(0);
+ 	layersUpdated();
+	updateCanvas();
+	canvasRefresh();
+}
+
+void KisView::shearCurrentImage(double angle)
+{
+	if (!currentImg()) return;
+	currentImg() -> shear(angle,m_progress);
 	m_doc -> setModified(true);
 	resizeEvent(0);
  	layersUpdated();

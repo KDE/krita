@@ -752,13 +752,13 @@ void KisView::paintView(const QRect& rc)
 		Q_INT32 yt; 
 
 		if (canvasXOffset())
-			gc.eraseRect(0, 0, canvasXOffset(), height());
+			gc.eraseRect(0, 0, static_cast<Q_INT32>(canvasXOffset() * zoom()), height());
 
 		if (canvasYOffset())
-			gc.eraseRect(canvasXOffset(), 0, width(), canvasYOffset());
+			gc.eraseRect(static_cast<Q_INT32>(canvasXOffset() * zoom()), 0, width(), static_cast<Q_INT32>(canvasYOffset() * zoom()));
 
-		gc.eraseRect(canvasXOffset(), canvasYOffset() + static_cast<Q_INT32>(docHeight() * zoom()), width(), height());
-		gc.eraseRect(canvasXOffset() + static_cast<Q_INT32>(docWidth() * zoom()), canvasYOffset(), width(), height());
+		gc.eraseRect(static_cast<Q_INT32>(canvasXOffset() * zoom()), static_cast<Q_INT32>(docHeight() * zoom()) - canvasYOffset(), width(), height());
+		gc.eraseRect(static_cast<Q_INT32>(docWidth() * zoom()) - canvasXOffset(), static_cast<Q_INT32>(canvasYOffset() * zoom()), width(), height());
 		xt = -canvasXOffset() + horzValue();
 		yt = -canvasYOffset() + vertValue();
 		ur.moveBy(xt, yt);
@@ -2316,12 +2316,12 @@ QWidget *KisView::canvas()
 
 int KisView::canvasXOffset() const
 {
-	return static_cast<Q_INT32>(m_xoff * zoom());
+	return static_cast<Q_INT32>(static_cast<double>(m_xoff) * zoom());
 }
 
 int KisView::canvasYOffset() const
 {
-	return static_cast<Q_INT32>(m_yoff * zoom());
+	return static_cast<Q_INT32>(static_cast<double>(m_yoff) * zoom());
 }
 
 void KisView::setupCanvas()

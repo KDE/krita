@@ -187,7 +187,7 @@ private:
 	void setupClipboard();
 	void setupRulers();
 	void setupScrollBars();
-	void setupSideBar();
+	void setupDockers();
 	void setupTabBar();
 	void setupStatusBar();
 	void setupTools();

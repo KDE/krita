@@ -30,6 +30,7 @@
 #include <qpainter.h>
 #include <qscrollbar.h>
 #include <qspinbox.h>
+#include <qdockarea.h> 
 
 // KDE
 #include <dcopobject.h>
@@ -181,7 +182,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	setupCanvas();
 	setupRulers();
 	setupScrollBars();
-	setupSideBar();
+	setupDockers();
 	setupTabBar();
 	setupStatusBar();
 	dcopObject();
@@ -212,7 +213,7 @@ DCOPObject* KisView::dcopObject()
 	return 0;
 }
 
-void KisView::setupSideBar()
+void KisView::setupDockers()
 {
 	KStatusBar *sb = statusBar();
 	KisResourceServer *rserver = KisFactory::rServer();
@@ -291,9 +292,14 @@ void KisView::setupSideBar()
 		rserver -> loadBrushes();
 		rserver -> loadpipeBrushes();
 		rserver -> loadPatterns();
-                
-		viewLayerChannelDocker();
-		viewResourceDocker();
+
+		// TODO Here should be a better check
+		if ( mainWindow()->isDockEnabled( DockBottom))
+		{                
+			viewLayerChannelDocker();
+			viewResourceDocker();
+			mainWindow()->setDockEnabled( DockBottom, false);
+		}
 	}
 }
 

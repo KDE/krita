@@ -42,14 +42,6 @@ public:
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst) = 0;
-
-        // composite takes two colors and composite them according to
-        // to the given composition operation. alpha is the alpha
-        // value of the source pixel. opacitity is the extra opacitiy
-        // of the composition.
-        // XXX: maybe I should pass whole chunks of pixels, for efficiency reasons.
-        virtual void composite(QUANTUM *dst, QUANTUM *src, Q_INT32 opacity, CompositeOp op) const = 0;
-
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
 	virtual void tileBlt(Q_INT32 stride,
 			QUANTUM *dst, 

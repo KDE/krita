@@ -67,12 +67,6 @@ public:
 	Q_UINT32 ncols() const;
 	Q_UINT32 depth() const;
 
-	void offset(QPoint& off) const;
-	void offset(Q_INT32 *x, Q_INT32 *y) const;
-
-	void setOffSet(const QPoint& off);
-	void setOffSet(Q_INT32 x, Q_INT32 y);
-
 	Q_UINT32 memSize();
 	void tileCoord(const KisTileSP& tile, QPoint& coord);
 	void tileCoord(const KisTileSP& tile, Q_INT32 *x, Q_INT32 *y);
@@ -96,8 +90,6 @@ private:
 	void writePixelData(KisPixelDataSP pd);
 
 private:
-	Q_INT32 m_x;
-	Q_INT32 m_y;
 	Q_UINT32 m_width;
 	Q_UINT32 m_height;
 	Q_UINT32 m_depth;

@@ -38,6 +38,7 @@ KisTile::KisTile(KisTile& rhs) : super(rhs)
 		m_valid = rhs.valid();
 		allocate();
 		m_hints = rhs.m_hints;
+		rhs.shareRelease();
 
 		if (rhs.m_data) {
 			memcpy(m_data, rhs.m_data, size());
@@ -240,7 +241,8 @@ void KisTile::shareRef()
 
 void KisTile::shareRelease()
 {
-	m_nshare--;
+	if (m_nshare > 0)
+		m_nshare--;
 }
 
 Q_INT32 KisTile::writeCount() const

@@ -114,7 +114,6 @@ void KisTileMediatorSingleton::attach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 
 		m_links[tile] = vKisTileLink();
 
 	m_links[tile].push_back(qMakePair(mgr, tilenum));
-	tile -> shareRef();
 }
 
 void KisTileMediatorSingleton::detach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum)
@@ -125,10 +124,8 @@ void KisTileMediatorSingleton::detach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 
 		for (vKisTileLink_it it = l.begin(); it != l.end(); it++) {
 			const KisTileLink& link = *it;
 
-			if (link.first == mgr && link.second == tilenum) {
-				tile -> shareRelease();
+			if (link.first == mgr && link.second == tilenum)
 				it = l.erase(it);
-			}
 		}
 
 		if (l.empty())
@@ -145,10 +142,8 @@ void KisTileMediatorSingleton::detachAll(KisTileMgr *mgr)
 		for (vKisTileLink_it lit = l.begin(); lit != l.end(); lit++) {
 			const KisTileLink& link = *lit;
 
-			if (link.first.data() == mgr) {
-				tile -> shareRelease();
+			if (link.first.data() == mgr)
 				lit = l.erase(lit);
-			}
 		}
 
 		if (l.empty())

@@ -95,6 +95,7 @@ void KisPainter::begin(KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 w,
 	KisTileMgrSP tm = device -> data();
 
 	m_dst = tm -> pixelData(x, y, x + w - 1, y + h - 1, TILEMODE_RW);
+	Q_ASSERT(m_dst);
 }
 
 void KisPainter::begin(KisPaintDeviceSP device, const QRect& rc)
@@ -211,7 +212,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
-	KisTileMgrSP tm = src ? src -> data() : 0;
+	KisTileMgrSP tm = src.data() ? src -> data() : 0;
 	KisPixelDataSP pd;
 
 	if (!tm)
@@ -340,7 +341,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP s
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
-	KisTileMgrSP tm = src ? src -> data() : 0;
+	KisTileMgrSP tm = src.data() ? src -> data() : 0;
 	KisPixelDataSP pd;
 
 	if (!tm)

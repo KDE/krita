@@ -17,6 +17,7 @@
  */
 #include <string.h>
 #include <qpoint.h>
+#include <kdebug.h>
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kisscopedlock.h"
@@ -26,20 +27,12 @@
 
 KisTileMgr::KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height)
 {
-	m_x = 0;
-	m_y = 0;
 	m_width = width;
 	m_height = height;
 	m_depth = depth;
 	m_ntileRows = (height + TILE_HEIGHT - 1) / TILE_HEIGHT;
 	m_ntileCols = (width + TILE_WIDTH - 1) / TILE_WIDTH;
 	m_mediator = new KisTileMediator;
-}
-
-KisTileMgr::KisTileMgr(const KisTileMgr& rhs) : super(rhs)
-{
-	if (this != &rhs) {
-	}
 }
 
 KisTileMgr::~KisTileMgr()
@@ -52,7 +45,7 @@ void KisTileMgr::attach(KisTileSP tile, Q_INT32 tilenum)
 {
 	KisScopedLock l(tile -> mutex());
 
-	if (tile -> shareCount() > 1 && !tile -> valid())
+	if (tile -> shareCount() > 0 && !tile -> valid())
 		validate(tile);
 
 	m_mediator -> attach(tile, this, tilenum);
@@ -92,25 +85,20 @@ KisTileSP KisTileMgr::tile(Q_INT32 tilenum, Q_INT32 mode)
 	Q_ASSERT(tile);
 
 	if (mode & TILEMODE_READ) {
-		KisScopedLock l(tile -> mutex());
-
 		if (mode & TILEMODE_WRITE) {
-#if 0
-			 // TODO
-			if (tile -> shareCount() > 1) {
+			if (tile -> shareCount() > 0) {
 				KisTileSP tileNew = new KisTile(*tile);
 
+				kdDebug(DBG_AREA_TILES) << "Tile is shared.  Duplicating.\n";
 				detach(tile, tilenum);
 				attach(tileNew, tilenum);
 				tile = tileNew;
 			}
-#endif
 
 			tile -> writeRef();
 			tile -> dirty(true);
 		}
 
-		l.unlock();
 		tile -> lock();
 	}
 
@@ -254,32 +242,6 @@ Q_UINT32 KisTileMgr::ncols() const
 bool KisTileMgr::empty() const
 {
 	return m_tiles.empty();
-}
-
-void KisTileMgr::offset(QPoint& off) const
-{
-	off.setX(m_x);
-	off.setY(m_y);
-}
-
-void KisTileMgr::offset(Q_INT32 *x, Q_INT32 *y) const
-{
-	if (x && y) {
-		*x = m_x;
-		*y = m_y;
-	}
-}
-
-void KisTileMgr::setOffSet(const QPoint& off)
-{
-	m_x = off.x();
-	m_y = off.y();
-}
-
-void KisTileMgr::setOffSet(Q_INT32 x, Q_INT32 y)
-{
-	m_x = x;
-	m_y = y;
 }
 
 Q_UINT32 KisTileMgr::memSize()
@@ -528,15 +490,6 @@ KisTileSP KisTileMgr::invalidateTile(KisTileSP tile, Q_INT32 tilenum)
 
 	if (!tile -> valid())
 		return 0;
-
-	if (tile -> shareCount() > 1) {
-		KisTileSP tileNew = new KisTile(*tile);
-
-		l.unlock();
-		detach(tile, tilenum);
-		attach(tileNew, tilenum);
-		tile = tileNew;
-	}
 
 	tile -> valid(false);
 	return tile;

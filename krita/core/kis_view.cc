@@ -744,7 +744,7 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 			gc.fillRect(rc, c, opacity);
 			gc.end();
 			m_doc -> setModified(true);
-			updateCanvas(rc);
+			updateCanvas();
 		}
 	}
 }

@@ -27,6 +27,8 @@
 #include <koGlobal.h>
 #include <koUnit.h>
 
+#define DBG_AREA_TILES 40001
+
 /**
  * Mime type for this app - not same as file type, but file types
  * can be associated with a mime type and are opened with applications

@@ -49,16 +49,10 @@ void KisSelection::move(Q_INT32 x, Q_INT32 y)
 {
 	QRect rc = bounds();
 
-	if (0 && m_firstMove) {
-		// TODO
-		// copy tiles here
-		// i.e. create new tiles for parent
-		// init tiles to black transparent
-		// copy tiles ouvtide the drawoffset to the newly created tiles
+	if (m_firstMove) {
 		KisPainter gc(m_parent);
 
 		// push_undo_fill
-		printf("m_rc = %d, %d, %d, %d.\n", m_rc.x(), m_rc.y(), m_rc.width(), m_rc.height());
 		gc.fillRect(m_rc, KoColor::black(), OPACITY_TRANSPARENT);
 		m_firstMove = false;
 		m_parent -> invalidate(rc);
@@ -94,7 +88,7 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 			tile = tm1 -> tile(tileno, TILEMODE_READ);
 
 			if (tile) {
-				tile -> shareRef();
+//				tile -> shareRef();
 				tm2 -> attach(tile, tileno - offset);
 			}
 		}

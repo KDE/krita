@@ -1039,15 +1039,56 @@ void KisImage::rengerBg()
 	}
 }
 
-QPixmap KisImage::recreatePixmap()
+void KisImage::renderLayer(KisPainter& gc, KisLayerSP layer)
 {
-	KisTileMgrSP tm = m_projection -> data();
 	Q_INT32 sx;
 	Q_INT32 sy;
 	Q_INT32 dx;
 	Q_INT32 dy;
 	Q_INT32 w;
 	Q_INT32 h;
+
+	sx = layer -> x();
+	sy = layer -> y();
+	w = layer -> width();
+	h = layer -> height();
+
+	if (sx < 0) {
+		dx = 0;
+		sx = abs(sx);
+		w -= sx;
+	} else {
+		dx = sx;
+		sx = 0;
+	}
+
+	if (sy < 0) {
+		dy = 0;
+		sy = abs(sy);
+		h -= sy;
+	} else {
+		dy = sy;
+		sy = 0;
+	}
+
+	if (dx + w > width())
+		w = width() - dx;
+
+	if (dy + h > height())
+		h = height() - dy;
+
+	if (!m_projection -> contains(dx, dy))
+		return;
+
+	if (layer -> opacity() == OPACITY_OPAQUE)
+		gc.bitBlt(dx, dy, COMPOSITE_OVER, layer.data(), sx, sy, w, h);
+	else
+		gc.bitBlt(dx, dy, COMPOSITE_OVER, layer.data(), layer -> opacity(), sx, sy, w, h);
+}
+
+QPixmap KisImage::recreatePixmap()
+{
+	KisTileMgrSP tm = m_projection -> data();
 
 	if (width() > m_pixmapProjection.width() || height() > m_pixmapProjection.height()) {
 		m_pixmapProjection.resize(width(), height());
@@ -1062,45 +1103,12 @@ QPixmap KisImage::recreatePixmap()
 		for (Q_INT32 i = m_layers.size() - 1; i >= 0; i--) {
 			KisLayerSP layer = m_layers[i];
 
-			if (layer -> visible() && layer -> opacity() != OPACITY_TRANSPARENT) {
-				sx = layer -> x();
-				sy = layer -> y();
-				w = layer -> width();
-				h = layer -> height();
-
-				if (sx < 0) {
-					dx = 0;
-					sx = abs(sx);
-					w -= sx;
-				} else {
-					dx = sx;
-					sx = 0;
-				}
-
-				if (sy < 0) {
-					dy = 0;
-					sy = abs(sy);
-					h -= sy;
-				} else {
-					dy = sy;
-					sy = 0;
-				}
-
-				if (dx + w > width())
-					w = width() - dx;
-
-				if (dy + h > height())
-					h = height() - dy;
-
-				if (!m_projection -> contains(dx, dy))
-					continue;
-
-				if (layer -> opacity() == OPACITY_OPAQUE)
-					gc.bitBlt(dx, dy, COMPOSITE_OVER, layer.data(), sx, sy, w, h);
-				else
-					gc.bitBlt(dx, dy, COMPOSITE_OVER, layer.data(), layer -> opacity(), sx, sy, w, h);
-			}
+			if (layer -> visible() && layer -> opacity() != OPACITY_TRANSPARENT)
+				renderLayer(gc, layer.data());
 		}
+
+		if (m_selection)
+			renderLayer(gc, m_selection.data());
 	}
 
 	renderProjection();

@@ -72,7 +72,7 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 		m_painter -> beginTransaction(i18n("selectioneraser"));
 		m_painter -> setPaintColor(Qt::white); // XXX: the mask color!
 		m_painter -> setBrush(m_subject -> currentBrush());
-		m_painter -> setOpacity(OPACITY_OPAQUE);
+		m_painter -> setOpacity(OPACITY_TRANSPARENT);
 		m_painter -> setCompositeOp(COMPOSITE_OVER);
 
 		// XXX: Yes, the selection eraser is a brush and the

@@ -2637,7 +2637,8 @@ void KisView::imgSelectionChanged(KisImageSP img)
 void KisView::connectCurrentImg() const
 {
         if (m_current) {
-                connect(m_current, SIGNAL(selectionChanged(KisImageSP)), SLOT(imgSelectionChanged(KisImageSP)));
+                connect(m_current, SIGNAL(activeSelectionChanged(KisImageSP)), SLOT(imgSelectionChanged(KisImageSP)));
+		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), SLOT(imgUpdated(KisImageSP)));
                 connect(m_current, SIGNAL(update(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
 		connect(m_current, SIGNAL(layersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
         }
@@ -2681,6 +2682,12 @@ void KisView::imgUpdated(KisImageSP img, const QRect& rc)
                 updateCanvas(rc);
         }
 }
+
+void KisView::imgUpdated(KisImageSP img)
+{
+	imgUpdated(img, QRect(img -> bounds()));
+}
+
 
 void KisView::resizeLayer(Q_INT32 w, Q_INT32 h)
 {

@@ -167,13 +167,17 @@ signals:
 	void activeLayerChanged(KisImageSP image);
 	void activeChannelChanged(KisImageSP image);
 	void alphaChanged(KisImageSP image);
+	void activeSelectionChanged(KisImageSP image);
+	void selectionCreated(KisImageSP image);
 	void floatingSelectionChanged(KisImageSP image);
 	void visibilityChanged(KisImageSP image, CHANNELTYPE type);
 	void update(KisImageSP image, const QRect& rc);
 	void layersChanged(KisImageSP image);
 
 private slots:
-	void slotUpdateDisplay();
+	void slotUpdateDisplay(); 
+	void slotSelectionChanged();
+	void slotSelectionCreated();
 
 private:
 	KisImage& operator=(const KisImage& rhs);

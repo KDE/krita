@@ -24,7 +24,7 @@
 #include "kis_tile_command.h"
 
 KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device,
-		Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
+			       Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
 {
 	m_name = name;
 	m_device = device;

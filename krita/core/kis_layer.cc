@@ -34,12 +34,12 @@
 static int numLayers = 0;
 #endif
 
-KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name) : 
-	super(width, height, colorStrategy, name),
-	m_opacity(OPACITY_OPAQUE),
-	m_linked(false),
-	m_hasSelection(false),
-	m_selection(0)
+KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name) 
+	: super(width, height, colorStrategy, name),
+	  m_opacity(OPACITY_OPAQUE),
+	  m_linked(false),
+	  m_hasSelection(false),
+	  m_selection(0)
 {
 #if DEBUG_LAYERS
 	numLayers++;
@@ -131,9 +131,10 @@ KisSelectionSP KisLayer::selection(){
 		gc.end();
 		m_selection -> setVisible(true);
 		m_hasSelection = true;
-		update();
+		//update();
+		kdDebug() << "KisLayer::selection()\n";
+		emit selectionCreated();
 	}
-
 	return m_selection;
  
 }
@@ -142,20 +143,26 @@ void KisLayer::setSelection(KisSelectionSP selection)
 {
 	m_selection = selection;
 	m_hasSelection = true;
+	emit selectionChanged();
+
 }
 
 void KisLayer::addSelection(KisSelectionSP /*selection*/)
 {
 // 	m_selection = m_selection + selection;
+	emit selectionChanged();
+
 }
 
 void KisLayer::subtractSelection(KisSelectionSP /*selection*/)
 {
 // 	m_selection = m_selection - selection;
+	emit selectionChanged();
+
 }
 
 
-bool KisLayer::hasSelection() const
+bool KisLayer::hasSelection()
 {
 	return m_hasSelection;
 }
@@ -165,32 +172,35 @@ void KisLayer::removeSelection()
 {
 	m_selection = 0; // XXX: Does this automatically remove the selection due to the shared pointer?
 	m_hasSelection = false;
+	emit selectionChanged();
 }
 
-QUANTUM KisLayer::selected(Q_INT32 x, Q_INT32 y) const
-{
-	if (m_hasSelection) {
-		return m_selection -> selected(x, y);
-	}
-	else {
-		return 0;
-	}
-}
+// QUANTUM KisLayer::selected(Q_INT32 x, Q_INT32 y) const
+// {
+// 	if (m_hasSelection) {
+// 		return m_selection -> selected(x, y);
+// 	}
+// 	else {
+// 		return 0;
+// 	}
+// }
 
 
-QUANTUM KisLayer::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s) 
-{
-	if (!m_hasSelection) {
-		m_selection = new KisSelection(this, "layer selection for: " + name());
-		m_hasSelection = true;
-	}
-	return m_selection -> setSelected(x, y, s);
-}
+// QUANTUM KisLayer::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s) 
+// {
+// 	if (!m_hasSelection) {
+// 		m_selection = new KisSelection(this, "layer selection for: " + name());
+// 		m_hasSelection = true;
+// 	}
+// 	return m_selection -> setSelected(x, y, s);
+// }
+
 
 
 void KisLayer::translate(Q_INT32 x, Q_INT32 y)
 {
 	m_dx = x;
+
 	m_dy = y;
 }
 
@@ -231,3 +241,4 @@ void KisLayer::setVisible(bool v)
 	super::setVisible(v);
 }
 
+#include "kis_layer.moc"

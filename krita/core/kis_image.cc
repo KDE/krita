@@ -547,12 +547,16 @@ KisLayerSP KisImage::activate(KisLayerSP layer)
 			m_layerStack.erase(it);
 
 		m_layerStack.insert(m_layerStack.begin() + 0, layer);
+
+		connect(layer, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+		connect(layer, SIGNAL(selectionCreated()), this, SLOT(slotSelectionCreated()));
 	}
 
 	if (layer != m_activeLayer) {
 		m_activeLayer = layer;
 		emit activeLayerChanged(KisImageSP(this));
 	}
+
 
 	return layer;
 }
@@ -1285,6 +1289,19 @@ void KisImage::slotUpdateDisplay()
 		emit update(KisImageSP(this), rect);
 	}
 }
+
+void KisImage::slotSelectionChanged() 
+{
+	kdDebug() << "KisImage::slotSelectionChanged\n";
+	emit activeSelectionChanged(KisImageSP(this));
+}
+
+void KisImage::slotSelectionCreated()
+{
+	kdDebug() << "KisImage::slotSelectionCreated\n";
+	emit selectionCreated(KisImageSP(this));
+}
+
 
 void KisImage::startUpdateTimer()
 {

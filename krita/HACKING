@@ -88,3 +88,7 @@ Files and classes
 Spaces
 
 	Keep the source airy and open: put spaces around -> and * and the like.
+
+Slots and signals
+
+	Prefix slots with slot and signals with sig: slotSelectionUpdated, sigSelectionUpdated.

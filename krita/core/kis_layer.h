@@ -24,6 +24,8 @@
 class KisLayer : public KisPaintDevice {
 	typedef KisPaintDevice super;
 
+	Q_OBJECT
+
 public:
 	KisLayer(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name);
 	KisLayer(KisImage *img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity);
@@ -60,24 +62,24 @@ public:
 	void subtractSelection(KisSelectionSP selection);
 
 	/** Whether there is a valid selection for this layer. */
-	bool hasSelection() const;
+	bool hasSelection();
 
 	/** Removes the current selection for this layer. */
 	void removeSelection();
 
-	/**
-	 * Returns the selection state for the pixel designated by X
-	 * and Y: a pixel can be fully selected (QUANTUM_MASK) or not
-	 * selected at all (0).
-	 */
-	QUANTUM selected(Q_INT32 x, Q_INT32 y) const;
+// 	/**
+// 	 * Returns the selection state for the pixel designated by X
+// 	 * and Y: a pixel can be fully selected (QUANTUM_MASK) or not
+// 	 * selected at all (0).
+// 	 */
+// 	QUANTUM selected(Q_INT32 x, Q_INT32 y) const;
 
-	/**
-	 * Sets pixel x,y to selection state s; returns the previous
-	 * state. If the layer has no valid selection, creates a new
-	 * valid selection.
-	 */
-	QUANTUM setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
+// 	/**
+// 	 * Sets pixel x,y to selection state s; returns the previous
+// 	 * state. If the layer has no valid selection, creates a new
+// 	 * valid selection.
+// 	 */
+// 	QUANTUM setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
 	
 	void translate(Q_INT32 x, Q_INT32 y);
 	void addAlpha();
@@ -88,6 +90,11 @@ public:
 
 	bool linked() const;
 	void setLinked(bool l);
+
+signals:
+
+	void selectionChanged();
+	void selectionCreated();
 
 private:
 	QUANTUM m_opacity;

@@ -25,8 +25,8 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kistilecache.h"
-#include "kistile.h"
 #include "kistileswap.h"
+#include "kistile.h"
 
 #define DEBUG_TILES 0
 

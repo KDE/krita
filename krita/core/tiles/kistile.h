@@ -29,10 +29,6 @@
 class KisTileCacheInterface;
 class KisTileSwapInterface;
 
-/**
- * Provides abstraction to a tile.  A tile contains
- * a part of a layer.  Layers form an image.
- */
 class KisTile : public KShared {
 	typedef KShared super;
 

@@ -329,6 +329,7 @@ private slots:
 	void slotEmbedImage(const QString& filename);
 	void slotInsertImageAsLayer();
 	void imgUpdated(KisImageSP img, const QRect& rc);
+	void imgUpdated(KisImageSP img);
 	void slotZoomIn();
 	void slotZoomOut();
 

@@ -44,7 +44,6 @@ User Interface
 	* Tabs in dockers drag-and-droppable (vector of docker
 	  windows, create new docker if tab dropped outside existing
 	  docker window)
-	* Show/Hide rulers
 	* Implement the following dialogs / widgets:
 		    - Select by color range (#Boudewijn)
 		    - Variations (#Boudewijn)

@@ -125,6 +125,8 @@
   <Action name="view_layer_docker"/>
   <Action name="view_resource_docker"/>
   <Separator/>
+  <Action name="view_ruler"/>
+  <Separator/>
   <Action name="refresh_canvas"/>
  </Menu>
 

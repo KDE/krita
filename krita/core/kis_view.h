@@ -335,6 +335,7 @@ private slots:
 	void slotUpdateFullScreen(bool toggle);
 
 	void updateTabBar();
+	void showRuler();
 
 private:
 	static KisView* m_activeView;
@@ -389,6 +390,7 @@ private:
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
 	KAction *m_fullScreen;
+	KToggleAction *m_RulerAction;
 
 	DCOPObject *m_dcop;
 

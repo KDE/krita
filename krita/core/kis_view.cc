@@ -565,6 +565,9 @@ void KisView::setupActions()
         (void)new KAction(i18n( "&Tool Properties" ), 0, this, SLOT( viewControlDocker() ), actionCollection(), "view_control_docker" );
         (void)new KAction(i18n( "&Layers/Channels" ), 0, this, SLOT( viewLayerChannelDocker() ), actionCollection(), "view_layer_docker" );
         (void)new KAction(i18n( "&Brushes/Patterns/Gradients" ), 0, this, SLOT( viewResourceDocker() ), actionCollection(), "view_resource_docker" );
+
+	m_RulerAction = new KToggleAction( i18n( "Show Rulers" ), 0, this, SLOT( showRuler() ), actionCollection(), "view_ruler" );
+	m_RulerAction->setChecked( true );
 }
 
 void KisView::reset()
@@ -586,6 +589,7 @@ void KisView::resizeEvent(QResizeEvent *)
         Q_INT32 drawW;
         Q_INT32 docW;
         Q_INT32 docH;
+
 
         if (img) {
                 KisGuideMgr *mgr = img -> guides();
@@ -657,7 +661,11 @@ void KisView::resizeEvent(QResizeEvent *)
                         m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, (width() - rsideW -lsideW - tbarOffset)/2, tbarBtnH);
         }
 
-        m_canvas -> setGeometry(ruler + lsideW, ruler, drawW, drawH);
+	//Check if rulers are visible
+	if( m_RulerAction->isChecked() )
+		m_canvas -> setGeometry(ruler + lsideW, ruler, drawW, drawH);
+	else
+		m_canvas -> setGeometry(1 + lsideW, 1, drawW, drawH);
         m_canvas -> show();
 
         m_vScroll -> setPageStep(drawH);
@@ -673,8 +681,11 @@ void KisView::resizeEvent(QResizeEvent *)
         else
                 m_hRuler -> updateVisibleArea(-canvasXOffset(), 0);
 
-        m_hRuler -> show();
-        m_vRuler -> show();
+	if( m_RulerAction->isChecked() )
+	{
+		m_hRuler -> show();
+		m_vRuler -> show();
+	}
 }
 
 void KisView::updateReadWrite(bool readwrite)
@@ -1778,6 +1789,25 @@ void KisView::viewResourceDocker()
         }
 }
 
+void KisView::showRuler()
+{
+	if( m_RulerAction->isChecked() )
+	{
+		m_hRuler->show();
+		m_vRuler->show();
+
+		m_canvas -> setGeometry(20, 20, width() - canvasXOffset(), height() - m_tabBar->height() - canvasYOffset());
+		m_canvas -> show();
+	}
+	else
+	{
+		m_hRuler->hide();
+		m_vRuler->hide();
+
+		m_canvas -> setGeometry(1, 1, width() - canvasXOffset(), height() - m_tabBar->height() - canvasYOffset());
+		m_canvas -> show();
+	}
+}
 
 void KisView::slotUpdateFullScreen(bool toggle)
 {

@@ -34,14 +34,11 @@ KisConvolutionFilter::KisConvolutionFilter(const QString& name, KisView * view) 
 void KisConvolutionFilter::process(KisPaintDeviceSP src,
 				   KisPaintDeviceSP dst,
 				   KisFilterConfiguration* configuration,
-				   const QRect& /*rect*/,
-				   KisTileCommand* command)
+				   const QRect& rect)
 {
 	KisConvolutionPainter painter( dst );
-	painter.beginTransaction(command);
 	KisMatrix3x3* amatrixes = ((KisConvolutionConfiguration*)configuration)->matrixes();
-	painter.applyConvolutionColorTransformation(amatrixes, src);
-	painter.endTransaction();
+	painter.applyMatrix(amatrixes, src, rect.x(), rect.y(), rect.width(), rect.height());
 }
 
 KisConvolutionConstFilter::~KisConvolutionConstFilter()

@@ -39,13 +39,15 @@ KisBaseDocker::KisBaseDocker( QWidget* parent, const char* name)
 	setResizeEnabled(true);
 	setOpaqueMoving(true);
 
- 	setVerticallyStretchable(true);
- 	setHorizontallyStretchable(false);
+  	setVerticallyStretchable(true);
+  	setHorizontallyStretchable(false);
+	
 	setNewLine(true);
 	layout() -> setSpacing(0);
 	layout() -> setMargin(0);
 
 	setFont(KGlobalSettings::toolBarFont());
+
 }
 
 #include "kis_basedocker.moc"

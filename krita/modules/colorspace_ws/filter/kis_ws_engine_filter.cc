@@ -39,7 +39,6 @@
 #include <kis_layer.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
-#include <kis_tile_command.h>
 #include <kis_types.h>
 #include <kis_view.h>
 #include <kis_paint_device.h>
@@ -112,7 +111,7 @@ void single_step(KisStrategyColorSpaceSP cs, KisPaintDeviceSP src,  KisPaintDevi
 
 }
 
-void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect, KisTileCommand* ktc)
+void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
 
 	m_src = src;

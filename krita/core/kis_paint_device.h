@@ -25,6 +25,7 @@
 #include <qvaluelist.h>
 #include <qstring.h>
 
+#include "kdebug.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_image.h"
@@ -41,7 +42,6 @@ class QPoint;
 class KoStore;
 class KisImage;
 class QWMatrix;
-class KisTileCommand;
 class KisRotateVisitor;
 class KisRectIteratorPixel;
 class KisVLineIteratorPixel;
@@ -56,9 +56,11 @@ class KRITACORE_EXPORT KisPaintDevice : public QObject, public KShared {
 public:
 	KisPaintDevice(KisStrategyColorSpaceSP colorStrategy,
 			const QString& name);
+	
 	KisPaintDevice(KisImage *img,
 			KisStrategyColorSpaceSP colorStrategy,
 			const QString& name);
+
 	KisPaintDevice(const KisPaintDevice& rhs);
 	virtual ~KisPaintDevice();
 
@@ -67,11 +69,6 @@ public:
         virtual bool write(KoStore *store);
         virtual bool read(KoStore *store);
 
-public:
-	virtual void configure(KisImage *image,
-			KisStrategyColorSpaceSP colorStrategy,
-			const QString& name,
-			CompositeOp compositeOp);
 public:
         virtual bool shouldDrawBorder() const;
 
@@ -238,10 +235,6 @@ public:
 	 */
 	KisVLineIteratorPixel createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
 
-	// Selection stuff. XXX: is it necessary to make the actual
-	// selection object available outside the layer? YYY: yes, so
-	// selection tools can act on it.
-
 	/** Get the current selection or create one if this layers hasn't got a selection yet. */
 	KisSelectionSP selection();
 
@@ -272,7 +265,6 @@ signals:
 
 private:
 	KisPaintDevice& operator=(const KisPaintDevice&);
-	void init();
 
 private:
 	KisImage *m_owner;
@@ -284,6 +276,10 @@ private:
 	// Operation used to composite this layer with the layers _under_ this layer
 	CompositeOp m_compositeOp;
 	KisStrategyColorSpaceSP m_colorStrategy;
+	// Cached for quick access
+	Q_INT32 m_pixelSize;
+	Q_INT32 m_nChannels;
+
 	KisProfileSP m_profile;
 
 	void accept(KisScaleVisitor &);
@@ -299,20 +295,20 @@ private:
 
 inline Q_INT32 KisPaintDevice::pixelSize() const
 {
-	return m_colorStrategy -> pixelSize();
+	Q_ASSERT(m_pixelSize > 0);
+	return m_pixelSize;
 }
 
 inline Q_INT32 KisPaintDevice::nChannels() const
 {
-        return m_colorStrategy -> nChannels();
+	Q_ASSERT(m_nChannels > 0);
+	return m_nChannels;
 ;
 }
 
 inline KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
 {
-	if (m_colorStrategy == 0 && m_owner != 0) {
-		return m_owner -> colorStrategy();
-	}
+	Q_ASSERT(m_colorStrategy != 0);
         return m_colorStrategy;
 }
 
@@ -390,6 +386,13 @@ inline void KisPaintDevice::writeBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_I
 {
 	m_datamanager -> writeBytes( data, x, y, w, h);
 }
+
+inline KisProfileSP KisPaintDevice::profile() const
+{
+	return m_profile;
+}
+
+
 
 #endif // KIS_PAINT_DEVICE_H_
 

@@ -44,7 +44,6 @@
 #include <kis_layer.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
-#include <kis_tile_command.h>
 #include <kis_types.h>
 #include <kis_view.h>
 #include <kis_progress_display_interface.h>
@@ -57,7 +56,7 @@ KisOilPaintFilter::KisOilPaintFilter(KisView * view) : KisFilter(name(), view)
 {
 }
 
-void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect, KisTileCommand* ktc)
+void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
 	kdDebug() << "Oilpaintfilter 2 called!\n";
 

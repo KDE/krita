@@ -111,11 +111,6 @@ void KisSelection::setMaskColor(QColor c)
 
 QRect KisSelection::selectedRect()
 {
-
-	Q_INT32 x, y, w, h;
-	extent(x, y, w, h);
-	
-	return QRect(x, y, w, h);
-
+	return extent();
 }
 

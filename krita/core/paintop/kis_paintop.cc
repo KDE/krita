@@ -49,6 +49,8 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 	// the target layer. We only use a real temporary layer for things
 	// like filter tools.
 	KisLayerSP dab = new KisLayer(m_painter -> device() -> colorStrategy(), "dab");
+	KisProfileSP profile = m_painter -> device() -> profile();
+	QColor c = m_painter -> paintColor();
 
 	KisStrategyColorSpaceSP colorStrategy = dab -> colorStrategy();
 	Q_INT32 maskWidth = mask -> width();
@@ -60,10 +62,10 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 		int x=0;
 		while(! hiter.isDone())
 		{
-			colorStrategy -> nativeColor(m_painter -> paintColor(),
+			colorStrategy -> nativeColor(c,
 						     mask -> alphaAt(x++, y),
 						     hiter.rawData(),
-						     m_painter -> device() -> profile());
+						     profile);
 			hiter++;
 		}
 	}

@@ -21,6 +21,7 @@
 #include <qstring.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <qrect.h>
 
 // kjs
 #include <kjs/interpreter.h>
@@ -82,7 +83,7 @@ void PaintDeviceFactory::createBindings()
 
 PaintDeviceObject::PaintDeviceObject()
 {
-	m_paintDevice = new KisPaintDevice(10,10,KisColorSpaceRegistry::instance()->get("RGBA"), "JSPaintDevice");
+	m_paintDevice = new KisPaintDevice(KisColorSpaceRegistry::instance()->get("RGBA"), "JSPaintDevice");
 }
 
 };
@@ -93,7 +94,7 @@ Width::Width(KJSEmbed::KJSEmbedPart *part) : FunctionBase(part, "width") {
 KJS::Value Width::call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args )
 {
 	Objects::PaintDeviceObject* pdo = Objects::PaintDeviceObject::toPaintDeviceObject( self.imp() );
-	return KJS::Number( pdo->paintDevice()->width() );
+	return KJS::Number( pdo->paintDevice()->extent().width() );
 }
 
 }; }; }; }; }; };

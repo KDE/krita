@@ -53,11 +53,12 @@
 #include "kis_pattern.h"
 #include "kis_rect.h"
 #include "kis_strategy_colorspace.h"
-#include "kis_tile_command.h"
+#include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
 #include "kis_iterators_pixel.h"
 #include "kis_paintop.h"
+#include "kis_selection.h"
 
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
@@ -72,6 +73,12 @@ KisPainter::KisPainter(KisPaintDeviceSP device)
 {
 	init();
         begin(device);
+}
+
+KisPainter::KisPainter(KisLayerSP device)
+{
+	init();
+	begin(device.data());
 }
 
 void KisPainter::init()
@@ -99,6 +106,9 @@ void KisPainter::begin(KisPaintDeviceSP device)
                 delete m_transaction;
 
         m_device = device;
+	m_colorStrategy = device -> colorStrategy();
+	m_pixelSize = device -> pixelSize();
+	m_profile = device -> profile();
 }
 
 KCommand *KisPainter::end()
@@ -110,10 +120,10 @@ void KisPainter::beginTransaction(const QString& customName)
 {
         if (m_transaction)
                 delete m_transaction;
-        m_transaction = new KisTileCommand(customName, m_device);
+        m_transaction = new KisTransaction(customName, m_device);
 }
 
-void KisPainter::beginTransaction( KisTileCommand* command)
+void KisPainter::beginTransaction( KisTransaction* command)
 {
 	if (m_transaction)
 		delete m_transaction;
@@ -148,56 +158,127 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 		return;
 	}
 
-	int dstDepth = m_device -> pixelSize();
+// 	kdDebug() << "KisPainter::bitBlt rect "
+// 			  << " dx: " << dx
+// 			  << " dy: " << dy
+// 			  << " sx: " << sx
+// 			  << " sy: " << sy
+// 			  << " w: " << sw
+// 			  << " h " << sh
+// 			  << " layer: " << srcdev -> name()
+// 			  << " onto: " << m_device -> name()
+// 			  << "\n";
+
+
+	int dstDepth = m_pixelSize;
 	int srcDepth = srcdev -> pixelSize();
+	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
+	KisProfileSP srcProfile = srcdev -> profile();
 
-
-	// A small optimization at the cost of some memory which makes
-	// it possible to benefit from optimizations at the backend
-	// and in the conversion code inside the color strategies.
-	// Used only when we bitBlt small rects.
-	/*
-	if ((sw * sh) <= (RENDER_WIDTH * RENDER_HEIGHT)) {
-
-		QUANTUM * src = srcdev -> readBytes(sx, sy, sw, sh);
-		QUANTUM * dst = m_device -> readBytes(dx, dy, sw, sh);
-		m_device -> colorStrategy () -> bitBlt(dstDepth,
-						       dst, dstDepth * sw,
-						       srcdev -> colorStrategy(), src, srcDepth * sw,
-						       opacity,
-						       sh, sw,
-						       op,
-						       srcdev -> profile(),
-						       m_device -> profile());
-		m_device -> writeBytes(dst, dx, dy, sw, sh);
-		delete[] src;
-		delete[] dst;
-
-	}
-	else */{
-		for(Q_INT32 i = 0; i <sh; i++)
+	for(Q_INT32 i = 0; i < sh; i++)
+	{
+		// Use line iterators because the rect iterators do not guarantee that they will
+		// return corresponding pixels for source and destination.
+		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, false);
+		KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
+		while( ! srcIter.isDone())
 		{
-			// Use line iterators because the rect iterators do not guarantee that they will
-			// return corresponding pixels for source and destination.
-			KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, false);
-			KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
-			while( ! srcIter.isDone())
-			{
-				int adv = srcIter.nConseqHPixels();
-				if(adv > dstIter.nConseqHPixels())
-					adv = dstIter.nConseqHPixels();
+			int adv = QMIN(srcIter.nConseqHPixels(), dstIter.nConseqHPixels());
 
-				m_device -> colorStrategy() -> bitBlt(dstDepth,
-								      dstIter.rawData(), srcDepth,
-								      srcdev -> colorStrategy(), srcIter.rawData(), dstDepth,
-								      opacity,
-								      1, adv,
-								      op,
-								      srcdev -> profile(),
-								      m_device -> profile());
-				srcIter += adv;
-				dstIter += adv;
+			m_colorStrategy -> bitBlt(dstDepth,
+						  dstIter.rawData(), srcDepth,
+						  srcCs,
+						  srcIter.rawData(), dstDepth,
+						  opacity,
+						  1,
+						  adv,
+						  op,
+						  srcProfile,
+						  m_profile);
+			srcIter += adv;
+			dstIter += adv;
+		}
+	}
+
+}
+
+void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
+			      CompositeOp op, 
+			      KisPaintDeviceSP srcdev,
+			      QUANTUM opacity,
+			      Q_INT32 sx, Q_INT32 sy, 
+			      Q_INT32 sw, Q_INT32 sh)
+{
+	if (srcdev == 0) return;
+
+	if (m_device == 0) return;
+
+
+	kdDebug() << "KisPainter::bltSelection rect "
+			  << " dx: " << dx
+			  << " dy: " << dy
+			  << " sx: " << sx
+			  << " sy: " << sy
+			  << " w: " << sw
+			  << " h " << sh
+			  << " layer: " << srcdev -> name()
+			  << " onto: " << m_device -> name()
+			  << "\n";
+
+
+	if (!m_device -> hasSelection()) {
+		kdDebug() << "No selection, doing ordinary blit\n";
+		bitBlt(dx, dy, op, srcdev, opacity, sx, sy, sw, sh);
+		return;
+	}
+
+	KisSelectionSP selection = m_device -> selection();
+
+	QRect r = selection -> selectedRect();
+	//r.setRect(selection -> getX(), selection -> getY(), r.width(), r.height());
+
+	if (!r.intersects(QRect(dx, dy, sw, sh))) {
+		kdDebug() << "Blitting outside selection rect\n";
+		return;
+	}
+
+	kdDebug() << "KisPainter::bltSelection selection rect: "
+			  << " x: " << r.x()
+			  << " y: " << r.y()
+			  << " w: " << r.width()
+			  << " h " << r.height()
+			  << "\n";
+
+	int dstDepth = m_pixelSize;
+	int srcDepth = srcdev -> pixelSize();
+	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
+	KisProfileSP srcProfile = srcdev -> profile();
+	
+
+	for(Q_INT32 i = 0; i < sh; i++)
+	{
+		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, false);
+		KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
+		KisHLineIterator selIter = selection -> createHLineIterator(dx, dy + i, sw, false);
+
+		while( ! srcIter.isDone())
+		{
+			// XXX: Make selection threshold configurable
+			if (selIter.rawData()[0] > SELECTION_THRESHOLD) {
+				m_colorStrategy -> bitBlt(dstDepth,
+							  dstIter.rawData(), srcDepth,
+							  srcCs,
+							  srcIter.rawData(), dstDepth,
+							  opacity,
+							  1,
+							  1,
+							  op,
+							  srcProfile,
+							  m_profile);
 			}
+			srcIter++;
+			dstIter++;
+			selIter++;
 		}
 	}
 }

@@ -275,7 +275,7 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 
 void KisTiledDataManager::rollforward(KisMemento *memento)
 {
-	// Rollforwarf means restoring all of the tiles in the memento's redo to our hashtable.
+	// Rollforward means restoring all of the tiles in the memento's redo to our hashtable.
 
 	for(int i = 0; i < 1024; i++)
 	{

@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <qhbox.h>
+#include <qvbox.h>
 #include <kinstance.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -27,9 +27,9 @@
 
 KisItemChooser::KisItemChooser(QWidget *parent, const char *name) : super(parent, name)
 {
-	m_frame = new QHBox(this);
-	m_frame -> setFrameStyle(QFrame::Panel | QFrame::Sunken);
-	m_chooser = new KoIconChooser(QSize(30,30), m_frame, "icon_chooser", true);
+/*	m_frame = new QVBox(this);
+	m_frame -> setFrameStyle(QFrame::Panel | QFrame::Sunken);*/
+	m_chooser = new KoIconChooser(QSize(30,30), this, "icon_chooser", true);
 	QObject::connect(m_chooser, SIGNAL(selected(KoIconItem*)), this, SLOT(slotItemSelected(KoIconItem*)));
 }
 
@@ -69,7 +69,7 @@ void KisItemChooser::addItems(const vKoIconItem& items)
 
 QWidget *KisItemChooser::chooserWidget() const
 {
-	return m_frame;
+	return m_chooser;
 }
 
 void KisItemChooser::notify()

@@ -61,10 +61,6 @@ public:
 				     QPainter &painter,
 				     KisProfileSP profile);
 
-	// XXX: Add a convertToQImage to KisImage?
-
-
-	KisLayerSP projection() const;
 
 public:
 	QString name() const;

@@ -42,7 +42,7 @@ class KisOilPaintFilter : public KisFilter
 public:
 	KisOilPaintFilter(KisView * view);
 public:
-	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
+	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline QString name() { return "Oilpaint"; };
 	virtual bool supportsPainting() { return true; }
 public:

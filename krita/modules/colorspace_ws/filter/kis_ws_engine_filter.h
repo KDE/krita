@@ -51,7 +51,7 @@ public:
 
 	KisWSEngineFilter(KisView * view);
 
-	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rc, KisTileCommand* ktc);
+	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rc);
 	static inline QString name() { return "Wet & Sticky Engine"; };
 	virtual bool supportsPainting() { return false; }
 
@@ -69,7 +69,7 @@ private:
 	KisPaintDeviceSP m_src;
 	KisPaintDeviceSP m_dst;
 	QRect m_rect;
-	KisTileCommand * m_ktc;
+	KisTransaction * m_ktc;
 
 };
 

@@ -42,15 +42,25 @@
 KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QString& name) :
 	KShared()
 {
-	init();
+	Q_ASSERT(colorStrategy != 0);
+	Q_ASSERT(name.isEmpty() == false);
+
 	m_x = 0;
 	m_y = 0;
-	m_datamanager = new KisDataManager(colorStrategy -> pixelSize());
+
+	m_pixelSize = colorStrategy -> pixelSize();
+	m_nChannels = colorStrategy -> nChannels();
+
+	m_datamanager = new KisDataManager(m_pixelSize);
+
 	m_visible = true;
 	m_owner = 0;
 	m_name = name;
+
 	m_compositeOp = COMPOSITE_OVER;
+
 	m_colorStrategy = colorStrategy;
+
 	m_hasSelection = false;
 	m_selection = 0;
 	m_profile = 0;
@@ -59,9 +69,41 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QStr
 KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrategy, const QString& name) :
 	KShared()
 {
-        init();
-        configure(img, colorStrategy, name, COMPOSITE_OVER);
+
+	Q_ASSERT(img != 0);
+	Q_ASSERT(colorStrategy != 0);
+	Q_ASSERT(name.isEmpty() == false);
+
+        m_x = 0;
+        m_y = 0;
+	
+	m_visible = true;
+
+	m_name = name;
+	m_compositeOp = COMPOSITE_OVER;
+	m_hasSelection = false;
+	m_selection = 0;
 	m_profile = 0;
+
+	m_owner = img;
+
+	if (img != 0 && colorStrategy == 0) {
+		kdDebug() << "Layer " << name << ", Image is not empty, color strategy is; our color strategy will be the image color strategy\n";
+		m_colorStrategy = img -> colorStrategy();
+	}
+	else {
+		m_colorStrategy = colorStrategy;
+	}
+
+	if (img != 0 && m_colorStrategy == img -> colorStrategy()) {
+			m_profile = m_owner -> profile();
+	}
+
+	m_pixelSize = m_colorStrategy -> pixelSize();
+	m_nChannels = m_colorStrategy -> nChannels();
+
+	m_datamanager = new KisDataManager(m_pixelSize);
+
 }
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(rhs)
@@ -81,6 +123,8 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
 		m_hasSelection = false;
 		m_selection = 0;
 		m_profile = rhs.m_profile;
+		m_pixelSize = rhs.m_pixelSize;
+		m_nChannels = rhs.m_nChannels;
         }
 }
 
@@ -88,25 +132,6 @@ KisPaintDevice::~KisPaintDevice()
 {
 }
 
-void KisPaintDevice::configure(KisImage *image,
-                               KisStrategyColorSpaceSP colorStrategy,
-                               const QString& name,
-                               CompositeOp compositeOp)
-{
-	if (image == 0 || name.isEmpty() || colorStrategy == 0)
-		return;
-
-	m_x = 0;
-	m_y = 0;
-	m_datamanager = new KisDataManager(colorStrategy -> pixelSize());
-	m_visible = true;
-	m_owner = image;
-	m_name = name;
-	m_compositeOp = compositeOp;
-	m_colorStrategy = colorStrategy;
-	m_hasSelection = false;
-		m_selection = 0;
-}
 
 void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
 {
@@ -136,16 +161,6 @@ void KisPaintDevice::setName(const QString& name)
                 m_name = name;
 }
 
-void KisPaintDevice::init()
-{
-        m_visible = false;
-        m_x = 0;
-        m_y = 0;
-
-	m_colorStrategy = 0;
-	m_hasSelection = false;
-	m_selection = 0;
-}
 
 void KisPaintDevice::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
 {
@@ -436,16 +451,6 @@ void KisPaintDevice::convertFromImage(const QImage& img)
 	}
 }
 
-KisProfileSP KisPaintDevice::profile() const
-{
-	if (m_profile == 0 && m_owner != 0) {
-		if (colorStrategy() == m_owner -> colorStrategy()) {
-			return m_owner -> profile();
-		}
-	}
-	return m_profile;
-}
-
 
 void KisPaintDevice::setProfile(KisProfileSP profile)
 {
@@ -539,20 +544,6 @@ void KisPaintDevice::setSelection(KisSelectionSP selection)
 
 }
 
-void KisPaintDevice::addSelection(KisSelectionSP /*selection*/)
-{
-// 	m_selection = m_selection + selection;
-	emit selectionChanged();
-
-}
-
-// void KisLayer::subtractSelection(KisSelectionSP /*selection*/)
-// {
-// // 	m_selection = m_selection - selection;
-// 	emit selectionChanged();
-//
-// }
-
 
 bool KisPaintDevice::hasSelection()
 {
@@ -589,5 +580,7 @@ bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opa
 
   return true;
 }
+
+
 
 #include "kis_paint_device.moc"

@@ -75,7 +75,7 @@ bool KisProfile::loadAsync()
 		m_productInfo = cmsTakeProductInfo(m_profile);
 // 		kdDebug() << "\tInfo: " << m_productInfo << "\n";
 // #if (LCMS_MAJOR_VERSION > 1) || (LCMS_MAJOR_VERSION == 1 && LCMS_MINOR_VERSION >= 12)
-		m_manufacturer = cmsTakeManufacturer(m_profile);
+//		m_manufacturer = cmsTakeManufacturer(m_profile);
 // 		kdDebug() << "\tManufacturer: " << m_manufacturer << "\n";
 // #endif
 // 		kdDebug() << "\tCopyright: " << cmsTakeCopyright(m_profile) << "\n";

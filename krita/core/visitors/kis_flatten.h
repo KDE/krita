@@ -122,18 +122,16 @@ private:
 
 		if (!m_test(dev))
 			return;
-
-		sx = m_rc.x() - dev->getX();
-		sy = m_rc.y() - dev->getY();
-
-//  		kdDebug() << "Blitting: " << dev -> name() 
-//  			  << " dx: " << dx
-//  			  << " dy: " << dy
-//  			  << " sx: " << sx
-//  			  << " sy: " << sy
-//  			  << " w: " << w
-//  			  << " h " << h
-//  			  << "\n";
+		sx = m_rc.x() - dev-> getX();
+		sy = m_rc.y() - dev-> getY();
+// 		kdDebug() << "Visiting on: " << dev
+// 			  << " dx: " << dx
+// 			  << " dy: " << dy
+// 			  << " sx: " << sx
+// 			  << " sy: " << sy
+// 			  << " w: " << w
+// 			  << " h " << h
+// 			  << "\n";
 
 		gc.bitBlt(dx, dy, dev -> compositeOp(), dev, opacity, sx, sy, w, h);
 	}

@@ -203,7 +203,7 @@ QString PerfTest::doBlit(CompositeOp op,
 	pf.end();
 
 	t.restart();
-	KisPainter p(img -> activeLayer().data());
+	KisPainter p(img -> activeLayer());
 	for (Q_UINT32 i = 0; i < testCount; ++i) {
 		p.bitBlt(0, 0, op, small.data(),0,0,32, 32);
 	}
@@ -371,15 +371,16 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 					
 		// Colour fill
 
-// 		t.restart();
-// 		for (Q_UINT32 i = 0; i < testCount; ++i) {
-// 			p.eraseRect(0, 0, 1000, 1000);
-// 			p.setPaintColor(Qt::yellow);
-// 			p.setFillThreshold(15);
-// 			p.setCompositeOp(COMPOSITE_OVER);
-// 			p.fillColor(500, 500);
-// 		}
-// 		report = report.append(QString("    Opaque floodfill of whole layer (incl. erase) %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+		t.restart();
+		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			p.eraseRect(0, 0, 1000, 1000);
+// 			p.paintEllipse(500, 1000, 100, 0, 0);
+			p.setPaintColor(Qt::yellow);
+			p.setFillThreshold(15);
+			p.setCompositeOp(COMPOSITE_OVER);
+			p.fillColor(500, 500);
+		}
+		report = report.append(QString("    Opaque floodfill of whole circle (incl. erase and painting of circle) %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 					
 
 		// Pattern fill
@@ -478,5 +479,11 @@ QString PerfTest::colorConversionTest(Q_UINT32 testCount)
 {
 	return QString("Color conversion test");
 }
+
+QString PerfTest::filterTest(Q_UINT32 testCount)
+{
+	return QString("Filter test");
+}
+
 
 #include "perftest.moc"

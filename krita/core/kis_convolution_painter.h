@@ -53,14 +53,12 @@ public:
         KisConvolutionPainter();
         KisConvolutionPainter(KisPaintDeviceSP device);
 
-	// XXX: add params to paint only in a certain rect
-	// XXX: this name is a bit long... paintConvolution?
-		void applyConvolutionColorTransformation(KisMatrix3x3* matrix);
-		void applyConvolutionColorTransformation(KisMatrix3x3* matrix, KisPaintDeviceSP src);
+	void applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	void applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
-	private:
+private:
 
-
+	Q_INT32 m_nChannels;
 
 };
 #endif //KIS_CONVOLUTION_PAINTER_H_

@@ -38,10 +38,8 @@
 #include "core/kis_view.h"
 
 // KOffice
-#if KIVIO_STYLE_DOCKERS
 #include "kotooldockmanager.h"
 #include "kotooldockbase.h"
-#endif
 
 // KisKJSEmbed
 #include "kis_script.h"

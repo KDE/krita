@@ -30,14 +30,13 @@
 #include <qtabwidget.h>
 #include <qimage.h>
 #include <qdockwindow.h>
+#include <qfontmetrics.h>
+#include <qfont.h>
 
 #include <kglobalsettings.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <ktabwidget.h>
-
-#include <koColorChooser.h>
-#include <koFrameButton.h>
 
 #include "kis_dockframedocker.h"
 #include "wdgdockertab.h"

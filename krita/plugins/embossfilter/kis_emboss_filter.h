@@ -40,7 +40,7 @@ class KisEmbossFilter : public KisFilter
 public:
 	KisEmbossFilter(KisView * view);
 public:
-	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
+	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline QString name() { return "Emboss"; };
 	virtual bool supportsPainting() { return true; }
 public:

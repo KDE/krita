@@ -41,7 +41,7 @@ class KisFilterInvert : public KisFilter
 public:
 	KisFilterInvert(KisView * view);
 public:
-	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&, KisTileCommand* );
+	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
 	static inline QString name() { return "Invert"; };
 	virtual bool supportsPainting() { return true; }
 };

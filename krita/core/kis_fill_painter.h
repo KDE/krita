@@ -45,7 +45,6 @@
 #include "kis_matrix.h"
 #include "kis_progress_subject.h"
 #include "kis_painter.h"
-//#include "kis_iterators_infinite.h"
 #include "kis_selection.h"
 #include "kis_pixel.h"
 #include "kis_pattern.h"

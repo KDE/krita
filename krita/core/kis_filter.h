@@ -30,7 +30,6 @@
 #include "kis_layer.h"
 #include "kis_filter_registry.h"
 
-class KisTileCommand;
 class KisFilterConfigurationWidget;
 class KisPreviewDialog;
 
@@ -75,9 +74,7 @@ public:
 
 public:
 
-	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&, KisTileCommand* ) = 0;
-
-	void process(KisPaintDeviceSP, KisFilterConfiguration*, const QRect&, KisTileCommand* );
+	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&) = 0;
 
 public:
 	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
@@ -132,10 +129,6 @@ inline KisStrategyColorSpaceSP KisFilter::colorStrategy()
 	return layer -> colorStrategy();
 }
 
-inline void KisFilter::process(KisPaintDeviceSP dev, KisFilterConfiguration* config, const QRect& rect, KisTileCommand* ktc)
-{
-	process( dev, dev, config, rect, ktc);
-}
 
 
 

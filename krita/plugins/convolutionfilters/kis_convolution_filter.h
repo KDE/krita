@@ -40,7 +40,7 @@ class KisConvolutionFilter : public KisFilter {
 public:
 	KisConvolutionFilter(const QString& name, KisView * view);
 public:
-	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
+	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 };
 
 

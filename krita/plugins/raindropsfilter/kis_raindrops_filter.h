@@ -44,7 +44,7 @@ class KisRainDropsFilter : public KisFilter
 public:
 	KisRainDropsFilter(KisView * view);
 public:
-	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
+	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline QString name() { return "Raindrops"; };
 	virtual bool supportsPainting() { return false; }
 public:

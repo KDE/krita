@@ -20,22 +20,22 @@
 #include "tiles/kis_tile.h"
 #include "tiles/kis_tileddatamanager.h"
 #include "kis_image.h"
-#include "kis_tile_command.h"
+#include "kis_transaction.h"
 #include "kis_memento.h"
 
-KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device)
+KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device)
 {
 	m_name = name;
 	m_device = device;
 	m_memento = device -> getMemento();
 }
 
-KisTileCommand::~KisTileCommand()
+KisTransaction::~KisTransaction()
 {
 	delete m_memento;
 }
 
-void KisTileCommand::execute()
+void KisTransaction::execute()
 {
 	KisImageSP img = m_device -> image();
 	
@@ -49,7 +49,7 @@ void KisTileCommand::execute()
 		img -> notify(rc);
 }
 
-void KisTileCommand::unexecute()
+void KisTransaction::unexecute()
 {
 	KisImageSP img = m_device -> image();
 	
@@ -63,7 +63,7 @@ void KisTileCommand::unexecute()
 		img -> notify(rc);
 }
 
-QString KisTileCommand::name() const
+QString KisTransaction::name() const
 {
 	return m_name;
 }

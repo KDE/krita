@@ -31,7 +31,7 @@ class KisDesaturateFilter : public KisFilter {
 public:
 	KisDesaturateFilter(KisView * view);
 public:
-	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
+	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline QString name() { return i18n("Desaturate"); };
 	virtual bool supportsPainting() { return true; }
 };
@@ -40,7 +40,7 @@ class KisGammaCorrectionFilter : public KisPerChannelFilter {
 public:
 	KisGammaCorrectionFilter(KisView * view);
 public:
-	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
+	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline QString name() { return i18n("Gamma Adjustment"); };
         virtual bool supportsPainting() { return true; }
 
@@ -50,7 +50,7 @@ class KisColorAdjustmentFilter : public KisPerChannelFilter {
 public:
 	KisColorAdjustmentFilter(KisView * view);
 public:
-	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
+	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline QString name() { return i18n("Color Adjustment"); };
         virtual bool supportsPainting() { return true; }
 
@@ -60,7 +60,7 @@ class KisAutoContrast : public KisFilter {
 public:
 	KisAutoContrast(KisView* view);
 public:
-	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
+	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline QString name() { return i18n("Auto Contrast"); };
         virtual bool supportsPainting() { return true; }
 

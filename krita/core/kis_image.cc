@@ -272,19 +272,12 @@ QString KisImage::nextLayerName() const
 
 void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
-	if (!adapter) {
-		kdDebug() << "no color strategy\n";
-	}
-
-	if (!colorStrategy) {
-		kdDebug() << "no color strategy\n";
-		return;
-	}
+	Q_ASSERT(colorStrategy != 0);
+	Q_ASSERT(adapter != 0);
 
 	m_adapter = adapter;
 	m_nserver = new KisNameServer(i18n("Layer %1"), 1);
 	m_name = name;
-
 
 	m_colorStrategy = colorStrategy;
 	m_bkg = new KisBackground(this, width, height);
@@ -994,7 +987,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
 			Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
 			Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
 			renderToProjection(x, y, w, h);
-			QImage img = projection() -> convertToQImage(profile, x, y, w, h);
+			QImage img = m_projection -> convertToQImage(profile, x, y, w, h);
 			if (!img.isNull()) {
 				m_pixmap.convertFromImage(img);
 				painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
@@ -1059,10 +1052,6 @@ KisStrategyColorSpaceSP KisImage::colorStrategy() const
 	return m_colorStrategy;
 }
 
-KisLayerSP KisImage::projection() const
-{
-	return m_projection;
-}
 
 #include "kis_image.moc"
 

@@ -51,14 +51,13 @@
 #include "kis_pattern.h"
 #include "kis_rect.h"
 #include "kis_strategy_colorspace.h"
-#include "kis_tile_command.h"
+#include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_pixel.h"
 #include "kis_iterators_pixel.h"
-//#include "kis_iterators_infinite.h"
 #include "kis_iterator.h"
 
 namespace {

@@ -533,7 +533,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 	Q_ASSERT(repeatStrategy != 0);
 
 	KisLayerSP layer = new KisLayer( m_device -> colorStrategy(), "gradient");
-	KisPainter painter(layer.data());
+	KisPainter painter(layer);
 
 	int totalPixels = width * height;
 

@@ -79,22 +79,24 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : super(de
 {
 }
 
-void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* matrix)
+void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	applyConvolutionColorTransformation(matrix, m_device);
+	applyMatrix(matrix, m_device, x, y, w, h);
 }
-void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* matrix, KisPaintDeviceSP src)
+void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	// XXX: add checking of selections
 
 	Q_INT32 depth = src -> colorStrategy() -> pixelSize();
-	Q_INT32 y, top, left, w, h;
-	src->extent(left, top, w, h);
+	Q_INT32 top, left;
+
+	left = x;
+	top = y;
 
 	Q_INT32 above=top;
 	Q_INT32 below=top+1;
 	Q_INT32 dstY=top;
-	y=top;
+
 
 	KisPixelRO pixels[9];
 	{

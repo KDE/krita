@@ -22,15 +22,14 @@
 
 #include "tiles/kis_iterator.h"
 #include "kis_pixel.h"
-#include "kis_strategy_colorspace.h"
 #include <kis_paint_device.h>
+
 template< typename _iTp> 
 class KisIteratorPixelTrait
 {
 public:
-	KisIteratorPixelTrait(KisPaintDevice *ndevice, _iTp *underlyingIterator)
+	KisIteratorPixelTrait(KisPaintDevice * ndevice, _iTp *underlyingIterator)
 	:	m_device(ndevice),
-		m_colorSpace(ndevice->colorStrategy()),
 		m_underlyingIterator(underlyingIterator)
 	{
 		m_selectionIterator = NULL;
@@ -58,7 +57,9 @@ public:
 	
 protected:
 	KisPaintDevice *m_device;
+
 	KisStrategyColorSpaceSP m_colorSpace;
+
 	inline void advance(int n){if(m_selectionIterator)(*m_selectionIterator)++;};
 	void setSelectionIterator(_iTp *si){m_selectionIterator = si;};
 

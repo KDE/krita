@@ -38,7 +38,6 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_global.h>
-#include <kis_tile_command.h>
 #include <kis_types.h>
 #include <kis_view.h>
 #include <kis_iterators_pixel.h>
@@ -93,7 +92,7 @@ KisColorAdjustmentFilter::KisColorAdjustmentFilter(KisView * view) :
 {
 }
 
-void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
+void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
 	KisPerChannelFilterConfiguration* configPC = (KisPerChannelFilterConfiguration*) config;
 	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
@@ -122,7 +121,7 @@ KisGammaCorrectionFilter::KisGammaCorrectionFilter(KisView * view)
 {
 }
 
-void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
+void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
 	KisPerChannelFilterConfiguration* configPC = (KisPerChannelFilterConfiguration*) config;
 	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
@@ -146,7 +145,7 @@ KisAutoContrast::KisAutoContrast(KisView* view) : KisFilter(name(), view)
 {
 
 }
-void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* , const QRect& rect, KisTileCommand* ktc)
+void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* , const QRect& rect)
 {
 	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), false);
 
@@ -207,13 +206,13 @@ KisDesaturateFilter::KisDesaturateFilter(KisView * view)
 {
 }
 
-void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect,KisTileCommand* ktc)
+void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
 
 	if(colorStrategy()->name() != "RGBA")
 		return;
 
-	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
+	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
 // 	Q_INT32 depth = device->nChannels() - 1;
 	while( ! rectIt.isDone() )
 	{

@@ -53,12 +53,13 @@ void KisFilterBox::init()
 			insertItem( f -> name() );
 		}
 	}
-// 	connect( this,  SIGNAL(currentChanged( QListBoxItem * )),  this, SLOT( slotFilterSelected( QListBoxItem * ) );
+ 	connect(this, SIGNAL(currentChanged( QListBoxItem * )), this, SLOT( slotFilterSelected( QListBoxItem * ) ));
 }
 
 
 void KisFilterBox::slotFilterSelected(QListBoxItem * item) {
-
-
+	// Get the current tool
+	// Set the paintop to filter
+	// Set the config widget to the config widget of the current filter
 }
 #include "kis_filter_box.moc"

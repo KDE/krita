@@ -1,6 +1,5 @@
 /*
- * This file is part of the KDE project
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,21 +16,35 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef _KIS_ITERATORS_PIXEL_NO_MASK_H_
-#define _KIS_ITERATORS_PIXEL_NO_MASK_H_
+#ifndef KIS_TILE_COMMAND_H_
+#define KIS_TILE_COMMAND_H_
 
-#include "kis_iteratorpixeltrait.h"
+#include <map>
+#include <qglobal.h>
+#include <qstring.h>
+#include <kcommand.h>
+#include "kis_paint_device.h"
 
-class KisIteratorPixelNoMask : public KisIteratorPixelTrait <KisHLineIterator>
-{
+class QRect;
+class KisMemento;
+
+class KisTransaction : public KCommand {
 public:
-	KisIteratorPixelNoMask( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos = 0, Q_INT32 nxpos = 0);
+	KisTransaction(const QString& name, KisPaintDeviceSP device);
+	virtual ~KisTransaction();
+
 public:
-	inline operator KisPixel();
-	inline KisPixelRO oldValue();
-	inline KisQuantum operator[](int index);
+	virtual void execute();
+	virtual void unexecute();
+	virtual QString name() const;
+
+public:
+
 private:
+	QString m_name;
+	KisPaintDeviceSP m_device;
+	KisMemento *m_memento;
 };
 
+#endif // KIS_TILE_COMMAND_H_
 
-#endif

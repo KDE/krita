@@ -48,7 +48,7 @@
 #include "kis_paintop.h"
 #include <koffice_export.h>
 class QRect;
-class KisTileCommand;
+class KisTransaction;
 class KisBrush;
 class KisPattern;
 
@@ -70,6 +70,7 @@ class KRITACORE_EXPORT KisPainter : public KisProgressSubject {
 public:
         KisPainter();
         KisPainter(KisPaintDeviceSP device);
+	KisPainter(KisLayerSP device);
         virtual ~KisPainter();
 
 private:
@@ -94,10 +95,10 @@ public:
         KCommand *endTransaction();
 
         // begin a transaction with the given command
-        void beginTransaction( KisTileCommand* command);
+        void beginTransaction( KisTransaction* command);
 
 	// Return the current transcation
-	KisTileCommand  * transaction() { return m_transaction; }
+	KisTransaction  * transaction() { return m_transaction; }
 
 
         // The current paint device.
@@ -130,6 +131,18 @@ public:
                     QUANTUM opacity,
                     Q_INT32 sx, Q_INT32 sy, 
 		    Q_INT32 sw, Q_INT32 sh);
+
+
+	/**
+	 * A version of bitBlt applies the destination selection mask first to the source device and 
+	 * only then blits. This means that the source device is permently altered.
+	 */
+	void bltSelection(Q_INT32 dx, Q_INT32 dy,
+			  CompositeOp op, 
+			  KisPaintDeviceSP src,
+			  QUANTUM opacity,
+			  Q_INT32 sx, Q_INT32 sy, 
+			  Q_INT32 sw, Q_INT32 sh);
 
 
 	/**
@@ -276,7 +289,7 @@ private:
 
 protected:
         KisPaintDeviceSP m_device;
-        KisTileCommand  *m_transaction;
+        KisTransaction  *m_transaction;
 
 	QRect m_dirtyRect;
 
@@ -292,7 +305,11 @@ protected:
 	KisPaintOp * m_paintOp;
 	double m_pressure;
 	bool m_cancelRequested;
+	Q_INT32 m_pixelSize;
+	KisStrategyColorSpaceSP m_colorStrategy;
+	KisProfileSP m_profile;
 	KisPaintDeviceSP m_dab;
+
 };
 
 

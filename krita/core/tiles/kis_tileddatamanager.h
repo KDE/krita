@@ -73,7 +73,6 @@ public:
 
 public:
 
-// 	Q_UINT32 pixelSize();
 	Q_UINT32 pixelSize();
 
 	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;

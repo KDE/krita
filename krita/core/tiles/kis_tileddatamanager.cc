@@ -160,8 +160,8 @@ bool KisTiledDataManager::read(KoStore *store)
 		// the following is only correct as long as tile size is not changed
 		// The first time we change tilesize the dimensions just read needs to be respected
 		// but for now we just assume that tiles are the same size as ever.
-		Q_UINT32 row = (y + 16384 * KisTile::HEIGHT) / KisTile::HEIGHT - 16384;
-		Q_UINT32 col = (x + 16384 * KisTile::WIDTH) / KisTile::WIDTH - 16384;
+		Q_UINT32 row = yToRow(y);
+		Q_UINT32 col = xToCol(x);
 		Q_UINT32 tileHash = calcTileHash(col, row);
 
 		KisTile *tile = new KisTile(m_pixelSize, col, row);
@@ -356,6 +356,14 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 				curTile->setNext(memento->m_redoHashTable[i]);
 				memento->m_redoHashTable[i] = curTile;
 			}
+			else
+			{
+				KisMemento::DeletedTile *d = new KisMemento::DeletedTile;
+				d->col = tile->getCol();
+				d->row = tile->getRow();
+				d->next = memento->m_delTilesTable;
+				memento->m_delTilesTable = d;
+			}
 
 			// Put a copy of the memento tile into our hashtable
 			curTile = new KisTile(*tile);
@@ -407,6 +415,35 @@ void KisTiledDataManager::rollforward(KisMemento *memento)
 
 			tile = tile->getNext();
 		}
+	}
+	
+	// Roll forward also means re-deleting the tiles that was deleted but restored by the undo
+	KisMemento::DeletedTile *d = memento->m_delTilesTable;
+	while(d)
+	{
+		Q_UINT32 tileHash = calcTileHash(d->col, d->row);
+		KisTile *curTile = m_hashTable[tileHash];
+		KisTile *preTile = 0;
+		while(curTile)
+		{
+			if(curTile->getRow() == d->row && curTile->getCol() == d->col)
+			{
+				break;
+			}
+			preTile = curTile;
+			curTile = curTile->getNext();
+		}
+
+		// Remove it from our hashtable
+		if(preTile)
+			preTile->setNext(curTile->getNext());
+		else
+			m_hashTable[tileHash] = 0;
+
+		// And delete it (it's equal to the one stored in the memento's undo)
+		delete curTile;
+
+		d = d->next;
 	}
 }
 

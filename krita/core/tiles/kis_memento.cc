@@ -29,6 +29,7 @@ KisMemento::KisMemento()
 		m_redoHashTable [i] = 0;
 	}
 	m_numTiles = 0;
+	m_delTilesTable=0;
 }
 
 KisMemento::~KisMemento()
@@ -58,6 +59,17 @@ KisMemento::~KisMemento()
 	}
 	delete [] m_hashTable;
 	delete [] m_redoHashTable;
+	
+	// Finally delete the list of deleted tiles
+	// They are not tiles just references. The actual tiles have already been deleted,
+	// so just delete the references.
+	DeletedTile *deletedtile = m_delTilesTable;
+	while(deletedtile)
+	{
+		DeletedTile *d = deletedtile;
+		deletedtile = deletedtile->next;
+		delete d;
+	}
 }
 
 void KisMemento::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const

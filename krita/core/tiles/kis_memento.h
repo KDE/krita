@@ -43,7 +43,9 @@ private:
 	KisTiledDataManager *originator;
 	KisTile **m_hashTable;	
 	Q_UINT32 m_numTiles;
-	KisTile **m_redoHashTable;	
+	KisTile **m_redoHashTable;
+	struct DeletedTile {Q_INT32 col; Q_INT32 row; DeletedTile *next;};
+	DeletedTile *m_delTilesTable;
 };
 
 #endif // KIS_MEMENTO_H_

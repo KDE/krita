@@ -83,6 +83,12 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_vRuler = 0;
 	m_zoomIn = 0;
 	m_zoomOut = 0;
+	m_layerRm = 0;
+	m_layerLink = 0;
+	m_layerHide = 0;
+	m_layerProperties = 0;
+	m_layerNext = 0;
+	m_layerPrev = 0;
 	m_sidebarToggle = 0;
 	m_floatsidebarToggle  = 0;
 	m_lsidebarToggle = 0;
@@ -116,9 +122,7 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 #if 0
 	m_pTool = 0;
 
-	QObject::connect(m_doc, SIGNAL(docUpdated()), this, SLOT(slotDocUpdated()));
-	QObject::connect(m_doc, SIGNAL(docUpdated(const QRect&)), this, SLOT(slotDocUpdated(const QRect&)));
-	QObject::connect(this, SIGNAL(embeddImage(const QString&)), this, SLOT(slotEmbeddImage(const QString&)));
+	QObject::connect(this, SIGNAL(embeddImage(const QString&)), this, SLOT(slotEmbedImage(const QString&)));
 	connect(m_doc, SIGNAL(layersUpdated()), SLOT(layersUpdated()));
 	setActiveBrush(m_pBrush);
 	setActivePattern(m_pPattern);
@@ -189,10 +193,10 @@ void KisView::setupSideBar()
 	m_layerBox = new KisListBox(i18n("layer"), KisListBox::SHOWALL, m_sideBar);
 	m_layerBox -> setCaption(i18n("Layers"));
 
-	connect(m_layerBox, SIGNAL(itemToggleVisible(int)), SLOT(layerToggleVisible(int)));
+	connect(m_layerBox, SIGNAL(itemToggleVisible()), SLOT(layerToggleVisible()));
 	connect(m_layerBox, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
 	connect(m_layerBox, SIGNAL(itemToggleLinked(int)), SLOT(layerToggleLinked(int)));
-	connect(m_layerBox, SIGNAL(itemProperties(int)), SLOT(layerProperties(int)));
+	connect(m_layerBox, SIGNAL(itemProperties()), SLOT(layerProperties()));
 	connect(m_layerBox, SIGNAL(itemAdd()), SLOT(layerAdd()));
 	connect(m_layerBox, SIGNAL(itemRemove()), SLOT(layerRemove()));
 	connect(m_layerBox, SIGNAL(itemAddMask(int)), SLOT(layerAddMask(int)));
@@ -274,8 +278,8 @@ void KisView::setupTabBar()
 void KisView::setupActions()
 {
 	// navigation actions
-	(void)new KAction(i18n("Refresh Canvas"), "reload", 0, this, SLOT(slotDocUpdated()), actionCollection(), "refresh_canvas");
-	(void)new KAction(i18n("Panic Button"), "stop", 0, this, SLOT(slotHalt()), actionCollection(), "panic_button");
+	(void)new KAction(i18n("Refresh Canvas"), "reload", 0, this, SLOT(canvasRefresh()), actionCollection(), "refresh_canvas");
+	(void)new KAction(i18n("Reset Button"), "stop", 0, this, SLOT(reset()), actionCollection(), "panic_button");
 
 	// selection actions
 	(void)KStdAction::cut(this, SLOT(cut()), actionCollection(), "cut");
@@ -302,12 +306,12 @@ void KisView::setupActions()
 
 	// layer actions
 	(void)new KAction(i18n("&Add Layer..."), 0, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
-	(void)new KAction(i18n("&Remove Layer"), 0, this, SLOT(remove_layer()), actionCollection(), "remove_layer");
-	(void)new KAction(i18n("&Link/Unlink Layer"), 0, this, SLOT(link_layer()), actionCollection(), "link_layer");
-	(void)new KAction(i18n("&Hide/Show Layer"), 0, this, SLOT(hide_layer()), actionCollection(), "hide_layer");
-	(void)new KAction(i18n("&Next Layer"), "forward", 0, this, SLOT(next_layer()), actionCollection(), "next_layer");
-	(void)new KAction(i18n("&Previous Layer"), "back", 0, this, SLOT(previous_layer()), actionCollection(), "previous_layer");
-	(void)new KAction(i18n("Layer Properties..."), 0, this, SLOT(layer_properties()), actionCollection(), "layer_properties");
+	m_layerRm = new KAction(i18n("&Remove Layer"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
+	m_layerLink = new KAction(i18n("&Link/Unlink Layer"), 0, this, SLOT(layerToggleLinked()), actionCollection(), "link_layer");
+	m_layerHide = new KAction(i18n("&Hide/Show Layer"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");
+	m_layerNext = new KAction(i18n("&Next Layer"), "forward", 0, this, SLOT(next_layer()), actionCollection(), "next_layer");
+	m_layerPrev = new KAction(i18n("&Previous Layer"), "back", 0, this, SLOT(previous_layer()), actionCollection(), "previous_layer");
+	m_layerProperties = new KAction(i18n("Layer Properties..."), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
 	(void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
 	(void)new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(save_layer_as_image()), actionCollection(), "save_layer_as_image");
 
@@ -351,49 +355,9 @@ void KisView::setupActions()
 	m_dlgChannelsToggle -> setChecked(true);
 }
 
-/*
-    slotHalt - try to restore reasonable defaults for a user
-    who may have pushed krita beyond its limits or the
-    limits of his/her hardware and system memory!  This can happen
-    when someone sets a ridiculously high zoom factor which
-    requires a supercomputer for all the floating point
-    calculatons.  Krayon is not idiot proof!
-*/
-
-void KisView::slotHalt()
+void KisView::reset()
 {
-#if 0
-    KMessageBox::error(NULL,
-        "STOP! In the name of Love ...", "System Error", FALSE);
-
-    zoom(0, 0, 1.0);
-    slotUpdateImage();
-    slotRefreshPainter();
-#endif
-}
-
-/*
-    refreshPainter - refresh and resize the painter device
-    whenever the image or layer is changed
-*/
-
-void KisView::slotRefreshPainter()
-{
-#if 0
-	KisImageSP img = currentImg();
-
-	if(img) {
-		KisLayerSP lay = img -> getCurrentLayer();
-
-		if(lay) {
-			QRect extents(lay -> imageExtents());
-
-			m_pPainter -> resize(extents.left() + extents.width(), extents.top() + extents.height());
-		}
-
-		m_pPainter -> clearAll();
-	}
-#endif
+	zoomUpdateGUI(0, 0, 1.0);
 }
 
 void KisView::resizeEvent(QResizeEvent *)
@@ -516,85 +480,6 @@ void KisView::resizeEvent(QResizeEvent *)
 */
 void KisView::updateReadWrite(bool /*readwrite*/)
 {
-}
-
-/*
-    slotUpdateImage - a cheap hack to mark the entire image
-    dirty to force a repaint AND to send a fake resize event
-    to force the view to show the scrollbars
-*/
-void KisView::slotUpdateImage()
-{
-#if 0
-	KisImageSP img = currentImg();
-
-	if (img) {
-		QRect updateRect(0, 0, img -> width(), img -> height());
-		img -> markDirty(updateRect);
-	}
-#endif
-}
-
-/*
-    slotDocUpdated - response to a signal from the document
-    that there is a new or different currentImg image for the
-    document - setCurrentImage() in kis_doc.cc
-*/
-
-void KisView::slotDocUpdated()
-{
-#if 0
-	QPainter p;
-	QRect ur(0, 0, m_canvas -> width(), m_canvas -> height());
-
-	p.begin(m_canvas);
-	p.eraseRect(ur);
-	p.end();
-
-	m_canvas -> repaint();
-	slotRefreshPainter();
-	//kdDebug() << "KisView::slotDocUpdated\n";
-#endif
-}
-
-/*
-    slotDocUpdated - response to a signal from
-    the document that content has changed and that we
-    need to update the canvas -  a definite update area
-    is given, so only update that rectangle's contents.
-*/
-
-void KisView::slotDocUpdated(const QRect& )
-{
-#if 0
-	KisImageSP img = currentImg();
-	QRect ur = rc;
-	QPainter p;
-	float zF = zoom();
-
-	if (!img)
-		return;
-
-	p.begin(m_canvas);
-	ur.moveBy(static_cast<int>((canvasXOffset() + m_hScroll -> value()) * zF),  static_cast<int>(((canvasYOffset() + m_vScroll -> value()) * zF)));
-	ur = ur.intersect(img -> imageExtents());
-	ur.setBottom(ur.bottom() + 1);
-	ur.setRight(ur.right() + 1);
-
-	int xt = canvasXOffset() - m_hScroll -> value();
-	int yt = canvasYOffset() - m_vScroll -> value();
-
-	p.translate(xt, yt);
-	p.scale(zF, zF);
-	m_doc -> paintContent(p, ur);
-	p.end();
-
-	if (m_pTool && !m_pTool -> willModify()) {
-		QPaintEvent ev(ur, false);
-
-		m_pTool -> paintEvent(&ev);
-	}
-#endif
 }
 
 inline
@@ -762,6 +647,16 @@ void KisView::tool_properties()
 #endif
 }
 
+void KisView::layerUpdateGUI(bool enable)
+{
+	m_layerRm -> setEnabled(enable);
+	m_layerLink -> setEnabled(enable);
+	m_layerHide -> setEnabled(enable);
+	m_layerProperties -> setEnabled(enable);
+	m_layerNext -> setEnabled(enable);
+	m_layerPrev -> setEnabled(enable);
+}
+
 /*---------------------------------
     edit selection action slots
 ----------------------------------*/
@@ -808,7 +703,6 @@ void KisView::removeSelection()
 
 	// clear old selection outline
 	m_pTool -> clearOld();
-	slotUpdateImage();
 #endif
 }
 
@@ -825,7 +719,6 @@ void KisView::paste()
 	if (m_doc -> getClipImage()) {
 		m_paste -> setClip();
 		activateTool(m_paste);
-		slotUpdateImage();
 	}
 	else
 		KMessageBox::sorry(0, i18n("Nothing to paste!"), "", false);
@@ -887,8 +780,6 @@ void KisView::crop()
 		kdDebug(0) << "crop: can't load image into layer." << endl;
 	}
 	else {
-		slotUpdateImage();
-		slotRefreshPainter();
 	}
 
 	/* remove the currentImg clip image which now belongs to the
@@ -934,10 +825,10 @@ void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 	m_zoomOut -> setEnabled(zf >= KISVIEW_MIN_ZOOM);
 
 	if (zf > 3.0) {
-		m_hRuler -> setPixelPerMark(static_cast<int>(zf * 1.0));
-		m_vRuler -> setPixelPerMark(static_cast<int>(zf * 1.0));
+		m_hRuler -> setPixelPerMark(static_cast<Q_INT32>(zf * 1.0));
+		m_vRuler -> setPixelPerMark(static_cast<Q_INT32>(zf * 1.0));
 	} else {
-		Q_INT32 mark = static_cast<int>(zf * 10.0);
+		Q_INT32 mark = static_cast<Q_INT32>(zf * 10.0);
 
 		if (!mark)
 			mark = 1;
@@ -1061,73 +952,6 @@ void KisView::dialog_channels()
 #endif
 }
 
-/*-------------------------------
-    layer action slots
---------------------------------*/
-
-/*
-    Properties dialog for the currentImg layer.
-    Only for changing name and opacity so far.
-*/
-
-void KisView::layer_properties()
-{
-//	layerProperties(0);
-}
-
-/*
-    remove currentImg layer - to remove other layers, a user must
-    access the layers tableview in a dialog or sidebar widget
-*/
-
-void KisView::remove_layer()
-{
-#if 0
-	KisImageSP img = currentImg();
-	int i;
-
-	if (img && (i = img -> getCurrentLayerIndex()) != -1)
-		layerRemove(i);
-#endif
-}
-
-/*
-    hide/show the currentImg layer - to hide other layers, a user must
-    access the layers tableview in a dialog or sidebar widget
-*/
-
-void KisView::hide_layer()
-{
-#if 0
-	KisImageSP img = currentImg();
-	int i;
-
-	if (img && (i = img -> getCurrentLayerIndex()) != -1)
-		layerToggleVisible(i);
-#endif
-}
-
-/*
-    link/unlink the currentImg layer - to link other layers, a user must
-    access the layers tableview in a dialog or sidebar widget
-*/
-
-void KisView::link_layer()
-{
-#if 0
-	KisImageSP img = currentImg();
-	int i;
-
-	if (img && (i = img -> getCurrentLayerIndex()) != -1)
-		layerToggleLinked(i);
-#endif
-}
-
-/*
-    make the next layer in the layers list the active one and
-    bring it to the front of the view
-*/
-
 void KisView::next_layer()
 {
 #if 0
@@ -1162,7 +986,6 @@ void KisView::next_layer()
 		img->markDirty(img->getCurrentLayer()->imageExtents());
 		m_pLayerView->layerTable()->updateTable();
 		m_pLayerView->layerTable()->updateAllCells();
-		slotRefreshPainter();
 		m_doc -> setModified(true);
 	}
 #endif
@@ -1201,7 +1024,6 @@ void KisView::previous_layer()
 
 		m_pLayerView->layerTable()->updateTable();
 		m_pLayerView->layerTable()->updateAllCells();
-		slotRefreshPainter();
 
 		m_doc->setModified(true);
 	}
@@ -1216,7 +1038,7 @@ void KisView::slotImportImage()
 
 void KisView::export_image()
 {
-//	save_layer_image(true);
+//	exportImage(true);
 }
 
 void KisView::slotInsertImageAsLayer()
@@ -1227,10 +1049,10 @@ void KisView::slotInsertImageAsLayer()
 
 void KisView::save_layer_as_image()
 {
-//	save_layer_image(false);
+//	exportImage(false);
 }
 
-void KisView::slotEmbeddImage(const QString &)
+void KisView::slotEmbedImage(const QString &)
 {
 //	importImage(false, filename);
 }
@@ -1295,16 +1117,7 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 	return 1;
 }
 
-
-/*
-    save_layer_image - export the currentImg image after merging
-    layers or just export the currentImg layer -  like the above
-    method, the body of this, after a valid url is obtained,
-    belongs in the doc, not the view and eventually needs to be
-    moved from the doc to koffice/filters.
-*/
-
-void KisView::save_layer_image(bool )
+Q_INT32 KisView::exportImage(bool,  const QString&)
 {
 #if 0
 	KURL url = KFileDialog::getSaveURL(QString::null, KisUtil::writeFilters(), 0, i18n("Image File for Layer"));
@@ -1325,6 +1138,7 @@ void KisView::save_layer_image(bool )
 			kdDebug(0) << "Can't save doc as image" << endl;
 	}
 #endif
+	return 0;
 }
 
 void KisView::layer_scale_smooth()
@@ -1383,7 +1197,6 @@ void KisView::layerScale(bool )
         img->markDirty(img->getCurrentLayer()->imageExtents());
 	layerSelected(indx);
 	layersUpdated();
-        slotRefreshPainter();
 
         m_doc->setModified(true);
     }
@@ -1422,29 +1235,17 @@ void KisView::layer_mirrorY()
 
 void KisView::add_new_image_tab()
 {
-#if 0
-    if(m_doc->slotNewImage())
-    {
-        slotUpdateImage();
-        slotRefreshPainter();
-
-        m_doc->setModified(true);
-    }
-#endif
+	if (m_doc -> slotNewImage()) {
+		m_doc -> setModified(true);
+	}
 }
 
 void KisView::remove_current_image_tab()
 {
-#if 0
-    if (currentImg())
-    {
-        m_doc->removeImage(currentImg());
-        slotUpdateImage();
-        slotRefreshPainter();
-
-        m_doc->setModified(true);
-    }
-#endif
+	if (currentImg()) {
+		m_doc -> removeImage(currentImg());
+		m_doc -> setModified(true);
+	}
 }
 
 void KisView::merge_all_layers()
@@ -1454,8 +1255,6 @@ void KisView::merge_all_layers()
 
 	if (img) {
 		img -> mergeAllLayers();
-		slotUpdateImage();
-		slotRefreshPainter();
 		m_doc -> setModified(true);
 	}
 #endif
@@ -1468,8 +1267,6 @@ void KisView::merge_visible_layers()
     if (currentImg())
     {
         currentImg()->mergeVisibleLayers();
-        slotUpdateImage();
-        slotRefreshPainter();
 
         m_doc->setModified(true);
     }
@@ -1483,8 +1280,6 @@ void KisView::merge_linked_layers()
     if (currentImg())
     {
         currentImg()->mergeLinkedLayers();
-        slotUpdateImage();
-        slotRefreshPainter();
 
         m_doc->setModified(true);
     }
@@ -1821,6 +1616,11 @@ void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 	QApplication::sendEvent(m_vScroll, event);
 }
 
+void KisView::canvasRefresh()
+{
+	updateCanvas();
+}
+
 void KisView::layerToggleVisible(int n)
 {
 	KisImageSP img = currentImg();
@@ -1844,8 +1644,7 @@ void KisView::layerSelected(int n)
 {	
 	KisImageSP img = currentImg();
 
-	if (!img -> activateLayer(n))
-		KMessageBox::error(this, i18n("Non existent layer."), i18n("Error Selecting Layer"));
+	layerUpdateGUI(img -> activateLayer(n));
 }
 
 void KisView::docImageListUpdate()
@@ -1855,37 +1654,35 @@ void KisView::docImageListUpdate()
 	updateCanvas();
 }
 
-void KisView::layerToggleLinked(int n)
-{
-	KisImageSP img = currentImg();
-
-	if (img) {
-		vKisLayerSP l = img -> layers();
-
-		if (n >= 0 && static_cast<Q_UINT32>(n) < l.size()) {
-			KisLayerSP layer = l[n];
-
-			layer -> linked(!layer -> linked());
-			m_doc -> setModified(true);
-		}
-	}
-}
-
-void KisView::layerProperties(int n)
+void KisView::layerToggleLinked()
 {
 	KisImageSP img = currentImg();
 
 	if (img) {
 		KisLayerSP layer = img -> activeLayer();
 
-		if (layer && n == img -> index(layer)) {
+		if (layer) {
+			layer -> linked(!layer -> linked());
+			m_doc -> setModified(true);
+		}
+	}
+}
+
+void KisView::layerProperties()
+{
+	KisImageSP img = currentImg();
+
+	if (img) {
+		KisLayerSP layer = img -> activeLayer();
+
+		if (layer) {
 			KisPaintPropertyDlg dlg(layer -> name(), layer -> opacity());
 
 			if (dlg.exec() == QDialog::Accepted) {
 				layer -> setName(dlg.getName());
 				layer -> opacity(dlg.getOpacity());
 				layersUpdated();
-				slotUpdateImage();
+				updateCanvas();
 			}
 		}
 	}
@@ -1943,6 +1740,7 @@ void KisView::layerRemove()
 			m_layerBox -> setCurrentItem(n - 1);
 			resizeEvent(0);
 			updateCanvas();
+			layerUpdateGUI(img -> activeLayer() != 0);
 		}
 	}
 }
@@ -2011,6 +1809,8 @@ void KisView::layerLevel(int /*n*/)
 void KisView::layersUpdated()
 {
 	KisImageSP img = currentImg();
+
+	layerUpdateGUI(img && img -> activeLayer());
 
 	if (img) {
 		vKisLayerSP l = img -> layers();

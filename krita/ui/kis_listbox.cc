@@ -105,7 +105,7 @@ KisListBox::KisListBox(const QString& label, flags f, QWidget *parent, const cha
 	connect(m_contextMnu, SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
 	connect(mnu, SIGNAL(activated(int)), SLOT(slotMenuAction(int)));
 	connect(m_lst, SIGNAL(contextMenuRequested(QListBoxItem *, const QPoint&)), SLOT(slotShowContextMenu(QListBoxItem*, const QPoint&)));
-	connect(m_lst, SIGNAL(selectionChanged(QListBoxItem*)), SLOT(slotSelectionChanged(QListBoxItem*)));
+	connect(m_lst, SIGNAL(pressed(QListBoxItem*)), SLOT(slotSelectionChanged(QListBoxItem*)));
 	connect(m_lst, SIGNAL(clicked(QListBoxItem *, const QPoint&)), SLOT(slotClicked(QListBoxItem*, const QPoint&)));
 	connect(m_lst, SIGNAL(doubleClicked(QListBoxItem*)), SLOT(slotDoubleClicked(QListBoxItem*)));
 	connect(m_lst, SIGNAL(returnPressed(QListBoxItem*)), SLOT(slotDoubleClicked(QListBoxItem*)));
@@ -133,7 +133,7 @@ void KisListBox::slotMenuAction(int mnuId)
 	
 	switch (mnuId) {
 		case VISIBLE:
-			emit itemToggleVisible(n);
+			emit itemToggleVisible();
 			p -> toggleVisible();
 			m_contextMnu -> setItemChecked(VISIBLE, p -> visible());
 			break;
@@ -141,12 +141,12 @@ void KisListBox::slotMenuAction(int mnuId)
 			emit itemSelected(n);
 			break;
 		case LINKING:
-			emit itemToggleLinked(n);
+			emit itemToggleLinked();
 			p -> toggleLinked();
 			m_contextMnu -> setItemChecked(LINKING, p -> linked());
 			break;
 		case PROPERTIES:
-			emit itemProperties(n);
+			emit itemProperties();
 			break;
 		case ADD:
 			emit itemAdd();
@@ -208,14 +208,18 @@ void KisListBox::slotShowContextMenu(QListBoxItem *item, const QPoint& pos)
 
 void KisListBox::slotSelectionChanged(QListBoxItem *item)
 {
-	int n = m_lst -> currentItem();
+	Q_INT32 n;
 
-	if (item)
+	if (item) {
+		n = m_lst -> currentItem();
 		slotMenuAction(SELECTION);
+		m_btnLower -> setEnabled(item && static_cast<Q_UINT32>(n) != m_lst -> count() - 1);
+	} else {
+		emit itemSelected(-1);
+	}
 
 	m_btnRm -> setEnabled(item != 0);
 	m_btnRaise -> setEnabled(item && item != m_lst -> item(0));
-	m_btnLower -> setEnabled(item && n != -1 && static_cast<uint>(n) != m_lst -> count() - 1);
 }
 
 void KisListBox::slotClicked(QListBoxItem *item, const QPoint& pos)

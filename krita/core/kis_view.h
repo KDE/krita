@@ -31,6 +31,7 @@ class QPaintEvent;
 class QScrollBar;
 class QWidget;
 class DCOPObject;
+class KAction;
 class KPrinter;
 class KRuler;
 class KToggleAction;
@@ -67,30 +68,23 @@ public:
 
 public:  
 	KoColor bgColor();
+	KoColor fgColor();
+	KisBrush *currentBrush();
 	KisImageSP currentImg() const;
+	KisPattern *currentPattern();
 	QString currentImgName() const;
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, const QString& filename = QString::null);
-	KoColor fgColor();
+	Q_INT32 exportImage(bool mergeLayers,  const QString& filename = QString::null);
 	void updateCanvas();
 	void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	void updateCanvas(const QRect& rc);
 	void setBGColor(const KoColor& c);
 	void setFGColor(const KoColor& c);
+	void setCanvasCursor(const QCursor& cursor);
 	void zoomIn(Q_INT32 x, Q_INT32 y);
 	void zoomOut(Q_INT32 x, Q_INT32 y);
-
-//	void setActiveTool(KisTool *tool);
-//	KisTool* getActiveTool();
-
-	KisPattern  *currentPattern();
-	KisBrush    *currentBrush();
-
-//	void activateTool(KisTool*);
-	void layerScale(bool smooth);
-	void save_layer_image(bool mergeLayers);
-	void setCanvasCursor(const QCursor& cursor);
 
 signals:
 	void bgColorChanged(const KoColor& c);
@@ -104,28 +98,18 @@ public slots:
 	void dialog_patterns();
 	void dialog_layers();
 	void dialog_channels();
-	void slotDocUpdated();
-	void slotDocUpdated(const QRect&);
-	void slotHalt(); // for the faint of heart
-	void slotRefreshPainter();
 	void slotSetBGColor(const KoColor& c);
 	void slotSetFGColor(const KoColor& c);
-	void slotUpdateImage();
 	void zoomIn();
 	void zoomOut();
      
-	void remove_layer();
-	void link_layer();
-	void hide_layer();
 	void next_layer();
 	void previous_layer();
-	void layer_properties(); 
 
-	void save_layer_as_image();
-	void slotEmbeddImage(const QString& filename);
 
 	void layer_scale_smooth();
 	void layer_scale_rough();
+	void layerScale(bool smooth);
 	void layer_rotate180();
 	void layer_rotateleft90();
 	void layer_rotateright90();
@@ -138,9 +122,6 @@ public slots:
 	void export_image();
 	void add_new_image_tab();
 	void remove_current_image_tab();
-	void merge_all_layers();
-	void merge_visible_layers();
-	void merge_linked_layers();
 
 	// tool action slots
 	void tool_properties();
@@ -155,6 +136,7 @@ protected:
 private:
 	void clearCanvas(const QRect& rc);
 	Q_INT32 horzValue() const;
+	void layerUpdateGUI(bool enable);
 	void paintView(const QRect& rc);
 	void selectImage(KisImageSP img);
 	void setupActions();
@@ -182,12 +164,13 @@ private slots:
 	void canvasGotEnterEvent(QEvent *e);
 	void canvasGotLeaveEvent(QEvent *e);
 	void canvasGotMouseWheelEvent(QWheelEvent *e);
+	void canvasRefresh();
 	void docImageListUpdate();
 	void floatSidebar();
 	void layerToggleVisible(int n);
 	void layerSelected(int n);
-	void layerToggleLinked(int n);
-	void layerProperties(int n);
+	void layerToggleLinked();
+	void layerProperties();
 	void layerAdd();
 	void layerRemove();
 	void layerAddMask(int n);
@@ -199,6 +182,11 @@ private slots:
 	void layerLevel(int n);
 	void layersUpdated();
 	void placeSidebarLeft();
+	void merge_all_layers();
+	void merge_visible_layers();
+	void merge_linked_layers();
+	void save_layer_as_image();
+	void reset();
 	void selectImage(const QString&);
 	void setActiveBrush(KoIconItem *brush);
 	void setActiveCrayon(KoIconItem *);
@@ -207,6 +195,7 @@ private slots:
 	void scrollH(int value);
 	void scrollTo(Q_INT32 x, Q_INT32 y);
 	void scrollV(int value);
+	void slotEmbedImage(const QString& filename);
 	void showMenubar();
 	void showSidebar();
 	void showStatusbar();
@@ -225,6 +214,12 @@ private:
 	KRuler *m_vRuler;
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
+	KAction *m_layerRm;
+	KAction *m_layerLink;
+	KAction *m_layerHide;
+	KAction *m_layerProperties;
+	KAction *m_layerNext;
+	KAction *m_layerPrev;
 	KToggleAction *m_sidebarToggle; 
 	KToggleAction *m_floatsidebarToggle; 
 	KToggleAction *m_lsidebarToggle;

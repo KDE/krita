@@ -54,10 +54,10 @@ public:
 	void setSelected(int index);
 
 signals:
-	void itemToggleVisible(int n);
+	void itemToggleVisible();
 	void itemSelected(int n);
-	void itemToggleLinked(int n);
-	void itemProperties(int n);
+	void itemToggleLinked();
+	void itemProperties();
 	void itemAdd();
 	void itemRemove();
 	void itemAddMask(int n);

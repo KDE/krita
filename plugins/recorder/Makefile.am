@@ -43,6 +43,8 @@ recorder.h: recorder.idl
 	rm -f recorder.cc
 	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) recorder.idl
 
-main.cc: main.h
+main.cc: main.h recorder.h
 recorder.cc: recorder.h
 main.cc: main.moc
+
+

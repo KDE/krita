@@ -24,6 +24,7 @@
 #define KIS_VIEW_H_
 
 #include <qdatetime.h>
+#include <qpixmap.h>
 
 #include <list>
 #include <map>
@@ -328,7 +329,7 @@ private slots:
 	void imgUpdated(KisImageSP img);
 	void slotZoomIn();
 	void slotZoomOut();
-
+	void slotImageSizeChanged(KisImageSP img, Q_INT32 w, Q_INT32 h);
 	void viewColorDocker();
 	void viewControlDocker();
 	void viewLayerChannelDocker();
@@ -446,7 +447,7 @@ private:
 	QTime m_tabletEventTimer;
 	QTabletEvent::TabletDevice m_lastTabletEventDevice;
 	KisFilterRegistrySP m_filterRegistry;
-
+	QPixmap m_canvasPixmap;
 	
 private:
 	mutable KisImageSP m_current;

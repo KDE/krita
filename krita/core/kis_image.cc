@@ -90,7 +90,7 @@ namespace {
 				m_adapter -> setUndo(false);
 				m_img -> resize(m_after.width(), m_after.height());
 				m_adapter -> setUndo(true);
-				m_img -> notify();
+				m_img -> notify(0, 0, QMAX(m_before.width(), m_after.width()), QMAX(m_before.height(), m_after.height()));
 			}
 
 		virtual void unexecute()
@@ -98,7 +98,7 @@ namespace {
 				m_adapter -> setUndo(false);
 				m_img -> resize(m_before.width(), m_before.height());
 				m_adapter -> setUndo(true);
-				m_img -> notify();
+				m_img -> notify(0, 0, QMAX(m_before.width(), m_after.width()), QMAX(m_before.height(), m_after.height()));
 			}
 
 	private:
@@ -375,6 +375,8 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 		if (m_adapter && m_adapter -> undo()) {
 			m_adapter -> endMacro();
 		}
+
+		emit sizeChanged(KisImageSP(this), w, h);
 	}
 }
 
@@ -419,6 +421,8 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 
 		m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
  		m_bkg -> resize(w, h);
+
+		emit sizeChanged(KisImageSP(this), w, h);
 	}
 
 	undoAdapter()->endMacro();

@@ -171,6 +171,7 @@ signals:
 	void floatingSelectionChanged(KisImageSP image);
 	void update(KisImageSP image, const QRect& rc);
 	void layersChanged(KisImageSP image);
+	void sizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
 
 private slots:
 	void slotUpdateDisplay(); 

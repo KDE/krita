@@ -599,35 +599,32 @@ void KisView::reset()
 void KisView::resizeEvent(QResizeEvent *)
 {
         KisImageSP img = currentImg();
-        Q_INT32 rsideW = 0;
-        Q_INT32 lsideW = 0;
-        Q_INT32 ruler = 20;
+        Q_INT32 rulerThickness = m_RulerAction -> isChecked() ? 20 : 0;
         Q_INT32 scrollBarExtent = style().pixelMetric(QStyle::PM_ScrollBarExtent);
-        Q_INT32 tbarOffset = 64;
+        Q_INT32 tbarOffset = 0; //64;
         Q_INT32 tbarBtnH = scrollBarExtent;
         Q_INT32 drawH;
         Q_INT32 drawW;
         Q_INT32 docW;
         Q_INT32 docH;
 
-
         if (img) {
                 KisGuideMgr *mgr = img -> guides();
                 mgr -> resize(size());
         }
 
-        m_hRuler -> setGeometry(ruler + lsideW, 0, width() - ruler - rsideW - lsideW, ruler);
-        m_vRuler -> setGeometry(0 + lsideW, ruler, ruler, height() - (ruler + tbarBtnH));
+        m_hRuler -> setGeometry(rulerThickness, 0, width() - rulerThickness, rulerThickness);
+        m_vRuler -> setGeometry(0, rulerThickness, rulerThickness, height() - (rulerThickness + tbarBtnH));
 
         docW = static_cast<Q_INT32>(ceil(docWidth() * zoom()));
         docH = static_cast<Q_INT32>(ceil(docHeight() * zoom()));
 
-        drawH = height() - ruler - tbarBtnH - canvasYOffset();
-        drawW = width() - ruler - lsideW - rsideW - canvasXOffset();
+        drawH = height() - rulerThickness - tbarBtnH - canvasYOffset();
+        drawW = width() - rulerThickness - canvasXOffset();
 
-        if (drawH < docH) {
-                // Will need vert scrollbar
-                drawW -= scrollBarExtent;
+	if (drawH < docH) {
+		// Will need vert scrollbar
+		drawW -= scrollBarExtent;
         }
 
         m_vScroll -> setEnabled(docH > drawH);
@@ -641,52 +638,71 @@ void KisView::resizeEvent(QResizeEvent *)
                 m_hScroll -> setValue(0);
 
                 if (m_tabBar)
-                        m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, width() - rsideW - lsideW - tbarOffset, tbarBtnH);
+                        m_tabBar -> setGeometry(tbarOffset, height() - tbarBtnH, width() - tbarOffset, tbarBtnH);
         } else if (docH <= drawH) {
                 // we need a horizontal scrollbar only
                 m_vScroll -> hide();
                 m_vScroll -> setValue(0);
                 m_hScroll -> setRange(0, docW - drawW);
-                m_hScroll -> setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset) / 2,
+                m_hScroll -> setGeometry(tbarOffset + (width() - tbarOffset) / 2,
                                          height() - scrollBarExtent,
-                                         (width() - rsideW -lsideW - tbarOffset) / 2,
+                                         (width() - tbarOffset) / 2,
                                          scrollBarExtent);
                 m_hScroll -> show();
 
                 if (m_tabBar)
-                        m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, (width() - rsideW - lsideW - tbarOffset) / 2, tbarBtnH);
+                        m_tabBar -> setGeometry(tbarOffset, height() - tbarBtnH, (width() - tbarOffset) / 2, tbarBtnH);
         } else if(docW <= drawW) {
                 // we need a vertical scrollbar only
                 m_hScroll -> hide();
                 m_hScroll -> setValue(0);
                 m_vScroll -> setRange(0, docH - drawH);
-                m_vScroll -> setGeometry(width() - scrollBarExtent - rsideW, ruler, scrollBarExtent, height() - (ruler + tbarBtnH));
+                m_vScroll -> setGeometry(width() - scrollBarExtent, rulerThickness, scrollBarExtent, height() - (rulerThickness + tbarBtnH));
                 m_vScroll -> show();
 
                 if (m_tabBar)
-                        m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, width() - rsideW -lsideW - tbarOffset, tbarBtnH);
+                        m_tabBar -> setGeometry(tbarOffset, height() - tbarBtnH, width() - tbarOffset, tbarBtnH);
         } else {
                 // we need both scrollbars
                 m_vScroll -> setRange(0, docH - drawH);
-                m_vScroll -> setGeometry(width() - scrollBarExtent - rsideW, ruler, scrollBarExtent, height() - (ruler + tbarBtnH));
+                m_vScroll -> setGeometry(width() - scrollBarExtent, rulerThickness, scrollBarExtent, height() - (rulerThickness + tbarBtnH));
                 m_hScroll -> setRange(0, docW - drawW);
-                m_hScroll -> setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset) / 2,
+                m_hScroll -> setGeometry(tbarOffset + (width() - tbarOffset) / 2,
                                          height() - scrollBarExtent,
-                                         (width() - rsideW -lsideW - tbarOffset) / 2,
+                                         (width() - tbarOffset) / 2,
                                          scrollBarExtent);
                 m_vScroll -> show();
                 m_hScroll -> show();
 
                 if (m_tabBar)
-                        m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, (width() - rsideW -lsideW - tbarOffset)/2, tbarBtnH);
+                        m_tabBar -> setGeometry(tbarOffset, height() - tbarBtnH, (width() - tbarOffset)/2, tbarBtnH);
         }
 
 	//Check if rulers are visible
 	if( m_RulerAction->isChecked() )
-		m_canvas -> setGeometry(ruler + lsideW, ruler, drawW, drawH);
+		m_canvas -> setGeometry(rulerThickness, rulerThickness, drawW, drawH);
 	else
-		m_canvas -> setGeometry(1 + lsideW, 1, drawW, drawH);
+		m_canvas -> setGeometry(0, 0, drawW, drawH);
         m_canvas -> show();
+
+	Q_INT32 oldWidth = m_canvasPixmap.width();
+	Q_INT32 oldHeight = m_canvasPixmap.height();
+
+	m_canvasPixmap.resize(drawW, drawH);
+
+	if (!m_canvasPixmap.isNull()) {
+		if (drawW > oldWidth) {
+			KisRect drawRect(oldWidth, 0, drawW - oldWidth, drawH);
+
+			paintView(viewToWindow(drawRect));
+		}
+
+		if (drawH > oldHeight) {
+			KisRect drawRect(0, oldHeight, drawW, drawH - oldHeight);
+
+			paintView(viewToWindow(drawRect));
+		}
+	}
 
         m_vScroll -> setPageStep(drawH);
         m_hScroll -> setPageStep(drawW);
@@ -716,9 +732,9 @@ void KisView::updateReadWrite(bool readwrite)
 
 void KisView::clearCanvas(const QRect& rc)
 {
-        QPainter gc(m_canvas);
+        QPainter gc(&m_canvasPixmap);
 
-        gc.eraseRect(rc);
+        gc.fillRect(rc, backgroundColor());
 }
 
 void KisView::setCurrentTool(KisTool *tool)
@@ -862,7 +878,7 @@ void KisView::paintView(const KisRect& r)
 
                 if (!vr.isNull()) {
 
-                        QPainter gc(m_canvas);
+                        QPainter gc(&m_canvasPixmap);
                         QRect wr = viewToWindow(vr).qRect();
 
                         if (wr.left() < 0 || wr.right() >= img -> width() || wr.top() < 0 || wr.bottom() >= img -> height()) {
@@ -874,7 +890,7 @@ void KisView::paintView(const KisRect& r)
 
                                 for (unsigned int i = 0; i < rects.count(); i++) {
                                         QRect er = rects[i];
-                                        gc.eraseRect(er);
+                                        gc.fillRect(er, backgroundColor());
                                 }
 
                                 wr &= QRect(0, 0, img -> width(), img -> height());
@@ -883,7 +899,7 @@ void KisView::paintView(const KisRect& r)
                         if (!wr.isNull()) {
 
                                 if (zoom() < 1.0 || zoom() > 1.0)
-                                        gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvas -> width() * zoom()), static_cast<Q_INT32>(m_canvas -> height() * zoom()));
+                                        gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
 
                                 gc.translate((canvasXOffset() - horzValue()) / zoom(), (canvasYOffset() - vertValue()) / zoom());
 
@@ -896,9 +912,11 @@ void KisView::paintView(const KisRect& r)
                         }
 
                         paintGuides();
+			m_canvas -> update(vr.qRect());
                 }
         } else {
                 clearCanvas(r.qRect());
+		m_canvas -> update(r.qRect());
         }
 }
 
@@ -1657,18 +1675,15 @@ void KisView::showRuler()
 	{
 		m_hRuler->show();
 		m_vRuler->show();
-
-		m_canvas -> setGeometry(20, 20, width() - canvasXOffset(), height() - m_tabBar->height() - canvasYOffset());
-		m_canvas -> show();
 	}
 	else
 	{
 		m_hRuler->hide();
 		m_vRuler->hide();
-
-		m_canvas -> setGeometry(1, 1, width() - canvasXOffset(), height() - m_tabBar->height() - canvasYOffset());
-		m_canvas -> show();
 	}
+
+	resizeEvent(0);
+	canvasRefresh();
 }
 
 void KisView::slotUpdateFullScreen(bool toggle)
@@ -1833,8 +1848,7 @@ void KisView::setupTools()
 
 void KisView::canvasGotPaintEvent(QPaintEvent *event)
 {
-        KisRect r = viewToWindow(KisRect(event -> rect()));
-        paintView(r);
+	bitBlt(m_canvas, event -> rect().x(), event -> rect().y(), &m_canvasPixmap, event -> rect().x(), event -> rect().y(), event -> rect().width(), event -> rect().height());
 }
 
 void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
@@ -2095,6 +2109,9 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
 
 void KisView::canvasRefresh()
 {
+	KisRect drawRect(0, 0, m_canvasPixmap.width(), m_canvasPixmap.height());
+
+	paintView(viewToWindow(drawRect));
         m_canvas -> repaint();
 }
 
@@ -2389,15 +2406,53 @@ void KisView::selectImage(KisImageSP img)
 void KisView::scrollH(int value)
 {
         m_hRuler -> updateVisibleArea(value, 0);
-	m_canvas -> scroll(m_scrollX - value, 0);
+
+	int xShift = m_scrollX - value;
 	m_scrollX = value;
+
+	if (xShift > 0) {
+		bitBlt(&m_canvasPixmap, xShift, 0, &m_canvasPixmap, 0, 0, m_canvasPixmap.width() - xShift, m_canvasPixmap.height());
+
+		KisRect drawRect(0, 0, xShift, m_canvasPixmap.height());
+
+		paintView(viewToWindow(drawRect));
+		m_canvas -> repaint();
+	}
+	else
+	if (xShift < 0) {
+		bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, -xShift, 0, m_canvasPixmap.width() + xShift, m_canvasPixmap.height());
+
+		KisRect drawRect(m_canvasPixmap.width() + xShift, 0, -xShift, m_canvasPixmap.height());
+
+		paintView(viewToWindow(drawRect));
+		m_canvas -> repaint();
+	}
 }
 
 void KisView::scrollV(int value)
 {
         m_vRuler -> updateVisibleArea(0, value);
-	m_canvas -> scroll(0, m_scrollY - value);
+
+	int yShift = m_scrollY - value;
 	m_scrollY = value;
+
+	if (yShift > 0) {
+		bitBlt(&m_canvasPixmap, 0, yShift, &m_canvasPixmap, 0, 0, m_canvasPixmap.width(), m_canvasPixmap.height() - yShift);
+
+		KisRect drawRect(0, 0, m_canvasPixmap.width(), yShift);
+
+		paintView(viewToWindow(drawRect));
+		m_canvas -> repaint();
+	}
+	else
+	if (yShift < 0) {
+		bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, 0, -yShift, m_canvasPixmap.width(), m_canvasPixmap.height() + yShift);
+
+		KisRect drawRect(0, m_canvasPixmap.height() + yShift, m_canvasPixmap.width(), -yShift);
+
+		paintView(viewToWindow(drawRect));
+		m_canvas -> repaint();
+	}
 }
 
 int KisView::canvasXOffset() const
@@ -2478,6 +2533,7 @@ void KisView::connectCurrentImg() const
 // 		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), SLOT(imgUpdated(KisImageSP)));
                 connect(m_current, SIGNAL(update(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
 		connect(m_current, SIGNAL(layersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
+		connect(m_current, SIGNAL(sizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
         }
 }
 
@@ -2514,6 +2570,12 @@ void KisView::imgUpdated(KisImageSP img)
 	imgUpdated(img, QRect(img -> bounds()));
 }
 
+void KisView::slotImageSizeChanged(KisImageSP img, Q_INT32 /*w*/, Q_INT32 /*h*/)
+{
+	if (img == currentImg()) {
+		resizeEvent(0);
+	}
+}
 
 void KisView::resizeLayer(Q_INT32 w, Q_INT32 h)
 {
@@ -2870,7 +2932,7 @@ void KisView::eraseGuides()
                 KisGuideMgr *mgr = img -> guides();
 
                 if (mgr)
-                        mgr -> erase(m_canvas, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
+                        mgr -> erase(&m_canvasPixmap, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
         }
 }
 
@@ -2882,7 +2944,7 @@ void KisView::paintGuides()
                 KisGuideMgr *mgr = img -> guides();
 
                 if (mgr)
-                        mgr -> paint(m_canvas, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
+                        mgr -> paint(&m_canvasPixmap, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
         }
 }
 

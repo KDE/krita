@@ -83,7 +83,7 @@ void PaintDeviceFactory::createBindings()
 
 PaintDeviceObject::PaintDeviceObject()
 {
-	m_paintDevice = new KisPaintDevice(10,10,KisColorSpaceRegistry::instance()->colorSpace("RGBA"), "JSPaintDevice");
+	m_paintDevice = new KisPaintDevice(10,10,KisColorSpaceRegistry::instance()->get("RGBA"), "JSPaintDevice");
 }
 
 };

@@ -26,7 +26,7 @@
 #include <qtabwidget.h>
 #include <qdockwindow.h>
 #include <kdualcolorbutton.h>
-#include <koColor.h>
+#include <qcolor.h>
 #include <koFrameButton.h>
 
 class KDualColorButton;
@@ -53,16 +53,16 @@ public:
 	ActiveColor activeColor();
 
 public slots:
-	void slotSetFGColor(const KoColor& c);
-	void slotSetBGColor(const KoColor& c);
+	void slotSetFGColor(const QColor& c);
+	void slotSetBGColor(const QColor& c);
 
 	void slotSetBrush(KoIconItem *item);
 	void slotSetPattern(KoIconItem *item);
 	void slotSetGradient(KoIconItem *item);
 
 signals:
-	void fgColorChanged(const KoColor& c);
-	void bgColorChanged(const KoColor& c);
+	void fgColorChanged(const QColor& c);
+	void bgColorChanged(const QColor& c);
 	void activeColorChanged(ActiveColor ac);
 
 protected slots:

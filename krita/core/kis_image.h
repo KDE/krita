@@ -26,8 +26,6 @@
 
 #include <kurl.h>
 
-#include <koColor.h>
-
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_render.h"
@@ -207,7 +205,6 @@ private:
 	KoUnit::Unit m_unit;
 
 	KisStrategyColorSpaceSP m_colorStrategy;
-	KoColorMap m_clrMap;
 
 	bool m_dirty;
 	QRect m_dirtyRect;

@@ -30,10 +30,7 @@ class KisColorSpaceRegistry : public KisGenericRegistry<KisStrategyColorSpaceSP>
 public:
 	virtual ~KisColorSpaceRegistry();
 
-public:
-	KisStrategyColorSpaceSP colorSpace(const QString& name) const;
 	QStringList listColorSpaceNames() const;
-public:
 	static KisColorSpaceRegistry* instance();
 	
 private:
@@ -43,6 +40,7 @@ private:
 
 private:
 	static KisColorSpaceRegistry *m_singleton;
+
 };
 
 #endif // KIS_COLORSPACE_REGISTRY_H_

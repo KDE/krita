@@ -24,11 +24,13 @@
 #include "kis_profile.h"
 #include "kis_quantum.h"
 
+class QColor;
+
 // XXX: Template these classes to byte, int, float, double
 // XXX: Separate color channels from substance channels (wetness, thickness, grainyness) on construction
 
 /**
- * KisPixel and KisPixelRO are the primary class to access individual pixel data.
+ * KisPixel and KisPixelRO are the primary classes to access individual pixel data.
  * A pixel consists of channels of a certain size. At the moment, all channels must
  * be of the same size, and that size is one byte, or QUANTUM. In the future
  * pixels with heteregenous channels and larger (or smaller?) channels will be
@@ -92,6 +94,8 @@ private:
 /**
  * A read-write pixel. You can retrieve the channel values by name or position
  * or all channels as a pointer vector.
+ *
+ * The alpha channel is separately available.
  */
 class KisPixel {
 
@@ -131,5 +135,52 @@ private:
 };
 
 
+/**
+ * A color is a self-contained pixel, that is, the data in the color
+ * is not a reference to some pixel in an image. When a color is
+ * deleted, the QUANTUM data is deleted, too, the creator of the color
+ * is not responsible for that.
+ *
+ * By contrast, a KisPixel(RO) is a view on data owned by somebody
+ * else.
+ *
+ * Probably the easiest way to construct a KisColor is by calling
+ * factory methods in the color strategies, instead of messing with
+ * pointers to arrays of channels yourself.
+ */
+class KisColor {
+	
+public:
+
+	KisColor(QColor c, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile);
+
+	KisColor(QUANTUM * channels, QUANTUM* alpha, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile)
+		: m_channels(channels), 
+		  m_alpha(alpha), 
+		  m_colorStrategy(colorStrategy), 
+		  m_profile(profile) {};
+
+	~KisColor() { delete m_channels; delete m_alpha; };
+
+public:
+
+	KisQuantum operator[](int index) { return KisQuantum(&m_channels[index]); };
+	KisQuantum alpha() { return KisQuantum(m_alpha); };
+	KisStrategyColorSpaceSP colorStrategy() { return m_colorStrategy; };
+
+	void setProfile(KisProfileSP profile) { m_profile = profile; }
+	KisProfileSP profile() { return m_profile; }
+
+	QUANTUM* channels() { return m_channels; }
+
+	QColor toQColor();
+
+private:
+	QUANTUM* m_channels;
+	QUANTUM* m_alpha;
+	KisStrategyColorSpaceSP m_colorStrategy;
+	KisProfileSP m_profile;	
+
+};
 
 #endif

@@ -75,7 +75,8 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_scale_visitor.cc \
 	kis_rotate_visitor.cc \
 	kis_cms.cc \
-	kis_quantum_operations.cc
+	kis_quantum_operations.cc \
+	kis_pixel.h
 
 noinst_HEADERS = kis_paint_device.h \
 	kis_layer.h \
@@ -84,7 +85,6 @@ noinst_HEADERS = kis_paint_device.h \
 	kis_view.h \
 	kis_factory.h \
 	kis_nameserver.h \
-	kis_painter.h \
 	kis_cursor.h \
 	kis_selection.h \
 	kis_command.h \

@@ -40,7 +40,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_brush.h"
 #include "kis_global.h"
@@ -77,7 +77,7 @@ KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 
 // 'regular' filling
 
-void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity)
+void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const QColor& c, QUANTUM opacity)
 {
         Q_INT32 x;
         Q_INT32 y;
@@ -88,7 +88,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
         Q_INT32 dststride;
         Q_INT32 stride;
         KisTileSP tile;
-        QUANTUM src[8]; // XXX: Change KoColor to KisColor, then use channelsize from color space
+        QUANTUM src[8]; // XXX: Change QColor to KisColor, then use channelsize from color space
         QUANTUM *dst;
         KisTileMgrSP tm = m_device -> tiles();
         Q_INT32 xmod;
@@ -246,7 +246,7 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
 	// use the selection as mask over our fill
 	for (int y = 0; y < m_layer -> height(); y++) {
 		for (int x = 0; x < m_layer -> width(); x++) {
-			KoColor c;
+			QColor c;
 			QUANTUM opacity;
 			filled -> pixel(x, y, &c, &opacity);
 			opacity = ((OPACITY_OPAQUE - m_selection -> selected(x, y)) * opacity)

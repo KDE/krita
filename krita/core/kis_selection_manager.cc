@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <kstdaction.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_types.h"
 #include "kis_view.h"
@@ -347,7 +347,7 @@ KisLayerSP KisSelectionManager::paste()
 		if (!qimg.isNull()) {
 			KisLayerSP layer =
 				new KisLayer(qimg.width(), qimg.height(),
-					     KisColorSpaceRegistry::instance()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
+					     KisColorSpaceRegistry::instance()->get( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
 					     "KisDoc created clipboard selection");
 
 			layer -> convertFromImage(qimg);

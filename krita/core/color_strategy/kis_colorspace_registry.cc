@@ -44,11 +44,6 @@ KisColorSpaceRegistry* KisColorSpaceRegistry::instance()
 	return KisColorSpaceRegistry::m_singleton;
 }
 
-KisStrategyColorSpaceSP KisColorSpaceRegistry::colorSpace(const QString& name) const
-{
-	return get(name);
-}
-
 QStringList KisColorSpaceRegistry::listColorSpaceNames() const
 {
 	return listKeys();

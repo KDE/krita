@@ -612,7 +612,8 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 		if ((colorspacename = element.attribute("colorspacename")).isNull())
 		{
 			// TODO: This code is used for compatibility with old files,
-			// it should be removed before alpha
+			// it should be removed before alpha.
+			// XXX: Don't depend on the names, but on the id's
 			if ((attr = element.attribute("colorspace")).isNull())
 				return 0;
 			colorspace_int = attr.toInt();
@@ -622,7 +623,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 			{
 			case IMAGE_TYPE_GREYA:
 			case IMAGE_TYPE_GREY:
-				colorspacename = "Grayscale + Alpha";
+				colorspacename = "Grayscale/Alpha";
 				break;
 			case IMAGE_TYPE_RGB:
 			case IMAGE_TYPE_RGBA:
@@ -630,15 +631,17 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 				break;
 			case IMAGE_TYPE_CMYK:
 			case IMAGE_TYPE_CMYKA:
-				colorspacename = "CMYKA";
+				colorspacename = "CMYK/Alpha";
 				break;
 			default:
 				return 0;
 			}
 		}
 
-		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> colorSpace(colorspacename);
-
+		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
+		kdDebug() << "Colorspace: " << cs << "\n";
+		if (cs == 0) return 0;
+		
 		if ((profileProductName = element.attribute("profile")).isNull()) {
 			profile = 0;
 		}
@@ -932,7 +935,7 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 	KisFillPainter painter;
 
 	painter.begin(layer.data());
-	painter.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::white(), OPACITY_OPAQUE);
+	painter.fillRect(0, 0, layer -> width(), layer -> height(), Qt::white, OPACITY_OPAQUE);
 	painter.end();
 
 	img -> add(layer, -1);
@@ -992,14 +995,19 @@ bool KisDoc::slotNewImage()
 	if (dlg.exec() == QDialog::Accepted) {
 		QString name;
 		QUANTUM opacity = dlg.backgroundOpacity();
-		KoColor c = dlg.backgroundColor();
+		QColor c = dlg.backgroundColor();
 		KisImageSP img;
 		KisLayerSP layer;
 		KisFillPainter painter;
+		
+		kdDebug() << dlg.colorStrategyName() << "\n";
+		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance()->get(dlg.colorStrategyName());
 
+		if (!cs) return false;
+		
 		img = new KisImage(this, dlg.imgWidth(),
 				   dlg.imgHeight(),
-				   KisColorSpaceRegistry::instance()->colorSpace(dlg.colorStrategyName()),
+				   cs,
 				   dlg.imgName());
 		img -> setResolution(dlg.imgResolution(), dlg.imgResolution()); // XXX needs to be added to dialog
 		img -> setDescription(dlg.imgDescription());
@@ -1184,7 +1192,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 
 			if (layer) {
 				KisFillPainter painter(layer.data());
-				painter.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
+				painter.fillRect(0, 0, layer -> width(), layer -> height(), Qt::black, OPACITY_TRANSPARENT);
 				painter.end();
 
 				img -> top(layer);
@@ -1222,7 +1230,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img,
 
 			if (layer) {
 				KisFillPainter painter(layer.data());
-				painter.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
+				painter.fillRect(0, 0, layer -> width(), layer -> height(), Qt::black, OPACITY_TRANSPARENT);
 				painter.end();
 				img -> top(layer);
 
@@ -1442,7 +1450,7 @@ void KisDoc::clipboardDataChanged()
 		if (!qimg.isNull()) {
 			m_clipboard =
 				new KisPaintDevice(qimg.width(), qimg.height(),
-						   KisColorSpaceRegistry::instance()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
+						   KisColorSpaceRegistry::instance()->get( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
 						   "KisDoc created clipboard selection");
 
 			m_clipboard -> convertFromImage(qimg);

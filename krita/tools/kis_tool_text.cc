@@ -33,7 +33,7 @@
 #include <kfontdialog.h>
 #include <ksqueezedtextlabel.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_doc.h"
 #include "kis_point.h"

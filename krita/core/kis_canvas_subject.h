@@ -20,7 +20,7 @@
 #define KIS_CANVAS_SUBJECT_H_
 
 #include <qstring.h>
-#include <koColor.h>
+#include <qcolor.h>
 #include "kis_types.h"
 
 class KoDocument;
@@ -49,10 +49,10 @@ public:
 	virtual void notify() = 0;
 	virtual KisImageSP currentImg() const = 0;
 	virtual QString currentImgName() const = 0;
-	virtual KoColor bgColor() const = 0;
-	virtual void setBGColor(const KoColor& c) = 0;
-	virtual KoColor fgColor() const = 0;
-	virtual void setFGColor(const KoColor& c) = 0;
+	virtual QColor bgColor() const = 0;
+	virtual void setBGColor(const QColor& c) = 0;
+	virtual QColor fgColor() const = 0;
+	virtual void setFGColor(const QColor& c) = 0;
 	virtual KisBrush *currentBrush() const = 0;
 	virtual KisPattern *currentPattern() const = 0;
 	virtual KisGradient *currentGradient() const = 0;

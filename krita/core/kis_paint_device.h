@@ -25,8 +25,6 @@
 #include <qvaluelist.h>
 #include <qstring.h>
 
-#include <koColor.h>
-
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_render.h"
@@ -126,11 +124,12 @@ public:
         virtual QString name() const;
         virtual void setName(const QString& name);
 
+
         /** 
 	 * fill c and opacity with the values found at x and y
 	 * @return true if the operation was succesful
 	 */
-        bool pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity);
+        bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
         /**
 	 * Set the specified pixel to the specified color. Note that this
@@ -139,7 +138,7 @@ public:
          * there is no compositing with an existing value at this location.
 	 * @return true if the operation was succesful
 	 */
-        bool setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity);
+        bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity, KisProfileSP profile = 0);
 
         void maskBounds(Q_INT32 *x1, Q_INT32 *y1, Q_INT32 *x2, Q_INT32 *y2);
         void maskBounds(QRect *rc);
@@ -185,9 +184,6 @@ public:
 	QRect clip() const;
         void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
         void setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh);
-
-/*         bool cmap(KoColorMap& cm); */
-/*         KoColor colorAt(); */
 
         KisImage *image();
         const KisImage *image() const;
@@ -453,16 +449,6 @@ inline void KisPaintDevice::setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_
         m_offH = offh;
 }
 
-/* inline bool KisPaintDevice::cmap(KoColorMap& cm) */
-/* { */
-/*         cm.clear(); */
-/*         return false; */
-/* } */
-
-/* inline KoColor KisPaintDevice::colorAt() */
-/* { */
-/*         return KoColor(); */
-/* } */
 
 inline KisImage *KisPaintDevice::image()
 {
@@ -497,7 +483,7 @@ inline bool KisPaintDevice::alpha() const
         return colorStrategy()->alpha();
 }
 
-inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
+inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity, KisProfileSP profile)
 {
 	KisTileMgrSP tm = tiles();
 	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
@@ -509,12 +495,13 @@ inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opa
 	pix = pd -> data;
 	
  	if (!pix) return false;
- 	colorStrategy() -> toKoColor(pix, c, opacity);
+
+ 	colorStrategy() -> toQColor(pix, c, opacity);
 
 	return true;
 }
 
-inline bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)
+inline bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity, KisProfileSP profile)
 {
 	KisTileMgrSP tm = tiles();
 	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);

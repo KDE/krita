@@ -42,9 +42,9 @@ namespace {
 }
 
 KisColorSpaceAlpha::KisColorSpaceAlpha() :
-	KisStrategyColorSpace("alpha mask", TYPE_GRAY_8, icSigGrayData)
+	KisStrategyColorSpace("ALPHA", i18n("Alpha mask"),  TYPE_GRAY_8, icSigGrayData)
 {
-	m_maskColor = KoColor::white();
+	m_maskColor = Qt::white;
 	m_inverted = false;
 	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 0, ALPHA));
 }
@@ -53,24 +53,24 @@ KisColorSpaceAlpha::~KisColorSpaceAlpha()
 {
 }
 
-void KisColorSpaceAlpha::nativeColor(const KoColor& /*c*/, QUANTUM *dst)
+void KisColorSpaceAlpha::nativeColor(const QColor& /*c*/, QUANTUM *dst)
 {
 	dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
-void KisColorSpaceAlpha::nativeColor(const KoColor& /*c*/, QUANTUM opacity, QUANTUM *dst)
+void KisColorSpaceAlpha::nativeColor(const QColor& /*c*/, QUANTUM opacity, QUANTUM *dst)
 {
 	dst[PIXEL_MASK] = opacity;
 }
 
-void KisColorSpaceAlpha::toKoColor(const QUANTUM */*src*/, KoColor *c)
+void KisColorSpaceAlpha::toQColor(const QUANTUM */*src*/, QColor *c)
 {
-	c -> setRGB(m_maskColor.R(), m_maskColor.G(), m_maskColor.B());
+	c -> setRgb(m_maskColor.red(), m_maskColor.green(), m_maskColor.blue());
 }
 
-void KisColorSpaceAlpha::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity)
+void KisColorSpaceAlpha::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity)
 {
-	c -> setRGB(m_maskColor.R(), m_maskColor.G(), m_maskColor.B());
+	c -> setRgb(m_maskColor.red(), m_maskColor.green(), m_maskColor.blue());
 	if (m_inverted) {
 		*opacity = OPACITY_OPAQUE - src[PIXEL_MASK];
 	}
@@ -97,8 +97,8 @@ Q_INT32 KisColorSpaceAlpha::depth() const
 // etc. No need to actually use the profiles here to create a mask image -- they don't
 // need to be true color.
 QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
-					   KisProfileSP srcProfile, KisProfileSP dstProfile, 
-					   Q_INT32 renderingIntent)
+					   KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/, 
+					   Q_INT32 /*renderingIntent*/)
 {
 
 	QImage img(width, height, 32, 0, QImage::LittleEndian);
@@ -115,12 +115,12 @@ QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q
 		PIXELTYPE PIXEL_RED = 2;
 		PIXELTYPE PIXEL_ALPHA = 3;
 
-		// XXX: for previews of the mask, it would be handy to
+		// XXX: for previews of the mask, it is be handy to
 		// make this always black.
 
-		*( j + PIXEL_RED )   = m_maskColor.R();
-		*( j + PIXEL_GREEN ) = m_maskColor.G();
-		*( j + PIXEL_BLUE )  = m_maskColor.B();
+		*( j + PIXEL_RED )   = 0;
+		*( j + PIXEL_GREEN ) = 0;
+		*( j + PIXEL_BLUE )  = 0;
 		*( j + PIXEL_ALPHA ) = *( data + i );
 		
 		i += MAX_CHANNEL_ALPHA;

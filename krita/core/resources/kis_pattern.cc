@@ -244,7 +244,7 @@ KisLayerSP KisPattern::image(KisStrategyColorSpaceSP colorSpace) {
 				blue = (blue * 255) / alpha;
 			}
 
-			KoColor colour = KoColor(red, green, blue);
+			QColor colour = QColor(red, green, blue);
 			QUANTUM a = (alpha * OPACITY_OPAQUE) / 255;
 
 			layer -> setPixel(x, y, colour, a);

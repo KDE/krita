@@ -20,7 +20,7 @@
 
 #include <qcolor.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
@@ -38,11 +38,11 @@ public:
 	virtual ~KisColorSpaceAlpha();
 
 public:
-	virtual void nativeColor(const KoColor& c, QUANTUM *dst);
-	virtual void nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst);
+	virtual void nativeColor(const QColor& c, QUANTUM *dst);
+	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst);
 	
-	virtual void toKoColor(const QUANTUM *src, KoColor *c);
-	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity);
+	virtual void toQColor(const QUANTUM *src, QColor *c);
+	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity);
 
 	virtual KisPixelRO toKisPixelRO(QUANTUM *src, KisProfileSP profile = 0) { return KisPixelRO (src, src, this, profile); }
 	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0) { return KisPixel (src, src, this, profile); }
@@ -55,7 +55,7 @@ public:
 				       KisProfileSP srcProfile, KisProfileSP dstProfile, 
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
-	virtual void setMaskColor(KoColor c) { m_maskColor = c; }
+	virtual void setMaskColor(QColor c) { m_maskColor = c; }
 	virtual void setInverted(bool b) { m_inverted = b; }
 
 protected:
@@ -73,7 +73,7 @@ protected:
 private:
 	vKisChannelInfoSP m_channels;
 
-	KoColor m_maskColor;
+	QColor m_maskColor;
 	bool m_inverted;
 };
 

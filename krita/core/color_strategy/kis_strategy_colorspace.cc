@@ -29,8 +29,9 @@
 #include "kis_profile.h"
 #include "kis_config.h"
 
-KisStrategyColorSpace::KisStrategyColorSpace(const QString& name, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature) 
+KisStrategyColorSpace::KisStrategyColorSpace(const QString& name, const QString& description, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature) 
 	: m_name(name),
+	  m_description(description),
 	  m_cmType(cmType),
 	  m_colorSpaceSignature(colorSpaceSignature)
 {	

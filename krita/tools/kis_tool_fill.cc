@@ -28,7 +28,7 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_layer.h"
 #include "kis_cursor.h"

@@ -23,7 +23,7 @@
 #include <qpoint.h>
 #include <kaction.h>
 #include <klocale.h>
-#include <koColor.h>
+#include <qcolor.h>
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"

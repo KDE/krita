@@ -44,7 +44,7 @@ namespace {
 }
 
 KisStrategyColorSpaceCMYKA::KisStrategyColorSpaceCMYKA() :
-	KisStrategyColorSpace("CMYK/Alpha", 
+	KisStrategyColorSpace("CMYKA", i18n("CMYK/Alpha"),  
 			      (COLORSPACE_SH(PT_CMYK) | CHANNELS_SH(4) | BYTES_SH(1) | EXTRA_SH(1)),
 			      icSigCmykData)
 {
@@ -59,11 +59,11 @@ KisStrategyColorSpaceCMYKA::~KisStrategyColorSpaceCMYKA()
 {
 }
 
-void KisStrategyColorSpaceCMYKA::nativeColor(const KoColor& color, QUANTUM *dst)
+void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& color, QUANTUM *dst)
 {
-	QUANTUM c = 255 - color.R();
-	QUANTUM m = 255 - color.G();
-	QUANTUM y = 255 - color.B();
+	QUANTUM c = 255 - color.red();
+	QUANTUM m = 255 - color.green();
+	QUANTUM y = 255 - color.blue();
 
 	QUANTUM k = 255;
 
@@ -77,21 +77,21 @@ void KisStrategyColorSpaceCMYKA::nativeColor(const KoColor& color, QUANTUM *dst)
 	dst[PIXEL_BLACK] = k;
 }
 
-void KisStrategyColorSpaceCMYKA::nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst)
+void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst)
 {
 	nativeColor(c, dst);
 	dst[PIXEL_CMYK_ALPHA] = opacity;
  }
 
-void KisStrategyColorSpaceCMYKA::toKoColor(const QUANTUM *src, KoColor *c)
+void KisStrategyColorSpaceCMYKA::toQColor(const QUANTUM *src, QColor *c)
 {
-	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
+// 	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
 }
 
-void KisStrategyColorSpaceCMYKA::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity)
+void KisStrategyColorSpaceCMYKA::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity)
 {
-	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
-	*opacity = src[PIXEL_CMYK_ALPHA];
+// 	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
+ 	*opacity = src[PIXEL_CMYK_ALPHA];
 }
 
 vKisChannelInfoSP KisStrategyColorSpaceCMYKA::channels() const

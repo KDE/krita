@@ -21,7 +21,7 @@
 #include <kaction.h>
 #include <kcommand.h>
 #include <klocale.h>
-#include <koColor.h>
+#include <qcolor.h>
 #include <koDocument.h>
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"

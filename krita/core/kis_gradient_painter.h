@@ -33,7 +33,6 @@
 #include <qpainter.h>
 #include <qvaluevector.h>
 
-#include <koColor.h>
 #include <kcommand.h>
 
 #include "kis_global.h"

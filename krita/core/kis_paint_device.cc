@@ -179,7 +179,7 @@ void KisPaintDevice::configure(KisImage *image,
                                const QString& name,
                                CompositeOp compositeOp)
 {
-	if (image == 0 || name.isEmpty())
+	if (image == 0 || name.isEmpty() || colorStrategy == 0)
 		return;
 
 	m_x = 0;
@@ -256,21 +256,6 @@ void KisPaintDevice::maskBounds(QRect *rc)
 
 void KisPaintDevice::init()
 {
-/*	m_visible = false;
-	m_quantumSize = 0;
-	m_offX = 0;
-	m_offY = 0;
-	m_offW = 0;
-	m_offH = 0;
-	m_x = 0;
-	m_y = 0;
-        m_visible = false;
-        m_offX = 0;
-        m_offY = 0;
-        m_offW = 0;
-        m_offH = 0;
-        m_x = 0;
-        m_y = 0;*/
 	m_colorStrategy = 0;
 	m_hasSelection = false;
 		m_selection = 0;
@@ -634,7 +619,7 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 void KisPaintDevice::convertFromImage(const QImage& img)
 {
 	// XXX: Apply import profile
-	KoColor c;
+	QColor c;
 	QRgb rgb;
 	Q_INT32 opacity;
 
@@ -644,7 +629,7 @@ void KisPaintDevice::convertFromImage(const QImage& img)
 	for (Q_INT32 y = 0; y < height(); y++) {
 		for (Q_INT32 x = 0; x < width(); x++) {
 			rgb = img.pixel(x, y);
-			c.setRGB(upscale(qRed(rgb)), upscale(qGreen(rgb)), upscale(qBlue(rgb)));
+			c.setRgb(upscale(qRed(rgb)), upscale(qGreen(rgb)), upscale(qBlue(rgb)));
 
 			if (img.hasAlphaBuffer())
 				opacity = qAlpha(rgb);

@@ -20,7 +20,7 @@
 
 #include <qcolor.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
@@ -37,11 +37,11 @@ public:
 	virtual ~KisStrategyColorSpaceRGB();
 
 public:
-	virtual void nativeColor(const KoColor& c, QUANTUM *dst);
-	virtual void nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst);
+	virtual void nativeColor(const QColor& c, QUANTUM *dst);
+	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst);
 
-	virtual void toKoColor(const QUANTUM *src, KoColor *c);
-	virtual void toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity);
+	virtual void toQColor(const QUANTUM *src, QColor *c);
+	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity);
 
 	virtual KisPixelRO toKisPixelRO(QUANTUM *src, KisProfileSP profile = 0) 
 		{ return KisPixelRO (src, src + PIXEL_ALPHA, this, profile); }

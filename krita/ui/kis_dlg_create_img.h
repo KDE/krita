@@ -22,7 +22,7 @@
 
 #include <kdialogbase.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_global.h"
 #include "dialogs/wdgnewimage.h"
@@ -43,7 +43,7 @@ public:
 	virtual ~KisDlgCreateImg();
 
 public:
-	KoColor backgroundColor() const;
+	QColor backgroundColor() const;
 	QUANTUM backgroundOpacity() const;
 	QString colorStrategyName() const;
 	Q_INT32 imgWidth() const;

@@ -28,7 +28,7 @@
 #include <koColorSlider.h>
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
-#include <koColor.h>
+#include <qcolor.h>
 
 KisGrayWidget::KisGrayWidget(QWidget *parent, const char *name) : super(parent, name)
 {
@@ -75,13 +75,13 @@ void KisGrayWidget::slotChanged(int v)
 	v = 255 - v;
 
 	if (m_ColorButton->current() == KDualColorButton::Foreground){
-		m_fgColor.setRGB(v, v, v);
+		m_fgColor.setRgb(v, v, v);
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
 		if(m_subject)
 			m_subject->setFGColor(m_fgColor);
 	}
 	else{
-		m_bgColor.setRGB(v, v, v);
+		m_bgColor.setRgb(v, v, v);
 		m_ColorButton->setCurrent(KDualColorButton::Background);
 		if(m_subject)
 			m_subject->setBGColor(m_bgColor);
@@ -94,16 +94,16 @@ void KisGrayWidget::update(KisCanvasSubject *subject)
 	m_fgColor = subject->fgColor();
 	m_bgColor = subject->bgColor();
 
-	KoColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
+	QColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
 
 	disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	disconnect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 	disconnect(mSlider, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
 	disconnect(mIn, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
-	m_ColorButton->setForeground( m_fgColor.color() );
-	m_ColorButton->setBackground( m_bgColor.color() );
+	m_ColorButton->setForeground( m_fgColor );
+	m_ColorButton->setBackground( m_bgColor );
 
-	double v = color.R() + color.G() + color.B();
+	double v = color.red() + color.green() + color.blue();
 	v /= 3.0;
 	v = 255.0 - v;
 	mIn->setValue(static_cast<int>(v));
@@ -117,14 +117,14 @@ void KisGrayWidget::update(KisCanvasSubject *subject)
 
 void KisGrayWidget::slotFGColorSelected(const QColor& c)
 {
-	m_fgColor = KoColor(c);
+	m_fgColor = c;
 	if(m_subject)
 		m_subject->setFGColor(m_fgColor);
 }
 
 void KisGrayWidget::slotBGColorSelected(const QColor& c)
 {
-	m_bgColor = KoColor(c);
+	m_bgColor = c;
 	if(m_subject)
 		m_subject->setBGColor(m_bgColor);
 }

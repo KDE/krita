@@ -43,7 +43,7 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_cursor.h"
 #include <kis_doc.h>
@@ -202,7 +202,7 @@ QString PerfTest::doBlit(CompositeOp op,
 
 
 	KisFillPainter pf(small.data()) ;
-	pf.fillRect(0, 0, TILE_WIDTH/2, TILE_HEIGHT/2, KoColor::black());
+	pf.fillRect(0, 0, TILE_WIDTH/2, TILE_HEIGHT/2, Qt::black);
 	pf.end();
 
 	t.restart();
@@ -226,7 +226,7 @@ QString PerfTest::doBlit(CompositeOp op,
 					 "medium blit");
 		
 	pf.begin(medium.data()) ;
-	pf.fillRect(0, 0, TILE_WIDTH * 3, TILE_HEIGHT * 3, KoColor::black());
+	pf.fillRect(0, 0, TILE_WIDTH * 3, TILE_HEIGHT * 3, Qt::black);
 	pf.end();
 
 	t.restart();
@@ -250,7 +250,7 @@ QString PerfTest::doBlit(CompositeOp op,
 				      "big blit");
 
 	pf.begin(big.data()) ;
-	pf.fillRect(0, 0, 800, 800, KoColor::black());
+	pf.fillRect(0, 0, 800, 800, Qt::black);
 	pf.end();
 
 	t.restart();
@@ -275,7 +275,7 @@ QString PerfTest::doBlit(CompositeOp op,
 					  "outside blit");
 
 	pf.begin(outside.data()) ;
-	pf.fillRect(0, 0, 500, 500, KoColor::lightGray());
+	pf.fillRect(0, 0, 500, 500, Qt::lightGray);
 	pf.end();
 
 	t.restart();
@@ -338,21 +338,21 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 		// Opaque Rect fill
 		t.restart();
 		for (Q_UINT32 i = 0; i < testCount; ++i) {
-			p.fillRect(0, 0, 1000, 1000, KoColor::red());
+			p.fillRect(0, 0, 1000, 1000, Qt::red);
 		}
 		report = report.append(QString("    Opaque fill 1000 x 1000 layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 
 
 		t.restart();
 		for (Q_UINT32 i = 0; i < testCount; ++i) {
-			p.fillRect(50, 50, 500, 500, KoColor::green());
+			p.fillRect(50, 50, 500, 500, Qt::green);
 		}
 		report = report.append(QString("    Opaque fill 500 x 500 layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 
 
 		t.restart();
-		for (Q_UINT32 i = 0; i < testCount; ++i, KoColor::blue()) {
-			p.fillRect(-50, -50, 1100, 1100, KoColor::lightGray());
+		for (Q_UINT32 i = 0; i < testCount; ++i, Qt::blue) {
+			p.fillRect(-50, -50, 1100, 1100, Qt::lightGray);
 		}
 		report = report.append(QString("    Opaque fill rect bigger than layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 								       
@@ -360,21 +360,21 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 		
 		t.restart();
 		for (Q_UINT32 i = 0; i < testCount; ++i) {
-			p.fillRect(0, 0, 1000, 1000, KoColor::red(), OPACITY_OPAQUE / 2);
+			p.fillRect(0, 0, 1000, 1000, Qt::red, OPACITY_OPAQUE / 2);
 		}
 		report = report.append(QString("    Opaque fill 1000 x 1000 layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 
 
 		t.restart();
 		for (Q_UINT32 i = 0; i < testCount; ++i) {
-			p.fillRect(50, 50, 500, 500, KoColor::green(), OPACITY_OPAQUE / 2);
+			p.fillRect(50, 50, 500, 500, Qt::green, OPACITY_OPAQUE / 2);
 		}
 		report = report.append(QString("    Opaque fill 500 x 500 layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 
 
 		t.restart();
 		for (Q_UINT32 i = 0; i < testCount; ++i) {
-			p.fillRect(-50, -50, 1100, 1100, KoColor::blue(), OPACITY_OPAQUE / 2);
+			p.fillRect(-50, -50, 1100, 1100, Qt::blue, OPACITY_OPAQUE / 2);
 		}
 		report = report.append(QString("    Opaque fill rect bigger than layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 					
@@ -383,7 +383,7 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 		t.restart();
 		for (Q_UINT32 i = 0; i < testCount; ++i) {
 			p.eraseRect(0, 0, 1000, 1000);
-			p.setPaintColor(KoColor::yellow());
+			p.setPaintColor(Qt::yellow);
 			p.setFillThreshold(15);
 			p.setCompositeOp(COMPOSITE_OVER);
 			p.fillColor(500, 500);

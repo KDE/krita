@@ -29,7 +29,7 @@
 #include <list>
 #include <map>
 
-#include <koColor.h>
+#include <qcolor.h>
 #include <koView.h>
 #include <kdebug.h>
 
@@ -150,8 +150,8 @@ public: // Plugin access API. XXX: This needs redesign.
 	KisSelectionManager * selectionManager() { return m_selectionManager; }
 
 signals:
-	void bgColorChanged(const KoColor& c);
-	void fgColorChanged(const KoColor& c);
+	void bgColorChanged(const QColor& c);
+	void fgColorChanged(const QColor& c);
 	void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
 	void cursorEnter();
 	void cursorLeave();
@@ -159,8 +159,8 @@ signals:
 
 public slots:
 	void dialog_gradient();
-	void slotSetFGColor(const KoColor& c);
-	void slotSetBGColor(const KoColor& c);
+	void slotSetFGColor(const QColor& c);
+	void slotSetBGColor(const QColor& c);
 
 	void next_layer();
 	void previous_layer();
@@ -203,10 +203,10 @@ private:
 	virtual void detach(KisCanvasObserver *observer);
 	virtual void notify();
 	virtual QString currentImgName() const;
-	virtual KoColor bgColor() const;
-	virtual void setBGColor(const KoColor& c);
-	virtual KoColor fgColor() const;
-	virtual void setFGColor(const KoColor& c);
+	virtual QColor bgColor() const;
+	virtual void setBGColor(const QColor& c);
+	virtual QColor fgColor() const;
+	virtual void setFGColor(const QColor& c);
 	virtual KisBrush *currentBrush() const;
 	virtual KisPattern *currentPattern() const;
 	virtual KisGradient *currentGradient() const;
@@ -259,7 +259,7 @@ private:
 
 	void layerUpdateGUI(bool enable);
 	void paintView(const KisRect& rc);
-	bool selectColor(KoColor& result);
+	bool selectColor(QColor& result);
 	void selectImage(KisImageSP img);
 
 	void setupActions();
@@ -447,8 +447,8 @@ private:
 	// Current colours, brushes, patterns etc.
 	Q_INT32 m_xoff;
 	Q_INT32 m_yoff;
-	KoColor m_fg;
-	KoColor m_bg;
+	QColor m_fg;
+	QColor m_bg;
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;

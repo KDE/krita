@@ -23,7 +23,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_doc.h"
 #include "kis_view.h"
@@ -53,8 +53,8 @@ KisToolColorChanger::KisToolColorChanger() :
 // 	layerAlpha = true;
 
 // 	// get currentImg colors
-// 	KoColor startColor( view->fgColor().R(), view->fgColor().G(), view->fgColor().B() );
-// 	KoColor endColor( view->bgColor().R(), view->bgColor().G(), view->bgColor().B() );
+// 	QColor startColor( view->fgColor().red(), view->fgColor().green(), view->fgColor().blue() );
+// 	QColor endColor( view->bgColor().red(), view->bgColor().green(), view->bgColor().blue() );
 
 // 	// prepare for painting with pattern
 // 	if( m_usePattern )
@@ -100,9 +100,9 @@ bool KisToolColorChanger::changeColors(int /*startX*/, int /*startY*/)
 // 	sBlue = qBlue(srgb);
 
 // 	// new color values from color selector
-// 	nRed     = view->fgColor().R();
-// 	nGreen   = view->fgColor().G();
-// 	nBlue    = view->fgColor().B();
+// 	nRed     = view->fgColor().red();
+// 	nGreen   = view->fgColor().green();
+// 	nBlue    = view->fgColor().blue();
 
 // 	int left    = lay->imageExtents().left();
 // 	int top     = lay->imageExtents().top();
@@ -115,8 +115,8 @@ bool KisToolColorChanger::changeColors(int /*startX*/, int /*startY*/)
 
 // 	// prepare for painting with gradient
 // 	if (m_useGradient) {
-// 		KoColor startColor(view->fgColor().R(), view->fgColor().G(), view->fgColor().B());
-// 		KoColor endColor(view->bgColor().R(), view->bgColor().G(), view->bgColor().B());
+// 		QColor startColor(view->fgColor().red(), view->fgColor().green(), view->fgColor().blue());
+// 		QColor endColor(view->bgColor().red(), view->bgColor().green(), view->bgColor().blue());
 
 // 		m_doc->frameBuffer()->setGradientPaint(true, startColor, endColor);
 // 	}
@@ -208,8 +208,8 @@ void KisToolColorChanger::buttonPress(KisButtonPressEvent */*e*/)
 // 		// particular tool, unlike the other options
 
 // 		// get currentImg colors
-// 		KoColor startColor( view->fgColor().R(), view->fgColor().G(), view->fgColor().B() );
-// 		KoColor endColor( view->bgColor().R(), view->bgColor().G(), view->bgColor().B() );
+// 		QColor startColor( view->fgColor().red(), view->fgColor().green(), view->fgColor().blue() );
+// 		QColor endColor( view->bgColor().red(), view->bgColor().green(), view->bgColor().blue() );
 
 // 		// prepare for painting with pattern
 // 		if( m_usePattern )

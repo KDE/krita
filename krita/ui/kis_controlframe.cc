@@ -123,25 +123,25 @@ void ControlFrame::slotSetGradient(KoIconItem *item)
 		m_pGradientWidget -> slotSetItem(*item);
 }
 
-void ControlFrame::slotSetFGColor(const KoColor& c)
+void ControlFrame::slotSetFGColor(const QColor& c)
 {
 	disconnect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	disconnect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 
 	m_pColorButton->setCurrent(KDualColorButton::Foreground);
-	m_pColorButton->setForeground( c.color() );
+	m_pColorButton->setForeground( c );
     
 	connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 }
 
-void ControlFrame::slotSetBGColor(const KoColor& c)
+void ControlFrame::slotSetBGColor(const QColor& c)
 {
 	disconnect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	disconnect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
     
 	m_pColorButton->setCurrent(KDualColorButton::Background);
-	m_pColorButton->setBackground( c.color() );
+	m_pColorButton->setBackground( c );
     
 	connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
@@ -149,12 +149,12 @@ void ControlFrame::slotSetBGColor(const KoColor& c)
 
 void ControlFrame::slotFGColorSelected(const QColor& c)
 {
-	emit fgColorChanged( KoColor(c) );
+	emit fgColorChanged( c);
 }
 
 void ControlFrame::slotBGColorSelected(const QColor& c)
 {
-	emit bgColorChanged( KoColor(c) );
+	emit bgColorChanged( c );
 }
 
 #include "kis_controlframe.moc"

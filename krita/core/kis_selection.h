@@ -24,7 +24,7 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 
-class KoColor;
+class QColor;
 
 // Note: this is intentionally not namespaced, because it's meant for all of Krita
 // that wants to determine selectedness.
@@ -47,7 +47,7 @@ class KisSelection : public KisPaintDevice {
 
 public:
 	KisSelection(KisPaintDeviceSP layer, const QString& name);
-	KisSelection(KisPaintDeviceSP layer, const QString& name, KoColor c);
+	KisSelection(KisPaintDeviceSP layer, const QString& name, QColor c);
 
 	virtual ~KisSelection();
 
@@ -68,7 +68,7 @@ public:
 	// Keep the selection but set the mask to color c
 	// Note: it is intentional to deep-copy the color
 	// since the selection will want to own its own copy.
-	void setMaskColor(const KoColor c);
+	void setMaskColor(const QColor c);
 
 	/**
 	 * Set the area that encloses all selected pixels. This
@@ -84,7 +84,7 @@ private:
 #ifdef USE_ALPHA_MAP
 	KisColorSpaceAlphaSP m_alpha;
 #endif
-	KoColor m_maskColor;
+	QColor m_maskColor;
 	QRect m_selectedRect;
 };
 

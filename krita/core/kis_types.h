@@ -21,7 +21,6 @@
 #include <qvaluevector.h>
 #include <qmap.h>
 #include <ksharedptr.h>
-#include <koColor.h>
 
 #include "kis_global.h"
 #include "kis_shared_ptr_vector.h"
@@ -98,9 +97,6 @@ class KisPixelData;
 typedef KSharedPtr<KisPixelData> KisPixelDataSP;
 
 typedef QValueVector<QPoint> vKisSegments;
-
-class KoColor;
-typedef QValueVector<KoColor> KoColorMap;
 
 class KisStrategyColorSpace;
 typedef KSharedPtr<KisStrategyColorSpace> KisStrategyColorSpaceSP;

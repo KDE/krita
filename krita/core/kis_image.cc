@@ -203,7 +203,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_yres = rhs.m_yres;
 		m_unit = rhs.m_unit;
 		m_colorStrategy = rhs.m_colorStrategy;
-		m_clrMap = rhs.m_clrMap;
 		m_dirty = rhs.m_dirty;
 		m_adapter = rhs.m_adapter;
 		m_profile = rhs.m_profile;
@@ -286,13 +285,19 @@ QString KisImage::nextLayerName() const
 
 void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
-	Q_INT32 n;
-
+	if (!adapter || !colorStrategy) {
+		kdDebug() << "no adapter or no color strategy\n";
+		return;
+	}
 	m_adapter = adapter;
 	m_nserver = new KisNameServer(i18n("Layer %1"), 1);
-	n = colorStrategy->depth();
 	m_name = name;
-	m_depth = n;
+
+	if (colorStrategy)
+		m_depth = colorStrategy -> depth();
+	else
+		m_depth = 0;
+
 	m_colorStrategy = colorStrategy;
 	m_bkg = new KisBackground(this, width, height);
 	m_projection = new KisLayer(this, width, height, "projection", OPACITY_OPAQUE);
@@ -868,7 +873,7 @@ void KisImage::flatten()
 
 	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
 	KisFillPainter painter(dst.data());
-	painter.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
+	painter.fillRect(0, 0, dst -> width(), dst -> height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers = layers();
 	KisMerge<isVisible, All> visitor(this);
@@ -889,7 +894,7 @@ void KisImage::mergeVisibleLayers()
 
 	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
 	KisFillPainter painter(dst.data());
-	painter.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
+	painter.fillRect(0, 0, dst -> width(), dst -> height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers = layers();
 	KisMerge<isVisible, isVisible> visitor(this);
@@ -917,7 +922,7 @@ void KisImage::mergeLinkedLayers()
 
 	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
 	KisFillPainter painter(dst.data());
-	painter.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
+	painter.fillRect(0, 0, dst -> width(), dst -> height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers = layers();
 	KisMerge<isLinked, isLinked> visitor(this);
@@ -947,7 +952,7 @@ void KisImage::mergeLayer(KisLayerSP l)
 
 	KisLayerSP dst = new KisLayer(this, width(), height(), nextLayerName(), OPACITY_OPAQUE);
 	KisFillPainter painter(dst.data());
-	painter.fillRect(0, 0, dst -> width(), dst -> height(), KoColor(0, 0, 0), OPACITY_TRANSPARENT);
+	painter.fillRect(0, 0, dst -> width(), dst -> height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers;
 

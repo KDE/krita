@@ -23,7 +23,7 @@
 
 #include <kaction.h>
 #include <klocale.h>
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_cursor.h"
 #include "kis_canvas_subject.h"
@@ -53,7 +53,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 		KisImageSP img;
 		KisPaintDeviceSP dev;
 		QPoint pos;
-		KoColor c;
+		QColor c;
 		QUANTUM opacity;
 
 		if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)

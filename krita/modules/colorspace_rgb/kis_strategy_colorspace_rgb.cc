@@ -39,7 +39,7 @@ namespace {
 }
 
 KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
-	KisStrategyColorSpace("RGBA", TYPE_BGRA_8, icSigRgbData)
+	KisStrategyColorSpace("RGBA", i18n("RGB/Alpha"), TYPE_BGRA_8, icSigRgbData)
 {
 	m_channels.push_back(new KisChannelInfo(i18n("red"), 2, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("green"), 1, COLOR));
@@ -52,29 +52,29 @@ KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
 {
 }
 
-void KisStrategyColorSpaceRGB::nativeColor(const KoColor& c, QUANTUM *dst)
+void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM *dst)
 {
-	dst[PIXEL_RED] = upscale(c.R());
-	dst[PIXEL_GREEN] = upscale(c.G());
-	dst[PIXEL_BLUE] = upscale(c.B());
+	dst[PIXEL_RED] = upscale(c.red());
+	dst[PIXEL_GREEN] = upscale(c.green());
+	dst[PIXEL_BLUE] = upscale(c.blue());
 }
 
-void KisStrategyColorSpaceRGB::nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst)
+void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst)
 {
-	dst[PIXEL_RED] = upscale(c.R());
-	dst[PIXEL_GREEN] = upscale(c.G());
-	dst[PIXEL_BLUE] = upscale(c.B());
+	dst[PIXEL_RED] = upscale(c.red());
+	dst[PIXEL_GREEN] = upscale(c.green());
+	dst[PIXEL_BLUE] = upscale(c.blue());
 	dst[PIXEL_ALPHA] = opacity;
 }
 
-void KisStrategyColorSpaceRGB::toKoColor(const QUANTUM *src, KoColor *c)
+void KisStrategyColorSpaceRGB::toQColor(const QUANTUM *src, QColor *c)
 {
-	c -> setRGB(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
+	c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
 }
 
-void KisStrategyColorSpaceRGB::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity)
+void KisStrategyColorSpaceRGB::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity)
 {
-	c -> setRGB(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
+	c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
 	*opacity = src[PIXEL_ALPHA];
 }
 

@@ -42,7 +42,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_brush.h"
 #include "kis_global.h"

@@ -59,7 +59,7 @@
 #include <kpopupmenu.h>
 
 // KOffice
-#include <koColor.h>
+#include <qcolor.h>
 #include <koMainWindow.h>
 #include <koView.h>
 #include "kotabbar.h"
@@ -195,8 +195,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_dcop = 0;
         m_xoff = 0;
         m_yoff = 0;
-        m_fg = KoColor::black();
-        m_bg = KoColor::white();
+        m_fg = Qt::black;
+        m_bg = Qt::white;
 
 
         m_layerchanneldocker = 0;
@@ -290,10 +290,10 @@ void KisView::setupDockers()
 
 	m_controlWidget -> slotSetBGColor(m_bg);
 	m_controlWidget -> slotSetFGColor(m_fg);
-	connect(m_controlWidget, SIGNAL(fgColorChanged(const KoColor&)), SLOT(slotSetFGColor(const KoColor&)));
-	connect(m_controlWidget, SIGNAL(bgColorChanged(const KoColor&)), SLOT(slotSetBGColor(const KoColor&)));
-	connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetFGColor(const KoColor&)));
-	connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetBGColor(const KoColor&)));
+	connect(m_controlWidget, SIGNAL(fgColorChanged(const QColor&)), SLOT(slotSetFGColor(const QColor&)));
+	connect(m_controlWidget, SIGNAL(bgColorChanged(const QColor&)), SLOT(slotSetBGColor(const QColor&)));
+	connect(this, SIGNAL(fgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetFGColor(const QColor&)));
+	connect(this, SIGNAL(bgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetBGColor(const QColor&)));
 
 
  	// ---------------------------------------------------------------------
@@ -1885,26 +1885,26 @@ void KisView::gradientActivated(KisResource *gradient)
                 notify();
 }
 
-void KisView::setBGColor(const KoColor& c)
+void KisView::setBGColor(const QColor& c)
 {
         emit bgColorChanged(c);
         m_bg = c;
         notify();
 }
 
-void KisView::setFGColor(const KoColor& c)
+void KisView::setFGColor(const QColor& c)
 {
         emit fgColorChanged(c);
         m_fg = c;
         notify();
 }
 
-void KisView::slotSetFGColor(const KoColor& c)
+void KisView::slotSetFGColor(const QColor& c)
 {
         setFGColor(c);
 }
 
-void KisView::slotSetBGColor(const KoColor& c)
+void KisView::slotSetBGColor(const QColor& c)
 {
         setBGColor(c);
 }
@@ -2346,7 +2346,7 @@ void KisView::layerAdd()
                                                              dlg.compositeOp(),
                                                              dlg.opacity(),
                                                              dlg.position(),
-                                                             KisColorSpaceRegistry::instance()->colorSpace(dlg.colorStrategyName()));
+                                                             KisColorSpaceRegistry::instance() -> get(dlg.colorStrategyName()));
 
                         if (layer) {
                                 m_layerBox -> setCurrentItem(img -> index(layer));
@@ -2595,20 +2595,20 @@ void KisView::currentImageUpdated(KisImageSP img)
                 canvasRefresh();
 }
 
-bool KisView::selectColor(KoColor& result)
+bool KisView::selectColor(QColor& result)
 {
         QColor color;
         bool rc;
 
         if ((rc = (KColorDialog::getColor(color) == KColorDialog::Accepted)))
-                result.setRGB(color.red(), color.green(), color.blue());
+                result.setRgb(color.red(), color.green(), color.blue());
 
         return rc;
 }
 
 void KisView::selectFGColor()
 {
-        KoColor c;
+        QColor c;
 
         if (selectColor(c))
                 setFGColor(c);
@@ -2616,7 +2616,7 @@ void KisView::selectFGColor()
 
 void KisView::selectBGColor()
 {
-        KoColor c;
+        QColor c;
 
         if (selectColor(c))
                 setBGColor(c);
@@ -2624,8 +2624,8 @@ void KisView::selectBGColor()
 
 void KisView::reverseFGAndBGColors()
 {
-        KoColor oldFg = m_fg;
-        KoColor oldBg = m_bg;
+        QColor oldFg = m_fg;
+        QColor oldBg = m_bg;
 
         setFGColor(oldBg);
         setBGColor(oldFg);
@@ -3110,12 +3110,12 @@ QString KisView::currentImgName() const
         return QString::null;
 }
 
-KoColor KisView::bgColor() const
+QColor KisView::bgColor() const
 {
         return m_bg;
 }
 
-KoColor KisView::fgColor() const
+QColor KisView::fgColor() const
 {
         return m_fg;
 }

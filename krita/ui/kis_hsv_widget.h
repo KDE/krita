@@ -22,12 +22,15 @@
 
 #include "qwidget.h"
 
+#include "koColor.h"
+
 #include "kis_canvas_subject.h"
 #include "kis_canvas_observer.h"
 
+
+
 class KoFrameButton;
 class QGridLayout;
-class KoColor;
 class KoColorSlider;
 class QLabel;
 class QSpinBox;

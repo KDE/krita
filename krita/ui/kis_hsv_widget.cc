@@ -96,13 +96,13 @@ void KisHSVWidget::slotHChanged(int h)
 		m_fgColor.setHSV(h, m_fgColor.S(), m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
 		if(m_subject)
-			m_subject->setFGColor(m_fgColor);
+			m_subject->setFGColor(m_fgColor.color());
 	}
 	else{
 		m_bgColor.setHSV(h, m_bgColor.S(), m_bgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Background);
 		if(m_subject)
-			m_subject->setBGColor(m_bgColor);
+			m_subject->setBGColor(m_bgColor.color());
 	}
 }
 
@@ -112,13 +112,13 @@ void KisHSVWidget::slotSChanged(int s)
 		m_fgColor.setHSV(m_fgColor.H(), s, m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
 		if(m_subject)
-			m_subject->setFGColor(m_fgColor);
+			m_subject->setFGColor(m_fgColor.color());
 	}
 	else{
 		m_bgColor.setHSV(m_bgColor.H(), s, m_bgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Background);
 		if(m_subject)
-			m_subject->setBGColor(m_bgColor);
+			m_subject->setBGColor(m_bgColor.color());
 	}
 }
 
@@ -128,13 +128,13 @@ void KisHSVWidget::slotVChanged(int v)
 		m_fgColor.setHSV(m_fgColor.H(), m_fgColor.S(), v);
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
 		if(m_subject)
-			m_subject->setFGColor(m_fgColor);
+			m_subject->setFGColor(m_fgColor.color());
 	}
 	else{
 		m_bgColor.setHSV(m_bgColor.H(), m_bgColor.S(), v);
 		m_ColorButton->setCurrent(KDualColorButton::Background);
 		if(m_subject)
-			m_subject->setBGColor(m_bgColor);
+			m_subject->setBGColor(m_bgColor.color());
 	}
 }
 
@@ -144,13 +144,13 @@ void KisHSVWidget::slotWheelChanged(const KoColor& c)
 		m_fgColor.setHSV(c.H(), c.S(), m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
 		if(m_subject)
-			m_subject->setFGColor(m_fgColor);
+			m_subject->setFGColor(m_fgColor.color());
 	}
 	else{
 		m_bgColor.setHSV(c.H(), c.S(), m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Background);
 		if(m_subject)
-			m_subject->setBGColor(m_bgColor);
+			m_subject->setBGColor(m_bgColor.color());
 	}
 }
 
@@ -192,14 +192,14 @@ void KisHSVWidget::slotFGColorSelected(const QColor& c)
 {
 	m_fgColor = KoColor(c);
 	if(m_subject)
-		m_subject->setFGColor(m_fgColor);
+		m_subject->setFGColor(m_fgColor.color());
 }
 
 void KisHSVWidget::slotBGColorSelected(const QColor& c)
 {
 	m_bgColor = KoColor(c);
 	if(m_subject)
-		m_subject->setBGColor(m_bgColor);
+		m_subject->setBGColor(m_bgColor.color());
 }
 
 #include "kis_hsv_widget.moc"

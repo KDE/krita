@@ -20,7 +20,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_layer.h"
 #include "kis_selection.h"
@@ -46,7 +46,7 @@ KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
 		name)
 {
 	m_parentLayer = layer;
-	m_maskColor = KoColor::white();
+	m_maskColor = Qt::white;
 #if USE_ALPHA_MAP
 	m_alpha = KisColorSpaceAlphaSP(dynamic_cast<KisColorSpaceAlpha*> (colorStrategy().data()));
  	m_alpha -> setMaskColor(m_maskColor);
@@ -54,7 +54,7 @@ KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
 // 	kdDebug() << "Selection created with compositeOp " << compositeOp() << "\n";
 }
 
-KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name, KoColor color) 
+KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name, QColor color) 
  	: super(layer -> width(),
 		layer -> height(),
 		layer -> colorStrategy(),
@@ -71,7 +71,7 @@ KisSelection::~KisSelection()
 
 QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y)
 {
-	KoColor c;
+	QColor c;
 	QUANTUM opacity;
 	if (pixel(x, y, &c, &opacity)) {
 		return opacity;
@@ -128,7 +128,7 @@ void KisSelection::invert(QRect r)
 	m_selectedRect |= r;
 }
 
-void KisSelection::setMaskColor(KoColor c)
+void KisSelection::setMaskColor(QColor c)
 {
 #if USE_ALPHA_MAP
 	m_alpha -> setMaskColor(c);

@@ -35,7 +35,7 @@
 #include <qpainter.h>
 #include <qvaluevector.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 #include <kcommand.h>
 
 #include "kis_global.h"
@@ -220,14 +220,14 @@ public:
 	void setPattern(KisPattern& pattern) { m_pattern = &pattern; }
 	KisPattern * pattern() const { return m_pattern; }
 
-	void setPaintColor(const KoColor& color) {m_paintColor = color; }
-	KoColor paintColor() const { return m_paintColor; }
+	void setPaintColor(const QColor& color) {m_paintColor = color; }
+	QColor paintColor() const { return m_paintColor; }
 
-	void setBackgroundColor(const KoColor& color) {m_backgroundColor = color; }
-	KoColor backgroundColor() const { return m_backgroundColor; }
+	void setBackgroundColor(const QColor& color) {m_backgroundColor = color; }
+	QColor backgroundColor() const { return m_backgroundColor; }
 
-	void setFillColor(const KoColor& color) { m_fillColor = color; }
-	KoColor fillColor() const { return m_fillColor; }
+	void setFillColor(const QColor& color) { m_fillColor = color; }
+	QColor fillColor() const { return m_fillColor; }
 
 	void setOpacity(QUANTUM opacity) { m_opacity = opacity; }
 	QUANTUM opacity() const { return m_opacity; }
@@ -290,9 +290,9 @@ protected:
 
 	QRect m_dirtyRect;
 
-	KoColor m_paintColor;
-	KoColor m_backgroundColor;
-	KoColor m_fillColor;
+	QColor m_paintColor;
+	QColor m_backgroundColor;
+	QColor m_fillColor;
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisPoint m_duplicateOffset;

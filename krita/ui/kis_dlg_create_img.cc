@@ -91,9 +91,9 @@ QString KisDlgCreateImg::colorStrategyName() const
 	return m_page -> cmbColorSpaces -> currentText ();
 }
 
-KoColor KisDlgCreateImg::backgroundColor() const
+QColor KisDlgCreateImg::backgroundColor() const
 {
-	return KoColor(m_page -> cmbColor -> color());
+	return QColor(m_page -> cmbColor -> color());
 }
 
 QUANTUM KisDlgCreateImg::backgroundOpacity() const
@@ -146,9 +146,17 @@ KisProfileSP KisDlgCreateImg::profile() const
 
 void KisDlgCreateImg::fillCmbProfiles(const QString & s) 
 {
-	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
+
+
 	m_page -> cmbProfile -> clear();
 	m_page -> cmbProfile -> insertItem(i18n("None"));
+
+	kdDebug() << "Colorspace: " << s << "\n";
+	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
+	kdDebug() << "Instance: " << cs << "\n";
+
+	if (cs == 0) return;
+
 	vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {

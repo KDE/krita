@@ -252,9 +252,9 @@ bool KisToolStamp::stampColor(QPoint pos)
 	int   v = 255;
 	int   bv = 0;
 
-	int red     = view->fgColor().R();
-	int green   = view->fgColor().G();
-	int blue    = view->fgColor().B();
+	int red     = view->fgColor().red();
+	int green   = view->fgColor().green();
+	int blue    = view->fgColor().blue();
 
 	bool colorBlending = false;
 	bool grayscale = false;

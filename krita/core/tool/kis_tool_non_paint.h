@@ -20,7 +20,7 @@
 #define KIS_TOOL_NON_PAINT_H_
 
 #include <qcursor.h>
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_global.h"
 #include "kis_types.h"

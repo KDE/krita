@@ -24,11 +24,11 @@
 #define KIS_GRADIENT_H
 
 #include <qvaluevector.h>
+#include <qcolor.h>
 
 #include <kio/job.h>
 
 #include <koIconChooser.h>
-#include <koColor.h>
 
 #include "kis_resource.h"
 
@@ -46,20 +46,20 @@ public:
 	virtual bool saveAsync();
 	virtual QImage img();
 
-	void colorAt(double t, KoColor *color, QUANTUM *opacity) const;
+	void colorAt(double t, QColor *color, QUANTUM *opacity) const;
 
 protected:
 
 	class Color {
 	public:
 		Color() { m_alpha = 0; }
-		Color(const KoColor& color, double alpha) { m_color = color; m_alpha = alpha; }
+		Color(const QColor& color, double alpha) { m_color = color; m_alpha = alpha; }
 
-		const KoColor& color() const { return m_color; }
+		const QColor& color() const { return m_color; }
 		double alpha() const { return m_alpha; }
 
 	private:
-		KoColor m_color;
+		QColor m_color;
 		double m_alpha;
 	};
 

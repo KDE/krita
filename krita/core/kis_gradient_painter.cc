@@ -38,7 +38,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_brush.h"
 #include "kis_global.h"
@@ -555,7 +555,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 				t = 1 - t;
 			}
 
-			KoColor color;
+			QColor color;
 			QUANTUM opacity;
 
 			m_gradient -> colorAt(t, &color, &opacity);
@@ -593,7 +593,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
 				double maxDistance = 0;
 
-				KoColor thisPixel;
+				QColor thisPixel;
 				QUANTUM thisPixelOpacity;
 
 				layer -> pixel(x, y, &thisPixel, &thisPixelOpacity);
@@ -607,14 +607,14 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 							int sampleY = y + yOffset;
 
 							if (sampleX >= 0 && sampleX < layer -> width() && sampleY >=0 && sampleY < layer -> height()) {
-								KoColor color;
+								QColor color;
 								QUANTUM opacity;
 
 								layer -> pixel(sampleX, sampleY, &color, &opacity);
 
-								double dRed = (color.R() * opacity - thisPixel.R() * thisPixelOpacity) / 65535.0;
-								double dGreen = (color.G() * opacity - thisPixel.G() * thisPixelOpacity) / 65535.0;
-								double dBlue = (color.B() * opacity - thisPixel.B() * thisPixelOpacity) / 65535.0;
+								double dRed = (color.red() * opacity - thisPixel.red() * thisPixelOpacity) / 65535.0;
+								double dGreen = (color.green() * opacity - thisPixel.green() * thisPixelOpacity) / 65535.0;
+								double dBlue = (color.blue() * opacity - thisPixel.blue() * thisPixelOpacity) / 65535.0;
 
 #define SQRT_3 1.7320508
 
@@ -654,14 +654,14 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 								t = 1 - t;
 							}
 
-							KoColor color;
+							QColor color;
 							QUANTUM opacity;
 
 							m_gradient -> colorAt(t, &color, &opacity);
 
-							totalRed += color.R();
-							totalGreen += color.G();
-							totalBlue += color.B();
+							totalRed += color.red();
+							totalGreen += color.green();
+							totalBlue += color.blue();
 							totalOpacity += opacity;
 						}
 					}
@@ -671,7 +671,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 					int blue = totalBlue / (numSamples * numSamples);
 					int opacity = totalOpacity / (numSamples * numSamples);
 
-					KoColor color(red, green,  blue);
+					QColor color(red, green,  blue);
 
 					antiAliasedLayer ->setPixel(x, y, color, opacity);
 				}
@@ -709,7 +709,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 				KisSelectionSP selection = l -> selection();
 				for (int y = 0; y < layer -> height(); y++) {
 					for (int x = 0; x < layer -> width(); x++) {
-						KoColor c;
+						QColor c;
 						QUANTUM opacity;
 						layer -> pixel(x, y, &c, &opacity);
 						opacity = ((OPACITY_OPAQUE - selection -> selected(x, y)) * opacity) / QUANTUM_MAX;

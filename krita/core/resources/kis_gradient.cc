@@ -215,8 +215,8 @@ void KisGradient::ioResult(KIO::Job * /*job*/)
 		KoColor leftRgb((int)(leftRed * 255 + 0.5), (int)(leftGreen * 255 + 0.5), (int)(leftBlue * 255 + 0.5));
 		KoColor rightRgb((int)(rightRed * 255 + 0.5), (int)(rightGreen * 255 + 0.5), (int)(rightBlue * 255 + 0.5));
 
-		Color leftColor(leftRgb, leftAlpha);
-		Color rightColor(rightRgb, rightAlpha);
+		Color leftColor(leftRgb.color(), leftAlpha);
+		Color rightColor(rightRgb.color(), rightAlpha);
 
 		Segment *segment = new Segment(interpolator, colorInterpolator, leftOffset, middleOffset, rightOffset, leftColor, rightColor);
 
@@ -257,7 +257,7 @@ const KisGradient::Segment *KisGradient::segmentAt(double t) const
 	return segment;
 }
 
-void KisGradient::colorAt(double t, KoColor *color, QUANTUM *opacity) const
+void KisGradient::colorAt(double t, QColor *color, QUANTUM *opacity) const
 {
 	const Segment *segment = segmentAt(t);
 	Q_ASSERT(segment != 0);
@@ -280,7 +280,7 @@ QImage KisGradient::generatePreview() const
 			int backgroundGreen = backgroundRed;
 			int backgroundBlue = backgroundRed;
 
-			KoColor color;
+			QColor color;
 			QUANTUM opacity;
 			double t = static_cast<double>(x) / (img.width() - 1);
 
@@ -288,9 +288,9 @@ QImage KisGradient::generatePreview() const
 
 			double alpha = static_cast<double>(opacity) / OPACITY_OPAQUE;
 
-			int red = static_cast<int>((1 - alpha) * backgroundRed + alpha * color.R() + 0.5);
-			int green = static_cast<int>((1 - alpha) * backgroundGreen + alpha * color.G() + 0.5);
-			int blue = static_cast<int>((1 - alpha) * backgroundBlue + alpha * color.B() + 0.5);
+			int red = static_cast<int>((1 - alpha) * backgroundRed + alpha * color.red() + 0.5);
+			int green = static_cast<int>((1 - alpha) * backgroundGreen + alpha * color.green() + 0.5);
+			int blue = static_cast<int>((1 - alpha) * backgroundBlue + alpha * color.blue() + 0.5);
 
 			img.setPixel(x, y, qRgb(red, green, blue));
 		}
@@ -401,12 +401,12 @@ KisGradient::RGBColorInterpolationStrategy *KisGradient::RGBColorInterpolationSt
 
 KisGradient::Color KisGradient::RGBColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
 {
-	int red = static_cast<int>(start.color().R() + t * (end.color().R() - start.color().R()) + 0.5);
-	int green = static_cast<int>(start.color().G() + t * (end.color().G() - start.color().G()) + 0.5);
-	int blue = static_cast<int>(start.color().B() + t * (end.color().B() - start.color().B()) + 0.5);
+	int red = static_cast<int>(start.color().red() + t * (end.color().red() - start.color().red()) + 0.5);
+	int green = static_cast<int>(start.color().green() + t * (end.color().green() - start.color().green()) + 0.5);
+	int blue = static_cast<int>(start.color().blue() + t * (end.color().blue() - start.color().blue()) + 0.5);
 	double alpha = start.alpha() + t * (end.alpha() - start.alpha());
 
-	return Color(KoColor(red, green, blue), alpha);
+	return Color(QColor(red, green, blue), alpha);
 }
 
 KisGradient::HSVCWColorInterpolationStrategy *KisGradient::HSVCWColorInterpolationStrategy::instance()
@@ -420,24 +420,27 @@ KisGradient::HSVCWColorInterpolationStrategy *KisGradient::HSVCWColorInterpolati
 
 KisGradient::Color KisGradient::HSVCWColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
 {
-	int s = static_cast<int>(start.color().S() + t * (end.color().S() - start.color().S()) + 0.5);
-	int v = static_cast<int>(start.color().V() + t * (end.color().V() - start.color().V()) + 0.5);
+	KoColor sc = KoColor(start.color());
+	KoColor ec = KoColor(end.color());
+	
+	int s = static_cast<int>(sc.S() + t * (ec.S() - sc.S()) + 0.5);
+	int v = static_cast<int>(sc.V() + t * (ec.V() - sc.V()) + 0.5);
 	int h;
-
-	if (end.color().H() < start.color().H()) {
-		h = static_cast<int>(end.color().H() + (1 - t) * (start.color().H() - end.color().H()) + 0.5);
+	
+	if (ec.H() < sc.H()) {
+		h = static_cast<int>(ec.H() + (1 - t) * (sc.H() - ec.H()) + 0.5);
 	}
 	else {
-		h = static_cast<int>(end.color().H() + (1 - t) * (360 - end.color().H() + start.color().H()) + 0.5);
-
+		h = static_cast<int>(ec.H() + (1 - t) * (360 - ec.H() + sc.H()) + 0.5);
+		
 		if (h > 359) {
 			h -= 360;
 		}
 	}
-
+	
 	double alpha = start.alpha() + t * (end.alpha() - start.alpha());
 
-	return Color(KoColor(h, s, v, KoColor::csHSV), alpha);
+	return Color(KoColor(h, s, v, KoColor::csHSV).color(), alpha);
 }
 
 KisGradient::HSVCCWColorInterpolationStrategy *KisGradient::HSVCCWColorInterpolationStrategy::instance()
@@ -451,15 +454,18 @@ KisGradient::HSVCCWColorInterpolationStrategy *KisGradient::HSVCCWColorInterpola
 
 KisGradient::Color KisGradient::HSVCCWColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
 {
-	int s = static_cast<int>(start.color().S() + t * (end.color().S() - start.color().S()) + 0.5);
-	int v = static_cast<int>(start.color().V() + t * (end.color().V() - start.color().V()) + 0.5);
+	KoColor sc = KoColor(start.color());
+	KoColor se = KoColor(end.color());
+
+	int s = static_cast<int>(sc.S() + t * (se.S() - sc.S()) + 0.5);
+	int v = static_cast<int>(sc.V() + t * (se.V() - sc.V()) + 0.5);
 	int h;
 
-	if (start.color().H() < end.color().H()) {
-		h = static_cast<int>(start.color().H() + t * (end.color().H() - start.color().H()) + 0.5);
+	if (sc.H() < se.H()) {
+		h = static_cast<int>(sc.H() + t * (se.H() - sc.H()) + 0.5);
 	}
 	else {
-		h = static_cast<int>(start.color().H() + t * (360 - start.color().H() + end.color().H()) + 0.5);
+		h = static_cast<int>(sc.H() + t * (360 - sc.H() + se.H()) + 0.5);
 
 		if (h > 359) {
 			h -= 360;
@@ -468,7 +474,7 @@ KisGradient::Color KisGradient::HSVCCWColorInterpolationStrategy::colorAt(double
 
 	double alpha = start.alpha() + t * (end.alpha() - start.alpha());
 
-	return Color(KoColor(h, s, v, KoColor::csHSV), alpha);
+	return Color(KoColor(h, s, v, KoColor::csHSV).color(), alpha);
 }
 
 KisGradient::LinearInterpolationStrategy *KisGradient::LinearInterpolationStrategy::instance()

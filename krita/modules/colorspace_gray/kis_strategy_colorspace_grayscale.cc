@@ -43,7 +43,7 @@ namespace {
 
 
 KisStrategyColorSpaceGrayscale::KisStrategyColorSpaceGrayscale() :
-	KisStrategyColorSpace("Grayscale/Alpha", TYPE_GRAYA_8, icSigGrayData)
+	KisStrategyColorSpace("GRAYA", i18n("Grayscale/Alpha"), TYPE_GRAYA_8, icSigGrayData)
 {
 	m_channels.push_back(new KisChannelInfo(i18n("gray"), 0, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 1, ALPHA));
@@ -54,28 +54,27 @@ KisStrategyColorSpaceGrayscale::~KisStrategyColorSpaceGrayscale()
 {
 }
 
-void KisStrategyColorSpaceGrayscale::nativeColor(const KoColor& c, QUANTUM *dst)
+void KisStrategyColorSpaceGrayscale::nativeColor(const QColor& c, QUANTUM *dst)
 {
 	// Use qGray for a better rgb -> gray formula: (r*11 + g*16 + b*5)/32.
-	dst[PIXEL_GRAY] = upscale(qGray(c.R(), c.G(), c.B()));
+	dst[PIXEL_GRAY] = upscale(qGray(c.red(), c.green(), c.blue()));
 }
 
-void KisStrategyColorSpaceGrayscale::nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst)
+void KisStrategyColorSpaceGrayscale::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst)
 {
-	dst[PIXEL_GRAY] = upscale(qGray(c.R(), c.G(), c.B()));
+	dst[PIXEL_GRAY] = upscale(qGray(c.red(), c.green(), c.blue()));
 	dst[PIXEL_GRAY_ALPHA] = opacity;
 }
 
-void KisStrategyColorSpaceGrayscale::toKoColor(const QUANTUM *src, KoColor *c)
+void KisStrategyColorSpaceGrayscale::toQColor(const QUANTUM *src, QColor *c)
 {
-	c -> setRGB(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
+	c -> setRgb(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
 }
 
-void KisStrategyColorSpaceGrayscale::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity)
+void KisStrategyColorSpaceGrayscale::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity)
 {
-	c -> setRGB(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
+	c -> setRgb(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
 	*opacity = src[PIXEL_GRAY_ALPHA];
-	
 }
 
 vKisChannelInfoSP KisStrategyColorSpaceGrayscale::channels() const

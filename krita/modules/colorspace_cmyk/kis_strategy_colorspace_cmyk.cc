@@ -43,7 +43,7 @@ namespace {
 }
 
 KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
-	KisStrategyColorSpace("CMYK", TYPE_CMYK_8, icSigCmykData)
+	KisStrategyColorSpace("CMYK", i18n("CMYK"), TYPE_CMYK_8, icSigCmykData)
 {
 	m_channels.push_back(new KisChannelInfo(i18n("cyan"), 0, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("magenta"), 1, COLOR));
@@ -55,34 +55,55 @@ KisStrategyColorSpaceCMYK::~KisStrategyColorSpaceCMYK()
 {
 }
 
-void KisStrategyColorSpaceCMYK::nativeColor(const KoColor& c, QUANTUM *dst)
+void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM *dst)
 {
-	dst[PIXEL_CYAN] = upscale( c.C() );
-	dst[PIXEL_MAGENTA] = upscale( c.M() );
-	dst[PIXEL_YELLOW] = upscale( c.Y() );
-	dst[PIXEL_BLACK] = upscale( c.K() );
+	// XXX: Use lcms transforms
+
+	QUANTUM c = 255 - color.red();
+	QUANTUM m = 255 - color.green();
+	QUANTUM y = 255 - color.blue();
+
+	QUANTUM k = 255;
+
+	if (c < k) k = c;
+	if (m < k) k = m;
+	if (y < k) k = y;
+
+	dst[PIXEL_CYAN] = (c - k) / ( 255 - k);
+	dst[PIXEL_MAGENTA] = (m  - k) / ( 255 - k);
+	dst[PIXEL_YELLOW] = (y - k) / ( 255 - k);
+	dst[PIXEL_BLACK] = k;
 }
 
-void KisStrategyColorSpaceCMYK::nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst)
+void KisStrategyColorSpaceCMYK::nativeColor(const QColor& c, QUANTUM /*opacity*/, QUANTUM *dst)
 {
-	dst[PIXEL_CYAN] = upscale( c.C() );
-	dst[PIXEL_MAGENTA] = upscale( c.M() );
-	dst[PIXEL_YELLOW] = upscale( c.Y() );
-	dst[PIXEL_BLACK] = upscale( c.K() );
+	nativeColor(c, dst);
 }
 
-void KisStrategyColorSpaceCMYK::toKoColor(const QUANTUM *src, KoColor *c)
+void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c)
 {
-	c -> setCMYK(downscale(src[PIXEL_CYAN]), 
-		     downscale(src[PIXEL_MAGENTA]), 
-		     downscale(src[PIXEL_YELLOW]), 
-		     downscale(src[PIXEL_BLACK]));
+#if 0	
+    *C = 255 - R;
+    *M = 255 - G;
+    *Y = 255 - B;
+
+    int min = (*C < *M) ? *C : *M;
+    *K = (min < *Y) ? min : *Y;
+
+    *C -= *K;
+    *M -= *K;
+    *Y -= *K;
+#endif
+// 	c -> setCMYK(downscale(src[PIXEL_CYAN]), 
+// 		     downscale(src[PIXEL_MAGENTA]), 
+// 		     downscale(src[PIXEL_YELLOW]), 
+// 		     downscale(src[PIXEL_BLACK]));
 }
 
-void KisStrategyColorSpaceCMYK::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity)
+void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity)
 {
-	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
-	*opacity = OPACITY_OPAQUE;
+// 	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
+ 	*opacity = OPACITY_OPAQUE;
 }
 
 vKisChannelInfoSP KisStrategyColorSpaceCMYK::channels() const

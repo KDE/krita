@@ -27,13 +27,13 @@
 
 class KoFrameButton;
 class QGridLayout;
-class KoColor;
+class QColor;
 class KoColorSlider;
 class QLabel;
 class QSpinBox;
 class KDualColorButton;
 class KoColorSlider;
-class KoColor;
+class QColor;
 
 class KisRGBWidget
 	 : public QWidget,
@@ -70,8 +70,8 @@ private:
 	QSpinBox *mBIn;
 	KDualColorButton *m_ColorButton;
 
-	KoColor m_fgColor;
-	KoColor m_bgColor;
+	QColor m_fgColor;
+	QColor m_bgColor;
 };
 
 #endif

@@ -25,7 +25,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 
-#include <koColor.h>
+#include <qcolor.h>
 
 #include "kis_undo_adapter.h"
 #include "kis_global.h"

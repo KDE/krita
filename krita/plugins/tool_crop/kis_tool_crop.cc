@@ -24,6 +24,7 @@
 #include <qpushbutton.h>
 #include <qobject.h>
 #include <qcombobox.h>
+#include <qrect.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -174,6 +175,12 @@ void KisToolCrop::buttonRelease(KisButtonReleaseEvent *e)
 	if (!img)
 		return;
 
+        if (m_startPos != m_endPos)
+                //remove old outline
+                paintOutline();
+                //paint outline with handles
+                paintOutlineWithHandles();
+
 	if (m_subject && m_selecting) {
 		if (m_startPos == m_endPos) {
 			clearRect();
@@ -205,7 +212,7 @@ void KisToolCrop::paintOutline(QPainter& gc, const QRect&)
 		RasterOp op = gc.rasterOp();
 		QPen old = gc.pen();
 		QPen pen(Qt::SolidLine);
-		pen.setWidth(2);
+		pen.setWidth(1);
 		QPoint start;
 		QPoint end;
 
@@ -216,7 +223,57 @@ void KisToolCrop::paintOutline(QPainter& gc, const QRect&)
 		gc.setRasterOp(Qt::NotROP);
 		gc.setPen(pen);
 		gc.drawRect(QRect(start, end));
-		gc.setRasterOp(op);
+                gc.setRasterOp(op);
+		gc.setPen(old);
+	}
+}
+
+void KisToolCrop::paintOutlineWithHandles()
+{
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+		QWidget *canvas = controller -> canvas();
+		QPainter gc(canvas);
+		QRect rc;
+
+		paintOutlineWithHandles(gc, rc);
+	}
+}
+
+void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
+{
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+		RasterOp op = gc.rasterOp();
+		QPen old = gc.pen();
+		QPen pen(Qt::SolidLine);
+		pen.setWidth(1);
+		QPoint start;
+		QPoint end;
+
+		Q_ASSERT(controller);
+		start = controller -> windowToView(m_startPos);
+		end = controller -> windowToView(m_endPos);
+
+		gc.setRasterOp(Qt::NotROP);
+		gc.setPen(pen);
+                //draw handles
+                m_handlesRegion = handles(QRect(start, end));
+                //add outline rectangle to the region
+                m_handlesRegion += QRect( start.x(), start.y(), 1, QABS( end.y()-start.y() ) );
+                m_handlesRegion += QRect( end.x(), start.y(), 1, QABS( end.y()-start.y() ) );
+                m_handlesRegion += QRect( start.x(), start.y(), QABS( end.x() - start.x() ), 1 );
+                m_handlesRegion += QRect( start.x(), end.y(), QABS( end.x() - start.x() ), 1 );
+                QMemArray <QRect> rects = m_handlesRegion.rects (); 
+                for (QMemArray <QRect>::ConstIterator it = rects.begin (); 
+                        it != rects.end ();
+                        it++)
+                {
+                        gc.fillRect (*it, Qt::black);
+                }
+
+
+                gc.setRasterOp(op);
 		gc.setPen(old);
 	}
 }
@@ -321,6 +378,27 @@ void KisToolCrop::setup(KActionCollection *collection)
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
+}
+
+QRegion KisToolCrop::handles(QRect rect)
+{
+        QRegion handlesRegion;
+        //size of the handles
+        Q_INT32 handleSize = 12;
+
+        //add handle at the upper right corner
+        handlesRegion += QRect( rect.width() - handleSize, rect.height() - handleSize, handleSize, handleSize );
+        //add handle at the lower right corner
+        handlesRegion += QRect( rect.width() - handleSize, 0, handleSize, handleSize );
+        //add rectangle at the upper left corner
+        handlesRegion += QRect( 0, rect.height() - handleSize, handleSize, handleSize );
+        //add rectangle at the lower left corner
+        handlesRegion += QRect( 0, 0, handleSize, handleSize );
+
+        //move the handles to the correct position
+        handlesRegion.translate ( rect.x(), rect.y() );
+
+        return handlesRegion;
 }
 
 #include "kis_tool_crop.moc"

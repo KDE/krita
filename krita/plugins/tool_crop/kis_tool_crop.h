@@ -22,9 +22,13 @@
 #define KIS_TOOL_CROP_H_
 
 #include <qpoint.h>
+#include <qregion.h>
+
 #include <kis_tool.h>
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
+
+class QRect;
 
 /**
  * Crop tool
@@ -64,6 +68,9 @@ private:
 	void paintOutline();
 	void paintOutline(QPainter& gc, const QRect& rc);
 	void cropLayer(KisLayerSP layer, QRect rc);
+        QRegion handles(QRect rect);
+        void paintOutlineWithHandles();
+        void paintOutlineWithHandles(QPainter& gc, const QRect& rc);
 
 private slots:
 
@@ -80,8 +87,8 @@ private:
 	bool m_selecting;
 
 	QWidget * m_optWidget;
-
-
+        
+        QRegion m_handlesRegion;
 };
 
 class KisToolCropFactory : public KisToolFactory {

@@ -1,6 +1,8 @@
 
 #include "koChart.h"
 
+#include <qobjectlist.h>
+
 using namespace KoChart;
 
 WizardExtension::WizardExtension( Part *part, const char *name )
@@ -26,10 +28,12 @@ Part::~Part()
 
 WizardExtension *Part::wizardExtension()
 {
-    QObject *ch = QObject::child( 0L, "KoChart::WizardExtension" );
-    if ( !ch )
-        return 0;
-    return static_cast<WizardExtension *>( ch );
+    QObjectListIt it( *QObject::children() );
+    for (; it.current(); ++it )
+        if ( it.current()->inherits( "KoChart::WizardExtension" ) )
+            return static_cast<WizardExtension *>( it.current() );
+
+    return 0;
 }
 
 #include "koChart.moc"

@@ -22,8 +22,8 @@
 #include "kis_tile.h"
 #include "kis_tileddatamanager.h"
 
-const Q_UINT32 KisTile::WIDTH = 64;
-const Q_UINT32 KisTile::HEIGHT = 64;
+const Q_INT32 KisTile::WIDTH = 64;
+const Q_INT32 KisTile::HEIGHT = 64;
 
 
 KisTile::KisTile(Q_INT32 depth, Q_INT32 col, Q_INT32 row)

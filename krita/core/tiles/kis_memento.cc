@@ -59,3 +59,40 @@ KisMemento::~KisMemento()
 	delete [] m_hashTable;
 	delete [] m_redoHashTable;
 }
+
+void KisMemento::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
+{
+	Q_INT32 maxX = -10000;
+	Q_INT32 maxY = -10000;
+	x=10000;
+	y=10000;
+	
+	for(int i = 0; i < 1024; i++)
+	{
+		KisTile *tile = m_hashTable[i];
+		
+		while(tile)
+		{
+			if(x > tile->getCol() * KisTile::WIDTH)
+				x = tile->getCol() * KisTile::WIDTH;
+			if(maxX < (tile->getCol() + 1) * KisTile::WIDTH - 1)
+				maxX = (tile->getCol() + 1) * KisTile::WIDTH - 1;
+			if(y > tile->getRow() * KisTile::HEIGHT)
+				y = tile->getRow() * KisTile::HEIGHT;
+			if(maxY < (tile->getRow() +1) * KisTile::HEIGHT - 1)
+				maxY = (tile->getRow() +1) * KisTile::HEIGHT - 1;
+				
+			tile = tile->getNext();
+		}
+	}
+	
+	if(maxX < x)
+		w = 0;
+	else
+		w = maxX - x +1;
+
+	if(maxY < y)
+		h = 0;
+	else
+		h = maxY - y +1;
+}

@@ -36,6 +36,8 @@ public:
 	virtual KisTransaction &operator+(const KisTransaction &,
 				  const KisTransaction &) = 0;
 */
+	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+
 private:
 	friend class KisTiledDataManager;
 	KisTiledDataManager *originator;

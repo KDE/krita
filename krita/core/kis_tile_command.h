@@ -30,8 +30,6 @@ class KisMemento;
 
 class KisTileCommand : public KCommand {
 public:
-	KisTileCommand(const QString& name, KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
-	KisTileCommand(const QString& name, KisPaintDeviceSP device, const QRect& rc);
 	KisTileCommand(const QString& name, KisPaintDeviceSP device);
 	virtual ~KisTileCommand();
 
@@ -45,7 +43,6 @@ public:
 private:
 	QString m_name;
 	KisPaintDeviceSP m_device;
-	QRect m_rc;
 	KisMemento *m_memento;
 };
 

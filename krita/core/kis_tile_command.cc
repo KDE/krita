@@ -23,31 +23,10 @@
 #include "kis_tile_command.h"
 #include "kis_memento.h"
 
-KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device,
-			       Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
-{
-	m_name = name;
-	m_device = device;
-	m_rc.setRect(x + m_device->getX(), y + m_device->getY(), width, height);
-	m_memento = device -> getMemento();
-}
-
-KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device, const QRect& rc)
-{
-	m_name = name;
-	m_device = device;
-	m_rc = rc;
-	m_rc.moveBy(m_device->getX(), m_device->getY());
-	m_memento = device -> getMemento();
-}
-
 KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device)
 {
 	m_name = name;
 	m_device = device;
-	//AUTOLAYER m_rc = device -> bounds();
-	m_rc.setRect(0, 0, 10, 10);
-	m_rc.moveBy(m_device->getX(), m_device->getY());
 	m_memento = device -> getMemento();
 }
 
@@ -62,8 +41,12 @@ void KisTileCommand::execute()
 	
 	m_device->rollforward(m_memento);
 	
+	QRect rc;	
+	Q_INT32 x, y, width, height;
+	m_memento->extent(x,y,width,height);
+	rc.setRect(x + m_device->getX(), y + m_device->getY(), width, height);
 	if (img)
-		img -> notify(m_rc);
+		img -> notify(rc);
 }
 
 void KisTileCommand::unexecute()
@@ -72,8 +55,12 @@ void KisTileCommand::unexecute()
 	
 	m_device -> rollback(m_memento);
 	
+	QRect rc;	
+	Q_INT32 x, y, width, height;
+	m_memento->extent(x,y,width,height);
+	rc.setRect(x + m_device->getX(), y + m_device->getY(), width, height);
 	if (img)
-		img -> notify(m_rc);
+		img -> notify(rc);
 }
 
 QString KisTileCommand::name() const

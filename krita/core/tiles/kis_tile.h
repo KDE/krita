@@ -48,6 +48,7 @@ public:
 
 	friend class KisTiledIterator;
 	friend class KisTiledDataManager;
+	friend class KisMemento;
 private:
 	KisTile& operator=(const KisTile&);
 
@@ -60,8 +61,8 @@ private:
 	Q_INT32 m_depth;
 	KisTile *m_nextTile;
 	
-	static const Q_UINT32 WIDTH;
-	static const Q_UINT32 HEIGHT;
+	static const Q_INT32 WIDTH;
+	static const Q_INT32 HEIGHT;
 };
 
 #endif // KIS_TILE_H_

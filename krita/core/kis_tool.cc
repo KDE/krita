@@ -34,18 +34,24 @@
 
 KisTool::KisTool(KisDoc *doc, const char * /*name*/) //: QObject(doc, name)
 {
+#if 0
 	m_doc = doc;
 	m_cursor = KisCursor::arrowCursor();
+#endif
 }
 
 KisTool::~KisTool() 
 {
+#if 0
 	QObject::disconnect(this);
+#endif
 }
 
 void KisTool::optionsDialog()
 {
+#if 0
 	KMessageBox::sorry(0, "Options for current tool... coming soon", "", false);  
+#endif
 }
 
 void KisTool::setChecked(bool /*check*/)
@@ -54,48 +60,61 @@ void KisTool::setChecked(bool /*check*/)
 
 void KisTool::setCursor(const QCursor& c)
 {
-	m_cursor = c;
+//	m_cursor = c;
 }
 
 void KisTool::setCursor()
 {
-	setCursor(arrowCursor);
+//	setCursor(arrowCursor);
 }
 
 QCursor KisTool::cursor() const
 {
-	return m_cursor;
+	return QCursor();
+//	return m_cursor;
 }
 
 // translate integer for zoom factor
 int KisTool::zoomed(int n) const
 {
+	return 0;
+#if 0
 	const KisView *view = getCurrentView();
 
 	return static_cast<int>(n / view -> zoomFactor());
+#endif
 }
 
 // translate integer for zoom factor
 int KisTool::zoomedX(int n) const
 {
+	return 0;
+#if 0
 	const KisView *view = getCurrentView();
 	float zF = view -> zoomFactor();
 
 	return static_cast<int>(n / zF);
+#endif
 }
 
 // translate integer for zoom factor
 int KisTool::zoomedY(int n) const
 {
+	return 0;
+
+#if 0
 	const KisView *view = getCurrentView();
 	float zF = view -> zoomFactor();
 
 	return static_cast<int>(n / zF);    
+#endif
 }
 
 // translate point for zoom factor
 QPoint KisTool::zoomed(const QPoint & pt) const
 {
+	return pt;
+#if 0
 	const KisView *view = getCurrentView();
 	float zF = view -> zoomFactor();
 
@@ -107,6 +126,7 @@ QPoint KisTool::zoomed(const QPoint & pt) const
 	
 	// just dealing with canvas, no scroll accounting 
 	return QPoint(startx, starty);
+#endif
 }
 
 void KisTool::mousePress(QMouseEvent*)
@@ -124,6 +144,9 @@ void KisTool::mouseRelease(QMouseEvent*)
 // get QRect for draw freehand in layer.
 QRect KisTool::getDrawRect(const QPointArray& points) const
 {
+	return QRect();
+
+#if 0
 	int maxX = 0, maxY = 0;
 	int minX = 0, minY = 0;
 	int tmpX = 0, tmpY = 0;
@@ -160,18 +183,21 @@ QRect KisTool::getDrawRect(const QPointArray& points) const
 	QPoint topLeft = QPoint(minX, minY);
 	QPoint bottomRight = QPoint(maxX, maxY);
 	return QRect(zoomed(topLeft), zoomed(bottomRight));
+#endif
 }
 
 // get QPointArray for draw freehand and polyline in layer.
 QPointArray KisTool::zoomPointArray(const QPointArray& points) const
 {
 	QPointArray rc(points.size());
+#if 0
 	int count = 0;
 
 	for (QPointArray::ConstIterator it = points.begin(); it != points.end(); it++) {
 		rc.setPoint(count, zoomed(*it));
 		count++;
 	}
+#endif
 
 	return rc;
 }
@@ -179,6 +205,7 @@ QPointArray KisTool::zoomPointArray(const QPointArray& points) const
 // clip select area image
 void KisTool::setClipImage()
 {
+#if 0
 	// set select area clip
 	if ( !m_doc->setClipImage() ) {
 		kdDebug( 0 ) << "FreehandSelectTool::setClipImage(): m_doc->setClipImage() failed" << endl;
@@ -216,11 +243,13 @@ void KisTool::setClipImage()
 	}
 
 	kdDebug( 0 ) << "FreehandSelectTool::setClipImage(): Success set up clip image!!" << endl;
+#endif
 }
 
 // drag clip image
 void KisTool::dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot)
 {
+#if 0
 	KisImage *img = m_doc->currentImg();
 	if ( !img )
 		return;
@@ -287,6 +316,7 @@ void KisTool::dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot)
 			imageRect.width(), imageRect.height() );
 
 	p.end();
+#endif
 }
 
 // pasete clip image
@@ -394,7 +424,7 @@ bool KisTool::shouldRepaint() const
 
 void KisTool::setBrush(KisBrush *brush)
 {
-	m_brush = brush;
+//	m_brush = brush;
 }
 
 void KisTool::clearOld()
@@ -403,15 +433,17 @@ void KisTool::clearOld()
 
 void KisTool::toolSelect()
 {
+#if 0
 	KisView *view = m_doc -> currentView();
 
 	if (view)
 		view -> activateTool(this);
+#endif
 }
 
 void KisTool::setPattern(KisPattern *pattern)
 {
-	m_pattern = pattern;
+//	m_pattern = pattern;
 }
 
 bool KisTool::willModify() const
@@ -422,23 +454,27 @@ bool KisTool::willModify() const
 // set select cursor
 void KisTool::setSelectCursor()
 {
+#if 0
 	KisView *view = m_doc -> currentView();
 
 	m_cursor = KisCursor::selectCursor();
 
 	if (view)
 		view -> kisCanvas() -> setCursor(KisCursor::selectCursor());
+#endif
 }
 
 // set move cursor
 void KisTool::setMoveCursor()
 {
+#if 0
 	KisView *view = m_doc -> currentView();
 
 	m_cursor = KisCursor::moveCursor();
 
 	if (view)
 		view -> kisCanvas() -> setCursor(KisCursor::moveCursor());
+#endif
 }
 
 QDomElement KisTool::saveSettings(QDomDocument& /*doc*/) const
@@ -475,15 +511,15 @@ QString KisTool::settingsName() const
 
 KisView* KisTool::getCurrentView()
 {
-	Q_ASSERT(m_doc);
-	return m_doc -> currentView();
+	return 0;
+//	Q_ASSERT(m_doc);
+//	return m_doc -> currentView();
 }
 
 const KisView* KisTool::getCurrentView() const
 {
-	Q_ASSERT(m_doc);
-	return m_doc -> currentView();
+	return 0;
+//	Q_ASSERT(m_doc);
+//	return m_doc -> currentView();
 }
-
-#include "kis_tool.moc"
 

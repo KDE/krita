@@ -1,84 +1,123 @@
 /*
- *  kis_layer.cc - part of KImageShop
+ *  copyright (c) 2002 patrick julien <freak@codepimps.org>
  *
- *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
- *                1999-2000 Matthias Elter <elter@kde.org>
- *                2002 Patrick Julien <freak@codepimps.org>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  this program is free software; you can redistribute it and/or modify
+ *  it under the terms of the gnu general public license as published by
+ *  the free software foundation; either version 2 of the license, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  this program is distributed in the hope that it will be useful,
+ *  but without any warranty; without even the implied warranty of
+ *  merchantability or fitness for a particular purpose.  see the
+ *  gnu general public license for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  you should have received a copy of the gnu general public license
+ *  along with this program; if not, write to the free software
+ *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
-
-#include <assert.h>
-
-#include <kdebug.h>
-
-#include "kis_layer.h"
 #include "kis_global.h"
+#include "kis_types.h"
+#include "kistile.h"
+#include "kistilemgr.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_channel.h"
+#include "kis_mask.h"
 
-KisLayer::KisLayer(const QString& name, uint width, uint height, uint bpp, cMode cm, const QRgb& defaultColor) : super(name, width, height, bpp, defaultColor)
+KisLayer::KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity)
+	: super(img, width, height, img -> imgType(), name)
 {
-	m_cMode = cm;
-	m_linked = false;
+}
+
+KisLayer::KisLayer(KisTileMgr tiles, KisImageSP img, const QString& name, QUANTUM opacity)
+	: super(img, img -> width(), img -> height(), img -> imgType(), name)
+{
 }
 
 KisLayer::~KisLayer()
 {
-	kdDebug() << "KisLayer::~KisLayer\n";
 }
 
-QRect KisLayer::tileRect(int tileNo)
+void KisLayer::copy(const KisPaintDevice& rhs, bool addAlpha)
 {
-#if 0
-	int xTile = tileNo % m_tiles.xTiles();
-	int yTile = tileNo / m_tiles.xTiles(); // xTiles is used here.  Is this the intent?
-
-	QRect tr(xTile * TILE_SIZE, yTile * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	tr.moveBy(m_tileRect.x(), m_tileRect.y());
-	return(tr);
-#endif
-	return QRect();
 }
 
-
-int KisLayer::channelLastTileOffsetX() const
+bool KisLayer::checkScaling(Q_INT32 width, Q_INT32 height)
 {
-	Q_ASSERT(false);
+	return false;
+}
+
+KisMaskSP KisLayer::createMask(Q_INT32 maskType)
+{
 	return 0;
-//	return m_ch[0]->lastTileOffsetX();
 }
 
-
-int KisLayer::channelLastTileOffsetY() const
+KisMaskSP KisLayer::addMask(KisMaskSP mask)
 {
-	Q_ASSERT(false);
 	return 0;
-//	return m_ch[0]->lastTileOffsetY();
 }
 
-
-bool KisLayer::boundryTileX(int tile) const
+void KisLayer::applyMask(Q_INT32 mode)
 {
-	return (((tile % xTiles()) + 1) == xTiles());
 }
 
-
-bool KisLayer::boundryTileY(int tile) const
+void KisLayer::translate(Q_INT32 x, Q_INT32 y)
 {
-	return (((tile/xTiles()) + 1) == yTiles());
 }
 
-#include "kis_layer.moc"
+void KisLayer::addAlpha()
+{
+}
+
+void KisLayer::scaleFactor(double wfactor, double hfactor)
+{
+}
+
+void KisLayer::scale(Q_INT32 width, Q_INT32 height, Q_INT32 interpolation, bool localOrigin)
+{
+}
+
+void KisLayer::scale(const QSize& size, Q_INT32 interpolation, bool localOrigin)
+{
+}
+
+void KisLayer::resize(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+}
+
+void KisLayer::resize(const QRect& rc)
+{
+}
+
+void KisLayer::resize()
+{
+}
+
+void KisLayer::boundary(const vKisSegments& segments)
+{
+}
+
+void KisLayer::invalidateBounds()
+{
+}
+
+KisMaskSP KisLayer::mask() const
+{
+	return 0;
+}
+
+bool KisLayer::isFloatingSel() const
+{
+	return false;
+}
+
+QUANTUM KisLayer::opacity() const
+{
+	return 0;
+}
+
+void KisLayer::opacity(QUANTUM val)
+{
+}
+
 

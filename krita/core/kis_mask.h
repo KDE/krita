@@ -1,48 +1,49 @@
 /*
- *  kis_mask.h - part of KImageShop
+ *  copyright (c) 2002 patrick julien <freak@codepimps.org>
  *
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  this program is free software; you can redistribute it and/or modify
+ *  it under the terms of the gnu general public license as published by
+ *  the free software foundation; either version 2 of the license, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  this program is distributed in the hope that it will be useful,
+ *  but without any warranty; without even the implied warranty of
+ *  merchantability or fitness for a particular purpose.  see the
+ *  gnu general public license for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  you should have received a copy of the gnu general public license
+ *  along with this program; if not, write to the free software
+ *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
-
 #if !defined KIS_MASK_H_
 #define KIS_MASK_H_
 
-#include "kis_paint_device.h"
+#include "kis_channel.h"
 
-class KisMask : public KisPaintDevice {
-	typedef KisPaintDevice super;
+class KisMask : public KisChannel {
+	typedef KisChannel super;
 
 public:
-	enum MaskType {CUSTOMMASK, REDMASK, GREENMASK, BLUEMASK, GREYMASK};
-
-	KisMask(MaskType type, const QString& name, uint width, uint height);
+	KisMask(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, const KoColor& color);
+	KisMask(const KisMask& rhs);
 	virtual ~KisMask();
 
-#if 0
-	virtual void setPixel(uint x, uint y, const uchar *src, KisImageCmd *cmd);
-	virtual void setPixel(uint x, uint y, const QRgb& rgb, KisImageCmd *cmd);
-	virtual bool pixel(uint x, uint y, uchar **val);
-	virtual bool pixel(uint x, uint y, QRgb *rgb);
-#endif
-	virtual bool writeToStore(KoStore *store);
-	virtual bool loadFromStore(KoStore *store);
+public:
+	KisMask& operator=(const KisMask& rhs);
 
-private:
-	MaskType m_type;
+public:
+	// Overide KisPaintDevice
+	virtual void duplicate(const KisPaintDevice& rhs, bool addAlpha);
+
+public:
+	KisLayerSP layer() const;
+	void layer(KisLayerSP owner);
+
+	Q_INT32 apply() const;
+	void apply(Q_INT32 mask);
+
+	bool edit() const;
+	void edit(bool val);
 };
 
 #endif // KIS_MASK_H_

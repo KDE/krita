@@ -18,6 +18,7 @@
 
 #include <string.h>
 #include <qtl.h>
+#include "kis_types.h"
 #include "kis_global.h"
 #include "kistilecache.h"
 #include "kistile.h"
@@ -55,7 +56,8 @@ KisTile::~KisTile()
 		m_data = 0;
 	}
 
-	m_swap -> remove(m_swapNo);
+	if (m_swap)
+		m_swap -> remove(m_swapNo);
 }
 
 QMutex *KisTile::mutex()
@@ -65,10 +67,26 @@ QMutex *KisTile::mutex()
 
 void KisTile::lock()
 {
-#if 0
 	m_mutex.lock();
-	// TODO No swap implementation right now, tile always in core
+	m_nref++;
+
+	if (m_nref == 1) {
+	//	if (tile->listhead)
+	//		tile_cache_flush (tile);
+	}
+
+	if (m_data == 0) {
+		Q_ASSERT(m_swap);
+		m_swap -> swapIn(this);
+	}
+		
 	m_mutex.unlock();
+
+#if 0
+	if (!tile->valid) {
+		/* an invalid tile should never be shared, so this should work */
+		tile_manager_validate ((TileManager*) tile->tlink->tm, tile);
+	}
 #endif
 }
 
@@ -78,19 +96,27 @@ void KisTile::lockAsync()
 
 void KisTile::release()
 {
-#if 0
-	// TODO No swap implementation right now, tile always in core
+	m_mutex.lock();
+	m_nref--;
+
+	if (m_dirty) {
+		m_nwrite--;
+		qFill(m_hints.begin(), m_hints.end(), unknown);
+	}
+
+	if (m_nref && m_nshare && m_cache)
+		m_cache -> insert(this);
+
 	m_mutex.unlock();
-#endif
 }
 
 void KisTile::allocate()
 {
 	if (m_data == 0)
-		m_data = new Q_UINT16[size()];
+		m_data = new QUANTUM[size()];
 }
 
-Q_UINT16 *KisTile::data(Q_INT32 xoff, Q_INT32 yoff) const
+QUANTUM *KisTile::data(Q_INT32 xoff, Q_INT32 yoff) const
 {
 	Q_INT32 offset = yoff * m_width + xoff;
 
@@ -136,22 +162,6 @@ void KisTile::valid(bool valid)
 {
 	m_mutex.lock();
 	m_valid = valid;
-
-	if (m_valid) {
-		// ?!?
-	} else {
-		if (m_cache)
-			m_cache -> flush(this);
-		
-		if (m_data) {
-			delete[] m_data;
-			m_data = 0;
-		}
-
-		if (m_swap)
-			m_swap -> swapDel(this);
-	}
-	
 	m_mutex.unlock();
 }
 
@@ -199,6 +209,9 @@ void KisTile::init(Q_INT32 depth, KisTileCacheInterface *cache, KisTileSwapInter
 	m_nref = 0;
 	m_nshare = 0;
 	m_nwrite = 0;
+
+	if (m_swap == 0)
+		allocate();
 }
 
 void KisTile::initRowHints()
@@ -246,4 +259,28 @@ void KisTile::writeRef()
 	m_nwrite++;
 }
 
+QImage KisTile::convertToImage()
+{
+	QImage img(width(), height(), 32);
+	QUANTUM *pixel = data();
+
+	// TODO : Get convertToImage out of here...
+	// TODO : use some kind of proxy to access
+	// TODO : color info.  Also this proxy would support
+	// TODO : all image formats.  Only RGBA is supported
+	// TODO : here.
+	for (Q_INT32 j = 0; j < img.height(); j++) {
+		for (Q_INT32 i = 0; i < img.width(); i++) {
+			Q_INT8 red = downscale(pixel[PIXEL_RED]);
+			Q_INT8 green = downscale(pixel[PIXEL_GREEN]);
+			Q_INT8 blue = downscale(pixel[PIXEL_BLUE]);
+			Q_INT8 alpha = downscale(pixel[PIXEL_ALPHA]);
+
+			img.setPixel(i, j, qRgba(red, green, blue, OPACITY_OPAQUE - alpha));
+			pixel += depth();
+		}
+	}
+
+	return img;
+}
 

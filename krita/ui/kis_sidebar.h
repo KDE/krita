@@ -44,6 +44,8 @@ class KisPattern;
 class KisColorChooser;
 class KoColorChooser;
 
+typedef KoColor ActiveColor;
+
 
 class TopTitleFrame : public QFrame
 {

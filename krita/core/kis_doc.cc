@@ -1,6 +1,4 @@
 /*
- *  kis_doc.cc - part of Krayon
- *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
  *  Copyright (c) 2001 Toshitaka Fujioka  <fujioka@kde.org>
@@ -20,44 +18,44 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-#include <Magick++.h>
-
 #include <qdom.h>
 #include <qimage.h>
 #include <qpainter.h>
+#include <qtl.h>
+#include <qstringlist.h>
 #include <qwidget.h>
 
+#include <dcopobject.h>
 #include <kcommand.h>
-#include <kglobal.h>
-#include <kmimetype.h>
-#include <kimageio.h>
 #include <kdebug.h>
+#include <kimageio.h>
+#include <kglobal.h>
 #include <kmessagebox.h>
+#include <kmimetype.h>
+#include <klocale.h>
+#include <ksharedptr.h>
 
 #include <koFilterManager.h>
 #include <koMainWindow.h>
 #include <koQueryTrader.h>
-#include <koTemplateChooseDia.h>
 #include <koStore.h>
 #include <koStoreDevice.h>
+#include <koTemplateChooseDia.h>
 
+#include "kis_types.h"
+#include "kis_global.h"
 #include "kis_channel.h"
 #include "kis_doc.h"
-#include "kis_dlg_new.h"
 #include "kis_factory.h"
-#include "kis_framebuffer.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_pixel_packet.h"
+#include "kis_mask.h"
 #include "kis_selection.h"
-#include "kis_undo.h"
 #include "kis_view.h"
-#include "KIsDocIface.h"
 
-// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
-static const char * CURRENT_DTD_VERSION = "1.2";
+static const char *CURRENT_DTD_VERSION = "1.2";
 
+#if 0
 class KisCommandImageAdd : public KisCommand {
 	typedef KisCommand super;
 
@@ -176,153 +174,95 @@ void KisCommandImageMv::unexecute()
 	m_doc -> renameImage(m_name, m_oldName);
 	m_doc -> setUndo(true);
 }
+#endif
 
-/*
-    KisDoc - constructor ko virtual method implemented
-*/
-
-KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
-	: KoDocument(parentWidget, widgetName, parent, name, singleViewMode)
+KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) : 
+	super(parentWidget, widgetName, parent, name, singleViewMode)
 {
-	bool loadPlugins = true;
-
-	m_undo = true;
-        dcop = 0;
-	setInstance(KisFactory::global(), loadPlugins);
+	m_undo = false;
+	m_dcop = 0;
+	setInstance(KisFactory::global(), true);
 	m_cmdHistory = new KCommandHistory(actionCollection(), false);
-	m_currentView = 0;
-	m_currentImg = 0L;
-	m_pClipImage = 0L;
-	m_pSelection = new KisSelection(this);
-	m_pFrameBuffer = new KisFrameBuffer(this);
+	m_clip = 0;
+	QPixmap::setDefaultOptimization(QPixmap::BestOptim);
 
+#if 0
+//	m_selection = new KisSelection(this);
 	connect(m_cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
 	connect(m_cmdHistory, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
 
-        if (name)
-            dcopObject();
+#endif
+	if (name)
+		dcopObject();
 }
-
-/*
-    KisDoc destructor - Note that since this is MDI, each image
-    in the list must be deleted to free up all memory.  While
-    there is only ONE Koffice "document", there are multiple
-    images you can load and work with in any session
-*/
 
 KisDoc::~KisDoc()
 {
 	unsetCurrentImage();
-	delete m_pClipImage;
-	delete m_pSelection;
-	delete m_pFrameBuffer;
+	delete m_clip;
+//	delete m_selection;
 	delete m_cmdHistory;
-        delete dcop;
+        delete m_dcop;
 }
 
-DCOPObject* KisDoc::dcopObject()
+QCString KisDoc::mimeType() const
 {
-	if (!dcop)
-		dcop = new KIsDocIface(this);
-
-	return dcop;
+	return APP_MIMETYPE;
 }
 
-KisImageSP KisDoc::imageNum(unsigned int num)
+DCOPObject *KisDoc::dcopObject()
 {
-	if (m_images.empty() || num > m_images.size())
-		return 0;
+#if 0
+	if (!m_dcop)
+		m_dcop = new KIsDocIface(this);
 
-	return m_images[num];
+	return m_dcop;
+#endif
+	return 0;
 }
 
-/*
-    initDoc - ko virtual method implemented
-*/
+QDomDocument KisDoc::saveXML()
+{
+	// FIXME: implement saving of non-RGB modes.
+        // This creates the DOCTYPE stuff, as well as the document-element named <image>.
+	QDomDocument doc = createDomDocument("image", CURRENT_DTD_VERSION);
+
+	doc.documentElement().appendChild(saveImages(doc));
+	setModified(false);
+	return doc;
+}
+
+
 
 bool KisDoc::initDoc()
 {
 	bool ok = false;
 	QString name = i18n("image %1").arg(m_images.size() + 1);
-
-	kdDebug() << "KisDoc::initDoc\n";
-
-	// choose dialog for open mode
 	QString templ;
 	KoTemplateChooseDia::ReturnType ret;
 
-	ret = KoTemplateChooseDia::choose (KisFactory::global(),
-			templ,
-			"application/x-krita", "*.kra",
-			i18n("Krayon"),
-			KoTemplateChooseDia::NoTemplates,
-			"krita_template");
-
-	// create document from template - use default
-	// 512x512 RGBA image util we have real templates
-	// however, this will never happen because KoTemplateChossDia
-	// returns false if there is no templae selected
-
-	if (m_currentView) {
-		removeView(m_currentView);
-		delete m_currentView;
-		m_currentView = 0;
-	}
+	ret = KoTemplateChooseDia::choose(KisFactory::global(), templ, "application/x-krita", "*.kra",
+			i18n("Krita"), KoTemplateChooseDia::NoTemplates, "krita_template");
 
 	if (ret == KoTemplateChooseDia::Template) {
-		KisImageSP img = newImage(name, 512, 512, cm_RGBA, 8);
+		KisImageSP img = new KisImage(this, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, IMG_DEFAULT_DEPTH, 0, IMAGE_TYPE_RGBA, name);
+		KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_DEPTH, i18n("background"), 0);
 
-		if (!img)
-			return false;
-
-		// add background layer
-		img -> addLayer(QRect(0, 0, 512, 512), KoColor::white(), false, i18n("background"));
-		img -> markDirty(QRect(0, 0, 512, 512));
-
-		// list of images - mdi document
 		setCurrentImage(img);
-
-		// signal to tabbar for iages
 		emit imageListUpdated();
-
-		setModified (true);
+		setModified(true);
 		ok = true;
-	}
-	else if (ret == KoTemplateChooseDia::File) {
+	} else if (ret == KoTemplateChooseDia::File) {
 		KURL url;
-		url.setPath (templ);
-		ok = openURL (url);
-	}
-	// create a new document from scratch
-	else if (ret == KoTemplateChooseDia::Empty) {
-		// NewDialog for entering parameters
-		ok = slotNewImage();
-		// signal to tabbar for images
-		if(ok)
+
+		url.setPath(templ);
+		ok = openURL(url);
+	} else if (ret == KoTemplateChooseDia::Empty) {
+		if ((ok = slotNewImage()))
 			emit imageListUpdated();
 	}
 
 	return ok;
-}
-
-
-/*
-    Save document (image) to xml format using QDomDocument
-    ko virtual method implemented
-*/
-
-QDomDocument KisDoc::saveXML()
-{
-	kdDebug(0) << "KisDoc::saveXML" << endl;
-
-	// FIXME: implement saving of non-RGB modes.
-
-        // This creates the DOCTYPE stuff, as well as the document-element named <image>.
-        QDomDocument doc = createDomDocument( "image", CURRENT_DTD_VERSION );
-	doc.documentElement().appendChild( saveImages( doc ) );
-
-	setModified( false );
-	return doc;
 }
 
 QDomElement KisDoc::saveImages(QDomDocument& doc)
@@ -347,8 +287,8 @@ QDomElement KisDoc::saveImages(QDomDocument& doc)
 		image.setAttribute("email", img -> email());
 		image.setAttribute("width", img -> width());
 		image.setAttribute("height", img -> height());
-		image.setAttribute("bitDepth", static_cast<int>(img -> bitDepth()));
-		image.setAttribute("cMode", static_cast<int>(img -> colorMode()));
+		image.setAttribute("depth", img -> depth());
+		image.setAttribute("type", img -> imgType());
 		images.appendChild(image);
 		image.appendChild(saveLayers(doc, img));
 	}
@@ -364,6 +304,7 @@ QDomElement KisDoc::saveLayers(QDomDocument& doc, KisImageSP img)
 	// layers element - variable
 	QDomElement layersElement = doc.createElement("layers");
 
+#if 0
 	// layer elements
 	kdDebug(0) << "layer elements" << endl;
 	KisLayerSPLst layers = img -> layerList();
@@ -397,6 +338,7 @@ QDomElement KisDoc::saveLayers(QDomDocument& doc, KisImageSP img)
 		layersElement.appendChild(layer);
 		layer.appendChild(saveChannels(doc, lay));
 	}
+#endif
 
 	return layersElement;
 }
@@ -429,15 +371,9 @@ QDomElement KisDoc::saveChannels( QDomDocument &doc, KisLayer * /*lay*/ )
     return channels;
 }
 
-// save tool settings
 QDomElement KisDoc::saveToolSettings(QDomDocument& doc) const
 {
 	QDomElement tool = doc.createElement("tool");
-
-	for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
-		kdDebug() << "KisDoc::saveToolSettings\n";
-		tool.appendChild(m_tools[i] -> saveSettings(doc));
-   	}
 
 	return tool;
 }
@@ -475,8 +411,9 @@ QDomElement KisDoc::saveGradientsSettings( QDomDocument &doc )
     ko virtual method implemented
 */
 
-bool KisDoc::completeSaving(KoStore *store)
+bool KisDoc::completeSaving(KoStore * /*store*/)
 {
+#if 0
 	if (!m_currentImg)
 		return false;
 
@@ -515,6 +452,8 @@ bool KisDoc::completeSaving(KoStore *store)
 
 	setImage(tmp_currentImageName);
 	return true;
+#endif
+	return false;
 }
 
 /*
@@ -524,11 +463,6 @@ bool KisDoc::completeSaving(KoStore *store)
 bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
 {
 	kdDebug(0) << "KisDoc::loadXML() entering" << endl;
-
-	if (!m_currentView) {
-		m_currentView = new KisView(this);
-		m_currentView -> setupTools();
-	}
 
 	if (doc.doctype().name() != "image") {
 		kdDebug(0) << "KisDoc::loadXML() no doctype name error" << endl;
@@ -564,8 +498,9 @@ bool KisDoc::loadImages(QDomElement& element)
 }
 
 // load layers
-bool KisDoc::loadLayers(QDomElement& element, KisImageSP img)
+bool KisDoc::loadLayers(QDomElement& /*element*/, KisImageSP /*img*/)
 {
+#if 0
 	QDomElement layers = element.namedItem("layers").toElement();
 
 	if (layers.isNull()) {
@@ -601,6 +536,7 @@ bool KisDoc::loadLayers(QDomElement& element, KisImageSP img)
 
 	slotLayersUpdated();
 	return true;
+#endif
 }
 
 // load channels
@@ -624,8 +560,9 @@ void KisDoc::loadChannels(QDomElement& /*element*/, KisLayerSP /*lay*/)
 #endif
 }
 
-bool KisDoc::loadImgSettings(QDomElement& elem)
+bool KisDoc::loadImgSettings(QDomElement& /*elem*/)
 {
+#if 0
 	QString name = elem.attribute("name");
 	int w = elem.attribute("width").toInt();
 	int h = elem.attribute("height").toInt();
@@ -652,11 +589,14 @@ bool KisDoc::loadImgSettings(QDomElement& elem)
 
 	setCurrentImage(img);
 	return true;
+#endif
+	return false;
 }
 
 // load tool settings
-void KisDoc::loadToolSettings(QDomElement& elem)
+void KisDoc::loadToolSettings(QDomElement& /*elem*/)
 {
+#if 0
 	KisTool *p;
 
 	kdDebug() << "KisDoc::loadToolSettings\n";
@@ -674,6 +614,7 @@ void KisDoc::loadToolSettings(QDomElement& elem)
 			}
 		}
 	}
+#endif
 }
 
 #if 0
@@ -689,8 +630,9 @@ void KisDoc::loadGradientsSettings( QDomElement &elem )
 }
 #endif
 
-bool KisDoc::completeLoading(KoStore *store)
+bool KisDoc::completeLoading(KoStore * /*store*/)
 {
+#if 0
 	QStringList imageNames = images(); // XXX why go by image names?
 	QString tmp_currentImageName = currentImgName();
 	uint imageNumbers = 1;
@@ -729,23 +671,25 @@ bool KisDoc::completeLoading(KoStore *store)
 	}
 
 	return true;
+#endif
+	return false;
 }
-
-/*
-    setCurrentImage - using pointer to a KisImage - this is
-    normally done from the view.
-*/
 
 void KisDoc::setCurrentImage(KisImageSP img)
 {
 	unsetCurrentImage();
 	m_currentImg = img;
 
+	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+		return;
+
 	if (m_currentImg) {
 		// connect new currentImg image
+#if 0
 		QObject::connect(m_currentImg, SIGNAL(updated()), this, SLOT(slotImageUpdated()));
 		QObject::connect(m_currentImg, SIGNAL(updated(const QRect&)), this, SLOT(slotImageUpdated(const QRect&)));
 		QObject::connect(m_currentImg, SIGNAL(layersUpdated()), this, SLOT(slotLayersUpdated()));
+#endif
 	}
 
 	// signal to tabbar for images - kis_view.cc
@@ -762,7 +706,7 @@ void KisDoc::setCurrentImage(KisImageSP img)
 
 void KisDoc::setCurrentImage(const QString& name)
 {
-	for (KisImageSPLstIterator it = m_images.begin(); it != m_images.end(); it++) {
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
 		if ((*it) -> name() == name) {
 			setCurrentImage(*it);
 			return;
@@ -773,10 +717,12 @@ void KisDoc::setCurrentImage(const QString& name)
 void KisDoc::unsetCurrentImage()
 {
 	if (m_currentImg) {
-		// disconnect old currentImg image
-		QObject::disconnect(m_currentImg, SIGNAL(updated()), this, SLOT(slotImageUpdated()));
-		QObject::disconnect(m_currentImg, SIGNAL(updated(const QRect&)), this, SLOT(slotImageUpdated(const QRect&)));
-		QObject::disconnect(m_currentImg, SIGNAL(layersUpdated()), this, SLOT(slotLayersUpdated()));
+		QObject::disconnect(m_currentImg, SIGNAL(activeLayerChanged(KisImageSP)), this, SLOT(slotActiveLayerChanged(KisImageSP)));
+		QObject::disconnect(m_currentImg, SIGNAL(alphaChanged(KisImageSP)), this, SLOT(slotAlphaChanged(KisImageSP)));
+		QObject::disconnect(m_currentImg, SIGNAL(selectionChanged(KisImageSP)), this, SLOT(slotSelectionChanged(KisImageSP)));
+		QObject::disconnect(m_currentImg, SIGNAL(visibilityChanged(KisImageSP, CHANNELTYPE)), this, SLOT(slotVisibilityChanged(KisImageSP, CHANNELTYPE)));
+		QObject::disconnect(m_currentImg, SIGNAL(update(KisImageSP, Q_UINT32, Q_UINT32, Q_UINT32, Q_UINT32)), 
+				this, SLOT(slotUpdate(KisImageSP, Q_UINT32, Q_UINT32, Q_UINT32, Q_UINT32)));
 	}
 
 	m_currentImg = 0;
@@ -788,80 +734,64 @@ void KisDoc::unsetCurrentImage()
 
 void KisDoc::renameImage(const QString& oldName, const QString& newName)
 {
-	for (KisImageSPLstIterator it = m_images.begin(); it != m_images.end(); it++) {
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
 		if ((*it) -> name() == oldName) {
 			(*it) -> setName(newName);
 			break;
 		}
 	}
 
-	if (m_undo)
-		addCommand(new KisCommandImageMv(this, newName, oldName));
+//	if (m_undo)
+//		addCommand(new KisCommandImageMv(this, newName, oldName));
 
 	emit imageListUpdated();
 }
-
-/*
-    images - build list of images by name
-*/
 
 QStringList KisDoc::images()
 {
 	QStringList lst;
 
-	for (KisImageSPLstIterator it = m_images.begin(); it != m_images.end(); it++) {
-		kdDebug() << "(*it) -> name() == " << (*it) -> name() << endl;
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++)
 		lst.append((*it) -> name());
-	}
 
 	return lst;
 }
 
-/*
-    isEmpty - has no image.  This is not an error condition but
-    still need to be check occasionally for operations which
-    require an image
-*/
-
 bool KisDoc::isEmpty() const
 {
-	return !isModified();
+	return m_images.size() == 0;
 }
-
-/*
-    currentView - pointer to currentImg view for this doc
-*/
 
 KisView* KisDoc::currentView()
 {
 	const QPtrList<KoView>& v = views();
 
-	return v.count() ? dynamic_cast<KisView*>(v.getFirst()) : m_currentView;
+	return v.count() ? dynamic_cast<KisView*>(v.getFirst()) : 0;
 }
 
 const KisView* KisDoc::currentView() const
 {
 	const QPtrList<KoView>& v = views();
 
-	return v.count() ? dynamic_cast<KisView*>(v.getFirst()) : m_currentView;
+	return v.count() ? dynamic_cast<KisView*>(v.getFirst()) : 0;
 }
-
-/*
-    currentImgName - name of currentImg image
-*/
 
 QString KisDoc::currentImgName()
 {
 	if (m_currentImg)
 		return m_currentImg -> name();
 
-	return QString("");
+	return QString();
 }
 
+KisImageSP KisDoc::imageNum(unsigned int num)
+{
+	if (m_images.empty() || num > m_images.size())
+		return 0;
 
-/*
-    currentImg - pointer to currentImg image
-*/
+	return m_images[num];
+}
+
 KisImageSP KisDoc::currentImg() const
 {
 	return m_currentImg;
@@ -893,8 +823,9 @@ KisImageSP KisDoc::currentImg() const
 
 */
 
-bool KisDoc::saveAsQtImage(const QString& file, bool wholeImage)
+bool KisDoc::saveAsQtImage(const QString& /*file*/, bool /*wholeImage*/)
 {
+#if 0
 	int x, y, w, h;
 	KisImageSP img = currentImg();
 
@@ -931,38 +862,14 @@ bool KisDoc::saveAsQtImage(const QString& file, bool wholeImage)
 	QRect saveRect = QRect(x, y, w, h);
 	LayerToQtImage(&qimg, saveRect);
 	return qimg.save(file, KImageIO::type(file).ascii());
+#endif
+	return false;
 }
 
-bool KisDoc::MagickImageToLayer(const Magick::Image& mimg, KisView * /*view*/)
+bool KisDoc::QtImageToLayer(QImage * /*qimg*/, KisView * /*pView*/)
 {
-	KisImageSP img = currentImg();
-	QImage cI;
-	KisLayerSP lay = img -> getCurrentLayer();
-	QRect clipRect(0, 0, mimg.columns(), mimg.rows());
-
-	if (!clipRect.intersects(lay -> imageExtents()))
-		return false;
-
-	clipRect = clipRect.intersect(lay -> imageExtents());
-
-	int sx = clipRect.left();
-	int sy = clipRect.top();
-	int ex = clipRect.right();
-	int ey = clipRect.bottom();
-	KisPixelPacket *dst = lay -> getPixels(sx, sy, ex, ey);
-	const Magick::PixelPacket *src = mimg.getConstPixels(sx, sy, ex, ey);
-
-	memcpy(dst, src, ey * ex * sizeof(KisPixelPacket));
-	lay -> syncPixels(dst);
-	return true;
-}
-
-/*
-    Copy a QImage exactly into the currentImg image's active layer.
-*/
-
-bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
-{
+	return false;
+#if 0
 	KisImageSP img = currentImg();
 	QImage cI;
 
@@ -1001,6 +908,7 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 
 	lay -> syncPixels(region);
 	return true;
+#endif
 }
 
 
@@ -1012,8 +920,9 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
     raster operations, and many other neat effects.
 */
 
-bool KisDoc::LayerToQtImage(QImage *qimg, const QRect& clipRect)
+bool KisDoc::LayerToQtImage(QImage * /*qimg*/, const QRect& /*clipRect*/)
 {
+	return false;
 #if 0
 	QRect clip;
 
@@ -1077,8 +986,8 @@ bool KisDoc::LayerToQtImage(QImage *qimg, const QRect& clipRect)
 */
 void KisDoc::setSelection(const QRect& r)
 {
-	Q_ASSERT(m_pSelection);
-	m_pSelection -> setBounds(r);
+	Q_ASSERT(m_selection);
+	m_selection -> setBounds(r);
 }
 
 /*
@@ -1086,7 +995,7 @@ void KisDoc::setSelection(const QRect& r)
 */
 void KisDoc::clearSelection()
 {
-	m_pSelection -> setNull();
+	m_selection -> setNull();
 }
 
 
@@ -1095,7 +1004,7 @@ void KisDoc::clearSelection()
 */
 bool KisDoc::hasSelection()
 {
-	return !m_pSelection -> getRectangle().isNull();
+	return !m_selection -> getRectangle().isNull();
 }
 
 /*
@@ -1103,8 +1012,8 @@ bool KisDoc::hasSelection()
 */
 void KisDoc::removeClipImage()
 {
-	delete m_pClipImage;
-	m_pClipImage = 0L;
+	delete m_clip;
+	m_clip = 0L;
 }
 
 /*
@@ -1113,44 +1022,47 @@ void KisDoc::removeClipImage()
 */
 bool KisDoc::setClipImage()
 {
+#if 0
     KisImageSP img = currentImg();
     if(!img) return false;
 
     KisLayer *lay = img->getCurrentLayer();
     if(!lay) return false;
 
-    if(m_pClipImage != 0L)
+    if(m_clip != 0L)
     {
-        delete m_pClipImage;
-        m_pClipImage = 0L;
+        delete m_clip;
+        m_clip = 0L;
     }
 
     QRect selectRect = getSelection()->getRectangle();
 
     // create a clip image same size, depth, etc., as selection image
-    m_pClipImage = new QImage(selectRect.width(), selectRect.height(), 32);
-    if(!m_pClipImage) return false;
+    m_clip = new QImage(selectRect.width(), selectRect.height(), 32);
+    if(!m_clip) return false;
 
     // we will need alpha channel for masking the unselected pixels out
-    m_pClipImage->setAlphaBuffer(true);
+    m_clip->setAlphaBuffer(true);
 
     // make a deep copy of the selection image, if there is one
     if(getSelection()->getImage().isNull())
         return false;
     else
-        *m_pClipImage = getSelection()->getImage();
+        *m_clip = getSelection()->getImage();
 
     return true;
+#endif
+    return false;
 }
 
-KisImageSP KisDoc::newImage(const QString& n, int width, int height, cMode cm, uchar bitDepth)
+KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, enumImgType type, Q_INT32 depth)
 {
-	KisImageSP img = new KisImage(this, n, width, height, cm, bitDepth);
+	KisImageSP img = new KisImage(this, width, height, depth, 0, type, name);
 
 	m_images.push_back(img);
 
-	if (m_undo)
-		addCommand(new KisCommandImageAdd(this, img));
+//	if (m_undo)
+//		addCommand(new KisCommandImageAdd(this, img));
 
 	return img;
 }
@@ -1158,65 +1070,53 @@ KisImageSP KisDoc::newImage(const QString& n, int width, int height, cMode cm, u
 void KisDoc::addImage(KisImageSP img)
 {
 	m_images.push_back(img);
-	img -> markDirty(QRect(0, 0, img -> width(), img -> height()));
+	img -> invalidate();
 	setCurrentImage(img);
 }
 
 void KisDoc::removeImage(KisImageSP img)
 {
-	KisImageSPLstIterator it;
+	vKisImageSP_it it = qFind(m_images.begin(), m_images.end(), img);
 
-	for (it = m_images.begin(); it != m_images.end(); it++)
-		if (img == (*it)) {
-			m_images.erase(it);
-			break;
-		}
-
+	if (it != m_images.end())
+		m_images.erase(it);
 
 	if (m_images.empty()) {
 		unsetCurrentImage();
 		emit imageListUpdated();
 		emit layersUpdated();
 		emit docUpdated();
-	}
-	else
+	} else {
 		setCurrentImage(*m_images.begin());
+	}
 
-	if (m_undo)
-		addCommand(new KisCommandImageRm(this, img));
+//	if (m_undo)
+//		addCommand(new KisCommandImageRm(this, img));
 }
 
 void KisDoc::slotRemoveImage(const QString& name)
 {
-	for (KisImageSPLstIterator it = m_images.begin(); it != m_images.end(); it++)
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
 		if ((*it) -> name() == name) {
 			removeImage(*it);
 			return;
 		}
+	}
 }
-
-/*
-    slotnewImage - Create a new image for this document and set the
-    currentImg image to it. There can be more than one image for each doc
-*/
 
 bool KisDoc::slotNewImage()
 {
+#if 0
 	NewDialog dlg;
 	KisImageSP img;
-
-	/* This dialog causes bad drawable or invalid window paramater.
-	   It seems harmless, though, just a message about an Xerror.
-	   Error only occurs when document is first created and has no
-	   content, not when adding new image to an existing document */
 
 	dlg.exec();
 
 	if (!dlg.result() == QDialog::Accepted)
 		return false;
 
-	int w = dlg.newwidth();
-	int h = dlg.newheight();
+	Q_INT32 w = dlg.newwidth();
+	Q_INT32 h = dlg.newheight();
 	bgMode bg = dlg.backgroundMode();
 	cMode cm = dlg.colorMode();
 
@@ -1242,89 +1142,44 @@ bool KisDoc::slotNewImage()
 	setCurrentImage(img);
 	emit layersUpdated();
 	return true;
+#endif
+	QString name = "noname";
+	KisImageSP img = new KisImage(this, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, IMG_DEFAULT_DEPTH, 0, IMAGE_TYPE_RGBA, name);
+	KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_HEIGHT, i18n("background"), 0);
+
+	img -> add(layer, -1);
+	img -> invalidate();
+	addImage(img);
+	setCurrentImage(img);
+	emit layersUpdated();
+	return true;
 }
-
-/*
-    Mime type for this app - not same as file type, but file types
-    can be associated with a mime type and are opened with applications
-    associated with the same mime type
-*/
-
-QCString KisDoc::mimeType() const
-{
-	return "application/x-krita";
-}
-
-
-/*
-    Create view instance for this document - there can be more than
-    one view of a document open at any time - a list of the views for
-    this document can be obtained somehow - perhaps from the factory
-    or some kind of view manager - needed
-*/
 
 KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 {
-	KisView *view;
-
-	if ((view = currentView()) && !view -> parentWidget()) {
-		view -> reparent(parent, QPoint(0, 0));
-		view -> setName(name);
-	}
-	else {
-		view = m_currentView = new KisView(this, parent, name);
-		view -> setupTools();
-	}
-
-	return view;
+	return new KisView(this, parent, name);
 }
 
-/*
-    Draw currentImg image on canvas - indirect approach
-*/
-
-void KisDoc::paintContent( QPainter& painter,
-        const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
+void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
 {
-    // TODO support zooming
-    if (m_currentImg)
-    {
-        m_currentImg->paintPixmap( &painter, rect );
-    }
-    else
-    {
-        kdDebug(0) <<  "KisDoc::paintContent() - no m_currentImg" << endl;
-    }
+	if (transparent)
+		painter.eraseRect(rect);
+
+	if (zoomX != 1.0 || zoomY != 1.0)
+		painter.scale(zoomX, zoomY);
+
+	if (m_currentImg) {
+		QPixmap projection = m_currentImg -> pixmap();
+
+		if (!projection.isNull())
+			painter.drawPixmap(rect.topLeft(), projection, rect);
+	}
 }
-
-/*
-    Draw currentImg image on canvas - direct apprach
-*/
-
-void KisDoc::paintPixmap(QPainter *p, QRect area)
-{
-    if (m_currentImg)
-    {
-        m_currentImg->paintPixmap(p, area);
-    }
-    else
-    {
-        kdDebug(0) <<  "KisDoc::paintPixmap() - no m_currentImg" << endl;
-    }
-}
-
-/*
-    let document update view when image is changed
-*/
 
 void KisDoc::slotImageUpdated()
 {
 	emit docUpdated();
 }
-
-/*
-    let document update specific area of view when image is changed
-*/
 
 void KisDoc::slotImageUpdated(const QRect& rect)
 {
@@ -1343,7 +1198,7 @@ QRect KisDoc::getImageRect()
 
 void KisDoc::setImage(const QString& imageName)
 {
-	for (KisImageSPLstIterator it = m_images.begin(); it != m_images.end(); it++) {
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
 		if ((*it) -> name() == imageName) {
 			setCurrentImage((*it));
 			return;
@@ -1351,26 +1206,15 @@ void KisDoc::setImage(const QString& imageName)
 	}
 }
 
-ktvector KisDoc::getTools() const
-{
-	return m_tools;
-}
-
-void KisDoc::setTools(const ktvector& tools)
-{
-	Q_ASSERT(tools.size());
-
-	m_tools.erase(m_tools.begin(), m_tools.end());
-	m_tools.reserve(tools.size());
-
-	for (ktvector_size_type i = 0; i < tools.size(); i++)
-		m_tools.push_back(tools[i]);
-}
-
 void KisDoc::addCommand(KCommand *cmd)
 {
 	Q_ASSERT(cmd);
 	m_cmdHistory -> addCommand(cmd, false);
+}
+
+void KisDoc::setUndo(bool undo)
+{
+	m_undo = undo;
 }
 
 int KisDoc::undoLimit() const
@@ -1403,6 +1247,7 @@ void KisDoc::slotCommandExecuted()
 	setModified(true);
 }
 
+#if 0
 void KisDoc::setCanvasCursor(const QCursor& cursor)
 {
 	QPtrList<KoView> l = views();
@@ -1414,11 +1259,44 @@ void KisDoc::setCanvasCursor(const QCursor& cursor)
 			p -> setCanvasCursor(cursor);
 	}
 }
+#endif
 
 QString KisDoc::nextImageName() const
 {
 	return i18n("image %1").arg(m_images.size() + 1);
 }
 
-#include "kis_doc.moc"
+bool KisDoc::loadNativeFormat(const QString& file)
+{
+	kdDebug() << "KisDoc::loadNativeFormat : " << file << endl;
+	return false;
+}
+
+void KisDoc::slotActiveLayerChanged(KisImageSP img)
+{
+	Q_ASSERT(img == m_currentImg);
+}
+
+void KisDoc::slotAlphaChanged(KisImageSP img)
+{
+	Q_ASSERT(img == m_currentImg);
+}
+
+void KisDoc::slotSelectionChanged(KisImageSP img)
+{
+	Q_ASSERT(img == m_currentImg);
+}
+
+void KisDoc::slotVisibilityChanged(KisImageSP img, CHANNELTYPE ctype)
+{
+	Q_ASSERT(img == m_currentImg);
+}
+
+void KisDoc::slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
+{
+	QRect rc(x, y, w, h);
+
+	Q_ASSERT(img == m_currentImg);
+	emit docUpdated(rc);
+}
 

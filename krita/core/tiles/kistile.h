@@ -19,10 +19,12 @@
 #define KISTILE_H_
 
 #include <qcstring.h>
+#include <qimage.h>
 #include <qglobal.h>
 #include <qmutex.h>
 #include <qvaluevector.h>
 #include <ksharedptr.h>
+#include "kis_types.h"
 
 class KisTileCacheInterface;
 class KisTileSwapInterface;
@@ -35,47 +37,32 @@ class KisTile : public KShared {
 	typedef KShared super;
 
 public:
-	enum drawingHints {
-		broken,
-		opaque,
-		transparent,
-		mixed,
-		outofrange,
-		undef,
-		unknown
-	};
+	enum drawingHints { broken, opaque, transparent, mixed, outofrange, undef, unknown };
 
 public:
-	KisTile(Q_INT32 depth, KisTileCacheInterface *cache, KisTileSwapInterface *swap);
+	KisTile(Q_INT32 depth, KisTileCacheInterface *cache = 0, KisTileSwapInterface *swap = 0);
 	KisTile(KisTile& rhs);
 	virtual ~KisTile();
 
 public:
 	QMutex *mutex();
-
 	void lock();
 	void lockAsync();
 	void release();
-
 	void allocate();
-	Q_UINT16 *data(Q_INT32 xoff = 0, Q_INT32 yoff = 0) const;
-
+	QUANTUM *data(Q_INT32 xoff = 0, Q_INT32 yoff = 0) const;
 	Q_INT32 width() const;
 	void width(Q_INT32 w);
 	Q_INT32 height() const;
 	void height(Q_INT32 h);
 	Q_INT32 depth() const;
 	Q_INT32 size() const;
-
 	bool dirty() const;
 	void dirty(bool val);
-
 	bool valid() const;
 	void valid(bool valid);
-
 	Q_INT32 rowHint(Q_INT32 row) const;
 	void setRowHint(Q_INT32 row, drawingHints hint);
-
 	Q_INT32 refCount() const;
 	void ref();
 	Q_INT32 shareCount() const;
@@ -83,6 +70,7 @@ public:
 	void shareRelease();
 	Q_INT32 writeCount() const;
 	void writeRef();
+	QImage convertToImage();
 
 private:
 	KisTile& operator=(const KisTile&);
@@ -92,7 +80,7 @@ private:
 private:
 	bool m_dirty;
 	bool m_valid;
-	Q_UINT16 *m_data;
+	QUANTUM *m_data;
 	Q_INT32 m_datacnt;
 	Q_INT32 m_width;
 	Q_INT32 m_height;
@@ -106,11 +94,6 @@ private:
 	Q_INT32 m_nshare;
 	Q_INT32 m_nwrite;
 };
-
-typedef KSharedPtr<KisTile> KisTileSP;
-typedef QValueVector<KisTileSP> vKisTileSP;
-typedef vKisTileSP::iterator vKisTileSP_it;
-typedef vKisTileSP::const_iterator vKisTileSPLst_cit;
 
 #endif // KISTILE_H_
 

@@ -21,7 +21,10 @@
 #include "kistile.h"
 #include "kistilemgr.h"
 
+#define PIXEL_APPLY_REPLACE 1
+
 struct KisPixelData : public KShared {
+	KisPixelData();
 	virtual ~KisPixelData();
 
 	KisTileMgrSP mgr;
@@ -31,7 +34,7 @@ struct KisPixelData : public KShared {
 	Q_INT32 y1;
 	Q_INT32 x2;
 	Q_INT32 y2;
-	Q_UINT16 *data;
+	QUANTUM *data;
 	bool owner;
 	Q_INT32 width;
 	Q_INT32 height;
@@ -39,7 +42,10 @@ struct KisPixelData : public KShared {
 	Q_INT32 depth;
 };	
 
-typedef KSharedPtr<KisPixelData> KisPixelDataSP;
+inline
+KisPixelData::KisPixelData()
+{
+}
 
 #endif // KISPIXELDATA_H_
 

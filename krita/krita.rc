@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="3">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="4">
 
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
@@ -130,11 +130,11 @@
   <Action name="dialog_gradient"/>    
   <Action name="preferences"/>    
   <Action name="save_options"/>
+  <Action name="paint_offset"/>
   <Separator/>
   <Action name="show_sidebar"/>  
   <Action name="float_sidebar"/>
   <Action name="left_sidebar"/>
-  <Action name="toggle_paint_offset"/>
   <Separator/>          
 </Menu>
 
@@ -174,8 +174,8 @@
   <Action name="show_sidebar"/>
   <Action name="float_sidebar"/>      
   <Action name="left_sidebar"/>
-  <Action name="toggle_paint_offset"/>        
   <Action name="preferences"/>
+  <Action name="paint_offset"/>        
   <Action name="current_tool_properties"/>
   <Action name="blending_properties"/>       
 </ToolBar>

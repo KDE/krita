@@ -20,6 +20,8 @@
 #include <qmap.h>
 #include <qtl.h>
 #include <qvaluelist.h>
+#include "kis_types.h"
+#include "kis_global.h"
 #include "kisscopedlock.h"
 #include "kistilemediator.h"
 
@@ -37,7 +39,7 @@ public:
 public:
 	void attach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum);
 	void detach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum);
-	void detachAll(KisTileMgrSP mgr);
+	void detachAll(KisTileMgr *mgr);
 	Q_INT32 tileNum(KisTileSP tile, KisTileMgrSP mgr);
 
 private:
@@ -91,7 +93,7 @@ Q_INT32 KisTileMediator::tileNum(KisTileSP tile, KisTileMgrSP mgr)
 	KisTileMediator::m_instance -> tileNum(tile, mgr);
 }
 
-void KisTileMediator::detachAll(KisTileMgrSP mgr)
+void KisTileMediator::detachAll(KisTileMgr *mgr)
 {
 	KisScopedLock l(&KisTileMediator::m_mutex);
 
@@ -134,7 +136,7 @@ void KisTileMediatorSingleton::detach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 
 	}
 }
 
-void KisTileMediatorSingleton::detachAll(KisTileMgrSP mgr)
+void KisTileMediatorSingleton::detachAll(KisTileMgr *mgr)
 {
 	for (KisTileLinkMap_it it = m_links.begin(); it != m_links.end(); it++) {
 		KisTileSP tile = it.key();
@@ -143,7 +145,7 @@ void KisTileMediatorSingleton::detachAll(KisTileMgrSP mgr)
 		for (vKisTileLink_it lit = l.begin(); lit != l.end(); lit++) {
 			const KisTileLink& link = *lit;
 
-			if (link.first == mgr) {
+			if (link.first.data() == mgr) {
 				tile -> shareRelease();
 				lit = l.erase(lit);
 			}

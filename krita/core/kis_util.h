@@ -37,14 +37,14 @@ public:
     static void enlargeRectToContainPoint( QRect& r, QPoint p );
     static QRect findTileExtents(QRect r );
 
-    static QString channelIdtoString(cId);
+//    static QString channelIdtoString(cId);
 
     static QString readFilters();
     static QString writeFilters();
   
     static QImage roughScaleQImage(QImage & src, int width, int height);
     static QRect findBoundingTiles(const QRect& area);
-    static int calcNumChannels(cMode cm);
+//    static int calcNumChannels(cMode cm);
 };
 
 #endif

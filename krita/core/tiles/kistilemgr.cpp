@@ -18,13 +18,14 @@
 
 #include <string.h>
 #include <qpoint.h>
+#include "kis_types.h"
 #include "kis_global.h"
 #include "kisscopedlock.h"
 #include "kispixeldata.h"
 #include "kistilemediator.h"
 #include "kistilemgr.h"
 
-KisTileMgr::KisTileMgr(Q_INT32 depth, Q_INT32 width, Q_INT32 height)
+KisTileMgr::KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height)
 {
 	m_x = 0;
 	m_y = 0;
@@ -36,9 +37,16 @@ KisTileMgr::KisTileMgr(Q_INT32 depth, Q_INT32 width, Q_INT32 height)
 	m_mediator = new KisTileMediator;
 }
 
+KisTileMgr::KisTileMgr(const KisTileMgr& rhs) : super(rhs)
+{
+	if (this != &rhs) {
+	}
+}
+
 KisTileMgr::~KisTileMgr()
 {
 	m_mediator -> detachAll(this);
+	delete m_mediator;
 }
 
 void KisTileMgr::attach(KisTileSP tile, Q_INT32 tilenum)
@@ -154,12 +162,17 @@ void KisTileMgr::tileMap(Q_INT32 tilenum, KisTileSP src)
 	attach(src, tilenum);
 }
 
-void KisTileMgr::validate(KisTileSP tile)
+bool KisTileMgr::completetlyValid() const
 {
-	tile -> valid(true);
+	return false;
 }
 
-KisTileSP KisTileMgr::inValidate(KisTileSP tile, Q_INT32 xpix, Q_INT32 ypix)
+void KisTileMgr::validate(KisTileSP tile)
+{
+//	tile -> valid(true);
+}
+
+KisTileSP KisTileMgr::invalidate(KisTileSP tile, Q_INT32 xpix, Q_INT32 ypix)
 {
 	Q_INT32 tilenum;
 
@@ -175,7 +188,7 @@ KisTileSP KisTileMgr::inValidate(KisTileSP tile, Q_INT32 xpix, Q_INT32 ypix)
 	return tile;
 }
 
-void KisTileMgr::inValidateTiles(KisTileSP top)
+void KisTileMgr::invalidateTiles(KisTileSP top)
 {
 	double x;
 	double y;
@@ -198,19 +211,34 @@ void KisTileMgr::inValidateTiles(KisTileSP top)
 	m_tiles[num] = invalidateTile(m_tiles[num], num);
 }
 
-Q_INT32 KisTileMgr::width() const
+Q_UINT32 KisTileMgr::width() const
 {
 	return m_width;
 }
 
-Q_INT32 KisTileMgr::height() const
+Q_UINT32 KisTileMgr::height() const
 {
 	return m_height;
 }
 
-Q_INT32 KisTileMgr::depth() const
+Q_UINT32 KisTileMgr::depth() const
 {
 	return m_depth;
+}
+
+Q_UINT32 KisTileMgr::nrows() const
+{
+	return m_ntileRows;
+}
+
+Q_UINT32 KisTileMgr::ncols() const
+{
+	return m_ntileCols;
+}
+
+bool KisTileMgr::empty() const
+{
+	return m_tiles.empty();
 }
 
 void KisTileMgr::offset(QPoint& off) const
@@ -290,6 +318,15 @@ KisPixelDataSP KisTileMgr::pixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32
 	Q_INT32 tilenum1;
 	Q_INT32 tilenum2;
 
+	if (m_tiles.empty())
+		allocate(m_ntileRows * m_ntileCols);
+
+	tilenum1 = tileNum(x1, y1);
+	tilenum2 = tileNum(x2, y2);
+
+	if (tilenum1 < 0 || tilenum2 < 0)
+		return 0;
+
 	pd = new KisPixelData;
 	pd -> mgr = this;
 	pd -> mode = mode;
@@ -300,12 +337,7 @@ KisPixelDataSP KisTileMgr::pixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32
 	pd -> width = x2 - x1 + 1;
 	pd -> height = y2 - y1 + 1;
 	pd -> data = 0;
-
-	tilenum1 = tileNum(x1, y1);
-	tilenum2 = tileNum(x2, y2);
-
-	if (tilenum1 < 0 || tilenum2 < 0)
-		return 0;
+	pd -> depth = depth();
 
 	if (tilenum1 == tilenum2) {
 		KisTileSP t = tile(tilenum1, mode);
@@ -315,13 +347,13 @@ KisPixelDataSP KisTileMgr::pixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32
 		pd -> stride = t -> depth() * t -> width();
 		pd -> owner = false;
 	} else {
-		pd -> data = new Q_UINT16[pd -> width * pd -> height];
+		pd -> data = new QUANTUM[pd -> width * pd -> height * depth()];
 		pd -> stride = depth() * pd -> width;
 		pd -> owner = true;
 		pd -> tile = 0;
 
 		if (mode & TILEMODE_READ)
-			releasePixelData(pd);
+			readPixelData(pd);
 	}
 
 	return pd;
@@ -333,12 +365,14 @@ void KisTileMgr::releasePixelData(KisPixelDataSP pd)
 		if (pd -> mode & TILEMODE_WRITE)
 			writePixelData(pd);
 	} else {
-		pd -> tile -> dirty(pd -> mode & TILEMODE_WRITE);
+		if (pd -> mode & TILEMODE_WRITE)
+			pd -> tile -> valid(false);
+
 		pd -> tile -> release();
 	}
 }
 
-void KisTileMgr::readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q_UINT16 *buffer, Q_UINT32 stride)
+void KisTileMgr::readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride) 
 {
 	Q_INT32 x;
 	Q_INT32 y;
@@ -346,8 +380,8 @@ void KisTileMgr::readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q
 	Q_INT32 cols;
 	Q_UINT32 srcstride;
 	KisTileSP t;
-	Q_UINT16 *src;
-	Q_UINT16 *dst;
+	QUANTUM *src;
+	QUANTUM *dst;
 
 	for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
 		for (x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
@@ -367,7 +401,7 @@ void KisTileMgr::readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q
 			srcstride = t -> width() * t -> depth();
 
 			while (rows--) {
-				memcpy(dst, src, cols * depth() * sizeof(Q_UINT16));
+				memcpy(dst, src, cols * depth() * sizeof(QUANTUM));
 				src += srcstride;
 				dst += stride;
 			}
@@ -383,7 +417,7 @@ void KisTileMgr::readPixelData(KisPixelDataSP pd)
 	readPixelData(pd -> x1, pd -> y1, pd -> x2, pd -> y2, pd -> data, pd -> stride);
 }
 
-void KisTileMgr::writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q_UINT16 *buffer, Q_UINT32 stride)
+void KisTileMgr::writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride)
 {
 	Q_INT32 x;
 	Q_INT32 y;
@@ -391,8 +425,8 @@ void KisTileMgr::writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, 
 	Q_INT32 cols;
 	Q_UINT32 dststride;
 	KisTileSP t;
-	Q_UINT16 *src;
-	Q_UINT16 *dst;
+	QUANTUM *src;
+	QUANTUM *dst;
 
 	for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
 		for (x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
@@ -412,12 +446,12 @@ void KisTileMgr::writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, 
 			dststride = t -> width() * t -> depth();
 
 			while (rows--) {
-				memcpy(dst, src, cols * depth() * sizeof(Q_UINT16));
+				memcpy(dst, src, cols * depth() * sizeof(QUANTUM));
 				src += stride;
 				dst += dststride;
 			}
 
-			t -> dirty(true);
+			t -> valid(false);
 			t -> release();
 		}
 	}
@@ -446,24 +480,25 @@ void KisTileMgr::allocate(Q_INT32 ntiles)
 
 	for (i = 0, k = 0; i < nrows; i++) {
 		for (j = 0; j < ncols; j++, k++) {
+			m_tiles[k] = new KisTile(depth(), 0, 0);
 			attach(m_tiles[k], k);
 
 			if (j == ncols - 1)
 				m_tiles[k] -> width(rightTile);
 
-			if (j == nrows - 1)
+			if (i == nrows - 1)
 				m_tiles[k] -> height(bottomTile);
 		}
 	}
 }
 
-Q_INT32 KisTileMgr::tileNum(Q_INT32 xpix, Q_INT32 ypix)
+Q_INT32 KisTileMgr::tileNum(Q_UINT32 xpix, Q_UINT32 ypix) const
 {
 	Q_INT32 row;
 	Q_INT32 col;
 	Q_INT32 num;
 
-	if (xpix < 0 || xpix >= m_width || ypix < 0 || ypix >= m_height)
+	if (xpix >= m_width || ypix >= m_height)
 		return -1;
 
 	row = ypix / TILE_HEIGHT;

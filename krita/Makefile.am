@@ -1,12 +1,14 @@
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) $(KOPAINTER_INCLUDES)
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) $(KOPAINTER_INCLUDES) 
 
 ## The part
 kde_module_LTLIBRARIES = libkritapart.la
 libkritapart_la_SOURCES = dummy.cc
 
 libkritapart_la_LDFLAGS = $(KDE_PLUGIN)
-libkritapart_la_LIBADD = core/libkiscore.la ui/libkisui.la tools/libkistools.la \
-	../lib/kofficeui/libkofficeui.la ../lib/kopainter/libkopainter.la
+libkritapart_la_LIBADD = core/libkiscore.la core/helper/libkishelper.la core/tiles/libkistile.la \
+	ui/libkisui.la ../lib/kofficeui/libkofficeui.la ../lib/kopainter/libkopainter.la tools/libkistools.la
+	
+
 METASOURCES = AUTO
 
 ## The kdeinit loadable module
@@ -36,7 +38,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/krita
 rc_DATA = krita.rc krita_readonly.rc
 
-SUBDIRS = core tools ui . dtd plugins data pics
+SUBDIRS = core ui . dtd plugins data pics 
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc */*.cc core/kis_aboutdata.h -o $(podir)/krita.pot

@@ -1,8 +1,4 @@
 /*
- *  kis_image.h - part of KImageShop
- *
- *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -19,259 +15,169 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#if !defined KIS_IMAGE_H_
+#define KIS_IMAGE_H_
 
-#ifndef __kis_image_h__
-#define __kis_image_h__
-
-#include <qimage.h>
-#include <qmemarray.h>
+#include <qbitarray.h>
 #include <qobject.h>
-#include <qpixmap.h>
-#include <qptrlist.h>
+#include <qstring.h>
 #include <qvaluevector.h>
-
 #include <ksharedptr.h>
-
+#include <kurl.h>
 #include <koColor.h>
+#include "kis_global.h"
+#include "kis_types.h"
+#include "kis_render.h"
 
-#include "kis_channel.h"
-#include "kis_layer.h"
-#include "kis_paint_device.h"
-
-#include "kis_tiles.h"
-#include "kis_tile.h"
-
-class QTimer;
-class DCOPObject;
-class KCommand;
-
-class KisBrush;
+class KCommandHistory;
 class KisDoc;
-class KisImage;
 
-typedef KSharedPtr<KisImage> KisImageSP;
-typedef QValueVector<KisImageSP> KisImageSPLst;
-typedef KisImageSPLst::iterator KisImageSPLstIterator;
-typedef KisImageSPLst::const_iterator KisImageSPLstConstIterator;
-
-class KisImage : public QObject, public KShared {
+class KisImage : public QObject, public KisRenderInterface {
 	Q_OBJECT
-	typedef QObject super;
 
 public:
-	KisImage(KisDoc *doc, const QString& name, int width, int height, cMode cm = cm_RGBA, uchar bitDepth = 8);
+	KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name);
 	virtual ~KisImage();
 
-	virtual DCOPObject* dcopObject();
+public:
+	// Implement KisRenderInterface
+	virtual void invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	virtual void invalidate(const QRect& rc);
+	virtual void invalidate();
+	virtual QPixmap pixmap();
+	virtual QPixmap recreatePixmap();
 
-	KisPaintDeviceSP getCurrentPaintDevice();
-	KisChannelSP getCurrentChannel();
-	KisLayerSP getCurrentLayer();
+public:
+	QString name() const;
+	void setName(const QString& name);
+	QString author() const;
+	void setAuthor(const QString& author);
+	QString email() const;
+	void setEmail(const QString& email);
 
-	void upperLayer(unsigned int layer);
-	void lowerLayer(unsigned int layer);
-	void setFrontLayer(unsigned int layer);
-	void setBackgroundLayer(unsigned int layer);
+	void resize(Q_INT32 w, Q_INT32 h);
+	void resize(const QRect& rc);
+	void enableUndo(KCommandHistory *history);
 
-	void addLayer(const QRect& rc, const KoColor& c, bool transparent, const QString& name);
-	void addLayer(KisLayerSP layer);
-	void removeLayer(KisLayerSPLstIterator it);
-	void removeLayer(unsigned int layer);
-	void removeLayer(KisLayerSP layer);
+	enumImgType imgType() const;
+	enumImgType imgTypeWithAlpha() const;
 
-	/**
-	 * @name nLayers
-	 * @return Returns the number of layers in this image.
-	 */
-	int nLayers() const;
+	KURL uri() const;
+	void uri(const KURL& uri);
 
-	void mergeAllLayers();
-	void mergeVisibleLayers();
-	void mergeLinkedLayers();
+	enumUnit unit() const;
+	void unit(const enumUnit& u);
 
-	int getCurrentLayerIndex() const;
-	void setCurrentLayer(int layer);
-	void setCurrentLayer(KisLayerSP layer);
+	void resolution(double xres, double yres);
+	void resolution(double *xres, double *yres);
 
-	inline KisLayerSPLst layerList();
-	inline KisChannelSPLst channelList();
+	Q_INT32 width() const;
+	Q_INT32 height() const;
+	Q_UINT32 depth() const;
+	bool alpha() const;
+	bool empty() const;
+	KisLayerSP selection();
+	bool colorMap(KoColorMap& cm);
+	KisChannelSP mask();
+	KoColor foreground() const;
+	KoColor background() const;
+	KoColor color() const;
+	KoColor transformColor() const;
+	KisTileMgrSP shadow();
 
-	void addChannel(const QRect& rc, uchar opacity, const QString& name);
-	void addChannel(KisChannelSP channel);
-	void removeChannel(KisChannelSPLstIterator it);
-	void removeChannel(unsigned int channel);
-	void removeChannel(KisChannelSP channel);
+	void activeComponent(CHANNELTYPE type, bool active);
+	bool activeComponent(CHANNELTYPE type);
 
-	int getCurrentChannelIndex() const;
-	void setCurrentChannel(int channel);
-	void setCurrentChannel(KisChannelSP channel);
+	void visibleComponent(CHANNELTYPE pixel, bool active);
+	bool visibleComponent(CHANNELTYPE pixel);
 
-	void markDirty(const QRect& rect);
+	void flush();
+	void apply(KisPaintDeviceSP device, KisPixelDataSP src2, QUANTUM opacity, enumComposite mode, Q_INT32 x, Q_INT32 y);
+	void replace(KisPixelDataSP device, KisPixelDataSP src2, QUANTUM opacity, KisPixelDataSP mask, Q_INT32 x, Q_INT32 y);
 
-	void setAutoUpdate(bool autoUpdate = true);
-	inline void setUndo(bool doUndo = true);
+	vKisLayerSP layers() const;
+	vKisChannelSP channels() const;
 
-	void paintContent(QPainter& painter, const QRect& rect, bool transparent = false);
-	void paintPixmap(QPainter *painter, const QRect& area);
+	KisPaintDeviceSP activeDevice();
 
-	inline int height();
-	inline int width();
-	inline QSize size();
-	inline QRect imageExtents();
+	KisLayerSP activeLayer();
+	KisLayerSP activate(KisLayerSP layer);
+	Q_INT32 index(KisLayerSP layer);
+	KisLayerSP layer(const QString& name);
+	bool add(KisLayerSP layer, Q_INT32 position);
+	void rm(KisLayerSP layer);
+	bool raise(KisLayerSP layer);
+	bool lower(KisLayerSP layer);
+	bool top(KisLayerSP layer);
+	bool bottom(KisLayerSP layer);
+	bool pos(KisLayerSP layer, Q_INT32 position);
 
-	inline QString name();
-	inline QString author();
-	inline QString email();
+	KisChannelSP activeChannel();
+	KisChannelSP activate(KisChannelSP channel);
+	KisChannelSP unsetActiveChannel();
+	Q_INT32 index(KisChannelSP channel);
+	KisChannelSP channel(const QString& name);
+	bool add(KisChannelSP channel, Q_INT32 position);
+	void rm(KisChannelSP channel);
+	bool raise(KisChannelSP channel);
+	bool lower(KisChannelSP channel);
+	bool pos(KisChannelSP channel, Q_INT32 position);
 
-	inline cMode colorMode();
-	inline uchar bitDepth();
-
-	inline void setName(const QString& n);
-	inline void setAuthor(const QString& a);
-	inline void setEmail(const QString& e);
-
-	int getHishestLayerEver() const;
+	bool boundsLayer();
+	KisLayerSP corrolateLayer(Q_INT32 x, Q_INT32 y);
 
 signals:
-	void updated();
-	void updated(const QRect& rect);
-	void layersUpdated();
-
-#if 1
-public slots:
-	void slotUpdateTimeOut();
-#endif
-
-protected:
-	void mergeLayers(KisLayerSPLst& layers);
-	void compositeImage(const QRect& rect = QRect(), bool allDirty = false);
-	void compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y);
-	void convertTileToPixmap(KisPaintDevice *dstDevice, int tileNo, QPixmap *pix);
-	void convertImageToPixmap(QImage *img, QPixmap *pix);
+	void activeLayerChanged(KisImageSP image);
+	void activeChannelChanged(KisImageSP image);
+	void alphaChanged(KisImageSP image);
+	void selectionChanged(KisImageSP image);
+	void visibilityChanged(KisImageSP image, CHANNELTYPE type);
+	void update(KisImageSP image, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
 
 private:
-	KisImage(const KisImage&);
-	KisImage& operator=(const KisImage&);
-
-	void addCommand(KCommand *cmd);
-	void renderTile(KisPixelPacket *dst, const KisPixelPacket *src, const KisPaintDevice *srcDevice);
-	void renderBg(KisPaintDevice *srcDevice, int tileNo);
-	void resizeImage(KisPaintDevice *device, const QRect& rect);
-	void resizePixmap(bool dirty);
-	void destroyPixmap();
-	QRect findBoundingTiles(const QRect& area);
+	KisImage(const KisImage& rhs);
+	KisImage& operator=(const KisImage& rhs);
+	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height, Q_UINT32 depth, QUANTUM opacity, const enumImgType& imgType, const QString& name);
+	PIXELTYPE pixelFromChannel(CHANNELTYPE type);
+	void renderTile(KisTileSP dst, Q_INT32 x, Q_INT32 y);
+	void expand(KisPaintDeviceSP dev);
 
 private:
-	int m_depth;
 	KisDoc *m_doc;
-
-	KisLayerSPLst m_layers;
-	KisChannelSPLst m_channels;
-
-	int m_xTiles;
-	int m_yTiles;
-	QPixmap **m_pixmapTiles;
-	QImage m_imgTile;
-
-	KisLayerSP m_activeLayer;
-       	KisLayerSP m_composeLayer;
-       	KisLayerSP m_bgLayer;
-
-	KisChannelSP m_activeChannel;
-
+	KCommandHistory *m_undoHistory;
+	KURL m_uri;
 	QString m_name;
 	QString m_author;
 	QString m_email;
-
-	int m_width;
-	int m_height;
-
-	cMode m_cMode;
-	uchar m_bitDepth;
-	QMemArray<bool> m_dirty;
-
-	QPtrList<QPixmap> m_dirtyTiles;
-        DCOPObject* m_dcop;
-	bool m_autoUpdate;
-	bool m_doUndo;
-	int m_nLayers;
-	QTimer *m_timer;
+	Q_INT32 m_width;
+	Q_INT32 m_height;
+	Q_UINT32 m_depth;
+	QUANTUM m_opacity;
+	double m_xres;
+	double m_yres;
+	enumUnit m_unit;
+	enumImgType m_type;
+	KoColorMap m_clrMap;
+	bool m_dirty;
+	KisTileMgrSP m_shadow;
+	bool m_construct;
+	enumImgType m_projType;
+	QPixmap m_pixmapProjection;
+	KisTileMgrSP m_projection;
+	vKisLayerSP m_layers;
+	vKisChannelSP m_channels;
+	vKisLayerSP m_layerStack;
+	KisLayerSP m_activeLayer;
+	KisChannelSP m_activeChannel;
+	KisLayerSP m_selection;
+	KisChannelSP m_selectionMask;
+	QBitArray m_visible;
+	QBitArray m_active;
+	bool m_alpha;
+	bool m_maskEnabled;
+	bool m_maskInverted;
+	KoColor m_maskClr;
 };
 
-KisLayerSPLst KisImage::layerList()
-{
-	return m_layers;
-}
-
-KisChannelSPLst KisImage::channelList()
-{
-	return m_channels;
-}
-
-int KisImage::height()
-{
-	return m_height;
-}
-
-int KisImage::width()
-{
-	return m_width;
-}
-
-QSize KisImage::size()
-{
-	return QSize(m_width, m_height);
-}
-
-QRect KisImage::imageExtents()
-{
-	return QRect(0, 0, m_width, m_height);
-}
-
-QString KisImage::name()
-{
-	return m_name;
-}
-
-QString KisImage::author()
-{
-	return m_author;
-}
-
-QString KisImage::email()
-{
-	return m_email;
-}
-
-cMode KisImage::colorMode()
-{
-	return m_cMode;
-}
-
-uchar KisImage::bitDepth()
-{
-	return m_bitDepth;
-}
-
-void KisImage::setName(const QString& n)
-{
-	m_name = n;
-}
-
-void KisImage::setAuthor(const QString& a)
-{
-	m_author = a;
-}
-
-void KisImage::setEmail(const QString& e)
-{
-	m_email = e;
-}
-
-void KisImage::setUndo(bool doUndo)
-{
-	m_doUndo = doUndo;
-}
-
-#endif
+#endif // KIS_IMAGE_H_
 

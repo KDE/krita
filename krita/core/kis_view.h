@@ -1,9 +1,8 @@
 /*
- *  kis_view.h - part of Krayon
- *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
+ *                2002 Patrick Julien <freak@codepimps.org>
  *      
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,48 +18,38 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-#ifndef __kis_view_h__
-#define __kis_view_h__
-
-#include <qscrollbar.h>
-#include <qwidget.h>
+#if !defined KIS_VIEW_H_
+#define KIS_VIEW_H_
 
 #include <koColor.h>
 #include <koView.h>
-
 #include "kis_global.h"
-#include "kis_tool.h"
+#include "kis_types.h"
 
 class QButton;
 class QPaintEvent;
 class QScrollBar;
-class QSize;
+class QWidget;
 
-class KAction;
-class KHelpMenu;
-class KRuler;
-class KTabCtl;
-class KToggleAction;
 class DCOPObject;
+class KPrinter;
+class KRuler;
+class KToggleAction;
 
-class KisDoc;
-class KisImage;
 class KisCanvas;
-class KisPainter;
-class KisSideBar;
+class KisDoc;
 class KisGradient;
 class KisGridViewFrame;
+class KisPainter;
+class KisSideBar;
 
 class KisBrushChooser;
 class KisPatternChooser;
 class KisKrayonChooser;
 
-class PasteTool;
 class KisKrayon;
 class KisBrush;
 class KisPattern;
-class KisTool;
 class KisTabBar;
 class KisChannelView;
 class KisListBoxView;
@@ -69,60 +58,55 @@ class KisView : public KoView {
 	Q_OBJECT
 	typedef KoView super;
 
-public:  
+public:
 	KisView(KisDoc *doc, QWidget *parent = 0, const char *name = 0);
 	virtual ~KisView();
 
-	inline void setActiveTool(KisTool *tool);
-	inline KisTool* getActiveTool();
-	inline KisDoc* getKisDocument();
-
-	void setupPixmap();
-	void setupPainter();
-	void setupCanvas();
-	void setupSideBar();
-	void setupScrollBars();
-	void setupRulers();
-	void setupDialogs();
-	void setupActions();
-	void setupTabBar();
-	void setupTools();
-
+public:
+	// Overide KoView
+	virtual QWidget *canvas();
+	virtual int canvasXOffset() const;
+	virtual int canvasYOffset() const;
 	virtual DCOPObject* dcopObject();
-	virtual void updateReadWrite(bool readwrite);
-	virtual void setupPrinter(KPrinter &printer);
 	virtual void print(KPrinter &printer);
+	virtual void setupPrinter(KPrinter &printer);
+	virtual void updateReadWrite(bool readwrite);
 
-	KoColor& fgColor() { return m_fg; }
-	KoColor& bgColor() { return m_bg; }
-
-	KisCanvas   *kisCanvas()        { return m_pCanvas; }
-	KisPainter  *kisPainter()       { return m_pPainter; }
-	KisPattern  *currentPattern()   { return m_pPattern; }
-	KisBrush    *currentBrush()     { return m_pBrush; }
-
-	void activateTool(KisTool*);
+public:  
+	Q_INT32 docWidth() const;
+	Q_INT32 docHeight() const;
+	Q_INT32 importImage(bool createLayer, const QString& filename = QString::null);
+	void updateCanvas();
 	void updateCanvas(const QRect& rc);
-	void layerScale(bool smooth);
-        
-	int docWidth();
-	int docHeight();
-
-	int xPaintOffset();
-	int yPaintOffset();
-     
-	int xScrollOffset() { return m_pHorz->value(); }
-	int yScrollOffset() { return m_pVert->value(); }
-	void scrollTo(QPoint p);
-
-	int insert_layer_image(bool newLayer, const QString &filename = QString::null);
-	void save_layer_image(bool mergeLayers);
-
-	void zoom(int x, int y, float zf);
+//	void zoom(int x, int y, float zf);
 	void zoom_in(int x, int y);
 	void zoom_out(int x, int y);
-	float zoomFactor() const;
-	void setZoomFactor(float zf);
+
+//	void setActiveTool(KisTool *tool);
+//	KisTool* getActiveTool();
+
+	void setupPainter();
+	void setupDialogs();
+	void setupTools();
+
+
+	KoColor fgColor();
+	KoColor bgColor();
+
+	KisPainter  *kisPainter();
+	KisPattern  *currentPattern();
+	KisBrush    *currentBrush();
+
+//	void activateTool(KisTool*);
+	void layerScale(bool smooth);
+        
+//	Q_INT32 xScrollOffset();
+//	Q_INT32 yScrollOffset();
+
+	void scrollTo(QPoint p);
+
+	void save_layer_image(bool mergeLayers);
+
 
 	void setSetFGColor(const KoColor& c);
 	void setSetBGColor(const KoColor& c);
@@ -145,7 +129,6 @@ public slots:
 	void slotSetPattern(KisPattern *);
 	void slotSetFGColor(const KoColor& c);
 	void slotSetBGColor(const KoColor& c);
-	void slotSetPaintOffset();
 
 	void slotTabSelected(const QString& name);
 
@@ -182,7 +165,7 @@ public slots:
 
 	void layer_properties(); 
 
-	void insert_image_as_layer();
+	void slotInsertImageAsLayer();
 	void save_layer_as_image();
 	void slotEmbeddImage(const QString& filename);
 
@@ -196,7 +179,7 @@ public slots:
 	void layer_mirrorY();
 
 	// image action slots
-	void import_image();
+	void slotImportImage();
 	void export_image();
 	void add_new_image_tab();
 	void remove_current_image_tab();
@@ -217,34 +200,78 @@ public slots:
 	void saveOptions();
 	void preferences();
 
-protected slots:
-	// scrollbar slots
-	void scrollH(int);
-	void scrollV(int);
+protected:
+	virtual void resizeEvent(QResizeEvent*);
 
+private:
+	void clearCanvas(const QRect& rc);
+	Q_INT32 horzValue() const;
+	void paintView(const QRect& rc);
+	void setupActions();
+	void setupCanvas();
+	void setupRulers();
+	void setupScrollBars();
+	void setupSideBar();
+	void setupTabBar();
+	Q_INT32 vertValue() const;
+
+private slots:
 	void canvasGotMousePressEvent(QMouseEvent *);
-	void canvasGotMouseMoveEvent (QMouseEvent *);
-	void canvasGotMouseReleaseEvent (QMouseEvent *);
+	void canvasGotMouseMoveEvent(QMouseEvent *);
+	void canvasGotMouseReleaseEvent(QMouseEvent *);
 	void canvasGotPaintEvent(QPaintEvent *);
 	void canvasGotEnterEvent(QEvent *);
 	void canvasGotLeaveEvent(QEvent *);
 	void canvasGotMouseWheelEvent(QWheelEvent *);
+	void docImageListUpdate();
+	void layerToggleVisible(int n);
+	void layerSelected(int n);
+	void layerToggleLinked(int n);
+	void layerProperties(int n);
+	void layerAdd();
+	void layerRemove(int n);
+	void layerAddMask(int n);
+	void layerRmMask(int n);
+	void layerRaise(int n);
+	void layerLower(int n);
+	void layerFront(int n);
+	void layerBack(int n);
+	void layerLevel(int n);
+	void layersUpdated();
+	void setPaintOffset();
+	void scrollH(int);
+	void scrollV(int);
 
-protected:
-	virtual void resizeEvent(QResizeEvent*);
+private:
+	KisDoc *m_doc;
+	KisCanvas *m_canvas;
+	KisTabBar *m_tabBar;
+	QButton *m_tabFirst; 
+	QButton *m_tabLeft; 
+	QButton *m_tabRight; 
+	QButton *m_tabLast;
+	KisSideBar *m_sideBar;
+	KRuler *m_hRuler;
+	KRuler *m_vRuler;
+	KAction *m_zoomIn;
+	KAction *m_zoomOut;
+	KToggleAction *m_sidebarToggle; 
+	KToggleAction *m_floatsidebarToggle; 
+	KToggleAction *m_lsidebarToggle;
+	KToggleAction *m_dlgColorsToggle;
+       	KToggleAction *m_dlgCrayonToggle; 
+	KToggleAction *m_dlgBrushToggle;
+	KToggleAction *m_dlgPatternToggle; 
+	KToggleAction *m_dlgLayersToggle; 
+	KToggleAction *m_dlgChannelsToggle;
+	QScrollBar *m_hScroll; 
+	QScrollBar *m_vScroll;
+	DCOPObject *m_dcop;
+	Q_INT32 m_xoff;
+	Q_INT32 m_yoff;    
 
-	void appendToDocImgList(const QSize& size, const KURL& u);
-	void addHasNewLayer(const QSize& size, const KURL& u);
-	void paintView(const QRect& rc);
-	void clearCanvas(const QRect& rc);
-
-protected:
-   	// krayon box floating dialog actions
-	KToggleAction *m_dialog_colors, *m_dialog_krayons, *m_dialog_brushes,
-                 *m_dialog_patterns, *m_dialog_layers, *m_dialog_channels;
-
+#if 0
 	// krayon box (sidebar)
-	KToggleAction *m_side_bar, *m_float_side_bar, *m_lsidebar;
 
 	KisDoc *m_doc;  // always needed
 	KisToolSP m_pTool; // current active tool
@@ -267,59 +294,17 @@ protected:
 	KisChannelView	 *m_pChannelView;
 
 	// krayon and kde objects
-	KisCanvas           *m_pCanvas;
 	KisPainter          *m_pPainter;
-	KisSideBar          *m_pSideBar;
-	QScrollBar          *m_pHorz, *m_pVert;
-	KRuler              *m_pHRuler, *m_pVRuler;
 	KoColor            m_fg;
 	KoColor m_bg;
-	KisTabBar           *m_pTabBar;
-	KTabCtl *m_tabCtl;
-	QButton             *m_pTabFirst, *m_pTabLeft, *m_pTabRight, *m_pTabLast;
 
 	// normal variables
 	float	    m_zoomFactor;
-	int         m_xPaintOffset;
-	int         m_yPaintOffset;    
-
-	DCOPObject *m_dcop;
-
-private:
-	KisListBoxView *m_layerView;
-
-private slots:
-	void slotLayerToggleVisible(int n);
-	void slotLayerSelected(int n);
-	void slotLayerToggleLinked(int n);
-	void slotLayerProperties(int n);
-	void slotLayerAdd();
-	void slotLayerRemove(int n);
-	void slotLayerAddMask(int n);
-	void slotLayerRmMask(int n);
-	void slotLayerRaise(int n);
-	void slotLayerLower(int n);
-	void slotLayerFront(int n);
-	void slotLayerBack(int n);
-	void slotLayerLevel(int n);
-	void slotLayersUpdated();
-};
-
-void KisView::setActiveTool(KisTool *tool)
-{
-	//assert(tool == 0 || (tool && m_pTools.find(tool) != -1));
-	m_pTool = tool;
-}
-
-KisTool* KisView::getActiveTool()
-{
-	return m_pTool;
-}
-
-KisDoc* KisView::getKisDocument()
-{
-	return m_doc;
-}
 
 #endif
+//	KisListBoxView *m_layerView;
+
+};
+
+#endif // KIS_VIEW_H_
 

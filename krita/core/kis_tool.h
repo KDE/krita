@@ -46,7 +46,7 @@ class KisDoc;
 class KisView;
 
 class KisTool : public QObject, public KShared {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	KisTool(KisDoc *doc, const char *name = 0);
@@ -101,6 +101,7 @@ protected:
 	bool pasteClipImage(const QPoint& pos);
 
 protected:
+#if 0
 	KisDoc *m_doc;
 	KisPattern *m_pattern;
 	KisBrush *m_brush;
@@ -114,15 +115,18 @@ protected:
 	bool m_useGradient;
 	bool m_useRegions;
 	bool m_fillSolid;
+#endif
 
 private:
 	KisTool(const KisTool&);
 	KisTool& operator=(const KisTool&);
 
 private:
+#if 0
 	unsigned int m_paintThreshold;
 	bool m_paintWithPattern; 
 	bool m_paintWithGradient;
+#endif
 };
 
 #endif

@@ -74,6 +74,7 @@ QRect KisUtil::findTileExtents( QRect r )
   return(r);
 }
 
+#if 0
 QString KisUtil::channelIdtoString(cId cid)
 {
   switch (cid)
@@ -119,6 +120,7 @@ QString KisUtil::channelIdtoString(cId cid)
 	  break;
 	}
 }
+#endif
 
 /**
  * @name readFilters
@@ -217,6 +219,7 @@ QRect KisUtil::findBoundingTiles(const QRect& area)
 	return rc;
 }
 
+#if 0
 int KisUtil::calcNumChannels(cMode cm)
 {
 	switch (cm) {
@@ -237,3 +240,4 @@ int KisUtil::calcNumChannels(cMode cm)
 	return 0;
 }
 
+#endif

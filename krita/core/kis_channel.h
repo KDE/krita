@@ -1,70 +1,66 @@
 /*
- *  kis_channel.h - part of KImageShop
+ *  copyright (c) 2002 patrick julien <freak@codepimps.org>
  *
- *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
- *                1999-2000 Matthias ELter  <elter@kde.org>
- *
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  this program is free software; you can redistribute it and/or modify
+ *  it under the terms of the gnu general public license as published by
+ *  the free software foundation; either version 2 of the license, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  this program is distributed in the hope that it will be useful,
+ *  but without any warranty; without even the implied warranty of
+ *  merchantability or fitness for a particular purpose.  see the
+ *  gnu general public license for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  you should have received a copy of the gnu general public license
+ *  along with this program; if not, write to the free software
+ *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
+#if !defined KIS_CHANNEL_H_
+#define KIS_CHANNEL_H_
 
-#ifndef __kis_channel_h__
-#define __kis_channel_h__
-
-#include <qrect.h>
-#include <qpoint.h>
-#include <koStore.h>
-
-#include "kis_global.h"
 #include "kis_paint_device.h"
-
-class KisChannel;
-class KisImageCmd;
-
-typedef KSharedPtr<KisChannel> KisChannelSP;
-typedef QValueVector<KisChannelSP> KisChannelSPLst;
-typedef KisChannelSPLst::iterator KisChannelSPLstIterator;
-typedef KisChannelSPLst::const_iterator KisChannelSPLstConstIterator;
 
 class KisChannel : public KisPaintDevice {
 	typedef KisPaintDevice super;
 
 public:
-	KisChannel(cId id, const QString& name, uint width, uint height, const QRgb& defaultColor);
+	KisChannel(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, const KoColor& color);
+	KisChannel(const KisChannel& rhs);
 	virtual ~KisChannel();
 
-//	virtual void setPixel(uint x, uint y, const uchar *pixel, KisImageCmd *cmd);
+public:
+	KisChannel& operator=(const KisChannel& rhs);
 
-	cId channelId() const { return m_id; }
-	int width() const { return m_imgRect.width(); }
-	int height() const { return m_imgRect.height(); }
-	QRect tileExtents() const { return m_tileRect; };
-	QRect imageExtents() const { return m_imgRect; };
-	QPoint offset() const { return m_imgRect.topLeft() - m_tileRect.topLeft(); };
+public:
+	// Overide KisPaintDevice
+	virtual void duplicate(const KisPaintDevice& rhs, bool addAlpha);
 
-   	QRect tileRect(int tileNo);
+public:
+	QUANTUM opacity() const;
+	void opacity(QUANTUM val);
 
-	uint lastTileOffsetX();
-	uint lastTileOffsetY();
+	KoColor color() const;
+	void color(KoColor clr);
 
-protected:
-	cId m_id;
-	QRect m_imgRect; 
-	QRect m_tileRect;
+	void scale(Q_INT32 width, Q_INT32 height, Q_INT32 interpolationType);
+	void resize(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	void resize(const QRect& rc);
+
+	KisChannelSP createMask(Q_INT32 w, Q_INT32 h);
+	bool boundary(vKisSegments& inside, vKisSegments& outside, const QRect& rc);
+	bool bounds(QRect& rc);
+
+	Q_INT32 value(Q_INT32 x, Q_INT32 y);
+	bool empty();
+
+	void feather();
+	void clear();
+	void invert();
+	void border(Q_INT32 xradius, Q_INT32 yradius);
+	void grow(Q_INT32 xradius, Q_INT32 yradius);
+	void shrink(Q_INT32 xradius, Q_INT32 yradius);
+	void translate(Q_INT32 x, Q_INT32 y);
 };
 
-#endif // __kis_channel_h__
+#endif // KIS_CHANNEL_H_
 

@@ -40,7 +40,7 @@ class KisTileMgr : public KShared {
 	typedef KShared super;
 
 public:
-	KisTileMgr(Q_INT32 depth, Q_INT32 width, Q_INT32 height);
+	KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
 	virtual ~KisTileMgr();
 
 public:
@@ -54,13 +54,17 @@ public:
 	void tileMap(Q_INT32 xpix, Q_INT32 ypix, KisTileSP src);
 	void tileMap(Q_INT32 tilenum, KisTileSP src);
 
+	bool completetlyValid() const;
 	void validate(KisTileSP tile);
-	KisTileSP inValidate(KisTileSP tile, Q_INT32 xpix, Q_INT32 ypix);
-	void inValidateTiles(KisTileSP tile);
+	KisTileSP invalidate(KisTileSP tile, Q_INT32 xpix, Q_INT32 ypix);
+	void invalidateTiles(KisTileSP tile);
 
-	Q_INT32 width() const;
-	Q_INT32 height() const;
-	Q_INT32 depth() const;
+	bool empty() const;
+	Q_UINT32 width() const;
+	Q_UINT32 height() const;
+	Q_UINT32 nrows() const;
+	Q_UINT32 ncols() const;
+	Q_UINT32 depth() const;
 
 	void offset(QPoint& off) const;
 	void offset(Q_INT32 *x, Q_INT32 *y) const;
@@ -78,32 +82,30 @@ public:
 	void releasePixelData(KisPixelDataSP pd);
 
 private:
-	KisTileMgr(const KisTileMgr&);
+	KisTileMgr(const KisTileMgr& rhs);
 	KisTileMgr& operator=(const KisTileMgr&);
 	void allocate(Q_INT32 ntiles);
-	Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix);
 	KisTileSP invalidateTile(KisTileSP tile, Q_INT32 tilenum);
+	Q_INT32 tileNum(Q_UINT32 xpix, Q_UINT32 ypix) const;
 
-	void readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q_UINT16 *buffer, Q_UINT32 stride);
+	void readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
 	void readPixelData(KisPixelDataSP pd);
 
-	void writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q_UINT16 *buffer, Q_UINT32 stride);
+	void writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
 	void writePixelData(KisPixelDataSP pd);
 
 private:
 	Q_INT32 m_x;
 	Q_INT32 m_y;
-	Q_INT32 m_width;
-	Q_INT32 m_height;
-	Q_INT32 m_depth;
-	Q_INT32 m_ntileRows;
-	Q_INT32 m_ntileCols;
+	Q_UINT32 m_width;
+	Q_UINT32 m_height;
+	Q_UINT32 m_depth;
+	Q_UINT32 m_ntileRows;
+	Q_UINT32 m_ntileCols;
 	vKisTileSP m_tiles;
 	QMutex m_mutex;
 	KisTileMediator *m_mediator;
 };
-
-typedef KSharedPtr<KisTileMgr> KisTileMgrSP;
 
 #endif // KISTILEMGR_H_
 

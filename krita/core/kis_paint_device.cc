@@ -1,6 +1,4 @@
 /*
- *  kis_paint_device.cc - part of KImageShop aka Krayon aka Krita
- *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,223 +15,286 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-#include <Magick++.h>
-
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qpoint.h>
-#include <qsize.h>
-
-#include <kdebug.h>
-
-#include <koStore.h>
-
+#include <qrect.h>
 #include "kis_global.h"
-#include "kis_image_cmd.h"
-#include "kis_pixel_region.h"
-#include "kis_util.h"
-#include "kis_tile.h"
+#include "kis_types.h"
+#include "kis_image.h"
+#include "kis_paint_device.h"
+#include "kistile.h"
+#include "kistilemgr.h"
+#include "kispixeldata.h"
 
-using namespace Magick;
-
-const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(int);
-    
-KisPaintDevice::KisPaintDevice(const QString& name, int width, int height, uchar depth, const QRgb& defaultColor, bool alpha)
+KisPaintDevice::KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
 {
-	Color clr(Upscale(qRed(defaultColor)), Upscale(qGreen(defaultColor)), Upscale(qBlue(defaultColor)), TransparentOpacity - Upscale(qAlpha(defaultColor)));
-
-	m_depth = depth;
-	m_name = name;
-	m_imgRect = QRect(0, 0, width, height);
-	m_tileRect = KisUtil::findTileExtents(m_imgRect);
-	m_visible = true;
-	m_opacity = CHANNEL_MAX;
-	m_tiles = new Image(Geometry(m_tileRect.width(), m_tileRect.height()), clr);
-	m_tiles -> matte(alpha);
+	init();
+	configure(img, width, height, imgType, name);
 }
 
 KisPaintDevice::~KisPaintDevice()
 {
 }
 
-void KisPaintDevice::resize(int width, int height, uchar depth)
+void KisPaintDevice::invalidate(Q_INT32, Q_INT32, Q_INT32, Q_INT32)
 {
-	m_imgRect.setWidth(width);
-      	m_imgRect.setHeight(height);
-	m_tileRect = KisUtil::findTileExtents(m_imgRect);
-//	m_tiles -> scale(Geometry(width, height));
+	m_projectionValid = false;
 }
 
-void KisPaintDevice::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
+void KisPaintDevice::invalidate(const QRect&)
 {
-	pt = pt - tileExtents().topLeft();
-	*tileNo = (pt.y() / TILE_SIZE) * xTiles() + pt.x() / TILE_SIZE;
-	*offset = (pt.y() % TILE_SIZE) * TILE_SIZE + pt.x() % TILE_SIZE;
+	m_projectionValid = false;
 }
 
-void KisPaintDevice::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
+void KisPaintDevice::invalidate()
 {
-	pt = pt - tileExtents().topLeft();
-	*tileNo = (pt.y() / TILE_SIZE) * xTiles() + pt.x() / TILE_SIZE;
-	*y = pt.y() % TILE_SIZE;
-	*x = pt.x() % TILE_SIZE;
+	m_projectionValid = false;
 }
 
-QRect KisPaintDevice::tileExtents() const
+QPixmap KisPaintDevice::pixmap()
 {
-	return m_tileRect;
+	return QPixmap();
 }
 
-bool KisPaintDevice::writeToStore(KoStore *store)
+QPixmap KisPaintDevice::recreatePixmap()
 {
-#if 0
-	for (int ty = 0; ty < yTiles(); ty++) 
-		for (int tx = 0; tx < xTiles(); tx++) {
-			KisTileSP src = m_tiles.getTile(tx, ty);
-			const char *p = reinterpret_cast<const char*>(src -> data());
-
-			if (store -> write(p, TILE_BYTES) != TILE_BYTES)
-				return false;
-		}
-
-	return true;
-#endif
-	return false;
+	return QPixmap();
 }
 
-bool KisPaintDevice::loadFromStore(KoStore *store)
+void KisPaintDevice::configure(KisImageSP image, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
 {
-#if 0
-	int nread;
+	if (image == 0 || name.isEmpty())
+		return;
 
-	for (int ty = 0; ty < yTiles(); ty++) {
-		for (int tx = 0; tx < xTiles(); tx++) {
-			KisTileSP dst = m_tiles.getTile(tx, ty);
-			char *p = reinterpret_cast<char*>(dst -> data());
-
-			nread = store -> read(p, TILE_BYTES);
-
-			if (nread != TILE_BYTES)
-				return false;
-		}
-	}
-
-	return true;
-#endif
-	return false;
-}
-
-QRect KisPaintDevice::imageExtents() const
-{
-	return m_imgRect;
-}
-
-void KisPaintDevice::moveBy(int dx, int dy)
-{
-	m_imgRect.moveBy(dx, dy);
-	m_tileRect.moveBy(dx, dy);
-}
-
-void KisPaintDevice::moveTo(int x, int y)
-{
-	int dx = x - m_imgRect.x();
-	int dy = y - m_imgRect.y();
-
-	m_imgRect.moveTopLeft(QPoint(x, y));
-	m_tileRect.moveBy(dx,dy);
-}
-
-void KisPaintDevice::allocateRect(const QRect& rc, uchar depth)
-{
-	resize(m_tileRect.width(), m_tileRect.height(), depth);
-	m_imgRect = rc;
-}
-
-const KisPixelPacket* KisPaintDevice::getConstPixels(int x, int y, int w, int h) const
-{
-	return 0;
-}
-
-KisPixelPacket* KisPaintDevice::getPixels(int x, int y, int w, int h)
-{
-	return static_cast<KisPixelPacket*>(m_tiles -> getPixels(x, y, w, h));
-}
-
-void KisPaintDevice::syncPixels(KisPixelPacket *region)
-{
-	m_tiles -> syncPixels();
-}
-
-int KisPaintDevice::xTiles() const
-{
-	return m_tileRect.width() / TILE_SIZE;
-}
-
-int KisPaintDevice::yTiles() const
-{
-	return m_tileRect.height() / TILE_SIZE;
-}
-
-uchar KisPaintDevice::depth() const
-{
-	return m_depth;
-}
-
-void KisPaintDevice::setName(const QString& name)
-{
+	m_width = width;
+	m_height = height;
+	m_imgType = imgType;
+	m_depth = image -> depth();
+	m_alpha = image -> alpha();
+	m_offX = 0;
+	m_offY = 0;
+	m_tiles = new KisTileMgr(m_depth, width, height);
+	m_visible = true;
+	m_owner = image;
 	m_name = name;
+	m_projectionValid = false;
 }
 
-QString KisPaintDevice::name() const
+void KisPaintDevice::duplicate(KisPaintDevice& , bool )
+{
+
+}
+
+void KisPaintDevice::update()
+{
+	update(0, 0, width(), height());
+}
+
+void KisPaintDevice::update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+	Q_INT32 xoff;
+	Q_INT32 yoff;
+
+	if (!m_owner)
+		return;
+	
+	drawOffset(&xoff, &yoff);
+	x += xoff;
+	y += yoff;
+	invalidate(x, y, w, h);
+}
+
+QString KisPaintDevice::name()
 {
 	return m_name;
 }
 
-KisTileSP KisPaintDevice::getTile(unsigned int x, unsigned int y) 
-{ 
-	// TODO
+void KisPaintDevice::setName(const QString& name)
+{
+	if (!name.isEmpty())
+		m_name = name;
+}
+
+void KisPaintDevice::mergeShadow()
+{
+	QRect rc;
+	KisPixelDataSP shadow;
+
+	if (!m_owner || m_shadow -> empty())
+		return;
+
+	maskBounds(&rc);
+	shadow = m_shadow -> pixelData(rc.left(), rc.top(), rc.right(), rc.bottom(), TILEMODE_READ);
+	m_owner -> apply(this, shadow, OPACITY_OPAQUE, COMPOSITE_COPY, rc.x(), rc.y());
+}
+
+void KisPaintDevice::fill(const KoColor& )
+{
+
+}
+
+void KisPaintDevice::maskBounds(Q_INT32 *, Q_INT32 *, Q_INT32 *, Q_INT32 *)
+{
+}
+
+void KisPaintDevice::maskBounds(QRect *rc)
+{
+	Q_INT32 x1;
+	Q_INT32 y1;
+	Q_INT32 x2;
+	Q_INT32 y2;
+
+	maskBounds(&x1, &y1, &x2, &y2);
+	rc -> setRect(x1, y1, x2 - x1, y2 - y1);
+}
+
+bool KisPaintDevice::alpha() const
+{
+	return m_alpha;
+}
+
+enumImgType KisPaintDevice::type() const
+{
+	switch (m_imgType) {
+	case IMAGE_TYPE_INDEXED:
+		return IMAGE_TYPE_INDEXEDA;
+	case IMAGE_TYPE_GREY:
+		return IMAGE_TYPE_GREYA;
+	case IMAGE_TYPE_RGB:
+		return IMAGE_TYPE_RGBA;
+	case IMAGE_TYPE_CMYK:
+		return IMAGE_TYPE_CMYKA;
+	case IMAGE_TYPE_LAB:
+		return IMAGE_TYPE_LABA;
+	case IMAGE_TYPE_YUV:
+		return IMAGE_TYPE_YUVA;
+	default:
+		return m_imgType;
+	}
+
+	return m_imgType;
+}
+
+enumImgType KisPaintDevice::typeWithAlpha() const
+{
+	switch (m_imgType) {
+		case IMAGE_TYPE_INDEXEDA:
+			return IMAGE_TYPE_INDEXED;
+		case IMAGE_TYPE_GREYA:
+			return IMAGE_TYPE_GREY;
+		case IMAGE_TYPE_RGBA:
+			return IMAGE_TYPE_RGB;
+		case IMAGE_TYPE_CMYKA:
+			return IMAGE_TYPE_CMYK;
+		case IMAGE_TYPE_LABA:
+			return IMAGE_TYPE_LAB;
+		case IMAGE_TYPE_YUVA:
+			return IMAGE_TYPE_YUV;
+		default:
+			return m_imgType;
+	}
+
+	return m_imgType;
+
+}
+
+KisTileMgrSP KisPaintDevice::data()
+{
+	return m_tiles;
+}
+
+const KisTileMgrSP KisPaintDevice::data() const
+{
+	return m_tiles;
+}
+
+KisTileMgrSP KisPaintDevice::shadow()
+{
+	return m_shadow;
+}
+
+const KisTileMgrSP KisPaintDevice::shadow() const
+{
+	return m_shadow;
+}
+
+Q_INT32 KisPaintDevice::quantumSize() const
+{
 	return 0;
 }
 
-const KisTileSP KisPaintDevice::getTile(unsigned int x, unsigned int y) const
-{ 
-	// TODO
+Q_INT32 KisPaintDevice::quantumSizeWithAlpha() const
+{
 	return 0;
 }
 
-uchar KisPaintDevice::opacity() const 
-{ 
-	return m_opacity; 
-}
-
-void KisPaintDevice::setOpacity(uchar o) 
-{ 
-	m_opacity = o; 
-}
-
-bool KisPaintDevice::visible() const 
-{ 
-	return m_visible; 
-}
-
-void KisPaintDevice::setVisible(bool v) 
-{ 
-	m_visible = v; 
-}
-
-int KisPaintDevice::width() const
+Q_INT32 KisPaintDevice::width() const
 {
-	return m_imgRect.width();
+	return m_width;
 }
 
-int KisPaintDevice::height() const
+Q_INT32 KisPaintDevice::height() const
 {
-	return m_imgRect.height();
+	return m_height;
 }
 
-QSize KisPaintDevice::size() const
+const bool KisPaintDevice::visible() const
 {
-	return QSize(width(), height());
+	return m_visible;
+}
+
+void KisPaintDevice::visible(bool v)
+{
+	if (m_visible != v) {
+		m_visible = v;
+		emit visibilityChanged(this);
+		update();
+	}
+}
+
+void KisPaintDevice::drawOffset(Q_INT32 *offx, Q_INT32 *offy)
+{
+	if (offx && offy) {
+		*offx = m_offX;
+		*offy = m_offY;
+	}
+}
+
+bool KisPaintDevice::cmap(KoColorMap& cm)
+{
+	cm.clear();
+	return false;
+}
+
+KoColor KisPaintDevice::colorAt()
+{
+	return KoColor();
+}
+
+KisImageSP KisPaintDevice::image()
+{
+	return m_owner;
+}
+
+const KisImageSP KisPaintDevice::image() const
+{
+	return m_owner;
+}
+
+void KisPaintDevice::setImage(KisImageSP image)
+{
+	m_owner = image;
+}
+
+void KisPaintDevice::init()
+{
+	m_visible = false;
+	m_width = 0;
+	m_height = 0;
+	m_depth = 0;
+	m_opacity = 0;
+	m_alpha = false;
+	m_quantumSize = 0;
+	m_offX = 0;
+	m_offY = 0;
+	m_projectionValid = false;
 }
 

@@ -1,6 +1,4 @@
 /*
- *  kis_magick.cc - part of Krita aka Krayon aka KImageShop
- *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,9 +16,22 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+// Qt
 #include <qcolor.h>
 #include <qimage.h>
 
+// Koffice
+#include <koColor.h>
+
+// Image Magick
+#include <Magick++.h>
+
+// Local
+#include "kis_types.h"
+#include "kis_global.h"
+#include "kis_image.h"
+#include "kistile.h"
+#include "kistilemgr.h"
 #include "kis_magick.h"
 
 using namespace Magick;

@@ -1,79 +1,76 @@
 /*
- *  kis_layer.h - part of KImageShop
+ *  copyright (c) 2002 patrick julien <freak@codepimps.org>
  *
- *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  this program is free software; you can redistribute it and/or modify
+ *  it under the terms of the gnu general public license as published by
+ *  the free software foundation; either version 2 of the license, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  this program is distributed in the hope that it will be useful,
+ *  but without any warranty; without even the implied warranty of
+ *  merchantability or fitness for a particular purpose.  see the
+ *  gnu general public license for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  you should have received a copy of the gnu general public license
+ *  along with this program; if not, write to the free software
+ *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
+#if !defined KIS_LAYER_H_
+#define KIS_LAYER_H_
 
-#ifndef __kis_layer_h__
-#define __kis_layer_h__
-
-#include <qimage.h>
-#include <qobject.h>
-#include <qptrlist.h>
-
-#include <koColor.h>
-
-#include "kis_channel.h"
-#include "kis_global.h"
 #include "kis_paint_device.h"
 
-class KisLayer;
-class KisImageCmd;
-
-typedef KSharedPtr<KisLayer> KisLayerSP;
-typedef QValueVector<KisLayerSP> KisLayerSPLst;
-typedef KisLayerSPLst::iterator KisLayerSPLstIterator;
-typedef KisLayerSPLst::const_iterator KisLayerSPLstConstIterator;
+class QSize;
+class QRect;
 
 class KisLayer : public KisPaintDevice {
-	Q_OBJECT
 	typedef KisPaintDevice super;
 
 public:
-	KisLayer(const QString& name, uint width, uint height, uint bpp, cMode cm, const QRgb& defaultColor);
+	KisLayer(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity);
+	KisLayer(KisTileMgr tiles, KisImageSP img, const QString& name, QUANTUM opacity);
 	virtual ~KisLayer();
 
-	bool    linked()  const { return m_linked; }
-	cMode   colorMode()   const { return m_cMode; }
-
-	void    setLinked(bool l)  { m_linked = l; }
-
-	int     channelLastTileOffsetX() const;
-	int     channelLastTileOffsetY() const;
-	QRect   tileRect(int tileNo);
-
-	// information about where the layer rectange (not the
-	// entire image rectangle) is in canvas coords -jwc-
-
-	void    loadRGBImage(QImage img, QImage alpha);
-	void    loadGrayImage(QImage img, QImage alpha);
-
-	bool    boundryTileX(int tile) const;
-	bool    boundryTileY(int tile) const;
-    
-signals:
-	void layerPropertiesChanged();
+public:
+	// Overide KisPaintDevice
+	virtual void copy(const KisPaintDevice& rhs, bool addAlpha);
 
 public:
-	bool     m_linked;
-	uchar    m_bitDepth;
-	cMode m_cMode;
+	bool checkScaling(Q_INT32 width, Q_INT32 height);
+	KisMaskSP createMask(Q_INT32 maskType);
+	KisMaskSP addMask(KisMaskSP mask);
+	void applyMask(Q_INT32 mode);
+
+	void translate(Q_INT32 x, Q_INT32 y);
+	void addAlpha();
+
+	void scaleFactor(double wfactor, double hfactor);
+	void scale(Q_INT32 width, Q_INT32 height, Q_INT32 interpolation, bool localOrigin);
+	void scale(const QSize& size, Q_INT32 interpolation, bool localOrigin);
+
+	void resize(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	void resize(const QRect& rc);
+	void resize();
+
+	void boundary(const vKisSegments& segments);
+	void invalidateBounds();
+
+	KisMaskSP mask() const;
+	bool isFloatingSel() const;
+
+	QUANTUM opacity() const;
+	void opacity(QUANTUM val);
+
+private:
+	QUANTUM m_opacity;
+	bool m_preserveTranspanrency;
+	KisMaskSP m_mask;
+	KisTileMgrSP m_store;
+	KisPaintDeviceSP m_attachedTo;
+	bool m_initial;
+	bool m_boundsValid;
+	QRect m_bounds;
 };
 
-#endif // __kis_layer_h__
+#endif // KIS_LAYER_H_
 

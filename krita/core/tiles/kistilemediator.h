@@ -34,7 +34,7 @@ public:
 
 	void attach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum);
 	void detach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum);
-	void detachAll(KisTileMgrSP mgr);
+	void detachAll(KisTileMgr *mgr);
 	Q_INT32 tileNum(KisTileSP tile, KisTileMgrSP mgr);
 
 private:

@@ -1,6 +1,4 @@
 /*
- *  kis_canvas.h - part of KImageShop
- *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,36 +16,38 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __kis_canvas_h__
-#define __kis_canvas_h__
+#if !defined KIS_CANVAS_H_
+#define KIS_CANVAS_H_
 
 #include <qwidget.h>
 
-class KisCanvas : public QWidget
-{
-  Q_OBJECT
+class KisCanvas : public QWidget {
+	Q_OBJECT
+	typedef QWidget super;
 
- public:
-    KisCanvas( QWidget* parent = 0, const char* name = 0 );
-    void showScrollBars();
+public:
+	KisCanvas(QWidget *parent = 0, const char *name = 0);
+	virtual ~KisCanvas();
+	void showScrollBars();
     
- signals:
-    void mousePressed( QMouseEvent * );
-    void mouseMoved( QMouseEvent * );
-    void mouseReleased( QMouseEvent * );
-    void gotPaintEvent( QPaintEvent* );
-    void gotEnterEvent( QEvent* );
-    void gotLeaveEvent( QEvent* );  
-    void mouseWheelEvent( QWheelEvent * );
-  
- protected:
-    virtual void paintEvent( QPaintEvent* );
-    virtual void mousePressEvent ( QMouseEvent * );
-    virtual void mouseReleaseEvent ( QMouseEvent * );
-    virtual void mouseMoveEvent ( QMouseEvent * );
-    virtual void enterEvent( QEvent* );
-    virtual void leaveEvent( QEvent* );
-    virtual void wheelEvent( QWheelEvent * );
+signals:
+	void mousePressed(QMouseEvent*);
+	void mouseMoved(QMouseEvent*);
+	void mouseReleased(QMouseEvent*);
+	void gotPaintEvent(QPaintEvent*);
+	void gotEnterEvent(QEvent*);
+	void gotLeaveEvent(QEvent*);
+	void mouseWheelEvent(QWheelEvent*);
+
+protected:
+	virtual void paintEvent(QPaintEvent *event);
+	virtual void mousePressEvent(QMouseEvent *event);
+	virtual void mouseReleaseEvent(QMouseEvent *event);
+	virtual void mouseMoveEvent(QMouseEvent *event);
+	virtual void enterEvent(QEvent *event );
+	virtual void leaveEvent(QEvent *event);
+	virtual void wheelEvent(QWheelEvent *event);
 };
 
-#endif
+#endif // KIS_CANVAS_H_
+

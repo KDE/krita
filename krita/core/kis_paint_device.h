@@ -32,7 +32,7 @@
 #include "tiles/kis_datamanager.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_scale_visitor.h"
-#include "kis_iterators_pixel.h"
+//#include "kis_iterators_pixel.h"
 
 class QImage;
 class QSize;
@@ -42,6 +42,9 @@ class KisImage;
 class QWMatrix;
 class KisTileCommand;
 class KisRotateVisitor;
+class KisRectIteratorPixel;
+class KisVLineIteratorPixel;
+class KisHLineIteratorPixel;
 
 /**
  * Class modelled on QPaintDevice.
@@ -159,6 +162,10 @@ public:
         void setX(Q_INT32 x);
         void setY(Q_INT32 y);
 
+	/**
+	 * Return the number of bytes in a single pixel.
+	 * XXX: Rename this to something more desciptive.
+	 */
 	Q_INT32 depth() const;
 
 	QRect clip() const;
@@ -173,7 +180,7 @@ public:
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
-        
+
 	/**
 	   Apply the transformation matrix _in place_.
 	*/
@@ -206,7 +213,7 @@ public:
 	KisHLineIteratorPixel  & createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable);
 	
 	/** 
-	 * This function return an iterator which points to the first pixel of a horizontal line
+	 * This function return an iterator which points to the first pixel of a vertical line
 	 */
 	KisVLineIteratorPixel  & createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
 	
@@ -355,28 +362,6 @@ inline void KisPaintDevice::setImage(KisImage *image)
 inline bool KisPaintDevice::alpha() const
 {
         return colorStrategy()->alpha();
-}
-
-inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity, KisProfileSP profile)
-{
-	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
-
-	Q_UINT8 *pix = (Q_UINT8 *)iter;
-	
- 	if (!pix) return false;
-
- 	colorStrategy() -> toQColor(pix, c, opacity); //profile
-
-	return true;
-}
-
-inline bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity, KisProfileSP profile)
-{
-	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
-	
-	colorStrategy() -> nativeColor(c, opacity, (QUANTUM*)(iter)); // profile
-
-	return true;
 }
 
 #endif // KIS_PAINT_DEVICE_H_

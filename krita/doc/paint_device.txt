@@ -1,3 +1,5 @@
+THIS DOCUMENT IS OBSOLETED BY THE AUTOLAYERS MERGE
+
 * Paint devices and painters
 
 Krita's core consists of paint devices and painters:

@@ -22,19 +22,19 @@
 #include "kis_paint_device.h"
 
 KisHLineIteratorPixel::KisHLineIteratorPixel( KisPaintDeviceSP ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable) :
-	KisIteratorPixelTrait <KisHLineIterator> ( ndevice, this ),
-	KisHLineIterator(dm, x, y, w, writable)
+	KisHLineIterator(dm, x, y, w, writable),
+	KisIteratorPixelTrait <KisHLineIterator> ( ndevice, this )
 {
 }
 
 KisVLineIteratorPixel::KisVLineIteratorPixel( KisPaintDeviceSP ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable) :
-	KisIteratorPixelTrait <KisVLineIterator> ( ndevice, this ),
-	KisVLineIterator(dm, x, y, h, writable)
+	KisVLineIterator(dm, x, y, h, writable),
+	KisIteratorPixelTrait <KisVLineIterator> ( ndevice, this )
 {
 }
 
 KisRectIteratorPixel::KisRectIteratorPixel( KisPaintDeviceSP ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, bool writable) :
-	KisIteratorPixelTrait <KisRectIterator> ( ndevice, this ),
-	KisRectIterator(dm, x, y, w, h, writable)
+	KisRectIterator(dm, x, y, w, h, writable),
+	KisIteratorPixelTrait <KisRectIterator> ( ndevice, this )
 {
 }

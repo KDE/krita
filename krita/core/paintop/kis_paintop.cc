@@ -28,6 +28,7 @@
 #include "kis_point.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_global.h"
+#include "kis_iterators_pixel.h"
 
 KisPaintOp::KisPaintOp(KisPainter * painter) 
 {

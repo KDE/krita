@@ -558,4 +558,27 @@ void KisPaintDevice::removeSelection()
 	emit selectionChanged();
 }
 
+
+bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity, KisProfileSP profile)
+{
+  KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
+
+  Q_UINT8 *pix = (Q_UINT8 *)iter;
+    
+  if (!pix) return false;
+
+  colorStrategy() -> toQColor(pix, c, opacity); //profile
+
+  return true;
+}
+
+bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity, KisProfileSP profile)
+{
+  KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
+    
+  colorStrategy() -> nativeColor(c, opacity, (QUANTUM*)(iter)); // profile
+
+  return true;
+}
+
 #include "kis_paint_device.moc"

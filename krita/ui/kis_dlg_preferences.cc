@@ -189,7 +189,6 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 
 void ColorSettingsTab::refillMonitorProfiles(const QString & s)
 {
-	kdDebug() << "Get monitor profiles: " << s << "\n";
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbMonitorProfile -> clear();
 	m_page -> cmbMonitorProfile -> insertItem(i18n("None"));
@@ -204,7 +203,6 @@ void ColorSettingsTab::refillMonitorProfiles(const QString & s)
 
 void ColorSettingsTab::refillPrintProfiles(const QString & s)
 {
-	kdDebug() << "Get printer profiles " << s << "\n";
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbPrintProfile -> clear();
 	m_page -> cmbPrintProfile -> insertItem(i18n("None"));
@@ -219,7 +217,6 @@ void ColorSettingsTab::refillPrintProfiles(const QString & s)
 
 void ColorSettingsTab::refillImportProfiles(const QString & s)
 {
-	kdDebug() << "Get import profiles " << s << "\n";
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbImportProfile -> clear();
 	m_page -> cmbImportProfile -> insertItem(i18n("None"));

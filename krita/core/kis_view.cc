@@ -611,7 +611,6 @@ KisProfileSP KisView::monitorProfile()
 	if (m_monitorProfile == 0) {
 		resetMonitorProfile();
 	}
-	kdDebug() << "Monitor profile: " << m_monitorProfile << "\n";
 
 	return m_monitorProfile;
 }

@@ -41,8 +41,8 @@ public:
 	/**
 	 * Return the current pixel
 	 */
-	inline operator KisPixel() { return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile()); };
-	inline KisPixel value();
+	inline operator KisPixel() { return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile()); }; 
+	inline KisPixel value() { return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile()); };
         inline KisPixelRO oldValue() { return m_colorSpace -> toKisPixelRO( this->oldQuantumValue(), m_device -> profile()); };
 
 	/**

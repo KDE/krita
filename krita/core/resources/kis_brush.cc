@@ -42,6 +42,8 @@
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
 #include "kis_colorspace_registry.h"
+#include "kis_iterators_pixel.h"
+
 
 namespace {
 	struct GimpBrushV1Header {

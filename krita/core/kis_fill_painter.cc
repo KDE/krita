@@ -64,9 +64,9 @@
 namespace {
 }
 
-KisFillPainter::KisFillPainter() 
+KisFillPainter::KisFillPainter()
 	: super()
-{ 
+{
     m_width = m_height = -1;
 }
 
@@ -76,7 +76,7 @@ KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 }
 
 // 'regular' filling
-
+// XXX: This needs to be optimized.
 void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const QColor& c, QUANTUM opacity)
 {
 
@@ -164,7 +164,7 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 			m_width = m_height = 500;
 		}
 	}
-    
+
 	m_size = m_width * m_height;
 
 	if (lay -> hasSelection()) {
@@ -177,7 +177,7 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 
 		KisHLineIterator pixelIt = m_layer->createHLineIterator(startX, startY, startX+1, false);
 		KisPixel pixel((QUANTUM*)(pixelIt));
-		
+
 		for (int i = 0; i < lay -> depth(); i++) {
 			m_oldColor[i] = pixel[i];
 		}
@@ -202,11 +202,11 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
         m_width = m_height = -1;
 		return;
     }
-	// use the selection as mask over our fill        
+	// use the selection as mask over our fill
     for (int y = 0; y < m_height; y++) {
 	    KisHLineIteratorPixel line = filled->createHLineIterator(0, y, m_width, true);
-	    KisHLineIteratorPixel selectionIt = m_selection->createHLineIterator(0, y, m_width, true); 
-	    
+	    KisHLineIteratorPixel selectionIt = m_selection->createHLineIterator(0, y, m_width, true);
+
 	    QUANTUM selectionOpacity;
 	    QColor notUsed;
 
@@ -226,25 +226,25 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
 	    if (progressPercent > m_currentPercent) {
 		    emit notifyProgress(this, progressPercent);
 		    m_currentPercent = progressPercent;
-		    
+
 		    if (m_cancelRequested) {
 			    m_width = m_height = -1;
 			    return;
 		    }
 	    }
     }
-    
+
     bitBlt(0, 0, m_compositeOp, filled.data(), m_opacity, 0, 0,
 	   m_width, m_height);
-    
+
     emit notifyProgressDone(this);
-    
+
     m_width = m_height = 0;
 }
 
 void KisFillPainter::floodLine(int x, int y) {
 	int mostRight, mostLeft = x;
-	
+
 	KisHLineIteratorPixel pixelIt = m_layer->createHLineIterator(x, y, m_width, false);
 
 	int lastPixel = m_width;
@@ -317,7 +317,7 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& 
 			stop = true;
 		}
 	}
-	
+
 	return most;
 }
 

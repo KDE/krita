@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
- 
+
 #include "kis_autogradient.h"
 
 #include <qpainter.h>
@@ -131,11 +131,11 @@ void KisAutogradientResource::splitSegment( KisGradientSegment* segment )
 				segment -> interpolation(), segment -> colorInterpolation(),
 				segment  -> startOffset(),
 				( segment -> middleOffset() - segment -> startOffset() ) / 2 + segment -> startOffset(),
-				segment -> middleOffset(), 
+				segment -> middleOffset(),
 				segment -> startColor(),
 				segment -> colorAt( segment -> middleOffset() ) );
 		m_segments.insert( it, newSegment );
-		segment -> setStartColor( segment -> colorAt( segment -> middleOffset() ) );	
+		segment -> setStartColor( segment -> colorAt( segment -> middleOffset() ) );
 		segment -> setStartOffset( segment -> middleOffset() );
 		segment -> setMiddleOffset( ( segment -> endOffset() - segment -> startOffset() ) / 2 + segment -> startOffset() );
 	}

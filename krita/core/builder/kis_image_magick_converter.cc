@@ -42,7 +42,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_image_magick_converter.h"
 #include "kis_colorspace_registry.h"
-#include "tiles/kis_iterator.h"
+#include "kis_iterators_pixel.h"
 
 #include "../../../config.h"
 
@@ -232,7 +232,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 					return KisImageBuilder_RESULT_FAILURE;
 				}
 
-				KisHLineIterator hiter = layer->createHLineIterator(0, y, image->columns, true);
+				KisHLineIteratorPixel hiter = layer -> createHLineIterator(0, y, image->columns, true);
 				while(! hiter.isDone())
 				{
 					Q_UINT8 *ptr= (Q_UINT8 *)hiter;

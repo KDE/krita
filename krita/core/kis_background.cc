@@ -18,7 +18,7 @@
 #include "kis_global.h"
 #include "kis_background.h"
 #include "kis_image.h"
-#include "tiles/kis_iterator.h"
+#include "kis_iterators_pixel.h"
 
 KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*/) :
 	super(img, "background flyweight", OPACITY_OPAQUE)

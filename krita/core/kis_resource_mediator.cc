@@ -121,6 +121,7 @@ void KisResourceMediator::resourceServerLoadedBrush(KisBrush *resource)
 
 		m_chooser -> addItem(item);
 		emit addedResource(resource);
+		if (m_activeItem == 0) setActiveItem(item);
 	}
 }
 
@@ -134,6 +135,7 @@ void KisResourceMediator::resourceServerLoadedPipeBrush(KisImagePipeBrush *resou
 
 		m_chooser -> addItem(item);
 		emit addedResource(resource);
+		if (m_activeItem == 0) setActiveItem(item);
 	}
 }
 
@@ -148,6 +150,7 @@ void KisResourceMediator::resourceServerLoadedPattern(KisPattern *resource)
 
 		m_chooser -> addItem(item);
 		emit addedResource(resource);
+		if (m_activeItem == 0) setActiveItem(item);
 	}
 }
 

@@ -37,7 +37,6 @@ kritadefaulttools_la_SOURCES = \
         kis_tool_fill.cc \
         kis_tool_rectangle.cc \
         kis_tool_ellipse.cc \
-        kis_tool_polyline.cc \
         kis_tool_polygon.cc \
         kis_tool_colorchanger.cc  \
 	kis_tool_select_brush.cc \
@@ -58,7 +57,6 @@ noinst_HEADERS = \
 	kis_tool_polygon.h \
 	kis_tool_select_polygonal.h \
 	kis_tool_brush.h \
-	kis_tool_polyline.h \
 	kis_tool_select_rectangular.h \
 	kis_tool_colorchanger.h \
 	kis_tool_gradient.h \

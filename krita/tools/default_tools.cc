@@ -46,7 +46,6 @@
 #include "kis_tool_select_polygonal.h"
 #include "kis_tool_brush.h"
 #include "kis_tool_freehand.h"
-#include "kis_tool_polyline.h"
 #include "kis_tool_select_rectangular.h"
 #include "kis_tool_colorchanger.h"
 #include "kis_tool_gradient.h"
@@ -93,7 +92,6 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
 		r -> add(new KisToolPolygonFactory( actionCollection() ));
 		r -> add(new KisToolSelectPolygonalFactory( actionCollection() ));
 		r -> add(new KisToolBrushFactory( actionCollection() ));
-		r -> add(new KisToolPolyLineFactory( actionCollection() ));
 		r -> add(new KisToolSelectRectangularFactory( actionCollection() ));
 		r -> add(new KisToolColorPickerFactory( actionCollection() ));
 		r -> add(new KisToolLineFactory( actionCollection() ));

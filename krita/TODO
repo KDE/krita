@@ -11,6 +11,26 @@ to maintain the Krita screenshots page is screenshot and scale :-).
 
 Items with a hash have work started on them.
 
+Scaling
+
+	- replace calloc and free by new and delete.
+	- check if memory allocations fail and free the resources if
+	  they fail.
+	- replace the structs CONTRIB and CLIST by some STL or Qt
+	  container.
+	- mode the code to a visitor class.
+	- Add progressinfo
+	- Add a widget to the scale dialog to chose a scaling filter
+	  (the code is actually there, right now it can only be
+	  changed in the source)
+	- There is still a bug. The rightmost pixels in the scaled
+	  image are wrong. Actually it is not really a bug in the
+	  scaling code, if you draw a one pixel line at the rightmost
+	  edge of the image and scale it, the line is still there,
+	  there is just an addition line right of it. So the image is
+	  not scaled to the actual target width
+	- use iterators to access pixels.
+
 Core
 
 	* Discontinuous selections (A byte-map mask for a whole image) (#Boudewijn)

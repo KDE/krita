@@ -987,6 +987,11 @@ void KisView::unSelectAll()
 
 void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 {
+	// Disable updates while we change the scrollbar settings.
+	m_canvas -> setUpdatesEnabled(false);
+	m_hScroll -> setUpdatesEnabled(false);
+	m_vScroll -> setUpdatesEnabled(false);
+
 	if (x < 0 || y < 0) {
 		// Zoom about the centre of the current display
 		KisImageSP img = currentImg();
@@ -1038,6 +1043,12 @@ void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 		m_vScroll -> setValue(scrollY);
 	}
 
+	// Now update everything.
+	m_canvas -> setUpdatesEnabled(true);
+	m_hScroll -> setUpdatesEnabled(true);
+	m_vScroll -> setUpdatesEnabled(true);
+	m_hScroll -> update();
+	m_vScroll -> update();
 	canvasRefresh();
 }
 

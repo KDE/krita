@@ -395,8 +395,7 @@ int KisLayerBoxItem::width() const
 
 void KisLayerBoxItem::paint(QPainter *gc)
 {
-        QBrush br = isSelected() ? m_parent -> colorGroup().highlight() :
-		QBrush::white;
+        QBrush br = isSelected() ? m_parent -> colorGroup().highlight() : m_parent -> colorGroup().base();
         QPoint pt;
         QPixmap *pix;
 
@@ -419,6 +418,10 @@ void KisLayerBoxItem::paint(QPainter *gc)
         m_parent -> style().drawPrimitive(QStyle::PE_Panel, gc, m_previewRect,
 					  m_parent -> colorGroup());
         gc -> drawRect(0, 0, width() - 1, height() - 1);
+
+	QPen pen = isSelected() ? m_parent -> colorGroup().highlightedText() : m_parent -> colorGroup().text();
+	gc -> setPen(pen);
+
         gc -> drawText(HEIGHT * 3 + 3 * 3, 20, m_label);
 }
 

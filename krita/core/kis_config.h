@@ -33,14 +33,6 @@ public:
 	Q_INT32 defImgHeight() const;
 	void defImgHeight(Q_INT32 height);
 
-	Q_INT32 maxLayerWidth() const;
-	Q_INT32 defLayerWidth() const;
-	void defLayerWidth(Q_INT32 width);
-
-	Q_INT32 maxLayerHeight() const;
-	Q_INT32 defLayerHeight() const;
-	void defLayerHeight(Q_INT32 height);
-
 	enumCursorStyle defCursorStyle() const;
 	void defCursorStyle(enumCursorStyle style);
 

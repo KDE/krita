@@ -71,26 +71,6 @@ Q_INT32 KisConfig::defImgHeight() const
 	return m_cfg -> readNumEntry("imgHeightDef", IMG_DEFAULT_HEIGHT);
 }
 
-Q_INT32 KisConfig::maxLayerWidth() const
-{
-	return m_cfg -> readNumEntry("layerWidthMax", IMG_WIDTH_MAX);
-}
-
-Q_INT32 KisConfig::defLayerWidth() const
-{
-	return m_cfg -> readNumEntry("layerWidthDef", IMG_DEFAULT_WIDTH);
-}
-
-Q_INT32 KisConfig::maxLayerHeight() const
-{
-	return m_cfg -> readNumEntry("layerHeightMax", IMG_HEIGHT_MAX);
-}
-
-Q_INT32 KisConfig::defLayerHeight() const
-{
-	return m_cfg -> readNumEntry("layerHeightDef", IMG_DEFAULT_HEIGHT);
-}
-
 void KisConfig::defImgWidth(Q_INT32 width)
 {
 	m_cfg -> writeEntry("imgWidthDef", width);
@@ -99,16 +79,6 @@ void KisConfig::defImgWidth(Q_INT32 width)
 void KisConfig::defImgHeight(Q_INT32 height)
 {
 	m_cfg -> writeEntry("imgHeightDef", height);
-}
-
-void KisConfig::defLayerWidth(Q_INT32 width)
-{
-	m_cfg -> writeEntry("layerWidthDef", width);
-}
-
-void KisConfig::defLayerHeight(Q_INT32 height)
-{
-	m_cfg -> writeEntry("layerHeightDef", height);
 }
 
 enumCursorStyle KisConfig::defCursorStyle() const

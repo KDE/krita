@@ -1001,8 +1001,6 @@ bool KisDoc::slotNewImage()
 
 		cfg.defImgWidth(dlg.imgWidth());
 		cfg.defImgHeight(dlg.imgHeight());
-		cfg.defLayerWidth(dlg.imgWidth());
-		cfg.defLayerHeight(dlg.imgHeight());
 
 		return true;
 	}

@@ -1510,7 +1510,7 @@ void KisView::scaleLayer(double sx, double sy, enumFilterType ftype)
 	KisLayerSP layer = currentImg() -> activeLayer();
 	if (!layer) return;
 
-	layer -> scale(sx, sy, ftype);
+	layer -> scale(sx, sy, m_progress, ftype);
 
 	m_doc -> setModified(true);
 	layersUpdated();
@@ -2612,7 +2612,7 @@ void KisView::scaleCurrentImage(double sx, double sy, enumFilterType ftype)
 {
 	if (!currentImg()) return;
 	kdDebug() << "Going to scale image to (sx, sy): " << sx << ", " << sy << "\n";
-	currentImg() -> scale(sx, sy, ftype);
+	currentImg() -> scale(sx, sy, m_progress, ftype);
 	m_doc -> setModified(true);
 
 	resizeEvent(0);

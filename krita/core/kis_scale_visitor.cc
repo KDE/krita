@@ -22,8 +22,9 @@
 
 #include "kis_paint_device.h"
 #include "kis_scale_visitor.h"
+#include "kis_progress_display_interface.h"
 
-void KisScaleVisitor::scale(double xscale, double yscale, enumFilterType filterType) 
+void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, enumFilterType filterType) 
 {
         
         //define filter supports
@@ -84,6 +85,9 @@ void KisScaleVisitor::scale(double xscale, double yscale, enumFilterType filterT
         
         // create intermediate column to hold horizontal dst column zoom
         QUANTUM * tmp = new QUANTUM[m_dev -> height() * m_dev -> depth() * sizeof(QUANTUM)];
+        
+        //progress info
+        m_progress -> setSubject(this, true, true);
         
         /* Build y weights */
         /* pre-calculate filter contributions for a column */

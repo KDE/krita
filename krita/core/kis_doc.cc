@@ -1020,12 +1020,6 @@ bool KisDoc::contains(KisImageSP img) const
 KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorstrategy)
 {
 	KisImageSP img = new KisImage(this, width, height, colorstrategy, name);
-
-	m_images.push_back(img);
-
-	if (m_undo)
-		addCommand(new KisCommandImageAdd(this, this, img));
-
 	return img;
 }
 

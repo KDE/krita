@@ -383,7 +383,7 @@ void KisImage::resize(const QRect& rc)
 	resize(rc.width(), rc.height());
 }
 
-void KisImage::scale(double sx, double sy, enumFilterType ftype) 
+void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype) 
 {
 	kdDebug() << "KisImage::scale. SX: " 
 		  << sx
@@ -407,7 +407,7 @@ void KisImage::scale(double sx, double sy, enumFilterType ftype)
 	vKisLayerSP_it it;
 	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
 		KisLayerSP layer = (*it);
-		layer -> scale(sx, sy, ftype);
+		layer -> scale(sx, sy, m_progress, ftype);
 	}
 
 

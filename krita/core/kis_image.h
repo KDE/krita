@@ -71,7 +71,7 @@ public:
 	void resize(Q_INT32 w, Q_INT32 h);
 	void resize(const QRect& rc);
 
-	void scale(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
+	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype = MITCHELL_FILTER);
         void rotate(double angle);
         
 	void convertTo(KisStrategyColorSpaceSP colorStrategy);

@@ -313,11 +313,11 @@ void KisPaintDevice::accept(KisScaleVisitor& visitor)
         visitor.visitKisPaintDevice(this);
 }
 
-void KisPaintDevice::scale(double xscale, double yscale, enumFilterType ftype)
+void KisPaintDevice::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, enumFilterType ftype)
 {
         KisScaleVisitor visitor;
         accept(visitor);
-        visitor.scale(xscale, yscale, ftype);
+        visitor.scale(xscale, yscale, m_progress, ftype);
 }
 
 void KisPaintDevice::rotate(double angle) 

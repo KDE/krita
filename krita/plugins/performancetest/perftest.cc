@@ -30,6 +30,7 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qtextedit.h>
+#include <qdatetime.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -140,14 +141,24 @@ void PerfTest::slotPerfTest()
 
 QString PerfTest::bltTest(Q_UINT32 testCount)
 {
-	return QString("bitBlt test\n");
+	QString report = QString("* bitBlt test\n");
 
 	KisDoc * doc = m_view -> getDocument();
 	QStringList l = KisColorSpaceRegistry::singleton() -> listColorSpaceNames();
+	kdDebug() << "Number of color spaces: " << l.size() << "\n";
 	for (QStringList::Iterator it = l.begin(); it != l.end(); ++it) {
-		kdDebug() << "Testing for colorspace " << *it;
-// 		KisImage * img = new KisImage(doc, 1000, 1000, KisColorSpaceRegistry::singleton() -> get(*it));
+		report = report.append( "  Testing blitting on " + *it + "\n");
+ 		KisImage * img = doc -> newImage("blit-test", 1000, 1000, KisColorSpaceRegistry::singleton() -> get(*it));
+		doc -> addImage(img);
+		QTime t;
+		t.start();
+		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			
+		}
+		report = report.append(QString("   %1 opaquae blits of rectangles < tilesize : %2ms\n").arg(testCount).arg(t.elapsed()));
 	}
+
+	return report;
 	
 
 }

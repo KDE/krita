@@ -22,6 +22,7 @@
 #include "kis_progress_subject.h"
 
 class KisPaintDevice;
+class KisProgressDisplayInterface;
 
 enum enumFilterType {
 	BOX_FILTER,
@@ -51,7 +52,7 @@ public:
         KisScaleVisitor();
         ~KisScaleVisitor();
         void visitKisPaintDevice(KisPaintDevice* dev);
-        void scale(double sx, double sy, enumFilterType filterType = MITCHELL_FILTER);
+        void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType filterType = MITCHELL_FILTER);
 private:
         KisPaintDevice* m_dev;
         

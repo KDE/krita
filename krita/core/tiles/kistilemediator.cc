@@ -28,10 +28,10 @@
 
 namespace {
 	class KisTileMediatorSingleton {
-		typedef std::pair<KisTileMgrSP, Q_INT32> KisTileLink;
+		typedef std::pair<KisTileMgr *, Q_INT32> KisTileLink;
 		typedef std::list<KisTileLink> vKisTileLink;
 		typedef vKisTileLink::iterator vKisTileLink_it;
-		typedef std::map<KisTileSP, vKisTileLink> acKisTileLink;
+		typedef std::map<KisTile *, vKisTileLink> acKisTileLink;
 		typedef acKisTileLink::iterator acKisTileLink_it;
 
 	public:
@@ -39,10 +39,10 @@ namespace {
 		~KisTileMediatorSingleton();
 
 	public:
-		void attach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum);
-		void detach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum);
+		void attach(KisTile *tile, KisTileMgr *mgr, Q_INT32 tilenum);
+		void detach(KisTile *tile, KisTileMgr *mgr, Q_INT32 tilenum);
 		void detachAll(KisTileMgr *mgr);
-		Q_INT32 tileNum(KisTileSP tile, KisTileMgrSP mgr);
+		Q_INT32 tileNum(KisTile *tile, KisTileMgr *mgr);
 
 	public:
 		static KisTileMediatorSingleton *singleton();
@@ -68,7 +68,7 @@ namespace {
 		assert(KisTileMediatorSingleton::m_singleton);
 	}
 
-	void KisTileMediatorSingleton::attach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum) 
+	void KisTileMediatorSingleton::attach(KisTile *tile, KisTileMgr *mgr, Q_INT32 tilenum) 
 	{
 		QMutexLocker lock(&m_mutex);
 
@@ -78,18 +78,22 @@ namespace {
 		m_links[tile].push_back(std::make_pair(mgr, tilenum));
 	}
 
-	void KisTileMediatorSingleton::detach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum)
+	void KisTileMediatorSingleton::detach(KisTile *tile, KisTileMgr *mgr, Q_INT32 tilenum)
 	{
 		QMutexLocker lock(&m_mutex);
 
 		if (m_links.count(tile)) {
 			vKisTileLink& l = m_links[tile];
 
-			for (vKisTileLink_it it = l.begin(); it != l.end(); it++) {
+			for (vKisTileLink_it it = l.begin(); it != l.end();) {
 				const KisTileLink& link = *it;
 
-				if (link.first == mgr && link.second == tilenum)
+				if (link.first == mgr && link.second == tilenum) {
 					it = l.erase(it);
+				}
+				else {
+					it++;
+				}
 			}
 
 			if (l.empty()) 
@@ -100,24 +104,34 @@ namespace {
 	void KisTileMediatorSingleton::detachAll(KisTileMgr *mgr)
 	{
 		QMutexLocker lock(&m_mutex);
+		std::list<KisTile *> emptyEntries;
 
 		for (acKisTileLink_it it = m_links.begin(); it != m_links.end(); it++) {
-			KisTileSP tile = it -> first;
+			KisTile *tile = it -> first;
 			vKisTileLink& l = it -> second;
 
-			for (vKisTileLink_it lit = l.begin(); lit != l.end(); lit++) {
+			for (vKisTileLink_it lit = l.begin(); lit != l.end();) {
 				const KisTileLink& link = *lit;
 
-				if (link.first.data() == mgr)
+				if (link.first == mgr) {
 					lit = l.erase(lit);
+				}
+				else {
+					lit++;
+				}
 			}
 
-			if (l.empty())
-				m_links.erase(it);
+			if (l.empty()) {
+				emptyEntries.push_back(tile);
+			}
+		}
+
+		for (std::list<KisTile *>::iterator it = emptyEntries.begin(); it != emptyEntries.end(); it++) {
+			m_links.erase(*it);
 		}
 	}
 
-	Q_INT32 KisTileMediatorSingleton::tileNum(KisTileSP tile, KisTileMgrSP mgr)
+	Q_INT32 KisTileMediatorSingleton::tileNum(KisTile *tile, KisTileMgr *mgr)
 	{
 		QMutexLocker lock(&m_mutex);
 
@@ -153,21 +167,21 @@ KisTileMediator::~KisTileMediator()
 {
 }
 
-void KisTileMediator::attach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum)
+void KisTileMediator::attach(KisTile *tile, KisTileMgr *mgr, Q_INT32 tilenum)
 {
 	KisTileMediatorSingleton *mediator = KisTileMediatorSingleton::singleton();
 
 	mediator -> attach(tile, mgr, tilenum);
 }
 
-void KisTileMediator::detach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum)
+void KisTileMediator::detach(KisTile *tile, KisTileMgr *mgr, Q_INT32 tilenum)
 {
 	KisTileMediatorSingleton *mediator = KisTileMediatorSingleton::singleton();
 
 	return mediator -> detach(tile, mgr, tilenum);
 }
 
-Q_INT32 KisTileMediator::tileNum(KisTileSP tile, KisTileMgrSP mgr)
+Q_INT32 KisTileMediator::tileNum(KisTile *tile, KisTileMgr *mgr)
 {
 	KisTileMediatorSingleton *mediator = KisTileMediatorSingleton::singleton();
 

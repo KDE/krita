@@ -29,6 +29,12 @@
 #include "kistilemediator.h"
 #include "kistilemgr.h"
 
+#define DEBUG_TILE_MANAGERS 0
+
+#if DEBUG_TILE_MANAGERS
+static int numTileManagers = 0;
+#endif
+
 KisTileMgr::KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height) :
 	m_depth ( depth ),
 	m_width ( width ),
@@ -37,6 +43,10 @@ KisTileMgr::KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height) :
 	m_ntileCols ( (width + TILE_WIDTH - 1) / TILE_WIDTH ),
 	m_mediator ( new KisTileMediator )
 {
+#if DEBUG_TILE_MANAGERS
+	numTileManagers++;
+	kdDebug(DBG_AREA_TILES) << "TILE MANAGER CREATED total now = " << numTileManagers << endl;
+#endif
 }
 
 KisTileMgr::KisTileMgr(KisTileMgr *tm, Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height) :
@@ -47,12 +57,20 @@ KisTileMgr::KisTileMgr(KisTileMgr *tm, Q_UINT32 depth, Q_UINT32 width, Q_UINT32 
 	m_ntileCols ( (width + TILE_WIDTH - 1) / TILE_WIDTH ),
 	m_mediator ( new KisTileMediator )
 {
+#if DEBUG_TILE_MANAGERS
+	numTileManagers++;
+	kdDebug(DBG_AREA_TILES) << "TILE MANAGER CREATED total now = " << numTileManagers << endl;
+#endif
 	Q_ASSERT(tm != this);
 	duplicate(m_ntileRows * m_ntileCols, tm);
 }
 
 KisTileMgr::KisTileMgr(const KisTileMgr& rhs) : KShared(rhs)
 {
+#if DEBUG_TILE_MANAGERS
+	numTileManagers++;
+	kdDebug(DBG_AREA_TILES) << "TILE MANAGER CREATED total now = " << numTileManagers << endl;
+#endif
 	if (this != &rhs) {
 		m_width = rhs.m_width;
 		m_height = rhs.m_height;
@@ -69,10 +87,14 @@ KisTileMgr::KisTileMgr(const KisTileMgr& rhs) : KShared(rhs)
 
 KisTileMgr::~KisTileMgr()
 {
+#if DEBUG_TILE_MANAGERS
+	numTileManagers--;
+	kdDebug(DBG_AREA_TILES) << "TILE MANAGER DESTROYED total now = " << numTileManagers << endl;
+#endif
 	for (vKisTileSP_it it = m_tiles.begin(); it != m_tiles.end(); it++)
 		(*it) -> shareRelease();
 
-	//m_mediator -> detachAll(this);
+	m_mediator -> detachAll(this);
 	delete m_mediator;
 }
 
@@ -157,7 +179,7 @@ KisTileSP KisTileMgr::tile(Q_INT32 tilenum, Q_INT32 mode)
 	if (mode & TILEMODE_WRITE) {
 		if (tile -> shareCount() > 0) {
 			KisTileSP tileNew = new KisTile(*tile);
-#if 0
+#if DEBUG_TILE_MANAGERS
 			kdDebug(DBG_AREA_TILES) << "Tile " << tilenum << " is shared.  Duplicating.\n";
 #endif
 			detach(tile, tilenum);

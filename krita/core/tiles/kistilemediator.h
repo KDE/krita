@@ -46,10 +46,10 @@ public:
 	KisTileMediator();
 	~KisTileMediator();
 
-	void attach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum);
-	void detach(KisTileSP tile, KisTileMgrSP mgr, Q_INT32 tilenum);
+	void attach(KisTile *tile, KisTileMgr *mgr, Q_INT32 tilenum);
+	void detach(KisTile *tile, KisTileMgr *mgr, Q_INT32 tilenum);
 	void detachAll(KisTileMgr *mgr);
-	Q_INT32 tileNum(KisTileSP tile, KisTileMgrSP mgr);
+	Q_INT32 tileNum(KisTile *tile, KisTileMgr *mgr);
 
 private:
 	KisTileMediator(const KisTileMediator&);

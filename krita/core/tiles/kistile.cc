@@ -17,21 +17,38 @@
  */
 #include <assert.h>
 #include <string.h>
+
 #include <qtl.h>
+
 #include <kdebug.h>
+
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kistilecache.h"
 #include "kistile.h"
 #include "kistileswap.h"
 
+#define DEBUG_TILES 0
+
+#if DEBUG_TILES
+static int numTiles = 0;
+#endif
+
 KisTile::KisTile(Q_INT32 depth, KisTileCacheInterface *cache, KisTileSwapInterface *swap)
 {
+#if DEBUG_TILES
+	numTiles++;
+	kdDebug(DBG_AREA_TILES) << "TILE CREATED total now = " << numTiles << endl;
+#endif
 	init(depth, cache, swap);
 }
 
 KisTile::KisTile(KisTile& rhs) : super(rhs)
 {
+#if DEBUG_TILES
+	numTiles++;
+	kdDebug(DBG_AREA_TILES) << "TILE CREATED total now = " << numTiles << endl;
+#endif
 	if (this != &rhs) {
 		init(rhs.m_depth, rhs.m_cache, rhs.m_swap);
 		m_width = rhs.m_width;
@@ -51,6 +68,10 @@ KisTile::KisTile(KisTile& rhs) : super(rhs)
 	
 KisTile::~KisTile()
 {
+#if DEBUG_TILES
+	numTiles--;
+	kdDebug(DBG_AREA_TILES) << "TILE DESTROYED total now = " << numTiles << endl;
+#endif
 	if (m_data) {
 		delete[] m_data;
 		m_data = 0;
@@ -107,8 +128,9 @@ void KisTile::release()
 
 void KisTile::allocate()
 {
-	if (m_data == 0)
+	if (m_data == 0) {
 		m_data = new QUANTUM[size()];
+	}
 }
 
 QUANTUM *KisTile::data(Q_INT32 xoff, Q_INT32 yoff)

@@ -64,6 +64,7 @@ private:
 	QRect m_rc;
 	bool m_firstMove;
 	bool m_clearOnMove;
+	bool m_endMacroOnAnchor;
 };
 
 #endif // KIS_FLOATINGSELECTION_H_

@@ -1251,18 +1251,14 @@ void KisImage::unsetSelection(bool commit)
 		QRect rc = m_selection -> bounds();
 
 		if (commit) {
-			bool inMacro = m_adapter -> inMacro();
-
 			if (m_adapter -> undo()) {
-				if (!inMacro)
-					m_adapter -> beginMacro(i18n("Anchor Selection"));
-
+				m_adapter -> beginMacro(i18n("Anchor Selection"));
 				m_adapter -> addCommand(new KisSelectionSet(m_adapter, this, m_selection));
 			}
 
 			m_selection -> commit();
 
-			if (m_adapter -> undo() && !inMacro)
+			if (m_adapter -> undo())
 				m_adapter -> endMacro();
 		}
 

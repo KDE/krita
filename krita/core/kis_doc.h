@@ -63,7 +63,6 @@ private:
 	virtual bool undo() const;
 	virtual void beginMacro(const QString& macroName);
 	virtual void endMacro();
-	virtual bool inMacro() const;
 
 
 public:
@@ -167,7 +166,8 @@ private:
 	DCOPObject *m_dcop;
 	KisNameServer *m_nserver;
 	KMacroCommand *m_currentMacro;
-	Q_INT32 m_conversionDepth;;
+	Q_INT32 m_macroNestDepth;
+	Q_INT32 m_conversionDepth;
 };
 
 #endif // KIS_DOC_H_

@@ -63,6 +63,7 @@ namespace {
 KisFloatingSelection::KisFloatingSelection(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name) : super(width, height, colorStrategy, name)
 {
 	m_clearOnMove = true;
+	m_endMacroOnAnchor = false;
 	setVisible(false);
 	setName(name);
 }
@@ -77,6 +78,7 @@ KisFloatingSelection::KisFloatingSelection(KisPaintDeviceSP parent, KisImageSP i
 	m_name = name;
 	m_firstMove = true;
 	m_clearOnMove = true;
+	m_endMacroOnAnchor = false;
 	connect(m_parent, SIGNAL(visibilityChanged(KisPaintDeviceSP)), SLOT(parentVisibilityChanged(KisPaintDeviceSP)));
 }
 
@@ -154,6 +156,7 @@ void KisFloatingSelection::move(Q_INT32 x, Q_INT32 y)
 		m_firstMove = false;
 		m_parent -> invalidate(rc);
 		adapter -> addCommand(gc.endTransaction());
+		m_endMacroOnAnchor = true;
 	}
 
 	super::move(x, y);
@@ -252,10 +255,11 @@ KisPaintDeviceSP KisFloatingSelection::parent() const
 
 void KisFloatingSelection::anchor()
 {
-	if (m_firstMove == false) {
+	if (m_endMacroOnAnchor) {
 		KisUndoAdapter *adapter = m_parent -> image() -> undoAdapter();
 
 		adapter -> endMacro();
+		m_endMacroOnAnchor = false;
 	}
 
 	super::anchor();

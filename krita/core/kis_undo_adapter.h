@@ -35,7 +35,6 @@ public:
 	virtual bool undo() const = 0;
 	virtual void beginMacro(const QString& macroName) = 0;
 	virtual void endMacro() = 0;
-	virtual bool inMacro() const = 0;
 
 private:
 	KisUndoAdapter(const KisUndoAdapter&);

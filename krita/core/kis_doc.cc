@@ -345,6 +345,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_nserver = 0;
 	m_pushedClipboard = false;
 	m_currentMacro = 0;
+	m_macroNestDepth = 0;
 
 	if (name)
 		dcopObject();
@@ -1167,22 +1168,33 @@ void KisDoc::slotImageUpdated(const QRect& rect)
 	emit docUpdated(rect);
 }
 
-bool KisDoc::inMacro() const
-{
-	return m_currentMacro != 0;
-}
-
 void KisDoc::beginMacro(const QString& macroName)
 {
-	if (!m_currentMacro)
-		m_currentMacro = new KMacroCommand(macroName);
+	if (m_undo) {
+		if (m_macroNestDepth == 0) {
+			Q_ASSERT(m_currentMacro == 0);
+			m_currentMacro = new KMacroCommand(macroName);
+		}
+
+		m_macroNestDepth++;
+	}
 }
 
 void KisDoc::endMacro()
 {
-	if (m_undo && m_currentMacro) {
-		m_cmdHistory -> addCommand(m_currentMacro, false);
-		m_currentMacro = 0;
+	if (m_undo) {
+		Q_ASSERT(m_macroNestDepth > 0);
+
+		if (m_macroNestDepth > 0) {
+			m_macroNestDepth--;
+
+			if (m_macroNestDepth == 0) {
+				Q_ASSERT(m_currentMacro != 0);
+
+				m_cmdHistory -> addCommand(m_currentMacro, false);
+				m_currentMacro = 0;
+			}
+		}
 	}
 }
 

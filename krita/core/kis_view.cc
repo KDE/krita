@@ -1021,7 +1021,6 @@ void KisView::removeSelection()
                                 QRect ur;
                                 KisPainter gc(parent);
 
-                                Q_ASSERT(!m_adapter -> inMacro());
                                 m_adapter -> beginMacro(i18n("Remove Selection"));
                                 img -> unsetSelection(true);
                                 ur = rc;

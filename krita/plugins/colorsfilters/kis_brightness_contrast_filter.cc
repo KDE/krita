@@ -16,6 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#include <klocale.h>
 
 #include "kis_brightness_contrast_filter.h"
 #include "kis_multi_integer_filter_widget.h"
@@ -38,8 +39,8 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter(KisView * view ) : KisF
 KisFilterConfigurationWidget* KisBrightnessContrastFilter::createConfigurationWidget(QWidget* parent)
 {
 	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( -100, 100, 0, "Brightness" ) );
-	param.push_back( KisIntegerWidgetParam( -100, 100, 0, "Contrast" ) );
+	param.push_back( KisIntegerWidgetParam( -100, 100, 0, i18n("Brightness") ) );
+	param.push_back( KisIntegerWidgetParam( -100, 100, 0, i18n("Contrast") ) );
 	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );
 }
 

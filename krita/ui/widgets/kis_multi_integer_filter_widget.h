@@ -26,11 +26,11 @@
 class KIntNumInput;
 
 struct KisIntegerWidgetParam {
-	KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, const char* nname);
+	KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString nname);
 	Q_INT32 min;
 	Q_INT32 max;
 	Q_INT32 initvalue;
-	const char* name;
+	QString name;
 };
 
 typedef std::vector<KisIntegerWidgetParam> vKisIntegerWidgetParam;

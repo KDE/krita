@@ -53,7 +53,7 @@ KisFilterConfigurationWidget* KisPerChannelFilter::createConfigurationWidget(QWi
 	for(Q_INT32 i = 0; i < m_nbchannels; i++)
 	{
 		KisChannelInfoSP cI = colorStrategy() -> channels()[i];
-		param.push_back( KisIntegerWidgetParam( m_min, m_max, m_initvalue, cI->name().ascii() ) );
+		param.push_back( KisIntegerWidgetParam( m_min, m_max, m_initvalue, cI->name() ) );
 	}
 	return new KisMultiIntegerFilterWidget(this, parent, name().ascii(), name().ascii(), param );
 }

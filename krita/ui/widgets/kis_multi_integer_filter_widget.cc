@@ -22,10 +22,11 @@
 #include <qlayout.h>
 
 #include <knuminput.h>
+#include <klocale.h>
 
 #include "kis_filter.h"
 
-KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, const char* nname) :
+KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString nname) :
 	min(nmin),
 	max(nmax),
 	initvalue(ninitvalue),
@@ -47,13 +48,13 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget( KisFilter* nfilter, QW
 
 	for( Q_INT32 i = 0; i < m_nbintegerWidgets; ++i)
 	{
-		m_integerWidgets[i] = new KIntNumInput( this, iwparam[i].name);
+		m_integerWidgets[i] = new KIntNumInput( this, iwparam[i].name.ascii());
 		m_integerWidgets[i] -> setRange( iwparam[i].min, iwparam[i].max);
 		m_integerWidgets[i] -> setValue( iwparam[i].initvalue );
 
 		connect(m_integerWidgets[i], SIGNAL(valueChanged( int )), filter(), SLOT(refreshPreview()));
 
-		QLabel* lbl = new QLabel(QString(iwparam[i].name)+":", this);
+		QLabel* lbl = new QLabel(iwparam[i].name+":", this);
 		widgetLayout -> addWidget( lbl, i , 0);
 
 		widgetLayout -> addWidget( m_integerWidgets[i], i , 1);

@@ -30,9 +30,13 @@
 class QPaintEvent;
 class KisDoc;
 class KisCanvas;
+class KisLayer;
+class KisSelection;
 class KisView;
 
 class RectangularSelectTool : public KisTool {
+	typedef KisTool super;
+
 public:
 	RectangularSelectTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~RectangularSelectTool();
@@ -48,7 +52,9 @@ public:
 	virtual void mouseRelease(QMouseEvent *event);
 
 protected:
-	void drawRect(const QPoint& start, const QPoint& end, QPaintEvent *e = 0);
+	virtual void draw(const QPoint& start, const QPoint& end, QPaintEvent *e = 0);
+	virtual QRegion::RegionType regionType();
+	virtual void setSelection(const QRect& rc, KisLayer *lay);
 	void dragSelectArea(QMouseEvent *event);
 
 protected:

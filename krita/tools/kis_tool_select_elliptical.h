@@ -2,6 +2,7 @@
  *  kis_tool_select_elliptical.h - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,49 +24,26 @@
 
 #include <qpoint.h>
 #include "kis_tool.h"
+#include "kis_tool_select_rectangular.h"
 
 class KisDoc;
 class KisCanvas;
 class KisView;
 
-class EllipticalSelectTool : public KisTool {
+class EllipticalSelectTool : public RectangularSelectTool {
+	typedef RectangularSelectTool super;
+
 public:
 	EllipticalSelectTool(KisDoc *doc, KisCanvas *canvas);
 	virtual ~EllipticalSelectTool();
-
+	
 	virtual void setupAction(QObject *collection);
 
-	virtual void clearOld();
-	virtual bool willModify() const;
-
-	virtual void paintEvent(QPaintEvent *e);
-	virtual void mousePress(QMouseEvent *event);
-	virtual void mouseMove(QMouseEvent *event);
-	virtual void mouseRelease(QMouseEvent *event);
-
 protected:
-	void drawEllipse(const QPoint&, const QPoint&); 
-
-protected:
-    QPoint     m_dragStart;
-    QPoint     m_dragEnd;
-    bool       m_dragging;
-    bool       m_drawn;   
-    bool       m_init;
-
-    KisCanvas *m_canvas;
-
-    QRect      m_selectRect;
-
-private:
-
-    bool        moveSelectArea;
-    bool        dragSelectArea;
-    QPoint      m_hotSpot, oldDragPoint;
-    QRegion     m_selectRegion;
-    QRect       m_imageRect;
-    bool        dragFirst;
-    float       m_dragdist;
+	virtual void draw(const QPoint& start, const QPoint& end, QPaintEvent *e = 0);
+	virtual QRegion::RegionType regionType();
+	virtual void setSelection(const QRect& rc, KisLayer *lay);
 };
 
 #endif //__selecttoolelliptical_h__
+

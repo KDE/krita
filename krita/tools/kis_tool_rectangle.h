@@ -53,14 +53,14 @@ protected:
 	void drawRectangle(const QPoint&, const QPoint&);
 
 protected:
+	int m_lineThickness;
 
-    int         m_lineThickness;
+	QPoint m_dragStart;
+	QPoint m_dragEnd;
+	QRect m_final_lines;
 
-    QPoint      m_dragStart;
-    QPoint      m_dragEnd;
-    QRect	m_final_lines;
- 
-    bool        m_dragging;
+	bool m_dragging;
 };
 
 #endif //__linetool_h__
+

@@ -33,7 +33,7 @@
 #include "kis_view.h"
 #include "kis_vec.h"
 
-RectangularSelectTool::RectangularSelectTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
+RectangularSelectTool::RectangularSelectTool(KisDoc *doc, KisCanvas *canvas) : super(doc)
 {
 	m_dragging = false;
 	m_moving = false;
@@ -51,7 +51,7 @@ void RectangularSelectTool::clearOld()
 {
 	QRect rc;
 
-	drawRect(m_dragStart, m_dragEnd); 
+	draw(m_dragStart, m_dragEnd); 
 	m_cleared = true;
 	rc.setRect(0, 0, m_doc -> current() -> width(), m_doc -> current() -> height());
 	m_view -> updateCanvas(rc);
@@ -81,7 +81,7 @@ void RectangularSelectTool::mousePress(QMouseEvent *event)
 	else {
 		clearOld();
 		m_cleared = false;
-		drawRect(m_dragStart, m_dragEnd); 
+		draw(m_dragStart, m_dragEnd); 
 		m_dragging = true;
 		m_dragStart = event -> pos();
 		m_dragEnd = event -> pos();
@@ -158,9 +158,9 @@ void RectangularSelectTool::mouseMove( QMouseEvent* event )
 	}
 		
 	if (m_dragging) {
-		drawRect( m_dragStart, m_dragEnd );
+		draw(m_dragStart, m_dragEnd);
 		m_dragEnd = event->pos();
-		drawRect( m_dragStart, m_dragEnd );
+		draw(m_dragStart, m_dragEnd);
 	}
 	else {
 		if ((m_moving = !m_selectRegion.isNull() && m_selectRegion.contains(event -> pos())))
@@ -207,7 +207,7 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 		m_imageRect = selectRect;
 
 		if (selectRect.left() != selectRect.right() && selectRect.top() != selectRect.bottom())
-			m_selectRegion = QRegion(selectRect, QRegion::Rectangle);
+			m_selectRegion = QRegion(selectRect, regionType());
 		else
 			m_selectRegion = QRegion();
 
@@ -223,7 +223,7 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 
 			// the selection class handles getting the selection
 			// content from the given rectangular area
-			m_doc -> getSelection() -> setRectangularSelection(selectRect, lay);
+			setSelection(selectRect, lay);
 
 			kdDebug(0) << "selectRect" 
 				<< " left: "   << selectRect.left() 
@@ -239,8 +239,8 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 			m_dragEnd.setY(m_doc -> current() -> height());
 
 		if (old_end != m_dragEnd) {
-			drawRect(m_dragStart, old_end);
-			drawRect(m_dragStart, m_dragEnd);
+			draw(m_dragStart, old_end);
+			draw(m_dragStart, m_dragEnd);
 		}
 	}
 	else {
@@ -263,7 +263,7 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 	m_moving = false;
 }
 
-void RectangularSelectTool::drawRect(const QPoint& start, const QPoint& end, QPaintEvent *e)
+void RectangularSelectTool::draw(const QPoint& start, const QPoint& end, QPaintEvent *e)
 {
 	QPainter gc(m_canvas);
 	float zF = m_view -> zoomFactor();
@@ -296,6 +296,16 @@ bool RectangularSelectTool::willModify() const
 void RectangularSelectTool::paintEvent(QPaintEvent *event)
 {
 	if (!m_cleared)
-		drawRect(m_dragStart, m_dragEnd, event);
+		draw(m_dragStart, m_dragEnd, event);
+}
+
+QRegion::RegionType RectangularSelectTool::regionType()
+{
+	return QRegion::Rectangle;
+}
+
+void RectangularSelectTool::setSelection(const QRect& rc, KisLayer *lay)
+{
+	m_doc -> getSelection() -> setRectangularSelection(rc, lay);
 }
 

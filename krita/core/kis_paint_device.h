@@ -116,6 +116,8 @@ public:
         enumImgType typeWithoutAlpha() const;
         enumImgType typeWithAlpha() const;
 
+	KisStrategyColorSpaceSP colorStrategy() const;
+
 	CompositeOp compositeOp() { return m_compositeOp; }
 	void setCompositeOp(CompositeOp compositeOp) { m_compositeOp = compositeOp;}
 
@@ -206,6 +208,7 @@ private:
         QString m_name;
 	// Operation used to composite this layer with the layers _under_ this layer
 	CompositeOp m_compositeOp;
+	KisStrategyColorSpaceSP m_colorStrategy;
 };
 
 #endif // KIS_PAINT_DEVICE_H_

@@ -34,6 +34,8 @@
 #include "kispixeldata.h"
 #include "kis_painter.h"
 #include "kis_undo_adapter.h"
+#include "kis_strategy_colorspace.h"
+#include "kis_colorspace_factory.h"
 
 namespace {
         class KisResizeDeviceCmd : public KNamedCommand {
@@ -103,6 +105,10 @@ KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType&
         m_name = name;
         m_projectionValid = false;
 	m_compositeOp = COMPOSITE_OVER;
+
+	KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+	Q_ASSERT(factory);
+	m_colorStrategy = factory -> create(m_imgType);
 }
 
 KisPaintDevice::KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
@@ -131,6 +137,10 @@ KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& n
         m_name = name;
         m_projectionValid = false;
 	m_compositeOp = COMPOSITE_OVER;
+
+	KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+	Q_ASSERT(factory);
+	m_colorStrategy = factory -> create(m_imgType);
 }
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs)
@@ -160,6 +170,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs
                 m_projectionValid = false;
                 m_name = rhs.m_name;
 		m_compositeOp = COMPOSITE_OVER;
+		m_colorStrategy = rhs.m_colorStrategy;
         }
 }
 
@@ -232,6 +243,10 @@ void KisPaintDevice::configure(KisImageSP image,
         m_projectionValid = false;
 	kdDebug() << "composite op: " << compositeOp << "\n";
 	m_compositeOp = compositeOp;	
+
+	KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+	Q_ASSERT(factory);
+	m_colorStrategy = factory -> create(m_imgType);
 }
 
 void KisPaintDevice::update()
@@ -907,6 +922,11 @@ KisTileMgrSP KisPaintDevice::tiles() const
 Q_INT32 KisPaintDevice::depth() const
 {
 	return m_depth;
+}
+
+KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
+{
+	return m_colorStrategy;
 }
 
 #include "kis_paint_device.moc"

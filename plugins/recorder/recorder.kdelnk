@@ -13,19 +13,19 @@ MenuEntries=Start,Stop,Play
 ToolBarEntries=Start,Stop,Play
 [Start]
 Icon=unknown.xpm
-MiniIcon=unknown.xpm
+MiniIcon=record.xpm
 Slot=start
 Menu=Extra
 Name=Start Makro Recording
 [Stop]
 Icon=unknown.xpm
-MiniIcon=unknown.xpm
+MiniIcon=stop.xpm
 Slot=stop
 Menu=Extra
 Name=Stop Makro Recording
 [Play]
 Icon=unknown.xpm
-MiniIcon=unknown.xpm
+MiniIcon=play.xpm
 Slot=play
 Menu=Extra
 Name=Playback Makro

@@ -22,6 +22,8 @@ idl_HEADERS =
 kdelnk_DATA = recorder.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/pluginlnk
 
+SUBDIRS = pics
+
 ####### Implicit rules
 
 SUFFIXES = .h .moc

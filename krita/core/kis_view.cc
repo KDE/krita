@@ -1506,7 +1506,7 @@ void KisView::layer_rotateleft90()
 	if (!layer) return;
 
 	QWMatrix m;
-	m.rotate(45);
+	m.rotate(270);
 	layer->transform(m);
 
 	layersUpdated();

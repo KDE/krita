@@ -689,7 +689,8 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 	// Create target pixel buffer which we'll read into a tile manager
 	// when done.
 	QUANTUM * newData = new QUANTUM[targetW * targetH * depth() * sizeof(QUANTUM)];
-	memset(newData, targetW * targetH * depth() * sizeof(QUANTUM), 255);
+	/* This _has_ to be fixed; horribly layertype dependent */
+	memset(newData, targetW * targetH * depth() * sizeof(QUANTUM), 0);
 
 	bool invertible;
 	QWMatrix targetMat = mat.invert( &invertible ); // invert matrix
@@ -721,9 +722,9 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 			Q_INT32 orX = qRound(targetMat.m11() * x + targetMat.m21() * y + targetMat.dx());
 			Q_INT32 orY = qRound(targetMat.m22() * y + targetMat.m12() * x + targetMat.dy());
 
+			int currentPos = (y*targetW+x) * depth(); // try to be at least a little efficient
 			if (!(orX < 0 || orY < 0 || orX >= width() || orY >= height())) {
 				data() -> readPixelData(orX, orY, orX, orY, origPixel, depth());
-				int currentPos = (y*targetW+x) * depth(); // try to be at least a little efficient
 				for(int i = 0; i < depth(); i++)
 					newData[currentPos + i] = origPixel[i];
 			}

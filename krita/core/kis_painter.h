@@ -21,6 +21,7 @@
 #include <qstring.h>
 #include "kis_global.h"
 #include "kis_types.h"
+#include "kis_paint_device.h"
 
 class QRect;
 class KCommand;

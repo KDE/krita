@@ -35,19 +35,22 @@
 class KisHLineIteratorPixel : public KisHLineIterator, public KisIteratorPixelTrait <KisHLineIterator>
 {
 public:
-	KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, Q_INT32 x , Q_INT32 y , Q_INT32 w, bool writable);
+	KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x , Q_INT32 y , Q_INT32 w, bool writable);
+	inline KisHLineIteratorPixel & operator ++(int n) { KisHLineIterator::operator++(n); advance(n); return *this;}
 };
 
 class KisVLineIteratorPixel : public KisVLineIterator, public KisIteratorPixelTrait <KisVLineIterator>
 {
 public:
-	KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, Q_INT32 xpos , Q_INT32 ypos , Q_INT32 height, bool writable);
+	KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 xpos , Q_INT32 ypos , Q_INT32 height, bool writable);
+	inline KisVLineIteratorPixel & operator ++(int n) { KisVLineIterator::operator++(n); advance(n); return *this;}
 };
 
 class KisRectIteratorPixel : public KisRectIterator, public KisIteratorPixelTrait <KisRectIterator>
 {
 public:
-	KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, bool writable);
+	KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, bool writable);
+	inline KisRectIteratorPixel & operator ++(int n) { KisRectIterator::operator++(n); advance(n); return *this;}
 };
 
 #endif

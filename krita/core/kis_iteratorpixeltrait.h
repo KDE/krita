@@ -33,6 +33,7 @@ public:
 		m_colorSpace(ndevice->colorStrategy()),
 		m_underlyingIterator(underlyingIterator)
 	{
+		m_selectionIterator = NULL;
 	};
 
 	
@@ -58,8 +59,11 @@ protected:
 protected:
 	KisPaintDevice *m_device;
 	KisStrategyColorSpaceSP m_colorSpace;
+	inline void advance(int n){if(m_selectionIterator)(*m_selectionIterator)++;};
+	void setSelectionIterator(_iTp *si){m_selectionIterator = si; printf("setseliter\n");};
 
 	_iTp *m_underlyingIterator;
+	_iTp *m_selectionIterator;
 };
 
 #endif

@@ -215,7 +215,6 @@ public:
 	 */
 	void mirrorY();
 
-
 	/**
 	 * XXX: Move this undo code back into the tiles/ module and wrap in transactions
 	 * CBR: not sure about that, but transaction system needs to be revisited

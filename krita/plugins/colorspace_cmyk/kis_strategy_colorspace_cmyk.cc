@@ -41,7 +41,7 @@ ColorLUT KisStrategyColorSpaceCMYK::m_rgbLUT = ColorLUT();
 ChannelInfo KisStrategyColorSpaceCMYK::channelInfo[4] = { ChannelInfo("Cyan", 4), ChannelInfo("Magenta", 3), ChannelInfo("Yellow", 2), ChannelInfo("Black", 1) };
 
 
-KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() : m_pixmap(RENDER_WIDTH * 2, RENDER_HEIGHT * 2)
+KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() : KisStrategyColorSpace("CMYKA"), m_pixmap(RENDER_WIDTH * 2, RENDER_HEIGHT * 2)
 {
 	m_buf = new QUANTUM[RENDER_WIDTH * RENDER_HEIGHT * MAX_CHANNEL_CMYKA];
 }

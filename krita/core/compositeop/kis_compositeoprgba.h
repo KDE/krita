@@ -1,5 +1,4 @@
 /*
- *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -14,24 +13,21 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ *   02111-1307, USA.
+ *
  */
+ 
+#include "kis_compositeop.h"
 
-#include <stdlib.h>
-#include <kdebug.h>
-#include "kis_colorspace_factory_flyweight.h"
-#include "kis_paint_device.h"
-#include "kis_strategy_colorspace_rgb.h"
-#include "kis_strategy_colorspace_grayscale.h"
+#ifndef _KIS_COMPOSITE_OP_RGBA_H_
+#define _KIS_COMPOSITE_OP_RGBA_H_
 
-namespace {
-	KisColorSpaceFactoryFlyweight moveMe; // XXX Where should we create singletons in Krita?!?
-}
-
-KisColorSpaceFactoryFlyweight::KisColorSpaceFactoryFlyweight()
+class KisCompositeOpRGBAOver : public KisCompositeOp
 {
-}
+	public:
+		KisCompositeOpRGBAOver();
+		virtual void compose(KisPixelRepresentation dst, KisPixelRepresentation src, QUANTUM opacity);
+};
 
-KisColorSpaceFactoryFlyweight::~KisColorSpaceFactoryFlyweight()
-{
-}
+#endif

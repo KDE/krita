@@ -17,22 +17,82 @@
  */
 
 #include "kis_colorspace_factory.h"
+#include "kis_paint_device.h"
 
-KisColorSpaceFactoryInterface *KisColorSpaceFactoryInterface::m_singleton = 0;
+KisColorSpaceFactory *KisColorSpaceFactory::m_singleton = 0;
 
-KisColorSpaceFactoryInterface::KisColorSpaceFactoryInterface()
+KisColorSpaceFactory::KisColorSpaceFactory()
 {
-	Q_ASSERT(KisColorSpaceFactoryInterface::m_singleton == 0);
-	KisColorSpaceFactoryInterface::m_singleton = this;
+	Q_ASSERT(KisColorSpaceFactory::m_singleton == 0);
+	KisColorSpaceFactory::m_singleton = this;
 }
 
-KisColorSpaceFactoryInterface::~KisColorSpaceFactoryInterface()
+KisColorSpaceFactory::~KisColorSpaceFactory()
 {
 }
 
-KisColorSpaceFactoryInterface *KisColorSpaceFactoryInterface::singleton()
+KisColorSpaceFactory *KisColorSpaceFactory::singleton()
 {
-	Q_ASSERT(KisColorSpaceFactoryInterface::m_singleton);
-	return KisColorSpaceFactoryInterface::m_singleton;
+// 	Q_ASSERT(KisColorSpaceFactoryInterface::m_singleton);
+	if(KisColorSpaceFactory::m_singleton == 0)
+	{
+		KisColorSpaceFactory::m_singleton = new KisColorSpaceFactory();
+	}
+	return KisColorSpaceFactory::m_singleton;
+}
+
+
+KisStrategyColorSpaceSP KisColorSpaceFactory::create(const KisPaintDeviceSP& device)
+{
+	KisStrategyColorSpaceSP p;
+
+	if (device != 0)
+		p = create(device -> type());
+
+	return p;
+}
+
+KisStrategyColorSpaceSP KisColorSpaceFactory::create(enumImgType imgType)
+{
+
+	switch (imgType) {
+	case IMAGE_TYPE_GREYA:
+	case IMAGE_TYPE_GREY:
+		return colorSpace("Grayscale + Alpha");
+		break;
+	case IMAGE_TYPE_RGB:
+	case IMAGE_TYPE_RGBA:
+		return colorSpace("RGBA");
+		break;
+	default:
+		kdDebug() << "Color space strategy not accessible by create." << endl;
+		abort();
+		break;
+	}
+	return 0;
+}
+
+void KisColorSpaceFactory::add(enumImgType, KisStrategyColorSpaceSP )
+{
+	kdDebug() << "KisColorSpaceFactoryFlyweight::add(enumImgType , KisStrategyColorSpaceSP ) is deprecated" << endl;
+}
+
+KisStrategyColorSpaceSP KisColorSpaceFactory::colorSpace(const QString& name) const
+{
+	KisStrategyColorSpaceSP p;
+	acFlyweights_cit it = m_flyweights.find(name);
+
+	if (it != m_flyweights.end()) {
+		p = it -> second;
+		Q_ASSERT(p);
+	}
+
+	return p;
+}
+
+void KisColorSpaceFactory::add(KisStrategyColorSpaceSP colorspace)
+{
+	kdDebug() << "add a new colorspace : " << colorspace->name() << endl;
+	m_flyweights.insert(acFlyweights::value_type( colorspace->name(),colorspace));
 }
 

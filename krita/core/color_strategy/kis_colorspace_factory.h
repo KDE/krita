@@ -21,25 +21,36 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
+#include <map>
+#include <qstring.h>
+#include <kdemacros.h>
 
-class KisColorSpaceFactoryInterface {
-public:
-	KisColorSpaceFactoryInterface();
-	virtual ~KisColorSpaceFactoryInterface();
+class KisColorSpaceFactory {
+	typedef std::map<QString, KisStrategyColorSpaceSP> acFlyweights;
+	typedef acFlyweights::iterator acFlyweights_it;
+	typedef acFlyweights::const_iterator acFlyweights_cit;
 
 public:
-	virtual KisStrategyColorSpaceSP create(const KisPaintDeviceSP& device) = 0;
-	virtual KisStrategyColorSpaceSP create(enumImgType imgType) = 0;
-	virtual void add(enumImgType imgType, KisStrategyColorSpaceSP colorspace) = 0;
+	virtual ~KisColorSpaceFactory();
+
 public:
-	static KisColorSpaceFactoryInterface *singleton();
+	KisStrategyColorSpaceSP create(const KisPaintDeviceSP& device) KDE_DEPRECATED;
+	KisStrategyColorSpaceSP create(enumImgType imgType) KDE_DEPRECATED;
+	void add(enumImgType imgType, KisStrategyColorSpaceSP colorspace) KDE_DEPRECATED ;
+public:
+	void add(KisStrategyColorSpaceSP colorspace);
+	KisStrategyColorSpaceSP colorSpace(const QString& name) const;
+public:
+	static KisColorSpaceFactory *singleton();
 
 private:
-	KisColorSpaceFactoryInterface(const KisColorSpaceFactoryInterface&);
-	KisColorSpaceFactoryInterface operator=(const KisColorSpaceFactoryInterface&);
+	KisColorSpaceFactory();
+	KisColorSpaceFactory(const KisColorSpaceFactory&);
+	KisColorSpaceFactory operator=(const KisColorSpaceFactory&);
 
 private:
-	static KisColorSpaceFactoryInterface *m_singleton;
+	static KisColorSpaceFactory *m_singleton;
+	acFlyweights m_flyweights;
 };
 
 #endif // KIS_COLORSPACE_FACTORY_H_

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
+ *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,11 +19,13 @@
 #if !defined KIS_STRATEGY_COLORSPACE_H_
 #define KIS_STRATEGY_COLORSPACE_H_
 
+#include <map>
 #include <qcolor.h>
 #include <ksharedptr.h>
 #include <koColor.h>
 #include "kis_global.h"
 #include "kis_types.h"
+#include "kis_compositeop.h"
 
 class QPainter;
 class KisIteratorPixel;
@@ -48,8 +51,9 @@ class ChannelInfo {
 };
 
 class KisStrategyColorSpace : public KShared {
+	typedef std::map<QString, KisCompositeOp*> compositeOpStorage;
 public:
-	KisStrategyColorSpace();
+	KisStrategyColorSpace(const QString& name);
 	virtual ~KisStrategyColorSpace();
 
 public:
@@ -64,6 +68,7 @@ public:
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst) = 0;
 
 	virtual ChannelInfo * channelsInfo() const = 0;
+	inline QString name() { return m_name; };
 
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
 
@@ -100,11 +105,26 @@ public:
 			     CompositeOp op) const = 0;
 	
 	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src) =0;
+	
+	void addCompositeOp(KisCompositeOp* newco);
+	KisCompositeOp* compositeOp(const QString& name);
 
 private:
 	KisStrategyColorSpace(const KisStrategyColorSpace&);
 	KisStrategyColorSpace& operator=(const KisStrategyColorSpace&);
+	compositeOpStorage m_compositeOpStorage;
+	QString m_name;
 };
+
+inline void KisStrategyColorSpace::addCompositeOp(KisCompositeOp* newco)
+{
+	m_compositeOpStorage.insert(compositeOpStorage::value_type( newco->name(),newco));
+}
+inline KisCompositeOp* KisStrategyColorSpace::compositeOp(const QString& name)
+{
+	return m_compositeOpStorage.find(name)->second;
+}
+
 
 #endif // KIS_STRATEGY_COLORSPACE_H_
 

@@ -186,7 +186,7 @@ void KisPreviewWidget::render(QPainter &painter, KisImageSP image, double zoomX,
 	Q_INT32 x2 = image -> width();
 	Q_INT32 y2 = image -> height();
 	Q_INT32 tileno;
-	KisColorSpaceFactoryInterface *factory = KisColorSpaceFactoryInterface::singleton();
+	KisColorSpaceFactory *factory = KisColorSpaceFactory::singleton();
 
 	if (!image)
 		return;

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
+ *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,9 +18,11 @@
  */
 #include "kis_strategy_colorspace.h"
 #include "kis_strategy_colorspace_rgb.h"
+#include "kis_colorspace_factory.h"
 
-KisStrategyColorSpace::KisStrategyColorSpace()
+KisStrategyColorSpace::KisStrategyColorSpace(const QString& name) : m_name(name)
 {
+	KisColorSpaceFactory::singleton()->add(this);
 }
 
 KisStrategyColorSpace::~KisStrategyColorSpace()

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
+ *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,13 +21,14 @@
 #define KIS_COLORSPACE_FACTORY_FLYWEIGHT_H_
 
 #include <map>
+#include <qstring.h>
 #include "kis_colorspace_factory.h"
 
 class KisColorSpaceFactoryFlyweight : public KisColorSpaceFactoryInterface {
 
 	typedef KisColorSpaceFactoryInterface super;
 
-	typedef std::map<enumImgType, KisStrategyColorSpaceSP> acFlyweights;
+	typedef std::map<QString, KisStrategyColorSpaceSP> acFlyweights;
 	typedef acFlyweights::iterator acFlyweights_it;
 	typedef acFlyweights::const_iterator acFlyweights_cit;
 
@@ -38,10 +40,10 @@ public:
 	virtual KisStrategyColorSpaceSP create(const KisPaintDeviceSP& device);
 	virtual KisStrategyColorSpaceSP create(enumImgType imgType);
 	virtual void add(enumImgType imgType, KisStrategyColorSpaceSP colorspace);
+public:
+	virtual void add(KisStrategyColorSpaceSP colorspace);
+	virtual KisStrategyColorSpaceSP colorSpace(const QString& name) const;
 
-private:
-	KisStrategyColorSpaceSP find(enumImgType imgType) const;
-	
 private:
 	acFlyweights m_flyweights;
 };

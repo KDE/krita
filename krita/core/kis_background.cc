@@ -22,7 +22,7 @@
 #include "kistile.h"
 
 namespace {
-	void renderBgTile(KisTileSP tile)
+	void fillBgTile(KisTileSP tile)
 	{
 		QUANTUM *p;
 		QUANTUM *q;
@@ -57,7 +57,7 @@ KisBackground::KisBackground(KisImageSP img, Q_INT32 width, Q_INT32 height) : su
 
 	tm = data();
 	tile = tm -> tile(0, TILEMODE_WRITE);
-	renderBgTile(tile);
+	fillBgTile(tile);
 
 	for (Q_UINT32 i = 0, k = 0; i < tm -> nrows(); i++)
 		for (Q_UINT32 j = 0; j < tm -> ncols(); j++, k++)

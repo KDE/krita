@@ -37,6 +37,8 @@ namespace {
 		typedef QMap<Q_INT32, KisTileSP> TileMap;
 
 	public:
+		KisTileCommand(const QString& name, KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
+		KisTileCommand(const QString& name, KisPaintDeviceSP device, const QRect& rc);
 		KisTileCommand(const QString& name, KisPaintDeviceSP device);
 		virtual ~KisTileCommand();
 
@@ -53,12 +55,30 @@ namespace {
 		TileMap m_originals;
 		QString m_name;
 		KisPaintDeviceSP m_device;
+		QRect m_rc;
 	};
+
+	KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
+	{
+		m_name = name;
+		m_device = device;
+		m_rc.setRect(x + m_device -> x(), y + m_device -> y(), width, height);
+	}
+
+	KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device, const QRect& rc)
+	{
+		m_name = name;
+		m_device = device;
+		m_rc = rc;
+		m_rc.moveBy(m_device -> x(), m_device -> y());
+	}
 
 	KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device)
 	{
 		m_name = name;
 		m_device = device;
+		m_rc = device -> bounds();
+		m_rc.moveBy(m_device -> x(), m_device -> y());
 	}
 
 	KisTileCommand::~KisTileCommand()
@@ -76,7 +96,7 @@ namespace {
 		}
 
 		if (img)
-			img -> invalidate(); //it.key());
+			img -> notify(m_rc);
 	}
 
 	void KisTileCommand::unexecute()
@@ -96,12 +116,11 @@ namespace {
 			for (TileMap::iterator it = m_tiles.begin(); it != m_tiles.end(); it++) {
 				(*it) -> valid(false);
 				tm -> attach(*it, it.key());
-
 			}
 		}
 
 		if (img)
-			img -> invalidate(); //it.key());
+			img -> notify(m_rc);
 	}
 
 	QString KisTileCommand::name() const
@@ -471,7 +490,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 	sxmod = sx % TILE_WIDTH;
 
 	if (m_transaction) {
-		tc = new KisTileCommand(m_transaction -> name(), m_device);
+		tc = new KisTileCommand(m_transaction -> name(), m_device, dx, dy, sw, sh);
 		m_transaction -> addCommand(tc);
 	}
 
@@ -519,21 +538,25 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 			srctile -> lock();
 			dst = dsttile -> data(dxmod, dymod);
 			src = srctile -> data(sxmod, symod);
+			cols = QMIN(cols, srctile -> width());
+			rows = QMIN(rows, srctile -> height());
 			tileBlt(dst, dsttile, src, srctile, opacity, rows, cols, op);
 
 			if (yxtra < 0) {
 				tile = srctm -> tile(sx, sy + TILE_HEIGHT - (sy % TILE_HEIGHT) + 1, TILEMODE_READ);
 
 				if (tile) {
-					if (dsttile -> height() == TILE_HEIGHT)
+					if (dsttile -> height() == TILE_HEIGHT) {
 						nrows = QMIN(tile -> height(), symod);
-					else
+					} else {
 						nrows = dsttile -> height() - rows;
+						nrows = QMIN(tile -> height(), nrows);
+					}
 
 					tile -> lock();
 					dst = dsttile -> data(dxmod, rows);
 					src = tile -> data(sxmod, 0);
-					tileBlt(dst, dsttile, src, tile, nrows, cols, op);
+					tileBlt(dst, dsttile, src, tile, opacity, nrows, cols, op);
 					tile -> release();
 				}
 			} else if (yxtra > 0) {
@@ -545,16 +568,20 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 				tile = dsttm -> tile(tileno, TILEMODE_RW);
 
 				if (tile) {
-					if (srctile -> height() == TILE_HEIGHT)
+					if (srctile -> height() == TILE_HEIGHT) {
 						nrows = QMIN(tile -> height(), dymod);
-					else
+					} else {
 						nrows = srctile -> height() - rows;
+						nrows = QMIN(tile -> height(), nrows);
+					}
 
-					tile -> lock();
-					dst = tile -> data(dxmod, 0);
-					src = srctile -> data(sxmod, rows);
-					tileBlt(dst, tile, src, srctile, nrows, cols, op);
-					tile -> release();
+					if (nrows > 0) {
+						tile -> lock();
+						dst = tile -> data(dxmod, 0);
+						src = srctile -> data(sxmod, rows);
+						tileBlt(dst, tile, src, srctile, opacity, nrows, cols, op);
+						tile -> release();
+					}
 				}
 			}
 
@@ -562,15 +589,17 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 				tile = srctm -> tile(sx + TILE_WIDTH - (sx % TILE_WIDTH) + 1, sy, TILEMODE_READ);
 
 				if (tile) {
-					if (dsttile -> width() == TILE_WIDTH)
+					if (dsttile -> width() == TILE_WIDTH) {
 						ncols = QMIN(tile -> width(), sxmod);
-					else
+					} else {
 						ncols = dsttile -> width() - cols;
+						ncols = QMIN(tile -> width(), ncols);
+					}
 
 					tile -> lock();
 					dst = dsttile -> data(cols, dymod);
 					src = tile -> data(0, symod);
-					tileBlt(dst, dsttile, src, tile, rows, ncols, op);
+					tileBlt(dst, dsttile, src, tile, opacity, rows, ncols, op);
 					tile -> release();
 				}
 			} else if (xxtra > 0) {
@@ -582,16 +611,20 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 				tile = dsttm -> tile(tileno, TILEMODE_RW);
 
 				if (tile) {
-					if (srctile -> width() == TILE_WIDTH)
+					if (srctile -> width() == TILE_WIDTH) {
 						ncols = QMIN(tile -> width(), dxmod);
-					else
+					} else {
 						ncols = srctile -> width() - cols;
+						ncols = QMIN(tile -> width(), ncols);
+					}
 
-					tile -> lock();
-					dst = tile -> data(0, dymod);
-					src = srctile -> data(cols, symod);
-					tileBlt(dst, tile, src, srctile, rows, ncols, op);
-					tile -> release();
+					if (ncols > 0) {
+						tile -> lock();
+						dst = tile -> data(0, dymod);
+						src = srctile -> data(cols, symod);
+						tileBlt(dst, tile, src, srctile, opacity, rows, ncols, op);
+						tile -> release();
+					}
 				}
 			}
 
@@ -634,7 +667,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 						tile -> lock();
 						dst = tile -> data();
 						src = srctile -> data(cols, rows);
-						tileBlt(dst, tile, src, srctile, nrows, ncols, op);
+						tileBlt(dst, tile, src, srctile, opacity, nrows, ncols, op);
 						tile -> release();
 					}
 				}
@@ -670,7 +703,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 						tile -> lock();
 						dst = dsttile -> data(cols, rows);
 						src = tile -> data();
-						tileBlt(dst, dsttile, src, tile, nrows, ncols, op);
+						tileBlt(dst, dsttile, src, tile, opacity, nrows, ncols, op);
 						tile -> release();
 					}
 				}
@@ -740,7 +773,7 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 	ydiff = y1 - TILE_HEIGHT * (y1 / TILE_HEIGHT);
 
 	if (m_transaction) {
-		tc = new KisTileCommand(m_transaction -> name(), m_device);
+		tc = new KisTileCommand(m_transaction -> name(), m_device, x1, y1, w, h);
 		m_transaction -> addCommand(tc);
 	}
 

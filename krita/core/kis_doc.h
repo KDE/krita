@@ -60,6 +60,7 @@ public:
 
 	KisLayerSP layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM devOpacity);
 	KisLayerSP layerAdd(KisImageSP img, const QString& name, KisSelectionSP selection);
+	KisLayerSP layerAdd(KisImageSP img, KisLayerSP layer, Q_INT32 position);
 	void layerRemove(KisImageSP img, KisLayerSP layer);
 	void layerRaise(KisImageSP img, KisLayerSP layer);
 	void layerLower(KisImageSP img, KisLayerSP layer);

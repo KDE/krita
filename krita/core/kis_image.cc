@@ -360,7 +360,6 @@ void KisImage::visibleComponent(CHANNELTYPE type, bool value)
 	if (i != PIXEL_UNDEF && value != m_visible[i]) {
 		m_visible[i] = value;
 		emit visibilityChanged(KisImageSP(this), type);
-		emit update(KisImageSP(this), 0, 0, width(), height());
 	}
 }
 
@@ -563,7 +562,6 @@ void KisImage::rm(KisLayerSP layer)
 	}
 
 	rc = layer -> bounds();
-	emit update(KisImageSP(this), rc.x(), rc.y(), rc.width(), rc.height());
 	invalidate(rc.x(), rc.y(), rc.width(), rc.height());
 
 	if (m_layers.size() == 1 && m_layers[0] -> alpha())
@@ -667,7 +665,6 @@ bool KisImage::pos(KisLayerSP layer, Q_INT32 position)
 
 	//undo_push_layer_reposition (gimage, layer);
 	qSwap(m_layers[old], m_layers[position]);	
-	layer -> update(layer -> x(), layer -> y(), layer -> width(), layer -> height());
 	invalidate();
 	return true;
 }
@@ -806,8 +803,6 @@ void KisImage::rm(KisChannelSP channel)
 		else
 			activate(m_channels[0]);
 	}
-
-	emit update(KisImageSP(this), 0, 0, width(), height());	
 }
 
 bool KisImage::raise(KisChannelSP channel)
@@ -1041,7 +1036,6 @@ void KisImage::unsetSelection(bool commit)
 		m_selection = 0;
 		invalidate(rc);
 		emit selectionChanged(KisImageSP(this));
-		emit update(this, rc.x(), rc.y(), rc.width(), rc.height());
 	}
 }
 
@@ -1081,6 +1075,24 @@ void KisImage::renderProjection(QPixmap& dst, KisTileSP src)
 
 		src -> release();
 	}
+}
+
+void KisImage::notify()
+{
+	invalidate(0, 0, width(), height());
+	emit update(KisImageSP(this), QRect(0, 0, width(), height()));
+}
+
+void KisImage::notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
+{
+	invalidate(x, y, width, height);
+	emit update(KisImageSP(this), QRect(x, y, width, height));
+}
+
+void KisImage::notify(const QRect& rc)
+{
+	invalidate(rc);
+	emit update(KisImageSP(this), rc);
 }
 
 #include "kis_image.moc"

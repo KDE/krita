@@ -143,13 +143,17 @@ public:
 	void unsetSelection(bool commit = true);
 	KisSelectionSP selection() const;
 
+	void notify();
+	void notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
+	void notify(const QRect& rc);
+
 signals:
 	void activeLayerChanged(KisImageSP image);
 	void activeChannelChanged(KisImageSP image);
 	void alphaChanged(KisImageSP image);
 	void selectionChanged(KisImageSP image);
 	void visibilityChanged(KisImageSP image, CHANNELTYPE type);
-	void update(KisImageSP image, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
+	void update(KisImageSP image, const QRect& rc);
 
 private:
 	KisImage& operator=(const KisImage& rhs);

@@ -422,6 +422,7 @@ void KisTileMgr::readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q
 	for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
 		for (x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
 			t = tile(x, y, TILEMODE_READ);
+			t -> lock();
 			src = t -> data(x % TILE_WIDTH, y % TILE_HEIGHT);
 			dst = buffer + stride * (y - y1) + depth() * (x - x1);
 			rows = t -> height() - y % TILE_HEIGHT;

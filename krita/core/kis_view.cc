@@ -1959,8 +1959,10 @@ void KisView::imgSelectionChanged(KisImageSP img)
 
 void KisView::connectCurrentImg() const
 {
-	if (m_current)
+	if (m_current) {
 		connect(m_current, SIGNAL(selectionChanged(KisImageSP)), SLOT(imgSelectionChanged(KisImageSP)));
+		connect(m_current, SIGNAL(update(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
+	}
 }
 
 void KisView::disconnectCurrentImg() const
@@ -2005,9 +2007,10 @@ void KisView::clipboardDataChanged()
 	m_clipboardHasImage = !QApplication::clipboard() -> image().isNull();
 }
 
-void KisView::commandExecuted()
+void KisView::imgUpdated(KisImageSP img, const QRect& rc)
 {
-	updateCanvas();
+	if (img == currentImg())
+		updateCanvas(rc);
 }
 
 #include "kis_view.moc"

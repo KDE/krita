@@ -119,7 +119,6 @@ public slots:
 	// settings action slots
 	void saveOptions();
 	void preferences();
-	void commandExecuted();
 
 protected:
 	virtual void resizeEvent(QResizeEvent*);
@@ -218,6 +217,7 @@ private slots:
 	void showStatusbar();
 	void showToolbar();
 	void slotInsertImageAsLayer();
+	void imgUpdated(KisImageSP img, const QRect& rc);
 
 private:
 	KisDoc *m_doc;

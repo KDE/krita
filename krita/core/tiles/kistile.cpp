@@ -18,6 +18,7 @@
 #include <assert.h>
 #include <string.h>
 #include <qtl.h>
+#include <kdebug.h>
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kistilecache.h"
@@ -117,14 +118,25 @@ QUANTUM *KisTile::data(Q_INT32 xoff, Q_INT32 yoff)
 {
 	Q_INT32 offset = yoff * m_width + xoff;
 
+	if (!m_data)
+		allocate();
+
+#if !defined (NDEBUG)
+	if (yoff > height()) {
+		kdDebug(DBG_AREA_TILES) << "yoff = " << yoff << endl;
+		kdDebug(DBG_AREA_TILES) << "height() = " << height() << endl;
+	}
+
+	if (xoff > width()) {
+		kdDebug(DBG_AREA_TILES) << "xoff = " << xoff << endl;
+		kdDebug(DBG_AREA_TILES) << "width() = " << width() << endl;
+	}
+#endif
+
 	assert(xoff >= 0);
 	assert(yoff >= 0);
 	assert(yoff <= height());
 	assert(xoff <= width());
-
-	if (!m_data)
-		allocate();
-
 	return m_data + offset * m_depth;
 }
 

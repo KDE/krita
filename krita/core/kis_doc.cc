@@ -168,6 +168,43 @@ namespace {
 		KisDoc *m_doc;
 		KisImageSP m_img;
 	};
+
+	class LayerAddCmd : public KisCommand {
+		typedef KisCommand super;
+
+	public:
+		LayerAddCmd(KisDoc *doc, KisImageSP img, KisLayerSP layer) : super("Add Layer", doc)
+		{
+			m_doc = doc;
+			m_img = img;
+			m_layer = layer;
+			m_index = img -> index(layer);
+		}
+
+		virtual ~LayerAddCmd()
+		{
+		}
+
+		virtual void execute()
+		{
+			m_doc -> setUndo(false);
+			m_doc -> layerAdd(m_img, m_layer, m_index);
+			m_doc -> setUndo(true);
+		}
+
+		virtual void unexecute()
+		{
+			m_doc -> setUndo(false);
+			m_doc -> layerRemove(m_img, m_layer);
+			m_doc -> setUndo(true);
+		}
+
+	private:
+		KisDoc *m_doc;
+		KisImageSP m_img;
+		KisLayerSP m_layer;
+		Q_INT32 m_index;
+	};
 }
 
 KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) : 
@@ -799,7 +836,6 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 {
 	KisView *view = new KisView(this, parent, name);
 
-	connect(m_cmdHistory, SIGNAL(commandExecuted()), view, SLOT(commandExecuted()));
 	return view;
 }
 
@@ -967,6 +1003,10 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 				gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
 				gc.end();
 				img -> top(layer);
+				
+				if (m_undo)
+					addCommand(new LayerAddCmd(this, img, layer)); 
+				
 				img -> invalidate();
 				setModified(true);
 				layer -> visible(true);
@@ -992,14 +1032,41 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisSelectionSP 
 			return 0;
 
 		img -> top(layer);
-		img -> invalidate(layer -> bounds());
 		setModified(true);
+	
+		if (m_undo)
+			addCommand(new LayerAddCmd(this, img, layer)); 
+
+		img -> invalidate(layer -> bounds());
 		layer -> move(selection -> x(), selection -> y());
 		layer -> visible(true);
 		emit layersUpdated(img);
 	}
 
 	return layer;
+}
+
+KisLayerSP KisDoc::layerAdd(KisImageSP img, KisLayerSP l, Q_INT32 position)
+{
+	if (!contains(img) || !l)
+		return 0;
+
+	if (img -> layer(l -> name()))
+		return 0;
+
+	if (!img -> add(l, -1))
+		return 0;
+
+	setModified(true);
+	img -> pos(l, position);
+
+	if (m_undo)
+		addCommand(new LayerAddCmd(this, img, l)); 
+
+	img -> invalidate(l -> bounds());
+	l -> visible(true);
+	emit layersUpdated(img);
+	return l;
 }
 
 void KisDoc::layerRemove(KisImageSP img, KisLayerSP layer)

@@ -101,6 +101,7 @@ public:
 	KisPaintDeviceSP activeDevice();
 
 	KisLayerSP activeLayer();
+	const KisLayerSP activeLayer() const;
 	KisLayerSP activate(KisLayerSP layer);
 	KisLayerSP activateLayer(Q_INT32 n);
 	Q_INT32 index(KisLayerSP layer);

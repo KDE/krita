@@ -100,6 +100,9 @@ public:
 signals:
 	void bgColorChanged(const KoColor& c);
 	void fgColorChanged(const KoColor& c);     
+	void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
+	void cursorEnter();
+	void cursorLeave();
 
 public slots:
 	void dialog_gradient();
@@ -120,6 +123,7 @@ public slots:
 	// image action slots
 	void slotImportImage();
 	void export_image();
+	void imgResizeToActiveLayer();
 	void add_new_image_tab();
 	void remove_current_image_tab();
 	void imageResize();
@@ -167,6 +171,7 @@ private slots:
 	void fillSelectionBg();
 	void fillSelectionFg();
 	void paste();
+	void paste_into();
 	void crop();
 	void selectAll();
 	void unSelectAll();
@@ -189,6 +194,7 @@ private slots:
 	void layerProperties();
 	void layerResize();
 	void layerResizeToImage();
+	void layerToImage();
 	void layerScale();
 	void layerAdd();
 	void layerRemove();
@@ -252,6 +258,7 @@ private:
 	KAction *m_imgImport;
 	KAction *m_imgExport;
 	KAction *m_imgScan;
+	KAction *m_imgResizeToLayer;
 	KAction *m_imgMergeAll;
 	KAction *m_imgMergeVisible;
 	KAction *m_imgMergeLinked;
@@ -264,6 +271,7 @@ private:
 	KAction *m_layerSaveAs;
 	KAction *m_layerResize;
 	KAction *m_layerResizeToImage;
+	KAction *m_layerToImage;
 	KAction *m_layerScale;
 	KAction *m_layerRaise;
 	KAction *m_layerLower;
@@ -272,6 +280,7 @@ private:
 	KAction *m_selectionCut;
 	KAction *m_selectionCopy;
 	KAction *m_selectionPaste;
+	KAction *m_selectionPasteInto;
 	KAction *m_selectionCrop;
 	KAction *m_selectionFillBg;
 	KAction *m_selectionFillFg;

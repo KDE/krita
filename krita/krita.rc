@@ -7,7 +7,8 @@
   <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
-  <Action name="paste_special"/>
+  <Action name="paste"/>
+  <Action name="paste_into"/>
   <Action name="remove"/>
   <Action name="crop"/>
   <Separator/>
@@ -46,6 +47,7 @@
   <Action name="remove_current_image_tab"/>
   <Action name="scale_image"/>
   <Action name="resize_image"/>
+  <Action name="resizeimgtolayer"/>
   <Action name="duplicate_image"/>  
   <Separator/>
   <Action name="merge_all_layers"/>
@@ -71,6 +73,7 @@
   <Separator/>  
   <Action name="insert_image_as_layer"/>
   <Action name="save_layer_as_image"/>
+  <Action name="layer_to_image"/>
   <Separator/>
   <Action name="layer_rotateright90"/>
   <Action name="layer_rotate180"/>

@@ -145,7 +145,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		Q_ASSERT(uri.isEmpty());
 		images = BlobToImage(ii, &m_data[0], m_data.size(), &ei);
 	} else {
-		strncpy(ii -> filename, uri.path().latin1(), MaxTextExtent - 1);
+		qstrncpy(ii -> filename, uri.path().latin1(), MaxTextExtent - 1);
 
 		if (ii -> filename[MaxTextExtent - 1]) {
 			emit notify(this, KisImageBuilder_STEP_ERROR, 0);
@@ -296,7 +296,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 
 	GetExceptionInfo(&ei);
 	ii = CloneImageInfo(0);
-	strncpy(ii -> filename, uri.path().latin1(), MaxTextExtent - 1);
+	qstrncpy(ii -> filename, uri.path().latin1(), MaxTextExtent - 1);
 
 	if (ii -> filename[MaxTextExtent - 1]) {
 		emit notify(this, KisImageBuilder_STEP_ERROR, 0);

@@ -247,8 +247,11 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 
 	m_width = w;
 	m_height = h;
-	m_projection = new KisLayer(this, m_width, m_height, "image projection", OPACITY_OPAQUE);
+	m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
+	m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
 	m_bkg = new KisBackground(this, m_width, m_height);
+	m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
+	invalidate();
 }
 
 void KisImage::resize(const QRect& rc)
@@ -453,7 +456,7 @@ const vKisChannelSP& KisImage::channels() const
 	return m_channels;
 }
 
-KisPaintDeviceSP KisImage::activeDevice()
+KisPaintDeviceSP KisImage::activeDevice() 
 {
 	if (m_selection)
 		return m_selection.data();
@@ -469,6 +472,11 @@ KisPaintDeviceSP KisImage::activeDevice()
 	}
 
 	return 0;
+}
+
+const KisLayerSP KisImage::activeLayer() const
+{
+	return m_activeLayer;
 }
 
 KisLayerSP KisImage::activeLayer()
@@ -603,6 +611,8 @@ void KisImage::rm(KisLayerSP layer)
 
 	if (it != m_layerStack.end())
 		m_layerStack.erase(it);
+
+	layer -> setImage(0);
 
 	if (m_selection == layer) {
 		m_selection = 0;
@@ -1024,6 +1034,7 @@ void KisImage::validate(Q_INT32 tileno)
 	}
 
 	dst = tm -> tile(tileno, TILEMODE_WRITE);
+	Q_ASSERT(dst);
 
 	if (!dst || dst -> valid())
 		return;
@@ -1130,7 +1141,7 @@ KisDoc* KisImage::document() const
 
 KoCanvasGuideMgr *KisImage::guides() const
 {
-	return &m_guides;
+	return const_cast<KoCanvasGuideMgr*>(&m_guides);
 }
 
 KisTileMgrSP KisImage::tiles() const

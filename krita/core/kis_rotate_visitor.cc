@@ -37,19 +37,29 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                 angle=angle+360;
         }
         
+        //progress info
+        m_cancelRequested = false;
+        m_progress -> setSubject(this, true, true);
+        Q_INT32 progressCurrent=0;
+        emit notifyProgressStage(this,i18n("Rotating Image..."),0);
+        
         if(angle>=-45 && angle <45){
                 Q_INT32 origHeight = m_dev -> height();
                 Q_INT32 origWidth = m_dev -> width();
                 double theta=angle*pi/180;
-                //first perform a shear along the x-axis by tan(theta/2)
                 double shearX=tan(theta/2);
-                xShearImage(shearX, m_progress);
-                //next perform a shear along the y-axis by sin(theta)
                 double shearY=sin(theta);
-                yShearImage(shearY, m_progress);
+                Q_INT32 newWidth=origWidth + QABS(origHeight * shearX);
+                Q_INT32 newHeight=origHeight + QABS(newWidth * shearY);
+                Q_INT32 progressTotal=origHeight + newWidth + newHeight;
+                //first perform a shear along the x-axis by tan(theta/2)
+                progressCurrent=xShearImage(shearX, m_progress, progressTotal, progressCurrent);
+                //next perform a shear along the y-axis by sin(theta)
+                progressCurrent=yShearImage(shearY, m_progress, progressTotal, progressCurrent);
                 //again perform a shear along the x-axis by tan(theta/2)
-                xShearImage(shearX, m_progress);
+                progressCurrent=xShearImage(shearX, m_progress, progressTotal, progressCurrent);
                 double deltaX=(origWidth+origHeight*QABS(shearX))*QABS(shearX*shearY);
+        
                 if (deltaX != 0)
                         xCropImage(deltaX);
                 double deltaY=origHeight*QABS(shearX*shearY);
@@ -60,14 +70,17 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                 Q_INT32 origHeight = m_dev -> height();
                 Q_INT32 origWidth = m_dev -> width();
                 double theta=(angle-90)*pi/180;
-                //first perform a shear along the x-axis by tan(theta/2)
                 double shearX=tan(theta/2);
-                xShearImage(shearX, m_progress);
-                //next perform a shear along the y-axis by sin(theta)
                 double shearY=sin(theta);
-                yShearImage(shearY, m_progress);
+                Q_INT32 newWidth=origWidth + QABS(origHeight * shearX);
+                Q_INT32 newHeight=origHeight + QABS(newWidth * shearY);
+                Q_INT32 progressTotal=origHeight + newWidth + newHeight;
+                //first perform a shear along the x-axis by tan(theta/2)
+                progressCurrent=xShearImage(shearX, m_progress, progressTotal, progressCurrent);
+                //next perform a shear along the y-axis by sin(theta)
+                progressCurrent=yShearImage(shearY, m_progress, progressTotal, progressCurrent);
                 //again perform a shear along the x-axis by tan(theta/2)
-                xShearImage(shearX, m_progress);
+                progressCurrent=xShearImage(shearX, m_progress, progressTotal, progressCurrent);
                 double deltaX=(origWidth+origHeight*QABS(shearX))*QABS(shearX*shearY);
                 if (deltaX != 0)
                         xCropImage(deltaX);
@@ -79,14 +92,17 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                 Q_INT32 origHeight = m_dev -> height();
                 Q_INT32 origWidth = m_dev -> width();
                 double theta=(angle-180)*pi/180;
-                //first perform a shear along the x-axis by tan(theta/2)
                 double shearX=tan(theta/2);
-                xShearImage(shearX, m_progress);
-                //next perform a shear along the y-axis by sin(theta)
                 double shearY=sin(theta);
-                yShearImage(shearY, m_progress);
+                Q_INT32 newWidth=origWidth + QABS(origHeight * shearX);
+                Q_INT32 newHeight=origHeight + QABS(newWidth * shearY);
+                Q_INT32 progressTotal=origHeight + newWidth + newHeight;
+                //first perform a shear along the x-axis by tan(theta/2)
+                progressCurrent=xShearImage(shearX, m_progress, progressTotal, progressCurrent);
+                //next perform a shear along the y-axis by sin(theta)
+                progressCurrent=yShearImage(shearY, m_progress, progressTotal, progressCurrent);
                 //again perform a shear along the x-axis by tan(theta/2)
-                xShearImage(shearX, m_progress);
+                progressCurrent=xShearImage(shearX, m_progress, progressTotal, progressCurrent);
                 double deltaX=(origWidth+origHeight*QABS(shearX))*QABS(shearX*shearY);
                 if (deltaX != 0)
                         xCropImage(deltaX);
@@ -98,14 +114,17 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                 Q_INT32 origHeight = m_dev -> height();
                 Q_INT32 origWidth = m_dev -> width();
                 double theta=(angle-270)*pi/180;
-                //first perform a shear along the x-axis by tan(theta/2)
                 double shearX=tan(theta/2);
-                xShearImage(shearX, m_progress);
-                //next perform a shear along the y-axis by sin(theta)
                 double shearY=sin(theta);
-                yShearImage(shearY, m_progress);
+                Q_INT32 newWidth=origWidth + QABS(origHeight * shearX);
+                Q_INT32 newHeight=origHeight + QABS(newWidth * shearY);
+                Q_INT32 progressTotal=origHeight + newWidth + newHeight;
+                //first perform a shear along the x-axis by tan(theta/2)
+                progressCurrent=xShearImage(shearX, m_progress, progressTotal, progressCurrent);
+                //next perform a shear along the y-axis by sin(theta)
+                progressCurrent=yShearImage(shearY, m_progress, progressTotal, progressCurrent);
                 //again perform a shear along the x-axis by tan(theta/2)
-                xShearImage(shearX, m_progress);
+                progressCurrent=xShearImage(shearX, m_progress, progressTotal, progressCurrent);
                 double deltaX=(origWidth+origHeight*QABS(shearX))*QABS(shearX*shearY);
                 if (deltaX != 0)
                         xCropImage(deltaX);
@@ -120,6 +139,7 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                 rotateLeft90();
         }
 
+        emit notifyProgressDone(this);
 }
 
 void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress) 
@@ -127,14 +147,25 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
         kdDebug() << "Shear Code called! Going to shear image by xAngle " << angleX << " and yAngle " << angleY << "\n";
         const double pi=3.1415926535897932385;
         
+        //progress info
+        m_cancelRequested = false;
+        m_progress -> setSubject(this, true, true);
+        Q_INT32 progressCurrent=0;
+        emit notifyProgressStage(this,i18n("Rotating Image..."),0);
+        
         if (angleX != 0 || angleY != 0){
                 Q_INT32 origHeight = m_dev -> height();
+                Q_INT32 origWidth = m_dev -> width();
                 double thetaX=angleX*pi/180;
                 double shearX=tan(thetaX);
-                xShearImage(shearX, m_progress);
                 double thetaY=angleY*pi/180;
                 double shearY=tan(thetaY);
-                yShearImage(shearY, m_progress);
+                Q_INT32 newWidth=origWidth + QABS(origHeight * shearX);
+                Q_INT32 progressTotal=origHeight + newWidth;
+                //first perform a shear along the x-axis by tan(thetaX)
+                progressCurrent=xShearImage(shearX, m_progress, progressTotal, progressCurrent);
+                //next perform a shear along the y-axis by tan(thetaY)
+                progressCurrent=yShearImage(shearY, m_progress, progressTotal, progressCurrent);
                 double deltaY=origHeight*QABS(shearX*shearY);
                 if (deltaY != 0 && thetaX > 0 && thetaY > 0)
                         yCropImage(deltaY);
@@ -143,12 +174,13 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
         }
 }
 
-void KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface */*m_progress*/)
+Q_INT32 KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface *m_progress, Q_INT32 progressTotal, Q_INT32 progressCurrent)
 {
         kdDebug() << "xShearImage called, shear parameter " << shearX << "\n";        
         Q_INT32 width = m_dev->width();
         Q_INT32 height = m_dev->height();
-        
+        double progressStart=(double)progressCurrent / progressTotal * 100; 
+         
         //calculate widht of the sheared image
         Q_INT32 targetW = (Q_INT32)(width + QABS(height*shearX));
         Q_INT32 targetH = height;
@@ -163,8 +195,14 @@ void KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface */
         double weight;
         Q_INT32 currentPos;
         
+       
         if(shearX>=0){
                 for (Q_INT32 y=0; y < height; y++){
+                        emit notifyProgress(this, y * 100  / progressTotal + progressStart + 1);
+                        progressCurrent++;
+                        if (m_cancelRequested) {
+                                break;
+                        }
                         //calculate displacement
                         displacement = (height-y)*shearX;
                         displacementInt = (Q_INT32)(floor(displacement));
@@ -188,6 +226,11 @@ void KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface */
                 }        
         } else {
                 for (Q_INT32 y=0; y < height; y++){
+                        emit notifyProgress(this, y * 100  / progressTotal + progressStart + 1);
+                        progressCurrent++;
+                        if (m_cancelRequested) {
+                                break;
+                        }
                         //calculate displacement
                         displacement = y*QABS(shearX);
                         displacementInt = (Q_INT32)(floor(displacement));
@@ -214,16 +257,16 @@ void KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface */
         kdDebug() << "write newData to the image!" << "\n";
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
         m_dev -> setTiles(tm); // Also sets width and height correctly
+        return progressCurrent;
 }
 
-void KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface */*m_progress*/)
+Q_INT32 KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface *m_progress, Q_INT32 progressTotal, Q_INT32 progressCurrent)
 {
         kdDebug() << "YShearImage called, shear paramter " << shearY << "\n";
-
-        //const double pi=3.1415926535897932385; // Appears to be unused. BSAR.
         
         Q_INT32 width = m_dev->width();
         Q_INT32 height = m_dev->height();
+        double progressStart=(double)progressCurrent / progressTotal * 100; 
         
         //calculate widht of the sheared image
         Q_INT32 targetW = width;
@@ -243,6 +286,11 @@ void KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface */
         
         if(shearY>=0){
                 for (Q_INT32 x=0; x < width; x++){
+                        emit notifyProgress(this, x * 100  / progressTotal + progressStart + 1);
+                        progressCurrent++;
+                        if (m_cancelRequested) {
+                                break;
+                        }
                         //calculate displacement
                         displacement = x*shearY;
                         displacementInt = (Q_INT32)(floor(displacement));
@@ -266,6 +314,11 @@ void KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface */
                 }        
         } else {
                 for (Q_INT32 x=0; x < width; x++){
+                        emit notifyProgress(this, x * 100  / progressTotal + progressStart + 1);
+                        progressCurrent++;
+                        if (m_cancelRequested) {
+                                break;
+                        }
                         //calculate displacement
                         displacement = (width-x)*QABS(shearY);
                         displacementInt = (Q_INT32)(floor(displacement));
@@ -292,6 +345,7 @@ void KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface */
         kdDebug() << "write newData to the image!" << "\n";
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
         m_dev -> setTiles(tm); // Also sets width and height correctly
+        return progressCurrent;
 }
 
 void KisRotateVisitor::xCropImage(double deltaX)

@@ -1973,13 +1973,13 @@ void KisView::print(KPrinter& printer)
 
 void KisView::setupTools()
 {
-        KisToolFactory *factory = KisToolFactory::singleton();
-        Q_ASSERT(factory);
+	KisToolFactory *factory = KisToolFactory::singleton();
+	Q_ASSERT(factory);
 
-	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = factory -> create(actionCollection(), this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = factory -> create(actionCollection(), this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = factory -> create(actionCollection(), this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = factory -> create(actionCollection(), this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = factory -> create(actionCollection(), this, this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = factory -> create(actionCollection(), this, this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = factory -> create(actionCollection(), this, this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = factory -> create(actionCollection(), this, this);
 
 	qApp -> installEventFilter(this);
 	m_tabletEventTimer.start();

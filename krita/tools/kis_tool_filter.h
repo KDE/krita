@@ -26,13 +26,14 @@
 
 class KisEvent;
 class KisButtonPressEvent;
+class KisView;
 
 class KisToolFilter : public KisToolFreeHand {
 
 	typedef KisToolFreeHand super;
 
 public:
-	KisToolFilter();
+	KisToolFilter(KisView* view);
 	virtual ~KisToolFilter();
   
 	virtual void setup(KActionCollection *collection);
@@ -50,7 +51,8 @@ public:
 			       const double pressure2,
 			       const double xTilt2,
 			       const double yTilt2);
-
+private:
+	KisView* m_view;
 };
 
 #endif //__KIS_TOOL_FILTER_H__

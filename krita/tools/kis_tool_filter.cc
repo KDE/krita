@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "kis_filter_registry.h"
 #include "kis_brush.h"
 #include "kis_view.h"
 #include "kis_cursor.h"
@@ -37,8 +38,8 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 
-KisToolFilter::KisToolFilter() 
-	: super(i18n("Filter tool"))
+KisToolFilter::KisToolFilter(KisView* view) 
+	: super(i18n("Filter tool")), m_view(view)
 {
 	setName("tool_filter");
 	m_subject = 0;
@@ -55,7 +56,7 @@ void KisToolFilter::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("&Filter"),
-					    "stamp", 0, this,
+					    "filter", 0, this,
 					    SLOT(activate()), collection,
 					    name());
 		m_action -> setExclusiveGroup("tools");
@@ -72,6 +73,7 @@ void KisToolFilter::paintLine(const KisPoint & pos1,
 				 const double xtilt2,
 				 const double ytilt2)
 {
+	painter()->setFilter( m_view->filterRegistry()->get( "Invert" ) );
 	m_dragDist = painter() -> paintLine(PAINTOP_FILTER, pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
 }
 
@@ -80,5 +82,6 @@ void KisToolFilter::paintAt(const KisPoint &pos,
 			       const double xtilt,
 			       const double ytilt)
 {
+	painter()->setFilter( m_view->filterRegistry()->get( "Invert" ) );
 	painter() -> filterAt( pos, pressure, xtilt, ytilt);
 }

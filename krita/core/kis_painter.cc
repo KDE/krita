@@ -1082,6 +1082,8 @@ void KisPainter::duplicateAt(const KisPoint &pos, const double pressure, const d
 
 void KisPainter::filterAt(const KisPoint &pos, const double pressure, const double /*xTilt*/, const double /*yTilt*/)
 {
+	kdDebug() << "KisPainter::filterAt" << endl;
+	Q_ASSERT(m_filter != 0);
 	if (!m_device) return;
 
 	KisPoint hotSpot = m_brush -> hotSpot(pressure);
@@ -1135,6 +1137,7 @@ void KisPainter::filterAt(const KisPoint &pos, const double pressure, const doub
 	KisIteratorLinePixel dabLit = m_dab.data()->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
 	KisIteratorLinePixel srcLitend = srcdev->iteratorPixelSelectionEnd( 0, sx, sw - 1, sh - 1);
 	KisIteratorLinePixel devLit = m_device->iteratorPixelSelectionBegin( m_transaction, x, x + sw - 1, y);
+	Q_INT32 stop = m_device->depth() - 1;
 	while ( srcLit <= srcLitend )
 	{
 		KisIteratorPixel srcUit = *srcLit;
@@ -1146,17 +1149,42 @@ void KisPainter::filterAt(const KisPoint &pos, const double pressure, const doub
 			KisPixelRepresentation srcP = srcUit;
 			KisPixelRepresentation dabP = dabUit;
 			KisPixelRepresentation devP = devUit;
-			for( Q_INT32 i = 0; i < m_device->depth() - 1; i++)
+			for( Q_INT32 i = 0; i < stop; i++)
 			{
-				srcUit[ i ] = devUit[ i ];
+				srcUit[ i ] = ( devUit[ i ] * (QUANTUM_MAX - dabUit[ i ]) ) / QUANTUM_MAX;
+// 				kdDebug() << " srcUit[ " << i << " ] = " << srcUit[i] << " devUit[ " << i << " ] = " << devUit[i] << " dabUit[ " << i << " ] = " << dabUit[ i ] << endl;
 			}
-			srcUit[ m_device->depth() - 1 ] = dabUit[ m_device->depth() - 1 ];
+			srcUit[ stop ] = ( dabUit[ stop ] );//* devUit[ stop ] ) / QUANTUM_MAX;
+// 			kdDebug() << " srcUit[ " << stop << " ] = " << srcUit[stop] << " devUit[ " << stop << " ] = " << devUit[stop] << " dabUit[ " << stop << " ] = " << dabUit[ stop ] << endl;
 			++srcUit; ++dabUit; ++devUit;
 		}
 	++srcLit; ++dabLit; ++devLit;
 	}
+// 	kdDebug() << "applying filter to the square" << endl;
 	m_filter->process( srcdev, 0, QRect(0,0,srcdev->width(), srcdev->height()), 0 );
+	
+// 	KisIteratorLinePixel srcLit2 = srcdev->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
+// 	KisIteratorLinePixel srcLitend2 = srcdev->iteratorPixelSelectionEnd( 0, sx, sw - 1, sh - 1);
+// 	while ( srcLit <= srcLitend )
+// 	{
+// 		KisIteratorPixel srcUit = *srcLit2;
+// 		KisIteratorPixel srcUitend = srcLit2.end();
+// 		while ( srcUit <= srcUitend )
+// 		{
+// 			KisPixelRepresentation srcP = srcUit;
+// 			for( Q_INT32 i = 0; i < m_device->depth(); i++)
+// 			{
+// 				kdDebug() << " srcUit[ " << i << " ] = " << srcUit[i] << endl;
+// 			}
+// 			++srcUit;
+// 		}
+// 		++srcLit2;
+// 	}
+	
+	
 	bitBlt( x,  y,  m_compositeOp, srcdev, m_opacity, sx, sy, srcdev -> width(),srcdev -> width());
+	delete srcdev;
+	m_dirtyRect |= QRect(x, y, m_dab -> width(), m_dab -> height());
 }
 
 void KisPainter::penAt(const KisPoint & pos,

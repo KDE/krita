@@ -121,6 +121,7 @@ public: // KoView implementation
 
 	virtual KisImageSP currentImg() const;
 
+	
 signals:
 	void bgColorChanged(const KoColor& c);
 	void fgColorChanged(const KoColor& c);
@@ -333,6 +334,7 @@ private slots:
 	void updateTabBar();
 	void showRuler();
 
+	
 private:
 	KisDoc *m_doc;
 	KisCanvas *m_canvas;
@@ -447,7 +449,7 @@ private:
 	QTabletEvent::TabletDevice m_lastTabletEventDevice;
 	KisFilterRegistrySP m_filterRegistry;
 
-
+	
 private:
 	mutable KisImageSP m_current;
 };

@@ -23,6 +23,7 @@
 
 class KActionCollection;
 class KisCanvasSubject;
+class KisView;
 
 class KisToolFactory {
 
@@ -31,7 +32,7 @@ public:
 	~KisToolFactory();
 
 public:
-	vKisTool create(KActionCollection *actionCollection, KisCanvasSubject *subject);
+	vKisTool create(KActionCollection *actionCollection, KisCanvasSubject *subject, KisView *view);
 
 public:
 	static KisToolFactory *singleton();

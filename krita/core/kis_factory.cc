@@ -26,6 +26,7 @@
 
 #include "kis_factory.h"
 #include "kis_aboutdata.h"
+#include "kis_resourceserver.h"
 #include "kis_doc.h"
 
 extern "C" 
@@ -38,6 +39,7 @@ extern "C"
 
 KAboutData* KisFactory::s_aboutData = 0;
 KInstance* KisFactory::s_global = 0;
+KisResourceServer* KisFactory::s_rserver = 0;
 
 KisFactory::KisFactory( QObject* parent, const char* name )
 	: KoFactory( parent, name )
@@ -45,10 +47,13 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 	s_aboutData = newKritaAboutData();
 
 	(void)global();
+	s_rserver = new KisResourceServer;
 }
 
 KisFactory::~KisFactory()
 {
+	delete s_rserver;
+	s_rserver = 0L;
 	delete s_aboutData;
 	s_aboutData = 0L;
 	delete s_global;
@@ -110,6 +115,11 @@ KInstance* KisFactory::global()
 KAboutData* KisFactory::aboutData()
 {
 	return s_aboutData;
+}
+
+KisResourceServer* KisFactory::rServer()
+{
+	return s_rserver;
 }
 
 #include "kis_factory.moc"

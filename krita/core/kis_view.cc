@@ -250,7 +250,7 @@ DCOPObject* KisView::dcopObject()
 void KisView::setupDockers()
 {
 
-        m_resourceServer = new KisResourceServer();
+         KisResourceServer *rserver = KisFactory::rServer();
 
         m_layerchanneldocker = new DockFrameDocker(this);
         m_layerchanneldocker -> setCaption(i18n("Layers/Channels/Paths"));
@@ -284,7 +284,7 @@ void KisView::setupDockers()
 
 
 	// Setup all brushes
-        m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, m_resourceServer, i18n("Brushes"),
+        m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
                                                   m_resourcedocker, "brush_chooser", this);
         m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
         m_resourcedocker -> plug(m_brushMediator -> chooserWidget());
@@ -292,7 +292,7 @@ void KisView::setupDockers()
 
 
 	// Setup patterns
-        m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, m_resourceServer, i18n("Patterns"),
+        m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
                                                     m_resourcedocker, "pattern chooser", this);
         m_pattern = dynamic_cast<KisPattern*>(m_patternMediator -> currentResource());
         m_resourcedocker -> plug(m_patternMediator -> chooserWidget());
@@ -300,16 +300,11 @@ void KisView::setupDockers()
 
 
 	// Setup gradients
-	m_gradientMediator = new KisResourceMediator(MEDIATE_GRADIENTS, m_resourceServer, i18n("Gradients"),
+	m_gradientMediator = new KisResourceMediator(MEDIATE_GRADIENTS, rserver, i18n("Gradients"),
 						    m_resourcedocker, "gradient chooser", this);
 	m_gradient = dynamic_cast<KisGradient*>(m_gradientMediator -> currentResource());
 	m_resourcedocker -> plug(m_gradientMediator -> chooserWidget());
 	connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(gradientActivated(KisResource*)));
-
-	m_resourceServer -> loadBrushes();
-        m_resourceServer -> loadpipeBrushes();
-        m_resourceServer -> loadPatterns();
-        m_resourceServer -> loadGradients();
 
 	// Autocrush
 	m_autobrush = new KisAutobrush(m_resourcedocker, "autobrush", i18n("Autobrush"));

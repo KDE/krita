@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include <qptrlist.h>
+ 
 #include <koIconChooser.h>
 
 #include "kdebug.h"
@@ -42,32 +44,34 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 	Q_ASSERT(rserver);
 	m_activeItem = 0;
 
+	QPtrList<KisResource> resouceslist;
+	KisResource *resource;
+
 	if (mediateOn & MEDIATE_BRUSHES) {
 		m_chooser = new KisBrushChooser(chooserParent, chooserName);
-		connect(rserver,
-                        SIGNAL(loadedBrush(KisResource*)),
-                        this,
-                        SLOT(resourceServerLoadedResource(KisResource*)));
 
-		connect(rserver,
-                        SIGNAL(loadedpipeBrush(KisResource*)),
-                        this,
-                        SLOT(resourceServerLoadedResource(KisResource*)));
+		resouceslist = rserver -> brushes();
+		for ( resource = resouceslist.first(); resource; resource = resouceslist.next() )
+			resourceServerLoadedResource(resource);
 
+		resouceslist = rserver -> pipebrushes();
+		for ( resource = resouceslist.first(); resource; resource = resouceslist.next() )
+			resourceServerLoadedResource(resource);
 	}
 	if (mediateOn & MEDIATE_PATTERNS) {
 		m_chooser = new KisPatternChooser(chooserParent, chooserName);
-		connect(rserver,
-                        SIGNAL(loadedPattern(KisResource*)),
-                        this,
-                        SLOT(resourceServerLoadedResource(KisResource*)));
+
+		resouceslist = rserver -> patterns();
+		for ( resource = resouceslist.first(); resource; resource = resouceslist.next() )
+			resourceServerLoadedResource(resource);
+			
 	}
 	if (mediateOn & MEDIATE_GRADIENTS) {
 		m_chooser = new KisGradientChooser(chooserParent, chooserName);
-		connect(rserver,
-			SIGNAL(loadedGradient(KisResource*)),
-			this,
-			SLOT(resourceServerLoadedResource(KisResource*)));
+
+		resouceslist = rserver -> gradients();
+		for ( resource = resouceslist.first(); resource; resource = resouceslist.next() )
+			resourceServerLoadedResource(resource);
 	}
 
 	connect(m_chooser, SIGNAL(selected(KoIconItem*)), SLOT(setActiveItem(KoIconItem*)));

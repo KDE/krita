@@ -61,7 +61,6 @@ class KisGradient;
 class KisPattern;
 class KisResource;
 class KisResourceMediator;
-class KisResourceServer;
 class KisAutobrush;
 class DockFrameDocker;
 class ColorDocker;
@@ -416,7 +415,6 @@ private:
 	KisBuilderMonitor *m_imgBuilderMgr;
 	KisLabelProgress *m_progress;
 
-	KisResourceServer *m_resourceServer;
 	KisResourceMediator *m_brushMediator;
 	KisResourceMediator *m_patternMediator;
 	KisResourceMediator *m_gradientMediator;

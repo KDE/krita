@@ -60,7 +60,7 @@ namespace {
                         KisImageSP owner;
 
                         m_adapter -> setUndo(false);
-                        m_dev -> setData(m_after);
+                        m_dev -> setTiles(m_after);
                         m_adapter -> setUndo(true);
                         owner = m_dev -> image();
                         owner -> notify();
@@ -71,7 +71,7 @@ namespace {
                         KisImageSP owner;
 
                         m_adapter -> setUndo(false);
-                        m_dev -> setData(m_before);
+                        m_dev -> setTiles(m_before);
                         m_adapter -> setUndo(true);
                         owner = m_dev -> image();
                         owner -> notify();
@@ -271,7 +271,7 @@ void KisPaintDevice::init()
 }
 
 
-void KisPaintDevice::setData(KisTileMgrSP mgr)
+void KisPaintDevice::setTiles(KisTileMgrSP mgr)
 {
         Q_ASSERT(mgr);
 
@@ -288,13 +288,13 @@ void KisPaintDevice::setData(KisTileMgrSP mgr)
 
 void KisPaintDevice::resize(Q_INT32 w, Q_INT32 h)
 {
-        KisTileMgrSP old = data();
+        KisTileMgrSP old = tiles();
         KisTileMgrSP tm = new KisTileMgr(old, colorStrategy() -> depth(), w, h);
         Q_INT32 oldW = width();
         Q_INT32 oldH = height();
         KisFillPainter painter;
 
-        setData(tm);
+        setTiles(tm);
 
         painter.begin(this);
 
@@ -318,7 +318,7 @@ void KisPaintDevice::scale(double sx, double sy)
 // XXX: also allow transform on part of paint device?
 void KisPaintDevice::transform(const QWMatrix & matrix)
 {
-        if (data() == 0) {
+        if (tiles() == 0) {
                 kdDebug() << "No tilemgr.\n";
                 return;
         }
@@ -393,7 +393,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 
                         int currentPos = (y*targetW+x) * depth(); // try to be at least a little efficient
                         if (!(orX < 0 || orY < 0 || orX >= width() || orY >= height())) {
-                                data() -> readPixelData(orX, orY, orX, orY, origPixel, depth());
+                                tiles() -> readPixelData(orX, orY, orX, orY, origPixel, depth());
                                 for(int i = 0; i < depth(); i++)
                                         newData[currentPos + i] = origPixel[i];
                         }
@@ -402,7 +402,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 
         KisTileMgrSP tm = new KisTileMgr(colorStrategy() -> depth(), targetW, targetH);
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * depth());
-        setData(tm); // Also sets width and height correctly
+        setTiles(tm); // Also sets width and height correctly
 
         delete[] origPixel;
         delete[] newData;
@@ -422,13 +422,13 @@ void KisPaintDevice::mirrorX()
         int cutoff = static_cast<int>(height()/2);
 
         for(int i = 0; i < cutoff; i++) {
-                data() -> readPixelData(0, i, width() - 1, i, line1, width() * depth());
-                data() -> readPixelData(0, height() - i - 1, width() - 1, height() - i - 1, line2, width() * depth());
+                tiles() -> readPixelData(0, i, width() - 1, i, line1, width() * depth());
+                tiles() -> readPixelData(0, height() - i - 1, width() - 1, height() - i - 1, line2, width() * depth());
                 tm -> writePixelData(0, height() - i - 1, width() - 1, height() - i - 1, line1, width() * depth());
                 tm -> writePixelData(0, i, width() - 1, i, line2, width() * depth());
         }
 
-        setData(tm);
+        setTiles(tm);
 
         delete[] line1;
         delete[] line2;
@@ -449,7 +449,7 @@ void KisPaintDevice::mirrorY()
         int cutoff = static_cast<int>(width()/2);
 
         for(int i = 0; i < height(); i++) {
-                data() -> readPixelData(0, i, width() - 1, i, line, width() * depth());
+                tiles() -> readPixelData(0, i, width() - 1, i, line, width() * depth());
                 for(int j = 0; j < cutoff; j++) {
                         for(int k = 0; k < depth(); k++) {
                                 pixel[k] = line[(width()-1)*depth() - j*depth() + k];
@@ -460,7 +460,7 @@ void KisPaintDevice::mirrorY()
                 tm -> writePixelData(0, i, width() - 1, i, line, width() * depth());
         }
 
-        setData(tm); // Act like this is a resize; this should get it's own undo 'name'
+        setTiles(tm); // Act like this is a resize; this should get it's own undo 'name'
 
         delete[] line;
         delete[] pixel;
@@ -490,12 +490,12 @@ void KisPaintDevice::offsetBy(Q_INT32 x, Q_INT32 y)
         if (y < 0)
                 y = 0;
 
-        KisTileMgrSP old = data();
+        KisTileMgrSP old = tiles();
         KisTileMgrSP tm = new KisTileMgr(colorStrategy() -> depth(), x + old -> width(), y + old -> height());
         KisPixelDataSP dst;
         KisPixelDataSP src;
 
-        setData(tm);
+        setTiles(tm);
         src = old -> pixelData(0, 0, old -> width() - 1, old -> height() - 1, TILEMODE_READ);
         Q_ASSERT(src);
         dst = tm -> pixelData(x, y, x + old -> width() - 1, y + old -> height() - 1, TILEMODE_WRITE);
@@ -508,7 +508,7 @@ void KisPaintDevice::offsetBy(Q_INT32 x, Q_INT32 y)
 
 bool KisPaintDevice::write(KoStore *store)
 {
-        KisTileMgrSP tm = data();
+        KisTileMgrSP tm = tiles();
         Q_INT32 totalBytes = height() * width() * depth() * sizeof(QUANTUM);
         Q_INT32 nbytes = 0;
 
@@ -538,7 +538,7 @@ bool KisPaintDevice::write(KoStore *store)
 
 bool KisPaintDevice::read(KoStore *store)
 {
-        KisTileMgrSP tm = data();
+        KisTileMgrSP tm = tiles();
         Q_INT32 totalBytes = height() * width() * depth() * sizeof(QUANTUM);
         Q_INT32 nbytes = 0;
 
@@ -591,7 +591,7 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstCS)
 		}
 		++dstLIt; ++srcLIt;
 	}
-	setData(dst.data());
+	setTiles(dst.tiles());
 }
 
 
@@ -663,7 +663,7 @@ QImage KisPaintDevice::convertToImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h
 
 	QImage image;
 
-	if (x2 - x1 + 1 > 0 && y2 - y1 + 1 > 0 && data()) {
+	if (x2 - x1 + 1 > 0 && y2 - y1 + 1 > 0 && tiles()) {
 		KisPixelDataSP pd = new KisPixelData;
 
 		pd -> mgr = 0;
@@ -683,7 +683,7 @@ QImage KisPaintDevice::convertToImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h
 		// this too if profiling shows this is too slow...
 		pd -> owner = true;
 		pd -> data = new QUANTUM[pd -> depth * pd -> width * pd -> height];
-		data() -> readPixelData(pd);
+		tiles() -> readPixelData(pd);
 
 		image = colorStrategy() -> convertToImage(pd -> data, pd -> width, pd -> height, pd -> stride);
 	}

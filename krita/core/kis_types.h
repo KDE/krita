@@ -26,6 +26,14 @@
 #include "kis_global.h"
 #include "kis_shared_ptr_vector.h"
 
+/**
+ * Define lots of shared pointer versions of Krita classes.
+ * Shared pointer classes have the advantage of near automatic
+ * memory management (but take care of circular references)
+ * and the disadvantage that inheritiance relations are no longer
+ * recognizable 
+ */
+
 class KisImage;
 typedef KSharedPtr<KisImage> KisImageSP;
 typedef KisSharedPtrVector<KisImage> vKisImageSP;

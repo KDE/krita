@@ -55,7 +55,7 @@ KisTileCommand::~KisTileCommand()
 
 void KisTileCommand::execute()
 {
-	KisTileMgrSP tm = m_device -> data();
+	KisTileMgrSP tm = m_device -> tiles();
 	KisImageSP img = m_device -> image();
 
 	for (TileMap::iterator it = m_originals.begin(); it != m_originals.end(); it++) {
@@ -68,7 +68,7 @@ void KisTileCommand::execute()
 
 void KisTileCommand::unexecute()
 {
-	KisTileMgrSP tm = m_device -> data();
+	KisTileMgrSP tm = m_device -> tiles();
 	KisImageSP img = m_device -> image();
 	KisTileSP tmp;
 

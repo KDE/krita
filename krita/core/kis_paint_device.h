@@ -79,13 +79,13 @@ public:
 			KisStrategyColorSpaceSP colorStrategy, 
 			const QString& name,
 			CompositeOp compositeOp);
-
+#if 0
 	/**
 	   The data() methods return a shared pointer to the tile manager.
 	*/
         virtual KisTileMgrSP data();
         virtual const KisTileMgrSP data() const;
-
+#endif
         virtual bool shouldDrawBorder() const;
 
         virtual void move(Q_INT32 x, Q_INT32 y);
@@ -106,7 +106,7 @@ public:
         bool contains(Q_INT32 x, Q_INT32 y) const;
         bool contains(const QPoint& pt) const;
 
-        void setData(KisTileMgrSP mgr);
+        void setTiles(KisTileMgrSP mgr);
 
 	/** 
 	 *   Converts the paint device to a different colorspace
@@ -303,7 +303,7 @@ inline KisTileMgrSP KisPaintDevice::tiles() const
 
 inline Q_INT32 KisPaintDevice::depth() const
 {
-        return data()->depth();
+        return tiles()->depth();
 ;
 }
 
@@ -311,7 +311,7 @@ inline KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
 {
         return m_colorStrategy;
 }
-
+#if 0
 inline KisTileMgrSP KisPaintDevice::data()
 {
 	return m_tiles;
@@ -321,7 +321,7 @@ inline const KisTileMgrSP KisPaintDevice::data() const
 {
         return m_tiles;
 }
-
+#endif
 inline KisTileMgrSP KisPaintDevice::shadow()
 {
         return m_shadow;
@@ -369,12 +369,12 @@ inline void KisPaintDevice::setY(Q_INT32 y)
 
 inline Q_INT32 KisPaintDevice::width() const
 {
-        return data()->width();
+        return tiles()->width();
 }
 
 inline Q_INT32 KisPaintDevice::height() const
 {
-        return data()->height();
+        return tiles()->height();
 }
 
 inline const bool KisPaintDevice::visible() const
@@ -459,7 +459,7 @@ inline bool KisPaintDevice::alpha() const
 
 inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
 {
-	KisTileMgrSP tm = data();
+	KisTileMgrSP tm = tiles();
 	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
 	QUANTUM *pix;
 
@@ -476,7 +476,7 @@ inline bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opa
 
 inline bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opacity)
 {
-	KisTileMgrSP tm = data();
+	KisTileMgrSP tm = tiles();
 	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);
 	QUANTUM * pix;
 

@@ -176,8 +176,8 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
         KisTileSP srctile;
         QUANTUM *dst;
         QUANTUM *src;
-        KisTileMgrSP dsttm = m_device -> data();
-        KisTileMgrSP srctm = srcdev -> data();
+        KisTileMgrSP dsttm = m_device -> tiles();
+        KisTileMgrSP srctm = srcdev -> tiles();
         Q_INT32 sxmod;
         Q_INT32 symod;
         Q_INT32 dxmod;

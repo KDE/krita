@@ -35,6 +35,7 @@ const QUANTUM MAX_SELECTED = OPACITY_TRANSPARENT;
 const QUANTUM MIN_SELECTED = OPACITY_OPAQUE;
 #endif
 
+#define USE_ALPHA_MAP 0
 
 /**
  * KisSelection contains a byte-map representation of a layer, where
@@ -86,7 +87,7 @@ public:
 
 private:
 	KisLayerSP m_parentLayer;
-	KisColorSpaceAlphaSP m_alpha;
+	//KisColorSpaceAlphaSP m_alpha;
 	KoColor m_maskColor;
 	QRect m_selectedRect;
 };

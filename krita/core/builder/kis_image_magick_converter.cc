@@ -201,7 +201,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 			Q_INT32 totalTiles = ((image -> columns + TILE_WIDTH - 1) / TILE_WIDTH) * ((image -> rows + TILE_HEIGHT - 1) / TILE_HEIGHT);
 			Q_INT32 ntile = 0;
 			KisLayerSP layer = new KisLayer(m_img, image -> columns, image -> rows, m_img -> nextLayerName(), OPACITY_OPAQUE);
-			KisTileMgrSP tm = layer -> data();
+			KisTileMgrSP tm = layer -> tiles();
 			Q_INT32 w = TILE_WIDTH;
 			Q_INT32 h = TILE_HEIGHT;
 
@@ -347,7 +347,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 		return KisImageBuilder_RESULT_EMPTY;
 
 	image = AllocateImage(ii);
-	tm = layer -> data();
+	tm = layer -> tiles();
 	image -> columns = layer -> width();
 	image -> rows = layer -> height();
 #ifdef HAVE_MAGICK6

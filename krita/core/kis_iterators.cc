@@ -22,7 +22,7 @@
 KisIteratorUnit::KisIteratorUnit( KisPaintDeviceSP ndevice, KisTileCommand* command, Q_INT32 nypos, Q_INT32 nxpos, Q_INT8 inc)
 		: m_device (ndevice),
 		  m_command (command), 
-		  m_ktm( m_device->data()),
+		  m_ktm( m_device->tiles()),
 		  m_depth( m_device->depth() ),
 		  m_ypos(nypos), 
 		  m_rownum(nypos / TILE_HEIGHT ), 

@@ -1105,7 +1105,7 @@ Q_INT32 KisImage::tileNum(Q_INT32 xpix, Q_INT32 ypix) const
 // Composite the specified tile onto the projection layer.
 void KisImage::renderToProjection(Q_INT32 tileno)
 {
-	KisTileMgrSP tm = m_projection -> data();
+	KisTileMgrSP tm = m_projection -> tiles();
 	KisTileSP dst;
 	KisPainter gc;
 	QPoint pt;
@@ -1130,7 +1130,7 @@ void KisImage::renderToProjection(Q_INT32 tileno)
 		return;
 
 	gc.begin(m_projection.data());
-	// XXX: This uses the tile mediator. Is it truly necessary?
+
 	tm -> tileCoord(dst, pt);
 	gc.bitBlt(pt.x(), pt.y(), COMPOSITE_COPY, m_bkg.data(), pt.x(), pt.y(), dst -> width(), dst -> height());
 
@@ -1144,8 +1144,8 @@ void KisImage::renderToProjection(Q_INT32 tileno)
 			visitor(gc, s);
 		}
 
-		if (m_floatingSelection)
-			visitor(gc, m_floatingSelection);
+// 		if (m_floatingSelection)
+// 			visitor(gc, m_floatingSelection);
 	}
 
 	gc.end();
@@ -1254,7 +1254,7 @@ KisGuideMgr *KisImage::guides() const
 
 KisTileMgrSP KisImage::tiles() const
 {
-	return m_projection -> data();
+	return m_projection -> tiles();
 }
 
 void KisImage::slotUpdateDisplay()

@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#ifndef KIS_BUILDER_MANAGER_H_
-#define KIS_BUILDER_MANAGER_H_
+#ifndef KIS_BUILDER_MONITOR_H_
+#define KIS_BUILDER_MONITOR_H_
 
 #include <qobject.h>
 #include "builder/kis_builder_types.h"
@@ -44,5 +44,5 @@ private:
 	vKisBuilderSubject m_subjects;
 };
 
-#endif // KIS_BUILDER_MANAGER_H_
+#endif // KIS_BUILDER_MONITOR_H_
 

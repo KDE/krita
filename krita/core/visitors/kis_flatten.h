@@ -20,6 +20,8 @@
 
 #include <qrect.h>
 
+#include <kdebug.h>
+
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_visitor.h"
@@ -181,6 +183,15 @@ private:
 		sy = QMAX(sy + y1, 0);
 		dx = QMAX(dx + x1, dev -> x());
 		dy = QMAX(dy + y1, dev -> y());
+
+// 		kdDebug() << "Blitting: " << dev -> name() 
+// 			  << " dx: " << dx
+// 			  << " dy: " << dy
+// 			  << " sx: " << sx
+// 			  << " sy: " << sy
+// 			  << " w: " << w
+// 			  << " h " << h
+// 			  << "\n";
 		gc.bitBlt(dx, dy, dev -> compositeOp(), dev, opacity, sx, sy, w, h);
 	}
 

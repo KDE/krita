@@ -1375,7 +1375,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisFloatingSele
 	KisLayerSP layer;
 
 	if (contains(img) && floatingSelection) {
-		layer = new KisLayer(floatingSelection -> data(), img, name, OPACITY_OPAQUE);
+		layer = new KisLayer(floatingSelection -> tiles(), img, name, OPACITY_OPAQUE);
 
 		if (floatingSelection -> mask())
 			layer -> addMask(floatingSelection -> mask());

@@ -288,7 +288,7 @@ void KisSelectionManager::copy()
 
 	floatingSelection -> clearParentOnMove(false);
 	m_doc -> setClipboardFloatingSelection(floatingSelection);
-	
+	img -> setFloatingSelection(floatingSelection);
 	imgSelectionChanged(m_parent -> currentImg());
 
 }
@@ -361,37 +361,15 @@ void KisSelectionManager::clear()
 		  << r.width() << ", "
 		  << r.height() << "\n";
 
-	KisTileCommand * ktc = new KisTileCommand("clear", (KisPaintDeviceSP) layer ); // Create a command
-
-
-	KoColor c;
-	QUANTUM opacity;
-	Q_INT32 x = r.x();
-	Q_INT32 y = r.y();
-	QUANTUM s;
-
-	KisIteratorLineQuantum lineIt = selection -> iteratorQuantumSelectionBegin(ktc, r.x(), r.x() + r.width() - 1, r.y() );
-	KisIteratorLineQuantum lastLine = selection -> iteratorQuantumSelectionEnd(ktc, r.x(), r.x() + r.width() - 1, r.y() + r.height() - 1);
-	while( lineIt <= lastLine )
-	{
-		KisIteratorQuantum quantumIt = *lineIt;
-		KisIteratorQuantum lastQuantum = lineIt.end();
-		while( quantumIt <= lastQuantum )
-		{
-			// XXX: roundabout way of setting opacity
-			layer -> pixel(x, y, &c, &opacity);
-			s = QUANTUM_MAX - quantumIt; // Invert
-			
-			if (s > OPACITY_TRANSPARENT) {
-				layer -> setPixel(x, y, c, opacity - s);
-			}
-			++quantumIt; // the alphamask has just one byte per pixel.
-			++x;
-		}
-		++lineIt;
-		x = r.x();
-		++y;
-	}
+	// XXX: make undoable
+	KisPainter p(img -> activeDevice());
+	p.bitBlt(r.x(), r.y(), 
+		 COMPOSITE_COPY_OPACITY, // XXX: Is a mere copy of transparency correct?
+		 selection.data(),
+		 r.x(), r.y(),
+		 r.width(), r.height());
+	p.end();
+	
 	layer -> removeSelection();
 	m_parent -> updateCanvas();
 
@@ -455,41 +433,18 @@ void KisSelectionManager::copySelectionToNewLayer()
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
-	KisSelectionSP selection = layer -> selection();
-	QRect r = selection -> selectedRect();
+	copy();
 
-	KisLayerSP newLayer = new KisLayer(r.width(), r.height(), layer -> colorStrategy(), img -> nextLayerName());
+	KisFloatingSelectionSP s = img -> floatingSelection();
+	
+	img -> unsetFloatingSelection(false);
 
-	KisPainter p(newLayer.data());
-	p.bitBlt(0, 0, COMPOSITE_COPY, layer.data(), r.x(), r.y(), r.width(), r.height());
-	p.end();
-
-	KoColor c1;
-	KoColor c2;
-	QUANTUM opacity1;
-	QUANTUM opacity2;
-
-	int dx = r.x();
-	int dy = r.y();
-
-	for (int x = 0; x < newLayer -> width(); x++) {
-		for (int y = 0; y < newLayer -> height(); y++) {
-			newLayer -> pixel(x, y, &c1, &opacity1);
-			selection -> pixel(dx + x, dy + y, &c2, &opacity2);
-			newLayer -> setPixel(x, y, c1, &opacity1 - &opacity2);
-		}
-	}
+	if (s && m_doc -> layerAdd(img, img -> nextLayerName(), s))
+		m_parent -> layersUpdated();
+	else
+		img -> setFloatingSelection(s);
 
 	layer -> removeSelection();
-	img -> add(layer, img -> nlayers() + 1);
-	m_parent -> layersUpdated();
-
-// 		img -> removeActiveSelection(); // XXX: commit==false
-	
-//                 if (selection && m_doc -> layerAdd(img, img -> nextLayerName(), selection))
-//                         layersUpdated();
-//                 else
-//                         img -> setSelection(selection);
         
 }
 

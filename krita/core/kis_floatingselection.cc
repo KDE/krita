@@ -154,41 +154,44 @@ void KisFloatingSelection::copySelection(KisSelectionSP selection) {
 
 		configure(m_img, r.width(), r.height(), m_img -> colorStrategy(), m_name, COMPOSITE_OVER);
 
-
 		gc.begin(this);
+		// Copy image data
 		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, r.x() - m_parent -> x(), r.y() - m_parent -> y(), r.width(), r.height());
+		// Apply selection mask
+		gc.bitBlt(0, 0, COMPOSITE_COPY_OPACITY, selection.data(), r.x() - m_parent -> x(), r.y() - m_parent -> y(), r.width(), r.height());
+		gc.end();
 
-		// XXX: switch to proper iterators
-		KisTileCommand * ktc = new KisTileCommand("apply mask", (KisPaintDeviceSP) this ); // Create a command
+// 		// XXX: switch to proper iterators
+// 		KisTileCommand * ktc = new KisTileCommand("apply mask", (KisPaintDeviceSP) this ); // Create a command
 		
-		KoColor c;
-		QUANTUM opacity;
-		Q_INT32 x = 0;
-		Q_INT32 y = 0;
+// 		KoColor c;
+// 		QUANTUM opacity;
+// 		Q_INT32 x = 0;
+// 		Q_INT32 y = 0;
 
-		KisIteratorLineQuantum lineIt = selection -> iteratorQuantumSelectionBegin(ktc, r.x(), r.x() + r.width() - 1, r.y() );
-		KisIteratorLineQuantum lastLine = selection -> iteratorQuantumSelectionEnd(ktc, r.x(), r.x() + r.width() - 1, r.y() + r.height() - 1);
-		while( lineIt <= lastLine )
-		{
-			KisIteratorQuantum quantumIt = *lineIt;
-			KisIteratorQuantum lastQuantum = lineIt.end();
-			while( quantumIt <= lastQuantum )
-			{
-				// XXX: roundabout way of setting opacity
-				pixel(x, y, &c, &opacity);
-				if ((opacity - quantumIt) < OPACITY_TRANSPARENT) {
-					setPixel(x, y, c, OPACITY_TRANSPARENT);
-				}
-				else {
-					setPixel(x, y, c, opacity - quantumIt);
-				}
-				++quantumIt; // the alphamask has just one byte per pixel.
-				++x;
-			}
-			++lineIt;
-			x = 0;
-			++y;
-		}
+// 		KisIteratorLineQuantum lineIt = selection -> iteratorQuantumSelectionBegin(ktc, r.x(), r.x() + r.width() - 1, r.y() );
+// 		KisIteratorLineQuantum lastLine = selection -> iteratorQuantumSelectionEnd(ktc, r.x(), r.x() + r.width() - 1, r.y() + r.height() - 1);
+// 		while( lineIt <= lastLine )
+// 		{
+// 			KisIteratorQuantum quantumIt = *lineIt;
+// 			KisIteratorQuantum lastQuantum = lineIt.end();
+// 			while( quantumIt <= lastQuantum )
+// 			{
+// 				// XXX: roundabout way of setting opacity
+// 				pixel(x, y, &c, &opacity);
+// 				if ((opacity - quantumIt) < OPACITY_TRANSPARENT) {
+// 					setPixel(x, y, c, OPACITY_TRANSPARENT);
+// 				}
+// 				else {
+// 					setPixel(x, y, c, opacity - quantumIt);
+// 				}
+// 				++quantumIt; // the alphamask has just one byte per pixel.
+// 				++x;
+// 			}
+// 			++lineIt;
+// 			x = 0;
+// 			++y;
+// 		}
 		super::move(r.x(), r.y());
 
 		kdDebug() << "Selection copied: "
@@ -262,7 +265,7 @@ void KisFloatingSelection::clearParentOnMove(bool f)
 
 QImage KisFloatingSelection::toImage()
 {
-	KisTileMgrSP tm = data();
+	KisTileMgrSP tm = tiles();
 	KisPixelDataSP raw;
 	Q_INT32 stride;
 	QUANTUM *src;

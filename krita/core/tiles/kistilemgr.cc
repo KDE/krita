@@ -66,8 +66,7 @@ KisTileMgr::KisTileMgr(KisTileMgr *tm, Q_UINT32 depth, Q_UINT32 width, Q_UINT32 
 }
 
 KisTileMgr::KisTileMgr(const KisTileMgr& rhs)
-	: KisPixelManagerInterface(rhs),
-	  KShared(rhs)
+	: KShared(rhs)
 {
 #if DEBUG_TILE_MANAGERS
 	numTileManagers++;

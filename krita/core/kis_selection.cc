@@ -36,16 +36,21 @@
 KisSelection::KisSelection(KisLayerSP layer, const QString& name) 
  	: super(layer -> width(),
 		layer -> height(),
-		new KisColorSpaceAlpha(), // Note that the alpha color
+#if USE_ALPHA_MAP
+ 		new KisColorSpaceAlpha(), // Note that the alpha color
 					  // model has _state_, so we
 					  // create a new one, instead
-					  // of sharing.
+#else					  // of sharing.
+		layer -> colorStrategy(),
+#endif
 		name)
 {
 	m_parentLayer = layer;
 	m_maskColor = KoColor::white();
+#if USE_ALPHA_MAP
 	m_alpha = KisColorSpaceAlphaSP(dynamic_cast<KisColorSpaceAlpha*> (colorStrategy().data()));
  	m_alpha -> setMaskColor(m_maskColor);
+#endif
 	kdDebug() << "Selection created with compositeOp " << compositeOp() << "\n";
 }
 
@@ -90,7 +95,6 @@ void KisSelection::select(QRect r)
 {
 	KisFillPainter painter(this);
 	painter.fillRect(r, m_maskColor, MAX_SELECTED);
-	//m_selectedRect = painter -> dirtyRect(); // XXX: use this when fill supports it.
 	m_selectedRect |= r;
 }
 
@@ -126,7 +130,9 @@ void KisSelection::invert(QRect r)
 
 void KisSelection::setMaskColor(KoColor c)
 {
+#if USE_ALPHA_MAP
 	m_alpha -> setMaskColor(c);
+#endif
 	m_maskColor = c;
 }
 
@@ -139,3 +145,4 @@ QRect KisSelection::selectedRect()
 		return QRect(0, 0, 0, 0);
 	}
 }
+

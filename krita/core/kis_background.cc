@@ -57,7 +57,7 @@ KisBackground::KisBackground(KisImage *img, Q_INT32 width, Q_INT32 height) :
 	KisTileMgrSP tm;
 	KisTileSP tile;
 
-	tm = data();
+	tm = tiles();
 	tile = tm -> tile(0, TILEMODE_WRITE);
 	Q_ASSERT( colorStrategy() != 0 );
 	fillBgTile(tile,  colorStrategy()->depth() - 1);

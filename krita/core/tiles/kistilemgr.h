@@ -28,7 +28,6 @@
 
 #include "kistile.h"
 #include "kis_types.h"
-#include "kis_pixel_manager.h"
 
 class QPoint;
 struct KisPixelData;
@@ -61,7 +60,7 @@ class KisTileMediator;
  * @short KisTileMgr manages the pixels for every layer.
  *
  */
-class KisTileMgr : public KisPixelManagerInterface, public KShared {
+class KisTileMgr : public KShared {
 
 public:
         /**

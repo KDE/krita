@@ -67,7 +67,7 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 		}
 	}
 
-	KisTileMgrSP dabTiles = dab -> data();
+	KisTileMgrSP dabTiles = dab -> tiles();
 	dabTiles -> writePixelData(0, 0, maskWidth - 1, maskHeight - 1, quantums, maskWidth * dstDepth);
 	delete [] quantums;
 

@@ -34,6 +34,7 @@
 #include <kis_image.h>
 #include <kis_iterators_quantum.h>
 #include <kis_layer.h>
+#include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_tile_command.h>
 #include <kis_types.h>
@@ -69,9 +70,7 @@ KritaExample::KritaExample(QObject *parent, const char *name, const QStringList 
 		m_view = (KisView*) parent;
 	}
 
-
-	KisFilterInvert* kfi = new KisFilterInvert(m_view);
-
+	KisFilterSP kfi = createFilter<KisFilterInvert>(m_view);
 	(void) new KAction(i18n("&Invert..."), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "krita_example");
 }
 
@@ -79,7 +78,7 @@ KritaExample::~KritaExample()
 {
 }
 
-KisFilterInvert::KisFilterInvert(KisView * view) : KisFilter("Invert", view)
+KisFilterInvert::KisFilterInvert(KisView * view) : KisFilter(sname(), view)
 {
 }
 

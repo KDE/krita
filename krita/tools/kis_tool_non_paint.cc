@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include "kdebug.h"
 #include "kis_tool_memento.h"
 #include "kis_tool_non_paint.h"
 #include "kis_view.h"
@@ -65,6 +66,17 @@ void KisToolNonPaint::mouseRelease(QMouseEvent *)
 {
 }
 
+void KisToolNonPaint::tabletEvent(QTabletEvent *e)
+{
+//     kdDebug() << "received tablet event at position ("
+//               << e->pos().x()
+//               << ", "
+//               << e->pos().y()
+//               << ")"
+//               << endl;
+}
+
+
 void KisToolNonPaint::keyPress(QKeyEvent *)
 {
 }
@@ -110,6 +122,23 @@ void KisToolNonPaint::setup()
 void KisToolNonPaint::activate()
 {
 }
+
+void KisToolNonPaint::setBrush(KisBrush *)
+{
+}
+
+void KisToolNonPaint::setPattern(KisPattern *)
+{
+}
+
+void KisToolNonPaint::setGradient(KisGradient *)
+{
+}
+
+void KisToolNonPaint::setFGColor(const KoColor& )
+{
+}
+
 
 #include "kis_tool_non_paint.moc"
 

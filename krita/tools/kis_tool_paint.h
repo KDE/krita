@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2003 Boudewijn Rempt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#if !defined KIS_TOOL_NON_PAINT_H_
-#define KIS_TOOL_NON_PAINT_H_
+#if !defined KIS_TOOL_PAINT_H_
+#define KIS_TOOL_PAINT_H_
 
 #include <qcursor.h>
 
@@ -39,13 +39,13 @@ class KDialog;
 class KisDoc;
 class KisView;
 
-class KisToolNonPaint : public KisToolInterface {
+class KisToolPaint : public KisToolInterface {
 	Q_OBJECT
 	typedef KisToolInterface super;
 
 public:
-	KisToolNonPaint(KisView *view, KisDoc *doc);
-	virtual ~KisToolNonPaint();
+	KisToolPaint(KisView *view, KisDoc *doc);
+	virtual ~KisToolPaint();
 	
 public:
 	virtual void paint(QPainter& gc);
@@ -84,7 +84,13 @@ private:
 	KisView *m_view;
 	KisDoc *m_doc;
 	QCursor m_cursor;
+
+protected:
+        KisBrush *m_brush;
+        KisPattern *m_pattern;
+        KisGradient *m_gradient;
+        KoColor m_color;
 };
 
-#endif // KIS_TOOL_NON_PAINT_H_
+#endif // KIS_TOOL_PAINT_H_
 

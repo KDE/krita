@@ -57,6 +57,11 @@ void KisCanvas::mouseMoveEvent(QMouseEvent *e)
 	emit mouseMoved(e);
 }
 
+void KisCanvas::tabletEvent( QTabletEvent *e )
+{
+    emit gotTabletEvent( e );
+}
+
 void KisCanvas::enterEvent(QEvent *e)
 {
 	emit gotEnterEvent(e);

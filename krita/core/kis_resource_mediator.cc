@@ -23,8 +23,8 @@
 #include "kis_resourceserver.h"
 #include "kis_resource_mediator.h"
 
-KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn, 
-			KisResourceServer *rserver, 
+KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
+			KisResourceServer *rserver,
 			const QString& chooserCaption,
 			QWidget *chooserParent,
 			const char *chooserName,
@@ -34,10 +34,15 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 	Q_ASSERT(rserver);
 	m_activeItem = 0;
 	m_chooser = new KisItemChooser(true, chooserParent, chooserName);
-	connect(m_chooser, SIGNAL(selected(KoIconItem*)), SLOT(setActiveItem(KoIconItem*)));
+	connect(m_chooser,
+                SIGNAL(selected(KoIconItem*)),
+                SLOT(setActiveItem(KoIconItem*)));
 
 	if (mediateOn & MEDIATE_BRUSHES)
-		connect(rserver, SIGNAL(loadedBrush(KisBrush*)), this, SLOT(resourceServerLoadedBrush(KisBrush*)));
+		connect(rserver,
+                        SIGNAL(loadedBrush(KisBrush*)),
+                        this,
+                        SLOT(resourceServerLoadedBrush(KisBrush*)));
 
 	m_chooser -> setCaption(chooserCaption);
 }

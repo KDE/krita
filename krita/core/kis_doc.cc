@@ -320,7 +320,7 @@ namespace {
 	};
 }
 
-KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) : 
+KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) :
 	super(parentWidget, widgetName, parent, name, singleViewMode)
 {
 	m_undo = false;
@@ -371,7 +371,7 @@ bool KisDoc::initDoc()
 		dlgtype = KoTemplateChooseDia::Everything;
 	else
 		dlgtype = KoTemplateChooseDia::OnlyTemplates;
-	
+
 	KoTemplateChooseDia::ReturnType ret =
 	    KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE,
 			"*.kra", i18n("Krita"),
@@ -467,7 +467,7 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
 	m_conversionDepth = attr.toInt();
 
 	for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
-		if (node.isElement()) { 
+		if (node.isElement()) {
 			if (node.nodeName() == "IMAGE") {
 				QDomElement elem = node.toElement();
 
@@ -563,7 +563,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 		img = new KisImage(this, width, height, static_cast<enumImgType>(colorspace), name);
 
 		for (node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
-			if (node.isElement()) { 
+			if (node.isElement()) {
 				if (node.nodeName() == "LAYERS") {
 					for (child = node.firstChild(); !child.isNull(); child = child.nextSibling()) {
 						KisLayerSP layer = loadLayer(child.toElement(), img);
@@ -663,7 +663,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 		return 0;
 
 	visible = attr == "0" ? false : true;
-	
+
 	if ((attr = element.attribute("linked")) == QString::null)
 		return 0;
 
@@ -870,7 +870,7 @@ bool KisDoc::completeLoading(KoStore *store)
 }
 
 bool KisDoc::namePresent(const QString& name) const
-{ 
+{
 	for (vKisImageSP_cit it = m_images.begin(); it != m_images.end(); it++)
 		if ((*it) -> name() == name)
 			return true;
@@ -1049,7 +1049,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 	if (m_projection) {
 		if (!(colorstate = m_colorspaces[m_projection -> nativeImgType()]))
 			return;
-		
+
 		x1 = CLAMP(rect.x(), 0, m_projection -> width());
 		y1 = CLAMP(rect.y(), 0, m_projection -> height());
 		x2 = CLAMP(rect.x() + rect.width(), 0, m_projection -> width());
@@ -1072,7 +1072,11 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 
 		for (y = y1; y < y2; y += RENDER_HEIGHT)
 			for (x = x1; x < x2; x += RENDER_WIDTH)
-				colorstate -> render(m_projection, painter, x, y, QMIN(x2 - x, RENDER_WIDTH), QMIN(y2 - y, RENDER_HEIGHT));
+				colorstate -> render(m_projection,
+                                                     painter,
+                                                     x, y,
+                                                     QMIN(x2 - x, RENDER_WIDTH),
+                                                     QMIN(y2 - y, RENDER_HEIGHT));
 
 		if ((selection = m_projection -> selection())) {
 			QPen pen(Qt::DotLine);
@@ -1173,7 +1177,7 @@ void KisDoc::slotCommandExecuted()
 QString KisDoc::nextImageName() const
 {
 	QString name;
-       
+
 	do {
 		name = m_nserver -> name();
 	} while (namePresent(name));
@@ -1212,16 +1216,15 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 				gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::black(), OPACITY_TRANSPARENT);
 				gc.end();
 				img -> top(layer);
-				
+
 				if (m_undo)
 					addCommand(new LayerAddCmd(this, this, img, layer)); 
-				
 				img -> invalidate();
 				setModified(true);
 				layer -> visible(true);
 				emit layersUpdated(img);
 			}
-		} 
+		}
 	}
 
 	return layer;
@@ -1242,7 +1245,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisSelectionSP 
 
 		img -> top(layer);
 		setModified(true);
-	
+
 		if (m_undo)
 			addCommand(new LayerAddCmd(this, this, img, layer)); 
 
@@ -1271,7 +1274,6 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, KisLayerSP l, Q_INT32 position)
 
 	if (m_undo)
 		addCommand(new LayerAddCmd(this, this, img, l)); 
-
 	img -> invalidate(l -> bounds());
 	l -> visible(true);
 	emit layersUpdated(img);
@@ -1456,7 +1458,7 @@ void KisDoc::clipboardDataChanged()
 		QImage qimg = cb -> image();
 
 		if (!qimg.isNull()) {
-			m_clipboard = new KisSelection(qimg.width(), qimg.height(), 
+			m_clipboard = new KisSelection(qimg.width(), qimg.height(),
 					qimg.hasAlphaBuffer() ? IMAGE_TYPE_RGBA : IMAGE_TYPE_RGB,
 					"KisDoc created clipboard selection");
 
@@ -1499,7 +1501,7 @@ bool KisDoc::importImage(const QString& filename)
 		if (ib.buildImage(url) == KisImageBuilder_RESULT_OK) {
 			addImage(ib.image());
 			return true;
-		} 
+		}
 	}
 
 	return false;

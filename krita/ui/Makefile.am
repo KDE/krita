@@ -1,7 +1,7 @@
 INCLUDES = -I$(srcdir)/../core $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
 
 noinst_LTLIBRARIES = libkisui.la
-libkisui_la_LIBADD = ./labels/libkislabel.la
+libkisui_la_LIBADD = ./labels/libkislabel.la 
 libkisui_la_SOURCES = integerwidget.cc kis_dlg_preferences.cc kis_dlg_builder_progress.cc \
     kfloatingdialog.cc \
     kis_tabbar.cc  kis_canvas.cc \

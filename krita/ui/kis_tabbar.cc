@@ -92,7 +92,7 @@ void KisTabBar::removeAllTabs()
 void KisTabBar::slotScrollLeft()
 {
   if ( tabsList.count() == 0 )
-    return;
+      return;
 
   if ( leftTab == 1 )
     return;

@@ -178,6 +178,7 @@ private slots:
 	void canvasGotMousePressEvent(QMouseEvent *e);
 	void canvasGotMouseMoveEvent(QMouseEvent *e);
 	void canvasGotMouseReleaseEvent(QMouseEvent *e);
+	void canvasGotTabletEvent(QTabletEvent *e);
 	void canvasGotPaintEvent(QPaintEvent *e);
 	void canvasGotEnterEvent(QEvent *e);
 	void canvasGotLeaveEvent(QEvent *e);
@@ -242,13 +243,18 @@ private slots:
 private:
 	KisDoc *m_doc;
 	KisCanvas *m_canvas;
+
+        // Fringe benefits
 	KisTabBar *m_tabBar;
 	QButton *m_tabFirst; 
 	QButton *m_tabLeft; 
 	QButton *m_tabRight; 
 	QButton *m_tabLast;
+
 	KisRuler *m_hRuler;
 	KisRuler *m_vRuler;
+
+        // Actions
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
 	KAction *m_imgRm;
@@ -286,6 +292,7 @@ private:
 	KAction *m_selectionRm;
 	KAction *m_selectionSelectAll;
 	KAction *m_selectionSelectNone;
+
 	KToggleAction *m_sidebarToggle; 
 	KToggleAction *m_floatsidebarToggle; 
 	KToggleAction *m_lsidebarToggle;
@@ -294,33 +301,38 @@ private:
 	KToggleAction *m_dlgPatternToggle; 
 	KToggleAction *m_dlgLayersToggle; 
 	KToggleAction *m_dlgChannelsToggle;
-	QScrollBar *m_hScroll; 
-	QScrollBar *m_vScroll;
+
 	DCOPObject *m_dcop;
-	Q_INT32 m_xoff;
-	Q_INT32 m_yoff;    
-	KoColor m_fg;
-	KoColor m_bg;
+
+        // Widgets
+	QScrollBar *m_hScroll; // XXX: the sizing of the scrollthumbs
+	QScrollBar *m_vScroll; // is not right yet.
 	KisSideBar *m_sideBar;
 	KisItemChooser *m_patternChooser;
 	QWidget *m_paletteChooser;    
 	QWidget *m_gradientChooser;
 	QWidget *m_imageChooser;
+	KisChannelView *m_channelView;
+	QWidget *m_pathView;    
+	vKisToolSP m_toolSet;
+	KisBuilderMonitor *m_imgBuilderMgr;
+	KisLabelBuilderProgress *m_buildProgress;
+	KisResourceMediator *m_brushMediator;
+
+        // Current colours, brushes, patterns etc.
+        Q_INT32 m_xoff;
+        Q_INT32 m_yoff;
+	KoColor m_fg;
+	KoColor m_bg;
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
 	KisListBox *m_layerBox;
-	KisChannelView *m_channelView;
-	QWidget *m_pathView;    
 	KisToolSP m_tool;
 	KisToolSP m_paste;
-	vKisToolSP m_toolSet;
 	bool m_clipboardHasImage;
-	KisBuilderMonitor *m_imgBuilderMgr;
-	KisLabelBuilderProgress *m_buildProgress;
 	KisGuideSP m_currentGuide;
 	QPoint m_lastGuidePoint;
-	KisResourceMediator *m_brushMediator;
 	KisUndoAdapter *m_adapter;
 
 private:

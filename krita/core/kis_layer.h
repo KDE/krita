@@ -52,7 +52,7 @@ public:
 
 private:
 	QUANTUM m_opacity;
-	bool m_preserveTranspanrency;
+	bool m_preserveTransparency;
 	KisMaskSP m_mask;
 	bool m_initial;
 	bool m_linked;

@@ -69,6 +69,10 @@ public:
 	virtual void update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	virtual const bool visible() const;
 	virtual void visible(bool v);
+        /**
+         * Don't know what this does, to judge from the source nothing,
+         * but without it, painting won't be done.
+         */
 	virtual void anchor();
 
 public:

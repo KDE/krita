@@ -31,7 +31,8 @@
 #include "kis_tool_ellipse.h"
 #include "kis_dlg_toolopts.h"
 
-EllipseTool::EllipseTool(KisDoc *doc, KisCanvas *canvas) : super(doc, canvas)
+EllipseTool::EllipseTool(KisDoc *doc, KisCanvas *canvas) :
+     super(doc, canvas)
 {
 	m_doc = doc;
 	m_dragging = false;

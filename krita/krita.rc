@@ -117,6 +117,8 @@
   <Action name="tool_colorchanger"/>  
   <Action name="tool_stamp"/>
   <Action name="tool_gradient"/>  
+  <Action name="tool_test"/>  
+  <Action name="tool_qpen"/>  
 </Menu>
 
 <Menu name="Color"><text>C&amp;olor</text>
@@ -233,6 +235,8 @@
   <Action name="tool_fill"/>
   <Action name="tool_colorchanger"/>    
   <Action name="tool_stamp"/>
+  <Action name="tool_test"/>
+  <Action name="tool_qpen"/>
 
   <Action name="dialog_gradient"/>  
   <Action name="current_tool_properties"/>  

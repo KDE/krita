@@ -26,6 +26,10 @@
 
 class KisView;
 
+/**
+ * This is the definition of the interface Krita presents to
+ * dcop.
+ */
 class KRayonViewIface : public KoViewIface
 {
     K_DCOP

@@ -46,4 +46,3 @@ private:
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_H_
-

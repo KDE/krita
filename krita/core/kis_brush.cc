@@ -74,12 +74,12 @@ bool KisBrush::saveAsync()
 
 QImage KisBrush::img() const
 {
-	return m_img;
+    return m_img;
 }
 
 QImage KisBrush::frame(Q_INT32) const
 {
-	return m_img;
+    return m_img;
 }
 
 void KisBrush::setHotSpot(QPoint pt)
@@ -87,14 +87,14 @@ void KisBrush::setHotSpot(QPoint pt)
 	Q_INT32 x = pt.x();
 	Q_INT32 y = pt.y();
 
-	if (x < 0) 
+	if (x < 0)
 		x = 0;
-	else if (x >= width()) 
+	else if (x >= width())
 		x = width() - 1;
 
-	if (y < 0) 
+	if (y < 0)
 		y = 0;
-	else if (y >= height()) 
+	else if (y >= height())
 		y = height() - 1;
 
 	m_hotSpot = QPoint(x, y);
@@ -141,7 +141,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		emit ioFailed(this);
 		return;
 	}
-	
+
 	memcpy(&bh, &m_data[0], sizeof(GimpBrushHeader));
 	bh.header_size = ntohl(bh.header_size);
 	bh.version = ntohl(bh.version);
@@ -164,7 +164,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		emit ioFailed(this);
 		return;
 	}
-	
+
 	setName(&name[0]);
 
 	if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
@@ -183,7 +183,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 					emit ioFailed(this);
 					return;
 				}
-				
+
 				val = 255 - m_data[k];
 				m_img.setPixel(x, y, qRgb(val, val, val));
 			}

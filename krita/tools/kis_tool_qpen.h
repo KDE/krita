@@ -1,4 +1,4 @@
-g/*
+/*
  *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -16,8 +16,8 @@ g/*
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#if !defined KIS_TOOL_BRUSH_H_
-#define KIS_TOOL_BRUSH_H_
+#if !defined KIS_TOOL_QPEN_H_
+#define KIS_TOOL_QPEN_H_
 
 #include <qpoint.h>
 #include <qpointarray.h>
@@ -27,15 +27,16 @@ g/*
 #include "kis_tool_paint.h"
 
 /**
-   KisToolBrush is a supersampled pattern-using brush.
+   KisToolQPen is a very simple pen tool that
+   paints a line using QPainter.
 
 */
-class KisToolBrush : public KisToolPaint {
+class KisToolQPen : public KisToolPaint {
 	typedef KisToolPaint super;
 
 public:
-	KisToolBrush(KisView *view, KisDoc *doc);
-	virtual ~KisToolBrush();
+	KisToolQPen(KisView *view, KisDoc *doc);
+	virtual ~KisToolQPen();
 
 public:
         virtual void setup();
@@ -49,9 +50,9 @@ private:
 	KisDoc *m_doc;
 
         bool m_mousePressed; // Are we drawing?
-        int m_oldPressure;
+        Q_INT32 m_oldPressure;
         // If the mouse moves too fast, keep the delta's in here
         QPointArray m_polyline; 
 };
-#endif // KIS_TOOL_BRUSH_H_
+#endif // KIS_TOOL_QPEN_H_
 

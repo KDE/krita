@@ -41,7 +41,7 @@ KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
 {
 	if (this != &rhs) {
 		m_opacity = rhs.m_opacity;
-		m_preserveTranspanrency = rhs.m_preserveTranspanrency;
+		m_preserveTransparency = rhs.m_preserveTransparency;
 		m_initial = rhs.m_initial;
 		m_linked = rhs.m_linked;
 		m_dx = rhs.m_dx;

@@ -22,8 +22,14 @@
 #include <qevent.h>
 #include <qobject.h>
 #include <qstring.h>
+
+#include <koColor.h>
+
 #include "kis_types.h"
 #include "kis_cursor.h"
+#include "kis_brush.h"
+#include "kis_pattern.h"
+#include "kis_gradient.h"
 
 class QPainter;
 class QRect;
@@ -49,6 +55,7 @@ public:
 	virtual void mousePress(QMouseEvent *e) = 0;
 	virtual void mouseMove(QMouseEvent *e) = 0;
 	virtual void mouseRelease(QMouseEvent *e) = 0;
+        virtual void tabletEvent(QTabletEvent *e) = 0;
 	virtual void keyPress(QKeyEvent *e) = 0;
 	virtual void keyRelease(QKeyEvent *e) = 0;
 
@@ -58,6 +65,11 @@ public:
 	
 	virtual void save(KisToolMementoSP memento) = 0;
 	virtual void restore(KisToolMementoSP memento) = 0;
+
+        virtual void setBrush(KisBrush *brush) = 0;
+        virtual void setPattern(KisPattern *pattern) = 0;
+        virtual void setGradient(KisGradient *gradient) = 0;
+        virtual void setFGColor(const KoColor& color) = 0;
 
 public slots:
 	virtual void activateSelf() = 0;

@@ -18,20 +18,24 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <stdlib.h>
+
 #include <qpoint.h>
+
 #include <kaction.h>
 #include <kcommand.h>
 #include <klocale.h>
+
 #include <koColor.h>
+
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_view.h"
-#include "kis_tool_memento.h"
 #include "kis_tool_move.h"
 
-KisToolMove::KisToolMove(KisView *view, KisDoc *doc) : super(view, doc), KisStrategyMove(view, doc)
+KisToolMove::KisToolMove(KisView *view, KisDoc *doc)
+    : super(view, doc), KisStrategyMove(view, doc)
 {
 	m_view = view;
 	m_doc = doc;
@@ -106,7 +110,10 @@ void KisToolMove::setup()
 {
 	KToggleAction *toggle;
 
-	toggle = new KToggleAction(i18n("&Move"), "move", 0, this, SLOT(activateSelf()), m_view -> actionCollection(), "tool_move");
+	toggle = new KToggleAction(i18n("&Move"), "move", 0, this,
+                                   SLOT(activateSelf()),
+                                   m_view -> actionCollection(),
+                                   "tool_move");
 	toggle -> setExclusiveGroup("tools");
 }
 

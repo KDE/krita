@@ -73,7 +73,7 @@ namespace {
 	private:
 		KisUndoAdapter *m_adapter;
 		KisPaintDeviceSP m_dev;
-		KisTileMgrSP m_before; 
+		KisTileMgrSP m_before;
 		KisTileMgrSP m_after;
 	};
 }
@@ -265,7 +265,7 @@ bool KisPaintDevice::contains(const QPoint& pt) const
 {
 	return contains(pt.x(), pt.y());
 }
-	
+
 bool KisPaintDevice::shouldDrawBorder() const
 {
 	return false;
@@ -637,7 +637,7 @@ void KisPaintDevice::expand(const QSize& size)
 {
 	expand(size.width(), size.height());
 }
-	
+
 void KisPaintDevice::anchor()
 {
 }

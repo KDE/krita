@@ -1,0 +1,154 @@
+/*
+ *  Copyright (c) 2003 Boudewijn Rempt
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+#include <kdebug.h>
+#include <koColor.h>
+
+#include "kis_tool_memento.h"
+#include "kis_tool_paint.h"
+#include "kis_view.h"
+#include "kis_global.h"
+#include "kis_types.h"
+#include "kis_resource.h"
+
+
+KisToolPaint::KisToolPaint(KisView *view, KisDoc *doc)
+{
+	m_view = view;
+	m_doc = doc;
+}
+
+KisToolPaint::~KisToolPaint()
+{
+}
+
+void KisToolPaint::paint(QPainter&)
+{
+}
+
+void KisToolPaint::paint(QPainter&, const QRect&)
+{
+}
+
+void KisToolPaint::clear()
+{
+}
+
+void KisToolPaint::clear(const QRect&)
+{
+}
+
+void KisToolPaint::enter(QEvent *)
+{
+}
+
+void KisToolPaint::leave(QEvent *)
+{
+}
+
+void KisToolPaint::mousePress(QMouseEvent *)
+{
+}
+
+void KisToolPaint::mouseMove(QMouseEvent *)
+{
+}
+
+void KisToolPaint::mouseRelease(QMouseEvent *)
+{
+}
+
+void KisToolPaint::tabletEvent(QTabletEvent *)
+{
+//     kdDebug() << "received tablet event at position ("
+//               << e->pos().x()
+//               << ", "
+//               << e->pos().y()
+//               << ")"
+//               << endl;
+}
+
+
+void KisToolPaint::keyPress(QKeyEvent *)
+{
+}
+
+void KisToolPaint::keyRelease(QKeyEvent *)
+{
+}
+
+KDialog *KisToolPaint::options()
+{
+	return 0;
+}
+
+void KisToolPaint::save(KisToolMementoSP)
+{
+}
+
+void KisToolPaint::restore(KisToolMementoSP)
+{
+}
+
+void KisToolPaint::cursor(QWidget *w) const
+{
+	if (w)
+		w -> setCursor(m_cursor);
+}
+
+void KisToolPaint::setCursor(const QCursor& cursor)
+{
+	m_cursor = cursor;
+}
+
+void KisToolPaint::activateSelf()
+{
+	if (m_view)
+		m_view -> activateTool(this);
+}
+
+void KisToolPaint::setup()
+{
+}
+
+void KisToolPaint::activate()
+{
+}
+
+void KisToolPaint::setBrush(KisBrush *brush)
+{
+    m_brush = brush;
+}
+
+void KisToolPaint::setPattern(KisPattern *pattern)
+{
+    m_pattern = pattern;
+}
+
+void KisToolPaint::setGradient(KisGradient *gradient)
+{
+    m_gradient = gradient;
+}
+
+void KisToolPaint::setFGColor(const KoColor& color)
+{
+    m_color = color;
+}
+
+
+#include "kis_tool_paint.moc"
+

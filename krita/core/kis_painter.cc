@@ -17,10 +17,27 @@
  */
 #include <stdlib.h>
 #include <string.h>
+
+#include "qbrush.h"
+#include "qcolor.h"
+#include "qfontinfo.h"
+#include "qfontmetrics.h"
+#include "qpen.h"
+#include "qpointarray.h"
+#include "qregion.h"
+#include "qwmatrix.h"
+#include <qimage.h>
 #include <qmap.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qpointarray.h>
+#include <qrect.h>
+#include <qstring.h>
+
 #include <kdebug.h>
 #include <kcommand.h>
 #include <koColor.h>
+
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_image.h"
@@ -29,6 +46,10 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kispixeldata.h"
+#include "kis_layer.h"
+#include "kis_brush.h"
+#include "kis_gradient.h"
+#include "kis_pattern.h"
 
 namespace {
 #	include <qmap.h>
@@ -58,7 +79,8 @@ namespace {
 		QRect m_rc;
 	};
 
-	KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
+	KisTileCommand::KisTileCommand(const QString& name, KisPaintDeviceSP device,
+                                       Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
 	{
 		m_name = name;
 		m_device = device;
@@ -136,7 +158,7 @@ namespace {
 
 		if (m_tiles.count(tileNo) == 0) {
 			tile -> shareRef();
-			m_tiles[tileNo] = tile;	
+			m_tiles[tileNo] = tile;
 		}
 	}
 }
@@ -194,7 +216,9 @@ KCommand *KisPainter::endTransaction()
 	return command;
 }
 
-void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileSP srctile, QUANTUM opacity, Q_INT32 rows, Q_INT32 cols, CompositeOp op)
+void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile,
+                         QUANTUM *src, KisTileSP srctile,
+                         QUANTUM opacity, Q_INT32 rows, Q_INT32 cols, CompositeOp op)
 {
 	if (opacity == OPACITY_OPAQUE)
 		return tileBlt(dst, dsttile, src, srctile, rows, cols, op);
@@ -241,7 +265,9 @@ void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileS
 	}
 }
 
-void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileSP srctile, Q_INT32 rows, Q_INT32 cols, CompositeOp op)
+void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile,
+                         QUANTUM *src, KisTileSP srctile,
+                         Q_INT32 rows, Q_INT32 cols, CompositeOp op)
 {
 	Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
 	Q_INT32 srcstride = srctile -> width() * srctile -> depth();
@@ -307,12 +333,16 @@ void KisPainter::tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src, KisTileS
 	}
 }
 
-void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP srcdev, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
+                        KisPaintDeviceSP srcdev,
+                        Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
 	bitBlt(dx, dy, op, srcdev, OPACITY_OPAQUE, sx, sy, sw, sh);
 }
 
-void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP srcdev, QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op,
+                        KisPaintDeviceSP srcdev,
+                        QUANTUM opacity, Q_INT32 sx, Q_INT32 sy, Q_INT32 sw, Q_INT32 sh)
 {
 	Q_INT32 x;
 	Q_INT32 y;
@@ -334,8 +364,8 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 	Q_INT32 dymod;
 	Q_INT32 xxtra;
 	Q_INT32 yxtra;
-	Q_INT32 nrows;
-	Q_INT32 ncols;
+	Q_INT32 nrows = 0;
+	Q_INT32 ncols = 0;
 	KisTileCommand *tc;
 	Q_INT32 tileno;
 
@@ -495,7 +525,8 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 			}
 
 			if (yxtra > 0 && xxtra > 0) {
-				tileno = dsttm -> tileNum(x + TILE_WIDTH - (x % TILE_WIDTH) + 1, y + TILE_HEIGHT - (y % TILE_HEIGHT) + 1);
+				tileno = dsttm -> tileNum(x + TILE_WIDTH - (x % TILE_WIDTH) + 1,
+                                                          y + TILE_HEIGHT - (y % TILE_HEIGHT) + 1);
 
 				if (m_transaction && (tile = dsttm -> tile(tileno, TILEMODE_NONE)))
 					tc -> addTile(tileno, tile);
@@ -538,7 +569,9 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 					}
 				}
 			} else if (yxtra < 0 && xxtra < 0) {
-				tile = srctm -> tile(sx + TILE_WIDTH - (sx % TILE_WIDTH) + 1, sy + TILE_HEIGHT - (sy % TILE_HEIGHT) + 1, TILEMODE_READ);
+				tile = srctm -> tile(sx + TILE_WIDTH - (sx % TILE_WIDTH) + 1,
+                                                     sy + TILE_HEIGHT - (sy % TILE_HEIGHT) + 1,
+                                                     TILEMODE_READ);
 
 				if (tile) {
 					if (dsttile -> height() == TILE_HEIGHT) {
@@ -636,7 +669,8 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 	}
 
 	stride = m_device -> image() -> depth();
-	ydiff = y1 - TILE_HEIGHT * (y1 / TILE_HEIGHT);
+
+        ydiff = y1 - TILE_HEIGHT * (y1 / TILE_HEIGHT);
 
 	if (m_transaction) {
 		tc = new KisTileCommand(m_transaction -> name(), m_device, x1, y1, w, h);
@@ -655,7 +689,7 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 
 			if (!(tile = tm -> tile(x, y, TILEMODE_WRITE)))
 				continue;
-		
+
 			if (xmod > tile -> width())
 				continue;
 
@@ -695,5 +729,81 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 		if (y > y1)
 			ydiff = 0;
 	}
+
 }
 
+void KisPainter::drawPolyline ( const QPointArray & polyline,
+                                const QColor & c)
+{
+    QRect r = polyline.boundingRect();
+
+    if ( r.left() < 0 ) r.setLeft( 1 );
+    if ( r.bottom() < 0 ) r.setBottom( 1 );
+    if ( r.right() < 0 ) r.setRight( 1 );
+    if ( r.top() < 0 ) r.setTop( 1 );
+
+    if ( r.left() >= m_device->width() ) r.setLeft( m_device->width() - 1);
+    if ( r.bottom() >= m_device->height() ) r.setBottom(  m_device->height() - 1);
+    if ( r.right() >= m_device->width() ) r.setRight( m_device->width() - 1);
+    if ( r.top() >= m_device->height() ) r.setTop( m_device->height() - 1);
+
+#if 0
+     kdDebug() << " left: " << r.left()
+               << " right: " << r.right()
+               << " bottom: " << r.bottom()
+               << " top: " << r.top() << endl;
+#endif
+
+    // XXX: should paint a single dot
+    if ( r.left() == r.right() && r.top() == r.bottom() ) return;
+
+    // XXX: This does not use the tile commands, and is thus not undoable
+    // XXX: This sometimes crashes when the pen leaves the paint area
+    // XXX: This sometimes shouts something weird about a null pixmap
+    // XXX: This probably won't work with thick pens
+
+    KisTileMgrSP tileMgr =  m_device->data();
+
+    KisPixelDataSP pd = new KisPixelData;
+    QImage img;
+
+    pd -> mgr = 0;
+    pd -> tile = 0;
+    pd -> mode = TILEMODE_READ;
+    pd -> x1 = r.left();
+    pd -> x2 = r.right();
+    pd -> y1 = r.top();
+    pd -> y2 = r.bottom();
+    pd -> width = r.width(); //pd -> x2 - pd -> x1 + 1;
+    pd -> height = r.height(); //pd -> y2 - pd -> y1 + 1;
+    pd -> depth = tileMgr -> depth();
+    pd -> stride = pd -> depth * pd -> width;
+    pd -> owner = true;
+
+    // XXX: this assumes RGBA.
+    pd -> data = new QUANTUM[pd->width * pd->height * 4];
+    tileMgr -> readPixelData(pd);
+
+    img = QImage(pd -> data,
+                 pd -> width, pd -> height,
+                 pd -> depth * CHAR_BIT,
+                 0, 0,
+                 QImage::LittleEndian);
+
+    QPixmap buffer = QPixmap( img );
+
+    QPainter p;
+    p.begin(&buffer);
+    p.translate( -r.x(),  -r.y() );
+    // Get currently selected brush or pattern, color and use
+    // that as the pen
+    p.setPen( c );
+    p.drawPolyline( polyline );
+    p.end();
+
+    QImage img2 = buffer.convertToImage();
+    memcpy(pd->data,  img2.bits(), pd->width * pd->height * 4 * sizeof( QUANTUM ));
+
+    tileMgr->writePixelData( pd );
+
+}

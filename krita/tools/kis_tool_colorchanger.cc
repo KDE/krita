@@ -47,11 +47,11 @@ ColorChangerTool::ColorChangerTool(KisDoc *doc) : KisTool(doc)
 	toleranceBlue = 0;
 
 	layerAlpha = true;
-    
+
 	// get currentImg colors
 	KoColor startColor( view->fgColor().R(), view->fgColor().G(), view->fgColor().B() );
-	KoColor endColor( view->bgColor().R(), view->bgColor().G(), view->bgColor().B() );        
-    
+	KoColor endColor( view->bgColor().R(), view->bgColor().G(), view->bgColor().B() );
+
 	// prepare for painting with pattern
 	if( m_usePattern )
 		m_doc->frameBuffer()->setPattern( view->currentPattern() );
@@ -60,7 +60,7 @@ ColorChangerTool::ColorChangerTool(KisDoc *doc) : KisTool(doc)
 	m_doc->frameBuffer()->setGradientPaint( m_useGradient, startColor, endColor );
 }
 
-ColorChangerTool::~ColorChangerTool() 
+ColorChangerTool::~ColorChangerTool()
 {
 }
 
@@ -75,12 +75,12 @@ bool ColorChangerTool::changeColors(int startX, int startY)
 	KisView *view = getCurrentView();
 	KisImage *img = m_doc -> currentImg();
 
-	if (!img) 
+	if (!img)
 		return false;
 
 	KisLayer *lay = img->getCurrentLayer();
-	
-	if (!lay) 
+
+	if (!lay)
 		return false;
 
 	if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
@@ -95,15 +95,15 @@ bool ColorChangerTool::changeColors(int startX, int startY)
 	sGreen = qGreen(srgb);
 	sBlue = qBlue(srgb);
 
-	// new color values from color selector 
+	// new color values from color selector
 	nRed     = view->fgColor().R();
 	nGreen   = view->fgColor().G();
 	nBlue    = view->fgColor().B();
 
-	int left    = lay->imageExtents().left(); 
-	int top     = lay->imageExtents().top();    
-	int width   = lay->imageExtents().width();    
-	int height  = lay->imageExtents().height();    
+	int left    = lay->imageExtents().left();
+	int top     = lay->imageExtents().top();
+	int width   = lay->imageExtents().width();
+	int height  = lay->imageExtents().height();
 
 	QRect ur(left, top, width, height);
 
@@ -112,9 +112,9 @@ bool ColorChangerTool::changeColors(int startX, int startY)
 	// prepare for painting with gradient
 	if (m_useGradient) {
 		KoColor startColor(view->fgColor().R(), view->fgColor().G(), view->fgColor().B());
-		KoColor endColor(view->bgColor().R(), view->bgColor().G(), view->bgColor().B());        
+		KoColor endColor(view->bgColor().R(), view->bgColor().G(), view->bgColor().B());
 
-		m_doc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
+		m_doc->frameBuffer()->setGradientPaint(true, startColor, endColor);
 	}
 
 	// prepare for painting with pattern
@@ -122,11 +122,11 @@ bool ColorChangerTool::changeColors(int startX, int startY)
 		m_doc->frameBuffer()->setPattern(view->currentPattern());
 
 	// this does the painting
-	if (!m_doc->frameBuffer()->changeColors(qRgba(sRed, sGreen, sBlue, m_opacity), 
-				qRgba(nRed, nGreen, nBlue, m_opacity), ur)) {     
+	if (!m_doc->frameBuffer()->changeColors(qRgba(sRed, sGreen, sBlue, m_opacity),
+				qRgba(nRed, nGreen, nBlue, m_opacity), ur)) {
 		kdDebug() << "error changing colors" << endl;
-		return false;    
-	} 
+		return false;
+	}
 
 	/* refresh canvas so changes show up */
 	img->markDirty(ur);
@@ -145,17 +145,17 @@ void ColorChangerTool::mousePress(QMouseEvent *e)
 
     QPoint pos = e->pos();
     pos = zoomed(pos);
-        
+
     if( !img->getCurrentLayer()->visible() )
         return;
-  
+
     if( !img->getCurrentLayer()->imageExtents().contains(pos))
         return;
-  
+
     /*  need to fill with foreground color on left click,
     transparent on middle click, and background color on right click,
     need another paramater or to set color here and pass in */
-    
+
     if (e->button() == QMouseEvent::LeftButton)
         changeColors(pos.x(), pos.y());
     else if (e->button() == QMouseEvent::RightButton)
@@ -165,8 +165,8 @@ void ColorChangerTool::mousePress(QMouseEvent *e)
 
 void ColorChangerTool::optionsDialog()
 {
-	ToolOptsStruct ts;    
-    
+	ToolOptsStruct ts;
+
 	ts.usePattern       = m_usePattern;
 	ts.useGradient      = m_useGradient;
 	ts.opacity          = m_opacity;
@@ -181,7 +181,7 @@ void ColorChangerTool::optionsDialog()
 
 	if (OptsDialog.result() == QDialog::Rejected)
 		return;
-	
+
 	/* the following values should be unique for each tool.
 	   To change global tool options that will over-ride these
 	   local ones for individual tools, we need a master tool
@@ -193,18 +193,18 @@ void ColorChangerTool::optionsDialog()
 
 	// we need HSV tolerances even more
 	//toleranceRed    = OptsDialog->ToleranceRed();
-	//toleranceGreen  = OptsDialog->ToleranceGreen();    
+	//toleranceGreen  = OptsDialog->ToleranceGreen();
 	//toleranceBlue   = OptsDialog->ToleranceBlue();
 
 	// User change value ?
 	if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_m_opacity != m_opacity ) {
 		KisView *view = getCurrentView();
-		// note that gradients amd patterns are not associated with a
+		// note that gradients and patterns are not associated with a
 		// particular tool, unlike the other options
 
 		// get currentImg colors
 		KoColor startColor( view->fgColor().R(), view->fgColor().G(), view->fgColor().B() );
-		KoColor endColor( view->bgColor().R(), view->bgColor().G(), view->bgColor().B() );        
+		KoColor endColor( view->bgColor().R(), view->bgColor().G(), view->bgColor().B() );
 
 		// prepare for painting with pattern
 		if( m_usePattern )
@@ -215,7 +215,7 @@ void ColorChangerTool::optionsDialog()
 
 		// set color changer settings
 		m_doc->setModified( true );
-	}        
+	}
 }
 
 void ColorChangerTool::setCursor()

@@ -221,6 +221,7 @@ void KisView::setupSideBar()
 
 	if (sb) {
 		m_sideBar = new KisSideBar(this, "kis_sidebar");
+
 		m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"), m_sideBar -> dockFrame(), "brush_chooser", this);
 		m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
 		m_sideBar -> plug(m_brushMediator -> chooserWidget());
@@ -441,7 +442,7 @@ void KisView::setupActions()
 	m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(merge_linked_layers()), actionCollection(), "merge_linked_layers");
 
 	// setting actions
-	(void)new KAction(i18n("Paint Offset..."), "paint_offet", this, SLOT(setPaintOffset()), actionCollection(), "paint_offset");
+	(void)new KAction(i18n("Paint Offset..."), "paint_offset", this, SLOT(setPaintOffset()), actionCollection(), "paint_offset");
 	m_sidebarToggle = new KToggleAction(i18n("Show/Hide Sidebar"), "ok", 0, this, SLOT(showSidebar()), actionCollection(), "show_sidebar");
 	m_floatsidebarToggle = new KToggleAction(i18n("Dock/Undock Sidebar"), "attach", 0, this, SLOT(floatSidebar()), actionCollection(), "float_sidebar");
 	m_lsidebarToggle = new KToggleAction(i18n("Left/Right Sidebar"), "view_right", 0, this, SLOT(placeSidebarLeft()), actionCollection(), "left_sidebar");
@@ -615,7 +616,12 @@ void KisView::activateTool(KisToolSP tool)
 	if (tool && qFind(m_toolSet.begin(), m_toolSet.end(), tool) != m_toolSet.end()) {
 		m_tool = tool;
 		m_tool -> cursor(m_canvas);
+                m_tool -> setFGColor( m_fg );
+                m_tool -> setBrush( m_brush );
+                m_tool -> setPattern( m_pattern );
+                m_tool -> setGradient( m_gradient );
 		m_tool -> activate();
+
 	} else {
 		m_tool = 0;
 		m_canvas -> setCursor(KisCursor::arrowCursor());
@@ -756,14 +762,14 @@ void KisView::layerUpdateGUI(bool enable)
 {
 	KisImageSP img = currentImg();
 	KisLayerSP layer;
-	Q_INT32 nlayers;
-	Q_INT32 layerPos;
+	Q_INT32 nlayers = 0;
+	Q_INT32 layerPos = 0;
 
 	if (img) {
 		layer = img -> activeLayer();
 		nlayers = img -> nlayers();
 	}
-	
+
 	if (layer)
 		layerPos = img -> index(layer);
 
@@ -834,7 +840,7 @@ void KisView::paste_into()
 	KisImageSP img = currentImg();
 
 	Q_ASSERT(!QApplication::clipboard() -> image().isNull());
-	
+
 	if (img) {
 		KisSelectionSP selection = m_doc -> clipboardSelection();
 		KisLayerSP layer = m_doc -> layerAdd(img, img -> nextLayerName(), selection);
@@ -869,7 +875,7 @@ void KisView::removeSelection()
 				m_adapter -> beginMacro(i18n("Remove Selection"));
 				img -> unsetSelection(true);
 				ur = rc;
-			
+
 				if (parent -> x() || parent -> y())
 					rc.moveBy(-parent -> x(), -parent -> y());
 
@@ -980,7 +986,7 @@ void KisView::selectAll()
 
 	if (img) {
 		KisPaintDeviceSP dev;
-	       
+
 		img -> unsetSelection();
 		dev = img -> activeDevice();
 
@@ -1593,7 +1599,7 @@ void KisView::placeSidebarLeft()
 */
 void KisView::preferences()
 {
- //   PreferencesDialog::editPreferences();
+//    PreferencesDialog::editPreferences();
 }
 
 Q_INT32 KisView::docWidth() const
@@ -1612,7 +1618,7 @@ void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
 
     // this needs to update the scrollbar values and
     // let resizeEvent() handle the repositioning
-    // with showScollBars()
+    // with showScrollBars()
 }
 
 void KisView::brushActivated(KisResource *brush)
@@ -1624,12 +1630,19 @@ void KisView::brushActivated(KisResource *brush)
 
 	if (m_brush && (item = m_brushMediator -> itemFor(m_brush)))
 		m_sideBar -> slotSetBrush(item);
+
+        if ( m_brush && m_tool ) {
+            m_tool -> setBrush( m_brush );
+        }
 }
 
 void KisView::setActivePattern(KoIconItem *pattern)
 {
 	m_pattern = dynamic_cast<KisPattern*>(pattern);
 	m_sideBar -> slotSetPattern(*m_pattern);
+        if ( m_pattern && m_tool ) {
+            m_tool -> setPattern( m_pattern );
+        }
 }
 
 void KisView::setBGColor(const KoColor& c)
@@ -1647,6 +1660,9 @@ void KisView::setFGColor(const KoColor& c)
 void KisView::slotSetFGColor(const KoColor& c)
 {
 	m_fg = c;
+        if ( m_tool ) {
+            m_tool->setFGColor( c );
+        }
 }
 
 void KisView::slotSetBGColor(const KoColor& c)
@@ -1699,6 +1715,8 @@ void KisView::print(KPrinter& printer)
 void KisView::setupTools()
 {
 	m_toolSet = toolFactory(this, m_doc);
+        // Why is the paste tool local to the view,
+        // instead of added by the toolfactory?
 	m_paste = new KisToolPaste(this, m_doc);
 	m_toolSet.push_back(m_paste);
 	m_paste -> setup();
@@ -1760,7 +1778,7 @@ void KisView::canvasGotMousePressEvent(QMouseEvent *e)
 				return;
 			}
 		}
-	} 
+	}
 
 	if (m_tool) {
 		Q_INT32 x = static_cast<Q_INT32>((e -> pos().x() - canvasXOffset() + horzValue() * zoom()) / zoom());
@@ -1820,6 +1838,30 @@ void KisView::canvasGotMouseReleaseEvent(QMouseEvent *e)
 
 		m_tool -> mouseRelease(&ev);
 	}
+}
+
+void KisView::canvasGotTabletEvent(QTabletEvent *e)
+{
+    KisImageSP img = currentImg();
+    if (img ) {
+        if ( m_tool ) {
+            // Compute offset between screen coordinates and (zoomed) canvas coordinates.
+            Q_INT32 x = static_cast<Q_INT32>((e -> pos().x() - canvasXOffset() + horzValue() * zoom()) / zoom());
+            Q_INT32 y = static_cast<Q_INT32>((e -> pos().y() - canvasYOffset() + vertValue() * zoom()) / zoom());
+            // Synthesize a new tablet event.
+            // Pity I haven't got a tablet that's got tilt, too
+            QTabletEvent ev(e -> type(),
+                            QPoint(x, y),
+                            e -> globalPos(),
+                            e -> device(),
+                            e -> pressure(),
+                            e -> xTilt(),
+                            e -> yTilt(),
+                            e -> uniqueId());
+
+            m_tool->tabletEvent( &ev );
+        }
+    }
 }
 
 void KisView::canvasGotEnterEvent(QEvent *e)
@@ -1920,7 +1962,7 @@ void KisView::layerProperties()
 		if (layer) {
 			KisPaintPropertyDlg dlg(layer -> name(), QPoint(layer -> x(), layer -> y()), layer -> opacity());
 
-			if (dlg.exec() == QDialog::Accepted) { 
+			if (dlg.exec() == QDialog::Accepted) {
 				QPoint pt = dlg.getPosition();
 				bool changed = layer -> name() != dlg.getName();
 
@@ -1948,12 +1990,19 @@ void KisView::layerAdd()
 
 	if (img) {
 		KisConfig cfg;
-		NewLayerDialog dlg(cfg.maxLayerWidth(), cfg.defLayerWidth(), cfg.maxLayerHeight() , cfg.defLayerHeight(), this);
+		NewLayerDialog dlg(cfg.maxLayerWidth(),
+                                   cfg.defLayerWidth(),
+                                   cfg.maxLayerHeight() ,
+                                   cfg.defLayerHeight(),
+                                   this);
 
 		dlg.exec();
 
 		if (dlg.result() == QDialog::Accepted) {
-			KisLayerSP layer = m_doc -> layerAdd(img, dlg.layerWidth(), dlg.layerHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
+			KisLayerSP layer = m_doc -> layerAdd(img,
+                                                             dlg.layerWidth(), dlg.layerHeight(),
+                                                             img -> nextLayerName(),
+                                                             OPACITY_OPAQUE);
 
 			if (layer) {
 				m_layerBox -> setCurrentItem(img -> index(layer));
@@ -2163,6 +2212,7 @@ void KisView::setupCanvas()
 	QObject::connect(m_canvas, SIGNAL(mousePressed(QMouseEvent*)), this, SLOT(canvasGotMousePressEvent(QMouseEvent*)));
 	QObject::connect(m_canvas, SIGNAL(mouseMoved(QMouseEvent*)), this, SLOT(canvasGotMouseMoveEvent(QMouseEvent*)));
 	QObject::connect(m_canvas, SIGNAL(mouseReleased(QMouseEvent*)), this, SLOT(canvasGotMouseReleaseEvent(QMouseEvent*)));
+        QObject::connect(m_canvas, SIGNAL(gotTabletEvent(QTabletEvent*)), this, SLOT(canvasGotTabletEvent(QTabletEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotPaintEvent(QPaintEvent*)), this, SLOT(canvasGotPaintEvent(QPaintEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotEnterEvent(QEvent*)), this, SLOT(canvasGotEnterEvent(QEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotLeaveEvent(QEvent*)), this, SLOT(canvasGotLeaveEvent(QEvent*)));
@@ -2332,7 +2382,7 @@ void KisView::layerToImage()
 	if (img) {
 		KisSelectionSP selection = img -> selection();
 		KisLayerSP layer;
-	       
+
 		if (selection)
 			layer = selection.data();
 		else
@@ -2457,7 +2507,7 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
 
 		if (!img)
 			return super::eventFilter(o, e);
-		
+
 		mgr = img -> guides();
 
 		if (e -> type() == QEvent::MouseMove) {
@@ -2465,7 +2515,7 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
 			KisGuideSP gd;
 
 			if (m_currentGuide == 0 && flag) {
-				// No guide is being edited and moving mouse over the canvas.  
+				// No guide is being edited and moving mouse over the canvas.
 				// Create a new guide.
 				enterEvent(0);
 				eraseGuides();

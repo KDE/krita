@@ -143,7 +143,7 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 
 			if (!img)
 				return;
-			
+
 			m_startPos = m_view -> viewToWindow(m_startPos);
 			m_endPos = e -> pos();
 
@@ -220,7 +220,7 @@ void KisToolRectangularSelect::setup()
 {
 	KToggleAction *toggle;
 
-	toggle = new KToggleAction(i18n("&Rectangular Select"), "rectangular", 0, this, 
+	toggle = new KToggleAction(i18n("&Rectangular Select"), "rectangular", 0, this,
 			SLOT(activateSelf()), m_view -> actionCollection(), "tool_select_rectangular");
 	toggle -> setExclusiveGroup("tools");
 }

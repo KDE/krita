@@ -29,6 +29,14 @@
 class KisView;
 class KisDoc;
 
+/**
+  The KisTabBar is similar to KSpread's sheet-bar. The scroll buttons
+  are apparently not supposed to change the active view, but to bring
+  other sheets within reach when there are too many tabs to fit in the
+  statusbar.
+
+  STATUS: This widget appears to work correctly.
+ */
 class KisTabBar : public QWidget
 {
     Q_OBJECT

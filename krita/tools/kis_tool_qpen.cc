@@ -16,6 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <qpainter.h>
+#include <qpen.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -27,12 +28,12 @@
 #include "kis_selection.h"
 #include "kis_doc.h"
 #include "kis_view.h"
-#include "kis_tool_brush.h"
+#include "kis_tool_qpen.h"
 #include "kis_global.h"
 
 
 
-KisToolBrush::KisToolBrush(KisView *view, KisDoc *doc)
+KisToolQPen::KisToolQPen(KisView *view, KisDoc *doc)
     : super(view, doc),
       m_mousePressed( false ),
       m_polyline(3)
@@ -43,11 +44,11 @@ KisToolBrush::KisToolBrush(KisView *view, KisDoc *doc)
     setCursor( Qt::crossCursor );
 }
 
-KisToolBrush::~KisToolBrush()
+KisToolQPen::~KisToolQPen()
 {
 }
 
-void KisToolBrush::mousePress(QMouseEvent *e)
+void KisToolQPen::mousePress(QMouseEvent *e)
 {
     m_mousePressed = true;
     m_polyline[2] = m_polyline[1] = m_polyline[0] = e->pos();
@@ -55,7 +56,7 @@ void KisToolBrush::mousePress(QMouseEvent *e)
 
 
 
-void KisToolBrush::mouseMove(QMouseEvent *e)
+void KisToolQPen::mouseMove(QMouseEvent *e)
 {
     if ( m_mousePressed ) {
         m_polyline[2] = m_polyline[1];
@@ -70,8 +71,9 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
             KisPaintDeviceSP device = img -> activeDevice();
             if (device) {
                 KisPainter p( device );
-                p.beginTransaction( "Brush" );
-                p.brushpaint( m_polyline );
+                p.beginTransaction( "QPen" );
+                p.drawPolyline( m_polyline, m_color.color());
+
                 p.endTransaction();
                 device->anchor();
             }
@@ -82,25 +84,25 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
 
 }
 
-void KisToolBrush::mouseRelease(QMouseEvent *e)
+void KisToolQPen::mouseRelease(QMouseEvent *e)
 {
     m_mousePressed = false;
 }
 
 
-void KisToolBrush::tabletEvent(QTabletEvent *e)
+void KisToolQPen::tabletEvent(QTabletEvent *e)
 {
     // XXX
     e->accept();
 }
 
 
-void KisToolBrush::setup()
+void KisToolQPen::setup()
 {
 	KToggleAction *toggle;
-	toggle = new KToggleAction(i18n("&Brush"), "Brush", 0, this,
+	toggle = new KToggleAction(i18n("&QPen"), "QPen", 0, this,
                                    SLOT(activateSelf()),
-                                   m_view -> actionCollection(), "tool_brush
-	toggle -> setExclusiveGroup("tools");
+                                   m_view -> actionCollection(), "tool_qpen" );
+        toggle -> setExclusiveGroup("tools");
 }
 

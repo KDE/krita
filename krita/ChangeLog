@@ -1,0 +1,5 @@
+14-10-2003
+	* Added support for QTabletEvents to the tools
+	* Added a silly test tool that puts red squares on the 
+          page
+        * Added a pen tool that uses QPainter

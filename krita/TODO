@@ -1,3 +1,40 @@
+User interface
+
+        * add tool palette
+        * add tool option palette
+        * make the sidebar elements dockable, floatable palettes
+        * show/hide rulers
+        * add decent toolbar icons
+        * config dialog
+        * gradient dialog
+        * the progressbar in the statusbar gets mad sometimes, 
+          appearing twice
+
+Tools
+
+        * brush, pen, pencil, airbrush, chalk etc.
+        * text tool
+        * more types of selection
+        * smear, convolve etc.
+        * rotate, scale, shear
+
+Core
+
+        * Add support for natural media-like painting
+        * Add support for filters
+        * There's something broken about channels, I guess
+
+To investigate
+
+        * plugins -- what are they, how should they work,
+          what's the interface to Krita
+        * graphics algorithms. One cannot steal from the Gimp
+          forever
+
+
+Old TODO, parts of it seem pretty obsolete, and others are more of a 'redo'
+than a 'todo':
+
 - color modes: Indexed, Greyscale, RGB and RGBA.
 - layers
 - channels (RGB, CMYK, HSB, etc...)

@@ -21,23 +21,30 @@
 #include "kis_types.h"
 #include "kistilemgr.h"
 
+/**
+   This struct offers access to the actual bytes with pixel data.
+   
+   XXX: how about endianness, and is it 32-bit aligned
+*/
+   
 struct KisPixelData : public KShared {
-	KisPixelData();
-	virtual ~KisPixelData();
-
-	KisTileMgrSP mgr;
-	KisTileSP tile;
-	Q_INT32 mode;
-	Q_INT32 x1;
-	Q_INT32 y1;
-	Q_INT32 x2;
-	Q_INT32 y2;
-	QUANTUM *data;
-	bool owner;
-	Q_INT32 width;
-	Q_INT32 height;
-	Q_INT32 stride;
-	Q_INT32 depth;
+    KisPixelData();
+    virtual ~KisPixelData();
+    
+    KisTileMgrSP mgr; // The KisTileMgr that 'owns' this block of data
+    KisTileSP tile;  // The tile this data belongs to -- if any?
+    Q_INT32 mode; // ???
+    Q_INT32 x1; // In image coordinates, not tile coordinages
+    Q_INT32 y1;
+    Q_INT32 x2;
+    Q_INT32 y2;
+    QUANTUM *data; // Pointer to the pixeldata -- just a plain sequence of 
+                   // bytes
+    bool owner; // XXX
+    Q_INT32 width;
+    Q_INT32 height; 
+    Q_INT32 stride; // The number of bytes, or QUANTUM's each pixel takes
+    Q_INT32 depth; // Color depth, I guess. XXX
 };	
 
 inline

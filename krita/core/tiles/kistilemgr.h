@@ -35,6 +35,28 @@ class KisTileMediator;
 #define TILEMODE_WRITE 2
 #define TILEMODE_RW (TILEMODE_READ|TILEMODE_WRITE)
 
+/**
+ * KisTileMgr manages the imagedata that for implementations of KisRenderInterface.
+ * Those are:
+ *
+ * KisPaintDevices
+ *    KisLayer
+ *       KisBackround
+ *       KisSelection
+ *    KisChannel
+ *       KisMask
+ *
+ * and
+ *
+ * KisImage
+ * 
+ * Imagedata is structured in the form of tiles, by default 64 by 64
+ * pixels big. The KisTileMgr is smart enough to hide most of the
+ * details of reading on and writing from tiles.
+ *
+ * @short KisTileMgr manages the pixels for every layer.
+ *
+ */
 class KisTileMgr : public KShared {
 	typedef KShared super;
 	typedef QValueList<KisTileSP> KisTileSPLst;
@@ -45,43 +67,169 @@ class KisTileMgr : public KShared {
 	typedef vKisTileSPLst::const_iterator vKisTileSPLst_cit; 
 
 public:
+        /**
+          Create a KisTileMgr of width and height with the specified
+          colour depth.
+         */
 	KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
-	KisTileMgr(KisTileMgr *tm, Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
+
+        /**
+          Create a new KisTileMgr of width and height with the
+          specified colour depth. Deep copies the tiles of tm to the
+          new KisTileMgr.
+         
+          XXX: I am not sure what happens when tm is bigger or smaller
+          than width and height, nor what happens when tm has a
+          different depth.
+         */
+	KisTileMgr(KisTileMgr *tm,
+                   Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
+
+        /**
+          Creates a new KisTileMgr based on rhs, shares a reference
+          to the tiles of rhs.
+         */
 	KisTileMgr(const KisTileMgr& rhs);
+
 	virtual ~KisTileMgr();
 
 public:
+        /**
+          XXX?
+         */
 	void attach(KisTileSP tile, Q_INT32 tilenum, bool keepold = true);
+
+        /**
+          XXX?
+        */
 	void detach(KisTileSP tile, Q_INT32 tilenum, bool keepold = true);
 
+        /**
+           Create or duplicate a tile at location xpix/ypix.
+          
+           XXX: Not sure what 'mode' is. Presumbly related to the
+           TILEMODE constants.
+         */
 	KisTileSP tile(Q_INT32 xpix, Q_INT32 ypix, Q_INT32 mode);
+
+        /**
+           Create or duplicate a tile with identity tilenum; tilenum
+           is computed from the x/y coordinates of the tile in the
+           image
+         
+           XXX: Not sure what 'mode' is. Presumbly related to the
+           TILEMODE constants.
+         */
 	KisTileSP tile(Q_INT32 tilenum, Q_INT32 mode);
 
+        /**
+           XXX
+        */
 	void tileMap(Q_INT32 xpix, Q_INT32 ypix, KisTileSP src);
+        /**
+           XXX
+        */
 	void tileMap(Q_INT32 tilenum, KisTileSP src);
 
+        /**
+           XXX
+        */
 	KisTileSP invalidate(Q_INT32 tileno);
+
+        /**
+           XXX
+        */
 	KisTileSP invalidate(Q_INT32 xpix, Q_INT32 ypix);
+
+        /**
+           XXX
+        */
 	KisTileSP invalidate(KisTileSP tile, Q_INT32 xpix, Q_INT32 ypix);
+
+        /**
+           XXX
+        */
 	void invalidateTiles(KisTileSP tile);
 
+        /**
+           Returns true if this KisTileMgr does not manage any
+           tiles.
+        */
 	bool empty() const;
+
+        /**
+           Width in pixels of the total area managed by this KisTileMgr
+         */
 	Q_INT32 width() const;
+
+        /**
+           Height in pixels of the total area managed by this KisTileMgr
+         */
 	Q_INT32 height() const;
+
+        /**
+           Number of rows of tiles managed by this KisTileMgr
+         */
 	Q_UINT32 nrows() const;
+
+        /**
+           Number of columns of tiles managed by this KisTileMgr
+         */
 	Q_UINT32 ncols() const;
+
+        /**
+           Color-depth of the KisRenderInterface implementation
+           managed by this KisTileMgr
+         */
 	Q_INT32 depth() const;
 
+        /**
+           Total size in memory the data managed by this KisTileMgr 
+        */
 	Q_UINT32 memSize();
+
+        /**
+           Puts the x/y coordinates of the top left (?) corner
+           of tile in coord.
+        */
 	void tileCoord(const KisTileSP& tile, QPoint& coord);
+
+        /**
+           Puts the x/y coordinates of the top left (?) corner
+           of tile in x and y.
+        */
 	void tileCoord(const KisTileSP& tile, Q_INT32 *x, Q_INT32 *y);
 
-	KisPixelDataSP pixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, Q_INT32 mode);
+        /**
+           Returns the KisPixelData defined by the rectangle x1, y1,
+           x2, y2. Depending on mode, this data is readable, writable
+           or both.
+        */
+	KisPixelDataSP pixelData(Q_INT32 x1, Q_INT32 y1,
+                                 Q_INT32 x2, Q_INT32 y2, 
+                                 Q_INT32 mode);
+
+        /**
+           Not sure what this does... Perhaps write changed data if
+           owner, else mark something invalid. XXX
+        */
 	void releasePixelData(KisPixelDataSP pd);
+
+        /**
+           Read the area defined by x1, y2, x2, y2 into the buffer. Stride is number of bytes
+           that a pixel takes in the buffer.
+        */
 	void readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
+
 	void readPixelData(KisPixelDataSP pd);
+
+        /**
+           Commit the pixel data in buffer.
+        */
 	void writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);
+
 	void writePixelData(KisPixelDataSP pd);
+
 	Q_INT32 tileNum(Q_UINT32 xpix, Q_UINT32 ypix) const;
 
 private:

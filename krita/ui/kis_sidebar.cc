@@ -49,7 +49,7 @@ KisSideBar::KisSideBar( QWidget* parent, const char* name ) : super(parent, name
     // krayon box
     m_dockFrame = new DockFrame(this);
 
-    // fixed width for sidebar itselt.  When free-floating,
+    // fixed width for sidebar itself.  When free-floating,
     // there should be no fixed width
 //    setFixedWidth( 200 );
     QRect rc = geometry();

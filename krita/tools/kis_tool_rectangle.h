@@ -34,8 +34,8 @@ class KisDoc;
 class KisPainter;
 class KisView;
 
-class RectangleTool : public KisTool {
-	typedef KisTool super;
+class RectangleTool : public KisToolInterface {
+	typedef KisToolInterface super;
 
 public:
 	RectangleTool(KisDoc *doc, KisCanvas *canvas);

@@ -23,7 +23,7 @@
 class QLabel;
 class QCheckBox;
 
-class IntegerWidget;
+class KisDoubleWidget;
 
 class KisBrushChooser : public KisItemChooser {
 	typedef KisItemChooser super;
@@ -37,13 +37,13 @@ protected:
 	virtual void update(KoIconItem *item);
 
 private slots:
-	void slotSetItemSpacing(int spacing);
+	void slotSetItemSpacing(double spacing);
 	void slotSetItemUseColorAsMask(bool);
 
 private:
 	QLabel *m_lbName;
 	QLabel *m_lbSpacing;
-	IntegerWidget *m_slSpacing;
+	KisDoubleWidget *m_slSpacing;
 	QCheckBox *m_chkColorMask;
 };
 

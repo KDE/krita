@@ -72,8 +72,8 @@ public:
 	void setHotSpot(KisPoint);
 	KisPoint hotSpot(double pressure = PRESSURE_DEFAULT) const;
 
-	void setSpacing(Q_INT32 s) { m_spacing = s; }
-	Q_INT32 spacing() const { return m_spacing; }
+	void setSpacing(double s) { m_spacing = s; }
+	double spacing() const { return m_spacing; }
 	double xSpacing(double pressure = PRESSURE_DEFAULT) const;
 	double ySpacing(double pressure = PRESSURE_DEFAULT) const;
 
@@ -129,7 +129,7 @@ private:
 	QByteArray m_data;
 	bool m_ownData;
 	KisPoint m_hotSpot;
-	Q_INT32 m_spacing;
+	double m_spacing;
 	bool m_useColorAsMask;
 	bool m_hasColor;
 	QImage m_img;

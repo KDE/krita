@@ -65,7 +65,7 @@ namespace {
 	};
 }
 
-#define DEFAULT_SPACING 25
+#define DEFAULT_SPACING 0.25
 #define MAXIMUM_SCALE 2
 
 KisBrush::KisBrush(const QString& filename) : super(filename)
@@ -331,7 +331,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 
 	if (bh.version == 1) {
 		// No spacing in version 1 files so use Gimp default
-		bh.spacing = DEFAULT_SPACING;
+		bh.spacing = static_cast<int>(DEFAULT_SPACING * 100);
 	}
 	else {
 		bh.spacing = ntohl(bh.spacing);
@@ -342,7 +342,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		}
 	}
 
-	setSpacing(bh.spacing);
+	setSpacing(bh.spacing / 100.0);
 
 	if (bh.header_size > m_data.size() || bh.header_size == 0) {
 		emit ioFailed(this);
@@ -463,12 +463,12 @@ void KisBrush::createScaledBrushes() const
 
 double KisBrush::xSpacing(double pressure) const
 {
-	return (width() * scaleForPressure(pressure) * m_spacing) / 100;
+	return width() * scaleForPressure(pressure) * m_spacing;
 }
 
 double KisBrush::ySpacing(double pressure) const
 {
-	return (height() * scaleForPressure(pressure) * m_spacing) / 100;
+	return height() * scaleForPressure(pressure) * m_spacing;
 }
 
 double KisBrush::scaleForPressure(double pressure)

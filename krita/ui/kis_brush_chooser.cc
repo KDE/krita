@@ -21,7 +21,7 @@
 #include <klocale.h>
 #include <koIconChooser.h>
 
-#include "integerwidget.h"
+#include "kis_double_widget.h"
 #include "kis_brush_chooser.h"
 #include "kis_global.h"
 #include "kis_icon_item.h"
@@ -30,10 +30,10 @@
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name) : super(parent, name)
 {
 	m_lbSpacing = new QLabel(i18n("Spacing: "), this);
-	m_slSpacing = new IntegerWidget( 1, 100, this, "int_widget" );
+	m_slSpacing = new KisDoubleWidget(0.01, 10, this, "double_widget");
 	m_slSpacing -> setTickmarks(QSlider::Below);
-	m_slSpacing -> setTickInterval(10);
-	QObject::connect(m_slSpacing, SIGNAL(valueChanged(int)), this, SLOT(slotSetItemSpacing(int)));
+	m_slSpacing -> setTickInterval(1);
+	QObject::connect(m_slSpacing, SIGNAL(valueChanged(double)), this, SLOT(slotSetItemSpacing(double)));
 
 	m_chkColorMask = new QCheckBox(i18n("Use color as mask"), this);
 	QObject::connect(m_chkColorMask, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
@@ -59,13 +59,13 @@ KisBrushChooser::~KisBrushChooser()
 {
 }
 
-void KisBrushChooser::slotSetItemSpacing(int spacingValue)
+void KisBrushChooser::slotSetItemSpacing(double spacingValue)
 {
 	KisIconItem *item = static_cast<KisIconItem *>(currentItem());
 
 	if (item) {
 		KisBrush *brush = static_cast<KisBrush *>(item -> resource());
-		brush -> setSpacing(spacingValue * 10);
+		brush -> setSpacing(spacingValue);
 	}
 }
 
@@ -93,7 +93,7 @@ void KisBrushChooser::update(KoIconItem *item)
 		QString text = QString("%1 (%2 x %3)").arg(brush -> name()).arg(brush -> width()).arg(brush -> height());
 
 		m_lbName -> setText(text);
-		m_slSpacing -> setValue(brush -> spacing() / 10);
+		m_slSpacing -> setValue(brush -> spacing());
 		m_chkColorMask -> setChecked(brush -> useColorAsMask());
 		m_chkColorMask -> setEnabled(brush -> hasColor());
 	}

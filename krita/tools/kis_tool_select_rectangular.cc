@@ -57,7 +57,7 @@ void KisToolRectangularSelect::paint(QPainter& gc, const QRect& rc)
 		paintOutline(gc, rc);
 }
 
-void KisToolRectangularSelect::clear()
+void KisToolRectangularSelect::clearSelection()
 {
 	KisImageSP img = m_view -> currentImg();
 
@@ -71,15 +71,10 @@ void KisToolRectangularSelect::clear()
 	m_selecting = false;
 }
 
-void KisToolRectangularSelect::clear(const QRect&)
-{
-	clear();
-}
-
 void KisToolRectangularSelect::mousePress(QMouseEvent *e)
 {
 	if (e -> button() == LeftButton) {
-		clear();
+		clearSelection();
 		m_startPos = e -> pos();
 		m_endPos = e -> pos();
 		m_selecting = true;
@@ -101,7 +96,7 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 {
 	if (m_selecting) {
 		if (m_startPos == m_endPos) {
-			clear();
+			clearSelection();
 		} else {
 			KisImageSP img;
 			KisPaintDeviceSP parent;

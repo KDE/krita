@@ -59,7 +59,6 @@ void KisSelection::move(Q_INT32 x, Q_INT32 y)
 		m_firstMove = false;
 	}
 
-	printf("Moving to (%d, %d)\n", x, y);
 	super::move(x, y);
 	m_parent -> invalidate();
 	invalidate();
@@ -77,8 +76,6 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 	configure(m_img, width, height, m_img -> imgType(), m_name);
 	tm2 = data();
 	Q_ASSERT(tm2);
-	width += parentX;
-	height += parentY;
 
 	for (y = parentY; y < height; y += TILE_HEIGHT) {
 		for (x = parentX; x < width; x += TILE_WIDTH) {
@@ -98,7 +95,6 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 
 	m_rc.setRect(parentX, parentY, width, height);
 	super::move(parentX, parentY);
-	setClip(0, 0, width, height);
 }
 
 void KisSelection::setBounds(const QRect& rc)

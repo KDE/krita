@@ -35,8 +35,6 @@ public:
 
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
-	virtual void clear();
-	virtual void clear(const QRect& rc);
 	virtual void mousePress(QMouseEvent *e);
 	virtual void mouseMove(QMouseEvent *e);
 	virtual void mouseRelease(QMouseEvent *e);
@@ -46,8 +44,8 @@ public:
 public slots:
 	virtual void activateSelf();
 
-
 private:
+	void clearSelection();
 	void paintOutline();
 	void paintOutline(QPainter& gc, const QRect& rc);
 

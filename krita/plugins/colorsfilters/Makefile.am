@@ -14,8 +14,6 @@ INCLUDES  = -I$(srcdir)/../../core/color_strategy \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
-kde_module_LTLIBRARIES = kritacolorsfilters.la
-
 kritacolorsfilters_la_SOURCES = colorsfilters.cc \
 	kis_perchannel_filter.cc \
 	formbcdialog.ui formrgbsliders.ui formcmybsliders.ui

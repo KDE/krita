@@ -547,7 +547,7 @@ Q_UINT8* KisTiledDataManager::pixel(Q_INT32 x, Q_INT32 y)
 	
 }
 
-void KisTiledDataManager::setPixel(Q_INT32 x, Q_INT32 y, Q_UINT8 * data)
+void KisTiledDataManager::setPixel(Q_INT32 x, Q_INT32 y, const Q_UINT8 * data)
 {
 	// XXX: Optimize by using the tiles directly
 	// writeBytes(data, x, y, 1, 1);
@@ -601,7 +601,7 @@ Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
 }
 
 
-void KisTiledDataManager::writeBytes(Q_UINT8 * bytes,
+void KisTiledDataManager::writeBytes(const Q_UINT8 * bytes,
 				     Q_INT32 x, Q_INT32 y,
 				     Q_INT32 w, Q_INT32 h)
 {
@@ -613,7 +613,7 @@ void KisTiledDataManager::writeBytes(Q_UINT8 * bytes,
 
 	if (h < 0)
 		h = 0;
-	Q_UINT8 * ptr = bytes;
+	const Q_UINT8 * ptr = bytes;
 
 	int adv;
 

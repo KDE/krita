@@ -180,14 +180,22 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 		// return corresponding pixels for source and destination.
 		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, false);
 		KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
+
+		// We can only blt one row at a time so these values are irrelevant. They were
+		// used when we accessed tiles directly.
+		Q_INT32 srcRowSize = 0;
+		Q_INT32 dstRowSize = 0;
+
 		while( ! srcIter.isDone())
 		{
 			int adv = QMIN(srcIter.nConseqHPixels(), dstIter.nConseqHPixels());
 
 			m_colorStrategy -> bitBlt(dstDepth,
-						  dstIter.rawData(), srcDepth,
+						  dstIter.rawData(),
+						  dstRowSize,
 						  srcCs,
-						  srcIter.rawData(), dstDepth,
+						  srcIter.rawData(),
+						  srcRowSize,
 						  opacity,
 						  1,
 						  adv,
@@ -198,7 +206,6 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 			dstIter += adv;
 		}
 	}
-
 }
 
 void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
@@ -252,7 +259,11 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 	int srcDepth = srcdev -> pixelSize();
 	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();
-	
+
+	// We can only blt one row at a time so these values are irrelevant. They were
+	// used when we accessed tiles directly.
+	Q_INT32 srcRowSize = 0;
+	Q_INT32 dstRowSize = 0;
 
 	for(Q_INT32 i = 0; i < sh; i++)
 	{
@@ -265,9 +276,11 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 			// XXX: Make selection threshold configurable
 			if (selIter.rawData()[0] > SELECTION_THRESHOLD) {
 				m_colorStrategy -> bitBlt(dstDepth,
-							  dstIter.rawData(), srcDepth,
+							  dstIter.rawData(), 
+							  dstRowSize,
 							  srcCs,
-							  srcIter.rawData(), dstDepth,
+							  srcIter.rawData(),
+							  srcRowSize,
 							  opacity,
 							  1,
 							  1,

@@ -224,7 +224,7 @@ QImage KisColorSpaceWetSticky::convertToQImage(const QUANTUM *data, Q_INT32 widt
 	return img;
 }
 
-bool KisColorSpaceWetSticky::convertPixelsTo(QUANTUM * src, KisProfileSP /*srcProfile*/,
+bool KisColorSpaceWetSticky::convertPixelsTo(const QUANTUM * src, KisProfileSP /*srcProfile*/,
 					     QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 					     Q_UINT32 length,
 					     Q_INT32 /*renderingIntent*/)
@@ -260,7 +260,7 @@ bool KisColorSpaceWetSticky::convertPixelsTo(QUANTUM * src, KisProfileSP /*srcPr
 void KisColorSpaceWetSticky::bitBlt(Q_INT32 stride,
 				    QUANTUM *dst,
 				    Q_INT32 dststride,
-				    QUANTUM *src,
+				    const QUANTUM *src,
 				    Q_INT32 srcstride,
 				    QUANTUM opacity,
 				    Q_INT32 rows,

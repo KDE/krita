@@ -149,7 +149,7 @@ public:
 			    QUANTUM *dst,
 			    Q_INT32 dststride,
 			    KisStrategyColorSpaceSP srcSpace,
-			    QUANTUM *src,
+			    const QUANTUM *src,
 			    Q_INT32 srcstride,
 			    QUANTUM opacity,
 			    Q_INT32 rows,
@@ -195,7 +195,7 @@ protected:
 	 *
 	 * Returns false if the conversion failed, true if it succeeded
 	 */
-	virtual bool convertPixelsTo(QUANTUM * src, KisProfileSP srcProfile,
+	virtual bool convertPixelsTo(const QUANTUM * src, KisProfileSP srcProfile,
 				     QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 				     Q_UINT32 length,
 				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
@@ -205,11 +205,11 @@ protected:
 	 * Compose two byte arrays containing pixels in the same color
 	 * model together.
 	 */
-	virtual void bitBlt(Q_INT32 stride,
+	virtual void bitBlt(Q_INT32 pixelSize,
 			    QUANTUM *dst,
-			    Q_INT32 dststride,
-			    QUANTUM *src,
-			    Q_INT32 srcstride,
+			    Q_INT32 dstRowSize,
+			    const QUANTUM *src,
+			    Q_INT32 srcRowSize,
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,

@@ -124,7 +124,7 @@ QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q
 	return img;
 }
 
-bool KisColorSpaceAlpha::convertPixelsTo(QUANTUM * src, KisProfileSP /*srcProfile*/,
+bool KisColorSpaceAlpha::convertPixelsTo(const QUANTUM * src, KisProfileSP /*srcProfile*/,
 					 QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 					 Q_UINT32 length,
 					 Q_INT32 /*renderingIntent*/)
@@ -151,7 +151,7 @@ bool KisColorSpaceAlpha::convertPixelsTo(QUANTUM * src, KisProfileSP /*srcProfil
 void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 				QUANTUM *dst,
 				Q_INT32 dststride,
-				QUANTUM *src,
+				const QUANTUM *src,
 				Q_INT32 srcstride,
 				QUANTUM opacity,
 				Q_INT32 rows,
@@ -166,7 +166,7 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 //  		  << ", op: " << op << "\n";
 
 	QUANTUM *d;
-	QUANTUM *s;
+	const QUANTUM *s;
  	Q_INT32 i;
 	Q_INT32 linesize;
 

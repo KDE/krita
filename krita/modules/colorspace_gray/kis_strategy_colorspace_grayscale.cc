@@ -150,7 +150,7 @@ QImage KisStrategyColorSpaceGrayscale::convertToQImage(const QUANTUM *data, Q_IN
 void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 stride,
 					    QUANTUM *dst,
 					    Q_INT32 dststride,
-					    QUANTUM *src,
+					    const QUANTUM *src,
 					    Q_INT32 srcstride,
 					    QUANTUM opacity,
 					    Q_INT32 rows,
@@ -158,7 +158,7 @@ void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 stride,
 					    CompositeOp op)
 {
 	QUANTUM *d;
-	QUANTUM *s;
+	const QUANTUM *s;
 	Q_INT32 i;
 	Q_INT32 linesize;
 

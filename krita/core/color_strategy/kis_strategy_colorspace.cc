@@ -54,7 +54,7 @@ bool KisStrategyColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 rend
 			       renderingIntent);
 }
 
-bool KisStrategyColorSpace::convertPixelsTo(QUANTUM * src, KisProfileSP srcProfile,
+bool KisStrategyColorSpace::convertPixelsTo(const QUANTUM * src, KisProfileSP srcProfile,
 					    QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 					    Q_UINT32 length,
 					    Q_INT32 renderingIntent)
@@ -78,7 +78,7 @@ bool KisStrategyColorSpace::convertPixelsTo(QUANTUM * src, KisProfileSP srcProfi
 	}
 
 	if (tf) {
-		cmsDoTransform(tf, src, dst, length);
+		cmsDoTransform(tf, const_cast<QUANTUM *>(src), dst, length);
 		return true;
 	}
 
@@ -93,7 +93,7 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 				   QUANTUM *dst,
 				   Q_INT32 dststride,
 				   KisStrategyColorSpaceSP srcSpace,
-				   QUANTUM *src,
+				   const QUANTUM *src,
 				   Q_INT32 srcstride,
 				   QUANTUM opacity,
 				   Q_INT32 rows,

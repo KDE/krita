@@ -153,11 +153,11 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 	return img;
 }
 
-void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 stride,
+void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 pixelSize,
 				      QUANTUM *dst,
-				      Q_INT32 dststride,
-				      QUANTUM *src,
-				      Q_INT32 srcstride,
+				      Q_INT32 dstRowSize,
+				      const QUANTUM *src,
+				      Q_INT32 srcRowSize,
 				      QUANTUM opacity,
 				      Q_INT32 rows,
 				      Q_INT32 cols,
@@ -169,101 +169,101 @@ void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 stride,
 		// Undefined == no composition
 		break;
 	case COMPOSITE_OVER:
-		compositeOver(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeOver(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_IN:
-		compositeIn(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeIn(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 	case COMPOSITE_OUT:
-		compositeOut(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeOut(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_ATOP:
-		compositeAtop(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeAtop(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_XOR:
-		compositeXor(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeXor(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_PLUS:
-		compositePlus(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositePlus(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_MINUS:
-		compositeMinus(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeMinus(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_ADD:
-		compositeAdd(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeAdd(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_SUBTRACT:
-		compositeSubtract(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeSubtract(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_DIFF:
-		compositeDiff(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeDiff(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_MULT:
-		compositeMult(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeMult(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_BUMPMAP:
-		compositeBumpmap(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeBumpmap(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_COPY:
-		compositeCopy(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeCopy(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_COPY_RED:
-		compositeCopyRed(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeCopyRed(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_COPY_GREEN:
-		compositeCopyGreen(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeCopyGreen(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_COPY_BLUE:
-		compositeCopyBlue(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeCopyBlue(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_COPY_OPACITY:
-		compositeCopyOpacity(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeCopyOpacity(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_CLEAR:
-		compositeClear(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeClear(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 #if 0
 	case COMPOSITE_DISSOLVE:
-		compositeDissolve(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeDissolve(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_DISPLACE:
-		compositeDisplace(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeDisplace(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_MODULATE:
-		compositeModulate(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeModulate(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_THRESHOLD:
-		compositeThreshold(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeThreshold(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_NO:
 		// No composition.
 		break;
 	case COMPOSITE_DARKEN:
-		compositeDarken(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeDarken(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_LIGHTEN:
-		compositeLighten(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeLighten(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_HUE:
-		compositeHue(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeHue(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_SATURATE:
-		compositeSaturate(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeSaturate(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_COLORIZE:
-		compositeColorize(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeColorize(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_LUMINIZE:
-		compositeLuminize(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeLuminize(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_SCREEN:
-		compositeScreen(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeScreen(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	case COMPOSITE_OVERLAY:
-		compositeOverlay(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeOverlay(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 #endif
 	case COMPOSITE_ERASE:
-		compositeErase(stride, dst, dststride, src, srcstride, rows, cols, opacity);
+		compositeErase(pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 		break;
 	default:
 		break;

@@ -95,14 +95,14 @@ public:
 
 
 	/**
-	 * Get a copy of a single pixel
+	 * Get a pointer to a single pixel.
 	 */
 	Q_UINT8* pixel(Q_INT32 x, Q_INT32 y);
 
 	/**
 	 * write the specified data to x, y. There is no checking on pixelSize!
 	 */
-	void setPixel(Q_INT32 x, Q_INT32 y, Q_UINT8 * data);
+	void setPixel(Q_INT32 x, Q_INT32 y, const Q_UINT8 * data);
 
 
 	/**
@@ -117,7 +117,7 @@ public:
 	 * not enough bytes, the rest of the rect will be filled with the default value
 	 * given (by default, 0);
 	 */
-	void writeBytes(Q_UINT8 * bytes,
+	void writeBytes(const Q_UINT8 * bytes,
 			Q_INT32 x, Q_INT32 y,
 			Q_INT32 w, Q_INT32 h);
 

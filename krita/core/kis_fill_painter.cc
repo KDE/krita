@@ -326,7 +326,7 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& 
 }
 
 /* RGB-only I fear */
-QUANTUM KisFillPainter::difference(QUANTUM* src, KisPixel dst)
+QUANTUM KisFillPainter::difference(const QUANTUM* src, KisPixel dst)
 {
 	QUANTUM max = 0, diff = 0;
 	int depth = m_device->pixelSize();

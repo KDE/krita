@@ -182,7 +182,7 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 				       QUANTUM *dst,
 				       Q_INT32 dststride,
-				       QUANTUM *src,
+				       const QUANTUM *src,
 				       Q_INT32 srcstride,
 				       QUANTUM opacity,
 				       Q_INT32 rows,
@@ -191,7 +191,7 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 {
 	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
 	QUANTUM *d;
-	QUANTUM *s;
+	const QUANTUM *s;
 	Q_INT32 i;
 
 	if (rows <= 0 || cols <= 0)

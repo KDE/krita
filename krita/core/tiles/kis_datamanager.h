@@ -140,13 +140,13 @@ public:
 	 * Get a read-only pointer to the spcified pixel. The result of writing to this pointer is
 	 * unspecified.
 	 */
-  	Q_UINT8* pixel(Q_INT32 x, Q_INT32 y)
+  	const Q_UINT8* pixel(Q_INT32 x, Q_INT32 y)
   		{ return ACTUAL_DATAMGR::pixel(x, y);};
 
 	/**
 	 * Write the specified data to x, y. There is no checking on pixelSize!
 	 */
-	void setPixel(Q_INT32 x, Q_INT32 y, Q_UINT8 * data)
+	void setPixel(Q_INT32 x, Q_INT32 y, const Q_UINT8 * data)
 		{ ACTUAL_DATAMGR::setPixel(x, y, data);};
 
 
@@ -162,7 +162,7 @@ public:
 	 * Copy the bytes to the specified rect. w * h * pixelSize bytes will be read, whether
 	 * the caller prepared them or not. XXX: Better use QValueVector?
  	 */
- 	void writeBytes(Q_UINT8 * data,
+ 	void writeBytes(const Q_UINT8 * data,
  			Q_INT32 x, Q_INT32 y,
  			Q_INT32 w, Q_INT32 h)
 		{ACTUAL_DATAMGR::writeBytes( data, x, y, w, h); };

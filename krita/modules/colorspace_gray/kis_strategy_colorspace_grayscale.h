@@ -65,7 +65,7 @@ public:
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst,
 			    Q_INT32 dststride,
-			    QUANTUM *src,
+			    const QUANTUM *src,
 			    Q_INT32 srcstride,
 			    QUANTUM opacity,
 			    Q_INT32 rows,

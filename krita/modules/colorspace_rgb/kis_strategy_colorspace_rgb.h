@@ -60,11 +60,11 @@ public:
 
 protected:
 
-	virtual void bitBlt(Q_INT32 stride,
+	virtual void bitBlt(Q_INT32 pixelSize,
 			    QUANTUM *dst,
-			    Q_INT32 dststride,
-			    QUANTUM *src,
-			    Q_INT32 srcstride,
+			    Q_INT32 dstRowSize,
+			    const QUANTUM *src,
+			    Q_INT32 srcRowSize,
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,

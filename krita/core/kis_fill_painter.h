@@ -113,7 +113,7 @@ private:
 	 * 255 (actually should be MIN_SELECTED to MAX_SELECTED?). Only 0 and 255 are
 	 * returned when anti-aliasing is off
 	 **/
-	QUANTUM difference(QUANTUM* src, KisPixel dst);
+	QUANTUM difference(const QUANTUM* src, KisPixel dst);
 	void genericFillStart(int startX, int startY);
 	void genericFillEnd(KisLayerSP filled);
 	typedef enum { Left, Right } Direction;

@@ -105,7 +105,7 @@ public:
 	void crop(QRect r) { m_datamanager -> setExtent(r); };
 	
 	Q_UINT8 * readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-	void writeBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	void writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 	/**
 	 *   Converts the paint device to a different colorspace
@@ -395,7 +395,7 @@ inline Q_UINT8 * KisPaintDevice::readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_IN
 	return m_datamanager -> readBytes(x, y, w, h);
 }
 
-inline void KisPaintDevice::writeBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+inline void KisPaintDevice::writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	m_datamanager -> writeBytes( data, x, y, w, h);
 }

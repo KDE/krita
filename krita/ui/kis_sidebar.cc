@@ -38,6 +38,8 @@
 #include "kis_previewwidget.h"
 #include "kis_brush.h"
 #include "kis_pattern.h"
+#include "kis_rgb_widget.h"
+#include "kis_hsv_widget.h"
 
 BaseDocker::BaseDocker( QWidget* parent, const char* name) : QDockWindow( QDockWindow::OutsideDock, parent ,name )
 {
@@ -181,31 +183,52 @@ ColorDocker::ColorDocker( QWidget* parent, const char* name ) : BaseDocker( pare
 {
         kdDebug() << "ColorDocker::ColorDocker" << endl;
         
-        m_ColorChooser = new KoColorChooser(this);
-        m_ColorChooser -> setFixedSize( 200, 150 );
-        setWidget(m_ColorChooser);
+        setWidget( m_tabwidget = new QTabWidget( this ) );
+        m_tabwidget -> setFixedSize( 200, 150 );
+        
+        m_rgbChooser = new KisRGBWidget(this);
+        m_hsvChooser = new KisHSVWidget(this);
+        m_tabwidget-> addTab( m_rgbChooser, i18n("RGB"));
+        m_tabwidget-> addTab( m_hsvChooser, i18n("HSV"));
 
-        // connect chooser frame
-        connect(m_ColorChooser, SIGNAL(colorChanged(const KoColor &)),
-                this, SLOT(slotColorSelected(const KoColor &)));
-
+        // connect chooser frames
+        connect(m_rgbChooser, SIGNAL(fgColorChanged(const KoColor &)), SLOT(slotFGColorSelected(const KoColor &)));
+        connect(m_hsvChooser, SIGNAL(fgColorChanged(const KoColor &)), SLOT(slotFGColorSelected(const KoColor &)));
+        connect(m_rgbChooser, SIGNAL(bgColorChanged(const KoColor &)), SLOT(slotBGColorSelected(const KoColor &)));
+        connect(m_hsvChooser, SIGNAL(bgColorChanged(const KoColor &)), SLOT(slotBGColorSelected(const KoColor &)));
         kdDebug() << "ColorDocker::ColorDocker leaving" << endl;
 }
 
 ColorDocker::~ColorDocker()
 {
-        delete m_ColorChooser;
+        delete m_tabwidget;
 }
 
-void ColorDocker::slotSetColor(const KoColor& c)
+
+void ColorDocker::slotSetFGColor(const KoColor& c)
 {
-        m_ColorChooser -> slotChangeColor( c );
+        m_rgbChooser->slotSetFGColor(c);
+        m_hsvChooser->slotSetFGColor(c);
 }
 
-void ColorDocker::slotColorSelected(const KoColor& c)
+void ColorDocker::slotSetBGColor(const KoColor& c)
 {
-        emit ColorChanged( c );
+        m_rgbChooser->slotSetBGColor(c);
+        m_hsvChooser->slotSetBGColor(c);
 }
+
+void ColorDocker::slotFGColorSelected(const KoColor& c)
+{
+        slotSetFGColor(c);
+        emit fgColorChanged(c);
+}
+
+void ColorDocker::slotBGColorSelected(const KoColor& c)
+{
+        slotSetBGColor(c);
+        emit bgColorChanged(c);
+}
+
 
 #include "kis_sidebar.moc"
 

@@ -292,9 +292,13 @@ void KisView::setupDockers()
         	connect(m_controlWidget, SIGNAL(bgColorChanged(const KoColor&)), SLOT(slotSetBGColor(const KoColor&)));
 		connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetFGColor(const KoColor&)));
 		connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetBGColor(const KoColor&)));
-                
-		connect(this , SIGNAL(fgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetColor(const KoColor&)));
-		connect(m_colordocker, SIGNAL(ColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
+
+		m_colordocker -> slotSetBGColor(m_bg);
+		m_colordocker -> slotSetFGColor(m_fg);
+		connect(this , SIGNAL(fgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetFGColor(const KoColor&)));
+		connect(this , SIGNAL(bgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetBGColor(const KoColor&)));
+		connect(m_colordocker, SIGNAL(fgColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
+		connect(m_colordocker, SIGNAL(bgColorChanged(const KoColor&)), this, SLOT(slotSetBGColor(const KoColor&)));
 
 		rserver -> loadBrushes();
 		rserver -> loadpipeBrushes();

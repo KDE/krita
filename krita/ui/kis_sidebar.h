@@ -38,6 +38,8 @@ class KisBrush;
 class KisPattern;
 class KoColorChooser;
 class ControlFrame;
+class KisRGBWidget;
+class KisHSVWidget;
 
 enum ActiveColor { ac_Foreground, ac_Background};
 
@@ -114,16 +116,21 @@ public:
         ~ColorDocker();
 
 public slots:
-        void slotSetColor(const KoColor&);
-        
-signals:
-        void ColorChanged(const KoColor&);
+        void slotSetFGColor(const KoColor& c);
+        void slotSetBGColor(const KoColor& c);
+
+signals:   
+        void fgColorChanged(const KoColor& c);
+        void bgColorChanged(const KoColor& c);
 
 protected slots:
-        void slotColorSelected(const KoColor&);
+        void slotFGColorSelected(const KoColor& c);
+        void slotBGColorSelected(const KoColor& c);
 
 private:
-        KoColorChooser *m_ColorChooser;  
+        QTabWidget *m_tabwidget;
+        KisRGBWidget *m_rgbChooser;
+        KisHSVWidget *m_hsvChooser;
 };
 
 #endif

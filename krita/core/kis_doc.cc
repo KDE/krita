@@ -338,21 +338,21 @@ DCOPObject *KisDoc::dcopObject()
 
 bool KisDoc::initDoc()
 {
+	if (!init())
+		return false;
+
 	bool ok = false;
 	QString file;
-	KoTemplateChooseDia::ReturnType ret;
 	KoTemplateChooseDia::DialogType dlgtype;
 
-	if (KoApplication::isStarting())
+	if (initDocFlags() != KoDocument::InitDocFileNew)
 		dlgtype = KoTemplateChooseDia::Everything;
 	else
 		dlgtype = KoTemplateChooseDia::OnlyTemplates;
 	
-	if (!init())
-		return false;
-
-	ret = KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE,
-			"*.kra", i18n("Krita"), 
+	KoTemplateChooseDia::ReturnType ret =
+	    KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE,
+			"*.kra", i18n("Krita"),
 			dlgtype, "krita_template");
 
 	if (ret == KoTemplateChooseDia::Template) {

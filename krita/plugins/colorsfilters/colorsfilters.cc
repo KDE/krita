@@ -112,8 +112,8 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 				else if( d > QUANTUM_MAX - s) dstData[ configPC->channel( i ) ] = QUANTUM_MAX;
 				else dstData[ configPC->channel( i ) ] = d + s;
 			}
-			rectIt++;
 		}
+		rectIt++;
 	}
 }
 
@@ -197,8 +197,8 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 			for (int i = 0; i < depth; ++i) {
 				dstData[i] = (QUANTUM) QMIN ( QUANTUM_MAX, QMAX(0, (srcData[i] - start) * factor) );
 			}
-			rectIt++;
 		}
+		rectIt++;
 	}
 }
 
@@ -240,7 +240,7 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 			rectIt[1] = lightness;
 			rectIt[2] = lightness;
 
-			rectIt++;
 		}
+		rectIt++;
 	}
 }

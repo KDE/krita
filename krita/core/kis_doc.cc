@@ -49,6 +49,7 @@
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <koTemplateChooseDia.h>
+#include <koApplication.h>
 
 // Local
 #include "kis_types.h"
@@ -341,9 +342,8 @@ bool KisDoc::initDoc()
 	QString file;
 	KoTemplateChooseDia::ReturnType ret;
 
-    // FIXME : hack to hide the startup dialog (ita)
     KoTemplateChooseDia::DialogType dlgtype;
-    if (displayStartupDlgFlag())
+    if (KoApplication::isStarting())
             dlgtype = KoTemplateChooseDia::Everything;
     else
             dlgtype = KoTemplateChooseDia::OnlyTemplates;

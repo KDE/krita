@@ -19,6 +19,7 @@
 #define KISPIXELDATA_H_
 
 #include "kis_types.h"
+#include "kistilemgr.h"
 
 struct KisPixelData : public KShared {
 	KisPixelData();
@@ -42,6 +43,7 @@ struct KisPixelData : public KShared {
 inline
 KisPixelData::KisPixelData()
 {
+	data = 0;
 }
 
 #endif // KISPIXELDATA_H_

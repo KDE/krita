@@ -1,5 +1,5 @@
 
-data_DATA = deletelayer.png lowerlayer.png newlayer.png raiselayer.png \
+kritapics_DATA = deletelayer.png lowerlayer.png newlayer.png raiselayer.png \
         close.png minimize.png dock.png \
         layer_dialog.png color_dialog.png brush_dialog.png pattern_dialog.png \
         channel_dialog.png gradient_dialog.png gradienteditor_dialog.png \
@@ -10,7 +10,7 @@ data_DATA = deletelayer.png lowerlayer.png newlayer.png raiselayer.png \
         freehand.png rectangular.png handdrawn.png elliptical.png contiguous.png
 
 # directory for pixmaps
-datadir = $(kde_datadir)/krita/pics
+kritapicsdir = $(kde_datadir)/krita/pics
 
 #KDE_ICON = krita
 

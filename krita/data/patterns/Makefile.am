@@ -1,7 +1,7 @@
 
-datadir = $(prefix)/share/apps/krita/patterns
+kritapatternsdir = $(prefix)/share/apps/krita/patterns
 
-data_DATA = Circle.png \
+kritapatterns_DATA = Circle.png \
 Cloth.png \
 Concrete.png \
 Dark_Wood.png \

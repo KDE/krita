@@ -1,7 +1,7 @@
 
-datadir = $(prefix)/share/apps/krita/brushes
+kritabrushesdir = $(prefix)/share/apps/krita/brushes
 
-data_DATA = 10x10squareBlur.gbr 10x10square.gbr 11circle.gbr 11fcircle.gbr \
+kritabrushes_DATA = 10x10squareBlur.gbr 10x10square.gbr 11circle.gbr 11fcircle.gbr \
 	13circle.gbr 13fcircle.gbr 15circle.gbr 15fcircle.gbr 17circle.gbr \
 	17fcircle.gbr 19circle.gbr 19fcircle.gbr 1circle.gbr 20x20squareBlur.gbr \
 	20x20square.gbr 3circle.gbr 3fcircle.gbr 5circle.gbr 5fcircle.gbr \

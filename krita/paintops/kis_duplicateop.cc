@@ -159,7 +159,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 	
 	if (dabRect.isNull() || dabRect.isEmpty() || !dabRect.isValid()) return;
 	
-	m_painter -> bltSelection( x,  y,  m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), 0, 0, dabRect.width(), dabRect.height());
+	m_painter -> bltSelection( x,  y,  m_painter -> compositeOp(), srcdev.data(), m_painter -> opacity(), 0, 0, dabRect.width(), dabRect.height());
 	m_painter -> addDirtyRect(QRect(x, y, dabRect.width(), dabRect.height()));
 
 }

@@ -22,14 +22,16 @@
 #include <qcstring.h>
 #include <qimage.h>
 #include <qsize.h>
-#include <qvaluevector.h>
+#include <qptrlist.h>
+
 #include <kio/job.h>
+
 #include "kis_resource.h"
 #include "kis_alpha_mask.h"
+#include "kis_global.h"
 
 class QPoint;
 class QPixmap;
-
 
 class KisBrush : public KisResource {
 	typedef KisResource super;
@@ -45,10 +47,9 @@ public:
 
 	/**
 	   @return a mask computed from the grey-level values of the
-	   pixels in the brush. The 'normal' scaled version is constructed
-	   when the brush is created; XXX create a scaled version of the mask.
+	   pixels in the brush.
 	*/
-	virtual KisAlphaMask *mask() const;
+	virtual KisAlphaMask *mask(Q_INT32 scale = PRESSURE_LEVELS / 2);
 
 	void setHotSpot(QPoint);
 	QPoint hotSpot() const { return m_hotSpot; }
@@ -62,10 +63,12 @@ private slots:
 	void ioResult(KIO::Job *job);
 
 private:
+	void createMasks(const QImage & img);
+	
 	QValueVector<Q_UINT8> m_data;
 	QPoint m_hotSpot;
 	QImage m_img;
-	KisAlphaMask *m_mask;
+	QPtrList<KisAlphaMask> m_masks;
 	
 };
 #endif // KIS_BRUSH_

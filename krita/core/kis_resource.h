@@ -55,7 +55,7 @@ public:
 	virtual bool saveAsync() = 0;
 	/**
 	 * Returns a QImage representing this resource.  This image could be null.
-w	 */
+	 */
 	virtual QImage img() const = 0;
 
 public:

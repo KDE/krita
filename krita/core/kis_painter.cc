@@ -38,25 +38,39 @@
 #include <kcommand.h>
 #include <koColor.h>
 
-#include "kis_types.h"
+#include "kis_brush.h"
 #include "kis_colorspace_factory.h"
 #include "kis_global.h"
+#include "kis_gradient.h"
 #include "kis_image.h"
-#include "kistile.h"
-#include "kistilemgr.h"
+#include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
-#include "kis_strategy_colorspace.h"
-#include "kispixeldata.h"
-#include "kis_layer.h"
-#include "kis_brush.h"
-#include "kis_gradient.h"
 #include "kis_pattern.h"
+#include "kis_strategy_colorspace.h"
 #include "kis_tile_command.h"
+#include "kis_types.h"
+#include "kis_vec.h"
+#include "kispixeldata.h"
+#include "kistile.h"
+#include "kistilemgr.h"
 
 KisPainter::KisPainter()
+
 {
-        m_transaction = 0;
+	m_hotSpotX = 0;
+	m_hotSpotY = 0;
+	m_brushWidth = 0;
+	m_brushHeight = 0;
+	m_spacing = 1;
+
+	m_transaction = 0;
+
+	m_dab = 0;
+	m_brush = 0;
+	m_pattern= 0;
+	m_gradient = 0;
+	m_opacity = OPACITY_TRANSPARENT;
 }
 
 KisPainter::KisPainter(KisPaintDeviceSP device)
@@ -67,6 +81,7 @@ KisPainter::KisPainter(KisPaintDeviceSP device)
 
 KisPainter::~KisPainter()
 {
+	m_brush = 0;
         end();
 }
 
@@ -99,13 +114,13 @@ KCommand *KisPainter::endTransaction()
 }
 
 void KisPainter::tileBlt(QUANTUM *dst,
-                KisTileSP dsttile,
-                QUANTUM *src,
-                KisTileSP srctile,
-                QUANTUM opacity,
-                Q_INT32 rows,
-                Q_INT32 cols,
-                CompositeOp op)
+			 KisTileSP dsttile,
+			 QUANTUM *src,
+			 KisTileSP srctile,
+			 QUANTUM opacity,
+			 Q_INT32 rows,
+			 Q_INT32 cols,
+			 CompositeOp op)
 {
         Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
         Q_INT32 srcstride = srctile -> width() * srctile -> depth();
@@ -121,12 +136,12 @@ void KisPainter::tileBlt(QUANTUM *dst,
 }
 
 void KisPainter::tileBlt(QUANTUM *dst,
-                KisTileSP dsttile,
-                QUANTUM *src,
-                KisTileSP srctile,
-                Q_INT32 rows,
-                Q_INT32 cols,
-                CompositeOp op)
+			 KisTileSP dsttile,
+			 QUANTUM *src,
+			 KisTileSP srctile,
+			 Q_INT32 rows,
+			 Q_INT32 cols,
+			 CompositeOp op)
 {
         Q_INT32 dststride = dsttile -> width() * dsttile -> depth();
         Q_INT32 srcstride = srctile -> width() * srctile -> depth();
@@ -501,11 +516,170 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 
 }
 
-void KisPainter::drawLine(const QPoint &p1, const QPoint &p2) {
-	// Draw a single point
-	if (p1.x() == p2.x() && p1.y() == p2.y()) {
-		
+QRect KisPainter::dirtyRect() {
+	return m_dirtyRect;
+}
+
+
+float KisPainter::paintLine(const QPoint & pos1,
+			    const QPoint & pos2,
+			    const Q_INT32 pressure,
+			    const Q_INT32 xTilt,
+			    const Q_INT32 yTilt,
+			    const float savedDist)
+{
+	Q_INT32 x1, y1, x2, y2;
+
+	x1 = pos1.x();
+	y1 = pos1.y();
+
+	x2 = pos2.x();
+	y2 = pos2.y();
+
+	QRect r;
+
+	if (x1 < x2 ) {
+		if (y1 < y2) {
+			r = QRect(x1, y1, x2 - x1 + m_dab -> width(), y2 - y1 + m_dab -> height());
+		}
+		else {
+			r = QRect(x1, y2, x2 - x1 + m_dab -> width(), y1 - y2 + m_dab -> height());
+		}
 	}
-	else { // Draw a line
+	else {
+		if (y1 < y2) {
+			r = QRect(x2, y1, x1 - x2 + m_dab -> width(), y2 - y1 + m_dab -> height());
+		}
+		else {
+			r = QRect(x2, y2, x1 - x2 + m_dab -> width(), y1 - y2 + m_dab -> height());
+		}
+	}
+
+	KisVector end(x2, y2);
+	KisVector start(x1, y1);
+
+	KisVector dragVec = end - start;
+
+	float newDist = dragVec.length();
+	float dist = savedDist + newDist;
+	float l_savedDist = savedDist;
+
+	if (static_cast<int>(dist) < m_spacing) {
+		m_dirtyRect = QRect();
+		return dist;
+	}
+
+	double length, ilength;
+	double x, y, z;
+	x = dragVec.x();
+	y = dragVec.y();
+	z = dragVec.z();
+	length = x * x + y * y + z * z;
+	length = sqrt (length);
+
+	if (length)
+	{
+		ilength = 1/length;
+		x *= ilength;
+		y *= ilength;
+		z *= ilength;
+	}
+
+	dragVec.setX(x);
+	dragVec.setY(y);
+	dragVec.setZ(z);
+
+	KisVector step = start;
+
+	while (dist >= m_spacing) {
+		if (l_savedDist > 0) {
+			step += dragVec * (m_spacing - l_savedDist);
+			l_savedDist -= m_spacing;
+		}
+		else {
+			step += dragVec * m_spacing;
+		}
+		QPoint p(qRound(step.x()), qRound(step.y()));
+		// Fix this: paintAt does not always have to compute the dirtyRect
+		paintAt(p, pressure, xTilt, yTilt);
+		dist -= m_spacing;
+	}
+
+	m_dirtyRect = r;
+
+	if (dist > 0)
+		return dist;
+	else
+		return 0;
+
+}
+
+void KisPainter::paintAt(const QPoint & pos,
+			 const Q_INT32 pressure,
+                         const Q_INT32 /*xTilt*/,
+                         const Q_INT32 /*yTilt*/)
+{
+
+#if 0
+        kdDebug() << "paint: " << pos.x() << ", " << pos.y() << endl;
+#endif
+	Q_INT32 x = pos.x() - m_hotSpotX;
+	Q_INT32 y = pos.y() - m_hotSpotY;
+	Q_INT32 calibratedPressure = pressure / 2;
+	// This is going to be sloooooow
+	if (calibratedPressure != m_lastPressure) {
+		KisAlphaMask * mask = m_brush -> mask(calibratedPressure);
+		m_brushWidth = mask -> width();
+		m_brushHeight = mask -> height();
+		computeDab(mask);
+		m_lastPressure = calibratedPressure;
+	}
+
+	bitBlt( x,  y,  COMPOSITE_NORMAL, m_dab.data() );
+
+	m_dirtyRect = QRect(x,
+			    y,
+			    m_dab -> width(),
+			    m_dab -> height());
+}
+
+void KisPainter::setBrush(KisBrush* brush)
+{
+	m_brush = brush;
+	m_lastPressure = 50; // Make neat constant
+	KisAlphaMask *mask = m_brush -> mask();
+	m_brushWidth = mask -> width();
+	m_brushHeight = mask -> height();
+
+	m_hotSpot = m_brush -> hotSpot();
+	m_hotSpotX = m_hotSpot.x();
+	m_hotSpotY = m_hotSpot.y();
+
+	m_spacing = m_brush -> spacing();
+	if (m_spacing <= 0) {
+		m_spacing = m_brushWidth;
+	}
+
+	// Some brushes are loaded with a weird spacing of 100, probably
+	// a bug in the brush loader.
+	if (m_spacing > m_brushWidth || m_spacing > m_brushHeight) {
+		m_spacing = m_brushWidth;
+	}
+
+	computeDab(mask);
+
+}
+
+void KisPainter::computeDab(KisAlphaMask* mask)
+{
+	m_dab = new KisLayer(mask -> width(),
+			     mask -> height(),
+			     m_device -> image() -> imgType(),
+			     "dab");
+	m_dab -> opacity(OPACITY_TRANSPARENT);
+	for (int y = 0; y < mask -> height(); y++) {
+		for (int x = 0; x < mask -> width(); x++) {
+			m_dab -> setPixel(x, y, m_paintColor, mask -> alphaAt(x, y));
+		}
 	}
 }

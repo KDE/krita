@@ -51,27 +51,11 @@ private:
 			       const Q_INT32 xtilt,
 			       const Q_INT32 ytilt);
 
-	virtual void paint(const QPoint & pos,
-			   const Q_INT32 pressure,
-			   const Q_INT32 xtilt,
-			   const Q_INT32 ytilt);
-
 	virtual void initPaint(const QPoint & pos);
 	virtual void endPaint();
 
 	enumBrushMode m_mode;
 	KisPainter *m_painter;
-
-	KisLayerSP m_dab;
-
-	QPoint m_hotSpot;
-        Q_INT32 m_hotSpotX;
-        Q_INT32 m_hotSpotY;
-
-        Q_INT32 m_brushWidth;
-        Q_INT32 m_brushHeight;
-
-        Q_INT32 m_spacing;
 
         QPoint m_dragStart;
         float m_dragDist;

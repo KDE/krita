@@ -19,6 +19,9 @@
 #define KIS_ALPHA_MASK_
 
 #include <qimage.h>
+#include <qvaluevector.h>
+
+#include "kis_global.h"
 
 class KisAlphaMask {
 	
@@ -26,11 +29,7 @@ class KisAlphaMask {
 	/**
 	   Create an alpha mask based on the gray values of the
 	   specified QImage. If the QImage is not grayscale, you're
-	   buggered. The QImage is not scaled, which means that the
-	   default scale is used, 1.
-
-	   It would be better to directly compute the mask from the Gimp
-	   brush data, perhaps.
+	   buggered.
 	*/
 	KisAlphaMask(const QImage& img);
 
@@ -41,7 +40,7 @@ class KisAlphaMask {
 	   where the target w and h are computed by taking scale as a
 	   percentage.
 	*/
-	KisAlphaMask(const QImage& img, float scale);
+	KisAlphaMask(const QImage& img, double scale);
 
 	virtual ~KisAlphaMask();
 
@@ -56,9 +55,9 @@ class KisAlphaMask {
    	Q_INT32 width();
 
 	/**
-	   @return the scale factor. Default is 100.
+	   @return the scale factor.
 	*/
-	float scale();
+	double scale();
 	
 	/**
 	   @return the alpha value at the specified position.
@@ -73,7 +72,7 @@ class KisAlphaMask {
 	   Q_INT32 alphaPos). That would be fastest, or we could
 	   provide an iterator over the mask, that would be nice, too.
 	*/
-	Q_INT32 alphaAt(Q_INT32 x, Q_INT32 y) const;
+	QUANTUM alphaAt(Q_INT32 x, Q_INT32 y) const;
 
 private:
 
@@ -81,7 +80,7 @@ private:
 	void copyAlpha(const QImage& img);
 
 	QValueVector<Q_INT32> m_data;
-	float m_scale;
+	double m_scale;
 	Q_INT32 m_scaledWidth;
 	Q_INT32 m_scaledHeight;
 

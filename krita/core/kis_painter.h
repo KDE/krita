@@ -26,12 +26,12 @@
 #include <qpen.h>
 #include <qpointarray.h>
 #include <qregion.h>
+#include <qregion.h>
 #include <qwmatrix.h>
 #include <qimage.h>
 #include <qmap.h>
 #include <qpixmap.h>
 #include <qpointarray.h>
-#include <qrect.h>
 #include <qstring.h>
 #include <qpainter.h>
 
@@ -41,12 +41,16 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
-#include "kis_gradient.h"
-#include "kis_brush.h"
-#include "kis_pattern.h"
+//#include "kis_gradient.h"
+//#include "kis_brush.h"
+//#include "kis_pattern.h"
 
 class QRect;
 class KisTileCommand;
+class KisAlphaMask;
+class KisBrush;
+class KisPattern;
+class KisGradient;
 
 /*
   KisPainter contains the graphics primitives necessary to draw on a
@@ -106,21 +110,39 @@ public:
         void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity);
         void fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity);
 
-	
 	// ------------------------------------------------------------------------------------------
-	// Draw a line between pos1 and pos2 using the currently set brush and color
-	void drawLine(const QPoint &p1, const QPoint &p2);
+	// The methods below are 'higher' level than the above methods. They need brushes, colors etc.
+	// set before they can be called. The methods do not directly tell the image to update, but
+	// you can call dirtyRect() to get the rect that needs to be notified by your painting code.
+	QRect dirtyRect();
 
 	// ------------------------------------------------------------------------------------------
-	// Set the parameters for the higher level graphics primitives
-   
-	void setBrush(KisBrush& brush) { m_brush = &brush; }
+	// Draw a line between pos1 and pos2 using the currently set brush and color. Returns
+	// the drag distance, that is the remains of the distance between p1 and p2 not covered
+	// because the currenlty set brush has a spacing greater than that distance.
+	float paintLine(const QPoint &pos1,
+			const QPoint &pos2,
+			const Q_INT32 pressure,
+			const Q_INT32 xTilt,
+			const Q_INT32 yTilt,
+			const float savedDist);
+
+	// Draw a spot at pos using the currently set brush and color
+	void paintAt(const QPoint &pos,
+		     const Q_INT32 /*pressure*/,
+		     const Q_INT32 /*xTilt*/,
+		     const Q_INT32 /*yTilt*/);
+
+	// ------------------------------------------------------------------------------------------
+	// Set the parameters for the higher level graphics primitives. These primiti
+
+	void setBrush(KisBrush* brush);
 	void setPattern(KisPattern& pattern) { m_pattern = &pattern; }
 	void setGradient(KisGradient& gradient) { m_gradient = &gradient; }
-	void setPaintColor(KoColor& color) { m_paintColor = &color; }
-	void setFillColor(KoColor& color) { m_fillColor = &color; }
+	void setPaintColor(const KoColor& color) {m_paintColor = color; }
+	void setFillColor(const KoColor& color) { m_fillColor = color; }
 	void setOpacity(QUANTUM opacity) { m_opacity = opacity; }
-	
+
 
 private:
         void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src,
@@ -133,17 +155,32 @@ private:
         KisPainter(const KisPainter&);
         KisPainter& operator=(const KisPainter&);
 
+	void computeDab(KisAlphaMask * mask);
+
 private:
         KisPaintDeviceSP m_device;
         KisTileCommand  *m_transaction;
 
-	KoColor *m_paintColor;
-	KoColor *m_fillColor;
+	QRect m_dirtyRect;
+
+	KisLayerSP m_dab;
+	KoColor m_paintColor;
+	KoColor m_fillColor;
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
 	QUANTUM m_opacity;
 
+	QPoint m_hotSpot;
+        Q_INT32 m_hotSpotX;
+        Q_INT32 m_hotSpotY;
+
+        Q_INT32 m_brushWidth;
+        Q_INT32 m_brushHeight;
+
+        Q_INT32 m_spacing;
+
+	Q_INT32 m_lastPressure;
 };
 
 inline

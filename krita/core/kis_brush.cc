@@ -53,11 +53,12 @@ namespace {
 
 KisBrush::KisBrush(const QString& filename) : super(filename)
 {
-	m_mask = 0;
 }
 
 KisBrush::~KisBrush()
 {
+	m_masks.setAutoDelete(true);
+	m_masks.clear();
 }
 
 bool KisBrush::loadAsync()
@@ -79,9 +80,18 @@ QImage KisBrush::img() const
 	return m_img;
 }
 
-KisAlphaMask *KisBrush::mask() const
+KisAlphaMask *KisBrush::mask(Q_INT32 scale)
 {
-	return m_mask;
+	kdDebug() << "Scale: " << scale << "\n";
+	kdDebug() << "Masks: " << m_masks.count()<< "\n";
+	kdDebug() << "Pressure levels: " << PRESSURE_LEVELS << "\n";
+
+	if (scale >= PRESSURE_LEVELS || scale >= m_masks.count())
+		scale = m_masks.count() - 1;
+
+	if (scale < 0) scale = 0;
+
+	return m_masks.at(scale);
 }
 
 void KisBrush::setHotSpot(QPoint pt)
@@ -173,7 +183,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		emit ioFailed(this);
 		return;
 	}
-	
+
 
 
 	k = bh.header_size;
@@ -203,8 +213,8 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 				}
 
 				m_img.setPixel(x, y, qRgba(255 - m_data[k++],
-							   255 - m_data[k++], 
-							   255 - m_data[k++], 
+							   255 - m_data[k++],
+							   255 - m_data[k++],
 							   255 - m_data[k++]));
 			}
 		}
@@ -215,10 +225,25 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 
 	setWidth(m_img.width());
 	setHeight(m_img.height());
-	m_mask = new KisAlphaMask(m_img);
+	createMasks(m_img);
 	kdDebug() << "Brush: " << &name[0] << " spacing: " << spacing() << "\n";
 	setValid(true);
 	emit loadComplete(this);
+}
+
+
+void KisBrush::createMasks(const QImage & img) {
+	if (!m_masks.isEmpty())
+		m_masks.clear();
+
+	double scale = 0.0;
+	for (Q_INT32 i = 0; i < PRESSURE_LEVELS; i++) {
+		// 100 levels, 50 smaller, 50 bigger, smallest image is 0%, biggest 200$, value 50
+		// is 100%, so 0-50 describes 0-100%, compute x & y: 50 becomes 1, 0 becomes 0.01,
+		// every step is 2%
+		scale += 0.02;
+		m_masks.append(new KisAlphaMask(img, scale));
+	}
 }
 
 #include "kis_brush.moc"

@@ -106,7 +106,6 @@
   <Action name="tool_colorpicker"/>  
   <Action name="tool_pen"/>
   <Action name="tool_brush"/>
-  <Action name="tool_silly"/>
   <Action name="tool_airbrush"/>
   <Action name="tool_eraser"/>  
   <Action name="tool_line"/>
@@ -224,7 +223,6 @@
 <ToolBar name="painting tools" position="top"><Text>Painting Tools</Text>
   <Action name="tool_pen"/>
   <Action name="tool_brush"/>
-  <Action name="tool_silly"/>
   <Action name="tool_airbrush"/>
   <Action name="tool_eraser"/>
 

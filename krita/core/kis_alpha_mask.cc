@@ -30,11 +30,11 @@ KisAlphaMask::KisAlphaMask(const QImage& img)
 	computeAlpha(img);
 }
 
-KisAlphaMask::KisAlphaMask(const QImage& img, float scale)
+KisAlphaMask::KisAlphaMask(const QImage& img, double scale)
 {
 	m_scale = scale;
 	QImage scaledImg = img.smoothScale((int)(img.width() * scale), 
-					   (int)(img.width() * scale));
+					   (int)(img.height() * scale));
 	computeAlpha(scaledImg);
 }
 
@@ -51,13 +51,12 @@ Q_INT32 KisAlphaMask::height()
 	return m_scaledHeight;
 }
 
-float KisAlphaMask::scale()
+double KisAlphaMask::scale()
 {
 	return m_scale;
 }
 
-
-Q_INT32 KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
+QUANTUM KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
 {
 	if (y >= 0 && y < m_scaledHeight && x >= 0 && x < m_scaledWidth) {
 		return m_data[((y) * m_scaledWidth) + x];
@@ -90,7 +89,6 @@ void KisAlphaMask::copyAlpha(const QImage& img)
 
 void KisAlphaMask::computeAlpha(const QImage& img) 
 {
-	kdDebug() << "Width " << img.width() << ", " << img.height() << ".\n";
 	m_scaledWidth = img.width();
 	m_scaledHeight = img.height();
 
@@ -107,7 +105,6 @@ void KisAlphaMask::computeAlpha(const QImage& img)
 	// knackered for the nonce.
 
 	if (!img.allGray()) {
-		kdDebug() << "Not all gray brush!\n";
 		copyAlpha(img);
 	}
 	else {

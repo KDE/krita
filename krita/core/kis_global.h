@@ -36,7 +36,7 @@
 #define APP_MIMETYPE "application/x-krita"
 
 /**
- * Mime type for native file format 
+ * Mime type for native file format
  */
 #define NATIVE_MIMETYPE "application/x-kra"
 
@@ -72,6 +72,13 @@ const Q_INT32 IMG_DEFAULT_DEPTH = 4;
 const Q_INT32 RENDER_HEIGHT = TILE_SIZE * 4;
 const Q_INT32 RENDER_WIDTH = TILE_SIZE * 4;
 
+/*
+ * Most wacom pads have 500 levels of pressure; this is downscaled
+ * to 100 levels with steps of 5 because the line would be too jittery
+ * otherwise.
+ */
+const Q_INT32 PRESSURE_LEVELS=127;
+
 enum CompositeOp {
 	COMPOSITE_UNDEF,
 	COMPOSITE_OVER,
@@ -98,7 +105,7 @@ enum CompositeOp {
 	COMPOSITE_NORMAL
 };
 
-enum enumImgType { 
+enum enumImgType {
 	IMAGE_TYPE_UNKNOWN,
 	IMAGE_TYPE_INDEXED,
 	IMAGE_TYPE_INDEXEDA,

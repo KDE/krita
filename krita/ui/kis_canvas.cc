@@ -122,6 +122,20 @@ void KisCanvas::mouseMoveEvent(QMouseEvent *e)
 void KisCanvas::tabletEvent( QTabletEvent *e )
 {
     emit gotTabletEvent( e );
+
+#ifdef Q_WS_X11
+    // Fix the problem that when you change from using a tablet device to the mouse,
+    // the first mouse button event is not recognised. This is because we handle 
+    // X11 core mouse move events directly so Qt does not get to see them. This breaks
+    // the tablet event accept/ignore mechanism, causing Qt to consume the first
+    // mouse button event it sees, instead of a mouse move. 'Ignoring' tablet move events
+    // stops Qt from stealing the next mouse button event. This does not affect the 
+    // tablet aware tools as they do not care about mouse moves while the tablet device is
+    // drawing.
+    if (e -> type() == QEvent::TabletMove) {
+	    e -> ignore();
+    }
+#endif
 }
 
 void KisCanvas::enterEvent(QEvent *e)

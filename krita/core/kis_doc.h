@@ -32,6 +32,7 @@ class KCommand;
 class KCommandHistory;
 class KisSelection;
 class KisView;
+class KisNameServer;
 
 class KisDoc : public KoDocument {
 	typedef KoDocument super;
@@ -145,6 +146,7 @@ private:
 	QImage *m_clip;
 	KisSelection *m_selection;
 	DCOPObject *m_dcop;
+	KisNameServer *m_nserver;
 };
 
 #endif // KIS_DOC_H_

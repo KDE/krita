@@ -1018,7 +1018,7 @@ void KisView::unSelectAll()
 //	m_doc -> clearSelection();
 }
 
-void KisView::zoomUpdateGUI(Q_INT32 , Q_INT32 , double zf)
+void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 {
 	Q_ASSERT(m_zoomIn);
 	Q_ASSERT(m_zoomOut);
@@ -1026,42 +1026,41 @@ void KisView::zoomUpdateGUI(Q_INT32 , Q_INT32 , double zf)
 	m_zoomIn -> setEnabled(zf <= KISVIEW_MAX_ZOOM);
 	m_zoomOut -> setEnabled(zf >= KISVIEW_MIN_ZOOM);
 
-#if 0
 	if (zf > 3.0) {
 		m_hRuler -> setPixelPerMark(static_cast<int>(zf * 1.0));
 		m_vRuler -> setPixelPerMark(static_cast<int>(zf * 1.0));
-	} else if (zf < 0.3) {
-		m_hRuler -> setPixelPerMark(static_cast<int>(zf * 0.1));
-		m_vRuler -> setPixelPerMark(static_cast<int>(zf * 0.1));
 	} else {
-		m_hRuler -> setPixelPerMark(static_cast<int>(zf * 10.0));
-		m_vRuler -> setPixelPerMark(static_cast<int>(zf * 10.0));
-	}
-#endif
+		Q_INT32 mark = static_cast<int>(zf * 10.0);
 
-	m_hRuler -> setShowTinyMarks(zf > 0.4);
-	m_vRuler -> setShowTinyMarks(zf > 0.4);
+		if (!mark)
+			mark = 1;
+
+		m_hRuler -> setPixelPerMark(mark);
+		m_vRuler -> setPixelPerMark(mark);
+	}
+
+	m_hRuler -> setShowTinyMarks(zf <= 0.4);
+	m_vRuler -> setShowTinyMarks(zf <= 0.4);
 	m_hRuler -> setShowLittleMarks(zf > 0.3);
 	m_vRuler -> setShowLittleMarks(zf > 0.3);
 	m_hRuler -> setShowMediumMarks(zf > 0.2);
 	m_vRuler -> setShowMediumMarks(zf > 0.2);
 
-	resizeEvent(0);
-	updateCanvas();
-#if 0
-	/* scroll to the point clicked on and update the canvas.
-	   Currently scrollTo() doesn't do anything but the zoomed view
-	   does have the same offset as the prior view so it
-	   approximately works */
+	if (x < 0 || y < 0) {
+		resizeEvent(0);
+		updateCanvas();
+	} else {
+		x = static_cast<Q_INT32>(x * zf - width() / 2);
+		y = static_cast<Q_INT32>(y * zf - height() / 2);
 
-	int x = static_cast<int> (_x * zf - docWidth() / 2);
-	int y = static_cast<int> (_y * zf - docHeight() / 2);
+		if (x < 0) 
+			x = 0;
 
-	if (x < 0) x = 0;
-	if (y < 0) y = 0;
+		if (y < 0) 
+			y = 0;
 
-	scrollTo(QPoint(x, y));
-#endif
+		scrollTo(x, y);
+	}
 }
 
 void KisView::zoomIn(Q_INT32 x, Q_INT32 y)
@@ -1678,7 +1677,7 @@ Q_INT32 KisView::docHeight() const
 	return currentImg() ? currentImg() -> height() : 0;
 }
 
-void KisView::scrollTo(QPoint )
+void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
 {
 //    kdDebug() << "scroll to " << pt.x() << "," << pt.y() << endl;
 

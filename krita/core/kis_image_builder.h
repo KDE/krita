@@ -26,6 +26,7 @@ class QString;
 class KURL;
 class KisDoc;
 class KisImageBuilderPriv;
+class KisNameServer;
 
 enum KisImageBuilder_Result {
 	KisImageBuilder_RESULT_FAILURE = -400,
@@ -57,6 +58,7 @@ private:
 
 private:
 	KisImageBuilderPriv *m_members;
+	KisNameServer *m_nserver;
 };
 
 #endif // KIS_IMAGE_BUILDER_H_

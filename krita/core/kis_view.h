@@ -101,7 +101,6 @@ public:
 //	Q_INT32 xScrollOffset();
 //	Q_INT32 yScrollOffset();
 
-	void scrollTo(QPoint p);
 
 	void save_layer_image(bool mergeLayers);
 
@@ -239,6 +238,7 @@ private slots:
 	void selectImage(const QString&);
 	void setPaintOffset();
 	void scrollH(int value);
+	void scrollTo(Q_INT32 x, Q_INT32 y);
 	void scrollV(int value);
 
 private:

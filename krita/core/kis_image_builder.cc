@@ -31,6 +31,7 @@
 #include "kis_global.h"
 #include "kis_doc.h"
 #include "kis_image.h"
+#include "kis_nameserver.h"
 #include "kistile.h"
 #include "kistilemgr.h"
 #include "kispixeldata.h"
@@ -82,6 +83,7 @@ KisImageBuilder::KisImageBuilder(KisDoc *doc, const KURL& uri)
 KisImageBuilder::~KisImageBuilder()
 {
 	delete m_members;
+	delete m_nserver;
 }
 
 KisImageBuilder_Result KisImageBuilder::buildImage()
@@ -121,7 +123,7 @@ KisImageBuilder_Result KisImageBuilder::buildImage()
 		Magick::Geometry geo = magick.size();
 
 		if (geo.width() && geo.height()) {
-			KisLayerSP layer = new KisLayer(img, geo.width(), geo.height(), m_members -> doc -> nextImageName(), 0);
+			KisLayerSP layer = new KisLayer(img, geo.width(), geo.height(), m_nserver -> name(), 0);
 			KisTileMgrSP tm = layer -> data();
 			Q_INT32 w = TILE_WIDTH;
 			Q_INT32 h = TILE_HEIGHT;
@@ -161,6 +163,7 @@ KisImageSP KisImageBuilder::image()
 
 void KisImageBuilder::init(KisDoc *doc, const KURL& uri)
 {
+	m_nserver = new KisNameServer("Layer %1", 1);
 	m_members = new KisImageBuilderPriv;
 	m_members -> uri = uri;
 	m_members -> doc = doc;

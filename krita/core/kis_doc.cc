@@ -50,6 +50,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_mask.h"
+#include "kis_nameserver.h"
 #include "kis_selection.h"
 #include "kis_view.h"
 
@@ -185,6 +186,8 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_cmdHistory = new KCommandHistory(actionCollection(), false);
 	m_clip = 0;
 	QPixmap::setDefaultOptimization(QPixmap::BestOptim);
+	m_nserver = new KisNameServer(i18n("Image %1"), 0);
+
 
 #if 0
 //	m_selection = new KisSelection(this);
@@ -203,6 +206,7 @@ KisDoc::~KisDoc()
 //	delete m_selection;
 	delete m_cmdHistory;
         delete m_dcop;
+	delete m_nserver;
 }
 
 QCString KisDoc::mimeType() const
@@ -1194,7 +1198,7 @@ void KisDoc::setCanvasCursor(const QCursor& cursor)
 
 QString KisDoc::nextImageName() const
 {
-	return i18n("image %1").arg(m_images.size() + 1);
+	return m_nserver -> name();
 }
 
 bool KisDoc::loadNativeFormat(const QString& file)

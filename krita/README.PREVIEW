@@ -1,35 +1,40 @@
                  Krita Technology Preview Release
 
-Welcom to the Krita Technology Preview Release. Krita is a KOffice
-application for working with raster image data. This preview release
-is meant to sate your curiosity about the current state of Krita
-without forcing you to compile most of KOffice from CVS. However,
-Krita is far from ready, even though it can already be used to make
-screenshots of itself and scale them for use in the Krita website
-(http://koffice.kde.org/krita), so please read the:
+Welcome to the Krita Technology Preview Release. Krita is a KOffice
+application for working with raster image data. This preview release is
+meant to sate your curiosity about the current state of Krita without
+forcing you to compile most of KOffice from CVS. However, Krita is
+far from ready, but you can paint using quite comfortable paint tools,
+load and save most image formats, scale your images, filter them... But,
+this is a preview, and you should read the:
 
 Caveats
 
 * KOffice
 
-Installing the Krita Preview release means invariably hosing your KOffice
+Installing the Krita Preview release inevitably means hosing your KOffice
 installation. If you have currently any installation of KOffice, and
-would like to keep on using your KOffice applications, do not install
-the Krita preview release.
+would like to go on using your KOffice applications, do not install the
+Krita preview release.
 
 
 * Quality
 
 Despite having been in development since 1999, this is the first public
-release of Krita.  It is a preview release: this means that it isn't even
-alpha quality. Some things work, other things are horribly broken, other
-things again are not implemented at all, and, finally, some things may
-crash your X Window session, you computer, your house or your marriage.
+release of Krita. This is a preview release of and many parts of Krita
+will not work as expected or even crash Krita, Krita already offers
+powerful painting tools, the possibility to work with various layers, the
+possibility to load and save images and various image editing functions.
 
-Also, you will find many menu options or tools don't do anything, or
-present an anemic little dialog that has no obvious functionality. 
-This we know, too. It's a consequence of my lack of focus... I work
-on too many things at the same time.
+This release is intended to give you an overview of the basic image
+editing functions Krita currently supports. Not to be a fully functional
+application.  Some things work, other things are horribly broken, other
+things again are not implemented at all.
+
+Also, you will find many menu options or tools don't do anything,
+or present an anemic little dialog that has no obvious functionality.
+This we know, too. There's so much to do, and a small team of part-time
+developers.
 
 * Bug reports
 
@@ -40,18 +45,14 @@ done and  we have a very clear idea of what we want Krita to look like.
 
 * Patches
 
-Patches that fix bugs or that implement items from the TODO list, or
-plugins and filters that enhance Krita's functionality _are_ welcome,
-if they conform to the HACKING guidelines.  If you've always wanted
-to work on a big paint app, but were intimidated by the Gimp's half a
-million lines of code, this is the time to join. Krita is a tenth of
-the Gimp's code, so it could fit into anyone's head.
+Patches that fix bugs or that implement items from the TODO list,
+or plugins and filters that enhance Krita's functionality _are_
+welcome.  If you've always wanted to work on a big paint app, but were
+intimidated by the Gimp's half a million lines of code, this is the
+time to join. Krita is a tenth of the Gimp's code, so it could fit into
+anyone's head. And there's much basic stuff still missing: you don't
+need to be a SIGGRAPH regular to be able to contribute.
 
-* Documentation
-
-We don't have any user documentation, but it is likely that any user
-documentation will become obsolete before the projected release with
-KOffice 1.4 anyway.
 
 Features
 

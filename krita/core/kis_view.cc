@@ -51,6 +51,7 @@
 #include <kpushbutton.h>
 #include <kstatusbar.h>
 #include <kstdaction.h>
+#include <klineeditdlg.h>
 
 // KOffice
 #include <koColor.h>
@@ -371,21 +372,8 @@ void KisView::moveImage( unsigned, unsigned )
 
 void KisView::slotRename()
 {
-    //todo
-#if 0 //code from kis_tabbar
-        int i = 1;
-    QString imgName;
-
-    QStringList::Iterator it;
-    for ( it = tabsList.begin(); it != tabsList.end(); ++it )
-    {
-        if (i == activeTab)
-	        imgName = *it;
-        i++;
-    }
-
     bool ok;
-    QString activeName = imgName;
+    QString activeName = currentImgName();
     QString newName = KLineEditDlg::getText( i18n("Image Name"), i18n("Enter name:"), activeName, &ok, this );
 
     // Have a different name ?
@@ -396,28 +384,23 @@ void KisView::slotRename()
             KNotifyClient::beep();
             KMessageBox::information( this, i18n("Image name cannot be empty."), i18n("Change Image Name") );
             // Recursion
-            renameTab();
+            slotRename();
             return;
         }
         else if ( newName != activeName ) // Image name changed.
         {
-             for ( QStringList::Iterator it = tabsList.begin(); it != tabsList.end(); ++it )
-             {
-                 // Is the name already used
-                 if ( (*it) == newName )
-                 {
-                     KNotifyClient::beep();
-                     KMessageBox::information( this, i18n("This name is already used."), i18n("Change Image Name") );
-                     // Recursion
-                     renameTab();
-                     return;
-                 }
-             }
-             m_pDoc->renameImage(imgName, newName);
-             m_pDoc->setModified( true );
+            if ( m_doc->findImage(newName) )
+            {
+                KNotifyClient::beep();
+                KMessageBox::information( this, i18n("This name is already used."), i18n("Change Image Name") );
+                // Recursion
+                slotRename();
+                return;
+            }
+            m_doc->renameImage(activeName, newName);
+            m_doc->setModified( true );
         }
     }
-#endif
 }
 
 void KisView::updateStatusBarZoomLabel ()

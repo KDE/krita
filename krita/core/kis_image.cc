@@ -1066,7 +1066,6 @@ void KisImage::validate(Q_INT32 tileno)
 	KisTileSP dst;
 	KisPainter gc;
 	QPoint pt;
-	QPixmap pix;
 
 	Q_ASSERT(tm);
 

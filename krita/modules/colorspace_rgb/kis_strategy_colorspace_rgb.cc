@@ -108,7 +108,6 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 #ifdef __BIG_ENDIAN__
 	img = QImage(width, height, 32, 0, QImage::LittleEndian);
 
-
 	// Find a way to use convertPixelsTo without needing to code a
 	// complete agrb color strategy or something like that.
 
@@ -141,7 +140,7 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 //  	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
 //  		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
 
-	
+
 	if (srcProfile != 0 && dstProfile != 0) {
 		convertPixelsTo(img.bits(), srcProfile, 
 				img.bits(), this, dstProfile,

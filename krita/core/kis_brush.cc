@@ -2,6 +2,7 @@
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +30,7 @@
 #include <netinet/in.h>
 #include <limits.h>
 #include <stdlib.h>
+#include <cfloat>
 
 #include <qimage.h>
 #include <qpoint.h>
@@ -78,7 +80,6 @@ KisBrush::KisBrush(const QString& filename,
 
 KisBrush::~KisBrush()
 {
-	m_masks.setAutoDelete(true);
 	m_masks.clear();
 }
 
@@ -101,7 +102,7 @@ QImage KisBrush::img()
 	return m_img;
 }
 
-KisAlphaMask *KisBrush::mask(Q_INT32 pressure) const
+KisAlphaMaskSP KisBrush::mask(Q_INT32 pressure, double subPixelX, double subPixelY) const
 {
 	if (m_masks.isEmpty()) {
 		createMasks(m_img);
@@ -114,7 +115,38 @@ KisAlphaMask *KisBrush::mask(Q_INT32 pressure) const
 
 	if (scale < 0) scale = 0;
 
-	return m_masks.at(scale);
+	KisAlphaMaskSP srcMask = m_masks.at(scale);
+
+	if (subPixelX < DBL_EPSILON && subPixelY < DBL_EPSILON) {
+		return srcMask;
+	}
+	else {
+		Q_INT32 srcWidth = srcMask -> width();
+		Q_INT32 srcHeight = srcMask -> height();
+		KisAlphaMaskSP dstMask = new KisAlphaMask(srcWidth + 1, srcHeight + 1, 1);
+		double a = subPixelX;
+		double b = subPixelY;
+
+		// XXX: Optimise
+		for (int y = 0; y < dstMask -> height(); y++) {
+			for (int x = 0; x < dstMask -> width(); x++) {
+
+				QUANTUM topLeft = (x > 0 && y > 0) ? srcMask -> alphaAt(x - 1, y - 1) : OPACITY_TRANSPARENT;
+				QUANTUM bottomLeft = (x > 0 && y < srcHeight) ? srcMask -> alphaAt(x - 1, y) : OPACITY_TRANSPARENT;
+				QUANTUM topRight = (x < srcWidth && y > 0) ? srcMask -> alphaAt(x, y - 1) : OPACITY_TRANSPARENT;
+				QUANTUM bottomRight = (x < srcWidth && y < srcHeight) ? srcMask -> alphaAt(x, y) : OPACITY_TRANSPARENT;
+				
+				// Bi-linear interpolation
+				QUANTUM d = static_cast<QUANTUM>(a * b * topLeft
+					+ a * (1 - b) * bottomLeft
+					+ (1 - a) * b * topRight
+					+ (1 - a) * (1 - b) * bottomRight);
+				dstMask -> setAlphaAt(x, y, d);
+			}
+		}
+		
+		return dstMask;
+	}
 }
 
 KisLayerSP KisBrush::image(Q_INT32 pressure) const
@@ -133,10 +165,10 @@ KisLayerSP KisBrush::image(Q_INT32 pressure) const
 	return m_images.at(scale);
 }
 
-void KisBrush::setHotSpot(QPoint pt)
+void KisBrush::setHotSpot(KisPoint pt)
 {
-	Q_INT32 x = pt.x();
-	Q_INT32 y = pt.y();
+	double x = pt.x();
+	double y = pt.y();
 
 	if (x < 0)
 		x = 0;
@@ -148,13 +180,13 @@ void KisBrush::setHotSpot(QPoint pt)
 	else if (y >= height())
 		y = height() - 1;
 
-	m_hotSpot = QPoint(x, y);
+	m_hotSpot = KisPoint(x, y);
 }
 
-QPoint KisBrush::hotSpot(Q_INT32 pressure) const
+KisPoint KisBrush::hotSpot(Q_INT32 pressure) const
 {
-	KisAlphaMask *msk = mask(pressure);
-	QPoint p(msk -> width() / 2, msk -> height() / 2);
+	KisAlphaMaskSP msk = mask(pressure);
+	KisPoint p(msk -> width() / 2.0, msk -> height() / 2.0);
 	return p;
 }
 
@@ -348,12 +380,12 @@ void KisBrush::createImages(const QImage & img) const
 	}
 }
 
-Q_INT32 KisBrush::xSpacing(Q_INT32 pressure) const
+double KisBrush::xSpacing(Q_INT32 pressure) const
 {
 	return (mask(pressure) -> width() * m_spacing) / 100;
 }
 
-Q_INT32 KisBrush::ySpacing(Q_INT32 pressure) const
+double KisBrush::ySpacing(Q_INT32 pressure) const
 {
 	return (mask(pressure) -> height() * m_spacing) / 100;
 }

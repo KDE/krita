@@ -2,6 +2,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
+ *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,6 +20,7 @@
  */
 #include <stdlib.h>
 #include <string.h>
+#include <cfloat>
 
 #include "qbrush.h"
 #include "qcolor.h"
@@ -514,17 +516,17 @@ QRect KisPainter::dirtyRect() {
 }
 
 
-float KisPainter::paintLine(const enumPaintOp paintOp,
-			    const QPoint & pos1,
-			    const QPoint & pos2,
+double KisPainter::paintLine(const enumPaintOp paintOp,
+			    const KisPoint & pos1,
+			    const KisPoint & pos2,
 			    const Q_INT32 pressure,
 			    const Q_INT32 xTilt,
 			    const Q_INT32 yTilt,
-			    const float inSavedDist)
+			    const double inSavedDist)
 {
 	if (!m_device) return 0;
 
-	float savedDist = inSavedDist;
+	double savedDist = inSavedDist;
 
 	if (savedDist < 0) {
 		// pos1 is the start of the line, rather than this being a
@@ -542,13 +544,13 @@ float KisPainter::paintLine(const enumPaintOp paintOp,
 		savedDist = 0;
 	}
 
-	Q_INT32 xSpacing = m_brush -> xSpacing(pressure);
-	Q_INT32 ySpacing = m_brush -> ySpacing(pressure);
+	double xSpacing = m_brush -> xSpacing(pressure);
+	double ySpacing = m_brush -> ySpacing(pressure);
 
-	if (xSpacing <= 0) {
+	if (xSpacing <= DBL_EPSILON) {
 		xSpacing = 1;
 	}
-	if (ySpacing <= 0) {
+	if (ySpacing <= DBL_EPSILON) {
 		ySpacing = 1;
 	}
 
@@ -560,11 +562,11 @@ float KisPainter::paintLine(const enumPaintOp paintOp,
 	// before drawing the brush. This produces the correct spacing in both
 	// x and y directions, even if the brush's aspect ratio is not 1:1.
 	if (xSpacing > ySpacing) {
-		yScale = (double)xSpacing / ySpacing;
+		yScale = xSpacing / ySpacing;
 		spacing = xSpacing;
 	}
 	else {
-		xScale = (double)ySpacing / xSpacing;
+		xScale = ySpacing / xSpacing;
 		spacing = ySpacing;
 	}
 
@@ -576,11 +578,11 @@ float KisPainter::paintLine(const enumPaintOp paintOp,
 	dragVec.setX(dragVec.x() * xScale);
 	dragVec.setY(dragVec.y() * yScale);
 
-	float newDist = dragVec.length();
-	float dist = savedDist + newDist;
-	float l_savedDist = savedDist;
+	double newDist = dragVec.length();
+	double dist = savedDist + newDist;
+	double l_savedDist = savedDist;
 
-	if (static_cast<int>(dist) < spacing) {
+	if (dist < spacing) {
 		return dist;
 	}
 
@@ -596,9 +598,7 @@ float KisPainter::paintLine(const enumPaintOp paintOp,
 			step += dragVec * spacing;
 		}
 
-		KisVector2D sp = start + KisVector2D(step.x() / xScale, step.y() / yScale);
-
-		QPoint p(qRound(sp.x()), qRound(sp.y()));
+		KisPoint p = (start + KisVector2D(step.x() / xScale, step.y() / yScale)).toKisPoint();
 
 		switch(paintOp) {
 		case PAINTOP_BRUSH:
@@ -763,7 +763,7 @@ void KisPainter::paintEllipse (const enumPaintOp paintOp,
 
 
 
-void KisPainter::paintAt(const QPoint & pos,
+void KisPainter::paintAt(const KisPoint & pos,
 			 const Q_INT32 pressure,
                          const Q_INT32 /*xTilt*/,
                          const Q_INT32 /*yTilt*/)
@@ -780,31 +780,34 @@ void KisPainter::paintAt(const QPoint & pos,
 	// composite temporary layer into target layer
 	// @see: doc/brush.txt
 
-	// Note that this paint op is not correct: it really should do
-	// sub-pixel positioning of the dab to create a soft line
-	// effect. What is does now is equivalent to the 'pen' tool in
-	// the Gimp and, presumably, Photoshop.
-
-
 	if (!m_device) return;
 
-	QPoint hotSpot = m_brush -> hotSpot(pressure);
-	Q_INT32 x = pos.x() - hotSpot.x();
-	Q_INT32 y = pos.y() - hotSpot.y();
+	KisPoint hotSpot = m_brush -> hotSpot(pressure);
+	KisPoint pt = pos - hotSpot;
 
-	// This is going to be sloooooow!
-	if (m_pressure != pressure || m_brush -> brushType() == PIPE_MASK || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
+	// Split the coordinates into integer plus fractional parts. The integer
+	// is where the dab will be positioned and the fractional part determines
+	// the sub-pixel positioning.
+	Q_INT32 x;
+	double xFraction;
+	Q_INT32 y;
+	double yFraction;
+	
+	splitCoordinate(pt.x(), &x, &xFraction);
+	splitCoordinate(pt.y(), &y, &yFraction);
 
-		if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
+	if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
+		// XXX: No subpixel available for image brushes yet.
+		if (m_pressure != pressure || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
 			m_dab = m_brush -> image(pressure);
 		}
-		else {
-			KisAlphaMask * mask = m_brush -> mask(pressure);
-			computeDab(mask);
-		}
-
-		m_pressure = pressure;
 	}
+	else {
+		KisAlphaMaskSP mask = m_brush -> mask(pressure, xFraction, yFraction);
+		computeDab(mask);
+	}
+
+	m_pressure = pressure;
 
         // Draw correctly near the left and top edges
         Q_INT32 sx = 0;
@@ -823,7 +826,7 @@ void KisPainter::paintAt(const QPoint & pos,
 	m_dirtyRect |= QRect(x, y, m_dab -> width(), m_dab -> height());
 }
 
-void KisPainter::eraseAt(const QPoint &pos,
+void KisPainter::eraseAt(const KisPoint &pos,
 			 const Q_INT32 pressure,
 			 const Q_INT32 /*xTilt*/,
 			 const Q_INT32 /*yTilt*/)
@@ -850,11 +853,11 @@ void KisPainter::eraseAt(const QPoint &pos,
 
 	if (!m_device) return;
 
-	KisAlphaMask *mask = m_brush -> mask(pressure);
-	QPoint hotSpot = m_brush -> hotSpot(pressure);
+	KisAlphaMaskSP mask = m_brush -> mask(pressure);
+	KisPoint hotSpot = m_brush -> hotSpot(pressure);
 
-	QRect r = QRect(pos.x() - hotSpot.x(),
-			pos.y() - hotSpot.y(),
+	QRect r = QRect(static_cast<int>(pos.x() - hotSpot.x()),
+			static_cast<int>(pos.y() - hotSpot.y()),
 			mask -> width(),
 			mask -> height());
 
@@ -891,7 +894,7 @@ void KisPainter::eraseAt(const QPoint &pos,
 
 
 
-void KisPainter::airBrushAt(const QPoint &pos,
+void KisPainter::airBrushAt(const KisPoint &pos,
 			    const Q_INT32 pressure,
 			    const Q_INT32 /*xTilt*/,
 			    const Q_INT32 /*yTilt*/)
@@ -933,9 +936,9 @@ void KisPainter::airBrushAt(const QPoint &pos,
 	// ellipes and cones, and it shows the working of the timer.
 	if (!m_device) return;
 
-	QPoint hotSpot = m_brush -> hotSpot(pressure);
-	Q_INT32 x = pos.x() - hotSpot.x();
-	Q_INT32 y = pos.y() - hotSpot.y();
+	KisPoint hotSpot = m_brush -> hotSpot(pressure);
+	Q_INT32 x = static_cast<Q_INT32>(pos.x() - hotSpot.x());
+	Q_INT32 y = static_cast<Q_INT32>(pos.y() - hotSpot.y());
 
 	// This is going to be sloooooow!
 	if (m_pressure != pressure || m_brush -> brushType() == PIPE_MASK || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
@@ -944,7 +947,7 @@ void KisPainter::airBrushAt(const QPoint &pos,
 			m_dab = m_brush -> image(pressure);
 		}
 		else {
-			KisAlphaMask * mask = m_brush -> mask(pressure);
+			KisAlphaMaskSP mask = m_brush -> mask(pressure);
 			computeDab(mask);
 		}
 
@@ -1083,7 +1086,7 @@ void KisPainter::setBrush(KisBrush* brush)
 	m_brush = brush;
 }
 
-void KisPainter::computeDab(KisAlphaMask* mask)
+void KisPainter::computeDab(KisAlphaMaskSP mask)
 {
 	// XXX: According to the SeaShore source, the Gimp uses a temporary layer
 	// the size of the layer that is being painted on. Thas layer is cleared
@@ -1112,5 +1115,21 @@ void KisPainter::computeDab(KisAlphaMask* mask)
 	KisTileMgrSP dabTiles = m_dab -> data();
 	dabTiles -> writePixelData(0, 0, maskWidth - 1, maskHeight - 1, quantums, maskWidth * dstDepth);
 	delete [] quantums;
+}
+
+void KisPainter::splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction)
+{
+	Q_INT32 i = static_cast<Q_INT32>(coordinate);
+
+	if (coordinate < 0) {
+		// We always want the fractional part to be positive.
+		// E.g. -1.25 becomes -2 and +0.75
+		i--;
+	}
+
+	double f = coordinate - i;
+
+	*whole = i;
+	*fraction = f;
 }
 

@@ -42,13 +42,13 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
+#include "kis_point.h"
 //#include "kis_gradient.h"
 //#include "kis_brush.h"
 //#include "kis_pattern.h"
 
 class QRect;
 class KisTileCommand;
-class KisAlphaMask;
 class KisBrush;
 class KisPattern;
 class KisGradient;
@@ -124,13 +124,13 @@ public:
 	// painted along the line using the spacing setting.
 	// @Return the drag distance, that is the remains of the distance between p1 and p2 not covered
 	// because the currenlty set brush has a spacing greater than that distance.
-	float paintLine(const enumPaintOp paintOp,
-			const QPoint &pos1,
-			const QPoint &pos2,
+	double paintLine(const enumPaintOp paintOp,
+			const KisPoint &pos1,
+			const KisPoint &pos2,
 			const Q_INT32 pressure,
 			const Q_INT32 xTilt,
 			const Q_INT32 yTilt,
-			const float savedDist = -1);
+			const double savedDist = -1);
         void paintRect(const enumPaintOp paintOp,
                           const QPoint &startPoint,
                           const QPoint &endPoint,
@@ -157,21 +157,21 @@ public:
                           const Q_INT32 pressure);
 
 	// Draw a spot at pos using the currently set brush and color
-	void paintAt(const QPoint &pos,
+	void paintAt(const KisPoint &pos,
 		     const Q_INT32 pressure,
 		     const Q_INT32 /*xTilt*/,
 		     const Q_INT32 /*yTilt*/);
 
 	// Erase to the background color or transparency (depending on the type of the paint device)
 	// using the currently set brush.
-	void eraseAt(const QPoint &pos,
+	void eraseAt(const KisPoint &pos,
 		     const Q_INT32 pressure,
 		     const Q_INT32 /*xTilt*/,
 		     const Q_INT32 /*yTilt*/);
 
 	// Paint a filled circle at pos with pressure dependent alpha and
 	// 'ragged' edges. Meant to simulate the true effect of an airbrush.
-	void airBrushAt(const QPoint &pos,
+	void airBrushAt(const KisPoint &pos,
 			const Q_INT32 pressure,
 			const Q_INT32 /*xTilt*/,
 			const Q_INT32 /*yTilt*/);
@@ -205,7 +205,10 @@ private:
         KisPainter(const KisPainter&);
         KisPainter& operator=(const KisPainter&);
 
-	void computeDab(KisAlphaMask * mask);
+	void computeDab(KisAlphaMaskSP mask);
+
+	// Split the coordinate into whole + fraction, where fraction is always >= 0.
+	static void splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction);
 
 private:
         KisPaintDeviceSP m_device;

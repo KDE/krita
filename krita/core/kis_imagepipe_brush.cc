@@ -77,7 +77,7 @@ QImage KisImagePipeBrush::img()
 	}
 }
 
-KisAlphaMask *KisImagePipeBrush::mask(Q_INT32 pressure) const
+KisAlphaMaskSP KisImagePipeBrush::mask(Q_INT32 pressure, double subPixelX, double subPixelY) const
 {
 	if (m_brushes.isEmpty()) return 0;
 	// XXX: This does not follow the instructions in the 'parasite'
@@ -85,7 +85,7 @@ KisAlphaMask *KisImagePipeBrush::mask(Q_INT32 pressure) const
 		m_currentBrush = 0;
 	}
 	m_currentBrush++;
-	return m_brushes.at(m_currentBrush - 1) -> mask(pressure);
+	return m_brushes.at(m_currentBrush - 1) -> mask(pressure, subPixelX, subPixelY);
 }
 
 KisLayerSP KisImagePipeBrush::image(Q_INT32 pressure) const

@@ -32,8 +32,6 @@ class QImage;
 class QPoint;
 class QSize;
 
-class KisAlphaMask;
-
 class KisImagePipeBrush : public KisBrush {
 	typedef KisBrush super;
 	Q_OBJECT
@@ -53,7 +51,7 @@ public:
 	/**
 	   @return the next mask in the pipe.
 	*/
-	virtual KisAlphaMask *mask(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+	virtual KisAlphaMaskSP mask(Q_INT32 pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
 	virtual KisLayerSP image(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 
 	virtual bool hasColor() const;

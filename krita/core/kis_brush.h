@@ -22,8 +22,8 @@
 
 #include <qcstring.h>
 #include <qsize.h>
-#include <qptrlist.h>
 #include <qimage.h>
+#include <qvaluevector.h>
 
 #include <kio/job.h>
 
@@ -31,6 +31,7 @@
 #include "kis_alpha_mask.h"
 #include "kis_global.h"
 #include "kis_layer.h"
+#include "kis_point.h"
 
 class QPoint;
 class QPixmap;
@@ -64,16 +65,17 @@ public:
 	   @return a mask computed from the grey-level values of the
 	   pixels in the brush.
 	*/
-	virtual KisAlphaMask *mask(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+	virtual KisAlphaMaskSP mask(Q_INT32 pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
+	// XXX: return non-tiled simple buffer
 	virtual KisLayerSP image(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 
-	void setHotSpot(QPoint);
-	QPoint hotSpot(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+	void setHotSpot(KisPoint);
+	KisPoint hotSpot(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 
 	void setSpacing(Q_INT32 s) { m_spacing = s; }
 	Q_INT32 spacing() const { return m_spacing; }
-	Q_INT32 xSpacing(Q_INT32 pressure = PRESSURE_DEFAULT) const;
-	Q_INT32 ySpacing(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+	double xSpacing(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+	double ySpacing(Q_INT32 pressure = PRESSURE_DEFAULT) const;
 
 	virtual void setUseColorAsMask(bool useColorAsMask) { m_useColorAsMask = useColorAsMask; }
 	virtual bool useColorAsMask() const { return m_useColorAsMask; }
@@ -92,12 +94,12 @@ private:
 
 	QByteArray m_data;
 	bool m_ownData;
-	QPoint m_hotSpot;
+	KisPoint m_hotSpot;
 	Q_INT32 m_spacing;
 	bool m_useColorAsMask;
 	bool m_hasColor;
 	QImage m_img;
-	mutable QPtrList<KisAlphaMask> m_masks;
+	mutable QValueVector<KisAlphaMaskSP> m_masks;
 	mutable QValueVector<KisLayerSP> m_images;
 
 	Q_UINT32 m_header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */

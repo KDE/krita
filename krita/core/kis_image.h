@@ -24,6 +24,7 @@
 #include <qtimer.h>
 #include <qmutex.h>
 
+#include <ksharedptr.h>
 #include <kurl.h>
 
 #include "kis_global.h"
@@ -78,7 +79,7 @@ public:
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype = MITCHELL_FILTER);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
-                
+
 	void convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 	// Get the profile associated with this image
@@ -89,7 +90,7 @@ public:
 
 
 	void enableUndo(KoCommandHistory *history);
- 
+
 	KisStrategyColorSpaceSP colorStrategy() const;
 
 	KURL uri() const;
@@ -105,11 +106,6 @@ public:
 
 	Q_INT32 width() const;
 	Q_INT32 height() const;
-
-	Q_UINT32 depth() const;
-	void setDepth(Q_UINT32 depth) { m_depth = depth; }
-
-	bool alpha() const;
 
 	bool empty() const;
 
@@ -144,11 +140,11 @@ public:
 	void mergeLinkedLayers();
 
 	/**
-	 * Merge the specified layer with the layer 
+	 * Merge the specified layer with the layer
 	 * below this layer, remove the specified layer.
 	 */
 	void mergeLayer(KisLayerSP l);
-	
+
 	QRect bounds() const;
 
 	void notify();
@@ -171,7 +167,7 @@ signals:
 	void profileChanged(KisProfileSP profile);
 
 private slots:
-	void slotUpdateDisplay(); 
+	void slotUpdateDisplay();
 	void slotSelectionChanged();
 	void slotSelectionCreated();
 
@@ -188,8 +184,6 @@ private:
 	QString m_description;
 
 	KisProfileSP m_profile;
-
-	Q_UINT32 m_depth;
 
 	Q_INT32 m_width;
 	Q_INT32 m_height;

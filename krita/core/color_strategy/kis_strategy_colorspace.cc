@@ -29,12 +29,12 @@
 #include "kis_profile.h"
 #include "kis_config.h"
 
-KisStrategyColorSpace::KisStrategyColorSpace(const QString& name, const QString& description, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature) 
+KisStrategyColorSpace::KisStrategyColorSpace(const QString& name, const QString& description, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature)
 	: m_name(name),
 	  m_description(description),
 	  m_cmType(cmType),
 	  m_colorSpaceSignature(colorSpaceSignature)
-{	
+{
 	// Load all profiles that are suitable for this colorspace signature
 	resetProfiles();
 }
@@ -57,14 +57,14 @@ bool KisStrategyColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 rend
 }
 
 bool KisStrategyColorSpace::convertPixelsTo(QUANTUM * src, KisProfileSP srcProfile,
-					    QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, 
-					    Q_UINT32 length, 
+					    QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
+					    Q_UINT32 length,
 					    Q_INT32 renderingIntent)
 {
 //  	kdDebug() << "convertPixels for " << length << " pixels from " << name() << " to " << dstColorStrategy -> name() << "\n";
 // 	kdDebug() << " src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
 	cmsHTRANSFORM tf = 0;
-	
+
 	if (!m_transforms.contains(KisProfilePair(srcProfile, dstProfile))) {
 // 		kdDebug() << "Create new transform\n";
 		tf = createTransform(dstColorStrategy,
@@ -72,7 +72,7 @@ bool KisStrategyColorSpace::convertPixelsTo(QUANTUM * src, KisProfileSP srcProfi
 				     dstProfile,
 				     renderingIntent);
 
-		m_transforms[KisProfilePair(srcProfile, dstProfile)] = tf;				      
+		m_transforms[KisProfilePair(srcProfile, dstProfile)] = tf;
 	}
 	else {
 // 		kdDebug() << "Use cached transform\n";
@@ -83,23 +83,23 @@ bool KisStrategyColorSpace::convertPixelsTo(QUANTUM * src, KisProfileSP srcProfi
 		cmsDoTransform(tf, src, dst, length);
 		return true;
 	}
-	
+
 	kdDebug() << "No transform from "
 		  << srcProfile -> productName() << " to " << dstProfile -> productName()
 		  << ", so cannot convert pixels!\n";
 	return false;
-	
+
 }
 
 void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
-				   QUANTUM *dst, 
+				   QUANTUM *dst,
 				   Q_INT32 dststride,
 				   KisStrategyColorSpaceSP srcSpace,
-				   QUANTUM *src, 
+				   QUANTUM *src,
 				   Q_INT32 srcstride,
 				   QUANTUM opacity,
-				   Q_INT32 rows, 
-				   Q_INT32 cols, 
+				   Q_INT32 rows,
+				   Q_INT32 cols,
 				   CompositeOp op,
 				   KisProfileSP srcProfile,
 				   KisProfileSP dstProfile)
@@ -111,7 +111,7 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 
  	if (m_name != srcSpace -> name()) {
 // 		kdDebug() << "compositing heterogenous color spaces: src = " << srcSpace -> name() << ", dst = " << m_name << "\n";
-		int len = depth() * rows * cols;
+		int len = pixelSize() * rows * cols;
  		QUANTUM * convertedSrcPixels = new QUANTUM[len];
 		memset(convertedSrcPixels, 0, len * sizeof(QUANTUM));
 
@@ -119,35 +119,35 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
    		srcSpace -> convertPixelsTo(src, 0,
 					    convertedSrcPixels, this, 0,
 					    rows * cols);
- 		srcstride = (srcstride / srcSpace -> depth()) * depth();
+ 		srcstride = (srcstride / srcSpace -> pixelSize()) * pixelSize();
 
 		bitBlt(stride,
-		       dst, 
+		       dst,
 		       dststride,
-		       convertedSrcPixels, 
+		       convertedSrcPixels,
 		       srcstride,
 		       opacity,
-		       rows, 
-		       cols, 
+		       rows,
+		       cols,
 		       op);
 
  		delete[] convertedSrcPixels;
  	}
 	else {
 		bitBlt(stride,
-		       dst, 
+		       dst,
 		       dststride,
-		       src, 
+		       src,
 		       srcstride,
 		       opacity,
-		       rows, 
-		       cols, 
+		       rows,
+		       cols,
 		       op);
 	}
 
 }
 
-void KisStrategyColorSpace::resetProfiles() 
+void KisStrategyColorSpace::resetProfiles()
 {
 	// XXX: Should find a way to make sure not all profiles are read for all color strategies
 	m_profiles.clear();
@@ -168,7 +168,7 @@ void KisStrategyColorSpace::resetProfiles()
 KisProfileSP KisStrategyColorSpace::getProfileByName(const QString & name)
 {
 	vKisProfileSP::iterator it;
-	
+
 	for ( it = m_profiles.begin(); it != m_profiles.end(); ++it ) {
 		if ((*it) -> productName() == name) {
 			return *it;
@@ -185,12 +185,12 @@ cmsHTRANSFORM KisStrategyColorSpace::createTransform(KisStrategyColorSpaceSP dst
 {
 	KisConfig cfg;
 	int flags = 0;
-	
+
 	if (cfg.useBlackPointCompensation()) {
 		flags = cmsFLAGS_BLACKPOINTCOMPENSATION;
 	}
 
-	if (dstProfile != 0 
+	if (dstProfile != 0
 	    && dstColorStrategy != 0
 	    && dstColorStrategy != 0
 	    && dstProfile -> colorSpaceSignature() == dstColorStrategy -> colorSpaceSignature()

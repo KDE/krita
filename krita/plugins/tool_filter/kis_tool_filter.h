@@ -41,7 +41,7 @@ class KisToolFilter : public KisToolFreehand {
 public:
 	KisToolFilter();
 	virtual ~KisToolFilter();
-  
+
 	virtual void setup(KActionCollection *collection);
 	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
@@ -64,10 +64,10 @@ private:
 class KisToolFilterFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolFilterFactory(KActionCollection * ac) : super(ac) {};
+	KisToolFilterFactory(KActionCollection * ac) : super( ac ) {};
 	virtual ~KisToolFilterFactory(){};
-	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolFilter(); t -> setup(m_actionCollection); return t; }
+
+	virtual KisTool * createTool() { KisTool * t =  new KisToolFilter(); t -> setup(m_ac); return t; }
 	virtual QString name() { return i18n("Filter tool"); }
 };
 

@@ -30,7 +30,7 @@ class KisTiledIterator;
  */
 class KisTile  {
 public:
-	KisTile(Q_INT32 depth, Q_INT32 col, Q_INT32 row);
+	KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row);
 	KisTile(KisTile& rhs, Q_INT32 col, Q_INT32 row);
 	KisTile(KisTile& rhs);
 	~KisTile();
@@ -58,9 +58,9 @@ private:
 	bool m_writeLock;
 	Q_INT32 m_row;
 	Q_INT32 m_col;
-	Q_INT32 m_depth;
+	Q_INT32 m_pixelSize;
 	KisTile *m_nextTile;
-	
+
 	static const Q_INT32 WIDTH;
 	static const Q_INT32 HEIGHT;
 };

@@ -79,7 +79,7 @@ void KisPreviewView::setSourceLayer(KisLayerSP lay)
 	m_sourcelayer = lay;
 	KisPainter gc;
 	KisPaintDeviceSP pd(m_sourcelayer.data());
-    
+
 	Q_INT32 w = static_cast<Q_INT32>(size().width() / m_zoom);
 	Q_INT32 h = static_cast<Q_INT32>(size().height() / m_zoom);
 
@@ -87,6 +87,10 @@ void KisPreviewView::setSourceLayer(KisLayerSP lay)
 
 	m_image -> setProfile(lay -> profile());
 	m_clippedview = new KisLayer(m_image, m_image -> nextLayerName(), OPACITY_OPAQUE);
+	gc.begin(m_clippedview.data());
+
+	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, m_pos.x(), m_pos.y(), -1, -1);
+	gc.end();
 	m_image -> add(m_clippedview, -1);
 	updateView();
 	repaint(false);

@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/CorePaintop
+Comment=paint operation plugin for Krita

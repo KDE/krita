@@ -24,17 +24,17 @@
 
 class KisToolFactory  : public KShared
 {
-       
+
 public:
-	KisToolFactory(KActionCollection * ac) { m_actionCollection = ac; }
+	KisToolFactory(KActionCollection * ac) {m_ac = ac;}
 	virtual ~KisToolFactory() {};
-	
+
 	virtual KisTool * createTool() = 0;
 	virtual QString name() { return QString("Abstract Tool"); }
 
 protected:
 
-	KActionCollection * m_actionCollection;
+	KActionCollection * m_ac;
 };
 
 #endif // KIS_TOOL_FACTORY_H_

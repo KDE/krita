@@ -194,7 +194,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 		m_undoHistory = rhs.m_undoHistory;
 		m_uri = rhs.m_uri;
 		m_name = QString::null;
-		m_depth = rhs.m_depth;
 		m_width = rhs.m_width;
 		m_height = rhs.m_height;
 		m_xres = rhs.m_xres;
@@ -294,10 +293,6 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 	m_nserver = new KisNameServer(i18n("Layer %1"), 1);
 	m_name = name;
 
-	if (colorStrategy)
-		m_depth = colorStrategy -> depth();
-	else
-		m_depth = 0;
 
 	m_colorStrategy = colorStrategy;
 	m_bkg = new KisBackground(this, width, height);
@@ -313,14 +308,14 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h)
 {
-// 	kdDebug() << "KisImage::resize. From: (" 
+// 	kdDebug() << "KisImage::resize. From: ("
 // 		  << width()
-// 		  << ", " 
+// 		  << ", "
 // 		  << height()
-// 		  << ") to (" 
-// 		  << w 
-// 		  << ", " 
-// 		  << h 
+// 		  << ") to ("
+// 		  << w
+// 		  << ", "
+// 		  << h
 // 		  << ")\n";
 
 	if (w != width() || h != height()) {
@@ -348,23 +343,23 @@ void KisImage::resize(const QRect& rc)
 	resize(rc.width(), rc.height());
 }
 
-void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype) 
+void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype)
 {
-// 	kdDebug() << "KisImage::scale. SX: " 
+// 	kdDebug() << "KisImage::scale. SX: "
 // 		  << sx
-// 		  << ", SY:" 
-// 		  << sy 
+// 		  << ", SY:"
+// 		  << sy
 // 		  << "\n";
 
 	if (m_layers.empty()) return; // Nothing to scale
 
 	// New image size. XXX: Pass along to discourage rounding errors?
-	Q_INT32 w, h;	
+	Q_INT32 w, h;
 	w = (Q_INT32)(( width() * sx) + 0.5);
-	h = (Q_INT32)(( height() * sy) + 0.5); 
-	
-// 	kdDebug() << "Scaling from (" << m_projection -> width() 
-// 		  << ", " << m_projection -> height() 
+	h = (Q_INT32)(( height() * sy) + 0.5);
+
+// 	kdDebug() << "Scaling from (" << m_projection -> width()
+// 		  << ", " << m_projection -> height()
 // 		  << "to: (" << w << ", " << h << ")\n";
 
 	if (w != width() || h != height()) {
@@ -378,7 +373,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 		}
 
 		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
-		
+
 		m_width = w;
 		m_height = h;
 
@@ -391,9 +386,9 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 	}
 }
 
-void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress) 
+void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 {
-	
+
         const double pi=3.1415926535897932385;
 
 	if (m_layers.empty()) return; // Nothing to scale
@@ -411,7 +406,7 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 		}
 
 		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
-		
+
 		m_width = w;
 		m_height = h;
 
@@ -424,17 +419,17 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 	}
 }
 
-void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress) 
+void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress)
 {
 	const double pi=3.1415926535897932385;
-        
+
         if (m_layers.empty()) return; // Nothing to scale
 
         //new image size
 	Q_INT32 w=width();
-        Q_INT32 h=height();	
-        
-        
+        Q_INT32 h=height();
+
+
         if(angleX != 0 || angleY != 0){
                 double deltaY=height()*QABS(tan(angleX*pi/180)*tan(angleY*pi/180));
                 w = (Q_INT32) ( width() + QABS(height()*tan(angleX*pi/180)) );
@@ -446,10 +441,10 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
                         h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180))- 2 * deltaY + 2 );
                 else if (angleX < 0 && angleY < 0)
                         h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180))- 2 * deltaY + 2 );
-                else 
+                else
                         h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180)) );
         }
-        
+
 	if (w != width() || h != height()) {
 
 		undoAdapter() -> beginMacro("Shear image");
@@ -461,7 +456,7 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 		}
 
 		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
-		
+
 		m_width = w;
 		m_height = h;
 
@@ -492,7 +487,7 @@ KisProfileSP KisImage::profile() const
 	return m_profile;
 }
 
-void KisImage::setProfile(const KisProfileSP& profile) 
+void KisImage::setProfile(const KisProfileSP& profile)
 {
 	if (profile && profile -> valid() && profile -> colorSpaceSignature() == m_colorStrategy -> colorSpaceSignature()) {
 		m_profile = profile;
@@ -550,15 +545,6 @@ Q_INT32 KisImage::height() const
 	return m_height;
 }
 
-Q_UINT32 KisImage::depth() const
-{
-	return m_depth;
-}
-
-bool KisImage::alpha() const
-{
-	return m_colorStrategy -> alpha();
-}
 
 bool KisImage::empty() const
 {
@@ -933,7 +919,7 @@ void KisImage::mergeLinkedLayers()
 	}
 }
 
-void KisImage::mergeLayer(KisLayerSP l) 
+void KisImage::mergeLayer(KisLayerSP l)
 {
 	if (bottom(l)) return;
 
@@ -1085,7 +1071,7 @@ void KisImage::slotUpdateDisplay()
 	}
 }
 
-void KisImage::slotSelectionChanged() 
+void KisImage::slotSelectionChanged()
 {
 // 	kdDebug() << "KisImage::slotSelectionChanged\n";
 	emit activeSelectionChanged(KisImageSP(this));

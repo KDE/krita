@@ -28,6 +28,12 @@
 #include <koGlobal.h>
 #include <koUnit.h>
 
+#include "config.h"
+
+
+#define KRITA_VERSION VERSION
+
+
 #define DBG_AREA_TILES 40001
 #define DBG_AREA_CORE 41000
 
@@ -79,7 +85,7 @@ enum enumCursorStyle {
 };
 
 /*
- * Most wacom pads have 512 levels of pressure; Qt only supports 256, and even 
+ * Most wacom pads have 512 levels of pressure; Qt only supports 256, and even
  * this is downscaled to 127 levels because the line would be too jittery, and
  * the amount of masks take too much memory otherwise.
  */
@@ -113,7 +119,7 @@ enum CompositeOp {
 #if 0
 	COMPOSITE_MODULATE,
 	COMPOSITE_THRESHOLD,
-#endif 
+#endif
 	COMPOSITE_NO,
 #if 0
 	COMPOSITE_DARKEN,
@@ -130,7 +136,7 @@ enum CompositeOp {
 	COMPOSITE_COPY_YELLOW,
 	COMPOSITE_COPY_BLACK,
 	COMPOSITE_ERASE,
-	 
+
 	COMPOSITE_UNDEF,
 };
 
@@ -161,7 +167,7 @@ enum enumImgTypeDeprecated {
 enum enumPaintStyles {
 	PAINTSTYLE_HARD,
 	PAINTSTYLE_SOFT };
-		
+
 // If QUANTUM changes size, this should change, too.
 typedef Q_UINT8 PIXELTYPE;
 

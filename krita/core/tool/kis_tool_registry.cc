@@ -26,6 +26,8 @@
 #include "kis_tool_factory.h"
 #include "kis_canvas_subject.h"
 
+// KisToolRegistry *KisToolRegistry::m_singleton = 0;
+
 KisToolRegistry::KisToolRegistry()
 {
  	kdDebug() << " creating a KisToolRegistry" << endl;
@@ -34,6 +36,17 @@ KisToolRegistry::KisToolRegistry()
 KisToolRegistry::~KisToolRegistry()
 {
 }
+
+// KisToolRegistry* KisToolRegistry::instance()
+// {
+// 	if(KisToolRegistry::m_singleton == 0)
+// 	{
+// 		KisToolRegistry::m_singleton = new KisToolRegistry();
+// 	}
+// 	return KisToolRegistry::m_singleton;
+// }
+
+
 
 vKisTool KisToolRegistry::createTools(KisCanvasSubject *subject) const
 {
@@ -46,7 +59,7 @@ vKisTool KisToolRegistry::createTools(KisCanvasSubject *subject) const
 	for ( QStringList::Iterator it = factories.begin(); it != factories.end(); ++it )
 	{
 		KisToolFactorySP f = get(*it);
-		
+
 		KisTool * tool = f -> createTool();
 		subject -> attach(tool);
 		tools.push_back(tool);

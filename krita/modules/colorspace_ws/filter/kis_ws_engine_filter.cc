@@ -1,0 +1,182 @@
+/*
+ *  Copyright (c) 2005 Boudewijn Rempt (boud@valdyas.org)
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+#include <stdlib.h>
+#include <vector>
+#include <math.h>
+
+#include <qpoint.h>
+#include <qspinbox.h>
+#include <qrect.h>
+
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kinstance.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
+#include <ktempfile.h>
+#include <kdebug.h>
+#include <kgenericfactory.h>
+#include <knuminput.h>
+
+#include <kis_doc.h>
+#include <kis_image.h>
+#include <kis_iterators_pixel.h>
+#include <kis_layer.h>
+#include <kis_filter_registry.h>
+#include <kis_global.h>
+#include <kis_tile_command.h>
+#include <kis_types.h>
+#include <kis_view.h>
+#include <kis_paint_device.h>
+#include <kis_colorspace_registry.h>
+
+#include "kis_filter_configuration_widget.h"
+#include "kis_ws_engine_filter.h"
+#include "kis_colorspace_wet_sticky.h"
+
+/**
+ * The Wet & Sticky Engine filter is based on the wet & sticky model
+ * for computer painting designed by Tunde Cockshott and implemented
+ * by David England and Kevin Waite.
+ *
+ * The filter implements the engine that moves the paint according to
+ * gravity, viscosity and absorbency.
+ *
+ */
+KisWSEngineFilter::KisWSEngineFilter(KisView * view) : KisFilter(name(), view)
+{
+}
+
+
+/**
+ * Sets the POINT giving the coordinate location of the next
+ * cell on the canvas to be visited.  There is an even probability
+ * of each cell being visited.
+ */
+QPoint next_cell(Q_UINT32 width, Q_UINT32 height)
+{
+	kdDebug() << "W " << width << ", H " << height << "\n";
+
+	return QPoint(random() * width,  random() * height);
+}
+
+void single_step(KisStrategyColorSpaceSP cs, KisPaintDeviceSP src,  KisPaintDeviceSP dst, const QRect & rect, bool native)
+{
+	using namespace WetAndSticky;
+
+
+	QPoint p = next_cell( rect.width(),  rect.height() );
+
+	// XXX: We could optimize by randomly doing lines of 64 pixels
+	// -- maybe that would be enough to avoid the windscreen wiper
+	// effect.
+	KisHLineIterator iter = src -> createHLineIterator(p.x(), p.y(), 1,  false);
+
+	Q_UINT8 *orig = (Q_UINT8 *)iter;
+	Q_UINT8 *pix = orig;
+
+ 	if (!orig) return;
+
+	if (!native ) {
+		QColor c;
+		QUANTUM opacity;
+
+		src -> colorStrategy() -> toQColor(( QUANTUM* )pix, &c, &opacity);
+		Q_UINT8 *pix = new Q_UINT8[sizeof( cell )];
+		cs -> nativeColor(c, opacity, pix);
+	}
+
+	// Process
+
+	CELL_PTR c = ( CELL_PTR )pix;
+
+
+	if ( !native ) {
+		// Set RGBA back
+	}
+
+}
+
+void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect, KisTileCommand* ktc)
+{
+
+	m_src = src;
+	m_dst = dst;
+	m_cfg = ( KisWSEngineFilterConfiguration * )configuration;
+	m_rect = rect;
+	m_ktc = ktc;
+
+	kdDebug() << "WSEnginefilter called!\n";
+	QTime t;
+	t.restart();
+
+	// Two possibilities: we have our own, cool w&s pixel, and
+	// then we have real data to mess with, or we're filtering a
+	// boring shoup-model paint device and we can only work by
+	// synthesizing w&s pixels.
+	bool native = false;
+	// XXX: We need a better way to ID color strategies
+	if ( src -> colorStrategy() -> name() == "W&S" ) native = true;
+
+	// XXX: We need a better way to ID color strategies
+	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance()->get("W&S");
+
+	Q_UINT32 pixels = 400; //m_cfg -> pixels();
+
+	kdDebug() << "Going to singlestep " << pixels << " pixels.\n";
+
+	// Determine whether we want an infinite loop
+	if ( pixels == 0 ) {
+		while ( true )
+			single_step (cs, src, dst, rect, native);
+	}
+	// Or not.
+	else {
+		for ( Q_UINT32 i = 0; i < pixels; ++i ) {
+			single_step (cs, src, dst, rect, native);
+		}
+	}
+	kdDebug() << "Done in " << t.elapsed() << " ms\n";
+
+}
+
+KisFilterConfigurationWidget* KisWSEngineFilter::createConfigurationWidget(QWidget* parent)
+{
+// 	KisWSEngineFilterConfigurationWidget* kefcw = new KisWSEngineFilterConfigurationWidget(this,parent, "");
+// 	kdDebug() << kefcw << endl;
+// 	return kefcw  ;
+	return 0;
+}
+
+KisFilterConfiguration* KisWSEngineFilter::configuration(KisFilterConfigurationWidget* nwidget)
+{
+// 	KisWSEngineFilterConfigurationWidget* widget = (KisWSEngineFilterConfigurationWidget*) nwidget;
+
+// 	if( widget == 0 )
+// 	{
+// 		return new KisWSEngineFilterConfiguration(30);
+// 	} else {
+//                 Q_UINT32 depth = widget -> baseWidget() -> depthSpinBox -> value();
+
+//                 return new KisWSEngineFilterConfiguration(depth);
+//         }
+
+
+	return new KisWSEngineFilterConfiguration( m_rect.height() * m_rect.width() );
+}
+

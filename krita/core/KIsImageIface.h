@@ -35,7 +35,6 @@ k_dcop:
 	QString name()const;
 	int height() const;
 	int width() const;
-	bool alpha() const;
 	bool empty() const;
 
 	void setName(const QString& name);

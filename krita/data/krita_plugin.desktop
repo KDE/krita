@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/Plugin
+Comment=Plugin functionality module for Krita

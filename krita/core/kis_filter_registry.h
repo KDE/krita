@@ -20,27 +20,36 @@
 #ifndef KIS_FILTER_REGISTRY_H_
 #define KIS_FILTER_REGISTRY_H_
 
+#include "qptrlist.h"
+
+#include "ksharedptr.h"
 #include "kis_types.h"
 #include "kis_generic_registry.h"
-#include <ksharedptr.h>
+#include "kaction.h"
+#include "kis_filter.h"
 
+class QString;
+class KisView;
 class QStringList;
 
-class KisFilterRegistry : public KisGenericRegistry<KisFilterSP>, public KShared {
+class KisFilterRegistry : public KisGenericRegistry<KisFilterSP>,  public KShared
+{
 
 public:
+
 	KisFilterRegistry();
 	virtual ~KisFilterRegistry();
 
-// public:
-// 	static KisFilterRegistry* instance();
+//  	static KisFilterRegistry* instance();
+
+
+private:
+
+ 	KisFilterRegistry(const KisFilterRegistry&);
+ 	KisFilterRegistry operator=(const KisFilterRegistry&);
 
 // private:
-// 	KisFilterRegistry(const KisFilterRegistry&) { };
-// 	KisFilterRegistry operator=(const KisFilterRegistry&) { };
-
-// private:
-// 	static KisFilterRegistry *m_singleton;
+//  	static KisFilterRegistry *m_singleton;
 };
 
 #endif // KIS_FILTERSPACE_REGISTRY_H_

@@ -37,10 +37,10 @@ KisBaseDocker::KisBaseDocker( QWidget* parent, const char* name)
 {
 	setCloseMode( QDockWindow::Always );
 	setResizeEnabled(true);
-	setOpaqueMoving(false);
+	setOpaqueMoving(true);
 
-// 	setVerticallyStretchable(false);
-// 	setHorizontallyStretchable(true);
+ 	setVerticallyStretchable(true);
+ 	setHorizontallyStretchable(false);
 	setNewLine(true);
 	layout() -> setSpacing(0);
 	layout() -> setMargin(0);

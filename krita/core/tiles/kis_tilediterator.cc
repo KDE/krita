@@ -29,7 +29,7 @@ KisTiledIterator::KisTiledIterator( KisTiledDataManager *ndevice)
 	m_y = 0;
 	m_row = 0;
 	m_col = 0;
-	m_depth = m_ktm -> getDepth();
+	m_pixelSize = m_ktm -> pixelSize();
 }
 
 KisTiledIterator::~KisTiledIterator( )
@@ -51,7 +51,7 @@ void KisTiledIterator::fetchTileData(Q_INT32 col, Q_INT32 row)
 {
 	KisTile *tile = m_ktm->getTile(col, row, m_writable);
 	m_data = tile->data();
-	
+
 	// set old data but default to current value
 	m_oldData = m_ktm->getOldTile(col, row, tile)->data();
 };

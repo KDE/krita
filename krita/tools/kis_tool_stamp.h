@@ -89,7 +89,7 @@ public:
 	KisToolStampFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolStampFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolStamp(); t -> setup(m_actionCollection); return t; }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolStamp(); t -> setup(m_ac); return t; }
 	virtual QString name() { return i18n("Stamp tool"); }
 };
 

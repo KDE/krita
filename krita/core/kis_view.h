@@ -39,7 +39,6 @@
 #include "kis_canvas_subject.h"
 #include "kis_global.h"
 #include "kis_tool_controller.h"
-#include "kis_tool_registry.h"
 #include "kis_types.h"
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
@@ -49,6 +48,7 @@
 #include "kotooldockbase.h"
 #else
 #include "kis_dockframedocker.h"
+#include "kis_basedocker.h"
 #endif
 
 class QButton;
@@ -91,9 +91,11 @@ class KisMoveEvent;
 class KisHSVWidget;
 class KisRGBWidget;
 class KisGrayWidget;
-class KisFilterRegistry;
 class KisSelectionManager;
 class KisBirdEyeBox;
+class KisPaintOpBox;
+class KisToolRegistry;
+class KisFilterRegistry;
 
 class KisView
 	: public KoView,
@@ -135,9 +137,6 @@ public: // KoView implementation
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, bool modal = false, const KURL& url = KURL());
 
-	KisFilterRegistrySP filterRegistry() const;
-	KisToolRegistry * toolRegistry() const { return m_toolRegistry; }
-
 #if KIVIO_STYLE_DOCKERS
 	KoToolDockManager * toolDockManager() { return m_toolDockManager; }
 #endif
@@ -164,6 +163,7 @@ public: // Plugin access API. XXX: This needs redesign.
 	KisDoc * getDocument() { return m_doc; }
 
 	KisSelectionManager * selectionManager() { return m_selectionManager; }
+
 
 signals:
 	void bgColorChanged(const QColor& c);
@@ -204,7 +204,7 @@ public slots:
 	void scaleLayer(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
         void rotateLayer(double angle);
         void shearLayer(double angleX, double angleY);
-        
+
 	// settings action slots
 	void preferences();
 
@@ -230,8 +230,6 @@ private:
 	virtual KisCanvasControllerInterface *canvasController() const;
 	virtual KisToolControllerInterface *toolController() const;
 	virtual KoDocument *document() const;
-	virtual KisFilterSP filterGet(const QString& name);
-	virtual QStringList filterList();
 
 private:
 	// Implement KisCanvasControllerInterface
@@ -276,8 +274,8 @@ private:
 	void layerUpdateGUI(bool enable);
 	void paintView(const KisRect& rc);
 
-	/** 
-	 * Get the profile that this view uses to display itself on 
+	/**
+	 * Get the profile that this view uses to display itself on
 	 * he monitor.
 	 */
 	KisProfileSP monitorProfile();
@@ -390,6 +388,7 @@ private slots:
 	void viewLayerChannelDocker();
 	void viewShapesDocker();
 	void viewFillsDocker();
+	void viewPaintOpDocker();
 /* #endif */
 
 
@@ -465,13 +464,14 @@ private:
 	KisDockFrameDocker *m_fillsdocker;
 	KisDockFrameDocker *m_toolcontroldocker;
 	KisDockFrameDocker *m_colordocker;
-
+	KisPaintOpBox *m_paintopdocker;
 #endif
 	// Dialogs
 	QWidget *m_paletteChooser;
 	QWidget *m_gradientChooser;
 	QWidget *m_imageChooser;
 
+	KisPaintOpBox *m_paintOpBox;
 	ControlFrame *m_controlWidget;
 	KisBirdEyeBox * m_birdEyeBox;
 	KisChannelView *m_channelView;
@@ -510,10 +510,7 @@ private:
 
 	QTime m_tabletEventTimer;
 	QTabletEvent::TabletDevice m_lastTabletEventDevice;
-	KisFilterRegistrySP m_filterRegistry;
 	QPixmap m_canvasPixmap;
-
-	KisToolRegistry * m_toolRegistry;
 
 #if KIVIO_STYLE_DOCKERS
 	KoToolDockManager * m_toolDockManager;
@@ -524,6 +521,18 @@ private:
 
 private:
 	mutable KisImageSP m_current;
+
+	// XXX: Temporary re-instatement of old way to load filters and tools
+public:
+	KisToolRegistry * toolRegistry() const;
+	KisFilterRegistry * filterRegistry() const;
+
+	virtual KisFilterSP filterGet(const QString& name);
+	virtual QStringList filterList();
+
+private:
+	KisFilterRegistry * m_filterRegistry;
+	KisToolRegistry * m_toolRegistry;
 };
 
 #endif // KIS_VIEW_H_

@@ -76,7 +76,7 @@ KisBirdEyeBox::~KisBirdEyeBox()
 // 	delete m_zoomHandler;
 }
 
-void KisBirdEyeBox::zoomChanged(int z)
+void KisBirdEyeBox::zoomChanged(int /*z*/)
 {
 //  debug(QString("zoomChanged %1 %2").arg(z).arg((double)(z/100.0)));
 // 	m_view->viewZoom(z);
@@ -116,7 +116,7 @@ void KisBirdEyeBox::canvasZoomChanged()
 // 	updateView();
 // }
 
-bool KisBirdEyeBox::eventFilter(QObject* o, QEvent* ev)
+bool KisBirdEyeBox::eventFilter(QObject* /*o*/, QEvent* /*ev*/)
 {
 // 	if (o == canvas && ev->type() == QEvent::Show) {
 // 		updateView();
@@ -152,6 +152,7 @@ bool KisBirdEyeBox::eventFilter(QObject* o, QEvent* ev)
 // 	}
 
 // 	return WdgBirdEye::eventFilter(o, ev);
+	return true;
 }
 
 void KisBirdEyeBox::updateView()
@@ -207,7 +208,7 @@ void KisBirdEyeBox::updateView()
 // 	updateVisibleArea();
 }
 
-void KisBirdEyeBox::togglePageBorder(bool b)
+void KisBirdEyeBox::togglePageBorder(bool /*b*/)
 {
 // 	TOGGLE_ACTION("pageBorder")->setChecked(b);
 // 	m_bShowPageBorders = b;
@@ -258,7 +259,7 @@ void KisBirdEyeBox::updateVisibleArea()
 // 	varea.setRect(x,y,w,h);
 }
 
-void KisBirdEyeBox::handleMouseMove(QPoint p)
+void KisBirdEyeBox::handleMouseMove(QPoint /*p*/)
 {
 // 	m_handlePress = true;
 
@@ -300,7 +301,7 @@ void KisBirdEyeBox::handleMouseMove(QPoint p)
 // 	m_handlePress = false;
 }
 
-void KisBirdEyeBox::handleMouseMoveAction(QPoint p)
+void KisBirdEyeBox::handleMouseMoveAction(QPoint /*p*/)
 {
 // 	if (!m_handlePress)
 // 		return;
@@ -341,7 +342,7 @@ void KisBirdEyeBox::handleMouseMoveAction(QPoint p)
 // 	}
 }
 
-void KisBirdEyeBox::handleMousePress(QPoint p)
+void KisBirdEyeBox::handleMousePress(QPoint /*p*/)
 {
 // 	if (m_handlePress)
 // 		return;

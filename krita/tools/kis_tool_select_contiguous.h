@@ -72,7 +72,7 @@ public:
 	KisToolSelectContiguousFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectContiguousFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectContiguous(); t -> setup(m_actionCollection); return t; }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectContiguous(); t -> setup(m_ac); return t; }
 	virtual QString name() { return i18n("Contiguous select tool"); }
 };
 

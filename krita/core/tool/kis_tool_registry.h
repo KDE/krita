@@ -38,8 +38,12 @@ public:
 	KisToolRegistry();
 	virtual ~KisToolRegistry();
 
+// 	static KisToolRegistry* instance();
+
 	vKisTool createTools(KisCanvasSubject *subject) const;
 
+// private:
+//     static KisToolRegistry *m_singleton;
 };
 
 #endif // KIS_TOOL_REGISTRY_H_

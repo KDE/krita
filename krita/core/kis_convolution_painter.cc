@@ -70,9 +70,9 @@ namespace {
 	};
 }
 
-KisConvolutionPainter::KisConvolutionPainter() 
+KisConvolutionPainter::KisConvolutionPainter()
 	: super()
-{ 
+{
 }
 
 KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : super(device)
@@ -87,15 +87,15 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 {
 	// XXX: add checking of selections
 
-	Q_INT32 depth = src -> colorStrategy() -> depth();
-	Q_INT32 x, y, top, left, w, h;
+	Q_INT32 depth = src -> colorStrategy() -> pixelSize();
+	Q_INT32 y, top, left, w, h;
 	src->extent(left, top, w, h);
-	
+
 	Q_INT32 above=top;
 	Q_INT32 below=top+1;
 	Q_INT32 dstY=top;
 	y=top;
-	
+
 	KisPixelRO pixels[9];
 	{
 		KisHLineIteratorPixel curIt = src->createHLineIterator(y,left,w,false);
@@ -130,7 +130,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 			sums[i] = matrix[i][1][1] + matrix[i][1][0] + matrix[i][1][2] + matrix[i][2][0] +  matrix[i][2][1] + matrix[i][2][2];
 			sums[i] = (sums[i] == 0) ? 1 : sums[i];
 		}
-		
+
 		while( ! curIt.isDone() )
 		{
 			currentPixel = dstIt;
@@ -166,7 +166,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 									  * matrix[i].sum() / matrix[i].factor() / sum + matrix[i].offset() ) );
 		}
 	}
-	
+
 	// Body
 	int rightSums[depth];
 	int leftSums[depth];
@@ -186,7 +186,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		KisHLineIteratorPixel curIt = src->createHLineIterator(left, y, w, false);
 		KisHLineIteratorPixel dstIt = src->createHLineIterator(left, dstY, w, true);
 		KisHLineIteratorPixel afterIt = src->createHLineIterator(left, below, w, false);
-		
+
 		// Body : left border
 		KisPixel currentPixel = dstIt;
 		dstIt++;
@@ -262,7 +262,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		KisHLineIteratorPixel beforeIt = src->createHLineIterator(left, above, w, false);
 		KisHLineIteratorPixel curIt = src->createHLineIterator(left, y, w, false);
 		KisHLineIteratorPixel dstIt = src->createHLineIterator(left, dstY, w, true);
-		
+
 		// Corner : left bottom
 		pixels[ CONVOLUTION_PIXEL_TOP ] = beforeIt.oldPixelValue();
 		beforeIt++;
@@ -313,7 +313,7 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 										/ matrix[i].factor() / sums[i] + matrix[i].offset() ) );
 			}
 		}
-	
+
 	// Corner : right bottom
 		currentPixel = dstIt;
 		for(int i = 0; i < depth; i++)

@@ -23,8 +23,8 @@
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
 
-KisHistogram::KisHistogram(KisLayerSP layer, 
-			   const KisChannelInfo & initialChannel, 
+KisHistogram::KisHistogram(KisLayerSP layer,
+			   const KisChannelInfo & initialChannel,
 			   const enumHistogramType type)
 {
 	m_layer = layer;
@@ -65,11 +65,11 @@ void KisHistogram::computeHistogramFor(const KisChannelInfo & channel)
 		Q_INT32 x,y,w,h;
 		m_layer->extent(x,y,w,h);
  		KisRectIteratorPixel srcIt = m_layer->createRectIterator(x,y,w,h, false);
-		
-		Q_INT32 depth = m_layer -> depth();
+
+		Q_INT32 channels = m_layer -> nChannels();
 		while( ! srcIt.isDone() )
 		{
-			for( int i = 0; i < depth; i++)
+			for( int i = 0; i < channels; i++)
 			{
 				// Do computing
 				if (i == channel.pos()) {
@@ -106,10 +106,10 @@ void KisHistogram::dump() {
         vBins::iterator it;
 	QUANTUM i = 0;
         for( it = m_values.begin(); it != m_values.end(); ++it ) {
-		kdDebug() << "Value " 
+		kdDebug() << "Value "
 			  << QString().setNum(i)
-			  << ": " 
-			  <<  QString().setNum((*it)) 
+			  << ": "
+			  <<  QString().setNum((*it))
 			  << "\n";
 		i++;
 	}

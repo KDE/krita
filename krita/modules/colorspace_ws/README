@@ -1,0 +1,42 @@
+Wet & Sticky
+
+The Krita Wet & Sticky module is derived from the seminal dissertation
+"Wet & Stick: A Novel Model for Computer-Based Painting" by Malcom Tunde
+Cockshott, and the implementation of that model by Tunde Cockshott,
+David England and Kevin Waite. The complete source code to the first
+implementation is included in the module_ws/ws and is released under
+the terms of the GPL. 
+
+The W&S model is implemented in the following components:
+
+* A color strategy
+* A paint op
+* A filter
+
+The color strategy implements the canvas; the paint op implements the
+application of paint and the filter implements the paint simulation
+engine.
+
+This system adds the following interesting capabilities to Krita:
+
+* Extending the tool options dialog with a widget describing the 
+  paint op.
+
+* Extending the paint op class with properties beyond opacity and
+  color to a more generic structure with can contain the many different
+  properties needed by more complex color models to calculate bitBlt's.
+
+  All the ordinary paint ops still work, but they act as if they are
+  applying dry, thin paint, conforming to Cockshott's analysis of the
+  Shoup model (which Krita implemented in the first instance) as a subset
+  of the W&S model.
+
+* Adding continuously running filters (either in separate threads or 
+  called by a timer) to a particular paint device.
+
+* Adding a new way to mix colour; the older colour selection widgets
+  still work, but only give completely dry, infinitely thin paint.
+
+* Creating a layer with a fill of 'substrate' cells -- i.e, filling not just
+  with colour, but also with certain calculated amounts of height,
+  gravity and absorbency.

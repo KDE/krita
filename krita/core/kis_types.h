@@ -30,7 +30,7 @@
  * Shared pointer classes have the advantage of near automatic
  * memory management (but take care of circular references)
  * and the disadvantage that inheritiance relations are no longer
- * recognizable 
+ * recognizable
  */
 
 class KisImage;
@@ -66,8 +66,8 @@ typedef KisSharedPtrVector<KisHistogram> vKisHistogramSP;
 typedef vKisHistogramSP::iterator vKisHistogramSP_it;
 typedef vKisHistogramSP::const_iterator vKisHistogramSP_cit;
 
-// class KisPaintOp;
-// typedef KSharedPtr<KisPaintOp> KisPaintOpSP;
+class KisPaintOp;
+typedef KSharedPtr<KisPaintOp> KisPaintOpSP;
 
 class KisPaintOpFactory;
 typedef KSharedPtr<KisPaintOpFactory> KisPaintOpFactorySP;
@@ -75,8 +75,8 @@ typedef KSharedPtr<KisPaintOpFactory> KisPaintOpFactorySP;
 class KisToolFactory;
 typedef KSharedPtr<KisToolFactory> KisToolFactorySP;
 
-class KisPluginRegistry;
-typedef KSharedPtr<KisPluginRegistry> KisPluginRegistrySP;
+class KisPluginFactory;
+typedef KSharedPtr<KisPluginFactory> KisPluginFactorySP;
 
 class KisTool;
 typedef KSharedPtr<KisTool> KisToolSP;
@@ -106,8 +106,6 @@ typedef KSharedPtr<KisColorSpaceAlpha> KisColorSpaceAlphaSP;
 class KisFilter;
 typedef KSharedPtr<KisFilter> KisFilterSP;
 
-class KisFilterRegistry;
-typedef KSharedPtr<KisFilterRegistry> KisFilterRegistrySP;
 
 class KisProfile;
 typedef KSharedPtr<KisProfile> KisProfileSP;

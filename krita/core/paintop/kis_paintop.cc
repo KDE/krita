@@ -30,7 +30,7 @@
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"
 
-KisPaintOp::KisPaintOp(KisPainter * painter) 
+KisPaintOp::KisPaintOp(KisPainter * painter)
 {
 	m_painter = painter;
 	setSource(painter->device());
@@ -40,7 +40,7 @@ KisPaintOp::~KisPaintOp()
 {
 }
 
-KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask) 
+KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 {
 	// XXX: According to the SeaShore source, the Gimp uses a temporary layer
 	// the size of the layer that is being painted on. Thas layer is cleared
@@ -51,7 +51,6 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 	KisStrategyColorSpaceSP colorStrategy = dab -> colorStrategy();
 	Q_INT32 maskWidth = mask -> width();
 	Q_INT32 maskHeight = mask -> height();
-	Q_INT32 dstDepth = dab -> depth();
 
 	for (int y = 0; y < maskHeight; y++)
 	{
@@ -59,7 +58,7 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 		int x=0;
 		while(! hiter.isDone())
 		{
-			colorStrategy -> nativeColor(m_painter -> paintColor(), 
+			colorStrategy -> nativeColor(m_painter -> paintColor(),
 						     mask -> alphaAt(x++, y),
 						     (Q_UINT8 *)hiter,
 						     m_painter -> device() -> profile());

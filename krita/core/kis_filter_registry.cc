@@ -16,18 +16,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include <qstring.h>
+#include <qptrlist.h>
 
+#include <kaction.h>
+#include <kdebug.h>
+#include <klocale.h>
+
+#include "kis_types.h"
 #include "kis_filter_registry.h"
 #include "kis_paint_device.h"
 #include "kis_filter.h"
+#include "kis_view.h"
 
 // KisFilterRegistry *KisFilterRegistry::m_singleton = 0;
 
 KisFilterRegistry::KisFilterRegistry()
 {
-// 	kdDebug() << " creating a KisFilterRegistry" << endl;
-// 	Q_ASSERT(KisFilterRegistry::m_singleton == 0);
-// 	KisFilterRegistry::m_singleton = this;
+ 	kdDebug() << "Creating KisFilterRegistry" << endl;
+//  	Q_ASSERT(KisFilterRegistry::m_singleton == 0);
+//  	KisFilterRegistry::m_singleton = this;
+
 }
 
 KisFilterRegistry::~KisFilterRegistry()
@@ -36,9 +45,10 @@ KisFilterRegistry::~KisFilterRegistry()
 
 // KisFilterRegistry* KisFilterRegistry::instance()
 // {
-// 	if(KisFilterRegistry::m_singleton == 0)
-// 	{
-// 		KisFilterRegistry::m_singleton = new KisFilterRegistry();
-// 	}
-// 	return KisFilterRegistry::m_singleton;
+//  	if(KisFilterRegistry::m_singleton == 0)
+//  	{
+//  		KisFilterRegistry::m_singleton = new KisFilterRegistry();
+//  	}
+//  	return KisFilterRegistry::m_singleton;
 // }
+

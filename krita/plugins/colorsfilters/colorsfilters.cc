@@ -1,21 +1,23 @@
-/* This file is part of the KDE project
-   Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-*/
+/*
+ * This file is part of Krita
+ *
+ * Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
 
 #include <math.h>
 
@@ -55,9 +57,9 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 {
 	setInstance(ColorsFiltersFactory::instance());
 
- 	kdDebug() << "ColorsFilters plugin. Class: " 
- 		  << className() 
- 		  << ", Parent: " 
+ 	kdDebug() << "ColorsFilters plugin. Class: "
+ 		  << className()
+ 		  << ", Parent: "
  		  << parent -> className()
  		  << "\n";
 
@@ -87,7 +89,7 @@ ColorsFilters::~ColorsFilters()
 
 //==================================================================
 
-KisColorAdjustmentFilter::KisColorAdjustmentFilter(KisView * view) : 
+KisColorAdjustmentFilter::KisColorAdjustmentFilter(KisView * view) :
 	KisPerChannelFilter(view, name(), -255, 255, 0)
 {
 }
@@ -96,7 +98,7 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 {
 	KisPerChannelFilterConfiguration* configPC = (KisPerChannelFilterConfiguration*) config;
 	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
-	Q_INT32 depth = src->depth() - 1;
+	Q_INT32 depth = src->nChannels() - 1;
 	while( ! rectIt.isDone() )
 	{
 		KisPixelRO data = rectIt.oldValue();
@@ -125,7 +127,7 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 {
 	KisPerChannelFilterConfiguration* configPC = (KisPerChannelFilterConfiguration*) config;
 	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
-	Q_INT32 depth = src->depth() - 1;
+	Q_INT32 depth = src->nChannels() - 1;
 	while( ! rectIt.isDone() )
 	{
 		for( int i = 0; i < depth; i++)
@@ -143,7 +145,7 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 
 KisAutoContrast::KisAutoContrast(KisView* view) : KisFilter(name(), view)
 {
-	
+
 }
 void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* , const QRect& rect, KisTileCommand* ktc)
 {
@@ -163,7 +165,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	{
 		KisPixel data = rectIt;
 		Q_INT32 lightness = ( QMAX(QMAX(data[0], data[1]), data[2])
-				+ QMIN(QMIN(data[0], data[1]), data[2]) ) / 2; 
+				+ QMIN(QMIN(data[0], data[1]), data[2]) ) / 2;
 		histo[ lightness ] ++;
 // 			kdDebug() << " histo[ " << lightness << " ] = " << histo[ lightness ] << " " << maxvalue << endl;
 		if( histo[ lightness ] > maxvalue )
@@ -201,7 +203,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 
 //==================================================================
 
-KisDesaturateFilter::KisDesaturateFilter(KisView * view) 
+KisDesaturateFilter::KisDesaturateFilter(KisView * view)
 	: KisFilter(name(), view)
 {
 }
@@ -211,22 +213,22 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 
 	if(colorStrategy()->name() != "RGBA")
 		return;
-		
+
 	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
-// 	Q_INT32 depth = device->depth() - 1;
+// 	Q_INT32 depth = device->nChannels() - 1;
 	while( ! rectIt.isDone() )
 	{
 		KisPixelRO srcData = rectIt.oldValue();
 		KisPixel dstData = KisPixel((Q_UINT8 *)rectIt);
 		/* I thought of using the HSV model, but GIMP seems to use
-		HSL for desaturating. Better use the gimp model for now 
+		HSL for desaturating. Better use the gimp model for now
 				(HSV produces a lighter image than HSL) */
 		Q_INT32 lightness = ( QMAX(QMAX(srcData[0], srcData[1]), srcData[2])
-				+ QMIN(QMIN(srcData[0], srcData[1]), srcData[2]) ) / 2; 
+				+ QMIN(QMIN(srcData[0], srcData[1]), srcData[2]) ) / 2;
 		rectIt[0] = lightness;
 		rectIt[1] = lightness;
 		rectIt[2] = lightness;
-		
+
 		rectIt++;
 	}
 }

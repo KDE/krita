@@ -205,7 +205,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 	emit notifyProgressStage(this, i18n("Importing..."), 0);
 
 	m_img = 0;
-	
+
 	while ((image = RemoveFirstImageFromList(&images))) {
 		ViewInfo *vi = OpenCacheView(image);
 
@@ -218,7 +218,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 
 			m_img->add(layer, 0);
 
-			for (Q_INT32 y = 0; y < image->rows; y ++)
+			for (Q_UINT32 y = 0; y < image->rows; y ++)
 			{
 				const PixelPacket *pp = AcquireCacheView(vi, 0, y, image->columns, 1, &ei);
 
@@ -241,11 +241,11 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 					*(ptr++) = pp->green;
 					*(ptr++) = pp->red;
 					*(ptr++) = OPACITY_OPAQUE - pp->opacity;
-			
-					pp++;	
+
+					pp++;
 					hiter++;
 				}
-				
+
 				emit notifyProgress(this, y * 100 / image->rows);
 
 				if (m_stop) {
@@ -258,7 +258,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 				}
 			}
 		}
-		
+
 		emit notifyProgressDone(this);
 		CloseCacheView(vi);
 		DestroyImage(image);
@@ -368,7 +368,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 		image -> matte = MagickTrue;
 	else
 		image -> matte = MagickFalse;
-#else       
+#else
 	image -> matte = layer -> alpha();
 #endif
 	w = TILE_WIDTH;
@@ -531,6 +531,7 @@ QString KisImageMagickConverter::writeFilters()
 	mi = GetMagickInfo("*", &ei);
 
 	if (!mi)
+		kdDebug() << "Eek, no magick info!\n";
 		return s;
 
 	for (; mi; mi = reinterpret_cast<const MagickInfo*>(mi -> next)) {
@@ -539,6 +540,7 @@ QString KisImageMagickConverter::writeFilters()
 
 		if (mi -> encoder) {
 			name = mi -> name;
+			kdDebug() << "Found: " << name << "\n";
 			description = mi -> description;
 
 			if (!description.isEmpty() && !description.contains('/')) {

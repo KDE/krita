@@ -5,8 +5,9 @@
  * (c) Matthias Ettrich 2000
  * (c) Aaron J. Seigo 2002
  * (c) Nadeem Hasan 2003
+ * This adaptation: (c) Boudewijn Rempt 2005 
  *
- * Released under the LGPL see file LICENSE for details.
+ * Released under the GPL see file LICENSE for details.
  */
 
 #include <kapplication.h>

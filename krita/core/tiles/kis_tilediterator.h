@@ -22,14 +22,14 @@
 #include <kis_tile.h>
 #include <kis_tileddatamanager.h>
 
-/** 
+/**
  * The KisIterator class iterates through the pixels of a KisPaintDevice hiding the tile structure
  */
 class KisTiledIterator {
 
 protected:
 	KisTiledDataManager *m_ktm;
-	Q_INT32 m_depth;		// bytes per pixel	 
+	Q_INT32 m_pixelSize;		// bytes per pixel
 	Q_INT32 m_x;		// current x position
 	Q_INT32 m_y;		// cirrent y position
 	Q_INT32 m_row;	// row in tilemgr
@@ -39,26 +39,26 @@ protected:
 	Q_INT32 m_offset;
 	KisTile *m_tile;
 	bool m_writable;
-	
+
 protected:
 	Q_UINT32 tileWidth() { return KisTile::WIDTH; };
 	Q_UINT32 tileHeight() { return KisTile::HEIGHT; };
 	Q_UINT32 xToCol(Q_UINT32 x) { return m_ktm->xToCol(x); };
 	Q_UINT32 yToRow(Q_UINT32 y) { return m_ktm->yToRow(y); };
 	void fetchTileData(Q_INT32 col, Q_INT32 row);
-	
+
 public:
 	KisTiledIterator( KisTiledDataManager *ktm);
-	
+
 	~KisTiledIterator();
 
 public:
 	// current x position
 	Q_INT32 x() { return m_x; };
-	
+
 	// cirrent y position
 	Q_INT32 y() { return m_y; };
-	
+
 	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
 	operator Q_UINT8 * ();
 
@@ -66,7 +66,7 @@ public:
 	Q_UINT8 * oldValue();
 };
 
-/** 
+/**
  * The KisRectIterator class iterates through the pixels of a rect in a KisPaintDevice hiding the
  * tile structure
  */
@@ -76,16 +76,16 @@ class KisTiledRectIterator : public KisTiledIterator
 public:
 	/// do not call constructor directly use factory method in KisDataManager instead.
 	KisTiledRectIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32  w, Q_INT32  h, bool writable);
-	
+
 	~KisTiledRectIterator();
 
-public:	
+public:
 	/// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
 	KisTiledRectIterator & operator++(int);
-	
+
 	/// Goes back one pixel. Going to the end of the line above when it reaches the beginning of a line
 	KisTiledRectIterator & operator--(int);
-	
+
 	/// returns true when the iterator has reached the end
 	bool isDone();
 
@@ -105,12 +105,12 @@ protected:
 	 Q_INT32 m_topInTile;
 	 Q_INT32 m_bottomInTile;
 	 bool m_beyondEnd;
-	 
+
 private:
 	 void nextTile();
 };
 
-/** 
+/**
  * The KisHLineIterator class iterates through the pixels of a horizontal line in a KisPaintDevice hiding the
  * tile structure
  */
@@ -120,23 +120,23 @@ class KisTiledHLineIterator : public KisTiledIterator
 public:
 	/// do not call constructor directly use factory method in KisDataManager instead.
 	KisTiledHLineIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32 w, bool writable);
-	
+
 	~KisTiledHLineIterator();
 
-public:	
+public:
 	/// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
 	KisTiledHLineIterator & operator++();
-	
+
 	/// Returns the number of consequtive horizontal pixels that we point at
 	/// This is useful for optimizing
 	Q_INT32 nConseqHPixels();
-	
+
 	/// Advances a number of pixels until it reaches the end of the line
 	KisTiledHLineIterator & operator+=(int);
-	
+
 	/// Goes back one pixel. Going to the end of the line above when it reaches the beginning of a line
 	KisTiledHLineIterator & operator--();
-	
+
 	/// returns true when the iterator has reached the end
 	bool isDone();
 
@@ -148,12 +148,12 @@ protected:
 	 Q_INT32 m_yInTile;
 	 Q_INT32 m_leftInTile;
 	 Q_INT32 m_rightInTile;
-	 
+
 private:
 	 void nextTile();
 };
 
-/** 
+/**
  * The KisVLineIterator class iterates through the pixels of a vertical line in a KisPaintDevice hiding the
  * tile structure
  */
@@ -163,16 +163,16 @@ class KisTiledVLineIterator : public KisTiledIterator
 public:
 	/// do not call constructor directly use factory method in KisDataManager instead.
 	KisTiledVLineIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32 h, bool writable);
-	
+
 	~KisTiledVLineIterator();
 
-public:	
+public:
 	/// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
 	KisTiledVLineIterator & operator++();
-	
+
 	/// Goes back one pixel. Going to the end of the line above when it reaches the beginning of a line
 	KisTiledVLineIterator & operator--();
-	
+
 	/// returns true when the iterator has reached the end
 	bool isDone();
 
@@ -184,7 +184,7 @@ protected:
 	 Q_INT32 m_yInTile;
 	 Q_INT32 m_topInTile;
 	 Q_INT32 m_bottomInTile;
-	 
+
 private:
 	 void nextTile();
 };

@@ -61,7 +61,7 @@ public:
 	KisToolAirbrushFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolAirbrushFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolAirbrush(); t -> setup(m_actionCollection); return t; }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolAirbrush(); t -> setup(m_ac); return t; }
 	virtual QString name() { return i18n("Airbrush tool"); }
 };
 

@@ -88,7 +88,7 @@ public:
 	KisToolFillFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolFillFactory(){};
 	
-	virtual KisTool * createTool() { KisToolFill * t = new KisToolFill(); t -> setup(m_actionCollection); return t; }
+	virtual KisTool * createTool() { KisToolFill * t = new KisToolFill(); t -> setup(m_ac); return t; }
 	virtual QString name() { return i18n("Fill tool"); }
 
 };

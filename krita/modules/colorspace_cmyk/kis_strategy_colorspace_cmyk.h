@@ -56,23 +56,23 @@ public:
 
 	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;
-	virtual Q_INT32 depth() const;
+	virtual Q_INT32 nChannels() const;
 	virtual Q_INT32 nColorChannels() const;
-	virtual Q_INT32 size() const;
+	virtual Q_INT32 pixelSize() const;
 
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
-				       KisProfileSP srcProfile, KisProfileSP dstProfile, 
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 
 	virtual void bitBlt(Q_INT32 stride,
-			    QUANTUM *dst, 
+			    QUANTUM *dst,
 			    Q_INT32 dststride,
-			    QUANTUM *src, 
+			    QUANTUM *src,
 			    Q_INT32 srcstride,
 			    QUANTUM opacity,
-			    Q_INT32 rows, 
-			    Q_INT32 cols, 
+			    Q_INT32 rows,
+			    Q_INT32 cols,
 			    CompositeOp op);
 
 	virtual bool valid() { return m_defaultProfile != 0; }

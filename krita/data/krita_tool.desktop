@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/CoreTool
+Comment=Tool plugin for Krita

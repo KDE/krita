@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritatoolfilter" version="1">
+
+<ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
+<Separator/>
+  <Action name="tool_filter"/>
+</ToolBar>
+
+
+</kpartgui>

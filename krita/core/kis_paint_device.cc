@@ -45,7 +45,7 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QStr
 	init();
 	m_x = 0;
 	m_y = 0;
-	m_datamanager = new KisDataManager(colorStrategy -> depth());
+	m_datamanager = new KisDataManager(colorStrategy -> pixelSize());
 	m_visible = true;
 	m_owner = 0;
 	m_name = name;
@@ -98,7 +98,7 @@ void KisPaintDevice::configure(KisImage *image,
 
 	m_x = 0;
 	m_y = 0;
-	m_datamanager = new KisDataManager(colorStrategy -> depth());
+	m_datamanager = new KisDataManager(colorStrategy -> pixelSize());
 	m_visible = true;
 	m_owner = image;
 	m_name = name;
@@ -144,7 +144,7 @@ void KisPaintDevice::init()
 
 	m_colorStrategy = 0;
 	m_hasSelection = false;
-		m_selection = 0;
+	m_selection = 0;
 }
 
 void KisPaintDevice::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
@@ -152,7 +152,7 @@ void KisPaintDevice::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) cons
 	m_datamanager -> extent(x, y, w, h);
 }
 
-QRect KisPaintDevice::extent() const 
+QRect KisPaintDevice::extent() const
 {
 	Q_INT32 x, y, w, h;
 	extent(x, y, w, h);
@@ -192,7 +192,7 @@ void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInter
 }
 
 // XXX: also allow transform on part of paint device?
-void KisPaintDevice::transform(const QWMatrix & matrix)
+void KisPaintDevice::transform(const QWMatrix & )
 {
 #if 0 //AUTOLAYER
         if (tiles() == 0) {
@@ -202,7 +202,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 
         /* No, we're NOT duplicating the entire image, at the moment krita uses
            too much memory already */
-        QUANTUM *origPixel = new QUANTUM[depth() * sizeof(QUANTUM)];
+        Q_UINT8 *origPixel = new Q_UINT8[pixelSize()];
         // target image data
         Q_INT32 targetW;
         Q_INT32 targetH;
@@ -231,11 +231,11 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 
         // Create target pixel buffer which we'll read into a tile manager
         // when done.
-        QUANTUM * newData = new QUANTUM[targetW * targetH * depth() * sizeof(QUANTUM)];
+        Q_UINT8 * newData = new Q_UINT8[targetW * targetH * pixelSize()];
         /* This _has_ to be fixed; horribly layertype dependent */
         // XXX: according to man memset, this param order is wrong.
-        // memset(newData, targetW * targetH * depth() * sizeof(QUANTUM), 0);
-        memset(newData, 0, targetW * targetH * depth() * sizeof(QUANTUM));
+        // memset(newData, targetW * targetH * pixelSize() * sizeof(QUANTUM), 0);
+        memset(newData, 0, targetW * targetH * pixelSize() * sizeof(QUANTUM));
 
         bool invertible;
         QWMatrix targetMat = mat.invert( &invertible ); // invert matrix
@@ -268,17 +268,17 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
                         Q_INT32 orX = qRound(targetMat.m11() * x + targetMat.m21() * y + targetMat.dx());
                         Q_INT32 orY = qRound(targetMat.m22() * y + targetMat.m12() * x + targetMat.dy());
 
-                        int currentPos = (y*targetW+x) * depth(); // try to be at least a little efficient
+                        int currentPos = (y*targetW+x) * pixelSize(); // try to be at least a little efficient
                         if (!(orX < 0 || orY < 0 || orX >= width() || orY >= height())) {
-                                tiles() -> readPixelData(orX, orY, orX, orY, origPixel, depth());
-                                for(int i = 0; i < depth(); i++)
+                                tiles() -> readPixelData(orX, orY, orX, orY, origPixel, pixelSize());
+                                for(int i = 0; i < pixelSize(); i++)
                                         newData[currentPos + i] = origPixel[i];
                         }
                 }
         }
 
-        KisTileMgrSP tm = new KisTileMgr(colorStrategy() -> depth(), targetW, targetH);
-        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * depth());
+        KisTileMgrSP tm = new KisTileMgr(colorStrategy() -> pixelSize(), targetW, targetH);
+        tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * pixelSize());
 
         setTiles(tm); // Also sets width and height correctly
 
@@ -364,7 +364,7 @@ bool KisPaintDevice::read(KoStore *store)
         return retval;
 }
 
-void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
+void KisPaintDevice::convertTo(KisStrategyColorSpaceSP, KisProfileSP , Q_INT32)
 {
 #if 0 //AUTOLAYER
 
@@ -448,7 +448,7 @@ KisProfileSP KisPaintDevice::profile() const
 
 
 void KisPaintDevice::setProfile(KisProfileSP profile)
-{	
+{
 	if (profile && profile -> colorSpaceSignature() == colorStrategy() -> colorSpaceSignature() && profile -> valid()) {
 		m_profile = profile;
 	}
@@ -562,7 +562,7 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity)
   KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
 
   Q_UINT8 *pix = (Q_UINT8 *)iter;
-    
+
   if (!pix) return false;
 
   colorStrategy() -> toQColor(pix, c, opacity, m_profile);
@@ -573,7 +573,7 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity)
 bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity)
 {
   KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
-    
+
   colorStrategy() -> nativeColor(c, opacity, (QUANTUM*)(iter), m_profile);
 
   return true;

@@ -31,9 +31,9 @@
 #include "tiles/kis_datamanager.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_scale_visitor.h"
-//#include "kis_iterators_pixel.h"
-#include <koffice_export.h>
 #include "kis_pixel.h"
+
+#include <koffice_export.h>
 
 class QImage;
 class QSize;
@@ -50,8 +50,8 @@ class KisHLineIteratorPixel;
 /**
  * Class modelled on QPaintDevice.
  */
-class  KRITACORE_EXPORT KisPaintDevice : public QObject, public KShared {
-	Q_OBJECT
+class KRITACORE_EXPORT KisPaintDevice : public QObject, public KShared {
+        Q_OBJECT
 
 public:
 	KisPaintDevice(KisStrategyColorSpaceSP colorStrategy,
@@ -68,8 +68,8 @@ public:
         virtual bool read(KoStore *store);
 
 public:
-	virtual void configure(KisImage *image, 
-			KisStrategyColorSpaceSP colorStrategy, 
+	virtual void configure(KisImage *image,
+			KisStrategyColorSpaceSP colorStrategy,
 			const QString& name,
 			CompositeOp compositeOp);
 public:
@@ -90,7 +90,7 @@ public:
 	Q_UINT8 * readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	void writeBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
-	/** 
+	/**
 	 *   Converts the paint device to a different colorspace
 	 */
 	virtual void convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile = 0, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
@@ -106,31 +106,31 @@ public:
 	 * x, y left-top point of the rect of pixels
 	 * w, h width and height in pixels
 	 * profile RGB profile to use in conversion. May be 0, in which
-	 * case it's up to the colour strategy to choose a profile (most 
+	 * case it's up to the colour strategy to choose a profile (most
 	 * like sRGB).
 	 */
 	virtual QImage convertToQImage(KisProfileSP dstProfile, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-		
+
 	/**
 	 * Create an RGBA QImage from a rectangle in the paint device.
 	 *
 	 * The dimensions is so that it takes what is currently on screen. relies on the image() to return an image.
 	 * profile RGB profile to use in conversion. May be 0, in which
-	 * case it's up to the colour strategy to choose a profile (most 
+	 * case it's up to the colour strategy to choose a profile (most
 	 * like sRGB).
-	 */	
+	 */
 	virtual QImage convertToQImage(KisProfileSP dstProfile);
 
         virtual QString name() const;
         virtual void setName(const QString& name);
 
 
-        /** 
+        /**
 	 * Fill c and opacity with the values found at x and y.
 	 * The color values will be transformed from the profile of
 	 *  this paint device to the display profile.
 	 *
-	 * @return true if the operation was succesful. 
+	 * @return true if the operation was succesful.
 	 */
         bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity);
 
@@ -159,7 +159,7 @@ public:
 	KisStrategyColorSpaceSP colorStrategy() const;
 
 	/**
-	 * Return the icm profile associated with this layer, or 
+	 * Return the icm profile associated with this layer, or
 	 * the profile associated with the image if the color space of
 	 * this layer is the same as the color space of the image,
 	 * or 0.
@@ -177,21 +177,22 @@ public:
 	void setCompositeOp(CompositeOp compositeOp) { m_compositeOp = compositeOp; }
 
 	Q_INT32 getX();
-	Q_INT32 getY();	 
+	Q_INT32 getY();
         void setX(Q_INT32 x);
         void setY(Q_INT32 y);
 
+
 	/**
-	 * Return the number of bytes in a single pixel.
-	 * XXX: Rename this to something more desciptive.
+	 * Return the number of bytes a pixel takes
 	 */
-	Q_INT32 depth() const;
+	Q_INT32 pixelSize() const;
 
-// 	QRect clip() const;
-//         void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
-//         void setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh);
+	/**
+	 * Return the number of channels a pixel takes
+	 */
+	Q_INT32 nChannels() const;
 
-        KisImage *image();
+	KisImage *image();
         const KisImage *image() const;
         void setImage(KisImage *image);
 
@@ -204,7 +205,7 @@ public:
 	   Apply the transformation matrix _in place_.
 	*/
 	void transform(const QWMatrix & matrix);
-	
+
 	/**
 	 * Mirror the device along the X axis
 	 */
@@ -213,7 +214,7 @@ public:
 	 * Mirror the device along the Y axis
 	 */
 	void mirrorY();
-	
+
 
 	/**
 	 * XXX: Move this undo code back into the tiles/ module and wrap in transactions
@@ -223,21 +224,21 @@ public:
 	void rollback(KisMemento *memento) { m_datamanager -> rollback(memento); };
 	void rollforward(KisMemento *memento) { m_datamanager -> rollforward(memento); };
 
-	/** 
+	/**
 	 * This function return an iterator which points to the first pixel of an rectangle
 	 */
 	KisRectIteratorPixel createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable);
-	
-	/** 
+
+	/**
 	 * This function return an iterator which points to the first pixel of a horizontal line
 	 */
-	KisHLineIteratorPixel  createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable);
-	
-	/** 
+	KisHLineIteratorPixel createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable);
+
+	/**
 	 * This function return an iterator which points to the first pixel of a vertical line
 	 */
-	KisVLineIteratorPixel  createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
-	
+	KisVLineIteratorPixel createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
+
 	// Selection stuff. XXX: is it necessary to make the actual
 	// selection object available outside the layer? YYY: yes, so
 	// selection tools can act on it.
@@ -283,23 +284,28 @@ private:
 	QString m_name;
 	// Operation used to composite this layer with the layers _under_ this layer
 	CompositeOp m_compositeOp;
-	KisStrategyColorSpaceSP m_colorStrategy; 
+	KisStrategyColorSpaceSP m_colorStrategy;
 	KisProfileSP m_profile;
 
 	void accept(KisScaleVisitor &);
 	void accept(KisRotateVisitor &);
-        
+
 	// Whether there is a selection valid for this layer
 	bool m_hasSelection;
 	// Contains the actual selection. For now, there can be only
-	// one selection per layer. XXX: is this a limitation? 
+	// one selection per layer. XXX: is this a limitation?
 	KisSelectionSP m_selection;
-        
+
 };
 
-inline Q_INT32 KisPaintDevice::depth() const
+inline Q_INT32 KisPaintDevice::pixelSize() const
 {
-        return m_datamanager->getDepth();
+	return m_colorStrategy -> pixelSize();
+}
+
+inline Q_INT32 KisPaintDevice::nChannels() const
+{
+        return m_colorStrategy -> nChannels();
 ;
 }
 
@@ -344,26 +350,6 @@ inline void KisPaintDevice::setVisible(bool v)
                 emit visibilityChanged(this);
         }
 }
-
-// inline QRect KisPaintDevice::clip() const
-// {
-// 	Q_
-//         return QRect(0, 0, 10, 10); // fix AUTOLAYER
-// }
-
-// inline void KisPaintDevice::clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const
-// {
-//         if (offx && offy && offw && offh) {
-//                 *offx = 0;
-//                 *offy = 0;
-//                 *offw = 10;
-//                 *offh = 10;
-//         }
-// }
-
-// inline void KisPaintDevice::setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh)
-// {
-// }
 
 
 inline KisImage *KisPaintDevice::image()

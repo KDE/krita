@@ -27,26 +27,26 @@ class KoStore;
 #include "kis_tileddatamanager.h"
 #define ACTUAL_DATAMGR KisTiledDataManager
 
- 
+
 /**
  * KisDataManager defines the interface that modules responsible for
- * storing and retrieving data must inmplement. Data modules, like 
+ * storing and retrieving data must inmplement. Data modules, like
  * the tile manager, are responsible for:
  *
  * * Storing undo/redo data
  * * Offering ordererd and unordered iterators over rects of pixels
- * * (eventually) efficiently loading and saving data in a format 
+ * * (eventually) efficiently loading and saving data in a format
  * that may allow deferred loading.
  *
- * A datamanager knows nothing about the type of pixel data except 
- * how many Q_UINT8's a single pixel takes.  
+ * A datamanager knows nothing about the type of pixel data except
+ * how many Q_UINT8's a single pixel takes.
  */
 class KisDataManager : private ACTUAL_DATAMGR {
 
 public:
-	KisDataManager(Q_UINT32 depth) : ACTUAL_DATAMGR(depth) {};
+	KisDataManager(Q_UINT32 pixelSize) : ACTUAL_DATAMGR(pixelSize) {};
 	KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm) { };
-		
+
 public:
 
 	/**
@@ -54,7 +54,7 @@ public:
 	 *
 	 * Any write actions on the datamanger builds undo data into this memento
 	 * necessary to rollback the transaction.
-	 */ 
+	 */
 	KisMemento *getMemento() { return ACTUAL_DATAMGR::getMemento(); };
 
 	/**
@@ -64,7 +64,7 @@ public:
 	 * their creation, as mementos only store incremental changes
 	 */
 	void rollback(KisMemento *memento) { ACTUAL_DATAMGR::rollback(memento); };
-	
+
 	/**
 	 * Restores the image data to the state at the time of the rollback call of the memento.
 	 *
@@ -85,14 +85,9 @@ public:
 public:
 
 	/**
-	 * Return the size in bytes the image data takes.
+	 * Returns the number of bytes a pixel takes
 	 */
-	Q_UINT32 size() { return ACTUAL_DATAMGR::size(); };
-
-	/**
-	 * The number of Q_UINT8 that make up pixel.
-	 */
-	Q_UINT32 getDepth() { return ACTUAL_DATAMGR::getDepth(); };
+	Q_UINT32 pixelSize() { return ACTUAL_DATAMGR::pixelSize(); };
 
 	/**
 	 * Return the extent of the data in x,y,w,h.
@@ -125,7 +120,7 @@ public:
 	 */
 	void paste(KisDataManager * data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
 		   Q_INT32 w, Q_INT32 h) { ACTUAL_DATAMGR::paste(data, sx, sy, dx, dy, w, h); };
-	
+
 public:
 	/**
 	 * Get a copy of a single pixel
@@ -134,7 +129,7 @@ public:
   		{ return ACTUAL_DATAMGR::pixel(x, y);};
 
 	/**
-	 * write the specified data to x, y. There is no checking on depth!
+	 * write the specified data to x, y. There is no checking on pixelSize!
 	 */
 	void setPixel(Q_INT32 x, Q_INT32 y, Q_UINT8 * data)
 		{ ACTUAL_DATAMGR::setPixel(x, y, data);};
@@ -142,17 +137,17 @@ public:
 
  	/**
  	 * Copy the bytes in the specified rect to a chunk of memory. The caller is responsible
- 	 * for managing the memory. The size in bytes is w * h * depth. XXX: Better use QValueVector?
+ 	 * for managing the memory. The pixelSize in bytes is w * h * pixelSize. XXX: Better use QValueVector?
  	 */
  	Q_UINT8 * readBytes(Q_INT32 x, Q_INT32 y,
  		  	    Q_INT32 w, Q_INT32 h)
 		{ return ACTUAL_DATAMGR::readBytes(x, y, w, h);};
 
  	/**
-	 * Copy the bytes to the specified rect. w * h * depth bytes will be read, whether
+	 * Copy the bytes to the specified rect. w * h * pixelSize bytes will be read, whether
 	 * the caller prepared them or not. XXX: Better use QValueVector?
  	 */
- 	void writeBytes(Q_UINT8 * data, 
+ 	void writeBytes(Q_UINT8 * data,
  			Q_INT32 x, Q_INT32 y,
  			Q_INT32 w, Q_INT32 h)
 		{ACTUAL_DATAMGR::writeBytes( data, x, y, w, h); };

@@ -1,6 +1,7 @@
 INCLUDES  = -I$(srcdir)/.. \
         -I$(srcdir)/../tiles \
         -I$(srcdir)/../tool \
+        -I$(srcdir)/../filters \
         -I$(srcdir)/../color_strategy \
         -I$(srcdir)/../../paintops \
         -I$(srcdir)/../../ui \

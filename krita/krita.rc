@@ -29,6 +29,7 @@
   <Action name="view_layer_docker"/>
   <Action name="view_shapes_docker"/>
   <Action name="view_fills_docker"/>
+  <Action name="view_paintop_docker"/>
   <Separator/>
   <Action name="view_ruler"/>
   <Separator/>
@@ -53,6 +54,7 @@
 </Menu>
 
 <Menu name="Adjust"><text>&amp;Adjust</text>
+	<ActionList name="adjust"/>
 </Menu>
 
 
@@ -120,7 +122,7 @@
 </Menu>
 
 <Menu name="Filter"><text>F&amp;ilter</text>
-
+	<ActionList name="filters"/>
 </Menu>
 
 <Menu name="settings"><text>Settings</text>
@@ -137,7 +139,6 @@
   <Action name="cut"/>
   <Action name="copy"/>
   <Action name="remove"/>
-  <Action name="crop"/>
   <Action name="scrap_selection"/>
   <Action name="paste_special"/>
 </ToolBar>
@@ -149,10 +150,10 @@
 </ToolBar>
 
 
-<ToolBar name="painting tools" position="left"><Text>Painting Tools</Text>
+<ToolBar name="painting tools" position="top"><Text>Painting Tools</Text>
 </ToolBar>
 
-<ToolBar name="selection_tools" position="left"><Text>Selection Tools</Text>
+<ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
 </ToolBar>
 
 <Menu name="menuimage_popup">

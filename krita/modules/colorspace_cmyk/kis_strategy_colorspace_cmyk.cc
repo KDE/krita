@@ -1,4 +1,4 @@
- /*
+/*
  *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can CYANistribute it and/or modify
@@ -50,20 +50,20 @@ KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
 	m_channels.push_back(new KisChannelInfo(i18n("black"), 3, COLOR));
 
 	if (profileCount() == 0) {
-		kdDebug() << "No profiles loaded!";
+		kdDebug() << "No profiles loaded!\n";
 		return;
 	}
-	
+
 	m_defaultProfile = getProfileByName("Adobe CMYK"); // XXX: Do not i18n -- this is from a data file
 	if (m_defaultProfile == 0) {
-		kdDebug() << "No Adobe CMYK!";
+		kdDebug() << "No Adobe CMYK!\n";
 		if (profileCount() != 0) {
 			m_defaultProfile = profiles()[0];
 		}
 	}
 
 	if (m_defaultProfile == 0) {
-		kdDebug() << "No default CMYK profile; CMYK will not work!";
+		kdDebug() << "No default CMYK profile; CMYK will not work!\n";
 		return;
 	}
 
@@ -74,12 +74,12 @@ KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
 	cmsHPROFILE hsRGB = cmsCreate_sRGBProfile();
 	cmsHPROFILE hsCMYK = m_defaultProfile -> profile();
 
-	m_defaultFromRGB = cmsCreateTransform(hsRGB, TYPE_BGR_8, 
+	m_defaultFromRGB = cmsCreateTransform(hsRGB, TYPE_BGR_8,
 					      hsCMYK, TYPE_CMYK_8,
 					      INTENT_PERCEPTUAL, 0);
 
 	m_defaultToRGB =  cmsCreateTransform(hsCMYK, TYPE_CMYK_8,
-					     hsRGB, TYPE_BGR_8, 
+					     hsRGB, TYPE_BGR_8,
 					     INTENT_PERCEPTUAL, 0);
 
 	// Default pixel buffer for QColor conversion
@@ -89,9 +89,11 @@ KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
 
 KisStrategyColorSpaceCMYK::~KisStrategyColorSpaceCMYK()
 {
-	delete m_qcolordata;
-	cmsDeleteTransform(m_defaultToRGB);
-	cmsDeleteTransform(m_defaultFromRGB);
+	// XXX: These deletes cause a crash, but since the color strategy is a singleton
+	//      that's only deleted at application close, it's no big deal.
+	// delete m_qcolordata;
+	//cmsDeleteTransform(m_defaultToRGB);
+	//cmsDeleteTransform(m_defaultFromRGB);
 }
 
 void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM *dst, KisProfileSP profile)
@@ -130,7 +132,7 @@ bool KisStrategyColorSpaceCMYK::alpha() const
 	return false;
 }
 
-Q_INT32 KisStrategyColorSpaceCMYK::depth() const
+Q_INT32 KisStrategyColorSpaceCMYK::nChannels() const
 {
 	return cmyk::MAX_CHANNEL_CMYK;
 }
@@ -140,13 +142,13 @@ Q_INT32 KisStrategyColorSpaceCMYK::nColorChannels() const
 	return cmyk::MAX_CHANNEL_CMYK;
 }
 
-Q_INT32 KisStrategyColorSpaceCMYK::size() const
+Q_INT32 KisStrategyColorSpaceCMYK::pixelSize() const
 {
 	return cmyk::MAX_CHANNEL_CMYK;
 }
 
-QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
-						  KisProfileSP srcProfile, KisProfileSP dstProfile, 
+QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+						  KisProfileSP srcProfile, KisProfileSP dstProfile,
 						  Q_INT32 renderingIntent)
 
 {
@@ -154,21 +156,21 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
 
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
-	
+
 	KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
 
 
 	if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
 		//kdDebug() << "Going to use default transform\n";
-		cmsDoTransform(m_defaultToRGB, 
-			       const_cast<QUANTUM *> (data), 
-			       img.bits(), 
+		cmsDoTransform(m_defaultToRGB,
+			       const_cast<QUANTUM *> (data),
+			       img.bits(),
 			       width * height);
 	}
 	else {
 		//kdDebug() << "Going to transform with profiles\n";
 		// Do a nice calibrated conversion
-		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile, 
+		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile,
 				img.bits(), dstCS, dstProfile,
 				width * height, renderingIntent);
 	}

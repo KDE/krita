@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Default paint operations
+Comment=Default paint operations
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritadefaultpaintops

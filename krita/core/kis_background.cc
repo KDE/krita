@@ -24,8 +24,8 @@ KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*
 	super(img, "background flyweight", OPACITY_OPAQUE)
 {
 	Q_INT32 y;
-        Q_UINT8 src[depth()]; // XXX: Change KoColor to KisColor
-	Q_UINT32 d = depth();
+        Q_UINT8 src[pixelSize()]; // XXX: Change KoColor to KisColor
+	Q_UINT32 d = pixelSize();
 
 	Q_ASSERT( colorStrategy() != 0 );
 
@@ -37,9 +37,9 @@ KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*
 			QUANTUM v = 128 + 63 * ((hiter.x() / 16 + y / 16) % 2);
 			QColor c(v,v,v);
 			colorStrategy() -> nativeColor(c, OPACITY_OPAQUE, src);
-			
+
 			memcpy((Q_UINT8 *)hiter, src, d);
-			
+
 			hiter++;
 		}
 	}

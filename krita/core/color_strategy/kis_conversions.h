@@ -67,8 +67,6 @@ void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, float * h, float * l, float * s
 		
 	}
 
-	kdDebug() << " Converted rgb (" << r << ", " << g << ", " << b 
-		  << ") to hls (" << *h << ", " << *l << ", " << *s << ")\n";
 };
 
 float hue_value(float n1, float n2, float hue)

@@ -35,7 +35,6 @@
 #include "kis_types.h"
 
 namespace {
-	const Q_INT32 MAX_CHANNEL_ALPHA = 1;
 	const PIXELTYPE PIXEL_MASK = 0;
 }
 
@@ -87,16 +86,11 @@ bool KisColorSpaceAlpha::alpha() const
 	return true; // Of course!
 }
 
-Q_INT32 KisColorSpaceAlpha::depth() const
-{
-	return MAX_CHANNEL_ALPHA;
-}
-
 // XXX: We convert the alpha space to create a mask for display in selection previews
 // etc. No need to actually use the profiles here to create a mask image -- they don't
 // need to be true color.
-QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
-					   KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/, 
+QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+					   KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/,
 					   Q_INT32 /*renderingIntent*/)
 {
 
@@ -105,10 +99,10 @@ QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q
 	Q_INT32 i = 0;
 	uchar *j = img.bits();
 
-	while ( i < width * height * depth()) {
+	while ( i < width * height * pixelSize()) {
 
 		// Temporary copy until I figure out something better
-		
+
 		PIXELTYPE PIXEL_BLUE = 0;
 		PIXELTYPE PIXEL_GREEN = 1;
 		PIXELTYPE PIXEL_RED = 2;
@@ -121,49 +115,49 @@ QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q
 		*( j + PIXEL_GREEN ) = 0;
 		*( j + PIXEL_BLUE )  = 0;
 		*( j + PIXEL_ALPHA ) = *( data + i );
-		
-		i += MAX_CHANNEL_ALPHA;
+
+		i += 1;
 		j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
-		
+
 	}
 	return img;
 }
 
 bool KisColorSpaceAlpha::convertPixelsTo(QUANTUM * src, KisProfileSP /*srcProfile*/,
-					 QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, 
-					 Q_UINT32 length, 
+					 QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
+					 Q_UINT32 length,
 					 Q_INT32 /*renderingIntent*/)
 {
 //  	kdDebug() << "KisColorSpaceAlpha:: convertPixels for " << length << " pixels from " << name() << " to " << dstColorStrategy -> name() << "\n";
 
 	// No lcms trickery here, we are a QColor + opacity channel
 
-	Q_INT32 size = dstColorStrategy -> size();
+	Q_INT32 size = dstColorStrategy -> pixelSize();
 
 	Q_UINT32 j = 0;
 	Q_UINT32 i = 0;
 
 	while ( i < length ) {
-		
+
 		dstColorStrategy -> nativeColor(m_maskColor, OPACITY_OPAQUE - *(src + i), (dst + j), dstProfile);
 
 		i += 1;
 		j += size;
-						
+
 	}
 	return true;
-	
+
 }
 
 
 void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
-				QUANTUM *dst, 
+				QUANTUM *dst,
 				Q_INT32 dststride,
-				QUANTUM *src, 
+				QUANTUM *src,
 				Q_INT32 srcstride,
 				QUANTUM opacity,
-				Q_INT32 rows, 
-				Q_INT32 cols, 
+				Q_INT32 rows,
+				Q_INT32 cols,
 				CompositeOp op)
 {
 //  	kdDebug() << "KisColorSpaceAlpha::bitBlt. stride: " << stride
@@ -203,7 +197,7 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 		while (rows-- > 0) {
 			d = dst;
 			s = src;
-			
+
 			for (i = cols; i > 0; i--, d += stride, s += stride) {
 				if (d[PIXEL_MASK] < s[PIXEL_MASK]) {
 					continue;
@@ -211,16 +205,16 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 				else {
 					d[PIXEL_MASK] = s[PIXEL_MASK];
 				}
-				
+
 			}
-			
+
 			dst += dststride;
 			src += srcstride;
 		}
 		return;
 	case COMPOSITE_OVER:
 	default:
-		if (opacity == OPACITY_TRANSPARENT) 
+		if (opacity == OPACITY_TRANSPARENT)
 			return;
 		if (opacity != OPACITY_OPAQUE) {
 			while (rows-- > 0) {

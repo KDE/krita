@@ -1,4 +1,4 @@
-/* 
+/*
  * cmyk_plugin.cc -- Part of Krita
  *
  * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
@@ -37,7 +37,8 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kis_plugin_registry.h>
+#include <kis_factory.h>
+#include <kis_colorspace_registry.h>
 
 #include "cmyk_plugin.h"
 
@@ -53,23 +54,23 @@ CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
 {
        	setInstance(CMYKPluginFactory::instance());
 
- 	kdDebug() << "CMYK Color model plugin. Class: " 
- 		  << className() 
- 		  << ", Parent: " 
+ 	kdDebug() << "CMYK Color model plugin. Class: "
+ 		  << className()
+ 		  << ", Parent: "
  		  << parent -> className()
  		  << "\n";
 
-	if ( parent->inherits("KisPluginRegistry") )
+	if ( parent->inherits("KisFactory") )
 	{
 		m_StrategyColorSpaceCMYKA = new KisStrategyColorSpaceCMYKA();
 		m_StrategyColorSpaceCMYK = new KisStrategyColorSpaceCMYK();
 
-		if (m_StrategyColorSpaceCMYK -> valid()) 
-			KisPluginRegistry::instance() -> registerColorStrategy("CMYK", m_StrategyColorSpaceCMYK);
-// 		if (m_StrategyColorSpaceCMYKA -> valid())
-// 			KisPluginRegistry::instance() -> registerColorStrategy("CMYK/Alpha", m_StrategyColorSpaceCMYKA);
+		if (m_StrategyColorSpaceCMYK -> valid())
+			KisColorSpaceRegistry::instance() -> add(m_StrategyColorSpaceCMYK);
+		if (m_StrategyColorSpaceCMYKA -> valid())
+			KisColorSpaceRegistry::instance() -> add(m_StrategyColorSpaceCMYKA);
 	}
-	
+
 }
 
 CMYKPlugin::~CMYKPlugin()

@@ -81,8 +81,8 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
 {
 
 	Q_INT32 y;
-        Q_UINT8 src[m_device->depth()]; // XXX: Change QColor to KisColor, then use channelsize from color space
-	Q_UINT32 depth = m_device->depth();
+        Q_UINT8 src[m_device->pixelSize()]; // XXX: Change QColor to KisColor, then use channelsize from color space
+	Q_UINT32 depth = m_device->pixelSize();
         m_device->colorStrategy()->nativeColor(c, opacity, src, 0);
 
 	for (y = y1; y < y1 + h; y++)
@@ -173,12 +173,12 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 		// Create a selection from the surrounding area
 		m_selection = new KisSelection(lay, "Fill Temporary Selection");
 		m_selection -> clear(QRect(0, 0, m_width, m_height));
-		m_oldColor = new QUANTUM[m_device->depth()];
+		m_oldColor = new QUANTUM[m_device->pixelSize()];
 
 		KisHLineIterator pixelIt = m_layer->createHLineIterator(startX, startY, startX+1, false);
 		KisPixel pixel((QUANTUM*)(pixelIt));
 
-		for (int i = 0; i < lay -> depth(); i++) {
+		for (int i = 0; i < lay -> pixelSize(); i++) {
 			m_oldColor[i] = pixel[i];
 		}
 
@@ -325,7 +325,7 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& 
 QUANTUM KisFillPainter::difference(QUANTUM* src, KisPixel dst)
 {
 	QUANTUM max = 0, diff = 0;
-	int depth = m_device->depth();
+	int depth = m_device->pixelSize();
 
 	for (int i = 0; i < depth; i++) {
 		// added extra (QUANTUM) casts just to be on the safe side until that is fixed

@@ -1,8 +1,8 @@
 kritarcdir = $(kde_datadir)/krita/kpartplugins
 kritarc_DATA = kritatoolcrop.rc
-
 EXTRA_DIST = $(kritarc_DATA)
 
+kde_services_DATA = kritatoolcrop.desktop
 
 # all_includes must remain last!
 INCLUDES = -I$(srcdir)/../../core \

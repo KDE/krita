@@ -26,6 +26,8 @@
 
 #include <kdebug.h>
 
+// XXX: Map on KisID to have a combination of unique identifying
+//      string and an an i18n-ed display string
 template<typename _T>
 class KisGenericRegistry {
 	typedef std::map<QString, _T> storageMap;
@@ -37,6 +39,7 @@ public:
 	void add(_T item)
 	{
 		m_storage.insert( typename storageMap::value_type( item->name(), item) );
+		//kdDebug() << "Added " << item -> name() << "\n";
 	}
 	_T get(const QString& name) const
 	{
@@ -45,7 +48,10 @@ public:
 		if (it != m_storage.end()) {
 			p = it -> second;
 		}
-		Q_ASSERT(p);
+		if (!p) {
+			//kdDebug() << "No item " << name << " found\n";
+			return 0;
+		}
 		return p;
 	}
 	bool exist(const QString& name) const

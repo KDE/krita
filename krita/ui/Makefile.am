@@ -1,12 +1,9 @@
 KDE_OPTIONS = nofinal
 
-INCLUDES = -I$(srcdir)/../core \
-  -I$(srcdir)/../core/resources/ \
-  -I$(srcdir)/../core/color_strategy \
-  -I$(srcdir)/../core/tiles \
-  -I$(srcdir)/../core/tool \
-  -I$(srcdir)/../core/paintop \
-  $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
+INCLUDES = -I$(srcdir)/../core/filters -I$(srcdir)/../core \
+	-I$(srcdir)/../core/resources/ -I$(srcdir)/../core/color_strategy -I$(srcdir)/../core/tiles \
+	-I$(srcdir)/../core/tool -I$(srcdir)/../core/paintop $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
+	$(all_includes)
 
 noinst_LTLIBRARIES = libkisui.la
 libkisui_la_LIBADD = ./labels/libkislabel.la ./widgets/libkiswidgets.la
@@ -46,6 +43,7 @@ libkisui_la_SOURCES = kis_dlg_preferences.cc \
     kis_previewview.cc \
     kis_previewdialog.cc \
     kis_birdeye_box.cc \
+    kis_paintop_box.cc \
     wdgmatrix.ui \
     wdghistogram.ui \
     kis_previewwidgetbase.ui \
@@ -97,7 +95,8 @@ noinst_HEADERS = kis_dlg_preferences.h \
     wdgcolorsettings.h \
     wdgapplyprofile.h \
     wdgdockertab.h \
-    kis_birdeye_box.h
+    kis_birdeye_box.h \
+    kis_paintop_box.h
 
 
 libkisui_la_METASOURCES = AUTO

@@ -65,7 +65,7 @@ public:
 	KisToolZoomFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolZoomFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t = new KisToolZoom(); t -> setup(m_actionCollection); return t; }
+	virtual KisTool * createTool() { KisTool * t = new KisToolZoom(); t -> setup(m_ac); return t; }
 	virtual QString name() { return i18n("Zoom tool"); }
 };
 

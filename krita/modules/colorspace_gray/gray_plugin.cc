@@ -1,4 +1,4 @@
-/* 
+/*
  * gray_plugin.cc -- Part of Krita
  *
  * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
@@ -31,13 +31,14 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
+#include <kis_factory.h>
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kis_plugin_registry.h>
+#include <kis_colorspace_registry.h>
 
 #include "gray_plugin.h"
 
@@ -52,19 +53,19 @@ GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
 {
        	setInstance(GrayPluginFactory::instance());
 
- 	kdDebug() << "GRAY Color model plugin. Class: " 
- 		  << className() 
- 		  << ", Parent: " 
+ 	kdDebug() << "GRAY Color model plugin. Class: "
+ 		  << className()
+ 		  << ", Parent: "
  		  << parent -> className()
  		  << "\n";
 
 	// This is not a gui plugin; only load it when the doc is created.
-	if ( parent->inherits("KisPluginRegistry") )
+	if ( parent->inherits("KisFactory") )
 	{
 		m_StrategyColorSpaceGrayA = new KisStrategyColorSpaceGrayscale();
-		KisPluginRegistry::instance() -> registerColorStrategy("Grayscale/Alpha", m_StrategyColorSpaceGrayA);
+		KisColorSpaceRegistry::instance() -> add(m_StrategyColorSpaceGrayA);
 	}
-	
+
 }
 
 GrayPlugin::~GrayPlugin()

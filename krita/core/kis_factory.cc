@@ -25,11 +25,19 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <kparts/plugin.h>
+#include <kservice.h>
+#include <ktrader.h>
+#include <kparts/componentfactory.h>
+
 
 #include "kis_factory.h"
 #include "kis_aboutdata.h"
 #include "kis_resourceserver.h"
-#include "kis_plugin_registry.h"
+#include "kis_colorspace_registry.h"
+#include "kis_paintop_registry.h"
+#include "kis_filter_registry.h"
+#include "kis_tool_registry.h"
 #include "kis_doc.h"
 
 KAboutData* KisFactory::s_aboutData = 0;
@@ -43,9 +51,45 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
 	(void)global();
 	s_rserver = new KisResourceServer;
-	// Initialize singletons
-	KisPluginRegistry::instance();
-	
+
+	// Load extension modules and plugins
+//  	KisToolRegistry::instance();
+	KisPaintOpRegistry::instance();
+//  	KisFilterRegistry::instance();
+	KisColorSpaceRegistry::instance();
+
+	// Load modules
+	KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/CoreModule"),
+								    QString::fromLatin1("Type == 'Service'"));
+
+	KTrader::OfferList::ConstIterator iter;
+
+	for(iter = offers.begin(); iter != offers.end(); ++iter)
+	{
+	    KService::Ptr service = *iter;
+	    int errCode = 0;
+	    KParts::Plugin* plugin =
+		     KParts::ComponentFactory::createInstanceFromService<KParts::Plugin>
+		     ( service, this, 0, QStringList(), &errCode);
+	    if ( plugin )
+		kdDebug() << "found plugin " << service -> property("Name").toString() << "\n";
+	}
+
+
+// 	// Load plugins
+// 	offers = KTrader::self() -> query(QString::fromLatin1("Krita/Plugin"),
+// 					      QString::fromLatin1("Type == 'Service'"));
+// 	for(iter = offers.begin(); iter != offers.end(); ++iter)
+// 	{
+// 	    KService::Ptr service = *iter;
+// 	    int errCode = 0;
+// 	    KParts::Plugin* plugin =
+// 		     KParts::ComponentFactory::createInstanceFromService<KParts::Plugin>
+// 		     ( service, this, 0, QStringList(), &errCode);
+// 		// here we ought to check the error code.
+// 	    if ( plugin );
+// 	}
+
 }
 
 KisFactory::~KisFactory()

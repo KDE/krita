@@ -1,0 +1,32 @@
+There are several kinds of plugins in Krita: CoreModules and Plugins. Core modules
+add functionality to Krita but do not directly add to the user interface (menus and
+toolbars). Plugins create actions.
+
+All plugins register themselves with the appropriate registry:
+
+KisToolRegistry -- tools like brush, crop etc. Tools are added to the menu and the tools
+  box, but are special in that every view has a different instantiation of a tool for every
+  pointer X11 presents to Krita (mouse, stylus, eraser, other styluses for fancy wacom
+  tablets).
+
+KisColorSpaceRegistry -- color models like cmyk or rgb are core modules. These add the capability
+  to load and save and edit images in a particular color model and bit depth. 
+ 
+KisFilterRegistry -- Filters are a little mode complicated in that these are operations that
+  should be available from many places in the application -- i.e, some tools build on 
+  the availablity of filters, and filters can be building blocks in scripts -- but are
+  also directly available from the filter menu.
+
+KisPaintOpRegistry -- Paintops are plugins that define the way tools actually make
+  marks on the canvas. Paintops have no independent life in the gui but can be shown
+  in the toolbox.
+
+KisPluginRegistry -- Plugins that do not fall into any of the previous categories. Examples
+  are the GUI for scaling/resizing an image, select-by-colour etc. 
+
+
+Krita automatically adds filters to the items menu and tools to the tools menu; paintops
+are managed in the paintop toolbox and the tool plugins add themselves to the tools toolbar.
+This is done without referring to the XML gui buider. General plugins, like select-by-colour,
+that are often gui wrappers around core functionality, are loaded using the ordinary
+KDE plugin framework.

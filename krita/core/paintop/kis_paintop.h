@@ -26,6 +26,7 @@
 #include <ksharedptr.h>
 
 #include "kis_types.h"
+
 #include <koffice_export.h>
 
 class KisPoint;
@@ -33,7 +34,7 @@ class KisAlphaMask;
 class KisPainter;
 
 
-class KRITACORE_EXPORT KisPaintOp
+class KRITACORE_EXPORT KisPaintOp : public KShared
 {
 
 public:
@@ -62,11 +63,11 @@ protected:
 
 class KisPaintOpFactory  : public KShared
 {
-       
+
 public:
 	KisPaintOpFactory() {};
 	virtual ~KisPaintOpFactory() {};
-	
+
 	virtual KisPaintOp * createOp(KisPainter * painter) = 0;
 	virtual QString name() { return QString("Abstract PaintOp"); }
 };

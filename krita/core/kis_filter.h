@@ -38,16 +38,17 @@ class KisPreviewDialog;
 template<class F>
 KisFilterSP createFilter(KisView* view)
 {
-	KisFilterSP kfi;
-	if( view->filterRegistry()->exist( F::name() ) )
-	{
-		kfi = view->filterRegistry()->get( F::name() );
-	} else {
-		kfi = new F(view);
-		view->filterRegistry()->add(kfi);
-	}
-	return kfi;
+       KisFilterSP kfi;
+       if( view->filterRegistry()->exist( F::name() ) )
+       {
+               kfi = view->filterRegistry()->get( F::name() );
+      } else {
+               kfi = new F(view);
+               view->filterRegistry()->add(kfi);
+       }
+       return kfi;
 }
+
 
 class KisFilterConfiguration {
 };
@@ -61,7 +62,7 @@ public:
 public:
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&, KisTileCommand* ) = 0;
 	void process(KisPaintDeviceSP, KisFilterConfiguration*, const QRect&, KisTileCommand* );
-	
+
 public:
 	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
 	inline const QString name() const { return m_name; };
@@ -115,6 +116,7 @@ inline void KisFilter::process(KisPaintDeviceSP dev, KisFilterConfiguration* con
 {
 	process( dev, dev, config, rect, ktc);
 }
+
 
 
 #endif

@@ -137,19 +137,19 @@ QRect KisPainter::dirtyRect() {
 }
 
 
-void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, 
+void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 			CompositeOp op,
                         KisPaintDeviceSP srcdev,
                         QUANTUM opacity,
-			Q_INT32 sx, Q_INT32 sy, 
+			Q_INT32 sx, Q_INT32 sy,
 			Q_INT32 sw, Q_INT32 sh)
 {
 	if (srcdev == 0) {
 		return;
 	}
 
-	int dstDepth = m_device -> depth();
-	int srcDepth = srcdev -> depth();
+	int dstDepth = m_device -> pixelSize();
+	int srcDepth = srcdev -> pixelSize();
 
 
 	// A small optimization at the cost of some memory which makes
@@ -164,8 +164,8 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 		m_device -> colorStrategy () -> bitBlt(dstDepth,
 						       dst, dstDepth * sw,
 						       srcdev -> colorStrategy(), src, srcDepth * sw,
-						       opacity, 
-						       sh, sw, 
+						       opacity,
+						       sh, sw,
 						       op,
 						       srcdev -> profile(),
 						       m_device -> profile());
@@ -177,7 +177,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 	else */{
 		for(Q_INT32 i = 0; i <sh; i++)
 		{
-			// Use line iterators because the rect iterators do not guarantee that they will 
+			// Use line iterators because the rect iterators do not guarantee that they will
 			// return corresponding pixels for source and destination.
 			KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, false);
 			KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
@@ -186,12 +186,12 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 				int adv = srcIter.nConseqHPixels();
 				if(adv > dstIter.nConseqHPixels())
 					adv = dstIter.nConseqHPixels();
-				
-				m_device -> colorStrategy() -> bitBlt(dstDepth, 
-								      (Q_UINT8 *)dstIter, srcDepth, 
-								      srcdev -> colorStrategy(), (Q_UINT8 *)srcIter, dstDepth, 
-								      opacity, 
-								      1, adv, 
+
+				m_device -> colorStrategy() -> bitBlt(dstDepth,
+								      (Q_UINT8 *)dstIter, srcDepth,
+								      srcdev -> colorStrategy(), (Q_UINT8 *)srcIter, dstDepth,
+								      opacity,
+								      1, adv,
 								      op,
 								      srcdev -> profile(),
 								      m_device -> profile());
@@ -290,7 +290,7 @@ double KisPainter::paintLine(const KisPoint & pos1,
 		double pressure = (1 - t) * pressure1 + t * pressure2;
 		double xTilt = (1 - t) * xTilt1 + t * xTilt2;
 		double yTilt = (1 - t) * yTilt1 + t * yTilt2;
-		
+
 		m_paintOp -> paintAt(p, pressure, xTilt, yTilt);
 		dist -= spacing;
 	}
@@ -360,13 +360,13 @@ double KisPainter::paintBezierCurve(const KisPoint &pos1,
 		double midXTilt = (xTilt1 + xTilt2) / 2;
 		double midYTilt = (yTilt1 + yTilt2) / 2;
 
-		newDistance = paintBezierCurve(l1.toKisPoint(), pressure1, xTilt1, yTilt1, 
-					       l2.toKisPoint(), l3.toKisPoint(), 
+		newDistance = paintBezierCurve(l1.toKisPoint(), pressure1, xTilt1, yTilt1,
+					       l2.toKisPoint(), l3.toKisPoint(),
 					       l4.toKisPoint(), midPressure, midXTilt, midYTilt,
 					       savedDist);
-		newDistance = paintBezierCurve(r1.toKisPoint(), midPressure, midXTilt, midYTilt, 
-					       r2.toKisPoint(), 
-					       r3.toKisPoint(), 
+		newDistance = paintBezierCurve(r1.toKisPoint(), midPressure, midXTilt, midYTilt,
+					       r2.toKisPoint(),
+					       r3.toKisPoint(),
 					       r4.toKisPoint(), pressure2, xTilt2, yTilt2, newDistance);
 	}
 
@@ -387,7 +387,7 @@ void KisPainter::paintRect (const KisPoint &startPoint,
 		   yTilt,
 		   normalizedRect.topRight (),
 		   pressure,
-		   xTilt, 
+		   xTilt,
 		   yTilt);
 	paintLine (normalizedRect.topRight (),
 		   pressure,
@@ -417,7 +417,7 @@ void KisPainter::paintRect (const KisPoint &startPoint,
 
 
 //
-// Ellipse code derived from zSprite2 Game Engine. 
+// Ellipse code derived from zSprite2 Game Engine.
 // XXX: copyright attribution needed? BSAR.
 //
 

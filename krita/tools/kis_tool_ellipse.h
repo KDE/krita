@@ -84,7 +84,7 @@ public:
 	KisToolEllipseFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolEllipseFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolEllipse(); t -> setup(m_actionCollection); return t; }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolEllipse(); t -> setup(m_ac); return t; }
 	virtual QString name() { return i18n("Ellipse tool"); }
 };
 

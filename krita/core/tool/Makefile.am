@@ -1,6 +1,7 @@
 INCLUDES  = -I$(srcdir)/.. \
         -I$(srcdir)/../../ui \
         -I$(srcdir)/../tiles \
+        -I$(srcdir)/../paintop \
         -I$(srcdir)/../resources \
         -I$(srcdir)/../color_strategy \
         $(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
@@ -12,6 +13,7 @@ libkistool_la_SOURCES =  \
 	kis_tool_registry.cc \
 	kis_tool_controller.cc \
 	kis_tool_paint.cc \
+	kis_tool_freehand.cc \
 	kis_tool_non_paint.cc
 
 noinst_HEADERS = \

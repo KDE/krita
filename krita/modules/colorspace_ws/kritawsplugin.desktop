@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Wet & Sticky canvas color model
+Comment[xx]=xxCanvas color model for wet & sticky paintxx
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritawsplugin

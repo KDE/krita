@@ -1,21 +1,24 @@
-/* This file is part of the KDE project
-   Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+/*
+ * This file is part of the KDE project
+ *
+ * Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-*/
 #include <stdlib.h>
 #include <vector>
 
@@ -51,13 +54,13 @@ K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFact
 {
        	setInstance(KritaConvolutionFiltersFactory::instance());
 
- 	kdDebug() << "ConvolutionFilters plugin. Class: " 
- 		  << className() 
- 		  << ", Parent: " 
+ 	kdDebug() << "ConvolutionFilters plugin. Class: "
+ 		  << className()
+ 		  << ", Parent: "
  		  << parent -> className()
  		  << "\n";
 	KisView * view;
-	
+
 	if ( !parent->inherits("KisView") )
 	{
 		return;
@@ -66,7 +69,7 @@ K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFact
 	}
 
 
-	
+
 	KisFilterSP kgbf = createFilter<KisGaussianBlurFilter>(view);
 	(void) new KAction(i18n("&Gaussian Blur"), 0, 0, kgbf, SLOT(slotActivated()), actionCollection(), "convolution_blur");
 
@@ -81,34 +84,34 @@ K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFact
 
 	KisFilterSP keiadf = createFilter<KisEmbossInAllDirectionsFilter>(view);
 	(void) new KAction("Emboss in All Directions", 0, 0, keiadf, SLOT(slotActivated()), actionCollection(), "convolution_embossalldirections");
-	
+
 	KisFilterSP kehvf = createFilter<KisEmbossHorizontalVerticalFilter>(view);
 	(void) new KAction("Emboss Horizontal && Vertical", 0, 0, kehvf, SLOT(slotActivated()), actionCollection(), "convolution_embosshorzvertical");
-	
+
 	KisFilterSP kevf = createFilter<KisEmbossVerticalFilter>(view);
 	(void) new KAction("Emboss Vertical Only", 0, 0, kevf, SLOT(slotActivated()), actionCollection(), "convolution_embossverticalonly");
-	
+
 	KisFilterSP kehf = createFilter<KisEmbossHorizontalFilter>(view);
 	(void) new KAction("Emboss Horizontal Only", 0, 0, kehf, SLOT(slotActivated()), actionCollection(), "convolution_embosshorizontalonly");
-	
+
 	KisFilterSP kedf = createFilter<KisEmbossDiagonalFilter>(view);
  	(void) new KAction("Emboss in Diagonal", 0, 0, kedf, SLOT(slotActivated()), actionCollection(), "convolution_embossdiagonal");
-	
+
 	KisFilterSP ktedf = createFilter<KisTopEdgeDetectionFilter>(view);
 	(void) new KAction("Top Edge Detection", 0, 0, ktedf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectiontop");
 
 	KisFilterSP kredf = createFilter<KisRightEdgeDetectionFilter>(view);
 	(void) new KAction("Right Edge Detection", 0, 0, kredf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionright");
-	
+
 	KisFilterSP kbedf = createFilter<KisBottomEdgeDetectionFilter>(view);
 	(void) new KAction("Bottom Edge Detection", 0, 0, kbedf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionbottom");
-	
+
 	KisFilterSP kledf = createFilter<KisLeftEdgeDetectionFilter>(view);
 	(void) new KAction("Left Edge Detection", 0, 0, kledf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionleft");
 
 	KisFilterSP kccf = createFilter<KisCustomConvolutionFilter>(view);
 	(void) new KAction("Custom Convolution", 0, 0, kccf, SLOT(slotActivated()), actionCollection(), "convolution_custom");
-	
+
 }
 
 KritaConvolutionFilters::~KritaConvolutionFilters()
@@ -118,7 +121,7 @@ KritaConvolutionFilters::~KritaConvolutionFilters()
 KisGaussianBlurFilter::KisGaussianBlurFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
 	if (!colorStrategy()) return;
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 1, 2, 1 }, { 2, 4, 2 }, { 1, 2, 1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
@@ -134,7 +137,7 @@ KisSharpenFilter::KisSharpenFilter(KisView * view) : KisConvolutionConstFilter(n
 {
 	if (!colorStrategy()) return;
 
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 0, -2, 0 }, { -2, 11, -2 }, { 0, -2, 0} };
 	for(int i = 0; i < imgdepth - 1; i ++)
@@ -149,7 +152,7 @@ KisMeanRemovalFilter::KisMeanRemovalFilter(KisView * view) : KisConvolutionConst
 {
 	if (!colorStrategy()) return;
 
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { -1, -1, -1 }, { -1, 9, -1 }, { -1, -1, -1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
@@ -164,7 +167,7 @@ KisEmbossLaplascianFilter::KisEmbossLaplascianFilter(KisView * view) : KisConvol
 {
 	if (!colorStrategy()) return;
 
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { -1, 0, -1 }, { 0, 4, 0 }, { -1, 0, -1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
@@ -175,12 +178,12 @@ KisEmbossLaplascianFilter::KisEmbossLaplascianFilter(KisView * view) : KisConvol
 	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter(KisView * view) 
+KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter(KisView * view)
 	: KisConvolutionConstFilter(name(), view)
 {
 	if(!colorStrategy()) return;
 
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { -1, -1, -1 }, { -1, 8, -1 }, { -1, -1, -1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
@@ -191,12 +194,12 @@ KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter(KisView * view)
 	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter(KisView * view) 
+KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter(KisView * view)
 	: KisConvolutionConstFilter(name(), view)
 {
 	if (!colorStrategy()) return;
 
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 0, -1, 0 }, { -1, 4, -1 }, { 0, -1, 0} };
 	for(int i = 0; i < imgdepth - 1; i ++)
@@ -211,7 +214,7 @@ KisEmbossVerticalFilter::KisEmbossVerticalFilter(KisView * view) : KisConvolutio
 {
 	if (!colorStrategy()) return;
 
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 0, -1, 0 }, { 0, 2, 0 }, { 0, -1, 0} };
 	for(int i = 0; i < imgdepth - 1; i ++)
@@ -222,12 +225,12 @@ KisEmbossVerticalFilter::KisEmbossVerticalFilter(KisView * view) : KisConvolutio
 	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisEmbossHorizontalFilter::KisEmbossHorizontalFilter(KisView * view) : 
+KisEmbossHorizontalFilter::KisEmbossHorizontalFilter(KisView * view) :
 	KisConvolutionConstFilter(name(), view)
 {
 	if (!colorStrategy()) return;
 
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 0, 0, 0 }, { -1, 4, -1 }, { 0, 0, 0} };
 	for(int i = 0; i < imgdepth - 1; i ++)
@@ -243,7 +246,7 @@ KisEmbossDiagonalFilter::KisEmbossDiagonalFilter(KisView * view) : KisConvolutio
 {
 	if (!colorStrategy()) return;
 
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { -1, 0, -1 }, { 0, 4, 0 }, { -1, 0, -1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
@@ -259,7 +262,7 @@ KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter(KisView * view) : KisConvol
 {
 	if (!colorStrategy()) return;
 
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 1, 1, 1 }, { 0, 0, 0 }, { -1, -1, -1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
@@ -275,7 +278,7 @@ KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter(KisView * view) : KisCo
 {
 	if (!colorStrategy()) return;
 
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { -1, 0, 1 }, { -1, 0, 1 }, { -1, 0, 1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
@@ -290,7 +293,7 @@ KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter(KisView * view) : Kis
 {
 	if (!colorStrategy()) return;
 
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { -1, -1, -1 }, { 0, 0, 0 }, { 1, 1, 1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
@@ -305,7 +308,7 @@ KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter(KisView * view) : KisConv
 {
 	if (!colorStrategy()) return;
 
-	Q_INT32 imgdepth = colorStrategy()->depth();
+	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 1, 0, -1 }, { 1, 0, -1 }, { 1, 0, -1} };
 	for(int i = 0; i < imgdepth - 1; i ++)

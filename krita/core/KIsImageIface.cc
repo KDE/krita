@@ -45,11 +45,6 @@ int KIsImageIface::width() const
 	return m_img->width();
 }
 
-bool KIsImageIface::alpha() const
-{
-	return m_img->alpha();
-}
-
 bool KIsImageIface::empty() const
 {
 	return m_img->empty();

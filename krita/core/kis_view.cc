@@ -1,27 +1,27 @@
 /*
- * This file is part of KimageShop^WKrayon^WKrita
- *
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *                1999 Michael Koch    <koch@kde.org>
- *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
- *                2002 Patrick Julien <freak@codepimps.org>
- *                2003-2004 Boudewijn Rempt <boud@valdyas.org>
- *                2004 Clarence Dang <dang@kde.org>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
+* This file is part of KimageShop^WKrayon^WKrita
+*
+*  Copyright (c) 1999 Matthias Elter  <me@kde.org>
+*                1999 Michael Koch    <koch@kde.org>
+*                1999 Carsten Pfeiffer <pfeiffer@kde.org>
+*                2002 Patrick Julien <freak@codepimps.org>
+*                2003-2005 Boudewijn Rempt <boud@valdyas.org>
+*                2004 Clarence Dang <dang@kde.org>
+*
+*  This program is free software; you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation; either version 2 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
 
 #include <algorithm>
 #include <cmath>
@@ -57,6 +57,7 @@
 #include <kurldrag.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
+#include <ksharedptr.h>
 
 // KOffice
 #include <qcolor.h>
@@ -109,6 +110,7 @@
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
 
+
 // Widgets
 #include "kis_autobrush.h"
 #include "kis_text_brush.h"
@@ -116,6 +118,7 @@
 #include "kis_hsv_widget.h"
 #include "kis_rgb_widget.h"
 #include "kis_gray_widget.h"
+#include "kis_paintop_box.h"
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
@@ -128,6 +131,7 @@
 // Action managers
 #include "kis_selection_manager.h"
 
+
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
 
@@ -138,111 +142,113 @@
 
 KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name) : super(doc, parent, name)
 {
-        if (!doc -> isReadWrite())
-                setXMLFile("krita_readonly.rc");
-        else
-                setXMLFile("krita.rc");
+	// XXX Temporary re-instatement of old way to load filters and tools
+	m_toolRegistry = new KisToolRegistry();
+	m_filterRegistry = new KisFilterRegistry();
+
+	if (!doc -> isReadWrite())
+		setXMLFile("krita_readonly.rc");
+	else
+		setXMLFile("krita.rc");
 
 	m_inputDevice = INPUT_DEVICE_UNKNOWN;
 
 	m_selectionManager = new KisSelectionManager(this, doc);
-	m_toolRegistry = new KisToolRegistry();
 
-        m_doc = doc;
-        m_adapter = adapter;
-        m_canvas = 0;
-        m_tabBar = 0;
-        m_tabFirst = 0;
-        m_tabLeft = 0;
-        m_tabRight = 0;
-        m_tabLast = 0;
-        m_hRuler = 0;
-        m_vRuler = 0;
-        m_zoomIn = 0;
-        m_zoomOut = 0;
+	m_doc = doc;
+	m_adapter = adapter;
+	m_canvas = 0;
+	m_tabBar = 0;
+	m_tabFirst = 0;
+	m_tabLeft = 0;
+	m_tabRight = 0;
+	m_tabLast = 0;
+	m_hRuler = 0;
+	m_vRuler = 0;
+	m_zoomIn = 0;
+	m_zoomOut = 0;
 
-        m_layerAdd = 0;
-        m_layerRm = 0;
-        m_layerDup = 0;
-        m_layerLink = 0;
-        m_layerHide = 0;
-        m_layerProperties = 0;
-        m_layerSaveAs = 0;
-        m_layerToImage = 0;
+	m_layerAdd = 0;
+	m_layerRm = 0;
+	m_layerDup = 0;
+	m_layerLink = 0;
+	m_layerHide = 0;
+	m_layerProperties = 0;
+	m_layerSaveAs = 0;
+	m_layerToImage = 0;
 //        m_layerTransform = 0;
-        m_layerRaise = 0;
-        m_layerLower = 0;
-        m_layerTop = 0;
-        m_layerBottom = 0;
+	m_layerRaise = 0;
+	m_layerLower = 0;
+	m_layerTop = 0;
+	m_layerBottom = 0;
 
-        m_imgRm = 0;
-        m_imgDup = 0;
-        m_imgImport = 0;
-        m_imgExport = 0;
-        m_imgScan = 0;
-        m_imgResizeToLayer = 0;
-        m_imgFlatten = 0;
-        m_imgMergeVisible = 0;
-        m_imgMergeLinked = 0;
+	m_imgRm = 0;
+	m_imgDup = 0;
+	m_imgImport = 0;
+	m_imgExport = 0;
+	m_imgScan = 0;
+	m_imgResizeToLayer = 0;
+	m_imgFlatten = 0;
+	m_imgMergeVisible = 0;
+	m_imgMergeLinked = 0;
 	m_imgMergeLayer = 0;
 
-        m_hScroll = 0;
-        m_vScroll = 0;
+	m_hScroll = 0;
+	m_vScroll = 0;
 
-        m_dcop = 0;
-        m_xoff = 0;
-        m_yoff = 0;
-        m_fg = Qt::black;
-        m_bg = Qt::white;
+	m_dcop = 0;
+	m_xoff = 0;
+	m_yoff = 0;
+	m_fg = Qt::black;
+	m_bg = Qt::white;
 
 
-        m_layerchanneldocker = 0;
-        m_shapesdocker = 0;
+	m_layerchanneldocker = 0;
+	m_shapesdocker = 0;
 	m_fillsdocker = 0;
-        m_toolcontroldocker = 0;
-        m_colordocker = 0;
+	m_toolcontroldocker = 0;
+	m_colordocker = 0;
 
 	m_hsvwidget = 0;
 	m_rgbwidget = 0;
 	m_graywidget = 0;
 
-        m_paletteChooser = 0;
-        m_gradientChooser = 0;
-        m_imageChooser = 0;
-        m_brush = 0;
-        m_pattern = 0;
-        m_gradient = 0;
-        m_layerBox = 0;
-        m_currentGuide = 0;
-        m_brushMediator = 0;
-        m_imgBuilderMgr = new KisBuilderMonitor(this);
-        m_progress = 0;
-        m_statusBarZoomLabel = 0;
+	m_paletteChooser = 0;
+	m_gradientChooser = 0;
+	m_imageChooser = 0;
+	m_brush = 0;
+	m_pattern = 0;
+	m_gradient = 0;
+	m_layerBox = 0;
+	m_currentGuide = 0;
+	m_brushMediator = 0;
+	m_imgBuilderMgr = new KisBuilderMonitor(this);
+	m_progress = 0;
+	m_statusBarZoomLabel = 0;
 	m_statusBarSelectionLabel = 0;
 	m_statusBarProfileLabel = 0;
-	m_filterRegistry = new KisFilterRegistry();
 
-        setInstance(KisFactory::global());
+	setInstance(KisFactory::global());
 
-        setupCanvas();
-        setupRulers();
-        setupScrollBars();
-        setupTabBar();
-        setupStatusBar();
+	setupCanvas();
+	setupRulers();
+	setupScrollBars();
+	setupTabBar();
+	setupStatusBar();
 
-        setupActions();
+	setupActions();
 
-        dcopObject();
+	dcopObject();
 
-        connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
-        connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
-        connect(m_doc, SIGNAL(currentImageUpdated(KisImageSP)), SLOT(currentImageUpdated(KisImageSP)));
-        connect(this, SIGNAL(embeddImage(const QString&)), SLOT(slotEmbedImage(const QString&)));
-        connect(m_imgBuilderMgr, SIGNAL(size(Q_INT32)), SLOT(nBuilders(Q_INT32)));
+	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
+	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
+	connect(m_doc, SIGNAL(currentImageUpdated(KisImageSP)), SLOT(currentImageUpdated(KisImageSP)));
+	connect(this, SIGNAL(embeddImage(const QString&)), SLOT(slotEmbedImage(const QString&)));
+	connect(m_imgBuilderMgr, SIGNAL(size(Q_INT32)), SLOT(nBuilders(Q_INT32)));
 
-        setupTools();
-
+	setupTools();
 	setupDockers();
+
 #if KIVIO_STYLE_DOCKERS
 	m_dockersSetup = false;
 #endif
@@ -254,7 +260,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 KisView::~KisView()
 {
-        delete m_dcop;
+	delete m_dcop;
 #if KIVIO_STYLE_DOCKERS
 	delete m_toolDockManager;
 #endif
@@ -262,10 +268,10 @@ KisView::~KisView()
 
 DCOPObject* KisView::dcopObject()
 {
-        if (!m_dcop)
-                m_dcop = new KRayonViewIface(this);
+	if (!m_dcop)
+		m_dcop = new KRayonViewIface(this);
 
-        return m_dcop;
+	return m_dcop;
 }
 
 
@@ -281,7 +287,7 @@ void KisView::setupDockers()
 	m_toolcontroldocker = m_toolDockManager -> createTabbedToolDock("info");
 	m_toolcontroldocker -> setCaption(i18n("Navigator/Info/Options"));
 	KToggleAction * show = new KToggleAction(i18n( "&Navigator/Info/Tool Options" ), 0, 0,
-						 actionCollection(), "view_control_docker" );
+						actionCollection(), "view_control_docker" );
 	connect(show, SIGNAL(toggled(bool)), m_toolcontroldocker, SLOT(makeVisible(bool)));
 	connect(m_toolcontroldocker, SIGNAL(visibleChange(bool)), SLOT(viewControlDocker(bool)));
 
@@ -289,12 +295,12 @@ void KisView::setupDockers()
 	m_layerchanneldocker = m_toolDockManager -> createTabbedToolDock("layers/channels");
 	m_layerchanneldocker -> setCaption(i18n("Layers/Channels" ));
 	show = new KToggleAction(i18n( "&Layers/Channels" ), 0, 0, actionCollection(), "view_layer_docker" );
- 	connect(show, SIGNAL(toggled(bool)), m_layerchanneldocker, SLOT(makeVisible(bool)));
- 	connect(m_layerchanneldocker, SIGNAL(visibleChange(bool)), SLOT(viewLayerChannelDocker(bool)));
+	connect(show, SIGNAL(toggled(bool)), m_layerchanneldocker, SLOT(makeVisible(bool)));
+	connect(m_layerchanneldocker, SIGNAL(visibleChange(bool)), SLOT(viewLayerChannelDocker(bool)));
 
 	// Shapes
 	m_shapesdocker = m_toolDockManager -> createTabbedToolDock("shapes");
-        m_shapesdocker -> setCaption(i18n("Brush Shapes"));
+	m_shapesdocker -> setCaption(i18n("Brush Shapes"));
 	show = new KToggleAction(i18n( "&Shapes" ), 0, 0, actionCollection(), "view_shapes_docker" );
 	connect(show, SIGNAL(toggled(bool)), m_shapesdocker, SLOT(makeVisible(bool)));
 	connect(m_shapesdocker, SIGNAL(visibleChange(bool)), SLOT(viewShapesDocker(bool)));
@@ -316,22 +322,34 @@ void KisView::setupDockers()
 
 #else
 
-        m_layerchanneldocker = new KisDockFrameDocker(this);
-        m_layerchanneldocker -> setCaption(i18n("Layers/Channels/Paths"));
+	m_layerchanneldocker = new KisDockFrameDocker(this);
+	m_layerchanneldocker -> setCaption(i18n("Layers/Channels/Paths"));
 
 	m_shapesdocker = new KisDockFrameDocker(this);
-        m_shapesdocker -> setCaption(i18n("Brush Shapes"));
+	m_shapesdocker -> setCaption(i18n("Brush Shapes"));
 
 	m_fillsdocker = new KisDockFrameDocker(this);
 	m_fillsdocker -> setCaption(i18n("Fills"));
 
-        m_toolcontroldocker = new KisDockFrameDocker(this);
-        m_toolcontroldocker -> setCaption(i18n("Navigator/Info/Options"));
+	m_toolcontroldocker = new KisDockFrameDocker(this);
+	m_toolcontroldocker -> setCaption(i18n("Navigator/Info/Options"));
 
 	m_colordocker = new KisDockFrameDocker(this);
 	m_colordocker -> setCaption(i18n("Color Manager"));
 
+
+	(void)new KAction(i18n( "&Color Manager" ), 0, this, SLOT( viewColorDocker() ), actionCollection(), "view_color_docker" );
+	(void)new KAction(i18n( "&Tool Properties" ), 0, this, SLOT( viewControlDocker() ), actionCollection(), "view_control_docker" );
+	(void)new KAction(i18n( "&Layers/Channels" ), 0, this, SLOT( viewLayerChannelDocker() ), actionCollection(), "view_layer_docker" );
+	(void)new KAction(i18n( "&Shapes" ), 0, this, SLOT( viewShapesDocker() ), actionCollection(), "view_shapes_docker" );
+	(void)new KAction(i18n( "&Fills" ), 0, this, SLOT( viewFillsDocker() ), actionCollection(), "view_fills_docker" );
+
 #endif
+	// Even with kivio dockers, this is always an old-style docker
+	m_paintopdocker = new KisPaintOpBox( this );
+	m_paintopdocker -> setCaption( i18n( "Tools" ) );
+	(void)new KAction(i18n( "&Tools" ), 0, this, SLOT( viewPaintOpDocker() ), actionCollection(), "view_paintop_docker" );
+
 
 	// ---------------------------------------------------------------------
 	// Control box
@@ -354,46 +372,46 @@ void KisView::setupDockers()
 	m_toolcontroldocker -> plug(m_birdEyeBox);
 
 
- 	// ---------------------------------------------------------------------
- 	// Layers
+	// ---------------------------------------------------------------------
+	// Layers
 
-        m_layerBox = new KisLayerBox(i18n("Layer"), KisLayerBox::SHOWALL, m_layerchanneldocker);
-        m_layerBox -> setCaption(i18n("Layers"));
+	m_layerBox = new KisLayerBox(i18n("Layer"), KisLayerBox::SHOWALL, m_layerchanneldocker);
+	m_layerBox -> setCaption(i18n("Layers"));
 
-        connect(m_layerBox, SIGNAL(itemToggleVisible()), SLOT(layerToggleVisible()));
-        connect(m_layerBox, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
-        connect(m_layerBox, SIGNAL(itemToggleLinked()), SLOT(layerToggleLinked()));
-        connect(m_layerBox, SIGNAL(itemProperties()), SLOT(layerProperties()));
-        connect(m_layerBox, SIGNAL(itemAdd()), SLOT(layerAdd()));
-        connect(m_layerBox, SIGNAL(itemRemove()), SLOT(layerRemove()));
-        connect(m_layerBox, SIGNAL(itemAddMask(int)), SLOT(layerAddMask(int)));
-        connect(m_layerBox, SIGNAL(itemRmMask(int)), SLOT(layerRmMask(int)));
-        connect(m_layerBox, SIGNAL(itemRaise()), SLOT(layerRaise()));
-        connect(m_layerBox, SIGNAL(itemLower()), SLOT(layerLower()));
-        connect(m_layerBox, SIGNAL(itemFront()), SLOT(layerFront()));
-        connect(m_layerBox, SIGNAL(itemBack()), SLOT(layerBack()));
-        connect(m_layerBox, SIGNAL(itemLevel(int)), SLOT(layerLevel(int)));
+	connect(m_layerBox, SIGNAL(itemToggleVisible()), SLOT(layerToggleVisible()));
+	connect(m_layerBox, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
+	connect(m_layerBox, SIGNAL(itemToggleLinked()), SLOT(layerToggleLinked()));
+	connect(m_layerBox, SIGNAL(itemProperties()), SLOT(layerProperties()));
+	connect(m_layerBox, SIGNAL(itemAdd()), SLOT(layerAdd()));
+	connect(m_layerBox, SIGNAL(itemRemove()), SLOT(layerRemove()));
+	connect(m_layerBox, SIGNAL(itemAddMask(int)), SLOT(layerAddMask(int)));
+	connect(m_layerBox, SIGNAL(itemRmMask(int)), SLOT(layerRmMask(int)));
+	connect(m_layerBox, SIGNAL(itemRaise()), SLOT(layerRaise()));
+	connect(m_layerBox, SIGNAL(itemLower()), SLOT(layerLower()));
+	connect(m_layerBox, SIGNAL(itemFront()), SLOT(layerFront()));
+	connect(m_layerBox, SIGNAL(itemBack()), SLOT(layerBack()));
+	connect(m_layerBox, SIGNAL(itemLevel(int)), SLOT(layerLevel(int)));
 
-        m_layerchanneldocker -> plug(m_layerBox);
-        layersUpdated();
+	m_layerchanneldocker -> plug(m_layerBox);
+	layersUpdated();
 
 
 	// Channels
-        m_channelView = new KisChannelView(m_doc, this);
-        m_channelView -> setCaption(i18n("Channels"));
-        m_layerchanneldocker -> plug(m_channelView);
+	m_channelView = new KisChannelView(m_doc, this);
+	m_channelView -> setCaption(i18n("Channels"));
+	m_layerchanneldocker -> plug(m_channelView);
 
 
 	// ---------------------------------------------------------------------
 	// Shapes
 
 
-        m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
-                                                  m_shapesdocker, "brush_chooser", this);
+	m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
+							m_shapesdocker, "brush_chooser", this);
 
-        m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
-        m_shapesdocker -> plug(m_brushMediator -> chooserWidget());
-        connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
+	m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
+	m_shapesdocker -> plug(m_brushMediator -> chooserWidget());
+	connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
 
 	// AutoBrush
 	m_autobrush = new KisAutobrush(m_shapesdocker, "autobrush", i18n("Autobrush"));
@@ -410,15 +428,15 @@ void KisView::setupDockers()
 
 
 	// Setup patterns
-        m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
-                                                    m_fillsdocker, "pattern chooser", this);
-        m_pattern = dynamic_cast<KisPattern*>(m_patternMediator -> currentResource());
-        m_fillsdocker -> plug(m_patternMediator -> chooserWidget());
-        connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
+	m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
+							m_fillsdocker, "pattern chooser", this);
+	m_pattern = dynamic_cast<KisPattern*>(m_patternMediator -> currentResource());
+	m_fillsdocker -> plug(m_patternMediator -> chooserWidget());
+	connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
 
 	// Setup gradients
 	m_gradientMediator = new KisResourceMediator(MEDIATE_GRADIENTS, rserver, i18n("Gradients"),
-						    m_fillsdocker, "gradient chooser", this);
+						m_fillsdocker, "gradient chooser", this);
 	m_gradient = dynamic_cast<KisGradient*>(m_gradientMediator -> currentResource());
 	m_fillsdocker -> plug(m_gradientMediator -> chooserWidget());
 	connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(gradientActivated(KisResource*)));
@@ -451,18 +469,21 @@ void KisView::setupDockers()
 
 #if KIVIO_STYLE_DOCKERS
 #else
-        // TODO Here should be a better check
-        if ( mainWindow() -> isDockEnabled( DockBottom))
-        {
-                viewControlDocker();
-                viewLayerChannelDocker();
-                viewShapesDocker();
-                viewColorDocker();
+	// TODO Here should be a better check
+	if ( mainWindow() -> isDockEnabled( DockBottom))
+	{
+		viewControlDocker();
+		viewLayerChannelDocker();
+		viewShapesDocker();
+		viewColorDocker();
 		viewFillsDocker();
-		m_fillsdocker -> shade(true);
-                mainWindow() -> setDockEnabled( DockBottom, false);
-                mainWindow() -> setDockEnabled( DockTop, false);
-        }
+		viewPaintOpDocker();
+
+		mainWindow() -> setDockEnabled( DockBottom, false);
+		mainWindow() -> setDockEnabled( DockTop, false);
+		mainWindow() -> moveDockWindow( m_paintopdocker, QMainWindow::DockLeft  );
+		mainWindow() -> moveDockWindow( m_colordocker, QMainWindow::DockLeft);
+	}
 #endif
 }
 
@@ -470,109 +491,109 @@ void KisView::setupScrollBars()
 {
 	m_scrollX = 0;
 	m_scrollY = 0;
-        m_vScroll = new QScrollBar(QScrollBar::Vertical, this);
-        m_hScroll = new QScrollBar(QScrollBar::Horizontal, this);
-        m_vScroll -> setGeometry(width() - 16, 20, 16, height() - 36);
-        m_hScroll -> setGeometry(20, height() - 16, width() - 36, 16);
-        m_hScroll -> setValue(0);
-        m_vScroll -> setValue(0);
-        QObject::connect(m_vScroll, SIGNAL(valueChanged(int)), this, SLOT(scrollV(int)));
-        QObject::connect(m_hScroll, SIGNAL(valueChanged(int)), this, SLOT(scrollH(int)));
+	m_vScroll = new QScrollBar(QScrollBar::Vertical, this);
+	m_hScroll = new QScrollBar(QScrollBar::Horizontal, this);
+	m_vScroll -> setGeometry(width() - 16, 20, 16, height() - 36);
+	m_hScroll -> setGeometry(20, height() - 16, width() - 36, 16);
+	m_hScroll -> setValue(0);
+	m_vScroll -> setValue(0);
+	QObject::connect(m_vScroll, SIGNAL(valueChanged(int)), this, SLOT(scrollV(int)));
+	QObject::connect(m_hScroll, SIGNAL(valueChanged(int)), this, SLOT(scrollH(int)));
 }
 
 void KisView::setupRulers()
 {
-        m_hRuler = new KisRuler(Qt::Horizontal, this);
-        m_vRuler = new KisRuler(Qt::Vertical, this);
-        m_hRuler -> setGeometry(20, 0, width() - 20, 20);
-        m_vRuler -> setGeometry(0, 20, 20, height() - 20);
+	m_hRuler = new KisRuler(Qt::Horizontal, this);
+	m_vRuler = new KisRuler(Qt::Vertical, this);
+	m_hRuler -> setGeometry(20, 0, width() - 20, 20);
+	m_vRuler -> setGeometry(0, 20, 20, height() - 20);
 
-        if (statusBar()) {
-                m_hRuler -> installEventFilter(this);
-                m_vRuler -> installEventFilter(this);
-        }
+	if (statusBar()) {
+		m_hRuler -> installEventFilter(this);
+		m_vRuler -> installEventFilter(this);
+	}
 }
 
 void KisView::setupTabBar()
 {
-        KStatusBar *sb = statusBar();
+	KStatusBar *sb = statusBar();
 
-        if (sb) {
-                m_tabBar = new KoTabBar(this);
-                updateTabBar();
-                connect(m_tabBar, SIGNAL(tabChanged(const QString&)), SLOT(selectImage(const QString&)));
-                connect(m_doc, SIGNAL(imageListUpdated()), SLOT(updateTabBar()));
-                connect( m_tabBar, SIGNAL( doubleClicked() ), this, SLOT( slotRename() ) );
-                connect( m_tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ), this, SLOT( moveImage( unsigned, unsigned ) ) );
-                connect( m_tabBar, SIGNAL( contextMenu( const QPoint& ) ), this, SLOT( popupTabBarMenu( const QPoint& ) ) );
-        }
+	if (sb) {
+		m_tabBar = new KoTabBar(this);
+		updateTabBar();
+		connect(m_tabBar, SIGNAL(tabChanged(const QString&)), SLOT(selectImage(const QString&)));
+		connect(m_doc, SIGNAL(imageListUpdated()), SLOT(updateTabBar()));
+		connect( m_tabBar, SIGNAL( doubleClicked() ), this, SLOT( slotRename() ) );
+		connect( m_tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ), this, SLOT( moveImage( unsigned, unsigned ) ) );
+		connect( m_tabBar, SIGNAL( contextMenu( const QPoint& ) ), this, SLOT( popupTabBarMenu( const QPoint& ) ) );
+	}
 }
 
 void KisView::popupTabBarMenu( const QPoint& _point )
 {
-        if ( !m_doc->isReadWrite() || !factory() )
-                return;
-        static_cast<QPopupMenu*>(factory()->container("menuimage_popup",this))->popup(_point);
+	if ( !m_doc->isReadWrite() || !factory() )
+		return;
+	static_cast<QPopupMenu*>(factory()->container("menuimage_popup",this))->popup(_point);
 }
 
 void KisView::moveImage( unsigned img , unsigned target)
 {
-        // XXX: todo
+	// XXX: todo
 #if 0  //code from kspread adapt it.
-        QStringList vs = d->workbook->visibleSheets();
+	QStringList vs = d->workbook->visibleSheets();
 
-        if( target >= vs.count() )
-                d->workbook->moveTable( vs[ img ], vs[ vs.count()-1 ], false );
-        else
-                d->workbook->moveTable( vs[ img ], vs[ target ], true );
+	if( target >= vs.count() )
+		d->workbook->moveTable( vs[ img ], vs[ vs.count()-1 ], false );
+	else
+		d->workbook->moveTable( vs[ img ], vs[ target ], true );
 #endif
-        m_tabBar->moveTab( img, target );
+	m_tabBar->moveTab( img, target );
 }
 
 void KisView::slotRename()
 {
-        bool ok;
-        QString activeName = currentImgName();
-        QString newName = KInputDialog::getText( i18n("Image Name"), i18n("Enter name:"), activeName, &ok, this );
+	bool ok;
+	QString activeName = currentImgName();
+	QString newName = KInputDialog::getText( i18n("Image Name"), i18n("Enter name:"), activeName, &ok, this );
 
-        // Have a different name ?
-        if ( ok ) // User pushed an OK button.
-        {
-                if ( (newName.stripWhiteSpace()).isEmpty() ) // Image name is empty.
-                {
-                        KNotifyClient::beep();
-                        KMessageBox::information( this, i18n("Image name cannot be empty."), i18n("Change Image Name") );
-                        // Recursion
-                        slotRename();
-                        return;
-                }
-                else if ( newName != activeName ) // Image name changed.
-                {
-                        if ( m_doc->findImage(newName) )
-                        {
-                                KNotifyClient::beep();
-                                KMessageBox::information( this, i18n("This name is already used."), i18n("Change Image Name") );
-                                // Recursion
-                                slotRename();
-                                return;
-                        }
-                        m_doc->renameImage(activeName, newName);
-                        m_doc->setModified( true );
-                }
-        }
+	// Have a different name ?
+	if ( ok ) // User pushed an OK button.
+	{
+		if ( (newName.stripWhiteSpace()).isEmpty() ) // Image name is empty.
+		{
+			KNotifyClient::beep();
+			KMessageBox::information( this, i18n("Image name cannot be empty."), i18n("Change Image Name") );
+			// Recursion
+			slotRename();
+			return;
+		}
+		else if ( newName != activeName ) // Image name changed.
+		{
+			if ( m_doc->findImage(newName) )
+			{
+				KNotifyClient::beep();
+				KMessageBox::information( this, i18n("This name is already used."), i18n("Change Image Name") );
+				// Recursion
+				slotRename();
+				return;
+			}
+			m_doc->renameImage(activeName, newName);
+			m_doc->setModified( true );
+		}
+	}
 }
 
 void KisView::updateStatusBarZoomLabel ()
 {
-        if (zoom () >= 1)
-                m_statusBarZoomLabel->setText(i18n ("Zoom %1:1").arg (zoom ()));
-        else if (zoom () > 0)
-                m_statusBarZoomLabel->setText(i18n ("Zoom 1:%1").arg (1 / zoom ()));
-        else
-        {
-                kdError () << "KisView::updateStatusBarZoomLabel() with 0 zoom" << endl;
-                m_statusBarZoomLabel->setText(QString::null);
-        }
+	if (zoom () >= 1)
+		m_statusBarZoomLabel->setText(i18n ("Zoom %1:1").arg (zoom ()));
+	else if (zoom () > 0)
+		m_statusBarZoomLabel->setText(i18n ("Zoom 1:%1").arg (1 / zoom ()));
+	else
+	{
+		kdError () << "KisView::updateStatusBarZoomLabel() with 0 zoom" << endl;
+		m_statusBarZoomLabel->setText(QString::null);
+	}
 }
 
 void KisView::updateStatusBarSelectionLabel()
@@ -581,7 +602,7 @@ void KisView::updateStatusBarSelectionLabel()
 		return;
 	}
 
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 	if (img) {
 		KisLayerSP layer = img -> activeLayer();
 		if (layer) {
@@ -634,25 +655,25 @@ void KisView::resetMonitorProfile()
 // 	} else {
 // 		kdDebug() << "Empty monitor profile " << monitorProfileName << "\n";
 // 	}
-	
+
 }
 
 void KisView::setupStatusBar()
 {
-        KStatusBar *sb = statusBar();
+	KStatusBar *sb = statusBar();
 
-        if (sb) {
-                QLabel *lbl;
+	if (sb) {
+		QLabel *lbl;
 
-                lbl = new KisLabelCursorPos(sb);
-                connect(this, SIGNAL(cursorPosition(Q_INT32, Q_INT32)), lbl, SLOT(updatePos(Q_INT32, Q_INT32)));
-                connect(this, SIGNAL(cursorEnter()), lbl, SLOT(enter()));
-                connect(this, SIGNAL(cursorLeave()), lbl, SLOT(leave()));
-                addStatusBarItem(lbl, 0);
+		lbl = new KisLabelCursorPos(sb);
+		connect(this, SIGNAL(cursorPosition(Q_INT32, Q_INT32)), lbl, SLOT(updatePos(Q_INT32, Q_INT32)));
+		connect(this, SIGNAL(cursorEnter()), lbl, SLOT(enter()));
+		connect(this, SIGNAL(cursorLeave()), lbl, SLOT(leave()));
+		addStatusBarItem(lbl, 0);
 
-                m_statusBarZoomLabel = new QLabel(sb);
-                addStatusBarItem(m_statusBarZoomLabel, 1);
-                updateStatusBarZoomLabel();
+		m_statusBarZoomLabel = new QLabel(sb);
+		addStatusBarItem(m_statusBarZoomLabel, 1);
+		updateStatusBarZoomLabel();
 
 
 		m_statusBarSelectionLabel = new QLabel(sb);
@@ -664,14 +685,14 @@ void KisView::setupStatusBar()
 		addStatusBarItem(m_statusBarProfileLabel, 3);
 		updateStatusBarProfileLabel();
 
-                m_progress = new KisLabelProgress(this);
-                m_progress -> setMaximumWidth(225);
-                m_progress -> setMaximumHeight(sb -> height());
+		m_progress = new KisLabelProgress(this);
+		m_progress -> setMaximumWidth(225);
+		m_progress -> setMaximumHeight(sb -> height());
 
-                addStatusBarItem(m_progress, 4, true);
+		addStatusBarItem(m_progress, 4, true);
 
-                m_progress -> hide();
-        }
+		m_progress -> hide();
+	}
 }
 
 void KisView::setupActions()
@@ -679,67 +700,67 @@ void KisView::setupActions()
 	m_selectionManager -> setup(actionCollection());
 
 
-        // navigation actions
-        KStdAction::redisplay(this, SLOT(canvasRefresh()), actionCollection(), "refresh_canvas");
-        (void)new KAction(i18n("Reset Button"), "stop", 0, this, SLOT(reset()), actionCollection(), "panic_button");
+	// navigation actions
+	KStdAction::redisplay(this, SLOT(canvasRefresh()), actionCollection(), "refresh_canvas");
+	(void)new KAction(i18n("Reset Button"), "stop", 0, this, SLOT(reset()), actionCollection(), "panic_button");
 
 
 	m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
 	connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
 
-        // import/export actions
-        m_imgImport = new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
-        m_imgExport = new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
+	// import/export actions
+	m_imgImport = new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
+	m_imgExport = new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
 	m_imgProperties = new KAction(i18n("Image properties..."), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
-        m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
-        m_imgResizeToLayer = new KAction(i18n("Resize Image to Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
-        // view actions
-        m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
-        m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
+	m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
+	m_imgResizeToLayer = new KAction(i18n("Resize Image to Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
+	// view actions
+	m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
+	m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
 
-        // tool settings actions
-        (void)new KAction(i18n("&Gradient Dialog..."), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
+	// tool settings actions
+	(void)new KAction(i18n("&Gradient Dialog..."), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
 
-        // layer actions
-        m_layerAdd = new KAction(i18n("&Add Layer..."), 0, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
-        m_layerRm = new KAction(i18n("&Remove Layer"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
-        m_layerDup = new KAction(i18n("Duplicate Layer"), 0, this, SLOT(layerDuplicate()), actionCollection(), "duplicate_layer");
-        m_layerLink = new KAction(i18n("&Link/Unlink Layer"), 0, this, SLOT(layerToggleLinked()), actionCollection(), "link_layer");
-        m_layerHide = new KAction(i18n("&Hide/Show Layer"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");
-        m_layerRaise = new KAction(i18n("Raise Layer"), "raiselayer", 0, this, SLOT(layerRaise()), actionCollection(), "raiselayer");
-        m_layerLower = new KAction(i18n("Lower Layer"), "lowerlayer", 0, this, SLOT(layerLower()), actionCollection(), "lowerlayer");
-        m_layerTop = new KAction(i18n("Layer to Top"), 0, this, SLOT(layerFront()), actionCollection(), "toplayer");
-        m_layerBottom = new KAction(i18n("Layer to Bottom"), 0, this, SLOT(layerBack()), actionCollection(), "bottomlayer");
-        m_layerProperties = new KAction(i18n("Layer Properties"), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
-        (void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
-        m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
-        m_layerToImage = new KAction(i18n("Layer to Image"), 0, this, SLOT(layerToImage()), actionCollection(), "layer_to_image");
+	// layer actions
+	m_layerAdd = new KAction(i18n("&Add Layer..."), 0, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
+	m_layerRm = new KAction(i18n("&Remove Layer"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
+	m_layerDup = new KAction(i18n("Duplicate Layer"), 0, this, SLOT(layerDuplicate()), actionCollection(), "duplicate_layer");
+	m_layerLink = new KAction(i18n("&Link/Unlink Layer"), 0, this, SLOT(layerToggleLinked()), actionCollection(), "link_layer");
+	m_layerHide = new KAction(i18n("&Hide/Show Layer"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");
+	m_layerRaise = new KAction(i18n("Raise Layer"), "raiselayer", 0, this, SLOT(layerRaise()), actionCollection(), "raiselayer");
+	m_layerLower = new KAction(i18n("Lower Layer"), "lowerlayer", 0, this, SLOT(layerLower()), actionCollection(), "lowerlayer");
+	m_layerTop = new KAction(i18n("Layer to Top"), 0, this, SLOT(layerFront()), actionCollection(), "toplayer");
+	m_layerBottom = new KAction(i18n("Layer to Bottom"), 0, this, SLOT(layerBack()), actionCollection(), "bottomlayer");
+	m_layerProperties = new KAction(i18n("Layer Properties"), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
+	(void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
+	m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
+	m_layerToImage = new KAction(i18n("Layer to Image"), 0, this, SLOT(layerToImage()), actionCollection(), "layer_to_image");
 
-        // layer transformations
+	// layer transformations
 //        m_layerTransform = new KAction(i18n("Scale Layer..."), 0, this, SLOT(layerTransform()), actionCollection(), "transformlayer");
-        (void)new KAction(i18n("Rotate &180"), 0, this, SLOT(rotateLayer180()), actionCollection(), "rotateLayer180");
-        (void)new KAction(i18n("Rotate &270"), 0, this, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
-        (void)new KAction(i18n("Rotate &90"), 0, this, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerRight90");
-        (void)new KAction(i18n("Rotate &Custom..."), 0, this, SLOT(rotateLayerCustom()), actionCollection(), "rotateLayerCustom");
-        (void)new KAction(i18n("Mirror Along &X Axis"), 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
-        (void)new KAction(i18n("Mirror Along &Y Axis"), 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
+	(void)new KAction(i18n("Rotate &180"), 0, this, SLOT(rotateLayer180()), actionCollection(), "rotateLayer180");
+	(void)new KAction(i18n("Rotate &270"), 0, this, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
+	(void)new KAction(i18n("Rotate &90"), 0, this, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerRight90");
+	(void)new KAction(i18n("Rotate &Custom..."), 0, this, SLOT(rotateLayerCustom()), actionCollection(), "rotateLayerCustom");
+	(void)new KAction(i18n("Mirror Along &X Axis"), 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
+	(void)new KAction(i18n("Mirror Along &Y Axis"), 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
 
-        // color actions
-        (void)new KAction(i18n("Select Foreground Color..."), 0, this, SLOT(selectFGColor()), actionCollection(), "select_fgColor");
-        (void)new KAction(i18n("Select Background Color..."), 0, this, SLOT(selectBGColor()), actionCollection(), "select_bgColor");
-        (void)new KAction(i18n("Reverse Foreground/Background Colors"), 0, this, SLOT(reverseFGAndBGColors()), actionCollection(), "reverse_fg_bg");
+	// color actions
+	(void)new KAction(i18n("Select Foreground Color..."), 0, this, SLOT(selectFGColor()), actionCollection(), "select_fgColor");
+	(void)new KAction(i18n("Select Background Color..."), 0, this, SLOT(selectBGColor()), actionCollection(), "select_bgColor");
+	(void)new KAction(i18n("Reverse Foreground/Background Colors"), 0, this, SLOT(reverseFGAndBGColors()), actionCollection(), "reverse_fg_bg");
 
-        // image actions
-        m_imgRename = new KAction(i18n("Rename Current Image..."), 0, this, SLOT(slotRename()), actionCollection(), "rename_current_image_tab");
-        (void)new KAction(i18n("Add New Image..."), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
-        m_imgRm = new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
-        m_imgDup = new KAction(i18n("Duplicate Image"), 0, this, SLOT(duplicateCurrentImg()), actionCollection(), "duplicate_image");
-        m_imgFlatten = new KAction(i18n("Flatten Image"), 0, this, SLOT(flattenImage()), actionCollection(), "flatten_image");
-        m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
-        m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(mergeLinkedLayers()), actionCollection(), "merge_linked_layers");
+	// image actions
+	m_imgRename = new KAction(i18n("Rename Current Image..."), 0, this, SLOT(slotRename()), actionCollection(), "rename_current_image_tab");
+	(void)new KAction(i18n("Add New Image..."), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
+	m_imgRm = new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
+	m_imgDup = new KAction(i18n("Duplicate Image"), 0, this, SLOT(duplicateCurrentImg()), actionCollection(), "duplicate_image");
+	m_imgFlatten = new KAction(i18n("Flatten Image"), 0, this, SLOT(flattenImage()), actionCollection(), "flatten_image");
+	m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
+	m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(mergeLinkedLayers()), actionCollection(), "merge_linked_layers");
 	m_imgMergeLayer = new KAction(i18n("&Merge Layer"), 0, this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
-        // setting actions
-        KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
+	// setting actions
+	KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
 	m_RulerAction = new KToggleAction( i18n( "Show Rulers" ), 0, this, SLOT( showRuler() ), actionCollection(), "view_ruler" );
 	m_RulerAction->setChecked( true );
@@ -747,98 +768,98 @@ void KisView::setupActions()
 
 void KisView::reset()
 {
-        zoomUpdateGUI(0, 0, 1.0);
-        canvasRefresh();
+	zoomUpdateGUI(0, 0, 1.0);
+	canvasRefresh();
 }
 
 void KisView::resizeEvent(QResizeEvent *)
 {
-        KisImageSP img = currentImg();
-        Q_INT32 rulerThickness = m_RulerAction -> isChecked() ? 20 : 0;
-        Q_INT32 scrollBarExtent = style().pixelMetric(QStyle::PM_ScrollBarExtent);
-        Q_INT32 tbarOffset = 0;
-        Q_INT32 tbarBtnH = scrollBarExtent;
-        Q_INT32 drawH;
-        Q_INT32 drawW;
-        Q_INT32 docW;
-        Q_INT32 docH;
+	KisImageSP img = currentImg();
+	Q_INT32 rulerThickness = m_RulerAction -> isChecked() ? 20 : 0;
+	Q_INT32 scrollBarExtent = style().pixelMetric(QStyle::PM_ScrollBarExtent);
+	Q_INT32 tbarOffset = 0;
+	Q_INT32 tbarBtnH = scrollBarExtent;
+	Q_INT32 drawH;
+	Q_INT32 drawW;
+	Q_INT32 docW;
+	Q_INT32 docH;
 
-        if (img) {
-                KisGuideMgr *mgr = img -> guides();
-                mgr -> resize(size());
-        }
+	if (img) {
+		KisGuideMgr *mgr = img -> guides();
+		mgr -> resize(size());
+	}
 
-        m_hRuler -> setGeometry(rulerThickness, 0, width() - rulerThickness, rulerThickness);
-        m_vRuler -> setGeometry(0, rulerThickness, rulerThickness, height() - (rulerThickness + tbarBtnH));
+	m_hRuler -> setGeometry(rulerThickness, 0, width() - rulerThickness, rulerThickness);
+	m_vRuler -> setGeometry(0, rulerThickness, rulerThickness, height() - (rulerThickness + tbarBtnH));
 
-        docW = static_cast<Q_INT32>(ceil(docWidth() * zoom()));
-        docH = static_cast<Q_INT32>(ceil(docHeight() * zoom()));
+	docW = static_cast<Q_INT32>(ceil(docWidth() * zoom()));
+	docH = static_cast<Q_INT32>(ceil(docHeight() * zoom()));
 
-        drawH = height() - rulerThickness - tbarBtnH - canvasYOffset();
-        drawW = width() - rulerThickness - canvasXOffset();
+	drawH = height() - rulerThickness - tbarBtnH - canvasYOffset();
+	drawW = width() - rulerThickness - canvasXOffset();
 
 	if (drawH < docH) {
 		// Will need vert scrollbar
 		drawW -= scrollBarExtent;
-        }
+	}
 
-        m_vScroll -> setEnabled(docH > drawH);
-        m_hScroll -> setEnabled(docW > drawW);
+	m_vScroll -> setEnabled(docH > drawH);
+	m_hScroll -> setEnabled(docW > drawW);
 
-        if (docH <= drawH && docW <= drawW) {
-                // we need no scrollbars
-                m_vScroll -> hide();
-                m_hScroll -> hide();
-                m_vScroll -> setValue(0);
-                m_hScroll -> setValue(0);
+	if (docH <= drawH && docW <= drawW) {
+		// we need no scrollbars
+		m_vScroll -> hide();
+		m_hScroll -> hide();
+		m_vScroll -> setValue(0);
+		m_hScroll -> setValue(0);
 
-                if (m_tabBar)
-                        m_tabBar -> setGeometry(tbarOffset, height() - tbarBtnH, width() - tbarOffset, tbarBtnH);
-        } else if (docH <= drawH) {
-                // we need a horizontal scrollbar only
-                m_vScroll -> hide();
-                m_vScroll -> setValue(0);
-                m_hScroll -> setRange(0, docW - drawW);
-                m_hScroll -> setGeometry(tbarOffset + (width() - tbarOffset) / 2,
-                                         height() - scrollBarExtent,
-                                         (width() - tbarOffset) / 2,
-                                         scrollBarExtent);
-                m_hScroll -> show();
+		if (m_tabBar)
+			m_tabBar -> setGeometry(tbarOffset, height() - tbarBtnH, width() - tbarOffset, tbarBtnH);
+	} else if (docH <= drawH) {
+		// we need a horizontal scrollbar only
+		m_vScroll -> hide();
+		m_vScroll -> setValue(0);
+		m_hScroll -> setRange(0, docW - drawW);
+		m_hScroll -> setGeometry(tbarOffset + (width() - tbarOffset) / 2,
+					height() - scrollBarExtent,
+					(width() - tbarOffset) / 2,
+					scrollBarExtent);
+		m_hScroll -> show();
 
-                if (m_tabBar)
-                        m_tabBar -> setGeometry(tbarOffset, height() - tbarBtnH, (width() - tbarOffset) / 2, tbarBtnH);
-        } else if(docW <= drawW) {
-                // we need a vertical scrollbar only
-                m_hScroll -> hide();
-                m_hScroll -> setValue(0);
-                m_vScroll -> setRange(0, docH - drawH);
-                m_vScroll -> setGeometry(width() - scrollBarExtent, rulerThickness, scrollBarExtent, height() - (rulerThickness + tbarBtnH));
-                m_vScroll -> show();
+		if (m_tabBar)
+			m_tabBar -> setGeometry(tbarOffset, height() - tbarBtnH, (width() - tbarOffset) / 2, tbarBtnH);
+	} else if(docW <= drawW) {
+		// we need a vertical scrollbar only
+		m_hScroll -> hide();
+		m_hScroll -> setValue(0);
+		m_vScroll -> setRange(0, docH - drawH);
+		m_vScroll -> setGeometry(width() - scrollBarExtent, rulerThickness, scrollBarExtent, height() - (rulerThickness + tbarBtnH));
+		m_vScroll -> show();
 
-                if (m_tabBar)
-                        m_tabBar -> setGeometry(tbarOffset, height() - tbarBtnH, width() - tbarOffset, tbarBtnH);
-        } else {
-                // we need both scrollbars
-                m_vScroll -> setRange(0, docH - drawH);
-                m_vScroll -> setGeometry(width() - scrollBarExtent, rulerThickness, scrollBarExtent, height() - (rulerThickness + tbarBtnH));
-                m_hScroll -> setRange(0, docW - drawW);
-                m_hScroll -> setGeometry(tbarOffset + (width() - tbarOffset) / 2,
-                                         height() - scrollBarExtent,
-                                         (width() - tbarOffset) / 2,
-                                         scrollBarExtent);
-                m_vScroll -> show();
-                m_hScroll -> show();
+		if (m_tabBar)
+			m_tabBar -> setGeometry(tbarOffset, height() - tbarBtnH, width() - tbarOffset, tbarBtnH);
+	} else {
+		// we need both scrollbars
+		m_vScroll -> setRange(0, docH - drawH);
+		m_vScroll -> setGeometry(width() - scrollBarExtent, rulerThickness, scrollBarExtent, height() - (rulerThickness + tbarBtnH));
+		m_hScroll -> setRange(0, docW - drawW);
+		m_hScroll -> setGeometry(tbarOffset + (width() - tbarOffset) / 2,
+					height() - scrollBarExtent,
+					(width() - tbarOffset) / 2,
+					scrollBarExtent);
+		m_vScroll -> show();
+		m_hScroll -> show();
 
-                if (m_tabBar)
-                        m_tabBar -> setGeometry(tbarOffset, height() - tbarBtnH, (width() - tbarOffset)/2, tbarBtnH);
-        }
+		if (m_tabBar)
+			m_tabBar -> setGeometry(tbarOffset, height() - tbarBtnH, (width() - tbarOffset)/2, tbarBtnH);
+	}
 
 	//Check if rulers are visible
 	if( m_RulerAction->isChecked() )
 		m_canvas -> setGeometry(rulerThickness, rulerThickness, drawW, drawH);
 	else
 		m_canvas -> setGeometry(0, 0, drawW, drawH);
-        m_canvas -> show();
+	m_canvas -> show();
 
 	Q_INT32 oldWidth = m_canvasPixmap.width();
 	Q_INT32 oldHeight = m_canvasPixmap.height();
@@ -857,18 +878,18 @@ void KisView::resizeEvent(QResizeEvent *)
 		}
 	}
 
-        m_vScroll -> setPageStep(drawH);
-        m_hScroll -> setPageStep(drawW);
+	m_vScroll -> setPageStep(drawH);
+	m_hScroll -> setPageStep(drawW);
 
-        if (m_vScroll -> isVisible())
-                m_vRuler -> updateVisibleArea(0, m_vScroll -> value());
-        else
-                m_vRuler -> updateVisibleArea(0, -canvasYOffset());
+	if (m_vScroll -> isVisible())
+		m_vRuler -> updateVisibleArea(0, m_vScroll -> value());
+	else
+		m_vRuler -> updateVisibleArea(0, -canvasYOffset());
 
-        if (m_hScroll -> isVisible())
-                m_hRuler -> updateVisibleArea(m_hScroll -> value(), 0);
-        else
-                m_hRuler -> updateVisibleArea(-canvasXOffset(), 0);
+	if (m_hScroll -> isVisible())
+		m_hRuler -> updateVisibleArea(m_hScroll -> value(), 0);
+	else
+		m_hRuler -> updateVisibleArea(-canvasXOffset(), 0);
 
 	if( m_RulerAction->isChecked() )
 	{
@@ -880,41 +901,41 @@ void KisView::resizeEvent(QResizeEvent *)
 
 void KisView::updateReadWrite(bool readwrite)
 {
-        layerUpdateGUI(readwrite);
+	layerUpdateGUI(readwrite);
 }
 
 void KisView::clearCanvas(const QRect& rc)
 {
-        QPainter gc(&m_canvasPixmap);
+	QPainter gc(&m_canvasPixmap);
 
-        gc.fillRect(rc, backgroundColor());
+	gc.fillRect(rc, backgroundColor());
 }
 
 void KisView::setCurrentTool(KisTool *tool)
 {
 	KisTool *oldTool = currentTool();
 
-        if (oldTool)
-        {
-                if (oldTool -> optionWidget())
+	if (oldTool)
+	{
+		if (oldTool -> optionWidget())
 			if (m_toolcontroldocker) m_toolcontroldocker -> unplug(oldTool -> optionWidget());
-                oldTool -> clear();
-                oldTool -> action() -> setChecked( false );
-        }
+		oldTool -> clear();
+		oldTool -> action() -> setChecked( false );
+	}
 
-        if (tool) {
-                m_inputDeviceToolMap[currentInputDevice()] = tool;
-                tool -> cursor(m_canvas);
+	if (tool) {
+		m_inputDeviceToolMap[currentInputDevice()] = tool;
+		tool -> cursor(m_canvas);
 
-                if(tool -> createOptionWidget(m_toolcontroldocker)){
-                        if (m_toolcontroldocker) {
+		if(tool -> createOptionWidget(m_toolcontroldocker)){
+			if (m_toolcontroldocker) {
 				m_toolcontroldocker -> plug(tool -> optionWidget());
 				m_toolcontroldocker -> showPage(tool -> optionWidget());
 			}
-                }
-                m_canvas -> enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
+		}
+		m_canvas -> enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
 
-                notify();
+		notify();
 		tool -> action() -> setChecked( true );
 
 	} else {
@@ -1019,65 +1040,65 @@ enumInputDevice KisView::currentInputDevice() const
 
 Q_INT32 KisView::horzValue() const
 {
-        return m_hScroll -> value();
+	return m_hScroll -> value();
 }
 
 Q_INT32 KisView::vertValue() const
 {
-        return m_vScroll -> value();
+	return m_vScroll -> value();
 }
 
 void KisView::paintView(const KisRect& r)
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
+	if (img) {
 
-                KisRect vr = windowToView(r);
-                vr &= KisRect(0, 0, m_canvas -> width(), m_canvas -> height());
+		KisRect vr = windowToView(r);
+		vr &= KisRect(0, 0, m_canvas -> width(), m_canvas -> height());
 
-                if (!vr.isNull()) {
+		if (!vr.isNull()) {
 
-                        QPainter gc(&m_canvasPixmap);
-                        QRect wr = viewToWindow(vr).qRect();
+			QPainter gc(&m_canvasPixmap);
+			QRect wr = viewToWindow(vr).qRect();
 
-                        if (wr.left() < 0 || wr.right() >= img -> width() || wr.top() < 0 || wr.bottom() >= img -> height()) {
-                                // Erase areas outside document
-                                QRegion rg(vr.qRect());
-                                rg -= QRegion(windowToView(KisRect(0, 0, img -> width(), img -> height())).qRect());
+			if (wr.left() < 0 || wr.right() >= img -> width() || wr.top() < 0 || wr.bottom() >= img -> height()) {
+				// Erase areas outside document
+				QRegion rg(vr.qRect());
+				rg -= QRegion(windowToView(KisRect(0, 0, img -> width(), img -> height())).qRect());
 
-                                QMemArray<QRect> rects = rg.rects();
+				QMemArray<QRect> rects = rg.rects();
 
-                                for (unsigned int i = 0; i < rects.count(); i++) {
-                                        QRect er = rects[i];
-                                        gc.fillRect(er, backgroundColor());
-                                }
-
-                                wr &= QRect(0, 0, img -> width(), img -> height());
-                        }
-
-                        if (!wr.isNull()) {
-
-                                if (zoom() < 1.0 || zoom() > 1.0) {
-                                        gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
+				for (unsigned int i = 0; i < rects.count(); i++) {
+					QRect er = rects[i];
+					gc.fillRect(er, backgroundColor());
 				}
-                                gc.translate((canvasXOffset() - horzValue()) / zoom(), (canvasYOffset() - vertValue()) / zoom());
 
-                                m_doc -> setCurrentImage(img);
-                                m_doc -> paintContent(gc, wr, monitorProfile());
+				wr &= QRect(0, 0, img -> width(), img -> height());
+			}
+
+			if (!wr.isNull()) {
+
+				if (zoom() < 1.0 || zoom() > 1.0) {
+					gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
+				}
+				gc.translate((canvasXOffset() - horzValue()) / zoom(), (canvasYOffset() - vertValue()) / zoom());
+
+				m_doc -> setCurrentImage(img);
+				m_doc -> paintContent(gc, wr, monitorProfile());
 				m_doc -> setCurrentImage(0);
 
-                                if (currentTool())
-                                        currentTool() -> paint(gc, wr);
-                        }
+				if (currentTool())
+					currentTool() -> paint(gc, wr);
+			}
 
-                        paintGuides();
+			paintGuides();
 			m_canvas -> update(vr.qRect());
-                }
-        } else {
-                clearCanvas(r.qRect());
+		}
+	} else {
+		clearCanvas(r.qRect());
 		m_canvas -> update(r.qRect());
-        }
+	}
 #if KIVIO_STYLE_DOCKERS
 	if (!m_dockersSetup) {
 		m_colordocker -> restore(); //move(w, h); h+=100; // XXX Remember last position
@@ -1093,88 +1114,88 @@ void KisView::paintView(const KisRect& r)
 
 QWidget *KisView::canvas() const
 {
-        return m_canvas;
+	return m_canvas;
 }
 
 void KisView::updateCanvas()
 {
-        KisRect vr(0, 0, m_canvas -> width(), m_canvas -> height());
-        KisRect wr = viewToWindow(vr);
+	KisRect vr(0, 0, m_canvas -> width(), m_canvas -> height());
+	KisRect wr = viewToWindow(vr);
 
-        updateCanvas(wr);
+	updateCanvas(wr);
 }
 
 void KisView::updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-        KisRect rc(x, y, w, h);
+	KisRect rc(x, y, w, h);
 
-        updateCanvas(rc);
+	updateCanvas(rc);
 }
 
 void KisView::updateCanvas(const QRect& rc)
 {
-        updateCanvas(KisRect(rc));
+	updateCanvas(KisRect(rc));
 }
 
 void KisView::updateCanvas(const KisRect& rc)
 {
-        paintView(rc);
+	paintView(rc);
 }
 
 void KisView::layerUpdateGUI(bool enable)
 {
-        KisImageSP img = currentImg();
-        KisLayerSP layer;
-        Q_INT32 nlayers = 0;
-        Q_INT32 layerPos = 0;
+	KisImageSP img = currentImg();
+	KisLayerSP layer;
+	Q_INT32 nlayers = 0;
+	Q_INT32 layerPos = 0;
 
-        if (img) {
-                layer = img -> activeLayer();
-                nlayers = img -> nlayers();
-        }
+	if (img) {
+		layer = img -> activeLayer();
+		nlayers = img -> nlayers();
+	}
 
-        if (layer)
-                layerPos = img->index(layer);
-        enable = enable && img && layer;
-        m_layerDup -> setEnabled(enable);
-        m_layerRm -> setEnabled(enable);
-        m_layerLink -> setEnabled(enable);
-        m_layerHide -> setEnabled(enable);
-        m_layerProperties -> setEnabled(enable);
-        m_layerSaveAs -> setEnabled(enable);
-        m_layerToImage -> setEnabled(enable);
+	if (layer)
+		layerPos = img->index(layer);
+	enable = enable && img && layer;
+	m_layerDup -> setEnabled(enable);
+	m_layerRm -> setEnabled(enable);
+	m_layerLink -> setEnabled(enable);
+	m_layerHide -> setEnabled(enable);
+	m_layerProperties -> setEnabled(enable);
+	m_layerSaveAs -> setEnabled(enable);
+	m_layerToImage -> setEnabled(enable);
 //        m_layerTransform -> setEnabled(enable);
-        m_layerRaise -> setEnabled(enable && nlayers > 1 && layerPos);
-        m_layerLower -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
-        m_layerTop -> setEnabled(enable && nlayers > 1 && layerPos);
-        m_layerBottom -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
-        imgUpdateGUI();
+	m_layerRaise -> setEnabled(enable && nlayers > 1 && layerPos);
+	m_layerLower -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
+	m_layerTop -> setEnabled(enable && nlayers > 1 && layerPos);
+	m_layerBottom -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
+	imgUpdateGUI();
 }
 
 
 void KisView::imgUpdateGUI()
 {
-        const KisImageSP img = currentImg();
-        Q_INT32 n = 0;
-        Q_INT32 nvisible = 0;
-        Q_INT32 nlinked = 0;
+	const KisImageSP img = currentImg();
+	Q_INT32 n = 0;
+	Q_INT32 nvisible = 0;
+	Q_INT32 nlinked = 0;
 
-        m_imgRm -> setEnabled(img != 0);
-        m_imgDup -> setEnabled(img != 0);
-        m_imgExport -> setEnabled(img != 0);
-        m_layerAdd -> setEnabled(img != 0);
-        m_imgResizeToLayer -> setEnabled(img && img -> activeLayer());
+	m_imgRm -> setEnabled(img != 0);
+	m_imgDup -> setEnabled(img != 0);
+	m_imgExport -> setEnabled(img != 0);
+	m_layerAdd -> setEnabled(img != 0);
+	m_imgResizeToLayer -> setEnabled(img && img -> activeLayer());
 
-        if (img) {
+	if (img) {
 		n = img -> nlayers();
 		nvisible = n - img -> nHiddenLayers();
 		nlinked = img -> nLinkedLayers();
-        }
+	}
 
-        m_imgFlatten -> setEnabled(n > 1);
+	m_imgFlatten -> setEnabled(n > 1);
 
-        m_imgMergeVisible -> setEnabled(nvisible > 1 && nvisible != n);
-        m_imgMergeLinked -> setEnabled(nlinked > 1);
+	m_imgMergeVisible -> setEnabled(nvisible > 1 && nvisible != n);
+	m_imgMergeLinked -> setEnabled(nlinked > 1);
 
 	m_imgMergeLayer -> setEnabled(n > 1);
 
@@ -1185,306 +1206,306 @@ void KisView::imgUpdateGUI()
 
 void KisView::updateTabBar()
 {
-        QStringList lst = m_doc->images();
+	QStringList lst = m_doc->images();
 
-        m_tabBar->clear();
+	m_tabBar->clear();
 
-        // populate list
-        if (!lst.empty()) {
-                for (QStringList::Iterator it = lst.begin(); it != lst.end(); ++it)
-                        m_tabBar->addTab(*it);
-        }
+	// populate list
+	if (!lst.empty()) {
+		for (QStringList::Iterator it = lst.begin(); it != lst.end(); ++it)
+			m_tabBar->addTab(*it);
+	}
 
-        if (currentImg())
-                m_tabBar->setActiveTab(currentImgName());
+	if (currentImg())
+		m_tabBar->setActiveTab(currentImgName());
 }
 
 
 void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 {
-        // Disable updates while we change the scrollbar settings.
-        m_canvas -> setUpdatesEnabled(false);
-        m_hScroll -> setUpdatesEnabled(false);
-        m_vScroll -> setUpdatesEnabled(false);
+	// Disable updates while we change the scrollbar settings.
+	m_canvas -> setUpdatesEnabled(false);
+	m_hScroll -> setUpdatesEnabled(false);
+	m_vScroll -> setUpdatesEnabled(false);
 
-        if (x < 0 || y < 0) {
-                // Zoom about the centre of the current display
-                KisImageSP img = currentImg();
+	if (x < 0 || y < 0) {
+		// Zoom about the centre of the current display
+		KisImageSP img = currentImg();
 
-                if (img) {
-                        if (m_hScroll -> isVisible()) {
-                                QPoint c = viewToWindow(QPoint(m_canvas -> width() / 2, m_canvas -> height() / 2));
-                                x = c.x();
-                        }
-                        else {
-                                x = img -> width() / 2;
-                        }
+		if (img) {
+			if (m_hScroll -> isVisible()) {
+				QPoint c = viewToWindow(QPoint(m_canvas -> width() / 2, m_canvas -> height() / 2));
+				x = c.x();
+			}
+			else {
+				x = img -> width() / 2;
+			}
 
-                        if (m_vScroll -> isVisible()) {
-                                QPoint c = viewToWindow(QPoint(m_canvas -> width() / 2, m_canvas -> height() / 2));
-                                y = c.y();
-                        }
-                        else {
-                                y = img -> height() / 2;
-                        }
-                }
-                else {
-                        x = 0;
-                        y = 0;
-                }
-        }
+			if (m_vScroll -> isVisible()) {
+				QPoint c = viewToWindow(QPoint(m_canvas -> width() / 2, m_canvas -> height() / 2));
+				y = c.y();
+			}
+			else {
+				y = img -> height() / 2;
+			}
+		}
+		else {
+			x = 0;
+			y = 0;
+		}
+	}
 
-        setZoom(zf);
+	setZoom(zf);
 
-        Q_ASSERT(m_zoomIn);
-        Q_ASSERT(m_zoomOut);
+	Q_ASSERT(m_zoomIn);
+	Q_ASSERT(m_zoomOut);
 
-        updateStatusBarZoomLabel ();
+	updateStatusBarZoomLabel ();
 
-        m_zoomIn -> setEnabled(zf <= KISVIEW_MAX_ZOOM);
-        m_zoomOut -> setEnabled(zf >= KISVIEW_MIN_ZOOM);
-        resizeEvent(0);
+	m_zoomIn -> setEnabled(zf <= KISVIEW_MAX_ZOOM);
+	m_zoomOut -> setEnabled(zf >= KISVIEW_MIN_ZOOM);
+	resizeEvent(0);
 
-        m_hRuler -> setZoom(zf);
-        m_vRuler -> setZoom(zf);
+	m_hRuler -> setZoom(zf);
+	m_vRuler -> setZoom(zf);
 
-        if (m_hScroll -> isVisible()) {
-                Q_INT32 vcx = m_canvas -> width() / 2;
-                Q_INT32 scrollX = qRound(x * zoom() - vcx);
-                m_hScroll -> setValue(scrollX);
-        }
+	if (m_hScroll -> isVisible()) {
+		Q_INT32 vcx = m_canvas -> width() / 2;
+		Q_INT32 scrollX = qRound(x * zoom() - vcx);
+		m_hScroll -> setValue(scrollX);
+	}
 
-        if (m_vScroll -> isVisible()) {
-                Q_INT32 vcy = m_canvas -> height() / 2;
-                Q_INT32 scrollY = qRound(y * zoom() - vcy);
-                m_vScroll -> setValue(scrollY);
-        }
+	if (m_vScroll -> isVisible()) {
+		Q_INT32 vcy = m_canvas -> height() / 2;
+		Q_INT32 scrollY = qRound(y * zoom() - vcy);
+		m_vScroll -> setValue(scrollY);
+	}
 
-        // Now update everything.
-        m_canvas -> setUpdatesEnabled(true);
-        m_hScroll -> setUpdatesEnabled(true);
-        m_vScroll -> setUpdatesEnabled(true);
-        m_hScroll -> update();
-        m_vScroll -> update();
-        canvasRefresh();
+	// Now update everything.
+	m_canvas -> setUpdatesEnabled(true);
+	m_hScroll -> setUpdatesEnabled(true);
+	m_vScroll -> setUpdatesEnabled(true);
+	m_hScroll -> update();
+	m_vScroll -> update();
+	canvasRefresh();
 }
 
 void KisView::zoomTo(const KisRect& r)
 {
-        if (!r.isNull()) {
+	if (!r.isNull()) {
 
-                double wZoom = fabs(m_canvas -> width() / r.width());
-                double hZoom = fabs(m_canvas -> height() / r.height());
+		double wZoom = fabs(m_canvas -> width() / r.width());
+		double hZoom = fabs(m_canvas -> height() / r.height());
 
-                double zf = kMin(wZoom, hZoom);
+		double zf = kMin(wZoom, hZoom);
 
-                if (zf < KISVIEW_MIN_ZOOM) {
-                        zf = KISVIEW_MIN_ZOOM;
-                }
-                else
-                        if (zf > KISVIEW_MAX_ZOOM) {
-                                zf = KISVIEW_MAX_ZOOM;
-                        }
+		if (zf < KISVIEW_MIN_ZOOM) {
+			zf = KISVIEW_MIN_ZOOM;
+		}
+		else
+			if (zf > KISVIEW_MAX_ZOOM) {
+				zf = KISVIEW_MAX_ZOOM;
+			}
 
-                Q_INT32 cx = qRound(r.center().x());
-                Q_INT32 cy = qRound(r.center().y());
+		Q_INT32 cx = qRound(r.center().x());
+		Q_INT32 cy = qRound(r.center().y());
 
-                zoomUpdateGUI(cx, cy, zf);
-        }
+		zoomUpdateGUI(cx, cy, zf);
+	}
 }
 
 void KisView::zoomTo(const QRect& r)
 {
-        zoomTo(KisRect(r));
+	zoomTo(KisRect(r));
 }
 
 void KisView::zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-        zoomTo(KisRect(x, y, w, h));
+	zoomTo(KisRect(x, y, w, h));
 }
 
 void KisView::zoomIn(Q_INT32 x, Q_INT32 y)
 {
-        if (zoom() <= KISVIEW_MAX_ZOOM)
-                zoomUpdateGUI(x, y, zoom() * 2);
+	if (zoom() <= KISVIEW_MAX_ZOOM)
+		zoomUpdateGUI(x, y, zoom() * 2);
 }
 
 void KisView::zoomOut(Q_INT32 x, Q_INT32 y)
 {
-        if (zoom() >= KISVIEW_MIN_ZOOM)
-                zoomUpdateGUI(x, y, zoom() / 2);
+	if (zoom() >= KISVIEW_MIN_ZOOM)
+		zoomUpdateGUI(x, y, zoom() / 2);
 }
 
 void KisView::zoomIn()
 {
-        slotZoomIn();
+	slotZoomIn();
 }
 
 void KisView::zoomOut()
 {
-        slotZoomOut();
+	slotZoomOut();
 }
 
 void KisView::slotZoomIn()
 {
-        if (zoom() <= KISVIEW_MAX_ZOOM)
-                zoomUpdateGUI(-1, -1, zoom() * 2);
+	if (zoom() <= KISVIEW_MAX_ZOOM)
+		zoomUpdateGUI(-1, -1, zoom() * 2);
 }
 
 void KisView::slotZoomOut()
 {
-        if (zoom() >= KISVIEW_MIN_ZOOM)
-                zoomUpdateGUI(-1, -1, zoom() / 2);
+	if (zoom() >= KISVIEW_MIN_ZOOM)
+		zoomUpdateGUI(-1, -1, zoom() / 2);
 }
 
 /*
-  dialog_gradient - invokes a GradientDialog which is
-  now an options dialog.  Gradients can be used by many tools
-  and are not a tool in themselves.
+dialog_gradient - invokes a GradientDialog which is
+now an options dialog.  Gradients can be used by many tools
+and are not a tool in themselves.
 */
 void KisView::dialog_gradient()
 {
 #if 0
-        GradientDialog *pGradientDialog = new GradientDialog(m_gradient);
-        pGradientDialog -> exec();
+	GradientDialog *pGradientDialog = new GradientDialog(m_gradient);
+	pGradientDialog -> exec();
 
-        if (pGradientDialog->result() == QDialog::Accepted) {
-                /* set m_pGradient here and update gradientwidget in sidebar
-                   to show sample of gradient selected. Also update effect for
-                   the framebuffer's gradient, which is used in painting */
+	if (pGradientDialog->result() == QDialog::Accepted) {
+		/* set m_pGradient here and update gradientwidget in sidebar
+		to show sample of gradient selected. Also update effect for
+		the framebuffer's gradient, which is used in painting */
 
-                int type = pGradientDialog->gradientTab()->gradientType();
-                m_gradient->setEffect(static_cast<KImageEffect::GradientType>(type));
+		int type = pGradientDialog->gradientTab()->gradientType();
+		m_gradient->setEffect(static_cast<KImageEffect::GradientType>(type));
 
-                KisFrameBuffer *fb = m_doc->frameBuffer();
-                fb->setGradientEffect(static_cast<KImageEffect::GradientType>(type));
+		KisFrameBuffer *fb = m_doc->frameBuffer();
+		fb->setGradientEffect(static_cast<KImageEffect::GradientType>(type));
 
-        }
-        delete pGradientDialog;
+	}
+	delete pGradientDialog;
 #endif
 }
 
 void KisView::next_layer()
 {
-        KisImageSP img = currentImg();
-        KisLayerSP layer;
+	KisImageSP img = currentImg();
+	KisLayerSP layer;
 
-        if (!img)
-                return;
+	if (!img)
+		return;
 
-        layer = img -> activeLayer();
+	layer = img -> activeLayer();
 
-        if (layer) {
-                m_doc -> layerNext(img, layer);
-                resizeEvent(0);
-                updateCanvas();
-        }
+	if (layer) {
+		m_doc -> layerNext(img, layer);
+		resizeEvent(0);
+		updateCanvas();
+	}
 }
 
 void KisView::previous_layer()
 {
-        KisImageSP img = currentImg();
-        KisLayerSP layer;
+	KisImageSP img = currentImg();
+	KisLayerSP layer;
 
-        if (!img)
-                return;
+	if (!img)
+		return;
 
-        layer = img -> activeLayer();
+	layer = img -> activeLayer();
 
-        if (layer) {
-                m_doc -> layerPrev(img, layer);
-                resizeEvent(0);
-                updateCanvas();
-        }
+	if (layer) {
+		m_doc -> layerPrev(img, layer);
+		resizeEvent(0);
+		updateCanvas();
+	}
 }
 
 
 void KisView::imgResizeToActiveLayer()
 {
-        KisImageSP img = currentImg();
-        KisLayerSP layer;
+	KisImageSP img = currentImg();
+	KisLayerSP layer;
 
 
-        if (img && (layer = img -> activeLayer())) {
+	if (img && (layer = img -> activeLayer())) {
 		int x, y, w, h;
 		layer -> extent(x, y, w, h);
 
-                if (w > img -> width() && h > img -> height()) {
-                        img -> resize(w, h);
-                }
+		if (w > img -> width() && h > img -> height()) {
+			img -> resize(w, h);
+		}
 		else if (w <= img -> width() && h > img -> height()) {
 			img -> resize(img -> width(), h);
 		}
 		else if (w > img -> width() && h <= img -> height()) {
 			img -> resize(w, img -> height());
 		}
-        }
+	}
 }
 
 
 
 void KisView::slotImportImage()
 {
-        if (importImage(false) > 0)
-                m_doc -> setModified(true);
+	if (importImage(false) > 0)
+		m_doc -> setModified(true);
 }
 
 
 
 void KisView::export_image()
 {
-        KURL url = KFileDialog::getSaveURL(QString::null, KisImageMagickConverter::writeFilters(), this, i18n("Export Image"));
-        KisImageSP img = currentImg();
-        KisLayerSP dst;
+	KURL url = KFileDialog::getSaveURL(QString::null, KisImageMagickConverter::writeFilters(), this, i18n("Export Image"));
+	KisImageSP img = currentImg();
+	KisLayerSP dst;
 
-        if (url.isEmpty())
-                return;
+	if (url.isEmpty())
+		return;
 
-        Q_ASSERT(img);
+	Q_ASSERT(img);
 
-        if (img) {
-                KisImageMagickConverter ib(m_doc, m_adapter);
+	if (img) {
+		KisImageMagickConverter ib(m_doc, m_adapter);
 
-                img = new KisImage(*img);
+		img = new KisImage(*img);
 		img -> flatten();
 
-                dst = img -> layer(0);
-                Q_ASSERT(dst);
+		dst = img -> layer(0);
+		Q_ASSERT(dst);
 
-                //m_imgBuilderMgr -> attach(&ib);
-                m_progress -> setSubject(&ib, true, true);
+		//m_imgBuilderMgr -> attach(&ib);
+		m_progress -> setSubject(&ib, true, true);
 
-                switch (ib.buildFile(url, dst)) {
-                case KisImageBuilder_RESULT_UNSUPPORTED:
-                        KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
-                        break;
-                case KisImageBuilder_RESULT_INVALID_ARG:
-                        KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving File"));
-                        break;
-                case KisImageBuilder_RESULT_NO_URI:
-                case KisImageBuilder_RESULT_NOT_LOCAL:
-                        KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving File"));
-                        break;
-                case KisImageBuilder_RESULT_BAD_FETCH:
-                        KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));
-                        break;
-                case KisImageBuilder_RESULT_EMPTY:
-                        KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
-                        break;
-                case KisImageBuilder_RESULT_FAILURE:
-                        KMessageBox::error(this, i18n("Error saving file."), i18n("Error Saving File"));
-                        break;
-                case KisImageBuilder_RESULT_OK:
-                default:
-                        break;
-                }
-        }
+		switch (ib.buildFile(url, dst)) {
+		case KisImageBuilder_RESULT_UNSUPPORTED:
+			KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_INVALID_ARG:
+			KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_NO_URI:
+		case KisImageBuilder_RESULT_NOT_LOCAL:
+			KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_BAD_FETCH:
+			KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_EMPTY:
+			KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_FAILURE:
+			KMessageBox::error(this, i18n("Error saving file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_OK:
+		default:
+			break;
+		}
+	}
 }
 
 
 void KisView::slotImageProperties()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
 	if (!img) return;
 
@@ -1495,199 +1516,199 @@ void KisView::slotImageProperties()
 
 void KisView::slotInsertImageAsLayer()
 {
-        if (importImage(true) > 0)
-                m_doc -> setModified(true);
+	if (importImage(true) > 0)
+		m_doc -> setModified(true);
 }
 
 void KisView::saveLayerAsImage()
 {
-        KURL url = KFileDialog::getSaveURL(QString::null, KisImageMagickConverter::writeFilters(), this, i18n("Export Layer"));
-        KisImageSP img = currentImg();
+	KURL url = KFileDialog::getSaveURL(QString::null, KisImageMagickConverter::writeFilters(), this, i18n("Export Layer"));
+	KisImageSP img = currentImg();
 
-        if (url.isEmpty())
-                return;
+	if (url.isEmpty())
+		return;
 
-        Q_ASSERT(img);
+	Q_ASSERT(img);
 
-        if (img) {
-                KisImageMagickConverter ib(m_doc, m_adapter);
-                KisLayerSP dst = img -> activeLayer();
+	if (img) {
+		KisImageMagickConverter ib(m_doc, m_adapter);
+		KisLayerSP dst = img -> activeLayer();
 
-                Q_ASSERT(dst);
+		Q_ASSERT(dst);
 
-                switch (ib.buildFile(url, dst)) {
-                case KisImageBuilder_RESULT_UNSUPPORTED:
-                        KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
-                        break;
-                case KisImageBuilder_RESULT_INVALID_ARG:
-                        KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving File"));
-                        break;
-                case KisImageBuilder_RESULT_NO_URI:
-                case KisImageBuilder_RESULT_NOT_LOCAL:
-                        KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving File"));
-                        break;
-                case KisImageBuilder_RESULT_BAD_FETCH:
-                        KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));
-                        break;
-                case KisImageBuilder_RESULT_EMPTY:
-                        KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
-                        break;
-                case KisImageBuilder_RESULT_FAILURE:
-                        KMessageBox::error(this, i18n("Error saving file."), i18n("Error Saving File"));
-                        break;
-                case KisImageBuilder_RESULT_OK:
-                default:
-                        break;
-                }
-        }
+		switch (ib.buildFile(url, dst)) {
+		case KisImageBuilder_RESULT_UNSUPPORTED:
+			KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_INVALID_ARG:
+			KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_NO_URI:
+		case KisImageBuilder_RESULT_NOT_LOCAL:
+			KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_BAD_FETCH:
+			KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_EMPTY:
+			KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_FAILURE:
+			KMessageBox::error(this, i18n("Error saving file."), i18n("Error Saving File"));
+			break;
+		case KisImageBuilder_RESULT_OK:
+		default:
+			break;
+		}
+	}
 }
 
 void KisView::slotEmbedImage(const QString& filename)
 {
-        importImage(false, true, filename);
+	importImage(false, true, filename);
 }
 
 Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
 {
-        KURL::List urls;
-        Q_INT32 rc = 0;
+	KURL::List urls;
+	Q_INT32 rc = 0;
 
-        if (urlArg.isEmpty())
-                urls = KFileDialog::getOpenURLs(QString::null, KisImageMagickConverter::readFilters(), 0, i18n("Import Image"));
-        else
-                urls.push_back(urlArg);
+	if (urlArg.isEmpty())
+		urls = KFileDialog::getOpenURLs(QString::null, KisImageMagickConverter::readFilters(), 0, i18n("Import Image"));
+	else
+		urls.push_back(urlArg);
 
-        if (urls.empty())
-                return 0;
+	if (urls.empty())
+		return 0;
 
-        KisImageMagickConverter ib(m_doc, m_adapter);
-        KisImageSP img;
+	KisImageMagickConverter ib(m_doc, m_adapter);
+	KisImageSP img;
 
-        //m_imgBuilderMgr -> attach(&ib);
+	//m_imgBuilderMgr -> attach(&ib);
 
-        for (KURL::List::iterator it = urls.begin(); it != urls.end(); it++) {
-                KURL url = *it;
-                KisDlgProgress dlg(&ib);
+	for (KURL::List::iterator it = urls.begin(); it != urls.end(); it++) {
+		KURL url = *it;
+		KisDlgProgress dlg(&ib);
 
-                if (modal)
-                        dlg.show();
-                else
-                        m_progress -> setSubject(&ib, false, true);
+		if (modal)
+			dlg.show();
+		else
+			m_progress -> setSubject(&ib, false, true);
 
-                switch (ib.buildImage(url)) {
-                case KisImageBuilder_RESULT_UNSUPPORTED:
-                        KMessageBox::error(this, i18n("No coder for the type of file %1.").arg(url.path()), i18n("Error Importing File"));
-                        continue;
-                case KisImageBuilder_RESULT_NO_URI:
-                case KisImageBuilder_RESULT_NOT_LOCAL:
-                        KNotifyClient::event(this -> winId(), "cannotopenfile");
-                        continue;
-                case KisImageBuilder_RESULT_NOT_EXIST:
-                        KMessageBox::error(this, i18n("File %1 does not exist.").arg(url.path()), i18n("Error Importing File"));
-                        KNotifyClient::event(this -> winId(), "cannotopenfile");
-                        continue;
-                case KisImageBuilder_RESULT_BAD_FETCH:
-                        KMessageBox::error(this, i18n("Unable to download file %1.").arg(url.path()), i18n("Error Importing File"));
-                        KNotifyClient::event(this -> winId(), "cannotopenfile");
-                        continue;
-                case KisImageBuilder_RESULT_EMPTY:
-                        KMessageBox::error(this, i18n("Empty file: %1").arg(url.path()), i18n("Error Importing File"));
-                        KNotifyClient::event(this -> winId(), "cannotopenfile");
-                        continue;
-                case KisImageBuilder_RESULT_FAILURE:
-                        m_progress -> setSubject(0, true, true);
-                        KMessageBox::error(this, i18n("Error loading file %1.").arg(url.path()), i18n("Error Importing File"));
-                        KNotifyClient::event(this -> winId(), "cannotopenfile");
-                        continue;
-                case KisImageBuilder_RESULT_PROGRESS:
-                        break;
-                case KisImageBuilder_RESULT_OK:
-                default:
-                        break;
-                }
+		switch (ib.buildImage(url)) {
+		case KisImageBuilder_RESULT_UNSUPPORTED:
+			KMessageBox::error(this, i18n("No coder for the type of file %1.").arg(url.path()), i18n("Error Importing File"));
+			continue;
+		case KisImageBuilder_RESULT_NO_URI:
+		case KisImageBuilder_RESULT_NOT_LOCAL:
+			KNotifyClient::event(this -> winId(), "cannotopenfile");
+			continue;
+		case KisImageBuilder_RESULT_NOT_EXIST:
+			KMessageBox::error(this, i18n("File %1 does not exist.").arg(url.path()), i18n("Error Importing File"));
+			KNotifyClient::event(this -> winId(), "cannotopenfile");
+			continue;
+		case KisImageBuilder_RESULT_BAD_FETCH:
+			KMessageBox::error(this, i18n("Unable to download file %1.").arg(url.path()), i18n("Error Importing File"));
+			KNotifyClient::event(this -> winId(), "cannotopenfile");
+			continue;
+		case KisImageBuilder_RESULT_EMPTY:
+			KMessageBox::error(this, i18n("Empty file: %1").arg(url.path()), i18n("Error Importing File"));
+			KNotifyClient::event(this -> winId(), "cannotopenfile");
+			continue;
+		case KisImageBuilder_RESULT_FAILURE:
+			m_progress -> setSubject(0, true, true);
+			KMessageBox::error(this, i18n("Error loading file %1.").arg(url.path()), i18n("Error Importing File"));
+			KNotifyClient::event(this -> winId(), "cannotopenfile");
+			continue;
+		case KisImageBuilder_RESULT_PROGRESS:
+			break;
+		case KisImageBuilder_RESULT_OK:
+		default:
+			break;
+		}
 
-                if (!(img = ib.image()))
-                        continue;
+		if (!(img = ib.image()))
+			continue;
 
-                if (createLayer && currentImg()) {
-                        vKisLayerSP v = img -> layers();
-                        KisImageSP current = currentImg();
+		if (createLayer && currentImg()) {
+			vKisLayerSP v = img -> layers();
+			KisImageSP current = currentImg();
 
-                        rc += v.size();
+			rc += v.size();
 			current -> activeLayer() -> removeSelection();
 
-                        for (vKisLayerSP_it it = v.begin(); it != v.end(); it++) {
-                                KisLayerSP layer = *it;
+			for (vKisLayerSP_it it = v.begin(); it != v.end(); it++) {
+				KisLayerSP layer = *it;
 
-                                layer -> setImage(current);
-                                layer -> setName(current -> nextLayerName());
-                                m_doc -> layerAdd(current, layer, 0);
-                                m_layerBox -> setCurrentItem(img -> index(layer));
-                        }
-                        resizeEvent(0);
-                        updateCanvas();
-                } else {
-                        m_doc -> addImage(img);
-                        rc++;
-                }
-        }
+				layer -> setImage(current);
+				layer -> setName(current -> nextLayerName());
+				m_doc -> layerAdd(current, layer, 0);
+				m_layerBox -> setCurrentItem(img -> index(layer));
+			}
+			resizeEvent(0);
+			updateCanvas();
+		} else {
+			m_doc -> addImage(img);
+			rc++;
+		}
+	}
 
-        if (img && !createLayer)
-                selectImage(img);
+	if (img && !createLayer)
+		selectImage(img);
 
-        return rc;
+	return rc;
 }
 
 
 void KisView::rotateLayer180()
 {
-        if (!currentImg()) return;
-        KisLayerSP layer = currentImg() -> activeLayer();
-        if (!layer) return;
+	if (!currentImg()) return;
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
 
 
-        QWMatrix m;
-        //m.rotate(180);
-        layer->transform(m.rotate(180));
+	QWMatrix m;
+	//m.rotate(180);
+	layer->transform(m.rotate(180));
 	m_doc -> setModified(true);
 
-        layersUpdated();
-        resizeEvent(0);
-        updateCanvas();
+	layersUpdated();
+	resizeEvent(0);
+	updateCanvas();
 }
 
 void KisView::rotateLayerLeft90()
 {
-        if (!currentImg()) return;
-        KisLayerSP layer = currentImg() -> activeLayer();
-        if (!layer) return;
+	if (!currentImg()) return;
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
 
-        QWMatrix m;
-        m.rotate(270);
-        layer->transform(m);
+	QWMatrix m;
+	m.rotate(270);
+	layer->transform(m);
 	m_doc -> setModified(true);
 
-        layersUpdated();
-        resizeEvent(0);
-        updateCanvas();
+	layersUpdated();
+	resizeEvent(0);
+	updateCanvas();
 
 }
 
 void KisView::rotateLayerRight90()
 {
-        if (!currentImg()) return;
-        KisLayerSP layer = currentImg() -> activeLayer();
-        if (!layer) return;
+	if (!currentImg()) return;
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
 
 
-        QWMatrix m;
-        m.rotate(90);
-        layer -> transform(m);
+	QWMatrix m;
+	m.rotate(90);
+	layer -> transform(m);
 	m_doc -> setModified(true);
 
-        layersUpdated();
-        resizeEvent(0);
-        updateCanvas();
+	layersUpdated();
+	resizeEvent(0);
+	updateCanvas();
 
 }
 
@@ -1698,26 +1719,26 @@ void KisView::rotateLayerCustom()
 
 void KisView::mirrorLayerX()
 {
-        if (!currentImg()) return;
-        KisLayerSP layer = currentImg() -> activeLayer();
-        if (!layer) return;
+	if (!currentImg()) return;
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
 
-        layer->mirrorX();
+	layer->mirrorX();
 	m_doc -> setModified(true);
-        layersUpdated();
-        updateCanvas();
+	layersUpdated();
+	updateCanvas();
 }
 
 void KisView::mirrorLayerY()
 {
-        if (!currentImg()) return;
-        KisLayerSP layer = currentImg() -> activeLayer();
-        if (!layer) return;
+	if (!currentImg()) return;
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
 
-        layer->mirrorY();
+	layer->mirrorY();
 	m_doc -> setModified(true);
-        layersUpdated();
-        updateCanvas();
+	layersUpdated();
+	updateCanvas();
 }
 
 void KisView::scaleLayer(double sx, double sy, enumFilterType ftype)
@@ -1738,7 +1759,7 @@ void KisView::scaleLayer(double sx, double sy, enumFilterType ftype)
 
 void KisView::rotateLayer(double angle)
 {
-        if (!currentImg()) return;
+	if (!currentImg()) return;
 
 	KisLayerSP layer = currentImg() -> activeLayer();
 	if (!layer) return;
@@ -1754,7 +1775,7 @@ void KisView::rotateLayer(double angle)
 
 void KisView::shearLayer(double angleX, double angleY)
 {
-        if (!currentImg()) return;
+	if (!currentImg()) return;
 
 	KisLayerSP layer = currentImg() -> activeLayer();
 	if (!layer) return;
@@ -1770,19 +1791,19 @@ void KisView::shearLayer(double angleX, double angleY)
 
 void KisView::add_new_image_tab()
 {
-        m_doc -> slotNewImage();
-        updateTabBar();
+	m_doc -> slotNewImage();
+	updateTabBar();
 }
 
 void KisView::remove_current_image_tab()
 {
-        KisImageSP current = currentImg();
+	KisImageSP current = currentImg();
 
-        if (current) {
-                disconnectCurrentImg();
-                m_current = 0;
-                m_doc -> removeImage(current);
-        }
+	if (current) {
+		disconnectCurrentImg();
+		m_current = 0;
+		m_doc -> removeImage(current);
+	}
 }
 
 void KisView::flattenImage()
@@ -1794,10 +1815,10 @@ void KisView::flattenImage()
 
 		if (img -> nHiddenLayers() > 0) {
 			int answer = KMessageBox::warningYesNo(this,
-							       i18n("The image contains hidden layers that will be lost."),
-							       i18n("Flatten Image"),
-							       i18n("Flatten Image"),
-							       i18n("Cancel"));
+								i18n("The image contains hidden layers that will be lost."),
+								i18n("Flatten Image"),
+								i18n("Flatten Image"),
+								i18n("Cancel"));
 
 			if (answer != KMessageBox::Yes) {
 				doIt = false;
@@ -1828,7 +1849,7 @@ void KisView::mergeLinkedLayers()
 	}
 }
 
-void KisView::mergeLayer() 
+void KisView::mergeLayer()
 {
 	KisImageSP img = currentImg();
 	if (!img) return;
@@ -1842,12 +1863,12 @@ void KisView::mergeLayer()
 }
 
 /*
-  preferences - the main Krayon preferences dialog - modeled
-  after the konqueror prefs dialog - quite nice compound dialog
+preferences - the main Krayon preferences dialog - modeled
+after the konqueror prefs dialog - quite nice compound dialog
 */
 void KisView::preferences()
 {
-        PreferencesDialog::editPreferences();
+	PreferencesDialog::editPreferences();
 	resetMonitorProfile();
 }
 
@@ -1878,52 +1899,66 @@ void KisView::viewShapesDocker(bool v)
 	((KToggleAction*)actionCollection()->action("view_shapes_docker")) -> setChecked(v);
 }
 
+void KisView::viewPaintOpDocker( bool v )
+{
+	( ( KToggleAction * )actionCollection() -> action( "view_paintop_docer" ) )->setChecked( v );
+}
+
 
 #else
 void KisView::viewColorDocker()
 {
-        if( m_colordocker->isVisible() == false )
-        {
-                mainWindow()->addDockWindow( m_colordocker, DockRight );
-                m_colordocker->show();
-        }
+	if( m_colordocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_colordocker, DockRight );
+		m_colordocker->show();
+	}
 }
 
 void KisView::viewControlDocker()
 {
-        if( m_toolcontroldocker->isVisible() == false )
-        {
-                mainWindow()->addDockWindow( m_toolcontroldocker, DockRight );
-                m_toolcontroldocker->show();
-        }
+	if( m_toolcontroldocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_toolcontroldocker, DockRight );
+		m_toolcontroldocker->show();
+	}
 }
 
 void KisView::viewLayerChannelDocker()
 {
-        if( m_layerchanneldocker->isVisible() == false )
-        {
-                mainWindow()->addDockWindow( m_layerchanneldocker, DockRight );
-                m_layerchanneldocker->show();
-        }
+	if( m_layerchanneldocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_layerchanneldocker, DockRight );
+		m_layerchanneldocker->show();
+	}
 }
 
 void KisView::viewFillsDocker()
 {
-        if( m_fillsdocker->isVisible() == false )
-        {
-                mainWindow()->addDockWindow( m_fillsdocker, DockRight );
-                m_shapesdocker->show();
-        }
+	if( m_fillsdocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_fillsdocker, DockRight );
+		m_shapesdocker->show();
+	}
 }
 
 
 void KisView::viewShapesDocker()
 {
-        if( m_shapesdocker->isVisible() == false )
-        {
-                mainWindow()->addDockWindow( m_shapesdocker, DockRight );
-                m_shapesdocker->show();
-        }
+	if( m_shapesdocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_shapesdocker, DockRight );
+		m_shapesdocker->show();
+	}
+}
+
+void KisView::viewPaintOpDocker()
+{
+	if ( m_paintopdocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_paintopdocker, DockRight );
+		m_paintopdocker->show();
+	}
 }
 
 #endif
@@ -1963,12 +1998,12 @@ void KisView::slotUpdateFullScreen(bool toggle)
 
 Q_INT32 KisView::docWidth() const
 {
-        return currentImg() ? currentImg() -> width() : 0;
+	return currentImg() ? currentImg() -> width() : 0;
 }
 
 Q_INT32 KisView::docHeight() const
 {
-        return currentImg() ? currentImg() -> height() : 0;
+	return currentImg() ? currentImg() -> height() : 0;
 }
 
 void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
@@ -2001,70 +2036,70 @@ void KisView::brushActivated(KisResource *brush)
 
 void KisView::patternActivated(KisResource *pattern)
 {
-        KisIconItem *item;
+	KisIconItem *item;
 
-        m_pattern = dynamic_cast<KisPattern*>(pattern);
+	m_pattern = dynamic_cast<KisPattern*>(pattern);
 
-        if (m_pattern && (item = m_patternMediator -> itemFor(m_pattern)))
-                if (m_controlWidget) m_controlWidget -> slotSetPattern(item);
+	if (m_pattern && (item = m_patternMediator -> itemFor(m_pattern)))
+		if (m_controlWidget) m_controlWidget -> slotSetPattern(item);
 
-        if (m_pattern)
-                notify();
+	if (m_pattern)
+		notify();
 }
 
 void KisView::gradientActivated(KisResource *gradient)
 {
-        KisIconItem *item;
+	KisIconItem *item;
 
-        m_gradient = dynamic_cast<KisGradient*>(gradient);
+	m_gradient = dynamic_cast<KisGradient*>(gradient);
 
-        if (m_gradient && (item = m_gradientMediator -> itemFor(m_gradient)))
+	if (m_gradient && (item = m_gradientMediator -> itemFor(m_gradient)))
 		if (m_controlWidget) m_controlWidget -> slotSetGradient(item);
 
-        if (m_gradient)
-                notify();
+	if (m_gradient)
+		notify();
 }
 
 void KisView::setBGColor(const QColor& c)
 {
-        emit bgColorChanged(c);
-        m_bg = c;
-        notify();
+	emit bgColorChanged(c);
+	m_bg = c;
+	notify();
 }
 
 void KisView::setFGColor(const QColor& c)
 {
-        emit fgColorChanged(c);
-        m_fg = c;
-        notify();
+	emit fgColorChanged(c);
+	m_fg = c;
+	notify();
 }
 
 void KisView::slotSetFGColor(const QColor& c)
 {
-        setFGColor(c);
+	setFGColor(c);
 }
 
 void KisView::slotSetBGColor(const QColor& c)
 {
-        setBGColor(c);
+	setBGColor(c);
 }
 
 void KisView::setupPrinter(KPrinter& /*printer*/)
 {
 // XXX: If only printing were this simple, but it isn't, not by a long stretch
 #if 0
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
-                Q_INT32 count;
+	if (img) {
+		Q_INT32 count;
 
-                printer.setPageSelection(KPrinter::ApplicationSide);
-                count = m_doc -> imageIndex(img);
-                printer.setCurrentPage(1 + count);
-                printer.setMinMax(1, m_doc -> nimages());
-                printer.setPageSize(KPrinter::A4);
-                printer.setOrientation(KPrinter::Portrait);
-        }
+		printer.setPageSelection(KPrinter::ApplicationSide);
+		count = m_doc -> imageIndex(img);
+		printer.setCurrentPage(1 + count);
+		printer.setMinMax(1, m_doc -> nimages());
+		printer.setPageSize(KPrinter::A4);
+		printer.setOrientation(KPrinter::Portrait);
+	}
 #endif
 }
 
@@ -2105,12 +2140,14 @@ void KisView::setupTools()
 	m_tabletEventTimer.start();
 }
 
+
+
 void KisView::canvasGotPaintEvent(QPaintEvent *event)
 {
-	bitBlt(m_canvas, 
-	       event -> rect().x(), event -> rect().y(), 
-	       &m_canvasPixmap, 
-	       event -> rect().x(), event -> rect().y(), event -> rect().width(), event -> rect().height());
+	bitBlt(m_canvas,
+		event -> rect().x(), event -> rect().y(),
+		&m_canvasPixmap,
+		event -> rect().x(), event -> rect().y(), event -> rect().width(), event -> rect().height());
 }
 
 void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
@@ -2203,15 +2240,15 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
 		QPoint p = mapToScreen(e -> pos().floorQPoint());
 		KisGuideMgr *mgr = img -> guides();
 
-              if (((e -> state() & Qt::LeftButton) == Qt::LeftButton) && mgr -> hasSelected()) {
-                      eraseGuides();
-                      p -= m_lastGuidePoint;
+		if (((e -> state() & Qt::LeftButton) == Qt::LeftButton) && mgr -> hasSelected()) {
+			eraseGuides();
+			p -= m_lastGuidePoint;
 
-                      if (p.x())
-                              mgr -> moveSelectedByX(p.x() / zoom());
+			if (p.x())
+				mgr -> moveSelectedByX(p.x() / zoom());
 
-                      if (p.y())
-                              mgr -> moveSelectedByY(p.y() / zoom());
+			if (p.y())
+				mgr -> moveSelectedByY(p.y() / zoom());
 
 			m_doc -> setModified(true);
 			paintGuides();
@@ -2261,14 +2298,14 @@ void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
 
 void KisView::canvasGotEnterEvent(QEvent *e)
 {
-        if (currentTool())
-                currentTool() -> enter(e);
+	if (currentTool())
+		currentTool() -> enter(e);
 }
 
 void KisView::canvasGotLeaveEvent (QEvent *e)
 {
-        if (currentTool())
-                currentTool() -> leave(e);
+	if (currentTool())
+		currentTool() -> leave(e);
 }
 
 void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
@@ -2291,14 +2328,14 @@ void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 
 void KisView::canvasGotKeyPressEvent(QKeyEvent *event)
 {
-        if (currentTool())
-                currentTool() -> keyPress(event);
+	if (currentTool())
+		currentTool() -> keyPress(event);
 }
 
 void KisView::canvasGotKeyReleaseEvent(QKeyEvent *event)
 {
-        if (currentTool())
-                currentTool() -> keyRelease(event);
+	if (currentTool())
+		currentTool() -> keyRelease(event);
 }
 
 void KisView::canvasGotDragEnterEvent(QDragEnterEvent *event)
@@ -2373,148 +2410,148 @@ void KisView::canvasRefresh()
 {
 	KisRect rc(0, 0, m_canvasPixmap.width(), m_canvasPixmap.height());
 	paintView(viewToWindow(rc));
-        m_canvas -> repaint();
+	m_canvas -> repaint();
 }
 
 void KisView::layerToggleVisible()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
-                KisLayerSP layer = img -> activeLayer();
+	if (img) {
+		KisLayerSP layer = img -> activeLayer();
 
-                if (layer) {
-                        layer -> setVisible(!layer -> visible());
-                        m_doc -> setModified(true);
-                        resizeEvent(0);
-                        layersUpdated();
-                        canvasRefresh();
-                }
-        }
+		if (layer) {
+			layer -> setVisible(!layer -> visible());
+			m_doc -> setModified(true);
+			resizeEvent(0);
+			layersUpdated();
+			canvasRefresh();
+		}
+	}
 }
 
 void KisView::layerSelected(int n)
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        layerUpdateGUI(img -> activateLayer(n));
+	layerUpdateGUI(img -> activateLayer(n));
 }
 
 void KisView::docImageListUpdate()
 {
-        disconnectCurrentImg();
-        m_current = 0;
-        zoomUpdateGUI(0, 0, 1.0);
-        resizeEvent(0);
-        updateCanvas();
+	disconnectCurrentImg();
+	m_current = 0;
+	zoomUpdateGUI(0, 0, 1.0);
+	resizeEvent(0);
+	updateCanvas();
 
-        if (!currentImg())
-                layersUpdated();
+	if (!currentImg())
+		layersUpdated();
 
-        imgUpdateGUI();
+	imgUpdateGUI();
 }
 
 void KisView::layerToggleLinked()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
-                KisLayerSP layer = img -> activeLayer();
+	if (img) {
+		KisLayerSP layer = img -> activeLayer();
 
-                if (layer) {
-                        layer -> setLinked(!layer -> linked());
-                        m_doc -> setModified(true);
-                        layersUpdated();
-                }
-        }
+		if (layer) {
+			layer -> setLinked(!layer -> linked());
+			m_doc -> setModified(true);
+			layersUpdated();
+		}
+	}
 }
 
 void KisView::layerProperties()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
-                KisLayerSP layer = img -> activeLayer();
+	if (img) {
+		KisLayerSP layer = img -> activeLayer();
 
-                if (layer) {
-                        KisPaintPropertyDlg dlg(layer -> name(),
-                                                QPoint(layer->getX(),
-                                                       layer->getY()),
-                                                layer->opacity(),
-                                                layer->compositeOp());
+		if (layer) {
+			KisPaintPropertyDlg dlg(layer -> name(),
+						QPoint(layer->getX(),
+							layer->getY()),
+						layer->opacity(),
+						layer->compositeOp());
 
-                        if (dlg.exec() == QDialog::Accepted) {
-                                QPoint pt = dlg.getPosition();
+			if (dlg.exec() == QDialog::Accepted) {
+				QPoint pt = dlg.getPosition();
 
-                                bool changed = layer -> name() != dlg.getName()
-                                        || layer -> opacity() != dlg.getOpacity()
-                                        || layer -> compositeOp() != dlg.getCompositeOp()
-                                        || pt.x() != layer -> getX()
-                                        || pt.y() != layer -> getY();
+				bool changed = layer -> name() != dlg.getName()
+					|| layer -> opacity() != dlg.getOpacity()
+					|| layer -> compositeOp() != dlg.getCompositeOp()
+					|| pt.x() != layer -> getX()
+					|| pt.y() != layer -> getY();
 
 
-                                if (changed)
-                                        m_adapter -> beginMacro(i18n("Property changes"));
+				if (changed)
+					m_adapter -> beginMacro(i18n("Property changes"));
 
-                                if (layer -> name() != dlg.getName()
-                                    || layer -> opacity() != dlg.getOpacity()
-                                    || layer -> compositeOp() != dlg.getCompositeOp())
-                                        m_doc -> setLayerProperties(img, layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
+				if (layer -> name() != dlg.getName()
+					|| layer -> opacity() != dlg.getOpacity()
+					|| layer -> compositeOp() != dlg.getCompositeOp())
+					m_doc -> setLayerProperties(img, layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
 
-                                if (pt.x() != layer->getX() || pt.y() != layer->getY())
-                                        KisStrategyMove(this).simpleMove(QPoint(layer->getX(), layer->getY()), pt);
+				if (pt.x() != layer->getX() || pt.y() != layer->getY())
+					KisStrategyMove(this).simpleMove(QPoint(layer->getX(), layer->getY()), pt);
 
-                                if (changed)
-                                        m_adapter -> endMacro();
-                        }
-                }
-        }
+				if (changed)
+					m_adapter -> endMacro();
+			}
+		}
+	}
 }
 
 void KisView::layerAdd()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
-                KisConfig cfg;
-                NewLayerDialog dlg(img->colorStrategy()->name(), img->nextLayerName(), this);
+	if (img) {
+		KisConfig cfg;
+		NewLayerDialog dlg(img->colorStrategy()->name(), img->nextLayerName(), this);
 
-                dlg.exec();
+		dlg.exec();
 
-                if (dlg.result() == QDialog::Accepted) {
-                        KisLayerSP layer = m_doc -> layerAdd(img,
-                                                             dlg.layerName(),
-                                                             dlg.compositeOp(),
-                                                             dlg.opacity(),
-                                                             KisColorSpaceRegistry::instance() -> get(dlg.colorStrategyName()));
-                        if (layer) {
-                                m_layerBox -> setCurrentItem(img -> index(layer));
-                                resizeEvent(0);
-                                updateCanvas(0, 0, img -> width(), img -> height());
-                        } else {
-                                KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
-                        }
-                }
-        }
+		if (dlg.result() == QDialog::Accepted) {
+			KisLayerSP layer = m_doc -> layerAdd(img,
+								dlg.layerName(),
+								dlg.compositeOp(),
+								dlg.opacity(),
+								KisColorSpaceRegistry::instance() -> get(dlg.colorStrategyName()));
+			if (layer) {
+				m_layerBox -> setCurrentItem(img -> index(layer));
+				resizeEvent(0);
+				updateCanvas(0, 0, img -> width(), img -> height());
+			} else {
+				KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
+			}
+		}
+	}
 }
 
 void KisView::layerRemove()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
-                KisLayerSP layer = img -> activeLayer();
+	if (img) {
+		KisLayerSP layer = img -> activeLayer();
 
-                if (layer) {
-                        Q_INT32 n = img -> index(layer);
+		if (layer) {
+			Q_INT32 n = img -> index(layer);
 
-                        m_doc -> layerRemove(img, layer);
-                        m_layerBox -> setCurrentItem(n - 1);
-                        resizeEvent(0);
-                        updateCanvas();
-                        layerUpdateGUI(img -> activeLayer() != 0);
-                }
-        }
+			m_doc -> layerRemove(img, layer);
+			m_layerBox -> setCurrentItem(n - 1);
+			resizeEvent(0);
+			updateCanvas();
+			layerUpdateGUI(img -> activeLayer() != 0);
+		}
+	}
 }
 
 void KisView::layerDuplicate()
@@ -2531,66 +2568,68 @@ void KisView::layerRmMask(int /*n*/)
 
 void KisView::layerRaise()
 {
-        KisImageSP img = currentImg();
-        KisLayerSP layer;
+	KisImageSP img = currentImg();
+	KisLayerSP layer;
 
-        if (!img)
-                return;
+	if (!img)
+		return;
 
-        layer = img -> activeLayer();
+	layer = img -> activeLayer();
 
-        if (layer) {
-                m_doc -> layerRaise(img, layer);
-                layersUpdated();
-                resizeEvent(0);
-                updateCanvas();
-        }
+	if (layer) {
+		m_doc -> layerRaise(img, layer);
+		layersUpdated();
+		resizeEvent(0);
+		updateCanvas();
+	}
 }
 
 void KisView::layerLower()
 {
-        KisImageSP img = currentImg();
-        KisLayerSP layer;
+	KisImageSP img = currentImg();
+	KisLayerSP layer;
 
-        if (!img)
-                return;
+	if (!img)
+		return;
 
-        layer = img -> activeLayer();
+	layer = img -> activeLayer();
 
-        if (layer) {
-                m_doc -> layerLower(img, layer);
-                layersUpdated();
-                resizeEvent(0);
-                updateCanvas();
-        }
+	if (layer) {
+		m_doc -> layerLower(img, layer);
+		layersUpdated();
+		resizeEvent(0);
+		updateCanvas();
+	}
 }
 
 void KisView::layerFront()
 {
-        KisImageSP img = currentImg();
-        KisLayerSP layer;
+	KisImageSP img = currentImg();
+	KisLayerSP layer;
 
-        if (img && (layer = img -> activeLayer())) {
-                img -> top(layer);
+	if (img && (layer = img -> activeLayer())) {
+		img -> top(layer);
 		m_doc -> setModified(true);
-                layersUpdated();
-                resizeEvent(0);
-                updateCanvas();
-        }
+		layersUpdated();
+		resizeEvent(0);
+		updateCanvas();
+	}
 }
 
 void KisView::layerBack()
 {
-        KisImageSP img = currentImg();
-        KisLayerSP layer;
+	KisImageSP img = currentImg();
+	if (!img) return;
 
-        if (img && (layer = img -> activeLayer())) {
-                img -> bottom(layer);
+	KisLayerSP layer;
+
+	if (img && (layer = img -> activeLayer())) {
+		img -> bottom(layer);
 		m_doc -> setModified(true);
-                layersUpdated();
-                resizeEvent(0);
-                updateCanvas();
-        }
+		layersUpdated();
+		resizeEvent(0);
+		updateCanvas();
+	}
 }
 
 void KisView::layerLevel(int /*n*/)
@@ -2599,61 +2638,65 @@ void KisView::layerLevel(int /*n*/)
 
 void KisView::layersUpdated()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
+	if (!img) return;
 
-        layerUpdateGUI(img && img -> activeLayer());
-        m_layerBox -> setUpdatesEnabled(false);
-        m_layerBox -> clear();
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
 
-        if (img) {
-                vKisLayerSP l = img -> layers();
+	layerUpdateGUI(img && layer);
+	m_layerBox -> setUpdatesEnabled(false);
+	m_layerBox -> clear();
 
-                for (vKisLayerSP_it it = l.begin(); it != l.end(); it++)
-                        m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked());
+	if (img) {
+		vKisLayerSP l = img -> layers();
 
-                m_layerBox -> setCurrentItem(img -> index(img -> activeLayer()));
-        }
+		for (vKisLayerSP_it it = l.begin(); it != l.end(); it++)
+			m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked());
 
-        m_layerBox -> setUpdatesEnabled(true);
+		m_layerBox -> setCurrentItem(img -> index(layer));
+	}
+
+	m_layerBox -> setUpdatesEnabled(true);
 }
 
 void KisView::layersUpdated(KisImageSP img)
 {
-        if (img == currentImg())
-                layersUpdated();
+	if (img == currentImg())
+		layersUpdated();
 }
 
 void KisView::selectImage(const QString& name)
 {
-        disconnectCurrentImg();
-        m_current = m_doc -> findImage(name);
-        connectCurrentImg();
-        layersUpdated();
+	disconnectCurrentImg();
+	m_current = m_doc -> findImage(name);
+	connectCurrentImg();
+	layersUpdated();
 	// XXX: was m_current && m_current -> activeLayer() -> selection()
-        m_selectionManager -> updateGUI();
-        resizeEvent(0);
-        updateCanvas();
-        notify();
+	m_selectionManager -> updateGUI();
+	resizeEvent(0);
+	updateCanvas();
+	notify();
 }
 
 void KisView::selectImage(KisImageSP img)
 {
-        disconnectCurrentImg();
-        m_current = img;
-        connectCurrentImg();
-        layersUpdated();
-        resizeEvent(0);
-        updateCanvas();
+	disconnectCurrentImg();
+	m_current = img;
+	connectCurrentImg();
+	layersUpdated();
+	resizeEvent(0);
+	updateCanvas();
 
-        if (m_tabBar)
-                updateTabBar();
+	if (m_tabBar)
+		updateTabBar();
 	// XXX: was m_current && m_current -> activeLayer() -> selection()
-        m_selectionManager -> updateGUI();
+	m_selectionManager -> updateGUI();
 }
 
 void KisView::scrollH(int value)
 {
-        m_hRuler -> updateVisibleArea(value, 0);
+	m_hRuler -> updateVisibleArea(value, 0);
 
 	int xShift = m_scrollX - value;
 	m_scrollX = value;
@@ -2677,7 +2720,7 @@ void KisView::scrollH(int value)
 
 void KisView::scrollV(int value)
 {
-        m_vRuler -> updateVisibleArea(0, value);
+	m_vRuler -> updateVisibleArea(0, value);
 
 	int yShift = m_scrollY - value;
 	m_scrollY = value;
@@ -2701,21 +2744,21 @@ void KisView::scrollV(int value)
 
 int KisView::canvasXOffset() const
 {
-        return static_cast<Q_INT32>(ceil(m_xoff * zoom()));
+	return static_cast<Q_INT32>(ceil(m_xoff * zoom()));
 }
 
 int KisView::canvasYOffset() const
 {
-        return static_cast<Q_INT32>(ceil(m_yoff * zoom()));
+	return static_cast<Q_INT32>(ceil(m_yoff * zoom()));
 }
 
 void KisView::setupCanvas()
 {
-        m_canvas = new KisCanvas(this, "kis_canvas");
+	m_canvas = new KisCanvas(this, "kis_canvas");
 
-        QObject::connect(m_canvas, SIGNAL(gotButtonPressEvent(KisButtonPressEvent*)), this, SLOT(canvasGotButtonPressEvent(KisButtonPressEvent*)));
-        QObject::connect(m_canvas, SIGNAL(gotButtonReleaseEvent(KisButtonReleaseEvent*)), this, SLOT(canvasGotButtonReleaseEvent(KisButtonReleaseEvent*)));
-        QObject::connect(m_canvas, SIGNAL(gotMoveEvent(KisMoveEvent*)), this, SLOT(canvasGotMoveEvent(KisMoveEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotButtonPressEvent(KisButtonPressEvent*)), this, SLOT(canvasGotButtonPressEvent(KisButtonPressEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotButtonReleaseEvent(KisButtonReleaseEvent*)), this, SLOT(canvasGotButtonReleaseEvent(KisButtonReleaseEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotMoveEvent(KisMoveEvent*)), this, SLOT(canvasGotMoveEvent(KisMoveEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotPaintEvent(QPaintEvent*)), this, SLOT(canvasGotPaintEvent(QPaintEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotEnterEvent(QEvent*)), this, SLOT(canvasGotEnterEvent(QEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotLeaveEvent(QEvent*)), this, SLOT(canvasGotLeaveEvent(QEvent*)));
@@ -2728,86 +2771,86 @@ void KisView::setupCanvas()
 
 void KisView::currentImageUpdated(KisImageSP img)
 {
-        if (img == currentImg())
-                canvasRefresh();
+	if (img == currentImg())
+		canvasRefresh();
 }
 
 bool KisView::selectColor(QColor& result)
 {
-        QColor color;
-        bool rc;
+	QColor color;
+	bool rc;
 
-        if ((rc = (KColorDialog::getColor(color) == KColorDialog::Accepted)))
-                result.setRgb(color.red(), color.green(), color.blue());
+	if ((rc = (KColorDialog::getColor(color) == KColorDialog::Accepted)))
+		result.setRgb(color.red(), color.green(), color.blue());
 
-        return rc;
+	return rc;
 }
 
 void KisView::selectFGColor()
 {
-        QColor c;
+	QColor c;
 
-        if (selectColor(c))
-                setFGColor(c);
+	if (selectColor(c))
+		setFGColor(c);
 }
 
 void KisView::selectBGColor()
 {
-        QColor c;
+	QColor c;
 
-        if (selectColor(c))
-                setBGColor(c);
+	if (selectColor(c))
+		setBGColor(c);
 }
 
 void KisView::reverseFGAndBGColors()
 {
-        QColor oldFg = m_fg;
-        QColor oldBg = m_bg;
+	QColor oldFg = m_fg;
+	QColor oldBg = m_bg;
 
-        setFGColor(oldBg);
-        setBGColor(oldFg);
+	setFGColor(oldBg);
+	setBGColor(oldFg);
 }
 
 void KisView::connectCurrentImg() const
 {
-        if (m_current) {
-                connect(m_current, SIGNAL(activeSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
+	if (m_current) {
+		connect(m_current, SIGNAL(activeSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
 		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
 
 // 		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), SLOT(imgUpdated(KisImageSP)));
 		connect(m_current, SIGNAL(profileChanged(KisProfileSP)), SLOT(profileChanged(KisProfileSP)));
-                connect(m_current, SIGNAL(update(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
+		connect(m_current, SIGNAL(update(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
 		connect(m_current, SIGNAL(layersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
 		connect(m_current, SIGNAL(sizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
-        }
+	}
 }
 
 void KisView::disconnectCurrentImg() const
 {
-        if (m_current)
-                m_current -> disconnect(this);
+	if (m_current)
+		m_current -> disconnect(this);
 }
 
 void KisView::duplicateCurrentImg()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        Q_ASSERT(img);
+	Q_ASSERT(img);
 
-        if (img) {
-                KisImageSP dubbed = new KisImage(*img);
+	if (img) {
+		KisImageSP dubbed = new KisImage(*img);
 
-                dubbed -> setName(m_doc -> nextImageName());
-                m_doc -> addImage(dubbed);
-        }
+		dubbed -> setName(m_doc -> nextImageName());
+		m_doc -> addImage(dubbed);
+	}
 }
 
 
 void KisView::imgUpdated(KisImageSP img, const QRect& rc)
 {
-        if (img == currentImg()) {
-                updateCanvas(rc);
-        }
+	if (img == currentImg()) {
+		updateCanvas(rc);
+	}
 }
 
 void KisView::imgUpdated(KisImageSP img)
@@ -2831,36 +2874,36 @@ void KisView::slotImageSizeChanged(KisImageSP img, Q_INT32 /*w*/, Q_INT32 /*h*/)
 
 void KisView::layerToImage()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
+	if (img) {
 		KisLayerSP layer = img -> activeLayer();
 
-                KisSelectionSP selection = layer-> selection();
+		KisSelectionSP selection = layer-> selection();
 
 
 //                 if (selection)
 //                         layer = selection.data();
 //                 else
-                        img -> activeLayer();
+			img -> activeLayer();
 
-                if (layer) {
-                        KisImageSP dupedImg = new KisImage(m_adapter, img->width(), img->height(), img -> colorStrategy(), m_doc -> nextImageName());
-                        KisLayerSP duped = new KisLayer(*layer);
+		if (layer) {
+			KisImageSP dupedImg = new KisImage(m_adapter, img->width(), img->height(), img -> colorStrategy(), m_doc -> nextImageName());
+			KisLayerSP duped = new KisLayer(*layer);
 
-                        duped -> setName(dupedImg -> nextLayerName());
-                        duped -> setX(0);
-                        duped -> setY(0);
-                        dupedImg -> add(duped, -1);
-                        m_doc -> addImage(dupedImg);
-                        selectImage(dupedImg);
-                }
-        }
+			duped -> setName(dupedImg -> nextLayerName());
+			duped -> setX(0);
+			duped -> setY(0);
+			dupedImg -> add(duped, -1);
+			m_doc -> addImage(dupedImg);
+			selectImage(dupedImg);
+		}
+	}
 }
 
 void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h)
 {
-        if (!currentImg()) return;
+	if (!currentImg()) return;
 
 	currentImg() -> resize(w, h);
 	m_doc -> setModified(true);
@@ -2875,7 +2918,7 @@ void KisView::scaleCurrentImage(double sx, double sy, enumFilterType ftype)
 	currentImg() -> scale(sx, sy, m_progress, ftype);
 	m_doc -> setModified(true);
 	resizeEvent(0);
- 	layersUpdated();
+	layersUpdated();
 	updateCanvas();
 	canvasRefresh();
 }
@@ -2886,7 +2929,7 @@ void KisView::rotateCurrentImage(double angle)
 	currentImg() -> rotate(angle,m_progress);
 	m_doc -> setModified(true);
 	resizeEvent(0);
- 	layersUpdated();
+	layersUpdated();
 	updateCanvas();
 	canvasRefresh();
 }
@@ -2897,7 +2940,7 @@ void KisView::shearCurrentImage(double angleX, double angleY)
 	currentImg() -> shear(angleX, angleY ,m_progress);
 	m_doc -> setModified(true);
 	resizeEvent(0);
- 	layersUpdated();
+	layersUpdated();
 	updateCanvas();
 	canvasRefresh();
 }
@@ -2905,125 +2948,125 @@ void KisView::shearCurrentImage(double angleX, double angleY)
 
 QPoint KisView::viewToWindow(const QPoint& pt)
 {
-        QPoint converted;
+	QPoint converted;
 
-        converted.rx() = static_cast<int>((pt.x() + horzValue() - canvasXOffset()) / zoom());
-        converted.ry() = static_cast<int>((pt.y() + vertValue() - canvasYOffset()) / zoom());
+	converted.rx() = static_cast<int>((pt.x() + horzValue() - canvasXOffset()) / zoom());
+	converted.ry() = static_cast<int>((pt.y() + vertValue() - canvasYOffset()) / zoom());
 
-        return converted;
+	return converted;
 }
 
 KisPoint KisView::viewToWindow(const KisPoint& pt)
 {
-        KisPoint converted;
+	KisPoint converted;
 
-        converted.setX((pt.x() + horzValue() - canvasXOffset()) / zoom());
-        converted.setY((pt.y() + vertValue() - canvasYOffset()) / zoom());
+	converted.setX((pt.x() + horzValue() - canvasXOffset()) / zoom());
+	converted.setY((pt.y() + vertValue() - canvasYOffset()) / zoom());
 
-        return converted;
+	return converted;
 }
 
 QRect KisView::viewToWindow(const QRect& rc)
 {
-        QRect r;
-        QPoint p = viewToWindow(QPoint(rc.x(), rc.y()));
-        r.setX(p.x());
-        r.setY(p.y());
-        r.setWidth(static_cast<int>(ceil(rc.width() / zoom())));
-        r.setHeight(static_cast<int>(ceil(rc.height() / zoom())));
+	QRect r;
+	QPoint p = viewToWindow(QPoint(rc.x(), rc.y()));
+	r.setX(p.x());
+	r.setY(p.y());
+	r.setWidth(static_cast<int>(ceil(rc.width() / zoom())));
+	r.setHeight(static_cast<int>(ceil(rc.height() / zoom())));
 
-        return r;
+	return r;
 }
 
 KisRect KisView::viewToWindow(const KisRect& rc)
 {
-        KisRect r;
-        KisPoint p = viewToWindow(KisPoint(rc.x(), rc.y()));
-        r.setX(p.x());
-        r.setY(p.y());
-        r.setWidth(rc.width() / zoom());
-        r.setHeight(rc.height() / zoom());
+	KisRect r;
+	KisPoint p = viewToWindow(KisPoint(rc.x(), rc.y()));
+	r.setX(p.x());
+	r.setY(p.y());
+	r.setWidth(rc.width() / zoom());
+	r.setHeight(rc.height() / zoom());
 
-        return r;
+	return r;
 }
 
 void KisView::viewToWindow(Q_INT32 *x, Q_INT32 *y)
 {
-        if (x && y) {
-                QPoint p = viewToWindow(QPoint(*x, *y));
-                *x = p.x();
-                *y = p.y();
-        }
+	if (x && y) {
+		QPoint p = viewToWindow(QPoint(*x, *y));
+		*x = p.x();
+		*y = p.y();
+	}
 }
 
 QPoint KisView::windowToView(const QPoint& pt)
 {
-        QPoint p;
-        p.setX(static_cast<int>(pt.x() * zoom() + canvasXOffset() - horzValue()));
-        p.setY(static_cast<int>(pt.y() * zoom() + canvasYOffset() - vertValue()));
+	QPoint p;
+	p.setX(static_cast<int>(pt.x() * zoom() + canvasXOffset() - horzValue()));
+	p.setY(static_cast<int>(pt.y() * zoom() + canvasYOffset() - vertValue()));
 
-        return p;
+	return p;
 }
 
 KisPoint KisView::windowToView(const KisPoint& pt)
 {
-        KisPoint p;
-        p.setX(pt.x() * zoom() + canvasXOffset() - horzValue());
-        p.setY(pt.y() * zoom() + canvasYOffset() - vertValue());
+	KisPoint p;
+	p.setX(pt.x() * zoom() + canvasXOffset() - horzValue());
+	p.setY(pt.y() * zoom() + canvasYOffset() - vertValue());
 
-        return p;
+	return p;
 }
 
 QRect KisView::windowToView(const QRect& rc)
 {
-        QRect r;
-        QPoint p = windowToView(QPoint(rc.x(), rc.y()));
-        r.setX(p.x());
-        r.setY(p.y());
-        r.setWidth(static_cast<int>(ceil(rc.width() * zoom())));
-        r.setHeight(static_cast<int>(ceil(rc.height() * zoom())));
+	QRect r;
+	QPoint p = windowToView(QPoint(rc.x(), rc.y()));
+	r.setX(p.x());
+	r.setY(p.y());
+	r.setWidth(static_cast<int>(ceil(rc.width() * zoom())));
+	r.setHeight(static_cast<int>(ceil(rc.height() * zoom())));
 
-        return r;
+	return r;
 }
 
 KisRect KisView::windowToView(const KisRect& rc)
 {
-        KisRect r;
-        KisPoint p = windowToView(KisPoint(rc.x(), rc.y()));
-        r.setX(p.x());
-        r.setY(p.y());
-        r.setWidth(rc.width() * zoom());
-        r.setHeight(rc.height() * zoom());
+	KisRect r;
+	KisPoint p = windowToView(KisPoint(rc.x(), rc.y()));
+	r.setX(p.x());
+	r.setY(p.y());
+	r.setWidth(rc.width() * zoom());
+	r.setHeight(rc.height() * zoom());
 
-        return r;
+	return r;
 }
 
 void KisView::windowToView(Q_INT32 *x, Q_INT32 *y)
 {
-        if (x && y) {
-                QPoint p = windowToView(QPoint(*x, *y));
-                *x = p.x();
-                *y = p.y();
-        }
+	if (x && y) {
+		QPoint p = windowToView(QPoint(*x, *y));
+		*x = p.x();
+		*y = p.y();
+	}
 }
 
 void KisView::guiActivateEvent(KParts::GUIActivateEvent *event)
 {
-        KStatusBar *sb = statusBar();
+	KStatusBar *sb = statusBar();
 
-        if (sb)
-                sb -> show();
+	if (sb)
+		sb -> show();
 
-        super::guiActivateEvent(event);
+	super::guiActivateEvent(event);
 }
 
 void KisView::nBuilders(Q_INT32 size)
 {
-        m_imgImport -> setEnabled(size == 0);
-        m_imgExport -> setEnabled(size == 0);
+	m_imgImport -> setEnabled(size == 0);
+	m_imgExport -> setEnabled(size == 0);
 
-        if (m_imgScan)
-                m_imgScan -> setEnabled(size == 0);
+	if (m_imgScan)
+		m_imgScan -> setEnabled(size == 0);
 }
 
 bool KisView::eventFilter(QObject *o, QEvent *e)
@@ -3070,196 +3113,196 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
 		break;
 	}
 
-        if ((o == m_hRuler || o == m_vRuler) && (e -> type() == QEvent::MouseMove || e -> type() == QEvent::MouseButtonRelease)) {
-                QMouseEvent *me = dynamic_cast<QMouseEvent*>(e);
-                QPoint pt = mapFromGlobal(me -> globalPos());
-                KisImageSP img = currentImg();
-                KisGuideMgr *mgr;
+	if ((o == m_hRuler || o == m_vRuler) && (e -> type() == QEvent::MouseMove || e -> type() == QEvent::MouseButtonRelease)) {
+		QMouseEvent *me = dynamic_cast<QMouseEvent*>(e);
+		QPoint pt = mapFromGlobal(me -> globalPos());
+		KisImageSP img = currentImg();
+		KisGuideMgr *mgr;
 
-                if (!img)
-                        return super::eventFilter(o, e);
+		if (!img)
+			return super::eventFilter(o, e);
 
-                mgr = img -> guides();
+		mgr = img -> guides();
 
-                if (e -> type() == QEvent::MouseMove && (me -> state() & Qt::LeftButton)) {
-                        bool flag = geometry().contains(pt);
-                        KisGuideSP gd;
+		if (e -> type() == QEvent::MouseMove && (me -> state() & Qt::LeftButton)) {
+			bool flag = geometry().contains(pt);
+			KisGuideSP gd;
 
-                        if (m_currentGuide == 0 && flag) {
-                                // No guide is being edited and moving mouse over the canvas.
-                                // Create a new guide.
-                                enterEvent(0);
-                                eraseGuides();
-                                mgr -> unselectAll();
+			if (m_currentGuide == 0 && flag) {
+				// No guide is being edited and moving mouse over the canvas.
+				// Create a new guide.
+				enterEvent(0);
+				eraseGuides();
+				mgr -> unselectAll();
 
-                                if (o == m_vRuler)
-                                        gd = mgr -> add((pt.x() - m_vRuler -> width() + horzValue()) / zoom(), Qt::Vertical);
-                                else
-                                        gd = mgr -> add((pt.y() - m_hRuler -> height() + vertValue()) / zoom(), Qt::Horizontal);
+				if (o == m_vRuler)
+					gd = mgr -> add((pt.x() - m_vRuler -> width() + horzValue()) / zoom(), Qt::Vertical);
+				else
+					gd = mgr -> add((pt.y() - m_hRuler -> height() + vertValue()) / zoom(), Qt::Horizontal);
 
-                                m_currentGuide = gd;
-                                mgr -> select(gd);
-                                m_lastGuidePoint = mapToScreen(pt);
-                        } else if (m_currentGuide) {
-                                if (flag) {
-                                        // moved an existing guide.
+				m_currentGuide = gd;
+				mgr -> select(gd);
+				m_lastGuidePoint = mapToScreen(pt);
+			} else if (m_currentGuide) {
+				if (flag) {
+					// moved an existing guide.
 					KisMoveEvent kme(currentInputDevice(), pt, me -> globalPos(), PRESSURE_DEFAULT, 0, 0, me -> state());
 					canvasGotMoveEvent(&kme);
-                                } else {
-                                        //  moved a guide out of the frame, destroy it
-                                        leaveEvent(0);
-                                        eraseGuides();
-                                        mgr -> remove(m_currentGuide);
-                                        paintGuides();
-                                        m_currentGuide = 0;
-                                }
-                        }
-                } else if (e -> type() == QEvent::MouseButtonRelease && m_currentGuide) {
-                        eraseGuides();
-                        mgr -> unselect(m_currentGuide);
-                        paintGuides();
-                        m_currentGuide = 0;
-                        enterEvent(0);
+				} else {
+					//  moved a guide out of the frame, destroy it
+					leaveEvent(0);
+					eraseGuides();
+					mgr -> remove(m_currentGuide);
+					paintGuides();
+					m_currentGuide = 0;
+				}
+			}
+		} else if (e -> type() == QEvent::MouseButtonRelease && m_currentGuide) {
+			eraseGuides();
+			mgr -> unselect(m_currentGuide);
+			paintGuides();
+			m_currentGuide = 0;
+			enterEvent(0);
 			KisMoveEvent kme(currentInputDevice(), pt, me -> globalPos(), PRESSURE_DEFAULT, 0, 0, Qt::NoButton);
 			canvasGotMoveEvent(&kme);
-                }
-        }
+		}
+	}
 
-        return super::eventFilter(o, e);
+	return super::eventFilter(o, e);
 }
 
 void KisView::eraseGuides()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
-                KisGuideMgr *mgr = img -> guides();
+	if (img) {
+		KisGuideMgr *mgr = img -> guides();
 
-                if (mgr)
-                        mgr -> erase(&m_canvasPixmap, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
-        }
+		if (mgr)
+			mgr -> erase(&m_canvasPixmap, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
+	}
 }
 
 void KisView::paintGuides()
 {
-        KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 
-        if (img) {
-                KisGuideMgr *mgr = img -> guides();
+	if (img) {
+		KisGuideMgr *mgr = img -> guides();
 
-                if (mgr)
-                        mgr -> paint(&m_canvasPixmap, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
-        }
+		if (mgr)
+			mgr -> paint(&m_canvasPixmap, this, horzValue() - canvasXOffset(), vertValue() - canvasYOffset(), zoom());
+	}
 }
 
 void KisView::updateGuides()
 {
-        eraseGuides();
-        paintGuides();
+	eraseGuides();
+	paintGuides();
 }
 
 QPoint KisView::mapToScreen(const QPoint& pt)
 {
-        QPoint converted;
+	QPoint converted;
 
-        converted.rx() = pt.x() + horzValue() - canvasXOffset();
-        converted.ry() = pt.y() + vertValue() - canvasYOffset();
-        return converted;
+	converted.rx() = pt.x() + horzValue() - canvasXOffset();
+	converted.ry() = pt.y() + vertValue() - canvasYOffset();
+	return converted;
 }
 
 void KisView::attach(KisCanvasObserver *observer)
 {
-        if (observer)
-                m_observers.push_back(observer);
+	if (observer)
+		m_observers.push_back(observer);
 }
 
 void KisView::detach(KisCanvasObserver *observer)
 {
-        vKisCanvasObserver_it it = std::find(m_observers.begin(), m_observers.end(), observer);
+	vKisCanvasObserver_it it = std::find(m_observers.begin(), m_observers.end(), observer);
 
-        if (it != m_observers.end())
-                m_observers.erase(it);
+	if (it != m_observers.end())
+		m_observers.erase(it);
 }
 
 void KisView::notify()
 {
-        for (vKisCanvasObserver_it it = m_observers.begin(); it != m_observers.end(); it++)
-                (*it) -> update(this);
+	for (vKisCanvasObserver_it it = m_observers.begin(); it != m_observers.end(); it++)
+		(*it) -> update(this);
 }
 
 KisImageSP KisView::currentImg() const
 {
-        if (m_current && m_doc -> contains(m_current)) {
-                return m_current;
+	if (m_current && m_doc -> contains(m_current)) {
+		return m_current;
 	}
 
 	if (m_doc -> nimages() < 1) {
 		return 0;
 	}
 
-        m_current = m_doc -> imageNum(m_doc -> nimages() - 1);
+	m_current = m_doc -> imageNum(m_doc -> nimages() - 1);
 
-        connectCurrentImg();
+	connectCurrentImg();
 
-        return m_current;
+	return m_current;
 }
 
 QString KisView::currentImgName() const
 {
-        if (currentImg())
-                return currentImg() -> name();
+	if (currentImg())
+		return currentImg() -> name();
 
-        return QString::null;
+	return QString::null;
 }
 
 QColor KisView::bgColor() const
 {
-        return m_bg;
+	return m_bg;
 }
 
 QColor KisView::fgColor() const
 {
-        return m_fg;
+	return m_fg;
 }
 
 KisBrush *KisView::currentBrush() const
 {
-        return m_brush;
+	return m_brush;
 }
 
 KisPattern *KisView::currentPattern() const
 {
-        return m_pattern;
+	return m_pattern;
 }
 
 KisGradient *KisView::currentGradient() const
 {
-        return m_gradient;
+	return m_gradient;
 }
 
 double KisView::zoomFactor() const
 {
-        return zoom();
+	return zoom();
 }
 
 KisUndoAdapter *KisView::undoAdapter() const
 {
-        return m_adapter;
+	return m_adapter;
 }
 
 KisCanvasControllerInterface *KisView::canvasController() const
 {
-        return const_cast<KisCanvasControllerInterface*>(static_cast<const KisCanvasControllerInterface*>(this));
+	return const_cast<KisCanvasControllerInterface*>(static_cast<const KisCanvasControllerInterface*>(this));
 }
 
 KisToolControllerInterface *KisView::toolController() const
 {
-        return const_cast<KisToolControllerInterface*>(static_cast<const KisToolControllerInterface*>(this));
+	return const_cast<KisToolControllerInterface*>(static_cast<const KisToolControllerInterface*>(this));
 }
 
 KoDocument *KisView::document() const
 {
-        return koDocument();
+	return koDocument();
 }
 
 KisProgressDisplayInterface *KisView::progressDisplay() const
@@ -3267,20 +3310,27 @@ KisProgressDisplayInterface *KisView::progressDisplay() const
 	return m_progress;
 }
 
+
+// XXX: Temporary re-instatement of old way of getting filter and tools plugins
 KisFilterSP KisView::filterGet(const QString& name)
 {
-	return filterRegistry()->get( name );
+       return filterRegistry()->get( name );
 }
 
 QStringList KisView::filterList()
 {
-	return filterRegistry()->listKeys();
+       return filterRegistry()->listKeys();
 }
 
-KisFilterRegistrySP KisView::filterRegistry() const
+KisToolRegistry * KisView::toolRegistry() const
+{
+	return m_toolRegistry;
+};
+
+KisFilterRegistry * KisView::filterRegistry() const
 {
 	return m_filterRegistry;
-}
+};
 
 
 #include "kis_view.moc"

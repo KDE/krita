@@ -59,7 +59,7 @@ public:
 
 	/**
 	 * Create a new colorspace strategy.
-	 * 
+	 *
 	 * @param name The internal Krita name for this color strategy that we can use for loading and saving
 	 * @param description i18n'able The user-friendly description of this strategy
 	 * @param cmType The littlecms colorstrategy type we wrap.
@@ -74,7 +74,7 @@ public:
         /**
 	 * The nativeColor methods take a given color that can be defined in any
 	 * colorspace and fills a byte array with the corresponding color in the
-	 * the colorspace managed by this strategy. 
+	 * the colorspace managed by this strategy.
 	 *
 	 * The profile parameter is the profile of the paint device; the other profile
 	 * is the display profile -- since we are moving from QColor that have most likely
@@ -89,15 +89,15 @@ public:
 
 	virtual KisPixelRO toKisPixelRO(QUANTUM *src, KisProfileSP profile) = 0;
 	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile) = 0;
-	
+
 	// Return a vector describing all the channels this color model has.
 	virtual vKisChannelInfoSP channels() const = 0;
-	
+
 	/**
 	 * The total number of channels for a single pixel in this color model
 	 */
-	virtual Q_INT32 depth() const = 0;
-	
+	virtual Q_INT32 nChannels() const = 0;
+
 	/**
 	 * The total number of color channels (excludes alpha and substance) for a single
 	 * pixel in this color model.
@@ -113,7 +113,7 @@ public:
 	/**
 	 * The size in bytes of a single pixel in this color model
 	 */
-	virtual Q_INT32 size() const = 0;
+	virtual Q_INT32 pixelSize() const = 0;
 
 	/**
 	 * Whether this color model has a channel of type ALPHA
@@ -136,7 +136,7 @@ public:
 	 * color strategy.
 	 */
 	virtual bool convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
- 	
+
 	/**
 	 * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
 	 * The pixels are supposed to be encoded in this color model.
@@ -145,8 +145,8 @@ public:
 	 * @param width in pixels
 	 * @param height in pixels
 	 */
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
-				       KisProfileSP srcProfile, KisProfileSP dstProfile, 
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL) = 0;
 
 	/**
@@ -155,14 +155,14 @@ public:
 	 * converted to the target model.
 	 */
 	virtual void bitBlt(Q_INT32 stride,
-			    QUANTUM *dst, 
+			    QUANTUM *dst,
 			    Q_INT32 dststride,
 			    KisStrategyColorSpaceSP srcSpace,
-			    QUANTUM *src, 
+			    QUANTUM *src,
 			    Q_INT32 srcstride,
 			    QUANTUM opacity,
-			    Q_INT32 rows, 
-			    Q_INT32 cols, 
+			    Q_INT32 rows,
+			    Q_INT32 cols,
 			    CompositeOp op,
 			    KisProfileSP srcProfile = 0,
 			    KisProfileSP dstProfile = 0);
@@ -205,23 +205,23 @@ protected:
 	 * Returns false if the conversion failed, true if it succeeded
 	 */
 	virtual bool convertPixelsTo(QUANTUM * src, KisProfileSP srcProfile,
-				     QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, 
+				     QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 				     Q_UINT32 length,
 				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
-	
+
 	/**
 	 * Compose two byte arrays containing pixels in the same color
 	 * model together.
 	 */
 	virtual void bitBlt(Q_INT32 stride,
-			    QUANTUM *dst, 
+			    QUANTUM *dst,
 			    Q_INT32 dststride,
-			    QUANTUM *src, 
+			    QUANTUM *src,
 			    Q_INT32 srcstride,
 			    QUANTUM opacity,
-			    Q_INT32 rows, 
-			    Q_INT32 cols, 
+			    Q_INT32 rows,
+			    Q_INT32 cols,
 			    CompositeOp op) = 0;
 
 	virtual cmsHTRANSFORM createTransform(KisStrategyColorSpaceSP dstColorStrategy,
@@ -241,9 +241,9 @@ private:
 
 	KisStrategyColorSpace(const KisStrategyColorSpace&);
 	KisStrategyColorSpace& operator=(const KisStrategyColorSpace&);
-	
+
 	vKisProfileSP m_profiles;
-	QStringList m_profileFilenames;	
+	QStringList m_profileFilenames;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_H_

@@ -29,34 +29,34 @@ class KisMemento;
 
 /**
  * KisTiledDataManager implements the interface that KisDataManager defines
- * 
+ *
  * The interface definition is enforced by KisDataManager calling all the methods
  * which must also be defined in KisTiledDataManager. It is not allowed to change the interface
  * as other datamangers may also rely on the same interface.
  *
  * * Storing undo/redo data
  * * Offering ordered and unordered iterators over rects of pixels
- * * (eventually) efficiently loading and saving data in a format 
+ * * (eventually) efficiently loading and saving data in a format
  * that may allow deferred loading.
  *
- * A datamanager knows nothing about the type of pixel data except 
- * how many Q_UINT8's a single pixel takes.  
+ * A datamanager knows nothing about the type of pixel data except
+ * how many Q_UINT8's a single pixel takes.
  */
- 
+
 class KisTiledDataManager {
 
 protected:
-	KisTiledDataManager(Q_UINT32 depth);
+	KisTiledDataManager(Q_UINT32 pixelSize);
 	~KisTiledDataManager();
 	KisTiledDataManager(const KisTiledDataManager &dm);
 	KisTiledDataManager & operator=(const KisTiledDataManager &dm);
 
-	
+
 public:
 	// Allow the baseclass of iterators acces to the interior
 	// derived classes must go through KisTiledIterator
 	friend class KisTiledIterator;
-	
+
 public:
 
 	KisMemento *getMemento();
@@ -73,10 +73,9 @@ public:
 
 public:
 
-	// XXX: Refactor these names to conform to rest of Krita : depth() && setDepth()
-	Q_UINT32 size();
-	Q_UINT32 getDepth();
-	
+// 	Q_UINT32 pixelSize();
+	Q_UINT32 pixelSize();
+
 	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
 
 
@@ -101,7 +100,7 @@ public:
 	Q_UINT8* pixel(Q_INT32 x, Q_INT32 y);
 
 	/**
-	 * write the specified data to x, y. There is no checking on depth!
+	 * write the specified data to x, y. There is no checking on pixelSize!
 	 */
 	void setPixel(Q_INT32 x, Q_INT32 y, Q_UINT8 * data);
 
@@ -124,16 +123,16 @@ public:
 
 
 private:
-	 
-	Q_UINT32 m_depth;
+
+	Q_UINT32 m_pixelSize;
 	Q_UINT32 m_numTiles;
 	KisTile *m_defaultTile;
 	KisTile **m_hashTable;
 	KisMemento *m_currentMemento;
-	Q_UINT32 m_extentMinX;
-	Q_UINT32 m_extentMinY;
-	Q_UINT32 m_extentMaxX;
-	Q_UINT32 m_extentMaxY;
+	Q_INT32 m_extentMinX;
+	Q_INT32 m_extentMinY;
+	Q_INT32 m_extentMaxX;
+	Q_INT32 m_extentMaxY;
 private:
 
 	void ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, KisTile *refTile);

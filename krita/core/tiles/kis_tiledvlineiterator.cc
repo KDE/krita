@@ -29,26 +29,26 @@ KisTiledVLineIterator::KisTiledVLineIterator( KisTiledDataManager *ndevice,  Q_I
 	m_writable = writable;
 	m_x = x;
 	m_y = y;
-	
+
 	// Find tile row,col matching x,y
 	m_col = xToCol(m_x);
 	m_topRow = yToRow(m_y);
 	m_bottomRow = yToRow(m_bottom);
 	m_row = m_topRow;
-	
+
 	// calc limits within the tile
 	m_xInTile = m_x - m_col * tileWidth();
-	m_topInTile = m_y - m_topRow * tileHeight();	
-	
+	m_topInTile = m_y - m_topRow * tileHeight();
+
 	if(m_row == m_bottomRow)
 		m_bottomInTile = m_bottom - m_bottomRow * tileHeight();
 	else
 		m_bottomInTile = tileHeight() - 1;
-	
+
 	m_yInTile = m_topInTile;
-	
+
 	fetchTileData(m_col, m_row);
-	m_offset = m_depth * (m_yInTile * tileWidth() + m_xInTile);
+	m_offset = m_pixelSize * (m_yInTile * tileWidth() + m_xInTile);
 }
 ;
 KisTiledVLineIterator::~KisTiledVLineIterator( )
@@ -62,15 +62,15 @@ KisTiledVLineIterator & KisTiledVLineIterator::operator ++ ()
 		nextTile();
 		fetchTileData(m_col, m_row);
 		m_yInTile =m_topInTile;
-		m_offset = m_depth * (m_yInTile * tileWidth() + m_xInTile);
+		m_offset = m_pixelSize * (m_yInTile * tileWidth() + m_xInTile);
 	}
 	else
 	{
 		m_yInTile++;
-		m_offset += m_depth * tileWidth();
+		m_offset += m_pixelSize * tileWidth();
 	}
 	m_y++;
-	
+
 	return *this;
 }
 
@@ -80,7 +80,7 @@ void KisTiledVLineIterator::nextTile()
 	{
 		m_row++;
 		m_topInTile = 0;
-		
+
 		if(m_row == m_bottomRow)
 			m_bottomInTile = m_bottom - m_bottomRow * tileHeight();
 		else

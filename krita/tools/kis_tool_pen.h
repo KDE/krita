@@ -53,8 +53,8 @@ class KisToolPenFactory : public KisToolFactory {
 public:
 	KisToolPenFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolPenFactory(){};
-	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolPen(); t -> setup(m_actionCollection); return t; }
+
+	virtual KisTool * createTool() { KisTool * t =  new KisToolPen(); t -> setup(m_ac); return t; }
 	virtual QString name() { return i18n("Pen tool"); }
 };
 

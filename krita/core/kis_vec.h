@@ -29,6 +29,7 @@
 /*
  * vector classes
  */
+const double epsilon = DBL_EPSILON;
 
 class KisVector2D
 {
@@ -73,12 +74,8 @@ public:
 	friend inline KisVector2D operator/(const KisVector2D &, int);
 	friend inline KisVector2D operator/(const KisVector2D &, long);
 	friend inline KisVector2D operator/(const KisVector2D &, double);
-   
-	KisPoint toKisPoint() const;
 
-	// This ought to be:
-	//const double epsilon = DBL_EPSILON;
-#define epsilon DBL_EPSILON
+	KisPoint toKisPoint() const;
 
 private:
 	double m_x;
@@ -278,7 +275,7 @@ public:
 	friend inline KisVector3D operator/(const KisVector3D &, int);
 	friend inline KisVector3D operator/(const KisVector3D &, long);
 	friend inline KisVector3D operator/(const KisVector3D &, double);
-   
+
 private:
 	double m_x;
 	double m_y;

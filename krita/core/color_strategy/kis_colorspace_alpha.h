@@ -27,7 +27,7 @@
 #include "kis_pixel.h"
 
 /**
- * The alpha mask is a special color strategy that treats all pixels as 
+ * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a colour common to the mask. The default color is white.
  */
 class KisColorSpaceAlpha : public KisStrategyColorSpace {
@@ -38,7 +38,7 @@ public:
 public:
 	virtual void nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile = 0);
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile = 0);
-	
+
 	virtual void toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile = 0);
 	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
@@ -47,12 +47,12 @@ public:
 
 	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;
-	virtual Q_INT32 depth() const;
+	virtual Q_INT32 nChannels() const { return 1; };
 	virtual Q_INT32 nColorChannels() const { return 0; };
-	virtual Q_INT32 size() const { return 1; };
+	virtual Q_INT32 pixelSize() const { return 1; };
 
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
-				       KisProfileSP srcProfile, KisProfileSP dstProfile, 
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 	virtual void setMaskColor(QColor c) { m_maskColor = c; }
@@ -67,20 +67,20 @@ protected:
 	 * Returns false if the conversion failed, true if it succeeded
 	 */
 	virtual bool convertPixelsTo(QUANTUM * src, KisProfileSP srcProfile,
-				     QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, 
+				     QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 				     Q_UINT32 length,
 				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 
 
 	virtual void bitBlt(Q_INT32 stride,
-			    QUANTUM *dst, 
+			    QUANTUM *dst,
 			    Q_INT32 dststride,
-			    QUANTUM *src, 
+			    QUANTUM *src,
 			    Q_INT32 srcstride,
 			    QUANTUM opacity,
-			    Q_INT32 rows, 
-			    Q_INT32 cols, 
+			    Q_INT32 rows,
+			    Q_INT32 cols,
 			    CompositeOp op);
 
 private:

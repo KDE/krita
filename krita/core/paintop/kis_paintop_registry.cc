@@ -23,14 +23,6 @@
 #include "kis_paintop_registry.h"
 #include "kis_paintop.h"
 
-#include "kis_airbrushop.h"
-#include "kis_brushop.h"
-#include "kis_convolveop.h"
-#include "kis_duplicateop.h"
-#include "kis_eraseop.h"
-#include "kis_filterop.h"
-#include "kis_penop.h"
-
 KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 
 KisPaintOpRegistry::KisPaintOpRegistry()
@@ -38,18 +30,6 @@ KisPaintOpRegistry::KisPaintOpRegistry()
 // 	kdDebug() << " creating a KisPaintOpRegistry" << endl;
 	Q_ASSERT(KisPaintOpRegistry::m_singleton == 0);
 	KisPaintOpRegistry::m_singleton = this;
-
-	// Add hard-coded paint ops. Plugin paintops will add
-	// themselves in the plugin initialization code.
-
- 	add(new KisAirbrushOpFactory);
- 	add(new KisBrushOpFactory);
- 	add(new KisConvolveOpFactory);
- 	add(new KisDuplicateOpFactory);
- 	add(new KisEraseOpFactory);
- 	add(new KisFilterOpFactory);
- 	add(new KisPenOpFactory);
-
 }
 
 KisPaintOpRegistry::~KisPaintOpRegistry()

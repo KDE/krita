@@ -64,7 +64,7 @@ public:
 	KisToolColorPickerFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolColorPickerFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolColorPicker(); t -> setup(m_actionCollection); return t; }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolColorPicker(); t -> setup(m_ac); return t; }
 	virtual QString name() { return i18n("Color picker"); }
 };
 

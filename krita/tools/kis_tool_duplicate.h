@@ -67,7 +67,7 @@ public:
 	KisToolDuplicateFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolDuplicateFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolDuplicate(); t -> setup(m_actionCollection); return t; }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolDuplicate(); t -> setup(m_ac); return t; }
 	virtual QString name() { return i18n("Duplicate tool"); }
 };
 

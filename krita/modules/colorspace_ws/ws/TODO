@@ -1,0 +1,24 @@
+1/ Load in portable pixmaps (PPM). Set an arbitrary paint attribute
+map for each different colour. Otherwise load in a paint attribute
+map definition file.
+2/ Input from "brush". Incremental development of brush input.
+First simple mixing then
+empty brush moving paint
+paint on top of paint
+attribute application.
+3/ Animation 
+1000000 = 1 fps
+500000  = 2 fps
+250000  = 4 fps
+125000  = 8 fps
+62500   = 16 fps
+41660   = 24 fps
+
+4/ NK times    178.9 real        49.4 user        13.3 sys
+   Orig times  636.6 real       111.1 user        43.6 sys
+
+5/ Cross section through volume 
+
+6/ Separate Colour scale window
+
+7/ Transparency

@@ -22,9 +22,8 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <config.h>
 
-#define KRITA_VERSION VERSION
+#include "kis_global.h"
 
 KAboutData * newKritaAboutData()
 {

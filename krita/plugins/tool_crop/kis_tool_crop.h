@@ -28,16 +28,14 @@
 
 /**
  * Crop tool
- * 
+ *
  * TODO: - crop from selection
  *       - crop all layers
  *       - crop single layer
- *       - (when moving to Qt 4: replace rectangle with  darker, dimmer overlay layer 
+ *       - (when moving to Qt 4: replace rectangle with  darker, dimmer overlay layer
  *         like we have for selections right now)
- *
+ *       - Move crop selection with corner markers
  * BUGS: - No undo yet
- *       - Tool does nog get deselected when other tool gets selected (problem
- *         with different actioncollections not sharing exclusive groups.)
  */
 class KisToolCrop : public KisToolNonPaint {
 
@@ -89,10 +87,10 @@ private:
 class KisToolCropFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolCropFactory(KActionCollection * ac) : super(ac) {};
+	KisToolCropFactory(KActionCollection * ac ) : super(ac) {};
 	virtual ~KisToolCropFactory(){};
-	
-	virtual KisTool * createTool() { KisTool * t = new KisToolCrop(); t -> setup(m_actionCollection); return t;}
+
+	virtual KisTool * createTool() { KisTool * t = new KisToolCrop(); t -> setup(m_ac); return t;}
 	virtual QString name() { return i18n("Crop tool"); }
 };
 

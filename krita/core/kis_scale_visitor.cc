@@ -97,7 +97,7 @@ double KisMitchellScaleFilterStrategy::valueAt(double t) const {
 }
 
 
-void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, enumFilterType filterType) 
+void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, enumFilterType filterType)
 {
         //define filter supports
         const double filter_support=1.0;
@@ -107,21 +107,21 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         const double B_spline_support=2.0;
         const double Lanczos3_support=3.0;
         const double Mitchell_support=2.0;
-        
+
         double fwidth = 0;
-        
+
         KisScaleFilterStrategy *filterStrategy = 0;
-        
+
         switch(filterType){
-                case BOX_FILTER: 
+                case BOX_FILTER:
                         filterStrategy = new KisBoxScaleFilterStrategy();
                         fwidth=box_support;
                         break;
-                case TRIANGLE_FILTER: 
+                case TRIANGLE_FILTER:
                         filterStrategy = new KisTriangleScaleFilterStrategy();
                         fwidth=triangle_support;
                         break;
-                case BELL_FILTER: 
+                case BELL_FILTER:
                         filterStrategy = new KisBellScaleFilterStrategy();
                         fwidth=bell_support;
                         break;
@@ -129,28 +129,28 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                         filterStrategy = new KisBSplineScaleFilterStrategy();
                         fwidth=B_spline_support;
                         break;
-                case FILTER: 
+                case FILTER:
                         filterStrategy = new KisSimpleScaleFilterStrategy();
                         fwidth=filter_support;
                         break;
-                case LANCZOS3_FILTER: 
+                case LANCZOS3_FILTER:
                         filterStrategy = new KisLanczos3ScaleFilterStrategy();
                         fwidth=Lanczos3_support;
                         break;
-                case MITCHELL_FILTER: 
+                case MITCHELL_FILTER:
                         filterStrategy = new KisMitchellScaleFilterStrategy();
                         fwidth=Mitchell_support;
                         break;
         }
-        
-     
+
+
         // target image data
         Q_INT32 targetW;
         Q_INT32 targetH;
 
         Q_INT32 width = m_dev->image()->width();
         Q_INT32 height = m_dev->image()->height();
-        
+
         // compute size of target image
         // (this bit seems to be mostly from QImage.xForm)
         QWMatrix scale_matrix;
@@ -164,33 +164,33 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         targetH = qRound( scale_matrix.m22() * height );
         targetW = QABS( targetW );
         targetH = QABS( targetH );
- 
-        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> depth() * sizeof(QUANTUM)];
+
+        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> pixelSize() * sizeof(QUANTUM)];
         int n;				/* pixel number */
         double center, left, right;	/* filter calculation variables */
-        double m_width, fscale, weight[m_dev -> depth()];	/* filter calculation variables */
-        QUANTUM *pel = new QUANTUM[m_dev -> depth() * sizeof(QUANTUM)];
-        QUANTUM *pel2 = new QUANTUM[m_dev -> depth() * sizeof(QUANTUM)];
-        bool bPelDelta[m_dev -> depth()];
+        double m_width, fscale, weight[m_dev -> pixelSize()];	/* filter calculation variables */
+        QUANTUM *pel = new QUANTUM[m_dev -> pixelSize() * sizeof(QUANTUM)];
+        QUANTUM *pel2 = new QUANTUM[m_dev -> pixelSize() * sizeof(QUANTUM)];
+        bool bPelDelta[m_dev -> pixelSize()];
         CLIST	*contribY;		/* array of contribution lists */
         CLIST	contribX;
         int		nRet = -1;
         const Q_INT32 BLACK_PIXEL=0;
         const Q_INT32 WHITE_PIXEL=255;
-        
-        
+
+
         // create intermediate column to hold horizontal dst column zoom
-        QUANTUM * tmp = new QUANTUM[height * m_dev -> depth() * sizeof(QUANTUM)];
-        
+        QUANTUM * tmp = new QUANTUM[height * m_dev -> pixelSize() * sizeof(QUANTUM)];
+
         //progress info
         m_cancelRequested = false;
         m_progress -> setSubject(this, true, true);
-        
+
         /* Build y weights */
         /* pre-calculate filter contributions for a column */
         contribY = (CLIST *)calloc(targetH, sizeof(CLIST));
         int k;
-        
+
         if(yscale < 1.0)
         {
                 m_width = fwidth / yscale;
@@ -243,7 +243,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
         //progress info
         emit notifyProgressStage(this,i18n("Scaling layer..."),0);
-        
+
         for(int x = 0; x < targetW; x++)
         {
                 //progress info
@@ -251,12 +251,12 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                 if (m_cancelRequested) {
                         break;
                 }
-                
+
                 calc_x_contrib(&contribX, xscale, fwidth, targetW, width, filterStrategy, x);
                 /* Apply horz filter to make dst column in tmp. */
                 for(int y = 0; y < height; y++)
                 {
-                        for(int channel = 0; channel < m_dev -> depth(); channel++){
+                        for(int channel = 0; channel < m_dev -> pixelSize(); channel++){
                                 weight[channel] = 0.0;
                                 bPelDelta[channel] = FALSE;
                         }
@@ -265,41 +265,41 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                         {
                                 if (!(contribX.p[xx].m_pixel < 0 || contribX.p[xx].m_pixel >= width)){
                                         pel2 = m_dev -> readBytes(contribX.p[xx].m_pixel, y, 1, 1);
-                                        for(int channel = 0; channel < m_dev -> depth(); channel++)
+                                        for(int channel = 0; channel < m_dev -> pixelSize(); channel++)
                                         {
                                                 if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;
                                                 weight[channel] += pel2[channel] * contribX.p[xx].m_weight;
                                         }
                                 }
                         }
-                        
-                        for(int channel = 0; channel < m_dev -> depth(); channel++){
+
+                        for(int channel = 0; channel < m_dev -> pixelSize(); channel++){
                                 weight[channel] = bPelDelta[channel] ? static_cast<int>(qRound(weight[channel])) : pel[channel];
-                                tmp[y*m_dev -> depth()+channel] = static_cast<QUANTUM>(CLAMP(weight[channel], BLACK_PIXEL, WHITE_PIXEL));
+                                tmp[y*m_dev -> pixelSize()+channel] = static_cast<QUANTUM>(CLAMP(weight[channel], BLACK_PIXEL, WHITE_PIXEL));
                         }
                 } /* next row in temp column */
                 free(contribX.p);
 
-                /* The temp column has been built. Now stretch it 
+                /* The temp column has been built. Now stretch it
                 vertically into dst column. */
                 for(int y = 0; y < targetH; y++)
                 {
-                        for(int channel = 0; channel < m_dev -> depth(); channel++){
+                        for(int channel = 0; channel < m_dev -> pixelSize(); channel++){
                                 weight[channel] = 0.0;
                                 bPelDelta[channel] = FALSE;
-                                pel[channel] = tmp[contribY[y].p[0].m_pixel*m_dev -> depth()+channel];
+                                pel[channel] = tmp[contribY[y].p[0].m_pixel*m_dev -> pixelSize()+channel];
                         }
                         for(int xx = 0; xx < contribY[y].n; xx++)
                         {
-                                for(int channel = 0; channel < m_dev -> depth(); channel++){
-                                        pel2[channel] = tmp[contribY[y].p[xx].m_pixel*m_dev -> depth()+channel];
+                                for(int channel = 0; channel < m_dev -> pixelSize(); channel++){
+                                        pel2[channel] = tmp[contribY[y].p[xx].m_pixel*m_dev -> pixelSize()+channel];
                                         if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;
                                         weight[channel] += pel2[channel] * contribY[y].p[xx].m_weight;
                                 }
                         }
-                        for(int channel = 0; channel < m_dev -> depth(); channel++){
+                        for(int channel = 0; channel < m_dev -> pixelSize(); channel++){
                                 weight[channel] = bPelDelta[channel] ? static_cast<int>(qRound(weight[channel])) : pel[channel];
-                                int currentPos = (y*targetW+x) * m_dev -> depth(); // try to be at least a little efficient
+                                int currentPos = (y*targetW+x) * m_dev -> pixelSize(); // try to be at least a little efficient
                                 if (weight[channel]<0) newData[currentPos + channel] = 0;
                                 else if (weight[channel]>255) newData[currentPos + channel] = 255;
                                 else newData[currentPos + channel] = (uchar)weight[channel];
@@ -324,7 +324,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
         //progress info
         emit notifyProgressDone(this);
-        
+
         //return nRet;
         return;
 }
@@ -338,7 +338,7 @@ int KisScaleVisitor::calc_x_contrib(CLIST *contribX, double xscale, double fwidt
         //int srcwidth: Source bitmap width
         //double (*filterf)(double): Filter proc
         //int i: Pixel column in source bitmap being processed
-        
+
         double width;
         double fscale;
         double center, left, right;
@@ -364,7 +364,7 @@ int KisScaleVisitor::calc_x_contrib(CLIST *contribX, double xscale, double fwidt
                                 n = -xx;
                         else if(xx >= srcwidth)
                                 n = (srcwidth - xx) + srcwidth - 1;
-                        else                                                                    
+                        else
                                 n = xx;
 
                         k = contribX->n++;

@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/CoreFilter
+Comment=Filter plugin for Krita

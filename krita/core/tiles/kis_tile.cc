@@ -26,17 +26,17 @@ const Q_INT32 KisTile::WIDTH = 64;
 const Q_INT32 KisTile::HEIGHT = 64;
 
 
-KisTile::KisTile(Q_INT32 depth, Q_INT32 col, Q_INT32 row)
+KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row)
 {
-	m_depth = depth;
+	m_pixelSize = pixelSize;
 	m_data = 0;
 	m_nextTile = 0;
 	m_col = col;
 	m_row = row;
 	allocate();
-	
+
 	//HACK
-	memset(m_data, 0, WIDTH * HEIGHT * m_depth);
+	memset(m_data, 0, WIDTH * HEIGHT * m_pixelSize);
 /**
 // XXX: This code causes an alarm clock and a valgrind crash:
 
@@ -56,37 +56,37 @@ KisTile::KisTile(Q_INT32 depth, Q_INT32 col, Q_INT32 row)
 KisTile::KisTile(KisTile& rhs, Q_INT32 col, Q_INT32 row)
 {
 	if (this != &rhs) {
-		m_depth = rhs.m_depth;
+		m_pixelSize = rhs.m_pixelSize;
 		m_data = 0;
 		m_nextTile = 0;
 		allocate();
 
 		if (rhs.m_data) {
-			memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_depth * sizeof(Q_UINT8));
+			memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(Q_UINT8));
 		}
-		
+
 		m_col = col;
-		m_row = row;	
+		m_row = row;
 	}
 }
 
 KisTile::KisTile(KisTile& rhs)
 {
 	if (this != &rhs) {
-		m_depth = rhs.m_depth;
+		m_pixelSize = rhs.m_pixelSize;
 		m_col = rhs.m_col;
-		m_row = rhs.m_row;	
+		m_row = rhs.m_row;
 		m_data = 0;
 		m_nextTile = 0;
 		allocate();
 
 		if (rhs.m_data) {
-			memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_depth * sizeof(Q_UINT8));
-		}		
+			memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(Q_UINT8));
+		}
 	}
 }
-	
-	
+
+
 KisTile::~KisTile()
 {
 	if (m_data) {
@@ -98,7 +98,7 @@ KisTile::~KisTile()
 void KisTile::allocate()
 {
 	if (m_data == 0)
-		m_data = new Q_UINT8[WIDTH * HEIGHT * m_depth];
+		m_data = new Q_UINT8[WIDTH * HEIGHT * m_pixelSize];
 }
 
 KisTile * KisTile::getNext()
@@ -113,5 +113,5 @@ void KisTile::setNext(KisTile *n)
 
 Q_UINT8 *KisTile::data(Q_INT32 x, Q_INT32 y )
 {
-	return m_data + m_depth * ( y * WIDTH + x );
+	return m_data + m_pixelSize * ( y * WIDTH + x );
 }

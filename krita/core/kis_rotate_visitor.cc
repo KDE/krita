@@ -81,7 +81,19 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
         delete newData;
 }
 
-void KisRotateVisitor::shear(double angle, KisProgressDisplayInterface *m_progress) 
+void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress) 
 {
-        kdDebug() << "Shear Code called! Going to shear image by (angle): " << angle << "\n";
+        kdDebug() << "Shear Code called! Going to shear image by xAngle " << angleX << " and yAngle " << angleY << "\n";
+        
+        const double pi=3.1415926535897932385;
+        
+        Q_INT32 xOffset, yOffset, yWidth;
+        Q_INT32 shearX=-tan(angleX*pi/180);
+
+        xOffset=(fabs(2.0*m_dev->height()*shearX)+0.5);
+        xShearImage(shearX,m_dev->width(),m_dev->height(),xOffset,0);
+}
+
+void KisRotateVisitor::xShearImage(double angle, Q_INT32 width, Q_INT32 height, Q_INT32 x_offset, Q_INT32 y_offset)
+{
 }

@@ -171,7 +171,7 @@ public slots:
 	void resizeCurrentImage(Q_INT32 w, Q_INT32 h);
 	void scaleCurrentImage(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
         void rotateCurrentImage(double angle);
-        void shearCurrentImage(double angle);
+        void shearCurrentImage(double angleX, double angleY);
                 
 	// Layer action slots
 	void rotateLayer180();
@@ -183,7 +183,7 @@ public slots:
 	void resizeLayer(Q_INT32 w, Q_INT32 h);
 	void scaleLayer(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
         void rotateLayer(double angle);
-        void shearLayer(double angle);
+        void shearLayer(double angleX, double angleY);
         
 	// settings action slots
 	void preferences();

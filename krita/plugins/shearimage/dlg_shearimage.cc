@@ -59,16 +59,28 @@ DlgShearImage::~DlgShearImage()
 	delete m_page;
 }
 
-void DlgShearImage::setAngle(Q_UINT32 angle) 
+void DlgShearImage::setAngleX(Q_UINT32 angle) 
 {
-	m_page -> intAngle -> setValue(angle);
+	m_page -> shearAngleX -> setValue(angle);
 	m_oldAngle = angle;
 
 }
 
-Q_INT32 DlgShearImage::angle()
+void DlgShearImage::setAngleY(Q_UINT32 angle) 
 {
-	return (Q_INT32)qRound(m_page -> intAngle -> value());
+	m_page -> shearAngleY -> setValue(angle);
+	m_oldAngle = angle;
+
+}
+
+Q_INT32 DlgShearImage::angleX()
+{
+	return (Q_INT32)qRound(m_page -> shearAngleX -> value());
+}
+
+Q_INT32 DlgShearImage::angleY()
+{
+	return (Q_INT32)qRound(m_page -> shearAngleY -> value());
 }
 
 // SLOTS

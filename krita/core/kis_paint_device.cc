@@ -333,11 +333,11 @@ void KisPaintDevice::rotate(double angle, KisProgressDisplayInterface *m_progres
         visitor.rotate(angle, m_progress);
 }
 
-void KisPaintDevice::shear(double angle, KisProgressDisplayInterface *m_progress) 
+void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress) 
 {
         KisRotateVisitor visitor;
         accept(visitor);
-        visitor.shear(angle, m_progress);
+        visitor.shear(angleX, angleY, m_progress);
 }
 
 // XXX: also allow transform on part of paint device?

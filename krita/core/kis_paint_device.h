@@ -189,7 +189,7 @@ public:
         void resize();
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
-        void shear(double angle, KisProgressDisplayInterface *m_progress);
+        void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
         
 	/**
 	   Apply the transformation matrix _in place_.

@@ -34,14 +34,15 @@ public:
         ~KisRotateVisitor();
         void visitKisPaintDevice(KisPaintDevice* dev);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
-        void shear(double angle, KisProgressDisplayInterface *m_progress);
+        void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 private:
         KisPaintDevice* m_dev;
         
 	// Implement KisProgressSubject
 	bool m_cancelRequested;
         virtual void cancel() { m_cancelRequested = true; }
-
+        void xShearImage(double angle, Q_INT32 width, Q_INT32 height, Q_INT32 x_offset, Q_INT32 y_offset);
+        
 };
 
 inline KisRotateVisitor::KisRotateVisitor()

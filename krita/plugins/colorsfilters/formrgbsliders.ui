@@ -9,13 +9,13 @@
             <x>0</x>
             <y>0</y>
             <width>352</width>
-            <height>151</height>
+            <height>164</height>
         </rect>
     </property>
     <property name="sizePolicy">
         <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
@@ -23,7 +23,7 @@
     <property name="minimumSize">
         <size>
             <width>352</width>
-            <height>151</height>
+            <height>160</height>
         </size>
     </property>
     <property name="caption">
@@ -32,144 +32,246 @@
     <property name="modal">
         <bool>true</bool>
     </property>
-    <grid>
+    <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>unnamed</cstring>
+            <cstring>layout20</cstring>
         </property>
-        <widget class="QLabel" row="0" column="0">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>350</width>
+                <height>160</height>
+            </rect>
+        </property>
+        <vbox>
             <property name="name">
-                <cstring>textLabelRed</cstring>
+                <cstring>unnamed</cstring>
             </property>
-            <property name="text">
-                <string>Red :</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="2" column="0">
-            <property name="name">
-                <cstring>textLabelBlue</cstring>
-            </property>
-            <property name="text">
-                <string>Blue :</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="1" column="0">
-            <property name="name">
-                <cstring>textLabelGreen</cstring>
-            </property>
-            <property name="text">
-                <string>Green :</string>
-            </property>
-        </widget>
-        <widget class="QSlider" row="2" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>sliderBlue</cstring>
-            </property>
-            <property name="minValue">
-                <number>-255</number>
-            </property>
-            <property name="maxValue">
-                <number>255</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Both</enum>
-            </property>
-            <property name="tickInterval">
-                <number>32</number>
-            </property>
-        </widget>
-        <widget class="QLabel" row="0" column="3">
-            <property name="name">
-                <cstring>textRedValue</cstring>
-            </property>
-            <property name="text">
-                <string>0</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLabel" row="1" column="3">
-            <property name="name">
-                <cstring>textGreenValue</cstring>
-            </property>
-            <property name="text">
-                <string>0</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLabel" row="2" column="3">
-            <property name="name">
-                <cstring>textBlueValue</cstring>
-            </property>
-            <property name="text">
-                <string>0</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="3" column="1">
-            <property name="name">
-                <cstring>pushButtonOk</cstring>
-            </property>
-            <property name="text">
-                <string>Ok</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="3" column="2">
-            <property name="name">
-                <cstring>pushButtonCancel</cstring>
-            </property>
-            <property name="text">
-                <string>Cancel</string>
-            </property>
-        </widget>
-        <widget class="QSlider" row="0" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>sliderRed</cstring>
-            </property>
-            <property name="minValue">
-                <number>-255</number>
-            </property>
-            <property name="maxValue">
-                <number>255</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Both</enum>
-            </property>
-            <property name="tickInterval">
-                <number>32</number>
-            </property>
-        </widget>
-        <widget class="QSlider" row="1" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>sliderGreen</cstring>
-            </property>
-            <property name="minValue">
-                <number>-255</number>
-            </property>
-            <property name="maxValue">
-                <number>255</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Both</enum>
-            </property>
-            <property name="tickInterval">
-                <number>32</number>
-            </property>
-        </widget>
-    </grid>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout18</cstring>
+                </property>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLabel" row="2" column="2">
+                        <property name="name">
+                            <cstring>textBlueValue</cstring>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>20</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>0</string>
+                        </property>
+                        <property name="alignment">
+                            <set>AlignVCenter|AlignRight</set>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="1" column="2">
+                        <property name="name">
+                            <cstring>textGreenValue</cstring>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>20</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>0</string>
+                        </property>
+                        <property name="alignment">
+                            <set>AlignVCenter|AlignRight</set>
+                        </property>
+                    </widget>
+                    <widget class="QSlider" row="2" column="1">
+                        <property name="name">
+                            <cstring>sliderBlue</cstring>
+                        </property>
+                        <property name="minValue">
+                            <number>-255</number>
+                        </property>
+                        <property name="maxValue">
+                            <number>255</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="tickmarks">
+                            <enum>Both</enum>
+                        </property>
+                        <property name="tickInterval">
+                            <number>32</number>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>textLabelBlue</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Blue :</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="1" column="0">
+                        <property name="name">
+                            <cstring>textLabelGreen</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Green :</string>
+                        </property>
+                    </widget>
+                    <widget class="QSlider" row="0" column="1">
+                        <property name="name">
+                            <cstring>sliderRed</cstring>
+                        </property>
+                        <property name="minValue">
+                            <number>-255</number>
+                        </property>
+                        <property name="maxValue">
+                            <number>255</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="tickmarks">
+                            <enum>Both</enum>
+                        </property>
+                        <property name="tickInterval">
+                            <number>32</number>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>textLabelRed</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Red :</string>
+                        </property>
+                    </widget>
+                    <widget class="QSlider" row="1" column="1">
+                        <property name="name">
+                            <cstring>sliderGreen</cstring>
+                        </property>
+                        <property name="minValue">
+                            <number>-255</number>
+                        </property>
+                        <property name="maxValue">
+                            <number>255</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="tickmarks">
+                            <enum>Both</enum>
+                        </property>
+                        <property name="tickInterval">
+                            <number>32</number>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="2">
+                        <property name="name">
+                            <cstring>textRedValue</cstring>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>20</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>0</string>
+                        </property>
+                        <property name="alignment">
+                            <set>AlignVCenter|AlignRight</set>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout19</cstring>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer8_3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>40</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>pushButtonOk</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Ok</string>
+                        </property>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer8</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>40</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>pushButtonCancel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Cancel</string>
+                        </property>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer8_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>40</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </hbox>
+            </widget>
+        </vbox>
+    </widget>
 </widget>
 <connections>
     <connection>

@@ -351,7 +351,9 @@ bool KisDoc::initDoc()
 	if (!init())
 		return false;
 
-	ret = KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE, "Krita", "*.kra", dlgtype, "krita_template");
+	ret = KoTemplateChooseDia::choose(KisFactory::global(), file, APP_MIMETYPE,
+			"*.kra", i18n("Krita"), 
+			dlgtype, "krita_template");
 
 	if (ret == KoTemplateChooseDia::Template) {
 		KisConfig cfg;

@@ -1,5 +1,5 @@
 /*
- *  kis_sidebar.h - part of Krita
+ *  kis_controlframe.h - part of Krita
  *
  *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
@@ -19,8 +19,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#ifndef __kis_sidebar_h__
-#define __kis_sidebar_h__
+#ifndef __kis_controlframe_h__
+#define __kis_controlframe_h__
 
 #include <qframe.h>
 #include <qtabwidget.h>
@@ -43,17 +43,6 @@ class KisHSVWidget;
 class KisGrayWidget;
 
 enum ActiveColor { ac_Foreground, ac_Background};
-
-/**
- *  @short Base class for all dockers
- */
-class BaseDocker : public QDockWindow
-{
-        Q_OBJECT
-
-public:
-        BaseDocker ( QWidget* parent = 0, const char* name = 0 );
-};
 
 /**
  *   Control Frame - status display with access to
@@ -91,51 +80,6 @@ private:
 	KisIconWidget    *m_pBrushWidget;
 	KisIconWidget  *m_pPatternWidget;
 	KisGradientWidget *m_pGradientWidget;  
-};
-
-class DockFrameDocker : public BaseDocker
-{
-        Q_OBJECT
-
-public:
-        DockFrameDocker ( QWidget* parent = 0, const char* name = 0 );
-        ~DockFrameDocker();
-        
-        void plug(QWidget *w);
-        void unplug(QWidget *w);
-        void showPage(QWidget *w);
-private:
-        QTabWidget *m_tabwidget;
-};
-
-class ColorDocker : public BaseDocker 
-{
-        Q_OBJECT
-
-public:
-        ColorDocker(QWidget *parent = 0, const char *name = 0);
-        ~ColorDocker();
-
-public slots:
-        void slotSetFGColor(const KoColor& c);
-        void slotSetBGColor(const KoColor& c);
-
-signals:   
-        void fgColorChanged(const KoColor& c);
-        void bgColorChanged(const KoColor& c);
-
-protected slots:
-        void slotFGColorSelected(const KoColor& c);
-        void slotBGColorSelected(const KoColor& c);
-        void slotCurrentChanged(QWidget*);
-
-private:
-        QTabWidget *m_tabwidget;
-        KisRGBWidget *m_rgbChooser;
-        KisHSVWidget *m_hsvChooser;
-        KisGrayWidget *m_grayChooser;
-        KoColor m_fgColor;
-        KoColor m_bgColor;
 };
 
 #endif

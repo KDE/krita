@@ -220,3 +220,20 @@ Disadvantages:
 	- Development seems to have stopped in 2000
 
 
+Antigrain (http://www.antigrain.com/)
+
+Antigrain is a graphics lib that specializes in high-quality anti-aliasing. It can be 
+useful to mine for algorithms, but is mainly a library to render vector data to bitmaps,
+just like libart or cairo.
+
+Advantages:
+
+	- High quality algorithms
+	- Completely free license.
+	- Colour-space agnostic
+
+Disadvantages:
+
+	- Not a complete 2D library
+	- self-admittedly complex and hard to use.
+	- No support for greater bit-depths.

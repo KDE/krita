@@ -21,7 +21,6 @@
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qrect.h>
-#include <qwindowsstyle.h>
 
 #include <kglobal.h>
 #include <kglobalsettings.h>

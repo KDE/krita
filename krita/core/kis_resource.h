@@ -37,15 +37,29 @@ public:
 	 * Creates a new KisResource object using @p filename.  No file is opened
 	 * in the construtor, you have to call loadAsync.
 	 *
-	 * @param filename the file name to save and load from.  This isn't a complete path.
+	 * @param filename the file name to save and load from.
 	 */
 	KisResource(const QString& filename);
 	virtual ~KisResource();
 
 public:
+	/**
+	 * Load this resource asynchronously.  The signal loadComplete is emitted when
+	 * the resource has been loaded and valid flag is set to true.
+	 */
 	virtual bool loadAsync() = 0;
+	/**
+	 * Save this resource asynchronously.  The signal saveComplete is emitted when
+	 * the resource has been saved.
+	 */
 	virtual bool saveAsync() = 0;
+	/**
+	 * Returns a QImage representing this resource.  This image could be null.
+	 */
 	virtual QImage img() const = 0;
+	/**
+	 * Returns a QImage representing frame @p n in this resource.  This image could be null.
+	 */
 	virtual QImage frame(Q_INT32 n) const = 0;
 
 public:
@@ -71,6 +85,7 @@ protected:
 signals:
 	void loadComplete(KisResource *me);
 	void saveComplete(KisResource *me);
+	void ioFailed(KisResource *me);
 
 private:
 	KisResource(const KisResource&);

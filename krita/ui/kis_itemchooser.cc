@@ -27,24 +27,7 @@
 
 KisItemChooser::KisItemChooser(const vKoIconItem& items, bool spacing, QWidget *parent, const char *name) : super(parent, name)
 {
-	m_doSpacing = spacing;
-
-	if (spacing) {
-		m_lbSpacing = new QLabel(i18n("Spacing: "), this);
-		m_slSpacing = new IntegerWidget( 1, 100, this, "int_widget" );
-		m_slSpacing -> setTickmarks(QSlider::Below);
-		m_slSpacing -> setTickInterval(10);
-		QObject::connect(m_slSpacing, SIGNAL(valueChanged(int)), this, SLOT(slotSetItemSpacing(int)));
-	} else {
-		m_lbSpacing = 0;
-		m_slSpacing = 0;
-	}
-
-    	m_frame = new QHBox(this);
-	m_frame -> setFrameStyle(QFrame::Panel | QFrame::Sunken);
-	m_chooser = new KoIconChooser(QSize(30,30), m_frame, "icon_chooser");
-	QObject::connect(m_chooser, SIGNAL(selected(KoIconItem*)), this, SLOT(slotItemSelected(KoIconItem*)));
-	initGUI(spacing);
+	init(spacing);
 
 	QPtrListIterator<KoIconItem> itr(items);
 
@@ -54,24 +37,7 @@ KisItemChooser::KisItemChooser(const vKoIconItem& items, bool spacing, QWidget *
 
 KisItemChooser::KisItemChooser(bool spacing, QWidget *parent, const char *name) : super(parent, name)
 {
-	m_doSpacing = spacing;
-
-	if (spacing) {
-		m_lbSpacing = new QLabel(i18n("Spacing: "), this);
-		m_slSpacing = new IntegerWidget( 1, 100, this, "int_widget" );
-		m_slSpacing -> setTickmarks(QSlider::Below);
-		m_slSpacing -> setTickInterval(10);
-		QObject::connect(m_slSpacing, SIGNAL(valueChanged(int)), this, SLOT(slotSetItemSpacing(int)));
-	} else {
-		m_lbSpacing = 0;
-		m_slSpacing = 0;
-	}
-
-	m_frame = new QHBox(this);
-	m_frame -> setFrameStyle(QFrame::Panel | QFrame::Sunken);
-	m_chooser = new KoIconChooser(QSize(30,30), m_frame, "icon_chooser");
-	QObject::connect(m_chooser, SIGNAL(selected(KoIconItem*)), this, SLOT(slotItemSelected(KoIconItem*)));
-	initGUI(spacing);
+	init(spacing);
 }
 
 KisItemChooser::~KisItemChooser()
@@ -134,6 +100,28 @@ void KisItemChooser::addItem(const vKoIconItem& items)
 
 	for (itr.toFirst(); itr.current(); ++itr)
 		m_chooser -> addItem(itr.current());
+}
+
+void KisItemChooser::init(bool spacing)
+{
+	m_doSpacing = spacing;
+
+	if (spacing) {
+		m_lbSpacing = new QLabel(i18n("Spacing: "), this);
+		m_slSpacing = new IntegerWidget( 1, 100, this, "int_widget" );
+		m_slSpacing -> setTickmarks(QSlider::Below);
+		m_slSpacing -> setTickInterval(10);
+		QObject::connect(m_slSpacing, SIGNAL(valueChanged(int)), this, SLOT(slotSetItemSpacing(int)));
+	} else {
+		m_lbSpacing = 0;
+		m_slSpacing = 0;
+	}
+
+	m_frame = new QHBox(this);
+	m_frame -> setFrameStyle(QFrame::Panel | QFrame::Sunken);
+	m_chooser = new KoIconChooser(QSize(30,30), m_frame, "icon_chooser");
+	QObject::connect(m_chooser, SIGNAL(selected(KoIconItem*)), this, SLOT(slotItemSelected(KoIconItem*)));
+	initGUI(spacing);
 }
 
 #include "kis_itemchooser.moc"

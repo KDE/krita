@@ -53,6 +53,7 @@ signals:
 
 private:
 	void initGUI(bool spacing);
+	void init(bool spacing);
 
 private slots:
 	void slotItemSelected(KoIconItem *item);

@@ -222,7 +222,6 @@ void KisView::setupSideBar()
 		m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
 		m_sideBar -> plug(m_brushMediator -> chooserWidget());
 		connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
-		rserver -> loadBrushes();
 
 		m_patternChooser = new KisItemChooser(KisFactory::rServer() -> patterns(), true, m_sideBar -> dockFrame(), "pattern_chooser");
 		//	m_pPattern = m_patternChooser -> currentPattern();
@@ -276,6 +275,8 @@ void KisView::setupSideBar()
 		connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_sideBar, SLOT(slotSetFGColor(const KoColor&)));
 		connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_sideBar, SLOT(slotSetBGColor(const KoColor&)));
 		m_sidebarToggle -> setChecked(true);
+
+		rserver -> loadBrushes();
 	}
 }
 

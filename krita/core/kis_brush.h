@@ -19,8 +19,11 @@
 #if !defined KIS_BRUSH_
 #define KIS_BRUSH_
 
+#include <qcstring.h>
 #include <qimage.h>
 #include <qsize.h>
+#include <qvaluevector.h>
+#include <kio/job.h>
 #include "kis_krayon.h"
 #include "kis_resource.h"
 
@@ -51,10 +54,14 @@ public:
 	uchar *scanline(Q_INT32 i) const;
 	uchar *bits() const;
 
+private slots:
+	void ioData(KIO::Job *job, const QByteArray& data);
+	void ioResult(KIO::Job *job);
+
 private:
+	QValueVector<Q_UINT8> m_data;
 	Q_INT32 m_spacing;
 	QPoint m_hotSpot;
-	uchar* m_pData;
 	QImage m_img;
 };
 

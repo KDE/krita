@@ -73,6 +73,7 @@ void KisResourceServer::loadBrush()
 		m_brushFilnames.pop_front();
 		brush = new KisBrush(front);
 		connect(brush, SIGNAL(loadComplete(KisResource*)), SLOT(brushLoaded(KisResource*)));
+		connect(brush, SIGNAL(ioFailed(KisResource*)), SLOT(resourceLoadFailed(KisResource*)));
 
 		if (!brush -> loadAsync())
 			loadBrush();
@@ -103,6 +104,12 @@ void KisResourceServer::brushLoaded(KisResource *br)
 		delete br;
 	}
 
+	loadBrush();
+}
+
+void KisResourceServer::resourceLoadFailed(KisResource *r)
+{
+	delete r;
 	loadBrush();
 }
 

@@ -54,7 +54,8 @@ private:
 	const KisPattern *loadPattern(const QString& filename);
 
 private slots:
-	void brushLoaded(KisResource *br);
+	void brushLoaded(KisResource *r);
+	void resourceLoadFailed(KisResource *br);
 
 private:
 	QPtrList<KoIconItem> m_patterns;

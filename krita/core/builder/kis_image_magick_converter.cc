@@ -384,8 +384,8 @@ void KisImageMagickConverter::ioData(KIO::Job *job, const QByteArray& data)
 	}
 
 	Q_ASSERT(data.size() + m_data.size() <= m_size);
-	memcpy(&m_data[m_data.size()], data.data(), data.size());
-	m_data.resize(m_data.size() + data.size());
+	memcpy(&m_data[m_data.size()], data.data(), data.count());
+	m_data.resize(m_data.size() + data.count());
 	emit notify(this, KisImageBuilder_STEP_LOADING, m_data.size() * 100 / m_size);
 
 	if (m_stop)

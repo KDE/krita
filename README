@@ -1,4 +1,4 @@
-Koffice is based on KDE (www.kde.org) and is needed to run Koffice.
+Koffice is based on KDE (www.kde.org) which is needed to run Koffice.
 You need kdelibs and kdebase installed if you want to compile and 
 run koffice. Look in the kdelibs sourcedir for the file COMPILING
 for help. Also look at the website as there are many helpfiles 

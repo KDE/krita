@@ -46,6 +46,7 @@
 #include <kistile.h>
 #include <kistilemgr.h>
 #include <kis_iterators.h>
+#include <kis_selection.h>
 
 #include "colorrange.h"
 #include "dlg_colorrange.h"
@@ -77,7 +78,7 @@ void ColorRange::slotActivated()
 	DlgColorRange * dlgColorRange = new DlgColorRange(m_view, "ColorRange");
 
 	// Render layer to a QIMage -- keep in mind possibility of selection
-	//KisLayerSP layer = m_view -> currentImg() -> activeLayer();
+	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
 	//QImage img = layer.convertToImage();
 	// Scale QImage 
 
@@ -86,6 +87,10 @@ void ColorRange::slotActivated()
 	if (dlgColorRange -> exec() == QDialog::Accepted) {
 		// Retrieve changes made by dialog
 		// Apply changes to layer (selection)
+		KisSelection * selection = new KisSelection((KisPaintDeviceSP)layer, "ColorRangeSelection");
+		// Iterate through the pixels of the layer
+		
+		// If the pixel matches the criteria from the dialog, set the pixel selected
 	}
 	delete dlgColorRange;
 }

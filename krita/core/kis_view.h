@@ -96,6 +96,8 @@ public:
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, bool modal = false, const QString& filename = QString::null);
 
+	virtual KisImageSP currentImg() const;
+
 signals:
 	void bgColorChanged(const KoColor& c);
 	void fgColorChanged(const KoColor& c);
@@ -145,7 +147,6 @@ private:
 	virtual void attach(KisCanvasObserver *observer);
 	virtual void detach(KisCanvasObserver *observer);
 	virtual void notify();
-	virtual KisImageSP currentImg() const;
 	virtual QString currentImgName() const;
 	virtual KoColor bgColor() const;
 	virtual void setBGColor(const KoColor& c);

@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>wdgNewImage</class>
+<class>NewImage</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>wdgNewImage</cstring>
+        <cstring>NewImage</cstring>
     </property>
     <property name="geometry">
         <rect>

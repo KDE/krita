@@ -18,11 +18,15 @@
 
 #include "kis_layer.h"
 #include "kis_selection.h"
-
+#include "kis_global.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name) 
 {
 	m_layer = layer;
+	m_mask = new MaskVector(layer -> width() * layer -> height(), OPACITY_TRANSPARENT);
 }
 
-KisSelection::~KisSelection() {}
+KisSelection::~KisSelection() 
+{
+	delete m_mask;
+}

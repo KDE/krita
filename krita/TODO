@@ -2,7 +2,6 @@
 * Add scriptability
 * Figure out a way to have 1, 8, 16, 24 and 64 bits per channel.
 * Fix speed of painting.
-* Move composite ops and paint ops to capability framework
 * Add tranform dialog (scale, shear etc.) and debug transform code.
 * Fix linetool to use pressure to draw tapered lines.
 * Brush cursor shapes for tools (updating cursors from the tools doesn't work yet).
@@ -68,12 +67,9 @@ than a 'todo':
 - color modes: Indexed, Greyscale, RGB and RGBA, CMYK, CMKYA
 - channels (RGB, CMYK, HSB, etc...)
 - layer masks
-- plugin filter API
-- plugin tool API
 - basic image manipulation (contrast/brightness/saturation etc.)
 - scale images
 - basic plugin filters (blur/sharpen etc.)
-- basic image transformations (rotate, mirror)
 - move tool
 - crop tool
 - basic text tool

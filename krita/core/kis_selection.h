@@ -18,6 +18,8 @@
 #if !defined KIS_SELECTION_H_
 #define KIS_SELECTION_H_
 
+#include "qvaluevector.h"
+
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
@@ -35,9 +37,15 @@ public:
 	KisSelection(KisPaintDeviceSP layer, const QString& name);
 	virtual ~KisSelection();
 
+	void setSelected(Q_UINT8 s, Q_UINT32 x, Q_UINT32 y);
+	Q_UINT8 isSelected(Q_UINT32 x, Q_UINT32 y);
+
 private:
 	KisPaintDeviceSP m_layer;
-	
+	// XXX: check whether the STL vector is faster/better match.
+	// a big chunk of memory is _not_ an alternative.
+	typedef QValueVector<Q_UINT8> MaskVector;
+	MaskVector * m_mask;
 };
 
 #endif // KIS_FLOATINGSELECTION_H_

@@ -77,6 +77,6 @@ public:
 	 * Slot the paint op into the relevant toolbox, if so desired. It's
 	 * up to the paintop to decide whether it want to so something with this
 	 */
-	virtual void slot(KisPaintBox * box) {};
+	virtual void slot(KisPaintBox * box) { Q_UNUSED(box); };
 };
 #endif // KIS_PAINTOP_H_

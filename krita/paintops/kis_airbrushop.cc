@@ -101,27 +101,33 @@ void KisAirbrushOp::paintAt(const KisPoint &pos,
 	KisPaintDeviceSP dab = m_painter -> dab();
 
 	KisPoint hotSpot = brush -> hotSpot(pressure);
-	Q_INT32 x = static_cast<Q_INT32>(pos.x() - hotSpot.x());
-	Q_INT32 y = static_cast<Q_INT32>(pos.y() - hotSpot.y());
+	KisPoint pt = pos - hotSpot;
 
-	// This is going to be sloooooow!
-	if (fabs(oldPressure - pressure) > DBL_EPSILON || 
-	    brush -> brushType() == PIPE_MASK || 
-	    brush -> brushType() == PIPE_IMAGE || 
-	    dab == 0)
-	{
-		if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
-			dab = brush -> image(device -> colorStrategy(), pressure);
-		}
-		else {
-			KisAlphaMaskSP mask = brush -> mask(pressure);
-			dab = computeDab(mask);
-		}
+	Q_INT32 x;
+	double xFraction;
+	Q_INT32 y;
+	double yFraction;
 
-		m_painter -> setDab(dab); // Cache dab for future paints in the painter.
-		m_painter -> setPressure(pressure); // Cache pressure in the current painter.
+	splitCoordinate(pt.x(), &x, &xFraction);
+	splitCoordinate(pt.y(), &y, &yFraction);
+
+	if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
+		dab = brush -> image(device -> colorStrategy(), pressure, xFraction, yFraction);
+	}
+	else {
+		KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
+		dab = computeDab(mask);
 	}
 
-	m_painter->bltSelection( x,  y,  COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE / 50, 0, 0, brush->width(), brush->height());
-	m_painter->addDirtyRect(QRect(x, y, brush->width(), brush->height()));
+	m_painter -> setDab(dab); // Cache dab for future paints in the painter.
+	m_painter -> setPressure(pressure); // Cache pressure in the current painter.
+
+	Q_INT32 dabWidth = dab -> extent().width();
+	Q_INT32 dabHeight = dab -> extent().height();
+
+	Q_ASSERT(dab -> extent().x() == 0);
+	Q_ASSERT(dab -> extent().y() == 0);
+
+	m_painter->bltSelection( x,  y,  COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE / 50, 0, 0, dabWidth, dabHeight);
+	m_painter->addDirtyRect(QRect(x, y, dabWidth, dabHeight));
 }

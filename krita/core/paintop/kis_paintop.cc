@@ -58,7 +58,7 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 
 	for (int y = 0; y < maskHeight; y++)
 	{
-		KisHLineIteratorPixel hiter = dab->createHLineIterator(0, y, maskWidth, false);
+		KisHLineIteratorPixel hiter = dab->createHLineIterator(0, y, maskWidth, true);
 		int x=0;
 		while(! hiter.isDone())
 		{

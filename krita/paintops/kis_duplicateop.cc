@@ -95,8 +95,8 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 				 (Q_INT32)(pt.y() - m_painter -> duplicateOffset().y()));
 
 		
-	Q_INT32 sw = brush -> width();
-	Q_INT32 sh = brush -> height();
+	Q_INT32 sw = dab -> extent().width();
+	Q_INT32 sh = dab -> extent().height();
 
 	if (srcPoint.x() < 0 )
 		srcPoint.setX(0);
@@ -142,7 +142,12 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 		srcY++;
 	}
 
-	m_painter -> bltSelection( x,  y,  m_painter -> compositeOp(), srcdev, m_painter -> opacity(), 0, 0, brush -> width(), brush -> height());
+	Q_INT32 dabWidth = dab -> extent().width();
+	Q_INT32 dabHeight = dab -> extent().height();
 
-	m_painter -> addDirtyRect(QRect(x, y, brush -> width(), brush -> height()));
+	Q_ASSERT(dab -> extent().x() == 0);
+	Q_ASSERT(dab -> extent().y() == 0);
+
+	m_painter -> bltSelection( x,  y,  m_painter -> compositeOp(), srcdev, m_painter -> opacity(), 0, 0, dabWidth, dabHeight);
+	m_painter -> addDirtyRect(QRect(x, y, dabWidth, dabHeight));
 }

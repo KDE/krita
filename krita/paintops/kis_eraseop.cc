@@ -79,38 +79,45 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 	KisPaintDeviceSP device = m_painter -> device();
 	if (!device) return;
 
-	KisBrush * brush = m_painter -> brush();
-
-	KisAlphaMaskSP mask = brush -> mask(pressure);
+	KisBrush *brush = m_painter -> brush();
 	KisPoint hotSpot = brush -> hotSpot(pressure);
+	KisPoint pt = pos - hotSpot;
 
-	QRect r = QRect(static_cast<int>(pos.x() - hotSpot.x()),
-			static_cast<int>(pos.y() - hotSpot.y()),
-			mask -> width(),
-			mask -> height());
+	Q_INT32 destX;
+	double xFraction;
+	Q_INT32 destY;
+	double yFraction;
+
+	splitCoordinate(pt.x(), &destX, &xFraction);
+	splitCoordinate(pt.y(), &destY, &yFraction);
+
+	KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
 
 	KisLayerSP dab = new KisLayer(device -> colorStrategy(), "eraser_dab");
 
+	Q_INT32 maskWidth = mask -> width();
+	Q_INT32 maskHeight = mask -> height();
+
 	if (device -> alpha()) {
 		dab -> setOpacity(OPACITY_OPAQUE);
-		for (int y = 0; y < brush->height(); y++) {
-			for (int x = 0; x < brush->width(); x++) {
+		for (int y = 0; y < maskHeight; y++) {
+			for (int x = 0; x < maskWidth; x++) {
 				// the color doesn't matter, since we only composite the alpha
-				dab->setPixel(x, y, m_painter -> paintColor(), QUANTUM_MAX - mask->alphaAt(x, y));
+				dab -> setPixel(x, y, m_painter -> paintColor(), QUANTUM_MAX - mask->alphaAt(x, y));
 			}
 		}
-		m_painter->bltSelection( r.x(), r.y(), COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, 0, 0, brush->width(), brush->height());
+		m_painter -> bltSelection(destX, destY, COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, 0, 0, maskWidth, maskHeight);
 
  	} else {
 		dab -> setOpacity(OPACITY_TRANSPARENT);
-		for (int y = 0; y < brush->height(); y++) {
-			for (int x = 0; x < brush->width(); x++) {
+		for (int y = 0; y < maskHeight; y++) {
+			for (int x = 0; x < maskWidth; x++) {
 				dab -> setPixel(x, y, m_painter -> backgroundColor(), mask->alphaAt(x, y));
 			}
 		}
-		m_painter->bltSelection(r.x(), r.y(), COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE, 0, 0, mask -> width(), mask -> height());
+		m_painter -> bltSelection(destX, destY, COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE, 0, 0, maskWidth, maskHeight);
  	}
 
-	m_painter -> addDirtyRect(r);
-
+	m_painter -> addDirtyRect(QRect(destX, destY, maskWidth, maskHeight));
 }
+

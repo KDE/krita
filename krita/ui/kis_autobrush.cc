@@ -31,12 +31,12 @@ double NormeCircleSquare(double a, double b)
 }
 double NormeSquareSquare(double a, double b)
 {
-	return QMAX(a,b);
+	return QMIN(a*a,b*b);
 }
 
 KisAutobrush::KisAutobrush(QWidget *parent, char* name, const QString& caption) : KisWdgAutobrush(parent, name)
 {
-// 	setCaption(caption);
+	setCaption(caption);
 	connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
 	spinBoxWidth->setMinValue(1);
 	connect(spinBoxWidth,SIGNAL(valueChanged(int)),this,SLOT(spinBoxWidthChanged(int)));

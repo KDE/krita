@@ -401,13 +401,10 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 	}
 
 	KoTemplateChooseDia::ReturnType ret =
-		KoTemplateChooseDia::choose(KisFactory::global(), 
-					    file, 
-					    "application/x-krita",
-					    "*.kra", 
-					    i18n("Krita"),
-					    dlgtype, 
-					    "krita_template", 
+		KoTemplateChooseDia::choose(KisFactory::global(),
+					    file,
+					    dlgtype,
+					    "krita_template",
 					    parentWidget);
 	setUndo(false);
 
@@ -1120,7 +1117,7 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 void KisDoc::paintContent(QPainter& painter, const QRect& rect)
 {
 // 	kdDebug() << "KisDoc::paintContent called with rect: "
-// 		  << rect.x() << "," 
+// 		  << rect.x() << ","
 // 		  << rect.y() << ","
 // 		  << rect.right() << ","
 // 		  << rect.bottom() << "\n";
@@ -1171,9 +1168,9 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect)
 // 			for (x = x1; x < x2; x += RENDER_WIDTH) {
 // 				Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
 // 				Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
-				
+
 // 				QImage img = m_currentImage -> projection() -> convertToImage(x, y, w, h);
-				
+
 // 				if (!img.isNull()) {
 // 					m_pixio.putImage(&m_pixmap, 0, 0, &img);
 // 					painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
@@ -1182,7 +1179,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect)
 // 		}
 
 
-	
+
 
 		// Draw rectangular floating selections.
 		if ((floatingSelection = m_currentImage -> floatingSelection())) {
@@ -1613,7 +1610,7 @@ void KisDoc::clipboardDataChanged()
 		QImage qimg = cb -> image();
 
 		if (!qimg.isNull()) {
-			m_clipboardFloatingSelection = 
+			m_clipboardFloatingSelection =
 				new KisFloatingSelection(qimg.width(), qimg.height(),
 							 KisColorSpaceRegistry::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
 							 "KisDoc created clipboard floating selection");

@@ -1,0 +1,13 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritarotateimage" version="6">
+<MenuBar>
+    <Menu name="Image"><text>Image</text>
+	<Separator/>
+	<Action name="rotateimage"/>
+    </Menu>
+    <Menu name="Layer"><text>Layer</text>
+	<Separator/>
+	<Action name="rotatelayer"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

@@ -32,9 +32,6 @@ class KisRainDropsFilterConfiguration : public KisFilterConfiguration
                 inline Q_UINT32 dropSize() { return m_dropSize; };
                 inline Q_UINT32 number() {return m_number; };
                 inline Q_UINT32 fishEyes() {return m_fishEyes; };
-                inline void setDropSize(Q_UINT32 dropSize) { m_dropSize = dropSize; };
-                inline void setNumber(Q_UINT32 number) { m_number = number; };
-                inline void setFishEyes(Q_UINT32 fishEyes) { m_fishEyes = fishEyes; }; 
         private:
                 Q_UINT32 m_dropSize;
                 Q_UINT32 m_number;
@@ -56,10 +53,6 @@ class KisRainDropsFilter : public KisFilter
                 bool** CreateBoolArray (uint Columns, uint Rows);
                 void   FreeBoolArray (bool** lpbArray, uint Columns);
                 uchar  LimitValues (int ColorValue);
-        private:        
-                Q_UINT32 m_dropSize;
-                Q_UINT32 m_number;
-                Q_UINT32 m_fishEyes;
 };
 
 #endif

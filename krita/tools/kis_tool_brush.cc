@@ -58,6 +58,8 @@ KisToolBrush::KisToolBrush()
 
         m_painter = 0;
 	m_dab = 0;
+	m_currentImage = 0;
+
 #if defined TRACERLINE
 	m_points = 0;
 #endif
@@ -73,6 +75,8 @@ KisToolBrush::~KisToolBrush()
 void KisToolBrush::update(KisCanvasSubject *subject)
 {
 	m_subject = subject;
+	m_currentImage = subject -> currentImg();
+
 	super::update(m_subject);
 }
 #if defined TRACERLINE
@@ -119,6 +123,10 @@ void KisToolBrush::mousePress(QMouseEvent *e)
 		m_y1 = e -> pos().y();
 #endif
                 paint(e->pos(), 128, 0, 0);
+		m_currentImage -> notify(e -> pos().x(),
+ 				       e -> pos().y(),
+ 				       m_dab -> width(),
+ 			               m_dab -> height());
          }
 }
 
@@ -201,6 +209,11 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
 			}
 			QPoint p(qRound(step.x()), qRound(step.y()));
 			paint(p, 128, 0, 0);
+			m_currentImage -> notify(p.x(),
+					       p.y(),
+					       m_dab -> width(),
+					       m_dab -> height());
+
 			kdDebug() << "paint: (" << p.x() << "," << p.y() << ")\n";
 			dist -= m_spacing;
 		}
@@ -222,6 +235,11 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
 	// mouse-move events if I lift the stylus from the pad.
 	if (m_mode == PAINT) {
 			paint(e->pos(), 128, 0, 0);
+			m_currentImage -> notify(e -> pos().x(),
+					       e -> pos().y(),
+					       m_dab -> width(),
+					       m_dab -> height());
+
 	}
 }
 #endif
@@ -237,6 +255,11 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
 
 		x2 = e->pos().x();
 		y2 = e->pos().y();
+
+
+		QRect r = QRect(x1, y1, x2 - x1, y2 - y1);
+		kdDebug() << "Painting on: (" << x1 << "," << y1 << ") - (" << x2 - x1 << "," << y2 - y1 << ")\n";
+		r.normalize();
 
 		m_x1 = x2;
 		m_y1 = y2;
@@ -288,7 +311,6 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
 				}
 				// draw last point
 				paint(QPoint(x1, y1), 128, 0, 0);
-
 			}			
 			else {
 				if ( diffY < 0 ) {
@@ -318,8 +340,9 @@ void KisToolBrush::mouseMove(QMouseEvent *e)
 				}
 				// draw last point
 				paint(QPoint(x1, y1), 128, 0, 0);
-
+			
 			}
+			m_currentImage -> notify();
 		}
 	}
 }
@@ -361,9 +384,8 @@ void KisToolBrush::tabletEvent(QTabletEvent *e)
 void KisToolBrush::initPaint()
 {
 	// Create painter
-	KisImageSP currentImage = m_subject -> currentImg();
 	KisPaintDeviceSP device;
-	if (currentImage && (device = currentImage -> activeDevice())) {
+	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
 		if (m_painter)
 			delete m_painter;
 		m_painter = new KisPainter( device );
@@ -400,7 +422,7 @@ void KisToolBrush::initPaint()
 	// Create dab
 	m_dab = new KisLayer(mask -> width(),
 			     mask -> height(),
-			     currentImage -> imgType(),
+			     m_currentImage -> imgType(),
 			     "dab");
         m_dab -> opacity(OPACITY_TRANSPARENT);
 	for (int y = 0; y < mask -> height(); y++) {
@@ -413,10 +435,9 @@ void KisToolBrush::initPaint()
 void KisToolBrush::endPaint() 
 {
 	m_mode = HOVER;
-	KisImageSP currentImage = m_subject -> currentImg();
 	KisPaintDeviceSP device;
-	if (currentImage && (device = currentImage -> activeDevice())) {
-		KisUndoAdapter *adapter = currentImage -> undoAdapter();
+	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
+		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
 		if (adapter && m_painter) {
 			// If painting in mouse release, make sure painter
 			// is destructed or end()ed
@@ -439,19 +460,13 @@ void KisToolBrush::paint(const QPoint & pos,
 	Q_INT32 x = pos.x() - m_hotSpotX;
 	Q_INT32 y = pos.y() - m_hotSpotY;
 
-        KisImageSP currentImage = m_subject -> currentImg();
-
-        if (!currentImage) return;
+        if (!m_currentImage) return;
 
         // Blit the temporary KisPaintDevice onto the current layer
-        KisPaintDeviceSP device = currentImage -> activeDevice();
+        KisPaintDeviceSP device = m_currentImage -> activeDevice();
         if (device) {
                 m_painter->bitBlt( x,  y,  COMPOSITE_NORMAL, m_dab.data() );
         }
-	currentImage -> notify(x,
- 			       y,
- 			       m_dab -> width(),
- 			       m_dab -> height());
 }
 
 

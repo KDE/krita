@@ -98,6 +98,7 @@ private:
 	QPointArray *m_points;
 #endif
 	KisCanvasSubject *m_subject;
+	KisImageSP m_currentImage;
 };
 #endif // KIS_TOOL_BRUSH_H_
 

@@ -116,14 +116,14 @@ void compositeOver(Q_INT32 stride,
 				if (s[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
 					continue;
 
-				int srcAlpha = (s[PIXEL_ALPHA] * opacity) / QUANTUM_MAX;
-				int dstAlpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha)) / QUANTUM_MAX;
+				int srcAlpha = (s[PIXEL_ALPHA] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
+				int dstAlpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
 
-				d[PIXEL_RED]   = (d[PIXEL_RED]   * dstAlpha + s[PIXEL_RED]   * srcAlpha) / QUANTUM_MAX;
-				d[PIXEL_GREEN] = (d[PIXEL_GREEN] * dstAlpha + s[PIXEL_GREEN] * srcAlpha) / QUANTUM_MAX;
-				d[PIXEL_BLUE]  = (d[PIXEL_BLUE]  * dstAlpha + s[PIXEL_BLUE]  * srcAlpha) / QUANTUM_MAX;
+				d[PIXEL_RED]   = (d[PIXEL_RED]   * dstAlpha + s[PIXEL_RED]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+				d[PIXEL_GREEN] = (d[PIXEL_GREEN] * dstAlpha + s[PIXEL_GREEN] * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+				d[PIXEL_BLUE]  = (d[PIXEL_BLUE]  * dstAlpha + s[PIXEL_BLUE]  * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
 
-				d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * 255) / QUANTUM_MAX;
+				d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * 255 + QUANTUM_MAX / 2) / QUANTUM_MAX;
 
 				if (d[PIXEL_ALPHA] != 0) {
 					d[PIXEL_RED] = (d[PIXEL_RED] * 255) / d[PIXEL_ALPHA];
@@ -151,13 +151,13 @@ void compositeOver(Q_INT32 stride,
 				}
 
 				int srcAlpha = s[PIXEL_ALPHA];
-				int dstAlpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha)) / QUANTUM_MAX;
+				int dstAlpha = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
 
-				d[PIXEL_RED]   = (d[PIXEL_RED]   * dstAlpha + s[PIXEL_RED]   * srcAlpha) / QUANTUM_MAX;
-				d[PIXEL_GREEN] = (d[PIXEL_GREEN] * dstAlpha + s[PIXEL_GREEN] * srcAlpha) / QUANTUM_MAX;
-				d[PIXEL_BLUE]  = (d[PIXEL_BLUE]  * dstAlpha + s[PIXEL_BLUE]  * srcAlpha) / QUANTUM_MAX;
+				d[PIXEL_RED]   = (d[PIXEL_RED]   * dstAlpha + s[PIXEL_RED]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+				d[PIXEL_GREEN] = (d[PIXEL_GREEN] * dstAlpha + s[PIXEL_GREEN] * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+				d[PIXEL_BLUE]  = (d[PIXEL_BLUE]  * dstAlpha + s[PIXEL_BLUE]  * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
 
-				d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * 255) / QUANTUM_MAX;
+				d[PIXEL_ALPHA] = (d[PIXEL_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * 255 + QUANTUM_MAX / 2) / QUANTUM_MAX;
 
 				if (d[PIXEL_ALPHA] != 0) {
 					d[PIXEL_RED] = (d[PIXEL_RED] * 255) / d[PIXEL_ALPHA];

@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
+#include <qevent.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -48,7 +48,6 @@ KisToolBrush::~KisToolBrush()
 
 void KisToolBrush::update(KisCanvasSubject *subject)
 {
-	kdDebug() << "update brush\n";
 	m_subject = subject;
 	m_currentImage = subject -> currentImg();
 
@@ -134,9 +133,6 @@ void KisToolBrush::initPaint(const QPoint & pos)
 		m_painter -> beginTransaction(i18n("brush"));
 	}
 
-	// First set colour, then brush, otherwise dab won't be computed with the
-	// right colour. This will be fixed when we no longer compute dabs but
-	// composite the mask directly onto the layer with the currently set colour.
 	m_painter -> setPaintColor(m_subject -> fgColor());
 	m_painter -> setBrush(m_subject -> currentBrush());
 
@@ -147,7 +143,6 @@ void KisToolBrush::initPaint(const QPoint & pos)
 	// should be fixed.
 	setCursor(KisCursor::brushCursor());
 #endif
-
 }
 
 void KisToolBrush::endPaint() 

@@ -149,7 +149,10 @@ void KisToolLine::mouseRelease(QMouseEvent *e)
 			delete m_painter;
 			m_painter = 0;
 		}
-		controller -> updateCanvas(m_painter -> dirtyRect()); // Removes the last remaining line.
+               	else {
+			// m_painter can be 0 here...!!!
+			controller -> updateCanvas(m_painter -> dirtyRect()); // Removes the last remaining line.
+		}
 	}
     
 }

@@ -46,7 +46,6 @@ struct _WetLayer {
 	int width;
 	int height;
 	int rowstride;
-	byte *mask;
 };
 
 struct _WetPack {
@@ -67,7 +66,7 @@ struct _WetPixDbl {
 
 void wet_composite(byte * rgb, int rgb_rowstride,
 		   WetPix * wet, int wet_rowstride,
-		   int width, int height, byte * mask);
+		   int width, int height);
 
 void wet_composite_layer(byte * rgb, int rgb_rowstride,
 			 WetLayer * layer,

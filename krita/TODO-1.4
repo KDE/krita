@@ -12,7 +12,6 @@ Menus
   export shows three completely uninteresting versions of Krita's
   native file format.
 * The radio actions for showing/hiding dockers don't work.
-* Resize image to current layer can only make images larger (rephrase)
 * Removing current image does not ask whether to save the image
   even if it has been changed -> people will expect Krita to save the
   image in its import format. Nobody will assume that all the tabs
@@ -67,6 +66,9 @@ Painting
 
 * The shapes tools should offer a filled shape option
 * The ConvolutionPainter does not take isSelected() into account.
+* The convolution paintop doesn't do anything at all.
+* Long painter operations (e.g., convolution painter) should use the 
+  progressbar and be cancelable.
 
 Color models
 

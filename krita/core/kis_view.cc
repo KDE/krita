@@ -460,7 +460,7 @@ void KisView::setupActions()
 	m_imgExport = new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
 	m_imgProperties = new KAction(i18n("Image Properties..."), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
 	m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
-	m_imgResizeToLayer = new KAction(i18n("Resize Image to Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
+	m_imgResizeToLayer = new KAction(i18n("Extend Image to the Size of the Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
 	// view actions
 	m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
 	m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");

@@ -48,7 +48,7 @@ static void wet_init_render_tab(void)
 void
 wet_composite(byte * rgb, int rgb_rowstride,
 	      WetPix * wet, int wet_rowstride,
-	      int width, int height, byte * mask)
+	      int width, int height)
 {
 	int x, y;
 	byte *rgb_line = rgb;
@@ -121,7 +121,6 @@ wet_render_wetness(byte * rgb, int rgb_rowstride,
 	byte *rgb_line = rgb;
 	WetPix *wet_line = layer->buf + (y0 * layer->rowstride) + x0;
 	int highlight;
-	int maskstride = (layer->width + 3) >> 2;
 
 	for (y = 0; y < height; y++) {
 		byte *rgb_ptr = rgb_line;
@@ -165,7 +164,7 @@ wet_composite_layer(byte * rgb, int rgb_rowstride,
 	/* todo: sanitycheck bounds */
 	wet_composite(rgb, rgb_rowstride,
 		      layer->buf + (y0 * layer->rowstride) + x0,
-		      layer->rowstride, width, height, layer->mask);
+		      layer->rowstride, width, height);
 }
 
 void
@@ -211,8 +210,6 @@ WetLayer *wet_layer_new(int width, int height)
 	layer->width = width;
 	layer->height = height;
 	layer->rowstride = width;
-	layer->mask =
-	    g_new0(byte, ((width + 3) >> 2) * ((height + 3) >> 2));
 
 	return layer;
 }
@@ -237,8 +234,6 @@ void wet_layer_clear(WetLayer * layer)
 		}
 		wet_line += layer->rowstride;
 	}
-	memset(layer->mask, 0,
-	       ((layer->width + 3) >> 2) * ((layer->height + 3) >> 2));
 }
 
 WetPack *wet_pack_new(int width, int height)

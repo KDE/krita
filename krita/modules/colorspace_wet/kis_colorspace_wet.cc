@@ -35,6 +35,31 @@
 #include "kis_colorspace_wet.h"
 #include "kis_iterators_pixel.h"
 
+namespace {
+	static const WetPix m_paint = { 707, 0, 707, 0, 707, 0, 240, 0 };
+
+	/* colors from Curtis et al, Siggraph 97 */
+
+	static const WetPix m_paintbox[] = {
+		{496, 0, 16992, 0, 3808, 0, 0, 0},
+		{16992, 9744, 21712, 6400, 25024, 3296, 0, 0},
+		{6512, 6512, 6512, 4880, 11312, 0, 0, 0},
+		{16002, 0, 2848, 0, 16992, 0, 0, 0},
+		{22672, 0, 5328, 2272, 4288, 2640, 0, 0},
+		{8000, 0, 16992, 0, 28352, 0, 0, 0},
+		{5696, 5696, 12416, 2496, 28352, 0, 0, 0},
+		{0, 0, 5136, 0, 28352, 0, 0, 0},
+		{2320, 1760, 7344, 4656, 28352, 0, 0, 0},
+		{8000, 0, 3312, 0, 5504, 0, 0, 0},
+		{13680, 0, 16992, 0, 3312, 0, 0, 0},
+		{5264, 5136, 1056, 544, 6448, 6304, 0, 0},
+		{11440, 11440, 11440, 11440, 11440, 11440, 0, 0},
+		{11312, 0, 11312, 0, 11312, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0} };
+
+	static const int m_nPaints = 15;
+}
+
 void wetPixToDouble(WetPixDbl * dst, WetPix *src)
 {
 	dst->rd = (1.0 / 8192.0) * src->rd;
@@ -97,6 +122,21 @@ KisColorSpaceWet::KisColorSpaceWet() :
 	KisStrategyColorSpace(KisID("WET", i18n("Watercolors")), 0, icMaxEnumData)
 {
 	wet_init_render_tab();
+	m_paintNames << i18n("Quinacridone Rose")
+		<< i18n("Indian Red")
+		<< i18n("Cadmium Yellow")
+		<< i18n("Hookers Green")
+		<< i18n("Cerulean Blue")
+		<< i18n("Burnt Umber")
+		<< i18n("Cadmium Red")
+		<< i18n("Brilliant Orange")
+		<< i18n("Hansa Yellow")
+		<< i18n("Phthalo Green")
+		<< i18n("French Ultramarine")
+		<< i18n("Interference Lilac")
+		<< i18n("Titanium White")
+		<< i18n("Ivory Black")
+		<< i18n("Pure Water");
 }
 
 
@@ -106,10 +146,63 @@ KisColorSpaceWet::~KisColorSpaceWet()
 
 void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP /*profile*/)
 {
+	Q_INT32 r, g, b;
+	c.getRgb(&r, &g, &b);
+
+	WetPix * p = (WetPix*)dst;
+
+	// Translate the special QCOlors from our paintbox to wetpaint paints.
+	if (r == 240 && g == 32 && b == 160) {
+		// Quinacridone Rose
+		memcpy(dst, &m_paintbox[0], sizeof(WetPix));
+	} else if (r == 159 && g == 88 && b == 43) {
+		// Indian Red
+		memcpy(dst, &m_paintbox[1], sizeof(WetPix));
+	} else if (r == 254, 220, 64) {
+		// Cadmium Yellow
+		memcpy(dst, &m_paintbox[2], sizeof(WetPix));
+	} else if (r == 36, 180, 32) {
+		// Hookers Green
+		memcpy(dst, &m_paintbox[3], sizeof(WetPix));
+	} else if (r == 16, 185, 215) {
+		// Cerulean Blue
+		memcpy(dst, &m_paintbox[4], sizeof(WetPix));
+	} else if (r == 96, 32, 8) {
+		// Burnt Umber
+		memcpy(dst, &m_paintbox[5], sizeof(WetPix));
+	} else if (r ==  254, 96, 8) {
+		// Cadmium Red
+		memcpy(dst, &m_paintbox[6], sizeof(WetPix));
+	} else if (r == 255, 136, 8) {
+		// Brilliant Orange
+		memcpy(dst, &m_paintbox[7], sizeof(WetPix));
+	} else if (r == 240, 199, 8) {
+		// Hansa Yellow
+		memcpy(dst, &m_paintbox[8], sizeof(WetPix));
+	} else if (r == 96, 170, 130) {
+		// Phthalo Green
+		memcpy(dst, &m_paintbox[9], sizeof(WetPix));
+	} else if (r == 48, 32, 170) {
+		// French Ultramarine
+		memcpy(dst, &m_paintbox[10], sizeof(WetPix));
+	} else if (r == 118, 16, 135) {
+		// Interference Lilac
+		memcpy(dst, &m_paintbox[11], sizeof(WetPix));
+	} else if (r == 254, 254, 254) {
+		// Titanium White
+		memcpy(dst, &m_paintbox[12], sizeof(WetPix));
+	} else if (r == 64, 64, 74) {
+		// Ivory Black
+		memcpy(dst, &m_paintbox[13], sizeof(WetPix));
+	} else {
+		// Pure water
+		memcpy(dst, &m_paintbox[14], sizeof(WetPix));
+	}
 }
 
-void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP /*profile*/)
+void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM  /*opacity*/, QUANTUM *dst, KisProfileSP /*profile*/)
 {
+	nativeColor(c, dst);
 }
 
 void KisColorSpaceWet::toQColor(const QUANTUM *src, QColor *c, KisProfileSP /*profile*/)
@@ -154,7 +247,9 @@ Q_INT32 KisColorSpaceWet::nSubstanceChannels() const
 Q_INT32 KisColorSpaceWet::pixelSize() const
 {
 	return 32; // This color strategy wants an unsigned short for each
-		   // channel, and every pixel consists of two wetpix structs.
+		   // channel, and every pixel consists of two wetpix structs
+		   // -- even though for many purposes we need only one wetpix
+		   // struct.
 }
 
 
@@ -164,6 +259,21 @@ QImage KisColorSpaceWet::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_I
 {
 
 	QImage img(width, height, 32, 0, QImage::LittleEndian);
+
+        int y, i;
+
+        uchar *rgb = img.bits();
+
+//         for (i = 0; i < pack->n_layers; i++)
+//                 wet_composite_layer(rgb, rgb_rowstride,
+//                                     pack->layers[i],
+//                                     x0, y0, width, height);
+//
+//         wet_render_wetness(rgb, rgb_rowstride,
+//                            pack->layers[pack->n_layers - 1],
+//                            x0, y0, width, height);
+//
+
 	return img;
 }
 

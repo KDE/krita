@@ -87,10 +87,11 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
 	// Temporary pixel constructs
         WetPixDbl wet_mix, wet_tmp;
 
-
-	// XXX: wet_old is what we automatically have in oldRawData() for the iterators.
+	// If the flow touches areas that have not been initialized with a height field yet,
+	// create a heigth field.
 
 	// We need three iterators, because we're working on a five-point convolution kernel (no corner pixels are being used)
+
 	// First iteration: compute fluid deposits around the paper.
 	Q_INT32 dx, dy, dw, dh;
 	dx = r.x();

@@ -19,8 +19,7 @@
 #define KIS_STRATEGY_COLORSPACE_WET_H_
 
 #include <qcolor.h>
-
-#include <qcolor.h>
+#include <qstringlist.h>
 
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
@@ -77,6 +76,7 @@ struct _WetPixDbl {
 };
 
 
+
 void wetPixToDouble(WetPixDbl * dst, WetPix *src);
 void wetPixFromDouble(WetPix * dst, WetPixDbl *src);
 
@@ -88,6 +88,9 @@ public:
 
 public:
 
+	// Semi-clever: we have only fifteen wet paint colors that are mapped to the
+	// qcolors that are put in the painter by the special wet paint palette. Other
+	// QColors are mapped to plain water...
 	virtual void nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile = 0);
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile = 0);
 
@@ -132,10 +135,13 @@ private:
 	// Convert a single pixel from its wet representation to rgb
 	void wet_composite(Q_UINT8 *rgb, WetPix * wet);
 
+//	void wet_render_wetness(byte * rgb, int rgb_rowstride, WetLayer * layer, int x0, int y0, int width, int height);
+
 private:
 	vKisChannelInfoSP m_channels;
 	Q_UINT32 * wet_render_tab;
 
+	QStringList m_paintNames;
 
 };
 

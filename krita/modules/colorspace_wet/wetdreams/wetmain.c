@@ -266,7 +266,6 @@ pselect_expose(GtkWidget * widget, GdkEventExpose * event, WetPack * pack)
 	int paint_quad, paint_num;
 	int last_pn;
 	int bg;
-	byte mask = 1;
 
 #ifdef VERBOSE
 	g_print("expose: %d layers\n", pack->n_layers);
@@ -293,7 +292,7 @@ pselect_expose(GtkWidget * widget, GdkEventExpose * event, WetPack * pack)
 			rgb[x * 3 + 1] = bg;
 			rgb[x * 3 + 2] = bg;
 			wet_composite(&rgb[x * 3], 0, &paintbox[paint_num],
-				      0, 1, 1, &mask);
+				      0, 1, 1);
 		}
 	}
 

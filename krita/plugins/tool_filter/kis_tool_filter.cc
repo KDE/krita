@@ -106,7 +106,7 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
  	m_optionLayout -> addWidget(lbFilter, 1, 0);
  	m_optionLayout -> addWidget(m_cbFilter, 1, 1);
 
-	connect(m_cbFilter, SIGNAL(activated ( const QString& )), this, SLOT( changeFilter( const QString& ) ) );
+	connect(m_cbFilter, SIGNAL(activated ( const KisID& )), this, SLOT( changeFilter( const KisID& ) ) );
 	changeFilter( m_cbFilter->currentItem () );
 
 	return m_optWidget;

@@ -112,6 +112,10 @@ public:
         // ???
 	KCommand *endTransaction();
 
+
+        // The current paint device.
+	KisPaintDeviceSP device() const;
+
         // ----------------------------------------------------------------------------------------
         // Native paint methods that are tile aware, undo/redo-able,
         // use the color strategies and the composite operations.
@@ -126,10 +130,6 @@ public:
                     QUANTUM opacity, 
                     Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 
-        // The current paint device.
-	KisPaintDeviceSP device() const;
-
-        // Clean away a rectangle
 	void eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h);
 	void eraseRect(const QRect& rc);
 
@@ -139,9 +139,15 @@ public:
 	void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c, QUANTUM opacity);
 	void fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity);
 
+	// Draw a point with the specified brush in the specified color at x, y
+	// XXX: brush, color, gradient, pattern etc. should be set
+	// as in QPainter.
+	void drawPoint(Q_INT32 x, Q_INT32 y, const KoColor &c, const KisBrush &brush);
+	void drawPoint(const QPoint &p,  const KoColor &c, const KisBrush &brush);
+
 
         // ----------------------------------------------------------------------------------------
-        // QPainter-like methods.
+        // QPainter-using methods.
 
         // XXX: we use a simple black pen for everything, for now.
         // XXX: we actually use QPainter for everything.
@@ -150,7 +156,7 @@ public:
         // XXX: let alone colour strategies.
 
         void drawPolyline ( const QPointArray & polyline, 
-                            const QColor & c);
+                            const QColor & c );
 
         // ----------------------------------------------------------------------------------------
 
@@ -167,6 +173,7 @@ private:
 private:
 	KisPaintDeviceSP m_device;	
 	KMacroCommand *m_transaction;
+
 
 };
 
@@ -199,6 +206,13 @@ void KisPainter::fillRect(const QRect& rc, const KoColor& c, QUANTUM opacity)
 {
 	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
 }
+
+inline
+void KisPainter::drawPoint(const QPoint &p,  const KoColor &c, const KisBrush &brush) 
+{
+	drawPoint(p.x(), p.y(), c, brush);
+}
+
 
 inline
 KisPaintDeviceSP KisPainter::device() const

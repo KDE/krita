@@ -741,6 +741,12 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 
 }
 
+void KisPainter::drawPoint(Q_INT32 x, Q_INT32 y, const KoColor &c, const KisBrush &brush) 
+{
+}
+
+
+
 void KisPainter::drawPolyline ( const QPointArray & polyline,
                                 const QColor & c)
 {

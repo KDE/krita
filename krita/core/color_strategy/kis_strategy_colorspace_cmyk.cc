@@ -267,7 +267,7 @@ void KisStrategyColorSpaceCMYK::render(KisImageSP projection,
             }
 
             // fix the pixel in QImage.
-            *( j + PIXEL_ALPHA ) = 0; //*( pd->data + i + PIXEL_CMYK_ALPHA );
+            *( j + PIXEL_ALPHA ) = *( pd->data + i + PIXEL_CMYK_ALPHA );
             *( j + PIXEL_RED ) = r.r;
             *( j + PIXEL_GREEN ) =  r.g;
             *( j + PIXEL_BLUE ) =  r.b;

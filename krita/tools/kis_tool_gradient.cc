@@ -268,7 +268,7 @@ QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
 	m_cmbShape -> insertItem(i18n("Radial"));
 	m_cmbShape -> insertItem(i18n("Square"));
 	m_cmbShape -> insertItem(i18n("Conical"));
-	m_cmbShape -> insertItem(i18n("Conical Symetric"));
+	m_cmbShape -> insertItem(i18n("Conical Symmetric"));
 
 	m_cmbRepeat = new QComboBox(false, m_optWidget, "repeat_combo");
 	connect(m_cmbRepeat, SIGNAL(activated(int)), this, SLOT(slotSetRepeat(int)));

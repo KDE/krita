@@ -46,10 +46,12 @@ public:
 	KisListBoxView(const QString& label, flags f = SHOWALL, QWidget *parent = 0, const char *name = 0);
 	virtual ~KisListBoxView();
 
-	void insertItem(const QString& name);
+	void insertItem(const QString& name, bool visible = true, bool linked = false);
 	void setCurrentItem(int n);
+	int getCurrentItem() const;
 	void setTopItem(int n);
 	void clear();
+	void setSelected(int index);
 
 signals:
 	void itemToggleVisible(int n);

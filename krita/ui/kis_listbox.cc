@@ -63,12 +63,13 @@ KisListBoxView::KisListBoxView(const QString& label, flags f, QWidget *parent, c
 	m_btnRaise = new KPushButton(hbox);
 	m_btnRaise -> setPixmap(BarIcon("raiselayer"));
 	QToolTip::add(m_btnRaise, i18n("Upper Current %1").arg(label));
+	m_btnRaise -> setEnabled(false);
 	m_btnLower = new KPushButton(hbox);
 	m_btnLower -> setPixmap(BarIcon("lowerlayer"));
+	m_btnLower -> setEnabled(false);
 	QToolTip::add(m_btnLower, i18n("Lower Current %1").arg(label));
 
 	mnu = new KPopupMenu();
-
 	mnu -> insertItem(i18n("Raise %1").arg(label), RAISE);
 	mnu -> insertItem(i18n("Lower %1").arg(label), LOWER);
 	mnu -> insertItem(i18n("Foremost %1").arg(label), FRONT);
@@ -120,8 +121,10 @@ void KisListBoxView::slotMenuAction(int mnuId)
 	int n = m_lst -> currentItem();
 	KisListBoxItem *p;
 
-	if (n == -1 && mnuId != ADD)
+	if (n == -1 && mnuId != ADD) {
+		setCurrentItem(n);
 		return;
+	}
 
 	p = dynamic_cast<KisListBoxItem*>(m_lst -> item(n));
 	
@@ -137,7 +140,7 @@ void KisListBoxView::slotMenuAction(int mnuId)
 		case LINKING:
 			emit itemToggleLinked(n);
 			p -> toggleLinked();
-			m_contextMnu -> setItemChecked(LINKING, p -> visible());
+			m_contextMnu -> setItemChecked(LINKING, p -> linked());
 			break;
 		case PROPERTIES:
 			emit itemProperties(n);
@@ -187,6 +190,7 @@ void KisListBoxView::slotAboutToShow()
 	m_contextMnu -> setItemEnabled(ADDMASK, enabled);
 	m_contextMnu -> setItemEnabled(REMOVEMASK, enabled);
 	m_contextMnu -> setItemEnabled(RAISE, m_lst -> item(m_lst -> currentItem()) != m_lst -> firstItem());
+	m_contextMnu -> setItemEnabled(LOWER, m_lst -> item(m_lst -> currentItem()) != m_lst -> item(m_lst -> count() - 1));
 }
 
 void KisListBoxView::slotShowContextMenu(QListBoxItem *item, const QPoint& pos)
@@ -194,13 +198,18 @@ void KisListBoxView::slotShowContextMenu(QListBoxItem *item, const QPoint& pos)
 	m_lst -> setCurrentItem(item);
 	m_contextMnu -> popup(pos);
 	m_btnRm -> setEnabled(item != 0);
-	m_btnRaise -> setEnabled(item != 0);
+	m_btnRaise -> setEnabled(item && item != m_lst -> item(0));
 	m_btnLower -> setEnabled(item != 0);
 }
 
-void KisListBoxView::slotSelectionChanged(QListBoxItem * /*item*/)
+void KisListBoxView::slotSelectionChanged(QListBoxItem *item)
 {
+	int n = m_lst -> currentItem();
+
 	slotMenuAction(SELECTION);
+	m_btnRm -> setEnabled(item != 0);
+	m_btnRaise -> setEnabled(item && item != m_lst -> item(0));
+	m_btnLower -> setEnabled(item && n != -1 && static_cast<uint>(n) != m_lst -> count() - 1);
 }
 
 void KisListBoxView::slotClicked(QListBoxItem *item, const QPoint& pos)
@@ -215,6 +224,10 @@ void KisListBoxView::slotClicked(QListBoxItem *item, const QPoint& pos)
 		else if (p -> intersectLinkedRect(pos, n))
 			slotMenuAction(LINKING);
 	}
+	
+	m_btnRm -> setEnabled(item != 0);
+	m_btnRaise -> setEnabled(item && item != m_lst -> item(0));
+	m_btnLower -> setEnabled(item && n != -1 && static_cast<uint>(n) != m_lst -> count() - 1);
 }
 
 void KisListBoxView::slotDoubleClicked(QListBoxItem * /*item*/)
@@ -224,13 +237,10 @@ void KisListBoxView::slotDoubleClicked(QListBoxItem * /*item*/)
 
 void KisListBoxView::setCurrentItem(int n)
 {
-	if (n != -1) {
-		m_lst -> setTopItem(n);
-		m_lst -> triggerUpdate(false);
-		m_btnRm -> setEnabled(true);
-		m_btnRaise -> setEnabled(true);
-		m_btnLower -> setEnabled(true);
-	}
+	if (n != -1)
+		setTopItem(n);
+
+	slotSelectionChanged(m_lst -> item(n));
 }
 
 void KisListBoxView::setTopItem(int n)
@@ -239,9 +249,15 @@ void KisListBoxView::setTopItem(int n)
 	m_lst -> triggerUpdate(false);
 }
 
-void KisListBoxView::insertItem(const QString& name)
+void KisListBoxView::insertItem(const QString& name, bool visible, bool linked)
 {
 	KisListBoxItem *p = new KisListBoxItem(name, m_lst, m_flags);
+
+	if (!visible)
+		p -> toggleVisible();
+
+	if (linked)
+		p -> toggleLinked();
 
 	m_lst -> insertItem(p);
 	m_lst -> setCurrentItem(p);
@@ -270,6 +286,27 @@ void KisListBoxView::slotRaiseClicked()
 void KisListBoxView::slotLowerClicked()
 {
 	slotMenuAction(LOWER);
+}
+
+int KisListBoxView::getCurrentItem() const
+{
+	QListBoxItem *p = 0;
+	int n = 0;
+
+	for (p = m_lst -> firstItem(); p; p = p -> next()) {
+		if (p -> isSelected())
+			return n;
+
+		n++;
+	}
+
+	return -1;
+}
+
+void KisListBoxView::setSelected(int index)
+{
+	m_lst -> setSelected(index, true);
+	m_lst -> setCurrentItem(index);
 }
 
 KisListBoxItem::KisListBoxItem(const QString& label, QListBox *parent, KisListBoxView::flags f)

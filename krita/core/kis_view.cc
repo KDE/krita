@@ -485,14 +485,6 @@ void KisView::setupActions()
 	m_dialog_patterns -> setChecked (true);
 	m_dialog_layers -> setChecked (true);
 	m_dialog_channels -> setChecked (true);
-
-	// help actions - these are standard kde actions
-	m_helpMenu = new KHelpMenu(this);
-
-	(void)KStdAction::helpContents(m_helpMenu, SLOT(appHelpActivated()), actionCollection(), "help_contents");
-	(void)KStdAction::whatsThis(m_helpMenu, SLOT(contextHelpActivated()), actionCollection(), "help_whatsthis");
-	(void)KStdAction::reportBug(m_helpMenu, SLOT(reportBug()), actionCollection(), "help_bugreport");
-	(void)KStdAction::aboutApp(m_helpMenu, SLOT(aboutApplication()), actionCollection(), "help_about");
 }
 
 /*
@@ -2334,17 +2326,25 @@ void KisView::slotLayerRmMask(int /*n*/)
 void KisView::slotLayerRaise(int n)
 {
 	KisImageSP img = m_doc -> currentImg();
+	int npos;
 
-	if (img)
+	if (img) {
+		npos = m_layerView -> getCurrentItem() - 1;
 		img -> upperLayer(n);
+		m_layerView -> setSelected(npos);
+	}
 }
 
 void KisView::slotLayerLower(int n)
 {
 	KisImageSP img = m_doc -> currentImg();
+	int npos;
 
-	if (img)
+	if (img) {
+		npos = m_layerView -> getCurrentItem() + 1;
 		img -> lowerLayer(n);
+		m_layerView -> setSelected(npos);
+	}
 }
 
 void KisView::slotLayerFront(int n)
@@ -2379,7 +2379,7 @@ void KisView::slotLayersUpdated()
 		m_layerView -> clear();
 
 		for (KisLayerSPLstConstIterator it = l.begin(); it != l.end(); it++)
-			m_layerView -> insertItem((*it) -> name());
+			m_layerView -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked());
 
 		m_layerView -> setUpdatesEnabled(true);
 		m_layerView -> repaint();

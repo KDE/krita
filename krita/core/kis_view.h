@@ -278,9 +278,6 @@ protected:
 	KTabCtl *m_tabCtl;
 	QButton             *m_pTabFirst, *m_pTabLeft, *m_pTabRight, *m_pTabLast;
 
-	// what's this doing here?
-	KHelpMenu            *m_helpMenu;
-
 	// normal variables
 	float	    m_zoomFactor;
 	int         m_xPaintOffset;

@@ -39,6 +39,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
+#include <kprinter.h>
 #include <kpushbutton.h>
 #include <kruler.h>
 #include <kstatusbar.h>
@@ -1298,26 +1299,27 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filena
 
 		switch (ib.buildImage(url)) {
 			case KisImageBuilder_RESULT_UNSUPPORTED:
-				KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Loading file"));
+				KMessageBox::error(this, i18n("No coder for this type of file.  %1.").arg(url.path()), i18n("Error Importing File"));
 				continue;
 			case KisImageBuilder_RESULT_NO_URI:
 			case KisImageBuilder_RESULT_NOT_LOCAL:
 				KNotifyClient::event("cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_NOT_EXIST:
-				KMessageBox::error(this, i18n("File does not exist."), i18n("Error Loading File"));
+				KMessageBox::error(this, i18n("File does not exist.  %1.").arg(url.path()), i18n("Error Importing File"));
 				KNotifyClient::event("cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_BAD_FETCH:
-				KMessageBox::error(this, i18n("Unable to download file."), i18n("Error Loading File"));
+				KMessageBox::error(this, i18n("Unable to download file.  %1.").arg(url.path()), i18n("Error Importing File"));
 				KNotifyClient::event("cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_EMPTY:
-				KMessageBox::error(this, i18n("Empty file."), i18n("Error Loading File"));
+				KMessageBox::error(this, i18n("Empty file.  %1.").arg(url.path()), i18n("Error Importing File"));
 				KNotifyClient::event("cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_FAILURE:
-				KMessageBox::error(this, i18n("Error Loading File."), i18n("Error Loading File"));
+				m_buildProgress -> changeSubject(0);
+				KMessageBox::error(this, i18n("Error Loading File.  %1.").arg(url.path()), i18n("Error Importing File"));
 				KNotifyClient::event("cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_PROGRESS:
@@ -1630,57 +1632,46 @@ void KisView::slotSetBGColor(const KoColor& c)
 	m_bg = c;
 }
 
-void KisView::setupPrinter(KPrinter& )
+void KisView::setupPrinter(KPrinter& printer)
 {
-#if 0
-    printer.setPageSelection(KPrinter::ApplicationSide);
+	KisImageSP img = currentImg();
 
-    int count = 0;
-    QStringList imageList = m_doc->images();
-    for (QStringList::Iterator it = imageList.begin(); it != imageList.end(); ++it) {
-        if (*it == currentImg()->name())
-            break;
-        ++count;
-    }
+	if (img) {
+		Q_INT32 count;
 
-    printer.setCurrentPage(1 + count);
-    printer.setMinMax(1, m_doc->images().count());
-    printer.setPageSize(KPrinter::A4);
-    printer.setOrientation(KPrinter::Portrait);
-#endif
+		printer.setPageSelection(KPrinter::ApplicationSide);
+		count = m_doc -> imageIndex(img);
+		printer.setCurrentPage(1 + count);
+		printer.setMinMax(1, m_doc -> nimages());
+		printer.setPageSize(KPrinter::A4);
+		printer.setOrientation(KPrinter::Portrait);
+	}
 }
 
-void KisView::print(KPrinter &)
+void KisView::print(KPrinter& printer)
 {
-#if 0
-    printer.setFullPage(true);
-    QPainter paint;
-    paint.begin(&printer);
-    paint.setClipping(false);
-    QValueList<int> imageList;
-    int from = printer.fromPage();
-    int to = printer.toPage();
-    if(!from && !to)
-    {
-        from = printer.minPage();
-        to = printer.maxPage();
-    }
-    for (int i = from; i <= to; i++)
-        imageList.append(i);
-    QString tmp_currentImageName = m_doc->currentImgName();
-    QValueList<int>::Iterator it = imageList.begin();
-    for (; it != imageList.end(); ++it)
-    {
-        int imageNumber = *it - 1;
-        if (it != imageList.begin())
-            printer.newPage();
+	QPainter gc(&printer);
+	Q_INT32 from = printer.fromPage();
+	Q_INT32 to = printer.toPage();
+	KisImageSP img;
 
-        m_doc->setImage(*m_doc->images().at(imageNumber));
-        m_doc->paintContent(paint, m_doc->getImageRect());
-    }
-    paint.end ();
-    m_doc->setImage(tmp_currentImageName);
-#endif
+	printer.setFullPage(true);
+	gc.setClipping(false);
+
+	if (!from && !to) {
+		from = printer.minPage();
+		to = printer.maxPage();
+	}
+
+	for (Q_INT32 i = from; i < to; i++) {
+		if (i)
+			printer.newPage();
+
+		img = m_doc -> imageNum(i - 1);
+		Q_ASSERT(img);
+		m_doc -> setProjection(img);
+		m_doc -> paintContent(gc, img -> bounds());
+	}
 }
 
 void KisView::setupTools()

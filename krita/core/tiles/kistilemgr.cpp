@@ -155,7 +155,7 @@ KisTileSP KisTileMgr::tile(Q_INT32 tilenum, Q_INT32 mode)
 		if (tile -> shareCount() > 0) {
 			KisTileSP tileNew = new KisTile(*tile);
 
-			kdDebug(DBG_AREA_TILES) << "Tile is shared.  Duplicating.\n";
+			kdDebug(DBG_AREA_TILES) << "Tile " << tilenum << " is shared.  Duplicating.\n";
 			detach(tile, tilenum);
 			attach(tileNew, tilenum);
 			tile = tileNew;

@@ -83,7 +83,8 @@ public:
 
 	KisImageSP imageNum(Q_UINT32 num) const;
 	Q_INT32 nimages() const;
-	KisImageSP findImage(const QString& name);
+	Q_INT32 imageIndex(KisImageSP img) const;
+	KisImageSP findImage(const QString& name) const;
 	bool contains(KisImageSP img) const;
 
 	bool empty() const;

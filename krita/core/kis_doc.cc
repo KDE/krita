@@ -305,7 +305,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_dcop = 0;
 	setInstance(KisFactory::global(), true);
 	m_cmdHistory = 0;
-//	QPixmap::setDefaultOptimization(QPixmap::BestOptim);
+	QPixmap::setDefaultOptimization(QPixmap::BestOptim);
 	m_nserver = 0;
 	m_pushedClipboard = false;
 	m_currentMacro = 0;
@@ -881,6 +881,16 @@ bool KisDoc::isEmpty() const
 	return m_images.size() == 0;
 }
 
+Q_INT32 KisDoc::imageIndex(KisImageSP img) const
+{
+	for (vKisImageSP_cit it = m_images.begin(); it != m_images.end(); it++) {
+		if (*it == img)
+			return it - m_images.begin();
+	}
+
+	return -1;
+}
+
 KisImageSP KisDoc::imageNum(unsigned int num) const
 {
 	if (m_images.empty() || num > m_images.size())
@@ -894,9 +904,9 @@ Q_INT32 KisDoc::nimages() const
 	return m_images.size();
 }
 
-KisImageSP KisDoc::findImage(const QString& name)
+KisImageSP KisDoc::findImage(const QString& name) const
 {
-	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
+	for (vKisImageSP_cit it = m_images.begin(); it != m_images.end(); it++) {
 		if ((*it) -> name() == name) {
 			return *it;
 		}

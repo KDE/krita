@@ -1682,9 +1682,6 @@ void KisView::add_new_image_tab()
 
 void KisView::remove_current_image_tab()
 {
-        if ( m_doc->nimages() == 1 )
-                return;
-
         KisImageSP current = currentImg();
 
         if (current) {

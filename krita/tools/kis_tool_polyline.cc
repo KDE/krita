@@ -26,7 +26,6 @@
 #include <kaction.h>
 #include <klocale.h>
 
-#include "kis_dlg_toolopts.h"
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 

@@ -41,7 +41,6 @@ public:
 // 	virtual bool loadSettings(QDomElement& elem);
 
 // 	virtual void toolSelect();
-// 	virtual void optionsDialog();
 
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);

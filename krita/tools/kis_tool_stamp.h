@@ -51,7 +51,6 @@ public:
 
 /* 	virtual bool shouldRepaint(); */
 /* 	virtual void setPattern(KisPattern *pattern); */
-	virtual KDialog *options(QWidget * parent);
 
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);

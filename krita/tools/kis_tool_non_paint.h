@@ -68,7 +68,6 @@ public:
 
 	virtual void cursor(QWidget *w) const;
 	virtual void setCursor(const QCursor& cursor);
-	virtual KDialog *options(QWidget *parent);
 	virtual QWidget* createoptionWidget(QWidget* parent) ;
 	virtual QWidget* optionWidget();
 

@@ -36,7 +36,7 @@
 #include "color_strategy/kis_strategy_colorspace.h"
 
 #include "kis_previewwidget.h"
-#include "kis_previewwidgetbase.h"
+#include "dialogs/kis_previewwidgetbase.h"
 
 /*FIXME make this unnecessary */
 #define SIZE 150

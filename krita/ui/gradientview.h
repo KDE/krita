@@ -11,38 +11,38 @@
 // Why? The Gradients are RGB only, so use QColor.
 struct GradientItem
 {
-  QColor leftColor;
-  QColor rightColor;
+	QColor leftColor;
+	QColor rightColor;
 
-  double middle;
-  double right;
+	double middle;
+	double right;
 };
 
 class GradientView : public QWidget
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
 
-  GradientView( QWidget *_parent = 0 , const char *_name = 0 );
-  ~GradientView();
+	GradientView( QWidget *_parent = 0 , const char *_name = 0 );
+	~GradientView();
 
-  void addItem( QColor, QColor, float, float );
+	void addItem( QColor, QColor, float, float );
 
-  virtual QSize sizeHint() const;
+	virtual QSize sizeHint() const;
 
 protected:
 
-  virtual void paintEvent( QPaintEvent *_event );
+	virtual void paintEvent( QPaintEvent *_event );
 
 private:
 
-  void updatePixmap();
-  void readGIMPGradientFile( const QString& _file );
+	void updatePixmap();
+	void readGIMPGradientFile( const QString& _file );
 
-  QPtrList<GradientItem> m_lstGradientItems;
+	QPtrList<GradientItem> m_lstGradientItems;
 
-  QPixmap m_pixmap;
+	QPixmap m_pixmap;
 };
 
 #endif

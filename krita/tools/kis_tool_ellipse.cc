@@ -33,7 +33,6 @@
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
 #include "kis_tool_ellipse.h"
-#include "kis_dlg_toolopts.h"
 
 KisToolEllipse::KisToolEllipse()
         : super(),

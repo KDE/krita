@@ -28,7 +28,6 @@
 #include <klocale.h>
 
 #include "kis_cursor.h"
-#include "kis_dlg_toolopts.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
 #include "kis_view.h"
@@ -209,19 +208,6 @@ void KisToolBrush::setup(KActionCollection *collection)
                                    SLOT(activate()), collection,
                                    "tool_brush");
         toggle -> setExclusiveGroup("tools");
-}
-
-KDialog *KisToolBrush::options(QWidget * parent)
-{
-        ToolOptsStruct ts;
-
-        ts.usePattern = false; //m_usePattern;
-        ts.useGradient = false; //m_useGradient;
-        ts.opacity = OPACITY_OPAQUE; //m_opacity;
-
-        ToolOptionsDialog * d = new ToolOptionsDialog(tt_brushtool, ts, parent);
-
-	return d;
 }
 
 QWidget* KisToolBrush::createoptionWidget(QWidget* parent)

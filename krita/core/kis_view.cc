@@ -494,9 +494,6 @@ void KisView::setupActions()
         // tool settings actions
         (void)new KAction(i18n("&Gradient Dialog..."), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
 
-        // tool actions
-        (void)new KAction(i18n("&Current Tool Properties..."), "configure", 0, this, SLOT(tool_properties()), actionCollection(), "current_tool_properties");
-
         // layer actions
         m_layerAdd = new KAction(i18n("&Add Layer..."), 0, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
         m_layerRm = new KAction(i18n("&Remove Layer"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
@@ -790,15 +787,6 @@ void KisView::updateCanvas(const QRect& rc)
 void KisView::updateCanvas(const KisRect& rc)
 {
         paintView(rc);
-}
-
-void KisView::tool_properties()
-{
-        if (m_tool) {
-                KDialog * optionsDialog = m_tool -> options(this);
-                if (optionsDialog)
-                        optionsDialog -> show();
-        }
 }
 
 void KisView::layerUpdateGUI(bool enable)

@@ -34,7 +34,6 @@
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
 #include "kis_tool_polygon.h"
-#include "kis_dlg_toolopts.h"
 
 KisToolPolygon::KisToolPolygon() : 
 	super()

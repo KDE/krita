@@ -27,23 +27,24 @@ class KisGradient;
 
 class KisGradientWidget : public QFrame
 {
-  Q_OBJECT
+	Q_OBJECT
 
- public:
-  KisGradientWidget( QWidget* parent = 0, const char* name = 0 );
+public:
+	KisGradientWidget( QWidget* parent = 0, const char* name = 0 );
 
- public slots:
-  void slotSetGradient( const KisGradient & );
+public slots:
 
- signals:
-  void clicked();
+	void slotSetGradient( const KisGradient & );
+
+signals:
+	void clicked();
   
- protected:
-  virtual void drawContents ( QPainter * );
-  virtual void mousePressEvent ( QMouseEvent * );
+protected:
+	virtual void drawContents ( QPainter * );
+	virtual void mousePressEvent ( QMouseEvent * );
 
- private:
-  const KisGradient *m_pGradient; 
+private:
+	const KisGradient *m_pGradient; 
 };
 
 #endif

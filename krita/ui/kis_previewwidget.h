@@ -26,8 +26,9 @@
 #include <qpixmap.h>
 
 #include "kis_types.h"
-//class PreviewWidgetBase;
-#include "kis_previewwidgetbase.h"
+
+#include "dialogs/kis_previewwidgetbase.h"
+
 class KisUndoAdapter;
 
 /**
@@ -38,57 +39,67 @@ class KisUndoAdapter;
  */
 class KisPreviewWidget : public PreviewWidgetBase
 {
-  Q_OBJECT
+	Q_OBJECT
 
- public:
-    /** Constructs the widget */
-    KisPreviewWidget( QWidget* parent = 0, const char* name = 0 );
-    /** @return the layer, so the dialog can apply it's effect on it */
-    KisLayerSP getLayer();
-    /**
-     * returns the zoom factor. This could be useful if the filter has to rely on
-     * the whole layer. With this and getPos(), there is enough information to
-     * paint the preview from a source different from the layer in @see getLayer */
-    double getZoom() { return m_zoom; }
-    /** returns the 'vector' the image in the preview has been moved by. @see getZoom */
-    QPoint getPos() { return m_startDrag; }
+public:
+	/** Constructs the widget */
+
+	KisPreviewWidget( QWidget* parent = 0, const char* name = 0 );
+
+	/** @return the layer, so the dialog can apply it's effect on it */
+	KisLayerSP getLayer();
+
+	/**
+	 * returns the zoom factor. This could be useful if the filter has to rely on
+	 * the whole layer. With this and getPos(), there is enough information to
+	 * paint the preview from a source different from the layer in @see getLayer */
+	double getZoom() { return m_zoom; }
+
+	/** returns the 'vector' the image in the preview has been moved by. @see getZoom */
+	QPoint getPos() { return m_startDrag; }
     
 
- public slots:
-    /** Sets the preview to use the layer specified as argument */
-    void slotSetPreview(KisLayerSP lay);
-    /** 
-     * This should be called at the beginning of the effect. This ensures that 
-     * the layer in the preview widget is in the right state. */
-    void slotRenewLayer();
-    /**
-     * Call this when the effect has finished updating the layer. Makes the preview
-     * repaint itself. */
-    void slotUpdate();
+public slots:
 
- signals:
-    /** This is emitted when the position or zoom factor of the widget has changed */
-    void updated();
+	/** Sets the preview to use the layer specified as argument */
+	void slotSetPreview(KisLayerSP lay);
+
+	/** 
+	 * This should be called at the beginning of the effect. This ensures that 
+	 * the layer in the preview widget is in the right state. */
+	void slotRenewLayer();
+
+	/**
+	 * Call this when the effect has finished updating the layer. Makes the preview
+	 * repaint itself. */
+	void slotUpdate();
+
+signals:
+	/** This is emitted when the position or zoom factor of the widget has changed */
+	void updated();
   
- protected:
-    virtual void paintEvent(QPaintEvent*);
-    virtual void mousePressEvent(QMouseEvent * e);
-    virtual void mouseMoveEvent(QMouseEvent * e);
-    virtual void mouseReleaseEvent(QMouseEvent * e);
+protected:
+	virtual void paintEvent(QPaintEvent*);
+	virtual void mousePressEvent(QMouseEvent * e);
+	virtual void mouseMoveEvent(QMouseEvent * e);
+	virtual void mouseReleaseEvent(QMouseEvent * e);
 
- private:
-   void render(QPainter &painter, KisImageSP image, double zoomX, double zoomY);
-   void updateWidgets(QPoint delta);
-   KisLayerSP m_layer;
-   KisImageSP m_original, m_preview;
-   QPoint m_startDrag, m_pos;
-   KisUndoAdapter* m_undo;
-   KisLayerSP layerNew1 /*original image*/, layerNew2/*preview image*/;
-   bool m_moved;
-   double m_zoom;
- private slots:
-   void zoomIn();
-   void zoomOut();
+private:
+
+	void render(QPainter &painter, KisImageSP image, double zoomX, double zoomY);
+	void updateWidgets(QPoint delta);
+	KisLayerSP m_layer;
+	KisImageSP m_original, m_preview;
+	QPoint m_startDrag, m_pos;
+	KisUndoAdapter* m_undo;
+	KisLayerSP layerNew1 /*original image*/, layerNew2/*preview image*/;
+	bool m_moved;
+	double m_zoom;
+
+private slots:
+
+	void zoomIn();
+	void zoomOut();
 };
 
 #endif

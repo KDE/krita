@@ -48,7 +48,6 @@ public:
 	virtual void mouseRelease(QMouseEvent *e);
 	virtual void tabletEvent(QTabletEvent *e);
 
-	virtual KDialog *options(QWidget * parent);
 	virtual QWidget* createoptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 

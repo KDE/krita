@@ -30,7 +30,6 @@
 #include "kis_canvas.h"
 #include "kis_cursor.h"
 #include "kis_tool_colorchanger.h"
-#include "kis_dlg_toolopts.h"
 
 KisToolColorChanger::KisToolColorChanger() : super()
 {

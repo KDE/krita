@@ -43,40 +43,40 @@ class KisSpinBox;
 
 class IntegerWidget : public QWidget
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
 
-  IntegerWidget( int min, int max, QWidget* parent = 0, const char* name = 0 );
-  ~IntegerWidget();
+	IntegerWidget( int min, int max, QWidget* parent = 0, const char* name = 0 );
+	~IntegerWidget();
 
-  int value();
-  void setRange( int min, int max );
+	int value();
+	void setRange( int min, int max );
 
-  void setTickmarks( QSlider::TickSetting );
-  void setTickInterval ( int );
-  int tickInterval() const;
+	void setTickmarks( QSlider::TickSetting );
+	void setTickInterval ( int );
+	int tickInterval() const;
 
 signals:
 
-  void valueChanged( int );
+	void valueChanged( int );
 
 public slots:
 
-  void setValue( int value );
-  void setEditFocus( bool mark = true );
+	void setValue( int value );
+	void setEditFocus( bool mark = true );
 
 protected slots:
 
-  void setSliderValue( int );
+	void setSliderValue( int );
 
 protected:
 
-  void initGUI();
+	void initGUI();
 
-  QHBoxLayout* layout;
-  QSlider* slider;
-  KisSpinBox* spinBox;
+	QHBoxLayout* layout;
+	QSlider* slider;
+	KisSpinBox* spinBox;
 };
 
 /**
@@ -86,17 +86,17 @@ protected:
  */
 class KisSpinBox : public QSpinBox
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
-  KisSpinBox( QWidget *parent=0, const char *name=0 );
-  KisSpinBox ( int minValue, int maxValue, int step=1, QWidget*parent=0,
-	     const char *name=0 );
-  ~KisSpinBox() {}
+	KisSpinBox( QWidget *parent=0, const char *name=0 );
+	KisSpinBox ( int minValue, int maxValue, int step=1, QWidget*parent=0,
+		     const char *name=0 );
+	~KisSpinBox() {}
 
 
 public slots:
-  void 	setEditFocus( bool mark=true );
+	void setEditFocus( bool mark=true );
 
 };
 

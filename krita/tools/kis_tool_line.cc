@@ -28,7 +28,6 @@
 #include <klocale.h>
 
 #include "kis_cursor.h"
-#include "kis_dlg_toolopts.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
 #include "kis_tool_line.h"
@@ -229,24 +228,6 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
 		gc.setRasterOp(op);
 		gc.setPen(old);
 	}
-}
-
-KDialog *KisToolLine::options(QWidget * parent)
-{
-	ToolOptsStruct ts;
-
-	ts.usePattern = false; //m_usePattern;
-	ts.useGradient = false; //m_useGradient;
-	ts.opacity = OPACITY_OPAQUE; //m_opacity;
-
-// 	bool old_usePattern = m_usePattern;
-// 	bool old_useGradient = m_useGradient;
-// 	unsigned int old_opacity = m_opacity;
-
-	ToolOptionsDialog *d = new ToolOptionsDialog(tt_linetool, ts, parent);
-
-	return d;
-
 }
 
 void KisToolLine::setup(KActionCollection *collection)

@@ -28,7 +28,6 @@
 
 #include "kis_brush.h"
 #include "kis_cursor.h"
-#include "kis_dlg_toolopts.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
 #include "kis_tool_airbrush.h"
@@ -215,20 +214,6 @@ void KisToolAirBrush::setup(KActionCollection *collection)
 	toggle -> setExclusiveGroup("tools");
 }
 
-
-KDialog * KisToolAirBrush::optionsDialog(QWidget * parent)
-{
-
-        ToolOptsStruct ts;
-
-        ts.usePattern = false; //m_usePattern;
-        ts.useGradient = false; //m_useGradient;
-        ts.opacity = OPACITY_OPAQUE; //m_opacity;
-
-        ToolOptionsDialog * d = new ToolOptionsDialog(tt_airbrushtool, ts, parent);
-
-	return d;
-}
 
 
 #include "kis_tool_airbrush.moc"

@@ -35,17 +35,17 @@ class KURLRequester;
  */
 class GeneralTab : public QWidget
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
 
-  GeneralTab( QWidget *_parent = 0, const char *_name = 0 );
+	GeneralTab( QWidget *_parent = 0, const char *_name = 0 );
 
-  bool saveOnExit();
+	bool saveOnExit();
 
 private:
 
-  QCheckBox *m_saveOnExit;
+	QCheckBox *m_saveOnExit;
 };
 
 /**
@@ -53,32 +53,32 @@ private:
  */
 class DirectoriesTab : public QWidget
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
 
-    DirectoriesTab( QWidget *_parent = 0, const char *_name = 0 );
+	DirectoriesTab( QWidget *_parent = 0, const char *_name = 0 );
 
 private slots:
 
-    void slotRequesterClicked( KURLRequester * );
+        void slotRequesterClicked( KURLRequester * );
 
 private:
 
-    KURLRequester *m_pLineEdit, *m_pGimpGradients;
+	KURLRequester *m_pLineEdit, *m_pGimpGradients;
 };
 
 /* jwc - undo-redo not working yet - still we can show the 
-options and keep them in mind.  Harmless as the actions don't
-do anything yet */
+   options and keep them in mind.  Harmless as the actions don't
+   do anything yet */
 
 class UndoRedoTab : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 
-    UndoRedoTab( QWidget *_parent = 0, const char *_name = 0 );
+	UndoRedoTab( QWidget *_parent = 0, const char *_name = 0 );
 };
 
 
@@ -87,22 +87,22 @@ public:
  */
 class PreferencesDialog : public KDialogBase
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
 
-    static void editPreferences();
+	static void editPreferences();
 
 protected:
 
-    PreferencesDialog( QWidget *_parent = 0, const char *_name = 0 );
-    ~PreferencesDialog();
+	PreferencesDialog( QWidget *_parent = 0, const char *_name = 0 );
+	~PreferencesDialog();
 
 private:
 
-    GeneralTab     *m_general;
-    DirectoriesTab *m_directories;
-    UndoRedoTab    *m_undoRedo; 
+	GeneralTab     *m_general;
+	DirectoriesTab *m_directories;
+	UndoRedoTab    *m_undoRedo; 
 };
 
 #endif

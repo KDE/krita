@@ -58,7 +58,6 @@ public:
 // 	virtual bool loadSettings(QDomElement& elem);
 
 	virtual void setup(KActionCollection *collection);
-// 	virtual void optionsDialog();
 
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);

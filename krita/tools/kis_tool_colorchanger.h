@@ -43,7 +43,6 @@ public:
 
 // 	virtual QDomElement saveSettings(QDomDocument& doc) const;
 // 	virtual bool loadSettings(QDomElement& elem);
-// 	virtual void optionsDialog();
 // 	virtual void setCursor();
 
 	virtual void mousePress(QMouseEvent*); 

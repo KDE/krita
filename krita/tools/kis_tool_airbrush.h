@@ -47,9 +47,6 @@ class KisToolAirBrush : public KisToolPaint {
 	virtual void mouseRelease(QMouseEvent *e);
 	virtual void tabletEvent(QTabletEvent *e);
 	
-	virtual KDialog * optionsDialog(QWidget * parent);
-
-
  protected slots:
 	void timeoutPaint();  
 

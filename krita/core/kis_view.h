@@ -129,9 +129,6 @@ public slots:
 	void resizeCurrentImage(Q_INT32 w, Q_INT32 h);
 	void scaleCurrentImage(double sx, double sy);
 
-	// tool action slots
-	void tool_properties();
-
 	// Layer action slots
 	void copy();
 	void cut();

@@ -27,7 +27,6 @@
 #include <klocale.h>
 
 #include "kis_cursor.h"
-#include "kis_dlg_toolopts.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
 #include "kis_tool_stamp.h"
@@ -444,18 +443,6 @@ void KisToolStamp::tabletEvent(QTabletEvent */*event*/)
 	// have thick-thin lines for pressure.
 }
 
-KDialog * KisToolStamp::options(QWidget * parent)
-{
-	ToolOptsStruct ts;
-// 	bool old_useGradient = m_useGradient;
-// 	unsigned int  old_opacity = m_opacity;
-
-// 	ts.useGradient = m_useGradient;
-// 	ts.opacity = m_opacity;
-
-        ToolOptionsDialog * d = new ToolOptionsDialog(tt_stamptool, ts, parent);
-	return d;
-}
 
 void KisToolStamp::setup(KActionCollection *collection)
 {

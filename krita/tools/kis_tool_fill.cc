@@ -29,7 +29,6 @@
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_tool_fill.h"
-#include "kis_dlg_toolopts.h"
 
 KisToolFill::KisToolFill() 
 	: super()

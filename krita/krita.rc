@@ -171,7 +171,6 @@
   <Action name="left_sidebar"/>
   <Action name="preferences"/>
   <Action name="paint_offset"/>
-  <Action name="current_tool_properties"/>
   <Action name="blending_properties"/>
 </ToolBar>
 

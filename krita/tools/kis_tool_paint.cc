@@ -91,11 +91,6 @@ void KisToolPaint::keyRelease(QKeyEvent *)
 {
 }
 
-KDialog *KisToolPaint::options(QWidget * /*parent*/)
-{
-	return 0;
-}
-
 QWidget* KisToolPaint::createoptionWidget(QWidget* parent)
 {
 	return 0;

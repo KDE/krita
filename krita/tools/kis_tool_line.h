@@ -57,7 +57,6 @@ class KisToolLine : public KisToolPaint {
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
 
-	virtual KDialog *options(QWidget * parent);
 
  private:
 	void paintLine();

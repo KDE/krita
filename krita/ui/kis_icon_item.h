@@ -23,6 +23,7 @@
 class KisResource;
 
 class KisIconItem : public KoIconItem {
+
 public:
 	KisIconItem(KisResource *resource);
 	virtual ~KisIconItem();

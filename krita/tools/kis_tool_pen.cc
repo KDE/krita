@@ -30,7 +30,6 @@
 
 #include "kis_brush.h"
 #include "kis_cursor.h"
-#include "kis_dlg_toolopts.h"
 #include "kis_doc.h"
 #include "kis_tool_pen.h"
 #include "kis_vec.h"

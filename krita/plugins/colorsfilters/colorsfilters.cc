@@ -222,7 +222,7 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 	while( ! rectIt.isDone() )
 	{
 		if (rectIt.isSelected()) {
-			Q_UINT8 * srcData = rectIt.oldRawData();
+			const Q_UINT8 * srcData = rectIt.oldRawData();
 			// Try to be colorspace independent
 			scs -> toQColor(srcData, &c, profile);
 			;

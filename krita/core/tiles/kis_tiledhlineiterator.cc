@@ -88,7 +88,7 @@ void KisTiledHLineIterator::nextTile()
 	}
 }
 
-Q_INT32 KisTiledHLineIterator::nConseqHPixels()
+Q_INT32 KisTiledHLineIterator::nConseqHPixels() const
 {
 	return m_rightInTile - m_xInTile + 1;
 }
@@ -117,7 +117,7 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator -- ()
 	return *this;
 }
 
-bool KisTiledHLineIterator::isDone()
+bool KisTiledHLineIterator::isDone() const
 {
 	return m_x > m_right;
 }

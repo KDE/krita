@@ -152,7 +152,7 @@ public:
 	 * bytes, bad things will happen. XXX: use vectors?
 	 */
 	KisPixel toPixel(Q_UINT8 * bytes);
-	KisPixelRO toPixelRO(Q_UINT8 * bytes);
+	KisPixelRO toPixelRO(const Q_UINT8 * bytes);
 
         bool alpha() const;
 
@@ -374,7 +374,7 @@ inline KisPixel KisPaintDevice::toPixel(Q_UINT8 * bytes)
 	return m_colorStrategy -> toKisPixel(bytes, m_profile);
 }
 
-inline KisPixelRO KisPaintDevice::toPixelRO(Q_UINT8 * bytes)
+inline KisPixelRO KisPaintDevice::toPixelRO(const Q_UINT8 * bytes)
 {
 	return m_colorStrategy -> toKisPixelRO(bytes, m_profile);
 }

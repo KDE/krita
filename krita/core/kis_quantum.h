@@ -30,7 +30,7 @@ class KisQuantum {
 	public:
 		inline KisQuantum(QUANTUM* q, KisQuantumOperation* op = new KisQuantumOperationLinear()) : m_quantum(q), m_op(op) { };
 	public:
-		inline operator QUANTUM() { return *m_quantum; };
+		inline operator QUANTUM() const { return *m_quantum; };
 
 		inline QUANTUM operator=(QUANTUM q)
 		{
@@ -51,7 +51,7 @@ class KisQuantum {
 		 * This operator allow to acces to a neighbour quantum, it's mean to be used
 		 * inside a pixel
 		 */
-		KisQuantum operator[](int index) {
+		KisQuantum operator[](int index) const {
 			return KisQuantum( m_quantum + index );
 		}
 	private:

@@ -49,7 +49,7 @@ public:
 	virtual void toQColor(const QUANTUM *src, QColor *color, KisProfileSP profile = 0);
 	virtual void toQColor(const QUANTUM *src, QColor *color, QUANTUM *opacity, KisProfileSP profile = 0);
 
-	virtual KisPixelRO toKisPixelRO(QUANTUM *src, KisProfileSP profile = 0)
+	virtual KisPixelRO toKisPixelRO(const QUANTUM *src, KisProfileSP profile = 0)
 		{ return KisPixelRO (src, src + PIXEL_CMYK_ALPHA, this, profile); }
 	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0)
 		{ return KisPixel (src, src + PIXEL_CMYK_ALPHA, this, profile); }

@@ -87,7 +87,7 @@ public:
  	virtual void toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile= 0 ) = 0;
  	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0) = 0;
 
-	virtual KisPixelRO toKisPixelRO(QUANTUM *src, KisProfileSP profile) = 0;
+	virtual KisPixelRO toKisPixelRO(const QUANTUM *src, KisProfileSP profile) = 0;
 	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile) = 0;
 
 	// Return a vector describing all the channels this color model has.

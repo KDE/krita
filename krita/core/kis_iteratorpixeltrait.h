@@ -40,25 +40,25 @@ public:
 	/**
 	 * Return the current pixel
 	 */
- 	inline KisPixel pixel() { return m_device->toPixel(m_underlyingIterator->rawData()); };
-        inline KisPixelRO oldPixel() { return m_device->toPixelRO( m_underlyingIterator->oldRawData()); };
+ 	inline KisPixel pixel() const { return m_device->toPixel(m_underlyingIterator->rawData()); };
+        inline KisPixelRO oldPixel() const { return m_device->toPixelRO( m_underlyingIterator->oldRawData()); };
 
 	/**
 	 * Return one channel from the current kispixel. Does not check whether
 	 * channel index actually exists in this colorspace.
 	 */
-	inline KisQuantum operator[](int index)
+	inline KisQuantum operator[](int index) const
 			{ return m_device -> toPixel(m_underlyingIterator->rawData())[index]; };
 			
 	/**
 	 * Returns if the pixel is selected or not. This is much faster than first building a KisPixel
 	 */
-	inline bool isSelected() {if(m_selectionIterator) return*(m_selectionIterator->rawData()); else return true;};
+	inline bool isSelected() const {if(m_selectionIterator) return*(m_selectionIterator->rawData()); else return true;};
 	
 protected:
 	KisPaintDevice *m_device;
 
-	KisStrategyColorSpaceSP m_colorSpace;
+	//KisStrategyColorSpaceSP m_colorSpace;
 
 	// XXX: Is this fix correct? BSAR
 	//inline void advance(int n){if(m_selectionIterator)(*m_selectionIterator)++;};

@@ -41,8 +41,8 @@ protected:
 	bool m_writable;
 
 protected:
-	Q_UINT32 xToCol(Q_UINT32 x) { return m_ktm->xToCol(x); };
-	Q_UINT32 yToRow(Q_UINT32 y) { return m_ktm->yToRow(y); };
+	Q_UINT32 xToCol(Q_UINT32 x) const { return m_ktm->xToCol(x); };
+	Q_UINT32 yToRow(Q_UINT32 y) const { return m_ktm->yToRow(y); };
 	void fetchTileData(Q_INT32 col, Q_INT32 row);
 
 public:
@@ -52,16 +52,16 @@ public:
 
 public:
 	// current x position
-	Q_INT32 x() { return m_x; };
+	Q_INT32 x() const { return m_x; };
 
 	// cirrent y position
-	Q_INT32 y() { return m_y; };
+	Q_INT32 y() const { return m_y; };
 
 	/// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-	Q_UINT8 *rawData();
+	Q_UINT8 *rawData() const;
 
 	/// Returns a pointer to the pixel data as it was at the moment tof he last memento creation.
-	Q_UINT8 * oldRawData();
+	const Q_UINT8 * oldRawData() const;
 };
 
 /**
@@ -85,7 +85,7 @@ public:
 	KisTiledRectIterator & operator--(int);
 
 	/// returns true when the iterator has reached the end
-	bool isDone();
+	bool isDone() const;
 
 protected:
 	 Q_INT32 m_left;
@@ -127,7 +127,7 @@ public:
 
 	/// Returns the number of consequtive horizontal pixels that we point at
 	/// This is useful for optimizing
-	Q_INT32 nConseqHPixels();
+	Q_INT32 nConseqHPixels() const;
 
 	/// Advances a number of pixels until it reaches the end of the line
 	KisTiledHLineIterator & operator+=(int);
@@ -136,7 +136,7 @@ public:
 	KisTiledHLineIterator & operator--();
 
 	/// returns true when the iterator has reached the end
-	bool isDone();
+	bool isDone() const;
 
 protected:
 	 Q_INT32 m_right;
@@ -172,7 +172,7 @@ public:
 	KisTiledVLineIterator & operator--();
 
 	/// returns true when the iterator has reached the end
-	bool isDone();
+	bool isDone() const;
 
 protected:
 	 Q_INT32 m_bottom;

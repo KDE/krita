@@ -130,7 +130,7 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 		
 		while( ! srcIt.isDone() )
 		{
-			Q_UINT8 * d = srcIt.oldRawData();
+			const Q_UINT8 * d = srcIt.oldRawData();
 			img(x, y, 0) = d[0];
 			img(x, y, 1) = d[1];
 			img(x, y, 2) = d[2];

@@ -149,7 +149,7 @@ void KisColorSpaceWetSticky::toQColor(const QUANTUM *src, QColor *c, QUANTUM *op
 
 
 
-KisPixelRO KisColorSpaceWetSticky::toKisPixelRO(QUANTUM *src, KisProfileSP profile)
+KisPixelRO KisColorSpaceWetSticky::toKisPixelRO(const QUANTUM *src, KisProfileSP profile)
 {
 	return KisPixelRO (src, src, this, profile);
 }

@@ -38,11 +38,7 @@
 #include "kis_brush.h"
 #include "kis_pattern.h"
 
-
-
-//KisSideBar::KisSideBar( QWidget* parent, const char* name ) : QWidget( parent, name )
-KisSideBar::KisSideBar( QWidget* parent, const char* name )
-    : KFloatingDialog( parent, name )
+KisSideBar::KisSideBar( QWidget* parent, const char* name ) : super(parent, name)
 {
     kdDebug() << "KisSideBar::KisSideBar" << endl;
 
@@ -231,7 +227,8 @@ void ControlFrame::slotActiveColorChanged(KDualColorButton::DualColor s)
 
 void ControlFrame::slotSetBrush(KisBrush& b)
 {
-    m_pBrushWidget->slotSetItem(b);
+	// XXX
+//    m_pBrushWidget->slotSetItem(b);
 }
 
 void ControlFrame::slotSetPattern(KisPattern& b)
@@ -330,65 +327,40 @@ void ColorChooserFrame::slotColorSelected(const KoColor& c)
     Dock Frame - contains tabs for brushes, layers, channels
 */
 
-DockFrame::DockFrame( QWidget* parent, const char* name )
-    : super( parent, name )
+DockFrame::DockFrame(QWidget *parent, const char *name) : super(parent, name)
 {
-    setFrameStyle(Panel | Raised);
-    setLineWidth(1);
-    m_wlst.setAutoDelete(true);
-    m_blst.setAutoDelete(true);
+	setFrameStyle(Panel | Raised);
+	setLineWidth(1);
+	m_wlst.setAutoDelete(true);
+	m_blst.setAutoDelete(true);
 }
 
-void DockFrame::plug (QWidget* w)
+void DockFrame::plug(QWidget* w)
 {
-	if (!w)
-		return;
+	if (w) {
+		QString name = w -> caption();
 
-	QString name = w -> caption();
+		m_wlst.append(w);
+		w -> reparent(this, QPoint(0, 0), true);
 
-	m_wlst.append(w);
-	w -> reparent(this, QPoint(0, 0), true);
+		KoFrameButton* btn = new KoFrameButton(this);
 
-	KoFrameButton* btn = new KoFrameButton(this);
+		btn -> setText(i18n(name.latin1()));
+		btn -> setFixedHeight(18);
+		btn -> setToggleButton(true);
 
-	btn -> setText(i18n(name.latin1()));
-	btn -> setFixedHeight(18);
-	btn -> setToggleButton(true);
-
-	connect(btn, SIGNAL(clicked(const QString&)), this, SLOT(slotActivateTab(const QString&)));
-	m_blst.append(btn);
-	slotActivateTab(name);
-}
-
-void DockFrame::unplug (QWidget* w)
-{
-    if(!w) return;
-
-#if 0
-    KoFrameButton *b;
-
-    for ( b = m_blst.first(); b != 0; b = m_blst.next() )
-    {
-	    if (b->text() == w->caption())
-		{
-            QObject::disconnect( b, SIGNAL(clicked(const QString&)),
-	            this, SLOT(slotActivateTab(const QString&)));
-
-		    m_blst.remove(b);
-            delete b;
-		    break;
-		}
+		connect(btn, SIGNAL(clicked(const QString&)), this, SLOT(slotActivateTab(const QString&)));
+		m_blst.append(btn);
+		slotActivateTab(name);
 	}
+}
 
-    m_wlst.remove(w);
-    //w->reparent ( 0L, QPoint(0, 0), false );
-#endif
-
-    kdDebug() << "unplug: reparenting widget" << endl;
-
-    w->reparent(0, WStyle_StaysOnTop, mapToGlobal(QPoint(0,0)), true);
-    w->setActiveWindow();
-
+void DockFrame::unplug(QWidget* w)
+{
+	if (w) {
+		w -> reparent(0, WStyle_StaysOnTop, mapToGlobal(QPoint(0,0)), true);
+		w -> setActiveWindow();
+	}
 }
 
 
@@ -435,3 +407,4 @@ void DockFrame::resizeEvent( QResizeEvent * )
 }
 
 #include "kis_sidebar.moc"
+

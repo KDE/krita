@@ -37,7 +37,8 @@ class KisItemChooser : public KFloatingDialog {
 	Q_OBJECT
 
 public:
-	KisItemChooser(const vKoIconItem& items, bool spacing, QWidget *parent, const char *name = 0);
+	KisItemChooser(const vKoIconItem& items, bool spacing, QWidget *parent = 0, const char *name = 0);
+	KisItemChooser(bool spacing, QWidget *parent = 0, const char *name = 0);
 	virtual ~KisItemChooser();
 
 	KoIconItem *currentItem();

@@ -23,13 +23,10 @@
 
 #include <qframe.h>
 #include <qptrlist.h>
-
 #include <kdockwidget.h>
 #include <kdualcolorbutton.h>
-
 #include <koColor.h>
 #include <koFrameButton.h>
-
 #include "kfloatingdialog.h"
 
 class KDualColorButton;
@@ -134,12 +131,12 @@ class DockFrame : public QFrame
 };
 
 class KisSideBar : public KFloatingDialog {
+	typedef KFloatingDialog super;
 	Q_OBJECT
 
 public:
 	KisSideBar(QWidget *parent = 0, const char *name = 0);
 	virtual ~KisSideBar();
-
 
 public:
 	void plug(QWidget *w);
@@ -150,7 +147,6 @@ public slots:
 	void slotSetFGColor(const KoColor&);
 	void slotSetBGColor(const KoColor&);
 
-	void slotSetKrayon(KisKrayon&);
 	void slotSetBrush(KisBrush&);
 	void slotSetPattern(KisPattern&);
 

@@ -94,7 +94,7 @@ KisTiledDataManager::~KisTiledDataManager()
 			delete deltile;
 		}
 	}
-	delete m_hashTable;
+	delete [] m_hashTable;
 	delete m_defaultTile;
 }
 
@@ -581,5 +581,10 @@ void KisTiledDataManager::writeBytes(Q_UINT8 * bytes,
 			++hiter;
 		}
 	}
+}
+
+Q_INT32 KisTiledDataManager::numTiles(void) const
+{
+	return m_numTiles;
 }
 

@@ -122,6 +122,9 @@ public:
 			Q_INT32 w, Q_INT32 h);
 
 
+	// For debugging use
+	Q_INT32 numTiles() const;
+
 private:
 
 	Q_UINT32 m_pixelSize;

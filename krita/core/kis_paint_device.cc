@@ -130,6 +130,8 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
 
 KisPaintDevice::~KisPaintDevice()
 {
+	delete m_datamanager;
+	m_datamanager = 0;
 }
 
 

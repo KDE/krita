@@ -52,8 +52,8 @@ public:
 	void setName(const QString& name);
 	QString name() const;
 
-	const KisPixelPacket* getConstPixels(int x, int y, int width = TILE_SIZE - 1, int height = TILE_SIZE - 1) const;
-	KisPixelPacket* getPixels(int x, int y, int width = TILE_SIZE - 1, int height = TILE_SIZE - 1);
+	const KisPixelPacket* getConstPixels(int x, int y, int width = TILE_SIZE, int height = TILE_SIZE) const;
+	KisPixelPacket* getPixels(int x, int y, int width = TILE_SIZE, int height = TILE_SIZE);
 	void syncPixels(KisPixelPacket *region);
 
 	virtual void resize(int width, int height, uchar depth);

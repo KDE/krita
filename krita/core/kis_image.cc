@@ -792,22 +792,24 @@ void KisImage::destroyPixmap()
 void KisImage::renderBg(KisPaintDevice *srcDevice, int tileNo)
 {
 	Q_ASSERT(srcDevice);
-	KisPixelPacket* region = srcDevice -> getPixels(tileNo, tileNo);
+	KisPixelPacket *region = srcDevice -> getPixels(0, 0);
 
 	if (!region)
 		return;
 
-	for (int y = 0; y < TILE_SIZE; y++)
+	for (int y = 0; y < TILE_SIZE; y++) {
 		for (int x = 0; x < TILE_SIZE; x++) {
 			KisPixelPacket *p = region + y * TILE_SIZE + x;
-			uchar v = 128 + 63 * ((x / 16 + y / 16) % 2);
+			int v = 128 + 63 * ((x / 16 + y / 16) % 2);
 
+			v = Upscale(v);
 			Q_ASSERT(p);
 			p -> red = v;
 			p -> green = v;
 			p -> blue = v;
 			p -> opacity = OpaqueOpacity;
 		}
+	}
 
 	srcDevice -> syncPixels(region);
 	compositeImage();

@@ -22,6 +22,3 @@ colorsfilters_la_LDFLAGS = $(all_libraries) -avoid-version -module
 colorsfilters_la_LIBADD =  ../../core/libkiscore.la ../../ui/libkisui.la ../../tools/libkistools.la $(LIB_KPARTS) $(LIB_KIO) $(LIB_KOFFICECORE) $(LIB_KOPAINTER)
 
 colorsfilters_la_METASOURCES = AUTO
-
-messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/colorsfilters_plugin.pot

@@ -21,7 +21,9 @@
 #include <kdebug.h>
 #include "kis_cmb_imagetype.h"
 #include "kis_cmb_composite.h"
-#include "kis_filter.h"
+#include "integerwidget.h"
+#include "kis_filter_configuration_widget.h"
+#include "kis_previewwidget.h"
 
 KisWidgetInfo::KisWidgetInfo(QString nincludeFile, QString ntoolTip, QString nwhatsThis, bool nisContainer) :
 	includeFile (nincludeFile),
@@ -34,13 +36,17 @@ KisWidgetInfo::KisWidgetInfo(QString nincludeFile, QString ntoolTip, QString nwh
 KisWidgetsPlugin::KisWidgetsPlugin()
 {
 	kdDebug() << "KisWidgetsPlugin::KisWidgetsPlugin()" << endl;
+	m_widgetsMap.insert(widgetInfoMap::value_type("IntegerWidget", 
+		KisWidgetInfo("integerwidget.h", "a combobox displaying the colorspaces", "", false)));
 	m_widgetsMap.insert(widgetInfoMap::value_type("KisCmbImageType", 
 		KisWidgetInfo("kis_cmb_imagetype.h", "a combobox displaying the colorspaces", "", false)));
 	m_widgetsMap.insert(widgetInfoMap::value_type("KisCmbComposite", 
 		KisWidgetInfo("kis_cmb_composite.h", "a combobox displaying the composite operations",
 		"", false)));
 	m_widgetsMap.insert(widgetInfoMap::value_type("KisFilterConfigurationWidget", 
-		KisWidgetInfo("kis_filter.h", "a widget for configuring a filter", "", true)));
+		KisWidgetInfo("kis_filter_configuration_widget.h", "a widget for configuring a filter", "", true)));
+	m_widgetsMap.insert(widgetInfoMap::value_type("KisPreviewWidget", 
+		KisWidgetInfo("kis_previewwidget.h", "a widget which display a preview of an action", "", true)));
 	new KInstance("kiswidgets");
 }
 
@@ -71,9 +77,17 @@ QWidget* KisWidgetsPlugin::create(const QString& key, QWidget* parent, const cha
 	{
 		return new KisCmbComposite(parent, name);
 	}
+	if(key == "IntegerWidget")
+	{
+		return new IntegerWidget(0, 100, parent, name);
+	}
 	if(key == "KisFilterConfigurationWidget")
 	{
-		return new KisFilterConfigurationWidget(parent, name);
+		return new KisFilterConfigurationWidget(0, parent, name);
+	}
+	if(key == "KisPreviewWidget")
+	{
+		return new KisPreviewWidget(parent, name);
 	}
 	return 0;
 }

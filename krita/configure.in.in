@@ -47,7 +47,7 @@ else
                         lcms_var_maj=`echo $lcms_ver | cut -d . -f 1`
 
                         # Some versions have a character attached to the end of minor version
-                        lcms_var_min=`echo $lcms_ver | perl -pi -e "s/\d+.(\d+).*/\1/; s/^0(\d)/\1/"`
+                        lcms_var_min=`echo $lcms_ver | perl -pi -e "s/\d+\.(\d+).*/\1/; s/^0(\d)/\1/"`
 
                         AC_DEFINE_UNQUOTED(LCMS_MAJOR_VERSION, $lcms_var_maj, [LCMS major version])
                         AC_DEFINE_UNQUOTED(LCMS_MINOR_VERSION, $lcms_var_min, [LCMS minor version])

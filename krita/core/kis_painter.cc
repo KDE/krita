@@ -514,7 +514,6 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP
 				}
 			}
 
-			dsttile -> valid(false);
 			dsttile -> release();
 			srctile -> release();
 			sx += TILE_WIDTH;
@@ -574,12 +573,6 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 		return;
 	}
 
-	if (x2 > m_device -> x() + m_device -> width() + 1)
-		x2 = m_device -> x() + m_device -> width() + 1;
-
-	if (y2 > m_device -> y() + m_device -> height() + 1)
-		y2 = m_device -> y() + m_device -> height() + 1;
-
 	stride = m_device -> image() -> depth();
 	ydiff = y1 - TILE_HEIGHT * (y1 / TILE_HEIGHT);
 
@@ -624,7 +617,6 @@ void KisPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const Ko
 			}
 
 			tile -> release();
-			tile -> valid(false);
 
 			if (x > x1)
 				xdiff = 0;

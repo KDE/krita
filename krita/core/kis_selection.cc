@@ -67,7 +67,11 @@ void KisSelection::commit()
 		Q_ASSERT(w <= width());
 		Q_ASSERT(h <= height());
 		// TODO Go over each tile... if src == dst, then don't do anything.  Just drop the share count.
-		gc.bitBlt(m_rc.x(), m_rc.y(), COMPOSITE_COPY, this, opacity(), 0, 0, m_rc.width(), m_rc.height());
+		gc.bitBlt(m_rc.x() - m_parent -> x(), m_rc.y() - m_parent -> y(), 
+				COMPOSITE_COPY, this, opacity(), 
+				0, 0,
+				m_rc.width(),
+				m_rc.height());
 	}
 }
 
@@ -106,7 +110,7 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 
 		kdDebug(DBG_AREA_CORE) << "selection -> (parentX = " << parentX << ", parentY = " << parentY 
 			<< ", width = " << width << ", height = " << height << ")\n";
-		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, parentX, parentY, width, height);
+		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, parentX - m_parent -> x(), parentY - m_parent -> y(), width, height);
 		m_rc.setRect(parentX, parentY, width, height);
 		super::move(parentX, parentY);
 	}

@@ -136,6 +136,7 @@ private:
 	void selectImage(KisImageSP img);
 	void setupActions();
 	void setupCanvas();
+	void setupClipboard();
 	void setupRulers();
 	void setupScrollBars();
 	void setupSideBar();
@@ -146,6 +147,7 @@ private:
 private slots:
 	void copy();
 	void cut();
+	void clipboardDataChanged();
 	void duplicateCurrentImg();
 	void removeSelection();
 	void fillSelectionBg();
@@ -281,6 +283,7 @@ private:
 	KisToolSP m_tool;
 	KisToolSP m_paste;
 	vKisToolSP m_toolSet;
+	bool m_clipboardHasImage;
 
 private:
 	mutable KisImageSP m_current;

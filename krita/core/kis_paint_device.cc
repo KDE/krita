@@ -120,8 +120,8 @@ void KisPaintDevice::invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 
 	m_projectionValid = false;
 
-	for (y1 = y; y1 < dy; y1 += TILE_HEIGHT)
-		for (x1 = x; x1 < dx; x1 += TILE_WIDTH)
+	for (y1 = y; y1 < dy; y1 += TILE_HEIGHT - y1 % TILE_HEIGHT)
+		for (x1 = x; x1 < dx; x1 += TILE_WIDTH - x1 % TILE_WIDTH)
 			data() -> invalidate(x1, y1);
 }
 

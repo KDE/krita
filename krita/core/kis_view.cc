@@ -159,6 +159,8 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	connect(m_doc, SIGNAL(projectionUpdated(KisImageSP)), SLOT(projectionUpdated(KisImageSP)));
 	setupTools();
 	selectionUpdateGUI(false);
+	setupClipboard();
+	clipboardDataChanged();
 }
 
 KisView::~KisView()
@@ -609,7 +611,7 @@ void KisView::paintView(const QRect& rc)
 			return;
 
 		ur.setBottom(ur.bottom() + 1);
-		ur.setRight(ur.right() - 1);
+		ur.setRight(ur.right() + 1);
 		xt = canvasXOffset() - horzValue();
 		yt = canvasYOffset() - vertValue();
 
@@ -706,8 +708,8 @@ void KisView::selectionUpdateGUI(bool enable)
 	enable = enable && img && img -> selection();
 	m_selectionCut -> setEnabled(enable);
 	m_selectionCopy -> setEnabled(enable);
-	m_selectionPaste -> setEnabled(img != 0 && !QApplication::clipboard() -> image().isNull());
 	m_selectionCrop -> setEnabled(enable);
+	m_selectionPaste -> setEnabled(img != 0 && m_clipboardHasImage);
 	m_selectionRm -> setEnabled(enable);
 	m_selectionFillBg -> setEnabled(enable);
 	m_selectionFillFg -> setEnabled(enable);
@@ -753,17 +755,11 @@ void KisView::removeSelection()
 
 			if (parent) {
 				QRect rc = selection -> bounds();
-				QRect clip = selection -> clip();
+				QRect ur;
 				KisPainter gc(parent);
 
-				if (!clip.isEmpty()) {
-					rc.setX(rc.x() + clip.x());
-					rc.setY(rc.y() + clip.y());
-					rc.setWidth(clip.width());
-					rc.setHeight(clip.height());
-				}
-
 				img -> unsetSelection(false);
+				ur = rc;
 			
 				if (parent -> x() || parent -> y())
 					rc.moveBy(-parent -> x(), -parent -> y());
@@ -772,7 +768,7 @@ void KisView::removeSelection()
 				gc.end();
 				m_doc -> setModified(true);
 				img -> invalidate(rc);
-				updateCanvas(rc);
+				updateCanvas(ur);
 			}
 		}
 	}
@@ -845,24 +841,15 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 
 		if (selection) {
 			QRect rc = selection -> bounds();
-			QRect clip = selection -> clip();
+			QRect ur = rc;
 			KisPainter gc(selection.data());
 
-			if (!clip.isEmpty()) {
-				rc.setX(clip.x());
-				rc.setY(clip.y());
-				rc.setWidth(clip.width());
-				rc.setHeight(clip.height());
-			} else {
-				rc.setX(0);
-				rc.setY(0);
-			}
-
+			rc.moveBy(-rc.x(), -rc.y());
 			gc.fillRect(rc, c, opacity);
 			gc.end();
 			img -> invalidate(rc);
 			m_doc -> setModified(true);
-			updateCanvas(rc);
+			updateCanvas(ur);
 		}
 	}
 }
@@ -2001,6 +1988,18 @@ KoColor KisView::bgColor()
 KoColor KisView::fgColor()
 {
 	return m_fg;
+}
+
+void KisView::setupClipboard()
+{
+	QClipboard *cb = QApplication::clipboard();
+
+	connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
+}
+
+void KisView::clipboardDataChanged()
+{
+	m_clipboardHasImage = !QApplication::clipboard() -> image().isNull();
 }
 
 #include "kis_view.moc"

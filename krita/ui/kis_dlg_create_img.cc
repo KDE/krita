@@ -30,11 +30,13 @@
 KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, QString colorStrategyName, QWidget *parent, const char *name)
 	: super(parent, name, true, "", Ok | Cancel), m_opacity(OPACITY_OPAQUE)
 {
+
+	// XXX: put this in UI file
+
 	QWidget *page = new QWidget(this);
 	QLabel *lbl;
 	QVBoxLayout* layout;
 	QGridLayout* grid;
-	QButtonGroup *grp;
 	QRadioButton *radio;
 
 	setMainWidget(page);
@@ -61,78 +63,45 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 max
 	grid -> addWidget(lbl, 2, 0);
 	grid -> addWidget(m_cmbImageType, 2, 1);
 
-#if 0
-	grp = new QButtonGroup(2, QGroupBox::Horizontal, i18n("Color Mode"), page);
-	grp -> setExclusive(true);
-	
-	QRadioButton *indexedRadio = new QRadioButton(i18n("&Indexed"), grp);
-	indexedRadio -> setEnabled(false);
-	grp -> insert(indexedRadio, IMAGE_TYPE_INDEXEDA);
 
-	QRadioButton *grayScaleRadio = new QRadioButton(i18n("&Grayscale"), grp);
-	grayScaleRadio -> setEnabled(true);
-	grp -> insert(grayScaleRadio, IMAGE_TYPE_GREYA);
-
-	QRadioButton *rgbRadio = new QRadioButton(i18n("&RGB"), grp);
-	rgbRadio -> setEnabled(true);
-	grp -> insert(rgbRadio, IMAGE_TYPE_RGBA);
-
-	QRadioButton *cmykRadio = new QRadioButton(i18n("&CMYK"), grp);
-	cmykRadio -> setEnabled(true);
-	grp -> insert(cmykRadio, IMAGE_TYPE_CMYKA);
-
-	QRadioButton *labRadio = new QRadioButton(i18n("&LAB"), grp);
-	labRadio -> setEnabled(false);
-	grp -> insert(labRadio, IMAGE_TYPE_LABA);
-
-	QRadioButton *yuvRadio = new QRadioButton(i18n("&YUV"), grp);
-	yuvRadio -> setEnabled(false);
-	grp -> insert(yuvRadio, IMAGE_TYPE_YUVA);
-
-	switch (defImgType) {
-	case IMAGE_TYPE_INDEXED:
-	case IMAGE_TYPE_INDEXEDA:
-		indexedRadio -> setChecked(true);
-		break;
-	case IMAGE_TYPE_GREY:
-	case IMAGE_TYPE_GREYA:
-		grayScaleRadio -> setChecked(true);
-		break;
-	default:
-	case IMAGE_TYPE_RGB:
-	case IMAGE_TYPE_RGBA:
-		rgbRadio -> setChecked(true);
-		break;
-	case IMAGE_TYPE_CMYK:
-	case IMAGE_TYPE_CMYKA:
-		cmykRadio -> setChecked(true);
-		break;
-	case IMAGE_TYPE_YUV:
-	case IMAGE_TYPE_YUVA:
-		yuvRadio -> setChecked(true);
-		break;
-	case IMAGE_TYPE_LAB:
-	case IMAGE_TYPE_LABA:
-		labRadio -> setChecked(true);
-		break;
-	}
-	connect(grp, SIGNAL(clicked(int)), SLOT(imgTypeClicked(int)));
-
-	layout -> addWidget(grp);
-#endif
-
-	grp = new QButtonGroup(2, QGroupBox::Horizontal, i18n("Background"), page);
-	grp -> setExclusive(true);
-	radio = new QRadioButton(i18n("&Background color"), grp);
-	radio = new QRadioButton(i18n("&Foreground color"), grp);
-	radio = new QRadioButton(i18n("&White"), grp);
+	m_grp = new QButtonGroup(2, QGroupBox::Horizontal, i18n("Background"), page);
+	m_grp -> setExclusive(true);
+	radio = new QRadioButton(i18n("&Background color"), m_grp);
+	radio = new QRadioButton(i18n("&Foreground color"), m_grp);
+	radio = new QRadioButton(i18n("&White"), m_grp);
 	radio -> setChecked(true);
-	radio = new QRadioButton(i18n("&Transparent"), grp);
-	layout -> addWidget(grp);
+	radio = new QRadioButton(i18n("&Transparent"), m_grp);
+	layout -> addWidget(m_grp);
 }
 
 KisDlgCreateImg::~KisDlgCreateImg()
 {
+}
+
+
+KoColor KisDlgCreateImg::backgroundColor() const
+{
+	switch(m_grp -> selectedId()) {
+	case 0:
+		return KoColor::white(); // Retrieve from kconfig
+	case 1:
+		return KoColor::black(); // Retrieve from kconfig
+	case 2:
+		return KoColor::white(); 
+	case 3:
+		return KoColor::white();
+	}
+	return KoColor::white();
+}
+
+QUANTUM KisDlgCreateImg::backgroundOpacity() const
+{
+	if (m_grp -> selectedId() == 3) {
+		return OPACITY_TRANSPARENT;
+	}
+	else {
+		return m_opacity;
+	}
 }
 
 #include "kis_dlg_create_img.moc"

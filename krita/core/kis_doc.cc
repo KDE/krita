@@ -1077,17 +1077,22 @@ bool KisDoc::slotNewImage()
 
 		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), KisColorSpaceRegistry::singleton()->colorSpace(dlg.colorStrategyName()), nextImageName());
 		img -> setResolution(100.0, 100.0); // XXX needs to be added to dialog
+
 		layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 
 		painter.begin(layer.data());
 		painter.fillRect(0, 0, layer -> width(), layer -> height(), c, opacity);
 		painter.end();
+
 		img -> add(layer, -1);
+
 		addImage(img);
+
 		cfg.defImgWidth(dlg.imgWidth());
 		cfg.defImgHeight(dlg.imgHeight());
 		cfg.defLayerWidth(dlg.imgWidth());
 		cfg.defLayerHeight(dlg.imgHeight());
+
 		return true;
 	}
 	return false;

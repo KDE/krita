@@ -19,10 +19,14 @@
 #define KIS_DLG_CREATE_IMG_H_
 
 #include <qspinbox.h>
+
 #include <kdialogbase.h>
 #include <koColor.h>
 #include "kis_global.h"
 #include "kis_cmb_imagetype.h"
+
+class QButtonGroup;
+
 
 class KisDlgCreateImg : public KDialogBase {
 	typedef KDialogBase super;
@@ -44,6 +48,7 @@ private:
 	QSpinBox *m_heightSpin;
 	QUANTUM m_opacity;
 	KisCmbImageType *m_cmbImageType;
+	QButtonGroup *m_grp;
 };
 
 inline
@@ -62,18 +67,6 @@ inline
 QString KisDlgCreateImg:: colorStrategyName() const
 {
 	return m_cmbImageType -> currentText ();
-}
-
-inline
-KoColor KisDlgCreateImg::backgroundColor() const
-{
-	return KoColor::white();
-}
-
-inline
-QUANTUM KisDlgCreateImg::backgroundOpacity() const
-{
-	return m_opacity;
 }
 
 #endif // KIS_DLG_CREATE_IMG_H_

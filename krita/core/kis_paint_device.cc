@@ -100,7 +100,6 @@ KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, KisStrategyColorSp
 	m_name = name;
 	m_compositeOp = COMPOSITE_OVER;
 	m_colorStrategy = colorStrategy;
-        m_tmpPixel = new QUANTUM[depth() * sizeof(QUANTUM)];
 }
 
 KisPaintDevice::KisPaintDevice(KisImage *img, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name)
@@ -152,7 +151,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs
 
 KisPaintDevice::~KisPaintDevice()
 {
-	delete[] m_tmpPixel;
 }
 
 Q_INT32 KisPaintDevice::tileNum(Q_INT32, Q_INT32) const
@@ -327,8 +325,7 @@ void KisPaintDevice::transform(const QWMatrix & matrix)
 
         /* No, we're NOT duplicating the entire image, at the moment krita uses
            too much memory already */
-        //QUANTUM *origPixel = new QUANTUM[depth() * sizeof(QUANTUM)];
-	QUANTUM * origPixel = m_tmpPixel;
+        QUANTUM *origPixel = new QUANTUM[depth() * sizeof(QUANTUM)];
         // target image data
         Q_INT32 targetW;
         Q_INT32 targetH;

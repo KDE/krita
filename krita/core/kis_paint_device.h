@@ -294,8 +294,6 @@ private:
 	CompositeOp m_compositeOp;
 	KisStrategyColorSpaceSP m_colorStrategy; 
 
-	QUANTUM * m_tmpPixel; // Temporary pixel buffer for reuse in setpixel/pixel
-	
 };
 
 inline KisTileMgrSP KisPaintDevice::tiles() const

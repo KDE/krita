@@ -60,6 +60,18 @@ void KisStrategyColorSpaceCMYK::nativeColor(const KoColor& c, QUANTUM *dst)
 
 void KisStrategyColorSpaceCMYK::nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst)
 {
+#ifdef DEBUG_COLORCONVERSION
+	kdDebug() << "KisStrategyColorSpaceCMYK::nativeColor: "
+		  << "R: " << c.R()
+		  << ", G: " << c.G()
+		  << ", B: " << c.B()
+		  << " -- " 
+		  << " C: " << c.C()
+		  << ", M: " << c.M()
+		  << ", Y: " << c.Y()
+		  << ", K: " << c.K()
+		  << "\n";
+#endif
 	dst[PIXEL_CYAN] = upscale( c.C() );
 	dst[PIXEL_MAGENTA] = upscale( c.M() );
 	dst[PIXEL_YELLOW] = upscale( c.Y() );
@@ -149,24 +161,40 @@ QImage KisStrategyColorSpaceCMYK::convertToImage(const QUANTUM *data, Q_INT32 wi
 		c.m = *( data + i + PIXEL_MAGENTA );
 		c.y = *( data + i + PIXEL_YELLOW );
 		c.k = *( data + i + PIXEL_BLACK );
-		
+#if 0
 		if ( m_rgbLUT.contains ( c ) ) {
 			r =  m_rgbLUT[c];
 		}
 		else {
+#endif
 			// Accessing the rgba of KoColor automatically converts
 			// from cmyk to rgb and caches the result.
-			KoColor k = KoColor(c.c,
-					    c.m,
-					    c.y,
-					    c.k );
+			KoColor k = KoColor(downscale(c.c),
+					    downscale(c.m),
+					    downscale(c.y),
+					    downscale(c.k));
+#if 0
 			// Store as little as possible
 			r.r =  k.R();
 			r.g =  k.G();
 			r.b =  k.B();
 			m_rgbLUT[c] = r;
+
 		}
+#endif
 		
+		kdDebug() << "KisStrategyColorSpaceCMYK::convertToImage "
+			  << "R: " << r.r
+			  << ", G: " << r.g
+			  << ", B: " << r.b
+			  << " -- " 
+			  << " C: " << c.c
+			  << ", M: " << c.m
+			  << ", Y: " << c.y
+			  << ", K: " << c.k
+			  << ", opacity: " << *(data + i + PIXEL_CMYK_ALPHA)
+			  << "\n";
+
 		// fix the pixel in QImage.
 		*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_CMYK_ALPHA );
 		*( j + PIXEL_RED )   = r.r;

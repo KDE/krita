@@ -126,11 +126,16 @@ User interface
 	* Add scriptability 
 	* Add third cursor mode:  outline of current brush
 	* Rethink document model (perhaps add dynamic links between images)
+        * Use OpenGL if available to composite checkerboard with image so
+          while scrolling the checks can stay in place, and the partially
+          transparent image move. This maybe needs Qt 4.
 Tools
 
 	* Implement path tools
 	* Calligraphic pen tool
 	* Sumi-e brush tool
 	* Natural media tools (chalk, ink, oil, watercolour -- fun!)
+
+
 
 A much shorter list, much harder  TODO's :-).

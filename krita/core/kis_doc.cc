@@ -2,7 +2,7 @@
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
  *  Copyright (c) 2001 Toshitaka Fujioka  <fujioka@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,133 +49,115 @@
 #include "kis_factory.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_mask.h"
 #include "kis_nameserver.h"
 #include "kis_painter.h"
+#include "kis_undo.h"
 #include "kis_view.h"
 
 static const char *CURRENT_DTD_VERSION = "1.2";
 
-#if 0
-class KisCommandImageAdd : public KisCommand {
-	typedef KisCommand super;
+namespace {
+	class KisCommandImageAdd : public KisCommand {
+		typedef KisCommand super;
 
-public:
-	KisCommandImageAdd(KisDoc *doc, KisImageSP img);
-	virtual ~KisCommandImageAdd();
+	public:
+		KisCommandImageAdd(KisDoc *doc, KisImageSP img) : super("Add Image", doc)
+		{
+			m_doc = doc;
+			m_img = img;
+		}
 
-	virtual void execute();
-	virtual void unexecute();
+		virtual ~KisCommandImageAdd()
+		{
+		}
 
-private:
-	KisDoc *m_doc;
-	KisImageSP m_img;
-};
+		virtual void execute()
+		{
+			m_doc -> setUndo(false);
+			m_doc -> addImage(m_img);
+			m_doc -> setUndo(true);
+		}
 
-class KisCommandImageRm : public KisCommand {
-	typedef KisCommand super;
+		virtual void unexecute()
+		{
+			m_doc -> setUndo(false);
+			m_doc -> removeImage(m_img);
+			m_doc -> setUndo(true);
+		}
 
-public:
-	KisCommandImageRm(KisDoc *doc, KisImageSP img);
-	virtual ~KisCommandImageRm();
+	private:
+		KisDoc *m_doc;
+		KisImageSP m_img;
+	};
 
-	virtual void execute();
-	virtual void unexecute();
+	class KisCommandImageMv : public KisCommand {
+		typedef KisCommand super;
 
-private:
-	KisDoc *m_doc;
-	KisImageSP m_img;
-};
+	public:
+		KisCommandImageMv(KisDoc *doc, const QString& name, const QString& oldName) : super(i18n("Rename image"), doc)
+		{
+			m_doc = doc;
+			m_name = name;
+			m_oldName = oldName;
+		}
 
-class KisCommandImageMv : public KisCommand {
-	typedef KisCommand super;
+		virtual ~KisCommandImageMv()
+		{
+		}
 
-public:
-	KisCommandImageMv(KisDoc *doc, const QString& name, const QString& oldName);
-	virtual ~KisCommandImageMv();
+		virtual void execute()
+		{
+			m_doc -> setUndo(false);
+			m_doc -> renameImage(m_oldName, m_name);
+			m_doc -> setUndo(true);
+		}
 
-	virtual void execute();
-	virtual void unexecute();
+		virtual void unexecute()
+		{
+			m_doc -> setUndo(false);
+			m_doc -> renameImage(m_name, m_oldName);
+			m_doc -> setUndo(true);
+		}
 
-private:
-	KisDoc *m_doc;
-	QString m_name;
-	QString m_oldName;
-};
+	private:
+		KisDoc *m_doc;
+		QString m_name;
+		QString m_oldName;
+	};
 
-KisCommandImageAdd::KisCommandImageAdd(KisDoc *doc, KisImageSP img) : super("Add Image", doc)
-{
-	m_doc = doc;
-	m_img = img;
+	class KisCommandImageRm : public KisCommand {
+		typedef KisCommand super;
+
+	public:
+		KisCommandImageRm(KisDoc *doc, KisImageSP img) : super("Remove Image", doc)
+		{
+			m_doc = doc;
+			m_img = img;
+		}
+
+		virtual ~KisCommandImageRm()
+		{
+		}
+
+		virtual void execute()
+		{
+			m_doc -> setUndo(false);
+			m_doc -> removeImage(m_img);
+			m_doc -> setUndo(true);
+		}
+
+		virtual void unexecute()
+		{
+			m_doc -> setUndo(false);
+			m_doc -> addImage(m_img);
+			m_doc -> setUndo(true);
+		}
+
+	private:
+		KisDoc *m_doc;
+		KisImageSP m_img;
+	};
 }
-
-KisCommandImageAdd::~KisCommandImageAdd()
-{
-}
-
-void KisCommandImageAdd::execute()
-{
-	m_doc -> setUndo(false);
-	m_doc -> addImage(m_img);
-	m_doc -> setUndo(true);
-}
-
-void KisCommandImageAdd::unexecute()
-{
-	m_doc -> setUndo(false);
-	m_doc -> removeImage(m_img);
-	m_doc -> setUndo(true);
-}
-
-KisCommandImageRm::KisCommandImageRm(KisDoc *doc, KisImageSP img) : super("Remove Image", doc)
-{
-	m_doc = doc;
-	m_img = img;
-}
-
-KisCommandImageRm::~KisCommandImageRm()
-{
-}
-
-void KisCommandImageRm::execute()
-{
-	m_doc -> setUndo(false);
-	m_doc -> removeImage(m_img);
-	m_doc -> setUndo(true);
-}
-
-void KisCommandImageRm::unexecute()
-{
-	m_doc -> setUndo(false);
-	m_doc -> addImage(m_img);
-	m_doc -> setUndo(true);
-}
-
-KisCommandImageMv::KisCommandImageMv(KisDoc *doc, const QString& name, const QString& oldName) : super("Rename Image", doc)
-{
-	m_doc = doc;
-	m_name = name;
-	m_oldName = oldName;
-}
-
-KisCommandImageMv::~KisCommandImageMv()
-{
-}
-
-void KisCommandImageMv::execute()
-{
-	m_doc -> setUndo(false);
-	m_doc -> renameImage(m_oldName, m_name);
-	m_doc -> setUndo(true);
-}
-
-void KisCommandImageMv::unexecute()
-{
-	m_doc -> setUndo(false);
-	m_doc -> renameImage(m_name, m_oldName);
-	m_doc -> setUndo(true);
-}
-#endif
 
 KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) : 
 	super(parentWidget, widgetName, parent, name, singleViewMode)
@@ -188,21 +170,13 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	QPixmap::setDefaultOptimization(QPixmap::BestOptim);
 	m_nserver = 0;
 
-#if 0
-//	m_selection = new KisSelection(this);
-	connect(m_cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
-	connect(m_cmdHistory, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
-
-#endif
 	if (name)
 		dcopObject();
 }
 
 KisDoc::~KisDoc()
 {
-//	unsetCurrentImage();
 	delete m_clip;
-//	delete m_selection;
 	delete m_cmdHistory;
         delete m_dcop;
 	delete m_nserver;
@@ -242,6 +216,9 @@ bool KisDoc::initDoc()
 	KoTemplateChooseDia::ReturnType ret;
 
 	m_cmdHistory = new KCommandHistory(actionCollection(), false);
+	connect(m_cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
+	connect(m_cmdHistory, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
+	m_undo = true;
 	m_nserver = new KisNameServer(i18n("Image %1"), 0);
 	ret = KoTemplateChooseDia::choose(KisFactory::global(), templ, "application/x-krita", "*.kra",
 			i18n("Krita"), KoTemplateChooseDia::NoTemplates, "krita_template");
@@ -252,8 +229,7 @@ bool KisDoc::initDoc()
 		KisLayerSP layer = new KisLayer(img, IMG_DEFAULT_WIDTH, IMG_DEFAULT_DEPTH, img -> nextLayerName(), OPACITY_OPAQUE);
 
 		layer -> visible(true);
-		emit imageListUpdated();
-		setModified(true);
+		addImage(img);
 		ok = true;
 	} else if (ret == KoTemplateChooseDia::File) {
 		KURL url;
@@ -679,23 +655,19 @@ bool KisDoc::completeLoading(KoStore * /*store*/)
 	return false;
 }
 
-/*
-    renameImage - from menu or click on image tab
-*/
-
 void KisDoc::renameImage(const QString& oldName, const QString& newName)
 {
 	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
 		if ((*it) -> name() == oldName) {
 			(*it) -> setName(newName);
+
+			if (m_undo)
+				addCommand(new KisCommandImageMv(this, newName, oldName));
+
+			emit imageListUpdated();
 			break;
 		}
 	}
-
-//	if (m_undo)
-//		addCommand(new KisCommandImageMv(this, newName, oldName));
-
-	emit imageListUpdated();
 }
 
 QStringList KisDoc::images()
@@ -975,8 +947,8 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 
 	m_images.push_back(img);
 
-//	if (m_undo)
-//		addCommand(new KisCommandImageAdd(this, img));
+	if (m_undo)
+		addCommand(new KisCommandImageAdd(this, img));
 
 	return img;
 }
@@ -984,10 +956,15 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 void KisDoc::addImage(KisImageSP img)
 {
 	m_images.push_back(img);
+
+	if (m_undo)
+		addCommand(new KisCommandImageAdd(this, img));
+
 	img -> invalidate();
 	emit imageListUpdated();
 	emit layersUpdated(img);
 	emit docUpdated();
+	setModified(true);
 }
 
 void KisDoc::removeImage(KisImageSP img)
@@ -1002,8 +979,8 @@ void KisDoc::removeImage(KisImageSP img)
 	emit imageListUpdated();
 	emit docUpdated();
 
-//	if (m_undo)
-//		addCommand(new KisCommandImageRm(this, img));
+	if (m_undo)
+		addCommand(new KisCommandImageRm(this, img));
 }
 
 void KisDoc::removeImage(const QString& name)
@@ -1060,10 +1037,7 @@ bool KisDoc::slotNewImage()
 	gc.fillRect(0, 0, layer -> width(), layer -> height(), KoColor::white());
 	gc.end();
 	img -> add(layer, -1);
-	img -> invalidate();
-	layer -> visible(true);
 	addImage(img);
-	emit layersUpdated(img);
 	return true;
 }
 
@@ -1158,20 +1132,6 @@ void KisDoc::slotCommandExecuted()
 {
 	setModified(true);
 }
-
-#if 0
-void KisDoc::setCanvasCursor(const QCursor& cursor)
-{
-	QPtrList<KoView> l = views();
-
-	for (KoView *view = l.first(); view; view = l.next()) {
-		KisView *p = dynamic_cast<KisView*>(view);
-
-		if (p)
-			p -> setCanvasCursor(cursor);
-	}
-}
-#endif
 
 QString KisDoc::nextImageName() const
 {

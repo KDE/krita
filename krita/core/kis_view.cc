@@ -1536,6 +1536,9 @@ void KisView::docImageListUpdate()
 	zoomUpdateGUI(0, 0, 1.0);
 	resizeEvent(0);
 	updateCanvas();
+
+	if (!currentImg())
+		layersUpdated();
 }
 
 void KisView::layerToggleLinked()
@@ -1680,13 +1683,12 @@ void KisView::layersUpdated()
 	KisImageSP img = currentImg();
 
 	layerUpdateGUI(img && img -> activeLayer());
+	m_layerBox -> setUpdatesEnabled(false);
+	m_layerBox -> clear();
 
 	if (img) {
 		vKisLayerSP l = img -> layers();
 		Q_INT32 current = m_layerBox -> getCurrentItem();
-
-		m_layerBox -> setUpdatesEnabled(false);
-		m_layerBox -> clear();
 
 		for (vKisLayerSP_it it = l.begin(); it != l.end(); it++)
 			m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked());
@@ -1695,6 +1697,8 @@ void KisView::layersUpdated()
 		m_layerBox -> repaint();
 		m_layerBox -> setCurrentItem(current);
 		m_doc -> setModified(true);
+	} else {
+		m_layerBox -> setUpdatesEnabled(true);
 	}
 }
 

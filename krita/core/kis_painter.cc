@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
- *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

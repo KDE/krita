@@ -58,6 +58,7 @@ void KisSelection::move(Q_INT32 x, Q_INT32 y)
 		KisPainter gc(m_parent);
 
 		// push_undo_fill
+		printf("m_rc = %d, %d, %d, %d.\n", m_rc.x(), m_rc.y(), m_rc.width(), m_rc.height());
 		gc.fillRect(m_rc, KoColor::black(), OPACITY_TRANSPARENT);
 		m_firstMove = false;
 		m_parent -> invalidate(rc);

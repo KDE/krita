@@ -1,8 +1,9 @@
 /*
- *  kis_sidebar.h - part of Krayon
+ *  kis_sidebar.h - part of Krita
  *
  *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
+ *  Copyright (c) 2004 Sven Langkamp  <longamp@reallygood.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,12 +23,11 @@
 #define __kis_sidebar_h__
 
 #include <qframe.h>
-#include <qptrlist.h>
-#include <kdockwidget.h>
+#include <qtabwidget.h>
+#include <qdockwindow.h>
 #include <kdualcolorbutton.h>
 #include <koColor.h>
 #include <koFrameButton.h>
-#include "kfloatingdialog.h"
 
 class KDualColorButton;
 class KoIconItem;
@@ -36,16 +36,26 @@ class KisGradientWidget;
 
 class KisBrush;
 class KisPattern;
-class KisColorChooser;
 class KoColorChooser;
 class ControlFrame;
 
 enum ActiveColor { ac_Foreground, ac_Background};
 
-/*
-    Control Frame - status display with access to
-    color selector, brushes, patterns, and preview
-*/
+/**
+ *  @short Base class for all dockers
+ */
+class BaseDocker : public QDockWindow
+{
+        Q_OBJECT
+
+public:
+        BaseDocker ( QWidget* parent = 0, const char* name = 0 );
+};
+
+/**
+ *   Control Frame - status display with access to
+ *   color selector, brushes, patterns, and preview
+ */
 class ControlFrame : public QFrame {
 	Q_OBJECT
 
@@ -80,98 +90,67 @@ private:
 	KisGradientWidget *m_pGradientWidget;  
 };
 
-class ColorChooserFrame : public QFrame
+class DockFrameDocker : public BaseDocker
 {
-  Q_OBJECT
-
- public:
-    ColorChooserFrame( QWidget* parent = 0, const char* name = 0 );
-
- public slots:
-    void slotSetFGColor(const KoColor&);
-    void slotSetBGColor(const KoColor&);
-    void slotSetActiveColor( ActiveColor );
-
- signals:
-    void colorChanged(const KoColor&);
-
- protected:
-    virtual void resizeEvent ( QResizeEvent * );
-
- protected slots:
-    void slotColorSelected(const KoColor&);
-
- private:
-    KoColorChooser   *m_pColorChooser;
-    KoColor m_fg;
-    KoColor m_bg;
-};
-
-
-class DockFrame : public QFrame
-{
-	typedef QFrame super;
-  Q_OBJECT
-
- public:
-    DockFrame( QWidget* parent = 0, const char* name = 0 );
-
- public:
-    void plug (QWidget* w);
-    void unplug (QWidget* w);
-
- public slots:
-    void slotActivateTab(const QString& tab);
-
- protected:
-    virtual void resizeEvent ( QResizeEvent * );
-
- private:
-    QPtrList<QWidget>         m_wlst;
-    QPtrList<KoFrameButton>  m_blst;
-};
-
-class KisSideBar : public KFloatingDialog {
-	typedef KFloatingDialog super;
-	Q_OBJECT
+        Q_OBJECT
 
 public:
-	KisSideBar(QWidget *parent = 0, const char *name = 0);
-	virtual ~KisSideBar();
+        DockFrameDocker ( QWidget* parent = 0, const char* name = 0 );
+        ~DockFrameDocker();
+        
+        void plug(QWidget *w);
+        void unplug(QWidget *w);
+private:
+        QTabWidget *m_tabwidget;
+};
+
+class ColorDocker : public BaseDocker 
+{
+        Q_OBJECT
 
 public:
-	void plug(QWidget *w);
-	void unplug(QWidget *w);
-	QWidget *dockFrame();
-    
+        ColorDocker(QWidget *parent = 0, const char *name = 0);
+        ~ColorDocker();
+
 public slots:
-	void slotSetFGColor(const KoColor&);
-	void slotSetBGColor(const KoColor&);
-
-	void slotSetBrush(KoIconItem *item);
-	void slotSetPattern(KoIconItem *item);
-
-	void slotActivateTab(const QString& tab) { m_dockFrame->slotActivateTab(tab); }
-	void slotHideChooserFrame();
-
+        void slotSetColor(const KoColor&);
+        
 signals:
-	void fgColorChanged(const KoColor&);
-	void bgColorChanged(const KoColor&);
-
-protected:
-	virtual void resizeEvent ( QResizeEvent * );
-	virtual void closeEvent ( QCloseEvent * );
+        void ColorChanged(const KoColor&);
 
 protected slots:
-	void slotColorChooserColorSelected(const KoColor&);
-	void slotControlFGColorSelected(const KoColor&);
-	void slotControlBGColorSelected(const KoColor&);
-	void slotControlActiveColorChanged(ActiveColor);
+        void slotColorSelected(const KoColor&);
 
 private:
-	ControlFrame *m_pControlFrame; 
-	ColorChooserFrame *m_pColorChooserFrame;  
-	DockFrame *m_dockFrame;
+        KoColorChooser *m_ColorChooser;  
+};
+
+class ToolControlDocker : public BaseDocker {
+        Q_OBJECT
+
+public:
+        ToolControlDocker(QWidget *parent = 0, const char *name = 0);
+        ~ToolControlDocker();
+
+public slots:
+        void slotColorSelected(const KoColor&);
+        
+        void slotSetFGColor(const KoColor&);
+        void slotSetBGColor(const KoColor&);
+
+        void slotSetBrush(KoIconItem *item);
+        void slotSetPattern(KoIconItem *item);
+
+signals:
+        void fgColorChanged(const KoColor&);
+        void bgColorChanged(const KoColor&);
+
+protected slots:
+        void slotControlFGColorSelected(const KoColor&);
+        void slotControlBGColorSelected(const KoColor&);
+
+private:
+        ControlFrame *m_controlframe; 
 };
 
 #endif

@@ -153,10 +153,10 @@
   <Action name="preferences"/>    
   <Action name="save_options"/>
   <Separator/>
-  <Action name="show_sidebar"/>  
+  <!--<Action name="show_sidebar"/>  
   <Action name="float_sidebar"/>
   <Action name="left_sidebar"/>
-  <Separator/>          
+  <Separator/> -->        
 </Menu>
 
 </MenuBar>

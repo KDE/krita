@@ -169,8 +169,11 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_yoff = 0;
 	m_fg = KoColor::black();
 	m_bg = KoColor::white();
-	m_sideBar = 0;
- 	m_paletteChooser = 0;
+        m_layerchanneldocker = 0;
+        m_brushpatterndocker = 0;
+        m_toolcontroldocker = 0;
+        m_colordocker = 0;
+	m_paletteChooser = 0;
 	m_gradientChooser = 0;
 	m_imageChooser = 0;
 	m_brush = 0;
@@ -223,18 +226,21 @@ void KisView::setupSideBar()
 	KisResourceServer *rserver = KisFactory::rServer();
 
 	if (sb) {
-		m_sideBar = new KisSideBar(this, "kis_sidebar");
-
+                m_layerchanneldocker = new DockFrameDocker(this);
+                m_brushpatterndocker = new DockFrameDocker(this);
+                m_toolcontroldocker = new ToolControlDocker(this);
+                m_colordocker = new ColorDocker(this);
+                
 		m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
-							  m_sideBar -> dockFrame(), "brush_chooser", this);
+							 m_brushpatterndocker, "brush_chooser", this);
 		m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
-		m_sideBar -> plug(m_brushMediator -> chooserWidget());
+		m_brushpatterndocker -> plug(m_brushMediator -> chooserWidget());
 		connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(brushActivated(KisResource*)));
 
 		m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, rserver, i18n("Patterns"),
-							    m_sideBar -> dockFrame(), "pattern chooser", this);
+							    m_brushpatterndocker, "pattern chooser", this);
 		m_pattern = dynamic_cast<KisPattern*>(m_patternMediator -> currentResource());
-		m_sideBar ->plug(m_patternMediator -> chooserWidget());
+		m_brushpatterndocker -> plug(m_patternMediator -> chooserWidget());
 		connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), this, SLOT(patternActivated(KisResource*)));
 
 //  		m_gradientChooser = new QWidget(this);
@@ -246,7 +252,7 @@ void KisView::setupSideBar()
 //  		m_paletteChooser -> setCaption(i18n("Palettes"));
 //  		m_sideBar -> plug(m_paletteChooser);
 
-		m_layerBox = new KisListBox(i18n("layer"), KisListBox::SHOWALL, m_sideBar);
+		m_layerBox = new KisListBox(i18n("layer"), KisListBox::SHOWALL, m_layerchanneldocker);
 		m_layerBox -> setCaption(i18n("Layers"));
 
 		connect(m_layerBox, SIGNAL(itemToggleVisible()), SLOT(layerToggleVisible()));
@@ -263,30 +269,47 @@ void KisView::setupSideBar()
 		connect(m_layerBox, SIGNAL(itemBack()), SLOT(layerBack()));
 		connect(m_layerBox, SIGNAL(itemLevel(int)), SLOT(layerLevel(int)));
 
-		m_sideBar -> plug(m_layerBox);
-		layersUpdated();
+		m_layerchanneldocker -> plug(m_layerBox);
+                layersUpdated();
 
-//  		m_channelView = new KisChannelView(m_doc, this);
-//  		m_channelView -> setCaption(i18n("Channels"));
-//  		m_sideBar -> plug(m_channelView);
+  		m_channelView = new KisChannelView(m_doc, this);
+  		m_channelView -> setCaption(i18n("Channels"));
+  		m_layerchanneldocker -> plug(m_channelView);
 
 //  		m_pathView = new QWidget(this);
 //  		m_pathView -> setCaption(i18n("Paths"));
 //  		m_sideBar -> plug(m_pathView);
 
-		m_sideBar -> slotActivateTab(i18n("Brushes"));
-
-		m_sideBar -> slotSetBGColor(m_bg);
-		m_sideBar -> slotSetFGColor(m_fg);
-		connect(m_sideBar, SIGNAL(fgColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
-		connect(m_sideBar, SIGNAL(bgColorChanged(const KoColor&)), this, SLOT(slotSetBGColor(const KoColor&)));
-		connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_sideBar, SLOT(slotSetFGColor(const KoColor&)));
-		connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_sideBar, SLOT(slotSetBGColor(const KoColor&)));
+		m_toolcontroldocker -> slotSetBGColor(m_bg);
+		m_toolcontroldocker -> slotSetFGColor(m_fg);
+                connect(m_toolcontroldocker, SIGNAL(fgColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
+        	connect(m_toolcontroldocker, SIGNAL(bgColorChanged(const KoColor&)), this, SLOT(slotSetBGColor(const KoColor&)));
+		connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_toolcontroldocker, SLOT(slotSetFGColor(const KoColor&)));
+		connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_toolcontroldocker, SLOT(slotSetBGColor(const KoColor&)));
+                
+		connect(m_toolcontroldocker, SIGNAL(fgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetColor(const KoColor&)));
+		connect(m_toolcontroldocker, SIGNAL(bgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetColor(const KoColor&)));                
+                
+		connect(m_colordocker, SIGNAL(ColorChanged(const KoColor&)), m_toolcontroldocker, SLOT(slotColorSelected(const KoColor&)));
+                
 		m_sidebarToggle -> setChecked(true);
 
 		rserver -> loadBrushes();
 		rserver -> loadpipeBrushes();
 		rserver -> loadPatterns();
+                
+                mainWindow() -> addDockWindow( m_layerchanneldocker, DockRight);
+                m_layerchanneldocker  -> setCaption(i18n("Layers/Channels"));
+                m_layerchanneldocker -> show();
+                mainWindow() -> addDockWindow( m_brushpatterndocker, DockRight );
+                m_brushpatterndocker  -> setCaption(i18n("Brushes/Pattern"));
+                m_brushpatterndocker -> show();
+                mainWindow() -> addDockWindow( m_toolcontroldocker, DockLeft );
+                m_toolcontroldocker  -> setCaption(i18n("Tool Control"));
+                m_toolcontroldocker -> show();
+                mainWindow() -> addDockWindow( m_colordocker, DockLeft );
+                m_colordocker  -> setCaption(i18n("Color"));
+                m_colordocker -> show();
 	}
 }
 
@@ -492,19 +515,7 @@ void KisView::resizeEvent(QResizeEvent *)
 		KisGuideMgr *mgr = img -> guides();
 		mgr -> resize(size());
 	}
-
-	if (m_sideBar && m_sidebarToggle -> isChecked() && !m_floatsidebarToggle -> isChecked()) {
-		if (m_lsidebarToggle -> isChecked()) {
-			lsideW = m_sideBar -> width();
-			m_sideBar -> setGeometry(0, 0, lsideW, height());
-		} else {
-			rsideW = m_sideBar -> width();
-			m_sideBar -> setGeometry(width() - rsideW, 0, rsideW, height());
-		}
-
-		m_sideBar -> show();
-	}
-
+        
 	m_hRuler -> setGeometry(ruler + lsideW, 0, width() - ruler - rsideW - lsideW, ruler);
 	m_vRuler -> setGeometry(0 + lsideW, ruler, ruler, height() - (ruler + tbarBtnH));
 
@@ -1125,18 +1136,12 @@ void KisView::dialog_patterns()
 
 void KisView::dialog_layers()
 {
-	if (m_dlgLayersToggle -> isChecked())
-		m_sideBar -> plug(m_layerBox);
-	else
-		m_sideBar -> unplug(m_layerBox);
+
 }
 
 void KisView::dialog_channels()
 {
-	if (m_dlgChannelsToggle -> isChecked())
-		m_sideBar -> plug(m_channelView);
-	else
-		m_sideBar -> unplug(m_channelView);
+
 }
 
 void KisView::next_layer()
@@ -1566,23 +1571,17 @@ void KisView::merge_linked_layers()
 
 void KisView::showSidebar()
 {
-	if (m_sidebarToggle -> isChecked())
-		m_sideBar -> show();
-	else
-		m_sideBar -> hide();
 
-	resizeEvent(0);
 }
 
 void KisView::floatSidebar()
 {
-	m_sideBar -> setDocked(!m_floatsidebarToggle -> isChecked());
-	resizeEvent(0);
+
 }
 
 void KisView::placeSidebarLeft()
 {
-	resizeEvent(0);
+
 }
 
 /*
@@ -1617,11 +1616,11 @@ void KisView::brushActivated(KisResource *brush)
 {
 	KisIconItem *item;
 
-	Q_ASSERT(m_sideBar);
+	Q_ASSERT(m_toolcontroldocker);
 	m_brush = dynamic_cast<KisBrush*>(brush);
 
 	if (m_brush && (item = m_brushMediator -> itemFor(m_brush)))
-		m_sideBar -> slotSetBrush(item);
+		m_toolcontroldocker -> slotSetBrush(item);
 
         if (m_brush)
 		notify();
@@ -1631,11 +1630,11 @@ void KisView::patternActivated(KisResource *pattern)
 {
 	KisIconItem *item;
 
-	Q_ASSERT(m_sideBar);
+	Q_ASSERT(m_toolcontroldocker);
 	m_pattern = dynamic_cast<KisPattern*>(pattern);
 
 	if (m_pattern && (item = m_patternMediator -> itemFor(m_pattern)))
-		m_sideBar -> slotSetPattern(item);
+		m_toolcontroldocker -> slotSetPattern(item);
 
         if (m_pattern)
 		notify();
@@ -1655,13 +1654,13 @@ void KisView::setFGColor(const KoColor& c)
 
 void KisView::slotSetFGColor(const KoColor& c)
 {
-	m_fg = c;
-	notify();
+        m_fg = c;
+        notify();
 }
 
-void KisView::slotSetBGColor(const KoColor& c)
-{
-	m_bg = c;
+void KisView::slotSetBGColor(const KoColor& c)                        
+{                        
+        m_bg = c;
 }
 
 void KisView::setupPrinter(KPrinter& printer)
@@ -2246,7 +2245,7 @@ void KisView::selectFGColor()
 	KoColor c;
 
 	if (selectColor(c))
-		m_sideBar -> slotSetFGColor(c);
+		m_toolcontroldocker -> slotSetFGColor(c);
 }
 
 void KisView::selectBGColor()
@@ -2254,7 +2253,7 @@ void KisView::selectBGColor()
 	KoColor c;
 
 	if (selectColor(c))
-		m_sideBar -> slotSetBGColor(c);
+		m_toolcontroldocker -> slotSetBGColor(c);
 }
 
 void KisView::reverseFGAndBGColors()
@@ -2262,8 +2261,8 @@ void KisView::reverseFGAndBGColors()
 	KoColor oldFg = m_fg;
 	KoColor oldBg = m_bg;
 
-	m_sideBar -> slotSetFGColor(oldBg);
-	m_sideBar -> slotSetBGColor(oldFg);
+	m_toolcontroldocker -> slotSetFGColor(oldBg);
+	m_toolcontroldocker -> slotSetBGColor(oldFg);
 }
 
 void KisView::imgSelectionChanged(KisImageSP img)

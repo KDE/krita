@@ -1,8 +1,9 @@
 /*
- *  kis_sidebar.cc - part of KImageShop
+ *  kis_sidebar.cc - part of Krita
  *
  *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
+ *  Copyright (c) 2004 Sven Langkamp  <longamp@reallygood.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,151 +39,9 @@
 #include "kis_brush.h"
 #include "kis_pattern.h"
 
-KisSideBar::KisSideBar( QWidget* parent, const char* name ) : super(parent, name)
+BaseDocker::BaseDocker( QWidget* parent, const char* name) : QDockWindow( QDockWindow::OutsideDock, parent ,name )
 {
-    kdDebug() << "KisSideBar::KisSideBar" << endl;
-
-    m_pControlFrame  = new ControlFrame(this);
-
-    m_pColorChooserFrame    = new ColorChooserFrame(this);
-
-    // krayon box
-    m_dockFrame = new DockFrame(this);
-
-    // fixed width for sidebar itself.  When free-floating,
-    // there should be no fixed width
-//    setFixedWidth( 200 );
-    QRect rc = geometry();
-
-    rc.setWidth(200);
-    setGeometry(rc);
-
-    // connect chooser frame
-    connect(m_pColorChooserFrame, SIGNAL(colorChanged(const KoColor &)),
-        this, SLOT(slotColorChooserColorSelected(const KoColor &)));
-
-    // connect control frame
-    connect(m_pControlFrame, SIGNAL(fgColorChanged(const KoColor &)),
-        this, SLOT(slotControlFGColorSelected(const KoColor &)));
-    connect(m_pControlFrame, SIGNAL(bgColorChanged(const KoColor &)),
-        this, SLOT(slotControlBGColorSelected(const KoColor &)));
-    connect(m_pControlFrame, SIGNAL(activeColorChanged(ActiveColor)),
-        this, SLOT(slotControlActiveColorChanged(ActiveColor)));
-
-    kdDebug() << "KisSideBar::KisSideBar leaving" << endl;
-}
-
-KisSideBar::~KisSideBar()
-{
-}
-
-void KisSideBar::plug (QWidget* w)
-{
-	m_dockFrame -> plug(w);
-}
-
-void KisSideBar::unplug(QWidget *w)
-{
-	m_dockFrame -> unplug(w);
-}
-
-QWidget *KisSideBar::dockFrame()
-{
-	return m_dockFrame;
-}
-
-void KisSideBar::resizeEvent ( QResizeEvent * )
-{
-//    int topTitleFrameHeight = 20;
-    int controlHeight = 42;
-//    int topColorFrameHeight = 18;
-    int colorChooserHeight = 152; //m_pColorChooserFrame->isVisible() ? 152 : 0;
-
-    int total = 0;
-
-//    m_pTopTitleFrame->setGeometry( 0, 0, width(), topTitleFrameHeight );
-//    total += topTitleFrameHeight;
-
-    m_pControlFrame->setGeometry( 0, total, width(), controlHeight);
-    total += m_pControlFrame -> height();
-
-//    m_pTopColorFrame->setGeometry( 0, total, width(), topColorFrameHeight );
-//    total += topColorFrameHeight;
-
-    m_pColorChooserFrame->setGeometry( 0, total, width(), colorChooserHeight );
-    total += colorChooserHeight;
-
-    m_dockFrame->setGeometry( 0, total, width(), height() - total);
-}
-
-void KisSideBar::closeEvent ( QCloseEvent * )
-{
-    setDocked(true);
-}
-
-void KisSideBar::slotSetFGColor(const KoColor& c)
-{
-    m_pColorChooserFrame->slotSetFGColor( c );
-    m_pControlFrame->slotSetFGColor( c );
-}
-
-void KisSideBar::slotSetBGColor(const KoColor& c)
-{
-    m_pColorChooserFrame->slotSetBGColor( c );
-    m_pControlFrame->slotSetBGColor( c );
-}
-
-void KisSideBar::slotColorChooserColorSelected(const KoColor& c)
-{
-    if (m_pControlFrame->activeColor() == ac_Foreground)
-	{
-	    m_pControlFrame->slotSetFGColor(c);
-	    emit fgColorChanged( c );
-	}
-    else
-	{
-	    m_pControlFrame->slotSetBGColor(c);
-	    emit bgColorChanged( c );
-	}
-}
-
-void KisSideBar::slotControlActiveColorChanged(ActiveColor s)
-{
-  m_pColorChooserFrame->slotSetActiveColor(s);
-}
-
-void KisSideBar::slotControlFGColorSelected(const KoColor& c)
-{
-  m_pColorChooserFrame->slotSetFGColor(c);
-  emit fgColorChanged( c );
-}
-
-void KisSideBar::slotControlBGColorSelected(const KoColor& c)
-{
-  m_pColorChooserFrame->slotSetBGColor(c);
-  emit bgColorChanged( c );
-}
-
-void KisSideBar::slotSetBrush(KoIconItem *item)
-{
-	m_pControlFrame -> slotSetBrush(item);
-}
-
-void KisSideBar::slotSetPattern(KoIconItem *item)
-{
-	m_pControlFrame -> slotSetPattern(item);
-}
-
-
-
-void KisSideBar::slotHideChooserFrame( )
-{
-    if(m_pColorChooserFrame->isVisible())
-        m_pColorChooserFrame->hide();
-    else
-        m_pColorChooserFrame->show();
-
-    resizeEvent(0L);
+        setCloseMode( QDockWindow::Always );
 }
 
 ControlFrame::ControlFrame( QWidget* parent, const char* name )
@@ -222,9 +81,9 @@ ActiveColor ControlFrame::activeColor()
 void ControlFrame::slotActiveColorChanged(KDualColorButton::DualColor s)
 {
     if(s == KDualColorButton::Foreground)
-	    emit activeColorChanged(ac_Foreground);
+	    slotFGColorSelected(m_pColorButton->currentColor());
     else
-	    emit activeColorChanged(ac_Background);
+	    slotBGColorSelected(m_pColorButton->currentColor());
 }
 
 void ControlFrame::slotSetBrush(KoIconItem *item)
@@ -256,11 +115,13 @@ void ControlFrame::resizeEvent ( QResizeEvent * )
 
 void ControlFrame::slotSetFGColor(const KoColor& c)
 {
+    m_pColorButton->setCurrent(KDualColorButton::Foreground);
     m_pColorButton->setForeground( c.color() );
 }
 
 void ControlFrame::slotSetBGColor(const KoColor& c)
 {
+    m_pColorButton->setCurrent(KDualColorButton::Background);
     m_pColorButton->setBackground( c.color() );
 }
 
@@ -274,139 +135,128 @@ void ControlFrame::slotBGColorSelected(const QColor& c)
     emit bgColorChanged( KoColor(c) );
 }
 
-/*
-    Chooser Frame - contains color selectors and sliders for the
-    different color modes
-*/
-
-ColorChooserFrame::ColorChooserFrame( QWidget* parent, const char* name )
-    : QFrame( parent, name )
+DockFrameDocker::DockFrameDocker( QWidget* parent, const char* name ) : BaseDocker( parent, name )
 {
-    setFrameStyle(Panel | Raised);
-    setLineWidth(1);
+    kdDebug() << "DockFrameDocker::DockFrameDocker" << endl;
 
-    m_pColorChooser = new KoColorChooser(this, "Sidebar color chooser");
-
-    connect(m_pColorChooser, SIGNAL(colorChanged(const KoColor &)),
-        this, SLOT(slotColorSelected(const KoColor &)));
+    setWidget( m_tabwidget = new QTabWidget( this ) );
+    
+    m_tabwidget -> setFixedSize( 200, 250 );
+    kdDebug() << "DockFrameDocker::DockFrameDocker leaving" << endl;
 }
 
-void ColorChooserFrame::slotSetActiveColor( ActiveColor a )
+DockFrameDocker::~DockFrameDocker()
 {
-    KoColor c;
-
-    if (a == ac_Foreground)
-	    c = m_fg;
-    else
-	    c = m_bg;
-
-    m_pColorChooser->slotChangeColor(c);
+        delete m_tabwidget;
 }
 
-void ColorChooserFrame::resizeEvent ( QResizeEvent * )
+void DockFrameDocker::plug (QWidget* w)
 {
-    m_pColorChooser->setGeometry ( 2, 2, width()-4, height()-4 );
+        m_tabwidget-> addTab( w , w -> caption());
 }
 
-void ColorChooserFrame::slotSetFGColor(const KoColor& c)
+void DockFrameDocker::unplug(QWidget *w)
 {
-    m_fg = c;
-    m_pColorChooser->slotChangeColor(c);
+        m_tabwidget -> removePage(w);
 }
 
-void ColorChooserFrame::slotSetBGColor(const KoColor& c)
+ColorDocker::ColorDocker( QWidget* parent, const char* name ) : BaseDocker( parent, name )
 {
-    m_bg = c;
-    m_pColorChooser->slotChangeColor(c);
+        kdDebug() << "ColorDocker::ColorDocker" << endl;
+        
+        m_ColorChooser = new KoColorChooser(this);
+        m_ColorChooser -> setFixedSize( 200, 150 );
+        setWidget(m_ColorChooser);
+
+        // connect chooser frame
+        connect(m_ColorChooser, SIGNAL(colorChanged(const KoColor &)),
+                this, SLOT(slotColorSelected(const KoColor &)));
+
+        kdDebug() << "ColorDocker::ColorDocker leaving" << endl;
 }
 
-void ColorChooserFrame::slotColorSelected(const KoColor& c)
+ColorDocker::~ColorDocker()
 {
-    emit colorChanged( c );
+        delete m_ColorChooser;
 }
 
-
-/*
-    Dock Frame - contains tabs for brushes, layers, channels
-*/
-
-DockFrame::DockFrame(QWidget *parent, const char *name) : super(parent, name)
+void ColorDocker::slotSetColor(const KoColor& c)
 {
-	setFrameStyle(Panel | Raised);
-	setLineWidth(1);
-	m_wlst.setAutoDelete(true);
-	m_blst.setAutoDelete(true);
+        m_ColorChooser -> slotChangeColor( c );
 }
 
-void DockFrame::plug(QWidget* w)
+void ColorDocker::slotColorSelected(const KoColor& c)
 {
-	if (w) {
-		QString name = w -> caption();
-
-		m_wlst.append(w);
-		w -> reparent(this, QPoint(0, 0), true);
-
-		KoFrameButton* btn = new KoFrameButton(this);
-
-		btn -> setText(i18n(name.utf8()));
-		btn -> setFixedHeight(18);
-		btn -> setToggleButton(true);
-
-		connect(btn, SIGNAL(clicked(const QString&)), this, SLOT(slotActivateTab(const QString&)));
-		m_blst.append(btn);
-		slotActivateTab(name);
-	}
+        emit ColorChanged( c );
 }
 
-void DockFrame::unplug(QWidget* w)
+ToolControlDocker::ToolControlDocker( QWidget* parent, const char* name ) : BaseDocker( parent, name )
 {
-	if (w) {
-		w -> reparent(0, WStyle_StaysOnTop, mapToGlobal(QPoint(0,0)), true);
-		w -> setActiveWindow();
-	}
+        kdDebug() << "ToolControlDocker::ToolControlDocker" << endl;
+
+        m_controlframe  = new ControlFrame(this);
+
+        // connect control frame
+        connect(m_controlframe, SIGNAL(fgColorChanged(const KoColor &)),
+                this, SLOT(slotControlFGColorSelected(const KoColor &)));
+        connect(m_controlframe, SIGNAL(bgColorChanged(const KoColor &)),
+                this, SLOT(slotControlBGColorSelected(const KoColor &)));
+        connect(m_controlframe, SIGNAL(activeColorChanged(ActiveColor)),
+                this, SLOT(slotControlActiveColorChanged(ActiveColor)));
+                
+        m_controlframe -> setFixedSize(200,50);
+        setWidget(m_controlframe);
+
+        kdDebug() << "ToolControlDocker::ToolControlDocker leaving" << endl;
 }
 
-
-void DockFrame::slotActivateTab(const QString& tab)
+ToolControlDocker::~ToolControlDocker()
 {
-    QWidget *w;
-    for ( w = m_wlst.first(); w != 0; w = m_wlst.next() )
-	{
-	    if (w->caption() == tab)
-		    w->show();
-	    else
-		    w->hide();
-	}
-
-    KoFrameButton *b;
-    for ( b = m_blst.first(); b != 0; b = m_blst.next() )
-	    b->setOn(b->text() == tab);
+        delete m_controlframe;
 }
 
-void DockFrame::resizeEvent( QResizeEvent * )
+void ToolControlDocker::slotSetFGColor(const KoColor& c)
 {
-    int bw = 0;
-    int row = 0;
+        m_controlframe->slotSetFGColor( c );
+}
 
-    KoFrameButton *b;
+void ToolControlDocker::slotSetBGColor(const KoColor& c)
+{
+        m_controlframe->slotSetBGColor( c );
+}
 
-    for ( b = m_blst.first(); b != 0; b = m_blst.next() )
-	{
-	    if (bw + b->width() >= width())
-		{
-		    bw = 0;
-		    row++;
-		}
-	    b->move(bw, row*18);
-	    bw += b->width();
-	}
+void ToolControlDocker::slotColorSelected(const KoColor& c)
+{
+        if (m_controlframe->activeColor() == ac_Foreground)
+        {
+                m_controlframe->slotSetFGColor( c );
+                emit fgColorChanged( c );
+        }
+        else
+        {        
+                m_controlframe->slotSetBGColor( c );
+                emit bgColorChanged( c );
+        }
+}
 
-    QWidget *w;
+void ToolControlDocker::slotControlFGColorSelected(const KoColor& c)
+{
+        emit fgColorChanged(c);
+}
 
-    int xw = 18 + row*18;
+void ToolControlDocker::slotControlBGColorSelected(const KoColor& c)
+{
+        emit bgColorChanged(c);
+}
 
-    for ( w = m_wlst.first(); w != 0; w = m_wlst.next() )
-	    w->setGeometry(2, xw, width()-4, height()- xw-2);
+void ToolControlDocker::slotSetBrush(KoIconItem *item)
+{
+        m_controlframe -> slotSetBrush(item);
+}
+
+void ToolControlDocker::slotSetPattern(KoIconItem *item)
+{
+        m_controlframe -> slotSetPattern(item);
 }
 
 #include "kis_sidebar.moc"

@@ -58,6 +58,9 @@ class KisPattern;
 class KisResource;
 class KisResourceMediator;
 class KisSideBar;
+class DockFrameDocker;
+class ToolControlDocker;
+class ColorDocker;
 class KisUndoAdapter;
 
 class KisView : public KoView, 
@@ -103,9 +106,9 @@ public slots:
 	void dialog_patterns();
 	void dialog_layers();
 	void dialog_channels();
-	void slotSetBGColor(const KoColor& c);
 	void slotSetFGColor(const KoColor& c);
-     
+	void slotSetBGColor(const KoColor& c);
+             
 	void next_layer();
 	void previous_layer();
 
@@ -342,7 +345,12 @@ private:
         // Widgets
 	QScrollBar *m_hScroll; // XXX: the sizing of the scrollthumbs
 	QScrollBar *m_vScroll; // is not right yet.
-	KisSideBar *m_sideBar;
+        
+        //Dockers
+        DockFrameDocker *m_layerchanneldocker;
+        DockFrameDocker *m_brushpatterndocker;
+        ToolControlDocker *m_toolcontroldocker;
+        ColorDocker *m_colordocker;
 
 	QWidget *m_paletteChooser;    
 	QWidget *m_gradientChooser;

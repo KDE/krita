@@ -63,12 +63,6 @@ class KisTileMediator;
 class KisTileMgr : public KShared {
 
 	typedef KShared super;
-	typedef QValueList<KisTileSP> KisTileSPLst;
-	typedef KisTileSPLst::iterator KisTileSPLst_it;
-	typedef KisTileSPLst::const_iterator KisTileSPLst_cit;
-	typedef QValueVector<KisTileSPLst> vKisTileSPLst; 
-	typedef vKisTileSPLst::iterator vKisTileSPLst_it; 
-	typedef vKisTileSPLst::const_iterator vKisTileSPLst_cit; 
 
 public:
         /**

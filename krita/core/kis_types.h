@@ -24,40 +24,41 @@
 #include <koColor.h>
 
 #include "kis_global.h"
+#include "kis_shared_ptr_vector.h"
 
 class KisImage;
 typedef KSharedPtr<KisImage> KisImageSP;
-typedef QValueVector<KisImageSP> vKisImageSP;
+typedef KisSharedPtrVector<KisImage> vKisImageSP;
 typedef vKisImageSP::iterator vKisImageSP_it;
 typedef vKisImageSP::const_iterator vKisImageSP_cit;
 
 class KisPaintDevice;
 typedef KSharedPtr<KisPaintDevice> KisPaintDeviceSP;
-typedef QValueVector<KisPaintDeviceSP> vKisPaintDeviceSP;
+typedef KisSharedPtrVector<KisPaintDevice> vKisPaintDeviceSP;
 typedef vKisPaintDeviceSP::iterator vKisPaintDeviceSP_it;
 typedef vKisPaintDeviceSP::const_iterator vKisPaintDeviceSP_cit;
 
 class KisChannel;
 typedef KSharedPtr<KisChannel> KisChannelSP;
-typedef QValueVector<KisChannelSP> vKisChannelSP;
+typedef KisSharedPtrVector<KisChannel> vKisChannelSP;
 typedef vKisChannelSP::iterator vKisChannelSP_it;
 typedef vKisChannelSP::const_iterator vKisChannelSP_cit;
 
 class KisMask;
 typedef KSharedPtr<KisMask> KisMaskSP;
-typedef QValueVector<KisMaskSP> vKisMaskSP;
+typedef KisSharedPtrVector<KisMask> vKisMaskSP;
 typedef vKisMaskSP::iterator vKisMaskSP_it;
 typedef vKisMaskSP::const_iterator vKisMaskSP_cit;
 
 class KisLayer;
 typedef KSharedPtr<KisLayer> KisLayerSP;
-typedef QValueVector<KisLayerSP> vKisLayerSP;
+typedef KisSharedPtrVector<KisLayer> vKisLayerSP;
 typedef vKisLayerSP::iterator vKisLayerSP_it;
 typedef vKisLayerSP::const_iterator vKisLayerSP_cit;
 
 class KisSelection;
 typedef KSharedPtr<KisSelection> KisSelectionSP;
-typedef QValueVector<KisSelectionSP> vKisSelectionSP;
+typedef KisSharedPtrVector<KisSelection> vKisSelectionSP;
 typedef vKisSelectionSP::iterator vKisSelectionSP_it;
 typedef vKisSelectionSP::const_iterator vKisSelectionSP_cit;
 
@@ -69,13 +70,13 @@ typedef KSharedPtr<KisFloatingSelection> KisFloatingSelectionSP;
 
 class KisTile;
 typedef KSharedPtr<KisTile> KisTileSP;
-typedef QValueVector<KisTileSP> vKisTileSP;
+typedef KisSharedPtrVector<KisTile> vKisTileSP;
 typedef vKisTileSP::iterator vKisTileSP_it;
 typedef vKisTileSP::const_iterator vKisTileSP_cit;
 
 class KisHistogram;
 typedef KSharedPtr<KisHistogram> KisHistogramSP;
-typedef QValueVector<KisHistogramSP> vKisHistogramSP;
+typedef KisSharedPtrVector<KisHistogram> vKisHistogramSP;
 typedef vKisHistogramSP::iterator vKisHistogramSP_it;
 typedef vKisHistogramSP::const_iterator vKisHistogramSP_cit;
 
@@ -85,7 +86,7 @@ typedef KSharedPtr<KisPluginRegistry> KisPluginRegistrySP;
 
 class KisTool;
 typedef KSharedPtr<KisTool> KisToolSP;
-typedef QValueVector<KisToolSP> vKisTool;
+typedef KisSharedPtrVector<KisTool> vKisTool;
 // was: typedef QValueVector<KisTool*> vKisTool;
 typedef vKisTool::iterator vKisTool_it;
 typedef vKisTool::const_iterator vKisTool_cit;

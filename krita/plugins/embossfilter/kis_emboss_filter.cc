@@ -46,6 +46,7 @@
 #include <kis_tile_command.h>
 #include <kis_types.h>
 #include <kis_view.h>
+#include <kis_progress_display_interface.h>
 
 #include "kis_filter_configuration_widget.h"
 #include "kis_emboss_filter_configuration_widget.h"
@@ -75,10 +76,10 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
 	//with the actual pixel data.
 
-	Emboss(newData, width, height, embossdepth);
+	Emboss(newData, width, height, embossdepth, view() -> progressDisplay());
 	src -> writeBytes( newData, x, y, width, height);
 
-	delete newData;
+	delete[] newData;
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -95,8 +96,13 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
  *                     increase it. After this, get the gray tone            
  */
 
-void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d)
+void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d, KisProgressDisplayInterface *m_progress)
 {
+    //Progress info
+    m_cancelRequested = false;
+    m_progress -> setSubject(this, true, true);
+    emit notifyProgressStage(this,i18n("Applying emboss filter..."),0);
+    
     float Depth = d / 10.0;
     int LineWidth = Width * 4;
     if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
@@ -108,9 +114,9 @@ void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d)
     
     bool m_cancel = false; //make it compile...
     
-    for (int h = 0 ; !m_cancel && (h < Height) ; ++h)
+    for (int h = 0 ; !m_cancelRequested && (h < Height) ; ++h)
        {
-       for (int w = 0 ; !m_cancel && (w < Width) ; ++w)
+       for (int w = 0 ; !m_cancelRequested && (w < Width) ; ++w)
            {
            i = h * LineWidth + 4 * w;
            j = (h + Lim_Max (h, 1, Height)) * LineWidth + 4 * (w + Lim_Max (w, 1, Width));
@@ -125,11 +131,9 @@ void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d)
            Bits[i+1] = Gray;
            Bits[ i ] = Gray;
            }
-       
-       // Update de progress bar in dialog.
-       //m_progressBar->setValue((int) (((double)h * 100.0) / Height));
-       //kapp->processEvents(); 
+           emit notifyProgress(this, (int) (((double)h * 100.0) / Height));
        }
+    emit notifyProgressDone(this);
 }
        
 // This method have been ported from Pieter Z. Voloshyn algorithm code.   

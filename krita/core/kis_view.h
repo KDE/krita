@@ -156,6 +156,8 @@ public: // Plugin access API. XXX: This needs redesign.
 	virtual void updateCanvas(const QRect& rc);
 	virtual void updateCanvas(const KisRect& rc);
 
+	virtual KisProgressDisplayInterface *progressDisplay() const;
+
 	void layersUpdated();
 
 	KisDoc * getDocument() { return m_doc; }
@@ -227,7 +229,6 @@ private:
 	virtual KisCanvasControllerInterface *canvasController() const;
 	virtual KisToolControllerInterface *toolController() const;
 	virtual KoDocument *document() const;
-	virtual KisProgressDisplayInterface *progressDisplay() const;
 	virtual KisFilterSP filterGet(const QString& name);
 	virtual QStringList filterList();
 

@@ -52,7 +52,7 @@ KisFilterSP createFilter(KisView* view)
 class KisFilterConfiguration {
 };
 
-class KisFilter : public QObject, public KShared {
+class KisFilter : public KisProgressSubject, public KShared {
 	Q_OBJECT
 public:
 	KisFilter(const QString& name, KisView * view);
@@ -66,7 +66,7 @@ public:
 	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
 	inline const QString name() const { return m_name; };
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-
+	virtual void cancel() { m_cancelRequested = true; }
 // XXX: Why is this commented out?
 // 	KisFilterConfigurationWidget* configurationWidget(QWidget* parent);
 	inline KisView* view();
@@ -79,6 +79,8 @@ protected:
 // 	KisFilterConfigurationWidget* configurationWidget();
 
   	KisStrategyColorSpaceSP colorStrategy();
+protected:
+	bool m_cancelRequested;
 
 private slots:
 

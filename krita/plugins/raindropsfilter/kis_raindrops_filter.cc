@@ -46,6 +46,7 @@
 #include <kis_tile_command.h>
 #include <kis_types.h>
 #include <kis_view.h>
+#include <kis_progress_display_interface.h>
 
 #include "kis_filter_configuration_widget.h"
 #include "kis_raindrops_filter_configuration_widget.h"
@@ -76,10 +77,10 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 	
 	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
 	//with the actual pixel data.
-	rainDrops(newData, width, height, dropSize, number, fishEyes, 0);
+	rainDrops(newData, width, height, dropSize, number, fishEyes, view() -> progressDisplay());
 	src -> writeBytes( newData, x, y, width, height);
 
-	delete newData;
+	delete[] newData;
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -104,9 +105,9 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int DropSize, int Amount, int Coeff, KisProgressDisplayInterface *m_progress)
 {
         //Progress info
-        //m_cancelRequested = false;
-        //m_progress -> setSubject(this, true, true);
-        //emit notifyProgressStage(this,i18n("Applying oilpaint filter..."),0);
+        m_cancelRequested = false;
+        m_progress -> setSubject(this, true, true);
+        emit notifyProgressStage(this,i18n("Applying oilpaint filter..."),0);
     
         int BitCount = 0;
 
@@ -146,13 +147,11 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
     
         srand ((uint) dt.secsTo(Y2000));
     
-        bool m_cancel=false; //only to make it compile
-    
         // Init booleen Matrix.
     
-        for (i = 0 ; !m_cancel && (i < Width) ; ++i)
+        for (i = 0 ; !m_cancelRequested && (i < Width) ; ++i)
         {
-                for (j = 0 ; !m_cancel && (j < Height) ; ++j)
+                for (j = 0 ; !m_cancelRequested && (j < Height) ; ++j)
                 {
                         p = j * LineWidth + 4 * i;         
                         NewBits[p+3] = Bits[p+3];
@@ -163,7 +162,7 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
                 }
        }
 
-        for (int NumBlurs = 0 ; !m_cancel && (NumBlurs <= Amount) ; ++NumBlurs)
+        for (int NumBlurs = 0 ; !m_cancelRequested && (NumBlurs <= Amount) ; ++NumBlurs)
         {
                 NewSize = (int)(rand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
                 halfSize = NewSize / 2;
@@ -181,15 +180,15 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
                         if (BoolMatrix[y][x])
                                 FindAnother = true;
                         else
-                                for (i = x - halfSize ; !m_cancel && (i <= x + halfSize) ; i++)
-                                        for (j = y - halfSize ; !m_cancel && (j <= y + halfSize) ; j++)
+                                for (i = x - halfSize ; !m_cancelRequested && (i <= x + halfSize) ; i++)
+                                        for (j = y - halfSize ; !m_cancelRequested && (j <= y + halfSize) ; j++)
                                                 if ((i >= 0) && (i < Height) && (j >= 0) && (j < Width))
                                                         if (BoolMatrix[j][i])
                                                                 FindAnother = true;
 
                         Counter++;
                 } 
-        while (!m_cancel && (FindAnother && (Counter < 10000)) );
+        while (!m_cancelRequested && (FindAnother && (Counter < 10000)) );
 
         if (Counter >= 10000)
         {
@@ -197,9 +196,9 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
                 break;
         }
 
-        for (i = -1 * halfSize ; !m_cancel && (i < NewSize - halfSize) ; i++)
+        for (i = -1 * halfSize ; !m_cancelRequested && (i < NewSize - halfSize) ; i++)
         {
-                for (j = -1 * halfSize ; !m_cancel && (j < NewSize - halfSize) ; j++)
+                for (j = -1 * halfSize ; !m_cancelRequested && (j < NewSize - halfSize) ; j++)
                 {
                         r = sqrt (i * i + j * j);
                         a = atan2 (i, j);
@@ -302,9 +301,9 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
 
         BlurRadius = NewSize / 25 + 1;
             
-        for (i = -1 * halfSize - BlurRadius ; !m_cancel && (i < NewSize - halfSize + BlurRadius) ; i++)
+        for (i = -1 * halfSize - BlurRadius ; !m_cancelRequested && (i < NewSize - halfSize + BlurRadius) ; i++)
         {
-                for (j = -1 * halfSize - BlurRadius ; !m_cancel && (j < NewSize - halfSize + BlurRadius) ; j++)
+                for (j = -1 * halfSize - BlurRadius ; !m_cancelRequested && (j < NewSize - halfSize + BlurRadius) ; j++)
                 {
                         r = sqrt (i * i + j * j);
                 
@@ -342,19 +341,16 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
                                 }
                         }
                 }
-        //emit notifyProgress(this, (int) (((double)NumBlurs * 100.0) / Amount));
-        // Update the progress bar in dialog.
-        // m_progressBar->setValue((int) (((double)NumBlurs * 100.0) / Amount));
-        // kapp->processEvents(); 
+        emit notifyProgress(this, (int) (((double)NumBlurs * 100.0) / Amount));
         }
     
-        if (!m_cancel) 
+        if (!m_cancelRequested) 
         memcpy (data, NewBits, BitCount);        
         
         delete [] NewBits;
 
         FreeBoolArray (BoolMatrix, Width);
-        //emit notifyProgressDone(this);
+        emit notifyProgressDone(this);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

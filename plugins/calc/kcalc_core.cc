@@ -46,6 +46,16 @@
 #undef HAVE_LONG_DOUBLE
 #endif
 
+#ifndef HAVE_FUNC_ISINF
+#ifdef HAVE_IEEEFP_H
+#include <ieeefp.h>
+#else
+#include <math.h>
+#endif
+
+int isinf(double x) { return !finite(x) && x==x; }
+#endif
+
 extern QList<CALCAMNT> temp_stack; 
 last_input_type last_input;
 char		display_str[DSP_SIZE+1];

@@ -32,6 +32,7 @@
 #include "configdlg.h"
 #include "fontdlg.h"
 #include "version.h"
+#include <kconfig.h>
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken
 // glibc

@@ -2438,8 +2438,8 @@ QPoint KisView::viewToWindow(const QPoint& pt)
 {
 	QPoint converted;
 
-	converted.rx() = qRound((pt.x() + horzValue() - canvasXOffset()) / zoom());
-	converted.ry() = qRound((pt.y() + vertValue() - canvasYOffset()) / zoom());
+	converted.rx() = static_cast<int>((pt.x() + horzValue() - canvasXOffset()) / zoom());
+	converted.ry() = static_cast<int>((pt.y() + vertValue() - canvasYOffset()) / zoom());
 
 	return converted;
 }
@@ -2460,8 +2460,8 @@ QRect KisView::viewToWindow(const QRect& rc)
 	QPoint p = viewToWindow(QPoint(rc.x(), rc.y()));
         r.setX(p.x());
 	r.setY(p.y());
-	r.setWidth(qRound(rc.width() / zoom()));
-	r.setHeight(qRound(rc.height() / zoom()));
+	r.setWidth(static_cast<int>(ceil(rc.width() / zoom())));
+	r.setHeight(static_cast<int>(ceil(rc.height() / zoom())));
 
 	return r;
 }
@@ -2490,8 +2490,8 @@ void KisView::viewToWindow(Q_INT32 *x, Q_INT32 *y)
 QPoint KisView::windowToView(const QPoint& pt)
 {
 	QPoint p;
-	p.setX(qRound(pt.x() * zoom() + canvasXOffset() - horzValue()));
-	p.setY(qRound(pt.y() * zoom() + canvasYOffset() - vertValue()));
+	p.setX(static_cast<int>(pt.x() * zoom() + canvasXOffset() - horzValue()));
+	p.setY(static_cast<int>(pt.y() * zoom() + canvasYOffset() - vertValue()));
 
 	return p;
 }
@@ -2511,8 +2511,8 @@ QRect KisView::windowToView(const QRect& rc)
 	QPoint p = windowToView(QPoint(rc.x(), rc.y()));
 	r.setX(p.x());
 	r.setY(p.y());
-	r.setWidth(qRound(rc.width() * zoom()));
-	r.setHeight(qRound(rc.height() * zoom()));
+	r.setWidth(static_cast<int>(ceil(rc.width() * zoom())));
+	r.setHeight(static_cast<int>(ceil(rc.height() * zoom())));
 
 	return r;
 }

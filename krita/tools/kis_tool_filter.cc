@@ -123,6 +123,7 @@ void KisToolFilter::changeFilter( const QString & string )
 	{
 		kdDebug() << "KisToolFilter::changeFilter add to layout manager" << endl;
 		m_optionLayout -> addMultiCellWidget ( m_filterConfigurationWidget, 2, 2, 0, 1 );
+		m_filterConfigurationWidget->show();
 	}
 }
 

@@ -4,7 +4,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) $(KOPAINTER_IN
 kde_module_LTLIBRARIES = libkritapart.la
 libkritapart_la_SOURCES = dummy.cc
 
-libkritapart_la_LDFLAGS = $(KDE_PLUGIN)
+libkritapart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkritapart_la_LIBADD = core/libkiscore.la ui/libkisui.la ../lib/kofficeui/libkofficeui.la ../lib/kopainter/libkopainter.la tools/libkistools.la
 
 METASOURCES = AUTO

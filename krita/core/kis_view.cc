@@ -3,6 +3,7 @@
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
+ *                2004 Clarence Dang <dang@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +33,7 @@
 #include <qscrollbar.h>
 #include <qspinbox.h>
 #include <qdockarea.h>
-#include <qstringlist.h> 
+#include <qstringlist.h>
 #include <qstyle.h>
 
 // KDE
@@ -182,6 +183,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_brushMediator = 0;
 	m_imgBuilderMgr = new KisBuilderMonitor(this);
 	m_buildProgress = 0;
+        m_statusBarZoomLabel = 0;
+
 	setInstance(KisFactory::global());
 	setupActions();
 	setupCanvas();
@@ -232,7 +235,7 @@ void KisView::setupDockers()
 		m_toolcontroldocker  -> setCaption(i18n("Tool Properties"));
 		m_colordocker = new ColorDocker(this);
 		m_colordocker  -> setCaption(i18n("Color Manager"));
-                
+
 		m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, rserver, i18n("Brushes"),
 							 m_resourcedocker, "brush_chooser", this);
 		m_brush = dynamic_cast<KisBrush*>(m_brushMediator -> currentResource());
@@ -285,14 +288,13 @@ void KisView::setupDockers()
 		m_controlWidget = new ControlFrame(m_toolcontroldocker);
 		m_controlWidget -> setCaption(i18n("General"));
 		m_toolcontroldocker -> plug(m_controlWidget);
-		
+
 		m_controlWidget -> slotSetBGColor(m_bg);
 		m_controlWidget -> slotSetFGColor(m_fg);
 		connect(m_controlWidget, SIGNAL(fgColorChanged(const KoColor&)), SLOT(slotSetFGColor(const KoColor&)));
         	connect(m_controlWidget, SIGNAL(bgColorChanged(const KoColor&)), SLOT(slotSetBGColor(const KoColor&)));
 		connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetFGColor(const KoColor&)));
 		connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetBGColor(const KoColor&)));
-
 		m_colordocker -> slotSetBGColor(m_bg);
 		m_colordocker -> slotSetFGColor(m_fg);
 		connect(this , SIGNAL(fgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetFGColor(const KoColor&)));
@@ -306,8 +308,8 @@ void KisView::setupDockers()
 
 		// TODO Here should be a better check
 		if ( mainWindow()->isDockEnabled( DockBottom))
-		{      
-			viewControlDocker();          
+		{
+			viewControlDocker();
 			viewLayerChannelDocker();
 			viewResourceDocker();
 			mainWindow()->setDockEnabled( DockBottom, false);
@@ -352,6 +354,19 @@ void KisView::setupTabBar()
 	}
 }
 
+void KisView::updateStatusBarZoomLabel ()
+{
+    if (zoom () >= 1)
+        m_statusBarZoomLabel->setText(i18n ("Zoom %1:1").arg (zoom ()));
+    else if (zoom () > 0)
+        m_statusBarZoomLabel->setText(i18n ("Zoom 1:%1").arg (1 / zoom ()));
+    else
+    {
+        kdError () << "KisView::updateStatusBarZoomLabel() with 0 zoom" << endl;
+        m_statusBarZoomLabel->setText(QString::null);
+    }
+}
+
 void KisView::setupStatusBar()
 {
 	KStatusBar *sb = statusBar();
@@ -365,9 +380,9 @@ void KisView::setupStatusBar()
 		connect(this, SIGNAL(cursorEnter()), lbl, SLOT(enter()));
 		connect(this, SIGNAL(cursorLeave()), lbl, SLOT(leave()));
 		addStatusBarItem(lbl, 0);
-		lbl = new QLabel(sb);
-		lbl -> setText("Zoom 1:1"); // TODO
-		addStatusBarItem(lbl, 1);
+		m_statusBarZoomLabel = new QLabel(sb);
+		addStatusBarItem(m_statusBarZoomLabel, 1);
+                updateStatusBarZoomLabel ();
 		m_buildProgress = new KisLabelBuilderProgress(this);
 		m_buildProgress -> setMaximumWidth(225);
 		m_buildProgress -> setMaximumHeight(sb -> height());
@@ -496,7 +511,7 @@ void KisView::resizeEvent(QResizeEvent *)
 		KisGuideMgr *mgr = img -> guides();
 		mgr -> resize(size());
 	}
-        
+
 	m_hRuler -> setGeometry(ruler + lsideW, 0, width() - ruler - rsideW - lsideW, ruler);
 	m_vRuler -> setGeometry(0 + lsideW, ruler, ruler, height() - (ruler + tbarBtnH));
 
@@ -719,7 +734,7 @@ void KisView::tool_properties()
 {
 	if (m_tool) {
 		KDialog * optionsDialog = m_tool -> options(this);
-		if (optionsDialog) 
+		if (optionsDialog)
 			optionsDialog -> show();
 	}
 }
@@ -1030,6 +1045,9 @@ void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 
 	Q_ASSERT(m_zoomIn);
 	Q_ASSERT(m_zoomOut);
+
+        updateStatusBarZoomLabel ();
+
 	m_zoomIn -> setEnabled(zf <= KISVIEW_MAX_ZOOM);
 	m_zoomOut -> setEnabled(zf >= KISVIEW_MIN_ZOOM);
 
@@ -1037,7 +1055,7 @@ void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 
 	m_hRuler -> setZoom(zf);
 	m_vRuler -> setZoom(zf);
-	
+
 	if (m_hScroll -> isVisible()) {
 		Q_INT32 vcx = m_canvas -> width() / 2;
 		Q_INT32 scrollX = qRound(x * zoom() - vcx);
@@ -1761,8 +1779,8 @@ void KisView::slotSetFGColor(const KoColor& c)
 	setFGColor(c);
 }
 
-void KisView::slotSetBGColor(const KoColor& c)                        
-{                        
+void KisView::slotSetBGColor(const KoColor& c)
+{
 	setBGColor(c);
 }
 
@@ -2034,9 +2052,9 @@ void KisView::layerProperties()
 		KisLayerSP layer = img -> activeLayer();
 
 		if (layer) {
-			KisPaintPropertyDlg dlg(layer -> name(), 
-						QPoint(layer -> x(), 
-						       layer -> y()), 
+			KisPaintPropertyDlg dlg(layer -> name(),
+						QPoint(layer -> x(),
+						       layer -> y()),
 						layer -> opacity(),
 						layer -> compositeOp());
 
@@ -2046,15 +2064,15 @@ void KisView::layerProperties()
 				bool changed = layer -> name() != dlg.getName()
 					|| layer -> opacity() != dlg.getOpacity()
 					|| layer -> compositeOp() != dlg.getCompositeOp()
-					|| pt.x() != layer -> x() 
+					|| pt.x() != layer -> x()
 					|| pt.y() != layer -> y();
-					
+
 
 				if (changed)
 					m_adapter -> beginMacro(i18n("Property changes"));
 
-				if (layer -> name() != dlg.getName() 
-				    || layer -> opacity() != dlg.getOpacity() 
+				if (layer -> name() != dlg.getName()
+				    || layer -> opacity() != dlg.getOpacity()
 				    || layer -> compositeOp() != dlg.getCompositeOp())
 					m_doc -> setLayerProperties(img, layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
 
@@ -2086,7 +2104,7 @@ void KisView::layerAdd()
 
 		if (dlg.result() == QDialog::Accepted) {
 			KisLayerSP layer = m_doc -> layerAdd(img,
-                                                             dlg.layerWidth(), 
+                                                             dlg.layerWidth(),
 							     dlg.layerHeight(),
 							     dlg.layerName(),
 							     dlg.compositeOp(),

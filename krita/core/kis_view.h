@@ -3,7 +3,8 @@
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
- *      
+ *                2004 Clarence Dang <dang@kde.org>
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -32,6 +33,7 @@
 #include "kis_types.h"
 
 class QButton;
+class QLabel;
 class QPaintEvent;
 class QScrollBar;
 class QWidget;
@@ -65,8 +67,8 @@ class KisUndoAdapter;
 class KisRect;
 class KisPoint;
 
-class KisView : public KoView, 
-		private KisCanvasSubject, 
+class KisView : public KoView,
+		private KisCanvasSubject,
 		private KisCanvasControllerInterface,
 		private KisToolControllerInterface {
 	Q_OBJECT
@@ -89,14 +91,14 @@ public:
 	virtual void updateReadWrite(bool readwrite);
 	virtual void guiActivateEvent(KParts::GUIActivateEvent *event);
 
-public:  
+public:
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, bool modal = false, const QString& filename = QString::null);
 
 signals:
 	void bgColorChanged(const KoColor& c);
-	void fgColorChanged(const KoColor& c);     
+	void fgColorChanged(const KoColor& c);
 	void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
 	void cursorEnter();
 	void cursorLeave();
@@ -105,7 +107,7 @@ public slots:
 	void dialog_gradient();
 	void slotSetFGColor(const KoColor& c);
 	void slotSetBGColor(const KoColor& c);
-             
+
 	void next_layer();
 	void previous_layer();
 
@@ -199,6 +201,7 @@ private:
 	void setupScrollBars();
 	void setupDockers();
 	void setupTabBar();
+        void updateStatusBarZoomLabel();
 	void setupStatusBar();
 	void setupTools();
 	void zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf);
@@ -294,9 +297,9 @@ private:
 
         // Fringe benefits
 	KoTabBar *m_tabBar;
-	QButton *m_tabFirst; 
-	QButton *m_tabLeft; 
-	QButton *m_tabRight; 
+	QButton *m_tabFirst;
+	QButton *m_tabLeft;
+	QButton *m_tabRight;
 	QButton *m_tabLast;
 
 	KisRuler *m_hRuler;
@@ -346,20 +349,20 @@ private:
         // Widgets
 	QScrollBar *m_hScroll; // XXX: the sizing of the scrollthumbs
 	QScrollBar *m_vScroll; // is not right yet.
-        
+
         //Dockers
 	DockFrameDocker *m_layerchanneldocker;
 	DockFrameDocker *m_resourcedocker;
 	DockFrameDocker *m_toolcontroldocker;
 	ColorDocker *m_colordocker;
 
-	QWidget *m_paletteChooser;    
+	QWidget *m_paletteChooser;
 	QWidget *m_gradientChooser;
 	QWidget *m_imageChooser;
 
 	ControlFrame *m_controlWidget;
 	KisChannelView *m_channelView;
-	QWidget *m_pathView;    
+	QWidget *m_pathView;
 	KisBuilderMonitor *m_imgBuilderMgr;
 	KisLabelBuilderProgress *m_buildProgress;
 	KisResourceMediator *m_brushMediator;
@@ -380,6 +383,8 @@ private:
 	QPoint m_lastGuidePoint;
 	KisUndoAdapter *m_adapter;
 	vKisCanvasObserver m_observers;
+
+        QLabel *m_statusBarZoomLabel;
 
 private:
 	mutable KisImageSP m_current;

@@ -191,7 +191,6 @@ void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
 					adapter -> addCommand(cmd);
 			}
 
-			dev -> anchor();
 		}
 	}
 }

@@ -25,6 +25,7 @@
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
 
+// XXX: Moving is not nearly smooth enough!
 class KisToolMove : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;

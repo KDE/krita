@@ -23,7 +23,6 @@
 
 #include "kis_image.h"
 #include "kis_selection.h"
-#include "kis_floatingselection.h"
 
 class KAction;
 class KisView;

@@ -68,7 +68,6 @@
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
 #include "kis_mask.h"
-#include "kis_floatingselection.h"
 #include "kis_command.h"
 #include "kis_view.h"
 #include "builder/kis_builder_subject.h"
@@ -1129,7 +1128,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect)
 	Q_INT32 x2;
 	Q_INT32 y2;
 	Q_INT32 tileno;
-	KisFloatingSelectionSP floatingSelection;
+
 
 	// Only happens if there's actually only one image. As soon as
 	// a second image is created, or selected, m_currentImage is
@@ -1162,41 +1161,6 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect)
 					painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
 				}
 			}
-		}
-
-// 		// Render the current image's projection onto a QPainter, a block at a time.
-// 		for (y = y1; y < y2; y += RENDER_HEIGHT) {
-// 			for (x = x1; x < x2; x += RENDER_WIDTH) {
-// 				Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
-// 				Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
-
-// 				QImage img = m_currentImage -> projection() -> convertToImage(x, y, w, h);
-
-// 				if (!img.isNull()) {
-// 					m_pixio.putImage(&m_pixmap, 0, 0, &img);
-// 					painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
-// 				}
-// 			}
-// 		}
-
-
-
-
-		// Draw rectangular floating selections.
-		if ((floatingSelection = m_currentImage -> floatingSelection())) {
-			QPen pen(Qt::DotLine);
-			QRect rc = floatingSelection -> bounds();
-			QRect clip = floatingSelection -> clip();
-
-			if (!clip.isEmpty()) {
-				rc.setX(rc.x() + clip.x());
-				rc.setY(rc.y() + clip.y());
-				rc.setWidth(clip.width());
-				rc.setHeight(clip.height());
-			}
-
-			painter.setPen(pen);
-			painter.drawRect(rc);
 		}
 	}
 }
@@ -1383,33 +1347,6 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img,
 }
 
 
-KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisFloatingSelectionSP floatingSelection)
-{
-	KisLayerSP layer;
-
-	if (contains(img) && floatingSelection) {
-		layer = new KisLayer(floatingSelection -> tiles(), img, name, OPACITY_OPAQUE);
-
-		if (floatingSelection -> mask())
-			layer -> addMask(floatingSelection -> mask());
-
-		if (!img -> add(layer, -1))
-			return 0;
-
-		img -> top(layer);
-		setModified(true);
-
-		if (m_undo)
-			addCommand(new LayerAddCmd(this, this, img, layer));
-
-		layer -> move(floatingSelection -> x(), floatingSelection -> y());
-		layer -> setVisible(true);
-		emit layersUpdated(img);
-	}
-
-	return layer;
-}
-
 KisLayerSP KisDoc::layerAdd(KisImageSP img, KisLayerSP l, Q_INT32 position)
 {
 	if (!contains(img) || !l)
@@ -1586,12 +1523,12 @@ void KisDoc::setLayerProperties(KisImageSP img,
 	}
 }
 
-void KisDoc::setClipboardFloatingSelection(KisFloatingSelectionSP floatingSelection)
+void KisDoc::setClipboard(KisPaintDeviceSP selection)
 {
-	m_clipboardFloatingSelection = floatingSelection;
+	m_clipboard = selection;
 
-	if (floatingSelection) {
-		QImage qimg = floatingSelection -> convertToImage();
+	if (selection) {
+		QImage qimg = selection -> convertToImage();
 		QClipboard *cb = QApplication::clipboard();
 
 		cb -> setImage(qimg);
@@ -1599,9 +1536,9 @@ void KisDoc::setClipboardFloatingSelection(KisFloatingSelectionSP floatingSelect
 	}
 }
 
-KisFloatingSelectionSP KisDoc::clipboardFloatingSelection()
+KisPaintDeviceSP KisDoc::clipboard()
 {
-	return m_clipboardFloatingSelection;
+	return m_clipboard;
 }
 
 void KisDoc::clipboardDataChanged()
@@ -1611,12 +1548,12 @@ void KisDoc::clipboardDataChanged()
 		QImage qimg = cb -> image();
 
 		if (!qimg.isNull()) {
-			m_clipboardFloatingSelection =
-				new KisFloatingSelection(qimg.width(), qimg.height(),
-							 KisColorSpaceRegistry::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
-							 "KisDoc created clipboard floating selection");
+			m_clipboard =
+				new KisPaintDevice(qimg.width(), qimg.height(),
+						   KisColorSpaceRegistry::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
+						   "KisDoc created clipboard selection");
 
-			m_clipboardFloatingSelection -> convertFromImage(qimg);
+			m_clipboard -> convertFromImage(qimg);
 		}
 	}
 

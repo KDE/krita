@@ -59,10 +59,15 @@ public:
 	virtual bool saveOasis( KoStore*, KoXmlWriter* );
 	virtual bool loadXML(QIODevice *, const QDomDocument& doc);
 	virtual QCString mimeType() const;
+
 	// XXX: Use of transparent, zoomX and zoomY is not supported
 	// by Krita because we appear to be doing our zooming
 	// elsewhere. This may affect KOffice compatibility.
-	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY) {paintContent(painter, rect);}
+	virtual void paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/) 
+	{
+	  paintContent(painter, rect);
+	}
+	
 	virtual void paintContent(QPainter& painter, const QRect& rect);
 	virtual QDomDocument saveXML();
 
@@ -85,8 +90,6 @@ public:
 			    QPoint pos,
 			    KisStrategyColorSpaceSP colorstrategy);
 
-	// Add a new layer to the image with the data from the floating selection
-	KisLayerSP layerAdd(KisImageSP img, const QString& name, KisFloatingSelectionSP floatingSelection);
 	KisLayerSP layerAdd(KisImageSP img, KisLayerSP layer, Q_INT32 position);
 	void layerRemove(KisImageSP img, KisLayerSP layer);
 	void layerRaise(KisImageSP img, KisLayerSP layer);
@@ -131,8 +134,17 @@ public:
 	QString nextImageName() const;
 	void setCurrentImage(KisImageSP img);
 
-	void setClipboardFloatingSelection(KisFloatingSelectionSP floatingSelection);
-	KisFloatingSelectionSP clipboardFloatingSelection();
+	/**
+	 * Sets the clipboard to the contents of the specified paint device; also
+	 * set the system clipboard to a QImage representation of the specified 
+	 * paint device.
+	 */
+	void setClipboard(KisPaintDeviceSP layer);
+	
+	/**
+	 * Get the contents of the clipboard in the form of a paint device.
+	 */
+	KisPaintDeviceSP clipboard();
 
 	bool importImage(const QString& filename);
 
@@ -178,7 +190,9 @@ private:
 	KoCommandHistory *m_cmdHistory;
 	vKisImageSP m_images;
 	KisImageSP m_currentImage;
-	KisFloatingSelectionSP m_clipboardFloatingSelection;
+
+	KisPaintDeviceSP m_clipboard;
+
 	bool m_pushedClipboard;
 	DCOPObject *m_dcop;
 	KisNameServer *m_nserver;

@@ -90,7 +90,6 @@
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
 #include "kis_ruler.h"
-#include "kis_floatingselection.h"
 #include "kis_selection.h"
 #include "kis_controlframe.h"
 #include "kis_tool.h"
@@ -268,8 +267,6 @@ DCOPObject* KisView::dcopObject()
 void KisView::setupDockers()
 {
 	m_toolDockManager = new KoToolDockManager(this);
-	Q_INT32 w = 0;
-	Q_INT32 h = 0;
 
 	KisResourceServer *rserver = KisFactory::rServer();
 	// ---------------------------------------------------------------------

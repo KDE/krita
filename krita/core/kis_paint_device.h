@@ -81,13 +81,12 @@ public:
 			KisStrategyColorSpaceSP colorStrategy, 
 			const QString& name,
 			CompositeOp compositeOp);
-#if 0
 	/**
 	   The data() methods return a shared pointer to the tile manager.
 	*/
         virtual KisTileMgrSP data();
         virtual const KisTileMgrSP data() const;
-#endif
+
         virtual bool shouldDrawBorder() const;
 
         virtual void move(Q_INT32 x, Q_INT32 y);
@@ -98,12 +97,6 @@ public:
 
 	virtual const bool visible() const;
         virtual void setVisible(bool v);
-
-        /**
-         * Reimplemented by KisFloatingSelection; here it does nothing useful, but it
-         * cannot be abstract, because otherwise this class would be abstract.
-         */
-        virtual void anchor();
 
         bool contains(Q_INT32 x, Q_INT32 y) const;
         bool contains(const QPoint& pt) const;
@@ -152,7 +145,7 @@ public:
 	KisStrategyColorSpaceSP colorStrategy() const;
 
 	CompositeOp compositeOp() { return m_compositeOp; }
-	void setCompositeOp(CompositeOp compositeOp) { m_compositeOp = compositeOp;}
+	void setCompositeOp(CompositeOp compositeOp) { m_compositeOp = compositeOp; }
 
         KisTileMgrSP shadow();
         const KisTileMgrSP shadow() const;
@@ -317,7 +310,7 @@ inline KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
 {
         return m_colorStrategy;
 }
-#if 0
+
 inline KisTileMgrSP KisPaintDevice::data()
 {
 	return m_tiles;
@@ -327,7 +320,7 @@ inline const KisTileMgrSP KisPaintDevice::data() const
 {
         return m_tiles;
 }
-#endif
+
 inline KisTileMgrSP KisPaintDevice::shadow()
 {
         return m_shadow;

@@ -31,7 +31,6 @@ kritadefaulttools_la_SOURCES = \
 	kis_tool_eraser.cc \
 	kis_tool_line.cc \
 	kis_tool_airbrush.cc \
-        kis_tool_paste.cc \
         kis_tool_select_freehand.cc \
         kis_tool_select_polygonal.cc \
         kis_tool_select_elliptical.cc \
@@ -82,7 +81,6 @@ noinst_HEADERS = \
 	kis_tool_pan.h \
 	kis_tool_select_elliptical.h \
 	kis_tool_eraser.h \
-	kis_tool_paste.h \
 	kis_tool_select_eraser.h
 
 

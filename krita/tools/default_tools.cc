@@ -64,7 +64,6 @@
 #include "kis_tool_pan.h"
 #include "kis_tool_select_elliptical.h"
 #include "kis_tool_eraser.h"
-#include "kis_tool_paste.h"
 #include "kis_tool_select_eraser.h"
 
 
@@ -113,7 +112,6 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
 		r -> add(new KisToolPanFactory(actionCollection()));
 		r -> add(new KisToolSelectEllipticalFactory(actionCollection()));
 		r -> add(new KisToolEraserFactory(actionCollection()));
-		r -> add(new KisToolPasteFactory(actionCollection()));
 		r -> add(new KisToolSelectEraserFactory(actionCollection()));
  	}
 	

@@ -105,7 +105,7 @@ public:
 	vKisChannelSP channels();
 	const vKisChannelSP& channels() const;
 
-	// Get the active painting device (layer, floating selection, mask)
+	// Get the active painting device
 	KisPaintDeviceSP activeDevice();
 
 	KisLayerSP activeLayer();
@@ -148,10 +148,6 @@ public:
 	bool pos(KisChannelSP channel, Q_INT32 position);
 	Q_INT32 nchannels() const;
 
-	void setFloatingSelection(KisFloatingSelectionSP floatingSelection);
-	void unsetFloatingSelection(bool commit = true);
-	KisFloatingSelectionSP floatingSelection() const;
-
 	QRect bounds() const;
 
 	void notify();
@@ -169,7 +165,7 @@ signals:
 	void alphaChanged(KisImageSP image);
 	void activeSelectionChanged(KisImageSP image);
 	void selectionCreated(KisImageSP image);
-	void floatingSelectionChanged(KisImageSP image);
+	void selectionChanged(KisImageSP image);
 	void update(KisImageSP image, const QRect& rc);
 	void layersChanged(KisImageSP image);
 	void sizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
@@ -215,8 +211,7 @@ private:
 	vKisLayerSP m_layerStack;
 	KisLayerSP m_activeLayer;
 	KisChannelSP m_activeChannel;
-	KisFloatingSelectionSP m_floatingSelection;
-	KisChannelSP m_floatingSelectionMask;
+
 	QBitArray m_visible;
 	QBitArray m_active;
 	bool m_alpha;

@@ -32,7 +32,6 @@
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
-#include "kis_floatingselection.h"
 #include "kis_tool_select_polygonal.h"
 #include "kis_vec.h"
 #include "kis_undo_adapter.h"
@@ -45,7 +44,7 @@ namespace {
 		typedef KNamedCommand super;
 
 	public:
-		PolygonSelectCmd(KisFloatingSelectionSP selection);
+		PolygonSelectCmd();
 		virtual ~PolygonSelectCmd();
 
 	public:
@@ -53,14 +52,11 @@ namespace {
 		virtual void unexecute();
 
 	private:
-		KisFloatingSelectionSP m_selection;
 		KisImageSP m_owner;
 	};
 
-	PolygonSelectCmd::PolygonSelectCmd(KisFloatingSelectionSP selection) : super(i18n("Elliptical Selection"))
+	PolygonSelectCmd::PolygonSelectCmd() : super(i18n("Elliptical Selection"))
 	{
-		m_selection = selection;
-		m_owner = selection -> image();
 	}
 
 	PolygonSelectCmd::~PolygonSelectCmd()
@@ -69,14 +65,10 @@ namespace {
 
 	void PolygonSelectCmd::execute()
 	{
-		m_selection -> clearParentOnMove(true);
-		m_owner -> setFloatingSelection(m_selection);
-		m_owner -> notify(m_selection -> bounds());
 	}
 
 	void PolygonSelectCmd::unexecute()
 	{
-		m_owner -> unsetFloatingSelection(false);
 	}
 }
 
@@ -283,10 +275,10 @@ void KisToolSelectPolygonal::clearSelection()
 
 		Q_ASSERT(controller);
 
-		if (img && img -> floatingSelection().data() != 0) {
-			img -> unsetFloatingSelection();
-                        controller -> canvas() -> update();
-		}
+// 		if (img && img -> floatingSelection().data() != 0) {
+// 			img -> unsetFloatingSelection();
+//                         controller -> canvas() -> update();
+// 		}
 
 // 		m_startPos = QPoint(0, 0);
 // 		m_endPos = QPoint(0, 0);

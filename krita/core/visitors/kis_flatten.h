@@ -28,7 +28,6 @@
 #include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
-#include "kis_floatingselection.h"
 
 struct flattenAll {
 	const bool operator()(const KisPaintDeviceSP) const
@@ -108,12 +107,6 @@ public:
 
 		visit(gc, selection.data(), OPACITY);
 		return true; 
-	}
-
-	virtual bool visit(KisPainter& gc, KisFloatingSelectionSP selection)
-	{
-		visit(gc, selection.data(), selection -> opacity());
-		return true;
 	}
 
 private:

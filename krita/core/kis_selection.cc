@@ -33,7 +33,7 @@
 #include "kis_iterators_pixel.h"
 
 
-KisSelection::KisSelection(KisLayerSP layer, const QString& name) 
+KisSelection::KisSelection(KisLayerSP layer, const QString& name)
  	: super(layer -> width(),
 		layer -> height(),
 #if USE_ALPHA_MAP
@@ -54,8 +54,8 @@ KisSelection::KisSelection(KisLayerSP layer, const QString& name)
 // 	kdDebug() << "Selection created with compositeOp " << compositeOp() << "\n";
 }
 
-KisSelection::KisSelection(KisLayerSP layer, const QString& name, KoColor color) 
- 	: super(layer -> width(),
+KisSelection::KisSelection(KisLayerSP layer, const QString& name, KoColor color)
+	: super(layer -> width(),
 		layer -> height(),
 		layer -> colorStrategy(),
 		name)
@@ -65,7 +65,7 @@ KisSelection::KisSelection(KisLayerSP layer, const QString& name, KoColor color)
 }
 
 
-KisSelection::~KisSelection() 
+KisSelection::~KisSelection()
 {
 }
 
@@ -86,7 +86,7 @@ void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
 	setPixel(x, y, m_maskColor, s);
 }
 
-QImage KisSelection::maskImage() const 
+QImage KisSelection::maskImage() const
 {
 	return QImage();
 }
@@ -98,7 +98,7 @@ void KisSelection::select(QRect r)
 	m_selectedRect |= r;
 }
 
-void KisSelection::clear(QRect r) 
+void KisSelection::clear(QRect r)
 {
 	KisFillPainter painter(this);
 	painter.fillRect(r, m_maskColor, MIN_SELECTED);
@@ -136,8 +136,8 @@ void KisSelection::setMaskColor(KoColor c)
 	m_maskColor = c;
 }
 
-QRect KisSelection::selectedRect() 
-{ 
+QRect KisSelection::selectedRect()
+{
 	if (!m_selectedRect.isNull()) {
 		return m_selectedRect;
 	}

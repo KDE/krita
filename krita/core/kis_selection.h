@@ -27,7 +27,7 @@
 
 class KoColor;
 
-// Note: this is intentionally not namespaced, because it's meant for all of Krita 
+// Note: this is intentionally not namespaced, because it's meant for all of Krita
 // that wants to determine selectedness.
 #if (QUANTUM_DEPTH == 8)
 // XXX: swap when special color strategy for selections is done?
@@ -69,7 +69,7 @@ public:
 	void select(QRect r);
 
 	void invert(QRect r);
-	
+
 	void clear(QRect r);
 
 	// Keep the selection but set the mask to color c
@@ -79,7 +79,7 @@ public:
 
 	/**
 	 * Set the area that encloses all selected pixels. This
-	 * will over the lifetime of the selection grow, and 
+	 * will over the lifetime of the selection grow, and
 	 * only shrink when the entire selected rect is cleared.
 	 */
 	void setSelectedRect(QRect r) { m_selectedRect |= r; }
@@ -87,7 +87,9 @@ public:
 
 private:
 	KisLayerSP m_parentLayer;
-	//KisColorSpaceAlphaSP m_alpha;
+#ifdef USE_ALPHA_MAP
+	KisColorSpaceAlphaSP m_alpha;
+#endif
 	KoColor m_maskColor;
 	QRect m_selectedRect;
 };

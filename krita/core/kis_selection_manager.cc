@@ -31,12 +31,13 @@
 #include "kis_doc.h"
 #include "kis_image.h"
 #include "kis_selection.h"
-#include "kis_floatingselection.h"
 #include "kis_selection_manager.h"
 #include "kis_painter.h"
 #include "kis_iterators_quantum.h"
 #include "kis_iterators_pixel.h"
-
+#include "kis_layer.h"
+#include "kis_paint_device.h"
+#include "kistilemgr.h"
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	: m_parent(parent),
@@ -252,7 +253,7 @@ void KisSelectionManager::updateGUI()
 	m_save -> setEnabled(enable);
 
 	m_parent -> updateStatusBarSelectionLabel();
-	
+
 	KAction a;
 	for (Q_UINT32 i = 0; i < m_pluginActions.count(); ++i) {
 	}
@@ -293,21 +294,59 @@ void KisSelectionManager::copy()
 // 		  << r.width() << ", "
 // 		  << r.height() << "\n";
 
-	KisFloatingSelectionSP floatingSelection = new KisFloatingSelection(img -> activeDevice(), img, "copy", OPACITY_OPAQUE);
-	floatingSelection -> copySelection(selection);
+	KisPaintDeviceSP s = new KisPaintDevice(r.width(), r.height(), 
+						img -> activeDevice() -> colorStrategy(), 
+						"Copy from " + img -> activeDevice() -> name() );
+	s -> setCompositeOp(COMPOSITE_OVER);
 
-	floatingSelection -> clearParentOnMove(false);
-	m_doc -> setClipboardFloatingSelection(floatingSelection);
-	img -> setFloatingSelection(floatingSelection);
-	imgSelectionChanged(m_parent -> currentImg());
+
+	// TODO if the source is linked... copy from all linked layers?!?
+
+	KisPainter gc;
+	gc.begin(s);
+	// Copy image data
+	gc.bitBlt(0, 0, COMPOSITE_COPY, layer.data(), r.x() - layer -> x(), r.y() - layer -> y(), r.width(), r.height());
+	// Apply selection mask.
+	selection -> invert(QRect(r.x() - layer -> x(), r.y() - layer -> y(), r.width(), r.height()));
+	gc.bitBlt(0, 0, COMPOSITE_COPY_OPACITY, selection.data(), r.x() - layer -> x(), r.y() - layer -> y(), r.width(), r.height());
+	selection -> invert(QRect(r.x() - layer -> x(), r.y() - layer -> y(), r.width(), r.height()));
+	gc.end();
+
+//      kdDebug() << "Selection copied: "
+//                << r.x() << ", "
+//                << r.y() << ", "
+//                << r.width() << ", "
+//                << r.height() << "\n";
+
+
+ 	m_doc -> setClipboard(s);
+ 	imgSelectionChanged(m_parent -> currentImg());
 
 }
 
 
 void KisSelectionManager::paste()
 {
-// 	Q_ASSERT(!QApplication::clipboard() -> image().isNull());
-// 	activateTool(m_paste);
+        KisImageSP img = m_parent -> currentImg();
+        if (!img) return;
+
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
+
+	KisPaintDeviceSP clip = m_doc -> clipboard();
+
+	if (clip) {
+		KisLayerSP layer = new KisLayer(img, clip -> width(), clip -> height(), clip -> name(), OPACITY_OPAQUE);
+		
+		KisPainter gc;
+		gc.begin(layer.data());
+		gc.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), clip -> x(), clip -> y(), clip -> width(), clip -> height());
+		gc.end();
+
+		m_doc -> layerAdd(img, layer, img -> index(layer));
+		layer -> move(0,0);
+		img -> notify();
+	}
 }
 
 
@@ -445,16 +484,16 @@ void KisSelectionManager::copySelectionToNewLayer()
 
 	copy();
 
-	KisFloatingSelectionSP s = img -> floatingSelection();
+// 	KisFloatingSelectionSP s = img -> floatingSelection();
 
-	img -> unsetFloatingSelection(false);
+// 	img -> unsetFloatingSelection(false);
 
-	if (s && m_doc -> layerAdd(img, img -> nextLayerName(), s))
-		m_parent -> layersUpdated();
-	else
-		img -> setFloatingSelection(s);
+// 	if (s && m_doc -> layerAdd(img, img -> nextLayerName(), s))
+// 		m_parent -> layersUpdated();
+// 	else
+// 		img -> setFloatingSelection(s);
 
-	layer -> removeSelection();
+// 	layer -> removeSelection();
 
 }
 

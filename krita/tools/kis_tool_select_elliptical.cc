@@ -31,7 +31,6 @@
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
-#include "kis_floatingselection.h"
 #include "kis_tool_select_elliptical.h"
 #include "kis_undo_adapter.h"
 #include "kis_button_press_event.h"
@@ -43,7 +42,7 @@ namespace {
 		typedef KNamedCommand super;
 
 	public:
-		EllipseSelectCmd(KisFloatingSelectionSP selection);
+		EllipseSelectCmd();
 		virtual ~EllipseSelectCmd();
 
 	public:
@@ -51,14 +50,11 @@ namespace {
 		virtual void unexecute();
 
 	private:
-		KisFloatingSelectionSP m_selection;
 		KisImageSP m_owner;
 	};
 
-	EllipseSelectCmd::EllipseSelectCmd(KisFloatingSelectionSP selection) : super(i18n("Elliptical Selection"))
+	EllipseSelectCmd::EllipseSelectCmd() : super(i18n("Elliptical Selection"))
 	{
-		m_selection = selection;
-		m_owner = selection -> image();
 	}
 
 	EllipseSelectCmd::~EllipseSelectCmd()
@@ -67,14 +63,10 @@ namespace {
 
 	void EllipseSelectCmd::execute()
 	{
-		m_selection -> clearParentOnMove(true);
-		m_owner -> setFloatingSelection(m_selection);
-		m_owner -> notify(m_selection -> bounds());
 	}
 
 	void EllipseSelectCmd::unexecute()
 	{
-		m_owner -> unsetFloatingSelection(false);
 	}
 }
 
@@ -119,10 +111,10 @@ void KisToolSelectElliptical::clearSelection()
 
 		Q_ASSERT(controller);
 
-		if (img && img -> floatingSelection().data() != 0) {
-			img -> unsetFloatingSelection();
-                        controller -> canvas() -> update();
-		}
+// 		if (img && img -> floatingSelection().data() != 0) {
+// 			img -> unsetFloatingSelection();
+//                         controller -> canvas() -> update();
+// 		}
 
 		m_startPos = QPoint(0, 0);
 		m_endPos = QPoint(0, 0);

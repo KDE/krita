@@ -34,19 +34,19 @@
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
-#include "kis_floatingselection.h"
 #include "kis_tool_select_rectangular.h"
 #include "kis_undo_adapter.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_selection.h"
 
 namespace {
 	class RectSelectCmd : public KNamedCommand {
 		typedef KNamedCommand super;
 
 	public:
-		RectSelectCmd(KisFloatingSelectionSP selection);
+		RectSelectCmd();
 		virtual ~RectSelectCmd();
 
 	public:
@@ -54,14 +54,11 @@ namespace {
 		virtual void unexecute();
 
 	private:
-		KisFloatingSelectionSP m_selection;
 		KisImageSP m_owner;
 	};
 
-	RectSelectCmd::RectSelectCmd(KisFloatingSelectionSP selection) : super(i18n("Rectangular Selection"))
+	RectSelectCmd::RectSelectCmd() : super(i18n("Rectangular Selection"))
 	{
-		m_selection = selection;
-		m_owner = selection -> image();
 	}
 
 	RectSelectCmd::~RectSelectCmd()
@@ -70,14 +67,10 @@ namespace {
 
 	void RectSelectCmd::execute()
 	{
-		m_selection -> clearParentOnMove(true);
-		m_owner -> setFloatingSelection(m_selection);
-		m_owner -> notify(m_selection -> bounds());
 	}
 
 	void RectSelectCmd::unexecute()
 	{
-		m_owner -> unsetFloatingSelection(false);
 	}
 }
 
@@ -121,10 +114,10 @@ void KisToolSelectRectangular::clearSelection()
 
 		Q_ASSERT(controller);
 
-		if (img && img -> floatingSelection().data() != 0) {
-			img -> unsetFloatingSelection();
-                        controller -> canvas() -> update();
-		}
+// 		if (img && img -> floatingSelection().data() != 0) {
+// 			img -> unsetFloatingSelection();
+//                         controller -> canvas() -> update();
+// 		}
 
 		m_startPos = QPoint(0, 0);
 		m_endPos = QPoint(0, 0);

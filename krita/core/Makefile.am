@@ -45,7 +45,6 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_gradient_painter.cc \
 	kis_convolution_painter.cc \
 	kis_cursor.cc \
-	kis_floatingselection.cc \
 	kis_selection.cc \
 	kis_command.cc \
 	kis_background.cc \
@@ -87,7 +86,6 @@ noinst_HEADERS = kis_paint_device.h \
 	kis_nameserver.h \
 	kis_painter.h \
 	kis_cursor.h \
-	kis_floatingselection.h \
 	kis_selection.h \
 	kis_command.h \
 	kis_background.h \

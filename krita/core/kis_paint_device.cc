@@ -504,9 +504,6 @@ void KisPaintDevice::expand(const QSize& size)
         expand(size.width(), size.height());
 }
 
-void KisPaintDevice::anchor()
-{
-}
 
 void KisPaintDevice::offsetBy(Q_INT32 x, Q_INT32 y)
 {

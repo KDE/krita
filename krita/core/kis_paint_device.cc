@@ -658,6 +658,10 @@ double KisPaintDevice::Mitchell_filter(double t)
         return(0.0);
 }
 
+void KisPaintDevice::rotate(double angle) 
+{
+        kdDebug() << "Rotating Code called! Going to rotate image by (angle): " << angle << "\n";
+}
 
 // XXX: also allow transform on part of paint device?
 void KisPaintDevice::transform(const QWMatrix & matrix)

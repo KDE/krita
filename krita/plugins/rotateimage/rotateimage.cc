@@ -93,7 +93,7 @@ void RotateImage::slotRotateImage()
 	
         if (dlgRotateImage -> exec() == QDialog::Accepted) {
 		Q_INT32 angle = dlgRotateImage -> angle();	
-               // m_view -> rotateCurrentImage(angle);
+                m_view -> rotateCurrentImage(angle);
 	}
         delete dlgRotateImage;
 }
@@ -109,7 +109,7 @@ void RotateImage::slotRotateLayer()
 	
 	if (dlgRotateImage -> exec() == QDialog::Accepted) {
                 Q_INT32 angle = dlgRotateImage -> angle();
-                //m_view -> rotateLayer(angle);
+                m_view -> rotateLayer(angle);
 
 	}
 	delete dlgRotateImage;

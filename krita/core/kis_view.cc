@@ -1513,6 +1513,23 @@ void KisView::scaleLayer(double sx, double sy)
 	canvasRefresh();
 }
 
+void KisView::rotateLayer(double angle)
+{
+	kdDebug() << "RotateLayer called: " << angle << "\n";
+        if (!currentImg()) return;
+
+	KisLayerSP layer = currentImg() -> activeLayer();
+	if (!layer) return;
+
+	layer -> rotate(angle);
+
+	m_doc -> setModified(true);
+	layersUpdated();
+	resizeEvent(0);
+	updateCanvas();
+	canvasRefresh();
+}
+
 void KisView::add_new_image_tab()
 {
         m_doc -> slotNewImage();
@@ -2588,6 +2605,18 @@ void KisView::scaleCurrentImage(double sx, double sy)
 	canvasRefresh();
 }
 
+void KisView::rotateCurrentImage(double angle)
+{
+	if (!currentImg()) return;
+	//kdDebug() << "Going to rotate image by (angle): " << angle << "\n";
+	currentImg() -> rotate(angle);
+	m_doc -> setModified(true);
+
+	resizeEvent(0);
+ 	layersUpdated();
+	updateCanvas();
+	canvasRefresh();
+}
 
 
 QPoint KisView::viewToWindow(const QPoint& pt)

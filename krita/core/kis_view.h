@@ -155,7 +155,8 @@ public slots:
 	void remove_current_image_tab();
 	void resizeCurrentImage(Q_INT32 w, Q_INT32 h);
 	void scaleCurrentImage(double sx, double sy);
-
+        void rotateCurrentImage(double angle);
+        
 	// Layer action slots
 	void rotateLayer180();
 	void rotateLayerLeft90();
@@ -165,7 +166,8 @@ public slots:
 	void mirrorLayerY();
 	void resizeLayer(Q_INT32 w, Q_INT32 h);
 	void scaleLayer(double sx, double sy);
-
+        void rotateLayer(double angle);
+        
 	// settings action slots
 	void preferences();
 

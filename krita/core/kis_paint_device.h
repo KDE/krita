@@ -199,7 +199,7 @@ public:
         void resize(const QSize& size);
         void resize();
 	void scale(double sx, double sy);
-
+        void rotate(double angle);
 
 	/**
 	   Apply the transformation matrix _in place_.

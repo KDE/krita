@@ -424,6 +424,28 @@ void KisImage::scale(double sx, double sy)
 
 }
 
+void KisImage::rotate(double angle) 
+{
+	//kdDebug() << "KisImage::rotate. ANGLE: " 
+	//	  << angle
+	//	  << "\n";
+
+
+	if (m_layers.empty()) return; // Nothing to scale
+
+        //fix undo
+	undoAdapter()->beginMacro("Rotate image");
+	
+	vKisLayerSP_it it;
+	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
+		KisLayerSP layer = (*it);
+		layer -> rotate(angle);
+	}
+
+	undoAdapter()->endMacro();
+
+}
+
 void KisImage::convertTo( KisStrategyColorSpaceSP colorStrategy)
 {
 	if (m_layers.empty()) return; // Nothing to convert

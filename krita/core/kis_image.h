@@ -71,7 +71,8 @@ public:
 	void resize(const QRect& rc);
 
 	void scale(double sx, double sy);
-
+        void rotate(double angle);
+        
 	void convertTo(KisStrategyColorSpaceSP colorStrategy);
 
 	void enableUndo(KoCommandHistory *history);

@@ -22,6 +22,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qvaluevector.h>
+#include <kpixmapio.h>
 #include <ksharedptr.h>
 #include <kurl.h>
 #include <koColor.h>
@@ -199,6 +200,7 @@ private:
 	bool m_maskInverted;
 	KoColor m_maskClr;
 	KisNameServer *m_nserver;
+	KPixmapIO m_pixmapIO;
 };
 
 #endif // KIS_IMAGE_H_

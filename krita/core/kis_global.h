@@ -42,7 +42,7 @@
  * on the edge of an canvas are exempt from
  * this rule.
  */
-const int TILE_SIZE = 64;
+const int TILE_SIZE = 32;
 
 /**
  * Default width of a tile.

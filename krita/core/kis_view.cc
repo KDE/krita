@@ -97,12 +97,16 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_vRuler = 0;
 	m_zoomIn = 0;
 	m_zoomOut = 0;
+	m_layerAdd = 0;
 	m_layerRm = 0;
 	m_layerLink = 0;
 	m_layerHide = 0;
 	m_layerProperties = 0;
-	m_layerNext = 0;
-	m_layerPrev = 0;
+	m_layerSaveAs = 0;
+	m_layerRaise = 0;
+	m_layerLower = 0;
+	m_layerTop = 0;
+	m_layerBottom = 0;
 	m_selectionCut = 0;
 	m_selectionCopy = 0;
 	m_selectionPaste = 0;
@@ -306,7 +310,8 @@ void KisView::setupTabBar()
 void KisView::setupActions()
 {
 	// navigation actions
-	(void)new KAction(i18n("Refresh Canvas"), "reload", 0, this, SLOT(canvasRefresh()), actionCollection(), "refresh_canvas");
+	KStdAction::redisplay(this, SLOT(canvasRefresh()), actionCollection(), "refresh_canvas");
+//	(void)new KAction(i18n("Refresh Canvas"), "reload", 0, this, SLOT(canvasRefresh()), actionCollection(), "refresh_canvas");
 	(void)new KAction(i18n("Reset Button"), "stop", 0, this, SLOT(reset()), actionCollection(), "panic_button");
 
 	// selection actions
@@ -316,7 +321,7 @@ void KisView::setupActions()
 	m_selectionRm = new KAction(i18n("Remove Selection"), "remove", 0, this, SLOT(removeSelection()), actionCollection(), "remove");
 	m_selectionCrop = new KAction(i18n("Copy Selection to New Layer"), "crop", 0,  this, SLOT(crop()), actionCollection(), "crop");
 	m_selectionSelectAll = KStdAction::selectAll(this, SLOT(selectAll()), actionCollection(), "select_all");
-	m_selectionSelectNone = new KAction(i18n("Select None"), 0, this, SLOT(unSelectAll()), actionCollection(), "select_none");
+	m_selectionSelectNone = KStdAction::deselect(this, SLOT(unSelectAll()), actionCollection(), "select_none");
 	m_selectionFillFg = new KAction(i18n("Fill with Foreground Color"), 0, this, SLOT(fillSelectionFg()), actionCollection(), "fill_fgcolor");
 	m_selectionFillBg = new KAction(i18n("Fill with Background Color"), 0, this, SLOT(fillSelectionBg()), actionCollection(), "fill_bgcolor");
 
@@ -325,8 +330,8 @@ void KisView::setupActions()
 	m_imgExport = new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
 
 	// view actions
-	m_zoomIn = new KAction(i18n("Zoom &In"), "viewmag+", 0, this, SLOT(zoomIn()), actionCollection(), "zoom_in");
-	m_zoomOut = new KAction(i18n("Zoom &Out"), "viewmag-", 0, this, SLOT(zoomOut()), actionCollection(), "zoom_out");
+	m_zoomIn = KStdAction::zoomIn(this, SLOT(zoomIn()), actionCollection(), "zoom_in");
+	m_zoomOut = KStdAction::zoomOut(this, SLOT(zoomOut()), actionCollection(), "zoom_out");
 
 	// tool settings actions
 	(void)new KAction(i18n("&Gradient Dialog..."), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
@@ -335,15 +340,17 @@ void KisView::setupActions()
 	(void)new KAction(i18n("&Current Tool Properties..."), "configure", 0, this, SLOT(tool_properties()), actionCollection(), "current_tool_properties");
 
 	// layer actions
-	(void)new KAction(i18n("&Add Layer..."), 0, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
+	m_layerAdd = new KAction(i18n("&Add Layer..."), 0, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
 	m_layerRm = new KAction(i18n("&Remove Layer"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
 	m_layerLink = new KAction(i18n("&Link/Unlink Layer"), 0, this, SLOT(layerToggleLinked()), actionCollection(), "link_layer");
 	m_layerHide = new KAction(i18n("&Hide/Show Layer"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");
-	m_layerNext = new KAction(i18n("&Next Layer"), "forward", 0, this, SLOT(next_layer()), actionCollection(), "next_layer");
-	m_layerPrev = new KAction(i18n("&Previous Layer"), "back", 0, this, SLOT(previous_layer()), actionCollection(), "previous_layer");
+	m_layerRaise = new KAction(i18n("Raise Layer"), "raiselayer", 0, this, SLOT(layerRaise()), actionCollection(), "raiselayer");
+	m_layerLower = new KAction(i18n("Lower Layer"), "lowerlayer", 0, this, SLOT(layerLower()), actionCollection(), "lowerlayer");
+	m_layerTop = new KAction(i18n("Layer to Top"), 0, this, SLOT(layerFront()), actionCollection(), "toplayer");
+	m_layerBottom = new KAction(i18n("Layer to Bottom"), 0, this, SLOT(layerBack()), actionCollection(), "bottomlayer");
 	m_layerProperties = new KAction(i18n("Layer Properties..."), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
 	(void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
-	(void)new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(save_layer_as_image()), actionCollection(), "save_layer_as_image");
+	m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(save_layer_as_image()), actionCollection(), "save_layer_as_image");
 
 	// layer transformations - should be generic, for selection too
 	(void)new KAction(i18n("Scale Layer Smoothly"), 0, this, SLOT(layer_scale_smooth()), actionCollection(), "layer_scale_smooth");
@@ -374,7 +381,7 @@ void KisView::setupActions()
 	m_floatsidebarToggle = new KToggleAction(i18n("Dock/Undock Sidebar"), "attach", 0, this, SLOT(floatSidebar()), actionCollection(), "float_sidebar");
 	m_lsidebarToggle = new KToggleAction(i18n("Left/Right Sidebar"), "view_right", 0, this, SLOT(placeSidebarLeft()), actionCollection(), "left_sidebar");
 	(void)KStdAction::saveOptions(this, SLOT(saveOptions()), actionCollection(), "save_options");
-	(void)new KAction(i18n("Krita Preferences..."), "edit", 0, this, SLOT(preferences()), actionCollection(), "preferences");
+	KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
 	// crayon box toolbar actions - these will be used only
 	// to dock and undock wideget in the crayon box
@@ -615,14 +622,14 @@ void KisView::paintView(const QRect& rc)
 		xt = canvasXOffset() - horzValue();
 		yt = canvasYOffset() - vertValue();
 
-		if (zoom() < 1.0 || zoom() > 1.0)
-			gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvas -> width() * zoom()), static_cast<Q_INT32>(m_canvas -> height() * zoom()));
+//		if (zoom() < 1.0 || zoom() > 1.0)
+//			gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvas -> width() * zoom()), static_cast<Q_INT32>(m_canvas -> height() * zoom()));
 
 		if (xt || yt)
 			gc.translate(xt, yt);
 
 		m_doc -> setProjection(img);
-		m_doc -> paintContent(gc, ur, false, 1.0, 1.0);
+		m_doc -> paintContent(gc, ur, false, zoom(), zoom());
 
 		if (m_tool)
 			m_tool -> paint(gc, ur);
@@ -691,13 +698,29 @@ void KisView::tool_properties()
 
 void KisView::layerUpdateGUI(bool enable)
 {
-	enable = enable && currentImg() && currentImg() -> activeLayer();
+	KisImageSP img = currentImg();
+	KisLayerSP layer;
+	Q_INT32 nlayers;
+	Q_INT32 layerPos;
+
+	if (img) {
+		layer = img -> activeLayer();
+		nlayers = img -> nlayers();
+	}
+	
+	if (layer)
+		layerPos = img -> index(layer);
+
+	enable = enable && img && layer;
 	m_layerRm -> setEnabled(enable);
 	m_layerLink -> setEnabled(enable);
 	m_layerHide -> setEnabled(enable);
 	m_layerProperties -> setEnabled(enable);
-	m_layerNext -> setEnabled(enable);
-	m_layerPrev -> setEnabled(enable);
+	m_layerSaveAs -> setEnabled(enable);
+	m_layerRaise -> setEnabled(enable && nlayers > 1 && layerPos);
+	m_layerLower -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
+	m_layerTop -> setEnabled(enable && nlayers > 1 && layerPos);
+	m_layerBottom -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
 	imgUpdateGUI();
 }
 
@@ -798,6 +821,7 @@ void KisView::imgUpdateGUI()
 	m_imgRm -> setEnabled(img != 0);
 	m_imgDup -> setEnabled(img != 0);
 	m_imgExport -> setEnabled(img != 0);
+	m_layerAdd -> setEnabled(img != 0);
 
 	if (img) {
 		const vKisLayerSP& layers = img -> layers();
@@ -1702,12 +1726,12 @@ void KisView::layerAdd()
 	KisImageSP img = currentImg();
 
 	if (img) {
-		NewLayerDialog dlg(this);
+		NewLayerDialog dlg(IMG_WIDTH_MAX, IMG_DEFAULT_WIDTH, IMG_HEIGHT_MAX, IMG_DEFAULT_HEIGHT, this);
 
 		dlg.exec();
 
 		if (dlg.result() == QDialog::Accepted) {
-			KisLayerSP layer = m_doc -> layerAdd(img, dlg.width(), dlg.height(), img -> nextLayerName(), OPACITY_OPAQUE);
+			KisLayerSP layer = m_doc -> layerAdd(img, dlg.layerWidth(), dlg.layerHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
 
 			if (layer) {
 				m_layerBox -> setCurrentItem(img -> index(layer));
@@ -1759,7 +1783,7 @@ void KisView::layerRaise()
 
 	if (layer) {
 		m_doc -> layerRaise(img, layer);
-		m_layerBox -> setCurrentItem(img -> index(layer));
+		layersUpdated();
 		resizeEvent(0);
 		updateCanvas();
 	}
@@ -1777,7 +1801,7 @@ void KisView::layerLower()
 
 	if (layer) {
 		m_doc -> layerLower(img, layer);
-		m_layerBox -> setCurrentItem(img -> index(layer));
+		layersUpdated();
 		resizeEvent(0);
 		updateCanvas();
 	}
@@ -1786,17 +1810,27 @@ void KisView::layerLower()
 void KisView::layerFront()
 {
 	KisImageSP img = currentImg();
+	KisLayerSP layer;
 
-	if (img && img -> activeLayer())
-		img -> top(img -> activeLayer());
+	if (img && (layer = img -> activeLayer())) {
+		img -> top(layer);
+		layersUpdated();
+		resizeEvent(0);
+		updateCanvas();
+	}
 }
 
 void KisView::layerBack()
 {
 	KisImageSP img = currentImg();
+	KisLayerSP layer;
 
-	if (img && img -> activeLayer())
-		img -> bottom(img -> activeLayer());
+	if (img && (layer = img -> activeLayer())) {
+		img -> bottom(layer);
+		layersUpdated();
+		resizeEvent(0);
+		updateCanvas();
+	}
 }
 
 void KisView::layerLevel(int /*n*/)
@@ -1813,18 +1847,15 @@ void KisView::layersUpdated()
 
 	if (img) {
 		vKisLayerSP l = img -> layers();
-		Q_INT32 current = m_layerBox -> getCurrentItem();
 
 		for (vKisLayerSP_it it = l.begin(); it != l.end(); it++)
 			m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked());
 
-		m_layerBox -> setUpdatesEnabled(true);
-		m_layerBox -> repaint();
-		m_layerBox -> setCurrentItem(current);
+		m_layerBox -> setCurrentItem(img -> index(img -> activeLayer()));
 		m_doc -> setModified(true);
-	} else {
-		m_layerBox -> setUpdatesEnabled(true);
 	}
+
+	m_layerBox -> setUpdatesEnabled(true);
 }
 
 void KisView::layersUpdated(KisImageSP img)

@@ -1,7 +1,6 @@
 /*
- *  newlayerdialog.h - part of KImageShop
- *
  *  Copyright (c) 2000 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2000 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,32 +16,26 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-#ifndef __newlayerdialog_h__
-#define __newlayerdialog_h__
-
-#include <kdialogbase.h>
+#if !defined  KIS_DLG_NEW_LAYER_H_
+#define KIS_DLG_NEW_LAYER_H_
 
 class QSpinBox;
-#include <qlineedit.h>
+#include <kdialogbase.h>
 
-class NewLayerDialog : public KDialogBase
-{
-  Q_OBJECT
+class NewLayerDialog : public KDialogBase {
+	typedef KDialogBase super;
+	Q_OBJECT
 
 public:
+	NewLayerDialog(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, QWidget *parent = 0, const char *name = 0);
 
-  NewLayerDialog( QWidget *parent = 0, const char *name = 0 );
-
-  QString name()const { return m_name->text(); };
-  int width()const { return m_width->value(); };
-  int height()const { return m_height->value(); };
+	Q_INT32 layerWidth() const { return m_width -> value(); };
+	Q_INT32 layerHeight() const { return m_height -> value(); };
 
 private:
-
-  QLineEdit *m_name;
-  QSpinBox  *m_width;
-  QSpinBox  *m_height;
+	QSpinBox *m_width;
+	QSpinBox *m_height;
 };
 
-#endif // __newlayerdialog.h__
+#endif // KIS_DLG_NEW_LAYER_H_
+

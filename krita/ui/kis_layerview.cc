@@ -88,7 +88,7 @@ KisLayerView::KisLayerView( KisDoc *doc, QWidget *parent, const char *name )
 
     QToolTip::add( pbAddLayer, i18n( "Create new Layer" ) );
     QToolTip::add( pbRemoveLayer, i18n( "Remove Current Layer" ) );
-    QToolTip::add( pbUp, i18n( "Upper Current Layer" ) );
+    QToolTip::add( pbUp, i18n( "Raise Current Layer" ) );
     QToolTip::add( pbDown, i18n( "Lower Current Layer" ) );
 
     initGUI();

@@ -21,6 +21,7 @@
 #include <qpixmap.h>
 #include <qtl.h>
 #include <kdebug.h>
+#include <kpixmapio.h>
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_visitor.h"
@@ -594,7 +595,7 @@ bool KisImage::lower(KisLayerSP layer)
 	position = index(layer);
 	size = m_layers.size();
 
-	if (position >= size - 1)
+	if (position >= size)
 		return false;
 
 	return pos(layer, position + 1);
@@ -655,13 +656,6 @@ bool KisImage::pos(KisLayerSP layer, Q_INT32 position)
 
 	if (old == position)
 		return true;
-
-	if (position == nlayers - 1) {
-		KisLayerSP tmp = m_layers[nlayers - 1];
-
-		if (!tmp -> alpha())
-			position--;
-	}
 
 	//undo_push_layer_reposition (gimage, layer);
 	qSwap(m_layers[old], m_layers[position]);	
@@ -1060,20 +1054,15 @@ void KisImage::renderProjection(QPixmap& dst, KisTileSP src)
 	if (dst.width() < src -> width() || dst.height() < src -> height())
 		dst.resize(src -> width(), src -> height());
 
-
 	if (src) {
 		QImage image;
 
 		src -> lock();
 		image = src -> convertToImage();
-
-		if (!image.isNull()) {
-			QPainter gc(&dst);
-		
-			gc.drawImage(0, 0, image);
-		}
-
 		src -> release();
+
+		if (!image.isNull())
+			dst = m_pixmapIO.convertToPixmap(image);
 	}
 }
 

@@ -51,6 +51,7 @@ KisSelection::~KisSelection()
 
 void KisSelection::commit()
 {
+#if 1
 	if (m_parent) {
 		KisPainter gc(m_parent);
 		QRect rc = clip();
@@ -74,6 +75,7 @@ void KisSelection::commit()
 				m_rc.width(),
 				m_rc.height());
 	}
+#endif
 }
 
 bool KisSelection::shouldDrawBorder() const
@@ -104,6 +106,7 @@ void KisSelection::move(Q_INT32 x, Q_INT32 y)
 
 void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_INT32 height)
 {
+#if 1
 	if (m_img) {
 		configure(m_img, width, height, m_img -> imgType(), m_name);
 
@@ -115,6 +118,8 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 		m_rc.setRect(parentX, parentY, width, height);
 		super::move(parentX, parentY);
 	}
+#endif
+
 #if 0
 	KisTileMgrSP tm1 = m_parent -> data();
 	KisTileMgrSP tm2;
@@ -132,28 +137,20 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 	Q_ASSERT(tm2);
 	kdDebug(DBG_AREA_CORE) << "selection -> (parentX = " << parentX << ", parentY = " << parentY << ", width = " << width << ", height = " << height << ")\n";
 
-	for (y = parentY, k = 0; y < height; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
+	for (y = parentY, k = 0; y < parentY + height; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
 		offset = tm1 -> tileNum(parentX, y);
 
-		for (x = parentX; x < width; x += TILE_WIDTH - (x % TILE_WIDTH), k++) {
+		for (x = parentX; x < width + parentX; x += TILE_WIDTH - (x % TILE_WIDTH), k++) {
 			tileno = tm1 -> tileNum(x, y);
 
 			if (tileno < 0)
 				continue;
 
-			tile = new KisTile(4, 0, 0);
-//			tile = tm1 -> tile(tileno, TILEMODE_READ);
+			tile = tm1 -> tile(tileno, TILEMODE_READ);
 			Q_ASSERT(tile);
 
-#if 0
-			if (tile) {
-				tile -> shareRef();
+			if (tile)
 				tm2 -> attach(tile, k);
-			}
-#else
-			tm2 -> attach(tile, k);
-#endif
-
 		}
 	}
 
@@ -165,7 +162,7 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 	setClip(clipX, clipY, width, height);
 	kdDebug(DBG_AREA_CORE) << "selection clip -> (x = " << clipX << ", y = " << clipY << ", width = " << width << ", height = " << height << ")\n";
 	
-#if 1
+#if 0
 	{
 		// tile -> shareRef() above sets "Copy on write" flag.
 		// however, it doesn't seem to be working very well righ now, so

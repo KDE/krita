@@ -237,12 +237,16 @@ private:
 	KAction *m_imgMergeAll;
 	KAction *m_imgMergeVisible;
 	KAction *m_imgMergeLinked;
+	KAction *m_layerAdd;
 	KAction *m_layerRm;
 	KAction *m_layerLink;
 	KAction *m_layerHide;
 	KAction *m_layerProperties;
-	KAction *m_layerNext;
-	KAction *m_layerPrev;
+	KAction *m_layerSaveAs;
+	KAction *m_layerRaise;
+	KAction *m_layerLower;
+	KAction *m_layerTop;
+	KAction *m_layerBottom;
 	KAction *m_selectionCut;
 	KAction *m_selectionCopy;
 	KAction *m_selectionPaste;

@@ -33,6 +33,8 @@
   <ActionList name="view_split"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
+  <Separator/>
+  <Action name="refresh_canvas"/>
  </Menu>
 
 <Menu name="Image"><text>Image</text>
@@ -54,8 +56,11 @@
   <Action name="duplicate_layer"/>  
   <Action name="hide_layer"/>
   <Action name="link_layer"/>
-  <Action name="previous_layer"/>  
-  <Action name="next_layer"/>
+  <Separator/>
+  <Action name="raiselayer"/>
+  <Action name="lowerlayer"/>
+  <Action name="toplayer"/>
+  <Action name="bottomlayer"/>
   <Separator/>
   <Action name="layer_scale_smooth"/>  
   <Action name="layer_scale_rough"/>  

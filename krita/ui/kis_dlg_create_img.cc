@@ -23,6 +23,7 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <klocale.h>
+#include <koUnitWidgets.h>
 #include "kis_dlg_create_img.h"
 
 KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 maxHeight, Q_INT32 defHeight, QWidget *parent, const char *name) 
@@ -46,7 +47,7 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 max
 	grid -> addWidget(lbl, 0, 0);
 	grid -> addWidget(m_widthSpin, 0, 1);
 
-	m_heightSpin = new QSpinBox(1, maxHeight, 10, page);
+	m_heightSpin = new QSpinBox(1, maxHeight, 10, page); 
 	m_heightSpin -> setValue(defHeight);
 	lbl = new QLabel(m_heightSpin, i18n("&Height:"), page);
 
@@ -57,16 +58,16 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, Q_INT32 max
 	grp -> setExclusive(true);
 	radio = new QRadioButton(i18n("&Indexed"), grp);
 	radio -> setEnabled(false);
-	grp -> insert(radio, IMAGE_TYPE_INDEXED);
+	grp -> insert(radio, IMAGE_TYPE_INDEXEDA);
 	radio = new QRadioButton(i18n("&Grayscale"), grp);
 	radio -> setEnabled(false);
-	grp -> insert(radio, IMAGE_TYPE_GREY);
+	grp -> insert(radio, IMAGE_TYPE_GREYA);
 	radio = new QRadioButton(i18n("&RGB"), grp);
 	radio -> setChecked(true);
 	grp -> insert(radio, IMAGE_TYPE_RGBA);
 	radio = new QRadioButton(i18n("&CMYK"), grp);
 	radio -> setEnabled(false);
-	grp -> insert(radio, IMAGE_TYPE_CMYK);
+	grp -> insert(radio, IMAGE_TYPE_CMYKA);
 	connect(grp, SIGNAL(clicked(int)), SLOT(imgTypeCliked(int)));
 
 	layout -> addWidget(grp);

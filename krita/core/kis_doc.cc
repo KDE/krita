@@ -205,6 +205,43 @@ namespace {
 		KisLayerSP m_layer;
 		Q_INT32 m_index;
 	};
+
+	class LayerRmCmd : public KNamedCommand {
+		typedef KNamedCommand super;
+
+	public:
+		LayerRmCmd(KisDoc *doc, KisImageSP img, KisLayerSP layer) : super("Remove Layer")
+		{
+			m_doc = doc;
+			m_img = img;
+			m_layer = layer;
+			m_index = img -> index(layer);
+		}
+
+		virtual ~LayerRmCmd()
+		{
+		}
+
+		virtual void execute()
+		{
+			m_doc -> setUndo(false);
+			m_doc -> layerRemove(m_img, m_layer);
+			m_doc -> setUndo(true);
+		}
+
+		virtual void unexecute()
+		{
+			m_doc -> setUndo(false);
+			m_doc -> layerAdd(m_img, m_layer, m_index);
+			m_doc -> setUndo(true);
+		}
+
+	private:
+		KisDoc *m_doc;
+		KisImageSP m_img;
+		KisLayerSP m_layer;
+		Q_INT32 m_index;
+	};
 }
 
 KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) : 
@@ -871,6 +908,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 				}
 			}	
 		}
+
 #if 0
 		// TODO : Use QPainter here to draw whatever is left (outlines, borders) until KisPainter gets the missing functionality
 		{
@@ -1066,6 +1104,10 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, KisLayerSP l, Q_INT32 position)
 	img -> invalidate(l -> bounds());
 	l -> visible(true);
 	emit layersUpdated(img);
+
+	if (!m_undo)
+		emit projectionUpdated(img);
+
 	return l;
 }
 
@@ -1076,9 +1118,16 @@ void KisDoc::layerRemove(KisImageSP img, KisLayerSP layer)
 
 	if (layer) {
 		setModified(true);
-		img -> invalidate();
 		img -> rm(layer);
+
+		if (m_undo)
+			addCommand(new LayerRmCmd(this, img, layer));
+
+		img -> invalidate(layer -> bounds());
 		emit layersUpdated(img);
+
+		if (!m_undo)
+			emit projectionUpdated(img);
 	}
 }
 

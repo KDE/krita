@@ -117,7 +117,7 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 	Q_INT32 i = 0;
 	uchar *j = img.bits();
 
-	while ( i < width * height * MAX_CHANNEL_RGBA()) {
+	while ( i < width * height * MAX_CHANNEL_RGBA) {
 
 		// Swap the bytes
 		*( j + 0)  = *( data + i + PIXEL_ALPHA );

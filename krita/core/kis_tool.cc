@@ -523,3 +523,4 @@ const KisView* KisTool::getCurrentView() const
 //	return m_doc -> currentView();
 }
 
+#include "kis_tool.moc"

@@ -317,3 +317,4 @@ void KisPaintDevice::init()
 	m_projectionValid = false;
 }
 
+#include "kis_paint_device.moc"

@@ -100,3 +100,4 @@ void KisItemChooser::addItem(const vKoIconItem& items)
 		m_chooser -> addItem(itr.current());
 }
 
+#include "kis_itemchooser.moc"

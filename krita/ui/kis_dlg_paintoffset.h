@@ -18,11 +18,11 @@
 #if !defined KIS_DLG_PAINTOFFSET_H_
 #define KIS_DLG_PAINTOFFSET_H_
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
-class KisDlgPaintOffset : public KDialog {
+class KisDlgPaintOffset : public KDialogBase {
 	Q_OBJECT
-	typedef KDialog super;
+	typedef KDialogBase super;
 
 public:
 	KisDlgPaintOffset(Q_INT32 xoff, Q_INT32 yoff, QWidget *parent, const char *name);

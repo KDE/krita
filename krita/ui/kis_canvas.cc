@@ -72,3 +72,4 @@ void KisCanvas::wheelEvent(QWheelEvent *e)
 	emit mouseWheelEvent(e);
 }
 
+#include "kis_canvas.moc"

@@ -1034,3 +1034,4 @@ QPixmap KisImage::recreatePixmap()
 	return m_pixmapProjection;
 }
 
+#include "kis_image.moc"

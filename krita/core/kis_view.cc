@@ -2097,3 +2097,4 @@ void KisView::setupCanvas()
 	QObject::connect(m_canvas, SIGNAL(mouseWheelEvent(QWheelEvent*)), this, SLOT(canvasGotMouseWheelEvent(QWheelEvent*)));
 }
 
+#include "kis_view.moc"

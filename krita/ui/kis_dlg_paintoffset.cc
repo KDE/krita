@@ -22,10 +22,13 @@
 #include <knuminput.h>
 #include <kpushbutton.h>
 #include "kis_dlg_paintoffset.h"
+#include <qvbox.h>
 
-KisDlgPaintOffset::KisDlgPaintOffset(Q_INT32 xoff, Q_INT32 yoff, QWidget *parent, const char *name) : super(parent, name)
+KisDlgPaintOffset::KisDlgPaintOffset(Q_INT32 xoff, Q_INT32 yoff, QWidget *parent, const char *name) :
+    super(parent, name, true, "", Ok | Cancel)
 {
-	QGroupBox *grp = new QGroupBox(i18n("Pixel Paint Offset"), this);
+        QVBox *page = makeVBoxMainWidget();
+	QGroupBox *grp = new QGroupBox(i18n("Pixel Paint Offset"), page);
 	KPushButton *btn;
 	QHBoxLayout *hbox;
 	QVBoxLayout *vbox;
@@ -35,7 +38,7 @@ KisDlgPaintOffset::KisDlgPaintOffset(Q_INT32 xoff, Q_INT32 yoff, QWidget *parent
 
 	m_xoff = xoff;
 	m_yoff = yoff;
-	vbox = new QVBoxLayout(this);
+	vbox = new QVBoxLayout(page);
 	vbox -> insertSpacing(-1, 15);
 	vbox -> addWidget(grp);
 	vboxchild = new QVBoxLayout(grp);
@@ -58,14 +61,6 @@ KisDlgPaintOffset::KisDlgPaintOffset(Q_INT32 xoff, Q_INT32 yoff, QWidget *parent
 	hbox -> insertSpacing(-1, 15);
 	vboxchild -> insertSpacing(-1, 15);
 	vbox -> insertSpacing(-1, 15);
-	hbox = new QHBoxLayout(vbox);
-	hbox -> insertSpacing(-1, 45);
-	btn = new KPushButton(i18n("&OK"), this);
-	connect(btn, SIGNAL(clicked()), SLOT(accept()));
-	hbox -> addWidget(btn);
-	btn = new KPushButton(i18n("&Cancel"), this);
-	connect(btn, SIGNAL(clicked()), SLOT(reject()));
-	hbox -> addWidget(btn);
 }
 
 KisDlgPaintOffset::~KisDlgPaintOffset()
@@ -92,3 +87,4 @@ void KisDlgPaintOffset::yOffsetValue(int value)
 	m_yoff = value;
 }
 
+#include "kis_dlg_paintoffset.moc"

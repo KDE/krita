@@ -1238,3 +1238,4 @@ void KisDoc::setProjection(KisImageSP img)
 	m_projection = img;
 }
 
+#include "kis_doc.moc"

@@ -1,3 +1,6 @@
+24-09-2004
+	* Oops... I'd forgotten we even had a changelog. cvs2changlog.pl,
+	anyone?
 22-01-2004
 	* Fixed spacing tool, fixed cursors for paint tools, restarted
 	eraser tool, fixed some toolbar icons.

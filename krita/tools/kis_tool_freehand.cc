@@ -128,16 +128,14 @@ void KisToolFreehand::initPaint(KisEvent *)
 		if (m_painter)
 			delete m_painter;
 		if (m_useTempLayer) {
-			m_target = new KisLayer(currentImage(), device->width(), device->height(), "temp",
-				OPACITY_OPAQUE);
+			m_target = new KisLayer(currentImage(), device->width(), device->height(), "temp", OPACITY_OPAQUE);
 			KisFillPainter painter(m_target.data());
-			painter.fillRect(0, 0, m_target -> width(), m_target -> height(), KoColor::black(),
-				OPACITY_TRANSPARENT);
+			painter.eraseRect(0, 0, m_target -> width(), m_target -> height());
 			painter.end();
 			dynamic_cast<KisLayer*>(m_target.data()) -> setVisible(true);
 			// XXX doesn't look very good I'm afraid
 			currentImage() -> add(dynamic_cast<KisLayer*>(m_target.data()),
-				currentImage() -> index(dynamic_cast<KisLayer*>(device.data()) + 1));
+					      currentImage() -> index(dynamic_cast<KisLayer*>(device.data()) + 1));
 			m_target = currentImage() -> activate(dynamic_cast<KisLayer*>(m_target.data()));
 		} else {
 			m_target = device;
@@ -171,11 +169,11 @@ void KisToolFreehand::endPaint()
 			// If painting in mouse release, make sure painter
 			// is destructed or end()ed
 			if (m_useTempLayer) {
-				m_painter->endTransaction();
+				m_painter -> endTransaction();
 				KisPainter painter( m_source );
 				painter.beginTransaction(m_transactionText);
-				painter.bitBlt(0, 0,  m_painter->compositeOp(), m_target, m_painter -> opacity(),
-					0, 0, m_source -> width() - 1, m_source -> width() - 1);
+				painter.bitBlt(0, 0,  m_painter -> compositeOp(), m_target, m_painter -> opacity(),
+					       0, 0, m_source -> width() - 1, m_source -> width() - 1);
 				adapter -> addCommand(painter.endTransaction());
 				currentImage() -> rm(dynamic_cast<KisLayer*>(m_target.data()));
 				currentImage() -> activate(dynamic_cast<KisLayer*>(m_source.data()));

@@ -50,6 +50,8 @@ private:
 	QString scaleTest(Q_UINT32 testCount);
 	QString rotateTest(Q_UINT32 testCount);
 	QString renderTest(Q_UINT32 restCount);
+	QString selectionTest(Q_UINT32 testCount);
+	QString colorConversionTest(Q_UINT32 testCount);
 
 	QString doBlit(CompositeOp op, 
 		       QString cspace,

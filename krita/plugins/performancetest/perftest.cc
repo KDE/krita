@@ -43,6 +43,9 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
+#include <koColor.h>
+
+#include "kis_cursor.h"
 #include <kis_doc.h>
 #include <kis_config.h>
 #include <kis_image.h>
@@ -104,6 +107,7 @@ void PerfTest::slotPerfTest()
 	QString report = QString("");
 
         if (dlgPerfTest -> exec() == QDialog::Accepted) {
+
 		Q_INT32 testCount = (Q_INT32)qRound(dlgPerfTest -> page() -> intTestCount -> value());	
 		if (dlgPerfTest -> page() -> chkBitBlt -> isChecked()) {
 			report = report.append(bltTest(testCount));
@@ -132,6 +136,13 @@ void PerfTest::slotPerfTest()
 		if (dlgPerfTest -> page() -> chkRender -> isChecked()) {
 			report = report.append(renderTest(testCount));
 		}
+		if (dlgPerfTest -> page() -> chkSelection -> isChecked()) {
+			report = report.append(selectionTest(testCount));
+		}
+		if (dlgPerfTest -> page() -> chkColorConversion -> isChecked()) {
+			report = report.append(colorConversionTest(testCount));
+		}
+
 		KDialogBase * d = new KDialogBase(m_view, "", true, "", KDialogBase::Ok);
 		d -> setCaption("Performance test results");
 		QTextEdit * e = new QTextEdit(d);
@@ -249,11 +260,37 @@ QString PerfTest::doBlit(CompositeOp op,
 
 	}
 	p.end();
-	report = report.append(QString("   %1 blits of rectangles tilesize 800 x 800 with opacity %2 and composite op %3: %4ms\n")
+	report = report.append(QString("   %1 blits of rectangles 800 x 800 with opacity %2 and composite op %3: %4ms\n")
 			       .arg(testCount)
 			       .arg(opacity)
 			       .arg(op)
 			       .arg(t.elapsed()));
+
+
+	// ------------------------------------------------------------------------------
+	// Outside
+
+	KisLayerSP outside = new KisLayer(500, 500,
+					  KisColorSpaceRegistry::singleton() -> get(cspace),
+					  "outside blit");
+
+	pf.begin(outside.data()) ;
+	pf.fillRect(0, 0, 500, 500, KoColor::lightGray());
+	pf.end();
+
+	t.restart();
+	p.begin(img -> activeLayer().data());
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		p.bitBlt(600, 600, op, outside.data());
+
+	}
+	p.end();
+	report = report.append(QString("   %1 blits of rectangles 500 x 500 at 600,600 with opacity %2 and composite op %3: %4ms\n")
+			       .arg(testCount)
+			       .arg(opacity)
+			       .arg(op)
+			       .arg(t.elapsed()));
+
 
 	return report;
 
@@ -261,6 +298,105 @@ QString PerfTest::doBlit(CompositeOp op,
 
 QString PerfTest::fillTest(Q_UINT32 testCount)
 {
+	QString report = QString("* Fill test\n");
+
+	KisDoc * doc = m_view -> getDocument();
+	QStringList l = KisColorSpaceRegistry::singleton() -> listColorSpaceNames();
+
+
+	for (QStringList::Iterator it = l.begin(); it != l.end(); ++it) {
+		report = report.append( "  Testing blitting on " + *it + "\n");
+
+ 		KisImage * img = doc -> newImage("fill-" + *it, 1000, 1000, KisColorSpaceRegistry::singleton() -> get(*it));
+		doc -> addImage(img);
+		KisLayerSP l = img -> activeLayer();
+
+		// Rect fill
+		KisFillPainter p(l.data());
+		QTime t;
+		t.restart();
+		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			p.eraseRect(0, 0, 1000, 1000);
+		}
+		report = report.append(QString("    Erased 1000 x 1000 layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+
+
+		t.restart();
+		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			p.eraseRect(50, 50, 500, 500);
+		}
+		report = report.append(QString("    Erased 500 x 500 layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+
+
+		t.restart();
+		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			p.eraseRect(-50, -50, 1100, 1100);
+		}
+		report = report.append(QString("    Erased rect bigger than layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+							      
+				       
+		// Opaque Rect fill
+		t.restart();
+		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			p.fillRect(0, 0, 1000, 1000, KoColor::red());
+		}
+		report = report.append(QString("    Opaque fill 1000 x 1000 layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+
+
+		t.restart();
+		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			p.fillRect(50, 50, 500, 500, KoColor::green());
+		}
+		report = report.append(QString("    Opaque fill 500 x 500 layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+
+
+		t.restart();
+		for (Q_UINT32 i = 0; i < testCount; ++i, KoColor::blue()) {
+			p.fillRect(-50, -50, 1100, 1100, KoColor::lightGray());
+		}
+		report = report.append(QString("    Opaque fill rect bigger than layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+								       
+		// Transparent rect fill
+		
+		t.restart();
+		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			p.fillRect(0, 0, 1000, 1000, KoColor::red(), OPACITY_OPAQUE / 2);
+		}
+		report = report.append(QString("    Opaque fill 1000 x 1000 layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+
+
+		t.restart();
+		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			p.fillRect(50, 50, 500, 500, KoColor::green(), OPACITY_OPAQUE / 2);
+		}
+		report = report.append(QString("    Opaque fill 500 x 500 layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+
+
+		t.restart();
+		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			p.fillRect(-50, -50, 1100, 1100, KoColor::blue(), OPACITY_OPAQUE / 2);
+		}
+		report = report.append(QString("    Opaque fill rect bigger than layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+					
+		// Colour fill
+
+		t.restart();
+		for (Q_UINT32 i = 0; i < testCount; ++i) {
+			p.eraseRect(0, 0, 1000, 1000);
+			p.setPaintColor(KoColor::yellow());
+			p.setFillThreshold(15);
+			p.setCompositeOp(COMPOSITE_OVER);
+			p.fillColor(500, 500);
+		}
+		report = report.append(QString("    Opaque floodfill of whole layer (incl. erase) %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+					
+
+		// Pattern fill
+	}
+
+	return report;
+	
+
 	return QString("Fill test\n");
 }
 
@@ -299,5 +435,14 @@ QString PerfTest::renderTest(Q_UINT32 restCount)
 	return QString("Render test\n");
 }
 
+QString PerfTest::selectionTest(Q_UINT32 testCount)
+{
+	return QString("Selection test\n");
+}
+
+QString PerfTest::colorConversionTest(Q_UINT32 testCount)
+{
+	return QString("Color conversion test");
+}
 
 #include "perftest.moc"

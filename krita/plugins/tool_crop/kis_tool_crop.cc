@@ -31,6 +31,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kdebug.h>
 
 #include <kis_global.h>
 #include <kis_painter.h>
@@ -86,6 +87,8 @@ KisToolCrop::KisToolCrop()
 	m_selecting = false;
 	m_startPos = QPoint(0, 0);
 	m_endPos = QPoint(0, 0);
+        m_handleSize = 12;
+        m_handlesDrawn = false;
 }
 
 KisToolCrop::~KisToolCrop()
@@ -166,6 +169,12 @@ void KisToolCrop::move(KisMoveEvent *e)
 
 		paintOutline();
 	}
+        if (m_subject && m_handlesDrawn)
+        {
+                Q_INT32 type = mouseOnHandle( e -> pos().floorQPoint() );
+                //set resize cursor if we are on one of the handles
+                cursor(type);
+        }
 }
 
 void KisToolCrop::buttonRelease(KisButtonReleaseEvent *e)
@@ -176,10 +185,13 @@ void KisToolCrop::buttonRelease(KisButtonReleaseEvent *e)
 		return;
 
         if (m_startPos != m_endPos)
+        {
                 //remove old outline
                 paintOutline();
                 //paint outline with handles
                 paintOutlineWithHandles();
+                m_handlesDrawn = true;
+        }
 
 	if (m_subject && m_selecting) {
 		if (m_startPos == m_endPos) {
@@ -383,22 +395,71 @@ void KisToolCrop::setup(KActionCollection *collection)
 QRegion KisToolCrop::handles(QRect rect)
 {
         QRegion handlesRegion;
-        //size of the handles
-        Q_INT32 handleSize = 12;
 
-        //add handle at the upper right corner
-        handlesRegion += QRect( rect.width() - handleSize, rect.height() - handleSize, handleSize, handleSize );
         //add handle at the lower right corner
-        handlesRegion += QRect( rect.width() - handleSize, 0, handleSize, handleSize );
-        //add rectangle at the upper left corner
-        handlesRegion += QRect( 0, rect.height() - handleSize, handleSize, handleSize );
+        handlesRegion += QRect( rect.width() - m_handleSize, rect.height() - m_handleSize, m_handleSize, m_handleSize );
+        //add handle at the upper right corner
+        handlesRegion += QRect( rect.width() - m_handleSize, 0, m_handleSize, m_handleSize );
         //add rectangle at the lower left corner
-        handlesRegion += QRect( 0, 0, handleSize, handleSize );
+        handlesRegion += QRect( 0, rect.height() - m_handleSize, m_handleSize, m_handleSize );
+        //add rectangle at the upper left corner
+        handlesRegion += QRect( 0, 0, m_handleSize, m_handleSize );
 
         //move the handles to the correct position
         handlesRegion.translate ( rect.x(), rect.y() );
 
         return handlesRegion;
+}
+
+Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
+{
+        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        Q_ASSERT(controller);
+        QPoint start = controller -> windowToView(m_startPos);
+        QPoint end = controller -> windowToView(m_endPos);
+
+        Q_INT32 startx = start.x();
+        Q_INT32 starty = start.y();
+        Q_INT32 endx = end.x();
+        Q_INT32 endy = end.y();
+
+        if ( QRect ( startx, starty, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+        {
+                return UpperLeft;
+        }
+        else if ( QRect ( startx, endy -  m_handleSize, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+        {
+                return LowerLeft;
+        }
+        else if ( QRect ( endx - m_handleSize, starty, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+        {
+                return UpperRight;
+        }
+        else if ( QRect ( endx - m_handleSize, endy - m_handleSize, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+        {
+                return LowerRight;
+        }
+        else return None;
+}
+
+void KisToolCrop::cursor (Q_INT32 handle)
+{
+        switch (handle)
+        {
+        case (UpperLeft):
+        case (LowerRight):
+                kdDebug() << "setCursor(KisCursor::sizeFDiagCursor()) called" << endl;
+                setCursor(KisCursor::sizeFDiagCursor());
+                return;
+        case (LowerLeft):
+        case (UpperRight):
+                kdDebug() << "setCursor(KisCursor::sizeBDiagCursor()) called" << endl;
+                setCursor(KisCursor::sizeBDiagCursor());
+                return;
+        }
+        kdDebug() << "setCursor(KisCursor::selectCursor()) called" << endl;
+        setCursor(KisCursor::selectCursor());
+        return;
 }
 
 #include "kis_tool_crop.moc"

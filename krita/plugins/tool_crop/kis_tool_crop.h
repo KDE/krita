@@ -29,6 +29,7 @@
 #include <kis_tool_factory.h>
 
 class QRect;
+class QCursor;
 
 /**
  * Crop tool
@@ -71,7 +72,8 @@ private:
         QRegion handles(QRect rect);
         void paintOutlineWithHandles();
         void paintOutlineWithHandles(QPainter& gc, const QRect& rc);
-
+        Q_INT32 mouseOnHandle (const QPoint currentViewPoint);
+        void cursor (Q_INT32 handle);
 private slots:
 
 	void crop();
@@ -87,8 +89,19 @@ private:
 	bool m_selecting;
 
 	QWidget * m_optWidget;
-        
+
+        Q_INT32 m_handleSize;
         QRegion m_handlesRegion;
+        bool m_handlesDrawn;
+
+        enum handleType
+        {
+                None = 0,
+                UpperLeft = 1,
+                UpperRight = 2,
+                LowerLeft = 3,
+                LowerRight = 4
+        };
 };
 
 class KisToolCropFactory : public KisToolFactory {

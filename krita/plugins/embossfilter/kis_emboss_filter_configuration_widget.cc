@@ -43,3 +43,4 @@ KisEmbossFilterConfigurationWidget::KisEmbossFilterConfigurationWidget( KisFilte
 }
 
 //#include "kis_raindrops_filter_configuration_widget.moc"
+#include "kis_emboss_filter_configuration_widget.moc"

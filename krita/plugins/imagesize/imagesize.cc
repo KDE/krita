@@ -47,6 +47,7 @@
 #include <kistilemgr.h>
 #include <kis_iterators_quantum.h>
 #include <kis_selection.h>
+#include <kis_selection_manager.h>
 #include <kis_scale_visitor.h>
 
 #include "imagesize.h"
@@ -69,12 +70,15 @@ ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
 
 	(void) new KAction(i18n("&Image Size..."), 0, 0, this, SLOT(slotImageSize()), actionCollection(), "imagesize");
 	(void) new KAction(i18n("&Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "layersize");
-	
+
 	if ( !parent->inherits("KisView") )
 	{
 		m_view = 0;
 	} else {
 		m_view = (KisView*) parent;
+		// Selection manager takes ownership?
+		KAction * a = new KAction(i18n("&Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "selectionScale");
+		m_view -> selectionManager() -> addSelectionAction(a);
 	}
 }
 
@@ -128,7 +132,7 @@ void ImageSize::slotLayerSize()
 	if (!image) return;
 
 	DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "LayerSize");
-	dlgImageSize -> setCaption("Layer Size");
+	dlgImageSize -> setCaption(i18n("Layer Size"));
 
 	KisConfig cfg;
 
@@ -153,5 +157,47 @@ void ImageSize::slotLayerSize()
 	}
 	delete dlgImageSize;
 }
+
+void ImageSize::slotSelectionScale()
+{
+	// XXX: figure out a way to add selection actions to the selection
+	// manager to enable/disable
+
+	KisImageSP image = m_view -> currentImg();
+
+	if (!image) return;
+
+	KisLayerSP layer = image -> activeLayer();
+
+	if (!layer) return;
+
+	if (!layer -> hasSelection()) return;
+	
+
+	DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "SelectionScale");
+	dlgImageSize -> setCaption(i18n("Scale Selection"));
+
+	KisConfig cfg;
+
+	dlgImageSize -> setWidth(image -> width());
+	dlgImageSize -> setHeight(image -> height());
+	dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
+	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
+
+	dlgImageSize -> hideScaleBox();
+
+	if (dlgImageSize -> exec() == QDialog::Accepted) {
+		Q_INT32 w = dlgImageSize -> width();
+		Q_INT32 h = dlgImageSize -> height();
+		Q_INT32 f = dlgImageSize -> filterType();
+
+		m_view -> scaleLayer((double)w / ((double)(image -> width())), 
+				     (double)h / ((double)(image -> height())),
+				     (enumFilterType)f);
+		
+	}
+	delete dlgImageSize;
+}
+
 
 #include "imagesize.moc"

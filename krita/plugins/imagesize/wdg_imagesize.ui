@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>392</width>
-            <height>352</height>
+            <width>397</width>
+            <height>332</height>
         </rect>
     </property>
     <property name="caption">
@@ -178,7 +178,7 @@
         </widget>
         <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>buttonGroup3</cstring>
+                <cstring>grpResizeScale</cstring>
             </property>
             <property name="title">
                 <string></string>
@@ -251,6 +251,14 @@
                         <bool>true</bool>
                     </property>
                 </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>radioResize</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Resize</string>
+                    </property>
+                </widget>
                 <widget class="QRadioButton" row="1" column="2">
                     <property name="name">
                         <cstring>radioScale</cstring>
@@ -260,14 +268,6 @@
                     </property>
                     <property name="checked">
                         <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="1" column="0">
-                    <property name="name">
-                        <cstring>radioResize</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Resize</string>
                     </property>
                 </widget>
             </grid>

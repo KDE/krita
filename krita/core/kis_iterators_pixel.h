@@ -24,7 +24,40 @@
 #include "kis_pixel_representation.h"
 
 /**
- * XXX: document
+ 
+There are two functions to create an iterator : iteratorPixelBegin and
+iteratorPixelSelectionBegin, use the first if you don't care about
+whether pixels are selected, the second if you need to take selections
+into account.
+
+KisIteratorLinePixel lineIt = device->iteratorPixelBegin( command, 0, width(), y);
+KisIteratorPixel pixelIt = *linetIt;
+KisIteratorPixel endIt = linetIt.end();
+while( pixelIt <= endIt )
+{
+ // your computing
+ ++pixelIt;
+}
+
+If y goes from 0 to height(), you may do the following:
+
+KisIteratorLinePixel lineIt = device->iteratorPixelBegin( command, 0, width(), 
+0);
+KisIteratorLinePixel endLineIt = device->iteratorPixelEnd( command, 0, 
+width(), height);
+while( lineIt <) endLineIt )
+{
+ KisIteratorPixel pixelIt = *linetIt;
+ KisIteratorPixel endIt = linetIt.end();
+ while( pixelIt <= endIt )
+ {
+   // your computing
+   ++pixelIt;
+ }
+ ++lineIt;
+}
+
+
  */
 class KisIteratorPixel : public KisIteratorUnit
 {

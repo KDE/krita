@@ -37,6 +37,7 @@ private slots:
 
 	void slotImageSize();
 	void slotLayerSize();
+	void slotSelectionScale();
 
 private:
 

@@ -47,6 +47,7 @@
 #include <kistilemgr.h>
 #include <kis_iterators_quantum.h>
 #include <kis_selection.h>
+#include <kis_selection_manager.h>
 
 #include "colorrange.h"
 #include "dlg_colorrange.h"
@@ -65,13 +66,14 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
  		  << parent -> className()
  		  << "\n";
 
-	(void) new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange");
+	KAction * a = new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange");
 
 	if ( !parent->inherits("KisView") )
 	{
 		m_view = 0;
 	} else {
 		m_view = (KisView*) parent;
+		m_view -> selectionManager() -> addSelectionAction(a);
 	}
 }
 

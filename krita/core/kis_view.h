@@ -143,6 +143,8 @@ public: // Plugin access API. XXX: This needs redesign.
 
 	KisDoc * getDocument() { return m_doc; }
 
+	KisSelectionManager * selectionManager() { return m_selectionManager; }
+
 signals:
 	void bgColorChanged(const KoColor& c);
 	void fgColorChanged(const KoColor& c);

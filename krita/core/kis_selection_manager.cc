@@ -65,10 +65,12 @@ KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	  m_save(0)
 
 {
+	m_pluginActions.setAutoDelete(true);
 }
 
 KisSelectionManager::~KisSelectionManager()
 {
+	m_pluginActions.clear();
 }
 
 
@@ -211,6 +213,11 @@ void KisSelectionManager::setup(KActionCollection * collection)
 }
 
 
+void KisSelectionManager::addSelectionAction(KAction * action)
+{
+	m_pluginActions.append(action);
+}
+
 void KisSelectionManager::clipboardDataChanged()
 {
         m_clipboardHasImage = !QApplication::clipboard() -> image().isNull();
@@ -245,6 +252,10 @@ void KisSelectionManager::updateGUI()
 	m_save -> setEnabled(enable);
 
 	m_parent -> updateStatusBarSelectionLabel();
+	
+	KAction a;
+	for (Q_UINT32 i = 0; i < m_pluginActions.count(); ++i) {
+	}
 }
 
 void KisSelectionManager::imgSelectionChanged(KisImageSP img)

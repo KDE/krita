@@ -65,6 +65,11 @@ DlgImageSize::~DlgImageSize()
 	delete m_page;
 }
 
+void DlgImageSize::hideScaleBox()
+{
+//	m_page -> grpResizeScale -> hide();
+}
+
 void DlgImageSize::setWidth(Q_UINT32 w) 
 {
 	blockAll();

@@ -2250,9 +2250,9 @@ void KisView::layerAdd()
         if (img) {
                 KisConfig cfg;
                 NewLayerDialog dlg(cfg.maxLayerWidth(),
-                                   cfg.defLayerWidth(),
+                                   img -> width(),
                                    cfg.maxLayerHeight(),
-                                   cfg.defLayerHeight(),
+                                   img -> height(),
                                    img -> colorStrategy() -> name(),
                                    img -> nextLayerName(),
                                    this);

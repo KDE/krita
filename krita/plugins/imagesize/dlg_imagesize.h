@@ -41,6 +41,8 @@ public:
 			 const char* name = 0);
 	~DlgImageSize();
 
+	void hideScaleBox();
+
 	void setWidth(Q_UINT32 w);
 	void setWidthPercent(Q_UINT32 w);
 	void setMaximumWidth(Q_UINT32 w);

@@ -19,6 +19,7 @@
 #define KIS_SELECTION_MANAGER_
 
 #include "qobject.h"
+#include "qptrlist.h"
 
 #include "kis_image.h"
 #include "kis_selection.h"
@@ -42,6 +43,8 @@ public:
 	virtual ~KisSelectionManager();
 
 	void setup(KActionCollection * collection);
+
+	void addSelectionAction(KAction * action);
 
 public slots:
 
@@ -98,6 +101,9 @@ private:
 	KAction *m_transform;
 	KAction *m_load;
 	KAction *m_save;
+
+	QPtrList<KAction> m_pluginActions;
+
 };
 
 #endif // KIS_SELECTION_MANAGER_

@@ -28,7 +28,8 @@
   <Action name="view_color_docker"/>
   <Action name="view_control_docker"/>
   <Action name="view_layer_docker"/>
-  <Action name="view_resource_docker"/>
+  <Action name="view_shapes_docker"/>
+  <Action name="view_fills_docker"/>
   <Separator/>
   <Action name="view_ruler"/>
   <Separator/>

@@ -204,6 +204,8 @@ protected:
 
 	const Segment *segmentAt(double t) const;
 	QImage generatePreview() const;
+protected:
+	inline void pushSegment( Segment* segment ) { m_segments.push_back(segment); };
 
 private slots:
 	void ioData(KIO::Job *job, const QByteArray& data);

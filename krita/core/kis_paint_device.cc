@@ -671,22 +671,28 @@ void KisPaintDevice::offsetBy(Q_INT32 x, Q_INT32 y)
 bool KisPaintDevice::write(KoStore *store)
 {
 	KisTileMgrSP tm = data();
-	KisPixelDataSP pd;
-	Q_INT32 nline;
+	Q_INT32 totalBytes = m_height * m_width * m_depth * sizeof(QUANTUM);
+	Q_INT32 nbytes = 0;
 
 	Q_ASSERT(store);
 	Q_ASSERT(tm);
-	nline = width() * sizeof(QUANTUM) * m_depth;
 
-	for (Q_INT32 y = 0; y < height(); y++) {
-		pd = tm -> pixelData(-m_x, y - m_y, width() - m_x - 1, y - m_y, TILEMODE_READ);
-		Q_ASSERT(pd);
-		Q_ASSERT(pd -> data);
+	for (Q_INT32 y = 0; y < m_height; y += TILE_HEIGHT) {
+		for (Q_INT32 x = 0; x < m_width; x += TILE_WIDTH) {
+			KisTileSP tile = tm -> tile(x, y, TILEMODE_READ);
+			Q_INT32 tileBytes = tile -> height() * tile -> width() * m_depth * sizeof(QUANTUM);
 
-		if (store -> write(reinterpret_cast<char*>(pd -> data), nline) != nline)
-			return false;
+			tile -> lock();
 
-		emit ioProgress(y * 100 / height());
+			if (store -> write(reinterpret_cast<char*>(tile -> data()), tileBytes) != tileBytes) {
+				tile -> release();
+				return false;
+			}
+
+			tile -> release();
+			nbytes += tileBytes;
+			emit ioProgress(nbytes * 100 / totalBytes);
+		}
 	}
 
 	return true;
@@ -695,23 +701,28 @@ bool KisPaintDevice::write(KoStore *store)
 bool KisPaintDevice::read(KoStore *store)
 {
 	KisTileMgrSP tm = data();
-	KisPixelDataSP pd;
-	Q_INT32 nline;
+	Q_INT32 totalBytes = m_height * m_width * m_depth * sizeof(QUANTUM);
+	Q_INT32 nbytes = 0;
 
 	Q_ASSERT(store);
 	Q_ASSERT(tm);
-	nline = width() * sizeof(QUANTUM) * m_depth;
 
-	for (Q_INT32 y = 0; y < height(); y++) {
-		pd = tm -> pixelData(-m_x, y - m_y, width() - m_x - 1, y - m_y, TILEMODE_WRITE);
-		Q_ASSERT(pd);
-		Q_ASSERT(pd -> data);
+	for (Q_INT32 y = 0; y < m_height; y += TILE_HEIGHT) {
+		for (Q_INT32 x = 0; x < m_width; x += TILE_WIDTH) {
+			KisTileSP tile = tm -> tile(x, y, TILEMODE_WRITE);
+			Q_INT32 tileBytes = tile -> height() * tile -> width() * m_depth * sizeof(QUANTUM);
 
-		if (store -> read(reinterpret_cast<char*>(pd -> data), nline) != nline)
-			return false;
+			tile -> lock();
 
-		tm -> releasePixelData(pd);
-		emit ioProgress(y * 100 / height());
+			if (store -> read(reinterpret_cast<char*>(tile -> data()), tileBytes) != tileBytes) {
+				tile -> release();
+				return false;
+			}
+
+			tile -> release();
+			nbytes += tileBytes;
+			emit ioProgress(nbytes * 100 / totalBytes);
+		}
 	}
 
 	return true;

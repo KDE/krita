@@ -71,8 +71,12 @@ private slots:
 	void slotAboutToShow();
 	void slotShowContextMenu(QListBoxItem *item, const QPoint& pos);
 	void slotClicked(QListBoxItem *item, const QPoint& pos);
-	void slotCurrentChanged(QListBoxItem *item);
+	void slotSelectionChanged(QListBoxItem *item);
 	void slotDoubleClicked(QListBoxItem* item);
+	void slotAddClicked();
+	void slotRmClicked();
+	void slotRaiseClicked();
+	void slotLowerClicked();
 
 private:
 	flags m_flags;

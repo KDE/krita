@@ -61,7 +61,6 @@ class KisBrush;
 class KisPattern;
 class KisTool;
 class KisTabBar;
-class KisLayerView;
 class KisChannelView;
 class KisListBoxView;
 

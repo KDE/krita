@@ -44,6 +44,7 @@
 KisToolFill::KisToolFill() 
 	: super()
 {
+	setName("tool_fill");
 	m_subject = 0;
 	m_oldColor = 0;
 	m_threshold = 15;
@@ -226,14 +227,19 @@ void KisToolFill::slotSetCompositeMode(int compositeOp)
 
 void KisToolFill::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Filler Tool"), 
-					       "fill",
-					       0, 
-					       this, 
-					       SLOT(activate()),
-					       collection,
-					       "tool_fill");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Filler Tool"), 
+					    "fill",
+					    0, 
+					    this, 
+					    SLOT(activate()),
+					    collection,
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 #include "kis_tool_fill.moc"

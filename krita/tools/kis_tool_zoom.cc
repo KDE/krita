@@ -28,6 +28,7 @@
 
 KisToolZoom::KisToolZoom()
 {
+	setName("tool_zoom");
 	m_subject = 0;
 	m_dragging = false;
 	m_startPos = QPoint(0, 0);
@@ -136,7 +137,12 @@ void KisToolZoom::paintOutline(QPainter& gc, const QRect&)
 
 void KisToolZoom::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Zoom Tool"), "viewmag", 0, this, SLOT(activate()), collection, "tool_zoom");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Zoom Tool"), "viewmag", 0, this, SLOT(activate()), collection, name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 

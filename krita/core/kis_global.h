@@ -81,6 +81,14 @@ const Q_INT32 IMG_DEFAULT_DEPTH = 4;
 const Q_INT32 RENDER_HEIGHT = TILE_SIZE * 4;
 const Q_INT32 RENDER_WIDTH = TILE_SIZE * 4;
 
+enum enumInputDevice {
+	INPUT_DEVICE_UNKNOWN,
+	INPUT_DEVICE_MOUSE,	// Standard mouse
+	INPUT_DEVICE_STYLUS,	// Wacom stylus
+	INPUT_DEVICE_ERASER,	// Wacom eraser
+	INPUT_DEVICE_PUCK	// Wacom puck
+};
+
 /*
  * Most wacom pads have 512 levels of pressure; Qt only supports 256, and even 
  * this is downscaled to 127 levels because the line would be too jittery, and

@@ -39,6 +39,7 @@
 
 KisToolSelectFreehand::KisToolSelectFreehand() : super()
 {
+	setName("tool_select_freehand");
 	m_subject = 0;
 	setCursor(KisCursor::selectCursor());
 
@@ -285,15 +286,20 @@ void KisToolSelectFreehand::drawLine( const QPoint& start, const QPoint& end )
 
 void KisToolSelectFreehand::setup(KActionCollection *collection)
 {
-	KRadioAction *p = new KRadioAction(i18n("&Freehand Select"), 
-					     "freehand", 
-					     0, 
-					     this,  
-					     SLOT(activate()),
-					     collection, 
-					     "tool_select_freehand");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
-	p -> setExclusiveGroup("tools");
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Freehand Select"), 
+					    "freehand", 
+					    0, 
+					    this,  
+					    SLOT(activate()),
+					    collection, 
+					    name());
+
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 bool KisToolSelectFreehand::willModify() const

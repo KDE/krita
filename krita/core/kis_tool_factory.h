@@ -26,16 +26,13 @@ class KActionCollection;
 class KisCanvasSubject;
 
 class KisToolFactory {
-	typedef std::vector<KisTool*> vKisTool;
-	typedef vKisTool::iterator vKisTool_it;
-	typedef vKisTool::const_iterator vKisTool_cit;
 
 public:
 	KisToolFactory();
 	~KisToolFactory();
 
 public:
-	void create(KActionCollection *actionCollection, KisCanvasSubject *subject);
+	vKisTool create(KActionCollection *actionCollection, KisCanvasSubject *subject);
 
 public:
 	static KisToolFactory *singleton();
@@ -43,9 +40,6 @@ public:
 private:
 	KisToolFactory(const KisToolFactory&);
 	KisToolFactory& operator=(const KisToolFactory&);
-
-private:
-	vKisTool m_tools;
 
 private:
 	static KisToolFactory *m_singleton;

@@ -80,6 +80,7 @@ namespace {
 KisToolSelectPolygonal::KisToolSelectPolygonal() 
 	: super()
 {
+	setName("tool_select_polygonal");
 	setCursor(KisCursor::selectCursor());
 
 	m_subject = 0;
@@ -295,14 +296,19 @@ void KisToolSelectPolygonal::clearSelection()
 
 void KisToolSelectPolygonal::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Polygonal Select"),
-					       "polygonal" , 
-					       0, 
-					       this, 
-					       SLOT(activate()),
-					       collection, 
-					       "tool_select_polygonal");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Polygonal Select"),
+					    "polygonal" , 
+					    0, 
+					    this, 
+					    SLOT(activate()),
+					    collection, 
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 

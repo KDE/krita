@@ -61,42 +61,40 @@ KisToolFactory::KisToolFactory()
 
 KisToolFactory::~KisToolFactory()
 {
-	for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); it++)
-		delete *it;
 }
 
-void KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSubject *subject)
+vKisTool KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSubject *subject)
 {
 	Q_ASSERT(actionCollection);
 	Q_ASSERT(subject);
 
-	if (m_tools.empty()) {
-		m_tools.push_back(new KisToolColorPicker);
-		m_tools.push_back(new KisToolMove);
-		m_tools.push_back(new KisToolZoom);
-		m_tools.push_back(new KisToolBrush);
-		m_tools.push_back(new KisToolDuplicate);
-		m_tools.push_back(new KisToolAirBrush);
-		m_tools.push_back(new KisToolEraser);
-		m_tools.push_back(new KisToolLine);
-		//m_tools.push_back(new KisToolStamp);
-		m_tools.push_back(new KisToolPaste);
-		m_tools.push_back(new KisToolSelectRectangular);
-		m_tools.push_back(new KisToolSelectFreehand);
-		m_tools.push_back(new KisToolSelectPolygonal);
-		m_tools.push_back(new KisToolSelectElliptical);
-		m_tools.push_back(new KisToolSelectContiguous);
-		m_tools.push_back(new KisToolSelectBrush);
-		m_tools.push_back(new KisToolPen);
-		m_tools.push_back(new KisToolRectangle);
-		m_tools.push_back(new KisToolEllipse);
-		m_tools.push_back(new KisToolPolyLine);
-		m_tools.push_back(new KisToolPolygon);
-		m_tools.push_back(new KisToolColorChanger);
-		m_tools.push_back(new KisToolFill);
-	}
+	vKisTool tools;
 
-	for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); it++) {
+	tools.push_back(new KisToolColorPicker);
+	tools.push_back(new KisToolMove);
+	tools.push_back(new KisToolZoom);
+	tools.push_back(new KisToolBrush);
+	tools.push_back(new KisToolDuplicate);
+	tools.push_back(new KisToolAirBrush);
+	tools.push_back(new KisToolEraser);
+	tools.push_back(new KisToolLine);
+	//tools.push_back(new KisToolStamp);
+	tools.push_back(new KisToolPaste);
+	tools.push_back(new KisToolSelectRectangular);
+	tools.push_back(new KisToolSelectFreehand);
+	tools.push_back(new KisToolSelectPolygonal);
+	tools.push_back(new KisToolSelectElliptical);
+	tools.push_back(new KisToolSelectContiguous);
+	tools.push_back(new KisToolSelectBrush);
+	tools.push_back(new KisToolPen);
+	tools.push_back(new KisToolRectangle);
+	tools.push_back(new KisToolEllipse);
+	tools.push_back(new KisToolPolyLine);
+	tools.push_back(new KisToolPolygon);
+	tools.push_back(new KisToolColorChanger);
+	tools.push_back(new KisToolFill);
+
+	for (vKisTool_it it = tools.begin(); it != tools.end(); it++) {
 		KisTool *tool = *it;
 
 		if (tool) {
@@ -106,6 +104,8 @@ void KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSubjec
 	}
 
 	subject -> notify();
+
+	return tools;
 }
 
 KisToolFactory *KisToolFactory::singleton()

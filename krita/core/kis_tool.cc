@@ -16,14 +16,22 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+#include <kaction.h>
+
 #include "kis_tool.h"
 #include "kis_tool.moc"
 
 KisTool::KisTool()
 {
+	m_action = 0;
+	m_ownAction = false;
 }
 
 KisTool::~KisTool()
 {
+	if (m_ownAction) {
+		delete m_action;
+		m_action = 0;
+	}
 }
 

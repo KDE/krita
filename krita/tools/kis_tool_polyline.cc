@@ -37,6 +37,7 @@
 KisToolPolyLine::KisToolPolyLine() 
 	: super()
 {
+	setName("tool_polyline");
 	m_subject = 0;
 }
 
@@ -78,14 +79,19 @@ void KisToolPolyLine::mouseRelease(QMouseEvent * /*event*/)
 
 void KisToolPolyLine::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Polyline Tool"),
-					       "polyline", 
-					       0, 
-					       this, 
-					       SLOT(activate()), 
-					       collection, 
-					       "tool_polyline");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Polyline Tool"),
+					    "polyline", 
+					    0, 
+					    this, 
+					    SLOT(activate()), 
+					    collection, 
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 QString KisToolPolyLine::settingsName() const

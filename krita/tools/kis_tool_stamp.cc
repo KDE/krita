@@ -35,6 +35,7 @@
 KisToolStamp::KisToolStamp() : 
 	super()
 {
+	setName("tool_stamp");
 }
 
 KisToolStamp::~KisToolStamp() 
@@ -446,12 +447,16 @@ void KisToolStamp::tabletEvent(QTabletEvent */*event*/)
 
 void KisToolStamp::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Stamp (Pattern) Tool"),
-					       "stamp", 0, this, 
-					       SLOT(activate()), collection,
-					       "tool_stamp");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Stamp (Pattern) Tool"),
+					    "stamp", 0, this, 
+					    SLOT(activate()), collection,
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 

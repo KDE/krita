@@ -32,6 +32,7 @@ class QRect;
 class QTabletEvent;
 class QWidget;
 class KActionCollection;
+class KRadioAction;
 class KDialog;
 class KoColor;
 class KisBrush;
@@ -66,10 +67,15 @@ public:
 	virtual void cursor(QWidget *w) const = 0;
 	virtual QWidget* createoptionWidget(QWidget* parent) = 0;
 	virtual QWidget* optionWidget() = 0;
+	KRadioAction *action() const { return m_action; }
 
 private:
 	KisTool(const KisTool&);
 	KisTool& operator=(const KisTool&);
+
+protected:
+	KRadioAction *m_action;
+	bool m_ownAction;
 };
 
 #endif // KIS_TOOL_H_

@@ -39,6 +39,7 @@ KisToolEraser::KisToolEraser()
 	  m_mode ( HOVER),
 	  m_dragDist ( 0 )
 {
+	setName("tool_eraser");
 	setCursor(KisCursor::eraserCursor());
 
 	m_painter = 0;
@@ -165,11 +166,16 @@ void KisToolEraser::eraseLine(const QPoint & pos1,
 
 void KisToolEraser::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Eraser Tool"),
-					       "eraser", 0, this,
-					       SLOT(activate()), collection,
-					       "tool_eraser");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Eraser Tool"),
+					    "eraser", 0, this,
+					    SLOT(activate()), collection,
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 #include "kis_tool_eraser.moc"

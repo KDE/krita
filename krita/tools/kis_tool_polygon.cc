@@ -38,6 +38,7 @@
 KisToolPolygon::KisToolPolygon() : 
 	super()
 {
+	setName("tool_polygon");
 	m_subject = 0;
 
 // 	m_dragging = false;
@@ -234,14 +235,19 @@ void KisToolPolygon::drawPolygon(const QPoint& start, const QPoint& end)
 
 void KisToolPolygon::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Polygon Tool"), 
-					       "polygon",
-					       0, 
-					       this, 
-					       SLOT(activate()),
-					       collection, 
-					       "tool_polygon");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Polygon Tool"), 
+					    "polygon",
+					    0, 
+					    this, 
+					    SLOT(activate()),
+					    collection, 
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 // void KisToolPolygon::toolSelect()

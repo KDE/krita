@@ -33,6 +33,7 @@
 
 KisToolMove::KisToolMove()
 {
+	setName("tool_move");
 	m_subject = 0;
 	setCursor(KisCursor::moveCursor());
 }
@@ -77,13 +78,18 @@ void KisToolMove::mouseRelease(QMouseEvent *e)
 
 void KisToolMove::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Move"), 
-					       "move", 
-					       0, 
-					       this,
-					       SLOT(activate()),
-					       collection,
-					       "tool_move");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Move"), 
+					    "move", 
+					    0, 
+					    this,
+					    SLOT(activate()),
+					    collection,
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 

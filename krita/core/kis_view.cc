@@ -114,6 +114,11 @@
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
 
+// Time in ms that must pass after a tablet event before a mouse event is allowed to
+// change the input device to the mouse. This is needed because mouse events are always
+// sent to a receiver if it does not accept the tablet event.
+#define MOUSE_CHANGE_EVENT_DELAY 100
+
 KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name) : super(doc, parent, name)
 {
         if (!doc -> isReadWrite())
@@ -121,7 +126,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         else
                 setXMLFile("krita.rc");
 
-        m_tool = 0;
+	m_inputDevice = INPUT_DEVICE_UNKNOWN;
         m_doc = doc;
         m_adapter = adapter;
         m_canvas = 0;
@@ -208,6 +213,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         connect(this, SIGNAL(embeddImage(const QString&)), SLOT(slotEmbedImage(const QString&)));
         connect(m_imgBuilderMgr, SIGNAL(size(Q_INT32)), SLOT(nBuilders(Q_INT32)));
         setupTools();
+	setInputDevice(INPUT_DEVICE_MOUSE);
         selectionUpdateGUI(false);
         setupClipboard();
         clipboardDataChanged();
@@ -676,16 +682,18 @@ void KisView::clearCanvas(const QRect& rc)
 
 void KisView::setCurrentTool(KisTool *tool)
 {
-        if (m_tool)
+	KisTool *oldTool = currentTool();
+
+        if (oldTool)
         {
-                if(m_tool -> optionWidget())
-                        m_toolcontroldocker -> unplug(m_tool -> optionWidget());
-                m_tool -> clear();
+                if (oldTool -> optionWidget())
+                        m_toolcontroldocker -> unplug(oldTool -> optionWidget());
+                oldTool -> clear();
         }
 
         if (tool) {
-                m_tool = tool;
-                m_tool -> cursor(m_canvas);
+                m_inputDeviceToolMap[m_inputDevice] = tool;
+                tool -> cursor(m_canvas);
 
                 if(tool -> createoptionWidget(m_toolcontroldocker)){
                         m_toolcontroldocker -> plug(tool -> optionWidget());
@@ -693,16 +701,100 @@ void KisView::setCurrentTool(KisTool *tool)
                 }
                 m_canvas -> enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
                 notify();
-        }
-        else{
-                m_tool = 0;
-                m_canvas -> setCursor(KisCursor::arrowCursor());
-        }
+	} else {
+		m_inputDeviceToolMap[m_inputDevice] = 0;
+		m_canvas -> setCursor(KisCursor::arrowCursor());
+	}
 }
 
 KisTool *KisView::currentTool() const
 {
-        return m_tool;
+	InputDeviceToolMap::const_iterator it = m_inputDeviceToolMap.find(m_inputDevice);
+
+	if (it != m_inputDeviceToolMap.end()) {
+		return (*it).second;
+	} else {
+		return 0;
+	}
+}
+
+KisTool *KisView::findTool(QString toolName, enumInputDevice inputDevice) const
+{
+	if (inputDevice == INPUT_DEVICE_UNKNOWN) {
+		inputDevice = m_inputDevice;
+	}
+
+	KisTool *tool = 0;
+	InputDeviceToolSetMap::const_iterator vit = m_inputDeviceToolSetMap.find(inputDevice);
+
+	Q_ASSERT(vit != m_inputDeviceToolSetMap.end());
+
+	const vKisTool& tools = (*vit).second;
+
+	for (vKisTool::const_iterator it = tools.begin(); it != tools.end(); it++) {
+		KisTool *t = *it;
+		if (t -> name() == toolName) {
+			tool = t;
+			break;
+		}
+	}
+
+	return tool;
+}
+
+void KisView::setInputDevice(enumInputDevice inputDevice)
+{
+	if (inputDevice != m_inputDevice) {
+		InputDeviceToolSetMap::iterator vit = m_inputDeviceToolSetMap.find(m_inputDevice);
+
+		if (vit != m_inputDeviceToolSetMap.end()) {
+			vKisTool& oldTools = (*vit).second;
+
+			for (vKisTool::iterator it = oldTools.begin(); it != oldTools.end(); it++) {
+				KisTool *tool = *it;
+				KAction *toolAction = tool -> action();
+
+				toolAction -> disconnect(SIGNAL(activated()), tool, SLOT(activate()));
+			}
+		}
+
+		KisTool *oldTool = currentTool();
+
+		if (oldTool)
+		{
+			if (oldTool -> optionWidget()) {
+				m_toolcontroldocker -> unplug(oldTool -> optionWidget());
+			}
+			oldTool -> clear();
+		}
+
+		m_inputDevice = inputDevice;
+
+		vit = m_inputDeviceToolSetMap.find(m_inputDevice);
+
+		Q_ASSERT(vit != m_inputDeviceToolSetMap.end());
+
+		vKisTool& tools = (*vit).second;
+
+		for (vKisTool::iterator it = tools.begin(); it != tools.end(); it++) {
+			KisTool *tool = *it;
+			KAction *toolAction = tool -> action();
+
+			connect(toolAction, SIGNAL(activated()), tool, SLOT(activate()));
+		}
+
+		if (currentTool() == 0) {
+			if (m_inputDevice == INPUT_DEVICE_ERASER) {
+				setCurrentTool(findTool("tool_eraser"));
+			} else {
+				setCurrentTool(findTool("tool_brush"));
+			}
+		} else {
+			setCurrentTool(currentTool());
+		}
+
+		currentTool() -> action() -> activate();
+	}
 }
 
 Q_INT32 KisView::horzValue() const
@@ -754,8 +846,8 @@ void KisView::paintView(const KisRect& r)
                                 m_doc -> setProjection(img);
                                 m_doc -> paintContent(gc, wr, false, 1.0, 1.0);
 
-                                if (m_tool)
-                                        m_tool -> paint(gc, wr);
+                                if (currentTool())
+                                        currentTool() -> paint(gc, wr);
                         }
 
                         paintGuides();
@@ -1839,9 +1931,15 @@ void KisView::print(KPrinter& printer)
 void KisView::setupTools()
 {
         KisToolFactory *factory = KisToolFactory::singleton();
-
         Q_ASSERT(factory);
-        factory -> create(actionCollection(), this);
+
+	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = factory -> create(actionCollection(), this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = factory -> create(actionCollection(), this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = factory -> create(actionCollection(), this);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = factory -> create(actionCollection(), this);
+
+	qApp -> installEventFilter(this);
+	m_tabletEventTimer.start();
 }
 
 void KisView::canvasGotPaintEvent(QPaintEvent *event)
@@ -1885,16 +1983,20 @@ void KisView::canvasGotMousePressEvent(QMouseEvent *e)
                 }
         }
 
-        if (m_tool) {
+        if (currentTool()) {
                 QPoint p = viewToWindow(e -> pos());
                 QMouseEvent ev(QEvent::MouseButtonPress, p, e -> globalPos(), e -> button(), e -> state());
 
-                m_tool -> mousePress(&ev);
+                currentTool() -> mousePress(&ev);
         }
 }
 
 void KisView::canvasGotMouseMoveEvent(QMouseEvent *e)
 {
+	if (m_inputDevice != INPUT_DEVICE_MOUSE && m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
+		setInputDevice(INPUT_DEVICE_MOUSE);
+	}
+
         KisImageSP img = currentImg();
 
         m_hRuler -> updatePointer(e -> pos().x() - canvasXOffset(), e -> pos().y() - canvasYOffset());
@@ -1906,7 +2008,7 @@ void KisView::canvasGotMouseMoveEvent(QMouseEvent *e)
                 QPoint p = mapToScreen(e -> pos());
                 KisGuideMgr *mgr = img -> guides();
 
-                if ((e -> state() & LeftButton == LeftButton) && mgr -> hasSelected()) {
+                if (((e -> state() & Qt::LeftButton) == Qt::LeftButton) && mgr -> hasSelected()) {
                         eraseGuides();
                         p -= m_lastGuidePoint;
 
@@ -1919,10 +2021,10 @@ void KisView::canvasGotMouseMoveEvent(QMouseEvent *e)
                         m_doc -> setModified(true);
                         paintGuides();
                 }
-        } else if (m_tool) {
+        } else if (currentTool()) {
                 QMouseEvent ev(QEvent::MouseButtonPress, wp, e -> globalPos(), e -> button(), e -> state());
 
-                m_tool -> mouseMove(&ev);
+                currentTool() -> mouseMove(&ev);
         }
 
         m_lastGuidePoint = mapToScreen(e -> pos());
@@ -1935,11 +2037,11 @@ void KisView::canvasGotMouseReleaseEvent(QMouseEvent *e)
 
         if (img && m_currentGuide) {
                 m_currentGuide = 0;
-        } else if (m_tool) {
+        } else if (currentTool()) {
                 QPoint p = viewToWindow(e -> pos());
                 QMouseEvent ev(QEvent::MouseButtonPress, p, e -> globalPos(), e -> button(), e -> state());
 
-                m_tool -> mouseRelease(&ev);
+                currentTool() -> mouseRelease(&ev);
         }
 }
 
@@ -1947,7 +2049,7 @@ void KisView::canvasGotTabletEvent(QTabletEvent *e)
 {
         KisImageSP img = currentImg();
         if (img ) {
-                if ( m_tool ) {
+                if ( currentTool() ) {
                         // Compute offset between screen coordinates and (zoomed) canvas coordinates.
                         QPoint p = viewToWindow(e -> pos());
                         // Synthesize a new tablet event.
@@ -1961,21 +2063,21 @@ void KisView::canvasGotTabletEvent(QTabletEvent *e)
                                         e -> yTilt(),
                                         e -> uniqueId());
 
-                        m_tool->tabletEvent( &ev );
+                        currentTool() -> tabletEvent( &ev );
                 }
         }
 }
 
 void KisView::canvasGotEnterEvent(QEvent *e)
 {
-        if (m_tool)
-                m_tool -> enter(e);
+        if (currentTool())
+                currentTool() -> enter(e);
 }
 
 void KisView::canvasGotLeaveEvent (QEvent *e)
 {
-        if (m_tool)
-                m_tool -> leave(e);
+        if (currentTool())
+                currentTool() -> leave(e);
 }
 
 void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
@@ -1985,14 +2087,14 @@ void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 
 void KisView::canvasGotKeyPressEvent(QKeyEvent *event)
 {
-        if (m_tool)
-                m_tool -> keyPress(event);
+        if (currentTool())
+                currentTool() -> keyPress(event);
 }
 
 void KisView::canvasGotKeyReleaseEvent(QKeyEvent *event)
 {
-        if (m_tool)
-                m_tool -> keyRelease(event);
+        if (currentTool())
+                currentTool() -> keyRelease(event);
 }
 
 void KisView::canvasRefresh()
@@ -2663,6 +2765,48 @@ void KisView::nBuilders(Q_INT32 size)
 
 bool KisView::eventFilter(QObject *o, QEvent *e)
 {
+	switch (e -> type()) {
+	case QEvent::TabletMove:
+	case QEvent::TabletPress:
+	case QEvent::TabletRelease:
+	{
+		QTabletEvent *te = static_cast<QTabletEvent *>(e);
+		enumInputDevice device;
+
+		switch (te -> device()) {
+		default:
+		case QTabletEvent::NoDevice:
+		case QTabletEvent::Stylus:
+			device = INPUT_DEVICE_STYLUS;
+			break;
+		case QTabletEvent::Puck:
+			device = INPUT_DEVICE_PUCK;
+			break;
+		case QTabletEvent::Eraser:
+			device = INPUT_DEVICE_ERASER;
+			break;
+		}
+
+		setInputDevice(device);
+
+		// We ignore device change due to mouse events for a short duration
+		// after a tablet event, since these are almost certainly mouse events
+		// sent to receivers that don't accept the tablet event.
+		m_tabletEventTimer.start();
+		break;
+	}
+	case QEvent::MouseButtonPress:
+	case QEvent::MouseMove:
+	case QEvent::MouseButtonRelease:
+		if (m_inputDevice != INPUT_DEVICE_MOUSE && m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
+			setInputDevice(INPUT_DEVICE_MOUSE);
+		}
+		break;
+	default:
+		// Ignore
+		break;
+	}
+
         if ((o == m_hRuler || o == m_vRuler) && (e -> type() == QEvent::MouseMove || e -> type() == QEvent::MouseButtonRelease)) {
                 QMouseEvent *me = dynamic_cast<QMouseEvent*>(e);
                 QPoint pt = mapFromGlobal(me -> globalPos());
@@ -2675,7 +2819,7 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
 
                 mgr = img -> guides();
 
-                if (e -> type() == QEvent::MouseMove) {
+                if (e -> type() == QEvent::MouseMove && (me -> state() & Qt::LeftButton)) {
                         bool flag = geometry().contains(pt);
                         KisGuideSP gd;
 

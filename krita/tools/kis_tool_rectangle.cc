@@ -39,6 +39,7 @@ KisToolRectangle::KisToolRectangle()
           m_dragging (false),
           m_currentImage (0)
 {
+	setName("tool_rectangle");
 // 	// initialize rectangle tool settings
 // 	m_lineThickness = 4;
 // 	m_opacity = 255;
@@ -194,14 +195,19 @@ void KisToolRectangle::draw(const QPoint& start, const QPoint& end )
 
 void KisToolRectangle::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Rectangle Tool"),
-					       "rectangle",
-					       0,
-					       this,
-					       SLOT(activate()),
-					       collection,
-					       "tool_rectangle");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Rectangle Tool"),
+					    "rectangle",
+					    0,
+					    this,
+					    SLOT(activate()),
+					    collection,
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 // QDomElement KisToolRectangle::saveSettings(QDomDocument& doc) const

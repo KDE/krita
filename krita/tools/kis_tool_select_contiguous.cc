@@ -34,7 +34,7 @@
 
 KisToolSelectContiguous::KisToolSelectContiguous() : super()
 {
-
+	setName("tool_select_contiguous");
 	m_subject = 0;
 
 	m_dragging = false;
@@ -173,14 +173,19 @@ void KisToolSelectContiguous::drawRect( const QPoint& start, const QPoint& end )
 
 void KisToolSelectContiguous::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Contiguous Select"), 
-					       "contiguous" , 
-					       0, 
-					       this, 
-					       SLOT(activate()), 
-					       collection, 
-					       "tool_select_contiguous" );
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Contiguous Select"), 
+					    "contiguous" , 
+					    0, 
+					    this, 
+					    SLOT(activate()), 
+					    collection, 
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 bool KisToolSelectContiguous::willModify() const

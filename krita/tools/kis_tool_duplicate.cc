@@ -37,6 +37,7 @@
 KisToolDuplicate::KisToolDuplicate() 
 	: super(), m_isOffsetNotUptodate(true), m_position(QPoint(-1,-1))
 {
+	setName("tool_duplicate");
 	m_subject = 0;
 	setCursor(KisCursor::penCursor());
 }
@@ -66,11 +67,16 @@ void KisToolDuplicate::mousePress(QMouseEvent *e)
 
 void KisToolDuplicate::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Duplicate"),
-					       "stamp", 0, this,
-					       SLOT(activate()), collection,
-					       "tool_duplicate");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Duplicate"),
+					    "stamp", 0, this,
+					    SLOT(activate()), collection,
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 void KisToolDuplicate::initPaint(const QPoint & pos)

@@ -30,6 +30,7 @@
 
 KisToolPaste::KisToolPaste()
 {
+	setName("tool_paste");
 	m_subject = 0;
 	setCursor(KisCursor::crossCursor());
 	m_justEntered = false;
@@ -130,13 +131,18 @@ void KisToolPaste::activate()
 
 void KisToolPaste::setup(KActionCollection *collection)
 {
- 	KRadioAction * radio = new KRadioAction(i18n("&Paste Tool"), 
-						"editpaste", 
-						0, 
-						this, 
-						SLOT(activate()), 
-						collection, 
-						"tool_paste");
- 	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Paste Tool"), 
+					    "editpaste", 
+					    0, 
+					    this, 
+					    SLOT(activate()), 
+					    collection, 
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 

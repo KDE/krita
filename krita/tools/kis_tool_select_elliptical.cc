@@ -77,6 +77,7 @@ namespace {
 
 KisToolSelectElliptical::KisToolSelectElliptical()
 {
+	setName("tool_select_elliptical");
 	setCursor(KisCursor::selectCursor());
 
 	m_subject = 0;
@@ -240,14 +241,19 @@ void KisToolSelectElliptical::paintOutline(QPainter& gc, const QRect&)
 
 void KisToolSelectElliptical::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Elliptical Select"), 
-					       "elliptical" , 
-					       0, 
-					       this, 
-					       SLOT(activate()),
-					       collection, 
-					       "tool_select_elliptical" );
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Elliptical Select"), 
+					    "elliptical" , 
+					    0, 
+					    this, 
+					    SLOT(activate()),
+					    collection, 
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 

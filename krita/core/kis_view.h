@@ -23,7 +23,9 @@
 #if !defined KIS_VIEW_H_
 #define KIS_VIEW_H_
 
+#include <qdatetime.h>
 #include <list>
+#include <map>
 #include <koColor.h>
 #include <koView.h>
 #include "kis_canvas_controller.h"
@@ -78,6 +80,9 @@ class KisView : public KoView,
 	typedef std::list<KisCanvasObserver*> vKisCanvasObserver;
 	typedef vKisCanvasObserver::iterator vKisCanvasObserver_it;
 	typedef vKisCanvasObserver::const_iterator vKisCanvasObserver_cit;
+
+	typedef std::map<enumInputDevice, KisTool *> InputDeviceToolMap;
+	typedef std::map<enumInputDevice, vKisTool> InputDeviceToolSetMap;
 
 public:
 	KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent = 0, const char *name = 0);
@@ -230,6 +235,8 @@ private:
 	void setupStatusBar();
 	void setupTools();
 	void zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf);
+	void setInputDevice(enumInputDevice inputDevice);
+	KisTool *findTool(QString toolName, enumInputDevice inputDevice = INPUT_DEVICE_UNKNOWN) const;
 
 private slots:
 
@@ -397,7 +404,6 @@ private:
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
 	KisLayerBox *m_layerBox;
-	KisTool *m_tool;
 	bool m_clipboardHasImage;
 	KisGuideSP m_currentGuide;
 	QPoint m_lastGuidePoint;
@@ -405,6 +411,13 @@ private:
 	vKisCanvasObserver m_observers;
 
         QLabel *m_statusBarZoomLabel;
+
+	enumInputDevice m_inputDevice;
+	InputDeviceToolMap m_inputDeviceToolMap;
+	InputDeviceToolSetMap m_inputDeviceToolSetMap;
+
+	QTime m_tabletEventTimer;
+	QTabletEvent::TabletDevice m_lastTabletEventDevice;
 
 private:
 	mutable KisImageSP m_current;

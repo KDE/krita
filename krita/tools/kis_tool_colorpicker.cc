@@ -35,6 +35,7 @@
 
 KisToolColorPicker::KisToolColorPicker()
 {
+	setName("tool_colorpicker");
 	setCursor(KisCursor::pickerCursor());
 	m_subject = 0;
 	m_optWidget = 0;
@@ -89,8 +90,13 @@ void KisToolColorPicker::mousePress(QMouseEvent *e)
 
 void KisToolColorPicker::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Color Picker"), "colorpicker", 0, this, SLOT(activate()), collection, "tool_colorpicker");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Color Picker"), "colorpicker", 0, this, SLOT(activate()), collection, name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 void KisToolColorPicker::update(KisCanvasSubject *subject)

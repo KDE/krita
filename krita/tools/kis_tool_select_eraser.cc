@@ -40,6 +40,7 @@ KisToolSelectEraser::KisToolSelectEraser()
           m_mode( HOVER ),
 	  m_dragDist ( 0 )
 {
+	setName("tool_select_eraser");
 	// XXX: create cursors in the shape of the brush -- very
 	// important for this tool
 	setCursor(KisCursor::selectCursor());
@@ -187,11 +188,16 @@ void KisToolSelectEraser::paintLine(const QPoint & pos1,
 
 void KisToolSelectEraser::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Selecteraser"),
-					       "selecteraser", 0, this,
-					       SLOT(activate()), collection,
-					       "tool_select_eraser");
-	radio -> setExclusiveGroup("selection_tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Selecteraser"),
+					    "selecteraser", 0, this,
+					    SLOT(activate()), collection,
+					    name());
+		m_action -> setExclusiveGroup("selection_tools");
+		m_ownAction = true;
+	}
 }
 
 QWidget* KisToolSelectEraser::createoptionWidget(QWidget* parent)

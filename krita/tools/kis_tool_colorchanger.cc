@@ -33,7 +33,7 @@
 
 KisToolColorChanger::KisToolColorChanger() : super()
 {
-
+	setName("tool_colorchanger");
 	// set custom cursor.
 	setCursor(KisCursor::colorChangerCursor());
 
@@ -224,14 +224,19 @@ void KisToolColorChanger::mousePress(QMouseEvent *e)
 
 void KisToolColorChanger::setup(KActionCollection *collection)
 {
-	KRadioAction * radio = new KRadioAction(i18n("Color Changer"), 
-						"colorize", 
-						0, 
-						this, 
-						SLOT(activate()), 
-						collection, 
-						"tool_colorchanger");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("Color Changer"), 
+					    "colorize", 
+					    0, 
+					    this, 
+					    SLOT(activate()), 
+					    collection, 
+					    name());
+		m_action-> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 // QDomElement KisToolColorChanger::saveSettings(QDomDocument& doc) const

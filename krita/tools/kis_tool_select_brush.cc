@@ -40,6 +40,7 @@ KisToolSelectBrush::KisToolSelectBrush()
           m_mode( HOVER ),
 	  m_dragDist ( 0 )
 {
+	setName("tool_select_brush");
 	// XXX: create cursors in the shape of the brush -- very
 	// important for this tool
 	setCursor(KisCursor::selectCursor());
@@ -187,11 +188,16 @@ void KisToolSelectBrush::paintLine(const QPoint & pos1,
 
 void KisToolSelectBrush::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Selectbrush"),
-					       "selectbrush", 0, this,
-					       SLOT(activate()), collection,
-					       "tool_select_brush");
-	radio -> setExclusiveGroup("selection_tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Selectbrush"),
+					    "selectbrush", 0, this,
+					    SLOT(activate()), collection,
+					    name());
+		m_action -> setExclusiveGroup("selection_tools");
+		m_ownAction = true;
+	}
 }
 
 QWidget* KisToolSelectBrush::createoptionWidget(QWidget* parent)

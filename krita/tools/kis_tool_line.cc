@@ -39,6 +39,7 @@ KisToolLine::KisToolLine()
 	  m_opacity(OPACITY_OPAQUE),
 	  m_compositeOp(COMPOSITE_OVER)
 {
+	setName("tool_line");
 	setCursor(KisCursor::arrowCursor());
 
 	m_painter = 0;
@@ -218,11 +219,16 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
 
 void KisToolLine::setup(KActionCollection *collection)
 {
-	KRadioAction *radio = new KRadioAction(i18n("&Line Tool"),
-					       "line", 0, this,
-					       SLOT(activate()), collection,
-					       "tool_line");
-	radio -> setExclusiveGroup("tools");
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("&Line Tool"),
+					    "line", 0, this,
+					    SLOT(activate()), collection,
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
 }
 
 #include "kis_tool_line.moc"

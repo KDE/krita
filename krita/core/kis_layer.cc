@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
  *                1999-2000 Matthias Elter <elter@kde.org>
+ *                2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,47 +20,30 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "kis_layer.h"
-#include "kis_global.h"
+#include <assert.h>
+
 #include <kdebug.h>
 
+#include "kis_layer.h"
+#include "kis_global.h"
 
-KisLayer::KisLayer(const QString& name, cMode cm, uchar bd)
-  : QObject()
-  , m_name(name)
-  , m_cMode(cm)
-  , m_bitDepth(bd)
+KisLayer::KisLayer(const QString& name, uint width, uint height, uint bpp, cMode cm) : super(name, width, height, bpp)
 {
-    m_visible = true;
-    m_linked = false;
-    m_current = 0;
-    m_opacity= 255;
-    mLayerXOffset = 0;
-    mLayerYOffset = 0;
-    
-    calcNumChannels();
-
-    // FIXME: Implement non-RGB modes.
-    if (cm == cm_RGB || cm == cm_RGBA)
-    {
-        m_ch[0] = new KisChannel(ci_Red, m_bitDepth);
-	    m_ch[1] = new KisChannel(ci_Green, m_bitDepth);
-	    m_ch[2] = new KisChannel(ci_Blue, m_bitDepth);
-
-	    if (cm == cm_RGBA)
-	        m_ch[3] = new KisChannel(ci_Alpha, m_bitDepth);
-    }
+	m_cMode = cm;
+	m_visible = true;
+	m_linked = false;
+	m_current = 0;
+	m_opacity= 255;
+	mLayerXOffset = 0;
+	mLayerYOffset = 0;
 }
-
 
 KisLayer::~KisLayer()
 {
-    for (uchar i = 0; i < m_channels; i++)
-	delete m_ch[i];
 }
 
-
-
+// XXX Move the firstChannel and nextChannel to KisImage
+#if 0
 KisChannel* KisLayer::firstChannel()
 {
     m_current = 0;
@@ -76,7 +60,6 @@ KisChannel* KisLayer::nextChannel()
     else
 	    return 0;
 }
-
 
 void KisLayer::calcNumChannels()
 {
@@ -108,57 +91,76 @@ void KisLayer::calcNumChannels()
     }
 }
 
+#endif
 
 QRect KisLayer::tileRect(int tileNo)
 {
-    return(m_ch[0]->tileRect(tileNo));
+	int xTile = tileNo % m_tiles.xTiles();
+	int yTile = tileNo / m_tiles.xTiles(); // xTiles is used here.  Is this the intent?
+
+	QRect tr(xTile * TILE_SIZE, yTile * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	tr.moveBy(m_tileRect.x(), m_tileRect.y());
+	return(tr);
 }
 
+#if 0
+uint* KisLayer::scanLine()
+{
+	KisTile *tile = m_tiles.getTile(0, 0);
 
+	Q_ASSERT(tile);
+	return tile -> data();
+}
+#endif
+
+#if 0
 uchar* KisLayer::channelMem(uchar channel, uint tileNo, int ox, int oy) const
 {
-    return m_ch[channel]->tiles()[tileNo] + (oy * TILE_SIZE + ox);
+	assert(false);
+	return 0;
+	//return m_ch[channel]->tiles()[tileNo] + (oy * TILE_SIZE + ox);
 }
 
+#endif
 
 QRect KisLayer::imageExtents() const
 {
-    return m_ch[0]->imageExtents();
+	return m_imgRect;
+//    return m_ch[0]->imageExtents();
 }
 
 
 QRect KisLayer::layerExtents() const
 {
-    return QRect(mLayerXOffset, mLayerYOffset, mLayerWidth, mLayerHeight);
+	return QRect(mLayerXOffset, mLayerYOffset, mLayerWidth, mLayerHeight);
 }
 
 
 QRect KisLayer::tileExtents() const
 {
-    return m_ch[0]->tileExtents();
+	return m_tileRect;
+//	return QRect(0, 0, TILE_SIZE, TILE_SIZE);
+//	return m_ch[0]->tileExtents();
 }
 
-
+#if 0
 QPoint KisLayer::channelOffset() const 
 {
-    return m_ch[0]->offset();
+
+//    return m_ch[0]->offset();
 }
-
-
-int KisLayer::xTiles() const
-{
-    return m_ch[0]->xTiles();
-}
-
-
-int KisLayer::yTiles() const
-{
-    return m_ch[0]->yTiles();
-}
+#endif
 
 
 void KisLayer::moveBy(int dx, int dy)
 {
+	mLayerXOffset += dx;
+	mLayerYOffset += dy;
+	m_imgRect.moveBy(dx, dy);
+	m_tileRect.moveBy(dx, dy);
+
+#if 0
     mLayerXOffset += dx;
     mLayerYOffset += dy;
     
@@ -170,11 +172,24 @@ void KisLayer::moveBy(int dx, int dy)
 
     for (uchar i = 0; i < m_channels; i++)
 	    m_ch[i]->moveBy(dx, dy);
+#endif
 }
 
 
 void KisLayer::moveTo(int x, int y) 
 {
+	mLayerXOffset = x;
+	mLayerYOffset = y;
+
+	int dx = x - m_imgRect.x();
+	int dy = y - m_imgRect.y();
+
+	m_imgRect.moveTopLeft(QPoint(x, y));
+	m_tileRect.moveBy(dx,dy);
+
+#if 0
+	Q_ASSERT(false);
+
     mLayerXOffset = x;
     mLayerYOffset = y;
     
@@ -186,45 +201,52 @@ void KisLayer::moveTo(int x, int y)
 
     for (uchar i = 0; i < m_channels; i++)
 	    m_ch[i]->moveTo(x, y);
-        
+#endif
 }
 
 
 int KisLayer::channelLastTileOffsetX() const
 {
-    return m_ch[0]->lastTileOffsetX();
+	Q_ASSERT(false);
+	return 0;
+//	return m_ch[0]->lastTileOffsetX();
 }
 
 
 int KisLayer::channelLastTileOffsetY() const
 {
-    return m_ch[0]->lastTileOffsetY();
+	Q_ASSERT(false);
+	return 0;
+//	return m_ch[0]->lastTileOffsetY();
 }
 
 
 bool KisLayer::boundryTileX(int tile) const
 {
-    return (((tile % xTiles()) + 1) == xTiles());
+	return (((tile % xTiles()) + 1) == xTiles());
 }
 
 
 bool KisLayer::boundryTileY(int tile) const
 {
-    return (((tile/xTiles()) + 1) == yTiles());
+	return (((tile/xTiles()) + 1) == yTiles());
 }
 
 
 void KisLayer::allocateRect(QRect r)
 {
-    mLayerWidth  = r.width();  //jwc
-    mLayerHeight = r.height(); //jwc
+	mLayerWidth  = r.width();  //jwc
+	mLayerHeight = r.height(); //jwc
         
+	m_imgRect = m_tileRect = r;
+#if 0
     for (uchar i = 0; i < m_channels; i++)
 	    m_ch[i]->allocateRect(r);
-
+#endif
 }
 
 
+#if 0
 void KisLayer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
 {
     pt = pt - m_ch[0]->tileExtents().topLeft();
@@ -240,22 +262,12 @@ void KisLayer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) cons
     *y = pt.y() % TILE_SIZE;
     *x = pt.x() % TILE_SIZE;
 }
-
-
-void KisLayer::setPixel(uchar channel, uint x, uint y, uchar pixel)
-{
-    m_ch[channel]->setPixel(x,y, pixel);
-}
-
-
-uchar KisLayer::pixel(uchar channel, uint x, uint y)
-{
-    return m_ch[channel]->pixel(x,y);
-}
+#endif
 
 
 void KisLayer::clear(const KisColor& c, bool transparent )
 {
+#if 0
     if (!m_cMode == cm_RGB && !m_cMode == cm_RGBA)
 	    return;
 
@@ -302,6 +314,7 @@ void KisLayer::clear(const KisColor& c, bool transparent )
             }
         }
     }    
+#endif
 }
 
 #include "kis_layer.moc"

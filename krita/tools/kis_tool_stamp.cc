@@ -229,6 +229,7 @@ bool StampTool::stampToCanvas(QPoint pos)
 
 bool StampTool::stampColor(QPoint pos)
 {
+#if 0
     KisImage *img = m_doc->current();
     KisLayer *lay = img->getCurrentLayer();
     QImage  *qimg = m_pattern->image();
@@ -342,6 +343,8 @@ bool StampTool::stampColor(QPoint pos)
     }
 
     return true;
+#endif
+    return false;
 }
 
 

@@ -53,15 +53,19 @@ FillTool::~FillTool()
 // floodfill based on GPL code in gpaint by Li-Cheng (Andy) Tai
 int FillTool::is_old_pixel_value(struct fillinfo *info, int x, int y)
 {
+#if 0
 	unsigned char o_r = fLayer -> pixel(0, x, y);
 	unsigned char o_g = fLayer -> pixel(1, x, y);   
 	unsigned char o_b = fLayer -> pixel(2, x, y);   
 
 	return o_r == info -> o_r && o_g == info->o_g && o_b == info->o_b;
+#endif
+	return 0;
 }
 
 void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
 {
+#if 0
 	// fill with pattern
 	if(m_useGradient)
 		m_doc -> frameBuffer() -> setGradientToPixel(fLayer, x, y);
@@ -78,6 +82,7 @@ void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
 	// alpha adjustment with either fill method
 	if (layerAlpha)
 		fLayer -> setPixel(3, x, y, m_opacity);
+#endif
 }
 
 
@@ -87,6 +92,7 @@ void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
 
 void FillTool::flood_fill(struct fillinfo *info, int x, int y)
 {
+#if 0
    struct fillpixelinfo stack[STACKSIZE];
    struct fillpixelinfo * sp = stack;
    int l, x1, x2, dy;
@@ -150,7 +156,7 @@ skip:
 
 #undef POP
 #undef PUSH
-   	 
+#endif	 
 }   
    
 void FillTool::seed_flood_fill(int x, int y, const QRect& frect)
@@ -178,6 +184,7 @@ void FillTool::seed_flood_fill(int x, int y, const QRect& frect)
 
 bool FillTool::flood(int startX, int startY)
 {
+#if 0
     int startx = startX;
     int starty = startY;
     
@@ -237,6 +244,7 @@ bool FillTool::flood(int startX, int startY)
     /* refresh canvas so changes show up */
     QRect updateRect(0, 0, img->width(), img->height());
     img->markDirty(updateRect);
+#endif
   
     return true;
 }

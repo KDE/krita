@@ -20,6 +20,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <assert.h>
+
 #include <qpainter.h>
 
 #include <klocale.h>
@@ -72,40 +74,21 @@ KisImage::KisImage(const QString& name, int w, int h, cMode cm, uchar bd)
 	m_img.create(TILE_SIZE, TILE_SIZE, 32);
 	m_pCurrentLay = 0;
     
-	m_pComposeLay = new KisLayer("_compose", m_cMode, m_bitDepth);
+	m_pComposeLay = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, bd, cm);
 	m_pComposeLay -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE));
 
-	m_pBGLay = new KisLayer("_background", m_cMode, m_bitDepth);
+	m_pBGLay = new KisLayer("_background", TILE_SIZE, TILE_SIZE, bd, cm);
 	m_pBGLay -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE));
 
 	// FIXME: make it work with non-RGB color spaces
 	// make it work with BigEndian! - john
-
-	uchar *ptrRed   = m_pBGLay->channelMem(0, 0, 0, 0); // red
-	uchar *ptrGreen = m_pBGLay->channelMem(1, 0, 0, 0); // green
-	uchar *ptrBlue  = m_pBGLay->channelMem(2, 0, 0, 0); // blue
-	uchar *ptrAlpha = 0;                                // alpha
-
-	if (m_cMode == cm_RGBA)
-		ptrAlpha = m_pBGLay->channelMem(3, 0, 0, 0);
-
-	/* fill in background layer - draw a checkerboard pattern of alternating
-	   dark and light gray tiles in 16x16 squares on the background layer -
-	   if the image background is white, this is not seen until its first
-	   layer is moved. Note:  This "background" layer is deceptive.  It is
-	   not the same thing as the background layer that shows up in the layerview
-	   which can either be transparent like this underlying one or white
-	   or some other solid color. */
+	uint *ptr = m_pBGLay -> getTile(0, 0) -> data();
 
 	for (int y = 0; y < TILE_SIZE; y++)
 		for (int x = 0; x < TILE_SIZE; x++) {
 			uchar v = 128 + 63 * ((x / 16 + y / 16) % 2);
-			*(ptrRed + (y * TILE_SIZE + x)) = v;
-			*(ptrGreen + (y * TILE_SIZE + x)) = v;
-			*(ptrBlue + (y * TILE_SIZE + x)) = v;
 
-			if (m_cMode == cm_RGBA)
-				*(ptrAlpha + (y * TILE_SIZE + x)) = 255;
+			*(ptr + (y * TILE_SIZE) + x) = qRgba(v, v, v, 255);
 		}
 
 	compositeImage();
@@ -132,8 +115,6 @@ KisImage::KisImage(const QString& name, int w, int h, cMode cm, uchar bd)
 
 KisImage::~KisImage()
 {
-	kdDebug()<<"~KisImage()\n";
-
 	for (int y = 0; y < m_yTiles; y++)
 		for (int x = 0; x < m_xTiles; x++)
 			delete m_ptiles[y * m_xTiles + x];
@@ -186,7 +167,7 @@ void KisImage::setBackgroundLayer(unsigned int layer)
 
 void KisImage::addLayer(const QRect& rect, const KisColor& c, bool tr, const QString& name)
 {
-	KisLayer *lay = new KisLayer(name, m_cMode, m_bitDepth);
+	KisLayer *lay = new KisLayer(name, m_width, m_height, m_bitDepth, m_cMode);
 
 	lay -> allocateRect(rect);
 	lay -> clear(c, tr);
@@ -228,7 +209,7 @@ void KisImage::markDirty(const QRect& r)
 
 	for (int y = rc.top(); y < maxY; y++) {
 		for (int x = rc.left(); x < maxX; x++) {
-			Q_ASSERT(m_ptiles[y * m_xTiles + x]);
+//			Q_ASSERT(m_ptiles[y * m_xTiles + x]);
 			m_dirty[y * m_xTiles + x] = true;
 
 			if (m_autoUpdate)
@@ -327,45 +308,39 @@ void KisImage::paintPixmap(QPainter *p, const QRect& area)
 
 void KisImage::compositeTile(int x, int y, KisLayer *dstLay, int dstTile)
 {
-    // work out which tile to render into unless directed to a specific tile
-    if (dstTile==-1)
-        dstTile=y*m_xTiles+x;
-    if (dstLay==0)
-        dstLay=m_pComposeLay;
+	KisTile *dst = dstLay -> getTile(dstTile, dstTile);
+	QRect tileBoundary(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
-    KIS_DEBUG(tile, printf("\n*** compositeTile %d,%d\n",x,y); );
+	if (dstTile==-1)
+		dstTile = y * m_xTiles + x;
 
-    //printf("compositeTile: dstLay=%p dstTile=%d\n",dstLay, dstTile);
+	if (dstLay == 0)
+		dstLay = m_pComposeLay;
 
-    // Set the background
-    for (uchar i = 0; i < dstLay->numChannels(); i++)
-  	    memcpy(dstLay->channelMem(i, dstTile, 0, 0),
-            m_pBGLay->channelMem(i, dstTile, 0, 0), TILE_SIZE * TILE_SIZE);
+	for (unsigned int i = 0; i < dstLay -> yTiles(); i++)
+		memcpy(dstLay -> getTile(i, i) -> data(), m_pBGLay -> getTile(i, i) -> data(), TILE_SIZE * TILE_SIZE * sizeof(unsigned int));
 
-    // Find the tiles boundary in KisImage coordinates
-    QRect tileBoundary(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	for (KisLayer *lay = m_layers.first(); lay; lay = m_layers.next()) {
+		if (lay && lay -> visible()) { // && tileBoundary.intersects(lay -> imageExtents())) {
+			KisTile *src = lay -> getTile(x, y);
+			uint *p = src -> data();
 
-    int l=0;
-    KisLayer *lay=m_layers.first();
+			// TODO : Restore merging layers
+			memcpy(dst -> data(), p, TILE_SIZE * TILE_SIZE * sizeof(unsigned int));
+#if 0
+			for (int y = 0; y < TILE_SIZE; y++) {
+				uint *ptr = dst -> data();//(uint *)m_img.scanLine(y);
 
-    while(lay)
-    {
-        // Go through each layer and find its contribution to this tile
-        l++;
-        //printf("layer: %s opacity=%d\n",lay->name().data(), lay->opacity());
-        if ((lay->visible()) && (tileBoundary.intersects(lay->imageExtents())))
-        {
-            /* The layer is part of the tile. Find out the 1-4 tiles of
-            the channel which are in it and render the appropriate
-            proportions of each */
-            //TIME_START;
-            //printf("*** compositeTile %d,%d\n",x,y);
-            renderLayerIntoTile(tileBoundary, lay, dstLay, dstTile);
-            //TIME_END("renderLayerIntoTile");
-        }
+				for (int x = TILE_SIZE; x >= 0; x--) {
+					// TODO Merge with other layers
+					*(ptr + (y * TILE_SIZE) + x) = *(p + (y * TILE_SIZE) + x);
+				}
+			}
 
-        lay=m_layers.next();
-    }
+			//renderLayerIntoTile(tileBoundary, lay, dstLay, dstTile);
+#endif
+		}
+	}
 }
 
 void KisImage::compositeImage(const QRect& area)
@@ -380,8 +355,8 @@ void KisImage::compositeImage(const QRect& area)
 			// set the alpha channel to opaque in the compose layer
 			// if this is not done the colors from the different layers
 			// won't show up
-		        if (m_cMode == cm_RGBA)
-				memset(m_pComposeLay -> channelMem(3, 0, 0, 0), 255, TILE_SIZE * TILE_SIZE);
+//		        if (m_cMode == cm_RGBA)
+//				memset(m_pComposeLay -> channelMem(3, 0, 0, 0), 255, TILE_SIZE * TILE_SIZE);
 
 			// for this tile, get all the tiles from different layers
 			// which correspond and add them in (if they are visible, etc.)
@@ -407,6 +382,8 @@ void KisImage::compositeImage(const QRect& area)
 void KisImage::renderLayerIntoTile(QRect tileBoundary, const KisLayer *srcLay,
           KisLayer *dstLay, int dstTile)
 {
+	// TODO
+#if 0
     int tileNo, tileOffsetX, tileOffsetY, xTile, yTile;
 
     //puts("renderLayerIntoTile");
@@ -558,6 +535,7 @@ void KisImage::renderLayerIntoTile(QRect tileBoundary, const KisLayer *srcLay,
     }
     else
         KIS_DEBUG(render, puts("ignore"); );
+#endif
 }
 
 
@@ -567,6 +545,7 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
 	KisLayer *dstLay, int dstTile,
 	int srcX, int srcY, int dstX, int dstY, int w, int h)
 {
+#if 0
     for (uchar i = 0; i < srcLay->numChannels(); i++)
 	if (srcLay->channelMem(i, srcTile, 0, 0) == 0) return;
 
@@ -643,6 +622,7 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
 	        sptr3 += leadIn;
 	    }
     }
+#endif
 }
 
 /*
@@ -688,78 +668,18 @@ void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
 
 void KisImage::convertTileToPixmap(KisLayer *lay, int tileNo, QPixmap *pix)
 {
-    /* Copy the composite image into a QImage so it can be
-    converted to a QPixmap.  Note: surprisingly it is not quicker
-    to render directly into a QImage probably due to the CPU cache,
-    it's also useless wrt (writing?) to other colour spaces  */
+	KisTile *tile = lay -> getTile(0, 0);
+	uint *p = tile -> data();
 
-// too confusing - easier to use variables with color names
-#if 0
-    uchar *ptr0 = lay->channelMem(2, tileNo, 0, 0); // blue
-    uchar *ptr1 = lay->channelMem(1, tileNo, 0, 0); // green
-    uchar *ptr2 = lay->channelMem(0, tileNo, 0, 0); // red
-#endif
+	for (int y = 0; y < TILE_SIZE; y++) {
+		uint *ptr = (uint *)m_img.scanLine(y);
 
-    uchar *ptrBlue  = lay->channelMem(2, tileNo, 0, 0); // blue
-    uchar *ptrGreen = lay->channelMem(1, tileNo, 0, 0); // green
-    uchar *ptrRed   = lay->channelMem(0, tileNo, 0, 0); // red
-    uchar *ptrAlpha = 0;
+		for (int x = TILE_SIZE; x; x--)
+			*ptr++ = *p++;
+	}
 
-    if (m_cMode == cm_RGBA)
-         ptrAlpha = lay->channelMem(3, tileNo, 0, 0); // alpha
-
-    for(int y = 0; y < TILE_SIZE; y++)
-    {
-// this directly equates what is in each channel to a QImage scanline
-// offset backwards to front which hardcodes it to littlendian architecture
-#if 0
-        uchar *ptr = m_img.scanLine(y);
-	    for(int x = TILE_SIZE; x; x--)
-	    {
-	        *ptr++ = *ptr0++; // blue
-	        *ptr++ = *ptr1++; // green
-	        *ptr++ = *ptr2++; // red
-	        ptr++;  // alpha - ptr incremented, but value not used here
-	    }
-#endif
-
-// this may be somewhat more inefficient for littlendian systems but
-// should also work with bigendian. It lets Qt determine the color values
-// for each channel which automatically takes into account endianness for
-// 32 bit images like these.  The intermediate variable can be removed
-// later with the pointer increment taking place inside the qRgb( )
-// phrase, I think, achieving the same performance.
-
-        uchar iblue, ired, igreen, ialpha;
-
-        uint *ptr = (uint *)m_img.scanLine(y);
-	    for(int x = TILE_SIZE; x; x--)
-	    {
-            iblue   = *ptrBlue++;
-            igreen  = *ptrGreen++;
-            ired    = *ptrRed++;
-
-            if (m_cMode == cm_RGBA)
-            {
-                ialpha  = *ptrAlpha++;
-
-                // note - to duplicate (sortof) bigendian bug on littleendian
-                // system, comment out next line and uncomment out the
-                // one after - for testing only - john
-                *ptr = qRgba(ired, igreen, iblue, ialpha);
-                //*ptr = qRgb(ired, igreen, 255 - ialpha);
-            }
-            else
-            {
-                *ptr = qRgb(ired, igreen, iblue);
-            }
-
-            ptr++;
-	    }
-    }
-
-    // Construct the relevant pixmap
-    convertImageToPixmap(&m_img, pix);
+	// Construct the relevant pixmap
+	convertImageToPixmap(&m_img, pix);
 }
 
 /*

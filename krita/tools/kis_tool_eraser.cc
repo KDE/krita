@@ -135,6 +135,7 @@ bool EraserTool::paint(QPoint pos)
 
     bool alpha = (img->colorMode() == cm_RGBA);
 
+#if 0
     if (alpha)
     {
         uchar a;
@@ -191,6 +192,7 @@ bool EraserTool::paint(QPoint pos)
 	        }
 	    }
     }
+#endif
 
     return true;
 }

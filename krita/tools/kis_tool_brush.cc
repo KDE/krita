@@ -143,12 +143,9 @@ void BrushTool::mousePress(QMouseEvent *e)
 	m_dragdist = 0;
 
 	if (paintMonochrome(pos)) {
-		KCommand *cmd = new BrushToolCmd(m_doc);
 		QRect rc(pos - m_hotSpot, m_brushSize);
 
 		img -> markDirty(rc);
-//		cmd -> markDirty(rc, lay);
-		m_doc -> addCommand(cmd);
 	}
 }
 
@@ -180,39 +177,29 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 	uchar bv, invbv;
 	uchar r, g, b, a;
 	int   v;
+	uint rgb;
 
 	for (int y = sy; y <= ey; y++) {
 		sl = m_brush -> scanline(y);
 
 		for (int x = sx; x <= ex; x++) {
-			r = lay -> pixel(0, startx + x, starty + y);
-			g = lay -> pixel(1, startx + x, starty + y);
-			b = lay -> pixel(2, startx + x, starty + y);
-
+			lay -> pixel(startx + x, starty + y, &rgb);
+			r = qRed(rgb);
+			g = qGreen(rgb);
+			b = qBlue(rgb);
 			bv = *(sl + x);
 
-			if (bv == 0) 
+			if (bv == 0)
 				continue;
 
 			invbv = 255 - bv;
-#if 0
-			b = ((m_blue * bv) + (b * invbv)) / 255;
-			g = ((m_green * bv) + (g * invbv)) / 255;
-			r = ((m_red * bv) + (r * invbv)) / 255;
-			lay -> setPixel(0, startx + x, starty + y, r);
-			lay -> setPixel(1, startx + x, starty + y, g);
-			lay -> setPixel(2, startx + x, starty + y, b);
-#endif
 			b = (m_blue * m_opacity + r * invopacity) / 255;
 			g = (m_green * m_opacity + g * invopacity) / 255;
 			r = (m_red * m_opacity + r * invopacity) / 255;
-			lay -> setPixel(0, startx + x, starty + y, r);
-			lay -> setPixel(1, startx + x, starty + y, g);
-			lay -> setPixel(2, startx + x, starty + y, b);
+			rgb = (qRgb(m_red, m_green, m_red) * m_opacity + rgb * invopacity) / 255;
 
 			if (m_alpha) {
-				a = lay->pixel(3, startx + x, starty + y);
-
+				a = qAlpha(rgb);
 				v = a + bv;
 
 				if (v < 0) 
@@ -222,8 +209,12 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 					v = 255;
 
 				a = (uchar) v;
-				lay->setPixel(3, startx + x, starty + y, a);
+				rgb = qRgba(r, g, b, a);
 			}
+			else 
+				rgb = qRgb(r, g, b);
+
+			lay -> setPixel(startx + x, starty + y, rgb);
 		}
 	}
 
@@ -272,12 +263,9 @@ void BrushTool::mouseMove(QMouseEvent *e)
 		QPoint p(qRound(step.x()), qRound(step.y()));
 
 		if (paintMonochrome(p)) {
-			KCommand *cmd = new BrushToolCmd(m_doc);
 			QRect rc(p - m_hotSpot, m_brushSize);
 
 			img -> markDirty(rc);
-//			cmd -> markDirty(rc, lay);
-			m_doc -> addCommand(cmd);
 		}
 
 		dist -= m_spacing;

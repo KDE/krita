@@ -164,19 +164,21 @@ bool PenTool::paint(QPoint pos)
             // use foreround color
             if(!m_usePattern)
             {
+#if 0
 	            lay->setPixel(0, startx + x, starty + y, r);
 	            lay->setPixel(1, startx + x, starty + y, g);
 	            lay->setPixel(2, startx + x, starty + y, b);
+#endif
             }
             // map pattern to pen pixel
             else
             {
-	            m_fb->setPatternToPixel(lay, startx + x, starty + y, 0);
+//	            m_fb->setPatternToPixel(lay, startx + x, starty + y, 0);
             }
 
             if (alpha)
 	        {
-		        lay->setPixel(3, startx + x, starty + y, bv);
+//		        lay->setPixel(3, startx + x, starty + y, bv);
 	        }
 	    }
     }

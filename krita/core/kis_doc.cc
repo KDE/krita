@@ -279,10 +279,10 @@ QDomElement KisDoc::saveLayers( QDomDocument &doc, KisImage *img )
         else
             layer.setAttribute( "linked", "false" );
 
-        layer.setAttribute( "bitDepth", static_cast<int>(lay->bitDepth()) );
+        layer.setAttribute( "bitDepth", static_cast<int>(lay->bpp()) );
         layer.setAttribute( "cMode", static_cast<int>(lay->colorMode()) );
 
-        kdDebug(0) << "bitDepth: " <<  static_cast<int>(lay->bitDepth())  << endl;
+        kdDebug(0) << "bitDepth: " <<  static_cast<int>(lay->bpp())  << endl;
         kdDebug(0) << "colorMode: " <<  static_cast<int>(lay->colorMode())  << endl;
 
         layers.appendChild( layer );
@@ -300,6 +300,8 @@ QDomElement KisDoc::saveChannels( QDomDocument &doc, KisLayer *lay )
     // channels element - variable, normally maximum of 4 channels
     QDomElement channels = doc.createElement( "channels" );
 
+    // XXX
+#if 0
     kdDebug(0) << "channel elements" << endl;
 
     // channel elements
@@ -315,6 +317,7 @@ QDomElement KisDoc::saveChannels( QDomDocument &doc, KisLayer *lay )
 
         channels.appendChild( channel );
     } // end of channels loop
+#endif
 
     return channels;
 }
@@ -384,6 +387,8 @@ bool KisDoc::completeSaving( KoStore* store )
 
         for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
         {
+		// XXX
+#if 0 
             for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel() )
             {
                 QString image = QString( "image%1" ).arg( imageNumbers );
@@ -404,6 +409,7 @@ bool KisDoc::completeSaving( KoStore* store )
                     store->close();
                 }
             }
+#endif
             ++layerNumbers;
         }
         ++imageNumbers;
@@ -658,6 +664,7 @@ bool KisDoc::completeLoading( KoStore* store )
 
 	    for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next() )
 	    {
+#if 0
 		    for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel() )
 		    {
 			    QString image = QString( "image%1" ).arg( imageNumbers );
@@ -679,6 +686,7 @@ bool KisDoc::completeLoading( KoStore* store )
 				    store->close();
 			    }
 		    }
+#endif
 		    ++layerNumbers;
 	    }
 	    ++imageNumbers;
@@ -989,6 +997,7 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
 
             //QRgb *p = (QRgb *)qimg->scanLine(y) + x;
 
+#if 0 /// XXX
             if(layerGrayScale)
             {
                 /* only if qimage is gray scale - in which case all
@@ -1013,10 +1022,11 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
 	            lay->setPixel(2, startx + x, starty + y, r);
             }
             else
+		
             {
-	            lay->setPixel(0, startx + x, starty + y, qRed(*p));
-	            lay->setPixel(1, startx + x, starty + y, qGreen(*p));
-	            lay->setPixel(2, startx + x, starty + y, qBlue(*p));
+	            lay->setPixel(startx + x, starty + y, qRed(*p));
+	            lay->setPixel(startx + x, starty + y, qGreen(*p));
+	            lay->setPixel(startx + x, starty + y, qBlue(*p));
             }
 
             if (alpha)
@@ -1026,8 +1036,10 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
                 have already converted to 32 bit above */
 
                 a = qAlpha(*p);
-		        lay->setPixel(3, startx + x, starty + y, a);
+		        lay->setPixel(startx + x, starty + y, a);
 	        }
+#endif
+	lay -> setPixel(startx + x, starty + y, *p);
 	    }
     }
 
@@ -1045,55 +1057,61 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
 
 bool KisDoc::LayerToQtImage(QImage *qimg, KisView * /*pView*/, QRect & clipRect)
 {
-    KisImage *img = current();
-    if (!img)  return false;
+	KisImage *img = current();
+	if (!img)  return false;
 
-    KisLayer *lay = img->getCurrentLayer();
-    if (!lay)  return false;
+	KisLayer *lay = img->getCurrentLayer();
+	if (!lay)  return false;
 
-    // this may not always be zero, but for current
-    // uses it will be, as the entire layer is copied
-    // from its offset into the image
-    int startx = 0;
-    int starty = 0;
+	// this may not always be zero, but for current
+	// uses it will be, as the entire layer is copied
+	// from its offset into the image
+	int startx = 0;
+	int starty = 0;
 
-    // this insures getting the layer from its offset
-    // into the image, which may not be zero if the
-    // layer has been moved
-    if (!clipRect.intersects(lay->imageExtents()))
-        return false;
+	// this insures getting the layer from its offset
+	// into the image, which may not be zero if the
+	// layer has been moved
+	if (!clipRect.intersects(lay->imageExtents()))
+		return false;
 
-    clipRect = clipRect.intersect(lay->imageExtents());
+	clipRect = clipRect.intersect(lay->imageExtents());
 
-    int sx = clipRect.left();
-    int sy = clipRect.top();
-    int ex = clipRect.right();
-    int ey = clipRect.bottom();
+	int sx = clipRect.left();
+	int sy = clipRect.top();
+	int ex = clipRect.right();
+	int ey = clipRect.bottom();
 
-    uchar *sl;
-    uchar r, g, b;
-    uchar a = 255;
+	uchar *sl;
+	uchar r, g, b;
+	uchar a = 255;
+	uint rgba;
 
-    bool alpha = (img->colorMode() == cm_RGBA);
+	bool alpha = (img->colorMode() == cm_RGBA);
 
-    for (int y = sy; y <= ey; y++)
-    {
-        sl = qimg->scanLine(y);
+	for (int y = sy; y <= ey; y++) {
+		sl = qimg->scanLine(y);
 
-        for (int x = sx; x <= ex; x++)
-	    {
-            // layer binary values by channel
-	        r = lay->pixel(0, startx + x, starty + y);
-	        g = lay->pixel(1, startx + x, starty + y);
-	        b = lay->pixel(2, startx + x, starty + y);
-            if(alpha) a = lay->pixel(3, startx + x, starty + y);
+		for (int x = sx; x <= ex; x++) {
+			lay -> pixel(startx + x, starty + y, &rgba);
+			// layer binary values by channel
+#if 0
+			r = lay->pixel(0, startx + x, starty + y);
+			g = lay->pixel(1, startx + x, starty + y);
+			b = lay->pixel(2, startx + x, starty + y);
+			if(alpha) a = lay->pixel(3, startx + x, starty + y);
+#endif
+			r = qRed(rgba);
+			g = qGreen(rgba);
+			b = qBlue(rgba);
+			a = qAlpha(rgba);
 
-            uint *p = (uint *)qimg->scanLine(y - sy) + (x - sx);
-            *p = alpha ? qRgba(r, g, b, a) : qRgb(r, g, b);
-	    }
-    }
+			uint *p = (uint *)qimg->scanLine(y - sy) + (x - sx);
+			*p = alpha ? qRgba(r, g, b, a) : qRgb(r, g, b);
+		}
+	}
 
-    return true;
+	return true;
 }
 
 /*

@@ -109,6 +109,7 @@ uint KisChannel::lastTileOffsetY()
 
 void KisChannel::moveBy(int dx, int dy)
 {
+	Q_ASSERT(false);
     m_imgRect.moveBy(dx, dy);
     m_tileRect.moveBy(dx, dy);
 }

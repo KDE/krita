@@ -101,6 +101,7 @@ void KisSelection::setImage(QImage & img)
 */
 bool KisSelection::erase()
 {
+#if 0
     KisImage *img = pDoc->current();
     if (!img) return false;
 
@@ -156,6 +157,7 @@ bool KisSelection::erase()
     }
 
     return true;
+#endif
 }
 
 
@@ -182,6 +184,7 @@ void KisSelection::reverse()
 void KisSelection::fill(uint color,
     KisPattern * /*pattern*/, KisGradient * /*gradient*/)
 {
+#if 0
     KisImage *img = pDoc->current();
     if (!img) return;
 
@@ -244,11 +247,13 @@ void KisSelection::fill(uint color,
 	        }
 	    }
     }
+#endif
 }
 
 
 void KisSelection::setRectangularSelection(const QRect & re, KisLayer *lay)
 {
+#if 0
     setBounds(re);
 
     QRect clipRect = rectangle;
@@ -291,11 +296,13 @@ void KisSelection::setRectangularSelection(const QRect & re, KisLayer *lay)
             }
 	    }
     }
+#endif
 }
 
 
 void KisSelection::setEllipticalSelection(const QRect & re, KisLayer *lay)
 {
+#if 0
     // set the bounding selection rectangle
     setBounds(re);
 
@@ -399,12 +406,14 @@ void KisSelection::setEllipticalSelection(const QRect & re, KisLayer *lay)
             }
 	    }
     }
+#endif
 }
 
 
 
 void KisSelection::setPolygonalSelection(const QRect & re, QPointArray & pointsArray, KisLayer *lay )
 {
+#if 0
     // set the bounding selection rectangle
     setBounds( re );
 
@@ -505,6 +514,7 @@ void KisSelection::setPolygonalSelection(const QRect & re, QPointArray & pointsA
             }
         }
     }
+#endif
 }
 
 // Pixmap size of top left point is (0, 0). But original size of
@@ -531,6 +541,7 @@ QPointArray KisSelection::getBundedPointArray( QPointArray & points, QPoint & to
 
 void KisSelection::setContiguousSelection(const QRect & re, KisLayer *lay)
 {
+#if 0
     // set the bounding selection rectangle
     setBounds(re);
 
@@ -601,6 +612,7 @@ void KisSelection::setContiguousSelection(const QRect & re, KisLayer *lay)
             }
 	    }
     }
+#endif
 }
 
 

@@ -169,6 +169,7 @@ bool PasteTool::pasteColor(QPoint pos)
     bool layerAlpha = (img->colorMode() == cm_RGBA);
     bool imageAlpha = qimg->hasAlphaBuffer();
 
+#if 0
     for (int y = sy; y <= ey; y++)
     {
         for (int x = sx; x <= ex; x++)
@@ -218,6 +219,7 @@ bool PasteTool::pasteColor(QPoint pos)
 	        }
 	    }
     }
+#endif
 
     return true;
 }

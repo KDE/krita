@@ -24,10 +24,9 @@
 
 #include <qrect.h>
 #include <qpoint.h>
-#include <koStore.h> //jwc
+#include <koStore.h>
 
 #include "kis_global.h"
-
 
 class KisChannel
 {
@@ -39,9 +38,6 @@ public:
     cId    channelId()    const { return m_id; }
     uchar  bitDepth()     const { return m_bitDepth; }
     uint   xTiles()       const { return m_xTiles; }
-    // very bad bug - jwc - yTiles() returned m_xTiles, not m_yTiles
-    // this casued memory allocation problems with channelMem
-    //uint   yTiles()       const { return m_xTiles; }
     uint   yTiles()       const { return m_yTiles; }
     int    width()        const { return m_imgRect.width(); }
     int    height()       const { return m_imgRect.height(); }

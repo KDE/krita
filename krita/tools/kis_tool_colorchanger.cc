@@ -64,6 +64,7 @@ ColorChangerTool::~ColorChangerTool()
 
 bool ColorChangerTool::changeColors(int startX, int startY)
 {
+#if 0
     int startx = startX;
     int starty = startY;
     
@@ -128,6 +129,8 @@ bool ColorChangerTool::changeColors(int startX, int startY)
     img->markDirty(ur);
   
     return true;
+#endif
+    return false;
 }
 
 

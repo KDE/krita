@@ -275,6 +275,7 @@ void KisPainter::drawPolygon(const QPointArray& points, const QRect& rect)
 
 bool KisPainter::toLayer(const QRect& paintRect)
 {
+#if 0
 	KisImage *img;
 	KisLayer *lay;
 	QImage *qimg;
@@ -407,6 +408,8 @@ bool KisPainter::toLayer(const QRect& paintRect)
 	img -> markDirty(clipRect);
 	clearRectangle(clipRect);
 	return true;
+#endif
+	return false;
 }
 
 #include "kis_painter.moc"

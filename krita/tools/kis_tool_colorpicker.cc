@@ -34,6 +34,7 @@ ColorPicker::~ColorPicker() {}
 
 KisColor ColorPicker::pick(int x, int y)
 {
+#if 0
     KisImage * img = m_doc->current();
     KisLayer *lay = img->getCurrentLayer();
     
@@ -49,6 +50,8 @@ KisColor ColorPicker::pick(int x, int y)
     int b = lay->pixel(2, x, y);
         
     return KisColor(r, g,  b, cs_RGB);
+#endif
+    return KisColor(0, 0, 0, cs_RGB);
 }
 
 void ColorPicker::mousePress(QMouseEvent *e)

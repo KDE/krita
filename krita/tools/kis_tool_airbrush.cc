@@ -201,6 +201,7 @@ bool AirBrushTool::paint(QPoint pos, bool timeout)
 
             if(paintPoint)
             {
+#if 0
 	            r = lay->pixel(0, startx + x, starty + y);
 	            g = lay->pixel(1, startx + x, starty + y);
 	            b = lay->pixel(2, startx + x, starty + y);
@@ -234,6 +235,7 @@ bool AirBrushTool::paint(QPoint pos, bool timeout)
                     m_brushArray[brushWidth * (y-sy) + (x-sx)] = 1;
                     nPoints++;
                 }
+#endif
             }
 	    }
     }

@@ -182,7 +182,7 @@ void ChannelTable::init( KisDoc* doc )
     setCellWidth( CELLWIDTH );
     setCellHeight( CELLHEIGHT );
 
-    m_selected = (m_doc->current() ? m_doc->current()->getCurrentLayer()->numChannels() : 0) - 1;
+    m_selected = 0; // XXX (m_doc->current() ? m_doc->current()->getCurrentLayer()->numChannels() : 0) - 1;
 
     updateAllCells();
 
@@ -367,6 +367,7 @@ void ChannelTable::updateAllCells()
 
 void ChannelTable::slotProperties()
 {
+#if 0
     if( ChannelPropertyDialog::editProperties(
          *( m_doc->current()->getCurrentLayer()->firstChannel() ) ) )
     {
@@ -374,6 +375,7 @@ void ChannelTable::slotProperties()
         updateCell( m_selected, 0 );
         //m_doc->current()->markDirty( updateRect );
     }
+#endif
 }
 
 ChannelPropertyDialog::ChannelPropertyDialog( QString _channelname,

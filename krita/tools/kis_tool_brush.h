@@ -1,5 +1,7 @@
 /*
- *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
+ *  kis_tool_brush.h - part of Krita
+ *
+ *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,13 +21,11 @@
 #if !defined KIS_TOOL_BRUSH_H_
 #define KIS_TOOL_BRUSH_H_
 
-#include <qpoint.h>
-
-#include <kcommand.h>
-
-#include "kis_painter.h"
-#include "kis_tool.h"
 #include "kis_tool_paint.h"
+
+class KisPainter;
+class QPoint;
+
 
 class KisToolBrush : public KisToolPaint {
 	typedef KisToolPaint super;
@@ -62,9 +62,6 @@ private:
 
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;
-
-	bool m_usePattern;
-	bool m_useGradient;
 
 };
 #endif // KIS_TOOL_BRUSH_H_

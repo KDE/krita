@@ -1,3 +1,20 @@
+* Brush cursor shapes for tools (updating cursors from the tools doesn't work yet).
+* Give each layer its own imagetype; allow layers of diverse types in one image.
+* Option dialog for tools
+* Make tools kparts
+* Fix scrollbars
+* make brush tool antialiased; make un-antialiased pen tool
+* Fix spacing slider in sidebar
+* If you have a tablet, you can have more than one active tool at a time:
+	stylus, eraser, pointer and your ordinary mouse, not to mention
+	the possibility of having several styluses.
+* Implement saving/loading of tool properties.
+* redo configuration dialog
+* Find a way to set the hourglass cursor when doing complex things from
+	e.g. KisPainter.
+* Make pipe brushes pay attention to the instructions in the 'parasite'
+* Use patterns and gradients while painting
+
 User interface
 
         * add tool palette
@@ -12,7 +29,7 @@ User interface
 
 Tools
 
-        * brush, pen, pencil, airbrush, chalk etc.
+        * pen, pencil, airbrush, chalk etc.
         * text tool
         * more types of selection
         * smear, convolve etc.
@@ -35,17 +52,13 @@ To investigate
 Old TODO, parts of it seem pretty obsolete, and others are more of a 'redo'
 than a 'todo':
 
-- color modes: Indexed, Greyscale, RGB and RGBA.
-- layers
+- color modes: Indexed, Greyscale, RGB and RGBA, CMYK, CMKYA
 - channels (RGB, CMYK, HSB, etc...)
 - layer masks
 - plugin filter API
 - plugin tool API
 - basic image manipulation (contrast/brightness/saturation etc.)
 - scale images
-- zooming
-- native XML file format
-- basic import/export filters (png/jpg/tif/gif)
 - basic plugin filters (blur/sharpen etc.)
 - basic image transformations (rotate, mirror)
 - move tool
@@ -55,7 +68,6 @@ than a 'todo':
 - fill tool (fill with color or pattern)
 - gradient tool
 - pen (paint brush or pattern)
-- brush (paint brush or pattern)
 - airbrush (paint brush or pattern)
 - eraser
 - blur/sharpen with brush tool 

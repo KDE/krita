@@ -53,12 +53,15 @@ namespace {
 
 KisBrush::KisBrush(const QString& filename) : super(filename)
 {
+	m_brushType = INVALID;
 }
 
 KisBrush::KisBrush(const QString& filename,
 		   const QValueVector<Q_UINT8> & data,
 		   Q_UINT32 & dataPos) : super(filename)
 {
+	m_brushType = INVALID;
+
 	m_data.clear();
 	// XXX: This can be done more efficiently, I guess.
 	for (Q_UINT32 i = dataPos; i < data.size(); i++) {
@@ -126,25 +129,29 @@ void KisBrush::setHotSpot(QPoint pt)
 	m_hotSpot = QPoint(x, y);
 }
 
-uchar KisBrush::value(Q_INT32 x, Q_INT32 y) const
-{
-	return m_data[width() * y + x];
-}
+// uchar KisBrush::value(Q_INT32 x, Q_INT32 y) const
+// {
+// 	return m_data[width() * y + x];
+// }
 
-uchar *KisBrush::scanline(Q_INT32 i) const
-{
-	if (valid())
-		return m_img.scanLine(i);
+// uchar *KisBrush::scanline(Q_INT32 i) const
+// {
+// 	if (valid())
+// 		return m_img.scanLine(i);
 
-	return 0;
-}
+// 	return 0;
+// }
 
-uchar *KisBrush::bits() const
-{
-	if (valid())
-		return m_img.bits();
+// uchar *KisBrush::bits() const
+// {
+// 	if (valid())
+// 		return m_img.bits();
 
-	return 0;
+// 	return 0;
+// }
+
+enumBrushType KisBrush::brushType() const {
+	return m_brushType;
 }
 
 void KisBrush::ioData(KIO::Job * /*job*/, const QByteArray& data)
@@ -216,8 +223,9 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 
 	if (bh.bytes == 1) {
 		// Grayscale
-		Q_INT32 val;
+		m_brushType = MASK;
 
+		Q_INT32 val;
 		for (Q_UINT32 y = 0; y < bh.height; y++) {
 			for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
 				if (static_cast<Q_UINT32>(k) > m_data.size()) {
@@ -231,13 +239,14 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		}
 	} else if (bh.bytes == 4) {
 		// Has alpha
+		m_brushType = IMAGE;
+
 		for (Q_UINT32 y = 0; y < bh.height; y++) {
 			for (Q_UINT32 x = 0; x < bh.width; x++) {
 				if (static_cast<Q_UINT32>(k + 4) > m_data.size()) {
 					emit ioFailed(this);
 					return;
 				}
-
 				m_img.setPixel(x, y, qRgba(255 - m_data[k++],
 							   255 - m_data[k++],
 							   255 - m_data[k++],

@@ -62,6 +62,8 @@ public:
 	void setHotSpot(QPoint);
 	QPoint hotSpot() const { return m_hotSpot; }
 
+	virtual enumBrushType brushType() const;
+
 private slots:
 	void ioData(KIO::Job *job, const QByteArray& data);
 	void ioResult(KIO::Job *job);
@@ -80,6 +82,8 @@ private:
 	QPoint m_hotSpot;
 	QPtrList<KisBrush> m_brushes;
 
+	enumBrushType m_brushType;
+	
 };
 
 #endif // KIS_IMAGEPIPE_BRUSH_

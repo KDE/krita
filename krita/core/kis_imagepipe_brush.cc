@@ -39,9 +39,9 @@
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
 
-
 KisImagePipeBrush::KisImagePipeBrush(const QString& filename) : super(filename)
 {
+	m_brushType = INVALID;
 	m_numOfBrushes = 0;
 	m_currentBrush = 0;
 
@@ -114,6 +114,10 @@ void KisImagePipeBrush::setParasite(const QString& parasite)
 }
 
 
+enumBrushType KisImagePipeBrush::brushType() const {
+	return m_brushType;
+}
+
 void KisImagePipeBrush::ioData(KIO::Job * /*job*/, const QByteArray& data)
 {
 	if (!data.isEmpty()) {
@@ -170,7 +174,15 @@ void KisImagePipeBrush::ioResult(KIO::Job * /*job*/)
  		numOfBrushes++;
  	}
 
-	if (!m_brushes.isEmpty()) setValid(true);
+	if (!m_brushes.isEmpty()) {
+		setValid(true);
+		if (m_brushes.at( 0 ) -> brushType() == MASK) {
+			m_brushType = PIPE_MASK;
+		}
+		else {
+			m_brushType = PIPE_IMAGE;
+		}
+	}
 
 	emit loadComplete(this);
 }

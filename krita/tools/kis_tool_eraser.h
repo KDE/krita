@@ -1,8 +1,9 @@
 /*
- *  kis_tool_eraser.h - part of KImageShop
+ *  kis_tool_eraser.h - part of Krita
  *
  *  Copyright (c) 1999 Matthias Elter
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,34 +20,46 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __erasertool_h__
-#define __erasertool_h__
+#if !defined KIS_TOOL_ERASER_H_
+#define KIS_TOOL_ERASER_H_
 
-#include <qpoint.h>
+#include "kis_tool_paint.h"
 
-#include "kis_tool.h"
+class KisPainter;
+class QPoint;
 
-class KisBrush;
-class KisDoc;
-class BrushTool;
 
-class EraserTool : public BrushTool {
-	typedef BrushTool super;
+class KisToolEraser : public KisToolPaint {
+	typedef KisToolPaint super;
 
 public:
-	EraserTool(KisDoc *doc, KisBrush *brush);
-	virtual ~EraserTool();
+	KisToolEraser();
+	virtual ~KisToolEraser();
   
-	virtual void setupAction(QObject *collection);
-	virtual QDomElement saveSettings(QDomDocument& doc) const;
-	virtual bool loadSettings(QDomElement& elem);
+	virtual void setup(KActionCollection *collection);
 
-	virtual bool paint(const QPoint& pos);
-	virtual void mousePress(QMouseEvent*); 
+	virtual void update(KisCanvasSubject *subject);
+
+	virtual void mousePress(QMouseEvent *e); 
+	virtual void mouseMove(QMouseEvent *e);
+	virtual void mouseRelease(QMouseEvent *e);
+	virtual void tabletEvent(QTabletEvent *e);
 
 protected:
-	QCursor defaultCursor() const;
+
+	virtual void initErase(const QPoint & pos);
+	virtual void erase(const QPoint & pos);
+	virtual void endErase();
+
+	enumBrushMode m_mode;
+	KisPainter *m_painter;
+
+        QPoint m_dragStart;
+        float m_dragDist;
+
+	KisCanvasSubject *m_subject;
+	KisImageSP m_currentImage;
 };
 
-#endif
+#endif // KIS_TOOL_ERASER_H_
 

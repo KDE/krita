@@ -33,6 +33,14 @@
 class QPoint;
 class QPixmap;
 
+enum enumBrushType {
+        INVALID,
+	MASK,
+	IMAGE,
+	PIPE_MASK,
+	PIPE_IMAGE
+};
+
 class KisBrush : public KisResource {
 	typedef KisResource super;
 	Q_OBJECT
@@ -58,9 +66,11 @@ public:
 	void setHotSpot(QPoint);
 	QPoint hotSpot() const { return m_hotSpot; }
 
-	uchar value(Q_INT32 x, Q_INT32 y) const;
-	uchar *scanline(Q_INT32 i) const;
-	uchar *bits() const;
+/* 	uchar value(Q_INT32 x, Q_INT32 y) const; */
+/* 	uchar *scanline(Q_INT32 i) const; */
+/* 	uchar *bits() const; */
+
+	virtual enumBrushType brushType() const;
 
 
 private slots:
@@ -81,6 +91,8 @@ private:
 	Q_UINT32 m_height;       /*  height of brush  */
 	Q_UINT32 m_bytes;        /*  depth of brush in bytes */
 	Q_UINT32 m_magic_number; /*  GIMP brush magic number  */
+
+	enumBrushType m_brushType;
 
 };
 #endif // KIS_BRUSH_

@@ -741,7 +741,6 @@ void KisView::updateCanvas(const QRect& rc)
     options dialog by reparenting the widgets for each tool to a
     tabbed properties dialog, each tool getting a tab  - later
 */
-
 void KisView::tool_properties()
 {
 #if 0
@@ -1346,24 +1345,24 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const QString& filena
 				continue;
 			case KisImageBuilder_RESULT_NO_URI:
 			case KisImageBuilder_RESULT_NOT_LOCAL:
-				KNotifyClient::event("cannotopenfile");
+				KNotifyClient::event(this -> winId(), "cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_NOT_EXIST:
 				KMessageBox::error(this, i18n("File %1 does not exist.").arg(url.path()), i18n("Error Importing File"));
-				KNotifyClient::event("cannotopenfile");
+				KNotifyClient::event(this -> winId(), "cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_BAD_FETCH:
 				KMessageBox::error(this, i18n("Unable to download file %1.").arg(url.path()), i18n("Error Importing File"));
-				KNotifyClient::event("cannotopenfile");
+				KNotifyClient::event(this -> winId(), "cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_EMPTY:
 				KMessageBox::error(this, i18n("Empty file: %1").arg(url.path()), i18n("Error Importing File"));
-				KNotifyClient::event("cannotopenfile");
+				KNotifyClient::event(this -> winId(), "cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_FAILURE:
 				m_buildProgress -> changeSubject(0);
 				KMessageBox::error(this, i18n("Error loading file %1.").arg(url.path()), i18n("Error Importing File"));
-				KNotifyClient::event("cannotopenfile");
+				KNotifyClient::event(this -> winId(), "cannotopenfile");
 				continue;
 			case KisImageBuilder_RESULT_PROGRESS:
 				break;

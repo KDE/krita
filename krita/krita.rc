@@ -203,7 +203,6 @@
 <ToolBar name="navigation" position="top"><Text>Navigation</Text>
   <Action name="tool_move"/>
   <Action name="tool_zoom"/>
-  <Action name="tool_colorpicker"/>
   <Action name="previous_layer"/>  
   <Action name="refresh_canvas"/>
   <Action name="next_layer"/>  
@@ -221,6 +220,7 @@
 </ToolBar>
 
 <ToolBar name="painting tools" position="top"><Text>Painting Tools</Text>
+  <Action name="tool_colorpicker"/>
   <Action name="tool_pen"/>
   <Action name="tool_brush"/>
   <Action name="tool_airbrush"/>

@@ -1,5 +1,7 @@
 /*
- *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
+ *  kis_tool_brush.cc - part of Kria
+ *
+ *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,37 +17,28 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <qpainter.h>
-#include <qpen.h>
-#include <qcolor.h>
+
 
 #include <kdebug.h>
 #include <kaction.h>
 #include <kcommand.h>
 #include <klocale.h>
-#include <koColor.h>
 
-#include "kis_vec.h"
+#include "kis_cursor.h"
+#include "kis_doc.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
-#include "kis_doc.h"
-#include "kis_view.h"
 #include "kis_tool_brush.h"
-#include "kis_tool_paint.h"
-#include "kis_layer.h"
-#include "kis_alpha_mask.h"
-#include "kis_cursor.h"
+#include "kis_vec.h"
+#include "kis_view.h"
 
 KisToolBrush::KisToolBrush()
         : super(),
           m_mode( HOVER ),
-	  m_dragDist ( 0 ),
-	  m_usePattern ( false ),
-	  m_useGradient ( false )
+	  m_dragDist ( 0 )
 {
-#if 0 // until we got a decent cursor
-	setCursor(KisCursor::crossCursor());
-#endif
+	setCursor(KisCursor::brushCursor());
+
         m_painter = 0;
 	m_currentImage = 0;
 }

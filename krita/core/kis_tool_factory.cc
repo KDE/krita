@@ -1,5 +1,8 @@
 /*
+ * kis_tool_factory.cc -- part of Krita
+ *
  *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +28,7 @@
 #include "kis_tool_select_rectangular.h"
 #include "kis_tool_zoom.h"
 #include "kis_tool_brush.h"
+#include "kis_tool_eraser.h"
 
 namespace {
 	KisToolFactory moveMe; // XXX Where to create singletons in Krita?!?
@@ -54,6 +58,7 @@ void KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSubjec
 		m_tools.push_back(new KisToolZoom);
 		m_tools.push_back(new KisToolRectangularSelect);
 		m_tools.push_back(new KisToolBrush);
+		m_tools.push_back(new KisToolEraser);
 	}
 
 	for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); it++) {

@@ -45,7 +45,7 @@ public:
 	virtual void mouseRelease(QMouseEvent *e);
 	virtual void tabletEvent(QTabletEvent *e);
 
-protected:
+private:
 
 	virtual void initErase(const QPoint & pos);
 	virtual void eraseLine(const QPoint & pos1,

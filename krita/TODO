@@ -1,3 +1,5 @@
+* Fix drawing position to be middle of each brush, instead of under the brush -- see linetool
+* Fix linetool to use pressure to draw tapered lines.
 * The custom cursor show up in a white block if not run using a graphics card with hardware cursors.
 * The tabs for images inside a document seem to be broken :-( -- use Aditya's new common tabbar when it's done
 * Brush cursor shapes for tools (updating cursors from the tools doesn't work yet).

@@ -23,9 +23,8 @@
 
 #include "kis_tool_paint.h"
 
-class KisPainter;
 class QPoint;
-
+class KisPainter;
 
 class KisToolBrush : public KisToolPaint {
 	typedef KisToolPaint super;

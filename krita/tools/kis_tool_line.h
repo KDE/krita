@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2000 John Califf <jcaliff@comuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,45 +20,48 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __linetool_h__
-#define __linetool_h__
+#if !defined KIS_TOOL_LINE_H_
+#define KIS_TOOL_LINE_H_
 
-#include <qpoint.h>
+#include "kis_tool_paint.h"
 
-class KisDoc;
-class KisView;
-class KisCanvas;
+class QPoint;
+class KisPainter;
 
-class LineTool : public KisTool {
-	typedef KisTool super;
+class KisToolLine : public KisToolPaint {
+	typedef KisToolPaint super;
 
-public:
-	LineTool(KisDoc *doc, KisCanvas *canvas);
-	virtual ~LineTool();
+ public:
+	KisToolLine();
+	virtual ~KisToolLine();
 
-	virtual void setupAction(QObject *collection);
-	
-	virtual QString settingsName() const;
-	virtual QDomElement saveSettings(QDomDocument& doc) const;
-	virtual bool loadSettings(QDomElement& elem);
+	virtual void setup(KActionCollection *collection);
+	virtual void update(KisCanvasSubject *subject);
 
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);
+	virtual void tabletEvent(QTabletEvent *e);
 
-	virtual void optionsDialog();
-	virtual void toolSelect();
-  
-protected:
-	virtual void draw(const QPoint& start, const QPoint& end);
+	virtual void paint(QPainter& gc);
+	virtual void paint(QPainter& gc, const QRect& rc);
+
+	virtual KDialog *options(QWidget * parent);
+
+ private:
+	void paintLine();
+	void paintLine(QPainter& gc, const QRect& rc);
+
     
-protected:
-	int m_lineThickness;
 	bool m_dragging;
 
-	QPoint m_dragStart;
-	QPoint m_dragEnd;
+	QPoint m_startPos;
+	QPoint m_endPos;
+
+	KisCanvasSubject *m_subject;
+	KisImageSP m_currentImage;
+	KisPainter *m_painter;
 };
 
-#endif //__linetool_h__
+#endif //KIS_TOOL_LINE_H_
 

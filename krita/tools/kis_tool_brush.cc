@@ -25,13 +25,11 @@
 #include <klocale.h>
 
 #include "kis_cursor.h"
+#include "kis_dlg_toolopts.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
-#include "kis_selection.h"
 #include "kis_tool_brush.h"
-#include "kis_vec.h"
 #include "kis_view.h"
-#include "kis_dlg_toolopts.h"
 
 KisToolBrush::KisToolBrush()
         : super(),
@@ -50,6 +48,7 @@ KisToolBrush::~KisToolBrush()
 
 void KisToolBrush::update(KisCanvasSubject *subject)
 {
+	kdDebug() << "update brush\n";
 	m_subject = subject;
 	m_currentImage = subject -> currentImg();
 
@@ -185,7 +184,7 @@ void KisToolBrush::setup(KActionCollection *collection)
 {
         KToggleAction *toggle;
         toggle = new KToggleAction(i18n("&Brush"),
-				   "color_line", 0, this,
+				   "paintbrush", 0, this,
                                    SLOT(activate()), collection,
                                    "tool_brush");
         toggle -> setExclusiveGroup("tools");

@@ -52,6 +52,7 @@ KisToolEraser::~KisToolEraser()
 
 void KisToolEraser::update(KisCanvasSubject *subject)
 {
+	kdDebug() << "update eraser\n";
 	m_subject = subject;
 	m_currentImage = subject -> currentImg();
 

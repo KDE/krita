@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
@@ -527,11 +528,18 @@ float KisPainter::paintLine(const QPoint & pos1,
 			    const Q_INT32 yTilt,
 			    const float savedDist)
 {
+	// XXX: this is copy-paste from paint-at, and I don't like it.
+	Q_INT32 calibratedPressure = pressure / 2;
+	KisAlphaMask * mask = m_brush -> mask(calibratedPressure);
+	m_brushWidth = mask -> width();
+	m_brushHeight = mask -> height();
+	computeDab(mask);
+
 
 	Q_INT32 spacing = m_brush -> spacing();
 
 	if (spacing <= 0) {
-		spacing = m_brushWidth;
+		spacing = 1;
 	}
 
 	Q_INT32 x1, y1, x2, y2;
@@ -635,6 +643,8 @@ void KisPainter::paintAt(const QPoint & pos,
 	// composite filtered mask into temporary layer
 	// composite temporary layer into target layer
 	// @see: doc/brush.txt
+
+
 
 #if 0
         kdDebug() << "paint: " << pos.x() << ", " << pos.y() << endl;
@@ -812,11 +822,6 @@ void KisPainter::eraseAt(const QPoint &pos,
 void KisPainter::setBrush(KisBrush* brush)
 {
 	m_brush = brush;
-	m_lastPressure = 50; // Make neat constant
-	KisAlphaMask *mask = m_brush -> mask();
-	m_brushWidth = mask -> width();
-	m_brushHeight = mask -> height();
-
 	m_hotSpot = m_brush -> hotSpot();
 	m_hotSpotX = m_hotSpot.x();
 	m_hotSpotY = m_hotSpot.y();

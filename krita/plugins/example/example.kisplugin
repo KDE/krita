@@ -1,7 +1,0 @@
-[GENERAL]
-Name=Example
-Comment=Example Krayon plugin
-Subdir=example
-Library=lipkisp_example
-Type=Filter
-Group=Render

@@ -11,15 +11,21 @@ INCLUDES  = \
 	-I$(srcdir)/../../core/tool \
 	-I$(srcdir)/../../core/paintop \
 	-I$(srcdir)/../../ui \
+	-I$(srcdir)/../../ui/widgets \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
 kde_module_LTLIBRARIES = kritaconvolutionfilters.la
 
-kritaconvolutionfilters_la_SOURCES = convolutionfilters.cc \
+kritaconvolutionfilters_la_SOURCES = kis_custom_convolution_filter_configuration_base_widget.ui \
+	kis_custom_convolution_filter_configuration_widget.cc \
+	kis_custom_convolution_filter.cc \
+	convolutionfilters.cc \
 	kis_convolution_filter.cc
+   
 
 noinst_HEADERS = convolutionfilters.h \
+	kis_custom_convolution_filter_configuration_widget.h \
 	kis_convolution_filter.h
 
 kritaconvolutionfilters_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

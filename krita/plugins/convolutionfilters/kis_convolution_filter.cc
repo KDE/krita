@@ -30,12 +30,22 @@ KisConvolutionFilter::KisConvolutionFilter(const QString& name, KisView * view) 
 	
 }
 
-void KisConvolutionFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* , const QRect& /*rect*/, KisTileCommand* /*command*/)
+void KisConvolutionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& /*rect*/, KisTileCommand* command)
 {
-	KisConvolutionPainter painter( device );
-	painter.beginTransaction(i18n("convolve"));
-	KisMatrix3x3* amatrixes = matrixes();
-	painter.applyConvolutionColorTransformation(amatrixes);
-	delete amatrixes;
+ KisConvolutionPainter painter( dst );
+ painter.beginTransaction(command);
+ KisMatrix3x3* amatrixes = ((KisConvolutionConfiguration*)configuration)->matrixes();
+ painter.applyConvolutionColorTransformation(amatrixes, src);
 	painter.endTransaction();
 }
+
+KisConvolutionConstFilter::~KisConvolutionConstFilter()
+{
+	delete m_matrixes;
+}
+
+KisFilterConfiguration* KisConvolutionConstFilter::configuration(KisFilterConfigurationWidget*)
+{
+	return new KisConvolutionConfiguration( m_matrixes );
+}
+

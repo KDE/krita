@@ -27,107 +27,94 @@
 
 class KisView;
 
-class KisGaussianBlurFilter : public KisConvolutionFilter {
+class KisGaussianBlurFilter : public KisConvolutionConstFilter {
 public:
 	KisGaussianBlurFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Gaussian blur"; };
 };
 
-class KisSharpenFilter : public KisConvolutionFilter {
+class KisSharpenFilter : public KisConvolutionConstFilter {
 public:
 	KisSharpenFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Sharpen"; };
 };
 
-class KisMeanRemovalFilter : public KisConvolutionFilter {
+class KisMeanRemovalFilter : public KisConvolutionConstFilter {
 public:
 	KisMeanRemovalFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Mean Removal"; };
 };
 
-class KisEmbossLaplascianFilter : public KisConvolutionFilter {
+class KisEmbossLaplascianFilter : public KisConvolutionConstFilter {
 public:
 	KisEmbossLaplascianFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Emboss laplascian"; };
 };
 
-class KisEmbossInAllDirectionsFilter : public KisConvolutionFilter {
+class KisEmbossInAllDirectionsFilter : public KisConvolutionConstFilter {
 public:
 	KisEmbossInAllDirectionsFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Emboss in all directions"; };
 };
 
-class KisEmbossHorizontalVerticalFilter : public KisConvolutionFilter {
+class KisEmbossHorizontalVerticalFilter : public KisConvolutionConstFilter {
 public:
 	KisEmbossHorizontalVerticalFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Emboss horizontal and vertical"; };
 };
 
-class KisEmbossVerticalFilter : public KisConvolutionFilter {
+class KisEmbossVerticalFilter : public KisConvolutionConstFilter {
 public:
 	KisEmbossVerticalFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Emboss vertical only"; };
 };
 
-class KisEmbossHorizontalFilter : public KisConvolutionFilter {
+class KisEmbossHorizontalFilter : public KisConvolutionConstFilter {
 public:
 	KisEmbossHorizontalFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Emboss horizontal only"; };
 };
 
-class KisEmbossDiagonalFilter : public KisConvolutionFilter {
+class KisEmbossDiagonalFilter : public KisConvolutionConstFilter {
 public:
 	KisEmbossDiagonalFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Emboss diagonal"; };
 };
 
-class KisTopEdgeDetectionFilter : public KisConvolutionFilter {
+class KisTopEdgeDetectionFilter : public KisConvolutionConstFilter {
 public:
 	KisTopEdgeDetectionFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Top Edge detections"; };
 };
 
-class KisRightEdgeDetectionFilter : public KisConvolutionFilter {
+class KisRightEdgeDetectionFilter : public KisConvolutionConstFilter {
 public:
 	KisRightEdgeDetectionFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Right Edge detections"; };
 };
 
-class KisBottomEdgeDetectionFilter : public KisConvolutionFilter {
+class KisBottomEdgeDetectionFilter : public KisConvolutionConstFilter {
 public:
 	KisBottomEdgeDetectionFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Bottom Edge detections"; };
 };
 
-class KisLeftEdgeDetectionFilter : public KisConvolutionFilter {
+class KisLeftEdgeDetectionFilter : public KisConvolutionConstFilter {
 public:
 	KisLeftEdgeDetectionFilter(KisView * view);
 public:
-	virtual KisMatrix3x3* matrixes();
 	static inline QString name() { return "Left Edge detections"; };
 };
 

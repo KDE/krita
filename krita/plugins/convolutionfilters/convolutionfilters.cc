@@ -42,6 +42,7 @@
 // #include <kmessagebox.h>
 
 #include "convolutionfilters.h"
+#include "kis_custom_convolution_filter.h"
 
 typedef KGenericFactory<KritaConvolutionFilters> KritaConvolutionFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFactory( "krita" ) )
@@ -106,247 +107,187 @@ K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFact
 	KisFilterSP kledf = createFilter<KisLeftEdgeDetectionFilter>(view);
 	(void) new KAction("Left Edge detection", 0, 0, kledf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionleft");
 
+	KisFilterSP kccf = createFilter<KisCustomConvolutionFilter>(view);
+	(void) new KAction("Custom Convolution", 0, 0, kccf, SLOT(slotActivated()), actionCollection(), "convolution_custom");
+	
 }
 
 KritaConvolutionFilters::~KritaConvolutionFilters()
 {
 }
 
-KisGaussianBlurFilter::KisGaussianBlurFilter(KisView * view) : KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisGaussianBlurFilter::matrixes()
+KisGaussianBlurFilter::KisGaussianBlurFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 1, 2, 1 }, { 2, 4, 2 }, { 1, 2, 1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 16, 0);
+		m_matrixes[i] = KisMatrix3x3(mat, 16, 0);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
 
-KisSharpenFilter::KisSharpenFilter(KisView * view) : KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisSharpenFilter::matrixes()
+KisSharpenFilter::KisSharpenFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 0, -2, 0 }, { -2, 11, -2 }, { 0, -2, 0} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 3, 0);
+		m_matrixes[i] = KisMatrix3x3(mat, 3, 0);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisMeanRemovalFilter::KisMeanRemovalFilter(KisView * view) : KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisMeanRemovalFilter::matrixes()
+KisMeanRemovalFilter::KisMeanRemovalFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { -1, -1, -1 }, { -1, 9, -1 }, { -1, -1, -1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 1, 0);
+		m_matrixes[i] = KisMatrix3x3(mat, 1, 0);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisEmbossLaplascianFilter::KisEmbossLaplascianFilter(KisView * view) : KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisEmbossLaplascianFilter::matrixes()
+KisEmbossLaplascianFilter::KisEmbossLaplascianFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { -1, 0, -1 }, { 0, 4, 0 }, { -1, 0, -1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 1, 127);
+		m_matrixes[i] = KisMatrix3x3(mat, 1, 127);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
 KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter(KisView * view) 
-	: KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisEmbossInAllDirectionsFilter::matrixes()
+	: KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { -1, -1, -1 }, { -1, 8, -1 }, { -1, -1, -1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 1, 127);
+		m_matrixes[i] = KisMatrix3x3(mat, 1, 127);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
 KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter(KisView * view) 
-	: KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisEmbossHorizontalVerticalFilter::matrixes()
+	: KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 0, -1, 0 }, { -1, 4, -1 }, { 0, -1, 0} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 1, 127);
+		m_matrixes[i] = KisMatrix3x3(mat, 1, 127);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisEmbossVerticalFilter::KisEmbossVerticalFilter(KisView * view) : KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisEmbossVerticalFilter::matrixes()
+KisEmbossVerticalFilter::KisEmbossVerticalFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 0, -1, 0 }, { 0, 2, 0 }, { 0, -1, 0} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 1, 127);
+		m_matrixes[i] = KisMatrix3x3(mat, 1, 127);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
 KisEmbossHorizontalFilter::KisEmbossHorizontalFilter(KisView * view) : 
-	KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisEmbossHorizontalFilter::matrixes()
+	KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 0, 0, 0 }, { -1, 4, -1 }, { 0, 0, 0} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 1, 127);
+		m_matrixes[i] = KisMatrix3x3(mat, 1, 127);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
+
 }
 
-KisEmbossDiagonalFilter::KisEmbossDiagonalFilter(KisView * view) : KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisEmbossDiagonalFilter::matrixes()
+KisEmbossDiagonalFilter::KisEmbossDiagonalFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { -1, 0, -1 }, { 0, 4, 0 }, { -1, 0, -1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 1, 127);
+		m_matrixes[i] = KisMatrix3x3(mat, 1, 127);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
 
-KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter(KisView * view) : KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisTopEdgeDetectionFilter::matrixes()
+KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 1, 1, 1 }, { 0, 0, 0 }, { -1, -1, -1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 1, 127);
+		m_matrixes[i] = KisMatrix3x3(mat, 1, 127);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
+
 }
 
-KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter(KisView * view) : KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisRightEdgeDetectionFilter::matrixes()
+KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { -1, 0, 1 }, { -1, 0, 1 }, { -1, 0, 1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 1, 127);
+		m_matrixes[i] = KisMatrix3x3(mat, 1, 127);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter(KisView * view) : KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisBottomEdgeDetectionFilter::matrixes()
+KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { -1, -1, -1 }, { 0, 0, 0 }, { 1, 1, 1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 1, 127);
+		m_matrixes[i] = KisMatrix3x3(mat, 1, 127);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }
 
-KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter(KisView * view) : KisConvolutionFilter(name(), view)
-{
-}
-
-KisMatrix3x3* KisLeftEdgeDetectionFilter::matrixes()
+KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter(KisView * view) : KisConvolutionConstFilter(name(), view)
 {
 	Q_INT32 imgdepth = colorStrategy()->depth();
-	KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
+	m_matrixes = new KisMatrix3x3[imgdepth];
 	int mat[3][3] =  { { 1, 0, -1 }, { 1, 0, -1 }, { 1, 0, -1} };
 	for(int i = 0; i < imgdepth - 1; i ++)
 	{
-		amatrixes[i] = KisMatrix3x3(mat, 1, 127);
+		m_matrixes[i] = KisMatrix3x3(mat, 1, 127);
 	}
 	int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-	amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-	return amatrixes;
+	m_matrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 }

@@ -17,40 +17,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _KIS_CONVOLUTION_FILTER_H_
-#define _KIS_CONVOLUTION_FILTER_H_
+#ifndef _KIS_CUSTOM_CONVOLUTION_FILTER_H_
+#define _KIS_CUSTOM_CONVOLUTION_FILTER_H_
 
-#include "kis_filter.h"
-#include "kis_matrix.h"
-#include "kis_view.h"
-#include <kdebug.h>
+#include "kis_convolution_filter.h"
 
-class KisConvolutionConfiguration : public KisFilterConfiguration {
+class KisCustomConvolutionConfiguration : public KisConvolutionConfiguration {
 	public:
-		KisConvolutionConfiguration(KisMatrix3x3* matrixes) : m_matrixes(matrixes) {
+		KisCustomConvolutionConfiguration(KisMatrix3x3* matrixes) : KisConvolutionConfiguration(matrixes) {
 		};
-	public:
-		inline KisMatrix3x3* matrixes() { return m_matrixes; };
+		~KisCustomConvolutionConfiguration() { delete m_matrixes; };
 	private:
 		KisMatrix3x3* m_matrixes;
 };
 
-class KisConvolutionFilter : public KisFilter {
-public:
-	KisConvolutionFilter(const QString& name, KisView * view);
-public:
-	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
-};
-/** This class is used for a convolution filter with a constant matrix
- */
-class KisConvolutionConstFilter : public KisConvolutionFilter {
+class KisCustomConvolutionFilter : public KisConvolutionFilter {
 	public:
-		KisConvolutionConstFilter(const QString& name, KisView * view) : KisConvolutionFilter(name, view) { } ;
-		virtual ~KisConvolutionConstFilter();
+		KisCustomConvolutionFilter(KisView * view);
 	public:
+		static inline QString name() { return "Custom Convolution"; };
+	public:
+		virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
 		virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
 	protected:
-		KisMatrix3x3* m_matrixes;
+		virtual KisMatrix3x3* matrixes() { return m_matrix; };
+	private:
+		KisMatrix3x3* m_matrix;
 };
+
+
+
 
 #endif

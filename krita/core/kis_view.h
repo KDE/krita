@@ -63,6 +63,7 @@ class KisTool;
 class KisTabBar;
 class KisLayerView;
 class KisChannelView;
+class KisListBoxView;
 
 class KisView : public KoView {
 	Q_OBJECT
@@ -288,6 +289,24 @@ protected:
 	int         m_yPaintOffset;    
 
 	DCOPObject *m_dcop;
+
+private:
+	KisListBoxView *m_layerView;
+
+private slots:
+	void slotLayerToggleVisible(int n);
+	void slotLayerSelected(int n);
+	void slotLayerToggleLinked(int n);
+	void slotLayerProperties(int n);
+	void slotLayerAdd();
+	void slotLayerRemove(int n);
+	void slotLayerAddMask(int n);
+	void slotLayerRmMask(int n);
+	void slotLayerRaise(int n);
+	void slotLayerLower(int n);
+	void slotLayerFront(int n);
+	void slotLayerBack(int n);
+	void slotLayerLevel(int n);
 };
 
 void KisView::setActiveTool(KisTool *tool)

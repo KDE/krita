@@ -49,31 +49,27 @@ KisListBoxView::KisListBoxView(const QString& label, flags f, QWidget *parent, c
 	QHBox *hbox;
 	QButton *btn;
 
+	m_flags = f;
 	vbox -> setAutoAdd(true);
 	m_lst = new KListBox(this);
-
-#if 1
-	m_lst -> insertItem(new KisListBoxItem("Test 1", m_lst));
-	m_lst -> insertItem(new KisListBoxItem("Test 2", m_lst));
-#endif
 
 	hbox = new QHBox(this);
 	btn = new KPushButton(hbox);
 	btn -> setPixmap(BarIcon("newlayer"));
 	QToolTip::add(btn, i18n("Create New %1").arg(label));
-	btn = new KPushButton(hbox);
-	btn -> setPixmap(BarIcon("deletelayer"));
-	QToolTip::add(btn, i18n("Remove Current %1").arg(label));
-	btn = new KPushButton(hbox);
-	btn -> setPixmap(BarIcon("raiselayer"));
-	QToolTip::add(btn, i18n("Upper Current %1").arg(label));
-	btn = new KPushButton(hbox);
-	btn -> setPixmap(BarIcon("lowerlayer"));
-	QToolTip::add(btn, i18n("Lower Current %1").arg(label));
+	m_btnRm = new KPushButton(hbox);
+	m_btnRm -> setPixmap(BarIcon("deletelayer"));
+	QToolTip::add(m_btnRm, i18n("Remove Current %1").arg(label));
+	m_btnRaise = new KPushButton(hbox);
+	m_btnRaise -> setPixmap(BarIcon("raiselayer"));
+	QToolTip::add(m_btnRaise, i18n("Upper Current %1").arg(label));
+	m_btnLower = new KPushButton(hbox);
+	m_btnLower -> setPixmap(BarIcon("lowerlayer"));
+	QToolTip::add(m_btnLower, i18n("Lower Current %1").arg(label));
 
 	mnu = new KPopupMenu();
 
-	mnu -> insertItem(i18n("Raise %1").arg(label), UPPER);
+	mnu -> insertItem(i18n("Raise %1").arg(label), RAISE);
 	mnu -> insertItem(i18n("Lower %1").arg(label), LOWER);
 	mnu -> insertItem(i18n("Foremost %1").arg(label), FRONT);
 	mnu -> insertItem(i18n("Hindmost %1").arg(label), BACK);
@@ -114,6 +110,60 @@ KisListBoxView::~KisListBoxView()
 
 void KisListBoxView::slotMenuAction(int mnuId)
 {
+	int n = m_lst -> currentItem();
+	KisListBoxItem *p;
+
+	if (n == -1 && mnuId != ADD)
+		return;
+
+	p = dynamic_cast<KisListBoxItem*>(m_lst -> item(n));
+	
+	switch (mnuId) {
+		case VISIBLE:
+			emit itemToggleVisible(n);
+			p -> toggleVisible();
+			m_contextMnu -> setItemChecked(VISIBLE, p -> visible());
+			break;
+		case SELECTION:
+			emit itemSelected(n);
+			break;
+		case LINKING:
+			emit itemToggleLinked(n);
+			p -> toggleLinked();
+			break;
+		case PROPERTIES:
+			emit itemProperties(n);
+			break;
+		case ADD:
+			emit itemAdd();
+			break;
+		case REMOVE: 
+			emit itemRemove(n);
+			break;
+		case ADDMASK:
+			emit itemAddMask(n);
+			break;
+		case REMOVEMASK: 
+			emit itemRmMask(n);
+			break;
+		case RAISE: 
+			emit itemRaise(n);
+			break;
+		case LOWER: 
+			emit itemLower(n);
+			break;
+		case FRONT: 
+			emit itemFront(n);
+			break;
+		case BACK: 
+			emit itemBack(n);
+			break;
+		case LEVEL:
+			emit itemLevel(n);
+			break;
+	}
+
+	m_lst -> triggerUpdate(false);
 }
 
 void KisListBoxView::slotAboutToShow()
@@ -138,13 +188,51 @@ void KisListBoxView::slotExecuted(QListBoxItem *item, const QPoint& pos)
 	KisListBoxItem *p = dynamic_cast<KisListBoxItem*>(item);
 	int n = m_lst -> currentItem();
 
+	m_btnRm -> setEnabled(n != -1);
+	m_btnRaise -> setEnabled(n != -1);
+	m_btnLower -> setEnabled(n != -1);
+
 	if (n == -1)
 		return;
 
-	kdDebug() << "n = " << n << endl;
-	kdDebug() << "KisListBoxItem::intersectVisibleRect = " << p -> intersectVisibleRect(pos, n) << endl;
-	kdDebug() << "KisListBoxItem::intersectLinkedRect = " << p -> intersectLinkedRect(pos, n) << endl;
-	kdDebug() << "KisListBoxItem::intersectPreviewRect = " << p -> intersectPreviewRect(pos, n) << endl;
+	if (p -> intersectVisibleRect(pos, n))
+		slotMenuAction(VISIBLE);
+	else if (p -> intersectLinkedRect(pos, n))
+		slotMenuAction(LINKING);
+}
+
+void KisListBoxView::setCurrentItem(int n)
+{
+	m_lst -> setTopItem(n);
+	m_lst -> triggerUpdate(false);
+}
+
+void KisListBoxView::setTopItem(int n)
+{
+	m_lst -> setTopItem(n);
+	m_lst -> triggerUpdate(false);
+}
+
+void KisListBoxView::lower(int pos)
+{
+	QListBoxItem *p = m_lst -> item(pos - 1);
+	QListBoxItem *q = m_lst -> item(pos);
+
+	m_lst -> takeItem(p);
+	m_lst -> takeItem(q);
+
+	if (p && q) {
+		m_lst -> changeItem(p, pos);
+		m_lst -> changeItem(q, pos - 1);
+	}
+	else {
+		kdDebug() << "Not flipping.\n";
+	}
+}
+
+void KisListBoxView::insertItem(const QString& name)
+{
+	m_lst -> insertItem(new KisListBoxItem(name, m_lst, m_flags));
 }
 
 KisListBoxItem::KisListBoxItem(const QString& label, QListBox *parent, int flags)

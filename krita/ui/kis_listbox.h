@@ -18,8 +18,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined KIS_LISTVIEW_H_
-#define KIS_LISTVIEW_H_
+#if !defined KIS_LISTBOX_H
+#define KIS_LISTBOX_H
 
 #include <qframe.h>
 #include <qpixmap.h>
@@ -29,6 +29,7 @@
 
 #include <klistbox.h>
 
+class QButton;
 class QPainter;
 class QWidget;
 class KIconLoader;
@@ -39,11 +40,31 @@ class KisListBoxView : public QFrame {
 	Q_OBJECT
 
 public:
-	enum action {VISIBLE, SELECTION, LINKING, PROPERTIES, ADD, REMOVE, ADDMASK, REMOVEMASK, UPPER, LOWER, FRONT, BACK, LEVEL};
+	enum action {VISIBLE, SELECTION, LINKING, PROPERTIES, ADD, REMOVE, ADDMASK, REMOVEMASK, RAISE, LOWER, FRONT, BACK, LEVEL};
 	enum flags {SHOWVISIBLE = 1, SHOWLINKED = (1 << 1), SHOWPREVIEW = (1 << 2), SHOWMASK = (1 << 3), SHOWALL = (SHOWMASK|SHOWPREVIEW|SHOWLINKED|SHOWVISIBLE)};
 
 	KisListBoxView(const QString& label, flags f = SHOWALL, QWidget *parent = 0, const char *name = 0);
 	virtual ~KisListBoxView();
+
+	void insertItem(const QString& name);
+	void setCurrentItem(int n);
+	void setTopItem(int n);
+	void lower(int pos);
+
+signals:
+	void itemToggleVisible(int n);
+	void itemSelected(int n);
+	void itemToggleLinked(int n);
+	void itemProperties(int n);
+	void itemAdd();
+	void itemRemove(int n);
+	void itemAddMask(int n);
+	void itemRmMask(int n);
+	void itemRaise(int n);
+	void itemLower(int n);
+	void itemFront(int n);
+	void itemBack(int n);
+	void itemLevel(int n);
 
 private slots:
 	void slotMenuAction(int mnuId);
@@ -52,8 +73,12 @@ private slots:
 	void slotExecuted(QListBoxItem *item, const QPoint& pos);
 
 private:
+	flags m_flags;
 	KListBox *m_lst;
 	KPopupMenu *m_contextMnu;
+	QButton *m_btnRm;
+	QButton *m_btnRaise;
+	QButton *m_btnLower;
 };
 
 class KisListBoxItem : public QListBoxItem {
@@ -69,6 +94,11 @@ public:
 	virtual int width() const;
 	virtual void paint(QPainter *gc);
 
+	inline bool visible();
+	inline bool linked();
+	inline void toggleVisible();
+	inline void toggleLinked();
+	
 	bool intersectVisibleRect(const QPoint& pos, int yOffset) const;
 	bool intersectLinkedRect(const QPoint& pos, int yOffset) const;
 	bool intersectPreviewRect(const QPoint& pos, int yOffset) const;
@@ -94,5 +124,25 @@ private:
 	bool m_linked;
 };
 
-#endif // __kis_layerview_h__
+bool KisListBoxItem::visible()
+{
+	return m_visible;
+}
+
+bool KisListBoxItem::linked()
+{
+	return m_linked;
+}
+
+void KisListBoxItem::toggleVisible()
+{
+	m_visible = !m_visible;
+}
+
+void KisListBoxItem::toggleLinked()
+{
+	m_linked = !m_linked;
+}
+
+#endif // KIS_LISTBOX_H
 

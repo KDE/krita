@@ -104,8 +104,6 @@
 #include "kis_tool_factory.h"
 #include "kis_tool_paste.h"
 
-KisListBoxView *channelView;
-
 KisView::KisView(KisDoc* doc, QWidget* parent, const char* name) : super(doc, parent, name)
 {
 	m_doc = doc;
@@ -284,9 +282,26 @@ void KisView::setupSideBar()
 	m_pSideBar -> plug(m_pChannelView);
 
 #if 1
-	channelView = new KisListBoxView("Test", KisListBoxView::SHOWALL, m_pSideBar, "Test List View");
-	channelView -> setCaption("Test List View");
-	m_pSideBar -> plug(channelView);
+	m_layerView = new KisListBoxView("Test Layer", KisListBoxView::SHOWALL, m_pSideBar, "Test View Layer");
+	m_layerView -> setCaption("Test List View");
+
+	connect(m_layerView, SIGNAL(itemToggleVisible(int)), SLOT(slotLayerToggleVisible(int)));
+	connect(m_layerView, SIGNAL(itemSelected(int)), SLOT(slotLayerSelected(int)));
+	connect(m_layerView, SIGNAL(itemToggleLinked(int)), SLOT(slotLayerToggleLinked(int)));
+	connect(m_layerView, SIGNAL(itemProperties(int)), SLOT(slotLayerProperties(int)));
+	connect(m_layerView, SIGNAL(itemAdd()), SLOT(slotLayerAdd()));
+	connect(m_layerView, SIGNAL(itemRemove(int)), SLOT(slotLayerRemove(int)));
+	connect(m_layerView, SIGNAL(itemAddMask(int)), SLOT(slotLayerAddMask(int)));
+	connect(m_layerView, SIGNAL(itemRmMask(int)), SLOT(slotLayerRmMask(int)));
+	connect(m_layerView, SIGNAL(itemRaise(int)), SLOT(slotLayerRaise(int)));
+	connect(m_layerView, SIGNAL(itemLower(int)), SLOT(slotLayerLower(int)));
+	connect(m_layerView, SIGNAL(itemFront(int)), SLOT(slotLayerFront(int)));
+	connect(m_layerView, SIGNAL(itemBack(int)), SLOT(slotLayerBack(int)));
+	connect(m_layerView, SIGNAL(itemLevel(int)), SLOT(slotLayerLevel(int)));
+
+	m_layerView -> insertItem(i18n("background")); // XXX 
+
+	m_pSideBar -> plug(m_layerView);
 #endif
 
 	// activate brushes tab
@@ -1516,6 +1531,7 @@ void KisView::insert_layer()
 	slotUpdateImage();
 	slotRefreshPainter();
 	m_doc -> setModified(true);
+	m_layerView -> insertItem(name);
 }
 
 /*
@@ -2233,6 +2249,7 @@ void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
 		clr = m_bg;
 
 	newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), clr, false, i18n("background"));
+	m_layerView -> insertItem(i18n("background"));
 	newimg -> markDirty(QRect(0, 0, newimg -> width(), newimg -> height()));
 	m_doc -> setCurrentImage(newimg);
 }
@@ -2285,6 +2302,122 @@ void KisView::setCanvasCursor(const QCursor& cursor)
 
 	Q_ASSERT(canvas);
 	canvas -> setCursor(cursor);
+}
+
+void KisView::slotLayerToggleVisible(int n)
+{
+	KisImageSP img = m_doc -> currentImg();
+	KisLayerSPLst l = img -> layerList();
+	KisLayerSP lay = l[n];
+
+	lay -> setVisible(!lay -> visible());
+	img -> markDirty(lay -> imageExtents());
+	m_doc -> setModified(true);
+}
+
+void KisView::slotLayerSelected(int n)
+{	
+	KisImage *img = m_doc -> currentImg();
+
+	img -> setCurrentLayer(n);
+}
+
+void KisView::slotLayerToggleLinked(int n)
+{
+	KisImageSP img = m_doc -> currentImg();
+	KisLayerSPLst l = img -> layerList();
+	KisLayerSP lay = l[n];
+
+	lay -> setLinked(!lay -> linked());
+	m_doc -> setModified(true);
+}
+
+void KisView::slotLayerProperties(int n)
+{
+}
+
+void KisView::slotLayerAdd()
+{
+	KisImageSP img = m_doc -> currentImg();
+	int indx;
+
+	if (!img)
+		return;
+
+	NewLayerDialog dlg;
+	KisLayerSPLst l = img -> layerList();
+
+	dlg.exec();
+
+	if (!dlg.result() == QDialog::Accepted)
+		return;
+
+	QRect layerRect(0, 0, dlg.width(), dlg.height());
+	QString name = i18n("layer %1").arg(l.size());
+
+	img -> addLayer(layerRect, white, true, name);
+	m_layerView -> insertItem(name);
+	indx = l.size() - 1;
+	img -> setCurrentLayer(indx);
+	m_layerView -> setCurrentItem(indx);
+
+	slotUpdateImage();
+	slotRefreshPainter();
+	m_doc -> setModified(true);
+}
+
+void KisView::slotLayerRemove(int n)
+{
+	KisImageSP img = m_doc -> currentImg();
+	KisLayerSPLst l = img -> layerList();
+
+	if (l.size()) {
+		QRect uR = l[n] -> imageExtents();
+
+		img -> removeLayer(n);
+		m_doc -> setModified(true);
+		slotUpdateImage();
+		slotRefreshPainter();
+	}
+}
+
+void KisView::slotLayerAddMask(int /*n*/)
+{
+}
+
+void KisView::slotLayerRmMask(int /*n*/)
+{
+}
+
+void KisView::slotLayerRaise(int n)
+{
+}
+
+void KisView::slotLayerLower(int n)
+{
+	KisImageSP img = m_doc -> currentImg();
+	KisLayerSPLst l = img -> layerList();
+
+	int npos = n - 1 >= 0 ? n - 1 : n;
+
+	if (n != npos) {
+		img -> lowerLayer(n);
+		m_layerView -> lower(n);
+		slotLayerSelected(npos);
+		m_doc -> setModified( true );
+	}
+}
+
+void KisView::slotLayerFront(int n)
+{
+}
+
+void KisView::slotLayerBack(int n)
+{
+}
+
+void KisView::slotLayerLevel(int /*n*/)
+{
 }
 
 #include "kis_view.moc"

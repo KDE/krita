@@ -204,6 +204,7 @@
   <Action name="tool_ellipse"/>
 
   <Action name="tool_fill"/>
+  <Action name="tool_text"/>
   <Action name="tool_colorchanger"/>
   <Action name="tool_stamp"/>
   <Action name="tool_test"/>

@@ -48,6 +48,7 @@
 #include "kis_tool_polyline.h"
 #include "kis_tool_polygon.h"
 #include "kis_tool_colorchanger.h"
+#include "kis_tool_text.h"
 
 namespace {
 	KisToolFactory moveMe; // XXX Where to create singletons in Krita?!?
@@ -95,6 +96,7 @@ vKisTool KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSu
 	tools.push_back(new KisToolPolygon);
 	tools.push_back(new KisToolColorChanger);
 	tools.push_back(new KisToolFill);
+	tools.push_back(new KisToolText);
 
 	for (vKisTool_it it = tools.begin(); it != tools.end(); it++) {
 		KisTool *tool = *it;

@@ -1,0 +1,166 @@
+/*
+ *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+#include <qfont.h>
+#include <qrect.h>
+#include <qimage.h>
+#include <qlayout.h> 
+#include <qwidget.h>
+#include <qstring.h>
+#include <qpixmap.h>
+#include <qpainter.h>
+#include <qpushbutton.h>
+#include <qinputdialog.h>
+#include <qfontmetrics.h>
+
+#include <kaction.h>
+#include <klocale.h>
+#include <kfontdialog.h>
+#include <ksqueezedtextlabel.h>
+
+#include <koColor.h>
+
+#include "kis_doc.h"
+#include "kis_point.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_cursor.h"
+#include "kis_tool_text.h"
+#include "kis_paint_device.h"
+#include "kis_canvas_subject.h"
+#include "kis_button_release_event.h"
+
+KisToolText::KisToolText()
+{
+	setName("tool_text");
+	m_subject = 0;
+	setCursor(KisCursor::pointingHandCursor()); // needs a Text Cursur
+}
+
+KisToolText::~KisToolText()
+{
+}
+
+void KisToolText::update(KisCanvasSubject *subject)
+{
+	m_subject = subject;
+	super::update(subject);
+}
+
+void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
+{
+	if (m_subject && e->button() == QMouseEvent::LeftButton) {
+		KisImageSP img = m_subject->currentImg();
+		KisPaintDeviceSP dev;
+
+		if (!img || !(dev = img->activeDevice()))
+			return;
+
+		bool ok;
+		QString text = QInputDialog::getText(i18n("Krita Font Tool"), i18n("Enter text"),
+			QLineEdit::Normal, QString::null, &ok);
+		if (!ok)
+			return;
+		QFontMetrics metrics(m_font);
+		QRect boundingRect = metrics.boundingRect(text).normalize();
+		if (boundingRect.x() < 0 || boundingRect.y() < 0)
+			boundingRect.moveBy(- boundingRect.x(), - boundingRect.y());
+
+		QPixmap pixels(boundingRect.width(), boundingRect.height());
+		{
+			QPainter paint(&pixels);
+			paint.fillRect(boundingRect, Qt::white);
+			paint.setFont(m_font);
+			paint.setBrush(QBrush(Qt::black));
+			// some boundingRect magic that doesn't quite work:
+			int flags = Qt::SingleLine|Qt::AlignCenter ;
+			paint.drawText(paint.boundingRect(boundingRect, flags, text),
+				flags, text);
+		}
+		QImage image = pixels.convertToImage();
+
+		Q_INT32 height = boundingRect.height();
+		Q_INT32 width = boundingRect.width();
+		KisLayerSP layer = dynamic_cast<KisDoc*>(m_subject->document())->layerAdd(
+			img, width, height, "text layer", OPACITY_OPAQUE);
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				QRgb pixel = image.pixel(x, y);
+				 // use the 'blackness' as alpha :)
+				QUANTUM alpha = 255 - qRed(pixel) * OPACITY_OPAQUE / 255;
+				layer->setPixel(x, y, m_subject->fgColor(), alpha);
+			}
+		}
+
+		Q_INT32 x = QMAX(0, static_cast<int>(e->x() - width/2));
+		Q_INT32 y = QMAX(0, static_cast<int>(e->y() - height/2));
+		layer->move(x, y);
+		img->notify();
+	}
+}
+
+void KisToolText::setFont() {
+	KFontDialog::getFont( m_font, false/*, QWidget* parent! */ );
+	m_lbFontName->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
+}
+
+QWidget* KisToolText::createoptionWidget(QWidget* parent)
+{
+	m_optWidget = new QWidget(parent);
+	m_optWidget->setCaption(i18n("Text"));
+
+	// set a 'standard' font
+	m_font = m_optWidget->font();
+
+	m_lbFont = new QLabel(i18n("Font: "), m_optWidget);
+	m_lbFontName = new KSqueezedTextLabel(QString(m_font.family() + ", %1")
+		.arg(m_font.pointSize()), m_optWidget);
+	m_btnMoreFonts = new QPushButton("...", m_optWidget);
+
+	connect(m_btnMoreFonts, SIGNAL(released()), this, SLOT(setFont()));
+
+	QGridLayout *optionLayout = new QGridLayout(m_optWidget, 3, 1);
+	optionLayout->addWidget(m_lbFont, 0, 0);
+	optionLayout->addWidget(m_lbFontName, 0, 1);
+	optionLayout->addWidget(m_btnMoreFonts, 0, 2);
+	
+	return m_optWidget;
+}
+
+QWidget* KisToolText::optionWidget() {
+	return m_optWidget;
+}
+
+void KisToolText::setup(KActionCollection *collection)
+{
+	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+
+	if (m_action == 0) {
+		m_action = new KRadioAction(i18n("Tool T&ext"), 
+					    "tool_text", 
+					    Qt::SHIFT+Qt::Key_T, 
+					    this,
+					    SLOT(activate()),
+					    collection,
+					    name());
+		m_action -> setExclusiveGroup("tools");
+		m_ownAction = true;
+	}
+}
+
+#include "kis_tool_text.moc"

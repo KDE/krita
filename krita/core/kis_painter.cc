@@ -519,9 +519,9 @@ QRect KisPainter::dirtyRect() {
 double KisPainter::paintLine(const enumPaintOp paintOp,
 			    const KisPoint & pos1,
 			    const KisPoint & pos2,
-			    const Q_INT32 pressure,
-			    const Q_INT32 xTilt,
-			    const Q_INT32 yTilt,
+			    const double pressure,
+			    const double xTilt,
+			    const double yTilt,
 			    const double inSavedDist)
 {
 	if (!m_device) return 0;
@@ -626,7 +626,7 @@ double KisPainter::paintLine(const enumPaintOp paintOp,
 void KisPainter::paintRect (const enumPaintOp paintOp,
                             const QPoint &startPoint,
                             const QPoint &endPoint,
-                            const Q_INT32 pressure)
+                            const double pressure)
 {
     QRect normalizedRect = QRect (startPoint, endPoint).normalize ();
 
@@ -651,7 +651,7 @@ void KisPainter::paintRect (const enumPaintOp paintOp,
 void KisPainter::paintEllipsePixel (const enumPaintOp paintOp,
                                     bool invert,
                                     int xc, int yc, int x1, int y1, int x2, int y2,
-                                    const Q_INT32 pressure)
+                                    const double pressure)
 {
     if (invert)
     {
@@ -669,7 +669,7 @@ void KisPainter::paintEllipsePixel (const enumPaintOp paintOp,
 void KisPainter::paintEllipseSymmetry (const enumPaintOp paintOp,
                                        double ratio, bool invert,
                                        int x, int y, int xc, int yc,
-                                       const Q_INT32 pressure)
+                                       const double pressure)
 {
     int x_start, x_end, x_out;
     int y_start, y_end, y_out;
@@ -695,7 +695,7 @@ void KisPainter::paintEllipseSymmetry (const enumPaintOp paintOp,
 void KisPainter::paintEllipseInternal (const enumPaintOp paintOp,
                                        double ratio, bool invert,
                                        int xc, int yc, int radius,
-                                       const Q_INT32 pressure)
+                                       const double pressure)
 {
     int x, y, d;
     unsigned char mask, exist_color;
@@ -727,7 +727,7 @@ void KisPainter::paintEllipseInternal (const enumPaintOp paintOp,
 void KisPainter::paintEllipse (const enumPaintOp paintOp,
                                const QPoint &startPoint,
                                const QPoint &endPoint,
-                               const Q_INT32 pressure)
+                               const double pressure)
 {
     QRect normalizedRect = QRect (startPoint, endPoint).normalize ();
 
@@ -764,9 +764,9 @@ void KisPainter::paintEllipse (const enumPaintOp paintOp,
 
 
 void KisPainter::paintAt(const KisPoint & pos,
-			 const Q_INT32 pressure,
-                         const Q_INT32 /*xTilt*/,
-                         const Q_INT32 /*yTilt*/)
+			 const double pressure,
+                         const double /*xTilt*/,
+                         const double /*yTilt*/)
 {
 	// Painting should be implemented according to the following algorithm:
 	// retrieve brush
@@ -798,7 +798,7 @@ void KisPainter::paintAt(const KisPoint & pos,
 
 	if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
 		// XXX: No subpixel available for image brushes yet.
-		if (m_pressure != pressure || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
+		if (fabs(m_pressure - pressure) > DBL_EPSILON || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
 			m_dab = m_brush -> image(pressure);
 		}
 	}
@@ -827,9 +827,9 @@ void KisPainter::paintAt(const KisPoint & pos,
 }
 
 void KisPainter::eraseAt(const KisPoint &pos,
-			 const Q_INT32 pressure,
-			 const Q_INT32 /*xTilt*/,
-			 const Q_INT32 /*yTilt*/)
+			 const double pressure,
+			 const double /*xTilt*/,
+			 const double /*yTilt*/)
 {
 // Erasing is traditionally in paint applications one of two things:
 // either it is painting in the 'background' color, or it is replacing
@@ -895,9 +895,9 @@ void KisPainter::eraseAt(const KisPoint &pos,
 
 
 void KisPainter::airBrushAt(const KisPoint &pos,
-			    const Q_INT32 pressure,
-			    const Q_INT32 /*xTilt*/,
-			    const Q_INT32 /*yTilt*/)
+			    const double pressure,
+			    const double /*xTilt*/,
+			    const double /*yTilt*/)
 {
 // See: http://www.sysf.physto.se/~klere/airbrush/ for information
 // about _real_ airbrushes.
@@ -941,7 +941,7 @@ void KisPainter::airBrushAt(const KisPoint &pos,
 	Q_INT32 y = static_cast<Q_INT32>(pos.y() - hotSpot.y());
 
 	// This is going to be sloooooow!
-	if (m_pressure != pressure || m_brush -> brushType() == PIPE_MASK || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
+	if (fabs(m_pressure - pressure) > DBL_EPSILON || m_brush -> brushType() == PIPE_MASK || m_brush -> brushType() == PIPE_IMAGE || m_dab == 0) {
 
 		if (m_brush -> brushType() == IMAGE || m_brush -> brushType() == PIPE_IMAGE) {
 			m_dab = m_brush -> image(pressure);

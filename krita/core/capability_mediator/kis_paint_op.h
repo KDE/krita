@@ -53,9 +53,9 @@ public:
 	virtual void paint(const KisPainter &gc,
 			   const double x,
 			   const double y,
-			   const Q_INT32 pressure,
-			   const Q_INT32 /*xTilt*/,
-			   const Q_INT32 /*yTilt*/) = 0;
+			   const double pressure,
+			   const double /*xTilt*/,
+			   const double /*yTilt*/) = 0;
 	
 };
 

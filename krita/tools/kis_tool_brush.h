@@ -59,9 +59,9 @@ public slots:
 private:
 	virtual void paintLine(const QPoint & pos1,
 			       const QPoint & pos2,
-			       const Q_INT32 pressure,
-			       const Q_INT32 xtilt,
-			       const Q_INT32 ytilt);
+			       const double pressure,
+			       const double xtilt,
+			       const double ytilt);
 
 	virtual void initPaint(const QPoint & pos);
 	virtual void endPaint();

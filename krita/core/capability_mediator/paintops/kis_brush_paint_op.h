@@ -43,9 +43,9 @@ public:
 	virtual void paint(const KisPainter &gc,
 			   const double x,
 			   const double y,
-			   const Q_INT32 pressure,
-			   const Q_INT32 /*xTilt*/,
-			   const Q_INT32 /*yTilt*/);
+			   const double pressure,
+			   const double /*xTilt*/,
+			   const double /*yTilt*/);
 };
 
 #endif // KIS_BRUSH_PAINT_OP_H

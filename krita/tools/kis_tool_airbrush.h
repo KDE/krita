@@ -56,9 +56,9 @@ class KisToolAirBrush : public KisToolPaint {
 
 	virtual void paintLine(const QPoint & pos1,
 			       const QPoint & pos2,
-			       const Q_INT32 pressure,
-			       const Q_INT32 xtilt,
-			       const Q_INT32 ytitl);
+			       const double pressure,
+			       const double xtilt,
+			       const double ytilt);
 	virtual void initPaint(const QPoint & pos);
 	virtual void endPaint();
 
@@ -71,9 +71,9 @@ class KisToolAirBrush : public KisToolPaint {
 	float m_dragDist;
 
 	QPoint m_currentPos;
-	Q_INT32 m_pressure;
-	Q_INT32 m_xTilt;
-	Q_INT32 m_yTilt;
+	double m_pressure;
+	double m_xTilt;
+	double m_yTilt;
 
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;

@@ -127,54 +127,54 @@ public:
 	double paintLine(const enumPaintOp paintOp,
 			const KisPoint &pos1,
 			const KisPoint &pos2,
-			const Q_INT32 pressure,
-			const Q_INT32 xTilt,
-			const Q_INT32 yTilt,
+			const double pressure,
+			const double xTilt,
+			const double yTilt,
 			const double savedDist = -1);
         void paintRect(const enumPaintOp paintOp,
                           const QPoint &startPoint,
                           const QPoint &endPoint,
-                          const Q_INT32 pressure);
+                          const double pressure);
 
 private:
         void paintEllipsePixel (const enumPaintOp paintOp,
                                 bool invert,
                                 int xc, int yc, int x1, int y1, int x2, int y2,
-                                const Q_INT32 pressure);
+                                const double pressure);
         void paintEllipseSymmetry (const enumPaintOp paintOp,
                                    double ratio, bool invert,
                                    int x, int y, int xc, int yc,
-                                   const Q_INT32 pressure);
+                                   const double pressure);
         void paintEllipseInternal (const enumPaintOp paintOp,
                                    double ratio, bool invert,
                                    int xc, int yc, int radius,
-                                   const Q_INT32 pressure);
+                                   const double pressure);
 
 public:
         void paintEllipse(const enumPaintOp paintOp,
                           const QPoint &startPoint,
                           const QPoint &endPoint,
-                          const Q_INT32 pressure);
+                          const double pressure);
 
 	// Draw a spot at pos using the currently set brush and color
 	void paintAt(const KisPoint &pos,
-		     const Q_INT32 pressure,
-		     const Q_INT32 /*xTilt*/,
-		     const Q_INT32 /*yTilt*/);
+		     const double pressure,
+		     const double /*xTilt*/,
+		     const double /*yTilt*/);
 
 	// Erase to the background color or transparency (depending on the type of the paint device)
 	// using the currently set brush.
 	void eraseAt(const KisPoint &pos,
-		     const Q_INT32 pressure,
-		     const Q_INT32 /*xTilt*/,
-		     const Q_INT32 /*yTilt*/);
+		     const double pressure,
+		     const double /*xTilt*/,
+		     const double /*yTilt*/);
 
 	// Paint a filled circle at pos with pressure dependent alpha and
 	// 'ragged' edges. Meant to simulate the true effect of an airbrush.
 	void airBrushAt(const KisPoint &pos,
-			const Q_INT32 pressure,
-			const Q_INT32 /*xTilt*/,
-			const Q_INT32 /*yTilt*/);
+			const double pressure,
+			const double /*xTilt*/,
+			const double /*yTilt*/);
 
 
 
@@ -227,7 +227,7 @@ private:
 	QUANTUM m_opacity;
 	CompositeOp m_compositeOp;
 
-	Q_INT32 m_pressure;
+	double m_pressure;
 };
 
 inline

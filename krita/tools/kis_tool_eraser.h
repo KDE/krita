@@ -50,9 +50,9 @@ private:
 	virtual void initErase(const QPoint & pos);
 	virtual void eraseLine(const QPoint & pos1,
 			       const QPoint & pos2,
-			       const Q_INT32 pressure,
-			       const Q_INT32 xtilt,
-			       const Q_INT32 ytilt);
+			       const double pressure,
+			       const double xtilt,
+			       const double ytilt);
 	virtual void endErase();
 
 	enumBrushMode m_mode;

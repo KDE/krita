@@ -121,18 +121,18 @@ void KisToolBrush::tabletEvent(QTabletEvent *e)
 			 return;
 		 }
 
-		 Q_INT32 pressure = e -> pressure();
+		 double pressure = e -> pressure() / 255.0;
 
-		 if (pressure < 5 && m_mode == PAINT_STYLUS) {
+		 if (pressure < PRESSURE_THRESHOLD && m_mode == PAINT_STYLUS) {
 			 endPaint();
-		 } else if (pressure >= 5 && m_mode == HOVER) {
+		 } else if (pressure >= PRESSURE_THRESHOLD && m_mode == HOVER) {
 			 m_mode = PAINT_STYLUS;
 			 initPaint(e -> pos());
-			 m_painter -> paintAt(e -> pos(), e->pressure(), e->xTilt(), e->yTilt());
+			 m_painter -> paintAt(e -> pos(), pressure, e->xTilt(), e->yTilt());
 			 // XXX: Get the rect that should be updated
 			 m_currentImage -> notify( m_painter -> dirtyRect() );
 
-		 } else if (pressure >= 5 && m_mode == PAINT_STYLUS) {
+		 } else if (pressure >= PRESSURE_THRESHOLD && m_mode == PAINT_STYLUS) {
 			 paintLine(m_dragStart, e -> pos(), pressure, e -> xTilt(), e -> yTilt());
 		 }
          }
@@ -189,9 +189,9 @@ void KisToolBrush::endPaint()
 
 void KisToolBrush::paintLine(const QPoint & pos1,
 			     const QPoint & pos2,
-			     const Q_INT32 pressure,
-			     const Q_INT32 xtilt,
-			     const Q_INT32 ytilt)
+			     const double pressure,
+			     const double xtilt,
+			     const double ytilt)
 {
 	if (!m_currentImage -> activeDevice()) return;
 

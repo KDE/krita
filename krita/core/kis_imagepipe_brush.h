@@ -51,8 +51,8 @@ public:
 	/**
 	   @return the next mask in the pipe.
 	*/
-	virtual KisAlphaMaskSP mask(Q_INT32 pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
-	virtual KisLayerSP image(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+	virtual KisAlphaMaskSP mask(double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
+	virtual KisLayerSP image(double pressure = PRESSURE_DEFAULT) const;
 
 	virtual bool hasColor() const;
 

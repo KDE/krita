@@ -40,9 +40,9 @@ KisBrushPaintOp::~KisBrushPaintOp()
 void KisBrushPaintOp::paint(const KisPainter & /*gc*/,
 			    const double /*x*/,
 			    const double /*y*/,
-			    const Q_INT32 /*pressure*/,
-			    const Q_INT32 /*xTilt*/,
-			    const Q_INT32 /*yTilt*/) 
+			    const double /*pressure*/,
+			    const double /*xTilt*/,
+			    const double /*yTilt*/) 
 {
 
 	// Painting should be implemented according to the following algorithm:

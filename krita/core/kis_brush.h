@@ -65,17 +65,17 @@ public:
 	   @return a mask computed from the grey-level values of the
 	   pixels in the brush.
 	*/
-	virtual KisAlphaMaskSP mask(Q_INT32 pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
+	virtual KisAlphaMaskSP mask(double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
 	// XXX: return non-tiled simple buffer
-	virtual KisLayerSP image(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+	virtual KisLayerSP image(double pressure = PRESSURE_DEFAULT) const;
 
 	void setHotSpot(KisPoint);
-	KisPoint hotSpot(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+	KisPoint hotSpot(double pressure = PRESSURE_DEFAULT) const;
 
 	void setSpacing(Q_INT32 s) { m_spacing = s; }
 	Q_INT32 spacing() const { return m_spacing; }
-	double xSpacing(Q_INT32 pressure = PRESSURE_DEFAULT) const;
-	double ySpacing(Q_INT32 pressure = PRESSURE_DEFAULT) const;
+	double xSpacing(double pressure = PRESSURE_DEFAULT) const;
+	double ySpacing(double pressure = PRESSURE_DEFAULT) const;
 
 	virtual void setUseColorAsMask(bool useColorAsMask) { m_useColorAsMask = useColorAsMask; }
 	virtual bool useColorAsMask() const { return m_useColorAsMask; }

@@ -102,13 +102,13 @@ QImage KisBrush::img()
 	return m_img;
 }
 
-KisAlphaMaskSP KisBrush::mask(Q_INT32 pressure, double subPixelX, double subPixelY) const
+KisAlphaMaskSP KisBrush::mask(double pressure, double subPixelX, double subPixelY) const
 {
 	if (m_masks.isEmpty()) {
 		createMasks(m_img);
 	}
 
-	Q_INT32 scale = (pressure * PRESSURE_LEVELS) / PRESSURE_MAX;
+	Q_INT32 scale = qRound((pressure * PRESSURE_LEVELS) / PRESSURE_MAX);
 
 	if (scale >= PRESSURE_LEVELS || (uint)scale >= m_masks.count())
 		scale = m_masks.count() - 1;
@@ -149,13 +149,13 @@ KisAlphaMaskSP KisBrush::mask(Q_INT32 pressure, double subPixelX, double subPixe
 	}
 }
 
-KisLayerSP KisBrush::image(Q_INT32 pressure) const
+KisLayerSP KisBrush::image(double pressure) const
 {
 	if (m_images.isEmpty()) {
 		createImages(m_img);
 	}
 
-	Q_INT32 scale = (pressure * PRESSURE_LEVELS) / PRESSURE_MAX;
+	Q_INT32 scale = qRound((pressure * PRESSURE_LEVELS) / PRESSURE_MAX);
 
 	if (scale >= PRESSURE_LEVELS || (uint)scale >= m_images.count())
 		scale = m_images.count() - 1;
@@ -183,7 +183,7 @@ void KisBrush::setHotSpot(KisPoint pt)
 	m_hotSpot = KisPoint(x, y);
 }
 
-KisPoint KisBrush::hotSpot(Q_INT32 pressure) const
+KisPoint KisBrush::hotSpot(double pressure) const
 {
 	KisAlphaMaskSP msk = mask(pressure);
 	KisPoint p(msk -> width() / 2.0, msk -> height() / 2.0);
@@ -380,12 +380,12 @@ void KisBrush::createImages(const QImage & img) const
 	}
 }
 
-double KisBrush::xSpacing(Q_INT32 pressure) const
+double KisBrush::xSpacing(double pressure) const
 {
 	return (mask(pressure) -> width() * m_spacing) / 100;
 }
 
-double KisBrush::ySpacing(Q_INT32 pressure) const
+double KisBrush::ySpacing(double pressure) const
 {
 	return (mask(pressure) -> height() * m_spacing) / 100;
 }

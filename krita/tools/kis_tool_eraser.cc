@@ -99,20 +99,20 @@ void KisToolEraser::tabletEvent(QTabletEvent *e) {
 			 return;
 		 }
 
-		 Q_INT32 pressure = e -> pressure();
+		 double pressure = e -> pressure() / 255.0;
 
-		 if (pressure < 5 && m_mode == ERASE_STYLUS) {
+		 if (pressure < PRESSURE_THRESHOLD && m_mode == ERASE_STYLUS) {
 			 endErase();
 		 }
-		 else if (pressure >= 5 && m_mode == HOVER) {
+		 else if (pressure >= PRESSURE_THRESHOLD && m_mode == HOVER) {
 			 m_mode = ERASE_STYLUS;
 			 initErase(e -> pos());
-			 m_painter -> eraseAt(e -> pos(), e->pressure(), e->xTilt(), e->yTilt());
+			 m_painter -> eraseAt(e -> pos(), pressure, e->xTilt(), e->yTilt());
 			 // XXX: Get the rect that should be updated
 			 m_currentImage -> notify( m_painter -> dirtyRect() );
 
 		 }
-		 else if (pressure >= 5 && m_mode == ERASE_STYLUS) {
+		 else if (pressure >= PRESSURE_THRESHOLD && m_mode == ERASE_STYLUS) {
 			 eraseLine(m_dragStart, e -> pos(), pressure, e -> xTilt(), e -> yTilt());
 		 }
          }
@@ -155,9 +155,9 @@ void KisToolEraser::endErase() {
 
 void KisToolEraser::eraseLine(const QPoint & pos1,
 			     const QPoint & pos2,
-			     const Q_INT32 pressure,
-			     const Q_INT32 xtilt,
-			     const Q_INT32 ytilt)
+			     const double pressure,
+			     const double xtilt,
+			     const double ytilt)
 {
 	m_dragDist = m_painter -> paintLine(PAINTOP_ERASE, pos1, pos2, pressure, xtilt, ytilt, m_dragDist);
 	m_currentImage -> notify( m_painter -> dirtyRect() );

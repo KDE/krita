@@ -23,14 +23,11 @@
 #if !defined KIS_TOOL_ERASER_H_
 #define KIS_TOOL_ERASER_H_
 
-#include "kis_tool_paint.h"
-#include "kis_types.h"
+#include "kis_tool_freehand.h"
 
-class KisPainter;
+class KisToolEraser : public KisToolFreeHand {
 
-class KisToolEraser : public KisToolPaint {
-
-	typedef KisToolPaint super;
+	typedef KisToolFreeHand super;
 	Q_OBJECT
 
 public:
@@ -39,30 +36,19 @@ public:
   
 	virtual void setup(KActionCollection *collection);
 
-	virtual void update(KisCanvasSubject *subject);
-
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
-
-private:
-
-	virtual void initErase(const KisPoint & pos);
-	virtual void eraseLine(const KisPoint & pos1,
+protected:
+	virtual void paintAt(const KisPoint & pos,
+			     const double pressure,
+			     const double xtilt,
+			     const double ytilt);
+	virtual void paintLine(const KisPoint & pos1,
+			       const double pressure1,
+			       const double xtilt1,
+			       const double ytilt1,
 			       const KisPoint & pos2,
-			       const double pressure,
-			       const double xTilt,
-			       const double yTilt);
-	virtual void endErase();
-
-	enumBrushMode m_mode;
-	KisPainter *m_painter;
-
-        KisPoint m_dragStart;
-        double m_dragDist;
-
-	KisCanvasSubject *m_subject;
-	KisImageSP m_currentImage;
+			       const double pressure2,
+			       const double xtilt2,
+			       const double ytilt2);
 };
 
 #endif // KIS_TOOL_ERASER_H_

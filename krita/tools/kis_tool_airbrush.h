@@ -21,65 +21,48 @@
 #if !defined KIS_TOOL_AIRBRUSH_H
 #define KIS_TOOL_AIRBRUSH_H
 
-#include "kis_tool_paint.h"
+#include "kis_tool_freehand.h"
 
 class QTimer;
-
-class KisPainter;
 class KisBrush;
-class KisPoint;
 
-class KisToolAirBrush : public KisToolPaint {
+class KisToolAirBrush : public KisToolFreeHand {
 
 	Q_OBJECT
-	typedef KisToolPaint super;
+	typedef KisToolFreeHand super;
     
- public:
+public:
 	KisToolAirBrush();
 	virtual ~KisToolAirBrush();
   
 	virtual void setup(KActionCollection *collection);
 
-	virtual void update(KisCanvasSubject *subject);
-
-	virtual void buttonPress(KisButtonPressEvent *e); 
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
-	
- protected slots:
+protected slots:
 	void timeoutPaint();  
 
- private:
-
+protected:
+	virtual void paintAt(const KisPoint & pos,
+			     const double pressure,
+			     const double xtilt,
+			     const double ytilt);
 	virtual void paintLine(const KisPoint & pos1,
+			       const double pressure1,
+			       const double xtilt1,
+			       const double ytilt1,
 			       const KisPoint & pos2,
-			       const double pressure,
-			       const double xtilt,
-			       const double ytilt);
-	virtual void initPaint(const KisPoint & pos);
+			       const double pressure2,
+			       const double xtilt2,
+			       const double ytilt2);
+	virtual void initPaint(KisEvent *e);
 	virtual void endPaint();
 
-	enumBrushMode m_mode;
-	KisPainter * m_painter;
-
+private:
 	QTimer * m_timer;
-    
-	KisPoint m_dragStart;
-	double m_dragDist;
-
-	KisPoint m_currentPos;
-	double m_pressure;
-	double m_xTilt;
-	double m_yTilt;
-
-	KisCanvasSubject *m_subject;
-	KisImageSP m_currentImage;
 
 	KisBrush *m_dummyBrush; // The airbrush doesn't use a real
 				// brush-shape, but still needs a way
 				// to get the initial size info into
 				// KisPainter.
-       
 };
 
 #endif // KIS_TOOL_AIRBRUSH_H

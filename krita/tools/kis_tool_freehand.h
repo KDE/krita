@@ -30,13 +30,14 @@ class IntegerWidget;
 class KisCmbComposite;
 class KisBrush;
 class KisPoint;
+class KisEvent;
 
 class KisToolFreeHand : public KisToolPaint {
 	Q_OBJECT
 	typedef KisToolPaint super;
 
 public:
-	KisToolFreeHand();
+	KisToolFreeHand(QString transactionText);
 	virtual ~KisToolFreeHand();
 
 	virtual void update(KisCanvasSubject *subject);
@@ -59,21 +60,28 @@ protected:
 			     const double yTilt) =0;
 
 	virtual void paintLine(const KisPoint & pos1,
+			       const double pressure1,
+			       const double xtilt1,
+			       const double ytilt1,
 			       const KisPoint & pos2,
-			       const double pressure,
-			       const double xtilt,
-			       const double ytilt) =0;
+			       const double pressure2,
+			       const double xtilt2,
+			       const double ytilt2) =0;
 	inline KisPainter * painter() { return m_painter; };
-	virtual void initPaint(const KisPoint & pos);
+	virtual void initPaint(KisEvent *e);
 	virtual void endPaint();
 
 	KisImageSP currentImage();
 
 protected:
-	KisPoint m_dragStart;
+	KisPoint m_prevPos;
+	double m_prevPressure;
+	double m_prevXTilt;
+	double m_prevYTilt;
 	double m_dragDist;
 
 private:
+	QString m_transactionText;
 	enumBrushMode m_mode;
 	KisPainter *m_painter;
 	QUANTUM m_opacity;

@@ -38,7 +38,7 @@
 #include "kis_move_event.h"
 
 KisToolDuplicate::KisToolDuplicate() 
-	: super(), m_isOffsetNotUptodate(true), m_position(QPoint(-1,-1))
+	: super(i18n("Duplicate")), m_isOffsetNotUptodate(true), m_position(QPoint(-1,-1))
 {
 	setName("tool_duplicate");
 	m_subject = 0;
@@ -82,32 +82,31 @@ void KisToolDuplicate::setup(KActionCollection *collection)
 	}
 }
 
-void KisToolDuplicate::initPaint(const KisPoint & pos)
+void KisToolDuplicate::initPaint(KisEvent *e)
 {
 	kdDebug() << "initPaint(const KisPoint & pos)" << endl;
 	if( m_position != QPoint(-1,-1))
 	{
 		if(m_isOffsetNotUptodate)
 		{
-			m_offset = pos - m_position;
+			m_offset = e -> pos() - m_position;
 			m_isOffsetNotUptodate = false;
 		}
-		super::initPaint(pos);
-		painter()->setDuplicateOffset( m_offset );
+		super::initPaint(e);
+		painter() -> setDuplicateOffset( m_offset );
 	}
 }
 
 void KisToolDuplicate::paintLine(const KisPoint & pos1,
+				 const double pressure1,
+				 const double xtilt1,
+				 const double ytilt1,
 				 const KisPoint & pos2,
-				 const double pressure,
-				 const double xtilt,
-				 const double ytilt)
+				 const double pressure2,
+				 const double xtilt2,
+				 const double ytilt2)
 {
-	if (!currentImage() -> activeDevice()) return;
-
-	m_dragDist = painter() -> paintLine(PAINTOP_DUPLICATE, pos1, pos2, pressure, xtilt, ytilt, m_dragDist);
-	currentImage() -> notify( painter() -> dirtyRect() );
-	m_dragStart = pos2;
+	m_dragDist = painter() -> paintLine(PAINTOP_DUPLICATE, pos1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
 }
 
 void KisToolDuplicate::paintAt(const KisPoint &pos,
@@ -122,7 +121,7 @@ void KisToolDuplicate::paintAt(const KisPoint &pos,
 			m_offset = pos - m_position;
 			m_isOffsetNotUptodate = false;
 		}
-		painter()->duplicateAt( pos, pressure, xtilt, ytilt);
+		painter() -> duplicateAt( pos, pressure, xtilt, ytilt);
 	}
 }
 

@@ -32,28 +32,17 @@
 #include "kis_painter.h"
 #include "kis_tool_airbrush.h"
 #include "kis_view.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "kis_event.h"
 
 namespace {
 	Q_INT32 RATE = 100;
 }
 
 KisToolAirBrush::KisToolAirBrush()
-	: super(),
-	  m_mode( HOVER ),
-	  m_dragDist( 0 ),
-	  m_pressure( PRESSURE_DEFAULT ),
-	  m_xTilt( 0 ),
-	  m_yTilt( 0 )
-
+	: super(i18n("Airbrush"))
 {
 	setName("tool_airbrush");
 	setCursor(KisCursor::airbrushCursor());
-
-	m_painter = 0;
-	m_currentImage = 0;
 
 	m_timer = new QTimer(this);
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
@@ -61,158 +50,49 @@ KisToolAirBrush::KisToolAirBrush()
 
 KisToolAirBrush::~KisToolAirBrush()
 {
+	delete m_timer;
+	m_timer = 0;
 }
 
 void KisToolAirBrush::timeoutPaint()
 {
-	if (m_painter) {
-		m_painter -> airBrushAt(m_currentPos, m_pressure, m_xTilt, m_yTilt);
-		m_currentImage -> notify( m_painter -> dirtyRect() );
+	if (painter()) {
+		painter() -> airBrushAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
+		currentImage() -> notify(painter() -> dirtyRect());
 	}
 }
 
-void KisToolAirBrush::update(KisCanvasSubject *subject)
+void KisToolAirBrush::initPaint(KisEvent *e)
 {
-	m_subject = subject;
-	m_currentImage = subject -> currentImg();
-
-	super::update(m_subject);
-}
-
-void KisToolAirBrush::buttonPress(KisButtonPressEvent *e)
-{
-	if (!m_subject) return;
-	if (!m_currentImage) return;
-	if (!m_currentImage -> activeDevice()) return;
-
-	if (e->button() == QMouseEvent::LeftButton) {
-		m_mode = PAINT;
-		initPaint(e -> pos());
-		m_painter -> airBrushAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
-		m_currentImage -> notify( m_painter -> dirtyRect() );
-		m_currentPos = e -> pos();
-		m_pressure = e -> pressure();
-		m_xTilt = e -> xTilt();
-		m_yTilt = e -> yTilt();
-	}
-}
-
-
-void KisToolAirBrush::buttonRelease(KisButtonReleaseEvent *e)
-{
-	if (e->button() == QMouseEvent::LeftButton && m_mode == PAINT ) {
-		endPaint();
-	}
-}
-
-void KisToolAirBrush::move(KisMoveEvent *e)
-{
-	if (m_mode == PAINT) {
-		paintLine(m_dragStart, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
-		m_currentPos = e -> pos();
-		m_pressure = e -> pressure();
-		m_xTilt = e -> xTilt();
-		m_yTilt = e -> yTilt();
-	}
-}
-#if 0
-void KisToolAirBrush::tabletEvent(QTabletEvent *e)
-{
-         if (e->device() == QTabletEvent::Stylus) {
-		 if (!m_currentImage -> activeDevice()) {
-			 e -> accept();
-			 return;
-		 }
-
-		 if (!m_subject) {
-			 e -> accept();
-			 return;
-		 }
-
-		 double pressure = e -> pressure() / 255.0;
-
-		 if (pressure < PRESSURE_THRESHOLD && m_mode == PAINT_STYLUS) {
-			 endPaint();
-		 } else if (pressure >= PRESSURE_THRESHOLD && m_mode == HOVER) {
-			 m_mode = PAINT_STYLUS;
-			 initPaint(e -> pos());
-			 m_painter -> airBrushAt(e -> pos(), pressure, e->xTilt(), e->yTilt());
-			 m_currentImage -> notify( m_painter -> dirtyRect() );
-
-		 } else if (pressure >= PRESSURE_THRESHOLD && m_mode == PAINT_STYLUS) {
-			 paintLine(m_dragStart, e -> pos(), pressure, e -> xTilt(), e -> yTilt());
-		 }
-		 m_currentPos = e -> pos();
-		 m_pressure = pressure;
-		 m_xTilt = e -> xTilt();
-		 m_yTilt = e -> yTilt();
-
-         }
-	 e -> accept();
-}
-#endif
-void KisToolAirBrush::initPaint(const KisPoint & pos)
-{
-	if (!m_currentImage) return;
-	if (!m_currentImage -> activeDevice()) return;
-
-	m_dragStart = pos;
-	m_dragDist = 0;
-
-	// Create painter
-	KisPaintDeviceSP device;
-	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
-            delete m_painter;
-		m_painter = new KisPainter( device );
-		m_painter -> beginTransaction(i18n("airbrush"));
-	}
-
-	m_painter -> setBrush(m_subject -> currentBrush());
-	m_painter -> setPaintColor(m_subject -> fgColor());
-
-	// Set the cursor -- ideally. this should be a mask created from the brush,
-	// now that X11 can handle custom cursors.
-#if 0
-	// Setting cursors has no effect until the tool is selected again; this
-	// should be fixed.
-	setCursor(KisCursor::brushCursor());
-#endif
-
+	super::initPaint(e);
 	m_timer -> start( RATE );
 }
 
 void KisToolAirBrush::endPaint()
 {
-	m_mode = HOVER;
 	m_timer -> stop();
+	super::endPaint();
+}
 
-	KisPaintDeviceSP device;
-	if (m_currentImage && (device = m_currentImage -> activeDevice())) {
-		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-		if (adapter && m_painter) {
-			// If painting in mouse release, make sure painter
-			// is destructed or end()ed
-			adapter -> addCommand(m_painter->endTransaction());
-		}
-		delete m_painter;
-		m_painter = 0;
-
-	}
+void KisToolAirBrush::paintAt(const KisPoint & pos,
+			      const double pressure,
+			      const double xtilt,
+			      const double ytilt)
+{
+	painter() -> airBrushAt(pos, pressure, xtilt, ytilt);
 }
 
 void KisToolAirBrush::paintLine(const KisPoint & pos1,
+				const double pressure1,
+				const double xtilt1,
+				const double ytilt1,
 				const KisPoint & pos2,
-				const double pressure,
-				const double xtilt,
-				const double ytilt)
+				const double pressure2,
+				const double xtilt2,
+				const double ytilt2)
 {
-	if (!m_currentImage -> activeDevice()) return;
-
-	m_dragDist = m_painter -> paintLine(PAINTOP_AIRBRUSH, pos1, pos2, pressure, xtilt, ytilt, m_dragDist);
-	m_currentImage -> notify( m_painter -> dirtyRect() );
-	m_dragStart = pos2;
+	m_dragDist = painter() -> paintLine(PAINTOP_AIRBRUSH, pos1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
 }
-
 
 void KisToolAirBrush::setup(KActionCollection *collection)
 {
@@ -227,8 +107,6 @@ void KisToolAirBrush::setup(KActionCollection *collection)
 		m_ownAction = true;
 	}
 }
-
-
 
 #include "kis_tool_airbrush.moc"
 

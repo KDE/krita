@@ -21,15 +21,7 @@
 #ifndef KIS_TOOL_PEN_H_
 #define KIS_TOOL_PEN_H_
 
-#include "kis_tool_paint.h"
-
-class QWidget;
-class QLabel;
-class KisPainter;
-class IntegerWidget;
-class KisCmbComposite;
-class KisBrush;
-class KisPoint;
+#include "kis_tool_freehand.h"
 
 /**
  * Hard-edged pen-like tool. Funny: the icon is a pencil, and the effect
@@ -37,9 +29,9 @@ class KisPoint;
  * rename, later, when we have a real pencil, a real fountain pen, a real
  * ink pen.
  */
-class KisToolPen : public KisToolPaint {
+class KisToolPen : public KisToolFreeHand {
 	Q_OBJECT
-	typedef KisToolPaint super;
+	typedef KisToolFreeHand super;
 
 public:
 	KisToolPen();
@@ -47,44 +39,19 @@ public:
 
         virtual void setup(KActionCollection *collection);
 
-	virtual void update(KisCanvasSubject *subject);
-
-	virtual void buttonPress(KisButtonPressEvent *e); 
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
-
-	virtual QWidget* createoptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
-
-public slots:
-	virtual void slotSetOpacity(int);
-	virtual void slotSetCompositeMode(int);
-
 private:
+	virtual void paintAt(const KisPoint & pos,
+			     const double pressure,
+			     const double xtilt,
+			     const double ytilt);
 	virtual void paintLine(const KisPoint & pos1,
+			       const double pressure1,
+			       const double xtilt1,
+			       const double ytilt1,
 			       const KisPoint & pos2,
-			       const double pressure,
-			       const double xtilt,
-			       const double ytilt);
-
-	virtual void initPaint(const KisPoint & pos);
-	virtual void endPaint();
-
-	enumBrushMode m_mode;
-	KisPainter *m_painter;
-	QUANTUM m_opacity;
-	CompositeOp m_compositeOp;
-
-        KisPoint m_dragStart;
-        double m_dragDist;
-
-	KisCanvasSubject *m_subject;
-	KisImageSP m_currentImage;
-	QWidget *m_optWidget;
-	QLabel *m_lbOpacity;
-	IntegerWidget *m_slOpacity;
-	QLabel *m_lbComposite;
-	KisCmbComposite *m_cmbComposite;
+			       const double pressure2,
+			       const double xtilt2,
+			       const double ytilt2);
 };
 #endif // KIS_TOOL_PEN_H_
 

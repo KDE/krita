@@ -38,10 +38,11 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 
-KisToolFreeHand::KisToolFreeHand()
+KisToolFreeHand::KisToolFreeHand(QString transactionText)
 		: super(),
-			m_dragDist ( 0 ),
-			m_mode( HOVER )
+		m_dragDist ( 0 ),
+		m_transactionText(transactionText),
+		m_mode( HOVER )
 {
 	m_painter = 0;
 	m_currentImage = 0;
@@ -75,11 +76,17 @@ void KisToolFreeHand::buttonPress(KisButtonPressEvent *e)
 	if (!m_currentImage -> activeDevice()) return;
 
         if (e -> button() == QMouseEvent::LeftButton) {
-		m_mode = PAINT;
-		initPaint(e -> pos());
+
+		initPaint(e);
+
 		paintAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
-		// XXX: get the rect that should be notified
-		m_currentImage -> notify( m_painter -> dirtyRect() );
+
+		m_prevPos = e -> pos();
+		m_prevPressure = e -> pressure();
+		m_prevXTilt = e -> xTilt();
+		m_prevYTilt = e -> yTilt();
+
+		m_currentImage -> notify(m_painter -> dirtyRect());
          }
 }
 
@@ -93,52 +100,22 @@ void KisToolFreeHand::buttonRelease(KisButtonReleaseEvent* e)
 void KisToolFreeHand::move(KisMoveEvent *e)
 {
 	if (m_mode == PAINT) {
-		paintLine(m_dragStart, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
+		paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
+
+		m_prevPos = e -> pos();
+		m_prevPressure = e -> pressure();
+		m_prevXTilt = e -> xTilt();
+		m_prevYTilt = e -> yTilt();
+
+		m_currentImage -> notify(m_painter -> dirtyRect());
 	}
 }
-/*
-void KisToolFreeHand::tabletEvent(QTabletEvent *e)
+
+void KisToolFreeHand::initPaint(KisEvent *)
 {
-	if (e->device() == QTabletEvent::Stylus) {
-		 if (!m_currentImage -> activeDevice()) {
-			 e -> accept();
-			 return;
-		 }
-
-		 if (!m_subject) {
-			 e -> accept();
-			 return;
-		 }
-
-		 if (!m_subject -> currentBrush()) {
-			 e->accept();
-			 return;
-		 }
-
-		 double pressure = e -> pressure() / 255.0;
-
-		 if (pressure < PRESSURE_THRESHOLD && m_mode == PAINT_STYLUS) {
-			 endPaint();
-		 } else if (pressure >= PRESSURE_THRESHOLD && m_mode == HOVER) {
-			 m_mode = PAINT_STYLUS;
-			 initPaint(e -> pos());
-			 paintAt(e -> pos(), pressure, e->xTilt(), e->yTilt());
-			 // XXX: Get the rect that should be updated
-			 m_currentImage -> notify( m_painter -> dirtyRect() );
-
-		 } else if (pressure >= PRESSURE_THRESHOLD && m_mode == PAINT_STYLUS) {
-			 paintLine(m_dragStart, e -> pos(), pressure, e -> xTilt(), e -> yTilt());
-		 }
-	}
-	 e -> accept();
-}
-*/
-
-void KisToolFreeHand::initPaint(const KisPoint & pos)
-{
-
 	if (!m_currentImage -> activeDevice()) return;
-	m_dragStart = pos;
+
+	m_mode = PAINT;
 	m_dragDist = 0;
 
 	// Create painter
@@ -147,10 +124,11 @@ void KisToolFreeHand::initPaint(const KisPoint & pos)
 		if (m_painter)
 			delete m_painter;
 		m_painter = new KisPainter( device );
-		m_painter -> beginTransaction(i18n("brush"));
+		m_painter -> beginTransaction(m_transactionText);
 	}
 
 	m_painter -> setPaintColor(m_subject -> fgColor());
+	m_painter -> setBackgroundColor(m_subject -> bgColor());
 	m_painter -> setBrush(m_subject -> currentBrush());
 	m_painter -> setOpacity(m_opacity);
 	m_painter -> setCompositeOp(m_compositeOp);
@@ -177,7 +155,6 @@ void KisToolFreeHand::endPaint()
 		}
 		delete m_painter;
 		m_painter = 0;
-
 	}
 }
 

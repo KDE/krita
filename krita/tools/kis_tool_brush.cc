@@ -38,7 +38,7 @@
 
 
 KisToolBrush::KisToolBrush()
-        : super()
+        : super(i18n("Brush"))
 {
 	setName("tool_brush");
 	setCursor(KisCursor::brushCursor());
@@ -53,23 +53,20 @@ void KisToolBrush::paintAt(const KisPoint &pos,
 			   const double xTilt,
 			   const double yTilt)
 {
-	painter()->paintAt(pos, pressure, xTilt, yTilt);
+	painter() -> paintAt(pos, pressure, xTilt, yTilt);
 }
 
 void KisToolBrush::paintLine(const KisPoint & pos1,
+			     const double pressure1,
+			     const double xtilt1,
+			     const double ytilt1,
 			     const KisPoint & pos2,
-			     const double pressure,
-			     const double xtilt,
-			     const double ytilt)
+			     const double pressure2,
+			     const double xtilt2,
+			     const double ytilt2)
 {
-	if (!currentImage() -> activeDevice()) return;
-
-	m_dragDist = painter() -> paintLine(PAINTOP_BRUSH, pos1, pos2, pressure, xtilt, ytilt, m_dragDist);
-	currentImage() -> notify( painter() -> dirtyRect() );
-	m_dragStart = pos2;
+	m_dragDist = painter() -> paintLine(PAINTOP_BRUSH, pos1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
 }
-
-
 
 void KisToolBrush::setup(KActionCollection *collection)
 {

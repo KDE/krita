@@ -24,6 +24,7 @@
 #include "kis_tool.h"
 #include "kis_tool_freehand.h"
 
+class KisEvent;
 class KisButtonPressEvent;
 
 class KisToolDuplicate : public KisToolFreeHand {
@@ -44,20 +45,24 @@ public:
 			     const double yTilt);
 	
 	virtual void paintLine(const KisPoint & pos1,
+			       const double pressure1,
+			       const double xTilt1,
+			       const double yTilt1,
 			       const KisPoint & pos2,
-			       const double pressure,
-			       const double xTilt,
-			       const double yTilt);
+			       const double pressure2,
+			       const double xTilt2,
+			       const double yTilt2);
 
 
 protected slots:
 	virtual void activate();
 protected:
-	virtual void initPaint(const KisPoint & pos);
- // Tool starting duplicate
- KisPoint m_offset; // This member give the offset from the click position to the point where we take the duplication
- bool m_isOffsetNotUptodate; // Tells if the offset is update
- KisPoint m_position; // Give the position of the last alt-click
+	virtual void initPaint(KisEvent *e);
+
+	// Tool starting duplicate
+	KisPoint m_offset; // This member give the offset from the click position to the point where we take the duplication
+	bool m_isOffsetNotUptodate; // Tells if the offset is update
+	KisPoint m_position; // Give the position of the last alt-click
 };
 
 #endif //__KIS_TOOL_DUPLICATE_H__

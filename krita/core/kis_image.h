@@ -29,7 +29,6 @@
 #include <qpixmap.h>
 #include <qptrlist.h>
 #include <qvaluevector.h>
-#include <qtimer.h>
 
 #include <ksharedptr.h>
 
@@ -42,11 +41,12 @@
 #include "kis_tiles.h"
 #include "kis_tile.h"
 
+class QTimer;
 class DCOPObject;
 class KCommand;
+
 class KisBrush;
 class KisDoc;
-
 class KisImage;
 
 typedef KSharedPtr<KisImage> KisImageSP;
@@ -156,7 +156,7 @@ private:
 	QRect findBoundingTiles(const QRect& area);
 
 private:
-	int m_bpp;
+	int m_depth;
 	KisDoc *m_doc;
 
 	KisLayerSPLst m_layers;

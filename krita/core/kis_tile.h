@@ -43,18 +43,23 @@ typedef QValueVector<KisTileSP> KisTileSPLst;
 typedef KisTileSPLst::iterator KisTileSPLstIterator;
 typedef KisTileSPLst::const_iterator KisTileSPLstConstIterator;
 
+typedef Magick::CompositeOperator TileCompositeOperator;
+
 class KisTile : public KShared {
 public:
-	KisTile(int x, int y, uint width = TILE_SIZE, uint height = TILE_SIZE, int depth = 4, const QRgb& defaultColor = 0);
+	KisTile(int x, int y, bool alpha, int width = TILE_SIZE, int height = TILE_SIZE, int depth = 4, const QRgb& defaultColor = 0);
 	KisTile(const KisTile& tile);
 	KisTile& operator=(const KisTile& tile);
 	~KisTile();
 
-	const KisPixelPacket* getConstPixels(int x, int y, uint width = TILE_SIZE, uint height = TILE_SIZE) const;
+	const KisPixelPacket* getConstPixels(int x, int y, int width = TILE_SIZE, int height = TILE_SIZE) const;
 	const KisPixelPacket* getConstPixels() const;
-	KisPixelPacket* getPixels(int x, int y, uint width = TILE_SIZE, uint height = TILE_SIZE);
+	KisPixelPacket* getPixels(int x, int y, int width = TILE_SIZE, int height = TILE_SIZE);
 	KisPixelPacket* getPixels();
 	void syncPixels();
+
+	Magick::Image* getImage();
+	const Magick::Image* getImage() const;
 
 	void copy(const KisTile& tile);
 	void clear();
@@ -69,13 +74,15 @@ public:
 
 	void modifyImage();
 
-	inline QSize size() const;
-	inline uint width() const;
-	inline uint height() const;
-	inline int depth() const;
+	QSize size() const;
+	int width() const;
+	int height() const;
+	int depth() const;
 
 	QImage convertTileToImage();
 	void convertTileFromImage(const QImage& img);
+
+	void composite(const KisTileSP src, const TileCompositeOperator& op);
 	
 private:
 	void setGeometry(int x, int y, int w, int h);
@@ -84,31 +91,12 @@ private:
 
 private:
 	QRect m_geometry;
+	bool m_alpha;
 	int m_depth;
 	Magick::Image *m_data;
 	QRgb m_defaultColor;
 	QMutex m_mutex;
 };
-
-int KisTile::depth() const
-{
-	return m_depth;
-}
-
-QSize KisTile::size() const
-{
-	return m_geometry.size();
-}
-
-uint KisTile::width() const
-{
-	return m_geometry.width();
-}
-
-uint KisTile::height() const
-{
-	return m_geometry.height();
-}
 
 #endif // KIS_TILE_
 

@@ -141,6 +141,8 @@ bool BrushTool::paintCanvas(const QPoint& /* pos */)
 
 bool BrushTool::paint(const QPoint& pos)
 {
+	return false;
+#if 0
 	KisImageSP img = m_doc -> currentImg();
 	KisPaintDeviceSP device = img -> getCurrentPaintDevice();
 	int startx = pos.x() - m_hotSpotX;
@@ -156,62 +158,57 @@ bool BrushTool::paint(const QPoint& pos)
 	int sy = clipRect.top();
 	int ex = clipRect.width();
 	int ey = clipRect.height();
-	int bv; 
-	int invbv;
-	int opacity = Upscale(m_opacity);
-	int invOpacity = MaxRGB - opacity;
+	double bv; 
 	bool alpha = img -> colorMode() == cm_RGBA;
+	int opacity = TransparentOpacity - Upscale(m_opacity);
 	KisPixelPacket *view = device -> getPixels(sx, sy, ex, ey);
 
 	if (!view)
 		return false;
 
+	if (opacity == TransparentOpacity)
+		return true;
+	
 	for (int y = 0; y < ey; y++) {
 		uchar *sl = m_brush -> scanline(y - starty + sy);
 
 		for (int x = 0; x < ex; x++) {
 			bv = *(sl - startx + sx + x);
-			bv = Upscale(bv);
-			invbv = MaxRGB - bv;
+//			bv = Upscale(bv);
 
-			if (bv == 0)
+			if (bv < 3)
 				continue;
 
-			KisPixelPacket *src = view + y * ex + x;
-
+			KisPixelPacket *dst = view + y * ex + x;
 			int r = Upscale(m_red);
 			int g = Upscale(m_green);
 			int b = Upscale(m_blue);
+			KisPixelPacket src(r, g, b, opacity);
 
-			src -> red = (r * opacity + src -> red * invOpacity) / MaxRGB;
-			src -> green = (g * opacity + src -> green * invOpacity) / MaxRGB;
-			src -> blue = (b * opacity + src -> blue * invOpacity) / MaxRGB;
-#if 0
-			src -> red = ((m_red * (CHANNEL_MAX - m_opacity) + Downscale(src -> red) * m_opacity)) / CHANNEL_MAX;
-			src -> green = ((m_green * (CHANNEL_MAX - m_opacity) + Downscale(src -> green) * m_opacity)) / CHANNEL_MAX;
-			src -> blue = ((m_blue * (CHANNEL_MAX - m_opacity) + Downscale(src -> blue) * m_opacity)) / CHANNEL_MAX;
+			// In operator
+#if 1
+//			if (alpha)
+//				dst -> opacity = ((MaxRGB - bv) * (MaxRGB - opacity)) / MaxRGB;
 
-			src -> red = Upscale(src -> red);
-			src -> green = Upscale(src -> green);
-			src -> blue = Upscale(src -> blue);
+			bv = (double)bv / CHANNEL_MAX;
+			dst -> red = (bv / CHANNEL_MAX * r);
+			dst -> green = (bv / CHANNEL_MAX * g);
+			dst -> blue = (bv / CHANNEL_MAX * b);
 #endif
-
+		
 #if 0
-			if (alpha) {
-				src -> opacity = Upscale(m_opacity) + Upscale(bv);
-
-				if (src -> opacity > MaxRGB)
-					src -> opacity = MaxRGB;
-
-				if (src -> opacity < 0)
-					src -> opacity = 0;
-			}
+			dst -> red = (dst -> red * (opacity) + src.red * (MaxRGB - opacity)) / MaxRGB;
+			dst -> green = (dst -> green * (opacity) + src.green * (MaxRGB - opacity)) / MaxRGB;
+			dst -> blue = (dst -> blue * (opacity) + src.blue * (MaxRGB - opacity)) / MaxRGB;
 #endif
+			
+			dst -> opacity = OpaqueOpacity;
 		}
 	}
 
-	device -> syncPixels();
+	device -> syncPixels(view);
 	return true;
+#endif
 }
 
 void BrushTool::mouseMove(QMouseEvent *e)

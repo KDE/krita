@@ -40,12 +40,15 @@ ColorPicker::~ColorPicker()
 
 KoColor ColorPicker::pick(KisImageSP img, KisPaintDeviceSP device, int x, int y)
 {
+#if 0
 	const KisPixelPacket *p = device -> getConstPixels(x, y, 1, 1);
 
 	if (!p)
 		return KoColor::white();
 	
 	return *p;
+#endif
+	return KoColor::white();
 }
 
 void ColorPicker::mousePress(QMouseEvent *e)

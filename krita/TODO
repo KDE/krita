@@ -50,3 +50,13 @@ BUGS
 
 - Tile left over show up on image import
 - Image import larger than current image will crash if you click somewhere outside the image on the canvas that also contains tiles.
+
+TASKS
+-----
+
+- Restore Separate Tiles
+- Restore undo command
+- Restore load/save (plus use ImageMagick to get xcf and pdp support)
+- Brush should not be grayscale
+- KisPixelRegion should not inherit for ImageMagick Type
+

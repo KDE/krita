@@ -21,8 +21,6 @@
 #if !defined KIS_PAINT_DEVICE_H_
 #define KIS_PAINT_DEVICE_H_
 
-#include <Magick++.h>
-
 #include <qcolor.h>
 #include <qobject.h>
 #include <qrect.h>
@@ -32,6 +30,7 @@
 
 #include "kis_global.h"
 #include "kis_pixel_packet.h"
+#include "kis_pixel_region.h"
 #include "kis_tiles.h"
 #include "kis_tile.h"
 
@@ -48,35 +47,34 @@ class KisPaintDevice : public QObject, public KShared {
 	typedef QObject super;
 
 public:
-	KisPaintDevice(const QString& name, uint width, uint height, uchar bpp, const QRgb& defaultColor);
+	KisPaintDevice(const QString& name, int width, int height, uchar depth, const QRgb& defaultColor);
 	virtual ~KisPaintDevice();
 
-	inline void setName(const QString& name);
-	inline QString name() const;
+	void setName(const QString& name);
+	QString name() const;
 
-	const KisPixelPacket* getConstPixels(int x, int y, uint width = TILE_SIZE, uint height = TILE_SIZE) const;
-	KisPixelPacket* getPixels(int x, int y, uint width = TILE_SIZE, uint height = TILE_SIZE);
-	void syncPixels();
+	const KisPixelRegionSP getConstPixels(int x, int y, int width = TILE_SIZE, int height = TILE_SIZE) const;
+	KisPixelRegionSP getPixels(int x, int y, int width = TILE_SIZE, int height = TILE_SIZE);
+	void syncPixels(KisPixelRegionSP region);
 
-	virtual void resize(uint width, uint height, uchar bpp);
+	virtual void resize(int width, int height, uchar depth);
 	
-//	inline KisTileSP getTile(unsigned int x, unsigned int y);
-	inline KisPixelPacket* getTile(uint x, uint y);
+	KisTileSP getTile(unsigned int x, unsigned int y);
 
-	inline uint xTiles() const;
-	inline uint yTiles() const;
-	inline uchar bpp() const;
+	int xTiles() const;
+	int yTiles() const;
+	uchar depth() const;
 	QRect tileExtents() const;
 
 	void findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
 	void findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const;
-//	KisTileSP swapTile(KisTileSP tile);
+	KisTileSP swapTile(KisTileSP tile);
 
-	inline uchar opacity() const;
-	inline void setOpacity(uchar o);
+	uchar opacity() const;
+	void setOpacity(uchar o);
 
-	inline bool visible() const;
-	inline void setVisible(bool v);
+	bool visible() const;
+	void setVisible(bool v);
 
 	virtual bool writeToStore(KoStore *store);
 	virtual bool loadFromStore(KoStore *store);
@@ -84,87 +82,20 @@ public:
 	QRect imageExtents() const;
 	void moveBy(int dx, int dy);
 	void moveTo(int x, int y);
-	void allocateRect(const QRect& rc, uchar bpp);
+	void allocateRect(const QRect& rc, uchar depth);
 
-	inline int width() const;
-	inline int height() const;
-
-	Magick::Image* getImage() { return m_tiles; }
+	int width() const;
+	int height() const;
 
 protected:
-	uchar m_bpp;
+	uchar m_depth;
 	uchar m_opacity;
 	bool m_visible;
 	QRect m_tileRect;
 	QRect m_imgRect;
 	QString m_name;
-	Magick::Image *m_tiles;
-//	KisTiles m_tiles;
+	KisTiles m_tiles;
 };
-
-uint KisPaintDevice::xTiles() const
-{
-	return 0;
-//	return m_tiles.xTiles();
-}
-
-uint KisPaintDevice::yTiles() const
-{
-	return 0;
-//	return m_tiles.yTiles();
-}
-
-uchar KisPaintDevice::bpp() const
-{
-	return m_bpp;
-}
-
-void KisPaintDevice::setName(const QString& name)
-{
-	m_name = name;
-}
-
-QString KisPaintDevice::name() const
-{
-	return m_name;
-}
-
-#if 0
-KisTileSP KisPaintDevice::getTile(unsigned int x, unsigned int y) 
-{ 
-	return m_tiles.getTile(x, y); 
-}
-#endif
-
-uchar KisPaintDevice::opacity() const 
-{ 
-	return m_opacity; 
-}
-
-void KisPaintDevice::setOpacity(uchar o) 
-{ 
-	m_opacity = o; 
-}
-
-bool KisPaintDevice::visible() const 
-{ 
-	return m_visible; 
-}
-
-void KisPaintDevice::setVisible(bool v) 
-{ 
-	m_visible = v; 
-}
-
-int KisPaintDevice::width() const
-{
-	return m_imgRect.width();
-}
-
-int KisPaintDevice::height() const
-{
-	return m_imgRect.height();
-}
 
 #endif // KIS_PAINT_DEVICE_H_
 

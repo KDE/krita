@@ -385,10 +385,10 @@ QDomElement KisDoc::saveLayers(QDomDocument& doc, KisImageSP img)
 
 		layer.setAttribute("visible", lay -> visible());
 		layer.setAttribute("linked", lay -> linked());
-		layer.setAttribute("bitDepth", static_cast<int>(lay -> bpp()) );
+		layer.setAttribute("bitDepth", static_cast<int>(lay -> depth()) );
 		layer.setAttribute("cMode", static_cast<int>(lay -> colorMode()) );
 
-		kdDebug(0) << "bitDepth: " <<  static_cast<int>(lay -> bpp())  << endl;
+		kdDebug(0) << "bitDepth: " <<  static_cast<int>(lay -> depth())  << endl;
 		kdDebug(0) << "colorMode: " <<  static_cast<int>(lay -> colorMode())  << endl;
 
 		layersElement.appendChild(layer);

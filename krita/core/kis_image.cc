@@ -23,10 +23,8 @@
 #include <Magick++.h>
 
 #include <qpainter.h>
-#include <qthread.h>
 #include <qptrqueue.h>
-#include <qmutex.h>
-#include <qwaitcondition.h>
+#include <qtimer.h>
 
 #include <kcommand.h>
 #include <kdebug.h>
@@ -218,13 +216,13 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 	m_dcop = 0;
 	dcopObject();
 	resizePixmap(false);
-	m_bpp = KisUtil::calcNumChannels(cm);
+	m_depth = KisUtil::calcNumChannels(cm);
 
-	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * m_bpp, m_bpp == 1 ? QImage::LittleEndian : QImage::IgnoreEndian);
+	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * m_depth, m_depth == 1 ? QImage::LittleEndian : QImage::IgnoreEndian);
 //	m_imgTile.setAlphaBuffer(true);
 
-	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, m_bpp, cm, defaultColor);
-	m_bgLayer = new KisLayer("_background", TILE_SIZE, TILE_SIZE, m_bpp, cm, defaultColor);
+	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, m_depth, cm, defaultColor);
+	m_bgLayer = new KisLayer("_background", TILE_SIZE, TILE_SIZE, m_depth, cm, defaultColor);
 	renderBg(m_bgLayer, 0);
 	compositeImage();
 
@@ -232,9 +230,6 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 	m_timer = new QTimer(this);
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(slotUpdateTimeOut()));
 	m_timer -> start(1);
-#else
-	QThread *thr = new KisRenderThread(this, &wcDirty);
-	thr -> start();
 #endif
 }
 
@@ -251,7 +246,7 @@ KisImage::~KisImage()
 
 inline void KisImage::renderTile(KisPixelPacket *dst, const KisPixelPacket *src, const KisPaintDevice *srcDevice)
 {
-	if (!src)
+	if (!src || !srcDevice)
 		return;
 
 	memcpy(dst, src, TILE_SIZE * TILE_SIZE * sizeof(KisPixelPacket));
@@ -317,7 +312,7 @@ void KisImage::addLayer(const QRect& rect, const KoColor& c, bool /*tr*/, const 
 	else
 		defaultColor = c.color().rgb();
 	
-	lay = new KisLayer(name, rect.width(), rect.height(), m_bpp, m_cMode, defaultColor);
+	lay = new KisLayer(name, rect.width(), rect.height(), m_depth, m_cMode, defaultColor);
 	m_nLayers++;
 	m_layers.push_back(lay);
 	m_activeLayer = lay;
@@ -502,24 +497,21 @@ void KisImage::paintPixmap(QPainter *p, const QRect& area)
 
 void KisImage::compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y)
 {
-	Image *dstimg = dstDevice -> getImage();
-	Image tile(Geometry(TILE_SIZE, TILE_SIZE), Color(0, 0, 0, TransparentOpacity));
-
-	Q_ASSERT(dstimg);
-	
 	for (KisLayerSPLstIterator it = m_layers.begin(); it != m_layers.end(); it++) {
 		KisLayerSP layer = *it;
 
 		if (layer && layer -> visible()) {
-			const PixelPacket *src = layer -> getConstPixels(x, y);
-			PixelPacket *dst = tile.getPixels(0, 0, TILE_SIZE, TILE_SIZE);
+			KisTileSP dst = dstDevice -> getTile(tileNo, tileNo);
+			KisTileSP src = layer -> getTile(x, y);
+			
+			if (!src)
+				continue;
 
-			memcpy(dst, src, sizeof(PixelPacket) * TILE_SIZE * TILE_SIZE);
-			tile.syncPixels();
-//			tile.opacity(TransparentOpacity - Upscale(layer -> opacity()));
-			dstimg -> composite(tile, tileNo * TILE_SIZE, tileNo * TILE_SIZE, OverCompositeOp);
+			dst -> composite(src, OverCompositeOp);
 		}
 	}
+
+	// TODO Paint the current channel
 }
 
 void KisImage::compositeImage(const QRect& area, bool allDirty)
@@ -531,11 +523,12 @@ void KisImage::compositeImage(const QRect& area, bool allDirty)
 			if (!allDirty && m_dirty[y * m_xTiles + x] == false)
 				continue;
 
-			KisPixelPacket *dst = m_composeLayer -> getPixels(0, 0);
-			const KisPixelPacket *src = m_bgLayer -> getConstPixels(0, 0);
-
-			memcpy(dst, src, TILE_SIZE * TILE_SIZE * sizeof(KisPixelPacket));
-			m_composeLayer -> syncPixels();
+			KisTileSP dst = m_composeLayer -> getTile(0, 0);
+			const KisTileSP src = m_bgLayer -> getTile(0, 0);
+		
+			if (src)
+				dst -> composite(src, CopyCompositeOp);
+			
 			compositeTile(m_composeLayer, 0, x * TILE_SIZE, y * TILE_SIZE);
 			convertTileToPixmap(m_composeLayer, 0, m_pixmapTiles[y * m_xTiles + x]);
 			m_dirty[y * m_xTiles + x] = false;
@@ -571,15 +564,17 @@ void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
 
 void KisImage::convertTileToPixmap(KisPaintDevice *dstDevice, int tileNo, QPixmap *pix)
 {
-	const KisPixelPacket *srcTile = dstDevice -> getConstPixels(tileNo * TILE_SIZE, tileNo * TILE_SIZE);
-	uchar bpp = dstDevice -> bpp();
+	KisTileSP srcTile = dstDevice -> getTile(tileNo * TILE_SIZE, tileNo * TILE_SIZE);
+	const KisPixelPacket *src = srcTile -> getConstPixels();
+
+	if (!src)
+		return;
 
 	for (int row = 0; row < m_imgTile.height(); row++) {
 		for (int column = 0; column < m_imgTile.width(); column++) {
-			const KisPixelPacket *pixel = srcTile + row * m_imgTile.width() + column;
-			QRgb rgb;
+			const KisPixelPacket *pixel = src + row * m_imgTile.width() + column;
+			QRgb rgb = *pixel;
 
-			rgb = *pixel;
 			m_imgTile.setPixel(column, row, rgb);
 		}
 	}
@@ -814,15 +809,21 @@ void KisImage::destroyPixmap()
 
 void KisImage::renderBg(KisPaintDevice *srcDevice, int tileNo)
 {
-	KisPixelPacket *ptr = srcDevice -> getPixels(0, 0);
+	KisPixelRegionSP region = srcDevice -> getPixels(tileNo, tileNo);
 
+	if (!region)
+		return;
+
+	KisPixelPacket *p = region -> start();
+	
 	for (int y = 0; y < TILE_SIZE; y++)
 		for (int x = 0; x < TILE_SIZE; x++) {
 			uchar v = 128 + 63 * ((x / 16 + y / 16) % 2);
 
-			*(ptr + (y * TILE_SIZE) + x) = qRgba(v, v, v, OPACITY_OPAQUE);
+			*(p + (y * TILE_SIZE) + x) = qRgba(v, v, v, OPACITY_OPAQUE);
 		}
 
+	srcDevice -> syncPixels(region);
 	compositeImage();
 }
 
@@ -889,7 +890,7 @@ void KisImage::removeChannel(KisChannelSPLstIterator it)
 
 void KisImage::removeChannel(unsigned int channel)
 {
-	if (channel >= m_layers.size())
+	if (channel >= m_channels.size())
 		return;
 
 	removeChannel(m_channels.begin() + channel);

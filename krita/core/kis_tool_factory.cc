@@ -70,7 +70,9 @@ ktvector toolFactory(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern, Ki
 	tools.push_back(new AirBrushTool(doc, brush));
 	tools.push_back(new PenTool(doc, canvas, brush));
 	tools.push_back(new EraserTool(doc, brush));
+#endif
 	tools.push_back(new ColorPicker(doc));
+#if 0
 	tools.push_back(new ColorChangerTool(doc));
 	tools.push_back(new FillTool(doc));
 	tools.push_back(new StampTool(doc, canvas, pattern));

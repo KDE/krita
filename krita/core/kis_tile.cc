@@ -29,13 +29,15 @@
 
 using namespace Magick;
 
-KisTile::KisTile(int x, int y, uint width, uint height, int depth, const QRgb& defaultColor) : m_data(0)
+KisTile::KisTile(int x, int y, bool alpha, int width, int height, int depth, const QRgb& defaultColor) : m_data(0)
 {
-	try {
-		m_depth = depth;
-		m_defaultColor = defaultColor;
-		setGeometry(x, y, width, height);
+	m_data = 0;
+	m_alpha = alpha;
+	m_depth = depth;
+	m_defaultColor = defaultColor;
+	setGeometry(x, y, width, height);
 
+	try {
 		if (qAlpha(defaultColor))
 			initTile();
 	}
@@ -64,9 +66,14 @@ KisTile::~KisTile()
 	delete m_data;
 }
 
-const KisPixelPacket* KisTile::getConstPixels(int x, int y, uint width, uint height) const
+const KisPixelPacket* KisTile::getConstPixels(int x, int y, int width, int height) const
 {
 	if (!m_data)
+		return 0;
+
+	QRect geometry(x, y, width, height);
+
+	if (geometry.width() > m_geometry.width() || geometry.height() > m_geometry.height())
 		return 0;
 
 	return static_cast<const KisPixelPacket*>(m_data -> getConstPixels(x, y, width, height));
@@ -77,11 +84,16 @@ const KisPixelPacket* KisTile::getConstPixels() const
 	return getConstPixels(0, 0, m_geometry.width(), m_geometry.height());
 }
 
-KisPixelPacket* KisTile::getPixels(int x, int y, uint width, uint height)
+KisPixelPacket* KisTile::getPixels(int x, int y, int width, int height)
 {
 	if (!m_data)
 		initTile();
 	
+	QRect geometry(x, y, width, height);
+
+	if (geometry.width() > m_geometry.width() || geometry.height() > m_geometry.height())
+		return 0;
+
 	return static_cast<KisPixelPacket*>(m_data -> getPixels(x, y, width, height));
 }
 
@@ -109,8 +121,10 @@ void KisTile::copy(const KisTile& tile)
 	m_defaultColor = tile.m_defaultColor;
 	m_geometry = tile.m_geometry;
 
-	if (tile.m_data)
+	if (tile.m_data) {
 		m_data = new Image(*tile.m_data);
+		m_data -> matte(m_alpha);
+	}
 }
 
 void KisTile::clear()
@@ -181,5 +195,48 @@ void KisTile::initTile()
 {
 	delete m_data;
 	m_data = new Image(Geometry(m_geometry.width(), m_geometry.height()));
+	m_data -> matte(m_alpha);
+	// TODO : Init with default color
+}
+
+Image* KisTile::getImage()
+{
+	if (!m_data)
+		initTile();
+
+	return m_data;
+}
+
+const Image* KisTile::getImage() const
+{
+	return m_data;
+}
+
+int KisTile::depth() const
+{
+	return m_depth;
+}
+
+QSize KisTile::size() const
+{
+	return m_geometry.size();
+}
+
+int KisTile::width() const
+{
+	return m_geometry.width();
+}
+
+int KisTile::height() const
+{
+	return m_geometry.height();
+}
+
+void KisTile::composite(const KisTileSP src, const TileCompositeOperator& op)
+{
+	if (m_data && src -> m_data) {
+		m_data -> composite(*src -> m_data, 0, 0, op);
+		m_data -> syncPixels();
+	}
 }
 

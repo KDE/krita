@@ -28,32 +28,29 @@
 
 class KisTiles {
 public:
-	KisTiles(uint width, uint height, uint bpp, const QRgb& defaultColor);
+	KisTiles();
+	KisTiles(uint width, uint height, uint depth, const QRgb& defaultColor);
 	~KisTiles();
 	
-	inline uint xTiles() const;
-	inline uint yTiles() const;
-	inline uint bpp() const;
-
+	uint xTiles() const;
+	uint yTiles() const;
+	uint depth() const;
 	KisTileSP setTile(uint x, uint y, KisTileSP tile);
 	KisTileSP setTile(const QPoint& pt, KisTileSP tile);
 	KisTileSP getTile(uint x, uint y);
 	KisTileSP getTile(const QPoint& pt);
 	KisTileSP takeTile(uint x, uint y);
 	bool swapTile(uint x1, uint y1, uint x2, uint y2);
-
 	void markDirty(uint x, uint y);
-
-	void resize(uint width, uint height, uint bpp);
-
-	inline uint getTileNo(uint x, uint y);
-	inline bool intersects(uint x, uint y);
+	void resize(uint width, uint height, uint depth);
+	uint getTileNo(uint x, uint y);
+	bool intersects(uint x, uint y);
 
 private:
 	KisTiles(const KisTiles&);
 	KisTiles& operator=(const KisTiles&);
 
-	void init(uint width, uint height, uint bpp);
+	void init(uint width, uint height, uint depth);
 	void cleanup();
 
 private:
@@ -61,33 +58,8 @@ private:
 	QRgb m_defaultColor;
 	uint m_xTiles;
 	uint m_yTiles;
-	uint m_bpp;
+	uint m_depth;
 };
-
-uint KisTiles::xTiles() const
-{ 
-	return m_xTiles; 
-}
-
-uint KisTiles::yTiles() const 
-{ 
-	return m_yTiles; 
-}
-
-uint KisTiles::bpp() const
-{
-	return m_bpp;
-}
-
-uint KisTiles::getTileNo(uint x, uint y)
-{
-	return y * xTiles() + x;
-}
-
-bool KisTiles::intersects(uint x, uint y)
-{
-	return !(y >= yTiles() || x >= xTiles());
-}
 
 #endif // KIS_TILES_
 

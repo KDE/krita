@@ -26,10 +26,14 @@
 #include "kis_tiles.h"
 #include "kis_tile.h"
 
-KisTiles::KisTiles(uint width, uint height, uint bpp, const QRgb& defaultColor)
+KisTiles::KisTiles()
+{
+}
+
+KisTiles::KisTiles(uint width, uint height, uint depth, const QRgb& defaultColor)
 {
 	m_defaultColor = defaultColor;
-	init(width, height, bpp);
+	init(width, height, depth);
 }
 
 KisTiles::~KisTiles()
@@ -62,7 +66,7 @@ KisTileSP KisTiles::getTile(uint x, uint y)
 	int tileNo = getTileNo(x, y);
 
 	if (!m_tiles[tileNo])
-		m_tiles[tileNo] = new KisTile(x, y, TILE_SIZE, TILE_SIZE, m_bpp, m_defaultColor);
+		m_tiles[tileNo] = new KisTile(x, y, TILE_SIZE, TILE_SIZE, m_depth, m_defaultColor);
 	
 	return m_tiles[tileNo];
 }
@@ -104,7 +108,7 @@ void KisTiles::markDirty(uint x, uint y)
 	m_tiles[getTileNo(x, y)] -> modifyImage();
 }
 
-void KisTiles::resize(uint width, uint height, uint bpp)
+void KisTiles::resize(uint width, uint height, uint depth)
 {
 	m_tiles.resize(width * height);
 
@@ -113,14 +117,14 @@ void KisTiles::resize(uint width, uint height, uint bpp)
 	
 	m_xTiles = width;
 	m_yTiles = height;
-	m_bpp = bpp;
+	m_depth = depth;
 }
 
-void KisTiles::init(uint width, uint height, uint bpp)
+void KisTiles::init(uint width, uint height, uint depth)
 {
 	m_xTiles = width;
 	m_yTiles = height;
-	m_bpp = bpp;
+	m_depth = depth;
 	m_tiles.resize(m_xTiles * m_yTiles);
 	qFill(m_tiles.begin(), m_tiles.end(), static_cast<KisTile*>(0));
 }
@@ -130,5 +134,30 @@ void KisTiles::cleanup()
 	m_tiles.clear();
 	m_xTiles = 0;
 	m_yTiles = 0;
+}
+
+uint KisTiles::xTiles() const
+{ 
+	return m_xTiles; 
+}
+
+uint KisTiles::yTiles() const 
+{ 
+	return m_yTiles; 
+}
+
+uint KisTiles::depth() const
+{
+	return m_depth;
+}
+
+uint KisTiles::getTileNo(uint x, uint y)
+{
+	return y * xTiles() + x;
+}
+
+bool KisTiles::intersects(uint x, uint y)
+{
+	return !(y >= yTiles() || x >= xTiles());
 }
 

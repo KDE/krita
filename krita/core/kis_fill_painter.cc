@@ -76,6 +76,8 @@ KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 
 // 'regular' filling
 // XXX: This needs to be optimized.
+// XXX: This also needs renaming, since filling ought to keep the opacity and the composite op in mind,
+//      this is more eraseToColor.
 void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const QColor& c, QUANTUM opacity)
 {
 
@@ -99,6 +101,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisP
 	if (!pattern) return;
 	if (!pattern -> valid()) return;
 	if (!m_device) return;
+
 
 	KisLayerSP patternLayer = pattern -> image(m_device->colorStrategy());
 

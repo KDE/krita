@@ -467,6 +467,8 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 void KisPaintDevice::convertFromImage(const QImage& img)
 {
 	// XXX: Apply import profile
+
+	// XXX: Optimize this.
 	QColor c;
 	QRgb rgb;
 	Q_INT32 opacity;

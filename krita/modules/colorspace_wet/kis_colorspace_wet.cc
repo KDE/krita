@@ -34,66 +34,62 @@
 #include "kis_image.h"
 #include "kis_colorspace_wet.h"
 #include "kis_iterators_pixel.h"
-namespace {
 
-	void wetPixToDouble(WetPixDbl * dst, WetPix *src)
-	{
-		dst->rd = (1.0 / 8192.0) * src->rd;
-		dst->rw = (1.0 / 8192.0) * src->rw;
-		dst->gd = (1.0 / 8192.0) * src->gd;
-		dst->gw = (1.0 / 8192.0) * src->gw;
-		dst->bd = (1.0 / 8192.0) * src->bd;
-		dst->bw = (1.0 / 8192.0) * src->bw;
-		dst->w = (1.0 / 8192.0) * src->w;
-		dst->h = (1.0 / 8192.0) * src->h;
-	}
+void wetPixToDouble(WetPixDbl * dst, WetPix *src)
+{
+	dst->rd = (1.0 / 8192.0) * src->rd;
+	dst->rw = (1.0 / 8192.0) * src->rw;
+	dst->gd = (1.0 / 8192.0) * src->gd;
+	dst->gw = (1.0 / 8192.0) * src->gw;
+	dst->bd = (1.0 / 8192.0) * src->bd;
+	dst->bw = (1.0 / 8192.0) * src->bw;
+	dst->w = (1.0 / 8192.0) * src->w;
+	dst->h = (1.0 / 8192.0) * src->h;
+}
 
-	void wetPixFromDouble(WetPix * dst, WetPixDbl *src)
-	{
-		int v;
+void wetPixFromDouble(WetPix * dst, WetPixDbl *src)
+{
+	int v;
 
-		v = floor (8192.0 * src->rd + 0.5);
-		if (v < 0) v = 0;
-		if (v > 65535) v = 65535;
-		dst->rd = v;
-		
-		v = floor (8192.0 * src->rw + 0.5);
-		if (v < 0) v = 0;
-		if (v > 65535) v = 65535;
-		dst->rw = v;
-		
-		v = floor (8192.0 * src->gd + 0.5);
-		if (v < 0) v = 0;
-		if (v > 65535) v = 65535;
-		dst->gd = v;
-		
-		v = floor (8192.0 * src->gw + 0.5);
-		if (v < 0) v = 0;
-		if (v > 65535) v = 65535;
-		dst->gw = v;
-		
-		v = floor (8192.0 * src->bd + 0.5);
-		if (v < 0) v = 0;
-		if (v > 65535) v = 65535;
-		dst->bd = v;
-		
-		v = floor (8192.0 * src->bw + 0.5);
-		if (v < 0) v = 0;
-		if (v > 65535) v = 65535;
-		dst->bw = v;
-		
-		v = floor (8192.0 * src->w + 0.5);
-		if (v < 0) v = 0;
-		if (v > 511) v = 511;
-		dst->w = v;
-		
-		v = floor (8192.0 * src->h + 0.5);
-		if (v < 0) v = 0;
-		if (v > 511) v = 511;
-		dst->h = v;
+	v = floor (8192.0 * src->rd + 0.5);
+	if (v < 0) v = 0;
+	if (v > 65535) v = 65535;
+	dst->rd = v;
 
-	}
+	v = floor (8192.0 * src->rw + 0.5);
+	if (v < 0) v = 0;
+	if (v > 65535) v = 65535;
+	dst->rw = v;
 
+	v = floor (8192.0 * src->gd + 0.5);
+	if (v < 0) v = 0;
+	if (v > 65535) v = 65535;
+	dst->gd = v;
+
+	v = floor (8192.0 * src->gw + 0.5);
+	if (v < 0) v = 0;
+	if (v > 65535) v = 65535;
+	dst->gw = v;
+
+	v = floor (8192.0 * src->bd + 0.5);
+	if (v < 0) v = 0;
+	if (v > 65535) v = 65535;
+	dst->bd = v;
+
+	v = floor (8192.0 * src->bw + 0.5);
+	if (v < 0) v = 0;
+	if (v > 65535) v = 65535;
+	dst->bw = v;
+
+	v = floor (8192.0 * src->w + 0.5);
+	if (v < 0) v = 0;
+	if (v > 511) v = 511;
+	dst->w = v;
+
+	v = floor (8192.0 * src->h + 0.5);
+	if (v < 0) v = 0;
+	if (v > 511) v = 511;
+	dst->h = v;
 
 }
 
@@ -157,7 +153,8 @@ Q_INT32 KisColorSpaceWet::nSubstanceChannels() const
 
 Q_INT32 KisColorSpaceWet::pixelSize() const
 {
-	return 16; // This color strategy wants an unsigned short for each channel.
+	return 32; // This color strategy wants an unsigned short for each
+		   // channel, and every pixel consists of two wetpix structs.
 }
 
 
@@ -212,17 +209,17 @@ void KisColorSpaceWet::wet_composite(Q_UINT8 *rgb, WetPix * wet)
 	int d, w;
 	int ab;
 	int wa;
-	
+
 	r = rgb[0];
 	w = wet[0].rw >> 4;
 	d = wet[0].rd >> 4;
-	
+
 	ab = wet_render_tab[d];
 	wa = (w * (ab >> 16) + 0x80) >> 8;
 	r = wa + (((r - wa) * (ab & 0xffff) + 0x4000) >> 15);
 	rgb[0] = r;
-	
-	
+
+
 	g = rgb[1];
 	w = wet[0].gw >> 4;
 	d = wet[0].gd >> 4;
@@ -231,7 +228,7 @@ void KisColorSpaceWet::wet_composite(Q_UINT8 *rgb, WetPix * wet)
 	wa = (w * (ab >> 16) + 0x80) >> 8;
 	g = wa + (((g - wa) * (ab & 0xffff) + 0x4000) >> 15);
 	rgb[1] = g;
-	
+
 	b = rgb[2];
 	w = wet[0].bw >> 4;
 	d = wet[0].bd >> 4;

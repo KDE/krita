@@ -26,50 +26,60 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_pixel.h"
 
-namespace {
+
+/**
+ * The wet colourspace is one of the more complicated colour spaces. Every
+ * pixel actually consists of two pixels: the paint pixel and the adsorbtion
+ * pixel. This corresponds to the two layers of the wetpack structure in the
+ * original wetdreams code by Raph Levien.
+ */
+
+// XXX: This should really be in a namespace.
+
+typedef struct _WetPix WetPix;
+typedef struct _WetPixDbl WetPixDbl;
+
+/*
+	* White is made up of myth-red, myth-green, and myth-blue. Myth-red
+	* looks red when viewed reflectively, but cyan when viewed
+	* transmissively (thus, it vaguely resembles a dichroic
+	* filter). Myth-red over black is red, and myth-red over white is
+	* white.
+	*
+	* Total red channel concentration is myth-red concentration plus
+	* cyan concentration.
+	*/
+
+struct _WetPix {
+	Q_UINT16 rd;  /*  Total red channel concentration */
+	Q_UINT16 rw;  /*  Myth-red concentration */
+
+	Q_UINT16 gd;  /*  Total green channel concentration */
+	Q_UINT16 gw;  /*  Myth-green concentration */
+
+	Q_UINT16 bd;  /*  Total blue channel concentration */
+	Q_UINT16 bw;  /*  Myth-blue concentration */
+
+	Q_UINT16 w;   /*  Water volume */
+	Q_UINT16 h;   /*  Height of paper surface */
+};
 
 
-	typedef struct _WetPix WetPix;
-	typedef struct _WetPixDbl WetPixDbl;
+struct _WetPixDbl {
+	double rd;  /*  Total red channel concentration */
+	double rw;  /*  Myth-red concentration */
+	double gd;  /*  Total green channel concentration */
+	double gw;  /*  Myth-green concentration */
+	double bd;  /*  Total blue channel concentration */
+	double bw;  /*  Myth-blue concentration */
+	double w;   /*  Water volume */
+	double h;   /*  Height of paper surface */
+};
 
-	/*
-	 * White is made up of myth-red, myth-green, and myth-blue. Myth-red
-	 * looks red when viewed reflectively, but cyan when viewed
-	 * transmissively (thus, it vaguely resembles a dichroic
-	 * filter). Myth-red over black is red, and myth-red over white is
-	 * white.
-	 *
-	 * Total red channel concentration is myth-red concentration plus
-	 * cyan concentration.
-  	 */
 
-	struct _WetPix {
-		Q_UINT16 rd;  /*  Total red channel concentration */
-		Q_UINT16 rw;  /*  Myth-red concentration */
-		
-		Q_UINT16 gd;  /*  Total green channel concentration */
-		Q_UINT16 gw;  /*  Myth-green concentration */
-		
-		Q_UINT16 bd;  /*  Total blue channel concentration */
-		Q_UINT16 bw;  /*  Myth-blue concentration */
-		
-		Q_UINT16 w;   /*  Water volume */
-		Q_UINT16 h;   /*  Height of paper surface */
-	};
+void wetPixToDouble(WetPixDbl * dst, WetPix *src);
+void wetPixFromDouble(WetPix * dst, WetPixDbl *src);
 
-	
-	struct _WetPixDbl {
-		double rd;  /*  Total red channel concentration */
-		double rw;  /*  Myth-red concentration */
-		double gd;  /*  Total green channel concentration */
-		double gw;  /*  Myth-green concentration */
-		double bd;  /*  Total blue channel concentration */
-		double bw;  /*  Myth-blue concentration */
-		double w;   /*  Water volume */
-		double h;   /*  Height of paper surface */
-	};
-
-}
 
 class KisColorSpaceWet : public KisStrategyColorSpace {
 public:
@@ -85,10 +95,10 @@ public:
 	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
 	virtual KisPixelRO toKisPixelRO(const QUANTUM *src, KisProfileSP profile = 0)
-		{ return 0; }; 
+		{ return 0; };
 
 	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0)
-		{ return 0; }; 
+		{ return 0; };
 
 	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;
@@ -121,10 +131,10 @@ private:
 
 	// Convert a single pixel from its wet representation to rgb
 	void wet_composite(Q_UINT8 *rgb, WetPix * wet);
-			    
+
 private:
 	vKisChannelInfoSP m_channels;
-	Q_UINT32 * wet_render_tab; 
+	Q_UINT32 * wet_render_tab;
 
 
 };

@@ -41,7 +41,11 @@
 
 #include <map>
 #include <X11/Xlib.h>
+
+#if defined(EXTENDED_X11_TABLET_SUPPORT)
 #include <X11/extensions/XInput.h>
+#endif
+
 #endif // Q_WS_X11
 
 class KisEvent;

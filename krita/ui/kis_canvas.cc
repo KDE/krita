@@ -69,9 +69,7 @@
 #include <qdesktopwidget.h>
 #include <qapplication.h>
 
-#include <X11/Xlib.h>
 #include <X11/keysym.h>
-#include <X11/extensions/XInput.h>
 
 bool KisCanvas::X11SupportInitialised = false;
 long KisCanvas::X11AltMask = 0;

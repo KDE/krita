@@ -40,6 +40,8 @@ KisRainDropsFilterConfigurationWidget::KisRainDropsFilterConfigurationWidget( Ki
         //refresh the filter preview if the parameters for the filter are changed
         
         connect((QObject*)krdfcw->dropSizeSpinBox, SIGNAL(valueChanged(int)), filter(), SLOT(refreshPreview()));
+        connect((QObject*)krdfcw->numberSpinBox, SIGNAL(valueChanged(int)), filter(), SLOT(refreshPreview()));
+        connect((QObject*)krdfcw->fishEyesSpinBox, SIGNAL(valueChanged(int)), filter(), SLOT(refreshPreview()));
 }
 
 //#include "kis_raindrops_filter_configuration_widget.moc"

@@ -32,7 +32,7 @@
 
 #include <kis_doc.h>
 #include <kis_image.h>
-#include <kis_iterators.h>
+#include <kis_iterators_quantum.h>
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_tile_command.h>
@@ -86,7 +86,6 @@ void KritaExample::slotIteratorsActivated()
 	KisIteratorLineQuantum lineIt = lay->iteratorQuantumSelectionBegin(ktc);
 	KisIteratorLineQuantum lastLine = lay->iteratorQuantumSelectionEnd(ktc);
 	Q_INT32 depth = ::imgTypeDepth( lay->typeWithoutAlpha() );
-
 	while( lineIt <= lastLine )
 	{
 		KisIteratorQuantum quantumIt = *lineIt;
@@ -95,8 +94,7 @@ void KritaExample::slotIteratorsActivated()
 		{
 			for( int i = 0; i < depth; i++)
 			{
-				QUANTUM* data = quantumIt;
-				*data = QUANTUM_MAX - (*data);
+				quantumIt = QUANTUM_MAX - quantumIt;
 				++quantumIt;
 			}
 			++quantumIt;

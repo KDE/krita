@@ -42,7 +42,7 @@
 #include <kis_view.h>
 #include <kistile.h>
 #include <kistilemgr.h>
-#include <kis_iterators.h>
+#include <kis_iterators_pixel.h>
 
 // #include <kmessagebox.h>
 
@@ -100,14 +100,14 @@ void ColorsFilters::slotColorActivated()
 	if( kD->imageNum(0) == 0 )
 		return;
 	KisLayerSP lay = kD->imageNum(0)->activeLayer();
-	KisTileCommand* ktc = new KisTileCommand("Color adjustment", (KisPaintDeviceSP)lay ); // Create a command
+	KisTileCommand* ktc = new KisTileCommand(i18n("Color adjustment"), (KisPaintDeviceSP)lay ); // Create a command
 	KisTileMgrSP ktm = lay->data();
 	KisTileSP tile;
 	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB)
 	{
 		FormRGBSliders* frsd = new FormRGBSliders( m_view, "Color adjustment", TRUE);
 
-		frsd->setCaption("Color adjustment");
+		frsd->setCaption(i18n("Color adjustment"));
 
 		frsd->setMinValue(-255);
 		frsd->setMaxValue(255);
@@ -118,7 +118,6 @@ void ColorsFilters::slotColorActivated()
 		int red = (int)frsd->getRedValue();
 		int green = (int)frsd->getGreenValue();
 		int blue = (int)frsd->getBlueValue();
-		kdDebug() << "RGB" << red << " " << green << " " << blue << endl;
 		for(unsigned int i = 0; i < ktm->nrows() * ktm->ncols(); i++)
 		{
 			if( (tile = ktm->tile( i , TILEMODE_NONE)) )
@@ -144,11 +143,7 @@ void ColorsFilters::slotColorActivated()
 		kD->imageNum(0)->notify();
 	} else if( lay->typeWithoutAlpha() == IMAGE_TYPE_CMYK) {
 		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Color adjustment", TRUE);
-
-		frsd->setCaption("Color adjustment");
-
-
-
+		frsd->setCaption(i18n("Color adjustment"));
 		frsd->setMinValue(-255);
 		frsd->setMaxValue(255);
 		frsd->setPrecision(1);
@@ -195,15 +190,15 @@ void ColorsFilters::slotDesaturate()
 	KisLayerSP lay = kD->imageNum(0)->activeLayer();
 	KisTileCommand* ktc = new KisTileCommand("Desaturate", (KisPaintDeviceSP)lay ); // Create a command
 	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB) {
-		KisIteratorLineQuantum lineIt = lay->iteratorQuantumSelectionBegin(ktc);
-		KisIteratorLineQuantum lastLine = lay->iteratorQuantumSelectionEnd(ktc);
+		KisIteratorLinePixel lineIt = lay->iteratorPixelSelectionBegin(ktc);
+		KisIteratorLinePixel lastLine = lay->iteratorPixelSelectionEnd(ktc);
 		while( lineIt <= lastLine )
 		{
-			KisIteratorQuantum quantumIt = *lineIt;
-			KisIteratorQuantum lastQuantum = lineIt.end();
-			while( quantumIt <= lastQuantum )
+			KisIteratorPixel pixelIt = *lineIt;
+			KisIteratorPixel lastPixel = lineIt.end();
+			while( pixelIt <= lastPixel )
 			{
-				QUANTUM* data = quantumIt;
+				KisPixelRepresentation data = pixelIt;
 				/* I thought of using the HSV model, but GIMP seems to use
 				   HSL for desaturating. Better use the gimp model for now 
 				   (HSV produces a lighter image than HSL) */
@@ -212,10 +207,7 @@ void ColorsFilters::slotDesaturate()
 				data[0] = lightness;
 				data[1] = lightness;
 				data[2] = lightness;
-				++quantumIt;
-				++quantumIt;
-				++quantumIt;
-				++quantumIt;
+				++pixelIt;
 			}
 			++lineIt;
 		}
@@ -232,17 +224,13 @@ void ColorsFilters::slotGammaActivated()
 	if( kD->imageNum(0) == 0 )
 		return;
 	KisLayerSP lay = kD->imageNum(0)->activeLayer();
-	KisTileCommand* ktc = new KisTileCommand("Gamma Correction", (KisPaintDeviceSP)lay ); // Create a command
+	KisTileCommand* ktc = new KisTileCommand(i18n("Gamma Correction"), (KisPaintDeviceSP)lay ); // Create a command
 	KisTileMgrSP ktm = lay->data();
 	KisTileSP tile;
 	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB)
 	{
 		FormRGBSliders* frsd = new FormRGBSliders( m_view, "Gamma Correction", TRUE);
-
-		frsd->setCaption("Gamma Correction");
-
-
-
+		frsd->setCaption(i18n("Gamma Correction"));
 		frsd->setMinValue(1);
 		frsd->setMaxValue(600);
 		frsd->setPrecision(100);
@@ -252,7 +240,7 @@ void ColorsFilters::slotGammaActivated()
 		float red = frsd->getRedValue();
 		float green = frsd->getGreenValue();
 		float blue = frsd->getBlueValue();
-		kdDebug() << "RGB" << red << " " << green << " " << blue << endl;
+//		kdDebug() << "RGB" << red << " " << green << " " << blue << endl;
 		for(unsigned int i = 0; i < ktm->nrows() * ktm->ncols(); i++)
 		{
 			if( (tile = ktm->tile( i , TILEMODE_NONE)) )
@@ -278,11 +266,7 @@ void ColorsFilters::slotGammaActivated()
 		kD->imageNum(0)->notify();
 	} else if( lay->typeWithoutAlpha() == IMAGE_TYPE_CMYK) {
 		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Gamma Correction", TRUE);
-
-		frsd->setCaption("Gamma Correction");
-
-
-
+		frsd->setCaption(i18n("Gamma Correction"));
 		frsd->setMinValue(1);
 		frsd->setMaxValue(600);
 		frsd->setPrecision(100);
@@ -324,6 +308,7 @@ void ColorsFilters::slotBrightnessContrastActivated()
 {
 	//Get the new values
 	FormBCDialog* fbcd = new FormBCDialog( m_view, "Brightness / Contrast", TRUE);
+	fbcd->setCaption(i18n("Brightness / Contrast"));
 	if( fbcd->exec() ==  QDialog::Rejected )
 		return;
 	KisDoc* kD = (KisDoc*) m_view->koDocument();
@@ -332,7 +317,7 @@ void ColorsFilters::slotBrightnessContrastActivated()
 	int bright = fbcd->sliderBrightness->value();
 	int contrast = 100+fbcd->sliderContrast->value();
 	KisLayerSP lay = kD->imageNum(0)->activeLayer();
-	KisTileCommand* ktc = new KisTileCommand("Brightness / Contrast", (KisPaintDeviceSP)lay ); // Create a command
+	KisTileCommand* ktc = new KisTileCommand(i18n("Brightness / Contrast"), (KisPaintDeviceSP)lay ); // Create a command
 	int nbchannel = ::imgTypeDepth( lay->typeWithoutAlpha() ); // get the number of channel whithout alpha
 	KisTileMgrSP ktm = lay->data();
 	KisTileSP tile;

@@ -21,7 +21,7 @@
 #include "kis_histogram.h"
 #include "kis_layer.h"
 #include "kis_types.h"
-#include "kis_iterators.h"
+#include "kis_iterators_pixel.h"
 
 KisHistogram::KisHistogram(KisLayerSP layer, 
 			   const ChannelInfo & initialChannel, 
@@ -62,35 +62,29 @@ void KisHistogram::computeHistogramFor(const ChannelInfo & channel)
 		// Get plain iterators
 		// XXX: refactor when iterator refactoring done...
 
-		// XXX: we don't actually need a command here, but the
-		// iterators demand it. Something for the redesign.
-		KisTileCommand* ktc = new KisTileCommand("histogram", (KisPaintDeviceSP)m_layer );
-
-		KisIteratorLineQuantum lineIt = m_layer -> iteratorQuantumSelectionBegin(ktc);
-		KisIteratorLineQuantum lastLine = m_layer -> iteratorQuantumSelectionEnd(ktc);
+		KisIteratorLinePixel lineIt = m_layer -> iteratorPixelSelectionBegin(0);
+		KisIteratorLinePixel lastLine = m_layer -> iteratorPixelSelectionEnd(0);
 		Q_INT32 depth = ::imgTypeDepth( m_layer -> typeWithAlpha() );
 		while( lineIt <= lastLine )
 		{
-			KisIteratorQuantum quantumIt = *lineIt;
-			KisIteratorQuantum lastQuantum = lineIt.end();
-			while( quantumIt <= lastQuantum )
+			KisIteratorPixel pixelIt = *lineIt;
+			KisIteratorPixel lastPixel = lineIt.end();
+			while( pixelIt <= lastPixel )
 			{
 				for( int i = 0; i < depth; i++)
 				{
-					QUANTUM* data = quantumIt;
 					// Do computing
 					if (i == channel.pos()) {
-						QUANTUM datum = data[channel.pos()];
+						KisQuantum datum = pixelIt[channel.pos()];
 						m_values[datum] = m_values[datum]++;
 						if (datum > m_max) m_max = datum;
 						if (datum < m_min) m_min = datum;
 						total += datum;
 						m_count++;
-
 					}
-					++quantumIt;
+					++pixelIt;
 				}
-				++quantumIt;
+				++pixelIt;
 			}
 			++lineIt;
 		}

@@ -27,7 +27,7 @@
 #include "kis_image.h"
 #include "kis_strategy_colorspace_cmyk.h"
 #include "tiles/kispixeldata.h"
-#include "kis_iterators.h"
+#include "kis_iterators_pixel.h"
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_CMYK = 4;
@@ -314,23 +314,15 @@ void KisStrategyColorSpaceCMYK::tileBlt(Q_INT32 stride,
 
 }
 
-void KisStrategyColorSpaceCMYK::computeDuplicatePixel(KisIteratorQuantum* dst, KisIteratorQuantum* dab, KisIteratorQuantum* src)
+void KisStrategyColorSpaceCMYK::computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src)
 {
-	QUANTUM c = (**dab); dab->inc();
-	QUANTUM m = (**dab); dab->inc();
-	QUANTUM y = (**dab); dab->inc();
-	QUANTUM k = (**dab); dab->inc();
-	QUANTUM a = (**dab); dab->inc();
-	QUANTUM* d;
-	d = (*dst); *d = ( (QUANTUM_MAX - c) * (**src) ) / QUANTUM_MAX;
-	dst->inc(); 	src->inc();
-	d = (*dst); *d = ( (QUANTUM_MAX - m) * (**src) ) / QUANTUM_MAX;
-	dst->inc(); +src->inc();
-	d = (*dst); *d = ( (QUANTUM_MAX - y) * (**src) ) / QUANTUM_MAX;
-	dst->inc(); src->inc();
-	d = (*dst); *d = ( (QUANTUM_MAX - k) * (**src) ) / QUANTUM_MAX;
-	dst->inc(); src->inc();
-	d =(*dst); *d = ( a * (**src) ) / QUANTUM_MAX;
-	dst->inc(); src->inc();
+	KisPixelRepresentationCMYK dstPR(*dst);
+	KisPixelRepresentationCMYK dabPR(*dab);
+	KisPixelRepresentationCMYK srcPR(*src);
+	dstPR.cyan() = ( (QUANTUM_MAX - dabPR.cyan()) * (srcPR.cyan()) ) / QUANTUM_MAX;
+	dstPR.magenta() = ( (QUANTUM_MAX - dabPR.magenta()) * (srcPR.magenta()) ) / QUANTUM_MAX;
+	dstPR.yellow() = ( (QUANTUM_MAX - dabPR.yellow()) * (srcPR.yellow()) ) / QUANTUM_MAX;
+	dstPR.black() = ( (QUANTUM_MAX - dabPR.black()) * (srcPR.black()) ) / QUANTUM_MAX;
+	dstPR.alpha() =( dabPR.alpha() * (srcPR.alpha()) ) / QUANTUM_MAX;
 }
 

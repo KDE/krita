@@ -29,7 +29,7 @@
 #include "kis_image.h"
 #include "kis_strategy_colorspace_grayscale.h"
 #include "tiles/kispixeldata.h"
-#include "kis_iterators.h"
+#include "kis_iterators_pixel.h"
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_GRAYSCALE = 1;
@@ -263,15 +263,13 @@ void KisStrategyColorSpaceGrayscale::tileBlt(Q_INT32 stride,
 	}
 }
 
-void KisStrategyColorSpaceGrayscale::computeDuplicatePixel(KisIteratorQuantum* dst, KisIteratorQuantum* dab, KisIteratorQuantum* src)
+void KisStrategyColorSpaceGrayscale::computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src)
 {
-	QUANTUM g = (**dab); dab->inc();
-	QUANTUM a = (**dab); dab->inc();
-	QUANTUM* d;
-	d = (*dst); *d = ( (QUANTUM_MAX - g) * (**src) ) / QUANTUM_MAX;
-	dst->inc(); 	src->inc();
-	d =(*dst); *d = ( a * (**src) ) / QUANTUM_MAX;
-	dst->inc(); src->inc();
+	KisPixelRepresentationGrayscale dstPR(*dst);
+	KisPixelRepresentationGrayscale dabPR(*dab);
+	KisPixelRepresentationGrayscale srcPR(*src);
+	dstPR.gray() = ( (QUANTUM_MAX - dabPR.gray()) * (srcPR.gray()) ) / QUANTUM_MAX;
+	dstPR.alpha() =( dabPR.alpha() * (srcPR.alpha()) ) / QUANTUM_MAX;
 }
 
 

@@ -30,7 +30,7 @@
 #include "kis_strategy_colorspace_rgb.h"
 #include "tiles/kispixeldata.h"
 #include "composite.h"
-#include "kis_iterators.h"
+#include "kis_iterators_pixel.h"
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_RGB = 3;
@@ -319,21 +319,15 @@ void KisStrategyColorSpaceRGB::tileBlt(Q_INT32 stride,
 	}
 }
 
-void KisStrategyColorSpaceRGB::computeDuplicatePixel(KisIteratorQuantum* dst, KisIteratorQuantum* dab, KisIteratorQuantum* src)
+void KisStrategyColorSpaceRGB::computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src)
 {
-	QUANTUM b = (**dab); dab->inc();
-	QUANTUM g = (**dab); dab->inc();
-	QUANTUM r = (**dab); dab->inc();
-	QUANTUM a = (**dab); dab->inc();
-	QUANTUM* d;
-	d = (*dst); *d = ( (QUANTUM_MAX - b) * (**src) ) / QUANTUM_MAX;
-	dst->inc(); 	src->inc();
-	d = (*dst); *d = ( (QUANTUM_MAX - g) * (**src) ) / QUANTUM_MAX;
-	dst->inc(); +src->inc();
-	d = (*dst); *d = ( (QUANTUM_MAX - r) * (**src) ) / QUANTUM_MAX;
-	dst->inc(); src->inc();
-	d =(*dst); *d = ( a * (**src) ) / QUANTUM_MAX;
-	dst->inc(); src->inc();
+	KisPixelRepresentationRGB dstPR(*dst);
+	KisPixelRepresentationRGB dabPR(*dab);
+	KisPixelRepresentationRGB srcPR(*src);
+	dstPR.red() = ( (QUANTUM_MAX - dabPR.red()) * (srcPR.red()) ) / QUANTUM_MAX;
+	dstPR.green() = ( (QUANTUM_MAX - dabPR.green()) * (srcPR.green()) ) / QUANTUM_MAX;
+	dstPR.blue() = ( (QUANTUM_MAX - dabPR.blue()) * (srcPR.blue()) ) / QUANTUM_MAX;
+	dstPR.alpha() =( dabPR.alpha() * (srcPR.alpha()) ) / QUANTUM_MAX;
 }
 
 

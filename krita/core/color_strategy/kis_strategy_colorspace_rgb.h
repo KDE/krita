@@ -24,6 +24,19 @@
 #include <koColor.h>
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
+#include "kis_pixel_representation.h"
+
+class KisPixelRepresentationRGB : public KisPixelRepresentation {
+public:
+	inline KisPixelRepresentationRGB( const KisPixelRepresentation& pr) : KisPixelRepresentation(pr) { };
+public:
+	inline KisQuantum red() { return (*this)[PIXEL_RED]; };
+	inline KisQuantum green() { return (*this)[PIXEL_GREEN]; };
+	inline KisQuantum blue() { return (*this)[PIXEL_BLUE]; };
+	inline KisQuantum alpha() { return (*this)[PIXEL_ALPHA]; };
+};
+
+class KisIteratorQuantum;
 
 class KisStrategyColorSpaceRGB : public KisStrategyColorSpace {
 public:
@@ -62,7 +75,7 @@ public:
 			Q_INT32 rows, 
 			Q_INT32 cols, 
 			CompositeOp op) const;
-	virtual void computeDuplicatePixel(KisIteratorQuantum* dst, KisIteratorQuantum* dab, KisIteratorQuantum* src);
+	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src);
 
 private:
 	KPixmapIO m_pixio;

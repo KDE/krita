@@ -31,6 +31,7 @@ class QWidget;
 class QLabel;
 class IntegerWidget;
 class KisCmbComposite;
+class KisPixelRepresentation;
 
 class KisToolFill : public KisToolPaint {
 
@@ -57,7 +58,7 @@ public slots:
 	virtual void slotSetCompositeMode(int);
 
 private:
-	QUANTUM difference(QUANTUM* src, QUANTUM* dst, QUANTUM threshold, int depth);
+	QUANTUM difference(QUANTUM* src, KisPixelRepresentation dst, QUANTUM threshold, int depth);
 	void floodLine(int x, int y, Q_INT32 depth, KisLayerSP lay, KisTileCommand* ktc,
 	 QUANTUM* color);
 	int m_threshold;

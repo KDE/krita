@@ -1,5 +1,5 @@
 # all_includes must remain last!
-INCLUDES = -I$(srcdir)/../core -I$(srcdir)/../core/tiles -I$(srcdir)/../ui $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../core/strategy/ $(all_includes)
+INCLUDES = -I$(srcdir)/../core -I$(srcdir)/../core/color_strategy/ -I$(srcdir)/../core/tiles -I$(srcdir)/../ui $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../core/strategy/ $(all_includes)
 
 noinst_LTLIBRARIES = libkistools.la
 

@@ -46,7 +46,7 @@
 #include <kis_view.h>
 #include <kistile.h>
 #include <kistilemgr.h>
-#include <kis_iterators.h>
+#include <kis_iterators_quantum.h>
 #include <kis_selection.h>
 
 #include "imagesize.h"

@@ -27,6 +27,20 @@
 
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
+#include "kis_pixel_representation.h"
+
+
+class KisPixelRepresentationCMYK : public KisPixelRepresentation {
+public:
+	inline KisPixelRepresentationCMYK( const KisPixelRepresentation& pr) : KisPixelRepresentation(pr) { };
+public:
+	inline KisQuantum cyan() { return (*this)[PIXEL_CYAN]; };
+	inline KisQuantum magenta() { return (*this)[PIXEL_MAGENTA]; };
+	inline KisQuantum yellow() { return (*this)[PIXEL_YELLOW]; };
+	inline KisQuantum black() { return (*this)[PIXEL_BLACK]; };
+	inline KisQuantum alpha() { return (*this)[PIXEL_CMYK_ALPHA]; };
+};
+
 
 /**
    This class implements the conversion of the Krita images that
@@ -95,7 +109,7 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 			     Q_INT32 rows, 
 			     Q_INT32 cols, 
 			     CompositeOp op) const;
-	virtual void computeDuplicatePixel(KisIteratorQuantum* dst, KisIteratorQuantum* dab, KisIteratorQuantum* src);
+	virtual void computeDuplicatePixel(KisIteratorPixel* dst, KisIteratorPixel* dab, KisIteratorPixel* src);
 
  private:
 

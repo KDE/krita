@@ -38,7 +38,7 @@
 #include "integerwidget.h"
 #include "kis_cmb_composite.h"
 #include "kis_tool_fill.h"
-#include "kis_iterators.h"
+#include "kis_iterators_pixel.h"
 #include "color_strategy/kis_strategy_colorspace.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
@@ -94,7 +94,7 @@ bool KisToolFill::flood(int startX, int startY)
 }
 
 /* RGB-only I fear */
-QUANTUM KisToolFill::difference(QUANTUM* src, QUANTUM* dst, QUANTUM threshold, int depth)
+QUANTUM KisToolFill::difference(QUANTUM* src, KisPixelRepresentation dst, QUANTUM threshold, int depth)
 {
 	QUANTUM max = 0, diff = 0;
 	for (int i = 0; i < depth; i++) {
@@ -109,62 +109,59 @@ void KisToolFill::floodLine(int x, int y, Q_INT32 depth, KisLayerSP lay,
 							KisTileCommand* ktc, QUANTUM* color) {
 	bool stop = false;
 	int mostRight = x, mostLeft = x;
-	KisIteratorLineQuantum *lineIt = new KisIteratorLineQuantum((KisPaintDeviceSP)lay, ktc, y, x,-1);
+	KisIteratorLinePixel lineIt = lay->iteratorPixelSelectionBegin( ktc, y, x,-1);
 
-	KisIteratorQuantum quantumIt = **lineIt;
-	KisIteratorQuantum lastQuantum = lineIt->end();
+	KisIteratorPixel pixelIt = *lineIt;
+	KisIteratorPixel lastPixel = lineIt.end();
 	if (!m_oldColor) {
 		m_oldColor = new QUANTUM[depth];
 		for (int i = 0; i < depth; i++)
-			m_oldColor[i] = quantumIt[i];
+			m_oldColor[i] = pixelIt[i];
 	} else {
-		if (difference(m_oldColor, quantumIt, m_threshold, depth) != 0)
+		if (difference(m_oldColor, pixelIt, m_threshold, depth) != 0)
 			return;
 	}
 
-	while( quantumIt <= lastQuantum && !stop)
+	while( pixelIt <= lastPixel && !stop)
 	{
-		QUANTUM* data = quantumIt;
+		KisPixelRepresentation data = pixelIt;
 		if (difference(m_oldColor, data, m_threshold, depth) == 0) {
 			for( int i = 0; i < depth; i++)
 			{
 				data[i] = color[i];
-				++quantumIt;
 			}
 			m_map[y*lay->width()+mostRight] = true;
 			mostRight++;
 		} else {
 			stop = true;
 		}
-		++quantumIt;
+		++pixelIt;
 	}
-	if (lastQuantum < quantumIt) mostRight--;
+	if (lastPixel < pixelIt) mostRight--;
 	stop = false;
 	delete lineIt;
-
 	if (x > 0) {
-		lineIt = new KisIteratorLineQuantum((KisPaintDeviceSP)lay, ktc,y, 0,x-1);
-		KisIteratorQuantum lastQuantum = lineIt->begin();
-		KisIteratorQuantum quantumIt = lineIt->end();
-		if (difference(m_oldColor, quantumIt, m_threshold, depth) == 0) {
+		KisIteratorLinePixel lineIt2 = lay->iteratorPixelSelectionBegin(ktc,y, 0,x-1);
+		KisIteratorPixel lastPixel = lineIt2.begin();
+		KisIteratorPixel pixelIt = lineIt2.end();
+		if (difference(m_oldColor, pixelIt, m_threshold, depth) == 0) {
 			mostLeft--;
-			while( lastQuantum <= quantumIt && !stop)
+			while( lastPixel <= pixelIt && !stop)
 			{
-				QUANTUM* data = quantumIt;
+				KisPixelRepresentation data = pixelIt;
 				if (difference(m_oldColor, data, m_threshold, depth) == 0) {
 					for( int i = 0; i < depth; i++)
 					{
 						data[i] = color[i];
-						--quantumIt;
 					}
 					m_map[y*lay->width()+mostLeft] = true;
 					mostLeft--;
 				} else {
 					stop = true;
 				}
-				--quantumIt;
+				--pixelIt;
 			}
-			if (quantumIt < lastQuantum) mostLeft++;
+			if (pixelIt < lastPixel) mostLeft++;
 		}
 		delete lineIt;
 	}

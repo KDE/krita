@@ -25,6 +25,7 @@
 #include <string.h>
 
 #include <komAutoLoader.h>
+#include <komShutdownManager.h>
 #include <kom.h>
 
 #include <qmsgbox.h>
@@ -126,7 +127,11 @@ KOM::Plugin_ptr Factory::create( KOM::Component_ptr _comp )
 
   cerr << "CREATING Calculator" << endl;
 
-  return KOM::Plugin::_duplicate( new Calculator( view ) );
+  Calculator *calc = new Calculator( view );
+  
+  KOMShutdownManager::self()->watchObject( calc );
+
+  return KOM::Plugin::_duplicate( calc );
 }
 
 /***************************************************

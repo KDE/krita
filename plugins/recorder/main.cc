@@ -22,6 +22,7 @@
 #include <iostream>
 
 #include <komAutoLoader.h>
+#include <komShutdownManager.h>
 #include <kom.h>
 
 #include <qmsgbox.h>
@@ -54,8 +55,12 @@ KOM::Plugin_ptr Factory::create( const KOM::Component_ptr _comp )
     return 0L;
     
   cerr << "CREATING MakroRecorder" << endl;
+
+  Recorder *rec = new Recorder( view );
   
-  return KOM::Plugin::_duplicate( new Recorder( view ) );
+  KOMShutdownManager::self()->watchObject( rec );
+  
+  return KOM::Plugin::_duplicate( rec );
 }
 
 Recorder::Recorder( OpenParts::View_ptr _view )

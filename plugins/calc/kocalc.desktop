@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=KoCalc
+Exec=foo
+CORBAExec=kocalc --server
+Comment=KOffice Calculator
+X-KDE-RepoIds=IDL:KOM/PluginFactory:1.0#KoCalc
+X-KDE-ActivationMode=shared
+ServiceTypes=KOfficePlugin
+Type=GUIPlugin
+Icon=kcalc.xpm
+MiniIcon=kcalc.xpm
+MenuEntries=Calculator,calc.xpm,calc.xpm,open
+ToolBarEntries=Calculator,calc.xpm,calc.xpm,open,Extra

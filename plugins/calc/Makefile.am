@@ -21,8 +21,8 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES) calc.h calc.
 idl_DATA = 
 idl_HEADERS = 
 
-kdelnk_DATA = kocalc.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/pluginlnk
+service_DATA = kocalc.desktop
+servicedir = $(kde_servicesdir)
 
 SUBDIRS = pics
 

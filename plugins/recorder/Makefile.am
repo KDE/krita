@@ -18,8 +18,8 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES) recorder.h r
 idl_DATA =
 idl_HEADERS =
 
-kdelnk_DATA = recorder.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/pluginlnk
+service_DATA = recorder.desktop
+servicedir = $(kde_servicesdir)
 
 SUBDIRS = pics
 

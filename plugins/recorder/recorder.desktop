@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=MakroRecorder
+Exec=foo
+CORBAExec=makro_recorder --server
+Comment=Torben's Makro Recorder
+X-KDE-RepoIds=IDL:KOM/PluginFactory:1.0#MakroRecorder
+X-KDE-ActivationMode=shared
+Type=GUIPlugin
+Icon=unknown.xpm
+MiniIcon=unknown.xpm
+MenuEntries=Start,unknown.xpm,record.xpm,start,Stop,unknown.xpm,stop.xpm,stop,Play,unknown.xpm,play.xpm,play
+ToolBarEntries=Start,unknown.xpm,record.xpm,start,Extra,Stop,unknown.xpm,stop.xpm,stop,Extra,Play,unknown.xpm,play.xpm,play,Extra
+ServiceTypes=KOfficePlugin

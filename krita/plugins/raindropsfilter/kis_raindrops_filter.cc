@@ -1,6 +1,10 @@
 /* This file is part of the KDE project
    Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
 
+   ported from digikam, Copyright 2004 by Gilles Caulier,
+   Original RainDrops algorithm copyrighted 2004 by 
+   Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -139,6 +143,26 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 		++dstLineIt;
 	}
 }
+
+// This method have been ported from Pieter Z. Voloshyn algorithm code.
+
+/* Function to apply the RainDrops effect (inspired from Jason Waltman code)          
+ *                                                                                  
+ * data             => The image data in RGBA mode.                            
+ * Width            => Width of image.                          
+ * Height           => Height of image.                            
+ * DropSize         => Raindrop size                                              
+ * Amount           => Maximum number of raindrops                                  
+ * Coeff            => FishEye coefficient                                           
+ *                                                                                   
+ * Theory           => This functions does several math's functions and the engine   
+ *                     is simple to undestand, but a little hard to implement. A       
+ *                     control will indicate if there is or not a raindrop in that       
+ *                     area, if not, a fisheye effect with a random size (max=DropSize)
+ *                     will be applied, after this, a shadow will be applied too.       
+ *                     and after this, a blur function will finish the effect.            
+ */
+
 void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int DropSize, int Amount, int Coeff, KisProgressDisplayInterface *m_progress)
 {
         //Progress info

@@ -1,6 +1,10 @@
 /* This file is part of the KDE project
    Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
 
+   ported from digikam, Copyright 2004 by Gilles Caulier,
+   Original Oilpaint algorithm copyrighted 2004 by 
+   Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either

@@ -114,7 +114,9 @@ noinst_HEADERS = kis_paint_device.h \
 	kis_plugin_registry.h \
 	KRayonViewIface.h \
 	KIsDocIface.h \
-	KIsImageIface.h
+	KIsImageIface.h \
+	kis_matrix.h
+
 	
 libkritacore_la_METASOURCES = AUTO
 libkritacore_la_LDFLAGS = $(all_libraries)

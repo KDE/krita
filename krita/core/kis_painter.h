@@ -43,6 +43,7 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_point.h"
+#include "kis_matrix.h"
 //#include "kis_gradient.h"
 //#include "kis_brush.h"
 //#include "kis_pattern.h"
@@ -232,6 +233,11 @@ public:
 			const double /*xTilt*/,
 			const double /*yTilt*/);
 
+	/** This fonction apply a convolution transformation to the PainterDevice.
+		* @param const KisMatrix3x3* matrix is a pointer to an array of KisMatrix3x3, this array
+		* should have the same size as the number of channels (including alpha)
+		*/
+	void applyConvolutionColorTransformation(KisMatrix3x3* matrix);
 
 
 	// ------------------------------------------------------------------------------------------

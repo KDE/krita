@@ -27,6 +27,7 @@
 #include "kis_tool_move.h"
 #include "kis_tool_select_rectangular.h"
 #include "kis_tool_zoom.h"
+#include "kis_tool_pan.h"
 #include "kis_tool_brush.h"
 #include "kis_tool_duplicate.h"
 #include "kis_tool_eraser.h"
@@ -73,6 +74,7 @@ vKisTool KisToolFactory::create(KActionCollection *actionCollection, KisCanvasSu
 	tools.push_back(new KisToolColorPicker);
 	tools.push_back(new KisToolMove);
 	tools.push_back(new KisToolZoom);
+	tools.push_back(new KisToolPan);
 	tools.push_back(new KisToolBrush);
 	tools.push_back(new KisToolDuplicate);
 	tools.push_back(new KisToolAirBrush);

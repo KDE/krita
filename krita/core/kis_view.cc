@@ -1843,9 +1843,8 @@ void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
 {
         kdDebug() << "scroll to " << x << "," << y << endl;
 
-        // this needs to update the scrollbar values and
-        // let resizeEvent() handle the repositioning
-        // with showScrollBars()
+	m_hScroll -> setValue(x);
+	m_vScroll -> setValue(y);
 }
 
 void KisView::brushActivated(KisResource *brush)

@@ -37,6 +37,7 @@ public:
 	virtual QWidget *canvas() const = 0;
 	virtual Q_INT32 horzValue() const = 0;
 	virtual Q_INT32 vertValue() const = 0;
+	virtual void scrollTo(Q_INT32 x, Q_INT32 y) = 0;
 	virtual void updateCanvas() = 0;
 	virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
 	virtual void updateCanvas(const QRect& rc) = 0;

@@ -185,6 +185,7 @@ private:
 	virtual QWidget *canvas() const;
 	virtual Q_INT32 horzValue() const;
 	virtual Q_INT32 vertValue() const;
+	virtual void scrollTo(Q_INT32 x, Q_INT32 y);
 	virtual void updateCanvas();
 	virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	virtual void updateCanvas(const QRect& rc);
@@ -303,7 +304,6 @@ private slots:
 	void patternActivated(KisResource *pattern);
 	void setPaintOffset();
 	void scrollH(int value);
-	void scrollTo(Q_INT32 x, Q_INT32 y);
 	void scrollV(int value);
 	void slotEmbedImage(const QString& filename);
 	void slotInsertImageAsLayer();

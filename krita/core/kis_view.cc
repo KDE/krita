@@ -1077,7 +1077,7 @@ void KisView::imgUpdateGUI()
         }
 
         m_imgFlatten -> setEnabled(n > 1);
-        m_imgMergeVisible -> setEnabled(nvisible > 1);
+        m_imgMergeVisible -> setEnabled(nvisible > 1 && nvisible != n);
         m_imgMergeLinked -> setEnabled(nlinked > 1);
 }
 

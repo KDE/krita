@@ -1,0 +1,100 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgToolStar</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgToolStar</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>253</width>
+            <height>50</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Star</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout8</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Vertices:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>isbX</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntSpinBox">
+                    <property name="name">
+                        <cstring>verticesSpinBox</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                    <property name="value">
+                        <number>5</number>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout7</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Ratio:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>isbWidth</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntSpinBox">
+                    <property name="name">
+                        <cstring>ratioSpinBox</cstring>
+                    </property>
+                    <property name="suffix">
+                        <string>%</string>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                    <property name="value">
+                        <number>40</number>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </hbox>
+</widget>
+<tabstops>
+    <tabstop>verticesSpinBox</tabstop>
+    <tabstop>ratioSpinBox</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

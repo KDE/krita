@@ -33,11 +33,13 @@
 #include "kis_painter.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
-#include "kis_tool_star.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_paintop_registry.h"
+
+#include "kis_tool_star.h"
+#include "wdg_tool_star.h"
 
 KisToolStar::KisToolStar()
         : super(),
@@ -211,6 +213,21 @@ QPointArray KisToolStar::starCoordinates(int N, int mx, int my, int x, int y)
         for(n=0;n<2*N;n++)
                 //kdDebug() << "starCoordinatesArray: (x,y) " << starCoordinatesArray.point(n)  << endl;
         return starCoordinatesArray;
+}
+
+QWidget* KisToolStar::createOptionWidget(QWidget* parent)
+{
+	WdgToolStar * w = new WdgToolStar(parent);
+	
+	//connect(w -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
+
+	m_optWidget = w;
+	return m_optWidget;
+}
+
+QWidget* KisToolStar::optionWidget()
+{
+	return m_optWidget;
 }
 
 

@@ -49,6 +49,9 @@ public:
 
         virtual void update (KisCanvasSubject *subject);
 
+        virtual QWidget* createOptionWidget(QWidget* parent);
+	virtual QWidget* optionWidget();
+        
         //
         // KisToolPaint interface
         //
@@ -76,6 +79,7 @@ private:
         QPointArray starCoordinates(int N, int mx, int my, int x, int y);
         Q_INT32 m_innerOuterRatio;
         Q_INT32 m_vertices;
+        QWidget * m_optWidget;
 };
 
 

@@ -19,7 +19,8 @@ INCLUDES = -I$(srcdir)/../../core \
 	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../../core/strategy/ $(all_includes)
 
 kritatoolstar_la_SOURCES = \
-	tool_star.cc \
+	wdg_tool_star.ui \
+        tool_star.cc \
 	kis_tool_star.cc 
 
 # Install this plugin in the KDE modules directory

@@ -65,22 +65,27 @@ public:
 	 * @param cmType The littlecms colorstrategy type we wrap.
 	 * @param colorSpaceSignature The icc signature for the colorspace we are.
 	 */
-  KisStrategyColorSpace(const QString& name, const QString& description, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature);
+	KisStrategyColorSpace(const QString& name, const QString& description, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature);
 
 	virtual ~KisStrategyColorSpace();
 
 public:
 
-        // The nativeColor methods take a given color that can be defined in any
-        // colorspace and fills a byte array with the corresponding color in the
-        // the colorspace managed by this strategy. 
-	// XXX: Add profile support
-	virtual void nativeColor(const QColor& c, QUANTUM *dst) = 0;
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
+        /**
+	 * The nativeColor methods take a given color that can be defined in any
+	 * colorspace and fills a byte array with the corresponding color in the
+	 * the colorspace managed by this strategy. 
+	 *
+	 * The profile parameter is the profile of the paint device; the other profile
+	 * is the display profile -- since we are moving from QColor that have most likely
+	 * been picked from the display itself.
+	 */
+	virtual void nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile = 0) = 0;
+	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile = 0) = 0;
 
 	// XXX: Add profile support
- 	virtual void toQColor(const QUANTUM *src, QColor *c) = 0;
- 	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity) = 0;
+ 	virtual void toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile= 0 ) = 0;
+ 	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0) = 0;
 
 	virtual KisPixelRO toKisPixelRO(QUANTUM *src, KisProfileSP profile) = 0;
 	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile) = 0;

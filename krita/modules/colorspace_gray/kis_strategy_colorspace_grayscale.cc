@@ -53,24 +53,24 @@ KisStrategyColorSpaceGrayscale::~KisStrategyColorSpaceGrayscale()
 {
 }
 
-void KisStrategyColorSpaceGrayscale::nativeColor(const QColor& c, QUANTUM *dst)
+void KisStrategyColorSpaceGrayscale::nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile)
 {
 	// Use qGray for a better rgb -> gray formula: (r*11 + g*16 + b*5)/32.
 	dst[PIXEL_GRAY] = upscale(qGray(c.red(), c.green(), c.blue()));
 }
 
-void KisStrategyColorSpaceGrayscale::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst)
+void KisStrategyColorSpaceGrayscale::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile)
 {
 	dst[PIXEL_GRAY] = upscale(qGray(c.red(), c.green(), c.blue()));
 	dst[PIXEL_GRAY_ALPHA] = opacity;
 }
 
-void KisStrategyColorSpaceGrayscale::toQColor(const QUANTUM *src, QColor *c)
+void KisStrategyColorSpaceGrayscale::toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile)
 {
 	c -> setRgb(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
 }
 
-void KisStrategyColorSpaceGrayscale::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity)
+void KisStrategyColorSpaceGrayscale::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
 {
 	c -> setRgb(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
 	*opacity = src[PIXEL_GRAY_ALPHA];

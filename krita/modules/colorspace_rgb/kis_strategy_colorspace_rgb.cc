@@ -51,14 +51,14 @@ KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
 {
 }
 
-void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM *dst)
+void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile)
 {
 	dst[PIXEL_RED] = upscale(c.red());
 	dst[PIXEL_GREEN] = upscale(c.green());
 	dst[PIXEL_BLUE] = upscale(c.blue());
 }
 
-void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst)
+void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile)
 {
 	dst[PIXEL_RED] = upscale(c.red());
 	dst[PIXEL_GREEN] = upscale(c.green());
@@ -66,12 +66,12 @@ void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, QUA
 	dst[PIXEL_ALPHA] = opacity;
 }
 
-void KisStrategyColorSpaceRGB::toQColor(const QUANTUM *src, QColor *c)
+void KisStrategyColorSpaceRGB::toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile)
 {
 	c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
 }
 
-void KisStrategyColorSpaceRGB::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity)
+void KisStrategyColorSpaceRGB::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
 {
 	c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
 	*opacity = src[PIXEL_ALPHA];

@@ -83,7 +83,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
 	Q_INT32 y;
         Q_UINT8 src[m_device->depth()]; // XXX: Change QColor to KisColor, then use channelsize from color space
 	Q_UINT32 depth = m_device->depth();
-        m_device->colorStrategy()->nativeColor(c, opacity, src);
+        m_device->colorStrategy()->nativeColor(c, opacity, src, 0);
 
 	for (y = y1; y < y1 + h; y++)
 	{
@@ -213,11 +213,11 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
 	    while(! line.isDone()) {
 		    QColor c;
 		    QUANTUM opacity;
-		    filled -> colorStrategy() -> toQColor((QUANTUM*) line, &c, &opacity);
+		    filled -> colorStrategy() -> toQColor((QUANTUM*) line, &c, &opacity, 0);
 		    m_selection -> colorStrategy() -> toQColor((QUANTUM*) selectionIt,
-							       &notUsed, &selectionOpacity);
+							       &notUsed, &selectionOpacity, 0);
 		    opacity = (selectionOpacity * opacity) / QUANTUM_MAX;
-		    filled -> colorStrategy() -> nativeColor(c, opacity, (QUANTUM*) line);
+		    filled -> colorStrategy() -> nativeColor(c, opacity, (QUANTUM*) line, 0);
 		    ++m_pixelsDone;
 		    line++;
 		    selectionIt++;
@@ -305,7 +305,7 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& 
 		diff = difference(m_oldColor, data);
 		if (diff == MAX_SELECTED) {
 			// m_selection -> setSelected(x, y, diff);
-			colorStrategy -> nativeColor(selectionColor, diff, (QUANTUM*) selection);
+			colorStrategy -> nativeColor(selectionColor, diff, (QUANTUM*) selection, 0);
 			if (d == Right) {
 				it++; selection++;
 				x++; most++;

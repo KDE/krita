@@ -39,3 +39,9 @@ KisTiledIterator::operator Q_UINT8 * ()
 {
 	return m_data + m_offset;
 }
+
+
+Q_UINT8 * KisTiledIterator::oldValue ()
+{
+	// XXX: Implement!
+}

@@ -461,14 +461,14 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile)
 	w = image()->width();
 	h = image()->height();
 
-	convertToQImage(dstProfile, x1, y1, w, h);
+	return convertToQImage(dstProfile, x1, y1, w, h);
 }
 
 QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
 {
+#if 0
+	// xxx: Enable this when readBytes finally works
 	QImage image;
-	QUANTUM * data = new QUANTUM[depth() * w * h];
-	QUANTUM * ptr = data;
 
 	if (w < 0)
 		w = 0;
@@ -476,10 +476,26 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 	if (h < 0)
 		h = 0;
 
-	// XXX: Isn't this a very slow copy?
+	QUANTUM * data = m_datamanager -> readBytes(x1, y1, w, h);
+	image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
+	delete data;
+
+	return image;
+#else
+
+        QImage image;
+        QUANTUM  *data = new QUANTUM[depth() * w * h];
+        QUANTUM *ptr=data;
+
+        if (w < 0)
+                w = 0;
+
+        if (h < 0)
+                h = 0;
+
         for(Q_INT32 y=y1; y <y1+h;y++)
         {
-                KisHLineIteratorPixel hiter = createHLineIterator(x1, y, w, false);
+                KisHLineIterator hiter = createHLineIterator(x1, y, w, false);
                 while(! hiter.isDone())
                 {
                         memcpy(ptr, (Q_UINT8 *)hiter, depth());
@@ -488,10 +504,14 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
                         hiter++;
                 }
         }
-	// XXX: determine whether to apply the monitor profile or based on the copy setting
+
+        // XXX: determine whether to apply the monitor profile or based on the copy setting
 	image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
-	delete data;
-	return image;
+
+        delete data;
+
+        return image;
+#endif
 }
 
 KisRectIteratorPixel &KisPaintDevice::createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable)
@@ -559,7 +579,7 @@ void KisPaintDevice::removeSelection()
 }
 
 
-bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity, KisProfileSP profile)
+bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity)
 {
   KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
 
@@ -567,16 +587,16 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity, Ki
     
   if (!pix) return false;
 
-  colorStrategy() -> toQColor(pix, c, opacity); //profile
+  colorStrategy() -> toQColor(pix, c, opacity, m_profile);
 
   return true;
 }
 
-bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity, KisProfileSP profile)
+bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity)
 {
   KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
     
-  colorStrategy() -> nativeColor(c, opacity, (QUANTUM*)(iter)); // profile
+  colorStrategy() -> nativeColor(c, opacity, (QUANTUM*)(iter), m_profile);
 
   return true;
 }

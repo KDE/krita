@@ -27,8 +27,6 @@ class KisTile;
 class KoStore;
 class KisMemento;
 
-typedef QValueVector<Q_UINT8> ImageBytesVector;
-
 /**
  * KisTiledDataManager implements the interface that KisDataManager defines
  * 
@@ -93,24 +91,35 @@ public:
 			    Q_INT32 w, Q_INT32 h);
 
 
-// public:
+public:
 
-// 	/**
-// 	 * Copy the bytes in the specified rect to a vector. The caller is responsible
-// 	 * for managing the vector.
-// 	 */
-// 	ImageBytesVector * readBytes(Q_INT32 x, Q_INT32 y,
-// 				     Q_INT32 w, Q_INT32 h);
-// 	/**
-// 	 * Copy the bytes in the vector to the specified rect. If there are bytes left
-// 	 * in the vector after filling the rect, they will be ignored. If there are
-// 	 * not enough bytes, the rest of the rect will be filled with the default value
-// 	 * given (by default, 0);
-// 	 */
-// 	void writeBytes(ImageBytesVector * bytes, 
-// 			Q_INT32 x, Q_INT32 y,
-// 			Q_INT32 w, Q_INT32 h,
-// 			Q_UINT8 defaultvalue = 0);
+
+	/**
+	 * Get a copy of a single pixel
+	 */
+	Q_UINT8* pixel(Q_INT32 x, Q_INT32 y);
+
+	/**
+	 * write the specified data to x, y. There is no checking on depth!
+	 */
+	void setPixel(Q_INT32 x, Q_INT32 y, Q_UINT8 * data);
+
+
+	/**
+	 * Copy the bytes in the specified rect to a vector. The caller is responsible
+	 * for managing the vector.
+	 */
+	Q_UINT8 * readBytes(Q_INT32 x, Q_INT32 y,
+				     Q_INT32 w, Q_INT32 h);
+	/**
+	 * Copy the bytes in the vector to the specified rect. If there are bytes left
+	 * in the vector after filling the rect, they will be ignored. If there are
+	 * not enough bytes, the rest of the rect will be filled with the default value
+	 * given (by default, 0);
+	 */
+	void writeBytes(Q_UINT8 * bytes,
+			Q_INT32 x, Q_INT32 y,
+			Q_INT32 w, Q_INT32 h);
 
 
 private:

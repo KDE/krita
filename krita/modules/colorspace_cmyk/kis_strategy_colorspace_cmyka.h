@@ -37,16 +37,16 @@ public:
 
 public:
 
-	virtual void nativeColor(const QColor& c, QUANTUM *dst);
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst);
+	virtual void nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile = 0);
+	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile = 0);
 
-	virtual void toQColor(const QUANTUM *src, QColor *c);
-	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity);
+	virtual void toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile = 0);
+	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
 	virtual KisPixelRO toKisPixelRO(QUANTUM *src, KisProfileSP profile = 0) 
-	{ return KisPixelRO (src, src + PIXEL_CMYK_ALPHA, this, profile); }
+		{ return KisPixelRO (src, src + PIXEL_CMYK_ALPHA, this, profile); }
 	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0) 
-	{ return KisPixel (src, src + PIXEL_CMYK_ALPHA, this, profile); }
+		{ return KisPixel (src, src + PIXEL_CMYK_ALPHA, this, profile); }
 
 	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;

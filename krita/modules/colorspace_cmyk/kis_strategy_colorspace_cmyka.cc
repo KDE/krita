@@ -58,7 +58,7 @@ KisStrategyColorSpaceCMYKA::~KisStrategyColorSpaceCMYKA()
 {
 }
 
-void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& color, QUANTUM *dst)
+void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& color, QUANTUM *dst, KisProfileSP profile)
 {
 	QUANTUM c = 255 - color.red();
 	QUANTUM m = 255 - color.green();
@@ -76,18 +76,18 @@ void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& color, QUANTUM *dst)
 	dst[PIXEL_BLACK] = k;
 }
 
-void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst)
+void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile)
 {
 	nativeColor(c, dst);
 	dst[PIXEL_CMYK_ALPHA] = opacity;
  }
 
-void KisStrategyColorSpaceCMYKA::toQColor(const QUANTUM *src, QColor *c)
+void KisStrategyColorSpaceCMYKA::toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile)
 {
 // 	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
 }
 
-void KisStrategyColorSpaceCMYKA::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity)
+void KisStrategyColorSpaceCMYKA::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
 {
 // 	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
  	*opacity = src[PIXEL_CMYK_ALPHA];

@@ -39,13 +39,13 @@ public:
 	KisHLineIteratorPixel( KisPaintDeviceSP ndevice, KisDataManager *dm, Q_INT32 x , Q_INT32 y , Q_INT32 w, bool writable);
 };
 
-class KisVLineIteratorPixel : public KisIteratorPixelTrait <KisVLineIterator>, public KisVLineIterator
+class KisVLineIteratorPixel : public KisVLineIterator, public KisIteratorPixelTrait <KisVLineIterator>
 {
 public:
 	KisVLineIteratorPixel( KisPaintDeviceSP ndevice, KisDataManager *dm, Q_INT32 xpos , Q_INT32 ypos , Q_INT32 height, bool writable);
 };
 
-class KisRectIteratorPixel : public KisIteratorPixelTrait <KisRectIterator>, public KisRectIterator
+class KisRectIteratorPixel : public KisRectIterator, public KisIteratorPixelTrait <KisRectIterator>
 {
 public:
 	KisRectIteratorPixel( KisPaintDeviceSP ndevice, KisDataManager *dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, bool writable);

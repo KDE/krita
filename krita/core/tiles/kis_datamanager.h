@@ -27,8 +27,6 @@ class KoStore;
 #include "kis_tileddatamanager.h"
 #define ACTUAL_DATAMGR KisTiledDataManager
 
-typedef QValueVector<Q_UINT8> ImageBytesVector;
-
  
 /**
  * KisDataManager defines the interface that modules responsible for
@@ -119,28 +117,36 @@ public:
 	void paste(KisDataManager * data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
 		   Q_INT32 w, Q_INT32 h) { ACTUAL_DATAMGR::paste(data, sx, sy, dx, dy, w, h); };
 	
-// XXX: Something like this is need to avoid having memcpy's in the paint device; we also
-// need block-wise iterators that return a pointer to the actual image data in the block,
-// wrapped in a vector.
-// public:
+public:
+	/**
+	 * Get a copy of a single pixel
+	 */
+  	Q_UINT8* pixel(Q_INT32 x, Q_INT32 y)
+  		{ return ACTUAL_DATAMGR::pixel(x, y);};
 
-// 	/**
-// 	 * Copy the bytes in the specified rect to a vector. The caller is responsible
-// 	 * for managing the vector.
-// 	 */
-// 	ImageBytesVector * readBytes(Q_INT32 x, Q_INT32 y,
-// 					  Q_INT32 w, Q_INT32 h);
+	/**
+	 * write the specified data to x, y. There is no checking on depth!
+	 */
+	void setPixel(Q_INT32 x, Q_INT32 y, Q_UINT8 * data)
+		{ ACTUAL_DATAMGR::setPixel(x, y, data);};
 
-// 	/**
-// 	 * Copy the bytes in the vector to the specified rect. If there are bytes left
-// 	 * in the vector after filling the rect, they will be ignored. If there are
-// 	 * not enough bytes, the rest of the rect will be filled with the default value
-// 	 * given (by default, 0);
-// 	 */
-// 	void writeBytes(ImageBytesVector bytes, 
-// 			Q_INT32 x, Q_INT32 y,
-// 			Q_INT32 w, Q_INT32 h,
-// 			Q_UINT8 defaultvalue = 0);
+
+ 	/**
+ 	 * Copy the bytes in the specified rect to a chunk of memory. The caller is responsible
+ 	 * for managing the memory. The size in bytes is w * h * depth. XXX: Better use QValueVector?
+ 	 */
+ 	Q_UINT8 * readBytes(Q_INT32 x, Q_INT32 y,
+ 		  	    Q_INT32 w, Q_INT32 h)
+		{ return ACTUAL_DATAMGR::readBytes(x, y, w, h);};
+
+ 	/**
+	 * Copy the bytes to the specified rect. w * h * depth bytes will be read, whether
+	 * the caller prepared them or not. XXX: Better use QValueVector?
+ 	 */
+ 	void writeBytes(Q_UINT8 * data, 
+ 			Q_INT32 x, Q_INT32 y,
+ 			Q_INT32 w, Q_INT32 h)
+		{ACTUAL_DATAMGR::writeBytes( data, x, y, w, h); };
 
 
 
@@ -149,6 +155,7 @@ protected:
 	friend class KisHLineIterator;
 	friend class KisVLineIterator;
 };
+
 
 #endif // KIS_DATAMANAGER_H_
 

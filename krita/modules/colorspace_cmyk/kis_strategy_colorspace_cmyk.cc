@@ -94,26 +94,26 @@ KisStrategyColorSpaceCMYK::~KisStrategyColorSpaceCMYK()
 	cmsDeleteTransform(m_defaultFromRGB);
 }
 
-void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM *dst)
+void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM *dst, KisProfileSP profile)
 {
 	color.getRgb(m_qcolordata, m_qcolordata + 1, m_qcolordata + 2);
 	cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
 }
 
-void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM /*opacity*/, QUANTUM *dst)
+void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM /*opacity*/, QUANTUM *dst, KisProfileSP profile)
 {
 	color.getRgb(m_qcolordata, m_qcolordata + 1, m_qcolordata + 2);
 	cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
 }
 
 
-void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c)
+void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile)
 {
 	cmsDoTransform(m_defaultToRGB, const_cast <QUANTUM *>(src), m_qcolordata, 1);
 	c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
 }
 
-void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity)
+void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
 {
 	cmsDoTransform(m_defaultToRGB, const_cast <QUANTUM *>(src), m_qcolordata, 1);
 	c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);

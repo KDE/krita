@@ -42,8 +42,9 @@ public:
 	 * Return the current pixel
 	 */
 	inline operator KisPixel() { return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile()); }; 
-	inline KisPixel value() { return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile()); };
-        inline KisPixelRO oldValue() { return m_colorSpace -> toKisPixelRO( this->oldQuantumValue(), m_device -> profile()); };
+	// XXX: Isn't this the same as the above?
+ 	inline KisPixel value() { return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile()); };
+        inline KisPixelRO oldPixelValue() { return m_colorSpace -> toKisPixelRO( this -> oldQuantumValue(), m_device -> profile()); };
 
 	/**
 	 * Return one channel from the current kispixel. Does not check whether
@@ -56,6 +57,8 @@ public:
 protected:
 	inline QUANTUM* oldQuantumValue()
 {
+	return m_underlyingIterator -> oldValue();
+
 #if 0 // AUTOLAYER
 	if( m_oldTileNeedRefresh )
 	{
@@ -74,7 +77,6 @@ protected:
 	}
 	return (m_oldData + m_xintile);
 #endif  // AUTOLAYER
-return 0;
 };
 	
 protected:

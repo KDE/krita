@@ -104,13 +104,13 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		// Corner : left top
 		KisPixel currentPixel = dstIt;
 		dstIt++;
-		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldPixelValue();
 		curIt++;
-		pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldPixelValue();
 		curIt++;
-		pixels[ CONVOLUTION_PIXEL_BOTTOM ] = afterIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_BOTTOM ] = afterIt.oldPixelValue();
 		afterIt++;
-		pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldPixelValue();
 		afterIt++;
 		for(int i = 0; i < depth; i++)
 		{
@@ -136,9 +136,9 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 			currentPixel = dstIt;
 			dstIt++;
 			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRO));
-			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
+			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldPixelValue();
 			curIt++;
-			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
+			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldPixelValue();
 			afterIt++;
 			for(int i = 0; i < depth; i++)
 			{
@@ -190,17 +190,17 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		// Body : left border
 		KisPixel currentPixel = dstIt;
 		dstIt++;
-		pixels[ CONVOLUTION_PIXEL_TOP ] = beforeIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_TOP ] = beforeIt.oldPixelValue();
 		beforeIt++;
-		pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldPixelValue();
 		beforeIt++;
-		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldPixelValue();
 		curIt++;
-		pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldPixelValue();
 		curIt++;
-		pixels[ CONVOLUTION_PIXEL_BOTTOM ] = afterIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_BOTTOM ] = afterIt.oldPixelValue();
 		afterIt++;
-		pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldPixelValue();
 		afterIt++;
 		for(int i = 0; i < depth; i++)
 		{
@@ -219,11 +219,11 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 			currentPixel = dstIt;
 			dstIt++;
 			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRO));
-			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
+			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldPixelValue();
 			beforeIt++;
-			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
+			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldPixelValue();
 			curIt++;
-			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldValue();
+			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldPixelValue();
 			afterIt++;
 			for(int i = 0; i < depth; i++)
 			{
@@ -264,15 +264,15 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 		KisHLineIteratorPixel dstIt = src->createHLineIterator(left, dstY, w, true);
 		
 		// Corner : left bottom
-		pixels[ CONVOLUTION_PIXEL_TOP ] = beforeIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_TOP ] = beforeIt.oldPixelValue();
 		beforeIt++;
-		pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldPixelValue();
 		beforeIt++;
 		KisPixel currentPixel = dstIt;
 		dstIt++;
-		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_CUR ] = curIt.oldPixelValue();
 		curIt++;
-		pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
+		pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldPixelValue();
 		curIt++;
 		for(int i = 0; i < depth; i++)
 		{
@@ -297,9 +297,9 @@ void KisConvolutionPainter::applyConvolutionColorTransformation(KisMatrix3x3* ma
 			currentPixel = dstIt;
 			dstIt++;
 			memmove( pixels, pixels + 1, 8 * sizeof(KisPixelRO));
-			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldValue();
+			pixels[ CONVOLUTION_PIXEL_RIGHTTOP ] = beforeIt.oldPixelValue();
 			beforeIt++;
-			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldValue();
+			pixels[ CONVOLUTION_PIXEL_RIGHT ] = curIt.oldPixelValue();
 			curIt++;
 			for(int i = 0; i < depth; i++)
 			{

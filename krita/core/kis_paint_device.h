@@ -122,19 +122,26 @@ public:
 
 
         /** 
-	 * fill c and opacity with the values found at x and y
-	 * @return true if the operation was succesful
+	 * Fill c and opacity with the values found at x and y.
+	 * The color values will be transformed from the profile of
+	 *  this paint device to the display profile.
+	 *
+	 * @return true if the operation was succesful. 
 	 */
-        bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+        bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity);
 
         /**
 	 * Set the specified pixel to the specified color. Note that this
          * bypasses KisPainter. the PaintDevice is here used as an equivalent
          * to QImage, not QPixmap. This means that this is not undoable; also,
          * there is no compositing with an existing value at this location.
+	 *
+	 *  The color values will be transformed from the display profile to
+	 *  the paint device profile.
+	 *
 	 * @return true if the operation was succesful
 	 */
-        bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity, KisProfileSP profile = 0);
+        bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity);
 
         bool alpha() const;
 

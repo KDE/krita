@@ -21,8 +21,8 @@
 #include <koStore.h>
 
 #include "kis_tileddatamanager.h"
+#include "kis_tilediterator.h"
 #include "kis_tile.h"
-#include "kis_iterator.h"
 #include "kis_memento.h"
 
 /* The data area is divided into tiles each say 64x64 pixels (defined at compiletime)
@@ -193,65 +193,6 @@ void KisTiledDataManager::paste(KisDataManager * data,  Q_INT32 sx, Q_INT32 sy, 
 }
 
 
-// ImageBytesVector * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
-// 						  Q_INT32 w, Q_INT32 h)
-// {
-// 	if (w < 0)
-// 		w = 0;
-
-// 	if (h < 0)
-// 		h = 0;
-
-// 	ImageBytesVector * v = new ImageBytesVector (w * h * getDepth());
-// 	Q_UINT8 * ptr = v -> pointer();
-
-
-// 	// XXX: Isn't this a very slow copy?
-//         for(Q_INT32 y= y1; y < y1 + h; y++)
-//         {
-//                 KisHLineIterator hiter = createHLineIterator(x1, w, y, false);
-//                 while(! hiter.isDone())
-//                 {
-//                         memcpy(ptr, (Q_UINT8 *)hiter, getDepth());
-
-//                         ptr += getDepth();
-//                         hiter++;
-//                 }
-//         }
-
-// 	return v;
-// }
-
-
-// void KisTiledDataManager::writeBytes(ImageBytesVector bytes, 
-// 				     Q_INT32 x, Q_INT32 y,
-// 				     Q_INT32 w, Q_INT32 h,
-// 				     Q_UINT8 defaultvalue = 0)
-// {
-// 	// XXX: Is this correct?
-// 	if (w < 0)
-// 		w = 0;
-
-// 	if (h < 0)
-// 		h = 0;
-// 	QUANTUM * ptr = bytes -> pointer();
-
-
-// 	// XXX: Isn't this a very slow copy?
-//         for(Q_INT32 y= y1; y < y1 + h; y++)
-//         {
-//                 KisHLineIterator hiter = createHLineIterator(x1, w, y, false);
-//                 while(! hiter.isDone())
-//                 {
-//                         memcpy((Q_UINT8 *)hiter, ptr , getDepth());
-
-//                         ptr += getDepth();
-//                         hiter++;
-//                 }
-//         }
-
-// }
-
 
 
 Q_UINT32 KisTiledDataManager::calcTileHash(Q_INT32 col, Q_INT32 row)
@@ -365,3 +306,77 @@ KisTile *KisTiledDataManager::getTile(Q_INT32 col, Q_INT32 row, bool writeAccess
 		
 	return tile;
 }
+
+Q_UINT8* KisTiledDataManager::pixel(Q_INT32 x, Q_INT32 y)
+{
+	// XXX: Optimize by using the tiles directly
+	return readBytes(x, y, 1, 1);
+}
+
+void KisTiledDataManager::setPixel(Q_INT32 x, Q_INT32 y, Q_UINT8 * data)
+{
+	// XXX: Optimize by using the tiles directly
+	writeBytes(data, x, y, 1, 1);
+}
+
+
+Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
+					 Q_INT32 w, Q_INT32 h)
+{
+	// XXX: Optimize by using the tiles directly
+ 	if (w < 0)
+ 		w = 0;
+
+ 	if (h < 0)
+		h = 0;
+
+ 	Q_UINT8 * ptr = new Q_UINT8[w * h * getDepth()];
+ 	
+ 	// XXX: Isn't this a very slow copy?
+	for(Q_INT32 y2 = y; y2 < y + h; y2++)
+	{
+		// XXX; better use rect iterator here?
+		KisTiledHLineIterator hiter = KisTiledHLineIterator(this, x, y2, w, false);
+		while(! hiter.isDone())
+		{
+			memcpy(ptr, (Q_UINT8 *)hiter, getDepth());
+ 
+			ptr += getDepth();
+			++hiter;
+		}
+	}
+ 
+	return ptr;
+
+}
+
+
+void KisTiledDataManager::writeBytes(Q_UINT8 * bytes,
+				     Q_INT32 x, Q_INT32 y,
+				     Q_INT32 w, Q_INT32 h)
+{
+	// XXX: Optimize by using the tiles directly
+
+ 	// XXX: Is this correct?
+	if (w < 0)
+		w = 0;
+ 
+	if (h < 0)
+		h = 0;
+	Q_UINT8 * ptr = bytes;
+ 
+ 
+	// XXX: Isn't this a very slow copy?
+	for(Q_INT32 y2 = y; y2 < y + h; y2++)
+	{
+		KisTiledHLineIterator hiter = KisTiledHLineIterator(this, x, y2, w, false);
+		while(! hiter.isDone())
+		{
+			memcpy((Q_UINT8 *)hiter, ptr , getDepth());
+ 
+			ptr += getDepth();
+			++hiter;
+		}
+	}
+}
+

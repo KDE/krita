@@ -60,6 +60,9 @@ public:
 	
 	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
 	operator Q_UINT8 * ();
+
+	/// Returns a pointer to the pixel data as it was at the moment the iterator started.
+	Q_UINT8 * oldValue();
 };
 
 /** 

@@ -9,7 +9,7 @@
 
 typedef KOMAutoLoader<Factory> MyAutoLoader;
 
-MyApplication::MyApplication( int &argc, char **argv ) : KOMApplication( argc, argv, "recorder")
+MyApplication::MyApplication( int &argc, char **argv ) : KOMApplication( argc, argv, "makro_recorder")
 {
 }
 

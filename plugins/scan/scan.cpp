@@ -35,7 +35,7 @@ Scan::Scan(QObject *parent, const char *name) : KParts::Plugin(parent, name),
 {
     setInstance(ScanFactory::pluginInstance());
 
-    (void) new KAction(i18n("&Scan Image"), BarIcon("unknown"), 0, this, SLOT(slotScan()), actionCollection(), "scan_image");
+    (void) new KAction(i18n("&Scan Image"), BarIcon("scanner"), 0, this, SLOT(slotScan()), actionCollection(), "scan_image");
 }
 
 Scan::~Scan()

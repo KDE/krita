@@ -84,7 +84,6 @@ void KisHistogram::computeHistogramFor(const ChannelInfo & channel)
 // 						total += datum;
  						m_count++;
  					}
-					++pixelIt;
 				}
 				++pixelIt;
 			}

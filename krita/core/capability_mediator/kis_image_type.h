@@ -49,32 +49,31 @@ class KisImageType : public KisAbstractCapability {
 		     QString description);
 	virtual ~KisImageType();
 
-	virtual Q_UINT8 bitsPerChannel() { return m_bitsPerChannel; };
+	virtual Q_UINT8 bitsPerChannel() const { return m_bitsPerChannel; };
 	virtual void setBitsPerChannel( Q_UINT8 bits ) { m_bitsPerChannel = bits; };
 
-	virtual Q_UINT8 bytesPerChannel() { return m_bytesPerChannel; };
+	virtual Q_UINT8 bytesPerChannel() const { return m_bytesPerChannel; };
 	virtual void setBytesPerChannel( Q_UINT8 bytes ) { m_bytesPerChannel = bytes; };
 
-	virtual Q_UINT32 maxChannelValue() { return m_maxChannelValue; };
+	virtual Q_UINT32 maxChannelValue() const { return m_maxChannelValue; };
 	virtual void setMaxChannelValue( Q_UINT32 maxChannelValue ) { m_maxChannelValue = maxChannelValue; };
 
-	virtual Q_UINT8 numChannels() { return m_numChannels; };
+	virtual Q_UINT8 numChannels() const { return m_numChannels; };
 	virtual void setNumChannels( Q_UINT8 numChannels ) { m_numChannels = numChannels; };
 
-	virtual KisStrategyColorSpaceSP colorSpace() { return m_colorSpace; };
+	virtual KisStrategyColorSpaceSP colorSpace() const { return m_colorSpace; };
 	virtual void setColorSpace( KisStrategyColorSpaceSP colorSpace ) { m_colorSpace = colorSpace; };
 	
-	virtual bool hasAlpha() { return m_hasAlpha; };
+	virtual bool hasAlpha() const { return m_hasAlpha; };
 	virtual void setHasAlpha(bool hasAlpha) { m_hasAlpha = hasAlpha; };
 
 	// Compatibility methods that correspond to kis_global.h things.
-	virtual Q_UINT8 quantumSize() { return m_bitsPerChannel; };
-	virtual Q_UINT32 quantumMax() { return m_maxChannelValue; };
-	virtual Q_UINT32 opaque() { return m_maxChannelValue; };
-	virtual Q_INT32 depth() { return m_bytesPerChannel; };
+	virtual Q_UINT8 quantumSize() const { return m_bitsPerChannel; };
+	virtual Q_UINT32 quantumMax() const { return m_maxChannelValue; };
+	virtual Q_UINT32 opaque() const { return m_maxChannelValue; };
+	virtual Q_INT32 depth() const { return m_bytesPerChannel; };
 
  private:
-
 	Q_UINT8 m_bitsPerChannel;
 	Q_UINT8 m_bytesPerChannel;
 	Q_UINT32 m_maxChannelValue;

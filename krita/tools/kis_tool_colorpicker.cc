@@ -29,7 +29,6 @@
 #include "kis_canvas_subject.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
-#include "kis_rgb_widget.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_colorpicker.moc"
 #include "kis_button_press_event.h"
@@ -40,7 +39,6 @@ KisToolColorPicker::KisToolColorPicker()
 	setCursor(KisCursor::pickerCursor());
 	m_subject = 0;
 	m_optWidget = 0;
-	m_colorSelector = 0;
 	m_updateColor = 0;
 	m_update = true;
 }
@@ -74,18 +72,12 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 		if (!dev -> contains(pos))
 			return;
 
-		if (dev -> pixel(pos.x(), pos.y(), &c, &opacity)) {
-			if(m_colorSelector)
-				if (e -> button() == QMouseEvent::LeftButton)
-					m_colorSelector -> slotSetFGColor(c);
-				else
-					m_colorSelector -> slotSetBGColor(c);
+		if (dev -> pixel(pos.x(), pos.y(), &c, &opacity))
 			if(m_update)
 				if (e -> button() == QMouseEvent::LeftButton)
 					m_subject -> setFGColor(c);
 				else 
 					m_subject -> setBGColor(c);
-		}
 	}
 }
 
@@ -112,15 +104,11 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
 	m_optWidget -> setCaption(i18n("Color Picker"));
 	
 	m_frame = new QVBoxLayout(m_optWidget);
-	m_colorSelector = new KisRGBWidget(m_optWidget);
 	m_updateColor = new QCheckBox(i18n("Update current color"),m_optWidget);
 	m_updateColor -> setChecked(m_updateColor);
-	m_frame -> addWidget(m_colorSelector);
 	m_frame -> addWidget(m_updateColor);
 
 	connect(m_updateColor,SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
-	connect(m_colorSelector,SIGNAL(fgColorChanged(const KoColor&)), SLOT(slotFGColorSelected(const KoColor&)));
-	connect(m_colorSelector,SIGNAL(bgColorChanged(const KoColor&)), SLOT(slotBGColorSelected(const KoColor&)));
 
 	return m_optWidget;
 }
@@ -133,16 +121,4 @@ QWidget* KisToolColorPicker::optionWidget()
 void KisToolColorPicker::slotSetUpdateColor(bool state)
 {
 	m_update = state;
-}
-
-void KisToolColorPicker::slotFGColorSelected(const KoColor& c)
-{
-	if(m_update)
-		m_subject -> setFGColor(c);
-}
-
-void KisToolColorPicker::slotBGColorSelected(const KoColor& c)
-{
-	if(m_update)
-		m_subject -> setBGColor(c);
 }

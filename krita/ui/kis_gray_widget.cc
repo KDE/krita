@@ -29,8 +29,10 @@
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
 
-KisGrayWidget::KisGrayWidget(QWidget *parent) : super(parent)
-{  
+KisGrayWidget::KisGrayWidget(QWidget *parent, const char *name) : super(parent, name)
+{
+	m_subject = 0;
+
 	m_ColorButton = new KDualColorButton(this);
 	m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
 	QGridLayout *mGrid = new QGridLayout(this, 3, 5, 5, 2);
@@ -74,18 +76,23 @@ void KisGrayWidget::slotChanged(int v)
 	if (m_ColorButton->current() == KDualColorButton::Foreground){
 		m_fgColor.setRGB(v, v, v);
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
-		emit fgColorChanged(m_fgColor);
+		if(m_subject)
+			m_subject->setFGColor(m_fgColor);
 	}
 	else{
 		m_bgColor.setRGB(v, v, v);
 		m_ColorButton->setCurrent(KDualColorButton::Background);
-		emit bgColorChanged(m_bgColor);
+		if(m_subject)
+			m_subject->setBGColor(m_bgColor);
 	}
-	update();
 }
 
-void KisGrayWidget::update()
+void KisGrayWidget::update(KisCanvasSubject *subject)
 {
+	m_subject = subject;
+	m_fgColor = subject->fgColor();
+	m_bgColor = subject->bgColor();
+
 	KoColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
 
 	disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
@@ -110,15 +117,15 @@ void KisGrayWidget::update()
 void KisGrayWidget::slotFGColorSelected(const QColor& c)
 {
 	m_fgColor = KoColor(c);
-	emit fgColorChanged(m_fgColor);
-	update();
+	if(m_subject)
+		m_subject->setFGColor(m_fgColor);
 }
 
 void KisGrayWidget::slotBGColorSelected(const QColor& c)
 {
 	m_bgColor = KoColor(c);
-	emit bgColorChanged(m_bgColor);
-	update();
+	if(m_subject)
+		m_subject->setBGColor(m_bgColor);
 }
 
 #include "kis_gray_widget.moc"

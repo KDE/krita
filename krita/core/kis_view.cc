@@ -90,7 +90,6 @@
 #include "kis_selection.h"
 #include "kis_controlframe.h"
 #include "kis_dockframedocker.h"
-#include "kis_colordocker.h"
 #include "kis_tool.h"
 #include "kis_tool_factory.h"
 #include "kis_tool_non_paint.h"
@@ -107,6 +106,9 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_colorspace_registry.h"
+#include "kis_hsv_widget.h"
+#include "kis_rgb_widget.h"
+#include "kis_gray_widget.h"
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
@@ -196,6 +198,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         m_toolcontroldocker = 0;
         m_colordocker = 0;
 
+	m_hsvwidget = 0;
+	m_rgbwidget = 0;
+	m_graywidget = 0;
+
         m_paletteChooser = 0;
         m_gradientChooser = 0;
         m_imageChooser = 0;
@@ -257,8 +263,23 @@ void KisView::setupDockers()
         m_toolcontroldocker = new DockFrameDocker(this);
         m_toolcontroldocker -> setCaption(i18n("Navigator/Info/Options"));
 
-        m_colordocker = new ColorDocker(this);
-        m_colordocker -> setCaption(i18n("Color Manager"));
+	m_colordocker = new DockFrameDocker(this);
+	m_colordocker -> setCaption(i18n("Color Manager"));
+
+	m_hsvwidget = new KisHSVWidget(this, "hsv");
+	m_hsvwidget -> setCaption(i18n("HSV"));
+	m_colordocker -> plug(m_hsvwidget);
+	attach(m_hsvwidget);
+
+	m_rgbwidget = new KisRGBWidget(this, "rgb");
+	m_rgbwidget -> setCaption(i18n("RGB"));
+	m_colordocker -> plug(m_rgbwidget);
+	attach(m_rgbwidget);
+
+	m_graywidget = new KisGrayWidget(this, "gray");
+	m_graywidget -> setCaption(i18n("Gray"));
+	m_colordocker -> plug(m_graywidget);
+	attach(m_graywidget);
 
         m_historydocker = new DockFrameDocker(this);
         m_historydocker -> setCaption(i18n("History/Actions"));
@@ -319,12 +340,6 @@ void KisView::setupDockers()
         connect(m_controlWidget, SIGNAL(bgColorChanged(const KoColor&)), SLOT(slotSetBGColor(const KoColor&)));
         connect(this, SIGNAL(fgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetFGColor(const KoColor&)));
         connect(this, SIGNAL(bgColorChanged(const KoColor&)), m_controlWidget, SLOT(slotSetBGColor(const KoColor&)));
-        m_colordocker -> slotSetBGColor(m_bg);
-        m_colordocker -> slotSetFGColor(m_fg);
-        connect(this , SIGNAL(fgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetFGColor(const KoColor&)));
-        connect(this , SIGNAL(bgColorChanged(const KoColor&)), m_colordocker, SLOT(slotSetBGColor(const KoColor&)));
-        connect(m_colordocker, SIGNAL(fgColorChanged(const KoColor&)), this, SLOT(slotSetFGColor(const KoColor&)));
-        connect(m_colordocker, SIGNAL(bgColorChanged(const KoColor&)), this, SLOT(slotSetBGColor(const KoColor&)));
 
         rserver -> loadBrushes();
         rserver -> loadpipeBrushes();

@@ -27,7 +27,6 @@ class KisCanvasSubject;
 class QWidget;
 class QVBoxLayout;
 class QCheckBox;
-class KisRGBWidget;
 
 class KisToolColorPicker : public KisToolNonPaint {
 
@@ -48,15 +47,10 @@ public:
 public slots:
 	virtual void slotSetUpdateColor(bool);
 
-protected slots:
-	void slotFGColorSelected(const KoColor& c);
-	void slotBGColorSelected(const KoColor& c);
-
 private:
 	KisCanvasSubject *m_subject;
 	QWidget *m_optWidget;
 	QVBoxLayout *m_frame;
-	KisRGBWidget *m_colorSelector;
 	QCheckBox *m_updateColor;
 	bool m_update;
 };

@@ -20,7 +20,11 @@
 #ifndef KIS_RGB_WIDGET_H
 #define KIS_RGB_WIDGET_H
 
-#include "kis_color_widget.h"
+#include "qwidget.h"
+#include <koColor.h>
+
+#include "kis_canvas_subject.h"
+#include "kis_canvas_observer.h"
 
 class KoFrameButton;
 class QGridLayout;
@@ -30,13 +34,15 @@ class QLabel;
 class QSpinBox;
 class KDualColorButton;
 
-class KisRGBWidget : public KisColorWidget
+class KisRGBWidget
+	 : public QWidget,
+	   public KisCanvasObserver
 {
 	Q_OBJECT
-	typedef KisColorWidget super;
+	typedef QWidget super;
 
 public:
-	KisRGBWidget(QWidget *parent = 0L);
+	KisRGBWidget(QWidget *parent = 0L, const char *name = 0);
 	virtual ~KisRGBWidget() {}
 
 protected slots:
@@ -48,9 +54,10 @@ protected slots:
 	void slotBGColorSelected(const QColor& c);
 
 private:
-	void update();
+	void update(KisCanvasSubject*);
 
 private:
+	KisCanvasSubject *m_subject;
 	KoColorSlider *mRSlider;
 	KoColorSlider *mGSlider;
 	KoColorSlider *mBSlider;
@@ -61,6 +68,9 @@ private:
 	QSpinBox *mGIn;
 	QSpinBox *mBIn;
 	KDualColorButton *m_ColorButton;
+
+	KoColor m_fgColor;
+	KoColor m_bgColor;
 };
 
 #endif

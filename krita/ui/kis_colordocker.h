@@ -29,8 +29,8 @@
 
 #include "kis_basedocker.h"
 
-class KisRGBWidget;
-class KisHSVWidget;
+//class KisRGBWidget;
+//class KisHSVWidget;
 class KisGrayWidget;
 
 class ColorDocker : public BaseDocker 
@@ -56,8 +56,8 @@ protected slots:
 
 private:
         QTabWidget *m_tabwidget;
-        KisRGBWidget *m_rgbChooser;
-        KisHSVWidget *m_hsvChooser;
+    //   KisRGBWidget *m_rgbChooser;
+   //     KisHSVWidget *m_hsvChooser;
         KisGrayWidget *m_grayChooser;
         KoColor m_fgColor;
         KoColor m_bgColor;

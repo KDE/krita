@@ -33,8 +33,8 @@
 
 #include "kis_colordocker.h"
 
-#include "kis_rgb_widget.h"
-#include "kis_hsv_widget.h"
+//#include "kis_rgb_widget.h"
+//#include "kis_hsv_widget.h"
 #include "kis_gray_widget.h"
 #include "kis_color_widget.h"
 
@@ -43,22 +43,22 @@ ColorDocker::ColorDocker( QWidget* parent, const char* name ) : BaseDocker( pare
         setWidget( m_tabwidget = new QTabWidget( this ) );
         m_tabwidget -> setBaseSize( 200, 150 );
         
-        m_rgbChooser = new KisRGBWidget(this);
-        m_hsvChooser = new KisHSVWidget(this);
+       // m_rgbChooser = new KisRGBWidget(this);
+   //     m_hsvChooser = new KisHSVWidget(this);
         m_grayChooser = new KisGrayWidget(this);
-        m_tabwidget-> addTab( m_rgbChooser, i18n("RGB"));
-        m_tabwidget-> addTab( m_hsvChooser, i18n("HSV"));
+      //  m_tabwidget-> addTab( m_rgbChooser, i18n("RGB"));
+     //   m_tabwidget-> addTab( m_hsvChooser, i18n("HSV"));
         m_tabwidget-> addTab( m_grayChooser, i18n("Gray"));
 
         connect(m_tabwidget, SIGNAL(currentChanged(QWidget*)), SLOT(slotCurrentChanged(QWidget*)));
         
         // connect chooser frames
-        connect(m_rgbChooser, SIGNAL(fgColorChanged(const KoColor &)), SLOT(slotFGColorSelected(const KoColor &)));
-        connect(m_hsvChooser, SIGNAL(fgColorChanged(const KoColor &)), SLOT(slotFGColorSelected(const KoColor &)));
+    //    connect(m_rgbChooser, SIGNAL(fgColorChanged(const KoColor &)), SLOT(slotFGColorSelected(const KoColor &)));
+    //    connect(m_hsvChooser, SIGNAL(fgColorChanged(const KoColor &)), SLOT(slotFGColorSelected(const KoColor &)));
         connect(m_grayChooser, SIGNAL(fgColorChanged(const KoColor &)), SLOT(slotFGColorSelected(const KoColor &)));
   
-        connect(m_rgbChooser, SIGNAL(bgColorChanged(const KoColor &)), SLOT(slotBGColorSelected(const KoColor &)));
-        connect(m_hsvChooser, SIGNAL(bgColorChanged(const KoColor &)), SLOT(slotBGColorSelected(const KoColor &)));
+      //  connect(m_rgbChooser, SIGNAL(bgColorChanged(const KoColor &)), SLOT(slotBGColorSelected(const KoColor &)));
+      //  connect(m_hsvChooser, SIGNAL(bgColorChanged(const KoColor &)), SLOT(slotBGColorSelected(const KoColor &)));
         connect(m_grayChooser, SIGNAL(bgColorChanged(const KoColor &)), SLOT(slotBGColorSelected(const KoColor &))); 
  
 }

@@ -17,8 +17,6 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_channelview.cc \
     kis_cmb_composite.cc \
     kis_cmb_imagetype.cc \
-    kis_colordocker.cc \
-    kis_color_widget.cc \
     kis_controlframe.cc \
     kis_layerbox.cc \
     kis_dlg_create_img.cc \
@@ -56,8 +54,6 @@ noinst_HEADERS = integerwidget.h \
     kis_channelview.h \
     kis_cmb_composite.h \
     kis_cmb_imagetype.h \
-    kis_colordocker.h \
-    kis_color_widget.h \
     kis_controlframe.h \
     kis_layerbox.h \
     kis_dlg_create_img.h \

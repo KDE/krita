@@ -72,6 +72,9 @@ class KisLayerBox;
 class KisButtonPressEvent;
 class KisButtonReleaseEvent;
 class KisMoveEvent;
+class KisHSVWidget;
+class KisRGBWidget;
+class KisGrayWidget;
 
 class KisView
 	: public KoView,
@@ -401,12 +404,16 @@ private:
 	int m_scrollX;
 	int m_scrollY;
 
+	KisHSVWidget *m_hsvwidget;
+	KisRGBWidget *m_rgbwidget;
+	KisGrayWidget *m_graywidget;
+
         // Dockers
 	DockFrameDocker *m_layerchanneldocker;
 	DockFrameDocker *m_resourcedocker;
 	DockFrameDocker *m_toolcontroldocker;
 	DockFrameDocker *m_historydocker;
-	ColorDocker *m_colordocker;
+	DockFrameDocker *m_colordocker;
 
 	// Dialogs
 	QWidget *m_paletteChooser;

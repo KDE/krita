@@ -41,10 +41,6 @@
 #include "kis_brush.h"
 #include "kis_pattern.h"
 #include "kis_gradient.h"
-#include "kis_rgb_widget.h"
-#include "kis_hsv_widget.h"
-#include "kis_gray_widget.h"
-#include "kis_color_widget.h"
 
 ControlFrame::ControlFrame( QWidget* parent, const char* name )
 	: QFrame( parent, name )

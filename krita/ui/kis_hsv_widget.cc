@@ -31,8 +31,10 @@
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
 
-KisHSVWidget::KisHSVWidget(QWidget *parent) : super(parent)
+KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, name)
 {  
+	m_subject = 0;
+
 	m_ColorButton = new KDualColorButton(this);
 	m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
 	QGridLayout *mGrid = new QGridLayout(this, 5, 5, 5, 2);
@@ -93,14 +95,15 @@ void KisHSVWidget::slotHChanged(int h)
 	if (m_ColorButton->current() == KDualColorButton::Foreground){
 		m_fgColor.setHSV(h, m_fgColor.S(), m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
-		emit fgColorChanged(m_fgColor);
+		if(m_subject)
+			m_subject->setFGColor(m_fgColor);
 	}
 	else{
 		m_bgColor.setHSV(h, m_bgColor.S(), m_bgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Background);
-		emit bgColorChanged(m_bgColor);
+		if(m_subject)
+			m_subject->setBGColor(m_bgColor);
 	}
-	update();
 }
 
 void KisHSVWidget::slotSChanged(int s)
@@ -108,14 +111,15 @@ void KisHSVWidget::slotSChanged(int s)
 	if (m_ColorButton->current() == KDualColorButton::Foreground){
 		m_fgColor.setHSV(m_fgColor.H(), s, m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
-		emit fgColorChanged(m_fgColor);
+		if(m_subject)
+			m_subject->setFGColor(m_fgColor);
 	}
 	else{
 		m_bgColor.setHSV(m_bgColor.H(), s, m_bgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Background);
-		emit bgColorChanged(m_bgColor);
+		if(m_subject)
+			m_subject->setBGColor(m_bgColor);
 	}
-	update();
 }
 
 void KisHSVWidget::slotVChanged(int v)
@@ -123,14 +127,15 @@ void KisHSVWidget::slotVChanged(int v)
 	if (m_ColorButton->current() == KDualColorButton::Foreground){
 		m_fgColor.setHSV(m_fgColor.H(), m_fgColor.S(), v);
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
-		emit fgColorChanged(m_fgColor);
+		if(m_subject)
+			m_subject->setFGColor(m_fgColor);
 	}
 	else{
 		m_bgColor.setHSV(m_bgColor.H(), m_bgColor.S(), v);
 		m_ColorButton->setCurrent(KDualColorButton::Background);
-		emit bgColorChanged(m_bgColor);
+		if(m_subject)
+			m_subject->setBGColor(m_bgColor);
 	}
-	update();
 }
 
 void KisHSVWidget::slotWheelChanged(const KoColor& c)
@@ -138,18 +143,23 @@ void KisHSVWidget::slotWheelChanged(const KoColor& c)
 	if (m_ColorButton->current() == KDualColorButton::Foreground){
 		m_fgColor.setHSV(c.H(), c.S(), m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
-		emit fgColorChanged(m_fgColor);
+		if(m_subject)
+			m_subject->setFGColor(m_fgColor);
 	}
 	else{
 		m_bgColor.setHSV(c.H(), c.S(), m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Background);
-		emit bgColorChanged(m_bgColor);
+		if(m_subject)
+			m_subject->setBGColor(m_bgColor);
 	}
-	update();
 }
 
-void KisHSVWidget::update()
+void KisHSVWidget::update(KisCanvasSubject *subject)
 {
+	m_subject = subject;
+	m_fgColor = subject->fgColor();
+	m_bgColor = subject->bgColor();
+
 	KoColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
 
 	int h = color.H();
@@ -181,15 +191,15 @@ void KisHSVWidget::update()
 void KisHSVWidget::slotFGColorSelected(const QColor& c)
 {
 	m_fgColor = KoColor(c);
-	emit fgColorChanged(m_fgColor);
-	update();
+	if(m_subject)
+		m_subject->setFGColor(m_fgColor);
 }
 
 void KisHSVWidget::slotBGColorSelected(const QColor& c)
 {
 	m_bgColor = KoColor(c);
-	emit bgColorChanged(m_bgColor);
-	update();
+	if(m_subject)
+		m_subject->setBGColor(m_bgColor);
 }
 
 #include "kis_hsv_widget.moc"

@@ -39,9 +39,6 @@ class KisPattern;
 class KisGradient;
 class KoColorChooser;
 class ControlFrame;
-class KisRGBWidget;
-class KisHSVWidget;
-class KisGrayWidget;
 
 enum ActiveColor { ac_Foreground, ac_Background};
 

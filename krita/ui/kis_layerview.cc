@@ -561,7 +561,7 @@ LayerPropertyDialog::LayerPropertyDialog( QString layername,
     uchar opacity,  QWidget *parent, const char *name )
     : QDialog( parent, name, true )
 {
-    QGridLayout *layout = new QGridLayout( this, 4, 2, 15, 7 );
+    QGridLayout *layout = new QGridLayout( this, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     m_name = new QLineEdit( layername, this );
     layout->addWidget( m_name, 0, 1 );

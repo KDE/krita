@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <kdialog.h>
 
 #include <koFrameButton.h>
 
@@ -377,7 +378,7 @@ ChannelPropertyDialog::ChannelPropertyDialog( QString _channelname,
     uchar _opacity, QWidget *_parent, const char *_name )
     : QDialog( _parent, _name, true )
 {
-    QGridLayout *layout = new QGridLayout( this, 4, 2, 15, 7 );
+    QGridLayout *layout = new QGridLayout( this, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     m_name = new QLineEdit( _channelname, this );
     layout->addWidget( m_name, 0, 1 );

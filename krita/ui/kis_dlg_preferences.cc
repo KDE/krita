@@ -37,7 +37,7 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
   : QWidget( _parent, _name )
 {
   // Layout
-  QGridLayout* grid = new QGridLayout( this, 3, 1, 7, 15);
+  QGridLayout* grid = new QGridLayout( this, 3, 1, KDialog::marginHint(), KDialog::spacingHint());
 
   // checkbutton
   m_saveOnExit 
@@ -68,7 +68,7 @@ DirectoriesTab::DirectoriesTab( QWidget *_parent, const char *_name )
   QLabel* label;
 
   // Layout
-  QGridLayout* grid = new QGridLayout( this, 5, 1, 7, 15);
+  QGridLayout* grid = new QGridLayout( this, 5, 1, KDialog::marginHint(), KDialog::spacingHint());
 
   // Inputline
   m_pLineEdit = new KURLRequester( this, "tempDir" );
@@ -106,7 +106,7 @@ UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
   : QWidget( _parent, _name )
 {
 	// Layout
-  QGridLayout* grid = new QGridLayout( this, 3, 1, 7, 15);
+  QGridLayout* grid = new QGridLayout( this, 3, 1, KDialog::marginHint(), KDialog::spacingHint());
 
   QLabel *label;
 

@@ -20,6 +20,8 @@
 
 #include <string.h>
 
+#include <Magick++.h>
+
 #include <qcstring.h>
 #include <qdatastream.h>
 
@@ -29,100 +31,40 @@
 
 #include "kis_global.h"
 #include "kis_image_cmd.h"
-#include "kis_paint_device.h"
 #include "kis_util.h"
 #include "kis_tile.h"
 
-const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(unsigned int);
+using namespace Magick;
+
+const int TILE_BYTES = TILE_SIZE * TILE_SIZE * sizeof(uint);
     
-KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uchar bpp, const QRgb& defaultColor) :
-	m_tiles(width / TILE_SIZE, height / TILE_SIZE, bpp, defaultColor)
+KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uchar bpp, const QRgb& defaultColor)
 {
+	Color clr(Upscale(qRed(defaultColor)), Upscale(qGreen(defaultColor)), Upscale(qBlue(defaultColor)), Upscale(qAlpha(defaultColor)));
+
+	m_bpp = bpp;
 	m_name = name;
 	m_imgRect = QRect(0, 0, width, height);
 	resize(m_imgRect.width(), m_imgRect.height(), bpp);
 	m_visible = true;
-	m_opacity = 255;
+	m_opacity = qAlpha(defaultColor);
+	m_tiles = new Image(Geometry(width, height), clr);
+	m_tiles -> matte(true);
 }
 
 KisPaintDevice::~KisPaintDevice()
 {
-}
-
-void KisPaintDevice::setPixel(uint x, uint y, const uchar *src, KisImageCmd *cmd)
-{
-	int tileNoY = y / TILE_SIZE;
-	int tileNoX = x / TILE_SIZE;
-	KisTileSP tile = m_tiles.getTile(tileNoX, tileNoY);
-
-	if (cmd) {
-		if (tile && !cmd -> hasTile(tile)) {
-			if (tile -> cow()) {
-				KisTileSP tileCopy = new KisTile(*tile);
-
-				tile -> setCow(false);	
-				swapTile(tileCopy);
-				tile = tileCopy;
-			}
-
-			cmd -> addTile(tile);
-		}
-	}
-
-	uchar *dst = 0;
-
-	if (pixel(x, y, &dst)) {
-		dst = pixel(x, y);
-		memcpy(dst, src, tile -> bpp());
-	}
-}
-
-uchar* KisPaintDevice::pixel(uint x, uint y)
-{
-	uchar *pix = 0;
-
-	pixel(x, y, &pix);
-	return pix;
-}
-
-bool KisPaintDevice::pixel(uint x, uint y, uchar **val)
-{
-	int tileNoY = y / TILE_SIZE;
-	int tileNoX = x / TILE_SIZE;
-	KisTileSP tile = m_tiles.getTile(tileNoX, tileNoY);
-
-	if (!tile)
-		return false;
-
-	*val = tile -> data(x % TILE_SIZE, y % TILE_SIZE);
-	return true;
-}
-
-void KisPaintDevice::setPixel(uint x, uint y, const QRgb& rgb, KisImageCmd *cmd)
-{
-	// TODO
-}
-
-bool KisPaintDevice::pixel(uint x, uint y, QRgb *rgb)
-{
-	// TODO
-	return false;
-}
-
-QRgb KisPaintDevice::rgb(uint x, uint y)
-{
-	QRgb rgb;
-
-	pixel(x, y, &rgb);
-	return true;
+	delete m_tiles;
 }
 
 void KisPaintDevice::resize(uint width, uint height, uchar bpp)
 {
+#if 0
 	m_imgRect.setWidth(width);
       	m_imgRect.setHeight(height);
 	m_tileRect = KisUtil::findTileExtents(m_imgRect);
 	m_tiles.resize(m_tileRect.width() / TILE_SIZE, m_tileRect.height() / TILE_SIZE, bpp);
+#endif
 }
 
 void KisPaintDevice::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
@@ -145,13 +87,16 @@ QRect KisPaintDevice::tileExtents() const
 	return m_tileRect;
 }
 
+#if 0
 KisTileSP KisPaintDevice::swapTile(KisTileSP tile)
 {
 	return m_tiles.setTile(tile -> tileCoords(), tile);
 }
+#endif
 
 bool KisPaintDevice::writeToStore(KoStore *store)
 {
+#if 0
 	for (uint ty = 0; ty < yTiles(); ty++) 
 		for (uint tx = 0; tx < xTiles(); tx++) {
 			KisTileSP src = m_tiles.getTile(tx, ty);
@@ -162,10 +107,13 @@ bool KisPaintDevice::writeToStore(KoStore *store)
 		}
 
 	return true;
+#endif
+	return false;
 }
 
 bool KisPaintDevice::loadFromStore(KoStore *store)
 {
+#if 0
 	int nread;
 
 	for (uint ty = 0; ty < yTiles(); ty++) {
@@ -181,6 +129,8 @@ bool KisPaintDevice::loadFromStore(KoStore *store)
 	}
 
 	return true;
+#endif
+	return false;
 }
 
 QRect KisPaintDevice::imageExtents() const
@@ -207,5 +157,21 @@ void KisPaintDevice::allocateRect(const QRect& rc, uchar bpp)
 {
 	resize(m_tileRect.width(), m_tileRect.height(), bpp);
 	m_imgRect = rc;
+}
+
+const KisPixelPacket* KisPaintDevice::getConstPixels(int x, int y, uint width, uint height) const
+{
+	return static_cast<const KisPixelPacket*>(m_tiles -> getConstPixels(x, y, width, height));
+}
+
+KisPixelPacket* KisPaintDevice::getPixels(int x, int y, uint width, uint height)
+{
+	m_tiles -> modifyImage();
+	return static_cast<KisPixelPacket*>(m_tiles -> getPixels(x, y, width, height));
+}
+
+void KisPaintDevice::syncPixels()
+{
+	m_tiles -> syncPixels();
 }
 

@@ -32,10 +32,12 @@ public:
 	KisMask(MaskType type, const QString& name, uint width, uint height);
 	virtual ~KisMask();
 
+#if 0
 	virtual void setPixel(uint x, uint y, const uchar *src, KisImageCmd *cmd);
 	virtual void setPixel(uint x, uint y, const QRgb& rgb, KisImageCmd *cmd);
 	virtual bool pixel(uint x, uint y, uchar **val);
 	virtual bool pixel(uint x, uint y, QRgb *rgb);
+#endif
 	virtual bool writeToStore(KoStore *store);
 	virtual bool loadFromStore(KoStore *store);
 

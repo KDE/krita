@@ -44,18 +44,22 @@ QString KisImageCmd::name() const
 
 void KisImageCmd::execute()
 {
+#if 0
 	for (KisTileSPLstIterator it = m_tiles.begin(); it != m_tiles.end(); it++)
 		m_device -> swapTile(*it);
 
 	m_img -> markDirty(QRect(0, 0, m_img -> width(), m_img -> height())); // FIXME don't update entire image
+#endif
 }
 
 void KisImageCmd::unexecute()
 {
+#if 0
 	for (KisTileSPLstIterator it = m_originalTiles.begin(); it != m_originalTiles.end(); it++)
 		m_device -> swapTile(*it);
 
 	m_img -> markDirty(QRect(0, 0, m_img -> width(), m_img -> height())); // FIXME don't update entire image
+#endif
 }
 
 void KisImageCmd::addTile(KisTileSP tile)

@@ -46,7 +46,7 @@ public:
 	KisChannel(cId id, const QString& name, uint width, uint height, const QRgb& defaultColor);
 	virtual ~KisChannel();
 
-	virtual void setPixel(uint x, uint y, const uchar *pixel, KisImageCmd *cmd);
+//	virtual void setPixel(uint x, uint y, const uchar *pixel, KisImageCmd *cmd);
 
 	cId channelId() const { return m_id; }
 	int width() const { return m_imgRect.width(); }

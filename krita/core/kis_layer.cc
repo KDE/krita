@@ -40,6 +40,7 @@ KisLayer::~KisLayer()
 
 QRect KisLayer::tileRect(int tileNo)
 {
+#if 0
 	int xTile = tileNo % m_tiles.xTiles();
 	int yTile = tileNo / m_tiles.xTiles(); // xTiles is used here.  Is this the intent?
 
@@ -47,6 +48,8 @@ QRect KisLayer::tileRect(int tileNo)
 
 	tr.moveBy(m_tileRect.x(), m_tileRect.y());
 	return(tr);
+#endif
+	return QRect();
 }
 
 

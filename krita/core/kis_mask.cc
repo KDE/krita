@@ -31,6 +31,7 @@ KisMask::~KisMask()
 {
 }
 
+#if 0
 void KisMask::setPixel(uint x, uint y, const uchar *src, KisImageCmd *cmd)
 {
 	if (m_type != CUSTOMMASK)
@@ -42,7 +43,9 @@ void KisMask::setPixel(uint x, uint y, const QRgb& rgb, KisImageCmd *cmd)
 	if (m_type != CUSTOMMASK)
 		super::setPixel(x, y, rgb, cmd);
 }
+#endif
 
+#if 0
 bool KisMask::pixel(uint x, uint y, uchar **val)
 {
 	QRgb rgb;
@@ -75,6 +78,7 @@ bool KisMask::pixel(uint x, uint y, QRgb *rgb)
 
 	return true;
 }
+#endif
 
 bool KisMask::writeToStore(KoStore * /*store*/)
 {

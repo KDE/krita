@@ -21,6 +21,8 @@
 #if !defined KIS_PAINT_DEVICE_H_
 #define KIS_PAINT_DEVICE_H_
 
+#include <Magick++.h>
+
 #include <qcolor.h>
 #include <qobject.h>
 #include <qrect.h>
@@ -28,6 +30,8 @@
 
 #include <ksharedptr.h>
 
+#include "kis_global.h"
+#include "kis_pixel_packet.h"
 #include "kis_tiles.h"
 #include "kis_tile.h"
 
@@ -50,6 +54,7 @@ public:
 	inline void setName(const QString& name);
 	inline QString name() const;
 
+#if 0
 	virtual void setPixel(uint x, uint y, const uchar *pixel, KisImageCmd *cmd = 0);
 	virtual bool pixel(uint x, uint y, uchar **val);
 	virtual uchar *pixel(uint x, uint y);
@@ -57,10 +62,16 @@ public:
 	virtual void setPixel(uint x, uint y, const QRgb& rgb, KisImageCmd *cmd = 0);
 	virtual bool pixel(uint x, uint y, QRgb *rgb);
 	virtual QRgb rgb(uint x, uint y);
+#endif
+
+	const KisPixelPacket* getConstPixels(int x, int y, uint width = TILE_SIZE, uint height = TILE_SIZE) const;
+	KisPixelPacket* getPixels(int x, int y, uint width = TILE_SIZE, uint height = TILE_SIZE);
+	void syncPixels();
 
 	virtual void resize(uint width, uint height, uchar bpp);
 	
-	inline KisTileSP getTile(unsigned int x, unsigned int y);
+//	inline KisTileSP getTile(unsigned int x, unsigned int y);
+	inline KisPixelPacket* getTile(uint x, uint y);
 
 	inline uint xTiles() const;
 	inline uint yTiles() const;
@@ -69,7 +80,7 @@ public:
 
 	void findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
 	void findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const;
-	KisTileSP swapTile(KisTileSP tile);
+//	KisTileSP swapTile(KisTileSP tile);
 
 	inline uchar opacity() const;
 	inline void setOpacity(uchar o);
@@ -88,28 +99,33 @@ public:
 	inline int width() const;
 	inline int height() const;
 
+	
 protected:
+	uchar m_bpp;
 	uchar m_opacity;
 	bool m_visible;
 	QRect m_tileRect;
 	QRect m_imgRect;
 	QString m_name;
-	KisTiles m_tiles;
+	Magick::Image *m_tiles;
+//	KisTiles m_tiles;
 };
 
 uint KisPaintDevice::xTiles() const
 {
-	return m_tiles.xTiles();
+	return 0;
+//	return m_tiles.xTiles();
 }
 
 uint KisPaintDevice::yTiles() const
 {
-	return m_tiles.yTiles();
+	return 0;
+//	return m_tiles.yTiles();
 }
 
 uchar KisPaintDevice::bpp() const
 {
-	return m_tiles.bpp();
+	return m_bpp;
 }
 
 void KisPaintDevice::setName(const QString& name)
@@ -122,10 +138,12 @@ QString KisPaintDevice::name() const
 	return m_name;
 }
 
+#if 0
 KisTileSP KisPaintDevice::getTile(unsigned int x, unsigned int y) 
 { 
 	return m_tiles.getTile(x, y); 
 }
+#endif
 
 uchar KisPaintDevice::opacity() const 
 { 

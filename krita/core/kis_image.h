@@ -145,7 +145,7 @@ private:
 	KisImage& operator=(const KisImage&);
 
 	void addCommand(KCommand *cmd);
-	void renderTile(KisTileSP dst, const KisTileSP src, const KisPaintDevice *srcDevice);
+//	void renderTile(KisTileSP dst, const KisTileSP src, const KisPaintDevice *srcDevice);
 	void renderBg(KisPaintDevice *srcDevice, int tileNo);
 	void resizeImage(KisPaintDevice *device, const QRect& rect);
 	void resizePixmap(bool dirty);

@@ -939,6 +939,8 @@ bool KisDoc::saveAsQtImage(const QString& file, bool wholeImage)
 
 bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 {
+	return false;
+#if 0
 	KisImageSP img = currentImg();
 	QImage cI;
 
@@ -1042,6 +1044,7 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 	}
 
 	return true;
+#endif
 }
 
 
@@ -1055,6 +1058,7 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /*pView*/)
 
 bool KisDoc::LayerToQtImage(QImage *qimg, const QRect& clipRect)
 {
+#if 0
 	QRect clip;
 
 	KisImageSP img = currentImg();
@@ -1109,6 +1113,7 @@ bool KisDoc::LayerToQtImage(QImage *qimg, const QRect& clipRect)
 	}
 
 	return true;
+#endif
 }
 
 /*

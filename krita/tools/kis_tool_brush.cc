@@ -25,6 +25,7 @@
 
 #include <kaction.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 #include "kis_brush.h"
 #include "kis_canvas.h"
@@ -35,11 +36,14 @@
 #include "kis_image_cmd.h"
 #include "kis_global.h"
 #include "kis_paint_device.h"
+#include "kis_pixel_packet.h"
 #include "kis_tool_brush.h"
 #include "kis_undo.h"
 #include "kis_util.h"
 #include "kis_view.h"
 #include "kis_vec.h"
+
+using namespace Magick;
 
 BrushTool::BrushTool(KisDoc *doc, KisBrush *brush) : super(doc)
 {
@@ -148,48 +152,41 @@ bool BrushTool::paint(const QPoint& pos)
 
 	clipRect = clipRect.intersect(device -> imageExtents());
 
-	int sx = clipRect.left() - startx;
-	int sy = clipRect.top() - starty;
-	int ex = clipRect.right() - startx;
-	int ey = clipRect.bottom() - starty;
-	uchar opacity = m_opacity;
-	uchar invopacity = (CHANNEL_MAX - m_opacity);
-
-	uchar bv, invbv;
-	int bpp = device -> bpp();
-	uchar src2[MAX_CHANNELS];
-	uchar dst[MAX_CHANNELS];
-
-	src2[PIXEL_RED] = m_red;
-	src2[PIXEL_GREEN] = m_green;
-	src2[PIXEL_BLUE] = m_blue;
-	src2[PIXEL_ALPHA] = CHANNEL_MAX;
-	
+	int sx = clipRect.left();
+	int sy = clipRect.top();
+	int ex = clipRect.width();
+	int ey = clipRect.height();
+	int invOpacity = CHANNEL_MAX - m_opacity;
+	int bv; 
+	int invbv;
 	bool alpha = img -> colorMode() == cm_RGBA;
+	KisPixelPacket *view = device -> getPixels(sx, sy, ex, ey);
 
-	for (int y = sy; y <= ey; y++) {
-		uchar *sl = m_brush -> scanline(y);
+	if (!view)
+		return false;
 
-		for (int x = sx; x <= ex; x++) {
-			uchar *src = device -> pixel(startx + x, starty + y);
-			bv = *(sl + x);
+	for (int y = 0; y < ey; y++) {
+		uchar *sl = m_brush -> scanline(y - starty + sy);
+
+		for (int x = 0; x < ex; x++) {
+			bv = *(sl - startx + sx + x);
+			invbv = CHANNEL_MAX - bv;
 
 			if (bv == 0)
 				continue;
 
-			invbv = CHANNEL_MAX - bv;
+			KisPixelPacket *src = view + y * ex + x;
 
-			for (int w = 0; w < bpp; w++) {
-				dst[w] = (src2[w] * bv + src[w] * invbv) / CHANNEL_MAX;
+			src -> red = (Upscale(m_red) * bv + src -> red * invbv) / CHANNEL_MAX;
+			src -> green = (Upscale(m_green) * bv + src -> green * invbv) / CHANNEL_MAX;
+			src -> blue = (Upscale(m_blue) * bv + src -> blue * invbv) / CHANNEL_MAX;
 
-				if (alpha)
-					dst[w] = (dst[w] * opacity + src[w] * invopacity) / CHANNEL_MAX;
-			}
-
-			device -> setPixel(startx + x, starty + y, dst, m_cmd);
+			if (alpha)
+				src -> opacity = (Upscale(m_opacity) * bv + src -> opacity * invbv) / CHANNEL_MAX;
 		}
 	}
 
+	device -> syncPixels();
 	return true;
 }
 

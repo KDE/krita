@@ -20,6 +20,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <Magick++.h>
+
 #include <qpainter.h>
 #include <qthread.h>
 #include <qptrqueue.h>
@@ -36,10 +38,14 @@
 #include "kis_factory.h"
 #include "kis_global.h"
 #include "kis_layer.h"
+#include "kis_magick.h"
+#include "kis_pixel_packet.h"
 #include "kis_undo.h"
 #include "kis_util.h"
 #include "kis_timer.h"
 #include "KIsImageIface.h"
+
+using namespace Magick;
 
 /*
  * Very experimental thread test, only for experimenting
@@ -248,6 +254,7 @@ KisImage::KisImage(KisDoc *doc, const QString& name, int w, int h, cMode cm, uch
 	m_bpp = KisUtil::calcNumChannels(cm);
 
 	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth * m_bpp, m_bpp == 1 ? QImage::LittleEndian : QImage::IgnoreEndian);
+	m_imgTile.setAlphaBuffer(true);
 
 	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, m_bpp, cm, defaultColor);
 	m_bgLayer = new KisLayer("_background", TILE_SIZE, TILE_SIZE, m_bpp, cm, defaultColor);
@@ -275,6 +282,7 @@ KisImage::~KisImage()
 	destroyPixmap();
 }
 
+#if 0
 inline void KisImage::renderTile(KisTileSP dst, const KisTileSP src, const KisPaintDevice *srcDevice)
 {
 	if (!src -> data())
@@ -335,6 +343,7 @@ inline void KisImage::renderTile(KisTileSP dst, const KisTileSP src, const KisPa
 		}
 	}
 }
+#endif
 
 DCOPObject* KisImage::dcopObject()
 {
@@ -463,6 +472,7 @@ void KisImage::markDirty(const QRect& r)
 		for (int x = rc.left(); x < maxX; x++) {
 			//dirtyTilesMutex.lock();
 			m_dirty[y * m_xTiles + x] = true;
+
 			//dirtyTilesMutex.unlock();
 
 			if (m_autoUpdate)
@@ -497,6 +507,7 @@ void KisImage::slotUpdateTimeOut()
 		for(int x = 0; x < m_xTiles; x++)
 			if (m_dirty[y * m_xTiles + x])
 				compositeImage(QRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE));
+
 #else
 	dirtyTilesMutex.lock();
 
@@ -540,15 +551,6 @@ void KisImage::paintPixmap(QPainter *p, const QRect& area)
 	int b = area.bottom();
 	QRect rc = findBoundingTiles(area);
 
-#if 0
-	kdDebug() << "paintPixmap ===========>\n";
-	QRect ur = area;
-	kdDebug() << "top = " << ur.top() << endl;
-	kdDebug() << "left = " << ur.left() << endl;
-	kdDebug() << "bottom = " << ur.bottom() << endl;
-	kdDebug() << "right = " << ur.right() << endl;
-#endif
-
 	for (int y = rc.top(); y < rc.bottom(); y++) {
 		int yt = y * TILE_SIZE;
 
@@ -583,15 +585,7 @@ void KisImage::paintPixmap(QPainter *p, const QRect& area)
 			if (clipY <= 0)
 				clipY = -1;
 
-#if 0
-			kdDebug() << "xt == " << xt << endl;
-			kdDebug() << "yt == " << yt << endl;
-			kdDebug() << "pixX == " << pixX << endl;
-			kdDebug() << "pixY == " << pixY << endl;
-			kdDebug() << "clipX == " << clipX << endl;
-			kdDebug() << "clipY == " << clipY << endl;
-#endif
-			p -> drawPixmap(xt/*startX*/, yt/*startY*/, *m_pixmapTiles[y * m_xTiles + x]);//, pixX, pixY, clipX, clipY);
+			p -> drawPixmap(xt, yt, *m_pixmapTiles[y * m_xTiles + x]);
 		}
 	}
 }
@@ -603,6 +597,29 @@ void KisImage::paintPixmap(QPainter *p, const QRect& area)
 
 void KisImage::compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y)
 {
+	KisPixelPacket *dst = dstDevice -> getPixels(0, 0);
+	const KisPixelPacket *bkgPacket = m_bgLayer -> getConstPixels(0, 0);
+
+	Q_ASSERT(dst);
+	memcpy(dst, bkgPacket, TILE_SIZE * TILE_SIZE * sizeof(KisPixelPacket));
+
+	for (KisLayerSPLstConstIterator it = m_layers.begin(); it != m_layers.end(); it++) {
+		KisLayerSP lay = *it;
+
+		if (lay && lay -> visible()) {
+			const KisPixelPacket *src = lay -> getConstPixels(x, y);
+
+			if (dst && src) {
+				// XXX Copy for the moment
+				memcpy(dst, src, TILE_SIZE * TILE_SIZE * sizeof(KisPixelPacket));
+//				renderTile(dst, src, lay);
+			}
+		}
+	}
+
+	dstDevice -> syncPixels();
+	
+#if 0
 	KisTileSP dst = dstDevice -> getTile(tileNo, tileNo);
 
 	memcpy(dst -> data(), m_bgLayer -> getTile(0, 0) -> data(), dst -> size());
@@ -628,18 +645,19 @@ void KisImage::compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y
 				renderTile(dst, src, chan);
 		}
 	}
+#endif
 }
 
 void KisImage::compositeImage(const QRect& area, bool allDirty)
 {
 	QRect rc = findBoundingTiles(area);
-
+	
 	for (int y = rc.top(); y < rc.bottom(); y++) {
 		for (int x = rc.left(); x < rc.right(); x++) {
 			if (!allDirty && m_dirty[y * m_xTiles + x] == false)
 				continue;
 
-			compositeTile(m_composeLayer, 0, x, y);
+			compositeTile(m_composeLayer, 0, x * TILE_SIZE, y * TILE_SIZE);
 			convertTileToPixmap(m_composeLayer, 0, m_pixmapTiles[y * m_xTiles + x]);
 			m_dirty[y * m_xTiles + x] = false;
 		}
@@ -674,17 +692,16 @@ void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
 
 void KisImage::convertTileToPixmap(KisPaintDevice *dstDevice, int tileNo, QPixmap *pix)
 {
-	KisTileSP tile = dstDevice -> getTile(tileNo, tileNo);
-	uchar *src = tile -> data();
-	uchar bpp = tile -> bpp();
+	const KisPixelPacket *srcTile = dstDevice -> getConstPixels(tileNo * TILE_SIZE, tileNo * TILE_SIZE);
+	uchar bpp = dstDevice -> bpp();
 
-	for (int y = 0; y < TILE_SIZE; y++) {
-		uchar *dst = m_imgTile.scanLine(y);
+	for (int row = 0; row < m_imgTile.height(); row++) {
+		for (int column = 0; column < m_imgTile.width(); column++) {
+			const KisPixelPacket *pixel = srcTile + row * m_imgTile.width() + column;
+			QRgb rgb;
 
-		for (int x = TILE_SIZE; x; x--) {
-			memcpy(dst, src, bpp);
-			dst += bpp;
-			src += bpp;
+			rgb = qRgba(Downscale(pixel -> red), Downscale(pixel -> green), Downscale(pixel -> blue), Downscale(pixel -> opacity));
+			m_imgTile.setPixel(column, row, rgb);
 		}
 	}
 
@@ -749,6 +766,7 @@ void KisImage::mergeLinkedLayers()
 
 void KisImage::mergeLayers(KisLayerSPLst& layers)
 {
+#if 0
 	KisLayerSP a;
 	KisLayerSPLstIterator it;
 	KMacroCommand *macro = new KMacroCommand(i18n("Merge Layers"));
@@ -791,6 +809,7 @@ void KisImage::mergeLayers(KisLayerSPLst& layers)
 	addCommand(macro);
 	emit layersUpdated();
 	compositeImage(rc);
+#endif
 }
 
 void KisImage::resizeImage(KisPaintDevice *device, const QRect& rect)
@@ -916,7 +935,7 @@ void KisImage::destroyPixmap()
 
 void KisImage::renderBg(KisPaintDevice *srcDevice, int tileNo)
 {
-	uint *ptr = (uint*)srcDevice -> getTile(tileNo, tileNo) -> data();
+	KisPixelPacket *ptr = srcDevice -> getPixels(0, 0);
 
 	for (int y = 0; y < TILE_SIZE; y++)
 		for (int x = 0; x < TILE_SIZE; x++) {

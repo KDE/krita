@@ -63,9 +63,12 @@ QRect KisChannel::tileRect(int tileNo)
 	return(tr);
 }
 
+#if 0
 void KisChannel::setPixel(uint x, uint y, const uchar *pixel, KisImageCmd *cmd)
 {
 	// TODO : Manipulate pixel value before going upstream
 	super::setPixel(x, y, pixel, cmd);
 }
+
+#endif
 

@@ -23,14 +23,14 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_iterators.h"
-#include "kis_iterators_pixel.h"
+#include "kis_iterators_pixel_no_mask.h"
 #include "kis_pixel.h"
 #include "color_strategy/kis_strategy_colorspace.h"
 
 /**
  * This iterates over the pixels of a line of a paintdevice as if it was an endless plane
  **/
-class KisIteratorInfinitePixel : public KisIteratorPixel
+class KisIteratorInfinitePixel : public KisIteratorPixelNoMask
 {
 public:
 	/**
@@ -65,7 +65,7 @@ private:
  * that the end() function will only return the end of the 'pattern', since an endless
  * plane doesn't really has an end.
  **/
-class KisIteratorInfiniteLinePixel : public KisIteratorLinePixel
+class KisIteratorInfiniteLinePixel : public KisIteratorLinePixelNoMask
 {
 public:
 	/**

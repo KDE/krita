@@ -22,7 +22,6 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_layer.h"
 #include "kis_paint_device.h"
 
 class KoColor;
@@ -47,8 +46,8 @@ class KisSelection : public KisPaintDevice {
 	typedef KisPaintDevice super;
 
 public:
-	KisSelection(KisLayerSP layer, const QString& name);
-	KisSelection(KisLayerSP layer, const QString& name, KoColor c);
+	KisSelection(KisPaintDeviceSP layer, const QString& name);
+	KisSelection(KisPaintDeviceSP layer, const QString& name, KoColor c);
 
 	virtual ~KisSelection();
 
@@ -80,7 +79,8 @@ public:
 	QRect selectedRect();
 
 private:
-	KisLayerSP m_parentLayer;
+	KisPaintDeviceSP m_parentLayer;
+	//KisColorSpaceAlphaSP m_alpha;
 #ifdef USE_ALPHA_MAP
 	KisColorSpaceAlphaSP m_alpha;
 #endif

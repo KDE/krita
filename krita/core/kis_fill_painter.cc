@@ -155,6 +155,8 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
 }
 
 void KisFillPainter::fillRect(const QRect& rc, KisIteratorInfiniteLinePixel src) {
+#if 0
+// FIXME: correct to use KisPAinterDevice functions
 	KisIteratorLinePixel lineIt(m_device, 0, rc.y(), rc.x(), rc.x() + rc.width() - 1);
 	KisIteratorLinePixel stopLine(m_device, 0, rc.y() + rc.height() - 1);
 	Q_INT32 depth = m_device -> depth();
@@ -177,6 +179,7 @@ void KisFillPainter::fillRect(const QRect& rc, KisIteratorInfiniteLinePixel src)
 		++lineIt;
 		delete srcLine;
 	}
+#endif
 }
 
 // flood filling
@@ -212,7 +215,9 @@ void KisFillPainter::fillPattern(int startX, int startY) {
 }
 
 void KisFillPainter::genericFillStart(int startX, int startY) {
-	KisLayerSP lay = dynamic_cast<KisLayer*>(m_device.data());
+#if 0
+// FIXME: correct to use KisPAinterDevice functions
+	KisPaintDeviceSP lay = m_device.data();
 	Q_ASSERT(lay); // XXX: isn't this too agressive? maybe just a return; ?
 
 	m_layer = lay;
@@ -234,6 +239,7 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 
 		delete m_oldColor;
 	}
+#endif
 }
 
 void KisFillPainter::genericFillEnd(KisLayerSP filled) {
@@ -257,6 +263,9 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
 }
 
 void KisFillPainter::floodLine(int x, int y) {
+#if 0
+// FIXME: correct to use KisPAinterDevice functions
+
 	int mostRight, mostLeft = x;
 	
 	KisIteratorLinePixel lineIt = m_layer->iteratorPixelSelectionBegin( 0, x, -1, y);
@@ -293,9 +302,13 @@ void KisFillPainter::floodLine(int x, int y) {
 		if (y < m_layer->height() - 1 && !m_map[(y+1)*m_device -> width() + i])
 			floodLine(i, y+1);
 	}
+#endif
 }
 
 int KisFillPainter::floodSegment(int x, int y, int most, KisIteratorPixel* it, KisIteratorPixel* lastPixel, Direction d) {
+#if 0
+// FIXME: correct to use KisPAinterDevice functions
+
 	bool stop = false;
 	QUANTUM diff;
 
@@ -319,6 +332,7 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisIteratorPixel* it, K
 	}
 	
 	return most;
+	#endif
 }
 
 /* RGB-only I fear */

@@ -275,11 +275,36 @@ public:
 	KisIteratorLinePixel iteratorPixelSelectionEnd(KisTileCommand* command);
 	KisIteratorLinePixel iteratorPixelSelectionEnd(KisTileCommand* command, Q_INT32 xpos, Q_INT32 xend, Q_INT32 yend);
 
+	// Selection stuff. XXX: is it necessary to make the actual
+	// selection object available outside the layer? YYY: yes, so
+	// selection tools can act on it.
+
+	/** Get the current selection or create one if this layers hasn't got a selection yet. */
+	KisSelectionSP selection();
+
+	/** Set the specified selection object as the active selection for this layer */
+	void setSelection(KisSelectionSP selection);
+
+	/** Adds the specified selection to the currently active selection for this layer */
+	void addSelection(KisSelectionSP selection);
+
+	/** Subtracts the specified selection from the currently active selection for this layer */
+	void subtractSelection(KisSelectionSP selection);
+
+	/** Whether there is a valid selection for this layer. */
+	bool hasSelection();
+
+	/** Removes the current selection for this layer. */
+	void removeSelection();
+
+
 signals:
 
         void visibilityChanged(KisPaintDeviceSP device);
         void positionChanged(KisPaintDeviceSP device);
         void ioProgress(Q_INT8 percentage);
+	void selectionChanged();
+	void selectionCreated();
 
 protected:
         void setWidth(Q_INT32 w);
@@ -306,8 +331,14 @@ private:
 	KisStrategyColorSpaceSP m_colorStrategy; 
 	KisProfileSP m_profile;
 
-        void accept(KisScaleVisitor &);
-        void accept(KisRotateVisitor &);
+	void accept(KisScaleVisitor &);
+	void accept(KisRotateVisitor &);
+
+	// Whether there is a selection valid for this layer
+	bool m_hasSelection;
+	// Contains the actual selection. For now, there can be only
+	// one selection per layer. XXX: is this a limitation? 
+	KisSelectionSP m_selection;
         
 };
 

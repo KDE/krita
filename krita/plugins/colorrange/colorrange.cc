@@ -86,7 +86,7 @@ void ColorRange::slotActivated()
 	DlgColorRange * dlgColorRange = new DlgColorRange(m_view, "ColorRange");
 
 	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
-	KisSelectionSP selection = new KisSelection(layer, "colorrange");
+	KisSelectionSP selection = new KisSelection(KisPaintDeviceSP(layer.data()), "colorrange");
 
 	dlgColorRange -> setLayer(layer);
 	dlgColorRange -> setSelection(selection);

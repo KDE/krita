@@ -33,7 +33,7 @@
 #include "kis_iterators_pixel.h"
 
 
-KisSelection::KisSelection(KisLayerSP layer, const QString& name)
+KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name) 
  	: super(layer -> width(),
 		layer -> height(),
 #if USE_ALPHA_MAP
@@ -54,8 +54,8 @@ KisSelection::KisSelection(KisLayerSP layer, const QString& name)
 // 	kdDebug() << "Selection created with compositeOp " << compositeOp() << "\n";
 }
 
-KisSelection::KisSelection(KisLayerSP layer, const QString& name, KoColor color)
-	: super(layer -> width(),
+KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name, KoColor color) 
+ 	: super(layer -> width(),
 		layer -> height(),
 		layer -> colorStrategy(),
 		name)

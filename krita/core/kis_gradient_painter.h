@@ -75,6 +75,7 @@ public:
 	};
 
 	void setGradient(KisGradient& gradient) { m_gradient = &gradient; }
+	void setGradient(KisGradient* gradient) { m_gradient = gradient; }
 
 	bool paintGradient(const KisPoint& gradientVectorStart,
 			   const KisPoint& gradientVectorEnd,

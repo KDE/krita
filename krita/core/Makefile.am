@@ -58,6 +58,8 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_iterators.cc \
 	kis_iterators_quantum.cc \
 	kis_iterators_pixel.cc \
+	kis_iterators_pixel_no_mask.cc \
+	kis_iterators_pixel_mask.cc \
 	kis_iterators_infinite.cc \
 	kis_histogram.cc \
 	KRayonViewIface.cc \
@@ -71,8 +73,9 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_filter_registry.cc \
 	kis_selection_manager.cc \
 	kis_scale_visitor.cc \
-        kis_rotate_visitor.cc \
-        kis_cms.cc
+	kis_rotate_visitor.cc \
+	kis_cms.cc \
+	kis_quantum_operations.cc
 
 noinst_HEADERS = kis_paint_device.h \
 	kis_layer.h \
@@ -98,6 +101,8 @@ noinst_HEADERS = kis_paint_device.h \
 	kis_iterators.h \
 	kis_iterators_quantum.h \
 	kis_iterators_pixel.h \
+	kis_iterators_pixel_no_mask.h \
+	kis_iterators_pixel_mask.h \
 	kis_iterators_infinite.h \
 	kis_histogram.h \
 	kis_plugin_registry.h \
@@ -108,9 +113,11 @@ noinst_HEADERS = kis_paint_device.h \
 	kis_filter.h \
 	kis_filter_registry.h \
 	kis_selection_manager.h \
-        kis_scale_visitor.h \
-        kis_rotate_visitor.h \
-        kis_cms.h
+	kis_scale_visitor.h \
+	kis_rotate_visitor.h \
+	kis_cms.h \
+	kis_quantum_operations.h
+
 
 libkritacore_la_METASOURCES = AUTO
 libkritacore_la_LDFLAGS = $(all_libraries)

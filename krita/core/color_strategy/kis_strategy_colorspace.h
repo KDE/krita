@@ -98,7 +98,7 @@ public:
 	 * color strategy.
 	 */
 	virtual bool convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
-	
+// 	
 	/**
 	 * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
 	 * The pixels are supposed to be encoded in this color model.

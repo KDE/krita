@@ -35,9 +35,7 @@ static int numLayers = 0;
 KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorStrategy, const QString& name) 
 	: super(width, height, colorStrategy, name),
 	  m_opacity(OPACITY_OPAQUE),
-	  m_linked(false),
-	  m_hasSelection(false),
-	  m_selection(0)
+	  m_linked(false)
 {
 #if DEBUG_LAYERS
 	numLayers++;
@@ -48,10 +46,7 @@ KisLayer::KisLayer(Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorS
 KisLayer::KisLayer(KisImage *img, Q_INT32 width, Q_INT32 height, const QString& name, QUANTUM opacity)
 	: super(img, width, height, img -> colorStrategy(), name),
 	  m_opacity(opacity),
-	  m_linked(false),
-	  m_hasSelection(false),
-	  m_selection(0)
-
+	  m_linked(false)
 {
 #if DEBUG_LAYERS
 	numLayers++;
@@ -73,16 +68,15 @@ KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
 		m_dx = rhs.m_dx;
 		m_dy = rhs.m_dy;
 
-		m_selection = 0;
+/*		if (rhs.m_mask)
+			m_mask = new KisMask(*rhs.m_mask);*/
 	}
-	m_hasSelection = false;
 }
 
 KisLayer::KisLayer(KisTileMgrSP tm, KisImage *img, const QString& name, QUANTUM opacity) : 
 	super(tm, img, name),
 	m_opacity(opacity),
-	m_linked(false),
-	m_hasSelection(false)
+	m_linked(false)
 {
 #if DEBUG_LAYERS
 	numLayers++;
@@ -98,53 +92,25 @@ KisLayer::~KisLayer()
 #endif
 }
 
-KisSelectionSP KisLayer::selection(){
-	if (!m_hasSelection) {
-		m_selection = new KisSelection(this, "layer selection for: " + name());
-		m_selection -> clear(QRect(0, 0, width(), height()));
-		m_selection -> setVisible(true);
-		m_hasSelection = true;
-		emit selectionCreated();
-	}
-	return m_selection;
- 
-}
-
-void KisLayer::setSelection(KisSelectionSP selection)
-{
-	m_selection = selection;
-	m_hasSelection = true;
-	emit selectionChanged();
-
-}
-
-void KisLayer::addSelection(KisSelectionSP /*selection*/)
-{
-// 	m_selection = m_selection + selection;
-	emit selectionChanged();
-
-}
-
-void KisLayer::subtractSelection(KisSelectionSP /*selection*/)
-{
-// 	m_selection = m_selection - selection;
-	emit selectionChanged();
-
-}
-
-
-bool KisLayer::hasSelection()
-{
-	return m_hasSelection;
-}
-
-
-void KisLayer::removeSelection()
-{
-	m_selection = 0; // XXX: Does this automatically remove the selection due to the shared pointer?
-	m_hasSelection = false;
-	emit selectionChanged();
-}
+// KisMaskSP KisLayer::createMask(Q_INT32 )
+// {
+// 	return 0;
+// }
+// 
+// KisMaskSP KisLayer::addMask(KisMaskSP )
+// {
+// 	return 0;
+// }
+// 
+// void KisLayer::applyMask(Q_INT32 )
+// {
+// }
+// 
+// 
+// KisMaskSP KisLayer::mask() const
+// {
+// 	return 0;
+// }
 
 void KisLayer::translate(Q_INT32 x, Q_INT32 y)
 {
@@ -153,7 +119,11 @@ void KisLayer::translate(Q_INT32 x, Q_INT32 y)
 	m_dy = y;
 }
 
-	
+
+// void KisLayer::addAlpha()
+// {
+// }
+
 QUANTUM KisLayer::opacity() const
 {
 	return m_opacity;

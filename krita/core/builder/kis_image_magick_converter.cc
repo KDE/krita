@@ -26,6 +26,7 @@
 #include <qstring.h>
 
 #include <kdeversion.h>
+#include <kdebug.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -64,10 +65,11 @@ namespace {
 
 		for (j = 0; j < pd -> height; j++) {
 			for (i = 0; i < pd -> width; i++) {
-				pixel[PIXEL_RED] = pp -> red;
-				pixel[PIXEL_GREEN] = pp -> green;
-				pixel[PIXEL_BLUE] = pp -> blue;
-				pixel[PIXEL_ALPHA] = OPACITY_OPAQUE - pp -> opacity;
+				pixel[PIXEL_RED] = Downscale(pp -> red);
+				pixel[PIXEL_GREEN] = Downscale(pp -> green);
+				pixel[PIXEL_BLUE] = Downscale(pp -> blue);
+				pixel[PIXEL_ALPHA] = OPACITY_OPAQUE - Downscale(pp -> opacity);
+// 				kdDebug() << (int)pixel[PIXEL_ALPHA] << " " << (int)pixel[PIXEL_RED] << " " << pp -> red << " " <<  pp -> green << " " << pp -> blue << " " << MaxRGB << " " << pp -> opacity << " " << ( pp -> opacity * QUANTUM_MAX ) / MaxRGB << endl;
 				pixel += pd -> depth;
 				pp++;
 			}
@@ -86,7 +88,8 @@ namespace {
 				pp -> red = Upscale(pixel[PIXEL_RED]);
 				pp -> green = Upscale(pixel[PIXEL_GREEN]);
 				pp -> blue = Upscale(pixel[PIXEL_BLUE]);
-				pp -> opacity = OPACITY_OPAQUE - Upscale(pixel[PIXEL_ALPHA]);
+				pp -> opacity = Upscale(OPACITY_OPAQUE - pixel[PIXEL_ALPHA]);
+				kdDebug() << pp -> opacity << " " << pixel[PIXEL_ALPHA] << endl;
 				pixel += pd -> depth;
 				pp++;
 			}

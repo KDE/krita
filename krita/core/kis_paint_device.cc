@@ -36,6 +36,8 @@
 #include "kis_undo_adapter.h"
 #include "kis_iterators_quantum.h"
 #include "kis_iterators_pixel.h"
+#include "kis_iterators_pixel_no_mask.h"
+#include "kis_iterators_pixel_mask.h"
 #include "kis_scale_visitor.h"
 #include "kis_rotate_visitor.h"
 #include "kis_profile.h"
@@ -103,6 +105,8 @@ KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, KisStrategyColorSp
 	m_name = name;
 	m_compositeOp = COMPOSITE_OVER;
 	m_colorStrategy = colorStrategy;
+	m_hasSelection = false;
+	m_selection = 0;
 	m_profile = 0;
 }
 
@@ -127,6 +131,8 @@ KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImage *img, const QString& na
         m_owner = img;
         m_name = name;
         m_compositeOp = COMPOSITE_OVER;
+	m_hasSelection = false;
+		m_selection = 0;
 	m_profile = 0;
 	m_colorStrategy = img -> colorStrategy();
 }
@@ -152,6 +158,8 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs
                 m_name = rhs.m_name;
                 m_compositeOp = COMPOSITE_OVER;
 		m_colorStrategy = rhs.m_colorStrategy;
+		m_hasSelection = false;
+		m_selection = 0;
 		m_profile = rhs.m_profile;
         }
 }
@@ -186,6 +194,8 @@ void KisPaintDevice::configure(KisImage *image,
 	m_name = name;
 	m_compositeOp = compositeOp;
 	m_colorStrategy = colorStrategy;
+	m_hasSelection = false;
+		m_selection = 0;
 }
 
 
@@ -246,14 +256,24 @@ void KisPaintDevice::maskBounds(QRect *rc)
 
 void KisPaintDevice::init()
 {
+/*	m_visible = false;
+	m_quantumSize = 0;
+	m_offX = 0;
+	m_offY = 0;
+	m_offW = 0;
+	m_offH = 0;
+	m_x = 0;
+	m_y = 0;
         m_visible = false;
         m_offX = 0;
         m_offY = 0;
         m_offW = 0;
         m_offH = 0;
         m_x = 0;
-        m_y = 0;
+        m_y = 0;*/
 	m_colorStrategy = 0;
+	m_hasSelection = false;
+		m_selection = 0;
 }
 
 
@@ -735,82 +755,150 @@ QImage KisPaintDevice::convertToQImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 
 
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumBegin(KisTileCommand* command)
 {
-        return KisIteratorLineQuantum( this, command, 0);
+	return KisIteratorLineQuantum( this, command, 0);
 }
 
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
 {
-        return KisIteratorLineQuantum( this, command, ystart, xstart, xend);
+	return KisIteratorLineQuantum( this, command, ystart, xstart, xend);
 }
 
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumEnd(KisTileCommand* command)
 {
-        return KisIteratorLineQuantum( this, command, height() - 1);
+	return KisIteratorLineQuantum( this, command, height() - 1);
 }
 
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
 {
-        return KisIteratorLineQuantum( this, command, yend, xstart, xend);
+	return KisIteratorLineQuantum( this, command, yend, xstart, xend);
 }
 
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionBegin(KisTileCommand* command)
 {
-        return KisIteratorLineQuantum( this, command, 0);
+	return KisIteratorLineQuantum( this, command, 0);
 }
 
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
 {
-        return KisIteratorLineQuantum( this, command, ystart,  xstart, xend);
+	return KisIteratorLineQuantum( this, command, ystart,  xstart, xend);
 }
 
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionEnd(KisTileCommand* command)
 {
-        return KisIteratorLineQuantum( this, command, height() - 1);
+	return KisIteratorLineQuantum( this, command, height() - 1);
 }
 
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumSelectionEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
 {
-        return KisIteratorLineQuantum( this, command, yend, xstart, xend);
+	return KisIteratorLineQuantum( this, command, yend, xstart, xend);
 }
 
 KisIteratorLinePixel KisPaintDevice::iteratorPixelBegin(KisTileCommand* command)
 {
-        return KisIteratorLinePixel( this, command, 0);
+	return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, 0) );
 }
 
 KisIteratorLinePixel KisPaintDevice::iteratorPixelBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
 {
-        return KisIteratorLinePixel( this, command, ystart, xstart, xend);
+	return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, ystart, xstart, xend) );
 }
 
 KisIteratorLinePixel KisPaintDevice::iteratorPixelEnd(KisTileCommand* command)
 {
-        return KisIteratorLinePixel( this, command, height() - 1);
+	return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, height() - 1) );
 }
 
 KisIteratorLinePixel KisPaintDevice::iteratorPixelEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
 {
-        return KisIteratorLinePixel( this, command, yend, xstart, xend);
+	return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, yend, xstart, xend) );
 }
 
 KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionBegin(KisTileCommand* command)
 {
-        return KisIteratorLinePixel( this, command, 0);
+	if(hasSelection())
+	{
+		return KisIteratorLinePixel( new KisIteratorLinePixelMask( this, command, 0) );
+	} else {
+		return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, 0) );
+	}
 }
 
 KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionBegin(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 ystart)
 {
-        return KisIteratorLinePixel( this, command, ystart,  xstart, xend);
+	if(hasSelection())
+	{
+		return KisIteratorLinePixel( new KisIteratorLinePixelMask( this, command, ystart, xstart, xend) );
+	} else {
+		return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, ystart, xstart, xend) );
+	}
 }
 
 KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionEnd(KisTileCommand* command)
 {
-        return KisIteratorLinePixel( this, command, height() - 1);
+	if(hasSelection())
+	{
+		return KisIteratorLinePixel( new KisIteratorLinePixelMask( this, command, height() - 1) );
+	} else {
+		return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, height() - 1) );
+	}
 }
 
 KisIteratorLinePixel KisPaintDevice::iteratorPixelSelectionEnd(KisTileCommand* command, Q_INT32 xstart, Q_INT32 xend, Q_INT32 yend)
 {
-        return KisIteratorLinePixel( this, command, yend, xstart, xend);
+	if(hasSelection())
+	{
+		return KisIteratorLinePixel( new KisIteratorLinePixelMask( this, command, yend, xstart, xend) );
+	} else {
+		return KisIteratorLinePixel( new KisIteratorLinePixelNoMask( this, command, yend, xstart, xend) );
+	}
+}
+
+KisSelectionSP KisPaintDevice::selection(){
+	if (!m_hasSelection) {
+		m_selection = new KisSelection(this, "layer selection for: " + name());
+		m_selection -> clear(QRect(0, 0, width(), height()));
+		m_selection -> setVisible(true);
+		m_hasSelection = true;
+		emit selectionCreated();
+	}
+	return m_selection;
+ 
+}
+
+void KisPaintDevice::setSelection(KisSelectionSP selection)
+{
+	m_selection = selection;
+	m_hasSelection = true;
+	emit selectionChanged();
+
+}
+
+void KisPaintDevice::addSelection(KisSelectionSP /*selection*/)
+{
+// 	m_selection = m_selection + selection;
+	emit selectionChanged();
+
+}
+
+// void KisLayer::subtractSelection(KisSelectionSP /*selection*/)
+// {
+// // 	m_selection = m_selection - selection;
+// 	emit selectionChanged();
+// 
+// }
+
+
+bool KisPaintDevice::hasSelection()
+{
+	return m_hasSelection;
+}
+
+
+void KisPaintDevice::removeSelection()
+{
+	m_selection = 0; // XXX: Does this automatically remove the selection due to the shared pointer?
+	m_hasSelection = false;
+	emit selectionChanged();
 }
 
 

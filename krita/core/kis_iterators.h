@@ -29,6 +29,8 @@
 #include <kistile.h>
 #include <kistilemgr.h>
 #include <kdebug.h>
+#include "kis_quantum.h"
+#include "kis_pixel.h"
 
 /** 
  * These classe can be used to iterate over the pixel data in
@@ -61,11 +63,17 @@ public:
 	inline bool operator==(const KisIteratorUnit& __rhs) const;
 
 	//Data access operators
+	inline operator KisPixel();
+	inline KisPixel value();
+	inline KisPixelRO oldValue();
+	inline KisQuantum operator[](int index);
+
+	virtual ~KisIteratorUnit() {}
+
+protected:
 	inline operator QUANTUM () ;
 	inline operator QUANTUM*();
 	inline QUANTUM* oldQuantumValue();
-
-	virtual ~KisIteratorUnit() {}
 
 protected:
 	KisPaintDeviceSP m_device;
@@ -145,6 +153,25 @@ protected:
 	KisTileCommand* m_command;
 };
 
+inline KisPixelRO KisIteratorUnit::oldValue()
+{
+	return m_colorSpace -> toKisPixelRO( this->oldQuantumValue(), m_device -> profile());
+}
+
+inline KisIteratorUnit::operator KisPixel()
+{
+	return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile());
+}
+
+inline KisPixel KisIteratorUnit::value()
+{
+	return *this;
+}
+
+inline KisQuantum KisIteratorUnit::operator[](int index)
+{
+	return m_colorSpace -> toKisPixel((QUANTUM*)(*this), m_device -> profile())[index];
+}
 
 inline KisIteratorUnit& KisIteratorUnit::operator++()
 {

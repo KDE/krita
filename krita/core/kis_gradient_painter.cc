@@ -47,7 +47,6 @@
 #include "kis_iterators_pixel.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
 #include "kis_strategy_colorspace.h"
@@ -703,26 +702,24 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
 	if (!m_cancelRequested) {
 		KisLayer * l = dynamic_cast<KisLayer*>(m_device.data());
-		if (l -> hasSelection()) {
-			// apply mask...
-			KisSelectionSP selection = l -> selection();
-			for (int y = 0; y < layer -> height(); y++) {
-				for (int x = 0; x < layer -> width(); x++) {
-					KoColor c;
-					QUANTUM opacity;
-					layer -> pixel(x, y, &c, &opacity);
-					opacity = ((OPACITY_OPAQUE - selection -> selected(x, y)) * opacity) / QUANTUM_MAX;
-					layer -> setPixel(x, y, c, opacity); // XXX: we need a setOpacity in KisPaintDevice!
-					
+		if( l != 0)
+		{
+			if (l -> hasSelection()) {
+				// apply mask...
+				KisSelectionSP selection = l -> selection();
+				for (int y = 0; y < layer -> height(); y++) {
+					for (int x = 0; x < layer -> width(); x++) {
+						KoColor c;
+						QUANTUM opacity;
+						layer -> pixel(x, y, &c, &opacity);
+						opacity = ((OPACITY_OPAQUE - selection -> selected(x, y)) * opacity) / QUANTUM_MAX;
+						layer -> setPixel(x, y, c, opacity); // XXX: we need a setOpacity in KisPaintDevice!
+					}
 				}
 			}
-
-			
 		}
-
 		bitBlt(0, 0, m_compositeOp, layer.data(), m_opacity, 0, 0, layer -> width(), layer -> height());
 	}
-
 	delete shapeStrategy;
 
 	emit notifyProgressDone(this);

@@ -27,13 +27,15 @@
 #include "kis_pixel.h"
 #include "color_strategy/kis_strategy_colorspace.h"
 
+#if 1
+
 KisIteratorInfinitePixel::KisIteratorInfinitePixel(KisPaintDeviceSP plane , KisTileCommand* command, Q_INT32 nypos, Q_INT32 nxpos)
- : KisIteratorPixel ( plane, command, nypos % plane->height(), nxpos % plane->width() ),
+ : KisIteratorPixelNoMask ( plane, command, nypos % plane->height(), nxpos % plane->width() ),
    m_isPixel(false)
 { ; }
 
 KisIteratorInfinitePixel::KisIteratorInfinitePixel(KisStrategyColorSpaceSP s, KisPixel p)
- : KisIteratorPixel ( constructPixel(s, p) , 0, 0, 0 ),
+ : KisIteratorPixelNoMask ( constructPixel(s, p) , 0, 0, 0 ),
    m_isPixel(true)
 { ; }
 
@@ -43,16 +45,16 @@ KisIteratorInfinitePixel::~KisIteratorInfinitePixel() {
 }
 
 KisPaintDeviceSP KisIteratorInfinitePixel::constructPixel(KisStrategyColorSpaceSP s, KisPixel p) {
-	KisLayerSP l = new KisLayer(1, 1, s, "InfinitePixelIterator pixel");
+/*	KisLayerSP l = new KisLayer(1, 1, s, "InfinitePixelIterator pixel");
 	KisIteratorPixel it((KisPaintDeviceSP)l, 0, 0, 0);
 	KisPixel data = it;
 	for (int i = 0; i < l->depth(); i++)
 		data[i] = (QUANTUM) p[i]; // explicit (QUANTUM) cast to prevent weirdness
-	return (KisPaintDeviceSP)l;
+	return (KisPaintDeviceSP)l;*/
 }
 
 inline KisIteratorInfinitePixel& KisIteratorInfinitePixel::inc() {
-	Q_ASSERT( m_tile != 0 );
+/*	Q_ASSERT( m_tile != 0 );
 	if (m_isPixel)
 		return *this;
 	m_xintile+= m_inc;
@@ -67,10 +69,11 @@ inline KisIteratorInfinitePixel& KisIteratorInfinitePixel::inc() {
 		m_tileNeedRefreshRW = true;
 		m_oldTileNeedRefresh = true;
 	}
-	return *this;
+	return *this;*/
 }
 
 inline KisIteratorInfinitePixel& KisIteratorInfinitePixel::dec() {
+	#if 0
 	Q_ASSERT( m_tile != 0 );
 	if (m_isPixel)
 		return *this;
@@ -91,19 +94,20 @@ inline KisIteratorInfinitePixel& KisIteratorInfinitePixel::dec() {
 		m_oldTileNeedRefresh = true;
 	}
 	return *this;
+	#endif
 }
 
 KisIteratorInfiniteLinePixel::KisIteratorInfiniteLinePixel(KisPaintDeviceSP plane, KisTileCommand* command, Q_INT32 nypos, Q_INT32 nxstart) :
- KisIteratorLinePixel(plane, command, nypos % plane->height(),
+ KisIteratorLinePixelNoMask(plane, command, nypos % plane->height(),
 		(nxstart == -1) ? -1 : nxstart % plane->width(), -1) , m_plane(plane)
 { ; }
 
 KisIteratorPixel KisIteratorInfiniteLinePixel::operator*() {
-	return KisIteratorInfinitePixel( m_plane, m_command, m_ypos, m_xstart );
+	return KisIteratorPixel(new KisIteratorInfinitePixel( m_plane, m_command, m_ypos, m_xstart ));
 }
 
 KisIteratorInfiniteLinePixel::operator KisIteratorPixel*() {
-	return new KisIteratorInfinitePixel( m_plane, m_command, m_ypos, m_xstart );
+	return new KisIteratorPixel(new KisIteratorInfinitePixel( m_plane, m_command, m_ypos, m_xstart ) );
 }
 
 KisIteratorInfiniteLinePixel& KisIteratorInfiniteLinePixel::inc() {
@@ -121,6 +125,7 @@ KisIteratorInfiniteLinePixel& KisIteratorInfiniteLinePixel::dec() {
 }
 
 KisIteratorPixel KisIteratorInfiniteLinePixel::begin() {
-	return KisIteratorInfinitePixel( m_plane, m_command, m_ypos, m_xstart);
+	return KisIteratorPixel(new KisIteratorInfinitePixel( m_plane, m_command, m_ypos, m_xstart));
 }
 
+#endif

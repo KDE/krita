@@ -112,7 +112,7 @@ private:
 	int floodSegment(int x, int y, int most, KisIteratorPixel* it, KisIteratorPixel* lastPixel, Direction d);
 
 	KisSelectionSP m_selection;
-	KisLayerSP m_layer;
+	KisPaintDeviceSP m_layer;
 	QUANTUM* m_oldColor, *m_color;
 	int m_threshold;
 	bool* m_map;

@@ -39,28 +39,6 @@ public:
 
 public:
 
-	// Selection stuff. XXX: is it necessary to make the actual
-	// selection object available outside the layer? YYY: yes, so
-	// selection tools can act on it.
-
-	/** Get the current selection or create one if this layers hasn't got a selection yet. */
-	KisSelectionSP selection();
-
-	/** Set the specified selection object as the active selection for this layer */
-	void setSelection(KisSelectionSP selection);
-
-	/** Adds the specified selection to the currently active selection for this layer */
-	void addSelection(KisSelectionSP selection);
-
-	/** Subtracts the specified selection from the currently active selection for this layer */
-	void subtractSelection(KisSelectionSP selection);
-
-	/** Whether there is a valid selection for this layer. */
-	bool hasSelection();
-
-	/** Removes the current selection for this layer. */
-	void removeSelection();
-
 	void translate(Q_INT32 x, Q_INT32 y);
 
 	QUANTUM opacity() const;
@@ -68,11 +46,6 @@ public:
 
 	bool linked() const;
 	void setLinked(bool l);
-
-signals:
-
-	void selectionChanged();
-	void selectionCreated();
 
 private:
 	QUANTUM m_opacity;
@@ -82,13 +55,6 @@ private:
 	bool m_linked;
 	Q_INT32 m_dx;
 	Q_INT32 m_dy;
-
-	// Whether there is a selection valid for this layer
-	bool m_hasSelection;
-
-	// Contains the actual selection. For now, there can be only
-	// one selection per layer. XXX: is this a limitation? 
-	KisSelectionSP m_selection;
 
 };
 

@@ -90,7 +90,7 @@ void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	Q_INT32 depth = src->depth() - 1;
 	while( lineIt <= lastLine )
 	{
-		KisIteratorPixel quantumIt = *lineIt;
+		KisIteratorPixel quantumIt = lineIt.begin();
 		KisIteratorPixel dstQuantumIt = *dstLineIt;
 		KisIteratorPixel lastQuantum = lineIt.end();
 		while( quantumIt <= lastQuantum )

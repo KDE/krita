@@ -370,8 +370,7 @@ void KisSelectionManager::selectAll()
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
-
-	KisSelectionSP s = new KisSelection(layer, "layer selection for: " + layer -> name());
+	KisSelectionSP s = new KisSelection(KisPaintDeviceSP(layer.data()), "layer selection for: " + layer -> name());
 	s -> select(QRect(0, 0, layer -> width(), layer -> height()));
 	s -> setVisible(true);
 

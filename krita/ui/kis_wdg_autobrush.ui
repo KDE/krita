@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>KisWdgAutobrush</class>
 <widget class="QWidget">
     <property name="name">
@@ -11,9 +11,6 @@
             <width>401</width>
             <height>167</height>
         </rect>
-    </property>
-    <property name="caption">
-        <string>KisWdgAutobrush</string>
     </property>
     <grid>
         <property name="name">

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>WdgColorSettings</class>
 <widget class="QWidget">
     <property name="name">
@@ -273,9 +273,6 @@
                                     <property name="text">
                                         <string>&amp;Saturation</string>
                                     </property>
-                                    <property name="accel">
-                                        <string>Alt+S</string>
-                                    </property>
                                     <property name="toolTip" stdset="0">
                                         <string>Best for graphs and charts</string>
                                     </property>
@@ -298,9 +295,6 @@ intent.</string>
                                     <property name="text">
                                         <string>&amp;Absolute colorimetric</string>
                                     </property>
-                                    <property name="accel">
-                                        <string>Alt+A</string>
-                                    </property>
                                     <property name="toolTip" stdset="0">
                                         <string>Best for spot colours</string>
                                     </property>
@@ -320,9 +314,6 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
                                     <property name="text">
                                         <string>&amp;Relative colorimetric</string>
                                     </property>
-                                    <property name="accel">
-                                        <string>Alt+R</string>
-                                    </property>
                                     <property name="whatsThis" stdset="0">
                                         <string>Within and outside gamut; same as Absolute
 Colorimetric. White point changed to result in
@@ -339,9 +330,6 @@ intent.</string>
                                     </property>
                                     <property name="text">
                                         <string>&amp;Perceptual</string>
-                                    </property>
-                                    <property name="accel">
-                                        <string>Alt+P</string>
                                     </property>
                                     <property name="checked">
                                         <bool>true</bool>

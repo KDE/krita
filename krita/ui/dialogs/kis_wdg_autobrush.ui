@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>WdgNewImage</class>
 <widget class="QWidget">
     <property name="name">
@@ -68,9 +68,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Alpha channel</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
                     </property>
                 </widget>
                 <widget class="QComboBox" row="1" column="1">

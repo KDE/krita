@@ -13,7 +13,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 kde_module_LTLIBRARIES = kritascreenshot.la
 
 kritascreenshot_la_SOURCES = screenshot.cpp ksnapshot.cpp regiongrabber.cpp ksnapshotwidget.ui
-noinst_HEADERS = screenshot.h ksnapshot.h regiongrabber.h ksnapshotwidget.ui.h
+noinst_HEADERS = screenshot.h ksnapshot.h regiongrabber.h ksnapshotwidget.h
 
 kritascreenshot_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritascreenshot_la_LIBADD = $(LIB_KPARTS) $(LIB_KIO) $(LIB_KOFFICECORE)

@@ -164,9 +164,6 @@
                 <property name="text">
                     <string>&amp;Shadows</string>
                 </property>
-                <property name="accel">
-                    <string>Alt+S</string>
-                </property>
             </widget>
             <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="2">
                 <property name="name">
@@ -174,9 +171,6 @@
                 </property>
                 <property name="text">
                     <string>&amp;Midtones</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+M</string>
                 </property>
                 <property name="checked">
                     <bool>true</bool>
@@ -189,9 +183,6 @@
                 <property name="text">
                     <string>&amp;Highlights</string>
                 </property>
-                <property name="accel">
-                    <string>Alt+H</string>
-                </property>
             </widget>
             <widget class="QRadioButton" row="3" column="0" rowspan="1" colspan="2">
                 <property name="name">
@@ -200,9 +191,6 @@
                 <property name="text">
                     <string>&amp;Saturation</string>
                 </property>
-                <property name="accel">
-                    <string>Alt+S</string>
-                </property>
             </widget>
             <widget class="QCheckBox" row="6" column="0" rowspan="1" colspan="2">
                 <property name="name">
@@ -210,9 +198,6 @@
                 </property>
                 <property name="text">
                     <string>Show &amp;Clipping</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+C</string>
                 </property>
             </widget>
             <widget class="QSlider" row="5" column="0" rowspan="1" colspan="2">
@@ -264,9 +249,6 @@
                 <property name="text">
                     <string>&amp;Load...</string>
                 </property>
-                <property name="accel">
-                    <string>Alt+L</string>
-                </property>
             </widget>
             <widget class="QPushButton">
                 <property name="name">
@@ -274,9 +256,6 @@
                 </property>
                 <property name="text">
                     <string>&amp;Save...</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+S</string>
                 </property>
             </widget>
             <spacer>

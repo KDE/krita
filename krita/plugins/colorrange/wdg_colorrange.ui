@@ -72,9 +72,6 @@
                                     <property name="pixmap">
                                         <pixmap>image0</pixmap>
                                     </property>
-                                    <property name="accel">
-                                        <string></string>
-                                    </property>
                                 </widget>
                                 <widget class="QPushButton" row="2" column="0">
                                     <property name="name">
@@ -94,9 +91,6 @@
                                     <property name="pixmap">
                                         <pixmap>image1</pixmap>
                                     </property>
-                                    <property name="accel">
-                                        <string></string>
-                                    </property>
                                 </widget>
                                 <widget class="QPushButton" row="0" column="0" rowspan="1" colspan="3">
                                     <property name="name">
@@ -104,9 +98,6 @@
                                     </property>
                                     <property name="text">
                                         <string>Load...</string>
-                                    </property>
-                                    <property name="accel">
-                                        <string></string>
                                     </property>
                                 </widget>
                                 <widget class="QPushButton" row="2" column="2">
@@ -127,9 +118,6 @@
                                     <property name="pixmap">
                                         <pixmap>image2</pixmap>
                                     </property>
-                                    <property name="accel">
-                                        <string></string>
-                                    </property>
                                 </widget>
                                 <widget class="QPushButton" row="1" column="0" rowspan="1" colspan="3">
                                     <property name="name">
@@ -138,9 +126,6 @@
                                     <property name="text">
                                         <string>Save...</string>
                                     </property>
-                                    <property name="accel">
-                                        <string></string>
-                                    </property>
                                 </widget>
                                 <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="3">
                                     <property name="name">
@@ -148,9 +133,6 @@
                                     </property>
                                     <property name="text">
                                         <string>in&amp;Vert</string>
-                                    </property>
-                                    <property name="accel">
-                                        <string>Alt+V</string>
                                     </property>
                                 </widget>
                             </grid>
@@ -346,9 +328,6 @@
                             <property name="text">
                                 <string>&amp;Image</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+I</string>
-                            </property>
                             <property name="checked">
                                 <bool>true</bool>
                             </property>
@@ -428,9 +407,6 @@
                             </property>
                             <property name="text">
                                 <string>Se&amp;lection</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+L</string>
                             </property>
                         </widget>
                     </grid>

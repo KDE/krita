@@ -1,3 +1,4 @@
+
 /*
  *  kis_tool_select_brush.cc - part of Krita
  *
@@ -113,7 +114,7 @@ void KisToolSelectBrush::initPaint(const KisPoint & pos)
 		KisSelectionSP selection = layer -> selection();
 		m_painter = new KisPainter(selection.data());
 		m_painter -> beginTransaction(i18n("selectionbrush"));
-		m_painter -> setPaintColor(KoColor::white());
+		m_painter -> setPaintColor(KoColor::black());
 		m_painter -> setBrush(m_subject -> currentBrush());
 		m_painter -> setOpacity(OPACITY_TRANSPARENT);
 		m_painter -> setCompositeOp(COMPOSITE_OVER);
@@ -165,8 +166,8 @@ void KisToolSelectBrush::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Selectbrush"),
-					    "selectbrush", 0, this,
+		m_action = new KRadioAction(i18n("Tool &Brush Select"),
+					    "selectbrush", Qt::Key_B, this,
 					    SLOT(activate()), collection,
 					    name());
 		m_action -> setExclusiveGroup("selection_tools");

@@ -446,8 +446,8 @@ void KisToolStamp::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Stamp (Pattern) Tool"),
-					    "stamp", 0, this, 
+		m_action = new KRadioAction(i18n("Tool &Stamp (Pattern)"),
+					    "stamp", Qt::SHIFT+Qt::Key_S, this, 
 					    SLOT(activate()), collection,
 					    name());
 		m_action -> setExclusiveGroup("tools");

@@ -19,11 +19,13 @@
 #define KIS_FLATTEN_H_
 
 #include <qrect.h>
+
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
 #include "kis_layer.h"
+#include "kis_selection.h"
 #include "kis_floatingselection.h"
 
 struct flattenAll {
@@ -95,6 +97,12 @@ public:
 	virtual bool visit(KisPainter& gc, KisLayerSP layer)
 	{
 		visit(gc, layer.data(), layer -> opacity());
+		return true; 
+	}
+
+	virtual bool visit(KisPainter& gc, KisSelectionSP selection)
+	{
+		visit(gc, selection.data(), OPACITY_OPAQUE / 2);
 		return true; 
 	}
 

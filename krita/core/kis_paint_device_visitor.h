@@ -23,6 +23,7 @@
 #include "kis_paint_device.h"
 #include "kis_layer.h"
 #include "kis_floatingselection.h"
+#include "kis_selection.h"
 
 class KisPaintDeviceVisitor {
 public:
@@ -34,6 +35,7 @@ public:
 	virtual bool visit(KisPainter& gc, KisPaintDeviceSP dev) = 0;
 	virtual bool visit(KisPainter& gc, vKisLayerSP& layers) = 0;
 	virtual bool visit(KisPainter& gc, KisLayerSP layer) = 0;
+	virtual bool visit(KisPainter& gc, KisSelectionSP selection) = 0;
 	virtual bool visit(KisPainter& gc, KisFloatingSelectionSP selection) = 0;
 
 public:
@@ -41,6 +43,7 @@ public:
 	bool operator()(KisPainter& gc, KisPaintDeviceSP dev);
 	bool operator()(KisPainter& gc, vKisLayerSP& layers);
 	bool operator()(KisPainter& gc, KisLayerSP layer);
+	bool operator()(KisPainter& gc, KisSelectionSP selection);
 	bool operator()(KisPainter& gc, KisFloatingSelectionSP selection);
 };
 
@@ -77,6 +80,13 @@ bool KisPaintDeviceVisitor::operator()(KisPainter& gc, KisLayerSP layer)
 {
 	return visit(gc, layer);
 }
+
+inline
+bool KisPaintDeviceVisitor::operator()(KisPainter& gc, KisSelectionSP selection)
+{
+	return visit(gc, selection);
+}
+
 
 inline
 bool KisPaintDeviceVisitor::operator()(KisPainter& gc, KisFloatingSelectionSP selection)

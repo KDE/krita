@@ -82,7 +82,7 @@ void KisToolBrush::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Brush"),
+		m_action = new KRadioAction(i18n("Tool &Brush"),
 					    "paintbrush", 0, this,
 					    SLOT(activate()), collection,
 					    name());

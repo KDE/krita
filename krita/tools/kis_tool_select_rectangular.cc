@@ -245,9 +245,9 @@ void KisToolSelectRectangular::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Rectangular Select"), 
+		m_action = new KRadioAction(i18n("Tool &Rectangular Select"), 
 					    "rectangular", 
-					    0, 
+					    Qt::Key_R, 
 					    this,
 					    SLOT(activate()), 
 					    collection, 

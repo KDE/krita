@@ -98,8 +98,8 @@ QUANTUM KisToolFill::difference(QUANTUM* src, KisPixelRepresentation dst, QUANTU
 {
 	QUANTUM max = 0, diff = 0;
 	for (int i = 0; i < depth; i++) {
-// 		diff = QABS(src[i] - dst[i]);
-		diff = QABS(src[i] - (*(reinterpret_cast<QUANTUM**>(&dst)))[i]); // Hack, see mailing list.
+ 		diff = QABS(src[i] - dst[i]);
+//		diff = QABS(src[i] - (*(reinterpret_cast<QUANTUM**>(&dst)))[i]); // Hack, see mailing list.
 		if (diff > max)
 			max = diff;
 	}
@@ -181,7 +181,7 @@ void KisToolFill::buttonPress(KisButtonPressEvent *e)
 	if (!m_subject) return;
 	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 	if (e->button() != QMouseEvent::LeftButton) return;
-
+	
 	flood(e -> pos().floorX(), e -> pos().floorY());
 	notifyModified();
 }
@@ -233,9 +233,9 @@ void KisToolFill::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Filler Tool"), 
+		m_action = new KRadioAction(i18n("Tool &Fill"), 
 					    "fill",
-					    0, 
+					    Qt::Key_F, 
 					    this, 
 					    SLOT(activate()),
 					    collection,

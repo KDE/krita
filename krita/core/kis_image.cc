@@ -58,7 +58,7 @@ namespace {
 
 	// Whether to repaint the display every
 	// DISPLAY_UPDATE_FREQUENCY milliseconds
-	const bool DISPLAY_TIMER = true;
+	const bool DISPLAY_TIMER = false;
 	const int DISPLAY_UPDATE_FREQUENCY = 50; // in milliseconds
 
 	class KisResizeImageCmd : public KNamedCommand {
@@ -1227,6 +1227,11 @@ void KisImage::renderToProjection(Q_INT32 tileno)
 
 		visitor(gc, m_layers);
 
+		if (m_activeLayer -> hasSelection()) {
+			kdDebug() << "The active layer has a selection, and we're going to CRASH!\n";
+			KisSelectionSP s = m_activeLayer -> selection();
+			visitor(gc, s);
+		}
 		if (m_selection)
 			visitor(gc, m_selection);
 	}

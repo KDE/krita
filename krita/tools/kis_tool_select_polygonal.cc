@@ -304,7 +304,7 @@ void KisToolSelectPolygonal::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Polygonal Select"),
+		m_action = new KRadioAction(i18n("Tool &Polygonal Select"),
 					    "polygonal" , 
 					    0, 
 					    this, 

@@ -228,9 +228,9 @@ void KisToolColorChanger::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("Color Changer"), 
+		m_action = new KRadioAction(i18n("Tool Color Changer"), 
 					    "colorize", 
-					    0, 
+					    Qt::Key_Q, 
 					    this, 
 					    SLOT(activate()), 
 					    collection, 

@@ -127,10 +127,11 @@ KisSelectionSP KisLayer::selection(){
 	if (!m_hasSelection) {
 		m_selection = new KisSelection(this, "layer selection for: " + name());
 		KisPainter gc(m_selection.data());
-		gc.fillRect(0, 0, width(), height(), KoColor::black(), OPACITY_OPAQUE / 2);
+		gc.fillRect(0, 0, width(), height(), KoColor::black(), OPACITY_OPAQUE);
 		gc.end();
 		m_selection -> setVisible(true);
 		m_hasSelection = true;
+		update();
 	}
 
 	return m_selection;

@@ -134,9 +134,9 @@ void KisToolPaste::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Paste Tool"), 
+		m_action = new KRadioAction(i18n("Tool &Paste"), 
 					    "editpaste", 
-					    0, 
+					    Qt::CTRL+Qt::Key_V, 
 					    this, 
 					    SLOT(activate()), 
 					    collection, 

@@ -18,8 +18,6 @@
 #if !defined KIS_SELECTION_H_
 #define KIS_SELECTION_H_
 
-#include <qimage.h>
-
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
@@ -38,7 +36,6 @@
  */
 class KisSelection : public KisPaintDevice {
 
-	Q_OBJECT
 	typedef KisPaintDevice super;
 
 public:

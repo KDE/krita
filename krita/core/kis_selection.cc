@@ -72,5 +72,3 @@ void KisSelection::reset()
 {
 // 	m_mask.fill(NOT_SELECTED);
 }
-
-#include "kis_selection.moc"

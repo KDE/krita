@@ -146,9 +146,11 @@ void KisToolEllipse::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Ellipse Tool"),
+		KShortcut shortcut(Qt::Key_Plus);
+		shortcut.append(KShortcut(Qt::Key_F7));
+		m_action = new KRadioAction(i18n("Tool &Ellipse"),
 					    "ellipse",
-					    0,
+					    shortcut,
 					    this,
 					    SLOT(activate()),
 					    collection,

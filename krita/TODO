@@ -22,7 +22,7 @@ Core
 	* Mask layers
 	* Loading and saving of selections
 	* Painting of gradients
-        * loading Gimp gradients
+        X loading Gimp gradients
 	* Fill with pattern (#Bart)
 	* Non-rectangular fill (#Bart)
 	* Load/save configuration of everything user-settable.
@@ -34,7 +34,7 @@ Core
 	  layout of photoshop's toolbox for minimum confusability.
         * Rework iterators to allow iterating over pixels (#Cyrillle, Casper)
         * Auto-extending layers (#Casper)
-        * Code cleanup (make naming conformant to Qt) (#Dirk)
+        X Code cleanup (make naming conformant to Qt) (#Dirk)
 
 User Interface
 	

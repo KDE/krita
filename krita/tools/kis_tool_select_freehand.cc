@@ -292,9 +292,9 @@ void KisToolSelectFreehand::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Freehand Select"), 
+		m_action = new KRadioAction(i18n("Tool &Freehand Select"), 
 					    "freehand", 
-					    0, 
+					    Qt::Key_K, 
 					    this,  
 					    SLOT(activate()),
 					    collection, 

@@ -26,6 +26,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_floatingselection.h"
+#include "kis_selection.h"
 
 struct All {
 	const bool operator()(const KisPaintDeviceSP) const
@@ -139,6 +140,15 @@ public:
 
 		return true;
 	}
+
+
+
+	virtual bool visit(KisPainter&, KisSelectionSP)
+	{
+		return false;
+	}
+
+	// The laye
 
 	virtual bool visit(KisPainter&, KisFloatingSelectionSP)
 	{

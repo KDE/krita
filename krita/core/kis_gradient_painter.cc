@@ -535,24 +535,27 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 	KisLayerSP layer = new KisLayer( m_device -> colorStrategy(), "gradient");
 	KisPainter painter(layer);
 
-	int totalPixels = width * height;
+	//If the device has a selection only iterate of that selection
+	if( m_device -> hasSelection() )
+		m_device -> selection() -> extent(startx, starty, width, height);
 
-	if (antiAliasThreshold < 1 - DBL_EPSILON) {
-		totalPixels *= 2;
-	}
+	Q_INT32 endx = startx + width - 1;
+	Q_INT32 endy = starty + height - 1;
 
 	int pixelsProcessed = 0;
 	int lastProgressPercent = 0;
 
 	emit notifyProgressStage(this, i18n("Rendering gradient..."), 0);
 
-	//If the device has a selection only iterate of that selection
-	if( m_device -> hasSelection() )
-		m_device -> selection() -> extent( startx, starty, width, height);
+	int totalPixels = width * height;
 
-	for (int y = starty; y < height; y++) {
-		KisHLineIterator iter = layer -> createHLineIterator( startx, y, width, true);
-		for (int x = 0; x < width; x++) {
+	if (antiAliasThreshold < 1 - DBL_EPSILON) {
+		totalPixels *= 2;
+	}
+
+	for (int y = starty; y <= endy; y++) {
+		KisHLineIterator iter = layer -> createHLineIterator(startx, y, width, true);
+		for (int x = startx; x <= endx; x++) {
 
 			double t = shapeStrategy -> valueAt( x, y);
 			t = repeatStrategy -> valueAt(t);
@@ -591,10 +594,9 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
 		emit notifyProgressStage(this, i18n("Anti-aliasing gradient..."), lastProgressPercent);
 
-
-		for (int y = starty; y < height; y++) {
-			KisHLineIterator iter = layer -> createHLineIterator( startx, y, width, true);
-			for (int x = startx; x < width; x++) {
+		for (int y = starty; y <= endy; y++) {
+			KisHLineIterator iter = layer -> createHLineIterator(startx, y, width, true);
+			for (int x = startx; x <= endx; x++) {
 
 				double maxDistance = 0;
 
@@ -610,7 +612,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 							int sampleX = x + xOffset;
 							int sampleY = y + yOffset;
 
-							if (sampleX >= startx && sampleX < width && sampleY >= starty && sampleY < height) {
+							if (sampleX >= startx && sampleX <= endx && sampleY >= starty && sampleY <= endy) {
 								QColor color;
 								QUANTUM opacity;
 
@@ -620,7 +622,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 								double dGreen = (color.green() * opacity - thisPixel.green() * thisPixelOpacity) / 65535.0;
 								double dBlue = (color.blue() * opacity - thisPixel.blue() * thisPixelOpacity) / 65535.0;
 
-#define SQRT_3 1.7320508
+								#define SQRT_3 1.7320508
 
 								double distance = sqrt(dRed * dRed + dGreen * dGreen + dBlue * dBlue) / SQRT_3;
 
@@ -699,7 +701,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 	}
 
 	if (!m_cancelRequested) {
-		bltSelection(startx, starty, m_compositeOp, layer.data(), m_opacity, 0, 0, width, height);
+		bltSelection(startx, starty, m_compositeOp, layer.data(), m_opacity, startx, starty, width, height);
 	}
 	delete shapeStrategy;
 

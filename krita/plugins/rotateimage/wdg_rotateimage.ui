@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WdgRotateImage</class>
 <widget class="QWidget">
     <property name="name">
@@ -46,10 +46,10 @@
                         <cstring>intAngle</cstring>
                     </property>
                     <property name="minValue">
-                        <number>0</number>
+                        <number>-45</number>
                     </property>
                     <property name="maxValue">
-                        <number>359</number>
+                        <number>45</number>
                     </property>
                 </widget>
             </grid>

@@ -431,24 +431,40 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 
 void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress) 
 {
-	//kdDebug() << "KisImage::rotate. ANGLE: " 
-	//	  << angle
-	//	  << "\n";
-
+	
+        const double pi=3.1415926535897932385;
 
 	if (m_layers.empty()) return; // Nothing to scale
+        Q_INT32 w, h;
+        //width after performing a shear along the x-axis by tan(theta/2)
+        w = width() + QABS(height()*tan(angle*pi/360));
+        //height after performing a shear along the y-axis by sin(theta)
+        h = height() + QABS(width()*sin(angle*pi/180));
+        //width after performing another shear along the x-axis by tan(theta/2)        
+	w = w + QABS(height()*tan(angle*pi/360));
+        
+	if (w != width() || h != height()) {
 
-        //fix undo
-	undoAdapter()->beginMacro("Rotate image");
-	
-	vKisLayerSP_it it;
-	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-		KisLayerSP layer = (*it);
-		layer -> rotate(angle, m_progress);
+		undoAdapter() -> beginMacro("Rotate image");
+
+		vKisLayerSP_it it;
+		for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
+			KisLayerSP layer = (*it);
+			layer -> rotate(angle, m_progress);
+		}
+
+		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
+		
+		m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
+		m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
+
+		m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
+		m_bkg = new KisBackground(this, w, h);
+
+		undoAdapter()->endMacro();
+
+		emit sizeChanged(KisImageSP(this), w, h);
 	}
-
-	undoAdapter()->endMacro();
-
 }
 
 void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress) 

@@ -158,20 +158,20 @@ void KisView::setupSideBar()
 {
 	m_sideBar = new KisSideBar(this, "kis_sidebar");
 
-	m_crayonChooser = new KisItemChooser(KisFactory::rServer() -> brushes(), m_sideBar -> dockFrame(), "crayon_chooser");
+	m_crayonChooser = new KisItemChooser(KisFactory::rServer() -> brushes(), false, m_sideBar -> dockFrame(), "crayon_chooser");
 	m_crayonChooser -> addItem(KisFactory::rServer() -> patterns());
 //	m_pKrayon = m_crayonChooser -> currentKrayon();
 	QObject::connect(m_crayonChooser, SIGNAL(selected(KoIconItem*)), this, SLOT(setActiveCrayon(KoIconItem*)));
 	m_crayonChooser -> setCaption(i18n("Crayons"));
 	m_sideBar -> plug(m_crayonChooser);
 
-	m_brushChooser = new KisItemChooser(KisFactory::rServer() -> brushes(), m_sideBar -> dockFrame(), "brush_chooser");
+	m_brushChooser = new KisItemChooser(KisFactory::rServer() -> brushes(), true, m_sideBar -> dockFrame(), "brush_chooser");
 	m_brush = dynamic_cast<KisBrush*>(m_brushChooser -> currentItem());
 	QObject::connect(m_brushChooser, SIGNAL(selected(KoIconItem*)), this, SLOT(setActiveBrush(KoIconItem*)));
 	m_brushChooser -> setCaption(i18n("Brushes"));
 	m_sideBar -> plug(m_brushChooser);
 
-	m_patternChooser = new KisItemChooser(KisFactory::rServer() -> patterns(), m_sideBar -> dockFrame(), "pattern_chooser");
+	m_patternChooser = new KisItemChooser(KisFactory::rServer() -> patterns(), true, m_sideBar -> dockFrame(), "pattern_chooser");
 //	m_pPattern = m_patternChooser -> currentPattern();
 	QObject::connect(m_patternChooser, SIGNAL(selected(KoIconItem*)), this, SLOT(setActivePattern(KoIconItem*)));
 	m_patternChooser -> setCaption(i18n("Patterns"));

@@ -1,4 +1,4 @@
 dnl Don't compile krita when ImageMagick isn't available (for now)
-dnl if test -z "$LIBMAGICK_LIBS"; then
+if test -z "$LIBMAGICK_LIBS"; then
   DO_NOT_COMPILE="$DO_NOT_COMPILE krita"
-dnl fi
+fi

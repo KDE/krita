@@ -172,6 +172,7 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 	}
 
 	m_size = m_width * m_height;
+	m_cancelRequested = false;
 
 	if (lay -> hasSelection()) {
 		m_selection = lay -> selection();
@@ -188,13 +189,12 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 			m_oldColor[i] = pixel[i];
 		}
 
-		m_cancelRequested = false;
 		m_currentPercent = 0;
 		m_pixelsDone = 0;
 		m_map = new bool[m_size];
 		for (int i = 0; i < m_size; i++)
 			m_map[i] = false;
-		m_size*=2;
+
 		emit notifyProgressStage(this, i18n("Making fill outline..."), 0);
 		floodLine(startX, startY);
 		delete m_map;
@@ -208,40 +208,16 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
         m_width = m_height = -1;
 		return;
     }
-	// use the selection as mask over our fill
-    for (int y = 0; y < m_height; y++) {
-	    KisHLineIteratorPixel line = filled->createHLineIterator(0, y, m_width, true);
-	    KisHLineIteratorPixel selectionIt = m_selection->createHLineIterator(0, y, m_width, true);
 
-	    QUANTUM selectionOpacity;
-	    QColor notUsed;
-
-	    while(! line.isDone()) {
-		    QColor c;
-		    QUANTUM opacity;
-		    filled -> colorStrategy() -> toQColor(line.rawData(), &c, &opacity, 0);
-		    m_selection -> colorStrategy() -> toQColor(selectionIt.rawData(),
-							       &notUsed, &selectionOpacity, 0);
-		    opacity = (selectionOpacity * opacity) / QUANTUM_MAX;
-		    filled -> colorStrategy() -> nativeColor(c, opacity, line.rawData(), 0);
-		    ++m_pixelsDone;
-		    ++line;
-		    ++selectionIt;
-	    }
-	    int progressPercent = (m_pixelsDone * 100) / m_size;
-	    if (progressPercent > m_currentPercent) {
-		    emit notifyProgress(this, progressPercent);
-		    m_currentPercent = progressPercent;
-
-		    if (m_cancelRequested) {
-			    m_width = m_height = -1;
-			    return;
-		    }
-	    }
-    }
-
-    bitBlt(0, 0, m_compositeOp, filled.data(), m_opacity, 0, 0,
-	   m_width, m_height);
+	if (! m_device -> hasSelection() ) {
+		m_device -> setSelection(m_selection);
+		bltSelection(0, 0, m_compositeOp, filled.data(), m_opacity,
+					 0, 0, m_width, m_height);
+		m_device -> removeSelection();
+	} else {
+		bltSelection(0, 0, m_compositeOp, filled.data(), m_opacity,
+					 0, 0, m_width, m_height);
+	}
 
     emit notifyProgressDone(this);
 

@@ -965,7 +965,17 @@ QPixmap KisImage::pixmap()
 void KisImage::setSelection(KisSelectionSP selection)
 {
 	if (m_selection != selection) {
+		QRect rc;
+
+		if (m_selection)
+			rc = m_selection -> bounds();
+		
 		m_selection = selection;
+
+		if (m_selection)
+			rc |= m_selection -> bounds();
+
+		invalidate(rc);
 		emit selectionChanged(this);
 	}
 }

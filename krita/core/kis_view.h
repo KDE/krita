@@ -126,6 +126,7 @@ private:
 	void clearCanvas(const QRect& rc);
 	void connectCurrentImg() const;
 	void disconnectCurrentImg() const;
+	void fillSelection(const KoColor& c, QUANTUM opacity);
 	Q_INT32 horzValue() const;
 	void layerUpdateGUI(bool enable);
 	void selectionUpdateGUI(bool enable);
@@ -146,6 +147,8 @@ private slots:
 	void copy();
 	void cut();
 	void removeSelection();
+	void fillSelectionBg();
+	void fillSelectionFg();
 	void paste();
 	void crop();
 	void selectAll();
@@ -230,7 +233,15 @@ private:
 	KAction *m_layerProperties;
 	KAction *m_layerNext;
 	KAction *m_layerPrev;
+	KAction *m_selectionCut;
+	KAction *m_selectionCopy;
+	KAction *m_selectionPaste;
+	KAction *m_selectionCrop;
+	KAction *m_selectionFillBg;
+	KAction *m_selectionFillFg;
 	KAction *m_selectionRm;
+	KAction *m_selectionSelectAll;
+	KAction *m_selectionSelectNone;
 	KToggleAction *m_sidebarToggle; 
 	KToggleAction *m_floatsidebarToggle; 
 	KToggleAction *m_lsidebarToggle;

@@ -95,7 +95,15 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_layerProperties = 0;
 	m_layerNext = 0;
 	m_layerPrev = 0;
+	m_selectionCut = 0;
+	m_selectionCopy = 0;
+	m_selectionPaste = 0;
+	m_selectionCrop = 0;
+	m_selectionFillBg = 0;
+	m_selectionFillFg = 0;
 	m_selectionRm = 0;
+	m_selectionSelectAll = 0;
+	m_selectionSelectNone = 0;
 	m_sidebarToggle = 0;
 	m_floatsidebarToggle  = 0;
 	m_lsidebarToggle = 0;
@@ -283,13 +291,15 @@ void KisView::setupActions()
 	(void)new KAction(i18n("Reset Button"), "stop", 0, this, SLOT(reset()), actionCollection(), "panic_button");
 
 	// selection actions
-	(void)KStdAction::cut(this, SLOT(cut()), actionCollection(), "cut");
-	(void)KStdAction::copy(this, SLOT(copy()), actionCollection(), "copy");
-	(void)KStdAction::paste(this, SLOT(paste()), actionCollection(), "paste_special");
+	m_selectionCut = KStdAction::cut(this, SLOT(cut()), actionCollection(), "cut");
+	m_selectionCopy = KStdAction::copy(this, SLOT(copy()), actionCollection(), "copy");
+	m_selectionPaste = KStdAction::paste(this, SLOT(paste()), actionCollection(), "paste_special");
 	m_selectionRm = new KAction(i18n("Remove Selection"), "remove", 0, this, SLOT(removeSelection()), actionCollection(), "remove");
-	(void)new KAction(i18n("Copy Selection to New Layer"), "crop", 0,  this, SLOT(crop()), actionCollection(), "crop");
-	(void)KStdAction::selectAll(this, SLOT(selectAll()), actionCollection(), "select_all");
-	(void)new KAction(i18n("Select None"), 0, this, SLOT(unSelectAll()), actionCollection(), "select_none");
+	m_selectionCrop = new KAction(i18n("Copy Selection to New Layer"), "crop", 0,  this, SLOT(crop()), actionCollection(), "crop");
+	m_selectionSelectAll = KStdAction::selectAll(this, SLOT(selectAll()), actionCollection(), "select_all");
+	m_selectionSelectNone = new KAction(i18n("Select None"), 0, this, SLOT(unSelectAll()), actionCollection(), "select_none");
+	m_selectionFillFg = new KAction(i18n("Fill with Foreground Color"), 0, this, SLOT(fillSelectionFg()), actionCollection(), "fill_fgcolor");
+	m_selectionFillBg = new KAction(i18n("Fill with Background Color"), 0, this, SLOT(fillSelectionBg()), actionCollection(), "fill_bgcolor");
 
 	// import/export actions
 	(void)new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
@@ -661,28 +671,21 @@ void KisView::layerUpdateGUI(bool enable)
 
 void KisView::selectionUpdateGUI(bool enable)
 {
+	m_selectionCut -> setEnabled(enable);
+	m_selectionCopy -> setEnabled(enable);
+	m_selectionPaste -> setEnabled(currentImg() != 0);
+	m_selectionCrop -> setEnabled(enable);
 	m_selectionRm -> setEnabled(enable);
+	m_selectionFillBg -> setEnabled(enable);
+	m_selectionFillFg -> setEnabled(enable);
+	m_selectionSelectAll -> setEnabled(currentImg() != 0);
+	m_selectionSelectNone -> setEnabled(enable);
 }
 
-void KisView::removeSelection()
+void KisView::cut()
 {
-	KisImageSP img = currentImg();
-
-	if (img) {
-		KisSelectionSP selection = img -> selection();
-
-		if (selection) {
-			KisPaintDeviceSP parent = selection -> parent();
-			QRect rc = selection -> bounds();
-			KisPainter gc(parent);
-
-			img -> unsetSelection();
-			gc.fillRect(rc, KoColor::black(), OPACITY_TRANSPARENT);
-			gc.end();
-			m_doc -> setModified(true);
-			updateCanvas(rc);
-		}
-	}
+	copy();
+	removeSelection();
 }
 
 void KisView::copy()
@@ -698,12 +701,6 @@ void KisView::copy()
 #endif
 }
 
-void KisView::cut()
-{
-	copy();
-	removeSelection();
-}
-
 void KisView::paste()
 {
 #if 0
@@ -716,11 +713,41 @@ void KisView::paste()
 #endif
 }
 
-/*
-    create a new layer from the selection, same size as the
-    selection (in the case of a non-rectangular selection, find
-    and use the bounding rectangle for selected pixels)
-*/
+void KisView::removeSelection()
+{
+	fillSelection(KoColor::black(), OPACITY_TRANSPARENT);
+}
+
+void KisView::fillSelectionBg()
+{
+	fillSelection(bgColor(), OPACITY_OPAQUE);
+}
+
+void KisView::fillSelectionFg()
+{
+	fillSelection(fgColor(), OPACITY_OPAQUE);
+}
+
+void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
+{
+	KisImageSP img = currentImg();
+
+	if (img) {
+		KisSelectionSP selection = img -> selection();
+
+		if (selection) {
+			KisPaintDeviceSP parent = selection -> parent();
+			QRect rc = selection -> bounds();
+			KisPainter gc(parent);
+
+			img -> unsetSelection();
+			gc.fillRect(rc, c, opacity);
+			gc.end();
+			m_doc -> setModified(true);
+			updateCanvas(rc);
+		}
+	}
+}
 
 void KisView::crop()
 {
@@ -782,29 +809,31 @@ void KisView::crop()
 #endif
 }
 
-/*
-    selectAll - use the bounding rectangle of the layer itself
-*/
-
 void KisView::selectAll()
 {
-#if 0
 	KisImageSP img = currentImg();
 
 	if (img) {
-		QRect rc = img -> getCurrentLayer() -> imageExtents();
-		m_doc -> setSelection(rc);
-	}
-#endif
-}
+		KisPaintDeviceSP dev = img -> activeDevice();
 
-/*
-    unSelectAll - clear the selection, if any
-*/
+		if (dev) {
+			KisSelectionSP selection = new KisSelection(dev, img, "Selection box from KisView", OPACITY_OPAQUE);
+
+			selection -> setBounds(dev -> bounds());
+			img -> setSelection(selection);
+			updateCanvas();
+		}
+	}
+}
 
 void KisView::unSelectAll()
 {
-//	m_doc -> clearSelection();
+	KisImageSP img = currentImg();
+
+	if (img) {
+		img -> unsetSelection();
+		updateCanvas();
+	}
 }
 
 void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
@@ -1842,6 +1871,16 @@ void KisView::disconnectCurrentImg() const
 {
 	if (m_current)
 		m_current -> disconnect(this);
+}
+
+KoColor KisView::bgColor()
+{
+	return m_bg;
+}
+
+KoColor KisView::fgColor()
+{
+	return m_fg;
 }
 
 #include "kis_view.moc"

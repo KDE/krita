@@ -88,6 +88,7 @@ void KisToolRectangularSelect::mouseMove(QMouseEvent *e)
 			paintOutline();
 
 		m_endPos = e -> pos();
+		m_endPos *= m_view -> zoom();
 		paintOutline();
 	}
 }
@@ -98,20 +99,23 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 		if (m_startPos == m_endPos) {
 			clearSelection();
 		} else {
-			KisImageSP img;
-			KisPaintDeviceSP parent;
-			KisSelectionSP selection;
-			QRect rc(m_startPos.x(), m_startPos.y(), m_endPos.x() - m_startPos.x(), m_endPos.y() - m_startPos.y());
-
-			// TODO Zoom
+			KisImageSP img = m_view -> currentImg();
+			
 			m_endPos = e -> pos();
-			img = m_view -> currentImg();
-			Q_ASSERT(img);
-			parent = img -> activeDevice();
-			selection = new KisSelection(parent, img, "rectangular selection tool box", OPACITY_OPAQUE);
-			selection -> setBounds(rc);
-			img -> setSelection(selection);
-			img -> invalidate(rc);
+
+			if (img) {
+				KisPaintDeviceSP parent;
+				KisSelectionSP selection;
+				QRect rc(m_startPos.x(), m_startPos.y(), m_endPos.x() - m_startPos.x(), m_endPos.y() - m_startPos.y());
+
+				img = m_view -> currentImg();
+				Q_ASSERT(img);
+				parent = img -> activeDevice();
+				selection = new KisSelection(parent, img, "rectangular selection tool box", OPACITY_OPAQUE);
+				selection -> setBounds(rc);
+				img -> setSelection(selection);
+				img -> invalidate(rc);
+			}
 		}
 
 		m_selecting = false;
@@ -124,7 +128,6 @@ void KisToolRectangularSelect::paintOutline()
 	QPainter gc(canvas);
 	QRect rc;
 
-	// TODO : Zoom
 	paintOutline(gc, rc);
 }
 

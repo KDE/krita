@@ -706,7 +706,7 @@ KisImageSP KisDoc::findImage(const QString& name)
 
 bool KisDoc::contains(KisImageSP img) const
 {
-	return qFind(m_images.begin(), m_images.end(), img);
+	return qFind(m_images.begin(), m_images.end(), img) != m_images.end();
 }
 
 /*
@@ -1172,7 +1172,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 {
 	KisLayerSP layer;
 
-	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+	if (!contains(img))
 		return 0;
 
 	if (img) {
@@ -1200,7 +1200,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, Q_INT32 width, Q_INT32 height, const
 
 void KisDoc::layerRemove(KisImageSP img, KisLayerSP layer)
 {
-	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+	if (!contains(img))
 		return;
 
 	if (layer) {
@@ -1213,7 +1213,7 @@ void KisDoc::layerRemove(KisImageSP img, KisLayerSP layer)
 
 void KisDoc::layerRaise(KisImageSP img, KisLayerSP layer)
 {
-	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+	if (!contains(img))
 		return;
 
 	if (layer) {
@@ -1225,7 +1225,7 @@ void KisDoc::layerRaise(KisImageSP img, KisLayerSP layer)
 
 void KisDoc::layerLower(KisImageSP img, KisLayerSP layer)
 {
-	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+	if (!contains(img))
 		return;
 
 	if (layer) {
@@ -1237,7 +1237,7 @@ void KisDoc::layerLower(KisImageSP img, KisLayerSP layer)
 
 void KisDoc::layerNext(KisImageSP img, KisLayerSP layer)
 {
-	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+	if (!contains(img))
 		return;
 
 	if (layer) {
@@ -1277,7 +1277,7 @@ void KisDoc::layerNext(KisImageSP img, KisLayerSP layer)
 
 void KisDoc::layerPrev(KisImageSP img, KisLayerSP layer)
 {
-	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+	if (!contains(img))
 		return;
 
 	if (layer) {
@@ -1317,7 +1317,7 @@ void KisDoc::layerPrev(KisImageSP img, KisLayerSP layer)
 
 void KisDoc::layerProperties(KisImageSP img, KisLayerSP layer, QUANTUM opacity, const QString& name)
 {
-	if (qFind(m_images.begin(), m_images.end(), img) == m_images.end())
+	if (!contains(img))
 		return;
 
 	if (layer) {

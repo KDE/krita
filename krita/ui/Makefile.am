@@ -14,7 +14,10 @@ libkisui_la_SOURCES = integerwidget.cc kis_dlg_preferences.cc kis_dlg_builder_pr
     kis_icon_item.cc kis_ruler.cc \
     kis_cmb_composite.cc \
     kis_cmb_imagetype.cc \
-    kis_dlg_transform.cc
+    kis_dlg_transform.cc \
+    kis_color_widget.cc \
+    kis_rgb_widget.cc
+    
 #    blendchooser.cc
 #    kis_dlg_gradient.cc 
 

@@ -135,7 +135,7 @@ private:
 	// Convert a single pixel from its wet representation to rgb
 	void wet_composite(Q_UINT8 *rgb, WetPix * wet);
 
-//	void wet_render_wetness(byte * rgb, int rgb_rowstride, WetLayer * layer, int x0, int y0, int width, int height);
+	void wet_render_wetness(Q_UINT8 * rgb, Q_INT32 rgb_rowstride, WetPix * pix, Q_INT32 height);
 
 private:
 	vKisChannelInfoSP m_channels;

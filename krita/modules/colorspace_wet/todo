@@ -20,43 +20,5 @@ A wet layer is equivalent to the wetpack; two layers, i.e., stacked pixels, per 
 
 The filter will contain the physics model: paint flow, drying and adsorbing onto the lower "layer"
 
-A docker tab will contain the palette with the special colors. Every color will be encoding
-in a QColor so we can abuuse the fgColor setting
 
-WetPix paintbox[] = {
-  { 496, 0, 16992, 0, 3808, 0, 0, 0},
-  { 16992, 9744, 21712, 6400, 25024, 3296, 0, 0},
-  { 6512, 6512, 6512, 4880, 11312, 0, 0, 0},
-  { 16002, 0, 2848, 0, 16992, 0, 0, 0},
-  { 22672, 0, 5328, 2272, 4288, 2640, 0, 0},
-  { 8000, 0, 16992, 0, 28352, 0, 0, 0},
-  { 5696, 5696, 12416, 2496, 28352, 0, 0, 0},
-  { 0, 0, 5136, 0, 28352, 0, 0, 0},
-  { 2320, 1760, 7344, 4656, 28352, 0, 0, 0},
-  { 8000, 0, 3312, 0, 5504, 0, 0, 0},
-  { 13680, 0, 16992, 0, 3312, 0, 0, 0},
-  { 5264, 5136, 1056, 544, 6448, 6304, 0, 0},
-  { 11440, 11440, 11440, 11440, 11440, 11440, 0, 0},
-  { 11312, 0, 11312, 0, 11312, 0, 0, 0},
-  { 0, 0, 0, 0, 0, 0, 0, 0}
-};
-
-(with these rgb triplets:)
-char *paintnames[] = {
-  "Quinacridone Rose", 240, 32, 160
-  "Indian Red", 159, 88, 43
-  "Cadmium Yellow", 254, 220, 64
-  "Hookers Green", 36, 180, 32
-  "Cerulean Blue", 16, 185, 215
-  "Burnt Umber", 96, 32, 8
-  "Cadmium Red", 254, 96, 8
-  "Brilliant Orange", 255, 136, 8
-  "Hansa Yellow", 240, 199, 8
-  "Phthalo Green", 96, 170, 130
-  "French Ultramarine", 48, 32, 170
-  "Interference Lilac", 118, 16, 135
-  "Titanium White", 254, 254, 254
-  "Ivory Black", 64, 64, 74
-  "Pure Water" 255, 255, 255
-};
 

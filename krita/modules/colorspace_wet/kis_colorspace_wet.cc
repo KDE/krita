@@ -158,46 +158,47 @@ void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP /
 	} else if (r == 159 && g == 88 && b == 43) {
 		// Indian Red
 		memcpy(dst, &m_paintbox[1], sizeof(WetPix));
-	} else if (r == 254, 220, 64) {
+	} else if (r == 254 && g == 220  && b == 64) {
 		// Cadmium Yellow
 		memcpy(dst, &m_paintbox[2], sizeof(WetPix));
-	} else if (r == 36, 180, 32) {
+	} else if (r == 36 && g == 180 && b == 32) {
 		// Hookers Green
 		memcpy(dst, &m_paintbox[3], sizeof(WetPix));
-	} else if (r == 16, 185, 215) {
+	} else if (r == 16 && g == 185 && b == 215) {
 		// Cerulean Blue
 		memcpy(dst, &m_paintbox[4], sizeof(WetPix));
-	} else if (r == 96, 32, 8) {
+	} else if (r == 96 && g == 32 && b == 8) {
 		// Burnt Umber
 		memcpy(dst, &m_paintbox[5], sizeof(WetPix));
-	} else if (r ==  254, 96, 8) {
+	} else if (r ==  254 && g == 96 && b == 8) {
 		// Cadmium Red
 		memcpy(dst, &m_paintbox[6], sizeof(WetPix));
-	} else if (r == 255, 136, 8) {
+	} else if (r == 255 && g == 136 && b == 8) {
 		// Brilliant Orange
 		memcpy(dst, &m_paintbox[7], sizeof(WetPix));
-	} else if (r == 240, 199, 8) {
+	} else if (r == 240 && g == 199 && b == 8) {
 		// Hansa Yellow
 		memcpy(dst, &m_paintbox[8], sizeof(WetPix));
-	} else if (r == 96, 170, 130) {
+	} else if (r == 96 && g == 170 && b == 130) {
 		// Phthalo Green
 		memcpy(dst, &m_paintbox[9], sizeof(WetPix));
-	} else if (r == 48, 32, 170) {
+	} else if (r == 48 && g == 32 && b == 170) {
 		// French Ultramarine
 		memcpy(dst, &m_paintbox[10], sizeof(WetPix));
-	} else if (r == 118, 16, 135) {
+	} else if (r == 118 && g == 16 && b == 135) {
 		// Interference Lilac
 		memcpy(dst, &m_paintbox[11], sizeof(WetPix));
-	} else if (r == 254, 254, 254) {
+	} else if (r == 254 && g == 254 && b == 254) {
 		// Titanium White
 		memcpy(dst, &m_paintbox[12], sizeof(WetPix));
-	} else if (r == 64, 64, 74) {
+	} else if (r == 64 && g == 64 && b == 74) {
 		// Ivory Black
 		memcpy(dst, &m_paintbox[13], sizeof(WetPix));
 	} else {
 		// Pure water
 		memcpy(dst, &m_paintbox[14], sizeof(WetPix));
 	}
+	// XXX: Maybe somehow do something useful with QColor that don't correspond to paint from the paintbox.
 }
 
 void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM  /*opacity*/, QUANTUM *dst, KisProfileSP /*profile*/)
@@ -253,22 +254,40 @@ Q_INT32 KisColorSpaceWet::pixelSize() const
 }
 
 
+// XXX: use profiles to display correctly on calibrated displays.
 QImage KisColorSpaceWet::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
-				       KisProfileSP srcProfile, KisProfileSP dstProfile,
-				       Q_INT32 renderingIntent)
+				         KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/,
+				         Q_INT32 /*renderingIntent*/)
 {
 
 	QImage img(width, height, 32, 0, QImage::LittleEndian);
 
-        int y, i;
+        Q_UINT8 *rgb = (Q_UINT8*) img.bits();
 
-        uchar *rgb = img.bits();
+	// Clear to white -- the following code actually composits the contents of the
+	// wet pixels with the contents of the image buffer, so they need to be
+	// prepared
+	memset(rgb, 255, width * height * sizeof(Q_UINT32));
 
-//         for (i = 0; i < pack->n_layers; i++)
-//                 wet_composite_layer(rgb, rgb_rowstride,
-//                                     pack->layers[i],
-//                                     x0, y0, width, height);
-//
+	// Composite the two layers in each pixelSize
+
+	Q_INT32 i = 0;
+	while ( i < width * height * 32) {
+
+		// First the adsorption layers
+		wet_composite(rgb, (WetPix*)data + i + 16);
+
+		// Then the paint layer (which comes first in our double-packed pixel)
+		wet_composite(rgb,  (WetPix*)data + i);
+
+		i += 32;
+		rgb += sizeof(Q_UINT32); // Because the QImage is 4 bytes deep.
+
+	}
+
+	// Display the wet stripes -- this only works if we have at least three scanlines in height,
+	// because otherwise the phase trick won't work.
+
 //         wet_render_wetness(rgb, rgb_rowstride,
 //                            pack->layers[pack->n_layers - 1],
 //                            x0, y0, width, height);
@@ -278,15 +297,35 @@ QImage KisColorSpaceWet::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_I
 }
 
 void KisColorSpaceWet::bitBlt(Q_INT32 stride,
-			    QUANTUM *dst,
-			    Q_INT32 dststride,
-			    const QUANTUM *src,
-			    Q_INT32 srcstride,
-			    QUANTUM opacity,
-			    Q_INT32 rows,
-			    Q_INT32 cols,
-			    CompositeOp op)
+			      QUANTUM *dst,
+			      Q_INT32 dststride,
+			      const QUANTUM *src,
+			      Q_INT32 srcstride,
+			      QUANTUM /*opacity*/,
+			      Q_INT32 rows,
+			      Q_INT32 cols,
+			      CompositeOp /*op*/)
 {
+	Q_INT32 columns = cols;
+
+	while (rows > 0) {
+
+		const QUANTUM *src = srcRowStart;
+		QUANTUM *dst = dstRowStart;
+
+		while (cols > 0) {
+
+			// Do clever stuff to combine two wet pixels; for now, do something simple
+			// The paint op already has taken pressure and height field into account.
+
+			columns--;
+			src += 32;
+			dst += 32;
+		}
+		rows--;
+		srcRowStart += srcRowStride;
+		dstRowStart += dstRowStride;
+	}
 }
 
 void KisColorSpaceWet::wet_init_render_tab()
@@ -348,4 +387,46 @@ void KisColorSpaceWet::wet_composite(Q_UINT8 *rgb, WetPix * wet)
 	b = wa + (((b - wa) * (ab & 0xffff) + 0x4000) >> 15);
 	rgb[2] = b;
 
+}
+
+void wet_render_wetness(Q_UINT8 * rgb, Q_INT32 rgb_rowstride, WetPix * pix, Q_INT32 height)
+{
+//         static int wet_phase = 0;
+//         int x, y;
+//         byte *rgb_line = rgb;
+//         WetPix *wet_line = layer->buf + (y0 * layer->rowstride) + x0;
+//         int highlight;
+//
+//         for (y = 0; y < height; y++) {
+//                 byte *rgb_ptr = rgb_line;
+//                 WetPix *wet_ptr = wet_line;
+//                 for (x = 0; x < width; x++) {
+//                         if (((x + y) & 3) == wet_phase) {
+//                                 highlight = 255 - (wet_ptr[0].w >> 1);
+//                                 if (highlight < 255) {
+//                                         rgb_ptr[0] =
+//                                             255 -
+//                                             (((255 -
+//                                                rgb_ptr[0]) *
+//                                               highlight) >> 8);
+//                                         rgb_ptr[1] =
+//                                             255 -
+//                                             (((255 -
+//                                                rgb_ptr[1]) *
+//                                               highlight) >> 8);
+//                                         rgb_ptr[2] =
+//                                             255 -
+//                                             (((255 -
+//                                                rgb_ptr[2]) *
+//                                               highlight) >> 8);
+//                                 }
+//                         }
+//                         rgb_ptr += 3;
+//                         wet_ptr++;
+//                 }
+//                 rgb_line += rgb_rowstride;
+//                 wet_line += layer->rowstride;
+//         }
+//         wet_phase += 1;
+//         wet_phase &= 3;
 }

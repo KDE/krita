@@ -108,6 +108,12 @@ void KisStrategyColorSpaceCMYK::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *
     dst[PIXEL_CMYK_ALPHA] = opacity;
 }
 
+ChannelInfo* KisStrategyColorSpaceCMYK::channelsInfo() const
+{
+	ChannelInfo channelInfo[4] = { ChannelInfo("Cyan", 4), ChannelInfo("Magenta", 3), ChannelInfo("Yellow", 2), ChannelInfo("Black", 1) };
+	return channelInfo;
+}
+
 void KisStrategyColorSpaceCMYK::render(KisImageSP projection,
                                        QPainter& painter,
                                        Q_INT32 x,

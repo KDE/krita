@@ -26,6 +26,22 @@
 
 class QPainter;
 
+/** This class give some basic information about a channel.
+	*/
+class ChannelInfo {
+	public:
+		ChannelInfo( ) { };
+		ChannelInfo( QString nname, Q_INT32 npos ) : m_name (nname), m_pos (npos) { };
+	public:
+		inline QString name() const { return m_name; };
+		/** This function return the position of the channel in the pixel
+			*/
+		inline Q_INT32 pos() const { return m_pos; };
+	private:
+		QString m_name;
+		Q_INT32 m_pos;
+};
+
 class KisStrategyColorSpace : public KShared {
 public:
 	KisStrategyColorSpace();
@@ -41,6 +57,8 @@ public:
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM *dst) = 0;
 	virtual void nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *dst) = 0;
+
+	virtual ChannelInfo* channelsInfo() const =0;
 
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
 

@@ -91,6 +91,12 @@ void KisStrategyColorSpaceRGB::nativeColor(QRgb rgb, QUANTUM opacity, QUANTUM *d
 	dst[PIXEL_ALPHA] = opacity;
 }
 
+ChannelInfo* KisStrategyColorSpaceRGB::channelsInfo() const
+{
+	ChannelInfo channelInfo[4] = { ChannelInfo("Red", 3), ChannelInfo("Green", 2), ChannelInfo("Blue", 1) };
+	return channelInfo;
+}
+
 void KisStrategyColorSpaceRGB::render(KisImageSP image, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
 {
 	if (image) {

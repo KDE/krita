@@ -41,13 +41,11 @@ namespace {
 KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
 	KisStrategyColorSpace("RGBA", TYPE_BGRA_8, icSigRgbData)
 {
-	setProfile(cmsCreate_sRGBProfile());
-
 	m_channels.push_back(new KisChannelInfo(i18n("red"), 2, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("green"), 1, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("blue"), 0, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 3, ALPHA));
-	
+
 }
 
 KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
@@ -100,8 +98,9 @@ Q_INT32 KisStrategyColorSpaceRGB::nColorChannels() const
 	return MAX_CHANNEL_RGB;
 }
 
-QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
-                                KisProfileSP srcProfile, KisProfileSP dstProfile )
+QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
+						 KisProfileSP srcProfile, KisProfileSP dstProfile, 
+						 Q_INT32 renderingIntent)
 
 {
 
@@ -109,6 +108,11 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 	
 #ifdef __BIG_ENDIAN__
 	img = QImage(width, height, 32, 0, QImage::LittleEndian);
+
+
+	// Find a way to use convertPixelsTo without needing to code a
+	// complete agrb color strategy or something like that.
+
 	Q_INT32 i = 0;
 	uchar *j = img.bits();
 	
@@ -134,6 +138,13 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 	// be factored out again if needed.
 	img = img.copy();
 #endif
+	
+	if (srcProfile != 0 && dstProfile != 0) {
+		convertPixelsTo(img.bits(), srcProfile, 
+				img.bits(), this, dstProfile,
+				width * height, renderingIntent);
+	}
+	
 	return img;
 }
 

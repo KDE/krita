@@ -54,7 +54,8 @@ public:
 	virtual Q_INT32 nColorChannels() const;
 	
 	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
-				KisProfileSP srcProfile = 0, KisProfileSP dstProfile = 0);
+				       KisProfileSP srcProfile, KisProfileSP dstProfile, 
+				       Q_INT32 renderingIntent);
 
 protected:
 
@@ -70,6 +71,8 @@ protected:
 
 private:
 	vKisChannelInfoSP m_channels;
+
+
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_H_

@@ -50,7 +50,7 @@ DlgColorspaceConversion::DlgColorspaceConversion( QWidget *  parent,
 
 	// XXX: Until we have implemented high bit depth images
 	m_page -> cmbDepth -> setEnabled(false);
-	
+
 	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const QString &)), 
 		this, SLOT(fillCmbProfiles(const QString &)));
 

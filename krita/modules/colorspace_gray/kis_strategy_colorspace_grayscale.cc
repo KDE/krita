@@ -29,6 +29,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "kis_strategy_colorspace.h"
+#include "kis_colorspace_registry.h"
 #include "kis_image.h"
 #include "kis_strategy_colorspace_grayscale.h"
 #include "tiles/kispixeldata.h"
@@ -43,12 +45,8 @@ namespace {
 KisStrategyColorSpaceGrayscale::KisStrategyColorSpaceGrayscale() :
 	KisStrategyColorSpace("Grayscale/Alpha", TYPE_GRAYA_8, icSigGrayData)
 {
-
 	m_channels.push_back(new KisChannelInfo(i18n("gray"), 0, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 1, ALPHA));
-
-
-
 }
 
 
@@ -102,14 +100,14 @@ Q_INT32 KisStrategyColorSpaceGrayscale::nColorChannels() const
 
 
 QImage KisStrategyColorSpaceGrayscale::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
-						       KisProfileSP srcProfile, KisProfileSP dstProfile)
+						       KisProfileSP srcProfile, KisProfileSP dstProfile, 
+						       Q_INT32 renderingIntent)
 {
-
 
 	QImage img(width, height, 32, 0, QImage::LittleEndian);
 
 	// No profiles
-	if (srcProfile == 0 && dstProfile == 0 && defaultProfile() == 0) {
+	if (srcProfile == 0 || dstProfile == 0) {
 		Q_INT32 i = 0;
 		uchar *j = img.bits();
 		
@@ -132,6 +130,13 @@ QImage KisStrategyColorSpaceGrayscale::convertToQImage(const QUANTUM *data, Q_IN
 			j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
 		}
 		return img;
+	}
+	else {
+		// Do a nice calibrated conversion
+		KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
+		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile, 
+				img.bits(), dstCS, dstProfile,
+				width * height, renderingIntent);
 	}
 
 

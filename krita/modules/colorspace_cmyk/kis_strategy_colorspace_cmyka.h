@@ -53,8 +53,9 @@ public:
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const;
 	
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
-					KisProfileSP srcProfile = 0, KisProfileSP dstProfile = 0);
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
+				       KisProfileSP srcProfile, KisProfileSP dstProfile, 
+				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst, 

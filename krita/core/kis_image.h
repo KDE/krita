@@ -18,10 +18,8 @@
 #ifndef KIS_IMAGE_H_
 #define KIS_IMAGE_H_
 
-#include <qbitarray.h>
 #include <qobject.h>
 #include <qstring.h>
-#include <qimage.h>
 #include <qvaluevector.h>
 #include <qtimer.h>
 #include <qmutex.h>
@@ -66,6 +64,9 @@ public:
 				     Q_INT32 y2,
 				     QPainter &painter);
 
+	// XXX: Add a convertToQImage to KisImage?
+
+
 	KisLayerSP projection() const;
 
 public:
@@ -84,8 +85,7 @@ public:
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
                 
-	void convertTo(KisStrategyColorSpaceSP colorStrategy);
-	void convertTo(KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile);
+	void convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 	// Get the profile associated with this image
 	KisProfileSP profile() const;
@@ -218,8 +218,6 @@ private:
 	vKisLayerSP m_layerStack;
 	KisLayerSP m_activeLayer;
 
-	QBitArray m_visible;
-	QBitArray m_active;
 	KisNameServer *m_nserver;
 	KisUndoAdapter *m_adapter;
 	KisGuideMgr m_guides;

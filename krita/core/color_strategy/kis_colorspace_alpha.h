@@ -52,7 +52,8 @@ public:
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const { return 0; };
 	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
-				       KisProfileSP srcProfile = 0, KisProfileSP dstProfile = 0);
+				       KisProfileSP srcProfile, KisProfileSP dstProfile, 
+				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 	virtual void setMaskColor(KoColor c) { m_maskColor = c; }
 	virtual void setInverted(bool b) { m_inverted = b; }

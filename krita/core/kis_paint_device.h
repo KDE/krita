@@ -93,9 +93,6 @@ public:
         virtual void move(Q_INT32 x, Q_INT32 y);
         virtual void move(const QPoint& pt);
 
-//         virtual void update();
-//         virtual void update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-
 	virtual const bool visible() const;
         virtual void setVisible(bool v);
 
@@ -107,7 +104,7 @@ public:
 	/** 
 	 *   Converts the paint device to a different colorspace
 	 */
-	virtual void convertTo(KisStrategyColorSpaceSP colorStrategy);
+	virtual void convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile = 0, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 
 	/**
@@ -189,8 +186,8 @@ public:
         void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
         void setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh);
 
-        bool cmap(KoColorMap& cm);
-        KoColor colorAt();
+/*         bool cmap(KoColorMap& cm); */
+/*         KoColor colorAt(); */
 
         KisImage *image();
         const KisImage *image() const;
@@ -327,6 +324,9 @@ inline Q_INT32 KisPaintDevice::depth() const
 
 inline KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
 {
+	if (m_colorStrategy == 0 && m_owner != 0) {
+		return m_owner -> colorStrategy();
+	}
         return m_colorStrategy;
 }
 
@@ -421,16 +421,16 @@ inline void KisPaintDevice::setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_
         m_offH = offh;
 }
 
-inline bool KisPaintDevice::cmap(KoColorMap& cm)
-{
-        cm.clear();
-        return false;
-}
+/* inline bool KisPaintDevice::cmap(KoColorMap& cm) */
+/* { */
+/*         cm.clear(); */
+/*         return false; */
+/* } */
 
-inline KoColor KisPaintDevice::colorAt()
-{
-        return KoColor();
-}
+/* inline KoColor KisPaintDevice::colorAt() */
+/* { */
+/*         return KoColor(); */
+/* } */
 
 inline KisImage *KisPaintDevice::image()
 {

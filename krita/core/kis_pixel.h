@@ -121,6 +121,8 @@ public:
 	void setProfile(KisProfileSP profile) { m_profile = profile; }
 	KisProfileSP profile() { return m_profile; }
 
+	QUANTUM* channels() { return m_channels; }
+
 private:
 	QUANTUM* m_channels;
 	QUANTUM* m_alpha;

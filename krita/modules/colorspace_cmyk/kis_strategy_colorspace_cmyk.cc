@@ -106,84 +106,15 @@ Q_INT32 KisStrategyColorSpaceCMYK::nColorChannels() const
 }
 
 QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
-                                                        KisProfileSP srcProfile, KisProfileSP dstProfile)
+						  KisProfileSP srcProfile, KisProfileSP dstProfile, 
+						  Q_INT32 renderingIntent)
 
 {
 	kdDebug() << "convertToQImage: (" << width << ", " << height << ")\n";
-#if 0
-	// Determine rgb profile to use in this transform
-	KisConfig cfg;
-	QString monitorProfileName = cfg.monitorProfile();
-	cmsHPROFILE monitorProfile = 0;
-
-	if (profile() == 0) {
-		kdDebug() << "Get the very first profile that matches our color space signature.\n";
-		vKisProfileSP profileList = profiles();
-		vKisProfileSP::iterator it;
-		for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-			kdDebug() << (*it) -> productName() << "\n";
-			if ((*it) -> colorSpaceSignature() == colorSpaceSignature()) {
-				kdDebug() << "Found cmyk profile << " << (*it) -> productName() << "!\n";
-				setProfile((*it) -> profile());
-				break;
-			}
-		}
-	}
-
-	if (profile() != 0) {
-		
- 		if (displayTransform() == 0) {
-			kdDebug() << "Going to create transform for monitor profile: " << monitorProfileName << "\n";
-			if (cfg.applyMonitorProfileOnCopy() && monitorProfileName != "None") {
-				kdDebug() << "Going to retrieve profile from list\n";
-
-				KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get("RGBA");
-				if (cs != 0) {
-					vKisProfileSP profileList = cs -> profiles();
-
-					vKisProfileSP::iterator it;
-					for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-						if ((*it) -> productName() == monitorProfileName) {
-							kdDebug() << "Found monitorprofile: " << (*it) -> productName() << "\n";
-							monitorProfile = (*it) -> profile();
-							break;
-						}
-					}
-				}
-			}
-
-			if (monitorProfile == 0) {
-				kdDebug() << "Profile still 0, going to create one\n";
-				monitorProfile = cmsCreate_sRGBProfile();
-			}
-			
-			kdDebug() << "Going to create transform\n";
-			setDisplayTransform(cmsCreateTransform(profile(), 
-							       colorSpaceType(), 
-							       monitorProfile,
-							       TYPE_BGRA_8, 
-							       cfg.renderIntent(),
-							       cmsFLAGS_MATRIXONLY));
-			kdDebug() << "Transform created and cached\n";
- 		}
- 		else {
- 			kdDebug() << "Using cached transform\n";
- 		}
-	}
-	
-#endif
 
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
 	
-	if (displayTransform() != 0) {
-		kdDebug() << "Going to transform with profiles\n";
-		int pixels = width * height;
-		cmsDoTransform(displayTransform(), 
-			       const_cast<QUANTUM *>(data), 
-			       img.bits(), 
-			       pixels);
-	}
-	else {
+	if (srcProfile == 0 || dstProfile == 0) {
 		kdDebug() << "Going to transform without profiles\n";
 
 		// XXX: Temporary copy from cmyka.cc
@@ -217,7 +148,15 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 		}
 
 	}
-	
+	else {
+		kdDebug() << "Going to transform with profiles\n";
+
+		// Do a nice calibrated conversion
+		KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
+		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile, 
+				img.bits(), dstCS, dstProfile,
+				width * height, renderingIntent);
+	}
 
 	return img;
 }

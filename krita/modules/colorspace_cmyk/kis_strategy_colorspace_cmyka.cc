@@ -27,6 +27,7 @@
 
 #include "kis_config.h"
 #include "kis_image.h"
+#include "kis_colorspace_registry.h"
 #include "kis_strategy_colorspace_cmyka.h"
 #include "tiles/kispixeldata.h"
 #include "kis_iterators_pixel.h"
@@ -114,40 +115,54 @@ Q_INT32 KisStrategyColorSpaceCMYKA::nColorChannels() const
 }
 
 QImage KisStrategyColorSpaceCMYKA::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
-							KisProfileSP srcProfile, KisProfileSP dstProfile)
+						   KisProfileSP srcProfile, KisProfileSP dstProfile, 
+						   Q_INT32 renderingIntent)
 {
 
 	kdDebug() << "convertToQImage: (" << width << ", " << height << ")\n";
 
 	QImage img(width, height, 32, 0, QImage::LittleEndian);
-        Q_INT32 i = 0;
-        uchar *j = img.bits();
 
-        while ( i < width * height * depth() ) {
-                QUANTUM k = *( data + i + PIXEL_BLACK );
-		QUANTUM c = *( data + i + PIXEL_CYAN );
-		QUANTUM m = *( data + i + PIXEL_MAGENTA );
-		QUANTUM y = *( data + i + PIXEL_YELLOW );
+	if (srcProfile == 0 || dstProfile == 0) {
+
+		Q_INT32 i = 0;
+		uchar *j = img.bits();
 		
-		c = c * ( QUANTUM_MAX - k) + k;
-		m = m * ( QUANTUM_MAX - k) + k;
-		y = y * ( QUANTUM_MAX - k) + k;
-
-		// XXX: Temporary copy
-		const PIXELTYPE PIXEL_BLUE = 0;
-		const PIXELTYPE PIXEL_GREEN = 1;
-		const PIXELTYPE PIXEL_RED = 2;
-                const PIXELTYPE PIXEL_ALPHA = 3;
-
-		*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_CMYK_ALPHA ) ;
-		*( j + PIXEL_RED )   = QUANTUM_MAX - c;
-                *( j + PIXEL_GREEN ) = QUANTUM_MAX - m;
-                *( j + PIXEL_BLUE )  = QUANTUM_MAX - y;
-                
-                i += MAX_CHANNEL_CMYKA;
-                j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
-                
+		while ( i < width * height * depth() ) {
+			QUANTUM k = *( data + i + PIXEL_BLACK );
+			QUANTUM c = *( data + i + PIXEL_CYAN );
+			QUANTUM m = *( data + i + PIXEL_MAGENTA );
+			QUANTUM y = *( data + i + PIXEL_YELLOW );
+			
+			c = c * ( QUANTUM_MAX - k) + k;
+			m = m * ( QUANTUM_MAX - k) + k;
+			y = y * ( QUANTUM_MAX - k) + k;
+			
+			// XXX: Temporary copy
+			const PIXELTYPE PIXEL_BLUE = 0;
+			const PIXELTYPE PIXEL_GREEN = 1;
+			const PIXELTYPE PIXEL_RED = 2;
+			const PIXELTYPE PIXEL_ALPHA = 3;
+			
+			*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_CMYK_ALPHA ) ;
+			*( j + PIXEL_RED )   = QUANTUM_MAX - c;
+			*( j + PIXEL_GREEN ) = QUANTUM_MAX - m;
+			*( j + PIXEL_BLUE )  = QUANTUM_MAX - y;
+			
+			i += MAX_CHANNEL_CMYKA;
+			j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
+		}
+		
         }
+	else {
+		kdDebug() << "Going to transform with profiles\n";
+				
+		KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
+		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile, 
+				img.bits(), dstCS, dstProfile,
+				width * height, renderingIntent);
+
+	}
 
         return img;
 
@@ -165,7 +180,6 @@ void KisStrategyColorSpaceCMYKA::bitBlt(Q_INT32 stride,
 				       CompositeOp op)
 {
 	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
-	QUANTUM alpha = OPACITY_OPAQUE;
 	QUANTUM *d;
 	QUANTUM *s;
 	Q_INT32 i;

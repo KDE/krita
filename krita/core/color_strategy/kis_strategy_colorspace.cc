@@ -27,13 +27,12 @@
 #include "kis_global.h"
 #include "kis_factory.h"
 #include "kis_profile.h"
+#include "kis_config.h"
 
 KisStrategyColorSpace::KisStrategyColorSpace(const QString& name, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature) 
 	: m_name(name),
 	  m_cmType(cmType),
-	  m_colorSpaceSignature(colorSpaceSignature),
-	  m_displayTransform(0),
-	  m_profile(0)
+	  m_colorSpaceSignature(colorSpaceSignature)
 {	
 	// Load all profiles that are suitable for this colorspace signature
 	resetProfiles();
@@ -46,34 +45,48 @@ KisStrategyColorSpace::~KisStrategyColorSpace()
 		cmsDeleteTransform(it.data());
         }
 	m_transforms.clear();
-	m_profile = 0;
-	if (m_displayTransform != 0) cmsDeleteTransform(m_displayTransform);
 }
 
-void KisStrategyColorSpace::convertTo(KisPixel& /*src*/, KisPixel& /*dst*/,  KisStrategyColorSpaceSP /*cs*/)
+bool KisStrategyColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent)
 {
-	// XXX: Call convertPixels
+	return convertPixelsTo(src.channels(), src.profile(),
+			       dst.channels(), dst.colorStrategy(), dst.profile(),
+			       1);
+
 }
 
-
-void KisStrategyColorSpace::convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcColorSpace, KisProfileSP srcProfile,
-					  QUANTUM * dst, KisProfileSP dstProfile, Q_UINT32 srcLen)
+bool KisStrategyColorSpace::convertPixelsTo(QUANTUM * src, KisProfileSP srcProfile,
+					    QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, 
+					    Q_UINT32 length, 
+					    Q_INT32 renderingIntent)
 {
-	kdDebug() << "convertPixels for " << srcLen << " pixels.\n";
+	kdDebug() << "convertPixels for " << length << " pixels.\n";
 
-//  	if (!m_transforms.contains(srcSpace -> colorSpaceType())) {
-//  		cmsHTRANSFORM tf = cmsCreateTransform(srcSpace -> profile(), 
-// 						      srcSpace -> colorSpaceType(), 
-// 						      profile(),
-// 						      m_cmType, 
-// 						      INTENT_PERCEPTUAL,
-// 						      0);
-// 		m_transforms[srcSpace -> colorSpaceType()] = tf;
-//  	}
+	cmsHTRANSFORM tf = 0;
+	
+	if (!m_transforms.contains(KisProfilePair(srcProfile, dstProfile))) {
 
-// 	cmsHTRANSFORM tf = m_transforms[srcSpace -> colorSpaceType()];
+		tf = createTransform(dstColorStrategy,
+				     srcProfile,
+				     dstProfile,
+				     renderingIntent);
 
-// 	cmsDoTransform(tf, src, dst, numPixels);
+		m_transforms[KisProfilePair(srcProfile, dstProfile)] = tf;				      
+	}
+	else {
+		tf = m_transforms[KisProfilePair(srcProfile, dstProfile)];
+	}
+
+	if (tf) {
+		cmsDoTransform(tf, src, dst, length);
+		return true;
+	}
+	
+	kdDebug() << "No transform from "
+		  << srcProfile -> productName() << " to " << dstProfile -> productName()
+		  << ", so cannot convert pixels!\n";
+	return false;
+	
 }
 
 void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
@@ -107,9 +120,9 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 		memset(convertedSrcPixels, 255, len * sizeof(QUANTUM));
 
 		// XXX: Set profiles
-  		convertPixels(src, srcSpace, 0, 
-			      convertedSrcPixels, 0,
-			      (rows * cols * srcSpace -> depth()));
+   		srcSpace -> convertPixelsTo(src, 0,
+					    convertedSrcPixels, this, 0,
+					    rows * cols);
  		srcstride = (srcstride / srcSpace -> depth()) * depth();
 
 		bitBlt(stride,
@@ -166,5 +179,39 @@ KisProfileSP KisStrategyColorSpace::getProfileByName(const QString & name)
 		}
 	}
 	return 0;
+
+}
+
+cmsHTRANSFORM KisStrategyColorSpace::createTransform(KisStrategyColorSpaceSP dstColorStrategy,
+						     KisProfileSP srcProfile,
+						     KisProfileSP dstProfile,
+						     Q_INT32 renderingIntent)
+{
+	KisConfig cfg;
+	int flags = 0;
+	
+	if (cfg.useBlackPointCompensation()) {
+		flags = cmsFLAGS_BLACKPOINTCOMPENSATION;
+	}
+
+	if (dstProfile != 0 
+	    && dstColorStrategy != 0
+	    && dstColorStrategy != 0
+	    && dstProfile -> colorSpaceSignature() == dstColorStrategy -> colorSpaceSignature()
+	    && srcProfile != 0
+	    && srcProfile -> colorSpaceSignature() == colorSpaceSignature()) {
+		cmsHTRANSFORM tf = cmsCreateTransform(srcProfile -> profile(),
+						      colorSpaceType(),
+						      dstProfile -> profile(),
+						      dstColorStrategy -> colorSpaceType(),
+						      renderingIntent,
+						      flags);
+		return tf;
+	}
+	else {
+		// XXX: Cannot create the profile!
+		kdDebug() << "Cannot create the profile, we're going to crash, probably.\n";
+		return 0;
+	}
 
 }

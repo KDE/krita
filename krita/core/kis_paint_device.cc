@@ -128,6 +128,7 @@ KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImage *img, const QString& na
         m_name = name;
         m_compositeOp = COMPOSITE_OVER;
 	m_profile = 0;
+	m_colorStrategy = img -> colorStrategy();
 }
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs)
@@ -187,26 +188,6 @@ void KisPaintDevice::configure(KisImage *image,
 	m_colorStrategy = colorStrategy;
 }
 
-// void KisPaintDevice::update()
-// {
-//         update(0, 0, width(), height());
-// }
-
-// void KisPaintDevice::update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
-// {
-//         if (x < m_offX)
-//                 x = m_offX;
-
-//         if (y < m_offY)
-//                 y = m_offY;
-
-//         if (w > m_offW)
-//                 w = m_offW;
-
-//         if (h > m_offH)
-//                 h = m_offH;
-
-// }
 
 void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
 {
@@ -592,11 +573,16 @@ bool KisPaintDevice::read(KoStore *store)
         return true;
 }
 
-void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstCS)
+void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
-	KisPaintDevice dst(width(), height(), dstCS, "");
-	KisStrategyColorSpaceSP srcCS = colorStrategy();
-	if(srcCS == dstCS)
+	// XXX:  Given the way lcms works, we'd better not do
+	// this with iterators but with the largest chunks of 
+	// contiguous bytes we can get.
+	KisPaintDevice dst(width(), height(), dstColorStrategy, "");
+	dst.setProfile(dstProfile);
+
+	KisStrategyColorSpaceSP srcColorStrategy = colorStrategy();
+	if(srcColorStrategy == dstColorStrategy)
 	{
 		return;
 	}
@@ -612,18 +598,22 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstCS)
 		{
 			KisPixel srcPr = srcIt;
 			KisPixel dstPr = dstIt;
-			srcCS->convertTo(srcPr, dstPr, dstCS);
+			srcColorStrategy -> convertTo(srcPr, dstPr, renderingIntent);
 			++dstIt; ++srcIt;
 		}
 		++dstLIt; ++srcLIt;
 	}
 	setTiles(dst.tiles());
+
+	m_colorStrategy = dstColorStrategy;
+	setProfile(dstProfile);
 }
 
 
 
 void KisPaintDevice::convertFromImage(const QImage& img)
 {
+	// XXX: Apply import profile
 	KoColor c;
 	QRgb rgb;
 	Q_INT32 opacity;
@@ -648,7 +638,7 @@ void KisPaintDevice::convertFromImage(const QImage& img)
 
 KisProfileSP KisPaintDevice::profile() const
 {
-	if (m_profile == 0) {
+	if (m_profile == 0 && m_owner != 0) {
 		if (colorStrategy() == m_owner -> colorStrategy()) {
 			return m_owner -> profile();
 		}
@@ -659,7 +649,7 @@ KisProfileSP KisPaintDevice::profile() const
 
 void KisPaintDevice::setProfile(KisProfileSP profile) 
 {
-	if (profile -> colorSpaceSignature() == colorStrategy() -> colorSpaceSignature()) {
+	if (profile -> colorSpaceSignature() == colorStrategy() -> colorSpaceSignature() && profile -> valid()) {
 		m_profile = profile;
 	}
 	else {

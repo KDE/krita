@@ -327,6 +327,9 @@ result in neutral grays. Intended for images.</string>
                             <property name="text">
                                 <string>Ask for profile when opening</string>
                             </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Ask which profile should be applied when opening an image without an associated profile.</string>
+                            </property>
                         </widget>
                         <widget class="QCheckBox">
                             <property name="name">
@@ -334,6 +337,9 @@ result in neutral grays. Intended for images.</string>
                             </property>
                             <property name="text">
                                 <string>Ask for profile when pasting</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Ask which profile should be applied to the image that is to be pasted into the current image if it is not already associated with a profile.</string>
                             </property>
                         </widget>
                         <widget class="QCheckBox">

@@ -44,7 +44,7 @@
 #include <kistilemgr.h>
 #include <kis_iterators_quantum.h>
 #include <kis_paint_device.h>
-
+#include <kis_colorspace_registry.h>
 #include "colorspaceconversion.h"
 #include "dlg_colorspaceconversion.h"
 
@@ -88,10 +88,13 @@ void ColorspaceConversion::slotImgColorspaceConversion()
 
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
 	dlgColorspaceConversion -> setCaption(i18n("Convert all layers from ") + image -> colorStrategy() -> name());
-	dlgColorspaceConversion -> m_page -> chkAlpha -> setChecked(image -> alpha());
 
 	if (dlgColorspaceConversion -> exec() == QDialog::Accepted) {
 		kdDebug() << "Going to convert image\n";
+		// XXX: Do the rest of the stuff
+		QString cspace = dlgColorspaceConversion -> m_page -> cmbColorSpaces -> currentText();
+		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(cspace);
+		//image -> convertTo(cs);
 	}
 	delete dlgColorspaceConversion;
 }
@@ -107,10 +110,13 @@ void ColorspaceConversion::slotLayerColorspaceConversion()
 	
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
 	dlgColorspaceConversion -> setCaption(i18n("Convert current layer from") + dev -> colorStrategy() -> name());
-	dlgColorspaceConversion -> m_page -> chkAlpha -> setChecked(dev -> alpha());
 
 	if (dlgColorspaceConversion -> exec() == QDialog::Accepted) {
 		kdDebug() << "Going to convert layer\n";
+		QString cspace = dlgColorspaceConversion -> m_page -> cmbColorSpaces -> currentText();
+		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(cspace);
+		//image -> activeLayer() -> convertTo(cs);
+
 	}
 	delete dlgColorspaceConversion;
 }

@@ -224,8 +224,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		}
 
 
-		m_visible = rhs.m_visible;
-		m_active = rhs.m_active;
 		m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
 		m_guides = rhs.m_guides;
 		m_pixmap = rhs.m_pixmap;
@@ -293,8 +291,6 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 	m_adapter = adapter;
 	m_nserver = new KisNameServer(i18n("Layer %1"), 1);
 	n = colorStrategy->depth();
-	m_active.resize(n);
-	m_visible.resize(n);
 	m_name = name;
 	m_depth = n;
 	m_colorStrategy = colorStrategy;
@@ -472,20 +468,17 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 	}
 }
 
-void KisImage::convertTo( KisStrategyColorSpaceSP colorStrategy)
+void KisImage::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
 	if (m_layers.empty()) return; // Nothing to convert
 	vKisLayerSP_it it;
 	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-		(*it) -> convertTo(colorStrategy);
+		(*it) -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
 	}
-	m_projection -> convertTo(colorStrategy);
-}
+	m_projection -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
 
-void KisImage::convertTo(KisStrategyColorSpaceSP colorStrategy, KisProfileSP /*profile*/)
-{
-	// XXX: Implement
-	convertTo(colorStrategy);
+	m_colorStrategy = dstColorStrategy;
+	setProfile(dstProfile);
 }
 
 KisProfileSP KisImage::profile() const
@@ -495,7 +488,7 @@ KisProfileSP KisImage::profile() const
 
 void KisImage::setProfile(const KisProfileSP& profile) 
 {
-	if (profile && profile -> valid()) {
+	if (profile && profile -> valid() && profile -> colorSpaceSignature() == m_colorStrategy -> colorSpaceSignature()) {
 		kdDebug() << "KisImage::setProfile: " << profile -> productName() << "\n";
 		m_profile = profile;
 	}

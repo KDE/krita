@@ -22,6 +22,7 @@
 #include <qmap.h>
 #include <qcolor.h>
 #include <qstringlist.h>
+#include <qpair.h>
 
 #include <ksharedptr.h>
 #include <koColor.h>
@@ -37,14 +38,8 @@ class KisPixel;
 class KisPixelRO;
 
 
-struct KisProfilePair {
-  KisProfileSP srcProfile;
-  KisProfileSP dstProfile;
-};
+typedef QPair<KisProfileSP, KisProfileSP> KisProfilePair;
 
-// XXX: This class contains a default profile as state data,
-//      and there is currently no way to use the profile associated
-//      with the image here.
 class KisStrategyColorSpace : public KShared {
 
 
@@ -99,19 +94,22 @@ public:
 	inline QString name() const { return m_name; };
 
 	/**
-	 * This function is used to convert a KisPixelRepresentation to another color strategy.
+	 * This function is used to convert a KisPixelRepresentation from this color strategy to the specified
+	 * color strategy.
 	 */
-	virtual void convertTo(KisPixel& src, KisPixel& dst, KisStrategyColorSpaceSP srcColorSpace);
+	virtual bool convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 	
 	/**
-	 * Convert the pixels in data to  (8-bit BGRA) QImage using the specified profiles.
+	 * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
 	 * The pixels are supposed to be encoded in this color model.
 	 *
 	 * @param data A pointer to a contiguous memory region containing width * height pixels
 	 * @param width in pixels
 	 * @param height in pixels
 	 */
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, KisProfileSP srcProfile, KisProfileSP dstProfile) = 0;
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, 
+				       KisProfileSP srcProfile, KisProfileSP dstProfile, 
+				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL) = 0;
 
 	/**
 	 * Compose two arrays of pixels together. If source and target
@@ -137,22 +135,6 @@ public:
 
 	void setColorSpaceSignature(icColorSpaceSignature signature) { m_colorSpaceSignature = signature; }
 	icColorSpaceSignature colorSpaceSignature() { return m_colorSpaceSignature; }
-
-
-	/**
-	 * Set the icm profile for conversion between color spaces
-	 * 
-	 * XXX: make user-definable for certain transforms. Maybe
-	 * only in the switch color space dialog for the whole image.
-	 */
-	void setProfile(cmsHPROFILE profile) { m_profile = profile; }
-
-	/**
-	 * Get the icm profile for conversion between color spaces.
-	 */
-	cmsHPROFILE defaultProfile() { return m_profile; }
-
-
 	/**
 	 * Get a list of profiles that apply to this color space
 	 */
@@ -168,25 +150,25 @@ public:
 	 */
 	Q_INT32 profileCount() const { return m_profiles.count(); }
 
-
 	/**
 	 * Return the profile associated with the given product name,
 	 * or 0.
 	 */
 	KisProfileSP getProfileByName(const QString & name);
 
-	cmsHTRANSFORM displayTransform() { return m_displayTransform; }
-	void setDisplayTransform(cmsHTRANSFORM displayTransform) { m_displayTransform = displayTransform; }
 
 protected:
 
 	/**
-	 * Convert a byte array of srcLen pixels *src in the color space
-	 * srcSpace to the current color model and put the converted
-	 * bytes into the prepared byte array *dst.
+	 * Convert a byte array of srcLen pixels *src to the specified color space
+	 * and put the converted bytes into the prepared byte array *dst.
+	 *
+	 * Returns false if the conversion failed, true if it succeeded
 	 */
-	virtual void convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcColorSpace, KisProfileSP srcProfile,
-				   QUANTUM * dst, KisProfileSP dstProfile, Q_UINT32 srcLen);
+	virtual bool convertPixelsTo(QUANTUM * src, KisProfileSP srcProfile,
+				     QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, 
+				     Q_UINT32 length,
+				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 	
 	/**
@@ -203,7 +185,10 @@ protected:
 			    Q_INT32 cols, 
 			    CompositeOp op) = 0;
 
-
+	virtual cmsHTRANSFORM createTransform(KisStrategyColorSpaceSP dstColorStrategy,
+					      KisProfileSP srcProfile,
+					      KisProfileSP dstProfile,
+					      Q_INT32 renderingIntent);
 
 private:
 
@@ -213,10 +198,6 @@ private:
 
 	typedef QMap<KisProfilePair, cmsHTRANSFORM>  TransformMap;
 	TransformMap m_transforms; // Cache for existing transforms
-
-	cmsHTRANSFORM m_displayTransform;
-
- 	cmsHPROFILE m_profile; // THe default profile for this color strategy
 
 	KisStrategyColorSpace(const KisStrategyColorSpace&);
 	KisStrategyColorSpace& operator=(const KisStrategyColorSpace&);

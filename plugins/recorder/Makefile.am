@@ -20,5 +20,5 @@ SUBDIRS = pics
 messages:
 #	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../recorder.pot
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(idldir) 
+IDL_FLAGS = --relative-paths -I$(idldir) 
 

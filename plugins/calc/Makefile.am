@@ -20,7 +20,7 @@ servicedir = $(kde_servicesdir)
 
 SUBDIRS = pics
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
+IDL_FLAGS = --relative-paths --any -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 
 kspread_IDLDIR = $(top_srcdir)/kspread
 

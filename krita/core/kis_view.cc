@@ -1841,10 +1841,12 @@ Q_INT32 KisView::docHeight() const
 
 void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
 {
-        kdDebug() << "scroll to " << x << "," << y << endl;
-
-	m_hScroll -> setValue(x);
-	m_vScroll -> setValue(y);
+	if (m_hScroll -> isVisible()) {
+		m_hScroll -> setValue(x);
+	}
+	if (m_vScroll -> isVisible()) {
+		m_vScroll -> setValue(y);
+	}
 }
 
 void KisView::brushActivated(KisResource *brush)

@@ -106,6 +106,7 @@
 #include "kis_move_event.h"
 #include "kis_colorspace_registry.h"
 
+
 // Widgets
 #include "kis_autobrush.h"
 #include "kis_text_brush.h"

@@ -34,7 +34,7 @@
 #include "kistilemgr.h"
 #include "kis_strategy_colorspace.h"
 #include "kispixeldata.h"
-#include "kis_scale_visitor.h"
+
 
 class QImage;
 class QSize;

@@ -99,6 +99,9 @@ void ImageSize::slotImageSize()
 	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
 
 	if (dlgImageSize -> exec() == QDialog::Accepted) {
+		m_view -> updateCanvas(); // XXX: Check whether this
+					  // is necessary after
+					  // Adrian's changes 
 		Q_INT32 w = dlgImageSize -> width();
 		Q_INT32 h = dlgImageSize -> height();
 		

@@ -1,0 +1,170 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgPerfTest</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgPerfTest</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>377</width>
+            <height>345</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Image Size</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QButtonGroup" row="0" column="0">
+            <property name="name">
+                <cstring>grpPerfTest</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Performance Test:</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>lblTests</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Number of tests:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intWidth</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="0" column="1">
+                    <property name="name">
+                        <cstring>intTestCount</cstring>
+                    </property>
+                    <property name="value">
+                        <number>1000</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>1000000</number>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>chkBitBlt</cstring>
+                    </property>
+                    <property name="text">
+                        <string>bitBlt</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="0">
+                    <property name="name">
+                        <cstring>chkFill</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Fill</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="3" column="0">
+                    <property name="name">
+                        <cstring>chkGradient</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Gradients</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>chkPixel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>setPixel/getPixel</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="5" column="0">
+                    <property name="name">
+                        <cstring>chkShape</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Shapes</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="6" column="0">
+                    <property name="name">
+                        <cstring>chkLayer</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Layers</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="7" column="0">
+                    <property name="name">
+                        <cstring>chkScale</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Scaling</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="8" column="0">
+                    <property name="name">
+                        <cstring>chkRotate</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Rotating</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="9" column="0">
+                    <property name="name">
+                        <cstring>chkRender</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Rendering</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<tabstops>
+    <tabstop>intTestCount</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

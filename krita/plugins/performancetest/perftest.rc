@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaperftest" version="1">
+<MenuBar>
+    <Menu name="Tools"><text>&amp;Tools</text>
+	<Separator/>
+	<Action name="perf_test"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

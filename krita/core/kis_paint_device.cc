@@ -36,6 +36,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_iterators_quantum.h"
 #include "kis_iterators_pixel.h"
+#include "kis_scale_visitor.h"
 
 namespace {
         class KisResizeDeviceCmd : public KNamedCommand {

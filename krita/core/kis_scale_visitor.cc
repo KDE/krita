@@ -18,7 +18,9 @@
 #include <qwmatrix.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
+#include "kis_paint_device.h"
 #include "kis_scale_visitor.h"
 
 void KisScaleVisitor::scale(double xscale, double yscale) 
@@ -148,9 +150,14 @@ void KisScaleVisitor::scale(double xscale, double yscale)
                 }
         }
 
-
+        //progress info
+        emit notifyProgressStage(this,i18n("Scaling layer..."),0);
+        
         for(int x = 0; x < targetW; x++)
         {
+                //progress info
+                emit notifyProgress(this,(x * 100) / targetW);
+                
                 calc_x_contrib(&contribX, xscale, fwidth, targetW, m_dev -> width(), filterf, x);
                 /* Apply horz filter to make dst column in tmp. */
                 for(int y = 0; y < m_dev -> height(); y++)
@@ -216,6 +223,9 @@ void KisScaleVisitor::scale(double xscale, double yscale)
                 free(contribY[y].p);
         free(contribY);
 
+        //progress info
+        emit notifyProgressDone(this);
+        
         //return nRet;
         return;
 }

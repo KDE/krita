@@ -19,9 +19,12 @@
 #define KIS_SCALE_VISITOR_H_
 
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_progress_subject.h"
 
-class KisScaleVisitor {
+class KisPaintDevice;
+
+class KisScaleVisitor : public KisProgressSubject {
+        typedef KisProgressSubject super;  
         
         /* Structs for the image rescaling routine */
 	struct CONTRIB {
@@ -64,6 +67,11 @@ private:
 	double Mitchell_filter(double t);
 
         CLIST * contrib;  //array of contribution lists
+
+	// Implement KisProgressSubject
+	bool m_cancelRequested;
+        virtual void cancel() { m_cancelRequested = true; }
+
 };
 
 inline KisScaleVisitor::KisScaleVisitor()

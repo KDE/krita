@@ -69,7 +69,7 @@ KisTileMgr::~KisTileMgr()
 	for (vKisTileSP_it it = m_tiles.begin(); it != m_tiles.end(); it++)
 		(*it) -> shareRelease();
 
-	m_mediator -> detachAll(this);
+	//m_mediator -> detachAll(this);
 	delete m_mediator;
 }
 

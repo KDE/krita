@@ -103,6 +103,11 @@ signals:
 	void visibilityChanged(KisPaintDeviceSP device);
 	void positionChanged(KisPaintDeviceSP device);
 
+protected:
+	void data(KisTileMgrSP mgr);
+	void width(Q_INT32 w);
+	void height(Q_INT32 h);
+
 private:
 	KisPaintDevice& operator=(const KisPaintDevice&);
 	void init();

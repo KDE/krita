@@ -16,6 +16,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include <qrect.h>
+#include <kcommand.h>
 #include <kdebug.h>
 #include "kis_global.h"
 #include "kis_types.h"
@@ -517,6 +518,24 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, const KoColor& c, QUANTUM opaci
 
 	tm -> releasePixelData(pd);
 	return true;
+}
+
+void KisPaintDevice::data(KisTileMgrSP mgr)
+{
+	// TODO : undo/redo
+	//
+	Q_ASSERT(mgr);
+	m_tiles = mgr;
+}
+
+void KisPaintDevice::width(Q_INT32 w)
+{
+	m_width = w;
+}
+
+void KisPaintDevice::height(Q_INT32 h)
+{
+	m_height = h;
 }
 
 #include "kis_paint_device.moc"

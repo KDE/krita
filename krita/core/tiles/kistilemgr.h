@@ -47,6 +47,7 @@ class KisTileMgr : public KShared {
 
 public:
 	KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
+	KisTileMgr(KisTileMgr *tm, Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
 	KisTileMgr(const KisTileMgr& rhs);
 	virtual ~KisTileMgr();
 
@@ -87,6 +88,7 @@ public:
 private:
 	KisTileMgr& operator=(const KisTileMgr&);
 	void allocate(Q_INT32 ntiles);
+	void duplicate(Q_INT32 ntiles, KisTileMgr *tm);
 	KisTileSP invalidateTile(KisTileSP tile, Q_INT32 tilenum);
 
 	void readPixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, QUANTUM *buffer, Q_UINT32 stride);

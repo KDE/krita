@@ -71,6 +71,7 @@ public:
 	Q_INT32 writeCount() const;
 	void writeRef();
 	QImage convertToImage();
+	void duplicate(KisTile *tile);
 
 private:
 	KisTile& operator=(const KisTile&);

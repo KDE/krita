@@ -143,6 +143,7 @@ public:
 	void setSelection(KisSelectionSP selection);
 	void unsetSelection(bool commit = true);
 	KisSelectionSP selection() const;
+	QRect bounds() const;
 
 	void notify();
 	void notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
@@ -184,7 +185,6 @@ private:
 	KisTileMgrSP m_shadow;
 	KisBackgroundSP m_bkg;
 	vQPixmap m_projectionPixmaps;
-	QPixmap m_pixmapProjection;
 	KisLayerSP m_projection;
 	vKisLayerSP m_layers;
 	vKisChannelSP m_channels;

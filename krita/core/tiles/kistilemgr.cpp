@@ -36,6 +36,18 @@ KisTileMgr::KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height)
 	m_mediator = new KisTileMediator;
 }
 
+KisTileMgr::KisTileMgr(KisTileMgr *tm, Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height)
+{
+	Q_ASSERT(tm != this);
+	m_width = width;
+	m_height = height;
+	m_depth = depth;
+	m_ntileRows = (height + TILE_HEIGHT - 1) / TILE_HEIGHT;
+	m_ntileCols = (width + TILE_WIDTH - 1) / TILE_WIDTH;
+	m_mediator = new KisTileMediator;
+	duplicate(m_ntileRows * m_ntileCols, tm);
+}
+
 KisTileMgr::KisTileMgr(const KisTileMgr& rhs) : KShared(rhs)
 {
 	if (this != &rhs) {
@@ -132,7 +144,9 @@ KisTileSP KisTileMgr::tile(Q_INT32 tilenum, Q_INT32 mode)
 		allocate(ntiles);
 
 	tile = m_tiles[tilenum];
-	Q_ASSERT(tile);
+
+	if (!tile)
+		return tile;
 
 	if (mode & TILEMODE_READ) {
 	}
@@ -526,6 +540,64 @@ void KisTileMgr::allocate(Q_INT32 ntiles)
 
 			if (i == nrows - 1)
 				t -> height(bottomTile);
+		}
+	}
+}
+
+void KisTileMgr::duplicate(Q_INT32 ntiles, KisTileMgr *tm)
+{
+	Q_INT32 nrows;
+	Q_INT32 ncols;
+	Q_INT32 rightTile;
+	Q_INT32 bottomTile;
+	Q_INT32 i;
+	Q_INT32 j;
+	Q_INT32 k;
+	KisTileSP t;
+	Q_INT32 w;
+	Q_INT32 h;
+
+	m_tiles.resize(ntiles);
+	nrows = m_ntileRows;
+	ncols = m_ntileCols;
+	rightTile = m_width - ((ncols - 1) * TILE_WIDTH);
+	bottomTile = m_height - ((nrows - 1) * TILE_HEIGHT);
+
+	for (i = 0, k = 0; i < nrows; i++) {
+		h = i == nrows - 1 ? bottomTile : TILE_HEIGHT;
+
+		for (j = 0; j < ncols; j++, k++) {
+			t = tm -> tile(j * TILE_WIDTH, i * TILE_HEIGHT, TILEMODE_READ);
+
+			if (!t)
+				continue;
+			
+			w = j == ncols - 1 ? rightTile : TILE_WIDTH;
+
+			if (t) {
+				if (t -> width() != w || t -> height() != h) {
+					KisTileSP t2 = new KisTile(t -> depth(), 0, 0);
+
+					t2 -> width(w);
+					t2 -> height(h);
+					t2 -> lock();
+					t2 -> duplicate(t);
+					t2 -> release();
+					t = t2;
+				} else {
+					t -> shareRef();
+				}
+			} else {
+				t = new KisTile(depth(), 0, 0);
+				t -> width(w);
+				t -> height(h);
+				t -> lock();
+				memset(t -> data(), 0, t -> size());
+				t -> release();
+			}
+
+			t -> valid(false);
+			attach(t, k);
 		}
 	}
 }

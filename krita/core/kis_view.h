@@ -112,6 +112,7 @@ public slots:
 	void export_image();
 	void add_new_image_tab();
 	void remove_current_image_tab();
+	void imageResize();
 
 	// tool action slots
 	void tool_properties();
@@ -173,8 +174,12 @@ private slots:
 	void layerSelected(int n);
 	void layerToggleLinked();
 	void layerProperties();
+	void layerResize();
+	void layerResizeToImage();
+	void layerScale();
 	void layerAdd();
 	void layerRemove();
+	void layerDuplicate();
 	void layerAddMask(int n);
 	void layerRmMask(int n);
 	void layerRaise();
@@ -184,8 +189,6 @@ private slots:
 	void layerLevel(int n);
 	void layersUpdated();
 	void layersUpdated(KisImageSP img);
-	void layer_scale_smooth();
-	void layer_scale_rough();
 	void layerScale(bool smooth);
 	void layer_rotate180();
 	void layer_rotateleft90();
@@ -232,6 +235,7 @@ private:
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
 	KAction *m_imgRm;
+	KAction *m_imgResize;
 	KAction *m_imgDup;
 	KAction *m_imgExport;
 	KAction *m_imgMergeAll;
@@ -239,10 +243,14 @@ private:
 	KAction *m_imgMergeLinked;
 	KAction *m_layerAdd;
 	KAction *m_layerRm;
+	KAction *m_layerDup;
 	KAction *m_layerLink;
 	KAction *m_layerHide;
 	KAction *m_layerProperties;
 	KAction *m_layerSaveAs;
+	KAction *m_layerResize;
+	KAction *m_layerResizeToImage;
+	KAction *m_layerScale;
 	KAction *m_layerRaise;
 	KAction *m_layerLower;
 	KAction *m_layerTop;

@@ -29,7 +29,6 @@ KisDlgPaintOffset::KisDlgPaintOffset(Q_INT32 xoff, Q_INT32 yoff, QWidget *parent
 {
         QVBox *page = makeVBoxMainWidget();
 	QGroupBox *grp = new QGroupBox(i18n("Pixel Paint Offset"), page);
-	KPushButton *btn;
 	QHBoxLayout *hbox;
 	QVBoxLayout *vbox;
 	QVBoxLayout *vboxchild;

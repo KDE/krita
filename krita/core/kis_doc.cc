@@ -950,7 +950,11 @@ void KisDoc::slotImageUpdated(const QRect& rect)
 void KisDoc::addCommand(KCommand *cmd)
 {
 	Q_ASSERT(cmd);
-	m_cmdHistory -> addCommand(cmd, false);
+
+	if (m_undo)
+		m_cmdHistory -> addCommand(cmd, false);
+	else
+		delete cmd;
 }
 
 void KisDoc::setUndo(bool undo)
@@ -1284,6 +1288,11 @@ void KisDoc::clipboardDataChanged()
 	}
 
 	m_pushedClipboard = false;
+}
+
+bool KisDoc::undo() const
+{
+	return m_undo;
 }
 
 #include "kis_doc.moc"

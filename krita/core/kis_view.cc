@@ -54,6 +54,7 @@
 #include "kis_doc.h"
 #include "kis_canvas.h"
 #include "kis_channelview.h"
+#include "kis_dlg_dimension.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paintoffset.h"
 #include "kis_image_magick_converter.h"
@@ -99,10 +100,14 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_zoomOut = 0;
 	m_layerAdd = 0;
 	m_layerRm = 0;
+	m_layerDup = 0;
 	m_layerLink = 0;
 	m_layerHide = 0;
 	m_layerProperties = 0;
 	m_layerSaveAs = 0;
+	m_layerResize = 0;
+	m_layerResizeToImage = 0;
+	m_layerScale = 0;
 	m_layerRaise = 0;
 	m_layerLower = 0;
 	m_layerTop = 0;
@@ -117,6 +122,7 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_selectionSelectAll = 0;
 	m_selectionSelectNone = 0;
 	m_imgRm = 0;
+	m_imgResize = 0;
 	m_imgDup = 0;
 	m_imgExport = 0;
 	m_imgMergeAll = 0;
@@ -342,6 +348,7 @@ void KisView::setupActions()
 	// layer actions
 	m_layerAdd = new KAction(i18n("&Add Layer..."), 0, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
 	m_layerRm = new KAction(i18n("&Remove Layer"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
+	m_layerDup = new KAction(i18n("Duplicate Layer"), 0, this, SLOT(layerDuplicate()), actionCollection(), "duplicate_layer");
 	m_layerLink = new KAction(i18n("&Link/Unlink Layer"), 0, this, SLOT(layerToggleLinked()), actionCollection(), "link_layer");
 	m_layerHide = new KAction(i18n("&Hide/Show Layer"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");
 	m_layerRaise = new KAction(i18n("Raise Layer"), "raiselayer", 0, this, SLOT(layerRaise()), actionCollection(), "raiselayer");
@@ -351,14 +358,15 @@ void KisView::setupActions()
 	m_layerProperties = new KAction(i18n("Layer Properties..."), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
 	(void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
 	m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(save_layer_as_image()), actionCollection(), "save_layer_as_image");
+	m_layerResize = new KAction(i18n("Resize Layer..."), 0, this, SLOT(layerResize()), actionCollection(), "resizelayer");
+	m_layerResizeToImage = new KAction(i18n("Resize Layer to Image"), 0, this, SLOT(layerResizeToImage()), actionCollection(), "resizelayertoowner");
 
 	// layer transformations - should be generic, for selection too
-	(void)new KAction(i18n("Scale Layer Smoothly"), 0, this, SLOT(layer_scale_smooth()), actionCollection(), "layer_scale_smooth");
-	(void)new KAction(i18n("Scale Layer - Keep Palette"), 0, this, SLOT(layer_scale_rough()), actionCollection(), "layer_scale_rough");
+	m_layerScale = new KAction(i18n("Scale Layer..."), 0, this, SLOT(layerScale()), actionCollection(), "scalelayer");
 	(void)new KAction(i18n("Rotate &180"), 0, this, SLOT(layer_rotate180()), actionCollection(), "layer_rotate180");
 	(void)new KAction(i18n("Rotate &270"), 0, this, SLOT(layer_rotateleft90()), actionCollection(), "layer_rotateleft90");
 	(void)new KAction(i18n("Rotate &90"), 0, this, SLOT(layer_rotateright90()), actionCollection(), "layer_rotateright90");
-	(void)new KAction(i18n("Rotate &Custom"), 0, this, SLOT(layer_rotate_custom()), actionCollection(), "layer_rotate_custom");
+	(void)new KAction(i18n("Rotate &Custom..."), 0, this, SLOT(layer_rotate_custom()), actionCollection(), "layer_rotate_custom");
 	(void)new KAction(i18n("Mirror &X"), 0, this, SLOT(layer_mirrorX()), actionCollection(), "layer_mirrorX");
 	(void)new KAction(i18n("Mirror &Y"), 0, this, SLOT(layer_mirrorY()), actionCollection(), "layer_mirrorY");
 
@@ -370,6 +378,7 @@ void KisView::setupActions()
 	// image actions
 	(void)new KAction(i18n("Add New Image..."), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
 	m_imgRm = new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
+	m_imgResize = new KAction(i18n("Resize Image..."), 0, this, SLOT(imageResize()), actionCollection(), "resize_image");
 	m_imgDup = new KAction(i18n("Duplicate Image"), 0, this, SLOT(duplicateCurrentImg()), actionCollection(), "duplicate_image");
 	m_imgMergeAll = new KAction(i18n("Merge &All Layers"), 0, this, SLOT(merge_all_layers()), actionCollection(), "merge_all_layers");
 	m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(merge_visible_layers()), actionCollection(), "merge_visible_layers");
@@ -712,11 +721,15 @@ void KisView::layerUpdateGUI(bool enable)
 		layerPos = img -> index(layer);
 
 	enable = enable && img && layer;
+	m_layerDup -> setEnabled(enable);
 	m_layerRm -> setEnabled(enable);
 	m_layerLink -> setEnabled(enable);
 	m_layerHide -> setEnabled(enable);
 	m_layerProperties -> setEnabled(enable);
 	m_layerSaveAs -> setEnabled(enable);
+	m_layerResize -> setEnabled(enable);
+	m_layerResizeToImage -> setEnabled(enable);
+	m_layerScale -> setEnabled(enable);
 	m_layerRaise -> setEnabled(enable && nlayers > 1 && layerPos);
 	m_layerLower -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
 	m_layerTop -> setEnabled(enable && nlayers > 1 && layerPos);
@@ -819,6 +832,7 @@ void KisView::imgUpdateGUI()
 	Q_INT32 nlinked = 0;
 
 	m_imgRm -> setEnabled(img != 0);
+	m_imgResize -> setEnabled(img != 0);
 	m_imgDup -> setEnabled(img != 0);
 	m_imgExport -> setEnabled(img != 0);
 	m_layerAdd -> setEnabled(img != 0);
@@ -1226,18 +1240,6 @@ Q_INT32 KisView::importImage(bool createLayer, const QString& filename)
 	return 1;
 }
 
-void KisView::layer_scale_smooth()
-{
-//    layerScale(true);
-}
-
-
-void KisView::layer_scale_rough()
-{
-//    layerScale(false);
-}
-
-
 void KisView::layerScale(bool )
 {
 #if 0
@@ -1329,6 +1331,25 @@ void KisView::remove_current_image_tab()
 		disconnectCurrentImg();
 		m_current = 0;
 		m_doc -> removeImage(current);
+	}
+}
+
+void KisView::imageResize()
+{
+	KisImageSP img = currentImg();
+
+	if (img) {
+		KisDlgDimension dlg(IMG_WIDTH_MAX, img -> width(), IMG_HEIGHT_MAX, img -> height(), this);
+
+		if (dlg.exec() == QDialog::Accepted) {
+			QSize size = dlg.getSize();
+
+			img -> resize(size.width(), size.height());
+			img -> invalidate();
+			resizeEvent(0);
+			layersUpdated();
+			canvasRefresh();
+		}
 	}
 }
 
@@ -1648,7 +1669,7 @@ void KisView::canvasGotKeyReleaseEvent(QKeyEvent *event)
 
 void KisView::canvasRefresh()
 {
-	updateCanvas();
+	m_canvas -> repaint();
 }
 
 void KisView::layerToggleVisible()
@@ -1761,6 +1782,10 @@ void KisView::layerRemove()
 			layerUpdateGUI(img -> activeLayer() != 0);
 		}
 	}
+}
+
+void KisView::layerDuplicate()
+{
 }
 
 void KisView::layerAddMask(int /*n*/)
@@ -2043,6 +2068,54 @@ void KisView::imgUpdated(KisImageSP img, const QRect& rc)
 	if (img == currentImg())
 		updateCanvas(rc);
 }
+
+void KisView::layerResize()
+{
+	KisImageSP img = currentImg();
+
+	if (img) {
+		KisLayerSP layer = img -> activeLayer();
+
+		if (layer) {
+			KisDlgDimension dlg(IMG_WIDTH_MAX, layer -> width(), IMG_HEIGHT_MAX, layer -> height(), this);
+
+			if (dlg.exec() == QDialog::Accepted) {
+				QSize size = dlg.getSize();
+
+				layer -> resize(size.width(), size.height());
+				img -> invalidate();
+				layersUpdated();
+				resizeEvent(0);
+				canvasRefresh();
+			}
+		}
+	}
+}
+
+void KisView::layerResizeToImage()
+{
+	KisImageSP img = currentImg();
+
+	if (img) {
+		KisLayerSP layer = img -> activeLayer();
+
+		if (layer) {
+			if (layer -> width() == img -> width() || layer -> height() == img -> height())
+				return;
+
+			layer -> resize(img -> width(), img -> height());
+			img -> invalidate();
+			layersUpdated();
+			resizeEvent(0);
+			canvasRefresh();
+		}
+	}
+}
+
+void KisView::layerScale()
+{
+}
+
 
 #include "kis_view.moc"
 

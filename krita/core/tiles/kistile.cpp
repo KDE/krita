@@ -247,3 +247,32 @@ QImage KisTile::convertToImage()
 	return m_img;
 }
 
+void KisTile::duplicate(KisTile *tile) 
+{
+	tile -> lock();
+
+	if (tile -> width() == width() && tile -> height() == height()) {
+		memcpy(m_data, tile -> m_data, m_width * m_height * m_depth * sizeof(QUANTUM));
+	} else {
+		Q_INT32 rows = QMIN(height(), tile -> height());
+		Q_INT32 cols = QMIN(width(), tile -> width());
+		QUANTUM *dst = data();
+		QUANTUM *src = tile -> data();
+		QUANTUM *d;
+		QUANTUM *s;
+
+		while (rows-- > 0) {
+			d = dst;
+			s = src;
+
+			for (Q_INT32 i = cols; i > 0; i--, d += m_depth, s += m_depth)
+				memcpy(d, s, m_depth * sizeof(QUANTUM));
+
+			dst += width() * depth();
+			src += tile -> width() * tile -> depth();
+		}
+	}
+
+	tile -> release();
+}
+

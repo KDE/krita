@@ -74,6 +74,7 @@ public:
 	Q_INT32 redoLimit() const;
 	void setRedoLimit(Q_INT32 limit);
 	void setUndo(bool undo);
+	bool undo() const;
 
 	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, enumImgType type);
 	void addImage(KisImageSP img);

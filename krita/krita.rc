@@ -43,6 +43,8 @@
   <Separator/>
   <Action name="add_new_image_tab"/>
   <Action name="remove_current_image_tab"/>
+  <Action name="scale_image"/>
+  <Action name="resize_image"/>
   <Action name="duplicate_image"/>  
   <Separator/>
   <Action name="merge_all_layers"/>
@@ -62,8 +64,9 @@
   <Action name="toplayer"/>
   <Action name="bottomlayer"/>
   <Separator/>
-  <Action name="layer_scale_smooth"/>  
-  <Action name="layer_scale_rough"/>  
+  <Action name="resizelayer"/>  
+  <Action name="resizelayertoowner"/>  
+  <Action name="scalelayer"/>  
   <Separator/>  
   <Action name="insert_image_as_layer"/>
   <Action name="save_layer_as_image"/>

@@ -45,11 +45,10 @@ public:
 	void translate(Q_INT32 x, Q_INT32 y);
 	void addAlpha();
 
-	void resize(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	void resize(Q_INT32 w, Q_INT32 h);
 	void resize(const QRect& rc);
 	void resize();
 
-	void boundary(const vKisSegments& segments);
 	KisMaskSP mask() const;
 
 	QUANTUM opacity() const;
@@ -63,8 +62,9 @@ private:
 	bool m_preserveTranspanrency;
 	KisMaskSP m_mask;
 	bool m_initial;
-	QRect m_bounds;
 	bool m_linked;
+	Q_INT32 m_dx;
+	Q_INT32 m_dy;
 };
 
 #endif // KIS_LAYER_H_

@@ -188,9 +188,9 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 	if (m_height < h)
 		m_height = h;
 
-	m_projection = new KisLayer(this, m_width, m_height, "projection", OPACITY_OPAQUE);
+	m_projection = new KisLayer(this, m_width, m_height, "image projection", OPACITY_OPAQUE);
 	m_bkg = new KisBackground(this, m_width, m_height);
-	m_pixmapProjection = QPixmap();
+	m_projectionPixmaps.clear();
 }
 
 void KisImage::resize(const QRect& rc)
@@ -1082,6 +1082,11 @@ void KisImage::notify(const QRect& rc)
 {
 	invalidate(rc);
 	emit update(KisImageSP(this), rc);
+}
+
+QRect KisImage::bounds() const
+{
+	return QRect(0, 0, width(), height());
 }
 
 #include "kis_image.moc"

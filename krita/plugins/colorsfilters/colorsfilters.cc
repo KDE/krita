@@ -95,11 +95,9 @@ void ColorsFilters::slotColorActivated()
 	KisTileSP tile;
 	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB)
 	{
-		FormRGBSliders* frsd = new FormRGBSliders( m_view, "Color adjustment", TRUE)
+		FormRGBSliders* frsd = new FormRGBSliders( m_view, "Color adjustment", TRUE);
 
-		frsd->setCaption("Color adjustment")
-
-
+		frsd->setCaption("Color adjustment");
 
 		frsd->setMinValue(-255);
 		frsd->setMaxValue(255);
@@ -135,9 +133,9 @@ void ColorsFilters::slotColorActivated()
 		kD->imageNum(0)->undoAdapter()->addCommand( ktc );
 		kD->imageNum(0)->notify();
 	} else if( lay->typeWithoutAlpha() == IMAGE_TYPE_CMYK) {
-		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Color adjustment", TRUE)
+		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Color adjustment", TRUE);
 
-		frsd->setCaption("Color adjustment")
+		frsd->setCaption("Color adjustment");
 
 
 
@@ -189,9 +187,9 @@ void ColorsFilters::slotGammaActivated()
 	KisTileSP tile;
 	if( lay->typeWithoutAlpha() == IMAGE_TYPE_RGB)
 	{
-		FormRGBSliders* frsd = new FormRGBSliders( m_view, "Gamma Correction", TRUE)
+		FormRGBSliders* frsd = new FormRGBSliders( m_view, "Gamma Correction", TRUE);
 
-		frsd->setCaption("Gamma Correction")
+		frsd->setCaption("Gamma Correction");
 
 
 
@@ -229,9 +227,9 @@ void ColorsFilters::slotGammaActivated()
 		kD->imageNum(0)->undoAdapter()->addCommand( ktc );
 		kD->imageNum(0)->notify();
 	} else if( lay->typeWithoutAlpha() == IMAGE_TYPE_CMYK) {
-		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Gamma Correction", TRUE)
+		FormCMYBSliders* frsd = new FormCMYBSliders( m_view, "Gamma Correction", TRUE);
 
-		frsd->setCaption("Gamma Correction")
+		frsd->setCaption("Gamma Correction");
 
 
 

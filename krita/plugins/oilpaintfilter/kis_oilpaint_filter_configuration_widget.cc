@@ -44,3 +44,5 @@ KisOilPaintFilterConfigurationWidget::KisOilPaintFilterConfigurationWidget( KisF
 }
 
 //#include "kis_raindrops_filter_configuration_widget.moc"
+
+#include "kis_oilpaint_filter_configuration_widget.moc"

@@ -18,6 +18,8 @@
 
 #include <qimage.h>
 
+#include <koColor.h>
+
 #include "kis_layer.h"
 #include "kis_selection.h"
 #include "kis_global.h"
@@ -34,7 +36,19 @@ KisSelection::KisSelection(KisLayerSP layer, const QString& name)
 		name)
 {
 	m_parentLayer = layer;
+	m_maskColor = KoColor::white();
 }
+
+KisSelection::KisSelection(KisLayerSP layer, const QString& name, KoColor color) 
+ 	: super(layer -> width(),
+		layer -> height(),
+		layer -> colorStrategy(),
+		name)
+{
+	m_parentLayer = layer;
+	m_maskColor = color;
+}
+
 
 KisSelection::~KisSelection() 
 {
@@ -42,33 +56,44 @@ KisSelection::~KisSelection()
 
 QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y) const
 {
-// 	if (m_mask.valid(x, y)) {
-// 		return (QUANTUM)m_mask.pixelIndex(x, y);
-// 	}
-// 	else {
-		return 0;
-// 	}
+	KoColor c;
+	QUANTUM opacity;
+	if (pixel(x, y, &c, &opacity)) {
+		return opacity;
+	}
+	else {
+		return MIN_SELECTED;
+	}
 }
 
-QUANTUM KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
+void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
 {
-// 	if (m_mask.valid(x, y)) {
-// 		int previous = m_mask.pixelIndex(x, y);
-// 		m_mask.setPixel(x, y, s);
-// 		return (QUANTUM)previous;
-// 	}
-// 	else {
-		return 0;
-// 	}
-	
+	setPixel(x, y, m_maskColor, s);
 }
 
 QImage KisSelection::maskImage() const 
 {
- 	return QImage();
+	return QImage();
 }
 
-void KisSelection::reset()
+void KisSelection::clear() 
 {
-// 	m_mask.fill(NOT_SELECTED);
+	KisPainter gc(this);
+	gc.fillRect(0, 0, width(), height(), m_maskColor, MIN_SELECTED);
+	gc.end();
+}
+
+void KisSelection::clear(KoColor c) 
+{
+	KisPainter gc(this);
+	gc.fillRect(0, 0, width(), height(), c, MIN_SELECTED);
+	gc.end();
+
+}
+
+void KisSelection::changeMaskColor(KoColor c)
+{
+	// For all pixels in the selection, change only the color.
+	kdDebug() << "KisSelection::changeMaskColor not implemented.\n";
+	m_maskColor = c;
 }

@@ -130,7 +130,7 @@ public:
 	 * fill c and opacity with the values found at x and y
 	 * @return true if the operation was succesful
 	 */
-        bool pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity);
+        bool pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity) const;
 
         /**
 	 * Set the specified pixel to the specified color. Note that this

@@ -23,6 +23,17 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 
+class KoColor;
+
+// Note: this is intentionally not namespaced, because it's meant for all of Krita 
+// that wants to determine selectedness.
+#if (QUANTUM_DEPTH == 8)
+// XXX: swap when special color strategy for selec
+const QUANTUM MIX_SELECTED = OPACITY_TRANSPARENT;
+const QUANTUM MIN_SELECTED = OPACITY_OPAQUE;
+#endif
+
+
 /**
  * KisSelection contains a byte-map representation of a layer, where
  * the value of a byte signifies whether a corresponding pixel is selected, or not,
@@ -40,21 +51,32 @@ class KisSelection : public KisPaintDevice {
 
 public:
 	KisSelection(KisLayerSP layer, const QString& name);
+	KisSelection(KisLayerSP layer, const QString& name, KoColor c);
+
 	virtual ~KisSelection();
 
 	// Returns selectedness, or 0 if invalid coordinates
 	QUANTUM selected(Q_INT32 x, Q_INT32 y) const;
 
-	// Sets selectedness, and returns previous selectedness or 0
-	// if invalid coordinates.
-	QUANTUM setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
+	void setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
 
 	QImage maskImage() const;
 
-	void reset();
+	void clear();
+
+	// Clear the selection and set the mask to color c
+	// Note: it is intentional to deep-copy the color
+	// since the selection will want to own its own copy.
+	void clear(const KoColor c);
+
+	// Keep the selection but set the mask to color c
+	// Note: it is intentional to deep-copy the color
+	// since the selection will want to own its own copy.
+	void changeMaskColor(const KoColor c);
 
 private:
 	KisLayerSP m_parentLayer;
+	KoColor m_maskColor;
 };
 
 #endif // KIS_SELECTION_H_

@@ -54,8 +54,8 @@ KisHistogram::~KisHistogram()
 void KisHistogram::computeHistogramFor(const ChannelInfo & channel)
 {
 	Q_UINT32 total = 0;
-	Q_UINT32 total_white = 0;
-	Q_UINT32 total_black = 0;
+	//Q_UINT32 total_white = 0;
+	//Q_UINT32 total_black = 0;
 
 	if (m_layer -> hasSelection()) {
 		// Get selection iterators

@@ -1097,9 +1097,6 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 
 void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
 {
-	kdDebug() << "paintContent: " << rect.x() << ", " << rect.y() << ", "
-		  << rect.width() << ", " << rect.height() << "\n";
-
 	Q_INT32 x;
 	Q_INT32 y;
 	Q_INT32 x1;

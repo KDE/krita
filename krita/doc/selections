@@ -97,3 +97,15 @@ the surrounding unselected pixels, or should the operation then assume
 edge conditions? Or should this be an option?
 
 TODO: infrastructure for all these operations, actual implementation.
+
+Actions to a selection need to be undoable. 
+
+TODO: Make it so.
+
+I am not sure whether selections need to be saved and loaded:
+Photoshop offers this, but our selection mechanism works differently.
+The Gimp offers selection adding/subtracting, but that's also not
+really necessary. A good idea is perhaps to add a combobox to the
+selection tool properties widget to choose between 'select' and
+'deselect', where the brush is initially set to 'select' and the
+eraser to 'deselect'.

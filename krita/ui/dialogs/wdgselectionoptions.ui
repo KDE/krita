@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>398</width>
-            <height>91</height>
+            <width>427</width>
+            <height>153</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,7 +19,54 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <spacer row="1" column="0">
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>lblMaskColor</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Mask Color</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>cmbMaskColor</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>lblOpacity</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Opacity</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>sldrOpacity</cstring>
+            </property>
+        </widget>
+        <widget class="KColorCombo" row="1" column="1">
+            <property name="name">
+                <cstring>cmbMaskColor</cstring>
+            </property>
+        </widget>
+        <widget class="QSlider" row="0" column="1">
+            <property name="name">
+                <cstring>sldrOpacity</cstring>
+            </property>
+            <property name="maxValue">
+                <number>256</number>
+            </property>
+            <property name="lineStep">
+                <number>25</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>Below</enum>
+            </property>
+            <property name="tickInterval">
+                <number>25</number>
+            </property>
+        </widget>
+        <spacer row="3" column="1">
             <property name="name">
                 <cstring>spacer1</cstring>
             </property>
@@ -32,66 +79,47 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>201</height>
+                    <height>16</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QLayoutWidget" row="0" column="0">
+        <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>layout1</cstring>
+                <cstring>grpAction</cstring>
             </property>
-            <grid>
+            <property name="title">
+                <string>&amp;Action</string>
+            </property>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel" row="1" column="0">
+                <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>lblMaskColor</cstring>
+                        <cstring>radioSelect</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Mask Color</string>
+                        <string>&amp;Select</string>
                     </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>cmbMaskColor</cstring>
+                    <property name="accel">
+                        <string>Alt+S</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="0">
+                <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>lblOpacity</cstring>
+                        <cstring>radioDeselect</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Opacity</string>
+                        <string>&amp;Deselect</string>
                     </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>sldrOpacity</cstring>
-                    </property>
-                </widget>
-                <widget class="KColorCombo" row="1" column="1">
-                    <property name="name">
-                        <cstring>cmbMaskColor</cstring>
+                    <property name="accel">
+                        <string>Alt+D</string>
                     </property>
                 </widget>
-                <widget class="QSlider" row="0" column="1">
-                    <property name="name">
-                        <cstring>sldrOpacity</cstring>
-                    </property>
-                    <property name="maxValue">
-                        <number>256</number>
-                    </property>
-                    <property name="lineStep">
-                        <number>25</number>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="tickmarks">
-                        <enum>Below</enum>
-                    </property>
-                    <property name="tickInterval">
-                        <number>25</number>
-                    </property>
-                </widget>
-            </grid>
+            </hbox>
         </widget>
     </grid>
 </widget>

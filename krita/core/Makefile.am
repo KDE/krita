@@ -40,6 +40,7 @@ libkritacore_la_SOURCES = kis_paint_device.cc \
 	kis_pattern.cc \
 	kis_nameserver.cc \
 	kis_painter.cc \
+	kis_gradient_painter.cc \
 	kis_tool_factory.cc \
 	kis_cursor.cc \
 	kis_floatingselection.cc \

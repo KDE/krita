@@ -46,7 +46,7 @@ public:
 public:
         // The nativeColor methods take a given color that can be defined in any
         // colorspace and fills a byte array with the corresponding color in the
-        // the colorspace managed by this strategy.
+        // the colorspace managed by this strategy. 
 	virtual void nativeColor(const KoColor& c, QUANTUM *dst) = 0;
 	virtual void nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst) = 0;
 	virtual void nativeColor(const QColor& c, QUANTUM *dst) = 0;
@@ -65,7 +65,7 @@ public:
 	virtual void render(KisImageSP projection, QPainter& painter, Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) = 0;
 
 	/**
-	 * This function is used to convert a KisPixelRepresentation to an other color strategy.
+	 * This function is used to convert a KisPixelRepresentation to another color strategy.
 	 * When implementing a color space, there is no need to implement a conversion to all strategies,
 	 * if there is no direct conversion facilities, the function should use the conversion to/from RGBA
 	 *

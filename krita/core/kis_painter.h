@@ -46,15 +46,10 @@
 #include "kis_matrix.h"
 #include "kis_progress_subject.h"
 
-//#include "kis_gradient.h"
-//#include "kis_brush.h"
-//#include "kis_pattern.h"
-
 class QRect;
 class KisTileCommand;
 class KisBrush;
 class KisPattern;
-class KisGradient;
 
 /**
   KisPainter contains the graphics primitives necessary to draw on a
@@ -73,11 +68,11 @@ class KisPainter : public KisProgressSubject {
 public:
         KisPainter();
         KisPainter(KisPaintDeviceSP device);
-        ~KisPainter();
+        virtual ~KisPainter();
 
 private:
 	// Implement KisProgressSubject
-	virtual void cancel();
+	virtual void cancel() { m_cancelRequested = true; }
 
 public:
         /**
@@ -252,33 +247,10 @@ public:
 		*/
 	void applyConvolutionColorTransformation(KisMatrix3x3* matrix);
 
-	enum enumGradientShape {
-		GradientShapeLinear,
-		GradientShapeBiLinear,
-		GradientShapeRadial,
-		GradientShapeSquare,
-		GradientShapeConical,
-		GradientShapeConicalSymetric
-	};
-
-	enum enumGradientRepeat {
-		GradientRepeatNone,
-		GradientRepeatForwards,
-		GradientRepeatAlternate
-	};
-
-	bool paintGradient(const KisPoint& gradientVectorStart,
-			   const KisPoint& gradientVectorEnd,
-			   enumGradientShape shape,
-			   enumGradientRepeat repeat,
-			   double antiAliasThreshold,
-			   bool reverseGradient = false);
-
 	// ------------------------------------------------------------------------------------------
 	// Set the parameters for the higher level graphics primitives.
 	void setBrush(KisBrush* brush);
 	void setPattern(KisPattern& pattern) { m_pattern = &pattern; }
-	void setGradient(KisGradient& gradient) { m_gradient = &gradient; }
 	void setPaintColor(const KoColor& color) {m_paintColor = color; }
 	void setBackgroundColor(const KoColor& color) {m_backgroundColor = color; }
 	void setFillColor(const KoColor& color) { m_fillColor = color; }
@@ -286,7 +258,7 @@ public:
 	void setCompositeOp(CompositeOp op) { m_compositeOp = op; }
 
 
-private:
+protected:
         void tileBlt(QUANTUM *dst, KisTileSP dsttile, QUANTUM *src,
                      KisTileSP srctile, Q_INT32 rows, Q_INT32 cols,
                      CompositeOp op);
@@ -306,7 +278,7 @@ private:
 
 	static double pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1);
 
-private:
+protected:
         KisPaintDeviceSP m_device;
         KisTileCommand  *m_transaction;
 
@@ -318,7 +290,6 @@ private:
 	KoColor m_fillColor;
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
-	KisGradient *m_gradient;
 	KisPoint m_duplicateOffset;
 	QUANTUM m_opacity;
 	CompositeOp m_compositeOp;

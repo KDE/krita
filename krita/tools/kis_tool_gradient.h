@@ -29,6 +29,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_painter.h"
+#include "kis_gradient_painter.h"
 
 class IntegerWidget;
 class KisCmbComposite;
@@ -86,8 +87,8 @@ private:
 	QUANTUM m_opacity;
 	CompositeOp m_compositeOp;
 
-	KisPainter::enumGradientShape m_shape;
-	KisPainter::enumGradientRepeat m_repeat;
+	KisGradientPainter::enumGradientShape m_shape;
+	KisGradientPainter::enumGradientRepeat m_repeat;
 
 	bool m_reverse;
 	double m_antiAliasThreshold;

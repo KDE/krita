@@ -34,6 +34,7 @@
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
+#include "kis_gradient_painter.h"
 #include "kis_tool_gradient.h"
 #include "kis_view.h"
 #include "kis_button_press_event.h"
@@ -57,8 +58,8 @@ KisToolGradient::KisToolGradient()
 	m_endPos = KisPoint(0, 0);
 
 	m_reverse = false;
-	m_shape = KisPainter::GradientShapeLinear;
-	m_repeat = KisPainter::GradientRepeatNone;
+	m_shape = KisGradientPainter::GradientShapeLinear;
+	m_repeat = KisGradientPainter::GradientRepeatNone;
 	m_antiAliasThreshold = 0.2;
 }
 
@@ -141,7 +142,7 @@ void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
 
 		if (img && (device = img -> activeDevice())) {
 
-			KisPainter painter(device);
+			KisGradientPainter painter(device);
 
 			painter.beginTransaction(i18n("Gradient"));
 
@@ -314,12 +315,12 @@ void KisToolGradient::slotSetCompositeMode(int compositeOp)
 
 void KisToolGradient::slotSetShape(int shape)
 {
-	m_shape = static_cast<KisPainter::enumGradientShape>(shape);
+	m_shape = static_cast<KisGradientPainter::enumGradientShape>(shape);
 }
 
 void KisToolGradient::slotSetRepeat(int repeat)
 {
-	m_repeat = static_cast<KisPainter::enumGradientRepeat>(repeat);
+	m_repeat = static_cast<KisGradientPainter::enumGradientRepeat>(repeat);
 }
 
 void KisToolGradient::slotSetReverse(bool state)

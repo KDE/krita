@@ -21,6 +21,7 @@
 #if !defined KIS_PAINT_DEVICE_H_
 #define KIS_PAINT_DEVICE_H_
 
+#include <qcolor.h>
 #include <qobject.h>
 #include <qrect.h>
 #include <qstring.h>
@@ -30,8 +31,7 @@
 
 class KisPaintDevice : public QObject {
 public:
-	KisPaintDevice(const QString& name);
-	KisPaintDevice(const QString& name, uint width, uint height, uint bpp);
+	KisPaintDevice(const QString& name, uint width, uint height, uint bpp, const QRgb& defaultColor);
 	virtual ~KisPaintDevice();
 
 	inline void setName(const QString& name);
@@ -53,8 +53,8 @@ public:
 	void findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
 	void findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const;
 
-	uchar   opacity() const { return m_opacity; }
-	void    setOpacity(uchar o) { m_opacity = o; }
+	inline uchar opacity() const;
+	inline void setOpacity(uchar o);
 
 protected:
 	uchar m_opacity;
@@ -92,6 +92,16 @@ QString KisPaintDevice::name() const
 KisTile *KisPaintDevice::getTile(unsigned int x, unsigned int y) 
 { 
 	return m_tiles.getTile(x, y); 
+}
+
+uchar KisPaintDevice::opacity() const 
+{ 
+	return m_opacity; 
+}
+
+void KisPaintDevice::setOpacity(uchar o) 
+{ 
+	m_opacity = o; 
 }
 
 #endif // KIS_PAINT_DEVICE_H_

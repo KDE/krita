@@ -2293,18 +2293,20 @@ void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
 	KisImage *newimg = m_doc -> newImage(layerName, layerRect.width(), layerRect.height());
 
 	// add background for layer - should this always be white?
-	bgMode bg = bm_White;
+	bgMode bg = bm_White; // bm_Transparent, bm_ForegroundColor, bm_BackgroundColor
+	KisColor clr;
 
 	if (bg == bm_White)
-		newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), KisColor::white(), false, i18n("background"));
+		clr = KisColor::white();
 	else if (bg == bm_Transparent)
-		newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), KisColor::white(), true, i18n("background"));
+		clr = KisColor::white();
 	else if (bg == bm_ForegroundColor)
-		newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), KisColor::white(), false, i18n("background"));
+		clr = KisColor::white();
 	else if (bg == bm_BackgroundColor)
-		newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), KisColor::white(), false, i18n("background"));
+		clr = KisColor::white();
 
-//	newimg -> markDirty(QRect(0, 0, newimg -> width(), newimg -> height())); // XXX
+	newimg -> addLayer(QRect(0, 0, newimg -> width(), newimg -> height()), clr, false, i18n("background"));
+	newimg -> markDirty(QRect(0, 0, newimg -> width(), newimg -> height()));
 	m_doc -> setCurrentImage(newimg);
 }
 

@@ -23,15 +23,10 @@
 #include "kis_global.h"
 #include "kis_paint_device.h"
 
-KisPaintDevice::KisPaintDevice(const QString& name)
+KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uint bpp, const QRgb& defaultColor) :
+	m_tiles(width / TILE_SIZE, height / TILE_SIZE, bpp, defaultColor)
 {
 	m_name = name;
-}
-
-KisPaintDevice::KisPaintDevice(const QString& name, uint width, uint height, uint bpp)
-{
-	m_name = name;
-	m_tiles.resize(width / TILE_SIZE, height / TILE_SIZE, bpp);
 }
 
 KisPaintDevice::~KisPaintDevice()

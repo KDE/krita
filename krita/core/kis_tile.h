@@ -21,9 +21,11 @@
 #if !defined KIS_TILE_
 #define KIS_TILE_
 
+#include <qcolor.h>
+
 class KisTile {
 public:
-	KisTile(unsigned int width, unsigned int height, unsigned int bpp, bool dirty = false);
+	KisTile(unsigned int width, unsigned int height, unsigned int bpp, const QRgb& defaultColor, bool dirty = false);
 	~KisTile();
 				
 	void setDirty(bool dirty);
@@ -35,6 +37,7 @@ public:
 private:
 	KisTile(const KisTile&);
 	KisTile& operator=(const KisTile&);
+	void initTile();
 
 private:
 	bool m_dirty;
@@ -42,6 +45,7 @@ private:
 	unsigned int m_height;
 	unsigned int m_bpp;
 	unsigned int *m_data;
+	QRgb m_defaultColor;
 };
 
 bool KisTile::dirty() const

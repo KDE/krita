@@ -46,8 +46,7 @@ public:
 	KisImage(const QString& name, int width, int height, cMode cm = cm_RGBA, uchar bitDepth = 8);
 	virtual ~KisImage();
 
-        virtual DCOPObject* dcopObject();
-
+	virtual DCOPObject* dcopObject();
 
 	KisPaintDevice* getCurrentPaintDevice();
 	KisChannel* getCurrentChannel();
@@ -99,29 +98,27 @@ signals:
 	void updated(const QRect& rect);
 	void layersUpdated();
 
-#if 0
-//protected slots:
-//	void slotUpdateTimeOut();
+#if 1
+protected slots:
+	void slotUpdateTimeOut();
 #endif
 
 protected:
 	void mergeLayers(QPtrList<KisLayer> layers);
 	void compositeImage(const QRect& rect = QRect());
-	void compositeTile( int x, int y, KisLayer *dstLay = 0, int dstTile = -1 );
-	void convertTileToPixmap( KisLayer *lay, int tileNo, QPixmap *pix );
-	void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay,
-			KisLayer *dstLay, int dstTile );
-	void renderTileQuadrant( const KisLayer *srcLay, int srcTile, KisLayer *dstLay,
-			int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
-	void convertImageToPixmap( QImage *img, QPixmap *pix );
-
+	void compositeTile(KisPaintDevice *dstDevice, int tileNo, int x, int y);
+	void convertTileToPixmap(KisPaintDevice *dstDevice, int tileNo, QPixmap *pix);
+	void convertImageToPixmap(QImage *img, QPixmap *pix);
 
 private:
 	KisImage(const KisImage&);
 	KisImage& operator=(const KisImage&);
 
-	void renderTile(KisTile *dst, KisTile *src, const KisPaintDevice *srcDevice);
-	void resizePixmap(KisLayer *lay, const QRect& rect);
+	void renderTile(KisTile *dst, const KisTile *src, const KisPaintDevice *srcDevice);
+	void renderBg(KisPaintDevice *srcDevice, int tileNo);
+	void resizeImage(KisLayer *lay, const QRect& rect);
+	void resizePixmap(bool dirty);
+	void destroyPixmap();
 	QRect findBoundingTiles(const QRect& area);
 
 private:
@@ -154,7 +151,7 @@ private:
 	bool m_autoUpdate;
         DCOPObject* m_dcop;
 
-//	QTimer* m_timer;
+	QTimer* m_timer;
 };
 
 QPtrList<KisLayer> KisImage::layerList()

@@ -26,40 +26,22 @@
 #include "kis_global.h"
 #include "kis_tile.h"
 
-KisTile::KisTile(unsigned int width, unsigned int height, unsigned int bpp, bool dirty)
+KisTile::KisTile(unsigned int width, unsigned int height, unsigned int bpp, const QRgb& defaultColor, bool dirty)
 {
 	m_dirty = dirty;
 	m_width = width;
 	m_height = height;
 	m_bpp = bpp;
 	m_data = 0;
-}
+	m_defaultColor = defaultColor;
 
-KisTile::KisTile(const KisTile& rhs)
-{
-	m_dirty = rhs.m_dirty;
-	m_width = rhs.m_width;
-	m_height = rhs.m_height;
-	m_data = new unsigned int[m_width * m_height];
-	memcpy(m_data, rhs.m_data, m_width * m_height * sizeof(unsigned int));
-}
-
-KisTile& KisTile::operator=(const KisTile& rhs)
-{
-	if (this != &rhs) {
-		m_dirty = rhs.m_dirty;
-		m_width = rhs.m_width;
-		m_height = rhs.m_height;
-		m_data = new unsigned int[m_width * m_height];
-		memcpy(m_data, rhs.m_data, m_width * m_height);
-	}
-
-	return *this;
+	if (qAlpha(defaultColor))
+		initTile();
 }
 
 KisTile::~KisTile()
 {
-	delete m_data;
+	delete[] m_data;
 }
 	
 void KisTile::setDirty(bool dirty)
@@ -69,10 +51,8 @@ void KisTile::setDirty(bool dirty)
 
 unsigned int* KisTile::data()
 {
-	if (!m_data) {
-		m_data = new unsigned int[m_width * m_height];
-		memset(m_data, 255, m_width * m_height * sizeof(unsigned int));
-	}
+	if (!m_data)
+		initTile();
 
 	return m_data;
 }
@@ -80,5 +60,13 @@ unsigned int* KisTile::data()
 const unsigned int* KisTile::data() const
 {
 	return m_data;
+}
+
+void KisTile::initTile()
+{
+	uint a = qAlpha(m_defaultColor);
+
+	m_data = new unsigned int[m_width * m_height];
+	memset(m_data, a, m_width * m_height * sizeof(unsigned int));
 }
 

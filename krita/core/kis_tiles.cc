@@ -27,15 +27,9 @@
 #include "kis_tiles.h"
 #include "kis_tile.h"
 
-KisTiles::KisTiles()
+KisTiles::KisTiles(unsigned int width, unsigned int height, unsigned int bpp, const QRgb& defaultColor)
 {
-	m_xTiles = 0;
-	m_yTiles = 0;
-	m_tiles = 0;
-}
-
-KisTiles::KisTiles(unsigned int width, unsigned int height, unsigned int bpp)
-{
+	m_defaultColor = defaultColor;
 	init(width, height, bpp);
 }
 
@@ -83,7 +77,7 @@ void KisTiles::init(unsigned int width, unsigned int height, unsigned int bpp)
 
 	for (unsigned int y = 0; y < m_yTiles; y++)
 		for (unsigned int x = 0; x < m_xTiles; x++)
-			m_tiles[y * m_xTiles + x] = new KisTile(TILE_SIZE, TILE_SIZE, bpp);
+			m_tiles[y * m_xTiles + x] = new KisTile(TILE_SIZE, TILE_SIZE, bpp, m_defaultColor);
 }
 
 void KisTiles::cleanup()

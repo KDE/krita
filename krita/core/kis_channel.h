@@ -33,7 +33,7 @@ class KisChannel : public KisPaintDevice {
 	typedef KisPaintDevice super;
 
 public:
-	KisChannel(cId id, const QString& name, uint width, uint height, uint bpp);
+	KisChannel(cId id, const QString& name, uint width, uint height, uint bpp, const QRgb& defaultColor);
 	virtual ~KisChannel();
 
 	cId channelId() const { return m_id; }

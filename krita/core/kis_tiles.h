@@ -21,12 +21,13 @@
 #if !defined KIS_TILES_
 #define KIS_TILES_
 
+#include <qcolor.h>
+
 class KisTile;
 
 class KisTiles {
 public:
-	KisTiles();
-	KisTiles(unsigned int width, unsigned int height, unsigned int bpp);
+	KisTiles(unsigned int width, unsigned int height, unsigned int bpp, const QRgb& defaultColor);
 	~KisTiles();
 	
 	inline unsigned int xTiles() const;
@@ -48,12 +49,11 @@ private:
 	void cleanup();
 
 private:
-	unsigned underrun[1024];
 	KisTile **m_tiles;
 	unsigned int m_xTiles;
 	unsigned int m_yTiles;
 	unsigned int m_bpp;
-	unsigned overrun[1024];
+	QRgb m_defaultColor;
 };
 
 unsigned int KisTiles::xTiles() const

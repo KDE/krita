@@ -27,7 +27,7 @@
 #include "kis_layer.h"
 #include "kis_global.h"
 
-KisLayer::KisLayer(const QString& name, uint width, uint height, uint bpp, cMode cm) : super(name, width, height, bpp)
+KisLayer::KisLayer(const QString& name, uint width, uint height, uint bpp, cMode cm, const QRgb& defaultColor) : super(name, width, height, bpp, defaultColor)
 {
 	m_cMode = cm;
 	m_visible = true;

@@ -36,7 +36,7 @@ class KisLayer : public KisPaintDevice {
 	typedef KisPaintDevice super;
 
 public:
-	KisLayer(const QString& name, uint width, uint height, uint bpp, cMode cm);
+	KisLayer(const QString& name, uint width, uint height, uint bpp, cMode cm, const QRgb& defaultColor);
 	virtual ~KisLayer();
 
 	bool    visible() const { return m_visible; }

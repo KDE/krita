@@ -31,9 +31,7 @@
 class KisDoc;
 class KisView;
 
-class KisPainter { //: public QObject {
-//	Q_OBJECT
-
+class KisPainter {
 public:
 	KisPainter(KisDoc *doc, KisView *view);
 	virtual ~KisPainter();

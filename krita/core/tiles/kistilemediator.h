@@ -25,8 +25,6 @@
 
 #define TILE_NOT_ATTACHED -1
 
-class KisTileMediatorSingleton;
-
 class KisTileMediator {
 public:
 	KisTileMediator();
@@ -40,11 +38,6 @@ public:
 private:
 	KisTileMediator(const KisTileMediator&);
 	KisTileMediator& operator=(const KisTileMediator&);
-
-private:
-	static QMutex m_mutex;
-	static KisTileMediatorSingleton *m_instance;
-	static Q_INT32 m_ref;
 };
 
 #endif // KISTILEMEDIATOR_H_

@@ -119,7 +119,7 @@ void KisToolText::setFont() {
 	m_lbFontName->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
 }
 
-QWidget* KisToolText::createoptionWidget(QWidget* parent)
+QWidget* KisToolText::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
 	m_optWidget->setCaption(i18n("Text"));
@@ -152,7 +152,7 @@ void KisToolText::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("Tool T&ext"), 
-					    "tool_text", 
+					    "text", 
 					    Qt::SHIFT+Qt::Key_T, 
 					    this,
 					    SLOT(activate()),

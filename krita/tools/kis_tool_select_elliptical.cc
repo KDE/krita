@@ -68,13 +68,13 @@ namespace {
 	void EllipseSelectCmd::execute()
 	{
 		m_selection -> clearParentOnMove(true);
-		m_owner -> setSelection(m_selection);
+		m_owner -> setFloatingSelection(m_selection);
 		m_owner -> notify(m_selection -> bounds());
 	}
 
 	void EllipseSelectCmd::unexecute()
 	{
-		m_owner -> unsetSelection(false);
+		m_owner -> unsetFloatingSelection(false);
 	}
 }
 
@@ -119,8 +119,8 @@ void KisToolSelectElliptical::clearSelection()
 
 		Q_ASSERT(controller);
 
-		if (img && img -> selection().data() != 0) {
-			img -> unsetSelection();
+		if (img && img -> floatingSelection().data() != 0) {
+			img -> unsetFloatingSelection();
                         controller -> canvas() -> update();
 		}
 
@@ -156,7 +156,7 @@ void KisToolSelectElliptical::move(KisMoveEvent *e)
 	}
 }
 
-void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent */*e*/)
 {
 	clearSelection();
 	m_selecting = false;

@@ -65,7 +65,7 @@ public:
 
 	virtual void cursor(QWidget *w) const;
 	virtual void setCursor(const QCursor& cursor);
-	virtual QWidget* createoptionWidget(QWidget* parent);
+	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 
 protected:

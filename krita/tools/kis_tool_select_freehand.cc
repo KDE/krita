@@ -62,12 +62,12 @@ KisToolSelectFreehand::~KisToolSelectFreehand()
 {
 }
 
-void KisToolSelectFreehand::start( QPoint p )
+void KisToolSelectFreehand::start( QPoint /*p*/ )
 {
 // 	mStart = p;
 }
 
-void KisToolSelectFreehand::finish( QPoint p )
+void KisToolSelectFreehand::finish( QPoint /*p*/ )
 {
 // 	mFinish = p;
 // 	drawLine(mStart, mFinish);
@@ -89,7 +89,7 @@ void KisToolSelectFreehand::clearOld()
 // 	m_selectRegion = QRegion();
 }
 
-void KisToolSelectFreehand::buttonPress(KisButtonPressEvent *event)
+void KisToolSelectFreehand::buttonPress(KisButtonPressEvent */*event*/)
 {
 // 	// start the freehand line.
 // 	if (event -> button() == LeftButton && !moveSelectArea) {
@@ -123,7 +123,7 @@ void KisToolSelectFreehand::buttonPress(KisButtonPressEvent *event)
 }
 
 
-void KisToolSelectFreehand::move(KisMoveEvent *event)
+void KisToolSelectFreehand::move(KisMoveEvent */*event*/)
 {
 // 	if (event -> button() == RightButton) 
 // 		return;
@@ -211,7 +211,7 @@ void KisToolSelectFreehand::move(KisMoveEvent *event)
 }
 
 
-void KisToolSelectFreehand::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolSelectFreehand::buttonRelease(KisButtonReleaseEvent */*event*/)
 {
 // 	if ( event->button() == RightButton ) {
 // 		// TODO
@@ -269,7 +269,7 @@ void KisToolSelectFreehand::buttonRelease(KisButtonReleaseEvent *event)
 }
 
 
-void KisToolSelectFreehand::drawLine( const QPoint& start, const QPoint& end )
+void KisToolSelectFreehand::drawLine( const QPoint& /*start*/, const QPoint& /*end*/ )
 {
 // 	KisView *view = getCurrentView();
 // 	QPainter p;
@@ -307,10 +307,10 @@ void KisToolSelectFreehand::setup(KActionCollection *collection)
 
 bool KisToolSelectFreehand::willModify() const
 {
-// 	return false;
+ 	return false;
 }
 
-void KisToolSelectFreehand::paintEvent(QPaintEvent *e)
+void KisToolSelectFreehand::paintEvent(QPaintEvent */*e*/)
 {
 // 	if (m_pointArray.size() > 1) {
 // 		KisView *view = getCurrentView();

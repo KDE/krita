@@ -53,7 +53,7 @@ public:
 
 	bool flood(int startX, int startY);
       
-	virtual QWidget* createoptionWidget(QWidget* parent);
+	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 
 public slots:

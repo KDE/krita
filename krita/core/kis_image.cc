@@ -106,18 +106,18 @@ namespace {
 		QSize m_after;
 	};
 
-	class KisSelectionSet : public KNamedCommand {
+	class KisFloatingSelectionSet : public KNamedCommand {
 		typedef KNamedCommand super;
 
 	public:
-		KisSelectionSet(KisUndoAdapter *adapter, KisImageSP img, KisFloatingSelectionSP selection) : super(i18n("Set Floating Selection"))
+		KisFloatingSelectionSet(KisUndoAdapter *adapter, KisImageSP img, KisFloatingSelectionSP floatingSelection) : super(i18n("Set Floating Selection"))
 			{
 				m_adapter = adapter;
 				m_img = img;
-				m_selection = selection;
+				m_floatingSelection = floatingSelection;
 			}
 
-		virtual ~KisSelectionSet()
+		virtual ~KisFloatingSelectionSet()
 			{
 			}
 
@@ -125,7 +125,7 @@ namespace {
 		virtual void execute()
 			{
 				m_adapter -> setUndo(false);
-				m_img -> unsetSelection(false);
+				m_img -> unsetFloatingSelection(false);
 				m_adapter -> setUndo(true);
 				m_img -> notify();
 			}
@@ -133,7 +133,7 @@ namespace {
 		virtual void unexecute()
 			{
 				m_adapter -> setUndo(false);
-				m_img -> setSelection(m_selection);
+				m_img -> setFloatingSelection(m_floatingSelection);
 				m_adapter -> setUndo(true);
 				m_img -> notify();
 			}
@@ -141,7 +141,7 @@ namespace {
 	private:
 		KisUndoAdapter *m_adapter;
 		KisImageSP m_img;
-		KisFloatingSelectionSP m_selection;
+		KisFloatingSelectionSP m_floatingSelection;
 	};
 
 	class KisChangeLayersCmd : public KNamedCommand {
@@ -264,8 +264,8 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 			m_activeChannel = channel;
 		}
 
-		if (rhs.m_selectionMask)
-			m_selectionMask = new KisChannel(*m_selectionMask);
+		if (rhs.m_floatingSelectionMask)
+			m_floatingSelectionMask = new KisChannel(*m_floatingSelectionMask);
 
 		m_visible = rhs.m_visible;
 		m_active = rhs.m_active;
@@ -479,45 +479,6 @@ KisTileMgrSP KisImage::shadow() const
 	return m_shadow;
 }
 
-// void KisImage::activeComponent(CHANNELTYPE type, bool value)
-// {
-// 	PIXELTYPE i = pixelFromChannel(type);
-
-// 	if (i != PIXEL_UNDEF)
-// 		m_active[i] = value;
-// }
-
-// bool KisImage::activeComponent(CHANNELTYPE type)
-// {
-// 	PIXELTYPE i = pixelFromChannel(type);
-
-// 	if (i != PIXEL_UNDEF)
-// 		return m_active[i];
-
-// 	return false;
-// }
-
-// void KisImage::visibleComponent(CHANNELTYPE type, bool value)
-// {
-// 	PIXELTYPE i = pixelFromChannel(type);
-
-// 	if (i != PIXEL_UNDEF && value != m_visible[i]) {
-// 		m_visible[i] = value;
-// 		emit visibilityChanged(KisImageSP(this), type);
-// 	}
-// }
-
-// bool KisImage::visibleComponent(CHANNELTYPE type) const
-// {
-// 	PIXELTYPE i = pixelFromChannel(type);
-
-// 	return i != PIXEL_UNDEF && m_visible[i];
-// }
-
-void KisImage::flush()
-{
-}
-
 vKisLayerSP KisImage::layers()
 {
 	return m_layers;
@@ -540,8 +501,8 @@ const vKisChannelSP& KisImage::channels() const
 
 KisPaintDeviceSP KisImage::activeDevice()
 {
-	if (m_selection)
-		return m_selection.data();
+	if (m_floatingSelection)
+		return m_floatingSelection.data();
 
 	if (m_activeChannel)
 		return m_activeChannel.data();
@@ -557,12 +518,12 @@ KisPaintDeviceSP KisImage::activeDevice()
 
 const KisLayerSP KisImage::activeLayer() const
 {
-	return m_selection ? static_cast<KisLayerSP>(static_cast<KisFloatingSelection *>(m_selection)) : m_activeLayer;
+	return m_floatingSelection ? static_cast<KisLayerSP>(static_cast<KisFloatingSelection *>(m_floatingSelection)) : m_activeLayer;
 }
 
 KisLayerSP KisImage::activeLayer()
 {
-	return m_selection ? static_cast<KisLayerSP>(static_cast<KisFloatingSelection *>(m_selection)) : m_activeLayer;
+	return m_floatingSelection ? static_cast<KisLayerSP>(static_cast<KisFloatingSelection *>(m_floatingSelection)) : m_activeLayer;
 }
 
 KisLayerSP KisImage::activate(KisLayerSP layer)
@@ -655,7 +616,7 @@ bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 		position = m_layers.size();
 	}
 
-	if (position == 0 && m_selection && m_selection != layer)
+	if (position == 0 && m_floatingSelection && m_floatingSelection != layer)
 		position = 1;
 
 	if (m_layers.size() == 1 && m_layers[0] -> alpha())
@@ -694,9 +655,9 @@ void KisImage::rm(KisLayerSP layer)
 
 	layer -> setImage(0);
 
-	if (m_selection == layer) {
-		m_selection = 0;
-		emit selectionChanged(KisImageSP(this));
+	if (m_floatingSelection == layer) {
+		m_floatingSelection = 0;
+		emit floatingSelectionChanged(KisImageSP(this));
 	}
 
 	if (layer == m_activeLayer) {
@@ -936,7 +897,7 @@ KisChannelSP KisImage::activate(KisChannelSP channel)
 	if (m_channels.empty() || !channel)
 		return 0;
 
-	if (m_selection)
+	if (m_floatingSelection)
 		return 0;
 
 	if (qFind(m_channels.begin(), m_channels.end(), channel) == m_channels.end())
@@ -1115,62 +1076,10 @@ Q_INT32 KisImage::nchannels() const
 	return m_channels.size();
 }
 
-bool KisImage::boundsLayer()
-{
-	return false;
-}
-
-KisLayerSP KisImage::correlateLayer(Q_INT32 , Q_INT32 )
-{
-	return 0;
-}
-
 void KisImage::enableUndo(KoCommandHistory *history)
 {
 	m_undoHistory = history;
 }
-
-// PIXELTYPE KisImage::pixelFromChannel(CHANNELTYPE type) const
-// {
-// #if 0
-// 	PIXELTYPE i = PIXEL_UNDEF;
-
-// 	switch (type) {
-// 	case REDCHANNEL:
-// 		i = PIXEL_RED;
-// 		break;
-// 	case GREENCHANNEL:
-// 		i = PIXEL_GREEN;
-// 		break;
-// 	case BLUECHANNEL:
-// 		i = PIXEL_BLUE;
-// 		break;
-// 	case GRAYCHANNEL:
-// 		i = PIXEL_GRAY;
-// 		break;
-// 	case INDEXEDCHANNEL:
-// 		i = PIXEL_INDEXED;
-// 		break;
-// 	case ALPHACHANNEL:
-// 		switch (imgType()) {
-// 		case IMAGE_TYPE_GREY:
-// 			i = PIXEL_GRAY_ALPHA;
-// 			break;
-// 		case IMAGE_TYPE_INDEXED:
-// 			i = PIXEL_INDEXED_ALPHA;
-// 			break;
-// 		default:
-// 			i = PIXEL_ALPHA;
-// 			break;
-// 		}
-// 		break;
-// 	default:
-// 		break;
-// 	}
-
-// 	return i;
-// #endif
-// }
 
 Q_INT32 KisImage::tileNum(Q_INT32 xpix, Q_INT32 ypix) const
 {
@@ -1232,49 +1141,69 @@ void KisImage::renderToProjection(Q_INT32 tileno)
 			KisSelectionSP s = m_activeLayer -> selection();
 			visitor(gc, s);
 		}
-		if (m_selection)
-			visitor(gc, m_selection);
+
+		if (m_floatingSelection)
+			visitor(gc, m_floatingSelection);
 	}
 
 	gc.end();
 }
 
-void KisImage::setSelection(KisFloatingSelectionSP selection)
+void KisImage::setFloatingSelection(KisFloatingSelectionSP floatingSelection)
 {
-	if (m_selection != selection) {
-		unsetSelection();
-		m_selection = selection;
+	if (m_floatingSelection != floatingSelection) {
+		unsetFloatingSelection();
+		m_floatingSelection = floatingSelection;
 
-		emit selectionChanged(this);
+		emit floatingSelectionChanged(this);
 	}
 }
 
-void KisImage::unsetSelection(bool commit)
+void KisImage::unsetFloatingSelection(bool commit)
 {
-	if (m_selection) {
-		QRect rc = m_selection -> bounds();
+	if (m_floatingSelection) {
+		QRect rc = m_floatingSelection -> bounds();
 
 		if (commit) {
 			if (m_adapter -> undo()) {
-				m_adapter -> beginMacro(i18n("Anchor Selection"));
-				m_adapter -> addCommand(new KisSelectionSet(m_adapter, this, m_selection));
+				m_adapter -> beginMacro(i18n("Anchor Floating Selection"));
+				m_adapter -> addCommand(new KisFloatingSelectionSet(m_adapter, this, m_floatingSelection));
 			}
 
-			m_selection -> commit();
+			m_floatingSelection -> commit();
 
 			if (m_adapter -> undo())
 				m_adapter -> endMacro();
 		}
 
-		m_selection = 0;
+		m_floatingSelection = 0;
 
-		emit selectionChanged(KisImageSP(this));
+		emit floatingSelectionChanged(KisImageSP(this));
 	}
 }
 
-KisFloatingSelectionSP KisImage::selection() const
+KisFloatingSelectionSP KisImage::floatingSelection() const
 {
-	return m_selection;
+	return m_floatingSelection;
+}
+
+
+KisSelectionSP KisImage::activeSelection()
+{
+	if (activeLayer() -> hasSelection()) {
+		return activeLayer() -> selection();
+	}
+	else {
+		return 0;
+	}
+}
+
+
+void KisImage::removeActiveSelection()
+{
+	if (activeLayer() -> hasSelection()) {
+		activeLayer() -> removeSelection();
+	}
 }
 
 void KisImage::expand(KisPaintDeviceSP dev)

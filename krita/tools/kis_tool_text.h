@@ -40,7 +40,7 @@ public:
 	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 	virtual QWidget* optionWidget();
-	virtual QWidget* createoptionWidget(QWidget* parent);
+	virtual QWidget* createOptionWidget(QWidget* parent);
 public slots:
 	virtual void setFont();
 

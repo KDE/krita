@@ -30,7 +30,7 @@
 KisSelection::KisSelection(KisLayerSP layer, const QString& name) 
  	: super(layer -> width(),
 		layer -> height(),
-		KisColorSpaceRegistry::singleton()->colorSpace("RGBA"),
+		layer -> colorStrategy(),
 		name)
 {
 	m_parentLayer = layer;

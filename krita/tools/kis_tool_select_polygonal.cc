@@ -70,13 +70,13 @@ namespace {
 	void PolygonSelectCmd::execute()
 	{
 		m_selection -> clearParentOnMove(true);
-		m_owner -> setSelection(m_selection);
+		m_owner -> setFloatingSelection(m_selection);
 		m_owner -> notify(m_selection -> bounds());
 	}
 
 	void PolygonSelectCmd::unexecute()
 	{
-		m_owner -> unsetSelection(false);
+		m_owner -> unsetFloatingSelection(false);
 	}
 }
 
@@ -196,11 +196,11 @@ void KisToolSelectPolygonal::move(KisMoveEvent *event)
 	}
 }
 
-void KisToolSelectPolygonal::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolSelectPolygonal::buttonRelease(KisButtonReleaseEvent */*event*/)
 {
 }
 
-void KisToolSelectPolygonal::drawLine( const QPoint& start, const QPoint& end )
+void KisToolSelectPolygonal::drawLine( const QPoint& /*start*/, const QPoint& /*end*/ )
 {
 // 	if (m_subject) {
 // 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
@@ -243,7 +243,7 @@ void KisToolSelectPolygonal::paintOutline(QPainter &gc, const QRect&)
 {
 	if (m_subject) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
-		RasterOp op = gc.rasterOp();
+// 		RasterOp op = gc.rasterOp();
 		QPen old = gc.pen();
 		QPen pen(Qt::DotLine);
 		QPoint start;
@@ -283,8 +283,8 @@ void KisToolSelectPolygonal::clearSelection()
 
 		Q_ASSERT(controller);
 
-		if (img && img -> selection().data() != 0) {
-			img -> unsetSelection();
+		if (img && img -> floatingSelection().data() != 0) {
+			img -> unsetFloatingSelection();
                         controller -> canvas() -> update();
 		}
 

@@ -106,7 +106,7 @@ void KisToolColorPicker::update(KisCanvasSubject *subject)
 	m_subject = subject;
 }
 
-QWidget* KisToolColorPicker::createoptionWidget(QWidget* parent)
+QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
 	m_optWidget -> setCaption(i18n("Color Picker"));

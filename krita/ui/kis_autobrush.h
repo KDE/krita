@@ -40,7 +40,7 @@ class KisAutobrush : public KisWdgAutobrush
 {
 	Q_OBJECT
 public:
-	KisAutobrush(QWidget *parent, char* name, const QString& caption);
+	KisAutobrush(QWidget *parent, const char* name, const QString& caption);
 signals:
 	void activatedResource(KisResource *r);
 private:

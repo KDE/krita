@@ -102,7 +102,9 @@ public:
 
 	virtual bool visit(KisPainter& gc, KisSelectionSP selection)
 	{
-		visit(gc, selection.data(), OPACITY_OPAQUE / 2);
+		int OPACITY = 200;
+
+		visit(gc, selection.data(), OPACITY);
 		return true; 
 	}
 

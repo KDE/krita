@@ -45,8 +45,9 @@ public:
 
 public:
 	void commit();
-	void fromImage(const QImage& img);
-	QImage toImage();
+
+// XXX: duplicate of KisPaintDevice::convertToImage
+// 	QImage toImage();
 	void setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_INT32 height);
 	void setBounds(const QRect& rc);
 	KisPaintDeviceSP parent() const;

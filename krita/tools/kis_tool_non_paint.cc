@@ -87,7 +87,7 @@ void KisToolNonPaint::keyRelease(QKeyEvent *)
 }
 
 
-QWidget* KisToolNonPaint::createoptionWidget(QWidget* parent)
+QWidget* KisToolNonPaint::createOptionWidget(QWidget* parent)
 {
 	return 0;
 }

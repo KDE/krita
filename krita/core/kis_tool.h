@@ -68,7 +68,7 @@ public:
 
 	virtual void setCursor(const QCursor& cursor) = 0;
 	virtual void cursor(QWidget *w) const = 0;
-	virtual QWidget* createoptionWidget(QWidget* parent) = 0;
+	virtual QWidget* createOptionWidget(QWidget* parent) = 0;
 	virtual QWidget* optionWidget() = 0;
 	KRadioAction *action() const { return m_action; }
 

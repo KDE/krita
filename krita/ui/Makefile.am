@@ -23,7 +23,6 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_layerbox.cc \
     kis_dlg_create_img.cc \
     kis_dlg_new_layer.cc \
-    kis_dlg_paintoffset.cc \
     kis_dlg_paint_properties.cc \
     kis_dlg_transform.cc \
     kis_dockframedocker.cc \
@@ -43,6 +42,8 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_pattern_chooser.cc \
     kis_gradient_chooser.cc \
     kis_colorwheel.cc
+
+#    kis_dlg_paintoffset.cc 
 
 noinst_HEADERS = integerwidget.h \
     kis_dlg_preferences.h \

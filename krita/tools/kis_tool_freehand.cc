@@ -159,7 +159,7 @@ void KisToolFreeHand::endPaint()
 	}
 }
 
-QWidget* KisToolFreeHand::createoptionWidget(QWidget* parent)
+QWidget* KisToolFreeHand::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
 	m_optWidget -> setCaption(i18n("Brush"));

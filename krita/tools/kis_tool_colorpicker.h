@@ -42,7 +42,7 @@ public:
 	virtual void update(KisCanvasSubject *subject);
 	virtual void setup(KActionCollection *collection);
 	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual QWidget* createoptionWidget(QWidget* parent);
+	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 
 public slots:

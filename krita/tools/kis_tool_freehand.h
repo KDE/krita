@@ -46,7 +46,7 @@ public:
 	virtual void move(KisMoveEvent *e);
 	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
-	virtual QWidget* createoptionWidget(QWidget* parent);
+	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 
 public slots:

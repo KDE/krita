@@ -70,13 +70,13 @@ namespace {
 	void RectSelectCmd::execute()
 	{
 		m_selection -> clearParentOnMove(true);
-		m_owner -> setSelection(m_selection);
+		m_owner -> setFloatingSelection(m_selection);
 		m_owner -> notify(m_selection -> bounds());
 	}
 
 	void RectSelectCmd::unexecute()
 	{
-		m_owner -> unsetSelection(false);
+		m_owner -> unsetFloatingSelection(false);
 	}
 }
 
@@ -120,8 +120,8 @@ void KisToolSelectRectangular::clearSelection()
 
 		Q_ASSERT(controller);
 
-		if (img && img -> selection().data() != 0) {
-			img -> unsetSelection();
+		if (img && img -> floatingSelection().data() != 0) {
+			img -> unsetFloatingSelection();
                         controller -> canvas() -> update();
 		}
 
@@ -194,7 +194,7 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 					rc = rc.normalize();
 					selection = new KisFloatingSelection(parent, img, "rectangular selection tool frame", OPACITY_OPAQUE);
 					selection -> setBounds(rc);
-					img -> setSelection(selection);
+					img -> setFloatingSelection(selection);
 
 					if (img -> undoAdapter())
 						img -> undoAdapter() -> addCommand(new RectSelectCmd(selection));

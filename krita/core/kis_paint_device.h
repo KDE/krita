@@ -107,9 +107,20 @@ public:
 
         void setData(KisTileMgrSP mgr);
 
-	/** This function convert to a different colorspace
-		*/
+	/** 
+	 *   Converts the paint device to a different colorspace
+	 */
 	void convertTo(KisStrategyColorSpaceSP colorStrategy);
+
+
+	/**
+	 * Fill this paint device with the data from img;
+	 */
+	void convertFromImage(const QImage& img);
+
+	/**
+	 * Create an RGBA QImage from the paint device.
+	 */
 	QImage convertToImage();
 
         QString name() const;

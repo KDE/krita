@@ -340,7 +340,6 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 
 	m_undo = false;
 	m_dcop = 0;
-//	setInstance(KisFactory::global(), false);
 	m_cmdHistory = 0;
 	m_nserver = 0;
 	m_pushedClipboard = false;
@@ -1109,7 +1108,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 	Q_INT32 x2;
 	Q_INT32 y2;
 	Q_INT32 tileno;
-	KisFloatingSelectionSP selection;
+	KisFloatingSelectionSP floatingSelection;
 	KisStrategyColorSpaceSP colorStrategy;
 
 	// Only happens if there's actually only one image. As soon as
@@ -1154,20 +1153,6 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 			}
 		}
 
-// 		// Render the non-contiguous selection, if present
-// 		// XXX: integrate this better with rendering pipeline. 
-// 		// It's presence here is a hack.
-// 		if (m_currentImage -> activeLayer() -> hasSelection()) {
-// 			for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
-// 				for (x = x1; x <= x2; x += TILE_WIDTH - (x % TILE_WIDTH)) {
-// 					if ((tileno = m_currentImage -> tileNum(x, y)) < 0)
-// 						continue;
-
-// 					//m_currentImage -> renderSelection(tileno);
-// 				}
-// 			}
-// 		}
-
 		// Render the current image onto a QPainter
 		for (y = y1; y < y2; y += RENDER_HEIGHT)
 			for (x = x1; x < x2; x += RENDER_WIDTH)
@@ -1177,11 +1162,11 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 							QMIN(x2 - x, RENDER_WIDTH),
 							QMIN(y2 - y, RENDER_HEIGHT));
 
-		// Draw rectangular selections.
-		if ((selection = m_currentImage -> selection())) {
+		// Draw rectangular floating selections.
+		if ((floatingSelection = m_currentImage -> floatingSelection())) {
 			QPen pen(Qt::DotLine);
-			QRect rc = selection -> bounds();
-			QRect clip = selection -> clip();
+			QRect rc = floatingSelection -> bounds();
+			QRect clip = floatingSelection -> clip();
 
 			if (!clip.isEmpty()) {
 				rc.setX(rc.x() + clip.x());
@@ -1379,15 +1364,15 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img,
 }
 
 
-KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisFloatingSelectionSP selection)
+KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisFloatingSelectionSP floatingSelection)
 {
 	KisLayerSP layer;
 
-	if (contains(img) && selection) {
-		layer = new KisLayer(selection -> data(), img, name, OPACITY_OPAQUE);
+	if (contains(img) && floatingSelection) {
+		layer = new KisLayer(floatingSelection -> data(), img, name, OPACITY_OPAQUE);
 
-		if (selection -> mask())
-			layer -> addMask(selection -> mask());
+		if (floatingSelection -> mask())
+			layer -> addMask(floatingSelection -> mask());
 
 		if (!img -> add(layer, -1))
 			return 0;
@@ -1398,7 +1383,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, KisFloatingSele
 		if (m_undo)
 			addCommand(new LayerAddCmd(this, this, img, layer));
 
-		layer -> move(selection -> x(), selection -> y());
+		layer -> move(floatingSelection -> x(), floatingSelection -> y());
 		layer -> setVisible(true);
 		emit layersUpdated(img);
 	}
@@ -1582,12 +1567,12 @@ void KisDoc::setLayerProperties(KisImageSP img,
 	}
 }
 
-void KisDoc::setClipboardSelection(KisFloatingSelectionSP selection)
+void KisDoc::setClipboardFloatingSelection(KisFloatingSelectionSP floatingSelection)
 {
-	m_clipboard = selection;
+	m_clipboardFloatingSelection = floatingSelection;
 
-	if (selection) {
-		QImage qimg = selection -> toImage();
+	if (floatingSelection) {
+		QImage qimg = floatingSelection -> convertToImage();
 		QClipboard *cb = QApplication::clipboard();
 
 		cb -> setImage(qimg);
@@ -1595,9 +1580,9 @@ void KisDoc::setClipboardSelection(KisFloatingSelectionSP selection)
 	}
 }
 
-KisFloatingSelectionSP KisDoc::clipboardSelection()
+KisFloatingSelectionSP KisDoc::clipboardFloatingSelection()
 {
-	return m_clipboard;
+	return m_clipboardFloatingSelection;
 }
 
 void KisDoc::clipboardDataChanged()
@@ -1607,11 +1592,12 @@ void KisDoc::clipboardDataChanged()
 		QImage qimg = cb -> image();
 
 		if (!qimg.isNull()) {
-			m_clipboard = new KisFloatingSelection(qimg.width(), qimg.height(),
-							       KisColorSpaceRegistry::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
-							       "KisDoc created clipboard selection");
+			m_clipboardFloatingSelection = 
+				new KisFloatingSelection(qimg.width(), qimg.height(),
+							 KisColorSpaceRegistry::singleton()->colorSpace( qimg.hasAlphaBuffer() ? "RGBA" : "RGB" ),
+							 "KisDoc created clipboard floating selection");
 
-			m_clipboard -> fromImage(qimg);
+			m_clipboardFloatingSelection -> convertFromImage(qimg);
 		}
 	}
 

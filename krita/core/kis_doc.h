@@ -36,6 +36,7 @@ class KisView;
 class KisNameServer;
 
 class KisDoc : public KoDocument, private KisUndoAdapter {
+
 	typedef KoDocument super;
 	Q_OBJECT
 
@@ -75,7 +76,9 @@ public:
 			    QUANTUM opacity,
 			    QPoint pos,
 			    KisStrategyColorSpaceSP colorstrategy);
-	KisLayerSP layerAdd(KisImageSP img, const QString& name, KisFloatingSelectionSP selection);
+
+	// Add a new layer to the image with the data from the floating selection
+	KisLayerSP layerAdd(KisImageSP img, const QString& name, KisFloatingSelectionSP floatingSelection);
 	KisLayerSP layerAdd(KisImageSP img, KisLayerSP layer, Q_INT32 position);
 	void layerRemove(KisImageSP img, KisLayerSP layer);
 	void layerRaise(KisImageSP img, KisLayerSP layer);
@@ -113,8 +116,8 @@ public:
 	QString nextImageName() const;
 	void setCurrentImage(KisImageSP img);
 
-	void setClipboardSelection(KisFloatingSelectionSP selection);
-	KisFloatingSelectionSP clipboardSelection();
+	void setClipboardFloatingSelection(KisFloatingSelectionSP floatingSelection);
+	KisFloatingSelectionSP clipboardFloatingSelection();
 
 	bool importImage(const QString& filename);
 
@@ -149,18 +152,18 @@ private:
 	QDomElement saveChannel(QDomDocument& doc, KisChannelSP channel);
 	KisChannelSP loadChannel(const QDomElement& elem, KisImageSP img);
 	bool init();
+
 	void setIOSteps(Q_INT32 nsteps);
 	void IOCompletedStep();
 	void IODone();
-// 	void initSingletons();
 
 private:
-// 	static bool m_singletonsHasBeenInited;
+
 	bool m_undo;
 	KoCommandHistory *m_cmdHistory;
 	vKisImageSP m_images;
 	KisImageSP m_currentImage;
-	KisFloatingSelectionSP m_clipboard;
+	KisFloatingSelectionSP m_clipboardFloatingSelection;
 	bool m_pushedClipboard;
 	DCOPObject *m_dcop;
 	KisNameServer *m_nserver;

@@ -40,6 +40,7 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 
+#include "wdgselectionoptions.h"
 
 KisToolSelectBrush::KisToolSelectBrush()
         : super(),
@@ -149,7 +150,7 @@ void KisToolSelectBrush::paintLine(const KisPoint & pos1,
 	// XXX: make conform to latest version in kis_brush.cc
 
 
-	m_dragDist = m_painter -> paintLine(PAINTOP_PEN, 
+	m_dragDist = m_painter -> paintLine(PAINTOP_ERASE, 
 					    pos1, pressure, xtilt, ytilt,
 					    pos2, pressure, xtilt, ytilt,
 					    m_dragDist);
@@ -170,16 +171,15 @@ void KisToolSelectBrush::setup(KActionCollection *collection)
 					    "selectbrush", Qt::Key_B, this,
 					    SLOT(activate()), collection,
 					    name());
-		m_action -> setExclusiveGroup("selection_tools");
+		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
 }
 
-QWidget* KisToolSelectBrush::createoptionWidget(QWidget* parent)
+QWidget* KisToolSelectBrush::createOptionWidget(QWidget* parent)
 {
-	m_optWidget = new QWidget(parent);
-	m_optWidget -> setCaption(i18n("Selectbrush"));
-	
+	m_optWidget = new WdgSelectionOptions(parent);
+	m_optWidget -> setCaption(i18n("Selection brush"));
 	return m_optWidget;
 }
 

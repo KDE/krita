@@ -24,7 +24,7 @@
 #include "kis_tool_paint.h"
 
 class QPoint;
-class QWidget;
+class WdgSelectOptions;
 class QLabel;
 class KisPainter;
 class KisBrush;
@@ -51,7 +51,7 @@ public:
 	virtual void move(KisMoveEvent *e);
 	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
-	virtual QWidget* createoptionWidget(QWidget* parent);
+	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 
 

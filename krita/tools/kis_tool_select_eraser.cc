@@ -159,12 +159,12 @@ void KisToolSelectEraser::setup(KActionCollection *collection)
 					    "selecteraser", 0, this,
 					    SLOT(activate()), collection,
 					    name());
-		m_action -> setExclusiveGroup("selection_tools");
+		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
 }
 
-QWidget* KisToolSelectEraser::createoptionWidget(QWidget* parent)
+QWidget* KisToolSelectEraser::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
 	m_optWidget -> setCaption(i18n("Selecteraser"));

@@ -126,7 +126,6 @@
   <Action name="view_resource_docker"/>
   <Separator/>
   <Action name="refresh_canvas"/>
-  <Action name="paint_offset"/>
  </Menu>
 
 
@@ -164,7 +163,6 @@
   <Action name="float_sidebar"/>
   <Action name="left_sidebar"/>
   <Action name="preferences"/>
-  <Action name="paint_offset"/>
   <Action name="blending_properties"/>
 </ToolBar>
 

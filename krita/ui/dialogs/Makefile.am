@@ -8,7 +8,8 @@ libkisdialogs_la_SOURCES = dummy.cc \
 	new_image.ui \
 	wdghistogram.ui \
 	kis_previewwidgetbase.ui \
-	kis_preview_dialog.ui
+	kis_preview_dialog.ui \
+	wdgselectionoptions.ui
 
 noinst_HEADERS = wdgmatrix.h \
 	wdghistogram.h \

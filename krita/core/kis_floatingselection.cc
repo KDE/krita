@@ -174,63 +174,39 @@ void KisFloatingSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 w
 	}
 }
 
-void KisFloatingSelection::fromImage(const QImage& img)
-{
-	KoColor c;
-	QRgb rgb;
-	Q_INT32 opacity;
+// QImage KisFloatingSelection::toImage()
+// {
+// 	KisTileMgrSP tm = data();
+// 	KisPixelDataSP raw;
+// 	Q_INT32 stride;
+// 	QUANTUM *src;
 
-	if (img.isNull())
-		return;
+// 	if (tm) {
+// 		if (tm -> width() == 0 || tm -> height() == 0)
+// 			return QImage();
 
-	for (Q_INT32 y = 0; y < height(); y++) {
-		for (Q_INT32 x = 0; x < width(); x++) {
-			rgb = img.pixel(x, y);
-			c.setRGB(upscale(qRed(rgb)), upscale(qGreen(rgb)), upscale(qBlue(rgb)));
+// 		raw = tm -> pixelData(0, 0, tm -> width() - 1, tm -> height() - 1, TILEMODE_READ);
 
-			if (img.hasAlphaBuffer())
-				opacity = qAlpha(rgb);
-			else
-				opacity = OPACITY_OPAQUE;
+// 		if (raw == 0)
+// 			return QImage();
 
-			setPixel(x, y, c, opacity);
-		}
-	}
-}
+// 		if (m_clipImg.width() != tm -> width() || m_clipImg.height() != tm -> height())
+// 			m_clipImg.create(tm -> width(), tm -> height(), 32);
 
-QImage KisFloatingSelection::toImage()
-{
-	KisTileMgrSP tm = data();
-	KisPixelDataSP raw;
-	Q_INT32 stride;
-	QUANTUM *src;
+// 		stride = tm -> depth();
+// 		src = raw -> data;
 
-	if (tm) {
-		if (tm -> width() == 0 || tm -> height() == 0)
-			return QImage();
+// 		for (Q_INT32 y = 0; y < tm -> height(); y++) {
+// 			for (Q_INT32 x = 0; x < tm -> width(); x++) {
+// 				// TODO Different img formats
+// 				m_clipImg.setPixel(x, y, qRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE])));
+// 				src += stride;
+// 			}
+// 		}
+// 	}
 
-		raw = tm -> pixelData(0, 0, tm -> width() - 1, tm -> height() - 1, TILEMODE_READ);
-
-		if (raw == 0)
-			return QImage();
-
-		if (m_clipImg.width() != tm -> width() || m_clipImg.height() != tm -> height())
-			m_clipImg.create(tm -> width(), tm -> height(), 32);
-
-		stride = tm -> depth();
-		src = raw -> data;
-
-		for (Q_INT32 y = 0; y < tm -> height(); y++) {
-			for (Q_INT32 x = 0; x < tm -> width(); x++) {
-				// TODO Different img formats
-				m_clipImg.setPixel(x, y, qRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE])));
-				src += stride;
-			}
-		}
-	}
-
-	return m_clipImg;
-}
+// 	return m_clipImg;
+// }
 
 void KisFloatingSelection::setBounds(const QRect& rc)
 {

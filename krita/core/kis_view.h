@@ -73,10 +73,11 @@ class KisButtonPressEvent;
 class KisButtonReleaseEvent;
 class KisMoveEvent;
 
-class KisView : public KoView,
-	private KisCanvasSubject,
-	private KisCanvasControllerInterface,
-	private KisToolControllerInterface 
+class KisView
+	: public KoView,
+	  private KisCanvasSubject,
+	  private KisCanvasControllerInterface,
+	  private KisToolControllerInterface 
 {
 
 	Q_OBJECT
@@ -89,33 +90,35 @@ class KisView : public KoView,
 	typedef std::map<enumInputDevice, KisTool *> InputDeviceToolMap;
 	typedef std::map<enumInputDevice, vKisTool> InputDeviceToolSetMap;
 
+
 public:
 	KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent = 0, const char *name = 0);
 	virtual ~KisView();
 
+public:
+	// XXX: DO NOT USE. REMOVE ASAP.
+	static KisView* activeView();
+
+
 public: // KoView implementation
 	virtual bool eventFilter(QObject *o, QEvent *e);
-	virtual int canvasXOffset() const;
-	virtual int canvasYOffset() const;
+ 	virtual int canvasXOffset() const;
+ 	virtual int canvasYOffset() const;
+
 	virtual DCOPObject* dcopObject();
+
 	virtual void print(KPrinter &printer);
 	virtual void setupPrinter(KPrinter &printer);
+
 	virtual void updateReadWrite(bool readwrite);
 	virtual void guiActivateEvent(KParts::GUIActivateEvent *event);
 	
-public:
 	Q_INT32 docWidth() const;
 	Q_INT32 docHeight() const;
 	Q_INT32 importImage(bool createLayer, bool modal = false, const KURL& url = KURL());
-	/** This function return the active KisView
-		*/
-	static KisView* activeView();
+
 	
 	virtual KisImageSP currentImg() const;
-	/**
-	 * Refresh the complete view
-	 */
-	virtual void refresh();
 
 signals:
 	void bgColorChanged(const KoColor& c);
@@ -158,14 +161,18 @@ public slots:
 	void selectAll();
 	void unSelectAll();
 
-
 	// settings action slots
 	void preferences();
 
 protected:
+
 	virtual void resizeEvent(QResizeEvent*);
+
+	// XXX: DO NOT USE. REMOVE ASAP.
 	static void setActiveView(KisView* view);
+
 protected slots:
+
 	virtual void windowActivationChange ( bool oldActive );
 
 private:
@@ -312,7 +319,7 @@ private slots:
 	void brushActivated(KisResource *brush);
 	void patternActivated(KisResource *pattern);
 	void gradientActivated(KisResource *gradient);
-	void setPaintOffset();
+// 	void setPaintOffset();
 	void scrollH(int value);
 	void scrollV(int value);
 	void slotEmbedImage(const QString& filename);
@@ -442,6 +449,10 @@ private:
 	mutable KisImageSP m_current;
 };
 
+// XXX: Remove these functions. Only used from the filters,
+// which already have their view as parent because they
+// are KPart plugins loaded by the default system.
+// DO NOT USE FROM OTHER CODE.
 inline void KisView::setActiveView(KisView* view)
 {
 	KisView::m_activeView = view;

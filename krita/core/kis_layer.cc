@@ -127,7 +127,7 @@ KisSelectionSP KisLayer::selection(){
 	if (!m_hasSelection) {
 		m_selection = new KisSelection(this, "layer selection for: " + name());
 		KisPainter gc(m_selection.data());
-		gc.fillRect(0, 0, width(), height(), KoColor::black(), OPACITY_OPAQUE);
+		gc.fillRect(0, 0, width(), height(), KoColor::white(), OPACITY_OPAQUE);
 		gc.end();
 		m_selection -> setVisible(true);
 		m_hasSelection = true;
@@ -163,7 +163,7 @@ bool KisLayer::hasSelection() const
 
 void KisLayer::removeSelection()
 {
-	m_selection = 0;
+	m_selection = 0; // XXX: Does this automatically remove the selection due to the shared pointer?
 	m_hasSelection = false;
 }
 

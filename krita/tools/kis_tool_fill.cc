@@ -215,7 +215,7 @@ void KisToolFill::buttonPress(KisButtonPressEvent *e)
 	notifyModified();
 }
 
-QWidget* KisToolFill::createoptionWidget(QWidget* parent)
+QWidget* KisToolFill::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
 	m_optWidget -> setCaption(i18n("Fill"));

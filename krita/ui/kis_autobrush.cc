@@ -34,7 +34,7 @@ double NormeSquareSquare(double a, double b)
 	return QMIN(a*a,b*b);
 }
 
-KisAutobrush::KisAutobrush(QWidget *parent, char* name, const QString& caption) : KisWdgAutobrush(parent, name)
+KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& caption) : KisWdgAutobrush(parent, name)
 {
 	setCaption(caption);
 	connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
@@ -82,7 +82,7 @@ void KisAutobrush::createBrush(Q_INT32 w, Q_INT32 h, Q_INT32 fh, Q_INT32 fv, Nor
 				double normeFade = (*Norme)( (i - xcentre) * xfadecoef, (j - ycentre) * yfadecoef );
 				if( normeFade > limitfade)
 				{
-					v = 255 *( normeFade - limitfade) / (limit - limitfade ) ;
+					v = (uchar)(255 * ( normeFade - limitfade) / (limit - limitfade ));
 // 					kdDebug() << ">>> v="<< v << " r=" << ( normeFade - limitfade) / (norme - limitfade ) << " normeFade=" << normeFade << " limitFade=" << limitfade << endl;
 				} else {
 					v = 0;

@@ -269,7 +269,7 @@ void KisPaintDevice::init()
 	m_colorStrategy = 0;
 }
 
-bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity)
+bool KisPaintDevice::pixel(Q_INT32 /*x*/, Q_INT32 /*y*/, KoColor * /*c*/, QUANTUM * /*opacity*/)
 {
         // XXX: this should use the colour strategies!
 #if 0
@@ -340,8 +340,6 @@ void KisPaintDevice::setData(KisTileMgrSP mgr)
         }
 
         m_tiles = mgr;
-//         setWidth(mgr -> width());
-//         setHeight(mgr -> height());
 }
 
 
@@ -354,8 +352,7 @@ void KisPaintDevice::resize(Q_INT32 w, Q_INT32 h)
         KisPainter gc;
 
         setData(tm);
-//         setWidth(w);
-//         setHeight(h);
+
         gc.begin(this);
 
         if (oldW < w)
@@ -557,8 +554,6 @@ void KisPaintDevice::offsetBy(Q_INT32 x, Q_INT32 y)
         KisPixelDataSP src;
 
         setData(tm);
-//         setWidth(tm -> width());
-//         setHeight(tm -> height());
         src = old -> pixelData(0, 0, old -> width() - 1, old -> height() - 1, TILEMODE_READ);
         Q_ASSERT(src);
         dst = tm -> pixelData(x, y, x + old -> width() - 1, y + old -> height() - 1, TILEMODE_WRITE);
@@ -656,6 +651,33 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstCS)
 	}
 	setData(dst.data());
 }
+
+
+
+void KisPaintDevice::convertFromImage(const QImage& img)
+{
+	KoColor c;
+	QRgb rgb;
+	Q_INT32 opacity;
+
+	if (img.isNull())
+		return;
+
+	for (Q_INT32 y = 0; y < height(); y++) {
+		for (Q_INT32 x = 0; x < width(); x++) {
+			rgb = img.pixel(x, y);
+			c.setRGB(upscale(qRed(rgb)), upscale(qGreen(rgb)), upscale(qBlue(rgb)));
+
+			if (img.hasAlphaBuffer())
+				opacity = qAlpha(rgb);
+			else
+				opacity = OPACITY_OPAQUE;
+
+			setPixel(x, y, c, opacity);
+		}
+	}
+}
+
 
 KisIteratorLineQuantum KisPaintDevice::iteratorQuantumBegin(KisTileCommand* command)
 {

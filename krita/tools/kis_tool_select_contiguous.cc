@@ -66,7 +66,7 @@ void KisToolSelectContiguous::clearOld()
 // 	m_dragEnd =   QPoint(-1,-1);
 }
 
-void KisToolSelectContiguous::buttonPress(KisButtonPressEvent *event)
+void KisToolSelectContiguous::buttonPress(KisButtonPressEvent */*event*/)
 {
 //  //   if ( m_doc->isEmpty() )
 // //        return;
@@ -90,7 +90,7 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent *event)
 }
 
 
-void KisToolSelectContiguous::move(KisMoveEvent *event)
+void KisToolSelectContiguous::move(KisMoveEvent */*event*/)
 {
 // //    if ( m_doc->isEmpty() )
 // //        return;
@@ -104,7 +104,7 @@ void KisToolSelectContiguous::move(KisMoveEvent *event)
 }
 
 
-void KisToolSelectContiguous::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolSelectContiguous::buttonRelease(KisButtonReleaseEvent */*event*/)
 {
 // //    if ( m_doc->isEmpty() )
 // //        return;
@@ -151,7 +151,7 @@ void KisToolSelectContiguous::buttonRelease(KisButtonReleaseEvent *event)
 }
 
 
-void KisToolSelectContiguous::drawRect( const QPoint& start, const QPoint& end )
+void KisToolSelectContiguous::drawRect( const QPoint& /*start*/, const QPoint& /*end*/ )
 {
 // 	KisView *view = getCurrentView();
 // 	QPainter p, pCanvas;
@@ -190,7 +190,7 @@ void KisToolSelectContiguous::setup(KActionCollection *collection)
 
 bool KisToolSelectContiguous::willModify() const
 {
-// 	return false;
+ 	return false;
 }
 
 

@@ -63,11 +63,16 @@ public:
 public:
 	QString name() const;
 	void setName(const QString& name);
+
 	QString nextLayerName() const;
+
 	void resize(Q_INT32 w, Q_INT32 h);
 	void resize(const QRect& rc);
+
 	void scale(double sx, double sy);
+
 	void convertTo(KisStrategyColorSpaceSP colorStrategy);
+
 	void enableUndo(KoCommandHistory *history);
  
 	KisStrategyColorSpaceSP colorStrategy() const;
@@ -90,14 +95,6 @@ public:
 	bool alpha() const;
 	bool empty() const;
 	KisTileMgrSP shadow() const;
-
-// 	void activeComponent(CHANNELTYPE type, bool active);
-// 	bool activeComponent(CHANNELTYPE type);
-
-// 	void visibleComponent(CHANNELTYPE pixel, bool active);
-// 	bool visibleComponent(CHANNELTYPE pixel) const;
-
-	void flush();
 
 	vKisLayerSP layers();
 	const vKisLayerSP& layers() const;
@@ -131,6 +128,8 @@ public:
 	void mergeVisibleLayers();
 	void mergeLinkedLayers();
 
+	
+	// Channels
 	KisChannelSP activeChannel();
 	KisChannelSP activate(KisChannelSP channel);
 	KisChannelSP activateChannel(Q_INT32 n);
@@ -145,12 +144,14 @@ public:
 	bool pos(KisChannelSP channel, Q_INT32 position);
 	Q_INT32 nchannels() const;
 
-	bool boundsLayer();
-	KisLayerSP correlateLayer(Q_INT32 x, Q_INT32 y);
 
-	void setSelection(KisFloatingSelectionSP selection);
-	void unsetSelection(bool commit = true);
-	KisFloatingSelectionSP selection() const;
+	void setFloatingSelection(KisFloatingSelectionSP floatingSelection);
+	void unsetFloatingSelection(bool commit = true);
+	KisFloatingSelectionSP floatingSelection() const;
+
+	KisSelectionSP activeSelection();
+	void removeActiveSelection();
+
 	QRect bounds() const;
 
 	void notify();
@@ -166,7 +167,7 @@ signals:
 	void activeLayerChanged(KisImageSP image);
 	void activeChannelChanged(KisImageSP image);
 	void alphaChanged(KisImageSP image);
-	void selectionChanged(KisImageSP image);
+	void floatingSelectionChanged(KisImageSP image);
 	void visibilityChanged(KisImageSP image, CHANNELTYPE type);
 	void update(KisImageSP image, const QRect& rc);
 	void layersChanged(KisImageSP image);
@@ -178,7 +179,6 @@ private:
 	KisImage& operator=(const KisImage& rhs);
 	void expand(KisPaintDeviceSP dev);
 	void init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name);
-// 	PIXELTYPE pixelFromChannel(CHANNELTYPE type) const;
 
 	void startUpdateTimer();
 
@@ -211,8 +211,8 @@ private:
 	vKisLayerSP m_layerStack;
 	KisLayerSP m_activeLayer;
 	KisChannelSP m_activeChannel;
-	KisFloatingSelectionSP m_selection;
-	KisChannelSP m_selectionMask;
+	KisFloatingSelectionSP m_floatingSelection;
+	KisChannelSP m_floatingSelectionMask;
 	QBitArray m_visible;
 	QBitArray m_active;
 	bool m_alpha;

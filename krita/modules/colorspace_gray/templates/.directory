@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Grayscale
+Name[bg]=Степени на сивото
 Name[cy]=Graddlwyd
 Name[da]=Gråskala
 Name[en_GB]=Greyscale
@@ -10,4 +11,5 @@ Name[pt]=Tons de Cinzento
 Name[pt_BR]=Tons de Cinza
 Name[sv]=Gråskala
 Name[ta]=பழுப்புநிற வண்ணம்
+Name[tr]=Griton
 X-KDE-DefaultTab=true

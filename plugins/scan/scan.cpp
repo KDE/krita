@@ -50,7 +50,7 @@ void Scan::slotScan()
 {
     if ( !scanDialog )
     {
-	scanDialog = KScanDialog::getScanDialog();
+	scanDialog = KScanDialog::getScanDialog( dynamic_cast<QWidget*>( parent() ) );
 	if ( scanDialog )
 	{
 	    scanDialog->setMinimumSize(300, 300);

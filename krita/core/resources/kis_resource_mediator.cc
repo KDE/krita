@@ -111,7 +111,11 @@ KisResource *KisResourceMediator::currentResource() const
 
 KisIconItem *KisResourceMediator::itemFor(KisResource *r) const
 {
-	return m_items[r];
+	if(m_items.contains(r))
+	{
+		return m_items[r];
+	}
+	return 0;
 }
 
 KisResource *KisResourceMediator::resourceFor(KoIconItem *item) const

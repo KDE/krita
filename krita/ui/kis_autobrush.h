@@ -22,6 +22,42 @@
 #include "kis_wdg_autobrush.h"
 #include "kis_brush.h"
 
+class KisAutobrushShape {
+	public:
+		KisAutobrushShape(Q_INT32 w, Q_INT32 h, double fh, double fv) : m_w(w), m_h(h), m_fh(fh), m_fv(fv)
+		{ };
+		void createBrush( QImage* img);
+	protected:
+		virtual Q_INT8 valueAt(Q_INT32 x, Q_INT32 y) =0;
+		Q_INT32 m_w, m_h;
+		double m_fh, m_fv;
+};
+
+class KisAutobrushCircleShape : public KisAutobrushShape {
+	public:
+		KisAutobrushCircleShape(Q_INT32 w, Q_INT32 h, double fh, double fv);
+	protected:
+		virtual Q_INT8 valueAt(Q_INT32 x, Q_INT32 y);
+	private:
+		double norme(double a, double b)
+		{
+			return a*a + b * b;
+		}
+	private:
+		double m_xcentre, m_ycentre;
+		double m_xcoef, m_ycoef;
+		double m_xfadecoef, m_yfadecoef;
+};
+
+class KisAutobrushRectShape : public KisAutobrushShape {
+	public:
+		KisAutobrushRectShape(Q_INT32 w, Q_INT32 h, double fh, double fv);
+	protected:
+		virtual Q_INT8 valueAt(Q_INT32 x, Q_INT32 y);
+	private:
+		double m_xcentre, m_ycentre, m_c;
+};
+
 class KisAutobrushResource : public KisBrush
 {
 	public:
@@ -34,8 +70,6 @@ class KisAutobrushResource : public KisBrush
 		virtual bool loadAsync() { return false; };
 };
 
-typedef double (*NormeSquare)(double, double);
-
 class KisAutobrush : public KisWdgAutobrush
 {
 	Q_OBJECT
@@ -43,8 +77,6 @@ public:
 	KisAutobrush(QWidget *parent, const char* name, const QString& caption);
 signals:
 	void activatedResource(KisResource *r);
-private:
-	void createBrush(Q_INT32, Q_INT32, Q_INT32, Q_INT32, NormeSquare );
 private slots:
 	void paramChanged();
 	void spinBoxWidthChanged(int );

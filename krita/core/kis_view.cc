@@ -1675,16 +1675,21 @@ void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
 
 void KisView::brushActivated(KisResource *brush)
 {
-        KisIconItem *item;
+	KisIconItem *item;
 
-        Q_ASSERT(m_toolcontroldocker);
-        m_brush = dynamic_cast<KisBrush*>(brush);
+	Q_ASSERT(m_toolcontroldocker);
+	m_brush = dynamic_cast<KisBrush*>(brush);
 
-        if (m_brush && (item = m_brushMediator -> itemFor(m_brush)))
-                m_controlWidget -> slotSetBrush(item);
-
-        if (m_brush)
-                notify();
+	if (m_brush )
+	{
+		if(item = m_brushMediator -> itemFor(m_brush))
+		{
+			m_controlWidget -> slotSetBrush(item);
+		} else {
+			m_controlWidget -> slotSetBrush( new KisIconItem(m_brush) );
+		}
+		notify();
+	}
 }
 
 void KisView::patternActivated(KisResource *pattern)

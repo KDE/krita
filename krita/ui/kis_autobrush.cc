@@ -24,15 +24,92 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 
+void KisAutobrushShape::createBrush( QImage* img)
+{
+	img->create(m_w, m_h, 32);
+	for(int j = 0; j < m_h; j++)
+	{
+		for(int i = 0; i < m_w; i++)
+		{
+			Q_INT8 v = valueAt(i,j);
+			img->setPixel( i, j, qRgb(v,v,v));
+		}
+	}
+}
 
-double NormeCircleSquare(double a, double b)
+KisAutobrushCircleShape::KisAutobrushCircleShape(Q_INT32 w, Q_INT32 h, double fh, double fv)
+	: KisAutobrushShape( w, h, w / 2.0 - fh, h / 2.0 - fv),
+		m_xcentre ( w / 2.0 ),
+		m_ycentre ( h / 2.0 ),
+		m_xcoef ( 2.0 / w ),
+		m_ycoef ( 2.0 / h ),
+		m_xfadecoef ( (m_fh == 0) ? 1 : ( 1.0 / m_fh)),
+		m_yfadecoef ( (m_fv == 0) ? 1 : ( 1.0 / m_fv))
 {
-	return a*a + b * b;
-}
-double NormeSquareSquare(double a, double b)
+};
+Q_INT8 KisAutobrushCircleShape::valueAt(Q_INT32 x, Q_INT32 y)
 {
-	return QMIN(a*a,b*b);
+	double xr = (x - m_xcentre);
+	double yr = (y - m_ycentre);
+	double n = norme( xr * m_xcoef, yr * m_ycoef);
+	if( n > 1 )
+	{
+		return 255;
+	}
+	else
+	{
+		double normeFade = norme( xr * m_xfadecoef, yr * m_yfadecoef );
+		if( normeFade > 1)
+		{
+			double xle, yle;
+			// xle stands for x-coordinate limit exterior
+			// yle stands for y-coordinate limit exterior
+			// we are computing the coordinate on the external ellipse in order to compute
+			// the fade value
+			if( xr == 0 )
+			{
+				xle = 0;
+				yle = yr > 0 ? 1/m_ycoef : -1/m_ycoef;
+			} else {
+				double c = yr / (double)xr;
+				xle = sqrt(1 / norme( m_xcoef, c * m_ycoef ));
+				xle = xr > 0 ? xle : -xle;
+				yle = xle * c;
+			}
+			// On the internal limit of the fade area, normeFade is equal to 1
+			double normeFadeLimitE = norme( xle * m_xfadecoef, yle * m_yfadecoef );
+			return (uchar)(255 * ( normeFade - 1 ) / ( normeFadeLimitE - 1 ));
+		} else {
+			return 0;
+		}
+	}
 }
+
+KisAutobrushRectShape::KisAutobrushRectShape(Q_INT32 w, Q_INT32 h, double fh, double fv)
+	: KisAutobrushShape( w, h, w / 2.0 - fh, h / 2.0 - fv),
+		m_xcentre ( w / 2.0 ),
+		m_ycentre ( h / 2.0 ),
+		m_c( fv/fh)
+{
+}
+Q_INT8 KisAutobrushRectShape::valueAt(Q_INT32 x, Q_INT32 y)
+{
+	double xr = QABS(x - m_xcentre);
+	double yr = QABS(y - m_ycentre);
+	if( xr > m_fh || yr > m_fv )
+	{
+		if( yr <= ((xr - m_fh) * m_c + m_fv )  )
+		{
+			return (uchar)(255 * (xr - m_fh) / (m_w - m_fh));
+		} else {
+			return (uchar)(255 * (yr - m_fv) / (m_w - m_fv));
+		}
+	}
+	else {
+		return 0;
+	}
+}
+
 
 KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& caption) : KisWdgAutobrush(parent, name)
 {
@@ -50,62 +127,20 @@ KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& cap
 	paramChanged();
 }
 
-void KisAutobrush::createBrush(Q_INT32 w, Q_INT32 h, Q_INT32 fh, Q_INT32 fv, NormeSquare Norme)
-{
-	m_brsh->create(w, h, 32 );
-	int xcentre = w / 2;
-	int ycentre = h / 2;
-	double xcoef = ((double)w) /(QMAX(w,h) );
-	double ycoef = ((double)h) /( QMAX(w,h) );
-	double limit = QMAX(w,h);
-	limit *= limit / 4;
-	fh = w / 2 - fh;
-	fv = h / 2 - fv;
-	double xfadecoef = ((double)fh) /(QMAX(fh,fv) );
-	double yfadecoef = ((double)fv) /( QMAX(fh,fv) );
-	double limitfade = QMAX(fh,fv);
-	limitfade *= limitfade;
-// 	kdDebug() << "************************************************" << endl;
-// 	kdDebug() << "xcentre = " << xcentre << " ycentre = " << ycentre << " xcoef =  " << xcoef << " ycoef = " << ycoef << endl;
-	for(int j = 0; j < h; j++)
-	{
-		for(int i = 0; i < w; i++)
-		{
-			double norme = (*Norme)( (i - xcentre)*xcoef, (j - ycentre)*ycoef);
-			uchar v;
-			if( norme > limit )
-			{
-				v = 255;
-			}
-			else
-			{
-				double normeFade = (*Norme)( (i - xcentre) * xfadecoef, (j - ycentre) * yfadecoef );
-				if( normeFade > limitfade)
-				{
-					v = (uchar)(255 * ( normeFade - limitfade) / (limit - limitfade ));
-// 					kdDebug() << ">>> v="<< v << " r=" << ( normeFade - limitfade) / (norme - limitfade ) << " normeFade=" << normeFade << " limitFade=" << limitfade << endl;
-				} else {
-					v = 0;
-				}
-			}
-			m_brsh->setPixel(i,j, qRgb(v,v,v));
-// 			kdDebug() << "i=" << i << " j=" << j << "  (i - xcentre)*xcoef = " <<  ((i - xcentre)*xcoef) << "  (j - ycentre)*ycoef = " <<  ((j - ycentre)*ycoef)  << " norme = " << (*Norme)( (i - xcentre)*xcoef, (j - ycentre)*ycoef) << " limit = " << limit << " v=" << v << endl;
-		}
-	}
-}
+
 
 void KisAutobrush::paramChanged()
 {
-	NormeSquare f;
-	if(comboBoxShape->currentText() == "circle")
-	{
-		f = &NormeCircleSquare;
-	} else {
-		f = &NormeSquareSquare;
-	}
 	Q_INT32 fh = QMIN( spinBoxWidth->value()/2, spinBoxHorizontal->value() ) ;
 	Q_INT32 fv = QMIN( spinBoxHeigth->value()/2, spinBoxVertical->value() );
-	createBrush( spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv, f);
+	KisAutobrushShape* kas;
+	if(comboBoxShape->currentText() == "circle")
+	{
+		kas = new KisAutobrushCircleShape(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
+	} else {
+		kas = new KisAutobrushRectShape(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
+	}
+	kas->createBrush(m_brsh);
 	kdDebug() << " brush size : " << m_brsh->width() << " " << m_brsh->height() << endl;
 	QPixmap p;
 	p.convertFromImage(*m_brsh);
@@ -113,17 +148,26 @@ void KisAutobrush::paramChanged()
 	brushPreview->adjustSize ();
 	KisAutobrushResource * resource = new KisAutobrushResource(*m_brsh);
 	emit(activatedResource(resource));
+	delete kas;
 }
 void KisAutobrush::spinBoxWidthChanged(int a)
 {
+	spinBoxHorizontal->setMaxValue(a/2);
 	if(checkBoxSamesize->isChecked())
+	{
 		spinBoxHeigth->setValue(a);
+		spinBoxVertical->setMaxValue(a/2);
+	}
 	this->paramChanged();
 }
 void KisAutobrush::spinBoxHeigthChanged(int a)
 {
+	spinBoxVertical->setMaxValue(a/2);
 	if(checkBoxSamesize->isChecked())
+	{
 		spinBoxWidth->setValue(a);
+		spinBoxHorizontal->setMaxValue(a/2);
+	}
 	this->paramChanged();
 }
 void KisAutobrush::spinBoxHorizontalChanged(int a)

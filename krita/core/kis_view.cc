@@ -1647,7 +1647,7 @@ int KisView::insert_layer_image(bool newImage, const QString& filename)
 		return 0;
 
 	if (!KIO::NetAccess::exists(url)) {
-		KMessageBox::error(this, i18n("File does not exists."), i18n("Error Loading File"));
+		KMessageBox::error(this, i18n("File does not exist."), i18n("Error Loading File"));
 		return -1;
 	}
 
@@ -1656,7 +1656,7 @@ int KisView::insert_layer_image(bool newImage, const QString& filename)
 		QString tmpname = tf.name();
 
 		if (!KIO::NetAccess::download(url, tmpname)) {
-			KMessageBox::error(this, i18n("Could not dowload file."), i18n("Error Loading File"));
+			KMessageBox::error(this, i18n("Unable to download file."), i18n("Error Loading File"));
 			KNotifyClient::event("cannotopenfile"); 
 			return -1;
 		}

@@ -25,7 +25,6 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_view.h"
-#include "kis_tool_memento.h"
 #include "kis_strategy_move.h"
 #include "kis_undo_adapter.h"
 

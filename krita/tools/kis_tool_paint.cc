@@ -18,7 +18,6 @@
 #include <kdebug.h>
 #include <koColor.h>
 
-#include "kis_tool_memento.h"
 #include "kis_tool_paint.h"
 #include "kis_view.h"
 #include "kis_global.h"

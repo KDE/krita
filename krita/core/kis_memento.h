@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,13 +16,12 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "kis_tool_memento.h"
+#if !defined KIS_MEMENTO_H_
+#define KIS_MEMENTO_H_
 
-KisToolMemento::KisToolMemento()
-{
-}
+#include <qcstring.h>
 
-KisToolMemento::~KisToolMemento()
-{
-}
+typedef QByteArray KisMemento;
+
+#endif // KIS_MEMENTO_H_
 

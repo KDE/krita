@@ -91,3 +91,10 @@ Import/Export
   and put in its own plugin (KisFileFormat, KisFileFormatRegistry)
 * The image magick plugin should use KisAnnotation to preserve image
   data on roundtrips.
+* Open file does not show all the file formats that are shown in import
+  (for instance, no .psd)
+
+Composition
+
+* Most operators are wrong, especially multiply. Order of composite ops
+  is wrong, too. Should be: normal, multiply, burn, dodge.

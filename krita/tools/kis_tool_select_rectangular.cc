@@ -222,8 +222,8 @@ void KisToolRectangularSelect::paintOutline(QPainter& gc, const QRect&)
 		QPoint end;
 
 		Q_ASSERT(controller);
-		start = controller -> viewToWindow(m_startPos);
-		end = controller -> viewToWindow(m_endPos);
+		start = controller -> windowToView(m_startPos);
+		end = controller -> windowToView(m_endPos);
 
 		gc.setRasterOp(Qt::NotROP);
 		gc.setPen(pen);

@@ -20,6 +20,7 @@
  */
 
 #include <algorithm>
+#include <cmath>
 
 // Qt
 #include <qapplication.h>
@@ -98,6 +99,7 @@
 #include "strategy/kis_strategy_move.h"
 #include "visitors/kis_flatten.h"
 #include "visitors/kis_merge.h"
+#include "kis_rect.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
@@ -492,12 +494,17 @@ void KisView::resizeEvent(QResizeEvent *)
 	m_hRuler -> setGeometry(ruler + lsideW, 0, width() - ruler - rsideW - lsideW, ruler);
 	m_vRuler -> setGeometry(0 + lsideW, ruler, ruler, height() - (ruler + tbarBtnH));
 
+	docW = static_cast<Q_INT32>(ceil(docWidth() * zoom()));
+	docH = static_cast<Q_INT32>(ceil(docHeight() * zoom()));
+
 	drawH = height() - ruler - tbarBtnH - canvasYOffset();
 	drawW = width() - ruler - lsideW - rsideW - canvasXOffset();
-	docW = docWidth();
-	docH = docHeight();
-	docW = static_cast<Q_INT32>((zoom()) * docW);
-	docH = static_cast<Q_INT32>((zoom()) * docH);
+
+	if (drawH < docH) {
+		// Will need vert scrollbar
+		drawW -= tbarBtnW;
+	}
+
 	m_vScroll -> setEnabled(docH > drawH);
 	m_hScroll -> setEnabled(docW > drawW);
 
@@ -507,8 +514,6 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_hScroll -> hide();
 		m_vScroll -> setValue(0);
 		m_hScroll -> setValue(0);
-		m_canvas -> setGeometry(ruler + lsideW, ruler, drawW, drawH);
-		m_canvas -> show();
 
  		if (m_tabBar)
  			m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, width() - rsideW - lsideW - tbarOffset, tbarBtnH);
@@ -516,14 +521,12 @@ void KisView::resizeEvent(QResizeEvent *)
 		// we need a horizontal scrollbar only
 		m_vScroll -> hide();
 		m_vScroll -> setValue(0);
-		m_hScroll -> setRange(0, static_cast<int>((docW - drawW) / zoom()));
+		m_hScroll -> setRange(0, docW - drawW);
 		m_hScroll -> setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset) / 2,
 				height() - tbarBtnH,
 				(width() - rsideW -lsideW - tbarOffset) / 2,
 				tbarBtnH);
-		m_canvas -> setGeometry(ruler + lsideW, ruler, drawW, drawH);
 		m_hScroll -> show();
-		m_canvas -> show();
 
  		if (m_tabBar)
  			m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, (width() - rsideW - lsideW - tbarOffset) / 2, tbarBtnH);
@@ -531,34 +534,33 @@ void KisView::resizeEvent(QResizeEvent *)
 		// we need a vertical scrollbar only
 		m_hScroll -> hide();
 		m_hScroll -> setValue(0);
-		m_vScroll -> setRange(0, static_cast<int>((docH - drawH) / zoom()));
+		m_vScroll -> setRange(0, docH - drawH);
 		m_vScroll -> setGeometry(width() - tbarBtnW - rsideW, ruler, tbarBtnW, height() - (ruler + tbarBtnH));
-		m_canvas -> setGeometry(ruler + lsideW, ruler, drawW - tbarBtnW, drawH);
 		m_vScroll -> show();
-		m_canvas -> show();
 
  		if (m_tabBar)
  			m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, width() - rsideW -lsideW - tbarOffset, tbarBtnH);
 	} else {
 		// we need both scrollbars
-		m_vScroll -> setRange(0, static_cast<int>((docH - drawH) / zoom()));
+		m_vScroll -> setRange(0, docH - drawH);
 		m_vScroll -> setGeometry(width() - tbarBtnW - rsideW, ruler, tbarBtnW, height() - (ruler + tbarBtnH));
-		m_hScroll -> setRange(0, static_cast<int>((docW - drawW) / zoom()));
+		m_hScroll -> setRange(0, docW - drawW);
 		m_hScroll -> setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset) / 2,
 				height() - tbarBtnH,
 				(width() - rsideW -lsideW - tbarOffset) / 2,
 				tbarBtnH);
-		m_canvas -> setGeometry(ruler + lsideW, ruler, drawW - tbarBtnW, drawH);
 		m_vScroll -> show();
 		m_hScroll -> show();
-		m_canvas -> show();
 
  		if (m_tabBar)
  			m_tabBar -> setGeometry(tbarOffset + lsideW, height() - tbarBtnH, (width() - rsideW -lsideW - tbarOffset)/2, tbarBtnH);
 	}
 
-	m_vScroll -> setLineStep(static_cast<Q_INT32>(100 * zoom()));
-	m_hScroll -> setLineStep(static_cast<Q_INT32>(100 * zoom()));
+	m_canvas -> setGeometry(ruler + lsideW, ruler, drawW, drawH);
+	m_canvas -> show();
+
+	m_vScroll -> setPageStep(drawH);
+	m_hScroll -> setPageStep(drawW);
 
 	if (m_vScroll -> isVisible())
 		m_vRuler -> updateVisibleArea(0, m_vScroll -> value());
@@ -624,66 +626,65 @@ Q_INT32 KisView::vertValue() const
 	return m_vScroll -> value();
 }
 
-void KisView::paintView(const QRect& rc)
+void KisView::paintView(const KisRect& r)
 {
 	KisImageSP img = currentImg();
 
 	if (img) {
-		QPainter gc(m_canvas);
-		QRect ur = rc;
-		Q_INT32 xt;
-		Q_INT32 yt;
 
-		if (ur.x() < 0)
-			ur.setLeft(0);
+		KisRect vr = windowToView(r);
+		//vr &= QRect(0, 0, m_canvas -> width(), m_canvas -> height());
+		if (vr.x() < 0) {
+			vr.setX(0);
+		}
+		if (vr.width() > m_canvas -> width()) {
+			vr.setWidth(m_canvas -> width());
+		}
+		if (vr.y() < 0) {
+			vr.setY(0);
+		}
+		if (vr.height() > m_canvas -> height()) {
+			vr.setHeight(m_canvas -> height());
+		}
 
-		if (ur.y() < 0)
-			ur.setTop(0);
+		if (!vr.isNull()) {
 
-		if (canvasXOffset())
-			gc.eraseRect(0, 0, canvasXOffset(), height());
+			QPainter gc(m_canvas);
+			QRect wr = viewToWindow(vr).qRect();
 
-		if (canvasYOffset())
-			gc.eraseRect(static_cast<Q_INT32>(canvasXOffset() * zoom()), 0, width(), static_cast<Q_INT32>(canvasYOffset() * zoom()));
+			if (wr.left() < 0 || wr.right() > img -> width() || wr.top() < 0 || wr.bottom() > img -> height()) {
+				// Erase areas outside document
+				QRegion rg(vr.qRect());
+				rg -= QRegion(windowToView(KisRect(0, 0, img -> width(), img -> height())).qRect());
 
-		gc.eraseRect(static_cast<Q_INT32>(canvasXOffset() * zoom()), static_cast<Q_INT32>(docHeight() * zoom()) - canvasYOffset(), width(), height());
-		gc.eraseRect(static_cast<Q_INT32>(docWidth() * zoom()) - canvasXOffset() - 1, static_cast<Q_INT32>(canvasYOffset() * zoom()), width(), height());
-		xt = -canvasXOffset() + horzValue();
-		yt = -canvasYOffset() + vertValue();
-		ur.moveBy(xt, yt);
+				QMemArray<QRect> rects = rg.rects();
 
-		if (img -> width() * zoom() < ur.right())
-			ur.setWidth(img -> width());
+				for (unsigned int i = 0; i < rects.count(); i++) {
+					QRect er = rects[i];
+					gc.eraseRect(er);
+				}
 
-		if (img -> height() * zoom() < ur.bottom())
-			ur.setHeight(img -> height());
+				wr &= QRect(0, 0, img -> width(), img -> height());
+			}
 
-		if (ur.x() > docWidth())
-			return;
+			if (!wr.isNull()) {
 
-		if (ur.y() > docHeight())
-			return;
+				if (zoom() < 1.0 || zoom() > 1.0)
+					gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvas -> width() * zoom()), static_cast<Q_INT32>(m_canvas -> height() * zoom()));
 
-		ur.setBottom(ur.bottom() + 1);
-		ur.setRight(ur.right() + 1);
-		xt = canvasXOffset() - horzValue();
-		yt = canvasYOffset() - vertValue();
+				gc.translate((canvasXOffset() - horzValue()) / zoom(), (canvasYOffset() - vertValue()) / zoom());
 
-		if (zoom() < 1.0 || zoom() > 1.0)
-			gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvas -> width() * zoom()), static_cast<Q_INT32>(m_canvas -> height() * zoom()));
+				m_doc -> setProjection(img);
+				m_doc -> paintContent(gc, wr, false, 1.0, 1.0);
 
-		if (xt || yt)
-			gc.translate(xt, yt);
+				if (m_tool)
+					m_tool -> paint(gc, wr);
+			}
 
-		m_doc -> setProjection(img);
-		m_doc -> paintContent(gc, ur, false, 1.0, 1.0);
-
-		if (m_tool)
-			m_tool -> paint(gc, ur);
-
-		paintGuides();
+			paintGuides();
+		}
 	} else {
-		clearCanvas(rc);
+		clearCanvas(r.qRect());
 	}
 }
 
@@ -694,25 +695,27 @@ QWidget *KisView::canvas() const
 
 void KisView::updateCanvas()
 {
-	QRect rc(0, 0, m_canvas -> width(), m_canvas -> height());
+	KisRect vr(0, 0, m_canvas -> width(), m_canvas -> height());
+	KisRect wr = viewToWindow(vr);
 
-	updateCanvas(rc);
+	updateCanvas(wr);
 }
 
 void KisView::updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	QRect rc(x, y, w, h);
+	KisRect rc(x, y, w, h);
 
 	updateCanvas(rc);
 }
 
 void KisView::updateCanvas(const QRect& rc)
 {
-	QRect ur = rc;
+	updateCanvas(KisRect(rc));
+}
 
-	ur.setX(ur.x() - static_cast<Q_INT32>(horzValue() * zoom()));
-	ur.setY(ur.y() - static_cast<Q_INT32>(vertValue() * zoom()));
-	paintView(ur);
+void KisView::updateCanvas(const KisRect& rc)
+{
+	paintView(rc);
 }
 
 void KisView::tool_properties()
@@ -994,54 +997,58 @@ void KisView::unSelectAll()
 
 void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 {
+	if (x < 0 || y < 0) {
+		// Zoom about the centre of the current display
+		KisImageSP img = currentImg();
+
+		if (img) {
+			if (m_hScroll -> isVisible()) {
+				QPoint c = viewToWindow(QPoint(m_canvas -> width() / 2, m_canvas -> height() / 2));
+				x = c.x();
+			}
+			else {
+				x = img -> width() / 2;
+			}
+
+			if (m_vScroll -> isVisible()) {
+				QPoint c = viewToWindow(QPoint(m_canvas -> width() / 2, m_canvas -> height() / 2));
+				y = c.y();
+			}
+			else {
+				y = img -> height() / 2;
+			}
+		}
+		else {
+			x = 0;
+			y = 0;
+		}
+	}
+
+	setZoom(zf);
+
 	Q_ASSERT(m_zoomIn);
 	Q_ASSERT(m_zoomOut);
-	setZoom(zf);
 	m_zoomIn -> setEnabled(zf <= KISVIEW_MAX_ZOOM);
 	m_zoomOut -> setEnabled(zf >= KISVIEW_MIN_ZOOM);
 
+	resizeEvent(0);
+
 	m_hRuler -> setZoom(zf);
 	m_vRuler -> setZoom(zf);
-
-	if (x < 0 || y < 0) {
-		bool vvisible = m_vScroll -> isVisible();
-		bool hvisible = m_hScroll -> isVisible();
-		QRect ur(0, 0, m_canvas -> width(), m_canvas -> height());
-
-		resizeEvent(0);
-		ur.setX(ur.x() - static_cast<Q_INT32>(horzValue() * zoom()));
-		ur.setY(ur.y() - static_cast<Q_INT32>(vertValue() * zoom()));
-
-		if (zoom() > 1.0 || zoom() < 1.0) {
-			Q_INT32 urL = ur.left();
-			Q_INT32 urT = ur.top();
-			Q_INT32 urW = ur.width();
-			Q_INT32 urH = ur.height();
-
-			urL = static_cast<int>(static_cast<double>(urL) / zoom());
-			urT = static_cast<int>(static_cast<double>(urT) / zoom());
-			urW = static_cast<int>(static_cast<double>(urW) / zoom());
-			urH = static_cast<int>(static_cast<double>(urH) / zoom());
-			ur.setLeft(urL);
-			ur.setTop(urT);
-			ur.setWidth(urW);
-			ur.setHeight(urH);
-		}
-
-		if (vvisible == m_vScroll -> isVisible() || hvisible == m_hScroll -> isVisible())
-			updateCanvas(ur);
-	} else {
-		x = static_cast<Q_INT32>(x * zf - width() / 2);
-		y = static_cast<Q_INT32>(y * zf - height() / 2);
-
-		if (x < 0)
-			x = 0;
-
-		if (y < 0)
-			y = 0;
-
-		scrollTo(x, y);
+	
+	if (m_hScroll -> isVisible()) {
+		Q_INT32 vcx = m_canvas -> width() / 2;
+		Q_INT32 scrollX = qRound(x * zoom() - vcx);
+		m_hScroll -> setValue(scrollX);
 	}
+
+	if (m_vScroll -> isVisible()) {
+		Q_INT32 vcy = m_canvas -> height() / 2;
+		Q_INT32 scrollY = qRound(y * zoom() - vcy);
+		m_vScroll -> setValue(scrollY);
+	}
+
+	canvasRefresh();
 }
 
 void KisView::zoomIn(Q_INT32 x, Q_INT32 y)
@@ -1750,25 +1757,8 @@ void KisView::setupTools()
 
 void KisView::canvasGotPaintEvent(QPaintEvent *event)
 {
-	QRect ur = event -> rect();
-
-	if (zoom() > 1.0 || zoom() < 1.0) {
-		Q_INT32 urL = ur.left();
-		Q_INT32 urT = ur.top();
-		Q_INT32 urW = ur.width();
-		Q_INT32 urH = ur.height();
-
-		urL = static_cast<Q_INT32>(static_cast<double>(urL) / zoom());
-		urT = static_cast<Q_INT32>(static_cast<double>(urT) / zoom());
-		urW = static_cast<Q_INT32>(static_cast<double>(urW) / zoom());
-		urH = static_cast<Q_INT32>(static_cast<double>(urH) / zoom());
-		ur.setLeft(urL);
-		ur.setTop(urT);
-		ur.setWidth(urW);
-		ur.setHeight(urH);
-	}
-
-	paintView(ur);
+	KisRect r = viewToWindow(KisRect(event -> rect()));
+	paintView(r);
 }
 
 void KisView::canvasGotMousePressEvent(QMouseEvent *e)
@@ -1807,9 +1797,8 @@ void KisView::canvasGotMousePressEvent(QMouseEvent *e)
 	}
 
 	if (m_tool) {
-		Q_INT32 x = static_cast<Q_INT32>((e -> pos().x() - canvasXOffset() + horzValue() * zoom()) / zoom());
-		Q_INT32 y = static_cast<Q_INT32>((e -> pos().y() - canvasYOffset() + vertValue() * zoom()) / zoom());
-		QMouseEvent ev(QEvent::MouseButtonPress, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
+		QPoint p = viewToWindow(e -> pos());
+		QMouseEvent ev(QEvent::MouseButtonPress, p, e -> globalPos(), e -> button(), e -> state());
 
 		m_tool -> mousePress(&ev);
 	}
@@ -1821,6 +1810,8 @@ void KisView::canvasGotMouseMoveEvent(QMouseEvent *e)
 
 	m_hRuler -> updatePointer(e -> pos().x() - canvasXOffset(), e -> pos().y() - canvasYOffset());
 	m_vRuler -> updatePointer(e -> pos().x() - canvasXOffset(), e -> pos().y() - canvasYOffset());
+
+	QPoint wp = viewToWindow(e -> pos());
 
 	if (img && m_currentGuide) {
 		QPoint p = mapToScreen(e -> pos());
@@ -1840,15 +1831,13 @@ void KisView::canvasGotMouseMoveEvent(QMouseEvent *e)
 			paintGuides();
 		}
 	} else if (m_tool) {
-		Q_INT32 x = static_cast<Q_INT32>((e -> pos().x() - canvasXOffset() + horzValue() * zoom()) / zoom());
-		Q_INT32 y = static_cast<Q_INT32>((e -> pos().y() - canvasYOffset() + vertValue() * zoom()) / zoom());
-		QMouseEvent ev(QEvent::MouseButtonPress, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
+		QMouseEvent ev(QEvent::MouseButtonPress, wp, e -> globalPos(), e -> button(), e -> state());
 
 		m_tool -> mouseMove(&ev);
 	}
 
 	m_lastGuidePoint = mapToScreen(e -> pos());
-	emit cursorPosition(static_cast<Q_INT32>((e -> x() + horzValue()) / zoom()), static_cast<Q_INT32>((e -> y() + vertValue()) / zoom()));
+	emit cursorPosition(wp.x(), wp.y());
 }
 
 void KisView::canvasGotMouseReleaseEvent(QMouseEvent *e)
@@ -1858,9 +1847,8 @@ void KisView::canvasGotMouseReleaseEvent(QMouseEvent *e)
 	if (img && m_currentGuide) {
 		m_currentGuide = 0;
 	} else if (m_tool) {
-		Q_INT32 x = static_cast<Q_INT32>((e -> pos().x() - canvasXOffset() + horzValue() * zoom()) / zoom());
-		Q_INT32 y = static_cast<Q_INT32>((e -> pos().y() - canvasYOffset() + vertValue() * zoom()) / zoom());
-		QMouseEvent ev(QEvent::MouseButtonPress, QPoint(x, y), e -> globalPos(), e -> button(), e -> state());
+		QPoint p = viewToWindow(e -> pos());
+		QMouseEvent ev(QEvent::MouseButtonPress, p, e -> globalPos(), e -> button(), e -> state());
 
 		m_tool -> mouseRelease(&ev);
 	}
@@ -1872,12 +1860,11 @@ void KisView::canvasGotTabletEvent(QTabletEvent *e)
     if (img ) {
         if ( m_tool ) {
             // Compute offset between screen coordinates and (zoomed) canvas coordinates.
-            Q_INT32 x = static_cast<Q_INT32>((e -> pos().x() - canvasXOffset() + horzValue() * zoom()) / zoom());
-            Q_INT32 y = static_cast<Q_INT32>((e -> pos().y() - canvasYOffset() + vertValue() * zoom()) / zoom());
+	    QPoint p = viewToWindow(e -> pos());
             // Synthesize a new tablet event.
             // Pity I haven't got a tablet that's got tilt, too
             QTabletEvent ev(e -> type(),
-                            QPoint(x, y),
+                            p,
                             e -> globalPos(),
                             e -> device(),
                             e -> pressure(),
@@ -2236,12 +2223,12 @@ void KisView::scrollV(int value)
 
 int KisView::canvasXOffset() const
 {
-	return static_cast<Q_INT32>(static_cast<double>(m_xoff) * zoom());
+	return static_cast<Q_INT32>(ceil(m_xoff * zoom()));
 }
 
 int KisView::canvasYOffset() const
 {
-	return static_cast<Q_INT32>(static_cast<double>(m_yoff) * zoom());
+	return static_cast<Q_INT32>(ceil(m_yoff * zoom()));
 }
 
 void KisView::setupCanvas()
@@ -2351,13 +2338,9 @@ void KisView::clipboardDataChanged()
 void KisView::imgUpdated(KisImageSP img, const QRect& rc)
 {
 	if (img == currentImg()) {
-		QRect ur = rc;
 
 		resizeEvent(0);
-		/*ur.setX(ur.x() - static_cast<Q_INT32>(horzValue() * zoom()));
-		ur.setY(ur.y() - static_cast<Q_INT32>(vertValue() * zoom()));*/
-		ur.moveBy(- horzValue(), - vertValue());
-		updateCanvas(ur);
+		updateCanvas(rc);
 	}
 }
 
@@ -2453,61 +2436,93 @@ QPoint KisView::viewToWindow(const QPoint& pt)
 {
 	QPoint converted;
 
-        converted.rx() = static_cast<int>(pt.x() * zoom());
-        converted.rx() -= static_cast<int>(horzValue() * zoom()) + canvasXOffset();
-        converted.ry() = static_cast<int>(pt.y() * zoom());
-        converted.ry() -= static_cast<int>(vertValue() * zoom()) + canvasYOffset();
+	converted.rx() = qRound((pt.x() + horzValue() - canvasXOffset()) / zoom());
+	converted.ry() = qRound((pt.y() + vertValue() - canvasYOffset()) / zoom());
+
+	return converted;
+}
+
+KisPoint KisView::viewToWindow(const KisPoint& pt)
+{
+	KisPoint converted;
+
+	converted.setX((pt.x() + horzValue() - canvasXOffset()) / zoom());
+	converted.setY((pt.y() + vertValue() - canvasYOffset()) / zoom());
 
 	return converted;
 }
 
 QRect KisView::viewToWindow(const QRect& rc)
 {
-	QRect r = rc;
+	QRect r;
+	QPoint p = viewToWindow(QPoint(rc.x(), rc.y()));
+        r.setX(p.x());
+	r.setY(p.y());
+	r.setWidth(qRound(rc.width() / zoom()));
+	r.setHeight(qRound(rc.height() / zoom()));
 
-	if (zoom() < 1.0 || zoom() > 1.0) {
-		r.setX(static_cast<Q_INT32>((r.x() + horzValue()) * zoom()));
-		r.setY(static_cast<Q_INT32>((r.y() + vertValue()) * zoom()));
-		r.setWidth(static_cast<Q_INT32>(r.width() * zoom()));
-		r.setHeight(static_cast<Q_INT32>(r.height() * zoom()));
-	}
+	return r;
+}
+
+KisRect KisView::viewToWindow(const KisRect& rc)
+{
+	KisRect r;
+	KisPoint p = viewToWindow(KisPoint(rc.x(), rc.y()));
+        r.setX(p.x());
+	r.setY(p.y());
+	r.setWidth(rc.width() / zoom());
+	r.setHeight(rc.height() / zoom());
 
 	return r;
 }
 
 void KisView::viewToWindow(Q_INT32 *x, Q_INT32 *y)
 {
-	if (zoom() < 1.0 || zoom() > 1.0) {
-		*x += horzValue();
-		*y += vertValue();
-		*x /= static_cast<Q_INT32>(zoom());
-		*y /= static_cast<Q_INT32>(zoom());
+	if (x && y) {
+		QPoint p = viewToWindow(QPoint(*x, *y));
+		*x = p.x();
+		*y = p.y();
 	}
 }
 
 QPoint KisView::windowToView(const QPoint& pt)
 {
-	QPoint r = pt;
+	QPoint p;
+	p.setX(qRound(pt.x() * zoom() + canvasXOffset() - horzValue()));
+	p.setY(qRound(pt.y() * zoom() + canvasYOffset() - vertValue()));
 
-	if (zoom() < 1.0 || zoom() > 1.0) {
-		r *= zoom();
-		r.setX(r.x() - horzValue());
-		r.setY(r.y() - vertValue());
-	}
+	return p;
+}
 
-	return r;
+KisPoint KisView::windowToView(const KisPoint& pt)
+{
+	KisPoint p;
+	p.setX(pt.x() * zoom() + canvasXOffset() - horzValue());
+	p.setY(pt.y() * zoom() + canvasYOffset() - vertValue());
+
+	return p;
 }
 
 QRect KisView::windowToView(const QRect& rc)
 {
 	QRect r;
+	QPoint p = windowToView(QPoint(rc.x(), rc.y()));
+	r.setX(p.x());
+	r.setY(p.y());
+	r.setWidth(qRound(rc.width() * zoom()));
+	r.setHeight(qRound(rc.height() * zoom()));
 
-	if (zoom() > 1.0 || zoom() < 1.0) {
-		r.setX(static_cast<Q_INT32>(rc.x() * zoom()) - horzValue());
-		r.setY(static_cast<Q_INT32>(rc.y() * zoom()) - vertValue());
-		r.setWidth(static_cast<Q_INT32>(rc.width() * zoom()));
-		r.setHeight(static_cast<Q_INT32>(rc.height() * zoom()));
-	}
+	return r;
+}
+
+KisRect KisView::windowToView(const KisRect& rc)
+{
+	KisRect r;
+	KisPoint p = windowToView(KisPoint(rc.x(), rc.y()));
+	r.setX(p.x());
+	r.setY(p.y());
+	r.setWidth(rc.width() * zoom());
+	r.setHeight(rc.height() * zoom());
 
 	return r;
 }
@@ -2515,10 +2530,9 @@ QRect KisView::windowToView(const QRect& rc)
 void KisView::windowToView(Q_INT32 *x, Q_INT32 *y)
 {
 	if (x && y) {
-		*x *= static_cast<Q_INT32>(zoom());
-		*y *= static_cast<Q_INT32>(zoom());
-		*x -= horzValue();
-		*y -= vertValue();
+		QPoint p = windowToView(QPoint(*x, *y));
+		*x = p.x();
+		*y = p.y();
 	}
 }
 

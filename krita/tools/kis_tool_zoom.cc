@@ -47,9 +47,9 @@ void KisToolZoom::mousePress(QMouseEvent *e)
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 	
 		if (e -> button() == Qt::LeftButton)
-			controller -> zoomIn();
+			controller -> zoomIn(e -> pos().x(), e -> pos().y());
 		else if (e -> button() == Qt::RightButton)
-			controller -> zoomOut();
+			controller -> zoomOut(e -> pos().x(), e -> pos().y());
 	}
 }
 

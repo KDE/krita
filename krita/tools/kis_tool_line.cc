@@ -214,8 +214,8 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
 		QPoint end;
 
 //		Q_ASSERT(controller);
-		start = controller -> viewToWindow(m_startPos);
-		end = controller -> viewToWindow(m_endPos);
+		start = controller -> windowToView(m_startPos);
+		end = controller -> windowToView(m_endPos);
 //  		start.setX(start.x() - controller -> horzValue());
 //  		start.setY(start.y() - controller -> vertValue());
 //  		end.setX(end.x() - controller -> horzValue());

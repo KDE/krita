@@ -62,6 +62,8 @@ class DockFrameDocker;
 class ColorDocker;
 class ControlFrame;
 class KisUndoAdapter;
+class KisRect;
+class KisPoint;
 
 class KisView : public KoView, 
 		private KisCanvasSubject, 
@@ -152,15 +154,20 @@ private:
 	virtual void updateCanvas();
 	virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	virtual void updateCanvas(const QRect& rc);
+	virtual void updateCanvas(const KisRect& rc);
 	virtual void zoomIn();
 	virtual void zoomIn(Q_INT32 x, Q_INT32 y);
 	virtual void zoomOut();
 	virtual void zoomOut(Q_INT32 x, Q_INT32 y);
 	virtual QPoint viewToWindow(const QPoint& pt);
+	virtual KisPoint viewToWindow(const KisPoint& pt);
 	virtual QRect viewToWindow(const QRect& rc);
+	virtual KisRect viewToWindow(const KisRect& rc);
 	virtual void viewToWindow(Q_INT32 *x, Q_INT32 *y);
 	virtual QPoint windowToView(const QPoint& pt);
+	virtual KisPoint windowToView(const KisPoint& pt);
 	virtual QRect windowToView(const QRect& rc);
+	virtual KisRect windowToView(const KisRect& rc);
 	virtual void windowToView(Q_INT32 *x, Q_INT32 *y);
 
 private:
@@ -178,7 +185,7 @@ private:
 	void imgUpdateGUI();
 	void fillSelection(const KoColor& c, QUANTUM opacity);
 	void layerUpdateGUI(bool enable);
-	void paintView(const QRect& rc);
+	void paintView(const KisRect& rc);
 	void selectionUpdateGUI(bool enable);
 	bool selectColor(KoColor& result);
 	void selectImage(KisImageSP img);

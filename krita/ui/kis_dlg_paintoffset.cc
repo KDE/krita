@@ -44,7 +44,7 @@ KisDlgPaintOffset::KisDlgPaintOffset(Q_INT32 xoff, Q_INT32 yoff, QWidget *parent
 	vboxchild -> insertSpacing(-1, 15);
 	hbox = new QHBoxLayout(vboxchild);
 	hbox -> insertSpacing(-1, 15);
-	lbl = new QLabel(i18n("X Axis Offet:"), grp);
+	lbl = new QLabel(i18n("X axis offset:"), grp);
 	hbox -> addWidget(lbl, 0, Qt::AlignLeft);
 	ed = new KIntNumInput(xoff, grp);
 	connect(ed, SIGNAL(valueChanged(int)), SLOT(xOffsetValue(int)));
@@ -52,7 +52,7 @@ KisDlgPaintOffset::KisDlgPaintOffset(Q_INT32 xoff, Q_INT32 yoff, QWidget *parent
 	hbox -> insertSpacing(-1, 15);
 	hbox = new QHBoxLayout(vboxchild);
 	hbox -> insertSpacing(-1, 15);
-	lbl = new QLabel(i18n("Y Axis Offet:"), grp);
+	lbl = new QLabel(i18n("Y axis offset:"), grp);
 	hbox -> addWidget(lbl, 0, Qt::AlignLeft);
 	ed = new KIntNumInput(yoff, grp);
 	connect(ed, SIGNAL(valueChanged(int)), SLOT(yOffsetValue(int)));

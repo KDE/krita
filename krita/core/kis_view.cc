@@ -378,14 +378,14 @@ void KisView::setupActions()
 	m_selectionCrop = new KAction(i18n("Copy Selection to New Layer"), "crop", 0,  this, SLOT(crop()), actionCollection(), "crop");
 	m_selectionSelectAll = KStdAction::selectAll(this, SLOT(selectAll()), actionCollection(), "select_all");
 	m_selectionSelectNone = KStdAction::deselect(this, SLOT(unSelectAll()), actionCollection(), "select_none");
-	m_selectionFillFg = new KAction(i18n("Fill with Foreground Color"), 0, this, SLOT(fillSelectionFg()), actionCollection(), "fill_fgcolor");
-	m_selectionFillBg = new KAction(i18n("Fill with Background Color"), 0, this, SLOT(fillSelectionBg()), actionCollection(), "fill_bgcolor");
+	m_selectionFillFg = new KAction(i18n("Fill With Foreground Color"), 0, this, SLOT(fillSelectionFg()), actionCollection(), "fill_fgcolor");
+	m_selectionFillBg = new KAction(i18n("Fill With Background Color"), 0, this, SLOT(fillSelectionBg()), actionCollection(), "fill_bgcolor");
 
 	// import/export actions
 	m_imgImport = new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
 	m_imgExport = new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
 	m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
-	m_imgResizeToLayer = new KAction(i18n("Resize image to current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
+	m_imgResizeToLayer = new KAction(i18n("Resize Image to Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
 
 	// view actions
 	m_zoomIn = KStdAction::zoomIn(this, SLOT(zoomIn()), actionCollection(), "zoom_in");
@@ -1226,14 +1226,14 @@ void KisView::export_image()
 
 		switch (ib.buildFile(url, dst)) {
 			case KisImageBuilder_RESULT_UNSUPPORTED:
-				KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving file"));
+				KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
 				break;
 			case KisImageBuilder_RESULT_INVALID_ARG:
-				KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving file"));
+				KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving File"));
 				break;
 			case KisImageBuilder_RESULT_NO_URI:
 			case KisImageBuilder_RESULT_NOT_LOCAL:
-				KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving file"));
+				KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving File"));
 				break;
 			case KisImageBuilder_RESULT_BAD_FETCH:
 				KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));

@@ -114,7 +114,7 @@ namespace {
 		typedef KisCommand super;
 
 	public:
-		KisCommandImageMv(KisDoc *doc, const QString& name, const QString& oldName) : super(i18n("Rename image"), doc)
+		KisCommandImageMv(KisDoc *doc, const QString& name, const QString& oldName) : super(i18n("Rename Image"), doc)
 		{
 			m_doc = doc;
 			m_name = name;

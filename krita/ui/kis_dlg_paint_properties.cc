@@ -69,12 +69,12 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName, const QPoint
 	grp = new QGroupBox(i18n("Position"), page);
 	gridInBox = new QGridLayout(grp, 2, 2, 12);
 
-	lbl = new QLabel(i18n("X Axis:"), grp);
+	lbl = new QLabel(i18n("X axis:"), grp);
 	m_x = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, pos.x(), 10, grp);
 	gridInBox -> addWidget(lbl, 0, 0);
 	gridInBox -> addWidget(m_x, 0, 1);
 
-	lbl = new QLabel(i18n("Y Axis:"), grp);
+	lbl = new QLabel(i18n("Y axis:"), grp);
 	m_y = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, pos.y(), 10, grp);
 	gridInBox -> addWidget(lbl, 1, 0);
 	gridInBox -> addWidget(m_y, 1, 1);

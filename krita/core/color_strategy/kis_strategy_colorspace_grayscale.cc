@@ -37,7 +37,7 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_GRAYSCALEA = 2;
 }
 
-ChannelInfo KisStrategyColorSpaceGrayscale::channelInfo[1] = { ChannelInfo("Gray", 1) };
+ChannelInfo KisStrategyColorSpaceGrayscale::channelInfo[1] = { ChannelInfo("Gray", 0) };
 
 KisStrategyColorSpaceGrayscale::KisStrategyColorSpaceGrayscale() :
 	KisStrategyColorSpace("Grayscale + Alpha"),

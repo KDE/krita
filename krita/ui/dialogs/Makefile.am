@@ -1,10 +1,13 @@
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
+INCLUDES  = -I$(srcdir)/.. \
+	-I$(srcdir)/../../core \
+	$(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 noinst_LTLIBRARIES = libkisdialogs.la
 libkisdialogs_la_SOURCES = dummy.cc \
 	wdgmatrix.ui \
 	new_image.ui \
 	wdghistogram.ui \
-	kis_previewwidgetbase.ui
+	kis_previewwidgetbase.ui \
+	kis_preview_dialog.ui
 
 noinst_HEADERS = wdgmatrix.h \
 	wdghistogram.h \

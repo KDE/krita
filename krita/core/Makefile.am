@@ -1,17 +1,19 @@
 # all_includes must remain last!
 INCLUDES  = -I$(srcdir)/builder \
-	 -I$(srcdir)/visitors \
-	 -I$(srcdir)/helper/ \
+	-I$(srcdir)/visitors \
+	-I$(srcdir)/helper/ \
 	-I$(srcdir)/tiles \
-	-I$(srcdir)/../ui -I../ui \
+	-I$(srcdir)/../ui \
+	-I$(srcdir)/../ui/dialogs \
+	-I$(srcdir)/../ui/widgets \
 	-I$(srcdir)/../tools \
 	$(KOFFICE_INCLUDES) \
-	 -I$(interfacedir) \
+	-I$(interfacedir) \
 	$(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/strategy \
 	-I$(srcdir)/color_strategy \
 	-I$(srcdir)/compositeop \
-	 $(all_includes)
+	$(all_includes)
 
 #CXXFLAGS = -shared -fPIC
 

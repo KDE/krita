@@ -278,7 +278,8 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 		  << ", " 
 		  << h 
 		  << ")\n";
-	undoAdapter()->beginMacro("Resize image");
+	if(undoAdapter() != 0)
+		undoAdapter()->beginMacro("Resize image");
 	if (m_adapter && m_adapter -> undo())
 		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
 
@@ -288,7 +289,8 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 	m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
  	m_bkg -> resize(w, h);
 // 	m_projection -> resize(w, h);
-	undoAdapter()->endMacro();
+	if(undoAdapter() != 0)
+		undoAdapter()->endMacro();
 	invalidate();
 }
 

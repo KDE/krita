@@ -28,6 +28,7 @@
 #include <map>
 #include <koColor.h>
 #include <koView.h>
+#include <kdebug.h>
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_global.h"

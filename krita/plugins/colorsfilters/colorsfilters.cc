@@ -57,15 +57,6 @@
 typedef KGenericFactory<ColorsFilters> ColorsFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorsfilters, ColorsFiltersFactory( "krita" ) )
 
-namespace {
-	inline QUANTUM processColor( QUANTUM d, int s)
-	{
-		if( d < -s  ) return 0;
-		else if( d > QUANTUM_MAX - s) return QUANTUM_MAX;
-		else return d + s;
-	}
-}
-
 ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringList &)
 		: KParts::Plugin(parent, name)
 {
@@ -80,7 +71,8 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 
 	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, this, SLOT(slotBrightnessContrastActivated()), actionCollection(), "brightnesscontrast");
 	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, this, SLOT(slotGammaActivated()), actionCollection(), "gammacorrection");
-	(void) new KAction(i18n("&Color Adjustment..."), 0, 0, this, SLOT(slotColorActivated()), actionCollection(), "coloradjustment");
+	KisColorAdjustementFilter* kfca = new KisColorAdjustementFilter();
+	(void) new KAction(i18n("&Color Adjustment..."), 0, 0, kfca, SLOT(slotActivated()), actionCollection(), "coloradjustment");
 	(void) new KAction(i18n("&Desaturate"), 0, 0, this, SLOT(slotDesaturate()), actionCollection(), "desaturate");
 	if ( !parent->inherits("KisView") )
 	{
@@ -94,6 +86,38 @@ ColorsFilters::~ColorsFilters()
 {
 }
 
+KisColorAdjustementFilter::KisColorAdjustementFilter() : KisPerChannelFilter("Color adjustment", -255, 255, 0)
+{
+}
+
+void KisColorAdjustementFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
+{
+	KisPerChannelFilterConfiguration* configPC = (KisPerChannelFilterConfiguration*) config;
+	KisIteratorLinePixel lineIt = device->iteratorPixelSelectionBegin(ktc);//, rect.x(), rect.x() + rect.width() - 1, rect.y() );
+	KisIteratorLinePixel lastLine = device->iteratorPixelSelectionEnd(ktc);//, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
+	Q_INT32 depth = device->depth() - 1;
+	while( lineIt <= lastLine )
+	{
+		KisIteratorPixel pixelIt = *lineIt;
+		KisIteratorPixel lastPixel = lineIt.end();
+		while( pixelIt <= lastPixel )
+		{
+			KisPixelRepresentation data = pixelIt;
+			for( int i = 0; i < depth; i++)
+			{
+				KisQuantum d = pixelIt[ configPC->channel( i ) ];
+				Q_INT32 s = configPC->valueFor( i );
+				if( d < -s  ) d = 0;
+				else if( d > QUANTUM_MAX - s) d = QUANTUM_MAX;
+				else d = d + s;
+			}
+			++pixelIt;
+		}
+		++lineIt;
+	}
+}
+
+#if 0
 void ColorsFilters::slotColorActivated()
 {
 	KisLayerSP lay = m_view->currentImg()->activeLayer();
@@ -178,6 +202,7 @@ void ColorsFilters::slotColorActivated()
 		m_view->currentImg()->notify();
 	}
 }
+#endif
 
 void ColorsFilters::slotDesaturate()
 {

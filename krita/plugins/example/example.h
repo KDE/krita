@@ -35,7 +35,7 @@ class KisFilterInvert : public KisFilter
 public:
 	KisFilterInvert();
 public:
-	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , KisTileCommand* );
+	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
 };
 
 #endif

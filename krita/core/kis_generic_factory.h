@@ -22,7 +22,7 @@
 #include <map>
 #include <qstring.h>
 
-template<class _T>
+template<typename _T>
 class KisGenericFactory {
 	typedef std::map<QString, _T> storageMap;
 public:
@@ -37,7 +37,7 @@ public:
 	_T get(const QString& name) const
 	{
 		_T p;
-		storageMap::const_iterator it = m_storage.find(name);
+		typename storageMap::const_iterator it = m_storage.find(name);
 		if (it != m_storage.end()) {
 			p = it -> second;
 		}
@@ -47,8 +47,8 @@ public:
 	QStringList listKeys() const
 	{
 		QStringList list;
-		storageMap::const_iterator it = m_storage.begin();
-		storageMap::const_iterator endit = m_storage.end();
+		typename storageMap::const_iterator it = m_storage.begin();
+		typename storageMap::const_iterator endit = m_storage.end();
 		while( it != endit )
 		{
 			list.append(it->first);

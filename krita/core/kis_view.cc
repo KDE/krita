@@ -43,7 +43,6 @@
 #include <dcopobject.h>
 #include <kaction.h>
 #include <kcolordialog.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <klocale.h>

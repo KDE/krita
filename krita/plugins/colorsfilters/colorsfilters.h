@@ -21,9 +21,17 @@
 #define BRIGHTNESSCONTRAST_H
 
 #include <kparts/plugin.h>
+#include "kis_perchannel_filter.h"
 
 class KisView;
 
+class KisColorAdjustementFilter : public KisPerChannelFilter {
+public:
+	KisColorAdjustementFilter();
+public:
+	virtual void process(KisPaintDeviceSP, KisFilterConfiguration* , const QRect&, KisTileCommand* );
+
+};
 
 class ColorsFilters : public KParts::Plugin
 {
@@ -33,7 +41,7 @@ public:
 	virtual ~ColorsFilters();
 	
 private slots:
-        void slotColorActivated();
+//         void slotColorActivated();
 	void slotBrightnessContrastActivated();
 	void slotGammaActivated();
 	void slotDesaturate();

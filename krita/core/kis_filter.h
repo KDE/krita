@@ -22,36 +22,15 @@
 #include <ksharedptr.h>
 #include <qwidget.h>
 #include "kis_types.h"
+#include "kis_view.h"
+#include "kis_image.h"
+#include "kis_layer.h"
 
 class KisTileCommand;
+class KisFilterConfigurationWidget;
+class KisPreviewDialog;
 
 class KisFilterConfiguration {
-public:
-	KisFilterConfiguration(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
-public:
-	inline Q_INT32 x() { return m_x; };
-	inline Q_INT32 y() { return m_y; };
-	inline Q_INT32 width() { return m_width; };
-	inline Q_INT32 height() { return m_height; };
-private:
-	Q_INT32 m_x;
-	Q_INT32 m_y;
-	Q_INT32 m_width;
-	Q_INT32 m_height;
-};
-
-class KisFilterConfigurationWidget : public QWidget {
-// 	Q_OBJECT
-public:
-	KisFilterConfigurationWidget ( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
-// public signals:
-	/** This signal is emited when a value of the configuration is changed 
-		*/
-	void valueChanged(KisFilterConfiguration* config);
-public:
-	/** This function return the configuration
-		*/
-	virtual KisFilterConfiguration* config();
 };
 
 class KisFilter : public QObject, public KShared {
@@ -59,22 +38,39 @@ class KisFilter : public QObject, public KShared {
 public:
 	KisFilter(const QString& name);
 public:
-	virtual void process(KisPaintDeviceSP, KisFilterConfiguration*, KisTileCommand* ) =0;
+	virtual void process(KisPaintDeviceSP, KisFilterConfiguration*, const QRect&, KisTileCommand* ) =0;
 public:
-	inline QString name() { return m_name; };
+	inline const QString name() const { return m_name; };
 public slots:
 	void slotActivated();
 protected:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-	/** This function return the default configuration of the filter.
+	KisFilterConfigurationWidget* configurationWidget();
+	/** This function return the configuration of the filter.
 		*/
-	virtual KisFilterConfiguration* defaultConfiguration();
+	virtual KisFilterConfiguration* configuration();
+	/** This function return the colorspace of the active layout
+		*/
+	KisStrategyColorSpaceSP colorStrategy();
 private slots:
 	/** This signal is emited when a value of the configuration is changed 
 		*/
-	void refreshPreview(KisFilterConfiguration* config);
+	void refreshPreview();
 private:
 	QString m_name;
+	KisFilterConfigurationWidget* m_widget;
+	KisPreviewDialog* m_dialog;
 };
+
+inline KisFilterConfigurationWidget* KisFilter::configurationWidget()
+{
+	return m_widget;
+}
+
+inline KisStrategyColorSpaceSP KisFilter::colorStrategy()
+{
+	return KisView::activeView()->currentImg()->activeLayer()->colorStrategy();
+}
+
 
 #endif

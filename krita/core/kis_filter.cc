@@ -17,31 +17,15 @@
  */
 
 #include "kis_filter.h"
+
+#include <qlayout.h>
+
 #include "kis_filter_factory.h"
-#include "kis_view.h"
-#include "kis_image.h"
-#include "kis_layer.h"
 #include "kis_tile_command.h"
 #include "kis_undo_adapter.h"
-
-KisFilterConfiguration::KisFilterConfiguration(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height) :
-	m_x(x),
-	m_y(y),
-	m_width(width),
-	m_height(height)
-{
-	
-}
-
-KisFilterConfigurationWidget::KisFilterConfigurationWidget(QWidget * parent, const char * name, WFlags f ) :
-	QWidget(parent, name, f)
-{
-}
-
-KisFilterConfiguration* KisFilterConfigurationWidget::config()
-{
-	return 0;
-}
+#include "kis_filter_configuration_widget.h"
+#include "kis_preview_dialog.h"
+#include "kis_previewwidget.h"
 
 KisFilter::KisFilter(const QString& name) :
 	m_name(name)
@@ -49,15 +33,19 @@ KisFilter::KisFilter(const QString& name) :
 	KisFilterFactory::singleton()->add( this );
 }
 
-KisFilterConfiguration* KisFilter::defaultConfiguration()
+KisFilterConfiguration* KisFilter::configuration()
 {
-	KisLayerSP lay = KisView::activeView()->currentImg()->activeLayer();
-	return new KisFilterConfiguration(0, 0, lay->width(), lay->height() );
+	return 0;
 }
 
-void KisFilter::refreshPreview(KisFilterConfiguration* )
+void KisFilter::refreshPreview( )
 {
-	
+	m_dialog->previewWidget->slotRenewLayer();
+	KisLayerSP layer = m_dialog->previewWidget->getLayer();
+	KisFilterConfiguration* config = configuration();
+	QRect rect(0, 0, layer->width(), layer->height());
+	process((KisPaintDeviceSP) layer, config, rect, 0 );
+	m_dialog->previewWidget->slotUpdate();
 }
 
 KisFilterConfigurationWidget* KisFilter::createConfigurationWidget(QWidget* )
@@ -68,22 +56,30 @@ KisFilterConfigurationWidget* KisFilter::createConfigurationWidget(QWidget* )
 void KisFilter::slotActivated()
 {
 	KisView* view = KisView::activeView();
-	QWidget* configwidget = createConfigurationWidget( view );
-	KisFilterConfiguration* config = 0;
-	if( configwidget != 0)
-	{
-		//TODO : the dialog with previewwidget
-		delete configwidget;
-	}
-	if( config == 0 )
-	{
-		config = defaultConfiguration();
-	}
 	KisImageSP img = view->currentImg();
-	KisPaintDeviceSP device = (KisPaintDeviceSP) img->activeLayer();
-	KisTileCommand* ktc = new KisTileCommand(name(), device ); // Create a command
-	process(device, config, ktc);
+	KisLayerSP layer = img->activeLayer();
+	// Create the config dialog
+	m_dialog = new KisPreviewDialog( (QWidget*)view, name().ascii(), true);
+	m_widget = createConfigurationWidget( (QWidget*)m_dialog->container );
+	if( m_widget != 0)
+	{
+		m_dialog->previewWidget->slotSetPreview( layer );
+		QVBoxLayout* layout = new QVBoxLayout((QWidget *)m_dialog->container);
+		layout->addWidget( m_widget );
+		refreshPreview();
+		if(m_dialog->exec() == QDialog::Rejected )
+		{
+			delete m_dialog;
+			return;
+		}
+	}
+	//Apply the filter
+	KisFilterConfiguration* config = configuration();
+	KisTileCommand* ktc = new KisTileCommand(name(), (KisPaintDeviceSP)layer ); // Create a command
+	QRect rect(0, 0, layer->width(), layer->height());
+	process((KisPaintDeviceSP)layer, config, rect, ktc);
 	img->undoAdapter()->addCommand( ktc );
 	img->notify();
-	delete config;
+/*	delete m_dialog;
+	delete config;*/
 }

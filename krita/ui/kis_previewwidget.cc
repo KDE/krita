@@ -181,6 +181,8 @@ void KisPreviewWidget::updateWidgets(QPoint delta)
 
 void KisPreviewWidget::render(QPainter &painter, KisImageSP image, double zoomX, double zoomY)
 {
+	if( image == 0 ) // This is usefull only for Qt/Designer
+		return;
 	Q_INT32 x1 = 0;
 	Q_INT32 y1 = 0;
 	Q_INT32 x2 = image -> width();

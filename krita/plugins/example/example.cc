@@ -41,6 +41,8 @@
 #include <kistile.h>
 #include <kistilemgr.h>
 
+#include "kis_filter_configuration_widget.h"
+
 // #include <kmessagebox.h>
 
 #include "example.h"
@@ -69,10 +71,10 @@ KisFilterInvert::KisFilterInvert() : KisFilter("Invert")
 {
 }
 
-void KisFilterInvert::process(KisPaintDeviceSP device, KisFilterConfiguration* config, KisTileCommand* ktc)
+void KisFilterInvert::process(KisPaintDeviceSP device, KisFilterConfiguration* config, const QRect& rect,KisTileCommand* ktc)
 {
-	KisIteratorLineQuantum lineIt = device->iteratorQuantumSelectionBegin(ktc, config->x(), config->x() + config->width() - 1, config->y() );
-	KisIteratorLineQuantum lastLine = device->iteratorQuantumSelectionEnd(ktc, config->x(), config->x() + config->width() - 1, config->y() + config->height() - 1);
+	KisIteratorLineQuantum lineIt = device->iteratorQuantumSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
+	KisIteratorLineQuantum lastLine = device->iteratorQuantumSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
 	Q_INT32 depth = device->depth() - 1;
 	while( lineIt <= lastLine )
 	{

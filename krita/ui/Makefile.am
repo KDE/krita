@@ -11,10 +11,8 @@ INCLUDES = -I$(srcdir)/../core \
 
 noinst_LTLIBRARIES = libkisui.la
 libkisui_la_LIBADD = ./labels/libkislabel.la ./dialogs/libkisdialogs.la ./widgets/libkiswidgets.la
-libkisui_la_SOURCES = integerwidget.cc \
-    kis_dlg_preferences.cc \
+libkisui_la_SOURCES = kis_dlg_preferences.cc \
     kis_dlg_progress.cc \
-    gradientview.cc \
     kis_canvas.cc \
     kis_channelview.cc \
     kis_cmb_composite.cc \
@@ -26,7 +24,6 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_dlg_new_layer.cc \
     kis_dlg_paint_properties.cc \
     kis_dlg_transform.cc \
-    kis_gradientwidget.cc \
     kis_gray_widget.cc \
     kis_icon_item.cc \
     kis_ruler.cc \
@@ -48,10 +45,8 @@ libkisui_la_SOURCES = integerwidget.cc \
     kis_dockframedocker.cc \
     kis_basedocker.cc
 
-noinst_HEADERS = integerwidget.h \
-    kis_dlg_preferences.h \
+noinst_HEADERS = kis_dlg_preferences.h \
     kis_dlg_progress.h \
-    gradientview.h \
     kis_canvas.h \
     kis_channelview.h \
     kis_cmb_composite.h \
@@ -63,7 +58,6 @@ noinst_HEADERS = integerwidget.h \
     kis_dlg_paint_properties.h \
     kis_dlg_image_properties.h \
     kis_dlg_transform.h \
-    kis_gradientwidget.h \
     kis_gray_widget.h \
     kis_icon_item.h \
     kis_ruler.h \

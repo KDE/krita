@@ -118,7 +118,6 @@
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
-#include "kis_dlg_gradient.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paint_properties.h"
 #include "kis_dlg_transform.h"

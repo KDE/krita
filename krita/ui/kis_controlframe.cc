@@ -35,7 +35,6 @@
 #include "kis_controlframe.h"
 
 #include "kis_iconwidget.h"
-#include "kis_gradientwidget.h"
 #include "kis_previewwidget.h"
 #include "kis_brush.h"
 #include "kis_pattern.h"

@@ -76,7 +76,7 @@ void KisItemChooser::setCurrent(KoIconItem *item)
 	m_chooser -> setCurrentItem(item);
 
 	if (m_doSpacing) {
-		m_slSpacing -> setValue((dynamic_cast<KisIconItem*>(item)) -> spacing());
+		m_slSpacing -> setValue(((dynamic_cast<KisIconItem*>(item)) -> spacing()) / 10 );
 		m_slOpacity -> setValue(((dynamic_cast<KisIconItem*>(item)) -> opacity() * 100) / OPACITY_OPAQUE);
 		m_cmbComposite -> setCurrentItem((dynamic_cast<KisIconItem*>(item)) -> compositeOp());
 	}
@@ -90,7 +90,7 @@ KoIconItem* KisItemChooser::currentItem()
 void KisItemChooser::slotItemSelected(KoIconItem *item)
 {
 	if (m_doSpacing && item) {
-		m_slSpacing -> setValue((dynamic_cast<KisIconItem*>(item)) -> spacing());
+		m_slSpacing -> setValue(((dynamic_cast<KisIconItem*>(item)) -> spacing()) / 10 );
 		m_slOpacity -> setValue(((dynamic_cast<KisIconItem*>(item)) -> opacity() * 100) / OPACITY_OPAQUE);
 		m_cmbComposite -> setCurrentItem((dynamic_cast<KisIconItem*>(item)) -> compositeOp());
 	}
@@ -102,7 +102,7 @@ void KisItemChooser::slotSetItemSpacing(int spacingValue)
 	KoIconItem *item = currentItem();
 
 	if (m_doSpacing && item)
-		(dynamic_cast<KisIconItem*>(item)) -> setSpacing(spacingValue);
+		(dynamic_cast<KisIconItem*>(item)) -> setSpacing(spacingValue * 10 );
 }
 
 
@@ -145,7 +145,7 @@ void KisItemChooser::init(bool spacing)
 		m_lbSpacing = new QLabel(i18n("Spacing: "), this);
 		m_slSpacing = new IntegerWidget( 1, 100, this, "int_widget" );
 		m_slSpacing -> setTickmarks(QSlider::Below);
-		m_slSpacing -> setTickInterval(100);
+		m_slSpacing -> setTickInterval(10);
 		QObject::connect(m_slSpacing, SIGNAL(valueChanged(int)), this, SLOT(slotSetItemSpacing(int)));
 
 		m_lbOpacity = new QLabel(i18n("Opacity: "), this);

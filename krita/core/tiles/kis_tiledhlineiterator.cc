@@ -88,6 +88,29 @@ void KisTiledHLineIterator::nextTile()
 	}
 }
 
+Q_INT32 KisTiledHLineIterator::nConseqHPixels()
+{
+	return m_rightInTile - m_xInTile + 1;
+}
+
+KisTiledHLineIterator & KisTiledHLineIterator::operator+=(int n)
+{
+	if(m_xInTile + n > m_rightInTile)
+	{
+		nextTile();
+		m_xInTile = m_leftInTile;
+		m_x += n;
+	}
+	else
+	{
+		m_xInTile += n;
+		m_x += n;
+	}
+	fetchTileData(m_col, m_row);
+	m_offset = m_depth * (m_yInTile * tileWidth() + m_xInTile);
+	
+	return *this;
+}
 
 KisTiledHLineIterator & KisTiledHLineIterator::operator -- ()
 {

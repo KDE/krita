@@ -73,7 +73,7 @@ public:
 				ACTUAL_HLINEITERATOR((ACTUAL_DATAMGR * )dm, x, y, w, writable) {};
 
 public:	
-	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
+	/// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
 	operator Q_UINT8 * () { return ACTUAL_HLINEITERATOR::operator Q_UINT8 *();};
 
 	/// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
@@ -81,6 +81,13 @@ public:
 
 	/// Advances one pixel until it reaches the end of the line
 	KisHLineIterator & operator++(int) { ACTUAL_HLINEITERATOR::operator++(); return *this; };
+	
+	/// Returns the number of consequtive horizontal pixels that we point at
+	/// This is useful for optimizing
+	Q_INT32 nConseqHPixels() { return ACTUAL_HLINEITERATOR::nConseqHPixels(); };
+	
+	/// Advances a number of pixels until it reaches the end of the line
+	KisHLineIterator & operator+=(int n) { ACTUAL_HLINEITERATOR::operator+=(n); return *this; };
 	
 	/// Goes back one pixel until it reaches the beginning of the line
 	KisHLineIterator & operator--(int) { ACTUAL_HLINEITERATOR::operator--(); return *this; };

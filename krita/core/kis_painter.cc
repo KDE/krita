@@ -156,6 +156,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 	// it possible to benefit from optimizations at the backend
 	// and in the conversion code inside the color strategies.
 	// Used only when we bitBlt small rects.
+	/*
 	if ((sw * sh) <= (RENDER_WIDTH * RENDER_HEIGHT)) {
 
 		QUANTUM * src = srcdev -> readBytes(sx, sy, sw, sh);
@@ -173,7 +174,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 		delete[] dst;
 
 	}
-	else {
+	else */{
 		for(Q_INT32 i = 0; i <sh; i++)
 		{
 			// Use line iterators because the rect iterators do not guarantee that they will 
@@ -182,16 +183,20 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 			KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
 			while( ! srcIter.isDone())
 			{
+				int adv = srcIter.nConseqHPixels();
+				if(adv > dstIter.nConseqHPixels())
+					adv = dstIter.nConseqHPixels();
+				
 				m_device -> colorStrategy() -> bitBlt(dstDepth, 
 								      (Q_UINT8 *)dstIter, srcDepth, 
 								      srcdev -> colorStrategy(), (Q_UINT8 *)srcIter, dstDepth, 
 								      opacity, 
-								      1, 1, 
+								      1, adv, 
 								      op,
 								      srcdev -> profile(),
 								      m_device -> profile());
-				srcIter++;
-				dstIter++;
+				srcIter += adv;
+				dstIter += adv;
 			}
 		}
 	}

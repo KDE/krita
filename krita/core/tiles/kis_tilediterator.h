@@ -127,6 +127,13 @@ public:
 	/// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
 	KisTiledHLineIterator & operator++();
 	
+	/// Returns the number of consequtive horizontal pixels that we point at
+	/// This is useful for optimizing
+	Q_INT32 nConseqHPixels();
+	
+	/// Advances a number of pixels until it reaches the end of the line
+	KisTiledHLineIterator & operator+=(int);
+	
 	/// Goes back one pixel. Going to the end of the line above when it reaches the beginning of a line
 	KisTiledHLineIterator & operator--();
 	

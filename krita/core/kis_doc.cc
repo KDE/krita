@@ -703,13 +703,19 @@ bool KisDoc::completeSaving(KoStore *store)
 	QString location;
 	bool external = isStoredExtern();
 	Q_INT32 totalSteps = 0;
+	vKisImageSP images;
+	KisImageSP img;
 
-	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++)
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
 		totalSteps += (*it) -> nlayers() + (*it) -> nchannels();
+		img = new KisImage(**it);
+		img -> setName((*it) -> name());
+		images.push_back(img);
+	}
 
 	emit ioSteps(totalSteps);
 
-	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
+	for (vKisImageSP_it it = images.begin(); it != images.end(); it++) {
 		vKisLayerSP layers = (*it) -> layers();
 		vKisChannelSP channels = (*it) -> channels();
 

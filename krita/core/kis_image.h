@@ -59,11 +59,6 @@ public:
 	QString name() const;
 	void setName(const QString& name);
 	QString nextLayerName() const;
-	QString author() const;
-	void setAuthor(const QString& author);
-	QString email() const;
-	void setEmail(const QString& email);
-
 	void resize(Q_INT32 w, Q_INT32 h);
 	void resize(const QRect& rc);
 	void enableUndo(KCommandHistory *history);
@@ -169,8 +164,6 @@ private:
 	KCommandHistory *m_undoHistory;
 	KURL m_uri;
 	QString m_name;
-	QString m_author;
-	QString m_email;
 	Q_INT32 m_width;
 	Q_INT32 m_height;
 	Q_UINT32 m_depth;

@@ -134,8 +134,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		m_undoHistory = rhs.m_undoHistory;
 		m_uri = rhs.m_uri;
 		m_name = QString::null;
-		m_author = rhs.m_author;
-		m_email = rhs.m_email;
 		m_width = rhs.m_width;
 		m_height = rhs.m_height;
 		m_depth = rhs.m_depth;
@@ -213,26 +211,6 @@ QString KisImage::nextLayerName() const
 	}
 
 	return m_nserver -> name();
-}
-
-QString KisImage::author() const
-{
-	return m_author;
-}
-
-void KisImage::setAuthor(const QString& author)
-{
-	m_author = author;
-}
-
-QString KisImage::email() const
-{
-	return m_email;
-}
-
-void KisImage::setEmail(const QString& email)
-{
-	m_email = email;
 }
 
 void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)

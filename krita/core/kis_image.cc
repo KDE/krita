@@ -46,7 +46,6 @@ KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, 
 KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 {
 	if (this != &rhs) {
-		m_doc = rhs.m_doc;
 		m_undoHistory = rhs.m_undoHistory;
 		m_uri = rhs.m_uri;
 		m_name = QString::null;
@@ -76,6 +75,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		for (vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); it++) {
 			KisLayerSP layer = new KisLayer(**it);
 
+			layer -> setImage(KisImageSP(this));
 			m_layers.push_back(layer);	
 			m_layerStack.push_back(layer);
 			m_activeLayer = layer;
@@ -86,6 +86,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KisRenderInterface(rhs)
 		for (vKisChannelSP_cit it = rhs.m_channels.begin(); it != rhs.m_channels.end(); it++) {
 			KisChannelSP channel = new KisChannel(**it);
 
+			channel -> setImage(KisImageSP(this));
 			m_channels.push_back(channel);
 			m_activeChannel = channel;
 		}
@@ -149,7 +150,7 @@ void KisImage::setEmail(const QString& email)
 	m_email = email;
 }
 
-void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name)
+void KisImage::init(KisDoc *, Q_INT32 width, Q_INT32 height, QUANTUM opacity, const enumImgType& imgType, const QString& name)
 {
 	Q_INT32 n;
 
@@ -157,7 +158,6 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height, QUANTUM opacity,
 	n = ::imgTypeDepth(imgType);
 	m_active.resize(n);
 	m_visible.resize(n);
-	m_doc = doc;
 	m_name = name;
 	m_width = width;
 	m_height = height;
@@ -940,6 +940,11 @@ Q_INT32 KisImage::tileNum(Q_INT32 xpix, Q_INT32 ypix) const
 	col = xpix / TILE_WIDTH;
 	num = row * m_ntileCols + col;
 	return num;
+}
+
+void KisImage::invalidate(Q_INT32 tileno)
+{
+	m_projection -> invalidate(tileno);
 }
 
 void KisImage::invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)

@@ -38,6 +38,12 @@ class KisTileMediator;
 
 class KisTileMgr : public KShared {
 	typedef KShared super;
+	typedef QValueList<KisTileSP> KisTileSPLst;
+	typedef KisTileSPLst::iterator KisTileSPLst_it;
+	typedef KisTileSPLst::const_iterator KisTileSPLst_cit;
+	typedef QValueVector<KisTileSPLst> vKisTileSPLst; 
+	typedef vKisTileSPLst::iterator vKisTileSPLst_it; 
+	typedef vKisTileSPLst::const_iterator vKisTileSPLst_cit; 
 
 public:
 	KisTileMgr(Q_UINT32 depth, Q_UINT32 width, Q_UINT32 height);
@@ -56,7 +62,7 @@ public:
 	void tileMap(Q_INT32 tilenum, KisTileSP src);
 
 	bool completetlyValid() const;
-	void validate(KisTileSP tile);
+	KisTileSP invalidate(Q_INT32 tileno);
 	KisTileSP invalidate(Q_INT32 xpix, Q_INT32 ypix);
 	KisTileSP invalidate(KisTileSP tile, Q_INT32 xpix, Q_INT32 ypix);
 	void invalidateTiles(KisTileSP tile);

@@ -705,7 +705,7 @@ void KisView::selectionUpdateGUI(bool enable)
 {
 	KisImageSP img = currentImg();
 
-	enable = enable && img && img -> selection();
+	enable = enable && img && img -> selection() && img -> selection() -> parent();
 	m_selectionCut -> setEnabled(enable);
 	m_selectionCopy -> setEnabled(enable);
 	m_selectionCrop -> setEnabled(enable);
@@ -764,8 +764,9 @@ void KisView::removeSelection()
 				if (parent -> x() || parent -> y())
 					rc.moveBy(-parent -> x(), -parent -> y());
 
+				gc.beginTransaction(i18n("Remove Selection"));
 				gc.eraseRect(rc);
-				gc.end();
+				m_doc -> addCommand(gc.end());
 				m_doc -> setModified(true);
 				img -> invalidate(rc);
 				updateCanvas(ur);
@@ -845,9 +846,11 @@ void KisView::fillSelection(const KoColor& c, QUANTUM opacity)
 			KisPainter gc(selection.data());
 
 			rc.moveBy(-rc.x(), -rc.y());
+			gc.beginTransaction(i18n("Fill Selection."));
 			gc.fillRect(rc, c, opacity);
+			m_doc -> addCommand(gc.endTransaction());
 			gc.end();
-			img -> invalidate(rc);
+			img -> invalidate(ur);
 			m_doc -> setModified(true);
 			updateCanvas(ur);
 		}
@@ -2000,6 +2003,11 @@ void KisView::setupClipboard()
 void KisView::clipboardDataChanged()
 {
 	m_clipboardHasImage = !QApplication::clipboard() -> image().isNull();
+}
+
+void KisView::commandExecuted()
+{
+	updateCanvas();
 }
 
 #include "kis_view.moc"

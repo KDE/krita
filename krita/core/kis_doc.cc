@@ -797,7 +797,10 @@ bool KisDoc::slotNewImage()
 
 KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 {
-	return new KisView(this, parent, name);
+	KisView *view = new KisView(this, parent, name);
+
+	connect(m_cmdHistory, SIGNAL(commandExecuted()), view, SLOT(commandExecuted()));
+	return view;
 }
 
 void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
@@ -908,7 +911,6 @@ void KisDoc::slotDocumentRestored()
 
 void KisDoc::slotCommandExecuted()
 {
-	setModified(true);
 }
 
 QString KisDoc::nextImageName() const

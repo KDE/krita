@@ -48,6 +48,7 @@ public:
 public:
 	// Implement KisRenderInterface
 	virtual Q_INT32 tileNum(Q_INT32 xpix, Q_INT32 ypix) const;
+	virtual void invalidate(Q_INT32 tileno);
 	virtual void invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	virtual void invalidate(const QRect& rc);
 	virtual void invalidate();

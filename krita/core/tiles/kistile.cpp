@@ -109,9 +109,6 @@ void KisTile::allocate()
 {
 	if (m_data == 0) {
 		m_data = new QUANTUM[size()];
-#if defined(NDEBUG)
-		memset(m_data, 127, size());
-#endif
 		m_img = QImage(width(), height(), 32);
 	}
 }
@@ -120,10 +117,10 @@ QUANTUM *KisTile::data(Q_INT32 xoff, Q_INT32 yoff)
 {
 	Q_INT32 offset = yoff * m_width + xoff;
 
-	Q_ASSERT(xoff >= 0);
-	Q_ASSERT(yoff >= 0);
-	Q_ASSERT(yoff <= height());
-	Q_ASSERT(xoff <= width());
+	assert(xoff >= 0);
+	assert(yoff >= 0);
+	assert(yoff <= height());
+	assert(xoff <= width());
 
 	if (!m_data)
 		allocate();

@@ -119,6 +119,7 @@ public slots:
 	// settings action slots
 	void saveOptions();
 	void preferences();
+	void commandExecuted();
 
 protected:
 	virtual void resizeEvent(QResizeEvent*);

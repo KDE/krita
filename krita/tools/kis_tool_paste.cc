@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <kcommand.h>
+#include <klocale.h>
 #include "kis_paint_device.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
@@ -74,7 +76,9 @@ void KisToolPaste::mouseRelease(QMouseEvent *e)
 		m_move -> drag(e -> pos());
 		owner -> unsetSelection(false);
 		gc.begin(m_selection -> parent());
+		gc.beginTransaction(i18n("Paste Selection"));
 		gc.bitBlt(e -> x(), e -> y(), COMPOSITE_COPY, m_selection.data(), m_selection -> opacity(), 0, 0, m_selection -> width(), m_selection -> height());
+		m_doc -> addCommand(gc.endTransaction());
 		m_selection = 0;
 		activate();
 	}

@@ -19,10 +19,13 @@
 #if !defined KIS_PAINTER_H_
 #define KIS_PAINTER_H_
 
+#include <qstring.h>
 #include "kis_global.h"
 #include "kis_types.h"
 
 class QRect;
+class KCommand;
+class KMacroCommand;
 
 class KisPainter {
 public:
@@ -32,12 +35,15 @@ public:
 
 public:
 	void begin(KisPaintDeviceSP device);
+	KCommand *end();
+	void beginTransaction(KMacroCommand *command);
+	void beginTransaction(const QString& customName = QString::null);
+	KCommand *endTransaction();
 	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPixelDataSP src, QUANTUM opacity, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 	void bitBlt(Q_INT32 dx, Q_INT32 dy, CompositeOp op, KisPaintDeviceSP src, QUANTUM opacity, Q_INT32 sx = 0, Q_INT32 sy = 0, Q_INT32 sw = -1, Q_INT32 sh = -1);
 	KisPaintDeviceSP device() const;
-	void end();
 	void eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h);
 	void eraseRect(const QRect& rc);
 	void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoColor& c);
@@ -53,6 +59,7 @@ private:
 
 private:
 	KisPaintDeviceSP m_device;	
+	KMacroCommand *m_transaction;
 };
 
 inline

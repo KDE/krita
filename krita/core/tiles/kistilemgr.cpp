@@ -67,7 +67,7 @@ void KisTileMgr::attach(KisTileSP tile, Q_INT32 tilenum, bool)
 		KisScopedLock l(tile -> mutex());
 
 		if (tile -> shareCount() > 0 && !tile -> valid())
-			validate(tile);
+			tile -> valid(true);
 
 		m_mediator -> attach(tile, this, tilenum);
 
@@ -135,19 +135,20 @@ KisTileSP KisTileMgr::tile(Q_INT32 tilenum, Q_INT32 mode)
 	Q_ASSERT(tile);
 
 	if (mode & TILEMODE_READ) {
-		if (mode & TILEMODE_WRITE) {
-			if (tile -> shareCount() > 0) {
-				KisTileSP tileNew = new KisTile(*tile);
+	}
 
-				kdDebug(DBG_AREA_TILES) << "Tile is shared.  Duplicating.\n";
-				detach(tile, tilenum);
-				attach(tileNew, tilenum);
-				tile = tileNew;
-			}
+	if (mode & TILEMODE_WRITE) {
+		if (tile -> shareCount() > 0) {
+			KisTileSP tileNew = new KisTile(*tile);
 
-			tile -> writeRef();
-			tile -> dirty(true);
+			kdDebug(DBG_AREA_TILES) << "Tile is shared.  Duplicating.\n";
+			detach(tile, tilenum);
+			attach(tileNew, tilenum);
+			tile = tileNew;
 		}
+
+		tile -> writeRef();
+		tile -> dirty(true);
 	}
 
 	return tile;
@@ -206,9 +207,15 @@ bool KisTileMgr::completetlyValid() const
 	return false;
 }
 
-void KisTileMgr::validate(KisTileSP tile)
+KisTileSP KisTileMgr::invalidate(Q_INT32 tileno)
 {
-	tile -> valid(true);
+	KisTileSP t;
+
+	if (tileno < 0)
+		return 0;
+
+	t = tile(tileno, TILEMODE_NONE);
+	return invalidateTile(t, tileno);
 }
 
 KisTileSP KisTileMgr::invalidate(Q_INT32 xpix, Q_INT32 ypix)

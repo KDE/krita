@@ -111,6 +111,11 @@ Q_INT32 KisPaintDevice::tileNum(Q_INT32, Q_INT32) const
 	return 0;
 }
 
+void KisPaintDevice::invalidate(Q_INT32 tileno)
+{
+	data() -> invalidate(tileno);
+}
+
 void KisPaintDevice::invalidate(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	Q_INT32 dx = x + w + 1;

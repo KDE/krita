@@ -20,11 +20,50 @@
 #include <qpainter.h>
 #include <qpen.h>
 #include <kaction.h>
+#include <kcommand.h>
 #include <klocale.h>
 #include "kis_doc.h"
 #include "kis_selection.h"
 #include "kis_view.h"
 #include "kis_tool_select_rectangular.h"
+
+namespace {
+	class RectSelectCmd : public KNamedCommand {
+		typedef KNamedCommand super;
+
+	public:
+		RectSelectCmd(KisSelectionSP selection);
+		virtual ~RectSelectCmd();
+
+	public:
+		virtual void execute();
+		virtual void unexecute();
+
+	private:
+		KisSelectionSP m_selection;
+		KisImageSP m_owner;
+	};
+
+	RectSelectCmd::RectSelectCmd(KisSelectionSP selection) : super(i18n("Rectangular Selection"))
+	{
+		m_selection = selection;
+		m_owner = selection -> image();
+	}
+
+	RectSelectCmd::~RectSelectCmd()
+	{
+	}
+
+	void RectSelectCmd::execute()
+	{
+		m_owner -> setSelection(m_selection);
+	}
+
+	void RectSelectCmd::unexecute()
+	{
+		m_owner -> unsetSelection(false);
+	}
+}
 
 KisToolRectangularSelect::KisToolRectangularSelect(KisView *view, KisDoc *doc) : super(view, doc)
 {
@@ -123,6 +162,7 @@ void KisToolRectangularSelect::mouseRelease(QMouseEvent *e)
 				selection = new KisSelection(parent, img, "rectangular selection tool box", OPACITY_OPAQUE);
 				selection -> setBounds(rc);
 				img -> setSelection(selection);
+				m_doc -> addCommand(new RectSelectCmd(selection));
 			}
 		}
 

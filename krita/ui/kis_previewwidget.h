@@ -58,6 +58,9 @@ public:
 
 	/** returns the 'vector' the image in the preview has been moved by. @see getZoom */
 	QPoint getPos();
+
+	/** returns if the preview is automatically updated */
+	bool getAutoUpdate();
     
 
 public slots:
@@ -75,6 +78,9 @@ public slots:
 	 * repaint itself. */
 	void slotUpdate();
 
+	/** Enables or disables the automatically updating of the preview */
+	void slotSetAutoUpdate(bool set);
+
 signals:
 	/** This is emitted when the position or zoom factor of the widget has changed */
 	void updated();
@@ -82,6 +88,9 @@ signals:
 private slots:
 
 	void redirectUpdated();
+
+private:
+	bool m_autoupdate;
 };
 
 #endif

@@ -43,11 +43,13 @@
 KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
 	: PreviewWidgetBase( parent, name )
 {
+	m_autoupdate = true;
 	connect(m_preview, SIGNAL(updated()), this, SLOT(redirectUpdated()));
 }
 
 void KisPreviewWidget::redirectUpdated() {
-	emit updated();
+	if (m_autoupdate)
+		emit updated();
 }
 
 void KisPreviewWidget::slotSetLayer(KisLayerSP lay)
@@ -70,6 +72,10 @@ void KisPreviewWidget::slotUpdate()
 	m_preview->updatedPreview();
 }
 
+void KisPreviewWidget::slotSetAutoUpdate(bool set) {
+	m_autoupdate = set;
+}
+
 double KisPreviewWidget::getZoom()
 {
 	return m_preview->getZoom();
@@ -78,5 +84,9 @@ double KisPreviewWidget::getZoom()
 QPoint KisPreviewWidget::getPos()
 {
 	return m_preview->getPos();
+}
+
+bool KisPreviewWidget::getAutoUpdate() {
+	return m_autoupdate;
 }
 #include "kis_previewwidget.moc"

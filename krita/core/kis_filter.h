@@ -82,6 +82,7 @@ public:
 	virtual bool supportsPainting() = 0;
 	virtual void enableProgress();
 	virtual void disableProgress();
+	virtual void setAutoUpdate(bool set);
 
 	inline const QString name() const { return m_name; };
 

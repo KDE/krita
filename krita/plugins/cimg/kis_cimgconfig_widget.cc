@@ -36,6 +36,7 @@ KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, c
 	m_page = new WdgCImg(this);
 	QHBoxLayout * l = new QHBoxLayout(this);
 	l -> add(m_page);
+	filter() -> setAutoUpdate(false);
 	connect( m_page -> bnRefresh, SIGNAL(clicked()), filter(), SLOT(refreshPreview()));
 }
 

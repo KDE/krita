@@ -132,5 +132,9 @@ void KisFilter::disableProgress() {
 	m_progressEnabled = false;
 }
 
+void KisFilter::setAutoUpdate(bool set) {
+	m_dialog -> previewWidget() -> slotSetAutoUpdate(set);
+}
+
 
 #include "kis_filter.moc"

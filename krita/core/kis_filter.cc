@@ -68,6 +68,7 @@ void KisFilter::slotActivated()
 	if( m_widget != 0)
 	{
 		m_dialog->previewWidget->slotSetPreview( layer );
+		connect(m_dialog->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
 		QVBoxLayout* layout = new QVBoxLayout((QWidget *)m_dialog->container);
 		layout->addWidget( m_widget );
 		refreshPreview();

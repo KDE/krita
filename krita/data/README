@@ -1,0 +1,14 @@
+Krita is moving towards compatibility with the Gimp in 
+the area of data like patterns, brushes and gradients.
+All brushes, patterns etc. here are taken from the Gimp
+CVS, which is licensed under the GPL.
+
+This is the contents of the original authors file:
+
+This distribution of gimp-data is based on Frederico Mena's
+gimp-data-0.99.11, which was based on Matt Hawkins
+gimp-data-0.99.pre11-3.5, which was based on gimp-data-0.99.9 by Spencer
+Kimball and Peter Mattis.
+
+Adrian Likins
+

@@ -370,7 +370,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h)
 		m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
 
 		m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
- 		m_bkg -> resize(w, h);
+ 		m_bkg = new KisBackground(this, w, h);
 
 		if (m_adapter && m_adapter -> undo()) {
 			m_adapter -> endMacro();
@@ -393,10 +393,8 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 // 		  << sy 
 // 		  << "\n";
 
-
 	if (m_layers.empty()) return; // Nothing to scale
 
-	undoAdapter()->beginMacro("Scale image");
 	// New image size. XXX: Pass along to discourage rounding errors?
 	Q_INT32 w, h;	
 	w = (Q_INT32)(( width() * sx) + 0.5);
@@ -406,27 +404,28 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 // 		  << ", " << m_projection -> height() 
 // 		  << "to: (" << w << ", " << h << ")\n";
 
-	vKisLayerSP_it it;
-	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-		KisLayerSP layer = (*it);
-		layer -> scale(sx, sy, m_progress, ftype);
-	}
-
-
 	if (w != width() || h != height()) {
+
+		undoAdapter() -> beginMacro("Scale image");
+
+		vKisLayerSP_it it;
+		for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
+			KisLayerSP layer = (*it);
+			layer -> scale(sx, sy, m_progress, ftype);
+		}
+
 		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
 		
 		m_ntileCols = (w + TILE_WIDTH - 1) / TILE_WIDTH;
 		m_ntileRows = (h + TILE_HEIGHT - 1) / TILE_HEIGHT;
 
 		m_projection = new KisLayer(this, w, h, "projection", OPACITY_OPAQUE);
- 		m_bkg -> resize(w, h);
+		m_bkg = new KisBackground(this, w, h);
+
+		undoAdapter()->endMacro();
 
 		emit sizeChanged(KisImageSP(this), w, h);
 	}
-
-	undoAdapter()->endMacro();
-
 }
 
 void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress) 

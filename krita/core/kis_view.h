@@ -83,7 +83,6 @@ public:
 	void updateCanvas(const QRect& rc);
 	void setBGColor(const KoColor& c);
 	void setFGColor(const KoColor& c);
-	void setCanvasCursor(const QCursor& cursor);
 	void zoomIn(Q_INT32 x, Q_INT32 y);
 	void zoomOut(Q_INT32 x, Q_INT32 y);
 
@@ -128,6 +127,7 @@ private:
 	Q_INT32 horzValue() const;
 	void layerUpdateGUI(bool enable);
 	void paintView(const QRect& rc);
+	bool selectColor(KoColor& result);
 	void selectImage(KisImageSP img);
 	void setupActions();
 	void setupCanvas();
@@ -187,6 +187,9 @@ private slots:
 	void merge_linked_layers();
 	void save_layer_as_image();
 	void projectionUpdated(KisImageSP img);
+	void selectFGColor();
+	void selectBGColor();
+	void reverseFGAndBGColors();
 	void reset();
 	void selectImage(const QString&);
 	void setActiveBrush(KoIconItem *brush);

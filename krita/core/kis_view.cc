@@ -30,6 +30,7 @@
 // KDE
 #include <dcopobject.h>
 #include <kaction.h>
+#include <kcolordialog.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
@@ -322,6 +323,11 @@ void KisView::setupActions()
 	(void)new KAction(i18n("Mirror &X"), 0, this, SLOT(layer_mirrorX()), actionCollection(), "layer_mirrorX");
 	(void)new KAction(i18n("Mirror &Y"), 0, this, SLOT(layer_mirrorY()), actionCollection(), "layer_mirrorY");
 
+	// color actions
+	(void)new KAction(i18n("Select Foreground Color..."), 0, this, SLOT(selectFGColor()), actionCollection(), "select_fgColor");
+	(void)new KAction(i18n("Select Background Color..."), 0, this, SLOT(selectBGColor()), actionCollection(), "select_bgColor");
+	(void)new KAction(i18n("Reverse Foreground/Background Colors"), 0, this, SLOT(reverseFGAndBGColors()), actionCollection(), "reverse_fg_bg");
+
 	// image actions
 	(void)new KAction(i18n("Add New Image..."), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
 	(void)new KAction(i18n("Remove Current Image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
@@ -490,6 +496,7 @@ void KisView::clearCanvas(const QRect& rc)
 void KisView::activateTool(KisToolSP tool)
 {
 	if (tool && qFind(m_toolSet.begin(), m_toolSet.end(), tool) != m_toolSet.end()) {
+		m_tool -> clear();
 		m_tool = tool;
 		m_tool -> cursor(m_canvas);
 	}
@@ -610,31 +617,6 @@ void KisView::updateCanvas(const QRect& rc)
 
 	paintView(ur);
 }
-
-#if 0
-void KisView::activateTool(KisTool* t)
-{
-#if 0
-	if (!t)
-		return;
-
-	// remove the selection outline, if any
-	// prevent old tool from receiving events from canvas
-	if (m_pTool) {
-		m_pTool -> clearOld();
-		m_pTool -> setChecked(false);
-	}
-
-	m_pTool = t;
-	m_pTool -> setChecked(true);
-	m_pTool -> setBrush(m_pBrush);
-	m_pTool -> setPattern(m_pPattern);
-
-	if (m_canvas)
-		m_canvas -> setCursor(m_pTool -> cursor());
-#endif
-}
-#endif
 
 /*
     tool_properties invokes the optionsDialog() method for the
@@ -1464,16 +1446,6 @@ void KisView::setupTools()
 #endif
 }
 
-void KisView::setCanvasCursor(const QCursor& )
-{
-#if 0
-	KisCanvas *canvas = kisCanvas();
-
-	Q_ASSERT(canvas);
-	canvas -> setCursor(cursor);
-#endif
-}
-
 void KisView::canvasGotPaintEvent(QPaintEvent *event)
 {
 	QRect ur = event -> rect();
@@ -1836,6 +1808,42 @@ void KisView::projectionUpdated(KisImageSP img)
 {
 	if (img == currentImg())
 		updateCanvas();
+}
+
+bool KisView::selectColor(KoColor& result)
+{
+	QColor color;
+	bool rc;
+
+	if ((rc = (KColorDialog::getColor(color) == KColorDialog::Accepted)))
+		result.setRGB(color.red(), color.green(), color.blue());
+
+	return rc;
+}
+
+void KisView::selectFGColor()
+{
+	KoColor c;
+
+	if (selectColor(c))
+		m_sideBar -> slotSetFGColor(c);
+}
+
+void KisView::selectBGColor()
+{
+	KoColor c;
+
+	if (selectColor(c))
+		m_sideBar -> slotSetBGColor(c);
+}
+
+void KisView::reverseFGAndBGColors()
+{
+	KoColor oldFg = m_fg;
+	KoColor oldBg = m_bg;
+
+	m_sideBar -> slotSetFGColor(oldBg);
+	m_sideBar -> slotSetBGColor(oldFg);
 }
 
 #include "kis_view.moc"

@@ -1,6 +1,4 @@
 /*
- *  movetool.h - part of KImageShop
- *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *                1999 Michael Koch    <koch@kde.org>
  *
@@ -18,14 +16,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-#ifndef __movetool_h__
-#define __movetool_h__
+#if !defined KIS_TOOL_MOVE_H_
+#define KIS_TOOL_MOVE_H_
 
 #include <qpoint.h>
-
 #include "kis_tool.h"
-#include "kis_undo.h"
 
 class MoveTool : public KisTool {
 	typedef KisTool super;
@@ -49,5 +44,5 @@ protected:
 	bool   m_dragging;
 };
 
-#endif //__movetool_h__
+#endif // KIS_TOOL_MOVE_H_
 

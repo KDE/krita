@@ -103,6 +103,7 @@
 <Menu name="Color"><text>Color</text>
   <Action name="select_fgColor"/>
   <Action name="select_bgColor"/>
+  <Separator/>  
   <Action name="reverse_fg_bg"/>
 </Menu>
 

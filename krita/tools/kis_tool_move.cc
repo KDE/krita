@@ -1,6 +1,4 @@
 /*
- *  movetool.cc - part of Krayon
- *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *                1999 Michael Koch    <koch@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>

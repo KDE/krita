@@ -125,7 +125,7 @@
                                 <string>Absolute Colorimetric</string>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Within the destination device gamut; hue, ightness and saturation are maintained. Outside the gamut; hue and lightness are maintained, saturation is sacrificed. White point for source and destination; unchanged. Intended for spot clors (Pantone, TruMatch, logo colors, ...)</string>
+                                <string>Within the destination device gamut; hue, lightness and saturation are maintained. Outside the gamut; hue and lightness are maintained, saturation is sacrificed. White point for source and destination; unchanged. Intended for spot colors (Pantone, TruMatch, logo colors, ...)</string>
                             </property>
                         </widget>
                         <widget class="QRadioButton" row="0" column="0">

@@ -80,6 +80,9 @@ private:
 protected:
 	KisCanvasSubject *m_subject;
 	QString m_name;
+	QRect m_dirtyRect;
+
+
 };
 
 #endif // KIS_TOOL_PAINT_H_

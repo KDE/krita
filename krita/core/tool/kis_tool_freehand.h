@@ -21,8 +21,6 @@
 #ifndef KIS_TOOL_FREEHAND_H_
 #define KIS_TOOL_FREEHAND_H_
 
-#include <qrect.h>
-
 #include "kis_types.h"
 #include "kis_tool_paint.h"
 #include "kis_point.h"
@@ -88,7 +86,6 @@ protected:
 	void setUseTempLayer(bool u);
 
 protected:
-
 	KisPoint m_prevPos;
 	double m_prevPressure;
 	double m_prevXTilt;
@@ -112,9 +109,6 @@ protected:
 	QLabel *m_lbComposite;
 	KisCmbComposite *m_cmbComposite;
 
-private:
-
-//	QRect m_dirtyRect;
 
 };
 

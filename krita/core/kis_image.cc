@@ -59,11 +59,6 @@ static int numImages = 0;
 
 namespace {
 
-	// Whether to repaint the display every
-	// DISPLAY_UPDATE_FREQUENCY milliseconds
-	const bool DISPLAY_TIMER = true;
-	const int DISPLAY_UPDATE_INTERVAL = 80; // in milliseconds
-
 	class KisResizeImageCmd : public KNamedCommand {
 		typedef KNamedCommand super;
 
@@ -178,7 +173,6 @@ KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,  
 #endif
 	init(undoAdapter, width, height, colorStrategy, name);
 	setName(name);
-	startUpdateTimer();
         m_dcop = 0L;
 	m_profile = 0;
 }
@@ -221,7 +215,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 		m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
 		m_guides = rhs.m_guides;
 		m_pixmap = rhs.m_pixmap;
-		startUpdateTimer();
 	}
 
 }
@@ -242,7 +235,6 @@ KisImage::~KisImage()
 #endif
 	delete m_nserver;
         delete m_dcop;
-	// Not necessary to destroy m_updateTimer
 }
 
 QString KisImage::name() const
@@ -1022,21 +1014,9 @@ void KisImage::notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
 
 void KisImage::notify(const QRect& rc)
 {
-	if (DISPLAY_TIMER) {
-		m_displayMutex.lock();
-		if (m_dirtyRect.isValid()) {
-			m_dirtyRect |= rc;
-		} else {
-			m_dirtyRect = rc;
-		}
-		m_displayMutex.unlock();
-	} else {
-		if (rc.isValid()) {
-
-			emit update(KisImageSP(this), rc);
-		}
+	if (rc.isValid()) {
+		emit update(KisImageSP(this), rc);
 	}
-
 
 }
 
@@ -1060,18 +1040,6 @@ KisGuideMgr *KisImage::guides() const
 	return const_cast<KisGuideMgr*>(&m_guides);
 }
 
-void KisImage::slotUpdateDisplay()
-{
-	if (m_dirtyRect.isValid()) {
-		m_displayMutex.lock();
-		QRect rect = m_dirtyRect;
-		m_dirtyRect = QRect();
-		m_displayMutex.unlock();
-
-		emit update(KisImageSP(this), rect);
-	}
-}
-
 void KisImage::slotSelectionChanged()
 {
 // 	kdDebug() << "KisImage::slotSelectionChanged\n";
@@ -1084,15 +1052,6 @@ void KisImage::slotSelectionCreated()
 	emit selectionCreated(KisImageSP(this));
 }
 
-
-void KisImage::startUpdateTimer()
-{
-	if (DISPLAY_TIMER) {
-		m_updateTimer = new QTimer(this);
-		connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateDisplay()) );
-		m_updateTimer -> start( DISPLAY_UPDATE_INTERVAL );
-	}
-}
 
 KisStrategyColorSpaceSP KisImage::colorStrategy() const
 {

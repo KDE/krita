@@ -21,7 +21,6 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qvaluevector.h>
-#include <qtimer.h>
 #include <qmutex.h>
 
 #include <ksharedptr.h>
@@ -167,15 +166,12 @@ signals:
 	void profileChanged(KisProfileSP profile);
 
 private slots:
-	void slotUpdateDisplay();
 	void slotSelectionChanged();
 	void slotSelectionCreated();
 
 private:
 	KisImage& operator=(const KisImage& rhs);
 	void init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name);
-
-	void startUpdateTimer();
 
 private:
 	KoCommandHistory *m_undoHistory;
@@ -208,8 +204,6 @@ private:
 	KisUndoAdapter *m_adapter;
 	KisGuideMgr m_guides;
 
-	QTimer * m_updateTimer;
-	QMutex m_displayMutex;
 	DCOPObject *m_dcop;
 
 	QPixmap m_pixmap;

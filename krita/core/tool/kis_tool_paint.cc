@@ -17,6 +17,7 @@
  */
 
 #include <qwidget.h>
+#include <qrect.h>
 
 #include <kdebug.h>
 #include <koDocument.h>

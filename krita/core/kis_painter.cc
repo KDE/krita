@@ -27,7 +27,6 @@
 #include "qfontinfo.h"
 #include "qfontmetrics.h"
 #include "qpen.h"
-#include "qpointarray.h"
 #include "qregion.h"
 #include "qwmatrix.h"
 #include <qimage.h>
@@ -50,6 +49,7 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_pattern.h"
+#include "kis_rect.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_tile_command.h"
 #include "kis_types.h"
@@ -691,24 +691,54 @@ double KisPainter::paintLine(const enumPaintOp paintOp,
 		return 0;
 }
 
+void KisPainter::paintPolyline (const enumPaintOp paintOp,
+                                const QValueVector <KisPoint> &points,
+                                int index, int numPoints)
+{
+    if (index >= (int) points.count ())
+        return;
+
+    if (numPoints < 0)
+        numPoints = points.count ();
+
+    if (index + numPoints > (int) points.count ())
+        numPoints = points.count () - index;
+
+
+    for (int i = index; i < index + numPoints - 1; i++)
+    {
+        paintLine (paintOp, points [index], points [index + 1],
+                   0/*pressure*/, 0, 0);
+    }
+}
+
 void KisPainter::paintRect (const enumPaintOp paintOp,
-                            const QPoint &startPoint,
-                            const QPoint &endPoint,
+                            const KisPoint &startPoint,
+                            const KisPoint &endPoint,
                             const double pressure)
 {
-    QRect normalizedRect = QRect (startPoint, endPoint).normalize ();
+    KoRect normalizedRect = KisRect (startPoint, endPoint).normalize ();
 
-    for (int x = normalizedRect.left (); x <= normalizedRect.right (); x++)
-    {
-        paintAt (QPoint (x, normalizedRect.top ()), pressure, 0, 0);
-        paintAt (QPoint (x, normalizedRect.bottom ()), pressure, 0, 0);
-    }
-
-    for (int y = normalizedRect.top (); y <= normalizedRect.bottom (); y++)
-    {
-        paintAt (QPoint (normalizedRect.left (), y), pressure, 0, 0);
-        paintAt (QPoint (normalizedRect.right (), y), pressure, 0, 0);
-    }
+    paintLine (paintOp,
+               normalizedRect.topLeft (),
+               normalizedRect.topRight (),
+               pressure,
+               0, 0);
+    paintLine (paintOp,
+               normalizedRect.topRight (),
+               normalizedRect.bottomRight (),
+               pressure,
+               0, 0);
+    paintLine (paintOp,
+               normalizedRect.bottomRight (),
+               normalizedRect.bottomLeft (),
+               pressure,
+               0, 0);
+    paintLine (paintOp,
+               normalizedRect.bottomLeft (),
+               normalizedRect.topLeft (),
+               pressure,
+               0, 0);
 }
 
 
@@ -860,7 +890,7 @@ void KisPainter::paintAt(const KisPoint & pos,
 	double xFraction;
 	Q_INT32 y;
 	double yFraction;
-	
+
 	splitCoordinate(pt.x(), &x, &xFraction);
 	splitCoordinate(pt.y(), &y, &yFraction);
 
@@ -1179,7 +1209,7 @@ void KisPainter::computeDab(KisAlphaMaskSP mask)
 			dst += dstDepth;
 		}
 	}
-	
+
 	KisTileMgrSP dabTiles = m_dab -> data();
 	dabTiles -> writePixelData(0, 0, maskWidth - 1, maskHeight - 1, quantums, maskWidth * dstDepth);
 	delete [] quantums;

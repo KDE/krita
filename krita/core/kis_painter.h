@@ -25,7 +25,6 @@
 #include <qfontinfo.h>
 #include <qfontmetrics.h>
 #include <qpen.h>
-#include <qpointarray.h>
 #include <qregion.h>
 #include <qregion.h>
 #include <qwmatrix.h>
@@ -35,6 +34,7 @@
 #include <qpointarray.h>
 #include <qstring.h>
 #include <qpainter.h>
+#include <qvaluevector.h>
 
 #include <koColor.h>
 #include <kcommand.h>
@@ -127,6 +127,10 @@ public:
 	*/
 	QRect dirtyRect();
 
+        void paintPolyline (const enumPaintOp paintOp,
+                            const QValueVector <KisPoint> &points,
+                            int index = 0, int numPoints = -1);
+
 	/**
 	 * Draw a line between pos1 and pos2 using the currently set brush and color.
 	 * If savedDist is less than zero, the brush is painted at pos1 before being
@@ -142,8 +146,8 @@ public:
 			const double yTilt,
 			const double savedDist = -1);
         void paintRect(const enumPaintOp paintOp,
-                          const QPoint &startPoint,
-                          const QPoint &endPoint,
+                          const KisPoint &startPoint,
+                          const KisPoint &endPoint,
                           const double pressure);
 
 private:

@@ -5,8 +5,8 @@
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
-  <Action name="copy"/>
   <Action name="cut"/>
+  <Action name="copy"/>
   <Action name="paste_special"/>
   <Action name="crop"/>
   <Action name="remove"/>
@@ -31,35 +31,6 @@
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
  </Menu>
-
-<Menu name="Tools"><Text>Tools</Text>
-  <Action name="tool_move"/>
-  <Action name="tool_zoom"/>
-  <Action name="tool_colorpicker"/>  
-  
-  <Menu name="select"><text>Selection</text>
-    <Action name="tool_select_freehand"/>
-    <Action name="tool_select_rectangular"/>
-    <Action name="tool_select_elliptical"/>  
-    <Action name="tool_select_polygonal"/>
-    <Action name="tool_select_contiguous"/>
-  </Menu>
-
-  <Action name="tool_pen"/>
-  <Action name="tool_brush"/>
-  <Action name="tool_airbrush"/>
-  <Action name="tool_eraser"/>  
-  <Action name="tool_line"/>
-  <Action name="tool_polyline"/>
-  <Action name="tool_polygon"/>
-  <Action name="tool_rectangle"/>
-  <Action name="tool_ellipse"/>      
-  <Action name="tool_fill"/>
-  <Action name="tool_colorchanger"/>  
-  <Action name="tool_stamp"/>
-  <Action name="tool_paste"/>  
-  <Action name="tool_gradient"/>  
-</Menu>
 
 <Menu name="Image"><text>Image</text>
   <Action name="import_image"/>
@@ -100,6 +71,35 @@
   <Action name="layer_mirrorY"/>
   <Separator/>  
   <Action name="layer_properties"/>  
+</Menu>
+
+<Menu name="Tools"><Text>Tools</Text>
+  <Action name="tool_move"/>
+  <Action name="tool_zoom"/>
+  <Action name="tool_colorpicker"/>  
+  
+  <Menu name="select"><text>Selection</text>
+    <Action name="tool_select_freehand"/>
+    <Action name="tool_select_rectangular"/>
+    <Action name="tool_select_elliptical"/>  
+    <Action name="tool_select_polygonal"/>
+    <Action name="tool_select_contiguous"/>
+  </Menu>
+
+  <Action name="tool_pen"/>
+  <Action name="tool_brush"/>
+  <Action name="tool_airbrush"/>
+  <Action name="tool_eraser"/>  
+  <Action name="tool_line"/>
+  <Action name="tool_polyline"/>
+  <Action name="tool_polygon"/>
+  <Action name="tool_rectangle"/>
+  <Action name="tool_ellipse"/>      
+  <Action name="tool_fill"/>
+  <Action name="tool_colorchanger"/>  
+  <Action name="tool_stamp"/>
+  <Action name="tool_paste"/>  
+  <Action name="tool_gradient"/>  
 </Menu>
 
 <Menu name="Color"><text>Color</text>

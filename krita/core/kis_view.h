@@ -39,7 +39,7 @@ class KoIconItem;
 class KisBrush;
 class KisCanvas;
 class KisChannelView;
-class KisCrayon;
+class KisKrayon;
 class KisDoc;
 class KisGradient;
 class KisItemChooser;
@@ -124,8 +124,11 @@ protected:
 
 private:
 	void clearCanvas(const QRect& rc);
+	void connectCurrentImg() const;
+	void disconnectCurrentImg() const;
 	Q_INT32 horzValue() const;
 	void layerUpdateGUI(bool enable);
+	void selectionUpdateGUI(bool enable);
 	void paintView(const QRect& rc);
 	bool selectColor(KoColor& result);
 	void selectImage(KisImageSP img);
@@ -159,6 +162,7 @@ private slots:
 	void canvasGotKeyReleaseEvent(QKeyEvent*);
 	void docImageListUpdate();
 	void floatSidebar();
+	void imgSelectionChanged(KisImageSP img);
 	void layerToggleVisible();
 	void layerSelected(int n);
 	void layerToggleLinked();
@@ -226,6 +230,7 @@ private:
 	KAction *m_layerProperties;
 	KAction *m_layerNext;
 	KAction *m_layerPrev;
+	KAction *m_selectionRm;
 	KToggleAction *m_sidebarToggle; 
 	KToggleAction *m_floatsidebarToggle; 
 	KToggleAction *m_lsidebarToggle;
@@ -250,7 +255,7 @@ private:
 	QWidget *m_gradientChooser;
 	QWidget *m_imageChooser;
 	KisBrush *m_brush;
-	KisCrayon *m_crayon;
+	KisKrayon *m_crayon;
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
 	KisListBox *m_layerBox;

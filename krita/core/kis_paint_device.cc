@@ -387,11 +387,13 @@ void KisPaintDevice::init()
 KoColor KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y)
 {
 	KisTileMgrSP tm = data();
-	KisPixelDataSP pd = tm -> pixelData(x, y, x, y, TILEMODE_READ);
-	QUANTUM *data = pd -> data;
+	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_READ);
+	QUANTUM *data;
 	KoColor c;
 	Q_INT32 tmp;
 
+	Q_ASSERT(pd);
+	data = pd -> data;
 	Q_ASSERT(data);
 
 	switch (type()) {
@@ -414,7 +416,7 @@ KoColor KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y)
 void KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, const KoColor& c)
 {
 	KisTileMgrSP tm = data();
-	KisPixelDataSP pd = tm -> pixelData(x, y, x, y, TILEMODE_WRITE);
+	KisPixelDataSP pd = tm -> pixelData(x - m_x, y - m_y, x - m_x, y - m_y, TILEMODE_WRITE);
 	QUANTUM *data = pd -> data;
 
 	Q_ASSERT(data);

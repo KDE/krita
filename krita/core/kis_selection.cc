@@ -31,6 +31,7 @@ KisSelection::KisSelection(KisPaintDeviceSP parent, KisImageSP img, const QStrin
 	m_img = img;
 	m_name = name;
 	m_firstMove = true;
+	connect(m_parent, SIGNAL(visibilityChanged(KisPaintDeviceSP)), SLOT(parentVisibilityChanged(KisPaintDeviceSP)));
 }
 
 KisSelection::~KisSelection()
@@ -46,7 +47,9 @@ bool KisSelection::shouldDrawBorder() const
 
 void KisSelection::move(Q_INT32 x, Q_INT32 y)
 {
-	if (m_firstMove) {
+	QRect rc = bounds();
+
+	if (0 && m_firstMove) {
 		// TODO
 		// copy tiles here
 		// i.e. create new tiles for parent
@@ -57,11 +60,12 @@ void KisSelection::move(Q_INT32 x, Q_INT32 y)
 		// push_undo_fill
 		gc.fillRect(m_rc, KoColor::black(), OPACITY_TRANSPARENT);
 		m_firstMove = false;
+		m_parent -> invalidate(rc);
 	}
 
 	super::move(x, y);
-	m_parent -> invalidate();
-	invalidate();
+	rc |= bounds();
+	invalidate(rc);
 }
 
 void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_INT32 height)
@@ -72,10 +76,12 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 	Q_INT32 tileno;
 	Q_INT32 x;
 	Q_INT32 y;
+	Q_INT32 offset;
 
 	configure(m_img, width, height, m_img -> imgType(), m_name);
 	tm2 = data();
 	Q_ASSERT(tm2);
+	offset = tm1 -> tileNum(parentX, parentY);
 
 	for (y = parentY; y < height; y += TILE_HEIGHT) {
 		for (x = parentX; x < width; x += TILE_WIDTH) {
@@ -88,7 +94,7 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 
 			if (tile) {
 				tile -> shareRef();
-				tm2 -> attach(tile, tileno);
+				tm2 -> attach(tile, tileno - offset);
 			}
 		}
 	}
@@ -101,4 +107,16 @@ void KisSelection::setBounds(const QRect& rc)
 {
 	setBounds(rc.x(), rc.y(), rc.width(), rc.height());
 }
+
+void KisSelection::parentVisibilityChanged(KisPaintDeviceSP parent)
+{
+	visible(parent -> visible());
+}
+
+KisPaintDeviceSP KisSelection::parent() const
+{
+	return m_parent;
+}
+
+#include "kis_selection.moc"
 

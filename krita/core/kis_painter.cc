@@ -87,7 +87,7 @@ void KisPainter::begin(KisPixelDataSP pd)
 
 void KisPainter::begin(KisPaintDeviceSP device)
 {
-	begin(device, 0, 0, device -> width(), device -> height());
+	begin(device, device -> x(), device -> y(), device -> width(), device -> height());
 }
 
 void KisPainter::begin(KisPaintDeviceSP device, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
@@ -102,6 +102,7 @@ void KisPainter::begin(KisPaintDeviceSP device, const QRect& rc)
 	KisTileMgrSP tm = device -> data();
 
 	m_dst = tm -> pixelData(rc.x(), rc.y(), rc.width(), rc.height(), TILEMODE_RW);
+	Q_ASSERT(m_dst);
 }
 
 void KisPainter::end()
@@ -375,15 +376,15 @@ void KisPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KoCo
 	QUANTUM r = upscale(c.R());
 	QUANTUM g = upscale(c.G());
 	QUANTUM b = upscale(c.B());
-	QUANTUM *d = m_dst -> data;
+	QUANTUM *d;
 
 	for (y1 = y; y1 < dy; y1++) {
 		for (x1 = x; x1 < dx; x1++) {
+			d = m_dst -> data + (y1 * m_dst -> width + x1) * m_dst -> depth;
 			d[PIXEL_RED] = r;
 			d[PIXEL_GREEN] = g;
 			d[PIXEL_BLUE] = b;
 			d[PIXEL_ALPHA] = opacity;
-			d += m_dst -> depth;
 		}
 	}
 }

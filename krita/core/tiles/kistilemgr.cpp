@@ -95,6 +95,8 @@ KisTileSP KisTileMgr::tile(Q_INT32 tilenum, Q_INT32 mode)
 		KisScopedLock l(tile -> mutex());
 
 		if (mode & TILEMODE_WRITE) {
+#if 0
+			 // TODO
 			if (tile -> shareCount() > 1) {
 				KisTileSP tileNew = new KisTile(*tile);
 
@@ -102,6 +104,7 @@ KisTileSP KisTileMgr::tile(Q_INT32 tilenum, Q_INT32 mode)
 				attach(tileNew, tilenum);
 				tile = tileNew;
 			}
+#endif
 
 			tile -> writeRef();
 			tile -> dirty(true);
@@ -457,7 +460,7 @@ void KisTileMgr::writePixelData(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2, 
 
 			dststride = t -> width() * t -> depth();
 
-			while (rows--) {
+			while (rows-- > 0) {
 				memcpy(dst, src, cols * depth() * sizeof(QUANTUM));
 				dst += dststride;
 				src += stride;

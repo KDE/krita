@@ -60,6 +60,7 @@
 #include "kis_paint_device.h"
 #include "kis_dlg_paint_properties.h"
 #include "kis_resourceserver.h"
+#include "kis_selection.h"
 #include "kis_sidebar.h"
 #include "kis_tabbar.h"
 #include "kis_tool.h"
@@ -94,6 +95,7 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	m_layerProperties = 0;
 	m_layerNext = 0;
 	m_layerPrev = 0;
+	m_selectionRm = 0;
 	m_sidebarToggle = 0;
 	m_floatsidebarToggle  = 0;
 	m_lsidebarToggle = 0;
@@ -133,7 +135,8 @@ KisView::KisView(KisDoc *doc, QWidget *parent, const char *name) : super(doc, pa
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
 	connect(m_doc, SIGNAL(projectionUpdated(KisImageSP)), SLOT(projectionUpdated(KisImageSP)));
-	m_toolSet = toolFactory(this, doc);
+	setupTools();
+	selectionUpdateGUI(false);
 }
 
 KisView::~KisView()
@@ -283,7 +286,7 @@ void KisView::setupActions()
 	(void)KStdAction::cut(this, SLOT(cut()), actionCollection(), "cut");
 	(void)KStdAction::copy(this, SLOT(copy()), actionCollection(), "copy");
 	(void)KStdAction::paste(this, SLOT(paste()), actionCollection(), "paste_special");
-	(void)new KAction(i18n("Remove Selection"), "remove", 0, this, SLOT(removeSelection()), actionCollection(), "remove");
+	m_selectionRm = new KAction(i18n("Remove Selection"), "remove", 0, this, SLOT(removeSelection()), actionCollection(), "remove");
 	(void)new KAction(i18n("Copy Selection to New Layer"), "crop", 0,  this, SLOT(crop()), actionCollection(), "crop");
 	(void)KStdAction::selectAll(this, SLOT(selectAll()), actionCollection(), "select_all");
 	(void)new KAction(i18n("Select None"), 0, this, SLOT(unSelectAll()), actionCollection(), "select_none");
@@ -510,13 +513,14 @@ KisImageSP KisView::currentImg() const
 		return m_current;
 
 	m_current = m_doc -> imageNum(0);
+	connectCurrentImg();
 	return m_current;
 }
 
 QString KisView::currentImgName() const
 {
-	if (m_current)
-		return m_current -> name();
+	if (currentImg())
+		return currentImg() -> name();
 
 	return QString::null;
 }
@@ -655,13 +659,31 @@ void KisView::layerUpdateGUI(bool enable)
 	m_layerPrev -> setEnabled(enable);
 }
 
-/*---------------------------------
-    edit selection action slots
-----------------------------------*/
+void KisView::selectionUpdateGUI(bool enable)
+{
+	m_selectionRm -> setEnabled(enable);
+}
 
-/*
-    copy - copy selection contents to global kapp->clipboard()
-*/
+void KisView::removeSelection()
+{
+	KisImageSP img = currentImg();
+
+	if (img) {
+		KisSelectionSP selection = img -> selection();
+
+		if (selection) {
+			KisPaintDeviceSP parent = selection -> parent();
+			QRect rc = selection -> bounds();
+			KisPainter gc(parent);
+
+			img -> unsetSelection();
+			gc.fillRect(rc, KoColor::black(), OPACITY_TRANSPARENT);
+			gc.end();
+			m_doc -> setModified(true);
+			updateCanvas(rc);
+		}
+	}
+}
 
 void KisView::copy()
 {
@@ -676,40 +698,11 @@ void KisView::copy()
 #endif
 }
 
-/*
-    cut - move selection contents to global kapp->clipboard()
-*/
-
 void KisView::cut()
 {
-#if 0
 	copy();
 	removeSelection();
-#endif
 }
-
-/*
-    same as cut but don't move selection contents to clipboard
-*/
-
-void KisView::removeSelection()
-{
-#if 0
-	// remove selection in place
-	if (!m_doc -> getSelection() -> erase())
-		kdDebug() << "m_doc->m_Selection.erase() failed" << endl;
-
-	// clear old selection outline
-	m_pTool -> clearOld();
-#endif
-}
-
-/*
-    paste - from the global kapp->clipboard(). The image
-    in the clipboard (if any) is copied to the past tool clip
-    image so it can be used like a brush or stamp tool to paint
-    with, or it can just be moved into place and pasted in.
-*/
 
 void KisView::paste()
 {
@@ -1201,6 +1194,7 @@ void KisView::remove_current_image_tab()
 	KisImageSP current = currentImg();
 
 	if (current) {
+		disconnectCurrentImg();
 		m_current = 0;
 		m_doc -> removeImage(current);
 	}
@@ -1317,41 +1311,22 @@ void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
     // with showScollBars()
 }
 
-
 void KisView::setActiveBrush(KoIconItem *brush)
 {
 	m_brush = dynamic_cast<KisBrush*>(brush);
-#if 0
-	Q_ASSERT(b);
-	m_pBrush = b;
-
-	if (m_pTool) {
-		m_pTool -> setBrush(b);
-		m_pTool -> setCursor();
-	}
-#endif
+	m_sideBar -> slotSetBrush(*m_brush);
 }
 
-void KisView::setActiveCrayon(KoIconItem *)
+void KisView::setActiveCrayon(KoIconItem *crayon)
 {
-#if 0
-	m_pKrayon = k;
-	m_sideBar -> setActiveCrayon(*k);
-#endif
+	m_crayon = dynamic_cast<KisKrayon*>(crayon);
+	m_sideBar -> slotSetKrayon(*m_crayon);
 }
 
-void KisView::setActivePattern(KoIconItem *)
+void KisView::setActivePattern(KoIconItem *pattern)
 {
-#if 0
-	// set currentImg pattern for this view
-	m_pPattern = p;
-
-	// set pattern for other things that use patterns
-	Q_ASSERT(m_sideBar);
-	Q_ASSERT(m_doc);
-	m_sideBar -> setActivePattern(*p);
-	m_doc -> frameBuffer() -> setPattern(p);
-#endif
+	m_pattern = dynamic_cast<KisPattern*>(pattern);
+	m_sideBar -> slotSetPattern(*m_pattern);
 }
 
 void KisView::setBGColor(const KoColor& c)
@@ -1431,30 +1406,7 @@ void KisView::print(KPrinter &)
 
 void KisView::setupTools()
 {
-#if 0
-	ktvector tools;
-
-	tools = m_doc -> getTools();
-
-	if (tools.empty()) {
-		tools = ::toolFactory(m_canvas, m_pBrush, m_pPattern, m_doc);
-		m_paste = new PasteTool(m_doc, m_canvas);
-		tools.push_back(m_paste);
-	}
-
-	for (ktvector_size_type i = 0; i < tools.size(); i++) {
-		KisTool *p = tools[i];
-
-		Q_ASSERT(p);
-		p -> setupAction(actionCollection());
-	}
-
-	if (m_doc -> viewCount() < 1)
-		m_doc -> setTools(tools);
-
-	tools[0] -> toolSelect();
-	activateTool(tools[0]);
-#endif
+	m_toolSet = toolFactory(this, m_doc);
 }
 
 void KisView::canvasGotPaintEvent(QPaintEvent *event)
@@ -1579,6 +1531,7 @@ void KisView::layerSelected(int n)
 
 void KisView::docImageListUpdate()
 {
+	disconnectCurrentImg();
 	m_current = 0;
 	zoomUpdateGUI(0, 0, 1.0);
 	resizeEvent(0);
@@ -1753,7 +1706,9 @@ void KisView::layersUpdated(KisImageSP img)
 
 void KisView::selectImage(const QString& name)
 {
+	disconnectCurrentImg();
 	m_current = m_doc -> findImage(name);
+	connectCurrentImg();
 	layersUpdated();
 	resizeEvent(0);
 	updateCanvas();
@@ -1761,7 +1716,9 @@ void KisView::selectImage(const QString& name)
 
 void KisView::selectImage(KisImageSP img)
 {
+	disconnectCurrentImg();
 	m_current = img;
+	connectCurrentImg();
 	layersUpdated();
 	resizeEvent(0);
 	updateCanvas();
@@ -1863,6 +1820,24 @@ void KisView::reverseFGAndBGColors()
 
 	m_sideBar -> slotSetFGColor(oldBg);
 	m_sideBar -> slotSetBGColor(oldFg);
+}
+
+void KisView::imgSelectionChanged(KisImageSP img)
+{
+	if (img == currentImg())
+		selectionUpdateGUI(img -> selection() != 0);
+}
+
+void KisView::connectCurrentImg() const
+{
+	if (m_current)
+		connect(m_current, SIGNAL(selectionChanged(KisImageSP)), SLOT(imgSelectionChanged(KisImageSP)));
+}
+
+void KisView::disconnectCurrentImg() const
+{
+	if (m_current)
+		m_current -> disconnect(this);
 }
 
 #include "kis_view.moc"

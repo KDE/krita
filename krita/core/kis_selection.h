@@ -22,6 +22,7 @@
 #include "kis_layer.h"
 
 class KisSelection : public KisLayer {
+	Q_OBJECT
 	typedef KisLayer super;
 
 public:
@@ -36,6 +37,10 @@ public:
 public:
 	void setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_INT32 height);
 	void setBounds(const QRect& rc);
+	KisPaintDeviceSP parent() const;
+
+private slots:
+	void parentVisibilityChanged(KisPaintDeviceSP parent);
 
 private:
 	KisPaintDeviceSP m_parent;

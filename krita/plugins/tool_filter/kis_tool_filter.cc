@@ -46,7 +46,7 @@
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 
-KisToolFilter::KisToolFilter() 
+KisToolFilter::KisToolFilter()
 	: super(i18n("Filter tool")), m_filterConfigurationWidget(0)
 {
 	setName("tool_filter");
@@ -72,7 +72,7 @@ void KisToolFilter::setup(KActionCollection *collection)
 	}
 }
 
-void KisToolFilter::initPaint(KisEvent *e) 
+void KisToolFilter::initPaint(KisEvent *e)
 {
 	setUseTempLayer( true );
 	super::initPaint(e);
@@ -96,7 +96,7 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 	QLabel* lbFilter = new QLabel(i18n("Filter:"), m_optWidget);
 
 	m_cbFilter ->insertStringList( m_subject ->filterList() );
-	
+
 	m_optionLayout = new QGridLayout(m_optWidget, 3, 2, 0, 6);
 
 	m_optionLayout -> addMultiCellWidget(optionFreehandWidget, 0, 0, 0 , 1 );
@@ -105,7 +105,7 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 
 	connect(m_cbFilter, SIGNAL(activated ( const QString& )), this, SLOT( changeFilter( const QString& ) ) );
 	changeFilter( m_cbFilter->currentText () );
-	
+
 	return m_optWidget;
 }
 
@@ -116,7 +116,6 @@ QWidget* KisToolFilter::optionWidget()
 
 void KisToolFilter::changeFilter( const QString & string )
 {
-// 	kdDebug() << "KisToolFilter::changeFilter : change to " << string << endl;
 	m_filter =  m_subject -> filterGet( string );
 	Q_ASSERT(m_filter != 0);
 	if( m_filterConfigurationWidget != 0 )
@@ -125,10 +124,8 @@ void KisToolFilter::changeFilter( const QString & string )
 		delete m_filterConfigurationWidget;
 	}
 	m_filterConfigurationWidget = m_filter -> createConfigurationWidget( m_optWidget );
-// 	kdDebug() << "KisToolFilter::changeFilter m_filterConfigurationWidget = " << m_filterConfigurationWidget << endl;
 	if( m_filterConfigurationWidget != 0 )
 	{
-// 		kdDebug() << "KisToolFilter::changeFilter add to layout manager" << endl;
 		m_optionLayout -> addMultiCellWidget ( m_filterConfigurationWidget, 2, 2, 0, 1 );
 		m_filterConfigurationWidget->show();
 	}

@@ -42,10 +42,12 @@ KisPaintOp::~KisPaintOp()
 
 KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 {
-	// XXX: According to the SeaShore source, the Gimp uses a temporary layer
-	// the size of the layer that is being painted on. Thas layer is cleared
-	// between painting actions. Our temporary layer, dab, is for every paintAt, composited with
-	// the target layer.
+	// XXX: According to the SeaShore source, the Gimp uses a
+	// temporary layer the size of the layer that is being painted
+	// on. This layer is cleared between painting actions. Our
+	// temporary layer, dab, is for every paintAt, composited with
+	// the target layer. We only use a real temporary layer for things
+	// like filter tools.
 	KisLayerSP dab = new KisLayer(m_painter -> device() -> colorStrategy(), "dab");
 
 	KisStrategyColorSpaceSP colorStrategy = dab -> colorStrategy();

@@ -61,11 +61,12 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	KisFilterSP filter = m_painter -> filter();
 	if (!filter) return;
 
-	KisPaintDeviceSP device = m_source;
-	if (!device) return;
+	if ( ! m_source ) return;
 
 	KisBrush * brush = m_painter -> brush();
 	if (!brush) return;
+
+	KisStrategyColorSpaceSP colorStrategy = m_source -> colorStrategy();
 
 	KisPoint hotSpot = brush -> hotSpot(pressure);
 	KisPoint pt = pos - hotSpot;
@@ -81,32 +82,24 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	splitCoordinate(pt.x(), &x, &xFraction);
 	splitCoordinate(pt.y(), &y, &yFraction);
 
-	KisPaintDeviceSP dab = 0;
-	if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
-		return;
-	}
-	else {
-		KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
-		dab = computeDab(mask);
-	}
+	// Filters always work with a mask, never with an image; that
+	// wouldn't be useful at all.
+	KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
 
 	m_painter -> setPressure(pressure);
 
+	Q_INT32 maskWidth = mask -> width();
+	Q_INT32 maskHeight = mask -> height();
 
-	QRect r = dab -> extent();
+	Q_INT32 devX, devY, devWidth, devHeight;
 
-	Q_INT32 sw = r.width();
-	Q_INT32 sh = r.height();
+	m_source -> extent( devX,  devY,  devWidth,  devHeight );
 
-	r = device -> extent();
+	if ( x + maskWidth > devWidth ) maskWidth = devWidth - x;
 
-	if( x + sw > r.width() )
-		sw = r.width() - x;
+	if ( y + maskHeight > devHeight ) maskHeight = devHeight - y;
 
-	if( y + sh > r.height() )
-		sh = r.height() - y;
-
-	if(sw < 0 || sh < 0)
+	if ( maskWidth <= 0 || maskHeight <= 0 )
 		return;
 
 	// Draw correctly near the left and top edges
@@ -121,67 +114,37 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 		y = 0;
 	}
 
-#if 0 // AUTOLAYERS
 
-	KisPaintDeviceSP srcdev = new KisPaintDevice(sw, sh, dab.data() -> colorStrategy(), "");
+	// Create a temporary paint device
+	KisPaintDeviceSP tmpDev = new KisPaintDevice(colorStrategy, "");
 
-	KisIteratorLinePixel srcLit = srcdev -> iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
+	// Copy the layer data onto the new paint device
+	KisPainter p( tmpDev );
+	p.bitBlt( 0,  0,  COMPOSITE_COPY, m_source, OPACITY_OPAQUE, x, y, maskWidth, maskHeight );
 
-	KisIteratorLinePixel dabLit = dab.data()->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
+	// Filter the paint device
+	filter -> process( tmpDev,  m_filterConfiguration, QRect( 0, 0, maskWidth, maskHeight ),  0 );
 
-	KisIteratorLinePixel srcLitend = srcdev->iteratorPixelSelectionEnd( 0, sx, sw - 1, sh - 1);
+	// Apply the mask on the paint device (filter before mask because edge pixels may be important)
 
-	// XXX: Do we need the transaction here? The bitBlt later on
-	// makes it already part of the transaction.
-	KisIteratorLinePixel devLit = device->iteratorPixelSelectionBegin( m_painter -> transaction(), x, x + sw - 1, y);
-
-	Q_INT32 stop = device -> depth() - 1;
-
-	while ( srcLit <= srcLitend )
+	for (int y = 0; y < maskHeight; y++)
 	{
-		KisIteratorPixel srcUit = *srcLit;
-		KisIteratorPixel srcUitend = srcLit.end();
-		KisIteratorPixel dabUit = *dabLit;
-		KisIteratorPixel devUit = * devLit;
-		while ( srcUit <= srcUitend )
+		KisHLineIteratorPixel hiter = tmpDev->createHLineIterator(0, y, maskWidth, false);
+		int x=0;
+		while(! hiter.isDone())
 		{
-			KisPixel srcP = srcUit;
-			KisPixel dabP = dabUit;
-			KisPixel devP = devUit;
-			for( Q_INT32 i = 0; i < stop; i++)
-			{
-				srcUit[ i ] = ( devUit[ i ] * (QUANTUM_MAX - dabUit[ i ]) ) / QUANTUM_MAX;
-// 				kdDebug() << " srcUit[ " << i << " ] = " << srcUit[i] << " devUit[ " << i << " ] = " << devUit[i] << " dabUit[ " << i << " ] = " << dabUit[ i ] << endl;
-			}
-			srcUit[ stop ] = ( dabUit[ stop ] );//* devUit[ stop ] ) / QUANTUM_MAX;
-// 			kdDebug() << " srcUit[ " << stop << " ] = " << srcUit[stop] << " devUit[ " << stop << " ] = " << devUit[stop] << " dabUit[ " << stop << " ] = " << dabUit[ stop ] << endl;
-			++srcUit; ++dabUit; ++devUit;
+			// XXX: QUANTUM should be Q_UINT8
+			QUANTUM alpha = mask -> alphaAt( x++, y );
+			KisPixel p = colorStrategy -> toKisPixel( (QUANTUM *)hiter, 0);
+			p.alpha() = alpha;
+
+			hiter++;
 		}
-	++srcLit; ++dabLit; ++devLit;
 	}
-// 	kdDebug() << "applying filter to the square" << endl;
-	filter -> process( srcdev, m_filterConfiguration, QRect(0, 0, srcdev -> width(), srcdev -> height()), 0 );
-// XXX: Why was this commented out, and by whom?
-// 	KisIteratorLinePixel srcLit2 = srcdev->iteratorPixelSelectionBegin( 0, sx, sw - 1, sy);
-// 	KisIteratorLinePixel srcLitend2 = srcdev->iteratorPixelSelectionEnd( 0, sx, sw - 1, sh - 1);
-// 	while ( srcLit <= srcLitend )
-// 	{
-// 		KisIteratorPixel srcUit = *srcLit2;
-// 		KisIteratorPixel srcUitend = srcLit2.end();
-// 		while ( srcUit <= srcUitend )
-// 		{
-// 			KisPixel srcP = srcUit;
-// 			for( Q_INT32 i = 0; i < device->depth(); i++)
-// 			{
-// 				kdDebug() << " srcUit[ " << i << " ] = " << srcUit[i] << endl;
-// 			}
-// 			++srcUit;
-// 		}
-// 		++srcLit2;
-// 	}
 
+	// Blit the paint device onto the layer
+	m_painter -> bitBlt( x,  y,  m_painter -> compositeOp(), tmpDev, m_painter -> opacity(), 0, 0, maskWidth, maskHeight);
 
-	m_painter -> bitBlt( x,  y,  m_painter -> compositeOp(), srcdev, m_painter -> opacity(), sx, sy, srcdev -> width(),srcdev -> width());
-	m_painter -> addDirtyRect(QRect(x, y, dab -> width(), dab -> height()));
-#endif
+	m_painter -> addDirtyRect(QRect(x, y, maskWidth, maskHeight));
+
 }

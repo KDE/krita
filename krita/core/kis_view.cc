@@ -600,9 +600,9 @@ void KisView::setupDockers()
 	if ( cfg.paletteStyle() == PALETTE_DOCKER || cfg.paletteStyle() == PALETTE_TOOLBOX ) {
 		// TODO Here should be a better check
 		if ( mainWindow() -> isDockEnabled( DockBottom)) {
-			viewPaintBoxDocker();
 			viewControlDocker();
 			viewLayerChannelDocker();
+			viewPaintBoxDocker();
 			viewColorDocker();
 
 			mainWindow() -> setDockEnabled( DockBottom, false);

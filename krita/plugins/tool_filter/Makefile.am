@@ -13,7 +13,6 @@ INCLUDES = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tool \
 	-I$(srcdir)/../../core/paintop \
 	-I$(srcdir)/../../ui \
-	-I$(srcdir)/../../paintops \
 	-I$(srcdir)/../../ui/dialogs \
 	-I$(srcdir)/../../ui/widgets \
 	-I../../ui/dialogs \

@@ -86,7 +86,7 @@ KisLayerView::KisLayerView( KisDoc *doc, QWidget *parent, const char *name )
     connect( pbDown, SIGNAL( clicked() ),
         layertable, SLOT( slotLowerLayer() ) );
 
-    QToolTip::add( pbAddLayer, i18n( "Create new Layer" ) );
+    QToolTip::add( pbAddLayer, i18n( "Create new layer" ) );
     QToolTip::add( pbRemoveLayer, i18n( "Remove current layer" ) );
     QToolTip::add( pbUp, i18n( "Raise current layer" ) );
     QToolTip::add( pbDown, i18n( "Lower current layer" ) );

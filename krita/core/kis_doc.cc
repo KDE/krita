@@ -741,6 +741,15 @@ bool KisDoc::completeLoading(KoStore * /*store*/)
 	return false;
 }
 
+bool KisDoc::namePresent(const QString& name)
+{
+	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++)
+		if ((*it) -> name() == name)
+			return true;
+
+	return false;
+}
+
 void KisDoc::renameImage(const QString& oldName, const QString& newName)
 {
 	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
@@ -859,12 +868,20 @@ bool KisDoc::slotNewImage()
 	KisDlgCreateImg dlg(cfg.maxImgWidth() , cfg.defImgWidth(), cfg.maxImgHeight(), cfg.defImgHeight());
 
 	if (dlg.exec() == QDialog::Accepted) {
+		QString name;
 		QUANTUM opacity = dlg.backgroundOpacity();
 		KoColor c = dlg.backgroundColor();
-		KisImageSP img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), OPACITY_OPAQUE, dlg.colorSpace(), nextImageName());
-		KisLayerSP layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
-		KisPainter gc(layer.data());
+		KisImageSP img;
+		KisLayerSP layer;
+		KisPainter gc;
 
+		do {
+			name = nextImageName();
+		} while (namePresent(name));
+
+		img = new KisImage(this, dlg.imgWidth(), dlg.imgHeight(), OPACITY_OPAQUE, dlg.colorSpace(), name);
+		layer = new KisLayer(img, dlg.imgWidth(), dlg.imgHeight(), img -> nextLayerName(), OPACITY_OPAQUE);
+		gc.begin(layer.data());
 		gc.fillRect(0, 0, layer -> width(), layer -> height(), c, opacity);
 		gc.end();
 		img -> add(layer, -1);

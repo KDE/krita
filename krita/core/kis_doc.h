@@ -89,6 +89,7 @@ public:
 	bool empty() const;
 	QStringList images();
 	void renameImage(const QString& oldName, const QString& newName);
+	bool namePresent(const QString& name);
 
 	QString nextImageName() const;
 	void setProjection(KisImageSP img);

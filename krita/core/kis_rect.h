@@ -30,6 +30,7 @@ public:
 	KisRect(double x, double y, double w, double h) : super(x, y, w, h) {}
 	KisRect(const KisPoint& topLeft, const KisPoint& bottomRight) : super(topLeft, bottomRight) {}
 	KisRect(const QRect& qr) : super(qr.x(), qr.y(), qr.width(), qr.height()) {}
+	KisRect(const KoRect& r) : super(r) {}
 
 	QRect qRect() const;
 

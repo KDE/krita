@@ -60,6 +60,10 @@
 #include "kistilemgr.h"
 #include "kis_iterators_pixel.h"
 
+// Maximum distance from a Bezier control point to the line through the start
+// and end points for the curve to be considered flat.
+#define BEZIER_FLATNESS_THRESHOLD 0.5
+
 KisPainter::KisPainter()
 {
 	init();
@@ -653,6 +657,46 @@ void KisPainter::paintPolyline (const enumPaintOp paintOp,
     }
 }
 
+double KisPainter::paintBezierCurve(const enumPaintOp paintOp,
+				    const KisPoint &pos1,
+				    const KisPoint &control1,
+				    const KisPoint &control2,
+				    const KisPoint &pos2,
+				    const double pressure,
+				    const double xTilt,
+				    const double yTilt,
+				    const double savedDist)
+{
+	double newDistance;
+	double d1 = pointToLineDistance(control1, pos1, pos2);
+	double d2 = pointToLineDistance(control2, pos1, pos2);
+
+	if (d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD) {
+		newDistance = paintLine(paintOp, pos1, pos2, pressure, xTilt, yTilt, savedDist);
+	} else {
+		// Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508
+		KisVector2D p1 = pos1;
+		KisVector2D p2 = control1;
+		KisVector2D p3 = control2;
+		KisVector2D p4 = pos2;
+
+		KisVector2D l2 = (p1 + p2) / 2;
+		KisVector2D h = (p2 + p3) / 2;
+		KisVector2D l3 = (l2 + h) / 2;
+		KisVector2D r3 = (p3 + p4) / 2;
+		KisVector2D r2 = (h + r3) / 2;
+		KisVector2D l4 = (l3 + r2) / 2;
+		KisVector2D r1 = l4;
+		KisVector2D l1 = p1;
+		KisVector2D r4 = p4;
+
+		newDistance = paintBezierCurve(paintOp, l1.toKisPoint(), l2.toKisPoint(), l3.toKisPoint(), l4.toKisPoint(), pressure, xTilt, yTilt, savedDist);
+		newDistance = paintBezierCurve(paintOp, r1.toKisPoint(), r2.toKisPoint(), r3.toKisPoint(), r4.toKisPoint(), pressure, xTilt, yTilt, newDistance);
+	}
+
+	return newDistance;
+}
+
 void KisPainter::paintRect (const enumPaintOp paintOp,
                             const KisPoint &startPoint,
                             const KisPoint &endPoint,
@@ -770,9 +814,44 @@ void KisPainter::paintEllipse (const enumPaintOp paintOp,
                                const KisPoint &startPoint,
                                const KisPoint &endPoint,
                                const double pressure,
-			       const double /*xTilt*/,
-			       const double /*yTilt*/)
+			       const double xTilt,
+			       const double yTilt)
 {
+#if 1
+	KisRect r = KisRect(startPoint, endPoint).normalize();
+
+	// See http://www.whizkidtech.redprince.net/bezier/circle/ for explanation.
+	// kappa = (4/3*(sqrt(2)-1))
+	const double kappa = 0.5522847498;
+	const double lx = (r.width() / 2) * kappa;
+	const double ly = (r.height() / 2) * kappa;
+
+	KisPoint center = r.center();
+
+	KisPoint p0(r.left(), center.y());
+	KisPoint p1(r.left(), center.y() - ly);
+	KisPoint p2(center.x() - lx, r.top());
+	KisPoint p3(center.x(), r.top());
+
+	double distance = paintBezierCurve(paintOp, p0, p1, p2, p3, pressure, xTilt, yTilt);
+
+	KisPoint p4(center.x() + lx, r.top());
+	KisPoint p5(r.right(), center.y() - ly);
+	KisPoint p6(r.right(), center.y());
+
+	distance = paintBezierCurve(paintOp, p3, p4, p5, p6, pressure, xTilt, yTilt, distance);
+
+	KisPoint p7(r.right(), center.y() + ly);
+	KisPoint p8(center.x() + lx, r.bottom());
+	KisPoint p9(center.x(), r.bottom());
+
+	distance = paintBezierCurve(paintOp, p6, p7, p8, p9, pressure, xTilt, yTilt, distance);
+
+	KisPoint p10(center.x() - lx, r.bottom());
+	KisPoint p11(r.left(), center.y() + ly);
+
+	paintBezierCurve(paintOp, p9, p10, p11, p0, pressure, xTilt, yTilt, distance);
+#else
     QRect normalizedRect = QRect (startPoint.floorQPoint(), endPoint.floorQPoint()).normalize ();
 
     const int x1 = normalizedRect.left (),
@@ -803,6 +882,7 @@ void KisPainter::paintEllipse (const enumPaintOp paintOp,
                               (x1 + x2) / 2, (y1 + y2) / 2, (y2 - y1 + 1) / 2,
                               pressure);
     }
+#endif
 }
 
 void KisPainter::paintAt(const KisPoint & pos,
@@ -1202,5 +1282,18 @@ void KisPainter::splitCoordinate(double coordinate, Q_INT32 *whole, double *frac
 
 	*whole = i;
 	*fraction = f;
+}
+
+double KisPainter::pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1)
+{
+	double lineLength = sqrt((l1.x() - l0.x()) * (l1.x() - l0.x()) + (l1.y() - l0.y()) * (l1.y() - l0.y()));
+	double distance = 0;
+
+	if (lineLength > DBL_EPSILON) {
+		distance = ((l0.y() - l1.y()) * p.x() + (l1.x() - l0.x()) * p.y() + l0.x() * l1.y() - l1.x() * l0.y()) / lineLength;
+		distance = fabs(distance);
+	}
+
+	return distance;
 }
 

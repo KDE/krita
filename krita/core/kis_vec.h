@@ -170,6 +170,33 @@ inline KisVector2D operator*(double c, const KisVector2D &v)
 inline KisVector2D operator-(const KisVector2D &v)
 { return KisVector2D(-v.m_x, -v.m_y); }
 
+inline KisVector2D operator/(const KisVector2D &v, int c)
+{
+	if (c != 0) {
+		return KisVector2D(v.x() / c, v.y() / c);
+	} else {
+		return v;
+	}
+}
+
+inline KisVector2D operator/(const KisVector2D &v, long c)
+{
+	if (c != 0) {
+		return KisVector2D(v.x() / c, v.y() / c);
+	} else {
+		return v;
+	}
+}
+
+inline KisVector2D operator/(const KisVector2D &v, double c)
+{
+	if (c > DBL_EPSILON || c < -DBL_EPSILON) {
+		return KisVector2D(v.x() / c, v.y() / c);
+	} else {
+		return v;
+	}
+}
+
 inline KisVector2D &KisVector2D::operator/=(int c)
 {
 	if (!c == 0)

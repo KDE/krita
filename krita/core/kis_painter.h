@@ -145,6 +145,22 @@ public:
 			const double xTilt,
 			const double yTilt,
 			const double savedDist = -1);
+	/**
+	 * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.
+	 * If savedDist is less than zero, the brush is painted at pos1 before being
+	 * painted along the curve using the spacing setting.
+	 * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
+	 * because the currenlty set brush has a spacing greater than that distance.
+	 */
+	double paintBezierCurve(const enumPaintOp paintOp,
+				const KisPoint &pos1,
+				const KisPoint &control1,
+				const KisPoint &control2,
+				const KisPoint &pos2,
+				const double pressure,
+				const double xTilt,
+				const double yTilt,
+				const double savedDist = -1);
         void paintRect(const enumPaintOp paintOp,
 		       const KisPoint &startPoint,
 		       const KisPoint &endPoint,
@@ -247,6 +263,8 @@ private:
 
 	// Split the coordinate into whole + fraction, where fraction is always >= 0.
 	static void splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction);
+
+	static double pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1);
 
 private:
         KisPaintDeviceSP m_device;

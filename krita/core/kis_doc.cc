@@ -29,6 +29,7 @@
 #include <qstringlist.h>
 #include <qwidget.h>
 #include <qpaintdevicemetrics.h>
+#include <qmessagebox.h>
 
 // KDE
 #include <dcopobject.h>
@@ -1116,8 +1117,13 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 	return new KisView(this, this, parent, name);
 }
 
-void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
+void KisDoc::paintContent(QPainter& painter, const QRect& rect)
 {
+// 	kdDebug() << "KisDoc::paintContent called with rect: "
+// 		  << rect.x() << "," 
+// 		  << rect.y() << ","
+// 		  << rect.right() << ","
+// 		  << rect.bottom() << "\n";
 	Q_INT32 x;
 	Q_INT32 y;
 	Q_INT32 x1;
@@ -1142,21 +1148,6 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 		x2 = CLAMP(rect.x() + rect.width(), 0, m_currentImage -> width());
 		y2 = CLAMP(rect.y() + rect.height(), 0, m_currentImage -> height());
 
-		if (transparent)
-			painter.eraseRect(rect);
-
-
-#if 0
-  		// XXX: re-activate when rest of Krita uses the image's resolution
-		// Compute the zoom based on the resolution of the screen and the image
- 		QPaintDeviceMetrics m = QPaintDeviceMetrics(painter.device());
-
- 		// XXX: also make dpi a config option?
- 		zoomX = (m.logicalDpiX() / m_currentImage -> xRes()) * zoomX;
- 		zoomY = (m.logicalDpiY() / m_currentImage -> yRes()) * zoomY;
-#endif
- 		if (zoomX != 1.0 || zoomY != 1.0)
- 			painter.scale(zoomX, zoomY);
 
 		// Flatten the layers onto the projection layer of the current image
 		for (y = y1; y <= y2; y += TILE_HEIGHT - (y % TILE_HEIGHT)) {
@@ -1165,22 +1156,33 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent
 					continue;
 
 				m_currentImage -> renderToProjection(tileno);
-			}
-		}
-
-		// Render the current image's projection onto a QPainter, a block at a time.
-		for (y = y1; y < y2; y += RENDER_HEIGHT)
-			for (x = x1; x < x2; x += RENDER_WIDTH) {
-				Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
-				Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
-
-				QImage img = m_currentImage -> projection() -> convertToImage(x, y, w, h);
-
+				QImage img = m_currentImage -> projection() -> convertToImage(x, y, TILE_WIDTH, TILE_HEIGHT);
 				if (!img.isNull()) {
 					m_pixio.putImage(&m_pixmap, 0, 0, &img);
+					Q_INT32 w = QMIN(x2 - x, TILE_WIDTH);
+					Q_INT32 h = QMIN(y2 - y, TILE_HEIGHT);
 					painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
 				}
 			}
+		}
+
+// 		// Render the current image's projection onto a QPainter, a block at a time.
+// 		for (y = y1; y < y2; y += RENDER_HEIGHT) {
+// 			for (x = x1; x < x2; x += RENDER_WIDTH) {
+// 				Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
+// 				Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
+				
+// 				QImage img = m_currentImage -> projection() -> convertToImage(x, y, w, h);
+				
+// 				if (!img.isNull()) {
+// 					m_pixio.putImage(&m_pixmap, 0, 0, &img);
+// 					painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
+// 				}
+// 			}
+// 		}
+
+
+	
 
 		// Draw rectangular floating selections.
 		if ((floatingSelection = m_currentImage -> floatingSelection())) {

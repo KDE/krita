@@ -693,13 +693,11 @@ void KisView::resizeEvent(QResizeEvent *)
 	if (!m_canvasPixmap.isNull()) {
 		if (drawW > oldWidth) {
 			KisRect drawRect(oldWidth, 0, drawW - oldWidth, drawH);
-
 			paintView(viewToWindow(drawRect));
 		}
 
 		if (drawH > oldHeight) {
 			KisRect drawRect(0, oldHeight, drawW, drawH - oldHeight);
-
 			paintView(viewToWindow(drawRect));
 		}
 	}
@@ -898,13 +896,13 @@ void KisView::paintView(const KisRect& r)
 
                         if (!wr.isNull()) {
 
-                                if (zoom() < 1.0 || zoom() > 1.0)
+                                if (zoom() < 1.0 || zoom() > 1.0) {
                                         gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
-
+				}
                                 gc.translate((canvasXOffset() - horzValue()) / zoom(), (canvasYOffset() - vertValue()) / zoom());
 
                                 m_doc -> setCurrentImage(img);
-                                m_doc -> paintContent(gc, wr, false, 1.0, 1.0);
+                                m_doc -> paintContent(gc, wr);
 				m_doc -> setCurrentImage(0);
 
                                 if (currentTool())
@@ -1067,7 +1065,6 @@ void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 
         m_zoomIn -> setEnabled(zf <= KISVIEW_MAX_ZOOM);
         m_zoomOut -> setEnabled(zf >= KISVIEW_MIN_ZOOM);
-
         resizeEvent(0);
 
         m_hRuler -> setZoom(zf);
@@ -1184,7 +1181,6 @@ void KisView::dialog_gradient()
                 KisFrameBuffer *fb = m_doc->frameBuffer();
                 fb->setGradientEffect(static_cast<KImageEffect::GradientType>(type));
 
-//                 kdDebug() << "gradient type is " << type << endl;
         }
         delete pGradientDialog;
 #endif
@@ -1424,7 +1420,6 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
                                 m_doc -> layerAdd(current, layer, 0);
                                 m_layerBox -> setCurrentItem(img -> index(layer));
                         }
-
                         resizeEvent(0);
                         updateCanvas();
                 } else {
@@ -1539,7 +1534,6 @@ void KisView::scaleLayer(double sx, double sy, enumFilterType ftype)
 
 void KisView::rotateLayer(double angle)
 {
-// 	kdDebug() << "RotateLayer called: " << angle << "\n";
         if (!currentImg()) return;
 
 	KisLayerSP layer = currentImg() -> activeLayer();
@@ -2109,9 +2103,8 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
 
 void KisView::canvasRefresh()
 {
-	KisRect drawRect(0, 0, m_canvasPixmap.width(), m_canvasPixmap.height());
-
-	paintView(viewToWindow(drawRect));
+	KisRect rc(0, 0, m_canvasPixmap.width(), m_canvasPixmap.height());
+	paintView(viewToWindow(rc));
         m_canvas -> repaint();
 }
 
@@ -2380,7 +2373,6 @@ void KisView::selectImage(const QString& name)
         m_current = m_doc -> findImage(name);
         connectCurrentImg();
         layersUpdated();
-	kdDebug() << "Image: " << m_current -> name() << " layer: " << m_current -> activeLayer() << "\n";
 	// XXX: was m_current && m_current -> activeLayer() -> selection()
         m_selectionManager -> updateGUI(true);
         resizeEvent(0);
@@ -2414,7 +2406,6 @@ void KisView::scrollH(int value)
 		bitBlt(&m_canvasPixmap, xShift, 0, &m_canvasPixmap, 0, 0, m_canvasPixmap.width() - xShift, m_canvasPixmap.height());
 
 		KisRect drawRect(0, 0, xShift, m_canvasPixmap.height());
-
 		paintView(viewToWindow(drawRect));
 		m_canvas -> repaint();
 	}
@@ -2423,7 +2414,6 @@ void KisView::scrollH(int value)
 		bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, -xShift, 0, m_canvasPixmap.width() + xShift, m_canvasPixmap.height());
 
 		KisRect drawRect(m_canvasPixmap.width() + xShift, 0, -xShift, m_canvasPixmap.height());
-
 		paintView(viewToWindow(drawRect));
 		m_canvas -> repaint();
 	}
@@ -2440,7 +2430,6 @@ void KisView::scrollV(int value)
 		bitBlt(&m_canvasPixmap, 0, yShift, &m_canvasPixmap, 0, 0, m_canvasPixmap.width(), m_canvasPixmap.height() - yShift);
 
 		KisRect drawRect(0, 0, m_canvasPixmap.width(), yShift);
-
 		paintView(viewToWindow(drawRect));
 		m_canvas -> repaint();
 	}
@@ -2449,7 +2438,6 @@ void KisView::scrollV(int value)
 		bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, 0, -yShift, m_canvasPixmap.width(), m_canvasPixmap.height() + yShift);
 
 		KisRect drawRect(0, m_canvasPixmap.height() + yShift, m_canvasPixmap.width(), -yShift);
-
 		paintView(viewToWindow(drawRect));
 		m_canvas -> repaint();
 	}
@@ -2666,7 +2654,6 @@ void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h)
 
 	currentImg() -> resize(w, h);
 	m_doc -> setModified(true);
-
 	resizeEvent(0);
 	layersUpdated();
 	canvasRefresh();
@@ -2675,10 +2662,8 @@ void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h)
 void KisView::scaleCurrentImage(double sx, double sy, enumFilterType ftype)
 {
 	if (!currentImg()) return;
-// 	kdDebug() << "Going to scale image to (sx, sy): " << sx << ", " << sy << "\n";
 	currentImg() -> scale(sx, sy, m_progress, ftype);
 	m_doc -> setModified(true);
-
 	resizeEvent(0);
  	layersUpdated();
 	updateCanvas();
@@ -2688,10 +2673,8 @@ void KisView::scaleCurrentImage(double sx, double sy, enumFilterType ftype)
 void KisView::rotateCurrentImage(double angle)
 {
 	if (!currentImg()) return;
-	//kdDebug() << "Going to rotate image by (angle): " << angle << "\n";
 	currentImg() -> rotate(angle,m_progress);
 	m_doc -> setModified(true);
-
 	resizeEvent(0);
  	layersUpdated();
 	updateCanvas();

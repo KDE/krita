@@ -59,7 +59,11 @@ public:
 	virtual bool saveOasis( KoStore*, KoXmlWriter* );
 	virtual bool loadXML(QIODevice *, const QDomDocument& doc);
 	virtual QCString mimeType() const;
-	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);
+	// XXX: Use of transparent, zoomX and zoomY is not supported
+	// by Krita because we appear to be doing our zooming
+	// elsewhere. This may affect KOffice compatibility.
+	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY) {paintContent(painter, rect);}
+	virtual void paintContent(QPainter& painter, const QRect& rect);
 	virtual QDomDocument saveXML();
 
 private:

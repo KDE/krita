@@ -33,7 +33,6 @@ KisConvolutionFilter::KisConvolutionFilter(const QString& name, KisView * view) 
 void KisConvolutionFilter::process(KisPaintDeviceSP device, KisFilterConfiguration* , const QRect& /*rect*/, KisTileCommand* /*command*/)
 {
 	KisConvolutionPainter painter( device );
-	kdDebug() << device << endl;
 	painter.beginTransaction(i18n("convolve"));
 	KisMatrix3x3* amatrixes = matrixes();
 	painter.applyConvolutionColorTransformation(amatrixes);

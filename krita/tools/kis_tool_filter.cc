@@ -74,7 +74,7 @@ void KisToolFilter::setup(KActionCollection *collection)
 
 void KisToolFilter::initPaint(KisEvent *e) 
 {
-	//setUseTempLayer( true );
+	setUseTempLayer( true );
 	super::initPaint(e);
 	KisPaintOp * op = KisPaintOpRegistry::singleton() -> paintOp("filter", painter());
 	op -> setSource ( m_source );

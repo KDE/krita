@@ -37,9 +37,20 @@ public:
 public:
 	virtual void setup(KActionCollection *collection);
 	virtual void mousePress(QMouseEvent *e);
+	virtual void mouseMove(QMouseEvent *e);
+	virtual void mouseRelease(QMouseEvent *e);
+	virtual void paint(QPainter& gc);
+	virtual void paint(QPainter& gc, const QRect& rc);
+
+private:
+	void paintOutline();
+	void paintOutline(QPainter& gc, const QRect& rc);
 
 private:
 	KisCanvasSubject *m_subject;
+	QPoint m_startPos;
+	QPoint m_endPos;
+	bool m_dragging;
 };
 
 #endif // KIS_ZOOM_TOOL_H_

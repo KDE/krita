@@ -1052,6 +1052,40 @@ void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 	canvasRefresh();
 }
 
+void KisView::zoomTo(const KisRect& r)
+{
+	if (!r.isNull()) {
+
+		double wZoom = fabs(m_canvas -> width() / r.width());
+		double hZoom = fabs(m_canvas -> height() / r.height());
+
+		double zf = kMin(wZoom, hZoom);
+
+		if (zf < KISVIEW_MIN_ZOOM) {
+			zf = KISVIEW_MIN_ZOOM;
+		}
+		else
+		if (zf > KISVIEW_MAX_ZOOM) {
+			zf = KISVIEW_MAX_ZOOM;
+		}
+
+		Q_INT32 cx = qRound(r.center().x());
+		Q_INT32 cy = qRound(r.center().y());
+
+		zoomUpdateGUI(cx, cy, zf);
+	}
+}
+
+void KisView::zoomTo(const QRect& r)
+{
+	zoomTo(KisRect(r));
+}
+
+void KisView::zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+	zoomTo(KisRect(x, y, w, h));
+}
+
 void KisView::zoomIn(Q_INT32 x, Q_INT32 y)
 {
 	if (zoom() <= KISVIEW_MAX_ZOOM)

@@ -17,6 +17,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+#include <qpainter.h>
 #include <kaction.h>
 #include <klocale.h>
 #include "kis_canvas_controller.h"
@@ -28,6 +29,9 @@
 KisToolZoom::KisToolZoom()
 {
 	m_subject = 0;
+	m_dragging = false;
+	m_startPos = QPoint(0, 0);
+	m_endPos = QPoint(0, 0);
 	setCursor(KisCursor::zoomCursor());
 }
 
@@ -41,15 +45,92 @@ void KisToolZoom::update(KisCanvasSubject *subject)
 	super::update(m_subject);
 }
 
+void KisToolZoom::paint(QPainter& gc)
+{
+	if (m_dragging)
+		paintOutline(gc, QRect());
+}
+
+void KisToolZoom::paint(QPainter& gc, const QRect& rc)
+{
+	if (m_dragging)
+		paintOutline(gc, rc);
+}
+
 void KisToolZoom::mousePress(QMouseEvent *e)
+{
+	if (m_subject && !m_dragging) {
+		if (e -> button() == Qt::LeftButton) {
+			m_startPos = e -> pos();
+			m_endPos = e -> pos();
+			m_dragging = true;
+		}
+		else if (e -> button() == Qt::RightButton) {
+
+			KisCanvasControllerInterface *controller = m_subject -> canvasController();
+			controller -> zoomOut(e -> pos().x(), e -> pos().y());
+		}
+	}
+}
+
+void KisToolZoom::mouseMove(QMouseEvent *e)
+{
+	if (m_subject && m_dragging) {
+		if (m_startPos != m_endPos)
+			paintOutline();
+
+		m_endPos = e -> pos();
+		paintOutline();
+	}
+}
+
+void KisToolZoom::mouseRelease(QMouseEvent *e)
+{
+	if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
+
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+		m_endPos = e -> pos();
+		m_dragging = false;
+
+		if (m_startPos == m_endPos) {
+			controller -> zoomIn(e -> pos().x(), e -> pos().y());
+		} else {
+			controller -> zoomTo(QRect(m_startPos, m_endPos));
+		}
+	}
+}
+
+void KisToolZoom::paintOutline()
 {
 	if (m_subject) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
-	
-		if (e -> button() == Qt::LeftButton)
-			controller -> zoomIn(e -> pos().x(), e -> pos().y());
-		else if (e -> button() == Qt::RightButton)
-			controller -> zoomOut(e -> pos().x(), e -> pos().y());
+		QWidget *canvas = controller -> canvas();
+		QPainter gc(canvas);
+		QRect rc;
+
+		paintOutline(gc, rc);
+	}
+}
+
+void KisToolZoom::paintOutline(QPainter& gc, const QRect&)
+{
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+		RasterOp op = gc.rasterOp();
+		QPen old = gc.pen();
+		QPen pen(Qt::DotLine);
+		QPoint start;
+		QPoint end;
+
+		Q_ASSERT(controller);
+		start = controller -> windowToView(m_startPos);
+		end = controller -> windowToView(m_endPos);
+
+		gc.setRasterOp(Qt::NotROP);
+		gc.setPen(pen);
+		gc.drawRect(QRect(start, end));
+		gc.setRasterOp(op);
+		gc.setPen(old);
 	}
 }
 

@@ -159,6 +159,9 @@ private:
 	virtual void zoomIn(Q_INT32 x, Q_INT32 y);
 	virtual void zoomOut();
 	virtual void zoomOut(Q_INT32 x, Q_INT32 y);
+	virtual void zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	virtual void zoomTo(const QRect& r);
+	virtual void zoomTo(const KisRect& r);
 	virtual QPoint viewToWindow(const QPoint& pt);
 	virtual KisPoint viewToWindow(const KisPoint& pt);
 	virtual QRect viewToWindow(const QRect& rc);

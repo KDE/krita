@@ -276,6 +276,7 @@ private slots:
 	void viewControlDocker();
 	void viewLayerChannelDocker();
 	void viewResourceDocker();
+	void updateTabBar();
 
 private:
 	KisDoc *m_doc;

@@ -30,7 +30,8 @@
 #include <qpainter.h>
 #include <qscrollbar.h>
 #include <qspinbox.h>
-#include <qdockarea.h> 
+#include <qdockarea.h>
+#include <qstringlist.h> 
 
 // KDE
 #include <dcopobject.h>
@@ -335,21 +336,9 @@ void KisView::setupTabBar()
 
 	if (sb) {
 		m_tabBar = new KoTabBar(this);
-// 		m_tabBar -> slotImageListUpdated();
-// 		connect(m_tabBar, SIGNAL(tabSelected(const QString&)), SLOT(selectImage(const QString&)));
-// 		QObject::connect(m_doc, SIGNAL(imageListUpdated()), m_tabBar, SLOT(slotImageListUpdated()));
-// 		m_tabFirst = new KPushButton(this);
-// 		m_tabLeft = new KPushButton(this);
-// 		m_tabRight = new KPushButton(this);
-// 		m_tabLast = new KPushButton(this);
-// 		m_tabFirst -> setPixmap(QPixmap(BarIcon("tab_first")));
-// 		m_tabLeft -> setPixmap(QPixmap(BarIcon("tab_left")));
-// 		m_tabRight -> setPixmap(QPixmap(BarIcon("tab_right")));
-// 		m_tabLast -> setPixmap(QPixmap(BarIcon("tab_last")));
-// 		QObject::connect(m_tabFirst, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollFirst()));
-// 		QObject::connect(m_tabLeft, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollLeft()));
-// 		QObject::connect(m_tabRight, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollRight()));
-// 		QObject::connect(m_tabLast, SIGNAL(clicked()), m_tabBar, SLOT(slotScrollLast()));
+		updateTabBar();
+		connect(m_tabBar, SIGNAL(tabChanged(const QString&)), SLOT(selectImage(const QString&)));
+		connect(m_doc, SIGNAL(imageListUpdated()), SLOT(updateTabBar()));
 	}
 }
 
@@ -499,17 +488,6 @@ void KisView::resizeEvent(QResizeEvent *)
         
 	m_hRuler -> setGeometry(ruler + lsideW, 0, width() - ruler - rsideW - lsideW, ruler);
 	m_vRuler -> setGeometry(0 + lsideW, ruler, ruler, height() - (ruler + tbarBtnH));
-
-//  	if (m_tabBar) {
-//  		m_tabFirst -> setGeometry(0 + lsideW, height() - tbarBtnH, tbarBtnW, tbarBtnH);
-//  		m_tabLeft -> setGeometry(tbarBtnW + lsideW, height() - tbarBtnH, tbarBtnW, tbarBtnH);
-//  		m_tabRight -> setGeometry(2 * tbarBtnW + lsideW, height() - tbarBtnH, tbarBtnW, tbarBtnH);
-//  		m_tabLast -> setGeometry(3 * tbarBtnW + lsideW, height() - tbarBtnH, tbarBtnW, tbarBtnH);
-//  		m_tabFirst -> show();
-//  		m_tabLeft -> show();
-//  		m_tabRight -> show();
-//  		m_tabLast -> show();
-//  	}
 
 	drawH = height() - ruler - tbarBtnH - canvasYOffset();
 	drawW = width() - ruler - lsideW - rsideW - canvasXOffset();
@@ -922,6 +900,22 @@ void KisView::imgUpdateGUI()
 	m_imgMergeAll -> setEnabled(n > 1);
 	m_imgMergeVisible -> setEnabled(nvisible > 1);
 	m_imgMergeLinked -> setEnabled(nlinked > 1);
+}
+
+void KisView::updateTabBar()
+{
+		m_tabBar->clear();
+		// populate list
+		QStringList lst = m_doc->images();
+		if (!lst.isEmpty())
+		{
+			QStringList::Iterator it;
+
+		for ( it = lst.begin(); it != lst.end(); ++it )
+		m_tabBar->addTab(*it);
+		}
+		if(currentImg())
+		m_tabBar->setActiveTab(currentImgName());
 }
 
 void KisView::fillSelectionBg()
@@ -2198,8 +2192,8 @@ void KisView::selectImage(KisImageSP img)
 	resizeEvent(0);
 	updateCanvas();
 
-// 	if (m_tabBar)
-// 		m_tabBar -> slotImageListUpdated();
+ 	if (m_tabBar)
+ 		updateTabBar();
 
 	selectionUpdateGUI(m_current && m_current -> selection());
 }

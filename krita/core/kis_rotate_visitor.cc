@@ -111,19 +111,33 @@ void KisRotateVisitor::xShearImage(double angleX, KisProgressDisplayInterface *m
         
         //shear the image
         QUANTUM *tempRow = new QUANTUM[width * m_dev -> depth() * sizeof(QUANTUM)];
-        Q_INT32 displacement;
+        QUANTUM *pixel = new QUANTUM[m_dev -> depth() * sizeof(QUANTUM)];
+        QUANTUM *left = new QUANTUM[m_dev -> depth() * sizeof(QUANTUM)];
+        QUANTUM *oleft = new QUANTUM[m_dev -> depth() * sizeof(QUANTUM)];
+        double displacement;
+        Q_INT32 displacementInt;
+        double weight;
         Q_INT32 currentPos;
         
         for (Q_INT32 y=0; y < height; y++){
                 //calculate displacement
                 displacement = (height-y)*tanTheta;
+                displacementInt = floor(displacement);
+                weight=displacement-displacementInt;
                 //read a row from the image
                 m_dev -> tiles() -> readPixelData(0, y, width-1, y, tempRow, m_dev -> depth());
+                //initialize oleft
+                for(int channel = 0; channel < m_dev -> depth(); channel++)
+                        oleft[channel]=left[channel]=0;
                 //copy the pixels to the newData array
                 for(Q_INT32 x=0; x < width; x++){
-                        currentPos = (y*targetW+x) * m_dev -> depth(); // try to be at least a little efficient
+                        currentPos = (y*targetW+x+displacementInt) * m_dev -> depth(); // try to be at least a little efficient
                         for(int channel = 0; channel < m_dev -> depth(); channel++){
-                                newData[currentPos + displacement*m_dev -> depth() + channel]=tempRow[x*m_dev -> depth()+channel];
+                                pixel[channel]=tempRow[x*m_dev -> depth()+channel];
+                                left[channel]=weight*pixel[channel];
+                                pixel[channel]=pixel[channel]-left[channel]+oleft[channel];
+                                newData[currentPos  + channel]=pixel[channel];
+                                oleft[channel]=left[channel];
                         }
                 }
         }        
@@ -154,19 +168,33 @@ void KisRotateVisitor::yShearImage(double angleY, KisProgressDisplayInterface *m
         
         //shear the image
         QUANTUM *tempCol = new QUANTUM[height * m_dev -> depth() * sizeof(QUANTUM)];
-        Q_INT32 displacement;
+        QUANTUM *pixel = new QUANTUM[m_dev -> depth() * sizeof(QUANTUM)];
+        QUANTUM *left = new QUANTUM[m_dev -> depth() * sizeof(QUANTUM)];
+        QUANTUM *oleft = new QUANTUM[m_dev -> depth() * sizeof(QUANTUM)];
+        double displacement;
+        Q_INT32 displacementInt;
+        double weight;
         Q_INT32 currentPos;
         
         for (Q_INT32 x=0; x < width; x++){
                 //calculate displacement
                 displacement = x*tanTheta;
+                displacementInt = floor(displacement);
+                weight=displacement-displacementInt;
                 //read a column from the image
                 m_dev -> tiles() -> readPixelData(x, 0, x, height - 1, tempCol, m_dev -> depth());
+                //initialize oleft
+                for(int channel = 0; channel < m_dev -> depth(); channel++)
+                        oleft[channel]=left[channel]=0;
                 //copy the pixels to the newData array
                 for(Q_INT32 y=0; y < height; y++){
-                        currentPos = ((y+displacement)*targetW+x) * m_dev -> depth(); // try to be at least a little efficient
+                        currentPos = ((y+displacementInt)*targetW+x) * m_dev -> depth(); // try to be at least a little efficient
                         for(int channel = 0; channel < m_dev -> depth(); channel++){
-                                newData[currentPos + channel]=tempCol[y*m_dev -> depth()+channel];
+                                pixel[channel]=tempCol[y*m_dev -> depth()+channel];
+                                left[channel]=weight*pixel[channel];
+                                pixel[channel]=pixel[channel]-left[channel]+oleft[channel];
+                                newData[currentPos  + channel]=pixel[channel];
+                                oleft[channel]=left[channel];
                         }
                 }
         }        

@@ -42,7 +42,7 @@ private:
         virtual void cancel() { m_cancelRequested = true; }
 
         // oilpaint algorithm
-        void OilPaint(QUANTUM* data, int w, int h, int BrushSize, int Smoothness);
+        void OilPaint(QUANTUM* data, int w, int h, int BrushSize, int Smoothness, KisProgressDisplayInterface *m_progress);
         inline uint MostFrequentColor(uchar* Bits, int Width, int Height, int X, 
                                   int Y, int Radius, int Intensity);                           
         // Function to calcule the color intensity and return the luminance (Y)

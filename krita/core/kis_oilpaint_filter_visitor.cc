@@ -65,7 +65,7 @@ void KisOilPaintFilterVisitor::oilPaintFilter(Q_UINT32 brushSize, Q_UINT32 smoot
                         }    
                 }
         }
-        OilPaint(newData, width, height, brushSize, smooth);
+        OilPaint(newData, width, height, brushSize, smooth, m_progress);
         kdDebug() << "write newData to the image!" << "\n";
         tm -> writePixelData(0, 0, targetW - 1, targetH - 1, newData, targetW * m_dev -> depth());
         m_dev -> setTiles(tm); // Also sets width and height correctly
@@ -85,34 +85,41 @@ void KisOilPaintFilterVisitor::oilPaintFilter(Q_UINT32 brushSize, Q_UINT32 smoot
  *                     a matrix and simply write at the original position.            
  */                                                                                 
     
-void KisOilPaintFilterVisitor::OilPaint(QUANTUM* data, int w, int h, int BrushSize, int Smoothness)
+void KisOilPaintFilterVisitor::OilPaint(QUANTUM* data, int w, int h, int BrushSize, int Smoothness, KisProgressDisplayInterface *m_progress)
 {
-    bool m_cancel=false; //to make it compile
+        bool m_cancel=false; //to make it compile
     
-    int LineWidth = w * 4;
-    if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+        //Progress info
+        m_cancelRequested = false;
+        m_progress -> setSubject(this, true, true);
+        emit notifyProgressStage(this,i18n("Applying oilpaint filter..."),0);
+    
+        int LineWidth = w * 4;
+        if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
       
-    uchar* newBits = (uchar*)data;
-    int i = 0;
-    uint color;
+        uchar* newBits = (uchar*)data;
+        int i = 0;
+        uint color;
     
-    for (int h2 = 0; !m_cancel && (h2 < h); ++h2)
-       {
-       for (int w2 = 0; !m_cancel && (w2 < w); ++w2)
-          {
-          i = h2 * LineWidth + 4*w2;
-          color = MostFrequentColor ((uchar*)data, w, h, w2, h2, BrushSize, Smoothness);
+        for (int h2 = 0; !m_cancel && (h2 < h); ++h2)
+        {
+                for (int w2 = 0; !m_cancel && (w2 < w); ++w2)
+                {
+                        i = h2 * LineWidth + 4*w2;
+                        color = MostFrequentColor ((uchar*)data, w, h, w2, h2, BrushSize, Smoothness);
                 
-          newBits[i+3] = qAlpha(color);
-          newBits[i+2] = qBlue(color);
-          newBits[i+1] = qGreen(color);
-          newBits[ i ] = qRed(color);
-          }
+                        newBits[i+3] = qAlpha(color);
+                        newBits[i+2] = qBlue(color);
+                        newBits[i+1] = qGreen(color);
+                        newBits[ i ] = qRed(color);
+                }
        
        // Update de progress bar in dialog.
+       emit notifyProgress(this, (int) (((double)h2 * 100.0) / h));
        //m_progressBar->setValue((int) (((double)h2 * 100.0) / h));
        //kapp->processEvents();          
        }
+emit notifyProgressDone(this);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

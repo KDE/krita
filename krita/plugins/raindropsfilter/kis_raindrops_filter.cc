@@ -60,87 +60,24 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 {
 	kdDebug() << "Raindropsfilter 2 called!\n";
 
-#if 0 // AUTO_LAYERS
-        Q_INT32 width = src->width();
-        Q_INT32 height = src->height();
+	Q_INT32 x = 0, y = 0;
+	Q_INT32 width = src -> image() -> width();
+	Q_INT32 height = src-> image() -> height();
         
-        // create a QUANTUM array that holds the data the filter works on
-        
-        QUANTUM * newData = new QUANTUM[width * height * src -> depth() * sizeof(QUANTUM)];
-        
-        // create iterators for the src and the dst image
-        
-        KisIteratorLinePixel lineIt = src->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel dstLineIt = dst->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel lastLine = src->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
-	KisIteratorLinePixel dstLastLine = src->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
-        
-        Q_INT32 depth = src->depth();
-        
-        Q_UINT32 x=0;
-        
-        //read pixel data from image into QUANTUM array using iterators
-        
-        while( lineIt <= lastLine )
-	{
-		KisIteratorPixel quantumIt = lineIt.begin();
-		KisIteratorPixel lastQuantum = lineIt.end();
-		while( quantumIt <= lastQuantum )
-		{
-			for( int i = 0; i < depth; i++)
-			{
-			        newData[x*depth+i] = quantumIt.oldValue()[i];    
-                        }
-			++quantumIt;
-		        ++x;
-                }
-		++lineIt;
-        }
-        
-        //read the filter configuration values from the KisFilterConfiguration object
-        
-        Q_UINT32 dropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();
-        Q_UINT32 number = ((KisRainDropsFilterConfiguration*)configuration)->number();
-        Q_UINT32 fishEyes = ((KisRainDropsFilterConfiguration*)configuration)->fishEyes();
-        
-        kdDebug() << "dropSize:" << dropSize << " number:" << number << " fishEyes:" << fishEyes << "\n";
-        
-        //the actual filter function from digikam. It needs a pointer to a QUANTUM array
-        //with the actual pixel data.
-        
-        rainDrops(newData, width, height, dropSize, number, fishEyes, 0);
-       
-        x=0;
-        
-        //we set the iterator back to the first line
-        
-        lineIt = src->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-        
-        // now we read the pixels from the QUANTUM array and use the iterators to write it back
-        // to the actual image
-        //
-        // Fixme: this code uses the src and destination iterators. I think it would be enough
-        // to iterate over the destination image only. I don't actually know if this speeds up
-        // things, but it definitely should be tried
-        
-        while( lineIt <= lastLine )
-	{
-		KisIteratorPixel quantumIt = lineIt.begin();
-		KisIteratorPixel dstQuantumIt = *dstLineIt;
-		KisIteratorPixel lastQuantum = lineIt.end();
-		while( quantumIt <= lastQuantum )
-		{
-			for( int i = 0; i < depth; i++)
-			{
-                                dstQuantumIt[i]=newData[x*depth+i];
-			}
-			++quantumIt;
-			++dstQuantumIt;
-		        ++x;
-                }
-		++lineIt;
-		++dstLineIt;
-	}
+	// create a QUANTUM array that holds the data the filter works on
+	QUANTUM * newData = src -> readBytes( x, y, width, height);
+
+	//read the filter configuration values from the KisFilterConfiguration object
+	Q_UINT32 dropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();
+	Q_UINT32 number = ((KisRainDropsFilterConfiguration*)configuration)->number();
+	Q_UINT32 fishEyes = ((KisRainDropsFilterConfiguration*)configuration)->fishEyes();
+	
+	kdDebug() << "dropSize:" << dropSize << " number:" << number << " fishEyes:" << fishEyes << "\n";
+	
+	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
+	//with the actual pixel data.
+	rainDrops(newData, width, height, dropSize, number, fishEyes, 0);
+	src -> writeBytes( newData, x, y, width, height);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -416,7 +353,6 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
 
         FreeBoolArray (BoolMatrix, Width);
         //emit notifyProgressDone(this);
-#endif // AUTO_LAYERS
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

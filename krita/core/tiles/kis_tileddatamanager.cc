@@ -406,7 +406,8 @@ Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
  	if (h < 0)
 		h = 0;
 
- 	Q_UINT8 * ptr = new Q_UINT8[w * h * getDepth()];
+ 	Q_UINT8 * data = new Q_UINT8[w * h * getDepth()];
+	Q_UINT8 * ptr = data;
  	
  	// XXX: Isn't this a very slow copy?
 	for(Q_INT32 y2 = y; y2 < y + h; y2++)
@@ -422,7 +423,7 @@ Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
 		}
 	}
  
-	return ptr;
+	return data;
 
 }
 
@@ -445,7 +446,7 @@ void KisTiledDataManager::writeBytes(Q_UINT8 * bytes,
 	// XXX: Isn't this a very slow copy?
 	for(Q_INT32 y2 = y; y2 < y + h; y2++)
 	{
-		KisTiledHLineIterator hiter = KisTiledHLineIterator(this, x, y2, w, false);
+		KisTiledHLineIterator hiter = KisTiledHLineIterator(this, x, y2, w, true);
 		while(! hiter.isDone())
 		{
 			memcpy((Q_UINT8 *)hiter, ptr , getDepth());

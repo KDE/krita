@@ -87,6 +87,10 @@ public:
         bool contains(const QPoint& pt) const;
 
 	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+
+	Q_UINT8 * readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	void writeBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+
 	/** 
 	 *   Converts the paint device to a different colorspace
 	 */
@@ -393,6 +397,15 @@ inline KisPixelRO KisPaintDevice::pixelRO(Q_UINT8 * bytes)
 	return m_colorStrategy -> toKisPixelRO(bytes, m_profile);
 }
 
+inline Q_UINT8 * KisPaintDevice::readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+	return m_datamanager -> readBytes(x, y, w, h);
+}
+
+inline void KisPaintDevice::writeBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+	m_datamanager -> writeBytes( data, x, y, w, h);
+}
 
 #endif // KIS_PAINT_DEVICE_H_
 

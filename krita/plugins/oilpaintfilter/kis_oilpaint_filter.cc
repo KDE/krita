@@ -58,89 +58,26 @@ KisOilPaintFilter::KisOilPaintFilter(KisView * view) : KisFilter(name(), view)
 
 void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect, KisTileCommand* ktc)
 {
-#if 0 // AUTO_LAYERS
 	kdDebug() << "Oilpaintfilter 2 called!\n";
+
+	Q_INT32 x = 0, y = 0;
+	Q_INT32 width = src -> image() -> width();
+	Q_INT32 height = src-> image() -> height();
         
-        Q_INT32 width = src->width();
-        Q_INT32 height = src->height();
+	// create a QUANTUM array that holds the data the filter works on
+	QUANTUM * newData = src -> readBytes( x, y, width, height);
         
-        // create a QUANTUM array that holds the data the filter works on
+	//read the filter configuration values from the KisFilterConfiguration object      
+	Q_UINT32 brushSize = ((KisOilPaintFilterConfiguration*)configuration)->brushSize();
+	Q_UINT32 smooth = ((KisOilPaintFilterConfiguration*)configuration)->smooth();
         
-        QUANTUM * newData = new QUANTUM[width * height * src -> depth() * sizeof(QUANTUM)];
+	kdDebug() << "brushSize:" << brushSize << " smooth:" << smooth << "\n";
         
-        // create iterators for the src and the dst image
-        
-        KisIteratorLinePixel lineIt = src->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel dstLineIt = dst->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-	KisIteratorLinePixel lastLine = src->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
-	KisIteratorLinePixel dstLastLine = src->iteratorPixelSelectionEnd(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() + rect.height() - 1);
-        
-        Q_INT32 depth = src->depth();
-        
-        Q_UINT32 x=0;
-        
-        //read pixel data from image into QUANTUM array using iterators
-        
-        while( lineIt <= lastLine )
-	{
-		KisIteratorPixel quantumIt = lineIt.begin();
-		KisIteratorPixel lastQuantum = lineIt.end();
-		while( quantumIt <= lastQuantum )
-		{
-			for( int i = 0; i < depth; i++)
-			{
-			        newData[x*depth+i] = quantumIt.oldValue()[i];    
-                        }
-			++quantumIt;
-		        ++x;
-                }
-		++lineIt;
-        }
-        
-        //read the filter configuration values from the KisFilterConfiguration object
-        
-        Q_UINT32 brushSize = ((KisOilPaintFilterConfiguration*)configuration)->brushSize();
-        Q_UINT32 smooth = ((KisOilPaintFilterConfiguration*)configuration)->smooth();
-        
-        kdDebug() << "brushSize:" << brushSize << " smooth:" << smooth << "\n";
-        
-        //the actual filter function from digikam. It needs a pointer to a QUANTUM array
-        //with the actual pixel data.
-        
-        OilPaint(newData, width, height, brushSize, smooth, 0);
-       
-        x=0;
-        
-        //we set the iterator back to the first line
-        
-        lineIt = src->iteratorPixelSelectionBegin(ktc, rect.x(), rect.x() + rect.width() - 1, rect.y() );
-        
-        // now we read the pixels from the QUANTUM array and use the iterators to write it back
-        // to the actual image
-        //
-        // Fixme: this code uses the src and destination iterators. I think it would be enough
-        // to iterate over the destination image only. I don't actually know if this speeds up
-        // things, but it definitely should be tried
-        
-        while( lineIt <= lastLine )
-	{
-		KisIteratorPixel quantumIt = lineIt.begin();
-		KisIteratorPixel dstQuantumIt = *dstLineIt;
-		KisIteratorPixel lastQuantum = lineIt.end();
-		while( quantumIt <= lastQuantum )
-		{
-			for( int i = 0; i < depth; i++)
-			{
-                                dstQuantumIt[i]=newData[x*depth+i];
-			}
-			++quantumIt;
-			++dstQuantumIt;
-		        ++x;
-                }
-		++lineIt;
-		++dstLineIt;
-	}
-#endif
+	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
+	//with the actual pixel data.
+
+	OilPaint(newData, width, height, brushSize, smooth, 0);
+	src -> writeBytes( newData, x, y, width, height);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

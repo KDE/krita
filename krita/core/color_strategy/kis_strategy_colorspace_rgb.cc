@@ -176,29 +176,28 @@ void KisStrategyColorSpaceRGB::render(KisImageSP projection, QPainter& painter, 
 		pd -> data = m_buf;
 		tm -> readPixelData(pd);
 
-
-		if (QImage::systemByteOrder() == QImage::LittleEndian) {
-			img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * CHAR_BIT, 0, 0, QImage::LittleEndian);
+#ifdef __BIG_ENDIAN__
+		img = QImage(pd->width,  pd->height, 32, 0, QImage::LittleEndian);
+		Q_INT32 i = 0;
+		
+		uchar *j = img.bits();
+		QString s;
+		while ( i < pd ->stride * pd -> height ) {
+			
+			// Swap the bytes			
+			*( j + 0)  = *( pd->data + i + PIXEL_ALPHA );
+			*( j + 1 ) = *( pd->data + i + PIXEL_RED );
+			*( j + 2 ) = *( pd->data + i + PIXEL_GREEN );
+			*( j + 3 ) = *( pd->data + i + PIXEL_BLUE );
+			
+			i += MAX_CHANNEL_RGBA;
+			j += MAX_CHANNEL_RGBA; // Because we're hard-coded 32 bits deep, 4 bytes
+			
 		}
-		else {
-			img = QImage(pd->width,  pd->height, 32, 0, QImage::LittleEndian);
-			Q_INT32 i = 0;
 
-			uchar *j = img.bits();
-			QString s;
-			while ( i < pd ->stride * pd -> height ) {
-
-				// Swap the bytes
-				*( j + PIXEL_ALPHA ) = *( pd->data + i + PIXEL_BLUE );
-				*( j + PIXEL_RED )   = *( pd->data + i + PIXEL_GREEN );
-				*( j + PIXEL_GREEN ) = *( pd->data + i + PIXEL_RED );
-				*( j + PIXEL_BLUE )  = *( pd->data + i + PIXEL_ALPHA );
-
-				i += MAX_CHANNEL_RGBA;
-				j += MAX_CHANNEL_RGBA; // Because we're hard-coded 32 bits deep, 4 bytes
-
-			}
-		}
+#else
+		img = QImage(pd -> data, pd -> width, pd -> height, pd -> depth * CHAR_BIT, 0, 0, QImage::LittleEndian);
+#endif
 
 		m_pixio.putImage(&m_pixmap, 0, 0, &img);
 		painter.drawPixmap(x, y, m_pixmap, 0, 0, width, height);

@@ -97,12 +97,13 @@ KisPaintDevice::KisPaintDevice(Q_INT32 width, Q_INT32 height, const enumImgType&
         m_owner = 0;
         m_name = name;
         m_projectionValid = false;
+	m_compositeOp = COMPOSITE_OVER;
 }
 
 KisPaintDevice::KisPaintDevice(KisImageSP img, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
 {
         init();
-        configure(img, width, height, imgType, name);
+        configure(img, width, height, imgType, name, COMPOSITE_OVER);
 }
 
 KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& name)
@@ -124,6 +125,7 @@ KisPaintDevice::KisPaintDevice(KisTileMgrSP tm, KisImageSP img, const QString& n
         m_owner = img;
         m_name = name;
         m_projectionValid = false;
+	m_compositeOp = COMPOSITE_OVER;
 }
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs)
@@ -152,6 +154,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), super(rhs
                 m_alpha = rhs.m_alpha;
                 m_projectionValid = false;
                 m_name = rhs.m_name;
+		m_compositeOp = COMPOSITE_OVER;
         }
 }
 
@@ -197,7 +200,11 @@ void KisPaintDevice::invalidate()
         invalidate(0, 0, width(), height());
 }
 
-void KisPaintDevice::configure(KisImageSP image, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name)
+void KisPaintDevice::configure(KisImageSP image, 
+			       Q_INT32 width, Q_INT32 height, 
+			       const enumImgType& imgType, 
+			       const QString& name, 
+			       CompositeOp compositeOp)
 {
         if (image == 0 || name.isEmpty())
                 return;
@@ -218,6 +225,7 @@ void KisPaintDevice::configure(KisImageSP image, Q_INT32 width, Q_INT32 height, 
         m_owner = image;
         m_name = name;
         m_projectionValid = false;
+	m_compositeOp = compositeOp;	
 }
 
 void KisPaintDevice::update()

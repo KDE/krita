@@ -69,12 +69,12 @@ class KisAlphaMask {
 	   Q_INT32 alphaPos). That would be fastest, or we could
 	   provide an iterator over the mask, that would be nice, too.
 	*/
-	QUANTUM alphaAt(Q_INT32 x, Q_INT32 y) const;
+	QUANTUM alphaAt(Q_INT32 x, Q_INT32 y);
 
 private:
 
-	void computeAlpha(const QImage& img);
-	void copyAlpha(const QImage& img);
+	void computeAlpha();
+	void copyAlpha();
 
 	QValueVector<Q_INT32> m_data;
 	double m_scale;

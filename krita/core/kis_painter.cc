@@ -625,6 +625,17 @@ void KisPainter::paintAt(const QPoint & pos,
                          const Q_INT32 /*xTilt*/,
                          const Q_INT32 /*yTilt*/)
 {
+	// Painting should be implemented according to the following algorithm:
+	// retrieve brush
+	// if brush == mask
+	//          retrieve mask
+	// else if brush == image
+	//          retrieve image
+	// subsample (mask | image) for position -- pos should be double!
+	// apply filters to mask (colour | gradient | pattern | etc.
+	// composite filtered mask into temporary layer
+	// composite temporary layer into target layer
+	// @see: doc/brush.txt
 
 #if 0
         kdDebug() << "paint: " << pos.x() << ", " << pos.y() << endl;
@@ -646,6 +657,23 @@ void KisPainter::paintAt(const QPoint & pos,
 			    y,
 			    m_dab -> width(),
 			    m_dab -> height());
+}
+
+
+float KisPainter::eraseLine(const QPoint &pos1,
+			const QPoint &pos2,
+			const Q_INT32 pressure,
+			const Q_INT32 xTilt,
+			const Q_INT32 yTilt,
+			const float savedDist)
+{
+}
+
+void KisPainter::eraseAt(const QPoint &pos,
+			 const Q_INT32 pressure,
+			 const Q_INT32 /*xTilt*/,
+			 const Q_INT32 /*yTilt*/) 
+{
 }
 
 void KisPainter::setBrush(KisBrush* brush)

@@ -1,6 +1,6 @@
 * The tabs for images inside a document seem to be broken :-(
 * Brush cursor shapes for tools (updating cursors from the tools doesn't work yet).
-* Give each layer its own imagetype; allow layers of diverse types in one image.
+* Give each layer its own imagetype; allow layers of diverse types in one image. Add layer composition choice
 * Option dialog for tools
 * Make tools kparts
 * Fix scrollbars

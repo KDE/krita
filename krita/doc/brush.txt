@@ -1,0 +1,36 @@
+Painting with brushes
+
+:.,I don't know anything, nada, zilch, noppes about writing paint applications. So
+when I started working on Krita, I felt I needed examples. I used the following
+sources:
+
+* The old Krita brush code (http://webcvs.kde.org/cgi-bin/cvsweb.cgi/koffice/krita/tools/kis_tool_brush.cc?rev=1.58&content-type=text/x-cvsweb-markup)
+* Peter Jodda's Perico (http://software.jodda.de/perico.html)
+* The source of the Gimp (both current and 0.99.11 -- the oldest version I could find) (http://www.gimp.org)
+* David Hodson's article on Gimp brushes (http://members.ozemail.com.au/~hodsond/gimpbrush.html)
+* Raph Levien's article on Gimp brushes (http://www.levien.com/gimp/brush-arch.html)
+
+Krita uses the gimp's brush file formats: .gbr and .gih, for singe
+and pipeline brushes, respectively. These brushes contain one or more
+grayscale or rgba images. If the image is grayscale, the gray image is
+intended to be used as an alpha mask: each gray level corresponds to
+a certain alpha level, and when painting the current painting colour
+is composited in the image with this level as its alpha component. The
+image brushes should be masked -- i.e., these are coloured images placed
+on a white background. The white background should be made transparent,
+and then the brush image can be composited onto our image.
+
+This is currently only half supported: I make masks of everything,
+partly because I like that better, partly because until very recently
+there was no way of making out the difference between gray and rgb
+brushes because KisBrush didn't remember that bit of data.
+
+Making the initial mask of a brush is however by now pretty well done; the next
+problem is painting with those masks.
+
+Here we have two situations, one easy, one difficult. The easy one is the single
+mouse click. If the user clicks or taps with his stylus, we can composite the 
+mask or the image at the pixel position of the mouse click.
+
+The difficult situation is drawing a line. This line needs to be antialiased.
+

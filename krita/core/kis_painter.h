@@ -117,8 +117,8 @@ public:
 	QRect dirtyRect();
 
 	// ------------------------------------------------------------------------------------------
-	// Draw a line between pos1 and pos2 using the currently set brush and color. Returns
-	// the drag distance, that is the remains of the distance between p1 and p2 not covered
+	// Draw a line between pos1 and pos2 using the currently set brush and color. 
+	// @Return the drag distance, that is the remains of the distance between p1 and p2 not covered
 	// because the currenlty set brush has a spacing greater than that distance.
 	float paintLine(const QPoint &pos1,
 			const QPoint &pos2,
@@ -129,19 +129,40 @@ public:
 
 	// Draw a spot at pos using the currently set brush and color
 	void paintAt(const QPoint &pos,
-		     const Q_INT32 /*pressure*/,
+		     const Q_INT32 pressure,
+		     const Q_INT32 /*xTilt*/,
+		     const Q_INT32 /*yTilt*/);
+
+
+	// ------------------------------------------------------------------------------------------
+	// Erase the line between pos1 and pos2 to transparency or the background color (depending on
+	// the type of the paint device.
+	// @Return the drag distance, that is the remains of the distance between p1 and p2 not covered
+	// because the currenlty set brush has a spacing greater than that distance.
+	float eraseLine(const QPoint &pos1,
+			const QPoint &pos2,
+			const Q_INT32 pressure,
+			const Q_INT32 xTilt,
+			const Q_INT32 yTilt,
+			const float savedDist);
+
+	// Erase to the background color or transparency (depending on the type of the paint device)
+	// using the currently set brush.
+	void eraseAt(const QPoint &pos,
+		     const Q_INT32 pressure,
 		     const Q_INT32 /*xTilt*/,
 		     const Q_INT32 /*yTilt*/);
 
 	// ------------------------------------------------------------------------------------------
-	// Set the parameters for the higher level graphics primitives. These primiti
-
+	// Set the parameters for the higher level graphics primitives.
 	void setBrush(KisBrush* brush);
 	void setPattern(KisPattern& pattern) { m_pattern = &pattern; }
 	void setGradient(KisGradient& gradient) { m_gradient = &gradient; }
 	void setPaintColor(const KoColor& color) {m_paintColor = color; }
 	void setFillColor(const KoColor& color) { m_fillColor = color; }
 	void setOpacity(QUANTUM opacity) { m_opacity = opacity; }
+
+
 
 
 private:
@@ -166,6 +187,7 @@ private:
 	KisLayerSP m_dab;
 	KoColor m_paintColor;
 	KoColor m_fillColor;
+
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;

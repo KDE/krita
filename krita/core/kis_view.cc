@@ -1596,7 +1596,7 @@ void KisView::placeSidebarLeft()
 */
 void KisView::preferences()
 {
-//    PreferencesDialog::editPreferences();
+//	PreferencesDialog::editPreferences();
 }
 
 Q_INT32 KisView::docWidth() const

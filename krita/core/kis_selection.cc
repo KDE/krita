@@ -165,7 +165,7 @@ void KisSelection::setBounds(Q_INT32 parentX, Q_INT32 parentY, Q_INT32 width, Q_
 		KisPainter gc;
 
 		// TODO if the parent is linked... copy from all linked layers?!?
-		configure(m_img, width, height, m_img -> imgType(), m_name);
+		configure(m_img, width, height, m_img -> imgType(), m_name, COMPOSITE_OVER);
 		gc.begin(this);
 		gc.bitBlt(0, 0, COMPOSITE_COPY, m_parent, parentX - m_parent -> x(), parentY - m_parent -> y(), width, height);
 		super::move(parentX, parentY);

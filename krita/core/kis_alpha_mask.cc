@@ -56,12 +56,12 @@ double KisAlphaMask::scale()
 	return m_scale;
 }
 
-QUANTUM KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
+QUANTUM KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y)
 {
 
 	if (!m_valid) {
 		// Defer computing mask until actually needed
-		computeAlpha(m_img);
+		computeAlpha();
 		m_valid = true;
 	}
 
@@ -75,16 +75,16 @@ QUANTUM KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
 }
 
 
-void KisAlphaMask::copyAlpha(const QImage& img) 
+void KisAlphaMask::copyAlpha() 
 {
-	m_scaledWidth = img.width();
-	m_scaledHeight = img.height();
-	for (int y = 0; y < img.height(); y++) {
-		for (int x = 0; x < img.width(); x++) {
+	m_scaledWidth = m_img.width();
+	m_scaledHeight = m_img.height();
+	for (int y = 0; y < m_img.height(); y++) {
+		for (int x = 0; x < m_img.width(); x++) {
 			// Wish it were this simple: this makes a mask, like the Gimp uses, but I like my
 			// own solution better, and so do my kids
 			// m_data.push_back(255 - qAlpha(img.pixel(x,y)));
-                        QRgb c = img.pixel(x,y);
+                        QRgb c = m_img.pixel(x,y);
                         QUANTUM a = ((255 - qRed(c))
                                      + (255 - qGreen(c))
                                      + (255 - qBlue(c))) / 3;
@@ -94,18 +94,18 @@ void KisAlphaMask::copyAlpha(const QImage& img)
 	}
 }
 
-void KisAlphaMask::computeAlpha(const QImage& img) 
+void KisAlphaMask::computeAlpha() 
 {
 
 	if (m_scale != 1) {
-		QImage scaledImg = img.smoothScale((int)(img.width() * scale), 
-						   (int)(img.height() * scale));
+		m_img = m_img.smoothScale((int)(m_img.width() * m_scale), 
+					  (int)(m_img.height() * m_scale));
 		
 	}
-	computeAlpha(m_img);
+	computeAlpha();
 
-	m_scaledWidth = img.width();
-	m_scaledHeight = img.height();
+	m_scaledWidth = m_img.width();
+	m_scaledHeight = m_img.height();
 
 	// The brushes are mostly grayscale on a white background,
 	// although some do have a colors. The alpha channel is seldom
@@ -119,17 +119,18 @@ void KisAlphaMask::computeAlpha(const QImage& img)
 	// not the same, we have a real coloured brush, and are
 	// knackered for the nonce.
 
-	if (!img.allGray()) {
-		copyAlpha(img);
+	if (!m_img.allGray()) {
+		copyAlpha();
 	}
 	else {
 		// All gray -- any colour is alpha mask
-		for (int y = 0; y < img.height(); y++) {
-			for (int x = 0; x < img.width(); x++) {
-				m_data.push_back (255 - qRed(img.pixel(x,y)));
+		for (int y = 0; y < m_img.height(); y++) {
+			for (int x = 0; x < m_img.width(); x++) {
+				m_data.push_back (255 - qRed(m_img.pixel(x,y)));
 			}
 			
 		}
 	}
 	
 }
+

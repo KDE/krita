@@ -24,7 +24,9 @@
 #include <qrect.h>
 #include <qvaluelist.h>
 #include <qstring.h>
+
 #include <koColor.h>
+
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_render.h"
@@ -59,16 +61,26 @@ public:
         virtual bool read(KoStore *store);
 
 public:
-        virtual void configure(KisImageSP image, Q_INT32 width, Q_INT32 height, const enumImgType& imgType, const QString& name);
+        virtual void configure(KisImageSP image, 
+			       Q_INT32 width, Q_INT32 height, 
+			       const enumImgType& imgType, 
+			       const QString& name,
+			       CompositeOp compositeOp);
+
         virtual KisTileMgrSP data();
         virtual const KisTileMgrSP data() const;
+
         virtual bool shouldDrawBorder() const;
+
         virtual void move(Q_INT32 x, Q_INT32 y);
         virtual void move(const QPoint& pt);
+
         virtual void update();
         virtual void update(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-        virtual const bool visible() const;
+
+	virtual const bool visible() const;
         virtual void visible(bool v);
+
         /**
          * Reimplemented by KisSelection; here it does nothing useful, but it
          * cannot be abstract, because otherwise this class would be abstract.
@@ -86,6 +98,7 @@ public:
 
         // fill c and opacity with the values found at x and y
         bool pixel(Q_INT32 x, Q_INT32 y, KoColor *c, QUANTUM *opacity);
+
         // Set the specified pixel to the specified color. Note that this
         // bypasses KisPainter. the PaintDevice is here used as an equivalent
         // to QImage, not QPixmap. This means that this is undoable; also,
@@ -98,30 +111,45 @@ public:
         bool alpha() const;
         enumImgType type() const;
         enumImgType typeWithAlpha() const;
+
+	CompositeOp compositeOp() { return m_compositeOp; }
+	void setCompositeOp(CompositeOp compositeOp) { m_compositeOp = compositeOp;}
+
         KisTileMgrSP shadow();
         const KisTileMgrSP shadow() const;
+
         Q_INT32 quantumSize() const;
         Q_INT32 quantumSizeWithAlpha() const;
+
         QRect bounds() const;
+
         Q_INT32 x() const;
         void setX(Q_INT32 x);
+
         Q_INT32 y() const;
         void setY(Q_INT32 y);
+
         Q_INT32 width() const;
         Q_INT32 height() const;
+
         void clip(Q_INT32 *offx, Q_INT32 *offy, Q_INT32 *offw, Q_INT32 *offh) const;
         QRect clip() const;
         void setClip(Q_INT32 offx, Q_INT32 offy, Q_INT32 offw, Q_INT32 offh);
+
         bool cmap(KoColorMap& cm);
         KoColor colorAt();
+
         KisImageSP image();
         const KisImageSP image() const;
         void setImage(KisImageSP image);
+
         void resize(Q_INT32 w, Q_INT32 h);
         void resize(const QSize& size);
         void resize();
+
         void expand(Q_INT32 w, Q_INT32 h);
         void expand(const QSize& size);
+
         void offsetBy(Q_INT32 x, Q_INT32 y);
 
 signals:
@@ -157,6 +185,8 @@ private:
         QPixmap m_projection;
         bool m_projectionValid;
         QString m_name;
+	// Operation used to composite this layer with the layers _under_ this layer
+	CompositeOp m_compositeOp;
 };
 
 #endif // KIS_PAINT_DEVICE_H_

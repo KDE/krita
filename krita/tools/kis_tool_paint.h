@@ -35,6 +35,8 @@ class KisCanvasSubject;
 enum enumBrushMode {
 	PAINT,
 	PAINT_STYLUS,
+	ERASE,
+	ERASE_STYLUS,
 	HOVER
 };
 

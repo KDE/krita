@@ -1,8 +1,10 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=MakroRecorder
+Name[pt_BR]=MakroRecorder
 Exec=makro_recorder --server
 Comment=Torben's Makro Recorder
+Comment[pt_BR]=Gravador de Macros
 RepoID=IDL:KOM/PluginFactory:1.0,
 ActivationMode=shared
 Type=GUIPlugin
@@ -18,12 +20,14 @@ Slot=start
 Menu=Extra
 Name=Start Makro Recording
 Name[de]=Starte Makro Aufzeichnung
+Name[pt_BR]=Iniciar Gravação de Macro
 [Stop]
 Icon=unknown.xpm
 MiniIcon=unknown.xpm
 Slot=stop
 Menu=Extra
 Name=Stop Makro Recording
+Name[pt_BR]=Encerrar gravação de macro
 Name[de]=Beende Makro Aufzeichnung
 [Play]
 Icon=unknown.xpm
@@ -31,4 +35,5 @@ MiniIcon=unknown.xpm
 Slot=play
 Menu=Extra
 Name=Playback Makro
+Name[pt_BR]=Executar Macro
 Name[de]=Spiele Makro ab

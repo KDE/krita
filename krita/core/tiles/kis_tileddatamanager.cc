@@ -312,17 +312,14 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 	// This is nessesary as new changes might have been done since last rollback (automatic filters)
 	for(int i = 0; i < 1024; i++)
 	{
-		KisTile *tile = memento->m_redoHashTable[i];
-
-		while(tile)
-		{
-			KisTile *deltile = tile;
-			tile = tile->getNext();
-			delete deltile;
-		}
+		memento->deleteAll(memento->m_redoHashTable[i]);
 		memento->m_redoHashTable[i]=0;
 	}
-
+	
+	// Also clear the table of deleted tiles
+	memento->deleteAll(memento->m_delTilesTable);
+	memento->m_delTilesTable = 0;
+	
 	// Now on to the real rollback
 	for(int i = 0; i < 1024; i++)
 	{

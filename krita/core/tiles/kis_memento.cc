@@ -37,38 +37,35 @@ KisMemento::~KisMemento()
 	// Deep delete every tile
 	for(int i = 0; i < 1024; i++)
 	{
-		KisTile *tile = m_hashTable[i];
-		
-		// delete from the normal hashtable
-		while(tile)
-		{
-			KisTile *deltile = tile;
-			tile = tile->getNext();
-			delete deltile;
-		}
-		
-		// delete from the redo hashtable
-		tile = m_redoHashTable[i];
-		
-		while(tile)
-		{
-			KisTile *deltile = tile;
-			tile = tile->getNext();
-			delete deltile;
-		}
+		deleteAll(m_hashTable[i]);
+		deleteAll(m_redoHashTable[i]);
 	}
 	delete [] m_hashTable;
 	delete [] m_redoHashTable;
 	
 	// Finally delete the list of deleted tiles
+	deleteAll(m_delTilesTable);
+}
+
+void KisMemento::deleteAll(DeletedTile *deletedtile)
+{
 	// They are not tiles just references. The actual tiles have already been deleted,
 	// so just delete the references.
-	DeletedTile *deletedtile = m_delTilesTable;
 	while(deletedtile)
 	{
 		DeletedTile *d = deletedtile;
 		deletedtile = deletedtile->next;
 		delete d;
+	}
+}
+
+void KisMemento::deleteAll(KisTile *tile)
+{
+	while(tile)
+	{
+		KisTile *deltile = tile;
+		tile = tile->getNext();
+		delete deltile;
 	}
 }
 

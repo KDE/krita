@@ -37,6 +37,7 @@
 #include "kis_global.h"
 
 class KisBrush;
+class DCOPObject;
 
 class KisImage : public QObject {
 	Q_OBJECT
@@ -44,6 +45,9 @@ class KisImage : public QObject {
 public:
 	KisImage(const QString& name, int width, int height, cMode cm = cm_RGBA, uchar bitDepth = 8);
 	virtual ~KisImage();
+
+        virtual DCOPObject* dcopObject();
+
 
 	KisPaintDevice* getCurrentPaintDevice();
 	KisChannel* getCurrentChannel();
@@ -70,7 +74,7 @@ public:
 	void markDirty(const QRect& rect);
 
 	void setAutoUpdate(bool autoUpdate = true);
-	
+
 	void paintContent(QPainter& painter, const QRect& rect, bool transparent = false);
 	void paintPixmap(QPainter *painter, const QRect& area);
 
@@ -105,7 +109,7 @@ protected:
 	void compositeImage(const QRect& rect = QRect());
 	void compositeTile( int x, int y, KisLayer *dstLay = 0, int dstTile = -1 );
 	void convertTileToPixmap( KisLayer *lay, int tileNo, QPixmap *pix );
-	void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay, 
+	void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay,
 			KisLayer *dstLay, int dstTile );
 	void renderTileQuadrant( const KisLayer *srcLay, int srcTile, KisLayer *dstLay,
 			int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
@@ -146,78 +150,79 @@ private:
 
 	QPtrList<QPixmap> m_dirtyTiles;
 	bool m_autoUpdate;
+        DCOPObject* m_dcop;
 
 //	QTimer* m_timer;
 };
 
-QPtrList<KisLayer> KisImage::layerList() 
-{ 
-	return m_layers; 
+QPtrList<KisLayer> KisImage::layerList()
+{
+	return m_layers;
 }
 
 int KisImage::height()
-{ 
-	return m_height; 
+{
+	return m_height;
 }
 
-int KisImage::width()        
-{ 
-	return m_width; 
+int KisImage::width()
+{
+	return m_width;
 }
 
-QSize KisImage::size()         
-{ 
-	return QSize(m_width, m_height); 
+QSize KisImage::size()
+{
+	return QSize(m_width, m_height);
 }
 
-QRect KisImage::imageExtents() 
-{ 
-	return QRect(0, 0, m_width, m_height); 
+QRect KisImage::imageExtents()
+{
+	return QRect(0, 0, m_width, m_height);
 }
 
-QString KisImage::name()         
-{ 
-	return m_name; 
+QString KisImage::name()
+{
+	return m_name;
 }
 
-QString KisImage::author()       
-{ 
-	return m_author; 
+QString KisImage::author()
+{
+	return m_author;
 }
 
-QString KisImage::email()        
-{ 
-	return m_email; 
+QString KisImage::email()
+{
+	return m_email;
 }
 
-cMode KisImage::colorMode()    
-{ 
-	return m_cMode; 
-} 
-
-uchar KisImage::bitDepth()     
-{ 
-	return m_bitDepth; 
+cMode KisImage::colorMode()
+{
+	return m_cMode;
 }
 
-void KisImage::setName(const QString& n)    
-{ 
-	m_name = n; 
+uchar KisImage::bitDepth()
+{
+	return m_bitDepth;
 }
 
-void KisImage::setAuthor(const QString& a)  
-{ 
-	m_author = a; 
+void KisImage::setName(const QString& n)
+{
+	m_name = n;
 }
 
-void KisImage::setEmail(const QString& e)  
-{ 
-	m_email = e; 
+void KisImage::setAuthor(const QString& a)
+{
+	m_author = a;
 }
 
-int KisImage::getCurrentLayerIndex() 
-{ 
-	return m_layers.find(m_activeLayer); 
+void KisImage::setEmail(const QString& e)
+{
+	m_email = e;
+}
+
+int KisImage::getCurrentLayerIndex()
+{
+	return m_layers.find(m_activeLayer);
 }
 
 #endif

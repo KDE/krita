@@ -12,7 +12,8 @@ libkiscore_la_SOURCES = kis_view.cc kis_channel.cc kis_layer.cc kis_image.cc \
 	kis_cursor.cc kis_timer.cc \
     kis_selection.cc kis_framebuffer.cc kis_painter.cc kis_tool_factory.cc \
 	KRayonViewIface.skel KRayonViewIface.cc kis_tiles.cc kis_tile.cc \
-	kis_paint_device.cc
+	kis_paint_device.cc KIsImageIface.skel KIsImageIface.cc KIsDocIface.skel \
+	KIsDocIface.cc
 
 libkiscore_la_METASOURCES = AUTO
 

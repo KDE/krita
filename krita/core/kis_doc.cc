@@ -49,15 +49,17 @@
 #include "kis_channel.h"
 #include "kis_selection.h"
 #include "kis_framebuffer.h"
+#include "KIsDocIface.h"
 
 /*
     KisDoc - constructor ko virtual method implemented
 */
 
-KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) 
+KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
 	: KoDocument(parentWidget, widgetName, parent, name, singleViewMode)
 {
 	bool loadPlugins = true;
+        dcop = 0;
 	setInstance(KisFactory::global(), loadPlugins);
 	m_command_history = new KCommandHistory(actionCollection(), false);
 	m_current_view = 0;
@@ -70,6 +72,9 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 
 	connect(m_command_history, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored));
 	connect(m_command_history, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted));
+        if ( name )
+            dcopObject();
+
 }
 
 /*
@@ -99,6 +104,25 @@ KisDoc::~KisDoc()
 	delete m_pSelection;
 	delete m_pFrameBuffer;
 	delete m_command_history;
+        delete dcop;
+}
+
+DCOPObject* KisDoc::dcopObject()
+{
+    if ( !dcop )
+        dcop = new KIsDocIface( this );
+
+    return dcop;
+}
+
+
+KisImage* KisDoc::imageNum( unsigned int _num )
+{
+    if( _num> m_Images.count())
+        return 0L;
+    else
+        return m_Images.at(_num);
+
 }
 
 /*
@@ -137,7 +161,7 @@ bool KisDoc::initDoc()
 	if (ret == KoTemplateChooseDia::Template) {
 		KisImage *img = newImage(name, 512, 512, cm_RGBA, 8);
 
-		if (!img) 
+		if (!img)
 			return false;
 
 		// add background layer
@@ -163,7 +187,7 @@ bool KisDoc::initDoc()
 		// NewDialog for entering parameters
 		ok = slotNewImage();
 		// signal to tabbar for images
-		if(ok) 
+		if(ok)
 			emit imageListUpdated();
 	}
 
@@ -388,7 +412,7 @@ bool KisDoc::completeSaving( KoStore* store )
         for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
         {
 		// XXX
-#if 0 
+#if 0
             for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel() )
             {
                 QString image = QString( "image%1" ).arg( imageNumbers );

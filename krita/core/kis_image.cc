@@ -34,6 +34,7 @@
 #include "kis_global.h"
 #include "kis_timer.h"
 #include "kis_image.h"
+#include "KIsImageIface.h"
 
 #define KIS_DEBUG(AREA, CMD)
 
@@ -48,6 +49,9 @@ KisImage::KisImage(const QString& name, int w, int h, cMode cm, uchar bd)
 	m_author = i18n("The Krita team");
 	m_email = "kimageshop@mail.kde.org";
 	m_autoUpdate = true;
+
+	m_dcop = 0;
+	//dcopObject(); // build it
 
 	QRect tileExtents = KisUtil::findTileExtents(QRect(0, 0, m_width, m_height));
 
@@ -74,7 +78,7 @@ KisImage::KisImage(const QString& name, int w, int h, cMode cm, uchar bd)
 
 	m_imgTile.create(TILE_SIZE, TILE_SIZE, m_bitDepth);
 	m_activeLayer = 0;
-    
+
 	m_composeLayer = new KisLayer("_compose", TILE_SIZE, TILE_SIZE, bd, cm);
 	m_composeLayer -> allocateRect(QRect(0, 0, TILE_SIZE, TILE_SIZE));
 
@@ -123,9 +127,20 @@ KisImage::~KisImage()
 	delete[] m_pixmapTiles;
 	delete m_composeLayer;
 	delete m_bgLayer;
+        delete m_dcop;
 	// XXX m_layers;
 	// XXX m_channels;
 }
+
+
+DCOPObject* KisImage::dcopObject()
+{
+    if (!m_dcop)
+	m_dcop = new KIsImageIface(this);
+
+    return m_dcop;
+}
+
 
 void KisImage::upperLayer(unsigned int layer)
 {
@@ -260,7 +275,7 @@ void KisImage::paintContent(QPainter& painter, const QRect& rect, bool /*transpa
 
 void KisImage::paintPixmap(QPainter *p, const QRect& area)
 {
-	if (!p) 
+	if (!p)
 		return;
 
 	int startX, startY, pixX, pixY, clipX, clipY = 0;
@@ -837,16 +852,16 @@ void KisImage::resizePixmap(KisLayer *lay, const QRect& rect)
 		int old_m_xTiles = m_xTiles;
 		int old_m_yTiles = m_yTiles;
 
-		if (tmpXTiles > m_xTiles) 
+		if (tmpXTiles > m_xTiles)
 			m_xTiles = tmpXTiles;
-		
-		if (tmpYTiles > m_yTiles) 
+
+		if (tmpYTiles > m_yTiles)
 			m_yTiles = tmpYTiles;
 
-		if (rect.width() > m_width)  
+		if (rect.width() > m_width)
 			m_width = rect.width();
 
-		if (rect.height() > m_height) 
+		if (rect.height() > m_height)
 			m_height = rect.height();
 
 		// setup dirty flag array
@@ -940,9 +955,9 @@ KisChannel* KisImage::getCurrentChannel()
 	return m_activeChannel;
 }
 
-KisLayer* KisImage::getCurrentLayer() 
-{ 
-	return m_activeLayer; 
+KisLayer* KisImage::getCurrentLayer()
+{
+	return m_activeLayer;
 }
 
 #include "kis_image.moc"

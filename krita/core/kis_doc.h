@@ -38,6 +38,7 @@
 
 class NewDialog;
 class KisImage;
+class DCOPObject;
 
 //class KisView;
 //class KisSelection;
@@ -68,6 +69,7 @@ public:
 	virtual bool loadXML(QIODevice *, const QDomDocument& doc);
 	virtual bool completeLoading(KoStore *store);
 	virtual bool completeSaving(KoStore*);
+    virtual DCOPObject* dcopObject();
 
 	virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);
 
@@ -101,6 +103,9 @@ public:
 	 * Return apointer to the current image.
 	 */
 	KisImage* current() const;
+
+    KisImage* imageNum( unsigned int _num );
+
 
 	/*
 	 * Return the name of the current image.
@@ -237,7 +242,7 @@ protected:
 
 	/* save images */
 	QDomElement saveImages(QDomDocument& doc);
-    
+
 	/* save layers */
 	QDomElement saveLayers(QDomDocument& doc, KisImage* img);
 
@@ -279,6 +284,8 @@ private:
 	KisFrameBuffer *m_pFrameBuffer;
 
 	ktvector m_tools;
+        DCOPObject *dcop;
+
 };
 
 #endif // __kis_doc_h__

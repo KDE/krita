@@ -24,6 +24,7 @@
 #include <math.h>
 #include <cfloat>
 #include <qpoint.h>
+#include "kis_point.h"
 
 /*
  * vector classes
@@ -35,6 +36,7 @@ class KisVector2D
 	KisVector2D();
 	KisVector2D(double x, double y);
 	KisVector2D(const QPoint& p);
+	KisVector2D(const KisPoint& p);
 
 	bool isNull()	const;
 
@@ -72,6 +74,8 @@ class KisVector2D
 	friend inline KisVector2D operator/(const KisVector2D &, long);
 	friend inline KisVector2D operator/(const KisVector2D &, double);
    
+	KisPoint toKisPoint() const;
+
 	// This ought to be:
 	//const double epsilon = DBL_EPSILON;
 	#define epsilon DBL_EPSILON
@@ -88,6 +92,11 @@ inline KisVector2D::KisVector2D(double x, double y)
 { m_x=x; m_y=y; }
 
 inline KisVector2D::KisVector2D(const QPoint& p)
+{
+  m_x=p.x(); m_y=p.y();
+}
+
+inline KisVector2D::KisVector2D(const KisPoint& p)
 {
   m_x=p.x(); m_y=p.y();
 }
@@ -189,6 +198,11 @@ inline KisVector2D &KisVector2D::operator/=(double c)
 		m_y/=c;
 	}
 	return *this;
+}
+
+inline KisPoint KisVector2D::toKisPoint() const
+{
+	return KisPoint(m_x, m_y);
 }
 
 class KisVector3D

@@ -21,6 +21,7 @@
 
 #include <qmap.h>
 #include <qcolor.h>
+#include <qstringlist.h>
 
 #include <ksharedptr.h>
 #include <koColor.h>
@@ -28,24 +29,30 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_channelinfo.h"
+#include "kis_profile.h"
 
 class QPainter;
 class KisIteratorPixel;
 class KisPixel;
 class KisPixelRO;
 
+// XXX: This class contains a default profile as state data,
+//      and there is currently no way to use the profile associated
+//      with the image here.
 class KisStrategyColorSpace : public KShared {
 
 
 public:
-	KisStrategyColorSpace();
+
 	/**
 	 * Create a new colorspace strategy.
 	 * 
 	 * @param name The user-friendly name of this strategy
 	 * @param cmType The littlecms colorstrategy type we wrap.
+	 * @param colorSpaceSignature The icc signature for the colorspace we are.
 	 */
-	KisStrategyColorSpace(const QString& name, Q_UINT32 cmType);
+	KisStrategyColorSpace(const QString& name, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature);
+
 	virtual ~KisStrategyColorSpace();
 
 public:
@@ -64,8 +71,6 @@ public:
 	// Return a vector describing all the channels this color model has.
 	virtual vKisChannelInfoSP channels() const = 0;
 	
-	virtual Q_UINT32 colorModelType() { return m_cmType; };
-
 	/**
 	 * The total number of channels for a single pixel in this color model
 	 */
@@ -90,9 +95,9 @@ public:
 	/**
 	 * This function is used to convert a KisPixelRepresentation to another color strategy.
 	 */
-	virtual void convertTo(KisPixel& src, KisPixel& dst,  KisStrategyColorSpaceSP cs);
+	virtual void convertTo(KisPixel& src, KisPixel& dst, KisStrategyColorSpaceSP srcColorSpace);
 	
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const = 0;
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) = 0;
 
 	/**
 	 * Compose two arrays of pixels together. If source and target
@@ -110,6 +115,14 @@ public:
 			    Q_INT32 cols, 
 			    CompositeOp op);
 
+
+	void setColorSpaceType(Q_UINT32 type) { m_cmType = type; }
+	Q_UINT32 colorSpaceType() { return m_cmType; }
+
+	void setColorSpaceSignature(icColorSpaceSignature signature) { m_colorSpaceSignature = signature; }
+	icColorSpaceSignature colorSpaceSignature() { return m_colorSpaceSignature; }
+
+
 	/**
 	 * Set the icm profile for conversion between color spaces
 	 * 
@@ -121,8 +134,33 @@ public:
 	/**
 	 * Get the icm profile for conversion between color spaces.
 	 */
-	cmsHPROFILE getProfile() { return m_profile; }
+	cmsHPROFILE profile() { return m_profile; }
 
+
+	/**
+	 * Get a list of profiles that apply to this color space
+	 */
+	vKisProfileSP profiles() { return m_profiles; }
+
+	/**
+	 * Reload the profiles from disk
+	 */
+	void resetProfiles();
+
+	/**
+	 * Return the number of profiles available for this color space
+	 */
+	Q_INT32 profileCount() const { return m_profiles.count(); }
+
+
+	/**
+	 * Return the profile associated with the given product name,
+	 * or 0.
+	 */
+	KisProfileSP getProfileByName(const QString & name);
+
+	cmsHTRANSFORM displayTransform() { return m_displayTransform; }
+	void setDisplayTransform(cmsHTRANSFORM displayTransform) { m_displayTransform = displayTransform; }
 
 protected:
 
@@ -133,7 +171,7 @@ protected:
 	 *
 	 * This uses littlecms by default with default icm profiles.
 	 */
-	virtual void convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 srcLen);
+	virtual void convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcColorSpace, QUANTUM * dst, Q_UINT32 srcLen);
 
 	
 	/**
@@ -151,20 +189,25 @@ protected:
 			    CompositeOp op) = 0;
 
 
+
+private:
+
 	QString m_name;    // The user-friendly name
 	Q_UINT32 m_cmType; // The colorspace type as defined by littlecms
-	
+	icColorSpaceSignature m_colorSpaceSignature; // The colorspace signature as defined in icm/icc files
+
 	typedef QMap<Q_UINT32, cmsHTRANSFORM>  TransformMap;
 	TransformMap m_transforms; // Cache for existing transforms
 
- 	cmsHPROFILE m_profile; // THe default profile for this color strategy
+	cmsHTRANSFORM m_displayTransform;
 
-private:
+ 	cmsHPROFILE m_profile; // THe default profile for this color strategy
 
 	KisStrategyColorSpace(const KisStrategyColorSpace&);
 	KisStrategyColorSpace& operator=(const KisStrategyColorSpace&);
 	
-	
+	vKisProfileSP m_profiles;
+	QStringList m_profileFilenames;	
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_H_

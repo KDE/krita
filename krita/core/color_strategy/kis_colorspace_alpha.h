@@ -51,7 +51,7 @@ public:
 	virtual bool alpha() const;
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const { return 0; };
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const;
+	virtual QImage convertToQImage(const QUANTUM *data, bool applyMonitorProfile, Q_INT32 width, Q_INT32 height, Q_INT32 stride);
 
 	virtual void setMaskColor(KoColor c) { m_maskColor = c; }
 	virtual void setInverted(bool b) { m_inverted = b; }

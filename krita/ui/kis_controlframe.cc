@@ -30,7 +30,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <koColorChooser.h>
 #include <koFrameButton.h>
 
 #include "kis_controlframe.h"

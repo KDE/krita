@@ -1,4 +1,4 @@
-/*
+ /*
  *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can CYANistribute it and/or modify
@@ -25,46 +25,30 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "kis_config.h"
 #include "kis_image.h"
 #include "kis_strategy_colorspace_cmyk.h"
+#include "kis_colorspace_registry.h"
 #include "tiles/kispixeldata.h"
 #include "kis_iterators_pixel.h"
 
 #include "kis_resource.h"
 #include "kis_resourceserver.h"
 #include "kis_resource_mediator.h"
+#include "kis_factory.h"
 #include "kis_profile.h"
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_CMYK = 4;
-	// Is it actually possible to have transparency with CMYK?
-	const Q_INT32 MAX_CHANNEL_CMYKA = 5;
 }
 
-
-
-
-KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK(bool alpha) :
-	KisStrategyColorSpace()
+KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
+	KisStrategyColorSpace("CMYYK", TYPE_CMYK_8, icSigCmykData)
 {
-// 	setProfile(cmsCreateNullProfile());
-	m_alpha = alpha;
-
 	m_channels.push_back(new KisChannelInfo(i18n("cyan"), 0, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("magenta"), 1, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("yellow"), 2, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("black"), 3, COLOR));
-
-
-	if (alpha) {
-		m_name = "CMYK/Alpha";
-		// Custom definition for cmyka
-		m_cmType = (COLORSPACE_SH(PT_CMYK) | CHANNELS_SH(4) | BYTES_SH(1) | EXTRA_SH(1));
-		m_channels.push_back(new KisChannelInfo(i18n("alpha"), 4, ALPHA));
-	} else {
-		m_name = "CMYK";
-		m_cmType = TYPE_CMYK_8;
-	}
 }
 
 KisStrategyColorSpaceCMYK::~KisStrategyColorSpaceCMYK()
@@ -81,40 +65,24 @@ void KisStrategyColorSpaceCMYK::nativeColor(const KoColor& c, QUANTUM *dst)
 
 void KisStrategyColorSpaceCMYK::nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst)
 {
-#if 0
-	kdDebug() << "KisStrategyColorSpaceCMYK::nativeColor: "
-		  << "R: " << c.R()
-		  << ", G: " << c.G()
-		  << ", B: " << c.B()
-		  << " -- " 
-		  << " C: " << c.C()
-		  << ", M: " << c.M()
-		  << ", Y: " << c.Y()
-		  << ", K: " << c.K()
-		  << "\n";
-#endif
 	dst[PIXEL_CYAN] = upscale( c.C() );
 	dst[PIXEL_MAGENTA] = upscale( c.M() );
 	dst[PIXEL_YELLOW] = upscale( c.Y() );
 	dst[PIXEL_BLACK] = upscale( c.K() );
-
-	if (m_alpha)
-		dst[PIXEL_CMYK_ALPHA] = opacity;
-       
 }
 
 void KisStrategyColorSpaceCMYK::toKoColor(const QUANTUM *src, KoColor *c)
 {
-	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
+	c -> setCMYK(downscale(src[PIXEL_CYAN]), 
+		     downscale(src[PIXEL_MAGENTA]), 
+		     downscale(src[PIXEL_YELLOW]), 
+		     downscale(src[PIXEL_BLACK]));
 }
 
 void KisStrategyColorSpaceCMYK::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity)
 {
 	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
-	if (m_alpha)
-		*opacity = src[PIXEL_CMYK_ALPHA];
-	else
-		*opacity = OPACITY_OPAQUE;
+	*opacity = OPACITY_OPAQUE;
 }
 
 vKisChannelInfoSP KisStrategyColorSpaceCMYK::channels() const
@@ -124,15 +92,12 @@ vKisChannelInfoSP KisStrategyColorSpaceCMYK::channels() const
 
 bool KisStrategyColorSpaceCMYK::alpha() const
 {
-	return m_alpha;
+	return false;
 }
 
 Q_INT32 KisStrategyColorSpaceCMYK::depth() const
 {
-	if (m_alpha)
-		return MAX_CHANNEL_CMYKA;
-	else
-		return MAX_CHANNEL_CMYK;
+	return MAX_CHANNEL_CMYK;
 }
 
 Q_INT32 KisStrategyColorSpaceCMYK::nColorChannels() const
@@ -140,13 +105,117 @@ Q_INT32 KisStrategyColorSpaceCMYK::nColorChannels() const
 	return MAX_CHANNEL_CMYK;
 }
 
-QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
+QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride)
 {
-	QImage img(width, height, 32, 0, QImage::LittleEndian);
-	Q_INT32 i = 0;
-	uchar *j = img.bits();
+	kdDebug() << "convertToQImage: (" << width << ", " << height << ")\n";
 
-	// XXX: Convert using littlecms
+	// Determine rgb profile to use in this transform
+	KisConfig cfg;
+	QString monitorProfileName = cfg.monitorProfile();
+	cmsHPROFILE monitorProfile = 0;
+
+	if (profile() == 0) {
+		kdDebug() << "Get the very first profile that matches our color space signature.\n";
+		vKisProfileSP profileList = profiles();
+		vKisProfileSP::iterator it;
+		for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+			kdDebug() << (*it) -> productName() << "\n";
+			if ((*it) -> colorSpaceSignature() == colorSpaceSignature()) {
+				kdDebug() << "Found cmyk profile << " << (*it) -> productName() << "!\n";
+				setProfile((*it) -> profile());
+				break;
+			}
+		}
+	}
+
+	if (profile() != 0) {
+		
+ 		if (displayTransform() == 0) {
+			kdDebug() << "Going to create transform for monitor profile: " << monitorProfileName << "\n";
+			if (cfg.applyMonitorProfileOnCopy() && monitorProfileName != "None") {
+				kdDebug() << "Going to retrieve profile from list\n";
+
+				KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get("RGBA");
+				if (cs != 0) {
+					vKisProfileSP profileList = cs -> profiles();
+
+					vKisProfileSP::iterator it;
+					for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+						if ((*it) -> productName() == monitorProfileName) {
+							kdDebug() << "Found monitorprofile: " << (*it) -> productName() << "\n";
+							monitorProfile = (*it) -> profile();
+							break;
+						}
+					}
+				}
+			}
+
+			if (monitorProfile == 0) {
+				kdDebug() << "Profile still 0, going to create one\n";
+				monitorProfile = cmsCreate_sRGBProfile();
+			}
+			
+			kdDebug() << "Going to create transform\n";
+			setDisplayTransform(cmsCreateTransform(profile(), 
+							       colorSpaceType(), 
+							       monitorProfile,
+							       TYPE_BGRA_8, 
+							       cfg.renderIntent(),
+							       cmsFLAGS_MATRIXONLY));
+			kdDebug() << "Transform created and cached\n";
+ 		}
+ 		else {
+ 			kdDebug() << "Using cached transform\n";
+ 		}
+	}
+	
+
+
+	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
+	
+	if (displayTransform() != 0) {
+		kdDebug() << "Going to transform with profiles\n";
+		int pixels = width * height;
+		cmsDoTransform(displayTransform(), 
+			       const_cast<QUANTUM *>(data), 
+			       img.bits(), 
+			       pixels);
+	}
+	else {
+		kdDebug() << "Going to transform without profiles\n";
+
+		// XXX: Temporary copy from cmyka.cc
+		Q_INT32 i = 0;
+		uchar *j = img.bits();
+		
+		while ( i < stride * height ) {
+			QUANTUM k = *( data + i + PIXEL_BLACK );
+			QUANTUM c = *( data + i + PIXEL_CYAN );
+			QUANTUM m = *( data + i + PIXEL_MAGENTA );
+			QUANTUM y = *( data + i + PIXEL_YELLOW );
+			
+			c = c * ( QUANTUM_MAX - k) + k;
+			m = m * ( QUANTUM_MAX - k) + k;
+			y = y * ( QUANTUM_MAX - k) + k;
+			
+			// XXX: Temporary copy
+			const PIXELTYPE PIXEL_BLUE = 0;
+			const PIXELTYPE PIXEL_GREEN = 1;
+			const PIXELTYPE PIXEL_RED = 2;
+			const PIXELTYPE PIXEL_ALPHA = 3;
+
+			*( j + PIXEL_ALPHA ) = OPACITY_OPAQUE ;
+			*( j + PIXEL_RED )   = QUANTUM_MAX - c;
+			*( j + PIXEL_GREEN ) = QUANTUM_MAX - m;
+			*( j + PIXEL_BLUE )  = QUANTUM_MAX - y;
+			
+			i += 4;
+			j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
+                
+		}
+
+	}
+	
 
 	return img;
 }
@@ -163,7 +232,6 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 				       CompositeOp op)
 {
 	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
-	QUANTUM alpha = OPACITY_OPAQUE;
 	QUANTUM *d;
 	QUANTUM *s;
 	Q_INT32 i;
@@ -191,33 +259,16 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 		break;
 	case COMPOSITE_OVER:
 	default:
+		if (opacity == OPACITY_TRANSPARENT) return;
+
 		while (rows-- > 0) {
 			d = dst;
 			s = src;
 			for (i = cols; i > 0; i--, d += stride, s += stride) {
-				// XXX: this is probably incorrect. CMYK simulates ink; layers of
-				// ink over ink until a certain maximum, QUANTUM_MAX arbitrarily
-				// is reached. We invert the opacity because opacity_transparent
-				// and opacity_opaque were designed for RGB, which works the other
-				// way around.
-				alpha = (QUANTUM_MAX - opacity) + (QUANTUM_MAX - alpha);
-				if (alpha >= OPACITY_OPAQUE) // OPAQUE is CMYK transparent
-					continue;
-				if (s[PIXEL_CYAN] > alpha) {
-					d[PIXEL_CYAN] = d[PIXEL_CYAN] + (s[PIXEL_CYAN] - alpha);
-				}
-				if (s[PIXEL_MAGENTA] > alpha) {
-					d[PIXEL_MAGENTA] = d[PIXEL_MAGENTA] + (s[PIXEL_MAGENTA] - alpha);
-				}
-				if (s[PIXEL_YELLOW] > alpha) {
-					d[PIXEL_YELLOW] = d[PIXEL_YELLOW]  + (s[PIXEL_YELLOW] - alpha);
-				}
-				if (s[PIXEL_BLACK] > alpha) {
-					d[PIXEL_BLACK] = d[PIXEL_BLACK] + (s[PIXEL_BLACK] - alpha);
-				}
-				if (m_alpha) {
-					d[PIXEL_CMYK_ALPHA] = alpha; // XXX: this is certainly incorrect.
-				}
+				d[PIXEL_CYAN] = (d[PIXEL_CYAN] * OPACITY_OPAQUE  + s[PIXEL_CYAN] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
+				d[PIXEL_MAGENTA] = (d[PIXEL_MAGENTA] * OPACITY_OPAQUE + s[PIXEL_MAGENTA] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
+				d[PIXEL_YELLOW] = (d[PIXEL_YELLOW] * OPACITY_OPAQUE + s[PIXEL_YELLOW] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
+				d[PIXEL_BLACK] = (d[PIXEL_BLACK] * OPACITY_OPAQUE + s[PIXEL_BLACK] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
 			}
 			dst += dststride;
 			src += srcstride;

@@ -36,11 +36,12 @@ const PIXELTYPE PIXEL_BLACK = 3;
 const PIXELTYPE PIXEL_CMYK_ALPHA = 4;
 
 class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
- public:
-	KisStrategyColorSpaceCMYK(bool alpha);
+
+public:
+	KisStrategyColorSpaceCMYK();
 	virtual ~KisStrategyColorSpaceCMYK();
 
- public:
+public:
 
 	virtual void nativeColor(const KoColor& c, QUANTUM *dst);
 	virtual void nativeColor(const KoColor& c, QUANTUM opacity, QUANTUM *dst);
@@ -56,7 +57,7 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const;
 	
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const;
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride);
 
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst, 
@@ -68,9 +69,8 @@ class KisStrategyColorSpaceCMYK : public KisStrategyColorSpace {
 			    Q_INT32 cols, 
 			    CompositeOp op);
 
- private:
+private:
 	vKisChannelInfoSP m_channels;
-	bool m_alpha;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_CMYK_H_

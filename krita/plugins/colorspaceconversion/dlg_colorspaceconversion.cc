@@ -46,15 +46,14 @@ DlgColorspaceConversion::DlgColorspaceConversion( QWidget *  parent,
 
 	m_page -> cmbColorSpaces -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
 
-	vKisProfileSP profileList = KisFactory::rServer() -> profiles();
-        vKisProfileSP::iterator it;
-        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-		m_page -> cmbSourceProfile -> insertItem((*it) -> productName());
-		m_page -> cmbDestProfile -> insertItem((*it) -> productName());
-	}
+	fillCmbProfiles(m_page -> cmbColorSpaces -> currentText());
+
 	// XXX: Until we have implemented high bit depth images
 	m_page -> cmbDepth -> setEnabled(false);
 	
+	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const QString &)), 
+		this, SLOT(fillCmbProfiles(const QString &)));
+
 
 	connect(this, SIGNAL(okClicked()),
 		this, SLOT(okClicked()));
@@ -72,5 +71,25 @@ void DlgColorspaceConversion::okClicked()
 {
 	accept();
 }
+
+
+void DlgColorspaceConversion::fillCmbProfiles(const QString & s) 
+{
+
+	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
+	m_page -> cmbSourceProfile -> clear();
+	m_page -> cmbDestProfile -> clear();
+
+	vKisProfileSP profileList = cs -> profiles();
+        vKisProfileSP::iterator it;
+        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+		m_page -> cmbSourceProfile -> insertItem((*it) -> productName());
+		m_page -> cmbDestProfile -> insertItem((*it) -> productName());
+
+	}
+	
+
+}
+
 
 #include "dlg_colorspaceconversion.moc"

@@ -38,29 +38,16 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_RGBA = 4;
 }
 
-KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB(bool alpha) :
-	KisStrategyColorSpace()
+KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
+	KisStrategyColorSpace("RGBA", TYPE_BGRA_8, icSigRgbData)
 {
 	setProfile(cmsCreate_sRGBProfile());
 
 	m_channels.push_back(new KisChannelInfo(i18n("red"), 2, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("green"), 1, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("blue"), 0, COLOR));
-
-	m_alpha = alpha;
-
-	if (alpha) {
-		m_channels.push_back(new KisChannelInfo(i18n("alpha"), 3, ALPHA));
-		m_name = "RGBA";
-		m_cmType = TYPE_RGBA_8;
-	} else {
-		m_name = "RGB";
-		m_cmType = TYPE_RGB_8;
-	}
-
-
-
-
+	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 3, ALPHA));
+	
 }
 
 KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
@@ -79,8 +66,7 @@ void KisStrategyColorSpaceRGB::nativeColor(const KoColor& c, QUANTUM opacity, QU
 	dst[PIXEL_RED] = upscale(c.R());
 	dst[PIXEL_GREEN] = upscale(c.G());
 	dst[PIXEL_BLUE] = upscale(c.B());
-	if (m_alpha)
-		dst[PIXEL_ALPHA] = opacity;
+	dst[PIXEL_ALPHA] = opacity;
 }
 
 void KisStrategyColorSpaceRGB::toKoColor(const QUANTUM *src, KoColor *c)
@@ -91,10 +77,7 @@ void KisStrategyColorSpaceRGB::toKoColor(const QUANTUM *src, KoColor *c)
 void KisStrategyColorSpaceRGB::toKoColor(const QUANTUM *src, KoColor *c, QUANTUM *opacity)
 {
 	c -> setRGB(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
-	if (m_alpha)
-		*opacity = src[PIXEL_ALPHA];
-	else
-		*opacity = OPACITY_OPAQUE;
+	*opacity = src[PIXEL_ALPHA];
 }
 
 vKisChannelInfoSP KisStrategyColorSpaceRGB::channels() const
@@ -104,15 +87,12 @@ vKisChannelInfoSP KisStrategyColorSpaceRGB::channels() const
 
 bool KisStrategyColorSpaceRGB::alpha() const
 {
-	return m_alpha;
+	return true;
 }
 
 Q_INT32 KisStrategyColorSpaceRGB::depth() const
 {
-	if (m_alpha)
-		return MAX_CHANNEL_RGBA;
-	else
-		return MAX_CHANNEL_RGB;
+	return MAX_CHANNEL_RGBA;
 }
 
 Q_INT32 KisStrategyColorSpaceRGB::nColorChannels() const
@@ -120,7 +100,7 @@ Q_INT32 KisStrategyColorSpaceRGB::nColorChannels() const
 	return MAX_CHANNEL_RGB;
 }
 
-QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
+QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride)
 {
 	QImage img;
 	
@@ -137,11 +117,8 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 		*( j + 2 ) = *( data + i + PIXEL_GREEN );
 		*( j + 3 ) = *( data + i + PIXEL_BLUE );
 		
-		if (m_alpha)
-			i += MAX_CHANNEL_RGBA;
-		else
-			i += MAX_CHANNEL_RGB;
-
+		i += MAX_CHANNEL_RGBA;
+		
 		j += MAX_CHANNEL_RGBA; // Because we're hard-coded 32 bits deep, 4 bytes
 		
 	}
@@ -169,7 +146,6 @@ void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 stride,
 				      Q_INT32 cols, 
 				      CompositeOp op)
 {
-	// XXX: Fix composite ops to take care of m_alpha flag.
 
 	switch (op) {
 	case COMPOSITE_UNDEF:

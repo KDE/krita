@@ -41,7 +41,6 @@ KisResourceServer::KisResourceServer()
 	loadpipeBrushes();
 	loadPatterns();
 	loadGradients();
-	loadProfiles();
 }
 
 KisResourceServer::~KisResourceServer()
@@ -76,14 +75,6 @@ void KisResourceServer::loadGradients()
 {
 	m_gradientFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_gradients", "*.ggr");
 	loadGradient();
-}
-
-
-void KisResourceServer::loadProfiles()
-{
-	m_profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.icm");
-	m_profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.ICM");
-	loadProfile();
 }
 
 void KisResourceServer::loadBrush()
@@ -152,22 +143,6 @@ void KisResourceServer::loadGradient()
 }
 
 
-void KisResourceServer::loadProfile()
-{
-	if (!m_profileFilenames.empty()) {
-		QString front = *m_profileFilenames.begin();
-		m_profileFilenames.pop_front();
-		KisProfile * profile = new KisProfile(front);
-
-		kdDebug() << "Going to load: " << front << "\n";
-
-		connect(profile, SIGNAL(loadComplete(KisResource*)), SLOT(profileLoaded(KisResource*)));
-		connect(profile, SIGNAL(ioFailed(KisResource*)), SLOT(profileLoadFailed(KisResource*)));
-
-		if (!profile -> loadAsync())
-			loadProfile();
-	}
-}
 
 void KisResourceServer::brushLoaded(KisResource *br)
 {
@@ -222,20 +197,6 @@ void KisResourceServer::gradientLoaded(KisResource *gradient)
 }
 
 
-void KisResourceServer::profileLoaded(KisResource *resource)
-{
-	if (resource && resource -> valid()) {
-		KisProfile * p = static_cast<KisProfile*>(resource);
-		m_profiles.push_back(p);
-		emit loadedProfile(p);
-		kdDebug() << "Profiles loaded; " << m_profiles.count() << "\n";
-	} else {
-		delete resource;
-	}
-
-	loadProfile();
-}
-
 void KisResourceServer::brushLoadFailed(KisResource *r)
 {
 	delete r;
@@ -258,13 +219,6 @@ void KisResourceServer::gradientLoadFailed(KisResource *r)
 {
 	delete r;
 	loadGradient();
-}
-
-
-void KisResourceServer::profileLoadFailed(KisResource *r)
-{
-	delete r;
-	loadProfile();
 }
 
 QPtrList<KisResource> KisResourceServer::brushes()
@@ -301,14 +255,5 @@ QPtrList<KisResource> KisResourceServer::gradients()
 }
 
 
-vKisProfileSP KisResourceServer::profiles()
-{
-	kdDebug()<< "Call to profiles\n";
-	if (m_profiles.empty())
-		
-		loadProfiles();
-
-	return m_profiles;
-}
 #include "kis_resourceserver.moc"
 

@@ -30,7 +30,6 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_pattern.h"
 #include "kis_gradient.h"
-#include "kis_profile.h"
 #include "kis_types.h"
 
 // XXX: Encapsulate resources in shared pointers.
@@ -47,14 +46,12 @@ public:
 	void loadpipeBrushes();
 	void loadPatterns();
 	void loadGradients();
-	void loadProfiles();
 
 public:
 	Q_INT32 brushCount() const { return m_brushes.count(); }
 	Q_INT32 pipebrushCount() const { return m_pipebrushes.count(); }
 	Q_INT32 patternCount() const { return m_patterns.count(); }
 	Q_INT32 gradientCount() const { return m_gradients.count(); }
-	Q_INT32 profileCount() const { return m_profiles.count(); }
 
 	
 	// XXX (BSAR): Does this mean the the lists are copied for every call?
@@ -62,17 +59,12 @@ public:
 	QPtrList<KisResource> pipebrushes();
 	QPtrList<KisResource> patterns();
 	QPtrList<KisResource> gradients();
-	// Profiles do not carry view-specified data, they can safely be shared,
-	// and will never be changed.
-	vKisProfileSP profiles();
-	
 
 signals:
 	void loadedBrush(KisResource *br);
 	void loadedpipeBrush(KisResource *br);
 	void loadedPattern(KisResource *pat);
 	void loadedGradient(KisResource *pat);
-	void loadedProfile(KisProfile *profile);
 
 private:
 
@@ -80,7 +72,6 @@ private:
 	void loadpipeBrush();
 	void loadPattern();
 	void loadGradient();
-	void loadProfile();
 
 	KisResourceServer(const KisResourceServer&);
 	KisResourceServer& operator=(const KisResourceServer&);
@@ -98,9 +89,6 @@ private slots:
 	void gradientLoaded(KisResource *r);
 	void gradientLoadFailed(KisResource *br);
 
-	void profileLoaded(KisResource *r);
-	void profileLoadFailed(KisResource *br);
-
 private:
 	QPtrList<KisResource> m_brushes;
 	QStringList m_brushFilenames;
@@ -114,8 +102,6 @@ private:
 	QPtrList<KisResource> m_gradients;
 	QStringList m_gradientFilenames;
 
-	vKisProfileSP m_profiles;
-	QStringList m_profileFilenames;
 };
 
 #endif // KIS_RESOURCESERVER_H_

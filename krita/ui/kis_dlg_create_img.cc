@@ -28,6 +28,7 @@
 
 #include <klocale.h>
 #include <kcolorcombo.h>
+#include <kdebug.h>
 
 #include <koUnitWidgets.h>
 
@@ -63,12 +64,11 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth,
 	m_page -> cmbColorSpaces -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
 	m_page -> cmbColorSpaces -> setCurrentText(colorStrategyName);
 
-	vKisProfileSP profileList = KisFactory::rServer() -> profiles();
-        vKisProfileSP::iterator it;
-        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-		m_page -> cmbProfile -> insertItem((*it) -> productName());
-	}
-	
+	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const QString &)), 
+		this, SLOT(fillCmbProfiles(const QString &)));
+
+	fillCmbProfiles(colorStrategyName);
+
 }
 
 KisDlgCreateImg::~KisDlgCreateImg()
@@ -118,7 +118,7 @@ QString KisDlgCreateImg::imgName() const
 double KisDlgCreateImg::imgResolution() const
 {
 	return m_page -> doubleResolution -> value();
-}
+ }
 
 QString KisDlgCreateImg::imgDescription() const
 {
@@ -127,7 +127,10 @@ QString KisDlgCreateImg::imgDescription() const
 
 KisProfileSP KisDlgCreateImg::profile() const
 {
-	vKisProfileSP resourceslist = KisFactory::rServer() -> profiles();
+	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(m_page -> cmbColorSpaces -> currentText());
+	if (!cs) return 0;
+
+	vKisProfileSP resourceslist = cs -> profiles();
 	Q_UINT32 index = m_page -> cmbProfile -> currentItem();
 	
 	if (resourceslist.count() == 0 || 
@@ -139,6 +142,19 @@ KisProfileSP KisDlgCreateImg::profile() const
 		return resourceslist.at(index - 1);
 	}
 	
+}
+
+void KisDlgCreateImg::fillCmbProfiles(const QString & s) 
+{
+	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
+	m_page -> cmbProfile -> clear();
+	vKisProfileSP profileList = cs -> profiles();
+        vKisProfileSP::iterator it;
+        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+			m_page -> cmbProfile -> insertItem((*it) -> productName());
+	}
+	
+
 }
 
 #include "kis_dlg_create_img.moc"

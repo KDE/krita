@@ -18,18 +18,25 @@
  */
 
 #include <kdebug.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kinstance.h>
 
 #include "kis_strategy_colorspace.h"
 #include "kis_pixel.h"
 #include "kis_global.h"
 #include "kis_factory.h"
+#include "kis_profile.h"
 
-KisStrategyColorSpace::KisStrategyColorSpace() {}
-
-KisStrategyColorSpace::KisStrategyColorSpace(const QString& name, Q_UINT32 cmType) 
+KisStrategyColorSpace::KisStrategyColorSpace(const QString& name, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature) 
 	: m_name(name),
-	  m_cmType(cmType)
+	  m_cmType(cmType),
+	  m_colorSpaceSignature(colorSpaceSignature),
+	  m_displayTransform(0),
+	  m_profile(0)
 {	
+	// Load all profiles that are suitable for this colorspace signature
+	resetProfiles();
 }
 
 KisStrategyColorSpace::~KisStrategyColorSpace()
@@ -39,6 +46,8 @@ KisStrategyColorSpace::~KisStrategyColorSpace()
 		cmsDeleteTransform(it.data());
         }
 	m_transforms.clear();
+	m_profile = 0;
+	if (m_displayTransform != 0) cmsDeleteTransform(m_displayTransform);
 }
 
 void KisStrategyColorSpace::convertTo(KisPixel& /*src*/, KisPixel& /*dst*/,  KisStrategyColorSpaceSP /*cs*/)
@@ -49,17 +58,19 @@ void KisStrategyColorSpace::convertTo(KisPixel& /*src*/, KisPixel& /*dst*/,  Kis
 
 void KisStrategyColorSpace::convertPixels(QUANTUM * src, KisStrategyColorSpaceSP srcSpace, QUANTUM * dst, Q_UINT32 numPixels)
 {
- 	if (!m_transforms.contains(srcSpace -> colorModelType())) {
- 		cmsHTRANSFORM tf = cmsCreateTransform(srcSpace -> getProfile(), 
-						      srcSpace -> colorModelType(), 
-						      getProfile(),
+	kdDebug() << "convertPixels for " << numPixels << " pixels.\n";
+
+ 	if (!m_transforms.contains(srcSpace -> colorSpaceType())) {
+ 		cmsHTRANSFORM tf = cmsCreateTransform(srcSpace -> profile(), 
+						      srcSpace -> colorSpaceType(), 
+						      profile(),
 						      m_cmType, 
 						      INTENT_PERCEPTUAL,
 						      0);
-		m_transforms[srcSpace -> colorModelType()] = tf;
+		m_transforms[srcSpace -> colorSpaceType()] = tf;
  	}
 
-	cmsHTRANSFORM tf = m_transforms[srcSpace -> colorModelType()];
+	cmsHTRANSFORM tf = m_transforms[srcSpace -> colorSpaceType()];
 
 	cmsDoTransform(tf, src, dst, numPixels);
 }
@@ -121,3 +132,33 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 
 }
 
+void KisStrategyColorSpace::resetProfiles() 
+{
+	// XXX: Should find a way to make sure not all profiles are loaded for all color strategies
+	m_profiles.clear();
+	m_profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.icm");
+	m_profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.ICM");
+	if (!m_profileFilenames.empty()) {
+		KisProfile * profile = 0;
+		for ( QStringList::Iterator it = m_profileFilenames.begin(); it != m_profileFilenames.end(); ++it ) {
+			profile = new KisProfile(*it);
+			profile -> loadAsync();
+			if (profile -> valid() && profile -> colorSpaceSignature() == m_colorSpaceSignature) {
+				m_profiles.push_back(profile);
+			}
+		}
+	}
+}
+
+KisProfileSP KisStrategyColorSpace::getProfileByName(const QString & name)
+{
+	vKisProfileSP::iterator it;
+	
+	for ( it = m_profiles.begin(); it != m_profiles.end(); ++it ) {
+		if ((*it) -> productName() == name) {
+			return *it;
+		}
+	}
+	return 0;
+
+}

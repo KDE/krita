@@ -37,7 +37,6 @@ class KisGradientWidget;
 class KisBrush;
 class KisPattern;
 class KisGradient;
-class KoColorChooser;
 class ControlFrame;
 
 enum ActiveColor { ac_Foreground, ac_Background};

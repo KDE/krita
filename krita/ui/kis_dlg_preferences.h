@@ -98,6 +98,12 @@ public:
 	
 	ColorSettingsTab( QWidget *parent = 0, const char * name = 0 );
 
+private slots:
+
+	void refillMonitorProfiles(const QString & s);
+	void refillPrintProfiles(const QString & s);
+	void refillImportProfiles(const QString & s);
+
 public:
 
 	WdgColorSettings * m_page;
@@ -116,6 +122,7 @@ class PreferencesDialog : public KDialogBase
 public:
 
 	static void editPreferences();
+
 
 protected:
 

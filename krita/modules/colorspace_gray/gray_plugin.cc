@@ -65,9 +65,7 @@ GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
 	// This is not a gui plugin; only load it when the doc is created.
 	if ( parent->inherits("KisPluginRegistry") )
 	{
-		m_StrategyColorSpaceGrayA = new KisStrategyColorSpaceGrayscale(true);
-		m_StrategyColorSpaceGray = new KisStrategyColorSpaceGrayscale(false);
-		KisPluginRegistry::instance() -> registerColorStrategy("Grayscale", m_StrategyColorSpaceGray);
+		m_StrategyColorSpaceGrayA = new KisStrategyColorSpaceGrayscale();
 		KisPluginRegistry::instance() -> registerColorStrategy("Grayscale/Alpha", m_StrategyColorSpaceGrayA);
 	}
 	

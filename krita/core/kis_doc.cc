@@ -608,20 +608,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 		else if ((yres = attr.toInt()) < 0 || yres > cfg.maxImgHeight())
 			yres = 100.0;
 		
-		if ((profileProductName = element.attribute("profile")).isNull()) {
-			profile = 0;
-		}
-		else {
-			vKisProfileSP profileList = KisFactory::rServer() -> profiles();
-			vKisProfileSP::iterator it;
-			
-			for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-				if ((*it) -> productName() == profileProductName) {
-					profile = (*it);
-					break;
-				}
-			}
-		}
+
 
 		if ((colorspacename = element.attribute("colorspacename")).isNull())
 		{
@@ -651,7 +638,16 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 			}
 		}
 
-		img = new KisImage(this, width, height, KisColorSpaceRegistry::instance()->colorSpace(colorspacename), name);
+		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> colorSpace(colorspacename);
+
+		if ((profileProductName = element.attribute("profile")).isNull()) {
+			profile = 0;
+		}
+		else {
+			profile = cs -> getProfileByName(profileProductName);
+		}
+
+		img = new KisImage(this, width, height, cs, name);
 		img -> setDescription(description);
 		img -> setResolution(xres, yres);
 		img -> setProfile(profile);

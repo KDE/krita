@@ -18,7 +18,6 @@
 #ifndef KIS_CONFIG_H_
 #define KIS_CONFIG_H_
 
-#include <map>
 #include "kis_global.h"
 
 class KisConfig {
@@ -72,7 +71,10 @@ public:
 	bool askProfileOnPaste() const;
 	void setAskProfileOnPaste(bool askProfileOnPaste);
 
-	Q_INT32 renderIntent() const;
+	bool applyMonitorProfileOnCopy() const;
+	void setApplyMonitorProfileOnCopy(bool applyMonitorProfileOnCopy);
+
+	Q_INT32 renderIntent();
 	void setRenderIntent(Q_INT32 renderIntent);
 
 

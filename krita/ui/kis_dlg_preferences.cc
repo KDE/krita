@@ -175,24 +175,76 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 	m_page -> cmbPrintingColorSpace -> insertStringList(KisColorSpaceRegistry::instance() -> listColorSpaceNames());
 	m_page -> cmbPrintingColorSpace -> setCurrentText(cfg.printerColorSpace());
 
-	vKisProfileSP profileList = KisFactory::rServer() -> profiles();
-        vKisProfileSP::iterator it;
-        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-		m_page -> cmbMonitorProfile -> insertItem((*it) -> productName());
-		m_page -> cmbImportProfile -> insertItem((*it) -> productName());
-		m_page -> cmbPrintProfile -> insertItem((*it) -> productName());
-	}
-	m_page -> cmbMonitorProfile -> setCurrentText(cfg.monitorProfile());
-	m_page -> cmbImportProfile -> setCurrentText(cfg.importProfile());
-	m_page -> cmbPrintProfile -> setCurrentText(cfg.printerProfile());
+	refillMonitorProfiles(cfg.workingColorSpace());
+	refillPrintProfiles(cfg.printerColorSpace());
+	refillImportProfiles(cfg.workingColorSpace());
+
+ 	m_page -> cmbMonitorProfile -> setCurrentText(cfg.monitorProfile());
+ 	m_page -> cmbImportProfile -> setCurrentText(cfg.importProfile());
+ 	m_page -> cmbPrintProfile -> setCurrentText(cfg.printerProfile());
 	m_page -> chkBlackpoint -> setChecked(cfg.useBlackPointCompensation());
 	m_page -> chkDither8Bit -> setChecked(cfg.dither8Bit());
 	m_page -> chkAskOpen -> setChecked(cfg.askProfileOnOpen());
 	m_page -> chkAskPaste -> setChecked(cfg.askProfileOnPaste());
+	m_page -> chkApplyMonitorOnCopy -> setChecked(cfg.applyMonitorProfileOnCopy());
 	m_page -> grpIntent -> setButton(cfg.renderIntent());
+
+	connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const QString &)), 
+		this, SLOT(refillMonitorProfiles(const QString &)));
+
+	connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const QString &)), 
+		this, SLOT(refillImportProfiles(const QString &)));
+
+	connect(m_page -> cmbPrintingColorSpace, SIGNAL(activated(const QString &)), 
+		this, SLOT(refillPrintProfiles(const QString &)));
+
 
 }
 
+
+void ColorSettingsTab::refillMonitorProfiles(const QString & s)
+{
+
+	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
+	m_page -> cmbMonitorProfile -> clear();
+	vKisProfileSP profileList = cs -> profiles();
+        vKisProfileSP::iterator it;
+        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+		if ((*it) -> deviceClass() == icSigDisplayClass)
+			m_page -> cmbMonitorProfile -> insertItem((*it) -> productName());
+	}
+	
+
+}
+
+void ColorSettingsTab::refillPrintProfiles(const QString & s)
+{
+
+	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
+	m_page -> cmbPrintProfile -> clear();
+	vKisProfileSP profileList = cs -> profiles();
+        vKisProfileSP::iterator it;
+        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+		if ((*it) -> deviceClass() == icSigOutputClass)
+			m_page -> cmbPrintProfile -> insertItem((*it) -> productName());
+	}
+	
+
+}
+
+void ColorSettingsTab::refillImportProfiles(const QString & s)
+{
+	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
+	m_page -> cmbImportProfile -> clear();
+	vKisProfileSP profileList = cs -> profiles();
+        vKisProfileSP::iterator it;
+        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+		if ((*it) -> deviceClass() == icSigInputClass)
+			m_page -> cmbImportProfile -> insertItem((*it) -> productName());
+	}
+	
+
+}
 
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 	: KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default | Apply, Ok, parent, name, true, true )
@@ -237,9 +289,9 @@ void PreferencesDialog::editPreferences()
 		cfg.setDither8Bit( dialog -> m_colorSettings -> m_page -> chkDither8Bit -> isChecked());
 		cfg.setAskProfileOnOpen( dialog -> m_colorSettings -> m_page -> chkAskOpen -> isChecked());
 		cfg.setAskProfileOnPaste( dialog -> m_colorSettings -> m_page -> chkAskPaste -> isChecked());
+		cfg.setApplyMonitorProfileOnCopy( dialog -> m_colorSettings -> m_page -> chkApplyMonitorOnCopy -> isChecked());
 		cfg.setRenderIntent( dialog -> m_colorSettings -> m_page -> grpIntent -> selectedId());
-
-
+		
 	}
 }
 

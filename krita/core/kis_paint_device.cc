@@ -706,6 +706,7 @@ QImage KisPaintDevice::convertToQImage(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 
 		pd -> data = new QUANTUM[pd -> depth * pd -> width * pd -> height];
 		tiles() -> readPixelData(pd);
 
+		// XXX: determine whether to apply the monitor profile or based on the copy setting
 		image = colorStrategy() -> convertToQImage(pd -> data, pd -> width, pd -> height, pd -> stride);
 	}
 

@@ -32,6 +32,9 @@
 
 #include "kis_resource.h"
 
+//XXX: Profiles should be loaded by the color strategies
+//     and be available only through the color strategy 
+//     that matches the profile's color model
 class KisProfile : public KisResource, public KShared {
 	typedef KisResource super;
 	Q_OBJECT
@@ -45,16 +48,19 @@ public:
 	virtual bool saveAsync();
 	virtual QImage img();
 
-	icColorSpaceSignature colorSpace() const { return m_colorSpace; }
+	icColorSpaceSignature colorSpaceSignature() const { return m_colorSpaceSignature; }
+	icProfileClassSignature deviceClass() const { return m_deviceClass; }
 	QString productName() const { return m_productName; }
 	QString productDescription() const { return m_productDescription; }
 	QString productInfo() const { return m_productInfo; }
 	QString manufacturer() const { return m_manufacturer; }
 
+	cmsHPROFILE profile() const { return m_profile; }
 private:
 
 	cmsHPROFILE m_profile;
-	icColorSpaceSignature m_colorSpace;
+	icColorSpaceSignature m_colorSpaceSignature;
+	icProfileClassSignature m_deviceClass;
 	QString m_productName;
 	QString m_productDescription;
 	QString m_productInfo;

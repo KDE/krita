@@ -29,6 +29,7 @@
 #include "kis_factory.h"
 #include "kis_aboutdata.h"
 #include "kis_resourceserver.h"
+#include "kis_plugin_registry.h"
 #include "kis_doc.h"
 
 KAboutData* KisFactory::s_aboutData = 0;
@@ -42,8 +43,9 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
 	(void)global();
 	s_rserver = new KisResourceServer;
-	// Initially load the profiles
-	s_rserver -> profiles();
+	// Initialize singletons
+	KisPluginRegistry::instance();
+	
 }
 
 KisFactory::~KisFactory()

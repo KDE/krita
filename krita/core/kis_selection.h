@@ -39,13 +39,7 @@ const QUANTUM MIN_SELECTED = OPACITY_OPAQUE;
 
 /**
  * KisSelection contains a byte-map representation of a layer, where
- * the value of a byte signifies whether a corresponding pixel is selected, or not,
- * and an array or QPointArray's that represent the boundaries of the areas of a
- * possibly discontinuous selection. The points in the point array 'walk around'
- * the selected area clock-wise.
- *
- * Other types of selection could store a rect, a circle, a path --
- * whatever. Optimisation, not implemented yet.
+ * the value of a byte signifies whether a corresponding pixel is selected, or not.
  *
  */
 class KisSelection : public KisPaintDevice {

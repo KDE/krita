@@ -33,7 +33,7 @@ const PIXELTYPE PIXEL_GRAY_ALPHA = 1;
 
 class KisStrategyColorSpaceGrayscale : public KisStrategyColorSpace {
 public:
-	KisStrategyColorSpaceGrayscale(bool alpha);
+	KisStrategyColorSpaceGrayscale();
 	virtual ~KisStrategyColorSpaceGrayscale();
 
 public:
@@ -52,7 +52,7 @@ public:
 	virtual Q_INT32 depth() const;
 	virtual Q_INT32 nColorChannels() const;
 	
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const;
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride);
 
 
 	virtual void bitBlt(Q_INT32 stride,
@@ -67,7 +67,6 @@ public:
 
 private:
 	vKisChannelInfoSP m_channels;
-	bool m_alpha;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_

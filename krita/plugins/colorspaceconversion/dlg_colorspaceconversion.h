@@ -45,7 +45,7 @@ public:
 private slots:
 
 	void okClicked();
-
+	void fillCmbProfiles(const QString &);
 };
 
 #endif // DLG_COLORSPACECONVERSION

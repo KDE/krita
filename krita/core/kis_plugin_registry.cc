@@ -32,19 +32,12 @@
 #include "kis_types.h"
 #include "kis_tool.h"
 
-// XXX: is this a candidate for KStaticDeleter?
-namespace {
-	KisPluginRegistry moveMe; // XXX Where to create singletons in Krita?
-}
-
 KisPluginRegistry *KisPluginRegistry::m_singleton = 0;
-
-
 
 KisPluginRegistry::KisPluginRegistry()
 	: super()
 {
-// 	kdDebug() << "Creating plugin registry\n";
+ 	kdDebug() << "Creating plugin registry\n";
 
 	KisPluginRegistry::m_singleton = this;
 
@@ -65,18 +58,17 @@ KisPluginRegistry::KisPluginRegistry()
 
 		if (plugin) {
 			// guiFactory()->addClient(plugin);
-
-// 			kdDebug() << "KisPluginRegistry: Loaded plugin "
-// 				  << (*iter) -> name() << endl;
 		}
 	}
 
 }
 
-
-
 KisPluginRegistry *KisPluginRegistry::instance()
 {
+	if (KisPluginRegistry::m_singleton == 0) {
+		KisPluginRegistry::m_singleton = new KisPluginRegistry();
+	}
+		
 	return KisPluginRegistry::m_singleton;
 }
 
@@ -86,7 +78,7 @@ KisPluginRegistry::~KisPluginRegistry()
 
 void KisPluginRegistry::registerColorStrategy(const QString & /*name*/, KisStrategyColorSpaceSP colorspace)
 {
-// 	kdDebug() << "Adding color strategy: " << name << "\n";
+
 	KisColorSpaceRegistry::instance() -> add(colorspace);
 }
 

@@ -37,7 +37,6 @@
 #include "kis_profile.h"
 #include "kis_resource.h"
 #include "kis_resourceserver.h"
-#include "kis_factory.h"
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_config.h"
@@ -74,12 +73,9 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 	m_page -> cmbColorSpaces -> hide();
 	m_page -> lblColorSpaces -> hide();
 
-	vKisProfileSP profileList = KisFactory::rServer() -> profiles();
 
-        vKisProfileSP::iterator it;
-        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-		m_page -> cmbProfile -> insertItem((*it) -> productName());
-	}
+	fillCmbProfiles(image -> colorStrategy() -> name());
+	
 	if (image -> profile()) {
 		m_page -> cmbProfile -> setCurrentText(image -> profile() -> productName());
 	}
@@ -97,6 +93,10 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 
 	connect(this, SIGNAL(okClicked()),
 		this, SLOT(okClicked()));
+
+
+	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const QString &)), 
+		this, SLOT(fillCmbProfiles(const QString &)));
 
 	
 }
@@ -127,7 +127,7 @@ void KisDlgImageProperties::okClicked()
 				 m_page -> doubleResolution -> value());
 	m_image -> setDescription(m_page -> txtDescription -> text());
 
-	vKisProfileSP profileList = KisFactory::rServer() -> profiles();
+	vKisProfileSP profileList = m_image -> colorStrategy() -> profiles();
 	Q_UINT32 index = m_page -> cmbProfile -> currentItem();
 
 	if (profileList.count() == 0 || 
@@ -138,6 +138,21 @@ void KisDlgImageProperties::okClicked()
 	else {
 		m_image -> setProfile(profileList.at(index - 1));
 	}
+}
+
+// XXX: Copy & paste from kis_dlg_create_img -- refactor to separate class
+void KisDlgImageProperties::fillCmbProfiles(const QString & s) 
+{
+
+	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
+	m_page -> cmbProfile -> clear();
+	vKisProfileSP profileList = cs -> profiles();
+        vKisProfileSP::iterator it;
+        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+		m_page -> cmbProfile -> insertItem((*it) -> productName());
+	}
+	
+
 }
 
 #include "kis_dlg_image_properties.moc"

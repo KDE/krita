@@ -64,10 +64,8 @@ RGBPlugin::RGBPlugin(QObject *parent, const char *name, const QStringList &)
 
  	if ( parent->inherits("KisPluginRegistry") )
  	{
-		m_StrategyColorSpaceRGB = new KisStrategyColorSpaceRGB(false);
-		m_StrategyColorSpaceRGBA = new KisStrategyColorSpaceRGB(true);
+		m_StrategyColorSpaceRGBA = new KisStrategyColorSpaceRGB();
 
-		KisPluginRegistry::instance() -> registerColorStrategy("RGB", m_StrategyColorSpaceRGB);
 		KisPluginRegistry::instance() -> registerColorStrategy("RGB/Alpha", m_StrategyColorSpaceRGBA);
  	}
 	

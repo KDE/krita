@@ -38,7 +38,6 @@ public:
 private:
 
 	KisView* m_view;
-	KisStrategyColorSpaceSP m_StrategyColorSpaceGray;
 	KisStrategyColorSpaceSP m_StrategyColorSpaceGrayA;
 };
 

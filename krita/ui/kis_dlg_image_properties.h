@@ -48,6 +48,8 @@ private slots:
 
 	void okClicked();
 
+	void fillCmbProfiles(const QString &);
+
 
 private:
 	

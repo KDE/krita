@@ -36,7 +36,6 @@ public:
 	
 private:
 
-	KisStrategyColorSpaceSP m_StrategyColorSpaceRGB;
 	KisStrategyColorSpaceSP m_StrategyColorSpaceRGBA;
 };
 

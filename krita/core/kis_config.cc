@@ -220,7 +220,18 @@ void KisConfig::setAskProfileOnPaste(bool askProfileOnPaste)
 }
 
 
-Q_INT32 KisConfig::renderIntent() const
+bool KisConfig::applyMonitorProfileOnCopy() const
+{
+	return m_cfg -> readBoolEntry("applyMonitorProfileOnCopy", false);
+}
+
+void KisConfig::setApplyMonitorProfileOnCopy(bool applyMonitorProfileOnCopy)
+{
+	m_cfg -> writeEntry("applyMonitorProfileOnCopy", applyMonitorProfileOnCopy);
+}
+
+
+Q_INT32 KisConfig::renderIntent()
 {
 	return m_cfg -> readNumEntry("renderIntent", INTENT_PERCEPTUAL);
 }

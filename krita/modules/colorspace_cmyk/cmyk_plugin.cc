@@ -46,6 +46,7 @@
 #include "cmyk_plugin.h"
 
 #include "kis_strategy_colorspace_cmyk.h"
+#include "kis_strategy_colorspace_cmyka.h"
 
 typedef KGenericFactory<CMYKPlugin> CMYKPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacmykplugin, CMYKPluginFactory( "krita" ) )
@@ -64,8 +65,8 @@ CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
 
 	if ( parent->inherits("KisPluginRegistry") )
 	{
-		m_StrategyColorSpaceCMYKA = new KisStrategyColorSpaceCMYK(true);
-		m_StrategyColorSpaceCMYK = new KisStrategyColorSpaceCMYK(false);
+		m_StrategyColorSpaceCMYKA = new KisStrategyColorSpaceCMYKA();
+		m_StrategyColorSpaceCMYK = new KisStrategyColorSpaceCMYK();
 
 		KisPluginRegistry::instance() -> registerColorStrategy("CMYK", m_StrategyColorSpaceCMYK);
 		KisPluginRegistry::instance() -> registerColorStrategy("CMYK/Alpha", m_StrategyColorSpaceCMYKA);

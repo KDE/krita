@@ -53,6 +53,10 @@ public:
 	QString imgDescription() const;
 	KisProfileSP profile() const;
 
+private slots:
+
+	void fillCmbProfiles(const QString &);
+
 private:
 
 	WdgNewImage * m_page;

@@ -1,4 +1,3 @@
-
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -43,11 +42,10 @@ namespace {
 }
 
 KisColorSpaceAlpha::KisColorSpaceAlpha() :
-	KisStrategyColorSpace("alpha mask", TYPE_GRAY_8)
+	KisStrategyColorSpace("alpha mask", TYPE_GRAY_8, icSigGrayData)
 {
 	m_maskColor = KoColor::white();
 	m_inverted = false;
-
 	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 0, ALPHA));
 }
 
@@ -95,7 +93,7 @@ Q_INT32 KisColorSpaceAlpha::depth() const
 	return MAX_CHANNEL_ALPHA;
 }
 
-QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height, Q_INT32 stride) const 
+QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, bool applyMonitorProfile, Q_INT32 width, Q_INT32 height, Q_INT32 stride)
 {
 // 	kdDebug() << "KisColorSpaceAlpha::convertToImage. W:" << width
 // 		  << ", H: " << height

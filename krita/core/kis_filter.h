@@ -56,6 +56,7 @@ class KisFilter : public QObject, public KShared {
 	Q_OBJECT
 public:
 	KisFilter(const QString& name, KisView * view);
+	virtual ~KisFilter() {}
 
 public:
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&, KisTileCommand* ) = 0;

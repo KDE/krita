@@ -222,6 +222,9 @@ private:
 	QTimer * m_updateTimer;
 	QMutex m_displayMutex;
 	DCOPObject *m_dcop;
+
+	
+
 };
 
 #endif // KIS_IMAGE_H_

@@ -45,6 +45,7 @@ KisProfile::KisProfile(const QString& file) : super(file)
 
 KisProfile::~KisProfile()
 {
+	cmsCloseProfile(m_profile);
 }
 
 
@@ -55,10 +56,12 @@ bool KisProfile::loadAsync()
 
 	m_profile = cmsOpenProfileFromFile(filename().ascii(), "r");
 
- 	kdDebug() << "loading profile: " << filename() << "\n";
+//  	kdDebug() << "loading profile: " << filename() << "\n";
 	if (m_profile) {
-		m_colorSpace = cmsGetColorSpace(m_profile);
-// 		kdDebug() << "\tColorspace: " << m_colorSpace << "\n";
+		m_colorSpaceSignature = cmsGetColorSpace(m_profile);
+// 		kdDebug() << "\tColorspaceSignature: " << m_colorSpaceSignature << "\n";
+
+		m_deviceClass = cmsGetDeviceClass(m_profile);
 
 		m_productName = cmsTakeProductName(m_profile);
 // 		kdDebug() << "\tProduct name: " << m_productName << "\n";

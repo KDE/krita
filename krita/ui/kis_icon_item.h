@@ -41,6 +41,8 @@ public:
 
 	KisResource *resource() const;
 
+	virtual int compare(const KoIconItem *other) const;
+
 protected:
 	void updatePixmaps();
 	QImage createColorMaskImage(QImage srcImage);

@@ -43,12 +43,22 @@
 #include "kis_alpha_mask.h"
 
 namespace {
+	struct GimpBrushV1Header {
+		Q_UINT32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
+		Q_UINT32 version;      /*  brush file version #  */
+		Q_UINT32 width;        /*  width of brush  */
+		Q_UINT32 height;       /*  height of brush  */
+		Q_UINT32 bytes;        /*  depth of brush in bytes */
+	};
+
 	struct GimpBrushHeader {
 		Q_UINT32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
 		Q_UINT32 version;      /*  brush file version #  */
 		Q_UINT32 width;        /*  width of brush  */
 		Q_UINT32 height;       /*  height of brush  */
 		Q_UINT32 bytes;        /*  depth of brush in bytes */
+
+				       /*  The following are only defined in version 2 */
 		Q_UINT32 magic_number; /*  GIMP brush magic number  */
 		Q_UINT32 spacing;      /*  brush spacing as % of width & height, 0 - 1000 */
 	};
@@ -219,8 +229,6 @@ void KisBrush::ioData(KIO::Job * /*job*/, const QByteArray& data)
 void KisBrush::ioResult(KIO::Job * /*job*/)
 {
 	GimpBrushHeader bh;
-	Q_INT32 k;
-	QValueVector<char> name;
 
 	if (sizeof(GimpBrushHeader) > m_data.size()) {
 		emit ioFailed(this);
@@ -266,22 +274,26 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		return;
 	}
 
-	name.resize(bh.header_size - sizeof(GimpBrushHeader));
-	memcpy(&name[0], &m_data[sizeof(GimpBrushHeader)], name.size());
+	QString name;
 
-	if (name[name.size() - 1]) {
-		emit ioFailed(this);
-		return;
+	if (bh.version == 1) {
+		// Version 1 has no magic number or spacing, so the name
+		// is at a different offset. Character encoding is undefined.
+		const char *text = &m_data[sizeof(GimpBrushV1Header)];
+		name = QString::fromAscii(text, bh.header_size - sizeof(GimpBrushV1Header));
+	} else {
+		// Version 2 is UTF-8.
+		name = QString::fromUtf8(&m_data[sizeof(GimpBrushHeader)], bh.header_size - sizeof(GimpBrushHeader));
 	}
 
-	setName(&name[0]);
+	setName(name);
 
 	if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
 		emit ioFailed(this);
 		return;
 	}
 
-	k = bh.header_size;
+	Q_INT32 k = bh.header_size;
 
 	if (bh.bytes == 1) {
 		// Grayscale

@@ -16,6 +16,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+#include <kdebug.h>
+
 #include "kis_resource.h"
 #include "kis_global.h"
 #include "kis_icon_item.h"
@@ -158,6 +161,17 @@ bool KisIconItem::hasColor() const
 	}
 	else {
 		return false;
+	}
+}
+
+int KisIconItem::compare(const KoIconItem *o) const
+{
+	const KisIconItem *other = dynamic_cast<const KisIconItem *>(o);
+
+	if (other != 0) {
+		return m_resource -> name().localeAwareCompare(other -> m_resource -> name());
+	} else {
+		return 0;
 	}
 }
 

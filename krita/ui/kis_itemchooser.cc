@@ -151,7 +151,7 @@ void KisItemChooser::init(bool spacing)
 
 	m_frame = new QHBox(this);
 	m_frame -> setFrameStyle(QFrame::Panel | QFrame::Sunken);
-	m_chooser = new KoIconChooser(QSize(30,30), m_frame, "icon_chooser");
+	m_chooser = new KoIconChooser(QSize(30,30), m_frame, "icon_chooser", true);
 	QObject::connect(m_chooser, SIGNAL(selected(KoIconItem*)), this, SLOT(slotItemSelected(KoIconItem*)));
 	initGUI(spacing);
 }

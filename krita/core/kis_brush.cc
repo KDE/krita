@@ -96,6 +96,10 @@ QImage KisBrush::img()
 
 KisAlphaMask *KisBrush::mask(Q_INT32 scale)
 {
+	if (m_masks.isEmpty()) {
+		createMasks(m_img);
+	}
+
 	if (scale >= PRESSURE_LEVELS || (uint)scale >= m_masks.count())
 		scale = m_masks.count() - 1;
 
@@ -247,7 +251,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 
 	setWidth(m_img.width());
 	setHeight(m_img.height());
-	createMasks(m_img);
+	//createMasks(m_img);
 	m_data.clear(); // Save some memory, we're using enough of it as it is.
  	kdDebug() << "Brush: " << &name[0] << " spacing: " << spacing() << "\n";
 	setValid(true);

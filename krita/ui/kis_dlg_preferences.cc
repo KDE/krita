@@ -194,6 +194,8 @@ void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbMonitorProfile -> clear();
 	m_page -> cmbMonitorProfile -> insertItem(i18n("None"));
+	if ( !cs )
+		return;
 	vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
@@ -208,6 +210,8 @@ void ColorSettingsTab::refillPrintProfiles(const KisID & s)
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbPrintProfile -> clear();
 	m_page -> cmbPrintProfile -> insertItem(i18n("None"));
+	if ( !cs )
+		return;
 	vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
@@ -222,6 +226,8 @@ void ColorSettingsTab::refillImportProfiles(const KisID & s)
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbImportProfile -> clear();
 	m_page -> cmbImportProfile -> insertItem(i18n("None"));
+	if ( !cs )
+		return;
 	vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {

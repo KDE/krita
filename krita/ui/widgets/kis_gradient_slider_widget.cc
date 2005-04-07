@@ -188,6 +188,10 @@ void KisGradientSliderWidget::mouseMoveEvent( QMouseEvent * e )
 			m_autogradientResource -> moveSegmentMiddleOffset( m_currentSegment, t );
 			break;
 	}
+
+	if ( m_drag != NO_DRAG)
+		emit sigChangedSegment( m_currentSegment );
+
 	repaint(false);
 }
 

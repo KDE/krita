@@ -236,6 +236,7 @@ KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QStrin
 	m_autogradientResource = new KisAutogradientResource();
 	m_autogradientResource->createSegment( INTERP_LINEAR, COLOR_INTERP_RGB, 0.0, 1.0, 0.5, Qt::black, Qt::white );
 	connect(gradientSlider, SIGNAL( sigSelectedSegment( KisGradientSegment* ) ), SLOT( slotSelectedSegment(KisGradientSegment*) ));
+	connect(gradientSlider, SIGNAL( sigChangedSegment(KisGradientSegment*) ), SLOT( slotChangedSegment(KisGradientSegment*) ));
 	gradientSlider->setGradientResource( m_autogradientResource );
 	connect(comboBoxColorInterpolationType, SIGNAL( activated(int) ), SLOT( slotChangedColorInterpolation(int) ));
 	connect(comboBoxInterpolationType, SIGNAL( activated(int) ), SLOT( slotChangedInterpolation(int) ));
@@ -261,6 +262,11 @@ void KisAutogradient::slotSelectedSegment(KisGradientSegment* segment)
 	int rightOpacity = qRound(segment -> endColor().alpha() * 100);
 	intNumInputRightOpacity -> setValue( rightOpacity );
 
+	paramChanged();
+}
+
+void KisAutogradient::slotChangedSegment(KisGradientSegment* segment)
+{
 	paramChanged();
 }
 

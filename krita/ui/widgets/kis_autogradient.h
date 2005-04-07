@@ -96,6 +96,7 @@ class KisAutogradient : public KisWdgAutogradient
 		KisAutogradientResource* m_autogradientResource;
 	private slots:
 		void slotSelectedSegment(KisGradientSegment* segment);
+		void slotChangedSegment(KisGradientSegment* segment);
 		void slotChangedInterpolation(int type);
 		void slotChangedColorInterpolation(int type);
 		void slotChangedLeftColor( const QColor& color);

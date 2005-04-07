@@ -38,6 +38,7 @@ class KisGradientSliderWidget : public QWidget
 		KisGradientSegment* selectedSegment() { return m_selectedSegment; };
 	signals:
 		void sigSelectedSegment(KisGradientSegment*);
+		void sigChangedSegment(KisGradientSegment*);
 	protected:
 		virtual void mousePressEvent( QMouseEvent * e );
 		virtual void mouseReleaseEvent ( QMouseEvent * e );

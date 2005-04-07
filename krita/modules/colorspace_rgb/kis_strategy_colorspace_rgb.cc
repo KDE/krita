@@ -161,7 +161,8 @@ inline int INT_MULT(int a, int b)
 
 inline int INT_DIVIDE(int a, int b)
 {
-	return (a * QUANTUM_MAX + (QUANTUM_MAX / 2)) / b;
+	int c = (a * QUANTUM_MAX + (b / 2)) / b;
+	return c;
 }
 
 inline int INT_BLEND(int a, int b, int alpha)

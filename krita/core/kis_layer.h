@@ -47,12 +47,17 @@ public:
 	bool linked() const;
 	void setLinked(bool l);
 
+	bool locked() const;
+	void setLocked(bool l);
+
 private:
 	QUANTUM m_opacity;
 	bool m_preserveTransparency;
 
 	bool m_initial;
 	bool m_linked;
+	bool m_locked;
+
 	Q_INT32 m_dx;
 	Q_INT32 m_dy;
 

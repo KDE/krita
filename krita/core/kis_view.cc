@@ -179,7 +179,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_vScroll = 0;
 
 	m_dcop = 0;
-	
+
 	m_fg = Qt::black;
 	m_bg = Qt::white;
 
@@ -187,9 +187,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_brush = 0;
 	m_pattern = 0;
 	m_gradient = 0;
-	
+
 	m_currentGuide = 0;
-	
+
 	m_progress = 0;
 	m_statusBarZoomLabel = 0;
 	m_statusBarSelectionLabel = 0;
@@ -497,7 +497,7 @@ void KisView::setupActions()
 	m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
 	m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(mergeLinkedLayers()), actionCollection(), "merge_linked_layers");
 	m_imgMergeLayer = new KAction(i18n("&Merge Layer"), 0, this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
-	
+
 	// setting actions
 	KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
@@ -649,7 +649,7 @@ void KisView::setCurrentTool(KisTool *tool)
 	KisTool *oldTool = currentTool();
 
 	m_dockerManager ->setToolOptionWidget(oldTool, tool);
-	
+
 	if (oldTool)
 	{
 		oldTool -> clear();
@@ -825,7 +825,7 @@ void KisView::paintView(const KisRect& r)
 		clearCanvas(r.qRect());
 		m_canvas -> update(r.qRect());
 	}
-// 
+//
 }
 
 QWidget *KisView::canvas() const
@@ -1377,7 +1377,7 @@ void KisView::mirrorLayerX()
 	layer->mirrorX();
 
 	if (undo) undo -> addCommand(t);
-	
+
 	m_doc -> setModified(true);
 	layersUpdated();
 	updateCanvas();
@@ -1416,9 +1416,9 @@ void KisView::scaleLayer(double sx, double sy, enumFilterType ftype)
 		t = new KisTransaction(i18n("Scale layer"), layer.data());
 
 	layer -> scale(sx, sy, m_progress, ftype);
-	
+
 	if (undo) undo -> addCommand(t);
-	
+
 	m_doc -> setModified(true);
 	layersUpdated();
 	resizeEvent(0);
@@ -1574,6 +1574,34 @@ void KisView::preferences()
 {
 	PreferencesDialog::editPreferences();
 	resetMonitorProfile();
+	canvasRefresh();
+}
+
+void KisView::layerCompositeOp(int compositeOp)
+{
+	KisImageSP img = currentImg();
+	if (!img) return;
+
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
+
+	CompositeOp op = (CompositeOp)compositeOp;
+	layer -> setCompositeOp(op);
+	layersUpdated();
+	canvasRefresh();
+}
+
+void KisView::layerOpacity(int opacity)
+{
+	kdDebug() << "Opacity set to " << opacity << "\n";
+	KisImageSP img = currentImg();
+	if (!img) return;
+
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
+
+	layer -> setOpacity(opacity);
+	layersUpdated();
 	canvasRefresh();
 }
 
@@ -2035,6 +2063,19 @@ void KisView::layerToggleVisible()
 	}
 }
 
+void KisView::layerToggleLocked()
+{
+	KisImageSP img = currentImg();
+	if (!img) return;
+
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
+
+	layer -> setLocked(!layer -> locked());
+	m_doc -> setModified(true);
+	layersUpdated();
+}
+
 void KisView::layerSelected(int n)
 {
 	KisImageSP img = currentImg();
@@ -2165,7 +2206,7 @@ void KisView::layerDuplicate()
 
 	if (!img)
 		return;
-	
+
 	KisLayerSP active = img -> activeLayer();
 
 	if (!active)
@@ -2175,7 +2216,7 @@ void KisView::layerDuplicate()
 	KisLayerSP dup = new KisLayer(*active);
 	dup -> setName(QString(i18n("Duplicate of '%1'")).arg(active -> name()));
 	KisLayerSP layer = m_doc -> layerAdd(img, dup, index);
-	
+
 	if (layer) {
 		emit currentLayerChanged(img -> index(layer));
 		resizeEvent(0);

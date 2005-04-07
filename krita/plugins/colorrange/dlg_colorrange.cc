@@ -114,12 +114,12 @@ Q_UINT32 matchColors(const QColor & c, enumAction action)
 	rgb_to_hsv(r, g, b, &h, &s, &v);
 
 
-	
+
 	// XXX: Map the degree in which the colors conform to the requirement
 	//      to a range of selectedness between 0 and 255
 
 	// XXX: Implement out-of-gamut using lcms
-	
+
 	switch(action) {
 
 		case REDS:
@@ -137,7 +137,7 @@ Q_UINT32 matchColors(const QColor & c, enumAction action)
 			if (isGreenish(h))
 				return MAX_SELECTED;
 			else
-				return MIN_SELECTED;		
+				return MIN_SELECTED;
 		case CYANS:
 			if (isCyanish(h))
 				return MAX_SELECTED;
@@ -147,22 +147,22 @@ Q_UINT32 matchColors(const QColor & c, enumAction action)
 			if (isBlueish(h))
 				return MAX_SELECTED;
 			else
-				return MIN_SELECTED;		
+				return MIN_SELECTED;
 		case MAGENTAS:
 			if (isMagentaish(h))
 				return MAX_SELECTED;
 			else
-				return MIN_SELECTED;		
+				return MIN_SELECTED;
 		case HIGHLIGHTS:
 			if (isHighlight(v))
 				return MAX_SELECTED;
 			else
-				return MIN_SELECTED;		
+				return MIN_SELECTED;
 		case MIDTONES:
 			if (isMidTone(v))
 				return MAX_SELECTED;
 			else
-				return MIN_SELECTED;		
+				return MIN_SELECTED;
 		case SHADOWS:
 			if (isShadow(v))
 				return MAX_SELECTED;
@@ -180,9 +180,9 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 {
 	m_layer = layer;
 	m_view = view;
-	
+
 	m_subject = view -> getCanvasSubject();
-		
+
 	m_page = new WdgColorRange(this, "color_range");
 	setCaption(i18n("Color Range"));
 	setMainWidget(m_page);
@@ -196,20 +196,20 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 		// Show message box? Without a layer no selections...
 		return;
 	}
-		
+
         m_transaction = new KisTransaction(i18n("Select by Color Range"), m_selection.data());
         updatePreview();
 
 	m_invert = false;
 	m_mode = SELECTION_REPLACE;
 	m_currentAction = REDS;
-	
+
 	connect(this, SIGNAL(okClicked()),
 		this, SLOT(okClicked()));
 
 	connect(this, SIGNAL(cancelClicked()),
 		this, SLOT(cancelClicked()));
-		
+
 	connect(m_page -> chkInvert, SIGNAL(clicked()),
 		this, SLOT(slotInvertClicked()));
 
@@ -227,7 +227,7 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 
 	connect (m_page -> bnSelect, SIGNAL(clicked()),
 		this, SLOT(slotSelectClicked()));
-		
+
 }
 
 DlgColorRange::~DlgColorRange()
@@ -239,7 +239,7 @@ DlgColorRange::~DlgColorRange()
 void DlgColorRange::updatePreview()
 {
 	if (!m_selection) return;
-	
+
 	Q_INT32 x, y, w, h;
 	m_layer -> exactBounds(x, y, w, h);
 	QPixmap pix = QPixmap(m_selection -> maskImage().smoothScale(350, 350, QImage::ScaleMin));
@@ -297,51 +297,53 @@ void DlgColorRange::slotSelectClicked()
 	m_layer -> exactBounds(x, y, w, h);
 	KisStrategyColorSpaceSP cs = m_layer -> colorStrategy();
 	KisProfileSP profile = m_layer -> profile();
+	QUANTUM opacity;
 	for (int y2 = y; y2 < h - y; ++y2) {
 		KisHLineIterator hiter = m_layer -> createHLineIterator(x, y2, w, false);
 		KisHLineIterator selIter = m_selection  -> createHLineIterator(x, y2, w, true);
 		while (!hiter.isDone()) {
 			// Clean up as we go, if necessary
 			if (m_mode == SELECTION_REPLACE) memset (selIter.rawData(), 0, 1); // Selections are hard-coded one byte big.
-	
+
 			QColor c;
-			
-			cs -> toQColor(hiter.rawData(), &c, profile);
 
- 			Q_UINT8 match = matchColors(c, m_currentAction);
+			cs -> toQColor(hiter.rawData(), &c, &opacity, profile);
+			// Don't try to select transparent pixels.
+			if (opacity > OPACITY_TRANSPARENT) {
+				Q_UINT8 match = matchColors(c, m_currentAction);
 
-			if (match) {
-				// Personally, I think the invert option a bit silly. But it's possible I don't quite understand it. BSAR.
-				if (!m_invert) {
-					if (m_mode == SELECTION_ADD || m_mode == SELECTION_REPLACE) {
-						*(selIter.rawData()) =  match;
-					}
-					else if (m_mode == SELECTION_SUBTRACT) {
-						Q_UINT8 selectedness = *(selIter.rawData());
-						if (match < selectedness) {
-							*(selIter.rawData()) = selectedness - match;
+				if (match) {
+					// Personally, I think the invert option a bit silly. But it's possible I don't quite understand it. BSAR.
+					if (!m_invert) {
+						if (m_mode == SELECTION_ADD || m_mode == SELECTION_REPLACE) {
+							*(selIter.rawData()) =  match;
 						}
-						else {
-							*(selIter.rawData()) = 0;
-						}
-					}
-				}
-				else {
-					if (m_mode == SELECTION_ADD || m_mode == SELECTION_REPLACE) {
-						Q_UINT8 selectedness = *(selIter.rawData());
-						if (match < selectedness) {
-							*(selIter.rawData()) = selectedness - match;
-						}
-						else {
-							*(selIter.rawData()) = 0;
+						else if (m_mode == SELECTION_SUBTRACT) {
+							Q_UINT8 selectedness = *(selIter.rawData());
+							if (match < selectedness) {
+								*(selIter.rawData()) = selectedness - match;
+							}
+							else {
+								*(selIter.rawData()) = 0;
+							}
 						}
 					}
-					else if (m_mode == SELECTION_SUBTRACT) {
-						*(selIter.rawData()) =  match;
+					else {
+						if (m_mode == SELECTION_ADD || m_mode == SELECTION_REPLACE) {
+							Q_UINT8 selectedness = *(selIter.rawData());
+							if (match < selectedness) {
+								*(selIter.rawData()) = selectedness - match;
+							}
+							else {
+								*(selIter.rawData()) = 0;
+							}
+						}
+						else if (m_mode == SELECTION_SUBTRACT) {
+							*(selIter.rawData()) =  match;
+						}
 					}
 				}
 			}
-			
 			++hiter;
 			++selIter;
 		}

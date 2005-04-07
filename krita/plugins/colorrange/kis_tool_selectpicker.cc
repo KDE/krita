@@ -30,6 +30,7 @@
 #include <knuminput.h>
 
 #include <kis_cursor.h>
+#include <kis_selection_manager.h>
 #include <kis_canvas_subject.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
@@ -67,20 +68,20 @@ Q_UINT8 matchColors(const QColor & c, const QColor & c2, Q_UINT8 fuzziness)
 	long rmean;
 
 	rmean = ( (int)c.red() + (int)c2.red() ) / 2;
-	
+
 	r = (int)c.red() - (int)c2.red();
 	g = (int)c.green() - (int)c2.green();
 	b = (int)c.blue() - (int)c2.blue();
 
 	long diff = (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
-					    
+
         if (diff > fuzziness) return 0;
 
         if (diff == 0,0) return 255;
 
 	kdDebug() << "Diff: " << QString::number(diff) << "\n";
 	return (Q_UINT8) diff;
-	
+
 #endif
 }
 
@@ -88,47 +89,50 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const QColor 
 {
 	// XXX: Multithread this!
 	Q_INT32 x, y, w, h;
+
+	QUANTUM opacity;
 	dev -> exactBounds(x, y, w, h);
-	
+
 	KisStrategyColorSpaceSP cs = dev -> colorStrategy();
 	KisProfileSP profile = dev -> profile();
-	
+
 	for (int y2 = y; y2 < h - y; ++y2) {
 		KisHLineIterator hiter = dev -> createHLineIterator(x, y2, w, false);
 		KisHLineIterator selIter = selection -> createHLineIterator(x, y2, w, true);
 		while (!hiter.isDone()) {
 			// Clean up as we go, if necessary
 			if (mode == SELECTION_REPLACE) memset (selIter.rawData(), 0, 1); // Selections are hard-coded one byte big.
-	
 			QColor c2;
-			
-			cs -> toQColor(hiter.rawData(), &c2, profile);
+			cs -> toQColor(hiter.rawData(), &c2, &opacity, profile);
 
- 			Q_UINT8 match = matchColors(c, c2, fuzziness);
-			//kdDebug() << " Match: " << QString::number(match) << ", mode: " << mode << "\n";
-			if (mode == SELECTION_REPLACE) {
-				*(selIter.rawData()) =  match;
-			}
-			else if (mode == SELECTION_ADD) { 
-				Q_UINT8 d = *(selIter.rawData()); 
-				if (d + match > MAX_SELECTED) {
-					*(selIter.rawData()) = MAX_SELECTED;
-				}
-				else {
-					*(selIter.rawData()) = match + d;
-				}
+			// Don't try to select transparent pixels. The Gimp has an option to match transparent pixels; we don't, for the moment.
+			if (opacity > OPACITY_TRANSPARENT) {
 
-			}
-			else if (mode == SELECTION_SUBTRACT) {
-				Q_UINT8 selectedness = *(selIter.rawData());
-				if (match < selectedness) {
-					*(selIter.rawData()) = selectedness - match;
+				Q_UINT8 match = matchColors(c, c2, fuzziness);
+				//kdDebug() << " Match: " << QString::number(match) << ", mode: " << mode << "\n";
+				if (mode == SELECTION_REPLACE) {
+					*(selIter.rawData()) =  match;
 				}
-				else {
-					*(selIter.rawData()) = 0;
-				}
-			}
+				else if (mode == SELECTION_ADD) {
+					Q_UINT8 d = *(selIter.rawData());
+					if (d + match > MAX_SELECTED) {
+						*(selIter.rawData()) = MAX_SELECTED;
+					}
+					else {
+						*(selIter.rawData()) = match + d;
+					}
 
+				}
+				else if (mode == SELECTION_SUBTRACT) {
+					Q_UINT8 selectedness = *(selIter.rawData());
+					if (match < selectedness) {
+						*(selIter.rawData()) = selectedness - match;
+					}
+					else {
+						*(selIter.rawData()) = 0;
+					}
+				}
+			}
 			++hiter;
 			++selIter;
 		}
@@ -148,14 +152,14 @@ KisToolSelectPicker::KisToolSelectPicker()
 	m_selectAction = SELECTION_REPLACE;
 }
 
-KisToolSelectPicker::~KisToolSelectPicker() 
+KisToolSelectPicker::~KisToolSelectPicker()
 {
 }
 
 void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 {
 	kdDebug() << "button press: " << m_subject << "\n";
-	
+
 	if (m_subject) {
 		KisImageSP img;
 		KisPaintDeviceSP dev;
@@ -179,9 +183,13 @@ void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 
 		dev -> pixel(pos.x(), pos.y(), &c, &opacity);
 		kdDebug() << "Going to select colors similar to: " << c.red() << ", " << c.green() << ", "<< c.blue() << "\n";
-		selectByColor(dev, dev -> selection(), c, m_fuzziness, m_selectAction);
+		if (opacity > OPACITY_TRANSPARENT)
+			selectByColor(dev, dev -> selection(), c, m_fuzziness, m_selectAction);
+		else {
+			m_subject -> selectionManager() -> selectAll();
+		}
 		m_subject -> canvasController() -> updateCanvas();
-		
+
 	}
 }
 
@@ -221,7 +229,7 @@ void KisToolSelectPicker::slotSetAction(int action)
 			break;
 		case SELECTION_SUBTRACT:
 			m_subject -> setCanvasCursor(KisCursor::pickerMinusCursor());
-			
+
 	};
 }
 
@@ -231,16 +239,16 @@ QWidget* KisToolSelectPicker::createOptionWidget(QWidget* parent)
 	m_optWidget -> setCaption(i18n("Selection Picker"));
 
 	QVBoxLayout * l = new QVBoxLayout(m_optWidget);
-	
+
 	KisSelectionOptions * options = new KisSelectionOptions(m_optWidget, m_subject);
 	l -> addWidget( options);
 	connect (options, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
-	
+
 	QHBoxLayout * hbox = new QHBoxLayout(l);
-	
+
 	QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
 	hbox -> addWidget(lbl);
-	
+
 	KIntNumInput * input = new KIntNumInput(m_optWidget, "fuzziness");
 	input -> setRange(0, 200, 10, true);
 	input -> setValue(20);

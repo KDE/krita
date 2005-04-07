@@ -90,7 +90,7 @@ public:
 	void setToolOptionWidget(KisTool * oldTool, KisTool * newTool);
 	void unsetToolOptionWidget(KisTool * oldTool);
 	void resetLayerBox(KisImageSP img, KisLayerSP layer);
-	
+
 private:
 
 	KisGenericRegistry<QWidget*> * m_tabs;
@@ -101,7 +101,7 @@ private:
 	KisView * m_view;
 	KActionCollection * m_ac;
 
-	
+
 
 // XXX: Temporary copies from KisView
 
@@ -114,6 +114,7 @@ private slots:
 	void slotBrushChanged(KisBrush * brush);
 	void slotGradientChanged(KisGradient * gradient);
 	void slotPatternChanged(KisPattern * pattern);
+	void layerSelected(int layer);
 
  	void viewColorSlider(bool v = true);
  	void viewControlSlider(bool v = true);
@@ -128,9 +129,9 @@ private slots:
 	void viewFillsDocker();
 	void viewPaintBoxDocker();
 
-	
+
 private:
-	
+
 	KoToolDockManager * m_toolDockManager;
 
         // Sliders
@@ -151,14 +152,14 @@ private:
 	KisPaintBox *m_paintboxdocker;
 
 	// Widgets
-	
+
 	KisLayerBox *m_layerBox;
 	KisPaintBox *m_paintBox;
 	KisFilterBox * m_filterBox;
 	ControlFrame *m_controlWidget;
 	KisBirdEyeBox * m_birdEyeBox;
 	KisChannelView *m_channelView;
-	
+
 	KisAutobrush *m_autobrush;
 	KisTextBrush *m_textBrush;
 	KisAutogradient* m_autogradient;

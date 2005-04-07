@@ -41,6 +41,7 @@
 #include "kis_config.h"
 #include "kis_global.h"
 #include "kis_tool.h"
+#include "kis_layer.h"
 
 // Widgets
 #include "kis_autobrush.h"
@@ -76,7 +77,7 @@ KisDockerManager::KisDockerManager(KisView * view, KActionCollection * ac)
 	m_brushMediator = 0;
 
 	m_layerBox = 0;
-	
+
 	m_layerchannelslider = 0;
 	m_shapesslider = 0;
 	m_fillsslider = 0;
@@ -109,7 +110,7 @@ KisDockerManager::~KisDockerManager()
 void KisDockerManager::addDockerTab(QWidget * tab, const KisID & docker, enumDockerStyle docktype)
 {
 	m_tabs -> add(KisID(tab -> name(), tab -> caption()), tab);
-	
+
 	if (docktype == DOCKER_DOCKER) {
 		if (m_dockWindows -> exists(docker)) {
 			KisDockFrameDocker * d = m_dockWindows -> get(docker);
@@ -200,11 +201,11 @@ void KisDockerManager::setToolOptionWidget(KisTool * oldTool, KisTool * newTool)
 void KisDockerManager::setupDockers()
 {
 	KisResourceServer *rserver = new KisResourceServer;
-	
+
 	connect(m_view, SIGNAL(brushChanged(KisBrush *)), this, SLOT(slotBrushChanged(KisBrush* )));
 	connect(m_view, SIGNAL(gradientChanged(KisGradient *)), this, SLOT(slotGradientChanged(KisGradient* )));
 	connect(m_view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged(KisPattern* )));
-	
+
 	KisConfig cfg;
 	if ( cfg.dockerStyle() == DOCKER_SLIDER ) {
 
@@ -219,9 +220,9 @@ void KisDockerManager::setupDockers()
 		connect(m_toolcontrolslider, SIGNAL(visibleChange(bool)), SLOT(viewControlSlider(bool)));
 
 		// Layers
-		m_layerchannelslider = m_toolDockManager -> createTabbedToolDock("layers/channels");
-		m_layerchannelslider -> setCaption(i18n("Layers/Channels" ));
-		show = new KToggleAction(i18n( "&Layers/Channels" ), 0, 0, m_ac, "view_layer_docker" );
+		m_layerchannelslider = m_toolDockManager -> createTabbedToolDock("layers");
+		m_layerchannelslider -> setCaption(i18n("Layers" ));
+		show = new KToggleAction(i18n( "&Layers" ), 0, 0, m_ac, "view_layer_docker" );
 		connect(show, SIGNAL(toggled(bool)), m_layerchannelslider, SLOT(makeVisible(bool)));
 		connect(m_layerchannelslider, SIGNAL(visibleChange(bool)), SLOT(viewLayerChannelSlider(bool)));
 
@@ -270,10 +271,10 @@ void KisDockerManager::setupDockers()
 		m_colordocker -> setCaption(i18n("Color Manager"));
 
 		m_layerchanneldocker = new KisDockFrameDocker(m_view);
-		m_layerchanneldocker -> setCaption(i18n("Layers/Channels"));
+		m_layerchanneldocker -> setCaption(i18n("Layers"));
 
 
-		(void)new KAction(i18n( "&Layers/Channels" ), 0, this, SLOT( viewLayerChannelDocker() ), m_ac, "view_layer_docker" );
+		(void)new KAction(i18n( "&Layers" ), 0, this, SLOT( viewLayerChannelDocker() ), m_ac, "view_layer_docker" );
 		(void)new KAction(i18n( "&Color Manager" ), 0, this, SLOT( viewColorDocker() ), m_ac, "view_color_docker" );
 		(void)new KAction(i18n( "&Tool Properties" ), 0, this, SLOT( viewControlDocker() ), m_ac, "view_control_docker" );
 
@@ -301,10 +302,10 @@ void KisDockerManager::setupDockers()
 
 	m_controlWidget -> slotSetBGColor(m_view -> bgColor());
 	m_controlWidget -> slotSetFGColor(m_view -> fgColor());
-	
+
 	connect(m_controlWidget, SIGNAL(fgColorChanged(const QColor&)), m_view, SLOT(slotSetFGColor(const QColor&)));
 	connect(m_controlWidget, SIGNAL(bgColorChanged(const QColor&)), m_view, SLOT(slotSetBGColor(const QColor&)));
-	
+
 	connect(m_view, SIGNAL(fgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetFGColor(const QColor&)));
 	connect(m_view, SIGNAL(bgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetBGColor(const QColor&)));
 
@@ -329,6 +330,7 @@ void KisDockerManager::setupDockers()
 
 	connect(m_layerBox, SIGNAL(itemToggleVisible()), m_view, SLOT(layerToggleVisible()));
 	connect(m_layerBox, SIGNAL(itemSelected(int)), m_view, SLOT(layerSelected(int)));
+	connect(m_layerBox, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
 	connect(m_layerBox, SIGNAL(itemToggleLinked()), m_view, SLOT(layerToggleLinked()));
 	connect(m_layerBox, SIGNAL(itemProperties()), m_view, SLOT(layerProperties()));
 	connect(m_layerBox, SIGNAL(itemAdd()), m_view, SLOT(layerAdd()));
@@ -340,8 +342,10 @@ void KisDockerManager::setupDockers()
 	connect(m_layerBox, SIGNAL(itemFront()), m_view, SLOT(layerFront()));
 	connect(m_layerBox, SIGNAL(itemBack()), m_view, SLOT(layerBack()));
 	connect(m_layerBox, SIGNAL(itemLevel(int)), m_view, SLOT(layerLevel(int)));
+	connect(m_layerBox, SIGNAL(opacityChanged(int)), m_view, SLOT(layerOpacity(int)));
+	connect(m_layerBox, SIGNAL(itemComposite(int)), m_view, SLOT(layerCompositeOp(int)));
 	connect(m_view, SIGNAL(currentLayerChanged(int)), m_layerBox, SLOT(slotSetCurrentItem(int)));
-	
+
 	if ( cfg.dockerStyle() == DOCKER_SLIDER ) {
 		m_layerchannelslider -> plug( m_layerBox );
 	}
@@ -414,7 +418,7 @@ void KisDockerManager::setupDockers()
 		m_shapesdocker -> plug(m_textBrush);
 	}
 	connect(m_textBrush, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated(KisResource*)));
-// 
+//
 	// ---------------------------------------------------------------------
 	// Fills
 
@@ -437,7 +441,7 @@ void KisDockerManager::setupDockers()
 		m_fillsdocker -> plug(m_patternMediator -> chooserWidget());
 	}
 	m_view -> patternActivated(dynamic_cast<KisPattern*>(m_patternMediator -> currentResource()));
-	
+
 	connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(patternActivated(KisResource*)));
 
 	// Setup gradients
@@ -692,6 +696,18 @@ void KisDockerManager::resetLayerBox(KisImageSP img, KisLayerSP layer)
 	}
 
 	m_layerBox -> setUpdatesEnabled(true);
+}
+
+void KisDockerManager::layerSelected(int layer)
+{
+	KisImageSP img = m_view -> currentImg();
+	if (!img) return;
+	KisLayerSP l = img -> layer(layer);
+	if (!l) return;
+
+	m_layerBox -> setOpacity(l -> opacity());
+
+	m_layerBox -> setCompositeOp((int)(l -> compositeOp()));
 }
 
 #include "kis_docker_manager.moc"

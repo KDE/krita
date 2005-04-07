@@ -88,7 +88,7 @@ class KisView
 	Q_OBJECT
 
 	typedef KoView super;
-	
+
 	typedef std::list<KisCanvasObserver*> vKisCanvasObserver;
 	typedef vKisCanvasObserver::iterator vKisCanvasObserver_it;
 	typedef vKisCanvasObserver::const_iterator vKisCanvasObserver_cit;
@@ -104,7 +104,7 @@ public:
 
 public: // KoView implementation
 	virtual bool eventFilter(QObject *o, QEvent *e);
- 	
+
 	virtual DCOPObject* dcopObject();
 
 	virtual void print(KPrinter &printer);
@@ -119,9 +119,9 @@ public: // KoView implementation
 	void updateStatusBarSelectionLabel();
 
 public: // Plugin access API. XXX: This needs redesign.
-	
+
 	Q_INT32 importImage(bool createLayer, bool modal = false, const KURL& url = KURL());
-	
+
 	virtual KisImageSP currentImg() const;
 
 	virtual void updateCanvas();
@@ -140,13 +140,13 @@ public: // Plugin access API. XXX: This needs redesign.
 signals:
 	void bgColorChanged(const QColor& c);
 	void fgColorChanged(const QColor& c);
-	
+
 	void brushChanged(KisBrush * brush);
 	void gradientChanged(KisGradient * gradient);
 	void patternChanged(KisPattern * pattern);
 
 	void currentLayerChanged(int layer);
-	
+
 	void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
 	void cursorEnter();
 	void cursorLeave();
@@ -185,6 +185,8 @@ public slots:
 	void cropLayer(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	// settings action slots
 	void preferences();
+	void layerCompositeOp(int compositeOp);
+	void layerOpacity(int opacity);
 
 protected:
 
@@ -192,7 +194,7 @@ protected:
 
 public:
 	KisCanvasSubject * getCanvasSubject() { return this; };
-	
+
 private:
 	// Implement KisCanvasSubject
 	virtual void attach(KisCanvasObserver *observer);
@@ -265,7 +267,7 @@ private:
 	 * he monitor.
 	 */
 	KisProfileSP monitorProfile();
-	
+
 	/**
 	 * Reset the monitor profile to the new settings.
 	 */
@@ -294,10 +296,11 @@ private:
 	KisTool *findTool(QString toolName, enumInputDevice inputDevice = INPUT_DEVICE_UNKNOWN) const;
 
 public slots:
-	
+
 	void layerToggleVisible();
 	void layerSelected(int n);
 	void layerToggleLinked();
+	void layerToggleLocked();
 	void layerProperties();
 
 	void layerToImage();
@@ -342,7 +345,7 @@ public slots:
 	void duplicateCurrentImg();
 
 
-	
+
 private slots:
 
 	void popupTabBarMenu( const QPoint& );
@@ -372,7 +375,7 @@ private:
 
 	KisSelectionManager * m_selectionManager;
 	KisDockerManager * m_dockerManager;
-	
+
         // Fringe benefits
 	KoTabBar *m_tabBar;
 	QButton *m_tabFirst;
@@ -395,7 +398,7 @@ private:
 	KAction *m_imgResizeToLayer;
 	KAction *m_imgRm;
 	KAction *m_imgScan;
-	
+
 	KAction *m_layerAdd;
 	KAction *m_layerBottom;
 	KAction *m_layerDup;
@@ -408,13 +411,13 @@ private:
 	KAction *m_layerSaveAs;
 	KAction *m_layerToImage;
 	KAction *m_layerTop;
-	
+
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
-	
+
 	KAction *m_fullScreen;
 	KAction *m_imgProperties;
-	
+
 	KToggleAction *m_RulerAction;
 
 	DCOPObject *m_dcop;
@@ -434,10 +437,10 @@ private:
 	KisLabelProgress *m_progress;
 
 	// Current colours, brushes, patterns etc.
-	
+
 	QColor m_fg;
 	QColor m_bg;
-	
+
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
@@ -472,7 +475,7 @@ protected:
 
 	friend class KisSelectionManager;
 	friend class KisDockerManager;
-	
+
 };
 
 #endif // KIS_VIEW_H_

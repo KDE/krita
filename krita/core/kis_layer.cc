@@ -30,7 +30,7 @@
 static int numLayers = 0;
 #endif
 
-KisLayer::KisLayer(KisStrategyColorSpaceSP colorStrategy, const QString& name) 
+KisLayer::KisLayer(KisStrategyColorSpaceSP colorStrategy, const QString& name)
 	: super(colorStrategy, name),
 	  m_opacity(OPACITY_OPAQUE),
 	  m_linked(false)
@@ -118,5 +118,16 @@ void KisLayer::setVisible(bool v)
 {
 	super::setVisible(v);
 }
+
+bool KisLayer::locked() const
+{
+	return m_locked;
+}
+
+void KisLayer::setLocked(bool l)
+{
+	m_locked = l;
+}
+
 
 #include "kis_layer.moc"

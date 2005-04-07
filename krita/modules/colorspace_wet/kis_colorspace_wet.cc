@@ -310,21 +310,14 @@ void KisColorSpaceWet::bitBlt(Q_INT32 stride,
 
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
-
 		while (cols > 0) {
 
 			// Do clever stuff to combine two wet pixels; for now, do something simple
 			// The paint op already has taken pressure and height field into account.
 
 			columns--;
-			src += 32;
-			dst += 32;
 		}
 		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
 	}
 }
 

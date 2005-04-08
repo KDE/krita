@@ -21,6 +21,8 @@
 #include <vector>
 
 #include <qpoint.h>
+#include <qlabel.h>
+#include <qwidget.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -39,9 +41,10 @@
 #include <kis_types.h>
 #include <kis_view.h>
 #include <kis_colorspace_registry.h>
+#include <kis_dockframedocker.h>
 
 #include "wet_plugin.h"
-
+#include "kis_wet_palette_widget.h"
 #include "kis_colorspace_wet.h"
 
 typedef KGenericFactory<WetPlugin> WetPluginFactory;
@@ -64,6 +67,18 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 	{
 		m_colorSpaceWet = new KisColorSpaceWet();
 		KisColorSpaceRegistry::instance() -> add(m_colorSpaceWet);
+	}
+	else if (parent -> inherits("KisView"))
+	{
+		m_view = dynamic_cast<KisView*>(parent);
+		// Create the wet brush
+		// Create the wet palette
+		m_docker = new KisDockFrameDocker(m_view, "watercolor docker");
+		m_docker -> setCaption(i18n("Watercolor paint options"));
+
+		KisWetPaletteWidget * w = new KisWetPaletteWidget(m_docker);
+		w -> setCaption(i18n("Paints"));
+		m_docker -> plug(w);
 	}
 
 }

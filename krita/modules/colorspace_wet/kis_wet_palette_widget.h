@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -29,11 +29,8 @@
 class KoFrameButton;
 class QGridLayout;
 class QColor;
-class KoColorSlider;
 class QLabel;
 class QSpinBox;
-class KDualColorButton;
-class KoColorSlider;
 class QColor;
 
 class KRITAUI_EXPORT KisWetPaletteWidget
@@ -50,7 +47,6 @@ public:
 protected slots:
 
 	void slotFGColorSelected(const QColor& c);
-	void slotBGColorSelected(const QColor& c);
 
 private:
 	void update(KisCanvasSubject*);
@@ -58,8 +54,7 @@ private:
 private:
 	KisCanvasSubject *m_subject;
 
-	QColor m_fgColor;
-	QColor m_bgColor;
+
 };
 
 #endif

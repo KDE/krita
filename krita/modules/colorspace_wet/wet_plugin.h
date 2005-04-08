@@ -25,6 +25,7 @@
 
 class KisView;
 class KisColorSpaceWet;
+class KisDockFrameDocker;
 
 /**
  * A plugin wrapper around the WET colour space strategy.
@@ -35,11 +36,12 @@ class WetPlugin : public KParts::Plugin
 public:
 	WetPlugin(QObject *parent, const char *name, const QStringList &);
 	virtual ~WetPlugin();
-	
+
 private:
 
 	KisView* m_view;
 	KisStrategyColorSpaceSP m_colorSpaceWet;
+	KisDockFrameDocker * m_docker;
 };
 
 #endif // WET_PLUGIN_H_

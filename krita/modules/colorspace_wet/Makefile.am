@@ -1,8 +1,8 @@
-#kritarcdir = $(kde_datadir)/krita/kpartplugins
-#kritarc_DATA = wetplugin.rc
+kritarcdir = $(kde_datadir)/krita/kpartplugins
+kritarc_DATA = wetplugin.rc
 kde_services_DATA = kritawetplugin.desktop
 
-#EXTRA_DIST = $(kritarc_DATA)
+EXTRA_DIST = $(kritarc_DATA)
 
 INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tiles \

@@ -170,6 +170,7 @@ void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP /
 	WetPix * p = (WetPix*)dst;
 
 	// Translate the special QCOlors from our paintbox to wetpaint paints.
+	// XXX: Define a class that combines QColor, wet paint color and name.
 	if (r == 240 && g == 32 && b == 160) {
 		// Quinacridone Rose
 		memcpy(dst, &m_paintbox[0], sizeof(WetPix));

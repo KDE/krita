@@ -102,6 +102,7 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
 	for (Q_INT32 y2 = dh; y2 < dh - dy; ++y2) {
 		KisHLineIteratorPixel srcIt = src->createHLineIterator(dx, y2, dw, false);
 		while (!srcIt.isDone()) {
+			// XXX
 			++srcIt;
 		}
 	}
@@ -110,6 +111,7 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
 	for (Q_INT32 y2 = dh; y2 < dh - dy; ++y2) {
 		KisHLineIteratorPixel srcIt = src->createHLineIterator(dx, y2, dw, false);
 		while (!srcIt.isDone()) {
+			// XXX
 			++srcIt;
 		}
 	}
@@ -118,6 +120,7 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
 	for (Q_INT32 y2 = dh; y2 < dh - dy; ++y2) {
 		KisHLineIteratorPixel srcIt = src->createHLineIterator(dx, y2, dw, false);
 		while (!srcIt.isDone()) {
+			// XXX
 			++srcIt;
 		}
 	}

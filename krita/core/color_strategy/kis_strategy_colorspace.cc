@@ -82,6 +82,8 @@ bool KisStrategyColorSpace::convertPixelsTo(const QUANTUM * src, KisProfileSP sr
 		return true;
 	}
 
+	// XXX: Transform via QColor...  (Look in CVS for code, I think I already wrote this part)
+
 	kdDebug() << "No transform from "
 		  << srcProfile -> productName() << " to " << dstProfile -> productName()
 		  << ", so cannot convert pixels!\n";

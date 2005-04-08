@@ -60,7 +60,9 @@ struct _WetPix {
 	Q_UINT16 bw;  /*  Myth-blue concentration */
 
 	Q_UINT16 w;   /*  Water volume */
-	Q_UINT16 h;   /*  Height of paper surface */
+	Q_UINT16 h;   /*  Height of paper surface XXX: This might just as well be a single
+			  channel in our colour model that has two of
+			  these wetpix structs for every paint device pixels*/
 };
 
 

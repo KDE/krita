@@ -1,6 +1,4 @@
 /*
- *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2004 Cyrille Berger
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -122,6 +120,7 @@ KisColorSpaceWet::KisColorSpaceWet() :
 	KisStrategyColorSpace(KisID("WET", i18n("Watercolors")), 0, icMaxEnumData)
 {
 	wet_init_render_tab();
+
 	m_paintNames << i18n("Quinacridone Rose")
 		<< i18n("Indian Red")
 		<< i18n("Cadmium Yellow")
@@ -137,6 +136,25 @@ KisColorSpaceWet::KisColorSpaceWet() :
 		<< i18n("Titanium White")
 		<< i18n("Ivory Black")
 		<< i18n("Pure Water");
+
+	m_channels.push_back(new KisChannelInfo(i18n("red concentration"), 0, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("myth red"), 1, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("green concentration"), 2, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("myth green"), 3, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("blue concentration"), 4, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("myth blue"), 5, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("water volume"), 6, SUBSTANCE));
+	m_channels.push_back(new KisChannelInfo(i18n("paper height"), 7, SUBSTANCE));
+
+	m_channels.push_back(new KisChannelInfo(i18n("adsorbed red concentration"), 8, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("adsorbed myth red"), 9, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("adsorbed green concentration"), 10, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("adsorbed myth green"), 11, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("adsorbed blue concentration"), 12, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("adsorbed myth blue"), 13, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("adsorbed water volume"), 14, SUBSTANCE));
+	m_channels.push_back(new KisChannelInfo(i18n("adsorbed paper height"), 15, SUBSTANCE));
+
 }
 
 
@@ -231,17 +249,17 @@ bool KisColorSpaceWet::alpha() const
 
 Q_INT32 KisColorSpaceWet::nChannels() const
 {
-	return 8;
+	return 16;
 }
 
 Q_INT32 KisColorSpaceWet::nColorChannels() const
 {
-	return 6;
+	return 12;
 }
 
 Q_INT32 KisColorSpaceWet::nSubstanceChannels() const
 {
-        return 2;
+        return 4;
 }
 
 
@@ -306,19 +324,26 @@ void KisColorSpaceWet::bitBlt(Q_INT32 stride,
 			      Q_INT32 cols,
 			      CompositeOp /*op*/)
 {
-	Q_INT32 columns = cols;
+	if (rows <= 0 || cols <= 0)
+		return;
 
-	while (rows > 0) {
+	QUANTUM *d;
+	const QUANTUM *s;
 
-		while (cols > 0) {
+	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
 
-			// Do clever stuff to combine two wet pixels; for now, do something simple
-			// The paint op already has taken pressure and height field into account.
+	// Just copy the src onto the dst, we don't do fancy things here,
+	// we do those in the paint op, because we need pressure to determine
+	// paint deposition.
 
-			columns--;
-		}
-		rows--;
+	d = dst;
+	s = src;
+	while (rows-- > 0) {
+		memcpy(d, s, linesize);
+		d += dststride;
+		s += srcstride;
 	}
+
 }
 
 void KisColorSpaceWet::wet_init_render_tab()

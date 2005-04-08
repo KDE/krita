@@ -200,7 +200,7 @@ void KisToolSelectPicker::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Selection Picker"), "selectpicker", Qt::Key_E, this, SLOT(activate()), collection, name());
+		m_action = new KRadioAction(i18n("Tool &Selection Picker"), "selectpicker", Qt::Key_E, this, SLOT(activate()), collection, name());
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
@@ -254,8 +254,6 @@ QWidget* KisToolSelectPicker::createOptionWidget(QWidget* parent)
 	input -> setValue(20);
 	hbox -> addWidget(input);
 	connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
-
-	m_optWidget -> setCaption(i18n("Selection Picker"));
 
 	return m_optWidget;
 }

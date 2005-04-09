@@ -1591,14 +1591,21 @@ void KisView::layerCompositeOp(int compositeOp)
 	canvasRefresh();
 }
 
+// range: 0 - 100
 void KisView::layerOpacity(int opacity)
 {
-	kdDebug() << "Opacity set to " << opacity << "\n";
+	
+	kdDebug() << "Opacity set to " << opacity << endl;
 	KisImageSP img = currentImg();
 	if (!img) return;
 
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
+
+	if (opacity != 0) {
+		opacity = opacity * 255 / 100;
+		opacity = upscale(opacity - 1);
+	}
 
 	layer -> setOpacity(opacity);
 	layersUpdated();

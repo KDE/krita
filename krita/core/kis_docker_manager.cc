@@ -704,7 +704,13 @@ void KisDockerManager::layerSelected(int layer)
 	KisLayerSP l = img -> layer(layer);
 	if (!l) return;
 
-	m_layerBox -> setOpacity(l -> opacity());
+	Q_INT32 opacity = l -> opacity();
+	opacity = downscale(opacity);
+	opacity = opacity * 100 / 255;
+	if (opacity)
+		opacity++;
+
+	m_layerBox -> setOpacity(opacity);
 
 	m_layerBox -> setCompositeOp((int)(l -> compositeOp()));
 }

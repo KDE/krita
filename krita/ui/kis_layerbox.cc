@@ -279,6 +279,7 @@ void KisLayerBox::setCompositeOp(int n)
 	m_lst -> cmbComposite -> setCurrentItem(n);
 }
 
+// range: 0-100
 void KisLayerBox::setOpacity(int opacity)
 {
 	m_lst -> intOpacity -> setValue(opacity);

@@ -136,6 +136,7 @@ public: // Plugin access API. XXX: This needs redesign.
 	KisDoc * getDocument() { return m_doc; }
 
 	KisSelectionManager * selectionManager() { return m_selectionManager; }
+	KisDockerManager * dockerManager() { return m_dockerManager; |
 
 signals:
 	void bgColorChanged(const QColor& c);

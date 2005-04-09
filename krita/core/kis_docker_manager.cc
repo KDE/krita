@@ -197,7 +197,6 @@ void KisDockerManager::setToolOptionWidget(KisTool * oldTool, KisTool * newTool)
 
 	}
 }
-// Old stuff
 void KisDockerManager::setupDockers()
 {
 	KisResourceServer *rserver = new KisResourceServer;
@@ -541,7 +540,6 @@ void KisDockerManager::setupDockers()
 		if ( m_view -> mainWindow() -> isDockEnabled( DockBottom)) {
 			viewControlDocker();
 			viewLayerChannelDocker();
-			m_layerchanneldocker -> shade(true);
 			viewPaintBoxDocker();
 			viewColorDocker();
 

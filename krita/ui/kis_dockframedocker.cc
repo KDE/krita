@@ -94,6 +94,7 @@ void KisDockFrameDocker::setCaption(const QString & caption)
 
 void KisDockFrameDocker::shade(bool toggle)
 {
+	m_shaded = toggle;
 	if (!toggle) {
  		m_page -> tabWidget -> show();
 	}

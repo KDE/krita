@@ -50,6 +50,7 @@ public slots:
 private:
         WdgDockerTab * m_page;
 	bool m_docked;
+	bool m_shaded;
 };
 
 

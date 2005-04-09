@@ -20,6 +20,10 @@
 #include <stdlib.h>
 #include <vector>
 
+#include <qobject.h>
+#include <qapplication.h>
+#include <qclipboard.h>
+#include <qdockwindow.h>
 #include <qpoint.h>
 #include <qlabel.h>
 #include <qwidget.h>
@@ -33,6 +37,10 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
+#include <kotooldockmanager.h>
+#include <kotooldockbase.h>
+#include <koMainWindow.h>
+
 #include <kis_factory.h>
 #include <kis_doc.h>
 #include <kis_image.h>
@@ -42,6 +50,7 @@
 #include <kis_view.h>
 #include <kis_colorspace_registry.h>
 #include <kis_dockframedocker.h>
+#include <kis_canvas_subject.h>
 
 #include "wet_plugin.h"
 #include "kis_wet_palette_widget.h"
@@ -79,6 +88,9 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 		KisWetPaletteWidget * w = new KisWetPaletteWidget(m_docker);
 		w -> setCaption(i18n("Paints"));
 		m_docker -> plug(w);
+		m_view -> mainWindow()->addDockWindow( m_docker, DockRight );
+		m_view -> getCanvasSubject() -> attach(w);
+		m_docker -> show();
 	}
 
 }

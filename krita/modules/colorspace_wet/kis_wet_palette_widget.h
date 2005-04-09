@@ -20,6 +20,7 @@
 #define KIS_WET_PALETTE_WIDGET_H
 
 #include "qwidget.h"
+#include "qpushbutton.h"
 
 #include "kis_canvas_subject.h"
 #include "kis_canvas_observer.h"
@@ -32,6 +33,36 @@ class QColor;
 class QLabel;
 class QSpinBox;
 class QColor;
+
+class KisColorCup : public QPushButton {
+
+	Q_OBJECT
+
+public:
+
+	KisColorCup(const QColor & c, QWidget * parent, const char * name = 0);
+	virtual ~KisColorCup() {};
+
+signals:
+
+	void changed(const QColor &);
+
+public:
+
+	QSize sizeHint() const;
+
+private slots:
+
+	void slotClicked();
+
+protected:
+
+	virtual void drawButtonLabel( QPainter *p );
+
+private:
+
+	QColor m_color;
+};
 
 class KRITAUI_EXPORT KisWetPaletteWidget
 	 : public QWidget,
@@ -47,6 +78,8 @@ public:
 protected slots:
 
 	void slotFGColorSelected(const QColor& c);
+	void slotWetnessChanged(int);
+	void slotStrengthChanged(int);
 
 private:
 	void update(KisCanvasSubject*);

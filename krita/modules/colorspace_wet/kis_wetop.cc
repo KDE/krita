@@ -50,8 +50,27 @@ void KisWetOp::paintAt(const KisPoint &pos,
 			 const double /*xTilt*/,
 			 const double /*yTilt*/)
 {
+	if (!m_painter) return;
+
 	if (!m_painter -> device()) return;
+
 	KisPaintDeviceSP device = m_painter -> device();
+
+	// Get the paint
+	double wetness = (double)m_painter -> backgroundColor().red();
+	double strength = (double)m_painter -> backgroundColor().green();
+
+	KisStrategyColorSpaceSP cs = device -> colorStrategy();
+
+	if (cs -> id() != KisID("WET","")) {
+		kdDebug() << "You cannot paint wet paint on dry pixels.\n";
+	}
+
+	WetPix paint;
+
+	cs -> nativeColor(m_painter -> paintColor(), (QUANTUM*)(&paint), 0);
+
+
 
 /*
 	//

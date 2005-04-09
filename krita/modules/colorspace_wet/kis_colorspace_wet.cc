@@ -228,8 +228,18 @@ void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM  /*opacity*/, QUANTU
 void KisColorSpaceWet::toQColor(const QUANTUM *src, QColor *c, KisProfileSP /*profile*/)
 {
 	Q_UINT8 * rgb = new Q_UINT8[3];
-	wet_composite(rgb, (WetPix*)src);
+	memset(rgb, 255, 3);
+
+	// Composite the two layers in each pixelSize
+
+	// First the adsorption layers
+	wet_composite(rgb, (WetPix*)(src + 16));
+
+	// Then the paint layer (which comes first in our double-packed pixel)
+	wet_composite(rgb,  (WetPix*)(src));
+
 	c -> setRgb(rgb[0], rgb[1], rgb[2]);
+
 	delete[]rgb;
 }
 

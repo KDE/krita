@@ -32,7 +32,7 @@
                 </sizepolicy>
             </property>
             <property name="title">
-                <string>Select color range</string>
+                <string>Select Color Range</string>
             </property>
             <grid>
                 <property name="name">

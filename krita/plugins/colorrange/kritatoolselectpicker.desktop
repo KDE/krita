@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Color picker select tool
+Name=Color Picker Select Tool
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritacolorrange

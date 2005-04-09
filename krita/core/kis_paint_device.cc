@@ -65,7 +65,7 @@ private:
 };
 
 MoveCommand::MoveCommand(KisCanvasControllerInterface * controller, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
-	super(i18n("Moved layer"))
+	super(i18n("Moved Layer"))
 {
 	m_controller = controller;
 	m_device = device;

@@ -1,16 +1,22 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=ImageMagick wrapper
+Name=ImageMagick Wrapper
 Name[es]=Envoltorio para ImageMagick
 Name[fr]=Encapsulation d'ImageMagick
 Name[pt]='Wrapper' ImageMagick
 Name[pt_BR]='Wrapper' ImageMagick
+Name[sr]=Омотач ImageMagick-а
+Name[sr@Latn]=Омотач ImageMagick-а
+Name[sv]=ImageMagick-gränssnitt
 Name[zh_CN]=ImageMagick 管道
 Comment=ImageMagick based import/export and file conversion
 Comment[es]=Importación/exportación y conversión de archivos basadas en ImageMagick
 Comment[fr]=Filtre d'importation / exportation et conversion de fichiers ImageMagick
 Comment[pt]=Importação/exportação e conversão de ficheiro com o ImageMagick
 Comment[pt_BR]=Importação/exportação e conversão de ficheiro com o ImageMagick
+Comment[sr]=Увоз, извоз и конверзија фајлова помоћу ImageMagick-а
+Comment[sr@Latn]=Увоз, извоз и конверзија фајлова помоћу ImageMagick-а
+Comment[sv]=ImageMagick-baserad import, export och filkonvertering
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritamagick

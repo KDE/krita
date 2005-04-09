@@ -1,6 +1,16 @@
 [Desktop Entry]
-Name=Wet & Sticky canvas color model
-Comment[xx]=xxCanvas color model for wet & sticky paintxx
+Name=Wet & Sticky Canvas Color Model
+Name[da]=Våd & klæbrig kanvasfarve-model
+Name[en_GB]=Wet & Sticky canvas colour model
+Name[es]=Modelo de color de lienzo mojado y pegajoso
+Name[et]=Vesivärvi värvimudel
+Name[fr]=Modèle de couleurs sèches et mouillées
+Name[pt]=Modelo de cores de tela Molhado e Pegajoso
+Name[pt_BR]=Modelo de cores de tela Molhado & Pegajoso
+Name[ru]=Режим цвета с учётом влажности и прилипания
+Name[sr]=Модел боја мокрог и лепљивог платна
+Name[sr@Latn]=Модел боја мокрог и лепљивог платна
+Name[sv]=Våt och klibbig dukfärgmodell
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritawsplugin

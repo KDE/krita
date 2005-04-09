@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>CImg configuration</string>
+        <string>CImg Configuration</string>
     </property>
     <grid>
         <property name="name">
@@ -24,7 +24,7 @@
                 <cstring>bnRefresh</cstring>
             </property>
             <property name="text">
-                <string>&amp;Refresh preview</string>
+                <string>&amp;Refresh Preview</string>
             </property>
         </widget>
         <widget class="QLabel" row="0" column="1" rowspan="1" colspan="2">
@@ -62,7 +62,7 @@
                 <cstring>grpPrecision</cstring>
             </property>
             <property name="title">
-                <string>&amp;Mathematical precision</string>
+                <string>&amp;Mathematical Precision</string>
             </property>
             <grid>
                 <property name="name">

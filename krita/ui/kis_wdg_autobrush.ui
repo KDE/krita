@@ -75,12 +75,12 @@
                 <widget class="QComboBox" row="2" column="0">
                     <item>
                         <property name="text">
-                            <string>circle</string>
+                            <string>Circle</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>square</string>
+                            <string>Square</string>
                         </property>
                     </item>
                     <property name="name">

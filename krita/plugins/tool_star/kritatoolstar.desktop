@@ -1,15 +1,16 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Star tool
-Name[da]=Beskæringsværktøj
-Name[es]=Herramienta para recortar
-Name[et]=Kärpimistööriist
-Name[ga]=Uirlis bhearrtha
-Name[pt]=Ferramenta de recorte
-Name[pt_BR]=Ferramenta de recorte
-Name[ru]=Инструмент обрезки
-Name[sv]=Beskärningsverktyg
-Name[uk]=Засіб обрізання
+Name=Star Tool
+Name[br]=Ostilh steredenn
+Name[es]=Herramienta Estrella
+Name[fr]=Outil étoile
+Name[ga]=Uirlis réiltín
+Name[pt]=Ferramenta de estrelas
+Name[pt_BR]=Ferramenta de estrelas
+Name[sr]=Алат за звезде
+Name[sr@Latn]=Алат за звезде
+Name[sv]=Stjärnverktyg
+Name[zh_CN]=星形工具
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritatoolstar

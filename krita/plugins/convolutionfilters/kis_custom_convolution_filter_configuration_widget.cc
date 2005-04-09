@@ -39,7 +39,7 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
 {
 	QGridLayout *widgetLayout = new QGridLayout(this, 2, 1);
 
-	QPushButton *bnRefresh = new QPushButton(i18n("Refresh preview"), this, "bnrefresh");
+	QPushButton *bnRefresh = new QPushButton(i18n("Refresh Preview"), this, "bnrefresh");
 	QSpacerItem *spacer = new QSpacerItem(100, 30, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
 	widgetLayout -> addWidget(bnRefresh, 0, 0);

@@ -264,7 +264,7 @@
                         <cstring>chkCrop</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Crop layers on image resize.</string>
+                        <string>&amp;Crop layers on image resize</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>

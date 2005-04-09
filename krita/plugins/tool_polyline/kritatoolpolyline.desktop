@@ -1,6 +1,15 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Polyline tool
+Name=Polyline Tool
+Name[es]=Herramienta Polilínea
+Name[fr]=Outil lignes multiples
+Name[ga]=Uirlis Il-líne
+Name[pt]=Ferramenta de linhas poligonais
+Name[pt_BR]=Ferramenta de linhas poligonais
+Name[sr]=Алат за полилиније
+Name[sr@Latn]=Алат за полилиније
+Name[sv]=Flerlinjesverktyg
+Name[zh_CN]=折线工具
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritatoolpolyline

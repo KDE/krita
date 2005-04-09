@@ -1,6 +1,14 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Polygon tool
+Name=Polygon Tool
+Name[br]=Ostilh liestueg
+Name[es]=Herramienta Polígono
+Name[ga]=Uirlis Pholagáin
+Name[pt]=Ferramenta de polígonos
+Name[pt_BR]=Ferramenta de polígonos
+Name[sr]=Алат за полигоне
+Name[sr@Latn]=Алат за полигоне
+Name[sv]=Polygonverktyg
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritatoolpolygon

@@ -27,7 +27,7 @@
                 <cstring>lblMaskColor</cstring>
             </property>
             <property name="text">
-                <string>Mask color</string>
+                <string>Mask color:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>cmbMaskColor</cstring>

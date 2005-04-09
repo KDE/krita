@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Watercolor paint plugin
+Name=Watercolor Paint Plugin
 Comment=Color model and tools for painting with simulated watercolors
 ServiceTypes=Krita/CoreModule
 Type=Service

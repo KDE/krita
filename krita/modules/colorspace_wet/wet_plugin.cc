@@ -83,7 +83,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 		// Create the wet brush
 		// Create the wet palette
 		m_docker = new KisDockFrameDocker(m_view, "watercolor docker");
-		m_docker -> setCaption(i18n("Watercolor paint options"));
+		m_docker -> setCaption(i18n("Watercolor Paint Options"));
 
 		KisWetPaletteWidget * w = new KisWetPaletteWidget(m_docker);
 		w -> setCaption(i18n("Paints"));

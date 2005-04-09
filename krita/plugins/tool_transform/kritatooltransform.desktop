@@ -1,15 +1,19 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Crop tool
+Name=Crop Tool
 Name[da]=Beskæringsværktøj
 Name[es]=Herramienta para recortar
 Name[et]=Kärpimistööriist
+Name[fr]=Outil découpage
 Name[ga]=Uirlis bhearrtha
 Name[pt]=Ferramenta de recorte
 Name[pt_BR]=Ferramenta de recorte
 Name[ru]=Инструмент обрезки
+Name[sr]=Алат за сасецање
+Name[sr@Latn]=Алат за сасецање
 Name[sv]=Beskärningsverktyg
 Name[uk]=Засіб обрізання
+Name[zh_CN]=裁剪工具
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritatoolcrop

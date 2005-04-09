@@ -72,7 +72,7 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 			return;
 
 		bool ok;
-		QString text = QInputDialog::getText(i18n("Krita Font Tool"), i18n("Enter text"),
+		QString text = QInputDialog::getText(i18n("Krita Font Tool"), i18n("Enter text."),
 			QLineEdit::Normal, QString::null, &ok);
 		if (!ok)
 			return;

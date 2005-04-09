@@ -691,6 +691,7 @@ void KisDockerManager::resetLayerBox(KisImageSP img, KisLayerSP layer)
 			m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked());
 
 		m_layerBox -> slotSetCurrentItem(img -> index(layer));
+		layerSelected( img -> index(layer) );
 	}
 
 	m_layerBox -> setUpdatesEnabled(true);

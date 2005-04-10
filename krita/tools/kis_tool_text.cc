@@ -25,10 +25,10 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
-#include <qinputdialog.h>
 #include <qfontmetrics.h>
 
 #include <kaction.h>
+#include <kinputdialog.h>
 #include <klocale.h>
 #include <kfontdialog.h>
 #include <ksqueezedtextlabel.h>
@@ -72,8 +72,8 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 			return;
 
 		bool ok;
-		QString text = QInputDialog::getText(i18n("Krita Font Tool"), i18n("Enter text."),
-			QLineEdit::Normal, QString::null, &ok);
+		QString text = KInputDialog::getText(i18n("Font Tool"), i18n("Enter text:"),
+			 QString::null, &ok);
 		if (!ok)
 			return;
 		QFontMetrics metrics(m_font);

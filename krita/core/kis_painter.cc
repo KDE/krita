@@ -145,7 +145,6 @@ QRect KisPainter::dirtyRect() {
 	return r;
 }
 
-
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 			CompositeOp op,
                         KisPaintDeviceSP srcdev,
@@ -168,43 +167,59 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 // 			  << " onto: " << m_device -> name()
 // 			  << "\n";
 
-
-	int dstDepth = m_pixelSize;
-	int srcDepth = srcdev -> pixelSize();
 	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();
 
-	for(Q_INT32 i = 0; i < sh; i++)
-	{
-		// Use line iterators because the rect iterators do not guarantee that they will
-		// return corresponding pixels for source and destination.
-		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, false);
-		KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
+	Q_INT32 dstY = dy;
+	Q_INT32 srcY = sy;
+	Q_INT32 rowsRemaining = sh;
 
-		// We can only blt one row at a time so these values are irrelevant. They were
-		// used when we accessed tiles directly.
-		Q_INT32 srcRowSize = 0;
-		Q_INT32 dstRowSize = 0;
+	while (rowsRemaining > 0) {
 
-		while( ! srcIter.isDone())
-		{
-			int adv = QMIN(srcIter.nConseqHPixels(), dstIter.nConseqHPixels());
+		Q_INT32 dstX = dx;
+		Q_INT32 srcX = sx;
+		Q_INT32 columnsRemaining = sw;
+		Q_INT32 numContiguousDstRows = m_device -> numContiguousRows(dstY, dstX, dstX + sw - 1);
+		Q_INT32 numContiguousSrcRows = srcdev -> numContiguousRows(srcY, srcX, srcX + sw - 1);
 
-			m_colorStrategy -> bitBlt(dstDepth,
-						  dstIter.rawData(),
-						  dstRowSize,
+		Q_INT32 rows = QMIN(numContiguousDstRows, numContiguousSrcRows); 
+		rows = QMIN(rows, rowsRemaining);
+
+		while (columnsRemaining > 0) {
+
+			Q_INT32 numContiguousDstColumns = m_device -> numContiguousColumns(dstX, dstY, dstY + rows - 1);
+			Q_INT32 numContiguousSrcColumns = srcdev -> numContiguousColumns(srcX, srcY, srcY + rows - 1);
+
+			Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns); 
+			columns = QMIN(columns, columnsRemaining);
+
+			const Q_UINT8 *srcData = srcdev -> pixel(srcX, srcY);
+			Q_INT32 srcRowStride = srcdev -> rowStride(srcX, srcY);
+
+			Q_UINT8 *dstData = m_device -> writablePixel(dstX, dstY);
+			Q_INT32 dstRowStride = m_device -> rowStride(dstX, dstY);
+
+			m_colorStrategy -> bitBlt(m_pixelSize,
+						  dstData,
+						  dstRowStride,
 						  srcCs,
-						  srcIter.rawData(),
-						  srcRowSize,
+						  srcData,
+						  srcRowStride,
 						  opacity,
-						  1,
-						  adv,
+						  rows,
+						  columns,
 						  op,
 						  srcProfile,
 						  m_profile);
-			srcIter += adv;
-			dstIter += adv;
+
+			srcX += columns;
+			dstX += columns;
+			columnsRemaining -= columns;
 		}
+
+		srcY += rows;
+		dstY += rows;
+		rowsRemaining -= rows;
 	}
 }
 

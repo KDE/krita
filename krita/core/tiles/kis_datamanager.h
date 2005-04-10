@@ -137,11 +137,16 @@ public:
 
 public:
 	/**
-	 * Get a read-only pointer to the spcified pixel. The result of writing to this pointer is
-	 * unspecified.
+	 * Get a read-only pointer to the specified pixel.
 	 */
   	const Q_UINT8* pixel(Q_INT32 x, Q_INT32 y)
-  		{ return ACTUAL_DATAMGR::pixel(x, y);};
+  		{ return ACTUAL_DATAMGR::pixel(x, y); };
+
+	/**
+	 * Get a read-write pointer to the specified pixel.
+	 */
+  	Q_UINT8* writablePixel(Q_INT32 x, Q_INT32 y)
+  		{ return ACTUAL_DATAMGR::writablePixel(x, y); };
 
 	/**
 	 * Write the specified data to x, y. There is no checking on pixelSize!
@@ -167,7 +172,22 @@ public:
  			Q_INT32 w, Q_INT32 h)
 		{ACTUAL_DATAMGR::writeBytes( data, x, y, w, h); };
 
+	// Get the number of contiguous columns starting at x, valid for all values
+	// of y between minY and maxY.
+	Q_INT32 numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY)
+		{ return ACTUAL_DATAMGR::numContiguousColumns(x, minY, maxY); }
+	
 
+	// Get the number of contiguous rows starting at y, valid for all values
+	// of x between minX and maxX.
+	Q_INT32 numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX)
+		{ return ACTUAL_DATAMGR::numContiguousRows(y, minX, maxX); }
+
+
+	// Get the row stride at pixel (x, y). This is the number of bytes to add to a
+	// pointer to pixel (x, y) to access (x, y + 1).
+	Q_INT32 rowStride(Q_INT32 x, Q_INT32 y)
+		{ return ACTUAL_DATAMGR::rowStride(x, y); }
 
 protected:
 	friend class KisRectIterator;

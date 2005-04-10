@@ -107,6 +107,28 @@ public:
 	Q_UINT8 * readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	void writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
+	// Get the number of contiguous columns starting at x, valid for all values
+	// of y between minY and maxY.
+	Q_INT32 numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY); 
+
+	// Get the number of contiguous rows starting at y, valid for all values
+	// of x between minX and maxX.
+	Q_INT32 numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX); 
+
+	// Get the row stride at pixel (x, y). This is the number of bytes to add to a
+	// pointer to pixel (x, y) to access (x, y + 1).
+	Q_INT32 rowStride(Q_INT32 x, Q_INT32 y);
+
+	/**
+	 * Get a read-only pointer to pixel (x, y).
+	 */
+	const Q_UINT8* pixel(Q_INT32 x, Q_INT32 y);
+
+	/**
+	 * Get a read-write pointer to pixel (x, y).
+	 */
+	Q_UINT8* writablePixel(Q_INT32 x, Q_INT32 y);
+
 	/**
 	 *   Converts the paint device to a different colorspace
 	 */

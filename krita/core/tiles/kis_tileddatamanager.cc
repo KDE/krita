@@ -527,11 +527,8 @@ KisTile *KisTiledDataManager::getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def)
 		return tile;
 }
 
-Q_UINT8* KisTiledDataManager::pixel(Q_INT32 x, Q_INT32 y)
+Q_UINT8* KisTiledDataManager::pixelPtr(Q_INT32 x, Q_INT32 y, bool writable)
 {
-	// XXX: Optimize by using the tiles directly
-	//return readBytes(x, y, 1, 1);
-	
 	Q_UINT32 row = yToRow(y);
 	Q_UINT32 col = xToCol(x);
 	
@@ -541,37 +538,31 @@ Q_UINT8* KisTiledDataManager::pixel(Q_INT32 x, Q_INT32 y)
 	
 	Q_INT32 offset = m_pixelSize * (yInTile * KisTile::WIDTH + xInTile);
 
-	KisTile *tile = getTile(col, row, false);
+	KisTile *tile = getTile(col, row, writable);
 
 	return tile -> data() + offset;
-	
+}
+
+const Q_UINT8* KisTiledDataManager::pixel(Q_INT32 x, Q_INT32 y)
+{
+	return pixelPtr(x, y, false);
+}
+
+Q_UINT8* KisTiledDataManager::writablePixel(Q_INT32 x, Q_INT32 y)
+{
+	return pixelPtr(x, y, true);
 }
 
 void KisTiledDataManager::setPixel(Q_INT32 x, Q_INT32 y, const Q_UINT8 * data)
 {
-	// XXX: Optimize by using the tiles directly
-	// writeBytes(data, x, y, 1, 1);
-	
-	Q_UINT32 row = yToRow(y);
-	Q_UINT32 col = xToCol(x);
-
-
-	// calc limits within the tile
-	Q_INT32 yInTile = y - row * KisTile::HEIGHT;
-	Q_INT32 xInTile = x - col * KisTile::WIDTH;
-
-	Q_INT32 offset = m_pixelSize * (yInTile * KisTile::WIDTH + xInTile);
-	
-	KisTile *tile = getTile(col, row, true);
-
-	memcpy(tile -> data() + offset, data, m_pixelSize);
+	Q_UINT8 *pixel = pixelPtr(x, y, true);
+	memcpy(pixel, data, m_pixelSize);
 }
 
 
 Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
 					 Q_INT32 w, Q_INT32 h)
 {
-	// XXX: Optimize by using the tiles directly
  	if (w < 0)
  		w = 0;
 
@@ -580,24 +571,49 @@ Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
 
  	Q_UINT8 * data = new Q_UINT8[w * h * m_pixelSize];
 	Q_UINT8 * ptr = data;
-	int adv;
- 	// XXX: Isn't this a very slow copy?
-	for(Q_INT32 y2 = y; y2 < y + h; y2++)
-	{
-		// XXX; better use rect iterator here?
-		KisTiledHLineIterator hiter = KisTiledHLineIterator(this, x, y2, w, false);
-		while(! hiter.isDone())
-		{
-			adv = hiter.nConseqHPixels();
-			memcpy(ptr, hiter.rawData(), m_pixelSize * adv);
 
-			ptr += m_pixelSize * adv;
-			hiter += adv;
+	Q_INT32 dstY = 0;
+	Q_INT32 srcY = y;
+	Q_INT32 rowsRemaining = h;
+
+	while (rowsRemaining > 0) {
+
+		Q_INT32 dstX = 0;
+		Q_INT32 srcX = x;
+		Q_INT32 columnsRemaining = w;
+		Q_INT32 numContiguousSrcRows = numContiguousRows(srcY, srcX, srcX + w - 1);
+
+		Q_INT32 rows = QMIN(numContiguousSrcRows, rowsRemaining);
+
+		while (columnsRemaining > 0) {
+
+			Q_INT32 numContiguousSrcColumns = numContiguousColumns(srcX, srcY, srcY + rows - 1);
+
+			Q_INT32 columns = QMIN(numContiguousSrcColumns, columnsRemaining);
+
+			const Q_UINT8 *srcData = pixel(srcX, srcY);
+			Q_INT32 srcRowStride = rowStride(srcX, srcY);
+
+			Q_UINT8 *dstData = data + ((dstX + (dstY * w)) * m_pixelSize);
+			Q_INT32 dstRowStride = w * m_pixelSize;
+
+			for (Q_INT32 row = 0; row < rows; row++) {
+				memcpy(dstData, srcData, columns * m_pixelSize);
+				dstData += dstRowStride;
+				srcData += srcRowStride;
+			}
+
+			srcX += columns;
+			dstX += columns;
+			columnsRemaining -= columns;
 		}
+
+		srcY += rows;
+		dstY += rows;
+		rowsRemaining -= rows;
 	}
 
 	return data;
-
 }
 
 
@@ -605,8 +621,6 @@ void KisTiledDataManager::writeBytes(const Q_UINT8 * bytes,
 				     Q_INT32 x, Q_INT32 y,
 				     Q_INT32 w, Q_INT32 h)
 {
-	// XXX: Optimize by using the tiles directly
-
  	// XXX: Is this correct?
 	if (w < 0)
 		w = 0;
@@ -615,21 +629,86 @@ void KisTiledDataManager::writeBytes(const Q_UINT8 * bytes,
 		h = 0;
 	const Q_UINT8 * ptr = bytes;
 
-	int adv;
+	Q_INT32 srcY = 0;
+	Q_INT32 dstY = y;
+	Q_INT32 rowsRemaining = h;
 
-	// XXX: Isn't this a very slow copy?
-	for(Q_INT32 y2 = y; y2 < y + h; y2++)
-	{
-		KisTiledHLineIterator hiter = KisTiledHLineIterator(this, x, y2, w, true);
-		while(! hiter.isDone())
-		{
-			adv = hiter.nConseqHPixels();
-			memcpy(hiter.rawData(), ptr , adv * m_pixelSize);
+	while (rowsRemaining > 0) {
 
-			ptr += adv * m_pixelSize;
-			hiter += adv;
+		Q_INT32 srcX = 0;
+		Q_INT32 dstX = x;
+		Q_INT32 columnsRemaining = w;
+		Q_INT32 numContiguousdstRows = numContiguousRows(dstY, dstX, dstX + w - 1);
+
+		Q_INT32 rows = QMIN(numContiguousdstRows, rowsRemaining);
+
+		while (columnsRemaining > 0) {
+
+			Q_INT32 numContiguousdstColumns = numContiguousColumns(dstX, dstY, dstY + rows - 1);
+
+			Q_INT32 columns = QMIN(numContiguousdstColumns, columnsRemaining);
+
+			Q_UINT8 *dstData = writablePixel(dstX, dstY);
+			Q_INT32 dstRowStride = rowStride(dstX, dstY);
+
+			const Q_UINT8 *srcData = bytes + ((srcX + (srcY * w)) * m_pixelSize);
+			Q_INT32 srcRowStride = w * m_pixelSize;
+
+			for (Q_INT32 row = 0; row < rows; row++) {
+				memcpy(dstData, srcData, columns * m_pixelSize);
+				srcData += srcRowStride;
+				dstData += dstRowStride;
+			}
+
+			dstX += columns;
+			srcX += columns;
+			columnsRemaining -= columns;
 		}
+
+		dstY += rows;
+		srcY += rows;
+		rowsRemaining -= rows;
 	}
+}
+
+Q_INT32 KisTiledDataManager::numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY)
+{
+	Q_INT32 numColumns;
+
+	Q_UNUSED(minY);
+	Q_UNUSED(maxY);
+
+	if (x >= 0) {
+		numColumns = KisTile::WIDTH - (x % KisTile::WIDTH);
+	} else {
+		numColumns = ((-x - 1) % KisTile::WIDTH) + 1;
+	}
+
+	return numColumns;
+}
+
+Q_INT32 KisTiledDataManager::numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX)
+{
+	Q_INT32 numRows;
+
+	Q_UNUSED(minX);
+	Q_UNUSED(maxX);
+
+	if (y >= 0) {
+		numRows = KisTile::HEIGHT - (y % KisTile::HEIGHT);
+	} else {
+		numRows = ((-y - 1) % KisTile::HEIGHT) + 1;
+	}
+
+	return numRows;
+}
+
+Q_INT32 KisTiledDataManager::rowStride(Q_INT32 x, Q_INT32 y)
+{
+	Q_UNUSED(x);
+	Q_UNUSED(y);
+
+	return KisTile::WIDTH * m_pixelSize;
 }
 
 Q_INT32 KisTiledDataManager::numTiles(void) const

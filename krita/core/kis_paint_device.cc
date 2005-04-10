@@ -621,6 +621,30 @@ bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opa
   return true;
 }
 
+Q_INT32 KisPaintDevice::numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY)
+{
+	return m_datamanager -> numContiguousColumns(x - m_x, minY - m_y, maxY - m_y);
+}
+
+Q_INT32 KisPaintDevice::numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX)
+{
+	return m_datamanager -> numContiguousRows(y - m_y, minX - m_x, maxX - m_x);
+}
+
+Q_INT32 KisPaintDevice::rowStride(Q_INT32 x, Q_INT32 y)
+{
+	return m_datamanager -> rowStride(x - m_x, y - m_y);
+}
+
+const Q_UINT8* KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y)
+{
+	return m_datamanager -> pixel(x - m_x, y - m_y);
+}
+
+Q_UINT8* KisPaintDevice::writablePixel(Q_INT32 x, Q_INT32 y)
+{
+	return m_datamanager -> writablePixel(x - m_x, y - m_y);
+}
 
 
 #include "kis_paint_device.moc"

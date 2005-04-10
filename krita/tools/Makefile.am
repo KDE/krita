@@ -51,15 +51,13 @@ noinst_HEADERS = \
 	kis_tool_rectangle.h \
 	kis_tool_colorpicker.h \
 	kis_tool_line.h \
-	kis_tool_select_brush.h \
 	kis_tool_text.h \
 	kis_tool_duplicate.h \
 	kis_tool_move.h \
 	kis_tool_zoom.h \
 	kis_tool_ellipse.h \
 	kis_tool_pan.h \
-	kis_tool_eraser.h \
-	kis_tool_select_eraser.h 
+	kis_tool_eraser.h
 
 
 kritadefaulttools_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

@@ -249,7 +249,7 @@ uint KisOilPaintFilter::MostFrequentColor (uchar* Bits, int Width, int Height, i
 KisFilterConfigurationWidget* KisOilPaintFilter::createConfigurationWidget(QWidget* parent)
 {
 	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush Size") ) );
+	param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size") ) );
 	param.push_back( KisIntegerWidgetParam( 10, 255, 30, i18n("Smooth") ) );
 	return new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
 }

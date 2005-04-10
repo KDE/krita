@@ -99,7 +99,7 @@
                                         </font>
                                     </property>
                                     <property name="text">
-                                        <string>Segment color</string>
+                                        <string>Segment Color</string>
                                     </property>
                                 </widget>
                                 <widget class="QLayoutWidget">
@@ -229,7 +229,7 @@
                                         </font>
                                     </property>
                                     <property name="text">
-                                        <string>Opacity</string>
+                                        <string>Opacity:</string>
                                     </property>
                                 </widget>
                                 <widget class="KIntSpinBox">

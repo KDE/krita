@@ -106,7 +106,7 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
 
 		KisPaintDeviceSP device = m_currentImage->activeDevice ();
 		KisPainter painter (device);
-		painter.beginTransaction (i18n ("rectangle"));
+		painter.beginTransaction (i18n ("Rectangle"));
 		
 		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
 		painter.setPaintOp(op);

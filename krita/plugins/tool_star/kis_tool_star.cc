@@ -113,7 +113,7 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
 
                 KisPaintDeviceSP device = m_currentImage->activeDevice ();;
                 KisPainter painter (device);
-                painter.beginTransaction (i18n ("star"));
+                painter.beginTransaction (i18n("Star"));
 
                 painter.setPaintColor(m_subject -> fgColor());
                 painter.setBrush(m_subject -> currentBrush());

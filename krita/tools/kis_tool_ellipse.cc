@@ -106,7 +106,7 @@ void KisToolEllipse::buttonRelease(KisButtonReleaseEvent *event)
 
                 KisPaintDeviceSP device = m_currentImage->activeDevice ();;
                 KisPainter painter (device);
-                painter.beginTransaction (i18n ("ellipse"));
+                painter.beginTransaction (i18n ("Ellipse"));
 
                 painter.setPaintColor(m_subject -> fgColor());
                 painter.setBrush(m_subject -> currentBrush());

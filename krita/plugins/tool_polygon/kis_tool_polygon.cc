@@ -103,7 +103,7 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
 
                 KisPaintDeviceSP device = m_currentImage->activeDevice ();;
                 KisPainter painter (device);
-                painter.beginTransaction (i18n ("polygon"));
+                painter.beginTransaction (i18n ("Polygon"));
 
                 painter.setPaintColor(m_subject -> fgColor());
                 painter.setBrush(m_subject -> currentBrush());

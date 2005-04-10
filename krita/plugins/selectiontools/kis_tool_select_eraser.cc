@@ -69,7 +69,7 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 			delete m_painter;
 		KisSelectionSP selection = layer -> selection();
 		m_painter = new KisPainter(selection.data());
-		m_painter -> beginTransaction(i18n("selectioneraser"));
+		m_painter -> beginTransaction(i18n("Selection Eraser"));
 		m_painter -> setPaintColor(Qt::white); // XXX: the mask color!
 		m_painter -> setBrush(m_subject -> currentBrush());
 		m_painter -> setOpacity(OPACITY_OPAQUE);

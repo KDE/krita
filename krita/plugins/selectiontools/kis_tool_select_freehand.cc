@@ -308,7 +308,7 @@ void KisToolSelectFreehand::setup(KActionCollection *collection)
 QWidget* KisToolSelectFreehand::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
-	m_optWidget -> setCaption(i18n("Freehand selection"));
+	m_optWidget -> setCaption(i18n("Freehand Selection"));
 	return m_optWidget;
 }
 

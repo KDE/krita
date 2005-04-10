@@ -44,7 +44,7 @@ KisCImgPlugin::KisCImgPlugin(QObject *parent, const char *name, const QStringLis
         }
 
         KisFilterSP krdf = createFilter<KisCImgFilter>(view);
-	(void) new KAction("&CImg image restoration...", 0, 0, krdf, SLOT(slotActivated()), actionCollection(), "cimg_filter");
+	(void) new KAction(i18n("&CImg Image Restoration..."), 0, 0, krdf, SLOT(slotActivated()), actionCollection(), "cimg_filter");
 }
 
 KisCImgPlugin::~KisCImgPlugin()

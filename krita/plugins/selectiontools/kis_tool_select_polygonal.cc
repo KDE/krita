@@ -314,7 +314,7 @@ void KisToolSelectPolygonal::setup(KActionCollection *collection)
 QWidget* KisToolSelectPolygonal::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
-	m_optWidget -> setCaption(i18n("Selection polygons"));
+	m_optWidget -> setCaption(i18n("Selection Polygons"));
 	return m_optWidget;
 }
 

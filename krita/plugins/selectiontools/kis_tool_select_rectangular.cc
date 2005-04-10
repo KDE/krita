@@ -263,7 +263,7 @@ void KisToolSelectRectangular::setup(KActionCollection *collection)
 QWidget* KisToolSelectRectangular::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
-	m_optWidget -> setCaption(i18n("Select rectangles"));
+	m_optWidget -> setCaption(i18n("Select Rectangles"));
 	return m_optWidget;
 }
 

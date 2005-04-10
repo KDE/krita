@@ -458,9 +458,9 @@ void KisView::setupActions()
 	// import/export actions
 	m_imgImport = new KAction(i18n("Import Image..."), "wizard", 0, this, SLOT(slotImportImage()), actionCollection(), "import_image");
 	m_imgExport = new KAction(i18n("Export Image..."), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
-	m_imgProperties = new KAction(i18n("Image Properties..."), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
+	m_imgProperties = new KAction(i18n("Image Properties"), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
 	m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
-	m_imgResizeToLayer = new KAction(i18n("Extend Image to the Size of the Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
+	m_imgResizeToLayer = new KAction(i18n("Extend Image to Size of Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
 	// view actions
 	m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
 	m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
@@ -1372,7 +1372,7 @@ void KisView::mirrorLayerX()
 	KisUndoAdapter * undo = 0;
 	KisTransaction * t = 0;
 	if ((undo = currentImg() -> undoAdapter()))
-		t = new KisTransaction(i18n("Mirror layer X"), layer.data());
+		t = new KisTransaction(i18n("Mirror Layer X"), layer.data());
 
 	layer->mirrorX();
 
@@ -1392,7 +1392,7 @@ void KisView::mirrorLayerY()
 	KisUndoAdapter * undo = 0;
 	KisTransaction * t = 0;
 	if ((undo = currentImg() -> undoAdapter()))
-		t = new KisTransaction(i18n("Mirror layer Y"), layer.data());
+		t = new KisTransaction(i18n("Mirror Layer Y"), layer.data());
 
 	layer->mirrorY();
 
@@ -1413,7 +1413,7 @@ void KisView::scaleLayer(double sx, double sy, enumFilterType ftype)
 	KisUndoAdapter * undo = 0;
 	KisTransaction * t = 0;
 	if ((undo = currentImg() -> undoAdapter()))
-		t = new KisTransaction(i18n("Scale layer"), layer.data());
+		t = new KisTransaction(i18n("Scale Layer"), layer.data());
 
 	layer -> scale(sx, sy, m_progress, ftype);
 
@@ -1436,7 +1436,7 @@ void KisView::rotateLayer(double angle)
 	KisUndoAdapter * undo = 0;
 	KisTransaction * t = 0;
 	if ((undo = currentImg() -> undoAdapter()))
-		t = new KisTransaction(i18n("Rotate layer"), layer.data());
+		t = new KisTransaction(i18n("Rotate Layer"), layer.data());
 
 	layer -> rotate(angle, m_progress);
 
@@ -1483,7 +1483,7 @@ void KisView::cropLayer(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 	KisUndoAdapter * undo = 0;
 	KisTransaction * t = 0;
 	if ((undo = currentImg() -> undoAdapter()))
-		t = new KisTransaction(i18n("Mirror layer Y"), layer.data());
+		t = new KisTransaction(i18n("Mirror Layer Y"), layer.data());
 
 	if (undo) undo -> addCommand(t);
 
@@ -1594,7 +1594,7 @@ void KisView::layerCompositeOp(int compositeOp)
 // range: 0 - 100
 void KisView::layerOpacity(int opacity)
 {
-	
+
 	kdDebug() << "Opacity set to " << opacity << endl;
 	KisImageSP img = currentImg();
 	if (!img) return;

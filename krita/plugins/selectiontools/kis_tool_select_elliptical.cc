@@ -255,7 +255,7 @@ void KisToolSelectElliptical::setup(KActionCollection *collection)
 QWidget* KisToolSelectElliptical::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
-	m_optWidget -> setCaption(i18n("Elliptical selection"));
+	m_optWidget -> setCaption(i18n("Elliptical Selection"));
 	return m_optWidget;
 }
 

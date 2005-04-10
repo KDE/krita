@@ -193,7 +193,7 @@ void KisToolSelectContiguous::setup(KActionCollection *collection)
 QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
-	m_optWidget -> setCaption(i18n("Select contiguous areas"));
+	m_optWidget -> setCaption(i18n("Select Contiguous Areas"));
 	return m_optWidget;
 }
 

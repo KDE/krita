@@ -70,7 +70,7 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
 			delete m_painter;
 		KisSelectionSP selection = layer -> selection();
 		m_painter = new KisPainter(selection.data());
-		m_painter -> beginTransaction(i18n("selectionbrush"));
+		m_painter -> beginTransaction(i18n("Selection Brush"));
 		m_painter -> setPaintColor(Qt::black);
 		m_painter -> setBrush(m_subject -> currentBrush());
 		m_painter -> setOpacity(MAX_SELECTED);

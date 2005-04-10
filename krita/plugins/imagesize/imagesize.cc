@@ -64,8 +64,8 @@ ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
  		  << parent -> className()
  		  << "\n";
 
-	(void) new KAction(i18n("&Image Size..."), 0, 0, this, SLOT(slotImageSize()), actionCollection(), "imagesize");
-	(void) new KAction(i18n("&Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "layersize");
+	(void) new KAction(i18n("Change &Image Size..."), 0, 0, this, SLOT(slotImageSize()), actionCollection(), "imagesize");
+	(void) new KAction(i18n("Change &Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "layersize");
 
 	if ( !parent->inherits("KisView") )
 	{
@@ -117,7 +117,7 @@ void ImageSize::slotImageSize()
 		}
 
 	}
-		
+
 	delete dlgImageSize;
 }
 

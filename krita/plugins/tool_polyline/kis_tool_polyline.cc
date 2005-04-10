@@ -103,7 +103,7 @@ void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
 
                 KisPaintDeviceSP device = m_currentImage->activeDevice ();;
                 KisPainter painter (device);
-                painter.beginTransaction (i18n ("polyline"));
+                painter.beginTransaction (i18n ("Polyline"));
 
                 painter.setPaintColor(m_subject -> fgColor());
                 painter.setBrush(m_subject -> currentBrush());

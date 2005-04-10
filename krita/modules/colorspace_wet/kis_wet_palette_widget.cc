@@ -192,7 +192,7 @@ KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : su
 
 
 	QHBoxLayout * h1 = new QHBoxLayout(vl, 0, "strength layout");
-	QLabel * label = new QLabel(i18n("Paint strength"), this);
+	QLabel * label = new QLabel(i18n("Paint strength:"), this);
 	h1 -> addWidget(label);
 	KIntNumInput * n = new KIntNumInput(16, this);
 	connect(n, SIGNAL(valueChanged(int)), this,  SLOT(slotStrengthChanged(int)));
@@ -200,7 +200,7 @@ KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : su
 	h1 -> addWidget(n);
 
 	QHBoxLayout * h2 = new QHBoxLayout(vl, 0, "wet layout");
-	label = new QLabel(i18n("Wetness"), this);
+	label = new QLabel(i18n("Wetness:"), this);
 	h2 -> addWidget(label);
 	n = new KIntNumInput(16, this);
 	connect(n, SIGNAL(valueChanged(int)), this, SLOT(slotWetnessChanged(int)));

@@ -116,10 +116,12 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 		memset(convertedSrcPixels, 0, len * sizeof(QUANTUM));
 
 		// XXX: Set profiles
-   		srcSpace -> convertPixelsTo(src, 0,
-					    convertedSrcPixels, this, 0,
-					    rows * cols);
- 		srcstride = (srcstride / srcSpace -> pixelSize()) * pixelSize();
+		for (Q_INT32 row = 0; row < rows; row++) {
+			srcSpace -> convertPixelsTo(src + row * srcstride, 0,
+						    convertedSrcPixels + row * cols * pixelSize(), this, 0,
+						    cols);
+		}
+ 		srcstride = cols * pixelSize();
 
 		bitBlt(stride,
 		       dst,

@@ -76,6 +76,10 @@ public:
 	double xSpacing(double pressure = PRESSURE_DEFAULT) const;
 	double ySpacing(double pressure = PRESSURE_DEFAULT) const;
 
+	// Dimensions in pixels of the mask/image at a given pressure.
+	Q_INT32 maskWidth(double pressure) const;
+	Q_INT32 maskHeight(double pressure) const;
+
 	virtual void setUseColorAsMask(bool useColorAsMask) { m_useColorAsMask = useColorAsMask; }
 	virtual bool useColorAsMask() const { return m_useColorAsMask; }
 	virtual bool hasColor() const;

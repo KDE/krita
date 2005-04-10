@@ -95,11 +95,8 @@ void KisBrushOp::paintAt(const KisPoint &pos,
 	}
 	m_painter -> setPressure(pressure);
 
-	QRect dabRect = dab -> extent();
+	QRect dabRect = QRect(0, 0, brush -> maskWidth(pressure), brush -> maskHeight(pressure));
 
-	Q_ASSERT(dabRect.x() == 0);
-	Q_ASSERT(dabRect.y() == 0);
-	
 	KisImage * image = device -> image();
 	
 	if (image != 0) {

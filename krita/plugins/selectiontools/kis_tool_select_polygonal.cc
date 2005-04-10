@@ -22,22 +22,24 @@
 
 #include <qpainter.h>
 #include <qregion.h>
+#include <qwidget.h>
 
 #include <kaction.h>
 #include <kdebug.h>
 #include <kcommand.h>
 #include <klocale.h>
 
-#include "kis_canvas_controller.h"
-#include "kis_canvas_subject.h"
-#include "kis_cursor.h"
-#include "kis_image.h"
-#include "kis_tool_select_polygonal.h"
-#include "kis_vec.h"
-#include "kis_undo_adapter.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include <kis_selection_options.h>
+#include <kis_canvas_controller.h>
+#include <kis_canvas_subject.h>
+#include <kis_cursor.h>
+#include <kis_image.h>
+#include <kis_tool_select_polygonal.h>
+#include <kis_vec.h>
+#include <kis_undo_adapter.h>
+#include <kis_button_press_event.h>
+#include <kis_button_release_event.h>
+#include <kis_move_event.h>
 
 namespace {
 	class PolygonSelectCmd : public KNamedCommand {
@@ -72,7 +74,7 @@ namespace {
 	}
 }
 
-KisToolSelectPolygonal::KisToolSelectPolygonal() 
+KisToolSelectPolygonal::KisToolSelectPolygonal()
 	: super()
 {
 	setName("tool_select_polygonal");
@@ -85,7 +87,7 @@ KisToolSelectPolygonal::KisToolSelectPolygonal()
 	m_dragEnd =   QPoint(-1,-1);
 
 	m_start  = QPoint(-1, -1);
-	m_finish = QPoint(-1, -1);     
+	m_finish = QPoint(-1, -1);
 
 	m_index = 0;
 }
@@ -128,7 +130,7 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 
 				// draw new and final line for this segment
 				drawLine(m_dragStart, m_dragEnd);
-			} 
+			}
 			else {
 				clearSelection();
 				m_start = event -> pos().floorQPoint();
@@ -143,8 +145,8 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 			m_dragStart = event -> pos().floorQPoint();
 			m_dragEnd = event -> pos().floorQPoint();
 			m_pointArray.putPoints(m_index++, 1, m_dragStart.x(), m_dragStart.y());
-		} 
-		else if (event -> button() == Qt::RightButton || event -> button() == Qt::MidButton) {   
+		}
+		else if (event -> button() == Qt::RightButton || event -> button() == Qt::MidButton) {
 			m_dragging = false;
 			finish(event -> pos().floorQPoint());
 
@@ -153,11 +155,11 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 	// 		QPointArray points = zoomPointArray(m_pointArray);
 
 			// need to connect start and end positions to close the
-			// polyline 
+			// polyline
 
-			// we need a bounding rectangle and a point array of 
+			// we need a bounding rectangle and a point array of
 			// points in the polyline
-			// m_doc->getSelection()->setBounds(m_selectRect);        
+			// m_doc->getSelection()->setBounds(m_selectRect);
 
 	// 		m_doc -> getSelection() -> setPolygonalSelection(m_imageRect, points, m_doc -> currentImg() -> getCurrentLayer());
 			m_pointArray.putPoints(m_index++, 1, m_pointArray[0].x(), m_pointArray[0].y());
@@ -198,19 +200,19 @@ void KisToolSelectPolygonal::drawLine( const QPoint& /*start*/, const QPoint& /*
 // 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 // 		QWidget *canvas = controller -> canvas();
 // 		QPainter p(canvas);
-	
+
 // 		p.begin( m_canvas );
 // 		p.setRasterOp( Qt::NotROP );
 // 		p.setPen( QPen( Qt::DotLine ) );
 // 		float zF = view->zoomFactor();
 
-// 		p.drawLine( QPoint( start.x() + view->xPaintOffset() 
+// 		p.drawLine( QPoint( start.x() + view->xPaintOffset()
 // 				- (int)(zF * view->xScrollOffset()),
-// 				start.y() + view->yPaintOffset() 
-// 				- (int)(zF * view->yScrollOffset())), 
-// 			QPoint( end.x() + view->xPaintOffset() 
+// 				start.y() + view->yPaintOffset()
+// 				- (int)(zF * view->yScrollOffset())),
+// 			QPoint( end.x() + view->xPaintOffset()
 // 				- (int)(zF * view->xScrollOffset()),
-// 				end.y() + view->yPaintOffset() 
+// 				end.y() + view->yPaintOffset()
 // 				- (int)(zF * view->yScrollOffset())) );
 
 // 		p.end();
@@ -297,16 +299,30 @@ void KisToolSelectPolygonal::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("Tool &Polygonal Select"),
-					    "polygonal" , 
-					    0, 
-					    this, 
+					    "polygonal" ,
+					    0,
+					    this,
 					    SLOT(activate()),
-					    collection, 
+					    collection,
 					    name());
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
 }
+
+
+QWidget* KisToolSelectPolygonal::createOptionWidget(QWidget* parent)
+{
+	m_optWidget = new KisSelectionOptions(parent, m_subject);
+	m_optWidget -> setCaption(i18n("Selection polygons"));
+	return m_optWidget;
+}
+
+QWidget* KisToolSelectPolygonal::optionWidget()
+{
+        return m_optWidget;
+}
+
 
 
 #include "kis_tool_select_polygonal.moc"

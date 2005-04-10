@@ -22,24 +22,17 @@ kritadefaulttools_la_SOURCES = \
 	default_tools.cc \
 	kis_tool_colorpicker.cc \
 	kis_tool_move.cc \
-	kis_tool_select_rectangular.cc \
 	kis_tool_zoom.cc \
 	kis_tool_brush.cc \
 	kis_tool_eraser.cc \
 	kis_tool_line.cc \
 	kis_tool_airbrush.cc \
-        kis_tool_select_freehand.cc \
-        kis_tool_select_polygonal.cc \
-        kis_tool_select_elliptical.cc \
-        kis_tool_select_contiguous.cc \
         kis_tool_pen.cc \
 	kis_tool_duplicate.cc \
         kis_tool_fill.cc \
         kis_tool_rectangle.cc \
         kis_tool_ellipse.cc \
         kis_tool_colorchanger.cc  \
-	kis_tool_select_brush.cc \
-	kis_tool_select_eraser.cc \
 	kis_tool_pan.cc \
 	kis_tool_text.cc \
 	kis_tool_gradient.cc
@@ -51,11 +44,8 @@ noinst_HEADERS = \
 	default_tools.h \
 	kis_tool_fill.h \
 	kis_tool_pen.h \
-	kis_tool_select_freehand.h \
 	kis_tool_airbrush.h \
-	kis_tool_select_polygonal.h \
 	kis_tool_brush.h \
-	kis_tool_select_rectangular.h \
 	kis_tool_colorchanger.h \
 	kis_tool_gradient.h \
 	kis_tool_rectangle.h \
@@ -65,11 +55,9 @@ noinst_HEADERS = \
 	kis_tool_text.h \
 	kis_tool_duplicate.h \
 	kis_tool_move.h \
-	kis_tool_select_contiguous.h \
 	kis_tool_zoom.h \
 	kis_tool_ellipse.h \
 	kis_tool_pan.h \
-	kis_tool_select_elliptical.h \
 	kis_tool_eraser.h \
 	kis_tool_select_eraser.h 
 

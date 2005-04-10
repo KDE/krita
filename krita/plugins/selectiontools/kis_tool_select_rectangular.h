@@ -40,6 +40,9 @@ public:
 	virtual void update(KisCanvasSubject *subject);
 
 	virtual void setup(KActionCollection *collection);
+	virtual QWidget * createOptionWidget(QWidget* parent);
+        virtual QWidget* optionWidget();
+
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
 	virtual void buttonPress(KisButtonPressEvent *e);
@@ -56,6 +59,8 @@ private:
 	QPoint m_startPos;
 	QPoint m_endPos;
 	bool m_selecting;
+        QWidget * m_optWidget;
+
 };
 
 class KisToolSelectRectangularFactory : public KisToolFactory {
@@ -63,7 +68,7 @@ class KisToolSelectRectangularFactory : public KisToolFactory {
 public:
 	KisToolSelectRectangularFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectRectangularFactory(){};
-	
+
 	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectRectangular(); t -> setup(m_ac); return t; }
 	virtual KisID id() { return KisID("rectangularselect", i18n("Rectangular select tool")); }
 };

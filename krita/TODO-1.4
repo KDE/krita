@@ -1,61 +1,122 @@
-Krita TODO for KOffice release 1.4
+Krita buglist for KOffice release 1.4
+
+----------------------------------------------------------------------
 
 Templates
 
-* Grayscale templates broken (cannot be loaded at all)
-* RGB templates broken (show up with transparent background instead of
-  white)
+Loading templates is broken. The very same Krita file is readable from
+the checkout tree, but won't load, not even directly, when installed
+in the template location. On loading from the template dialog, koffice
+the lib store outputs
 
-Menus
+  the lib store outputs  KoDocument::loadNativeFormat( /usr/share/apps/krita/templates/rgb/.source/white_640x480.kra )
+  koffice (lib store): WARNING: /usr/share/apps/krita/templates/rgb/.source isn't writable
 
-* Import shows jpg, png etc. (but not everything we can import), but
-  export shows three completely uninteresting versions of Krita's
-  native file format.
+When loading directly, e.g.,
+
+  boud@talnus:~/prj/krita/ubuild/krita> krita /usr/share/apps/krita/templates/rgb/.source/white_640x480.kra        
+
+Krita returns a KOffice error notice:
+
+Could not open /usr/share/apps/krita/templates/rgb/.source/white_640x480.kra
+Reason: Not a valid KOffice file: /usr/share/apps/krita/templates/rgb/.source/white_640x480.kra
+
+Nonetheless:
+
+boud@talnus:~/prj/krita/ubuild/krita> cp /usr/share/apps/krita/templates/rgb/.source/white_640x480.kra .
+boud@talnus:~/prj/krita/ubuild/krita> krita ./white_640x480.kra
+
+Works fine, so it isn't the actual file that is corrupted.
+                                                                    
+----------------------------------------------------------------------
+
+Import/Export/Load/Save
+
+Krita cannot load the same set of file types from File/Open or the
+initial file dialog. For instance, Krita can import Photoshop files
+from Image/Import Image, but not from File/Import or File/Open.
+
+Desired situation:
+
+File/Open and File/Save can load/save images and documents in all
+formats Krita can handle.
+
+Image/Import and Image/Export can load/save an image into the current
+document. It should be able to handle all file formats, including
+Krita's native format, that Krita can handle.
+
+----------------------------------------------------------------------
 * The radio actions for showing/hiding dockers don't work.
+
 * Removing current image does not ask whether to save the image
   even if it has been changed -> people will expect Krita to save the
   image in its import format. Nobody will assume that all the tabs
   together form one big document that is saved/exported as a whole.
 
 * What's the difference between gamma correction and colour adjustment?
+
 * Desaturate doesn't use the progress bar and is not cancelable.
+
 * The Variations plugin is just a mockup and does not use the same
   preview as the rest of Krita.
+
 * Link/unlink layer sets a nice icon. but doesn't actually link the
   layer to anything.
+
 * Convert layer type doesn't do anything
+
 * Merge layer doesn't do anything
+
 * Merge visible layers is only accessable if there are non-visible
   layers. It should always be accessible even if there are only
   visible layers.
+
 * Histogram doesn't do anything yet.
+
 * Layer size doesn't do resize, just scaled. The dialog is ugly
   when the resize/scale option widget is hidden. The layer is scaled
   correctly, but when scaled down, the old tiles are not removed.
+
 * Select invert doesn't correctly update the image outside the
   selection rect
+
 * None of the selection menu options do anything yet, the
   select-by-color dialog shows just the dialog.
+
 * Gaussion blur doesn't use the progress bar
+
 * Sharpen doesn't use the progress bar
+
 * mean removal doesn't use the progress bar
+
 * Convolution/edge detection filters don't use the progress bar
+
 * There are no example script files for use with the scripting enging
+
 * The settings dialog has no icons yet
+
 * The cursor settings only take effect _after_ a tool change
+
 * The description field in color settings is empty.   
+
 * There is no Krita handbook yet.
+
 * Convert image doesn't work (commented out with autolayer merge)
 
 Selections
 
 * On change to a layer without a selection, do not show selection.
+
 * Select freehand (drawing a shape and selecting the contents) does not work
+
 * Magic wand does not work
+
 * Other selection menu options are not implemented either, except for 
   invert.
+
 * The shape tools should (with filled as default) also be available as 
   selection tools.
+
 * The selected parameter in KisPixel should be filled or removed.
   
 Gradients
@@ -64,8 +125,11 @@ Gradients
 Painting
 
 * The shapes tools should offer a filled shape option
+
 * The ConvolutionPainter does not take isSelected() into account.
+
 * The convolution paintop doesn't do anything at all.
+
 * Long painter operations (e.g., convolution painter) should use the 
   progressbar and be cancelable.
 
@@ -90,8 +154,10 @@ Import/Export
 
 * The image magick build should be ported to the fileformat framework
   and put in its own plugin (KisFileFormat, KisFileFormatRegistry)
+
 * The image magick plugin should use KisAnnotation to preserve image
   data on roundtrips.
+
 * Open file does not show all the file formats that are shown in import
   (for instance, no .psd)
 

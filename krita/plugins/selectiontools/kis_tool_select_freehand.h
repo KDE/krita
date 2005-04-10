@@ -31,7 +31,7 @@
 
 #include "kis_tool_factory.h"
 
-// This is KisToolSelectBrush, but filled when the mouse 
+// This is KisToolSelectBrush, but filled when the mouse
 // button is released.
 class KisToolSelectFreehand : public KisToolNonPaint {
 
@@ -46,6 +46,8 @@ public:
 	virtual bool willModify() const;
 
 	virtual void setup(KActionCollection *collection);
+	virtual QWidget * createOptionWidget(QWidget* parent);
+        virtual QWidget* optionWidget();
 
 	virtual void paintEvent(QPaintEvent *e);
 	virtual void buttonPress(KisButtonPressEvent *event);
@@ -53,10 +55,10 @@ public:
 	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 	void start( QPoint p );
-	void finish( QPoint p ); 
+	void finish( QPoint p );
 
 protected:
-	void drawLine(const QPoint& start, const QPoint& end); 
+	void drawLine(const QPoint& start, const QPoint& end);
 
 	QPoint      m_dragStart;
 	QPoint      m_dragEnd;
@@ -65,7 +67,7 @@ protected:
 	QPoint      mFinish;
 
 	bool        m_dragging;
-	bool        m_drawn;   
+	bool        m_drawn;
 
 // 	KisCanvas   *m_canvas;
 
@@ -85,6 +87,8 @@ private:
 	QRect m_imageRect;
 	bool dragFirst;
 	float m_dragdist;
+        QWidget * m_optWidget;
+
 };
 
 class KisToolSelectFreehandFactory : public KisToolFactory {
@@ -92,7 +96,7 @@ class KisToolSelectFreehandFactory : public KisToolFactory {
 public:
 	KisToolSelectFreehandFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectFreehandFactory(){};
-	
+
 	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectFreehand(); t -> setup(m_ac); return t; }
 	virtual KisID id() { return KisID("freehandselect", i18n("Freehand select tool")); }
 };

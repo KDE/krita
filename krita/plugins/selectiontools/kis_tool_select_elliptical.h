@@ -1,5 +1,5 @@
 /*
- *  kis_tool_select_polygonal.h - part of Krayon^WKrita
+ *  kis_tool_select_elliptical.h - part of Krayon^WKrita
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
@@ -20,86 +20,64 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef __selecttoolpolygonal_h__
-#define __selecttoolpolygonal_h__
+#ifndef __KIS_TOOL_SELECT_ELLIPTICAL_H__
+#define __KIS_TOOL_SELECT_ELLIPTICAL_H__
 
 #include <qpoint.h>
-#include <qpointarray.h>
-
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 
 #include "kis_tool_factory.h"
 
-
-class KisToolSelectPolygonal : public KisToolNonPaint {
+class KisToolSelectElliptical : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;
 	Q_OBJECT
 
 public:
-	KisToolSelectPolygonal();
-	virtual ~KisToolSelectPolygonal();
+	KisToolSelectElliptical();
+	virtual ~KisToolSelectElliptical();
 
 	virtual void update(KisCanvasSubject *subject);
 
 	virtual void setup(KActionCollection *collection);
+	virtual QWidget * createOptionWidget(QWidget* parent);
+        virtual QWidget* optionWidget();
+
+
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
-	virtual void buttonPress(KisButtonPressEvent *event);
-	virtual void move(KisMoveEvent *event);
-	virtual void buttonRelease(KisButtonReleaseEvent *event);
-
+	virtual void buttonPress(KisButtonPressEvent *e);
+	virtual void move(KisMoveEvent *e);
+	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 private:
-
-	virtual void clearSelection();
+	void clearSelection();
 	void paintOutline();
 	void paintOutline(QPainter& gc, const QRect& rc);
 
-	void drawLine(const QPoint& start, const QPoint& end); 
-	void start(QPoint p);
-	void finish(QPoint p); 
-
 private:
-
 	KisCanvasSubject *m_subject;
-
-	QPoint m_dragStart;
-	QPoint m_dragEnd;
-
-	QPoint m_start;
-	QPoint m_finish;
-
-	bool m_dragging;
-	bool m_drawn;   
-
-	QRect m_selectRect;
-	QPointArray m_pointArray;
-	int m_index;
-
-// 	bool moveSelectArea;
-// 	bool dragSelectArea;
+	KisPoint m_startPos;
+	KisPoint m_endPos;
 	bool m_selecting;
-	QPoint m_hotSpot;
-	QPoint m_oldDragPoint;
-	QRegion m_selectRegion;
-	QRect m_imageRect;
-	bool m_dragFirst;
-	float m_dragdist;
+        QWidget * m_optWidget;
+
 };
 
-
-class KisToolSelectPolygonalFactory : public KisToolFactory {
+class KisToolSelectEllipticalFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectPolygonalFactory(KActionCollection * ac) : super(ac) {};
-	virtual ~KisToolSelectPolygonalFactory(){};
-	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectPolygonal(); t -> setup(m_ac); return t; }
-	virtual KisID id() { return KisID("polygonalselect", i18n("Polygonal select tool")); }
+	KisToolSelectEllipticalFactory(KActionCollection * ac) : super(ac) {};
+	virtual ~KisToolSelectEllipticalFactory(){};
+
+	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectElliptical(); t -> setup(m_ac); return t; }
+	virtual KisID id() { return KisID("ellipticalselect", i18n("Elliptical select tool")); }
 };
 
 
-#endif //__selecttoolpolygonal_h__
+
+
+
+#endif //__KIS_TOOL_SELECT_ELLIPTICAL_H__
 

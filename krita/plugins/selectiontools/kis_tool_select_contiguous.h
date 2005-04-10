@@ -30,7 +30,7 @@
 
 
 /**
- * The 'magic wand' selection tool -- in fact just 
+ * The 'magic wand' selection tool -- in fact just
  * a floodfill that only creates a selection.
  */
 class KisToolSelectContiguous : public KisToolNonPaint {
@@ -43,6 +43,8 @@ public:
 	virtual ~KisToolSelectContiguous();
 
 	virtual void setup(KActionCollection *collection);
+	virtual QWidget* createOptionWidget(QWidget* parent);
+        virtual QWidget* optionWidget();
 
 	virtual void clearOld();
 	virtual bool willModify() const;
@@ -52,18 +54,20 @@ public:
 	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 protected:
-	void drawRect(const QPoint&, const QPoint&); 
+	void drawRect(const QPoint&, const QPoint&);
 
 protected:
 	QPoint m_dragStart;
 	QPoint m_dragEnd;
 	bool m_dragging;
-	bool m_drawn;   
+	bool m_drawn;
 	bool m_init;
 	QRect m_selectRect;
 
 private:
 	KisCanvasSubject *m_subject;
+        QWidget * m_optWidget;
+
 };
 
 class KisToolSelectContiguousFactory : public KisToolFactory {
@@ -71,7 +75,7 @@ class KisToolSelectContiguousFactory : public KisToolFactory {
 public:
 	KisToolSelectContiguousFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectContiguousFactory(){};
-	
+
 	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectContiguous(); t -> setup(m_ac); return t; }
 	virtual KisID id() { return KisID("contiguousselect", i18n("Contiguous select tool")); }
 };

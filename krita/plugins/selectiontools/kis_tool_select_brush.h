@@ -1,5 +1,5 @@
 /*
- *  kis_tool_select_eraser.h - part of Krita
+ *  kis_tool_select_brush.h - part of Krita
  *
  *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -18,27 +18,28 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef KIS_TOOL_SELECT_ERASER_H_
-#define KIS_TOOL_SELECT_ERASER_H_
+#ifndef KIS_TOOL_SELECT_BRUSH_H_
+#define KIS_TOOL_SELECT_BRUSH_H_
 
-#include "kis_tool_factory.h"
-#include "kis_tool_freehand.h"
+#include <kis_tool.h>
+#include <kis_tool_freehand.h>
+#include <kis_tool_factory.h>
 
+class QWidget;
 class KisPoint;
 
-
 /**
- * The selection eraser makes a selection smaller by painting with the
- * current eraser shape. Not sure what kind of an icon could represent
- * this... Depends a bit on how we're going to visualize selections.
+ * The selection brush creates a selection by painting with the current
+ * brush shape. Not sure what kind of an icon could represent this... 
+ * Depends a bit on how we're going to visualize selections.
  */
-class KisToolSelectEraser : public KisToolFreehand {
+class KisToolSelectBrush : public KisToolFreehand {
 	Q_OBJECT
 	typedef KisToolFreehand super;
 
 public:
-	KisToolSelectEraser();
-	virtual ~KisToolSelectEraser();
+	KisToolSelectBrush();
+	virtual ~KisToolSelectBrush();
 
 	virtual void setup(KActionCollection *collection);
 	virtual QWidget* createOptionWidget(QWidget* parent);
@@ -47,20 +48,22 @@ public:
 protected:
 
 	virtual void initPaint(KisEvent *e);
+	virtual void endPaint();
+
+private:
+	QWidget * m_optWidget;
 };
 
-
-class KisToolSelectEraserFactory : public KisToolFactory {
+class KisToolSelectBrushFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectEraserFactory(KActionCollection * ac) : super(ac) {};
-	virtual ~KisToolSelectEraserFactory(){};
+	KisToolSelectBrushFactory(KActionCollection * ac) : super(ac) {};
+	virtual ~KisToolSelectBrushFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectEraser(); t -> setup(m_ac); return t; }
-	virtual KisID id() { return KisID("eraserselect", i18n("Eraser select tool")); }
+	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectBrush(); t -> setup(m_ac); return t; }
+	virtual KisID id() { return KisID("brushselect", i18n("Brush select tool")); }
 };
 
 
-
-#endif // KIS_TOOL_SELECT_ERASER_H_
+#endif // KIS_TOOL_SELECT_BRUSH_H_
 

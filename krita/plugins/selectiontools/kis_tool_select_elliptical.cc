@@ -1,10 +1,7 @@
-
 /*
- *  kis_tool_select_rectangular.cc -- part of Krita
+ *  kis_tool_select_elliptical.cc -- part of Krita
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
- *                2001 John Califf <jcaliff@compuzone.net>
- *                2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,21 +31,20 @@
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
-#include "kis_tool_select_rectangular.h"
+#include "kis_tool_select_elliptical.h"
 #include "kis_undo_adapter.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
-#include "kis_selection.h"
 #include "kis_selection_options.h"
 
 namespace {
-	class RectSelectCmd : public KNamedCommand {
+	class EllipseSelectCmd : public KNamedCommand {
 		typedef KNamedCommand super;
 
 	public:
-		RectSelectCmd();
-		virtual ~RectSelectCmd();
+		EllipseSelectCmd();
+		virtual ~EllipseSelectCmd();
 
 	public:
 		virtual void execute();
@@ -58,56 +54,57 @@ namespace {
 		KisImageSP m_owner;
 	};
 
-	RectSelectCmd::RectSelectCmd() : super(i18n("Rectangular Selection"))
+	EllipseSelectCmd::EllipseSelectCmd() : super(i18n("Elliptical Selection"))
 	{
 	}
 
-	RectSelectCmd::~RectSelectCmd()
+	EllipseSelectCmd::~EllipseSelectCmd()
 	{
 	}
 
-	void RectSelectCmd::execute()
+	void EllipseSelectCmd::execute()
 	{
 	}
 
-	void RectSelectCmd::unexecute()
+	void EllipseSelectCmd::unexecute()
 	{
 	}
 }
 
-KisToolSelectRectangular::KisToolSelectRectangular()
+KisToolSelectElliptical::KisToolSelectElliptical()
 {
-	setName("tool_select_rectangular");
+	setName("tool_select_elliptical");
 	setCursor(KisCursor::selectCursor());
+
 	m_subject = 0;
 	m_selecting = false;
 	m_startPos = QPoint(0, 0);
 	m_endPos = QPoint(0, 0);
 }
 
-KisToolSelectRectangular::~KisToolSelectRectangular()
+KisToolSelectElliptical::~KisToolSelectElliptical()
 {
 }
 
-void KisToolSelectRectangular::update(KisCanvasSubject *subject)
+void KisToolSelectElliptical::update(KisCanvasSubject *subject)
 {
 	m_subject = subject;
 	super::update(m_subject);
 }
 
-void KisToolSelectRectangular::paint(QPainter& gc)
+void KisToolSelectElliptical::paint(QPainter& gc)
 {
 	if (m_selecting)
 		paintOutline(gc, QRect());
 }
 
-void KisToolSelectRectangular::paint(QPainter& gc, const QRect& rc)
+void KisToolSelectElliptical::paint(QPainter& gc, const QRect& rc)
 {
 	if (m_selecting)
 		paintOutline(gc, rc);
 }
 
-void KisToolSelectRectangular::clearSelection()
+void KisToolSelectElliptical::clearSelection()
 {
 	if (m_subject) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
@@ -126,66 +123,61 @@ void KisToolSelectRectangular::clearSelection()
 	}
 }
 
-void KisToolSelectRectangular::buttonPress(KisButtonPressEvent *e)
+void KisToolSelectElliptical::buttonPress(KisButtonPressEvent *e)
 {
 	if (m_subject) {
 		KisImageSP img = m_subject -> currentImg();
 
 		if (img && img -> activeDevice() && e -> button() == LeftButton) {
 			clearSelection();
-			m_startPos = e -> pos().floorQPoint();
-			m_endPos = e -> pos().floorQPoint();
+			m_startPos = e -> pos();
+			m_endPos = e -> pos();
 			m_selecting = true;
 		}
 	}
 }
 
-void KisToolSelectRectangular::move(KisMoveEvent *e)
+void KisToolSelectElliptical::move(KisMoveEvent *e)
 {
 	if (m_subject && m_selecting) {
 
 		if (m_startPos != m_endPos)
 			paintOutline();
 
-		m_endPos = e -> pos().floorQPoint(); //controller -> windowToView(e -> pos());
+		m_endPos = e -> pos(); //controller -> windowToView(e -> pos());
 		paintOutline();
 	}
 }
 
-void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent */*e*/)
 {
-	if (m_subject && m_selecting) {
-		if (m_startPos == m_endPos) {
-			clearSelection();
-		} else {
-			KisImageSP img = m_subject -> currentImg();
+	clearSelection();
+	m_selecting = false;
 
-			if (!img)
-				return;
+// 	if (m_subject && m_selecting) {
+// 		if (m_startPos == m_endPos) {
+// 			clearSelection();
+// 		} else {
+// 			KisImageSP img = m_subject -> currentImg();
 
-			m_endPos = e -> pos().floorQPoint();
+// 			if (!img)
+// 				return;
 
-			if (m_endPos.y() < 0)
-				m_endPos.setY(0);
+// 			m_endPos = e -> pos();
 
-			if (m_endPos.y() > img -> height())
-				m_endPos.setY(img -> height());
+// 			if (m_endPos.y() < 0)
+// 				m_endPos.setY(0);
 
-			if (m_endPos.x() < 0)
-				m_endPos.setX(0);
+// 			if (m_endPos.y() > img -> height())
+// 				m_endPos.setY(img -> height());
 
-			if (m_endPos.x() > img -> width())
-				m_endPos.setX(img -> width());
+// 			if (m_endPos.x() < 0)
+// 				m_endPos.setX(0);
 
-			if (img) {
-				KisLayerSP layer = img -> activeLayer();
-				KisSelectionSP selection = layer -> selection();
-				QRect rc(m_startPos, m_endPos);
-				rc = rc.normalize();
-				selection -> select(rc);
-				img -> notify(rc);
-				paintOutline();
+// 			if (m_endPos.x() > img -> width())
+// 				m_endPos.setX(img -> width());
 
+// 			if (img) {
 // 				KisPaintDeviceSP parent;
 // 				KisFloatingSelectionSP selection;
 
@@ -195,21 +187,21 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 
 // 				if (parent) {
 // 					rc = rc.normalize();
-// 					selection = new KisFloatingSelection(parent, img, "rectangular selection tool frame", OPACITY_OPAQUE);
+// 					selection = new KisFloatingSelection(parent, img, "elliptical selection tool frame", OPACITY_OPAQUE);
 // 					selection -> setBounds(rc);
-// 					img -> setFloatingSelection(selection);
+// 					img -> setSelection(selection);
 
 // 					if (img -> undoAdapter())
 // 						img -> undoAdapter() -> addCommand(new RectSelectCmd(selection));
 // 				}
-			}
-		}
-
-		m_selecting = false;
-	}
+// 			}
+// 		}
+//
+// 		m_selecting = false;
+// 	}
 }
 
-void KisToolSelectRectangular::paintOutline()
+void KisToolSelectElliptical::paintOutline()
 {
 	if (m_subject) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
@@ -221,7 +213,7 @@ void KisToolSelectRectangular::paintOutline()
 	}
 }
 
-void KisToolSelectRectangular::paintOutline(QPainter& gc, const QRect&)
+void KisToolSelectElliptical::paintOutline(QPainter& gc, const QRect&)
 {
 	if (m_subject) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
@@ -232,32 +224,46 @@ void KisToolSelectRectangular::paintOutline(QPainter& gc, const QRect&)
 		QPoint end;
 
 		Q_ASSERT(controller);
-		start = controller -> windowToView(m_startPos);
-		end = controller -> windowToView(m_endPos);
+		start = controller -> windowToView(m_startPos).floorQPoint();
+		end = controller -> windowToView(m_endPos).floorQPoint();
 
 		gc.setRasterOp(Qt::NotROP);
 		gc.setPen(pen);
-		gc.drawRect(QRect(start, end));
+		gc.drawEllipse(QRect(start, end));
 		gc.setRasterOp(op);
 		gc.setPen(old);
 	}
 }
 
-void KisToolSelectRectangular::setup(KActionCollection *collection)
+void KisToolSelectElliptical::setup(KActionCollection *collection)
 {
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("Tool &Rectangular Select"), 
-					    "rectangular", 
-					    Qt::Key_R, 
+		m_action = new KRadioAction(i18n("Tool &Elliptical Select"),
+					    "elliptical" ,
+					    Qt::Key_J,
 					    this,
-					    SLOT(activate()), 
-					    collection, 
+					    SLOT(activate()),
+					    collection,
 					    name());
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
 }
 
-#include "kis_tool_select_rectangular.moc"
+QWidget* KisToolSelectElliptical::createOptionWidget(QWidget* parent)
+{
+	m_optWidget = new KisSelectionOptions(parent, m_subject);
+	m_optWidget -> setCaption(i18n("Elliptical selection"));
+	return m_optWidget;
+}
+
+QWidget* KisToolSelectElliptical::optionWidget()
+{
+        return m_optWidget;
+}
+
+
+
+#include "kis_tool_select_elliptical.moc"

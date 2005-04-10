@@ -40,28 +40,21 @@
 
 #include "kis_tool_fill.h"
 #include "kis_tool_pen.h"
-#include "kis_tool_select_freehand.h"
 #include "kis_tool_airbrush.h"
-#include "kis_tool_select_polygonal.h"
 #include "kis_tool_brush.h"
 #include "kis_tool_freehand.h"
-#include "kis_tool_select_rectangular.h"
 #include "kis_tool_colorchanger.h"
 #include "kis_tool_gradient.h"
 #include "kis_tool_rectangle.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_line.h"
-#include "kis_tool_select_brush.h"
 #include "kis_tool_text.h"
 #include "kis_tool_duplicate.h"
 #include "kis_tool_move.h"
-#include "kis_tool_select_contiguous.h"
 #include "kis_tool_zoom.h"
 #include "kis_tool_ellipse.h"
 #include "kis_tool_pan.h"
-#include "kis_tool_select_elliptical.h"
 #include "kis_tool_eraser.h"
-#include "kis_tool_select_eraser.h"
 
 typedef KGenericFactory<DefaultTools> DefaultToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritadefaulttools, DefaultToolsFactory( "krita" ) )
@@ -86,25 +79,18 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
 		r -> add(new KisToolFillFactory( actionCollection() ));
 		r -> add(new KisToolGradientFactory( actionCollection() ));
 		r -> add(new KisToolPenFactory( actionCollection() ));
-		r -> add(new KisToolSelectFreehandFactory( actionCollection() ));
 		r -> add(new KisToolAirbrushFactory( actionCollection() ));
-		r -> add(new KisToolSelectPolygonalFactory( actionCollection() ));
 		r -> add(new KisToolBrushFactory( actionCollection() ));
-		r -> add(new KisToolSelectRectangularFactory( actionCollection() ));
 		r -> add(new KisToolColorPickerFactory( actionCollection() ));
 		r -> add(new KisToolLineFactory( actionCollection() ));
-		r -> add(new KisToolSelectBrushFactory( actionCollection() ));
 		r -> add(new KisToolTextFactory( actionCollection() ));
 		r -> add(new KisToolDuplicateFactory( actionCollection() ));
 		r -> add(new KisToolMoveFactory( actionCollection() ));
-		r -> add(new KisToolSelectContiguousFactory( actionCollection() ));
 		r -> add(new KisToolZoomFactory( actionCollection() ));
 		r -> add(new KisToolEllipseFactory( actionCollection() ));
 		r -> add(new KisToolRectangleFactory( actionCollection() ));
 		r -> add(new KisToolPanFactory( actionCollection() ));
-		r -> add(new KisToolSelectEllipticalFactory( actionCollection() ));
 		r -> add(new KisToolEraserFactory( actionCollection() ));
-		r -> add(new KisToolSelectEraserFactory( actionCollection() ));
         }
 }
 

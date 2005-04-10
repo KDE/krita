@@ -56,7 +56,7 @@ KisToolSelectBrush::~KisToolSelectBrush()
 {
 }
 
-void KisToolSelectBrush::initPaint(KisEvent */*e*/) 
+void KisToolSelectBrush::initPaint(KisEvent* /*e*/) 
 {
 	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 

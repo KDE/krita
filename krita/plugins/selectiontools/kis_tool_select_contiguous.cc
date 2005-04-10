@@ -31,6 +31,7 @@
 #include "kis_cursor.h"
 #include "kis_tool_select_contiguous.h"
 #include "kis_view.h"
+#include "kis_selection_options.h"
 
 KisToolSelectContiguous::KisToolSelectContiguous() : super()
 {
@@ -53,13 +54,13 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 void KisToolSelectContiguous::clearOld()
 {
 // //   if (m_doc->isEmpty()) return;
-        
+
 // 	KisView *view = getCurrentView();
 
 // 	if(m_dragStart.x() != -1)
-// 		drawRect( m_dragStart, m_dragEnd ); 
+// 		drawRect( m_dragStart, m_dragEnd );
 
-// 	QRect updateRect(0, 0, m_doc->currentImg()->width(), 
+// 	QRect updateRect(0, 0, m_doc->currentImg()->width(),
 // 			m_doc->currentImg()->height());
 // 	view->updateCanvas(updateRect);
 
@@ -74,15 +75,15 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent */*event*/)
 
 //     if( event->button() == LeftButton )
 //     {
-//         // erase old rectangle    
-//         if(m_drawn) 
+//         // erase old rectangle
+//         if(m_drawn)
 //         {
 //             m_drawn = false;
-           
+
 //             if(m_dragStart.x() != -1)
-//                 drawRect( m_dragStart, m_dragEnd ); 
+//                 drawRect( m_dragStart, m_dragEnd );
 //         }
-                
+
 //         m_init = false;
 //         m_dragging = true;
 //         m_dragStart = event->pos();
@@ -114,38 +115,38 @@ void KisToolSelectContiguous::buttonRelease(KisButtonReleaseEvent */*event*/)
 //     {
 //         m_dragging = false;
 //         m_drawn = true;
-        
+
 //         QPoint zStart = zoomed(m_dragStart);
 //         QPoint zEnd   = zoomed(m_dragEnd);
-                
+
 //         if(zStart.x() <= zEnd.x())
 //         {
 //             m_selectRect.setLeft(zStart.x());
 //             m_selectRect.setRight(zEnd.x());
-//         }    
-//         else 
+//         }
+//         else
 //         {
-//             m_selectRect.setLeft(zEnd.x());                   
+//             m_selectRect.setLeft(zEnd.x());
 //             m_selectRect.setRight(zStart.x());
 //         }
-        
+
 //         if(zStart.y() <= zEnd.y())
 //         {
 //             m_selectRect.setTop(zStart.y());
-//             m_selectRect.setBottom(zEnd.y());            
-//         }    
+//             m_selectRect.setBottom(zEnd.y());
+//         }
 //         else
 //         {
 //             m_selectRect.setTop(zEnd.y());
-//             m_selectRect.setBottom(zStart.y());            
+//             m_selectRect.setBottom(zStart.y());
 //         }
-                    
+
 //         m_doc->getSelection()->setBounds(m_selectRect);
 
-//         kdDebug(0) << "selectRect" 
-//             << " left: "   << m_selectRect.left() 
+//         kdDebug(0) << "selectRect"
+//             << " left: "   << m_selectRect.left()
 //             << " top: "    << m_selectRect.top()
-//             << " right: "  << m_selectRect.right() 
+//             << " right: "  << m_selectRect.right()
 //             << " bottom: " << m_selectRect.bottom()
 //             << endl;
 //     }
@@ -163,11 +164,11 @@ void KisToolSelectContiguous::drawRect( const QPoint& /*start*/, const QPoint& /
 
 // 	float zF = view->zoomFactor();
 
-// 	p.drawRect( QRect(start.x() + view->xPaintOffset() 
+// 	p.drawRect( QRect(start.x() + view->xPaintOffset()
 // 				- (int)(zF * view->xScrollOffset()),
-// 				start.y() + view->yPaintOffset() 
-// 				- (int)(zF * view->yScrollOffset()), 
-// 				end.x() - start.x(), 
+// 				start.y() + view->yPaintOffset()
+// 				- (int)(zF * view->yScrollOffset()),
+// 				end.x() - start.x(),
 // 				end.y() - start.y()) );
 // 	p.end();
 }
@@ -177,22 +178,36 @@ void KisToolSelectContiguous::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("Tool &Contiguous Select"), 
-					    "wizard" , 
-					    0, 
-					    this, 
-					    SLOT(activate()), 
-					    collection, 
+		m_action = new KRadioAction(i18n("Tool &Contiguous Select"),
+					    "wizard" ,
+					    0,
+					    this,
+					    SLOT(activate()),
+					    collection,
 					    name());
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
 }
 
+QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
+{
+	m_optWidget = new KisSelectionOptions(parent, m_subject);
+	m_optWidget -> setCaption(i18n("Select contiguous areas"));
+	return m_optWidget;
+}
+
+
 bool KisToolSelectContiguous::willModify() const
 {
  	return false;
 }
+
+QWidget* KisToolSelectContiguous::optionWidget()
+{
+        return m_optWidget;
+}
+
 
 
 #include "kis_tool_select_contiguous.moc"

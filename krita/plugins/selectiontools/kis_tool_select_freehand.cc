@@ -39,6 +39,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_selection_options.h"
 
 KisToolSelectFreehand::KisToolSelectFreehand() : super()
 {
@@ -51,7 +52,7 @@ KisToolSelectFreehand::KisToolSelectFreehand() : super()
 	m_dragEnd =   QPoint(-1,-1);
 
 	mStart  = QPoint(-1, -1);
-	mFinish = QPoint(-1, -1);     
+	mFinish = QPoint(-1, -1);
 
 	m_index = 0;
 	m_dragging = false;
@@ -82,8 +83,8 @@ void KisToolSelectFreehand::clearOld()
 // 	m_dragEnd = QPoint(-1,-1);
 // 	m_index = 0;
 // 	m_pointArray.resize(0);
-	
-// 	// clear everything in 
+
+// 	// clear everything in
 // 	QRect updateRect(0, 0, m_doc->currentImg()->width(), m_doc->currentImg()->height());
 // 	view->updateCanvas(updateRect);
 // 	m_selectRegion = QRegion();
@@ -124,7 +125,7 @@ void KisToolSelectFreehand::buttonPress(KisButtonPressEvent */*event*/)
 
 void KisToolSelectFreehand::move(KisMoveEvent */*event*/)
 {
-// 	if (event -> button() == RightButton) 
+// 	if (event -> button() == RightButton)
 // 		return;
 
 // 	KisView *view = getCurrentView();
@@ -203,7 +204,7 @@ void KisToolSelectFreehand::move(KisMoveEvent */*event*/)
 // 			dist -= spacing;
 // 		}
 
-// 		if ( dist > 0 ) 
+// 		if ( dist > 0 )
 // 			m_dragdist = dist;
 // 		m_dragStart = pos;
 // 	}
@@ -226,15 +227,15 @@ void KisToolSelectFreehand::buttonRelease(KisButtonReleaseEvent */*event*/)
 // 		// need to connect start and end positions to close the freehand line.
 // 		finish( event->pos() );
 
-// 		// we need a bounding rectangle and a point array of 
-// 		// points in the freehand line        
+// 		// we need a bounding rectangle and a point array of
+// 		// points in the freehand line
 
 // 		m_doc->getSelection()->setPolygonalSelection( m_imageRect, points, m_doc->currentImg()->getCurrentLayer() );
 
-// 		kdDebug(0) << "selectRect" 
-// 			<< " left: "   << m_imageRect.left() 
+// 		kdDebug(0) << "selectRect"
+// 			<< " left: "   << m_imageRect.left()
 // 			<< " top: "    << m_imageRect.top()
-// 			<< " right: "  << m_imageRect.right() 
+// 			<< " right: "  << m_imageRect.right()
 // 			<< " bottom: " << m_imageRect.bottom()
 // 			<< endl;
 
@@ -290,18 +291,32 @@ void KisToolSelectFreehand::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("Tool &Freehand Select"), 
-					    "freehand", 
-					    Qt::Key_K, 
-					    this,  
+		m_action = new KRadioAction(i18n("Tool &Freehand Select"),
+					    "freehand",
+					    Qt::Key_K,
+					    this,
 					    SLOT(activate()),
-					    collection, 
+					    collection,
 					    name());
 
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
 }
+
+
+QWidget* KisToolSelectFreehand::createOptionWidget(QWidget* parent)
+{
+	m_optWidget = new KisSelectionOptions(parent, m_subject);
+	m_optWidget -> setCaption(i18n("Freehand selection"));
+	return m_optWidget;
+}
+
+QWidget* KisToolSelectFreehand::optionWidget()
+{
+        return m_optWidget;
+}
+
 
 bool KisToolSelectFreehand::willModify() const
 {

@@ -375,6 +375,7 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
         if (flags==KoDocument::InitDocEmpty)
         {
+		kdDebug() << "Init doc empty\n";
                 if ((ok = slotNewImage()))
                         emit imageListUpdated();
                 setModified(false);
@@ -400,7 +401,6 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 	setUndo(false);
 
 	if (ret == KoTemplateChooseDia::Template) {
-
 		QFileInfo fileInfo( file );
 		QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kra" );
 		resetURL();
@@ -410,13 +410,17 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 			if ((ok = slotNewImage()))
 				emit imageListUpdated();
 		}
+		KoDocument::setEmpty();
 		ok = true;
 	} else if (ret == KoTemplateChooseDia::File) {
 		KURL url( file );
 		ok = openURL(url);
 	} else if (ret == KoTemplateChooseDia::Empty) {
-		if ((ok = slotNewImage()))
+		kdDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>Empty.\n";
+		if ((ok = slotNewImage())) {
 			emit imageListUpdated();
+			KoDocument::setEmpty();
+		}
 	}
 
 	setModified(false);
@@ -634,7 +638,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(KisID(colorspacename, ""));
 // 		kdDebug() << "Colorspace: " << cs << "\n";
 		if (cs == 0) return 0;
-		
+
 		if ((profileProductName = element.attribute("profile")).isNull()) {
 			profile = 0;
 		}
@@ -974,11 +978,11 @@ bool KisDoc::slotNewImage()
 		QColor c = dlg.backgroundColor();
 		KisImageSP img;
 		KisLayerSP layer;
-		
+
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance()->get(dlg.colorStrategyID());
 
 		if (!cs) return false;
-		
+
 		img = new KisImage(this, dlg.imgWidth(),
 				   dlg.imgHeight(),
 				   cs,
@@ -1434,7 +1438,7 @@ bool KisDoc::importImage(const QString& filename)
 {
 	if (m_nserver == 0)
 		init();
-	
+
 	if (!filename.isEmpty()) {
 		KURL url(filename);
 

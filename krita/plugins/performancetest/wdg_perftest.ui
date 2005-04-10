@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>377</width>
-            <height>485</height>
+            <height>509</height>
         </rect>
     </property>
     <property name="caption">
@@ -220,17 +220,59 @@
                         <bool>true</bool>
                     </property>
                 </widget>
+                <widget class="QCheckBox" row="16" column="0">
+                    <property name="name">
+                        <cstring>chkPaintView</cstring>
+                    </property>
+                    <property name="text">
+                        <string>PaintView</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="17" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>layout5</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>btnSelectAll</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Select All</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+S</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>btnDeselectAll</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Deselect All</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+D</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
             </grid>
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <tabstops>
     <tabstop>intTestCount</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

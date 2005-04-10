@@ -27,6 +27,7 @@
 using namespace std;
 
 #include <qradiobutton.h>
+#include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 
@@ -52,6 +53,8 @@ DlgPerfTest::DlgPerfTest( QWidget *  parent,
 	connect(this, SIGNAL(okClicked()),
 		this, SLOT(okClicked()));
 
+	connect(m_page -> btnSelectAll, SIGNAL(clicked()), this, SLOT(selectAllClicked()));
+	connect(m_page -> btnDeselectAll, SIGNAL(clicked()), this, SLOT(deselectAllClicked()));
 }
 
 DlgPerfTest::~DlgPerfTest()
@@ -70,5 +73,36 @@ void DlgPerfTest::okClicked()
 {
 	accept();
 }
+
+void DlgPerfTest::setAllTestCheckBoxes(bool checked)
+{
+	m_page -> chkBitBlt -> setChecked(checked);
+	m_page -> chkFill -> setChecked(checked);
+	m_page -> chkGradient -> setChecked(checked);
+	m_page -> chkPixel -> setChecked(checked);
+	m_page -> chkShape -> setChecked(checked);
+	m_page -> chkLayer -> setChecked(checked);
+	m_page -> chkScale -> setChecked(checked);
+	m_page -> chkRotate -> setChecked(checked);
+	m_page -> chkRender -> setChecked(checked);
+	m_page -> chkSelection -> setChecked(checked);
+	m_page -> chkColorConversion -> setChecked(checked);
+	m_page -> chkFilter -> setChecked(checked);
+	m_page -> chkReadBytes -> setChecked(checked);
+	m_page -> chkWriteBytes -> setChecked(checked);
+	m_page -> chkIterators -> setChecked(checked);
+	m_page -> chkPaintView -> setChecked(checked);
+}
+
+void DlgPerfTest::selectAllClicked()
+{
+	setAllTestCheckBoxes(true);
+}
+
+void DlgPerfTest::deselectAllClicked()
+{
+	setAllTestCheckBoxes(false);
+}
+
 
 #include "dlg_perftest.moc"

@@ -65,6 +65,12 @@
 
 #include "dlg_perftest.h"
 
+#define USE_CALLGRIND 0
+
+#if USE_CALLGRIND
+#include <valgrind/callgrind.h>
+#endif
+
 
 typedef KGenericFactory<PerfTest> PerfTestFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaperftest, PerfTestFactory( "krita" ) )
@@ -154,11 +160,16 @@ void PerfTest::slotPerfTest()
 		if (dlgPerfTest -> page() -> chkIterators -> isChecked()) {
 			report = report.append(iteratorTest(testCount));
 		}
+		if (dlgPerfTest -> page() -> chkPaintView -> isChecked()) {
+			report = report.append(paintViewTest(testCount));
+		}
 		KDialogBase * d = new KDialogBase(m_view, "", true, "", KDialogBase::Ok);
 		d -> setCaption("Performance test results");
 		QTextEdit * e = new QTextEdit(d);
 		d -> setMainWidget(e);
 		e -> setText(report);
+		e -> setMinimumWidth(600);
+		e -> setMinimumHeight(600);
 		d -> exec();
 		delete d;
 		
@@ -181,10 +192,13 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
 		doc -> addImage(img);
 
 		report = report.append(doBlit(COMPOSITE_OVER, *it, OPACITY_OPAQUE, testCount, img));
+		report = report.append( "\n");
 		report = report.append(doBlit(COMPOSITE_OVER, *it, OPACITY_OPAQUE / 2, testCount, img));
-
+		report = report.append( "\n");
 		report = report.append(doBlit(COMPOSITE_COPY, *it, OPACITY_OPAQUE, testCount, img));
+		report = report.append( "\n");
 		report = report.append(doBlit(COMPOSITE_COPY, *it, OPACITY_OPAQUE / 2, testCount, img));
+		report = report.append( "\n");
 
 		doc -> removeImage(img);
 
@@ -296,6 +310,29 @@ QString PerfTest::doBlit(CompositeOp op,
 			       .arg(op)
 			       .arg(t.elapsed()));
 
+	// ------------------------------------------------------------------------------
+	// Small with varied source opacity
+
+	KisLayerSP small_with_alpha = new KisLayer(KisColorSpaceRegistry::instance() -> get(cspace), "small blit with alpha");
+
+	pf.begin(small_with_alpha.data()) ;
+	pf.fillRect(0, 0, 32, 32, Qt::black, OPACITY_TRANSPARENT);
+	pf.fillRect(4, 4, 24, 24, Qt::black, OPACITY_OPAQUE / 2);
+	pf.fillRect(8, 8, 16, 16, Qt::black, OPACITY_OPAQUE);
+	pf.end();
+
+	t.restart();
+	p.begin(img -> activeLayer().data());
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		p.bitBlt(0, 0, op, small_with_alpha.data(), 0, 0, 32, 32);
+	}
+	p.end();
+
+	report = report.append(QString("   %1 blits of rectangles < tilesize with source alpha, with opacity %2 and composite op %3: %4ms\n")
+			       .arg(testCount)
+			       .arg(opacity)
+			       .arg(op)
+			       .arg(t.elapsed()));
 
 	return report;
 
@@ -554,7 +591,7 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
 
 QString PerfTest::readBytesTest(Q_UINT32 testCount)
 {
-	QString report = QString("* Read bytes test");
+	QString report = QString("* Read bytes test\n\n");
 
 	// On default tiles
 	KisDoc * doc = m_view -> getDocument();
@@ -1019,6 +1056,60 @@ QString PerfTest::iteratorTest(Q_UINT32 testCount)
 	return report;
 
 	
+}
+
+QString PerfTest::paintViewTest(Q_UINT32 testCount)
+{
+	QString report = QString("* paintView test\n\n");
+
+	KisDoc * doc = m_view -> getDocument();
+	KisImage * img = doc -> newImage("paintView ", 512, 512, KisColorSpaceRegistry::instance() -> get(KisID("RGBA","")));
+	doc -> addImage(img);
+	KisLayerSP l = img -> activeLayer();
+
+	KisFillPainter p(l.data());
+	p.fillRect(0, 0, 512, 512, Qt::blue);
+	p.end();
+
+	QTime t;
+	t.restart();
+
+#if USE_CALLGRIND
+	CALLGRIND_ZERO_STATS();
+#endif
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		m_view ->updateCanvas(QRect(0, 0, 512, 512));
+	}
+#if USE_CALLGRIND
+	CALLGRIND_DUMP_STATS();
+#endif
+
+	report = report.append(QString("    painted a 512 x 512 image %1 times: %2 ms\n").arg(testCount).arg(t.elapsed()));
+
+	doc -> layerAdd(img, "layer 2", OPACITY_OPAQUE);
+	l = img -> activeLayer();
+
+	p.begin(l.data());
+	p.fillRect(0, 0, 512, 512, Qt::blue);
+	p.end();
+
+	doc -> layerAdd(img, "layer 3", OPACITY_OPAQUE);
+	l = img -> activeLayer();
+
+	p.begin(l.data());
+	p.fillRect(0, 0, 512, 512, Qt::blue);
+	p.end();
+
+	t.restart();
+	
+	for (Q_UINT32 i = 0; i < testCount; ++i) {
+		m_view ->updateCanvas(QRect(0, 0, 512, 512));
+	}
+
+	report = report.append(QString("    painted a 512 x 512 image with 3 layers %1 times: %2 ms\n").arg(testCount).arg(t.elapsed()));
+	
+	doc -> removeImage(img);
+	return report;
 }
 
 #include "perftest.moc"

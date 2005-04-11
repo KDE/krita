@@ -246,9 +246,6 @@
                             <property name="text">
                                 <string>&amp;Select All</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+S</string>
-                            </property>
                         </widget>
                         <widget class="QPushButton">
                             <property name="name">
@@ -256,9 +253,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Deselect All</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+D</string>
                             </property>
                         </widget>
                     </hbox>

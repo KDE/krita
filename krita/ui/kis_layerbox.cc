@@ -59,7 +59,6 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
 
         KPopupMenu *mnu;
 
-
         m_flags = f;
 
         m_lst = new WdgLayerBox(this);

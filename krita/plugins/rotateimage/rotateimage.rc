@@ -16,4 +16,10 @@
 		</Menu>
 	</Menu>
 </MenuBar>
+
+<ToolBar name="transform_tools" position="top"><Text>Transformation Tools</Text>
+	<Action name="rotateLayerLeft90"/>
+	<Action name="rotateLayerRight90"/>
+</ToolBar>
+
 </kpartgui>

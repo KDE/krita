@@ -2,7 +2,7 @@
 <kpartgui library="kritatoolpolyline" version="1">
 
 
-<ToolBar name="painting tools" position="left"><Text>Painting Tools</Text>
+<ToolBar name="painting_tools" position="left"><Text>Painting Tools</Text>
   <Action name="tool_polyline"/>
 </ToolBar>
 

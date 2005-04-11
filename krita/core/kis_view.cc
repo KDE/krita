@@ -403,11 +403,11 @@ void KisView::resetMonitorProfile()
 	QString monitorProfileName = cfg.monitorProfile();
 
 	m_monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
-	if (m_monitorProfile) {
-		kdDebug() << "Monitor profile: " << m_monitorProfile -> productName() << "\n";
-	} else {
-		kdDebug() << "Empty monitor profile " << monitorProfileName << "\n";
-	}
+//	if (m_monitorProfile) {
+//		kdDebug() << "Monitor profile: " << m_monitorProfile -> productName() << "\n";
+//	} else {
+//		kdDebug() << "Empty monitor profile " << monitorProfileName << "\n";
+//	}
 
 }
 
@@ -480,8 +480,8 @@ void KisView::setupActions()
 	m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
 	m_layerToImage = new KAction(i18n("Layer to Image"), 0, this, SLOT(layerToImage()), actionCollection(), "layer_to_image");
 
-	(void)new KAction(i18n("Mirror Along &X Axis"), "view_left_right", this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
-	(void)new KAction(i18n("Mirror Along &Y Axis"), "view_top_bottom", this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
+	(void)new KAction(i18n("Mirror Along &X Axis"), "view_left_right", 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
+	(void)new KAction(i18n("Mirror Along &Y Axis"), "view_top_bottom", 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
 
 	// color actions
 	(void)new KAction(i18n("Select Foreground Color..."), 0, this, SLOT(selectFGColor()), actionCollection(), "select_fgColor");
@@ -2880,6 +2880,7 @@ void KisView::notify()
 
 KisImageSP KisView::currentImg() const
 {
+
 	if (m_current && m_doc -> contains(m_current)) {
 		return m_current;
 	}

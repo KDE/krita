@@ -54,6 +54,11 @@ int KisSelectionOptions::action()
 	return m_page -> cmbAction -> currentItem();
 }
 
+QColor KisSelectionOptions::maskColor()
+{
+	return m_page -> bnMaskColor -> color();
+}
+
 void KisSelectionOptions::slotSetMaskColor(const QColor & c)
 {
 	if (!m_subject) return;

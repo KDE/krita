@@ -73,8 +73,8 @@ RotateImage::RotateImage(QObject *parent, const char *name, const QStringList &)
 		(void) new KAction(i18n("&Rotate Layer..."), 0, 0, this, SLOT(slotRotateLayer()), actionCollection(), "rotatelayer");
 		
 		(void)new KAction(i18n("Rotate &180"), 0, m_view, SLOT(rotateLayer180()), actionCollection(), "rotateLayer180");
-		(void)new KAction(i18n("Rotate &270"), "rotate_ccw", m_view, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
-		(void)new KAction(i18n("Rotate &90"), "rotate_cw", m_view, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerRight90");
+		(void)new KAction(i18n("Rotate &270"), "rotate_ccw", 0, m_view, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
+		(void)new KAction(i18n("Rotate &90"), "rotate_cw", 0, m_view, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerRight90");
 	}
 }
 

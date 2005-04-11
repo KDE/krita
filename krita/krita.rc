@@ -143,16 +143,13 @@
 </ToolBar>
 
 
-<ToolBar name="painting tools" position="top"><Text>Painting Tools</Text>
+<ToolBar name="painting_tools" position="top"><Text>Painting Tools</Text>
 </ToolBar>
 
 <ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
 </ToolBar>
 
-<ToolBar name="layer actions" position="top"><Text>Layer Actions</Text>
-	<Action name="rotateLayerLeft90"/>
-	<Action name="rotateLayerRight90"/>
-	<Separator/>
+<ToolBar name="transform_tools" position="top"<Text>Transformation Tools</Text>
 	<Action name="mirrorLayerX"/>
 	<Action name="mirrorLayerY"/>
 </ToolBar>

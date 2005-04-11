@@ -31,6 +31,7 @@ class KisCanvasSubject;
 class QWidget;
 class QVBoxLayout;
 class QCheckBox;
+class KisSelectionOptions;
 
 /**
  * The 'magic wand' selection tool -- in fact just
@@ -58,14 +59,42 @@ public slots:
 	virtual void slotSetFuzziness(int);
 	virtual void slotSetAction(int);
 
+private:
+	// Floodfill a selection -- factor this out once it works
+	// to KisSelection.
+	void fillSelection(KisPaintDeviceSP device, enumSelectionMode mode, int startX, int startY);
+	/**
+	 * calculates the difference between 2 pixel values. Returns a value between 0 and
+	 * 255 (actually should be MIN_SELECTED to MAX_SELECTED?). Only 0 and 255 are
+	 * returned when anti-aliasing is off. This is RGB based, not HSV like in the selection
+	 * picker.
+	 * XXX: factor this out when done.
+	 **/
+	QUANTUM difference(const QUANTUM* src, KisPixel dst);
+
+	typedef enum { Left, Right } Direction;
+
+	void floodLine(int x, int y, enumSelectionMode mode);
+	int floodSegment(int x, int y, int most, KisHLineIteratorPixel& it, int lastPixel, Direction d, enumSelectionMode mode);
 
 private:
 	KisCanvasSubject *m_subject;
         QWidget * m_optWidget;
+	KisSelectionOptions * m_options; // Default options widget
 
 	int m_fuzziness;
 	enumSelectionMode m_selectAction;
 
+	// Scratch variables for floodfilling the selection
+	KisSelectionSP m_selection;
+	KisPaintDeviceSP m_device;
+	int m_size;
+	int m_depth;
+	int m_colorChannels;
+	int m_width, m_height;
+	QRect m_rect;
+	bool* m_map;
+	QUANTUM* m_oldColor, *m_color;
 };
 
 class KisToolSelectContiguousFactory : public KisToolFactory {

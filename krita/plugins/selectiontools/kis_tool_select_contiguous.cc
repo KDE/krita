@@ -23,11 +23,13 @@
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qapplication.h>
 
 #include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kcolorbutton.h>
 
 #include <kis_cursor.h>
 #include <kis_selection_manager.h>
@@ -51,6 +53,7 @@ KisToolSelectContiguous::KisToolSelectContiguous() : super()
 	setName("tool_select_contiguous");
 	m_subject = 0;
 	m_optWidget = 0;
+	m_options = 0;
 	m_fuzziness = 20;
 
 	//XXX : make wizard cursor from tool icon.
@@ -63,14 +66,11 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 
 void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 {
-	kdDebug() << "button press: " << m_subject << "\n";
 
 	if (m_subject) {
 		KisImageSP img;
 		KisPaintDeviceSP dev;
 		QPoint pos;
-		QColor c;
-		QUANTUM opacity;
 
 		if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)
 			return;
@@ -85,14 +85,9 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 
 
 		pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
-
-		dev -> pixel(pos.x(), pos.y(), &c, &opacity);
-		kdDebug() << "Going to select colors similar to: " << c.red() << ", " << c.green() << ", "<< c.blue() << "\n";
-// 		if (opacity > OPACITY_TRANSPARENT)
-// 			selectByColor(dev, dev -> selection(), c, m_fuzziness, m_selectAction);
-// 		else {
-// 			m_subject -> selectionManager() -> selectAll();
-// 		}
+		QCursor oldCursor = m_subject -> setCanvasCursor(KisCursor::waitCursor());
+		fillSelection(dev, m_selectAction, pos.x(), pos.y());
+		m_subject -> setCanvasCursor(oldCursor);
 		m_subject -> canvasController() -> updateCanvas();
 
 	}
@@ -148,14 +143,15 @@ void KisToolSelectContiguous::slotSetAction(int action)
 
 QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
 {
-	m_optWidget = new KisSelectionOptions(parent, m_subject);
+	m_optWidget = new QWidget(parent);
+
 	m_optWidget -> setCaption(i18n("Select Contiguous Areas"));
 
 	QVBoxLayout * l = new QVBoxLayout(m_optWidget);
 
-	KisSelectionOptions * options = new KisSelectionOptions(m_optWidget, m_subject);
-	l -> addWidget( options);
-	connect (options, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+	m_options = new KisSelectionOptions(m_optWidget, m_subject);
+	l -> addWidget( m_options);
+	connect (m_options, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
 	QHBoxLayout * hbox = new QHBoxLayout(l);
 
@@ -176,6 +172,153 @@ QWidget* KisToolSelectContiguous::optionWidget()
         return m_optWidget;
 }
 
+// flood filling
 
+void KisToolSelectContiguous::fillSelection(KisPaintDeviceSP device, enumSelectionMode mode, int startX, int startY)
+{
+
+	m_device = device;
+
+	if (mode == SELECTION_REPLACE) {
+		if (device -> hasSelection()) {
+			device -> removeSelection();
+		}
+	}
+
+	m_selection = device -> selection();
+	m_selection -> setMaskColor(m_options -> maskColor());
+
+	m_depth = device -> pixelSize();
+	m_colorChannels = device -> colorStrategy() -> nColorChannels();
+
+	Q_INT32 x, y;
+	device -> exactBounds(x, y, m_width, m_height);
+
+	m_size = m_width * m_height;
+
+	m_oldColor = new QUANTUM[m_depth];
+
+	KisHLineIteratorPixel pixelIt = m_device -> createHLineIterator(startX, startY, startX + 1, false);
+	memcpy(m_oldColor, pixelIt.rawData(), m_depth);
+
+	m_map = new bool[m_size];
+	for (int i = 0; i < m_size; i++)
+		m_map[i] = false;
+
+
+	floodLine(startX, startY, mode);
+
+	delete m_map;
+
+	delete m_oldColor;
+
+}
+
+void KisToolSelectContiguous::floodLine(int x, int y, enumSelectionMode mode)
+{
+
+	qApp -> processEvents();
+
+	int mostRight, mostLeft = x;
+
+
+	KisHLineIteratorPixel pixelIt = m_device -> createHLineIterator(x, y, m_width, false);
+
+	int lastPixel = m_width;
+
+	if (difference(m_oldColor, pixelIt.rawData()) > m_fuzziness) {
+		return;
+	}
+
+	mostRight = floodSegment(x, y, x, pixelIt, lastPixel, Right, mode);
+
+	if (lastPixel < pixelIt.x())
+		mostRight--;
+
+	if (x > 0) {
+		mostLeft--;
+
+		KisHLineIteratorPixel pixelIt = m_device->createHLineIterator(x - 1, y, m_width - 1, false);
+		int lastPixel = 0;
+
+		mostLeft = floodSegment(x,y, mostLeft, pixelIt, lastPixel, Left, mode);
+
+		if (pixelIt.x() < lastPixel)
+			mostLeft++;
+	}
+
+	// yay for stack overflowing:
+	for (int i = mostLeft; i <= mostRight; i++) {
+		qApp -> processEvents();
+		if (y > 0 && !m_map[(y-1)*m_width + i])
+			floodLine(i, y-1, mode);
+		if (y < m_height - 1 && !m_map[(y+1)*m_width + i])
+			floodLine(i, y+1, mode);
+	}
+}
+
+int KisToolSelectContiguous::floodSegment(int x, int y, int most, KisHLineIteratorPixel& it, int lastPixel, Direction d, enumSelectionMode mode)
+{
+	bool stop = false;
+	QUANTUM diff;
+	KisHLineIteratorPixel selIter = m_selection -> createHLineIterator(x, y, m_width - x, true);
+	KisStrategyColorSpaceSP colorStrategy = m_selection -> colorStrategy();
+	while( ( ( d == Right && it.x() <= lastPixel) || (d == Left && lastPixel <= it.x())) && !stop)
+	{
+
+		if (m_map[y * m_width + x])
+			break;
+		m_map[y * m_width + x] = true;
+
+		KisPixel data = it.pixel();
+		diff = difference(m_oldColor, data);
+		if (diff < m_fuzziness) {
+			Q_UINT8 selectedness = selIter.rawData()[0];
+
+			if (mode == SELECTION_ADD || mode == SELECTION_REPLACE) {
+
+				selIter.rawData()[0] = MAX_SELECTED;// - diff;
+			} else if (mode == SELECTION_SUBTRACT) {
+				if (selectedness > diff) {
+					selIter.rawData()[0] = selIter.rawData()[0] - diff;
+				} else {
+					selIter.rawData()[0] = MIN_SELECTED;
+				}
+			}
+
+			if (d == Right) {
+				++it;
+				++selIter;
+				x++;
+				most++;
+			} else {
+				//XXX: Iterator decrement has not been implemented
+				// for the tile iterators so this was broken. Add
+				// decrement operators for this case. AP
+				/*
+				it--; selection--;
+				*/
+				x--; most--;
+			}
+		} else {
+			stop = true;
+		}
+	}
+
+	return most;
+}
+
+QUANTUM KisToolSelectContiguous::difference(const QUANTUM* src, KisPixel dst)
+{
+	QUANTUM max = 0, diff = 0;
+
+	for (int i = 0; i < m_colorChannels; i++) {
+		// added extra (QUANTUM) casts just to be on the safe side until that is fixed
+		diff = QABS((QUANTUM)src[i] - (QUANTUM)dst[i]);
+		if (diff > max)
+			max = diff;
+	}
+	return max;
+}
 
 #include "kis_tool_select_contiguous.moc"

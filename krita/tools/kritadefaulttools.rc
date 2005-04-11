@@ -8,7 +8,7 @@
   <Action name="tool_pan"/>
 </ToolBar>
 
-<ToolBar name="painting tools" position="left"><Text>Painting Tools</Text>
+<ToolBar name="painting_tools" position="left"><Text>Painting Tools</Text>
   <Action name="tool_pen"/>
   <Action name="tool_brush"/>
   <Action name="tool_airbrush"/>

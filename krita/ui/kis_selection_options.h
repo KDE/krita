@@ -38,6 +38,7 @@ public:
 	virtual ~KisSelectionOptions();
 
 	int action();
+	QColor maskColor();
 
 signals:
 	void actionChanged(int);

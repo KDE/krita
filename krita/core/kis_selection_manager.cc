@@ -299,7 +299,7 @@ void KisSelectionManager::copy()
 // 		  << r.width() << ", "
 // 		  << r.height() << "\n";
 
-	KisPaintDeviceSP clip = new KisPaintDevice(img -> activeDevice() -> colorStrategy(), 
+	KisPaintDeviceSP clip = new KisPaintDevice(img -> activeDevice() -> colorStrategy(),
 						   "Copy from " + img -> activeDevice() -> name() );
 	clip -> setCompositeOp(COMPOSITE_OVER);
 	clip -> setProfile(layer -> profile());
@@ -365,7 +365,7 @@ KisLayerSP KisSelectionManager::paste()
 		gc.begin(layer.data());
 		gc.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), r.x(), r.y(), r.width(), r.height());
 		gc.end();
-		
+
 		KisConfig cfg;
 		if (cfg.askProfileOnPaste() && clip -> profile() == 0 && img -> profile() != 0) {
 			KisDlgApplyProfile * dlg = new KisDlgApplyProfile(m_parent);
@@ -440,7 +440,7 @@ void KisSelectionManager::clear()
 
 	KisTransaction * t = 0;
 	if (img -> undoAdapter()) t = new KisTransaction("Cut", layer.data());
-	
+
 
 	KisRectIterator layerIt = layer -> createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
  	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);

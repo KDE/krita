@@ -20,7 +20,7 @@
 #include <qglobal.h>
 #include <kdebug.h>
 
-#include "kis_conversions.h"
+#include "kis_color_conversions.h"
 
 /**
  * A number of often-used conversions between color models

@@ -31,7 +31,7 @@
 #include "kis_strategy_colorspace_rgb.h"
 #include "composite.h"
 #include "kis_iterators_pixel.h"
-#include "kis_conversions.h"
+#include "kis_color_conversions.h"
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_RGB = 3;

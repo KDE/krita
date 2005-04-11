@@ -49,59 +49,12 @@
 #include <kis_view.h>
 #include <kis_strategy_colorspace.h>
 #include <kis_profile.h>
-#include "kis_conversions.h"
+#include "kis_color_conversions.h"
+#include "kis_color_utilities.h"
 
 #include "dlg_colorrange.h"
 #include "wdg_colorrange.h"
 
-
-// XXX: Poynton says: hsv/hls is not what one ought to use for colour calculations.
-//      Unfortunately, I don't know enough to be able to use anything else.
-
-bool isReddish(int h)
-{
-	return ((h > 330 && h < 360) || ( h > 0 && h < 40));
-}
-
-bool isYellowish(int h)
-{
-	return (h> 40 && h < 65);
-}
-
-bool isGreenish(int h)
-{
-	return (h > 70 && h < 155);
-}
-
-bool isCyanish(int h)
-{
-	return (h > 150 && h < 190);
-}
-
-bool isBlueish(int h)
-{
-	return (h > 185 && h < 270);
-}
-
-bool isMagentaish(int h)
-{
-	return (h > 265 && h < 330);
-}
-
-bool isHighlight(int v)
-{
-	return (v > 200);
-}
-
-bool isMidTone(int v)
-{
-	return (v > 100 && v < 200);
-}
-
-bool isShadow(int v)
-{
-	return (v < 100);
-}
 
 
 Q_UINT32 matchColors(const QColor & c, enumAction action)

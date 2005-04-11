@@ -21,28 +21,38 @@
  */
 
 #include <qpainter.h>
+#include <qlayout.h>
+#include <qlabel.h>
 
 #include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <knuminput.h>
 
-#include "kis_canvas_controller.h"
-#include "kis_canvas_subject.h"
-#include "kis_cursor.h"
+#include <kis_cursor.h>
+#include <kis_selection_manager.h>
+#include <kis_canvas_subject.h>
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include <kis_button_press_event.h>
+#include <kis_canvas_subject.h>
+#include <kis_selection_options.h>
+#include <kis_selection.h>
+#include <kis_paint_device.h>
+#include <kis_iterators_pixel.h>
+#include <kis_color_utilities.h>
+#include <kis_selection_options.h>
+#include <kis_canvas_observer.h>
+
 #include "kis_tool_select_contiguous.h"
-#include "kis_view.h"
-#include "kis_selection_options.h"
 
 KisToolSelectContiguous::KisToolSelectContiguous() : super()
 {
 	setName("tool_select_contiguous");
 	m_subject = 0;
+	m_optWidget = 0;
+	m_fuzziness = 20;
 
-	m_dragging = false;
-	m_drawn = false;
-	m_init  = true;
-	m_dragStart = QPoint(-1,-1);
-	m_dragEnd = QPoint(-1,-1);
 	//XXX : make wizard cursor from tool icon.
 	setCursor(KisCursor::arrowCursor());
 }
@@ -51,127 +61,44 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 {
 }
 
-void KisToolSelectContiguous::clearOld()
+void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 {
-// //   if (m_doc->isEmpty()) return;
+	kdDebug() << "button press: " << m_subject << "\n";
 
-// 	KisView *view = getCurrentView();
+	if (m_subject) {
+		KisImageSP img;
+		KisPaintDeviceSP dev;
+		QPoint pos;
+		QColor c;
+		QUANTUM opacity;
 
-// 	if(m_dragStart.x() != -1)
-// 		drawRect( m_dragStart, m_dragEnd );
+		if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)
+			return;
 
-// 	QRect updateRect(0, 0, m_doc->currentImg()->width(),
-// 			m_doc->currentImg()->height());
-// 	view->updateCanvas(updateRect);
+		if (!(img = m_subject -> currentImg()))
+			return;
 
-// 	m_dragStart = QPoint(-1,-1);
-// 	m_dragEnd =   QPoint(-1,-1);
+		dev = img -> activeDevice();
+
+		if (!dev || !dev -> visible())
+			return;
+
+
+		pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
+
+		dev -> pixel(pos.x(), pos.y(), &c, &opacity);
+		kdDebug() << "Going to select colors similar to: " << c.red() << ", " << c.green() << ", "<< c.blue() << "\n";
+// 		if (opacity > OPACITY_TRANSPARENT)
+// 			selectByColor(dev, dev -> selection(), c, m_fuzziness, m_selectAction);
+// 		else {
+// 			m_subject -> selectionManager() -> selectAll();
+// 		}
+		m_subject -> canvasController() -> updateCanvas();
+
+	}
+
 }
 
-void KisToolSelectContiguous::buttonPress(KisButtonPressEvent */*event*/)
-{
-//  //   if ( m_doc->isEmpty() )
-// //        return;
-
-//     if( event->button() == LeftButton )
-//     {
-//         // erase old rectangle
-//         if(m_drawn)
-//         {
-//             m_drawn = false;
-
-//             if(m_dragStart.x() != -1)
-//                 drawRect( m_dragStart, m_dragEnd );
-//         }
-
-//         m_init = false;
-//         m_dragging = true;
-//         m_dragStart = event->pos();
-//         m_dragEnd = event->pos();
-//     }
-}
-
-
-void KisToolSelectContiguous::move(KisMoveEvent */*event*/)
-{
-// //    if ( m_doc->isEmpty() )
-// //        return;
-
-//     if( m_dragging )
-//     {
-//         drawRect( m_dragStart, m_dragEnd );
-//         m_dragEnd = event->pos();
-//         drawRect( m_dragStart, m_dragEnd );
-//     }
-}
-
-
-void KisToolSelectContiguous::buttonRelease(KisButtonReleaseEvent */*event*/)
-{
-// //    if ( m_doc->isEmpty() )
-// //        return;
-
-//     if( ( m_dragging ) && ( event->button() == LeftButton ) )
-//     {
-//         m_dragging = false;
-//         m_drawn = true;
-
-//         QPoint zStart = zoomed(m_dragStart);
-//         QPoint zEnd   = zoomed(m_dragEnd);
-
-//         if(zStart.x() <= zEnd.x())
-//         {
-//             m_selectRect.setLeft(zStart.x());
-//             m_selectRect.setRight(zEnd.x());
-//         }
-//         else
-//         {
-//             m_selectRect.setLeft(zEnd.x());
-//             m_selectRect.setRight(zStart.x());
-//         }
-
-//         if(zStart.y() <= zEnd.y())
-//         {
-//             m_selectRect.setTop(zStart.y());
-//             m_selectRect.setBottom(zEnd.y());
-//         }
-//         else
-//         {
-//             m_selectRect.setTop(zEnd.y());
-//             m_selectRect.setBottom(zStart.y());
-//         }
-
-//         m_doc->getSelection()->setBounds(m_selectRect);
-
-//         kdDebug(0) << "selectRect"
-//             << " left: "   << m_selectRect.left()
-//             << " top: "    << m_selectRect.top()
-//             << " right: "  << m_selectRect.right()
-//             << " bottom: " << m_selectRect.bottom()
-//             << endl;
-//     }
-}
-
-
-void KisToolSelectContiguous::drawRect( const QPoint& /*start*/, const QPoint& /*end*/ )
-{
-// 	KisView *view = getCurrentView();
-// 	QPainter p, pCanvas;
-
-// 	p.begin( m_canvas );
-// 	p.setRasterOp( Qt::NotROP );
-// 	p.setPen( QPen( Qt::DotLine ) );
-
-// 	float zF = view->zoomFactor();
-
-// 	p.drawRect( QRect(start.x() + view->xPaintOffset()
-// 				- (int)(zF * view->xScrollOffset()),
-// 				start.y() + view->yPaintOffset()
-// 				- (int)(zF * view->yScrollOffset()),
-// 				end.x() - start.x(),
-// 				end.y() - start.y()) );
-// 	p.end();
-}
 
 void KisToolSelectContiguous::setup(KActionCollection *collection)
 {
@@ -179,7 +106,7 @@ void KisToolSelectContiguous::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("Tool &Contiguous Select"),
-					    "wizard" ,
+					    "select_wizard" ,
 					    0,
 					    this,
 					    SLOT(activate()),
@@ -190,17 +117,58 @@ void KisToolSelectContiguous::setup(KActionCollection *collection)
 	}
 }
 
+void KisToolSelectContiguous::update(KisCanvasSubject *subject)
+{
+	super::update(subject);
+	m_subject = subject;
+}
+
+void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
+{
+	m_fuzziness = fuzziness;
+}
+
+
+void KisToolSelectContiguous::slotSetAction(int action)
+{
+	m_selectAction =(enumSelectionMode)action;
+// XXX: Fix cursors when then are done.
+// 	switch(m_selectAction) {
+// 		case SELECTION_REPLACE:
+// 			m_subject -> setCanvasCursor(KisCursor::pickerCursor());
+// 			break;
+// 		case SELECTION_ADD:
+// 			m_subject -> setCanvasCursor(KisCursor::pickerPlusCursor());
+// 			break;
+// 		case SELECTION_SUBTRACT:
+// 			m_subject -> setCanvasCursor(KisCursor::pickerMinusCursor());
+// 	};
+}
+
+
 QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
 	m_optWidget -> setCaption(i18n("Select Contiguous Areas"));
+
+	QVBoxLayout * l = new QVBoxLayout(m_optWidget);
+
+	KisSelectionOptions * options = new KisSelectionOptions(m_optWidget, m_subject);
+	l -> addWidget( options);
+	connect (options, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+
+	QHBoxLayout * hbox = new QHBoxLayout(l);
+
+	QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
+	hbox -> addWidget(lbl);
+
+	KIntNumInput * input = new KIntNumInput(m_optWidget, "fuzziness");
+	input -> setRange(0, 200, 10, true);
+	input -> setValue(20);
+	hbox -> addWidget(input);
+	connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
+
 	return m_optWidget;
-}
-
-
-bool KisToolSelectContiguous::willModify() const
-{
- 	return false;
 }
 
 QWidget* KisToolSelectContiguous::optionWidget()

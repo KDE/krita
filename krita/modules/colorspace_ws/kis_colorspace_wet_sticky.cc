@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "kis_conversions.h"
+#include "kis_color_conversions.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_colorspace_registry.h"
 #include "kis_image.h"

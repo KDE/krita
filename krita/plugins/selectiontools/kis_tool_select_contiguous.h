@@ -22,12 +22,15 @@
 #ifndef __KIS_TOOL_SELECT_CONTIGUOUS_H__
 #define __KIS_TOOL_SELECT_CONTIGUOUS_H__
 
-#include <qpoint.h>
-#include "kis_tool.h"
-#include "kis_tool_non_paint.h"
+#include <kis_tool.h>
+#include <kis_tool_non_paint.h>
+#include <kis_tool_factory.h>
+#include <kis_selection.h>
 
-#include "kis_tool_factory.h"
-
+class KisCanvasSubject;
+class QWidget;
+class QVBoxLayout;
+class QCheckBox;
 
 /**
  * The 'magic wand' selection tool -- in fact just
@@ -42,31 +45,26 @@ public:
 	KisToolSelectContiguous();
 	virtual ~KisToolSelectContiguous();
 
+public:
+	virtual void update(KisCanvasSubject *subject);
+
 	virtual void setup(KActionCollection *collection);
 	virtual QWidget* createOptionWidget(QWidget* parent);
         virtual QWidget* optionWidget();
 
-	virtual void clearOld();
-	virtual bool willModify() const;
-
 	virtual void buttonPress(KisButtonPressEvent *event);
-	virtual void move(KisMoveEvent *event);
-	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
-protected:
-	void drawRect(const QPoint&, const QPoint&);
+public slots:
+	virtual void slotSetFuzziness(int);
+	virtual void slotSetAction(int);
 
-protected:
-	QPoint m_dragStart;
-	QPoint m_dragEnd;
-	bool m_dragging;
-	bool m_drawn;
-	bool m_init;
-	QRect m_selectRect;
 
 private:
 	KisCanvasSubject *m_subject;
         QWidget * m_optWidget;
+
+	int m_fuzziness;
+	enumSelectionMode m_selectAction;
 
 };
 

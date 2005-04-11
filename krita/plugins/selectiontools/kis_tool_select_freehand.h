@@ -42,9 +42,6 @@ public:
 	KisToolSelectFreehand();
 	virtual ~KisToolSelectFreehand();
 
-	virtual void clearOld();
-	virtual bool willModify() const;
-
 	virtual void setup(KActionCollection *collection);
 	virtual QWidget * createOptionWidget(QWidget* parent);
         virtual QWidget* optionWidget();

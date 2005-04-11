@@ -27,7 +27,7 @@ kritaselectiontools_la_SOURCES = \
         kis_tool_select_polygonal.cc \
         kis_tool_select_elliptical.cc \
         kis_tool_select_contiguous.cc
-        
+
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = kritaselectiontools.la
 
@@ -48,3 +48,15 @@ kritaselectiontools_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_
 kritaselectiontools_la_METASOURCES = AUTO
 
 KDE_OPTIONS = nofinal
+
+kritapics_DATA = \
+	rectangular.png \
+	selecteraser.png \
+	selectbrush.png  \
+	select_wizard.png \
+	elliptical.png \
+	freehand.png \
+	polygonal.png
+
+kritapicsdir = $(kde_datadir)/krita/pics
+

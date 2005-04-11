@@ -47,10 +47,13 @@ public:
 
 public:
 	virtual void update(KisCanvasSubject *subject);
+
 	virtual void setup(KActionCollection *collection);
-	virtual void buttonPress(KisButtonPressEvent *e);
 	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
+
+	virtual void buttonPress(KisButtonPressEvent *e);
+
 
 public slots:
 	virtual void slotSetFuzziness(int);

@@ -87,7 +87,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32
 void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	// XXX: add checking of selections
-
+	KisPaintDeviceSP tmp = new KisPaintDevice(src -> colorStrategy(), "temporary paint device for convolving");
 	Q_INT32 depth = src -> colorStrategy() -> nColorChannels() + 1;
 	Q_INT32 top, left;
 
@@ -103,7 +103,10 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 	{
 		KisHLineIteratorPixel curIt = src->createHLineIterator(y,left,w,false);
 		KisHLineIteratorPixel dstIt = src->createHLineIterator(dstY,left,w,true);
+		KisHLineIteratorPixel tmpIt = tmp->createHLineIterator(dstY, left, w, true);
 		KisHLineIteratorPixel afterIt = src->createHLineIterator(below,left,w,false);
+
+
 		// Corner : left top
 		KisPixel currentPixel = dstIt.pixel();
 		++dstIt;

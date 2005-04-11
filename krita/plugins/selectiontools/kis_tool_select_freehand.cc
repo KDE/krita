@@ -75,21 +75,6 @@ void KisToolSelectFreehand::finish( QPoint /*p*/ )
 // 	m_pointArray.putPoints(m_index, 1, mFinish.x(), mFinish.y());
 }
 
-void KisToolSelectFreehand::clearOld()
-{
-// 	KisView *view = getCurrentView();
-
-// 	m_dragStart = QPoint(-1,-1);
-// 	m_dragEnd = QPoint(-1,-1);
-// 	m_index = 0;
-// 	m_pointArray.resize(0);
-
-// 	// clear everything in
-// 	QRect updateRect(0, 0, m_doc->currentImg()->width(), m_doc->currentImg()->height());
-// 	view->updateCanvas(updateRect);
-// 	m_selectRegion = QRegion();
-}
-
 void KisToolSelectFreehand::buttonPress(KisButtonPressEvent */*event*/)
 {
 // 	// start the freehand line.
@@ -315,12 +300,6 @@ QWidget* KisToolSelectFreehand::createOptionWidget(QWidget* parent)
 QWidget* KisToolSelectFreehand::optionWidget()
 {
         return m_optWidget;
-}
-
-
-bool KisToolSelectFreehand::willModify() const
-{
- 	return false;
 }
 
 void KisToolSelectFreehand::paintEvent(QPaintEvent */*e*/)

@@ -50,6 +50,7 @@ libkisui_la_SOURCES = \
     wdgmatrix.ui \
     kis_previewwidgetbase.ui \
     wdgselectionoptions.ui \
+    wdgshapeoptions.ui \
     wdgnewimage.ui \
     wdgcolorsettings.ui \
     wdgapplyprofile.ui \

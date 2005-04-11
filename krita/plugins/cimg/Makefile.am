@@ -1,3 +1,5 @@
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
 kritarcdir = $(kde_datadir)/krita/kpartplugins
 kritarc_DATA = kritacimg.rc
 EXTRA_DIST = $(kritarc_DATA)
@@ -38,6 +40,5 @@ kritacimg_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECOR
 
 kritacimg_la_METASOURCES = AUTO
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 KDE_OPTIONS = nofinal

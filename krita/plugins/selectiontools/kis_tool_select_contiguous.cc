@@ -179,11 +179,14 @@ void KisToolSelectContiguous::fillSelection(KisPaintDeviceSP device, enumSelecti
 
 	m_device = device;
 
-	if (mode == SELECTION_REPLACE) {
-		if (device -> hasSelection()) {
+	if (device -> hasSelection()) {
+		if (device -> selection() -> selected() > MIN_SELECTED)
+			return;
+
+		if (mode == SELECTION_REPLACE)
 			device -> removeSelection();
-		}
 	}
+
 
 	m_selection = device -> selection();
 	m_selection -> setMaskColor(m_options -> maskColor());

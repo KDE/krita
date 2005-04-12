@@ -257,8 +257,8 @@ void KisDockerManager::setupDockers()
 		m_fillsdocker = new KisDockFrameDocker(m_view);
 		m_fillsdocker -> setCaption(i18n("Fills"));
 
-		(void)new KAction(i18n( "&Shapes" ), 0, this, SLOT( viewShapesDocker() ), m_ac, "view_shapes_docker" );
-		(void)new KAction(i18n( "&Fills" ), 0, this, SLOT( viewFillsDocker() ), m_ac, "view_fills_docker" );
+		(void)new KAction(i18n( "Hide &Shapes" ), 0, this, SLOT( viewShapesDocker() ), m_ac, "view_shapes_docker" );
+		(void)new KAction(i18n( "Hide &Fills" ), 0, this, SLOT( viewFillsDocker() ), m_ac, "view_fills_docker" );
 
 	}
 	if ( cfg.dockerStyle() == DOCKER_DOCKER || cfg.dockerStyle() == DOCKER_TOOLBOX ) {
@@ -273,16 +273,16 @@ void KisDockerManager::setupDockers()
 		m_layerchanneldocker -> setCaption(i18n("Layers"));
 
 
-		(void)new KAction(i18n( "&Layers" ), 0, this, SLOT( viewLayerChannelDocker() ), m_ac, "view_layer_docker" );
-		(void)new KAction(i18n( "&Color Manager" ), 0, this, SLOT( viewColorDocker() ), m_ac, "view_color_docker" );
-		(void)new KAction(i18n( "&Tool Properties" ), 0, this, SLOT( viewControlDocker() ), m_ac, "view_control_docker" );
+		(void)new KAction(i18n( "Hide &Layers" ), 0, this, SLOT( viewLayerChannelDocker() ), m_ac, "view_layer_docker" );
+		(void)new KAction(i18n( "Hide &Color Manager" ), 0, this, SLOT( viewColorDocker() ), m_ac, "view_color_docker" );
+		(void)new KAction(i18n( "Hide &Tool Properties" ), 0, this, SLOT( viewControlDocker() ), m_ac, "view_control_docker" );
 
 	}
 
 	// No matter what the docker style, we always have a paint box
 	m_paintboxdocker = new KisPaintBox( m_view );
 	m_paintboxdocker -> setCaption( i18n( "Tools" ) );
-	(void)new KAction(i18n( "&Tools" ), 0, this, SLOT( viewPaintBoxDocker() ), m_ac, "view_paintop_docker" );
+	(void)new KAction(i18n( "Hide &Tools" ), 0, this, SLOT( viewPaintBoxDocker() ), m_ac, "view_paintop_docker" );
 
 
 	// ---------------------------------------------------------------------
@@ -538,10 +538,15 @@ void KisDockerManager::setupDockers()
 	if ( cfg.dockerStyle() == DOCKER_DOCKER || cfg.dockerStyle() == DOCKER_TOOLBOX ) {
 		// TODO Here should be a better check
 		if ( m_view -> mainWindow() -> isDockEnabled( DockBottom)) {
-			viewControlDocker();
-			viewLayerChannelDocker();
-			viewPaintBoxDocker();
-			viewColorDocker();
+			m_view -> mainWindow()->addDockWindow( m_toolcontroldocker, DockRight );
+			m_view -> mainWindow()->addDockWindow( m_layerchanneldocker, DockRight );
+			m_view -> mainWindow()->addDockWindow( m_paintboxdocker, DockRight );
+			m_view -> mainWindow()->addDockWindow( m_colordocker, DockRight );
+
+			m_toolcontroldocker -> show();
+			m_layerchanneldocker -> show();
+			m_paintboxdocker -> show();
+			m_colordocker -> show();
 
 			m_view -> mainWindow() -> setDockEnabled( DockBottom, false);
 			m_view -> mainWindow() -> setDockEnabled( DockTop, false);
@@ -554,8 +559,10 @@ void KisDockerManager::setupDockers()
 		// TODO Here should be a better check
 		if ( m_view -> mainWindow() -> isDockEnabled( DockBottom))
 		{
-			viewShapesDocker();
-			viewFillsDocker();
+			m_view -> mainWindow()->addDockWindow( m_shapesdocker, DockRight );
+			m_view -> mainWindow()->addDockWindow( m_fillsdocker, DockRight );
+			m_shapesdocker -> show();
+			m_fillsdocker -> show();
 
 		}
 	}
@@ -590,8 +597,12 @@ void KisDockerManager::viewColorDocker()
 {
 	if( m_colordocker->isVisible() == false )
 	{
-		m_view -> mainWindow()->addDockWindow( m_colordocker, DockRight );
 		m_colordocker->show();
+		((KAction*)m_ac->action("view_color_docker")) -> setText(i18n("Hide &Color Manager"));
+	}
+	else {
+		m_colordocker -> hide();
+		((KAction*)m_ac->action("view_color_docker")) -> setText(i18n("Show &Color Manager"));
 	}
 }
 
@@ -599,17 +610,26 @@ void KisDockerManager::viewControlDocker()
 {
 	if( m_toolcontroldocker->isVisible() == false )
 	{
-		m_view -> mainWindow()->addDockWindow( m_toolcontroldocker, DockRight );
+		((KAction*)m_ac->action("view_control_docker")) -> setText(i18n("Hide &Tool Properties"));
 		m_toolcontroldocker->show();
+	}
+	else {
+		m_toolcontroldocker -> hide();
+		((KAction*)m_ac->action("view_control_docker")) -> setText(i18n("Show &Tool Properties"));
+
 	}
 }
 
 void KisDockerManager::viewLayerChannelDocker()
 {
-	if( m_layerchanneldocker->isVisible() == false )
+	if ( m_layerchanneldocker->isVisible() == false )
 	{
-		m_view -> mainWindow()->addDockWindow( m_layerchanneldocker, DockRight );
 		m_layerchanneldocker->show();
+		((KAction*)m_ac->action("view_layer_docker")) -> setText(i18n("Hide &Layers"));
+	}
+	else {
+		m_layerchanneldocker -> hide();
+		((KAction*)m_ac->action("view_layer_docker")) -> setText(i18n("Show &Layers"));
 	}
 }
 
@@ -617,8 +637,12 @@ void KisDockerManager::viewFillsDocker()
 {
 	if( m_fillsdocker->isVisible() == false )
 	{
-		m_view -> mainWindow()->addDockWindow( m_fillsdocker, DockRight );
-		m_shapesdocker->show();
+		m_fillsdocker->show();
+		((KAction*)m_ac->action("view_fills_docker")) -> setText(i18n("Hide &Fills"));
+	}
+	else {
+		m_fillsdocker -> hide();
+		((KAction*)m_ac->action("view_fills_docker")) -> setText(i18n("Show &Fills"));
 	}
 }
 
@@ -627,8 +651,12 @@ void KisDockerManager::viewShapesDocker()
 {
 	if( m_shapesdocker->isVisible() == false )
 	{
-		m_view -> mainWindow()->addDockWindow( m_shapesdocker, DockRight );
 		m_shapesdocker->show();
+		((KAction*)m_ac->action("view_shapes_docker")) -> setText(i18n("Hide &Shapes"));
+	}
+	else {
+		m_shapesdocker -> hide();
+		((KAction*)m_ac->action("view_shapes_docker")) -> setText(i18n("Show &Shapes"));
 	}
 }
 
@@ -636,8 +664,12 @@ void KisDockerManager::viewPaintBoxDocker()
 {
 	if ( m_paintboxdocker->isVisible() == false )
 	{
-		m_view -> mainWindow()->addDockWindow( m_paintboxdocker, DockRight );
 		m_paintboxdocker->show();
+		((KAction*)m_ac->action("view_paintop_docker")) -> setText(i18n("Hide &Tools"));
+	}
+	else {
+		m_paintboxdocker -> hide();
+		((KAction*)m_ac->action("view_paintop_docker")) -> setText(i18n("Show &Tools"));
 	}
 }
 

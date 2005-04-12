@@ -1,11 +1,6 @@
 Krita TODO
 
 
-Zooming
-
-	- Zooming & moving of paint devices is still broken in all
-	  possible ways: painting, filtering, filling...
-
 Scaling
 
 	- replace calloc and free by new and delete.
@@ -31,8 +26,6 @@ Core
 	* Anti-aliased filling (requires some simple colorspace
 	  function to merge 2 Pixels)
 	* Load/save configuration of everything user-settable.
-	* Fix composite ops (nick from the code gwenview nicked for
-	  the xcf import)
 	* Make toolbox look like Karbon's toolbox, but follow the
 	  layout of photoshop's toolbox for minimum confusability.
         * Lock layers (make inaccessible) See bug #90456.
@@ -49,13 +42,10 @@ User Interface
 	* Create brush-shape outline cursor
 	* All dialogs ui-fied (#Boudewijn, Sven, Casper)
 	* Implement the following dialogs / widgets:
-		    - Select by color range (#Boudewijn)
 		    - Variations (#Boudewijn)
-		    - Transform (#Boudewijn)
 		    - Gradient (nick from Scribus?)
 		    - Histogram (#Boudewijn)
 		    - Modify curves (nick from Perico)
-	* Add auto-scroll to canvas while painting	  
 	* Add previews to all relevant dialogs. (#Bart) 
 	* Show which tool is associated with which pointer (mouse, stylus, eraser, other stylusses)
 	* Allow guides to be disabled. Allow diagonal guides (useful
@@ -86,8 +76,6 @@ Profiles
 	* Add an export profile combobox to the export image/print dialogs
         * Add loading and saving of profiles associated with images in .krita 
           files.
-        * Retrieve profiles from imported images (tiff, png and jpg can have
-          them, for instance embedded by a calibrated scanner).
         * Export profiles in tiff, png and jpg (this and the previous item
           depend on ImageMagick or GraphicsMagick supporting this in some way.)
         * Support out-of-gamut warning indications for parts of an image 
@@ -109,29 +97,25 @@ Color conversions
 Tools
 
 	* All tools must have a tool options tab (#Boudewijn, Adrian, Cyrille)
-        * Make crop tool more capable with grab handles around crop area.
+	
 	* Implement the following tools: 
 		    - Elliptical selection (#Boudewijn)
 		    - Freehand selection (#Boudewijn)
 		    - Polygonal selection (#Boudewijn)
-		    - Continguous selection (magic wand) (#Boudewijn)
 		    - pen(cil) tool (same as brush, but not anti-aliased) (#Boudewijn,
                       done, except there's still a little ant-aliasing present, perhaps
                       dependent on the brush).
 		    - fix airbrush tool (add rate option, add increase
 		      of brush size if kept in one place)
-		    - poly-line tool
 		    - rectangle tool (#Clarence, still some work to with opacity and so on)
 		    - ellipse too (#Clarence, still some work to with opacity and so on)l
-		    - polygon tool
 		    - color changer, smudge tool,sharpen tool, blur
 		      tool, dodge tool, burn tool, sponge tool (These
 		      last are perhaps more generally: painting with
 		      filters tool)
 		    - stamp tool (paint with patttern/image selection) (#Cyrille)
-		    - Text tool (use KWord with a transparent background here?)
+		    - Text tool (use kotext with a transparent background here?)
 		    - Measure tool
-		    - Pan tool (hand)
 	            - calligraphic pen tool
          
 	* Pressure sensivitize all relevant tools (e.g. line tool)
@@ -140,7 +124,6 @@ Tools
 	  freehand, rect, ellipse, curve, text, etc. Paintops are: pen, brush,
           filter, erase, select, deselect, airbrush etc.
 	* Implement path tools
-	* Calligraphic pen tool
 	* Sumi-e brush tool
 	* Natural media tools (chalk, ink, oil, watercolour -- fun!)
 
@@ -156,4 +139,4 @@ Modules
 	* Add color models for LAB, XYZ, HSV etc.
 	* Finally fix CMYK
 	* Add Wet & Sticky model (in progress already)
-	* Implement Curtiss et. al. for watercolour
+	* Implement Curtiss et. al. for watercolour (Levien, wet dreams. In progress)

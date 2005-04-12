@@ -49,10 +49,10 @@ public:
 
 	virtual ~KisSelection();
 
-// 	// Returns selectedness, or 0 if invalid coordinates
-// 	QUANTUM selected(Q_INT32 x, Q_INT32 y);
-// 
-// 	void setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
+	// Returns selectedness, or 0 if invalid coordinates
+	QUANTUM selected(Q_INT32 x, Q_INT32 y);
+
+	void setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
 
 	QImage maskImage();
 
@@ -66,7 +66,7 @@ public:
 	void setMaskColor(const QColor c);
 	// Set the mask to inverted, do not invert the actual selection.
 	void setInverted(bool);
-	
+
 	QRect selectedRect();
 
 private:

@@ -35,7 +35,7 @@
 KisBaseDocker::KisBaseDocker( QWidget* parent, const char* name)
 	: QDockWindow( QDockWindow::OutsideDock, parent ,name )
 {
-	setCloseMode( QDockWindow::Always );
+	setCloseMode( QDockWindow::Never );
 	setResizeEnabled(true);
 	setOpaqueMoving(true);
 

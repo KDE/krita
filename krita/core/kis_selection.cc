@@ -58,29 +58,29 @@ KisSelection::~KisSelection()
 {
 }
 
-// QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y)
-// {
-// 	QColor c;
-// 	QUANTUM opacity;
-// 	if (pixel(x, y, &c, &opacity)) {
-// 		return opacity;
-// 	}
-// 	else {
-// 		return MIN_SELECTED;
-// 	}
-// }
-// 
-// void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
-// {
-// 	setPixel(x, y, m_maskColor, s);
-// }
+QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y)
+{
+	QColor c;
+	QUANTUM opacity;
+	if (pixel(x, y, &c, &opacity)) {
+		return opacity;
+	}
+	else {
+		return MIN_SELECTED;
+	}
+}
+
+void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
+{
+	setPixel(x, y, m_maskColor, s);
+}
 
 QImage KisSelection::maskImage()
 {
 	Q_INT32 x, y, w, h, y2, x2;
 	m_parentLayer -> exactBounds(x, y, w, h);
 	QImage img = QImage(w, h, 32);;
-	
+
 	for (y2 = y; y2 < h - y; ++y2) {
 		KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
 		x2 = 0;

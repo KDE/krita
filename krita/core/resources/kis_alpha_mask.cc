@@ -127,6 +127,7 @@ KisAlphaMaskSP KisAlphaMask::interpolate(KisAlphaMaskSP mask1, KisAlphaMaskSP ma
 	int width = mask1 -> width();
 	int height = mask1 -> height();
 	KisAlphaMaskSP outputMask = new KisAlphaMask(width, height);
+	Q_CHECK_PTR(outputMask);
 
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {

@@ -85,6 +85,8 @@ void ShearImage::slotShearImage()
 	if (!image) return;
 
 	DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearImage");
+	Q_CHECK_PTR(dlgShearImage);
+
 	dlgShearImage -> setCaption(i18n("Shear Image"));
 
         if (dlgShearImage -> exec() == QDialog::Accepted) {
@@ -102,6 +104,8 @@ void ShearImage::slotShearLayer()
 	if (!image) return;
 
 	DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearLayer");
+	Q_CHECK_PTR(dlgShearImage);
+
 	dlgShearImage -> setCaption("Shear Layer");
 
 	if (dlgShearImage -> exec() == QDialog::Accepted) {

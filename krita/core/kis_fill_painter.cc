@@ -135,6 +135,7 @@ void KisFillPainter::fillColor(int startX, int startY) {
 
 	// Now create a layer and fill it
 	KisLayerSP filled = new KisLayer(m_layer->colorStrategy(), "Fill Temporary Layer");
+	Q_CHECK_PTR(filled);
 	KisFillPainter painter(filled.data());
 	painter.fillRect(0, 0, m_width, m_height, m_paintColor);
 	painter.end();
@@ -147,6 +148,7 @@ void KisFillPainter::fillPattern(int startX, int startY) {
 
 	// Now create a layer and fill it
 	KisLayerSP filled = new KisLayer(m_layer->colorStrategy(), "Fill Temporary Layer");
+	Q_CHECK_PTR(filled);
 	KisFillPainter painter(filled.data());
 	painter.fillRect(0, 0, m_width, m_height, m_pattern);
 	painter.end();
@@ -179,8 +181,11 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 	} else {
 		// Create a selection from the surrounding area
 		m_selection = new KisSelection(lay, "Fill Temporary Selection");
+		Q_CHECK_PTR(m_selection);
+
 		m_selection -> clear(QRect(0, 0, m_width, m_height));
 		m_oldColor = new QUANTUM[m_device->pixelSize()];
+		Q_CHECK_PTR(m_oldColor);
 
 		KisHLineIteratorPixel pixelIt = m_layer->createHLineIterator(startX, startY, startX+1, false);
 		KisPixel pixel = pixelIt.pixel();
@@ -191,7 +196,10 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 
 		m_currentPercent = 0;
 		m_pixelsDone = 0;
+
 		m_map = new bool[m_size];
+		Q_CHECK_PTR(m_map);
+
 		for (int i = 0; i < m_size; i++)
 			m_map[i] = false;
 

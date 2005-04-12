@@ -34,7 +34,11 @@ KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, c
 	: KisFilterConfigurationWidget(nfilter, parent, name, f)
 {
 	m_page = new WdgCImg(this);
+	Q_CHECK_PTR(m_page);
+
 	QHBoxLayout * l = new QHBoxLayout(this);
+	Q_CHECK_PTR(l);
+
 	l -> add(m_page);
 	filter() -> setAutoUpdate(false);
 	connect( m_page -> bnRefresh, SIGNAL(clicked()), filter(), SLOT(refreshPreview()));
@@ -44,6 +48,7 @@ KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, c
 KisCImgFilterConfiguration * KisCImgconfigWidget::config()
 {
 	KisCImgFilterConfiguration * cfg = new KisCImgFilterConfiguration();
+	Q_CHECK_PTR(cfg);
 
 	cfg -> power1         = m_page -> numDetail -> value();
 	cfg -> power2         = m_page -> numGradient -> value();

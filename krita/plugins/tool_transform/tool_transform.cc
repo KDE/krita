@@ -60,8 +60,9 @@ ToolTransform::ToolTransform(QObject *parent, const char *name, const QStringLis
 		KisView * view = dynamic_cast<KisView *>(parent);
 
 		KisToolRegistry * r = view -> toolRegistry();
-
-		r -> add(new KisToolTransformFactory(actionCollection()));
+		KisToolTransformFactory * f = new KisToolTransformFactory(actionCollection());
+		Q_CHECK_PTR(f);
+		r -> add(f);
 	}
 
 }

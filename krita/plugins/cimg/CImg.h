@@ -1269,6 +1269,7 @@ namespace cimg_library {
         std::FILE *file;
 #endif
         convert_path = new char[1024];
+	Q_CHECK_PTR(convert_path);
 #ifdef cimg_convert_path
         std::strcpy(convert_path,cimg_convert_path);
         if ((file=std::fopen(convert_path,"r"))!=NULL) { std::fclose(file); stopflag = true; }
@@ -1312,6 +1313,7 @@ namespace cimg_library {
       static char *temporary_path = NULL;
       if (!temporary_path) {
         temporary_path = new char[1024];
+	Q_CHECK_PTR(temporary_path);
 #ifdef cimg_temporary_path
         std::strcpy(temporary_path,cimg_temporary_path);
         const char* testing_path[7] = { temporary_path, "/tmp","C:\\WINNT\\Temp", "C:\\WINDOWS\\Temp","","C:",NULL };

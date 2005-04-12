@@ -38,6 +38,8 @@ KisPaintBox::KisPaintBox(QWidget * parent, const char * name)
 	QDockWindow::boxLayout() -> setMargin ( 0 );
 
 	setWidget( m_toolbox = new QToolBox( this ) );
+	Q_CHECK_PTR(m_toolbox);
+
 	m_toolbox -> setFont( KGlobalSettings::toolBarFont() );
 
 	addPaintOps();

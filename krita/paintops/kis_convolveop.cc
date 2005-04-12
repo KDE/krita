@@ -36,6 +36,7 @@
 KisPaintOp * KisConvolveOpFactory::createOp(KisPainter * painter)
 { 
 	KisPaintOp * op = new KisConvolveOp(painter); 
+	Q_CHECK_PTR(op);
 	return op; 
 }
 

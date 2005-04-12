@@ -75,6 +75,7 @@ RegionGrabber::RegionGrabber()
   sizeTip = new SizeTip( ( QWidget * )0L );
 
   tipTimer = new QTimer( this );
+  Q_CHECK_PTR(tipTimer);
   connect( tipTimer, SIGNAL( timeout() ), SLOT( updateSizeTip() ) );
 
   QTimer::singleShot( 200, this, SLOT( initGrabber() ) );

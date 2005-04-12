@@ -127,7 +127,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 {
 	// XXX Temporary re-instatement of old way to load filters and tools
 	m_toolRegistry = new KisToolRegistry();
+	Q_CHECK_PTR(m_toolRegistry);
+
 	m_filterRegistry = new KisFilterRegistry();
+	Q_CHECK_PTR(m_filterRegistry);
 
 	if (!doc -> isReadWrite())
 		setXMLFile("krita_readonly.rc");
@@ -137,6 +140,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_inputDevice = INPUT_DEVICE_UNKNOWN;
 
 	m_selectionManager = new KisSelectionManager(this, doc);
+	Q_CHECK_PTR(m_selectionManager);
 
 	m_doc = doc;
 	m_adapter = adapter;
@@ -214,6 +218,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	connect(this, SIGNAL(embeddImage(const QString&)), SLOT(slotEmbedImage(const QString&)));
 
 	m_dockerManager = new KisDockerManager(this, actionCollection());
+	Q_CHECK_PTR(m_dockerManager);
 
 	setInputDevice(INPUT_DEVICE_MOUSE);
 
@@ -232,9 +237,10 @@ KisView::~KisView()
 
 DCOPObject* KisView::dcopObject()
 {
-	if (!m_dcop)
+	if (!m_dcop) {
 		m_dcop = new KRayonViewIface(this);
-
+		Q_CHECK_PTR(m_dcop);
+	}
 	return m_dcop;
 }
 
@@ -246,7 +252,11 @@ void KisView::setupScrollBars()
 	m_scrollX = 0;
 	m_scrollY = 0;
 	m_vScroll = new QScrollBar(QScrollBar::Vertical, this);
+	Q_CHECK_PTR(m_vScroll);
+
 	m_hScroll = new QScrollBar(QScrollBar::Horizontal, this);
+	Q_CHECK_PTR(m_hScroll);
+
 	m_vScroll -> setGeometry(width() - 16, 20, 16, height() - 36);
 	m_hScroll -> setGeometry(20, height() - 16, width() - 36, 16);
 	m_hScroll -> setValue(0);
@@ -258,7 +268,11 @@ void KisView::setupScrollBars()
 void KisView::setupRulers()
 {
 	m_hRuler = new KisRuler(Qt::Horizontal, this);
+	Q_CHECK_PTR(m_hRuler);
+
 	m_vRuler = new KisRuler(Qt::Vertical, this);
+	Q_CHECK_PTR(m_vRuler);
+
 	m_hRuler -> setGeometry(20, 0, width() - 20, 20);
 	m_vRuler -> setGeometry(0, 20, 20, height() - 20);
 
@@ -274,6 +288,8 @@ void KisView::setupTabBar()
 
 	if (sb) {
 		m_tabBar = new KoTabBar(this);
+		Q_CHECK_PTR(m_tabBar);
+
 		updateTabBar();
 		connect(m_tabBar, SIGNAL(tabChanged(const QString&)), SLOT(selectImage(const QString&)));
 		connect(m_doc, SIGNAL(imageListUpdated()), SLOT(updateTabBar()));
@@ -1156,6 +1172,8 @@ void KisView::export_image()
 		KisImageMagickConverter ib(m_doc, m_adapter);
 
 		img = new KisImage(*img);
+		Q_CHECK_PTR(img);
+
 		img -> flatten();
 
 		dst = img -> layer(0);
@@ -1198,6 +1216,8 @@ void KisView::slotImageProperties()
 	if (!img) return;
 
 	KisDlgImageProperties * dlg = new KisDlgImageProperties(img, this);
+	Q_CHECK_PTR(dlg);
+
 	dlg -> exec();
 	delete dlg;
 }
@@ -1371,8 +1391,10 @@ void KisView::mirrorLayerX()
 
 	KisUndoAdapter * undo = 0;
 	KisTransaction * t = 0;
-	if ((undo = currentImg() -> undoAdapter()))
+	if ((undo = currentImg() -> undoAdapter())) {
 		t = new KisTransaction(i18n("Mirror Layer X"), layer.data());
+		Q_CHECK_PTR(t);
+	}
 
 	layer->mirrorX();
 
@@ -1391,8 +1413,10 @@ void KisView::mirrorLayerY()
 
 	KisUndoAdapter * undo = 0;
 	KisTransaction * t = 0;
-	if ((undo = currentImg() -> undoAdapter()))
+	if ((undo = currentImg() -> undoAdapter())) {
 		t = new KisTransaction(i18n("Mirror Layer Y"), layer.data());
+		Q_CHECK_PTR(t);
+	}
 
 	layer->mirrorY();
 
@@ -1412,8 +1436,10 @@ void KisView::scaleLayer(double sx, double sy, enumFilterType ftype)
 
 	KisUndoAdapter * undo = 0;
 	KisTransaction * t = 0;
-	if ((undo = currentImg() -> undoAdapter()))
+	if ((undo = currentImg() -> undoAdapter())) {
 		t = new KisTransaction(i18n("Scale Layer"), layer.data());
+		Q_CHECK_PTR(t);
+	}
 
 	layer -> scale(sx, sy, m_progress, ftype);
 
@@ -1435,8 +1461,10 @@ void KisView::rotateLayer(double angle)
 
 	KisUndoAdapter * undo = 0;
 	KisTransaction * t = 0;
-	if ((undo = currentImg() -> undoAdapter()))
+	if ((undo = currentImg() -> undoAdapter())) {
 		t = new KisTransaction(i18n("Rotate Layer"), layer.data());
+		Q_CHECK_PTR(t);
+	}
 
 	layer -> rotate(angle, m_progress);
 
@@ -1458,9 +1486,10 @@ void KisView::shearLayer(double angleX, double angleY)
 
 	KisUndoAdapter * undo = 0;
 	KisTransaction * t = 0;
-	if ((undo = currentImg() -> undoAdapter()))
+	if ((undo = currentImg() -> undoAdapter())) {
 		t = new KisTransaction(i18n("Shear layer"), layer.data());
-
+		Q_CHECK_PTR(t);
+	}
 
 	layer -> shear(angleX, angleY, m_progress);
 
@@ -1482,8 +1511,10 @@ void KisView::cropLayer(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 
 	KisUndoAdapter * undo = 0;
 	KisTransaction * t = 0;
-	if ((undo = currentImg() -> undoAdapter()))
+	if ((undo = currentImg() -> undoAdapter())) {
 		t = new KisTransaction(i18n("Mirror Layer Y"), layer.data());
+		Q_CHECK_PTR(t);
+	}
 
 	if (undo) undo -> addCommand(t);
 
@@ -2545,7 +2576,10 @@ void KisView::layerToImage()
 
 		if (layer) {
 			KisImageSP dupedImg = new KisImage(m_adapter, img->width(), img->height(), img -> colorStrategy(), m_doc -> nextImageName());
+			Q_CHECK_PTR(dupedImg);
+
 			KisLayerSP duped = new KisLayer(*layer);
+			Q_CHECK_PTR(duped);
 
 			duped -> setName(dupedImg -> nextLayerName());
 			duped -> setX(0);

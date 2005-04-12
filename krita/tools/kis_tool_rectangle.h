@@ -61,6 +61,8 @@ public:
 	virtual void move(KisMoveEvent *event);
 	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
+//	virtual QWidget* createOptionWidget(QWidget* parent);
+//	virtual QWidget* optionWidget();
 
 protected:
 	virtual void draw(const KisPoint&, const KisPoint&);
@@ -74,7 +76,7 @@ protected:
 
 	bool m_dragging;
 	KisImageSP m_currentImage;
-
+	QWidget *m_optWidget;
 };
 
 class KisToolRectangleFactory : public KisToolFactory {
@@ -83,7 +85,12 @@ public:
 	KisToolRectangleFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolRectangleFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolRectangle(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolRectangle(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("rectangle", i18n("Rectangle tool")); }
 };
 

@@ -87,7 +87,12 @@ public:
 	KisToolPolylineFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolPolylineFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolPolyline(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolPolyline(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("polyline", i18n("Polyline tool")); }
 };
 

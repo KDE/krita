@@ -38,6 +38,7 @@
 KisPaintOp * KisFilterOpFactory::createOp(KisPainter * painter)
 {
 	KisPaintOp * op = new KisFilterOp(painter);
+	Q_CHECK_PTR(op);
 	return op;
 }
 
@@ -117,6 +118,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 
 	// Create a temporary paint device
 	KisPaintDeviceSP tmpDev = new KisPaintDevice(colorStrategy, "temp");
+	Q_CHECK_PTR(tmpDev);
 
 	// Copy the layer data onto the new paint device
 	KisPainter p( tmpDev );

@@ -65,7 +65,12 @@ public:
 	KisToolZoomFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolZoomFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t = new KisToolZoom(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t = new KisToolZoom(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("zoom", i18n("Zoom tool")); }
 };
 

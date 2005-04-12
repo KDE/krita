@@ -71,7 +71,12 @@ public:
 	KisToolSelectEllipticalFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectEllipticalFactory(){};
 
-	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectElliptical(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolSelectElliptical(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("ellipticalselect", i18n("Elliptical select tool")); }
 };
 

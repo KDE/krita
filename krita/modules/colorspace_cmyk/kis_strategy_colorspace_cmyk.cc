@@ -84,6 +84,7 @@ KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
 
 	// Default pixel buffer for QColor conversion
 	m_qcolordata = new int[3];
+	Q_CHECK_PTR(m_qcolordata);
 
 }
 

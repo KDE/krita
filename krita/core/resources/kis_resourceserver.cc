@@ -98,6 +98,7 @@ void KisResourceServer::loadBrush()
 
 		m_brushFilenames.pop_front();
 		brush = new KisBrush(front);
+		Q_CHECK_PTR(brush);
 
 		connect(brush, SIGNAL(loadComplete(KisResource*)), SLOT(brushLoaded(KisResource*)));
 		connect(brush, SIGNAL(ioFailed(KisResource*)), SLOT(brushLoadFailed(KisResource*)));
@@ -115,6 +116,8 @@ void KisResourceServer::loadpipeBrush()
 
 		m_pipebrushFilenames.pop_front();
 		brush = new KisImagePipeBrush(front);
+		Q_CHECK_PTR(brush);
+
 		connect(brush, SIGNAL(loadComplete(KisResource*)), SLOT(pipebrushLoaded(KisResource*)));
 		connect(brush, SIGNAL(ioFailed(KisResource*)), SLOT(pipebrushLoadFailed(KisResource*)));
 
@@ -131,6 +134,7 @@ void KisResourceServer::loadPattern()
 		KisPattern *pattern;
 		m_patternFilenames.pop_front();
 		pattern = new KisPattern(front);
+		Q_CHECK_PTR(pattern);
 
 		connect(pattern, SIGNAL(loadComplete(KisResource*)), SLOT(patternLoaded(KisResource*)));
 		connect(pattern, SIGNAL(ioFailed(KisResource*)), SLOT(patternLoadFailed(KisResource*)));
@@ -146,6 +150,7 @@ void KisResourceServer::loadGradient()
 		QString front = *m_gradientFilenames.begin();
 		m_gradientFilenames.pop_front();
 		KisGradient *gradient = new KisGradient(front);
+		Q_CHECK_PTR(gradient);
 
 		connect(gradient, SIGNAL(loadComplete(KisResource*)), SLOT(gradientLoaded(KisResource*)));
 		connect(gradient, SIGNAL(ioFailed(KisResource*)), SLOT(gradientLoadFailed(KisResource*)));
@@ -162,6 +167,7 @@ void KisResourceServer::loadPalette()
 		QString front = *m_paletteFilenames.begin();
 		m_paletteFilenames.pop_front();
 		KisPalette *palette = new KisPalette(front);
+		Q_CHECK_PTR(palette);
 
 		connect(palette, SIGNAL(loadComplete(KisResource*)), SLOT(paletteLoaded(KisResource*)));
 		connect(palette, SIGNAL(ioFailed(KisResource*)), SLOT(paletteLoadFailed(KisResource*)));

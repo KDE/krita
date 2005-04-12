@@ -68,7 +68,12 @@ public:
 	KisToolFilterFactory(KActionCollection * ac) : super( ac ) {};
 	virtual ~KisToolFilterFactory(){};
 
-	virtual KisTool * createTool() { KisTool * t =  new KisToolFilter(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolFilter();
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("filter", i18n("Filter tool")); }
 };
 

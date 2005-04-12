@@ -129,6 +129,8 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
 		    m_subject -> currentBrush()) {
 			delete m_painter;
 			m_painter = new KisPainter( device );
+			Q_CHECK_PTR(m_painter);
+
 			m_painter -> beginTransaction(i18n("Line"));
 
 			m_painter -> setPaintColor(m_subject -> fgColor());

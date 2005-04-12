@@ -21,7 +21,10 @@
 KisMemento::KisMemento()
 {
 	m_hashTable = new KisTile * [1024];
+	Q_CHECK_PTR(m_hashTable);
+
 	m_redoHashTable = new KisTile * [1024];
+	Q_CHECK_PTR(m_redoHashTable);
 	
 	for(int i = 0; i < 1024; i++)
 	{

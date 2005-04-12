@@ -142,6 +142,8 @@ void KisPaletteWidget::setPalette( const QString &_paletteName )
 	if (rows < 1) rows = 1;
 
 	cells = new KColorCells( sv->viewport(), rows, mCols);
+	Q_CHECK_PTR(cells);
+
 	cells->setShading(false);
 	cells->setAcceptDrags(false);
 

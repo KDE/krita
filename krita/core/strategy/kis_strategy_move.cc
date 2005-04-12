@@ -185,6 +185,7 @@ void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
 
 			if (undo) {
 				KCommand *cmd = new MoveCommand(m_controller, img, img -> activeDevice(), m_layerStart, m_layerPosition);
+				Q_CHECK_PTR(cmd);
 				KisUndoAdapter *adapter = img -> undoAdapter();
 
 				if (adapter)

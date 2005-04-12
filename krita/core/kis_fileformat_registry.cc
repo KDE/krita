@@ -47,6 +47,7 @@ KisFileFormatRegistry* KisFileFormatRegistry::instance()
   	if(KisFileFormatRegistry::m_singleton == 0)
   	{
   		KisFileFormatRegistry::m_singleton = new KisFileFormatRegistry();
+		Q_CHECK_PTR(KisFileFormatRegistry::m_singleton);
   	}
   	return KisFileFormatRegistry::m_singleton;
 }

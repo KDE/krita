@@ -228,6 +228,8 @@ void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM  /*opacity*/, QUANTU
 void KisColorSpaceWet::toQColor(const QUANTUM *src, QColor *c, KisProfileSP /*profile*/)
 {
 	Q_UINT8 * rgb = new Q_UINT8[3];
+	Q_CHECK_PTR(rgb);
+
 	memset(rgb, 255, 3);
 
 	// Composite the two layers in each pixelSize
@@ -365,6 +367,7 @@ void KisColorSpaceWet::wet_init_render_tab()
 	int a, b;
 
 	wet_render_tab = new Q_UINT32[4096];
+	Q_CHECK_PTR(wet_render_tab);
 
 	for (i = 0; i < 4096; i++)
 	{

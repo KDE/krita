@@ -30,6 +30,7 @@ DlgVariations::DlgVariations( QWidget *  parent,
 {
 	m_previewPix = QPixmap();
 	m_page = new WdgVariations(this, "variations");
+	Q_CHECK_PTR(m_page);
 	setCaption(i18n("Variations"));
 	setMainWidget(m_page);
 	resize(m_page -> size());

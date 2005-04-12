@@ -72,7 +72,12 @@ public:
 	KisToolColorChangerFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolColorChangerFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolColorChanger(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolColorChanger();
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("colorchanger", i18n("Color changer")); }
 };
 

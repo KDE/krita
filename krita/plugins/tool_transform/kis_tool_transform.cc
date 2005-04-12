@@ -451,8 +451,11 @@ void KisToolTransform::transform() {
 	
 	img -> notify(rc);
 
-	if (img -> undoAdapter())
-		img -> undoAdapter() -> addCommand(new TransformCmd());
+	if (img -> undoAdapter()) {
+		TransformCmd * cmd = new TransformCmd();
+		Q_CHECK_PTR(cmd);
+		img -> undoAdapter() -> addCommand(cmd);
+	}
 }
 
 QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
@@ -478,6 +481,7 @@ void KisToolTransform::setup(KActionCollection *collection)
 					    SLOT(activate()), 
 					    collection, 
 					    name());
+		Q_CHECK_PTR(m_action);
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

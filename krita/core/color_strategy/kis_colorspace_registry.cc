@@ -40,6 +40,7 @@ KisColorSpaceRegistry* KisColorSpaceRegistry::instance()
 	if(KisColorSpaceRegistry::m_singleton == 0)
 	{
 		KisColorSpaceRegistry::m_singleton = new KisColorSpaceRegistry();
+		Q_CHECK_PTR(KisColorSpaceRegistry::m_singleton);
 	}
 	return KisColorSpaceRegistry::m_singleton;
 }

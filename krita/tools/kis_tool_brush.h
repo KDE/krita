@@ -49,7 +49,12 @@ public:
 	KisToolBrushFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolBrushFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolBrush(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolBrush(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("brush", i18n("Brush tool")); }
 };
 

@@ -47,6 +47,8 @@ KisToolAirbrush::KisToolAirbrush()
 	setCursor(KisCursor::airbrushCursor());
 
 	m_timer = new QTimer(this);
+	Q_CHECK_PTR(m_timer);
+
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
 }
 

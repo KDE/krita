@@ -160,6 +160,7 @@ void KisToolSelectPicker::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("Tool &Selection Picker"), "selectpicker", Qt::Key_E, this, SLOT(activate()), collection, name());
+		Q_CHECK_PTR(m_action);
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
@@ -195,20 +196,30 @@ void KisToolSelectPicker::slotSetAction(int action)
 QWidget* KisToolSelectPicker::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
+	Q_CHECK_PTR(m_optWidget);
+
 	m_optWidget -> setCaption(i18n("Selection Picker"));
 
 	QVBoxLayout * l = new QVBoxLayout(m_optWidget);
+	Q_CHECK_PTR(l);
 
 	KisSelectionOptions * options = new KisSelectionOptions(m_optWidget, m_subject);
+	Q_CHECK_PTR(options);
+
 	l -> addWidget( options);
 	connect (options, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
 	QHBoxLayout * hbox = new QHBoxLayout(l);
+	Q_CHECK_PTR(hbox);
 
 	QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
+	Q_CHECK_PTR(lbl);
+
 	hbox -> addWidget(lbl);
 
 	KIntNumInput * input = new KIntNumInput(m_optWidget, "fuzziness");
+	Q_CHECK_PTR(input);
+
 	input -> setRange(0, 200, 10, true);
 	input -> setValue(20);
 	hbox -> addWidget(input);

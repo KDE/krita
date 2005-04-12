@@ -69,11 +69,22 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
         int rowstride = width;
 
 	double * flow_t  = new double[width * height];
+	Q_CHECK_PTR(flow_t);
+
         double * flow_b  = new double[width * height];
+	Q_CHECK_PTR(flow_b);
+
         double * flow_l  = new double[width * height];
+	Q_CHECK_PTR(flow_l);
+
         double * flow_r  = new double[width * height];
+	Q_CHECK_PTR(flow_r);
+
 	double * fluid   = new double[width * height];
+	Q_CHECK_PTR(fluid);
+
         double * outflow = new double[width * height];
+	Q_CHECK_PTR(outflow);
 
 	// Height of the paper surface. Do we also increase height because of paint deposits?
         int my_height;

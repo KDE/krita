@@ -118,7 +118,11 @@ void KisTransformVisitor::transformx(Q_INT32 scale, Q_INT32 scaleDenom, Q_INT32 
 	Q_INT32 extrawidth =0;
 	
 	Q_UINT8 *tmpLine = new Q_UINT8[w*4];
+	Q_CHECK_PTR(tmpLine);
+
 	Q_UINT8 *tmpSel = new Q_UINT8[w];
+	Q_CHECK_PTR(tmpSel);
+
 	printf("w=%d,tW=%d\n",w,targetW);
 	
 	for(y = top; y < top+h; y++)

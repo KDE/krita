@@ -32,6 +32,7 @@ KisPreviewDialog::KisPreviewDialog( QWidget *  parent, const char * name, bool m
 	layout -> setSpacing( 6 );
 
 	preview = new KisPreviewWidget( layout, "previewWidget" );
+	Q_CHECK_PTR(preview);
 
 	QGroupBox* groupBox = new QGroupBox( caption, layout, "groupBox" );
 	groupBox -> setColumnLayout(0, Qt::Vertical );

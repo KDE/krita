@@ -88,9 +88,12 @@ void KisPreviewView::setSourceLayer(KisLayerSP lay)
 	Q_INT32 h = static_cast<Q_INT32>(size().height() / m_zoom);
 
 	m_image = new KisImage(m_undo, w, h, lay->colorStrategy(), "preview");
+	Q_CHECK_PTR(m_image);
 
 	m_image -> setProfile(lay -> profile());
 	m_clippedview = new KisLayer(m_image, m_image -> nextLayerName(), OPACITY_OPAQUE);
+	Q_CHECK_PTR(m_clippedview);
+
 	gc.begin(m_clippedview.data());
 
 	gc.bitBlt(0, 0, COMPOSITE_OVER, pd, m_pos.x(), m_pos.y(), -1, -1);

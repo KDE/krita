@@ -247,6 +247,7 @@ void KisToolSelectElliptical::setup(KActionCollection *collection)
 					    SLOT(activate()),
 					    collection,
 					    name());
+		Q_CHECK_PTR(m_action);
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
@@ -255,6 +256,7 @@ void KisToolSelectElliptical::setup(KActionCollection *collection)
 QWidget* KisToolSelectElliptical::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
+	Q_CHECK_PTR(m_optWidget);
 	m_optWidget -> setCaption(i18n("Elliptical Selection"));
 	return m_optWidget;
 }

@@ -152,6 +152,7 @@ void KisToolFreehand::initPaint(KisEvent *)
 			m_target = device;
 		}
 		m_painter = new KisPainter( m_target );
+		Q_CHECK_PTR(m_painter);
 		m_source = device;
 		m_painter -> beginTransaction(m_transactionText);
 	}

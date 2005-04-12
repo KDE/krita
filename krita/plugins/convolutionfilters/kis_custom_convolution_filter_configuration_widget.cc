@@ -38,14 +38,20 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
 	: KisFilterConfigurationWidget( nfilter, parent, name )
 {
 	QGridLayout *widgetLayout = new QGridLayout(this, 2, 1);
+	Q_CHECK_PTR(widgetLayout);
 
 	QPushButton *bnRefresh = new QPushButton(i18n("Refresh Preview"), this, "bnrefresh");
+	Q_CHECK_PTR(bnRefresh);
+
 	QSpacerItem *spacer = new QSpacerItem(100, 30, QSizePolicy::Expanding, QSizePolicy::Minimum);
+	Q_CHECK_PTR(spacer);
 
 	widgetLayout -> addWidget(bnRefresh, 0, 0);
 	widgetLayout -> addItem(spacer, 0, 1);
 
 	QTabWidget* tabWidget = new QTabWidget(this, "tabWidget");
+	Q_CHECK_PTR(tabWidget);
+
 	widgetLayout -> addMultiCellWidget(tabWidget, 1, 1, 0, 1);
 
 	KisImageSP img = filter() -> view() -> currentImg();
@@ -59,11 +65,17 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
 	vKisChannelInfoSP cis = cs->channels();
 	Q_INT32 depth = cs->nColorChannels();
 	m_ccfcws = new KisCustomConvolutionFilterConfigurationBaseWidget*[depth];
+	Q_CHECK_PTR(m_ccfcws);
+
 	m_pos = new int[depth];
+	Q_CHECK_PTR(m_pos);
+
 	for(Q_INT32 i = 0; i < depth; i++)
 	{
 		m_pos[i] = cis[i] -> pos();
 		m_ccfcws[i] = new KisCustomConvolutionFilterConfigurationBaseWidget((QWidget*)this);
+		Q_CHECK_PTR(m_ccfcws[i]);
+
 		tabWidget->addTab(m_ccfcws[i], cis[ i ] -> name() );
 	}
 

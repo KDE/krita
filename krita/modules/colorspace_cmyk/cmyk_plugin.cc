@@ -63,7 +63,10 @@ CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
 	if ( parent->inherits("KisFactory") )
 	{
 		m_StrategyColorSpaceCMYKA = new KisStrategyColorSpaceCMYKA();
+		Q_CHECK_PTR(m_StrategyColorSpaceCMYKA);
+
 		m_StrategyColorSpaceCMYK = new KisStrategyColorSpaceCMYK();
+		Q_CHECK_PTR(m_StrategyColorSpaceCMYK);
 
 		if (m_StrategyColorSpaceCMYK -> valid())
 			KisColorSpaceRegistry::instance() -> add(m_StrategyColorSpaceCMYK);

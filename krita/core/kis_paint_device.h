@@ -104,7 +104,7 @@ public:
 	void crop(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) { m_datamanager -> setExtent(x, y, w, h); };
 	void crop(QRect r) { m_datamanager -> setExtent(r); };
 	
-	Q_UINT8 * readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	void readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	void writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 	// Get the number of contiguous columns starting at x, valid for all values
@@ -222,7 +222,7 @@ public:
 
 
 	/**
-	 * Return the number of bytes a pixel takes
+	 * Return the number of bytes a pixel takes.
 	 */
 	Q_INT32 pixelSize() const;
 
@@ -412,9 +412,9 @@ inline KisPixelRO KisPaintDevice::toPixelRO(const Q_UINT8 * bytes)
 	return m_colorStrategy -> toKisPixelRO(bytes, m_profile);
 }
 
-inline Q_UINT8 * KisPaintDevice::readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+inline void KisPaintDevice::readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	return m_datamanager -> readBytes(x, y, w, h);
+	m_datamanager -> readBytes(data, x, y, w, h);
 }
 
 inline void KisPaintDevice::writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)

@@ -82,6 +82,8 @@ void KisGuideMgr::resizeLinesPixmap(const QSize& size, QPixmap *vLine, QPixmap *
 
 	mask = linePattern -> mask();
 	hmask = new QBitmap(hLine -> size());
+	Q_CHECK_PTR(hmask);
+
 	p.begin(hmask);
 	p.drawTiledPixmap(0, 0, hmask -> width(), 1, *mask);
 	p.end();
@@ -97,6 +99,8 @@ void KisGuideMgr::resizeLinesPixmap(const QSize& size, QPixmap *vLine, QPixmap *
 
 	mask = rpattern.mask();
 	vmask = new QBitmap(vLine -> size());
+	Q_CHECK_PTR(vmask);
+
 	p.begin(vmask);
 	p.drawTiledPixmap(0, 0, 1, vmask -> height(), *mask);
 	p.end();
@@ -183,6 +187,7 @@ void KisGuideMgr::paint(QPaintDevice *device, QWidget *w, Q_INT32 xOffset, Q_INT
 KisGuideSP KisGuideMgr::add(double pos, Qt::Orientation o)
 {
 	KisGuideSP gd = new KisGuide(o);
+	Q_CHECK_PTR(gd);
 
 	gd -> pos = pos;
 	m_lines.push_back(gd);

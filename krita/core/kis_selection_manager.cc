@@ -301,6 +301,8 @@ void KisSelectionManager::copy()
 
 	KisPaintDeviceSP clip = new KisPaintDevice(img -> activeDevice() -> colorStrategy(),
 						   "Copy from " + img -> activeDevice() -> name() );
+	Q_CHECK_PTR(clip);
+
 	clip -> setCompositeOp(COMPOSITE_OVER);
 	clip -> setProfile(layer -> profile());
 
@@ -360,6 +362,8 @@ KisLayerSP KisSelectionManager::paste()
 
 	if (clip) {
 		KisLayerSP layer = new KisLayer(img, img -> nextLayerName() + "(pasted)", OPACITY_OPAQUE);
+		Q_CHECK_PTR(layer);
+
 		QRect r = clip -> extent();
 		KisPainter gc;
 		gc.begin(layer.data());
@@ -369,6 +373,8 @@ KisLayerSP KisSelectionManager::paste()
 		KisConfig cfg;
 		if (cfg.askProfileOnPaste() && clip -> profile() == 0 && img -> profile() != 0) {
 			KisDlgApplyProfile * dlg = new KisDlgApplyProfile(m_parent);
+			Q_CHECK_PTR(dlg);
+
 			if (dlg -> exec() == QDialog::Accepted) {
 				KisProfileSP profile = dlg -> profile();
 				if (profile != img -> profile()) {
@@ -399,6 +405,8 @@ void KisSelectionManager::selectAll()
 	if (!layer) return;
 
 	KisSelectionSP s = new KisSelection(KisPaintDeviceSP(layer), "layer selection for: " + layer -> name());
+	Q_CHECK_PTR(s);
+
 	QRect r = layer -> extent();
 	s -> select(QRect(r.x(), r.y(), r.width(), r.height()));
 
@@ -439,7 +447,10 @@ void KisSelectionManager::clear()
 	r = r.normalize();
 
 	KisTransaction * t = 0;
-	if (img -> undoAdapter()) t = new KisTransaction("Cut", layer.data());
+	if (img -> undoAdapter()) {
+		t = new KisTransaction("Cut", layer.data());
+		Q_CHECK_PTR(t);
+	}
 
 
 	KisRectIterator layerIt = layer -> createRectIterator(r.x(), r.y(), r.width(), r.height(), true);

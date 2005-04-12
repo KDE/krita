@@ -74,6 +74,7 @@ ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
 		m_view = (KisView*) parent;
 		// Selection manager takes ownership?
 		KAction * a = new KAction(i18n("&Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "selectionScale");
+		Q_CHECK_PTR(a);
 		m_view -> selectionManager() -> addSelectionAction(a);
 	}
 }
@@ -90,6 +91,8 @@ void ImageSize::slotImageSize()
 	if (!image) return;
 
 	DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "ImageSize");
+	Q_CHECK_PTR(dlgImageSize);
+
 	dlgImageSize -> setCaption(i18n("Image Size"));
 
 	KisConfig cfg;
@@ -128,6 +131,8 @@ void ImageSize::slotLayerSize()
 	if (!image) return;
 
 	DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "LayerSize");
+	Q_CHECK_PTR(dlgImageSize);
+
 	dlgImageSize -> setCaption(i18n("Layer Size"));
 
 	KisConfig cfg;
@@ -173,6 +178,8 @@ void ImageSize::slotSelectionScale()
 
 
 	DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "SelectionScale");
+	Q_CHECK_PTR(dlgImageSize);
+
 	dlgImageSize -> setCaption(i18n("Scale Selection"));
 
 	KisConfig cfg;

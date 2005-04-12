@@ -37,6 +37,8 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent, KisCanvasSubject * sub
 	  m_subject(subject)
 {
 	m_page = new WdgSelectionOptions(this);
+	Q_CHECK_PTR(m_page);
+
 	QVBoxLayout * l = new QVBoxLayout(this);
 	l -> addWidget(m_page);
 

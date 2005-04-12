@@ -189,11 +189,22 @@ Q_INT32 KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface
         //calculate widht of the sheared image
         Q_INT32 targetW = (Q_INT32)(width + QABS(height*shearX));
         Q_INT32 targetH = height;
-        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> pixelSize() * sizeof(QUANTUM)];
-        QUANTUM *tempRow = new QUANTUM[width * m_dev -> pixelSize() * sizeof(QUANTUM)];
-        QUANTUM *pixel = new QUANTUM[m_dev -> pixelSize() * sizeof(QUANTUM)];
-        QUANTUM *left = new QUANTUM[m_dev -> pixelSize() * sizeof(QUANTUM)];
-        QUANTUM *oleft = new QUANTUM[m_dev -> pixelSize() * sizeof(QUANTUM)];
+
+        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> pixelSize()]; // XXX: (BSAR) Not* sizeof(quantum), the pixelsize is the size in bytes already!
+	Q_CHECK_PTR(newData);
+
+        QUANTUM *tempRow = new QUANTUM[width * m_dev -> pixelSize()];
+	Q_CHECK_PTR(tempRow);
+
+        QUANTUM *pixel = new QUANTUM[m_dev -> pixelSize()];
+	Q_CHECK_PTR(pixel);
+
+        QUANTUM *left = new QUANTUM[m_dev -> pixelSize()];
+	Q_CHECK_PTR(left);
+
+        QUANTUM *oleft = new QUANTUM[m_dev -> pixelSize()];
+	Q_CHECK_PTR(oleft);
+
         double displacement;
         Q_INT32 displacementInt;
         double weight;
@@ -212,7 +223,7 @@ Q_INT32 KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface
                         displacementInt = (Q_INT32)(floor(displacement));
                         weight=displacement-displacementInt;
                         //read a row from the image
-                        tempRow = m_dev -> readBytes( 0, y, width, 1);
+                        m_dev -> readBytes(tempRow, 0, y, width, 1);
                         //initialize oleft
                         for(int channel = 0; channel < m_dev -> pixelSize(); channel++)
                                 oleft[channel]=left[channel]=0;
@@ -240,7 +251,7 @@ Q_INT32 KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface
                         displacementInt = (Q_INT32)(floor(displacement));
                         weight=displacement-displacementInt;
                         //read a row from the image
-                        tempRow = m_dev -> readBytes( 0, y, width, 1);
+                        m_dev -> readBytes(tempRow, 0, y, width, 1);
                         //initialize oleft
                         for(int channel = 0; channel < m_dev -> pixelSize(); channel++)
                                 oleft[channel]=left[channel]=0;
@@ -260,6 +271,14 @@ Q_INT32 KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface
         //now write newData to the image
         kdDebug() << "write newData to the image!" << "\n";
         m_dev -> writeBytes( newData, 0, 0, targetW, targetH);
+
+        delete[] newData;
+	delete[] tempRow;
+	delete[] pixel;
+	delete[] left;
+	delete[] oleft;
+
+
         return progressCurrent;
 }
 
@@ -274,13 +293,23 @@ Q_INT32 KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface
         //calculate widht of the sheared image
         Q_INT32 targetW = width;
         Q_INT32 targetH = (Q_INT32)(height + QABS(width*shearY));
-        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> pixelSize() * sizeof(QUANTUM)];
-        
+
+        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> pixelSize()];
+        Q_CHECK_PTR(newData);
+
         //shear the image
-        QUANTUM *tempCol = new QUANTUM[height * m_dev -> pixelSize() * sizeof(QUANTUM)];
-        QUANTUM *pixel = new QUANTUM[m_dev -> pixelSize() * sizeof(QUANTUM)];
-        QUANTUM *left = new QUANTUM[m_dev -> pixelSize() * sizeof(QUANTUM)];
-        QUANTUM *oleft = new QUANTUM[m_dev -> pixelSize() * sizeof(QUANTUM)];
+        QUANTUM *tempCol = new QUANTUM[height * m_dev -> pixelSize()];
+	Q_CHECK_PTR(tempCol);
+
+        QUANTUM *pixel = new QUANTUM[m_dev -> pixelSize()];
+	Q_CHECK_PTR(pixel);
+
+        QUANTUM *left = new QUANTUM[m_dev -> pixelSize()];
+	Q_CHECK_PTR(left);
+
+        QUANTUM *oleft = new QUANTUM[m_dev -> pixelSize()];
+	Q_CHECK_PTR(oleft);
+
         double displacement;
         Q_INT32 displacementInt;
         double weight;
@@ -298,7 +327,7 @@ Q_INT32 KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface
                         displacementInt = (Q_INT32)(floor(displacement));
                         weight=displacement-displacementInt;
                         //read a column from the image
-                        tempCol = m_dev -> readBytes( x, 0, 1, height);
+                        m_dev -> readBytes(tempCol, x, 0, 1, height);
                         //initialize oleft
                         for(int channel = 0; channel < m_dev -> pixelSize(); channel++)
                                 oleft[channel]=left[channel]=0;
@@ -326,7 +355,7 @@ Q_INT32 KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface
                         displacementInt = (Q_INT32)(floor(displacement));
                         weight=displacement-displacementInt;
                         //read a column from the image
-                        tempCol = m_dev -> readBytes( x, 0, 1, height);
+                        m_dev -> readBytes(tempCol, x, 0, 1, height);
                         //initialize oleft
                         for(int channel = 0; channel < m_dev -> pixelSize(); channel++)
                                 oleft[channel]=left[channel]=0;
@@ -346,6 +375,13 @@ Q_INT32 KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface
         //now write newData to the image
         kdDebug() << "write newData to the image!" << "\n";
         m_dev -> writeBytes( newData, 0, 0, targetW, targetH);
+
+	delete[] newData;
+        delete[] tempCol;
+        delete[] pixel;
+        delete[] left;
+        delete[] oleft;
+
         return progressCurrent;
 }
 
@@ -360,7 +396,7 @@ void KisRotateVisitor::xCropImage(double deltaX)
         QUANTUM *tempRow = new QUANTUM[width * m_dev -> pixelSize() * sizeof(QUANTUM)];
         Q_INT32 currentPos;
         for(Q_INT32 y=0; y < height; y++){
-                tempRow = m_dev -> readBytes( 0, y, width, 1);
+                m_dev -> readBytes(tempRow, 0, y, width, 1);
                 for(Q_INT32 x = (Q_INT32)deltaX; x < (Q_INT32)((width - deltaX) + 1); x++){
                         currentPos = (y*targetW+x) * m_dev -> pixelSize();
                         for(int channel = 0; channel < m_dev -> pixelSize(); channel++){
@@ -383,7 +419,7 @@ void KisRotateVisitor::yCropImage(double deltaY)
         QUANTUM *tempRow = new QUANTUM[width * m_dev -> pixelSize() * sizeof(QUANTUM)];
         Q_INT32 currentPos;
         for(Q_INT32 y = (Q_INT32)deltaY; y < (Q_INT32)(height - deltaY); y++){
-                tempRow = m_dev -> readBytes( 0, y, width, 1);
+                m_dev -> readBytes(tempRow, 0, y, width, 1);
                 for(Q_INT32 x=0; x < width; x++){
                         currentPos = (y*targetW+x) * m_dev -> pixelSize();
                         for(int channel = 0; channel < m_dev -> pixelSize(); channel++){

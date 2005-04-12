@@ -114,8 +114,9 @@ public:
 	 * Copy the bytes in the specified rect to a vector. The caller is responsible
 	 * for managing the vector.
 	 */
-	Q_UINT8 * readBytes(Q_INT32 x, Q_INT32 y,
-				     Q_INT32 w, Q_INT32 h);
+	void readBytes(Q_UINT8 * bytes,
+		       Q_INT32 x, Q_INT32 y,
+		       Q_INT32 w, Q_INT32 h);
 	/**
 	 * Copy the bytes in the vector to the specified rect. If there are bytes left
 	 * in the vector after filling the rect, they will be ignored. If there are

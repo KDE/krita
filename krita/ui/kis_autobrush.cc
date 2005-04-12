@@ -123,7 +123,10 @@ KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& cap
 	connect(spinBoxHorizontal,SIGNAL(valueChanged(int)),this,SLOT(spinBoxHorizontalChanged(int)));
 	spinBoxVertical->setMinValue(0);
 	connect(spinBoxVertical,SIGNAL(valueChanged(int)),this,SLOT(spinBoxVerticalChanged(int)));
+
 	m_brsh = new QImage(1,1,32);
+	Q_CHECK_PTR(m_brsh);
+
 	paramChanged();
 }
 
@@ -137,8 +140,12 @@ void KisAutobrush::paramChanged()
 	if(comboBoxShape->currentText() == "circle")
 	{
 		kas = new KisAutobrushCircleShape(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
+		Q_CHECK_PTR(kas);
+
 	} else {
 		kas = new KisAutobrushRectShape(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
+		Q_CHECK_PTR(kas);
+
 	}
 	kas->createBrush(m_brsh);
 // 	kdDebug() << " brush size : " << m_brsh->width() << " " << m_brsh->height() << endl;
@@ -147,6 +154,8 @@ void KisAutobrush::paramChanged()
 	brushPreview->setPixmap(p);
 	//brushPreview->adjustSize ();
 	KisAutobrushResource * resource = new KisAutobrushResource(*m_brsh);
+	Q_CHECK_PTR(resource);
+
 	emit(activatedResource(resource));
 	delete kas;
 }

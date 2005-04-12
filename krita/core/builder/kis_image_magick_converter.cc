@@ -115,6 +115,7 @@ namespace {
 				}
 
 				p = new KisProfile(hProfile, cs -> colorSpaceType());
+				Q_CHECK_PTR(p);
 			}
 			name = GetNextImageProfile(image);
 		}
@@ -254,12 +255,16 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 
 		if( ! m_img) {
 			m_img = new KisImage(m_adapter, image -> columns, image -> rows, cs, m_doc -> nextImageName());
+			Q_CHECK_PTR(m_img);
+
  			if (profile)
  				m_img -> setProfile(profile);
 		}
 
 		if (image -> columns && image -> rows) {
 			KisLayerSP layer = new KisLayer(m_img, m_img -> nextLayerName(), OPACITY_OPAQUE);
+			Q_CHECK_PTR(layer);
+
 			if (profile)
 				layer -> setProfile(profile);
 

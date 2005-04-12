@@ -360,9 +360,10 @@ QCString KisDoc::mimeType() const
 
 DCOPObject *KisDoc::dcopObject()
 {
-	if (!m_dcop)
+	if (!m_dcop) {
 		m_dcop = new KIsDocIface(this);
-
+		Q_CHECK_PTR(m_dcop);
+	}
 	return m_dcop;
 }
 
@@ -442,10 +443,15 @@ bool KisDoc::init()
 	}
 
 	m_cmdHistory = new KoCommandHistory(actionCollection(), true);
+	Q_CHECK_PTR(m_cmdHistory);
+
 	connect(m_cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
 	connect(m_cmdHistory, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
 	m_undo = true;
+
 	m_nserver = new KisNameServer(i18n("Image %1"), 1);
+	Q_CHECK_PTR(m_nserver);
+
 	return true;
 }
 
@@ -647,6 +653,8 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 		}
 
 		img = new KisImage(this, width, height, cs, name);
+		Q_CHECK_PTR(img);
+
 		img -> setDescription(description);
 		img -> setResolution(xres, yres);
 		img -> setProfile(profile);
@@ -733,7 +741,10 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 		return 0;
 
 	linked = attr == "0" ? false : true;
+
 	layer = new KisLayer(img, name, opacity);
+	Q_CHECK_PTR(layer);
+
 	layer -> setLinked(linked);
 	layer -> setVisible(visible);
 	layer -> move(x, y);
@@ -752,7 +763,10 @@ bool KisDoc::completeSaving(KoStore *store)
 
 	for (vKisImageSP_it it = m_images.begin(); it != m_images.end(); it++) {
 		totalSteps += (*it) -> nlayers();
+
 		img = new KisImage(**it);
+		Q_CHECK_PTR(img);
+
 		img -> setName((*it) -> name());
 		images.push_back(img);
 	}
@@ -909,8 +923,10 @@ bool KisDoc::contains(KisImageSP img) const
 KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorstrategy)
 {
 	KisImageSP img = new KisImage(this, width, height, colorstrategy, name);
+	Q_CHECK_PTR(img);
 
 	KisLayerSP layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
+	Q_CHECK_PTR(layer);
 
 	KisFillPainter painter;
 
@@ -987,12 +1003,16 @@ bool KisDoc::slotNewImage()
 				   dlg.imgHeight(),
 				   cs,
 				   dlg.imgName());
+		Q_CHECK_PTR(img);
+
 		img -> setResolution(dlg.imgResolution(), dlg.imgResolution()); // XXX needs to be added to dialog
 		img -> setDescription(dlg.imgDescription());
 
 		img -> setProfile(dlg.profile());
 
 		layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
+		Q_CHECK_PTR(layer);
+
 
 		// Default color and opacity: don't allocate memory
 		if ( c.red() != 0 || c.green() != 0 || c.blue() != 0 || opacity != 0) {
@@ -1017,6 +1037,8 @@ bool KisDoc::slotNewImage()
 KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 {
 	KisView * v = new KisView(this, this, parent, name);
+	Q_CHECK_PTR(v);
+
 	return v;
 }
 
@@ -1063,6 +1085,7 @@ void KisDoc::beginMacro(const QString& macroName)
 		if (m_macroNestDepth == 0) {
 			Q_ASSERT(m_currentMacro == 0);
 			m_currentMacro = new KMacroCommand(macroName);
+			Q_CHECK_PTR(m_currentMacro);
 		}
 
 		m_macroNestDepth++;
@@ -1168,6 +1191,8 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, QUANTUM devOpac
 
 	if (img) {
 		layer = new KisLayer(img, name, devOpacity);
+		Q_CHECK_PTR(layer);
+
 		// No need to fill the layer with something; it's empty and transparent
 		// and doesn't have any pixels by default.
 		if (layer && img -> add(layer, -1)) {
@@ -1198,6 +1223,8 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img,
 	if (!contains(img)) return 0;
 	if (img) {
 		layer = new KisLayer(colorstrategy, name);
+		Q_CHECK_PTR(layer);
+
 		layer -> setOpacity(opacity);
 		layer -> setCompositeOp(compositeOp);
 		if (layer && img -> add(layer, -1)) {

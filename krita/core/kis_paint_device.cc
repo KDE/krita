@@ -108,6 +108,7 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QStr
 	m_nChannels = colorStrategy -> nChannels();
 
 	m_datamanager = new KisDataManager(m_pixelSize);
+	Q_CHECK_PTR(m_datamanager);
 
 	m_visible = true;
 	m_owner = 0;
@@ -158,6 +159,7 @@ KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrat
 	m_nChannels = m_colorStrategy -> nChannels();
 
 	m_datamanager = new KisDataManager(m_pixelSize);
+	Q_CHECK_PTR(m_datamanager);
 
 }
 
@@ -166,9 +168,10 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
         if (this != &rhs) {
                 m_owner = 0;
 
-                if (rhs.m_datamanager)
+                if (rhs.m_datamanager) {
                         m_datamanager = new KisDataManager(*rhs.m_datamanager);
-
+			Q_CHECK_PTR(m_datamanager);
+		}
                 m_visible = rhs.m_visible;
                 m_x = rhs.m_x;
                 m_y = rhs.m_y;
@@ -205,6 +208,7 @@ void KisPaintDevice::move(const QPoint& pt)
 KNamedCommand * KisPaintDevice::moveCommand(KisCanvasControllerInterface * c, Q_INT32 x, Q_INT32 y)
 {
 	KNamedCommand * cmd = new MoveCommand(c, this, QPoint(m_x, m_y), QPoint(x, y));
+	Q_CHECK_PTR(cmd);
 	cmd -> execute();
 	return cmd;
 }
@@ -258,6 +262,8 @@ QRect KisPaintDevice::exactBounds()
 	kdDebug() << "Extent: " << x << ", " << y << ", " << w << ", " << h << "\n";
 	extent(boundX, boundY, boundW, boundH);
 	Q_UINT8 * emptyPixel = new Q_UINT8(m_pixelSize);
+	Q_CHECK_PTR(emptyPixel);
+
 	memset(emptyPixel, 0, m_pixelSize);
 
 	bool found = false;
@@ -380,6 +386,7 @@ void KisPaintDevice::mirrorX()
 	le = rw * m_pixelSize - m_pixelSize;
 	// We need this tmpLine until we can use decrement iterators
 	Q_UINT8 * tmpLine = new Q_UINT8[(rw * m_pixelSize)];
+	Q_CHECK_PTR(tmpLine);
 	
 	for (y = ry; y < rh; ++y) {
 		x = le;
@@ -532,7 +539,10 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 	if (h < 0)
 		h = 0;
 
-	QUANTUM * data = m_datamanager -> readBytes(x1, y1, w, h);
+	QUANTUM * data = new QUANTUM[w * h * m_pixelSize];
+	Q_CHECK_PTR(data);
+
+	m_datamanager -> readBytes(data, x1, y1, w, h);
 //  	kdDebug() << m_name << ": convertToQImage. My profile: " << m_profile << ", destination profile: " << dstProfile << "\n";
 	QImage image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
 	delete[] data;
@@ -568,6 +578,7 @@ KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y,
 KisSelectionSP KisPaintDevice::selection(){
 	if (!m_hasSelection) {
 		m_selection = new KisSelection(this, "layer selection for: " + name());
+		Q_CHECK_PTR(m_selection);
 		m_selection -> setVisible(true);
 		m_hasSelection = true;
 		emit selectionCreated();

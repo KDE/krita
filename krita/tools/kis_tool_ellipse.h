@@ -60,6 +60,9 @@ public:
 	virtual void move(KisMoveEvent *event);
 	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
+//	virtual QWidget* createOptionWidget(QWidget* parent);
+//	virtual QWidget* optionWidget();
+
 protected:
 	virtual void draw(const KisPoint& start, const KisPoint& stop);
 	//virtual void draw(KisPainter *gc, const QRect& rc);
@@ -73,6 +76,7 @@ protected:
 
 	bool m_dragging;
 	KisImageSP m_currentImage;
+	QWidget *m_optWidget;
 };
 
 
@@ -84,7 +88,12 @@ public:
 	KisToolEllipseFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolEllipseFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolEllipse(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolEllipse(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac);
+		return t; 
+	}
 	virtual KisID id() { return KisID("ellipse", i18n("Ellipse tool")); }
 };
 

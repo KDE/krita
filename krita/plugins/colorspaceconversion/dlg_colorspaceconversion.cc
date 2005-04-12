@@ -41,6 +41,7 @@ DlgColorspaceConversion::DlgColorspaceConversion( QWidget *  parent,
 	: super (parent, name, true, i18n("Image Size"), Ok | Cancel, Ok)
 {
 	m_page = new WdgConvertColorSpace(this, "colorspace_conversion");
+	Q_CHECK_PTR(m_page);
 
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());

@@ -69,6 +69,7 @@ void KisToolFilter::setup(KActionCollection *collection)
 					    "filter", 0, this,
 					    SLOT(activate()), collection,
 					    name());
+		Q_CHECK_PTR(m_action);
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
@@ -93,14 +94,22 @@ void KisToolFilter::initPaint(KisEvent *e)
 QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
+	Q_CHECK_PTR(m_optWidget);
 	m_optWidget -> setCaption(i18n("Filter"));
+
 	QWidget* optionFreehandWidget = KisToolFreehand::createOptionWidget(m_optWidget);
+	Q_CHECK_PTR(optionFreehandWidget);
+
 	m_cbFilter = new KisCmbIDList(m_optWidget);
+	Q_CHECK_PTR(m_cbFilter);
+
 	QLabel* lbFilter = new QLabel(i18n("Filter:"), m_optWidget);
+	Q_CHECK_PTR(lbFilter);
 
 	m_cbFilter ->setIDList( m_subject ->filterList() );
 
 	m_optionLayout = new QGridLayout(m_optWidget, 3, 2, 0, 6);
+	Q_CHECK_PTR(m_optionLayout);
 
 	m_optionLayout -> addMultiCellWidget(optionFreehandWidget, 0, 0, 0 , 1 );
  	m_optionLayout -> addWidget(lbFilter, 1, 0);

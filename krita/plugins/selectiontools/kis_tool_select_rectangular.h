@@ -69,7 +69,12 @@ public:
 	KisToolSelectRectangularFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectRectangularFactory(){};
 
-	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectRectangular(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolSelectRectangular(); 
+		t -> setup(m_ac); 
+		Q_CHECK_PTR(t);
+		return t; 
+	}
 	virtual KisID id() { return KisID("rectangularselect", i18n("Rectangular select tool")); }
 };
 

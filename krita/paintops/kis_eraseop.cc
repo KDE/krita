@@ -36,6 +36,7 @@
 KisPaintOp * KisEraseOpFactory::createOp(KisPainter * painter)
 { 
 	KisPaintOp * op = new KisEraseOp(painter); 
+	Q_CHECK_PTR(op);
 	return op; 
 }
 
@@ -94,6 +95,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 	KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
 
 	KisLayerSP dab = new KisLayer(device -> colorStrategy(), "eraser_dab");
+	Q_CHECK_PTR(dab);
 
 	Q_INT32 maskWidth = mask -> width();
 	Q_INT32 maskHeight = mask -> height();

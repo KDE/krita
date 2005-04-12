@@ -46,6 +46,8 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 
 	if (mediateOn & MEDIATE_BRUSHES) {
 		m_chooser = new KisBrushChooser(chooserParent, chooserName);
+		Q_CHECK_PTR(m_chooser);
+
 		connect(rserver,
 			SIGNAL(loadedBrush(KisResource*)),
 			this,
@@ -60,6 +62,8 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 	}
 	if (mediateOn & MEDIATE_PATTERNS) {
 		m_chooser = new KisPatternChooser(chooserParent, chooserName);
+		Q_CHECK_PTR(m_chooser);
+
 		connect(rserver,
 			SIGNAL(loadedPattern(KisResource*)),
 			this,
@@ -69,6 +73,8 @@ KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
 	}
 	if (mediateOn & MEDIATE_GRADIENTS) {
 		m_chooser = new KisGradientChooser(chooserParent, chooserName);
+		Q_CHECK_PTR(m_chooser);
+
 		connect(rserver,
 			SIGNAL(loadedGradient(KisResource*)),
 			this,
@@ -137,6 +143,7 @@ void KisResourceMediator::resourceServerLoadedResource(KisResource *resource)
 	if (resource && resource -> valid()) {
 		
 		KisIconItem *item = new KisIconItem(resource);
+		Q_CHECK_PTR(item);
 
 		m_items[resource] = item;
 

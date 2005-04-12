@@ -74,7 +74,12 @@ public:
 	KisToolSelectPickerFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectPickerFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectPicker(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolSelectPicker(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("selectpicker", i18n("Selection picker")); }
 };
 

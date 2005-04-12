@@ -46,6 +46,7 @@ DlgPerfTest::DlgPerfTest( QWidget *  parent,
 	m_lock = false;
 
 	m_page = new WdgPerfTest(this, "perf_test");
+	Q_CHECK_PTR(m_page);
 
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());

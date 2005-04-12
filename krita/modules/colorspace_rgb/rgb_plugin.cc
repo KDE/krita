@@ -62,7 +62,7 @@ RGBPlugin::RGBPlugin(QObject *parent, const char *name, const QStringList &)
 	if ( parent->inherits("KisFactory") )
 	{
 		m_StrategyColorSpaceRGBA = new KisStrategyColorSpaceRGB();
-
+		Q_CHECK_PTR(m_StrategyColorSpaceRGBA);
 		KisColorSpaceRegistry::instance() -> add(m_StrategyColorSpaceRGBA);
 	}
 

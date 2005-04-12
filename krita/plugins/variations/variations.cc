@@ -77,6 +77,7 @@ Variations::~Variations()
 void Variations::slotVariationsActivated()
 {
 	DlgVariations * dlgVariations = new DlgVariations(m_view, "Variations");
+	Q_CHECK_PTR(dlgVariations);
 	// Render layer to a QIMage -- keep in mind possibility of selection
 
 	// Scale QImage 

@@ -37,6 +37,7 @@
 KisPaintOp * KisDuplicateOpFactory::createOp(KisPainter * painter)
 { 
 	KisPaintOp * op = new KisDuplicateOp(painter); 
+	Q_CHECK_PTR(op);
 	return op; 
 }
 
@@ -105,6 +106,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 		srcPoint.setY(0);
 
 	KisPaintDeviceSP srcdev = new KisPaintDevice(dab.data() -> colorStrategy(), "duplicate srcdev");
+	Q_CHECK_PTR(srcdev);
 	int srcY = 0;
 
 	while ( srcY < sh )

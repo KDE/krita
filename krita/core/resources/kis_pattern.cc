@@ -229,6 +229,8 @@ KisLayerSP KisPattern::image(KisStrategyColorSpaceSP colorSpace) {
 	Q_INT32 width = m_img.width();
 	Q_INT32 height = m_img.height();
 	KisLayerSP layer = new KisLayer(colorSpace, "pattern image");
+	Q_CHECK_PTR(layer);
+
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
 			QRgb pixel = m_img.pixel(x, y);

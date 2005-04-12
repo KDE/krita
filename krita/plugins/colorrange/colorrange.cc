@@ -86,6 +86,7 @@ void ColorRange::slotActivated()
 	if (!layer) return;
 
 	DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");
+	Q_CHECK_PTR(dlgColorRange);
 
 	dlgColorRange -> exec();
 }

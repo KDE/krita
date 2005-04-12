@@ -27,37 +27,39 @@
  * An editable wrapper around the byte values for a single colour channel.
  */
 class KisQuantum {
-	public:
-		inline KisQuantum(QUANTUM* q, KisQuantumOperation* op = new KisQuantumOperationLinear()) : m_quantum(q), m_op(op) { };
-	public:
-		inline operator QUANTUM() const { return *m_quantum; };
 
-		inline QUANTUM operator=(QUANTUM q)
+public:
+	inline KisQuantum(QUANTUM* q, KisQuantumOperation* op = new KisQuantumOperationLinear()) : m_quantum(q), m_op(op) { Q_ASSERT(m_op);};
+public:
+	inline operator QUANTUM() const { return *m_quantum; };
+
+	inline QUANTUM operator=(QUANTUM q)
 		{
+			Q_ASSERT(m_op);
 			return *m_quantum = m_op->operation(q);
 		};
 
-		inline QUANTUM operator-=(QUANTUM q)
+	inline QUANTUM operator-=(QUANTUM q)
 		{
 			return (*this = *this - q);
 		}
 
-		inline QUANTUM operator+=(QUANTUM q)
+	inline QUANTUM operator+=(QUANTUM q)
 		{
 			return (*this = *this + q);
 		}
 
-		/** 
-		 * This operator allow to acces to a neighbour quantum, it's mean to be used
-		 * inside a pixel
-		 */
-		KisQuantum operator[](int index) const {
-			return KisQuantum( m_quantum + index );
-		}
-	private:
-		QUANTUM* m_quantum;
+	/** 
+	 * This operator allow to acces to a neighbour quantum, it's mean to be used
+	 * inside a pixel
+	 */
+	KisQuantum operator[](int index) const {
+		return KisQuantum( m_quantum + index );
+	}
+private:
+	QUANTUM* m_quantum;
 
-		KisQuantumOperation* m_op;
+	KisQuantumOperation* m_op;
 };
 
 

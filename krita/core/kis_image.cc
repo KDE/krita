@@ -200,11 +200,16 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 		m_profile = rhs.m_profile;
 
 		m_bkg = new KisBackground(this, rhs.width(), rhs.height());
+		Q_CHECK_PTR(m_bkg);
+
 		m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+		Q_CHECK_PTR(m_projection);
+
 		m_layers.reserve(rhs.m_layers.size());
 
 		for (vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); it++) {
 			KisLayerSP layer = new KisLayer(**it);
+			Q_CHECK_PTR(layer);
 
 			layer -> setImage(this);
 			m_layers.push_back(layer);
@@ -214,6 +219,8 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 
 
 		m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
+		Q_CHECK_PTR(m_nserver);
+
 		m_guides = rhs.m_guides;
 		m_pixmap = rhs.m_pixmap;
 	}
@@ -223,8 +230,10 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 
 DCOPObject *KisImage::dcopObject()
 {
-	if (!m_dcop)
+	if (!m_dcop) {
 		m_dcop = new KIsImageIface(this);
+		Q_CHECK_PTR(m_dcop);
+	}
 	return m_dcop;
 }
 
@@ -278,11 +287,16 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 
 	m_adapter = adapter;
 	m_nserver = new KisNameServer(i18n("Layer %1"), 1);
+	Q_CHECK_PTR(m_nserver);
 	m_name = name;
 
 	m_colorStrategy = colorStrategy;
 	m_bkg = new KisBackground(this, width, height);
+	Q_CHECK_PTR(m_bkg);
+
 	m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+	Q_CHECK_PTR(m_projection);
+
 	m_xres = 1.0;
 	m_yres = 1.0;
 	m_unit = KoUnit::U_PT;
@@ -314,13 +328,17 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
 		m_height = h;
 
 		m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+		Q_CHECK_PTR(m_projection);
+
  		m_bkg = new KisBackground(this, w, h);
+		Q_CHECK_PTR(m_bkg);
 
 		if (cropLayers) {
 			vKisLayerSP_it it;
 			for ( it = layers().begin(); it != layers().end(); ++it ) {
 				KisLayerSP layer = (*it);
 				KisTransaction * t = new KisTransaction("crop", layer.data());
+				Q_CHECK_PTR(t);
 				layer -> crop(0, 0, w, h);
 				 if (m_adapter && m_adapter -> undo())
 					m_adapter -> addCommand(t);
@@ -375,7 +393,10 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 		m_height = h;
 
 		m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+		Q_CHECK_PTR(m_projection);
+
 		m_bkg = new KisBackground(this, w, h);
+		Q_CHECK_PTR(m_bkg);
 
 		undoAdapter()->endMacro();
 
@@ -408,7 +429,10 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 		m_height = h;
 
 		m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+		Q_CHECK_PTR(m_projection);
+
 		m_bkg = new KisBackground(this, w, h);
+		Q_CHECK_PTR(m_bkg);
 
 		undoAdapter()->endMacro();
 
@@ -458,7 +482,10 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 		m_height = h;
 
 		m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+		Q_CHECK_PTR(m_projection);
+
 		m_bkg = new KisBackground(this, w, h);
+		Q_CHECK_PTR(m_bkg);
 
 		undoAdapter()->endMacro();
 
@@ -846,6 +873,8 @@ void KisImage::flatten()
 	vKisLayerSP beforeLayers = m_layers;
 
 	KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
+	Q_CHECK_PTR(dst);
+
 	KisFillPainter painter(dst.data());
 	painter.fillRect(0, 0, width(), height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
@@ -867,6 +896,8 @@ void KisImage::mergeVisibleLayers()
 	vKisLayerSP beforeLayers = m_layers;
 
 	KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
+	Q_CHECK_PTR(dst);
+
 	KisFillPainter painter(dst.data());
 	painter.fillRect(0, 0, width(), height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
@@ -895,6 +926,8 @@ void KisImage::mergeLinkedLayers()
 	vKisLayerSP beforeLayers = m_layers;
 
 	KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
+	Q_CHECK_PTR(dst);
+
 	KisFillPainter painter(dst.data());
 	painter.fillRect(0, 0, width(), height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
@@ -926,6 +959,8 @@ void KisImage::mergeLayer(KisLayerSP l)
 	vKisLayerSP beforeLayers = m_layers;
 
 	KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
+	Q_CHECK_PTR(dst);
+
 	KisFillPainter painter(dst.data());
 	painter.fillRect(0, 0, width(), height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 

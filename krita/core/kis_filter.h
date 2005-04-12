@@ -48,6 +48,7 @@ KisFilterSP createFilter(KisView* view)
                kfi = view->filterRegistry()->get( F::id() );
       } else {
                kfi = new F(view);
+	       Q_CHECK_PTR(kfi);
                view->filterRegistry()->add(kfi);
        }
        return kfi;

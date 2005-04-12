@@ -85,6 +85,7 @@ void ColorspaceConversion::slotImgColorspaceConversion()
 	if (!image) return;
 
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
+	Q_CHECK_PTR(dlgColorspaceConversion);
 
 	dlgColorspaceConversion -> setCaption(i18n("Convert All Layers From ") + image -> colorStrategy() -> id().name());
 
@@ -118,6 +119,8 @@ void ColorspaceConversion::slotLayerColorspaceConversion()
 	if (!dev) return;
 
 	DlgColorspaceConversion * dlgColorspaceConversion = new DlgColorspaceConversion(m_view, "ColorspaceConversion");
+	Q_CHECK_PTR(dlgColorspaceConversion);
+
 	dlgColorspaceConversion -> setCaption(i18n("Convert Current Layer From") + dev -> colorStrategy() -> id().name());
 	dlgColorspaceConversion -> fillCmbSrcProfile(dev -> colorStrategy() -> id());
 

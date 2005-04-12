@@ -90,6 +90,8 @@ void RotateImage::slotRotateImage()
 	if (!image) return;
 
 	DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateImage");
+	Q_CHECK_PTR(dlgRotateImage);
+
 	dlgRotateImage -> setCaption(i18n("Rotate Image"));
 
         if (dlgRotateImage -> exec() == QDialog::Accepted) {
@@ -106,6 +108,8 @@ void RotateImage::slotRotateLayer()
 	if (!image) return;
 
 	DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateLayer");
+	Q_CHECK_PTR(dlgRotateImage);
+
 	dlgRotateImage -> setCaption("Rotate Layer");
 
 	if (dlgRotateImage -> exec() == QDialog::Accepted) {

@@ -121,6 +121,7 @@ void KisPainter::beginTransaction(const QString& customName)
         if (m_transaction)
                 delete m_transaction;
         m_transaction = new KisTransaction(customName, m_device);
+	Q_CHECK_PTR(m_transaction);
 }
 
 void KisPainter::beginTransaction( KisTransaction* command)

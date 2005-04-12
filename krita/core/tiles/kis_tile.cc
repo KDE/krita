@@ -84,8 +84,10 @@ KisTile::~KisTile()
 
 void KisTile::allocate()
 {
-	if (m_data == 0)
+	if (m_data == 0) {
 		m_data = new Q_UINT8[WIDTH * HEIGHT * m_pixelSize];
+		Q_CHECK_PTR(m_data);
+	}
 }
 
 KisTile * KisTile::getNext()

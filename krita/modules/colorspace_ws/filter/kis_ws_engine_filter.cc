@@ -97,6 +97,8 @@ void single_step(KisStrategyColorSpaceSP cs, KisPaintDeviceSP src,  KisPaintDevi
 
 		src -> colorStrategy() -> toQColor(pix, &c, &opacity);
 		Q_UINT8 *pix = new Q_UINT8[sizeof( cell )];
+		Q_CHECK_PTR(pix);
+
 		cs -> nativeColor(c, opacity, pix);
 	}
 

@@ -167,6 +167,7 @@ void KisGradient::ioResult(KIO::Job * /*job*/)
 		Color rightColor(rightRgb.color(), rightAlpha);
 
 		KisGradientSegment *segment = new KisGradientSegment(interpolationType, colorInterpolationType, leftOffset, middleOffset, rightOffset, leftColor, rightColor);
+		Q_CHECK_PTR(segment);
 
 		if ( !segment -> isValid() ) {
 			emit ioFailed(this);
@@ -482,6 +483,7 @@ KisGradientSegment::RGBColorInterpolationStrategy *KisGradientSegment::RGBColorI
 {
 	if (m_instance == 0) {
 		m_instance = new RGBColorInterpolationStrategy();
+		Q_CHECK_PTR(m_instance);
 	}
 
 	return m_instance;
@@ -501,6 +503,7 @@ KisGradientSegment::HSVCWColorInterpolationStrategy *KisGradientSegment::HSVCWCo
 {
 	if (m_instance == 0) {
 		m_instance = new HSVCWColorInterpolationStrategy();
+		Q_CHECK_PTR(m_instance);
 	}
 
 	return m_instance;
@@ -535,6 +538,7 @@ KisGradientSegment::HSVCCWColorInterpolationStrategy *KisGradientSegment::HSVCCW
 {
 	if (m_instance == 0) {
 		m_instance = new HSVCCWColorInterpolationStrategy();
+		Q_CHECK_PTR(m_instance);
 	}
 
 	return m_instance;
@@ -569,6 +573,7 @@ KisGradientSegment::LinearInterpolationStrategy *KisGradientSegment::LinearInter
 {
 	if (m_instance == 0) {
 		m_instance = new LinearInterpolationStrategy();
+		Q_CHECK_PTR(m_instance);
 	}
 
 	return m_instance;
@@ -615,6 +620,7 @@ KisGradientSegment::CurvedInterpolationStrategy *KisGradientSegment::CurvedInter
 {
 	if (m_instance == 0) {
 		m_instance = new CurvedInterpolationStrategy();
+		Q_CHECK_PTR(m_instance);
 	}
 
 	return m_instance;
@@ -640,6 +646,7 @@ KisGradientSegment::SineInterpolationStrategy *KisGradientSegment::SineInterpola
 {
 	if (m_instance == 0) {
 		m_instance = new SineInterpolationStrategy();
+		Q_CHECK_PTR(m_instance);
 	}
 
 	return m_instance;
@@ -657,6 +664,7 @@ KisGradientSegment::SphereIncreasingInterpolationStrategy *KisGradientSegment::S
 {
 	if (m_instance == 0) {
 		m_instance = new SphereIncreasingInterpolationStrategy();
+		Q_CHECK_PTR(m_instance);
 	}
 
 	return m_instance;
@@ -674,6 +682,7 @@ KisGradientSegment::SphereDecreasingInterpolationStrategy *KisGradientSegment::S
 {
 	if (m_instance == 0) {
 		m_instance = new SphereDecreasingInterpolationStrategy();
+		Q_CHECK_PTR(m_instance);
 	}
 
 	return m_instance;

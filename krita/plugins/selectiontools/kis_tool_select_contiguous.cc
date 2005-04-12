@@ -107,6 +107,7 @@ void KisToolSelectContiguous::setup(KActionCollection *collection)
 					    SLOT(activate()),
 					    collection,
 					    name());
+		Q_CHECK_PTR(m_action);
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
@@ -144,21 +145,27 @@ void KisToolSelectContiguous::slotSetAction(int action)
 QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
-
+	Q_CHECK_PTR(m_optWidget);
 	m_optWidget -> setCaption(i18n("Select Contiguous Areas"));
 
 	QVBoxLayout * l = new QVBoxLayout(m_optWidget);
+	Q_CHECK_PTR(l);
 
 	m_options = new KisSelectionOptions(m_optWidget, m_subject);
+	Q_CHECK_PTR(m_options);
+
 	l -> addWidget( m_options);
 	connect (m_options, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
 	QHBoxLayout * hbox = new QHBoxLayout(l);
+	Q_CHECK_PTR(hbox);
 
 	QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
 	hbox -> addWidget(lbl);
 
 	KIntNumInput * input = new KIntNumInput(m_optWidget, "fuzziness");
+	Q_CHECK_PTR(input);
+
 	input -> setRange(0, 200, 10, true);
 	input -> setValue(20);
 	hbox -> addWidget(input);
@@ -180,8 +187,8 @@ void KisToolSelectContiguous::fillSelection(KisPaintDeviceSP device, enumSelecti
 	m_device = device;
 
 	if (device -> hasSelection()) {
-		if (device -> selection() -> selected(startX, startY) > MIN_SELECTED)
-			return;
+		//if (device -> selection() -> selected(startX, startY) > MIN_SELECTED)
+		//	return;
 
 		if (mode == SELECTION_REPLACE)
 			device -> removeSelection();
@@ -189,7 +196,9 @@ void KisToolSelectContiguous::fillSelection(KisPaintDeviceSP device, enumSelecti
 
 
 	m_selection = device -> selection();
-	m_selection -> setMaskColor(m_options -> maskColor());
+	QColor c = m_options -> maskColor();
+	if (c.isValid())
+		m_selection -> setMaskColor(c);
 
 	m_depth = device -> pixelSize();
 	m_colorChannels = device -> colorStrategy() -> nColorChannels();
@@ -200,11 +209,14 @@ void KisToolSelectContiguous::fillSelection(KisPaintDeviceSP device, enumSelecti
 	m_size = m_width * m_height;
 
 	m_oldColor = new QUANTUM[m_depth];
+	Q_CHECK_PTR(m_oldColor);
 
 	KisHLineIteratorPixel pixelIt = m_device -> createHLineIterator(startX, startY, startX + 1, false);
 	memcpy(m_oldColor, pixelIt.rawData(), m_depth);
 
 	m_map = new bool[m_size];
+	Q_CHECK_PTR(m_map);
+
 	for (int i = 0; i < m_size; i++)
 		m_map[i] = false;
 
@@ -276,6 +288,7 @@ int KisToolSelectContiguous::floodSegment(int x, int y, int most, KisHLineIterat
 		KisPixel data = it.pixel();
 		diff = difference(m_oldColor, data);
 		if (diff < m_fuzziness) {
+			//kdDebug() << "Diff: " << QString::number(diff) << ", fuzz: " << m_fuzziness << "\n";
 			Q_UINT8 selectedness = selIter.rawData()[0];
 
 			if (mode == SELECTION_ADD || mode == SELECTION_REPLACE) {

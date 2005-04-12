@@ -366,6 +366,7 @@ namespace {
 	{
 		if (m_instance == 0) {
 			m_instance = new GradientRepeatNoneStrategy();
+			Q_CHECK_PTR(m_instance);
 		}
 
 		return m_instance;
@@ -406,6 +407,7 @@ namespace {
 	{
 		if (m_instance == 0) {
 			m_instance = new GradientRepeatForwardsStrategy();
+			Q_CHECK_PTR(m_instance);
 		}
 
 		return m_instance;
@@ -444,6 +446,7 @@ namespace {
 	{
 		if (m_instance == 0) {
 			m_instance = new GradientRepeatAlternateStrategy();
+			Q_CHECK_PTR(m_instance);
 		}
 
 		return m_instance;
@@ -513,8 +516,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 		shapeStrategy = new ConicalSymetricGradientStrategy(gradientVectorStart, gradientVectorEnd);
 		break;
 	}
-
-	Q_ASSERT(shapeStrategy != 0);
+	Q_CHECK_PTR(shapeStrategy);
 
 	GradientRepeatStrategy *repeatStrategy = 0;
 
@@ -529,10 +531,11 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 		repeatStrategy = GradientRepeatAlternateStrategy::instance();
 		break;
 	}
-
 	Q_ASSERT(repeatStrategy != 0);
 
 	KisLayerSP layer = new KisLayer( m_device -> colorStrategy(), "gradient");
+	Q_CHECK_PTR(layer);
+
 	KisPainter painter(layer);
 
 	//If the device has a selection only iterate of that selection

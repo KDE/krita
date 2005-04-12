@@ -27,9 +27,11 @@ KisHLineIteratorPixel::KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataMa
 	KisIteratorPixelTrait <KisHLineIterator> ( ndevice, this ),
 	m_offsetx(offsetx), m_offsety(offsety)
 {
-	if(sel_dm)
-		KisIteratorPixelTrait <KisHLineIterator>::setSelectionIterator(
-				new KisHLineIterator(sel_dm, x - offsetx, y - offsety, w, false));
+	if(sel_dm) {
+		KisHLineIterator * i = new KisHLineIterator(sel_dm, x - offsetx, y - offsety, w, false);
+		Q_CHECK_PTR(i);
+		KisIteratorPixelTrait <KisHLineIterator>::setSelectionIterator(i);
+	}
 }
 
 KisVLineIteratorPixel::KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
@@ -37,9 +39,11 @@ KisVLineIteratorPixel::KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataMa
 	KisIteratorPixelTrait <KisVLineIterator> ( ndevice, this ),
 	m_offsetx(offsetx), m_offsety(offsety)
 {
-	if(sel_dm)
-		KisIteratorPixelTrait <KisVLineIterator>::setSelectionIterator(
-				new KisVLineIterator(sel_dm, x - offsetx, y - offsety, h, false));
+	if(sel_dm) {
+		KisVLineIterator * i = new KisVLineIterator(sel_dm, x - offsetx, y - offsety, h, false);
+		Q_CHECK_PTR(i);
+		KisIteratorPixelTrait <KisVLineIterator>::setSelectionIterator(i);
+	}
 }
 
 KisRectIteratorPixel::KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
@@ -47,7 +51,9 @@ KisRectIteratorPixel::KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataMana
 	KisIteratorPixelTrait <KisRectIterator> ( ndevice, this ),
 	m_offsetx(offsetx), m_offsety(offsety)
 {
-	if(sel_dm)
-		KisIteratorPixelTrait <KisRectIterator>::setSelectionIterator(
-				new KisRectIterator(sel_dm, x - offsetx, y - offsety, w, h, false));
+	if(sel_dm) {
+		KisRectIterator * i = new KisRectIterator(sel_dm, x - offsetx, y - offsety, w, h, false);
+		Q_CHECK_PTR(i);
+		KisIteratorPixelTrait <KisRectIterator>::setSelectionIterator(i);
+	}
 }

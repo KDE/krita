@@ -88,6 +88,8 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 {
 	// XXX: add checking of selections
 	KisPaintDeviceSP tmp = new KisPaintDevice(src -> colorStrategy(), "temporary paint device for convolving");
+	Q_CHECK_PTR(tmp);
+
 	Q_INT32 depth = src -> colorStrategy() -> nColorChannels() + 1;
 	Q_INT32 top, left;
 

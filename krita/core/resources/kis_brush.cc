@@ -213,6 +213,7 @@ KisLayerSP KisBrush::image(KisStrategyColorSpaceSP colorSpace, double pressure, 
 	int outputHeight = outputImage.height();
 
 	KisLayer *layer = new KisLayer(colorSpace, "brush image");
+	Q_CHECK_PTR(layer);
 
 	for (int y = 0; y < outputHeight; y++) {
 		KisHLineIterator iter = layer -> createHLineIterator( 0, y, outputWidth, true);
@@ -448,6 +449,7 @@ void KisBrush::createScaledBrushes() const
 		}
 
 		KisAlphaMaskSP scaledMask = new KisAlphaMask(scaledImage, hasColor());
+		Q_CHECK_PTR(scaledMask);
 
 		double xScale = static_cast<double>(width) / m_img.width();
 		double yScale = static_cast<double>(height) / m_img.height();
@@ -509,6 +511,7 @@ KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, do
 	int dstHeight = static_cast<int>(ceil(scale * height())) + 1;
 
 	KisAlphaMaskSP dstMask = new KisAlphaMask(dstWidth, dstHeight);
+	Q_CHECK_PTR(dstMask);
 
 	KisAlphaMaskSP srcMask = srcBrush -> mask();
 
@@ -859,6 +862,7 @@ KisAlphaMaskSP KisBrush::scaleSinglePixelMask(double scale, QUANTUM maskValue, d
 	int dstWidth = 2;
 	int dstHeight = 2;
 	KisAlphaMaskSP outputMask = new KisAlphaMask(dstWidth, dstHeight);
+	Q_CHECK_PTR(outputMask);
 
 	double a = subPixelX;
 	double b = subPixelY;

@@ -384,6 +384,7 @@ void KisToolCrop::crop() {
 void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc) 
 {
 	KisTransaction * t = new KisTransaction(i18n("Crop"), layer.data());
+	Q_CHECK_PTR(t);
 	
 	layer -> crop(rc);
 
@@ -394,7 +395,8 @@ void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc)
 QWidget* KisToolCrop::createOptionWidget(QWidget* parent)
 {
 	WdgToolCrop * w = new WdgToolCrop(parent);
-	
+	Q_CHECK_PTR(w);
+
 	connect(w -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
 	m_optWidget = w;
@@ -418,7 +420,10 @@ void KisToolCrop::setup(KActionCollection *collection)
 					    SLOT(activate()), 
 					    collection, 
 					    name());
+		Q_CHECK_PTR(m_action);
+
 		m_action -> setExclusiveGroup("tools");
+
 		m_ownAction = true;
 	}
 }

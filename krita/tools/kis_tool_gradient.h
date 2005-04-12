@@ -117,7 +117,12 @@ public:
 	KisToolGradientFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolGradientFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolGradient(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolGradient(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("gradient", i18n("Gradient Tool")); }
 };
 

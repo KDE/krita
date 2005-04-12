@@ -63,6 +63,7 @@ GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
 	if ( parent->inherits("KisFactory") )
 	{
 		m_StrategyColorSpaceGrayA = new KisStrategyColorSpaceGrayscale();
+		Q_CHECK_PTR(m_StrategyColorSpaceGrayA);
 		KisColorSpaceRegistry::instance() -> add(m_StrategyColorSpaceGrayA);
 	}
 

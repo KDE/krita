@@ -61,6 +61,7 @@ public:
 /* 	bool stampToCanvas(QPoint pos); */
 
 protected:
+	QWidget *m_optWidget;
 
 	QPoint m_oldp;
 	QPoint m_hotSpot;
@@ -89,7 +90,12 @@ public:
 	KisToolStampFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolStampFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolStamp(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolStamp(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("stamp", i18n("Stamp tool")); }
 };
 

@@ -87,6 +87,7 @@ PerfTest::PerfTest(QObject *parent, const char *name, const QStringList &)
  		  << "\n";
 
 	(void) new KAction(i18n("&Performance Test..."), 0, 0, this, SLOT(slotPerfTest()), actionCollection(), "perf_test");
+
 	
 	if ( !parent->inherits("KisView") )
 	{
@@ -108,6 +109,8 @@ void PerfTest::slotPerfTest()
 	if (!image) return;
 
 	DlgPerfTest * dlgPerfTest = new DlgPerfTest(m_view, "PerfTest");
+	Q_CHECK_PTR(dlgPerfTest);
+
 	dlgPerfTest -> setCaption(i18n("Performance Test"));
 	
 	QString report = QString("");
@@ -164,8 +167,11 @@ void PerfTest::slotPerfTest()
 			report = report.append(paintViewTest(testCount));
 		}
 		KDialogBase * d = new KDialogBase(m_view, "", true, "", KDialogBase::Ok);
+		Q_CHECK_PTR(d);
+
 		d -> setCaption("Performance test results");
 		QTextEdit * e = new QTextEdit(d);
+		Q_CHECK_PTR(e);
 		d -> setMainWidget(e);
 		e -> setText(report);
 		e -> setMinimumWidth(600);
@@ -224,7 +230,7 @@ QString PerfTest::doBlit(CompositeOp op,
 	// Small
 
 	KisLayerSP small = new KisLayer(KisColorSpaceRegistry::instance() -> get(cspace), "small blit");
-
+	Q_CHECK_PTR(small);
 
 	KisFillPainter pf(small.data()) ;
 	pf.fillRect(0, 0, 64/2, 64/2, Qt::black);
@@ -247,7 +253,8 @@ QString PerfTest::doBlit(CompositeOp op,
 	// ------------------------------------------------------------------------------
 	// Medium
 	KisLayerSP medium = new KisLayer(KisColorSpaceRegistry::instance() -> get(cspace), "medium blit");
-		
+	Q_CHECK_PTR(medium);
+
 	pf.begin(medium.data()) ;
 	pf.fillRect(0, 0, 64 * 3, 64 * 3, Qt::black);
 	pf.end();
@@ -269,6 +276,7 @@ QString PerfTest::doBlit(CompositeOp op,
 	// ------------------------------------------------------------------------------
 	// Big
 	KisLayerSP big = new KisLayer(KisColorSpaceRegistry::instance() -> get(cspace), "big blit");
+	Q_CHECK_PTR(big);
 
 	pf.begin(big.data()) ;
 	pf.fillRect(0, 0, 800, 800, Qt::black);
@@ -292,7 +300,7 @@ QString PerfTest::doBlit(CompositeOp op,
 	// Outside
 
 	KisLayerSP outside = new KisLayer(KisColorSpaceRegistry::instance() -> get(cspace), "outside blit");
-
+	Q_CHECK_PTR(outside);
 	pf.begin(outside.data()) ;
 	pf.fillRect(0, 0, 500, 500, Qt::lightGray);
 	pf.end();
@@ -314,6 +322,7 @@ QString PerfTest::doBlit(CompositeOp op,
 	// Small with varied source opacity
 
 	KisLayerSP small_with_alpha = new KisLayer(KisColorSpaceRegistry::instance() -> get(cspace), "small blit with alpha");
+	Q_CHECK_PTR(small_with_alpha);
 
 	pf.begin(small_with_alpha.data()) ;
 	pf.fillRect(0, 0, 32, 32, Qt::black, OPACITY_TRANSPARENT);
@@ -441,6 +450,7 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 // 			p.paintEllipse(500, 1000, 100, 0, 0);
 			p.setPaintColor(Qt::yellow);
 			KisResourceServer * r = new KisResourceServer;
+			Q_CHECK_PTR(r);
 			p.setPattern((KisPattern*)r -> patterns().first());
 			p.setFillThreshold(15);
 			p.setCompositeOp(COMPOSITE_OVER);
@@ -603,8 +613,9 @@ QString PerfTest::readBytesTest(Q_UINT32 testCount)
 	t.restart();
 	
 	for (Q_UINT32 i = 0; i < testCount; ++i) {
-		Q_UINT8 * newData;
-		newData = l -> readBytes( 0, 0, 1000, 1000);
+		Q_UINT8 * newData = new Q_UINT8[1000 * 1000 * l -> pixelSize()];
+		Q_CHECK_PTR(newData);
+		l -> readBytes(newData, 0, 0, 1000, 1000);
 		delete[] newData;
 	}
 
@@ -619,8 +630,9 @@ QString PerfTest::readBytesTest(Q_UINT32 testCount)
 	t.restart();
 	
 	for (Q_UINT32 i = 0; i < testCount; ++i) {
-		Q_UINT8 * newData;
-		newData = l -> readBytes( 0, 0, 1000, 1000);
+		Q_UINT8 * newData = new Q_UINT8[1000 * 1000 * l -> pixelSize()];
+		Q_CHECK_PTR(newData);
+		l -> readBytes(newData, 0, 0, 1000, 1000);
 		delete[] newData;
 	}
 
@@ -645,7 +657,9 @@ QString PerfTest::writeBytesTest(Q_UINT32 testCount)
 	p.end();
 
 	
-	Q_UINT8 * data = l -> readBytes(0, 0, 1000, 1000);
+	Q_UINT8 * data = new Q_UINT8[1000 * 1000 * l -> pixelSize()];
+	Q_CHECK_PTR(data);
+	l -> readBytes(data, 0, 0, 1000, 1000);
 	
 	int pixelSize = l -> pixelSize();
 	

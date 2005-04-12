@@ -51,6 +51,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
 	(void)global();
 	s_rserver = new KisResourceServer;
+	Q_CHECK_PTR(s_rserver);
 
 	// Load extension modules and plugins
 //  	KisToolRegistry::instance();
@@ -113,6 +114,7 @@ KParts::Part* KisFactory::createPartObject( QWidget *parentWidget,
 
 	KisDoc *doc = new KisDoc( parentWidget,
 				  widgetName, parent, name, !bWantKoDocument );
+	Q_CHECK_PTR(doc);
 
 	if ( !bWantKoDocument )
 		doc->setReadWrite( false );
@@ -125,7 +127,8 @@ KInstance* KisFactory::global()
 	if ( !s_global )
 	{
 		s_global = new KInstance(s_aboutData);
-
+		Q_CHECK_PTR(s_global);
+	
 		s_global -> dirs() -> addResourceType("krita_template",
 					     KStandardDirs::kde_default("data") + "krita/templates");
 

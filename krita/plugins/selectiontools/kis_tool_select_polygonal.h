@@ -102,7 +102,12 @@ public:
 	KisToolSelectPolygonalFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectPolygonalFactory(){};
 
-	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectPolygonal(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolSelectPolygonal(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("polygonalselect", i18n("Polygonal select tool")); }
 };
 

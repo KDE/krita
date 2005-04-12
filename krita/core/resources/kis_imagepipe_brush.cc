@@ -190,6 +190,8 @@ void KisImagePipeBrush::ioResult(KIO::Job * /*job*/)
 		KisBrush * brush = new KisBrush(name() + "_" + numOfBrushes,
 						m_data,
 						i);
+		Q_CHECK_PTR(brush);
+
 		m_brushes.append(brush);
 		
  		numOfBrushes++;

@@ -65,7 +65,10 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	Q_INT32 height = rect.height();
         
 	// create a QUANTUM array that holds the data the filter works on
-	QUANTUM * newData = src -> readBytes( x, y, width, height);
+	QUANTUM * newData = new Q_UINT8[width, height * src -> pixelSize()];
+	Q_CHECK_PTR(newData);
+
+	src -> readBytes(newData, x, y, width, height);
 
 	//read the filter configuration values from the KisFilterConfiguration object
 	Q_UINT32 embossdepth = ((KisEmbossFilterConfiguration*)configuration)->depth();
@@ -208,7 +211,9 @@ KisFilterConfigurationWidget* KisEmbossFilter::createConfigurationWidget(QWidget
 {
 	vKisIntegerWidgetParam param;
 	param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth") ) );
-	return new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
+	KisFilterConfigurationWidget * w = new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
+	Q_CHECK_PTR(w);
+	return w;
 }
 
 KisFilterConfiguration* KisEmbossFilter::configuration(KisFilterConfigurationWidget* nwidget)

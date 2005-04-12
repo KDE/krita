@@ -113,6 +113,8 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 // 		kdDebug() << "compositing heterogenous color spaces: src = " << srcSpace -> name() << ", dst = " << m_name << "\n";
 		int len = pixelSize() * rows * cols;
  		QUANTUM * convertedSrcPixels = new QUANTUM[len];
+		Q_CHECK_PTR(convertedSrcPixels);
+
 		memset(convertedSrcPixels, 0, len * sizeof(QUANTUM));
 
 		// XXX: Set profiles
@@ -159,6 +161,7 @@ void KisStrategyColorSpace::resetProfiles()
 		KisProfile * profile = 0;
 		for ( QStringList::Iterator it = m_profileFilenames.begin(); it != m_profileFilenames.end(); ++it ) {
 			profile = new KisProfile(*it, colorSpaceType());
+			Q_CHECK_PTR(profile);
 			profile -> loadAsync();
 			if (profile -> valid() && profile -> colorSpaceSignature() == m_colorSpaceSignature) {
 				m_profiles.push_back(profile);

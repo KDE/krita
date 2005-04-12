@@ -156,12 +156,14 @@ public:
 
 
  	/**
- 	 * Copy the bytes in the specified rect to a chunk of memory. The caller is responsible
- 	 * for managing the memory. The pixelSize in bytes is w * h * pixelSize. XXX: Better use QValueVector?
+ 	 * Copy the bytes in the specified rect to a chunk of memory. 
+ 	 * The pixelSize in bytes is w * h * pixelSize. XXX: Better
+ 	 * use QValueVector?
  	 */
- 	Q_UINT8 * readBytes(Q_INT32 x, Q_INT32 y,
- 		  	    Q_INT32 w, Q_INT32 h)
-		{ return ACTUAL_DATAMGR::readBytes(x, y, w, h);};
+ 	void readBytes(Q_UINT8 * data, 
+		       Q_INT32 x, Q_INT32 y,
+		       Q_INT32 w, Q_INT32 h)
+		{ ACTUAL_DATAMGR::readBytes(data, x, y, w, h);};
 
  	/**
 	 * Copy the bytes to the specified rect. w * h * pixelSize bytes will be read, whether

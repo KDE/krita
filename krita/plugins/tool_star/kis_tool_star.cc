@@ -181,6 +181,8 @@ void KisToolStar::setup(KActionCollection *collection)
 					    SLOT(activate()),
 					    collection,
 					    name());
+		Q_CHECK_PTR(m_action);
+
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	        m_innerOuterRatio=40;
@@ -225,7 +227,8 @@ QPointArray KisToolStar::starCoordinates(int N, int mx, int my, int x, int y)
 QWidget* KisToolStar::createOptionWidget(QWidget* parent)
 {
 	WdgToolStar * w = new WdgToolStar(parent);
-	
+	Q_CHECK_PTR(w);
+
 	//connect(w -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
 	m_optWidget = w;

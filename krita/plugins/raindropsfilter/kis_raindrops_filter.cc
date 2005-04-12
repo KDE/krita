@@ -64,7 +64,10 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 	Q_INT32 height = rect.height();
 
 	// create a QUANTUM array that holds the data the filter works on
-	QUANTUM * newData = src -> readBytes( x, y, width, height);
+	QUANTUM * newData = new QUANTUM[width * height * src -> pixelSize()];
+	Q_CHECK_PTR(newData);
+
+	src -> readBytes(newData, x, y, width, height);
 
 	//read the filter configuration values from the KisFilterConfiguration object
 	Q_UINT32 dropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();
@@ -135,6 +138,8 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
         BitCount = LineWidth * Height;
         uchar*    Bits = (uchar*)data;
         uchar* NewBits = new uchar[BitCount];
+	Q_CHECK_PTR(NewBits);
+
         bool** BoolMatrix = CreateBoolArray (Width, Height);
 
         int       i, j, k, l, m, n;                 // loop variables

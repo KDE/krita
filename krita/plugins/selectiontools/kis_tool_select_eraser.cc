@@ -69,6 +69,7 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 			delete m_painter;
 		KisSelectionSP selection = layer -> selection();
 		m_painter = new KisPainter(selection.data());
+		Q_CHECK_PTR(m_painter);
 		m_painter -> beginTransaction(i18n("Selection Eraser"));
 		m_painter -> setPaintColor(Qt::white); // XXX: the mask color!
 		m_painter -> setBrush(m_subject -> currentBrush());
@@ -100,6 +101,7 @@ void KisToolSelectEraser::setup(KActionCollection *collection)
 					    "selecteraser", Qt::Key_B, this,
 					    SLOT(activate()), collection,
 					    name());
+		Q_CHECK_PTR(m_action);
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
@@ -108,6 +110,7 @@ void KisToolSelectEraser::setup(KActionCollection *collection)
 QWidget* KisToolSelectEraser::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
+	Q_CHECK_PTR(m_optWidget);
 	m_optWidget -> setCaption(i18n("Selection Eraser"));
 	return m_optWidget;
 }

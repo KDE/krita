@@ -234,6 +234,8 @@ void KisToolGradient::paintLine(QPainter& gc)
 QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
+	Q_CHECK_PTR(m_optWidget);
+
 	m_optWidget -> setCaption(i18n("Gradient"));
 	
 	m_lbOpacity = new QLabel(i18n("Opacity:"), m_optWidget);

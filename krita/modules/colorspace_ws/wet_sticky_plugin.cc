@@ -62,6 +62,7 @@ WetStickyPlugin::WetStickyPlugin(QObject *parent, const char *name, const QStrin
 	if ( parent->inherits("KisFactory") )
 	{
 		m_ColorSpaceWS = new KisColorSpaceWetSticky();
+		Q_CHECK_PTR(m_ColorSpaceWS);
 		KisColorSpaceRegistry::instance() -> add(m_ColorSpaceWS);
 	}
 

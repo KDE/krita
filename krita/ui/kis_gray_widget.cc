@@ -35,6 +35,8 @@ KisGrayWidget::KisGrayWidget(QWidget *parent, const char *name) : super(parent, 
 	m_subject = 0;
 
 	m_ColorButton = new KDualColorButton(this);
+	Q_CHECK_PTR(m_ColorButton);
+
 	m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
 	QGridLayout *mGrid = new QGridLayout(this, 3, 5, 5, 2);
 

@@ -42,6 +42,8 @@ DlgHistogram::DlgHistogram( QWidget *  parent, const char * name)
 	: super (parent, name, true, i18n("Histogram"), Ok | Cancel, Ok)
 {
 	m_page = new KisHistogramWidget(this, "histogram");
+	Q_CHECK_PTR(m_page);
+
 	setCaption(i18n("Histogram"));
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());

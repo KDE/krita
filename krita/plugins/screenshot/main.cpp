@@ -27,6 +27,7 @@ int main(int argc, char **argv)
 
   // Create top level window
   KSnapshot *toplevel= new KSnapshot();
+  Q_CHECK_PTR(toplevel);
   app.dcopClient()->setDefaultObject( toplevel->objId() );
   toplevel->setCaption( app.makeStdCaption("") );
   toplevel->setIcon(SmallIcon("ksnapshot"));

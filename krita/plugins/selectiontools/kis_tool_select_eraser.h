@@ -59,7 +59,12 @@ public:
 	KisToolSelectEraserFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectEraserFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolSelectEraser(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolSelectEraser(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("eraserselect", i18n("Eraser select tool")); }
 };
 

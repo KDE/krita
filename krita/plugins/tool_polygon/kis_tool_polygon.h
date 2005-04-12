@@ -87,7 +87,12 @@ public:
 	KisToolPolygonFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolPolygonFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolPolygon(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolPolygon(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("polygon", i18n("Polygon tool")); }
 };
 

@@ -606,6 +606,8 @@ KisFilterConfiguration* KisCImgFilter::configuration(KisFilterConfigurationWidge
 	if( widget == 0 )
 	{
 		KisCImgFilterConfiguration * cfg = new KisCImgFilterConfiguration();
+		Q_CHECK_PTR(cfg);
+
 		cfg -> nb_iter        = 1;
 		cfg -> dt             = 20.0f;
 		cfg -> sigma          = 1.4f;

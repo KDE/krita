@@ -36,8 +36,13 @@
 KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize)
 {
 	m_pixelSize = pixelSize;
+
 	m_defaultTile = new KisTile(pixelSize,0,0);
+	Q_CHECK_PTR(m_defaultTile);
+
 	m_hashTable = new KisTile * [1024];
+	Q_CHECK_PTR(m_hashTable);
+
 	for(int i = 0; i < 1024; i++)
 		m_hashTable [i] = 0;
 	m_numTiles = 0;
@@ -51,8 +56,13 @@ KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize)
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
 {
 	m_pixelSize = dm.m_pixelSize;
+
 	m_defaultTile = new KisTile(*dm.m_defaultTile, dm.m_defaultTile->getCol(), dm.m_defaultTile->getRow());
+	Q_CHECK_PTR(m_defaultTile);
+
 	m_hashTable = new KisTile * [1024];
+	Q_CHECK_PTR(m_hashTable);
+
 	m_numTiles = 0;
 	m_currentMemento = 0;
 	m_extentMinX = dm.m_extentMinX;
@@ -70,6 +80,8 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
 		while(tile)
 		{
 			KisTile *newtile = new KisTile(*tile, tile->getCol(), tile->getRow());
+			Q_CHECK_PTR(newtile);
+
 			newtile->setNext(m_hashTable[i]);
 			m_hashTable[i] = newtile;
 			tile = tile->getNext();
@@ -150,6 +162,8 @@ bool KisTiledDataManager::read(KoStore *store)
 		Q_UINT32 tileHash = calcTileHash(col, row);
 
 		KisTile *tile = new KisTile(m_pixelSize, col, row);
+		Q_CHECK_PTR(tile);
+
 		updateExtent(col,row);
 
 		store->read((char *)tile->m_data, KisTile::HEIGHT * KisTile::WIDTH * m_pixelSize);
@@ -283,6 +297,8 @@ Q_UINT32 KisTiledDataManager::calcTileHash(Q_INT32 col, Q_INT32 row)
 KisMemento *KisTiledDataManager::getMemento()
 {
 	m_currentMemento = new KisMemento();
+	Q_CHECK_PTR(m_currentMemento);
+
 	return m_currentMemento;
 }
 
@@ -338,6 +354,8 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 			else
 			{
 				KisMemento::DeletedTile *d = new KisMemento::DeletedTile;
+				Q_CHECK_PTR(d);
+
 				d->col = tile->getCol();
 				d->row = tile->getRow();
 				d->next = memento->m_delTilesTable;
@@ -346,6 +364,8 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 
 			// Put a copy of the memento tile into our hashtable
 			curTile = new KisTile(*tile);
+			Q_CHECK_PTR(curTile);
+
 			curTile->setNext(m_hashTable[i]);
 			m_hashTable[i] = curTile;
 
@@ -392,6 +412,8 @@ void KisTiledDataManager::rollforward(KisMemento *memento)
 
 			// Put a copy of the memento tile into our hashtable
 			curTile = new KisTile(*tile);
+			Q_CHECK_PTR(curTile);
+
 			curTile->setNext(m_hashTable[i]);
 			m_hashTable[i] = curTile;
 
@@ -449,6 +471,8 @@ void KisTiledDataManager::ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32
 		return; // it has allready been stored
 
 	tile = new KisTile(*refTile);
+	Q_CHECK_PTR(tile);
+
 	tile->setNext(m_currentMemento->m_hashTable[tileHash]);
 	m_currentMemento->m_hashTable[tileHash] = tile;
 	m_currentMemento->m_numTiles++;
@@ -487,6 +511,8 @@ KisTile *KisTiledDataManager::getTile(Q_INT32 col, Q_INT32 row, bool writeAccess
 		{
 			// Create a new tile
 			tile = new KisTile(*m_defaultTile, col, row);
+			Q_CHECK_PTR(tile);
+
 			tile->setNext(m_hashTable[tileHash]);
 			m_hashTable[tileHash] = tile;
 			m_numTiles++;
@@ -560,8 +586,9 @@ void KisTiledDataManager::setPixel(Q_INT32 x, Q_INT32 y, const Q_UINT8 * data)
 }
 
 
-Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
-					 Q_INT32 w, Q_INT32 h)
+void KisTiledDataManager::readBytes(Q_UINT8 * data, 
+				    Q_INT32 x, Q_INT32 y,
+				    Q_INT32 w, Q_INT32 h)
 {
  	if (w < 0)
  		w = 0;
@@ -569,7 +596,6 @@ Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
  	if (h < 0)
 		h = 0;
 
- 	Q_UINT8 * data = new Q_UINT8[w * h * m_pixelSize];
 	Q_UINT8 * ptr = data;
 
 	Q_INT32 dstY = 0;
@@ -613,7 +639,6 @@ Q_UINT8 * KisTiledDataManager::readBytes(Q_INT32 x, Q_INT32 y,
 		rowsRemaining -= rows;
 	}
 
-	return data;
 }
 
 

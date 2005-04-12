@@ -38,6 +38,7 @@
 KisPaintOp * KisPenOpFactory::createOp(KisPainter * painter)
 { 
 	KisPaintOp * op = new KisPenOp(painter); 
+	Q_CHECK_PTR(op);
 	return op; 
 }
 

@@ -42,6 +42,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 	if(KisPaintOpRegistry::m_singleton == 0)
 	{
 		KisPaintOpRegistry::m_singleton = new KisPaintOpRegistry();
+		Q_CHECK_PTR(KisPaintOpRegistry::m_singleton);
 	}
 	return KisPaintOpRegistry::m_singleton;
 }

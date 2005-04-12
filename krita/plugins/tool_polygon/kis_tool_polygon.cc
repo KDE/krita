@@ -56,6 +56,7 @@ KisToolPolygon::KisToolPolygon()
 // 	m_useGradient = false;
 // 	m_fillSolid = false;
         m_points = new KisPointVector();
+	Q_CHECK_PTR(m_points);
 }
 
 KisToolPolygon::~KisToolPolygon()
@@ -205,6 +206,7 @@ void KisToolPolygon::setup(KActionCollection *collection)
 					    SLOT(activate()),
 					    collection,
 					    name());
+		Q_CHECK_PTR(m_action);
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
         }

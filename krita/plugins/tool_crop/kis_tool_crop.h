@@ -112,7 +112,12 @@ public:
 	KisToolCropFactory(KActionCollection * ac ) : super(ac) {};
 	virtual ~KisToolCropFactory(){};
 
-	virtual KisTool * createTool() { KisTool * t = new KisToolCrop(); t -> setup(m_ac); return t;}
+	virtual KisTool * createTool() { 
+		KisTool * t = new KisToolCrop(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t;
+	}
 	virtual KisID id() { return KisID("crop", i18n("Crop tool")); }
 };
 

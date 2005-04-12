@@ -98,6 +98,8 @@ void KisRuler::recalculateSize()
 	}
 
 	m_pixmapBuffer = new QPixmap(w, h);
+	Q_CHECK_PTR(m_pixmapBuffer);
+
 	drawRuler();
 	updatePointer(m_currentPosition, m_currentPosition);
 }

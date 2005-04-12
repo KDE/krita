@@ -49,6 +49,7 @@ DlgImageSize::DlgImageSize( QWidget *  parent,
 	m_lock = false;
 
 	m_page = new WdgImageSize(this, "image_size");
+	Q_CHECK_PTR(m_page);
 
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());

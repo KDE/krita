@@ -54,7 +54,12 @@ public:
 	KisToolPenFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolPenFactory(){};
 
-	virtual KisTool * createTool() { KisTool * t =  new KisToolPen(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolPen(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("pen", i18n("Pen tool")); }
 };
 

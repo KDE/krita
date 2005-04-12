@@ -57,6 +57,8 @@ class KisToolLine : public KisToolPaint {
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
 
+//	virtual QWidget* createOptionWidget(QWidget* parent);
+//	virtual QWidget* optionWidget();
 
  private:
 	void paintLine();
@@ -76,6 +78,8 @@ class KisToolLine : public KisToolPaint {
 
 	QUANTUM m_opacity;
 	CompositeOp m_compositeOp;
+
+	QWidget *m_optWidget;
 };
 
 
@@ -85,7 +89,12 @@ public:
 	KisToolLineFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolLineFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolLine(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolLine(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("line", i18n("Line tool")); }
 };
 

@@ -43,13 +43,16 @@ KisFilterConfigurationWidget* KisBrightnessContrastFilter::createConfigurationWi
 	vKisIntegerWidgetParam param;
 	param.push_back( KisIntegerWidgetParam( -100, 100, 0, i18n("Brightness") ) );
 	param.push_back( KisIntegerWidgetParam( -100, 100, 0, i18n("Contrast") ) );
-	return new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
+	KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
+	Q_CHECK_PTR(w);
+	return w;
 }
 
 KisFilterConfiguration* KisBrightnessContrastFilter::configuration(KisFilterConfigurationWidget* nwidget)
 {
 	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-	if( widget == 0 )
+	
+	if ( widget == 0 )
 	{
 		return new KisBrightnessContrastFilterConfiguration( 0, 0 );
 	} else {

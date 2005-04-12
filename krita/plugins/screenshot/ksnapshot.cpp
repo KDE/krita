@@ -62,6 +62,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
 	: super(parent, name, false, QString::null, Ok|Cancel)
 {
 	grabber = new QWidget( 0, 0, WStyle_Customize | WX11BypassWM );
+	Q_CHECK_PTR(grabber);
 	grabber->move( -1000, -1000 );
 	grabber->installEventFilter( this );
 
@@ -73,6 +74,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
 
 	QVBox *vbox = makeVBoxMainWidget();
 	mainWidget = new KSnapshotWidget( vbox, "mainWidget" );
+	Q_CHECK_PTR(mainWidget);
 
 	connect(mainWidget, SIGNAL(startImageDrag()), SLOT(slotDragSnapshot()));
 
@@ -96,7 +98,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
 	connect( &grabTimer, SIGNAL( timeout() ), this, SLOT(  grabTimerDone() ) );
 
 	KAccel* accel = new KAccel(this);
-
+	Q_CHECK_PTR(accel);
 	accel->insert(KStdAccel::Print, this, SLOT(slotPrint()));
 	accel->insert(KStdAccel::New, this, SLOT(slotGrab()));
 
@@ -164,6 +166,7 @@ void KSnapshot::slotCopy()
 void KSnapshot::slotDragSnapshot()
 {
 	QDragObject *drobj = new QImageDrag(snapshot.convertToImage(), this);
+	Q_CHECK_PTR(drobj);
 	drobj->setPixmap(mainWidget->preview());
 	drobj->dragCopy();
 }
@@ -174,6 +177,7 @@ void KSnapshot::slotGrab()
 	if ( mainWidget->mode() == Region )
 	{
 		rgnGrab = new RegionGrabber();
+		Q_CHECK_PTR(rgnGrab);
 		connect( rgnGrab, SIGNAL( regionGrabbed( const QPixmap & ) ),
 			 SLOT( slotRegionGrabbed( const QPixmap & ) ) );
 	}

@@ -75,6 +75,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 	if ( parent->inherits("KisFactory") )
 	{
 		m_colorSpaceWet = new KisColorSpaceWet();
+		Q_CHECK_PTR(m_colorSpaceWet);
 		KisColorSpaceRegistry::instance() -> add(m_colorSpaceWet);
 	}
 	else if (parent -> inherits("KisView"))
@@ -83,9 +84,12 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 		// Create the wet brush
 		// Create the wet palette
 		m_docker = new KisDockFrameDocker(m_view, "watercolor docker");
+		Q_CHECK_PTR(m_docker);
 		m_docker -> setCaption(i18n("Watercolor Paint Options"));
 
 		KisWetPaletteWidget * w = new KisWetPaletteWidget(m_docker);
+		Q_CHECK_PTR(w);
+
 		w -> setCaption(i18n("Paints"));
 		m_docker -> plug(w);
 		m_view -> mainWindow()->addDockWindow( m_docker, DockRight );

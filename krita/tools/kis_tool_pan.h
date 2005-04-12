@@ -58,7 +58,12 @@ public:
 	KisToolPanFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolPanFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolPan(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolPan(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("pan", i18n("Pan tool")); }
 };
 

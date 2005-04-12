@@ -91,7 +91,12 @@ public:
 	KisToolStarFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolStarFactory(){};
 	
-	virtual KisTool * createTool() { KisTool * t =  new KisToolStar(); t -> setup(m_ac); return t; }
+	virtual KisTool * createTool() { 
+		KisTool * t =  new KisToolStar(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); 
+		return t; 
+	}
 	virtual KisID id() { return KisID("starshape", i18n("Star tool")); }
 };
 

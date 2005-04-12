@@ -166,11 +166,18 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         targetH = QABS( targetH );
 
         QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> pixelSize() * sizeof(QUANTUM)];
+	Q_CHECK_PTR(newData);
+
         int n;				/* pixel number */
         double center, left, right;	/* filter calculation variables */
         double m_width, fscale, weight[m_dev -> pixelSize()];	/* filter calculation variables */
+
         QUANTUM *pel = new QUANTUM[m_dev -> pixelSize() * sizeof(QUANTUM)];
+	Q_CHECK_PTR(pel);
+
         QUANTUM *pel2 = new QUANTUM[m_dev -> pixelSize() * sizeof(QUANTUM)];
+	Q_CHECK_PTR(pel2);
+
         bool bPelDelta[m_dev -> pixelSize()];
         CLIST	*contribY;		/* array of contribution lists */
         CLIST	contribX;
@@ -181,6 +188,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
         // create intermediate column to hold horizontal dst column zoom
         QUANTUM * tmp = new QUANTUM[height * m_dev -> pixelSize() * sizeof(QUANTUM)];
+	Q_CHECK_PTR(tmp);
 
         //progress info
         m_cancelRequested = false;
@@ -260,11 +268,11 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                                 weight[channel] = 0.0;
                                 bPelDelta[channel] = FALSE;
                         }
-                        pel = m_dev -> readBytes(contribX.p[0].m_pixel, y, 1, 1);
+                        m_dev -> readBytes(pel, contribX.p[0].m_pixel, y, 1, 1);
                         for(int xx = 0; xx < contribX.n; xx++)
                         {
                                 if (!(contribX.p[xx].m_pixel < 0 || contribX.p[xx].m_pixel >= width)){
-                                        pel2 = m_dev -> readBytes(contribX.p[xx].m_pixel, y, 1, 1);
+                                        m_dev -> readBytes(pel2, contribX.p[xx].m_pixel, y, 1, 1);
                                         for(int channel = 0; channel < m_dev -> pixelSize(); channel++)
                                         {
                                                 if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;

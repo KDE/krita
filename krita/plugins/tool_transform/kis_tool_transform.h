@@ -107,7 +107,11 @@ public:
 	KisToolTransformFactory(KActionCollection * ac ) : super(ac) {};
 	virtual ~KisToolTransformFactory(){};
 
-	virtual KisTool * createTool() { KisTool * t = new KisToolTransform(); t -> setup(m_ac); return t;}
+	virtual KisTool * createTool() { 
+		KisTool * t = new KisToolTransform(); 
+		Q_CHECK_PTR(t);
+		t -> setup(m_ac); return t;
+	}
 	virtual KisID id() { return KisID("transform", i18n("Transform tool")); }
 };
 

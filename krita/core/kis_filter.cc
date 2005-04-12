@@ -54,6 +54,7 @@ void KisFilter::refreshPreview( )
 	if( m_dialog == 0 )
 		return;
 	m_dialog -> previewWidget() -> slotRenewLayer();
+	
 	KisLayerSP layer = m_dialog -> previewWidget() -> getLayer();
 	KisFilterConfiguration* config = configuration(m_widget);
 	QRect rect = layer -> extent();
@@ -77,6 +78,8 @@ void KisFilter::slotActivated()
 
 	// Create the config dialog
 	m_dialog = new KisPreviewDialog( (QWidget*) m_view, id().name().ascii(), true, id().name());
+	Q_CHECK_PTR(m_dialog);
+
 	m_widget = createConfigurationWidget( (QWidget*)m_dialog->container() );
 
 	if( m_widget != 0)
@@ -114,6 +117,7 @@ void KisFilter::slotActivated()
 
 	enableProgress();
 	KisTransaction * cmd = new KisTransaction(id().name(), layer.data());
+	Q_CHECK_PTR(cmd);
 	process((KisPaintDeviceSP)layer, (KisPaintDeviceSP)layer, config, rect);
 	img -> undoAdapter() -> addCommand(cmd);
 	// Yuck, filters should work against the canvassubject interface, not the view object.

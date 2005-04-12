@@ -137,6 +137,8 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 	m_subject = view -> getCanvasSubject();
 
 	m_page = new WdgColorRange(this, "color_range");
+	Q_CHECK_PTR(m_page);
+
 	setCaption(i18n("Color Range"));
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
@@ -151,6 +153,8 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 	}
 
         m_transaction = new KisTransaction(i18n("Select by Color Range"), m_selection.data());
+	Q_CHECK_PTR(m_transaction);
+
         updatePreview();
 
 	m_invert = false;

@@ -54,6 +54,7 @@ KisClipboard* KisClipboard::instance()
 	if(KisClipboard::m_singleton == 0)
 	{
 		KisClipboard::m_singleton = new KisClipboard();
+		Q_CHECK_PTR(KisClipboard::m_singleton);
 	}
 	return KisClipboard::m_singleton;
 }
@@ -100,7 +101,7 @@ void KisClipboard::clipboardDataChanged()
 			m_clip =
 				new KisPaintDevice(cs,
 						   "KisClipboard created clipboard selection");
-
+			Q_CHECK_PTR(m_clip);
 			m_clip -> convertFromImage(qimg);
 		}
 	}

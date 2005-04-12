@@ -443,8 +443,13 @@ void KisToolTransform::transform() {
 	if (!img)
 		return;
 
+	Q_INT32 w = m_endPos.x() - m_startPos.x();
+	Q_INT32 h = m_endPos.y() - m_startPos.y();
+	
+	double tx = m_translateX - m_org_cenX * m_scaleX;
+	double ty = m_translateY - m_org_cenY * m_scaleY;
 	KisProgressDisplayInterface *progress = 0;//view() -> progressDisplay();
-	img->activeLayer()->transform(1, 1, 0, 0, 1, -256, 0, progress);
+	img->activeLayer()->transform(m_scaleX*w, m_scaleY*w, 0, 0, w, tx, ty, progress);
 	
 	QRect rc = img->activeLayer()->extent();
 	rc = rc.normalize();

@@ -261,7 +261,7 @@ QRect KisPaintDevice::exactBounds()
 
 	kdDebug() << "Extent: " << x << ", " << y << ", " << w << ", " << h << "\n";
 	extent(boundX, boundY, boundW, boundH);
-	Q_UINT8 * emptyPixel = new Q_UINT8(m_pixelSize);
+	Q_UINT8 * emptyPixel = new Q_UINT8[m_pixelSize];
 	Q_CHECK_PTR(emptyPixel);
 
 	memset(emptyPixel, 0, m_pixelSize);
@@ -326,7 +326,7 @@ QRect KisPaintDevice::exactBounds()
 		if (found) break;
 	}
 		
-	delete emptyPixel;
+	delete [] emptyPixel;
 	kdDebug() << "Bounds: " << boundX << ", " << boundY << ", " << boundW << ", " << boundH << "\n";
 	return QRect(boundX, boundY, boundW, boundH);
 }

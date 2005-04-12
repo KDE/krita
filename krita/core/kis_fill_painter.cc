@@ -294,7 +294,7 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& 
 			break;
 		m_map[y*m_width + x] = true;
 		++m_pixelsDone;
-		KisPixel data = it.pixel();
+		KisPixelRO data = it.rawData();
 		diff = difference(m_oldColor, data);
 		if (diff == MAX_SELECTED) {
 			// m_selection -> setSelected(x, y, diff);
@@ -320,7 +320,7 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& 
 }
 
 /* RGB-only I fear */
-QUANTUM KisFillPainter::difference(const QUANTUM* src, KisPixel dst)
+QUANTUM KisFillPainter::difference(const QUANTUM* src, KisPixelRO dst)
 {
 	QUANTUM max = 0, diff = 0;
 	int depth = m_device->pixelSize();

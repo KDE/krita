@@ -4,5 +4,5 @@ templatesdir = $(kde_datadir)/krita/templates/rgb
 templatesrc_DATA = transparent_1024x768.kra transparent_1280x1024.kra transparent_1600x1200.kra transparent_640x480.kra white_1024x768.kra white_1280x1024.kra white_1600x1200.kra white_640x480.kra
 templatesrcdir = $(kde_datadir)/krita/templates/rgb/.source
 
-templatesicon_DATA = empty.png
-templatesicondir = $(kde_datadir)/krita/templates/rgb/.icon
+templatesicon_ICON = AUTO
+templatesicondir = $(kde_datadir)/krita/icons

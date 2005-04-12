@@ -67,10 +67,10 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 
 	// XXX: Fix this: this filter can easily use the iterators without much work.
 	// create a QUANTUM array that holds the data the filter works on
-	QUANTUM * newData = new QUANTUM[width * height * src -> pixelSize()]
+	QUANTUM * newData = new QUANTUM[width * height * src -> pixelSize()];
 	Q_CHECK_PTR(newData);
 
-	src -> readBytes(newData, x, y, width, height);
+	src->readBytes(newData, x, y, width, height);
 
 	//read the filter configuration values from the KisFilterConfiguration object
 	Q_UINT32 brushSize = ((KisOilPaintFilterConfiguration*)configuration)->brushSize();

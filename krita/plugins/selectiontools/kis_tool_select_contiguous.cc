@@ -180,7 +180,7 @@ void KisToolSelectContiguous::fillSelection(KisPaintDeviceSP device, enumSelecti
 	m_device = device;
 
 	if (device -> hasSelection()) {
-		if (device -> selection() -> selected() > MIN_SELECTED)
+		if (device -> selection() -> selected(startX, startY) > MIN_SELECTED)
 			return;
 
 		if (mode == SELECTION_REPLACE)

@@ -231,6 +231,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 KisView::~KisView()
 {
 	delete m_dcop;
+	delete m_dockerManager;
 
 
 }

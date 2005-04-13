@@ -105,6 +105,13 @@ KisDockerManager::~KisDockerManager()
 		delete m_toolDockManager;
 	}
 
+	// make sure that the dockers get deleted
+	delete m_layerchanneldocker;
+	delete m_shapesdocker;
+	delete m_fillsdocker;
+	delete m_toolcontroldocker;
+	delete m_colordocker;
+	delete m_paintboxdocker;
 }
 
 void KisDockerManager::addDockerTab(QWidget * tab, const KisID & docker, enumDockerStyle docktype)

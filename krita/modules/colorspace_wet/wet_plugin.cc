@@ -64,6 +64,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)
 {
        	setInstance(WetPluginFactory::instance());
+	m_docker = 0;
 
  	kdDebug() << "Wet Color model plugin. Class: "
  		  << className()
@@ -101,6 +102,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 
 WetPlugin::~WetPlugin()
 {
+	delete m_docker;
 }
 
 #include "wet_plugin.moc"

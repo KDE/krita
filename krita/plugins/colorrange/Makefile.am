@@ -29,5 +29,4 @@ KDE_OPTIONS = nofinal
 # directory for pixmaps
 kritapics_DATA=selectpicker.png
 kritapicsdir = $(kde_datadir)/krita/pics
-KDE_ICON = krita
 

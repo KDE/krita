@@ -97,6 +97,11 @@ void KisFilter::slotActivated()
 			return;
 		}
 	}
+	else
+	{
+		delete m_dialog;
+		m_dialog = 0;
+	}
 
 	QCursor oldCursor = m_view -> cursor();
 	m_view -> setCursor(KisCursor::waitCursor());
@@ -116,16 +121,24 @@ void KisFilter::slotActivated()
 	}
 
 	enableProgress();
+	m_cancelRequested = false;
+
 	KisTransaction * cmd = new KisTransaction(id().name(), layer.data());
 	Q_CHECK_PTR(cmd);
 	process((KisPaintDeviceSP)layer, (KisPaintDeviceSP)layer, config, rect);
-	img -> undoAdapter() -> addCommand(cmd);
-	// Yuck, filters should work against the canvassubject interface, not the view object.
-	// code against interfaces, not implementations!
-	dynamic_cast<KisCanvasSubject*>(m_view) -> document() -> setModified(true);
-	disableProgress();
 
-	img->notify();
+	if (m_cancelRequested) {
+		cmd -> unexecute();
+		delete cmd;
+	} else {
+		img -> undoAdapter() -> addCommand(cmd);
+		// Yuck, filters should work against the canvassubject interface, not the view object.
+		// code against interfaces, not implementations!
+		dynamic_cast<KisCanvasSubject*>(m_view) -> document() -> setModified(true);
+		img->notify();
+	}
+
+	disableProgress();
 	
 	m_view -> setCursor(oldCursor);
 

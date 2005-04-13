@@ -26,6 +26,8 @@ KisTiledHLineIterator::KisTiledHLineIterator( KisTiledDataManager *ndevice,  Q_I
 	KisTiledIterator(ndevice),
 	m_right(x+w-1)
 {
+	Q_ASSERT(ndevice != 0);
+
 	m_writable = writable;
 	m_x = x;
 	m_y = y;

@@ -114,6 +114,9 @@ KisTiledDataManager::~KisTiledDataManager()
 
 bool KisTiledDataManager::write(KoStore *store)
 {
+
+	Q_ASSERT(store != 0);
+
 	char str[80];
 
 	sprintf(str, "%d\n", m_numTiles);
@@ -140,10 +143,13 @@ bool KisTiledDataManager::write(KoStore *store)
 }
 bool KisTiledDataManager::read(KoStore *store)
 {
+	Q_ASSERT(store != 0);
+
 	char str[80];
 	Q_INT32 x,y,w,h;
 
 	QIODevice *stream = store->device();
+	Q_ASSERT(stream != 0);
 
 	stream->readLine(str, 79);
 
@@ -304,6 +310,7 @@ KisMemento *KisTiledDataManager::getMemento()
 
 void KisTiledDataManager::rollback(KisMemento *memento)
 {
+	Q_ASSERT(memento != 0);
 	// Rollback means restoring all of the tiles in the memento to our hashtable.
 
 	// But first clear the memento redo hashtable.
@@ -376,6 +383,8 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 
 void KisTiledDataManager::rollforward(KisMemento *memento)
 {
+	Q_ASSERT(memento != 0);
+
 	// Rollforward means restoring all of the tiles in the memento's redo to our hashtable.
 
 	for(int i = 0; i < 1024; i++)
@@ -453,6 +462,8 @@ void KisTiledDataManager::rollforward(KisMemento *memento)
 
 void KisTiledDataManager::ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, KisTile *refTile)
 {
+	Q_ASSERT(refTile != 0);
+
 	// Basically we search for the tile in the current memento, and if it's already there we do nothing, otherwise
 	//  we make a copy of the tile and put it in the current memento
 
@@ -590,6 +601,7 @@ void KisTiledDataManager::readBytes(Q_UINT8 * data,
 				    Q_INT32 x, Q_INT32 y,
 				    Q_INT32 w, Q_INT32 h)
 {
+	Q_ASSERT(data != 0);
  	if (w < 0)
  		w = 0;
 
@@ -646,6 +658,7 @@ void KisTiledDataManager::writeBytes(const Q_UINT8 * bytes,
 				     Q_INT32 x, Q_INT32 y,
 				     Q_INT32 w, Q_INT32 h)
 {
+	Q_ASSERT(bytes != 0);
  	// XXX: Is this correct?
 	if (w < 0)
 		w = 0;

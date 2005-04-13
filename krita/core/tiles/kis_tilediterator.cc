@@ -24,6 +24,7 @@
 
 KisTiledIterator::KisTiledIterator( KisTiledDataManager *ndevice)
 {
+	Q_ASSERT(ndevice != 0);
 	m_ktm = ndevice;
 	m_x = 0;
 	m_y = 0;
@@ -50,7 +51,10 @@ const Q_UINT8 * KisTiledIterator::oldRawData() const
 void KisTiledIterator::fetchTileData(Q_INT32 col, Q_INT32 row)
 {
 	KisTile *tile = m_ktm->getTile(col, row, m_writable);
+	Q_ASSERT(tile != 0);
+
 	m_data = tile->data();
+	Q_ASSERT(m_data != 0);
 
 	// set old data but default to current value
 	m_oldData = m_ktm->getOldTile(col, row, tile)->data();

@@ -301,9 +301,15 @@ void KisView::setupTabBar()
 
 void KisView::popupTabBarMenu( const QPoint& _point )
 {
+	return; // XXX: We haven't defined a menu yet, and won't do so during the freeze.
+#if 0
 	if ( !m_doc->isReadWrite() || !factory() )
 		return;
-	static_cast<QPopupMenu*>(factory()->container("menuimage_popup",this))->popup(_point);
+	void * p = factory()->container("menuimage_popup",this);
+	Q_ASSERT(p);
+	if (p)
+		static_cast<QPopupMenu*>(p)->popup(_point);
+#endif
 }
 
 void KisView::moveImage( unsigned img , unsigned target)

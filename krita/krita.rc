@@ -149,7 +149,7 @@
 <ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
 </ToolBar>
 
-<ToolBar name="transform_tools" position="top"<Text>Transformation Tools</Text>
+<ToolBar name="transform_tools" position="top"><Text>Transformation Tools</Text>
 	<Action name="mirrorLayerX"/>
 	<Action name="mirrorLayerY"/>
 </ToolBar>

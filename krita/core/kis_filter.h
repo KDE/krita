@@ -116,8 +116,23 @@ private slots:
 protected:
 
   	KisStrategyColorSpaceSP colorStrategy();
+
+	bool progressEnabled() const { return m_progressEnabled; }
+	bool cancelRequested() const { return m_progressEnabled && m_cancelRequested; }
+
+	// Convenience functions for progress display.
+	void setProgressTotalSteps(Q_INT32 totalSteps);
+	void setProgress(Q_INT32 progress);
+	void setProgressStage(const QString& stage, Q_INT32 progress);
+	void setProgressDone();
+
+private:
 	bool m_cancelRequested;
 	bool m_progressEnabled;
+
+protected:
+	Q_INT32 m_progressTotalSteps;
+	Q_INT32 m_lastProgressPerCent;
 
 	KisID m_id;
 	KisView * m_view;

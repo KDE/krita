@@ -49,7 +49,7 @@ public:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
 	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
 private:
-	void OilPaint(QUANTUM* data, int w, int h, int BrushSize, int Smoothness, KisProgressDisplayInterface *m_progress);
+	void OilPaint(QUANTUM* data, int w, int h, int BrushSize, int Smoothness);
 	inline uint MostFrequentColor(uchar* Bits, int Width, int Height, int X,
 				      int Y, int Radius, int Intensity);
 	// Function to calcule the color intensity and return the luminance (Y)

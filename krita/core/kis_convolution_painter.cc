@@ -90,6 +90,10 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 	KisPaintDeviceSP tmp = new KisPaintDevice(src -> colorStrategy(), "temporary paint device for convolving");
 	Q_CHECK_PTR(tmp);
 
+	m_cancelRequested = false;
+	int lastProgressPercent = 0;
+	emit notifyProgress(this, 0);
+
 	Q_INT32 depth = src -> colorStrategy() -> nColorChannels() + 1;
 	Q_INT32 top, left;
 
@@ -300,6 +304,17 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		y++;
 		dstY++;
 		below++;
+
+		int progressPercent = ((y - top) * 100) / h;
+
+		if (progressPercent > lastProgressPercent) {
+			emit notifyProgress(this, progressPercent);
+			lastProgressPercent = progressPercent;
+
+			if (m_cancelRequested) {
+				return;
+			}
+		}
 	}
 	{
 		KisHLineIteratorPixel beforeIt = src->createHLineIterator(left, above, w, false);
@@ -388,4 +403,6 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 			}
 		}
 	}
+
+	emit notifyProgressDone(this);
 }

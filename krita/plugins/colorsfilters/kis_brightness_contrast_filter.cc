@@ -70,7 +70,11 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 	Q_INT32 depth = src->nChannels() - 1;
 	double contrast = (100.0 + configBC->contrast()) / 100;
 	contrast *= contrast;
-	while( ! srcIt.isDone()  )
+
+	setProgressTotalSteps(rect.width() * rect.height());
+	Q_INT32 pixelsProcessed = 0;
+
+	while( ! srcIt.isDone()  && !cancelRequested())
 	{
 		for( int i = 0; i < depth; i++)
 		{
@@ -81,5 +85,10 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 		}
 		++srcIt;
 		++dstIt;
+
+		pixelsProcessed++;
+		setProgress(pixelsProcessed);
 	}
+
+	setProgressDone();
 }

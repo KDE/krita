@@ -263,6 +263,8 @@ public:
 	void setDab(KisPaintDeviceSP dab) { m_dab = dab; }
 	KisPaintDeviceSP dab() const { return m_dab; }
 
+	bool cancelRequested() const { return m_cancelRequested; }
+
 protected:
 
 	void init();

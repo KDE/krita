@@ -36,6 +36,7 @@
 #include "kis_id.h"
 #include "kis_canvas_subject.h"
 #include "kis_doc.h"
+#include <kis_progress_display_interface.h>
 
 KisFilter::KisFilter(const KisID& id, KisView * view) :
 	m_id(id),
@@ -75,6 +76,8 @@ void KisFilter::slotActivated()
 
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
+
+	disableProgress();
 
 	// Create the config dialog
 	m_dialog = new KisPreviewDialog( (QWidget*) m_view, id().name().ascii(), true, id().name());
@@ -121,7 +124,6 @@ void KisFilter::slotActivated()
 	}
 
 	enableProgress();
-	m_cancelRequested = false;
 
 	KisTransaction * cmd = new KisTransaction(id().name(), layer.data());
 	Q_CHECK_PTR(cmd);
@@ -149,10 +151,58 @@ void KisFilter::slotActivated()
 
 void KisFilter::enableProgress() {
 	m_progressEnabled = true;
+	m_cancelRequested = false;
 }
 
 void KisFilter::disableProgress() {
 	m_progressEnabled = false;
+	m_cancelRequested = false;
+}
+
+void KisFilter::setProgressTotalSteps(Q_INT32 totalSteps)
+{
+	if (m_progressEnabled) {
+
+		m_progressTotalSteps = totalSteps;
+		m_lastProgressPerCent = 0;
+
+		KisProgressDisplayInterface *progress = view() -> progressDisplay();
+
+		progress -> setSubject(this, true, true);
+		emit notifyProgress(this, 0);
+	}
+}
+
+void KisFilter::setProgress(Q_INT32 progress)
+{
+	if (m_progressEnabled) {
+
+		Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
+
+		if (progressPerCent != m_lastProgressPerCent) {
+
+			m_lastProgressPerCent = progressPerCent;
+			emit notifyProgress(this, progressPerCent);
+		}
+	}
+}
+
+void KisFilter::setProgressStage(const QString& stage, Q_INT32 progress)
+{
+	if (m_progressEnabled) {
+
+		Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
+
+		m_lastProgressPerCent = progressPerCent;
+		emit notifyProgressStage(this, stage, progressPerCent);
+	}
+}
+
+void KisFilter::setProgressDone()
+{
+	if (m_progressEnabled) {
+		emit notifyProgressDone(this);
+	}
 }
 
 void KisFilter::setAutoUpdate(bool set) {

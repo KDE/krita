@@ -522,7 +522,7 @@ void KisCImgFilter::compute_LIC(int &counter)
 		{
 			counter++;
 
-			if ( m_progressEnabled ) {
+			if ( progressEnabled() ) {
 				// Update de progress bar in dialog.
 				double progress = counter;
 				progress /= (double)dest.width * dest.height * nb_iter * (180 / dtheta);
@@ -555,8 +555,7 @@ bool KisCImgFilter::process()
 
 
         //Progress info
-	if ( m_progressEnabled ) {
-		m_cancelRequested = false;
+	if ( progressEnabled() ) {
 		m_progress -> setSubject(this, true, true);
 		emit notifyProgressStage(this,i18n("Applying image restoration filter..."),0);
 	}

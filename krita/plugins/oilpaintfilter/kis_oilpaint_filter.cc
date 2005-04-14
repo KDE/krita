@@ -81,20 +81,24 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
 	//with the actual pixel data.
 
-	OilPaint(newData, width, height, brushSize, smooth, view() -> progressDisplay());
-// 	dst -> writeBytes( newData, x, y, width, height);
-	Q_INT32 pixelSize = dst -> pixelSize();
-	QUANTUM * ptr = newData;
-	for(Q_INT32 y2 = y; y2 < y + height; y2++)
-	{
-		KisHLineIteratorPixel hiter = dst -> createHLineIterator(x, y2, width, true);
-		while(! hiter.isDone())
+	OilPaint(newData, width, height, brushSize, smooth);
+
+	if (!cancelRequested()) {
+
+		//dst -> writeBytes( newData, x, y, width, height);
+		Q_INT32 pixelSize = dst -> pixelSize();
+		QUANTUM * ptr = newData;
+		for(Q_INT32 y2 = y; y2 < y + height; y2++)
 		{
-			if (hiter.isSelected()) {
-				    memcpy(hiter.rawData(), ptr , pixelSize);
+			KisHLineIteratorPixel hiter = dst -> createHLineIterator(x, y2, width, true);
+			while(! hiter.isDone())
+			{
+				if (hiter.isSelected()) {
+					    memcpy(hiter.rawData(), ptr , pixelSize);
+				}
+				ptr += pixelSize;
+				++hiter;
 			}
-			ptr += pixelSize;
-			++hiter;
 		}
 	}
 
@@ -115,14 +119,10 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
  *                     a matrix and simply write at the original position.
  */
 
-void KisOilPaintFilter::OilPaint(QUANTUM* data, int w, int h, int BrushSize, int Smoothness, KisProgressDisplayInterface *m_progress)
+void KisOilPaintFilter::OilPaint(QUANTUM* data, int w, int h, int BrushSize, int Smoothness)
 {
-        //Progress info
-	if ( m_progressEnabled ) {
-		m_cancelRequested = false;
-		m_progress -> setSubject(this, true, true);
-		emit notifyProgressStage(this,i18n("Applying oilpaint filter..."),0);
-	}
+	setProgressTotalSteps(h);
+	setProgressStage(i18n("Applying oilpaint filter..."),0);
 
         int LineWidth = w * 4;
         if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
@@ -131,9 +131,9 @@ void KisOilPaintFilter::OilPaint(QUANTUM* data, int w, int h, int BrushSize, int
         int i = 0;
         uint color;
 
-        for (int h2 = 0; !m_cancelRequested && (h2 < h); ++h2)
+        for (int h2 = 0; !cancelRequested() && (h2 < h); ++h2)
         {
-                for (int w2 = 0; !m_cancelRequested && (w2 < w); ++w2)
+                for (int w2 = 0; !cancelRequested() && (w2 < w); ++w2)
                 {
                         i = h2 * LineWidth + 4*w2;
                         color = MostFrequentColor ((uchar*)data, w, h, w2, h2, BrushSize, Smoothness);
@@ -144,14 +144,10 @@ void KisOilPaintFilter::OilPaint(QUANTUM* data, int w, int h, int BrushSize, int
                         newBits[ i ] = qRed(color);
                 }
 
-		if ( m_progressEnabled ) {
-			// Update de progress bar in dialog.
-			emit notifyProgress(this, (int) (((double)h2 * 100.0) / h));
-		}
+		setProgress(h2);
 	}
-	if ( m_progressEnabled ) {
-		emit notifyProgressDone(this);
-	}
+
+	setProgressDone();
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

@@ -175,7 +175,7 @@ void KisToolStar::setup(KActionCollection *collection)
 		KShortcut shortcut(Qt::Key_Plus);
 		shortcut.append(KShortcut(Qt::Key_F8));
 		m_action = new KRadioAction(i18n("Tool &Star"),
-					    "star",
+					    "tool_star",
 					    shortcut,
 					    this,
 					    SLOT(activate()),

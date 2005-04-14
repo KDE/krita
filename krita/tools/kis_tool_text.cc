@@ -149,7 +149,7 @@ void KisToolText::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("Tool T&ext"), 
-					    "text", 
+					    "tool_text", 
 					    Qt::SHIFT+Qt::Key_T, 
 					    this,
 					    SLOT(activate()),

@@ -30,6 +30,7 @@ class KisQuantum {
 
 public:
 	inline KisQuantum(QUANTUM* q, KisQuantumOperation* op = new KisQuantumOperationLinear()) : m_quantum(q), m_op(op) { Q_ASSERT(m_op);};
+	inline ~KisQuantum() { delete m_op; m_op = 0; }
 public:
 	inline operator QUANTUM() const { return *m_quantum; };
 

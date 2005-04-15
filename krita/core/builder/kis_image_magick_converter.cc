@@ -58,11 +58,10 @@ namespace {
 	const PIXELTYPE PIXEL_ALPHA = 3;
 
 	/**
-	 * Make this more flexible -- although... ImageMagick 
+	 * Make this more flexible -- although... ImageMagick
 	 * isn't that flexible either.
 	 */
 	KisStrategyColorSpaceSP getColorSpaceForColorType(ColorspaceType type) {
-		kdDebug() << "Colorspace type: " << type << "\n";
 		if (type == GRAYColorspace) {
 			KisColorSpaceRegistry::instance() -> get(KisID("CMYK", ""));
 		}
@@ -73,10 +72,10 @@ namespace {
 			return KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
 		}
 		return 0;
-	
+
 	}
 
-	KisProfileSP getProfileForProfileInfo(const Image * image, KisStrategyColorSpaceSP cs) 
+	KisProfileSP getProfileForProfileInfo(const Image * image, KisStrategyColorSpaceSP cs)
 	{
 #ifndef HAVE_MAGICK6
 		return 0;
@@ -84,7 +83,7 @@ namespace {
 
 		if (image->profiles == NULL)
 			return  0;
-    
+
 		const char *name;
 		const StringInfo *profile;
 
@@ -96,7 +95,6 @@ namespace {
 			profile = GetImageProfile(image, name);
 			if (profile == (StringInfo *) NULL)
 				continue;
-			kdDebug() << "Found profile: " << name << "\n";
 
 			// XXX: Hardcoded for icc type -- is that correct for us?
 			if (QString::compare(name, "icc") == 0) {
@@ -105,13 +103,7 @@ namespace {
 				cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile -> datum, (DWORD)profile -> length);
 
 				if (hProfile == (cmsHPROFILE) NULL) {
-					kdDebug() << "Could not construct profile from memory\n";
 					return 0;
-				}
-
-				if (cmsGetColorSpace(hProfile) != cs -> colorSpaceType()) {
-					kdDebug() << "Profile colorspace is not the same as image colorspace:"
-						  << cmsGetColorSpace(hProfile) << ", " << cs -> colorSpaceType() << "\n";
 				}
 
 				p = new KisProfile(hProfile, cs -> colorSpaceType());
@@ -388,7 +380,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 		return KisImageBuilder_RESULT_INVALID_ARG;
 
 	KisImageSP img = layer -> image();
-	if (!img) 
+	if (!img)
 		return KisImageBuilder_RESULT_EMPTY;
 
 	if (uri.isEmpty())
@@ -442,7 +434,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 			DestroyImage(image);
 			emit notifyProgressError(this);
 			return KisImageBuilder_RESULT_FAILURE;
-			
+
 		}
 
 		KisHLineIterator it = layer -> createHLineIterator(0, y, width, false);
@@ -464,10 +456,10 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 		emit notifyProgressStage(this, i18n("Saving..."), y * 100 / height);
 
 #ifdef HAVE_MAGICK6
-		if (SyncImagePixels(image) == MagickFalse) 
+		if (SyncImagePixels(image) == MagickFalse)
 			kdDebug() << "Syncing pixels failed\n";
 #else
-		if (!SyncImagePixels(image)) 
+		if (!SyncImagePixels(image))
 			kdDebug() << "Syncing pixels failed\n";
 #endif
 	}
@@ -568,6 +560,7 @@ QString KisImageMagickConverter::readFilters()
 		if (mi -> decoder) {
 			name = mi -> name;
 			description = mi -> description;
+			kdDebug() << "Found import filter for: " << name << "\n";
 
 			if (!description.isEmpty() && !description.contains('/')) {
 				all += "*." + name.lower() + " *." + name + " ";
@@ -601,12 +594,13 @@ QString KisImageMagickConverter::writeFilters()
 		return s;
 
 	for (; mi; mi = reinterpret_cast<const MagickInfo*>(mi -> next)) {
+		kdDebug() << "Found export filter for: " << mi -> name << "\n";
 		if (mi -> stealth)
 			continue;
 
 		if (mi -> encoder) {
 			name = mi -> name;
-			kdDebug() << "Found: " << name << "\n";
+
 			description = mi -> description;
 
 			if (!description.isEmpty() && !description.contains('/')) {

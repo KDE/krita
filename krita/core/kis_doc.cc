@@ -376,7 +376,6 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
         if (flags==KoDocument::InitDocEmpty)
         {
-		kdDebug() << "Init doc empty\n";
                 if ((ok = slotNewImage()))
                         emit imageListUpdated();
                 setModified(false);
@@ -417,7 +416,6 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 		KURL url( file );
 		ok = openURL(url);
 	} else if (ret == KoTemplateChooseDia::Empty) {
-		kdDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>Empty.\n";
 		if ((ok = slotNewImage())) {
 			emit imageListUpdated();
 			KoDocument::setEmpty();
@@ -642,7 +640,6 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 		}
 
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(KisID(colorspacename, ""));
-// 		kdDebug() << "Colorspace: " << cs << "\n";
 		if (cs == 0) return 0;
 
 		if ((profileProductName = element.attribute("profile")).isNull()) {
@@ -1056,7 +1053,6 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfileSP pro
 	if (!m_currentImage)
 		m_currentImage = m_images[0];
 
-// 	kdDebug() << "paintContent profile: " << profile << "\n";
 
 	if (m_currentImage) {
 		x1 = CLAMP(rect.x(), 0, m_currentImage -> width());
@@ -1485,5 +1481,31 @@ bool KisDoc::importImage(const QString& filename)
 	return false;
 }
 
+bool KisDoc::exportImage(const QString& filename)
+{
+	if (filename.isEmpty()) return false;
+
+	KURL url(filename);
+
+	KisLayerSP dst;
+
+	if (!m_currentImage)
+		m_currentImage = m_images[0];
+
+	KisImage * img = new KisImage(*m_currentImage);
+	Q_CHECK_PTR(img);
+
+	KisImageMagickConverter ib(this, this);
+
+	img -> flatten();
+
+	dst = img -> layer(0);
+	Q_ASSERT(dst);
+
+	if (ib.buildFile(url, dst) == KisImageBuilder_RESULT_OK) {
+		return true;
+	}
+	return false;
+}
 #include "kis_doc.moc"
 

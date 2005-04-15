@@ -134,6 +134,7 @@ public:
 
 
 	bool importImage(const QString& filename);
+	bool exportImage(const QString& filename);
 
 public slots:
 	void slotImageUpdated();

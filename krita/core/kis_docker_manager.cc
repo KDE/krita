@@ -547,8 +547,9 @@ void KisDockerManager::setupDockers()
 		if ( m_view -> mainWindow() -> isDockEnabled( DockBottom)) {
 			m_view -> mainWindow()->addDockWindow( m_toolcontroldocker, DockRight );
 			m_view -> mainWindow()->addDockWindow( m_layerchanneldocker, DockRight );
-			m_view -> mainWindow()->addDockWindow( m_paintboxdocker, DockRight );
 			m_view -> mainWindow()->addDockWindow( m_colordocker, DockRight );
+			m_view -> mainWindow()->addDockWindow( m_paintboxdocker, DockRight );
+
 
 			m_toolcontroldocker -> show();
 			m_layerchanneldocker -> show();

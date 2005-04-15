@@ -62,7 +62,7 @@ namespace {
 }
 
 typedef KGenericFactory<KritaMagick> KritaMagickFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatoolfilter, KritaMagickFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( kritamagick, KritaMagickFactory( "krita" ) )
 
 KritaMagick::KritaMagick(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)

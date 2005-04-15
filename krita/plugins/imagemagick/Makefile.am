@@ -2,7 +2,7 @@ kritarcdir = $(kde_datadir)/krita/kpartplugins
 kritarc_DATA = kritamagick.rc
 EXTRA_DIST = $(kritarc_DATA)
 
-kde_services_DATA = kritamagick.desktop
+#kde_services_DATA = kritamagick.desktop
 
 # all_includes must remain last!
 INCLUDES = -I$(srcdir)/../../core \

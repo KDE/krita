@@ -1,51 +1,8 @@
 Krita buglist for KOffice release 1.4
 
-----------------------------------------------------------------------
+* File/Import and File/Export show some Unknown filetypes and don't
+  warn when exporting to an unsupported filetype.
 
-Templates
-
-Loading templates is broken. The very same Krita file is readable from
-the checkout tree, but won't load, not even directly, when installed
-in the template location. On loading from the template dialog, koffice
-the lib store outputs
-
-  the lib store outputs  KoDocument::loadNativeFormat( /usr/share/apps/krita/templates/rgb/.source/white_640x480.kra )
-  koffice (lib store): WARNING: /usr/share/apps/krita/templates/rgb/.source isn't writable
-
-When loading directly, e.g.,
-
-  boud@talnus:~/prj/krita/ubuild/krita> krita /usr/share/apps/krita/templates/rgb/.source/white_640x480.kra        
-
-Krita returns a KOffice error notice:
-
-Could not open /usr/share/apps/krita/templates/rgb/.source/white_640x480.kra
-Reason: Not a valid KOffice file: /usr/share/apps/krita/templates/rgb/.source/white_640x480.kra
-
-Nonetheless:
-
-boud@talnus:~/prj/krita/ubuild/krita> cp /usr/share/apps/krita/templates/rgb/.source/white_640x480.kra .
-boud@talnus:~/prj/krita/ubuild/krita> krita ./white_640x480.kra
-
-Works fine, so it isn't the actual file that is corrupted.
-                                                                    
-----------------------------------------------------------------------
-
-Import/Export/Load/Save
-
-Krita cannot load the same set of file types from File/Open or the
-initial file dialog. For instance, Krita can import Photoshop files
-from Image/Import Image, but not from File/Import or File/Open.
-
-Desired situation:
-
-File/Open and File/Save can load/save images and documents in all
-formats Krita can handle.
-
-Image/Import and Image/Export can load/save an image into the current
-document. It should be able to handle all file formats, including
-Krita's native format, that Krita can handle.
-
-----------------------------------------------------------------------
 * The radio actions for showing/hiding dockers don't work.
 
 * Removing current image does not ask whether to save the image
@@ -164,3 +121,8 @@ Transform/rotate
 
 * The transform tool does not produce reproducable resutls
 * Rotating an image leaves transparant borders around the image. 
+
+Files
+
+* Image/Export should show all posssible file formats
+* Import/Export should be in the file menu.

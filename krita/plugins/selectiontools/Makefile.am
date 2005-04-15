@@ -55,7 +55,7 @@ kritapics_DATA = \
 	tool_brush_selection.png  \
 	tool_wizard_selection.png \
 	tool_elliptical_selection.png \
-	tool_free_form_selection.svg \
+	tool_free_form_selection.png \
 	tool_polygonal_selection.png
 
 kritapicsdir = $(kde_datadir)/krita/pics

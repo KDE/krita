@@ -50,13 +50,13 @@ kritaselectiontools_la_METASOURCES = AUTO
 KDE_OPTIONS = nofinal
 
 kritapics_DATA = \
-	rectangular.png \
-	selecteraser.png \
-	selectbrush.png  \
-	select_wizard.png \
-	elliptical.png \
-	freehand.png \
-	polygonal.png
+	tool_rect_selection.png \
+	tool_eraser_selection.png \
+	tool_brush_selection.png  \
+	tool_wizard_selection.png \
+	tool_elliptical_selection.png \
+	tool_free_form_selection.svg \
+	tool_polygonal_selection.png
 
 kritapicsdir = $(kde_datadir)/krita/pics
 

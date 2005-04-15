@@ -27,6 +27,6 @@ kritacolorrange_la_METASOURCES = AUTO
 KDE_OPTIONS = nofinal
 
 # directory for pixmaps
-kritapics_DATA=selectpicker.png
+kritapics_DATA=tool_picker_selection.png
 kritapicsdir = $(kde_datadir)/krita/pics
 

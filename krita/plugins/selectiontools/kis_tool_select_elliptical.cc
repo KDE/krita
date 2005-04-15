@@ -241,7 +241,7 @@ void KisToolSelectElliptical::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("Tool &Elliptical Select"),
-					    "elliptical" ,
+					    "tool_elliptical_selection" ,
 					    Qt::Key_J,
 					    this,
 					    SLOT(activate()),

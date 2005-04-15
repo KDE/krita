@@ -299,7 +299,7 @@ void KisToolSelectPolygonal::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("Tool &Polygonal Select"),
-					    "polygonal" ,
+					    "tool_polygonal_selection" ,
 					    0,
 					    this,
 					    SLOT(activate()),

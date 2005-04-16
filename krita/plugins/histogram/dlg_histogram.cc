@@ -64,18 +64,18 @@ void DlgHistogram::setLayer(KisLayerSP layer)
 {
 	m_layer = layer;
 
-// 	// XXX: depth() - 1: compensate for the alpha channel which isn't in channels info.
-// 	// We need to rationalize Krita here: the typeWithAlpha, typeWithoutAlpha, ChannelsWithAlpha
-// 	// and WithoutAlpha are very confusing.
-// 	m_page -> setChannels(layer -> colorStrategy() -> channels(), layer -> depth() - 1);
-// 	KisChannelInfo channel = layer -> colorStrategy() -> channels()[0];
-// 	KisHistogramSP histogram = new KisHistogram(layer, channel, LINEAR);
-// 	setHistogram(histogram);
+	// XXX: depth() - 1: compensate for the alpha channel which isn't in channels info.
+	// We need to rationalize Krita here: the typeWithAlpha, typeWithoutAlpha, ChannelsWithAlpha
+	// and WithoutAlpha are very confusing.
+	m_page -> setChannels(layer -> colorStrategy() -> channels(), layer -> colorStrategy() -> nColorChannels());
+	KisChannelInfo* channel = layer -> colorStrategy() -> channels()[0];
+	KisHistogramSP histogram = new KisHistogram(layer, *channel, LINEAR);
+	setHistogram(histogram);
 
-// 	connect(m_page -> cmbChannel,
-// 		SIGNAL(activated(const QString &)),
-// 		this,
-// 		SLOT(slotChannelSelected(const QString &)));
+	connect(m_page -> cmbChannel,
+		SIGNAL(activated(const QString &)),
+		this,
+		SLOT(slotChannelSelected(const QString &)));
 
 }
 
@@ -86,15 +86,15 @@ void DlgHistogram::okClicked()
 
 void DlgHistogram::slotChannelSelected(const QString & channelName)
 {
-// 	KisChannelInfo * channels = m_layer -> colorStrategy() -> channels();
-// 	for (int i = 0; i < m_layer -> depth() - 1; i++) {
-// 		KisChannelInfo channel = channels[i];
-// 		if (channel.name() == channelName) {
-// 			KisHistogramSP histogram = new KisHistogram(m_layer, channel, LINEAR);
-// 			setHistogram(histogram);
-// 			return;
-// 		}
-// 	}
+	vKisChannelInfoSP channels = m_layer -> colorStrategy() -> channels();
+	for (int i = 0; i < m_layer -> colorStrategy() -> nColorChannels(); i++) {
+		KisChannelInfo* channel = channels[i];
+		if (channel -> name() == channelName) {
+			KisHistogramSP histogram = new KisHistogram(m_layer, *channel, LINEAR);
+			setHistogram(histogram);
+			return;
+		}
+	}
 }
 
 #include "dlg_histogram.moc"

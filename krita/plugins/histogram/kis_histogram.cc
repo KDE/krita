@@ -41,6 +41,8 @@ KisHistogram::KisHistogram(KisLayerSP layer,
 	m_stddev = QUANTUM_MAX / 2;
 	m_pixels = 0;
 	m_count = 0;
+	m_high = 0;
+	m_low = QUANTUM_MAX;
 	m_percentile = 100;
 	m_pixels = 1; // AUTOLAYER: should use layer extends.
 
@@ -54,33 +56,35 @@ KisHistogram::~KisHistogram()
 void KisHistogram::computeHistogramFor(const KisChannelInfo & channel)
 {
 	Q_UINT32 total = 0;
+	Q_INT32 bincount = QUANTUM_MAX + 1;
+	m_values = vBins(bincount, 0);
+	m_count = 0;
+	m_high = 0;
+	m_low = QUANTUM_MAX;
 	//Q_UINT32 total_white = 0;
 	//Q_UINT32 total_black = 0;
 
 	if (m_layer -> hasSelection()) {
 		// Get selection iterators
 		// XXX: not implemented yet
-	}
-	else {
+	} else {
 		Q_INT32 x,y,w,h;
-		m_layer->extent(x,y,w,h);
- 		KisRectIteratorPixel srcIt = m_layer->createRectIterator(x,y,w,h, false);
+		m_layer->exactBounds(x,y,w,h);
+		KisRectIteratorPixel srcIt = m_layer->createRectIterator(x,y,w,h, false);
 
 		Q_INT32 channels = m_layer -> nChannels();
 		while( ! srcIt.isDone() )
 		{
-			for( int i = 0; i < channels; i++)
-			{
-				// Do computing
-				if (i == channel.pos()) {
-					KisQuantum datum = srcIt[channel.pos()];
-// 					m_values[datum] = m_values[datum]++;
-// 					if (datum > m_max) m_max = datum;
-// 						if (datum < m_min) m_min = datum;
-// 					total += datum;
- 					m_count++;
- 				}
-			}
+			QUANTUM datum = (QUANTUM)srcIt[channel.pos()];
+			m_values[datum]++;
+			if (datum > m_max) m_max = datum;
+			if (datum < m_min) m_min = datum;
+			if (m_values[datum] > m_high)
+				m_high = m_values[datum];
+			if (m_values[datum] < m_low)
+				m_low = m_values[datum];
+			total += datum;
+			m_count++;
 			++srcIt;
 		}
 	}
@@ -117,6 +121,8 @@ void KisHistogram::dump() {
 
 	kdDebug() << "Max: " << QString().setNum(m_max) << "\n";
 	kdDebug() << "Min: " << QString().setNum(m_min) << "\n";
+	kdDebug() << "High: " << QString().setNum(m_high) << "\n";
+	kdDebug() << "Low: " << QString().setNum(m_low) << "\n";
 	kdDebug() << "Mean: " << QString().setNum(m_mean) << "\n";
 	kdDebug() << "Median: " << QString().setNum(m_median) << "\n";
 	kdDebug() << "Stddev: " << QString().setNum(m_stddev) << "\n";

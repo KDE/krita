@@ -38,37 +38,41 @@ KisHistogramWidget::~KisHistogramWidget()
 {
 }
 
-void KisHistogramWidget::setChannels(KisChannelInfo * channels, Q_INT32 channelCount) 
+void KisHistogramWidget::setChannels(vKisChannelInfoSP channels, Q_INT32 channelCount) 
 {
 	for (int i = 0; i < channelCount; i++) {
-		KisChannelInfo channel = channels[i];
-		cmbChannel -> insertItem(channel.name());
+		KisChannelInfo* channel = channels[i];
+		cmbChannel -> insertItem(channel -> name());
 	}
 }
 
 
 void KisHistogramWidget::setHistogram(KisHistogramSP histogram) 
 {
+	Q_UINT32 height = pixHistogram -> height();
 	m_histogram = histogram;
-	m_pix = QPixmap(QUANTUM_MAX + 1, m_histogram -> getMax());
+	// XXX should the width be resisable?
+	m_pix = QPixmap(QUANTUM_MAX + 1, height);
 	m_pix.fill();
   	QPainter p(&m_pix);
 	p.setBrush(Qt::black);
 	
 	vBins::iterator it;
- 	Q_UINT32 i = 0;
-	for( it = m_histogram -> begin(); it != m_histogram -> end(); ++it ) {
-// 		kdDebug() << "Value " 
-// 			  << QString().setNum(i)
-// 			  << ": " 
-// 			  <<  QString().setNum((*it)) 
-// 			  << "\n";
-		
- 		p.drawLine(i, 0, i, (*it));
- 		i++;
- 	}
+	Q_UINT32 i = 0;
+
 	
- 	pixHistogram -> setPixmap(m_pix);
+	if (m_histogram -> getHistogramType() == LINEAR) {
+		double factor = (double)height / (double)m_histogram -> getHighest();
+		for( it = m_histogram -> begin(); it != m_histogram -> end(); ++it ) {
+			p.drawLine(i, height, i, height - static_cast<Q_INT32>((double)(*it) * factor));
+			i++;
+		}
+	} else {
+		// LOGARITHMIC - not implemented
+	}
+
+
+	pixHistogram -> setPixmap(m_pix);
 
 }
 

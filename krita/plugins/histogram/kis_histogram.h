@@ -59,12 +59,15 @@ public:
 
 	QUANTUM getMax() { return m_max; }
 	QUANTUM getMin() { return m_min; }
+	Q_UINT32 getHighest() { return m_high; }
+	Q_UINT32 getLowest() { return m_low; }
 	double getMean() { return m_mean; }
 	double getMedian() { return m_median; }
 	double getStandardDeviation() { return m_stddev; }
 	Q_UINT32 getPixels () { return m_pixels; }
 	Q_UINT32 getCount() { return m_count; }
 	Q_UINT8 getPercentile() { return m_percentile; }
+	enumHistogramType getHistogramType() { return m_type; }
 
 
 private:
@@ -77,6 +80,7 @@ private:
 	
 	vBins m_values;
 	QUANTUM m_max, m_min;
+	Q_UINT32 m_high, m_low;
 	double m_mean, m_median, m_stddev;
 	Q_UINT32 m_pixels, m_count;
 	Q_UINT8 m_percentile;

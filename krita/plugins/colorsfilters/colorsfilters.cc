@@ -191,9 +191,13 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	while (!rectIt.isDone() && !cancelRequested())
 	{
 		if (rectIt.isSelected()) {
-			KisPixel data = rectIt.pixel();
-			Q_INT32 lightness = ( QMAX(QMAX(data[0], data[1]), data[2])
-						+ QMIN(QMIN(data[0], data[1]), data[2]) ) / 2;
+
+			QColor color;
+			src -> colorStrategy() -> toQColor(rectIt.rawData(), &color);
+
+			Q_INT32 lightness = ( QMAX(QMAX(color.red(), color.green()), color.blue())
+						+ QMIN(QMIN(color.red(), color.green()), color.blue()) ) / 2;
+
 			histo[ lightness ] ++;
 
 			if( histo[ lightness ] > maxvalue )
@@ -213,26 +217,29 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 		for( start = 0; histo[start] < maxvalue * 0.1; start++) { /*kdDebug() << start << endl;*/ }
 		Q_INT32 end;
 		for( end = QUANTUM_MAX; histo[end] < maxvalue * 0.1; end--) { /*kdDebug() << end << endl;*/ }
-		double factor = QUANTUM_MAX / (double) (end - start);
 
-		rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
+		if (start != end) {
+			double factor = QUANTUM_MAX / (double) (end - start);
 
-		while (!rectIt.isDone()  && !cancelRequested())
-		{
-			if (rectIt.isSelected()) {
-				KisPixel srcData = rectIt.pixel();
-				KisPixel dstData = rectIt.pixel();
+			rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
 
-				// Iterate through all channels except alpha
-				// XXX: Check for off-by-one errors
-				for (int i = 0; i < depth; ++i) {
-					dstData[i] = (QUANTUM) QMIN ( QUANTUM_MAX, QMAX(0, (srcData[i] - start) * factor) );
+			while (!rectIt.isDone()  && !cancelRequested())
+			{
+				if (rectIt.isSelected()) {
+					KisPixel srcData = rectIt.pixel();
+					KisPixel dstData = rectIt.pixel();
+
+					// Iterate through all channels except alpha
+					// XXX: Check for off-by-one errors
+					for (int i = 0; i < depth; ++i) {
+						dstData[i] = (QUANTUM) QMIN ( QUANTUM_MAX, QMAX(0, (srcData[i] - start) * factor) );
+					}
 				}
-			}
-			++rectIt;
+				++rectIt;
 
-			pixelsProcessed++;
-			setProgress(pixelsProcessed);
+				pixelsProcessed++;
+				setProgress(pixelsProcessed);
+			}
 		}
 	}
 	setProgressDone();

@@ -87,8 +87,14 @@ void KisToolStar::move(KisMoveEvent *event)
 	if (m_dragging) {
 		// erase old lines on canvas
 		draw(m_dragStart, m_dragEnd);
-		// get current mouse position
-		m_dragEnd = event -> pos();
+		// move (alt) or resize star
+		if (event -> state() & Qt::AltButton) {
+			KisPoint trans = event -> pos() - m_dragEnd;
+			m_dragStart += trans;
+			m_dragEnd += trans;
+		} else {
+			m_dragEnd = event -> pos();
+		}
 		// draw new lines on canvas
 		draw(m_dragStart, m_dragEnd);
 	}
@@ -104,7 +110,6 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
 		draw(m_dragStart, m_dragEnd);
 		m_dragging = false;
 
-                m_dragEnd = event->pos ();
                 if (m_dragStart == m_dragEnd)
                         return;
 

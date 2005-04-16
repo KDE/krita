@@ -70,6 +70,7 @@ protected:
 protected:
 	int m_lineThickness;
 
+	KisPoint m_dragCenter;
 	KisPoint m_dragStart;
 	KisPoint m_dragEnd;
 	QRect m_final_lines;

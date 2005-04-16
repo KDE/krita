@@ -69,8 +69,7 @@ void KisToolRectangle::buttonPress(KisButtonPressEvent *event)
 // 	kdDebug (40001) << "KisToolRectangle::buttonPress" << event->pos () << endl;
 	if (m_currentImage && event -> button() == LeftButton) {
 		m_dragging = true;
-		m_dragStart = event -> pos();
-		m_dragEnd = event -> pos();
+		m_dragStart = m_dragCenter = m_dragEnd = event -> pos();
 	}
 }
 
@@ -80,8 +79,30 @@ void KisToolRectangle::move(KisMoveEvent *event)
 	if (m_dragging) {
 		// erase old lines on canvas
 		draw(m_dragStart, m_dragEnd);
-		// get current mouse position
-		m_dragEnd = event -> pos();
+		// move (alt) or resize rectangle
+		if (event -> state() & Qt::AltButton) {
+			KisPoint trans = event -> pos() - m_dragEnd;
+			m_dragStart += trans;
+			m_dragEnd += trans;
+			m_dragCenter = KisPoint((m_dragStart.x() + m_dragEnd.x()) / 2,
+					(m_dragStart.y() + m_dragEnd.y()) / 2);
+		} else {
+			KisPoint diag = event -> pos() - (event->state() & Qt::ControlButton
+					? m_dragCenter : m_dragStart);
+			// square?
+			if (event -> state() & Qt::ShiftButton) {
+				double w = QMAX(diag.x(), diag.y());
+				diag = KisPoint(w, w);
+			}
+
+			// resize around center point?
+			if (event -> state() & Qt::ControlButton) {
+				m_dragStart = m_dragCenter - diag;
+				m_dragEnd = m_dragCenter + diag;
+			} else {
+				m_dragEnd = m_dragStart + diag;
+			}
+		}
 		// draw new lines on canvas
 		draw(m_dragStart, m_dragEnd);
 	}
@@ -97,7 +118,6 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
 		draw(m_dragStart, m_dragEnd);
 		m_dragging = false;
 
-		m_dragEnd = event -> pos();
 		if (m_dragStart == m_dragEnd)
 			return;
 

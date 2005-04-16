@@ -29,15 +29,20 @@
 class KisQuantum {
 
 public:
-	inline KisQuantum(QUANTUM* q, KisQuantumOperation* op = new KisQuantumOperationLinear()) : m_quantum(q), m_op(op) { Q_ASSERT(m_op);};
-	inline ~KisQuantum() { delete m_op; m_op = 0; }
+	//XXX: Have removed the KisQuantumOperation mechanism since only Linear was used, which is 
+	// simple assignment, and it appears to be the source of hard to track bugs. It's also
+	// needlessly decreasing peformance. AP
+		
+	inline KisQuantum(QUANTUM* q/*, KisQuantumOperation* op = new KisQuantumOperationLinear()*/) : m_quantum(q) /*, m_op(op)*/ { /*Q_ASSERT(m_op);*/};
+	//inline ~KisQuantum() { delete m_op; m_op = 0; }
 public:
 	inline operator QUANTUM() const { return *m_quantum; };
 
+	
 	inline QUANTUM operator=(QUANTUM q)
 		{
-			Q_ASSERT(m_op);
-			return *m_quantum = m_op->operation(q);
+			//Q_ASSERT(m_op);
+			return *m_quantum = q;//m_op->operation(q);
 		};
 
 	inline QUANTUM operator-=(QUANTUM q)
@@ -60,7 +65,7 @@ public:
 private:
 	QUANTUM* m_quantum;
 
-	KisQuantumOperation* m_op;
+	//KisQuantumOperation* m_op;
 };
 
 

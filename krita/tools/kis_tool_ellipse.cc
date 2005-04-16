@@ -70,6 +70,7 @@ void KisToolEllipse::buttonPress(KisButtonPressEvent *event)
 	if (m_currentImage && event -> button() == LeftButton) {
 		m_dragging = true;
 		m_dragStart = m_dragCenter = m_dragEnd = event -> pos();
+		draw(m_dragStart, m_dragEnd);
 	}
 }
 

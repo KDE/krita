@@ -47,6 +47,7 @@ KAboutData * newKritaAboutData()
 	aboutData->addAuthor("John Califf",0, "jcaliff@compuzone.net");
 	aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
 	aboutData->addAuthor("Matthias Elter", 0, "me@kde.org");
+	aboutData->addAuthor("Melchior Franz", 0, "mfranz@kde.org");
 	aboutData->addAuthor("Michael Koch", 0, "koch@kde.org");
 	aboutData->addAuthor("Michael Thaler", 0, "michael.thaler@physik.tu-muenchen.de");
 	aboutData->addAuthor("Patrick Julien", 0, "freak@codepimps.org");

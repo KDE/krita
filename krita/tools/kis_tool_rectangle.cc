@@ -91,8 +91,10 @@ void KisToolRectangle::move(KisMoveEvent *event)
 					? m_dragCenter : m_dragStart);
 			// square?
 			if (event -> state() & Qt::ShiftButton) {
-				double w = QMAX(diag.x(), diag.y());
-				diag = KisPoint(w, w);
+				double size = QMAX(fabs(diag.x()), fabs(diag.y()));
+				double w = diag.x() < 0 ? -size : size;
+				double h = diag.y() < 0 ? -size : size;
+				diag = KisPoint(w, h);
 			}
 
 			// resize around center point?

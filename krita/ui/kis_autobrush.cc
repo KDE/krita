@@ -137,7 +137,8 @@ void KisAutobrush::paramChanged()
 	Q_INT32 fh = QMIN( spinBoxWidth->value()/2, spinBoxHorizontal->value() ) ;
 	Q_INT32 fv = QMIN( spinBoxHeigth->value()/2, spinBoxVertical->value() );
 	KisAutobrushShape* kas;
-	if(comboBoxShape->currentText() == "circle")
+
+	if(comboBoxShape->currentItem() == 0) // use index compare instead of comparing a translatable string
 	{
 		kas = new KisAutobrushCircleShape(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
 		Q_CHECK_PTR(kas);

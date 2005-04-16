@@ -60,17 +60,12 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 {
 	kdDebug() << "Oilpaintfilter 2 called!\n";
 
+	Q_UNUSED(dst);
+
 	Q_INT32 x = rect.x(), y = rect.y();
 	Q_INT32 width = rect.width();
 	Q_INT32 height = rect.height();
 	kdDebug() << "x: " << x << " y: " << y << " width: " << width << " height: " << height << endl;
-
-	// XXX: Fix this: this filter can easily use the iterators without much work.
-	// create a QUANTUM array that holds the data the filter works on
-	QUANTUM * newData = new QUANTUM[width * height * src -> pixelSize()];
-	Q_CHECK_PTR(newData);
-
-	src->readBytes(newData, x, y, width, height);
 
 	//read the filter configuration values from the KisFilterConfiguration object
 	Q_UINT32 brushSize = ((KisOilPaintFilterConfiguration*)configuration)->brushSize();
@@ -78,31 +73,7 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 
 	kdDebug() << "brushSize:" << brushSize << " smooth:" << smooth << "\n";
 
-	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
-	//with the actual pixel data.
-
-	OilPaint(newData, width, height, brushSize, smooth);
-
-	if (!cancelRequested()) {
-
-		//dst -> writeBytes( newData, x, y, width, height);
-		Q_INT32 pixelSize = dst -> pixelSize();
-		QUANTUM * ptr = newData;
-		for(Q_INT32 y2 = y; y2 < y + height; y2++)
-		{
-			KisHLineIteratorPixel hiter = dst -> createHLineIterator(x, y2, width, true);
-			while(! hiter.isDone())
-			{
-				if (hiter.isSelected()) {
-					    memcpy(hiter.rawData(), ptr , pixelSize);
-				}
-				ptr += pixelSize;
-				++hiter;
-			}
-		}
-	}
-
-	delete[] newData;
+	OilPaint(src, x, y, width, height, brushSize, smooth);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -119,32 +90,29 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
  *                     a matrix and simply write at the original position.
  */
 
-void KisOilPaintFilter::OilPaint(QUANTUM* data, int w, int h, int BrushSize, int Smoothness)
+void KisOilPaintFilter::OilPaint(KisPaintDeviceSP src, int x, int y, int w, int h, int BrushSize, int Smoothness)
 {
 	setProgressTotalSteps(h);
 	setProgressStage(i18n("Applying oilpaint filter..."),0);
 
-        int LineWidth = w * 4;
-        if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
+	QRect bounds(x, y, w, h);
 
-        uchar* newBits = (uchar*)data;
-        int i = 0;
-        uint color;
+	for (Q_INT32 yOffset = 0; yOffset < h; yOffset++) {
 
-        for (int h2 = 0; !cancelRequested() && (h2 < h); ++h2)
-        {
-                for (int w2 = 0; !cancelRequested() && (w2 < w); ++w2)
-                {
-                        i = h2 * LineWidth + 4*w2;
-                        color = MostFrequentColor ((uchar*)data, w, h, w2, h2, BrushSize, Smoothness);
+		KisHLineIteratorPixel it = src -> createHLineIterator(x, y + yOffset, w, true);
 
-                        newBits[i+3] = qAlpha(color);
-                        newBits[i+2] = qBlue(color);
-                        newBits[i+1] = qGreen(color);
-                        newBits[ i ] = qRed(color);
-                }
+		while (!it.isDone() && !cancelRequested()) {
 
-		setProgress(h2);
+			if (it.isSelected()) {
+
+				uint color = MostFrequentColor(src, bounds, it.x(), it.y(), BrushSize, Smoothness);
+				src -> colorStrategy() -> nativeColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), it.rawData());
+			}
+
+			++it;
+		}
+
+		setProgress(yOffset);
 	}
 
 	setProgressDone();
@@ -166,16 +134,12 @@ void KisOilPaintFilter::OilPaint(QUANTUM* data, int w, int h, int BrushSize, int
  *                     the center of this matrix and find the most frequenty color
  */
 
-uint KisOilPaintFilter::MostFrequentColor (uchar* Bits, int Width, int Height, int X,
-					   int Y, int Radius, int Intensity)
+uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bounds, int X, int Y, int Radius, int Intensity)
 {
-        int i, w, h, I;
         uint color;
+	uint I;
 
         double Scale = Intensity / 255.0;
-        int LineWidth = 4 * Width;
-
-        if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);   // Don't take off this step
 
         // Alloc some arrays to be used
         uchar *IntensityCount = new uchar[(Intensity + 1) * sizeof (uchar)];
@@ -189,39 +153,46 @@ uint KisOilPaintFilter::MostFrequentColor (uchar* Bits, int Width, int Height, i
         /*for (i = 0; i <= Intensity; ++i)
 	  IntensityCount[i] = 0;*/
 
-        for (w = X - Radius; w <= X + Radius; ++w)
-	{
-                for (h = Y - Radius; h <= Y + Radius; ++h)
-                {
-			// This condition helps to identify when a point doesn't exist
+	KisRectIterator it = src -> createRectIterator(X - Radius, Y - Radius, (2 * Radius) + 1, (2 * Radius) + 1, false);
 
-			if ((w >= 0) && (w < Width) && (h >= 0) && (h < Height))
-                        {
-				// You'll see a lot of times this formula
-				i = h * LineWidth + 4 * w;
-				I = (uint)(GetIntensity (Bits[i], Bits[i+1], Bits[i+2]) * Scale);
-				IntensityCount[I]++;
+	while (!it.isDone()) {
 
-				if (IntensityCount[I] == 1)
-				{
-					AverageColorR[I] = Bits[ i ];
-					AverageColorG[I] = Bits[i+1];
-					AverageColorB[I] = Bits[i+2];
-				}
-				else
-				{
-					AverageColorR[I] += Bits[ i ];
-					AverageColorG[I] += Bits[i+1];
-					AverageColorB[I] += Bits[i+2];
-				}
-                        }
-                }
+		if (bounds.contains(it.x(), it.y())) {
+
+			QColor c;
+			src -> colorStrategy() -> toQColor(it.rawData(), &c);
+
+			// Swapping red and blue here is done because that gives the same
+			// output as digikam, even though it might be interpreted as a bug
+			// in both applications.
+			int b = c.red();
+			int g = c.green();
+			int r = c.blue();
+
+			I = (uint)(GetIntensity (r, g, b) * Scale);
+			IntensityCount[I]++;
+
+			if (IntensityCount[I] == 1)
+			{
+				AverageColorR[I] = r;
+				AverageColorG[I] = g;
+				AverageColorB[I] = b;
+			}
+			else
+			{
+				AverageColorR[I] += r;
+				AverageColorG[I] += g;
+				AverageColorB[I] += b;
+			}
+		}
+
+		++it;
 	}
 
         I = 0;
         int MaxInstance = 0;
 
-        for (i = 0 ; i <= Intensity ; ++i)
+        for (int i = 0 ; i <= Intensity ; ++i)
         {
 		if (IntensityCount[i] > MaxInstance)
                 {
@@ -234,7 +205,9 @@ uint KisOilPaintFilter::MostFrequentColor (uchar* Bits, int Width, int Height, i
         R = AverageColorR[I] / MaxInstance;
         G = AverageColorG[I] / MaxInstance;
         B = AverageColorB[I] / MaxInstance;
-        color = qRgb (R, G, B);
+
+	// Swap red and blue back to get the correct colour.
+        color = qRgb (B, G, R);
 
         delete [] IntensityCount;        // free all the arrays
         delete [] AverageColorR;

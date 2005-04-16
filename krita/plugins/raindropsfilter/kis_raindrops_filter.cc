@@ -59,15 +59,7 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 {
 	kdDebug() << "Raindropsfilter 2 called!\n";
 
-	Q_INT32 x = rect.x(), y = rect.y();
-	Q_INT32 width = rect.width();
-	Q_INT32 height = rect.height();
-
-	// create a QUANTUM array that holds the data the filter works on
-	QUANTUM * newData = new QUANTUM[width * height * src -> pixelSize()];
-	Q_CHECK_PTR(newData);
-
-	src -> readBytes(newData, x, y, width, height);
+	Q_UNUSED(dst);
 
 	//read the filter configuration values from the KisFilterConfiguration object
 	Q_UINT32 dropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();
@@ -76,30 +68,7 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 
 	kdDebug() << "dropSize:" << dropSize << " number:" << number << " fishEyes:" << fishEyes << "\n";
 
-	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
-	//with the actual pixel data.
-	rainDrops(newData, width, height, dropSize, number, fishEyes);
-
-	if (!cancelRequested()) {
-
-		// 	dst -> writeBytes( newData, x, y, width, height);
-		Q_INT32 pixelSize = dst -> pixelSize();
-		QUANTUM * ptr = newData;
-		for(Q_INT32 y2 = y; y2 < y + height; y2++)
-		{
-			KisHLineIteratorPixel hiter = dst -> createHLineIterator(x, y2, width, true);
-			while(! hiter.isDone())
-			{
-				if (hiter.isSelected()) {
-					    memcpy(hiter.rawData(), ptr , pixelSize);
-				}
-				ptr += pixelSize;
-				++hiter;
-			}
-		}
-	}
-
-	delete[] newData;
+	rainDrops(src, rect, dropSize, number, fishEyes);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -121,29 +90,21 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
  *                     and after this, a blur function will finish the effect.
  */
 
-void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int DropSize, int Amount, int Coeff)
+void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, const QRect& rect, int DropSize, int Amount, int Coeff)
 {
 	setProgressTotalSteps(Amount);
 	setProgressStage(i18n("Applying oilpaint filter..."),0);
-
-        int BitCount = 0;
 
         if (Coeff <= 0) Coeff = 1;
 
         if (Coeff > 100) Coeff = 100;
 
-        int LineWidth = Width * 4;
-        if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-
-        BitCount = LineWidth * Height;
-        uchar*    Bits = (uchar*)data;
-        uchar* NewBits = new uchar[BitCount];
-	Q_CHECK_PTR(NewBits);
+	int Width = rect.width();
+	int Height = rect.height();
 
         bool** BoolMatrix = CreateBoolArray (Width, Height);
 
         int       i, j, k, l, m, n;                 // loop variables
-        int       p, q;                             // positions
         int       Bright;                           // Bright value for shadows and highlights
         int       x, y;                             // center coordinates
         int       Counter = 0;                      // Counter (duh !)
@@ -161,6 +122,8 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
 
         bool      FindAnother = false;              // To search for good coordinates
 
+	KisStrategyColorSpaceSP cs = src -> colorStrategy();
+
         QDateTime dt = QDateTime::currentDateTime();
         QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
 
@@ -172,11 +135,6 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
         {
                 for (j = 0 ; !cancelRequested() && (j < Height) ; ++j)
                 {
-                        p = j * LineWidth + 4 * i;
-                        NewBits[p+3] = Bits[p+3];
-                        NewBits[p+2] = Bits[p+2];
-                        NewBits[p+1] = Bits[p+1];
-                        NewBits[ p ] = Bits[ p ];
                         BoolMatrix[i][j] = false;
                 }
 	}
@@ -237,12 +195,6 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
 					{
 						if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
 						{
-							p = k * LineWidth + 4 * l;
-							q = m * LineWidth + 4 * n;
-							NewBits[q+2] = Bits[p+2];
-							NewBits[q+1] = Bits[p+1];
-							NewBits[ q ] = Bits[ p ];
-							BoolMatrix[n][m] = true;
 							Bright = 0;
 
 							if (OldRadius >= 0.9 * Radius)
@@ -309,9 +261,21 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
 									Bright = 20;
 							}
 
-							NewBits[q+2] = LimitValues (NewBits[q+2] + Bright);
-							NewBits[q+1] = LimitValues (NewBits[q+1] + Bright);
-							NewBits[ q ] = LimitValues (NewBits[ q ] + Bright);
+							BoolMatrix[n][m] = true;
+
+							QColor originalColor;
+
+							KisHLineIterator oldIt = src -> createHLineIterator(rect.x() + l, rect.y() + k, 1, false);
+							cs -> toQColor(oldIt.oldRawData(), &originalColor);
+
+							int newRed = CLAMP(originalColor.red() + Bright, 0, QUANTUM_MAX);
+							int newGreen = CLAMP(originalColor.green() + Bright, 0, QUANTUM_MAX);
+							int newBlue = CLAMP(originalColor.blue() + Bright, 0, QUANTUM_MAX);
+
+							QColor newColor;
+							newColor.setRgb(newRed, newGreen, newBlue);
+
+							cs -> nativeColor(newColor, src -> writablePixel(rect.x() + n, rect.y() + m));
 						}
 					}
 				}
@@ -339,10 +303,13 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
 
 							if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
 							{
-								p = m * LineWidth + 4 * n;
-								R += NewBits[p+2];
-								G += NewBits[p+1];
-								B += NewBits[ p ];
+								QColor color;
+								cs -> toQColor(src -> pixel(rect.x() + n, rect.y() + m),
+												   &color);
+
+								R += color.red();
+								G += color.green();
+								B += color.blue();
 								BlurPixels++;
 							}
 						}
@@ -352,10 +319,10 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
 
                                         if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
                                         {
-                                                p = m * LineWidth + 4 * n;
-                                                NewBits[p+2] = (uchar)(R / BlurPixels);
-                                                NewBits[p+1] = (uchar)(G / BlurPixels);
-                                                NewBits[ p ] = (uchar)(B / BlurPixels);
+						QColor color;
+
+						color.setRgb((int)(R / BlurPixels), (int)(G / BlurPixels), (int)(B / BlurPixels));
+						cs -> nativeColor(color, src -> writablePixel(rect.x() + n, rect.y() + m));
                                         }
                                 }
                         }
@@ -364,10 +331,15 @@ void KisRainDropsFilter::rainDrops(QUANTUM *data, int Width, int Height, int Dro
 		setProgress(NumBlurs);
         }
 
-        if (!cancelRequested())
-		memcpy (data, NewBits, BitCount);
+	KisRectIteratorPixel it = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
 
-        delete [] NewBits;
+	while (!it.isDone()) {
+
+		if (!it.isSelected()) {
+			memcpy(it.rawData(), it.oldRawData(), src -> pixelSize());
+		}
+		++it;
+	}
 
         FreeBoolArray (BoolMatrix, Width);
 

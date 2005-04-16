@@ -48,6 +48,8 @@ public:
 	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0)
 		{ return KisPixel (src, src + PIXEL_ALPHA, this, profile); }
 
+	virtual Q_INT8 difference(const QUANTUM* src1, const QUANTUM* src2);
+
 	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 nChannels() const;

@@ -89,6 +89,10 @@ public:
 
 	virtual KisPixelRO toKisPixelRO(const QUANTUM *src, KisProfileSP profile) = 0;
 	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile) = 0;
+	
+	// XXX: What with alpha channels?
+	/** Get the difference between 2 colors, normalized in the range (0,255) */
+	virtual Q_INT8 difference(const QUANTUM* src1, const QUANTUM* src2);
 
 	// Return a vector describing all the channels this color model has.
 	virtual vKisChannelInfoSP channels() const = 0;

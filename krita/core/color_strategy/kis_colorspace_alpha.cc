@@ -78,6 +78,11 @@ void KisColorSpaceAlpha::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacit
 	}
 }
 
+Q_INT8 KisColorSpaceAlpha::difference(const QUANTUM* src1, const QUANTUM* src2)
+{
+	return QABS(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
+}
+
 vKisChannelInfoSP KisColorSpaceAlpha::channels() const
 {
 	return m_channels;

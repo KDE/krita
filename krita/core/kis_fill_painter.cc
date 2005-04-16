@@ -234,12 +234,14 @@ void KisFillPainter::genericFillEnd(KisLayerSP filled) {
 
 void KisFillPainter::floodLine(int x, int y) {
 	int mostRight, mostLeft = x;
+	KisStrategyColorSpaceSP colorStrategy = m_device -> colorStrategy();
 
 	KisHLineIteratorPixel pixelIt = m_layer->createHLineIterator(x, y, m_width, false);
 
 	int lastPixel = m_width;
+	QUANTUM diff = colorStrategy -> difference(m_oldColor, pixelIt.rawData());
 
-	if (difference(m_oldColor, pixelIt.rawData()) == MIN_SELECTED) {
+	if (diff >= m_threshold) {
 		return;
 	}
 
@@ -287,6 +289,7 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& 
 	KisHLineIteratorPixel selection = m_selection -> createHLineIterator(x, y, m_width - x, true);
 	QColor selectionColor = Qt::white; // This is the standard selection colour
 	KisStrategyColorSpaceSP colorStrategy = m_selection -> colorStrategy();
+	KisStrategyColorSpaceSP devColorStrategy = m_device -> colorStrategy();
 
 	while( ( ( d == Right && it.x() <= lastPixel) || (d == Left && lastPixel <= it.x())) && !stop)
 	{
@@ -294,11 +297,12 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& 
 			break;
 		m_map[y*m_width + x] = true;
 		++m_pixelsDone;
-		KisPixelRO data = it.rawData();
-		diff = difference(m_oldColor, data);
-		if (diff == MAX_SELECTED) {
+
+		diff = devColorStrategy -> difference(m_oldColor, it.rawData());
+		if (diff < m_threshold) {
 			// m_selection -> setSelected(x, y, diff);
-			colorStrategy -> nativeColor(selectionColor, diff, selection.rawData(), 0);
+			colorStrategy -> nativeColor(selectionColor, MAX_SELECTED/* - diff*/, // ### diff for fuzzyness
+										 selection.rawData(), 0);
 			if (d == Right) {
 				++it; ++selection;
 				x++; most++;
@@ -320,7 +324,7 @@ int KisFillPainter::floodSegment(int x, int y, int most, KisHLineIteratorPixel& 
 }
 
 /* RGB-only I fear */
-QUANTUM KisFillPainter::difference(const QUANTUM* src, KisPixelRO dst)
+/*QUANTUM KisFillPainter::difference(const QUANTUM* src, KisPixelRO dst)
 {
 	QUANTUM max = 0, diff = 0;
 	int depth = m_device->pixelSize();
@@ -333,3 +337,4 @@ QUANTUM KisFillPainter::difference(const QUANTUM* src, KisPixelRO dst)
 	}
 	return (max < m_threshold) ? MAX_SELECTED : MIN_SELECTED;
 }
+*/

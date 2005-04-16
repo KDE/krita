@@ -77,6 +77,14 @@ void KisStrategyColorSpaceRGB::toQColor(const QUANTUM *src, QColor *c, QUANTUM *
 	*opacity = src[PIXEL_ALPHA];
 }
 
+Q_INT8 KisStrategyColorSpaceRGB::difference(const QUANTUM* src1, const QUANTUM* src2)
+{
+	//return KisStrategyColorSpace::difference(src1, src2);
+	return QMAX(QABS(src2[PIXEL_RED] - src1[PIXEL_RED]),
+				QMAX(QABS(src2[PIXEL_GREEN] - src1[PIXEL_GREEN]),
+	QABS(src2[PIXEL_BLUE] - src1[PIXEL_BLUE])));
+}
+
 vKisChannelInfoSP KisStrategyColorSpaceRGB::channels() const
 {
 	return m_channels;

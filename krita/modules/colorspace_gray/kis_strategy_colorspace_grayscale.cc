@@ -76,6 +76,11 @@ void KisStrategyColorSpaceGrayscale::toQColor(const QUANTUM *src, QColor *c, QUA
 	*opacity = src[PIXEL_GRAY_ALPHA];
 }
 
+Q_INT8 KisStrategyColorSpaceGrayscale::difference(const QUANTUM* src1, const QUANTUM* src2)
+{
+	return QABS(src2[PIXEL_GRAY] - src1[PIXEL_GRAY]);
+}
+
 vKisChannelInfoSP KisStrategyColorSpaceGrayscale::channels() const
 {
 	return m_channels;

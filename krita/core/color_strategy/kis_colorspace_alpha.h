@@ -44,6 +44,8 @@ public:
 
 	virtual KisPixelRO toKisPixelRO(const QUANTUM *src, KisProfileSP profile = 0) { return KisPixelRO (src, src, this, profile); }
 	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0) { return KisPixel (src, src, this, profile); }
+	
+	virtual Q_INT8 difference(const QUANTUM* src1, const QUANTUM* src2);
 
 	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;

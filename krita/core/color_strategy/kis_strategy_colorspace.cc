@@ -29,6 +29,8 @@
 #include "kis_profile.h"
 #include "kis_config.h"
 
+#include "kis_color_conversions.h"
+
 KisStrategyColorSpace::KisStrategyColorSpace(const KisID& id, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature)
 	: m_id(id),
 	  m_cmType(cmType),
@@ -89,6 +91,20 @@ bool KisStrategyColorSpace::convertPixelsTo(const QUANTUM * src, KisProfileSP sr
 		  << ", so cannot convert pixels!\n";
 	return false;
 
+}
+
+// BC: should this default be HSV-based?
+Q_INT8 KisStrategyColorSpace::difference(const QUANTUM* src1, const QUANTUM* src2)
+{
+	QColor color1, color2;
+	toQColor(src1, &color1);
+	toQColor(src2, &color2);
+
+	int h1, s1, v1, h2, s2, v2;
+	rgb_to_hsv(color1.red(), color1.green(), color1.blue(), &h1, &s1, &v1);
+	rgb_to_hsv(color2.red(), color2.green(), color2.blue(), &h2, &s2, &v2);
+
+	return QMAX(QABS(v1 - v2), QMAX(QABS(s1 - s2), QABS(h1 - h2)));
 }
 
 void KisStrategyColorSpace::bitBlt(Q_INT32 stride,

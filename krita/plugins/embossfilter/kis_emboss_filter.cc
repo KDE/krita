@@ -57,17 +57,9 @@ KisEmbossFilter::KisEmbossFilter(KisView * view) : KisFilter(id(), view)
 
 void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
+	Q_UNUSED(dst);
+
 	kdDebug() << "Embossfilter called!\n";
-
-	Q_INT32 x = rect.x(), y = rect.y();
-	Q_INT32 width = rect.width();
-	Q_INT32 height = rect.height();
-        
-	// create a QUANTUM array that holds the data the filter works on
-	QUANTUM * newData = new Q_UINT8[width * height * src -> pixelSize()];
-	Q_CHECK_PTR(newData);
-
-	src -> readBytes(newData, x, y, width, height);
 
 	//read the filter configuration values from the KisFilterConfiguration object
 	Q_UINT32 embossdepth = ((KisEmbossFilterConfiguration*)configuration)->depth();
@@ -77,28 +69,7 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
 	//with the actual pixel data.
 
-	Emboss(newData, width, height, embossdepth);
-
-	if (!cancelRequested()) {
-
-		//dst -> writeBytes( newData, x, y, width, height);
-		Q_INT32 pixelSize = dst -> pixelSize();
-		QUANTUM * ptr = newData;
-		for(Q_INT32 y2 = y; y2 < y + height; y2++)
-		{
-			KisHLineIteratorPixel hiter = dst -> createHLineIterator(x, y2, width, true);
-			while(! hiter.isDone())
-			{
-				if (hiter.isSelected()) {
-					    memcpy(hiter.rawData(), ptr , pixelSize);
-				}
-				ptr += pixelSize;
-				++hiter;
-			}
-		}
-	}
-
-	delete[] newData;
+	Emboss(src, rect, embossdepth);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -115,39 +86,43 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
  *                     increase it. After this, get the gray tone
  */
 
-void KisEmbossFilter::Emboss(QUANTUM* data, int Width, int Height, int d)
+void KisEmbossFilter::Emboss(KisPaintDeviceSP src, const QRect& rect, int d)
 {
+        float Depth = d / 10.0;
+        int    R = 0, G = 0, B = 0;
+        uchar  Gray = 0;
+	int Width = rect.width();
+	int Height = rect.height();
+
 	setProgressTotalSteps(Height);
 	setProgressStage(i18n("Applying emboss filter..."),0);
 
-        float Depth = d / 10.0;
-        int LineWidth = Width * 4;
-        if (LineWidth % 4) LineWidth += (4 - LineWidth % 4);
-
-        uchar *Bits = (uchar*) data;
-        int    i = 0, j = 0;
-        int    R = 0, G = 0, B = 0;
-        uchar  Gray = 0;
-
-        for (int h = 0 ; !cancelRequested() && (h < Height) ; ++h)
+        for (int y = 0 ; !cancelRequested() && (y < Height) ; ++y)
         {
-		for (int w = 0 ; !cancelRequested() && (w < Width) ; ++w)
+		KisHLineIteratorPixel it = src -> createHLineIterator(rect.x(), rect.y() + y, rect.width(), true);
+
+		for (int x = 0 ; !cancelRequested() && (x < Width) ; ++x, ++it)
 		{
-			i = h * LineWidth + 4 * w;
-			j = (h + Lim_Max (h, 1, Height)) * LineWidth + 4 * (w + Lim_Max (w, 1, Width));
-	
-			R = abs ((int)((Bits[i+2] - Bits[j+2]) * Depth + 128));
-			G = abs ((int)((Bits[i+1] - Bits[j+1]) * Depth + 128));
-			B = abs ((int)((Bits[ i ] - Bits[ j ]) * Depth + 128));
-	
-			Gray = LimitValues ((R + G + B) / 3);
-	
-			Bits[i+2] = Gray;
-			Bits[i+1] = Gray;
-			Bits[ i ] = Gray;
+			if (it.isSelected()) {
+
+				QColor color1;
+				src -> colorStrategy() -> toQColor(it.rawData(), &color1);
+
+				QColor color2;
+				QUANTUM opacity2;
+				src -> pixel(rect.x() + x + Lim_Max(x, 1, Width), rect.y() + y + Lim_Max(y, 1, Height), &color2, &opacity2);
+
+				R = abs((int)((color1.red() - color2.red()) * Depth + (QUANTUM_MAX / 2)));
+				G = abs((int)((color1.green() - color2.green()) * Depth + (QUANTUM_MAX / 2)));
+				B = abs((int)((color1.blue() - color2.blue()) * Depth + (QUANTUM_MAX / 2)));
+
+				Gray = CLAMP((R + G + B) / 3, 0, QUANTUM_MAX);
+
+				src -> colorStrategy() -> nativeColor(QColor(Gray, Gray, Gray), it.rawData());
+			}
 		}
 
-		setProgress(h);
+		setProgress(y);
         }
 
 	setProgressDone();
@@ -176,26 +151,6 @@ int KisEmbossFilter::Lim_Max (int Now, int Up, int Max)
     while (Now > Max - Up)
         --Up;
     return (Up);
-}
-
-// This method have been ported from Pieter Z. Voloshyn algorithm code.
-
-/* This function limits the RGB values
- *
- * ColorValue        => Here, is an RGB value to be analized
- *
- * Theory            => A color is represented in RGB value (e.g. 0xFFFFFF is
- *                      white color). But R, G and B values has 256 values to be used
- *                      so, this function analize the value and limits to this range
- */
-
-uchar KisEmbossFilter::LimitValues (int ColorValue)
-{
-    if (ColorValue > 255)        // MAX = 255
-        ColorValue = 255;
-    if (ColorValue < 0)          // MIN = 0
-        ColorValue = 0;
-    return ((uchar) ColorValue);
 }
 
 KisFilterConfigurationWidget* KisEmbossFilter::createConfigurationWidget(QWidget* parent)

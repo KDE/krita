@@ -68,6 +68,7 @@ public:
 	Q_UINT32 getCount() { return m_count; }
 	Q_UINT8 getPercentile() { return m_percentile; }
 	enumHistogramType getHistogramType() { return m_type; }
+	void setHistogramType(enumHistogramType type) { m_type = type; }
 
 
 private:

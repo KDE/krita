@@ -17,6 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qslider.h>
@@ -72,11 +73,11 @@ void DlgHistogram::setLayer(KisLayerSP layer)
 	KisHistogramSP histogram = new KisHistogram(layer, *channel, LINEAR);
 	setHistogram(histogram);
 
+	connect(m_page -> grpType, SIGNAL(clicked(int)), SLOT(slotTypeSwitched(int)));
 	connect(m_page -> cmbChannel,
 		SIGNAL(activated(const QString &)),
 		this,
 		SLOT(slotChannelSelected(const QString &)));
-
 }
 
 void DlgHistogram::okClicked()
@@ -90,11 +91,26 @@ void DlgHistogram::slotChannelSelected(const QString & channelName)
 	for (int i = 0; i < m_layer -> colorStrategy() -> nColorChannels(); i++) {
 		KisChannelInfo* channel = channels[i];
 		if (channel -> name() == channelName) {
-			KisHistogramSP histogram = new KisHistogram(m_layer, *channel, LINEAR);
+			KisHistogramSP histogram;
+			
+			if (m_page -> grpType -> selectedId() == LINEAR)
+				histogram = new KisHistogram(m_layer, *channel, LINEAR);
+			else
+				histogram = new KisHistogram(m_layer, *channel, LOGARITHMIC);
+			
 			setHistogram(histogram);
 			return;
 		}
 	}
+}
+
+void DlgHistogram::slotTypeSwitched(int id)
+{
+	if (id == LINEAR)
+		m_histogram -> setHistogramType(LINEAR);
+	else if (id == LOGARITHMIC)
+		m_histogram -> setHistogramType(LOGARITHMIC);
+	m_page -> setHistogram(m_histogram);
 }
 
 #include "dlg_histogram.moc"

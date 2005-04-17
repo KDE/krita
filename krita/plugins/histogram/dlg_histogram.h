@@ -52,6 +52,7 @@ private slots:
 
 	void okClicked();
 	void slotChannelSelected(const QString & channelName);
+	void slotTypeSwitched(int id);
 
 private:
 

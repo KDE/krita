@@ -15,6 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+#include <math.h>
+
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qlabel.h>
@@ -68,7 +71,11 @@ void KisHistogramWidget::setHistogram(KisHistogramSP histogram)
 			i++;
 		}
 	} else {
-		// LOGARITHMIC - not implemented
+		double factor = (double)height / (double)log(m_histogram -> getHighest());
+		for( it = m_histogram -> begin(); it != m_histogram -> end(); ++it ) {
+			p.drawLine(i, height, i, height - static_cast<Q_INT32>(log((double)*it) * factor));
+			i++;
+		}
 	}
 
 

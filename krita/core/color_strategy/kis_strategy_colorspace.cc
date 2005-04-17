@@ -58,10 +58,10 @@ bool KisStrategyColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 rend
 
 bool KisStrategyColorSpace::convertPixelsTo(const QUANTUM * src, KisProfileSP srcProfile,
 					    QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
-					    Q_UINT32 length,
+					    Q_UINT32 numPixels,
 					    Q_INT32 renderingIntent)
 {
-//  	kdDebug() << "convertPixels for " << length << " pixels from " << name() << " to " << dstColorStrategy -> name() << "\n";
+//  	kdDebug() << "convertPixels for " << numPixels << " pixels from " << name() << " to " << dstColorStrategy -> name() << "\n";
 // 	kdDebug() << " src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
 	cmsHTRANSFORM tf = 0;
 
@@ -80,17 +80,33 @@ bool KisStrategyColorSpace::convertPixelsTo(const QUANTUM * src, KisProfileSP sr
 	}
 
 	if (tf) {
-		cmsDoTransform(tf, const_cast<QUANTUM *>(src), dst, length);
+		cmsDoTransform(tf, const_cast<QUANTUM *>(src), dst, numPixels);
 		return true;
 	}
 
-	// XXX: Transform via QColor...  (Look in CVS for code, I think I already wrote this part)
+	if (srcProfile != 0 && dstProfile != 0) {
+		kdDebug() << "No transform from "
+			  << srcProfile -> productName() << " to " << dstProfile -> productName()
+			  << ", so cannot convert pixels!\n";
+	}
 
-	kdDebug() << "No transform from "
-		  << srcProfile -> productName() << " to " << dstProfile -> productName()
-		  << ", so cannot convert pixels!\n";
-	return false;
+	Q_INT32 srcPixelSize = pixelSize();
+	Q_INT32 dstPixelSize = dstColorStrategy -> pixelSize();
 
+	while (numPixels > 0) {
+
+		QColor color;
+		QUANTUM opacity;
+
+		toQColor(src, &color, &opacity);
+		dstColorStrategy -> nativeColor(color, opacity, dst);
+
+		src += srcPixelSize;
+		dst += dstPixelSize;
+		numPixels--;
+	}
+
+	return true;
 }
 
 // BC: should this default be HSV-based?

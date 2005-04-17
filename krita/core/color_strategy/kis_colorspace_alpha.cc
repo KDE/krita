@@ -131,7 +131,7 @@ QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q
 
 bool KisColorSpaceAlpha::convertPixelsTo(const QUANTUM * src, KisProfileSP /*srcProfile*/,
 					 QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
-					 Q_UINT32 length,
+					 Q_UINT32 numPixels,
 					 Q_INT32 /*renderingIntent*/)
 {
 	// No lcms trickery here, we are a QColor + opacity channel
@@ -140,7 +140,7 @@ bool KisColorSpaceAlpha::convertPixelsTo(const QUANTUM * src, KisProfileSP /*src
 	Q_UINT32 j = 0;
 	Q_UINT32 i = 0;
 
-	while ( i < length ) {
+	while ( i < numPixels ) {
 
 		dstColorStrategy -> nativeColor(m_maskColor, OPACITY_OPAQUE - *(src + i), (dst + j), dstProfile);
 

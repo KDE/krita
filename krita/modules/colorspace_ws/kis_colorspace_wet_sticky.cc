@@ -226,7 +226,7 @@ QImage KisColorSpaceWetSticky::convertToQImage(const QUANTUM *data, Q_INT32 widt
 
 bool KisColorSpaceWetSticky::convertPixelsTo(const QUANTUM * src, KisProfileSP /*srcProfile*/,
 					     QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
-					     Q_UINT32 length,
+					     Q_UINT32 numPixels,
 					     Q_INT32 /*renderingIntent*/)
 {
 	kdDebug() << "KisColorSpaceWetSticky::convertPixelsTo\n";
@@ -239,7 +239,7 @@ bool KisColorSpaceWetSticky::convertPixelsTo(const QUANTUM * src, KisProfileSP /
 	Q_UINT32 i = 0;
 	QColor c;
 	CELL_PTR cp;
-	while ( i < length ) {
+	while ( i < numPixels ) {
 		cp = (CELL_PTR) (src + i);
 
 		c.setRgb(cp -> representation.color.red,

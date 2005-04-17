@@ -45,7 +45,6 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kis_progress_display_interface.h>
 
 #include "kis_filter_configuration_widget.h"
 #include "kis_cimgconfig_widget.h"
@@ -111,7 +110,7 @@ KisCImgFilter::KisCImgFilter(KisView * view)
 
 void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
-	m_progress = view() -> progressDisplay();
+	Q_UNUSED(dst);
 
 	Q_INT32 width = rect.width();
 	Q_INT32 height = rect.height();
@@ -122,24 +121,24 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 
 	img = CImg<>(width, height, 1, 3);
 	
-	Q_INT32 x, y;
-	for (y = 0; y < height; ++y) {
-		
-		x = 0;
-		KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), y + rect.y(), width, false);
-		
-		while( ! srcIt.isDone() )
-		{
-			const Q_UINT8 * d = srcIt.oldRawData();
-			img(x, y, 0) = d[0];
-			img(x, y, 1) = d[1];
-			img(x, y, 2) = d[2];
-			++x;
-			++srcIt;
-		}
+	KisRectIteratorPixel it = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+	KisStrategyColorSpaceSP cs = src -> colorStrategy();
 
+	while (!it.isDone()) {
+
+		QColor color;
+		cs -> toQColor(it.rawData(), &color);
+
+		Q_INT32 x = it.x() - rect.x();
+		Q_INT32 y = it.y() - rect.y();
+
+		img(x, y, 0) = color.red();
+		img(x, y, 1) = color.green();
+		img(x, y, 2) = color.blue();
+
+		++it;
 	}
-	
+
 	// Copy the config data into local variables for easy cut & pasting from the original plugin
 
 	KisCImgFilterConfiguration * cfg = (KisCImgFilterConfiguration*)configuration;
@@ -155,29 +154,26 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
         onormalize = cfg -> onormalize;
         linear = cfg -> linear;
 
+	if (process() && !cancelRequested()) {
 
-	if (!process()) {
-		// Everything went wrong; notify user and restore old state
-	}
+		it = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
 
-	// Copy CImg onto a temporary paint device, taking account of selection
+		while (!it.isDone()) {
 
-	for (y = 0; y < height; ++y) {
-		
-		x = 0;
-		KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y + rect.y(), width, true);
-		KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), y + rect.y(), width, false);
-		while( ! srcIt.isDone() )
-		{
-			Q_UINT8 * d = dstIt.rawData();
-			d[0] = img(x, y, 0);
-			d[1] = img(x, y, 1);
-			d[2] = img(x, y, 2);
-			++x;
-			++dstIt;
-			++srcIt;
+			if (it.isSelected()) {
+
+				Q_INT32 x = it.x() - rect.x();
+				Q_INT32 y = it.y() - rect.y();
+
+				QColor color((int)img(x, y, 0), (int)img(x, y, 1), (int)img(x, y, 2));
+
+				cs -> nativeColor(color, it.rawData());
+			}
+
+			++it;
 		}
-
+	} else {
+		// Everything went wrong; notify user and restore old state
 	}
 
 }
@@ -503,7 +499,7 @@ void KisCImgFilter::compute_LIC_back_forward(int x, int y)
 
 //----------------------------------------------------------------------------
 
-void KisCImgFilter::compute_LIC(int &counter)
+void KisCImgFilter::compute_LIC(int &progressSteps)
 {
 	dest.fill(0);
 	sum.fill(0);
@@ -520,15 +516,13 @@ void KisCImgFilter::compute_LIC(int &counter)
 		// Compute the LIC along w in backward and forward directions
 		cimg_mapXY(dest,x,y) 
 		{
-			counter++;
+			setProgress(progressSteps);
+			progressSteps++;
 
-			if ( progressEnabled() ) {
-				// Update de progress bar in dialog.
-				double progress = counter;
-				progress /= (double)dest.width * dest.height * nb_iter * (180 / dtheta);
-				emit notifyProgress(this, (int) progress);
+			if (cancelRequested()) {
+				return;
 			}
-			
+
 			if (!mask.data || mask(x,y)) compute_LIC_back_forward(x,y);
 		}
 	}
@@ -553,17 +547,13 @@ bool KisCImgFilter::process()
 {
         if (!prepare()) return false;
 
-
-        //Progress info
-	if ( progressEnabled() ) {
-		m_progress -> setSubject(this, true, true);
-		emit notifyProgressStage(this,i18n("Applying image restoration filter..."),0);
-	}
+	setProgressTotalSteps(dest.width * dest.height * nb_iter * (int)ceil(180 / dtheta));
+	setProgressStage(i18n("Applying image restoration filter..."), 0);
 
         //-------------------------------------
         // Begin regularization PDE iterations
         //-------------------------------------
-        int counter = 0;
+        int progressSteps = 0;
         for (unsigned int iter=0; iter<nb_iter; iter++)
         {
                 // Compute smoothed structure tensor field G
@@ -573,7 +563,11 @@ bool KisCImgFilter::process()
                 compute_normalized_tensor();
 
                 // Compute LIC's along different angle projections a_\alpha
-                compute_LIC(counter);
+                compute_LIC(progressSteps);
+
+		if (cancelRequested()) {
+			break;
+		}
 
                 // Average all the LIC's
                 compute_average_LIC();
@@ -581,7 +575,8 @@ bool KisCImgFilter::process()
                 // Next step
                 img = dest;
         }
-	emit notifyProgressDone(this);
+
+	setProgressDone();
         // Save result and end program
         //-----------------------------
         if (visuflow) dest.mul(flow.get_norm_pointwise()).normalize(0,255);
@@ -589,10 +584,6 @@ bool KisCImgFilter::process()
         cleanup();
         return true;
 }
-
-
-
-
 
 KisFilterConfigurationWidget* KisCImgFilter::createConfigurationWidget(QWidget* parent)
 {

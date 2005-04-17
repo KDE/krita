@@ -93,8 +93,6 @@ private:
         void cleanup();
 
 private:
-	KisProgressDisplayInterface *m_progress;
-
         unsigned int nb_iter; // Number of smoothing iterations
         float dt;       // Time step
         float dlength; // Integration step

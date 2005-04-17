@@ -45,6 +45,7 @@ KisToolSelectFreehand::KisToolSelectFreehand() : super()
 {
 	setName("tool_select_freehand");
 	m_subject = 0;
+	m_optWidget = 0;
 	setCursor(KisCursor::selectCursor());
 
 	m_dragging = false;

@@ -80,6 +80,7 @@ KisToolSelectElliptical::KisToolSelectElliptical()
 	m_selecting = false;
 	m_startPos = QPoint(0, 0);
 	m_endPos = QPoint(0, 0);
+	m_optWidget = 0;
 }
 
 KisToolSelectElliptical::~KisToolSelectElliptical()

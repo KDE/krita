@@ -49,6 +49,7 @@ KisToolStar::KisToolStar()
           m_currentImage (0)
 {
 	setName("tool_star");
+	m_optWidget = 0;
 	// initialize ellipse tool settings
 //	m_lineThickness = 4;
 // 	m_opacity = 255;

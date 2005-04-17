@@ -186,7 +186,7 @@ void KisDockerManager::setToolOptionWidget(KisTool * oldTool, KisTool * newTool)
 
 	if (newTool) {
 		if ( cfg.dockerStyle() == DOCKER_SLIDER ) {
-			if(newTool -> createOptionWidget(m_toolcontrolslider)){
+			if(newTool -> optionWidget() || newTool -> createOptionWidget(m_toolcontrolslider)){
 				if (m_toolcontrolslider) {
 					m_toolcontrolslider-> plug(newTool -> optionWidget());
 					m_toolcontrolslider-> showPage(newTool -> optionWidget());
@@ -194,7 +194,7 @@ void KisDockerManager::setToolOptionWidget(KisTool * oldTool, KisTool * newTool)
 			}
 		}
 		else {
-			if(newTool -> createOptionWidget(m_toolcontroldocker)){
+			if(newTool -> optionWidget() || newTool -> createOptionWidget(m_toolcontroldocker)){
 				if (m_toolcontroldocker) {
 					m_toolcontroldocker -> plug(newTool -> optionWidget());
 					m_toolcontroldocker -> showPage(newTool -> optionWidget());

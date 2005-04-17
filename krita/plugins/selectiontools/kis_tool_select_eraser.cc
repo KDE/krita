@@ -49,6 +49,7 @@ KisToolSelectEraser::KisToolSelectEraser()
 {
 	setName("tool_select_eraser");
 	setCursor(KisCursor::eraserCursor());
+	m_optWidget = 0;
 }
 
 KisToolSelectEraser::~KisToolSelectEraser()

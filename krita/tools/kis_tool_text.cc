@@ -48,6 +48,7 @@
 KisToolText::KisToolText()
 {
 	setName("tool_text");
+	m_optWidget = 0;
 	m_subject = 0;
 	setCursor(KisCursor::pointingHandCursor()); // needs a Text Cursur
 }

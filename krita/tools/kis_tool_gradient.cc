@@ -61,6 +61,7 @@ KisToolGradient::KisToolGradient()
 	m_shape = KisGradientPainter::GradientShapeLinear;
 	m_repeat = KisGradientPainter::GradientRepeatNone;
 	m_antiAliasThreshold = 0.2;
+	m_optWidget = 0;
 }
 
 KisToolGradient::~KisToolGradient()

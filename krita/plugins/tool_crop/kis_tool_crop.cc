@@ -60,6 +60,7 @@ KisToolCrop::KisToolCrop()
 	m_endPos = QPoint(0, 0);
         m_handleSize = 12;
         m_cropSelectionDrawn = false;
+	m_optWidget = 0;
 }
 
 KisToolCrop::~KisToolCrop()

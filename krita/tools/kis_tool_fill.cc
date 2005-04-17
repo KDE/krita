@@ -58,6 +58,7 @@ KisToolFill::KisToolFill()
 	m_usePattern = false;
 	m_compositeOp = COMPOSITE_OVER;
 	m_samplemerged = false;
+	m_optWidget = 0;
 
 	// set custom cursor.
 	setCursor(KisCursor::fillerCursor());

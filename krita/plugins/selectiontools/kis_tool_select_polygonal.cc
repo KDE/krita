@@ -90,6 +90,7 @@ KisToolSelectPolygonal::KisToolSelectPolygonal()
 	m_finish = QPoint(-1, -1);
 
 	m_index = 0;
+	m_optWidget = 0;
 }
 
 KisToolSelectPolygonal::~KisToolSelectPolygonal()

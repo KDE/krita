@@ -53,6 +53,7 @@ KisToolFilter::KisToolFilter()
 {
 	setName("tool_filter");
 	m_subject = 0;
+	m_optWidget = 0;
 	setCursor(KisCursor::penCursor());
 }
 

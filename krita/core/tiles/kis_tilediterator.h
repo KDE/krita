@@ -133,13 +133,14 @@ public:
 	KisTiledHLineIterator & operator+=(int);
 
 	/// Goes back one pixel. Going to the end of the line above when it reaches the beginning of a line
-	//KisTiledHLineIterator & operator--();
+	KisTiledHLineIterator & operator--();
 
 	/// returns true when the iterator has reached the end
 	bool isDone() const;
 
 protected:
 	 Q_INT32 m_right;
+	 Q_INT32 m_left;
 	 Q_INT32 m_leftCol;
 	 Q_INT32 m_rightCol;
 	 Q_INT32 m_xInTile;
@@ -149,6 +150,7 @@ protected:
 
 private:
 	 void nextTile();
+	 void prevTile();
 };
 
 /**

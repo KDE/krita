@@ -90,7 +90,7 @@ public:
 	KisHLineIterator & operator+=(int n) { ACTUAL_HLINEITERATOR::operator+=(n); return *this; };
 	
 	/// Goes back one pixel until it reaches the beginning of the line
-	//KisHLineIterator & operator--() { ACTUAL_HLINEITERATOR::operator--(); return *this; };
+	KisHLineIterator & operator--() { ACTUAL_HLINEITERATOR::operator--(); return *this; };
 	
 	/// returns true when iterators has reached the end
 	bool isDone()  const { return ACTUAL_HLINEITERATOR::isDone(); };

@@ -24,7 +24,7 @@
 
 KisTiledHLineIterator::KisTiledHLineIterator( KisTiledDataManager *ndevice,  Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable) :
 	KisTiledIterator(ndevice),
-	m_right(x+w-1)
+	m_right(x+w-1), m_left(x)
 {
 	Q_ASSERT(ndevice != 0);
 
@@ -90,6 +90,22 @@ void KisTiledHLineIterator::nextTile()
 	}
 }
 
+void KisTiledHLineIterator::prevTile()
+{
+	if(m_col > m_leftCol)
+	{
+		m_col--;
+
+		if(m_col == m_leftCol) {
+			m_leftInTile = m_left - m_leftCol * KisTile::WIDTH;
+		} else {
+			m_leftInTile = 0;
+		}
+		// the only place this doesn't apply, is if we're in rightCol, and we can't go there
+		m_rightInTile = KisTile::WIDTH - 1;
+	}
+}
+
 Q_INT32 KisTiledHLineIterator::nConseqHPixels() const
 {
 	return m_rightInTile - m_xInTile + 1;
@@ -97,29 +113,49 @@ Q_INT32 KisTiledHLineIterator::nConseqHPixels() const
 
 KisTiledHLineIterator & KisTiledHLineIterator::operator+=(int n)
 {
+	// XXX what if outside the valid range of this iterator?
 	if(m_xInTile + n > m_rightInTile)
 	{
-		nextTile();
-		m_xInTile = m_leftInTile;
 		m_x += n;
+		m_col = xToCol(m_x);
+		m_xInTile = m_x - m_col * KisTile::WIDTH;
+		m_leftInTile = 0;
+
+		if(m_col == m_rightCol)
+			m_rightInTile = m_right - m_rightCol * KisTile::WIDTH;
+		else
+			m_rightInTile = KisTile::WIDTH - 1;
+
+		fetchTileData(m_col, m_row);
 	}
 	else
 	{
 		m_xInTile += n;
 		m_x += n;
 	}
-	fetchTileData(m_col, m_row);
 	m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 
 	return *this;
 }
 
-/*
 KisTiledHLineIterator & KisTiledHLineIterator::operator -- ()
 {
+	if(m_xInTile <= 0)
+	{
+		prevTile();
+		fetchTileData(m_col, m_row);
+		m_xInTile = KisTile::WIDTH - 1;
+		m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
+	}
+	else
+	{
+		m_xInTile--;
+		m_offset -= m_pixelSize;
+	}
+	m_x--;
+
 	return *this;
 }
-*/
 
 bool KisTiledHLineIterator::isDone() const
 {

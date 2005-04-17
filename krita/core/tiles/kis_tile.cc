@@ -26,7 +26,7 @@ const Q_INT32 KisTile::WIDTH = 64;
 const Q_INT32 KisTile::HEIGHT = 64;
 
 
-KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row)
+KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, Q_UINT8 *defPixel)
 {
 	m_pixelSize = pixelSize;
 	m_data = 0;
@@ -35,9 +35,7 @@ KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row)
 	m_row = row;
 	allocate();
 
-	//HACK: This should use a settable default pixel.
-	memset(m_data, 0, WIDTH * HEIGHT * m_pixelSize);
-
+	setData(defPixel);
 }
 
 KisTile::KisTile(KisTile& rhs, Q_INT32 col, Q_INT32 row)
@@ -104,4 +102,15 @@ Q_UINT8 *KisTile::data(Q_INT32 x, Q_INT32 y )
 {
 	Q_ASSERT(m_data != 0);
 	return m_data + m_pixelSize * ( y * WIDTH + x );
+}
+
+void KisTile::setData(Q_UINT8 *pixel)
+{
+	Q_UINT8 *dst = m_data;
+	
+	for(int i=0; i <WIDTH * HEIGHT;i++)
+	{
+		memcpy(dst, pixel, m_pixelSize);
+		dst+=m_pixelSize;
+	}
 }

@@ -45,7 +45,7 @@ class KoStore;
 class KisDataManager : private ACTUAL_DATAMGR {
 
 public:
-	KisDataManager(Q_UINT32 pixelSize) : ACTUAL_DATAMGR(pixelSize) {};
+	KisDataManager(Q_UINT32 pixelSize, Q_UINT8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel) {};
 	KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm) { };
 
 public:
@@ -124,6 +124,10 @@ public:
 		   Q_INT32 w, Q_INT32 h,
 		   Q_UINT8 * def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); };
 
+	/**
+	 * Clear all back to default values.
+	 */
+	void clear() { ACTUAL_DATAMGR::clear(); };
 
 
 public:

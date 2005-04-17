@@ -269,22 +269,22 @@ public:
 	 */
 	KisVLineIteratorPixel createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
 
-	/** Get the current selection or create one if this layers hasn't got a selection yet. */
+	/** Get the current selection or create one if this paintdevice hasn't got a selection yet. */
 	KisSelectionSP selection();
 
-	/** Set the specified selection object as the active selection for this layer */
+	/** Set the specified selection as the active selection for this paintdevice */
 	void setSelection(KisSelectionSP selection);
 
-	/** Adds the specified selection to the currently active selection for this layer */
+	/** Adds the specified selection to the currently active selection for this paintdevice */
 	void addSelection(KisSelectionSP selection);
 
-	/** Subtracts the specified selection from the currently active selection for this layer */
+	/** Subtracts the specified selection from the currently active selection for this paindevice */
 	void subtractSelection(KisSelectionSP selection);
 
-	/** Whether there is a valid selection for this layer. */
+	/** Whether there is a valid selection for this paintdevice. */
 	bool hasSelection();
 
-	/** Removes the current selection for this layer. */
+	/** Removes the current selection for this paintdevice. */
 	void removeSelection();
 
 

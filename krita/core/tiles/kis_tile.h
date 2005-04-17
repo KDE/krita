@@ -30,7 +30,7 @@ class KisTiledIterator;
  */
 class KisTile  {
 public:
-	KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row);
+	KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, Q_UINT8 *defPixel);
 	KisTile(KisTile& rhs, Q_INT32 col, Q_INT32 row);
 	KisTile(KisTile& rhs);
 	~KisTile();
@@ -45,6 +45,7 @@ public:
 	Q_INT32 getCol() {return m_col;};
 	void setNext(KisTile *);
 	KisTile *getNext();
+	void setData(Q_UINT8 *pixel);
 
 	friend class KisTiledIterator;
 	friend class KisTiledDataManager;

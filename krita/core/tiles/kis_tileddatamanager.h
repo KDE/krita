@@ -46,7 +46,7 @@ class KisMemento;
 class KisTiledDataManager {
 
 protected:
-	KisTiledDataManager(Q_UINT32 pixelSize);
+	KisTiledDataManager(Q_UINT32 pixelSize, Q_UINT8 *defPixel);
 	~KisTiledDataManager();
 	KisTiledDataManager(const KisTiledDataManager &dm);
 	KisTiledDataManager & operator=(const KisTiledDataManager &dm);
@@ -54,7 +54,7 @@ protected:
 
 public:
 	// Allow the baseclass of iterators acces to the interior
-	// derived classes must go through KisTiledIterator
+	// derived iterator classes must go through KisTiledIterator
 	friend class KisTiledIterator;
 
 public:
@@ -83,6 +83,7 @@ public:
 
 	void clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UINT8 def);
 	void clear(Q_INT32 x, Q_INT32 y,  Q_INT32 w, Q_INT32 h, Q_UINT8 * def);
+	void clear();
 
 
 public:
@@ -127,16 +128,16 @@ public:
 			Q_INT32 x, Q_INT32 y,
 			Q_INT32 w, Q_INT32 h);
 
-	// Get the number of contiguous columns starting at x, valid for all values
-	// of y between minY and maxY.
+	/// Get the number of contiguous columns starting at x, valid for all values
+	/// of y between minY and maxY.
 	Q_INT32 numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY); 
 
-	// Get the number of contiguous rows starting at y, valid for all values
-	// of x between minX and maxX.
+	/// Get the number of contiguous rows starting at y, valid for all values
+	/// of x between minX and maxX.
 	Q_INT32 numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX); 
 
-	// Get the row stride at pixel (x, y). This is the number of bytes to add to a
-	// pointer to pixel (x, y) to access (x, y + 1).
+	/// Get the row stride at pixel (x, y). This is the number of bytes to add to a
+	/// pointer to pixel (x, y) to access (x, y + 1).
 	Q_INT32 rowStride(Q_INT32 x, Q_INT32 y);
 
 	// For debugging use
@@ -153,6 +154,8 @@ private:
 	Q_INT32 m_extentMinY;
 	Q_INT32 m_extentMaxX;
 	Q_INT32 m_extentMaxY;
+	Q_UINT8 *m_defPixel;
+	
 private:
 
 	void ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, KisTile *refTile);

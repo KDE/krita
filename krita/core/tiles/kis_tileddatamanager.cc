@@ -33,11 +33,15 @@
  *  Even though the matrix has grown it may still not contain tiles at specific positions. They are created on demand
  */
 
-KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize)
+KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize, Q_UINT8 *defPixel)
 {
 	m_pixelSize = pixelSize;
 
-	m_defaultTile = new KisTile(pixelSize,0,0);
+	m_defPixel = new Q_UINT8[m_pixelSize];
+	Q_CHECK_PTR(m_defPixel);
+	memcpy(m_defPixel, defPixel, m_pixelSize);
+	
+	m_defaultTile = new KisTile(pixelSize,0,0, m_defPixel);
 	Q_CHECK_PTR(m_defaultTile);
 
 	m_hashTable = new KisTile * [1024];
@@ -57,6 +61,10 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
 {
 	m_pixelSize = dm.m_pixelSize;
 
+	m_defPixel = new Q_UINT8[m_pixelSize];
+	Q_CHECK_PTR(m_defPixel);
+	memcpy(m_defPixel, dm.m_defPixel, m_pixelSize);
+	
 	m_defaultTile = new KisTile(*dm.m_defaultTile, dm.m_defaultTile->getCol(), dm.m_defaultTile->getRow());
 	Q_CHECK_PTR(m_defaultTile);
 
@@ -108,6 +116,7 @@ KisTiledDataManager::~KisTiledDataManager()
 	}
 	delete [] m_hashTable;
 	delete m_defaultTile;
+	delete [] m_defPixel;
 }
 
 
@@ -167,7 +176,7 @@ bool KisTiledDataManager::read(KoStore *store)
 		Q_UINT32 col = xToCol(x);
 		Q_UINT32 tileHash = calcTileHash(col, row);
 
-		KisTile *tile = new KisTile(m_pixelSize, col, row);
+		KisTile *tile = new KisTile(m_pixelSize, col, row, m_defPixel);
 		Q_CHECK_PTR(tile);
 
 		updateExtent(col,row);
@@ -251,15 +260,16 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 				}
 				else {
 					//kdDebug() << "Completely outside, delete this tile. It had already been mementoed\n";
- 					KisTile *deltile = tile;
- 					tile = tile->getNext();
- 					
- 					if (previousTile)
+					KisTile *deltile = tile;
+					tile = tile->getNext();
+					
+					m_numTiles--;
+					
+					if (previousTile)
 						previousTile -> setNext(tile);
 					else 
 						m_hashTable[tileHash] = tile;
- 					delete deltile;
-
+					delete deltile;
 				}
 			}
 		}
@@ -283,6 +293,34 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UI
 {
 	//CBR_MISSING
 	x=y=w=h=*def;
+}
+
+void KisTiledDataManager::clear()
+{
+	// Loop through all tiles, add to the memento, then delete it,
+	for(int tileHash = 0; tileHash < 1024; tileHash++)
+	{
+		KisTile *tile = m_hashTable[tileHash];
+		
+		while(tile)
+		{
+			ensureTileMementoed(tile -> getCol(), tile -> getRow(), tileHash, tile);
+		
+			KisTile *deltile = tile;
+			tile = tile->getNext();
+				
+			delete deltile;
+		}
+		m_hashTable[tileHash] = 0;
+	}
+	
+	m_numTiles = 0;
+	
+	// Set the extent correctly
+	m_extentMinX = 0x7FFFFFFF;
+	m_extentMinY = 0x7FFFFFFF;
+	m_extentMaxX = -(0x7FFFFFFE);
+	m_extentMaxY = -(0x7FFFFFFE);
 }
 
 void KisTiledDataManager::paste(KisDataManager * data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
@@ -354,6 +392,8 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 				else
 					m_hashTable[i]= curTile->getNext();
 
+				m_numTiles--;
+
 				// And put it in the redo hashtable of the memento
 				curTile->setNext(memento->m_redoHashTable[i]);
 				memento->m_redoHashTable[i] = curTile;
@@ -372,7 +412,8 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 			// Put a copy of the memento tile into our hashtable
 			curTile = new KisTile(*tile);
 			Q_CHECK_PTR(curTile);
-
+			m_numTiles++;
+			
 			curTile->setNext(m_hashTable[i]);
 			m_hashTable[i] = curTile;
 
@@ -416,6 +457,7 @@ void KisTiledDataManager::rollforward(KisMemento *memento)
 					m_hashTable[i]= curTile->getNext();
 
 				// And delete it (it's equal to the one stored in the memento's undo)
+				m_numTiles--;
 				delete curTile;
 			}
 
@@ -425,6 +467,7 @@ void KisTiledDataManager::rollforward(KisMemento *memento)
 
 			curTile->setNext(m_hashTable[i]);
 			m_hashTable[i] = curTile;
+			m_numTiles++;
 
 			tile = tile->getNext();
 		}
@@ -454,6 +497,7 @@ void KisTiledDataManager::rollforward(KisMemento *memento)
 			m_hashTable[tileHash] = curTile->getNext();
 
 		// And delete it (it's equal to the one stored in the memento's undo)
+		m_numTiles--;
 		delete curTile;
 
 		d = d->next;
@@ -608,8 +652,6 @@ void KisTiledDataManager::readBytes(Q_UINT8 * data,
  	if (h < 0)
 		h = 0;
 
-	Q_UINT8 * ptr = data;
-
 	Q_INT32 dstY = 0;
 	Q_INT32 srcY = y;
 	Q_INT32 rowsRemaining = h;
@@ -665,7 +707,6 @@ void KisTiledDataManager::writeBytes(const Q_UINT8 * bytes,
 
 	if (h < 0)
 		h = 0;
-	const Q_UINT8 * ptr = bytes;
 
 	Q_INT32 srcY = 0;
 	Q_INT32 dstY = y;

@@ -85,8 +85,6 @@ void KisToolRectangle::move(KisMoveEvent *event)
 			KisPoint trans = event -> pos() - m_dragEnd;
 			m_dragStart += trans;
 			m_dragEnd += trans;
-			m_dragCenter = KisPoint((m_dragStart.x() + m_dragEnd.x()) / 2,
-					(m_dragStart.y() + m_dragEnd.y()) / 2);
 		} else {
 			KisPoint diag = event -> pos() - (event->state() & Qt::ControlButton
 					? m_dragCenter : m_dragStart);
@@ -108,6 +106,8 @@ void KisToolRectangle::move(KisMoveEvent *event)
 		}
 		// draw new lines on canvas
 		draw(m_dragStart, m_dragEnd);
+		m_dragCenter = KisPoint((m_dragStart.x() + m_dragEnd.x()) / 2,
+				(m_dragStart.y() + m_dragEnd.y()) / 2);
 	}
 }
 

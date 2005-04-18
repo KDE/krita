@@ -199,8 +199,13 @@ private:
 
 	KisBackgroundSP m_bkg;
 	KisLayerSP m_projection;
-	vKisLayerSP m_layers;
-	vKisLayerSP m_layerStack;
+	vKisLayerSP m_layers; // Contains the list of all layers
+	vKisLayerSP m_layerStack; // Contains a stack of layers in
+				  // order of activation, so that when
+				  // we remove a layer can activate
+				  // the previously activated layer
+				  // instead of the bottom or topmost
+				  // layer.
 	KisLayerSP m_activeLayer;
 
 	KisNameServer *m_nserver;

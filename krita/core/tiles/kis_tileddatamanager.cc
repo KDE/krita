@@ -119,7 +119,15 @@ KisTiledDataManager::~KisTiledDataManager()
 	delete [] m_defPixel;
 }
 
-
+void KisTiledDataManager::setDefaultPixel(Q_UINT8 *defPixel)
+{
+	delete [] m_defPixel;
+	m_defPixel = new Q_UINT8[m_pixelSize];
+	Q_CHECK_PTR(m_defPixel);
+	memcpy(m_defPixel, defPixel, m_pixelSize);
+	
+	m_defaultTile->setData(m_defPixel);	
+}
 
 bool KisTiledDataManager::write(KoStore *store)
 {

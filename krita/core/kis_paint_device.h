@@ -300,9 +300,11 @@ signals:
 private:
 	KisPaintDevice& operator=(const KisPaintDevice&);
 
+protected:
+	KisDataManager * m_datamanager;
+
 private:
 	KisImage *m_owner;
-	KisDataManager * m_datamanager;
 	Q_INT32 m_x;
 	Q_INT32 m_y;
 	bool m_visible;

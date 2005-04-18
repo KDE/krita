@@ -59,6 +59,8 @@ public:
 
 public:
 
+	void setDefaultPixel(Q_UINT8 *defPixel);
+	
 	KisMemento *getMemento();
 	void rollback(KisMemento *memento);
 	void rollforward(KisMemento *memento);

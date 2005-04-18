@@ -76,7 +76,7 @@ void KisSelectionOptions::slotSetMaskColor(const QColor & c)
 }
 
 
-
+/*
 void KisSelectionOptions::slotSetMaskInversion(bool i)
 {
 	if (!m_subject) return;
@@ -89,6 +89,6 @@ void KisSelectionOptions::slotSetMaskInversion(bool i)
 		m_subject -> canvasController() -> updateCanvas();
 	}	
 }
-
+*/
 
 #include "kis_selection_options.moc"

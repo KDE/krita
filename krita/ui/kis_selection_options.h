@@ -46,7 +46,7 @@ signals:
 private slots:
 
 	void slotSetMaskColor(const QColor &);
-	void slotSetMaskInversion(bool);
+//	void slotSetMaskInversion(bool);
 
 private:
 	WdgSelectionOptions * m_page;

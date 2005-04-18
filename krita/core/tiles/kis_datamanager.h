@@ -49,9 +49,14 @@ public:
 	KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm) { };
 
 public:
-
 	/**
-	 * Reguest a memento from the data manager. There is only one memento active
+	 * Sets the default pixel. Note that this might change every occourance, and it might not, but new data
+	 * well be initialised with this pixel
+	 */
+	void setDefaultPixel(Q_UINT8 *defPixel) { return ACTUAL_DATAMGR::setDefaultPixel(defPixel); };
+	
+	/**
+	 * Reguests a memento from the data manager. There is only one memento active
 	 * at any given moment for a given paint device and all and any
 	 * write actions on the datamanger builds undo data into this memento
 	 * necessary to rollback the transaction.

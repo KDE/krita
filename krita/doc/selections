@@ -6,21 +6,12 @@ find anything connected with that after I finish coding the new
 selections scheme, it's something I forgot.
 
 Selections in Krita are special paint devices as big as their parent
-layer. Until Krita can compose heterogenous images (i.e., with layers
-of a different type), selections have the same colour strategy as
-their parent layer. The alpha channel then contains the selections
-channel; selectedness of a pixel is not a binary value, but a scale,
-provisionally 8 bits. More might be needed, but I doubt it.
-
-The color/gray channels of a selection paint device contains the color
-of the mask. On creation, the selection is filled with the selected
-mask color. If during the lifetime of the selection the mask color is
-changed, the layer is filled again with the new color.
+layer. The selection has the alpha colour strategy. The alpha channel
+contains the selectedness of a pixel. It is not a binary value, but a scale,
+hardcoded to 8 bits unsigned
 
 TODO: * implement heterogenous compositing. (Needs knowledge by the
         target layer of the color strategy of the source layer).
-      * create an 8-bit KisAlphaMask color strategy that composits
-        using a given color and the alpha pixel value.
 
 Selections can be changed using tools that are clones of the usual
 painting tools: brush, eraser, polygon, etc. 
@@ -38,8 +29,8 @@ Selections can also changed by procedures like select-by-color etc.
 TODO: * finish dialog for select by color
       * implement select-by-color (depends on usable iterators)
 
-Selections are represented as a colored mask of a certain opacity
-where more transparent == more selected.
+Selections are represented as 0== unselected and 255 == fully
+selected. Values in between are semi selected
 
 Other representations of selections are possible: the selection for a
 particular rect is rendered as a separate step in

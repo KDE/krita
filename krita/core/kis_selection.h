@@ -58,14 +58,12 @@ public:
 
 	void select(QRect r);
 
-	void invert(QRect r);
+	void invert();
 
 	void clear(QRect r);
 
 	// Keep the selection but set the mask to color c.
 	void setMaskColor(const QColor c);
-	// Set the mask to inverted, do not invert the actual selection.
-	void setInverted(bool);
 
 	QRect selectedRect();
 
@@ -73,6 +71,7 @@ private:
 	KisPaintDeviceSP m_parentLayer;
 	KisColorSpaceAlphaSP m_alpha;
 	QColor m_maskColor;
+	Q_UINT8  m_defPixel;
 };
 
 #endif // KIS_SELECTION_H_

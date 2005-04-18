@@ -44,6 +44,7 @@ KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
 	m_maskColor = Qt::white;
 	m_alpha = KisColorSpaceAlphaSP(dynamic_cast<KisColorSpaceAlpha*> (colorStrategy().data()));
  	m_alpha -> setMaskColor(m_maskColor);
+	m_defPixel = MIN_SELECTED;
 }
 
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name, QColor color)
@@ -51,6 +52,7 @@ KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name, QColor c
 {
 	m_parentLayer = layer;
 	m_maskColor = color;
+	m_defPixel = MIN_SELECTED;
 }
 
 
@@ -110,27 +112,27 @@ void KisSelection::clear(QRect r)
 	painter.fillRect(r, m_maskColor, MIN_SELECTED);
 }
 
-void KisSelection::invert(QRect rect)
+void KisSelection::invert()
 {
-	KisRectIterator it = createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+	Q_INT32 x,y,w,h;
+
+	extent(x, y, w, h);
+	KisRectIterator it = createRectIterator(x, y, w, h, true);
 	while ( ! it.isDone() )
 	{
 		// CBR this is wrong only first byte is inverted
 		// BSAR: But we have always only one byte in this color model :-).
-		*(it.rawData()) = QUANTUM_MAX - *(it.rawData());
+		*(it.rawData()) = MAX_SELECTED - *(it.rawData());
 		++it;
 	}
+	m_defPixel = MAX_SELECTED - m_defPixel;
+	m_datamanager -> setDefaultPixel(&m_defPixel);
 }
 
 void KisSelection::setMaskColor(QColor c)
 {
 	m_alpha -> setMaskColor(c);
 	m_maskColor = c;
-}
-
-void KisSelection::setInverted(bool i)
-{
-	m_alpha -> setInverted(i);
 }
 
 QRect KisSelection::selectedRect()

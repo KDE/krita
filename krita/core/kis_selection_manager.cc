@@ -290,7 +290,7 @@ void KisSelectionManager::copy()
 	if (!layer -> hasSelection()) return;
 
 	KisSelectionSP selection = layer -> selection();
-	QRect r = selection -> exactBounds();
+	QRect r = selection -> selectedRect();
 	r = r.normalize();
 
 // 	kdDebug() << "Selection rect: "
@@ -307,35 +307,30 @@ void KisSelectionManager::copy()
 	clip -> setProfile(layer -> profile());
 
 	// TODO if the source is linked... copy from all linked layers?!?
-	
+
 	// Copy image data
 	KisPainter gc;
 	gc.begin(clip);
-	gc.bltSelection(0, 0, COMPOSITE_COPY, layer.data(), OPACITY_OPAQUE,  r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height());
+	gc.bitBlt(0, 0, COMPOSITE_COPY, layer.data(), r.x(), r.y(), r.width(), r.height());
 	gc.end();
-#if 0
-	// Apply selection mask.
-	selection -> invert(QRect(r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height()));
 
-	KisRectIterator layerIt = clip -> createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
+	// Apply selection mask.
+
+	KisRectIterator layerIt = clip -> createRectIterator(0, 0, r.width(), r.height(), true);
  	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
 
 	while (!layerIt.isDone()) {
  		KisPixel p = clip -> toPixel(layerIt.rawData());
  		KisPixel s = selection -> toPixel(selectionIt.rawData());
- 		Q_UINT8 p_alpha, s_alpha;
+ 		Q_UINT16 p_alpha, s_alpha;
  		p_alpha = p.alpha();
  		s_alpha = s.alpha();
-		if (p_alpha < s_alpha)
-			p.alpha() = 0;
-		else
-			p.alpha() = p_alpha - s_alpha;
-
+		
+		p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
+		
 		++layerIt;
  		++selectionIt;
 	}
-
-	selection -> invert(QRect(r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height()));
 
 //      kdDebug() << "Selection copied: "
 //                << r.x() << ", "
@@ -343,10 +338,9 @@ void KisSelectionManager::copy()
 //                << r.width() << ", "
 //                << r.height() << "\n";
 
-#endif
+
  	m_clipboard -> setClip(clip);
  	imgSelectionChanged(m_parent -> currentImg());
-
 }
 
 
@@ -452,20 +446,17 @@ void KisSelectionManager::clear()
 		Q_CHECK_PTR(t);
 	}
 
-
 	KisRectIterator layerIt = layer -> createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
  	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
 
 	while (!layerIt.isDone()) {
  		KisPixel p = layer -> toPixel(layerIt.rawData());
  		KisPixel s = selection -> toPixel(selectionIt.rawData());
- 		Q_UINT8 p_alpha, s_alpha;
+ 		Q_UINT16 p_alpha, s_alpha;
  		p_alpha = p.alpha();
- 		s_alpha = s.alpha();
-		if (p_alpha < s_alpha)
-			p.alpha() = 0;
-		else
-			p.alpha() = p_alpha - s_alpha;
+ 		s_alpha = MAX_SELECTED -  - s.alpha();
+		
+		p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
 
 		++layerIt;
  		++selectionIt;
@@ -497,7 +488,7 @@ void KisSelectionManager::invert()
 		Q_INT32 x,y,w,h;
 		KisSelectionSP s = layer -> selection();
 		layer->extent(x, y, w, h); // it's intentionally the extent of the layer
-		s -> invert(QRect(x, y, w, h));
+		s -> invert();
 	}
 	else {
 		selectAll();

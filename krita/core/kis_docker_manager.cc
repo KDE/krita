@@ -133,7 +133,7 @@ void KisDockerManager::addDockerTab(QWidget * tab, const KisID & docker, enumDoc
 	else if (docktype == DOCKER_SLIDER) {
 		if (m_sliders -> exists(docker)) {
 			KoTabbedToolDock * d = m_sliders -> get(docker);
-			d -> plug(tab);
+			 d -> plug(tab);
 		}
 		else {
 			KoTabbedToolDock * d = new KoTabbedToolDock(m_view);
@@ -753,6 +753,8 @@ void KisDockerManager::layerSelected(int layer)
 	m_layerBox -> setOpacity(opacity);
 
 	m_layerBox -> setCompositeOp((int)(l -> compositeOp()));
+
+	m_view -> updateCanvas();
 }
 
 #include "kis_docker_manager.moc"

@@ -64,7 +64,7 @@ Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
  		  << "\n";
 
 
-	(void) new KAction(i18n("&Histogram"), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
+	(void) new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
 	
 	if ( !parent->inherits("KisView") )
 	{

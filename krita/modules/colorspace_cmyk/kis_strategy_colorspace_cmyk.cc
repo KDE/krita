@@ -48,6 +48,7 @@ KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
 	m_channels.push_back(new KisChannelInfo(i18n("magenta"), 1, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("yellow"), 2, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("black"), 3, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 4, ALPHA));
 
 	if (profileCount() == 0) {
 		kdDebug() << "No profiles loaded!\n";
@@ -92,21 +93,29 @@ KisStrategyColorSpaceCMYK::~KisStrategyColorSpaceCMYK()
 {
 	// XXX: These deletes cause a crash, but since the color strategy is a singleton
 	//      that's only deleted at application close, it's no big deal.
-	// delete m_qcolordata;
+	delete [] m_qcolordata;
 	//cmsDeleteTransform(m_defaultToRGB);
 	//cmsDeleteTransform(m_defaultFromRGB);
 }
 
 void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM *dst, KisProfileSP profile)
 {
-	color.getRgb(m_qcolordata, m_qcolordata + 1, m_qcolordata + 2);
+	m_qcolordata[2] = color.red();
+	m_qcolordata[1] = color.green();
+	m_qcolordata[0] = color.blue();
+
 	cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
+	dst[3] = OPACITY_OPAQUE;
 }
 
-void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM /*opacity*/, QUANTUM *dst, KisProfileSP profile)
+void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile)
 {
-	color.getRgb(m_qcolordata, m_qcolordata + 1, m_qcolordata + 2);
+	m_qcolordata[2] = color.red();
+	m_qcolordata[1] = color.green();
+	m_qcolordata[0] = color.blue();
+
 	cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
+	dst[3] = opacity;
 }
 
 
@@ -120,7 +129,7 @@ void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c, QUANTUM 
 {
 	cmsDoTransform(m_defaultToRGB, const_cast <QUANTUM *>(src), m_qcolordata, 1);
 	c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
- 	*opacity = OPACITY_OPAQUE;
+ 	*opacity = src[3];
 }
 
 vKisChannelInfoSP KisStrategyColorSpaceCMYK::channels() const
@@ -153,28 +162,28 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 						  Q_INT32 renderingIntent)
 
 {
-// 	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
-// 		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
+ 	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
+ 		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
 
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
 	memset(img.bits(), 255, width * height * sizeof(Q_UINT32));
 	KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
 
 
-	if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
-// 		kdDebug() << "Going to use default transform\n";
-		cmsDoTransform(m_defaultToRGB,
-			       const_cast<QUANTUM *> (data),
-			       img.bits(),
-			       width * height);
-	}
-	else {
-// 		kdDebug() << "Going to transform with profiles\n";
-		// Do a nice calibrated conversion
-		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile,
-				img.bits(), dstCS, dstProfile,
-				width * height, renderingIntent);
-	}
+// 	if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
+//  		kdDebug() << "Going to use default transform\n";
+// 		cmsDoTransform(m_defaultToRGB,
+// 			       const_cast<QUANTUM *> (data),
+// 			       img.bits(),
+// 			       width * height);
+// 	}
+// 	else {
+//  		kdDebug() << "Going to transform with profiles\n";
+// 		// Do a nice calibrated conversion
+// 		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile,
+// 				img.bits(), dstCS, dstProfile,
+// 				width * height, renderingIntent);
+// 	}
 
 	return img;
 }

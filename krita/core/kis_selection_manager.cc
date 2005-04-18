@@ -290,7 +290,7 @@ void KisSelectionManager::copy()
 	if (!layer -> hasSelection()) return;
 
 	KisSelectionSP selection = layer -> selection();
-	QRect r = selection -> selectedRect();
+	QRect r = selection -> exactBounds();
 	r = r.normalize();
 
 // 	kdDebug() << "Selection rect: "
@@ -307,13 +307,13 @@ void KisSelectionManager::copy()
 	clip -> setProfile(layer -> profile());
 
 	// TODO if the source is linked... copy from all linked layers?!?
-
+	
 	// Copy image data
 	KisPainter gc;
 	gc.begin(clip);
-	gc.bitBlt(0, 0, COMPOSITE_COPY, layer.data(), r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height());
+	gc.bltSelection(0, 0, COMPOSITE_COPY, layer.data(), OPACITY_OPAQUE,  r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height());
 	gc.end();
-
+#if 0
 	// Apply selection mask.
 	selection -> invert(QRect(r.x() - layer->getX(), r.y() - layer->getY(), r.width(), r.height()));
 
@@ -343,7 +343,7 @@ void KisSelectionManager::copy()
 //                << r.width() << ", "
 //                << r.height() << "\n";
 
-
+#endif
  	m_clipboard -> setClip(clip);
  	imgSelectionChanged(m_parent -> currentImg());
 

@@ -78,9 +78,23 @@ void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& color, QUANTUM *dst, 
 
 void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile)
 {
-	nativeColor(c, dst);
+	QUANTUM c = 255 - color.red();
+	QUANTUM m = 255 - color.green();
+	QUANTUM y = 255 - color.blue();
+
+	QUANTUM k = 255;
+
+	if (c < k) k = c;
+	if (m < k) k = m;
+	if (y < k) k = y;
+
+	dst[PIXEL_CYAN] = (c - k) / ( 255 - k);
+	dst[PIXEL_MAGENTA] = (m  - k) / ( 255 - k);
+	dst[PIXEL_YELLOW] = (y - k) / ( 255 - k);
+	dst[PIXEL_BLACK] = k;
+
 	dst[PIXEL_CMYK_ALPHA] = opacity;
- }
+}
 
 void KisStrategyColorSpaceCMYKA::toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile)
 {

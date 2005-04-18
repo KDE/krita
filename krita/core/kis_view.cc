@@ -2569,32 +2569,30 @@ void KisView::slotImageSizeChanged(KisImageSP img, Q_INT32 /*w*/, Q_INT32 /*h*/)
 void KisView::layerToImage()
 {
 	KisImageSP img = currentImg();
+	if (!img) return;
 
-	if (img) {
-		KisLayerSP layer = img -> activeLayer();
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
 
+	KisImageSP dupedImg = new KisImage(m_adapter, img->width(), img->height(), img -> colorStrategy(), m_doc -> nextImageName());
+	Q_CHECK_PTR(dupedImg);
+
+	if (layer -> hasSelection()) {
 		KisSelectionSP selection = layer-> selection();
+		m_selectionManager -> copy();
+		m_doc -> addImage(dupedImg);
+		selectImage(dupedImg);
+		m_selectionManager -> paste();
+		
+	}
+	else {
+		KisLayerSP duped = new KisLayer(*layer);
+		Q_CHECK_PTR(duped);
 
-
-//                 if (selection)
-//                         layer = selection.data();
-//                 else
-		img -> activeLayer();
-
-		if (layer) {
-			KisImageSP dupedImg = new KisImage(m_adapter, img->width(), img->height(), img -> colorStrategy(), m_doc -> nextImageName());
-			Q_CHECK_PTR(dupedImg);
-
-			KisLayerSP duped = new KisLayer(*layer);
-			Q_CHECK_PTR(duped);
-
-			duped -> setName(dupedImg -> nextLayerName());
-			duped -> setX(0);
-			duped -> setY(0);
-			dupedImg -> add(duped, -1);
-			m_doc -> addImage(dupedImg);
-			selectImage(dupedImg);
-		}
+		duped -> setName(dupedImg -> nextLayerName());
+		duped -> setX(0);
+		duped -> setY(0);
+		dupedImg -> add(duped, -1);
 	}
 }
 

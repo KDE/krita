@@ -869,8 +869,9 @@ Q_INT32 KisImage::nLinkedLayers() const
 
 void KisImage::flatten()
 {
-
 	vKisLayerSP beforeLayers = m_layers;
+
+	if (m_layers.empty()) return;
 
 	KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
 	Q_CHECK_PTR(dst);
@@ -879,8 +880,14 @@ void KisImage::flatten()
 	painter.fillRect(0, 0, width(), height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers = layers();
+
+	KisLayerSP bottomLayer = mergeLayers.back();
+	QString bottomName =  bottomLayer -> name();
+
 	KisMerge<isVisible, All> visitor(this);
 	visitor(painter, mergeLayers);
+	dst -> setName(bottomName);
+
 	add(dst, -1);
 
 	notify();

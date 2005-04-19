@@ -291,12 +291,14 @@ void KisLayerBox::setTopItem(int n)
         m_lst -> listLayers -> triggerUpdate(false);
 }
 
-void KisLayerBox::insertItem(const QString& name, bool visible, bool linked)
+void KisLayerBox::insertItem(const QString& name, bool visible, bool linked, bool locked)
 {
         KisLayerBoxItem *p = new KisLayerBoxItem(name, m_lst -> listLayers, m_flags);
 
         p -> setVisible(visible);
         p -> setLinked(linked);
+	p -> setLocked(locked);
+
         m_lst -> listLayers -> insertItem(p);
         m_lst -> listLayers -> setCurrentItem(p);
 }

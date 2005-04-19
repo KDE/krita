@@ -27,6 +27,7 @@
 #include <qsize.h>
 #include <qstring.h>
 
+#include <kdebug.h>
 #include <klistbox.h>
 
 class WdgLayerBox;
@@ -48,8 +49,7 @@ public:
         KisLayerBox(const QString& label, flags f = SHOWALL, QWidget *parent = 0, const char *name = 0);
         virtual ~KisLayerBox();
 
-        void insertItem(const QString& name, bool visible = true, bool linked =
-false);
+        void insertItem(const QString& name, bool visible = true, bool linked = false, bool locked = false);
 	int getCurrentItem() const;
         void setTopItem(int n);
         void clear();
@@ -192,6 +192,7 @@ void KisLayerBoxItem::toggleLinked()
 inline
 void KisLayerBoxItem::toggleLocked()
 {
+	kdDebug() << "locked toggled!\n";
         m_locked = !m_locked;
 }
 

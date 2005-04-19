@@ -1,0 +1,40 @@
+Ranjan Ghosh on resolution:
+
+The resolution dialog needs a bit of fine-tuning IMO.
+
+1) It's not only the print size that changes but the size on any media. 
+Therefore I propose adding a single option"physical size" to
+the zoom menu (like 100%,200%, Fit in Window, Physical Size) and
+changing the text a bit:
+
+<snip>
+
+Physical Size
+----------------
+Width:  [---------] (cm, mm,...)
+Height: [---------] (cm, mm,...)
+
+The physical size of an image is determined by the
+size in pixels, the image resolution shown above
+and the physical resolution of the target media
+(screen, printer, etc). Most images do not...
+
+<snip>
+
+Now you can enter some value here and when you later select
+"Zoom to physical size" you will size the image on your screen
+just like it is on your printer. Requirements for this to work:
+A proper screen resolution setting in Properties (I would not
+repeat it here though as it is confusing) and proper printer
+resolution setting. Can this determined automatically? Otherwise
+there is a need to enter a printer resolution to (perhaps
+in the print dialogue itself or under properties)
+
+The metric system is not needed IMO. The resolution is never
+given in dots per centimeter but always in dots per inch. Nobody
+- even in Europe - will need that. It's just not used. Even more:
+Most people certainly will want to enter some values in centimeter
+but read the resolution in dpi. So I propose setting all resolution
+values to dpi.
+
+

@@ -300,7 +300,7 @@ void KisView::setupTabBar()
 	}
 }
 
-void KisView::popupTabBarMenu( const QPoint& _point )
+void KisView::popupTabBarMenu( const QPoint& /*_point*/ )
 {
 	return; // XXX: We haven't defined a menu yet, and won't do so during the freeze.
 #if 0
@@ -1762,49 +1762,36 @@ void KisView::slotSetBGColor(const QColor& c)
 	setBGColor(c);
 }
 
-void KisView::setupPrinter(KPrinter& /*printer*/)
+void KisView::setupPrinter(KPrinter& printer)
 {
-// XXX: If only printing were this simple, but it isn't, not by a long stretch
-#if 0
 	KisImageSP img = currentImg();
 
 	if (img) {
-		Q_INT32 count;
-
 		printer.setPageSelection(KPrinter::ApplicationSide);
-		count = m_doc -> imageIndex(img);
-		printer.setCurrentPage(1 + count);
-		printer.setMinMax(1, m_doc -> nimages());
 		printer.setPageSize(KPrinter::A4);
 		printer.setOrientation(KPrinter::Portrait);
 	}
-#endif
 }
 
-void KisView::print(KPrinter& /*printer*/)
+void KisView::print(KPrinter& printer)
 {
-// XXX: If only printing would be this simple, but it isn't, not by a long stretch
-#if 0
 	QPainter gc(&printer);
-	QValueList< int > pagesList = printer.pageList();
-	KisImageSP img;
+
+	KisImageSP img = currentImg();
+	if (!img) return;
+
 	printer.setFullPage(true);
 	gc.setClipping(false);
 
-	QValueList< int >::iterator it = pagesList.begin();
-	QValueList< int >::iterator itEnd = pagesList.end();
+	KisConfig cfg;
+	QString printerProfileName = cfg.monitorProfile();
+	KisProfileSP printerProfile = KisColorSpaceRegistry::instance() -> getProfileByName(printerProfileName);
 
-	while(it != itEnd)
-	{
-		if (*it)
-			printer.newPage();
-		img = m_doc -> imageNum(*it - 1);
-		Q_ASSERT(img);
-		m_doc -> setCurrentImage(img);
-		m_doc -> paintContent(gc, img -> bounds());
-		m_doc -> setCurrentImage(0);
-	}
-#endif
+	if (printerProfile != 0)
+		kdDebug() << "Printer profile: " << printerProfile -> productName() << "\n";
+	
+	QRect r = img -> bounds();
+	img -> renderToPainter(r.x(), r.y(), r.width(), r.height(), gc, printerProfile);
 }
 
 void KisView::setupTools()

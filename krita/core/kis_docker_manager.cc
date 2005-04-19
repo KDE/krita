@@ -338,6 +338,7 @@ void KisDockerManager::setupDockers()
 	connect(m_layerBox, SIGNAL(itemSelected(int)), m_view, SLOT(layerSelected(int)));
 	connect(m_layerBox, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
 	connect(m_layerBox, SIGNAL(itemToggleLinked()), m_view, SLOT(layerToggleLinked()));
+	connect(m_layerBox, SIGNAL(itemToggleLocked()), m_view, SLOT(layerToggleLocked()));
 	connect(m_layerBox, SIGNAL(itemProperties()), m_view, SLOT(layerProperties()));
 	connect(m_layerBox, SIGNAL(itemAdd()), m_view, SLOT(layerAdd()));
 	connect(m_layerBox, SIGNAL(itemRemove()), m_view, SLOT(layerRemove()));
@@ -728,8 +729,7 @@ void KisDockerManager::resetLayerBox(KisImageSP img, KisLayerSP layer)
 		vKisLayerSP l = img -> layers();
 
 		for (vKisLayerSP_it it = l.begin(); it != l.end(); it++)
-			m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked());
-
+			m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked(), (*it) -> locked());
 		m_layerBox -> slotSetCurrentItem(img -> index(layer));
 		layerSelected( img -> index(layer) );
 	}

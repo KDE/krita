@@ -1,6 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Color Picker Select Tool
+Name[es]=Herramienta selector de color
+Name[pt]=Ferramenta de Selecção de Cores
+Name[pt_BR]=Ferramenta de Seleção de Cores
+Name[sv]=Färgväljarverktyg
+Name[zh_CN]=颜色拾取选择工具
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritacolorrange

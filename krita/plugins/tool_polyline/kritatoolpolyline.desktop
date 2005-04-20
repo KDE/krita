@@ -2,12 +2,9 @@
 Encoding=UTF-8
 Name=Polyline Tool
 Name[es]=Herramienta Polilínea
-Name[fr]=Outil lignes multiples
 Name[ga]=Uirlis Il-líne
-Name[pt]=Ferramenta de linhas poligonais
-Name[pt_BR]=Ferramenta de linhas poligonais
-Name[sr]=Алат за полилиније
-Name[sr@Latn]=Алат за полилиније
+Name[pt]=Ferramenta de Linhas Poligonais
+Name[pt_BR]=Ferramenta Poli-linha
 Name[sv]=Flerlinjesverktyg
 Name[zh_CN]=折线工具
 ServiceTypes=Krita/CoreModule

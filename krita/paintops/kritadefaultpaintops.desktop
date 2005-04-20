@@ -1,23 +1,17 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Default Paint Operations
-Name[da]=Standard maleoperationer
-Name[es]=Operaciones de pintado predefinidas
-Name[et]=Vaikimisi joonistamisoperatsioonid
-Name[fr]=Opérations de dessin par défaut
-Name[pt]=Operações de pintura predefinidas
+Name[es]=Operaciones de pintura predefinidas
+Name[pt]=Operações de Pintura Predefinidas
 Name[pt_BR]=Operações de pintura padrão
-Name[ru]=Стандартные действия рисования
-Name[sr]=Подразумеване сликарске операције
-Name[sr@Latn]=Подразумеване сликарске операције
 Name[sv]=Förvalda målningsoperationer
-Name[uk]=Типові дії малювання
-Name[zh_CN]=默认绘图操作
 Comment=Default paint operations
 Comment[da]=Standard maleoperationer
 Comment[es]=Operaciones de pintado predefinidas
 Comment[et]=Vaikimisi joonistamisoperatsioonid
 Comment[fr]=Opérations de dessin par défaut
+Comment[nb]=Standard paint operasjoner
+Comment[nl]=Standaardschilderoperaties
 Comment[pt]=Operações de pintura predefinidas
 Comment[pt_BR]=Operações de pintura padrão
 Comment[ru]=Действия рисования по умолчанию

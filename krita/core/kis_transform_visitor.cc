@@ -100,7 +100,8 @@ double KisMitchellFilterStrategy::valueAt(double t) const {
 }
 
 
-void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q_INT32 scale, Q_INT32 scaleDenom, Q_INT32  shear, Q_INT32 dx,   KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
+void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q_INT32 scale, Q_INT32 scaleDenom, Q_INT32  shear, Q_INT32 dx,   
+				     KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
 {
 	Q_INT32 x,y,left,top,w,h;
         Q_INT32 center, begin, end;	/* filter calculation variables */
@@ -279,9 +280,9 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 }
 
 void KisTransformVisitor::transform(Q_INT32  xscale, Q_INT32  yscale, 
-Q_INT32  xshear, Q_INT32  yshear, Q_INT32  denominator,
-Q_INT32  xtranslate, Q_INT32  ytranslate,
- KisProgressDisplayInterface *m_progress, enumFilterType filterType)
+				    Q_INT32  xshear, Q_INT32  yshear, Q_INT32  denominator,
+				    Q_INT32  xtranslate, Q_INT32  ytranslate,
+				    KisProgressDisplayInterface *m_progress, enumFilterType filterType)
 {
         double fwidth;
 

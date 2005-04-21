@@ -21,6 +21,7 @@
 #include "kis_types.h"
 #include "kis_progress_subject.h"
 
+class QRect;
 class KisPaintDevice;
 class KisProgressDisplayInterface;
 
@@ -32,22 +33,39 @@ class KisRotateVisitor : public KisProgressSubject {
 public:
         KisRotateVisitor();
         ~KisRotateVisitor();
+
         void visitKisPaintDevice(KisPaintDevice* dev);
+
+	
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
+
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
+
+        /// Returns true if completed, false if not completed for whatever reason
+        bool rotateRight90(KisPaintDevice *src, KisPaintDevice *dst, QRect r, KisProgressDisplayInterface *m_progress);
+
+        /// Returns true if completed, false if not completed for whatever reason
+        bool rotateLeft90(KisPaintDevice *src, KisPaintDevice *dst, QRect r, KisProgressDisplayInterface *m_progress);
+
+        /// Returns true if completed, false if not completed for whatever reason
+        bool rotate180(KisPaintDevice *src, KisPaintDevice *dst, QRect r, KisProgressDisplayInterface *m_progress);
+
+        
 private:
         KisPaintDevice* m_dev;
-        
+
 	// Implement KisProgressSubject
 	bool m_cancelRequested;
         virtual void cancel() { m_cancelRequested = true; }
+        
+
         Q_INT32 xShearImage(double shearX, KisProgressDisplayInterface *m_progress, Q_INT32 progressTotal, Q_INT32 progresscurrent);
         Q_INT32 yShearImage(double shearY, KisProgressDisplayInterface *m_progress, Q_INT32 progressTotal, Q_INT32 progresscurrent);
         void xCropImage(double deltaX);
         void yCropImage(double deltaY);
-        void rotateRight90();
-        void rotateLeft90();
-        void rotate180();
+
+
+        
 };
 
 inline KisRotateVisitor::KisRotateVisitor()
@@ -60,6 +78,6 @@ inline KisRotateVisitor::~KisRotateVisitor()
 
 inline void KisRotateVisitor::visitKisPaintDevice(KisPaintDevice* dev)
 {
-        m_dev=dev;
+        m_dev = dev;
 }
 #endif // KIS_ROTATE_VISITOR_H_

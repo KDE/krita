@@ -52,8 +52,10 @@
 #include "kis_gray_widget.h"
 #include "kis_palette_widget.h"
 #include "kis_paint_box.h"
+#if 0
 #include "kis_filter_box.h"
 #include "kis_birdeye_box.h"
+#endif
 #include "kis_controlframe.h"
 #include "kis_layerbox.h"
 #include "kis_channelview.h"
@@ -314,7 +316,7 @@ void KisDockerManager::setupDockers()
 
 	connect(m_view, SIGNAL(fgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetFGColor(const QColor&)));
 	connect(m_view, SIGNAL(bgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetBGColor(const QColor&)));
-
+#if 0
 	// ---------------------------------------------------------------------
 	// Bird's eye box
 	m_birdEyeBox = new KisBirdEyeBox(m_toolcontroldocker);
@@ -326,7 +328,7 @@ void KisDockerManager::setupDockers()
 	else {
 		m_toolcontroldocker -> plug(m_birdEyeBox);
 	}
-
+#endif 
 
 	// ---------------------------------------------------------------------
 	// Layers

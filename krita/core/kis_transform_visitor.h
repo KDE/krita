@@ -112,8 +112,12 @@ class KisTransformVisitor : public KisProgressSubject {
 public:
 	KisTransformVisitor();
 	~KisTransformVisitor();
+
 	void visitKisPaintDevice(KisPaintDevice* dev);
+
+	// XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
 	void transformx(KisPaintDevice *src, KisPaintDevice *dst, Q_INT32 scale, Q_INT32 scaleDenom, Q_INT32  shear, Q_INT32 dx,   KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
+
 	void transformy(KisPaintDevice *src, KisPaintDevice *dst, Q_INT32 scale, Q_INT32 scaleDenom, Q_INT32  shear, Q_INT32 dy,   KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
 
 	void transform(Q_INT32  xscale, Q_INT32  yscale, 
@@ -138,6 +142,6 @@ inline KisTransformVisitor::~KisTransformVisitor()
 
 inline void KisTransformVisitor::visitKisPaintDevice(KisPaintDevice* dev)
 {
-	m_dev=dev;
+	m_dev = dev;
 }
 #endif // KIS_TRANSFORM_VISITOR_H_

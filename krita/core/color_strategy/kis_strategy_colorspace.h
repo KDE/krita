@@ -191,8 +191,6 @@ public:
 
 	virtual bool valid() { return true; }
 
-protected:
-
 	/**
 	 * Convert a byte array of srcLen pixels *src to the specified color space
 	 * and put the converted bytes into the prepared byte array *dst.
@@ -203,6 +201,9 @@ protected:
 				     QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 				     Q_UINT32 numPixels,
 				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+
+
+protected:
 
 
 	/**

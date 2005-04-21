@@ -18,6 +18,7 @@
 #include <math.h>
 #include <qapplication.h>
 #include <qwmatrix.h>
+#include <qrect.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -27,25 +28,28 @@
 #include "kis_progress_display_interface.h"
 #include "kis_iterators_pixel.h"
 
+
 void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progress) 
 {
 
         const double pi=3.1415926535897932385;
         kdDebug() << "Rotating Code called! Going to rotate image by (angle): " << angle << "\n";
-        
+
         if(angle>=315 && angle <360){
                 angle=angle-360;
         } else if(angle > -360 && angle < -45){
                 angle=angle+360;
         }
-        
+
         //progress info
         m_cancelRequested = false;
         m_progress -> setSubject(this, true, true);
         Q_INT32 progressCurrent=0;
         QRect r = m_dev -> extent();
-        emit notifyProgressStage(this,i18n("Rotating Image..."),0); 
-        if(angle>=-45 && angle <45){
+        emit notifyProgressStage(this,i18n("Rotating Image..."),0);
+        
+        if (angle>=-45 && angle <45) {
+        
                 Q_INT32 origHeight = r.height();
                 Q_INT32 origWidth = r.width();
                 double theta=angle*pi/180;
@@ -61,14 +65,16 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                 //again perform a shear along the x-axis by tan(theta/2)
                 progressCurrent=xShearImage(shearX, m_progress, progressTotal, progressCurrent);
                 double deltaX=(origWidth+origHeight*QABS(shearX))*QABS(shearX*shearY);
-        
+       
                 if (deltaX != 0)
                         xCropImage(deltaX);
                 double deltaY=origHeight*QABS(shearX*shearY);
                 if (deltaY != 0)
                         yCropImage(deltaY);
-        } else if(angle>=45 && angle < 135 && angle != 90){
-                rotateRight90();
+        }
+        else if (angle>=45 && angle < 135 && angle != 90) {
+        
+                rotateRight90(m_dev, m_dev, m_dev -> exactBounds(), m_progress);
                 Q_INT32 origHeight = r.height();
                 Q_INT32 origWidth = r.width();
                 double theta=(angle-90)*pi/180;
@@ -89,8 +95,11 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                 double deltaY=origHeight*QABS(shearX*shearY);
                 if (deltaY != 0)
                         yCropImage(deltaY);
-        } else if(angle>=135 && angle < 225 && angle != 180){
-                rotate180();
+                        
+        }
+        else if (angle>=135 && angle < 225 && angle != 180) {
+                
+                rotate180(m_dev, m_dev, m_dev -> exactBounds(), m_progress);
                 Q_INT32 origHeight = r.height();
                 Q_INT32 origWidth = r.width();
                 double theta=(angle-180)*pi/180;
@@ -111,8 +120,9 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                 double deltaY=origHeight*QABS(shearX*shearY);
                 if (deltaY != 0)
                         yCropImage(deltaY);
-        } else if(angle>=225 && angle < 315 && angle != 270){
-                rotateLeft90();
+        } else if(angle>=225 && angle < 315 && angle != 270) {
+                
+                rotateLeft90(m_dev, m_dev, m_dev -> exactBounds(), m_progress);
                 Q_INT32 origHeight = r.height();
                 Q_INT32 origWidth = r.width();
                 double theta=(angle-270)*pi/180;
@@ -134,12 +144,18 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                 if (deltaY != 0)
                         yCropImage(deltaY);
 
-        } else if(angle==90){      
-                rotateRight90();
-        } else if (angle==180){
-                rotate180();
-        } else if (angle==270){
-                rotateLeft90();
+        } else if(angle==90) {
+        
+                rotateRight90(m_dev, m_dev, m_dev -> exactBounds(), m_progress);
+
+        } else if (angle==180) {
+                
+                rotate180(m_dev, m_dev, m_dev -> exactBounds(), m_progress);
+                
+        } else if (angle==270) {
+        
+                rotateLeft90(m_dev, m_dev, m_dev -> exactBounds(), m_progress);
+
         }
 
         emit notifyProgressDone(this);
@@ -284,7 +300,7 @@ Q_INT32 KisRotateVisitor::xShearImage(double shearX, KisProgressDisplayInterface
 
 Q_INT32 KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface *m_progress, Q_INT32 progressTotal, Q_INT32 progressCurrent)
 {
-        kdDebug() << "YShearImage called, shear paramter " << shearY << "\n";
+        kdDebug() << "YShearImage called, shear parameter " << shearY << "\n";
         
         Q_INT32 width = m_dev -> image() -> width();
         Q_INT32 height = m_dev -> image() -> height();
@@ -314,7 +330,7 @@ Q_INT32 KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface
         Q_INT32 displacementInt;
         double weight;
         Q_INT32 currentPos;
-        
+
         if(shearY>=0){
                 for (Q_INT32 x=0; x < width; x++){
                         emit notifyProgress(this, x * 100  / progressTotal + progressStart + 1);
@@ -342,7 +358,7 @@ Q_INT32 KisRotateVisitor::yShearImage(double shearY, KisProgressDisplayInterface
                                         oleft[channel]=left[channel];
                                 }
                         }
-                }        
+                }
         } else {
                 for (Q_INT32 x=0; x < width; x++){
                         emit notifyProgress(this, x * 100  / progressTotal + progressStart + 1);
@@ -431,52 +447,202 @@ void KisRotateVisitor::yCropImage(double deltaY)
         m_dev -> writeBytes( newData, 0, 0, targetW, targetH);
 }
 
-void KisRotateVisitor::rotateRight90()
+bool KisRotateVisitor::rotateRight90(KisPaintDevice *src, KisPaintDevice *dst, QRect r, KisProgressDisplayInterface *m_progress)
 {
 	Q_INT32 x, y, rx, ry, rw, rh;
-	m_dev -> exactBounds(rx, ry, rw, rh);
+	Q_INT32 pixelSize = src -> pixelSize();
 
-	Q_INT32 pixelSize = m_dev -> pixelSize();
+	KisStrategyColorSpaceSP srcCS = src -> colorStrategy();
+	KisStrategyColorSpaceSP dstCS = dst -> colorStrategy();
+
+	KisProfileSP srcProfile = src -> profile();
+	KisProfileSP dstProfile = dst -> profile();
 	
-	x = rw;
-	for (y = ry; y < rh; ++y) {
-		KisHLineIterator hit = m_dev -> createHLineIterator(rx, y, rw, true);
-		KisVLineIterator vit = m_dev -> createVLineIterator(x, ry, rh, false);
-		while (!hit.isDone() && !vit.isDone()) {
-			memcpy(hit.rawData(), vit.oldRawData(), pixelSize);
-			++hit;
-			++vit;
+	x = rx = r.x();
+	ry = r.y();
+	rw = r.width();
+	rh = r.height();
+
+	if (srcCS == dstCS) {
+
+		if (!src -> hasSelection()) {
+
+			for (y = rh; y > ry; --y) {
+				KisHLineIterator hit = src -> createHLineIterator(rx, y, rw, false);
+				KisVLineIterator vit = dst -> createVLineIterator(x, ry, rw, true);
+				
+				while (!hit.isDone()) {
+					memcpy(vit.rawData(), hit.oldRawData(), pixelSize);
+					++hit;
+					++vit;
+				}
+				x = x + 1;
+				
+				if (m_cancelRequested) break;
+				qApp -> processEvents();
+		
+			}
 		}
-		x = x - 1;
-		qApp -> processEvents();
+		else {
+			
+			for (y = rh; y > ry; --y) {
+				KisHLineIteratorPixel hit = src -> createHLineIterator(rx, y, rw, true);
+				KisVLineIterator vit = dst -> createVLineIterator(x, ry, rw, true);
+				
+				while (!hit.isDone()) {
+
+					if (hit.isSelected()) {
+						memcpy(vit.rawData(), hit.oldRawData(), pixelSize);
+						// Clear the original, selected pixel
+						srcCS -> nativeColor(Qt::black, OPACITY_TRANSPARENT, hit.rawData(), srcProfile);
+					}
+					++hit;
+					++vit;
+				}
+				x = x - 1;
+				
+				if (m_cancelRequested) break;
+				qApp -> processEvents();
+		
+			}
+
+		}
+	
 	}
-	m_dev -> crop(ry, rx, rh, rw);
+	// We neeed to convert every pixel.
+	else {
+		Q_INT32 x, y;
+		Q_INT32 pixelSize = src -> pixelSize();
+	
+		x = rw;
+
+
+		
+		if (!src -> hasSelection()) {
+
+			for (y = rh; y > ry; --y) {
+				KisHLineIterator hit = src -> createHLineIterator(rx, y, rw, false);
+				KisVLineIterator vit = dst -> createVLineIterator(x, ry, rw, true);
+				
+				while (!hit.isDone()) {
+					// Convert the pixels and copy the converted pixels into the destination
+					srcCS -> convertPixelsTo(hit.oldRawData(),
+								 srcProfile,
+								 vit.rawData(),
+								 dstCS,
+								 dstProfile,
+								 1);
+					++hit;
+					++vit;
+				}
+				x = x - 1;
+				
+				if (m_cancelRequested) break;
+				qApp -> processEvents();
+		
+			}
+		}
+		else {
+			for (y = rh; y > ry; --y) {
+				KisHLineIteratorPixel hit = src -> createHLineIterator(rx, y, rw, true);
+				KisVLineIterator vit = dst -> createVLineIterator(x, ry, rw, true);
+				
+				while (!hit.isDone()) {
+
+					if (hit.isSelected()) {
+						// Convert the pixels and copy the converted pixels into the destination
+						srcCS -> convertPixelsTo(hit.oldRawData(),
+								 srcProfile,
+								 vit.rawData(),
+								 dstCS,
+								 dstProfile,
+								 1);
+						// Clear the original, selected pixel. XXX: don't 
+						srcCS -> nativeColor(Qt::black, OPACITY_TRANSPARENT, hit.rawData(), srcProfile);
+					}
+					++hit;
+					++vit;
+				}
+				x = x - 1;
+				
+				if (m_cancelRequested) break;
+				qApp -> processEvents();
+		
+			}
+
+		}
+		
+	}
+
+	return !m_cancelRequested;
+
 }
 
-void KisRotateVisitor::rotateLeft90()
+bool KisRotateVisitor::rotateLeft90(KisPaintDevice *src, KisPaintDevice *dst, QRect r, KisProgressDisplayInterface *m_progress)
 {
-	Q_INT32 x, y, rx, ry, rw, rh;
-	m_dev -> exactBounds(rx, ry, rw, rh);
+	Q_INT32 y, rx, ry, rw, rh;
+	Q_INT32 pixelSize = src -> pixelSize();
 
-	Q_INT32 pixelSize = m_dev -> pixelSize();
+	KisStrategyColorSpaceSP srcCS = src -> colorStrategy();
+	KisStrategyColorSpaceSP dstCS = dst -> colorStrategy();
+
+	KisProfileSP srcProfile = src -> profile();
+	KisProfileSP dstProfile = dst -> profile();
+
+	Q_INT32 le = rw * pixelSize - pixelSize;
+	// We need this tmpLine until we can use decrement iterators
+	Q_UINT8 * tmpLine = new Q_UINT8[rw * pixelSize];
+	Q_CHECK_PTR(tmpLine);
+	memset(tmpLine, 128, rw * pixelSize);
+
+		
+	rx = r.x();
+	ry = r.y();
+	rw = r.width();
+	rh = r.height();
+
+	kdDebug() << "x: " << rx << " y: " << ry << " h: " << rh << " w: " << rw << " le: " << le << "\n";
 	
-	x = 0;
-	for (y = ry; y < rh; ++y) {
-		KisHLineIterator hit = m_dev -> createHLineIterator(rx, y, rw, true);
-		KisVLineIterator vit = m_dev -> createVLineIterator(x, ry, rh, false);
-		while (!hit.isDone() && !vit.isDone()) {
-			memcpy(hit.rawData(), vit.oldRawData(), pixelSize);
-			++hit;
-			++vit;
+	if (srcCS == dstCS) {
+
+		if (!src -> hasSelection()) {
+			
+			for (y = ry; y < rh; ++y) {
+				// Mirror the line
+				int posx = le;
+
+				KisHLineIterator it = src -> createHLineIterator(rx, y, rw, false);
+				while (!it.isDone()) {
+					memcpy(tmpLine + posx, it.oldRawData(), pixelSize);
+					posx = posx - pixelSize;
+					++it;
+				}
+
+				// Read the mirrored line
+				posx = 0;
+				KisVLineIterator vit = dst -> createVLineIterator(y, ry, rw, true);
+				
+				while (!vit.isDone()) {
+					memcpy(vit.rawData(), tmpLine + posx, pixelSize);
+					posx += pixelSize;
+					++vit;
+				}
+				
+				if (m_cancelRequested) break;
+				qApp -> processEvents();
+		
+			}
+			
 		}
-		x = x + 1;
-		qApp -> processEvents();
 	}
-	m_dev -> crop(ry, rx, rh, rw);
+	delete [] tmpLine;
+	return !m_cancelRequested;
 }
 
-void KisRotateVisitor::rotate180()
+bool KisRotateVisitor::rotate180(KisPaintDevice *src, KisPaintDevice *dst, QRect r, KisProgressDisplayInterface *m_progress)
 {
-	rotateLeft90();
-	rotateLeft90();
+	if (rotateLeft90(src, dst, r, m_progress))
+		return rotateLeft90(src, dst, r, m_progress);
+	else
+		return false;
 }

@@ -1473,8 +1473,9 @@ void KisView::rotateLayer(double angle)
 		Q_CHECK_PTR(t);
 	}
 
+	// Rotate
 	layer -> rotate(angle, m_progress);
-
+	
 	if (undo) undo -> addCommand(t);
 
 	m_doc -> setModified(true);

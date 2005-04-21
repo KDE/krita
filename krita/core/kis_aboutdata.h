@@ -38,12 +38,13 @@ KAboutData * newKritaAboutData()
 			"submit@bugs.kde.org");
 	aboutData->addAuthor("Adrian Page", 0, "Adrian.Page@tesco.net");
 	aboutData->addAuthor("Bart Coppens", 0, "kde@bartcoppens.be");
-	aboutData->addAuthor("Boudewijn Rempt", 0, "boud@valdyas.org");
+	aboutData->addAuthor("Boudewijn Rempt", 0, "boud@valdyas.org", "http://www.valdyas.org/fading/index.cgi");
 	aboutData->addAuthor("Carsten Pfeiffer", 0, "carpdjih@cetus.zrz.tu-berlin.de");
 	aboutData->addAuthor("Casper Boemann", 0, "cbr@boemann.dk");
 	aboutData->addAuthor("Clarence Dang", 0, "dang@kde.org");
 	aboutData->addAuthor("Cyrille Berger", 0, "cyb@lepi.org");
 	aboutData->addAuthor("Dirk Schoenberger", 0, "dirk.schoenberger@sz-online.de");
+        aboutData->addAuthor("Danny Allen", 0 , "<dannya40uk@yahoo.co.uk>");
 	aboutData->addAuthor("John Califf",0, "jcaliff@compuzone.net");
 	aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
 	aboutData->addAuthor("Matthias Elter", 0, "me@kde.org");

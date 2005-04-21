@@ -23,4 +23,5 @@ SUBDIRS = cimg \
 	$(kjsembed_plugin) \
 	tool_transform \
 	selectiontools \
-	histogram #imagemagick variations performancetest
+	histogram
+#imagemagick variations performancetest

@@ -467,7 +467,9 @@ bool KisRotateVisitor::rotateRight90(KisPaintDevice *src, KisPaintDevice *dst, Q
 
 	int newX = newTopLeft2.x() / 2;
 	int newY = newTopLeft2.y() / 2;
-	
+
+	QRect newRect (newX, newY, rh, rw);	
+	int x = rx;
 	
 	for (y = rh; y > ry; --y) {
 		KisHLineIteratorPixel hit = src -> createHLineIterator(rx, y, rw, true);
@@ -476,7 +478,7 @@ bool KisRotateVisitor::rotateRight90(KisPaintDevice *src, KisPaintDevice *dst, Q
 		while (!hit.isDone()) {
 			
 			if (hit.isSelected())  {
- 				if (clear)
+ 				if (!newRect.contains(x, y) && clear)
  					memset(hit.rawData(), 0, pixelSize);
 
 				memcpy(vit.rawData(), hit.oldRawData(), pixelSize);
@@ -486,7 +488,8 @@ bool KisRotateVisitor::rotateRight90(KisPaintDevice *src, KisPaintDevice *dst, Q
 			++vit;
 		}
 		++newX;
-
+		++x;
+		
 		if (m_cancelRequested) break;
 		qApp -> processEvents();
 
@@ -515,7 +518,9 @@ bool KisRotateVisitor::rotateLeft90(KisPaintDevice *src, KisPaintDevice *dst, QR
 
 	int newX = newTopLeft2.x() / 2;
 	int newY = newTopLeft2.y() / 2;
-	
+
+	QRect newRect (newX, newY, rh, rw);	
+
 	for (y = ry; y < rh; ++y) {
 		// Read the horizontal line from back to front, write onto the vertical column
 		KisHLineIteratorPixel hit = src -> createHLineIterator(rx, y, rw, false);
@@ -526,7 +531,7 @@ bool KisRotateVisitor::rotateLeft90(KisPaintDevice *src, KisPaintDevice *dst, QR
 		while (x > 0) {
 			if (hit.isSelected()) {
 				memcpy(vit.rawData(), hit.oldRawData(), pixelSize);
-				if (clear)
+				if (!newRect.contains(x, y) && clear)
 					memset(hit.rawData(), 0, pixelSize);
 			}
 			--hit;

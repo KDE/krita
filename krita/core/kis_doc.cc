@@ -1109,7 +1109,7 @@ void KisDoc::endMacro()
 void KisDoc::addCommand(KCommand *cmd)
 {
 	Q_ASSERT(cmd);
-
+	setModified(true);
 	if (m_undo) {
 		if (m_currentMacro)
 			m_currentMacro -> addCommand(cmd);

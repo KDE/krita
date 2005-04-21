@@ -99,7 +99,6 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_colorspace_registry.h"
-#include "kis_scale_visitor.h"
 #include "kis_profile.h"
 #include "kis_transaction.h"
 

@@ -44,7 +44,6 @@
 #include <kis_view.h>
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
-#include <kis_scale_visitor.h>
 #include <kis_transaction.h>
 
 #include "imagesize.h"

@@ -24,6 +24,10 @@
 class QRect;
 class KisPaintDevice;
 class KisProgressDisplayInterface;
+class KisHLineIterator;
+
+void mirrorLine(KisHLineIterator it, Q_UINT8 * tmpLine, Q_INT32 width, Q_INT32 pixelSize);
+void mirrorLineSelection(KisHLineIteratorPixel it, Q_UINT8 * tmpLine, Q_INT32 width, Q_INT32 pixelSize, bool clear);
 
 class KisRotateVisitor : public KisProgressSubject {
         typedef KisProgressSubject super;  
@@ -42,13 +46,13 @@ public:
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 
         /// Returns true if completed, false if not completed for whatever reason
-        bool rotateRight90(KisPaintDevice *src, KisPaintDevice *dst, QRect r, KisProgressDisplayInterface *m_progress);
+        bool rotateRight90(KisPaintDevice *src, KisPaintDevice *dst, QRect r, bool clear = true);
 
         /// Returns true if completed, false if not completed for whatever reason
-        bool rotateLeft90(KisPaintDevice *src, KisPaintDevice *dst, QRect r, KisProgressDisplayInterface *m_progress);
+        bool rotateLeft90(KisPaintDevice *src, KisPaintDevice *dst, QRect r, bool clear = true);
 
         /// Returns true if completed, false if not completed for whatever reason
-        bool rotate180(KisPaintDevice *src, KisPaintDevice *dst, QRect r, KisProgressDisplayInterface *m_progress);
+        bool rotate180(KisPaintDevice *src, KisPaintDevice *dst, QRect r, bool clear = true);
 
         
 private:

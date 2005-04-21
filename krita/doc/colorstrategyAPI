@@ -66,3 +66,7 @@ core/kis_fill_painter.cc:
 The fill painter needs to know if a pixel doesn't vary too much from the seed pixel.
 Currently it calculates this in an RGB-only way, by taking the difference of the channels
 of the 2 points.
+
+------------------------------
+It is quite often necessary to blank a pixel The color strategy should have a function
+to return a blank pixel. Ditto with a default pixel.

@@ -72,6 +72,10 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 
 		pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
 
+		if (!img -> bounds().contains(pos)) {
+			return;
+		}
+
 		if (dev -> pixel(pos.x(), pos.y(), &c, &opacity))
 			if(m_update)
 				if (e -> button() == QMouseEvent::LeftButton)

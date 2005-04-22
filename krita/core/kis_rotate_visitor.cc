@@ -27,7 +27,8 @@
 #include "kis_rotate_visitor.h"
 #include "kis_progress_display_interface.h"
 #include "kis_iterators_pixel.h"
-
+#include "kis_selection.h"
+#include "kis_painter.h"
 
 void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progress) 
 {
@@ -145,17 +146,11 @@ void KisRotateVisitor::rotate(double angle, KisProgressDisplayInterface *m_progr
                         yCropImage(deltaY);
 
         } else if(angle==90) {
-        
-                rotateRight90(m_dev, m_dev, m_dev -> exactBounds());
-
+		rotateRight90(m_dev, m_dev, m_dev -> exactBounds());
         } else if (angle==180) {
-                
-                rotate180(m_dev, m_dev, m_dev -> exactBounds());
-                
+		rotate180(m_dev, m_dev, m_dev -> exactBounds());
         } else if (angle==270) {
-        
-                rotateLeft90(m_dev, m_dev, m_dev -> exactBounds());
-
+		rotateLeft90(m_dev, m_dev, m_dev -> exactBounds());
         }
 
         emit notifyProgressDone(this);
@@ -428,7 +423,7 @@ void KisRotateVisitor::yCropImage(double deltaY)
 {
         Q_INT32 width = m_dev -> image() -> width();
         Q_INT32 height = m_dev -> image() -> height();
-        //calculate widht of the croped image
+        //calculate width of the croped image
         Q_INT32 targetW = width;
         Q_INT32 targetH = (Q_INT32)(height - 2 * deltaY + 2);
         QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> pixelSize() * sizeof(QUANTUM)];
@@ -451,6 +446,14 @@ bool KisRotateVisitor::rotateRight90(KisPaintDevice *src, KisPaintDevice *dst, Q
 {
 	if (src -> colorStrategy() != dst -> colorStrategy()) return false;
 
+	KisPaintDeviceSP tmp;
+	if (src == dst)
+		tmp = new KisPaintDevice(src -> colorStrategy(), "temporary");
+	else
+		tmp = dst;
+	
+
+	
 	KisStrategyColorSpaceSP cs = src -> colorStrategy();
 	
 	Q_INT32 y, rx, ry, rw, rh;
@@ -461,24 +464,16 @@ bool KisRotateVisitor::rotateRight90(KisPaintDevice *src, KisPaintDevice *dst, Q
 	rw = r.width();
 	rh = r.height();
 
-	// Times 2 trick from Kolourpaint
-	QPoint oldCenter2 (rx * 2 + rw, ry * 2 + rh);
-	QPoint newTopLeft2 (oldCenter2 - QPoint(rh, rw));
-
-	int newX = newTopLeft2.x() / 2;
-	int newY = newTopLeft2.y() / 2;
-
-	QRect newRect (newX, newY, rh, rw);	
 	int x = rx;
 	
 	for (y = rh; y > ry; --y) {
 		KisHLineIteratorPixel hit = src -> createHLineIterator(rx, y, rw, true);
-		KisVLineIterator vit = dst -> createVLineIterator(newX, newY, rw, true);
+		KisVLineIterator vit = tmp -> createVLineIterator(x, 0, rw, true);
 
 		while (!hit.isDone()) {
 			
 			if (hit.isSelected())  {
- 				if (!newRect.contains(x, y) && clear)
+ 				if (clear)
  					memset(hit.rawData(), 0, pixelSize);
 
 				memcpy(vit.rawData(), hit.oldRawData(), pixelSize);
@@ -487,13 +482,29 @@ bool KisRotateVisitor::rotateRight90(KisPaintDevice *src, KisPaintDevice *dst, Q
 			++hit;
 			++vit;
 		}
-		++newX;
 		++x;
 		
 		if (m_cancelRequested) break;
 		qApp -> processEvents();
 
 	}
+
+	if (src == dst) {
+
+		// Times 2 trick from Kolourpaint
+		QPoint oldCenter2 (rx * 2 + rw, ry * 2 + rh);
+		QPoint newTopLeft2 (oldCenter2 - QPoint(rh, rw));
+	
+		int newX = newTopLeft2.x() / 2;
+		int newY = newTopLeft2.y() / 2;
+	
+		KisPainter p(src);
+		
+		p.bitBlt(newX, newY, COMPOSITE_OVER, tmp, OPACITY_OPAQUE, 0, 0, rh, rw);
+		p.end();
+
+	}
+	
 	return !m_cancelRequested;
 
 }
@@ -502,6 +513,12 @@ bool KisRotateVisitor::rotateLeft90(KisPaintDevice *src, KisPaintDevice *dst, QR
 {
 	if (src -> colorStrategy() != dst -> colorStrategy()) return false;
 
+	KisPaintDeviceSP tmp;
+	if (src == dst)
+		tmp = new KisPaintDevice(src -> colorStrategy(), "temporary");
+	else
+		tmp = dst;
+	
 	Q_INT32 y, rx, ry, rw, rh;
 
 	rx = r.x();
@@ -512,37 +529,45 @@ bool KisRotateVisitor::rotateLeft90(KisPaintDevice *src, KisPaintDevice *dst, QR
 	
 	Q_INT32 pixelSize = src -> pixelSize();
 
-	// Times 2 trick from Kolourpaint
-	QPoint oldCenter2 (rx * 2 + rw, ry * 2 + rh);
-	QPoint newTopLeft2 (oldCenter2 - QPoint(rh, rw));
-
-	int newX = newTopLeft2.x() / 2;
-	int newY = newTopLeft2.y() / 2;
-
-	QRect newRect (newX, newY, rh, rw);	
-
+	int tmpY = 0;
 	for (y = ry; y < rh; ++y) {
 		// Read the horizontal line from back to front, write onto the vertical column
-		KisHLineIteratorPixel hit = src -> createHLineIterator(rx, y, rw, false);
-		KisVLineIterator vit = dst -> createVLineIterator(newX, newY, rw, true);
+		KisHLineIteratorPixel hit = src -> createHLineIterator(rx, y, rw, true);
+		KisVLineIterator vit = tmp -> createVLineIterator(tmpY, 0, rw, true);
 
 		hit += rw - 1;
 		int x = rw;
 		while (x > 0) {
 			if (hit.isSelected()) {
 				memcpy(vit.rawData(), hit.oldRawData(), pixelSize);
-				if (!newRect.contains(x, y) && clear)
+				if (clear)
 					memset(hit.rawData(), 0, pixelSize);
 			}
 			--hit;
 			++vit;
 			--x;
 		}
-		++newX;
+		++tmpY;
 		if (m_cancelRequested) break;
 		qApp -> processEvents();
 
 
+	}
+
+	if (src == dst) {
+
+		// Times 2 trick from Kolourpaint
+		QPoint oldCenter2 (rx * 2 + rw, ry * 2 + rh);
+		QPoint newTopLeft2 (oldCenter2 - QPoint(rh, rw));
+	
+		int newX = newTopLeft2.x() / 2;
+		int newY = newTopLeft2.y() / 2;
+	
+		KisPainter p(src);
+		
+		p.bitBlt(newX, newY, COMPOSITE_OVER, tmp, OPACITY_OPAQUE, 0, 0, rh, rw);
+		p.end();
+		
 	}
 	return !m_cancelRequested;
 }

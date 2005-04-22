@@ -349,34 +349,34 @@ void KisPaintDevice::accept(KisTransformVisitor& visitor)
 }
 
 
-void KisPaintDevice::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, enumFilterType ftype)
+void KisPaintDevice::scale(double xscale, double yscale, KisProgressDisplayInterface * progress, enumFilterType ftype)
 {
         KisScaleVisitor visitor;
         accept(visitor);
-        visitor.scale(xscale, yscale, m_progress, ftype);
+        visitor.scale(xscale, yscale, progress, ftype);
 }
 
-void KisPaintDevice::rotate(double angle, KisProgressDisplayInterface *m_progress)
+void KisPaintDevice::rotate(double angle, KisProgressDisplayInterface * progress)
 {
         KisRotateVisitor visitor;
         accept(visitor);
-        visitor.rotate(angle, m_progress);
+        visitor.rotate(angle, progress);
 }
 
-void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress)
+void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInterface * progress)
 {
         KisRotateVisitor visitor;
         accept(visitor);
-        visitor.shear(angleX, angleY, m_progress);
+        visitor.shear(angleX, angleY, progress);
 }
 
 void KisPaintDevice::transform(Q_INT32  xscale, Q_INT32  yscale, 
 			Q_INT32  xshear, Q_INT32  yshear, Q_INT32  denominator,
-			Q_INT32  xtranslate, Q_INT32  ytranslate, KisProgressDisplayInterface *m_progress)
+			Q_INT32  xtranslate, Q_INT32  ytranslate, KisProgressDisplayInterface *progress)
 {
         KisTransformVisitor visitor;
         accept(visitor);
-        visitor.transform(xscale, yscale, xshear,  yshear, denominator, xtranslate, ytranslate, m_progress);
+        visitor.transform(xscale, yscale, xshear,  yshear, denominator, xtranslate, ytranslate, progress);
 }
 
 void KisPaintDevice::mirrorX()
@@ -545,7 +545,7 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 	Q_CHECK_PTR(data);
 
 	m_datamanager -> readBytes(data, x1, y1, w, h);
-//  	kdDebug() << m_name << ": convertToQImage. My profile: " << m_profile << ", destination profile: " << dstProfile << "\n";
+//  	/*kdDebug*/() << m_name << ": convertToQImage. My profile: " << m_profile << ", destination profile: " << dstProfile << "\n";
 	QImage image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
 	delete[] data;
 

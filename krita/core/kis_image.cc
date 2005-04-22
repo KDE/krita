@@ -384,10 +384,21 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 		vKisLayerSP_it it;
 		for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
 			KisLayerSP layer = (*it);
+			KisTransaction *cmd = 0;
+
+			if (undoAdapter() -> undo()) {
+				cmd = new KisTransaction("", layer.data());
+				Q_CHECK_PTR(cmd);
+			}
+
 			layer -> scale(sx, sy, m_progress, ftype);
+
+			if (undoAdapter() -> undo()) {
+				undoAdapter() -> addCommand(cmd);
+			}
 		}
 
-		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
+		undoAdapter() -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
 
 		m_width = w;
 		m_height = h;
@@ -398,7 +409,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 		m_bkg = new KisBackground(this, w, h);
 		Q_CHECK_PTR(m_bkg);
 
-		undoAdapter()->endMacro();
+		undoAdapter() -> endMacro();
 
 		emit sizeChanged(KisImageSP(this), w, h);
 	}

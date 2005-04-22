@@ -116,7 +116,10 @@ void KisToolFill::buttonPress(KisButtonPressEvent *e)
 	if (e->button() != QMouseEvent::LeftButton) return;
 	int x, y;
 	x = e -> pos().floorX();
-	y= e -> pos().floorY();
+	y = e -> pos().floorY();
+	if (!m_currentImage -> bounds().contains(x, y)) {
+		return;
+	}
 	flood(x, y);
 	notifyModified();
 }

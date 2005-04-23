@@ -59,7 +59,7 @@ KisToolCrop::KisToolCrop()
 	m_startPos = QPoint(0, 0);
 	m_endPos = QPoint(0, 0);
         m_handleSize = 12;
-        m_cropSelectionDrawn = false;
+        m_haveCropSelection = false;
 	m_optWidget = 0;
 }
 
@@ -75,14 +75,12 @@ void KisToolCrop::update(KisCanvasSubject *subject)
 
 void KisToolCrop::paint(QPainter& gc)
 {
-	if (m_selecting)
-		paintOutlineWithHandles(gc, QRect());
+	paintOutlineWithHandles(gc, QRect());
 }
 
 void KisToolCrop::paint(QPainter& gc, const QRect& rc)
 {
-	if (m_selecting)
-		paintOutlineWithHandles(gc, rc);
+	paintOutlineWithHandles(gc, rc);
 }
 
 void KisToolCrop::clearRect()
@@ -98,10 +96,10 @@ void KisToolCrop::clearRect()
 		m_startPos = QPoint(0, 0);
 		m_endPos = QPoint(0, 0);
 
-		((WdgToolCrop*)m_optWidget) -> intStartX -> setValue(m_startPos.x());
-		((WdgToolCrop*)m_optWidget) -> intStartY -> setValue(m_startPos.y());
-		((WdgToolCrop*)m_optWidget) -> intEndX -> setValue(m_endPos.x());
-		((WdgToolCrop*)m_optWidget) -> intEndY -> setValue(m_endPos.y());
+		setOptionWidgetStartX(m_startPos.x());
+		setOptionWidgetStartY(m_startPos.y());
+		setOptionWidgetEndX(m_endPos.x());
+		setOptionWidgetEndY(m_endPos.y());
 
 		m_selecting = false;
 	}
@@ -113,108 +111,132 @@ void KisToolCrop::buttonPress(KisButtonPressEvent *e)
 		KisImageSP img = m_subject -> currentImg();
 
 		if (img && img -> activeDevice() && e -> button() == LeftButton) {
-                        //clearRect();
-			
-                        if( !m_cropSelectionDrawn ) //if the selection is not already drawn
-                        {
-                                m_startPos = e -> pos().floorQPoint();
-                                m_endPos = e -> pos().floorQPoint();
-                        }
-                        else
-                        {
-                        m_type = mouseOnHandle( e -> pos().floorQPoint() );
-                        }
 
-			((WdgToolCrop*)m_optWidget) -> intStartX -> setValue(m_startPos.x());
-			((WdgToolCrop*)m_optWidget) -> intStartY -> setValue(m_startPos.y());
-			((WdgToolCrop*)m_optWidget) -> intEndX -> setValue(m_endPos.x());
-			((WdgToolCrop*)m_optWidget) -> intEndY -> setValue(m_endPos.y());
+			if (img -> bounds().contains(e -> pos().floorQPoint())) {
+				//clearRect();
 
-			m_selecting = true;
+				m_selecting = true;
+
+				if( !m_haveCropSelection ) //if the selection is not set
+				{
+					m_startPos = e -> pos().floorQPoint();
+					m_endPos = e -> pos().floorQPoint();
+
+					paintOutlineWithHandles();
+				}
+				else
+				{
+					KisCanvasControllerInterface *controller = m_subject -> canvasController();
+					m_mouseOnHandleType = mouseOnHandle(controller ->windowToView(e -> pos().floorQPoint()));
+				}
+
+				setOptionWidgetStartX(m_startPos.x());
+				setOptionWidgetStartY(m_startPos.y());
+				setOptionWidgetEndX(m_endPos.x());
+				setOptionWidgetEndY(m_endPos.y());
+			}
                 }
         }
 }
 
 void KisToolCrop::move(KisMoveEvent *e)
 {
-        if ( m_subject )
+        if ( m_subject && m_subject -> currentImg())
         {
                 if( m_selecting ) //if the user selects
                 {
-                        if( !m_cropSelectionDrawn ) //if the cropSelection is not yet drawn
+                        if( !m_haveCropSelection ) //if the cropSelection is not yet set
                         {
-                                if (m_startPos != m_endPos)
-                                paintOutlineWithHandles();
+				paintOutlineWithHandles();
 
-                                m_endPos = e -> pos().floorQPoint();
-                                ((WdgToolCrop*)m_optWidget) -> intEndX -> setValue(m_endPos.x());
-                                ((WdgToolCrop*)m_optWidget) -> intEndY -> setValue(m_endPos.y());
+				m_endPos = e -> pos().floorQPoint();
+
+				KisImageSP image = m_subject -> currentImg();
+
+				m_endPos.setX(CLAMP(m_endPos.x(), 0, image -> width() - 1));
+				m_endPos.setY(CLAMP(m_endPos.y(), 0, image -> height() - 1));
 
                                 paintOutlineWithHandles();
                         }
-                        else //if the crop selection is already drawn
+                        else //if the crop selection is set
                         {
-                                QPoint pos = e -> pos().floorQPoint();
-                                Q_INT32 width = QABS( m_startPos.x() - m_endPos.x() ); //with of the selected rectangle
-                                Q_INT32 height = QABS( m_startPos.y() - m_endPos.y() ); //height of the selected rectangle
-                                switch (m_type)
-                                {
-                                        case (UpperLeft):
-                                                if (m_startPos != m_oldStartPos)
-                                                        paintOutlineWithHandles();
-                                                m_oldStartPos = m_startPos;
-                                                m_startPos.setX( pos.x() - m_dx );
-                                                m_startPos.setY( pos.y() - m_dy );
-                                                ((WdgToolCrop*)m_optWidget) -> intStartX -> setValue(m_startPos.x());
-                                                ((WdgToolCrop*)m_optWidget) -> intStartY -> setValue(m_startPos.y());
-                                                paintOutlineWithHandles();
-                                                break;
-                                        case (LowerRight):
-                                                if (m_startPos != m_endPos)
-                                                        paintOutlineWithHandles();
-                                                m_endPos.setX( pos.x() + m_dx );
-                                                m_endPos.setY( pos.y() + m_dy );
-                                                ((WdgToolCrop*)m_optWidget) -> intEndX -> setValue(m_endPos.x());
-                                                ((WdgToolCrop*)m_optWidget) -> intEndY -> setValue(m_endPos.y());
-                                                paintOutlineWithHandles();
-                                                break;
-                                        case (LowerLeft):
-                                                if ( (m_startPos != m_oldStartPos) || (m_endPos != m_oldEndPos) )
-                                                        paintOutlineWithHandles();
-                                                
-                                                m_startPos.setX( pos.x() - m_dx );
-                                                m_startPos.setY( pos.y() - height + m_dy );
-                                                m_endPos.setX( pos.x() + width - m_dx );
-                                                m_endPos.setY( pos.y() + m_dy );
-                                                ((WdgToolCrop*)m_optWidget) -> intStartX -> setValue(m_endPos.x());
-                                                ((WdgToolCrop*)m_optWidget) -> intStartY -> setValue(m_endPos.y());
-                                                ((WdgToolCrop*)m_optWidget) -> intEndX -> setValue(m_endPos.x());
-                                                ((WdgToolCrop*)m_optWidget) -> intEndY -> setValue(m_endPos.y());
-                                                paintOutlineWithHandles();
-                                                break;
-                                        case (UpperRight):
-                                                if ( (m_startPos != m_oldStartPos) || (m_endPos != m_oldEndPos) )
-                                                        paintOutlineWithHandles();
-                                                m_oldStartPos = m_startPos;
-                                                m_oldEndPos = m_endPos;
-                                                m_startPos.setX( pos.x() - width + m_dx);
-                                                m_startPos.setY( pos.y() - m_dy );
-                                                m_endPos.setX( pos.x() + m_dx );
-                                                m_endPos.setY( pos.y() + height - m_dy);
-                                                ((WdgToolCrop*)m_optWidget) -> intStartX -> setValue(m_endPos.x());
-                                                ((WdgToolCrop*)m_optWidget) -> intStartY -> setValue(m_endPos.y());
-                                                ((WdgToolCrop*)m_optWidget) -> intEndX -> setValue(m_endPos.x());
-                                                ((WdgToolCrop*)m_optWidget) -> intEndY -> setValue(m_endPos.y());
-                                                paintOutlineWithHandles();
-                                                break;
-                                }
+				if (m_mouseOnHandleType != None && (m_dx != 0 || m_dy != 0)) {
+
+					QPoint pos = e -> pos().floorQPoint();
+					Q_INT32 width = QABS( m_startPos.x() - m_endPos.x() ); //with of the selected rectangle
+					Q_INT32 height = QABS( m_startPos.y() - m_endPos.y() ); //height of the selected rectangle
+
+					Q_INT32 imageWidth = m_subject -> currentImg() -> width();
+					Q_INT32 imageHeight = m_subject -> currentImg() -> height();
+
+					paintOutlineWithHandles();
+
+					switch (m_mouseOnHandleType)
+					{
+						case (UpperLeft):
+							m_startPos.setX( pos.x() - m_dx );
+							m_startPos.setY( pos.y() - m_dy );
+							break;
+						case (LowerRight):
+							m_endPos.setX( pos.x() + m_dx );
+							m_endPos.setY( pos.y() + m_dy );
+							break;
+						case (LowerLeft):
+						case (UpperRight):
+							{
+								Q_INT32 newStartX;
+								Q_INT32 newStartY;
+
+								if (m_mouseOnHandleType == LowerLeft) {
+									newStartX = pos.x() - m_dx;
+									newStartY = pos.y() - height + m_dy;
+								} else {
+									newStartX = pos.x() - width + m_dx;
+									newStartY = pos.y() - m_dy;
+								}
+
+								Q_INT32 dx = newStartX - m_startPos.x();
+								Q_INT32 dy = newStartY - m_startPos.y();
+
+								if (newStartX < 0) {
+									dx += (0 - newStartX);
+								} else if (m_endPos.x() + dx > imageWidth - 1) {
+									dx -=  m_endPos.x() + dx - (imageWidth - 1);
+								}
+
+								if (newStartY < 0) {
+									dy += (0 - newStartY);
+								} else if (m_endPos.y() + dy > imageHeight - 1) {
+									dy -=  m_endPos.y() + dy - (imageHeight - 1);
+								}
+
+								m_startPos += QPoint(dx, dy);
+								m_endPos += QPoint(dx, dy);
+							}
+							break;
+					}
+
+
+					m_startPos.setX(CLAMP(m_startPos.x(), 0, imageWidth - 1));
+					m_startPos.setY(CLAMP(m_startPos.y(), 0, imageHeight - 1));
+					m_endPos.setX(CLAMP(m_endPos.x(), 0, imageWidth - 1));
+					m_endPos.setY(CLAMP(m_endPos.y(), 0, imageHeight - 1));
+
+					paintOutlineWithHandles();
+				}
                         }
+
+			setOptionWidgetStartX(QMIN(m_startPos.x(), m_endPos.x()));
+			setOptionWidgetStartY(QMIN(m_startPos.y(), m_endPos.y()));
+			setOptionWidgetEndX(QMAX(m_startPos.x(), m_endPos.x()));
+			setOptionWidgetEndY(QMAX(m_startPos.y(), m_endPos.y()));
                 }
                 else //if we are not selecting
                 {
-                        if ( m_cropSelectionDrawn )  //if the crop selection is drawn
+                        if ( m_haveCropSelection )  //if the crop selection is set
                         {
-                                Q_INT32 type = mouseOnHandle( e -> pos().floorQPoint() );
+				KisCanvasControllerInterface *controller = m_subject -> canvasController();
+                                Q_INT32 type = mouseOnHandle(controller -> windowToView(e -> pos().floorQPoint()));
                                 //set resize cursor if we are on one of the handles
                                 setMoveResizeCursor(type);
                         } 
@@ -224,27 +246,48 @@ void KisToolCrop::move(KisMoveEvent *e)
 
 void KisToolCrop::buttonRelease(KisButtonReleaseEvent *e)
 {
-	KisImageSP img = m_subject -> currentImg();
+	if (m_subject && m_subject -> currentImg() && m_selecting && e -> button() == LeftButton) {
 
-	if (!img)
-		return;
-
-        if (m_startPos != m_endPos)
-        {
-                m_cropSelectionDrawn = true;
-        }
-
-	if (m_subject && m_selecting) {
-		if (m_startPos == m_endPos) {
-			clearRect();
-		}
-		if( !m_cropSelectionDrawn )
-                {
-                        m_endPos = e -> pos().floorQPoint();
-                        ((WdgToolCrop*)m_optWidget) -> intEndX -> setValue(m_endPos.x());
-                        ((WdgToolCrop*)m_optWidget) -> intEndY -> setValue(m_endPos.y());
-                }
 		m_selecting = false;
+		m_haveCropSelection = true;
+
+		paintOutlineWithHandles();
+		validateSelection();
+		paintOutlineWithHandles();
+	}
+}
+
+void KisToolCrop::validateSelection(void)
+{
+	if (m_subject) {
+		KisImageSP image = m_subject -> currentImg();
+
+		if (image) {
+			Q_INT32 imageWidth = image -> width();
+			Q_INT32 imageHeight = image -> height();
+
+			m_startPos.setX(CLAMP(m_startPos.x(), 0, imageWidth - 1));
+			m_startPos.setY(CLAMP(m_startPos.y(), 0, imageHeight - 1));
+			m_endPos.setX(CLAMP(m_endPos.x(), 0, imageWidth - 1));
+			m_endPos.setY(CLAMP(m_endPos.y(), 0, imageHeight - 1));
+
+			if (m_startPos.x() > m_endPos.x()) {
+				Q_INT32 startX = m_startPos.x();
+				m_startPos.setX(m_endPos.x());
+				m_endPos.setX(startX);
+			}
+
+			if (m_startPos.y() > m_endPos.y()) {
+				Q_INT32 startY = m_startPos.y();
+				m_startPos.setY(m_endPos.y());
+				m_endPos.setY(startY);
+			}
+
+			setOptionWidgetStartX(m_startPos.x());
+			setOptionWidgetStartY(m_startPos.y());
+			setOptionWidgetEndX(m_endPos.x());
+			setOptionWidgetEndY(m_endPos.y());
+		}
 	}
 }
 
@@ -262,7 +305,7 @@ void KisToolCrop::paintOutlineWithHandles()
 
 void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
 {
-	if (m_subject) {
+	if (m_subject && (m_selecting || m_haveCropSelection)) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 		RasterOp op = gc.rasterOp();
 		QPen old = gc.pen();
@@ -304,11 +347,11 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
                         starty=end.y();
                         endy=start.y();
                 }
-                gc.drawRect(QRect(start, end));
+                gc.drawRect(QRect(QPoint(startx, starty), QPoint(endx, endy)));
                 gc.drawLine(0,endy,startx,endy);
-                gc.drawLine(startx,endy, startx, m_subject -> currentImg() -> height());
+                gc.drawLine(startx,endy, startx, controller -> canvas() -> height());
                 gc.drawLine(endx,0,endx,starty);
-                gc.drawLine(endx,starty,m_subject -> currentImg() -> width(),starty);
+                gc.drawLine(endx,starty, controller -> canvas() -> width(), starty);
                 QMemArray <QRect> rects = m_handlesRegion.rects (); 
                 for (QMemArray <QRect>::ConstIterator it = rects.begin (); 
                         it != rects.end ();
@@ -326,7 +369,7 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
 void KisToolCrop::crop() {
 	// XXX: Should cropping be part of KisImage/KisPaintDevice's API?
 
-        m_cropSelectionDrawn = false;
+        m_haveCropSelection = false;
 
 	KisImageSP img = m_subject -> currentImg();
 
@@ -352,7 +395,7 @@ void KisToolCrop::crop() {
 	rc = rc.normalize();
 	
 	
-	if (((WdgToolCrop *)m_optWidget) -> cmbType -> currentItem() == 0) {
+	if (m_optWidget -> cmbType -> currentItem() == 0) {
 		KisLayerSP layer = img -> activeLayer();
 		cropLayer(layer, rc);
 		KNamedCommand * cmd = layer -> moveCommand(m_subject -> canvasController(),  -rc.x(), -rc.y());
@@ -375,11 +418,139 @@ void KisToolCrop::crop() {
 	if (img -> undoAdapter())
 		img -> undoAdapter() -> endMacro();
 
-	((WdgToolCrop*)m_optWidget) -> intStartX -> setValue(0);
-	((WdgToolCrop*)m_optWidget) -> intStartY -> setValue(0);
-	((WdgToolCrop*)m_optWidget) -> intEndX -> setValue(0);
-	((WdgToolCrop*)m_optWidget) -> intEndY -> setValue(0);
+	m_startPos = QPoint(0, 0);
+	m_endPos = QPoint(0, 0);
 
+	setOptionWidgetStartX(0);
+	setOptionWidgetStartY(0);
+	setOptionWidgetEndX(0);
+	setOptionWidgetEndY(0);
+}
+
+void KisToolCrop::setStartX(int x)
+{ 
+	if (x <= m_endPos.x() || m_startPos.x() == m_endPos.x()) {
+
+		if (!m_haveCropSelection) {
+			m_haveCropSelection = true;
+		}
+		else {
+			paintOutlineWithHandles();
+		}
+
+		m_startPos.setX(x);
+
+		if (m_endPos.x() < x) {
+			m_endPos.setX(x);
+		}
+
+		validateSelection();
+		paintOutlineWithHandles();
+	} else {
+		setOptionWidgetStartX(m_startPos.x());
+	}
+}
+
+void KisToolCrop::setStartY(int y)
+{ 
+	if (y <= m_endPos.y() || m_startPos.y() == m_endPos.y()) {
+
+		if (!m_haveCropSelection) {
+			m_haveCropSelection = true;
+		}
+		else {
+			paintOutlineWithHandles();
+		}
+
+		m_startPos.setY(y);
+
+		if (m_endPos.y() < y) {
+			m_endPos.setY(y);
+		}
+
+		validateSelection();
+		paintOutlineWithHandles();
+	} else {
+		setOptionWidgetStartY(m_startPos.y());
+	}
+}
+
+void KisToolCrop::setEndX(int x)
+{
+	if (x >= m_startPos.x() || m_startPos.x() == m_endPos.x()) {
+
+		if (!m_haveCropSelection) {
+			m_haveCropSelection = true;
+		}
+		else {
+			paintOutlineWithHandles();
+		}
+
+		m_endPos.setX(x);
+
+		if (m_startPos.x() > x) {
+			m_startPos.setX(x);
+		}
+
+		validateSelection();
+		paintOutlineWithHandles();
+	} else {
+		setOptionWidgetEndX(m_endPos.x());
+	}
+}
+
+void KisToolCrop::setEndY(int y)
+{ 
+	if (y >= m_startPos.y() || m_startPos.y() == m_endPos.y()) {
+
+		if (!m_haveCropSelection) {
+			m_haveCropSelection = true;
+		}
+		else {
+			paintOutlineWithHandles();
+		}
+
+		m_endPos.setY(y);
+
+		if (m_startPos.y() > y) {
+			m_startPos.setY(y);
+		}
+
+		validateSelection();
+		paintOutlineWithHandles();
+	} else {
+		setOptionWidgetEndY(m_endPos.y());
+	}
+}
+
+void KisToolCrop::setOptionWidgetStartX(Q_INT32 x)
+{
+	// Disable signals otherwise we get the valueChanged signal, which we don't want
+	// to go through the logic for setting values that way.
+	m_optWidget -> intStartX -> blockSignals(true);
+	m_optWidget -> intStartX -> setValue(x);
+	m_optWidget -> intStartX -> blockSignals(false);
+}
+
+void KisToolCrop::setOptionWidgetStartY(Q_INT32 y)
+{
+	m_optWidget -> intStartY -> blockSignals(true);
+	m_optWidget -> intStartY -> setValue(y);
+	m_optWidget -> intStartY -> blockSignals(false);
+}
+
+void KisToolCrop::setOptionWidgetEndX(Q_INT32 x)
+{
+	m_optWidget -> intEndX -> blockSignals(true);
+	m_optWidget -> intEndX -> setValue(x);
+	m_optWidget -> intEndX -> blockSignals(false);
+}
+
+void KisToolCrop::setOptionWidgetEndY(Q_INT32 y)
+{
+	m_optWidget -> intEndY -> blockSignals(true);
+	m_optWidget -> intEndY -> setValue(y);
+	m_optWidget -> intEndY -> blockSignals(false);
 }
 
 void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc) 
@@ -395,12 +566,16 @@ void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc)
 
 QWidget* KisToolCrop::createOptionWidget(QWidget* parent)
 {
-	WdgToolCrop * w = new WdgToolCrop(parent);
-	Q_CHECK_PTR(w);
+	m_optWidget = new WdgToolCrop(parent);
+	Q_CHECK_PTR(m_optWidget);
+				      
+	connect(m_optWidget -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
-	connect(w -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
+	connect(m_optWidget -> intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));
+	connect(m_optWidget -> intStartY, SIGNAL(valueChanged(int)), this, SLOT(setStartY(int)));
+	connect(m_optWidget -> intEndX, SIGNAL(valueChanged(int)), this, SLOT(setEndX(int)));
+	connect(m_optWidget -> intEndY, SIGNAL(valueChanged(int)), this, SLOT(setEndY(int)));
 
-	m_optWidget = w;
 	return m_optWidget;
 }
 

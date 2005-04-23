@@ -30,6 +30,7 @@
 
 class QRect;
 class QCursor;
+class WdgToolCrop;
 
 /**
  * Crop tool
@@ -72,29 +73,33 @@ private:
         void paintOutlineWithHandles(QPainter& gc, const QRect& rc);
         Q_INT32 mouseOnHandle (const QPoint currentViewPoint);
         void setMoveResizeCursor (Q_INT32 handle);
+	void validateSelection(void);
+	void setOptionWidgetStartX(Q_INT32 x);
+	void setOptionWidgetStartY(Q_INT32 y);
+	void setOptionWidgetEndX(Q_INT32 x);
+	void setOptionWidgetEndY(Q_INT32 y);
+
 private slots:
 
 	void crop();
-	void setStartX(int x) { m_startPos.setX(x); paintOutlineWithHandles(); }
-	void setStartY(int y) { m_startPos.setY(y); paintOutlineWithHandles(); }
-	void setEndX(int x) { m_endPos.setX(x); paintOutlineWithHandles(); }
-	void setEndY(int y) { m_endPos.setY(y); paintOutlineWithHandles(); }
+	void setStartX(int x);
+	void setStartY(int y);
+	void setEndX(int x);
+	void setEndY(int y);
 
 private:
 	KisCanvasSubject *m_subject;
 	QPoint m_startPos;
-	QPoint m_oldStartPos;
         QPoint m_endPos;
-	QPoint m_oldEndPos;
         bool m_selecting;
 
-	QWidget * m_optWidget;
+	WdgToolCrop* m_optWidget;
 
         Q_INT32 m_handleSize;
         QRegion m_handlesRegion;
-        bool m_cropSelectionDrawn;
+        bool m_haveCropSelection;
         Q_INT32 m_dx, m_dy;
-        Q_INT32 m_type;
+        Q_INT32 m_mouseOnHandleType;
 
         enum handleType
         {

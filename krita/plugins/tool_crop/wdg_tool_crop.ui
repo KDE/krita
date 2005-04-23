@@ -155,6 +155,9 @@
                                     <property name="name">
                                         <cstring>intEndY</cstring>
                                     </property>
+                                    <property name="maxValue">
+                                        <number>1000000000</number>
+                                    </property>
                                 </widget>
                             </hbox>
                         </widget>
@@ -226,4 +229,10 @@
     <tabstop>bnCrop</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
 </UI>

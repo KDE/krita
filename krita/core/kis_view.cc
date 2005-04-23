@@ -651,7 +651,6 @@ void KisView::resizeEvent(QResizeEvent *)
 		m_hRuler -> show();
 		m_vRuler -> show();
 	}
-
 }
 
 void KisView::updateReadWrite(bool readwrite)
@@ -835,9 +834,6 @@ void KisView::paintView(const KisRect& r)
 				m_doc -> setCurrentImage(img);
 				m_doc -> paintContent(gc, wr, monitorProfile());
 				m_doc -> setCurrentImage(0);
-
-				if (currentTool())
-					currentTool() -> paint(gc, wr);
 			}
 
 			paintGuides();
@@ -847,7 +843,6 @@ void KisView::paintView(const KisRect& r)
 		clearCanvas(r.qRect());
 		m_canvas -> update(r.qRect());
 	}
-//
 }
 
 QWidget *KisView::canvas() const
@@ -1813,6 +1808,12 @@ void KisView::canvasGotPaintEvent(QPaintEvent *event)
 	       event -> rect().x(), event -> rect().y(),
 	       &m_canvasPixmap,
 	       event -> rect().x(), event -> rect().y(), event -> rect().width(), event -> rect().height());
+
+	if (currentTool()) {
+		QPainter gc(m_canvas);
+
+		currentTool() -> paint(gc, event -> rect());
+	}
 }
 
 void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)

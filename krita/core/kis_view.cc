@@ -1804,13 +1804,19 @@ void KisView::setupTools()
 
 void KisView::canvasGotPaintEvent(QPaintEvent *event)
 {
-	bitBlt(m_canvas,
-	       event -> rect().x(), event -> rect().y(),
-	       &m_canvasPixmap,
-	       event -> rect().x(), event -> rect().y(), event -> rect().width(), event -> rect().height());
+	QMemArray<QRect> rects = event -> region().rects();
+
+	for (unsigned int i = 0; i < rects.count(); i++) {
+		QRect er = rects[i];
+
+		bitBlt(m_canvas, er.x(), er.y(), &m_canvasPixmap, er.x(), er.y(), er.width(), er.height());
+	}
 
 	if (currentTool()) {
 		QPainter gc(m_canvas);
+
+		gc.setClipRegion(event -> region());
+		gc.setClipping(true);
 
 		currentTool() -> paint(gc, event -> rect());
 	}

@@ -150,12 +150,17 @@ void KisToolSelectElliptical::move(KisMoveEvent *e)
 	}
 }
 
-void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent */*e*/)
+void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 {
-	clearSelection();
-	m_selecting = false;
+ 	if (m_subject && m_selecting && e -> button() == LeftButton) {
 
-// 	if (m_subject && m_selecting) {
+		if (m_startPos != m_endPos) {
+			paintOutline();
+		}
+
+		clearSelection();
+		m_selecting = false;
+
 // 		if (m_startPos == m_endPos) {
 // 			clearSelection();
 // 		} else {
@@ -199,7 +204,7 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent */*e*/)
 // 		}
 //
 // 		m_selecting = false;
-// 	}
+	}
 }
 
 void KisToolSelectElliptical::paintOutline()

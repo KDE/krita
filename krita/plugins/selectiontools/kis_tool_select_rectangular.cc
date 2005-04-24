@@ -155,7 +155,10 @@ void KisToolSelectRectangular::move(KisMoveEvent *e)
 
 void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 {
-	if (m_subject && m_selecting) {
+	if (m_subject && m_selecting && e -> button() == LeftButton) {
+
+		paintOutline();
+
 		if (m_startPos == m_endPos) {
 			clearSelection();
 		} else {
@@ -185,7 +188,6 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 				rc = rc.normalize();
 				selection -> select(rc);
 				img -> notify(rc);
-				paintOutline();
 
 // 				KisPaintDeviceSP parent;
 // 				KisFloatingSelectionSP selection;

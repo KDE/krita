@@ -45,7 +45,6 @@
 KisToolPolyline::KisToolPolyline()
         : super(),
           m_dragging (false),
-          m_polyLineStarted (false),
           m_currentImage (0)
 {
 	setName("tool_polyline");
@@ -55,7 +54,6 @@ KisToolPolyline::KisToolPolyline()
 // 	m_usePattern = false;
 // 	m_useGradient = false;
 // 	m_fillSolid = false;
-        m_points = new KisPointVector();
 }
 
 KisToolPolyline::~KisToolPolyline()
@@ -73,71 +71,61 @@ void KisToolPolyline::update (KisCanvasSubject *subject)
 void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
 {
 //         kdDebug (40001) << "KisToolStar::buttonPress" << event->pos () << endl;
-	if (m_currentImage && event -> button() == LeftButton) {
-		if ( !(m_polyLineStarted) )
-                {
-                        m_dragging = true;
-                        m_polyLineStarted = true;
-                        m_dragStart = event -> pos();
-                        m_dragEnd = event -> pos();
-                        m_points -> append (m_dragEnd);
-                } else {
-                        m_dragging = true;
-                        m_dragStart = m_dragEnd;
-                        m_dragEnd = event -> pos();
-                        // erase old lines on canvas
-		        draw(m_dragStart, m_dragEnd);
-                }
-        } else if (m_currentImage && event -> button() == RightButton) {
-                // erase old lines on canvas
-		draw(m_dragStart, m_dragEnd);
-		m_dragging = false;
-                m_polyLineStarted = false;
+	if (m_currentImage) {
+		if (event -> button() == LeftButton) {
 
-                m_dragEnd = event->pos ();
-                if (m_dragStart == m_dragEnd)
-                        return;
+			m_dragging = true;
 
-                if (!m_currentImage)
-                        return;
-
-                KisPaintDeviceSP device = m_currentImage->activeDevice ();;
-                KisPainter painter (device);
-                painter.beginTransaction (i18n ("Polyline"));
-
-                painter.setPaintColor(m_subject -> fgColor());
-                painter.setBrush(m_subject -> currentBrush());
-                //painter.setOpacity(m_opacity);
-                //painter.setCompositeOp(m_compositeOp);
-		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
-		painter.setPaintOp(op); // Painter takes ownership
-
-                KisPoint start,end;
-                KisPointVector::iterator it;
-                for( it = m_points -> begin(); it != m_points -> end(); ++it )
-                {
-                        if( it == m_points -> begin() )
-                        {
-                                start = (*it);
-                        } else {
-                                end = (*it);
-                                painter.paintLine(start, PRESSURE_DEFAULT, 0, 0, end, PRESSURE_DEFAULT, 0, 0);
-                                start = end;
-                        }
-                }
-                m_points -> clear();
-                
-                //painter.paintLine(m_dragStart, PRESSURE_DEFAULT, 0, 0, m_dragEnd, PRESSURE_DEFAULT, 0, 0);
-                //painter.paintLine(m_dragStart, PRESSURE_DEFAULT, 0, 0, m_dragEnd, PRESSURE_DEFAULT, 0, 0);
-                m_currentImage -> notify( painter.dirtyRect() );
-		notifyModified();
-
-                KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-                if (adapter) {
-                        adapter -> addCommand(painter.endTransaction());
-                }
-        }
-        
+			if (m_points.isEmpty())
+			{
+				m_dragStart = event -> pos();
+				m_dragEnd = event -> pos();
+				m_points.append(m_dragStart);
+			} else {
+				m_dragStart = m_dragEnd;
+				m_dragEnd = event -> pos();
+				draw();
+			}
+		} else if (event -> button() == RightButton) {
+			// erase old lines on canvas
+			draw();
+			m_dragging = false;
+	
+			KisPaintDeviceSP device = m_currentImage->activeDevice ();;
+			KisPainter painter (device);
+			painter.beginTransaction (i18n ("Polyline"));
+	
+			painter.setPaintColor(m_subject -> fgColor());
+			painter.setBrush(m_subject -> currentBrush());
+			//painter.setOpacity(m_opacity);
+			//painter.setCompositeOp(m_compositeOp);
+			KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
+			painter.setPaintOp(op); // Painter takes ownership
+	
+			KisPoint start,end;
+			KisPointVector::iterator it;
+			for( it = m_points.begin(); it != m_points.end(); ++it )
+			{
+				if( it == m_points.begin() )
+				{
+					start = (*it);
+				} else {
+					end = (*it);
+					painter.paintLine(start, PRESSURE_DEFAULT, 0, 0, end, PRESSURE_DEFAULT, 0, 0);
+					start = end;
+				}
+			}
+			m_points.clear();
+			
+			m_currentImage -> notify( painter.dirtyRect() );
+			notifyModified();
+	
+			KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+			if (adapter) {
+				adapter -> addCommand(painter.endTransaction());
+			}
+		}
+	}
 }
 
 void KisToolPolyline::move(KisMoveEvent *event)
@@ -145,11 +133,11 @@ void KisToolPolyline::move(KisMoveEvent *event)
 //         kdDebug (40001) << "KisToolStar::move" << event->pos () << endl;
 	if (m_dragging) {
 		// erase old lines on canvas
-		draw(m_dragStart, m_dragEnd);
+		draw();
 		// get current mouse position
 		m_dragEnd = event -> pos();
 		// draw new lines on canvas
-		draw(m_dragStart, m_dragEnd);
+		draw();
 	}
 }
 
@@ -160,33 +148,72 @@ void KisToolPolyline::buttonRelease(KisButtonReleaseEvent *event)
 
         if (m_dragging && event -> button() == LeftButton)  {
                 m_dragging = false;
-                m_points -> append (m_dragEnd);
-}
+                m_points.append (m_dragEnd);
+	}
 
 	if (m_dragging && event -> button() == RightButton) {
 		
         }
 }
 
-void KisToolPolyline::draw(const KisPoint& start, const KisPoint& end )
+void KisToolPolyline::paint(QPainter& gc)
+{
+	draw(gc);
+}
+
+void KisToolPolyline::paint(QPainter& gc, const QRect&)
+{
+	draw(gc);
+}
+
+void KisToolPolyline::draw()
+{
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+		QWidget *canvas = controller -> canvas();
+		QPainter gc(canvas);
+
+		draw(gc);
+	}
+}
+
+void KisToolPolyline::draw(QPainter& gc)
 {
         if (!m_subject || !m_currentImage)
             return;
 
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
-        QWidget *canvas = controller->canvas ();	
-        QPainter p (canvas);
-        QPen pen(Qt::SolidLine); 
+        QPen pen(Qt::white, 0, Qt::SolidLine); 
 
-        KisPoint startPos;
-        KisPoint endPos;	
-        startPos = controller -> windowToView(start);
-        endPos = controller -> windowToView(end);
+	gc.setPen(pen);
+        gc.setRasterOp(Qt::XorROP);
 
-        p.setRasterOp (Qt::NotROP);
-        
-        p.drawLine(startPos.floorQPoint(), endPos.floorQPoint());
-        p.end ();
+	KisCanvasControllerInterface *controller = m_subject -> canvasController();
+	KisPoint start, end;
+	QPoint startPos;
+	QPoint endPos;
+
+	if (m_dragging) {
+		startPos = controller -> windowToView(m_dragStart.floorQPoint());
+		endPos = controller -> windowToView(m_dragEnd.floorQPoint());
+		gc.drawLine(startPos, endPos);
+	} else {
+		for (KisPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+
+			if (it == m_points.begin())
+			{
+				start = (*it);
+			} else {
+				end = (*it);
+
+				startPos = controller -> windowToView(start.floorQPoint());
+				endPos = controller -> windowToView(end.floorQPoint());
+
+				gc.drawLine(startPos, endPos);
+
+				start = end;
+			}
+		}
+	}
 }
 
 void KisToolPolyline::setup(KActionCollection *collection)

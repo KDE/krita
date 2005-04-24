@@ -60,22 +60,20 @@ public:
 	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 protected:
-	virtual void draw(const KisPoint& start, const KisPoint& stop);
-	//virtual void draw(KisPainter *gc, const QRect& rc);
+	virtual void paint(QPainter& gc);
+	virtual void paint(QPainter& gc, const QRect& rc);
+	void draw(QPainter& gc);
+	void draw();
 
 protected:
-	int m_lineThickness;
-
 	KisPoint m_dragStart;
 	KisPoint m_dragEnd;
-	QRect m_final_lines;
 
 	bool m_dragging;
 	KisImageSP m_currentImage;
 private:
         typedef QValueVector<KisPoint> KisPointVector;
-        KisPointVector * m_points;
-        bool m_polyLineStarted;
+        KisPointVector m_points;
 };
 
 

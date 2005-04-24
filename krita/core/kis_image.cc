@@ -512,9 +512,11 @@ void KisImage::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP 
 		(*it) -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
 	}
 	m_projection -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
+	m_bkg -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
 
 	m_colorStrategy = dstColorStrategy;
 	setProfile(dstProfile);
+	notify();
 }
 
 KisProfileSP KisImage::profile() const

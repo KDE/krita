@@ -190,10 +190,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
 
 KisPaintDevice::~KisPaintDevice()
 {
-	delete m_datamanager;
-	m_datamanager = 0;
 }
-
 
 void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
 {
@@ -443,34 +440,34 @@ bool KisPaintDevice::read(KoStore *store)
 
 void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
-
-	Q_INT32 x, y, w, h;
-	extent(x, y, w, h);
-
-
-	KisPaintDevice dst(dstColorStrategy, name());
-	dst.setProfile(dstProfile);
-	
-	if(colorStrategy() == dstColorStrategy)
+	if (colorStrategy() -> id() == dstColorStrategy -> id())
 	{
 		return;
 	}
 
+	KisPaintDevice dst(dstColorStrategy, name());
+	dst.setProfile(dstProfile);
+
+	Q_INT32 x, y, w, h;
+	extent(x, y, w, h);
+
 	for (Q_INT32 y2 = y; y2 < h; ++y2) {
 		KisHLineIteratorPixel srcIt = createHLineIterator(x, y2, w, false);
-		KisHLineIteratorPixel dstIt = createHLineIterator(x, y2, w, true);
+		KisHLineIteratorPixel dstIt = dst.createHLineIterator(x, y2, w, true);
 		while (!srcIt.isDone()) {
-// 			m_colorStrategy -> convertTo(srcIt.pixel(), dstIt.pixel(), renderingIntent)
+
+			m_colorStrategy -> convertPixelsTo(srcIt.rawData(), m_profile, 
+							   dstIt.rawData(), dstColorStrategy, dstProfile, 1, renderingIntent);
 			++srcIt;
 			++dstIt;
 		}
 	}
-	delete m_datamanager;
+
 	m_datamanager = dst.m_datamanager;
 	m_colorStrategy = dstColorStrategy;
+	m_pixelSize = m_colorStrategy -> pixelSize();
+	m_nChannels = m_colorStrategy -> nChannels();
 	m_profile = dstProfile;
-
-
 }
 
 void KisPaintDevice::convertFromImage(const QImage& img)

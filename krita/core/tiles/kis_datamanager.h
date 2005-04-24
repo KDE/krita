@@ -42,7 +42,7 @@ class KoStore;
  * A datamanager knows nothing about the type of pixel data except
  * how many Q_UINT8's a single pixel takes.
  */
-class KisDataManager : private ACTUAL_DATAMGR {
+class KisDataManager : public ACTUAL_DATAMGR {
 
 public:
 	KisDataManager(Q_UINT32 pixelSize, Q_UINT8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel) {};
@@ -141,7 +141,7 @@ public:
 	 * Copy the specified rect from the specified data into this
 	 * data.
 	 */
-	void paste(KisDataManager * data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
+	void paste(KisDataManagerSP data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
 		   Q_INT32 w, Q_INT32 h) { ACTUAL_DATAMGR::paste(data, sx, sy, dx, dy, w, h); };
 
 public:

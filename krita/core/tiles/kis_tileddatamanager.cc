@@ -58,6 +58,7 @@ KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize, Q_UINT8 *defPixel)
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
+	: KShared()
 {
 	m_pixelSize = dm.m_pixelSize;
 
@@ -331,7 +332,7 @@ void KisTiledDataManager::clear()
 	m_extentMaxY = -(0x7FFFFFFE);
 }
 
-void KisTiledDataManager::paste(KisDataManager * data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
+void KisTiledDataManager::paste(KisDataManagerSP data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
 			 Q_INT32 w, Q_INT32 h)
 {
 	//CBR_MISSING

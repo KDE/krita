@@ -20,7 +20,12 @@
 
 #include <qglobal.h>
 #include <qvaluevector.h>
-#include <kis_tile.h>
+
+#include "kis_types.h"
+#include "kis_tile.h"
+
+class KisTiledDataManager;
+typedef KSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
 
 class KisDataManager;
 class KisTiledIterator;
@@ -43,7 +48,7 @@ class KisMemento;
  * how many Q_UINT8's a single pixel takes.
  */
 
-class KisTiledDataManager {
+class KisTiledDataManager : public KShared {
 
 protected:
 	KisTiledDataManager(Q_UINT32 pixelSize, Q_UINT8 *defPixel);
@@ -52,12 +57,12 @@ protected:
 	KisTiledDataManager & operator=(const KisTiledDataManager &dm);
 
 
-public:
+protected:
 	// Allow the baseclass of iterators acces to the interior
 	// derived iterator classes must go through KisTiledIterator
 	friend class KisTiledIterator;
 
-public:
+protected:
 
 	void setDefaultPixel(Q_UINT8 *defPixel);
 	
@@ -65,7 +70,7 @@ public:
 	void rollback(KisMemento *memento);
 	void rollforward(KisMemento *memento);
 
-public:
+protected:
 	/**
 	 * Reads and writes the tiles from/onto a KoStore (which is simply a file within a zip file)
 	 *
@@ -73,7 +78,7 @@ public:
 	bool write(KoStore *store);
 	bool read(KoStore *store);
 
-public:
+protected:
 
 	Q_UINT32 pixelSize();
 
@@ -81,20 +86,20 @@ public:
 
 	void setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
-public:
+protected:
 
 	void clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UINT8 def);
 	void clear(Q_INT32 x, Q_INT32 y,  Q_INT32 w, Q_INT32 h, Q_UINT8 * def);
 	void clear();
 
 
-public:
+protected:
 
-	void paste(KisDataManager * data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
+	void paste(KisDataManagerSP data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
 			    Q_INT32 w, Q_INT32 h);
 
 
-public:
+protected:
 
 
 	/**
@@ -165,8 +170,8 @@ private:
 	KisTile *getTile(Q_INT32 col, Q_INT32 row, bool writeAccess);
 	Q_UINT32 calcTileHash(Q_INT32 col, Q_INT32 row);
 	void updateExtent(Q_INT32 col, Q_INT32 row);
-	Q_UINT32 xToCol(Q_UINT32 x);
-	Q_UINT32 yToRow(Q_UINT32 y);
+	Q_UINT32 xToCol(Q_UINT32 x) const;
+	Q_UINT32 yToRow(Q_UINT32 y) const;
 	void getContiguousColumnsAndRows(Q_INT32 x, Q_INT32 y, Q_INT32 *columns, Q_INT32 *rows);
 	Q_UINT8* pixelPtr(Q_INT32 x, Q_INT32 y, bool writable);
 };
@@ -177,7 +182,7 @@ inline Q_UINT32 KisTiledDataManager::pixelSize()
 	return m_pixelSize;
 }
 
-inline Q_UINT32 KisTiledDataManager::xToCol(Q_UINT32 x)
+inline Q_UINT32 KisTiledDataManager::xToCol(Q_UINT32 x) const
 {
 	// The hack with 16384 is to avoid negative division which is undefined in C++ and the most
 	// common result is not like what is desired.
@@ -185,7 +190,7 @@ inline Q_UINT32 KisTiledDataManager::xToCol(Q_UINT32 x)
 	return (x + 16384 * KisTile::WIDTH) / KisTile::WIDTH - 16384;
 }
 
-inline Q_UINT32 KisTiledDataManager::yToRow(Q_UINT32 y)
+inline Q_UINT32 KisTiledDataManager::yToRow(Q_UINT32 y) const
 {
 	// The hack with 16384 is to avoid negative division which is undefined in C++ and the most
 	// common result is not like what is desired.

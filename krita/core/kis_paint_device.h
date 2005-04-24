@@ -32,7 +32,6 @@
 #include "tiles/kis_datamanager.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_scale_visitor.h"
-#include "kis_transform_visitor.h"
 #include "kis_pixel.h"
 #include "kis_canvas_controller.h"
 #include <koffice_export.h>
@@ -48,7 +47,7 @@ class KisRectIteratorPixel;
 class KisVLineIteratorPixel;
 class KisHLineIteratorPixel;
 class KNamedCommand;
-
+class KisTransformVisitor;
 
 /**
  * Class modelled on QPaintDevice.
@@ -325,10 +324,16 @@ private:
 	KisPaintDevice& operator=(const KisPaintDevice&);
 
 protected:
-	KisDataManager * m_datamanager;
+	KisDataManagerSP m_datamanager;
 
 private:
+	// This is not a shared pointer by design. A layer does not own its containing image,
+	// the image owns its layers. This allows the image and its layers to be destroyed
+	// when the last reference to the image is removed. If the layers kept references,
+	// a cycle would be created, and removing the last external reference to the image would not 
+	// destroy the objects.
 	KisImage *m_owner;
+
 	Q_INT32 m_x;
 	Q_INT32 m_y;
 	bool m_visible;

@@ -544,22 +544,22 @@ QString KisImageMagickConverter::readFilters()
 	QString all;
 	QString name;
 	QString description;
-	ExceptionInfo ei;
-	const MagickInfo *mi;
+	const MagickInfo **mi;
+	unsigned long matches;
 
-	GetExceptionInfo(&ei);
-	mi = GetMagickInfo("*", &ei);
+	mi = GetMagickInfoList("*", &matches);
 
 	if (!mi)
 		return s;
 
-	for (; mi; mi = reinterpret_cast<const MagickInfo*>(mi -> next)) {
-		if (mi -> stealth)
+	for (unsigned long i = 0; i < matches; i++) {
+		const MagickInfo *info = mi[i];
+		if (info -> stealth)
 			continue;
 
-		if (mi -> decoder) {
-			name = mi -> name;
-			description = mi -> description;
+		if (info -> decoder) {
+			name = info -> name;
+			description = info -> description;
 			kdDebug() << "Found import filter for: " << name << "\n";
 
 			if (!description.isEmpty() && !description.contains('/')) {
@@ -573,7 +573,7 @@ QString KisImageMagickConverter::readFilters()
 
 	all += "|" + i18n("All Images");
 	all += "\n";
-	DestroyExceptionInfo(&ei);
+
 	return all + s;
 }
 
@@ -583,25 +583,26 @@ QString KisImageMagickConverter::writeFilters()
 	QString all;
 	QString name;
 	QString description;
-	ExceptionInfo ei;
-	const MagickInfo *mi;
+	const MagickInfo **mi;
+	unsigned long matches;
 
-	GetExceptionInfo(&ei);
-	mi = GetMagickInfo("*", &ei);
+	mi = GetMagickInfoList("*", &matches);
 
-	if (!mi)
+	if (!mi) {
 		kdDebug() << "Eek, no magick info!\n";
 		return s;
+	}
 
-	for (; mi; mi = reinterpret_cast<const MagickInfo*>(mi -> next)) {
-		kdDebug() << "Found export filter for: " << mi -> name << "\n";
-		if (mi -> stealth)
+	for (unsigned long i = 0; i < matches; i++) {
+		const MagickInfo *info = mi[i];
+		kdDebug() << "Found export filter for: " << info -> name << "\n";
+		if (info -> stealth)
 			continue;
 
-		if (mi -> encoder) {
-			name = mi -> name;
+		if (info -> encoder) {
+			name = info -> name;
 
-			description = mi -> description;
+			description = info -> description;
 
 			if (!description.isEmpty() && !description.contains('/')) {
 				all += "*." + name.lower() + " *." + name + " ";
@@ -614,7 +615,7 @@ QString KisImageMagickConverter::writeFilters()
 
 	all += "|" + i18n("All Images");
 	all += "\n";
-	DestroyExceptionInfo(&ei);
+
 	return all + s;
 }
 

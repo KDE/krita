@@ -27,6 +27,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 
+#include "kis_autobrush.h"
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
@@ -36,6 +37,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_selection.h"
 #include "kis_selection_options.h"
 
 namespace {
@@ -158,52 +160,49 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 			paintOutline();
 		}
 
-		clearSelection();
+		if (m_startPos == m_endPos) {
+			clearSelection();
+		} else {
+			KisImageSP img = m_subject -> currentImg();
+
+			if (!img)
+				return;
+
+			m_endPos = e -> pos();
+
+			if (m_endPos.y() < 0)
+				m_endPos.setY(0);
+
+			if (m_endPos.y() > img -> height())
+				m_endPos.setY(img -> height());
+
+			if (m_endPos.x() < 0)
+				m_endPos.setX(0);
+
+			if (m_endPos.x() > img -> width())
+				m_endPos.setX(img -> width());
+
+			if (img) {
+				KisLayerSP layer = img -> activeLayer();
+				KisSelectionSP selection = layer -> selection();
+				QRect rc( m_startPos.floorQPoint(), m_endPos.floorQPoint());
+				rc = rc.normalize();
+
+				KisAutobrushCircleShape * shape = new KisAutobrushCircleShape(rc.width(),rc.height(), 1, 1);
+				Q_UINT8 value;
+				for (int y = 0; y <= rc.height(); y++)
+					for (int x = 0; x <= rc.width(); x++)
+					{
+						value = MAX_SELECTED - shape -> valueAt(x,y);
+						//Already selected pixels are skiped
+						if (selection -> selected( x+rc.x(), y+rc.y()) >= value)
+							continue;
+						selection -> setSelected( x+rc.x(), y+rc.y(), value);
+					}
+				img -> notify(rc);
+			}
+		}
 		m_selecting = false;
-
-// 		if (m_startPos == m_endPos) {
-// 			clearSelection();
-// 		} else {
-// 			KisImageSP img = m_subject -> currentImg();
-
-// 			if (!img)
-// 				return;
-
-// 			m_endPos = e -> pos();
-
-// 			if (m_endPos.y() < 0)
-// 				m_endPos.setY(0);
-
-// 			if (m_endPos.y() > img -> height())
-// 				m_endPos.setY(img -> height());
-
-// 			if (m_endPos.x() < 0)
-// 				m_endPos.setX(0);
-
-// 			if (m_endPos.x() > img -> width())
-// 				m_endPos.setX(img -> width());
-
-// 			if (img) {
-// 				KisPaintDeviceSP parent;
-// 				KisFloatingSelectionSP selection;
-
-//                                 QRect rc(m_startPos, m_endPos);
-
-// 				parent = img -> activeDevice();
-
-// 				if (parent) {
-// 					rc = rc.normalize();
-// 					selection = new KisFloatingSelection(parent, img, "elliptical selection tool frame", OPACITY_OPAQUE);
-// 					selection -> setBounds(rc);
-// 					img -> setSelection(selection);
-
-// 					if (img -> undoAdapter())
-// 						img -> undoAdapter() -> addCommand(new RectSelectCmd(selection));
-// 				}
-// 			}
-// 		}
-//
-// 		m_selecting = false;
 	}
 }
 

@@ -37,7 +37,7 @@ class KisAutobrushShape {
 class KisAutobrushCircleShape : public KisAutobrushShape {
 	public:
 		KisAutobrushCircleShape(Q_INT32 w, Q_INT32 h, double fh, double fv);
-	protected:
+	public:
 		virtual Q_INT8 valueAt(Q_INT32 x, Q_INT32 y);
 	private:
 		double norme(double a, double b)

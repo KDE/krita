@@ -693,6 +693,12 @@ QDomElement KisDoc::saveLayer(QDomDocument& doc, KisLayerSP layer)
 	layerElement.setAttribute("opacity", layer -> opacity());
 	layerElement.setAttribute("visible", layer -> visible());
 	layerElement.setAttribute("linked", layer -> linked());
+	layerElement.setAttribute("colorspacename", layer -> colorStrategy() -> id().id());
+	// XXX: Save profile as blob inside the layer, instead of the product name.
+	if (layer -> profile() && layer -> profile() -> valid()) {
+		layerElement.setAttribute("profile", layer -> profile() -> productName());
+	}
+
 	return layerElement;
 }
 
@@ -739,9 +745,31 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
 	linked = attr == "0" ? false : true;
 
-	layer = new KisLayer(img, name, opacity);
+	QString colorspacename = element.attribute("colorspacename");
+	KisStrategyColorSpaceSP colorSpace = 0;
+
+	if (colorspacename.isNull()) {
+		// Default to the image colourspace for backwards compatibility
+		colorSpace = img -> colorStrategy();
+	} else {
+		colorSpace = KisColorSpaceRegistry::instance() -> get(KisID(colorspacename, ""));
+	}
+
+	if (colorSpace == 0) {
+		return 0;
+	}
+
+	QString profileProductName = element.attribute("profile");
+	KisProfileSP profile = 0;
+
+	if (!profileProductName.isNull()) {
+		profile = colorSpace -> getProfileByName(profileProductName);
+	}
+
+	layer = new KisLayer(img, name, opacity, colorSpace);
 	Q_CHECK_PTR(layer);
 
+	layer -> setProfile(profile);
 	layer -> setLinked(linked);
 	layer -> setVisible(visible);
 	layer -> move(x, y);

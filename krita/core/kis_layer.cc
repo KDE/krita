@@ -52,6 +52,17 @@ KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity)
 #endif
 }
 
+KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisStrategyColorSpaceSP colorStrategy)
+	: super(img, colorStrategy, name),
+	  m_opacity(opacity),
+	  m_linked(false)
+{
+#if DEBUG_LAYERS
+	numLayers++;
+	kdDebug() << "LAYER " << name << " CREATED total now = " << numLayers << endl;
+#endif
+}
+
 KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
 {
 #if DEBUG_LAYERS

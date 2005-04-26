@@ -188,12 +188,12 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 				QRect rc( m_startPos.floorQPoint(), m_endPos.floorQPoint());
 				rc = rc.normalize();
 
-				KisAutobrushCircleShape * shape = new KisAutobrushCircleShape(rc.width(),rc.height(), 1, 1);
+				KisAutobrushCircleShape shape(rc.width(),rc.height(), 1, 1);
 				Q_UINT8 value;
 				for (int y = 0; y <= rc.height(); y++)
 					for (int x = 0; x <= rc.width(); x++)
 					{
-						value = MAX_SELECTED - shape -> valueAt(x,y);
+						value = MAX_SELECTED - shape.valueAt(x,y);
 						//Already selected pixels are skiped
 						if (selection -> selected( x+rc.x(), y+rc.y()) >= value)
 							continue;

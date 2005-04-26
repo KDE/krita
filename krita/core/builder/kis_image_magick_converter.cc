@@ -547,7 +547,12 @@ QString KisImageMagickConverter::readFilters()
 	const MagickInfo **mi;
 	unsigned long matches;
 
+#ifdef HAVE_OLD_GETMAGICKINFOLIST
 	mi = GetMagickInfoList("*", &matches);
+#else
+	ExceptionInfo ei;
+	mi = GetMagickInfoList("*", &matches, &ei);
+#endif
 
 	if (!mi)
 		return s;
@@ -586,7 +591,12 @@ QString KisImageMagickConverter::writeFilters()
 	const MagickInfo **mi;
 	unsigned long matches;
 
+#ifdef HAVE_OLD_GETMAGICKINFOLIST
 	mi = GetMagickInfoList("*", &matches);
+#else
+	ExceptionInfo ei;
+	mi = GetMagickInfoList("*", &matches, &ei);
+#endif
 
 	if (!mi) {
 		kdDebug() << "Eek, no magick info!\n";

@@ -94,6 +94,7 @@ public:
 	void enableUndo(KoCommandHistory *history);
 
 	KisStrategyColorSpaceSP colorStrategy() const;
+	void setColorStrategy(KisStrategyColorSpaceSP colorStrategy);
 
 	KURL uri() const;
 	void uri(const KURL& uri);

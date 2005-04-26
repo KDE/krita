@@ -125,9 +125,9 @@ void ColorspaceConversion::slotLayerColorspaceConversion()
 	dlgColorspaceConversion -> fillCmbSrcProfile(dev -> colorStrategy() -> id());
 
 	KisProfileSP p = dev -> profile();
-	if ( !p ) return;
-
-	dlgColorspaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(p -> productName());
+	if ( p ) {
+		dlgColorspaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(p -> productName());
+	}
 
 	if (dlgColorspaceConversion -> exec() == QDialog::Accepted) {
 		kdDebug() << "Going to convert layer\n";
@@ -137,7 +137,8 @@ void ColorspaceConversion::slotLayerColorspaceConversion()
 		dev -> convertTo(cs,
 				   cs -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbDestProfile -> currentText()),
 				   dlgColorspaceConversion -> m_page -> grpIntent -> selectedId());
-
+		image -> notify();
+		image -> notifyLayersChanged();
 	}
 	delete dlgColorspaceConversion;
 }

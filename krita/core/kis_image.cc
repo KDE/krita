@@ -164,6 +164,61 @@ namespace {
 		vKisLayerSP m_afterLayers;
 	};
 
+	class KisConvertImageTypeCmd : public KNamedCommand {
+		typedef KNamedCommand super;
+
+	public:
+		KisConvertImageTypeCmd(KisUndoAdapter *adapter, KisImageSP img, 
+				       KisStrategyColorSpaceSP beforeColorSpace, KisProfileSP beforeProfile, 
+				       KisStrategyColorSpaceSP afterColorSpace, KisProfileSP afterProfile
+				       ) : super(i18n("&Convert Image Type...")) //XXX: fix when string freeze over
+			{
+				m_adapter = adapter;
+				m_img = img;
+				m_beforeColorSpace = beforeColorSpace;
+				m_beforeProfile = beforeProfile;
+				m_afterColorSpace = afterColorSpace;
+				m_afterProfile = afterProfile;
+			}
+
+		virtual ~KisConvertImageTypeCmd()
+			{
+			}
+
+	public:
+		virtual void execute()
+			{
+				m_adapter -> setUndo(false);
+
+				m_img -> setColorStrategy(m_afterColorSpace);
+				m_img -> setProfile(m_afterProfile);
+
+				m_adapter -> setUndo(true);
+				m_img -> notify();
+				m_img -> notifyLayersChanged();
+			}
+
+		virtual void unexecute()
+			{
+				m_adapter -> setUndo(false);
+
+				m_img -> setColorStrategy(m_beforeColorSpace);
+				m_img -> setProfile(m_beforeProfile);
+
+				m_adapter -> setUndo(true);
+				m_img -> notify();
+				m_img -> notifyLayersChanged();
+			}
+
+	private:
+		KisUndoAdapter *m_adapter;
+		KisImageSP m_img;
+		KisStrategyColorSpaceSP m_beforeColorSpace;
+		KisStrategyColorSpaceSP m_afterColorSpace;
+		KisProfileSP m_beforeProfile;
+		KisProfileSP m_afterProfile;
+	};
+
 }
 
 KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
@@ -506,17 +561,28 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 
 void KisImage::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
-	if (m_layers.empty()) return; // Nothing to convert
-	vKisLayerSP_it it;
-	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-		(*it) -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
-	}
-	m_projection -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
-	m_bkg -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
+	if (m_colorStrategy -> id() != dstColorStrategy -> id()) {
 
-	m_colorStrategy = dstColorStrategy;
-	setProfile(dstProfile);
-	notify();
+		if (undoAdapter() && undoAdapter() -> undo()) {
+			undoAdapter() -> beginMacro(i18n("&Convert Image Type...")); //XXX: fix when string freeze over
+		}
+
+		vKisLayerSP_it it;
+		for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
+			(*it) -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
+		}
+
+		if (undoAdapter() && undoAdapter() -> undo()) {
+
+			undoAdapter() -> addCommand(new KisConvertImageTypeCmd(undoAdapter(), this, m_colorStrategy, m_profile,
+									       dstColorStrategy, dstProfile));
+			undoAdapter() -> endMacro();
+		}
+
+		setColorStrategy(dstColorStrategy);
+		setProfile(dstProfile);
+		notify();
+	}
 }
 
 KisProfileSP KisImage::profile() const
@@ -1119,6 +1185,17 @@ KisStrategyColorSpaceSP KisImage::colorStrategy() const
 	return m_colorStrategy;
 }
 
+void KisImage::setColorStrategy(KisStrategyColorSpaceSP colorStrategy)
+{
+	m_colorStrategy = colorStrategy;
+
+	m_bkg = new KisBackground(this, m_width, m_height);
+	Q_CHECK_PTR(m_bkg);
+
+	m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+	Q_CHECK_PTR(m_projection);
+	notify();
+}
 
 #include "kis_image.moc"
 

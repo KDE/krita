@@ -44,54 +44,118 @@
 
 namespace {
 
-class MoveCommand : public KNamedCommand {
-	typedef KNamedCommand super;
+	class MoveCommand : public KNamedCommand {
+		typedef KNamedCommand super;
+	
+	public:
+		MoveCommand(KisCanvasControllerInterface * controller,  KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
+		virtual ~MoveCommand();
+	
+		virtual void execute();
+		virtual void unexecute();
+	
+	private:
+		void moveTo(const QPoint& pos);
+	
+	private:
+		KisPaintDeviceSP m_device;
+		KisCanvasControllerInterface * m_controller;
+		QPoint m_oldPos;
+		QPoint m_newPos;
+	};
+	
+	MoveCommand::MoveCommand(KisCanvasControllerInterface * controller, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
+		super(i18n("Moved Layer"))
+	{
+		m_controller = controller;
+		m_device = device;
+		m_oldPos = oldpos;
+		m_newPos = newpos;
+	}
+	
+	MoveCommand::~MoveCommand()
+	{
+	}
+	
+	void MoveCommand::execute()
+	{
+		moveTo(m_newPos);
+	}
+	
+	void MoveCommand::unexecute()
+	{
+		moveTo(m_oldPos);
+	}
+	
+	void MoveCommand::moveTo(const QPoint& pos)
+	{
+		m_device -> move(pos.x(), pos.y());
+		m_controller -> updateCanvas();
+	}
 
-public:
-	MoveCommand(KisCanvasControllerInterface * controller,  KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
-	virtual ~MoveCommand();
+	class KisConvertLayerTypeCmd : public KNamedCommand {
+		typedef KNamedCommand super;
 
-	virtual void execute();
-	virtual void unexecute();
+	public:
+		KisConvertLayerTypeCmd(KisUndoAdapter *adapter, KisPaintDeviceSP paintDevice, 
+				       KisDataManagerSP beforeData, KisStrategyColorSpaceSP beforeColorSpace, KisProfileSP beforeProfile, 
+				       KisDataManagerSP afterData, KisStrategyColorSpaceSP afterColorSpace, KisProfileSP afterProfile
+				       ) : super(i18n("&Convert Layer Type...")) //XXX: fix when string freeze over
+			{
+				m_adapter = adapter;
+				m_paintDevice = paintDevice;
+				m_beforeData = beforeData;
+				m_beforeColorSpace = beforeColorSpace;
+				m_beforeProfile = beforeProfile;
+				m_afterData = afterData;
+				m_afterColorSpace = afterColorSpace;
+				m_afterProfile = afterProfile;
+			}
 
-private:
-	void moveTo(const QPoint& pos);
+		virtual ~KisConvertLayerTypeCmd()
+			{
+			}
 
-private:
-	KisPaintDeviceSP m_device;
-	KisCanvasControllerInterface * m_controller;
-	QPoint m_oldPos;
-	QPoint m_newPos;
-};
+	public:
+		virtual void execute()
+			{
+				m_adapter -> setUndo(false);
 
-MoveCommand::MoveCommand(KisCanvasControllerInterface * controller, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
-	super(i18n("Moved Layer"))
-{
-	m_controller = controller;
-	m_device = device;
-	m_oldPos = oldpos;
-	m_newPos = newpos;
-}
+				m_paintDevice -> setData(m_afterData, m_afterColorSpace, m_afterProfile);
 
-MoveCommand::~MoveCommand()
-{
-}
+				m_adapter -> setUndo(true);
+				if (m_paintDevice -> image()) {
+					m_paintDevice -> image() -> notify();
+					m_paintDevice -> image() -> notifyLayersChanged();
+				}
+			}
 
-void MoveCommand::execute()
-{
-	moveTo(m_newPos);
-}
+		virtual void unexecute()
+			{
+				m_adapter -> setUndo(false);
 
-void MoveCommand::unexecute()
-{
-	moveTo(m_oldPos);
-}
+				m_paintDevice -> setData(m_beforeData, m_beforeColorSpace, m_beforeProfile);
 
-void MoveCommand::moveTo(const QPoint& pos)
-{
-	m_device -> move(pos.x(), pos.y());
-	m_controller -> updateCanvas();
-}
+				m_adapter -> setUndo(true);
+				if (m_paintDevice -> image()) {
+					m_paintDevice -> image() -> notify();
+					m_paintDevice -> image() -> notifyLayersChanged();
+				}
+			}
+
+	private:
+		KisUndoAdapter *m_adapter;
+
+		KisPaintDeviceSP m_paintDevice;
+
+		KisDataManagerSP m_beforeData;
+		KisStrategyColorSpaceSP m_beforeColorSpace;
+		KisProfileSP m_beforeProfile;
+
+		KisDataManagerSP m_afterData;
+		KisStrategyColorSpaceSP m_afterColorSpace;
+		KisProfileSP m_afterProfile;
+	};
 
 }
 
@@ -447,27 +511,58 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 
 	KisPaintDevice dst(dstColorStrategy, name());
 	dst.setProfile(dstProfile);
+	dst.setX(getX());
+	dst.setY(getY());
 
 	Q_INT32 x, y, w, h;
 	extent(x, y, w, h);
 
-	for (Q_INT32 y2 = y; y2 < h; ++y2) {
-		KisHLineIteratorPixel srcIt = createHLineIterator(x, y2, w, false);
-		KisHLineIteratorPixel dstIt = dst.createHLineIterator(x, y2, w, true);
-		while (!srcIt.isDone()) {
+	for (Q_INT32 row = y; row < y + h; ++row) {
 
-			m_colorStrategy -> convertPixelsTo(srcIt.rawData(), m_profile, 
-							   dstIt.rawData(), dstColorStrategy, dstProfile, 1, renderingIntent);
-			++srcIt;
-			++dstIt;
+		Q_INT32 column = x;
+		Q_INT32 columnsRemaining = w;
+
+		while (columnsRemaining > 0) {
+
+			Q_INT32 numContiguousDstColumns = dst.numContiguousColumns(column, row, row);
+			Q_INT32 numContiguousSrcColumns = numContiguousColumns(column, row, row);
+
+			Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns); 
+			columns = QMIN(columns, columnsRemaining);
+
+			const Q_UINT8 *srcData = pixel(column, row);
+			Q_UINT8 *dstData = dst.writablePixel(column, row);
+
+			m_colorStrategy -> convertPixelsTo(srcData, m_profile, dstData, dstColorStrategy, dstProfile, columns, renderingIntent);
+
+			column += columns;
+			columnsRemaining -= columns;
 		}
 	}
 
-	m_datamanager = dst.m_datamanager;
-	m_colorStrategy = dstColorStrategy;
+	if (undoAdapter() && undoAdapter() -> undo()) {
+		undoAdapter() -> addCommand(new KisConvertLayerTypeCmd(undoAdapter(), this, m_datamanager, m_colorStrategy, m_profile,
+								       dst.m_datamanager, dstColorStrategy, dstProfile));
+	}
+
+	setData(dst.m_datamanager, dstColorStrategy, dstProfile);
+}
+
+void KisPaintDevice::setData(KisDataManagerSP data, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile)
+{
+	m_datamanager = data;
+	m_colorStrategy = colorStrategy;
 	m_pixelSize = m_colorStrategy -> pixelSize();
 	m_nChannels = m_colorStrategy -> nChannels();
-	m_profile = dstProfile;
+	m_profile = profile;
+}
+
+KisUndoAdapter *KisPaintDevice::undoAdapter() const
+{
+	if (m_owner) {
+		return m_owner -> undoAdapter();
+	}
+	return 0;
 }
 
 void KisPaintDevice::convertFromImage(const QImage& img)

@@ -235,6 +235,11 @@ public:
 	 */
 	void setProfile(KisProfileSP profile);
 
+	/**
+	 * Replace the pixel data, color strategy, and profile.
+	 */
+	void setData(KisDataManagerSP data, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile);
+
 	CompositeOp compositeOp() { return m_compositeOp; }
 	void setCompositeOp(CompositeOp compositeOp) { m_compositeOp = compositeOp; }
 
@@ -257,6 +262,8 @@ public:
 	KisImage *image();
         const KisImage *image() const;
         void setImage(KisImage *image);
+
+	KisUndoAdapter *undoAdapter() const;
 
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);

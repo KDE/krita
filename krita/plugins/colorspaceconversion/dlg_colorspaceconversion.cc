@@ -53,8 +53,8 @@ DlgColorspaceConversion::DlgColorspaceConversion( QWidget *  parent,
 	// XXX: Until we have implemented high bit depth images
 	m_page -> cmbDepth -> setEnabled(false);
 
-	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const QString &)), 
-		this, SLOT(fillCmbDestProfile(const QString &)));
+	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)), 
+		this, SLOT(fillCmbDestProfile(const KisID &)));
 
 
 	connect(this, SIGNAL(okClicked()),
@@ -90,6 +90,7 @@ void DlgColorspaceConversion::fillCmbSrcProfile(const KisID & s)
 void DlgColorspaceConversion::fillCmbProfile(QComboBox * cmb, const KisID& s)
 {
 	cmb -> clear();
+	cmb -> insertItem(i18n("None"));
 
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
 

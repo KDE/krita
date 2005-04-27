@@ -169,7 +169,7 @@ void KisToolSelectPicker::leave(QEvent *)
 
 void KisToolSelectPicker::slotTimer()
 {
-	ButtonState state = kapp->keyboardMouseState();
+	int state = kapp->keyboardMouseState() & (Qt::ShiftButton|Qt::ControlButton|Qt::AltButton);
 	enumSelectionMode action;
 
 	if (state == Qt::ShiftButton)

@@ -49,12 +49,6 @@ public:
 	virtual void update(KisCanvasSubject *subject);
 
 	virtual void setup(KActionCollection *collection);
-	virtual QWidget* createOptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
-
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void enter(QEvent *);
-	virtual void leave(QEvent *);
 
 
 public slots:
@@ -62,6 +56,14 @@ public slots:
 	virtual void slotSetAction(int);
 	
 private:
+	virtual QWidget* createOptionWidget(QWidget* parent);
+	virtual QWidget* optionWidget();
+
+	virtual void buttonPress(KisButtonPressEvent *e);
+	virtual void enter(QEvent *);
+	virtual void leave(QEvent *);
+	void setSelectCursor(enumSelectionMode);
+
 	KisCanvasSubject *m_subject;
 	QWidget *m_optWidget;
 

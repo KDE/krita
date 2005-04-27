@@ -159,7 +159,7 @@ void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 void KisToolSelectPicker::enter(QEvent *)
 {
 	m_timer->start(50);
-	m_currentSelectAction = SELECTION_REPLACE;
+	setSelectCursor(m_currentSelectAction);
 }
 
 void KisToolSelectPicker::leave(QEvent *)
@@ -181,9 +181,14 @@ void KisToolSelectPicker::slotTimer()
 	else
 		action = m_defaultSelectAction;
 
-	if (action == m_currentSelectAction)
-		return;
+	if (action != m_currentSelectAction) {
+		m_currentSelectAction = action;
+		setSelectCursor(action);
+	}
+}
 
+void KisToolSelectPicker::setSelectCursor(enumSelectionMode action)
+{
 	switch (action) {
 		case SELECTION_REPLACE:
 			m_subject -> setCanvasCursor(KisCursor::pickerCursor());
@@ -194,7 +199,6 @@ void KisToolSelectPicker::slotTimer()
 		case SELECTION_SUBTRACT:
 			m_subject -> setCanvasCursor(KisCursor::pickerMinusCursor());
 	}
-	m_currentSelectAction = action;
 }
 
 void KisToolSelectPicker::setup(KActionCollection *collection)

@@ -18,19 +18,37 @@
 
 #include <qwidget.h>
 #include <qrect.h>
+#include <qlayout.h>
+#include <qlabel.h>
 
 #include <kdebug.h>
 #include <koDocument.h>
+#include <klocale.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_canvas_subject.h"
 #include "kis_tool_controller.h"
 #include "kis_tool_paint.h"
+#include "knuminput.h"
+#include "kis_cmb_composite.h"
 
-KisToolPaint::KisToolPaint()
+KisToolPaint::KisToolPaint(const QString& UIName)
 {
 	m_subject = 0;
+
+	m_UIName = UIName;
+
+	m_optionWidget = 0;
+	m_optionWidgetLayout = 0;
+
+	m_lbOpacity = 0;
+	m_slOpacity = 0;
+	m_lbComposite= 0;
+	m_cmbComposite = 0;
+
+	m_opacity = OPACITY_OPAQUE;
+	m_compositeOp = COMPOSITE_OVER;
 }
 
 KisToolPaint::~KisToolPaint()
@@ -86,14 +104,55 @@ void KisToolPaint::keyRelease(QKeyEvent *)
 {
 }
 
-QWidget* KisToolPaint::createOptionWidget(QWidget* /*parent*/)
+QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
 {
-	return 0;
+	m_optionWidget = new QWidget(parent);
+	m_optionWidget -> setCaption(m_UIName);
+
+	m_lbOpacity = new QLabel(i18n("Opacity: "), m_optionWidget);
+	m_slOpacity = new KIntNumInput( m_optionWidget, "int_m_optionwidget");
+	m_slOpacity -> setRange( 0, 100);
+	m_slOpacity -> setValue(m_opacity / OPACITY_OPAQUE * 100);
+	connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
+
+	m_lbComposite = new QLabel(i18n("Mode: "), m_optionWidget);
+	m_cmbComposite = new KisCmbComposite(m_optionWidget);
+	connect(m_cmbComposite, SIGNAL(activated(int)), this, SLOT(slotSetCompositeMode(int)));
+
+	m_optionWidgetLayout = new QGridLayout(m_optionWidget, 4, 2, 0, 6);
+
+	m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
+	m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
+
+	m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
+	m_optionWidgetLayout -> addWidget(m_cmbComposite, 1, 1);
+
+	m_optionWidgetLayout -> setRowSpacing(3, 6);
+
+	return m_optionWidget;
 }
 
 QWidget* KisToolPaint::optionWidget()
 {
-	return 0;
+	return m_optionWidget;
+}
+
+void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
+{
+	Q_ASSERT(m_optionWidget != 0);
+	Q_ASSERT(m_optionWidgetLayout != 0);
+
+	m_optionWidgetLayout -> addMultiCellLayout(layout, 3, 3, 0, 1);
+}
+
+void KisToolPaint::slotSetOpacity(int opacityPerCent)
+{
+	m_opacity = opacityPerCent * OPACITY_OPAQUE / 100;
+}
+
+void KisToolPaint::slotSetCompositeMode(int compositeOp)
+{
+	m_compositeOp = (CompositeOp)compositeOp;
 }
 
 void KisToolPaint::cursor(QWidget *w) const

@@ -43,7 +43,6 @@ public:
 	virtual void setup(KActionCollection *collection);
 	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
-	virtual QWidget* optionWidget();
 	virtual QWidget* createOptionWidget(QWidget* parent);
 public slots:
 	virtual void setFont();
@@ -54,7 +53,6 @@ private:
 	QLabel *m_lbFont;
 	KSqueezedTextLabel *m_lbFontName;
 	QPushButton *m_btnMoreFonts;
-	QWidget *m_optWidget;
 };
 
 

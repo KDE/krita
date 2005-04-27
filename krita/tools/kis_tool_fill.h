@@ -31,7 +31,6 @@ class QWidget;
 class QLabel;
 class QCheckBox;
 class KIntNumInput;
-class KisCmbComposite;
 class KActionCollection;
 
 class KisToolFill : public KisToolPaint {
@@ -52,11 +51,9 @@ public:
 	bool flood(int startX, int startY);
       
 	virtual QWidget* createOptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
 
 public slots:
 	virtual void slotSetThreshold(int);
-	virtual void slotSetCompositeMode(int);
 	virtual void slotSetUsePattern(int);
 
 private:
@@ -70,13 +67,9 @@ private:
 	bool *m_map, m_samplemerged, m_usePattern, m_useSelection;
 	KisSelectionSP m_selection;
 
-	QWidget *m_optWidget;
 	QLabel *m_lbThreshold;
 	KIntNumInput *m_slThreshold;
-	QLabel *m_lbComposite;
-	KisCmbComposite *m_cmbComposite;
 	QCheckBox *m_checkUsePattern;
-	CompositeOp m_compositeOp;
 };
 
 

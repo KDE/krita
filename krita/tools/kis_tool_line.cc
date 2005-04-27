@@ -38,10 +38,8 @@
 #include "kis_paintop_registry.h"
 
 KisToolLine::KisToolLine()
-	: super(),
-	  m_dragging( false ),
-	  m_opacity(OPACITY_OPAQUE),
-	  m_compositeOp(COMPOSITE_OVER)
+	: super(i18n("Line")),
+	  m_dragging( false )
 {
 	setName("tool_line");
 	setCursor(KisCursor::arrowCursor());

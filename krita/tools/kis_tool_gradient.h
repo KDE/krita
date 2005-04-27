@@ -65,11 +65,8 @@ public:
 	virtual void paint(QPainter& gc, const QRect& rc);
 
 	QWidget* createOptionWidget(QWidget* parent);
-	QWidget* optionWidget();
 
 public slots:
-	void slotSetOpacity(int);
-	void slotSetCompositeMode(int);
 	void slotSetShape(int);
 	void slotSetRepeat(int);
 	void slotSetReverse(bool);
@@ -88,20 +85,12 @@ private:
 
 	KisCanvasSubject *m_subject;
 
-	QUANTUM m_opacity;
-	CompositeOp m_compositeOp;
-
 	KisGradientPainter::enumGradientShape m_shape;
 	KisGradientPainter::enumGradientRepeat m_repeat;
 
 	bool m_reverse;
 	double m_antiAliasThreshold;
 
-	QWidget *m_optWidget;
-	QLabel *m_lbOpacity;
-	KIntNumInput *m_slOpacity;
-	QLabel *m_lbComposite;
-	KisCmbComposite *m_cmbComposite;
 	QLabel *m_lbShape;
 	QLabel *m_lbRepeat;
 	QCheckBox *m_ckReverse;

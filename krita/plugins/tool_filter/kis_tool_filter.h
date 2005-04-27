@@ -45,7 +45,6 @@ public:
 
 	virtual void setup(KActionCollection *collection);
 	virtual QWidget* createOptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
 
 public slots:
 	void changeFilter( const KisID & filter);
@@ -57,7 +56,6 @@ private:
 	KisFilterSP m_filter;
 	KisFilterConfigurationWidget* m_filterConfigurationWidget;
 	QGridLayout* m_optionLayout;
-	QWidget* m_optWidget;
 	KisCmbIDList * m_cbFilter;
 };
 

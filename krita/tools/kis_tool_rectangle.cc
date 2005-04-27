@@ -39,7 +39,7 @@
 #include "kis_paintop_registry.h"
 
 KisToolRectangle::KisToolRectangle()
-	: super(),
+	: super(i18n ("Rectangle")),
           m_dragging (false),
           m_currentImage (0)
 {
@@ -135,8 +135,8 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
 		painter.setPaintOp(op);
 		painter.setPaintColor(m_subject -> fgColor());
 		painter.setBrush(m_subject -> currentBrush());
-		//painter.setOpacity(m_opacity);
-		//painter.setCompositeOp(m_compositeOp);
+		painter.setOpacity(m_opacity);
+		painter.setCompositeOp(m_compositeOp);
 
 		painter.paintRect(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
 		m_currentImage -> notify( painter.dirtyRect() );
@@ -183,7 +183,5 @@ void KisToolRectangle::setup(KActionCollection *collection)
 		m_ownAction = true;
 	}
 }
-
-
 
 #include "kis_tool_rectangle.moc"

@@ -46,10 +46,8 @@
 #include "kis_progress_display_interface.h"
 
 KisToolGradient::KisToolGradient()
-	: super(),
-	  m_dragging( false ),
-	  m_opacity(OPACITY_OPAQUE),
-	  m_compositeOp(COMPOSITE_OVER)
+	: super(i18n("Gradient")),
+	  m_dragging( false )
 {
 	setName("tool_gradient");
 	setCursor(KisCursor::arrowCursor());
@@ -61,7 +59,6 @@ KisToolGradient::KisToolGradient()
 	m_shape = KisGradientPainter::GradientShapeLinear;
 	m_repeat = KisGradientPainter::GradientRepeatNone;
 	m_antiAliasThreshold = 0.2;
-	m_optWidget = 0;
 }
 
 KisToolGradient::~KisToolGradient()
@@ -234,36 +231,16 @@ void KisToolGradient::paintLine(QPainter& gc)
 
 QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
 {
-	m_optWidget = new QWidget(parent);
-	Q_CHECK_PTR(m_optWidget);
+	QWidget *widget = super::createOptionWidget(parent);
+	Q_CHECK_PTR(widget);
 
-	m_optWidget -> setCaption(i18n("Gradient"));
-	
-	m_lbOpacity = new QLabel(i18n("Opacity:"), m_optWidget);
-	m_slOpacity = new KIntNumInput( m_optWidget, "int_widget");
-	m_slOpacity -> setRange( 0, 100);
-	m_slOpacity -> setValue(m_opacity / OPACITY_OPAQUE * 100);
-	connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
+	m_lbShape = new QLabel(i18n("Shape:"), widget);
+	m_lbRepeat = new QLabel(i18n("Repeat:"), widget);
 
-	m_lbComposite = new QLabel(i18n("Mode:"), m_optWidget);
-	m_cmbComposite = new KisCmbComposite(m_optWidget);
-	connect(m_cmbComposite, SIGNAL(activated(int)), this, SLOT(slotSetCompositeMode(int)));
-
-	QGridLayout *optionLayout = new QGridLayout(m_optWidget, 8, 2, 0, 6);
-
-	optionLayout -> addWidget(m_lbOpacity, 1, 0);
-	optionLayout -> addWidget(m_slOpacity, 1, 1);
-
-	optionLayout -> addWidget(m_lbComposite, 2, 0);
-	optionLayout -> addWidget(m_cmbComposite, 2, 1);                 
-
-	m_lbShape = new QLabel(i18n("Shape:"), m_optWidget);
-	m_lbRepeat = new QLabel(i18n("Repeat:"), m_optWidget);
-
-	m_ckReverse = new QCheckBox(i18n("Reverse"), m_optWidget, "reverse_check");
+	m_ckReverse = new QCheckBox(i18n("Reverse"), widget, "reverse_check");
 	connect(m_ckReverse, SIGNAL(toggled(bool)), this, SLOT(slotSetReverse(bool)));
 
-	m_cmbShape = new QComboBox(false, m_optWidget, "shape_combo");
+	m_cmbShape = new QComboBox(false, widget, "shape_combo");
 	connect(m_cmbShape, SIGNAL(activated(int)), this, SLOT(slotSetShape(int)));
 	m_cmbShape -> insertItem(i18n("Linear"));
 	m_cmbShape -> insertItem(i18n("Bi-Linear"));
@@ -272,46 +249,34 @@ QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
 	m_cmbShape -> insertItem(i18n("Conical"));
 	m_cmbShape -> insertItem(i18n("Conical Symmetric"));
 
-	m_cmbRepeat = new QComboBox(false, m_optWidget, "repeat_combo");
+	m_cmbRepeat = new QComboBox(false, widget, "repeat_combo");
 	connect(m_cmbRepeat, SIGNAL(activated(int)), this, SLOT(slotSetRepeat(int)));
 	m_cmbRepeat -> insertItem(i18n("None"));
 	m_cmbRepeat -> insertItem(i18n("Forwards"));
 	m_cmbRepeat -> insertItem(i18n("Alternating"));
 
-	optionLayout -> addWidget(m_lbShape, 3, 0);
-	optionLayout -> addWidget(m_cmbShape, 3, 1);
+	QGridLayout *optionLayout = new QGridLayout(widget, 6, 2);
+	super::addOptionWidgetLayout(optionLayout);
 
-	optionLayout -> addWidget(m_lbRepeat, 4, 0);
-	optionLayout -> addWidget(m_cmbRepeat, 4, 1);
+	optionLayout -> addWidget(m_lbShape, 0, 0);
+	optionLayout -> addWidget(m_cmbShape, 0, 1);
 
-	optionLayout -> addWidget(m_ckReverse, 5, 0);
+	optionLayout -> addWidget(m_lbRepeat, 1, 0);
+	optionLayout -> addWidget(m_cmbRepeat, 1, 1);
 
-	m_lbAntiAliasThreshold = new QLabel(i18n("Anti-alias threshold:"), m_optWidget);
+	optionLayout -> addWidget(m_ckReverse, 2, 0);
 
-	m_slAntiAliasThreshold = new KDoubleNumInput(m_optWidget, "threshold_slider");
+	m_lbAntiAliasThreshold = new QLabel(i18n("Anti-alias threshold:"), widget);
+
+	m_slAntiAliasThreshold = new KDoubleNumInput(widget, "threshold_slider");
 	m_slAntiAliasThreshold -> setRange( 0, 1); 
 	m_slAntiAliasThreshold -> setValue(m_antiAliasThreshold);
 	connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(double)), this, SLOT(slotSetAntiAliasThreshold(double)));
 
-	optionLayout -> addWidget(m_lbAntiAliasThreshold, 6, 0);
-	optionLayout -> addWidget(m_slAntiAliasThreshold, 6, 1);
+	optionLayout -> addWidget(m_lbAntiAliasThreshold, 3, 0);
+	optionLayout -> addWidget(m_slAntiAliasThreshold, 3, 1);
 
-	return m_optWidget;
-}
-
-QWidget *KisToolGradient::optionWidget()
-{
-	return m_optWidget;
-}
-
-void KisToolGradient::slotSetOpacity(int opacityPerCent)
-{
-	m_opacity = opacityPerCent * OPACITY_OPAQUE / 100;
-}
-
-void KisToolGradient::slotSetCompositeMode(int compositeOp)
-{
-	m_compositeOp = (CompositeOp)compositeOp;
+	return widget;
 }
 
 void KisToolGradient::slotSetShape(int shape)

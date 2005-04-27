@@ -23,6 +23,7 @@
  
 #include <qpainter.h>
 #include <qspinbox.h>
+#include <qlayout.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -44,12 +45,11 @@
 #include "wdg_tool_star.h"
 
 KisToolStar::KisToolStar()
-        : super(),
+        : super(i18n("Star")),
           m_dragging (false),
           m_currentImage (0)
 {
 	setName("tool_star");
-	m_optWidget = 0;
 	// initialize ellipse tool settings
 //	m_lineThickness = 4;
 // 	m_opacity = 255;
@@ -123,8 +123,8 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
 
                 painter.setPaintColor(m_subject -> fgColor());
                 painter.setBrush(m_subject -> currentBrush());
-                //painter.setOpacity(m_opacity);
-                //painter.setCompositeOp(m_compositeOp);
+                painter.setOpacity(m_opacity);
+                painter.setCompositeOp(m_compositeOp);
 		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
 		painter.setPaintOp(op); // Painter takes ownership
 
@@ -232,19 +232,18 @@ QPointArray KisToolStar::starCoordinates(int N, int mx, int my, int x, int y)
 
 QWidget* KisToolStar::createOptionWidget(QWidget* parent)
 {
-	WdgToolStar * w = new WdgToolStar(parent);
-	Q_CHECK_PTR(w);
+	QWidget *widget = super::createOptionWidget(parent);
 
+	m_optWidget = new WdgToolStar(widget);
+	Q_CHECK_PTR(m_optWidget);
+
+	QGridLayout *optionLayout = new QGridLayout(widget, 1, 1);
+	super::addOptionWidgetLayout(optionLayout);
+
+	optionLayout -> addWidget(m_optWidget, 0, 0);
 	//connect(w -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
-	m_optWidget = w;
-	return m_optWidget;
+	return widget;
 }
-
-QWidget* KisToolStar::optionWidget()
-{
-	return m_optWidget;
-}
-
 
 #include "kis_tool_star.moc"

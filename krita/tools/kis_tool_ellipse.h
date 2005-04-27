@@ -60,9 +60,6 @@ public:
 	virtual void move(KisMoveEvent *event);
 	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
-//	virtual QWidget* createOptionWidget(QWidget* parent);
-//	virtual QWidget* optionWidget();
-
 protected:
 	virtual void draw(const KisPoint& start, const KisPoint& stop);
 	//virtual void draw(KisPainter *gc, const QRect& rc);
@@ -77,7 +74,6 @@ protected:
 
 	bool m_dragging;
 	KisImageSP m_currentImage;
-	QWidget *m_optWidget;
 };
 
 

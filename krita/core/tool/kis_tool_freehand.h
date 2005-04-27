@@ -26,10 +26,7 @@
 #include "kis_point.h"
 
 class QWidget;
-class QLabel;
 class KisPainter;
-class KIntNumInput;
-class KisCmbComposite;
 class KisBrush;
 class KisEvent;
 
@@ -48,13 +45,6 @@ public:
 	virtual void buttonPress(KisButtonPressEvent *e);
 	virtual void move(KisMoveEvent *e);
 	virtual void buttonRelease(KisButtonReleaseEvent *e);
-
-	virtual QWidget* createOptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
-
-public slots:
-	virtual void slotSetOpacity(int);
-	virtual void slotSetCompositeMode(int);
 
 protected:
 	virtual void paintAt(const KisPoint &pos,
@@ -99,17 +89,8 @@ protected:
 	QString m_transactionText;
 	enumBrushMode m_mode;
 	KisPainter *m_painter;
-	QUANTUM m_opacity;
-	CompositeOp m_compositeOp;
 
 	KisImageSP m_currentImage;
-	QWidget *m_optWidget;
-	QLabel *m_lbOpacity;
-	KIntNumInput *m_slOpacity;
-	QLabel *m_lbComposite;
-	KisCmbComposite *m_cmbComposite;
-
-
 };
 
 

@@ -53,7 +53,6 @@ KisToolFilter::KisToolFilter()
 {
 	setName("tool_filter");
 	m_subject = 0;
-	m_optWidget = 0;
 	setCursor(KisCursor::penCursor());
 }
 
@@ -94,37 +93,28 @@ void KisToolFilter::initPaint(KisEvent *e)
 
 QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 {
-	m_optWidget = new QWidget(parent);
-	Q_CHECK_PTR(m_optWidget);
-	m_optWidget -> setCaption(i18n("Filter"));
+	QWidget *widget = super::createOptionWidget(parent);
 
-	QWidget* optionFreehandWidget = KisToolFreehand::createOptionWidget(m_optWidget);
-	Q_CHECK_PTR(optionFreehandWidget);
-
-	m_cbFilter = new KisCmbIDList(m_optWidget);
+	m_cbFilter = new KisCmbIDList(widget);
 	Q_CHECK_PTR(m_cbFilter);
 
-	QLabel* lbFilter = new QLabel(i18n("Filter:"), m_optWidget);
+	QLabel* lbFilter = new QLabel(i18n("Filter:"), widget);
 	Q_CHECK_PTR(lbFilter);
 
 	m_cbFilter ->setIDList( m_subject ->filterList() );
 
-	m_optionLayout = new QGridLayout(m_optWidget, 3, 2, 0, 6);
+	m_optionLayout = new QGridLayout(widget, 3, 2, 0, 6);
 	Q_CHECK_PTR(m_optionLayout);
 
-	m_optionLayout -> addMultiCellWidget(optionFreehandWidget, 0, 0, 0 , 1 );
- 	m_optionLayout -> addWidget(lbFilter, 1, 0);
- 	m_optionLayout -> addWidget(m_cbFilter, 1, 1);
+	super::addOptionWidgetLayout(m_optionLayout);
+
+ 	m_optionLayout -> addWidget(lbFilter, 0, 0);
+ 	m_optionLayout -> addWidget(m_cbFilter, 0, 1);
 
 	connect(m_cbFilter, SIGNAL(activated ( const KisID& )), this, SLOT( changeFilter( const KisID& ) ) );
 	changeFilter( m_cbFilter->currentItem () );
 
-	return m_optWidget;
-}
-
-QWidget* KisToolFilter::optionWidget()
-{
-	return m_optWidget;
+	return widget;
 }
 
 void KisToolFilter::changeFilter( const KisID & id)
@@ -136,7 +126,7 @@ void KisToolFilter::changeFilter( const KisID & id)
 		m_optionLayout -> remove ( m_filterConfigurationWidget );
 		delete m_filterConfigurationWidget;
 	}
-	m_filterConfigurationWidget = m_filter -> createConfigurationWidget( m_optWidget );
+	m_filterConfigurationWidget = m_filter -> createConfigurationWidget( optionWidget() );
 	if( m_filterConfigurationWidget != 0 )
 	{
 		m_optionLayout -> addMultiCellWidget ( m_filterConfigurationWidget, 2, 2, 0, 1 );

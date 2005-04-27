@@ -46,9 +46,9 @@
 #include "kis_button_release_event.h"
 
 KisToolText::KisToolText()
+	: super(i18n("Text"))
 {
 	setName("tool_text");
-	m_optWidget = 0;
 	m_subject = 0;
 	setCursor(KisCursor::pointingHandCursor()); // needs a Text Cursur
 }
@@ -108,6 +108,9 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 			}
 		}
 
+		layer -> setOpacity(m_opacity);
+		layer -> setCompositeOp(m_compositeOp);
+
 		Q_INT32 x = QMAX(0, static_cast<int>(e->x() - width/2));
 		Q_INT32 y = QMAX(0, static_cast<int>(e->y() - height/2));
 		layer->move(x, y);
@@ -122,26 +125,23 @@ void KisToolText::setFont() {
 
 QWidget* KisToolText::createOptionWidget(QWidget* parent)
 {
-	m_optWidget = new QWidget(parent);
-	m_optWidget->setCaption(i18n("Text"));
+	QWidget *widget = super::createOptionWidget(parent);
 
-	m_lbFont = new QLabel(i18n("Font: "), m_optWidget);
+	m_lbFont = new QLabel(i18n("Font: "), widget);
 	m_lbFontName = new KSqueezedTextLabel(QString(m_font.family() + ", %1")
-		.arg(m_font.pointSize()), m_optWidget);
-	m_btnMoreFonts = new QPushButton("...", m_optWidget);
+		.arg(m_font.pointSize()), widget);
+	m_btnMoreFonts = new QPushButton("...", widget);
 
 	connect(m_btnMoreFonts, SIGNAL(released()), this, SLOT(setFont()));
 
-	QGridLayout *optionLayout = new QGridLayout(m_optWidget, 3, 1);
+	QGridLayout *optionLayout = new QGridLayout(widget, 3, 1);
+	super::addOptionWidgetLayout(optionLayout);
+
 	optionLayout->addWidget(m_lbFont, 0, 0);
 	optionLayout->addWidget(m_lbFontName, 0, 1);
 	optionLayout->addWidget(m_btnMoreFonts, 0, 2);
 	
-	return m_optWidget;
-}
-
-QWidget* KisToolText::optionWidget() {
-	return m_optWidget;
+	return widget;
 }
 
 void KisToolText::setup(KActionCollection *collection)

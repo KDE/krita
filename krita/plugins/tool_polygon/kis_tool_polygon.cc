@@ -43,7 +43,7 @@
 #include "kis_tool_polygon.h"
 
 KisToolPolygon::KisToolPolygon()
-        : super(),
+        : super(i18n ("Polygon")),
           m_dragging (false),
           m_currentImage (0)
 {
@@ -97,8 +97,8 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
 	
 			painter.setPaintColor(m_subject -> fgColor());
 			painter.setBrush(m_subject -> currentBrush());
-			//painter.setOpacity(m_opacity);
-			//painter.setCompositeOp(m_compositeOp);
+			painter.setOpacity(m_opacity);
+			painter.setCompositeOp(m_compositeOp);
 			KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
 			painter.setPaintOp(op); // Painter takes ownership
 	

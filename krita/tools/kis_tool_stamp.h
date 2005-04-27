@@ -61,8 +61,6 @@ public:
 /* 	bool stampToCanvas(const QPoint & pos); */
 
 protected:
-	QWidget *m_optWidget;
-
 	QPoint m_oldp;
 	QPoint m_hotSpot;
 	Q_INT32 m_hotSpotX;

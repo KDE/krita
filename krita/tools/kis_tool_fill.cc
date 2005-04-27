@@ -49,16 +49,14 @@
 #include "kis_progress_display_interface.h"
 
 KisToolFill::KisToolFill() 
-	: super()
+	: super(i18n("Fill"))
 {
 	setName("tool_fill");
 	m_subject = 0;
 	m_oldColor = 0;
 	m_threshold = 15;
 	m_usePattern = false;
-	m_compositeOp = COMPOSITE_OVER;
 	m_samplemerged = false;
-	m_optWidget = 0;
 
 	// set custom cursor.
 	setCursor(KisCursor::fillerCursor());
@@ -83,7 +81,7 @@ bool KisToolFill::flood(int startX, int startY)
 	KisFillPainter painter(device);
 	painter.beginTransaction(i18n("Floodfill"));
 	painter.setPaintColor(m_subject -> fgColor());
-	painter.setOpacity(OPACITY_OPAQUE); // XXX: make a selector for this?
+	painter.setOpacity(m_opacity);
 	painter.setFillThreshold(m_threshold);
 	painter.setCompositeOp(m_compositeOp);
 	painter.setPattern(m_subject -> currentPattern());
@@ -126,49 +124,32 @@ void KisToolFill::buttonPress(KisButtonPressEvent *e)
 
 QWidget* KisToolFill::createOptionWidget(QWidget* parent)
 {
-	m_optWidget = new QWidget(parent);
-	m_optWidget -> setCaption(i18n("Fill"));
-	
-	m_lbThreshold = new QLabel(i18n("Threshold: "), m_optWidget);
-	m_slThreshold = new KIntNumInput( m_optWidget, "int_widget");
+	QWidget *widget = super::createOptionWidget(parent);
+
+	m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
+	m_slThreshold = new KIntNumInput( widget, "int_widget");
 	m_slThreshold -> setRange( 0, 255); 
 	m_slThreshold -> setValue(m_threshold);
 	connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
-	m_lbComposite = new QLabel(i18n("Mode: "), m_optWidget);
-	m_cmbComposite = new KisCmbComposite(m_optWidget);
-	connect(m_cmbComposite, SIGNAL(activated(int)), this, SLOT(slotSetCompositeMode(int)));
-
-	m_checkUsePattern = new QCheckBox("Use pattern", m_optWidget);
+	m_checkUsePattern = new QCheckBox("Use pattern", widget);
 	m_checkUsePattern->setChecked(m_usePattern);
 	connect(m_checkUsePattern, SIGNAL(stateChanged(int)), this, SLOT(slotSetUsePattern(int)));
 
-	QGridLayout *optionLayout = new QGridLayout(m_optWidget, 4, 3);
+	QGridLayout *optionLayout = new QGridLayout(widget, 3, 3);
+	super::addOptionWidgetLayout(optionLayout);
 
 	optionLayout -> addWidget(m_lbThreshold, 1, 0);
 	optionLayout -> addWidget(m_slThreshold, 1, 1);
 
-	optionLayout -> addWidget(m_lbComposite, 2, 0);
-	optionLayout -> addWidget(m_cmbComposite, 2, 1);
+	optionLayout -> addWidget(m_checkUsePattern, 2, 0);
 
-	optionLayout -> addWidget(m_checkUsePattern, 3, 0);
-
-	return m_optWidget;
-}
-
-QWidget* KisToolFill::optionWidget()
-{
-	return m_optWidget;
+	return widget;
 }
 
 void KisToolFill::slotSetThreshold(int threshold)
 {
 	m_threshold = threshold;
-}
-
-void KisToolFill::slotSetCompositeMode(int compositeOp)
-{
-	m_compositeOp = (CompositeOp)compositeOp;
 }
 
 void KisToolFill::slotSetUsePattern(int state)

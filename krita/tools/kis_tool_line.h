@@ -30,10 +30,8 @@
 #include "kis_tool_factory.h"
 
 class KisBrush;
-class KisCmbComposite;
 class KisPainter;
 
-class QLabel;
 class QPoint;
 class QWidget;
 
@@ -57,9 +55,6 @@ class KisToolLine : public KisToolPaint {
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
 
-//	virtual QWidget* createOptionWidget(QWidget* parent);
-//	virtual QWidget* optionWidget();
-
  private:
 	void paintLine();
 	void paintLine(QPainter& gc, const QRect& rc);
@@ -75,11 +70,6 @@ class KisToolLine : public KisToolPaint {
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;
 	KisPainter *m_painter;
-
-	QUANTUM m_opacity;
-	CompositeOp m_compositeOp;
-
-	QWidget *m_optWidget;
 };
 
 

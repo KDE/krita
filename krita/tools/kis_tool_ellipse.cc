@@ -39,7 +39,7 @@
 #include "kis_paintop_registry.h"
 
 KisToolEllipse::KisToolEllipse()
-        : super(),
+        : super(i18n ("Ellipse")),
           m_dragging (false),
           m_currentImage (0)
 {
@@ -133,8 +133,8 @@ void KisToolEllipse::buttonRelease(KisButtonReleaseEvent *event)
 
                 painter.setPaintColor(m_subject -> fgColor());
                 painter.setBrush(m_subject -> currentBrush());
-                //painter.setOpacity(m_opacity);
-                //painter.setCompositeOp(m_compositeOp);
+                painter.setOpacity(m_opacity);
+                painter.setCompositeOp(m_compositeOp);
 		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
 		painter.setPaintOp(op); // Painter takes ownership
 

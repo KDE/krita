@@ -26,9 +26,12 @@ class QEvent;
 class QKeyEvent;
 class QPaintEvent;
 class QRect;
+class QGridLayout;
 class KDialog;
 class KisCanvasSubject;
-
+class QLabel;
+class KIntNumInput;
+class KisCmbComposite;
 
 enum enumBrushMode {
 	PAINT,
@@ -44,7 +47,7 @@ class KRITACORE_EXPORT KisToolPaint : public KisTool {
 	typedef KisTool super;
 
 public:
-	KisToolPaint();
+	KisToolPaint(const QString& UIName);
 	virtual ~KisToolPaint();
 
 public:
@@ -70,19 +73,34 @@ public:
 
 public slots:
 	virtual void activate();
+	void slotSetOpacity(int opacityPerCent);
+	void slotSetCompositeMode(int compositeOp);
 
 protected:
 	void notifyModified() const;
 
+	// Add the tool-specific layout to the default option widget's layout.
+	void addOptionWidgetLayout(QLayout *layout);
 
-private:
-	QCursor m_cursor;
-	QCursor m_toolCursor;
 protected:
 	KisCanvasSubject *m_subject;
 	QRect m_dirtyRect;
+	QUANTUM m_opacity;
+	CompositeOp m_compositeOp;
 
+private:
+	QString m_UIName;
 
+	QCursor m_cursor;
+	QCursor m_toolCursor;
+
+	QWidget *m_optionWidget;
+	QGridLayout *m_optionWidgetLayout;
+
+	QLabel *m_lbOpacity;
+	KIntNumInput *m_slOpacity;
+	QLabel *m_lbComposite;
+	KisCmbComposite *m_cmbComposite;
 };
 
 #endif // KIS_TOOL_PAINT_H_

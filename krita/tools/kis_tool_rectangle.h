@@ -61,9 +61,6 @@ public:
 	virtual void move(KisMoveEvent *event);
 	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
-//	virtual QWidget* createOptionWidget(QWidget* parent);
-//	virtual QWidget* optionWidget();
-
 protected:
 	virtual void draw(const KisPoint&, const KisPoint&);
 
@@ -77,7 +74,6 @@ protected:
 
 	bool m_dragging;
 	KisImageSP m_currentImage;
-	QWidget *m_optWidget;
 };
 
 class KisToolRectangleFactory : public KisToolFactory {

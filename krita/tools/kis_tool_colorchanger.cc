@@ -32,7 +32,7 @@
 #include "kis_tool_colorchanger.h"
 
 KisToolColorChanger::KisToolColorChanger() : 
-	super()
+	super(i18n("Tool Color Changer"))  //XXX: temporary name
 {
 	setName("tool_colorchanger");
 	// set custom cursor.

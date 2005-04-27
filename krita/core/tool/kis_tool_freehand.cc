@@ -35,32 +35,20 @@
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_view.h"
-#include "knuminput.h"
-#include "kis_cmb_composite.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 
 KisToolFreehand::KisToolFreehand(QString transactionText)
-		: super(),
+		: super(transactionText),
 		m_dragDist ( 0 ),
 		m_transactionText(transactionText),
 		m_mode( HOVER )
 {
 	m_painter = 0;
 	m_currentImage = 0;
-	m_optWidget = 0;
-
-	m_lbOpacity = 0;
-	m_slOpacity = 0;
-	m_lbComposite= 0;
-	m_cmbComposite = 0;
 
 	m_useTempLayer = false;
-
-	m_opacity = OPACITY_OPAQUE;
-	m_compositeOp = COMPOSITE_OVER;
-
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -211,49 +199,6 @@ void KisToolFreehand::endPaint()
 		notifyModified();
 	}
 }
-
-QWidget* KisToolFreehand::createOptionWidget(QWidget* parent)
-{
-	m_optWidget = new QWidget(parent);
-	m_optWidget -> setCaption(m_transactionText);
-
-	m_lbOpacity = new QLabel(i18n("Opacity: "), m_optWidget);
-	m_slOpacity = new KIntNumInput( m_optWidget, "int_widget");
-	m_slOpacity -> setRange( 0, 100);
-	m_slOpacity -> setValue(m_opacity / OPACITY_OPAQUE * 100);
-	connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
-
-	m_lbComposite = new QLabel(i18n("Mode: "), m_optWidget);
-	m_cmbComposite = new KisCmbComposite(m_optWidget);
-	connect(m_cmbComposite, SIGNAL(activated(int)), this, SLOT(slotSetCompositeMode(int)));
-
-	QGridLayout *optionLayout = new QGridLayout(m_optWidget, 4, 2);
-
-	optionLayout -> addWidget(m_lbOpacity, 1, 0);
-	optionLayout -> addWidget(m_slOpacity, 1, 1);
-
-	optionLayout -> addWidget(m_lbComposite, 2, 0);
-	optionLayout -> addWidget(m_cmbComposite, 2, 1);
-
-	return m_optWidget;
-}
-
-QWidget* KisToolFreehand::optionWidget()
-{
-	return m_optWidget;
-}
-
-void KisToolFreehand::slotSetOpacity(int opacityPerCent)
-{
-	m_opacity = opacityPerCent * OPACITY_OPAQUE / 100;
-}
-
-void KisToolFreehand::slotSetCompositeMode(int compositeOp)
-{
-	m_compositeOp = (CompositeOp)compositeOp;
-}
-
-
 
 void KisToolFreehand::paintAt(const KisPoint &pos,
 			   const double pressure,

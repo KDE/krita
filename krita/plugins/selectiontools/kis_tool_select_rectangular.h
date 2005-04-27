@@ -56,8 +56,9 @@ private:
 
 private:
 	KisCanvasSubject *m_subject;
-	QPoint m_startPos;
-	QPoint m_endPos;
+	KisPoint m_centerPos;
+	KisPoint m_startPos;
+	KisPoint m_endPos;
 	bool m_selecting;
         QWidget * m_optWidget;
 

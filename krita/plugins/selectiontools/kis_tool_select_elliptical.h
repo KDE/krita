@@ -58,6 +58,7 @@ private:
 
 private:
 	KisCanvasSubject *m_subject;
+	KisPoint m_centerPos;
 	KisPoint m_startPos;
 	KisPoint m_endPos;
 	bool m_selecting;

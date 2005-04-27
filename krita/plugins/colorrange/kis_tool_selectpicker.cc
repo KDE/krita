@@ -159,6 +159,7 @@ void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 void KisToolSelectPicker::enter(QEvent *)
 {
 	m_timer->start(50);
+	m_currentSelectAction = SELECTION_REPLACE;
 }
 
 void KisToolSelectPicker::leave(QEvent *)

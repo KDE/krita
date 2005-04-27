@@ -53,6 +53,8 @@ public:
 	virtual QWidget* optionWidget();
 
 	virtual void buttonPress(KisButtonPressEvent *e);
+	virtual void enter(QEvent *);
+	virtual void leave(QEvent *);
 
 
 public slots:
@@ -64,8 +66,12 @@ private:
 	QWidget *m_optWidget;
 
 	int m_fuzziness;
-	enumSelectionMode m_selectAction;
-	
+	enumSelectionMode m_defaultSelectAction;
+	enumSelectionMode m_currentSelectAction;
+	QTimer *m_timer;
+
+private slots:
+	void slotTimer();
 };
 
 class KisToolSelectPickerFactory : public KisToolFactory {

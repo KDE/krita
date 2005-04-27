@@ -24,7 +24,9 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qcolor.h>
+#include <qtimer.h>
 
+#include <kapplication.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <knuminput.h>
@@ -108,7 +110,9 @@ KisToolSelectPicker::KisToolSelectPicker()
 	m_subject = 0;
 	m_optWidget = 0;
 	m_fuzziness = 20;
-	m_selectAction = SELECTION_REPLACE;
+	m_currentSelectAction = m_defaultSelectAction = SELECTION_REPLACE;
+	m_timer = new QTimer(this);
+	connect(m_timer, SIGNAL(timeout()), SLOT(slotTimer()) );
 }
 
 KisToolSelectPicker::~KisToolSelectPicker()
@@ -143,16 +147,54 @@ void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 		dev -> pixel(pos.x(), pos.y(), &c, &opacity);
 		kdDebug() << "Going to select colors similar to: " << c.red() << ", " << c.green() << ", "<< c.blue() << "\n";
 		if (opacity > OPACITY_TRANSPARENT)
-			selectByColor(dev, dev -> selection(), c, m_fuzziness, m_selectAction);
-		else {
+			selectByColor(dev, dev -> selection(), c, m_fuzziness, m_currentSelectAction);
+		else
 			m_subject -> selectionManager() -> selectAll();
-		}
+
 		m_subject -> canvasController() -> updateCanvas();
 
 	}
 }
 
+void KisToolSelectPicker::enter(QEvent *)
+{
+	m_timer->start(50);
+}
 
+void KisToolSelectPicker::leave(QEvent *)
+{
+	m_timer->stop();
+}
+
+void KisToolSelectPicker::slotTimer()
+{
+	ButtonState state = kapp->keyboardMouseState();
+	enumSelectionMode action;
+
+	if (state == Qt::ShiftButton)
+		action = SELECTION_ADD;
+	else if (state == Qt::ControlButton)
+		action = SELECTION_SUBTRACT;
+	else if (state == Qt::AltButton)
+		action = SELECTION_REPLACE;
+	else
+		action = m_defaultSelectAction;
+
+	if (action == m_currentSelectAction)
+		return;
+
+	switch (action) {
+		case SELECTION_REPLACE:
+			m_subject -> setCanvasCursor(KisCursor::pickerCursor());
+			break;
+		case SELECTION_ADD:
+			m_subject -> setCanvasCursor(KisCursor::pickerPlusCursor());
+			break;
+		case SELECTION_SUBTRACT:
+			m_subject -> setCanvasCursor(KisCursor::pickerMinusCursor());
+	}
+	m_currentSelectAction = action;
+}
 
 void KisToolSelectPicker::setup(KActionCollection *collection)
 {
@@ -179,18 +221,7 @@ void KisToolSelectPicker::slotSetFuzziness(int fuzziness)
 
 void KisToolSelectPicker::slotSetAction(int action)
 {
-	m_selectAction =(enumSelectionMode)action;
-	switch(m_selectAction) {
-		case SELECTION_REPLACE:
-			m_subject -> setCanvasCursor(KisCursor::pickerCursor());
-			break;
-		case SELECTION_ADD:
-			m_subject -> setCanvasCursor(KisCursor::pickerPlusCursor());
-			break;
-		case SELECTION_SUBTRACT:
-			m_subject -> setCanvasCursor(KisCursor::pickerMinusCursor());
-
-	};
+	m_defaultSelectAction = (enumSelectionMode)action;
 }
 
 QWidget* KisToolSelectPicker::createOptionWidget(QWidget* parent)

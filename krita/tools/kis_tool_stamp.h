@@ -56,9 +56,9 @@ public:
 	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 /* 	void setOpacity(int opacity); */
-/* 	bool stampMonochrome(QPoint pos); */
-/* 	bool stampColor(QPoint pos); */
-/* 	bool stampToCanvas(QPoint pos); */
+/* 	bool stampMonochrome(const QPoint & pos); */
+/* 	bool stampColor(const QPoint & pos); */
+/* 	bool stampToCanvas(const QPoint & pos); */
 
 protected:
 	QWidget *m_optWidget;

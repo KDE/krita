@@ -693,6 +693,7 @@ QDomElement KisDoc::saveLayer(QDomDocument& doc, KisLayerSP layer)
 	layerElement.setAttribute("opacity", layer -> opacity());
 	layerElement.setAttribute("visible", layer -> visible());
 	layerElement.setAttribute("linked", layer -> linked());
+	layerElement.setAttribute("locked", layer -> locked());
 	layerElement.setAttribute("colorspacename", layer -> colorStrategy() -> id().id());
 	// XXX: Save profile as blob inside the layer, instead of the product name.
 	if (layer -> profile() && layer -> profile() -> valid()) {
@@ -714,6 +715,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 	Q_INT32 opacity;
 	bool visible;
 	bool linked;
+	bool locked;
 	KisLayerSP layer;
 
 	if ((name = element.attribute("name")).isNull())
@@ -745,6 +747,13 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
 	linked = attr == "0" ? false : true;
 
+	if ((attr = element.attribute("locked")).isNull())
+		return 0;
+
+	locked = attr == "0" ? false : true;
+
+
+	layer = new KisLayer(img, name, opacity);
 	QString colorspacename = element.attribute("colorspacename");
 	KisStrategyColorSpaceSP colorSpace = 0;
 
@@ -796,7 +805,7 @@ bool KisDoc::completeSaving(KoStore *store)
 		images.push_back(img);
 	}
 
-	setIOSteps(totalSteps);
+	setIOSteps(totalSteps + 1);
 
 	for (vKisImageSP_it it = images.begin(); it != images.end(); it++) {
 		vKisLayerSP layers = (*it) -> layers();
@@ -822,7 +831,29 @@ bool KisDoc::completeSaving(KoStore *store)
 		}
 
 	}
+#if 0 // Composite rendition of the entire image for easier kimgio loading and to speed up loading the image into Krita: show the composite png first, then load the layers
+	if (store -> open("composite.png")) {
 
+		QPixmap * pix = new QPixmap(m_currentImage -> width(), m_currentImage -> height());
+		QPainter gc(pix);
+		m_currentImage -> renderToPainter(0, 0, m_currentImage -> width(), m_currentImage -> height(), gc, m_currentImage -> profile());
+		gc.end();
+		QImage composite = pix -> convertToImage();
+
+		KoStoreDevice io (store);
+
+		if (!composite.save(&io, "PNG")) {
+			store -> close();
+			IODone();
+			return false;
+		}
+
+		delete pix;
+
+		IOCompletedStep();
+		store -> close();
+	}
+#endif
 	IODone();
 	return true;
 }

@@ -120,14 +120,13 @@ void KisSelectionManager::setup(KActionCollection * collection)
 				  SLOT(clear()),
 				  collection,
 				  "clear");
-
+#if 0 // Not implemented yet
 	m_reselect =
 		new KAction(i18n("&Reselect"),
 			    0, 0,
 			    this, SLOT(reselect()),
 			    collection, "reselect");
-
-
+#endif
 	m_invert =
 		new KAction(i18n("&Invert"),
 			    0, 0,
@@ -141,6 +140,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 			    this, SLOT(copySelectionToNewLayer()),
 			    collection, "copy_selection_to_new_layer");
 
+#if 0 // Not implemented yet
 	m_feather =
 		new KAction(i18n("Feather..."),
 			    0, 0,
@@ -204,7 +204,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 			      0, 0,
 			      this, SLOT(save()),
 			      collection, "save_selection");
-
+#endif
 
         QClipboard *cb = QApplication::clipboard();
         connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
@@ -245,9 +245,12 @@ void KisSelectionManager::updateGUI()
 	m_selectAll -> setEnabled(img != 0);
 	m_deselect -> setEnabled(enable);
 	m_clear -> setEnabled(enable);
+#if 0 //  Not implemented yet
 	m_reselect -> setEnabled(m_previousSelection != 0);
+#endif
 	m_invert -> setEnabled(enable);
 	m_toNewLayer -> setEnabled(enable);
+#if 0 // Not implemented yet
 	m_feather -> setEnabled(enable);
 	m_border -> setEnabled(enable);
 	m_expand -> setEnabled(enable);
@@ -258,7 +261,7 @@ void KisSelectionManager::updateGUI()
 	m_transform -> setEnabled(enable);
 	m_load -> setEnabled(enable);
 	m_save -> setEnabled(enable);
-
+#endif
 	m_parent -> updateStatusBarSelectionLabel();
 
 }

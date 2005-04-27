@@ -37,6 +37,7 @@
 
 typedef struct _WetPix WetPix;
 typedef struct _WetPixDbl WetPixDbl;
+typedef struct _WetPack WetPack;
 
 /*
 	* White is made up of myth-red, myth-green, and myth-blue. Myth-red
@@ -65,6 +66,10 @@ struct _WetPix {
 			  these wetpix structs for every paint device pixels*/
 };
 
+struct _WetPack {
+	WetPix paint;      /* Paint layer */
+	WetPix adsorb; /* Adsorbtion layer */
+};
 
 struct _WetPixDbl {
 	double rd;  /*  Total red channel concentration */

@@ -310,7 +310,7 @@ QCursor KisCursor::closedHandCursor()
 	return load("closedhand_cursor");
 }
 
-QCursor KisCursor::load(QString iconName, int hotspotX, int hotspotY)
+QCursor KisCursor::load(const QString & iconName, int hotspotX, int hotspotY)
 {
 	QPixmap pixmap = UserIcon(iconName);
 	Q_ASSERT(!pixmap.isNull());

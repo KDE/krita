@@ -66,6 +66,6 @@ public:
 
 private:
 	// Load a cursor from an image file. XPM format seems to work the best.
-	static QCursor load(QString iconName, int hotspotX = -1, int hotspotY = -1);
+	static QCursor load(const QString & iconName, int hotspotX = -1, int hotspotY = -1);
 };
 #endif // __kis_cursor_h__

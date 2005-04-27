@@ -234,11 +234,13 @@ void KisColorSpaceWet::toQColor(const QUANTUM *src, QColor *c, KisProfileSP /*pr
 
 	// Composite the two layers in each pixelSize
 
+	WetPack * wp = (WetPack*)src;
+	
 	// First the adsorption layers
-	wet_composite(rgb, (WetPix*)(src + 16));
+	wet_composite(rgb, &wp -> adsorb);
 
 	// Then the paint layer (which comes first in our double-packed pixel)
-	wet_composite(rgb,  (WetPix*)(src));
+	wet_composite(rgb,  &wp -> paint);
 
 	c -> setRgb(rgb[0], rgb[1], rgb[2]);
 
@@ -285,33 +287,36 @@ Q_INT32 KisColorSpaceWet::pixelSize() const
 }
 
 
+
 // XXX: use profiles to display correctly on calibrated displays.
 QImage KisColorSpaceWet::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
 				         KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/,
 				         Q_INT32 /*renderingIntent*/)
 {
 
-	QImage img(width, height, 32, 0, QImage::LittleEndian);
+	QImage img(width, height, 32);
 
         Q_UINT8 *rgb = (Q_UINT8*) img.bits();
 
 	// Clear to white -- the following code actually composits the contents of the
 	// wet pixels with the contents of the image buffer, so they need to be
 	// prepared
-	memset(rgb, 255, width * height * sizeof(Q_UINT32));
-
+	kdDebug() << "1\n";
+	memset(rgb, 255, width * height * 4);
+	kdDebug() << "2\n";
 	// Composite the two layers in each pixelSize
 
 	Q_INT32 i = 0;
-	while ( i < width * height * 32) {
-
+	while ( i < width * height * (sizeof(WetPix) * 2)) {
+		kdDebug() << "Pixel: " << i << "\n";
 		// First the adsorption layers
-		wet_composite(rgb, (WetPix*)data + i + 16);
+		WetPack wp = (WetPack*)(data + i);
+		wet_composite(rgb, (WetPix*)data + i + sizeof(WetPix));
 
 		// Then the paint layer (which comes first in our double-packed pixel)
 		wet_composite(rgb,  (WetPix*)data + i);
 
-		i += 32;
+		i += (sizeof(WetPix) * 2);
 		rgb += sizeof(Q_UINT32); // Because the QImage is 4 bytes deep.
 
 	}
@@ -396,10 +401,11 @@ void KisColorSpaceWet::wet_composite(Q_UINT8 *rgb, WetPix * wet)
 	d = wet[0].rd >> 4;
 
 	ab = wet_render_tab[d];
+
+	
 	wa = (w * (ab >> 16) + 0x80) >> 8;
 	r = wa + (((r - wa) * (ab & 0xffff) + 0x4000) >> 15);
 	rgb[0] = r;
-
 
 	g = rgb[1];
 	w = wet[0].gw >> 4;
@@ -409,7 +415,7 @@ void KisColorSpaceWet::wet_composite(Q_UINT8 *rgb, WetPix * wet)
 	wa = (w * (ab >> 16) + 0x80) >> 8;
 	g = wa + (((g - wa) * (ab & 0xffff) + 0x4000) >> 15);
 	rgb[1] = g;
-
+	
 	b = rgb[2];
 	w = wet[0].bw >> 4;
 	d = wet[0].bd >> 4;
@@ -418,7 +424,6 @@ void KisColorSpaceWet::wet_composite(Q_UINT8 *rgb, WetPix * wet)
 	wa = (w * (ab >> 16) + 0x80) >> 8;
 	b = wa + (((b - wa) * (ab & 0xffff) + 0x4000) >> 15);
 	rgb[2] = b;
-
 }
 
 void wet_render_wetness(Q_UINT8 * rgb, Q_INT32 rgb_rowstride, WetPix * pix, Q_INT32 height)

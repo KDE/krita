@@ -706,9 +706,6 @@ KisLayerSP KisImage::activate(KisLayerSP layer)
 			m_layerStack.erase(it);
 
 		m_layerStack.insert(m_layerStack.begin() + 0, layer);
-
-		connect(layer.data(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-		connect(layer.data(), SIGNAL(selectionCreated()), this, SLOT(slotSelectionCreated()));
 	}
 
 	if (layer != m_activeLayer) {
@@ -1176,6 +1173,7 @@ void KisImage::slotSelectionChanged()
 void KisImage::slotSelectionCreated()
 {
  	kdDebug() << "KisImage::slotSelectionCreated\n";
+	notify();
 	emit selectionCreated(KisImageSP(this));
 }
 

@@ -323,8 +323,6 @@ signals:
         void visibilityChanged(KisPaintDeviceSP device);
         void positionChanged(KisPaintDeviceSP device);
         void ioProgress(Q_INT8 percentage);
-	void selectionChanged();
-	void selectionCreated();
 	void profileChanged(KisProfileSP profile);
 
 private:

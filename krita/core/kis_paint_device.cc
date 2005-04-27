@@ -675,7 +675,8 @@ KisSelectionSP KisPaintDevice::selection(){
 		Q_CHECK_PTR(m_selection);
 		m_selection -> setVisible(true);
 		m_hasSelection = true;
-		emit selectionCreated();
+		if(m_owner)
+			m_owner -> slotSelectionCreated();
 	}
 	return m_selection;
 
@@ -685,7 +686,8 @@ void KisPaintDevice::setSelection(KisSelectionSP selection)
 {
 	m_selection = selection;
 	m_hasSelection = true;
-	emit selectionChanged();
+	if(m_owner)
+		m_owner -> slotSelectionChanged();
 
 }
 
@@ -700,7 +702,8 @@ void KisPaintDevice::removeSelection()
 {
 	m_selection = 0; // XXX: Does this automatically remove the selection due to the shared pointer?
 	m_hasSelection = false;
-	emit selectionChanged();
+	if(m_owner)
+		m_owner -> slotSelectionChanged();
 }
 
 

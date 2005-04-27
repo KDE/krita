@@ -169,7 +169,7 @@ signals:
 	void sizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
 	void profileChanged(KisProfileSP profile);
 
-private slots:
+public slots:
 	void slotSelectionChanged();
 	void slotSelectionCreated();
 

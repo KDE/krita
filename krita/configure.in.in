@@ -57,6 +57,9 @@ AC_SUBST(LCMS_LIBS)
 # IM 6.1.3 changed the number of arguments to GetMagickInfoList
 
 AC_MSG_CHECKING(if GetMagickInfoList has only 2 arguments)
+CPPFLAGS_TMP="$CPPFLAGS"   # Save preprocessor flags
+CPPFLAGS="$LIBMAGICK_CPPFLAGS"
+
 AC_TRY_COMPILE(
 	[#include <stdio.h>
 	#if HAVE_SYS_TYPES_H
@@ -66,6 +69,8 @@ AC_TRY_COMPILE(
 	[const char *pattern; unsigned long ncolors; (void)GetMagickInfoList(pattern, &ncolors)],
 	magick_info_list='yes',
 	magick_info_list='no')
+
+CPPFLAGS="$CPPFLAGS_TMP"  # Restore preprocessor flags
 
 if test "$magick_info_list" = 'yes'; then
 	AC_MSG_RESULT(yes)

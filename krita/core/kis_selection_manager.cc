@@ -454,7 +454,7 @@ void KisSelectionManager::clear()
  		KisPixel s = selection -> toPixel(selectionIt.rawData());
  		Q_UINT16 p_alpha, s_alpha;
  		p_alpha = p.alpha();
- 		s_alpha = MAX_SELECTED -  - s.alpha();
+ 		s_alpha = MAX_SELECTED - s.alpha();
 		
 		p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
 

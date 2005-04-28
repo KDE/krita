@@ -172,7 +172,8 @@ void KisToolSelectPicker::slotTimer()
 #if KDE_IS_VERSION(3,4,0)
 	int state = kapp->keyboardMouseState() & (Qt::ShiftButton|Qt::ControlButton|Qt::AltButton);
 #else
-	int state = kapp->keyboardModifiers() & (Qt::ShiftButton|Qt::ControlButton|Qt::AltButton);
+	int state = kapp->keyboardModifiers() & (KApplication::ShiftModifier
+			|KApplication::ControlModifier|KApplication::Modifier1);
 #endif
 	enumSelectionMode action;
 

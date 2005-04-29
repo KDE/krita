@@ -80,4 +80,55 @@ $6 = {m_data = 0x882dc70 "", m_nReadlock = 138097808, m_writeLock = 184, m_row =
 
 
 == CRASH #2 =====================================================================================================
+Same cause, same bug, but slightly different place. (thus shortened bt)
+
+
+#0  0x424a104a in KisTiledDataManager::getOldTile (this=0x842f498, col=4, row=3, def=0x8c4c428)
+    at kis_tileddatamanager.cc:604
+#1  0x424a358c in KisTiledIterator::fetchTileData (this=0xbfffddd0, col=4, row=3) at kis_tilediterator.cc:60
+#2  0x424a0e11 in KisTiledHLineIterator (this=0xbfffddd0, ndevice=0x842f498, x=35, y=2, w=464, writable=false)
+    at kis_tiledhlineiterator.cc:52
+#3  0x424873bf in KisHLineIteratorPixel (this=0xbfffddd0, ndevice=0x1d0, dm=0x1d0, sel_dm=0x0, x=291, y=194, w=1,
+    offsetx=0, offsety=0, writable=false) at kis_iterator.h:73
+#4  0x4243e5cb in KisPaintDevice::createHLineIterator (this=0x8772ed8, x=291, y=194, w=1, writable=false)
+    at kis_paint_device.cc:661
+#5  0x4243e789 in KisPaintDevice::pixel (this=0x8772ed8, x=464, y=464, c=0x9a4d2f8,
+    opacity=0x9a4d2f8 "\020\210|\t@") at kis_paint_device.cc:712
+
+
+(gdb) list
+599             Q_UINT32 tileHash = calcTileHash(col, row);
+600
+601             // Lookup tile in hash table of current memento
+602             if(m_currentMemento)
+603             {
+604                     tile = m_currentMemento->m_hashTable[tileHash];
+605                     while(tile != 0)
+606                     {
+607                             if(tile->getRow() == row && tile->getCol() == col)
+608                                     break;
+
+(gdb) print calcTileHash(4,3)
+$1 = 100
+
+(gdb) print m_currentMemento
+$3 = (KisMemento *) 0x9a4d2f8
+
+(gdb) print m_currentMemento->m_hashTable
+$2 = (KisTile **) 0x40                                 [whooops]
+
+(gdb) print tile
+Variable "tile" is not available.
+
+(gdb) print tileHash
+Variable "tileHash" is not available.
+
+
+
+
+
+
+
+
+== CRASH #3 =====================================================================================================
 (goes here)

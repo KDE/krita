@@ -45,9 +45,10 @@ public:
 	KisToolSelectPicker();
 	virtual ~KisToolSelectPicker();
 
-public:
-	virtual void update(KisCanvasSubject *subject);
+	void activate();
+	void clear();
 
+	virtual void update(KisCanvasSubject *subject);
 	virtual void setup(KActionCollection *collection);
 
 
@@ -60,8 +61,6 @@ private:
 	virtual QWidget* optionWidget();
 
 	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void enter(QEvent *);
-	virtual void leave(QEvent *);
 	void setSelectCursor(enumSelectionMode);
 
 	KisCanvasSubject *m_subject;

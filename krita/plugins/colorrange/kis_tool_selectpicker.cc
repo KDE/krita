@@ -119,6 +119,18 @@ KisToolSelectPicker::~KisToolSelectPicker()
 {
 }
 
+void KisToolSelectPicker::activate()
+{
+	KisToolNonPaint::activate();
+	m_timer->start(50);
+	setSelectCursor(m_currentSelectAction);
+}
+
+void KisToolSelectPicker::clear()
+{
+	m_timer->stop();
+}
+
 void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 {
 	kdDebug() << "button press: " << m_subject << "\n";
@@ -154,17 +166,6 @@ void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 		m_subject -> canvasController() -> updateCanvas();
 
 	}
-}
-
-void KisToolSelectPicker::enter(QEvent *)
-{
-	m_timer->start(50);
-	setSelectCursor(m_currentSelectAction);
-}
-
-void KisToolSelectPicker::leave(QEvent *)
-{
-	m_timer->stop();
 }
 
 void KisToolSelectPicker::slotTimer()

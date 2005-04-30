@@ -59,10 +59,11 @@ void KisCmbIDList::setCurrent(const KisID id)
 {
 	if (m_list.find(id) != m_list.end()) 
 		super::setCurrentText(id.name());
-	else
+	else {
 		m_list.push_back(id);
 		insertItem(id.name());
 		super::setCurrentText(id.name());
+	}
 }
 
 void KisCmbIDList::setCurrentText(const QString & s)

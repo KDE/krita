@@ -136,7 +136,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	else
 		setXMLFile("krita.rc");
 
-	m_inputDevice = INPUT_DEVICE_UNKNOWN;
+	m_inputDevice = INPUT_DEVICE_MOUSE;
 
 	m_selectionManager = new KisSelectionManager(this, doc);
 	Q_CHECK_PTR(m_selectionManager);
@@ -219,11 +219,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_dockerManager = new KisDockerManager(this, actionCollection());
 	Q_CHECK_PTR(m_dockerManager);
 
-	setInputDevice(INPUT_DEVICE_MOUSE);
-
 	resetMonitorProfile();
 	layersUpdated();
-
+	setCurrentTool(findTool("tool_brush"));
 }
 
 

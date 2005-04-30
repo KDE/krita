@@ -61,7 +61,7 @@ private:
 	virtual QWidget* optionWidget();
 
 	virtual void buttonPress(KisButtonPressEvent *e);
-	void setSelectCursor(enumSelectionMode);
+	void setPickerCursor(enumSelectionMode);
 
 	KisCanvasSubject *m_subject;
 	QWidget *m_optWidget;

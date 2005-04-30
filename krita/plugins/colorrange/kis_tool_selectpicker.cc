@@ -123,7 +123,7 @@ void KisToolSelectPicker::activate()
 {
 	KisToolNonPaint::activate();
 	m_timer->start(50);
-	setSelectCursor(m_currentSelectAction);
+	setPickerCursor(m_currentSelectAction);
 }
 
 void KisToolSelectPicker::clear()
@@ -189,11 +189,11 @@ void KisToolSelectPicker::slotTimer()
 
 	if (action != m_currentSelectAction) {
 		m_currentSelectAction = action;
-		setSelectCursor(action);
+		setPickerCursor(action);
 	}
 }
 
-void KisToolSelectPicker::setSelectCursor(enumSelectionMode action)
+void KisToolSelectPicker::setPickerCursor(enumSelectionMode action)
 {
 	switch (action) {
 		case SELECTION_REPLACE:

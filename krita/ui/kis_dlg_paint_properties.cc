@@ -29,11 +29,13 @@
 #include "kis_dlg_paint_properties.h"
 #include "kis_dlg_paint_properties.moc"
 #include "kis_cmb_composite.h"
+#include "kis_strategy_colorspace.h"
 
 KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName,
 					 const QPoint& pos,
 					 Q_INT32 opacity,
-					 CompositeOp compositeOp,
+					 const KisCompositeOp& compositeOp,
+					 const KisStrategyColorSpaceSP colorSpace,
 					 QWidget *parent, const char *name, WFlags f)
 	: super(parent, name, f, name, Ok | Cancel)
 {
@@ -74,6 +76,7 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName,
 
 	lbl = new QLabel(i18n("Composite mode:"), page);
 	m_cmbComposite = new KisCmbComposite(page);
+	m_cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());
 	m_cmbComposite -> setCurrentItem(compositeOp);
 	grid -> addWidget(lbl, 2, 0);
 	grid -> addWidget(m_cmbComposite, 2, 1);
@@ -128,7 +131,7 @@ QPoint KisPaintPropertyDlg::getPosition() const
 }
 
 
-CompositeOp KisPaintPropertyDlg::getCompositeOp() const
+KisCompositeOp KisPaintPropertyDlg::getCompositeOp() const
 {
-	return (CompositeOp)m_cmbComposite -> currentItem();
+	return m_cmbComposite -> currentItem();
 }

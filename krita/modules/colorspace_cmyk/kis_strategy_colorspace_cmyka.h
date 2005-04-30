@@ -66,9 +66,11 @@ public:
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,
-			    CompositeOp op);
+			    const KisCompositeOp& op);
 
 	virtual bool valid() { return true; }
+
+	KisCompositeOpList userVisiblecompositeOps() const;
 
 private:
 	vKisChannelInfoSP m_channels;

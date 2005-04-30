@@ -83,7 +83,9 @@ protected:
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,
-			    CompositeOp op);
+			    const KisCompositeOp& op);
+
+	KisCompositeOpList userVisiblecompositeOps() const;
 
 private:
 	vKisChannelInfoSP m_channels;

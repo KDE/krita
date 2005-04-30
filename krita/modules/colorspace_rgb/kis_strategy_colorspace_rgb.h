@@ -60,6 +60,8 @@ public:
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent);
 
+	virtual KisCompositeOpList userVisiblecompositeOps() const;
+
 protected:
 
 	virtual void bitBlt(Q_INT32 pixelSize,
@@ -70,7 +72,7 @@ protected:
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,
-			    CompositeOp op);
+			    const KisCompositeOp& op);
 
 	void compositeOver(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
 	void compositeMultiply(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);

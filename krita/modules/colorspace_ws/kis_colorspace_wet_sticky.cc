@@ -265,7 +265,7 @@ void KisColorSpaceWetSticky::bitBlt(Q_INT32 stride,
 				    QUANTUM opacity,
 				    Q_INT32 rows,
 				    Q_INT32 cols,
-				    CompositeOp op)
+				    const KisCompositeOp& op)
 {
 	Q_INT32 i;
 	Q_INT32 linesize;
@@ -275,7 +275,7 @@ void KisColorSpaceWetSticky::bitBlt(Q_INT32 stride,
 
 	if (rows <= 0 || cols <= 0)
 		return;
-	switch (op) {
+	switch (op.op()) {
 	case COMPOSITE_COPY:
 
 		linesize = stride * sizeof(QUANTUM) * cols;
@@ -377,3 +377,13 @@ continue;
 
 	}
 }
+
+KisCompositeOpList KisColorSpaceWetSticky::userVisiblecompositeOps() const
+{
+	KisCompositeOpList list;
+
+	list.append(KisCompositeOp(COMPOSITE_OVER));
+
+	return list;
+}
+

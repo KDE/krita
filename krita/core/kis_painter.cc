@@ -147,7 +147,7 @@ QRect KisPainter::dirtyRect() {
 }
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
-			CompositeOp op,
+			const KisCompositeOp& op,
                         KisPaintDeviceSP srcdev,
                         QUANTUM opacity,
 			Q_INT32 sx, Q_INT32 sy,
@@ -225,7 +225,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 }
 
 void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
-			      CompositeOp op, 
+			      const KisCompositeOp& op, 
 			      KisPaintDeviceSP srcdev,
 			      QUANTUM opacity,
 			      Q_INT32 sx, Q_INT32 sy, 

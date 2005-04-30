@@ -1033,10 +1033,10 @@ void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 pixelSize,
 				      QUANTUM opacity,
 				      Q_INT32 rows,
 				      Q_INT32 cols,
-				      CompositeOp op)
+				      const KisCompositeOp& op)
 {
 
-	switch (op) {
+	switch (op.op()) {
 	case COMPOSITE_UNDEF:
 		// Undefined == no composition
 		break;
@@ -1157,4 +1157,24 @@ void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 pixelSize,
 	}
 }
 
+KisCompositeOpList KisStrategyColorSpaceRGB::userVisiblecompositeOps() const
+{
+	KisCompositeOpList list;
+
+	list.append(KisCompositeOp(COMPOSITE_OVER));
+	list.append(KisCompositeOp(COMPOSITE_MULT));
+	list.append(KisCompositeOp(COMPOSITE_BURN));
+	list.append(KisCompositeOp(COMPOSITE_DODGE));
+	list.append(KisCompositeOp(COMPOSITE_DIVIDE));
+	list.append(KisCompositeOp(COMPOSITE_SCREEN));
+	list.append(KisCompositeOp(COMPOSITE_OVERLAY));
+	list.append(KisCompositeOp(COMPOSITE_DARKEN));
+	list.append(KisCompositeOp(COMPOSITE_LIGHTEN));
+	list.append(KisCompositeOp(COMPOSITE_HUE));
+	list.append(KisCompositeOp(COMPOSITE_SATURATION));
+	list.append(KisCompositeOp(COMPOSITE_VALUE));
+	list.append(KisCompositeOp(COMPOSITE_COLOR));
+
+	return list;
+}
 

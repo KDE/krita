@@ -132,7 +132,7 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 				   QUANTUM opacity,
 				   Q_INT32 rows,
 				   Q_INT32 cols,
-				   CompositeOp op,
+				   const KisCompositeOp& op,
 				   KisProfileSP srcProfile,
 				   KisProfileSP dstProfile)
 {

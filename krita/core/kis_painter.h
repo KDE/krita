@@ -113,7 +113,7 @@ public:
 	 * Blast the specified region from src onto the current paint device.
 	 */
         void bitBlt(Q_INT32 dx, Q_INT32 dy, 
-		    CompositeOp op, 
+		    const KisCompositeOp& op, 
 		    KisPaintDeviceSP src,
                     Q_INT32 sx, Q_INT32 sy, 
 		    Q_INT32 sw, Q_INT32 sh)
@@ -126,7 +126,7 @@ public:
          * a value for opacity
 	 */
         void bitBlt(Q_INT32 dx, Q_INT32 dy, 
-		    CompositeOp op, 
+		    const KisCompositeOp& op, 
 		    KisPaintDeviceSP src,
                     QUANTUM opacity,
                     Q_INT32 sx, Q_INT32 sy, 
@@ -138,7 +138,7 @@ public:
 	 * only then blits. This means that the source device is permently altered.
 	 */
 	void bltSelection(Q_INT32 dx, Q_INT32 dy,
-			  CompositeOp op, 
+			  const KisCompositeOp& op, 
 			  KisPaintDeviceSP src,
 			  QUANTUM opacity,
 			  Q_INT32 sx, Q_INT32 sy, 
@@ -245,8 +245,8 @@ public:
 	void setOpacity(QUANTUM opacity) { m_opacity = opacity; }
 	QUANTUM opacity() const { return m_opacity; }
 
-	void setCompositeOp(CompositeOp op) { m_compositeOp = op; }
-	CompositeOp compositeOp() const { return m_compositeOp; }
+	void setCompositeOp(const KisCompositeOp& op) { m_compositeOp = op; }
+	KisCompositeOp compositeOp() const { return m_compositeOp; }
 
 	void setFilter(KisFilterSP filter) { m_filter = filter; }
 	KisFilterSP filter() { return m_filter; }
@@ -302,7 +302,7 @@ protected:
 	KisPattern *m_pattern;
 	KisPoint m_duplicateOffset;
 	QUANTUM m_opacity;
-	CompositeOp m_compositeOp;
+	KisCompositeOp m_compositeOp;
 	KisFilterSP m_filter;
 	KisPaintOp * m_paintOp;
 	double m_pressure;

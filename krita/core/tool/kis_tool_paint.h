@@ -20,8 +20,12 @@
 #define KIS_TOOL_PAINT_H_
 
 #include <qcursor.h>
-#include "kis_tool.h"
+
 #include <koffice_export.h>
+
+#include "kis_tool.h"
+#include "kis_composite_op.h"
+
 class QEvent;
 class QKeyEvent;
 class QPaintEvent;
@@ -74,7 +78,7 @@ public:
 public slots:
 	virtual void activate();
 	void slotSetOpacity(int opacityPerCent);
-	void slotSetCompositeMode(int compositeOp);
+	void slotSetCompositeMode(const KisCompositeOp& compositeOp);
 
 protected:
 	void notifyModified() const;
@@ -82,11 +86,14 @@ protected:
 	// Add the tool-specific layout to the default option widget's layout.
 	void addOptionWidgetLayout(QLayout *layout);
 
+private:
+	void updateCompositeOpComboBox();
+
 protected:
 	KisCanvasSubject *m_subject;
 	QRect m_dirtyRect;
 	QUANTUM m_opacity;
-	CompositeOp m_compositeOp;
+	KisCompositeOp m_compositeOp;
 
 private:
 	QString m_UIName;

@@ -32,6 +32,7 @@
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paint_properties.h"
 #include "kis_colorspace_registry.h"
+#include "kis_strategy_colorspace.h"
 
 NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 			       const QString & deviceName,
@@ -66,7 +67,6 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 	// Composite mode
 	lbl = new QLabel(i18n("Composite mode:"), page);
 	m_cmbComposite = new KisCmbComposite(page);
-	m_cmbComposite -> setCurrentItem((int)COMPOSITE_OVER);
 	grid -> addWidget(lbl, 2, 0);
 	grid -> addWidget(m_cmbComposite, 2, 1);
 
@@ -78,6 +78,10 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 
 	grid -> addWidget(lbl, 3, 0);
 	grid -> addWidget(m_cmbImageType, 3, 1);
+
+	slotSetColorStrategy(colorSpaceID);
+
+	connect(m_cmbImageType, SIGNAL(activated(const KisID &)), this, SLOT(slotSetColorStrategy(const KisID &)));
 }
 
 int NewLayerDialog::opacity() const
@@ -91,9 +95,9 @@ int NewLayerDialog::opacity() const
 	return upscale(opacity - 1);
 }
 
-CompositeOp NewLayerDialog::compositeOp() const
+KisCompositeOp NewLayerDialog::compositeOp() const
 {
-	return (CompositeOp)m_cmbComposite -> currentItem();
+	return m_cmbComposite -> currentItem();
 }
 
 KisID NewLayerDialog::colorStrategyID() const
@@ -106,6 +110,13 @@ QString NewLayerDialog::layerName() const
 	return m_name -> text();
 }
 
+void NewLayerDialog::slotSetColorStrategy(const KisID &colorStrategyId)
+{
+	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(colorStrategyId);
+	if (cs) {
+		m_cmbComposite -> setCompositeOpList(cs -> userVisiblecompositeOps());
+	}
+}
 
 #include "kis_dlg_new_layer.moc"
 

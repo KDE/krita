@@ -240,8 +240,8 @@ public:
 	 */
 	void setData(KisDataManagerSP data, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile);
 
-	CompositeOp compositeOp() { return m_compositeOp; }
-	void setCompositeOp(CompositeOp compositeOp) { m_compositeOp = compositeOp; }
+	KisCompositeOp compositeOp() { return m_compositeOp; }
+	void setCompositeOp(const KisCompositeOp& compositeOp) { m_compositeOp = compositeOp; }
 
 	Q_INT32 getX();
 	Q_INT32 getY();
@@ -344,7 +344,7 @@ private:
 	bool m_visible;
 	QString m_name;
 	// Operation used to composite this layer with the layers _under_ this layer
-	CompositeOp m_compositeOp;
+	KisCompositeOp m_compositeOp;
 	KisStrategyColorSpaceSP m_colorStrategy;
 	// Cached for quick access
 	Q_INT32 m_pixelSize;

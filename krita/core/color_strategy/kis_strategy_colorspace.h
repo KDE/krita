@@ -31,6 +31,7 @@
 #include "kis_channelinfo.h"
 #include "kis_profile.h"
 #include "kis_id.h"
+#include "kis_composite_op.h"
 
 class QPainter;
 class KisIteratorPixel;
@@ -158,7 +159,7 @@ public:
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,
-			    CompositeOp op,
+			    const KisCompositeOp& op,
 			    KisProfileSP srcProfile = 0,
 			    KisProfileSP dstProfile = 0);
 
@@ -202,6 +203,12 @@ public:
 				     Q_UINT32 numPixels,
 				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
+	/**
+	 * Returns the list of user-visible composite ops supported by this colourspace. Internal
+	 * ops such as COPY, CLEAR, and ERASE, are not included as these make no sense
+	 * for layers in the full image model.
+	 */
+	virtual KisCompositeOpList userVisiblecompositeOps() const = 0;
 
 protected:
 
@@ -218,7 +225,7 @@ protected:
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,
-			    CompositeOp op) = 0;
+			    const KisCompositeOp& op) = 0;
 
 	virtual cmsHTRANSFORM createTransform(KisStrategyColorSpaceSP dstColorStrategy,
 					      KisProfileSP srcProfile,

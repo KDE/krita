@@ -242,7 +242,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
                 m_x = rhs.m_x;
                 m_y = rhs.m_y;
                 m_name = rhs.m_name;
-                m_compositeOp = COMPOSITE_OVER;
+                m_compositeOp = rhs.m_compositeOp;
 		m_colorStrategy = rhs.m_colorStrategy;
 		m_hasSelection = false;
 		m_selection = 0;

@@ -76,7 +76,7 @@ class KisSelectionManager;
 class KisDockerManager;
 class KisToolRegistry;
 class KisFilterRegistry;
-
+class KisCompositeOp;
 
 class KisView
 	: public KoView,
@@ -186,7 +186,7 @@ public slots:
 	void cropLayer(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	// settings action slots
 	void preferences();
-	void layerCompositeOp(int compositeOp);
+	void layerCompositeOp(const KisCompositeOp& compositeOp);
 	void layerOpacity(int opacity);
 
 protected:

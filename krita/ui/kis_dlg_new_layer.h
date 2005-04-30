@@ -19,6 +19,8 @@
 #ifndef  KIS_DLG_NEW_LAYER_H_
 #define KIS_DLG_NEW_LAYER_H_
 
+#include "kis_composite_op.h"
+
 class QSpinBox;
 class QWidget;
 class KIntSpinBox;
@@ -44,10 +46,13 @@ public:
 		       const char *name = 0);
 
 	QString layerName() const;
-	CompositeOp compositeOp() const;
+	KisCompositeOp compositeOp() const;
 	Q_INT32 opacity() const;
 	QPoint position() const;
 	KisID colorStrategyID() const;
+
+private slots:
+	void slotSetColorStrategy(const KisID &colorStrategyId);
 
 private:
 	KLineEdit *m_name;

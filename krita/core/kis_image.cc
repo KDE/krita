@@ -582,6 +582,7 @@ void KisImage::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP 
 		setColorStrategy(dstColorStrategy);
 		setProfile(dstProfile);
 		notify();
+		notifyLayersChanged();
 	}
 }
 

@@ -216,7 +216,7 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
 }
 
 
-QString PerfTest::doBlit(CompositeOp op, 
+QString PerfTest::doBlit(const KisCompositeOp& op, 
 			 KisID cspace,
 			 QUANTUM opacity,
 			 Q_UINT32 testCount,

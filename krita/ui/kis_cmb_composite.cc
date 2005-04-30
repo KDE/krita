@@ -21,59 +21,66 @@
 #include <qcombobox.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "kis_cmb_composite.h"
 
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name) 
 	: super( false, parent, name )
 {
-	insertItem(i18n("Normal"));
-	insertItem(i18n("In"));
-	insertItem(i18n("Out"));
-	insertItem(i18n("Atop"));
-	insertItem(i18n("Xor"));
-	insertItem(i18n("Plus"));
-	insertItem(i18n("Minus"));
-	insertItem(i18n("Add"));
-	insertItem(i18n("Subtract"));
-	insertItem(i18n("Diff"));
-	insertItem(i18n("Multiply"));
-	insertItem(i18n("Divide"));
-	insertItem(i18n("Dodge"));
-	insertItem(i18n("Burn"));
-	insertItem(i18n("Bumpmap"));
-	insertItem(i18n("Copy"));
-	insertItem(i18n("Copy Red"));
-	insertItem(i18n("Copy Green"));
-	insertItem(i18n("Copy Blue"));
-	insertItem(i18n("Copy Opacity"));
-	insertItem(i18n("Clear"));
-	insertItem(i18n("Dissolve"));
-	insertItem(i18n("Displace"));
-#if 0
-	insertItem(i18n("Modulate"));
-	insertItem(i18n("Threshold"));
-#endif
-	insertItem(i18n("No Composition"));
-	insertItem(i18n("Darken"));
-	insertItem(i18n("Lighten"));
-	insertItem(i18n("Hue"));
-	insertItem(i18n("Saturation"));
-	insertItem(i18n("Value"));
-	insertItem(i18n("Color"));
-	insertItem(i18n("Colorize"));
-	insertItem(i18n("Luminize"));
-	insertItem(i18n("Screen"));
-	insertItem(i18n("Overlay"));
-	insertItem(i18n("Copy Cyan"));
-	insertItem(i18n("Copy Magenta"));
-	insertItem(i18n("Copy Yellow"));
-	insertItem(i18n("Copy Black"));
-	insertItem(i18n("Erase"));
+	connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
+	connect(this, SIGNAL(highlighted(int)), this, SLOT(slotOpHighlighted(int)));
 }
 
 KisCmbComposite::~KisCmbComposite()
 {
+}
+
+void KisCmbComposite::setCompositeOpList(const KisCompositeOpList & list)
+{
+	super::clear();
+	m_list = list;
+	KisCompositeOpList::iterator it;
+        for( it = m_list.begin(); it != m_list.end(); ++it )
+		insertItem((*it).id().name());
+}
+
+KisCompositeOp KisCmbComposite::currentItem() const
+{
+	Q_UINT32 i = super::currentItem();
+	if (i > m_list.count()) return KisCompositeOp();
+
+	return m_list[i];
+}
+
+void KisCmbComposite::setCurrentItem(const KisCompositeOp& op)
+{
+	if (m_list.find(op) != m_list.end()) {
+		super::setCurrentText(op.id().name());
+	}
+}
+
+void KisCmbComposite::setCurrentText(const QString & s)
+{
+	KisCompositeOpList::iterator it;
+        for( it = m_list.begin(); it != m_list.end(); ++it )
+		if ((*it).id().id() == s) {
+			super::setCurrentText((*it).id().name());
+		}
+}
+
+void KisCmbComposite::slotOpActivated(int i)
+{
+	if (i > m_list.count()) return;
+
+	emit activated(m_list[i]);
+}
+
+void KisCmbComposite::slotOpHighlighted(int i)
+{
+	if (i > m_list.count()) return;
+
+	emit highlighted(m_list[i]);
 }
 
 

@@ -1608,7 +1608,7 @@ void KisView::preferences()
 	canvasRefresh();
 }
 
-void KisView::layerCompositeOp(int compositeOp)
+void KisView::layerCompositeOp(const KisCompositeOp& compositeOp)
 {
 	KisImageSP img = currentImg();
 	if (!img) return;
@@ -1616,8 +1616,7 @@ void KisView::layerCompositeOp(int compositeOp)
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
-	CompositeOp op = (CompositeOp)compositeOp;
-	layer -> setCompositeOp(op);
+	layer -> setCompositeOp(compositeOp);
 	layersUpdated();
 	canvasRefresh();
 }
@@ -2118,6 +2117,7 @@ void KisView::layerSelected(int n)
 	KisImageSP img = currentImg();
 
 	layerUpdateGUI(img -> activateLayer(n));
+	notify();
 }
 
 void KisView::docImageListUpdate()
@@ -2161,7 +2161,8 @@ void KisView::layerProperties()
 						QPoint(layer->getX(),
 						       layer->getY()),
 						layer->opacity(),
-						layer->compositeOp());
+						layer->compositeOp(),
+						layer->colorStrategy());
 
 			if (dlg.exec() == QDialog::Accepted) {
 				QPoint pt = dlg.getPosition();
@@ -2352,7 +2353,7 @@ void KisView::layersUpdated()
 	layerUpdateGUI(img && layer);
 
 	m_dockerManager -> resetLayerBox(img, layer);
-
+	notify();
 }
 
 void KisView::layersUpdated(KisImageSP img)

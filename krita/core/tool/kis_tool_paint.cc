@@ -32,6 +32,8 @@
 #include "kis_tool_paint.h"
 #include "knuminput.h"
 #include "kis_cmb_composite.h"
+#include "kis_image.h"
+#include "kis_paint_device.h"
 
 KisToolPaint::KisToolPaint(const QString& UIName)
 {
@@ -58,6 +60,7 @@ KisToolPaint::~KisToolPaint()
 void KisToolPaint::update(KisCanvasSubject *subject)
 {
 	m_subject = subject;
+	updateCompositeOpComboBox();
 }
 
 void KisToolPaint::paint(QPainter&)
@@ -117,7 +120,7 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
 
 	m_lbComposite = new QLabel(i18n("Mode: "), m_optionWidget);
 	m_cmbComposite = new KisCmbComposite(m_optionWidget);
-	connect(m_cmbComposite, SIGNAL(activated(int)), this, SLOT(slotSetCompositeMode(int)));
+	connect(m_cmbComposite, SIGNAL(activated(const KisCompositeOp&)), this, SLOT(slotSetCompositeMode(const KisCompositeOp&)));
 
 	m_optionWidgetLayout = new QGridLayout(m_optionWidget, 4, 2, 0, 6);
 
@@ -150,9 +153,9 @@ void KisToolPaint::slotSetOpacity(int opacityPerCent)
 	m_opacity = opacityPerCent * OPACITY_OPAQUE / 100;
 }
 
-void KisToolPaint::slotSetCompositeMode(int compositeOp)
+void KisToolPaint::slotSetCompositeMode(const KisCompositeOp& compositeOp)
 {
-	m_compositeOp = (CompositeOp)compositeOp;
+	m_compositeOp = compositeOp;
 }
 
 void KisToolPaint::cursor(QWidget *w) const
@@ -174,6 +177,7 @@ void KisToolPaint::activate()
 
 		if (controller)
 			controller -> setCurrentTool(this);
+		updateCompositeOpComboBox();
 	}
 
 	KisConfig cfg;
@@ -200,6 +204,27 @@ void KisToolPaint::notifyModified() const
 
 		if (doc) {
 			doc -> setModified(true);
+		}
+	}
+}
+
+void KisToolPaint::updateCompositeOpComboBox()
+{
+	if (m_optionWidget && m_subject) {
+		KisImageSP img = m_subject -> currentImg();
+
+		if (img) {
+			KisPaintDeviceSP device = img -> activeDevice();
+
+			if (device) {
+				KisCompositeOpList compositeOps = device -> colorStrategy() -> userVisiblecompositeOps();
+				m_cmbComposite -> setCompositeOpList(compositeOps);
+
+				if (compositeOps.find(m_compositeOp) == compositeOps.end()) {
+					m_compositeOp = COMPOSITE_OVER;
+				}
+				m_cmbComposite -> setCurrentItem(m_compositeOp);
+			}
 		}
 	}
 }

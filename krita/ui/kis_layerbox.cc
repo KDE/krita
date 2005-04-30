@@ -48,6 +48,7 @@
 #include "kis_layerbox.h"
 #include "kis_cmb_composite.h"
 #include "wdglayerbox.h"
+#include "kis_strategy_colorspace.h"
 
 const int HEIGHT = 32;
 
@@ -126,7 +127,7 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
         connect(m_lst -> bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
 	connect(m_lst -> bnProperties, SIGNAL(clicked()), SIGNAL(itemProperties()));
 	connect(m_lst -> intOpacity, SIGNAL(valueChanged(int)), SIGNAL(opacityChanged(int)));
-	connect(m_lst -> cmbComposite, SIGNAL(activated(int)), SIGNAL(itemComposite(int)));
+	connect(m_lst -> cmbComposite, SIGNAL(activated(const KisCompositeOp&)), SIGNAL(itemComposite(const KisCompositeOp&)));
 }
 
 KisLayerBox::~KisLayerBox()
@@ -273,9 +274,15 @@ void KisLayerBox::slotSetCurrentItem(int n)
 {
         m_lst -> listLayers -> setSelected(n, true);
 }
-void KisLayerBox::setCompositeOp(int n)
+
+void KisLayerBox::setCompositeOp(const KisCompositeOp& compositeOp)
 {
-	m_lst -> cmbComposite -> setCurrentItem(n);
+	m_lst -> cmbComposite -> setCurrentItem(compositeOp);
+}
+
+void KisLayerBox::setColorStrategy(const KisStrategyColorSpaceSP colorSpace)
+{
+	m_lst -> cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());
 }
 
 // range: 0-100

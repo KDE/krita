@@ -340,7 +340,7 @@ void KisColorSpaceWet::bitBlt(Q_INT32 stride,
 			      QUANTUM /*opacity*/,
 			      Q_INT32 rows,
 			      Q_INT32 cols,
-			      CompositeOp /*op*/)
+			      const KisCompositeOp& /*op*/)
 {
 	if (rows <= 0 || cols <= 0)
 		return;
@@ -467,3 +467,13 @@ void wet_render_wetness(Q_UINT8 * rgb, Q_INT32 rgb_rowstride, WetPix * pix, Q_IN
 //         wet_phase += 1;
 //         wet_phase &= 3;
 }
+
+KisCompositeOpList KisColorSpaceWet::userVisiblecompositeOps() const
+{
+	KisCompositeOpList list;
+
+	list.append(KisCompositeOp(COMPOSITE_OVER));
+
+	return list;
+}
+

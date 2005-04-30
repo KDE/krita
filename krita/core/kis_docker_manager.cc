@@ -352,7 +352,7 @@ void KisDockerManager::setupDockers()
 	connect(m_layerBox, SIGNAL(itemBack()), m_view, SLOT(layerBack()));
 	connect(m_layerBox, SIGNAL(itemLevel(int)), m_view, SLOT(layerLevel(int)));
 	connect(m_layerBox, SIGNAL(opacityChanged(int)), m_view, SLOT(layerOpacity(int)));
-	connect(m_layerBox, SIGNAL(itemComposite(int)), m_view, SLOT(layerCompositeOp(int)));
+	connect(m_layerBox, SIGNAL(itemComposite(const KisCompositeOp&)), m_view, SLOT(layerCompositeOp(const KisCompositeOp&)));
 	connect(m_view, SIGNAL(currentLayerChanged(int)), m_layerBox, SLOT(slotSetCurrentItem(int)));
 
 	if ( cfg.dockerStyle() == DOCKER_SLIDER ) {
@@ -753,8 +753,8 @@ void KisDockerManager::layerSelected(int layer)
 		opacity++;
 
 	m_layerBox -> setOpacity(opacity);
-
-	m_layerBox -> setCompositeOp((int)(l -> compositeOp()));
+	m_layerBox -> setColorStrategy(l -> colorStrategy());
+	m_layerBox -> setCompositeOp(l -> compositeOp());
 
 	m_view -> updateCanvas();
 }

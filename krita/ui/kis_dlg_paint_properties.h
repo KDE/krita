@@ -21,6 +21,8 @@
 #include <kdialogbase.h>
 
 #include "kis_global.h"
+#include "kis_types.h"
+#include "kis_composite_op.h"
 
 class QWidget;
 class KIntSpinBox;
@@ -36,13 +38,14 @@ public:
 	KisPaintPropertyDlg(const QString& deviceName,
 			    const QPoint& pos,
 			    Q_INT32 opacity,
-			    CompositeOp compositeOp,
+			    const KisCompositeOp& compositeOp,
+			    const KisStrategyColorSpaceSP colorSpace,
 			    QWidget *parent = 0, const char *name = 0, WFlags f = 0);
 	virtual ~KisPaintPropertyDlg();
 
 	QString getName() const;
 	Q_INT32 getOpacity() const;
-	CompositeOp getCompositeOp() const;
+	KisCompositeOp getCompositeOp() const;
 	QPoint getPosition() const;
 protected slots:
     void slotNameChanged( const QString & );

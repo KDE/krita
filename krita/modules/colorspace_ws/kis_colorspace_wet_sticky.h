@@ -130,7 +130,9 @@ public:
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,
-			    CompositeOp op);
+			    const KisCompositeOp& op);
+
+	virtual KisCompositeOpList userVisiblecompositeOps() const;
 
 protected:
 	virtual bool convertPixelsTo(const QUANTUM * src, KisProfileSP srcProfile,

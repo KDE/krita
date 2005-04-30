@@ -30,12 +30,15 @@
 #include <kdebug.h>
 #include <klistbox.h>
 
+#include "kis_strategy_colorspace.h"
+
 class WdgLayerBox;
 class QButton;
 class QPainter;
 class QWidget;
 class KIconLoader;
 class KPopupMenu;
+class KisCompositeOp;
 
 // XXX: Add layer locking, previews
 class KisLayerBox : public QFrame {
@@ -58,8 +61,9 @@ public:
 public slots:
 
 	void slotSetCurrentItem(int n);
-	void setCompositeOp(int n);
+	void setCompositeOp(const KisCompositeOp& compositeOp);
 	void setOpacity(int opacity);
+	void setColorStrategy(const KisStrategyColorSpaceSP colorSpace);
 
 signals:
         void itemToggleVisible();
@@ -78,7 +82,7 @@ signals:
         void itemBack();
         void itemLevel(int n);
 	void opacityChanged(int opacity);
-	void itemComposite(int n);
+	void itemComposite(const KisCompositeOp&);
 
 private slots:
         void slotMenuAction(int mnuId);

@@ -28,6 +28,7 @@
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
+#include "kis_composite_op.h"
 
 #include <koffice_export.h>
 class QImage;
@@ -84,7 +85,7 @@ public:
 	KisLayerSP layerAdd(KisImageSP img, const QString& name, QUANTUM devOpacity);
 	KisLayerSP layerAdd(KisImageSP img,
 			    const QString& name,
-			    CompositeOp compositeOp,
+			    const KisCompositeOp& compositeOp,
 			    QUANTUM opacity,
 			    KisStrategyColorSpaceSP colorstrategy);
 
@@ -98,7 +99,7 @@ public:
 	void setLayerProperties(KisImageSP img,
 			     KisLayerSP layer,
 			     QUANTUM opacity,
-			     CompositeOp compositeOp,
+			     const KisCompositeOp& compositeOp,
 			     const QString& name);
 
 	Q_INT32 undoLimit() const;

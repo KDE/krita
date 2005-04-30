@@ -24,6 +24,7 @@
 #include "kis_global.h"
 #include <koffice_export.h>
 #include "qcombobox.h"
+#include "kis_composite_op.h"
 
 /**
  * A combobox filled with the various composition strategies defined in kis_global.
@@ -47,6 +48,24 @@ class KRITAUI_EXPORT KisCmbComposite : public QComboBox
 	KisCmbComposite(QWidget * parent = 0, const char * name = 0 );
 	virtual ~KisCmbComposite();
 
+	KisCompositeOp currentItem() const;
+
+	void setCompositeOpList(const KisCompositeOpList& list);
+	void setCurrentItem(const KisCompositeOp& op);
+	void setCurrentText(const QString & s);
+
+signals:
+
+	void activated(const KisCompositeOp &);
+	void highlighted(const KisCompositeOp &);
+
+private slots:
+
+	void slotOpActivated(int i);
+	void slotOpHighlighted(int i);
+
+private:
+	KisCompositeOpList m_list;
 };
 
 #endif

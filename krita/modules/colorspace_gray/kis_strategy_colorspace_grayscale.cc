@@ -152,93 +152,650 @@ QImage KisStrategyColorSpaceGrayscale::convertToQImage(const QUANTUM *data, Q_IN
 	return img;
 }
 
-void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 stride,
-					    QUANTUM *dst,
-					    Q_INT32 dststride,
-					    const QUANTUM *src,
-					    Q_INT32 srcstride,
-					    QUANTUM opacity,
-					    Q_INT32 rows,
-					    Q_INT32 cols,
-					    CompositeOp op)
+void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 pixelSize,
+				      QUANTUM *dst,
+				      Q_INT32 dstRowStride,
+				      const QUANTUM *src,
+				      Q_INT32 srcRowStride,
+				      QUANTUM opacity,
+				      Q_INT32 rows,
+				      Q_INT32 cols,
+				      const KisCompositeOp& op)
 {
-	QUANTUM *d;
-	const QUANTUM *s;
-	Q_INT32 i;
-	Q_INT32 linesize;
+	switch (op.op()) {
+	case COMPOSITE_OVER:
+		compositeOver(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		break;
+	case COMPOSITE_MULT:
+		compositeMultiply(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		break;
+	case COMPOSITE_DIVIDE:
+		compositeDivide(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		break;
+	case COMPOSITE_DARKEN:
+		compositeDarken(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		break;
+	case COMPOSITE_LIGHTEN:
+		compositeLighten(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		break;
+	case COMPOSITE_SCREEN:
+		compositeScreen(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		break;
+	case COMPOSITE_OVERLAY:
+		compositeOverlay(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		break;
+	case COMPOSITE_DODGE:
+		compositeDodge(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		break;
+	case COMPOSITE_BURN:
+		compositeBurn(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		break;
+	case COMPOSITE_COPY: {
+		QUANTUM *d;
+		const QUANTUM *s;
+		Q_INT32 linesize;
 
-	if (rows <= 0 || cols <= 0)
-		return;
-	switch (op) {
-	case COMPOSITE_COPY:
-		linesize = stride * sizeof(QUANTUM) * cols;
+		linesize = pixelSize * sizeof(QUANTUM) * cols;
 		d = dst;
 		s = src;
 		while (rows-- > 0) {
 			memcpy(d, s, linesize);
-			d += dststride;
-			s += srcstride;
+			d += dstRowStride;
+			s += srcRowStride;
 		}
-		return;
-	case COMPOSITE_CLEAR:
-		linesize = stride * sizeof(QUANTUM) * cols;
+	}
+		break;
+	case COMPOSITE_CLEAR: {
+		QUANTUM *d;
+		Q_INT32 linesize;
+
+		linesize = pixelSize * sizeof(QUANTUM) * cols;
 		d = dst;
 		while (rows-- > 0) {
 			memset(d, 0, linesize);
-			d += dststride;
+			d += dstRowStride;
 		}
-		return;
-	case COMPOSITE_OVER:
+	}
+		break;
 	default:
-		if (opacity == OPACITY_TRANSPARENT)
-			return;
-		if (opacity != OPACITY_OPAQUE) {
-			while (rows-- > 0) {
-				d = dst;
-				s = src;
-				for (i = cols; i > 0; i--, d += stride, s += stride) {
-					if (s[PIXEL_GRAY_ALPHA] == OPACITY_TRANSPARENT)
-						continue;
+		break;
+	}
+}
 
-					int srcAlpha = (s[PIXEL_GRAY_ALPHA] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					int dstAlpha = (d[PIXEL_GRAY_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_GRAY] = (d[PIXEL_GRAY]   * dstAlpha + s[PIXEL_GRAY]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+KisCompositeOpList KisStrategyColorSpaceGrayscale::userVisiblecompositeOps() const
+{
+	KisCompositeOpList list;
 
-					d[PIXEL_GRAY_ALPHA] = (d[PIXEL_GRAY_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					if (d[PIXEL_GRAY_ALPHA] != 0) {
-						d[PIXEL_GRAY] = (d[PIXEL_GRAY] * QUANTUM_MAX) / d[PIXEL_GRAY_ALPHA];
-					}
+	list.append(KisCompositeOp(COMPOSITE_OVER));
+	list.append(KisCompositeOp(COMPOSITE_MULT));
+	list.append(KisCompositeOp(COMPOSITE_BURN));
+	list.append(KisCompositeOp(COMPOSITE_DODGE));
+	list.append(KisCompositeOp(COMPOSITE_DIVIDE));
+	list.append(KisCompositeOp(COMPOSITE_SCREEN));
+	list.append(KisCompositeOp(COMPOSITE_OVERLAY));
+	list.append(KisCompositeOp(COMPOSITE_DARKEN));
+	list.append(KisCompositeOp(COMPOSITE_LIGHTEN));
 
+	return list;
+}
+
+inline int INT_MULT(int a, int b)
+{
+	int c = a * b + 0x80;
+	return ((c >> 8) + c) >> 8;
+}
+
+inline int INT_DIVIDE(int a, int b)
+{
+	int c = (a * QUANTUM_MAX + (b / 2)) / b;
+	return c;
+}
+
+inline int INT_BLEND(int a, int b, int alpha)
+{
+	return INT_MULT(a - b, alpha) + b;
+}
+
+inline int MIN(int a, int b)
+{
+	return a < b ? a : b;
+}
+
+inline int MAX(int a, int b)
+{
+	return a > b ? a : b;
+}
+
+void KisStrategyColorSpaceGrayscale::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+{
+	while (rows > 0) {
+
+		const QUANTUM *src = srcRowStart;
+		QUANTUM *dst = dstRowStart;
+		Q_INT32 columns = numColumns;
+
+		while (columns > 0) {
+
+			QUANTUM srcAlpha = src[PIXEL_GRAY_ALPHA];
+
+			if (srcAlpha != OPACITY_TRANSPARENT) {
+
+				if (opacity != OPACITY_OPAQUE) {
+					srcAlpha = INT_MULT(src[PIXEL_GRAY_ALPHA], opacity);
 				}
-				dst += dststride;
-				src += srcstride;
-			}
-		}
-		else {
-			while (rows-- > 0) {
-				d = dst;
-				s = src;
-				for (i = cols; i > 0; i--, d += stride, s += stride) {
-					if (s[PIXEL_GRAY_ALPHA] == OPACITY_TRANSPARENT)
-						continue;
-					if (d[PIXEL_GRAY_ALPHA] == OPACITY_TRANSPARENT || s[PIXEL_GRAY_ALPHA] == OPACITY_OPAQUE) {
-						memcpy(d, s, stride * sizeof(QUANTUM));
-						continue;
-					}
-					int srcAlpha = s[PIXEL_GRAY_ALPHA];
-					int dstAlpha = (d[PIXEL_GRAY_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_GRAY]   = (d[PIXEL_GRAY]   * dstAlpha + s[PIXEL_GRAY]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_GRAY_ALPHA] = (d[PIXEL_GRAY_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					if (d[PIXEL_GRAY_ALPHA] != 0) {
-						d[PIXEL_GRAY] = (d[PIXEL_GRAY] * QUANTUM_MAX) / d[PIXEL_GRAY_ALPHA];
+
+				if (srcAlpha == OPACITY_OPAQUE) {
+					memcpy(dst, src, MAX_CHANNEL_GRAYSCALEA * sizeof(QUANTUM));
+				} else {
+					QUANTUM dstAlpha = dst[PIXEL_GRAY_ALPHA];
+
+					QUANTUM srcBlend;
+
+					if (dstAlpha == OPACITY_OPAQUE) {
+						srcBlend = srcAlpha;
+					} else {
+						QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+						dst[PIXEL_GRAY_ALPHA] = newAlpha;
+
+						if (newAlpha != 0) {
+							srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+						} else {
+							srcBlend = srcAlpha;
+						}
 					}
 
+					if (srcBlend == OPACITY_OPAQUE) {
+						memcpy(dst, src, MAX_CHANNEL_GRAYSCALE * sizeof(QUANTUM));
+					} else {
+						dst[PIXEL_GRAY] = INT_BLEND(src[PIXEL_GRAY], dst[PIXEL_GRAY], srcBlend);
+					}
 				}
-				dst += dststride;
-				src += srcstride;
 			}
+
+			columns--;
+			src += MAX_CHANNEL_GRAYSCALEA;
+			dst += MAX_CHANNEL_GRAYSCALEA;
 		}
 
+		rows--;
+		srcRowStart += srcRowStride;
+		dstRowStart += dstRowStride;
+	}
+}
+
+void KisStrategyColorSpaceGrayscale::compositeMultiply(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+{
+	while (rows > 0) {
+
+		const QUANTUM *src = srcRowStart;
+		QUANTUM *dst = dstRowStart;
+		Q_INT32 columns = numColumns;
+
+		while (columns > 0) {
+
+			QUANTUM srcAlpha = src[PIXEL_GRAY_ALPHA];
+			QUANTUM dstAlpha = dst[PIXEL_GRAY_ALPHA];
+
+			srcAlpha = MIN(srcAlpha, dstAlpha);
+
+			if (srcAlpha != OPACITY_TRANSPARENT) {
+
+				if (opacity != OPACITY_OPAQUE) {
+					srcAlpha = INT_MULT(src[PIXEL_GRAY_ALPHA], opacity);
+				}
+
+				QUANTUM srcBlend;
+
+				if (dstAlpha == OPACITY_OPAQUE) {
+					srcBlend = srcAlpha;
+				} else {
+					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					dst[PIXEL_GRAY_ALPHA] = newAlpha;
+
+					if (newAlpha != 0) {
+						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+					} else {
+						srcBlend = srcAlpha;
+					}
+				}
+
+				QUANTUM srcColor = src[PIXEL_GRAY];
+				QUANTUM dstColor = dst[PIXEL_GRAY];
+
+				srcColor = INT_MULT(srcColor, dstColor);
+
+				dst[PIXEL_GRAY] = INT_BLEND(srcColor, dstColor, srcBlend);
+			}
+
+			columns--;
+			src += MAX_CHANNEL_GRAYSCALEA;
+			dst += MAX_CHANNEL_GRAYSCALEA;
+		}
+
+		rows--;
+		srcRowStart += srcRowStride;
+		dstRowStart += dstRowStride;
+	}
+}
+
+void KisStrategyColorSpaceGrayscale::compositeDivide(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+{
+	while (rows > 0) {
+
+		const QUANTUM *src = srcRowStart;
+		QUANTUM *dst = dstRowStart;
+		Q_INT32 columns = numColumns;
+
+		while (columns > 0) {
+
+			QUANTUM srcAlpha = src[PIXEL_GRAY_ALPHA];
+			QUANTUM dstAlpha = dst[PIXEL_GRAY_ALPHA];
+
+			srcAlpha = MIN(srcAlpha, dstAlpha);
+
+			if (srcAlpha != OPACITY_TRANSPARENT) {
+
+				if (opacity != OPACITY_OPAQUE) {
+					srcAlpha = INT_MULT(src[PIXEL_GRAY_ALPHA], opacity);
+				}
+
+				QUANTUM srcBlend;
+
+				if (dstAlpha == OPACITY_OPAQUE) {
+					srcBlend = srcAlpha;
+				} else {
+					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					dst[PIXEL_GRAY_ALPHA] = newAlpha;
+
+					if (newAlpha != 0) {
+						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+					} else {
+						srcBlend = srcAlpha;
+					}
+				}
+
+				for (int channel = 0; channel < MAX_CHANNEL_GRAYSCALE; channel++) {
+
+					QUANTUM srcColor = src[channel];
+					QUANTUM dstColor = dst[channel];
+
+					srcColor = MIN((dstColor * (QUANTUM_MAX + 1)) / (1 + srcColor), QUANTUM_MAX);
+
+					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+
+					dst[channel] = newColor;
+				}
+			}
+
+			columns--;
+			src += MAX_CHANNEL_GRAYSCALEA;
+			dst += MAX_CHANNEL_GRAYSCALEA;
+		}
+
+		rows--;
+		srcRowStart += srcRowStride;
+		dstRowStart += dstRowStride;
+	}
+}
+
+void KisStrategyColorSpaceGrayscale::compositeScreen(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+{
+	while (rows > 0) {
+
+		const QUANTUM *src = srcRowStart;
+		QUANTUM *dst = dstRowStart;
+		Q_INT32 columns = numColumns;
+
+		while (columns > 0) {
+
+			QUANTUM srcAlpha = src[PIXEL_GRAY_ALPHA];
+			QUANTUM dstAlpha = dst[PIXEL_GRAY_ALPHA];
+
+			srcAlpha = MIN(srcAlpha, dstAlpha);
+
+			if (srcAlpha != OPACITY_TRANSPARENT) {
+
+				if (opacity != OPACITY_OPAQUE) {
+					srcAlpha = INT_MULT(src[PIXEL_GRAY_ALPHA], opacity);
+				}
+
+				QUANTUM srcBlend;
+
+				if (dstAlpha == OPACITY_OPAQUE) {
+					srcBlend = srcAlpha;
+				} else {
+					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					dst[PIXEL_GRAY_ALPHA] = newAlpha;
+
+					if (newAlpha != 0) {
+						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+					} else {
+						srcBlend = srcAlpha;
+					}
+				}
+
+				for (int channel = 0; channel < MAX_CHANNEL_GRAYSCALE; channel++) {
+
+					QUANTUM srcColor = src[channel];
+					QUANTUM dstColor = dst[channel];
+
+					srcColor = QUANTUM_MAX - INT_MULT(QUANTUM_MAX - dstColor, QUANTUM_MAX - srcColor);
+
+					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+
+					dst[channel] = newColor;
+				}
+			}
+
+			columns--;
+			src += MAX_CHANNEL_GRAYSCALEA;
+			dst += MAX_CHANNEL_GRAYSCALEA;
+		}
+
+		rows--;
+		srcRowStart += srcRowStride;
+		dstRowStart += dstRowStride;
+	}
+}
+
+void KisStrategyColorSpaceGrayscale::compositeOverlay(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+{
+	while (rows > 0) {
+
+		const QUANTUM *src = srcRowStart;
+		QUANTUM *dst = dstRowStart;
+		Q_INT32 columns = numColumns;
+
+		while (columns > 0) {
+
+			QUANTUM srcAlpha = src[PIXEL_GRAY_ALPHA];
+			QUANTUM dstAlpha = dst[PIXEL_GRAY_ALPHA];
+
+			srcAlpha = MIN(srcAlpha, dstAlpha);
+
+			if (srcAlpha != OPACITY_TRANSPARENT) {
+
+				if (opacity != OPACITY_OPAQUE) {
+					srcAlpha = INT_MULT(src[PIXEL_GRAY_ALPHA], opacity);
+				}
+
+				QUANTUM srcBlend;
+
+				if (dstAlpha == OPACITY_OPAQUE) {
+					srcBlend = srcAlpha;
+				} else {
+					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					dst[PIXEL_GRAY_ALPHA] = newAlpha;
+
+					if (newAlpha != 0) {
+						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+					} else {
+						srcBlend = srcAlpha;
+					}
+				}
+
+				for (int channel = 0; channel < MAX_CHANNEL_GRAYSCALE; channel++) {
+
+					QUANTUM srcColor = src[channel];
+					QUANTUM dstColor = dst[channel];
+
+					srcColor = INT_MULT(dstColor, dstColor + INT_MULT(2 * srcColor, QUANTUM_MAX - dstColor));
+
+					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+
+					dst[channel] = newColor;
+				}
+			}
+
+			columns--;
+			src += MAX_CHANNEL_GRAYSCALEA;
+			dst += MAX_CHANNEL_GRAYSCALEA;
+		}
+
+		rows--;
+		srcRowStart += srcRowStride;
+		dstRowStart += dstRowStride;
+	}
+}
+
+void KisStrategyColorSpaceGrayscale::compositeDodge(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+{
+	while (rows > 0) {
+
+		const QUANTUM *src = srcRowStart;
+		QUANTUM *dst = dstRowStart;
+		Q_INT32 columns = numColumns;
+
+		while (columns > 0) {
+
+			QUANTUM srcAlpha = src[PIXEL_GRAY_ALPHA];
+			QUANTUM dstAlpha = dst[PIXEL_GRAY_ALPHA];
+
+			srcAlpha = MIN(srcAlpha, dstAlpha);
+
+			if (srcAlpha != OPACITY_TRANSPARENT) {
+
+				if (opacity != OPACITY_OPAQUE) {
+					srcAlpha = INT_MULT(src[PIXEL_GRAY_ALPHA], opacity);
+				}
+
+				QUANTUM srcBlend;
+
+				if (dstAlpha == OPACITY_OPAQUE) {
+					srcBlend = srcAlpha;
+				} else {
+					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					dst[PIXEL_GRAY_ALPHA] = newAlpha;
+
+					if (newAlpha != 0) {
+						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+					} else {
+						srcBlend = srcAlpha;
+					}
+				}
+
+				for (int channel = 0; channel < MAX_CHANNEL_GRAYSCALE; channel++) {
+
+					QUANTUM srcColor = src[channel];
+					QUANTUM dstColor = dst[channel];
+
+					srcColor = MIN((dstColor * (QUANTUM_MAX + 1)) / (QUANTUM_MAX + 1 - srcColor), QUANTUM_MAX);
+
+					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+
+					dst[channel] = newColor;
+				}
+			}
+
+			columns--;
+			src += MAX_CHANNEL_GRAYSCALEA;
+			dst += MAX_CHANNEL_GRAYSCALEA;
+		}
+
+		rows--;
+		srcRowStart += srcRowStride;
+		dstRowStart += dstRowStride;
+	}
+}
+
+void KisStrategyColorSpaceGrayscale::compositeBurn(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+{
+	while (rows > 0) {
+
+		const QUANTUM *src = srcRowStart;
+		QUANTUM *dst = dstRowStart;
+		Q_INT32 columns = numColumns;
+
+		while (columns > 0) {
+
+			QUANTUM srcAlpha = src[PIXEL_GRAY_ALPHA];
+			QUANTUM dstAlpha = dst[PIXEL_GRAY_ALPHA];
+
+			srcAlpha = MIN(srcAlpha, dstAlpha);
+
+			if (srcAlpha != OPACITY_TRANSPARENT) {
+
+				if (opacity != OPACITY_OPAQUE) {
+					srcAlpha = INT_MULT(src[PIXEL_GRAY_ALPHA], opacity);
+				}
+
+				QUANTUM srcBlend;
+
+				if (dstAlpha == OPACITY_OPAQUE) {
+					srcBlend = srcAlpha;
+				} else {
+					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					dst[PIXEL_GRAY_ALPHA] = newAlpha;
+
+					if (newAlpha != 0) {
+						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+					} else {
+						srcBlend = srcAlpha;
+					}
+				}
+
+				for (int channel = 0; channel < MAX_CHANNEL_GRAYSCALE; channel++) {
+
+					QUANTUM srcColor = src[channel];
+					QUANTUM dstColor = dst[channel];
+
+					srcColor = MIN(((QUANTUM_MAX - dstColor) * (QUANTUM_MAX + 1)) / (srcColor + 1), QUANTUM_MAX);
+					srcColor = CLAMP(QUANTUM_MAX - srcColor, 0, QUANTUM_MAX);
+
+					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+
+					dst[channel] = newColor;
+				}
+			}
+
+			columns--;
+			src += MAX_CHANNEL_GRAYSCALEA;
+			dst += MAX_CHANNEL_GRAYSCALEA;
+		}
+
+		rows--;
+		srcRowStart += srcRowStride;
+		dstRowStart += dstRowStride;
+	}
+}
+
+void KisStrategyColorSpaceGrayscale::compositeDarken(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+{
+	while (rows > 0) {
+
+		const QUANTUM *src = srcRowStart;
+		QUANTUM *dst = dstRowStart;
+		Q_INT32 columns = numColumns;
+
+		while (columns > 0) {
+
+			QUANTUM srcAlpha = src[PIXEL_GRAY_ALPHA];
+			QUANTUM dstAlpha = dst[PIXEL_GRAY_ALPHA];
+
+			srcAlpha = MIN(srcAlpha, dstAlpha);
+
+			if (srcAlpha != OPACITY_TRANSPARENT) {
+
+				if (opacity != OPACITY_OPAQUE) {
+					srcAlpha = INT_MULT(src[PIXEL_GRAY_ALPHA], opacity);
+				}
+
+				QUANTUM srcBlend;
+
+				if (dstAlpha == OPACITY_OPAQUE) {
+					srcBlend = srcAlpha;
+				} else {
+					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					dst[PIXEL_GRAY_ALPHA] = newAlpha;
+
+					if (newAlpha != 0) {
+						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+					} else {
+						srcBlend = srcAlpha;
+					}
+				}
+
+				for (int channel = 0; channel < MAX_CHANNEL_GRAYSCALE; channel++) {
+
+					QUANTUM srcColor = src[channel];
+					QUANTUM dstColor = dst[channel];
+
+					srcColor = MIN(srcColor, dstColor);
+
+					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+
+					dst[channel] = newColor;
+				}
+			}
+
+			columns--;
+			src += MAX_CHANNEL_GRAYSCALEA;
+			dst += MAX_CHANNEL_GRAYSCALEA;
+		}
+
+		rows--;
+		srcRowStart += srcRowStride;
+		dstRowStart += dstRowStride;
+	}
+}
+
+void KisStrategyColorSpaceGrayscale::compositeLighten(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+{
+	while (rows > 0) {
+
+		const QUANTUM *src = srcRowStart;
+		QUANTUM *dst = dstRowStart;
+		Q_INT32 columns = numColumns;
+
+		while (columns > 0) {
+
+			QUANTUM srcAlpha = src[PIXEL_GRAY_ALPHA];
+			QUANTUM dstAlpha = dst[PIXEL_GRAY_ALPHA];
+
+			srcAlpha = MIN(srcAlpha, dstAlpha);
+
+			if (srcAlpha != OPACITY_TRANSPARENT) {
+
+				if (opacity != OPACITY_OPAQUE) {
+					srcAlpha = INT_MULT(src[PIXEL_GRAY_ALPHA], opacity);
+				}
+
+				QUANTUM srcBlend;
+
+				if (dstAlpha == OPACITY_OPAQUE) {
+					srcBlend = srcAlpha;
+				} else {
+					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					dst[PIXEL_GRAY_ALPHA] = newAlpha;
+
+					if (newAlpha != 0) {
+						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+					} else {
+						srcBlend = srcAlpha;
+					}
+				}
+
+				for (int channel = 0; channel < MAX_CHANNEL_GRAYSCALE; channel++) {
+
+					QUANTUM srcColor = src[channel];
+					QUANTUM dstColor = dst[channel];
+
+					srcColor = MAX(srcColor, dstColor);
+
+					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+
+					dst[channel] = newColor;
+				}
+			}
+
+			columns--;
+			src += MAX_CHANNEL_GRAYSCALEA;
+			dst += MAX_CHANNEL_GRAYSCALEA;
+		}
+
+		rows--;
+		srcRowStart += srcRowStride;
+		dstRowStart += dstRowStride;
 	}
 }
 

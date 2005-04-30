@@ -277,7 +277,7 @@ namespace {
 			      KisUndoAdapter *adapter,
 			      const QString& name,
 			      Q_INT32 opacity,
-			      CompositeOp compositeOp) : super(i18n("Layer Property Changes"))
+			      const KisCompositeOp& compositeOp) : super(i18n("Layer Property Changes"))
 			{
 				m_layer = layer;
 				m_img = img;
@@ -297,7 +297,7 @@ namespace {
 			{
 				QString name = m_layer -> name();
 				Q_INT32 opacity = m_layer -> opacity();
-				CompositeOp compositeOp = m_layer -> compositeOp();
+				KisCompositeOp compositeOp = m_layer -> compositeOp();
 
 				m_adapter -> setUndo(false);
 				m_doc -> setLayerProperties(m_img,
@@ -324,7 +324,7 @@ namespace {
 		KisDoc *m_doc;
 		QString m_name;
 		Q_INT32 m_opacity;
-		CompositeOp m_compositeOp;
+		KisCompositeOp m_compositeOp;
 	};
 }
 
@@ -691,6 +691,7 @@ QDomElement KisDoc::saveLayer(QDomDocument& doc, KisLayerSP layer)
 	layerElement.setAttribute("x", layer->getX());
 	layerElement.setAttribute("y", layer-> getY());
 	layerElement.setAttribute("opacity", layer -> opacity());
+	layerElement.setAttribute("compositeop", layer -> compositeOp().id().id());
 	layerElement.setAttribute("visible", layer -> visible());
 	layerElement.setAttribute("linked", layer -> linked());
 	layerElement.setAttribute("locked", layer -> locked());
@@ -737,6 +738,19 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 	if ((opacity = attr.toInt()) < 0 || opacity > QUANTUM_MAX)
 		return 0;
 
+	QString compositeOpName = element.attribute("compositeop");
+	KisCompositeOp compositeOp;
+
+	if (compositeOpName.isNull()) {
+		compositeOp = COMPOSITE_OVER;
+	} else {
+		compositeOp = KisCompositeOp(compositeOpName);
+	}
+
+	if (!compositeOp.isValid()) {
+		return 0;
+	}
+
 	if ((attr = element.attribute("visible")).isNull())
 		return 0;
 
@@ -752,8 +766,6 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
 	locked = attr == "0" ? false : true;
 
-
-	layer = new KisLayer(img, name, opacity);
 	QString colorspacename = element.attribute("colorspacename");
 	KisStrategyColorSpaceSP colorSpace = 0;
 
@@ -778,6 +790,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 	layer = new KisLayer(img, name, opacity, colorSpace);
 	Q_CHECK_PTR(layer);
 
+	layer -> setCompositeOp(compositeOp);
 	layer -> setProfile(profile);
 	layer -> setLinked(linked);
 	layer -> setVisible(visible);
@@ -1270,7 +1283,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, const QString& name, QUANTUM devOpac
 
 KisLayerSP KisDoc::layerAdd(KisImageSP img,
 			    const QString& name,
-			    CompositeOp compositeOp,
+			    const KisCompositeOp& compositeOp,
 			    QUANTUM opacity,
 			    KisStrategyColorSpaceSP colorstrategy)
 {
@@ -1453,7 +1466,7 @@ void KisDoc::layerPrev(KisImageSP img, KisLayerSP layer)
 void KisDoc::setLayerProperties(KisImageSP img,
 				KisLayerSP layer,
 				QUANTUM opacity,
-				CompositeOp compositeOp,
+				const KisCompositeOp& compositeOp,
 				const QString& name)
 {
 	if (!contains(img))
@@ -1463,7 +1476,7 @@ void KisDoc::setLayerProperties(KisImageSP img,
 		if (m_undo) {
 			QString oldname = layer -> name();
 			Q_INT32 oldopacity = layer -> opacity();
-			CompositeOp oldCompositeOp = layer -> compositeOp();
+			KisCompositeOp oldCompositeOp = layer -> compositeOp();
 			layer -> setName(name);
 			layer -> setOpacity(opacity);
 			layer -> setCompositeOp(compositeOp);

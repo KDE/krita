@@ -72,7 +72,20 @@ public:
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,
-			    CompositeOp op);
+			    const KisCompositeOp& op);
+
+	KisCompositeOpList userVisiblecompositeOps() const;
+
+protected:
+	void compositeOver(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeMultiply(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeDivide(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeScreen(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeOverlay(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeDodge(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeBurn(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeDarken(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeLighten(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
 
 private:
 	vKisChannelInfoSP m_channels;

@@ -61,6 +61,7 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 	m_opacity = new KIntNumInput(page);
 	m_opacity -> setRange(0, 100, 13, true);
 	m_opacity -> setValue(100);
+	m_opacity -> setSuffix("%");
 	grid -> addWidget(lbl, 1, 0);
 	grid -> addWidget(m_opacity, 1, 1);
 

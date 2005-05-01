@@ -390,7 +390,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
 
 		if (cropLayers) {
 			vKisLayerSP_it it;
-			for ( it = layers().begin(); it != layers().end(); ++it ) {
+			for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
 				KisLayerSP layer = (*it);
 				KisTransaction * t = new KisTransaction("crop", layer.data());
 				Q_CHECK_PTR(t);

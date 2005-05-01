@@ -551,7 +551,9 @@ QString KisImageMagickConverter::readFilters()
 	mi = GetMagickInfoList("*", &matches);
 #else
 	ExceptionInfo ei;
+	GetExceptionInfo(&ei);
 	mi = GetMagickInfoList("*", &matches, &ei);
+	DestroyExceptionInfo(&ei);
 #endif
 
 	if (!mi)
@@ -595,7 +597,9 @@ QString KisImageMagickConverter::writeFilters()
 	mi = GetMagickInfoList("*", &matches);
 #else
 	ExceptionInfo ei;
+	GetExceptionInfo(&ei);
 	mi = GetMagickInfoList("*", &matches, &ei);
+	DestroyExceptionInfo(&ei);
 #endif
 
 	if (!mi) {

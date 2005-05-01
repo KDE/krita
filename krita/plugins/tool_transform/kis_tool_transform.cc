@@ -293,57 +293,57 @@ void KisToolTransform::move(KisMoveEvent *e)
 			m_function = ROTATE;
 			
 			if(det(mousePos - topleft, topright - topleft)>0)
-				controller -> canvas() -> setCursor(KisCursor::crossCursor());
+				setCursor(KisCursor::crossCursor());
 			else if(det(mousePos - topright, bottomright - topright)>0)
-				controller -> canvas() -> setCursor(KisCursor::crossCursor());
+				setCursor(KisCursor::crossCursor());
 			else if(det(mousePos - bottomright, bottomleft - bottomright)>0)
-				controller -> canvas() -> setCursor(KisCursor::crossCursor());
+				setCursor(KisCursor::crossCursor());
 			else if(det(mousePos - bottomleft, topleft - bottomleft)>0)
-				controller -> canvas() -> setCursor(KisCursor::crossCursor());
+				setCursor(KisCursor::crossCursor());
 			else
 			{
-				controller -> canvas() -> setCursor(KisCursor::moveCursor());
+				setCursor(KisCursor::moveCursor());
 				m_function = MOVE;
 			}
 			
 			if(distsq(mousePos, m_topleft)<25)
 			{
-				controller -> canvas() -> setCursor(KisCursor::sizeFDiagCursor());
+				setCursor(KisCursor::sizeFDiagCursor());
 				m_function = TOPLEFTSCALE;
 			}
 			if(distsq(mousePos, (m_topleft + m_topright)/2)<25)
 			{
-				controller -> canvas() -> setCursor(KisCursor::sizeVerCursor());
+				setCursor(KisCursor::sizeVerCursor());
 				m_function = TOPSCALE;
 			}
 			if(distsq(mousePos, m_topright)<25)
 			{
-				controller -> canvas() -> setCursor(KisCursor::sizeBDiagCursor());
+				setCursor(KisCursor::sizeBDiagCursor());
 				m_function = TOPRIGHTSCALE;
 			}
 			if(distsq(mousePos, (m_topright + m_bottomright)/2)<25)
 			{
-				controller -> canvas() -> setCursor(KisCursor::sizeHorCursor());
+				setCursor(KisCursor::sizeHorCursor());
 				m_function = RIGHTSCALE;
 			}
 			if(distsq(mousePos, m_bottomleft)<25)
 			{
-				controller -> canvas() -> setCursor(KisCursor::sizeBDiagCursor());
+				setCursor(KisCursor::sizeBDiagCursor());
 				m_function = BOTTOMLEFTSCALE;
 			}
 			if(distsq(mousePos, (m_bottomleft + m_bottomright)/2)<25)
 			{
-				controller -> canvas() -> setCursor(KisCursor::sizeVerCursor());
+				setCursor(KisCursor::sizeVerCursor());
 				m_function = BOTTOMSCALE;
 			}
 			if(distsq(mousePos, m_bottomright)<25)
 			{
-				controller -> canvas() -> setCursor(KisCursor::sizeFDiagCursor());
+				setCursor(KisCursor::sizeFDiagCursor());
 				m_function = BOTTOMRIGHTSCALE;
 			}
 			if(distsq(mousePos, (m_topleft + m_bottomleft)/2)<25)
 			{
-				controller -> canvas() -> setCursor(KisCursor::sizeHorCursor());
+				setCursor(KisCursor::sizeHorCursor());
 				m_function = LEFTSCALE;
 			}
 		}

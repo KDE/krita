@@ -70,7 +70,7 @@ public:
 	virtual void keyPress(QKeyEvent *e);
 	virtual void keyRelease(QKeyEvent *e);
 
-	virtual void cursor(QWidget *w) const;
+	virtual QCursor cursor();
 	virtual void setCursor(const QCursor& cursor);
 	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
@@ -99,7 +99,6 @@ private:
 	QString m_UIName;
 
 	QCursor m_cursor;
-	QCursor m_toolCursor;
 
 	QWidget *m_optionWidget;
 	QGridLayout *m_optionWidgetLayout;

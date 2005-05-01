@@ -97,15 +97,22 @@ QWidget* KisToolNonPaint::optionWidget()
 	return 0;
 }
 
-void KisToolNonPaint::cursor(QWidget *w) const
+QCursor KisToolNonPaint::cursor()
 {
-	if (w)
-		w -> setCursor(m_cursor);
+	return m_cursor;
 }
 
 void KisToolNonPaint::setCursor(const QCursor& cursor)
 {
-	m_toolCursor = cursor;
+	m_cursor = cursor;
+
+	if (m_subject) {
+		KisToolControllerInterface *controller = m_subject -> toolController();
+
+		if (controller && controller -> currentTool() == this) {
+			m_subject -> setCanvasCursor(m_cursor);
+		}
+	}
 }
 
 void KisToolNonPaint::activate()
@@ -117,24 +124,6 @@ void KisToolNonPaint::activate()
 		if (controller)
 			controller -> setCurrentTool(this);
 	}
-
-        KisConfig cfg;
-
-        switch (cfg.defCursorStyle()) {
-        case CURSOR_STYLE_TOOLICON:
-                m_cursor = m_toolCursor;
-                break;
-        case CURSOR_STYLE_CROSSHAIR:
-                m_cursor = KisCursor::crossCursor();
-                break;
-        case CURSOR_STYLE_POINTER:
-                m_cursor = KisCursor::arrowCursor();
-                break;
-        default:
-                m_cursor = KisCursor::crossCursor();
-        }
-
-
 }
 
 void KisToolNonPaint::notifyModified() const

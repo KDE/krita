@@ -56,7 +56,7 @@ void KisToolPan::buttonPress(KisButtonPressEvent *e)
 		m_origScrollY = controller -> vertValue();
 		m_dragPos = controller -> windowToView(e -> pos());
 		m_dragging = true;
-		controller -> canvas() -> setCursor(m_closedHandCursor);
+		setCursor(m_closedHandCursor);
 	}
 }
 
@@ -75,7 +75,7 @@ void KisToolPan::buttonRelease(KisButtonReleaseEvent *e)
 {
 	if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
-		controller -> canvas() -> setCursor(m_openHandCursor);
+		setCursor(m_openHandCursor);
 		m_dragging = false;
 	}
 }

@@ -677,7 +677,7 @@ void KisView::setCurrentTool(KisTool *tool)
 
 	if (tool) {
 		m_inputDeviceToolMap[currentInputDevice()] = tool;
-		tool -> cursor(m_canvas);
+		setCanvasCursor(tool -> cursor());
 
 		m_canvas -> enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
 
@@ -1606,6 +1606,9 @@ void KisView::preferences()
 	PreferencesDialog::editPreferences();
 	resetMonitorProfile();
 	canvasRefresh();
+	if (currentTool()) {
+		setCanvasCursor(currentTool() -> cursor());
+	}
 }
 
 void KisView::layerCompositeOp(const KisCompositeOp& compositeOp)
@@ -3016,7 +3019,25 @@ KisFilterRegistry * KisView::filterRegistry() const
 QCursor KisView::setCanvasCursor(const QCursor & cursor)
 {
 	QCursor oldCursor = m_canvas -> cursor();
-	m_canvas -> setCursor(cursor);
+	QCursor newCursor;
+
+	KisConfig cfg;
+
+	switch (cfg.defCursorStyle()) {
+	case CURSOR_STYLE_TOOLICON:
+		newCursor = cursor;
+		break;
+	case CURSOR_STYLE_CROSSHAIR:
+		newCursor = KisCursor::crossCursor();
+		break;
+	case CURSOR_STYLE_POINTER:
+		newCursor = KisCursor::arrowCursor();
+		break;
+	default:
+		newCursor = KisCursor::crossCursor();
+	}
+
+	m_canvas -> setCursor(newCursor);
 	return oldCursor;
 }
 

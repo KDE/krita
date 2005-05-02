@@ -544,21 +544,28 @@ QString KisImageMagickConverter::readFilters()
 	QString all;
 	QString name;
 	QString description;
-	const MagickInfo **mi;
 	unsigned long matches;
 
 #ifdef HAVE_OLD_GETMAGICKINFOLIST
+	const MagickInfo **mi;
 	mi = GetMagickInfoList("*", &matches);
-#else
+#else // HAVE_OLD_GETMAGICKINFOLIST
 	ExceptionInfo ei;
 	GetExceptionInfo(&ei);
+#ifdef HAVE_MAGICK6
+	const MagickInfo **mi;
 	mi = GetMagickInfoList("*", &matches, &ei);
+#else // HAVE_MAGICK6
+	const MagickInfo *mi;
+	mi = GetMagickInfo("*", &ei);
+#endif // HAVE_MAGICK6
 	DestroyExceptionInfo(&ei);
-#endif
+#endif // HAVE_OLD_GETMAGICKINFOLIST
 
 	if (!mi)
 		return s;
 
+#ifdef HAVE_MAGICK6
 	for (unsigned long i = 0; i < matches; i++) {
 		const MagickInfo *info = mi[i];
 		if (info -> stealth)
@@ -577,6 +584,24 @@ QString KisImageMagickConverter::readFilters()
 			}
 		}
 	}
+#else
+	for (; mi; mi = reinterpret_cast<const MagickInfo*>(mi -> next)) {
+		if (mi -> stealth)
+			continue;
+		if (mi -> decoder) {
+			name = mi -> name;
+			description = mi -> description;
+			kdDebug() << "Found import filter for: " << name << "\n";
+
+			if (!description.isEmpty() && !description.contains('/')) {
+				all += "*." + name.lower() + " *." + name + " ";
+				s += "*." + name.lower() + " *." + name + "|";
+				s += i18n(description.utf8());
+				s += "\n";
+			}
+		}
+	}
+#endif
 
 	all += "|" + i18n("All Images");
 	all += "\n";
@@ -590,23 +615,30 @@ QString KisImageMagickConverter::writeFilters()
 	QString all;
 	QString name;
 	QString description;
-	const MagickInfo **mi;
 	unsigned long matches;
 
 #ifdef HAVE_OLD_GETMAGICKINFOLIST
+	const MagickInfo **mi;
 	mi = GetMagickInfoList("*", &matches);
-#else
+#else // HAVE_OLD_GETMAGICKINFOLIST
 	ExceptionInfo ei;
 	GetExceptionInfo(&ei);
+#ifdef HAVE_MAGICK6
+	const MagickInfo **mi;
 	mi = GetMagickInfoList("*", &matches, &ei);
+#else // HAVE_MAGICK6
+	const MagickInfo *mi;
+	mi = GetMagickInfo("*", &ei);
+#endif // HAVE_MAGICK6
 	DestroyExceptionInfo(&ei);
-#endif
+#endif // HAVE_OLD_GETMAGICKINFOLIST
 
 	if (!mi) {
 		kdDebug() << "Eek, no magick info!\n";
 		return s;
 	}
 
+#ifdef HAVE_MAGICK6
 	for (unsigned long i = 0; i < matches; i++) {
 		const MagickInfo *info = mi[i];
 		kdDebug() << "Found export filter for: " << info -> name << "\n";
@@ -626,6 +658,27 @@ QString KisImageMagickConverter::writeFilters()
 			}
 		}
 	}
+#else
+ 	for (; mi; mi = reinterpret_cast<const MagickInfo*>(mi -> next)) {
+		kdDebug() << "Found export filter for: " << mi -> name << "\n";
+		if (mi -> stealth)
+			continue;
+
+		if (mi -> encoder) {
+			name = mi -> name;
+
+			description = mi -> description;
+
+			if (!description.isEmpty() && !description.contains('/')) {
+				all += "*." + name.lower() + " *." + name + " ";
+				s += "*." + name.lower() + " *." + name + "|";
+				s += i18n(description.utf8());
+				s += "\n";
+			}
+		}
+	}
+#endif
+
 
 	all += "|" + i18n("All Images");
 	all += "\n";

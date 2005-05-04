@@ -579,9 +579,6 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 		if ((name = element.attribute("name")).isNull())
 			return 0;
 
-		if (!namePresent(name))
-			name = nextImageName();
-
 		if ((attr = element.attribute("width")).isNull())
 			return 0;
 

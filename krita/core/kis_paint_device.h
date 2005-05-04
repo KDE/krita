@@ -450,12 +450,12 @@ inline KisPixelRO KisPaintDevice::toPixelRO(const Q_UINT8 * bytes)
 
 inline void KisPaintDevice::readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	m_datamanager -> readBytes(data, x, y, w, h);
+	m_datamanager -> readBytes(data, x - m_x, y - m_y, w, h);
 }
 
 inline void KisPaintDevice::writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	m_datamanager -> writeBytes( data, x, y, w, h);
+	m_datamanager -> writeBytes( data, x - m_x, y - m_y, w, h);
 }
 
 inline KisProfileSP KisPaintDevice::profile() const

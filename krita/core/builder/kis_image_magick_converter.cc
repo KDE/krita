@@ -546,21 +546,24 @@ QString KisImageMagickConverter::readFilters()
 	QString description;
 	unsigned long matches;
 
+#ifdef HAVE_MAGICK6
 #ifdef HAVE_OLD_GETMAGICKINFOLIST
 	const MagickInfo **mi;
 	mi = GetMagickInfoList("*", &matches);
 #else // HAVE_OLD_GETMAGICKINFOLIST
 	ExceptionInfo ei;
 	GetExceptionInfo(&ei);
-#ifdef HAVE_MAGICK6
 	const MagickInfo **mi;
 	mi = GetMagickInfoList("*", &matches, &ei);
-#else // HAVE_MAGICK6
-	const MagickInfo *mi;
-	mi = GetMagickInfo("*", &ei);
-#endif // HAVE_MAGICK6
 	DestroyExceptionInfo(&ei);
 #endif // HAVE_OLD_GETMAGICKINFOLIST
+#else // HAVE_MAGICK6
+	const MagickInfo *mi;
+	ExceptionInfo ei;
+	GetExceptionInfo(&ei);
+	mi = GetMagickInfo("*", &ei);
+	DestroyExceptionInfo(&ei);
+#endif // HAVE_MAGICK6
 
 	if (!mi)
 		return s;
@@ -617,21 +620,24 @@ QString KisImageMagickConverter::writeFilters()
 	QString description;
 	unsigned long matches;
 
+#ifdef HAVE_MAGICK6
 #ifdef HAVE_OLD_GETMAGICKINFOLIST
 	const MagickInfo **mi;
 	mi = GetMagickInfoList("*", &matches);
 #else // HAVE_OLD_GETMAGICKINFOLIST
 	ExceptionInfo ei;
 	GetExceptionInfo(&ei);
-#ifdef HAVE_MAGICK6
 	const MagickInfo **mi;
 	mi = GetMagickInfoList("*", &matches, &ei);
-#else // HAVE_MAGICK6
-	const MagickInfo *mi;
-	mi = GetMagickInfo("*", &ei);
-#endif // HAVE_MAGICK6
 	DestroyExceptionInfo(&ei);
 #endif // HAVE_OLD_GETMAGICKINFOLIST
+#else // HAVE_MAGICK6
+	const MagickInfo *mi;
+	ExceptionInfo ei;
+	GetExceptionInfo(&ei);
+	mi = GetMagickInfo("*", &ei);
+	DestroyExceptionInfo(&ei);
+#endif // HAVE_MAGICK6
 
 	if (!mi) {
 		kdDebug() << "Eek, no magick info!\n";

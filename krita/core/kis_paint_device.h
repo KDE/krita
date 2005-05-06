@@ -100,8 +100,8 @@ public:
 	 void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h);
 	 QRect exactBounds();
 		
-	void crop(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) { m_datamanager -> setExtent(x, y, w, h); };
-	void crop(QRect r) { m_datamanager -> setExtent(r); };
+	void crop(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) { m_datamanager -> setExtent(x - m_x, y - m_y, w, h); };
+	void crop(QRect r) { r.moveBy(-m_x, -m_y); m_datamanager -> setExtent(r); };
 
 	/**
 	 * Complete erase the current paint device. Its size will become 0.

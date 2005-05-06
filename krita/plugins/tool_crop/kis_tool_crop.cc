@@ -398,7 +398,7 @@ void KisToolCrop::crop() {
 	if (m_optWidget -> cmbType -> currentItem() == 0) {
 		KisLayerSP layer = img -> activeLayer();
 		cropLayer(layer, rc);
-		KNamedCommand * cmd = layer -> moveCommand(m_subject -> canvasController(),  -rc.x(), -rc.y());
+		KNamedCommand * cmd = layer -> moveCommand(m_subject -> canvasController(), layer -> getX() - rc.x(), layer -> getY() - rc.y());
 		if (m_subject -> undoAdapter()) m_subject -> undoAdapter() -> addCommand(cmd);
 		img -> notify();
 	}
@@ -408,7 +408,7 @@ void KisToolCrop::crop() {
 		for ( it = layers.begin(); it != layers.end(); ++it ) {
 			KisLayerSP layer = (*it);
 			cropLayer(layer, rc);
-			KNamedCommand * cmd = layer -> moveCommand(m_subject -> canvasController(),  -rc.x(), -rc.y());
+			KNamedCommand * cmd = layer -> moveCommand(m_subject -> canvasController(),  layer -> getX() - rc.x(), layer -> getY() - rc.y());
 			if (m_subject -> undoAdapter()) m_subject -> undoAdapter() -> addCommand(cmd);
 		}
 		img -> resize(rc);

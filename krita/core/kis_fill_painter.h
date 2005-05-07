@@ -98,6 +98,11 @@ public:
 	 * selection, the whole selection is filled
 	 **/
 	void fillPattern(int startX, int startY);
+	
+	/**
+	 * Returns a selection mask for the floodfill starting at the specified position.
+	 **/
+	KisSelectionSP createFloodSelection(int startX, int startY);
 
 	void setFillThreshold(int threshold);
     
@@ -114,23 +119,15 @@ private:
 	 * 255 (actually should be MIN_SELECTED to MAX_SELECTED?). Only 0 and 255 are
 	 * returned when anti-aliasing is off
 	 **/
-//	QUANTUM difference(const QUANTUM* src, KisPixelRO dst);
 	void genericFillStart(int startX, int startY);
 	void genericFillEnd(KisLayerSP filled);
-	typedef enum { Left, Right } Direction;
-	void floodLine(int x, int y);
-	int floodSegment(int x, int y, int most, KisHLineIteratorPixel& it, int lastPixel, Direction d);
 
 	KisSelectionSP m_selection;
-	KisPaintDeviceSP m_layer;
-	QUANTUM* m_oldColor, *m_color;
+
 	int m_threshold;
-	int m_pixelsDone;
 	int m_size;
-	int m_currentPercent;
 	int m_width, m_height;
 	QRect m_rect;
-	bool* m_map;
 };
 
 

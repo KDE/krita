@@ -158,6 +158,19 @@ void KisFillPainter::fillPattern(int startX, int startY) {
 void KisFillPainter::genericFillStart(int startX, int startY) {
 	m_cancelRequested = false;
 
+	if (m_width < 0 || m_height < 0) {
+		if (m_device->image()) {
+			m_width = m_device->image()->width();
+			m_height = m_device->image()->height();
+		} else {
+			kdDebug() << "KisFillPainter::genericFillStart: no size set, assuming 500x500"
+					<< endl;
+			m_width = m_height = 500;
+		}
+	}
+
+	m_size = m_width * m_height;
+
 	if (m_device -> hasSelection()) {
 		m_selection = m_device -> selection();
 	} else {

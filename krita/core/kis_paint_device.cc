@@ -727,9 +727,11 @@ void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
 		return;
 
 	Q_INT32 x, y, w, h;
-	selection -> extent(x, y, w, h);
 	KisPainter painter(m_selection.data());
-	painter.bitBlt(x, y, COMPOSITE_ERASE, selection.data(), x, y, x, y);
+	selection -> invert();
+	selection -> extent(x, y, w, h);
+	painter.bitBlt(x, y, COMPOSITE_ERASE, selection.data(), x, y, w, h);
+	selection -> invert();
 	painter.end();
 
 	if(m_owner)

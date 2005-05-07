@@ -56,6 +56,7 @@ KisToolSelectContiguous::KisToolSelectContiguous() : super()
 	m_optWidget = 0;
 	m_options = 0;
 	m_fuzziness = 20;
+	m_selectAction = SELECTION_REPLACE;
 
 	//XXX : make wizard cursor from tool icon.
 	setCursor(KisCursor::arrowCursor());
@@ -97,10 +98,11 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 			selection -> setMaskColor(c);
 
 		if (dev -> hasSelection()) {
-			switch ((enumSelectionMode) m_selectAction) {
+			switch (m_selectAction) {
 				case SELECTION_REPLACE: dev -> setSelection(selection); break;
-				//case SELECTION_ADD: dev -> addSelection(selection); break;
-				//case SELECTION_SUBTRACT: dev -> subtractSelection(selection); break;
+				case SELECTION_ADD: dev -> addSelection(selection); break;
+				case SELECTION_SUBTRACT: dev -> subtractSelection(selection); break;
+				default: kdDebug() << "KisToolSelectContiguous: invalid select action: " << m_selectAction << endl;
 			}
 		} else { // XXX what if the mode is subtract here?
 			dev -> setSelection(selection);
@@ -145,7 +147,8 @@ void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
 
 void KisToolSelectContiguous::slotSetAction(int action)
 {
-	m_selectAction =(enumSelectionMode)action;
+	if (action >= SELECTION_REPLACE && action <= SELECTION_SUBTRACT)
+		m_selectAction =(enumSelectionMode)action;
 // XXX: Fix cursors when then are done.
 // 	switch(m_selectAction) {
 // 		case SELECTION_REPLACE:

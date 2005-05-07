@@ -706,6 +706,36 @@ void KisPaintDevice::removeSelection()
 		m_owner -> slotSelectionChanged();
 }
 
+void KisPaintDevice::addSelection(KisSelectionSP selection) {
+	if (!m_hasSelection) {
+		setSelection(selection);
+		return;
+	}
+	
+	KisPainter painter(m_selection.data());
+	Q_INT32 x, y, w, h;
+	selection -> extent(x, y, w, h);
+	painter.bitBlt(x, y, COMPOSITE_OVER, selection.data(), x, y, w, h);
+	painter.end();
+	
+	if(m_owner)
+		m_owner -> slotSelectionChanged();
+}
+
+void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
+	if (!m_hasSelection)
+		return;
+
+	Q_INT32 x, y, w, h;
+	selection -> extent(x, y, w, h);
+	KisPainter painter(m_selection.data());
+	painter.bitBlt(x, y, COMPOSITE_ERASE, selection.data(), x, y, x, y);
+	painter.end();
+
+	if(m_owner)
+		m_owner -> slotSelectionChanged();
+}
+
 
 bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity)
 {

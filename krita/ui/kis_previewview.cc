@@ -19,6 +19,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+#include <math.h>
+
 #include <qpainter.h>
 #include <qpoint.h>
 #include <qpushbutton.h>
@@ -84,8 +86,8 @@ void KisPreviewView::setSourceLayer(KisLayerSP lay)
 	KisPainter gc;
 	KisPaintDeviceSP pd(m_sourcelayer.data());
 
-	Q_INT32 w = static_cast<Q_INT32>(size().width() / m_zoom);
-	Q_INT32 h = static_cast<Q_INT32>(size().height() / m_zoom);
+	Q_INT32 w = static_cast<Q_INT32>(ceil(size().width() / m_zoom));
+	Q_INT32 h = static_cast<Q_INT32>(ceil(size().height() / m_zoom));
 
 	m_image = new KisImage(m_undo, w, h, lay->colorStrategy(), "preview");
 	Q_CHECK_PTR(m_image);

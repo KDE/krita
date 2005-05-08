@@ -1,8 +1,13 @@
 [Desktop Entry]
 Name=Wet & Sticky Canvas Color Model
+Name[da]=Våd & klæbrig kanvasfarve-model
+Name[en_GB]=Wet & Sticky Canvas Colour Model
 Name[es]=Modelo de color de lienzo mojado y pegajoso
+Name[hu]=Nedves és ragadós vászon színmodell
+Name[nl]=Nat en kleverig canvasmodel
 Name[pt]=Modelo de Cores de Tela Molhado e Pegajoso
 Name[pt_BR]=Modelo de cores de tela Molhada & Pegajosa
+Name[ru]=Цветовая модель влажности и прилипания
 Name[sv]=Våt och klibbig dukfärgmodell
 ServiceTypes=Krita/CoreModule
 Type=Service

@@ -1,10 +1,15 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Crop Tool
+Name[da]=Beskæringsværktøj
+Name[el]=Εργαλείο κοψίματος
 Name[es]=Herramienta para recortar
 Name[ga]=Uirlis Bhearrtha
+Name[hu]=Levágó eszköz
+Name[nl]=Snijgereedschap
 Name[pt]=Ferramenta de Recorte
 Name[pt_BR]=Ferramenta de Recorte
+Name[ru]=Инструмент обрезки
 Name[sv]=Beskärningsverktyg
 Name[zh_CN]=裁剪工具
 ServiceTypes=Krita/CoreModule

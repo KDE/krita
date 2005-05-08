@@ -2,10 +2,15 @@
 Encoding=UTF-8
 Name=Star Tool
 Name[br]=Ostilh steredenn
+Name[da]=Stjerneværktøj
+Name[el]=Εργαλείο αστέρα
 Name[es]=Herramienta Estrella
 Name[ga]=Uirlis Réiltín
+Name[hu]=Csillag eszköz
+Name[nl]=Stergereedschap
 Name[pt]=Ferramenta de Estrelas
 Name[pt_BR]=Ferramenta Estrela
+Name[ru]=Звёзды
 Name[sv]=Stjärnverktyg
 Name[zh_CN]=星形工具
 ServiceTypes=Krita/CoreModule

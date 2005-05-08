@@ -1,12 +1,20 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Watercolor Paint Plugin
+Name[da]=Plugin for vandfarvemaling
 Name[es]=Extensión de pintura de acuarela
+Name[hu]=Vízfesték modul
+Name[nl]=Waterkleur schilderplugin
 Name[pt]='Plugin' de Pintura a Água
 Name[pt_BR]=Plug-in de Marca D'água
+Name[ru]=Модулль рисования водяными красками
 Name[sv]=Insticksprogram för vattenfärgsmålning
 Comment=Color model and tools for painting with simulated watercolors
+Comment[da]=Farvemodel og værktøjer til at male med simulerede vandfarver
+Comment[en_GB]=Colour model and tools for painting with simulated watercolours
 Comment[es]=Modelo de color y herramientas para pintar con acuarelas simuladas
+Comment[hu]=Színmodell és eszközök szimulált vízfestékes képekhez
+Comment[nl]=Kleurmodel en -gereedschappen voor het schilderen met gesimuleerde waterkleuren
 Comment[pt]=Modelo de cor e ferramentas para pintar com cores aquosas simuladas
 Comment[pt_BR]=Modelo de cor e ferramentas para pintura  de cores simuladas de água
 Comment[sv]=Färgmodell och verktyg för att måla med simulerade vattenfärger

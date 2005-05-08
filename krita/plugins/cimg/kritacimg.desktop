@@ -1,19 +1,26 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=CImg Image Restoration Filter
+Name[da]=Cimg-billedrestaureringsfilter
 Name[es]=Filtro para restauración de imágenes CImg
+Name[hu]=CImg képhelyreállító szűrő
+Name[nl]=CImg afbeeldingsrestauratiefilter
 Name[pt]=Filtro de Restauro de Imagem CImg
 Name[pt_BR]=Filtro de Restauração de Imagens CImg
 Name[sv]=Cimg-bildrestaureringsfilter
 Comment=CImg Image restoration filter
 Comment[da]=Cimg-billedforbedringsfilter
+Comment[el]=Φίλτρο αποκατάστασης εικόνων CImg
 Comment[es]=Filtro para restauración de imágenes CImg
 Comment[fr]=Filtre de restauration d'images de CImg
+Comment[hu]=CImg képhelyreállító szűrő
+Comment[nb]=CImg-filter for bilderestaurering
 Comment[nl]=CImg afbeeldingrestauratiefilter
+Comment[nn]=CImg-filter for biletrestaurering
 Comment[pt]=Filtro de restauro de imagem CImg
 Comment[pt_BR]=Filtro de restauração de imagens CImg
 Comment[sr]=CImg, филтер за обнову слика
-Comment[sr@Latn]=CImg, филтер за обнову слика
+Comment[sr@Latn]=CImg, filter za obnovu slika
 Comment[sv]=Cimg-bildförbättringsfilter
 ServiceTypes=Krita/CoreModule
 Type=Service

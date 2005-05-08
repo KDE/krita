@@ -2,10 +2,15 @@
 Encoding=UTF-8
 Name=Polygon Tool
 Name[br]=Ostilh liestueg
+Name[da]=Polygonværktøj
+Name[el]=Εργαλείο πολυγώνου
 Name[es]=Herramienta Polígono
 Name[ga]=Uirlis Pholagáin
+Name[hu]=Sokszög eszköz
+Name[nl]=Polygoongereedschap
 Name[pt]=Ferramenta de Polígonos
 Name[pt_BR]=Ferramenta Polígono
+Name[ru]=Многоугольник
 Name[sv]=Polygonverktyg
 Name[zh_CN]=多边形工具
 ServiceTypes=Krita/CoreModule

@@ -1,10 +1,15 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Polyline Tool
+Name[da]=Flerlinjeværktøj
+Name[el]=Εργαλείο Polyline
 Name[es]=Herramienta Polilínea
 Name[ga]=Uirlis Il-líne
+Name[hu]=Sokszögvonal eszköz
+Name[nl]=Polylijngereedschap
 Name[pt]=Ferramenta de Linhas Poligonais
 Name[pt_BR]=Ferramenta Poli-linha
+Name[ru]=Ломаная
 Name[sv]=Flerlinjesverktyg
 Name[zh_CN]=折线工具
 ServiceTypes=Krita/CoreModule

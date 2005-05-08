@@ -85,6 +85,7 @@ KisToolSelectRectangular::KisToolSelectRectangular()
 	m_startPos = KisPoint(0, 0);
 	m_endPos = KisPoint(0, 0);
 	m_optWidget = 0;
+	m_selectAction = SELECTION_REPLACE;
 }
 
 KisToolSelectRectangular::~KisToolSelectRectangular()
@@ -204,10 +205,17 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 
 			if (img) {
 				KisLayerSP layer = img -> activeLayer();
-				KisSelectionSP selection = layer -> selection();
+				KisSelectionSP selection = new KisSelection(layer.data(), "Temporary Selection");
 				QRect rc(m_startPos.floorQPoint(), m_endPos.floorQPoint());
 				rc = rc.normalize();
 				selection -> select(rc);
+				switch (m_selectAction) {
+					case SELECTION_REPLACE: layer -> setSelection(selection); break;
+					case SELECTION_ADD: layer -> addSelection(selection); break;
+					case SELECTION_SUBTRACT: layer -> subtractSelection(selection); break;
+					default: kdDebug() << "KisToolSelectRectangular: invalid select action: " << m_selectAction << endl;
+				}
+
 				img -> notify(rc);
 
 // 				KisPaintDeviceSP parent;
@@ -267,6 +275,11 @@ void KisToolSelectRectangular::paintOutline(QPainter& gc, const QRect&)
 	}
 }
 
+void KisToolSelectRectangular::slotSetAction(int action) {
+	if (action >= SELECTION_REPLACE && action <= SELECTION_SUBTRACT)
+		m_selectAction =(enumSelectionMode)action;
+}
+
 void KisToolSelectRectangular::setup(KActionCollection *collection)
 {
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
@@ -290,6 +303,9 @@ QWidget* KisToolSelectRectangular::createOptionWidget(QWidget* parent)
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
 	Q_CHECK_PTR(m_optWidget);
 	m_optWidget -> setCaption(i18n("Select Rectangles"));
+
+	connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+
 	return m_optWidget;
 }
 

@@ -84,6 +84,7 @@ KisToolSelectElliptical::KisToolSelectElliptical()
 	m_startPos = KisPoint(0, 0);
 	m_endPos = KisPoint(0, 0);
 	m_optWidget = 0;
+	m_selectAction = SELECTION_REPLACE;
 }
 
 KisToolSelectElliptical::~KisToolSelectElliptical()
@@ -203,7 +204,7 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 
 			if (img) {
 				KisLayerSP layer = img -> activeLayer();
-				KisSelectionSP selection = layer -> selection();
+				KisSelectionSP selection = new KisSelection(layer.data(), "Temporary Selection");
 				QRect rc( m_startPos.floorQPoint(), m_endPos.floorQPoint());
 				rc = rc.normalize();
 
@@ -218,6 +219,14 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 							continue;
 						selection -> setSelected( x+rc.x(), y+rc.y(), value);
 					}
+
+				switch (m_selectAction) {
+					case SELECTION_REPLACE: layer -> setSelection(selection); break;
+					case SELECTION_ADD: layer -> addSelection(selection); break;
+					case SELECTION_SUBTRACT: layer -> subtractSelection(selection); break;
+					default: kdDebug() << "KisToolSelectElliptical: invalid select action: " << m_selectAction << endl;
+				}
+
 				img -> notify(rc);
 			}
 		}
@@ -259,6 +268,11 @@ void KisToolSelectElliptical::paintOutline(QPainter& gc, const QRect&)
 	}
 }
 
+void KisToolSelectElliptical::slotSetAction(int action) {
+	if (action >= SELECTION_REPLACE && action <= SELECTION_SUBTRACT)
+		m_selectAction =(enumSelectionMode)action;
+}
+
 void KisToolSelectElliptical::setup(KActionCollection *collection)
 {
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
@@ -282,6 +296,9 @@ QWidget* KisToolSelectElliptical::createOptionWidget(QWidget* parent)
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
 	Q_CHECK_PTR(m_optWidget);
 	m_optWidget -> setCaption(i18n("Elliptical Selection"));
+
+	connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+
 	return m_optWidget;
 }
 

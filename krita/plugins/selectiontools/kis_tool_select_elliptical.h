@@ -28,6 +28,7 @@
 #include "kis_tool_non_paint.h"
 
 #include "kis_tool_factory.h"
+#include "kis_selection.h"
 
 class KisToolSelectElliptical : public KisToolNonPaint {
 
@@ -51,6 +52,9 @@ public:
 	virtual void move(KisMoveEvent *e);
 	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
+public slots:
+	virtual void slotSetAction(int);
+
 private:
 	void clearSelection();
 	void paintOutline();
@@ -62,8 +66,8 @@ private:
 	KisPoint m_startPos;
 	KisPoint m_endPos;
 	bool m_selecting;
-        QWidget * m_optWidget;
-
+	QWidget * m_optWidget;
+	enumSelectionMode m_selectAction;
 };
 
 class KisToolSelectEllipticalFactory : public KisToolFactory {

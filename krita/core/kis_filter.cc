@@ -93,7 +93,6 @@ void KisFilter::slotActivated()
 		widgetLayout -> addWidget(m_widget, 0 , 0);
 		m_dialog->container()->setMinimumSize(m_widget->minimumSize());
 		refreshPreview();
-		m_dialog -> setFixedSize(m_dialog -> minimumSize());
 		if(m_dialog->exec() == QDialog::Rejected )
 		{
 			delete m_dialog;

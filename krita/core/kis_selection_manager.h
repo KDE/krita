@@ -56,7 +56,7 @@ public slots:
 	void copy();
 	KisLayerSP paste();
 	void selectAll();
-	void unSelectAll();
+	void deselect();
 	void clear();
 	void reselect();
 	void invert();
@@ -76,8 +76,6 @@ private:
 
 	KisView * m_parent;
 	KisDoc * m_doc;
-
-	KisSelectionSP m_previousSelection;
 
 	KisClipboard * m_clipboard;
 

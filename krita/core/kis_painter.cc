@@ -224,6 +224,88 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 	}
 }
 
+void KisPainter::bltSelectionExt(Q_INT32 dx, Q_INT32 dy,
+			      const KisCompositeOp &op, 
+			      KisPaintDeviceSP srcdev,
+			      KisSelectionSP selMask,
+			      QUANTUM opacity,
+			      Q_INT32 sx, Q_INT32 sy, 
+			      Q_INT32 sw, Q_INT32 sh)
+{
+	if (srcdev == 0) return;
+
+	if (m_device == 0) return;
+
+
+//	kdDebug() << "KisPainter::bltSelectionExt rect "
+//			  << " dx: " << dx
+//			  << " dy: " << dy
+//			  << " sx: " << sx
+//			  << " sy: " << sy
+//			  << " w: " << sw
+//			  << " h " << sh
+//			  << " layer: " << srcdev -> name()
+//			  << " onto: " << m_device -> name()
+//			  << "\n";
+
+	KisSelectionSP selection = selMask;
+
+	QRect r = selection -> selectedRect();
+	//r.setRect(selection -> getX(), selection -> getY(), r.width(), r.height());
+
+	if (!r.intersects(QRect(dx, dy, sw, sh))) {
+//		kdDebug() << "Blitting outside selection rect\n";
+		return;
+	}
+
+//	kdDebug() << "KisPainter::bltSelection selection rect: "
+//			  << " x: " << r.x()
+//			  << " y: " << r.y()
+//			  << " w: " << r.width()
+//			  << " h " << r.height()
+//			  << "\n";
+
+	int dstDepth = m_pixelSize;
+	int srcDepth = srcdev -> pixelSize();
+	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
+	KisProfileSP srcProfile = srcdev -> profile();
+
+	// We can only blt one row at a time so these values are irrelevant. They were
+	// used when we accessed tiles directly.
+	Q_INT32 srcRowSize = 0;
+	Q_INT32 dstRowSize = 0;
+
+	for(Q_INT32 i = 0; i < sh; i++)
+	{
+		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, false);
+		KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
+		KisHLineIterator selIter = selection -> createHLineIterator(dx, dy + i, sw, false);
+
+		while( ! srcIter.isDone())
+		{
+			// XXX: Make selection threshold configurable
+			if (selIter.rawData()[0] > SELECTION_THRESHOLD) {
+				m_colorStrategy -> bitBlt(dstDepth,
+							  dstIter.rawData(), 
+							  dstRowSize,
+							  srcCs,
+							  srcIter.rawData(),
+							  srcRowSize,
+							  opacity,
+							  1,
+							  1,
+							  op,
+							  srcProfile,
+							  m_profile);
+			}
+			++srcIter;
+			++dstIter;
+			++selIter;
+		}
+	}
+}
+
+
 void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 			      const KisCompositeOp& op, 
 			      KisPaintDeviceSP srcdev,

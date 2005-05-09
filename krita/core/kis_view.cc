@@ -1342,7 +1342,7 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
 			KisImageSP current = currentImg();
 
 			rc += v.size();
-			current -> activeLayer() -> removeSelection();
+			current -> activeLayer() -> deselect();
 
 			for (vKisLayerSP_it it = v.begin(); it != v.end(); it++) {
 				KisLayerSP layer = *it;

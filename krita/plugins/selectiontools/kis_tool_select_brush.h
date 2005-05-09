@@ -27,6 +27,7 @@
 
 class QWidget;
 class KisPoint;
+class KisSelectedTransaction;
 
 /**
  * The selection brush creates a selection by painting with the current
@@ -52,6 +53,7 @@ protected:
 
 private:
 	QWidget * m_optWidget;
+	KisSelectedTransaction *m_transaction;
 };
 
 class KisToolSelectBrushFactory : public KisToolFactory {

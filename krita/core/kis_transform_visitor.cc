@@ -321,7 +321,7 @@ void KisTransformVisitor::transform(Q_INT32  xscale, Q_INT32  yscale,
 	
 	KisPaintDeviceSP tmpdev = new KisPaintDevice(m_dev->colorStrategy(),"temporary");
 	transformx(m_dev, tmpdev, xscale, denominator, xshear, xtranslate, m_progress, filterStrategy);
-	m_dev->removeSelection();
+	m_dev->deselect();
 	transformy(tmpdev, m_dev, yscale, denominator, yshear, ytranslate, m_progress, filterStrategy);
 	delete tmpdev;
 	

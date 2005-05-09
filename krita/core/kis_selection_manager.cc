@@ -46,10 +46,83 @@
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 
+namespace {
+	class DeselectCommand : public KNamedCommand {
+		typedef KNamedCommand super;
+	
+	public:
+		DeselectCommand(KisLayerSP device);
+		virtual ~DeselectCommand();
+	
+		virtual void execute();
+		virtual void unexecute();
+		
+	private:
+		KisLayerSP m_device;
+	};
+	
+	DeselectCommand::DeselectCommand(KisLayerSP device) :
+		super(i18n("&Deselect"))
+	{
+		m_device = device;
+	}
+	
+	DeselectCommand::~DeselectCommand()
+	{
+	}
+	
+	void DeselectCommand::execute()
+	{
+		// The following also emits selectionChanged
+		m_device -> deselect();
+	}
+	
+	void DeselectCommand::unexecute()
+	{
+		// The following also emits selectionChanged
+		m_device -> selection(); // also sets hasSelection=true
+	}
+	
+	class ReselectCommand : public KNamedCommand {
+		typedef KNamedCommand super;
+	
+	public:
+		ReselectCommand(KisLayerSP device);
+		virtual ~ReselectCommand();
+	
+		virtual void execute();
+		virtual void unexecute();
+		
+	private:
+		KisLayerSP m_device;
+	};
+	
+	ReselectCommand::ReselectCommand(KisLayerSP device) :
+		super(i18n("&Reselect"))
+	{
+		m_device = device;
+	}
+	
+	ReselectCommand::~ReselectCommand()
+	{
+	}
+	
+	void ReselectCommand::execute()
+	{
+		// The following also emits selectionChanged
+		m_device -> selection(); // also sets hasSelection=true
+	}
+	
+	void ReselectCommand::unexecute()
+	{
+		// The following also emits selectionChanged
+		m_device -> deselect();
+	}
+}
+
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	: m_parent(parent),
 	  m_doc(doc),
-	  m_previousSelection(0),
 	  m_copy(0),
 	  m_cut(0),
 	  m_paste(0),
@@ -110,7 +183,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
         m_deselect =
 		KStdAction::deselect(this,
-				     SLOT(unSelectAll()),
+				     SLOT(deselect()),
 				     collection,
 				     "deselect");
 
@@ -120,13 +193,13 @@ void KisSelectionManager::setup(KActionCollection * collection)
 				  SLOT(clear()),
 				  collection,
 				  "clear");
-#if 0 // Not implemented yet
+	
 	m_reselect =
 		new KAction(i18n("&Reselect"),
 			    0, 0,
 			    this, SLOT(reselect()),
 			    collection, "reselect");
-#endif
+	
 	m_invert =
 		new KAction(i18n("&Invert"),
 			    0, 0,
@@ -245,9 +318,7 @@ void KisSelectionManager::updateGUI()
 	m_selectAll -> setEnabled(img != 0);
 	m_deselect -> setEnabled(enable);
 	m_clear -> setEnabled(enable);
-#if 0 //  Not implemented yet
-	m_reselect -> setEnabled(m_previousSelection != 0);
-#endif
+	m_reselect -> setEnabled( ! enable);
 	m_invert -> setEnabled(enable);
 	m_toNewLayer -> setEnabled(enable);
 #if 0 // Not implemented yet
@@ -401,19 +472,25 @@ void KisSelectionManager::selectAll()
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
-	KisSelectionSP s = new KisSelection(KisPaintDeviceSP(layer), "layer selection for: " + layer -> name());
-	Q_CHECK_PTR(s);
+	KisSelectionSP s = layer -> selection();
+
+	KisTransaction * t = 0;
+	if (img -> undoAdapter())
+	{
+		t = new KisTransaction(i18n("Select &All"), s.data());
+		Q_CHECK_PTR(t);
+	}
 
 	QRect r = layer -> extent();
 	s -> select(QRect(r.x(), r.y(), r.width(), r.height()));
-
-	s -> setVisible(true);
-
-	layer -> setSelection(s);
-
+	
+	if (img -> undoAdapter())
+		img -> undoAdapter() -> addCommand(t);
+	layer -> emitSelectionChanged();
 }
 
-void KisSelectionManager::unSelectAll()
+
+void KisSelectionManager::deselect()
 {
         KisImageSP img = m_parent -> currentImg();
 	if (!img) return;
@@ -421,10 +498,11 @@ void KisSelectionManager::unSelectAll()
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
-	layer -> removeSelection(); // XXX save selection for reselect
-
-	m_parent -> updateCanvas();
-
+	if (img -> undoAdapter())
+		img -> undoAdapter() -> addCommand(new DeselectCommand(layer));
+		
+	// The following also emits selectionChanged
+	layer -> deselect();
 }
 
 
@@ -432,7 +510,6 @@ void KisSelectionManager::clear()
 {
         KisImageSP img = m_parent -> currentImg();
         if (!img) return;
-
 
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
@@ -466,16 +543,24 @@ void KisSelectionManager::clear()
 	}
 
 	if (img -> undoAdapter()) img -> undoAdapter() -> addCommand(t);
-	layer -> removeSelection();
-	m_parent -> updateCanvas();
-
+	layer -> deselect();
 }
 
 
 
 void KisSelectionManager::reselect()
 {
-	// Restore the previous selection
+	KisImageSP img = m_parent -> currentImg();
+	if (!img) return;
+
+	KisLayerSP layer = img ->activeLayer();
+	if (!layer) return;
+
+	if (img -> undoAdapter())
+		img -> undoAdapter() -> addCommand(new ReselectCommand(layer));
+		
+	// The following also emits selectionChanged
+	layer -> selection(); // also sets hasSelection=true
 }
 
 
@@ -488,16 +573,22 @@ void KisSelectionManager::invert()
 	if (!layer) return;
 
 	if (layer -> hasSelection()) {
-		Q_INT32 x,y,w,h;
 		KisSelectionSP s = layer -> selection();
-		layer->extent(x, y, w, h); // it's intentionally the extent of the layer
-		s -> invert();
-	}
-	else {
-		selectAll();
-	}
-	m_parent -> updateCanvas(0, 0, img->width(),img->height());
+	
+		KisTransaction * t = 0;
+		if (img -> undoAdapter())
+		{
+			t = new KisTransaction(i18n("&Invert"), s.data());
+			Q_CHECK_PTR(t);
+		}
 
+		s -> invert();
+	
+		if (img -> undoAdapter())
+			img -> undoAdapter() -> addCommand(t);
+	}
+	
+	layer -> emitSelectionChanged();
 }
 
 void KisSelectionManager::copySelectionToNewLayer()

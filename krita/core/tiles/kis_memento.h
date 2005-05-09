@@ -27,7 +27,7 @@ class KisTiledDataManager;
 class KisMemento
 {
 public:
-	KisMemento();
+	KisMemento(Q_UINT32 pixelSize);
 	~KisMemento();
 /*
 	// For consolidating transactions
@@ -46,6 +46,8 @@ private:
 	KisTile **m_redoHashTable;
 	struct DeletedTile {Q_INT32 col; Q_INT32 row; DeletedTile *next;};
 	DeletedTile *m_delTilesTable;
+	Q_UINT8 *m_defPixel;
+	Q_UINT8 *m_redoDefPixel;
 	void deleteAll(DeletedTile *deletedtile);
 	void deleteAll(KisTile *tile);
 };

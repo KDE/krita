@@ -96,7 +96,7 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 		QColor c = m_options -> maskColor();
 		if (c.isValid())
 			selection -> setMaskColor(c);
-
+/*
 		if (dev -> hasSelection()) {
 			switch (m_selectAction) {
 				case SELECTION_REPLACE: dev -> setSelection(selection); break;
@@ -107,7 +107,7 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 		} else { // XXX what if the mode is subtract here?
 			dev -> setSelection(selection);
 		}
-
+*/
 		m_subject -> setCanvasCursor(oldCursor);
 		m_subject -> canvasController() -> updateCanvas();
 

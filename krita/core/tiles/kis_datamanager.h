@@ -56,6 +56,11 @@ public:
 	void setDefaultPixel(Q_UINT8 *defPixel) { return ACTUAL_DATAMGR::setDefaultPixel(defPixel); };
 	
 	/**
+	 * Gets the default pixel.
+	 */
+	 Q_UINT8 *defaultPixel() { return ACTUAL_DATAMGR::defaultPixel(); };
+	
+	/**
 	 * Reguests a memento from the data manager. There is only one memento active
 	 * at any given moment for a given paint device and all and any
 	 * write actions on the datamanger builds undo data into this memento

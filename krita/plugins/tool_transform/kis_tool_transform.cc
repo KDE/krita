@@ -39,6 +39,7 @@
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
+#include <kis_transaction.h>
 #include <kis_button_press_event.h>
 #include <kis_button_release_event.h>
 #include <kis_move_event.h>
@@ -47,11 +48,11 @@
 #include "kis_tool_transform.h"
 
 namespace {
-	class TransformCmd : public KNamedCommand {
-		typedef KNamedCommand super;
+	class TransformCmd : public KisTransaction {
+		typedef KisTransaction super;
 
 	public:
-		TransformCmd();
+		TransformCmd(KisPaintDeviceSP device);
 		virtual ~TransformCmd();
 
 	public:
@@ -59,9 +60,11 @@ namespace {
 		virtual void unexecute();
 
 	private:
+		KisTransaction selTransaction;
 	};
 
-	TransformCmd::TransformCmd() : super(i18n("Transform"))
+	TransformCmd::TransformCmd(KisPaintDeviceSP device) : super(i18n("Transform"), device),
+		selTransaction(i18n("Transform"), device->selection().data())
 	{
 	}
 
@@ -71,10 +74,14 @@ namespace {
 
 	void TransformCmd::execute()
 	{
+		super::execute();
+		selTransaction.execute();
 	}
 
 	void TransformCmd::unexecute()
 	{
+		super::unexecute();
+		selTransaction.unexecute();
 	}
 }
 
@@ -130,6 +137,7 @@ void KisToolTransform::activate()
 		m_org_cenX = (m_startPos.x() + m_endPos.x()) / 2.0;
 		m_org_cenY = (m_startPos.y() + m_endPos.y()) / 2.0;
 
+		m_a = 0.0;
 		m_scaleX = 1.0;
 		m_scaleY = 1.0;
 		m_translateX = m_org_cenX;
@@ -450,6 +458,10 @@ void KisToolTransform::transform() {
 	double tx = m_translateX - m_org_cenX * m_scaleX;
 	double ty = m_translateY - m_org_cenY * m_scaleY;
 	KisProgressDisplayInterface *progress = 0;//view() -> progressDisplay();
+	
+	TransformCmd * cmd = new TransformCmd(img->activeLayer().data());
+	Q_CHECK_PTR(cmd);
+		
 	img->activeLayer()->transform(m_scaleX*w, m_scaleY*w, 0, 0, w, tx, ty, progress);
 	
 	QRect rc = img->activeLayer()->extent();
@@ -458,8 +470,6 @@ void KisToolTransform::transform() {
 	img -> notify(rc);
 
 	if (img -> undoAdapter()) {
-		TransformCmd * cmd = new TransformCmd();
-		Q_CHECK_PTR(cmd);
 		img -> undoAdapter() -> addCommand(cmd);
 	}
 }

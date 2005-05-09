@@ -133,12 +133,25 @@ public:
 		    Q_INT32 sw, Q_INT32 sh);
 
 
+	/** A version of bitBlt that applies an external selection mask first to the source device and
+	 * only then blits. This means that the source device is permanently altered.
+	 */
+	void bltSelectionExt(Q_INT32 dx, Q_INT32 dy,
+			  const KisCompositeOp &op,
+			  KisPaintDeviceSP src,
+			  KisSelectionSP selMask,
+			  QUANTUM opacity,
+			  Q_INT32 sx, Q_INT32 sy,
+			  Q_INT32 sw, Q_INT32 sh);
+ 
+
 	/**
-	 * A version of bitBlt applies the destination selection mask first to the source device and 
-	 * only then blits. This means that the source device is permently altered.
+	 * A version of bitBlt that applies the destination selection mask
+	 * first to the source device and
+	 * only then blits. This means that the source device is permanently altered.
 	 */
 	void bltSelection(Q_INT32 dx, Q_INT32 dy,
-			  const KisCompositeOp& op, 
+			  const KisCompositeOp &op, 
 			  KisPaintDeviceSP src,
 			  QUANTUM opacity,
 			  Q_INT32 sx, Q_INT32 sy, 

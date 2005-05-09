@@ -212,10 +212,11 @@ void DlgColorRange::okClicked()
 
 void DlgColorRange::cancelClicked()
 {
-	if (m_hadSelectionToStartWith)
-		m_transaction -> unexecute();
-	else
-		m_layer -> removeSelection();
+	if (!m_hadSelectionToStartWith)
+		m_layer -> deselect();
+
+	m_transaction -> unexecute();
+
 	m_subject -> canvasController() -> updateCanvas();
 	reject();
 }

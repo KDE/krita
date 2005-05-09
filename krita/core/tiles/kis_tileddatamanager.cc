@@ -122,9 +122,6 @@ KisTiledDataManager::~KisTiledDataManager()
 
 void KisTiledDataManager::setDefaultPixel(Q_UINT8 *defPixel)
 {
-	delete [] m_defPixel;
-	m_defPixel = new Q_UINT8[m_pixelSize];
-	Q_CHECK_PTR(m_defPixel);
 	memcpy(m_defPixel, defPixel, m_pixelSize);
 	
 	m_defaultTile->setData(m_defPixel);	
@@ -340,8 +337,6 @@ void KisTiledDataManager::paste(KisDataManagerSP data,  Q_INT32 sx, Q_INT32 sy, 
 }
 
 
-
-
 Q_UINT32 KisTiledDataManager::calcTileHash(Q_INT32 col, Q_INT32 row)
 {
 	return ((row << 5) + (col & 0x1F)) & 0x3FF;
@@ -349,9 +344,11 @@ Q_UINT32 KisTiledDataManager::calcTileHash(Q_INT32 col, Q_INT32 row)
 
 KisMemento *KisTiledDataManager::getMemento()
 {
-	m_currentMemento = new KisMemento();
+	m_currentMemento = new KisMemento(m_pixelSize);
 	Q_CHECK_PTR(m_currentMemento);
 
+	memcpy(m_currentMemento->m_defPixel, m_defPixel, m_pixelSize);
+	
 	return m_currentMemento;
 }
 
@@ -373,6 +370,10 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 	memento->m_delTilesTable = 0;
 	
 	// Now on to the real rollback
+	
+	memcpy(m_currentMemento->m_redoDefPixel, m_defPixel, m_pixelSize);
+	setDefaultPixel(m_currentMemento->m_defPixel);
+
 	for(int i = 0; i < 1024; i++)
 	{
 		KisTile *tile = memento->m_hashTable[i];
@@ -436,6 +437,8 @@ void KisTiledDataManager::rollforward(KisMemento *memento)
 	Q_ASSERT(memento != 0);
 
 	// Rollforward means restoring all of the tiles in the memento's redo to our hashtable.
+
+	setDefaultPixel(m_currentMemento->m_redoDefPixel);
 
 	for(int i = 0; i < 1024; i++)
 	{

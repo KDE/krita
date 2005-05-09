@@ -65,6 +65,7 @@ protected:
 protected:
 
 	void setDefaultPixel(Q_UINT8 *defPixel);
+	Q_UINT8 * defaultPixel() { return m_defPixel;};
 	
 	KisMemento *getMemento();
 	void rollback(KisMemento *memento);

@@ -34,6 +34,7 @@
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
+#include "kis_painter.h"
 #include "kis_tool_select_rectangular.h"
 #include "kis_undo_adapter.h"
 #include "kis_button_press_event.h"
@@ -41,39 +42,7 @@
 #include "kis_move_event.h"
 #include "kis_selection.h"
 #include "kis_selection_options.h"
-
-namespace {
-	class RectSelectCmd : public KNamedCommand {
-		typedef KNamedCommand super;
-
-	public:
-		RectSelectCmd();
-		virtual ~RectSelectCmd();
-
-	public:
-		virtual void execute();
-		virtual void unexecute();
-
-	private:
-		KisImageSP m_owner;
-	};
-
-	RectSelectCmd::RectSelectCmd() : super(i18n("Rectangular Selection"))
-	{
-	}
-
-	RectSelectCmd::~RectSelectCmd()
-	{
-	}
-
-	void RectSelectCmd::execute()
-	{
-	}
-
-	void RectSelectCmd::unexecute()
-	{
-	}
-}
+#include <kis_selected_transaction.h>
 
 KisToolSelectRectangular::KisToolSelectRectangular()
 {
@@ -117,11 +86,6 @@ void KisToolSelectRectangular::clearSelection()
 		KisImageSP img = m_subject -> currentImg();
 
 		Q_ASSERT(controller);
-
-// 		if (img && img -> floatingSelection().data() != 0) {
-// 			img -> unsetFloatingSelection();
-//                         controller -> canvas() -> update();
-// 		}
 
 		m_centerPos = KisPoint(0, 0);
 		m_startPos = KisPoint(0, 0);
@@ -202,38 +166,27 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 
 			if (m_endPos.x() > img -> width())
 				m_endPos.setX(img -> width());
-
 			if (img) {
 				KisLayerSP layer = img -> activeLayer();
-				KisSelectionSP selection = new KisSelection(layer.data(), "Temporary Selection");
+				bool hasSelection = layer -> hasSelection();
+
+				KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), layer.data());			
+				KisSelectionSP selection = layer -> selection();
 				QRect rc(m_startPos.floorQPoint(), m_endPos.floorQPoint());
 				rc = rc.normalize();
-				selection -> select(rc);
-				switch (m_selectAction) {
-					case SELECTION_REPLACE: layer -> setSelection(selection); break;
-					case SELECTION_ADD: layer -> addSelection(selection); break;
-					case SELECTION_SUBTRACT: layer -> subtractSelection(selection); break;
-					default: kdDebug() << "KisToolSelectRectangular: invalid select action: " << m_selectAction << endl;
+				
+				if (img -> undoAdapter())
+					img -> undoAdapter() -> addCommand(t);
+					
+				if(! hasSelection)
+				{
+					selection->clear();
+					layer -> emitSelectionChanged();
 				}
 
+				selection->select(rc);
+				
 				img -> notify(rc);
-
-// 				KisPaintDeviceSP parent;
-// 				KisFloatingSelectionSP selection;
-
-//                                 QRect rc(m_startPos, m_endPos);
-
-// 				parent = img -> activeDevice();
-
-// 				if (parent) {
-// 					rc = rc.normalize();
-// 					selection = new KisFloatingSelection(parent, img, "rectangular selection tool frame", OPACITY_OPAQUE);
-// 					selection -> setBounds(rc);
-// 					img -> setFloatingSelection(selection);
-
-// 					if (img -> undoAdapter())
-// 						img -> undoAdapter() -> addCommand(new RectSelectCmd(selection));
-// 				}
 			}
 		}
 

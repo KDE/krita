@@ -34,6 +34,7 @@
 
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
  	: super(
+		layer -> image(), 
  		new KisColorSpaceAlpha(), // Note that the alpha color
 					  // model has _state_, so we
 					  // create a new one, instead
@@ -44,7 +45,6 @@ KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
 	m_maskColor = Qt::white;
 	m_alpha = KisColorSpaceAlphaSP(dynamic_cast<KisColorSpaceAlpha*> (colorStrategy().data()));
  	m_alpha -> setMaskColor(m_maskColor);
-	m_defPixel = MIN_SELECTED;
 }
 
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name, QColor color)
@@ -52,7 +52,6 @@ KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name, QColor c
 {
 	m_parentLayer = layer;
 	m_maskColor = color;
-	m_defPixel = MIN_SELECTED;
 }
 
 
@@ -112,6 +111,13 @@ void KisSelection::clear(QRect r)
 	painter.fillRect(r, m_maskColor, MIN_SELECTED);
 }
 
+void KisSelection::clear()
+{
+	Q_UINT8 defPixel = MIN_SELECTED;
+	m_datamanager -> setDefaultPixel(&defPixel);
+	m_datamanager -> clear();
+}
+
 void KisSelection::invert()
 {
 	Q_INT32 x,y,w,h;
@@ -125,8 +131,8 @@ void KisSelection::invert()
 		*(it.rawData()) = MAX_SELECTED - *(it.rawData());
 		++it;
 	}
-	m_defPixel = MAX_SELECTED - m_defPixel;
-	m_datamanager -> setDefaultPixel(&m_defPixel);
+	Q_UINT8 defPixel = MAX_SELECTED - *(m_datamanager -> defaultPixel());
+	m_datamanager -> setDefaultPixel(&defPixel);
 }
 
 void KisSelection::setMaskColor(QColor c)

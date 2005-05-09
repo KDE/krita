@@ -68,6 +68,11 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 	if (m_currentImage && (layer = m_currentImage -> activeLayer())) {
 		if (m_painter)
 			delete m_painter;
+		if(! layer -> hasSelection())
+		{
+			layer -> selection() -> clear();
+			layer -> emitSelectionChanged();
+		}
 		KisSelectionSP selection = layer -> selection();
 		m_painter = new KisPainter(selection.data());
 		Q_CHECK_PTR(m_painter);
@@ -76,11 +81,6 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 		m_painter -> setBrush(m_subject -> currentBrush());
 		m_painter -> setOpacity(OPACITY_OPAQUE);
 		m_painter -> setCompositeOp(COMPOSITE_ERASE);
-
-		// XXX: Yes, the selection eraser is a brush and the
-		// selection brush is an eraser. That's because
-		// transparent == selected in KisSelection until we
-		// have a proper alpha colour model.
 		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("eraser", painter());
 		painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 	}

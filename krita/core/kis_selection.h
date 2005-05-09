@@ -62,6 +62,8 @@ public:
 
 	void clear(QRect r);
 
+	void clear();
+
 	// Keep the selection but set the mask to color c.
 	void setMaskColor(const QColor c);
 
@@ -71,7 +73,6 @@ private:
 	KisPaintDeviceSP m_parentLayer;
 	KisColorSpaceAlphaSP m_alpha;
 	QColor m_maskColor;
-	Q_UINT8  m_defPixel;
 };
 
 #endif // KIS_SELECTION_H_

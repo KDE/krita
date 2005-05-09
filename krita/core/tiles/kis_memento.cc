@@ -18,7 +18,7 @@
 #include "kis_memento.h"
 #include "kis_tile.h"
 
-KisMemento::KisMemento()
+KisMemento::KisMemento(Q_UINT32 pixelSize)
 {
 	m_hashTable = new KisTile * [1024];
 	Q_CHECK_PTR(m_hashTable);
@@ -33,6 +33,8 @@ KisMemento::KisMemento()
 	}
 	m_numTiles = 0;
 	m_delTilesTable=0;
+	m_defPixel = new Q_UINT8[pixelSize];
+	m_redoDefPixel = new Q_UINT8[pixelSize];
 }
 
 KisMemento::~KisMemento()
@@ -46,6 +48,10 @@ KisMemento::~KisMemento()
 	delete [] m_hashTable;
 	delete [] m_redoHashTable;
 	
+	// Delete defPixel arrays;
+	delete [] m_defPixel;
+	delete [] m_redoDefPixel;
+		
 	// Finally delete the list of deleted tiles
 	deleteAll(m_delTilesTable);
 }

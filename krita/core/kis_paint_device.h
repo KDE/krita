@@ -299,11 +299,14 @@ public:
 	 */
 	KisVLineIteratorPixel createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
 
+	/** make owning image emit a selectionChanged */
+	void emitSelectionChanged();
+
 	/** Get the current selection or create one if this paintdevice hasn't got a selection yet. */
 	KisSelectionSP selection();
 
 	/** Set the specified selection as the active selection for this paintdevice */
-	void setSelection(KisSelectionSP selection);
+	//void setSelection(KisSelectionSP selection);
 
 	/** Adds the specified selection to the currently active selection for this paintdevice */
 	void addSelection(KisSelectionSP selection);
@@ -314,8 +317,8 @@ public:
 	/** Whether there is a valid selection for this paintdevice. */
 	bool hasSelection();
 
-	/** Removes the current selection for this paintdevice. */
-	void removeSelection();
+	/** Deselect the selection for this paintdevice. */
+	void deselect();
 
 
 signals:

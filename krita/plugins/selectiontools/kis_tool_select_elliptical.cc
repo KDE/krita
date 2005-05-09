@@ -32,6 +32,7 @@
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
+#include "kis_painter.h"
 #include "kis_tool_select_elliptical.h"
 #include "kis_undo_adapter.h"
 #include "kis_button_press_event.h"
@@ -39,39 +40,7 @@
 #include "kis_move_event.h"
 #include "kis_selection.h"
 #include "kis_selection_options.h"
-
-namespace {
-	class EllipseSelectCmd : public KNamedCommand {
-		typedef KNamedCommand super;
-
-	public:
-		EllipseSelectCmd();
-		virtual ~EllipseSelectCmd();
-
-	public:
-		virtual void execute();
-		virtual void unexecute();
-
-	private:
-		KisImageSP m_owner;
-	};
-
-	EllipseSelectCmd::EllipseSelectCmd() : super(i18n("Elliptical Selection"))
-	{
-	}
-
-	EllipseSelectCmd::~EllipseSelectCmd()
-	{
-	}
-
-	void EllipseSelectCmd::execute()
-	{
-	}
-
-	void EllipseSelectCmd::unexecute()
-	{
-	}
-}
+#include "kis_selected_transaction.h"
 
 KisToolSelectElliptical::KisToolSelectElliptical()
 {
@@ -204,10 +173,17 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 
 			if (img) {
 				KisLayerSP layer = img -> activeLayer();
-				KisSelectionSP selection = new KisSelection(layer.data(), "Temporary Selection");
+				if(! layer -> hasSelection())
+				{
+					layer -> selection() -> clear();
+					layer -> emitSelectionChanged();
+				}
+				KisSelectionSP selection = layer -> selection();
 				QRect rc( m_startPos.floorQPoint(), m_endPos.floorQPoint());
 				rc = rc.normalize();
-
+				
+				KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), layer.data());
+				
 				KisAutobrushCircleShape shape(rc.width(),rc.height(), 1, 1);
 				Q_UINT8 value;
 				for (int y = 0; y <= rc.height(); y++)
@@ -219,13 +195,10 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 							continue;
 						selection -> setSelected( x+rc.x(), y+rc.y(), value);
 					}
-
-				switch (m_selectAction) {
-					case SELECTION_REPLACE: layer -> setSelection(selection); break;
-					case SELECTION_ADD: layer -> addSelection(selection); break;
-					case SELECTION_SUBTRACT: layer -> subtractSelection(selection); break;
-					default: kdDebug() << "KisToolSelectElliptical: invalid select action: " << m_selectAction << endl;
-				}
+					
+				KisUndoAdapter *adapter = img -> undoAdapter();
+				if (adapter)
+					adapter -> addCommand(t);
 
 				img -> notify(rc);
 			}

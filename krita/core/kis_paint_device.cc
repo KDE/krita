@@ -669,26 +669,26 @@ KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y,
 	
 }
 
+
+void KisPaintDevice::emitSelectionChanged() {
+	if(m_owner)
+		m_owner -> slotSelectionChanged();
+}
+
+
 KisSelectionSP KisPaintDevice::selection(){
-	if (!m_hasSelection) {
+	if (!m_selection) {
 		m_selection = new KisSelection(this, "layer selection for: " + name());
 		Q_CHECK_PTR(m_selection);
 		m_selection -> setVisible(true);
+	}
+
+	if (!m_hasSelection) {
 		m_hasSelection = true;
 		if(m_owner)
 			m_owner -> slotSelectionCreated();
 	}
 	return m_selection;
-
-}
-
-void KisPaintDevice::setSelection(KisSelectionSP selection)
-{
-	m_selection = selection;
-	m_hasSelection = true;
-	if(m_owner)
-		m_owner -> slotSelectionChanged();
-
 }
 
 
@@ -698,34 +698,23 @@ bool KisPaintDevice::hasSelection()
 }
 
 
-void KisPaintDevice::removeSelection()
+void KisPaintDevice::deselect()
 {
-	m_selection = 0; // XXX: Does this automatically remove the selection due to the shared pointer?
 	m_hasSelection = false;
-	if(m_owner)
-		m_owner -> slotSelectionChanged();
+	emitSelectionChanged();
 }
 
 void KisPaintDevice::addSelection(KisSelectionSP selection) {
-	if (!m_hasSelection) {
-		setSelection(selection);
-		return;
-	}
-	
 	KisPainter painter(m_selection.data());
 	Q_INT32 x, y, w, h;
 	selection -> extent(x, y, w, h);
 	painter.bitBlt(x, y, COMPOSITE_OVER, selection.data(), x, y, w, h);
 	painter.end();
 	
-	if(m_owner)
-		m_owner -> slotSelectionChanged();
+	emitSelectionChanged();
 }
 
 void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
-	if (!m_hasSelection)
-		return;
-
 	Q_INT32 x, y, w, h;
 	KisPainter painter(m_selection.data());
 	selection -> invert();
@@ -734,8 +723,7 @@ void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
 	selection -> invert();
 	painter.end();
 
-	if(m_owner)
-		m_owner -> slotSelectionChanged();
+	emitSelectionChanged();
 }
 
 

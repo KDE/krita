@@ -120,7 +120,7 @@ private:
 	 * returned when anti-aliasing is off
 	 **/
 	void genericFillStart(int startX, int startY);
-	void genericFillEnd(KisLayerSP filled);
+	void genericFillEnd(KisPaintDeviceSP filled);
 
 	KisSelectionSP m_selection;
 

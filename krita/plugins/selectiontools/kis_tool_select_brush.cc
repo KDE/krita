@@ -44,6 +44,7 @@
 #include "kis_types.h"
 #include "kis_view.h"
 #include "kis_selection_options.h"
+#include "kis_selected_transaction.h"
 
 KisToolSelectBrush::KisToolSelectBrush()
         : super(i18n("SelectBrush"))
@@ -69,10 +70,16 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
 	if (m_currentImage && (layer = m_currentImage -> activeLayer())) {
 		if (m_painter)
 			delete m_painter;
+		bool hasSelection = layer->hasSelection();
+		m_transaction = new KisSelectedTransaction(i18n("Selection Brush"),layer.data());
+		if(! hasSelection)
+		{
+			layer -> selection() -> clear();
+			layer -> emitSelectionChanged();
+		}
 		KisSelectionSP selection = layer -> selection();
 		m_painter = new KisPainter(selection.data());
 		Q_CHECK_PTR(m_painter);
-		m_painter -> beginTransaction(i18n("Selection Brush"));
 		m_painter -> setPaintColor(Qt::black);
 		m_painter -> setBrush(m_subject -> currentBrush());
 		m_painter -> setOpacity(MAX_SELECTED);
@@ -92,13 +99,12 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
 void KisToolSelectBrush::endPaint() 
 {
 	m_mode = HOVER;
-	KisSelectionSP selection;
-	if (m_currentImage && m_currentImage -> activeLayer() && (selection = m_currentImage -> activeLayer() -> selection())) {
+	if (m_currentImage && m_currentImage -> activeLayer()) {
 		KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
 		if (adapter && m_painter) {
 			// If painting in mouse release, make sure painter
 			// is destructed or end()ed
-			adapter -> addCommand(m_painter->endTransaction());
+			adapter -> addCommand(m_transaction);
 		}
 		delete m_painter;
 		m_painter = 0;

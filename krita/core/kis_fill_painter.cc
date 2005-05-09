@@ -135,7 +135,8 @@ void KisFillPainter::fillColor(int startX, int startY) {
 	genericFillStart(startX, startY);
 
 	// Now create a layer and fill it
-	KisLayerSP filled = new KisLayer(m_device->colorStrategy(), "Fill Temporary Layer");
+	KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorStrategy(), "Fill Temporary Layer");
+	Q_CHECK_PTR(filled);
 	KisFillPainter painter(filled.data());
 	painter.fillRect(0, 0, m_width, m_height, m_paintColor);
 	painter.end();
@@ -147,7 +148,8 @@ void KisFillPainter::fillPattern(int startX, int startY) {
 	genericFillStart(startX, startY);
 
 	// Now create a layer and fill it
-	KisLayerSP filled = new KisLayer(m_device->colorStrategy(), "Fill Temporary Layer");
+	KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorStrategy(), "Fill Temporary Layer");
+	Q_CHECK_PTR(filled);
 	KisFillPainter painter(filled.data());
 	painter.fillRect(0, 0, m_width, m_height, m_pattern);
 	painter.end();
@@ -179,17 +181,15 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 	}
 }
 
-void KisFillPainter::genericFillEnd(KisLayerSP filled) {
+void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
     if (m_cancelRequested) {
         m_width = m_height = -1;
 		return;
     }
 
 	if (! m_device -> hasSelection() ) {
-		m_device -> setSelection(m_selection);
-		bltSelection(0, 0, m_compositeOp, filled.data(), m_opacity,
+		bltSelectionExt(0, 0, m_compositeOp, filled, m_selection, m_opacity,
 					 0, 0, m_width, m_height);
-		m_device -> removeSelection();
 	} else {
 		bltSelection(0, 0, m_compositeOp, filled.data(), m_opacity,
 					 0, 0, m_width, m_height);

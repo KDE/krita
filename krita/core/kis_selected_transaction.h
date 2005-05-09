@@ -41,6 +41,7 @@ private:
 	KisPaintDeviceSP m_device;
 	KisTransaction *m_selTransaction;
 	bool m_hadSelection;
+	bool m_redoHasSelection;
 };
 
 #endif // KIS_SELECTED_TRANSACTION_H_

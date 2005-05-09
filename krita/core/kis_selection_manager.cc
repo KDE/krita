@@ -45,80 +45,7 @@
 #include "kis_global.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
-
-namespace {
-	class DeselectCommand : public KNamedCommand {
-		typedef KNamedCommand super;
-	
-	public:
-		DeselectCommand(KisLayerSP device);
-		virtual ~DeselectCommand();
-	
-		virtual void execute();
-		virtual void unexecute();
-		
-	private:
-		KisLayerSP m_device;
-	};
-	
-	DeselectCommand::DeselectCommand(KisLayerSP device) :
-		super(i18n("&Deselect"))
-	{
-		m_device = device;
-	}
-	
-	DeselectCommand::~DeselectCommand()
-	{
-	}
-	
-	void DeselectCommand::execute()
-	{
-		// The following also emits selectionChanged
-		m_device -> deselect();
-	}
-	
-	void DeselectCommand::unexecute()
-	{
-		// The following also emits selectionChanged
-		m_device -> selection(); // also sets hasSelection=true
-	}
-	
-	class ReselectCommand : public KNamedCommand {
-		typedef KNamedCommand super;
-	
-	public:
-		ReselectCommand(KisLayerSP device);
-		virtual ~ReselectCommand();
-	
-		virtual void execute();
-		virtual void unexecute();
-		
-	private:
-		KisLayerSP m_device;
-	};
-	
-	ReselectCommand::ReselectCommand(KisLayerSP device) :
-		super(i18n("&Reselect"))
-	{
-		m_device = device;
-	}
-	
-	ReselectCommand::~ReselectCommand()
-	{
-	}
-	
-	void ReselectCommand::execute()
-	{
-		// The following also emits selectionChanged
-		m_device -> selection(); // also sets hasSelection=true
-	}
-	
-	void ReselectCommand::unexecute()
-	{
-		// The following also emits selectionChanged
-		m_device -> deselect();
-	}
-}
+#include "kis_selected_transaction.h"
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	: m_parent(parent),
@@ -472,17 +399,11 @@ void KisSelectionManager::selectAll()
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
-	KisSelectionSP s = layer -> selection();
-
-	KisTransaction * t = 0;
-	if (img -> undoAdapter())
-	{
-		t = new KisTransaction(i18n("Select &All"), s.data());
-		Q_CHECK_PTR(t);
-	}
+	KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Select &All"), layer.data());
+	Q_CHECK_PTR(t);
 
 	QRect r = layer -> extent();
-	s -> select(QRect(r.x(), r.y(), r.width(), r.height()));
+	layer -> selection() -> select(QRect(r.x(), r.y(), r.width(), r.height()));
 	
 	if (img -> undoAdapter())
 		img -> undoAdapter() -> addCommand(t);
@@ -498,11 +419,14 @@ void KisSelectionManager::deselect()
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
-	if (img -> undoAdapter())
-		img -> undoAdapter() -> addCommand(new DeselectCommand(layer));
-		
+	KisSelectedTransaction * t = new KisSelectedTransaction(i18n("&Deselect"), layer.data());
+	Q_CHECK_PTR(t);
+	
 	// The following also emits selectionChanged
 	layer -> deselect();
+	
+	if (img -> undoAdapter())
+		img -> undoAdapter() -> addCommand(t);
 }
 
 
@@ -556,11 +480,14 @@ void KisSelectionManager::reselect()
 	KisLayerSP layer = img ->activeLayer();
 	if (!layer) return;
 
-	if (img -> undoAdapter())
-		img -> undoAdapter() -> addCommand(new ReselectCommand(layer));
-		
+	KisSelectedTransaction * t = new KisSelectedTransaction(i18n("&Reselect"), layer.data());
+	Q_CHECK_PTR(t);
+	
 	// The following also emits selectionChanged
 	layer -> selection(); // also sets hasSelection=true
+	
+	if (img -> undoAdapter())
+		img -> undoAdapter() -> addCommand(t);
 }
 
 

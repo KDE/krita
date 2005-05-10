@@ -131,4 +131,68 @@ Variable "tileHash" is not available.
 
 
 == CRASH #3 =====================================================================================================
+SVN/HEAD from a few minutes ago (revision 412058; Tue May 10 19:29:50 CEST 2005)
+loading a picture; "color picker selecting" a about twenty times in a row,
+then undoing all of them (quickly)
+
+
+#0  0x400a15fc in memcpy () from /lib/tls/libc.so.6
+#1  0x4248fbb0 in KisTiledDataManager::rollback (this=0x85afe40, memento=0xb8eb7b0)
+    at /home/m/kde/koffice/krita/core/tiles/kis_tileddatamanager.cc:374
+#2  0x4246ff15 in KisTransaction::unexecute (this=0xb2b8cc8) at kis_datamanager.h:77
+#3  0x4247040c in KisSelectedTransaction::unexecute (this=0xb2b8cc8)
+    at /home/m/kde/koffice/krita/core/kis_selected_transaction.cc:54
+#4  0x4299715b in KoCommandHistory::undo (this=0x84753b0)
+    at /home/m/kde/koffice/lib/kofficeui/kocommandhistory.cpp:214
+#5  0x42996f35 in KoCommandHistory::qt_invoke (this=0x84753b0, _id=2, _o=0xbfffde70) at kocommandhistory.moc:229
+#6  0x407779eb in QObject::activate_signal (this=0x8406048, clist=0x843d528, o=0xbfffde70) at qobject.cpp:2355
+#7  0x4077788a in QObject::activate_signal (this=0x8406048, signal=2) at qobject.cpp:2324
+#8  0x4136d3bd in KAction::activated (this=0xbfffdcd0) at qmetaobject.h:261
+#9  0x4136e17a in KAction::slotActivated (this=0x8406048) at /home/m/kde/kdelibs/kdeui/kaction.cpp:1102
+#10 0x4136e38e in KAction::slotPopupActivated (this=0x8406048) at /home/m/kde/kdelibs/kdeui/kaction.cpp:1137
+#11 0x4136e639 in KAction::qt_invoke (this=0x8406048, _id=15, _o=0xbfffe040) at kaction.moc:213
+
+
+
+(gdb) fr 1
+#1  0x4248fbb0 in KisTiledDataManager::rollback (this=0x85afe40, memento=0xb8eb7b0)
+    at /home/m/kde/koffice/krita/core/tiles/kis_tileddatamanager.cc:374
+374             memcpy(m_currentMemento->m_redoDefPixel, m_defPixel, m_pixelSize);
+
+
+(gdb) list
+369             memento->deleteAll(memento->m_delTilesTable);
+370             memento->m_delTilesTable = 0;
+371
+372             // Now on to the real rollback
+373
+374             memcpy(m_currentMemento->m_redoDefPixel, m_defPixel, m_pixelSize);
+375             setDefaultPixel(m_currentMemento->m_defPixel);
+376
+377             for(int i = 0; i < 1024; i++)
+378             {
+
+
+(gdb) print m_currentMemento
+$1 = (KisMemento *) 0xf4e8270
+(gdb) print *m_currentMemento
+
+
+$2 = {originator = 0x10, m_hashTable = 0x18, m_numTiles = 256803400, m_redoHashTable = 0xf4e9460,
+  m_delTilesTable = 0x0, m_defPixel = 0xa002420 'ÿ' <repeats 200 times>...,
+  m_redoDefPixel = 0x50 <Address 0x50 out of bounds>}
+
+
+m_redoDefPixel doesn't look good
+
+
+
+
+
+
+
+
+
+
+== CRASH #4 =====================================================================================================
 (goes here)

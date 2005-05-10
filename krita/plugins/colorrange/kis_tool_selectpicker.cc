@@ -43,6 +43,8 @@
 #include <kis_paint_device.h>
 #include <kis_iterators_pixel.h>
 #include <kis_color_utilities.h>
+#include <kis_selected_transaction.h>
+#include <kis_undo_adapter.h>
 
 #include "kis_tool_selectpicker.h"
 
@@ -156,6 +158,8 @@ void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 
 		pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
 
+		KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Selection Picker"),dev);
+
 		dev -> pixel(pos.x(), pos.y(), &c, &opacity);
 		kdDebug() << "Going to select colors similar to: " << c.red() << ", " << c.green() << ", "<< c.blue() << "\n";
 		if (opacity > OPACITY_TRANSPARENT)
@@ -163,6 +167,8 @@ void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 		else
 			m_subject -> selectionManager() -> selectAll();
 
+		if(img -> undoAdapter())
+			img -> undoAdapter() -> addCommand(t);
 		m_subject -> canvasController() -> updateCanvas();
 
 	}

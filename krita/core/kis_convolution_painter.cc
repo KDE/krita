@@ -107,10 +107,10 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 
 	KisPixelRO pixels[9];
 	{
-		KisHLineIteratorPixel curIt = src->createHLineIterator(y,left,w,false);
-		KisHLineIteratorPixel dstIt = src->createHLineIterator(dstY,left,w,true);
-		KisHLineIteratorPixel tmpIt = tmp->createHLineIterator(dstY, left, w, true);
-		KisHLineIteratorPixel afterIt = src->createHLineIterator(below,left,w,false);
+		KisHLineIteratorPixel curIt = src->createHLineIterator(left, y, w, false);
+		KisHLineIteratorPixel dstIt = src->createHLineIterator(left, dstY, w, true);
+		KisHLineIteratorPixel tmpIt = tmp->createHLineIterator(left, dstY, w, true);
+		KisHLineIteratorPixel afterIt = src->createHLineIterator(left, below, w, false);
 
 
 		// Corner : left top

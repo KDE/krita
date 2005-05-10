@@ -220,6 +220,9 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 			m_width = m_height = 500;
 		}
 	}
+	
+	if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
+		return new KisSelection(m_device, "Fill Temporary Selection");
 
 	m_size = m_width * m_height;
 

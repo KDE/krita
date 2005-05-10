@@ -173,6 +173,9 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 
 			if (img) {
 				KisLayerSP layer = img -> activeLayer();
+								
+				KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), layer.data());
+
 				if(! layer -> hasSelection())
 				{
 					layer -> selection() -> clear();
@@ -181,9 +184,7 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 				KisSelectionSP selection = layer -> selection();
 				QRect rc( m_startPos.floorQPoint(), m_endPos.floorQPoint());
 				rc = rc.normalize();
-				
-				KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), layer.data());
-				
+								
 				KisAutobrushCircleShape shape(rc.width(),rc.height(), 1, 1);
 				Q_UINT8 value;
 				for (int y = 0; y <= rc.height(); y++)

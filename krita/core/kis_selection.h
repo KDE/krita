@@ -64,6 +64,9 @@ public:
 
 	void clear();
 
+	// Tests if the the rect is totally outside the selection
+	bool isTotallyUnselected(QRect r);
+
 	// Keep the selection but set the mask to color c.
 	void setMaskColor(const QColor c);
 

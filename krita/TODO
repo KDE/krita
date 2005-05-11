@@ -37,6 +37,8 @@ File Format:
 
 User Interface
 
+        * The description field in color settings is empty
+
         * Give color strategies an option page just like tools. Give layers an option page,
 	  combine both pages to show for layer properties. Color strategies can be stateful.
 	* Create brush-shape outline cursor

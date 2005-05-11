@@ -376,7 +376,6 @@ KisLayerSP KisSelectionManager::paste()
 					layer -> setProfile(profile);
 					layer -> convertTo(img -> colorStrategy(), img -> profile(), dlg -> renderIntent());
 				}
-
 			}
 		}
 

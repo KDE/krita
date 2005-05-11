@@ -250,10 +250,7 @@ void KisPainter::bltSelectionExt(Q_INT32 dx, Q_INT32 dy,
 
 	KisSelectionSP selection = selMask;
 
-	QRect r = selection -> selectedRect();
-	//r.setRect(selection -> getX(), selection -> getY(), r.width(), r.height());
-
-	if (!r.intersects(QRect(dx, dy, sw, sh))) {
+	if (selection->isTotallyUnselected(QRect(dx, dy, sw, sh))) {
 //		kdDebug() << "Blitting outside selection rect\n";
 		return;
 	}
@@ -338,10 +335,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
 	KisSelectionSP selection = m_device -> selection();
 
-	QRect r = selection -> selectedRect();
-	//r.setRect(selection -> getX(), selection -> getY(), r.width(), r.height());
-
-	if (!r.intersects(QRect(dx, dy, sw, sh))) {
+	if (selection->isTotallyUnselected(QRect(dx, dy, sw, sh))) {
 //		kdDebug() << "Blitting outside selection rect\n";
 		return;
 	}

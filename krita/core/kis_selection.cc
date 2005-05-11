@@ -141,8 +141,16 @@ void KisSelection::setMaskColor(QColor c)
 	m_maskColor = c;
 }
 
+bool KisSelection::isTotallyUnselected(QRect r)
+{
+	if(*(m_datamanager -> defaultPixel()) != MIN_SELECTED)
+		return false;
+	
+	return ! r.intersects(extent());
+}
+
 QRect KisSelection::selectedRect()
 {
-	return extent();
+	return extent().unite(m_parentLayer->extent());
 }
 

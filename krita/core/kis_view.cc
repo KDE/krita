@@ -1180,7 +1180,7 @@ void KisView::export_image()
 
 		m_progress -> setSubject(&ib, true, true);
 
-		switch (ib.buildFile(url, dst)) {
+		switch (ib.buildFile(url, dst, img -> beginAnnotations(), img -> endAnnotations())) {
 		case KisImageBuilder_RESULT_UNSUPPORTED:
 			KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
 			break;

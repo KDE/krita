@@ -159,6 +159,16 @@ public:
 	KisUndoAdapter *undoAdapter() const;
 	KisGuideMgr *guides() const;
 
+	/**
+	 * Add an annotation for this image. This can be anything: Gamma, EXIF, etc.
+	 * Note that the "icc" annotation is reserved for the colour strategies.
+	 */
+	void addAnnotation(KisAnnotationSP annotation);
+	/** start of an iteration over the annotations of this image (including the ICC Profile) */
+	vKisAnnotationSP_it beginAnnotations();
+	/** end of an iteration over the annotations of this image */
+	vKisAnnotationSP_it endAnnotations();
+
 signals:
 	void activeLayerChanged(KisImageSP image);
 	void activeSelectionChanged(KisImageSP image);

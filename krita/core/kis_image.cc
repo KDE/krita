@@ -271,6 +271,8 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 			m_layerStack.push_back(layer);
 			m_activeLayer = layer;
 		}
+		
+		m_annotations = rhs.m_annotations; // XXX the annotations would probably need to be deep-copied
 
 
 		m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
@@ -1174,6 +1176,23 @@ void KisImage::setColorStrategy(KisStrategyColorSpaceSP colorStrategy)
 	m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
 	Q_CHECK_PTR(m_projection);
 	notify();
+}
+
+void KisImage::addAnnotation(KisAnnotationSP annotation)
+{
+	m_annotations.push_back(annotation);
+	kdDebug() << annotation -> type() << endl;
+	kdDebug() << (*(beginAnnotations())) -> type() << endl;
+}
+
+vKisAnnotationSP_it KisImage::beginAnnotations()
+{
+	return m_annotations.begin(); // XXX Actually add current ICC Profile
+}
+
+vKisAnnotationSP_it KisImage::endAnnotations()
+{
+	return m_annotations.end();
 }
 
 #include "kis_image.moc"

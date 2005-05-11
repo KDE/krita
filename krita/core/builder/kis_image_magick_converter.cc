@@ -46,6 +46,7 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_profile.h"
+#include "kis_annotation.h"
 
 #include "../../../config.h"
 
@@ -115,6 +116,58 @@ namespace {
 #endif
 	}
 
+	void setAnnotationsForImage(const Image * src, KisImageSP image)
+	{
+#ifndef HAVE_MAGICK6
+		return;
+#else
+		if (src->profiles == NULL)
+			return;
+
+		const char *name = 0;
+		const StringInfo *profile;
+		KisAnnotation* annotation = 0;
+
+		ResetImageProfileIterator(src);
+		while((name = GetNextImageProfile(src))) {
+			profile = GetImageProfile(src, name);
+			if (profile == (StringInfo *) NULL)
+				continue;
+
+			// XXX: icc will be written seperately?
+			if (QString::compare(name, "icc") == 0)
+				continue;
+
+			QByteArray rawdata;
+			rawdata.resize(profile->length);
+			memcpy(rawdata.data(), profile->datum, profile->length);
+			
+			kdDebug() << "Loaded annotation: " << name << endl;
+
+			annotation = new KisAnnotation(QString(name), "", rawdata);
+			Q_CHECK_PTR(annotation);
+			
+			image -> addAnnotation(annotation);
+		}
+#endif
+	}
+
+	void exportAnnotationsForImage(Image * dst, vKisAnnotationSP_it& it, vKisAnnotationSP_it& annotationsEnd)
+	{
+#ifndef HAVE_MAGICK6
+		return;
+#else
+		for ( ; it != annotationsEnd; ++it) {
+			kdDebug() << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
+			if (!ProfileImage(dst, (*it) -> type().ascii(),
+				(unsigned char*)(*it) -> annotation() . data(),
+				(*it) -> annotation() . size(), MagickFalse)) {
+					kdDebug() << "Storing failed!" << endl;
+			}
+			
+		}
+#endif
+	}
 
 	void InitGlobalMagick()
 	{
@@ -251,6 +304,9 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 
  			if (profile)
  				m_img -> setProfile(profile);
+			
+			// XXX I'm assuming seperate layers won't have other profile things like EXIF
+			setAnnotationsForImage(image, m_img);
 		}
 
 		if (image -> columns && image -> rows) {
@@ -466,6 +522,113 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
 
 	// XXX: Write to a temp file, then have Krita use KIO to copy temp
 	// image to remote location.
+	WriteImage(ii, image);
+	DestroyExceptionInfo(&ei);
+	DestroyImage(image);
+	emit notifyProgressDone(this);
+	return KisImageBuilder_RESULT_OK;
+}
+
+KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd)
+{
+	Image *image;
+	ExceptionInfo ei;
+	ImageInfo *ii;
+
+	if (!layer)
+		return KisImageBuilder_RESULT_INVALID_ARG;
+
+	KisImageSP img = layer -> image();
+	if (!img)
+		return KisImageBuilder_RESULT_EMPTY;
+
+	if (uri.isEmpty())
+		return KisImageBuilder_RESULT_NO_URI;
+
+	if (!uri.isLocalFile())
+		return KisImageBuilder_RESULT_NOT_LOCAL;
+
+	GetExceptionInfo(&ei);
+
+	ii = CloneImageInfo(0);
+
+	qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
+
+	if (ii -> filename[MaxTextExtent - 1]) {
+		emit notifyProgressError(this);
+		return KisImageBuilder_RESULT_PATH;
+	}
+
+	if (!img -> width() || !img -> height())
+		return KisImageBuilder_RESULT_EMPTY;
+
+	image = AllocateImage(ii);
+	image -> columns = img -> width();
+	image -> rows = img -> height();
+
+#ifdef HAVE_MAGICK6
+	if ( layer-> alpha() )
+		image -> matte = MagickTrue;
+	else
+		image -> matte = MagickFalse;
+#else
+	image -> matte = layer -> alpha();
+#endif
+
+
+	Q_INT32 y, height, width;
+
+	height = img -> height();
+	width = img -> width();
+
+	bool alpha = layer -> alpha();
+
+	for (y = 0; y < height; y++) {
+
+		// Allocate pixels for this scanline
+		PixelPacket *pp = SetImagePixels(image, 0, y, width, 1);
+
+		if (!pp) {
+			DestroyExceptionInfo(&ei);
+			DestroyImage(image);
+			emit notifyProgressError(this);
+			return KisImageBuilder_RESULT_FAILURE;
+
+		}
+
+		KisHLineIterator it = layer -> createHLineIterator(0, y, width, false);
+		while (!it.isDone()) {
+
+			Q_UINT8 * d = it.rawData();
+			// NOTE: Upscale is necessary for a correct export, otherwise
+			// only Krita can read the result.
+			pp -> red = Upscale(d[PIXEL_RED]);
+			pp -> green = Upscale(d[PIXEL_GREEN]);
+			pp -> blue = Upscale(d[PIXEL_BLUE]);
+			if (alpha)
+				pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
+
+			pp++;
+			++it;
+		}
+
+		emit notifyProgressStage(this, i18n("Saving..."), y * 100 / height);
+
+#ifdef HAVE_MAGICK6
+		if (SyncImagePixels(image) == MagickFalse)
+			kdDebug() << "Syncing pixels failed\n";
+#else
+		if (!SyncImagePixels(image))
+			kdDebug() << "Syncing pixels failed\n";
+#endif
+	}
+
+	// set the annotations
+	exportAnnotationsForImage(image, annotationsStart, annotationsEnd);
+
+	// XXX: Write to a temp file, then have Krita use KIO to copy temp
+	// image to remote location.
+
 	WriteImage(ii, image);
 	DestroyExceptionInfo(&ei);
 	DestroyImage(image);

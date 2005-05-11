@@ -371,8 +371,8 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 	
 	// Now on to the real rollback
 	
-	memcpy(m_currentMemento->m_redoDefPixel, m_defPixel, m_pixelSize);
-	setDefaultPixel(m_currentMemento->m_defPixel);
+	memcpy(memento->m_redoDefPixel, m_defPixel, m_pixelSize);
+	setDefaultPixel(memento->m_defPixel);
 
 	for(int i = 0; i < 1024; i++)
 	{
@@ -438,7 +438,7 @@ void KisTiledDataManager::rollforward(KisMemento *memento)
 
 	// Rollforward means restoring all of the tiles in the memento's redo to our hashtable.
 
-	setDefaultPixel(m_currentMemento->m_redoDefPixel);
+	setDefaultPixel(memento->m_redoDefPixel);
 
 	for(int i = 0; i < 1024; i++)
 	{

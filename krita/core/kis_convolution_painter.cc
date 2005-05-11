@@ -125,7 +125,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldPixel();
 		++afterIt;
 
-		if (currentPixel.selected())
+		if (dstIt.isSelected())
 		for(int i = 0; i < depth; i++)
 		{
 			int sum = matrix[i][1][1] + matrix[i][1][2] + matrix[i][2][1] + matrix[i][2][2];
@@ -159,7 +159,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 			pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ] = afterIt.oldPixel();
 			++afterIt;
 			// XXX: do something useful with the selectedness
-			if (currentPixel.selected() > 0 ) {
+			if (dstIt.isSelected()) {
 				for(int i = 0; i < depth; i++)
 				{
 					currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
@@ -175,7 +175,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		}
 		// Corner : right top
 		currentPixel = dstIt.pixel();
-		if (currentPixel.selected() > 0 ) {
+		if (dstIt.isSelected() ) {
 			for(int i = 0; i < depth; i++)
 			{
 				int sum = matrix[i][1][1] + matrix[i][1][0] + matrix[i][2][0] + matrix[i][2][1];
@@ -230,7 +230,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		++afterIt;
 		
 		// XXX: do something useful with the selectedness
-		if (currentPixel.selected() > 0 ) {
+		if (dstIt.isSelected() ) {
 	
 			for(int i = 0; i < depth; i++)
 			{
@@ -263,7 +263,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 			++afterIt;
 			
 			// XXX: do something useful with the selectedness
-			if (currentPixel.selected() > 0 ) {
+			if (dstIt.isSelected() ) {
 
 				for(int i = 0; i < depth; i++)
 				{
@@ -285,7 +285,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		currentPixel = dstIt.pixel();
 		
 		// XXX: do something useful with the selectedness
-		if (currentPixel.selected() > 0 ) {
+		if (dstIt.isSelected() ) {
 
 			for(int i = 0; i < depth; i++)
 			{
@@ -334,7 +334,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		++curIt;
 
 		// XXX: do something useful with the selectedness
-		if (currentPixel.selected() > 0 ) {
+		if (dstIt.isSelected() ) {
 	
 			for(int i = 0; i < depth; i++)
 			{
@@ -369,7 +369,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 			++curIt;
 
 			// XXX: do something useful with the selectedness
-			if (currentPixel.selected() > 0 ) {
+			if (dstIt.isSelected() ) {
 	
 				for(int i = 0; i < depth; i++)
 				{
@@ -388,7 +388,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		// Corner : right bottom
 		currentPixel = dstIt.pixel();
 		// XXX: do something useful with the selectedness
-		if (currentPixel.selected() > 0 ) {
+		if (dstIt.isSelected() ) {
 
 			for(int i = 0; i < depth; i++)
 			{

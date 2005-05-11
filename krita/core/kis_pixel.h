@@ -71,14 +71,12 @@ class QColor;
  * or all channels as a value vector.
  */
 
- // XXX: Fill the selectedness from the iterators!
 class KisPixelRO {
 public:
 
         KisPixelRO(const QUANTUM * channels = 0, const QUANTUM* alpha = 0, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0)
                 : m_channels(channels),
                   m_alpha(alpha),
-                  m_selected(MAX_SELECTED),
                   m_colorStrategy(colorStrategy),
                   m_profile(profile) {};
 
@@ -89,9 +87,6 @@ public:
 
 	QUANTUM alpha() const { return m_alpha[0]; }
 
-	QUANTUM selected() const { return m_selected; }
-	void setSelected(QUANTUM selected) { m_selected = selected; }
-
 	KisStrategyColorSpaceSP colorStrategy() const { return m_colorStrategy; }
 
 	void setProfile(KisProfileSP profile) { m_profile = profile; }
@@ -101,7 +96,6 @@ public:
 private:
 	const QUANTUM* m_channels;
 	const QUANTUM* m_alpha;
-        QUANTUM  m_selected;
 	KisStrategyColorSpaceSP m_colorStrategy;
 	KisProfileSP m_profile;
 };
@@ -124,7 +118,6 @@ public:
 
 		: m_channels(new QUANTUM(nbChannels)), 
 		  m_alpha(new QUANTUM(nbAlphaChannels)), 
-		  m_selected(MAX_SELECTED),
 		  m_colorStrategy(colorStrategy), 
 		  m_profile(profile) { };
 
@@ -134,7 +127,6 @@ public:
         KisPixel(QUANTUM * channels, QUANTUM* alpha = 0, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0)
                   : m_channels(channels),
                     m_alpha(alpha),
-                    m_selected(MAX_SELECTED),
                     m_colorStrategy(colorStrategy),
                     m_profile(profile) {};
 
@@ -146,9 +138,6 @@ public:
 	KisQuantum operator[](int index) const { return KisQuantum(&m_channels[index]); };
 
 	KisQuantum alpha() const { return KisQuantum(m_alpha); };
-
-	QUANTUM selected() const { return m_selected; }
-        void setSelected(QUANTUM selected) { m_selected = selected; }
 
 	KisStrategyColorSpaceSP colorStrategy() const { return m_colorStrategy; };
 
@@ -162,7 +151,6 @@ public:
 private:
 	QUANTUM* m_channels;
 	QUANTUM* m_alpha;
-        QUANTUM  m_selected;
 	KisStrategyColorSpaceSP m_colorStrategy;
 	KisProfileSP m_profile;
 };

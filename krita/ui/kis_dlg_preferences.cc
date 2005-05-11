@@ -35,6 +35,7 @@
 #include <kfiledialog.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
+#include <kiconloader.h>
 
 #include "kis_cursor.h"
 #include "kis_config.h"
@@ -241,7 +242,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 {
 	QVBox *vbox;
 
-	vbox = addVBoxPage( i18n( "General") );
+	vbox = addVBoxPage( i18n( "General"), i18n( "General"), BarIcon( "misc", KIcon::SizeMedium ));
 	m_general = new GeneralTab( vbox );
 
 // 	vbox = addVBoxPage( i18n( "Directories") );
@@ -250,7 +251,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 // 	vbox = addVBoxPage( i18n( "Undo/Redo") );
 // 	m_undoRedo = new UndoRedoTab( vbox );
 
-	vbox = addVBoxPage( i18n( "Color Settings") );
+	vbox = addVBoxPage( i18n( "Color Settings"), i18n( "Color Settings"), BarIcon( "colorize", KIcon::SizeMedium ));
 	m_colorSettings = new ColorSettingsTab( vbox );
 }
 

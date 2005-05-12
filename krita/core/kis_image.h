@@ -162,8 +162,13 @@ public:
 	/**
 	 * Add an annotation for this image. This can be anything: Gamma, EXIF, etc.
 	 * Note that the "icc" annotation is reserved for the colour strategies.
+	 * If the annotation already exists, overwrite it with this one.
 	 */
 	void addAnnotation(KisAnnotationSP annotation);
+	/** get the annotation with the given type, can return 0 */
+	KisAnnotationSP annotation(QString type);
+	/** delete the annotation, if the image contains it */
+	void removeAnnotation(QString type);
 	/** start of an iteration over the annotations of this image (including the ICC Profile) */
 	vKisAnnotationSP_it beginAnnotations();
 	/** end of an iteration over the annotations of this image */

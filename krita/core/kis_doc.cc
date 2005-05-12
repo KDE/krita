@@ -1571,7 +1571,9 @@ bool KisDoc::exportImage(const QString& filename)
 	dst = img -> layer(0);
 	Q_ASSERT(dst);
 
-	if (ib.buildFile(url, dst, img -> beginAnnotations(), img -> endAnnotations()) == KisImageBuilder_RESULT_OK) {
+	vKisAnnotationSP_it beginIt = img -> beginAnnotations();
+	vKisAnnotationSP_it endIt = img -> endAnnotations();
+	if (ib.buildFile(url, dst, beginIt, endIt) == KisImageBuilder_RESULT_OK) {
 		delete img;
 		return true;
 	}

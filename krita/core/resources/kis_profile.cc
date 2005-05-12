@@ -27,10 +27,12 @@
 
 #include <qimage.h>
 #include <qtextstream.h>
+#include <qfile.h>
 
 #include <kdebug.h>
 
 #include "kis_profile.h"
+#include "kis_annotation.h"
 
 #include "ksharedptr.h"
 
@@ -46,10 +48,11 @@ KisProfile::KisProfile(const QString& file, Q_UINT32 colorType)
 {
 }
 
-KisProfile::KisProfile(cmsHPROFILE profile, Q_UINT32 colorType)
+KisProfile::KisProfile(cmsHPROFILE profile, QByteArray rawData, Q_UINT32 colorType)
 	: super (QString()),
 	  m_profile(profile),
-	  m_lcmsColorType(colorType)
+	  m_lcmsColorType(colorType),
+	  m_rawData(rawData)
 {
 	init();
 }
@@ -65,6 +68,11 @@ bool KisProfile::loadAsync()
 	cmsErrorAction(LCMS_ERROR_IGNORE);
 
 	m_profile = cmsOpenProfileFromFile(filename().ascii(), "r");
+	// XXX this should be more efficient: we load the file twice
+	QFile file(filename());
+	file.open(IO_ReadOnly);
+	m_rawData = file.readAll();
+	file.close();
 
 	return init();
 
@@ -116,6 +124,12 @@ QImage KisProfile::img()
 	return QImage();
 }
 
+KisAnnotationSP KisProfile::annotation() const
+{
+	// XXX we hardcode icc, this is correct for lcms?
+	// XXX productName(), or just "ICC Profile"?
+	return new KisAnnotation("icc", productName(), m_rawData);
+}
 
 #include "kis_profile.moc"
 

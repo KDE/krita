@@ -1180,14 +1180,51 @@ void KisImage::setColorStrategy(KisStrategyColorSpaceSP colorStrategy)
 
 void KisImage::addAnnotation(KisAnnotationSP annotation)
 {
+	// Find the icc annotation, if there is one
+	vKisAnnotationSP_it it = m_annotations.begin();
+	while (it != m_annotations.end()) {
+		if ((*it) -> type() == annotation -> type()) {
+			*it = annotation;
+			return;
+		}
+		++it;
+	}
 	m_annotations.push_back(annotation);
-	kdDebug() << annotation -> type() << endl;
-	kdDebug() << (*(beginAnnotations())) -> type() << endl;
+}
+
+KisAnnotationSP KisImage::annotation(QString type)
+{
+	vKisAnnotationSP_it it = m_annotations.begin();
+	while (it != m_annotations.end()) {
+		if ((*it) -> type() == type) {
+			return *it;
+		}
+		++it;
+	}
+	return 0;
+}
+
+void KisImage::removeAnnotation(QString type)
+{
+	vKisAnnotationSP_it it = m_annotations.begin();
+	while (it != m_annotations.end()) {
+		if ((*it) -> type() == type) {
+			m_annotations.erase(it);
+			return;
+		}
+		++it;
+	}
 }
 
 vKisAnnotationSP_it KisImage::beginAnnotations()
 {
-	return m_annotations.begin(); // XXX Actually add current ICC Profile
+	if (m_profile) {
+		addAnnotation(m_profile -> annotation());
+	} else {
+		removeAnnotation("icc");
+	}
+
+	return m_annotations.begin();
 }
 
 vKisAnnotationSP_it KisImage::endAnnotations()

@@ -26,11 +26,13 @@
 
 #include <qvaluevector.h>
 #include <qimage.h>
+#include <qcstring.h>
 
 #include <ksharedptr.h>
 #include <kio/job.h>
 
 #include "kis_resource.h"
+#include "kis_types.h"
 
 //XXX: Profiles should be loaded by the color strategies
 //     and be available only through the color strategy 
@@ -42,7 +44,7 @@ class KisProfile : public KisResource, public KShared {
 public:
 	KisProfile(Q_UINT32 colorType);
 	KisProfile(const QString& file, Q_UINT32 colorType);
-	KisProfile(const cmsHPROFILE profile, Q_UINT32 colorType);
+	KisProfile(const cmsHPROFILE profile, QByteArray rawData, Q_UINT32 colorType);
 
 	virtual ~KisProfile();
 
@@ -58,6 +60,7 @@ public:
 	QString manufacturer() const { return m_manufacturer; }
 	cmsHPROFILE profile() const { return m_profile; }
 	Q_UINT32 colorType() { return m_lcmsColorType; }
+	KisAnnotationSP annotation() const;
 private:
 	bool init();
 	
@@ -70,7 +73,7 @@ private:
 	QString m_manufacturer;
 	Q_UINT32 m_lcmsColorType;
 
-
+	QByteArray m_rawData;
 };
 
 #endif // KIS_PROFILE_H

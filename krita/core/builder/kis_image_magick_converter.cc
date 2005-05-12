@@ -99,7 +99,9 @@ namespace {
 
 			// XXX: Hardcoded for icc type -- is that correct for us?
 			if (QString::compare(name, "icc") == 0) {
-
+				QByteArray rawdata;
+				rawdata.resize(profile->length);
+				memcpy(rawdata.data(), profile->datum, profile->length);
 
 				cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile -> datum, (DWORD)profile -> length);
 
@@ -107,7 +109,7 @@ namespace {
 					return 0;
 				}
 
-				p = new KisProfile(hProfile, cs -> colorSpaceType());
+				p = new KisProfile(hProfile, rawdata, cs -> colorSpaceType());
 				Q_CHECK_PTR(p);
 			}
 			name = GetNextImageProfile(image);
@@ -157,14 +159,19 @@ namespace {
 #ifndef HAVE_MAGICK6
 		return;
 #else
-		for ( ; it != annotationsEnd; ++it) {
+		while(it != annotationsEnd) {
+			kdDebug() << "new annotation" << endl;
+			if (!(*it) || (*it) -> type() == QString()) {
+				kdDebug() << "Warning: empty annotation" << endl;
+				continue;
+			}
 			kdDebug() << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
 			if (!ProfileImage(dst, (*it) -> type().ascii(),
 				(unsigned char*)(*it) -> annotation() . data(),
 				(*it) -> annotation() . size(), MagickFalse)) {
 					kdDebug() << "Storing failed!" << endl;
 			}
-			
+			++it;
 		}
 #endif
 	}

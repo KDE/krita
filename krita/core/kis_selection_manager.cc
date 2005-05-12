@@ -401,8 +401,8 @@ void KisSelectionManager::selectAll()
 	KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Select &All"), layer.data());
 	Q_CHECK_PTR(t);
 
-	QRect r = layer -> extent();
-	layer -> selection() -> select(QRect(r.x(), r.y(), r.width(), r.height()));
+	layer -> selection() -> clear();
+	layer -> selection() -> invert();
 	
 	if (img -> undoAdapter())
 		img -> undoAdapter() -> addCommand(t);

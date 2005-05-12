@@ -69,7 +69,8 @@ Import/Export
   and put in its own plugin (KisFileFormat, KisFileFormatRegistry)
 
 * The image magick plugin should use KisAnnotation to preserve image
-  data on roundtrips.
+  data on roundtrips. (BC: This is done now for EXIF and ICC Profiles, but
+  what about PNG comment chunks, gamma information and so? That still gets lost afaik)
 
 Widgets
 

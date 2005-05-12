@@ -132,7 +132,7 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
 	m_slThreshold -> setValue(m_threshold);
 	connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
-	m_checkUsePattern = new QCheckBox("Use pattern", widget);
+	m_checkUsePattern = new QCheckBox(i18n("Use pattern"), widget);
 	m_checkUsePattern->setChecked(m_usePattern);
 	connect(m_checkUsePattern, SIGNAL(stateChanged(int)), this, SLOT(slotSetUsePattern(int)));
 

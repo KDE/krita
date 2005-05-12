@@ -44,7 +44,7 @@ KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const char *na
         }
 
         KisFilterSP krdf = createFilter<KisOilPaintFilter>(view);
-	(void) new KAction("&Oilpaint...", 0, 0, krdf, SLOT(slotActivated()), actionCollection(), "oilpaint_filter");
+	(void) new KAction(i18n("&Oilpaint..."), 0, 0, krdf, SLOT(slotActivated()), actionCollection(), "oilpaint_filter");
 }
 
 KisOilPaintFilterPlugin::~KisOilPaintFilterPlugin()

@@ -81,7 +81,7 @@ KisKJSEmbed::KisKJSEmbed(QObject *parent, const char *name, const QStringList &)
 //      XXX: The console should be a docker. Enabling this causes a crash at the moment, though.
 #if KIVIO_STYLE_DOCKERS
  	m_consoleDocker = m_view -> toolDockManager() -> createTabbedToolDock("scripting");
- 	m_consoleDocker -> setCaption("Scripting console");
+ 	m_consoleDocker -> setCaption(i18n("Scripting console"));
  	m_consoleDocker -> restore();
 #endif
 #endif

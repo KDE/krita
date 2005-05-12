@@ -44,7 +44,7 @@ KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const char *
         }
 
         KisFilterSP krdf = createFilter<KisRainDropsFilter>(view);
-	(void) new KAction("&Raindrops...", 0, 0, krdf, SLOT(slotActivated()), actionCollection(), "raindrops_filter");
+	(void) new KAction(i18n("&Raindrops..."), 0, 0, krdf, SLOT(slotActivated()), actionCollection(), "raindrops_filter");
 }
 
 KisRainDropsFilterPlugin::~KisRainDropsFilterPlugin()

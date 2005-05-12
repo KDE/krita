@@ -79,39 +79,39 @@ K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFact
 	(void) new KAction(i18n("&Mean Removal"), 0, 0, kmrf, SLOT(slotActivated()), actionCollection(), "convolution_meanremoval");
 
 	KisFilterSP kelf = createFilter<KisEmbossLaplascianFilter>(view);
-	(void) new KAction("Emboss Laplascian", 0, 0, kelf, SLOT(slotActivated()), actionCollection(), "convolution_embosslaplascian");
+	(void) new KAction(i18n("Emboss Laplascian"), 0, 0, kelf, SLOT(slotActivated()), actionCollection(), "convolution_embosslaplascian");
 
 	KisFilterSP keiadf = createFilter<KisEmbossInAllDirectionsFilter>(view);
-	(void) new KAction("Emboss in All Directions", 0, 0, keiadf, SLOT(slotActivated()), actionCollection(), "convolution_embossalldirections");
+	(void) new KAction(i18n("Emboss in All Directions"), 0, 0, keiadf, SLOT(slotActivated()), actionCollection(), "convolution_embossalldirections");
 
 	KisFilterSP kehvf = createFilter<KisEmbossHorizontalVerticalFilter>(view);
-	(void) new KAction("Emboss Horizontal && Vertical", 0, 0, kehvf, SLOT(slotActivated()), actionCollection(), "convolution_embosshorzvertical");
+	(void) new KAction(i18n("Emboss Horizontal && Vertical"), 0, 0, kehvf, SLOT(slotActivated()), actionCollection(), "convolution_embosshorzvertical");
 
 	KisFilterSP kevf = createFilter<KisEmbossVerticalFilter>(view);
-	(void) new KAction("Emboss Vertical Only", 0, 0, kevf, SLOT(slotActivated()), actionCollection(), "convolution_embossverticalonly");
+	(void) new KAction(i18n("Emboss Vertical Only"), 0, 0, kevf, SLOT(slotActivated()), actionCollection(), "convolution_embossverticalonly");
 
 	KisFilterSP kehf = createFilter<KisEmbossHorizontalFilter>(view);
-	(void) new KAction("Emboss Horizontal Only", 0, 0, kehf, SLOT(slotActivated()), actionCollection(), "convolution_embosshorizontalonly");
+	(void) new KAction(i18n("Emboss Horizontal Only"), 0, 0, kehf, SLOT(slotActivated()), actionCollection(), "convolution_embosshorizontalonly");
 
 	KisFilterSP kedf = createFilter<KisEmbossDiagonalFilter>(view);
- 	(void) new KAction("Emboss in Diagonal", 0, 0, kedf, SLOT(slotActivated()), actionCollection(), "convolution_embossdiagonal");
+ 	(void) new KAction(i18n("Emboss in Diagonal"), 0, 0, kedf, SLOT(slotActivated()), actionCollection(), "convolution_embossdiagonal");
 
 	KisFilterSP ktedf = createFilter<KisTopEdgeDetectionFilter>(view);
-	(void) new KAction("Top Edge Detection", 0, 0, ktedf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectiontop");
+	(void) new KAction(i18n("Top Edge Detection"), 0, 0, ktedf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectiontop");
 
 	KisFilterSP kredf = createFilter<KisRightEdgeDetectionFilter>(view);
-	(void) new KAction("Right Edge Detection", 0, 0, kredf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionright");
+	(void) new KAction(i18n("Right Edge Detection"), 0, 0, kredf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionright");
 
 	KisFilterSP kbedf = createFilter<KisBottomEdgeDetectionFilter>(view);
-	(void) new KAction("Bottom Edge Detection", 0, 0, kbedf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionbottom");
+	(void) new KAction(i18n("Bottom Edge Detection"), 0, 0, kbedf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionbottom");
 
 	KisFilterSP kledf = createFilter<KisLeftEdgeDetectionFilter>(view);
-	(void) new KAction("Left Edge Detection", 0, 0, kledf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionleft");
+	(void) new KAction(i18n("Left Edge Detection"), 0, 0, kledf, SLOT(slotActivated()), actionCollection(), "convolution_edgedetectionleft");
 
 // XXX: This filter crashes Krita
 #if 0
 	KisFilterSP kccf = createFilter<KisCustomConvolutionFilter>(view);
-	(void) new KAction("Custom Convolution...", 0, 0, kccf, SLOT(slotActivated()), actionCollection(), "convolution_custom");
+	(void) new KAction(i18n("Custom Convolution..."), 0, 0, kccf, SLOT(slotActivated()), actionCollection(), "convolution_custom");
 #endif
 }
 

@@ -474,38 +474,58 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 
 void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 {
-
         const double pi=3.1415926535897932385;
 
 	if (m_layers.empty()) return; // Nothing to scale
         Q_INT32 w, h;
-        w = (Q_INT32)( width()*QABS(cos(angle*pi/180)) + height()*QABS(sin(angle*pi/180)) + 1 );
-        h = (Q_INT32)( height()*QABS(cos(angle*pi/180)) + width()*QABS(sin(angle*pi/180)) + 1 );
-	if (w != width() || h != height()) {
+        w = (Q_INT32)(width()*QABS(cos(angle*pi/180)) + height()*QABS(sin(angle*pi/180)) + 0.5);
+        h = (Q_INT32)(height()*QABS(cos(angle*pi/180)) + width()*QABS(sin(angle*pi/180)) + 0.5);
 
-		undoAdapter() -> beginMacro("Rotate image");
+	Q_INT32 oldCentreToNewCentreXOffset = (w - width()) / 2;
+	Q_INT32 oldCentreToNewCentreYOffset = (h - height()) / 2;
 
-		vKisLayerSP_it it;
-		for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-			KisLayerSP layer = (*it);
-			layer -> rotate(angle, m_progress);
+	undoAdapter() -> beginMacro("Rotate image");
+
+	vKisLayerSP_it it;
+	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
+		KisLayerSP layer = (*it);
+
+		KisTransaction * t = 0;
+		if (undoAdapter() && undoAdapter() -> undo()) {
+			t = new KisTransaction("", layer.data());
+			Q_CHECK_PTR(t);
 		}
 
-		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
+                layer -> rotate(angle, true, m_progress);
 
-		m_width = w;
-		m_height = h;
+		if (t) {
+			undoAdapter() -> addCommand(t);
+		}
 
-		m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
-		Q_CHECK_PTR(m_projection);
-
-		m_bkg = new KisBackground(this, w, h);
-		Q_CHECK_PTR(m_bkg);
-
-		undoAdapter()->endMacro();
-
-		emit sizeChanged(KisImageSP(this), w, h);
+		//XXX: This is very ugly.
+		KNamedCommand *moveCommand = layer -> moveCommand(layer -> getX() + oldCentreToNewCentreXOffset, 
+								  layer -> getY() + oldCentreToNewCentreYOffset);
+		if (undoAdapter() && undoAdapter() -> undo()) {
+			undoAdapter() -> addCommand(moveCommand);
+		} else {
+			delete moveCommand;
+		}
 	}
+
+	m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
+
+	m_width = w;
+	m_height = h;
+
+	m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+	Q_CHECK_PTR(m_projection);
+
+	m_bkg = new KisBackground(this, w, h);
+	Q_CHECK_PTR(m_bkg);
+
+	undoAdapter()->endMacro();
+
+	emit sizeChanged(KisImageSP(this), w, h);
 }
 
 void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress)
@@ -541,7 +561,19 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 		vKisLayerSP_it it;
 		for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
 			KisLayerSP layer = (*it);
+
+			KisTransaction * t = 0;
+			if (undoAdapter() && undoAdapter() -> undo()) {
+				t = new KisTransaction("", layer.data());
+				Q_CHECK_PTR(t);
+			}
+
 			layer -> shear(angleX, angleY, m_progress);
+
+			if (t) {
+				undoAdapter() -> addCommand(t);
+			}
+
 		}
 
 		m_adapter -> addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));

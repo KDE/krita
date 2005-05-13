@@ -1468,7 +1468,7 @@ void KisView::rotateLayer(double angle)
 	}
 
 	// Rotate
-	layer -> rotate(angle, m_progress);
+	layer -> rotate(angle, false, m_progress);
 	
 	if (undo) undo -> addCommand(t);
 

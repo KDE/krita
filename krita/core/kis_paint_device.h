@@ -76,7 +76,7 @@ public:
 
         virtual void move(Q_INT32 x, Q_INT32 y);
         virtual void move(const QPoint& pt);
-	virtual KNamedCommand * moveCommand(KisCanvasControllerInterface * c, Q_INT32 x, Q_INT32 y);
+	virtual KNamedCommand * moveCommand(Q_INT32 x, Q_INT32 y);
 	
 	virtual const bool visible() const;
         virtual void setVisible(bool v);
@@ -235,6 +235,8 @@ public:
 	 */
 	void setProfile(KisProfileSP profile);
 
+	KisDataManagerSP dataManager() const { return m_datamanager; }
+
 	/**
 	 * Replace the pixel data, color strategy, and profile.
 	 */
@@ -266,7 +268,7 @@ public:
 	KisUndoAdapter *undoAdapter() const;
 
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
-        void rotate(double angle, KisProgressDisplayInterface *m_progress);
+        void rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 	void transform(Q_INT32  xscale, Q_INT32  yscale, 
 			Q_INT32  xshear, Q_INT32  yshear, Q_INT32  denominator,

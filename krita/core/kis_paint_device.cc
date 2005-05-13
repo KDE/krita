@@ -48,7 +48,7 @@ namespace {
 		typedef KNamedCommand super;
 	
 	public:
-		MoveCommand(KisCanvasControllerInterface * controller,  KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
+		MoveCommand(KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
 		virtual ~MoveCommand();
 	
 		virtual void execute();
@@ -56,18 +56,18 @@ namespace {
 	
 	private:
 		void moveTo(const QPoint& pos);
-	
+		void undoOff();
+		void undoOn();
+
 	private:
 		KisPaintDeviceSP m_device;
-		KisCanvasControllerInterface * m_controller;
 		QPoint m_oldPos;
 		QPoint m_newPos;
 	};
 	
-	MoveCommand::MoveCommand(KisCanvasControllerInterface * controller, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
+	MoveCommand::MoveCommand(KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
 		super(i18n("Moved Layer"))
 	{
-		m_controller = controller;
 		m_device = device;
 		m_oldPos = oldpos;
 		m_newPos = newpos;
@@ -77,20 +77,41 @@ namespace {
 	{
 	}
 	
+	void MoveCommand::undoOff()
+	{
+		if (m_device -> undoAdapter()) {
+			m_device -> undoAdapter() -> setUndo(false);
+		}
+	}
+
+	void MoveCommand::undoOn()
+	{
+		if (m_device -> undoAdapter()) {
+			m_device -> undoAdapter() -> setUndo(true);
+		}
+	}
+
 	void MoveCommand::execute()
 	{
+		undoOff();
 		moveTo(m_newPos);
+		undoOn();
 	}
 	
 	void MoveCommand::unexecute()
 	{
+		undoOff();
 		moveTo(m_oldPos);
+		undoOn();
 	}
 	
 	void MoveCommand::moveTo(const QPoint& pos)
 	{
 		m_device -> move(pos.x(), pos.y());
-		m_controller -> updateCanvas();
+
+		if (m_device -> image()) {
+			m_device -> image() -> notify();
+		}
 	}
 
 	class KisConvertLayerTypeCmd : public KNamedCommand {
@@ -268,9 +289,9 @@ void KisPaintDevice::move(const QPoint& pt)
         move(pt.x(), pt.y());
 }
 
-KNamedCommand * KisPaintDevice::moveCommand(KisCanvasControllerInterface * c, Q_INT32 x, Q_INT32 y)
+KNamedCommand * KisPaintDevice::moveCommand(Q_INT32 x, Q_INT32 y)
 {
-	KNamedCommand * cmd = new MoveCommand(c, this, QPoint(m_x, m_y), QPoint(x, y));
+	KNamedCommand * cmd = new MoveCommand(this, QPoint(m_x, m_y), QPoint(x, y));
 	Q_CHECK_PTR(cmd);
 	cmd -> execute();
 	return cmd;
@@ -417,11 +438,11 @@ void KisPaintDevice::scale(double xscale, double yscale, KisProgressDisplayInter
         visitor.scale(xscale, yscale, progress, ftype);
 }
 
-void KisPaintDevice::rotate(double angle, KisProgressDisplayInterface * progress)
+void KisPaintDevice::rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface * progress)
 {
         KisRotateVisitor visitor;
         accept(visitor);
-        visitor.rotate(angle, progress);
+        visitor.rotate(angle, rotateAboutImageCentre, progress);
 }
 
 void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInterface * progress)
@@ -442,42 +463,33 @@ void KisPaintDevice::transform(Q_INT32  xscale, Q_INT32  yscale,
 
 void KisPaintDevice::mirrorX()
 {
-        /* Read a line and write it backwards into a temporary buffer. */
-	Q_INT32 x, y, rx, ry, rw, rh, le;
-	exactBounds(rx, ry, rw, rh);
-
-	le = rw * m_pixelSize - m_pixelSize;
-	// We need this tmpLine until we can use decrement iterators
-	Q_UINT8 * tmpLine = new Q_UINT8[(rw * m_pixelSize)];
-	Q_CHECK_PTR(tmpLine);
+	QRect r = exactBounds();
 	
-	for (y = ry; y < rh; ++y) {
-		x = le;
+	for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
+		KisHLineIterator srcIt = createHLineIterator(r.x(), y, r.width(), false);
+		KisHLineIterator dstIt = createHLineIterator(r.x(), y, r.width(), true);
 
-		KisHLineIterator it = createHLineIterator(rx, y, rw, false);
-		while (!it.isDone()) {
-			memcpy(tmpLine + x, it.rawData(), m_pixelSize);
-			x = x - m_pixelSize;
-			++it;
+		dstIt += r.width() - 1;
+
+		while (!srcIt.isDone()) {
+			memcpy(dstIt.rawData(), srcIt.oldRawData(), m_pixelSize);
+			++srcIt;
+			--dstIt;
 		}
-		writeBytes(tmpLine, rx, y, rw, 1);
 		qApp -> processEvents();
 	}
-	delete []tmpLine;
 }
 
 void KisPaintDevice::mirrorY()
 {
 	/* Read a line from bottom to top and and from top to bottom and write their values to each other */
-	Q_INT32 rx, ry, rw, rh;
-	exactBounds(rx, ry, rw, rh);
+	QRect r = exactBounds();
 		
 	Q_INT32 y1, y2;
-	for (y1 = 0, y2 = rh; y1 < rh / 2 || y2 > rh / 2; ++y1, --y2) {
-		KisHLineIterator itTop = createHLineIterator(rx, y1, rw, true);
-		KisHLineIterator itBottom = createHLineIterator(rx, y2, rw, true);
+	for (y1 = r.top(), y2 = r.bottom(); y1 <= r.bottom(); ++y1, --y2) {
+		KisHLineIterator itTop = createHLineIterator(r.x(), y1, r.width(), true);
+		KisHLineIterator itBottom = createHLineIterator(r.x(), y2, r.width(), false);
 		while (!itTop.isDone() && !itBottom.isDone()) {
-			memcpy(itBottom.rawData(), itTop.oldRawData(), m_pixelSize);
 			memcpy(itTop.rawData(), itBottom.oldRawData(), m_pixelSize);
 			++itBottom;
 			++itTop;

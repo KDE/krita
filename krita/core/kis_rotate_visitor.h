@@ -24,10 +24,6 @@
 class QRect;
 class KisPaintDevice;
 class KisProgressDisplayInterface;
-class KisHLineIterator;
-
-void mirrorLine(KisHLineIterator it, Q_UINT8 * tmpLine, Q_INT32 width, Q_INT32 pixelSize);
-void mirrorLineSelection(KisHLineIteratorPixel it, Q_UINT8 * tmpLine, Q_INT32 width, Q_INT32 pixelSize, bool clear);
 
 class KisRotateVisitor : public KisProgressSubject {
         typedef KisProgressSubject super;  
@@ -41,35 +37,33 @@ public:
         void visitKisPaintDevice(KisPaintDevice* dev);
 
 	
-        void rotate(double angle, KisProgressDisplayInterface *m_progress);
+        void rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *progress);
+        void shear(double angleX, double angleY, KisProgressDisplayInterface *progress);
 
-        void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
-
-        /// Returns true if completed, false if not completed for whatever reason
-        bool rotateRight90(KisPaintDevice *src, KisPaintDevice *dst, QRect r, bool clear = true);
-
-        /// Returns true if completed, false if not completed for whatever reason
-        bool rotateLeft90(KisPaintDevice *src, KisPaintDevice *dst, QRect r, bool clear = true);
-
-        /// Returns true if completed, false if not completed for whatever reason
-        bool rotate180(KisPaintDevice *src, KisPaintDevice *dst, QRect r, bool clear = true);
-
-        
 private:
-        KisPaintDevice* m_dev;
+        KisPaintDeviceSP m_dev;
 
 	// Implement KisProgressSubject
 	bool m_cancelRequested;
         virtual void cancel() { m_cancelRequested = true; }
-        
 
-        Q_INT32 xShearImage(double shearX, KisProgressDisplayInterface *m_progress, Q_INT32 progressTotal, Q_INT32 progresscurrent);
-        Q_INT32 yShearImage(double shearY, KisProgressDisplayInterface *m_progress, Q_INT32 progressTotal, Q_INT32 progresscurrent);
-        void xCropImage(double deltaX);
-        void yCropImage(double deltaY);
+	void initProgress(Q_INT32 totalSteps);
+	void incrementProgress();
+	void setProgressDone();
 
+	KisProgressDisplayInterface *m_progress;
+	Q_INT32 m_progressStep;
+	Q_INT32 m_progressTotalSteps;
+	Q_INT32 m_lastProgressPerCent;
 
-        
+	KisPaintDeviceSP rotateRight90(KisPaintDeviceSP src);
+	KisPaintDeviceSP rotateLeft90(KisPaintDeviceSP src);
+	KisPaintDeviceSP rotate180(KisPaintDeviceSP src);
+	KisPaintDeviceSP rotate(KisPaintDeviceSP src, double angle, KisPoint centreOfRotation);
+
+	KisPaintDeviceSP xShear(KisPaintDeviceSP src, double shearX);
+	KisPaintDeviceSP yShear(KisPaintDeviceSP src, double shearY);
+
 };
 
 inline KisRotateVisitor::KisRotateVisitor()

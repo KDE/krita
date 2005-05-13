@@ -29,11 +29,14 @@ Core
 	* Make toolbox look like Karbon's toolbox, but follow the
 	  layout of photoshop's toolbox for minimum confusability.
         * Lock layers (make inaccessible) See bug #90456.
+	* Add text information (contents, font, size, color, position,
+	  orientation) to text layers to allow editing and re-rendering
 
 File Format:
 
 	* Save & load actual profiles in .kra files
 	* Save & load undo information in .kra files
+	* Save & load text information in .kra files
 
 User Interface
 

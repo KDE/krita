@@ -1296,9 +1296,6 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img,
 			layer = img -> activate(layer);
 
 			if (layer) {
-				KisFillPainter painter(layer.data());
-				painter.fillRect(0, 0, img->width(), img->height(), Qt::black, OPACITY_TRANSPARENT);
-				painter.end();
 				img -> top(layer);
 
 				if (m_undo)

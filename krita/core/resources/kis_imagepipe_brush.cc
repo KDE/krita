@@ -33,6 +33,7 @@
 #include <qvaluevector.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "kis_global.h"
 #include "kis_imagepipe_brush.h"
@@ -166,7 +167,7 @@ void KisImagePipeBrush::ioResult(KIO::Job * /*job*/)
 		line1.append(m_data[i]);
 		i++;
 	}
-	setName(QString::fromUtf8(&line1[0], i));
+	setName(i18n(QString::fromUtf8(&line1[0], i).ascii()));
 
 	i++; // Skip past the first newline
 

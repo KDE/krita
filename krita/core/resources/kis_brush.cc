@@ -37,6 +37,7 @@
 #include <qvaluevector.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "kis_global.h"
 #include "kis_brush.h"
@@ -365,7 +366,7 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 		name = QString::fromAscii(&m_data[sizeof(GimpBrushHeader)], bh.header_size - sizeof(GimpBrushHeader));
 	}
 
-	setName(name);
+	setName(i18n(name.ascii()));
 
 	if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
 		emit ioFailed(this);

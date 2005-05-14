@@ -31,6 +31,7 @@
 #include <koColor.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "kis_gradient.h"
 
@@ -106,7 +107,7 @@ void KisGradient::ioResult(KIO::Job * /*job*/)
 
 	if (nameDefinition.startsWith("Name: ")) {
 		QString nameText = nameDefinition.right(nameDefinition.length() - 6);
-		setName(nameText);
+		setName(i18n(nameText.ascii()));
 
 		numSegmentsText = fileContent.readLine();
 	}

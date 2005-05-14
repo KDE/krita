@@ -33,6 +33,7 @@
 #include <qmap.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "kis_pattern.h"
 #include "kis_layer.h"
@@ -119,7 +120,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 		return;
 	}
 
-	setName(&name[0]);
+	setName(i18n(&name[0]));
 
 	if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
 		emit ioFailed(this);

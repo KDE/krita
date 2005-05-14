@@ -34,6 +34,7 @@
 #include <qvaluevector.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "kis_global.h"
 #include "kis_palette.h"
@@ -185,7 +186,7 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 			return;
 		}
 
-		setName(lines[1].mid(strlen("Name: ")).stripWhiteSpace());
+		setName(i18n(lines[1].mid(strlen("Name: ")).stripWhiteSpace().ascii()));
 		
 		index = 2;
 

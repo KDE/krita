@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WdgSelectionOptions</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>175</width>
-            <height>78</height>
+            <width>180</width>
+            <height>60</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>WdgSelectionOptions</string>
     </property>
     <grid>
         <property name="name">
@@ -59,17 +62,6 @@
             </item>
             <property name="name">
                 <cstring>cmbAction</cstring>
-            </property>
-        </widget>
-        <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>radioInvert</cstring>
-            </property>
-            <property name="text">
-                <string>Invert mask</string>
-            </property>
-            <property name="accel">
-                <string></string>
             </property>
         </widget>
         <widget class="KColorButton" row="1" column="1">

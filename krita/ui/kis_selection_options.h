@@ -46,12 +46,10 @@ signals:
 private slots:
 
 	void slotSetMaskColor(const QColor &);
-//	void slotSetMaskInversion(bool);
 
 private:
 	WdgSelectionOptions * m_page;
 	KisCanvasSubject* m_subject;
-
 };
 
 #endif

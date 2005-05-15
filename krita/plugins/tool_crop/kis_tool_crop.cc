@@ -44,7 +44,7 @@
 #include <kis_button_press_event.h>
 #include <kis_button_release_event.h>
 #include <kis_move_event.h>
-#include <kis_transaction.h>
+#include <kis_selected_transaction.h>
 
 #include "kis_tool_crop.h"
 #include "wdg_tool_crop.h"
@@ -555,7 +555,7 @@ void KisToolCrop::setOptionWidgetEndY(Q_INT32 y)
 
 void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc) 
 {
-	KisTransaction * t = new KisTransaction(i18n("Crop"), layer.data());
+	KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Crop"), layer.data());
 	Q_CHECK_PTR(t);
 	
 	layer -> crop(rc);

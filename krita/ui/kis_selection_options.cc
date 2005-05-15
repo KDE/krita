@@ -42,7 +42,6 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent, KisCanvasSubject * sub
 	QVBoxLayout * l = new QVBoxLayout(this);
 	l -> addWidget(m_page);
 
-	connect(m_page -> radioInvert, SIGNAL(toggled(bool)), this, SLOT(slotSetMaskInversion(bool)));
 	connect(m_page -> bnMaskColor, SIGNAL(changed(const QColor &)), this, SLOT(slotSetMaskColor(const QColor &)));
 	connect(m_page -> cmbAction, SIGNAL(activated(int)), this, SIGNAL(actionChanged(int)));
 }
@@ -74,21 +73,5 @@ void KisSelectionOptions::slotSetMaskColor(const QColor & c)
 		m_subject -> canvasController() -> updateCanvas();
 	}
 }
-
-
-/*
-void KisSelectionOptions::slotSetMaskInversion(bool i)
-{
-	if (!m_subject) return;
-	KisImageSP img = m_subject -> currentImg();
-	if (!img) return;
-	KisLayerSP l = img -> activeLayer();
-	if (!l) return;
-	if (l -> hasSelection()) {
-		l -> selection() -> setInverted(i);
-		m_subject -> canvasController() -> updateCanvas();
-	}	
-}
-*/
 
 #include "kis_selection_options.moc"

@@ -72,6 +72,19 @@ User Interface
           transparent image move. This maybe needs Qt 4. OpenGL can also be
   	  used to bumpmap images on a height-field canvas.
 
+Selections
+
+* Select freehand (drawing a shape and selecting the contents) does not work.
+
+* The shape tools should (with filled as default) also be available as 
+  selection tools. (fixed for ellipse)
+
+* Cropping should also crop the selection.
+
+* Select Polygonal does not work.
+
+* Invent and implement ways to visualise selection masks in more intelligent ways. When selecting a white area it should till be visible that it has been selected. Should be user configurable and globally implemented (ie not per layer)
+
 Profiles
 
 	* Add an input profile combobox to the import image & scan dialogs

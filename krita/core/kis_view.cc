@@ -906,10 +906,11 @@ void KisView::layerUpdateGUI(bool enable)
 
 void KisView::imgUpdateGUI()
 {
-	const KisImageSP img = currentImg();
+	KisImageSP img = currentImg();
 	Q_INT32 n = 0;
 	Q_INT32 nvisible = 0;
 	Q_INT32 nlinked = 0;
+	Q_INT32 al = 0;
 
 	m_imgRm -> setEnabled(img != 0);
 	m_imgDup -> setEnabled(img != 0);
@@ -921,14 +922,14 @@ void KisView::imgUpdateGUI()
 		n = img -> nlayers();
 		nvisible = n - img -> nHiddenLayers();
 		nlinked = img -> nLinkedLayers();
+		al = img -> index(img->activeLayer());
 	}
 
 	m_imgFlatten -> setEnabled(n > 1);
 
 	m_imgMergeVisible -> setEnabled(nvisible > 1);
 	m_imgMergeLinked -> setEnabled(nlinked > 1);
-
-	m_imgMergeLayer -> setEnabled(n > 1);
+	m_imgMergeLayer -> setEnabled(n > 1 && al < n - 1);
 
 	m_selectionManager -> updateGUI();
 
@@ -1598,9 +1599,7 @@ void KisView::mergeLayer()
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
-	if (!img -> bottom(layer)) {
-		img -> mergeLayer(layer);
-	}
+	img -> mergeLayer(layer);
 }
 
 void KisView::preferences()

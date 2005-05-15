@@ -988,7 +988,6 @@ void KisImage::flatten()
 	Q_CHECK_PTR(dst);
 
 	KisFillPainter painter(dst.data());
-	painter.fillRect(0, 0, width(), height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers = layers();
 
@@ -1017,7 +1016,6 @@ void KisImage::mergeVisibleLayers()
 	Q_CHECK_PTR(dst);
 
 	KisFillPainter painter(dst.data());
-	painter.fillRect(0, 0, width(), height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
 
 	vKisLayerSP mergeLayers = layers();
 	KisMerge<isVisible, isVisible> visitor(this);
@@ -1047,8 +1045,6 @@ void KisImage::mergeLinkedLayers()
 	Q_CHECK_PTR(dst);
 
 	KisFillPainter painter(dst.data());
-	painter.fillRect(0, 0, width(), height(), QColor(0, 0, 0), OPACITY_TRANSPARENT);
-
 
 	vKisLayerSP mergeLayers = layers();
 	KisMerge<isLinked, isLinked> visitor(this);
@@ -1072,20 +1068,33 @@ void KisImage::mergeLinkedLayers()
 
 void KisImage::mergeLayer(KisLayerSP l)
 {
-	if (bottom(l)) return;
+	vKisLayerSP beforeLayers = m_layers;
 
-	KisFillPainter painter(l.data());
+	KisLayerSP dst = new KisLayer(this, l -> name(), OPACITY_OPAQUE);
+	Q_CHECK_PTR(dst);
+
+	KisFillPainter painter(dst.data());
 
 	KisMerge<All, All> visitor(this);
 	visitor(painter, layer(index(l) + 1));
+	visitor(painter, l);
+
+	int insertIndex = -1;
+
+	if (visitor.insertMergedAboveLayer() != 0) {
+		insertIndex = index(visitor.insertMergedAboveLayer());
+	}
+
+	add(dst, insertIndex);
 
 	notify();
 	notifyLayersChanged();
-/*
-	if (m_adapter && m_adapter -> undo()) {
+
+	if (m_adapter && m_adapter -> undo())
+	{
 		m_adapter -> addCommand(new KisChangeLayersCmd(m_adapter, this, beforeLayers, m_layers, i18n("&Merge Layers")));
 //XXX fix name after string freeze
-	}*/
+	}
 }
 
 

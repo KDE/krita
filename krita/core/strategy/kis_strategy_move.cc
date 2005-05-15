@@ -118,6 +118,8 @@ void KisStrategyMove::reset(KisCanvasSubject *subject)
 
 void KisStrategyMove::startDrag(const QPoint& pos)
 {
+	// pos is the user chosen handle point
+	
 	if (m_subject) {
 		KisImageSP img;
 		KisPaintDeviceSP dev;
@@ -142,6 +144,8 @@ void KisStrategyMove::startDrag(const QPoint& pos)
 
 void KisStrategyMove::drag(const QPoint& original)
 {
+	// original is the position of the user chosen handle point
+	
 	if (m_subject && m_dragging) {
 		KisImageSP img = m_subject -> currentImg();
 		KisPaintDeviceSP dev;
@@ -153,7 +157,7 @@ void KisStrategyMove::drag(const QPoint& original)
 			if (pos.x() >= img -> width() || pos.y() >= img -> height())
 				return;
 
-			pos -= m_dragStart;
+			pos -= m_dragStart; // convert to delta
 //			rc.setRect(dev -> x(), dev -> y(), dev -> width(), dev -> height());
 			dev -> move(dev ->getX() + pos.x(), dev->getY() + pos.y());
 //			rc = rc.unite(QRect(dev->getX(), dev->getY(), dev -> width(), dev -> height()));

@@ -281,6 +281,12 @@ void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
 {
         m_x = x;
         m_y = y;
+	if(m_selection)
+	{
+		m_selection->setX(x);
+		m_selection->setY(y);
+	}
+
         emit positionChanged(this);
 }
 
@@ -693,6 +699,8 @@ KisSelectionSP KisPaintDevice::selection(){
 		m_selection = new KisSelection(this, "layer selection for: " + name());
 		Q_CHECK_PTR(m_selection);
 		m_selection -> setVisible(true);
+		m_selection -> setX(m_x);
+		m_selection -> setY(m_y);
 	}
 
 	if (!m_hasSelection) {
@@ -784,6 +792,20 @@ const Q_UINT8* KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y)
 Q_UINT8* KisPaintDevice::writablePixel(Q_INT32 x, Q_INT32 y)
 {
 	return m_datamanager -> writablePixel(x - m_x, y - m_y);
+}
+
+void KisPaintDevice::setX(Q_INT32 x)
+{
+	m_x = x;
+	if(m_selection)
+		m_selection->setX(x);
+}
+
+void KisPaintDevice::setY(Q_INT32 y)
+{
+	m_y = y;
+	if(m_selection)
+		m_selection->setY(y);
 }
 
 

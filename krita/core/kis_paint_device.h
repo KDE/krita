@@ -399,16 +399,6 @@ inline Q_INT32 KisPaintDevice::getY()
 	return m_y;
 }
 
-inline void KisPaintDevice::setX(Q_INT32 x)
-{
-	m_x = x;
-}
-
-inline void KisPaintDevice::setY(Q_INT32 y)
-{
-	m_y = y;
-}
-
 inline const bool KisPaintDevice::visible() const
 {
         return m_visible;

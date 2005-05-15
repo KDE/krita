@@ -595,7 +595,8 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 
 void KisImage::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
-	if (m_colorStrategy -> id() != dstColorStrategy -> id()) {
+	// XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
+	if ( (m_colorStrategy -> id() != dstColorStrategy -> id()) || (profile() -> profile() != dstProfile -> profile()) ) {
 
 		if (undoAdapter() && undoAdapter() -> undo()) {
 			undoAdapter() -> beginMacro(i18n("&Convert Image Type...")); //XXX: fix when string freeze over
@@ -633,8 +634,9 @@ void KisImage::setProfile(const KisProfileSP& profile)
 	}
 	else {
 		m_profile = 0;
-		m_projection -> setProfile(profile);
+		m_projection -> setProfile(m_profile);
 	}
+	notify();
 	emit(profileChanged(m_profile));
 }
 

@@ -522,7 +522,8 @@ bool KisPaintDevice::read(KoStore *store)
 
 void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
-	if (colorStrategy() -> id() == dstColorStrategy -> id())
+	// XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
+	if ( (colorStrategy() -> id() == dstColorStrategy -> id()) && (profile() -> profile() == dstProfile -> profile()) )
 	{
 		return;
 	}
@@ -547,11 +548,15 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 
 			Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns); 
 			columns = QMIN(columns, columnsRemaining);
+			columns = 1;
 
 			const Q_UINT8 *srcData = pixel(column, row);
 			Q_UINT8 *dstData = dst.writablePixel(column, row);
+			QUANTUM alpha = srcData[3];
 
 			m_colorStrategy -> convertPixelsTo(srcData, m_profile, dstData, dstColorStrategy, dstProfile, columns, renderingIntent);
+			
+			dstData[3] = alpha;
 
 			column += columns;
 			columnsRemaining -= columns;

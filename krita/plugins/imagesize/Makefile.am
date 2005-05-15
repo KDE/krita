@@ -16,8 +16,8 @@ INCLUDES  = -I$(srcdir)/../../core \
 
 kde_module_LTLIBRARIES = kritaimagesize.la
 
-kritaimagesize_la_SOURCES = wdg_imagesize.ui imagesize.cc dlg_imagesize.cc
-noinst_HEADERS = wdg_imagesize.h dlg_imagesize.h imagesize.h
+kritaimagesize_la_SOURCES = wdg_imagesize.ui wdg_layersize.ui imagesize.cc dlg_imagesize.cc dlg_layersize.cc
+noinst_HEADERS = wdg_imagesize.h dlg_imagesize.h imagesize.h dlg_layersize.h
 
 kritaimagesize_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritaimagesize_la_LIBADD =  ../../libkritacommon.la $(LIB_KOFFICECORE) $(LIB_KOPAINTER)

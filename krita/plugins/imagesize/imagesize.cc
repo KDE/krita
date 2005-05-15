@@ -48,6 +48,7 @@
 
 #include "imagesize.h"
 #include "dlg_imagesize.h"
+#include "dlg_layersize.h"
 
 typedef KGenericFactory<ImageSize> ImageSizeFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaimagesize, ImageSizeFactory( "krita" ) )
@@ -129,35 +130,28 @@ void ImageSize::slotLayerSize()
 
 	if (!image) return;
 
-	DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "LayerSize");
-	Q_CHECK_PTR(dlgImageSize);
+	DlgLayerSize * dlgLayerSize = new DlgLayerSize(m_view, "LayerSize");
+	Q_CHECK_PTR(dlgLayerSize);
 
-	dlgImageSize -> setCaption(i18n("Layer Size"));
+	dlgLayerSize -> setCaption(i18n("Layer Size"));
 
 	KisConfig cfg;
 
-	dlgImageSize -> setWidth(image -> width());
-	dlgImageSize -> setHeight(image -> height());
-	dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
-	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
+	dlgLayerSize -> setWidth(image -> width());
+	dlgLayerSize -> setHeight(image -> height());
+	dlgLayerSize -> setMaximumWidth(cfg.maxImgWidth());
+	dlgLayerSize -> setMaximumHeight(cfg.maxImgHeight());
 
-	if (dlgImageSize -> exec() == QDialog::Accepted) {
-		Q_INT32 w = dlgImageSize -> width();
-		Q_INT32 h = dlgImageSize -> height();
-		if (dlgImageSize -> scale()) {
+	if (dlgLayerSize -> exec() == QDialog::Accepted) {
+		Q_INT32 w = dlgLayerSize -> width();
+		Q_INT32 h = dlgLayerSize -> height();
 
-			Q_INT32 f = dlgImageSize -> filterType();
-			if (dlgImageSize -> scale()) {
-				m_view -> scaleLayer((double)w / ((double)(image -> width())),
-						(double)h / ((double)(image -> height())),
-						(enumFilterType)f);
-			}
-		}
-		else {
-			m_view -> cropLayer(0, 0, w, h);
-		}
+		Q_INT32 f = dlgLayerSize -> filterType();
+		m_view -> scaleLayer((double)w / ((double)(image -> width())),
+					(double)h / ((double)(image -> height())),
+					(enumFilterType)f);
 	}
-	delete dlgImageSize;
+	delete dlgLayerSize;
 }
 
 void ImageSize::slotSelectionScale()

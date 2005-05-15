@@ -1,0 +1,256 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgLayerSize</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgLayerSize</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>391</width>
+            <height>219</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Image Size</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>grpPixelDimensions</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Pixel Dimensions</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>lblWidth</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Width:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intWidth</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="2" column="2">
+                    <property name="name">
+                        <cstring>intHeight</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="2">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Height:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intHeight</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="1">
+                    <property name="name">
+                        <cstring>lblWidthOriginal</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>WinPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="2">
+                    <property name="name">
+                        <cstring>lblHeightOriginal</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>WinPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>lblOrignal</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Original:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>lblNew</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;New:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intWidth</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="2" column="1">
+                    <property name="name">
+                        <cstring>intWidth</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="3" column="1">
+                    <property name="name">
+                        <cstring>intWidthPercent</cstring>
+                    </property>
+                    <property name="value">
+                        <number>100</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="referencePoint">
+                        <number>100</number>
+                    </property>
+                    <property name="suffix">
+                        <string>%</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="3" column="2">
+                    <property name="name">
+                        <cstring>intHeightPercent</cstring>
+                    </property>
+                    <property name="value">
+                        <number>100</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="suffix">
+                        <string>%</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>lblPercent</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Percent:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intWidthPercent</cstring>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>chkConstrain</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Constrain proportions</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QComboBox" row="1" column="1">
+            <item>
+                <property name="text">
+                    <string>Box</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Triangle</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Bell</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>B-Spline</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Filter</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Lanczos 3</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Mitchell</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>cmbFilterType</cstring>
+            </property>
+            <property name="currentItem">
+                <number>6</number>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>lblFilterType</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Scaling type:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>cmbFilterType</cstring>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>intWidth</tabstop>
+    <tabstop>intHeight</tabstop>
+    <tabstop>intWidthPercent</tabstop>
+    <tabstop>intHeightPercent</tabstop>
+    <tabstop>chkConstrain</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

@@ -124,6 +124,9 @@ void KisToolFreehand::initPaint(KisEvent *)
 		if (m_painter)
 			delete m_painter;
 		if (m_useTempLayer) {
+			if (m_currentImage -> undoAdapter())
+				m_currentImage -> undoAdapter() -> beginMacro(m_transactionText);
+
 			// XXX ugly! hacky!
 			m_target = dynamic_cast<KisDoc*>(m_subject->document())->layerAdd(currentImage(), "temp", OPACITY_OPAQUE);
 
@@ -184,12 +187,10 @@ void KisToolFreehand::endPaint()
 					       m_dirtyRect.x(), m_dirtyRect.y(), m_dirtyRect.width(), m_dirtyRect.height());
 
 				adapter -> addCommand(painter.endTransaction());
-				//currentImage() -> rm(dynamic_cast<KisLayer*>(m_target.data()));
 				dynamic_cast<KisDoc*>(m_subject->document())->layerRemove(
 					currentImage(), dynamic_cast<KisLayer*>(m_target.data()));
 				currentImage() -> activate(dynamic_cast<KisLayer*>(m_source.data()));
-				// looks like deleting this isn't good for undo? XXX: Figure this out.
-				//delete m_target;
+				adapter -> endMacro();
 			} else {
 				adapter -> addCommand(m_painter->endTransaction());
 			}

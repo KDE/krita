@@ -401,10 +401,10 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 	setUndo(false);
 
 	if (ret == KoTemplateChooseDia::Template) {
-		QFileInfo fileInfo( file );
-		QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kra" );
 		resetURL();
-		ok = loadNativeFormat( fileName );
+		ok = loadNativeFormat( file );
+                if ( !ok )
+                    showLoadingErrorDialog();
 		emit imageListUpdated();
 		if (nimages() == 0) {
 			if ((ok = slotNewImage()))

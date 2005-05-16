@@ -37,8 +37,9 @@ Core
 
 File Format:
 
-	* Save & load actual profiles in .kra files
+	* Save & load all annotations in .kra files
 	* Save & load undo information in .kra files
+	* Save & load more information, like PNG comments, gamma information, etc
 
 User Interface
 

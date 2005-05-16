@@ -825,6 +825,7 @@ bool KisDoc::completeSaving(KoStore *store)
 			location = external ? QString::null : uri;
 			location += (*it) -> name() + "/layers/" + (*it2) -> name();
 
+			// Layer data
 			if (store -> open(location)) {
 				if (!(*it2) -> write(store)) {
 					(*it2) -> disconnect();
@@ -835,11 +836,43 @@ bool KisDoc::completeSaving(KoStore *store)
 
 				store -> close();
 			}
+			
+			if ((*it2) -> profile()) {
+				// save layer profile
+				location = external ? QString::null : uri;
+				location += (*it) -> name() + "/layers/" + (*it2) -> name() + ".icc";
+				
+				if (store -> open(location)) {
+					store -> write((*it2) -> profile() -> annotation() -> annotation());
+					store -> close();
+				}
+			}
 
 			IOCompletedStep();
 			(*it2) -> disconnect();
 		}
-
+		
+		// saving annotations
+		// XXX this only saves EXIF and ICC info. This would probably need
+		// a redesign of the dtd of the krita file to do this more generally correct
+		// e.g. have <ANNOTATION> tags or so.
+		KisAnnotationSP annotation = (*it) -> annotation("exif");
+		if (annotation) {
+			location = external ? QString::null : uri;
+			location += (*it) -> name() + "/annotations/exif";
+			if (store -> open(location)) {
+				store -> write(annotation -> annotation());
+				store -> close();
+			}
+		}
+		if ((*it) -> profile()) {
+			location = external ? QString::null : uri;
+			location += (*it) -> name() + "/annotations/icc";
+			if (store -> open(location)) {
+				store -> write((*it) -> profile() -> annotation() -> annotation());
+				store -> close();
+			}
+		}
 	}
 #if 0 // Composite rendition of the entire image for easier kimgio loading and to speed up loading the image into Krita: show the composite png first, then load the layers
 	if (store -> open("composite.png")) {
@@ -888,6 +921,7 @@ bool KisDoc::completeLoading(KoStore *store)
 			location = external ? QString::null : uri;
 			location += (*it) -> name() + "/layers/" + (*it2) -> name();
 
+			// Layer data
 			if (store -> open(location)) {
 				if (!(*it2) -> read(store)) {
 					(*it2) -> disconnect();
@@ -898,9 +932,47 @@ bool KisDoc::completeLoading(KoStore *store)
 
 				store -> close();
 			}
+			
+			// icc profile
+			location = external ? QString::null : uri;
+			location += (*it) -> name() + "/layers/" + (*it2) -> name() + ".icc";
+			if (store -> hasFile(location)) {
+				QByteArray data;
+				store -> open(location);
+				data = store -> read(store -> size());
+				store -> close();
+				(*it2) -> setProfile(new KisProfile(data,
+					(*it2) -> colorStrategy() -> colorSpaceType()));
+				kdDebug() << "Opened icc information, size is " << data.size() << endl;
+			}
 
 			IOCompletedStep();
 			(*it2) -> disconnect();
+		}
+		
+		// annotations
+		// exif
+		location = external ? QString::null : uri;
+		location += (*it) -> name() + "/annotations/exif";
+		if (store -> hasFile(location)) {
+			QByteArray data;
+			store -> open(location);
+			data = store -> read(store -> size());
+			store -> close();
+			(*it) -> addAnnotation(new KisAnnotation("exif", "", data));
+			kdDebug() << "Opened exif information, size is " << data.size() << endl;
+		}
+		// icc profile
+		location = external ? QString::null : uri;
+		location += (*it) -> name() + "/annotations/icc";
+		if (store -> hasFile(location)) {
+			QByteArray data;
+			store -> open(location);
+			data = store -> read(store -> size());
+			store -> close();
+			(*it) -> setProfile(new KisProfile(data,
+				(*it) -> colorStrategy() -> colorSpaceType()));
+			kdDebug() << "Opened icc information, size is " << data.size() << endl;
 		}
 	}
 

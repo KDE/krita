@@ -43,6 +43,7 @@ class KisProfile : public KisResource, public KShared {
 
 public:
 	KisProfile(Q_UINT32 colorType);
+	KisProfile(QByteArray rawData, Q_UINT32 colorType);
 	KisProfile(const QString& file, Q_UINT32 colorType);
 	KisProfile(const cmsHPROFILE profile, QByteArray rawData, Q_UINT32 colorType);
 

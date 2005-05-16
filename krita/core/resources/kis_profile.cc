@@ -42,6 +42,15 @@ KisProfile::KisProfile(Q_UINT32 colorType)
 {
 }
 
+KisProfile::KisProfile(QByteArray rawData, Q_UINT32 colorType)
+	: super (QString()),
+	  m_lcmsColorType(colorType),
+	  m_rawData(rawData)
+{
+	m_profile = cmsOpenProfileFromMem(rawData.data(), (DWORD)rawData.size());
+	init();
+}
+
 KisProfile::KisProfile(const QString& file, Q_UINT32 colorType) 
 	: super(file),
 	  m_lcmsColorType(colorType)

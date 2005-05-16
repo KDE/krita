@@ -43,7 +43,7 @@
 #include <kis_pattern.h>
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
-#include <kis_transaction.h>
+#include <kis_selected_transaction.h>
 #include <kis_tool_controller.h>
 #include <kis_tool.h>
 #include <kis_tool_registry.h>
@@ -99,7 +99,6 @@ private slots:
 	void updatePreview();
 	void slotSubtract(bool on);
 	void slotAdd(bool on);
-	void slotReplace(bool on);
 	void slotSelectClicked();
 			
 private:
@@ -114,10 +113,9 @@ private:
 	KisCanvasSubject * m_subject;
 	enumSelectionMode m_mode;
 	QCursor m_oldCursor;
-	KisTransaction * m_transaction;
+	KisSelectedTransaction *m_transaction;
 	enumAction m_currentAction;
 	bool m_invert;
-	bool m_hadSelectionToStartWith;
 };
 
 

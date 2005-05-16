@@ -63,8 +63,6 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const QColor 
 		KisHLineIterator hiter = dev -> createHLineIterator(x, y2, w, false);
 		KisHLineIterator selIter = selection -> createHLineIterator(x, y2, w, true);
 		while (!hiter.isDone()) {
-			// Clean up as we go, if necessary
-			if (mode == SELECTION_REPLACE) memset (selIter.rawData(), 0, 1); // Selections are hard-coded one byte big.
 			QColor c2;
 			cs -> toQColor(hiter.rawData(), &c2, &opacity, profile);
 
@@ -73,10 +71,7 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const QColor 
 
 				Q_UINT8 match = matchColors(c, c2, fuzziness);
 				//kdDebug() << " Match: " << QString::number(match) << ", mode: " << mode << "\n";
-				if (mode == SELECTION_REPLACE) {
-					*(selIter.rawData()) =  match;
-				}
-				else if (mode == SELECTION_ADD) {
+				if (mode == SELECTION_ADD) {
 					Q_UINT8 d = *(selIter.rawData());
 					if (d + match > MAX_SELECTED) {
 						*(selIter.rawData()) = MAX_SELECTED;
@@ -112,7 +107,7 @@ KisToolSelectPicker::KisToolSelectPicker()
 	m_subject = 0;
 	m_optWidget = 0;
 	m_fuzziness = 20;
-	m_currentSelectAction = m_defaultSelectAction = SELECTION_REPLACE;
+	m_currentSelectAction = m_defaultSelectAction = SELECTION_ADD;
 	m_timer = new QTimer(this);
 	connect(m_timer, SIGNAL(timeout()), SLOT(slotTimer()) );
 }
@@ -188,8 +183,6 @@ void KisToolSelectPicker::slotTimer()
 		action = SELECTION_ADD;
 	else if (state == Qt::ControlButton)
 		action = SELECTION_SUBTRACT;
-	else if (state == Qt::AltButton)
-		action = SELECTION_REPLACE;
 	else
 		action = m_defaultSelectAction;
 
@@ -202,9 +195,6 @@ void KisToolSelectPicker::slotTimer()
 void KisToolSelectPicker::setPickerCursor(enumSelectionMode action)
 {
 	switch (action) {
-		case SELECTION_REPLACE:
-			m_subject -> setCanvasCursor(KisCursor::pickerCursor());
-			break;
 		case SELECTION_ADD:
 			m_subject -> setCanvasCursor(KisCursor::pickerPlusCursor());
 			break;

@@ -51,6 +51,7 @@
 #include <kis_profile.h>
 #include "kis_color_conversions.h"
 #include "kis_color_utilities.h"
+#include "kis_selected_transaction.h"
 
 #include "dlg_colorrange.h"
 #include "wdg_colorrange.h"
@@ -143,22 +144,17 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
 
-        if (m_layer) {
-		m_hadSelectionToStartWith = m_layer -> hasSelection();
-		m_selection = m_layer -> selection();
-	}
-	else {
-		// Show message box? Without a layer no selections...
-		return;
-	}
-
-        m_transaction = new KisTransaction(i18n("Select by Color Range"), m_selection.data());
+        m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_layer.data());
 	Q_CHECK_PTR(m_transaction);
+	
+	if(! m_layer -> hasSelection())
+		m_layer -> selection() -> clear();
+	m_selection = m_layer -> selection();
 
         updatePreview();
 
 	m_invert = false;
-	m_mode = SELECTION_REPLACE;
+	m_mode = SELECTION_ADD;
 	m_currentAction = REDS;
 
 	connect(this, SIGNAL(okClicked()),
@@ -175,9 +171,6 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 
 	connect (m_page -> radioAdd, SIGNAL(toggled(bool)),
 		 this, SLOT(slotAdd(bool)));
-
-	connect (m_page -> radioReplace, SIGNAL(toggled(bool)),
-		 this, SLOT(slotReplace(bool)));
 
 	connect (m_page -> radioSubtract, SIGNAL(toggled(bool)),
 		 this, SLOT(slotSubtract(bool)));
@@ -212,9 +205,6 @@ void DlgColorRange::okClicked()
 
 void DlgColorRange::cancelClicked()
 {
-	if (!m_hadSelectionToStartWith)
-		m_layer -> deselect();
-
 	m_transaction -> unexecute();
 
 	m_subject -> canvasController() -> updateCanvas();
@@ -242,12 +232,6 @@ void DlgColorRange::slotAdd(bool on)
 		m_mode = SELECTION_ADD;
 }
 
-void DlgColorRange::slotReplace(bool on)
-{
-	if (on)
-		m_mode = SELECTION_REPLACE;
-}
-
 void DlgColorRange::slotSelectClicked()
 {
 	// XXX: Multithread this!
@@ -260,9 +244,6 @@ void DlgColorRange::slotSelectClicked()
 		KisHLineIterator hiter = m_layer -> createHLineIterator(x, y2, w, false);
 		KisHLineIterator selIter = m_selection  -> createHLineIterator(x, y2, w, true);
 		while (!hiter.isDone()) {
-			// Clean up as we go, if necessary
-			if (m_mode == SELECTION_REPLACE) memset (selIter.rawData(), 0, 1); // Selections are hard-coded one byte big.
-
 			QColor c;
 
 			cs -> toQColor(hiter.rawData(), &c, &opacity, profile);
@@ -273,7 +254,7 @@ void DlgColorRange::slotSelectClicked()
 				if (match) {
 					// Personally, I think the invert option a bit silly. But it's possible I don't quite understand it. BSAR.
 					if (!m_invert) {
-						if (m_mode == SELECTION_ADD || m_mode == SELECTION_REPLACE) {
+						if (m_mode == SELECTION_ADD) {
 							*(selIter.rawData()) =  match;
 						}
 						else if (m_mode == SELECTION_SUBTRACT) {
@@ -287,7 +268,7 @@ void DlgColorRange::slotSelectClicked()
 						}
 					}
 					else {
-						if (m_mode == SELECTION_ADD || m_mode == SELECTION_REPLACE) {
+						if (m_mode == SELECTION_ADD) {
 							Q_UINT8 selectedness = *(selIter.rawData());
 							if (match < selectedness) {
 								*(selIter.rawData()) = selectedness - match;

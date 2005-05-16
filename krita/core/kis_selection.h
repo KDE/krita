@@ -29,7 +29,6 @@ class QColor;
 
 
 enum enumSelectionMode {
-	SELECTION_REPLACE,
 	SELECTION_ADD,
 	SELECTION_SUBTRACT,
 };

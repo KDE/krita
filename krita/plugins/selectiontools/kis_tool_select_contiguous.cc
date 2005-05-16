@@ -46,6 +46,8 @@
 #include <kis_selection_options.h>
 #include <kis_canvas_observer.h>
 #include <kis_fill_painter.h>
+#include <kis_undo_adapter.h>
+#include <kis_selected_transaction.h>
 
 #include "kis_tool_select_contiguous.h"
 
@@ -56,7 +58,7 @@ KisToolSelectContiguous::KisToolSelectContiguous() : super()
 	m_optWidget = 0;
 	m_options = 0;
 	m_fuzziness = 20;
-	m_selectAction = SELECTION_REPLACE;
+	m_selectAction = SELECTION_ADD;
 
 	//XXX : make wizard cursor from tool icon.
 	setCursor(KisCursor::arrowCursor());
@@ -68,7 +70,6 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 
 void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 {
-
 	if (m_subject) {
 		KisImageSP img;
 		KisPaintDeviceSP dev;
@@ -96,21 +97,29 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 		QColor c = m_options -> maskColor();
 		if (c.isValid())
 			selection -> setMaskColor(c);
-/*
-		if (dev -> hasSelection()) {
-			switch (m_selectAction) {
-				case SELECTION_REPLACE: dev -> setSelection(selection); break;
-				case SELECTION_ADD: dev -> addSelection(selection); break;
-				case SELECTION_SUBTRACT: dev -> subtractSelection(selection); break;
-				default: kdDebug() << "KisToolSelectContiguous: invalid select action: " << m_selectAction << endl;
-			}
-		} else { // XXX what if the mode is subtract here?
-			dev -> setSelection(selection);
+		
+		KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Select Contiguous Areas"), dev.data());
+		
+		if (!dev -> hasSelection()) {
+			dev->selection()->clear();
 		}
-*/
+		
+		switch (m_selectAction) {
+			case SELECTION_ADD:
+				dev -> addSelection(selection);
+				break;
+			case SELECTION_SUBTRACT:
+				dev -> subtractSelection(selection);
+				break;
+			default: kdDebug() << "KisToolSelectContiguous: invalid select action: " << m_selectAction << endl;
+		}
+
+		KisUndoAdapter *adapter = img -> undoAdapter();
+		if (adapter)
+			adapter -> addCommand(t);
+			
 		m_subject -> setCanvasCursor(oldCursor);
 		m_subject -> canvasController() -> updateCanvas();
-
 	}
 
 }
@@ -147,13 +156,10 @@ void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
 
 void KisToolSelectContiguous::slotSetAction(int action)
 {
-	if (action >= SELECTION_REPLACE && action <= SELECTION_SUBTRACT)
+	if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
 		m_selectAction =(enumSelectionMode)action;
 // XXX: Fix cursors when then are done.
 // 	switch(m_selectAction) {
-// 		case SELECTION_REPLACE:
-// 			m_subject -> setCanvasCursor(KisCursor::pickerCursor());
-// 			break;
 // 		case SELECTION_ADD:
 // 			m_subject -> setCanvasCursor(KisCursor::pickerPlusCursor());
 // 			break;

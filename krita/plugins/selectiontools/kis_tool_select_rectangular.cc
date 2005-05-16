@@ -54,7 +54,7 @@ KisToolSelectRectangular::KisToolSelectRectangular()
 	m_startPos = KisPoint(0, 0);
 	m_endPos = KisPoint(0, 0);
 	m_optWidget = 0;
-	m_selectAction = SELECTION_REPLACE;
+	m_selectAction = SELECTION_ADD;
 }
 
 KisToolSelectRectangular::~KisToolSelectRectangular()
@@ -229,7 +229,7 @@ void KisToolSelectRectangular::paintOutline(QPainter& gc, const QRect&)
 }
 
 void KisToolSelectRectangular::slotSetAction(int action) {
-	if (action >= SELECTION_REPLACE && action <= SELECTION_SUBTRACT)
+	if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
 		m_selectAction =(enumSelectionMode)action;
 }
 

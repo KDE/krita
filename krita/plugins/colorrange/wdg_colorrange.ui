@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WdgColorRange</class>
 <widget class="QWidget">
     <property name="name">
@@ -172,23 +172,18 @@
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QRadioButton" row="0" column="0">
-                            <property name="name">
-                                <cstring>radioReplace</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Replace current selection</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
                         <widget class="QRadioButton" row="1" column="0">
                             <property name="name">
                                 <cstring>radioAdd</cstring>
                             </property>
                             <property name="text">
                                 <string>&amp;Add to current selection</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+A</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
                             </property>
                         </widget>
                         <widget class="QRadioButton" row="2" column="0">
@@ -213,7 +208,6 @@
 <tabstops>
     <tabstop>cmbSelect</tabstop>
     <tabstop>chkInvert</tabstop>
-    <tabstop>radioReplace</tabstop>
     <tabstop>bnSelect</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>

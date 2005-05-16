@@ -163,6 +163,7 @@ namespace {
 			kdDebug() << "new annotation" << endl;
 			if (!(*it) || (*it) -> type() == QString()) {
 				kdDebug() << "Warning: empty annotation" << endl;
+				++it;
 				continue;
 			}
 			kdDebug() << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;

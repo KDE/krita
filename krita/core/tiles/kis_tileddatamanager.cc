@@ -278,7 +278,6 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 			}
 		}
 	}
-	printf("set extent here3\n");
 
 	// Set the extent correctly
 	m_extentMinX = x;

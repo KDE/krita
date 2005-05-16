@@ -2209,35 +2209,7 @@ void KisView::layersUpdated(KisImageSP img)
 	if (img == currentImg())
 		layersUpdated();
 }
-/*
-void KisView::selectImage(const QString& name)
-{
-	disconnectCurrentImg();
-	m_current = m_doc -> findImage(name);
-	connectCurrentImg();
-	layersUpdated();
-	// XXX: was m_current && m_current -> activeLayer() -> selection()
-	m_selectionManager -> updateGUI();
-	resizeEvent(0);
-	updateCanvas();
-	notify();
-}
 
-void KisView::selectImage(KisImageSP img)
-{
-	disconnectCurrentImg();
-	m_current = img;
-	connectCurrentImg();
-	layersUpdated();
-	resizeEvent(0);
-	updateCanvas();
-
-	if (m_tabBar)
-		updateTabBar();
-	// XXX: was m_current && m_current -> activeLayer() -> selection()
-	m_selectionManager -> updateGUI();
-}
-*/
 void KisView::scrollH(int value)
 {
 	m_hRuler -> updateVisibleArea(value, 0);

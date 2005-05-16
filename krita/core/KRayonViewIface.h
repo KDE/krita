@@ -49,8 +49,6 @@ public:
 
 	void slotImportImage();
 	void export_image();
-	void add_new_image_tab();
-	void remove_current_image_tab();
 
 	// settings action slots
 	void preferences();

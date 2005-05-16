@@ -1,5 +1,6 @@
 Krita TODO
 
+	* write the Krita handbook.
 
 Scaling
 
@@ -13,6 +14,8 @@ Scaling
 
 Core
 
+	* Remove multiple images per document. The view part has already been disabled, but it still has
+	  signs of this, and doc is no changed yet.
 	* Channels showing (note that we don't do Gimp-type grayscale
 	  mask channels, just showing/hiding the various color
 	  channels.
@@ -29,6 +32,8 @@ Core
 	* Make toolbox look like Karbon's toolbox, but follow the
 	  layout of photoshop's toolbox for minimum confusability.
         * Lock layers (make inaccessible) See bug #90456.
+	* Link/unlink layer sets a nice icon. but doesn't actually link the
+  layer to anything.
 
 File Format:
 
@@ -148,6 +153,10 @@ Plugins
 	* As many filters as possible :-)
 	* Load plugins into registry on Krita startup, instead of on
 	  view creation. (Tried this, but failed miserable. BSAR)
+	* The Variations plugin is just a mockup and does not use the same
+  preview as the rest of Krita.
+
+
 
 Modules
 

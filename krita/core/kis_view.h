@@ -162,12 +162,9 @@ public slots:
 
 	// image action slots
 	// XXX: Rename to make all names consistent with slotDoX() pattern
-	void slotImportImage();
 	void export_image();
 	void slotImageProperties();
         void imgResizeToActiveLayer();
-	void add_new_image_tab();
-	void remove_current_image_tab();
 	void resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers = false);
 	void scaleCurrentImage(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
         void rotateCurrentImage(double angle);
@@ -276,13 +273,11 @@ private:
 
 
 	bool selectColor(QColor& result);
-	void selectImage(KisImageSP img);
 
 	void setupActions();
 	void setupCanvas();
 	void setupRulers();
 	void setupScrollBars();
-	void setupTabBar();
 	void setupStatusBar();
 	void setupTools();
 
@@ -304,7 +299,6 @@ public slots:
 	void layerToggleLocked();
 	void layerProperties();
 
-	void layerToImage();
 	void layerAdd();
 	void layerRemove();
 	void layerDuplicate();
@@ -324,7 +318,6 @@ public slots:
 	void selectFGColor();
 	void selectBGColor();
 	void reverseFGAndBGColors();
-	void selectImage(const QString&);
 	void brushActivated(KisResource *brush);
 	void patternActivated(KisResource *pattern);
 	void gradientActivated(KisResource *gradient);
@@ -340,18 +333,10 @@ public slots:
 	void slotImageSizeChanged(KisImageSP img, Q_INT32 w, Q_INT32 h);
 
 	void slotUpdateFullScreen(bool toggle);
-	void updateTabBar();
 	void showRuler();
-
-	void duplicateCurrentImg();
-
 
 
 private slots:
-
-	void popupTabBarMenu( const QPoint& );
-	void moveImage( unsigned, unsigned );
-	void slotRename();
 
 	void canvasGotMoveEvent(KisMoveEvent *e);
 	void canvasGotButtonPressEvent(KisButtonPressEvent *e);
@@ -378,26 +363,16 @@ private:
 	KisDockerManager * m_dockerManager;
 
         // Fringe benefits
-	KoTabBar *m_tabBar;
-	QButton *m_tabFirst;
-	QButton *m_tabLeft;
-	QButton *m_tabRight;
-	QButton *m_tabLast;
-
 	KisRuler *m_hRuler;
 	KisRuler *m_vRuler;
 
         // Actions
-	KAction *m_imgDup;
-	KAction *m_imgExport;
-	KAction *m_imgImport;
 	KAction *m_imgFlatten;
 	KAction *m_imgMergeLinked;
 	KAction *m_imgMergeVisible;
 	KAction *m_imgMergeLayer;
 	KAction *m_imgRename;
 	KAction *m_imgResizeToLayer;
-	KAction *m_imgRm;
 	KAction *m_imgScan;
 
 	KAction *m_layerAdd;
@@ -410,7 +385,6 @@ private:
 	KAction *m_layerRaise;
 	KAction *m_layerRm;
 	KAction *m_layerSaveAs;
-	KAction *m_layerToImage;
 	KAction *m_layerTop;
 
 	KAction *m_zoomIn;

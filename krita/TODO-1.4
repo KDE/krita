@@ -3,25 +3,11 @@ Krita buglist for KOffice release 1.4
 * File/Import and File/Export don't warn when exporting to
   an unsupported filetype. (check if this is still valid)
 
-* Removing current image does not ask whether to save the image
-  even if it has been changed -> people will expect Krita to save the
-  image in its import format. Nobody will assume that all the tabs
-  together form one big document that is saved/exported as a whole.
-
 * What's the difference between gamma correction and colour adjustment?
-
-* The Variations plugin is just a mockup and does not use the same
-  preview as the rest of Krita.
-
-* Link/unlink layer sets a nice icon. but doesn't actually link the
-  layer to anything.
 
 * The layer is scaled correctly, but when scaled down, the old tiles are not removed.
 
 * There are no example script files for use with the scripting engine
-
-* There is no Krita handbook yet.
-
 
 Selections
 
@@ -30,7 +16,7 @@ Selections
 * The shape tools should (with filled as default) also be available as 
   selection tools. (fixed for ellipse)
 
-* Cropping should also crop the selection.
+* Cropping, mirroring, scaling should also transform the selection - or take it into account
 
 * Select Polygonal does not work. Should be fixed or disabled
 
@@ -74,22 +60,18 @@ Import/Export
   to save them to the native krita format as well. (ICC data gets saved by name,
   but that doesn't work with profiles from an imported file)
 
-Widgets
-
-
-Layers
-
-* implement layer locking.
 
 Transform/rotate
 
 * The transform tool does not produce reproducable resutls
+
 
 Printing
 
 * Only one image is currently printed (but that's actually a feature)
 * No CMYK separation for printing
 * No use of the resolution parameter (but the resolution dialog is still only a .ui file and not implemented at all)
+
 
 Integration
 

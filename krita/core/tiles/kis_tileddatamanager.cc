@@ -213,16 +213,14 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	QRect newRect = QRect(x, y, w, h).normalize();
 	//printRect("newRect", newRect);
-	
 	QRect oldRect = QRect(m_extentMinX, m_extentMinY, m_extentMaxX - m_extentMinX + 1, m_extentMaxY - m_extentMinY + 1).normalize();
 	//printRect("oldRect", oldRect);
-	
+
 	// Do nothing if the desired size is bigger than we currently are: that is handled by the autoextending automatically
 	if (newRect.contains(oldRect)) return;
 
 	// Loop through all tiles, if a tile is wholly outside the extent, add to the memento, then delete it,
-	// if the tile is partially outside the extent, clear the outside pixels to black transparent (XXX: use the
-	// default pixel for this when avaiable).
+	// if the tile is partially outside the extent, clear the outside pixels to the default pixel.
 	for(int tileHash = 0; tileHash < 1024; tileHash++)
 	{
 		KisTile *tile = m_hashTable[tileHash];
@@ -257,7 +255,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 						for (int x = 0; x < KisTile::WIDTH; ++x) {
 							if (!intersection.contains(x,y)) {
 								Q_UINT8 * ptr = tile -> data(x, y);
-								memset(ptr, 0, m_pixelSize);
+								memcpy(ptr, m_defPixel, m_pixelSize);
 							}
 						}
 					}
@@ -280,7 +278,8 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 			}
 		}
 	}
-	
+	printf("set extent here3\n");
+
 	// Set the extent correctly
 	m_extentMinX = x;
 	m_extentMinY = y;
@@ -417,6 +416,8 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 				d->row = tile->getRow();
 				d->next = memento->m_delTilesTable;
 				memento->m_delTilesTable = d;
+				// As we are pratically adding a new tile we need to update the extent
+				updateExtent(tile->getCol(), tile->getRow());
 			}
 
 			// Put a copy of the memento tile into our hashtable

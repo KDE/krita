@@ -186,20 +186,19 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 					layer -> emitSelectionChanged();
 				}
 
-				KisSelection *tmpSel = new KisSelection(layer.data(),"tmp sel");
+				KisSelectionSP tmpSel = new KisSelection(layer.data(),"tmp sel");
 				tmpSel->select(rc);
 				switch(m_selectAction)
 				{
 					case SELECTION_ADD:
-						selection->addSelection(tmpSel);
+						layer->addSelection(tmpSel);
 						break;
 					case SELECTION_SUBTRACT:
-						selection->subtractSelection(tmpSel);
+						layer->subtractSelection(tmpSel);
 						break;
 					default:
 						break;
 				}
-				delete tmpSel;
 				layer->emitSelectionChanged();
 				img -> notify(rc);
 			}

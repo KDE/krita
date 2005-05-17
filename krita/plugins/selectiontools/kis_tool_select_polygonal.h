@@ -31,68 +31,49 @@
 
 #include "kis_tool_factory.h"
 
-
 class KisToolSelectPolygonal : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;
 	Q_OBJECT
-
 public:
 	KisToolSelectPolygonal();
 	virtual ~KisToolSelectPolygonal();
 
-	virtual void update(KisCanvasSubject *subject);
+        //
+        // KisCanvasObserver interface
+        //
+
+	virtual void update (KisCanvasSubject *subject);
+
+        //
+        // KisToolPaint interface
+        //
 
 	virtual void setup(KActionCollection *collection);
-	QWidget* createOptionWidget(QWidget* parent);
-        virtual QWidget* optionWidget();
 
-
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
 	virtual void buttonPress(KisButtonPressEvent *event);
 	virtual void move(KisMoveEvent *event);
 	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
+	QWidget* createOptionWidget(QWidget* parent);
+	virtual QWidget* optionWidget();
 
-private:
+protected:
+	virtual void paint(QPainter& gc);
+	virtual void paint(QPainter& gc, const QRect& rc);
+	void draw(QPainter& gc);
+	void draw();
 
-	virtual void clearSelection();
-	void paintOutline();
-	void paintOutline(QPainter& gc, const QRect& rc);
-
-	void drawLine(const QPoint& start, const QPoint& end);
-	void start(QPoint p);
-	void finish(QPoint p);
-
-private:
-
-	KisCanvasSubject *m_subject;
-
-	QPoint m_dragStart;
-	QPoint m_dragEnd;
-
-	QPoint m_start;
-	QPoint m_finish;
+protected:
+	KisPoint m_dragStart;
+	KisPoint m_dragEnd;
 
 	bool m_dragging;
-	bool m_drawn;
-
-	QRect m_selectRect;
-	QPointArray m_pointArray;
-	int m_index;
-
-// 	bool moveSelectArea;
-// 	bool dragSelectArea;
-	bool m_selecting;
-	QPoint m_hotSpot;
-	QPoint m_oldDragPoint;
-	QRegion m_selectRegion;
-	QRect m_imageRect;
-	bool m_dragFirst;
-	float m_dragdist;
-        QWidget * m_optWidget;
-
+private:
+	typedef QValueVector<KisPoint> KisPointVector;
+	KisCanvasSubject *m_subject;
+	KisPointVector m_points;
+	QWidget * m_optWidget;
 };
 
 

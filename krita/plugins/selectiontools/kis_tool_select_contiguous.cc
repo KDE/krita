@@ -102,6 +102,8 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 		
 		if (!dev -> hasSelection()) {
 			dev->selection()->clear();
+			if(m_selectAction==SELECTION_SUBTRACT)
+				selection->invert();
 		}
 		
 		switch (m_selectAction) {

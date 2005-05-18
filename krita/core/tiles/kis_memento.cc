@@ -18,7 +18,7 @@
 #include "kis_memento.h"
 #include "kis_tile.h"
 
-KisMemento::KisMemento(Q_UINT32 pixelSize)
+KisMemento::KisMemento(Q_UINT32 pixelSize) : KShared()
 {
 	m_hashTable = new KisTile * [1024];
 	Q_CHECK_PTR(m_hashTable);
@@ -35,6 +35,7 @@ KisMemento::KisMemento(Q_UINT32 pixelSize)
 	m_delTilesTable=0;
 	m_defPixel = new Q_UINT8[pixelSize];
 	m_redoDefPixel = new Q_UINT8[pixelSize];
+	m_valid = true;
 }
 
 KisMemento::~KisMemento()

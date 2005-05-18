@@ -340,7 +340,7 @@ Q_UINT32 KisTiledDataManager::calcTileHash(Q_INT32 col, Q_INT32 row)
 	return ((row << 5) + (col & 0x1F)) & 0x3FF;
 }
 
-KisMemento *KisTiledDataManager::getMemento()
+KisMementoSP KisTiledDataManager::getMemento()
 {
 	m_currentMemento = new KisMemento(m_pixelSize);
 	Q_CHECK_PTR(m_currentMemento);
@@ -350,9 +350,15 @@ KisMemento *KisTiledDataManager::getMemento()
 	return m_currentMemento;
 }
 
-void KisTiledDataManager::rollback(KisMemento *memento)
+void KisTiledDataManager::rollback(KisMementoSP memento)
 {
 	Q_ASSERT(memento != 0);
+
+	if (m_currentMemento != 0) {
+		// Undo means our current memento is no longer valid so remove it.
+		m_currentMemento = 0;
+	}
+
 	// Rollback means restoring all of the tiles in the memento to our hashtable.
 
 	// But first clear the memento redo hashtable.
@@ -432,9 +438,14 @@ void KisTiledDataManager::rollback(KisMemento *memento)
 	}
 }
 
-void KisTiledDataManager::rollforward(KisMemento *memento)
+void KisTiledDataManager::rollforward(KisMementoSP memento)
 {
 	Q_ASSERT(memento != 0);
+
+	if (m_currentMemento != 0) {
+		// Redo means our current memento is no longer valid so remove it.
+		m_currentMemento = 0;
+	}
 
 	// Rollforward means restoring all of the tiles in the memento's redo to our hashtable.
 
@@ -599,25 +610,27 @@ KisTile *KisTiledDataManager::getTile(Q_INT32 col, Q_INT32 row, bool writeAccess
 KisTile *KisTiledDataManager::getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def)
 {
 	KisTile *tile = 0;
-	Q_UINT32 tileHash = calcTileHash(col, row);
 
 	// Lookup tile in hash table of current memento
-	if(m_currentMemento)
+	if (m_currentMemento)
 	{
+		Q_ASSERT(m_currentMemento -> valid());
+
+		Q_UINT32 tileHash = calcTileHash(col, row);
 		tile = m_currentMemento->m_hashTable[tileHash];
-		while(tile != 0)
+		while (tile != 0)
 		{
-			if(tile->getRow() == row && tile->getCol() == col)
+			if (tile->getRow() == row && tile->getCol() == col)
 				break;
 
 			tile = tile->getNext();
 		}
 	}
 
-	if(! tile)
-		return def;
-	else
-		return tile;
+	if (!tile)
+		tile = def;
+
+	return tile;
 }
 
 Q_UINT8* KisTiledDataManager::pixelPtr(Q_INT32 x, Q_INT32 y, bool writable)

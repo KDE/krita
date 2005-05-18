@@ -283,9 +283,9 @@ public:
 	 */
 	void mirrorY();
 
-	KisMemento * getMemento() { return m_datamanager -> getMemento(); };
-	void rollback(KisMemento *memento) { m_datamanager -> rollback(memento); };
-	void rollforward(KisMemento *memento) { m_datamanager -> rollforward(memento); };
+	KisMementoSP getMemento() { return m_datamanager -> getMemento(); };
+	void rollback(KisMementoSP memento) { m_datamanager -> rollback(memento); };
+	void rollforward(KisMementoSP memento) { m_datamanager -> rollforward(memento); };
 	/**
 	 * This function return an iterator which points to the first pixel of an rectangle
 	 */

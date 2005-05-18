@@ -23,6 +23,7 @@
 
 #include "kis_types.h"
 #include "kis_tile.h"
+#include "kis_memento.h"
 
 class KisTiledDataManager;
 typedef KSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
@@ -30,7 +31,6 @@ typedef KSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
 class KisDataManager;
 class KisTiledIterator;
 class KoStore;
-class KisMemento;
 
 /**
  * KisTiledDataManager implements the interface that KisDataManager defines
@@ -67,9 +67,12 @@ protected:
 	void setDefaultPixel(Q_UINT8 *defPixel);
 	Q_UINT8 * defaultPixel() { return m_defPixel;};
 	
-	KisMemento *getMemento();
-	void rollback(KisMemento *memento);
-	void rollforward(KisMemento *memento);
+	KisMementoSP getMemento();
+	void rollback(KisMementoSP memento);
+	void rollforward(KisMementoSP memento);
+
+	// For debugging use.
+	bool hasCurrentMemento() const { return m_currentMemento != 0; }
 
 protected:
 	/**
@@ -157,7 +160,7 @@ private:
 	Q_UINT32 m_numTiles;
 	KisTile *m_defaultTile;
 	KisTile **m_hashTable;
-	KisMemento *m_currentMemento;
+	KisMementoSP m_currentMemento;
 	Q_INT32 m_extentMinX;
 	Q_INT32 m_extentMinY;
 	Q_INT32 m_extentMaxX;

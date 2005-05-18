@@ -23,10 +23,10 @@
 #include <qglobal.h>
 #include <qstring.h>
 #include <kcommand.h>
+#include "kis_types.h"
 #include "kis_paint_device.h"
 
 class QRect;
-class KisMemento;
 
 class KisTransaction : public KCommand {
 public:
@@ -43,7 +43,7 @@ public:
 private:
 	QString m_name;
 	KisPaintDeviceSP m_device;
-	KisMemento *m_memento;
+	KisMementoSP m_memento;
 };
 
 #endif // KIS_TILE_COMMAND_H_

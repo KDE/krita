@@ -66,7 +66,7 @@ public:
 	 * write actions on the datamanger builds undo data into this memento
 	 * necessary to rollback the transaction.
 	 */
-	KisMemento *getMemento() { return ACTUAL_DATAMGR::getMemento(); };
+	KisMementoSP getMemento() { return ACTUAL_DATAMGR::getMemento(); };
 
 	/**
 	 * Restores the image data to the state at the time of the getMemento() call.
@@ -74,7 +74,7 @@ public:
 	 * Note that rollback should be performed with mementos in the reverse order of
 	 * their creation, as mementos only store incremental changes
 	 */
-	void rollback(KisMemento *memento) { ACTUAL_DATAMGR::rollback(memento); };
+	void rollback(KisMementoSP memento) { ACTUAL_DATAMGR::rollback(memento); };
 
 	/**
 	 * Restores the image data to the state at the time of the rollback call of the memento.
@@ -83,7 +83,7 @@ public:
 	 * no intermittent actions have been performed (though it's ok to rollback other mementos and
 	 * roll them forward again)
 	 */
-	void rollforward(KisMemento *memento) { ACTUAL_DATAMGR::rollforward(memento); };
+	void rollforward(KisMementoSP memento) { ACTUAL_DATAMGR::rollforward(memento); };
 
 public:
 	/**

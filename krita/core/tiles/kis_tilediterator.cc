@@ -45,6 +45,11 @@ Q_UINT8 * KisTiledIterator::rawData() const
 
 const Q_UINT8 * KisTiledIterator::oldRawData() const
 {
+#ifdef DEBUG
+	// Warn if we're misusing oldRawData(). If there's no memento, oldRawData is the same
+	// as rawData().
+	kdWarning(!m_ktm -> hasCurrentMemento(), DBG_AREA_TILES) << "Accessing oldRawData() when no transaction is in progress.\n";
+#endif
 	return m_oldData + m_offset;
 }
 

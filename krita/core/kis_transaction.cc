@@ -30,15 +30,18 @@ KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device)
 	m_memento = device -> getMemento();
 }
 
-
-
 KisTransaction::~KisTransaction()
 {
-	delete m_memento;
+	if (m_memento) {
+		// For debugging purposes
+		m_memento -> setInvalid();
+	}
 }
 
 void KisTransaction::execute()
 {
+	Q_ASSERT(m_memento != 0);
+
 	KisImageSP img = m_device -> image();
 	
 	m_device->rollforward(m_memento);
@@ -53,6 +56,8 @@ void KisTransaction::execute()
 
 void KisTransaction::unexecute()
 {
+	Q_ASSERT(m_memento != 0);
+
 	KisImageSP img = m_device -> image();
 	
 	m_device -> rollback(m_memento);

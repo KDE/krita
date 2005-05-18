@@ -20,11 +20,12 @@
 #define KIS_MEMENTO_H_
 
 #include <qglobal.h>
+#include "kis_types.h"
 
 class KisTile;
 class KisTiledDataManager;
 
-class KisMemento
+class KisMemento : public KShared
 {
 public:
 	KisMemento(Q_UINT32 pixelSize);
@@ -38,6 +39,10 @@ public:
 */
 	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
 
+	// For debugging use
+	bool valid() const { return m_valid; }
+	void setInvalid() { m_valid = false; }
+
 private:
 	friend class KisTiledDataManager;
 	KisTiledDataManager *originator;
@@ -50,6 +55,8 @@ private:
 	Q_UINT8 *m_redoDefPixel;
 	void deleteAll(DeletedTile *deletedtile);
 	void deleteAll(KisTile *tile);
+
+	bool m_valid;
 };
 
 #endif // KIS_MEMENTO_H_

@@ -25,6 +25,7 @@
 #include <qstringlist.h>
 #include <kdebug.h>
 
+#include "kis_global.h"
 #include "kis_id.h"
 
 template<typename _T>
@@ -37,13 +38,12 @@ public:
 	void add(_T item)
 	{
 		m_storage.insert( typename storageMap::value_type( item->id(), item) );
-		kdDebug() << "Added " << item -> id().name() << "\n";
 	}
 
 	void add(KisID id, _T item)
 	{
 		m_storage.insert(typename storageMap::value_type(id, item));
-		kdDebug() << "Added: " << id.id() << "\n";
+		kdDebug(DBG_AREA_REGISTRY ) << "Added ID: " << id.id() << ", " << id.name() << "\n";
 	}
 	
 	_T get(const KisID& name) const
@@ -54,7 +54,7 @@ public:
 			p = it -> second;
 		}
 		if (!p) {
-			//kdDebug() << "No item " << name << " found\n";
+			kdDebug(DBG_AREA_REGISTRY) << "No item " << name.id() << ", " << name.name() << " found\n";
 			return 0;
 		}
 		return p;

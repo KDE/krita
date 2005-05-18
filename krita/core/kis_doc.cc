@@ -401,11 +401,16 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 	setUndo(false);
 
 	if (ret == KoTemplateChooseDia::Template) {
+
 		resetURL();
+
 		ok = loadNativeFormat( file );
+
                 if ( !ok )
                     showLoadingErrorDialog();
+
 		emit imageListUpdated();
+
 		if (nimages() == 0) {
 			if ((ok = slotNewImage()))
 				emit imageListUpdated();
@@ -490,29 +495,21 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
 
 	if (!init())
 		return false;
-
 	if (doc.doctype().name() != "DOC")
 		return false;
-
 	root = doc.documentElement();
 	attr = root.attribute("syntaxVersion");
-
-	if (attr.toInt() > 1)
-		return false;
-
+ 	if (attr.toInt() > 1)
+ 		return false;
 	if ((attr = root.attribute("depth")).isNull())
 		return false;
-
 	m_conversionDepth = attr.toInt();
-
 	for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
 		if (node.isElement()) {
 			if (node.nodeName() == "IMAGE") {
 				QDomElement elem = node.toElement();
-
 				if (!(img = loadImage(elem)))
 					return false;
-
 				m_images.push_back(img);
 			} else {
 				return false;
@@ -559,6 +556,7 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 
 KisImageSP KisDoc::loadImage(const QDomElement& element)
 {
+	
 	KisConfig cfg;
 	QString attr;
 	QDomNode node;
@@ -574,25 +572,21 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 	QString colorspacename;
 	Q_INT32 colorspace_int; // used to keep compatibility with old document
 	KisProfileSP profile;
+	
 
 	if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
 		if ((name = element.attribute("name")).isNull())
 			return 0;
-
 		if ((attr = element.attribute("width")).isNull())
 			return 0;
-
 		if ((width = attr.toInt()) < 0 || width > cfg.maxImgWidth())
 			return 0;
-
 		if ((attr = element.attribute("height")).isNull())
 			return 0;
-
 		if ((height = attr.toInt()) < 0 || height > cfg.maxImgHeight())
 			return 0;
-
 		description = element.attribute("description");
-
+		
 		if ((attr = element.attribute("x-res")).isNull())
 			xres = 100.0;
 		else if ((xres = attr.toInt()) < 0 || xres > cfg.maxImgHeight())
@@ -602,8 +596,6 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 			yres = 100.0;
 		else if ((yres = attr.toInt()) < 0 || yres > cfg.maxImgHeight())
 			yres = 100.0;
-
-
 
 		if ((colorspacename = element.attribute("colorspacename")).isNull())
 		{
@@ -635,9 +627,15 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 				return 0;
 			}
 		}
-
-		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(KisID(colorspacename, ""));
-		if (cs == 0) return 0;
+		
+		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
+		if (cs == 0) {
+			// return 0;
+			if (colorspacename  == "Grayscale + Alpha")
+				cs = KisColorSpaceRegistry::instance() -> get("GRAYA");
+			else 
+				cs = KisColorSpaceRegistry::instance() -> get("RGBA");
+		}
 
 		if ((profileProductName = element.attribute("profile")).isNull()) {
 			profile = 0;
@@ -659,9 +657,10 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 					for (child = node.firstChild(); !child.isNull(); child = child.nextSibling()) {
 						KisLayerSP layer = loadLayer(child.toElement(), img);
 
-						if (!layer)
+						if (!layer) {
+							kdDebug(DBG_AREA_FILE) << "Could not load layer\n";
 							return 0;
-
+						}
 						img -> add(layer, -1);
 					}
 
@@ -670,7 +669,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 					}
 				} else if (node.nodeName() == "COLORMAP") {
 					// TODO
-				} //else {
+				}
 			}
 		}
 	} else {
@@ -703,6 +702,12 @@ QDomElement KisDoc::saveLayer(QDomDocument& doc, KisLayerSP layer)
 
 KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 {
+	// Nota bene: If you add new properties to layers, you should
+	// ALWAYS define a default value in case the property is not
+	// present in the layer definition: this helps a LOT with backward
+	// compatibilty.
+	kdDebug(DBG_AREA_FILE) << "loadLayer called\n";
+	
 	KisConfig cfg;
 	QString attr;
 	QDomNode node;
@@ -718,23 +723,27 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
 	if ((name = element.attribute("name")).isNull())
 		return 0;
-
+	kdDebug(DBG_AREA_FILE) << "Loading layer " << name << "\n";
+	
 	if ((attr = element.attribute("x")).isNull())
 		return 0;
-
 	x = attr.toInt();
-
+	kdDebug(DBG_AREA_FILE) << "X: " << x << "\n";
+	
 	if ((attr = element.attribute("y")).isNull())
 		return 0;
 
 	y = attr.toInt();
+	kdDebug(DBG_AREA_FILE) << "Y: " << y << "\n";
 
 	if ((attr = element.attribute("opacity")).isNull())
 		return 0;
 
 	if ((opacity = attr.toInt()) < 0 || opacity > QUANTUM_MAX)
-		return 0;
+		opacity = OPACITY_OPAQUE;
 
+	kdDebug(DBG_AREA_FILE) << "Opacity: " << opacity << "\n";
+		
 	QString compositeOpName = element.attribute("compositeop");
 	KisCompositeOp compositeOp;
 
@@ -747,33 +756,37 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 	if (!compositeOp.isValid()) {
 		return 0;
 	}
-
+	kdDebug(DBG_AREA_FILE) << "CompositeOp: " << compositeOpName << "\n";
+	
 	if ((attr = element.attribute("visible")).isNull())
-		return 0;
+		attr = "1";
 
 	visible = attr == "0" ? false : true;
-
+	kdDebug(DBG_AREA_FILE) << "Visible: " << visible << "\n";
+	
 	if ((attr = element.attribute("linked")).isNull())
-		return 0;
+		attr = "0";
 
 	linked = attr == "0" ? false : true;
-
+	kdDebug(DBG_AREA_FILE) << "Linked: " << linked << "\n";
+	
 	if ((attr = element.attribute("locked")).isNull())
-		return 0;
+		attr = "0";
 
 	locked = attr == "0" ? false : true;
-
+	kdDebug(DBG_AREA_FILE) << "Locked: " << locked<< "\n";
+	
 	QString colorspacename = element.attribute("colorspacename");
-	KisStrategyColorSpaceSP colorSpace = 0;
-
-	if (colorspacename.isNull()) {
-		// Default to the image colourspace for backwards compatibility
-		colorSpace = img -> colorStrategy();
-	} else {
+	KisStrategyColorSpaceSP colorSpace = img -> colorStrategy();
+	
+	kdDebug() << "Colorspace name in layer: " << colorspacename << "\n";
+	if (!colorspacename.isNull()) {
 		colorSpace = KisColorSpaceRegistry::instance() -> get(KisID(colorspacename, ""));
 	}
-
+	kdDebug(DBG_AREA_FILE) << "Colorspace: " << colorspacename << "\n";
+	
 	if (colorSpace == 0) {
+		kdDebug() << "Could not get colorspace: aborting\n";
 		return 0;
 	}
 
@@ -943,7 +956,7 @@ bool KisDoc::completeLoading(KoStore *store)
 				store -> close();
 				(*it2) -> setProfile(new KisProfile(data,
 					(*it2) -> colorStrategy() -> colorSpaceType()));
-				kdDebug() << "Opened icc information, size is " << data.size() << endl;
+				kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
 			}
 
 			IOCompletedStep();
@@ -960,7 +973,7 @@ bool KisDoc::completeLoading(KoStore *store)
 			data = store -> read(store -> size());
 			store -> close();
 			(*it) -> addAnnotation(new KisAnnotation("exif", "", data));
-			kdDebug() << "Opened exif information, size is " << data.size() << endl;
+			kdDebug(DBG_AREA_FILE) << "Opened exif information, size is " << data.size() << endl;
 		}
 		// icc profile
 		location = external ? QString::null : uri;
@@ -972,7 +985,7 @@ bool KisDoc::completeLoading(KoStore *store)
 			store -> close();
 			(*it) -> setProfile(new KisProfile(data,
 				(*it) -> colorStrategy() -> colorSpaceType()));
-			kdDebug() << "Opened icc information, size is " << data.size() << endl;
+			kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
 		}
 	}
 

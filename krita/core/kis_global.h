@@ -33,8 +33,14 @@
 
 #define KRITA_VERSION VERSION
 
-#define DBG_AREA_TILES 40001
-#define DBG_AREA_CORE 41000
+#define DBG_AREA_TILES 41000
+#define DBG_AREA_CORE 41001
+#define DBG_AREA_REGISTRY 40002
+#define DBG_AREA_TOOLS 41003
+#define DBG_AREA_CMS 41004
+#define DBG_AREA_FILTERS 41005
+#define DBG_AREA_PLUGINS 41006
+#define DBG_AREA_FILE 41008
 
 /**
  * Mime type for this app - not same as file type, but file types

@@ -20,8 +20,7 @@ SUBDIRS = cimg \
 	tool_polyline \
 	tool_polygon \
 	embossfilter \
-	$(kjsembed_plugin) \
 	tool_transform \
 	selectiontools \
 	histogram
-#imagemagick variations performancetest
+#imagemagick variations performancetest $(kjsembed_plugin)

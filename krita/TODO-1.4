@@ -3,11 +3,12 @@ Krita buglist for KOffice release 1.4
 * File/Import and File/Export don't warn when exporting to
   an unsupported filetype. (check if this is still valid)
 
-* What's the difference between gamma correction and colour adjustment?
+* What's the difference between gamma correction and colour
+  adjustment? -> explained by Cyrille's mail, put this in handbook. We need
+  a fix, too. See mailing list.
 
-* There are no example script files for use with the scripting engine
-
-* Krita crashes sometimes involving undo/redo and then some painting. Suspects that either undo or redo doesn't set hashtable correctly.
+* Krita crashes sometimes involving undo/redo and then some painting. 
+  Suspects that either undo or redo doesn't set hashtable correctly.
 
 
 Selections
@@ -15,11 +16,13 @@ Selections
 * The shape tools should (with filled as default) also be available as 
   selection tools. (fixed for ellipse)
 
-* Cropping, mirroring, scaling should also transform the selection - or take it into account
+* Cropping, mirroring, scaling should also transform the selection -
+  or take it into account
 
 * Select Polygonal does not work. Should be fixed or disabled
 
-* Implement action and invert when subtract for ellipse and brush selection tools
+* Implement action and invert when subtract for ellipse and brush
+  selection tools
 
 
 Gradients
@@ -31,9 +34,6 @@ Painting
 
 * The convolution paintop doesn't do anything at all.
 
-* Long painter operations (e.g., convolution painter) should use the 
-  progressbar and be cancelable.
-
 * Add easy convolution painter tool: smear, blur and sharpen.
 
 Color models
@@ -41,30 +41,12 @@ Color models
 
 Filters
 
-
-Import/Export
-
-* The image magick build should be ported to the fileformat framework
-  and put in its own plugin (KisFileFormat, KisFileFormatRegistry)
-
-
 Transform/rotate
 
 * The transform tool does not produce reproducable resutls
 
-
-Printing
-
-* Only one image is currently printed (but that's actually a feature)
-* No CMYK separation for printing
-* No use of the resolution parameter (but the resolution dialog is still only a .ui file and not implemented at all)
-
-
 Integration
 
 * A krita document embedded in KWord has the wrong scaling
-* On embedding a krita document in KWord, the user is asked for a document using the
-  template dialog. On selecting a .png, the user is told that png images cannot be
-  imported.
-* There is currently no kimgio module for Krita images.
 
+* Why three Krita file formats in the file dialog when we support only one?

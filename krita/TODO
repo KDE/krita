@@ -34,12 +34,23 @@ Core
         * Lock layers (make inaccessible) See bug #90456.
 	* Link/unlink layer sets a nice icon. but doesn't actually link the
   layer to anything.
+	* Long painter operations (e.g., convolution painter) should use the 
+  progressbar and be cancelable.
+
+
 
 File Format:
 
 	* Save & load all annotations in .kra files
 	* Save & load undo information in .kra files
 	* Save & load more information, like PNG comments, gamma information, etc
+
+
+Import/Export
+
+* The image magick build should be ported to the fileformat framework
+  and put in its own plugin (KisFileFormat, KisFileFormatRegistry)
+
 
 User Interface
 
@@ -165,3 +176,13 @@ Modules
 	* Finally fix CMYK
 	* Add Wet & Sticky model (in progress already)
 	* Implement Curtiss et. al. for watercolour (Levien, wet dreams. In progress)
+
+Printing
+
+* No CMYK separation for printing
+* No use of the resolution parameter (but the resolution dialog is still only a .ui file and not implemented at all)
+* Use gutenprint or something better for image printing.
+
+Integration
+
+* There is currently no kimgio module for Krita images.

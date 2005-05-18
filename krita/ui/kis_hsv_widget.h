@@ -77,6 +77,7 @@ private:
 	KoColor m_bgColor;
 
 	bool locked;
+	bool autovalue;
 };
 
 #endif

@@ -91,6 +91,7 @@ KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, na
 
 	setFixedSize(mGrid -> minimumSize());
 	locked = false;
+	autovalue = true;
 }
 
 void KisHSVWidget::slotHChanged(int h)
@@ -127,6 +128,7 @@ void KisHSVWidget::slotSChanged(int s)
 
 void KisHSVWidget::slotVChanged(int v)
 {
+	autovalue = false;
 	locked = true;
 	if (m_ColorButton->current() == KDualColorButton::Foreground){
 		m_fgColor.setHSV(m_fgColor.H(), m_fgColor.S(), v);
@@ -147,14 +149,20 @@ void KisHSVWidget::slotWheelChanged(const KoColor& c)
 {
 	locked = true;
 	if (m_ColorButton->current() == KDualColorButton::Foreground){
-		m_fgColor.setHSV(c.H(), c.S(), m_fgColor.V());
+		if(autovalue)
+			m_fgColor.setHSV(c.H(), c.S(), 255);
+		else
+			m_fgColor.setHSV(c.H(), c.S(), m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
 		// XXX: I once got a crash here. BSAR.
 		if(m_subject)
 			m_subject->setFGColor(m_fgColor.color());
 	}
 	else{
-		m_bgColor.setHSV(c.H(), c.S(), m_fgColor.V());
+		if(autovalue)
+			m_bgColor.setHSV(c.H(), c.S(), 255);
+		else
+			m_bgColor.setHSV(c.H(), c.S(), m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Background);
 		if(m_subject)
 			m_subject->setBGColor(m_bgColor.color());

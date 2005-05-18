@@ -22,14 +22,17 @@
 #include <qlistbox.h>
 #include <qlayout.h>
 #include <qstringlist.h>
+#include <qtoolbutton.h>
+#include <qlabel.h>
 
 #include <kglobalsettings.h>
 
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
-#include "kis_paint_box.h"
 #include "kis_id.h"
+#include "kis_paint_box.h"
 
+#include "wdgdockertoolbox.h"
 
 KisPaintBox::KisPaintBox(QWidget * parent, const char * name)
 	: super(parent, name)
@@ -37,10 +40,26 @@ KisPaintBox::KisPaintBox(QWidget * parent, const char * name)
 	QDockWindow::boxLayout() -> setSpacing( 0 );
 	QDockWindow::boxLayout() -> setMargin ( 0 );
 
-	setWidget( m_toolbox = new QToolBox( this ) );
-	Q_CHECK_PTR(m_toolbox);
+	setWidget( m_page = new WdgDockerToolBox(this) );
 
-	m_toolbox -> setFont( KGlobalSettings::toolBarFont() );
+        // Compute a small fontsize for the dockers; not everyone has their
+        // toolbar fontsize at a sensible 6 points.
+	m_font = KGlobalSettings::toolBarFont();
+	QFont f2 = KGlobalSettings::generalFont();
+	if (m_font.pointSize() >= f2.pointSize() ) {
+		float ps = f2.pointSize() * 0.8;
+		m_font.setPointSize((int)ps);
+	}	
+	m_page -> setFont(m_font);
+	m_page -> lblCaption -> setFont(m_font);
+	m_page  -> setBaseSize( 175, 125 );
+ 	if (m_page -> layout() != 0) {
+ 		m_page -> layout() -> setSpacing(0);
+ 		m_page -> layout() -> setMargin(0);
+ 	}
+
+  	QObject::connect(m_page -> bnShade, SIGNAL(toggled(bool)), this, SLOT(shade(bool)));
+	QObject::connect(this, SIGNAL(placeChanged(QDockWindow::Place)), this, SLOT(slotPlaceChanged(QDockWindow::Place)));
 
 	addPaintOps();
 }
@@ -55,19 +74,21 @@ void KisPaintBox::plug( QWidget *w )
 }
 void KisPaintBox::plug(QWidget *w, const QString & label)
 {
-	m_toolbox -> addItem( w,  label );
+	w -> setFont(m_font);
+	m_page -> toolBox -> addItem( w,  label );
 }
 
 void KisPaintBox::plug(QWidget *w, const QString & label, const QIconSet & iconset)
 {
-	m_toolbox -> addItem( w,  iconset,  label );
+	w -> setFont(m_font);
+	m_page -> toolBox -> addItem( w,  iconset,  label );
 }
 
 QWidget * KisPaintBox::getWidget(const QString & label)
 {
-	for ( int i = 0; i < m_toolbox -> count(); ++i ) {
-		if ( label.compare( m_toolbox -> itemLabel( i ) ) == 0 ) {
-			return m_toolbox -> item( i );
+	for ( int i = 0; i < m_page -> toolBox -> count(); ++i ) {
+		if ( label.compare( m_page -> toolBox -> itemLabel( i ) ) == 0 ) {
+			return m_page -> toolBox -> item( i );
 		}
 	}
 	return 0;
@@ -75,12 +96,12 @@ QWidget * KisPaintBox::getWidget(const QString & label)
 
 void KisPaintBox::unplug(QWidget *w)
 {
-	m_toolbox -> removeItem( w );
+	m_page -> toolBox -> removeItem( w );
 }
 
 void KisPaintBox::showPage(QWidget *w)
 {
-	m_toolbox -> setCurrentItem( w );
+	m_page -> toolBox -> setCurrentItem( w );
 }
 
 void KisPaintBox::addPaintOps()
@@ -96,5 +117,46 @@ void KisPaintBox::addPaintOps()
 	}
 }
 
+void KisPaintBox::setCaption(const QString & caption)
+{
+	KisBaseDocker::setCaption(caption);
+ 	m_page -> lblCaption -> setText(caption);
+}
+
+void KisPaintBox::shade(bool toggle)
+{
+	m_shaded = toggle;
+	if (!toggle) {
+ 		m_page -> toolBox -> show();
+	}
+	else {
+ 		m_page -> toolBox -> hide();
+		if (!m_docked) {
+			resize(minimumSize());
+		}
+
+	}
+}
+
+void KisPaintBox::slotPlaceChanged(QDockWindow::Place p)
+{
+
+	if (p == QDockWindow::InDock) {
+		m_docked = true;
+		m_page -> lblCaption -> show();
+		m_page -> bnShade -> show();
+		m_page -> lblCaption -> setText(caption());
+		resize(sizeHint());
+	}
+	else {
+		m_docked = false;
+		m_page -> lblCaption -> hide();
+		m_page -> bnShade -> hide();
+		m_page -> toolBox -> show();
+		m_page -> lblCaption -> setText("");
+		resize(sizeHint());
+	}
+
+}
 
 #include "kis_paint_box.moc"

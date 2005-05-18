@@ -2,16 +2,6 @@ Krita TODO
 
 	* write the Krita handbook.
 
-Scaling
-
-	- replace calloc and free by new and delete.
-	- check if memory allocations fail and free the resources if
-	  they fail.
-	- replace the structs CONTRIB and CLIST by some STL or Qt
-	  container.
-	- use iterators to access pixels.
-        - Decide on more user-friendly names for the scaling algs.
-
 Core
 
 	* Remove multiple images per document. The view part has already been disabled, but it still has
@@ -118,7 +108,7 @@ Color conversions
 
         * Replace QColor with KisColor, where KisColor is a combination of a
           byte array and a pointer to a color model
-        * Add UI for depth choice
+       * Add UI for depth choice
         * Add UI for display settings for high bit depths -- we have upscale
           and downscale, but that's not enough. I want, as in OpenEXR, to be
           able to set the lighting stops.

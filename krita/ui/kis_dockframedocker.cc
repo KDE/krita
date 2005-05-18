@@ -49,9 +49,18 @@ KisDockFrameDocker::KisDockFrameDocker( QWidget* parent, const char* name )
 	QDockWindow::boxLayout() -> setMargin(0);
 
 	setWidget( m_page = new WdgDockerTab ( this ) );
-	m_page -> setFont(KGlobalSettings::toolBarFont());
-	m_page  -> setBaseSize( 175, 125 );
 
+	// Compute a small fontsize for the dockers; not everyone has their
+	// toolbar fontsize at a sensible 6 points.
+	m_font = KGlobalSettings::toolBarFont();
+	QFont f2 = KGlobalSettings::generalFont();
+	if (m_font.pointSize() >= f2.pointSize() ) {
+		float ps = f2.pointSize() * 0.8;
+		m_font.setPointSize((int)ps);
+	}	
+	m_page -> setFont(m_font);
+	m_page -> lblCaption -> setFont(m_font);
+	m_page  -> setBaseSize( 175, 125 );
  	if (m_page -> layout() != 0) {
  		m_page -> layout() -> setSpacing(0);
  		m_page -> layout() -> setMargin(0);
@@ -69,6 +78,7 @@ KisDockFrameDocker::~KisDockFrameDocker()
 
 void KisDockFrameDocker::plug (QWidget* w)
 {
+	w -> setFont(m_font);
         m_page -> tabWidget -> addTab( w , w -> caption());
 	if (w -> layout() != 0) {
  		w -> layout() -> setSpacing(0);

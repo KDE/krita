@@ -24,9 +24,9 @@
 #include "kis_basedocker.h"
 #include "kis_types.h"
 
-class QToolBox;
 class QIconSet;
 class QString;
+class WdgDockerToolBox;
 
 /**
  * The paint box is a toolbox that contains all
@@ -52,8 +52,8 @@ public:
 
 	/// Plug a new entry into the stack
 	void plug( QWidget *w );
-	void plug(QWidget *w, const QString & label);
-	void plug(QWidget *w, const QString & label, const QIconSet & iconset);
+	void plug( QWidget *w, const QString & label);
+	void plug( QWidget *w, const QString & label, const QIconSet & iconset);
 
 	 /// Get an entry
 	QWidget * getWidget(const QString & label);
@@ -64,6 +64,13 @@ public:
 	/// Show a particular entry from the stack
         void showPage(QWidget *w);
 
+	void setCaption(const QString & caption);
+
+public slots:
+
+	void shade(bool toggle);
+	void slotPlaceChanged(QDockWindow::Place p);
+
 private:
 
 	/// Ask all know paintops to add themselves to where they want to go
@@ -71,8 +78,10 @@ private:
 
 private:
 
-	QToolBox * m_toolbox;
-
+	WdgDockerToolBox * m_page;
+	bool m_docked;
+	bool m_shaded;
+	QFont m_font;
 
 };
 

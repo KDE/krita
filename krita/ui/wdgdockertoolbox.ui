@@ -1,0 +1,96 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgDockerToolBox</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgDockerToolBox</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>lblCaption</cstring>
+            </property>
+            <property name="backgroundMode">
+                <enum>PaletteMid</enum>
+            </property>
+            <property name="font">
+                <font>
+                </font>
+            </property>
+            <property name="text">
+                <string>Bla bla bla</string>
+            </property>
+        </widget>
+        <widget class="QToolButton" row="0" column="1">
+            <property name="name">
+                <cstring>bnShade</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>18</width>
+                    <height>18</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>18</width>
+                    <height>18</height>
+                </size>
+            </property>
+            <property name="backgroundMode">
+                <enum>PaletteMid</enum>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="on">
+                <bool>false</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image0</iconset>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Shade or unshade the palette</string>
+            </property>
+        </widget>
+        <widget class="QToolBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>toolBox</cstring>
+            </property>
+            <property name="currentIndex">
+                <number>0</number>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<images>
+    <image name="image0">
+        <data format="PNG" length="235">89504e470d0a1a0a0000000d4948445200000014000000130806000000908c2db5000000b249444154388dcd94510ac4200c449365bf054bee991394d2dec06316a5821e20fbd5a554db487161032204e6394354cc390b74acb74857de0f80e78631065bc529a5c24dd5213337d95e96a5e85d4676cedd3a6566a9698bc847816ab152b86d9b2ab4d6628cb1e90075cac330e0ee769a2615f86a850100ccf3ac0345046aeb0c3b42af342202e8bdbfcd4c445ff0388eaac32a9088308420dade1c79bf63da5e8dbcae6bd7c77c3be527f5ffdf57f7c81f91a7c049eb14d79e0000000049454e44ae426082</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

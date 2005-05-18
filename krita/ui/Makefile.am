@@ -56,7 +56,8 @@ libkisui_la_SOURCES = \
     wdgapplyprofile.ui \
     wdgdockertab.ui \
     wdgbirdeye.ui \
-    wdglayerbox.ui
+    wdglayerbox.ui \
+    wdgdockertoolbox.ui
 
 
 noinst_HEADERS = kis_dlg_preferences.h \
@@ -99,7 +100,8 @@ noinst_HEADERS = kis_dlg_preferences.h \
     kis_birdeye_box.h \
     kis_paint_box.h \
     kis_palette_widget.h \
-    wdglayerbox.h
+    wdglayerbox.h \
+    wdgdockertoolbox.h
 
 
 libkisui_la_METASOURCES = AUTO

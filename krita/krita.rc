@@ -143,16 +143,17 @@
 </ToolBar>
 
 
-<ToolBar name="painting_tools" position="top"><Text>Painting Tools</Text>
+<ToolBar name="painting_tools" position="left"><Text>Painting Tools</Text>
 </ToolBar>
 
-<ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
-</ToolBar>
-
-<ToolBar name="transform_tools" position="top"><Text>Transformation Tools</Text>
+<ToolBar name="transform_tools" position="left"><Text>Transformation Tools</Text>
 	<Action name="mirrorLayerX"/>
 	<Action name="mirrorLayerY"/>
 </ToolBar>
+
+<ToolBar name="selection_tools" position="left"><Text>Selection Tools</Text>
+</ToolBar>
+
 
 <Menu name="menuimage_popup">
   <Action name="rename_current_image_tab"/>

@@ -51,6 +51,7 @@ private:
         WdgDockerTab * m_page;
 	bool m_docked;
 	bool m_shaded;
+	QFont m_font;
 };
 
 

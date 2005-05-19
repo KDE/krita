@@ -523,7 +523,7 @@ bool KisPaintDevice::read(KoStore *store)
 void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
 	// XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
-	if ( (colorStrategy() -> id() == dstColorStrategy -> id()) && (profile() -> profile() == dstProfile -> profile()) )
+	if ( (colorStrategy() -> id() == dstColorStrategy -> id()) && profile() && dstProfile && (profile() -> profile() == dstProfile -> profile()) )
 	{
 		return;
 	}

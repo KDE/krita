@@ -35,13 +35,9 @@ class WdgToolCrop;
 /**
  * Crop tool
  *
- * TODO: - crop from selection
- *       - crop all layers
- *       - crop single layer
+ * TODO: - crop from selection -- i.e, set crop outline to the exact bounds of the selection.
  *       - (when moving to Qt 4: replace rectangle with  darker, dimmer overlay layer
  *         like we have for selections right now)
- *       - Move crop selection with corner markers
- * BUGS: - No undo yet
  */
 class KisToolCrop : public KisToolNonPaint {
 

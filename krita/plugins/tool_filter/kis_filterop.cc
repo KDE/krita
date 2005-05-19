@@ -121,6 +121,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	Q_CHECK_PTR(tmpDev);
 
 	// Copy the layer data onto the new paint device
+	// XXX: Some filters need the old-values, from before mouse-down here.
 	KisPainter p( tmpDev );
 	p.bitBlt( 0,  0,  COMPOSITE_COPY, m_source, OPACITY_OPAQUE, x, y, maskWidth, maskHeight );
 

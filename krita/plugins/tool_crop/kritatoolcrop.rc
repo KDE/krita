@@ -2,7 +2,7 @@
 <kpartgui library="kritatoolcrop" version="1">
 
 
-<ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
+<ToolBar name="transform_tools" position="top"><Text>Transformation Tools</Text>
 <Separator/>
   <Action name="tool_crop"/>
 </ToolBar>

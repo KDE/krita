@@ -1,46 +1,71 @@
 Krita buglist for KOffice release 1.4
 
 * File/Import and File/Export don't warn when exporting to
-  an unsupported filetype. (check if this is still valid)
+  an unsupported filetype. (Still valid).
 
 * What's the difference between gamma correction and colour
   adjustment? -> explained by Cyrille's mail, put this in handbook. We need
   a fix, too. See mailing list.
 
-* Krita crashes sometimes involving undo/redo and then some painting. 
-  Suspects that either undo or redo doesn't set hashtable correctly.
-
+* Photoshop files are not recognized when opened, but there is now an
+  option in the list of filetypes and that works.
 
 Selections
 
 * The shape tools should (with filled as default) also be available as 
-  selection tools. (fixed for ellipse)
+  selection tools. (fixed for ellipse) (We may have to remove the
+  poly selection tool if it isn't fixed before Monday, see also
+  painting todo).
+ 
+* Mirroring, scaling should also transform the selection -
+  or take it into account. 
 
-* Cropping, mirroring, scaling should also transform the selection -
-  or take it into account
+  Current problems: 
+	* on rotating with a selection present, all non-selected bits
+	  are cleared. The selection is not rotated.
+	* On mirroring, the whole image is mirrored, not the selected
+	  bits. The selection is not mirrored.
+	* Shear ditto.
+
+* If there is a selection present, on activating the crop tool, the
+  initial crop rectangle should be sized to the exact bounds of the
+  selection.  
 
 * Select Polygonal does not work. Should be fixed or disabled
 
+* Select colorrange dialog appears to be broken -- the dialog has no
+  "replace" option anymore, which is necessary, and the preview only
+  takes effect after the selection has been made. Selecting by tone
+  gives a very curious effect.
 
-Gradients
-
+* I still cannnot decipher the selection icons; they need to be
+  replaced with similar icons with the original tool icon on the
+  selection border field.
 
 Painting
 
-* The shapes tools should offer a filled shape option
+* The shapes tools should offer a filled shape option (Adrian is
+  working on this now).
+	
+* The convolution paintop doesn't do anything at all. (But it isn't
+  used anywhere yet, so that's not so bad, perhaps. We cannot add a
+  new tool at the moment anyway. Let's scrap this todo item.)
 
-* The convolution paintop doesn't do anything at all.
-
-* Add easy convolution painter tool: smear, blur and sharpen.
-
-Color models
+* Add easy convolution painter tool: smear, blur and sharpen. -> This
+  must be done with the filter painter tool. (Boudewijn is going to
+  pick this up.)
 
 
-Filters
+* It is not obvious how the duplicate tool works, and consequently
+  hard to determine wether it works correctly.
+
+Color spaces
+
+* Conversion from RGB to GRAY works, but vice versa not.
 
 Transform/rotate
 
-* The transform tool does not produce reproducable resutls
+* The transform tool does not produce reproducable resutls.
 
 Integration
 

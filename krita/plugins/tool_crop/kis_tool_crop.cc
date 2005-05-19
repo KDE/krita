@@ -725,4 +725,5 @@ void KisToolCrop::setMoveResizeCursor (Q_INT32 handle)
         return;
 }
 
+
 #include "kis_tool_crop.moc"

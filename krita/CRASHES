@@ -99,3 +99,49 @@ Thread debugging using libthread_db enabled]
 #30 0xb7fe7996 in kdeinitmain () from /usr/lib/kde3/krita.so
 #31 0x0804cb6e in ?? ()
 #32 0x00000001 in ?? ()
+
+--------------------
+
+After a longish session suddenly the selection tools didn't work anymore, or, at least, nothing
+appeard to be selected. On trying to undo, the following crash occurred.
+
+#5  0xb6496c15 in KisSelectionManager::updateGUI (this=0xa645e88)
+    at ../../../koffice/krita/core/kis_selection_manager.cc:237
+#6  0xb6496b23 in KisSelectionManager::clipboardDataChanged (this=0xa645e88)
+    at ../../../koffice/krita/core/kis_selection_manager.cc:215
+#7  0xb6498ece in KisSelectionManager::qt_invoke (this=0xa645e88, _id=4, 
+    _o=0xbfffe290) at kis_selection_manager.moc:129
+#8  0xb6f51fdd in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
+#9  0xb6f51eae in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
+#10 0xb7266918 in QClipboard::dataChanged () from /usr/lib/libqt-mt.so.3
+#11 0xb6e9d1c4 in QClipboard::setData () from /usr/lib/libqt-mt.so.3
+#12 0xb6f007f3 in QClipboard::setImage () from /usr/lib/libqt-mt.so.3
+#13 0xb6f00845 in QClipboard::setImage () from /usr/lib/libqt-mt.so.3
+#14 0xb649fdaa in KisClipboard::setClip (this=0x83af7a8, selection=
+      {ptr = 0x94c5eb8}) at ../../../koffice/krita/core/kis_clipboard.cc:82
+#15 0xb64976ca in KisSelectionManager::copy (this=0x83af700)
+    at ../../../koffice/krita/core/kis_selection_manager.cc:343
+#16 0xb6496f73 in KisSelectionManager::cut (this=0x83af700)
+    at ../../../koffice/krita/core/kis_selection_manager.cc:279
+#17 0xb6498ede in KisSelectionManager::qt_invoke (this=0x83af700, _id=5, 
+    _o=0xbfffe870) at kis_selection_manager.moc:130
+#18 0xb6f52067 in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
+#19 0xb6f51eae in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
+#20 0xb77fe711 in KAction::activated () from /usr/lib/libkdeui.so.4
+#21 0xb77fdf18 in KAction::slotActivated () from /usr/lib/libkdeui.so.4
+#22 0xb77fe9d2 in KAction::qt_invoke () from /usr/lib/libkdeui.so.4
+#23 0xb6f52067 in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
+#24 0xb6f51eae in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
+#25 0xb759bfab in KAccelPrivate::menuItemActivated ()
+   from /usr/lib/libkdecore.so.4
+#26 0xb759a94a in KAccelPrivate::eventFilter () from /usr/lib/libkdecore.so.4
+#27 0xb6f4fb01 in QObject::activate_filters () from /usr/lib/libqt-mt.so.3
+#28 0xb6f4fa5d in QObject::event () from /usr/lib/libqt-mt.so.3
+#29 0xb6f8576f in QWidget::event () from /usr/lib/libqt-mt.so.3
+#30 0xb703c5f4 in QMainWindow::event () from /usr/lib/libqt-mt.so.3
+#31 0xb6efa370 in QApplication::internalNotify () from /usr/lib/libqt-mt.so.3
+#32 0xb6ef9eb0 in QApplication::notify () from /usr/lib/libqt-mt.so.3
+#33 0xb7518960 in KApplication::notify () from /usr/lib/libkdecore.so.4
+#34 0xb7599924 in KAccelEventHandler::x11Event () from /usr/lib/libkdecore.so.4
+#35 0xb751e827 in KApplication::x11EventFilter () from /usr/lib/libkdecore.so.4
+#36 0xb6e87128 in qt_set_x11_event_filter () from /usr/lib/libqt-mt.so.3

@@ -26,6 +26,7 @@
 
 using namespace std;
 
+#include <qgroupbox.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlabel.h>

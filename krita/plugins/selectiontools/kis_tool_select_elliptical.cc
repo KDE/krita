@@ -173,7 +173,6 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 
 			if (img) {
 				KisLayerSP layer = img -> activeLayer();
-				KisSelectionSP selection = layer -> selection();
 								
 				KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), layer.data());
 
@@ -181,7 +180,7 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 				{
 					layer -> selection() -> clear();
 					if(m_selectAction==SELECTION_SUBTRACT)
-						selection->invert();
+						layer -> selection()->invert();
 					layer -> emitSelectionChanged();
 				}
 				QRect rc( m_startPos.floorQPoint(), m_endPos.floorQPoint());

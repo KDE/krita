@@ -559,8 +559,9 @@ void KisDockerManager::setupDockers()
 			m_paintboxdocker -> show();
 			m_colordocker -> show();
 
+			// XXX: With Qt 4.0, this will be solved. For now commenting this out fixes bug 105921.
+			//m_view -> mainWindow() -> setDockEnabled( DockTop, false);
 			m_view -> mainWindow() -> setDockEnabled( DockBottom, false);
-			m_view -> mainWindow() -> setDockEnabled( DockTop, false);
 
 		}
 	}

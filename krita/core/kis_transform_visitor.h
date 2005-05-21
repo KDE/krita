@@ -120,8 +120,8 @@ public:
 
 	void transformy(KisPaintDevice *src, KisPaintDevice *dst, Q_INT32 scale, Q_INT32 scaleDenom, Q_INT32  shear, Q_INT32 dy,   KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
 
-	void transform(Q_INT32  xscale, Q_INT32  yscale, 
-			Q_INT32  xshear, Q_INT32  yshear, Q_INT32  denominator,
+	void transform(double  xscale, double  yscale, 
+			Q_INT32  xshear, Q_INT32  yshear,
 			Q_INT32  xtranslate, Q_INT32  ytranslate,
  			KisProgressDisplayInterface *m_progress, enumFilterType filterType = MITCHELL_FILTER);
 private:

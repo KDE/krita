@@ -86,10 +86,6 @@ Selections
 * The shape tools should (with filled as default) also be available as 
   selection tools. (fixed for ellipse)
 
-* Cropping should also crop the selection.
-
-* Select Polygonal does not work.
-
 * Invent and implement ways to visualise selection masks in more intelligent ways. When selecting a white area it should still be visible that it has been selected. Should be user configurable and globally implemented (ie not per layer)
 
 Profiles

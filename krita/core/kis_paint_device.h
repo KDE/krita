@@ -270,8 +270,8 @@ public:
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
         void rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
-	void transform(Q_INT32  xscale, Q_INT32  yscale, 
-			Q_INT32  xshear, Q_INT32  yshear, Q_INT32  denominator,
+	void transform(double  xscale, double  yscale, 
+			Q_INT32  xshear, Q_INT32  yshear,
 			Q_INT32  xtranslate, Q_INT32  ytranslate, KisProgressDisplayInterface *m_progress);
 
 	/**

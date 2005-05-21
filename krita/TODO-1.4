@@ -31,8 +31,6 @@ Selections
   initial crop rectangle should be sized to the exact bounds of the
   selection.  
 
-* Select Polygonal does not work. Should be fixed or disabled
-
 * Select colorrange dialog appears to be broken -- the dialog has no
   "replace" option anymore, which is necessary, and the preview only
   takes effect after the selection has been made. Selecting by tone
@@ -63,9 +61,15 @@ Color spaces
 
 * Conversion from RGB to GRAY works, but vice versa not.
 
-Transform/rotate
+Transform tool
 
-* The transform tool does not produce reproducable resutls.
+* Get undo to work.
+
+* Get cursor shapes to change again
+
+* Use filter during scaling
+
+* Disable GUI for rotation as this will not be ready
 
 Integration
 
@@ -78,7 +82,3 @@ Filters
 * Why cannot I get autocontrast to do something useful? Is it my sample images,
   or is autocontrast not working correctly?
 
-Plugins
-
-* The snapshot plugin now overwrites the image instead of adding a new image
-  to the document: it should create a new view with the snapshot.

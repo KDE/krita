@@ -27,6 +27,8 @@
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
 
+class KisTransaction;
+
 /**
  * Transform tool
  *
@@ -97,6 +99,7 @@ private:
 	double m_sina;
 	double m_a;
 	double m_clickangle;
+	KisTransaction *m_transaction;
 
 	QWidget * m_optWidget;
 };

@@ -108,9 +108,11 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 	Q_UINT8 *data;
 	KisSelectionSP dstSelection = dst->selection();
 	
-	src->extent(left, top, w, h);
+	if(src->hasSelection())
+		src->selection()->exactBounds(left, top, w, h);
+	else
+		src->exactBounds(left, top, w, h);
 		
-	// create weight for each pixel of the destination line
 	double weight;
 	double fscale = 1.0 / scale;
 	double width = filterStrategy->support();
@@ -126,7 +128,7 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 	Q_UINT8 *tmpSel = new Q_UINT8[w];
 	Q_CHECK_PTR(tmpSel);
 
-	printf("w=%d,tW=%d\n",w,targetW);
+	printf("w=%d,tW=%d scale=%d sDenom=%d\n",w,targetW,scale, scaleDenom);
 	
 	for(y = top; y < top+h; y++)
 	{
@@ -199,9 +201,11 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 	Q_UINT8 *data;
 	KisSelectionSP dstSelection = dst->selection();
 	
-	src->extent(left, top, w, h);
+	if(src->hasSelection())
+		src->selection()->exactBounds(left, top, w, h);
+	else
+		src->exactBounds(left, top, w, h);
 		
-	// create weight for each pixel of the destination line
 	double weight;
 	double fscale = 1.0 / scale;
 	double width = filterStrategy->support();
@@ -279,8 +283,8 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 	delete [] tmpSel;
 }
 
-void KisTransformVisitor::transform(Q_INT32  xscale, Q_INT32  yscale, 
-				    Q_INT32  xshear, Q_INT32  yshear, Q_INT32  denominator,
+void KisTransformVisitor::transform(double  xscale, double  yscale, 
+				    Q_INT32  xshear, Q_INT32  yshear,
 				    Q_INT32  xtranslate, Q_INT32  ytranslate,
 				    KisProgressDisplayInterface *m_progress, enumFilterType filterType)
 {
@@ -320,9 +324,9 @@ void KisTransformVisitor::transform(Q_INT32  xscale, Q_INT32  yscale,
 	m_cancelRequested = false;
 	
 	KisPaintDeviceSP tmpdev = new KisPaintDevice(m_dev->colorStrategy(),"temporary");
-	transformx(m_dev, tmpdev, xscale, denominator, xshear, xtranslate, m_progress, filterStrategy);
-	m_dev->deselect();
-	transformy(tmpdev, m_dev, yscale, denominator, yshear, ytranslate, m_progress, filterStrategy);
+	transformx(m_dev, tmpdev, xscale*width, width, xshear, xtranslate, m_progress, filterStrategy);
+	m_dev->selection()->clear();
+	transformy(tmpdev, m_dev, yscale*height, height, yshear, ytranslate, m_progress, filterStrategy);
 	delete tmpdev;
 	
 	//progress info

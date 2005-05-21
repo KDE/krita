@@ -39,7 +39,7 @@
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
-#include <kis_transaction.h>
+#include <kis_selected_transaction.h>
 #include <kis_button_press_event.h>
 #include <kis_button_release_event.h>
 #include <kis_move_event.h>
@@ -48,8 +48,8 @@
 #include "kis_tool_transform.h"
 
 namespace {
-	class TransformCmd : public KisTransaction {
-		typedef KisTransaction super;
+	class TransformCmd : public KisSelectedTransaction {
+		typedef KisSelectedTransaction super;
 
 	public:
 		TransformCmd(KisPaintDeviceSP device);
@@ -58,13 +58,9 @@ namespace {
 	public:
 		virtual void execute();
 		virtual void unexecute();
-
-	private:
-		KisTransaction selTransaction;
 	};
 
-	TransformCmd::TransformCmd(KisPaintDeviceSP device) : super(i18n("Transform"), device),
-		selTransaction(i18n("Transform"), device->selection().data())
+	TransformCmd::TransformCmd(KisPaintDeviceSP device) : super(i18n("Transform"), device)
 	{
 	}
 
@@ -75,13 +71,11 @@ namespace {
 	void TransformCmd::execute()
 	{
 		super::execute();
-		selTransaction.execute();
 	}
 
 	void TransformCmd::unexecute()
 	{
 		super::unexecute();
-		selTransaction.unexecute();
 	}
 }
 
@@ -109,7 +103,16 @@ void KisToolTransform::update(KisCanvasSubject *subject)
 
 void KisToolTransform::clear()
 {
+	KisImageSP img = m_subject -> currentImg();
+
+	if (!img)
+		return;
+
 	paintOutline();
+
+	if (m_transaction && img -> undoAdapter()) {
+		img -> undoAdapter() -> addCommand(m_transaction);
+	}
 }
 
 void KisToolTransform::activate()
@@ -458,20 +461,21 @@ void KisToolTransform::transform() {
 	double tx = m_translateX - m_org_cenX * m_scaleX;
 	double ty = m_translateY - m_org_cenY * m_scaleY;
 	KisProgressDisplayInterface *progress = 0;//view() -> progressDisplay();
-	
-	TransformCmd * cmd = new TransformCmd(img->activeLayer().data());
-	Q_CHECK_PTR(cmd);
+
+	if(m_transaction)
+	{
+		m_transaction->unexecute();
+		delete m_transaction;
+	}	
+	m_transaction = new TransformCmd(img->activeLayer().data());
+	Q_CHECK_PTR(m_transaction);
 		
-	img->activeLayer()->transform(m_scaleX*w, m_scaleY*w, 0, 0, w, tx, ty, progress);
+	img->activeLayer()->transform(m_scaleX, m_scaleY, 0, 0, tx, ty, progress);
 	
 	QRect rc = img->activeLayer()->extent();
 	rc = rc.normalize();
 	
 	img -> notify(rc);
-
-	if (img -> undoAdapter()) {
-		img -> undoAdapter() -> addCommand(cmd);
-	}
 }
 
 QWidget* KisToolTransform::createOptionWidget(QWidget* parent)

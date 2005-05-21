@@ -114,10 +114,20 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 		src->exactBounds(left, top, w, h);
 		
 	double weight;
-	double fscale = 1.0 / scale;
+	double fscale;
 	double width = filterStrategy->support();
-	Q_INT32  targetW= w * scale / scaleDenom;
-	Q_INT32  targetL;
+	Q_INT32  targetW, targetL;
+	
+	if(scale < 0)
+	{
+		targetW = -w * scale / scaleDenom;
+		fscale = -1.0 / scale;
+	}
+	else
+	{
+		targetW = w * scale / scaleDenom;
+		fscale = 1.0 / scale;
+	}
 	
 	// Calculate extra width needed due to shear
 	Q_INT32 extrawidth =0;
@@ -129,10 +139,14 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 	Q_CHECK_PTR(tmpSel);
 
 	printf("w=%d,tW=%d scale=%d sDenom=%d\n",w,targetW,scale, scaleDenom);
+	printf("left=%d,dx=%d\n",left,dx);
 	
 	for(y = top; y < top+h; y++)
 	{
-		targetL = (left) * scale / scaleDenom + dx;
+		if(scale < 0)
+			targetL = left * scale / scaleDenom - targetW + dx;
+		else
+			targetL = (left) * scale / scaleDenom + dx;
 		
 		KisHLineIteratorPixel srcIt = src->createHLineIterator(left, y, w, true);
 		int i = 0;
@@ -163,7 +177,11 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 		i=0;
 		while(!dstIt.isDone())
 		{
-			center = (i * scaleDenom) / scale;
+			if(scale < 0)
+				center = w + (i * scaleDenom) / scale;
+			else
+				center = (i * scaleDenom) / scale;
+			
 			begin = ceil(center - width);
 			end = floor(center + width);
 			
@@ -207,10 +225,21 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 		src->exactBounds(left, top, w, h);
 		
 	double weight;
-	double fscale = 1.0 / scale;
+	double fscale;
 	double width = filterStrategy->support();
-	Q_INT32  targetW= h * scale / scaleDenom;
-	Q_INT32  targetT;
+	Q_INT32  targetW, targetT;
+	
+	if(scale < 0)
+	{
+		targetW = -h * scale / scaleDenom;
+		fscale = -1.0 / scale;
+	}
+	else
+	{
+		targetW = h * scale / scaleDenom;
+		fscale = 1.0 / scale;
+	}
+	
 	
 	// Calculate extra width needed due to shear
 	Q_INT32 extrawidth =0;
@@ -221,7 +250,10 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 	
 	for(x = left; x < left+w; x++)
 	{
-		targetT = (top) * scale / scaleDenom + dx;
+		if(scale < 0)
+			targetT = top * scale / scaleDenom - targetW + dx;
+		else
+			targetT = (top) * scale / scaleDenom + dx;
 		
 		KisVLineIteratorPixel srcIt = src->createVLineIterator(x, top, h, true);
 		int i = 0;
@@ -252,7 +284,11 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 		i=0;
 		while(!dstIt.isDone())
 		{
-			center = (i * scaleDenom) / scale;
+			if(scale < 0)
+				center = h + (i * scaleDenom) / scale;
+			else
+				center = (i * scaleDenom) / scale;
+				
 			begin = ceil(center - width);
 			end = floor(center + width);
 			

@@ -77,7 +77,7 @@ protected slots:
 	virtual void activate();
 
 private:
-	enum function {ROTATE,MOVE,TOPLEFTSCALE,TOPSCALE,TOPRIGHTSCALE,RIGHTSCALE,
+	enum function {NONE,ROTATE,MOVE,TOPLEFTSCALE,TOPSCALE,TOPRIGHTSCALE,RIGHTSCALE,
 				BOTTOMRIGHTSCALE, BOTTOMSCALE,BOTTOMLEFTSCALE, LEFTSCALE};
 	function m_function;
 	KisCanvasSubject *m_subject;

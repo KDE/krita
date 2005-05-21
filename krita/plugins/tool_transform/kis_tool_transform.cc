@@ -113,6 +113,7 @@ void KisToolTransform::clear()
 	if (m_transaction && img -> undoAdapter()) {
 		img -> undoAdapter() -> addCommand(m_transaction);
 	}
+	m_transaction=0;
 }
 
 void KisToolTransform::activate()
@@ -212,6 +213,8 @@ void KisToolTransform::buttonPress(KisButtonPressEvent *e)
 					m_clickoffset = e -> pos().floorQPoint() 
 							- controller -> windowToView((m_topleft + m_bottomleft)/2);
 					break;
+				case NONE:
+					break;
 			}
 			m_selecting = true;
 		}
@@ -301,7 +304,7 @@ void KisToolTransform::move(KisMoveEvent *e)
 		}
 		else
 		{
-			m_function = ROTATE;
+			m_function = NONE;//ROTATE;
 			
 			if(det(mousePos - topleft, topright - topleft)>0)
 				setCursor(KisCursor::crossCursor());

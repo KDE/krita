@@ -153,7 +153,7 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
         /*for (i = 0; i <= Intensity; ++i)
 	  IntensityCount[i] = 0;*/
 
-	KisRectIterator it = src -> createRectIterator(X - Radius, Y - Radius, (2 * Radius) + 1, (2 * Radius) + 1, false);
+	KisRectIteratorPixel it = src -> createRectIterator(X - Radius, Y - Radius, (2 * Radius) + 1, (2 * Radius) + 1, false);
 
 	while (!it.isDone()) {
 
@@ -202,9 +202,15 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
         }
 
         int R, G, B;
-        R = AverageColorR[I] / MaxInstance;
-        G = AverageColorG[I] / MaxInstance;
-        B = AverageColorB[I] / MaxInstance;
+		if (MaxInstance != 0) {
+        	R = AverageColorR[I] / MaxInstance;
+        	G = AverageColorG[I] / MaxInstance;
+        	B = AverageColorB[I] / MaxInstance;
+		} else {
+			R = 0;
+			G = 0;
+			B = 0;
+		}
 
 	// Swap red and blue back to get the correct colour.
         color = qRgb (B, G, R);

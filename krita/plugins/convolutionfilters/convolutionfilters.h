@@ -55,7 +55,7 @@ public:
 	KisMeanRemovalFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("mean removal", i18n("Mean Removal")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
 
 };
 
@@ -64,7 +64,7 @@ public:
 	KisEmbossLaplascianFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("emboss laplascian", i18n("Emboss Laplascian")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
 
 };
 
@@ -73,7 +73,7 @@ public:
 	KisEmbossInAllDirectionsFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("emboss all directions", i18n("Emboss in All Directions")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
 
 };
 
@@ -82,7 +82,7 @@ public:
 	KisEmbossHorizontalVerticalFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("", i18n("Emboss Horizontal & Vertical")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
 
 };
 
@@ -91,7 +91,7 @@ public:
 	KisEmbossVerticalFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("emboss vertical only", i18n("Emboss Vertical Only")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
 
 };
 
@@ -100,7 +100,7 @@ public:
 	KisEmbossHorizontalFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("emboss horizontal only", i18n("Emboss Horizontal Only")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
 
 };
 
@@ -109,7 +109,7 @@ public:
 	KisEmbossDiagonalFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("emboss diagonal", i18n("Emboss Diagonal")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
 
 };
 
@@ -118,7 +118,7 @@ public:
 	KisTopEdgeDetectionFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("top edge detections", i18n("Top Edge Detection")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
 
 };
 
@@ -127,7 +127,7 @@ public:
 	KisRightEdgeDetectionFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("right edge detections", i18n("Right Edge Detection")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
 
 };
 
@@ -136,7 +136,7 @@ public:
 	KisBottomEdgeDetectionFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("bottom edge detections", i18n("Bottom Edge Detection")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
 
 };
 
@@ -145,7 +145,7 @@ public:
 	KisLeftEdgeDetectionFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("left edge detections", i18n("Left Edge Detection")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
 
 };
 

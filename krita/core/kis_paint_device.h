@@ -322,6 +322,9 @@ public:
 	/** Deselect the selection for this paintdevice. */
 	void deselect();
 
+	/** Clear the selected pixels from the paint device */
+	void clearSelection();
+	
 
 signals:
 

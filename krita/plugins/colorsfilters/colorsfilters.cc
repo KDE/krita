@@ -73,12 +73,16 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 
 	KisFilterSP kbc = createFilter<KisBrightnessContrastFilter>(m_view);
 	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, kbc, SLOT(slotActivated()), actionCollection(), "brightnesscontrast");
+	
 	KisFilterSP kac = createFilter<KisAutoContrast>(m_view);
 	(void) new KAction(i18n("&Auto Contrast"), 0, 0, kac, SLOT(slotActivated()), actionCollection(), "autocontrast");
+#if 0	// XXX Disabled for 1.4 because it doesn't use floats and the range is too big to be useful.
 	KisFilterSP kgc = createFilter<KisGammaCorrectionFilter>(m_view);
 	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, kgc, SLOT(slotActivated()), actionCollection(), "gammacorrection");
+#endif
 	KisFilterSP kfca = createFilter<KisColorAdjustmentFilter>(m_view);
 	(void) new KAction(i18n("&Color Adjustment..."), 0, 0, kfca, SLOT(slotActivated()), actionCollection(), "coloradjustment");
+	
 	KisFilterSP kdf = createFilter<KisDesaturateFilter>(m_view);
 	(void) new KAction(i18n("&Desaturate"), 0, 0, kdf, SLOT(slotActivated()), actionCollection(), "desaturate");
 }
@@ -174,7 +178,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	setProgressTotalSteps(rect.width() * rect.height() * 2);
 	Q_INT32 pixelsProcessed = 0;
 
-	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), false);
+	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 
 	// Number of channels in this device except alpha
  	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();

@@ -5,7 +5,7 @@ Krita TODO
 Core
 
 	* Remove multiple images per document. The view part has already been disabled, but it still has
-	  signs of this, and doc is no changed yet.
+	  signs of this, and doc is not changed yet.
 	* Channels showing (note that we don't do Gimp-type grayscale
 	  mask channels, just showing/hiding the various color
 	  channels.
@@ -23,9 +23,9 @@ Core
 	  layout of photoshop's toolbox for minimum confusability.
         * Lock layers (make inaccessible) See bug #90456.
 	* Link/unlink layer sets a nice icon. but doesn't actually link the
-  layer to anything.
+          layer to anything.
 	* Long painter operations (e.g., convolution painter) should use the 
-  progressbar and be cancelable.
+          progressbar and be cancelable.
 
 
 
@@ -117,7 +117,6 @@ Tools
 	* All tools must have a tool options tab (#Boudewijn, Adrian, Cyrille)
 	
 	* Implement the following tools: 
-		    - Elliptical selection (#Boudewijn)
 		    - Freehand selection (#Boudewijn)
 		    - Polygonal selection (#Boudewijn)
 		    - pen(cil) tool (same as brush, but not anti-aliased) (#Boudewijn,
@@ -144,7 +143,7 @@ Tools
 	* Implement path tools
 	* Sumi-e brush tool
 	* Natural media tools (chalk, ink, oil, watercolour -- fun!)
-
+	* The poly selection tool should be available, filled as a selection tool.
 
 Plugins
 
@@ -152,9 +151,10 @@ Plugins
 	* Load plugins into registry on Krita startup, instead of on
 	  view creation. (Tried this, but failed miserable. BSAR)
 	* The Variations plugin is just a mockup and does not use the same
-  preview as the rest of Krita.
-
-
+          preview as the rest of Krita.
+	* What's the difference between gamma correction and colour
+	  adjustment? -> explained by Cyrille's mail, put this in handbook. We need
+	  a fix, too. See mailing list.
 
 Modules
 
@@ -165,9 +165,9 @@ Modules
 
 Printing
 
-* No CMYK separation for printing
-* No use of the resolution parameter (but the resolution dialog is still only a .ui file and not implemented at all)
-* Use gutenprint or something better for image printing.
+	* No CMYK separation for printing
+	* No use of the resolution parameter (but the resolution dialog is still only a .ui file and not implemented at all)
+	* Use gutenprint or something better for image printing.
 
 Integration
 

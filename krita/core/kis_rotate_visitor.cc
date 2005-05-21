@@ -45,11 +45,19 @@ void KisRotateVisitor::rotate(double angle, bool rotateAboutImageCentre, KisProg
 
 	KisPaintDeviceSP rotated = rotate(m_dev, angle, centreOfRotation);
 
-	m_dev -> clear();
+	if (!m_dev -> hasSelection()) {
+		// Clear everything
+		m_dev -> clear();
+	} else {
+		// Clear selected pixels
+		m_dev -> clearSelection();
+	}
+	
 	KisPainter p(m_dev);
 	QRect r = rotated -> extent();
 
-	p.bitBlt(r.x(), r.y(), COMPOSITE_COPY, rotated, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+	// OVER ipv COPY
+	p.bitBlt(r.x(), r.y(), COMPOSITE_OVER, rotated, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
 	p.end();
 }
 
@@ -72,11 +80,17 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
 	KisPaintDeviceSP sheared = xShear(m_dev, shearX);
 	sheared = yShear(sheared, shearY);
 
-	m_dev -> clear();
+	if (!m_dev -> hasSelection()) {
+		m_dev -> clear();
+	} else {
+		// Clear selected pixels
+		m_dev -> clearSelection();
+	}
+	
 	KisPainter p(m_dev);
 	r = sheared -> extent();
 
-	p.bitBlt(r.x(), r.y(), COMPOSITE_COPY, sheared, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+	p.bitBlt(r.x(), r.y(), COMPOSITE_OVER, sheared, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
 	p.end();
 
 	setProgressDone();
@@ -96,7 +110,7 @@ KisPaintDeviceSP KisRotateVisitor::rotateRight90(KisPaintDeviceSP src)
 		KisHLineIteratorPixel hit = src -> createHLineIterator(r.x(), y, r.width(), false);
 		KisVLineIterator vit = dst -> createVLineIterator(r.x() + x, r.y(), r.width(), true);
 
-		while (!hit.isDone()) {
+			while (!hit.isDone()) {
 			if (hit.isSelected())  {
 				memcpy(vit.rawData(), hit.rawData(), pixelSize);
 			}

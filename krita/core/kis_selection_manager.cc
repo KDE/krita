@@ -440,8 +440,6 @@ void KisSelectionManager::clear()
 	if (!layer -> hasSelection()) return;
 
 	KisSelectionSP selection = layer -> selection();
-	QRect r = selection -> selectedRect();
-	r = r.normalize();
 
 	KisTransaction * t = 0;
 	if (img -> undoAdapter()) {
@@ -449,22 +447,8 @@ void KisSelectionManager::clear()
 		Q_CHECK_PTR(t);
 	}
 
-	KisRectIterator layerIt = layer -> createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
- 	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
-
-	while (!layerIt.isDone()) {
- 		KisPixel p = layer -> toPixel(layerIt.rawData());
- 		KisPixel s = selection -> toPixel(selectionIt.rawData());
- 		Q_UINT16 p_alpha, s_alpha;
- 		p_alpha = p.alpha();
- 		s_alpha = MAX_SELECTED - s.alpha();
-		
-		p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
-
-		++layerIt;
- 		++selectionIt;
-	}
-
+	layer -> clearSelection();
+	
 	if (img -> undoAdapter()) img -> undoAdapter() -> addCommand(t);
 	layer -> deselect();
 }

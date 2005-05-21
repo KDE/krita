@@ -86,15 +86,21 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32
 
 void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	// XXX: add checking of selections
-	KisPaintDeviceSP tmp = new KisPaintDevice(src -> colorStrategy(), "temporary paint device for convolving");
-	Q_CHECK_PTR(tmp);
-
+	
+	// XXX: Add checking of selections
+	// kdDebug() << "Convolving on x: " << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
+	if (w < 3 || h < 3) {
+		// kdDebug() << "Refusing to convolve on too small an area.\n";
+		return;
+	}
+	
 	m_cancelRequested = false;
 	int lastProgressPercent = 0;
 	emit notifyProgress(this, 0);
 
-	Q_INT32 depth = src -> colorStrategy() -> nColorChannels() + 1;
+	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();//  + 1; XXX: Why the + 1? It makes Krita crash
+								   // on the custom convolution filter preview and I cannot
+								   // image what it's supposed to accomplish.
 	Q_INT32 top, left;
 
 	left = x;
@@ -103,13 +109,11 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 	Q_INT32 above=top;
 	Q_INT32 below=top+1;
 	Q_INT32 dstY=top;
-
-
+	
 	KisPixelRO pixels[9];
 	{
 		KisHLineIteratorPixel curIt = src->createHLineIterator(left, y, w, false);
 		KisHLineIteratorPixel dstIt = src->createHLineIterator(left, dstY, w, true);
-		KisHLineIteratorPixel tmpIt = tmp->createHLineIterator(left, dstY, w, true);
 		KisHLineIteratorPixel afterIt = src->createHLineIterator(left, below, w, false);
 
 
@@ -180,8 +184,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 			{
 				int sum = matrix[i][1][1] + matrix[i][1][0] + matrix[i][2][0] + matrix[i][2][1];
 				sum = (sum == 0) ? 1 : sum;
-						// XXX: do something useful with the selectedness
-
+				// XXX: do something useful with the selectedness
 	
 				currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
 									(     pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
@@ -281,11 +284,13 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 				}
 			}
 		}
+
 		// Body : right
 		currentPixel = dstIt.pixel();
 		
 		// XXX: do something useful with the selectedness
 		if (dstIt.isSelected() ) {
+
 
 			for(int i = 0; i < depth; i++)
 			{
@@ -298,8 +303,8 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 										+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM - 1 ][i] * matrix[i][2][1] )
 										* matrix[i].sum() / matrix[i].factor() / leftSums[i] + matrix[i].offset() ) );
 			}
-		}
 		
+		}
 		above++;
 		y++;
 		dstY++;
@@ -384,7 +389,6 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 				}
 			}
 		}
-
 		// Corner : right bottom
 		currentPixel = dstIt.pixel();
 		// XXX: do something useful with the selectedness
@@ -402,6 +406,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 										/ matrix[i].factor() / sum + matrix[i].offset() ) );
 			}
 		}
+		
 	}
 
 	emit notifyProgressDone(this);

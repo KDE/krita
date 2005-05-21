@@ -757,6 +757,32 @@ void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
 	emitSelectionChanged();
 }
 
+void KisPaintDevice::clearSelection()
+{
+	if (!hasSelection()) return;
+
+	QRect r = m_selection -> selectedRect();
+	r = r.normalize();
+
+
+	KisRectIterator devIt = createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
+ 	KisRectIterator selectionIt = m_selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
+
+	while (!devIt.isDone()) {
+ 		KisPixel p = toPixel(devIt.rawData());
+ 		KisPixel s = m_selection -> toPixel(selectionIt.rawData());
+ 		Q_UINT16 p_alpha, s_alpha;
+ 		p_alpha = p.alpha();
+ 		s_alpha = MAX_SELECTED - s.alpha();
+		
+		p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
+
+		++devIt;
+ 		++selectionIt;
+	}
+
+
+}
 
 bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity)
 {

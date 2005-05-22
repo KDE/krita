@@ -733,7 +733,7 @@ void KisPaintDevice::deselect()
 }
 
 void KisPaintDevice::addSelection(KisSelectionSP selection) {
-	KisPainter painter(m_selection.data());
+	KisPainter painter(this -> selection().data());
 	Q_INT32 x, y, w, h;
 	selection -> extent(x, y, w, h);
 	painter.bitBlt(x, y, COMPOSITE_OVER, selection.data(), x, y, w, h);
@@ -744,7 +744,7 @@ void KisPaintDevice::addSelection(KisSelectionSP selection) {
 
 void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
 	Q_INT32 x, y, w, h;
-	KisPainter painter(m_selection.data());
+	KisPainter painter(this -> selection().data());
 	selection -> invert();
 	selection -> extent(x, y, w, h);
 	painter.bitBlt(x, y, COMPOSITE_ERASE, selection.data(), x, y, w, h);

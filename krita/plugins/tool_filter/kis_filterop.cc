@@ -152,7 +152,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	}
 
 	// Blit the paint device onto the layer
-	m_painter -> bitBlt( x,  y,  m_painter -> compositeOp(), tmpDev, m_painter -> opacity(), 0, 0, maskWidth, maskHeight);
+	m_painter -> bltSelection( x,  y,  m_painter -> compositeOp(), tmpDev, m_painter -> opacity(), 0, 0, maskWidth, maskHeight);
 
 	m_painter -> addDirtyRect(QRect(x, y, maskWidth, maskHeight));
 

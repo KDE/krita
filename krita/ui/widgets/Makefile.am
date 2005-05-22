@@ -13,6 +13,7 @@ noinst_LTLIBRARIES = libkiswidgets.la
 
 libkiswidgets_la_SOURCES = kis_filter_configuration_widget.cc \
 	kis_multi_integer_filter_widget.cc \
+	kis_multi_double_filter_widget.cc \
 	kis_gradient_slider_widget.cc \
 	kis_wdg_autogradient.ui \
 	kis_autogradient.cc \

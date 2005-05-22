@@ -76,10 +76,10 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 	
 	KisFilterSP kac = createFilter<KisAutoContrast>(m_view);
 	(void) new KAction(i18n("&Auto Contrast"), 0, 0, kac, SLOT(slotActivated()), actionCollection(), "autocontrast");
-#if 0	// XXX Disabled for 1.4 because it doesn't use floats and the range is too big to be useful.
+
 	KisFilterSP kgc = createFilter<KisGammaCorrectionFilter>(m_view);
 	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, kgc, SLOT(slotActivated()), actionCollection(), "gammacorrection");
-#endif
+
 	KisFilterSP kfca = createFilter<KisColorAdjustmentFilter>(m_view);
 	(void) new KAction(i18n("&Color Adjustment..."), 0, 0, kfca, SLOT(slotActivated()), actionCollection(), "coloradjustment");
 	
@@ -94,13 +94,13 @@ ColorsFilters::~ColorsFilters()
 //==================================================================
 
 KisColorAdjustmentFilter::KisColorAdjustmentFilter(KisView * view) :
-	KisPerChannelFilter(view, id(), -255, 255, 0)
+	KisIntegerPerChannelFilter(view, id(), -255, 255, 0)
 {
 }
 
 void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
-	KisPerChannelFilterConfiguration* configPC = (KisPerChannelFilterConfiguration*) config;
+	KisIntegerPerChannelFilterConfiguration* configPC = (KisIntegerPerChannelFilterConfiguration*) config;
 	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
 	Q_INT32 depth = src->nChannels() - 1;
 
@@ -134,13 +134,13 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 //==================================================================
 
 KisGammaCorrectionFilter::KisGammaCorrectionFilter(KisView * view)
-	: KisPerChannelFilter(view, id(), 1, 600, 1)
+	: KisDoublePerChannelFilter(view, id(), 0.1, 6.0, 1.0)
 {
 }
 
 void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
-	KisPerChannelFilterConfiguration* configPC = (KisPerChannelFilterConfiguration*) config;
+	KisDoublePerChannelFilterConfiguration* configPC = (KisDoublePerChannelFilterConfiguration*) config;
 	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
 	Q_INT32 depth = src->nChannels() - 1;
 

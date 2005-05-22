@@ -36,7 +36,7 @@ public:
 	virtual bool supportsPainting() { return true; }
 };
 
-class KisGammaCorrectionFilter : public KisPerChannelFilter {
+class KisGammaCorrectionFilter : public KisDoublePerChannelFilter {
 public:
 	KisGammaCorrectionFilter(KisView * view);
 public:
@@ -46,7 +46,7 @@ public:
 
 };
 
-class KisColorAdjustmentFilter : public KisPerChannelFilter {
+class KisColorAdjustmentFilter : public KisIntegerPerChannelFilter {
 public:
 	KisColorAdjustmentFilter(KisView * view);
 public:

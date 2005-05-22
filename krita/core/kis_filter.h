@@ -84,10 +84,17 @@ public:
 
 	// This filter can be used in painting tools as a paint operation
 	virtual bool supportsPainting() = 0;
+
+	// Can this filter work incrementally when painting, or do we need to work
+	// on the state as it was before painting started. The former is faster.
+	virtual bool supportsIncrementalPainting() { return true; };
+	
 	// This filter supports cutting up the work area and filtering
 	// each chunk in a separate thread. Filters that need access to the
 	// whole area for correct computations should return false.
+	
 	virtual bool supportsThreading() { return true; };
+	
 	// Used when threading is used -- the overlap margin is passed to the
 	// filter to use to compute pixels, but the margin is not pasted into the
 	// resulting image.

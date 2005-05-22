@@ -45,6 +45,7 @@
 #include <kis_button_release_event.h>
 #include <kis_move_event.h>
 #include <kis_selected_transaction.h>
+#include <kis_selection.h>
 
 #include "kis_tool_crop.h"
 #include "wdg_tool_crop.h"
@@ -71,6 +72,26 @@ void KisToolCrop::update(KisCanvasSubject *subject)
 {
 	m_subject = subject;
 	super::update(m_subject);
+}
+
+void KisToolCrop::activate()
+{
+	super::activate();
+
+//	if ( (m_startPos - m_endPos) != QPoint(0,0) )
+//		return;
+	// No current crop rectangle, try to use the selection of the device to make a rectangle
+	if (m_subject && m_subject -> currentImg() && m_subject -> currentImg() -> activeDevice()) {
+		KisPaintDeviceSP device = m_subject -> currentImg() -> activeDevice();
+		if (!device -> hasSelection())
+			return;
+
+		QRect extent = device -> selection() -> exactBounds();
+		m_startPos = extent.topLeft();
+		m_endPos = extent.bottomRight();
+		validateSelection();
+		paintOutlineWithHandles();
+	}
 }
 
 void KisToolCrop::paint(QPainter& gc)

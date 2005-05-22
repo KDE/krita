@@ -61,6 +61,8 @@ public:
 	virtual void move(KisMoveEvent *e);
 	virtual void buttonRelease(KisButtonReleaseEvent *e);
 
+public slots:
+	virtual void activate();
 private:
 	void clearRect();
 	void cropLayer(KisLayerSP layer, QRect rc);

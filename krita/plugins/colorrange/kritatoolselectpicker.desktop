@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Color Picker Select Tool
 Name[da]=Farvevælgerværktøj
+Name[de]=Farbauswahl-Werkzeug
 Name[el]=Εργαλείο επιλογέα χρωμάτων
 Name[en_GB]=Colour Picker Select Tool
 Name[es]=Herramienta selector de color
@@ -14,6 +15,8 @@ Name[nl]=Kleurenkiezer
 Name[pt]=Ferramenta de Selecção de Cores
 Name[pt_BR]=Ferramenta de Seleção de Cores
 Name[ru]=Инструмент выбора цвета
+Name[sr]=Алат за бирање боја
+Name[sr@Latn]=Alat za biranje boja
 Name[sv]=Färgväljarverktyg
 Name[zh_CN]=颜色拾取选择工具
 ServiceTypes=Krita/CoreModule

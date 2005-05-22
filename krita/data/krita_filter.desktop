@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Krita/CoreFilter
 Comment=Filter plugin for Krita
 Comment[da]=Filterplugin for Krita
+Comment[de]=Filter-Plugin für Krita
 Comment[es]=Extensión de filtrado para Krita
 Comment[et]=Krita filtriplugin
 Comment[fr]=Module de filtrage pour Krita

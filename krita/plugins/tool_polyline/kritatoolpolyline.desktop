@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Polyline Tool
 Name[da]=Flerlinjeværktøj
+Name[de]=Polylinien-Werkzeug
 Name[el]=Εργαλείο Polyline
 Name[es]=Herramienta Polilínea
 Name[et]=Kompleksjoone tööriist
@@ -14,6 +15,8 @@ Name[nl]=Polylijngereedschap
 Name[pt]=Ferramenta de Linhas Poligonais
 Name[pt_BR]=Ferramenta Poli-linha
 Name[ru]=Ломаная
+Name[sr]=Алат за полилиније
+Name[sr@Latn]=Alat za polilinije
 Name[sv]=Flerlinjesverktyg
 Name[zh_CN]=折线工具
 ServiceTypes=Krita/CoreModule

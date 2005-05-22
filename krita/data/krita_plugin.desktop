@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Krita/Plugin
 Comment=Plugin functionality module for Krita
 Comment[da]=Plugin-funktionalitetsmodul for Krita
+Comment[de]=Krita-Modul für Pluginfunktionen
 Comment[el]=Άρθρωμα λειτουργιών προσθέτου για το Krita
 Comment[es]=Extensión de módulo de funcionalidad para Krita
 Comment[et]=Krita pluginafunktsioonide moodul

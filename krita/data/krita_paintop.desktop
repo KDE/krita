@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Krita/CorePaintop
 Comment=paint operation plugin for Krita
 Comment[da]=maleoperation-plugin for Krita
+Comment[de]=Krita-Plugin zum Zeichnen und Malen
 Comment[el]=Πρόσθετο σχεδίασης για το Krita
 Comment[es]=Extensión de operación de pintado para Krita
 Comment[et]=Krita joonistamisoperatsioonide plugin

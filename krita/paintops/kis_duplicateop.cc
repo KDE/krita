@@ -145,20 +145,21 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 	}
 
 	QRect dabRect = QRect(0, 0, brush -> maskWidth(pressure), brush -> maskHeight(pressure));
-	
-	KisImage * image = device -> image();
-	
-	if (image != 0) {
-		QRect imageRect = image -> bounds();
-		if (x > imageRect.width()
-			|| y > imageRect.height()
-			|| x + dabRect.width() < 0
-			|| y < + dabRect.height() < 0) return;
-	}
-	
-	if (dabRect.isNull() || dabRect.isEmpty() || !dabRect.isValid()) return;
-	
-	m_painter -> bltSelection( x,  y,  m_painter -> compositeOp(), srcdev.data(), m_painter -> opacity(), 0, 0, dabRect.width(), dabRect.height());
-	m_painter -> addDirtyRect(QRect(x, y, dabRect.width(), dabRect.height()));
+	QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
+	KisImage * image = device -> image();
+
+	if (image != 0) {
+		dstRect &= image -> bounds();
+	}
+
+	if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+
+	Q_INT32 sx = dstRect.x() - x;
+	Q_INT32 sy = dstRect.y() - y;
+	sw = dstRect.width();
+	sh = dstRect.height();
+
+	m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), srcdev.data(), m_painter -> opacity(), sx, sy, sw, sh);
+	m_painter -> addDirtyRect(dstRect);
 }

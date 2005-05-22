@@ -92,29 +92,6 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	Q_INT32 maskWidth = mask -> width();
 	Q_INT32 maskHeight = mask -> height();
 
-	Q_INT32 devX, devY, devWidth, devHeight;
-
-	m_source -> extent( devX,  devY,  devWidth,  devHeight );
-
-	if ( x + maskWidth > devWidth ) maskWidth = devWidth - x;
-
-	if ( y + maskHeight > devHeight ) maskHeight = devHeight - y;
-
-	if ( maskWidth <= 0 || maskHeight <= 0 )
-		return;
-
-	// Draw correctly near the left and top edges
-	Q_INT32 sx = 0;
-	Q_INT32 sy = 0;
-	if (x < 0) {
-		sx = -x;
-		x = 0;
-	}
-	if (y < 0) {
-		sy = -y;
-		y = 0;
-	}
-
 	// Create a temporary paint device
 	KisPaintDeviceSP tmpDev = new KisPaintDevice(colorStrategy, "temp");
 	Q_CHECK_PTR(tmpDev);
@@ -152,8 +129,23 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	}
 
 	// Blit the paint device onto the layer
-	m_painter -> bltSelection( x,  y,  m_painter -> compositeOp(), tmpDev, m_painter -> opacity(), 0, 0, maskWidth, maskHeight);
 
-	m_painter -> addDirtyRect(QRect(x, y, maskWidth, maskHeight));
+	QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
+	QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
+	KisImage * image = m_painter -> device() -> image();
+
+	if (image != 0) {
+		dstRect &= image -> bounds();
+	}
+
+	if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+
+	Q_INT32 sx = dstRect.x() - x;
+	Q_INT32 sy = dstRect.y() - y;
+	Q_INT32 sw = dstRect.width();
+	Q_INT32 sh = dstRect.height();
+
+	m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), tmpDev, m_painter -> opacity(), sx, sy, sw, sh);
+	m_painter -> addDirtyRect(dstRect);
 }

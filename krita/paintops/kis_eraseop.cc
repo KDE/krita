@@ -100,6 +100,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 	Q_INT32 maskWidth = mask -> width();
 	Q_INT32 maskHeight = mask -> height();
 
+	QRect dstRect;
 
 	if (device -> alpha()) {
 		dab -> setOpacity(OPACITY_OPAQUE);
@@ -109,24 +110,23 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 				dab -> setPixel(x, y, m_painter -> paintColor(), QUANTUM_MAX - mask->alphaAt(x, y));
 			}
 		}
-		QRect dabRect = dab -> extent();
+		QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
+		dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
 
-		Q_ASSERT(dabRect.x() == 0);
-		Q_ASSERT(dabRect.y() == 0);
-	
 		KisImage * image = device -> image();
-	
-		if (image != 0) {
-			QRect imageRect = image -> bounds();
-				if (destX > imageRect.width()
-				|| destY > imageRect.height()
-				|| destX + dabRect.width() < 0
-				|| destY < + dabRect.height() < 0) return;
-		}
-	
-		if (dabRect.isNull() || dabRect.isEmpty() || !dabRect.isValid()) return;
 
-		m_painter -> bltSelection(destX, destY, COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, 0, 0, maskWidth, maskHeight);
+		if (image != 0) {
+			dstRect &= image -> bounds();
+		}
+
+		if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+
+		Q_INT32 sx = dstRect.x() - destX;
+		Q_INT32 sy = dstRect.y() - destY;
+		Q_INT32 sw = dstRect.width();
+		Q_INT32 sh = dstRect.height();
+
+		m_painter -> bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, sx, sy, sw, sh);
 
  	} else {
 		dab -> setOpacity(OPACITY_TRANSPARENT);
@@ -135,26 +135,25 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 				dab -> setPixel(x, y, m_painter -> backgroundColor(), mask->alphaAt(x, y));
 			}
 		}
-				QRect dabRect = dab -> extent();
+		QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
+		dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
 
-		Q_ASSERT(dabRect.x() == 0);
-		Q_ASSERT(dabRect.y() == 0);
-	
 		KisImage * image = device -> image();
-	
-		if (image != 0) {
-			QRect imageRect = image -> bounds();
-				if (destX > imageRect.width()
-				|| destY > imageRect.height()
-				|| destX + dabRect.width() < 0
-				|| destY < + dabRect.height() < 0) return;
-		}
-	
-		if (dabRect.isNull() || dabRect.isEmpty() || !dabRect.isValid()) return;
 
-		m_painter -> bltSelection(destX, destY, COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE, 0, 0, maskWidth, maskHeight);
+		if (image != 0) {
+			dstRect &= image -> bounds();
+		}
+
+		if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+
+		Q_INT32 sx = dstRect.x() - destX;
+		Q_INT32 sy = dstRect.y() - destY;
+		Q_INT32 sw = dstRect.width();
+		Q_INT32 sh = dstRect.height();
+
+		m_painter -> bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE, sx, sy, sw, sh);
  	}
 
-	m_painter -> addDirtyRect(QRect(destX, destY, maskWidth, maskHeight));
+	m_painter -> addDirtyRect(dstRect);
 }
 

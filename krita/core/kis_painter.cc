@@ -820,6 +820,11 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
 	KisFillPainter fillPainter(polygon);
 	QRect boundingRectangle(x0, y0, x1 - x0 + 1, y1 - y0 + 1);
 
+	// Clip to the image bounds.
+	if (m_device -> image()) {
+		boundingRectangle &= m_device -> image() -> bounds();
+	}
+
 	switch (fillStyle) {
 	default:
 		// Fall through

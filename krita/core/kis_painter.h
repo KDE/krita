@@ -267,7 +267,7 @@ public:
 	QColor fillColor() const { return m_fillColor; }
 
 	enum FillStyle {
-		FillStyleOutlineOnly,
+		FillStyleNone,
 		FillStyleForegroundColor,
 		FillStyleBackgroundColor,
 		FillStylePattern,
@@ -277,6 +277,14 @@ public:
 
 	void setFillStyle(FillStyle fillStyle) { m_fillStyle = fillStyle; }
 	FillStyle fillStyle() const { return m_fillStyle; }
+
+	enum StrokeStyle {
+		StrokeStyleNone,
+		StrokeStyleBrush
+	};
+
+	void setStrokeStyle(StrokeStyle strokeStyle) { m_strokeStyle = strokeStyle; }
+	StrokeStyle strokeStyle() const { return m_strokeStyle; }
 
 	void setOpacity(QUANTUM opacity) { m_opacity = opacity; }
 	QUANTUM opacity() const { return m_opacity; }
@@ -311,21 +319,6 @@ protected:
 
 	void fillPolygon(const vKisPoint& points, FillStyle fillStyle);
 
-private:
-
-        void paintEllipsePixel (bool invert,
-                                int xc, int yc, int x1, int y1, int x2, int y2,
-                                const double pressure);
-
-        void paintEllipseSymmetry (double ratio, bool invert,
-                                   int x, int y, int xc, int yc,
-                                   const double pressure);
-
-        void paintEllipseInternal (double ratio, bool invert,
-                                   int xc, int yc, int radius,
-                                   const double pressure);
-
-
 protected:
         KisPaintDeviceSP m_device;
         KisTransaction  *m_transaction;
@@ -336,6 +329,7 @@ protected:
 	QColor m_backgroundColor;
 	QColor m_fillColor;
 	FillStyle m_fillStyle;
+	StrokeStyle m_strokeStyle;
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisPoint m_duplicateOffset;

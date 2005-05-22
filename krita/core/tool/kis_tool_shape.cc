@@ -63,7 +63,7 @@ KisPainter::FillStyle KisToolShape::fillStyle(void)
 	if (m_shapeOptionsWidget) {
 		return static_cast<KisPainter::FillStyle>(m_shapeOptionsWidget -> cmbFill -> currentItem());
 	} else {
-		return KisPainter::FillStyleOutlineOnly;
+		return KisPainter::FillStyleNone;
 	}
 }
 

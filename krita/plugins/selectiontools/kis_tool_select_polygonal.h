@@ -28,8 +28,9 @@
 
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
-
 #include "kis_tool_factory.h"
+
+#include "kis_selection.h"
 
 class KisToolSelectPolygonal : public KisToolNonPaint {
 
@@ -58,6 +59,9 @@ public:
 	QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 
+public slots:
+	virtual void slotSetAction(int);
+
 protected:
 	virtual void paint(QPainter& gc);
 	virtual void paint(QPainter& gc, const QRect& rc);
@@ -74,6 +78,7 @@ private:
 	KisCanvasSubject *m_subject;
 	KisPointVector m_points;
 	QWidget * m_optWidget;
+	enumSelectionMode m_selectAction;
 };
 
 

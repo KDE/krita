@@ -94,7 +94,8 @@ void KisPainter::init()
 	m_opacity = OPACITY_OPAQUE;
 	m_compositeOp = COMPOSITE_OVER;
 	m_dab = 0;
-	m_fillStyle = FillStyleOutlineOnly;
+	m_fillStyle = FillStyleNone;
+	m_strokeStyle = StrokeStyleBrush;
 }
 
 KisPainter::~KisPainter()
@@ -613,87 +614,6 @@ void KisPainter::paintRect (const KisPoint &startPoint,
 	paintPolygon(points);
 }
 
-
-//
-// Ellipse code derived from zSprite2 Game Engine.
-// XXX: copyright attribution needed? BSAR.
-//
-
-void KisPainter::paintEllipsePixel (bool invert,
-                                    int xc, int yc, int x1, int y1, int x2, int y2,
-                                    const double pressure)
-{
-	if (!m_paintOp) return;
-
-	if (invert)
-	{
-		paintAt (QPoint (y1 + xc, x1 + yc), pressure, 0, 0);
-		paintAt (QPoint (y2 + xc, x2 + yc), pressure, 0, 0);
-
-	}
-	else
-	{
-		paintAt (QPoint (x1 + xc, y1 + yc), pressure, 0, 0);
-		paintAt (QPoint (x2 + xc, y2 + yc), pressure, 0, 0);
-	}
-}
-
-void KisPainter::paintEllipseSymmetry(double ratio, bool invert,
-				      int x, int y, int xc, int yc,
-				      const double pressure)
-{
-	int x_start, x_end, x_out;
-	int y_start, y_end, y_out;
-
-	x_start = (int) (x * ratio);
-	x_end = (int) ((x + 1) * ratio);
-	y_start = (int) (y * ratio);
-	y_end = (int) ((y + 1) * ratio);
-
-	for (x_out = x_start; x_out < x_end; x_out++)
-	{
-		paintEllipsePixel (invert, xc, yc, -x_out, -y, x_out, -y, pressure);
-		paintEllipsePixel (invert, xc, yc, -x_out, y, x_out, y, pressure);
-	}
-
-	for (y_out = y_start; y_out < y_end; y_out++)
-	{
-		paintEllipsePixel (invert, xc, yc, -y_out, -x, y_out, -x, pressure);
-		paintEllipsePixel (invert, xc, yc, -y_out, x, y_out, x, pressure);
-	}
-}
-
-void KisPainter::paintEllipseInternal (double ratio, bool invert,
-                                       int xc, int yc, int radius,
-                                       const double pressure)
-{
-	int x, y, d;
-	//unsigned char mask, exist_color;
-
-	y = radius;
-	d = 3 - 2 * radius;
-
-	for (x = 0; x < y;)
-	{
-		paintEllipseSymmetry (ratio, invert, x, y, xc, yc, pressure);
-
-		if  (d < 0)
-		{
-			d += (4 * x + 6);
-		}
-		else
-		{
-			d += (4 * (x - y) + 10);
-			y--;
-		}
-
-		x++;
-	}
-
-	if (x == y)
-		paintEllipseSymmetry (ratio, invert, x, y, xc, yc, pressure);
-}
-
 void KisPainter::paintEllipse (const KisPoint &startPoint,
                                const KisPoint &endPoint,
                                const double /*pressure*/,
@@ -717,27 +637,23 @@ void KisPainter::paintEllipse (const KisPoint &startPoint,
 
 	vKisPoint points;
 
-	//double distance = paintBezierCurve(p0, pressure, xTilt, yTilt, p1, p2, p3, pressure, xTilt, yTilt);
 	getBezierCurvePoints(p0, p1, p2, p3, points);
 
 	KisPoint p4(center.x() + lx, r.top());
 	KisPoint p5(r.right(), center.y() - ly);
 	KisPoint p6(r.right(), center.y());
 
-	//distance = paintBezierCurve(p3, pressure, xTilt, yTilt, p4, p5, p6, pressure, xTilt, yTilt, distance);
 	getBezierCurvePoints(p3, p4, p5, p6, points);
 
 	KisPoint p7(r.right(), center.y() + ly);
 	KisPoint p8(center.x() + lx, r.bottom());
 	KisPoint p9(center.x(), r.bottom());
 
-	//distance = paintBezierCurve(p6, pressure, xTilt, yTilt, p7, p8, p9, pressure, xTilt, yTilt, distance);
 	getBezierCurvePoints(p6, p7, p8, p9, points);
 
 	KisPoint p10(center.x() - lx, r.bottom());
 	KisPoint p11(r.left(), center.y() + ly);
 
-	//paintBezierCurve(p9, pressure, xTilt, yTilt, p10, p11, p0, pressure, xTilt, yTilt, distance);
 	getBezierCurvePoints(p9, p10, p11, p0, points);
 
 	paintPolygon(points);
@@ -859,7 +775,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
 	n = nvert;
 	pt = &(points[0]);
 	if (n<3) return;
-	if (fillStyle == FillStyleOutlineOnly) {
+	if (fillStyle == FillStyleNone) {
 		return;
 	}
 
@@ -985,17 +901,19 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
 
 void KisPainter::paintPolygon(const vKisPoint& points)
 {
-	if (m_fillStyle != FillStyleOutlineOnly) {
+	if (m_fillStyle != FillStyleNone) {
 		fillPolygon(points, m_fillStyle);
 	}
 
-	if (points.count() > 1) {
-		double distance = -1;
+	if (m_strokeStyle != StrokeStyleNone) {
+		if (points.count() > 1) {
+			double distance = -1;
 
-		for (uint i = 0; i < points.count() - 1; i++) {
-			distance = paintLine(points[i], PRESSURE_DEFAULT, 0, 0, points[i + 1], PRESSURE_DEFAULT, 0, 0, distance);
+			for (uint i = 0; i < points.count() - 1; i++) {
+				distance = paintLine(points[i], PRESSURE_DEFAULT, 0, 0, points[i + 1], PRESSURE_DEFAULT, 0, 0, distance);
+			}
+			paintLine(points[points.count() - 1], PRESSURE_DEFAULT, 0, 0, points[0], PRESSURE_DEFAULT, 0, 0, distance);
 		}
-		paintLine(points[points.count() - 1], PRESSURE_DEFAULT, 0, 0, points[0], PRESSURE_DEFAULT, 0, 0, distance);
 	}
 }
 

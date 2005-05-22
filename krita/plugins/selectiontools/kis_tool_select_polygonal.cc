@@ -40,6 +40,9 @@
 #include <kis_button_press_event.h>
 #include <kis_button_release_event.h>
 #include <kis_move_event.h>
+#include "kis_selected_transaction.h"
+#include "kis_painter.h"
+#include "kis_paintop_registry.h"
 
 namespace {
 	class PolygonSelectCmd : public KNamedCommand {
@@ -115,7 +118,52 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 		draw();
 		m_dragging = false;
 
-		//TODO add select here
+		KisImageSP img = m_subject -> currentImg();
+
+		if (img) {
+			KisLayerSP layer = img -> activeLayer();
+			bool hasSelection = layer -> hasSelection();
+
+			//XXX: Fix string
+			KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Selection Polygons"), layer.data());
+			KisSelectionSP selection = layer -> selection();
+
+			if (!hasSelection)
+			{
+				selection -> clear();
+			}
+
+			KisPainter painter(selection.data());
+
+			painter.setPaintColor(Qt::black);
+			painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+			painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+			painter.setBrush(m_subject -> currentBrush());
+			painter.setOpacity(OPACITY_OPAQUE);
+			KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
+			painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
+
+			switch(m_selectAction)
+			{
+				case SELECTION_ADD:
+					painter.setCompositeOp(COMPOSITE_OVER);
+					break;
+				case SELECTION_SUBTRACT:
+					painter.setCompositeOp(COMPOSITE_SUBTRACT);
+					break;
+				default:
+					break;
+			}
+
+			painter.paintPolygon(m_points);
+
+			layer->emitSelectionChanged();
+
+			if (img -> undoAdapter())
+				img -> undoAdapter() -> addCommand(t);
+
+			img -> notify(painter.dirtyRect());
+		}
 
 		m_points.clear();
 	}
@@ -233,12 +281,20 @@ QWidget* KisToolSelectPolygonal::createOptionWidget(QWidget* parent)
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
 	Q_CHECK_PTR(m_optWidget);
 	m_optWidget -> setCaption(i18n("Selection Polygons"));
+
+	connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+
 	return m_optWidget;
 }
 
 QWidget* KisToolSelectPolygonal::optionWidget()
 {
         return m_optWidget;
+}
+
+void KisToolSelectPolygonal::slotSetAction(int action) {
+	if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
+		m_selectAction =(enumSelectionMode)action;
 }
 
 

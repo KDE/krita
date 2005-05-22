@@ -215,6 +215,23 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 			src += srcstride;
 		}
 		return;
+	case COMPOSITE_SUBTRACT:
+		while (rows-- > 0) {
+			d = dst;
+			s = src;
+
+			for (i = cols; i > 0; i--, d += stride, s += stride) {
+				if (d[PIXEL_MASK] <= s[PIXEL_MASK]) {
+					d[PIXEL_MASK] = MIN_SELECTED;
+				} else {
+					d[PIXEL_MASK] -= s[PIXEL_MASK];
+				}
+			}
+
+			dst += dststride;
+			src += srcstride;
+		}
+		return;
 	case COMPOSITE_OVER:
 	default:
 		if (opacity == OPACITY_TRANSPARENT)

@@ -101,8 +101,17 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 	QLabel* lbFilter = new QLabel(i18n("Filter:"), widget);
 	Q_CHECK_PTR(lbFilter);
 
-	// XXX: Check which filters support painting
-	m_cbFilter ->setIDList( m_subject ->filterList() );
+	// Check which filters support painting
+	KisIDList l = m_subject -> filterList();
+	KisIDList l2;
+	KisIDList::iterator it;
+	for (it = l.begin(); it !=  l.end(); ++it) {
+		KisFilterSP f = m_subject -> filterGet(*it);
+		if (f -> supportsPainting()) {
+			l2.push_back(*it);
+		}
+	}
+	m_cbFilter ->setIDList( l2 );
 
 	m_optionLayout = new QGridLayout(widget, 3, 2, 0, 6);
 	Q_CHECK_PTR(m_optionLayout);

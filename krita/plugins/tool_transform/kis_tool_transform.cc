@@ -374,7 +374,9 @@ void KisToolTransform::buttonRelease(KisButtonReleaseEvent *e)
 	if (m_subject && m_selecting) {
 		m_selecting = false;
 	}
+	setCursor(KisCursor::waitCursor());
 	transform();
+	// correct cursor set by moving cursor
 }
 
 void KisToolTransform::paintOutline()

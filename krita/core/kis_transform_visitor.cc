@@ -106,12 +106,18 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 	Q_INT32 x,y,left,top,w,h;
         Q_INT32 center, begin, end;	/* filter calculation variables */
 	Q_UINT8 *data;
-	KisSelectionSP dstSelection = dst->selection();
+	KisSelectionSP dstSelection;
 	
 	if(src->hasSelection())
+	{
 		src->selection()->exactBounds(left, top, w, h);
+		dstSelection = dst->selection();
+	}
 	else
+	{
 		src->exactBounds(left, top, w, h);
+		dstSelection = new KisSelection(dst, "dummy"); // essentially a dummy to be deleted
+	}
 		
 	double weight;
 	double fscale;
@@ -217,12 +223,18 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 	Q_INT32 x,y,left,top,w,h;
         Q_INT32 center, begin, end;	/* filter calculation variables */
 	Q_UINT8 *data;
-	KisSelectionSP dstSelection = dst->selection();
+	KisSelectionSP dstSelection;
 	
 	if(src->hasSelection())
+	{
 		src->selection()->exactBounds(left, top, w, h);
+		dstSelection = dst->selection();
+	}
 	else
+	{
 		src->exactBounds(left, top, w, h);
+		dstSelection = new KisSelection(dst, "dummy"); // essentially a dummy to be deleted
+	}
 		
 	double weight;
 	double fscale;
@@ -231,6 +243,7 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 	
 	if(scale < 0)
 	{
+		// mirroring
 		targetW = -h * scale / scaleDenom;
 		fscale = -1.0 / scale;
 	}
@@ -239,7 +252,6 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 		targetW = h * scale / scaleDenom;
 		fscale = 1.0 / scale;
 	}
-	
 	
 	// Calculate extra width needed due to shear
 	Q_INT32 extrawidth =0;
@@ -361,7 +373,8 @@ void KisTransformVisitor::transform(double  xscale, double  yscale,
 	
 	KisPaintDeviceSP tmpdev = new KisPaintDevice(m_dev->colorStrategy(),"temporary");
 	transformx(m_dev, tmpdev, xscale*width, width, xshear, xtranslate, m_progress, filterStrategy);
-	m_dev->selection()->clear();
+	if(m_dev->hasSelection())
+		m_dev->selection()->clear();
 	transformy(tmpdev, m_dev, yscale*height, height, yshear, ytranslate, m_progress, filterStrategy);
 	delete tmpdev;
 	

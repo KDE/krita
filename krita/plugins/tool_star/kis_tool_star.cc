@@ -122,26 +122,20 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
                 painter.beginTransaction (i18n("Star"));
 
                 painter.setPaintColor(m_subject -> fgColor());
-                painter.setBrush(m_subject -> currentBrush());
+		painter.setBackgroundColor(m_subject -> bgColor());
+		painter.setFillStyle(fillStyle());
+		painter.setBrush(m_subject -> currentBrush());
+		painter.setPattern(m_subject -> currentPattern());
                 painter.setOpacity(m_opacity);
                 painter.setCompositeOp(m_compositeOp);
 		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
 		painter.setPaintOp(op); // Painter takes ownership
 
                 //painter.paintEllipse(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
-                QPointArray coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
+                vKisPoint coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
                 //kdDebug() << "Number of points:" << coord.size() << endl;
-                QPoint start,end;
-                for(int i=1;i<coord.size();i++)
-                {
-                        start=coord.point(i-1);
-                        end=coord.point(i);
-                        painter.paintLine(start, PRESSURE_DEFAULT, 0, 0, end, PRESSURE_DEFAULT, 0, 0);
-                }  
-                start=coord.point(coord.size()-1);
-                end=coord.point(0);
-                painter.paintLine(start, PRESSURE_DEFAULT, 0, 0, end, PRESSURE_DEFAULT, 0, 0);
-                //painter.paintLine(m_dragStart, PRESSURE_DEFAULT, 0, 0, m_dragEnd, PRESSURE_DEFAULT, 0, 0);
+		painter.paintPolygon(coord);
+		//painter.paintLine(m_dragStart, PRESSURE_DEFAULT, 0, 0, m_dragEnd, PRESSURE_DEFAULT, 0, 0);
                 m_currentImage -> notify( painter.dirtyRect() );
 		notifyModified();
 
@@ -169,7 +163,13 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
 
         p.setRasterOp(Qt::NotROP);
 
-        p.drawPolygon(starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y()));
+	vKisPoint points = starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y());
+
+	for (uint i = 0; i < points.count() - 1; i++) {
+		p.drawLine(points[i].floorQPoint(), points[i + 1].floorQPoint());
+	}
+	p.drawLine(points[points.count() - 1].floorQPoint(), points[0].floorQPoint());
+
         p.end ();
 }
 
@@ -196,12 +196,13 @@ void KisToolStar::setup(KActionCollection *collection)
         }
 }
 
-QPointArray KisToolStar::starCoordinates(int N, int mx, int my, int x, int y)
+vKisPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)
 {
-        Q_INT32 R=0, r=0, n=0;
+        double R=0, r=0;
+	Q_INT32 n=0;
         double angle;
         
-        QPointArray starCoordinatesArray(2*N);
+        vKisPoint starCoordinatesArray(2*N);
         
         // the radius of the outer edges
         R=sqrt((x-mx)*(x-mx)+(y-my)*(y-my));
@@ -216,12 +217,12 @@ QPointArray KisToolStar::starCoordinates(int N, int mx, int my, int x, int y)
         
         //set outer edges
         for(n=0;n<N;n++){
-                starCoordinatesArray.setPoint(2*n,mx+R*cos(n * 2.0 * M_PI / N + angle),my+R*sin(n *2.0 * M_PI / N+angle));  
+                starCoordinatesArray[2*n] = KisPoint(mx+R*cos(n * 2.0 * M_PI / N + angle),my+R*sin(n *2.0 * M_PI / N+angle));  
         }
         
         //set inner edges
         for(n=0;n<N;n++){
-                starCoordinatesArray.setPoint(2*n+1,mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle)); 
+                starCoordinatesArray[2*n+1] = KisPoint(mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle)); 
         }
         
         for(n=0;n<2*N;n++){

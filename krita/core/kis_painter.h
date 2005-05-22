@@ -136,7 +136,7 @@ public:
 	/** A version of bitBlt that applies an external selection mask first to the source device and
 	 * only then blits. This means that the source device is permanently altered.
 	 */
-	void bltSelectionExt(Q_INT32 dx, Q_INT32 dy,
+	void bltSelection(Q_INT32 dx, Q_INT32 dy,
 			  const KisCompositeOp &op,
 			  KisPaintDeviceSP src,
 			  KisSelectionSP selMask,
@@ -215,6 +215,16 @@ public:
 				const double yTilt2,
 				const double savedDist = -1);
 
+	/**
+	 * Fill points with the points along the Bezier curve between pos1 and pos2 using control points 1 and 2,
+	 * excluding the final pos2.
+	 */
+	void getBezierCurvePoints(const KisPoint &pos1,
+				  const KisPoint &control1,
+				  const KisPoint &control2,
+				  const KisPoint &pos2,
+				  vKisPoint& points);
+
 
         void paintRect(const KisPoint &startPoint,
 		       const KisPoint &endPoint,
@@ -229,6 +239,7 @@ public:
 			  const double /*xTilt*/,
 			  const double /*yTilt*/);
 
+	void paintPolygon(const vKisPoint& points);
 
 	/** Draw a spot at pos using the currently set paint op, brush and color */
 	void paintAt(const KisPoint &pos,
@@ -254,6 +265,18 @@ public:
 
 	void setFillColor(const QColor& color) { m_fillColor = color; }
 	QColor fillColor() const { return m_fillColor; }
+
+	enum FillStyle {
+		FillStyleOutlineOnly,
+		FillStyleForegroundColor,
+		FillStyleBackgroundColor,
+		FillStylePattern,
+		FillStyleGradient,
+		FillStyleStrokes
+	};
+
+	void setFillStyle(FillStyle fillStyle) { m_fillStyle = fillStyle; }
+	FillStyle fillStyle() const { return m_fillStyle; }
 
 	void setOpacity(QUANTUM opacity) { m_opacity = opacity; }
 	QUANTUM opacity() const { return m_opacity; }
@@ -286,6 +309,7 @@ protected:
 
 	static double pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1);
 
+	void fillPolygon(const vKisPoint& points, FillStyle fillStyle);
 
 private:
 
@@ -311,6 +335,7 @@ protected:
 	QColor m_paintColor;
 	QColor m_backgroundColor;
 	QColor m_fillColor;
+	FillStyle m_fillStyle;
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisPoint m_duplicateOffset;

@@ -1,5 +1,6 @@
 INCLUDES  = -I$(srcdir)/.. \
         -I$(srcdir)/../../ui \
+	-I../../ui/ \
         -I$(srcdir)/../tiles \
         -I$(srcdir)/../paintop \
         -I$(srcdir)/../resources \
@@ -13,7 +14,8 @@ libkistool_la_SOURCES =  \
 	kis_tool_registry.cc \
 	kis_tool_paint.cc \
 	kis_tool_freehand.cc \
-	kis_tool_non_paint.cc
+	kis_tool_non_paint.cc \
+	kis_tool_shape.cc
 
 libkistool_la_METASOURCES = AUTO
 

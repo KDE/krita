@@ -24,8 +24,7 @@
 #include <qpoint.h>
 #include <qpointarray.h> 
 
-#include "kis_tool.h"
-#include "kis_tool_rectangle.h"
+#include "kis_tool_shape.h"
 
 class KisCanvas;
 class KisDoc;
@@ -34,9 +33,9 @@ class KisView;
 class KisRect;
 class WdgToolStar;
 
-class KisToolStar : public KisToolPaint {
+class KisToolStar : public KisToolShape {
 
-	typedef KisToolPaint super;
+	typedef KisToolShape super;
 	Q_OBJECT
 
 public:
@@ -75,7 +74,7 @@ protected:
 	bool m_dragging;
 	KisImageSP m_currentImage;
 private:
-        QPointArray starCoordinates(int N, int mx, int my, int x, int y);
+        vKisPoint starCoordinates(int N, double mx, double my, double x, double y);
         Q_INT32 m_innerOuterRatio;
         Q_INT32 m_vertices;
 	WdgToolStar* m_optWidget;

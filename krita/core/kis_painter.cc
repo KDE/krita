@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <cfloat>
+#include <cmath>
+#include <climits>
 
 #include "qbrush.h"
 #include "qcolor.h"
@@ -59,6 +61,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_paintop.h"
 #include "kis_selection.h"
+#include "kis_fill_painter.h"
 
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
@@ -91,6 +94,7 @@ void KisPainter::init()
 	m_opacity = OPACITY_OPAQUE;
 	m_compositeOp = COMPOSITE_OVER;
 	m_dab = 0;
+	m_fillStyle = FillStyleOutlineOnly;
 }
 
 KisPainter::~KisPainter()
@@ -224,7 +228,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 	}
 }
 
-void KisPainter::bltSelectionExt(Q_INT32 dx, Q_INT32 dy,
+void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 			      const KisCompositeOp &op, 
 			      KisPaintDeviceSP srcdev,
 			      KisSelectionSP selMask,
@@ -486,7 +490,7 @@ double KisPainter::paintLine(const KisPoint & pos1,
 		return 0;
 }
 
-void KisPainter::paintPolyline (const QValueVector <KisPoint> &points,
+void KisPainter::paintPolyline (const vKisPoint &points,
                                 int index, int numPoints)
 {
 	if (index >= (int) points.count ())
@@ -503,6 +507,39 @@ void KisPainter::paintPolyline (const QValueVector <KisPoint> &points,
 	{
 		paintLine (points [index], 0/*pressure*/, 0, 0, points [index + 1],
 			   0/*pressure*/, 0, 0);
+	}
+}
+
+void KisPainter::getBezierCurvePoints(const KisPoint &pos1,
+				      const KisPoint &control1,
+				      const KisPoint &control2,
+				      const KisPoint &pos2,
+				      vKisPoint& points)
+{
+	double d1 = pointToLineDistance(control1, pos1, pos2);
+	double d2 = pointToLineDistance(control2, pos1, pos2);
+
+	if (d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD) {
+		points.push_back(pos1);
+	} else {
+		// Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508
+		KisVector2D p1 = pos1;
+		KisVector2D p2 = control1;
+		KisVector2D p3 = control2;
+		KisVector2D p4 = pos2;
+
+		KisVector2D l2 = (p1 + p2) / 2;
+		KisVector2D h = (p2 + p3) / 2;
+		KisVector2D l3 = (l2 + h) / 2;
+		KisVector2D r3 = (p3 + p4) / 2;
+		KisVector2D r2 = (h + r3) / 2;
+		KisVector2D l4 = (l3 + r2) / 2;
+		KisVector2D r1 = l4;
+		KisVector2D l1 = p1;
+		KisVector2D r4 = p4;
+
+		getBezierCurvePoints(l1.toKisPoint(), l2.toKisPoint(), l3.toKisPoint(), l4.toKisPoint(), points);
+		getBezierCurvePoints(r1.toKisPoint(), r2.toKisPoint(), r3.toKisPoint(), r4.toKisPoint(), points);
 	}
 }
 
@@ -560,44 +597,20 @@ double KisPainter::paintBezierCurve(const KisPoint &pos1,
 
 void KisPainter::paintRect (const KisPoint &startPoint,
                             const KisPoint &endPoint,
-                            const double pressure,
-			    const double xTilt,
-			    const double yTilt)
+                            const double /*pressure*/,
+			    const double /*xTilt*/,
+			    const double /*yTilt*/)
 {
 	KoRect normalizedRect = KisRect (startPoint, endPoint).normalize ();
 
-	paintLine (normalizedRect.topLeft (),
-		   pressure,
-		   xTilt,
-		   yTilt,
-		   normalizedRect.topRight (),
-		   pressure,
-		   xTilt,
-		   yTilt);
-	paintLine (normalizedRect.topRight (),
-		   pressure,
-		   xTilt,
-		   yTilt,
-		   normalizedRect.bottomRight (),
-		   pressure,
-		   xTilt,
-		   yTilt);
-	paintLine (normalizedRect.bottomRight (),
-		   pressure,
-		   xTilt,
-		   yTilt,
-		   normalizedRect.bottomLeft (),
-		   pressure,
-		   xTilt,
-		   yTilt);
-	paintLine (normalizedRect.bottomLeft (),
-		   pressure,
-		   xTilt,
-		   yTilt,
-		   normalizedRect.topLeft (),
-		   pressure,
-		   xTilt,
-		   yTilt);
+	vKisPoint points;
+
+	points.push_back(normalizedRect.topLeft());
+	points.push_back(normalizedRect.bottomLeft());
+	points.push_back(normalizedRect.bottomRight());
+	points.push_back(normalizedRect.topRight());
+
+	paintPolygon(points);
 }
 
 
@@ -683,11 +696,10 @@ void KisPainter::paintEllipseInternal (double ratio, bool invert,
 
 void KisPainter::paintEllipse (const KisPoint &startPoint,
                                const KisPoint &endPoint,
-                               const double pressure,
-			       const double xTilt,
-			       const double yTilt)
+                               const double /*pressure*/,
+			       const double /*xTilt*/,
+			       const double /*yTilt*/)
 {
-#if 1
 	KisRect r = KisRect(startPoint, endPoint).normalize();
 
 	// See http://www.whizkidtech.redprince.net/bezier/circle/ for explanation.
@@ -703,57 +715,32 @@ void KisPainter::paintEllipse (const KisPoint &startPoint,
 	KisPoint p2(center.x() - lx, r.top());
 	KisPoint p3(center.x(), r.top());
 
-	double distance = paintBezierCurve(p0, pressure, xTilt, yTilt, p1, p2, p3, pressure, xTilt, yTilt);
+	vKisPoint points;
+
+	//double distance = paintBezierCurve(p0, pressure, xTilt, yTilt, p1, p2, p3, pressure, xTilt, yTilt);
+	getBezierCurvePoints(p0, p1, p2, p3, points);
 
 	KisPoint p4(center.x() + lx, r.top());
 	KisPoint p5(r.right(), center.y() - ly);
 	KisPoint p6(r.right(), center.y());
 
-	distance = paintBezierCurve(p3, pressure, xTilt, yTilt, p4, p5, p6, pressure, xTilt, yTilt, distance);
+	//distance = paintBezierCurve(p3, pressure, xTilt, yTilt, p4, p5, p6, pressure, xTilt, yTilt, distance);
+	getBezierCurvePoints(p3, p4, p5, p6, points);
 
 	KisPoint p7(r.right(), center.y() + ly);
 	KisPoint p8(center.x() + lx, r.bottom());
 	KisPoint p9(center.x(), r.bottom());
 
-	distance = paintBezierCurve(p6, pressure, xTilt, yTilt, p7, p8, p9, pressure, xTilt, yTilt, distance);
+	//distance = paintBezierCurve(p6, pressure, xTilt, yTilt, p7, p8, p9, pressure, xTilt, yTilt, distance);
+	getBezierCurvePoints(p6, p7, p8, p9, points);
 
 	KisPoint p10(center.x() - lx, r.bottom());
 	KisPoint p11(r.left(), center.y() + ly);
 
-	paintBezierCurve(p9, pressure, xTilt, yTilt, p10, p11, p0, pressure, xTilt, yTilt, distance);
-#else
-	QRect normalizedRect = QRect (startPoint.floorQPoint(), endPoint.floorQPoint()).normalize ();
+	//paintBezierCurve(p9, pressure, xTilt, yTilt, p10, p11, p0, pressure, xTilt, yTilt, distance);
+	getBezierCurvePoints(p9, p10, p11, p0, points);
 
-	const int x1 = normalizedRect.left (),
-		x2 = normalizedRect.right (),
-		y1 = normalizedRect.top (),
-		y2 = normalizedRect.bottom ();
-
-	const double ratio = (double) (x2 - x1 + 1) / (y2 - y1 + 1);
-	bool invert = false;
-
-	if (x1 == x2 || y1 == y2)
-	{
-		paintLine (normalizedRect.topLeft (),
-			   pressure, 0, 0,
-			   normalizedRect.bottomLeft (),
-			   pressure, 0, 0);
-		return;
-	}
-
-	if (x2 - x1 < y2 - y1)
-	{
-		paintEllipseInternal (1 / ratio, true,
-				      (x1 + x2) / 2, (y1 + y2) / 2, (x2 - x1 + 1) / 2,
-				      pressure);
-	}
-	else
-	{
-		paintEllipseInternal (ratio, false,
-				      (x1 + x2) / 2, (y1 + y2) / 2, (y2 - y1 + 1) / 2,
-				      pressure);
-	}
-#endif
+	paintPolygon(points);
 }
 
 void KisPainter::paintAt(const KisPoint & pos,
@@ -776,5 +763,239 @@ double KisPainter::pointToLineDistance(const KisPoint& p, const KisPoint& l0, co
 	}
 
 	return distance;
+}
+
+/*
+ * Concave Polygon Scan Conversion
+ * by Paul Heckbert
+ * from "Graphics Gems", Academic Press, 1990
+ */
+
+/*
+ * concave: scan convert nvert-sided concave non-simple polygon with vertices at
+ * (point[i].x, point[i].y) for i in [0..nvert-1] within the window win by
+ * calling spanproc for each visible span of pixels.
+ * Polygon can be clockwise or counterclockwise.
+ * Algorithm does uniform point sampling at pixel centers.
+ * Inside-outside test done by Jordan's rule: a point is considered inside if
+ * an emanating ray intersects the polygon an odd number of times.
+ * drawproc should fill in pixels from xl to xr inclusive on scanline y,
+ * e.g:
+ *	drawproc(y, xl, xr)
+ *	int y, xl, xr;
+ *	{
+ *	    int x;
+ *	    for (x=xl; x<=xr; x++)
+ *		pixel_write(x, y, pixelvalue);
+ *	}
+ *
+ *  Paul Heckbert	30 June 81, 18 Dec 89
+ */
+
+typedef struct {	/* a polygon edge */
+	double x;   	/* x coordinate of edge's intersection with current scanline */
+	double dx;  	/* change in x with respect to y */
+	int i;	    	/* edge number: edge i goes from pt[i] to pt[i+1] */
+} Edge;
+
+static int n;			/* number of vertices */
+static const KisPoint *pt;	/* vertices */
+
+static int nact;		/* number of active edges */
+static Edge *active;		/* active edge list:edges crossing scanline y */
+
+/* comparison routines for qsort */
+static int compare_ind(const void *pu, const void *pv)
+{
+	const int *u = static_cast<const int *>(pu);
+	const int *v = static_cast<const int *>(pv);
+
+	return pt[*u].y() <= pt[*v].y() ? -1 : 1;
+}
+
+static int compare_active(const void *pu, const void *pv)
+{
+	const Edge *u = static_cast<const Edge *>(pu);
+	const Edge *v = static_cast<const Edge *>(pv);
+
+	return u->x <= v->x ? -1 : 1;
+}
+
+static void cdelete(int i)		/* remove edge i from active list */
+{
+	int j;
+
+	for (j=0; j<nact && active[j].i!=i; j++);
+	if (j>=nact) return;	    /* edge not in active list; happens at win->y0*/
+	nact--;
+	bcopy(&active[j+1], &active[j], (nact-j)*sizeof active[0]);
+}
+
+static void cinsert(int i, int y)		/* append edge i to end of active list */
+{
+	int j;
+	double dx;
+	const KisPoint *p, *q;
+
+	j = i<n-1 ? i+1 : 0;
+	if (pt[i].y() < pt[j].y()) {
+		p = &pt[i]; q = &pt[j];
+	} else {
+		p = &pt[j]; q = &pt[i];
+	}
+	/* initialize x position at intersection of edge with scanline y */
+	active[nact].dx = dx = (q->x()-p->x())/(q->y()-p->y());
+	active[nact].x = dx*(y+.5-p->y())+p->x();
+	active[nact].i = i;
+	nact++;
+}
+
+void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
+{
+	int nvert = points.count();
+	int k, y0, y1, y, i, j, xl, xr;
+	int *ind;	    /* list of vertex indices, sorted by pt[ind[j]].y */
+
+	n = nvert;
+	pt = &(points[0]);
+	if (n<3) return;
+	if (fillStyle == FillStyleOutlineOnly) {
+		return;
+	}
+
+	ind = new int[n];
+	Q_CHECK_PTR(ind);
+	active = new Edge[n];
+	Q_CHECK_PTR(active);
+
+	/* create y-sorted array of indices ind[k] into vertex list */
+	for (k=0; k<n; k++)
+		ind[k] = k;
+	qsort(ind, n, sizeof ind[0], compare_ind);  /* sort ind by pt[ind[k]].y */
+
+	nact = 0;			    /* start with empty active list */
+	k = 0;				    /* ind[k] is next vertex to process */
+	y0 = static_cast<int>(ceil(pt[ind[0]].y()-.5));	    	/* ymin of polygon */
+	y1 = static_cast<int>(floor(pt[ind[n-1]].y()-.5));    	/* ymax of polygon */
+
+	int x0 = INT_MAX;
+	int x1 = INT_MIN;
+
+	for (int i = 0; i < nvert; i++) {
+		int pointHighX = static_cast<int>(ceil(points[i].x() - 0.5));
+		int pointLowX = static_cast<int>(floor(points[i].x() - 0.5));
+
+		if (pointLowX < x0) {
+			x0 = pointLowX;
+		}
+		if (pointHighX > x1) {
+			x1 = pointHighX;
+		}
+	}
+
+	// Fill the polygon bounding rectangle with the required contents then we'll
+	// create a mask for the actual polygon coverage.
+
+	KisPaintDeviceSP polygon = new KisPaintDevice(m_device -> colorStrategy(), "polygon");
+	Q_CHECK_PTR(polygon);
+	polygon -> setX(m_device -> getX());
+	polygon -> setY(m_device -> getY());
+
+	KisFillPainter fillPainter(polygon);
+	QRect boundingRectangle(x0, y0, x1 - x0 + 1, y1 - y0 + 1);
+
+	switch (fillStyle) {
+	default:
+		// Fall through
+	case FillStyleGradient:
+		// Currently unsupported, fall through
+	case FillStyleStrokes:
+		// Currently unsupported, fall through
+		kdDebug() << "Unknown or unsupported fill style in fillPolygon\n";
+	case FillStyleForegroundColor:
+		fillPainter.fillRect(boundingRectangle, paintColor(), OPACITY_OPAQUE);
+		break;
+	case FillStyleBackgroundColor:
+		fillPainter.fillRect(boundingRectangle, backgroundColor(), OPACITY_OPAQUE);
+		break;
+	case FillStylePattern:
+		Q_ASSERT(m_pattern != 0);
+		fillPainter.fillRect(boundingRectangle, m_pattern);
+		break;
+	}
+
+	KisSelectionSP polygonMask = new KisSelection(polygon, "polygon mask");
+	polygonMask -> setX(polygon -> getX());
+	polygonMask -> setY(polygon -> getY());
+
+	for (y=y0; y<=y1; y++) {	    /* step through scanlines */
+		/* scanline y is at y+.5 in continuous coordinates */
+
+		/* check vertices between previous scanline and current one, if any */
+		for (; k<n && pt[ind[k]].y()<=y+.5; k++) {
+			/* to simplify, if pt.y=y+.5, pretend it's above */
+			/* invariant: y-.5 < pt[i].y <= y+.5 */
+			i = ind[k]; 
+			/*
+			 * insert or delete edges before and after vertex i (i-1 to i,
+			 * and i to i+1) from active list if they cross scanline y
+			 */
+			j = i>0 ? i-1 : n-1;	    /* vertex previous to i */
+			if (pt[j].y() <= y-.5)	    /* old edge, remove from active list */
+				cdelete(j);
+			else if (pt[j].y() > y+.5)    /* new edge, add to active list */
+				cinsert(j, y);
+			j = i<n-1 ? i+1 : 0;	    /* vertex next after i */
+			if (pt[j].y() <= y-.5)	    /* old edge, remove from active list */
+				cdelete(i);
+			else if (pt[j].y() > y+.5)    /* new edge, add to active list */
+				cinsert(i, y);
+		}
+
+		/* sort active edge list by active[j].x */
+		qsort(active, nact, sizeof active[0], compare_active);
+
+		/* draw horizontal segments for scanline y */
+		for (j=0; j<nact; j+=2) {	/* draw horizontal segments */
+			/* span 'tween j & j+1 is inside, span tween j+1 & j+2 is outside */
+			xl = static_cast<int>(ceil(active[j].x-.5));	    /* left end of span */
+			xr = static_cast<int>(floor(active[j+1].x-.5));	    /* right end of span */
+
+			if (xl<=xr) {
+				KisHLineIterator it = polygonMask -> createHLineIterator(xl, y, xr - xl + 1, true);
+
+				while (!it.isDone()) {
+					polygonMask -> colorStrategy() -> nativeColor(QColor(0, 0, 0), MAX_SELECTED, it.rawData());
+					++it;
+				}
+			}
+
+			active[j].x += active[j].dx;	    /* increment edge coords */
+			active[j+1].x += active[j+1].dx;
+		}
+	}
+	delete [] ind;
+	delete [] active;
+
+	polygon -> applySelectionMask(polygonMask);
+
+	QRect r = polygon -> extent();
+	bltSelection(r.x(), r.y(), compositeOp(), polygon, opacity(), r.x(), r.y(), r.width(), r.height());
+}
+
+void KisPainter::paintPolygon(const vKisPoint& points)
+{
+	if (m_fillStyle != FillStyleOutlineOnly) {
+		fillPolygon(points, m_fillStyle);
+	}
+
+	if (points.count() > 1) {
+		double distance = -1;
+
+		for (uint i = 0; i < points.count() - 1; i++) {
+			distance = paintLine(points[i], PRESSURE_DEFAULT, 0, 0, points[i + 1], PRESSURE_DEFAULT, 0, 0, distance);
+		}
+		paintLine(points[points.count() - 1], PRESSURE_DEFAULT, 0, 0, points[0], PRESSURE_DEFAULT, 0, 0, distance);
+	}
 }
 

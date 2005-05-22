@@ -23,10 +23,7 @@
 #ifndef __KIS_TOOL_ELLIPSE_H__
 #define __KIS_TOOL_ELLIPSE_H__
 
-#include <qpoint.h>
-
-#include "kis_tool.h"
-#include "kis_tool_rectangle.h"
+#include "kis_tool_shape.h"
 
 class KisCanvas;
 class KisDoc;
@@ -34,10 +31,9 @@ class KisPainter;
 class KisView;
 class KisRect;
 
+class KisToolEllipse : public KisToolShape {
 
-class KisToolEllipse : public KisToolPaint {
-
-	typedef KisToolPaint super;
+	typedef KisToolShape super;
 	Q_OBJECT
 
 public:
@@ -62,15 +58,11 @@ public:
 
 protected:
 	virtual void draw(const KisPoint& start, const KisPoint& stop);
-	//virtual void draw(KisPainter *gc, const QRect& rc);
 
 protected:
-	int m_lineThickness;
-
 	KisPoint m_dragCenter;
 	KisPoint m_dragStart;
 	KisPoint m_dragEnd;
-	QRect m_final_lines;
 
 	bool m_dragging;
 	KisImageSP m_currentImage;

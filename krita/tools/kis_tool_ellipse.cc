@@ -131,8 +131,11 @@ void KisToolEllipse::buttonRelease(KisButtonReleaseEvent *event)
                 KisPainter painter (device);
                 painter.beginTransaction (i18n ("Ellipse"));
 
-                painter.setPaintColor(m_subject -> fgColor());
-                painter.setBrush(m_subject -> currentBrush());
+		painter.setPaintColor(m_subject -> fgColor());
+		painter.setBackgroundColor(m_subject -> bgColor());
+		painter.setFillStyle(fillStyle());
+		painter.setBrush(m_subject -> currentBrush());
+		painter.setPattern(m_subject -> currentPattern());
                 painter.setOpacity(m_opacity);
                 painter.setCompositeOp(m_compositeOp);
 		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);

@@ -24,8 +24,7 @@
 #include <qpoint.h>
 #include <qvaluevector.h>
 
-#include "kis_tool.h"
-#include "kis_tool_rectangle.h"
+#include "kis_tool_shape.h"
 
 class KisCanvas;
 class KisDoc;
@@ -33,10 +32,9 @@ class KisPainter;
 class KisView;
 class KisRect;
 
+class KisToolPolygon : public KisToolShape {
 
-class KisToolPolygon : public KisToolPaint {
-
-	typedef KisToolPaint super;
+	typedef KisToolShape super;
 	Q_OBJECT
 
 public:

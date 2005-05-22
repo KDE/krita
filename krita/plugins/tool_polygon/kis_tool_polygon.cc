@@ -96,28 +96,16 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
 			painter.beginTransaction (i18n ("Polygon"));
 	
 			painter.setPaintColor(m_subject -> fgColor());
+			painter.setBackgroundColor(m_subject -> bgColor());
+			painter.setFillStyle(fillStyle());
 			painter.setBrush(m_subject -> currentBrush());
+			painter.setPattern(m_subject -> currentPattern());
 			painter.setOpacity(m_opacity);
 			painter.setCompositeOp(m_compositeOp);
 			KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
 			painter.setPaintOp(op); // Painter takes ownership
-	
-			KisPoint start, end, polygonStart;
-			KisPointVector::iterator it;
-			for( it = m_points.begin(); it != m_points.end(); ++it )
-			{
-				if( it == m_points.begin() )
-				{
-					start = (*it);
-					polygonStart = start;
-				} else {
-					end = (*it);
-					painter.paintLine(start, PRESSURE_DEFAULT, 0, 0, end, PRESSURE_DEFAULT, 0, 0);
-					start = end;
-				}
-			}
 
-			painter.paintLine(end, PRESSURE_DEFAULT, 0, 0, polygonStart, PRESSURE_DEFAULT, 0, 0);
+			painter.paintPolygon(m_points);
 
 			m_points.clear();
 			

@@ -18,6 +18,7 @@
 #ifndef KIS_POINT_H_
 #define KIS_POINT_H_
 
+#include <qvaluevector.h>
 #include <koPoint.h>
 
 class KisPoint : public KoPoint {
@@ -36,6 +37,8 @@ public:
 	QPoint floorQPoint() const { return QPoint(static_cast<int>(x()), static_cast<int>(y())); }
 	QPoint roundQPoint() const { return QPoint(qRound(x()), qRound(y())); }
 };
+
+typedef QValueVector<KisPoint> vKisPoint;
 
 #endif // KIS_POINT_H_
 

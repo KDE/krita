@@ -161,13 +161,11 @@ void KisFillPainter::fillRect(const QRect& rc, const QColor& c, QUANTUM opacity)
         fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
 }
 
-/*
 inline
-void KisFillPainter::fillRect(const QRect& rc, KisPattern& pattern)
+void KisFillPainter::fillRect(const QRect& rc, KisPattern *pattern)
 {
 	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), pattern);
 }
-*/
 
 inline
 void KisFillPainter::setFillThreshold(int threshold)

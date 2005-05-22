@@ -240,14 +240,6 @@ KisLayerSP KisPattern::image(KisStrategyColorSpaceSP colorSpace) {
 			int blue = qBlue(pixel);
 			int alpha = qAlpha(pixel);
 
-			// Scaled images are in pre-multiplied alpha form so
-			// divide by alpha.
-			if (alpha != 0) {
-				red = (red * 255) / alpha;
-				green = (green * 255) / alpha;
-				blue = (blue * 255) / alpha;
-			}
-
 			QColor colour = QColor(red, green, blue);
 			QUANTUM a = (alpha * OPACITY_OPAQUE) / 255;
 

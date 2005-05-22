@@ -109,18 +109,27 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisP
 	int sx, sy, sw, sh;
 
 	int y = y1;
-	sy = y % pattern -> height();
+
+	if (y >= 0) {
+		sy = y % pattern -> height();
+	} else {
+		sy = pattern -> height() - (((-y - 1) % pattern -> height()) + 1);
+	}
+
 	while (y < y1 + h) {
+		sh = QMIN((y1 + h) - y, pattern -> height() - sy);
+
 		int x = x1;
-		sx = x % pattern -> width();
-		sh = QMIN(y + pattern -> height() - (y1 + h), pattern -> height());
-		if (sh <= 0)
-			sh = pattern -> height();
+
+		if (x >= 0) {
+			sx = x % pattern -> width();
+		} else {
+			sx = pattern -> width() - (((-x - 1) % pattern -> width()) + 1);
+		}
 
 		while (x < x1 + w) {
-			sw = QMIN(x + pattern -> width() - (x1 + w), pattern -> width());
-			if (sw <= 0)
-				sw = pattern -> width();
+			sw = QMIN((x1 + w) - x, pattern -> width() - sx);
+
 			bitBlt(x, y, m_compositeOp, patternLayer.data(), m_opacity, sx, sy, sw, sh);
 			x += sw; sx = 0;
 		}
@@ -188,7 +197,7 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
     }
 
 	if (! m_device -> hasSelection() ) {
-		bltSelectionExt(0, 0, m_compositeOp, filled, m_selection, m_opacity,
+		bltSelection(0, 0, m_compositeOp, filled, m_selection, m_opacity,
 					 0, 0, m_width, m_height);
 	} else {
 		bltSelection(0, 0, m_compositeOp, filled.data(), m_opacity,

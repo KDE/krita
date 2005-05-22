@@ -325,6 +325,11 @@ public:
 	/** Clear the selected pixels from the paint device */
 	void clearSelection();
 	
+	/**
+	 * Apply a mask to the image data, i.e. multiply each pixel's opacity by its
+	 * selectedness in the mask.
+	 */
+	void applySelectionMask(KisSelectionSP mask);
 
 signals:
 

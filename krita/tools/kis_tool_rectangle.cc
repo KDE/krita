@@ -134,7 +134,10 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
 		KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
 		painter.setPaintOp(op);
 		painter.setPaintColor(m_subject -> fgColor());
+		painter.setBackgroundColor(m_subject -> bgColor());
+		painter.setFillStyle(fillStyle());
 		painter.setBrush(m_subject -> currentBrush());
+		painter.setPattern(m_subject -> currentPattern());
 		painter.setOpacity(m_opacity);
 		painter.setCompositeOp(m_compositeOp);
 

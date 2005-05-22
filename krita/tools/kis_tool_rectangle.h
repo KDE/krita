@@ -27,8 +27,7 @@
 #include <qpoint.h>
 #include <qrect.h>
 
-#include "kis_tool.h"
-#include "kis_tool_paint.h"
+#include "kis_tool_shape.h"
 #include "kis_types.h"
 #include "kis_tool_factory.h"
 #include "kis_point.h"
@@ -36,9 +35,9 @@
 class QPainter;
 class KisPainter;
 
-class KisToolRectangle : public KisToolPaint {
+class KisToolRectangle : public KisToolShape {
 
-	typedef KisToolPaint super;
+	typedef KisToolShape super;
 	Q_OBJECT
 
 public:

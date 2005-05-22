@@ -212,9 +212,6 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QStr
 KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrategy, const QString& name) :
 	KShared()
 {
-
-	Q_ASSERT(img != 0);
-	Q_ASSERT(colorStrategy != 0);
 	Q_ASSERT(name.isEmpty() == false);
 
         m_x = 0;
@@ -782,6 +779,29 @@ void KisPaintDevice::clearSelection()
 	}
 
 
+}
+
+void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
+{
+	QRect r = mask -> extent();
+	crop(r);
+
+	for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
+
+		KisHLineIterator pixelIt = createHLineIterator(r.x(), y, r.width(), true);
+		KisHLineIterator maskIt = mask -> createHLineIterator(r.x(), y, r.width(), false);
+
+		while (!pixelIt.isDone()) {
+
+			KisPixel pixel = toPixel(pixelIt.rawData());
+			KisPixel maskValue = mask -> toPixel(maskIt.rawData());
+
+			pixel.alpha() = (pixel.alpha() * maskValue.alpha()) / MAX_SELECTED;
+
+			++pixelIt;
+			++maskIt;
+		}
+	}
 }
 
 bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity)

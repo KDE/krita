@@ -22,7 +22,6 @@
 #include "kis_filter_configuration_widget.h"
 #include <vector> 
 #include <knuminput.h>
-#include "kis_double_widget.h"
 
 struct KisDoubleWidgetParam {
 	KisDoubleWidgetParam(  double nmin, double nmax, double ninitvalue, QString nname);
@@ -43,7 +42,7 @@ class KisMultiDoubleFilterWidget : public KisFilterConfigurationWidget
 		inline Q_INT32 nbValues() { return m_nbdoubleWidgets; };
 		inline double valueAt( Q_INT32 i ) { return m_doubleWidgets[i]->value(); };
 	private:
-		KisDoubleWidget** m_doubleWidgets;
+		KDoubleNumInput** m_doubleWidgets;
 		Q_INT32 m_nbdoubleWidgets;
 };
 

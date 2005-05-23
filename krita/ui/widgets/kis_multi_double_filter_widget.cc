@@ -44,11 +44,12 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget( KisFilter* nfilter, QWid
 	QGridLayout *widgetLayout = new QGridLayout(this, m_nbdoubleWidgets + 1, 3);
 	widgetLayout -> setColStretch ( 1, 1 );
 
-	m_doubleWidgets = new KisDoubleWidget*[ m_nbdoubleWidgets ];
+	m_doubleWidgets = new KDoubleNumInput*[ m_nbdoubleWidgets ];
 
 	for( Q_INT32 i = 0; i < m_nbdoubleWidgets; ++i)
 	{
-		m_doubleWidgets[i] = new KisDoubleWidget(dwparam[i].min, dwparam[i].max, this, dwparam[i].name.ascii());
+		m_doubleWidgets[i] = new KDoubleNumInput(this, dwparam[i].name.ascii());
+		m_doubleWidgets[i] -> setRange( dwparam[i].min, dwparam[i].max ); 
 		m_doubleWidgets[i] -> setValue( dwparam[i].initvalue );
 
 		connect(m_doubleWidgets[i], SIGNAL(valueChanged(double)), filter(), SLOT(refreshPreview()));

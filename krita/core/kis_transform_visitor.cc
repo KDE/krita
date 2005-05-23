@@ -376,7 +376,6 @@ void KisTransformVisitor::transform(double  xscale, double  yscale,
 	if(m_dev->hasSelection())
 		m_dev->selection()->clear();
 	transformy(tmpdev, m_dev, yscale*height, height, yshear, ytranslate, m_progress, filterStrategy);
-	delete tmpdev;
 	
 	//progress info
         emit notifyProgressDone(this);

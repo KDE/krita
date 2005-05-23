@@ -168,52 +168,47 @@ void KisToolTransform::buttonPress(KisButtonPressEvent *e)
 {
 	if (m_subject) {
 		KisImageSP img = m_subject -> currentImg();
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 
 		if (img && img -> activeDevice() && e -> button() == LeftButton) {
 			switch(m_function)
 			{
 				case ROTATE:
 					m_clickoffset = e -> pos().floorQPoint() 
-							- controller -> windowToView(QPoint(m_translateX,m_translateY));
+						- QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
 					m_clickangle = -m_a - atan2(m_clickoffset.x(),m_clickoffset.y());
 					m_clickoffset = QPoint(0, 0);
 					break;
 				case MOVE:
 					m_clickoffset = e -> pos().floorQPoint() 
-							- controller -> windowToView(QPoint(m_translateX,m_translateY));
+						- QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
 					break;
 				case TOPLEFTSCALE:
-					m_clickoffset = e -> pos().floorQPoint() 
-							- controller -> windowToView(m_topleft);
+					m_clickoffset = e -> pos().floorQPoint() - m_topleft;
 					break;
 				case TOPSCALE:
 					m_clickoffset = e -> pos().floorQPoint() 
-							- controller -> windowToView((m_topleft + m_topright)/2);
+							- QPoint((m_topleft + m_topright)/2);
 					break;
 				case TOPRIGHTSCALE:
-					m_clickoffset = e -> pos().floorQPoint() 
-							- controller -> windowToView(m_topright);
+					m_clickoffset = e -> pos().floorQPoint() - m_topright;
 					break;
 				case RIGHTSCALE:
 					m_clickoffset = e -> pos().floorQPoint() 
-							- controller -> windowToView((m_topright + m_bottomright)/2);
+							- QPoint((m_topright + m_bottomright)/2);
 					break;
 				case BOTTOMRIGHTSCALE:
-					m_clickoffset = e -> pos().floorQPoint() 
-							- controller -> windowToView(m_bottomright);
+					m_clickoffset = e -> pos().floorQPoint() - m_bottomright;
 					break;
 				case BOTTOMSCALE:
 					m_clickoffset = e -> pos().floorQPoint() 
-							- controller -> windowToView((m_bottomleft + m_bottomright)/2);
+							- QPoint((m_bottomleft + m_bottomright)/2);
 					break;
 				case BOTTOMLEFTSCALE:
-					m_clickoffset = e -> pos().floorQPoint() 
-							- controller -> windowToView(m_bottomleft);
+					m_clickoffset = e -> pos().floorQPoint() - m_bottomleft;
 					break;
 				case LEFTSCALE:
 					m_clickoffset = e -> pos().floorQPoint() 
-							- controller -> windowToView((m_topleft + m_bottomleft)/2);
+							- QPoint((m_topleft + m_bottomleft)/2);
 					break;
 				case NONE:
 					break;
@@ -239,10 +234,10 @@ void KisToolTransform::move(KisMoveEvent *e)
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 
 		Q_ASSERT(controller);
-		QPoint topleft = controller -> windowToView(m_topleft);
-		QPoint topright = controller -> windowToView(m_topright);
-		QPoint bottomleft = controller -> windowToView(m_bottomleft);
-		QPoint bottomright = controller -> windowToView(m_bottomright);
+		QPoint topleft = m_topleft;
+		QPoint topright = m_topright;
+		QPoint bottomleft = m_bottomleft;
+		QPoint bottomright = m_bottomright;
 		
 		QPoint mousePos = e -> pos().floorQPoint();
 		
@@ -366,7 +361,7 @@ void KisToolTransform::move(KisMoveEvent *e)
 	}
 }
 
-void KisToolTransform::buttonRelease(KisButtonReleaseEvent *e)
+void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
 {
 	KisImageSP img = m_subject -> currentImg();
 
@@ -427,7 +422,7 @@ void KisToolTransform::paintOutline(QPainter& gc, const QRect&)
 		pen.setWidth(1);
 		Q_ASSERT(controller);
 
-		recalcOutline();		
+		recalcOutline();
 		QPoint topleft = controller -> windowToView(m_topleft);
 		QPoint topright = controller -> windowToView(m_topright);
 		QPoint bottomleft = controller -> windowToView(m_bottomleft);

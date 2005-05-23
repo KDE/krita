@@ -162,7 +162,6 @@ public slots:
 
 	// image action slots
 	// XXX: Rename to make all names consistent with slotDoX() pattern
-	void export_image();
 	void slotImageProperties();
         void imgResizeToActiveLayer();
 	void resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers = false);

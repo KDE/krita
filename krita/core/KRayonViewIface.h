@@ -48,7 +48,6 @@ public:
 	void previous_layer();
 
 	void slotImportImage();
-	void export_image();
 
 	// settings action slots
 	void preferences();

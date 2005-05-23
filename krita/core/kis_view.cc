@@ -1022,58 +1022,6 @@ void KisView::imgResizeToActiveLayer()
 }
 
 
-void KisView::export_image()
-{
-	KURL url = KFileDialog::getSaveURL(QString::null, KisImageMagickConverter::writeFilters(), this, i18n("Export Image"));
-	KisImageSP img = currentImg();
-	KisLayerSP dst;
-
-	if (url.isEmpty())
-		return;
-
-	Q_ASSERT(img);
-
-	if (img) {
-		KisImageMagickConverter ib(m_doc, m_adapter);
-
-		img = new KisImage(*img);
-		Q_CHECK_PTR(img);
-
-		img -> flatten();
-
-		dst = img -> layer(0);
-		Q_ASSERT(dst);
-
-		m_progress -> setSubject(&ib, true, true);
-
-		vKisAnnotationSP_it beginIt = img -> beginAnnotations();
-		vKisAnnotationSP_it endIt = img -> endAnnotations();
-		switch (ib.buildFile(url, dst, beginIt, endIt)) {
-		case KisImageBuilder_RESULT_UNSUPPORTED:
-			KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
-			break;
-		case KisImageBuilder_RESULT_INVALID_ARG:
-			KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving File"));
-			break;
-		case KisImageBuilder_RESULT_NO_URI:
-		case KisImageBuilder_RESULT_NOT_LOCAL:
-			KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving File"));
-			break;
-		case KisImageBuilder_RESULT_BAD_FETCH:
-			KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));
-			break;
-		case KisImageBuilder_RESULT_EMPTY:
-			KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
-			break;
-		case KisImageBuilder_RESULT_FAILURE:
-			KMessageBox::error(this, i18n("Error saving file."), i18n("Error Saving File"));
-			break;
-		case KisImageBuilder_RESULT_OK:
-		default:
-			break;
-		}
-	}
-}
 
 
 void KisView::slotImageProperties()

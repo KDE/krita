@@ -80,10 +80,6 @@ void KRayonViewIface::slotImportImage()
 {
 }
 
-void KRayonViewIface::export_image()
-{
-    m_view->export_image();
-}
 
 void KRayonViewIface::preferences()
 {

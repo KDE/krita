@@ -38,7 +38,7 @@ public:
 public:
 	static inline KisID id() { return KisID("gaussian blur", i18n("Gaussian Blur")); };
         virtual bool supportsPainting() { return true; }
-
+	virtual bool supportsIncrementalPainting() { return true; }
 };
 
 class KisSharpenFilter : public KisConvolutionConstFilter {

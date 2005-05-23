@@ -371,8 +371,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 	}
 
 
-	delete map;
-	delete source;
+	delete[] map;
+	delete[] source;
 
 	return selection;
 }

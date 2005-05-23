@@ -93,6 +93,7 @@ KisToolTransform::KisToolTransform()
 
 KisToolTransform::~KisToolTransform()
 {
+	delete m_transaction;
 }
 
 void KisToolTransform::update(KisCanvasSubject *subject)

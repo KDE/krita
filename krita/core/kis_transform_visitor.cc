@@ -144,8 +144,8 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 	Q_UINT8 *tmpSel = new Q_UINT8[w];
 	Q_CHECK_PTR(tmpSel);
 
-	printf("w=%d,tW=%d scale=%d sDenom=%d\n",w,targetW,scale, scaleDenom);
-	printf("left=%d,dx=%d\n",left,dx);
+	kdDebug() << "w=" << w << " tW" << targetW << " scale=" << scale << " sDenom=" <<scaleDenom << endl;
+	kdDebug() << "left="<< left << ",dx=" << dx << endl;
 	
 	for(y = top; y < top+h; y++)
 	{
@@ -258,7 +258,7 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 	
 	Q_UINT8 *tmpLine = new Q_UINT8[h*4];
 	Q_UINT8 *tmpSel = new Q_UINT8[h];
-	printf("h=%d,tH=%d\n",h,targetW);
+	kdDebug() << "h=" << h << ", tH=" << targetW << endl;
 	
 	for(x = left; x < left+w; x++)
 	{

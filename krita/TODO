@@ -170,4 +170,10 @@ Printing
 
 Integration
 
-* There is currently no kimgio module for Krita images.
+	* There is currently no kimgio module for Krita images.
+
+Paintops
+	* The convolution paintop doesn't do anything at all. (But it isn't
+	  used anywhere yet, so that's not so bad, perhaps. We cannot add a
+	  new tool at the moment anyway. Let's scrap this todo item.)
+

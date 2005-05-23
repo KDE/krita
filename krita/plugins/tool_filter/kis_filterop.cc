@@ -97,12 +97,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	Q_CHECK_PTR(tmpDev);
 
 	// Copy the layer data onto the new paint device
-	// XXX: Some filters need the old-values, from before mouse-down here.
-	//      Make a difference between painting on the state before we
-	//      started painting with filters, and painting on the state after
-	//      the previous filter operation. The first is useful for invert etc.
-	//      the second for convolution filters like smear. The main difference is:
- 	//	is it useful to apply a filter incrementally?
+
 	KisPainter p( tmpDev );
 	p.bitBlt( 0,  0,  COMPOSITE_COPY, m_source, OPACITY_OPAQUE, x, y, maskWidth, maskHeight );
 

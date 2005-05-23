@@ -46,9 +46,7 @@ KisFilterConfiguration* KisCustomConvolutionFilter::configuration(KisFilterConfi
 	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
 	if ( widget == 0 )
 	{
-		kdDebug() << "Without widget\n";
-
-		// Create an identity matrixes :
+		// Create the identity matrices:
 		KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
 		Q_CHECK_PTR(amatrixes);
 
@@ -63,28 +61,24 @@ KisFilterConfiguration* KisCustomConvolutionFilter::configuration(KisFilterConfi
 		return new KisCustomConvolutionConfiguration( amatrixes );
 	} else {
 
-		kdDebug() << "With widget\n";
-
 		KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
 		Q_CHECK_PTR(amatrixes);
 
+		KisCustomConvolutionFilterConfigurationBaseWidget* mw = widget->matrixWidget();
 		for(int i = 0; i < imgdepth; i ++)
 		{
-			KisCustomConvolutionFilterConfigurationBaseWidget* mw = widget->matrixWidget(i);
-			int pos = widget->pos(i);
-			amatrixes[pos][0][0] = mw->matrixWidget->m11->value();
-			amatrixes[pos][1][0] = mw->matrixWidget->m21->value();
-			amatrixes[pos][2][0] = mw->matrixWidget->m31->value();
-			amatrixes[pos][0][1] = mw->matrixWidget->m12->value();
-			amatrixes[pos][1][1] = mw->matrixWidget->m22->value();
-			amatrixes[pos][2][1] = mw->matrixWidget->m32->value();
-			amatrixes[pos][0][2] = mw->matrixWidget->m13->value();
-			amatrixes[pos][1][2] = mw->matrixWidget->m23->value();
-			amatrixes[pos][2][2] = mw->matrixWidget->m33->value();
-			amatrixes[pos].setFactor( mw->spinBoxFactor->value() );
-			amatrixes[pos].setOffset( mw->spinBoxOffset->value() );
+			amatrixes[i][0][0] = mw->matrixWidget->m11->value();
+			amatrixes[i][1][0] = mw->matrixWidget->m21->value();
+			amatrixes[i][2][0] = mw->matrixWidget->m31->value();
+			amatrixes[i][0][1] = mw->matrixWidget->m12->value();
+			amatrixes[i][1][1] = mw->matrixWidget->m22->value();
+			amatrixes[i][2][1] = mw->matrixWidget->m32->value();
+			amatrixes[i][0][2] = mw->matrixWidget->m13->value();
+			amatrixes[i][1][2] = mw->matrixWidget->m23->value();
+			amatrixes[i][2][2] = mw->matrixWidget->m33->value();
+			amatrixes[i].setFactor( mw->spinBoxFactor->value() );
+			amatrixes[i].setOffset( mw->spinBoxOffset->value() );
 		}
-		kdDebug() << "Created the matrices\n";
 		return new KisCustomConvolutionConfiguration( amatrixes );
 	}
 }

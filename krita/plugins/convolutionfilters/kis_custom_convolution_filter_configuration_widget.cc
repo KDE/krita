@@ -49,35 +49,10 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
 	widgetLayout -> addWidget(bnRefresh, 0, 0);
 	widgetLayout -> addItem(spacer, 0, 1);
 
-	QTabWidget* tabWidget = new QTabWidget(this, "tabWidget");
-	Q_CHECK_PTR(tabWidget);
-
-	widgetLayout -> addMultiCellWidget(tabWidget, 1, 1, 0, 1);
-
-	KisImageSP img = filter() -> view() -> currentImg();
-	if (!img) return;
-
-	KisLayerSP layer = img -> activeLayer();
-	if (!layer) return;
-
-	KisStrategyColorSpaceSP cs = layer->colorStrategy();
-	// Create the form
-	vKisChannelInfoSP cis = cs->channels();
-	Q_INT32 depth = cs->nColorChannels();
-	m_ccfcws = new KisCustomConvolutionFilterConfigurationBaseWidget*[depth];
+	m_ccfcws = new KisCustomConvolutionFilterConfigurationBaseWidget((QWidget*)this);
 	Q_CHECK_PTR(m_ccfcws);
 
-	m_pos = new int[depth];
-	Q_CHECK_PTR(m_pos);
-
-	for(Q_INT32 i = 0; i < depth; i++)
-	{
-		m_pos[i] = cis[i] -> pos();
-		m_ccfcws[i] = new KisCustomConvolutionFilterConfigurationBaseWidget((QWidget*)this);
-		Q_CHECK_PTR(m_ccfcws[i]);
-
-		tabWidget->addTab(m_ccfcws[i], cis[ i ] -> name() );
-	}
+	widgetLayout -> addMultiCellWidget(m_ccfcws, 1, 1, 0, 1);
 
 	connect( bnRefresh, SIGNAL(clicked()), filter(), SLOT(refreshPreview()));
 	

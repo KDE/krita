@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KisMatrixWidget</class>
 <widget class="QWidget">
     <property name="name">
@@ -23,30 +23,48 @@
             <property name="name">
                 <cstring>m11</cstring>
             </property>
+            <property name="minValue">
+                <number>-99</number>
+            </property>
         </widget>
         <widget class="QSpinBox" row="0" column="2">
             <property name="name">
                 <cstring>m13</cstring>
+            </property>
+            <property name="minValue">
+                <number>-99</number>
             </property>
         </widget>
         <widget class="QSpinBox" row="0" column="1">
             <property name="name">
                 <cstring>m12</cstring>
             </property>
+            <property name="minValue">
+                <number>-99</number>
+            </property>
         </widget>
         <widget class="QSpinBox" row="1" column="2">
             <property name="name">
                 <cstring>m23</cstring>
+            </property>
+            <property name="minValue">
+                <number>-99</number>
             </property>
         </widget>
         <widget class="QSpinBox" row="1" column="0">
             <property name="name">
                 <cstring>m21</cstring>
             </property>
+            <property name="minValue">
+                <number>-99</number>
+            </property>
         </widget>
         <widget class="QSpinBox" row="1" column="1">
             <property name="name">
                 <cstring>m22</cstring>
+            </property>
+            <property name="minValue">
+                <number>-99</number>
             </property>
             <property name="value">
                 <number>1</number>
@@ -56,15 +74,24 @@
             <property name="name">
                 <cstring>m31</cstring>
             </property>
+            <property name="minValue">
+                <number>-99</number>
+            </property>
         </widget>
         <widget class="QSpinBox" row="2" column="1">
             <property name="name">
                 <cstring>m32</cstring>
             </property>
+            <property name="minValue">
+                <number>-99</number>
+            </property>
         </widget>
         <widget class="QSpinBox" row="2" column="2">
             <property name="name">
                 <cstring>m33</cstring>
+            </property>
+            <property name="minValue">
+                <number>-99</number>
             </property>
         </widget>
         <spacer row="3" column="1">
@@ -159,6 +186,17 @@
         <slot>spinboxValueChanged()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>m11</tabstop>
+    <tabstop>m12</tabstop>
+    <tabstop>m13</tabstop>
+    <tabstop>m21</tabstop>
+    <tabstop>m22</tabstop>
+    <tabstop>m23</tabstop>
+    <tabstop>m31</tabstop>
+    <tabstop>m32</tabstop>
+    <tabstop>m33</tabstop>
+</tabstops>
 <includes>
     <include location="local" impldecl="in implementation">kis_matrix_widget.ui.h</include>
 </includes>

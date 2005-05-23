@@ -46,8 +46,8 @@ public:
 	KisSharpenFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("sharpen", i18n("Sharpen")); };
-        virtual bool supportsPainting() { return true; }
-
+        virtual bool supportsPainting() { return false; }
+	virtual bool supportsIncrementalPainting() { return false; }
 };
 
 class KisMeanRemovalFilter : public KisConvolutionConstFilter {

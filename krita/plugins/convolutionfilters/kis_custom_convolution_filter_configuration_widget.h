@@ -30,11 +30,9 @@ class KisCustomConvolutionFilterConfigurationWidget : public KisFilterConfigurat
 	Q_OBJECT
 	public:
 		KisCustomConvolutionFilterConfigurationWidget( KisFilter* nfilter, QWidget * parent, const char * name);
-		inline KisCustomConvolutionFilterConfigurationBaseWidget* matrixWidget(int i) { return m_ccfcws[i]; };
-		inline int pos(int i) { return m_pos[i]; };
+		inline KisCustomConvolutionFilterConfigurationBaseWidget* matrixWidget() { return m_ccfcws; };
 	private:
-		KisCustomConvolutionFilterConfigurationBaseWidget** m_ccfcws;
-		int* m_pos;
+		KisCustomConvolutionFilterConfigurationBaseWidget* m_ccfcws;
 };
 
 #endif

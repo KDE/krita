@@ -59,12 +59,9 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 {
 	Q_UNUSED(dst);
 
-	kdDebug() << "Embossfilter called!\n";
 
 	//read the filter configuration values from the KisFilterConfiguration object
 	Q_UINT32 embossdepth = ((KisEmbossFilterConfiguration*)configuration)->depth();
-
-	kdDebug() << "depth:" << embossdepth << "\n";
 
 	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
 	//with the actual pixel data.

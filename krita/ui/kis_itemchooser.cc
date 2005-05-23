@@ -57,6 +57,7 @@ void KisItemChooser::slotItemSelected(KoIconItem *item)
 void KisItemChooser::addItem(KoIconItem *item)
 {
 	m_chooser -> addItem(item);
+	m_chooser -> setCurrentItem(0);
 }
 
 void KisItemChooser::addItems(const vKoIconItem& items)
@@ -65,6 +66,7 @@ void KisItemChooser::addItems(const vKoIconItem& items)
 
 	for (itr.toFirst(); itr.current(); ++itr)
 		m_chooser -> addItem(itr.current());
+	m_chooser -> setCurrentItem(0);
 }
 
 QWidget *KisItemChooser::chooserWidget() const

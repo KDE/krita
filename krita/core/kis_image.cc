@@ -818,12 +818,10 @@ bool KisImage::add(KisLayerSP layer, Q_INT32 position)
 
 void KisImage::rm(KisLayerSP layer)
 {
-	vKisLayerSP_it it;
-
 	if (layer == 0)
 		return;
 
-	it = qFind(m_layers.begin(), m_layers.end(), layer);
+	vKisLayerSP_it it = qFind(m_layers.begin(), m_layers.end(), layer);
 
 	if (it == m_layers.end())
 		return;

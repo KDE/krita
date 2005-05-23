@@ -62,7 +62,7 @@ public:
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("autocontrast", i18n("Auto Contrast")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
 
 };
 

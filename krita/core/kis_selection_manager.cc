@@ -553,6 +553,8 @@ void KisSelectionManager::feather()
 
 	if (img -> undoAdapter())
 		img -> undoAdapter() -> addCommand(t);
+
+	dev -> emitSelectionChanged();
 }
 
 // XXX: Maybe move these esoteric functions to plugins?

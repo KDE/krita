@@ -67,9 +67,7 @@ SelectionTools::SelectionTools(QObject *parent, const char *name, const QStringL
  	{
 		KisView * view = dynamic_cast<KisView*>( parent );
 		KisToolRegistry * r = view -> toolRegistry();
-#if 0 // Commented out for 1.4 because these are not going to be fixed in time
 		r -> add(new KisToolSelectFreehandFactory( actionCollection() ));
-#endif
 		r -> add(new KisToolSelectPolygonalFactory( actionCollection() ));
 		r -> add(new KisToolSelectRectangularFactory( actionCollection() ));
 		r -> add(new KisToolSelectBrushFactory( actionCollection() ));

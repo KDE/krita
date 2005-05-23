@@ -1,7 +1,7 @@
 /*
- *  kis_tool_select_freehand.cc - part of Krayon^WKrita
+ *  kis_tool_select_freehand.h - part of Krayon^WKrita
  *
- *  Copyright (c) 2001 Toshitaka Fujioka <fujioka@kde.org>
+ *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -21,255 +21,207 @@
  */
 
 #include <qpainter.h>
-#include <qpen.h>
 #include <qregion.h>
+#include <qwidget.h>
 
 #include <kaction.h>
-#include <klocale.h>
 #include <kdebug.h>
 #include <kcommand.h>
+#include <klocale.h>
 
-#include "kis_canvas_controller.h"
-#include "kis_canvas_subject.h"
-#include "kis_cursor.h"
-#include "kis_image.h"
-#include "kis_tool_select_freehand.h"
-#include "kis_view.h"
-#include "kis_vec.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_move_event.h"
-#include "kis_selection_options.h"
+#include <kis_selection_options.h>
+#include <kis_canvas_controller.h>
+#include <kis_canvas_subject.h>
+#include <kis_cursor.h>
+#include <kis_image.h>
+#include <kis_tool_select_freehand.h>
+#include <kis_vec.h>
+#include <kis_undo_adapter.h>
+#include <kis_button_press_event.h>
+#include <kis_button_release_event.h>
+#include <kis_move_event.h>
+#include "kis_selected_transaction.h"
+#include "kis_painter.h"
+#include "kis_paintop_registry.h"
 
-KisToolSelectFreehand::KisToolSelectFreehand() : super()
+KisToolSelectFreehand::KisToolSelectFreehand()
+	: super()
 {
 	setName("tool_select_freehand");
-	m_subject = 0;
-	m_optWidget = 0;
 	setCursor(KisCursor::selectCursor());
 
+	m_subject = 0;
 	m_dragging = false;
-	m_dragStart = QPoint(-1,-1);
-	m_dragEnd =   QPoint(-1,-1);
-
-	mStart  = QPoint(-1, -1);
-	mFinish = QPoint(-1, -1);
-
-	m_index = 0;
-	m_dragging = false;
-	moveSelectArea = false;
+	m_optWidget = 0;
 }
 
 KisToolSelectFreehand::~KisToolSelectFreehand()
 {
 }
 
-void KisToolSelectFreehand::start( QPoint /*p*/ )
+void KisToolSelectFreehand::update (KisCanvasSubject *subject)
 {
-// 	mStart = p;
+	m_subject = subject;
+	super::update(m_subject);
 }
 
-void KisToolSelectFreehand::finish( QPoint /*p*/ )
+void KisToolSelectFreehand::buttonPress(KisButtonPressEvent *event)
 {
-// 	mFinish = p;
-// 	drawLine(mStart, mFinish);
-// 	m_pointArray.putPoints(m_index, 1, mFinish.x(), mFinish.y());
+	if (event -> button() == LeftButton) {
+		m_dragging = true;
+
+		m_dragStart = event -> pos();
+		m_dragEnd = event -> pos();
+		m_points.clear();
+		m_points.append(m_dragStart);
+	}
 }
 
-void KisToolSelectFreehand::buttonPress(KisButtonPressEvent */*event*/)
+void KisToolSelectFreehand::move(KisMoveEvent *event)
 {
-// 	// start the freehand line.
-// 	if (event -> button() == LeftButton && !moveSelectArea) {
-// 		m_dragging = true;
-// 		clearOld();
-// 		start( event->pos() );
-
-// 		m_dragStart = event->pos();
-// 		m_dragEnd = event->pos();
-// 		dragSelectArea = false;
-// 	}
-// 	else if (event -> button() == LeftButton && moveSelectArea) {
-// 		dragSelectArea = true;
-// 		dragFirst = true;
-// 		m_dragStart = event->pos();
-// 		m_dragdist = 0;
-
-// 		m_hotSpot = event->pos();
-// 		int x = zoomed( m_hotSpot.x() );
-// 		int y = zoomed( m_hotSpot.y() );
-
-// 		m_hotSpot = QPoint( x - m_imageRect.topLeft().x(), y - m_imageRect.topLeft().y() );
-
-// 		oldDragPoint = event->pos();
-// 		setClipImage();
-// 	}
-// 	else if (event->button() == RightButton) {
-// 		return;
-// 	}
+	if (m_dragging) {
+		m_dragStart = m_dragEnd;
+		m_dragEnd = event -> pos();
+		m_points.append (m_dragEnd);
+		// draw new lines on canvas
+		draw();
+	}
 }
 
-
-void KisToolSelectFreehand::move(KisMoveEvent */*event*/)
+void KisToolSelectFreehand::buttonRelease(KisButtonReleaseEvent *event)
 {
-// 	if (event -> button() == RightButton)
-// 		return;
+	if (!m_subject)
+		return;
 
-// 	KisView *view = getCurrentView();
+	if (m_dragging && event -> button() == LeftButton) {
+		m_dragging = false;
+		clear();
 
-// 	if (m_dragging && !dragSelectArea) {
-// 		m_dragEnd = event->pos();
-// 		m_pointArray.putPoints( m_index, 1, m_dragStart.x(),m_dragStart.y() );
-// 		++m_index;
-// 		drawLine(m_dragStart, m_dragEnd);
-// 		m_dragStart = m_dragEnd;
-// 	}
-// 	else if (!m_dragging && !dragSelectArea) {
-// 		if (!m_selectRegion.isNull() && m_selectRegion.contains(event -> pos())) {
-// 			setMoveCursor();
-// 			moveSelectArea = true;
-// 		}
-// 		else {
-// 			setSelectCursor();
-// 			moveSelectArea = false;
-// 		}
-// 	}
-// 	else if (dragSelectArea) {
-// 		if (dragFirst) {
-// 			// remove select image
-// 			m_doc->getSelection()->erase();
-// 			clearOld();
-// 			view->slotUpdateImage();
-// 			dragFirst = false;
-// 		}
+		KisImageSP img = m_subject -> currentImg();
 
-// 		int spacing = 10;
-// 		float zF = view->zoomFactor();
-// 		QPoint pos = event->pos();
-// 		int mouseX = pos.x();
-// 		int mouseY = pos.y();
+		if (img) {
+			KisLayerSP layer = img -> activeLayer();
+			bool hasSelection = layer -> hasSelection();
 
-// 		KisVector end( mouseX, mouseY );
-// 		KisVector start( m_dragStart.x(), m_dragStart.y() );
+			//XXX: Fix string
+			KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Freehand Selection"), layer.data());
+			KisSelectionSP selection = layer -> selection();
 
-// 		KisVector dragVec = end - start;
-// 		float saved_dist = m_dragdist;
-// 		float new_dist = dragVec.length();
-// 		float dist = saved_dist + new_dist;
+			if (!hasSelection) {
+				selection -> clear();
+			}
 
-// 		if ( (int)dist < spacing ) {
-// 			m_dragdist += new_dist;
-// 			m_dragStart = pos;
-// 			return;
-// 		}
-// 		else
-// 			m_dragdist = 0;
+			KisPainter painter(selection.data());
 
-// 		dragVec.normalize();
-// 		KisVector step = start;
+			painter.setPaintColor(Qt::black);
+			painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+			painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+			painter.setBrush(m_subject -> currentBrush());
+			painter.setOpacity(OPACITY_OPAQUE);
+			KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
+			painter.setPaintOp(op);	// And now the painter owns the op and will destroy it.
 
-// 		while ( dist >= spacing ) {
-// 			if ( saved_dist > 0 ) {
-// 				step += dragVec * ( spacing - saved_dist );
-// 				saved_dist -= spacing;
-// 			}
-// 			else
-// 				step += dragVec * spacing;
+			switch (m_selectAction) {
+			case SELECTION_ADD:
+				painter.setCompositeOp(COMPOSITE_OVER);
+				break;
+			case SELECTION_SUBTRACT:
+				painter.setCompositeOp(COMPOSITE_SUBTRACT);
+				break;
+			default:
+				break;
+			}
 
-// 			QPoint p( qRound( step.x() ), qRound( step.y() ) );
+			painter.paintPolygon(m_points);
 
-// 			QRect ur( zoomed( oldDragPoint.x() ) - m_hotSpot.x() - view->xScrollOffset(),
-// 					zoomed( oldDragPoint.y() ) - m_hotSpot.y() - view->yScrollOffset(),
-// 					(int)( m_clipPixmap.width() * ( zF > 1.0 ? zF : 1.0 ) ),
-// 					(int)( m_clipPixmap.height() * ( zF > 1.0 ? zF : 1.0 ) ) );
+			layer->emitSelectionChanged();
 
-// 			view->updateCanvas( ur );
+			if (img -> undoAdapter())
+				img -> undoAdapter() -> addCommand(t);
 
-// 			dragSelectImage( p, m_hotSpot );
+			img -> notify(painter.dirtyRect());
+		}
 
-// 			oldDragPoint = p;
-// 			dist -= spacing;
-// 		}
-
-// 		if ( dist > 0 )
-// 			m_dragdist = dist;
-// 		m_dragStart = pos;
-// 	}
+		m_points.clear();
+	}
 }
 
-
-void KisToolSelectFreehand::buttonRelease(KisButtonReleaseEvent */*event*/)
+void KisToolSelectFreehand::paint(QPainter& gc)
 {
-// 	if ( event->button() == RightButton ) {
-// 		return;
-// 	}
-
-// 	if ( !moveSelectArea ) {
-// 		// stop drawing freehand.
-// 		m_dragging = false;
-
-// 		m_imageRect = getDrawRect( m_pointArray );
-// 		QPointArray points = zoomPointArray( m_pointArray );
-
-// 		// need to connect start and end positions to close the freehand line.
-// 		finish( event->pos() );
-
-// 		// we need a bounding rectangle and a point array of
-// 		// points in the freehand line
-
-// 		m_doc->getSelection()->setPolygonalSelection( m_imageRect, points, m_doc->currentImg()->getCurrentLayer() );
-
-// 		kdDebug(0) << "selectRect"
-// 			<< " left: "   << m_imageRect.left()
-// 			<< " top: "    << m_imageRect.top()
-// 			<< " right: "  << m_imageRect.right()
-// 			<< " bottom: " << m_imageRect.bottom()
-// 			<< endl;
-
-// 		if ( m_pointArray.size() > 1 )
-// 			m_selectRegion = QRegion( m_pointArray, true );
-// 		else
-// 			m_selectRegion = QRegion();
-
-// 		// Initialize
-// //		m_index = 0;
-// //		m_pointArray.resize( 0 );
-// 	}
-// 	else {
-// 		// Initialize
-// 		dragSelectArea = false;
-// 		m_selectRegion = QRegion();
-// 		setSelectCursor();
-// 		moveSelectArea = false;
-
-// 		QPoint pos = event->pos();
-
-// 		KisImage *img = m_doc->currentImg();
-// 		if ( !img )
-// 			return;
-// 		if( !img->getCurrentLayer()->visible() )
-// 			return;
-// 		if( pasteClipImage( zoomed( pos ) - m_hotSpot ) )
-// 			img->markDirty( QRect( zoomed( pos ) - m_hotSpot, m_clipPixmap.size() ) );
-// 	}
+	draw(gc);
 }
 
-
-void KisToolSelectFreehand::drawLine( const QPoint& /*start*/, const QPoint& /*end*/ )
+void KisToolSelectFreehand::paint(QPainter& gc, const QRect&)
 {
-// 	KisView *view = getCurrentView();
-// 	QPainter p;
+	draw(gc);
+}
 
-// 	p.begin( m_canvas );
-// 	p.setRasterOp( Qt::NotROP );
-// 	p.setPen( QPen( Qt::DotLine ) );
-// 	float zF = view->zoomFactor();
+void KisToolSelectFreehand::draw()
+{
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+		QWidget *canvas = controller -> canvas();
+		QPainter gc(canvas);
 
-// 	p.drawLine(start.x() + view->xPaintOffset() - (int)(zF * view->xScrollOffset()),
-// 			start.y() + view->yPaintOffset() - (int)(zF * view->yScrollOffset()),
-// 			end.x() + view->xPaintOffset() - (int)(zF * view->xScrollOffset()),
-// 			end.y() + view->yPaintOffset() - (int)(zF * view->yScrollOffset()));
+		draw(gc);
+	}
+}
 
-// 	p.end();
+void KisToolSelectFreehand::draw(QPainter& gc)
+{
+	if (!m_subject)
+		return;
+
+	if (m_dragging && !m_points.empty()) {
+		QPen pen(Qt::white, 0, Qt::DotLine);
+
+		gc.setPen(pen);
+		gc.setRasterOp(Qt::XorROP);
+
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+		KisPoint start, end;
+		QPoint startPos;
+		QPoint endPos;
+
+		startPos = controller -> windowToView(m_dragStart.floorQPoint());
+		endPos = controller -> windowToView(m_dragEnd.floorQPoint());
+		gc.drawLine(startPos, endPos);
+	}
+}
+
+void KisToolSelectFreehand::clear()
+{
+	if (m_subject) {
+		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+		QWidget *canvas = controller -> canvas();
+		QPainter gc(canvas);
+
+		QPen pen(Qt::white, 0, Qt::DotLine);
+
+		gc.setPen(pen);
+		gc.setRasterOp(Qt::XorROP);
+
+		KisPoint start, end;
+		QPoint startPos;
+		QPoint endPos;
+
+		for (KisPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+
+			if (it == m_points.begin())
+			{
+				start = (*it);
+			} else {
+				end = (*it);
+
+				startPos = controller -> windowToView(start.floorQPoint());
+				endPos = controller -> windowToView(end.floorQPoint());
+
+				gc.drawLine(startPos, endPos);
+
+				start = end;
+			}
+		}
+	}
 }
 
 void KisToolSelectFreehand::setup(KActionCollection *collection)
@@ -279,7 +231,7 @@ void KisToolSelectFreehand::setup(KActionCollection *collection)
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("Tool &Freehand Select"),
 					    "tool_free_form_selection",
-					    Qt::Key_K,
+					    0,
 					    this,
 					    SLOT(activate()),
 					    collection,
@@ -296,6 +248,9 @@ QWidget* KisToolSelectFreehand::createOptionWidget(QWidget* parent)
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
 	Q_CHECK_PTR(m_optWidget);
 	m_optWidget -> setCaption(i18n("Freehand Selection"));
+
+	connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+
 	return m_optWidget;
 }
 
@@ -304,24 +259,10 @@ QWidget* KisToolSelectFreehand::optionWidget()
         return m_optWidget;
 }
 
-void KisToolSelectFreehand::paintEvent(QPaintEvent */*e*/)
-{
-// 	if (m_pointArray.size() > 1) {
-// 		KisView *view = getCurrentView();
-// 		QPainter gc(m_canvas);
-// 		QPen pen(Qt::DotLine);
-// 		float zF = view -> zoomFactor();
-
-// 		Q_ASSERT(view);
-// 		gc.setRasterOp(Qt::NotROP);
-// 		gc.setPen(pen);
-// 		gc.scale(zF, zF);
-// 		gc.translate(view -> xPaintOffset() - view -> xScrollOffset(), view -> yPaintOffset() - view -> yScrollOffset());
-// 		gc.setClipRect(e -> rect());
-// 		gc.drawPolyline(m_pointArray);
-// 		gc.drawLine(m_pointArray[m_pointArray.size() - 1], m_pointArray[0]);
-// 	}
+void KisToolSelectFreehand::slotSetAction(int action) {
+	if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
+		m_selectAction =(enumSelectionMode)action;
 }
 
-
 #include "kis_tool_select_freehand.moc"
+

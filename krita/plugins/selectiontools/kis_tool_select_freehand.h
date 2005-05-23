@@ -1,7 +1,7 @@
 /*
- *  kis_tool_select_freehand.h - part of Krayon
+ *  kis_tool_select_freehand.h - part of Krayon^WKrita
  *
- *  Copyright (c) 2001 Toshitaka Fujioka <fujioka@kde.org>
+ *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -28,65 +28,60 @@
 
 #include "kis_tool.h"
 #include "kis_tool_non_paint.h"
-
 #include "kis_tool_factory.h"
 
-// This is KisToolSelectBrush, but filled when the mouse
-// button is released.
+#include "kis_selection.h"
+
 class KisToolSelectFreehand : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;
 	Q_OBJECT
-
 public:
 	KisToolSelectFreehand();
 	virtual ~KisToolSelectFreehand();
 
-	virtual void setup(KActionCollection *collection);
-	virtual QWidget * createOptionWidget(QWidget* parent);
-        virtual QWidget* optionWidget();
+        //
+        // KisCanvasObserver interface
+        //
 
-	virtual void paintEvent(QPaintEvent *e);
+	virtual void update (KisCanvasSubject *subject);
+
+        //
+        // KisToolPaint interface
+        //
+
+	virtual void setup(KActionCollection *collection);
+
 	virtual void buttonPress(KisButtonPressEvent *event);
 	virtual void move(KisMoveEvent *event);
 	virtual void buttonRelease(KisButtonReleaseEvent *event);
 
-	void start( QPoint p );
-	void finish( QPoint p );
+	QWidget* createOptionWidget(QWidget* parent);
+	virtual QWidget* optionWidget();
+
+public slots:
+	virtual void slotSetAction(int);
 
 protected:
-	void drawLine(const QPoint& start, const QPoint& end);
+	virtual void paint(QPainter& gc);
+	virtual void paint(QPainter& gc, const QRect& rc);
+	void draw(QPainter& gc);
+	void draw();
+	void clear();
 
-	QPoint      m_dragStart;
-	QPoint      m_dragEnd;
+protected:
+	KisPoint m_dragStart;
+	KisPoint m_dragEnd;
 
-	QPoint      mStart;
-	QPoint      mFinish;
-
-	bool        m_dragging;
-	bool        m_drawn;
-
-// 	KisCanvas   *m_canvas;
-
+	bool m_dragging;
 private:
-
+	typedef QValueVector<KisPoint> KisPointVector;
 	KisCanvasSubject *m_subject;
-
-	QRect m_selectRect;
-	QPointArray m_pointArray;
-	uint m_index;
-
-	bool moveSelectArea;
-	bool dragSelectArea;
-	QPoint m_hotSpot;
-       	QPoint oldDragPoint;
-	QRegion m_selectRegion;
-	QRect m_imageRect;
-	bool dragFirst;
-	float m_dragdist;
-        QWidget * m_optWidget;
-
+	KisPointVector m_points;
+	QWidget * m_optWidget;
+	enumSelectionMode m_selectAction;
 };
+
 
 class KisToolSelectFreehandFactory : public KisToolFactory {
 	typedef KisToolFactory super;
@@ -94,7 +89,7 @@ public:
 	KisToolSelectFreehandFactory(KActionCollection * ac) : super(ac) {};
 	virtual ~KisToolSelectFreehandFactory(){};
 
-	virtual KisTool * createTool() {
+	virtual KisTool * createTool() { 
 		KisTool * t =  new KisToolSelectFreehand(); 
 		Q_CHECK_PTR(t);
 		t -> setup(m_ac); 
@@ -102,7 +97,6 @@ public:
 	}
 	virtual KisID id() { return KisID("freehandselect", i18n("Freehand select tool")); }
 };
-
 
 
 #endif //__selecttoolfreehand_h__

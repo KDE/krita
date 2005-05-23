@@ -46,6 +46,7 @@
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include "kis_selected_transaction.h"
+#include "kis_convolution_painter.h"
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	: m_parent(parent),
@@ -140,13 +141,14 @@ void KisSelectionManager::setup(KActionCollection * collection)
 			    this, SLOT(copySelectionToNewLayer()),
 			    collection, "copy_selection_to_new_layer");
 
-#if 0 // Not implemented yet
+
 	m_feather =
 		new KAction(i18n("Feather..."),
 			    0, 0,
 			    this, SLOT(feather()),
 			    collection, "feather");
 
+#if 0 // Not implemented yet
 	m_border =
 		new KAction(i18n("Border..."),
 			    0, 0,
@@ -248,8 +250,8 @@ void KisSelectionManager::updateGUI()
 	m_reselect -> setEnabled( ! enable);
 	m_invert -> setEnabled(enable);
 	m_toNewLayer -> setEnabled(enable);
-#if 0 // Not implemented yet
 	m_feather -> setEnabled(enable);
+#if 0 // Not implemented yet
 	m_border -> setEnabled(enable);
 	m_expand -> setEnabled(enable);
 	m_smooth -> setEnabled(enable);
@@ -513,8 +515,47 @@ void KisSelectionManager::copySelectionToNewLayer()
 	paste();
 }
 
+// XXX Krita post 1.4: Make feather radius configurable
+void KisSelectionManager::feather()
+{
+	KisImageSP img = m_parent -> currentImg();
+	if (!img) return;
+	KisPaintDeviceSP dev = img -> activeDevice();
+	if (!dev) return;
+	
+	if (!dev -> hasSelection()) {
+		// activate it, but don't do anything with it
+		dev -> selection();
+		return;
+	}
+
+	KisSelectionSP selection = dev -> selection();
+
+	KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Feather..."), dev);
+	Q_CHECK_PTR(t);
+
+
+	// ### we should let gaussian blur & others influence alpha channels as well
+	// (on demand of the caller)
+	// We process the selection to the extent of the image. This is because if the
+	// selection is precisely embedded in some tiles, using only that extent would
+	// give us hard edges, and that's what we don't want
+
+	KisConvolutionPainter painter(selection.data());
+	int matrixvalues[3][3] = { { 1, 2, 1 }, { 2, 4, 2 }, { 1, 2, 1} };
+	// depth of selection is 1, so only 1 needed
+	KisMatrix3x3 matrix(matrixvalues , 16, 0);
+
+
+	QRect rect = img -> bounds();
+	painter.applyMatrix(&matrix, rect.x(), rect.y(), rect.width(), rect.height());
+	painter.end();
+
+	if (img -> undoAdapter())
+		img -> undoAdapter() -> addCommand(t);
+}
+
 // XXX: Maybe move these esoteric functions to plugins?
-void KisSelectionManager::feather() {}
 void KisSelectionManager::border() {}
 void KisSelectionManager::expand() {}
 void KisSelectionManager::smooth() {}

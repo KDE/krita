@@ -98,9 +98,8 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 	int lastProgressPercent = 0;
 	emit notifyProgress(this, 0);
 
-	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();//  + 1; XXX: Why the + 1? It makes Krita crash
-								   // on the custom convolution filter preview and I cannot
-								   // image what it's supposed to accomplish.
+	Q_INT32 depth = src -> colorStrategy() -> nChannels();
+
 	Q_INT32 top, left;
 
 	left = x;

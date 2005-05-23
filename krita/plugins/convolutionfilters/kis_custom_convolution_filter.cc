@@ -43,7 +43,7 @@ KisFilterConfigurationWidget* KisCustomConvolutionFilter::createConfigurationWid
 KisFilterConfiguration* KisCustomConvolutionFilter::configuration(KisFilterConfigurationWidget* nwidget)
 {
 	KisCustomConvolutionFilterConfigurationWidget* widget = (KisCustomConvolutionFilterConfigurationWidget*) nwidget;
-	Q_INT32 imgdepth = colorStrategy()->nColorChannels();
+	Q_INT32 imgdepth = colorStrategy()->nChannels();
 	if ( widget == 0 )
 	{
 		// Create the identity matrices:
@@ -55,7 +55,7 @@ KisFilterConfiguration* KisCustomConvolutionFilter::configuration(KisFilterConfi
 		{
 			amatrixes[i] = KisMatrix3x3(mat, 1, 127);
 		}
- 		int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} }; // XXX: (BSAR) Unused.
+ 		int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
 		amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
 	
 		return new KisCustomConvolutionConfiguration( amatrixes );
@@ -65,7 +65,7 @@ KisFilterConfiguration* KisCustomConvolutionFilter::configuration(KisFilterConfi
 		Q_CHECK_PTR(amatrixes);
 
 		KisCustomConvolutionFilterConfigurationBaseWidget* mw = widget->matrixWidget();
-		for(int i = 0; i < imgdepth; i ++)
+		for(int i = 0; i < imgdepth - 1; i ++)
 		{
 			amatrixes[i][0][0] = mw->matrixWidget->m11->value();
 			amatrixes[i][1][0] = mw->matrixWidget->m21->value();
@@ -79,6 +79,11 @@ KisFilterConfiguration* KisCustomConvolutionFilter::configuration(KisFilterConfi
 			amatrixes[i].setFactor( mw->spinBoxFactor->value() );
 			amatrixes[i].setOffset( mw->spinBoxOffset->value() );
 		}
+		
+		// XXX make this configurable?
+		int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
+		amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
+		
 		return new KisCustomConvolutionConfiguration( amatrixes );
 	}
 }

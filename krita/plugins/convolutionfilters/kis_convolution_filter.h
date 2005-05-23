@@ -41,6 +41,7 @@ public:
 	KisConvolutionFilter(const KisID& id, KisView * view);
 public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+	virtual bool supportsIncrementalPainting() { return false; }
 };
 
 

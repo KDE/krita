@@ -43,6 +43,7 @@ public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("gammadjustment", i18n("Gamma Adjustment")); };
         virtual bool supportsPainting() { return true; }
+	virtual bool supportsIncrementalPainting() { return false; }
 
 };
 
@@ -53,6 +54,7 @@ public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("coloradjustment", i18n("Color Adjustment")); };
         virtual bool supportsPainting() { return true; }
+	virtual bool supportsIncrementalPainting() { return false; }
 
 };
 

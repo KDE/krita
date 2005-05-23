@@ -44,6 +44,7 @@ public:
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
 	static inline KisID id() { return KisID("invert", i18n("Invert")); };
 	virtual bool supportsPainting() { return true; }
+	virtual bool supportsIncrementalPainting() { return false; }
 };
 
 #endif

@@ -88,6 +88,7 @@ KisToolTransform::KisToolTransform()
 	m_startPos = QPoint(0, 0);
 	m_endPos = QPoint(0, 0);
 	m_optWidget = 0;
+	m_transaction = 0;
 }
 
 KisToolTransform::~KisToolTransform()

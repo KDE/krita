@@ -221,8 +221,8 @@ void KisDockerManager::setupDockers()
 
 		// Tools
 		m_toolcontrolslider = m_toolDockManager -> createTabbedToolDock("info");
-		m_toolcontrolslider -> setCaption(i18n("Navigator/Info/Options"));
-		KToggleAction * show = new KToggleAction(i18n( "&Navigator/Info/Tool Options" ), 0, 0,
+		m_toolcontrolslider -> setCaption(i18n("General") + "/" + i18n( "Tools" ) );
+		KToggleAction * show = new KToggleAction(i18n("General") + "/" + i18n( "Tools" ) , 0, 0,
 							 m_ac, "view_control_docker" );
 		connect(show, SIGNAL(toggled(bool)), m_toolcontrolslider, SLOT(makeVisible(bool)));
 		connect(m_toolcontrolslider, SIGNAL(visibleChange(bool)), SLOT(viewControlSlider(bool)));
@@ -273,7 +273,7 @@ void KisDockerManager::setupDockers()
 	if ( cfg.dockerStyle() == DOCKER_DOCKER || cfg.dockerStyle() == DOCKER_TOOLBOX ) {
 
 		m_toolcontroldocker = new KisDockFrameDocker(m_view);
-		m_toolcontroldocker -> setCaption(i18n("Navigator/Info/Options"));
+		m_toolcontroldocker -> setCaption(i18n("General") + "/" + i18n( "Tools" ));
 
 		m_colordocker = new KisDockFrameDocker(m_view);
 		m_colordocker -> setCaption(i18n("Color Manager"));

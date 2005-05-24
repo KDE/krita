@@ -33,7 +33,8 @@ static int numLayers = 0;
 KisLayer::KisLayer(KisStrategyColorSpaceSP colorStrategy, const QString& name)
 	: super(colorStrategy, name),
 	  m_opacity(OPACITY_OPAQUE),
-	  m_linked(false)
+	  m_linked(false),
+	  m_locked(false)
 {
 #if DEBUG_LAYERS
 	numLayers++;
@@ -44,7 +45,8 @@ KisLayer::KisLayer(KisStrategyColorSpaceSP colorStrategy, const QString& name)
 KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity)
 	: super(img, img -> colorStrategy(), name),
 	  m_opacity(opacity),
-	  m_linked(false)
+	  m_linked(false),
+	  m_locked(false)
 {
 #if DEBUG_LAYERS
 	numLayers++;
@@ -55,7 +57,8 @@ KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity)
 KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisStrategyColorSpaceSP colorStrategy)
 	: super(img, colorStrategy, name),
 	  m_opacity(opacity),
-	  m_linked(false)
+	  m_linked(false),
+	  m_locked(false)
 {
 #if DEBUG_LAYERS
 	numLayers++;
@@ -71,12 +74,10 @@ KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
 #endif
 	if (this != &rhs) {
 		m_opacity = rhs.m_opacity;
-		m_preserveTransparency = rhs.m_preserveTransparency;
-		m_initial = rhs.m_initial;
+		//m_preserveTransparency = rhs.m_preserveTransparency;
+		//m_initial = rhs.m_initial;
 		m_linked = rhs.m_linked;
-		m_dx = rhs.m_dx;
-		m_dy = rhs.m_dy;
-
+		m_locked = rhs.m_locked;
 /*		if (rhs.m_mask)
 			m_mask = new KisMask(*rhs.m_mask);*/
 	}
@@ -89,16 +90,6 @@ KisLayer::~KisLayer()
 	kdDebug() << "LAYER " << name() << " DESTROYED total now = " << numLayers << endl;
 #endif
 }
-
-
-
-void KisLayer::translate(Q_INT32 x, Q_INT32 y)
-{
-	m_dx = x;
-
-	m_dy = y;
-}
-
 
 QUANTUM KisLayer::opacity() const
 {
@@ -139,6 +130,5 @@ void KisLayer::setLocked(bool l)
 {
 	m_locked = l;
 }
-
 
 #include "kis_layer.moc"

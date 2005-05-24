@@ -39,9 +39,6 @@ public:
 	virtual void setVisible(bool v);
 
 public:
-
-	void translate(Q_INT32 x, Q_INT32 y);
-
 	QUANTUM opacity() const;
 	void setOpacity(QUANTUM val);
 
@@ -53,15 +50,10 @@ public:
 
 private:
 	QUANTUM m_opacity;
-	bool m_preserveTransparency;
-
-	bool m_initial;
+	//bool m_preserveTransparency;
+	//bool m_initial;
 	bool m_linked;
 	bool m_locked;
-
-	Q_INT32 m_dx;
-	Q_INT32 m_dy;
-
 };
 
 #endif // KIS_LAYER_H_

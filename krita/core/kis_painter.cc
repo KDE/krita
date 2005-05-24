@@ -96,6 +96,7 @@ void KisPainter::init()
 	m_dab = 0;
 	m_fillStyle = FillStyleNone;
 	m_strokeStyle = StrokeStyleBrush;
+	m_pressure = PRESSURE_MIN;
 }
 
 KisPainter::~KisPainter()
@@ -268,7 +269,6 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 //			  << "\n";
 
 	int dstDepth = m_pixelSize;
-	int srcDepth = srcdev -> pixelSize();
 	int alphaPos = srcdev -> nChannels() - 1;
 	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();
@@ -356,7 +356,6 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 //			  << "\n";
 
 	int dstDepth = m_pixelSize;
-	int srcDepth = srcdev -> pixelSize();
 	int alphaPos = srcdev -> nChannels() - 1;
 	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();

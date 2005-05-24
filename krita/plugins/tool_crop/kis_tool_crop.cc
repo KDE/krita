@@ -174,8 +174,8 @@ void KisToolCrop::move(KisMoveEvent *e)
 
 				KisImageSP image = m_subject -> currentImg();
 
-				m_endPos.setX(CLAMP(m_endPos.x(), 0, image -> width() - 1));
-				m_endPos.setY(CLAMP(m_endPos.y(), 0, image -> height() - 1));
+				m_endPos.setX(CLAMP(m_endPos.x(), 0, image -> width()));
+				m_endPos.setY(CLAMP(m_endPos.y(), 0, image -> height()));
 
                                 paintOutlineWithHandles();
                         }
@@ -221,14 +221,14 @@ void KisToolCrop::move(KisMoveEvent *e)
 
 								if (newStartX < 0) {
 									dx += (0 - newStartX);
-								} else if (m_endPos.x() + dx > imageWidth - 1) {
-									dx -=  m_endPos.x() + dx - (imageWidth - 1);
+								} else if (m_endPos.x() + dx > imageWidth) {
+									dx -=  m_endPos.x() + dx - (imageWidth);
 								}
 
 								if (newStartY < 0) {
 									dy += (0 - newStartY);
-								} else if (m_endPos.y() + dy > imageHeight - 1) {
-									dy -=  m_endPos.y() + dy - (imageHeight - 1);
+								} else if (m_endPos.y() + dy > imageHeight) {
+									dy -=  m_endPos.y() + dy - (imageHeight);
 								}
 
 								m_startPos += QPoint(dx, dy);
@@ -238,10 +238,10 @@ void KisToolCrop::move(KisMoveEvent *e)
 					}
 
 
-					m_startPos.setX(CLAMP(m_startPos.x(), 0, imageWidth - 1));
-					m_startPos.setY(CLAMP(m_startPos.y(), 0, imageHeight - 1));
-					m_endPos.setX(CLAMP(m_endPos.x(), 0, imageWidth - 1));
-					m_endPos.setY(CLAMP(m_endPos.y(), 0, imageHeight - 1));
+					m_startPos.setX(CLAMP(m_startPos.x(), 0, imageWidth));
+					m_startPos.setY(CLAMP(m_startPos.y(), 0, imageHeight));
+					m_endPos.setX(CLAMP(m_endPos.x(), 0, imageWidth));
+					m_endPos.setY(CLAMP(m_endPos.y(), 0, imageHeight));
 
 					paintOutlineWithHandles();
 				}
@@ -287,10 +287,10 @@ void KisToolCrop::validateSelection(void)
 			Q_INT32 imageWidth = image -> width();
 			Q_INT32 imageHeight = image -> height();
 
-			m_startPos.setX(CLAMP(m_startPos.x(), 0, imageWidth - 1));
-			m_startPos.setY(CLAMP(m_startPos.y(), 0, imageHeight - 1));
-			m_endPos.setX(CLAMP(m_endPos.x(), 0, imageWidth - 1));
-			m_endPos.setY(CLAMP(m_endPos.y(), 0, imageHeight - 1));
+			m_startPos.setX(CLAMP(m_startPos.x(), 0, imageWidth));
+			m_startPos.setY(CLAMP(m_startPos.y(), 0, imageHeight));
+			m_endPos.setX(CLAMP(m_endPos.x(), 0, imageWidth));
+			m_endPos.setY(CLAMP(m_endPos.y(), 0, imageHeight));
 
 			if (m_startPos.x() > m_endPos.x()) {
 				Q_INT32 startX = m_startPos.x();
@@ -399,6 +399,9 @@ void KisToolCrop::crop() {
 	
 	if (!img)
 		return;
+
+	// We don't want the border of the 'rectangle' to be included in our selection
+	m_endPos -= QPoint(1,1);
 
 	if (m_endPos.y() < 0)
 		m_endPos.setY(0);

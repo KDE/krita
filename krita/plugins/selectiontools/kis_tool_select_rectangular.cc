@@ -147,6 +147,9 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 
 		paintOutline();
 
+		// We don't want the border of the 'rectangle' to be included in our selection
+		m_endPos -= QPoint(1,1);
+
 		if (m_startPos == m_endPos) {
 			clearSelection();
 		} else {

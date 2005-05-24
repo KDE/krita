@@ -1401,8 +1401,6 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, KisLayerSP l, Q_INT32 position)
 	if (!contains(img) || !l)
 		return 0;
 
-	if (img -> layer(l -> name()))
-		return 0;
 
 	if (!img -> add(l, -1))
 		return 0;

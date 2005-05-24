@@ -84,8 +84,26 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32
 	applyMatrix(matrix, m_device, x, y, w, h);
 }
 
-void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, KisConvolutionBorderOp borderOp)
 {
+	// Don't try to convolve on an area smaller than the kernel
+	if (w < kernel[0].width || h < kernel[0].height) return;
+
+	m_cancelRequested = false;
+	
+	int lastProgressPercent = 0;
+	emit notifyProgress(this, 0);
+
+	Q_INT32 depth = src -> colorStrategy() -> nChannels();
+
+	
+	
+}
+
+void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+
+
 	
 	// XXX: Add checking of selections
 	// kdDebug() << "Convolving on x: " << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
@@ -320,6 +338,8 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 			}
 		}
 	}
+
+#if 0 // No convolution on the bottom row	
 	{
 		KisHLineIteratorPixel beforeIt = src->createHLineIterator(left, above, w, false);
 		KisHLineIteratorPixel curIt = src->createHLineIterator(left, y, w, false);
@@ -407,6 +427,6 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP s
 		}
 		
 	}
-
+#endif
 	emit notifyProgressDone(this);
 }

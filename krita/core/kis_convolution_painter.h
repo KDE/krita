@@ -43,6 +43,22 @@
 #include "kis_progress_subject.h"
 #include "kis_painter.h"
 
+enum KisConvolutionBorderOp {
+	BORDER_NOOP = 0,
+#if 0
+	BORDER_DEFAULT_FILL = 1,
+	BORDER_WRAP = 2,
+	BORDER_REPEAT = 3,
+	BORDER_AVOID = 4
+#endif	
+};
+
+struct KisKernel {
+	int width;
+	int height;
+	QValueVector<float> data;
+};
+
 class KisConvolutionPainter : public KisPainter
 {
 
@@ -54,6 +70,7 @@ public:
         KisConvolutionPainter(KisPaintDeviceSP device);
 
 	void applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	void applyMatrix(KisKernel * kernel, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, KisConvolutionBorderOp borderOp = BORDER_NOOP);
 	void applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 private:

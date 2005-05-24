@@ -28,6 +28,7 @@
 #include "kis_factory.h"
 #include "kis_profile.h"
 #include "kis_config.h"
+#include "kis_id.h"
 
 #include "kis_color_conversions.h"
 
@@ -61,34 +62,34 @@ bool KisStrategyColorSpace::convertPixelsTo(const QUANTUM * src, KisProfileSP sr
 					    Q_UINT32 numPixels,
 					    Q_INT32 renderingIntent)
 {
-//  	kdDebug() << "convertPixels for " << numPixels << " pixels from " << name() << " to " << dstColorStrategy -> name() << "\n";
-// 	kdDebug() << " src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
+  	//kdDebug() << "convertPixels: src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
 	cmsHTRANSFORM tf = 0;
 
-	if (!m_transforms.contains(KisProfilePair(srcProfile, dstProfile))) {
-// 		kdDebug() << "Create new transform\n";
-		tf = createTransform(dstColorStrategy,
-				     srcProfile,
-				     dstProfile,
-				     renderingIntent);
+	if (srcProfile && dstProfile) {
+		if (!m_transforms.contains(KisProfilePair(srcProfile, dstProfile))) {
+// 			kdDebug() << "Create new transform: src profile: " << srcProfile -> productName() << ", dst profile: " << dstProfile -> productName() << "\n";
+			tf = createTransform(dstColorStrategy,
+					     srcProfile,
+					     dstProfile,
+					     renderingIntent);
+			if (tf == 0) kdDebug() << "Creating transform failed! src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
+			m_transforms[KisProfilePair(srcProfile, dstProfile)] = tf;
+		}
+		else {
+			tf = m_transforms[KisProfilePair(srcProfile, dstProfile)];
+			if (tf == 0) kdDebug() << "Retrieving cached transform failed! src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
+		}
 
-		m_transforms[KisProfilePair(srcProfile, dstProfile)] = tf;
-	}
-	else {
-// 		kdDebug() << "Use cached transform\n";
-		tf = m_transforms[KisProfilePair(srcProfile, dstProfile)];
-	}
-
-	if (tf) {
-		cmsDoTransform(tf, const_cast<QUANTUM *>(src), dst, numPixels);
-		return true;
-	}
-
-	if (srcProfile != 0 && dstProfile != 0) {
+		if (tf) {
+			cmsDoTransform(tf, const_cast<QUANTUM *>(src), dst, numPixels);
+			return true;
+		}
+		
 		kdDebug() << "No transform from "
 			  << srcProfile -> productName() << " to " << dstProfile -> productName()
-			  << ", so cannot convert pixels!\n";
+			  << ", going to convert through RGB!\n";
 	}
+
 
 	Q_INT32 srcPixelSize = pixelSize();
 	Q_INT32 dstPixelSize = dstColorStrategy -> pixelSize();
@@ -138,22 +139,30 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 {
 	if (rows <= 0 || cols <= 0)
 		return;
-// 	kdDebug() << name() << "::bitBlt. source color space: " << srcSpace -> name() << "\n";
+//  	kdDebug() << id().name() << "::bitBlt. source color space: " << srcSpace -> id().name() << "\n";
 
 
  	if (m_id!= srcSpace -> id()) {
-// 		kdDebug() << "compositing heterogenous color spaces: src = " << srcSpace -> name() << ", dst = " << m_name << "\n";
 		int len = pixelSize() * rows * cols;
  		QUANTUM * convertedSrcPixels = new QUANTUM[len];
 		Q_CHECK_PTR(convertedSrcPixels);
 
 		memset(convertedSrcPixels, 0, len * sizeof(QUANTUM));
 
-		// XXX: Set profiles
-		for (Q_INT32 row = 0; row < rows; row++) {
-			srcSpace -> convertPixelsTo(src + row * srcstride, 0,
-						    convertedSrcPixels + row * cols * pixelSize(), this, 0,
-						    cols);
+		if (srcProfile && dstProfile) {
+// 			kdDebug() << "src profile: " << srcProfile -> productName() << ", dst profile: " << dstProfile -> productName() << "\n";
+			for (Q_INT32 row = 0; row < rows; row++) {
+				srcSpace -> convertPixelsTo(src + row * srcstride, srcProfile,
+							    convertedSrcPixels + row * cols * pixelSize(), this, dstProfile,
+							    cols);
+			}
+		}
+		else {
+			for (Q_INT32 row = 0; row < rows; row++) {
+				srcSpace -> convertPixelsTo(src + row * srcstride, 0,
+							    convertedSrcPixels + row * cols * pixelSize(), this, 0,
+							    cols);
+			}
 		}
  		srcstride = cols * pixelSize();
 
@@ -227,23 +236,23 @@ cmsHTRANSFORM KisStrategyColorSpace::createTransform(KisStrategyColorSpaceSP dst
 		flags = cmsFLAGS_BLACKPOINTCOMPENSATION;
 	}
 
-	if (dstProfile != 0
-	    && dstColorStrategy != 0
-	    && dstColorStrategy != 0
-	    && dstProfile -> colorSpaceSignature() == dstColorStrategy -> colorSpaceSignature()
-	    && srcProfile != 0
-	    && srcProfile -> colorSpaceSignature() == colorSpaceSignature()) {
+	if (dstProfile && srcProfile ) {
+//                 kdDebug() << "Going to create transform\n";
 		cmsHTRANSFORM tf = cmsCreateTransform(srcProfile -> profile(),
 						      colorSpaceType(),
 						      dstProfile -> profile(),
 						      dstColorStrategy -> colorSpaceType(),
 						      renderingIntent,
 						      flags);
+
+		if (!tf) {
+			kdDebug() << "No transform created for: src profile " << srcProfile 
+				  << ", src colorspace: " << colorSpaceType() 
+				  << ", dst profile " << dstProfile 
+				  << ", dst colorspace: " << dstColorStrategy -> colorSpaceType() << "\n";
+		}
+		
 		return tf;
-	}
-	else {
-		kdDebug() << "Haven't got the profiles, we're going to crash, probably.\n";
-		return 0;
 	}
 
 }

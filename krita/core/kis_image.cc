@@ -596,30 +596,36 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 void KisImage::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
 	// XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
-	if ( (m_colorStrategy -> id() != dstColorStrategy -> id())
-		|| profile() && dstProfile && (profile() -> profile() != dstProfile -> profile()) ) {
-
-		if (undoAdapter() && undoAdapter() -> undo()) {
-			undoAdapter() -> beginMacro(i18n("&Convert Image Type...")); //XXX: fix when string freeze over
-		}
-
-		vKisLayerSP_it it;
-		for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-			(*it) -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
-		}
-
-		if (undoAdapter() && undoAdapter() -> undo()) {
-
-			undoAdapter() -> addCommand(new KisConvertImageTypeCmd(undoAdapter(), this, m_colorStrategy, m_profile,
-									       dstColorStrategy, dstProfile));
-			undoAdapter() -> endMacro();
-		}
-
-		setColorStrategy(dstColorStrategy);
-		setProfile(dstProfile);
-		notify();
-		notifyLayersChanged();
+	if ( (m_colorStrategy -> id() == dstColorStrategy -> id())
+	     && profile() 
+	     && dstProfile 
+	     && (profile() -> profile() == dstProfile -> profile()) )
+	{
+		kdDebug() << "KisImage: NOT GOING TO CONVERT\n";
+		return;
 	}
+
+	if (undoAdapter() && undoAdapter() -> undo()) {
+		undoAdapter() -> beginMacro(i18n("&Convert Image Type...")); //XXX: fix when string freeze over
+	}
+
+	vKisLayerSP_it it;
+	for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
+		(*it) -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
+	}
+	
+	if (undoAdapter() && undoAdapter() -> undo()) {
+		
+		undoAdapter() -> addCommand(new KisConvertImageTypeCmd(undoAdapter(), this, m_colorStrategy, m_profile,
+								       dstColorStrategy, dstProfile));
+		undoAdapter() -> endMacro();
+	}
+
+	setColorStrategy(dstColorStrategy);
+	setProfile(dstProfile);
+	notify();
+	notifyLayersChanged();
+	
 }
 
 KisProfileSP KisImage::profile() const

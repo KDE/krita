@@ -84,7 +84,7 @@ KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
 					     INTENT_PERCEPTUAL, 0);
 
 	// Default pixel buffer for QColor conversion
-	m_qcolordata = new int[3];
+	m_qcolordata = new QUANTUM[3];
 	Q_CHECK_PTR(m_qcolordata);
 
 }
@@ -129,6 +129,7 @@ void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c, QUANTUM 
 {
 	cmsDoTransform(m_defaultToRGB, const_cast <QUANTUM *>(src), m_qcolordata, 1);
 	c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
+
  	*opacity = src[3];
 }
 
@@ -162,50 +163,50 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 						  Q_INT32 renderingIntent)
 
 {
- 	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
- 		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
+//  	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
+//  		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
 
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
 	memset(img.bits(), 255, width * height * sizeof(Q_UINT32));
 	KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
 
 
-// 	if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
-//  		kdDebug() << "Going to use default transform\n";
-// 		cmsDoTransform(m_defaultToRGB,
-// 			       const_cast<QUANTUM *> (data),
-// 			       img.bits(),
-// 			       width * height);
-// 	}
-// 	else {
-//  		kdDebug() << "Going to transform with profiles\n";
-// 		// Do a nice calibrated conversion
-// 		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile,
-// 				img.bits(), dstCS, dstProfile,
-// 				width * height, renderingIntent);
-// 	}
+ 	if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
+//   		kdDebug() << "Going to use default transform\n";
+ 		cmsDoTransform(m_defaultToRGB,
+ 			       const_cast<QUANTUM *> (data),
+ 			       img.bits(),
+ 			       width * height);
+ 	}
+ 	else {
+//   		kdDebug() << "Going to transform with profiles\n";
+ 		// Do a nice calibrated conversion
+ 		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile,
+ 				img.bits(), dstCS, dstProfile,
+ 				width * height, renderingIntent);
+ 	}
 
 	return img;
 }
 
 
-void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
+void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 pixelSize,
 				       QUANTUM *dst,
-				       Q_INT32 dststride,
+				       Q_INT32 dstRowStride,
 				       const QUANTUM *src,
-				       Q_INT32 srcstride,
+				       Q_INT32 srcRowStride,
 				       QUANTUM opacity,
 				       Q_INT32 rows,
 				       Q_INT32 cols,
 				       const KisCompositeOp& op)
 {
-	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
+	Q_INT32 linesize = pixelSize * sizeof(QUANTUM) * cols;
 	QUANTUM *d;
 	const QUANTUM *s;
-	Q_INT32 i;
 
 	if (rows <= 0 || cols <= 0)
 		return;
+
 	switch (op.op()) {
 	case COMPOSITE_COPY:
 		d = dst;
@@ -213,8 +214,8 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 
 		while (rows-- > 0) {
 			memcpy(d, s, linesize);
-			d += dststride;
-			s += srcstride;
+			d += dstRowStride;
+			s += srcRowStride;
 		}
 		break;
 	case COMPOSITE_CLEAR:
@@ -222,28 +223,65 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 stride,
 		s = src;
 		while (rows-- > 0) {
 			memset(d, 0, linesize);
-			d += dststride;
+			d += dstRowStride;
 		}
 		break;
 	case COMPOSITE_OVER:
 	default:
-		if (opacity == OPACITY_TRANSPARENT) return;
-		while (rows-- > 0) {
-
-			d = dst;
-			s = src;
-			for (i = cols; i > 0; i--, d += stride, s += stride) {
-				d[PIXEL_CYAN] = (d[PIXEL_CYAN] * OPACITY_OPAQUE  + s[PIXEL_CYAN] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
-				d[PIXEL_MAGENTA] = (d[PIXEL_MAGENTA] * OPACITY_OPAQUE + s[PIXEL_MAGENTA] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
-				d[PIXEL_YELLOW] = (d[PIXEL_YELLOW] * OPACITY_OPAQUE + s[PIXEL_YELLOW] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
-				d[PIXEL_BLACK] = (d[PIXEL_BLACK] * OPACITY_OPAQUE + s[PIXEL_BLACK] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
-			}
-			dst += dststride;
-			src += srcstride;
-		}
+		compositeOver(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
 	}
-
 }
+
+// XXX: Cut & Paste from colorspace_rgb
+
+inline int INT_MULT(int a, int b)
+{
+	int c = a * b + 0x80;
+	return ((c >> 8) + c) >> 8;
+}
+
+inline int INT_BLEND(int a, int b, int alpha)
+{
+	return INT_MULT(a - b, alpha) + b;
+}
+
+
+void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowStride, 
+					     const QUANTUM *srcRowStart, Q_INT32 srcRowStride, 
+					     Q_INT32 rows, Q_INT32 numColumns, 
+					     QUANTUM opacity)
+{
+	while (rows > 0) {
+
+		const QUANTUM *src = srcRowStart;
+		QUANTUM *dst = dstRowStart;
+		Q_INT32 columns = numColumns;
+
+		while (columns > 0) {
+
+			if (opacity == OPACITY_OPAQUE) {
+				memcpy(dst, src, cmyk::MAX_CHANNEL_CMYK * sizeof(QUANTUM));
+
+			} else {
+				
+				dst[PIXEL_CYAN] = INT_BLEND(src[PIXEL_CYAN], dst[PIXEL_CYAN], opacity);
+				dst[PIXEL_MAGENTA] = INT_BLEND(src[PIXEL_MAGENTA], dst[PIXEL_MAGENTA], opacity);
+				dst[PIXEL_YELLOW] = INT_BLEND(src[PIXEL_YELLOW], dst[PIXEL_YELLOW], opacity);
+				dst[PIXEL_BLACK] = INT_BLEND(src[PIXEL_BLACK], dst[PIXEL_BLACK], opacity);
+
+			}
+
+			columns--;
+			src += cmyk::MAX_CHANNEL_CMYK;
+			dst += cmyk::MAX_CHANNEL_CMYK;
+		}
+
+		rows--;
+		srcRowStart += srcRowStride;
+		dstRowStart += dstRowStride;
+	}
+}
+
 
 KisCompositeOpList KisStrategyColorSpaceCMYK::userVisiblecompositeOps() const
 {

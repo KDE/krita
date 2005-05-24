@@ -519,9 +519,15 @@ bool KisPaintDevice::read(KoStore *store)
 
 void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
+	if (profile() == 0) setProfile(m_owner -> profile());
+
 	// XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
-	if ( (colorStrategy() -> id() == dstColorStrategy -> id()) && profile() && dstProfile && (profile() -> profile() == dstProfile -> profile()) )
+	if ( (colorStrategy() -> id() == dstColorStrategy -> id()) 
+	     && profile() 
+	     && dstProfile 
+	     && (profile() -> profile() == dstProfile -> profile()) )
 	{
+		kdDebug() << "NOT GOING TO CONVERT!\n";
 		return;
 	}
 
@@ -533,6 +539,9 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 	Q_INT32 x, y, w, h;
 	extent(x, y, w, h);
 
+	// XXX: We really should try to convert as big chunks as
+	// possible. We must try to determine when the conversion eats
+	// the alpha, whether it's lcms or our own code that does it.
 	for (Q_INT32 row = y; row < y + h; ++row) {
 
 		Q_INT32 column = x;
@@ -545,7 +554,9 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 
 			Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns); 
 			columns = QMIN(columns, columnsRemaining);
+
 			// XXX This is a hack: sometimes this conversion eats the alpha value. This works around it, but this needs to be fixed properly
+			
 			columns = 1;
 
 			const Q_UINT8 *srcData = pixel(column, row);

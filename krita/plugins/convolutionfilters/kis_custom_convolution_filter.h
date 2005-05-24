@@ -37,7 +37,8 @@ public:
 	KisCustomConvolutionFilter(KisView * view);
 public:
 	static inline KisID id() { return KisID("custom convolution", i18n("Custom Convolution")); };
-	virtual bool supportsPainting() { return false; }
+	virtual bool supportsPainting() { return true; }
+	virtual bool supportsIncrementalPainting() { return true; }
 
 public:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);

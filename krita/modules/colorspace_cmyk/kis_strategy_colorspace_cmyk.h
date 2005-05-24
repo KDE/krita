@@ -78,13 +78,16 @@ public:
 	virtual bool valid() { return m_defaultProfile != 0; }
 
 	KisCompositeOpList userVisiblecompositeOps() const;
+protected:
+
+	void compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity);
 
 private:
 	vKisChannelInfoSP m_channels;
 	KisProfileSP m_defaultProfile;
 	cmsHTRANSFORM m_defaultToRGB;
 	cmsHTRANSFORM m_defaultFromRGB;
-	int * m_qcolordata;
+	QUANTUM * m_qcolordata;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_CMYK_H_

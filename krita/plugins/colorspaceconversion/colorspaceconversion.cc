@@ -100,7 +100,7 @@ void ColorspaceConversion::slotImgColorspaceConversion()
 		// XXX: Do the rest of the stuff
 		KisID cspace = dlgColorspaceConversion -> m_page -> cmbColorSpaces -> currentItem();
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(cspace);
-
+		// XXX: Should we actually set the profile here?
 		image -> setProfile(image -> colorStrategy() -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbSourceProfile -> currentText()));
 		image -> convertTo(cs,
 				   cs -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbDestProfile -> currentText()),

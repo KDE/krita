@@ -53,6 +53,7 @@ KisToolSelectFreehand::KisToolSelectFreehand()
 	m_subject = 0;
 	m_dragging = false;
 	m_optWidget = 0;
+	m_selectAction = SELECTION_ADD;
 }
 
 KisToolSelectFreehand::~KisToolSelectFreehand()

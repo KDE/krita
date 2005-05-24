@@ -44,39 +44,6 @@
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 
-namespace {
-	class PolygonSelectCmd : public KNamedCommand {
-		typedef KNamedCommand super;
-
-	public:
-		PolygonSelectCmd();
-		virtual ~PolygonSelectCmd();
-
-	public:
-		virtual void execute();
-		virtual void unexecute();
-
-	private:
-		KisImageSP m_owner;
-	};
-
-	PolygonSelectCmd::PolygonSelectCmd() : super(i18n("Elliptical Selection"))
-	{
-	}
-
-	PolygonSelectCmd::~PolygonSelectCmd()
-	{
-	}
-
-	void PolygonSelectCmd::execute()
-	{
-	}
-
-	void PolygonSelectCmd::unexecute()
-	{
-	}
-}
-
 KisToolSelectPolygonal::KisToolSelectPolygonal()
 	: super()
 {
@@ -86,6 +53,7 @@ KisToolSelectPolygonal::KisToolSelectPolygonal()
 	m_subject = 0;
 	m_dragging = false;
 	m_optWidget = 0;
+	m_selectAction = SELECTION_ADD;
 }
 
 KisToolSelectPolygonal::~KisToolSelectPolygonal()

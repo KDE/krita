@@ -82,7 +82,7 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 
  		QRect r = m_painter -> dirtyRect();
  		if ( r.isValid() ) {
- 			m_dirtyRect = m_painter -> dirtyRect();
+ 			m_dirtyRect = r;
  			m_currentImage -> notify(r);
  		}
          }

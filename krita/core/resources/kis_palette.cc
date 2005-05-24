@@ -146,7 +146,7 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 {
 	enumPaletteType format = FORMAT_UNKNOWN;
 
-	QString s = QString::fromUtf8(m_data.data());
+	QString s = QString::fromUtf8(m_data.data(), m_data.count());
 
 	if (s.isEmpty() || s.isNull() || s.length() < 50) {
 // 		kdDebug() << "Illegal Gimp palette file: " << filename() << "\n";

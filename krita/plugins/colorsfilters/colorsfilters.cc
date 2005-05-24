@@ -21,6 +21,7 @@
 #include <math.h>
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <qslider.h>
 #include <qpoint.h>
@@ -183,30 +184,40 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	// Number of channels in this device except alpha
  	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
 
-	Q_INT32 histo[QUANTUM_MAX+1];
-	for( Q_INT32 i = 0; i < QUANTUM_MAX+1; i++)
-	{
-		histo[i] = 0;
-// 		kdDebug() << histo[i] << endl;
-	}
 
-	Q_INT32 maxvalue = 0;
+	// initialize
+	QUANTUM* maxvalues = new QUANTUM[depth];
+	QUANTUM* minvalues = new QUANTUM[depth];
+	memset(maxvalues, 0, depth * sizeof(QUANTUM));
+	memset(minvalues, OPACITY_OPAQUE, depth * sizeof(QUANTUM));
+	
+	QUANTUM** lut = new QUANTUM*[depth];
+
+	for (int i = 0; i < depth; i++) {
+		lut[i] = new QUANTUM[QUANTUM_MAX+1];
+		memset(lut[i], 0, (QUANTUM_MAX+1) * sizeof(QUANTUM));
+	}
 
 	while (!rectIt.isDone() && !cancelRequested())
 	{
 		if (rectIt.isSelected()) {
+			QUANTUM opacity;
 
 			QColor color;
-			src -> colorStrategy() -> toQColor(rectIt.rawData(), &color);
+			src -> colorStrategy() -> toQColor(rectIt.rawData(), &color, &opacity);
 
-			Q_INT32 lightness = ( QMAX(QMAX(color.red(), color.green()), color.blue())
-						+ QMIN(QMIN(color.red(), color.green()), color.blue()) ) / 2;
+			// skip non-opaque pixels
+			if (src -> colorStrategy() -> alpha() && opacity != OPACITY_OPAQUE) {
+				++rectIt;
+				continue;
+			}
 
-			histo[ lightness ] ++;
-
-			if( histo[ lightness ] > maxvalue )
-			{
-				maxvalue = histo[ lightness ];
+			for (int i = 0; i < depth; i++) {
+				QUANTUM index = rectIt.rawData()[i];
+				if( index > maxvalues[i])
+					maxvalues[i] = index;
+				if( index < minvalues[i])
+					minvalues[i] = index;
 			}
 		}
 		++rectIt;
@@ -215,37 +226,50 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 		setProgress(pixelsProcessed);
 	}
 
-	if (!cancelRequested()) {
-
-		Q_INT32 start;
-		for( start = 0; histo[start] < maxvalue * 0.1; start++) { /*kdDebug() << start << endl;*/ }
-		Q_INT32 end;
-		for( end = QUANTUM_MAX; histo[end] < maxvalue * 0.1; end--) { /*kdDebug() << end << endl;*/ }
-
-		if (start != end) {
-			double factor = QUANTUM_MAX / (double) (end - start);
-
-			rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
-
-			while (!rectIt.isDone()  && !cancelRequested())
-			{
-				if (rectIt.isSelected()) {
-					KisPixel srcData = rectIt.pixel();
-					KisPixel dstData = rectIt.pixel();
-
-					// Iterate through all channels except alpha
-					// XXX: Check for off-by-one errors
-					for (int i = 0; i < depth; ++i) {
-						dstData[i] = (QUANTUM) QMIN ( QUANTUM_MAX, QMAX(0, (srcData[i] - start) * factor) );
-					}
-				}
-				++rectIt;
-
-				pixelsProcessed++;
-				setProgress(pixelsProcessed);
+	if (cancelRequested()) {
+		setProgressDone();
+		return;
+	}
+	
+	// build the LUT
+	for (int i = 0; i < depth; i++) {
+		QUANTUM diff = maxvalues[i] - minvalues[i];
+		if (diff != 0) {
+			for (int j = minvalues[i]; j <= maxvalues[i]; j++) {
+				lut[i][j] = QUANTUM_MAX * (j - minvalues[i]) / diff;
 			}
+		} else {
+			lut[i][minvalues[i]] = minvalues[i];
 		}
 	}
+
+	// apply
+
+	rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
+
+	while (!rectIt.isDone()  && !cancelRequested()) {
+		if (rectIt.isSelected()) {
+			QUANTUM* dstData = rectIt.rawData();
+
+			// Iterate through all channels except alpha
+			for (int i = 0; i < depth; ++i) {
+				dstData[i] = lut[i][dstData[i]];
+			}
+		}
+		++rectIt;
+
+		pixelsProcessed++;
+		setProgress(pixelsProcessed);
+	}
+	
+	// and delete everything
+	delete[] maxvalues;
+	delete[] minvalues;
+	for (int i = 0; i < depth; i++) {
+		delete[] lut[i];
+	}
+	delete[] lut;
+
 	setProgressDone();
 }
 

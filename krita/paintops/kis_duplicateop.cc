@@ -78,6 +78,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 	
 	splitCoordinate(pt.x(), &x, &xFraction);
 	splitCoordinate(pt.y(), &y, &yFraction);
+	xFraction = yFraction = 0.0;
 
 	KisPaintDeviceSP dab = 0;
 
@@ -92,8 +93,8 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 	
 	m_painter -> setPressure(pressure);
 
-	QPoint srcPoint = QPoint((Q_INT32)(pt.x() - m_painter -> duplicateOffset().x()),
-				 (Q_INT32)(pt.y() - m_painter -> duplicateOffset().y()));
+	QPoint srcPoint = QPoint(x - static_cast<Q_INT32>(m_painter -> duplicateOffset().x()),
+							 y - static_cast<Q_INT32>(m_painter -> duplicateOffset().y()));
 
 		
 	Q_INT32 sw = dab -> extent().width();

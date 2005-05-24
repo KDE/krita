@@ -269,6 +269,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
 	int dstDepth = m_pixelSize;
 	int srcDepth = srcdev -> pixelSize();
+	int alphaPos = srcdev -> nChannels() - 1;
 	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();
 
@@ -279,7 +280,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
 	for(Q_INT32 i = 0; i < sh; i++)
 	{
-		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, false);
+		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, true);
 		KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
 		KisHLineIterator selIter = selection -> createHLineIterator(dx, dy + i, sw, false);
 
@@ -287,6 +288,8 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 		{
 			// XXX: Make selection threshold configurable
 			if (selIter.rawData()[0] > SELECTION_THRESHOLD) {
+				if (srcdev -> colorStrategy() -> alpha())
+					srcIter.rawData()[alphaPos] = *(selIter.rawData());
 				m_colorStrategy -> bitBlt(dstDepth,
 							  dstIter.rawData(), 
 							  dstRowSize,
@@ -354,6 +357,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
 	int dstDepth = m_pixelSize;
 	int srcDepth = srcdev -> pixelSize();
+	int alphaPos = srcdev -> nChannels() - 1;
 	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();
 
@@ -364,7 +368,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
 	for(Q_INT32 i = 0; i < sh; i++)
 	{
-		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, false);
+		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, true);
 		KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
 		KisHLineIterator selIter = selection -> createHLineIterator(dx, dy + i, sw, false);
 
@@ -372,6 +376,8 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 		{
 			// XXX: Make selection threshold configurable
 			if (selIter.rawData()[0] > SELECTION_THRESHOLD) {
+				if (srcdev -> colorStrategy() -> alpha())
+					srcIter.rawData()[alphaPos] = *(selIter.rawData());
 				m_colorStrategy -> bitBlt(dstDepth,
 							  dstIter.rawData(), 
 							  dstRowSize,

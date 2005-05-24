@@ -147,9 +147,6 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 
 		paintOutline();
 
-		// We don't want the border of the 'rectangle' to be included in our selection
-		m_endPos -= QPoint(1,1);
-
 		if (m_startPos == m_endPos) {
 			clearSelection();
 		} else {
@@ -177,6 +174,9 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 				KisSelectionSP selection = layer -> selection();
 				QRect rc(m_startPos.floorQPoint(), m_endPos.floorQPoint());
 				rc = rc.normalize();
+
+				// We don't want the border of the 'rectangle' to be included in our selection
+				rc.setSize(rc.size() - QSize(1,1));
 				
 				if (img -> undoAdapter())
 					img -> undoAdapter() -> addCommand(t);

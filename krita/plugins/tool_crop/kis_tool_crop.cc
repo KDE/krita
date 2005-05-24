@@ -400,9 +400,6 @@ void KisToolCrop::crop() {
 	if (!img)
 		return;
 
-	// We don't want the border of the 'rectangle' to be included in our selection
-	m_endPos -= QPoint(1,1);
-
 	if (m_endPos.y() < 0)
 		m_endPos.setY(0);
 	
@@ -417,6 +414,9 @@ void KisToolCrop::crop() {
 	
 	QRect rc(m_startPos, m_endPos);
 	rc = rc.normalize();
+
+	// We don't want the border of the 'rectangle' to be included in our selection
+	rc.setSize(rc.size() - QSize(1,1));
 	
 	
 	if (m_optWidget -> cmbType -> currentItem() == 0) {

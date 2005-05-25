@@ -82,13 +82,20 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : super(de
 void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	applyMatrix(matrix, m_device, x, y, w, h);
-}
+	}
 
 void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, KisConvolutionBorderOp borderOp)
 {
-	// Don't try to convolve on an area smaller than the kernel
-	if (w < kernel[0].width || h < kernel[0].height) return;
+	// XXX: There may be a kernel for every channel.
 
+	Q_UINT32 kw, kh, kd;
+	kw = kernel[0].width;
+	kh = kernel[0].height;
+	kd = (kw - 1) / 2;
+	
+	// Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
+	if (w < kw || h < kh || kw != kh || kw&1 == 0 ) return;
+	
 	m_cancelRequested = false;
 	
 	int lastProgressPercent = 0;
@@ -96,15 +103,113 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 
 	Q_INT32 depth = src -> colorStrategy() -> nChannels();
 
+	Q_INT32 kernelSum = 0;
+	for (int i = 0; i < kw * kh; ++i) {
+		kernelSum += kernel[0].data[i];
+	}
+
+	kdDebug() << "Kernel sum = " << kernelSum << "\n";
+	kdDebug() << "Factor: " << kernel[0].factor << "\n";
+	kdDebug() << "Offset: " << kernel[0].offset << "\n";
+	kdDebug() << "Width: " << kw << "\n";
+	kdDebug() << "Height: " << kh << "\n";
+	for (int i = 0; i < kw * kh; ++i) {
+		kdDebug() << "Kernel value " << i << " = " << kernel[0].data[i] << "\n";
+	}
 	
+	// Iterate over all pixels in our rect
+	// XXX: Cache already seen pixels for the kernel iterator.
+	// XXX: Is it faster to use src->pixel(x,y, false)?
+	// XXX: Do something with the borderops -- now we always use the default pixel of the src device.
 	
+	// row == the y position of the pixel we want to change in the paint device
+	for (int row = y; row < y + h; ++row) {
+
+		// col = the x position of the pixel we want to change
+		int col = x; 
+		
+		KisHLineIteratorPixel hit = src -> createHLineIterator(x, row, w, true);
+		
+		while (!hit.isDone()) {
+			if (hit.isSelected()) {
+				
+				KisPixel curPixel = hit.pixel();
+				
+				int sums[depth];
+				memset(&sums, 0, depth);
+				
+				// Iterate over all contributing pixels that are covered by the kernel
+				// krow = the y position in the kernel matrix
+				for (int krow = 0; krow <  kh; ++krow) {
+	
+					// kx = the x position in the kernel matrix
+					int kx = 0;
+	
+					// col - kd = the left starting point of the kernel as centered on our pixel
+					// krow - kd = the offset for the top of the kernel as centered on our pixel
+					// kw = the kernel of a matrix line
+					KisHLineIteratorPixel kit = src -> createHLineIterator(col - kd, (row - kd) + krow, kw, false);
+					while (!kit.isDone()) {
+						KisPixelRO p = kit.oldPixel();
+						Q_INT32 kval = kernel[0].data[(kw * krow) + kx];
+						// Calculate the sum of all channels of the current pixel 
+						for (int i = 0; i < depth;  ++i) {
+							sums[i] += p[i] * kval;
+						}
+						
+						++kx;
+						++kit;
+					}
+				}
+				
+				// We got the total value of the channels of the pixels surrounding our pixel now, including the value of our own pixel,
+				// multiplied with the values of kernel. Compute the weighted value for every channel.
+				// XXX: What about offset?
+				for (int i = 0; i < depth; ++i) {
+					sums[i] = (sums[i] == 0) ? 1 : sums[i];
+					kdDebug() << "Result: " << sums[i] / (kw * kh * kernelSum) / kernel[0].factor + kernel[0].offset << "\n";
+					curPixel[i] = QMAX( 0, QMIN( QUANTUM_MAX, (sums[i] / (kw * kh * kernelSum)) / (kernel[0].factor + kernel[0].offset) ) );
+				}
+			}
+			++col;
+			++hit;
+
+		}
+
+		int progressPercent = 100 - ((((y + h) - row) * 100) / h);
+		
+		if (progressPercent > lastProgressPercent) {
+			emit notifyProgress(this, progressPercent);
+			lastProgressPercent = progressPercent;
+
+			if (m_cancelRequested) {
+				return;
+			}
+		}		
+	
+	}
+	
+	emit notifyProgressDone(this);
 }
 
 void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
+#if 0
+	KisKernel * kernel = new KisKernel();
+	kernel -> width = 3;
+	kernel -> height = 3;
+	kernel -> factor = matrix[0].factor();
+	kernel -> offset = matrix[0].offset();
+	for (int i = 0; i < 3; ++ i) {
+		for (int j = 0; j < 3; ++j) {
+			kdDebug() << "Kernel " << j << ", " << i << " = " << matrix[0][j][i] << "\n";
+			kernel -> data.push_back(matrix[0][j][i]);
+			
+		}
+	}
+	applyMatrix(kernel, src, x, y, w, h);
+#else
 
-
-	
 	// XXX: Add checking of selections
 	// kdDebug() << "Convolving on x: " << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
 	if (w < 3 || h < 3) {
@@ -126,8 +231,18 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP 
 	Q_INT32 above=top;
 	Q_INT32 below=top+1;
 	Q_INT32 dstY=top;
+
+	// Empty white, opaque pixel for edge conditions.
+	QUANTUM * emptyData = new QUANTUM[depth];
+	memset(emptyData, QUANTUM_MAX, depth);
+	KisPixelRO p (emptyData);
 	
 	KisPixelRO pixels[9];
+	
+	for (int i = 0; i < depth; ++i) {
+		pixels[i] = p;
+	}
+	
 	{
 		KisHLineIteratorPixel curIt = src->createHLineIterator(left, y, w, false);
 		KisHLineIteratorPixel dstIt = src->createHLineIterator(left, dstY, w, true);
@@ -339,7 +454,7 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP 
 		}
 	}
 
-#if 0 // No convolution on the bottom row	
+
 	{
 		KisHLineIteratorPixel beforeIt = src->createHLineIterator(left, above, w, false);
 		KisHLineIteratorPixel curIt = src->createHLineIterator(left, y, w, false);
@@ -427,6 +542,9 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP 
 		}
 		
 	}
-#endif
+
+	delete [] emptyData;
+	
 	emit notifyProgressDone(this);
+#endif	
 }

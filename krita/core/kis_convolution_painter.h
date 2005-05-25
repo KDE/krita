@@ -54,9 +54,11 @@ enum KisConvolutionBorderOp {
 };
 
 struct KisKernel {
-	int width;
-	int height;
-	QValueVector<float> data;
+	Q_UINT32 width;
+	Q_UINT32 height;
+	Q_INT32 offset;
+	Q_INT32 factor;
+	QValueVector<Q_INT32> data;
 };
 
 class KisConvolutionPainter : public KisPainter

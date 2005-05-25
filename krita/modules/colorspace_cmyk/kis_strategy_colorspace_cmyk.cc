@@ -258,8 +258,12 @@ void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstR
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
-
-			if (opacity == OPACITY_OPAQUE) {
+			if (src[PIXEL_CYAN] == 0
+				&& src[PIXEL_MAGENTA] == 0
+				&& src[PIXEL_YELLOW] == 0
+				&& src[PIXEL_BLACK] == 0) {
+				// Skip; we don't put any new ink over the old.
+			} else if (opacity == OPACITY_OPAQUE) {
 				memcpy(dst, src, cmyk::MAX_CHANNEL_CMYK * sizeof(QUANTUM));
 
 			} else {

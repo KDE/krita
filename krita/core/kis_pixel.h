@@ -80,7 +80,9 @@ public:
                   m_colorStrategy(colorStrategy),
                   m_profile(profile) {};
 
-		virtual ~KisPixelRO() {}
+	virtual ~KisPixelRO() {}
+
+	
 public:
 
 	QUANTUM operator[](int index) const { return m_channels[index]; }

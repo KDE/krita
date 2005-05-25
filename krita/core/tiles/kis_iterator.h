@@ -32,8 +32,8 @@
 
 
 /** 
- * The KisHLinetIterator class iterates through the pixels of a horizontal line in a KisPaintDevice hiding the
- * tile structure
+ * The KisRectIterator iterators over a rectangular area in the most efficient order. That is,
+ * there is no guarantee that the iterator will work scanline by scanline.
  */
 class KisRectIterator : private ACTUAL_RECTITERATOR
 {

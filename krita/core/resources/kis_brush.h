@@ -32,6 +32,7 @@
 #include "kis_layer.h"
 #include "kis_point.h"
 #include "kis_alpha_mask.h"
+#include "koffice_export.h"
 
 class QPoint;
 class QPixmap;
@@ -44,7 +45,7 @@ enum enumBrushType {
 	AIRBRUSH
 };
 
-class KisBrush : public KisResource {
+class KRITACORE_EXPORT KisBrush : public KisResource {
 	typedef KisResource super;
 	Q_OBJECT
 

@@ -21,11 +21,11 @@
 #include <qglobal.h>
 #include <kis_tile.h>
 #include <kis_tileddatamanager.h>
-
+#include <koffice_export.h>
 /**
  * The KisIterator class iterates through the pixels of a KisPaintDevice hiding the tile structure
  */
-class KisTiledIterator {
+class KRITACORE_EXPORT KisTiledIterator {
 
 protected:
 	KisTiledDataManager *m_ktm;
@@ -112,7 +112,7 @@ private:
  * The KisHLineIterator class iterates through the pixels of a horizontal line in a KisPaintDevice hiding the
  * tile structure
  */
-class KisTiledHLineIterator : public KisTiledIterator
+class KRITACORE_EXPORT KisTiledHLineIterator : public KisTiledIterator
 {
 
 public:
@@ -157,7 +157,7 @@ private:
  * The KisVLineIterator class iterates through the pixels of a vertical line in a KisPaintDevice hiding the
  * tile structure
  */
-class KisTiledVLineIterator : public KisTiledIterator
+class KRITACORE_EXPORT KisTiledVLineIterator : public KisTiledIterator
 {
 
 public:

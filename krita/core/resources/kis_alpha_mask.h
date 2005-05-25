@@ -32,7 +32,7 @@
  * in brush creation. It is not a generic alpha mask that can be used with
  * KisPaintDevices: use a KisSelection for that.
  */
-class KisAlphaMask : public KShared {
+class KRITACORE_EXPORT KisAlphaMask : public KShared {
 	
  public:
 	/**

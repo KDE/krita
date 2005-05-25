@@ -121,6 +121,11 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 	// XXX: Is it faster to use src->pixel(x,y, false)?
 	// XXX: Do something with the borderops -- now we always use the default pixel of the src device.
 	
+	x += (kw - 1) / 2;
+	y += (kh - 1) / 2;
+	w -= kw - 1;
+	h -= kh - 1;
+	
 	// row == the y position of the pixel we want to change in the paint device
 	for (int row = y; row < y + h; ++row) {
 
@@ -134,11 +139,9 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 				
 				KisPixel curPixel = hit.pixel();
 				
-				float sums[depth];
-				for (int i = 0; i < depth; ++i) {
-					sums[i] = 0;
-				}
-				
+				int sums[depth];
+				memset(&sums, 0, depth * sizeof(int));
+
 				// Iterate over all contributing pixels that are covered by the kernel
 				// krow = the y position in the kernel matrix
 				for (int krow = 0; krow <  kh; ++krow) {
@@ -167,11 +170,9 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 				// We got the total value of the channels of the pixels surrounding our pixel now, including the value of our own pixel,
 				// multiplied with the values of kernel. Compute the weighted value for every channel.
 				// XXX: What about offset?
-				for (int i = 0; i < depth; ++i) {
-//					kdDebug() << "Result: " << sums [i]
-//								<< ", " << sums[i] / ( kw * kh ) / kernelSum / kernel[0].factor  << "\n";
-								
-					curPixel[i] = QMAX(0, QMIN(QUANTUM_MAX, (QUANTUM)(sums[i] / kernelSum)));
+				for (int i = 0; i < depth - 1; ++i) {
+					curPixel[i] = CLAMP(((sums[i] / kernel[0].factor) + kernel[0].offset),
+										 0, QUANTUM_MAX );
 				}
 			}
 			++col;

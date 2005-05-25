@@ -107,15 +107,14 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 	for (int i = 0; i < kw * kh; ++i) {
 		kernelSum += kernel[0].data[i];
 	}
-
+	if (kernelSum <= 0) kernelSum = 1;
+	
 	kdDebug() << "Kernel sum = " << kernelSum << "\n";
 	kdDebug() << "Factor: " << kernel[0].factor << "\n";
 	kdDebug() << "Offset: " << kernel[0].offset << "\n";
 	kdDebug() << "Width: " << kw << "\n";
 	kdDebug() << "Height: " << kh << "\n";
-	for (int i = 0; i < kw * kh; ++i) {
-		kdDebug() << "Kernel value " << i << " = " << kernel[0].data[i] << "\n";
-	}
+
 	
 	// Iterate over all pixels in our rect
 	// XXX: Cache already seen pixels for the kernel iterator.
@@ -135,8 +134,10 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 				
 				KisPixel curPixel = hit.pixel();
 				
-				int sums[depth];
-				memset(&sums, 0, depth);
+				float sums[depth];
+				for (int i = 0; i < depth; ++i) {
+					sums[i] = 0;
+				}
 				
 				// Iterate over all contributing pixels that are covered by the kernel
 				// krow = the y position in the kernel matrix
@@ -152,11 +153,12 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 					while (!kit.isDone()) {
 						KisPixelRO p = kit.oldPixel();
 						Q_INT32 kval = kernel[0].data[(kw * krow) + kx];
-						// Calculate the sum of all channels of the current pixel 
-						for (int i = 0; i < depth;  ++i) {
-							sums[i] += p[i] * kval;
+						// Calculate for each channel of the current pixel the sum of all matrix pixels
+						if (kval > 0) {
+							for (int i = 0; i < depth;  ++i) {
+								sums[i] = sums[i] + (p[i] * kval);
+							}
 						}
-						
 						++kx;
 						++kit;
 					}
@@ -166,9 +168,10 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 				// multiplied with the values of kernel. Compute the weighted value for every channel.
 				// XXX: What about offset?
 				for (int i = 0; i < depth; ++i) {
-					sums[i] = (sums[i] == 0) ? 1 : sums[i];
-					kdDebug() << "Result: " << sums[i] / (kw * kh * kernelSum) / kernel[0].factor + kernel[0].offset << "\n";
-					curPixel[i] = QMAX( 0, QMIN( QUANTUM_MAX, (sums[i] / (kw * kh * kernelSum)) / (kernel[0].factor + kernel[0].offset) ) );
+//					kdDebug() << "Result: " << sums [i]
+//								<< ", " << sums[i] / ( kw * kh ) / kernelSum / kernel[0].factor  << "\n";
+								
+					curPixel[i] = QMAX(0, QMIN(QUANTUM_MAX, (QUANTUM)(sums[i] / kernelSum)));
 				}
 			}
 			++col;
@@ -195,15 +198,19 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 #if 0
+
+	matrix -> dump();
+
+
 	KisKernel * kernel = new KisKernel();
 	kernel -> width = 3;
 	kernel -> height = 3;
 	kernel -> factor = matrix[0].factor();
 	kernel -> offset = matrix[0].offset();
-	for (int i = 0; i < 3; ++ i) {
-		for (int j = 0; j < 3; ++j) {
-			kdDebug() << "Kernel " << j << ", " << i << " = " << matrix[0][j][i] << "\n";
-			kernel -> data.push_back(matrix[0][j][i]);
+	for (int row = 0; row < 3; ++row) {
+		for (int col = 0; col < 3; ++col) {
+			kdDebug() << "Kernel " << col << ", " << row << " = " << matrix[0][col][row] << "\n";
+			kernel -> data.push_back(matrix[0][col][row]);
 			
 		}
 	}
@@ -403,15 +410,16 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP 
 				for(int i = 0; i < depth; i++)
 				{
 					currentPixel[ i ] = QMAX( 0, QMIN( QUANTUM_MAX,
-											(   pixels[ CONVOLUTION_PIXEL_CUR ][ i ] * matrix[i][1][1]
-											+ pixels[ CONVOLUTION_PIXEL_LEFTTOP ][i] * matrix[i][0][0]
-											+ pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
-											+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
-											+ pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
-											+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2]
-											+ pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ][i] * matrix[i][2][0]
-											+ pixels[ CONVOLUTION_PIXEL_BOTTOM ][i] * matrix[i][2][1]
-											+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2] )
+											( pixels[ CONVOLUTION_PIXEL_CUR ]        [i] * matrix[i][1][1]
+											+ pixels[ CONVOLUTION_PIXEL_LEFTTOP ]    [i] * matrix[i][0][0]
+											+ pixels[ CONVOLUTION_PIXEL_TOP ]        [i] * matrix[i][0][1]
+											+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP ]   [i] * matrix[i][0][2]
+											+ pixels[ CONVOLUTION_PIXEL_LEFT ]       [i] * matrix[i][1][0]
+											+ pixels[ CONVOLUTION_PIXEL_RIGHT ]      [i] * matrix[i][1][2]
+											+ pixels[ CONVOLUTION_PIXEL_LEFTBOTTOM ] [i] * matrix[i][2][0]
+											+ pixels[ CONVOLUTION_PIXEL_BOTTOM ]     [i] * matrix[i][2][1]
+											+ pixels[ CONVOLUTION_PIXEL_RIGHTBOTTOM ][i] * matrix[i][2][2]
+											)
 											/ matrix[i].factor() + matrix[i].offset() ) );
 				}
 			}
@@ -518,8 +526,8 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP 
 											+ pixels[ CONVOLUTION_PIXEL_TOP ][i] * matrix[i][0][1]
 											+ pixels[ CONVOLUTION_PIXEL_RIGHTTOP ][i] * matrix[i][0][2]
 											+ pixels[ CONVOLUTION_PIXEL_LEFT ][i] * matrix[i][1][0]
-											+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2] ) * matrix[i].sum()
-											/ matrix[i].factor() / sums[i] + matrix[i].offset() ) );
+											+ pixels[ CONVOLUTION_PIXEL_RIGHT ][i] * matrix[i][1][2] )
+											* matrix[i].sum() / matrix[i].factor() / sums[i] + matrix[i].offset() ) );
 				}
 			}
 		}

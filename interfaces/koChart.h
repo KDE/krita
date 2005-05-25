@@ -22,7 +22,7 @@
 #include <koDocument.h>
 #include <KDChartTable.h>
 #include <KDChartData.h>
-
+#include <koffice_export.h>
 namespace KoChart
 {
     class Part;
@@ -33,7 +33,7 @@ namespace KoChart
     typedef KDChartData Value;
     typedef KDChartTableData Data;
 
-    class WizardExtension : public QObject
+    class KOCHARTINTERFACE_EXPORT WizardExtension : public QObject
     {
         Q_OBJECT
     public:
@@ -51,7 +51,7 @@ namespace KoChart
         WizardExtensionPrivate *d;
     };
 
-    class Part : public KoDocument
+    class KOCHARTINTERFACE_EXPORT Part : public KoDocument
     {
         Q_OBJECT
     public:

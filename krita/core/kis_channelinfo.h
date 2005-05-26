@@ -25,8 +25,7 @@ enum enumChannelType {
 	COLOR, // The channel represents a color
 	ALPHA, // The channel represents the opacity of a pixel
 	SUBSTANCE, // The channel represents a real-world substance like pigments or medium
-	SUBSTRATE, // The channel represents a real-world painting substrate like a canvas
-	SELECTION  // The channel represents the degree of selectedness of a pixel
+	SUBSTRATE // The channel represents a real-world painting substrate like a canvas
 };
 
 /** 

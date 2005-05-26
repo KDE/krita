@@ -599,33 +599,10 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
 		if ((colorspacename = element.attribute("colorspacename")).isNull())
 		{
-			// TODO: This code is used for compatibility with old files,
-			// it should be removed before alpha.
-			// XXX: Don't depend on the names, but on the id's
-			if ((attr = element.attribute("colorspace")).isNull())
-				return 0;
-			colorspace_int = attr.toInt();
-			if( colorspace_int <= IMAGE_TYPE_UNKNOWN || colorspace_int > IMAGE_TYPE_YUVA)
-				return 0;
-			switch(colorspace_int)
-			{
-			case IMAGE_TYPE_GREYA:
-			case IMAGE_TYPE_GREY:
-				colorspacename = "GRAYA";
-				break;
-			case IMAGE_TYPE_RGB:
-			case IMAGE_TYPE_RGBA:
-				colorspacename = "RGBA";
-				break;
-			case IMAGE_TYPE_CMYK:
-				colorspacename = "CMYKA";
-				break;
-			case IMAGE_TYPE_CMYKA:
-				colorspacename = "CMYKA";
-				break;
-			default:
-				return 0;
-			}
+			// And old file: take a reasonable default. 
+			// Krita didn't support anything else in those
+			// days anyway.
+			colorspacename = "RGBA";
 		}
 		
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(colorspacename);

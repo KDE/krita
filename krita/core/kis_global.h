@@ -114,30 +114,6 @@ const double PRESSURE_MAX = 1.0;
 const double PRESSURE_DEFAULT = (PRESSURE_MAX - PRESSURE_MIN) / 2;
 const double PRESSURE_THRESHOLD = 5.0 / 255.0;
 
-#if 0
-enum enumImgType {
-#endif
-// The following enum is kept to allow the loading of old documents in KisDoc::loadImage
-// XXX: Before Koffice 1.4 release, remove. We do not need backwards compatibility since
-// we have no installed base.
-enum enumImgTypeDeprecated {
-	IMAGE_TYPE_UNKNOWN,
-	IMAGE_TYPE_INDEXED,
-	IMAGE_TYPE_INDEXEDA,
-	IMAGE_TYPE_GREY,
-	IMAGE_TYPE_GREYA,
-	IMAGE_TYPE_RGB,
-	IMAGE_TYPE_RGBA,
-	IMAGE_TYPE_CMYK,
-	IMAGE_TYPE_CMYKA,
-	IMAGE_TYPE_LAB,
-	IMAGE_TYPE_LABA,
-	IMAGE_TYPE_YUV,
-	IMAGE_TYPE_YUVA,
-	IMAGE_TYPE_WET,
-	IMAGE_TYPE_SELECTION_MASK
-};
-
 enum enumPaintStyles {
 	PAINTSTYLE_HARD,
 	PAINTSTYLE_SOFT

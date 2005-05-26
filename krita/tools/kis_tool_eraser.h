@@ -26,8 +26,9 @@
 #include "kis_tool_freehand.h"
 
 #include "kis_tool_factory.h"
+#include "koffice_export.h"
 
-class KisToolEraser : public KisToolFreehand {
+class KRITACORE_EXPORT KisToolEraser : public KisToolFreehand {
 
 	typedef KisToolFreehand super;
 	Q_OBJECT

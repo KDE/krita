@@ -68,7 +68,7 @@ public:
  * The KisRectIterator class iterates through the pixels of a rect in a KisPaintDevice hiding the
  * tile structure
  */
-class KisTiledRectIterator : public KisTiledIterator
+class KRITACORE_EXPORT KisTiledRectIterator : public KisTiledIterator
 {
 
 public:

@@ -27,8 +27,8 @@ class QTimer;
 class KisBrush;
 
 #include "kis_tool_factory.h"
-
-class KisToolAirbrush : public KisToolFreehand {
+#include "koffice_export.h"
+class KRITACORE_EXPORT KisToolAirbrush : public KisToolFreehand {
 
 	Q_OBJECT
 	typedef KisToolFreehand super;

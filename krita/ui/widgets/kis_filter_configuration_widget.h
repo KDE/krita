@@ -23,8 +23,9 @@ class KisFilter;
 class KisFilterConfiguration;
 
 #include <qwidget.h>
+#include "koffice_export.h"
 
-class KisFilterConfigurationWidget : public QWidget {
+class KRITAUI_EXPORT KisFilterConfigurationWidget : public QWidget {
 	Q_OBJECT
 public:
 	KisFilterConfigurationWidget ( KisFilter* nfilter, QWidget * parent = 0, const char * name = 0, WFlags f = 0 );

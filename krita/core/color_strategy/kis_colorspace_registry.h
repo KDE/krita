@@ -22,6 +22,7 @@
 
 #include "kis_types.h"
 #include "kis_generic_registry.h"
+#include "koffice_export.h"
 
 class QStringList;
 
@@ -33,7 +34,7 @@ class QStringList;
  *      - a mapping of lcms color model identifiers to color strategies
  *     -  a mapping of icm color model identifiers to color stratiegs
  */
-class KisColorSpaceRegistry : public KisGenericRegistry<KisStrategyColorSpaceSP> {
+class KRITACORE_EXPORT KisColorSpaceRegistry : public KisGenericRegistry<KisStrategyColorSpaceSP> {
 
 public:
 	virtual ~KisColorSpaceRegistry();

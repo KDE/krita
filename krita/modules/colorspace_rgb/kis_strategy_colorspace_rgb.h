@@ -25,13 +25,14 @@
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_pixel.h"
+#include "koffice_export.h"
 
 const PIXELTYPE PIXEL_BLUE = 0;
 const PIXELTYPE PIXEL_GREEN = 1;
 const PIXELTYPE PIXEL_RED = 2;
 const PIXELTYPE PIXEL_ALPHA = 3;
 
-class KisStrategyColorSpaceRGB : public KisStrategyColorSpace {
+class KRITATOOL_EXPORT KisStrategyColorSpaceRGB : public KisStrategyColorSpace {
 public:
 	KisStrategyColorSpaceRGB();
 	virtual ~KisStrategyColorSpaceRGB();

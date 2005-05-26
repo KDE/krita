@@ -31,6 +31,7 @@
 #include "kis_layer.h"
 #include "kis_filter_registry.h"
 #include "kis_id.h"
+#include "koffice_export.h"
 
 class KisFilterConfigurationWidget;
 class KisPreviewDialog;
@@ -68,7 +69,7 @@ class KisFilterConfiguration {
 /**
  * Basic interface of a Krita filter.
  */
-class KisFilter : public KisProgressSubject, public KShared {
+class KRITACORE_EXPORT KisFilter : public KisProgressSubject, public KShared {
 	Q_OBJECT
 public:
 

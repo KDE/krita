@@ -42,7 +42,7 @@
 #include "kis_profile.h"
 
 #include "kis_id.h"
-
+#include "koffice_export.h"
 class QButton;
 class QLabel;
 class QPaintEvent;
@@ -78,7 +78,7 @@ class KisToolRegistry;
 class KisFilterRegistry;
 class KisCompositeOp;
 
-class KisView
+class KRITA_EXPORT KisView
 	: public KoView,
 	  public KisCanvasSubject,
 	  private KisCanvasControllerInterface,

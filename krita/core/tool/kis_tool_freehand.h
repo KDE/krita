@@ -24,7 +24,7 @@
 #include "kis_types.h"
 #include "kis_tool_paint.h"
 #include "kis_point.h"
-
+#include "koffice_export.h"
 class QWidget;
 class KisPainter;
 class KisBrush;
@@ -32,7 +32,7 @@ class KisEvent;
 
 // XXX: rename this to KisToolFreehand -- Freehand is one word, so
 // 'hand' must not be capitalized.
-class KisToolFreehand : public KisToolPaint {
+class KRITACORE_EXPORT KisToolFreehand : public KisToolPaint {
 	Q_OBJECT
 	typedef KisToolPaint super;
 

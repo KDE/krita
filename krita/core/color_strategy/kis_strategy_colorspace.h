@@ -32,6 +32,7 @@
 #include "kis_profile.h"
 #include "kis_id.h"
 #include "kis_composite_op.h"
+#include "koffice_export.h"
 
 class QPainter;
 class KisIteratorPixel;
@@ -54,7 +55,7 @@ struct transform {
 	Q_UINT32 renderIntent;
 };
 
-class KisStrategyColorSpace : public KShared {
+class KRITACORE_EXPORT KisStrategyColorSpace : public KShared {
 
 
 public:

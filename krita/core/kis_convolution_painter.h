@@ -72,12 +72,21 @@ public:
         KisConvolutionPainter(KisPaintDeviceSP device);
 
 	void applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+
+	/**
+	 * Convolve all channels in src using the specified kernel; there is only one kernel for all
+	 * channels possible. By default the the border pixels are not convolved, that is, convolving
+	 * starts with at (x + kernel.width/2, y + kernel.height) and stops at w - (kernel.width/2)
+	 * and h - (kernel.width/2)
+	 */
 	void applyMatrix(KisKernel * kernel, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, KisConvolutionBorderOp borderOp = BORDER_NOOP);
+
+	/**
+	 * Convolve all channels in src using the specified matrix. Only the first matrix of the array is 
+	 * used, since this method is simply a front-end for the above method.
+	 */
 	void applyMatrix(KisMatrix3x3* matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
-private:
-
-	Q_INT32 m_nChannels;
 
 };
 #endif //KIS_CONVOLUTION_PAINTER_H_

@@ -88,6 +88,20 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 {
 	// XXX: There may be a kernel for every channel.
 
+	if (src -> hasSelection()) {
+
+		if (src -> selection() -> isTotallyUnselected(QRect(x, y, w, h))) {
+			return;
+		}
+
+		QRect r = src -> selection() -> extent().intersect(QRect(x, y, w, h));
+		x = r.x();
+		y = r.y();
+		w = r.width();
+		h = r.height();
+
+	}
+
 	Q_UINT32 kw, kh, kd;
 	kw = kernel[0].width;
 	kh = kernel[0].height;
@@ -109,11 +123,11 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 	}
 	if (kernelSum <= 0) kernelSum = 1;
 	
-	kdDebug() << "Kernel sum = " << kernelSum << "\n";
-	kdDebug() << "Factor: " << kernel[0].factor << "\n";
-	kdDebug() << "Offset: " << kernel[0].offset << "\n";
-	kdDebug() << "Width: " << kw << "\n";
-	kdDebug() << "Height: " << kh << "\n";
+// 	kdDebug() << "Kernel sum = " << kernelSum << "\n";
+// 	kdDebug() << "Factor: " << kernel[0].factor << "\n";
+// 	kdDebug() << "Offset: " << kernel[0].offset << "\n";
+// 	kdDebug() << "Width: " << kw << "\n";
+// 	kdDebug() << "Height: " << kh << "\n";
 
 	
 	// Iterate over all pixels in our rect
@@ -157,7 +171,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 						KisPixelRO p = kit.oldPixel();
 						Q_INT32 kval = kernel[0].data[(kw * krow) + kx];
 						// Calculate for each channel of the current pixel the sum of all matrix pixels
-						if (kval > 0) {
+						if (kval != 0) {
 							for (int i = 0; i < depth;  ++i) {
 								sums[i] = sums[i] + (p[i] * kval);
 							}
@@ -198,7 +212,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 
 void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-#if 0
+#if 1
 
 	matrix -> dump();
 
@@ -210,7 +224,6 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP 
 	kernel -> offset = matrix[0].offset();
 	for (int row = 0; row < 3; ++row) {
 		for (int col = 0; col < 3; ++col) {
-			kdDebug() << "Kernel " << col << ", " << row << " = " << matrix[0][col][row] << "\n";
 			kernel -> data.push_back(matrix[0][col][row]);
 			
 		}

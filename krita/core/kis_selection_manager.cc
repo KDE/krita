@@ -537,19 +537,29 @@ void KisSelectionManager::feather()
 
 	// XXX: we should let gaussian blur & others influence alpha channels as well
 	// (on demand of the caller)
-	// We process the selection to the extent of the image. This is because if the
-	// selection is precisely embedded in some tiles, using only that extent would
-	// give us hard edges, and that's what we don't want.
-	// XXX: Perhaps not the image (what happens when the layer is move halfway outside the image?)
-	// but the selection's extent + the width/height of the kernel? (BSAR)
+	
 	KisConvolutionPainter painter(selection.data());
-	int matrixvalues[3][3] = { { 1, 2, 1 }, { 2, 4, 2 }, { 1, 2, 1} };
-	// depth of selection is 1, so only 1 needed
-	KisMatrix3x3 matrix(matrixvalues , 16, 0);
-
-
-	QRect rect = img -> bounds();
-	painter.applyMatrix(&matrix, rect.x(), rect.y(), rect.width(), rect.height());
+	
+	KisKernel k;
+	k.width = 3;
+	k.height = 3;
+	k.factor = 16;
+	k.offset = 0;
+	k.data.push_back( 1 );
+	k.data.push_back( 2 );
+	k.data.push_back( 1 );
+	k.data.push_back( 2 );
+	k.data.push_back( 4 );
+	k.data.push_back( 2 );
+	k.data.push_back( 1 );
+	k.data.push_back( 2 );
+	k.data.push_back( 1 );
+	
+	QRect rect = selection -> extent();
+	// Make sure we've got enough space around the edges.
+	rect = QRect(rect.x() - 3, rect.y() - 3, rect.width() + 3, rect.height() + 3);
+	
+	painter.applyMatrix(&k, selection.data(), rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, CONVOLVE_ALPHA);
 	painter.end();
 
 	if (img -> undoAdapter())

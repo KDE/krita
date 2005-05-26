@@ -19,8 +19,9 @@
 #define KIS_CONFIG_H_
 
 #include "kis_global.h"
+#include "koffice_export.h"
 
-class KisConfig {
+class KRITACORE_EXPORT KisConfig {
 public:
 	KisConfig();
 	~KisConfig();

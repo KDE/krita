@@ -23,18 +23,18 @@
 
 #include <qglobal.h>
 #include <kdebug.h>
+#include "koffice_export.h"
 
+KRITACORE_EXPORT Q_UINT8 matchColors(const QColor & c, const QColor & c2, Q_UINT8 fuzziness);
 
-Q_UINT8 matchColors(const QColor & c, const QColor & c2, Q_UINT8 fuzziness);
-
-bool isReddish(int h);
-bool isYellowish(int h);
-bool isGreenish(int h);
-bool isCyanish(int h);
-bool isBlueish(int h);
-bool isMagentaish(int h);
-bool isHighlight(int v);
-bool isMidTone(int v);
-bool isShadow(int v);
+KRITACORE_EXPORT bool isReddish(int h);
+KRITACORE_EXPORT bool isYellowish(int h);
+KRITACORE_EXPORT bool isGreenish(int h);
+KRITACORE_EXPORT bool isCyanish(int h);
+KRITACORE_EXPORT bool isBlueish(int h);
+KRITACORE_EXPORT bool isMagentaish(int h);
+KRITACORE_EXPORT bool isHighlight(int v);
+KRITACORE_EXPORT bool isMidTone(int v);
+KRITACORE_EXPORT bool isShadow(int v);
 
 #endif // _KIS_UTILITIES_H_

@@ -22,8 +22,9 @@
 #include "kis_filter_configuration_widget.h"
 #include <vector> 
 #include <knuminput.h>
+#include "koffice_export.h"
 
-struct KisDoubleWidgetParam {
+struct KRITA_EXPORT KisDoubleWidgetParam {
 	KisDoubleWidgetParam(  double nmin, double nmax, double ninitvalue, QString nname);
 	double min;
 	double max;
@@ -33,7 +34,7 @@ struct KisDoubleWidgetParam {
 
 typedef std::vector<KisDoubleWidgetParam> vKisDoubleWidgetParam;
 
-class KisMultiDoubleFilterWidget : public KisFilterConfigurationWidget
+class KRITA_EXPORT KisMultiDoubleFilterWidget : public KisFilterConfigurationWidget
 {
 	Q_OBJECT
 	public:

@@ -42,6 +42,7 @@
 #include "kis_matrix.h"
 #include "kis_progress_subject.h"
 #include "kis_painter.h"
+#include "koffice_export.h"
 
 enum KisConvolutionBorderOp {
 	BORDER_NOOP = 0,
@@ -61,7 +62,7 @@ struct KisKernel {
 	QValueVector<Q_INT32> data;
 };
 
-class KisConvolutionPainter : public KisPainter
+class KRITACORE_EXPORT KisConvolutionPainter : public KisPainter
 {
 
 	typedef KisPainter super;

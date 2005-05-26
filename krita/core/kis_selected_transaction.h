@@ -24,8 +24,8 @@
 #include <qstring.h>
 #include <kcommand.h>
 #include "kis_transaction.h"
-
-class KisSelectedTransaction : public KisTransaction {
+#include "koffice_export.h"
+class KRITACORE_EXPORT KisSelectedTransaction : public KisTransaction {
 	typedef KisTransaction super;
 public:
 	KisSelectedTransaction(const QString& name, KisPaintDeviceSP device);

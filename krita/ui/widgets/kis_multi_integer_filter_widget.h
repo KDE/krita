@@ -22,11 +22,12 @@
 #include "kis_filter_configuration_widget.h"
 #include <vector> 
 #include <knuminput.h>
+#include "koffice_export.h"
 
 class KIntNumInput;
 
 struct KisIntegerWidgetParam {
-	KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString nname);
+	KRITA_EXPORT KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString nname);
 	Q_INT32 min;
 	Q_INT32 max;
 	Q_INT32 initvalue;
@@ -35,7 +36,7 @@ struct KisIntegerWidgetParam {
 
 typedef std::vector<KisIntegerWidgetParam> vKisIntegerWidgetParam;
 
-class KisMultiIntegerFilterWidget : public KisFilterConfigurationWidget
+class KRITA_EXPORT KisMultiIntegerFilterWidget : public KisFilterConfigurationWidget
 {
 	Q_OBJECT
 	public:

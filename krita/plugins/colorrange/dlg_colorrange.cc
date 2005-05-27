@@ -168,7 +168,7 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 
 	connect(m_page -> cmbSelect, SIGNAL(activated(int)),
 		this, SLOT(slotSelectionTypeChanged(int)));
-
+		
 	connect (m_page -> radioAdd, SIGNAL(toggled(bool)),
 		 this, SLOT(slotAdd(bool)));
 
@@ -177,6 +177,9 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 
 	connect (m_page -> bnSelect, SIGNAL(clicked()),
 		this, SLOT(slotSelectClicked()));
+
+	connect (m_page -> bnDeselect, SIGNAL(clicked()),
+		this, SLOT(slotDeselectClicked()));
 
 }
 
@@ -289,5 +292,12 @@ void DlgColorRange::slotSelectClicked()
 	}
 	updatePreview();
 }
+
+void DlgColorRange::slotDeselectClicked()
+{
+	m_layer -> selection() -> clear();
+	updatePreview(); 
+}
+
 
 #include "dlg_colorrange.moc"

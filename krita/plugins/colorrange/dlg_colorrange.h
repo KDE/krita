@@ -100,7 +100,8 @@ private slots:
 	void slotSubtract(bool on);
 	void slotAdd(bool on);
 	void slotSelectClicked();
-			
+	void slotDeselectClicked();
+				
 private:
 	QImage createMask(KisSelectionSP selection, KisLayerSP layer);
 

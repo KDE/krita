@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>337</width>
-            <height>397</height>
+            <height>468</height>
         </rect>
     </property>
     <property name="caption">
@@ -101,7 +101,7 @@
                         <string>&amp;Invert</string>
                     </property>
                 </widget>
-                <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="3">
+                <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>grpPreview</cstring>
                     </property>
@@ -153,15 +153,7 @@
                         </widget>
                     </grid>
                 </widget>
-                <widget class="QPushButton" row="0" column="2">
-                    <property name="name">
-                        <cstring>bnSelect</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Select</string>
-                    </property>
-                </widget>
-                <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="3">
+                <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>grpSelection</cstring>
                     </property>
@@ -196,6 +188,55 @@
                         </widget>
                     </grid>
                 </widget>
+                <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer1</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>81</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>bnSelect</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Select</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+S</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>bnDeselect</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Deselect</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+D</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
             </grid>
         </widget>
     </grid>
@@ -208,7 +249,6 @@
 <tabstops>
     <tabstop>cmbSelect</tabstop>
     <tabstop>chkInvert</tabstop>
-    <tabstop>bnSelect</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

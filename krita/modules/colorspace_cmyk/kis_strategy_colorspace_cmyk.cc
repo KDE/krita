@@ -39,6 +39,7 @@
 
 namespace cmyk {
 	const Q_INT32 MAX_CHANNEL_CMYK = 4;
+	const Q_INT32 MAX_CHANNEL_CMYKA = 5;
 }
 
 KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
@@ -105,7 +106,7 @@ void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM *dst, K
 	m_qcolordata[0] = color.blue();
 
 	cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-	dst[3] = OPACITY_OPAQUE;
+	dst[4] = OPACITY_OPAQUE;
 }
 
 void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile)
@@ -115,7 +116,7 @@ void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM opacity
 	m_qcolordata[0] = color.blue();
 
 	cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-	dst[3] = opacity;
+	dst[4] = opacity;
 }
 
 
@@ -130,7 +131,7 @@ void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c, QUANTUM 
 	cmsDoTransform(m_defaultToRGB, const_cast <QUANTUM *>(src), m_qcolordata, 1);
 	c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
 
- 	*opacity = src[3];
+ 	*opacity = src[4];
 }
 
 vKisChannelInfoSP KisStrategyColorSpaceCMYK::channels() const
@@ -140,12 +141,12 @@ vKisChannelInfoSP KisStrategyColorSpaceCMYK::channels() const
 
 bool KisStrategyColorSpaceCMYK::alpha() const
 {
-	return false;
+	return true;
 }
 
 Q_INT32 KisStrategyColorSpaceCMYK::nChannels() const
 {
-	return cmyk::MAX_CHANNEL_CMYK;
+	return cmyk::MAX_CHANNEL_CMYKA;
 }
 
 Q_INT32 KisStrategyColorSpaceCMYK::nColorChannels() const
@@ -155,7 +156,7 @@ Q_INT32 KisStrategyColorSpaceCMYK::nColorChannels() const
 
 Q_INT32 KisStrategyColorSpaceCMYK::pixelSize() const
 {
-	return cmyk::MAX_CHANNEL_CMYK;
+	return cmyk::MAX_CHANNEL_CMYKA;
 }
 
 QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
@@ -173,17 +174,22 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 
  	if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
 //   		kdDebug() << "Going to use default transform\n";
- 		cmsDoTransform(m_defaultToRGB,
- 			       const_cast<QUANTUM *> (data),
- 			       img.bits(),
- 			       width * height);
+		for (int i = 0; i < height; i++)
+			for (int j = 0; j < width; j++)
+ 				cmsDoTransform(m_defaultToRGB,
+					const_cast<QUANTUM *>(&(data[cmyk::MAX_CHANNEL_CMYKA*(i*width+j)])),
+					&(img.scanLine(i)[j*img.bytesPerLine()/width]), 1);
  	}
  	else {
 //   		kdDebug() << "Going to transform with profiles\n";
  		// Do a nice calibrated conversion
- 		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile,
- 				img.bits(), dstCS, dstProfile,
- 				width * height, renderingIntent);
+		for (int i = 0; i < height; i++)
+			for (int j = 0; j < width; j++)
+				convertPixelsTo(const_cast<QUANTUM *>
+						(&(data[cmyk::MAX_CHANNEL_CMYKA*(i*width+j)])),
+						srcProfile,
+						&(img.scanLine(i)[j*img.bytesPerLine()/width]),
+						dstCS, dstProfile, 1, renderingIntent);
  	}
 
 	return img;
@@ -245,6 +251,12 @@ inline int INT_BLEND(int a, int b, int alpha)
 	return INT_MULT(a - b, alpha) + b;
 }
 
+inline int INT_DIVIDE(int a, int b)
+{
+	int c = (a * QUANTUM_MAX + (b / 2)) / b;
+	return c;
+}
+
 
 void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowStride, 
 					     const QUANTUM *srcRowStart, Q_INT32 srcRowStride, 
@@ -258,13 +270,56 @@ void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstR
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
+			QUANTUM srcAlpha = src[PIXEL_CMYK_ALPHA];
+
+			if (srcAlpha != OPACITY_TRANSPARENT) {
+
+				if (opacity != OPACITY_OPAQUE) {
+					srcAlpha = INT_MULT(src[PIXEL_CMYK_ALPHA], opacity);
+				}
+
+				if (srcAlpha == OPACITY_OPAQUE) {
+					memcpy(dst, src, cmyk::MAX_CHANNEL_CMYKA * sizeof(QUANTUM));
+				} else {
+					QUANTUM dstAlpha = dst[PIXEL_CMYK_ALPHA];
+
+					QUANTUM srcBlend;
+
+					if (dstAlpha == OPACITY_OPAQUE) {
+						srcBlend = srcAlpha;
+					} else {
+						QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+						dst[PIXEL_CMYK_ALPHA] = newAlpha;
+
+						if (newAlpha != 0) {
+							srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+						} else {
+							srcBlend = srcAlpha;
+						}
+					}
+
+					if (srcBlend == OPACITY_OPAQUE) {
+						memcpy(dst, src, cmyk::MAX_CHANNEL_CMYKA * sizeof(QUANTUM));
+					} else {
+						dst[PIXEL_CYAN] = INT_BLEND(src[PIXEL_CYAN], dst[PIXEL_CYAN], srcBlend);
+						dst[PIXEL_MAGENTA] = INT_BLEND(src[PIXEL_MAGENTA], dst[PIXEL_MAGENTA], srcBlend);
+						dst[PIXEL_YELLOW] = INT_BLEND(src[PIXEL_YELLOW], dst[PIXEL_YELLOW], srcBlend);
+						dst[PIXEL_BLACK] = INT_BLEND(src[PIXEL_BLACK], dst[PIXEL_BLACK], srcBlend);
+					}
+				}
+			}
+
+			columns--;
+			src += cmyk::MAX_CHANNEL_CMYKA;
+			dst += cmyk::MAX_CHANNEL_CMYKA;
+			/*
 			if (src[PIXEL_CYAN] == 0
 				&& src[PIXEL_MAGENTA] == 0
 				&& src[PIXEL_YELLOW] == 0
 				&& src[PIXEL_BLACK] == 0) {
 				// Skip; we don't put any new ink over the old.
 			} else if (opacity == OPACITY_OPAQUE) {
-				memcpy(dst, src, cmyk::MAX_CHANNEL_CMYK * sizeof(QUANTUM));
+				memcpy(dst, src, cmyk::MAX_CHANNEL_CMYKA * sizeof(QUANTUM));
 
 			} else {
 				
@@ -276,8 +331,8 @@ void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstR
 			}
 
 			columns--;
-			src += cmyk::MAX_CHANNEL_CMYK;
-			dst += cmyk::MAX_CHANNEL_CMYK;
+			src += cmyk::MAX_CHANNEL_CMYKA;
+			dst += cmyk::MAX_CHANNEL_CMYKA;*/
 		}
 
 		rows--;

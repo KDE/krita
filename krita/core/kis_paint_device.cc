@@ -35,6 +35,7 @@
 #include "kis_undo_adapter.h"
 #include "tiles/kis_iterator.h"
 #include "kis_iterators_pixel.h"
+#include "kis_iteratorpixeltrait.h"
 #include "kis_scale_visitor.h"
 #include "kis_rotate_visitor.h"
 #include "kis_transform_visitor.h"
@@ -466,18 +467,27 @@ void KisPaintDevice::transform(double xscale, double  yscale,
 
 void KisPaintDevice::mirrorX()
 {
-	QRect r = exactBounds();
+	QRect r;
+	if (hasSelection()) {
+		r = selection() -> exactBounds();
+	}
+	else {
+		r = exactBounds();
+	}
 	
 	for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
-		KisHLineIterator srcIt = createHLineIterator(r.x(), y, r.width(), false);
-		KisHLineIterator dstIt = createHLineIterator(r.x(), y, r.width(), true);
+		KisHLineIteratorPixel srcIt = createHLineIterator(r.x(), y, r.width(), false);
+		KisHLineIteratorPixel dstIt = createHLineIterator(r.x(), y, r.width(), true);
 
 		dstIt += r.width() - 1;
 
 		while (!srcIt.isDone()) {
-			memcpy(dstIt.rawData(), srcIt.oldRawData(), m_pixelSize);
+			if (srcIt.isSelected()) {
+				memcpy(dstIt.rawData(), srcIt.oldRawData(), m_pixelSize);
+			}
 			++srcIt;
 			--dstIt;
+
 		}
 		qApp -> processEvents();
 	}
@@ -486,14 +496,23 @@ void KisPaintDevice::mirrorX()
 void KisPaintDevice::mirrorY()
 {
 	/* Read a line from bottom to top and and from top to bottom and write their values to each other */
-	QRect r = exactBounds();
+	QRect r;
+	if (hasSelection()) {
+		r = selection() -> exactBounds();
+	}
+	else {
+		r = exactBounds();
+	}
+
 		
 	Q_INT32 y1, y2;
 	for (y1 = r.top(), y2 = r.bottom(); y1 <= r.bottom(); ++y1, --y2) {
-		KisHLineIterator itTop = createHLineIterator(r.x(), y1, r.width(), true);
-		KisHLineIterator itBottom = createHLineIterator(r.x(), y2, r.width(), false);
+		KisHLineIteratorPixel itTop = createHLineIterator(r.x(), y1, r.width(), true);
+		KisHLineIteratorPixel itBottom = createHLineIterator(r.x(), y2, r.width(), false);
 		while (!itTop.isDone() && !itBottom.isDone()) {
-			memcpy(itTop.rawData(), itBottom.oldRawData(), m_pixelSize);
+			if (itBottom.isSelected()) {
+				memcpy(itTop.rawData(), itBottom.oldRawData(), m_pixelSize);
+			}
 			++itBottom;
 			++itTop;
 		}

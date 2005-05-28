@@ -1001,28 +1001,15 @@ void KisView::previous_layer()
 
 void KisView::imgResizeToActiveLayer()
 {
-	KisImageSP img = currentImg();
-	KisLayerSP layer;
+        KisImageSP img = currentImg();
+        KisLayerSP layer;
 
 
-	if (img && (layer = img -> activeLayer())) {
-		int x, y, w, h;
-		layer -> extent(x, y, w, h);
-
-		if (w > img -> width() && h > img -> height()) {
-			img -> resize(w, h);
-		}
-		else if (w <= img -> width() && h > img -> height()) {
-			img -> resize(img -> width(), h);
-		}
-		else if (w > img -> width() && h <= img -> height()) {
-			img -> resize(w, img -> height());
-		}
-	}
+        if (img && (layer = img -> activeLayer())) {
+                QRect r = layer -> exactBounds();
+                img -> resize(r.width(), r.height());
+        }
 }
-
-
-
 
 void KisView::slotImageProperties()
 {

@@ -58,6 +58,8 @@ public:
 public slots:
 	virtual void slotSetFuzziness(int);
 	virtual void slotSetAction(int);
+	virtual void activate();
+
 
 private:
 	KisCanvasSubject *m_subject;

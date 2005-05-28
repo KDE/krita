@@ -25,6 +25,7 @@
 #include <kis_tool_freehand.h>
 
 class KisPoint;
+class KisSelectionOptions;
 
 
 /**
@@ -44,11 +45,14 @@ public:
 	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 
+public slots:
+	virtual void activate();
+
 protected:
 
 	virtual void initPaint(KisEvent *e);
 private:
-        QWidget * m_optWidget;
+	KisSelectionOptions * m_optWidget;
 
 };
 

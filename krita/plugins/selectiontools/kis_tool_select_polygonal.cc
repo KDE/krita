@@ -60,6 +60,16 @@ KisToolSelectPolygonal::~KisToolSelectPolygonal()
 {
 }
 
+void KisToolSelectPolygonal::activate()
+{
+	super::activate();
+
+	if (!m_optWidget)
+		return;
+
+	m_optWidget -> slotActivated();
+}
+
 void KisToolSelectPolygonal::update (KisCanvasSubject *subject)
 {
 	m_subject = subject;
@@ -124,6 +134,8 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 			}
 
 			painter.paintPolygon(m_points);
+
+			m_optWidget -> ensureMaskColor();
 
 			layer->emitSelectionChanged();
 

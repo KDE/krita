@@ -29,6 +29,8 @@
 
 #include "kis_tool_factory.h"
 
+class KisSelectionOptions;
+
 class KisToolSelectRectangular : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;
@@ -52,6 +54,8 @@ public:
 
 public slots:
 	virtual void slotSetAction(int);
+	virtual void activate();
+
 
 private:
 	void clearSelection();
@@ -64,7 +68,7 @@ private:
 	KisPoint m_startPos;
 	KisPoint m_endPos;
 	bool m_selecting;
-	QWidget * m_optWidget;
+	KisSelectionOptions * m_optWidget;
 	enumSelectionMode m_selectAction;
 
 };

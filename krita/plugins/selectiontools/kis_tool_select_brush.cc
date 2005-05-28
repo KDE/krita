@@ -58,6 +58,16 @@ KisToolSelectBrush::~KisToolSelectBrush()
 {
 }
 
+void KisToolSelectBrush::activate()
+{
+	super::activate();
+
+	if (!m_optWidget)
+		return;
+
+	m_optWidget -> slotActivated();
+}
+
 void KisToolSelectBrush::initPaint(KisEvent* /*e*/) 
 {
 	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
@@ -78,6 +88,9 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
 			layer -> emitSelectionChanged();
 		}
 		KisSelectionSP selection = layer -> selection();
+		
+		m_optWidget -> ensureMaskColor();
+		
 		m_painter = new KisPainter(selection.data());
 		Q_CHECK_PTR(m_painter);
 		m_painter -> setPaintColor(Qt::black);

@@ -61,6 +61,16 @@ KisToolSelectRectangular::~KisToolSelectRectangular()
 {
 }
 
+void KisToolSelectRectangular::activate()
+{
+	super::activate();
+
+	if (!m_optWidget)
+		return;
+
+	m_optWidget -> slotActivated();
+}
+
 void KisToolSelectRectangular::update(KisCanvasSubject *subject)
 {
 	m_subject = subject;
@@ -202,6 +212,8 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 					default:
 						break;
 				}
+				m_optWidget -> ensureMaskColor();
+
 				layer->emitSelectionChanged();
 				img -> notify(rc);
 			}

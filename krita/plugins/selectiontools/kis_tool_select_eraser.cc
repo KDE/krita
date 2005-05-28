@@ -56,6 +56,16 @@ KisToolSelectEraser::~KisToolSelectEraser()
 {
 }
 
+void KisToolSelectEraser::activate()
+{
+	super::activate();
+
+	if (!m_optWidget)
+		return;
+
+	m_optWidget -> slotActivated();
+}
+
 void KisToolSelectEraser::initPaint(KisEvent */*e*/) 
 {
 	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
@@ -74,6 +84,9 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 			layer -> emitSelectionChanged();
 		}
 		KisSelectionSP selection = layer -> selection();
+
+		m_optWidget -> ensureMaskColor();
+
 		m_painter = new KisPainter(selection.data());
 		Q_CHECK_PTR(m_painter);
 		m_painter -> beginTransaction(i18n("Selection Eraser"));

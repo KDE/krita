@@ -2131,7 +2131,6 @@ void KisView::layersUpdated()
 	if (!img) return;
 
 	KisLayerSP layer = img -> activeLayer();
-	if (!layer) return;
 
 	layerUpdateGUI(img && layer);
 

@@ -307,7 +307,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
  			kdDebug() << "Layer has profile: " << profile -> productName() << "\n";
 
 		if( ! m_img) {
-			m_img = new KisImage(m_adapter, image -> columns, image -> rows, cs, m_doc -> nextImageName());
+			m_img = new KisImage(m_adapter, image -> columns, image -> rows, cs, "built image");
 			Q_CHECK_PTR(m_img);
 
  			if (profile)

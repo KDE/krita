@@ -32,7 +32,7 @@ class KIsDocIface : virtual public KoDocumentIface
 public:
 	KIsDocIface( KisDoc *doc_ );
 k_dcop:
-	virtual DCOPRef image( int num );
+	virtual DCOPRef image();
 
 	virtual int undoLimit () const;
 	virtual void setUndoLimit(int limit);
@@ -40,7 +40,6 @@ k_dcop:
 	virtual void setRedoLimit(int limit);
 
 	virtual void renameImage(const QString& oldName, const QString& newName);
-	virtual QString nextImageName() const;
 
 private:
 	KisDoc *m_doc;

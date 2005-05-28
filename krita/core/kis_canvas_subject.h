@@ -52,7 +52,6 @@ public:
 	virtual void detach(KisCanvasObserver *observer) = 0;
 	virtual void notify() = 0;
 	virtual KisImageSP currentImg() const = 0;
-	virtual QString currentImgName() const = 0;
 	virtual QColor bgColor() const = 0;
 	virtual void setBGColor(const QColor& c) = 0;
 	virtual QColor fgColor() const = 0;

@@ -731,9 +731,7 @@ void KisView::paintView(const KisRect& r)
 				}
 				gc.translate((-horzValue()) / zoom(), (-vertValue()) / zoom());
 
-				m_doc -> setCurrentImage(img);
 				m_doc -> paintContent(gc, wr, monitorProfile());
-				m_doc -> setCurrentImage(0);
 			}
 
 			paintGuides();
@@ -2635,28 +2633,13 @@ void KisView::notify()
 
 KisImageSP KisView::currentImg() const
 {
-
-	if (m_current && m_doc -> contains(m_current)) {
-		return m_current;
+	if(m_current != m_doc -> currentImage())
+	{
+		m_current = m_doc -> currentImage();
+		connectCurrentImg();
 	}
-
-	if (m_doc -> nimages() < 1) {
-		return 0;
-	}
-
-	m_current = m_doc -> imageNum(m_doc -> nimages() - 1);
-
-	connectCurrentImg();
 
 	return m_current;
-}
-
-QString KisView::currentImgName() const
-{
-	if (currentImg())
-		return currentImg() -> name();
-
-	return QString::null;
 }
 
 QColor KisView::bgColor() const

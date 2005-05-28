@@ -29,9 +29,9 @@ KIsDocIface::KIsDocIface( KisDoc *doc_ )
 }
 
 
-DCOPRef KIsDocIface::image( int num )
+DCOPRef KIsDocIface::image()
 {
-	KisImage *img=m_doc->imageNum(num);
+	KisImage *img=0;//XXX
 	if( !img )
 		return DCOPRef();
 	else
@@ -63,9 +63,4 @@ void KIsDocIface::setRedoLimit(int limit)
 void KIsDocIface::renameImage(const QString& oldName, const QString& newName)
 {
 	m_doc->renameImage(oldName,newName);
-}
-
-QString KIsDocIface::nextImageName() const
-{
-    return m_doc->nextImageName();
 }

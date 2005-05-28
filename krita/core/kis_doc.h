@@ -55,7 +55,6 @@ public:
 	virtual bool completeSaving(KoStore*);
 	virtual DCOPObject* dcopObject();
 	virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
-	virtual bool isEmpty() const;
 	virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
 	virtual bool saveOasis( KoStore*, KoXmlWriter* );
 	virtual bool loadXML(QIODevice *, const QDomDocument& doc);
@@ -115,28 +114,13 @@ public:
 	 */
 	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorstrategy);
 
-	void addImage(KisImageSP img);
-	void removeImage(KisImageSP img);
-	void removeImage(const QString& name);
-
-	KisImageSP imageNum(Q_UINT32 num) const;
-	Q_INT32 nimages() const;
-	Q_INT32 imageIndex(KisImageSP img) const;
-	KisImageSP findImage(const QString& name) const;
-	bool contains(KisImageSP img) const;
-
-	bool empty() const;
-	QStringList images();
 	void renameImage(const QString& oldName, const QString& newName);
-	bool namePresent(const QString& name) const;
-
-	QString nextImageName() const;
-	void setCurrentImage(KisImageSP img);
-
 
 	bool importImage(const QString& filename);
 	bool exportImage(const QString& filename);
 
+	KisImageSP currentImage() { return m_currentImage;};
+	
 public slots:
 	void slotImageUpdated();
 	void slotImageUpdated(const QRect& rect);
@@ -174,7 +158,6 @@ private:
 
 	bool m_undo;
 	KoCommandHistory *m_cmdHistory;
-	vKisImageSP m_images;
 	KisImageSP m_currentImage;
 	DCOPObject *m_dcop;
 	KisNameServer *m_nserver;

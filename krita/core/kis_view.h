@@ -197,7 +197,6 @@ private:
 	virtual void attach(KisCanvasObserver *observer);
 	virtual void detach(KisCanvasObserver *observer);
 	virtual void notify();
-	virtual QString currentImgName() const;
 	virtual QColor bgColor() const;
 	virtual void setBGColor(const QColor& c);
 	virtual QColor fgColor() const;

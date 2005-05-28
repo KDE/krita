@@ -18,7 +18,6 @@ Name[ru]=Инструмент обрезки
 Name[sr]=Алат за сасецање
 Name[sr@Latn]=Alat za sasecanje
 Name[sv]=Beskärningsverktyg
-Name[zh_CN]=裁剪工具
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritatoolcrop

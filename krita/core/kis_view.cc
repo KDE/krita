@@ -1816,7 +1816,6 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
 					popup.insertItem(i18n("Insert as New Layer"), addLayerId);
 				}
 
-				popup.insertItem(i18n("Insert as New Image"), addImageId);
 				popup.insertSeparator();
 				popup.insertItem(i18n("Open in New Document"), addDocumentId);
 			}
@@ -1825,7 +1824,6 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
 					popup.insertItem(i18n("Insert as New Layers"), addLayerId);
 				}
 
-				popup.insertItem(i18n("Insert as New Images"), addImageId);
 				popup.insertSeparator();
 				popup.insertItem(i18n("Open in New Documents"), addDocumentId);
 			}

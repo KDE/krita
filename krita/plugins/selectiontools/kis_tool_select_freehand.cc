@@ -60,6 +60,16 @@ KisToolSelectFreehand::~KisToolSelectFreehand()
 {
 }
 
+void KisToolSelectFreehand::activate()
+{
+	super::activate();
+
+	if (!m_optWidget)
+		return;
+
+	m_optWidget -> slotActivated();
+}
+
 void KisToolSelectFreehand::update (KisCanvasSubject *subject)
 {
 	m_subject = subject;
@@ -136,6 +146,8 @@ void KisToolSelectFreehand::buttonRelease(KisButtonReleaseEvent *event)
 			painter.paintPolygon(m_points);
 
 			layer->emitSelectionChanged();
+			
+			m_optWidget -> ensureMaskColor();
 
 			if (img -> undoAdapter())
 				img -> undoAdapter() -> addCommand(t);

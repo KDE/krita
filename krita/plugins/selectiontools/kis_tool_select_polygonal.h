@@ -32,6 +32,8 @@
 
 #include "kis_selection.h"
 
+class KisSelectionOptions;
+
 class KisToolSelectPolygonal : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;
@@ -61,6 +63,8 @@ public:
 
 public slots:
 	virtual void slotSetAction(int);
+	virtual void activate();
+
 
 protected:
 	virtual void paint(QPainter& gc);
@@ -77,7 +81,7 @@ private:
 	typedef QValueVector<KisPoint> KisPointVector;
 	KisCanvasSubject *m_subject;
 	KisPointVector m_points;
-	QWidget * m_optWidget;
+	KisSelectionOptions * m_optWidget;
 	enumSelectionMode m_selectAction;
 };
 

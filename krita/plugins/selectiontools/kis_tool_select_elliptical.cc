@@ -60,6 +60,16 @@ KisToolSelectElliptical::~KisToolSelectElliptical()
 {
 }
 
+void KisToolSelectElliptical::activate()
+{
+	super::activate();
+
+	if (!m_optWidget)
+		return;
+
+	m_optWidget -> slotActivated();
+}
+
 void KisToolSelectElliptical::update(KisCanvasSubject *subject)
 {
 	m_subject = subject;
@@ -204,6 +214,8 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 						layer->subtractSelection(tmpSel);
 						break;
 				}
+				
+				m_optWidget -> ensureMaskColor();
 					
 				KisUndoAdapter *adapter = img -> undoAdapter();
 				if (adapter)

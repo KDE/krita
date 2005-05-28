@@ -68,6 +68,7 @@ public:
 
 	// Keep the selection but set the mask to color c.
 	void setMaskColor(const QColor c);
+	QColor maskColor() { return m_maskColor; }
 
 	QRect selectedRect();
 

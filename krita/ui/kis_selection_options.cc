@@ -42,6 +42,8 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent, KisCanvasSubject * sub
 	QVBoxLayout * l = new QVBoxLayout(this);
 	l -> addWidget(m_page);
 
+	m_page -> bnMaskColor -> setColor (QColor(255, 255, 255));
+
 	connect(m_page -> bnMaskColor, SIGNAL(changed(const QColor &)), this, SLOT(slotSetMaskColor(const QColor &)));
 	connect(m_page -> cmbAction, SIGNAL(activated(int)), this, SIGNAL(actionChanged(int)));
 }
@@ -58,6 +60,36 @@ int KisSelectionOptions::action()
 QColor KisSelectionOptions::maskColor()
 {
 	return m_page -> bnMaskColor -> color();
+}
+
+void KisSelectionOptions::ensureMaskColor()
+{
+	if (!m_subject) return;
+	KisImageSP img = m_subject -> currentImg();
+	if (!img) return;
+	KisLayerSP l = img -> activeLayer();
+	if (!l) return;
+	
+	if (l -> hasSelection()) {
+		l -> selection() -> setMaskColor( m_page -> bnMaskColor -> color() );
+		m_subject -> canvasController() -> updateCanvas();
+	}
+}
+
+void KisSelectionOptions::slotActivated()
+{
+	
+	if (!m_subject) return;
+	KisImageSP img = m_subject -> currentImg();
+	if (!img) return;
+	KisLayerSP l = img -> activeLayer();
+	if (!l) return;
+
+	if (l -> hasSelection()) {
+		if (m_page -> bnMaskColor -> color() != l -> selection() -> maskColor()) {
+			m_page -> bnMaskColor -> setColor(l -> selection() -> maskColor());
+		}
+	}
 }
 
 void KisSelectionOptions::slotSetMaskColor(const QColor & c)

@@ -28,6 +28,7 @@
 class QWidget;
 class KisPoint;
 class KisSelectedTransaction;
+class KisSelectionOptions;
 
 /**
  * The selection brush creates a selection by painting with the current
@@ -46,13 +47,16 @@ public:
 	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 
+public slots:
+	virtual void activate();
+
 protected:
 
 	virtual void initPaint(KisEvent *e);
 	virtual void endPaint();
 
 private:
-	QWidget * m_optWidget;
+	KisSelectionOptions * m_optWidget;
 	KisSelectedTransaction *m_transaction;
 };
 

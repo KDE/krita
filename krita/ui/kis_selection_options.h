@@ -40,8 +40,15 @@ public:
 	int action();
 	QColor maskColor();
 
+	/** Ensures that the color of the active selection is the same as set on this widget */
+	void ensureMaskColor();
+
 signals:
 	void actionChanged(int);
+
+public slots:
+	/** The mask color of the active selection (if it exists) is set as color of this widget */
+	void slotActivated();
 
 private slots:
 

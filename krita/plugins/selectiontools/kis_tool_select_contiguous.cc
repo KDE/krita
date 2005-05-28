@@ -68,6 +68,16 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 {
 }
 
+void KisToolSelectContiguous::activate()
+{
+	super::activate();
+
+	if (!m_options)
+		return;
+
+	m_options -> slotActivated();
+}
+
 void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 {
 	if (m_subject) {
@@ -115,6 +125,8 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 				break;
 			default: kdDebug() << "KisToolSelectContiguous: invalid select action: " << m_selectAction << endl;
 		}
+		
+		m_options -> ensureMaskColor();
 
 		KisUndoAdapter *adapter = img -> undoAdapter();
 		if (adapter)

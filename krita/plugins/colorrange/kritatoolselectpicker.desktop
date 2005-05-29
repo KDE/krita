@@ -18,6 +18,7 @@ Name[ru]=Инструмент выбора цвета
 Name[sr]=Алат за бирање боја
 Name[sr@Latn]=Alat za biranje boja
 Name[sv]=Färgväljarverktyg
+Name[zh_CN]=颜色拾取选择工具
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritacolorrange

@@ -106,6 +106,7 @@ KisToolSelectPicker::KisToolSelectPicker()
 	setCursor(KisCursor::pickerCursor());
 	m_subject = 0;
 	m_optWidget = 0;
+	m_selectionOptionsWidget = 0;
 	m_fuzziness = 20;
 	m_currentSelectAction = m_defaultSelectAction = SELECTION_ADD;
 	m_timer = new QTimer(this);
@@ -121,6 +122,10 @@ void KisToolSelectPicker::activate()
 	KisToolNonPaint::activate();
 	m_timer->start(50);
 	setPickerCursor(m_currentSelectAction);
+
+	if (m_selectionOptionsWidget) {
+		m_selectionOptionsWidget -> slotActivated();
+	}
 }
 
 void KisToolSelectPicker::clear()
@@ -165,7 +170,7 @@ void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 		if(img -> undoAdapter())
 			img -> undoAdapter() -> addCommand(t);
 		m_subject -> canvasController() -> updateCanvas();
-
+		m_selectionOptionsWidget -> ensureMaskColor();
 	}
 }
 
@@ -241,11 +246,11 @@ QWidget* KisToolSelectPicker::createOptionWidget(QWidget* parent)
 	QVBoxLayout * l = new QVBoxLayout(m_optWidget);
 	Q_CHECK_PTR(l);
 
-	KisSelectionOptions * options = new KisSelectionOptions(m_optWidget, m_subject);
-	Q_CHECK_PTR(options);
+	m_selectionOptionsWidget = new KisSelectionOptions(m_optWidget, m_subject);
+	Q_CHECK_PTR(m_selectionOptionsWidget);
 
-	l -> addWidget( options);
-	connect (options, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+	l -> addWidget(m_selectionOptionsWidget);
+	connect (m_selectionOptionsWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
 	QHBoxLayout * hbox = new QHBoxLayout(l);
 	Q_CHECK_PTR(hbox);

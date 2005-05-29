@@ -36,6 +36,9 @@ class QCheckBox;
  *       Implement shift/shift-ctrl keyboard shortcuts for 
  *       temporary add/subtract selection mode.     
  */
+
+class KisSelectionOptions;
+
 class KisToolSelectPicker : public KisToolNonPaint {
 
 	Q_OBJECT
@@ -65,6 +68,7 @@ private:
 
 	KisCanvasSubject *m_subject;
 	QWidget *m_optWidget;
+	KisSelectionOptions *m_selectionOptionsWidget;
 
 	int m_fuzziness;
 	enumSelectionMode m_defaultSelectAction;

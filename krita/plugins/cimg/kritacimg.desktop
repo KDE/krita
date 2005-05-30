@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=CImg Image Restoration Filter
 Name[da]=Cimg-billedrestaureringsfilter
 Name[de]=CImg Filter zur Bildrestauration
+Name[el]=Φίλτρο αποκατάστασης εικόνων CImg
 Name[es]=Filtro para restauración de imágenes CImg
 Name[et]=CImg pilditaastamisfilter
 Name[fr]=Filtre de restauration d'images de CImg

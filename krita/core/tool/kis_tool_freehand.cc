@@ -132,8 +132,10 @@ void KisToolFreehand::initPaint(KisEvent *)
 
 			m_target -> setCompositeOp(m_compositeOp);
 
-			if (device -> hasSelection())
+			if (device -> hasSelection()) {
 				m_target -> addSelection(device -> selection());
+				m_target -> selection() -> setMaskColor( device -> selection() -> maskColor() );
+			}
 
 			dynamic_cast<KisLayer*>(m_target.data()) -> setVisible(true);
 

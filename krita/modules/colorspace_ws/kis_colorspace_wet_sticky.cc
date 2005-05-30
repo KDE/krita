@@ -271,7 +271,7 @@ void KisColorSpaceWetSticky::bitBlt(Q_INT32 stride,
 	Q_INT32 linesize;
 
 	QUANTUM *dq;
-	QUANTUM *sq;
+	const QUANTUM *sq;
 
 	if (rows <= 0 || cols <= 0)
 		return;

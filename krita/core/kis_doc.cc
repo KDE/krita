@@ -336,15 +336,8 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
 		ok = loadNativeFormat( file );
 
-                if ( !ok )
-                    showLoadingErrorDialog();
-
 		emit imageListUpdated();
 
-{//XXX CBR		if (nimages() == 0) {
-			if ((ok = slotNewImage()))
-				emit imageListUpdated();
-		}
 		KoDocument::setEmpty();
 		ok = true;
 	} else if (ret == KoTemplateChooseDia::File) {
@@ -433,7 +426,14 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
 	if ((attr = root.attribute("depth")).isNull())
 		return false;
 	m_conversionDepth = attr.toInt();
+
+	if (!root.hasChildNodes()) {
+		// No children == empty file == show create dialog
+		return slotNewImage();
+	}
+	
 	for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
+		kdDebug() << "Node: " << node.nodeName() << ", element: " << node.isElement() << "\n";
 		if (node.isElement()) {
 			if (node.nodeName() == "IMAGE") {
 				QDomElement elem = node.toElement();
@@ -555,6 +555,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 		img -> setDescription(description);
 		img -> setResolution(xres, yres);
 		img -> setProfile(profile);
+
 
 		for (node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
 			if (node.isElement()) {
@@ -721,6 +722,8 @@ bool KisDoc::completeSaving(KoStore *store)
 	bool external = isStoredExtern();
 	Q_INT32 totalSteps = 0;
 	KisImageSP img;
+
+	if (!m_currentImage) return false;
 
 	totalSteps = (m_currentImage) -> nlayers();
 
@@ -927,8 +930,9 @@ bool KisDoc::slotNewImage()
 			    cfg.maxImgHeight(), cfg.defImgHeight(),
 			    "RGBA",
 			    "new image from dlg");
-
+	qApp -> setOverrideCursor(Qt::ArrowCursor);
 	if (dlg.exec() == QDialog::Accepted) {
+		qApp -> restoreOverrideCursor();
 		QString name;
 		QUANTUM opacity = dlg.backgroundOpacity();
 		QColor c = dlg.backgroundColor();

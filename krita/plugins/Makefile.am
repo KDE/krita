@@ -22,5 +22,8 @@ SUBDIRS = cimg \
 	embossfilter \
 	tool_transform \
 	selectiontools \
-	histogram
-#imagemagick variations performancetest $(kjsembed_plugin)
+	histogram \
+	imagemagick \
+	variations \
+	performancetest \
+	$(kjsembed_plugin)

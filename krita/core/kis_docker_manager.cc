@@ -52,10 +52,8 @@
 #include "kis_gray_widget.h"
 #include "kis_palette_widget.h"
 #include "kis_paint_box.h"
-#if 0
 #include "kis_filter_box.h"
 #include "kis_birdeye_box.h"
-#endif
 #include "kis_controlframe.h"
 #include "kis_layerbox.h"
 #include "kis_channelview.h"
@@ -316,7 +314,6 @@ void KisDockerManager::setupDockers()
 
 	connect(m_view, SIGNAL(fgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetFGColor(const QColor&)));
 	connect(m_view, SIGNAL(bgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetBGColor(const QColor&)));
-#if 0
 	// ---------------------------------------------------------------------
 	// Bird's eye box
 	m_birdEyeBox = new KisBirdEyeBox(m_toolcontroldocker);
@@ -328,7 +325,6 @@ void KisDockerManager::setupDockers()
 	else {
 		m_toolcontroldocker -> plug(m_birdEyeBox);
 	}
-#endif 
 
 	// ---------------------------------------------------------------------
 	// Layers
@@ -362,9 +358,8 @@ void KisDockerManager::setupDockers()
 		m_layerchanneldocker -> plug(m_layerBox);
 	}
 
-#if 0	// This doesn't do anything useful yet.
 	// Channels
-	m_channelView = new KisChannelView(m_view -> document(), m_view);
+	m_channelView = new KisChannelView((KisDoc*)m_view -> document());
 	m_channelView -> setCaption(i18n("Channels"));
 	if ( cfg.dockerStyle() == DOCKER_SLIDER ) {
 		m_layerchannelslider -> plug( m_channelView );
@@ -372,7 +367,6 @@ void KisDockerManager::setupDockers()
 	else {
 		m_layerchanneldocker -> plug(m_channelView);
 	}
-#endif
 
 	// ---------------------------------------------------------------------
 	// Shapes
@@ -538,12 +532,10 @@ void KisDockerManager::setupDockers()
 	}
 
 
-#if 0
 	// Filters XXX: Disable for the release.
 	m_filterBox = new KisFilterBox(m_view, m_view, "filter box");
 	m_paintboxdocker -> plug( m_filterBox, "Painting filters" );
 	m_filterBox -> init();
-#endif
 
 	if ( cfg.dockerStyle() == DOCKER_DOCKER || cfg.dockerStyle() == DOCKER_TOOLBOX ) {
 		// TODO Here should be a better check

@@ -310,7 +310,7 @@ QImage KisColorSpaceWet::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_I
 	while ( i < width * height * (sizeof(WetPix) * 2)) {
 		kdDebug() << "Pixel: " << i << "\n";
 		// First the adsorption layers
-		WetPack wp = (WetPack*)(data + i);
+		WetPack * wp = (WetPack*)(data + i);
 		wet_composite(rgb, (WetPix*)data + i + sizeof(WetPix));
 
 		// Then the paint layer (which comes first in our double-packed pixel)

@@ -25,6 +25,8 @@
 #include <qslider.h>
 #include <qtextedit.h>
 #include <qcheckbox.h>
+#include <qwidget.h>
+#include <qcursor.h>
 
 #include <klocale.h>
 #include <kcolorcombo.h>
@@ -52,6 +54,7 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth,
 	setCaption(i18n("New Image"));
 
 	m_page = new WdgNewImage(this);
+
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
 

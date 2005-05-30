@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaexample" version="7">
+<MenuBar>
+    <Menu name="View"><text>&amp;View</text>
+	<!-- XXX: Think up a better name for this menu, we want _real_ palettes one day -->
+	<Menu name="Dockers"><text>&amp;Palettes </text>
+    		<Action name="view_history"/>
+	</Menu>
+    </Menu>
+</MenuBar>
+</kpartgui>

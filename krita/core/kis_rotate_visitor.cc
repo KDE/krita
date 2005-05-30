@@ -77,21 +77,34 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
 	m_progress = progress;
 	initProgress(xShearSteps + yShearSteps);
 
-	KisPaintDeviceSP sheared = xShear(m_dev, shearX);
-	sheared = yShear(sheared, shearY);
 
-	if (!m_dev -> hasSelection()) {
-		m_dev -> clear();
-	} else {
-		// Clear selected pixels
-		m_dev -> clearSelection();
+	KisPaintDeviceSP sheared;
+
+	if (m_dev -> hasSelection()) {
+		sheared = new KisPaintDevice(m_dev -> colorStrategy(), "shear");
+		KisPainter p1(sheared);
+		p1.bltSelection(r.x(), r.y(), COMPOSITE_OVER, m_dev, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+		p1.end();
+ 		sheared = xShear(sheared, shearX);
 	}
+	else {
+		sheared = xShear(m_dev, shearX);
+	}
+
+ 	sheared = yShear(sheared, shearY);
+
+ 	if (!m_dev -> hasSelection()) {
+		m_dev -> clear();
+ 	} else {
+ 		// Clear selected pixels
+ 		m_dev -> clearSelection();
+ 	}
 	
-	KisPainter p(m_dev);
+	KisPainter p2(m_dev);
 	r = sheared -> extent();
 
-	p.bitBlt(r.x(), r.y(), COMPOSITE_OVER, sheared, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
-	p.end();
+	p2.bitBlt(r.x(), r.y(), COMPOSITE_OVER, sheared, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+	p2.end();
 
 	setProgressDone();
 }
@@ -379,7 +392,7 @@ KisPaintDeviceSP KisRotateVisitor::yShear(KisPaintDeviceSP src, double shearY)
 		KisVLineIteratorPixel dstIt = dst -> createVLineIterator(x, r.y() + displacementInt, r.height(), true);
 
 		while (!srcIt.isDone()) {
-
+			// XXX: pixelSize is the size in bytes, not the number of channels!
 			for (int channel = 0; channel < m_dev -> pixelSize(); channel++) {
 
 				pixel[channel] = srcIt.rawData()[channel];

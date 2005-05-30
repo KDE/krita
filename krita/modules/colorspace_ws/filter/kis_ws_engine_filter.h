@@ -20,9 +20,9 @@
 
 #include <kdebug.h>
 
-#include "kis_view.h"
-#include "kis_filter.h"
-
+#include <kis_view.h>
+#include <kis_filter.h>
+#include <kis_id.h>
 
 class KisWSEngineFilterConfiguration : public KisFilterConfiguration
 {
@@ -52,9 +52,10 @@ public:
 	KisWSEngineFilter(KisView * view);
 
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rc);
-	static inline QString name() { return "Wet & Sticky Engine"; };
-	virtual bool supportsPainting() { return false; }
 
+	static inline KisID id() { return KisID("Wet & Sticky Engine", i18n("Wet & Sticky")); };
+	virtual bool supportsPainting() { return false; }
+	virtual bool supportsIncrementalPainting() { return false; }
 
 public:
 	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
@@ -69,7 +70,6 @@ private:
 	KisPaintDeviceSP m_src;
 	KisPaintDeviceSP m_dst;
 	QRect m_rect;
-	KisTransaction * m_ktc;
 
 };
 

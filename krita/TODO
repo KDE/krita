@@ -1,5 +1,28 @@
 Krita TODO
 
+
+* File/Import and File/Export don't warn when exporting to
+  an unsupported filetype. (Still valid).
+
+* Photoshop files are not recognized when opened, but there is now an
+  option in the list of filetypes and that works.
+
+Selections
+
+* On shearing, the whole image is mirrored, not the selected
+  bits. 
+
+Transform tool
+
+* It should use filter during scaling
+
+* It doesn't handle "infinite" selections
+
+Integration
+
+* A krita document embedded in KWord has the wrong scaling
+
+
 	* write the Krita handbook.
 
 Core
@@ -86,7 +109,10 @@ Selections
 * The shape tools should (with filled as default) also be available as 
   selection tools. (fixed for ellipse)
 
-* Invent and implement ways to visualise selection masks in more intelligent ways. When selecting a white area it should still be visible that it has been selected. Should be user configurable and globally implemented (ie not per layer)
+* Invent and implement ways to visualise selection masks in more
+  intelligent ways. When selecting a white area it should still be
+  visible that it has been selected. Should be user configurable and
+  globally implemented (ie not per layer)
 
 Profiles
 
@@ -117,15 +143,11 @@ Tools
 	* All tools must have a tool options tab (#Boudewijn, Adrian, Cyrille)
 	
 	* Implement the following tools: 
-		    - Freehand selection (#Boudewijn)
-		    - Polygonal selection (#Boudewijn)
 		    - pen(cil) tool (same as brush, but not anti-aliased) (#Boudewijn,
                       done, except there's still a little ant-aliasing present, perhaps
                       dependent on the brush).
 		    - fix airbrush tool (add rate option, add increase
 		      of brush size if kept in one place)
-		    - rectangle tool (#Clarence, still some work to with opacity and so on)
-		    - ellipse too (#Clarence, still some work to with opacity and so on)l
 		    - color changer, smudge tool,sharpen tool, blur
 		      tool, dodge tool, burn tool, sponge tool (These
 		      last are perhaps more generally: painting with

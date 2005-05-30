@@ -57,7 +57,7 @@
  * gravity, viscosity and absorbency.
  *
  */
-KisWSEngineFilter::KisWSEngineFilter(KisView * view) : KisFilter(name(), view)
+KisWSEngineFilter::KisWSEngineFilter(KisView * view) : KisFilter(id(), view)
 {
 }
 
@@ -120,7 +120,7 @@ void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 	m_dst = dst;
 	m_cfg = ( KisWSEngineFilterConfiguration * )configuration;
 	m_rect = rect;
-	m_ktc = ktc;
+
 
 	kdDebug() << "WSEnginefilter called!\n";
 	QTime t;
@@ -132,7 +132,7 @@ void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 	// synthesizing w&s pixels.
 	bool native = false;
 	// XXX: We need a better way to ID color strategies
-	if ( src -> colorStrategy() -> name() == "W&S" ) native = true;
+	if ( src -> colorStrategy() -> id() == KisID("W&S","") ) native = true;
 
 	// XXX: We need a better way to ID color strategies
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance()->get("W&S");

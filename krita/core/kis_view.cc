@@ -390,7 +390,7 @@ void KisView::setupActions()
 	// import/export actions
 	m_imgProperties = new KAction(i18n("Image Properties"), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
 	m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
-	m_imgResizeToLayer = new KAction(i18n("Extend Image to Size of Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
+	m_imgResizeToLayer = new KAction(i18n("Resize Image to Size of Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
 	// view actions
 	m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
 	m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
@@ -791,6 +791,7 @@ void KisView::layerUpdateGUI(bool enable)
 
 	if (layer)
 		layerPos = img->index(layer);
+
 	enable = enable && img && layer;
 	m_layerDup -> setEnabled(enable);
 	m_layerRm -> setEnabled(enable);
@@ -804,7 +805,7 @@ void KisView::layerUpdateGUI(bool enable)
 	m_layerTop -> setEnabled(enable && nlayers > 1 && layerPos);
 	m_layerBottom -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
 	
-	// XXX thes should be named layer instead of img
+	// XXX these should be named layer instead of img
 	m_imgFlatten -> setEnabled(nlayers > 1);
 
 	m_imgMergeVisible -> setEnabled(nvisible > 1);
@@ -1004,18 +1005,8 @@ void KisView::imgResizeToActiveLayer()
 
 
 	if (img && (layer = img -> activeLayer())) {
-		int x, y, w, h;
-		layer -> extent(x, y, w, h);
-
-		if (w > img -> width() && h > img -> height()) {
-			img -> resize(w, h);
-		}
-		else if (w <= img -> width() && h > img -> height()) {
-			img -> resize(img -> width(), h);
-		}
-		else if (w > img -> width() && h <= img -> height()) {
-			img -> resize(w, img -> height());
-		}
+		QRect r = layer -> exactBounds();
+		img -> resize(r.width(), r.height());
 	}
 }
 
@@ -1879,18 +1870,16 @@ void KisView::canvasRefresh()
 void KisView::layerToggleVisible()
 {
 	KisImageSP img = currentImg();
+	if (!img) return;
 
-	if (img) {
-		KisLayerSP layer = img -> activeLayer();
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
 
-		if (layer) {
-			layer -> setVisible(!layer -> visible());
-			m_doc -> setModified(true);
-			resizeEvent(0);
-			layersUpdated();
-			canvasRefresh();
-		}
-	}
+	layer -> setVisible(!layer -> visible());
+	m_doc -> setModified(true);
+	resizeEvent(0);
+	layersUpdated();
+	canvasRefresh();
 }
 
 void KisView::layerToggleLocked()

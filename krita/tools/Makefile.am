@@ -36,7 +36,7 @@ kritadefaulttools_la_SOURCES = \
 	kis_tool_pan.cc \
 	kis_tool_text.cc \
 	kis_tool_gradient.cc
-        
+
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = kritadefaulttools.la
 

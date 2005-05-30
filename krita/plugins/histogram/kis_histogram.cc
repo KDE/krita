@@ -64,17 +64,19 @@ void KisHistogram::computeHistogramFor(const KisChannelInfo & channel)
 	//Q_UINT32 total_white = 0;
 	//Q_UINT32 total_black = 0;
 
-	if (m_layer -> hasSelection()) {
-		// Get selection iterators
-		// XXX: not implemented yet
-	} else {
 		Q_INT32 x,y,w,h;
 		m_layer->exactBounds(x,y,w,h);
 		KisRectIteratorPixel srcIt = m_layer->createRectIterator(x,y,w,h, false);
 
 		Q_INT32 channels = m_layer -> nChannels();
+		bool alpha = m_layer -> alpha();
 		while( ! srcIt.isDone() )
 		{
+			if (  !srcIt.isSelected()
+				|| (alpha && ((QUANTUM)srcIt[channels - 1] == OPACITY_TRANSPARENT)) ) {
+				++srcIt;
+				continue;
+			}
 			QUANTUM datum = (QUANTUM)srcIt[channel.pos()];
 			m_values[datum]++;
 			if (datum > m_max) m_max = datum;
@@ -87,7 +89,6 @@ void KisHistogram::computeHistogramFor(const KisChannelInfo & channel)
 			m_count++;
 			++srcIt;
 		}
-	}
 	m_mean = total / m_count;
 #if 0
 	dump();

@@ -64,9 +64,9 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 // 	m_cmbCursorShape -> insertItem(*KisCursor::crossCursor().bitmap(), "Crosshair");
 // 	m_cmbCursorShape -> insertItem(*KisCursor::arrowCursor().bitmap(), "Arrow");
 // 	m_cmbCursorShape -> insertItem("Brush shape");
-	m_cmbCursorShape -> insertItem("Tool Icon");
-	m_cmbCursorShape -> insertItem("Crosshair");
-	m_cmbCursorShape -> insertItem("Arrow");
+	m_cmbCursorShape -> insertItem(i18n("Tool Icon"));
+	m_cmbCursorShape -> insertItem(i18n("Crosshair"));
+	m_cmbCursorShape -> insertItem(i18n("Arrow"));
 
 	KisConfig cfg;
 	m_cmbCursorShape -> setCurrentItem(cfg.defCursorStyle());

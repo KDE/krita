@@ -102,3 +102,44 @@ Not easily reproducible,though.
 #47 0xb7fe5465 in kdemain (argc=1, argv=0x8145af8)
     at ../../koffice/krita/main.cc:40
 #48 0xb7fe7996 in kdeinitmain () from /usr/lib/kde3/krita.so
+
+-------------------------------------
+
+On exiting the last window of Krita after opening three images and resizing them all.
+See also notes in kis_doc.cc: 281
+
+#4  0x00000000 in ?? ()
+#5  0xb7f65960 in KShared::_KShared_unref (this=0xc17ee60) at ksharedptr.h:68
+#6  0xb643ed50 in ~KSharedPtr (this=0xb990554) at ksharedptr.h:126
+#7  0xb6442e6c in ~KisChangeLayersCmd (this=0xb990548)
+    at ../../../koffice/krita/core/kis_image.cc:122
+#8  0xb7953ddc in QPtrList<KCommand>::deleteItem () from /usr/lib/libkdeui.so.4
+#9  0xb71e25cc in QGList::clear () from /usr/lib/libqt-mt.so.3
+#10 0xb795286d in QPtrList<KCommand>::~QPtrList () from /usr/lib/libkdeui.so.4
+#11 0xb5d7b7f7 in ~KoCommandHistory (this=0xa8592a0)
+    at ../../../koffice/lib/kofficeui/kocommandhistory.cpp:142
+#12 0xb6443aa8 in ~KisDoc (this=0xa5c7c90)
+    at ../../../koffice/krita/core/kis_doc.cc:281
+#13 0xb7f75c05 in KoMainWindow::setRootDocument (this=0xb00e260, doc=0x0)
+    at ../../../koffice/lib/kofficecore/koMainWindow.cc:370
+#14 0xb7f78a31 in KoMainWindow::closeEvent (this=0xb00e260, e=0xbfffef60)
+    at ../../../koffice/lib/kofficecore/koMainWindow.cc:938
+#15 0xb6f7b974 in QWidget::event () from /usr/lib/libqt-mt.so.3
+#16 0xb70325f4 in QMainWindow::event () from /usr/lib/libqt-mt.so.3
+#17 0xb6ef0370 in QApplication::internalNotify () from /usr/lib/libqt-mt.so.3
+#18 0xb6eef9d4 in QApplication::notify () from /usr/lib/libqt-mt.so.3
+#19 0xb750f960 in KApplication::notify () from /usr/lib/libkdecore.so.4
+#20 0xb6f7b274 in QWidget::close () from /usr/lib/libqt-mt.so.3
+#21 0xb6e8c39c in QETWidget::translateCloseEvent () from /usr/lib/libqt-mt.so.3
+#22 0xb6e869c7 in QApplication::x11ClientMessage () from /usr/lib/libqt-mt.so.3
+#23 0xb6e8798a in QApplication::x11ProcessEvent () from /usr/lib/libqt-mt.so.3
+#24 0xb6e9cec2 in QEventLoop::processEvents () from /usr/lib/libqt-mt.so.3
+#25 0xb6f0174c in QEventLoop::enterLoop () from /usr/lib/libqt-mt.so.3
+#26 0xb6f0160e in QEventLoop::exec () from /usr/lib/libqt-mt.so.3
+#27 0xb6ef057b in QApplication::exec () from /usr/lib/libqt-mt.so.3
+#28 0xb7fe7465 in kdemain (argc=2, argv=0xbffff504)
+    at ../../koffice/krita/main.cc:40
+#29 0x0804872b in main ()
+
+
+

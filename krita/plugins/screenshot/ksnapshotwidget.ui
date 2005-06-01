@@ -46,7 +46,7 @@ The image can be dragged to another application or document to copy the full scr
                 <string>&amp;New Snapshot</string>
             </property>
             <property name="iconSet">
-                <iconset>"ksnapshot"</iconset>
+                <iconset>"tool_screenshot"</iconset>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>Click this button to take a new snapshot.</string>

@@ -56,7 +56,7 @@ K_EXPORT_COMPONENT_FACTORY( kritascreenshot, ScreenshotFactory( "kscreenshot_plu
 	Q_CHECK_PTR(snapshot);
 	connect( snapshot, SIGNAL( screenGrabbed() ), SLOT( slotScreenGrabbed() ) );
 
-	(void) new KAction(i18n("&Screenshot..."), SmallIcon("digikam"), 0, this, SLOT(slotScreenshot()), actionCollection(), "screenshot");
+	(void) new KAction(i18n("&Screenshot..."), SmallIcon("tool_screenshot"), 0, this, SLOT(slotScreenshot()), actionCollection(), "screenshot");
 }
 
 Screenshot::~Screenshot()

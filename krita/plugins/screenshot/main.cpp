@@ -30,7 +30,7 @@ int main(int argc, char **argv)
   Q_CHECK_PTR(toplevel);
   app.dcopClient()->setDefaultObject( toplevel->objId() );
   toplevel->setCaption( app.makeStdCaption("") );
-  toplevel->setIcon(SmallIcon("ksnapshot"));
+  toplevel->setIcon(SmallIcon("tool_screenshot"));
   app.setMainWidget(toplevel);
   toplevel->show();
   return app.exec();

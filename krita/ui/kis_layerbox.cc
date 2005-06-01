@@ -65,13 +65,17 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
         m_lst = new WdgLayerBox(this);
 	setMinimumSize(m_lst -> minimumSizeHint());
 
+        m_lst -> bnAdd -> setIconSet(SmallIconSet("newlayer"));
         QToolTip::add(m_lst -> bnAdd, i18n("Create new %1").arg(label));
 
+        m_lst -> bnDelete -> setIconSet(SmallIconSet("deletelayer"));
         QToolTip::add(m_lst -> bnDelete, i18n("Remove current %1").arg(label));
 
         QToolTip::add(m_lst -> bnRaise, i18n("Upper current %1").arg(label));
         m_lst -> bnRaise -> setEnabled(false);
+        m_lst -> bnRaise -> setIconSet(SmallIconSet("raiselayer"));
 
+        m_lst -> bnLower -> setIconSet(SmallIconSet("lowerlayer"));
         m_lst -> bnLower -> setEnabled(false);
         QToolTip::add(m_lst -> bnLower, i18n("Lower current %1").arg(label));
 
@@ -100,8 +104,8 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
         m_contextMnu -> insertItem(i18n("Properties"), PROPERTIES);
         m_contextMnu -> insertSeparator();
 
-        m_contextMnu -> insertItem(i18n("Add %1...").arg(label), ADD);
-        m_contextMnu -> insertItem(i18n("Remove %1").arg(label), REMOVE);
+        m_contextMnu -> insertItem(SmallIconSet("newlayer"),i18n("Add %1...").arg(label), ADD);
+        m_contextMnu -> insertItem(SmallIconSet("deletelayer"),i18n("Remove %1").arg(label), REMOVE);
 
         if (f & SHOWMASK) {
                  m_contextMnu -> insertItem(i18n("Add Mask"), ADDMASK);

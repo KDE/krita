@@ -47,6 +47,7 @@ libkisui_la_SOURCES = \
     kis_filter_box.cc \
     kis_palette_widget.cc \
     kis_selection_options.cc \
+    kis_guide.cc \
     wdgmatrix.ui \
     kis_previewwidgetbase.ui \
     wdgselectionoptions.ui \
@@ -90,6 +91,7 @@ noinst_HEADERS = kis_dlg_preferences.h \
     kis_dockframedocker.h \
     kis_basedocker.h \
     kis_filter_box.h \
+    kis_guide.h \
     wdgmatrix.h \
     kis_previewwidgetbase.h \
     kis_previewdialog.h \

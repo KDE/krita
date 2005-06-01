@@ -29,6 +29,7 @@
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <koView.h>
+#include <koDocument.h>
 #include <kgenericfactory.h>
 
 #include "ksnapshot.h"
@@ -57,6 +58,7 @@ K_EXPORT_COMPONENT_FACTORY( kritascreenshot, ScreenshotFactory( "kscreenshot_plu
 	connect( snapshot, SIGNAL( screenGrabbed() ), SLOT( slotScreenGrabbed() ) );
 
 	(void) new KAction(i18n("&Screenshot..."), SmallIcon("tool_screenshot"), 0, this, SLOT(slotScreenshot()), actionCollection(), "screenshot");
+	
 }
 
 Screenshot::~Screenshot()
@@ -76,5 +78,5 @@ void Screenshot::slotScreenGrabbed()
 	     
 	KoView *view = dynamic_cast<KoView *>(parent());
 	if(view)
-		emit view->embeddImage(temp.name());
+		view -> koDocument() -> import(temp.name());
 }

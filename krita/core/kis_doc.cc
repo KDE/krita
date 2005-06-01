@@ -65,7 +65,6 @@
 #include "kis_fill_painter.h"
 #include "kis_command.h"
 #include "kis_view.h"
-#include "kis_image_magick_converter.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_colorspace_registry.h"
 #include "kis_profile.h"
@@ -1347,59 +1346,20 @@ void KisDoc::slotIOProgress(Q_INT8 percentage)
 	emitProgress(totalPercentage);
 }
 
-bool KisDoc::importImage(const QString& filename)
+void KisDoc::prepareForImport()
 {
 	if (m_nserver == 0)
 		init();
 
-	if (!filename.isEmpty()) {
-		KURL url(filename);
-
-		// XXX: If we ever want to load an imageformat that ImageMagick
-		//      doesn't support, build a switch here.
-		KisImageMagickConverter ib(this, this);
-
-		if (url.isEmpty())
-			return false;
-printf("here\n");
-		if (ib.buildImage(url) == KisImageBuilder_RESULT_OK) {
-			m_currentImage = ib.image();
-			emit imageListUpdated();
-			emit layersUpdated(m_currentImage);
-			emit docUpdated();
-			return true;
-		}
-	}
-
-	return false;
 }
 
-bool KisDoc::exportImage(const QString& filename)
+void KisDoc::setCurrentImage(KisImageSP image)
 {
-	if (filename.isEmpty()) return false;
-
-	KURL url(filename);
-
-	KisLayerSP dst;
-
-	KisImage * img = new KisImage(*m_currentImage);
-	Q_CHECK_PTR(img);
-
-	KisImageMagickConverter ib(this, this);
-
-	img -> flatten();
-
-	dst = img -> layer(0);
-	Q_ASSERT(dst);
-
-	vKisAnnotationSP_it beginIt = img -> beginAnnotations();
-	vKisAnnotationSP_it endIt = img -> endAnnotations();
-	if (ib.buildFile(url, dst, beginIt, endIt) == KisImageBuilder_RESULT_OK) {
-		delete img;
-		return true;
-	}
-	delete img;
-	return false;
+	m_currentImage = image;
+	emit imageListUpdated();
+	emit layersUpdated(m_currentImage);
+	emit docUpdated();
 }
+
 #include "kis_doc.moc"
 

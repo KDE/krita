@@ -120,7 +120,7 @@ public: // KoView implementation
 
 public: // Plugin access API. XXX: This needs redesign.
 
-	Q_INT32 importImage(bool createLayer, bool modal = false, const KURL& url = KURL());
+	Q_INT32 importImage(const KURL& url = KURL());
 
 	virtual KisImageSP currentImg() const;
 
@@ -321,7 +321,6 @@ public slots:
 	void gradientActivated(KisResource *gradient);
 	void scrollH(int value);
 	void scrollV(int value);
-	void slotEmbedImage(const QString& filename);
 	void slotInsertImageAsLayer();
 	void imgUpdated(KisImageSP img, const QRect& rc);
 	void imgUpdated(KisImageSP img);

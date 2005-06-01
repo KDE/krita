@@ -116,10 +116,13 @@ public:
 
 	void renameImage(const QString& oldName, const QString& newName);
 
-	bool importImage(const QString& filename);
-	bool exportImage(const QString& filename);
-
+	// Makes an otherwise empty document ready for import/export
+	void prepareForImport();
+	
 	KisImageSP currentImage() { return m_currentImage;};
+	void setCurrentImage(KisImageSP image);
+
+	KisUndoAdapter * undoAdapter() { return this; }
 	
 public slots:
 	void slotImageUpdated();
@@ -149,7 +152,7 @@ private:
 	QDomElement saveLayer(QDomDocument& doc, KisLayerSP layer);
 	KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
 	bool init();
-
+	
 	void setIOSteps(Q_INT32 nsteps);
 	void IOCompletedStep();
 	void IODone();

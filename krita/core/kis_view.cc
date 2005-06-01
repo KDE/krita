@@ -1,7 +1,7 @@
 /*
  * This file is part of KimageShop^WKrayon^WKrita
  *
-*  Copyright (c) 1999 Matthias Elter  <me@kde.org>
+ *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
@@ -39,6 +39,8 @@
 #include <qstyle.h>
 #include <qpopupmenu.h>
 #include <qvaluelist.h>
+#include <qstringlist.h>
+#include <qcolor.h>
 
 // KDE
 #include <dcopobject.h>
@@ -60,7 +62,7 @@
 #include <ksharedptr.h>
 
 // KOffice
-#include <qcolor.h>
+#include <koFilterManager.h>
 #include <koMainWindow.h>
 #include <koView.h>
 #include "kotabbar.h"
@@ -76,7 +78,6 @@
 #include "kis_filter_registry.h"
 #include "kis_guide.h"
 #include "kis_gradient.h"
-#include "kis_image_magick_converter.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
@@ -203,7 +204,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
 	connect(m_doc, SIGNAL(currentImageUpdated(KisImageSP)), SLOT(currentImageUpdated(KisImageSP)));
-	connect(this, SIGNAL(embeddImage(const QString&)), SLOT(slotEmbedImage(const QString&)));
 
 	m_dockerManager = new KisDockerManager(this, actionCollection());
 	Q_CHECK_PTR(m_dockerManager);
@@ -387,7 +387,6 @@ void KisView::setupActions()
 	m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
 	connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
 
-	// import/export actions
 	m_imgProperties = new KAction(i18n("Image Properties"), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
 	m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
 	m_imgResizeToLayer = new KAction(i18n("Resize Image to Size of Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
@@ -1010,9 +1009,6 @@ void KisView::imgResizeToActiveLayer()
 	}
 }
 
-
-
-
 void KisView::slotImageProperties()
 {
 	KisImageSP img = currentImg();
@@ -1028,123 +1024,78 @@ void KisView::slotImageProperties()
 
 void KisView::slotInsertImageAsLayer()
 {
-	if (importImage(true) > 0)
+	if (importImage() > 0)
 		m_doc -> setModified(true);
 }
 
 void KisView::saveLayerAsImage()
 {
-	KURL url = KFileDialog::getSaveURL(QString::null, KisImageMagickConverter::writeFilters(), this, i18n("Export Layer"));
-	KisImageSP img = currentImg();
+	QString mimelist = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export).join(" ");
+
+	KFileDialog fd (QString::null, mimelist, this, "Export Layer", true);
+	fd.setCaption(i18n("Export Layer"));
+	fd.setMimeFilter(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+	fd.setOperationMode(KFileDialog::Saving);
+
+	if (!fd.exec()) return;
+
+	KURL url = fd.selectedURL();
+	QString mimefilter = fd.currentMimeFilter();
 
 	if (url.isEmpty())
 		return;
 
-	Q_ASSERT(img);
 
-	if (img) {
-		KisImageMagickConverter ib(m_doc, m_adapter);
-		KisLayerSP dst = img -> activeLayer();
+	KisImageSP img = currentImg();
+	if (!img) return;
 
-		Q_ASSERT(dst);
+	KisLayerSP l = img -> activeLayer();
+	if (!l) return;
 
-		switch (ib.buildFile(url, dst)) {
-		case KisImageBuilder_RESULT_UNSUPPORTED:
-			KMessageBox::error(this, i18n("No coder for this type of file."), i18n("Error Saving File"));
-			break;
-		case KisImageBuilder_RESULT_INVALID_ARG:
-			KMessageBox::error(this, i18n("Invalid argument."), i18n("Error Saving File"));
-			break;
-		case KisImageBuilder_RESULT_NO_URI:
-		case KisImageBuilder_RESULT_NOT_LOCAL:
-			KMessageBox::error(this, i18n("Unable to locate file."), i18n("Error Saving File"));
-			break;
-		case KisImageBuilder_RESULT_BAD_FETCH:
-			KMessageBox::error(this, i18n("Unable to upload file."), i18n("Error Saving File"));
-			break;
-		case KisImageBuilder_RESULT_EMPTY:
-			KMessageBox::error(this, i18n("Empty file."), i18n("Error Saving File"));
-			break;
-		case KisImageBuilder_RESULT_FAILURE:
-			KMessageBox::error(this, i18n("Error saving file."), i18n("Error Saving File"));
-			break;
-		case KisImageBuilder_RESULT_OK:
-		default:
-			break;
-		}
-	}
+	QRect r = l -> exactBounds();
+
+	KisDoc d;
+	d.prepareForImport();
+	
+	KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), l->colorStrategy(), l->name());
+	d.setCurrentImage( dst );
+	KisLayerSP layer = d.layerAdd( dst, l->name(), COMPOSITE_COPY, l->opacity(), l->colorStrategy());
+	if (!layer) return;
+
+	KisPainter p(layer);
+	p.bitBlt(0, 0, COMPOSITE_COPY, l.data(), r.x(), r.y(), r.width(), r.height());
+	p.end();
+	d.setOutputMimeType(mimefilter.latin1());
+	d.exp0rt(url);
 }
 
 
-void KisView::slotEmbedImage(const QString& filename)
-{
-	importImage(false, true, filename);
-}
 
-
-Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
+Q_INT32 KisView::importImage(const KURL& urlArg)
 {
 	KURL::List urls;
 	Q_INT32 rc = 0;
 
-	if (urlArg.isEmpty())
-		urls = KFileDialog::getOpenURLs(QString::null, KisImageMagickConverter::readFilters(), 0, i18n("Import Image"));
-	else
+	if (urlArg.isEmpty()) {
+		QString mimelist = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import).join(" ");
+		urls = KFileDialog::getOpenURLs(QString::null, mimelist, 0, i18n("Import Image"));
+	} else {
 		urls.push_back(urlArg);
+	}
 
 	if (urls.empty())
 		return 0;
 
-	KisImageMagickConverter ib(m_doc, m_adapter);
 	KisImageSP img;
-
-	//m_imgBuilderMgr -> attach(&ib);
 
 	for (KURL::List::iterator it = urls.begin(); it != urls.end(); it++) {
 		KURL url = *it;
-		KisDlgProgress dlg(&ib);
+		KisDoc d;
+		d.import(url);
+		img = d.currentImage();
+		
 
-		if (modal)
-			dlg.show();
-		else
-			m_progress -> setSubject(&ib, false, true);
-
-		switch (ib.buildImage(url)) {
-		case KisImageBuilder_RESULT_UNSUPPORTED:
-			KMessageBox::error(this, i18n("No coder for the type of file %1.").arg(url.path()), i18n("Error Importing File"));
-			continue;
-		case KisImageBuilder_RESULT_NO_URI:
-		case KisImageBuilder_RESULT_NOT_LOCAL:
-			KNotifyClient::event(this -> winId(), "cannotopenfile");
-			continue;
-		case KisImageBuilder_RESULT_NOT_EXIST:
-			KMessageBox::error(this, i18n("File %1 does not exist.").arg(url.path()), i18n("Error Importing File"));
-			KNotifyClient::event(this -> winId(), "cannotopenfile");
-			continue;
-		case KisImageBuilder_RESULT_BAD_FETCH:
-			KMessageBox::error(this, i18n("Unable to download file %1.").arg(url.path()), i18n("Error Importing File"));
-			KNotifyClient::event(this -> winId(), "cannotopenfile");
-			continue;
-		case KisImageBuilder_RESULT_EMPTY:
-			KMessageBox::error(this, i18n("Empty file: %1").arg(url.path()), i18n("Error Importing File"));
-			KNotifyClient::event(this -> winId(), "cannotopenfile");
-			continue;
-		case KisImageBuilder_RESULT_FAILURE:
-			m_progress -> setSubject(0, true, true);
-			KMessageBox::error(this, i18n("Error loading file %1.").arg(url.path()), i18n("Error Importing File"));
-			KNotifyClient::event(this -> winId(), "cannotopenfile");
-			continue;
-		case KisImageBuilder_RESULT_PROGRESS:
-			break;
-		case KisImageBuilder_RESULT_OK:
-		default:
-			break;
-		}
-
-		if (!(img = ib.image()))
-			continue;
-
-		if (/*NOTABcreateLayer && */currentImg()) {
+		if (currentImg()) {
 			vKisLayerSP v = img -> layers();
 			KisImageSP current = currentImg();
 
@@ -1162,6 +1113,7 @@ Q_INT32 KisView::importImage(bool createLayer, bool modal, const KURL& urlArg)
 			resizeEvent(0);
 			updateCanvas();
 		}
+	
 	}
 
 	return rc;
@@ -1806,8 +1758,7 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
 		if (urls.count() > 0) {
 			enum enumActionId {
 				addLayerId = 1,
-				addImageId,
-				addDocumentId,
+				addDocumentId = 2,
 				cancelId
 			};
 
@@ -1817,18 +1768,12 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
 				if (currentImg() != 0) {
 					popup.insertItem(i18n("Insert as New Layer"), addLayerId);
 				}
-
-				popup.insertItem(i18n("Insert as New Image"), addImageId);
-				popup.insertSeparator();
 				popup.insertItem(i18n("Open in New Document"), addDocumentId);
 			}
 			else {
 				if (currentImg() != 0) {
 					popup.insertItem(i18n("Insert as New Layers"), addLayerId);
 				}
-
-				popup.insertItem(i18n("Insert as New Images"), addImageId);
-				popup.insertSeparator();
 				popup.insertItem(i18n("Open in New Documents"), addDocumentId);
 			}
 
@@ -1843,10 +1788,7 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
 
 					switch (actionId) {
 					case addLayerId:
-						importImage(true, false, url);
-						break;
-					case addImageId:
-						importImage(false, false, url);
+						importImage(url);
 						break;
 					case addDocumentId:
 						if (shell() != 0) {

@@ -396,8 +396,8 @@ void KisView::setupActions()
 	m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
 
 	// layer actions
-	m_layerAdd = new KAction(i18n("&Add Layer..."), 0, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
-	m_layerRm = new KAction(i18n("&Remove Layer"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
+	m_layerAdd = new KAction(i18n("&Add Layer..."), "newlayer", 0, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
+	m_layerRm = new KAction(i18n("&Remove Layer"), "deletelayer", 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
 	m_layerDup = new KAction(i18n("Duplicate Layer"), 0, this, SLOT(layerDuplicate()), actionCollection(), "duplicate_layer");
 	m_layerLink = new KAction(i18n("&Link/Unlink Layer"), 0, this, SLOT(layerToggleLinked()), actionCollection(), "link_layer");
 	m_layerHide = new KAction(i18n("&Hide/Show Layer"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");

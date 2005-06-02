@@ -50,6 +50,7 @@ private slots:
 
 	void okClicked();
 	void resetPreview();
+	void slotAngleValueChanged( int );
 
 private:
 

@@ -39,7 +39,7 @@
 #include <kmessagebox.h>
 #include <kdialog.h>
 #include <knuminput.h>
-
+#include <kdebug.h>
 #include <koFrameButton.h>
 
 #include "kis_doc.h"
@@ -72,7 +72,7 @@ KisChannelView::KisChannelView( KisDoc *_doc, QWidget *_parent, const char *_nam
 	pbDown -> setFixedSize(24, 24);
 
 	QWidget * spacer = new QWidget(buttons);
-	buttons -> setStretchFactor(spacer, 10); 
+	buttons -> setStretchFactor(spacer, 10);
 
 
 	frame = new QHBox( this );
@@ -330,7 +330,7 @@ QSize ChannelTable::sizeHint() const
 
 void ChannelTable::mousePressEvent( QMouseEvent *_event )
 {
-	int row = rowAt(_event -> pos().y());
+    int row = rowAt( _event -> pos() .y()+ contentsY() );
 	if (row < 0) return;
 
 	QPoint localPoint( _event->pos().x() % cellWidth(),

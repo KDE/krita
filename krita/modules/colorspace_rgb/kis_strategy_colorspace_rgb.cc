@@ -85,6 +85,28 @@ Q_INT8 KisStrategyColorSpaceRGB::difference(const QUANTUM* src1, const QUANTUM* 
 	QABS(src2[PIXEL_BLUE] - src1[PIXEL_BLUE])));
 }
 
+void KisStrategyColorSpaceRGB::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+{
+	Q_UINT32 red=0, green=0, blue=0;
+	
+	while(nColors--)
+	{
+		red += (*colors)[PIXEL_RED] * *weights;
+		green += (*colors)[PIXEL_GREEN] * *weights;
+		blue += (*colors)[PIXEL_BLUE] * *weights;
+		weights++;
+		colors++;
+	}
+	
+	// Now downscale to 8 bit
+	red += 0x80;
+	*dst++ = ((red >> 8) + red) >> 8;
+	green += 0x80;
+	*dst++ = ((green >> 8) + green) >> 8;
+	blue += 0x80;
+	*dst++ = ((blue >> 8) + blue) >> 8;
+}
+
 vKisChannelInfoSP KisStrategyColorSpaceRGB::channels() const
 {
 	return m_channels;

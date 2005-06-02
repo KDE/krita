@@ -134,6 +134,10 @@ void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c, QUANTUM 
  	*opacity = src[4];
 }
 
+void KisStrategyColorSpaceCMYK::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+{
+}
+
 vKisChannelInfoSP KisStrategyColorSpaceCMYK::channels() const
 {
 	return m_channels;

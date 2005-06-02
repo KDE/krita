@@ -107,6 +107,19 @@ void KisStrategyColorSpaceCMYKA::toQColor(const QUANTUM *src, QColor *c, QUANTUM
  	*opacity = src[PIXEL_CMYK_ALPHA];
 }
 
+Q_INT8 KisStrategyColorSpaceCMYKA::difference(const QUANTUM* src1, const QUANTUM* src2)
+{
+	// XXX This is worng - doesn't take K into account
+	//return KisStrategyColorSpace::difference(src1, src2);
+	return QMAX(QABS(src2[PIXEL_CYAN] - src1[PIXEL_CYAN]),
+				QMAX(QABS(src2[PIXEL_MAGENTA] - src1[PIXEL_MAGENTA]),
+	QABS(src2[PIXEL_YELLOW] - src1[PIXEL_YELLOW])));
+}
+
+void KisStrategyColorSpaceCMYKA::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+{
+}
+
 vKisChannelInfoSP KisStrategyColorSpaceCMYKA::channels() const
 {
 	return m_channels;

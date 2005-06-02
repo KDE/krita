@@ -109,7 +109,9 @@ public:
 
 	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0)
 		{ return 0; };
-
+	
+	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
+	
 	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;
 	virtual Q_INT32 nChannels() const;

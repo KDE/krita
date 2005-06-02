@@ -252,6 +252,10 @@ void KisColorSpaceWet::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity,
 	toQColor(src, c);
 }
 
+void KisColorSpaceWet::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+{
+}
+
 vKisChannelInfoSP KisColorSpaceWet::channels() const
 {
 	return m_channels;

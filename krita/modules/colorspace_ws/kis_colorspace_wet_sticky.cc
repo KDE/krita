@@ -159,7 +159,9 @@ KisPixel KisColorSpaceWetSticky::toKisPixel(QUANTUM *src, KisProfileSP profile)
 	return KisPixel (src, src, this, profile);
 }
 
-
+void KisColorSpaceWetSticky::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+{
+}
 
 vKisChannelInfoSP KisColorSpaceWetSticky::channels() const
 {

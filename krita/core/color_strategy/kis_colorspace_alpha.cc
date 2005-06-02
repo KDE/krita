@@ -83,6 +83,18 @@ Q_INT8 KisColorSpaceAlpha::difference(const QUANTUM* src1, const QUANTUM* src2)
 	return QABS(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
 }
 
+void KisColorSpaceAlpha::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+{
+	Q_UINT32 total;
+	while(nColors)
+	{
+		nColors--;
+		total += *colors[nColors] * weights[nColors];
+	}
+	total >> 8;
+	*dst=total;
+}
+
 vKisChannelInfoSP KisColorSpaceAlpha::channels() const
 {
 	return m_channels;

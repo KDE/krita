@@ -7,11 +7,6 @@ Krita TODO
 * Photoshop files are not recognized when opened, but there is now an
   option in the list of filetypes and that works.
 
-Selections
-
-* On shearing, the whole image is mirrored, not the selected
-  bits. 
-
 Transform tool
 
 * It should use filter during scaling
@@ -27,8 +22,6 @@ Integration
 
 Core
 
-	* Remove multiple images per document. The view part has already been disabled, but it still has
-	  signs of this, and doc is not changed yet.
 	* Channels showing (note that we don't do Gimp-type grayscale
 	  mask channels, just showing/hiding the various color
 	  channels.
@@ -49,7 +42,6 @@ Core
           layer to anything.
 	* Long painter operations (e.g., convolution painter) should use the 
           progressbar and be cancelable.
-
 
 
 File Format:
@@ -104,15 +96,13 @@ User Interface
 
 Selections
 
-* Select freehand (drawing a shape and selecting the contents) does not work.
+  	* On shearing, the whole image is mirrored, not the selected
+	  bits. 
 
-* The shape tools should (with filled as default) also be available as 
-  selection tools. (fixed for ellipse)
-
-* Invent and implement ways to visualise selection masks in more
-  intelligent ways. When selecting a white area it should still be
-  visible that it has been selected. Should be user configurable and
-  globally implemented (ie not per layer)
+	* Invent and implement ways to visualise selection masks in more
+	  intelligent ways. When selecting a white area it should still be
+	  visible that it has been selected. Should be user configurable and
+	  globally implemented (ie not per layer)
 
 Profiles
 

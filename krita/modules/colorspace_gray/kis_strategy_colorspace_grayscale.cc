@@ -81,6 +81,10 @@ Q_INT8 KisStrategyColorSpaceGrayscale::difference(const QUANTUM* src1, const QUA
 	return QABS(src2[PIXEL_GRAY] - src1[PIXEL_GRAY]);
 }
 
+void KisStrategyColorSpaceGrayscale::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+{
+}
+
 vKisChannelInfoSP KisStrategyColorSpaceGrayscale::channels() const
 {
 	return m_channels;

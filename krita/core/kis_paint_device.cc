@@ -186,7 +186,7 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QStr
 {
 	Q_ASSERT(colorStrategy != 0);
 	Q_ASSERT(name.isEmpty() == false);
-	if (name.isEmpty()) kdDebug() << "Empty name";
+	if (name.isEmpty()) kdDebug() << "Empty name\n";
 	m_x = 0;
 	m_y = 0;
 

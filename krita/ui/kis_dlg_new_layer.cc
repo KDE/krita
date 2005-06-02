@@ -36,8 +36,8 @@
 
 NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 			       const QString & deviceName,
-			       QWidget *parent, 
-			       const char *name) 
+			       QWidget *parent,
+			       const char *name)
 	: super(parent, name, true, "", Ok | Cancel)
 {
 	QWidget *page = new QWidget(this);
@@ -55,7 +55,7 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 	m_name = new KLineEdit(deviceName, page);
 	grid -> addWidget(lbl, 0, 0);
 	grid -> addWidget(m_name, 0, 1);
-	
+
 	// Opacity
 	lbl = new QLabel(i18n("Opacity:"), page);
 	m_opacity = new KIntNumInput(page);
@@ -82,7 +82,14 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 
 	slotSetColorStrategy(colorSpaceID);
 
+        connect( m_name, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 	connect(m_cmbImageType, SIGNAL(activated(const KisID &)), this, SLOT(slotSetColorStrategy(const KisID &)));
+        slotNameChanged( m_name->text() );
+}
+
+void NewLayerDialog::slotNameChanged( const QString &_text )
+{
+    enableButtonOK( !_text.isEmpty() );
 }
 
 int NewLayerDialog::opacity() const

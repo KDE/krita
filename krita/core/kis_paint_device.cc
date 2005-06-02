@@ -47,14 +47,14 @@ namespace {
 
 	class MoveCommand : public KNamedCommand {
 		typedef KNamedCommand super;
-	
+
 	public:
 		MoveCommand(KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
 		virtual ~MoveCommand();
-	
+
 		virtual void execute();
 		virtual void unexecute();
-	
+
 	private:
 		void moveTo(const QPoint& pos);
 		void undoOff();
@@ -65,7 +65,7 @@ namespace {
 		QPoint m_oldPos;
 		QPoint m_newPos;
 	};
-	
+
 	MoveCommand::MoveCommand(KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
 		super(i18n("Moved Layer"))
 	{
@@ -73,11 +73,11 @@ namespace {
 		m_oldPos = oldpos;
 		m_newPos = newpos;
 	}
-	
+
 	MoveCommand::~MoveCommand()
 	{
 	}
-	
+
 	void MoveCommand::undoOff()
 	{
 		if (m_device -> undoAdapter()) {
@@ -98,14 +98,14 @@ namespace {
 		moveTo(m_newPos);
 		undoOn();
 	}
-	
+
 	void MoveCommand::unexecute()
 	{
 		undoOff();
 		moveTo(m_oldPos);
 		undoOn();
 	}
-	
+
 	void MoveCommand::moveTo(const QPoint& pos)
 	{
 		m_device -> move(pos.x(), pos.y());
@@ -119,8 +119,8 @@ namespace {
 		typedef KNamedCommand super;
 
 	public:
-		KisConvertLayerTypeCmd(KisUndoAdapter *adapter, KisPaintDeviceSP paintDevice, 
-				       KisDataManagerSP beforeData, KisStrategyColorSpaceSP beforeColorSpace, KisProfileSP beforeProfile, 
+		KisConvertLayerTypeCmd(KisUndoAdapter *adapter, KisPaintDeviceSP paintDevice,
+				       KisDataManagerSP beforeData, KisStrategyColorSpaceSP beforeColorSpace, KisProfileSP beforeProfile,
 				       KisDataManagerSP afterData, KisStrategyColorSpaceSP afterColorSpace, KisProfileSP afterProfile
 				       ) : super(i18n("&Convert Layer Type...")) //XXX: fix when string freeze over
 			{
@@ -186,14 +186,14 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QStr
 {
 	Q_ASSERT(colorStrategy != 0);
 	Q_ASSERT(name.isEmpty() == false);
-	if (name.isEmpty()) kdDebug() << "Empty name";
+	if (name.isEmpty()) kdDebug() << "Empty name \n";
 	m_x = 0;
 	m_y = 0;
 
 	m_pixelSize = colorStrategy -> pixelSize();
 	m_nChannels = colorStrategy -> nChannels();
 
-	Q_UINT8 defPixel[6] = {0,0,0,0,0,0};//XXX should be moved to colorstrategy	
+	Q_UINT8 defPixel[6] = {0,0,0,0,0,0};//XXX should be moved to colorstrategy
 	m_datamanager = new KisDataManager(m_pixelSize, defPixel);
 	Q_CHECK_PTR(m_datamanager);
 
@@ -217,7 +217,7 @@ KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrat
 
         m_x = 0;
         m_y = 0;
-	
+
 	m_visible = true;
 
 	m_name = name;
@@ -242,7 +242,7 @@ KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrat
 	m_pixelSize = m_colorStrategy -> pixelSize();
 	m_nChannels = m_colorStrategy -> nChannels();
 
-	Q_UINT8 defPixel[6] = {0,0,0,0,0,0};//XXX should be moved to colorstrategy	
+	Q_UINT8 defPixel[6] = {0,0,0,0,0,0};//XXX should be moved to colorstrategy
 	m_datamanager = new KisDataManager(m_pixelSize, defPixel);
 	Q_CHECK_PTR(m_datamanager);
 
@@ -370,7 +370,7 @@ QRect KisPaintDevice::exactBounds()
 	}
 
 	found = false;
-	
+
 	for (Q_INT32 y2 = y + h; y2 > y ; --y2) {
 		KisHLineIterator it = createHLineIterator(x, y2, w, false);
 		while (!it.isDone() && found == false) {
@@ -384,7 +384,7 @@ QRect KisPaintDevice::exactBounds()
 		if (found) break;
 	}
 	found = false;
-	
+
 	for (Q_INT32 x2 = x; x2 < x + w ; ++x2) {
 		KisVLineIterator it = createVLineIterator(x2, y, h, false);
 		while (!it.isDone() && found == false) {
@@ -413,7 +413,7 @@ QRect KisPaintDevice::exactBounds()
 		}
 		if (found) break;
 	}
-		
+
 	delete [] emptyPixel;
 	kdDebug() << "Bounds: " << boundX << ", " << boundY << ", " << boundW << ", " << boundH << "\n";
 	return QRect(boundX, boundY, boundW, boundH);
@@ -456,7 +456,7 @@ void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInter
         visitor.shear(angleX, angleY, progress);
 }
 
-void KisPaintDevice::transform(double xscale, double  yscale, 
+void KisPaintDevice::transform(double xscale, double  yscale,
 			Q_INT32  xshear, Q_INT32  yshear,
 			Q_INT32  xtranslate, Q_INT32  ytranslate, KisProgressDisplayInterface *progress)
 {
@@ -474,7 +474,7 @@ void KisPaintDevice::mirrorX()
 	else {
 		r = exactBounds();
 	}
-	
+
 	for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
 		KisHLineIteratorPixel srcIt = createHLineIterator(r.x(), y, r.width(), false);
 		KisHLineIteratorPixel dstIt = createHLineIterator(r.x(), y, r.width(), true);
@@ -504,7 +504,7 @@ void KisPaintDevice::mirrorY()
 		r = exactBounds();
 	}
 
-		
+
 	Q_INT32 y1, y2;
 	for (y1 = r.top(), y2 = r.bottom(); y1 <= r.bottom(); ++y1, --y2) {
 		KisHLineIteratorPixel itTop = createHLineIterator(r.x(), y1, r.width(), true);
@@ -541,9 +541,9 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 	if (profile() == 0) setProfile(m_owner -> profile());
 
 	// XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
-	if ( (colorStrategy() -> id() == dstColorStrategy -> id()) 
-	     && profile() 
-	     && dstProfile 
+	if ( (colorStrategy() -> id() == dstColorStrategy -> id())
+	     && profile()
+	     && dstProfile
 	     && (profile() -> profile() == dstProfile -> profile()) )
 	{
 		kdDebug() << "NOT GOING TO CONVERT!\n";
@@ -571,11 +571,11 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 			Q_INT32 numContiguousDstColumns = dst.numContiguousColumns(column, row, row);
 			Q_INT32 numContiguousSrcColumns = numContiguousColumns(column, row, row);
 
-			Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns); 
+			Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns);
 			columns = QMIN(columns, columnsRemaining);
 
 			// XXX This is a hack: sometimes this conversion eats the alpha value. This works around it, but this needs to be fixed properly
-			
+
 			columns = 1;
 
 			const Q_UINT8 *srcData = pixel(column, row);
@@ -586,7 +586,7 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 				alpha = srcData[m_colorStrategy -> nChannels() - 1];
 
 			m_colorStrategy -> convertPixelsTo(srcData, m_profile, dstData, dstColorStrategy, dstProfile, columns, renderingIntent);
-			
+
 			// XXX this too
 			if (dstColorStrategy -> alpha())
 				dstData[dstColorStrategy -> nChannels() - 1] = alpha;
@@ -722,7 +722,7 @@ KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y,
 		return KisVLineIteratorPixel(this, m_datamanager, m_selection->m_datamanager, x, y, h, m_x, m_y, writable);
 	else
 		return KisVLineIteratorPixel(this, m_datamanager, NULL, x, y, h, m_x, m_y, writable);
-	
+
 }
 
 
@@ -768,7 +768,7 @@ void KisPaintDevice::addSelection(KisSelectionSP selection) {
 	selection -> extent(x, y, w, h);
 	painter.bitBlt(x, y, COMPOSITE_OVER, selection.data(), x, y, w, h);
 	painter.end();
-	
+
 	emitSelectionChanged();
 }
 
@@ -801,7 +801,7 @@ void KisPaintDevice::clearSelection()
  		Q_UINT16 p_alpha, s_alpha;
  		p_alpha = p.alpha();
  		s_alpha = MAX_SELECTED - s.alpha();
-		
+
 		p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
 
 		++devIt;

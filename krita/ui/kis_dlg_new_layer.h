@@ -54,6 +54,9 @@ public:
 private slots:
 	void slotSetColorStrategy(const KisID &colorStrategyId);
 
+protected slots:
+    void slotNameChanged( const QString & );
+
 private:
 	KLineEdit *m_name;
 	KIntNumInput *m_opacity;

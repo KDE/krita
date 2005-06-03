@@ -425,6 +425,13 @@ void KisView::setupActions()
 	KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
 	m_RulerAction = new KToggleAction( i18n( "Show Rulers" ), 0, this, SLOT( showRuler() ), actionCollection(), "view_ruler" );
+        m_RulerAction->setCheckedState(i18n("Hide Rulers"));
+        m_RulerAction->setToolTip( i18n( "Shows or hides rulers." ) );
+        m_RulerAction->setWhatsThis( i18n("The rulers are the white measuring spaces top and left of the "
+                                          "document. The rulers show the position and width of pages and of frames and can "
+                                          "be used to position tabulators among others.<p>Uncheck this to disable "
+                                          "the rulers from being displayed." ) );
+
 	m_RulerAction->setChecked( true );
 }
 
@@ -448,7 +455,7 @@ void KisView::resizeEvent(QResizeEvent *)
 
 	drawH = height() - rulerThickness;
 	drawW = width() - rulerThickness;
-	
+
 	if (drawH < docH) {
 		// Will need vert scrollbar
 		drawW -= scrollBarExtent;
@@ -803,7 +810,7 @@ void KisView::layerUpdateGUI(bool enable)
 	m_layerLower -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
 	m_layerTop -> setEnabled(enable && nlayers > 1 && layerPos);
 	m_layerBottom -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
-	
+
 	// XXX these should be named layer instead of img
 	m_imgFlatten -> setEnabled(nlayers > 1);
 
@@ -1056,7 +1063,7 @@ void KisView::saveLayerAsImage()
 
 	KisDoc d;
 	d.prepareForImport();
-	
+
 	KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), l->colorStrategy(), l->name());
 	d.setCurrentImage( dst );
 	KisLayerSP layer = d.layerAdd( dst, l->name(), COMPOSITE_COPY, l->opacity(), l->colorStrategy());
@@ -1093,7 +1100,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
 		KisDoc d;
 		d.import(url);
 		img = d.currentImage();
-		
+
 
 		if (currentImg()) {
 			vKisLayerSP v = img -> layers();
@@ -1113,7 +1120,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
 			resizeEvent(0);
 			updateCanvas();
 		}
-	
+
 	}
 
 	return rc;
@@ -1518,7 +1525,7 @@ void KisView::print(KPrinter& printer)
 
 	if (printerProfile != 0)
 		kdDebug() << "Printer profile: " << printerProfile -> productName() << "\n";
-	
+
 	QRect r = img -> bounds();
 	img -> renderToPainter(r.x(), r.y(), r.width(), r.height(), gc, printerProfile);
 }

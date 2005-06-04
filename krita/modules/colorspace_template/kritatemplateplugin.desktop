@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Template Color Model
+Comment=Template Color model for developers
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritatemplateplugin

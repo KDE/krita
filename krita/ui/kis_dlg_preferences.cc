@@ -156,7 +156,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 	l -> addWidget( m_page, 0, 0);
 
 	KisConfig cfg;
-	
+
 	m_page -> cmbWorkingColorSpace -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
 	m_page -> cmbWorkingColorSpace -> setCurrentText(cfg.workingColorSpace());
 
@@ -180,10 +180,10 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 	connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const KisID &)),
 		this, SLOT(refillMonitorProfiles(const KisID &)));
 
-	connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const KisID &)), 
+	connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const KisID &)),
 		this, SLOT(refillImportProfiles(const KisID &)));
 
-	connect(m_page -> cmbPrintingColorSpace, SIGNAL(activated(const KisID &)), 
+	connect(m_page -> cmbPrintingColorSpace, SIGNAL(activated(const KisID &)),
 		this, SLOT(refillPrintProfiles(const KisID &)));
 
 
@@ -219,7 +219,7 @@ void ColorSettingsTab::refillPrintProfiles(const KisID & s)
 		if ((*it) -> deviceClass() == icSigOutputClass)
 			m_page -> cmbPrintProfile -> insertItem((*it) -> productName());
 	}
-	
+
 }
 
 void ColorSettingsTab::refillImportProfiles(const KisID & s)
@@ -283,6 +283,7 @@ void PreferencesDialog::editPreferences()
 		cfg.setApplyMonitorProfileOnCopy( dialog -> m_colorSettings -> m_page -> chkApplyMonitorOnCopy -> isChecked());
 		cfg.setRenderIntent( dialog -> m_colorSettings -> m_page -> grpIntent -> selectedId());
 	}
+        delete dialog;
 }
 
 #include "kis_dlg_preferences.moc"

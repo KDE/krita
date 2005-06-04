@@ -171,9 +171,6 @@
                             <property name="text">
                                 <string>&amp;Add to current selection</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+A</string>
-                            </property>
                             <property name="checked">
                                 <bool>true</bool>
                             </property>
@@ -220,9 +217,6 @@
                             <property name="text">
                                 <string>&amp;Select</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+S</string>
-                            </property>
                         </widget>
                         <widget class="QPushButton">
                             <property name="name">
@@ -230,9 +224,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Deselect</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+D</string>
                             </property>
                         </widget>
                     </hbox>

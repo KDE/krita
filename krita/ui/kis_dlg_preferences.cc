@@ -283,6 +283,7 @@ void PreferencesDialog::editPreferences()
 		cfg.setApplyMonitorProfileOnCopy( dialog -> m_colorSettings -> m_page -> chkApplyMonitorOnCopy -> isChecked());
 		cfg.setRenderIntent( dialog -> m_colorSettings -> m_page -> grpIntent -> selectedId());
 	}
+	delete dialog;
 }
 
 #include "kis_dlg_preferences.moc"

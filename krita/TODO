@@ -1,12 +1,5 @@
 Krita TODO
 
-
-* File/Import and File/Export don't warn when exporting to
-  an unsupported filetype. (Still valid).
-
-* Photoshop files are not recognized when opened, but there is now an
-  option in the list of filetypes and that works.
-
 Transform tool
 
 * It should use filter during scaling
@@ -20,6 +13,13 @@ Integration
 
 	* write the Krita handbook.
 
+Colorspace independence (found with the test colorstrategy)
+	* selections seems yellowish
+	* airbrush seems wrong/yellowish
+	*eraser doesn't work
+	* tool gradient uses wrong colors
+	*brightness/contrast and the like don't work.
+	
 Core
 
 	* Channels showing (note that we don't do Gimp-type grayscale
@@ -53,8 +53,13 @@ File Format:
 
 Import/Export
 
-* The image magick build should be ported to the fileformat framework
-  and put in its own plugin (KisFileFormat, KisFileFormatRegistry)
+	* The image magick build should be ported to the fileformat framework
+	  and put in its own plugin (KisFileFormat, KisFileFormatRegistry)
+	* File/Import and File/Export don't warn when exporting to
+	  an unsupported filetype. (Still valid).
+	* Photoshop files are not recognized when opened, but there is now an
+	  option in the list of filetypes and that works.
+	* Importing Photoshop files don't get the placement of layers correct
 
 
 User Interface
@@ -98,7 +103,6 @@ Selections
 
   	* On shearing, the whole image is mirrored, not the selected
 	  bits. 
-
 	* Invent and implement ways to visualise selection masks in more
 	  intelligent ways. When selecting a white area it should still be
 	  visible that it has been selected. Should be user configurable and

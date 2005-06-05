@@ -2,10 +2,10 @@
 #kritarcdir = $(kde_datadir)/krita/kpartplugins
 
 # rc file containing the GUI for the plugin
-#kritarc_DATA = rgbplugin.rc
+#kritarc_DATA = testcsplugin.rc
 
 # Install the desktop file needed to detect the plugin
-kde_services_DATA = kritargbplugin.desktop
+kde_services_DATA = kritatestcsplugin.desktop
 
 #EXTRA_DIST = $(kritarc_DATA)
 
@@ -21,16 +21,16 @@ INCLUDES  = -I$(srcdir)/../../core \
 	$(all_includes)
 
 # Install this plugin in the KDE modules directory
-kde_module_LTLIBRARIES = kritargbplugin.la
+kde_module_LTLIBRARIES = kritatestcsplugin.la
 
 # Srcs for the plugin
-kritargbplugin_la_SOURCES = rgb_plugin.cc kis_strategy_colorspace_rgb.cc
-noinst_HEADERS = rgb_plugin.h kis_strategy_colorspace_rgb.h
+kritatestcsplugin_la_SOURCES = testcs_plugin.cc kis_strategy_colorspace_test.cc
+noinst_HEADERS = testcs_plugin.h kis_strategy_colorspace_test.h
 
-kritargbplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritargbplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+kritatestcsplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+kritatestcsplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
 
-kritargbplugin_la_METASOURCES = AUTO
+kritatestcsplugin_la_METASOURCES = AUTO
 #METASOURCES = AUTO # XXX: which of the two?
 
 SUBDIRS = templates

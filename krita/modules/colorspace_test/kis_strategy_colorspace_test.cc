@@ -61,7 +61,7 @@ void KisStrategyColorSpaceTestCS::nativeColor(const QColor& c, QUANTUM *dst, Kis
 	
 	pix->r = c.red();
 	pix->g = c.green();
-	pix->bmg = c.blue();//*16 + c.green();
+	pix->bmg = c.blue()*16 + c.green();
 }
 
 void KisStrategyColorSpaceTestCS::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP /*profile*/)
@@ -70,21 +70,21 @@ void KisStrategyColorSpaceTestCS::nativeColor(const QColor& c, QUANTUM opacity, 
 	
 	pix->r = c.red();
 	pix->g = c.green();
-	pix->bmg = c.blue();//*16 + c.green();
+	pix->bmg = c.blue()*16 + c.green();
 	pix->alpha = opacity;
 }
 
 void KisStrategyColorSpaceTestCS::toQColor(const QUANTUM *src, QColor *c, KisProfileSP /*profile*/)
 {
 	testcspixel *pix = (testcspixel *)src;
-	c -> setRgb(pix->r, pix->g, (pix->bmg )/*- pix->g)/16*/);
+	c -> setRgb(pix->r, pix->g, (pix->bmg - pix->g)/16);
 }
 
 void KisStrategyColorSpaceTestCS::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
 {
 	testcspixel *pix = (testcspixel *)src;
-	c -> setRgb(pix->r, pix->g, (pix->bmg )/*- pix->g)/16*/);
-	*opacity = 255;//pix->alpha;
+	c -> setRgb(pix->r, pix->g, (pix->bmg - pix->g)/16);
+	*opacity = pix->alpha;
 }
 
 Q_INT8 KisStrategyColorSpaceTestCS::difference(const QUANTUM* src1, const QUANTUM* src2)
@@ -186,7 +186,7 @@ QImage KisStrategyColorSpaceTestCS::convertToQImage(const QUANTUM *data, Q_INT32
 		*( j + 3) = pix->alpha;
 		*( j + 2) = pix->r;
 		*( j + 1) = pix->g;
-		*( j + 0) = (pix->bmg );//- pix->g)/16;
+		*( j + 0) = (pix->bmg - pix->g)/16;
 
 		pix++;
 		i++;
@@ -279,8 +279,8 @@ void KisStrategyColorSpaceTestCS::compositeOver(QUANTUM *dstRowStart, Q_INT32 ds
 						memcpy(dst, src, sizeof(struct testcspixel));
 					} else {
 						dstpix->r = INT_BLEND(pix->r, dstpix->r, srcBlend);
+						dstpix->bmg = INT_BLEND(pix->bmg -pix->g, dstpix->bmg -dstpix->g, srcBlend);
 						dstpix->g = INT_BLEND(pix->g, dstpix->g, srcBlend);
-						dstpix->bmg = INT_BLEND(pix->bmg, dstpix->bmg, srcBlend);
 					}
 				}
 			}

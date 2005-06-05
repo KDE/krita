@@ -171,7 +171,7 @@ namespace {
 		KisConvertImageTypeCmd(KisUndoAdapter *adapter, KisImageSP img, 
 				       KisStrategyColorSpaceSP beforeColorSpace, KisProfileSP beforeProfile, 
 				       KisStrategyColorSpaceSP afterColorSpace, KisProfileSP afterProfile
-				       ) : super(i18n("&Convert Image Type...")) //XXX: fix when string freeze over
+				       ) : super(i18n("Convert Image Type"))
 			{
 				m_adapter = adapter;
 				m_img = img;
@@ -606,7 +606,7 @@ void KisImage::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP 
 	}
 
 	if (undoAdapter() && undoAdapter() -> undo()) {
-		undoAdapter() -> beginMacro(i18n("&Convert Image Type...")); //XXX: fix when string freeze over
+		undoAdapter() -> beginMacro(i18n("Convert Image Type")); //XXX: fix when string freeze over
 	}
 
 	vKisLayerSP_it it;
@@ -616,8 +616,8 @@ void KisImage::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP 
 	
 	if (undoAdapter() && undoAdapter() -> undo()) {
 		
-		undoAdapter() -> addCommand(new KisConvertImageTypeCmd(undoAdapter(), this, m_colorStrategy, m_profile,
-								       dstColorStrategy, dstProfile));
+		undoAdapter() -> addCommand(new KisConvertImageTypeCmd(undoAdapter(), this,
+				m_colorStrategy, m_profile,  dstColorStrategy, dstProfile));
 		undoAdapter() -> endMacro();
 	}
 

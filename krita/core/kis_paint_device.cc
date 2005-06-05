@@ -558,9 +558,6 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 	Q_INT32 x, y, w, h;
 	extent(x, y, w, h);
 
-	// XXX: We really should try to convert as big chunks as
-	// possible. We must try to determine when the conversion eats
-	// the alpha, whether it's lcms or our own code that does it.
 	for (Q_INT32 row = y; row < y + h; ++row) {
 
 		Q_INT32 column = x;
@@ -574,22 +571,10 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 			Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns);
 			columns = QMIN(columns, columnsRemaining);
 
-			// XXX This is a hack: sometimes this conversion eats the alpha value. This works around it, but this needs to be fixed properly
-
-			columns = 1;
-
 			const Q_UINT8 *srcData = pixel(column, row);
 			Q_UINT8 *dstData = dst.writablePixel(column, row);
-			QUANTUM alpha = 0;
-			// XXX Part of the hack
-			if (m_colorStrategy -> alpha())
-				alpha = srcData[m_colorStrategy -> nChannels() - 1];
 
 			m_colorStrategy -> convertPixelsTo(srcData, m_profile, dstData, dstColorStrategy, dstProfile, columns, renderingIntent);
-
-			// XXX this too
-			if (dstColorStrategy -> alpha())
-				dstData[dstColorStrategy -> nChannels() - 1] = alpha;
 
 			column += columns;
 			columnsRemaining -= columns;

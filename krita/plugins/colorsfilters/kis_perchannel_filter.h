@@ -23,7 +23,6 @@
 
 #include "kis_types.h"
 #include "kis_filter.h"
-#include "kis_perchannel_filter.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_multi_double_filter_widget.h"

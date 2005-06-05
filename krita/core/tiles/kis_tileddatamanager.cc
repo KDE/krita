@@ -199,8 +199,18 @@ void KisTiledDataManager::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h)
 {
 	x = m_extentMinX;
 	y = m_extentMinY;
-	w = m_extentMaxX - m_extentMinX + 1;
-	h = m_extentMaxY - m_extentMinY + 1;
+
+	if (m_extentMaxX >= m_extentMinX) {
+		w = m_extentMaxX - m_extentMinX + 1;
+	} else {
+		w = 0;
+	}
+
+	if (m_extentMaxY >= m_extentMinY) {
+		h = m_extentMaxY - m_extentMinY + 1;
+	} else {
+		h = 0;
+	}
 }
 
 /*

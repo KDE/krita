@@ -47,6 +47,7 @@ public:
 
 	bool saveOnExit();
 	enumCursorStyle cursorStyle();
+    void setDefault();
 
 private:
 
@@ -73,6 +74,7 @@ private slots:
         void slotRequesterClicked( KURLRequester * );
 
 private:
+    void setDefault();
 
 	KURLRequester *m_pLineEdit, *m_pGimpGradients;
 };
@@ -84,6 +86,7 @@ class UndoRedoTab : public QWidget
 	Q_OBJECT
 
 public:
+        void setDefault();
 
 	UndoRedoTab( QWidget *parent = 0, const char *name = 0 );
 };
@@ -95,7 +98,7 @@ class ColorSettingsTab : public QWidget
 	Q_OBJECT
 
 public:
-	
+
 	ColorSettingsTab( QWidget *parent = 0, const char * name = 0 );
 
 private slots:
@@ -105,7 +108,7 @@ private slots:
 	void refillImportProfiles(const KisID & s);
 
 public:
-
+    void setDefault();
 	WdgColorSettings * m_page;
 };
 
@@ -133,8 +136,11 @@ protected:
 
 	GeneralTab* m_general;
 	DirectoriesTab* m_directories;
-	UndoRedoTab* m_undoRedo; 
+	UndoRedoTab* m_undoRedo;
 	ColorSettingsTab* m_colorSettings;
+protected slots:
+    void slotDefault();
+
 };
 
 #endif

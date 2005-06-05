@@ -76,6 +76,10 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 	grid->setRowStretch( 2, 1 );
 }
 
+void GeneralTab::setDefault()
+{
+    m_cmbCursorShape -> setCurrentItem( CURSOR_STYLE_TOOLICON);
+}
 
 bool GeneralTab::saveOnExit()
 {
@@ -119,6 +123,12 @@ DirectoriesTab::DirectoriesTab( QWidget *_parent, const char *_name )
 	grid->setRowStretch( 4, 1 );
 }
 
+void DirectoriesTab::setDefault()
+{
+    //TODO
+}
+
+
 // delayed KURLRequester configuration to avoid reading directories right
 // on dialog construction
 void DirectoriesTab::slotRequesterClicked( KURLRequester *requester )
@@ -144,6 +154,12 @@ UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
 
 	grid->setRowStretch( 2, 1 );
 }
+
+void UndoRedoTab::setDefault()
+{
+    //TODO
+}
+
 
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 	: QWidget(parent, name)
@@ -187,6 +203,24 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 		this, SLOT(refillPrintProfiles(const KisID &)));
 
 
+}
+
+void ColorSettingsTab::setDefault()
+{
+    //TODO
+    m_page -> cmbWorkingColorSpace -> setCurrentText("RGBA");
+
+    m_page -> cmbPrintingColorSpace -> setCurrentText("CMYK");
+
+    m_page -> cmbMonitorProfile -> setCurrentText("None");
+    m_page -> cmbImportProfile -> setCurrentText("None");
+    m_page -> cmbPrintProfile -> setCurrentText("None");
+    m_page -> chkBlackpoint -> setChecked(false);
+    m_page -> chkDither8Bit -> setChecked(false);
+    m_page -> chkAskOpen -> setChecked(true);
+    m_page -> chkAskPaste -> setChecked(true);
+    m_page -> chkApplyMonitorOnCopy -> setChecked(false);
+    m_page -> grpIntent -> setButton(INTENT_PERCEPTUAL);
 }
 
 
@@ -257,6 +291,14 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 
 PreferencesDialog::~PreferencesDialog()
 {
+}
+
+void PreferencesDialog::slotDefault()
+{
+    m_general->setDefault();
+    //m_directories->setDefault();
+    //m_undoRedo->setDefault();
+    m_colorSettings->setDefault();
 }
 
 void PreferencesDialog::editPreferences()

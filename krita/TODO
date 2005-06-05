@@ -14,9 +14,6 @@ Integration
 	* write the Krita handbook.
 
 Colorspace independence (found with the test colorstrategy)
-	* selections seems yellowish
-	* airbrush seems wrong/yellowish
-	*eraser doesn't work
 	* tool gradient uses wrong colors
 	*brightness/contrast and the like don't work.
 	

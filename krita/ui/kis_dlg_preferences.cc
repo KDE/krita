@@ -301,12 +301,13 @@ void PreferencesDialog::slotDefault()
     m_colorSettings->setDefault();
 }
 
-void PreferencesDialog::editPreferences()
+bool PreferencesDialog::editPreferences()
 {
 	PreferencesDialog* dialog;
 
 	dialog = new PreferencesDialog();
-	if( dialog->exec() == Accepted )
+        bool baccept = ( dialog->exec() == Accepted );
+	if( baccept )
 	{
  		KisConfig cfg;
  		cfg.defCursorStyle(dialog -> m_general -> cursorStyle());
@@ -326,6 +327,7 @@ void PreferencesDialog::editPreferences()
 		cfg.setRenderIntent( dialog -> m_colorSettings -> m_page -> grpIntent -> selectedId());
 	}
         delete dialog;
+        return baccept;
 }
 
 #include "kis_dlg_preferences.moc"

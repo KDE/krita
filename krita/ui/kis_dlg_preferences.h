@@ -124,7 +124,7 @@ class PreferencesDialog : public KDialogBase
 
 public:
 
-	static void editPreferences();
+	static bool editPreferences();
 
 
 protected:

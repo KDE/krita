@@ -1037,11 +1037,12 @@ void KisView::slotInsertImageAsLayer()
 
 void KisView::saveLayerAsImage()
 {
-	QString mimelist = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export).join(" ");
+    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
+	QString mimelist = listMimeFilter.join(" ");
 
 	KFileDialog fd (QString::null, mimelist, this, "Export Layer", true);
 	fd.setCaption(i18n("Export Layer"));
-	fd.setMimeFilter(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+	fd.setMimeFilter(listMimeFilter);
 	fd.setOperationMode(KFileDialog::Saving);
 
 	if (!fd.exec()) return;
@@ -1344,12 +1345,14 @@ void KisView::mergeLayer()
 
 void KisView::preferences()
 {
-	PreferencesDialog::editPreferences();
+    if ( PreferencesDialog::editPreferences() )
+    {
 	resetMonitorProfile();
 	canvasRefresh();
 	if (currentTool()) {
-		setCanvasCursor(currentTool() -> cursor());
+            setCanvasCursor(currentTool() -> cursor());
 	}
+    }
 }
 
 void KisView::layerCompositeOp(const KisCompositeOp& compositeOp)

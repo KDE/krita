@@ -986,6 +986,16 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 	return v;
 }
 
+void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
+{
+	KisConfig cfg;
+	QString monitorProfileName = cfg.monitorProfile();
+	KisProfileSP profile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
+	painter.scale(zoomX, zoomY);
+	paintContent(painter, rect, profile);
+	
+}
+
 void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfileSP profile)
 {
 	Q_INT32 x1;

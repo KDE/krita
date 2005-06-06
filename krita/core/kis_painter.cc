@@ -24,6 +24,7 @@
 #include <cfloat>
 #include <cmath>
 #include <climits>
+#include <strings.h>
 
 #include "qbrush.h"
 #include "qcolor.h"

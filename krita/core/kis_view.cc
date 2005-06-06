@@ -1523,7 +1523,7 @@ void KisView::print(KPrinter& printer)
 	gc.setClipping(false);
 
 	KisConfig cfg;
-	QString printerProfileName = cfg.monitorProfile();
+	QString printerProfileName = cfg.printerProfile();
 	KisProfileSP printerProfile = KisColorSpaceRegistry::instance() -> getProfileByName(printerProfileName);
 
 	if (printerProfile != 0)

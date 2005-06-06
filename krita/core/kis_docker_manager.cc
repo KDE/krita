@@ -486,7 +486,6 @@ void KisDockerManager::setupDockers()
 	// ---------------------------------------------------------------------
 	// Colors
 
-
 	m_hsvwidget = new KisHSVWidget(m_view, "hsv");
 	m_hsvwidget -> setCaption(i18n("HSV"));
 	if ( cfg.dockerStyle() == DOCKER_SLIDER ) {

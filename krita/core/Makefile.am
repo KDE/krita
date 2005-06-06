@@ -40,7 +40,7 @@ libkritacore_la_SOURCES = kis_paint_device.cc kis_layer.cc kis_image.cc \
 		KIsImageIface.skel kis_selection_manager.cc kis_scale_visitor.cc kis_transform_visitor.cc \
 		kis_rotate_visitor.cc kis_quantum_operations.cc kis_clipboard.cc \
 		kis_filter.cc kis_filter_registry.cc \
-		kis_docker_manager.cc kis_composite_op.cc
+		kis_docker_manager.cc kis_composite_op.cc kis_color.cc
 
 
 noinst_HEADERS = kis_paint_device.h kis_layer.h kis_image.h kis_doc.h \

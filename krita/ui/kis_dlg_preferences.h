@@ -47,7 +47,7 @@ public:
 
 	bool saveOnExit();
 	enumCursorStyle cursorStyle();
-
+	void setDefault();
 private:
 
 	QCheckBox *m_saveOnExit;
@@ -67,6 +67,7 @@ class DirectoriesTab : public QWidget
 public:
 
 	DirectoriesTab( QWidget *parent = 0, const char *name = 0 );
+	void setDefault();
 
 private slots:
 
@@ -84,6 +85,7 @@ class UndoRedoTab : public QWidget
 	Q_OBJECT
 
 public:
+	void setDefault();
 
 	UndoRedoTab( QWidget *parent = 0, const char *name = 0 );
 };
@@ -105,6 +107,7 @@ private slots:
 	void refillImportProfiles(const KisID & s);
 
 public:
+	void setDefault();
 
 	WdgColorSettings * m_page;
 };
@@ -135,6 +138,8 @@ protected:
 	DirectoriesTab* m_directories;
 	UndoRedoTab* m_undoRedo; 
 	ColorSettingsTab* m_colorSettings;
+protected slots:
+    void slotDefault();
 };
 
 #endif

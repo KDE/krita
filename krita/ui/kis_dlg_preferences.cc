@@ -76,6 +76,10 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 	grid->setRowStretch( 2, 1 );
 }
 
+void GeneralTab::setDefault()
+{
+    m_cmbCursorShape -> setCurrentItem( CURSOR_STYLE_TOOLICON);
+}
 
 bool GeneralTab::saveOnExit()
 {
@@ -127,6 +131,11 @@ void DirectoriesTab::slotRequesterClicked( KURLRequester *requester )
 	requester->fileDialog()->setMode(KFile::Directory);
 }
 
+void DirectoriesTab::setDefault()
+{
+    //TODO
+}
+
 
 UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
 	: QWidget( _parent, _name )
@@ -145,6 +154,11 @@ UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
 	grid->setRowStretch( 2, 1 );
 }
 
+void UndoRedoTab::setDefault()
+{
+    //TODO
+}
+
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 	: QWidget(parent, name)
 {
@@ -156,7 +170,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 	l -> addWidget( m_page, 0, 0);
 
 	KisConfig cfg;
-	
+
 	m_page -> cmbWorkingColorSpace -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
 	m_page -> cmbWorkingColorSpace -> setCurrentText(cfg.workingColorSpace());
 
@@ -180,15 +194,31 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 	connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const KisID &)),
 		this, SLOT(refillMonitorProfiles(const KisID &)));
 
-	connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const KisID &)), 
+	connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const KisID &)),
 		this, SLOT(refillImportProfiles(const KisID &)));
 
-	connect(m_page -> cmbPrintingColorSpace, SIGNAL(activated(const KisID &)), 
+	connect(m_page -> cmbPrintingColorSpace, SIGNAL(activated(const KisID &)),
 		this, SLOT(refillPrintProfiles(const KisID &)));
 
 
 }
 
+void ColorSettingsTab::setDefault()
+{
+    m_page -> cmbWorkingColorSpace -> setCurrentText("RGBA");
+
+    m_page -> cmbPrintingColorSpace -> setCurrentText("CMYK");
+
+    m_page -> cmbMonitorProfile -> setCurrentText("None");
+    m_page -> cmbImportProfile -> setCurrentText("None");
+    m_page -> cmbPrintProfile -> setCurrentText("None");
+    m_page -> chkBlackpoint -> setChecked(false);
+    m_page -> chkDither8Bit -> setChecked(false);
+    m_page -> chkAskOpen -> setChecked(true);
+    m_page -> chkAskPaste -> setChecked(true);
+    m_page -> chkApplyMonitorOnCopy -> setChecked(false);
+    m_page -> grpIntent -> setButton(INTENT_PERCEPTUAL);
+}
 
 void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
 {
@@ -219,7 +249,7 @@ void ColorSettingsTab::refillPrintProfiles(const KisID & s)
 		if ((*it) -> deviceClass() == icSigOutputClass)
 			m_page -> cmbPrintProfile -> insertItem((*it) -> productName());
 	}
-	
+
 }
 
 void ColorSettingsTab::refillImportProfiles(const KisID & s)
@@ -257,6 +287,14 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 
 PreferencesDialog::~PreferencesDialog()
 {
+}
+
+void PreferencesDialog::slotDefault()
+{
+    m_general->setDefault();
+    //m_directories->setDefault();
+    //m_undoRedo->setDefault();
+    m_colorSettings->setDefault();
 }
 
 void PreferencesDialog::editPreferences()

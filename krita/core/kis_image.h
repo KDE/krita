@@ -114,6 +114,11 @@ public:
 
 	vKisLayerSP layers();
 	const vKisLayerSP& layers() const;
+	
+	/** returns a paintdevice that contains the merged layers of this image, within
+	 * the bounds of this image (with the colorspace and profile of this image) */
+	KisPaintDeviceSP mergedImage();
+	
 
 	// Get the active painting device
 	KisPaintDeviceSP activeDevice();

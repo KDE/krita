@@ -112,6 +112,12 @@ public:
 	/** Sets the height of the layer */
 	void setHeight(int h) { m_height = h; }
 
+	/** If sample merged is set to true, the paint device will get the bounds of the
+	 * floodfill from the complete image instead of the layer */
+
+	bool sampleMerged() { return m_sampleMerged; }
+	void setSampleMerged(bool set) { m_sampleMerged = set; }
+
 private:
 	// for floodfill
 	/**
@@ -128,6 +134,7 @@ private:
 	int m_size;
 	int m_width, m_height;
 	QRect m_rect;
+	bool m_sampleMerged;
 };
 
 

@@ -56,7 +56,7 @@ KisToolFill::KisToolFill()
 	m_oldColor = 0;
 	m_threshold = 15;
 	m_usePattern = false;
-	m_samplemerged = false;
+	m_sampleMerged = false;
 
 	// set custom cursor.
 	setCursor(KisCursor::fillerCursor());
@@ -85,6 +85,7 @@ bool KisToolFill::flood(int startX, int startY)
 	painter.setFillThreshold(m_threshold);
 	painter.setCompositeOp(m_compositeOp);
 	painter.setPattern(m_subject -> currentPattern());
+	painter.setSampleMerged(m_sampleMerged);
 	
 	KisProgressDisplayInterface *progress = m_subject -> progressDisplay();
 	if (progress) {
@@ -136,13 +137,18 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
 	m_checkUsePattern->setChecked(m_usePattern);
 	connect(m_checkUsePattern, SIGNAL(stateChanged(int)), this, SLOT(slotSetUsePattern(int)));
 
-	QGridLayout *optionLayout = new QGridLayout(widget, 3, 3);
+	m_checkSampleMerged = new QCheckBox(i18n("Sample merged"), widget);
+	m_checkSampleMerged->setChecked(m_sampleMerged);
+	connect(m_checkSampleMerged, SIGNAL(stateChanged(int)), this, SLOT(slotSetSampleMerged(int)));
+
+	QGridLayout *optionLayout = new QGridLayout(widget, 4, 3);
 	super::addOptionWidgetLayout(optionLayout);
 
 	optionLayout -> addWidget(m_lbThreshold, 1, 0);
 	optionLayout -> addWidget(m_slThreshold, 1, 1);
 
-	optionLayout -> addWidget(m_checkUsePattern, 2, 0);
+	optionLayout -> addMultiCellWidget(m_checkUsePattern, 2, 2, 0, 2);
+	optionLayout -> addMultiCellWidget(m_checkSampleMerged, 3, 3, 0, 2);
 
 	return widget;
 }
@@ -157,6 +163,13 @@ void KisToolFill::slotSetUsePattern(int state)
 	if (state == QButton::NoChange)
 		return;
 	m_usePattern = (state == QButton::On);
+}
+
+void KisToolFill::slotSetSampleMerged(int state)
+{
+	if (state == QButton::NoChange)
+		return;
+	m_sampleMerged = (state == QButton::On);
 }
 
 void KisToolFill::setup(KActionCollection *collection)

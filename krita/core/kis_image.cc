@@ -1157,6 +1157,25 @@ void KisImage::renderToPainter(Q_INT32 x1,
 	}
 }
 
+KisPaintDeviceSP KisImage::mergedImage()
+{
+	KisPaintDeviceSP dev = new KisPaintDevice(colorStrategy(), "merged image");
+	dev -> setProfile(profile());
+
+	KisPainter gc;
+
+	gc.begin(dev.data());
+
+	if (!m_layers.empty()) {
+		KisFlatten<flattenAllVisible> visitor(0, 0, width(), height());
+		visitor(gc, m_layers);
+	}
+
+	gc.end();
+	
+	return dev;
+}
+
 void KisImage::notify()
 {
 	notify(0, 0, width(), height());

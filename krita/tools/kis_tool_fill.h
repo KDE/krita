@@ -55,6 +55,7 @@ public:
 public slots:
 	virtual void slotSetThreshold(int);
 	virtual void slotSetUsePattern(int);
+	virtual void slotSetSampleMerged(int);
 
 private:
 	int m_threshold;
@@ -64,12 +65,13 @@ private:
 	KisPainter *m_painter;
 	KisCanvasSubject *m_subject;
 	KisImageSP m_currentImage;
-	bool *m_map, m_samplemerged, m_usePattern, m_useSelection;
+	bool *m_map, m_sampleMerged, m_usePattern, m_useSelection;
 	KisSelectionSP m_selection;
 
 	QLabel *m_lbThreshold;
 	KIntNumInput *m_slThreshold;
 	QCheckBox *m_checkUsePattern;
+	QCheckBox *m_checkSampleMerged;
 };
 
 

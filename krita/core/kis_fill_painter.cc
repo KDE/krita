@@ -68,11 +68,13 @@ KisFillPainter::KisFillPainter()
 	: super()
 {
     m_width = m_height = -1;
+	m_sampleMerged = false;
 }
 
 KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 {
     m_width = m_height = -1;
+	m_sampleMerged = false;
 }
 
 // 'regular' filling
@@ -229,21 +231,35 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 			m_width = m_height = 500;
 		}
 	}
-	
+
+	// Don't try to fill if we start outside the borders, just return an empty 'fill'
 	if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
 		return new KisSelection(m_device, "Fill Temporary Selection");
+
+	KisPaintDeviceSP sourceDevice = 0;
+
+	// sample merged?
+	if (m_sampleMerged) {
+		if (!m_device -> image()) {
+			kdDebug() << "No image to sample merged from associated with the device" << endl;
+			return new KisSelection(m_device, "Fill Temporary Selection");
+		}
+		sourceDevice = m_device -> image() -> mergedImage();
+	} else {
+		sourceDevice = m_device;
+	}
 
 	m_size = m_width * m_height;
 
 	KisSelectionSP selection = new KisSelection(m_device, "Fill Temporary Selection");
 	KisStrategyColorSpaceSP colorStrategy = selection -> colorStrategy();
-	KisStrategyColorSpaceSP devColorStrategy = m_device -> colorStrategy();
+	KisStrategyColorSpaceSP devColorStrategy = sourceDevice -> colorStrategy();
 	
-	QUANTUM* source = new QUANTUM[m_device->pixelSize()];
-	KisHLineIteratorPixel pixelIt = m_device->createHLineIterator(startX, startY, startX+1, false);
+	QUANTUM* source = new QUANTUM[sourceDevice->pixelSize()];
+	KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);
 	KisPixel pixel = pixelIt.rawData();
 
-	for (int i = 0; i < m_device -> pixelSize(); i++) {
+	for (int i = 0; i < sourceDevice -> pixelSize(); i++) {
 		source[i] = pixel[i];
 	}
 	
@@ -272,7 +288,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 
 		/* We need an iterator that is valid in the range (0,y) - (width,y). Therefore,
 		it is needed to start the iterator at the first position, and then skip to (x,y). */
-		pixelIt = m_device->createHLineIterator(0, y, m_width, false);
+		pixelIt = sourceDevice->createHLineIterator(0, y, m_width, false);
 		pixelIt += x;
 		QUANTUM diff = devColorStrategy -> difference(source, pixelIt.rawData());
 
@@ -333,7 +349,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 			continue;
 
 		// and go to the right
-		pixelIt = m_device -> createHLineIterator(x, y, m_width, false);
+		pixelIt = sourceDevice -> createHLineIterator(x, y, m_width, false);
 		selIt = selection -> createHLineIterator(x, y, m_width, true);
 
 		stop = false;

@@ -289,7 +289,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 			// XXX: Make selection threshold configurable
 			if (selIter.rawData()[0] > SELECTION_THRESHOLD) {
 				if (srcdev -> colorStrategy() -> alpha())
-					srcIter.rawData()[alphaPos] = *(selIter.rawData());
+					srcIter.rawData()[alphaPos] = QMIN(srcIter.rawData()[alphaPos], *(selIter.rawData()));
 				m_colorStrategy -> bitBlt(dstDepth,
 							  dstIter.rawData(), 
 							  dstRowSize,
@@ -376,7 +376,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 			// XXX: Make selection threshold configurable
 			if (selIter.rawData()[0] > SELECTION_THRESHOLD) {
 				if (srcdev -> colorStrategy() -> alpha())
-					srcIter.rawData()[alphaPos] = *(selIter.rawData());
+					srcIter.rawData()[alphaPos] = QMIN(srcIter.rawData()[alphaPos], *(selIter.rawData()));
 				m_colorStrategy -> bitBlt(dstDepth,
 							  dstIter.rawData(), 
 							  dstRowSize,

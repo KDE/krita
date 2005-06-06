@@ -1,7 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Template Color Model
+Name[da]=Farvemodelskabelon
+Name[es]=Modelo de plantilla de color
 Comment=Template Color model for developers
+Comment[da]=Farvemodelskabelon for udviklere
+Comment[es]=Modelo de plantilla de color para desarrolladores
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritatemplateplugin

@@ -251,6 +251,7 @@ void KisPalette::add(const KisPaletteEntry & c)
 
 void KisPalette::remove(const KisPaletteEntry & c)
 {
+	Q_UNUSED(c);
 // 	QValueVector<KisPaletteEntry>::iterator it = qFind(m_colors.begin(), m_colors.end(), c);
 // 	if (it != m_colors.end()) {
 // 		m_colors.erase(it);

@@ -496,13 +496,13 @@ double KisBrush::scaleForPressure(double pressure)
 Q_INT32 KisBrush::maskWidth(double pressure) const
 {
 	// Add one for sub-pixel shift
-	return ceil(width() * scaleForPressure(pressure)) + 1;
+	return static_cast<Q_INT32>(ceil(width() * scaleForPressure(pressure)) + 1);
 }
 
 Q_INT32 KisBrush::maskHeight(double pressure) const
 {
 	// Add one for sub-pixel shift
-	return ceil(height() * scaleForPressure(pressure)) + 1;
+	return static_cast<Q_INT32>(ceil(height() * scaleForPressure(pressure)) + 1);
 }
 
 KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const

@@ -85,14 +85,16 @@ Q_INT8 KisColorSpaceAlpha::difference(const QUANTUM* src1, const QUANTUM* src2)
 
 void KisColorSpaceAlpha::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
-	Q_UINT32 total;
-	while(nColors)
-	{
-		nColors--;
-		total += *colors[nColors] * weights[nColors];
+	if (nColors > 0) {
+		Q_UINT32 total = 0;
+
+		while(nColors)
+		{
+			nColors--;
+			total += *colors[nColors] * weights[nColors];
+		}
+		*dst = total / 255;
 	}
-	total >> 8;
-	*dst=total;
 }
 
 vKisChannelInfoSP KisColorSpaceAlpha::channels() const

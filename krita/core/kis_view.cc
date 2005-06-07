@@ -1935,9 +1935,7 @@ void KisView::layerAdd()
 		KisConfig cfg;
 		NewLayerDialog dlg(img->colorStrategy()->id(), img->nextLayerName(), this);
 
-		dlg.exec();
-
-		if (dlg.result() == QDialog::Accepted) {
+		if (dlg.exec() == QDialog::Accepted) {
 			KisLayerSP layer = m_doc -> layerAdd(img,
 							     dlg.layerName(),
 							     dlg.compositeOp(),

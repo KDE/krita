@@ -235,5 +235,4 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 	}
 	
 	emit notifyProgressDone(this);
-	delete [] channels;
 }

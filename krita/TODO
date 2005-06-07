@@ -2,20 +2,42 @@ Krita TODO
 
 Transform tool
 
-* It should use filter during scaling
-
-* It doesn't handle "infinite" selections
+	* It should use filter during scaling
+	* It doesn't handle "infinite" selections
 
 Integration
 
-* A krita document embedded in KWord has the wrong scaling
-
-
+	* A krita document embedded in KWord has the wrong scaling and transparency
+	* A krita document embedded in another document prints at the wrong place
 	* write the Krita handbook.
+	* There is currently no kimgio module for Krita images.
+
+
 
 Colorspace independence (found with the test colorstrategy)
+
 	* tool gradient uses wrong colors
-	*brightness/contrast and the like don't work.
+	* brightness/contrast and the like don't work.
+	* Map colorspace transforms using the full set of discriminating features:
+		source color space (not null) // KisStrategyColorspace descendant
+		destination color space (not null) // KisStrategyColorspace descendant
+		source profile (may be null) // KisProfile
+		destination profile (may be null) // KisProfile
+		src lcms color type (may be 0) // frex (COLORSPACE_SH(PT_CMYK) | 
+							CHANNELS_SH(4) |
+							BYTES_SH(1) | EXTRA_SH(1)) for cmyka
+		dst lcms color type (may be 0)
+		rendering intent
+
+
+        * Replace QColor with KisColor, where KisColor is a combination of a
+          byte array and a pointer to a color model
+	* Add UI for display settings for high bit depths -- we have upscale
+          and downscale, but that's not enough. I want, as in OpenEXR, to be
+          able to set the lighting stops.
+        * Add channel-depths other than 8 bits.
+	* http://www.argyllcms.com may be faster than lcms in some
+	  cases. Investigate this
 	
 Core
 
@@ -40,6 +62,11 @@ Core
 	* Long painter operations (e.g., convolution painter) should use the 
           progressbar and be cancelable.
 
+	* we now have a checkered background layer that we composite everything
+	  on, but in future we should composite the image first, and then render
+	  it onto a background image -- or not, if another KOffice app wants it
+	  rendered with transparency. But that'd probably better wait until Qt 4,
+	  where it would be a hardware accelerated snip.
 
 File Format:
 
@@ -61,8 +88,7 @@ Import/Export
 
 User Interface
 
-        * The description field in color settings is empty
-
+	* The description field in color settings is empty
         * Give color strategies an option page just like tools. Give layers an option page,
 	  combine both pages to show for layer properties. Color strategies can be stateful.
 	* Create brush-shape outline cursor
@@ -119,15 +145,6 @@ Profiles
 
 Color conversions
 
-        * Replace QColor with KisColor, where KisColor is a combination of a
-          byte array and a pointer to a color model
-       * Add UI for depth choice
-        * Add UI for display settings for high bit depths -- we have upscale
-          and downscale, but that's not enough. I want, as in OpenEXR, to be
-          able to set the lighting stops.
-        * Add channel-depths other than 8 bits.
-	* http://www.argyllcms.com may be faster than lcms in some
-	  cases. Investigatge this
 
 Tools
 
@@ -181,12 +198,6 @@ Printing
 	* No use of the resolution parameter (but the resolution dialog is still only a .ui file and not implemented at all)
 	* Use gutenprint or something better for image printing.
 
-Integration
-
-	* There is currently no kimgio module for Krita images.
 
 Paintops
-	* The convolution paintop doesn't do anything at all. (But it isn't
-	  used anywhere yet, so that's not so bad, perhaps. We cannot add a
-	  new tool at the moment anyway. Let's scrap this todo item.)
-
+	* The convolution paintop doesn't do anything at all -- but it can be used using paint-by-filters.

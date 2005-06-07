@@ -1,0 +1,73 @@
+/*
+ *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+#include <kunittest/runner.h>
+#include <kunittest/module.h>
+
+#include "kis_tiled_data_tester.h"
+#include "kis_datamanager.h"
+
+using namespace KUnitTest;
+
+KUNITTEST_MODULE( kunittest_kis_tiled_data_tester, "Tiled Data Tester" );
+KUNITTEST_MODULE_REGISTER_TESTER( KisTiledDataTester );
+
+#define TEST_PIXEL_SIZE 4
+
+static Q_UINT8 defaultPixel[TEST_PIXEL_SIZE] = {0, 0, 0, OPACITY_TRANSPARENT};
+
+void KisTiledDataTester::allTests()
+{
+	KisDataManager *dm = new KisDataManager(TEST_PIXEL_SIZE, defaultPixel);
+
+	Q_INT32 extentX;
+	Q_INT32 extentY;
+	Q_INT32 extentWidth;
+	Q_INT32 extentHeight;
+
+	dm -> extent(extentX, extentY, extentWidth, extentHeight);
+	CHECK(extentWidth, 0);
+	CHECK(extentHeight, 0);
+
+	const Q_UINT8 *readOnlyPixel = dm -> pixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
+	dm -> extent(extentX, extentY, extentWidth, extentHeight);
+	CHECK(extentWidth, 0);
+	CHECK(extentHeight, 0);
+
+	Q_UINT8 *writablePixel = dm -> writablePixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
+	dm -> extent(extentX, extentY, extentWidth, extentHeight);
+	CHECK(extentX, 0);
+	CHECK(extentY, 0);
+	CHECK(extentWidth, KisTile::WIDTH);
+	CHECK(extentHeight, KisTile::HEIGHT);
+
+	writablePixel = dm -> writablePixel(-KisTile::WIDTH, -KisTile::HEIGHT);
+	dm -> extent(extentX, extentY, extentWidth, extentHeight);
+	CHECK(extentX, -KisTile::WIDTH);
+	CHECK(extentY, -KisTile::HEIGHT);
+	CHECK(extentWidth, 2*KisTile::WIDTH);
+	CHECK(extentHeight, 2*KisTile::HEIGHT);
+
+	dm -> clear();
+	dm -> extent(extentX, extentY, extentWidth, extentHeight);
+	CHECK(extentWidth, 0);
+	CHECK(extentHeight, 0);
+
+	delete dm;
+}
+

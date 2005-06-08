@@ -18,6 +18,7 @@ Name[ru]=Инструменты выделения
 Name[sr]=Алати за избор
 Name[sr@Latn]=Alati za izbor
 Name[sv]=Markeringsverktyg
+Name[uk]=Інструменти виділення
 Name[zh_CN]=选择工具
 ServiceTypes=Krita/CoreModule
 Type=Service

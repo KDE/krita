@@ -18,6 +18,7 @@ Name[ru]=Ломаная
 Name[sr]=Алат за полилиније
 Name[sr@Latn]=Alat za polilinije
 Name[sv]=Flerlinjesverktyg
+Name[uk]=Інструмент ламаної лінії
 Name[zh_CN]=折线工具
 ServiceTypes=Krita/CoreModule
 Type=Service

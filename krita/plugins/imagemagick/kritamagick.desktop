@@ -16,6 +16,7 @@ Name[ru]=Интерфейс к ImageMagick
 Name[sr]=Омотач ImageMagick-а
 Name[sr@Latn]=Omotač ImageMagick-a
 Name[sv]=ImageMagick-gränssnitt
+Name[uk]=Обгортка для ImageMagick
 Name[zh_CN]=ImageMagick 管道
 Comment=ImageMagick based import/export and file conversion
 Comment[da]=ImageMagick-baseret import, eksport og filkonvertering

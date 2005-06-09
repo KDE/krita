@@ -81,11 +81,11 @@ void KisMemento::deleteAll(KisTile *tile)
 
 void KisMemento::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
 {
-	Q_INT32 maxX = -10000;
-	Q_INT32 maxY = -10000;
-	x=10000;
-	y=10000;
-	
+	Q_INT32 maxX = LONG_MIN;
+	Q_INT32 maxY = LONG_MIN;
+	x = LONG_MAX;
+	y = LONG_MAX;
+
 	for(int i = 0; i < 1024; i++)
 	{
 		KisTile *tile = m_hashTable[i];

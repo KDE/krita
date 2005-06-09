@@ -37,6 +37,7 @@
 #include <kis_view.h>
 
 #include "tool_star.h"
+#include "tool_star.moc"
 #include "kis_tool_star.h"
 
 

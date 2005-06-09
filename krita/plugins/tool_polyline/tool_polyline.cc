@@ -70,4 +70,4 @@ ToolPolyline::~ToolPolyline()
 {
 }
 
-//#include "tool_polyline.moc"
+#include "tool_polyline.moc"

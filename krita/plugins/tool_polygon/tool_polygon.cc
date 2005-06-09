@@ -37,6 +37,7 @@
 #include <kis_view.h>
 
 #include "tool_polygon.h"
+#include "tool_polygon.moc"
 #include "kis_tool_polygon.h"
 
 

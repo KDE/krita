@@ -610,7 +610,7 @@ KisTool *KisView::currentTool() const
 	}
 }
 
-KisTool *KisView::findTool(QString toolName, enumInputDevice inputDevice) const
+KisTool *KisView::findTool(const QString &toolName, enumInputDevice inputDevice) const
 {
 	if (inputDevice == INPUT_DEVICE_UNKNOWN) {
 		inputDevice = currentInputDevice();

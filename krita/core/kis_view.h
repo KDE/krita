@@ -287,7 +287,7 @@ private:
 	void setInputDevice(enumInputDevice inputDevice);
 	enumInputDevice currentInputDevice() const;
 
-	KisTool *findTool(QString toolName, enumInputDevice inputDevice = INPUT_DEVICE_UNKNOWN) const;
+	KisTool *findTool(const QString &toolName, enumInputDevice inputDevice = INPUT_DEVICE_UNKNOWN) const;
 
 public slots:
 

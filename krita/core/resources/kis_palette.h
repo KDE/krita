@@ -50,6 +50,7 @@ struct KisPaletteEntry {
  */
 class KisPalette : public KisResource {
 	typedef KisResource super;
+
 	Q_OBJECT
 
 public:

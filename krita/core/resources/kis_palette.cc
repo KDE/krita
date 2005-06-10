@@ -38,7 +38,6 @@
 
 #include "kis_global.h"
 #include "kis_palette.h"
-#include "kis_palette.moc"
 #include "kis_colorspace_registry.h"
 #include "kis_iterators_pixel.h"
 
@@ -263,3 +262,5 @@ KisPaletteEntry KisPalette::getColor(Q_UINT32 index)
 {
 	return m_colors[index];
 }
+
+#include "kis_palette.moc"

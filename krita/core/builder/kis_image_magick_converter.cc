@@ -318,8 +318,40 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 		}
 
 		if (image -> columns && image -> rows) {
-			KisLayerSP layer = new KisLayer(m_img, m_img -> nextLayerName(), OPACITY_OPAQUE);
-			Q_CHECK_PTR(layer);
+
+
+			// Opacity (set by the photoshop import filter)
+			QUANTUM opacity = OPACITY_OPAQUE;
+			const ImageAttribute * attr = GetImageAttribute(image, "[layer-opacity]");
+			if (attr != 0) {
+				opacity = QUANTUM_MAX - Downscale(QString(attr->value).toInt());
+			}
+
+			KisLayerSP layer = 0;
+
+			attr = GetImageAttribute(image, "[layer-name]");
+			if (attr != 0) {
+				layer = new KisLayer(m_img, attr->value, opacity);
+			}
+			else {
+				layer = new KisLayer(m_img, m_img -> nextLayerName(), opacity);
+			}
+
+			Q_ASSERT(layer);
+
+			// Layerlocation  (set by the photoshop import filter)
+			Q_INT32 x_offset = 0;
+			Q_INT32 y_offset = 0;
+			
+			attr = GetImageAttribute(image, "[layer-xpos]");
+			if (attr != 0) {
+				x_offset = QString(attr->value).toInt();
+			}
+
+			attr = GetImageAttribute(image, "[layer-ypos]");
+			if (attr != 0) {
+				y_offset = QString(attr->value).toInt();
+			}
 
 			if (profile)
 				layer -> setProfile(profile);
@@ -365,6 +397,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 					return KisImageBuilder_RESULT_INTR;
 				}
 			}
+			layer->move(x_offset, y_offset);
 		}
 
 		emit notifyProgressDone(this);

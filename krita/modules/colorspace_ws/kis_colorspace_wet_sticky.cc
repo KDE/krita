@@ -258,6 +258,11 @@ bool KisColorSpaceWetSticky::convertPixelsTo(const QUANTUM * src, KisProfileSP /
 
 }
 
+void KisColorSpaceWetSticky::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const
+{
+	//XXX does nothing for now
+}
+
 
 void KisColorSpaceWetSticky::bitBlt(Q_INT32 stride,
 				    QUANTUM *dst,

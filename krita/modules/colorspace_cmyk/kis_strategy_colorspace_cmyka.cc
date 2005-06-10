@@ -201,6 +201,11 @@ QImage KisStrategyColorSpaceCMYKA::convertToQImage(const QUANTUM *data, Q_INT32 
 
 }
 
+void KisStrategyColorSpaceCMYKA::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const
+{
+	//XXX does nothing for now
+}
+
 
 void KisStrategyColorSpaceCMYKA::bitBlt(Q_INT32 stride,
 				       QUANTUM *dst,

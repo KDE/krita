@@ -36,7 +36,7 @@
 #include "kis_id.h"
 
 namespace {
-	const PIXELTYPE PIXEL_MASK = 0;
+	const Q_UINT8 PIXEL_MASK = 0;
 }
 
 KisColorSpaceAlpha::KisColorSpaceAlpha() :
@@ -123,10 +123,10 @@ QImage KisColorSpaceAlpha::convertToQImage(const QUANTUM *data, Q_INT32 width, Q
 
 		// Temporary copy until I figure out something better
 
-		PIXELTYPE PIXEL_BLUE = 0;
-		PIXELTYPE PIXEL_GREEN = 1;
-		PIXELTYPE PIXEL_RED = 2;
-		PIXELTYPE PIXEL_ALPHA = 3;
+		Q_UINT8 PIXEL_BLUE = 0;
+		Q_UINT8 PIXEL_GREEN = 1;
+		Q_UINT8 PIXEL_RED = 2;
+		Q_UINT8 PIXEL_ALPHA = 3;
 
 		// XXX: for previews of the mask, it is be handy to
 		// make this always black.
@@ -166,6 +166,15 @@ bool KisColorSpaceAlpha::convertPixelsTo(const QUANTUM * src, KisProfileSP /*src
 
 }
 
+void KisColorSpaceAlpha::adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
+{
+	//XXX does nothing for now
+}
+
+void KisColorSpaceAlpha::adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
+{
+	//XXX does nothing for now
+}
 
 void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 				QUANTUM *dst,

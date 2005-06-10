@@ -27,8 +27,8 @@
 #include "kis_pixel.h"
 
 // XXX: move into namespace.
-const PIXELTYPE PIXEL_GRAY = 0;
-const PIXELTYPE PIXEL_GRAY_ALPHA = 1;
+const Q_UINT8 PIXEL_GRAY = 0;
+const Q_UINT8 PIXEL_GRAY_ALPHA = 1;
 
 
 class KisStrategyColorSpaceGrayscale : public KisStrategyColorSpace {
@@ -64,6 +64,8 @@ public:
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
+	virtual void adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const;
+	virtual void adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const;
 
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst,

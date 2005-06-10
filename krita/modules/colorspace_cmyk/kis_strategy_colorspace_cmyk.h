@@ -66,6 +66,7 @@ public:
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
+	virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
 
 	virtual void bitBlt(Q_INT32 stride,
 			    QUANTUM *dst,

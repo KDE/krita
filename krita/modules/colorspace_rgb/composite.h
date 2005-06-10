@@ -592,7 +592,7 @@ void compositeCopy(Q_INT32 pixelSize,
 	}
 }
 
-void compositeCopyChannel(PIXELTYPE pixel, 
+void compositeCopyChannel(Q_UINT8 pixel, 
 			   Q_INT32 pixelSize,
 			   QUANTUM *dst, 
 			   Q_INT32 dstRowSize,

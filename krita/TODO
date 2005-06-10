@@ -15,7 +15,6 @@ Integration
 
 
 Colorspace independence (found with the test colorstrategy)
-
 	* tool gradient uses wrong colors
 	* brightness/contrast and the like don't work.
 	* Map colorspace transforms using the full set of discriminating features:
@@ -35,9 +34,10 @@ Colorspace independence (found with the test colorstrategy)
 	* Add UI for display settings for high bit depths -- we have upscale
           and downscale, but that's not enough. I want, as in OpenEXR, to be
           able to set the lighting stops.
-        * Add channel-depths other than 8 bits.
+        * Add channel-depths other than 8 bits. Through seperate colorspaces.
 	* http://www.argyllcms.com may be faster than lcms in some
 	  cases. Investigate this
+	* get rid of QUANTUM, upscale, downscale
 	
 Core
 

@@ -53,6 +53,8 @@
 #include "kis_colorspace_registry.h"
 
 #define DEBUG_IMAGES 0
+const Q_INT32 RENDER_HEIGHT = 128;
+const Q_INT32 RENDER_WIDTH = 128;
 
 #if DEBUG_IMAGES
 static int numImages = 0;

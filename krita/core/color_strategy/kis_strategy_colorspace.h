@@ -151,6 +151,16 @@ public:
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL) = 0;
 
 	/**
+	 * Adjust the brightness of a pixel as told by adjust [-100;100]
+	 */
+	virtual void adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const = 0;
+	
+	/**
+	 * Adjust the contrast of a pixel as told by adjust [-100;100]
+	 */
+	virtual void adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const = 0;
+	
+	/**
 	 * Compose two arrays of pixels together. If source and target
 	 * are not the same colour model, the source pixels will be
 	 * converted to the target model.

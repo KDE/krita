@@ -47,7 +47,7 @@ KisStrategyColorSpaceTestCS::KisStrategyColorSpaceTestCS() :
 {
 	m_channels.push_back(new KisChannelInfo(i18n("red"), 2, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("green"), 1, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("blue-green"), 0, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("blue+green"), 0, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 3, ALPHA));
 }
 
@@ -87,7 +87,7 @@ void KisStrategyColorSpaceTestCS::toQColor(const QUANTUM *src, QColor *c, QUANTU
 	*opacity = pix->alpha;
 }
 
-Q_INT8 KisStrategyColorSpaceTestCS::difference(const QUANTUM* src1, const QUANTUM* src2)
+Q_INT8 KisStrategyColorSpaceTestCS::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
 {
 	testcspixel *pix1 = (testcspixel *)src1;
 	testcspixel *pix2 = (testcspixel *)src2;
@@ -207,6 +207,42 @@ QImage KisStrategyColorSpaceTestCS::convertToQImage(const QUANTUM *data, Q_INT32
 	}
 
 	return img;
+}
+
+void KisStrategyColorSpaceTestCS::adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
+{
+	testcspixel *spix = (testcspixel *)src;
+	testcspixel *dpix = (testcspixel *)dst;
+	
+	Q_INT32 nd = spix->r + adjust;
+	dpix->r = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+	
+	nd = spix->g + adjust;
+	dpix->g = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+	
+	nd = (spix->bmg - spix->g)/16 + adjust;
+	dpix->bmg = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+
+	dpix->bmg = dpix->bmg*16 + dpix->g;
+}
+
+void KisStrategyColorSpaceTestCS::adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
+{
+	testcspixel *spix = (testcspixel *)src;
+	testcspixel *dpix = (testcspixel *)dst;
+/*	
+	Q_INT32 nd = spix->r + adjust;
+	dpix->r = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+	
+	nd = spix->g + adjust;
+	dpix->g = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+	
+	nd = (spix->bmg - spix->g)/16 + adjust;
+	dpix->bmg = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+
+	dpix->bmg = dpix->bmg*16 + dpix->g;
+	*/
+	//XXX Nothing done yet
 }
 
 inline int INT_MULT(int a, int b)

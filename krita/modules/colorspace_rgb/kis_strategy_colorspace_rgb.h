@@ -26,11 +26,10 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_pixel.h"
 #include "koffice_export.h"
-
-const PIXELTYPE PIXEL_BLUE = 0;
-const PIXELTYPE PIXEL_GREEN = 1;
-const PIXELTYPE PIXEL_RED = 2;
-const PIXELTYPE PIXEL_ALPHA = 3;
+const Q_UINT8 PIXEL_BLUE = 0;
+const Q_UINT8 PIXEL_GREEN = 1;
+const Q_UINT8 PIXEL_RED = 2;
+const Q_UINT8 PIXEL_ALPHA = 3;
 
 class KRITATOOL_EXPORT KisStrategyColorSpaceRGB : public KisStrategyColorSpace {
 public:
@@ -63,6 +62,9 @@ public:
 				       Q_INT32 renderingIntent);
 
 	virtual KisCompositeOpList userVisiblecompositeOps() const;
+	
+	virtual void adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const;
+	virtual void adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const;
 
 protected:
 

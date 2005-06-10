@@ -127,10 +127,10 @@ QImage KisStrategyColorSpaceGrayscale::convertToQImage(const QUANTUM *data, Q_IN
 			QUANTUM q = *( data + i + PIXEL_GRAY );
 
 			// XXX: Temporarily moved here to get rid of these global constants
-			const PIXELTYPE PIXEL_BLUE = 0;
-			const PIXELTYPE PIXEL_GREEN = 1;
-			const PIXELTYPE PIXEL_RED = 2;
-			const PIXELTYPE PIXEL_ALPHA = 3;
+			const Q_UINT8 PIXEL_BLUE = 0;
+			const Q_UINT8 PIXEL_GREEN = 1;
+			const Q_UINT8 PIXEL_RED = 2;
+			const Q_UINT8 PIXEL_ALPHA = 3;
 
 			*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_GRAY_ALPHA );
 			*( j + PIXEL_RED )   = q;
@@ -155,6 +155,17 @@ QImage KisStrategyColorSpaceGrayscale::convertToQImage(const QUANTUM *data, Q_IN
 	// Create display transform if not present
 	return img;
 }
+
+void KisStrategyColorSpaceGrayscale::adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
+{
+	//XXX does nothing for now
+}
+
+void KisStrategyColorSpaceGrayscale::adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
+{
+	//XXX does nothing for now
+}
+
 
 void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 pixelSize,
 				      QUANTUM *dst,

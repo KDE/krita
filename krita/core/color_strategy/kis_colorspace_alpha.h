@@ -58,6 +58,9 @@ public:
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
+	virtual void adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const;
+	virtual void adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const;
+
 	virtual void setMaskColor(QColor c) { m_maskColor = c; }
 	virtual void setInverted(bool b) { m_inverted = b; }
 

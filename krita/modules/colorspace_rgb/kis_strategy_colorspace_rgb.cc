@@ -183,6 +183,30 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 	return img;
 }
 
+void KisStrategyColorSpaceRGB::adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
+{
+	for( int i = 0; i < 3; i++)
+	{
+		// change the brightness
+		int nd = src[ i ] + adjust;
+		dst[i] = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+	}
+}
+
+void KisStrategyColorSpaceRGB::adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
+{
+	double contrast = (100.0 + adjust) / 100;
+	contrast *= contrast;
+	
+	for( int i = 0; i < 3; i++)
+	{
+		// change the brightness
+		int nd = src[ i ];
+		nd = (int)(((nd - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2);
+		dst[i] = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+	}
+}
+
 inline int INT_MULT(int a, int b)
 {
 	int c = a * b + 0x80;

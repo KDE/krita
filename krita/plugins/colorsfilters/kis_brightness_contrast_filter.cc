@@ -67,22 +67,18 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 
 	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-	Q_INT32 depth = src->nChannels() - 1;
-	double contrast = (100.0 + configBC->contrast()) / 100;
-	contrast *= contrast;
 
 	setProgressTotalSteps(rect.width() * rect.height());
 	Q_INT32 pixelsProcessed = 0;
 
 	while( ! srcIt.isDone()  && !cancelRequested())
 	{
-		for( int i = 0; i < depth; i++)
-		{
-			// change the brightness
-			int nd = srcIt.oldRawData()[ i ] + configBC->brightness();
-			nd = (int)(((nd - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2);
-			dstIt[i] = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
-		}
+		// change the brightness
+		src->colorStrategy()->adjustBrightness(srcIt.oldRawData(), dstIt.rawData(), configBC->brightness());
+			
+		// change the contrast
+		src->colorStrategy()->adjustContrast(dstIt.rawData(), dstIt.rawData(), configBC->contrast());
+		
 		++srcIt;
 		++dstIt;
 

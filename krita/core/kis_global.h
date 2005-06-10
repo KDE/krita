@@ -54,26 +54,14 @@
  */
 #define NATIVE_MIMETYPE "application/x-kra"
 
-/**
- * Size of a quantum -- this could be 8, 16, 32 or 64 -- but for now, only 8 is possible.
- */
-#ifndef QUANTUM_DEPTH
-#define QUANTUM_DEPTH 8 // bits, i.e., one byte per channel
-#endif
 
-#if (QUANTUM_DEPTH == 8)
 typedef Q_UINT8 QUANTUM;
 const QUANTUM QUANTUM_MAX = UCHAR_MAX;
 const QUANTUM OPACITY_TRANSPARENT = 0;
 const QUANTUM OPACITY_OPAQUE = QUANTUM_MAX;
-const QUANTUM MAX_SELECTED = QUANTUM_MAX;
-const QUANTUM MIN_SELECTED = 0;
-const QUANTUM SELECTION_THRESHOLD = 1;
-#endif
-
-const Q_INT32 IMG_DEFAULT_DEPTH = 4;
-const Q_INT32 RENDER_HEIGHT = 128;
-const Q_INT32 RENDER_WIDTH = 128;
+const Q_UINT8 MAX_SELECTED = UCHAR_MAX;
+const Q_UINT8 MIN_SELECTED = 0;
+const Q_UINT8 SELECTION_THRESHOLD = 1;
 
 enum enumInputDevice {
 	INPUT_DEVICE_UNKNOWN,
@@ -118,10 +106,6 @@ enum enumPaintStyles {
 	PAINTSTYLE_HARD,
 	PAINTSTYLE_SOFT
 };
-
-// If QUANTUM changes size, this should change, too.
-typedef Q_UINT8 PIXELTYPE;
-
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 

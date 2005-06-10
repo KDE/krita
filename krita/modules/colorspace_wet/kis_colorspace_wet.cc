@@ -336,6 +336,12 @@ QImage KisColorSpaceWet::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_I
 	return img;
 }
 
+void KisColorSpaceWet::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const
+{
+	//XXX does nothing for now
+}
+
+
 void KisColorSpaceWet::bitBlt(Q_INT32 stride,
 			      QUANTUM *dst,
 			      Q_INT32 dststride,

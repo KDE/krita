@@ -35,6 +35,9 @@
 #include "kis_strategy_colorspace_grayscale.h"
 #include "kis_iterators_pixel.h"
 
+#define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
+#define upscale(value)  (value) // ((QUANTUM) (257UL*(value)))
+
 namespace {
 	const Q_INT32 MAX_CHANNEL_GRAYSCALE = 1;
 	const Q_INT32 MAX_CHANNEL_GRAYSCALEA = 2;

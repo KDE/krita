@@ -29,9 +29,13 @@
 
 #include "kis_image.h"
 #include "kis_strategy_colorspace_rgb.h"
-#include "composite.h"
 #include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
+
+#include "composite.h"
+
+#define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
+#define upscale(value)  (value) // ((QUANTUM) (257UL*(value)))
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_RGB = 3;

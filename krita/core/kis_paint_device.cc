@@ -621,7 +621,7 @@ void KisPaintDevice::convertFromImage(const QImage& img)
 	for (Q_INT32 y = 0; y < img.height(); y++) {
 		for (Q_INT32 x = 0; x < img.width(); x++) {
 			rgb = img.pixel(x, y);
-			c.setRgb(upscale(qRed(rgb)), upscale(qGreen(rgb)), upscale(qBlue(rgb)));
+			c.setRgb(qRed(rgb), qGreen(rgb), qBlue(rgb));
 
 			if (img.hasAlphaBuffer())
 				opacity = qAlpha(rgb);

@@ -109,8 +109,5 @@ enum enumPaintStyles {
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-#define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
-#define upscale(value)  (value) // ((QUANTUM) (257UL*(value)))
-
 #endif // KISGLOBAL_H_
 

@@ -100,7 +100,7 @@ int NewLayerDialog::opacity() const
 		return 0;
 
 	opacity = opacity * 255 / 100;
-	return upscale(opacity - 1);
+	return opacity - 1;
 }
 
 KisCompositeOp NewLayerDialog::compositeOp() const

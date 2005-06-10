@@ -112,8 +112,7 @@ QUANTUM KisDlgCreateImg::backgroundOpacity() const
 		return 0;
 
 	opacity = opacity * 255 / 100;
-	return upscale(opacity - 1);
-
+	return opacity;
 }
 
 QString KisDlgCreateImg::imgName() const

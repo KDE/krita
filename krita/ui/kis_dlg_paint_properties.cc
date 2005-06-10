@@ -47,7 +47,6 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName,
 	QGroupBox *grp;
 	QLabel *lbl;
 
-	opacity = downscale(opacity);
 	opacity = opacity * 100 / 255;
 
 	if (opacity)
@@ -123,7 +122,7 @@ int KisPaintPropertyDlg::getOpacity() const
 		return 0;
 
 	opacity = opacity * 255 / 100;
-	return upscale(opacity - 1);
+	return opacity - 1;
 }
 
 QPoint KisPaintPropertyDlg::getPosition() const

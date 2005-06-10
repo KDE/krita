@@ -739,7 +739,6 @@ void KisDockerManager::layerSelected(int layer)
 	if (!l) return;
 
 	Q_INT32 opacity = l -> opacity();
-	opacity = downscale(opacity);
 	opacity = opacity * 100 / 255;
 	if (opacity)
 		opacity++;

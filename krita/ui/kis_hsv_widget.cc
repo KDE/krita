@@ -211,7 +211,13 @@ void KisHSVWidget::slotFGColorSelected(const QColor& c)
 {
 	m_fgColor = KoColor(c);
 	if(m_subject)
+	{
+		QColor bgColor = m_ColorButton -> background();
 		m_subject->setFGColor(m_fgColor.color());
+		//Background signal could be blocked so do that manually 
+		//see bug 106919
+		m_subject->setBGColor(bgColor);
+	}
 }
 
 void KisHSVWidget::slotBGColorSelected(const QColor& c)

@@ -121,7 +121,13 @@ void KisGrayWidget::slotFGColorSelected(const QColor& c)
 {
 	m_fgColor = c;
 	if(m_subject)
+	{
+		QColor bgColor = m_ColorButton -> background();
 		m_subject->setFGColor(m_fgColor);
+		//Background signal could be blocked so do that manually 
+		//see bug 106919
+		m_subject->setBGColor(bgColor);
+	}
 }
 
 void KisGrayWidget::slotBGColorSelected(const QColor& c)

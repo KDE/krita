@@ -223,7 +223,7 @@ void KritaDefaultDockers::createPatternWidget(KisView * view)
 
         view -> patternActivated(dynamic_cast<KisPattern*>(m_patternMediator -> currentResource()));
 
-	connect(view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged(KisPattern* )));
+	KritaDefaultDockers::connect(view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged(KisPattern* )));
 
 }
 
@@ -238,7 +238,7 @@ void KritaDefaultDockers::createBrushesWidget(KisView * view)
 
         view -> brushActivated(dynamic_cast<KisBrush*>(m_brushMediator -> currentResource()));
 
-        connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(brushActivated(KisResource*)));
+        KritaDefaultDockers::connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(brushActivated(KisResource*)));
 }
 
 void KritaDefaultDockers::createGradientsWidget(KisView * view)
@@ -252,7 +252,7 @@ void KritaDefaultDockers::createGradientsWidget(KisView * view)
 
         view -> gradientActivated(dynamic_cast<KisGradient*>(m_gradientMediator -> currentResource()));
 
-        connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(gradientActivated(KisResource*)));
+        KritaDefaultDockers::connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(gradientActivated(KisResource*)));
 
 }
 
@@ -294,3 +294,4 @@ void KritaDefaultDockers::slotPatternChanged(KisPattern * pattern)
                 m_controlWidget -> slotSetGradient( new KisIconItem(pattern) );
 }
 
+#include "defaultdockers.moc"

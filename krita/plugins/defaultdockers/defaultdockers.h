@@ -42,6 +42,8 @@ class KisResourceMediator;
 
 class KritaDefaultDockers : public KParts::Plugin
 {
+	Q_OBJECT
+
 public:
 	KritaDefaultDockers(QObject *parent, const char *name, const QStringList &);
 	virtual ~KritaDefaultDockers();
@@ -62,7 +64,7 @@ private:
 	void createGradientsWidget(KisView * view);
 
 
-private slots:
+public slots:
         void slotBrushChanged(KisBrush * brush);
         void slotGradientChanged(KisGradient * gradient);
         void slotPatternChanged(KisPattern * pattern);

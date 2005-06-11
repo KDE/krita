@@ -24,7 +24,7 @@
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
   <Separator/>
-  	<Menu name="palettes"<text>&Tool palettes</text>
+  	<Menu name="palettes"><text>&amp;Tool palettes</text>
 		<Action name="togglelayerbox"/>
 	</Menu>
   <Action name="view_ruler"/>

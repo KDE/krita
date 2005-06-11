@@ -2,7 +2,7 @@
 <kpartgui library="kritadefaultdockers" version="1">
 <MenuBar>
  	<Menu name="View"><text>&amp;View</text>
-		<Menu name="palettes"<text>&Tool palettes</text>
+		<Menu name="palettes"><text>&amp;Tool palettes</text>
 			<Action name="toggletooloptions"/>
 			<Action name="togglecontrolframe"/>
 			<Action name="togglebirdeyebox"/>

@@ -24,13 +24,9 @@
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
   <Separator/>
-  <Action name="view_color_docker"/>
-  <Action name="view_control_docker"/>
-  <Action name="view_layer_docker"/>
-  <Action name="view_shapes_docker"/>
-  <Action name="view_fills_docker"/>
-  <Action name="view_paintop_docker"/>
-  <Separator/>
+  	<Menu name="palettes"<text>&Tool palettes</text>
+		<Action name="togglelayerbox"/>
+	</Menu>
   <Action name="view_ruler"/>
   <Separator/>
   <Action name="refresh_canvas"/>

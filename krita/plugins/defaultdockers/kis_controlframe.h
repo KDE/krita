@@ -37,7 +37,6 @@ class KisGradientWidget;
 class KisBrush;
 class KisPattern;
 class KisGradient;
-class ControlFrame;
 
 enum ActiveColor { ac_Foreground, ac_Background};
 
@@ -45,11 +44,11 @@ enum ActiveColor { ac_Foreground, ac_Background};
  *   Control Frame - status display with access to
  *   color selector, brushes, patterns, and preview
  */
-class ControlFrame : public QFrame {
+class KisControlFrame : public QFrame {
 	Q_OBJECT
 
 public:
-	ControlFrame(QWidget *parent = 0, const char *name = 0 );
+	KisControlFrame(QWidget *parent = 0, const char *name = 0 );
 	ActiveColor activeColor();
 
 public slots:

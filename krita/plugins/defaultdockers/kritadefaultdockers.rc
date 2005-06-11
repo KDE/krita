@@ -1,0 +1,23 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritadefaultdockers" version="1">
+<MenuBar>
+ 	<Menu name="View"><text>&amp;View</text>
+		<Menu name="palettes"<text>&Tool palettes</text>
+			<Action name="toggletooloptions"/>
+			<Action name="togglecontrolframe"/>
+			<Action name="togglebirdeyebox"/>
+			<Action name="togglechannelview"/>
+			<Action name="toggleautobrush"/>
+			<Action name="toggletextbrush"/>
+			<Action name="toggleautogradient"/>
+			<Action name="togglehsvwidget"/>
+			<Action name="togglergbwidget"/>
+			<Action name="togglegraywidget"/>
+			<Action name="togglepalettewidget"/>
+			<Action name="togglepatternwidget"/>
+			<Action name="togglebrusheswidget"/>
+			<Action name="togglegradientswidget"/>
+		</Menu>
+	</Menu>
+</MenuBar>
+</kpartgui>

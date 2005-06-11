@@ -33,7 +33,6 @@ namespace {
 	const Q_INT32 IMG_DEFAULT_WIDTH = 512;
 	const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
 	const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
-	const enumDockerStyle DEFAULT_DOCKER_STYLE = DOCKER_TOOLBOX;
 	const Q_INT32 DEFAULT_MAX_THREADS = 4;
 }
 
@@ -90,18 +89,6 @@ enumCursorStyle KisConfig::defCursorStyle() const
 void KisConfig::defCursorStyle(enumCursorStyle style)
 {
 	m_cfg -> writeEntry("cursorStyleDef", style);
-}
-
-
-
-enumDockerStyle KisConfig::dockerStyle() const
-{
-	return ( enumDockerStyle ) m_cfg -> readNumEntry( "dockerStyle",  DEFAULT_DOCKER_STYLE );
-}
-
-void KisConfig::setDockerStyle( enumDockerStyle style )
-{
-	m_cfg -> writeEntry( "dockerStyle",  style );
 }
 
 

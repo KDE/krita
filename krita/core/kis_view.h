@@ -43,6 +43,7 @@
 
 #include "kis_id.h"
 #include "koffice_export.h"
+
 class QButton;
 class QLabel;
 class QPaintEvent;
@@ -73,10 +74,11 @@ class KisButtonPressEvent;
 class KisButtonReleaseEvent;
 class KisMoveEvent;
 class KisSelectionManager;
-class KisDockerManager;
+class KoPaletteManager;
 class KisToolRegistry;
 class KisFilterRegistry;
 class KisCompositeOp;
+class KisLayerBox;
 
 class KRITA_EXPORT KisView
 	: public KoView,
@@ -136,7 +138,7 @@ public: // Plugin access API. XXX: This needs redesign.
 	KisDoc * getDocument() { return m_doc; }
 
 	KisSelectionManager * selectionManager() { return m_selectionManager; }
-	KisDockerManager * dockerManager() { return m_dockerManager; }
+	KoPaletteManager * paletteManager();
 
 signals:
 	void bgColorChanged(const QColor& c);
@@ -147,11 +149,12 @@ signals:
 	void patternChanged(KisPattern * pattern);
 
 	void currentLayerChanged(int layer);
-
+	
 	void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
 	void cursorEnter();
 	void cursorLeave();
 
+	void viewCreated();
 
 public slots:
 	void slotSetFGColor(const QColor& c);
@@ -178,11 +181,14 @@ public slots:
 	void scaleLayer(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
 	void rotateLayer(double angle);
 	void shearLayer(double angleX, double angleY);
+	
 	/// Crop the current layer to the specified dimensions, do not move it the image origin.
 	void cropLayer(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-	// settings action slots
+	
 	void preferences();
+	
 	void layerCompositeOp(const KisCompositeOp& compositeOp);
+	
 	void layerOpacity(int opacity);
 
 protected:
@@ -256,6 +262,8 @@ private:
 	void imgUpdateGUI();
 
 	void layerUpdateGUI(bool enable);
+	void createLayerBox();
+
 	void paintView(const KisRect& rc);
 
 	/**
@@ -352,13 +360,14 @@ private slots:
 	void layersUpdated(KisImageSP img);
 
 	QPoint mapToScreen(const QPoint& pt);
+	
 private:
 	KisDoc *m_doc;
 	KisCanvas *m_canvas;
 
 	KisSelectionManager * m_selectionManager;
-	KisDockerManager * m_dockerManager;
-
+	KoPaletteManager * m_paletteManager;
+	
         // Fringe benefits
 	KisRuler *m_hRuler;
 	KisRuler *m_vRuler;
@@ -408,6 +417,8 @@ private:
 	QLabel *m_statusBarProfileLabel;
 	KisLabelProgress *m_progress;
 
+        KisLayerBox *m_layerBox;
+
 	// Current colours, brushes, patterns etc.
 
 	QColor m_fg;
@@ -446,7 +457,6 @@ private:
 protected:
 
 	friend class KisSelectionManager;
-	friend class KisDockerManager;
 
 };
 

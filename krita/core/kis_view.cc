@@ -70,7 +70,6 @@
 // Local
 #include "kis_brush.h"
 #include "kis_canvas.h"
-#include "kis_channelview.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
@@ -102,6 +101,7 @@
 #include "kis_colorspace_registry.h"
 #include "kis_profile.h"
 #include "kis_transaction.h"
+#include "kis_layerbox.h"
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
@@ -113,7 +113,8 @@
 
 // Action managers
 #include "kis_selection_manager.h"
-#include "kis_docker_manager.h"
+
+#include "koPaletteManager.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
@@ -131,6 +132,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 	m_filterRegistry = new KisFilterRegistry();
 	Q_CHECK_PTR(m_filterRegistry);
+
+	m_paletteManager = new KoPaletteManager(this, "Krita palette manager");
+	Q_CHECK_PTR(m_paletteManager);
+	Q_ASSERT(m_paletteManager);
 
 	if (!doc -> isReadWrite())
 		setXMLFile("krita_readonly.rc");
@@ -201,26 +206,63 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 	dcopObject();
 
+	createLayerBox();
+
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
 	connect(m_doc, SIGNAL(currentImageUpdated(KisImageSP)), SLOT(currentImageUpdated(KisImageSP)));
 
-	m_dockerManager = new KisDockerManager(this, actionCollection());
-	Q_CHECK_PTR(m_dockerManager);
-
 	resetMonitorProfile();
+	
 	layersUpdated();
 	setCurrentTool(findTool("tool_brush"));
+
 }
 
 
 KisView::~KisView()
 {
 	delete m_dcop;
-	delete m_dockerManager;
+	delete m_paletteManager;
+}
 
+KoPaletteManager * KisView::paletteManager()
+{
+	if (!m_paletteManager) {
+		m_paletteManager = new KoPaletteManager(this, "Krita palette manager");
+		Q_CHECK_PTR(m_paletteManager);
+	}
+	return m_paletteManager;
+}
+
+void KisView::createLayerBox()
+{
+	m_layerBox = new KisLayerBox(i18n("Layer"), KisLayerBox::SHOWALL, this);
+        m_layerBox -> setCaption(i18n("Layers"));
+
+        connect(m_layerBox, SIGNAL(itemToggleVisible()), this, SLOT(layerToggleVisible()));
+        connect(m_layerBox, SIGNAL(itemSelected(int)), this, SLOT(layerSelected(int)));
+        connect(m_layerBox, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
+        connect(m_layerBox, SIGNAL(itemToggleLinked()), this, SLOT(layerToggleLinked()));
+        connect(m_layerBox, SIGNAL(itemToggleLocked()), this, SLOT(layerToggleLocked()));
+        connect(m_layerBox, SIGNAL(itemProperties()), this, SLOT(layerProperties()));
+        connect(m_layerBox, SIGNAL(itemAdd()), this, SLOT(layerAdd()));
+        connect(m_layerBox, SIGNAL(itemRemove()), this, SLOT(layerRemove()));
+        connect(m_layerBox, SIGNAL(itemAddMask(int)), this, SLOT(layerAddMask(int)));
+        connect(m_layerBox, SIGNAL(itemRmMask(int)), this, SLOT(layerRmMask(int)));
+        connect(m_layerBox, SIGNAL(itemRaise()), this, SLOT(layerRaise()));
+        connect(m_layerBox, SIGNAL(itemLower()), this, SLOT(layerLower()));
+        connect(m_layerBox, SIGNAL(itemFront()), this, SLOT(layerFront()));
+        connect(m_layerBox, SIGNAL(itemBack()), this, SLOT(layerBack()));
+        connect(m_layerBox, SIGNAL(itemLevel(int)), this, SLOT(layerLevel(int)));
+        connect(m_layerBox, SIGNAL(opacityChanged(int)), this, SLOT(layerOpacity(int)));
+        connect(m_layerBox, SIGNAL(itemComposite(const KisCompositeOp&)), this, SLOT(layerCompositeOp(const KisCompositeOp&)));
+        connect(this, SIGNAL(currentLayerChanged(int)), m_layerBox, SLOT(slotSetCurrentItem(int)));
+
+	paletteManager()->addWidget(m_layerBox, "layerbox", "layerpalette");
 
 }
+
 
 DCOPObject* KisView::dcopObject()
 {
@@ -574,8 +616,11 @@ void KisView::clearCanvas(const QRect& rc)
 void KisView::setCurrentTool(KisTool *tool)
 {
 	KisTool *oldTool = currentTool();
-
-	m_dockerManager ->setToolOptionWidget(oldTool, tool);
+	kdDebug() << "option widget for " << tool->name() << ": " << tool->optionWidget() << "\n";
+	if (!tool->optionWidget()) {
+		tool->createOptionWidget(0);
+	}
+	paletteManager()->addWidget(tool->optionWidget(), krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
 
 	if (oldTool)
 	{
@@ -652,7 +697,7 @@ void KisView::setInputDevice(enumInputDevice inputDevice)
 		KisTool *oldTool = currentTool();
 		if (oldTool)
 		{
-			m_dockerManager -> unsetToolOptionWidget(oldTool);
+			paletteManager()->removeWidget(krita::TOOL_OPTION_WIDGET);
 			oldTool -> clear();
 		}
 
@@ -1818,41 +1863,6 @@ void KisView::canvasRefresh()
 	m_canvas -> repaint();
 }
 
-void KisView::layerToggleVisible()
-{
-	KisImageSP img = currentImg();
-	if (!img) return;
-
-	KisLayerSP layer = img -> activeLayer();
-	if (!layer) return;
-
-	layer -> setVisible(!layer -> visible());
-	m_doc -> setModified(true);
-	resizeEvent(0);
-	layersUpdated();
-	canvasRefresh();
-}
-
-void KisView::layerToggleLocked()
-{
-	KisImageSP img = currentImg();
-	if (!img) return;
-
-	KisLayerSP layer = img -> activeLayer();
-	if (!layer) return;
-
-	layer -> setLocked(!layer -> locked());
-	m_doc -> setModified(true);
-	layersUpdated();
-}
-
-void KisView::layerSelected(int n)
-{
-	KisImageSP img = currentImg();
-
-	layerUpdateGUI(img -> activateLayer(n));
-	notify();
-}
 
 void KisView::docImageListUpdate()
 {
@@ -2083,7 +2093,20 @@ void KisView::layersUpdated()
 
 	layerUpdateGUI(img && layer);
 
-	m_dockerManager -> resetLayerBox(img, layer);
+        m_layerBox -> setUpdatesEnabled(false);
+        m_layerBox -> clear();
+
+        if (img) {
+                vKisLayerSP l = img -> layers();
+
+                for (vKisLayerSP_it it = l.begin(); it != l.end(); it++)
+                        m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked(), (*it) -> locked());
+                m_layerBox -> slotSetCurrentItem(img -> index(layer));
+                layerSelected( img -> index(layer) );
+        }
+
+        m_layerBox -> setUpdatesEnabled(true);	
+
 	notify();
 }
 
@@ -2091,6 +2114,56 @@ void KisView::layersUpdated(KisImageSP img)
 {
 	if (img == currentImg())
 		layersUpdated();
+}
+
+void KisView::layerToggleVisible()
+{
+	KisImageSP img = currentImg();
+	if (!img) return;
+
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
+
+	layer -> setVisible(!layer -> visible());
+	m_doc -> setModified(true);
+	resizeEvent(0);
+	layersUpdated();
+	canvasRefresh();
+}
+
+void KisView::layerToggleLocked()
+{
+	KisImageSP img = currentImg();
+	if (!img) return;
+
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
+
+	layer -> setLocked(!layer -> locked());
+	m_doc -> setModified(true);
+	layersUpdated();
+}
+
+void KisView::layerSelected(int n)
+{
+	KisImageSP img = currentImg();
+        if (!img) return;
+        KisLayerSP l = img -> layer(n);
+        if (!l) return;
+
+	layerUpdateGUI(img -> activateLayer(n));
+	notify();
+
+        Q_INT32 opacity = l -> opacity();
+        opacity = opacity * 100 / 255;
+        if (opacity)
+                opacity++;
+
+        m_layerBox -> setOpacity(opacity);
+        m_layerBox -> setColorStrategy(l -> colorStrategy());
+        m_layerBox -> setCompositeOp(l -> compositeOp());
+
+        updateCanvas();
 }
 
 void KisView::scrollH(int value)

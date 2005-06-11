@@ -56,6 +56,8 @@
 
 
 typedef Q_UINT8 QUANTUM;
+typedef Q_UINT8 PIXELTYPE;
+
 const QUANTUM QUANTUM_MAX = UCHAR_MAX;
 const QUANTUM OPACITY_TRANSPARENT = 0;
 const QUANTUM OPACITY_OPAQUE = QUANTUM_MAX;
@@ -78,19 +80,6 @@ enum enumCursorStyle {
 	CURSOR_STYLE_OUTLINE
 };
 
-
-enum enumDockerStyle {
-	DOCKER_SLIDER,
-	DOCKER_DOCKER,
-	DOCKER_TOOLBOX
-};
-
-
-enum enumRotationDirection {
-	CLOCKWISE,
-	COUNTERCLOCKWISE,
-};
-
 /*
  * Most wacom pads have 512 levels of pressure; Qt only supports 256, and even
  * this is downscaled to 127 levels because the line would be too jittery, and
@@ -102,12 +91,18 @@ const double PRESSURE_MAX = 1.0;
 const double PRESSURE_DEFAULT = (PRESSURE_MAX - PRESSURE_MIN) / 2;
 const double PRESSURE_THRESHOLD = 5.0 / 255.0;
 
-enum enumPaintStyles {
-	PAINTSTYLE_HARD,
-	PAINTSTYLE_SOFT
-};
-
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
+
+
+namespace krita {
+
+	// String constants for palettes and palette widgets
+	const QString TOOL_OPTION_WIDGET ("tooloptions");
+	const QString CONTROL_PALETTE ("controlpalette");
+	const QString PAINTBOX ("paintbox");
+	const QString COLORBOX ("colorbox");
+
+}
 
 #endif // KISGLOBAL_H_
 

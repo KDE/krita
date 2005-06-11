@@ -30,7 +30,7 @@
 #include "kis_paint_device.h"
 #include "kis_colorspace_registry.h"
 
-#include "kis_autogradient.h"
+#include "kis_autogradient_resource.h"
 
 #define MARGIN 5
 #define HANDLE_SIZE 10

@@ -1,10 +1,5 @@
 /*
- *  kis_basedocker.h - part of Krita
- *
- *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
- *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Sven Langkamp  <longamp@reallygood.de>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,22 +15,42 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#ifndef __kis_basedocker_h__
-#define __kis_basedocker_h__
+
 
 #include <qdockwindow.h>
+#include <qtoolbox.h>
 
-/**
- *  @short Base class for all dockers that sets some pleasant defaults.
- */
-class KisBaseDocker : public QDockWindow
+#include <koPalette.h>
+#include <koPaletteManager.h>
+#include <koToolBoxPalette.h>
+
+KoToolBoxPalette::KoToolBoxPalette(KoView * parent, const char * name)
+	: KoPalette(parent, name)
 {
-        Q_OBJECT
+	m_page = new QToolBox(this);
+	m_page->setFont(m_font);
+	setMainWidget(m_page);
+}
 
-public:
-        KisBaseDocker ( QWidget* parent = 0, const char* name = 0 );
-	virtual ~KisBaseDocker() {};
-};
+KoToolBoxPalette::~KoToolBoxPalette()
+{
+}
 
-#endif // __kis_basedocker_h__
+void KoToolBoxPalette::plug(QWidget *w, const QString & label)
+{
+	w->setFont(m_font);
+	m_page->addItem( w,  label );
+}
 
+
+void KoToolBoxPalette::unplug(const QWidget *w)
+{
+	m_page->removeItem( const_cast<QWidget*>(w) );
+}
+
+void KoToolBoxPalette::showPage(QWidget *w)
+{
+	m_page->setCurrentItem( w );
+}
+
+#include "koToolBoxPalette.moc"

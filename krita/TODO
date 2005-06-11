@@ -41,9 +41,7 @@ Colorspace independence (found with the test colorstrategy)
 	
 Core
 
-	* Channels showing (note that we don't do Gimp-type grayscale
-	  mask channels, just showing/hiding the various color
-	  channels.
+	* Implement threading for rendering and paint device operations
 	* Histogram computations (#Boudewijn)
 	* Adjustment layers (Layers that dynamically apply a filter to
 	  the layer they are linked to, these do not store actual
@@ -62,11 +60,6 @@ Core
 	* Long painter operations (e.g., convolution painter) should use the 
           progressbar and be cancelable.
 
-	* we now have a checkered background layer that we composite everything
-	  on, but in future we should composite the image first, and then render
-	  it onto a background image -- or not, if another KOffice app wants it
-	  rendered with transparency. But that'd probably better wait until Qt 4,
-	  where it would be a hardware accelerated snip.
 
 File Format:
 
@@ -88,6 +81,10 @@ Import/Export
 
 User Interface
 
+	* Channels showing (note that we don't do Gimp-type grayscale
+	  mask channels, just showing/hiding the various color
+	  channels.
+        * Locked layers should really be protected from changes -- via a facade?
 	* The description field in color settings is empty
         * Give color strategies an option page just like tools. Give layers an option page,
 	  combine both pages to show for layer properties. Color strategies can be stateful.
@@ -102,6 +99,7 @@ User Interface
 	* Show which tool is associated with which pointer (mouse, stylus, eraser, other stylusses)
 	* Allow guides to be disabled. Allow diagonal guides (useful
 	  for perspective drawings)
+        * Allow snapping to guides.
         * Create templates for often-used image formats. Add save-as-template
         * Fix gimp XCF import/export (ImageMagick hacking...)
 	* Fix imports to import metadata and image files in non-rgb encodings -> move import
@@ -121,6 +119,11 @@ User Interface
           while scrolling the checks can stay in place, and the partially
           transparent image move. This maybe needs Qt 4. OpenGL can also be
   	  used to bumpmap images on a height-field canvas.
+	  we now have a checkered background layer that we composite everything
+	  on, but in future we should composite the image first, and then render
+	  it onto a background image -- or not, if another KOffice app wants it
+	  rendered with transparency. But that'd probably better wait until Qt 4,
+	  where it would be a hardware accelerated snip.
 
 Selections
 
@@ -151,9 +154,6 @@ Tools
 	* All tools must have a tool options tab (#Boudewijn, Adrian, Cyrille)
 	
 	* Implement the following tools: 
-		    - pen(cil) tool (same as brush, but not anti-aliased) (#Boudewijn,
-                      done, except there's still a little ant-aliasing present, perhaps
-                      dependent on the brush).
 		    - fix airbrush tool (add rate option, add increase
 		      of brush size if kept in one place)
 		    - color changer, smudge tool,sharpen tool, blur

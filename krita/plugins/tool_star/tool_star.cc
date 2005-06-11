@@ -70,4 +70,4 @@ ToolStar::~ToolStar()
 {
 }
 
-//#include "tool_star.moc"
+#include "tool_star.moc"

@@ -301,10 +301,6 @@ KNamedCommand * KisPaintDevice::moveCommand(Q_INT32 x, Q_INT32 y)
 	return cmd;
 }
 
-bool KisPaintDevice::shouldDrawBorder() const
-{
-        return false;
-}
 
 QString KisPaintDevice::name() const
 {

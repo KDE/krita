@@ -1,6 +1,4 @@
 /*
- * This file is part of Krita
- *
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,39 +16,42 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef _KIS_FILTER_BOX_H_
-#define _KIS_FILTER_BOX_H_
+#ifndef _KO_TAB_PALETTE_
+#define _KO_TAB_PALETTE_
 
-#include <qlistbox.h>
-#include <qwidget.h>
+#include <qdockwindow.h>
 
-#include "kis_types.h"
+#include "koPalette.h"
 
-class KisCanvasSubject;
+class KoView;
+class QWidget;
+class KTabWidget;
 
+/**
+ * This is a palette with a tabwidget. It supports
+ * reorganzing the pages and moving the pages to other
+ * palettes with drag and drop,
+ *
+ */
+class KoTabPalette : public KoPalette {
 
-class KisFilterBox : public QListBox {
+Q_OBJECT
 
-	Q_OBJECT
-
-	typedef QListBox super;
 public:
-	KisFilterBox(KisCanvasSubject * subject, QWidget * parent, const char * name);
 
-	virtual ~KisFilterBox();
+	KoTabPalette(KoView * parent, const char * name);
+	virtual ~KoTabPalette();
 
-	virtual void init();
+public:
 
-public slots:
-
-	virtual void slotFilterSelected(QListBoxItem * item);
+	virtual void plug(QWidget * widget, const QString & name);
+	virtual void unplug(const QWidget * widget);
+        void showPage(QWidget *w);
 
 private:
 
-
-	KisCanvasSubject * m_subject;
+	KTabWidget * m_page;
 
 };
 
-
-#endif // _KIS_FILTER_BOX_H_
+#endif //_KO_TAB_PALETTE_

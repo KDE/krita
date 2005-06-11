@@ -31,9 +31,6 @@
 #include "kis_strategy_colorspace_cmyka.h"
 #include "kis_iterators_pixel.h"
 
-#include "kis_resource.h"
-#include "kis_resourceserver.h"
-#include "kis_resource_mediator.h"
 #include "kis_factory.h"
 #include "kis_profile.h"
 

@@ -1,0 +1,34 @@
+Requirements
+
+* Flexible: plugins should be able to add palettes or palette tabs
+* Connected: palette tabs should be able to connect to the main application
+  using signals and slots
+* Configurable: palette widgets should be drag & droppable from palette
+  to palette, and from palette to void to create a new palette.
+* Persistent: the palette configuration of a view should be persisted
+  on application end and reconfigured on application start.
+* Pretty: the palettes should be small, but perfectly formed. There
+  should be the possibility to use either tabbars or toolboxes for
+  a palette.
+* introspective: the application and plugins should be able to
+  query for existing palettes and tabs and retrieve a list and
+  pertinent data on existing palettes and tabs (so a plugin can
+  decide to place itself initially in a palette with other color
+  tabs, for instance.
+
+Classes:
+
+PaletteManager, Palette, PaletteContainer PaletteWidget
+
+The palettemanager keeps track of palettes and saves & restores sessions.
+
+Palettes can shade and unshade themselves with a double-click on the
+titlebar or using the shade button
+
+Palettes contain a container, either tab-type or toolbox type. 
+The containers accept drops, in which case a widget is plugged into
+the container. The tabs or separators accept drag events, in which
+case a widget is unplugged and a drag operation is started.
+
+The drag operation can end in the void, or above another palette.
+If above a palette, see above. Into the void: create a new palette

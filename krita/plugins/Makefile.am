@@ -25,4 +25,5 @@ SUBDIRS = cimg \
 	histogram \
 	variations \
 	performancetest \
-	$(kjsembed_plugin)
+	$(kjsembed_plugin) \
+	defaultdockers

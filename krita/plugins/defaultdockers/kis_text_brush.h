@@ -19,7 +19,7 @@
 #ifndef _KIS_TEXT_BRUSH_H_ 
 #define _KIS_TEXT_BRUSH_H_
 
-#include "kis_wdg_text_brush.h"
+#include "wdgtextbrush.h"
 #include "kis_brush.h"
 
 class KisTextBrushResource : public KisBrush

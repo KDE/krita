@@ -69,6 +69,10 @@ void KisBrushOp::paintAt(const KisPoint &pos,
 	if (!m_painter -> device()) return;
 
 	KisBrush *brush = m_painter -> brush();
+	
+	Q_ASSERT(brush);
+	if (!brush) return;
+	
 	KisPaintDeviceSP device = m_painter -> device();
 
 	KisPoint hotSpot = brush -> hotSpot(pressure);

@@ -29,6 +29,11 @@
 
 #include "wdg_rotateimage.h"
 
+enum enumRotationDirection {
+	CLOCKWISE,
+	COUNTERCLOCKWISE,
+};
+
 
 class DlgRotateImage: public KDialogBase {
 	typedef KDialogBase super;

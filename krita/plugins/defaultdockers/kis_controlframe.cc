@@ -39,7 +39,7 @@
 #include "kis_pattern.h"
 #include "kis_gradient.h"
 
-ControlFrame::ControlFrame( QWidget* parent, const char* name )
+KisControlFrame::KisControlFrame( QWidget* parent, const char* name )
 	: QFrame( parent, name )
 {
 	/*
@@ -87,7 +87,7 @@ ControlFrame::ControlFrame( QWidget* parent, const char* name )
 		this, SLOT(slotActiveColorChanged(KDualColorButton::DualColor )));
 }
 
-ActiveColor ControlFrame::activeColor()
+ActiveColor KisControlFrame::activeColor()
 {
 	if (m_pColorButton->current() == KDualColorButton::Foreground)
 		return ac_Foreground;
@@ -95,7 +95,7 @@ ActiveColor ControlFrame::activeColor()
 		return ac_Background;
 }
 
-void ControlFrame::slotActiveColorChanged(KDualColorButton::DualColor s)
+void KisControlFrame::slotActiveColorChanged(KDualColorButton::DualColor s)
 {
 	if(s == KDualColorButton::Foreground)
 		slotFGColorSelected(m_pColorButton->currentColor());
@@ -103,25 +103,25 @@ void ControlFrame::slotActiveColorChanged(KDualColorButton::DualColor s)
 		slotBGColorSelected(m_pColorButton->currentColor());
 }
 
-void ControlFrame::slotSetBrush(KoIconItem *item)
+void KisControlFrame::slotSetBrush(KoIconItem *item)
 {
 	if (item)
 		m_pBrushWidget -> slotSetItem(*item);
 }
 
-void ControlFrame::slotSetPattern(KoIconItem *item)
+void KisControlFrame::slotSetPattern(KoIconItem *item)
 {
 	if (item)
 		m_pPatternWidget -> slotSetItem(*item);
 }
 
-void ControlFrame::slotSetGradient(KoIconItem *item)
+void KisControlFrame::slotSetGradient(KoIconItem *item)
 {
 	if (item)
 		m_pGradientWidget -> slotSetItem(*item);
 }
 
-void ControlFrame::slotSetFGColor(const QColor& c)
+void KisControlFrame::slotSetFGColor(const QColor& c)
 {
 	disconnect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	disconnect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
@@ -133,7 +133,7 @@ void ControlFrame::slotSetFGColor(const QColor& c)
 	connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 }
 
-void ControlFrame::slotSetBGColor(const QColor& c)
+void KisControlFrame::slotSetBGColor(const QColor& c)
 {
 	disconnect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	disconnect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
@@ -145,12 +145,12 @@ void ControlFrame::slotSetBGColor(const QColor& c)
 	connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 }
 
-void ControlFrame::slotFGColorSelected(const QColor& c)
+void KisControlFrame::slotFGColorSelected(const QColor& c)
 {
 	emit fgColorChanged( c);
 }
 
-void ControlFrame::slotBGColorSelected(const QColor& c)
+void KisControlFrame::slotBGColorSelected(const QColor& c)
 {
 	emit bgColorChanged( c );
 }

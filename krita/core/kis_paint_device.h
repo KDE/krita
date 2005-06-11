@@ -72,7 +72,6 @@ public:
         virtual bool read(KoStore *store);
 
 public:
-        virtual bool shouldDrawBorder() const;
 
         virtual void move(Q_INT32 x, Q_INT32 y);
         virtual void move(const QPoint& pt);

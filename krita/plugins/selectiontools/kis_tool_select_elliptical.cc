@@ -27,7 +27,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-#include "kis_autobrush.h"
+#include "kis_autobrush_resource.h"
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"

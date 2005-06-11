@@ -33,4 +33,16 @@ kritargbplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFI
 kritargbplugin_la_METASOURCES = AUTO
 #METASOURCES = AUTO # XXX: which of the two?
 
-SUBDIRS = templates
+if include_kunittest_tests
+TESTSDIR = tests
+
+# Build a library to link the tests against to avoid warnings about linking to a module.
+check_LTLIBRARIES = libkritargbplugin.la
+libkritargbplugin_la_SOURCES = rgb_plugin.cc kis_strategy_colorspace_rgb.cc
+libkritargbplugin_la_LDFLAGS = $(all_libraries)
+libkritargbplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+
+endif
+
+SUBDIRS = . templates $(TESTSDIR)
+

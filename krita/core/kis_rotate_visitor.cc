@@ -295,15 +295,6 @@ KisPaintDeviceSP KisRotateVisitor::xShear(KisPaintDeviceSP src, double shearX)
 
 	QRect r = src -> exactBounds();
 
-        QUANTUM *pixel = new QUANTUM[m_dev -> pixelSize()];
-	Q_CHECK_PTR(pixel);
-
-        QUANTUM *left = new QUANTUM[m_dev -> pixelSize()];
-	Q_CHECK_PTR(left);
-
-        QUANTUM *oleft = new QUANTUM[m_dev -> pixelSize()];
-	Q_CHECK_PTR(oleft);
-
         double displacement;
         Q_INT32 displacementInt;
         double weight;
@@ -320,33 +311,30 @@ KisPaintDeviceSP KisRotateVisitor::xShear(KisPaintDeviceSP src, double shearX)
 		displacementInt = (Q_INT32)(floor(displacement));
 		weight = displacement - displacementInt;
 
-		//initialize oleft
-		for (int channel = 0; channel < m_dev -> pixelSize(); channel++)
-			oleft[channel] = left[channel] = 0;
+		Q_UINT8 pixelWeights[2];
 
-		KisHLineIteratorPixel srcIt = src -> createHLineIterator(r.x(), y, r.width(), false);
-		KisHLineIteratorPixel dstIt = dst -> createHLineIterator(r.x() + displacementInt, y, r.width(), true);
+		pixelWeights[0] = static_cast<Q_UINT8>(weight * 255 + 0.5);
+		pixelWeights[1] = 255 - pixelWeights[0];
+
+		KisHLineIteratorPixel srcIt = src -> createHLineIterator(r.x(), y, r.width() + 1, false);
+		KisHLineIteratorPixel leftSrcIt = src -> createHLineIterator(r.x() - 1, y, r.width() + 1, false);
+		KisHLineIteratorPixel dstIt = dst -> createHLineIterator(r.x() + displacementInt, y, r.width() + 1, true);
 
 		while (!srcIt.isDone()) {
 
-			for (int channel = 0; channel < m_dev -> pixelSize(); channel++) {
+			const Q_UINT8 *pixelPtrs[2];
 
-				pixel[channel] = srcIt.rawData()[channel];
-				left[channel] = (Q_INT32)(weight * pixel[channel]);
-				pixel[channel] = pixel[channel] - left[channel] + oleft[channel];
+			pixelPtrs[0] = leftSrcIt.rawData();
+			pixelPtrs[1] = srcIt.rawData();
 
-				dstIt.rawData()[channel] = pixel[channel];
-				oleft[channel] = left[channel];
-			}
+			src -> colorStrategy() -> mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
+
 			++srcIt;
+			++leftSrcIt;
 			++dstIt;
 		}
 		incrementProgress();
 	}        
-
-	delete[] pixel;
-	delete[] left;
-	delete[] oleft;
 
 	return dst;
 }
@@ -358,15 +346,6 @@ KisPaintDeviceSP KisRotateVisitor::yShear(KisPaintDeviceSP src, double shearY)
 	dst -> setY(src -> getY());
 
 	QRect r = src -> exactBounds();
-
-        QUANTUM *pixel = new QUANTUM[m_dev -> pixelSize()];
-	Q_CHECK_PTR(pixel);
-
-        QUANTUM *left = new QUANTUM[m_dev -> pixelSize()];
-	Q_CHECK_PTR(left);
-
-        QUANTUM *oleft = new QUANTUM[m_dev -> pixelSize()];
-	Q_CHECK_PTR(oleft);
 
         double displacement;
         Q_INT32 displacementInt;
@@ -384,33 +363,30 @@ KisPaintDeviceSP KisRotateVisitor::yShear(KisPaintDeviceSP src, double shearY)
 		displacementInt = (Q_INT32)(floor(displacement));
 		weight = displacement - displacementInt;
 
-		//initialize oleft
-		for(int channel = 0; channel < m_dev -> pixelSize(); channel++)
-			oleft[channel] = left[channel] = 0;
+		Q_UINT8 pixelWeights[2];
 
-		KisVLineIteratorPixel srcIt = src -> createVLineIterator(x, r.y(), r.height(), false);
-		KisVLineIteratorPixel dstIt = dst -> createVLineIterator(x, r.y() + displacementInt, r.height(), true);
+		pixelWeights[0] = static_cast<Q_UINT8>(weight * 255 + 0.5);
+		pixelWeights[1] = 255 - pixelWeights[0];
+
+		KisVLineIteratorPixel srcIt = src -> createVLineIterator(x, r.y(), r.height() + 1, false);
+		KisVLineIteratorPixel leftSrcIt = src -> createVLineIterator(x, r.y() - 1, r.height() + 1, false);
+		KisVLineIteratorPixel dstIt = dst -> createVLineIterator(x, r.y() + displacementInt, r.height() + 1, true);
 
 		while (!srcIt.isDone()) {
-			// XXX: pixelSize is the size in bytes, not the number of channels!
-			for (int channel = 0; channel < m_dev -> pixelSize(); channel++) {
 
-				pixel[channel] = srcIt.rawData()[channel];
-				left[channel] = (Q_INT32)(weight * pixel[channel]);
-				pixel[channel] = pixel[channel] - left[channel] + oleft[channel];
+			const Q_UINT8 *pixelPtrs[2];
 
-				dstIt.rawData()[channel] = pixel[channel];
-				oleft[channel] = left[channel];
-			}
+			pixelPtrs[0] = leftSrcIt.rawData();
+			pixelPtrs[1] = srcIt.rawData();
+
+			src -> colorStrategy() -> mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
+
 			++srcIt;
+			++leftSrcIt;
 			++dstIt;
 		}
 		incrementProgress();
 	}
-
-        delete[] pixel;
-        delete[] left;
-        delete[] oleft;
 
         return dst;
 }

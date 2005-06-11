@@ -43,6 +43,32 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_GRAYSCALEA = 2;
 }
 
+inline int INT_MULT(int a, int b)
+{
+	int c = a * b + 0x80;
+	return ((c >> 8) + c) >> 8;
+}
+
+inline int INT_DIVIDE(int a, int b)
+{
+	int c = (a * QUANTUM_MAX + (b / 2)) / b;
+	return c;
+}
+
+inline int INT_BLEND(int a, int b, int alpha)
+{
+	return INT_MULT(a - b, alpha) + b;
+}
+
+inline int MIN(int a, int b)
+{
+	return a < b ? a : b;
+}
+
+inline int MAX(int a, int b)
+{
+	return a > b ? a : b;
+}
 
 KisStrategyColorSpaceGrayscale::KisStrategyColorSpaceGrayscale() :
 	KisStrategyColorSpace(KisID("GRAYA", i18n("Grayscale/Alpha")), TYPE_GRAYA_8, icSigGrayData)
@@ -86,6 +112,33 @@ Q_INT8 KisStrategyColorSpaceGrayscale::difference(const QUANTUM* src1, const QUA
 
 void KisStrategyColorSpaceGrayscale::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
+	Q_UINT32 totalGray = 0, newAlpha = 0;
+
+	while (nColors--)
+	{
+		Q_UINT32 alpha = (*colors)[PIXEL_GRAY_ALPHA];
+		Q_UINT32 alphaTimesWeight = INT_MULT(alpha, *weights);
+
+		totalGray += (*colors)[PIXEL_GRAY] * alphaTimesWeight;
+		newAlpha += alphaTimesWeight;
+
+		weights++;
+		colors++;
+	}
+
+	Q_ASSERT(newAlpha <= 255);
+
+	dst[PIXEL_GRAY_ALPHA] = newAlpha;
+
+	if (newAlpha > 0) {
+		totalGray = INT_DIVIDE(totalGray, newAlpha);
+	}
+
+	// Divide by 255.
+	totalGray += 0x80;
+	Q_UINT32 dstGray = ((totalGray >> 8) + totalGray) >> 8;
+	Q_ASSERT(dstGray <= 255);
+	dst[PIXEL_GRAY] = dstGray;
 }
 
 vKisChannelInfoSP KisStrategyColorSpaceGrayscale::channels() const
@@ -255,33 +308,6 @@ KisCompositeOpList KisStrategyColorSpaceGrayscale::userVisiblecompositeOps() con
 	list.append(KisCompositeOp(COMPOSITE_LIGHTEN));
 
 	return list;
-}
-
-inline int INT_MULT(int a, int b)
-{
-	int c = a * b + 0x80;
-	return ((c >> 8) + c) >> 8;
-}
-
-inline int INT_DIVIDE(int a, int b)
-{
-	int c = (a * QUANTUM_MAX + (b / 2)) / b;
-	return c;
-}
-
-inline int INT_BLEND(int a, int b, int alpha)
-{
-	return INT_MULT(a - b, alpha) + b;
-}
-
-inline int MIN(int a, int b)
-{
-	return a < b ? a : b;
-}
-
-inline int MAX(int a, int b)
-{
-	return a > b ? a : b;
 }
 
 void KisStrategyColorSpaceGrayscale::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)

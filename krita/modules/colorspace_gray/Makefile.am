@@ -26,5 +26,16 @@ kritagrayplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFF
 
 kritagrayplugin_la_METASOURCES = AUTO
 
+if include_kunittest_tests
+TESTSDIR = tests
 
-SUBDIRS=templates
+# Build a library to link the tests against to avoid warnings about linking to a module.
+check_LTLIBRARIES = libkritagrayscaleplugin.la
+libkritagrayscaleplugin_la_SOURCES = gray_plugin.cc kis_strategy_colorspace_grayscale.cc
+libkritagrayscaleplugin_la_LDFLAGS = $(all_libraries)
+libkritagrayscaleplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+
+endif
+
+SUBDIRS = . templates $(TESTSDIR)
+

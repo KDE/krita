@@ -38,6 +38,33 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_RGBA = 4;
 }
 
+inline int INT_MULT(int a, int b)
+{
+	int c = a * b + 0x80;
+	return ((c >> 8) + c) >> 8;
+}
+
+inline int INT_DIVIDE(int a, int b)
+{
+	int c = (a * QUANTUM_MAX + (b / 2)) / b;
+	return c;
+}
+
+inline int INT_BLEND(int a, int b, int alpha)
+{
+	return INT_MULT(a - b, alpha) + b;
+}
+
+inline int MIN(int a, int b)
+{
+	return a < b ? a : b;
+}
+
+inline int MAX(int a, int b)
+{
+	return a > b ? a : b;
+}
+
 KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
 	KisStrategyColorSpace(KisID("RGBA", i18n("RGB/Alpha")), TYPE_BGRA_8, icSigRgbData)
 {
@@ -83,6 +110,51 @@ Q_INT8 KisStrategyColorSpaceRGB::difference(const QUANTUM* src1, const QUANTUM* 
 	return QMAX(QABS(src2[PIXEL_RED] - src1[PIXEL_RED]),
 				QMAX(QABS(src2[PIXEL_GREEN] - src1[PIXEL_GREEN]),
 	QABS(src2[PIXEL_BLUE] - src1[PIXEL_BLUE])));
+}
+
+void KisStrategyColorSpaceRGB::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+{
+	Q_UINT32 totalRed = 0, totalGreen = 0, totalBlue = 0, newAlpha = 0;
+	
+	while (nColors--)
+	{
+		Q_UINT32 alpha = (*colors)[PIXEL_ALPHA];
+		Q_UINT32 alphaTimesWeight = INT_MULT(alpha, *weights);
+
+		totalRed += (*colors)[PIXEL_RED] * alphaTimesWeight;
+		totalGreen += (*colors)[PIXEL_GREEN] * alphaTimesWeight;
+		totalBlue += (*colors)[PIXEL_BLUE] * alphaTimesWeight;
+		newAlpha += alphaTimesWeight;
+
+		weights++;
+		colors++;
+	}
+
+	Q_ASSERT(newAlpha <= 255);
+
+	dst[PIXEL_ALPHA] = newAlpha;
+
+	if (newAlpha > 0) {
+		totalRed = INT_DIVIDE(totalRed, newAlpha);
+		totalGreen = INT_DIVIDE(totalGreen, newAlpha);
+		totalBlue = INT_DIVIDE(totalBlue, newAlpha);
+	}
+
+	// Divide by 255.
+	totalRed += 0x80;
+	Q_UINT32 dstRed = ((totalRed >> 8) + totalRed) >> 8;
+	Q_ASSERT(dstRed <= 255);
+	dst[PIXEL_RED] = dstRed;
+
+	totalGreen += 0x80;
+	Q_UINT32 dstGreen = ((totalGreen >> 8) + totalGreen) >> 8;
+	Q_ASSERT(dstGreen <= 255);
+	dst[PIXEL_GREEN] = dstGreen;
+
+	totalBlue += 0x80;
+	Q_UINT32 dstBlue = ((totalBlue >> 8) + totalBlue) >> 8;
+	Q_ASSERT(dstBlue <= 255);
+	dst[PIXEL_BLUE] = dstBlue;
 }
 
 vKisChannelInfoSP KisStrategyColorSpaceRGB::channels() const
@@ -159,33 +231,6 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 	}
 
 	return img;
-}
-
-inline int INT_MULT(int a, int b)
-{
-	int c = a * b + 0x80;
-	return ((c >> 8) + c) >> 8;
-}
-
-inline int INT_DIVIDE(int a, int b)
-{
-	int c = (a * QUANTUM_MAX + (b / 2)) / b;
-	return c;
-}
-
-inline int INT_BLEND(int a, int b, int alpha)
-{
-	return INT_MULT(a - b, alpha) + b;
-}
-
-inline int MIN(int a, int b)
-{
-	return a < b ? a : b;
-}
-
-inline int MAX(int a, int b)
-{
-	return a > b ? a : b;
 }
 
 void KisStrategyColorSpaceRGB::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)

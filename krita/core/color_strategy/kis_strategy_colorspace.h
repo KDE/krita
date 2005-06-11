@@ -96,6 +96,10 @@ public:
 	/** Get the difference between 2 colors, normalized in the range (0,255) */
 	virtual Q_INT8 difference(const QUANTUM* src1, const QUANTUM* src2);
 
+	/** Mix the colors given their weights and return in dst
+	 * The sum of weights is assumed 255 */
+	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const = 0;
+
 	// Return a vector describing all the channels this color model has.
 	virtual vKisChannelInfoSP channels() const = 0;
 

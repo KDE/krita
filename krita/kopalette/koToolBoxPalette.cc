@@ -36,10 +36,10 @@ KoToolBoxPalette::~KoToolBoxPalette()
 {
 }
 
-void KoToolBoxPalette::plug(QWidget *w, const QString & label)
+void KoToolBoxPalette::plug(QWidget *w, const QString & label, int position)
 {
 	w->setFont(m_font);
-	m_page->addItem( w,  label );
+	m_page->insertItem( position, w,  label );
 }
 
 

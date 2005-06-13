@@ -16,6 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include <qdir.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -198,13 +199,38 @@ void KisStrategyColorSpace::resetProfiles()
 	m_profiles.clear();
 	m_profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.icm");
 	m_profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.ICM");
+	m_profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.ICC");
+	m_profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.icc");
+
 	if (!m_profileFilenames.empty()) {
 		KisProfile * profile = 0;
 		for ( QStringList::Iterator it = m_profileFilenames.begin(); it != m_profileFilenames.end(); ++it ) {
+			kdDebug() << "Trying to load profile " << *it << "\n";
 			profile = new KisProfile(*it, colorSpaceType());
 			Q_CHECK_PTR(profile);
+
 			profile -> loadAsync();
 			if (profile -> valid() && profile -> colorSpaceSignature() == m_colorSpaceSignature) {
+				kdDebug() << "Success loading profile " << *it << "\n";
+				m_profiles.push_back(profile);
+			}
+		}
+	}
+
+	// XXX: Make configurable; make flexible
+	QDir d("/usr/share/color/icc/", "*.icc");
+	m_profileFilenames += d.entryList();
+	if (!m_profileFilenames.empty()) {
+		KisProfile * profile = 0;
+		for ( QStringList::Iterator it = m_profileFilenames.begin(); it != m_profileFilenames.end(); ++it ) {
+
+			kdDebug() << "Trying to load profile " << *it << "\n";
+			profile = new KisProfile(d.filePath(*it), colorSpaceType());
+			Q_CHECK_PTR(profile);
+
+			profile -> loadAsync();
+			if (profile -> valid() && profile -> colorSpaceSignature() == m_colorSpaceSignature) {
+				kdDebug() << "Success loading profile " << *it << "\n";
 				m_profiles.push_back(profile);
 			}
 		}
@@ -254,5 +280,5 @@ cmsHTRANSFORM KisStrategyColorSpace::createTransform(KisStrategyColorSpaceSP dst
 		
 		return tf;
 	}
-
+	return 0;
 }

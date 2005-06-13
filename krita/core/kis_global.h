@@ -98,6 +98,7 @@ namespace krita {
 
 	// String constants for palettes and palette widgets
 	const QString TOOL_OPTION_WIDGET ("tooloptions");
+	
 	const QString CONTROL_PALETTE ("controlpalette");
 	const QString PAINTBOX ("paintbox");
 	const QString COLORBOX ("colorbox");

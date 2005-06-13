@@ -154,8 +154,6 @@ signals:
 	void cursorEnter();
 	void cursorLeave();
 
-	void viewCreated();
-
 public slots:
 	void slotSetFGColor(const QColor& c);
 	void slotSetBGColor(const QColor& c);

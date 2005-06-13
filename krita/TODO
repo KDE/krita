@@ -15,6 +15,7 @@ Integration
 
 
 Colorspace independence (found with the test colorstrategy)
+
 	* tool gradient uses wrong colors
 	* brightness/contrast and the like don't work.
 	* Map colorspace transforms using the full set of discriminating features:
@@ -30,14 +31,15 @@ Colorspace independence (found with the test colorstrategy)
 
 
         * Replace QColor with KisColor, where KisColor is a combination of a
-          byte array and a pointer to a color model
+          byte array and a pointer to a color model (note that we might have
+          to retain a qcolor to/from conversion for color pickers and the like).
 	* Add UI for display settings for high bit depths -- we have upscale
           and downscale, but that's not enough. I want, as in OpenEXR, to be
           able to set the lighting stops.
         * Add channel-depths other than 8 bits. Through seperate colorspaces.
-	* http://www.argyllcms.com may be faster than lcms in some
-	  cases. Investigate this
 	* get rid of QUANTUM, upscale, downscale
+	* Check and double check the cms capabilities: especially the use of
+          profiles in the render/convert/edit paths.
 	
 Core
 

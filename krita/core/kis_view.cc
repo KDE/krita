@@ -126,6 +126,12 @@
 
 KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name) : super(doc, parent, name)
 {
+	if (!doc -> isReadWrite())
+		setXMLFile("krita_readonly.rc");
+	else
+		setXMLFile("krita.rc");
+
+
 	// XXX Temporary re-instatement of old way to load filters and tools
 	m_toolRegistry = new KisToolRegistry();
 	Q_CHECK_PTR(m_toolRegistry);
@@ -137,10 +143,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	Q_CHECK_PTR(m_paletteManager);
 	Q_ASSERT(m_paletteManager);
 
-	if (!doc -> isReadWrite())
-		setXMLFile("krita_readonly.rc");
-	else
-		setXMLFile("krita.rc");
 
 	m_inputDevice = INPUT_DEVICE_MOUSE;
 
@@ -259,7 +261,7 @@ void KisView::createLayerBox()
         connect(m_layerBox, SIGNAL(itemComposite(const KisCompositeOp&)), this, SLOT(layerCompositeOp(const KisCompositeOp&)));
         connect(this, SIGNAL(currentLayerChanged(int)), m_layerBox, SLOT(slotSetCurrentItem(int)));
 
-	paletteManager()->addWidget(m_layerBox, "layerbox", "layerpalette");
+	paletteManager()->addWidget(actionCollection(), m_layerBox, "layerbox", "layerpalette", 0);
 
 }
 
@@ -620,7 +622,7 @@ void KisView::setCurrentTool(KisTool *tool)
 	if (!tool->optionWidget()) {
 		tool->createOptionWidget(0);
 	}
-	paletteManager()->addWidget(tool->optionWidget(), krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
+	paletteManager()->addWidget(actionCollection(), tool->optionWidget(), krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
 
 	if (oldTool)
 	{

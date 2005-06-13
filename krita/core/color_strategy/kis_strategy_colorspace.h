@@ -55,6 +55,12 @@ struct transform {
 	Q_UINT32 renderIntent;
 };
 
+
+
+/**
+ * A colorspace strategy is the definition of a certain color model
+ * in Krita.
+ */
 class KRITACORE_EXPORT KisStrategyColorSpace : public KShared {
 
 
@@ -71,34 +77,13 @@ public:
 
 	virtual ~KisStrategyColorSpace();
 
+
+//================== Information about this color strategy ========================//
+
 public:
 
-        /**
-	 * The nativeColor methods take a given color that can be defined in any
-	 * colorspace and fills a byte array with the corresponding color in the
-	 * the colorspace managed by this strategy.
-	 *
-	 * The profile parameter is the profile of the paint device; the other profile
-	 * is the display profile -- since we are moving from QColor that have most likely
-	 * been picked from the display itself.
-	 */
-	virtual void nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile = 0) = 0;
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile = 0) = 0;
 
-	// XXX: Add profile support
- 	virtual void toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile= 0 ) = 0;
- 	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0) = 0;
-
-	virtual KisPixelRO toKisPixelRO(const QUANTUM *src, KisProfileSP profile) = 0;
-	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile) = 0;
-	
-	// XXX: What with alpha channels?
-	/** Get the difference between 2 colors, normalized in the range (0,255) */
-	virtual Q_INT8 difference(const QUANTUM* src1, const QUANTUM* src2);
-
-	/** Mix the colors given their weights and return in dst
-	 * The sum of weights is assumed 255 */
-	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const = 0;
+	//========== Channels =====================================================//
 
 	// Return a vector describing all the channels this color model has.
 	virtual vKisChannelInfoSP channels() const = 0;
@@ -120,6 +105,7 @@ public:
 	 */
 	virtual Q_INT32 nSubstanceChannels() const { return 0; };
 
+
 	/**
 	 * The size in bytes of a single pixel in this color model
 	 */
@@ -130,60 +116,43 @@ public:
 	 */
 	virtual bool alpha() const = 0;
 
+
+	//========== Identification ===============================================//
+
+	/**
+	 * Krita definition for use in .kra files and internally: unchanging name +
+	 * i18n'able description.
+	 */
 	inline KisID id() const { return m_id; }
 
 	/**
-	 * This function is used to convert a KisPixelRepresentation from this color strategy to the specified
-	 * color strategy.
+	 * lcms colorspace type definition.
 	 */
-	virtual bool convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
-
-	/**
-	 * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
-	 * The pixels are supposed to be encoded in this color model.
-	 *
-	 * @param data A pointer to a contiguous memory region containing width * height pixels
-	 * @param width in pixels
-	 * @param height in pixels
-	 */
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
-				       KisProfileSP srcProfile, KisProfileSP dstProfile,
-				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL) = 0;
-
-	/**
-	 * Adjust the brightness of a pixel as told by adjust [-100;100]
-	 */
-	virtual void adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const = 0;
-	
-	/**
-	 * Adjust the contrast of a pixel as told by adjust [-100;100]
-	 */
-	virtual void adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const = 0;
-	
-	/**
-	 * Compose two arrays of pixels together. If source and target
-	 * are not the same colour model, the source pixels will be
-	 * converted to the target model.
-	 */
-	virtual void bitBlt(Q_INT32 stride,
-			    QUANTUM *dst,
-			    Q_INT32 dststride,
-			    KisStrategyColorSpaceSP srcSpace,
-			    const QUANTUM *src,
-			    Q_INT32 srcstride,
-			    QUANTUM opacity,
-			    Q_INT32 rows,
-			    Q_INT32 cols,
-			    const KisCompositeOp& op,
-			    KisProfileSP srcProfile = 0,
-			    KisProfileSP dstProfile = 0);
-
-
 	void setColorSpaceType(Q_UINT32 type) { m_cmType = type; }
 	Q_UINT32 colorSpaceType() { return m_cmType; }
 
+	/**
+	 * icc profile files colorspace id
+	 */
 	void setColorSpaceSignature(icColorSpaceSignature signature) { m_colorSpaceSignature = signature; }
 	icColorSpaceSignature colorSpaceSignature() { return m_colorSpaceSignature; }
+
+
+	//========== Capabilities =================================================//
+
+	/**
+	 * Returns the list of user-visible composite ops supported by this colourspace. Internal
+	 * ops such as COPY, CLEAR, and ERASE, are not included as these make no sense
+	 * for layers in the full image model.
+	 */
+	virtual KisCompositeOpList userVisiblecompositeOps() const = 0;
+
+
+	virtual bool valid() { return true; }
+
+
+	//========== Display profiles =============================================//
+
 	/**
 	 * Get a list of profiles that apply to this color space
 	 */
@@ -205,7 +174,54 @@ public:
 	 */
 	KisProfileSP getProfileByName(const QString & name);
 
-	virtual bool valid() { return true; }
+
+//================= Conversion functions ==================================//
+
+
+        /**
+	 * The nativeColor methods take a given color defined as an RGB QColor
+	 * and fills a byte array with the corresponding color in the
+	 * the colorspace managed by this strategy.
+	 *
+	 * The profile parameter is the profile of the paint device; the other profile
+	 * is the display profile -- since we are moving from QColor
+	 * that have most likely been picked from the display itself.
+	 */
+	virtual void nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile = 0) = 0;
+	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile = 0) = 0;
+
+	/**
+	 * The toQColor methods take a byte array that is at least pixelSize() long
+	 * and converts the contents to a QColor, using the given profile as a source
+	 * profile and the display profile as a destination profile.
+	 */
+ 	virtual void toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile= 0 ) = 0;
+ 	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0) = 0;
+
+
+	virtual KisPixelRO toKisPixelRO(const QUANTUM *src, KisProfileSP profile) = 0;
+	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile) = 0;
+
+
+	/**
+	 * This function is used to convert a KisPixelRepresentation from this color strategy to the specified
+	 * color strategy.
+	 */
+	virtual bool convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+
+	/**
+	 * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
+	 * The pixels are supposed to be encoded in this color model.
+	 *
+	 * @param data A pointer to a contiguous memory region containing width * height pixels
+	 * @param width in pixels
+	 * @param height in pixels
+	 */
+	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+				       KisProfileSP srcProfile, KisProfileSP dstProfile,
+				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL) = 0;
+
+
 
 	/**
 	 * Convert a byte array of srcLen pixels *src to the specified color space
@@ -218,12 +234,48 @@ public:
 				     Q_UINT32 numPixels,
 				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
+
+//============================== Manipulation fucntions ==========================//
+
 	/**
-	 * Returns the list of user-visible composite ops supported by this colourspace. Internal
-	 * ops such as COPY, CLEAR, and ERASE, are not included as these make no sense
-	 * for layers in the full image model.
+	 * Adjust the brightness of a pixel as told by adjust [-100;100]
 	 */
-	virtual KisCompositeOpList userVisiblecompositeOps() const = 0;
+	virtual void adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const = 0;
+	
+	/**
+	 * Adjust the contrast of a pixel as told by adjust [-100;100]
+	 */
+	virtual void adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const = 0;
+
+	
+	// XXX: What with alpha channels? YYY: Add an overloaded function that takes alpha into account?
+	/** Get the difference between 2 colors, normalized in the range (0,255) */
+	virtual Q_INT8 difference(const QUANTUM* src1, const QUANTUM* src2);
+
+	/** Mix the colors given their weights and return in dst
+	 * The sum of weights is assumed 255 */
+	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const = 0;
+
+	
+	/**
+	 * Compose two arrays of pixels together. If source and target
+	 * are not the same colour model, the source pixels will be
+	 * converted to the target model.
+	 */
+	virtual void bitBlt(Q_INT32 stride,
+			    QUANTUM *dst,
+			    Q_INT32 dststride,
+			    KisStrategyColorSpaceSP srcSpace,
+			    const QUANTUM *src,
+			    Q_INT32 srcstride,
+			    QUANTUM opacity,
+			    Q_INT32 rows,
+			    Q_INT32 cols,
+			    const KisCompositeOp& op,
+			    KisProfileSP srcProfile = 0,
+			    KisProfileSP dstProfile = 0);
+
+//========================== END of Public API ========================================//
 
 protected:
 

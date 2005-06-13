@@ -39,7 +39,7 @@ public:
 
 public:
 
-	virtual void plug(QWidget * widget, const QString & name);
+	virtual void plug(QWidget * widget, const QString & name, int position = INT_MAX);
 	virtual void unplug(const QWidget * widget);
         void showPage(QWidget *w);
         

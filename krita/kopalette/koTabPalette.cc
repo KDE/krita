@@ -31,7 +31,9 @@ KoTabPalette::KoTabPalette(KoView * parent, const char * name)
 {
 	m_page = new KTabWidget(this);
 	m_page->setTabShape(QTabWidget::Triangular);
-	m_page->setFont(m_font);
+	//m_page->setFont(m_font);
+	m_page->setMargin(1);
+	m_page->setTabReorderingEnabled(true);
 	setMainWidget(m_page);
 }
 
@@ -39,10 +41,10 @@ KoTabPalette::~KoTabPalette()
 {
 }
 
-void KoTabPalette::plug(QWidget * w, const QString & /*name*/)
+void KoTabPalette::plug(QWidget * w, const QString & name, int position)
 {
 	w -> setFont(m_font);
-        m_page -> addTab(w, w -> caption());
+        m_page -> insertTab(w, w -> caption(), position);
 	if (w -> layout() != 0) {
  		w -> layout() -> setSpacing(0);
  		w -> layout() -> setMargin(0);

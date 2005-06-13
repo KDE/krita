@@ -89,7 +89,7 @@ KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, na
 	connect(mSIn, SIGNAL(valueChanged(int)), this, SLOT(slotSChanged(int)));
 	connect(mVIn, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
 
-	setFixedSize(mGrid -> minimumSize());
+	//setFixedSize(mGrid -> minimumSize());
 	locked = false;
 	autovalue = true;
 }

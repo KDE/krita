@@ -48,7 +48,7 @@ public:
 
 public:
 
-	virtual void plug(QWidget * widget, const QString & name) = 0;
+	virtual void plug(QWidget * widget, const QString & name, int position) = 0;
 	virtual void unplug(const QWidget * widget) = 0;
         virtual void showPage(QWidget *w) = 0;
 

@@ -74,13 +74,14 @@ KisProfile::~KisProfile()
 
 bool KisProfile::loadAsync()
 {
-	cmsErrorAction(LCMS_ERROR_IGNORE);
+	//cmsErrorAction(LCMS_ERROR_IGNORE);
 
-	m_profile = cmsOpenProfileFromFile(filename().ascii(), "r");
+ 	//m_profile = cmsOpenProfileFromFile(filename().ascii(), "r");
 	// XXX this should be more efficient: we load the file twice
 	QFile file(filename());
 	file.open(IO_ReadOnly);
 	m_rawData = file.readAll();
+	m_profile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD)m_rawData.size());
 	file.close();
 
 	return init();
@@ -89,28 +90,28 @@ bool KisProfile::loadAsync()
 
 bool KisProfile::init() 
 {
-//  	kdDebug() << "loading profile: " << filename() << "\n";
+  	kdDebug() << "loading profile: " << filename() << "\n";
 	if (m_profile) {
 		m_colorSpaceSignature = cmsGetColorSpace(m_profile);
-// 		kdDebug() << "\tColorspaceSignature: " << m_colorSpaceSignature << "\n";
+ 		kdDebug() << "\tColorspaceSignature: " << m_colorSpaceSignature << "\n";
 
 		m_deviceClass = cmsGetDeviceClass(m_profile);
 
 		m_productName = cmsTakeProductName(m_profile);
-// 		kdDebug() << "\tProduct name: " << m_productName << "\n";
+ 		kdDebug() << "\tProduct name: " << m_productName << "\n";
 
 		m_productDescription = cmsTakeProductDesc(m_profile);
-// 		kdDebug() << "\tDescription: " << m_productDescription << "\n";
+ 		kdDebug() << "\tDescription: " << m_productDescription << "\n";
 
 		m_productInfo = cmsTakeProductInfo(m_profile);
-// 		kdDebug() << "\tInfo: " << m_productInfo << "\n";
+ 		kdDebug() << "\tInfo: " << m_productInfo << "\n";
 // #if (LCMS_MAJOR_VERSION > 1) || (LCMS_MAJOR_VERSION == 1 && LCMS_MINOR_VERSION >= 12)
 //		m_manufacturer = cmsTakeManufacturer(m_profile);
 // 		kdDebug() << "\tManufacturer: " << m_manufacturer << "\n";
 // #endif
-// 		kdDebug() << "\tCopyright: " << cmsTakeCopyright(m_profile) << "\n";
+ 		kdDebug() << "\tCopyright: " << cmsTakeCopyright(m_profile) << "\n";
 
-// 		kdDebug() << "\tModel: " << cmsTakeModel(m_profile) << "\n";
+ 		kdDebug() << "\tModel: " << cmsTakeModel(m_profile) << "\n";
 
 		setValid(true);
 

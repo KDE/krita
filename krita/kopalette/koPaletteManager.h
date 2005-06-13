@@ -25,6 +25,10 @@
 #include <qmap.h>
 #include <qdict.h>
 #include <qwidget.h>
+#include <qsignalmapper.h>
+#include <qstringlist.h>
+
+#include <kaction.h>
 
 #include <koView.h>
 
@@ -37,7 +41,6 @@ enum enumKoPaletteStyle {
 	PALETTE_DOCKER, // QDockWindow based docker with tabs
 	PALETTE_TOOLBOX, // QDockWindow based docker with a QToolBox
 };
-
 
 /**
  * Manages the set of dockwindow palettes and their widgets.
@@ -69,7 +72,7 @@ public:
 	 * If the widget occurs in the saved configuration, it is not added to the
 	 * specified palette, but in the place where it was left.
 	 */
-	virtual void addWidget(QWidget * widget, const QString & name, const QString & paletteName, enumKoPaletteStyle style = PALETTE_DOCKER);
+	virtual void addWidget(KActionCollection * ac, QWidget * widget, const QString & name, const QString & paletteName, int position = -1, enumKoPaletteStyle style = PALETTE_DOCKER);
 
 	/**
 	 * Get a certain widget by name
@@ -118,18 +121,25 @@ public:
 	 * default styles.
 	 */
 	 virtual void addPalette(KoPalette * palette, const QString & name, Dock location = DockRight);
-	 
+
+public slots:
+
+	void slotTogglePalette(int paletteIndex);
 
 private:
 
 	KoView * m_view;
 
+	QStringList             * m_widgetNames;
+	QPtrList<KAction>       * m_actions;
 	QDict<QWidget>          * m_widgets;
 	QDict<KoPalette>        * m_palettes;
 
+	QSignalMapper           * m_mapper;
+
 	QMap<QString, QString>  * m_defaultMapping; // widget to docker
 	QMap<QString, QString>  * m_currentMapping; // widget to docker
-	
+	QMap<QString, QString>  * m_savedMapping; // widget to docker
 
 };
 

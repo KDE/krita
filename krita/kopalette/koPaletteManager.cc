@@ -41,6 +41,8 @@ KoPaletteManager::KoPaletteManager(KoView * view, const char * name)
 	
 	m_view = view;
 
+	m_actions = new QPtrList<KAction>();
+
 	m_widgets = new QDict<QWidget>();
 	
 	m_palettes = new QDict<KoPalette>();
@@ -49,6 +51,10 @@ KoPaletteManager::KoPaletteManager(KoView * view, const char * name)
 	m_defaultMapping = new QMap<QString, QString>();
 	m_currentMapping = new QMap<QString, QString>();
 
+	m_widgetNames = new QStringList();
+	
+	m_mapper = new QSignalMapper(this);
+	connect(m_mapper, SIGNAL(mapped(int)), this, SLOT(slotTogglePalette(int)));
 }
 
 KoPaletteManager::~KoPaletteManager()
@@ -61,9 +67,11 @@ KoPaletteManager::~KoPaletteManager()
 	delete m_currentMapping;
 }
 
-void KoPaletteManager::addWidget(QWidget * widget,
+void KoPaletteManager::addWidget(KActionCollection * ac,
+				 QWidget * widget,
 				 const QString & name, 
 				 const QString & paletteName,
+				 int position,
 				 enumKoPaletteStyle style)
 {
 	kdDebug() << "Adding widget " << name << " (" << widget << ") to " << paletteName << "\n";
@@ -88,10 +96,14 @@ void KoPaletteManager::addWidget(QWidget * widget,
 		kdDebug() << "Tried to find or create palette " << paletteName << " for widget " << name << ", but failed\n";
 	}
 
-
-	palette->plug(widget, name);
+	m_widgetNames->append(name);
+	
+	m_actions->append(new KAction(widget->caption(), 0, m_mapper, SLOT(map()), ac));
+	
+	palette->plug(widget, name, position);
 	palette->showPage(widget);
 	m_widgets->insert(name, widget);
+	m_defaultMapping->insert(name, paletteName);
 	m_currentMapping->insert(name, paletteName);
 }
 
@@ -134,6 +146,7 @@ void KoPaletteManager::removeWidget(const QString & name)
 
 void KoPaletteManager::save()
 {
+	kdDebug() << "Saving our palettes to the config file\n";
 	// XXX: Save to the configuration
 	KApplication *app = KApplication::kApplication();
 	Q_ASSERT(app);
@@ -204,6 +217,19 @@ void KoPaletteManager::addPalette(KoPalette * palette, const QString & name, Qt:
 	
 	m_palettes->insert(name, palette);
 	placePalette(name, location);
+}
+
+void KoPaletteManager::slotTogglePalette(int paletteIndex)
+{
+	// Toggle the right palette
+	QString name = *m_widgetNames->at(paletteIndex);
+	QWidget * w = m_widgets->find(name);
+	if (w->isHidden()) {
+		w->show();
+	}
+	else {
+		w->hide();
+	}
 }
 
 #include "koPaletteManager.moc"

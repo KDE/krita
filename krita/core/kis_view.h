@@ -29,7 +29,6 @@
 #include <list>
 #include <map>
 
-#include <qcolor.h>
 #include <koView.h>
 #include <kdebug.h>
 
@@ -43,6 +42,7 @@
 
 #include "kis_id.h"
 #include "koffice_export.h"
+#include "kis_color.h"
 
 class QButton;
 class QLabel;
@@ -275,9 +275,6 @@ private:
 	 */
 	void resetMonitorProfile();
 
-
-	bool selectColor(QColor& result);
-
 	void setupActions();
 	void setupCanvas();
 	void setupRulers();
@@ -319,9 +316,6 @@ public slots:
 	void mergeLinkedLayers();
 	void saveLayerAsImage();
 	void currentImageUpdated(KisImageSP img);
-	void selectFGColor();
-	void selectBGColor();
-	void reverseFGAndBGColors();
 	void brushActivated(KisResource *brush);
 	void patternActivated(KisResource *pattern);
 	void gradientActivated(KisResource *gradient);

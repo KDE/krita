@@ -21,6 +21,23 @@
 #include "kis_profile.h"
 #include "kis_strategy_colorspace.h"
 
+KisColor::KisColor(const QColor & color, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile)
+	: m_colorStrategy(colorStrategy),
+	  m_profile(profile)
+{
+	m_data = new Q_UINT8[colorStrategy->pixelSize()];
+	m_colorStrategy->nativeColor(color, m_data, profile);
+}
+
+
+KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile)
+	: m_colorStrategy(colorStrategy),
+	  m_profile(profile)
+{
+	m_data = new Q_UINT8[colorStrategy->pixelSize()];
+	m_colorStrategy->nativeColor(color, alpha, m_data, profile);
+}
+
 KisColor::KisColor(Q_UINT8 * data, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile)
 {
 	m_data = new Q_UINT8[colorStrategy->pixelSize()];
@@ -40,4 +57,16 @@ KisColor::KisColor(KisColor &src, KisStrategyColorSpaceSP colorStrategy, KisProf
 	KisPixel dstPixel = KisPixel(m_data, m_data, colorStrategy, profile);
 	src.colorStrategy()->convertTo(srcPixel, dstPixel);
 	
+}
+
+// To save the user the trouble of doing color->colorStrategy()->toQColor(color->data(), &c, &a, profile
+void KisColor::toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile)
+{
+	m_colorStrategy->toQColor(src, c, profile);
+}
+
+
+void KisColor::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
+{
+	m_colorStrategy->toQColor(src, c, opacity, profile);
 }

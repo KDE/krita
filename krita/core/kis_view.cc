@@ -454,11 +454,6 @@ void KisView::setupActions()
 	(void)new KAction(i18n("Mirror Along &X Axis"), "view_left_right", 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
 	(void)new KAction(i18n("Mirror Along &Y Axis"), "view_top_bottom", 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
 
-	// color actions
-	(void)new KAction(i18n("Select Foreground Color..."), 0, this, SLOT(selectFGColor()), actionCollection(), "select_fgColor");
-	(void)new KAction(i18n("Select Background Color..."), 0, this, SLOT(selectBGColor()), actionCollection(), "select_bgColor");
-	(void)new KAction(i18n("Reverse Foreground/Background Colors"), 0, this, SLOT(reverseFGAndBGColors()), actionCollection(), "reverse_fg_bg");
-
 	// image actions
 	m_imgFlatten = new KAction(i18n("Flatten Image"), 0, this, SLOT(flattenImage()), actionCollection(), "flatten_image");
 	m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
@@ -2238,42 +2233,6 @@ void KisView::currentImageUpdated(KisImageSP img)
 {
 	if (img == currentImg())
 		canvasRefresh();
-}
-
-bool KisView::selectColor(QColor& result)
-{
-	QColor color;
-	bool rc;
-
-	if ((rc = (KColorDialog::getColor(color) == KColorDialog::Accepted)))
-		result.setRgb(color.red(), color.green(), color.blue());
-
-	return rc;
-}
-
-void KisView::selectFGColor()
-{
-	QColor c;
-
-	if (selectColor(c))
-		setFGColor(c);
-}
-
-void KisView::selectBGColor()
-{
-	QColor c;
-
-	if (selectColor(c))
-		setBGColor(c);
-}
-
-void KisView::reverseFGAndBGColors()
-{
-	QColor oldFg = m_fg;
-	QColor oldBg = m_bg;
-
-	setFGColor(oldBg);
-	setBGColor(oldFg);
 }
 
 void KisView::connectCurrentImg() const

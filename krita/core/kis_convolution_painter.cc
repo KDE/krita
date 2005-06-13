@@ -109,7 +109,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 	}
 
 	// Determine the kernel's extent from the center pixel
-	Q_UINT32 kw, kh, kd;
+	Q_INT32 kw, kh, kd;
 	kw = kernel[0].width;
 	kh = kernel[0].height;
 	kd = (kw - 1) / 2;

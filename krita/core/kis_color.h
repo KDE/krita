@@ -35,7 +35,14 @@ class KisColor {
 
 public:
 
-
+	// Create a KisColor from a QColor. The QColor is immediately converted to native. The QColor
+	// is assumed to have the current monitor profile.
+	KisColor(const QColor & color, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile = 0);
+	
+	// Create a KisColor from a QColor. The QColor is immediately converted to native. The QColor
+	// is assumed to have the current monitor profile.	
+	KisColor(const QColor & color, Q_UINT8 alpha, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile = 0);
+	
 	// Create a KisColor using a native color strategy. The data is copied.
 	KisColor(Q_UINT8 * data, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0);
 
@@ -48,6 +55,15 @@ public:
 	KisStrategyColorSpaceSP colorStrategy() { return m_colorStrategy; }
 	KisProfileSP profile() { return m_profile; }
 
+	// To save the user the trouble of doing color->colorStrategy()->toQColor(color->data(), &c, &a, profile
+	virtual void toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile = 0 );
+	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+
+#if 0
+	// XXX (bsar): Do we need these?
+	virtual void toLab(float * l, float * a, float * b, float * alpha, KisProfileSP profile = 0);
+	virtual void fromLab(float l, float a, float b, float alpha, KisProfileSP profile = 0);
+#endif	
 private:
 
 	Q_UINT8 * m_data;

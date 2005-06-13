@@ -1,0 +1,36 @@
+One think Krita can not handle are really big files. A 125MB tif file is
+loading into memory in one go, making Krita take about 289MB of memory
+-- with no image loaded, Krita takes a more reasonable 41MB. And during
+loading, Krita needs 800MB, and that's a bit much.
+
+Since my employer has paid to upgrade my laptop to 1GB of memory, that's
+not a problem for me :-). But it's the principle of the thing. Besides,
+loading the file does take a few minutes to convert. And you don't want
+to do a quick sharpen on a file of this size.
+
+Now it has never been a design goal to handle really enormous images, vips
+does that a lot better than any general purpose paint app can ever aspire
+to, but we should give some thought to our way of handling big images.
+
+The problem is layered: it's not enough to have lazy loading of krita
+files (although we should store, when an image gets above a certain
+size, an .png file of the rendered image that we can quickly load and
+display, and then we should only load the tiles we actually need for
+editing/rerendering from the file), but we should also be able to do the
+same with tiled tiffs and exr images that support random access loading.
+
+This must be done somewhere in the datamanager code. If an image reader
+(whether it's a filter or Krita's own file format reader) indicates that
+it supports random access, then a file handle and a the reader object
+is passed to the tile manager.
+
+The tile manager either does nothing until it gets a request for a
+certain chunk of data (through one of the read functions or the creation
+of an read/write iterator), and only then it starts reading and decoding
+image data. Or, the tile manager starts a background thread and begins
+converting the alien image data to Krita tiles, carefully caching them
+in a temp file.
+
+Maybe we could even devise an algorithm to delete unused tiles from
+memory and cache them on disk; same with undo information.
+

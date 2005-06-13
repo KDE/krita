@@ -32,6 +32,7 @@
 #include "composite.h"
 #include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
+#include "kis_integer_maths.h"
 
 struct testcspixel
 {
@@ -245,33 +246,6 @@ void KisStrategyColorSpaceTestCS::adjustContrast(const Q_UINT8 *src, Q_UINT8 *ds
 	//XXX Nothing done yet
 }
 
-inline int INT_MULT(int a, int b)
-{
-	int c = a * b + 0x80;
-	return ((c >> 8) + c) >> 8;
-}
-
-inline int INT_DIVIDE(int a, int b)
-{
-	int c = (a * QUANTUM_MAX + (b / 2)) / b;
-	return c;
-}
-
-inline int INT_BLEND(int a, int b, int alpha)
-{
-	return INT_MULT(a - b, alpha) + b;
-}
-
-inline int MIN(int a, int b)
-{
-	return a < b ? a : b;
-}
-
-inline int MAX(int a, int b)
-{
-	return a > b ? a : b;
-}
-
 void KisStrategyColorSpaceTestCS::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
@@ -288,7 +262,7 @@ void KisStrategyColorSpaceTestCS::compositeOver(QUANTUM *dstRowStart, Q_INT32 ds
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = INT_MULT(srcAlpha, opacity);
+					srcAlpha = UINT8_MULT(srcAlpha, opacity);
 				}
 
 				if (srcAlpha == OPACITY_OPAQUE) {
@@ -301,11 +275,11 @@ void KisStrategyColorSpaceTestCS::compositeOver(QUANTUM *dstRowStart, Q_INT32 ds
 					if (dstAlpha == OPACITY_OPAQUE) {
 						srcBlend = srcAlpha;
 					} else {
-						QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+						QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 						dstpix->alpha = newAlpha;
 
 						if (newAlpha != 0) {
-							srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+							srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 						} else {
 							srcBlend = srcAlpha;
 						}
@@ -314,9 +288,9 @@ void KisStrategyColorSpaceTestCS::compositeOver(QUANTUM *dstRowStart, Q_INT32 ds
 					if (srcBlend == OPACITY_OPAQUE) {
 						memcpy(dst, src, sizeof(struct testcspixel));
 					} else {
-						dstpix->r = INT_BLEND(pix->r, dstpix->r, srcBlend);
-						dstpix->bmg = INT_BLEND((pix->bmg - pix->g)/16, (dstpix->bmg -dstpix->g)/16, srcBlend);
-						dstpix->g = INT_BLEND(pix->g, dstpix->g, srcBlend);
+						dstpix->r = UINT8_BLEND(pix->r, dstpix->r, srcBlend);
+						dstpix->bmg = UINT8_BLEND((pix->bmg - pix->g)/16, (dstpix->bmg -dstpix->g)/16, srcBlend);
+						dstpix->g = UINT8_BLEND(pix->g, dstpix->g, srcBlend);
 						dstpix->bmg = dstpix->bmg*16 + dstpix->g;
 					}
 				}

@@ -58,5 +58,11 @@ noinst_HEADERS = kis_paint_device.h kis_layer.h kis_image.h kis_doc.h \
 
 libkritacore_la_METASOURCES = AUTO
 libkritacore_la_LDFLAGS = $(all_libraries)
-SUBDIRS = tiles strategy color_strategy paintop resources tool 
 KDE_OPTIONS = nofinal
+
+if include_kunittest_tests
+TESTSDIR = tests
+endif
+
+SUBDIRS = tiles strategy color_strategy paintop resources tool . $(TESTSDIR)
+

@@ -32,6 +32,7 @@
 #include "kis_image.h"
 #include "kis_colorspace_template.h"
 #include "kis_iterators_pixel.h"
+#include "kis_integer_maths.h"
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_TEMPLATE = 1;
@@ -237,33 +238,6 @@ KisCompositeOpList KisColorSpaceTemplate::userVisiblecompositeOps() const
 	return list;
 }
 
-inline int INT_MULT(int a, int b)
-{
-	int c = a * b + 0x80;
-	return ((c >> 8) + c) >> 8;
-}
-
-inline int INT_DIVIDE(int a, int b)
-{
-	int c = (a * QUANTUM_MAX + (b / 2)) / b;
-	return c;
-}
-
-inline int INT_BLEND(int a, int b, int alpha)
-{
-	return INT_MULT(a - b, alpha) + b;
-}
-
-inline int MIN(int a, int b)
-{
-	return a < b ? a : b;
-}
-
-inline int MAX(int a, int b)
-{
-	return a > b ? a : b;
-}
-
 void KisColorSpaceTemplate::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
@@ -279,7 +253,7 @@ void KisColorSpaceTemplate::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowSt
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = INT_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
+					srcAlpha = UINT8_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
 				}
 
 				if (srcAlpha == OPACITY_OPAQUE) {
@@ -292,11 +266,11 @@ void KisColorSpaceTemplate::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowSt
 					if (dstAlpha == OPACITY_OPAQUE) {
 						srcBlend = srcAlpha;
 					} else {
-						QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+						QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 						dst[PIXEL_TEMPLATE_ALPHA] = newAlpha;
 
 						if (newAlpha != 0) {
-							srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+							srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 						} else {
 							srcBlend = srcAlpha;
 						}
@@ -305,7 +279,7 @@ void KisColorSpaceTemplate::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowSt
 					if (srcBlend == OPACITY_OPAQUE) {
 						memcpy(dst, src, MAX_CHANNEL_TEMPLATE * sizeof(QUANTUM));
 					} else {
-						dst[PIXEL_TEMPLATE] = INT_BLEND(src[PIXEL_TEMPLATE], dst[PIXEL_TEMPLATE], srcBlend);
+						dst[PIXEL_TEMPLATE] = UINT8_BLEND(src[PIXEL_TEMPLATE], dst[PIXEL_TEMPLATE], srcBlend);
 					}
 				}
 			}
@@ -334,12 +308,12 @@ void KisColorSpaceTemplate::compositeMultiply(QUANTUM *dstRowStart, Q_INT32 dstR
 			QUANTUM srcAlpha = src[PIXEL_TEMPLATE_ALPHA];
 			QUANTUM dstAlpha = dst[PIXEL_TEMPLATE_ALPHA];
 
-			srcAlpha = MIN(srcAlpha, dstAlpha);
+			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = INT_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
+					srcAlpha = UINT8_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
 				}
 
 				QUANTUM srcBlend;
@@ -347,11 +321,11 @@ void KisColorSpaceTemplate::compositeMultiply(QUANTUM *dstRowStart, Q_INT32 dstR
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_TEMPLATE_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
-						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 					} else {
 						srcBlend = srcAlpha;
 					}
@@ -360,9 +334,9 @@ void KisColorSpaceTemplate::compositeMultiply(QUANTUM *dstRowStart, Q_INT32 dstR
 				QUANTUM srcColor = src[PIXEL_TEMPLATE];
 				QUANTUM dstColor = dst[PIXEL_TEMPLATE];
 
-				srcColor = INT_MULT(srcColor, dstColor);
+				srcColor = UINT8_MULT(srcColor, dstColor);
 
-				dst[PIXEL_TEMPLATE] = INT_BLEND(srcColor, dstColor, srcBlend);
+				dst[PIXEL_TEMPLATE] = UINT8_BLEND(srcColor, dstColor, srcBlend);
 			}
 
 			columns--;
@@ -389,12 +363,12 @@ void KisColorSpaceTemplate::compositeDivide(QUANTUM *dstRowStart, Q_INT32 dstRow
 			QUANTUM srcAlpha = src[PIXEL_TEMPLATE_ALPHA];
 			QUANTUM dstAlpha = dst[PIXEL_TEMPLATE_ALPHA];
 
-			srcAlpha = MIN(srcAlpha, dstAlpha);
+			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = INT_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
+					srcAlpha = UINT8_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
 				}
 
 				QUANTUM srcBlend;
@@ -402,11 +376,11 @@ void KisColorSpaceTemplate::compositeDivide(QUANTUM *dstRowStart, Q_INT32 dstRow
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_TEMPLATE_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
-						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 					} else {
 						srcBlend = srcAlpha;
 					}
@@ -417,9 +391,9 @@ void KisColorSpaceTemplate::compositeDivide(QUANTUM *dstRowStart, Q_INT32 dstRow
 					QUANTUM srcColor = src[channel];
 					QUANTUM dstColor = dst[channel];
 
-					srcColor = MIN((dstColor * (QUANTUM_MAX + 1)) / (1 + srcColor), QUANTUM_MAX);
+					srcColor = QMIN((dstColor * (QUANTUM_MAX + 1)) / (1 + srcColor), QUANTUM_MAX);
 
-					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -449,12 +423,12 @@ void KisColorSpaceTemplate::compositeScreen(QUANTUM *dstRowStart, Q_INT32 dstRow
 			QUANTUM srcAlpha = src[PIXEL_TEMPLATE_ALPHA];
 			QUANTUM dstAlpha = dst[PIXEL_TEMPLATE_ALPHA];
 
-			srcAlpha = MIN(srcAlpha, dstAlpha);
+			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = INT_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
+					srcAlpha = UINT8_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
 				}
 
 				QUANTUM srcBlend;
@@ -462,11 +436,11 @@ void KisColorSpaceTemplate::compositeScreen(QUANTUM *dstRowStart, Q_INT32 dstRow
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_TEMPLATE_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
-						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 					} else {
 						srcBlend = srcAlpha;
 					}
@@ -477,9 +451,9 @@ void KisColorSpaceTemplate::compositeScreen(QUANTUM *dstRowStart, Q_INT32 dstRow
 					QUANTUM srcColor = src[channel];
 					QUANTUM dstColor = dst[channel];
 
-					srcColor = QUANTUM_MAX - INT_MULT(QUANTUM_MAX - dstColor, QUANTUM_MAX - srcColor);
+					srcColor = QUANTUM_MAX - UINT8_MULT(QUANTUM_MAX - dstColor, QUANTUM_MAX - srcColor);
 
-					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -509,12 +483,12 @@ void KisColorSpaceTemplate::compositeOverlay(QUANTUM *dstRowStart, Q_INT32 dstRo
 			QUANTUM srcAlpha = src[PIXEL_TEMPLATE_ALPHA];
 			QUANTUM dstAlpha = dst[PIXEL_TEMPLATE_ALPHA];
 
-			srcAlpha = MIN(srcAlpha, dstAlpha);
+			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = INT_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
+					srcAlpha = UINT8_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
 				}
 
 				QUANTUM srcBlend;
@@ -522,11 +496,11 @@ void KisColorSpaceTemplate::compositeOverlay(QUANTUM *dstRowStart, Q_INT32 dstRo
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_TEMPLATE_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
-						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 					} else {
 						srcBlend = srcAlpha;
 					}
@@ -537,9 +511,9 @@ void KisColorSpaceTemplate::compositeOverlay(QUANTUM *dstRowStart, Q_INT32 dstRo
 					QUANTUM srcColor = src[channel];
 					QUANTUM dstColor = dst[channel];
 
-					srcColor = INT_MULT(dstColor, dstColor + INT_MULT(2 * srcColor, QUANTUM_MAX - dstColor));
+					srcColor = UINT8_MULT(dstColor, dstColor + UINT8_MULT(2 * srcColor, QUANTUM_MAX - dstColor));
 
-					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -569,12 +543,12 @@ void KisColorSpaceTemplate::compositeDodge(QUANTUM *dstRowStart, Q_INT32 dstRowS
 			QUANTUM srcAlpha = src[PIXEL_TEMPLATE_ALPHA];
 			QUANTUM dstAlpha = dst[PIXEL_TEMPLATE_ALPHA];
 
-			srcAlpha = MIN(srcAlpha, dstAlpha);
+			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = INT_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
+					srcAlpha = UINT8_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
 				}
 
 				QUANTUM srcBlend;
@@ -582,11 +556,11 @@ void KisColorSpaceTemplate::compositeDodge(QUANTUM *dstRowStart, Q_INT32 dstRowS
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_TEMPLATE_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
-						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 					} else {
 						srcBlend = srcAlpha;
 					}
@@ -597,9 +571,9 @@ void KisColorSpaceTemplate::compositeDodge(QUANTUM *dstRowStart, Q_INT32 dstRowS
 					QUANTUM srcColor = src[channel];
 					QUANTUM dstColor = dst[channel];
 
-					srcColor = MIN((dstColor * (QUANTUM_MAX + 1)) / (QUANTUM_MAX + 1 - srcColor), QUANTUM_MAX);
+					srcColor = QMIN((dstColor * (QUANTUM_MAX + 1)) / (QUANTUM_MAX + 1 - srcColor), QUANTUM_MAX);
 
-					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -629,12 +603,12 @@ void KisColorSpaceTemplate::compositeBurn(QUANTUM *dstRowStart, Q_INT32 dstRowSt
 			QUANTUM srcAlpha = src[PIXEL_TEMPLATE_ALPHA];
 			QUANTUM dstAlpha = dst[PIXEL_TEMPLATE_ALPHA];
 
-			srcAlpha = MIN(srcAlpha, dstAlpha);
+			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = INT_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
+					srcAlpha = UINT8_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
 				}
 
 				QUANTUM srcBlend;
@@ -642,11 +616,11 @@ void KisColorSpaceTemplate::compositeBurn(QUANTUM *dstRowStart, Q_INT32 dstRowSt
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_TEMPLATE_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
-						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 					} else {
 						srcBlend = srcAlpha;
 					}
@@ -657,10 +631,10 @@ void KisColorSpaceTemplate::compositeBurn(QUANTUM *dstRowStart, Q_INT32 dstRowSt
 					QUANTUM srcColor = src[channel];
 					QUANTUM dstColor = dst[channel];
 
-					srcColor = MIN(((QUANTUM_MAX - dstColor) * (QUANTUM_MAX + 1)) / (srcColor + 1), QUANTUM_MAX);
+					srcColor = QMIN(((QUANTUM_MAX - dstColor) * (QUANTUM_MAX + 1)) / (srcColor + 1), QUANTUM_MAX);
 					srcColor = CLAMP(QUANTUM_MAX - srcColor, 0, QUANTUM_MAX);
 
-					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -690,12 +664,12 @@ void KisColorSpaceTemplate::compositeDarken(QUANTUM *dstRowStart, Q_INT32 dstRow
 			QUANTUM srcAlpha = src[PIXEL_TEMPLATE_ALPHA];
 			QUANTUM dstAlpha = dst[PIXEL_TEMPLATE_ALPHA];
 
-			srcAlpha = MIN(srcAlpha, dstAlpha);
+			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = INT_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
+					srcAlpha = UINT8_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
 				}
 
 				QUANTUM srcBlend;
@@ -703,11 +677,11 @@ void KisColorSpaceTemplate::compositeDarken(QUANTUM *dstRowStart, Q_INT32 dstRow
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_TEMPLATE_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
-						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 					} else {
 						srcBlend = srcAlpha;
 					}
@@ -718,9 +692,9 @@ void KisColorSpaceTemplate::compositeDarken(QUANTUM *dstRowStart, Q_INT32 dstRow
 					QUANTUM srcColor = src[channel];
 					QUANTUM dstColor = dst[channel];
 
-					srcColor = MIN(srcColor, dstColor);
+					srcColor = QMIN(srcColor, dstColor);
 
-					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -750,12 +724,12 @@ void KisColorSpaceTemplate::compositeLighten(QUANTUM *dstRowStart, Q_INT32 dstRo
 			QUANTUM srcAlpha = src[PIXEL_TEMPLATE_ALPHA];
 			QUANTUM dstAlpha = dst[PIXEL_TEMPLATE_ALPHA];
 
-			srcAlpha = MIN(srcAlpha, dstAlpha);
+			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = INT_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
+					srcAlpha = UINT8_MULT(src[PIXEL_TEMPLATE_ALPHA], opacity);
 				}
 
 				QUANTUM srcBlend;
@@ -763,11 +737,11 @@ void KisColorSpaceTemplate::compositeLighten(QUANTUM *dstRowStart, Q_INT32 dstRo
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_TEMPLATE_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
-						srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 					} else {
 						srcBlend = srcAlpha;
 					}
@@ -780,7 +754,7 @@ void KisColorSpaceTemplate::compositeLighten(QUANTUM *dstRowStart, Q_INT32 dstRo
 
 					srcColor = MAX(srcColor, dstColor);
 
-					QUANTUM newColor = INT_BLEND(srcColor, dstColor, srcBlend);
+					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}

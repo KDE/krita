@@ -36,6 +36,7 @@
 #include "kis_resource_mediator.h"
 #include "kis_factory.h"
 #include "kis_profile.h"
+#include "kis_integer_maths.h"
 
 namespace cmyk {
 	const Q_INT32 MAX_CHANNEL_CMYK = 4;
@@ -249,24 +250,6 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 pixelSize,
 
 // XXX: Cut & Paste from colorspace_rgb
 
-inline int INT_MULT(int a, int b)
-{
-	int c = a * b + 0x80;
-	return ((c >> 8) + c) >> 8;
-}
-
-inline int INT_BLEND(int a, int b, int alpha)
-{
-	return INT_MULT(a - b, alpha) + b;
-}
-
-inline int INT_DIVIDE(int a, int b)
-{
-	int c = (a * QUANTUM_MAX + (b / 2)) / b;
-	return c;
-}
-
-
 void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowStride, 
 					     const QUANTUM *srcRowStart, Q_INT32 srcRowStride, 
 					     Q_INT32 rows, Q_INT32 numColumns, 
@@ -284,7 +267,7 @@ void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstR
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = INT_MULT(src[PIXEL_CMYK_ALPHA], opacity);
+					srcAlpha = UINT8_MULT(src[PIXEL_CMYK_ALPHA], opacity);
 				}
 
 				if (srcAlpha == OPACITY_OPAQUE) {
@@ -297,11 +280,11 @@ void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstR
 					if (dstAlpha == OPACITY_OPAQUE) {
 						srcBlend = srcAlpha;
 					} else {
-						QUANTUM newAlpha = dstAlpha + INT_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+						QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 						dst[PIXEL_CMYK_ALPHA] = newAlpha;
 
 						if (newAlpha != 0) {
-							srcBlend = INT_DIVIDE(srcAlpha, newAlpha);
+							srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 						} else {
 							srcBlend = srcAlpha;
 						}
@@ -310,10 +293,10 @@ void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstR
 					if (srcBlend == OPACITY_OPAQUE) {
 						memcpy(dst, src, cmyk::MAX_CHANNEL_CMYKA * sizeof(QUANTUM));
 					} else {
-						dst[PIXEL_CYAN] = INT_BLEND(src[PIXEL_CYAN], dst[PIXEL_CYAN], srcBlend);
-						dst[PIXEL_MAGENTA] = INT_BLEND(src[PIXEL_MAGENTA], dst[PIXEL_MAGENTA], srcBlend);
-						dst[PIXEL_YELLOW] = INT_BLEND(src[PIXEL_YELLOW], dst[PIXEL_YELLOW], srcBlend);
-						dst[PIXEL_BLACK] = INT_BLEND(src[PIXEL_BLACK], dst[PIXEL_BLACK], srcBlend);
+						dst[PIXEL_CYAN] = UINT8_BLEND(src[PIXEL_CYAN], dst[PIXEL_CYAN], srcBlend);
+						dst[PIXEL_MAGENTA] = UINT8_BLEND(src[PIXEL_MAGENTA], dst[PIXEL_MAGENTA], srcBlend);
+						dst[PIXEL_YELLOW] = UINT8_BLEND(src[PIXEL_YELLOW], dst[PIXEL_YELLOW], srcBlend);
+						dst[PIXEL_BLACK] = UINT8_BLEND(src[PIXEL_BLACK], dst[PIXEL_BLACK], srcBlend);
 					}
 				}
 			}
@@ -332,10 +315,10 @@ void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstR
 
 			} else {
 				
-				dst[PIXEL_CYAN] = INT_BLEND(src[PIXEL_CYAN], dst[PIXEL_CYAN], opacity);
-				dst[PIXEL_MAGENTA] = INT_BLEND(src[PIXEL_MAGENTA], dst[PIXEL_MAGENTA], opacity);
-				dst[PIXEL_YELLOW] = INT_BLEND(src[PIXEL_YELLOW], dst[PIXEL_YELLOW], opacity);
-				dst[PIXEL_BLACK] = INT_BLEND(src[PIXEL_BLACK], dst[PIXEL_BLACK], opacity);
+				dst[PIXEL_CYAN] = UINT8_BLEND(src[PIXEL_CYAN], dst[PIXEL_CYAN], opacity);
+				dst[PIXEL_MAGENTA] = UINT8_BLEND(src[PIXEL_MAGENTA], dst[PIXEL_MAGENTA], opacity);
+				dst[PIXEL_YELLOW] = UINT8_BLEND(src[PIXEL_YELLOW], dst[PIXEL_YELLOW], opacity);
+				dst[PIXEL_BLACK] = UINT8_BLEND(src[PIXEL_BLACK], dst[PIXEL_BLACK], opacity);
 
 			}
 

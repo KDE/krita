@@ -56,14 +56,14 @@ KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
 {
 }
 
-void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP /*profile*/)
+void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
 	dst[PIXEL_RED] = upscale(c.red());
 	dst[PIXEL_GREEN] = upscale(c.green());
 	dst[PIXEL_BLUE] = upscale(c.blue());
 }
 
-void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP /*profile*/)
+void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
 	dst[PIXEL_RED] = upscale(c.red());
 	dst[PIXEL_GREEN] = upscale(c.green());
@@ -71,18 +71,18 @@ void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, QUA
 	dst[PIXEL_ALPHA] = opacity;
 }
 
-void KisStrategyColorSpaceRGB::toQColor(const QUANTUM *src, QColor *c, KisProfileSP /*profile*/)
+void KisStrategyColorSpaceRGB::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
 {
 	c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
 }
 
-void KisStrategyColorSpaceRGB::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
+void KisStrategyColorSpaceRGB::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
 {
 	c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
 	*opacity = src[PIXEL_ALPHA];
 }
 
-Q_INT8 KisStrategyColorSpaceRGB::difference(const QUANTUM* src1, const QUANTUM* src2)
+Q_INT8 KisStrategyColorSpaceRGB::difference(const Q_UINT8* src1, const Q_UINT8* src2)
 {
 	//return KisStrategyColorSpace::difference(src1, src2);
 	return QMAX(QABS(src2[PIXEL_RED] - src1[PIXEL_RED]),
@@ -160,7 +160,7 @@ Q_INT32 KisStrategyColorSpaceRGB::pixelSize() const
 	return MAX_CHANNEL_RGBA;
 }
 
-QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+QImage KisStrategyColorSpaceRGB::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 						 KisProfileSP srcProfile, KisProfileSP dstProfile,
 						 Q_INT32 renderingIntent)
 
@@ -190,7 +190,7 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const QUANTUM *data, Q_INT32 wi
 	}
 
 #else
-	QImage img = QImage(const_cast<QUANTUM *>(data), width, height, 32, 0, 0, QImage::LittleEndian);
+	QImage img = QImage(const_cast<Q_UINT8 *>(data), width, height, 32, 0, 0, QImage::LittleEndian);
 	img.setAlphaBuffer(true);
 	// XXX: The previous version of this code used the quantum data directly
 	// as an optimisation. We're introducing a copy overhead here which could
@@ -217,7 +217,7 @@ void KisStrategyColorSpaceRGB::adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst
 	{
 		// change the brightness
 		int nd = src[ i ] + adjust;
-		dst[i] = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+		dst[i] = QMAX( 0, QMIN( UINT8_MAX, nd ) );
 	}
 }
 
@@ -230,22 +230,22 @@ void KisStrategyColorSpaceRGB::adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, 
 	{
 		// change the brightness
 		int nd = src[ i ];
-		nd = (int)(((nd - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2);
-		dst[i] = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+		nd = (int)(((nd - UINT8_MAX / 2 ) * contrast) + UINT8_MAX / 2);
+		dst[i] = QMAX( 0, QMIN( UINT8_MAX, nd ) );
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
 
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
@@ -254,16 +254,16 @@ void KisStrategyColorSpaceRGB::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRo
 				}
 
 				if (srcAlpha == OPACITY_OPAQUE) {
-					memcpy(dst, src, MAX_CHANNEL_RGBA * sizeof(QUANTUM));
+					memcpy(dst, src, MAX_CHANNEL_RGBA * sizeof(Q_UINT8));
 				} else {
-					QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+					Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
-					QUANTUM srcBlend;
+					Q_UINT8 srcBlend;
 
 					if (dstAlpha == OPACITY_OPAQUE) {
 						srcBlend = srcAlpha;
 					} else {
-						QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+						Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 						dst[PIXEL_ALPHA] = newAlpha;
 
 						if (newAlpha != 0) {
@@ -274,7 +274,7 @@ void KisStrategyColorSpaceRGB::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRo
 					}
 
 					if (srcBlend == OPACITY_OPAQUE) {
-						memcpy(dst, src, MAX_CHANNEL_RGB * sizeof(QUANTUM));
+						memcpy(dst, src, MAX_CHANNEL_RGB * sizeof(Q_UINT8));
 					} else {
 						dst[PIXEL_RED] = UINT8_BLEND(src[PIXEL_RED], dst[PIXEL_RED], srcBlend);
 						dst[PIXEL_GREEN] = UINT8_BLEND(src[PIXEL_GREEN], dst[PIXEL_GREEN], srcBlend);
@@ -294,18 +294,18 @@ void KisStrategyColorSpaceRGB::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRo
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeMultiply(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeMultiply(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
-			QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
@@ -315,12 +315,12 @@ void KisStrategyColorSpaceRGB::compositeMultiply(QUANTUM *dstRowStart, Q_INT32 d
 					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
 				}
 
-				QUANTUM srcBlend;
+				Q_UINT8 srcBlend;
 
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
@@ -330,8 +330,8 @@ void KisStrategyColorSpaceRGB::compositeMultiply(QUANTUM *dstRowStart, Q_INT32 d
 					}
 				}
 
-				QUANTUM srcColor = src[PIXEL_RED];
-				QUANTUM dstColor = dst[PIXEL_RED];
+				Q_UINT8 srcColor = src[PIXEL_RED];
+				Q_UINT8 dstColor = dst[PIXEL_RED];
 
 				srcColor = UINT8_MULT(srcColor, dstColor);
 
@@ -363,18 +363,18 @@ void KisStrategyColorSpaceRGB::compositeMultiply(QUANTUM *dstRowStart, Q_INT32 d
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeDivide(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeDivide(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
-			QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
@@ -384,12 +384,12 @@ void KisStrategyColorSpaceRGB::compositeDivide(QUANTUM *dstRowStart, Q_INT32 dst
 					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
 				}
 
-				QUANTUM srcBlend;
+				Q_UINT8 srcBlend;
 
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
@@ -401,12 +401,12 @@ void KisStrategyColorSpaceRGB::compositeDivide(QUANTUM *dstRowStart, Q_INT32 dst
 
 				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-					QUANTUM srcColor = src[channel];
-					QUANTUM dstColor = dst[channel];
+					Q_UINT8 srcColor = src[channel];
+					Q_UINT8 dstColor = dst[channel];
 
-					srcColor = QMIN((dstColor * (QUANTUM_MAX + 1)) / (1 + srcColor), QUANTUM_MAX);
+					srcColor = QMIN((dstColor * (UINT8_MAX + 1)) / (1 + srcColor), UINT8_MAX);
 
-					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
+					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -423,18 +423,18 @@ void KisStrategyColorSpaceRGB::compositeDivide(QUANTUM *dstRowStart, Q_INT32 dst
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeScreen(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeScreen(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
-			QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
@@ -444,12 +444,12 @@ void KisStrategyColorSpaceRGB::compositeScreen(QUANTUM *dstRowStart, Q_INT32 dst
 					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
 				}
 
-				QUANTUM srcBlend;
+				Q_UINT8 srcBlend;
 
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
@@ -461,12 +461,12 @@ void KisStrategyColorSpaceRGB::compositeScreen(QUANTUM *dstRowStart, Q_INT32 dst
 
 				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-					QUANTUM srcColor = src[channel];
-					QUANTUM dstColor = dst[channel];
+					Q_UINT8 srcColor = src[channel];
+					Q_UINT8 dstColor = dst[channel];
 
-					srcColor = QUANTUM_MAX - UINT8_MULT(QUANTUM_MAX - dstColor, QUANTUM_MAX - srcColor);
+					srcColor = UINT8_MAX - UINT8_MULT(UINT8_MAX - dstColor, UINT8_MAX - srcColor);
 
-					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
+					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -483,18 +483,18 @@ void KisStrategyColorSpaceRGB::compositeScreen(QUANTUM *dstRowStart, Q_INT32 dst
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeOverlay(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeOverlay(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
-			QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
@@ -504,12 +504,12 @@ void KisStrategyColorSpaceRGB::compositeOverlay(QUANTUM *dstRowStart, Q_INT32 ds
 					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
 				}
 
-				QUANTUM srcBlend;
+				Q_UINT8 srcBlend;
 
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
@@ -521,12 +521,12 @@ void KisStrategyColorSpaceRGB::compositeOverlay(QUANTUM *dstRowStart, Q_INT32 ds
 
 				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-					QUANTUM srcColor = src[channel];
-					QUANTUM dstColor = dst[channel];
+					Q_UINT8 srcColor = src[channel];
+					Q_UINT8 dstColor = dst[channel];
 
-					srcColor = UINT8_MULT(dstColor, dstColor + UINT8_MULT(2 * srcColor, QUANTUM_MAX - dstColor));
+					srcColor = UINT8_MULT(dstColor, dstColor + UINT8_MULT(2 * srcColor, UINT8_MAX - dstColor));
 
-					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
+					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -543,18 +543,18 @@ void KisStrategyColorSpaceRGB::compositeOverlay(QUANTUM *dstRowStart, Q_INT32 ds
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeDodge(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeDodge(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
-			QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
@@ -564,12 +564,12 @@ void KisStrategyColorSpaceRGB::compositeDodge(QUANTUM *dstRowStart, Q_INT32 dstR
 					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
 				}
 
-				QUANTUM srcBlend;
+				Q_UINT8 srcBlend;
 
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
@@ -581,12 +581,12 @@ void KisStrategyColorSpaceRGB::compositeDodge(QUANTUM *dstRowStart, Q_INT32 dstR
 
 				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-					QUANTUM srcColor = src[channel];
-					QUANTUM dstColor = dst[channel];
+					Q_UINT8 srcColor = src[channel];
+					Q_UINT8 dstColor = dst[channel];
 
-					srcColor = QMIN((dstColor * (QUANTUM_MAX + 1)) / (QUANTUM_MAX + 1 - srcColor), QUANTUM_MAX);
+					srcColor = QMIN((dstColor * (UINT8_MAX + 1)) / (UINT8_MAX + 1 - srcColor), UINT8_MAX);
 
-					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
+					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -603,18 +603,18 @@ void KisStrategyColorSpaceRGB::compositeDodge(QUANTUM *dstRowStart, Q_INT32 dstR
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeBurn(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
-			QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
@@ -624,12 +624,12 @@ void KisStrategyColorSpaceRGB::compositeBurn(QUANTUM *dstRowStart, Q_INT32 dstRo
 					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
 				}
 
-				QUANTUM srcBlend;
+				Q_UINT8 srcBlend;
 
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
@@ -641,13 +641,13 @@ void KisStrategyColorSpaceRGB::compositeBurn(QUANTUM *dstRowStart, Q_INT32 dstRo
 
 				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-					QUANTUM srcColor = src[channel];
-					QUANTUM dstColor = dst[channel];
+					Q_UINT8 srcColor = src[channel];
+					Q_UINT8 dstColor = dst[channel];
 
-					srcColor = QMIN(((QUANTUM_MAX - dstColor) * (QUANTUM_MAX + 1)) / (srcColor + 1), QUANTUM_MAX);
-					srcColor = CLAMP(QUANTUM_MAX - srcColor, 0, QUANTUM_MAX);
+					srcColor = QMIN(((UINT8_MAX - dstColor) * (UINT8_MAX + 1)) / (srcColor + 1), UINT8_MAX);
+					srcColor = CLAMP(UINT8_MAX - srcColor, 0, UINT8_MAX);
 
-					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
+					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -664,18 +664,18 @@ void KisStrategyColorSpaceRGB::compositeBurn(QUANTUM *dstRowStart, Q_INT32 dstRo
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeDarken(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeDarken(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
-			QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
@@ -685,12 +685,12 @@ void KisStrategyColorSpaceRGB::compositeDarken(QUANTUM *dstRowStart, Q_INT32 dst
 					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
 				}
 
-				QUANTUM srcBlend;
+				Q_UINT8 srcBlend;
 
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
@@ -702,12 +702,12 @@ void KisStrategyColorSpaceRGB::compositeDarken(QUANTUM *dstRowStart, Q_INT32 dst
 
 				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-					QUANTUM srcColor = src[channel];
-					QUANTUM dstColor = dst[channel];
+					Q_UINT8 srcColor = src[channel];
+					Q_UINT8 dstColor = dst[channel];
 
 					srcColor = QMIN(srcColor, dstColor);
 
-					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
+					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -724,18 +724,18 @@ void KisStrategyColorSpaceRGB::compositeDarken(QUANTUM *dstRowStart, Q_INT32 dst
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeLighten(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeLighten(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
-			QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
@@ -745,12 +745,12 @@ void KisStrategyColorSpaceRGB::compositeLighten(QUANTUM *dstRowStart, Q_INT32 ds
 					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
 				}
 
-				QUANTUM srcBlend;
+				Q_UINT8 srcBlend;
 
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
@@ -762,12 +762,12 @@ void KisStrategyColorSpaceRGB::compositeLighten(QUANTUM *dstRowStart, Q_INT32 ds
 
 				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-					QUANTUM srcColor = src[channel];
-					QUANTUM dstColor = dst[channel];
+					Q_UINT8 srcColor = src[channel];
+					Q_UINT8 dstColor = dst[channel];
 
 					srcColor = QMAX(srcColor, dstColor);
 
-					QUANTUM newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
+					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -784,18 +784,18 @@ void KisStrategyColorSpaceRGB::compositeLighten(QUANTUM *dstRowStart, Q_INT32 ds
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeHue(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeHue(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
-			QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
@@ -805,12 +805,12 @@ void KisStrategyColorSpaceRGB::compositeHue(QUANTUM *dstRowStart, Q_INT32 dstRow
 					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
 				}
 
-				QUANTUM srcBlend;
+				Q_UINT8 srcBlend;
 
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
@@ -856,18 +856,18 @@ void KisStrategyColorSpaceRGB::compositeHue(QUANTUM *dstRowStart, Q_INT32 dstRow
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeSaturation(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeSaturation(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
-			QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
@@ -877,12 +877,12 @@ void KisStrategyColorSpaceRGB::compositeSaturation(QUANTUM *dstRowStart, Q_INT32
 					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
 				}
 
-				QUANTUM srcBlend;
+				Q_UINT8 srcBlend;
 
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
@@ -928,18 +928,18 @@ void KisStrategyColorSpaceRGB::compositeSaturation(QUANTUM *dstRowStart, Q_INT32
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeValue(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeValue(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
-			QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
@@ -949,12 +949,12 @@ void KisStrategyColorSpaceRGB::compositeValue(QUANTUM *dstRowStart, Q_INT32 dstR
 					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
 				}
 
-				QUANTUM srcBlend;
+				Q_UINT8 srcBlend;
 
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
@@ -1000,18 +1000,18 @@ void KisStrategyColorSpaceRGB::compositeValue(QUANTUM *dstRowStart, Q_INT32 dstR
 	}
 }
 
-void KisStrategyColorSpaceRGB::compositeColor(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceRGB::compositeColor(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
 
-			QUANTUM srcAlpha = src[PIXEL_ALPHA];
-			QUANTUM dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
@@ -1021,12 +1021,12 @@ void KisStrategyColorSpaceRGB::compositeColor(QUANTUM *dstRowStart, Q_INT32 dstR
 					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
 				}
 
-				QUANTUM srcBlend;
+				Q_UINT8 srcBlend;
 
 				if (dstAlpha == OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
@@ -1073,9 +1073,9 @@ void KisStrategyColorSpaceRGB::compositeColor(QUANTUM *dstRowStart, Q_INT32 dstR
 }
 
 void KisStrategyColorSpaceRGB::bitBlt(Q_INT32 pixelSize,
-				      QUANTUM *dst,
+				      Q_UINT8 *dst,
 				      Q_INT32 dstRowStride,
-				      const QUANTUM *src,
+				      const Q_UINT8 *src,
 				      Q_INT32 srcRowStride,
 				      QUANTUM opacity,
 				      Q_INT32 rows,

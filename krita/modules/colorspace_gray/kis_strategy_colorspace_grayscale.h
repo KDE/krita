@@ -20,16 +20,9 @@
 
 #include <qcolor.h>
 
-#include <qcolor.h>
-
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_pixel.h"
-
-// XXX: move into namespace.
-const Q_UINT8 PIXEL_GRAY = 0;
-const Q_UINT8 PIXEL_GRAY_ALPHA = 1;
-
 
 class KisStrategyColorSpaceGrayscale : public KisStrategyColorSpace {
 public:
@@ -38,19 +31,19 @@ public:
 
 public:
 
-	virtual void nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile = 0);
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile = 0);
+	virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
+	virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
-	virtual void toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile = 0);
-	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+	virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
+	virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
-	virtual KisPixelRO toKisPixelRO(const QUANTUM *src, KisProfileSP profile = 0)
+	virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0)
 		{ return KisPixelRO (src, src + PIXEL_GRAY_ALPHA, this, profile); }
 
-	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0)
+	virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0)
 		{ return KisPixel (src, src + PIXEL_GRAY_ALPHA, this, profile); }
 
-	virtual Q_INT8 difference(const QUANTUM* src1, const QUANTUM* src2);
+	virtual Q_INT8 difference(const Q_UINT8* src1, const Q_UINT8* src2);
 	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
 	virtual vKisChannelInfoSP channels() const;
@@ -60,7 +53,7 @@ public:
 	virtual Q_INT32 pixelSize() const;
 
 
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
@@ -68,9 +61,9 @@ public:
 	virtual void adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const;
 
 	virtual void bitBlt(Q_INT32 stride,
-			    QUANTUM *dst,
+			    Q_UINT8 *dst,
 			    Q_INT32 dststride,
-			    const QUANTUM *src,
+			    const Q_UINT8 *src,
 			    Q_INT32 srcstride,
 			    QUANTUM opacity,
 			    Q_INT32 rows,
@@ -80,18 +73,21 @@ public:
 	KisCompositeOpList userVisiblecompositeOps() const;
 
 protected:
-	void compositeOver(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
-	void compositeMultiply(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
-	void compositeDivide(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
-	void compositeScreen(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
-	void compositeOverlay(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
-	void compositeDodge(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
-	void compositeBurn(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
-	void compositeDarken(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
-	void compositeLighten(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeOver(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeMultiply(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeDivide(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeScreen(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeOverlay(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeDodge(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeBurn(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeDarken(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeLighten(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
 
 private:
 	vKisChannelInfoSP m_channels;
+
+	static const Q_UINT8 PIXEL_GRAY = 0;
+	static const Q_UINT8 PIXEL_GRAY_ALPHA = 1;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_

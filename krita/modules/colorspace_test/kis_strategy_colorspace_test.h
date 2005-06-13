@@ -31,15 +31,15 @@ public:
 	virtual ~KisStrategyColorSpaceTestCS();
 
 public:
-	virtual void nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile = 0);
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile = 0);
+	virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
+	virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
-	virtual void toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile = 0);
-	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+	virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
+	virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
-	virtual KisPixelRO toKisPixelRO(const QUANTUM *src, KisProfileSP profile = 0)
+	virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0)
 		{ return KisPixelRO (src, src + 4, this, profile); }
-	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0)
+	virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0)
 		{ return KisPixel (src, src + 4, this, profile); }
 
 	virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
@@ -51,7 +51,7 @@ public:
 	virtual Q_INT32 nColorChannels() const;
 	virtual Q_INT32 pixelSize() const;
 
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent);
 
@@ -63,17 +63,17 @@ public:
 protected:
 
 	virtual void bitBlt(Q_INT32 pixelSize,
-			    QUANTUM *dst,
+			    Q_UINT8 *dst,
 			    Q_INT32 dstRowStride,
-			    const QUANTUM *src,
+			    const Q_UINT8 *src,
 			    Q_INT32 srcRowStride,
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,
 			    const KisCompositeOp& op);
 
-	void compositeOver(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
-	void compositeErase(QUANTUM *dst, Q_INT32 dstRowStride, const QUANTUM *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeOver(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeErase(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
 private:
 	vKisChannelInfoSP m_channels;
 };

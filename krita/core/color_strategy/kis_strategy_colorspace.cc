@@ -58,8 +58,8 @@ bool KisStrategyColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 rend
 			       renderingIntent);
 }
 
-bool KisStrategyColorSpace::convertPixelsTo(const QUANTUM * src, KisProfileSP srcProfile,
-					    QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
+bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP srcProfile,
+					    Q_UINT8 * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 					    Q_UINT32 numPixels,
 					    Q_INT32 renderingIntent)
 {
@@ -82,7 +82,7 @@ bool KisStrategyColorSpace::convertPixelsTo(const QUANTUM * src, KisProfileSP sr
 		}
 
 		if (tf) {
-			cmsDoTransform(tf, const_cast<QUANTUM *>(src), dst, numPixels);
+			cmsDoTransform(tf, const_cast<Q_UINT8 *>(src), dst, numPixels);
 			return true;
 		}
 		
@@ -112,7 +112,7 @@ bool KisStrategyColorSpace::convertPixelsTo(const QUANTUM * src, KisProfileSP sr
 }
 
 // BC: should this default be HSV-based?
-Q_INT8 KisStrategyColorSpace::difference(const QUANTUM* src1, const QUANTUM* src2)
+Q_INT8 KisStrategyColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src2)
 {
 	QColor color1, color2;
 	toQColor(src1, &color1);
@@ -126,10 +126,10 @@ Q_INT8 KisStrategyColorSpace::difference(const QUANTUM* src1, const QUANTUM* src
 }
 
 void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
-				   QUANTUM *dst,
+				   Q_UINT8 *dst,
 				   Q_INT32 dststride,
 				   KisStrategyColorSpaceSP srcSpace,
-				   const QUANTUM *src,
+				   const Q_UINT8 *src,
 				   Q_INT32 srcstride,
 				   QUANTUM opacity,
 				   Q_INT32 rows,
@@ -145,10 +145,10 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 
  	if (m_id!= srcSpace -> id()) {
 		int len = pixelSize() * rows * cols;
- 		QUANTUM * convertedSrcPixels = new QUANTUM[len];
+ 		Q_UINT8 * convertedSrcPixels = new Q_UINT8[len];
 		Q_CHECK_PTR(convertedSrcPixels);
 
-		memset(convertedSrcPixels, 0, len * sizeof(QUANTUM));
+		memset(convertedSrcPixels, 0, len * sizeof(Q_UINT8));
 
 		if (srcProfile && dstProfile) {
 // 			kdDebug() << "src profile: " << srcProfile -> productName() << ", dst profile: " << dstProfile -> productName() << "\n";

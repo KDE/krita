@@ -86,7 +86,7 @@ KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
 					     INTENT_PERCEPTUAL, 0);
 
 	// Default pixel buffer for QColor conversion
-	m_qcolordata = new QUANTUM[3];
+	m_qcolordata = new Q_UINT8[3];
 	Q_CHECK_PTR(m_qcolordata);
 
 }
@@ -100,7 +100,7 @@ KisStrategyColorSpaceCMYK::~KisStrategyColorSpaceCMYK()
 	//cmsDeleteTransform(m_defaultFromRGB);
 }
 
-void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM *dst, KisProfileSP profile)
+void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, Q_UINT8 *dst, KisProfileSP profile)
 {
 	m_qcolordata[2] = color.red();
 	m_qcolordata[1] = color.green();
@@ -110,7 +110,7 @@ void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM *dst, K
 	dst[4] = OPACITY_OPAQUE;
 }
 
-void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile)
+void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile)
 {
 	m_qcolordata[2] = color.red();
 	m_qcolordata[1] = color.green();
@@ -121,15 +121,15 @@ void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM opacity
 }
 
 
-void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile)
+void KisStrategyColorSpaceCMYK::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile)
 {
-	cmsDoTransform(m_defaultToRGB, const_cast <QUANTUM *>(src), m_qcolordata, 1);
+	cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
 	c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
 }
 
-void KisStrategyColorSpaceCMYK::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
+void KisStrategyColorSpaceCMYK::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
 {
-	cmsDoTransform(m_defaultToRGB, const_cast <QUANTUM *>(src), m_qcolordata, 1);
+	cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
 	c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
 
  	*opacity = src[4];
@@ -164,7 +164,7 @@ Q_INT32 KisStrategyColorSpaceCMYK::pixelSize() const
 	return cmyk::MAX_CHANNEL_CMYKA;
 }
 
-QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+QImage KisStrategyColorSpaceCMYK::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 						  KisProfileSP srcProfile, KisProfileSP dstProfile,
 						  Q_INT32 renderingIntent)
 
@@ -182,7 +182,7 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
 		for (int i = 0; i < height; i++)
 			for (int j = 0; j < width; j++)
  				cmsDoTransform(m_defaultToRGB,
-					const_cast<QUANTUM *>(&(data[cmyk::MAX_CHANNEL_CMYKA*(i*width+j)])),
+					const_cast<Q_UINT8 *>(&(data[cmyk::MAX_CHANNEL_CMYKA*(i*width+j)])),
 					&(img.scanLine(i)[j*img.bytesPerLine()/width]), 1);
  	}
  	else {
@@ -190,7 +190,7 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const QUANTUM *data, Q_INT32 w
  		// Do a nice calibrated conversion
 		for (int i = 0; i < height; i++)
 			for (int j = 0; j < width; j++)
-				convertPixelsTo(const_cast<QUANTUM *>
+				convertPixelsTo(const_cast<Q_UINT8 *>
 						(&(data[cmyk::MAX_CHANNEL_CMYKA*(i*width+j)])),
 						srcProfile,
 						&(img.scanLine(i)[j*img.bytesPerLine()/width]),
@@ -207,18 +207,18 @@ void KisStrategyColorSpaceCMYK::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) c
 
 
 void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 pixelSize,
-				       QUANTUM *dst,
+				       Q_UINT8 *dst,
 				       Q_INT32 dstRowStride,
-				       const QUANTUM *src,
+				       const Q_UINT8 *src,
 				       Q_INT32 srcRowStride,
 				       QUANTUM opacity,
 				       Q_INT32 rows,
 				       Q_INT32 cols,
 				       const KisCompositeOp& op)
 {
-	Q_INT32 linesize = pixelSize * sizeof(QUANTUM) * cols;
-	QUANTUM *d;
-	const QUANTUM *s;
+	Q_INT32 linesize = pixelSize * sizeof(Q_UINT8) * cols;
+	Q_UINT8 *d;
+	const Q_UINT8 *s;
 
 	if (rows <= 0 || cols <= 0)
 		return;
@@ -250,19 +250,19 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 pixelSize,
 
 // XXX: Cut & Paste from colorspace_rgb
 
-void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowStride, 
-					     const QUANTUM *srcRowStart, Q_INT32 srcRowStride, 
+void KisStrategyColorSpaceCMYK::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, 
+					     const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, 
 					     Q_INT32 rows, Q_INT32 numColumns, 
 					     QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
-			QUANTUM srcAlpha = src[PIXEL_CMYK_ALPHA];
+			Q_UINT8 srcAlpha = src[PIXEL_CMYK_ALPHA];
 
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
@@ -271,16 +271,16 @@ void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstR
 				}
 
 				if (srcAlpha == OPACITY_OPAQUE) {
-					memcpy(dst, src, cmyk::MAX_CHANNEL_CMYKA * sizeof(QUANTUM));
+					memcpy(dst, src, cmyk::MAX_CHANNEL_CMYKA * sizeof(Q_UINT8));
 				} else {
-					QUANTUM dstAlpha = dst[PIXEL_CMYK_ALPHA];
+					Q_UINT8 dstAlpha = dst[PIXEL_CMYK_ALPHA];
 
-					QUANTUM srcBlend;
+					Q_UINT8 srcBlend;
 
 					if (dstAlpha == OPACITY_OPAQUE) {
 						srcBlend = srcAlpha;
 					} else {
-						QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+						Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 						dst[PIXEL_CMYK_ALPHA] = newAlpha;
 
 						if (newAlpha != 0) {
@@ -291,7 +291,7 @@ void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstR
 					}
 
 					if (srcBlend == OPACITY_OPAQUE) {
-						memcpy(dst, src, cmyk::MAX_CHANNEL_CMYKA * sizeof(QUANTUM));
+						memcpy(dst, src, cmyk::MAX_CHANNEL_CMYKA * sizeof(Q_UINT8));
 					} else {
 						dst[PIXEL_CYAN] = UINT8_BLEND(src[PIXEL_CYAN], dst[PIXEL_CYAN], srcBlend);
 						dst[PIXEL_MAGENTA] = UINT8_BLEND(src[PIXEL_MAGENTA], dst[PIXEL_MAGENTA], srcBlend);
@@ -311,7 +311,7 @@ void KisStrategyColorSpaceCMYK::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstR
 				&& src[PIXEL_BLACK] == 0) {
 				// Skip; we don't put any new ink over the old.
 			} else if (opacity == OPACITY_OPAQUE) {
-				memcpy(dst, src, cmyk::MAX_CHANNEL_CMYKA * sizeof(QUANTUM));
+				memcpy(dst, src, cmyk::MAX_CHANNEL_CMYKA * sizeof(Q_UINT8));
 
 			} else {
 				

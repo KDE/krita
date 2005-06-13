@@ -36,16 +36,16 @@ public:
 	virtual ~KisColorSpaceAlpha();
 
 public:
-	virtual void nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile = 0);
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile = 0);
+	virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
+	virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
-	virtual void toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile = 0);
-	virtual void toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+	virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
+	virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
-	virtual KisPixelRO toKisPixelRO(const QUANTUM *src, KisProfileSP profile = 0) { return KisPixelRO (src, src, this, profile); }
-	virtual KisPixel toKisPixel(QUANTUM *src, KisProfileSP profile = 0) { return KisPixel (src, src, this, profile); }
+	virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0) { return KisPixelRO (src, src, this, profile); }
+	virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0) { return KisPixel (src, src, this, profile); }
 	
-	virtual Q_INT8 difference(const QUANTUM* src1, const QUANTUM* src2);
+	virtual Q_INT8 difference(const Q_UINT8* src1, const Q_UINT8* src2);
 	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
 	virtual vKisChannelInfoSP channels() const;
@@ -54,7 +54,7 @@ public:
 	virtual Q_INT32 nColorChannels() const { return 0; };
 	virtual Q_INT32 pixelSize() const { return 1; };
 
-	virtual QImage convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
@@ -72,17 +72,17 @@ protected:
 	 *
 	 * Returns false if the conversion failed, true if it succeeded
 	 */
-	virtual bool convertPixelsTo(const QUANTUM * src, KisProfileSP srcProfile,
-				     QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
+	virtual bool convertPixelsTo(const Q_UINT8 * src, KisProfileSP srcProfile,
+				     Q_UINT8 * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 				     Q_UINT32 numPixels,
 				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 
 
 	virtual void bitBlt(Q_INT32 stride,
-			    QUANTUM *dst,
+			    Q_UINT8 *dst,
 			    Q_INT32 dststride,
-			    const QUANTUM *src,
+			    const Q_UINT8 *src,
 			    Q_INT32 srcstride,
 			    QUANTUM opacity,
 			    Q_INT32 rows,

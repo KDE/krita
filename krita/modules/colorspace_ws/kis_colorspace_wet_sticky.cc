@@ -70,7 +70,7 @@ KisColorSpaceWetSticky::~KisColorSpaceWetSticky()
 {
 }
 
-void KisColorSpaceWetSticky::nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP profile)
+void KisColorSpaceWetSticky::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile)
 {
 	CELL_PTR p = (CELL_PTR) dst;
 	Q_UINT8 r, g, b;
@@ -98,7 +98,7 @@ void KisColorSpaceWetSticky::nativeColor(const QColor& c, QUANTUM *dst, KisProfi
 
 }
 
-void KisColorSpaceWetSticky::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile)
+void KisColorSpaceWetSticky::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile)
 {
 	CELL_PTR p = (CELL_PTR) dst;
 	Q_UINT8 r, g, b;
@@ -125,7 +125,7 @@ void KisColorSpaceWetSticky::nativeColor(const QColor& c, QUANTUM opacity, QUANT
 
 }
 
-void KisColorSpaceWetSticky::toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile)
+void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile)
 {
 	CELL_PTR p = (CELL_PTR) src;
 
@@ -135,7 +135,7 @@ void KisColorSpaceWetSticky::toQColor(const QUANTUM *src, QColor *c, KisProfileS
 
 }
 
-void KisColorSpaceWetSticky::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
+void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
 {
 
 	CELL_PTR p = (CELL_PTR) src;
@@ -149,12 +149,12 @@ void KisColorSpaceWetSticky::toQColor(const QUANTUM *src, QColor *c, QUANTUM *op
 
 
 
-KisPixelRO KisColorSpaceWetSticky::toKisPixelRO(const QUANTUM *src, KisProfileSP profile)
+KisPixelRO KisColorSpaceWetSticky::toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile)
 {
 	return KisPixelRO (src, src, this, profile);
 }
 
-KisPixel KisColorSpaceWetSticky::toKisPixel(QUANTUM *src, KisProfileSP profile)
+KisPixel KisColorSpaceWetSticky::toKisPixel(Q_UINT8 *src, KisProfileSP profile)
 {
 	return KisPixel (src, src, this, profile);
 }
@@ -195,7 +195,7 @@ Q_INT32 KisColorSpaceWetSticky::pixelSize() const
 }
 
 
-QImage KisColorSpaceWetSticky::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+QImage KisColorSpaceWetSticky::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 					       KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/,
 					       Q_INT32 /*renderingIntent*/)
 {
@@ -226,8 +226,8 @@ QImage KisColorSpaceWetSticky::convertToQImage(const QUANTUM *data, Q_INT32 widt
 	return img;
 }
 
-bool KisColorSpaceWetSticky::convertPixelsTo(const QUANTUM * src, KisProfileSP /*srcProfile*/,
-					     QUANTUM * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
+bool KisColorSpaceWetSticky::convertPixelsTo(const Q_UINT8 * src, KisProfileSP /*srcProfile*/,
+					     Q_UINT8 * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 					     Q_UINT32 numPixels,
 					     Q_INT32 /*renderingIntent*/)
 {
@@ -265,9 +265,9 @@ void KisColorSpaceWetSticky::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) cons
 
 
 void KisColorSpaceWetSticky::bitBlt(Q_INT32 stride,
-				    QUANTUM *dst,
+				    Q_UINT8 *dst,
 				    Q_INT32 dststride,
-				    const QUANTUM *src,
+				    const Q_UINT8 *src,
 				    Q_INT32 srcstride,
 				    QUANTUM opacity,
 				    Q_INT32 rows,
@@ -277,15 +277,15 @@ void KisColorSpaceWetSticky::bitBlt(Q_INT32 stride,
 	Q_INT32 i;
 	Q_INT32 linesize;
 
-	QUANTUM *dq;
-	const QUANTUM *sq;
+	Q_UINT8 *dq;
+	const Q_UINT8 *sq;
 
 	if (rows <= 0 || cols <= 0)
 		return;
 	switch (op.op()) {
 	case COMPOSITE_COPY:
 
-		linesize = stride * sizeof(QUANTUM) * cols;
+		linesize = stride * sizeof(Q_UINT8) * cols;
 		dq = dst;
 		sq = src;
 		while (rows-- > 0) {
@@ -296,7 +296,7 @@ void KisColorSpaceWetSticky::bitBlt(Q_INT32 stride,
 		return;
 	case COMPOSITE_CLEAR:
 
-		linesize = stride * sizeof(QUANTUM) * cols;
+		linesize = stride * sizeof(Q_UINT8) * cols;
 		dq = dst;
 		while (rows-- > 0) {
 			memset(dq, 0, linesize);
@@ -318,24 +318,24 @@ void KisColorSpaceWetSticky::bitBlt(Q_INT32 stride,
 					if (s -> representation.alpha == OPACITY_TRANSPARENT)
 						continue;
 
-					int srcAlpha = (s -> representation.alpha * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					int dstAlpha = (s -> representation.alpha * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					int srcAlpha = (s -> representation.alpha * opacity + UINT8_MAX / 2) / UINT8_MAX;
+					int dstAlpha = (s -> representation.alpha * (UINT8_MAX - srcAlpha) + UINT8_MAX / 2) / UINT8_MAX;
 
 					d -> representation.color.red   = (d -> representation.color.red * dstAlpha
-									   + s -> representation.color.red * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+									   + s -> representation.color.red * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
 
 					d -> representation.color.green = (d -> representation.color.green * dstAlpha +
-									   s -> representation.color.green * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+									   s -> representation.color.green * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
 					d -> representation.color.blue  = (d -> representation.color.blue  * dstAlpha +
-									   s -> representation.color.blue  * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+									   s -> representation.color.blue  * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
 
-					d -> representation.alpha = (d -> representation.alpha * (QUANTUM_MAX - srcAlpha) +
-								      srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					d -> representation.alpha = (d -> representation.alpha * (UINT8_MAX - srcAlpha) +
+								      srcAlpha * UINT8_MAX + UINT8_MAX / 2) / UINT8_MAX;
 
 					if (d -> representation.alpha != 0) {
-						d -> representation.color.red = (d -> representation.color.red * QUANTUM_MAX) / d -> representation.alpha;
-						d -> representation.color.green = (d -> representation.color.green * QUANTUM_MAX) / d -> representation.alpha;
-						d -> representation.color.blue = (d -> representation.color.blue * QUANTUM_MAX) / d -> representation.alpha;
+						d -> representation.color.red = (d -> representation.color.red * UINT8_MAX) / d -> representation.alpha;
+						d -> representation.color.green = (d -> representation.color.green * UINT8_MAX) / d -> representation.alpha;
+						d -> representation.color.blue = (d -> representation.color.blue * UINT8_MAX) / d -> representation.alpha;
 					}
 				}
 
@@ -353,27 +353,27 @@ void KisColorSpaceWetSticky::bitBlt(Q_INT32 stride,
 continue;
 
 					if (d -> representation.alpha == OPACITY_TRANSPARENT || s -> representation.alpha == OPACITY_OPAQUE) {
-						memcpy(d, s, stride * sizeof(QUANTUM));
+						memcpy(d, s, stride * sizeof(Q_UINT8));
 						continue;
 					}
 
 					int srcAlpha = s -> representation.alpha;
-					int dstAlpha = (d -> representation.alpha * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					int dstAlpha = (d -> representation.alpha * (UINT8_MAX - srcAlpha) + UINT8_MAX / 2) / UINT8_MAX;
 
 					d -> representation.color.red   = (d -> representation.color.red   * dstAlpha +
-									   s -> representation.color.red   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+									   s -> representation.color.red   * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
 					d -> representation.color.green = (d -> representation.color.green * dstAlpha +
-									   s -> representation.color.green * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+									   s -> representation.color.green * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
 					d -> representation.color.blue  = (d -> representation.color.blue  * dstAlpha +
-									   s -> representation.color.blue  * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+									   s -> representation.color.blue  * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
 
-					d -> representation.alpha = (d -> representation.alpha * (QUANTUM_MAX - srcAlpha) +
-								      srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					d -> representation.alpha = (d -> representation.alpha * (UINT8_MAX - srcAlpha) +
+								      srcAlpha * UINT8_MAX + UINT8_MAX / 2) / UINT8_MAX;
 
 					if (d -> representation.alpha != 0) {
-						d -> representation.color.red = (d -> representation.color.red * QUANTUM_MAX) / d -> representation.alpha;
-						d -> representation.color.green = (d -> representation.color.green * QUANTUM_MAX) / d -> representation.alpha;
-						d -> representation.color.blue = (d -> representation.color.blue * QUANTUM_MAX) / d -> representation.alpha;
+						d -> representation.color.red = (d -> representation.color.red * UINT8_MAX) / d -> representation.alpha;
+						d -> representation.color.green = (d -> representation.color.green * UINT8_MAX) / d -> representation.alpha;
+						d -> representation.color.blue = (d -> representation.color.blue * UINT8_MAX) / d -> representation.alpha;
 					}
 				}
 

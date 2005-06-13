@@ -162,7 +162,7 @@ KisColorSpaceWet::~KisColorSpaceWet()
 {
 }
 
-void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP /*profile*/)
+void KisColorSpaceWet::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
 	Q_INT32 r, g, b;
 	c.getRgb(&r, &g, &b);
@@ -220,12 +220,12 @@ void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP /
 	// XXX: Maybe somehow do something useful with QColor that don't correspond to paint from the paintbox.
 }
 
-void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM  /*opacity*/, QUANTUM *dst, KisProfileSP /*profile*/)
+void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM  /*opacity*/, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
 	nativeColor(c, dst);
 }
 
-void KisColorSpaceWet::toQColor(const QUANTUM *src, QColor *c, KisProfileSP /*profile*/)
+void KisColorSpaceWet::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
 {
 	Q_UINT8 * rgb = new Q_UINT8[3];
 	Q_CHECK_PTR(rgb);
@@ -247,7 +247,7 @@ void KisColorSpaceWet::toQColor(const QUANTUM *src, QColor *c, KisProfileSP /*pr
 	delete[]rgb;
 }
 
-void KisColorSpaceWet::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
+void KisColorSpaceWet::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
 {
 	toQColor(src, c);
 }
@@ -293,7 +293,7 @@ Q_INT32 KisColorSpaceWet::pixelSize() const
 
 
 // XXX: use profiles to display correctly on calibrated displays.
-QImage KisColorSpaceWet::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+QImage KisColorSpaceWet::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				         KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/,
 				         Q_INT32 /*renderingIntent*/)
 {
@@ -343,9 +343,9 @@ void KisColorSpaceWet::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const
 
 
 void KisColorSpaceWet::bitBlt(Q_INT32 stride,
-			      QUANTUM *dst,
+			      Q_UINT8 *dst,
 			      Q_INT32 dststride,
-			      const QUANTUM *src,
+			      const Q_UINT8 *src,
 			      Q_INT32 srcstride,
 			      QUANTUM /*opacity*/,
 			      Q_INT32 rows,
@@ -355,10 +355,10 @@ void KisColorSpaceWet::bitBlt(Q_INT32 stride,
 	if (rows <= 0 || cols <= 0)
 		return;
 
-	QUANTUM *d;
-	const QUANTUM *s;
+	Q_UINT8 *d;
+	const Q_UINT8 *s;
 
-	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
+	Q_INT32 linesize = stride * sizeof(Q_UINT8) * cols;
 
 	// Just copy the src onto the dst, we don't do fancy things here,
 	// we do those in the paint op, because we need pressure to determine

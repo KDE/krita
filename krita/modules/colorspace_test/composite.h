@@ -96,17 +96,17 @@
 #define AbsoluteValue(x)  ((x) < 0 ? -(x) : (x))
 
 void compositeCopy(Q_INT32 pixelSize,
-		   QUANTUM *dst, 
+		   Q_UINT8 *dst, 
 		   Q_INT32 dstRowSize,
-		   const QUANTUM *src, 
+		   const Q_UINT8 *src, 
 		   Q_INT32 srcRowSize,
 		   Q_INT32 rows, 
 		   Q_INT32 cols, 
 		   QUANTUM /*opacity*/ = OPACITY_OPAQUE)
 {
 	Q_INT32 linesize = pixelSize * cols;
-	QUANTUM *d;
-	const QUANTUM *s;
+	Q_UINT8 *d;
+	const Q_UINT8 *s;
 	d = dst;
 	s = src;
 	

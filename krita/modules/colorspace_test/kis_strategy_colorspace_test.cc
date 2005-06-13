@@ -56,7 +56,7 @@ KisStrategyColorSpaceTestCS::~KisStrategyColorSpaceTestCS()
 {
 }
 
-void KisStrategyColorSpaceTestCS::nativeColor(const QColor& c, QUANTUM *dst, KisProfileSP /*profile*/)
+void KisStrategyColorSpaceTestCS::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
 	testcspixel *pix = (testcspixel *)dst;
 	
@@ -65,7 +65,7 @@ void KisStrategyColorSpaceTestCS::nativeColor(const QColor& c, QUANTUM *dst, Kis
 	pix->bmg = c.blue()*16 + c.green();
 }
 
-void KisStrategyColorSpaceTestCS::nativeColor(const QColor& c, QUANTUM opacity, QUANTUM *dst, KisProfileSP /*profile*/)
+void KisStrategyColorSpaceTestCS::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
 	testcspixel *pix = (testcspixel *)dst;
 	
@@ -75,13 +75,13 @@ void KisStrategyColorSpaceTestCS::nativeColor(const QColor& c, QUANTUM opacity, 
 	pix->alpha = opacity;
 }
 
-void KisStrategyColorSpaceTestCS::toQColor(const QUANTUM *src, QColor *c, KisProfileSP /*profile*/)
+void KisStrategyColorSpaceTestCS::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
 {
 	testcspixel *pix = (testcspixel *)src;
 	c -> setRgb(pix->r, pix->g, (pix->bmg - pix->g)/16);
 }
 
-void KisStrategyColorSpaceTestCS::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
+void KisStrategyColorSpaceTestCS::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
 {
 	testcspixel *pix = (testcspixel *)src;
 	c -> setRgb(pix->r, pix->g, (pix->bmg - pix->g)/16);
@@ -144,7 +144,7 @@ Q_INT32 KisStrategyColorSpaceTestCS::pixelSize() const
 	return sizeof(struct testcspixel);
 }
 
-QImage KisStrategyColorSpaceTestCS::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+QImage KisStrategyColorSpaceTestCS::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 						 KisProfileSP srcProfile, KisProfileSP dstProfile,
 						 Q_INT32 renderingIntent)
 
@@ -216,13 +216,13 @@ void KisStrategyColorSpaceTestCS::adjustBrightness(const Q_UINT8 *src, Q_UINT8 *
 	testcspixel *dpix = (testcspixel *)dst;
 	
 	Q_INT32 nd = spix->r + adjust;
-	dpix->r = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+	dpix->r = QMAX( 0, QMIN( UINT8_MAX, nd ) );
 	
 	nd = spix->g + adjust;
-	dpix->g = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+	dpix->g = QMAX( 0, QMIN( UINT8_MAX, nd ) );
 	
 	nd = (spix->bmg - spix->g)/16 + adjust;
-	dpix->bmg = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+	dpix->bmg = QMAX( 0, QMIN( UINT8_MAX, nd ) );
 
 	dpix->bmg = dpix->bmg*16 + dpix->g;
 }
@@ -233,25 +233,25 @@ void KisStrategyColorSpaceTestCS::adjustContrast(const Q_UINT8 *src, Q_UINT8 *ds
 	testcspixel *dpix = (testcspixel *)dst;
 /*	
 	Q_INT32 nd = spix->r + adjust;
-	dpix->r = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+	dpix->r = QMAX( 0, QMIN( UINT8_MAX, nd ) );
 	
 	nd = spix->g + adjust;
-	dpix->g = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+	dpix->g = QMAX( 0, QMIN( UINT8_MAX, nd ) );
 	
 	nd = (spix->bmg - spix->g)/16 + adjust;
-	dpix->bmg = QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+	dpix->bmg = QMAX( 0, QMIN( UINT8_MAX, nd ) );
 
 	dpix->bmg = dpix->bmg*16 + dpix->g;
 	*/
 	//XXX Nothing done yet
 }
 
-void KisStrategyColorSpaceTestCS::compositeOver(QUANTUM *dstRowStart, Q_INT32 dstRowStride, const QUANTUM *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceTestCS::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
-		const QUANTUM *src = srcRowStart;
-		QUANTUM *dst = dstRowStart;
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
@@ -268,14 +268,14 @@ void KisStrategyColorSpaceTestCS::compositeOver(QUANTUM *dstRowStart, Q_INT32 ds
 				if (srcAlpha == OPACITY_OPAQUE) {
 					memcpy(dst, src, sizeof(struct testcspixel));
 				} else {
-					QUANTUM dstAlpha = dstpix->alpha;
+					Q_UINT8 dstAlpha = dstpix->alpha;
 
-					QUANTUM srcBlend;
+					Q_UINT8 srcBlend;
 
 					if (dstAlpha == OPACITY_OPAQUE) {
 						srcBlend = srcAlpha;
 					} else {
-						QUANTUM newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+						Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 						dstpix->alpha = newAlpha;
 
 						if (newAlpha != 0) {
@@ -308,9 +308,9 @@ void KisStrategyColorSpaceTestCS::compositeOver(QUANTUM *dstRowStart, Q_INT32 ds
 	}
 }
 
-void KisStrategyColorSpaceTestCS::compositeErase(QUANTUM *dst, 
+void KisStrategyColorSpaceTestCS::compositeErase(Q_UINT8 *dst, 
 		    Q_INT32 dstRowSize,
-		    const QUANTUM *src, 
+		    const Q_UINT8 *src, 
 		    Q_INT32 srcRowSize,
 		    Q_INT32 rows, 
 		    Q_INT32 cols, 
@@ -337,9 +337,9 @@ void KisStrategyColorSpaceTestCS::compositeErase(QUANTUM *dst,
 }
 
 void KisStrategyColorSpaceTestCS::bitBlt(Q_INT32 pixelSize,
-				      QUANTUM *dst,
+				      Q_UINT8 *dst,
 				      Q_INT32 dstRowStride,
-				      const QUANTUM *src,
+				      const Q_UINT8 *src,
 				      Q_INT32 srcRowStride,
 				      QUANTUM opacity,
 				      Q_INT32 rows,

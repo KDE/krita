@@ -55,13 +55,13 @@ KisStrategyColorSpaceCMYKA::~KisStrategyColorSpaceCMYKA()
 {
 }
 
-void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& color, QUANTUM *dst, KisProfileSP profile)
+void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& color, Q_UINT8 *dst, KisProfileSP profile)
 {
-	QUANTUM c = 255 - color.red();
-	QUANTUM m = 255 - color.green();
-	QUANTUM y = 255 - color.blue();
+	Q_UINT8 c = 255 - color.red();
+	Q_UINT8 m = 255 - color.green();
+	Q_UINT8 y = 255 - color.blue();
 
-	QUANTUM k = 255;
+	Q_UINT8 k = 255;
 
 	if (c < k) k = c;
 	if (m < k) k = m;
@@ -73,13 +73,13 @@ void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& color, QUANTUM *dst, 
 	dst[PIXEL_BLACK] = k;
 }
 
-void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& color, QUANTUM opacity, QUANTUM *dst, KisProfileSP profile)
+void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& color, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile)
 {
-	QUANTUM c = 255 - color.red();
-	QUANTUM m = 255 - color.green();
-	QUANTUM y = 255 - color.blue();
+	Q_UINT8 c = 255 - color.red();
+	Q_UINT8 m = 255 - color.green();
+	Q_UINT8 y = 255 - color.blue();
 
-	QUANTUM k = 255;
+	Q_UINT8 k = 255;
 
 	if (c < k) k = c;
 	if (m < k) k = m;
@@ -93,18 +93,18 @@ void KisStrategyColorSpaceCMYKA::nativeColor(const QColor& color, QUANTUM opacit
 	dst[PIXEL_CMYK_ALPHA] = opacity;
 }
 
-void KisStrategyColorSpaceCMYKA::toQColor(const QUANTUM *src, QColor *c, KisProfileSP profile)
+void KisStrategyColorSpaceCMYKA::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile)
 {
 // 	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
 }
 
-void KisStrategyColorSpaceCMYKA::toQColor(const QUANTUM *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
+void KisStrategyColorSpaceCMYKA::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
 {
 // 	c -> setCMYK(downscale(src[PIXEL_CYAN]), downscale(src[PIXEL_MAGENTA]), downscale(src[PIXEL_YELLOW]), downscale(src[PIXEL_BLACK]));
  	*opacity = src[PIXEL_CMYK_ALPHA];
 }
 
-Q_INT8 KisStrategyColorSpaceCMYKA::difference(const QUANTUM* src1, const QUANTUM* src2)
+Q_INT8 KisStrategyColorSpaceCMYKA::difference(const Q_UINT8* src1, const Q_UINT8* src2)
 {
 	// XXX This is worng - doesn't take K into account
 	//return KisStrategyColorSpace::difference(src1, src2);
@@ -143,7 +143,7 @@ Q_INT32 KisStrategyColorSpaceCMYKA::pixelSize() const
 }
 
 
-QImage KisStrategyColorSpaceCMYKA::convertToQImage(const QUANTUM *data, Q_INT32 width, Q_INT32 height,
+QImage KisStrategyColorSpaceCMYKA::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 						   KisProfileSP srcProfile, KisProfileSP dstProfile,
 						   Q_INT32 renderingIntent)
 {
@@ -158,14 +158,14 @@ QImage KisStrategyColorSpaceCMYKA::convertToQImage(const QUANTUM *data, Q_INT32 
 		uchar *j = img.bits();
 
 		while ( i < width * height * cmyka::MAX_CHANNEL_CMYKA) {
-			QUANTUM k = *( data + i + PIXEL_BLACK );
-			QUANTUM c = *( data + i + PIXEL_CYAN );
-			QUANTUM m = *( data + i + PIXEL_MAGENTA );
-			QUANTUM y = *( data + i + PIXEL_YELLOW );
+			Q_UINT8 k = *( data + i + PIXEL_BLACK );
+			Q_UINT8 c = *( data + i + PIXEL_CYAN );
+			Q_UINT8 m = *( data + i + PIXEL_MAGENTA );
+			Q_UINT8 y = *( data + i + PIXEL_YELLOW );
 
-			c = c * ( QUANTUM_MAX - k) + k;
-			m = m * ( QUANTUM_MAX - k) + k;
-			y = y * ( QUANTUM_MAX - k) + k;
+			c = c * ( UINT8_MAX - k) + k;
+			m = m * ( UINT8_MAX - k) + k;
+			y = y * ( UINT8_MAX - k) + k;
 
 			// XXX: Temporary copy
 			const PIXELTYPE PIXEL_BLUE = 0;
@@ -174,9 +174,9 @@ QImage KisStrategyColorSpaceCMYKA::convertToQImage(const QUANTUM *data, Q_INT32 
 			const PIXELTYPE PIXEL_ALPHA = 3;
 
 			*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_CMYK_ALPHA ) ;
-			*( j + PIXEL_RED )   = QUANTUM_MAX - c;
-			*( j + PIXEL_GREEN ) = QUANTUM_MAX - m;
-			*( j + PIXEL_BLUE )  = QUANTUM_MAX - y;
+			*( j + PIXEL_RED )   = UINT8_MAX - c;
+			*( j + PIXEL_GREEN ) = UINT8_MAX - m;
+			*( j + PIXEL_BLUE )  = UINT8_MAX - y;
 
 
 			i += cmyka::MAX_CHANNEL_CMYKA;
@@ -188,7 +188,7 @@ QImage KisStrategyColorSpaceCMYKA::convertToQImage(const QUANTUM *data, Q_INT32 
 		kdDebug() << "Going to transform with profiles\n";
 
 		KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
-		convertPixelsTo(const_cast<QUANTUM *>(data), srcProfile,
+		convertPixelsTo(const_cast<Q_UINT8 *>(data), srcProfile,
 				img.bits(), dstCS, dstProfile,
 				width * height, renderingIntent);
 
@@ -205,18 +205,18 @@ void KisStrategyColorSpaceCMYKA::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) 
 
 
 void KisStrategyColorSpaceCMYKA::bitBlt(Q_INT32 stride,
-				       QUANTUM *dst,
+				       Q_UINT8 *dst,
 				       Q_INT32 dststride,
-				       const QUANTUM *src,
+				       const Q_UINT8 *src,
 				       Q_INT32 srcstride,
 				       QUANTUM opacity,
 				       Q_INT32 rows,
 				       Q_INT32 cols,
 				       const KisCompositeOp& op)
 {
-	Q_INT32 linesize = stride * sizeof(QUANTUM) * cols;
-	QUANTUM *d;
-	const QUANTUM *s;
+	Q_INT32 linesize = stride * sizeof(Q_UINT8) * cols;
+	Q_UINT8 *d;
+	const Q_UINT8 *s;
 	Q_INT32 i;
 
 	if (rows <= 0 || cols <= 0)
@@ -252,20 +252,20 @@ void KisStrategyColorSpaceCMYKA::bitBlt(Q_INT32 stride,
 					if (s[PIXEL_CMYK_ALPHA] == OPACITY_TRANSPARENT)
 						continue;
 
-					int srcAlpha = (s[PIXEL_CMYK_ALPHA] * opacity + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					int dstAlpha = (d[PIXEL_CMYK_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					int srcAlpha = (s[PIXEL_CMYK_ALPHA] * opacity + UINT8_MAX / 2) / UINT8_MAX;
+					int dstAlpha = (d[PIXEL_CMYK_ALPHA] * (UINT8_MAX - srcAlpha) + UINT8_MAX / 2) / UINT8_MAX;
 
-					d[PIXEL_CYAN] = (d[PIXEL_CYAN]   * dstAlpha + s[PIXEL_CYAN]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_MAGENTA] = (d[PIXEL_MAGENTA]   * dstAlpha + s[PIXEL_MAGENTA]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_YELLOW] = (d[PIXEL_YELLOW]   * dstAlpha + s[PIXEL_YELLOW]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_BLACK] = (d[PIXEL_BLACK]   * dstAlpha + s[PIXEL_BLACK]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					d[PIXEL_CYAN] = (d[PIXEL_CYAN]   * dstAlpha + s[PIXEL_CYAN]   * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
+					d[PIXEL_MAGENTA] = (d[PIXEL_MAGENTA]   * dstAlpha + s[PIXEL_MAGENTA]   * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
+					d[PIXEL_YELLOW] = (d[PIXEL_YELLOW]   * dstAlpha + s[PIXEL_YELLOW]   * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
+					d[PIXEL_BLACK] = (d[PIXEL_BLACK]   * dstAlpha + s[PIXEL_BLACK]   * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
 
-					d[PIXEL_CMYK_ALPHA] = (d[PIXEL_CMYK_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					d[PIXEL_CMYK_ALPHA] = (d[PIXEL_CMYK_ALPHA] * (UINT8_MAX - srcAlpha) + srcAlpha * UINT8_MAX + UINT8_MAX / 2) / UINT8_MAX;
 					if (d[PIXEL_CMYK_ALPHA] != 0) {
-						d[PIXEL_CYAN] = (d[PIXEL_CYAN] * QUANTUM_MAX) / d[PIXEL_CMYK_ALPHA];
-						d[PIXEL_MAGENTA] = (d[PIXEL_MAGENTA] * QUANTUM_MAX) / d[PIXEL_CMYK_ALPHA];
-						d[PIXEL_YELLOW] = (d[PIXEL_YELLOW] * QUANTUM_MAX) / d[PIXEL_CMYK_ALPHA];
-						d[PIXEL_BLACK] = (d[PIXEL_BLACK] * QUANTUM_MAX) / d[PIXEL_CMYK_ALPHA];
+						d[PIXEL_CYAN] = (d[PIXEL_CYAN] * UINT8_MAX) / d[PIXEL_CMYK_ALPHA];
+						d[PIXEL_MAGENTA] = (d[PIXEL_MAGENTA] * UINT8_MAX) / d[PIXEL_CMYK_ALPHA];
+						d[PIXEL_YELLOW] = (d[PIXEL_YELLOW] * UINT8_MAX) / d[PIXEL_CMYK_ALPHA];
+						d[PIXEL_BLACK] = (d[PIXEL_BLACK] * UINT8_MAX) / d[PIXEL_CMYK_ALPHA];
 					}
 				}
 
@@ -283,24 +283,24 @@ void KisStrategyColorSpaceCMYKA::bitBlt(Q_INT32 stride,
 						continue;
 
 					if (d[PIXEL_CMYK_ALPHA] == OPACITY_TRANSPARENT || s[PIXEL_CMYK_ALPHA] == OPACITY_OPAQUE) {
-						memcpy(d, s, stride * sizeof(QUANTUM));
+						memcpy(d, s, stride * sizeof(Q_UINT8));
 						continue;
 					}
 
 					int srcAlpha = s[PIXEL_CMYK_ALPHA];
-					int dstAlpha = (d[PIXEL_CMYK_ALPHA] * (QUANTUM_MAX - srcAlpha) + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					int dstAlpha = (d[PIXEL_CMYK_ALPHA] * (UINT8_MAX - srcAlpha) + UINT8_MAX / 2) / UINT8_MAX;
 
-					d[PIXEL_CYAN]   = (d[PIXEL_CYAN]   * dstAlpha + s[PIXEL_CYAN]   * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_MAGENTA] = (d[PIXEL_MAGENTA] * dstAlpha + s[PIXEL_MAGENTA] * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_YELLOW]  = (d[PIXEL_YELLOW]  * dstAlpha + s[PIXEL_YELLOW]  * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_BLACK]  = (d[PIXEL_BLACK]  * dstAlpha + s[PIXEL_BLACK]  * srcAlpha + QUANTUM_MAX / 2) / QUANTUM_MAX;
-					d[PIXEL_CMYK_ALPHA] = (d[PIXEL_CMYK_ALPHA] * (QUANTUM_MAX - srcAlpha) + srcAlpha * QUANTUM_MAX + QUANTUM_MAX / 2) / QUANTUM_MAX;
+					d[PIXEL_CYAN]   = (d[PIXEL_CYAN]   * dstAlpha + s[PIXEL_CYAN]   * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
+					d[PIXEL_MAGENTA] = (d[PIXEL_MAGENTA] * dstAlpha + s[PIXEL_MAGENTA] * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
+					d[PIXEL_YELLOW]  = (d[PIXEL_YELLOW]  * dstAlpha + s[PIXEL_YELLOW]  * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
+					d[PIXEL_BLACK]  = (d[PIXEL_BLACK]  * dstAlpha + s[PIXEL_BLACK]  * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
+					d[PIXEL_CMYK_ALPHA] = (d[PIXEL_CMYK_ALPHA] * (UINT8_MAX - srcAlpha) + srcAlpha * UINT8_MAX + UINT8_MAX / 2) / UINT8_MAX;
 
 					if (d[PIXEL_CMYK_ALPHA] != 0) {
-						d[PIXEL_CYAN] = (d[PIXEL_CYAN] * QUANTUM_MAX) / d[PIXEL_CMYK_ALPHA];
-						d[PIXEL_MAGENTA] = (d[PIXEL_MAGENTA] * QUANTUM_MAX) / d[PIXEL_CMYK_ALPHA];
-						d[PIXEL_YELLOW] = (d[PIXEL_YELLOW] * QUANTUM_MAX) / d[PIXEL_CMYK_ALPHA];
-						d[PIXEL_BLACK] = (d[PIXEL_BLACK] * QUANTUM_MAX) / d[PIXEL_CMYK_ALPHA];
+						d[PIXEL_CYAN] = (d[PIXEL_CYAN] * UINT8_MAX) / d[PIXEL_CMYK_ALPHA];
+						d[PIXEL_MAGENTA] = (d[PIXEL_MAGENTA] * UINT8_MAX) / d[PIXEL_CMYK_ALPHA];
+						d[PIXEL_YELLOW] = (d[PIXEL_YELLOW] * UINT8_MAX) / d[PIXEL_CMYK_ALPHA];
+						d[PIXEL_BLACK] = (d[PIXEL_BLACK] * UINT8_MAX) / d[PIXEL_CMYK_ALPHA];
 					}
 				}
 

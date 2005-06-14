@@ -82,7 +82,7 @@ void KisStrategyColorSpaceRGB::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *
 	*opacity = src[PIXEL_ALPHA];
 }
 
-Q_INT8 KisStrategyColorSpaceRGB::difference(const Q_UINT8* src1, const Q_UINT8* src2)
+Q_INT8 KisStrategyColorSpaceRGB::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
 {
 	//return KisStrategyColorSpace::difference(src1, src2);
 	return QMAX(QABS(src2[PIXEL_RED] - src1[PIXEL_RED]),
@@ -211,28 +211,36 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const Q_UINT8 *data, Q_INT32 wi
 	return img;
 }
 
-void KisStrategyColorSpaceRGB::adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
+void KisStrategyColorSpaceRGB::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const
 {
-	for( int i = 0; i < 3; i++)
-	{
-		// change the brightness
-		int nd = src[ i ] + adjust;
-		dst[i] = QMAX( 0, QMIN( UINT8_MAX, nd ) );
-	}
-}
-
-void KisStrategyColorSpaceRGB::adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
-{
-	double contrast = (100.0 + adjust) / 100;
-	contrast *= contrast;
+	static cmsHPROFILE profiles[3];
+	static cmsHTRANSFORM transform=0;
+	static Q_INT8 oldb=0;
+	static Q_INT8 oldc=0;
 	
-	for( int i = 0; i < 3; i++)
+	if((oldb != brightness || oldc != contrast) && transform!=0)
 	{
-		// change the brightness
-		int nd = src[ i ];
-		nd = (int)(((nd - UINT8_MAX / 2 ) * contrast) + UINT8_MAX / 2);
-		dst[i] = QMAX( 0, QMIN( UINT8_MAX, nd ) );
+		cmsDeleteTransform(transform);
+		cmsCloseProfile(profiles[0]);
+		cmsCloseProfile(profiles[1]);
+		cmsCloseProfile(profiles[2]);
+		transform=0;
 	}
+
+	if(transform==0)
+	{
+		double a,b;
+		a=contrast/100.0+1.0;
+		a *= a;
+		b= 50 -50*a + brightness;
+		profiles[0] = cmsCreate_sRGBProfile();
+		profiles[1] = cmsCreateBCHSWabstractProfile(30, b, a, 0, 0, 6504, 6504);
+		profiles[2] = cmsCreate_sRGBProfile();
+		transform  = cmsCreateMultiprofileTransform(profiles, 3, TYPE_BGRA_8, TYPE_BGRA_8, INTENT_PERCEPTUAL, 0);
+		oldb=brightness;
+		oldc=contrast;
+	}
+	cmsDoTransform(transform, const_cast<Q_UINT8 *>(src), dst, nPixels);
 }
 
 void KisStrategyColorSpaceRGB::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)

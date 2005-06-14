@@ -154,3 +154,26 @@ QRect KisSelection::selectedRect()
 	return extent().unite(m_parentLayer->extent());
 }
 
+void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+	Q_INT32 x2;
+	uchar *j = img.bits();
+
+	for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
+		KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
+		x2 = 0;
+		while (!it.isDone()) {
+			Q_UINT8 s = *(it.rawData());
+			if(s!=MAX_SELECTED)
+			{
+				Q_UINT8 gray = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 3;
+				*(j+0) = 20 + gray/2;
+				*(j+1) = 20 + gray/2;
+				*(j+2) = 20 + gray/2;
+			}
+			j+=4;
+			++x2;
+			++it;
+		}
+	}
+}

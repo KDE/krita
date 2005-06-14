@@ -79,7 +79,7 @@ void KisColorSpaceAlpha::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacit
 	}
 }
 
-Q_INT8 KisColorSpaceAlpha::difference(const Q_UINT8* src1, const Q_UINT8* src2)
+Q_INT8 KisColorSpaceAlpha::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
 {
 	return QABS(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
 }
@@ -144,8 +144,8 @@ QImage KisColorSpaceAlpha::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q
 	return img;
 }
 
-bool KisColorSpaceAlpha::convertPixelsTo(const Q_UINT8 * src, KisProfileSP /*srcProfile*/,
-					 Q_UINT8 * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
+bool KisColorSpaceAlpha::convertPixelsTo(const Q_UINT8 *src, KisProfileSP /*srcProfile*/,
+					 Q_UINT8 *dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 					 Q_UINT32 numPixels,
 					 Q_INT32 /*renderingIntent*/)
 {
@@ -167,12 +167,7 @@ bool KisColorSpaceAlpha::convertPixelsTo(const Q_UINT8 * src, KisProfileSP /*src
 
 }
 
-void KisColorSpaceAlpha::adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
-{
-	//XXX does nothing for now
-}
-
-void KisColorSpaceAlpha::adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
+void KisColorSpaceAlpha::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const
 {
 	//XXX does nothing for now
 }

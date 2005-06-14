@@ -73,12 +73,9 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 
 	while( ! srcIt.isDone()  && !cancelRequested())
 	{
-		// change the brightness
-		src->colorStrategy()->adjustBrightness(srcIt.oldRawData(), dstIt.rawData(), configBC->brightness());
-			
-		// change the contrast
-		src->colorStrategy()->adjustContrast(dstIt.rawData(), dstIt.rawData(), configBC->contrast());
-		
+		// change the brightness and contrast
+		src->colorStrategy()->adjustBrightnessContrast(srcIt.oldRawData(), dstIt.rawData(), configBC->brightness(),configBC->contrast(),1);
+					
 		++srcIt;
 		++dstIt;
 

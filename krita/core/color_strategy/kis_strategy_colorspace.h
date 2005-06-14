@@ -238,14 +238,11 @@ public:
 //============================== Manipulation fucntions ==========================//
 
 	/**
-	 * Adjust the brightness of a pixel as told by adjust [-100;100]
+	 * Adjust the brightness and contrast of a series of pixels as told by
+	 * brightness [-100;100]
+	 * contrast [-100;100]
 	 */
-	virtual void adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const = 0;
-	
-	/**
-	 * Adjust the contrast of a pixel as told by adjust [-100;100]
-	 */
-	virtual void adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const = 0;
+	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const = 0;
 
 	
 	// XXX: What with alpha channels? YYY: Add an overloaded function that takes alpha into account?

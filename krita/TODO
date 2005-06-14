@@ -5,13 +5,13 @@ Transform tool
 	* It should use filter during scaling
 	* It doesn't handle "infinite" selections
 
+
 Integration
 
 	* A krita document embedded in KWord has the wrong scaling and transparency
 	* A krita document embedded in another document prints at the wrong place
 	* write the Krita handbook.
 	* There is currently no kimgio module for Krita images.
-
 
 
 Colorspace independence (found with the test colorstrategy)
@@ -28,19 +28,15 @@ Colorspace independence (found with the test colorstrategy)
 							BYTES_SH(1) | EXTRA_SH(1)) for cmyka
 		dst lcms color type (may be 0)
 		rendering intent
-
-
         * Replace QColor with KisColor, where KisColor is a combination of a
           byte array and a pointer to a color model (note that we might have
           to retain a qcolor to/from conversion for color pickers and the like).
-	* Add UI for display settings for high bit depths -- we have upscale
-          and downscale, but that's not enough. I want, as in OpenEXR, to be
-          able to set the lighting stops.
-        * Add channel-depths other than 8 bits. Through seperate colorspaces.
-	* get rid of QUANTUM, upscale, downscale
+	* Make sure it's possible to, as in OpenEXR, be able to set the lighting stops.
+	* get rid of QUANTUM
 	* Check and double check the cms capabilities: especially the use of
           profiles in the render/convert/edit paths.
-	
+
+
 Core
 
 	* Implement threading for rendering and paint device operations
@@ -79,6 +75,9 @@ Import/Export
 	* Photoshop files are not recognized when opened, but there is now an
 	  option in the list of filetypes and that works.
 	* Importing Photoshop files don't get the placement of layers correct
+        * Fix gimp XCF import/export (ImageMagick hacking...)
+	* Fix imports to import metadata and image files in non-rgb encodings -> move import
+	  export code to color strategies.
 
 
 User Interface
@@ -103,9 +102,6 @@ User Interface
 	  for perspective drawings)
         * Allow snapping to guides.
         * Create templates for often-used image formats. Add save-as-template
-        * Fix gimp XCF import/export (ImageMagick hacking...)
-	* Fix imports to import metadata and image files in non-rgb encodings -> move import
-	  export code to color strategies.
 
 	Dockers
 		* Tabs in dockers drag-and-droppable (vector of docker
@@ -127,14 +123,16 @@ User Interface
 	  rendered with transparency. But that'd probably better wait until Qt 4,
 	  where it would be a hardware accelerated snip.
 
+
 Selections
 
-  	* On shearing, the whole image is mirrored, not the selected
+	* On shearing, the whole image is mirrored, not the selected
 	  bits. 
 	* Invent and implement ways to visualise selection masks in more
 	  intelligent ways. When selecting a white area it should still be
 	  visible that it has been selected. Should be user configurable and
 	  globally implemented (ie not per layer)
+
 
 Profiles
 
@@ -147,8 +145,6 @@ Profiles
         * Support out-of-gamut warning indications for parts of an image 
           containing unprintable colours (no idea how to implement this). -> this
           is pretty easy with lcms
-
-Color conversions
 
 
 Tools
@@ -177,6 +173,7 @@ Tools
 	* Natural media tools (chalk, ink, oil, watercolour -- fun!)
 	* The poly selection tool should be available, filled as a selection tool.
 
+
 Plugins
 
 	* As many filters as possible :-)
@@ -186,6 +183,8 @@ Plugins
           preview as the rest of Krita.
 	* What's the difference between gamma correction and colour
 	  adjustment? -> explained by Cyrille's mail, put this in handbook.
+	* Improve brightness/contrast with curve manipulation and a nice GUI
+
 
 Modules
 
@@ -193,6 +192,8 @@ Modules
 	* Finally fix CMYK
 	* Add Wet & Sticky model (in progress already)
 	* Implement Curtiss et. al. for watercolour (Levien, wet dreams. In progress)
+        * Add channel-depths other than 8 bits. Through seperate colorspaces.
+
 
 Printing
 

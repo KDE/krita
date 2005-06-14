@@ -79,7 +79,7 @@ void KisStrategyColorSpaceGrayscale::toQColor(const Q_UINT8 *src, QColor *c, QUA
 	*opacity = src[PIXEL_GRAY_ALPHA];
 }
 
-Q_INT8 KisStrategyColorSpaceGrayscale::difference(const Q_UINT8* src1, const Q_UINT8* src2)
+Q_INT8 KisStrategyColorSpaceGrayscale::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
 {
 	return QABS(src2[PIXEL_GRAY] - src1[PIXEL_GRAY]);
 }
@@ -186,12 +186,7 @@ QImage KisStrategyColorSpaceGrayscale::convertToQImage(const Q_UINT8 *data, Q_IN
 	return img;
 }
 
-void KisStrategyColorSpaceGrayscale::adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
-{
-	//XXX does nothing for now
-}
-
-void KisStrategyColorSpaceGrayscale::adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
+void KisStrategyColorSpaceGrayscale::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const
 {
 	//XXX does nothing for now
 }

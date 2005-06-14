@@ -1124,11 +1124,11 @@ void KisImage::renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 		KisFlatten<flattenAllVisible> visitor(x, y, w, h);
 
 		visitor(gc, m_layers);
-
+/*
 		if (m_activeLayer -> hasSelection()) {
 			KisSelectionSP s = m_activeLayer -> selection();
 			visitor(gc, s);
-		}
+		}*/
 	}
 
 	gc.end();
@@ -1151,6 +1151,9 @@ void KisImage::renderToPainter(Q_INT32 x1,
 			Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
 			renderToProjection(x, y, w, h);
 			QImage img = m_projection -> convertToQImage(profile, x, y, w, h);
+			if (m_activeLayer -> hasSelection())
+				m_activeLayer -> selection()->paintSelection(img, x, y, w, h);
+			
 			if (!img.isNull()) {
 				m_pixmap.convertFromImage(img);
 				painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);

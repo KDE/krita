@@ -46,7 +46,7 @@ public:
 	virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0)
 		{ return KisPixel (src, src + PIXEL_ALPHA, this, profile); }
 
-	virtual Q_INT8 difference(const Q_UINT8* src1, const Q_UINT8* src2);
+	virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
 	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
 	virtual vKisChannelInfoSP channels() const;
@@ -61,8 +61,7 @@ public:
 
 	virtual KisCompositeOpList userVisiblecompositeOps() const;
 	
-	virtual void adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const;
-	virtual void adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const;
+	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
 
 protected:
 

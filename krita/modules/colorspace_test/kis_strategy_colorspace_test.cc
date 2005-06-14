@@ -210,40 +210,21 @@ QImage KisStrategyColorSpaceTestCS::convertToQImage(const Q_UINT8 *data, Q_INT32
 	return img;
 }
 
-void KisStrategyColorSpaceTestCS::adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
+void KisStrategyColorSpaceTestCS::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const
 {
 	testcspixel *spix = (testcspixel *)src;
 	testcspixel *dpix = (testcspixel *)dst;
 	
-	Q_INT32 nd = spix->r + adjust;
+	Q_INT32 nd = spix->r + brightness;
 	dpix->r = QMAX( 0, QMIN( UINT8_MAX, nd ) );
 	
-	nd = spix->g + adjust;
+	nd = spix->g + brightness;
 	dpix->g = QMAX( 0, QMIN( UINT8_MAX, nd ) );
 	
-	nd = (spix->bmg - spix->g)/16 + adjust;
+	nd = (spix->bmg - spix->g)/16 + brightness;
 	dpix->bmg = QMAX( 0, QMIN( UINT8_MAX, nd ) );
 
 	dpix->bmg = dpix->bmg*16 + dpix->g;
-}
-
-void KisStrategyColorSpaceTestCS::adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const
-{
-	testcspixel *spix = (testcspixel *)src;
-	testcspixel *dpix = (testcspixel *)dst;
-/*	
-	Q_INT32 nd = spix->r + adjust;
-	dpix->r = QMAX( 0, QMIN( UINT8_MAX, nd ) );
-	
-	nd = spix->g + adjust;
-	dpix->g = QMAX( 0, QMIN( UINT8_MAX, nd ) );
-	
-	nd = (spix->bmg - spix->g)/16 + adjust;
-	dpix->bmg = QMAX( 0, QMIN( UINT8_MAX, nd ) );
-
-	dpix->bmg = dpix->bmg*16 + dpix->g;
-	*/
-	//XXX Nothing done yet
 }
 
 void KisStrategyColorSpaceTestCS::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)

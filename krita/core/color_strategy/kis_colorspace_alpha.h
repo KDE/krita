@@ -45,7 +45,7 @@ public:
 	virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0) { return KisPixelRO (src, src, this, profile); }
 	virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0) { return KisPixel (src, src, this, profile); }
 	
-	virtual Q_INT8 difference(const Q_UINT8* src1, const Q_UINT8* src2);
+	virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
 	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
 	virtual vKisChannelInfoSP channels() const;
@@ -58,11 +58,9 @@ public:
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
-	virtual void adjustBrightness(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const;
-	virtual void adjustContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 adjust) const;
+	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
 
 	virtual void setMaskColor(QColor c) { m_maskColor = c; }
-	virtual void setInverted(bool b) { m_inverted = b; }
 
 protected:
 
@@ -72,8 +70,8 @@ protected:
 	 *
 	 * Returns false if the conversion failed, true if it succeeded
 	 */
-	virtual bool convertPixelsTo(const Q_UINT8 * src, KisProfileSP srcProfile,
-				     Q_UINT8 * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
+	virtual bool convertPixelsTo(const Q_UINT8 *src, KisProfileSP srcProfile,
+				     Q_UINT8 *dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 				     Q_UINT32 numPixels,
 				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 

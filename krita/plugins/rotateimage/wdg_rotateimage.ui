@@ -158,9 +158,6 @@
                     <property name="text">
                         <string>90 &amp;degrees</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">

@@ -341,6 +341,8 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_ioProgressBase = 0;
 	m_ioProgressTotalSteps = 0;
 
+	setInstance( KisFactory::global(), false );
+
 	if (name)
 		dcopObject();
 
@@ -556,7 +558,7 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 
 KisImageSP KisDoc::loadImage(const QDomElement& element)
 {
-	
+
 	KisConfig cfg;
 	QString attr;
 	QDomNode node;
@@ -572,7 +574,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 	QString colorspacename;
 	Q_INT32 colorspace_int; // used to keep compatibility with old document
 	KisProfileSP profile;
-	
+
 
 	if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
 		if ((name = element.attribute("name")).isNull())
@@ -586,7 +588,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 		if ((height = attr.toInt()) < 0 || height > cfg.maxImgHeight())
 			return 0;
 		description = element.attribute("description");
-		
+
 		if ((attr = element.attribute("x-res")).isNull())
 			xres = 100.0;
 		else if ((xres = attr.toInt()) < 0 || xres > cfg.maxImgHeight())
@@ -599,18 +601,18 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
 		if ((colorspacename = element.attribute("colorspacename")).isNull())
 		{
-			// And old file: take a reasonable default. 
+			// And old file: take a reasonable default.
 			// Krita didn't support anything else in those
 			// days anyway.
 			colorspacename = "RGBA";
 		}
-		
+
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
 		if (cs == 0) {
 			// return 0;
 			if (colorspacename  == "Grayscale + Alpha")
 				cs = KisColorSpaceRegistry::instance() -> get("GRAYA");
-			else 
+			else
 				cs = KisColorSpaceRegistry::instance() -> get("RGBA");
 		}
 
@@ -684,7 +686,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 	// present in the layer definition: this helps a LOT with backward
 	// compatibilty.
 	kdDebug(DBG_AREA_FILE) << "loadLayer called\n";
-	
+
 	KisConfig cfg;
 	QString attr;
 	QDomNode node;
@@ -701,12 +703,12 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 	if ((name = element.attribute("name")).isNull())
 		return 0;
 	kdDebug(DBG_AREA_FILE) << "Loading layer " << name << "\n";
-	
+
 	if ((attr = element.attribute("x")).isNull())
 		return 0;
 	x = attr.toInt();
 	kdDebug(DBG_AREA_FILE) << "X: " << x << "\n";
-	
+
 	if ((attr = element.attribute("y")).isNull())
 		return 0;
 
@@ -720,7 +722,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 		opacity = OPACITY_OPAQUE;
 
 	kdDebug(DBG_AREA_FILE) << "Opacity: " << opacity << "\n";
-		
+
 	QString compositeOpName = element.attribute("compositeop");
 	KisCompositeOp compositeOp;
 
@@ -734,34 +736,34 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 		return 0;
 	}
 	kdDebug(DBG_AREA_FILE) << "CompositeOp: " << compositeOpName << "\n";
-	
+
 	if ((attr = element.attribute("visible")).isNull())
 		attr = "1";
 
 	visible = attr == "0" ? false : true;
 	kdDebug(DBG_AREA_FILE) << "Visible: " << visible << "\n";
-	
+
 	if ((attr = element.attribute("linked")).isNull())
 		attr = "0";
 
 	linked = attr == "0" ? false : true;
 	kdDebug(DBG_AREA_FILE) << "Linked: " << linked << "\n";
-	
+
 	if ((attr = element.attribute("locked")).isNull())
 		attr = "0";
 
 	locked = attr == "0" ? false : true;
 	kdDebug(DBG_AREA_FILE) << "Locked: " << locked<< "\n";
-	
+
 	QString colorspacename = element.attribute("colorspacename");
 	KisStrategyColorSpaceSP colorSpace = img -> colorStrategy();
-	
+
 	kdDebug() << "Colorspace name in layer: " << colorspacename << "\n";
 	if (!colorspacename.isNull()) {
 		colorSpace = KisColorSpaceRegistry::instance() -> get(KisID(colorspacename, ""));
 	}
 	kdDebug(DBG_AREA_FILE) << "Colorspace: " << colorspacename << "\n";
-	
+
 	if (colorSpace == 0) {
 		kdDebug() << "Could not get colorspace: aborting\n";
 		return 0;
@@ -826,12 +828,12 @@ bool KisDoc::completeSaving(KoStore *store)
 
 				store -> close();
 			}
-			
+
 			if ((*it2) -> profile()) {
 				// save layer profile
 				location = external ? QString::null : uri;
 				location += (*it) -> name() + "/layers/" + (*it2) -> name() + ".icc";
-				
+
 				if (store -> open(location)) {
 					store -> write((*it2) -> profile() -> annotation() -> annotation());
 					store -> close();
@@ -841,7 +843,7 @@ bool KisDoc::completeSaving(KoStore *store)
 			IOCompletedStep();
 			(*it2) -> disconnect();
 		}
-		
+
 		// saving annotations
 		// XXX this only saves EXIF and ICC info. This would probably need
 		// a redesign of the dtd of the krita file to do this more generally correct
@@ -922,7 +924,7 @@ bool KisDoc::completeLoading(KoStore *store)
 
 				store -> close();
 			}
-			
+
 			// icc profile
 			location = external ? QString::null : uri;
 			location += (*it) -> name() + "/layers/" + (*it2) -> name() + ".icc";
@@ -939,7 +941,7 @@ bool KisDoc::completeLoading(KoStore *store)
 			IOCompletedStep();
 			(*it2) -> disconnect();
 		}
-		
+
 		// annotations
 		// exif
 		location = external ? QString::null : uri;

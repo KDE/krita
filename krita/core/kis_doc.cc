@@ -270,6 +270,8 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 	m_ioProgressBase = 0;
 	m_ioProgressTotalSteps = 0;
 
+	setInstance( KisFactory::global(), false );
+
 	if (name)
 		dcopObject();
 

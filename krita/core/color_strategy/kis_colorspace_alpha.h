@@ -77,11 +77,12 @@ protected:
 
 
 
-	virtual void bitBlt(Q_INT32 stride,
-			    Q_UINT8 *dst,
+	virtual void bitBlt(Q_UINT8 *dst,
 			    Q_INT32 dststride,
 			    const Q_UINT8 *src,
-			    Q_INT32 srcstride,
+			    Q_INT32 srcRowStride,
+			    const Q_UINT8 *srcAlphaMask,
+			    Q_INT32 maskRowStride,
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,

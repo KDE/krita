@@ -125,12 +125,13 @@ Q_INT8 KisStrategyColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src
 	return QMAX(QABS(v1 - v2), QMAX(QABS(s1 - s2), QABS(h1 - h2)));
 }
 
-void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
-				   Q_UINT8 *dst,
+void KisStrategyColorSpace::bitBlt(Q_UINT8 *dst,
 				   Q_INT32 dststride,
 				   KisStrategyColorSpaceSP srcSpace,
 				   const Q_UINT8 *src,
-				   Q_INT32 srcstride,
+				   Q_INT32 srcRowStride,
+				   const Q_UINT8 *srcAlphaMask,
+				   Q_INT32 maskRowStride,
 				   QUANTUM opacity,
 				   Q_INT32 rows,
 				   Q_INT32 cols,
@@ -143,9 +144,9 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 //  	kdDebug() << id().name() << "::bitBlt. source color space: " << srcSpace -> id().name() << "\n";
 
 
- 	if (m_id!= srcSpace -> id()) {
+	if (m_id!= srcSpace -> id()) {
 		int len = pixelSize() * rows * cols;
- 		Q_UINT8 * convertedSrcPixels = new Q_UINT8[len];
+		Q_UINT8 * convertedSrcPixels = new Q_UINT8[len];
 		Q_CHECK_PTR(convertedSrcPixels);
 
 		memset(convertedSrcPixels, 0, len * sizeof(Q_UINT8));
@@ -153,25 +154,26 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
 		if (srcProfile && dstProfile) {
 // 			kdDebug() << "src profile: " << srcProfile -> productName() << ", dst profile: " << dstProfile -> productName() << "\n";
 			for (Q_INT32 row = 0; row < rows; row++) {
-				srcSpace -> convertPixelsTo(src + row * srcstride, srcProfile,
+				srcSpace -> convertPixelsTo(src + row * srcRowStride, srcProfile,
 							    convertedSrcPixels + row * cols * pixelSize(), this, dstProfile,
 							    cols);
 			}
 		}
 		else {
 			for (Q_INT32 row = 0; row < rows; row++) {
-				srcSpace -> convertPixelsTo(src + row * srcstride, 0,
+				srcSpace -> convertPixelsTo(src + row * srcRowStride, 0,
 							    convertedSrcPixels + row * cols * pixelSize(), this, 0,
 							    cols);
 			}
 		}
- 		srcstride = cols * pixelSize();
+ 		srcRowStride = cols * pixelSize();
 
-		bitBlt(stride,
-		       dst,
+		bitBlt(dst,
 		       dststride,
 		       convertedSrcPixels,
-		       srcstride,
+		       srcRowStride,
+		       srcAlphaMask,
+		       maskRowStride,
 		       opacity,
 		       rows,
 		       cols,
@@ -180,17 +182,17 @@ void KisStrategyColorSpace::bitBlt(Q_INT32 stride,
  		delete[] convertedSrcPixels;
  	}
 	else {
-		bitBlt(stride,
-		       dst,
+		bitBlt(dst,
 		       dststride,
 		       src,
-		       srcstride,
+		       srcRowStride,
+		       srcAlphaMask,
+		       maskRowStride,
 		       opacity,
 		       rows,
 		       cols,
 		       op);
 	}
-
 }
 
 void KisStrategyColorSpace::resetProfiles()

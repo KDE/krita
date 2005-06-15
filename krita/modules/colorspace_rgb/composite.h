@@ -879,39 +879,5 @@ void compositeLuminize(Q_INT32 pixelSize,
 
 }
 
-void compositeErase(Q_INT32 pixelSize,
-		    Q_UINT8 *dst, 
-		    Q_INT32 dstRowSize,
-		    const Q_UINT8 *src, 
-		    Q_INT32 srcRowSize,
-		    Q_INT32 rows, 
-		    Q_INT32 cols, 
-		    QUANTUM /*opacity*/ = OPACITY_OPAQUE)
-{
-	Q_UINT8 *d;
-	const Q_UINT8 *s;
-	Q_INT32 i;
-
-	while (rows-- > 0) {
-		d = dst;
-		s = src;
-
-		for (i = cols; i > 0; i--, d += pixelSize, s += pixelSize) {
-			if (d[PIXEL_ALPHA] < s[PIXEL_ALPHA]) {
-				continue;
-			}
-			else {
-				d[PIXEL_ALPHA] = s[PIXEL_ALPHA];
-			}
-
-		}
-
-		dst += dstRowSize;
-		src += srcRowSize;
-	}
-
-
-}
-
 #endif
 

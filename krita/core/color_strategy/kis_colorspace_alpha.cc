@@ -172,11 +172,14 @@ void KisColorSpaceAlpha::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *d
 	//XXX does nothing for now
 }
 
-void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
-				Q_UINT8 *dst,
+//XXX bitblt of ColorSpaceAlpha does not take mask into consideration as this is probably not
+// used ever
+void KisColorSpaceAlpha::bitBlt(Q_UINT8 *dst,
 				Q_INT32 dststride,
 				const Q_UINT8 *src,
-				Q_INT32 srcstride,
+				Q_INT32 srcRowStride,
+				const Q_UINT8 *srcAlphaMask,
+				Q_INT32 maskRowStride,
 				QUANTUM opacity,
 				Q_INT32 rows,
 				Q_INT32 cols,
@@ -198,17 +201,17 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 		return;
 	switch (op.op()) {
 	case COMPOSITE_COPY:
-		linesize = stride * sizeof(Q_UINT8) * cols;
+		linesize = sizeof(Q_UINT8) * cols;
 		d = dst;
 		s = src;
 		while (rows-- > 0) {
 			memcpy(d, s, linesize);
 			d += dststride;
-			s += srcstride;
+			s += srcRowStride;
 		}
 		return;
 	case COMPOSITE_CLEAR:
-		linesize = stride * sizeof(Q_UINT8) * cols;
+		linesize = sizeof(Q_UINT8) * cols;
 		d = dst;
 		while (rows-- > 0) {
 			memset(d, OPACITY_TRANSPARENT, linesize);
@@ -220,7 +223,7 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 			d = dst;
 			s = src;
 
-			for (i = cols; i > 0; i--, d += stride, s += stride) {
+			for (i = cols; i > 0; i--, d ++, s ++) {
 				if (d[PIXEL_MASK] < s[PIXEL_MASK]) {
 					continue;
 				}
@@ -231,7 +234,7 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 			}
 
 			dst += dststride;
-			src += srcstride;
+			src += srcRowStride;
 		}
 		return;
 	case COMPOSITE_SUBTRACT:
@@ -239,7 +242,7 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 			d = dst;
 			s = src;
 
-			for (i = cols; i > 0; i--, d += stride, s += stride) {
+			for (i = cols; i > 0; i--, d++, s++) {
 				if (d[PIXEL_MASK] <= s[PIXEL_MASK]) {
 					d[PIXEL_MASK] = MIN_SELECTED;
 				} else {
@@ -248,7 +251,7 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 			}
 
 			dst += dststride;
-			src += srcstride;
+			src += srcRowStride;
 		}
 		return;
 	case COMPOSITE_OVER:
@@ -259,32 +262,32 @@ void KisColorSpaceAlpha::bitBlt(Q_INT32 stride,
 			while (rows-- > 0) {
 				d = dst;
 				s = src;
-				for (i = cols; i > 0; i--, d += stride, s += stride) {
+				for (i = cols; i > 0; i--, d++, s++) {
 					if (s[PIXEL_MASK] == OPACITY_TRANSPARENT)
 						continue;
 					int srcAlpha = (s[PIXEL_MASK] * opacity + UINT8_MAX / 2) / UINT8_MAX;
 					d[PIXEL_MASK] = (d[PIXEL_MASK] * (UINT8_MAX - srcAlpha) + srcAlpha * UINT8_MAX + UINT8_MAX / 2) / UINT8_MAX;
 				}
 				dst += dststride;
-				src += srcstride;
+				src += srcRowStride;
 			}
 		}
 		else {
 			while (rows-- > 0) {
 				d = dst;
 				s = src;
-				for (i = cols; i > 0; i--, d += stride, s += stride) {
+				for (i = cols; i > 0; i--, d++, s++) {
 					if (s[PIXEL_MASK] == OPACITY_TRANSPARENT)
 						continue;
 					if (d[PIXEL_MASK] == OPACITY_TRANSPARENT || s[PIXEL_MASK] == OPACITY_OPAQUE) {
-						memcpy(d, s, stride * sizeof(Q_UINT8));
+						memcpy(d, s, 1);
 						continue;
 					}
 					int srcAlpha = s[PIXEL_MASK];
 					d[PIXEL_MASK] = (d[PIXEL_MASK] * (UINT8_MAX - srcAlpha) + srcAlpha * UINT8_MAX + UINT8_MAX / 2) / UINT8_MAX;
 				}
 				dst += dststride;
-				src += srcstride;
+				src += srcRowStride;
 			}
 		}
 

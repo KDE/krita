@@ -61,18 +61,20 @@ public:
 
 protected:
 
-	virtual void bitBlt(Q_INT32 pixelSize,
-			    Q_UINT8 *dst,
+	virtual void bitBlt(Q_UINT8 *dst,
 			    Q_INT32 dstRowStride,
 			    const Q_UINT8 *src,
 			    Q_INT32 srcRowStride,
+			    const Q_UINT8 *srcAlphaMask,
+			    Q_INT32 maskRowStride,
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,
 			    const KisCompositeOp& op);
 
-	void compositeOver(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
-	void compositeErase(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeOver(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *srcAlphaMask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeErase(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *srcAlphaMask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeCopy(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *srcAlphaMask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
 private:
 	vKisChannelInfoSP m_channels;
 };

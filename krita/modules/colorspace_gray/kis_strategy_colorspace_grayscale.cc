@@ -192,11 +192,12 @@ void KisStrategyColorSpaceGrayscale::adjustBrightnessContrast(const Q_UINT8 *src
 }
 
 
-void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 pixelSize,
-				      Q_UINT8 *dst,
+void KisStrategyColorSpaceGrayscale::bitBlt(Q_UINT8 *dst,
 				      Q_INT32 dstRowStride,
 				      const Q_UINT8 *src,
 				      Q_INT32 srcRowStride,
+				      const Q_UINT8 *srcAlphaMask,
+				      Q_INT32 maskRowStride,
 				      QUANTUM opacity,
 				      Q_INT32 rows,
 				      Q_INT32 cols,
@@ -235,7 +236,7 @@ void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 pixelSize,
 		const Q_UINT8 *s;
 		Q_INT32 linesize;
 
-		linesize = pixelSize * sizeof(Q_UINT8) * cols;
+		linesize = sizeof(Q_UINT8) * cols;
 		d = dst;
 		s = src;
 		while (rows-- > 0) {
@@ -249,7 +250,7 @@ void KisStrategyColorSpaceGrayscale::bitBlt(Q_INT32 pixelSize,
 		Q_UINT8 *d;
 		Q_INT32 linesize;
 
-		linesize = pixelSize * sizeof(Q_UINT8) * cols;
+		linesize = sizeof(Q_UINT8) * cols;
 		d = dst;
 		while (rows-- > 0) {
 			memset(d, 0, linesize);

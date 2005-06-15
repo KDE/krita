@@ -259,12 +259,13 @@ public:
 	 * are not the same colour model, the source pixels will be
 	 * converted to the target model.
 	 */
-	virtual void bitBlt(Q_INT32 stride,
-			    Q_UINT8 *dst,
+	virtual void bitBlt(Q_UINT8 *dst,
 			    Q_INT32 dststride,
 			    KisStrategyColorSpaceSP srcSpace,
 			    const Q_UINT8 *src,
-			    Q_INT32 srcstride,
+			    Q_INT32 srcRowStride,
+			    const Q_UINT8 *srcAlphaMask,
+			    Q_INT32 maskRowStride,
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,
@@ -281,11 +282,12 @@ protected:
 	 * Compose two byte arrays containing pixels in the same color
 	 * model together.
 	 */
-	virtual void bitBlt(Q_INT32 pixelSize,
-			    Q_UINT8 *dst,
+	virtual void bitBlt(Q_UINT8 *dst,
 			    Q_INT32 dstRowSize,
 			    const Q_UINT8 *src,
-			    Q_INT32 srcRowSize,
+			    Q_INT32 srcRowStride,
+			    const Q_UINT8 *srcAlphaMask,
+			    Q_INT32 maskRowStride,
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,

@@ -29,7 +29,6 @@
 
 #include "kis_image.h"
 #include "kis_strategy_colorspace_test.h"
-#include "composite.h"
 #include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
 #include "kis_integer_maths.h"
@@ -227,11 +226,12 @@ void KisStrategyColorSpaceTestCS::adjustBrightnessContrast(const Q_UINT8 *src, Q
 	dpix->bmg = dpix->bmg*16 + dpix->g;
 }
 
-void KisStrategyColorSpaceTestCS::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceTestCS::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *srcAlphaMask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
 		const Q_UINT8 *src = srcRowStart;
+		const Q_UINT8 *mask = srcAlphaMask;
 		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
 
@@ -239,6 +239,14 @@ void KisStrategyColorSpaceTestCS::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 ds
 			testcspixel *pix = (testcspixel *)src;
 			testcspixel *dstpix = (testcspixel *)dst;
 			Q_UINT16 srcAlpha = pix->alpha;
+			
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_MULT(srcAlpha, *mask);
+				mask++;
+			}
 
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
@@ -280,11 +288,12 @@ void KisStrategyColorSpaceTestCS::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 ds
 			columns--;
 			src += sizeof(struct testcspixel);
 			dst += sizeof(struct testcspixel);
-			
 		}
 
 		rows--;
 		srcRowStart += srcRowStride;
+		if(srcAlphaMask)
+			srcAlphaMask += maskRowStride;
 		dstRowStart += dstRowStride;
 	}
 }
@@ -293,35 +302,97 @@ void KisStrategyColorSpaceTestCS::compositeErase(Q_UINT8 *dst,
 		    Q_INT32 dstRowSize,
 		    const Q_UINT8 *src, 
 		    Q_INT32 srcRowSize,
+		    const Q_UINT8 *srcAlphaMask,
+		    Q_INT32 maskRowStride,
 		    Q_INT32 rows, 
 		    Q_INT32 cols, 
-		    QUANTUM /*opacity*/ = OPACITY_OPAQUE)
+		    QUANTUM /*opacity*/)
 {
 	Q_INT32 i;
-
-	while (rows-- > 0) {
+	Q_UINT8 srcAlpha;
+	
+	while (rows-- > 0)
+	{
 		testcspixel *pix = (testcspixel *)src;
 		testcspixel *dstpix = (testcspixel *)dst;
+		const Q_UINT8 *mask = srcAlphaMask;
 
-		for (i = cols; i > 0; i--, pix++, dstpix++) {
-			if (dstpix->alpha < pix->alpha) {
-				continue;
+		for (i = cols; i > 0; i--, pix++, dstpix++)
+		{
+			srcAlpha = pix->alpha;
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_BLEND(srcAlpha, OPACITY_OPAQUE, *mask);
+				mask++;
 			}
-			else {
-				dstpix->alpha = pix->alpha;
-			}
+			dstpix->alpha = UINT8_MULT(srcAlpha, dstpix->alpha);
 		}
 
 		dst += dstRowSize;
+		if(srcAlphaMask)
+			srcAlphaMask += maskRowStride;
 		src += srcRowSize;
 	}
 }
 
-void KisStrategyColorSpaceTestCS::bitBlt(Q_INT32 pixelSize,
-				      Q_UINT8 *dst,
+void KisStrategyColorSpaceTestCS::compositeCopy(Q_UINT8 *dst, 
+		   Q_INT32 dstRowStride,
+		   const Q_UINT8 *src, 
+		   Q_INT32 srcRowStride,
+		   const Q_UINT8 *srcAlphaMask,
+		   Q_INT32 maskRowStride,
+		   Q_INT32 rows, 
+		   Q_INT32 cols, 
+		   QUANTUM /*opacity*/)
+{
+	Q_INT32 linesize = pixelSize() * cols;
+	Q_UINT8 *d;
+	const Q_UINT8 *s, *mask;
+	d = dst;
+	s = src;
+	mask = srcAlphaMask;
+	
+	if(srcAlphaMask==0)
+	{
+		while (rows-- > 0) {
+			memcpy(d, s, linesize);
+			d += dstRowStride;
+			s += srcRowStride;
+		}
+	}
+	else
+	{
+		while (rows-- > 0) {
+			testcspixel *pix = (testcspixel *)src;
+			testcspixel *dstpix = (testcspixel *)dst;
+			mask = srcAlphaMask;
+
+			for (Q_INT32 i = cols; i > 0; i--, pix++, dstpix++, mask++)
+			{
+				if(*mask != OPACITY_OPAQUE)
+				{
+					dstpix->r = UINT8_BLEND(pix->r, dstpix->r, *mask);
+					dstpix->bmg = UINT8_BLEND((pix->bmg - pix->g)/16, (dstpix->bmg -dstpix->g)/16, 	*mask);
+					dstpix->g = UINT8_BLEND(pix->g, dstpix->g, *mask);
+					dstpix->bmg = dstpix->bmg*16 + dstpix->g;
+					dstpix->alpha = UINT8_BLEND(pix->alpha, dstpix->alpha, *mask);
+				}
+			}
+			dst += dstRowStride;
+			srcAlphaMask += maskRowStride;
+			src += srcRowStride;
+		}
+	}
+}
+
+void KisStrategyColorSpaceTestCS::bitBlt(Q_UINT8 *dst,
 				      Q_INT32 dstRowStride,
 				      const Q_UINT8 *src,
 				      Q_INT32 srcRowStride,
+				      const Q_UINT8 *srcAlphaMask,
+				      Q_INT32 maskRowStride,
 				      QUANTUM opacity,
 				      Q_INT32 rows,
 				      Q_INT32 cols,
@@ -333,13 +404,13 @@ void KisStrategyColorSpaceTestCS::bitBlt(Q_INT32 pixelSize,
 		// Undefined == no composition
 		break;
 	case COMPOSITE_OVER:
-		compositeOver(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		compositeOver(dst, dstRowStride, src, srcRowStride, srcAlphaMask, maskRowStride, rows, cols, opacity);
 		break;
 	case COMPOSITE_COPY:
-		compositeCopy(pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		compositeCopy(dst, dstRowStride, src, srcRowStride, srcAlphaMask, maskRowStride, rows, cols, opacity);
 		break;
 	case COMPOSITE_ERASE:
-		compositeErase(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		compositeErase(dst, dstRowStride, src, srcRowStride, srcAlphaMask, maskRowStride, rows, cols, opacity);
 		break;
 
 	case COMPOSITE_NO:

@@ -196,7 +196,7 @@ void KisStrategyColorSpaceGrayscale::bitBlt(Q_UINT8 *dst,
 				      Q_INT32 dstRowStride,
 				      const Q_UINT8 *src,
 				      Q_INT32 srcRowStride,
-				      const Q_UINT8 *srcAlphaMask,
+				      const Q_UINT8 *mask,
 				      Q_INT32 maskRowStride,
 				      QUANTUM opacity,
 				      Q_INT32 rows,
@@ -205,38 +205,41 @@ void KisStrategyColorSpaceGrayscale::bitBlt(Q_UINT8 *dst,
 {
 	switch (op.op()) {
 	case COMPOSITE_OVER:
-		compositeOver(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		compositeOver(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
 		break;
 	case COMPOSITE_MULT:
-		compositeMultiply(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		compositeMultiply(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
 		break;
 	case COMPOSITE_DIVIDE:
-		compositeDivide(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		compositeDivide(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
 		break;
 	case COMPOSITE_DARKEN:
-		compositeDarken(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		compositeDarken(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
 		break;
 	case COMPOSITE_LIGHTEN:
-		compositeLighten(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		compositeLighten(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
 		break;
 	case COMPOSITE_SCREEN:
-		compositeScreen(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		compositeScreen(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
 		break;
 	case COMPOSITE_OVERLAY:
-		compositeOverlay(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		compositeOverlay(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
 		break;
 	case COMPOSITE_DODGE:
-		compositeDodge(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		compositeDodge(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
 		break;
 	case COMPOSITE_BURN:
-		compositeBurn(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+		compositeBurn(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
+		break;
+	case COMPOSITE_ERASE:
+		compositeErase(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
 		break;
 	case COMPOSITE_COPY: {
 		Q_UINT8 *d;
 		const Q_UINT8 *s;
 		Q_INT32 linesize;
 
-		linesize = sizeof(Q_UINT8) * cols;
+		linesize = MAX_CHANNEL_GRAYSCALEA*sizeof(Q_UINT8) * cols;
 		d = dst;
 		s = src;
 		while (rows-- > 0) {
@@ -250,7 +253,7 @@ void KisStrategyColorSpaceGrayscale::bitBlt(Q_UINT8 *dst,
 		Q_UINT8 *d;
 		Q_INT32 linesize;
 
-		linesize = sizeof(Q_UINT8) * cols;
+		linesize = MAX_CHANNEL_GRAYSCALEA*sizeof(Q_UINT8) * cols;
 		d = dst;
 		while (rows-- > 0) {
 			memset(d, 0, linesize);
@@ -280,18 +283,27 @@ KisCompositeOpList KisStrategyColorSpaceGrayscale::userVisiblecompositeOps() con
 	return list;
 }
 
-void KisStrategyColorSpaceGrayscale::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceGrayscale::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
 		const Q_UINT8 *src = srcRowStart;
 		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
+		const Q_UINT8 *mask = maskRowStart;
 
 		while (columns > 0) {
 
 			Q_UINT8 srcAlpha = src[PIXEL_GRAY_ALPHA];
 
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_MULT(srcAlpha, *mask);
+				mask++;
+			}
+			
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
@@ -334,16 +346,19 @@ void KisStrategyColorSpaceGrayscale::compositeOver(Q_UINT8 *dstRowStart, Q_INT32
 		rows--;
 		srcRowStart += srcRowStride;
 		dstRowStart += dstRowStride;
+		if(maskRowStart)
+			maskRowStart += maskRowStride;
 	}
 }
 
-void KisStrategyColorSpaceGrayscale::compositeMultiply(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceGrayscale::compositeMultiply(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
 		const Q_UINT8 *src = srcRowStart;
 		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
+		const Q_UINT8 *mask = maskRowStart;
 
 		while (columns > 0) {
 
@@ -352,6 +367,14 @@ void KisStrategyColorSpaceGrayscale::compositeMultiply(Q_UINT8 *dstRowStart, Q_I
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_MULT(srcAlpha, *mask);
+				mask++;
+			}
+			
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
@@ -389,16 +412,19 @@ void KisStrategyColorSpaceGrayscale::compositeMultiply(Q_UINT8 *dstRowStart, Q_I
 		rows--;
 		srcRowStart += srcRowStride;
 		dstRowStart += dstRowStride;
+		if(maskRowStart)
+			maskRowStart += maskRowStride;
 	}
 }
 
-void KisStrategyColorSpaceGrayscale::compositeDivide(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceGrayscale::compositeDivide(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
 		const Q_UINT8 *src = srcRowStart;
 		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
+		const Q_UINT8 *mask = maskRowStart;
 
 		while (columns > 0) {
 
@@ -407,6 +433,14 @@ void KisStrategyColorSpaceGrayscale::compositeDivide(Q_UINT8 *dstRowStart, Q_INT
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_MULT(srcAlpha, *mask);
+				mask++;
+			}
+			
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
@@ -449,16 +483,19 @@ void KisStrategyColorSpaceGrayscale::compositeDivide(Q_UINT8 *dstRowStart, Q_INT
 		rows--;
 		srcRowStart += srcRowStride;
 		dstRowStart += dstRowStride;
+		if(maskRowStart)
+			maskRowStart += maskRowStride;
 	}
 }
 
-void KisStrategyColorSpaceGrayscale::compositeScreen(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceGrayscale::compositeScreen(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
 		const Q_UINT8 *src = srcRowStart;
 		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
+		const Q_UINT8 *mask = maskRowStart;
 
 		while (columns > 0) {
 
@@ -467,6 +504,14 @@ void KisStrategyColorSpaceGrayscale::compositeScreen(Q_UINT8 *dstRowStart, Q_INT
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_MULT(srcAlpha, *mask);
+				mask++;
+			}
+			
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
@@ -509,16 +554,19 @@ void KisStrategyColorSpaceGrayscale::compositeScreen(Q_UINT8 *dstRowStart, Q_INT
 		rows--;
 		srcRowStart += srcRowStride;
 		dstRowStart += dstRowStride;
+		if(maskRowStart)
+			maskRowStart += maskRowStride;
 	}
 }
 
-void KisStrategyColorSpaceGrayscale::compositeOverlay(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceGrayscale::compositeOverlay(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
 		const Q_UINT8 *src = srcRowStart;
 		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
+		const Q_UINT8 *mask = maskRowStart;
 
 		while (columns > 0) {
 
@@ -527,6 +575,14 @@ void KisStrategyColorSpaceGrayscale::compositeOverlay(Q_UINT8 *dstRowStart, Q_IN
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_MULT(srcAlpha, *mask);
+				mask++;
+			}
+			
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
@@ -569,16 +625,19 @@ void KisStrategyColorSpaceGrayscale::compositeOverlay(Q_UINT8 *dstRowStart, Q_IN
 		rows--;
 		srcRowStart += srcRowStride;
 		dstRowStart += dstRowStride;
+		if(maskRowStart)
+			maskRowStart += maskRowStride;
 	}
 }
 
-void KisStrategyColorSpaceGrayscale::compositeDodge(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceGrayscale::compositeDodge(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
 		const Q_UINT8 *src = srcRowStart;
 		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
+		const Q_UINT8 *mask = maskRowStart;
 
 		while (columns > 0) {
 
@@ -587,6 +646,14 @@ void KisStrategyColorSpaceGrayscale::compositeDodge(Q_UINT8 *dstRowStart, Q_INT3
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_MULT(srcAlpha, *mask);
+				mask++;
+			}
+			
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
@@ -629,16 +696,19 @@ void KisStrategyColorSpaceGrayscale::compositeDodge(Q_UINT8 *dstRowStart, Q_INT3
 		rows--;
 		srcRowStart += srcRowStride;
 		dstRowStart += dstRowStride;
+		if(maskRowStart)
+			maskRowStart += maskRowStride;
 	}
 }
 
-void KisStrategyColorSpaceGrayscale::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceGrayscale::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
 		const Q_UINT8 *src = srcRowStart;
 		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
+		const Q_UINT8 *mask = maskRowStart;
 
 		while (columns > 0) {
 
@@ -647,6 +717,14 @@ void KisStrategyColorSpaceGrayscale::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_MULT(srcAlpha, *mask);
+				mask++;
+			}
+			
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
@@ -690,16 +768,19 @@ void KisStrategyColorSpaceGrayscale::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32
 		rows--;
 		srcRowStart += srcRowStride;
 		dstRowStart += dstRowStride;
+		if(maskRowStart)
+			maskRowStart += maskRowStride;
 	}
 }
 
-void KisStrategyColorSpaceGrayscale::compositeDarken(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceGrayscale::compositeDarken(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
 		const Q_UINT8 *src = srcRowStart;
 		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
+		const Q_UINT8 *mask = maskRowStart;
 
 		while (columns > 0) {
 
@@ -708,6 +789,14 @@ void KisStrategyColorSpaceGrayscale::compositeDarken(Q_UINT8 *dstRowStart, Q_INT
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_MULT(srcAlpha, *mask);
+				mask++;
+			}
+			
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
@@ -750,16 +839,19 @@ void KisStrategyColorSpaceGrayscale::compositeDarken(Q_UINT8 *dstRowStart, Q_INT
 		rows--;
 		srcRowStart += srcRowStride;
 		dstRowStart += dstRowStride;
+		if(maskRowStart)
+			maskRowStart += maskRowStride;
 	}
 }
 
-void KisStrategyColorSpaceGrayscale::compositeLighten(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisStrategyColorSpaceGrayscale::compositeLighten(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {
 
 		const Q_UINT8 *src = srcRowStart;
 		Q_UINT8 *dst = dstRowStart;
 		Q_INT32 columns = numColumns;
+		const Q_UINT8 *mask = maskRowStart;
 
 		while (columns > 0) {
 
@@ -768,6 +860,14 @@ void KisStrategyColorSpaceGrayscale::compositeLighten(Q_UINT8 *dstRowStart, Q_IN
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_MULT(srcAlpha, *mask);
+				mask++;
+			}
+			
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
 				if (opacity != OPACITY_OPAQUE) {
@@ -810,6 +910,46 @@ void KisStrategyColorSpaceGrayscale::compositeLighten(Q_UINT8 *dstRowStart, Q_IN
 		rows--;
 		srcRowStart += srcRowStride;
 		dstRowStart += dstRowStride;
+		if(maskRowStart)
+			maskRowStart += maskRowStride;
 	}
 }
 
+void KisStrategyColorSpaceGrayscale::compositeErase(Q_UINT8 *dst, 
+		    Q_INT32 dstRowSize,
+		    const Q_UINT8 *src, 
+		    Q_INT32 srcRowSize,
+		    const Q_UINT8 *srcAlphaMask,
+		    Q_INT32 maskRowStride,
+		    Q_INT32 rows, 
+		    Q_INT32 cols, 
+		    QUANTUM /*opacity*/)
+{
+	Q_INT32 i;
+	Q_UINT8 srcAlpha;
+	
+	while (rows-- > 0)
+	{
+		const Q_UINT8 *s = src;
+		Q_UINT8 *d = dst;
+		const Q_UINT8 *mask = srcAlphaMask;
+
+		for (i = cols; i > 0; i--, s+=MAX_CHANNEL_GRAYSCALEA, d+=MAX_CHANNEL_GRAYSCALEA)
+		{
+			srcAlpha = s[PIXEL_GRAY_ALPHA];
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_BLEND(srcAlpha, OPACITY_OPAQUE, *mask);
+				mask++;
+			}
+			d[PIXEL_GRAY_ALPHA] = UINT8_MULT(srcAlpha, d[PIXEL_GRAY_ALPHA]);
+		}
+
+		dst += dstRowSize;
+		if(srcAlphaMask)
+			srcAlphaMask += maskRowStride;
+		src += srcRowSize;
+	}
+}

@@ -915,9 +915,12 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 
 	KisFillPainter painter;
 
-	painter.begin(layer.data());
-	painter.fillRect(0, 0, width, height, Qt::white, OPACITY_OPAQUE);
-	painter.end();
+// 	painter.begin(layer.data());
+	// XXX: YUse default pixel color, no need to initialize all pixels immediately
+	KisColor c(Qt::white);
+	layer->dataManager()->setDefaultPixel(c.data());
+// 	painter.fillRect(0, 0, width, height, c, OPACITY_OPAQUE);
+// 	painter.end();
 
 	img -> add(layer, -1);
 
@@ -959,15 +962,17 @@ bool KisDoc::slotNewImage()
 		layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
 		Q_CHECK_PTR(layer);
 
-
-		// Default color and opacity: don't allocate memory
-		if ( c.red() != 0 || c.green() != 0 || c.blue() != 0 || opacity != 0) {
-			KisFillPainter painter;
-			painter.begin(layer.data());
-			painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), c, opacity);
-			painter.end();
-		}
-
+// 		// XXX: Use default color here! No need to fill all pixels immediately
+// 		// Default color and opacity: don't allocate memory
+// 		if ( c.red() != 0 || c.green() != 0 || c.blue() != 0 || opacity != 0) {
+// 			KisFillPainter painter;
+// 			painter.begin(layer.data());
+// 			painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), c, opacity);
+// 			painter.end();
+// 		}
+		KisColor kc(c, opacity, cs, dlg.profile());
+		layer->dataManager()->setDefaultPixel(kc.data());
+		
 		img -> add(layer, -1);
 
 		m_currentImage = img;

@@ -41,8 +41,6 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-#include <qcolor.h>
-
 #include "kis_brush.h"
 #include "kis_global.h"
 #include "kis_image.h"
@@ -81,14 +79,17 @@ KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 // XXX: This needs to be optimized.
 // XXX: This also needs renaming, since filling ought to keep the opacity and the composite op in mind,
 //      this is more eraseToColor.
-void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const QColor& c, QUANTUM opacity)
+void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const KisColor& kc, QUANTUM opacity)
 {
 
 	Q_INT32 y;
         Q_UINT8 src[m_device->pixelSize()]; // XXX: Change QColor to KisColor, then use channelsize from color space
 	Q_UINT32 depth = m_device->pixelSize();
-        m_device->colorStrategy()->nativeColor(c, opacity, src, 0);
 
+	//XXX: Add a method to set the opacity of a KisColor to KisColor
+	QColor c = kc.toQColor();
+        m_device->colorStrategy()->nativeColor(c, opacity, src, 0);
+	
 	for (y = y1; y < y1 + h; y++)
 	{
 		KisHLineIterator hiter = m_device->createHLineIterator(x1, y, w, true);

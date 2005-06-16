@@ -70,3 +70,16 @@ of the 2 points.
 ------------------------------
 It is quite often necessary to blank a pixel The color strategy should have a function
 to return a blank pixel. Ditto with a default pixel.
+
+
+==================
+Requested function
+
+A function that takes color channels and alpha channel and combines those in the right
+order and at the right place
+
+Usecase:
+
+KisPaintop:
+
+alpha from mast + color from color selector, together a new color

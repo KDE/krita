@@ -33,7 +33,7 @@
 #include <kdualcolorbutton.h>
 #include <koColor.h>
 #include <kdebug.h>
-
+#include "kis_color.h"
 KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, name)
 {
 	m_subject = 0;
@@ -100,13 +100,13 @@ void KisHSVWidget::slotHChanged(int h)
 		m_fgColor.setHSV(h, m_fgColor.S(), m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
 		if(m_subject)
-			m_subject->setFGColor(m_fgColor.color());
+			m_subject->setFGColor(KisColor(m_fgColor.color()));
 	}
 	else{
 		m_bgColor.setHSV(h, m_bgColor.S(), m_bgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Background);
 		if(m_subject)
-			m_subject->setBGColor(m_bgColor.color());
+			m_subject->setBGColor(KisColor(m_bgColor.color()));
 	}
 }
 
@@ -116,13 +116,13 @@ void KisHSVWidget::slotSChanged(int s)
 		m_fgColor.setHSV(m_fgColor.H(), s, m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
 		if(m_subject)
-			m_subject->setFGColor(m_fgColor.color());
+			m_subject->setFGColor(KisColor(m_fgColor.color()));
 	}
 	else{
 		m_bgColor.setHSV(m_bgColor.H(), s, m_bgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Background);
 		if(m_subject)
-			m_subject->setBGColor(m_bgColor.color());
+			m_subject->setBGColor(KisColor(m_bgColor.color()));
 	}
 }
 
@@ -134,13 +134,13 @@ void KisHSVWidget::slotVChanged(int v)
 		m_fgColor.setHSV(m_fgColor.H(), m_fgColor.S(), v);
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
 		if(m_subject)
-			m_subject->setFGColor(m_fgColor.color());
+			m_subject->setFGColor(KisColor(m_fgColor.color()));
 	}
 	else{
 		m_bgColor.setHSV(m_bgColor.H(), m_bgColor.S(), v);
 		m_ColorButton->setCurrent(KDualColorButton::Background);
 		if(m_subject)
-			m_subject->setBGColor(m_bgColor.color());
+			m_subject->setBGColor(KisColor(m_bgColor.color()));
 	}
 	locked = false;
 }
@@ -156,7 +156,7 @@ void KisHSVWidget::slotWheelChanged(const KoColor& c)
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
 		// XXX: I once got a crash here. BSAR.
 		if(m_subject)
-			m_subject->setFGColor(m_fgColor.color());
+			m_subject->setFGColor(KisColor(m_fgColor.color()));
 	}
 	else{
 		if(autovalue)
@@ -165,7 +165,7 @@ void KisHSVWidget::slotWheelChanged(const KoColor& c)
 			m_bgColor.setHSV(c.H(), c.S(), m_fgColor.V());
 		m_ColorButton->setCurrent(KDualColorButton::Background);
 		if(m_subject)
-			m_subject->setBGColor(m_bgColor.color());
+			m_subject->setBGColor(KisColor(m_bgColor.color()));
 	}
 	locked = false;
 }
@@ -175,8 +175,8 @@ void KisHSVWidget::update(KisCanvasSubject *subject)
 	if( !locked )
 	{
 		m_subject = subject;
-		m_fgColor = subject->fgColor();
-		m_bgColor = subject->bgColor();
+		m_fgColor = subject->fgColor().toQColor();
+		m_bgColor = subject->bgColor().toQColor();
 	}
 
 	KoColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;

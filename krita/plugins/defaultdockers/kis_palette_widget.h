@@ -33,6 +33,7 @@ class KListBox;
 class KisPalette;
 class KColorCells;
 class KisResource;
+class KisColor;
 
 /**
  * A color palette in table form.
@@ -54,8 +55,8 @@ public slots:
 	void setPalette(const QString &paletteName);
 
 signals:
-	void colorSelected( const QColor &);
-	void colorDoubleClicked( const QColor &, const QString &);
+	void colorSelected( const KisColor &);
+	void colorDoubleClicked( const KisColor &, const QString &);
 
 protected slots:
 	void slotColorCellSelected( int );

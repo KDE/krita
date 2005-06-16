@@ -167,6 +167,11 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 		Q_UINT32 index = 0;
 
 		QStringList lines = QStringList::split("\n", s);
+	
+		if (lines.size() < 3) {
+			setValid(false);
+			return;
+		}
 
 		QString entry, channel, columns;
 		QStringList c;

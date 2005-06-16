@@ -26,8 +26,8 @@
 #include <climits>
 #include <strings.h>
 
-#include "qbrush.h"
 #include "qcolor.h"
+#include "qbrush.h"
 #include "qfontinfo.h"
 #include "qfontmetrics.h"
 #include "qpen.h"
@@ -45,8 +45,6 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-#include <qcolor.h>
-
 #include "kis_brush.h"
 #include "kis_global.h"
 #include "kis_image.h"
@@ -63,6 +61,7 @@
 #include "kis_paintop.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
+#include "kis_color.h"
 
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
@@ -319,7 +318,6 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
 	if (m_device == 0) return;
 
-
 //	kdDebug() << "KisPainter::bltSelection rect "
 //			  << " dx: " << dx
 //			  << " dy: " << dy
@@ -401,7 +399,8 @@ double KisPainter::paintLine(const KisPoint & pos1,
 {
 	if (!m_device) return 0;
 	if (!m_paintOp) return 0;
-
+	if (!m_brush) return 0;
+	
 	double savedDist = inSavedDist;
 
 	if (savedDist < 0) {

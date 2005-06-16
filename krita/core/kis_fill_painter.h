@@ -20,7 +20,6 @@
 #define KIS_FILL_PAINTER_H_
 
 #include <qbrush.h>
-#include <qcolor.h>
 #include <qfontinfo.h>
 #include <qfontmetrics.h>
 #include <qpen.h>
@@ -38,6 +37,7 @@
 #include <qcolor.h>
 #include <kcommand.h>
 
+#include "kis_color.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
@@ -71,14 +71,14 @@ public:
 	/**
          * Fill a rectangle with a certain color.
 	 */
-        void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const QColor& c);
-        void fillRect(const QRect& rc, const QColor& c);
+        void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KisColor& c);
+        void fillRect(const QRect& rc, const KisColor& c);
 
 	/**
          * Fill a rectangle with a certain color and opacity.
 	 */
-        void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const QColor& c, QUANTUM opacity);
-        void fillRect(const QRect& rc, const QColor& c, QUANTUM opacity);
+        void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KisColor& c, QUANTUM opacity);
+        void fillRect(const QRect& rc, const KisColor& c, QUANTUM opacity);
 
 	/**
 	 * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
@@ -139,13 +139,13 @@ private:
 
 
 inline
-void KisFillPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const QColor& c)
+void KisFillPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KisColor& c)
 {
         fillRect(x, y, w, h, c, OPACITY_OPAQUE);
 }
 
 inline
-void KisFillPainter::fillRect(const QRect& rc, const QColor& c)
+void KisFillPainter::fillRect(const QRect& rc, const KisColor& c)
 {
         fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE);
 }
@@ -153,17 +153,19 @@ void KisFillPainter::fillRect(const QRect& rc, const QColor& c)
 inline
 void KisFillPainter::eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
 {
-        fillRect(x1, y1, w, h, Qt::black, OPACITY_TRANSPARENT);
+	KisColor c(Qt::black);
+        fillRect(x1, y1, w, h, c, OPACITY_TRANSPARENT);
 }
 
 inline
 void KisFillPainter::eraseRect(const QRect& rc)
 {
-        fillRect(rc, Qt::black, OPACITY_TRANSPARENT);
+	KisColor c(Qt::black);
+        fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_TRANSPARENT);
 }
 
 inline
-void KisFillPainter::fillRect(const QRect& rc, const QColor& c, QUANTUM opacity)
+void KisFillPainter::fillRect(const QRect& rc, const KisColor& c, QUANTUM opacity)
 {
         fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
 }

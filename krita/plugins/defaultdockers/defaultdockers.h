@@ -28,7 +28,6 @@
 class KisView;
 class KisBrush;
 class KisPattern;
-class KisControlFrame;
 class KisBirdEyeBox;
 class KisChannelView;
 class KisAutoBrush;
@@ -39,6 +38,7 @@ class KisRGBWidget;
 class KisGrayWidget;
 class KisPaletteWidget;
 class KisResourceMediator;
+//class KisControlFrame;
 
 class KritaDefaultDockers : public KParts::Plugin
 {
@@ -49,7 +49,7 @@ public:
 	virtual ~KritaDefaultDockers();
 
 private:
-	void createControlFrame(KisView * view);
+	//void createControlFrame(KisView * view);
 	void createBirdEyeBox(KisView * view);
 	void createChannelView(KisView * view);
 	void createAutoBrush(KisView * view);
@@ -62,22 +62,20 @@ private:
 	void createPatternWidget(KisView * view);
 	void createBrushesWidget(KisView * view);
 	void createGradientsWidget(KisView * view);
-
-
-public slots:
+#if 0	
+public XXXslots:
         void slotBrushChanged(KisBrush * brush);
         void slotGradientChanged(KisGradient * gradient);
         void slotPatternChanged(KisPattern * pattern);
-
-
-
+#endif
 private:
 
 	KisView * m_view;
 
 	KoPaletteManager * m_paletteManager;
-
-        KisControlFrame *m_controlWidget;
+#if 0
+	KisControlFrame * m_controlWidget;
+#endif
         KisBirdEyeBox * m_birdEyeBox;
         KisChannelView *m_channelView;
 

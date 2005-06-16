@@ -58,6 +58,7 @@ KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
 
 void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
+	//kdDebug() << "nativeColor called: " << c.red() << ", " << c.green() << ", " << c.blue() << "\n";
 	dst[PIXEL_RED] = upscale(c.red());
 	dst[PIXEL_GREEN] = upscale(c.green());
 	dst[PIXEL_BLUE] = upscale(c.blue());
@@ -65,6 +66,7 @@ void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, Q_UINT8 *dst, KisPro
 
 void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
+	//kdDebug() << "nativeColor called with opacity: " << c.red() << ", " << c.green() << ", " << c.blue() << "\n";
 	dst[PIXEL_RED] = upscale(c.red());
 	dst[PIXEL_GREEN] = upscale(c.green());
 	dst[PIXEL_BLUE] = upscale(c.blue());

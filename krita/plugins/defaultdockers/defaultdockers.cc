@@ -51,7 +51,8 @@
 #include "kis_autogradient.h"
 #include "kis_birdeye_box.h"
 #include "kis_channelview.h"
-#include "kis_controlframe.h"
+#include "kis_color.h"
+//#include "kis_controlframe.h"
 
 #include "defaultdockers.h"
 
@@ -85,9 +86,8 @@ KritaDefaultDockers::KritaDefaultDockers(QObject *parent, const char *name, cons
 
 	m_resourceServer = new KisResourceServer;
 
-	createControlFrame(m_view);
-	createBirdEyeBox(m_view);
-
+ 	createBirdEyeBox(m_view);
+	
 	createChannelView(m_view);
 
 	createHSVWidget(m_view);
@@ -113,26 +113,6 @@ KritaDefaultDockers::KritaDefaultDockers(QObject *parent, const char *name, cons
 
 KritaDefaultDockers::~KritaDefaultDockers()
 {
-}
-
-
-
-void KritaDefaultDockers::createControlFrame(KisView * view)
-{
-        m_controlWidget = new KisControlFrame(view);
-        m_controlWidget -> setCaption(i18n("General"));
-
-        
-        m_controlWidget -> slotSetBGColor(Qt::white);
-        m_controlWidget -> slotSetFGColor(Qt::black);
-
-        connect(m_controlWidget, SIGNAL(fgColorChanged(const QColor&)), m_view, SLOT(slotSetFGColor(const QColor&)));
-        connect(m_controlWidget, SIGNAL(bgColorChanged(const QColor&)), m_view, SLOT(slotSetBGColor(const QColor&)));
-
-        connect(m_view, SIGNAL(fgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetFGColor(const QColor&)));
-        connect(m_view, SIGNAL(bgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetBGColor(const QColor&)));
-
-	m_paletteManager->addWidget(actionCollection(), m_controlWidget, "controlframe", krita::CONTROL_PALETTE);
 }
 
 void KritaDefaultDockers::createBirdEyeBox(KisView * view)
@@ -205,7 +185,7 @@ void KritaDefaultDockers::createPaletteWidget(KisView * view)
 
         connect(m_resourceServer, SIGNAL(loadedPalette(KisResource*)), m_palettewidget, SLOT(slotAddPalette(KisResource*)));
         m_resourceServer->palettes();
-        connect(m_palettewidget, SIGNAL(colorSelected(const QColor &)), view, SLOT(slotSetFGColor(const QColor &)));
+        connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)), view, SLOT(slotSetFGColor(const KisColor &)));
 
 	m_paletteManager->addWidget(actionCollection(), m_palettewidget, "palettewidget", krita::COLORBOX);
 }
@@ -221,13 +201,12 @@ void KritaDefaultDockers::createPatternWidget(KisView * view)
 
         view -> patternActivated(dynamic_cast<KisPattern*>(m_patternMediator -> currentResource()));
 
-	KritaDefaultDockers::connect(view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged(KisPattern* )));
+	//KritaDefaultDockers::connect(view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged( KisPattern *)));
 
 }
 
 void KritaDefaultDockers::createBrushesWidget(KisView * view)
 {
-        connect(view, SIGNAL(brushChanged(KisBrush *)), this, SLOT(slotBrushChanged(KisBrush* )));
 
 	m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, m_resourceServer, i18n("Brushes"),
                                                   view, "brush_chooser", view);
@@ -236,24 +215,23 @@ void KritaDefaultDockers::createBrushesWidget(KisView * view)
 
         view -> brushActivated(dynamic_cast<KisBrush*>(m_brushMediator -> currentResource()));
 
+	//KritaDefaultDockers::connect(view, SIGNAL(brushChanged(KisBrush *)), this, SLOT(slotBrushChanged( KisBrush *)));
         KritaDefaultDockers::connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(brushActivated(KisResource*)));
 }
 
 void KritaDefaultDockers::createGradientsWidget(KisView * view)
 {
-	connect(view, SIGNAL(gradientChanged(KisGradient *)), this, SLOT(slotGradientChanged(KisGradient* )));
-
 	m_gradientMediator = new KisResourceMediator(MEDIATE_GRADIENTS, m_resourceServer, i18n("Gradients"),
                                                              view, "gradient chooser", view);
 
         m_paletteManager->addWidget(actionCollection(), m_gradientMediator->chooserWidget(), "gradients", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
 
         view -> gradientActivated(dynamic_cast<KisGradient*>(m_gradientMediator -> currentResource()));
-
+	//KritaDefaultDockers::connect(view, SIGNAL(gradientChanged(KisGradient *)), this, SLOT(slotGradientChanged( KisGradient *)));
         KritaDefaultDockers::connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(gradientActivated(KisResource*)));
 
 }
-
+#if 0
 void KritaDefaultDockers::slotBrushChanged(KisBrush * brush)
 {
         KisIconItem *item;
@@ -291,5 +269,7 @@ void KritaDefaultDockers::slotPatternChanged(KisPattern * pattern)
         else
                 m_controlWidget -> slotSetGradient( new KisIconItem(pattern) );
 }
+
+#endif
 
 #include "defaultdockers.moc"

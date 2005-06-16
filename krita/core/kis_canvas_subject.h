@@ -20,7 +20,6 @@
 #define KIS_CANVAS_SUBJECT_H_
 
 #include <qstring.h>
-#include <qcolor.h>
 #include "kis_types.h"
 #include "kis_id.h"
 
@@ -37,6 +36,7 @@ class KisSelectionManager;
 class QWidget;
 class KisFilterRegistry;
 class QCursor;
+class KisColor;
 
 /**
  * The canvas subject is the subset of operations that are directy available to
@@ -52,10 +52,10 @@ public:
 	virtual void detach(KisCanvasObserver *observer) = 0;
 	virtual void notify() = 0;
 	virtual KisImageSP currentImg() const = 0;
-	virtual QColor bgColor() const = 0;
-	virtual void setBGColor(const QColor& c) = 0;
-	virtual QColor fgColor() const = 0;
-	virtual void setFGColor(const QColor& c) = 0;
+	virtual KisColor bgColor() const = 0;
+	virtual void setBGColor(const KisColor& c) = 0;
+	virtual KisColor fgColor() const = 0;
+	virtual void setFGColor(const KisColor& c) = 0;
 	virtual KisBrush *currentBrush() const = 0;
 	virtual KisPattern *currentPattern() const = 0;
 	virtual KisGradient *currentGradient() const = 0;

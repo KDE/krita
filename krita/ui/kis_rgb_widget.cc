@@ -30,7 +30,7 @@
 #include <koColorSlider.h>
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
-
+#include "kis_color.h"
 #include <qcolor.h>
 
 KisRGBWidget::KisRGBWidget(QWidget *parent, const char *name) : super(parent, name)
@@ -107,13 +107,13 @@ void KisRGBWidget::slotRChanged(int r)
 		m_fgColor.setRgb(r, m_fgColor.green(), m_fgColor.blue());
 		m_ColorButton->setCurrent(KDualColorButton::Foreground);
 		if(m_subject)
-			m_subject->setFGColor(m_fgColor);;
+			m_subject->setFGColor(KisColor(m_fgColor));
 	}
 	else{
 		m_bgColor.setRgb(r, m_bgColor.green(), m_bgColor.blue());
 		m_ColorButton->setCurrent(KDualColorButton::Background);
 		if(m_subject)
-			m_subject->setBGColor(m_bgColor);
+			m_subject->setBGColor(KisColor(m_bgColor));
 	}
 }
 
@@ -152,8 +152,8 @@ void KisRGBWidget::slotBChanged(int b)
 void KisRGBWidget::update(KisCanvasSubject *subject)
 {
 	m_subject = subject;
-	m_fgColor = subject->fgColor();
-	m_bgColor = subject->bgColor();
+	m_fgColor = subject->fgColor().toQColor();
+	m_bgColor = subject->bgColor().toQColor();
 
 	QColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
 

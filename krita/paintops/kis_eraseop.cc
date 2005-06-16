@@ -107,7 +107,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 		for (int y = 0; y < maskHeight; y++) {
 			for (int x = 0; x < maskWidth; x++) {
 				// the color doesn't matter, since we only composite the alpha
-				dab -> setPixel(x, y, m_painter -> paintColor(), QUANTUM_MAX - mask->alphaAt(x, y));
+				dab -> setPixel(x, y, Qt::black, QUANTUM_MAX - mask->alphaAt(x, y));
 			}
 		}
 		QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
@@ -132,7 +132,9 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 		dab -> setOpacity(OPACITY_TRANSPARENT);
 		for (int y = 0; y < maskHeight; y++) {
 			for (int x = 0; x < maskWidth; x++) {
-				dab -> setPixel(x, y, m_painter -> backgroundColor(), mask->alphaAt(x, y));
+				// XXX: Change QColor to KisColor
+				QColor c = m_painter->backgroundColor().toQColor();
+				dab -> setPixel(x, y, c, mask->alphaAt(x, y));
 			}
 		}
 		QRect dabRect = QRect(0, 0, maskWidth, maskHeight);

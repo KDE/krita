@@ -37,6 +37,7 @@ class KisGradientWidget;
 class KisBrush;
 class KisPattern;
 class KisGradient;
+class KisColor;
 
 enum ActiveColor { ac_Foreground, ac_Background};
 
@@ -52,28 +53,28 @@ public:
 	ActiveColor activeColor();
 
 public slots:
-	void slotSetFGColor(const QColor& c);
-	void slotSetBGColor(const QColor& c);
+	void slotSetFGColor(const KisColor& c);
+	void slotSetBGColor(const KisQColor& c);
 
 	void slotSetBrush(KoIconItem *item);
 	void slotSetPattern(KoIconItem *item);
 	void slotSetGradient(KoIconItem *item);
 
 signals:
-	void fgColorChanged(const QColor& c);
-	void bgColorChanged(const QColor& c);
+	void fgColorChanged(const KisQColor& c);
+	void bgColorChanged(const KisQColor& c);
 	void activeColorChanged(ActiveColor ac);
 
 protected slots:
-	void slotFGColorSelected(const QColor& c);
-	void slotBGColorSelected(const QColor& c);
+	void slotFGColorSelected(const KisQColor& c);
+	void slotBGColorSelected(const KisQColor& c);
 	void slotActiveColorChanged(KDualColorButton::DualColor dc);
 
 private:
-	KDualColorButton  *m_pColorButton;
-	KisIconWidget    *m_pBrushWidget;
-	KisIconWidget  *m_pPatternWidget;
-	KisIconWidget  *m_pGradientWidget;
+	KDualColorButton *m_pColorButton;
+	KisIconWidget *m_pBrushWidget;
+	KisIconWidget *m_pPatternWidget;
+	KisIconWidget *m_pGradientWidget;
 };
 
 #endif

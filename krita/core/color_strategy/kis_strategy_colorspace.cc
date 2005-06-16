@@ -40,6 +40,8 @@ KisStrategyColorSpace::KisStrategyColorSpace(const KisID& id, Q_UINT32 cmType, i
 {
 	// Load all profiles that are suitable for this colorspace signature
 	resetProfiles();
+	m_alphaPos = -1;
+	m_alphaSize = -1;
 }
 
 KisStrategyColorSpace::~KisStrategyColorSpace()
@@ -91,7 +93,8 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 			  << ", going to convert through RGB!\n";
 	}
 
-
+	kdDebug () << "Transforming via qcolor\n";
+	
 	Q_INT32 srcPixelSize = pixelSize();
 	Q_INT32 dstPixelSize = dstColorStrategy -> pixelSize();
 
@@ -207,13 +210,13 @@ void KisStrategyColorSpace::resetProfiles()
 	if (!m_profileFilenames.empty()) {
 		KisProfile * profile = 0;
 		for ( QStringList::Iterator it = m_profileFilenames.begin(); it != m_profileFilenames.end(); ++it ) {
-			kdDebug() << "Trying to load profile " << *it << "\n";
+
 			profile = new KisProfile(*it, colorSpaceType());
 			Q_CHECK_PTR(profile);
 
 			profile -> loadAsync();
 			if (profile -> valid() && profile -> colorSpaceSignature() == m_colorSpaceSignature) {
-				kdDebug() << "Success loading profile " << *it << "\n";
+
 				m_profiles.push_back(profile);
 			}
 		}
@@ -226,13 +229,13 @@ void KisStrategyColorSpace::resetProfiles()
 		KisProfile * profile = 0;
 		for ( QStringList::Iterator it = m_profileFilenames.begin(); it != m_profileFilenames.end(); ++it ) {
 
-			kdDebug() << "Trying to load profile " << *it << "\n";
+
 			profile = new KisProfile(d.filePath(*it), colorSpaceType());
 			Q_CHECK_PTR(profile);
 
 			profile -> loadAsync();
 			if (profile -> valid() && profile -> colorSpaceSignature() == m_colorSpaceSignature) {
-				kdDebug() << "Success loading profile " << *it << "\n";
+
 				m_profiles.push_back(profile);
 			}
 		}
@@ -283,4 +286,33 @@ cmsHTRANSFORM KisStrategyColorSpace::createTransform(KisStrategyColorSpaceSP dst
 		return tf;
 	}
 	return 0;
+}
+
+void KisStrategyColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+{
+	Q_INT32 psize = pixelSize();
+	
+	if (m_alphaSize == -1 && m_alphaPos == -1) {
+		m_alphaPos = 0;
+		m_alphaSize = -1;
+		
+		vKisChannelInfoSP_cit it;
+		for (it = channels().begin(); it != channels().end(); ++it) {
+			if ((*it)->channelType() == ALPHA) {
+				m_alphaSize = (*it)->size();
+				break;
+			}
+			++m_alphaPos;
+		}
+	}
+
+	if (m_alphaSize == -1) {
+		m_alphaPos = -1;
+		return;
+	}
+	
+	for (Q_INT32 i = 0; i < nPixels; ++i) {
+		// XXX: Downscale for now.
+		pixels[(i * psize) + m_alphaPos] = alpha;
+	}
 }

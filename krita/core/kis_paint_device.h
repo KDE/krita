@@ -34,6 +34,8 @@
 #include "kis_scale_visitor.h"
 #include "kis_pixel.h"
 #include "kis_canvas_controller.h"
+#include "kis_color.h"
+
 #include <koffice_export.h>
 
 class QImage;
@@ -194,7 +196,8 @@ public:
 	 * @return true if the operation was succesful.
 	 */
         bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity);
-
+	bool pixel(Q_INT32 x, Q_INT32 y, KisColor * kc);
+	
         /**
 	 * Set the specified pixel to the specified color. Note that this
          * bypasses KisPainter. the PaintDevice is here used as an equivalent
@@ -205,9 +208,10 @@ public:
 	 *  the paint device profile.
 	 *
 	 * @return true if the operation was succesful
+	 *
 	 */
         bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity);
-
+	bool setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc);
 	/**
 	 * Return a KisPixel wrapper around these bytes. If there are not enough
 	 * bytes, bad things will happen. XXX: use vectors?

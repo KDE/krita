@@ -238,6 +238,18 @@ public:
 //============================== Manipulation fucntions ==========================//
 
 	/**
+	 * Set the alpha channel to the given value.
+	 *
+	 * pixels -- a pointer to the pixels that will have their alpha set to this value
+	 * alpha --  XXX: This must become int or float
+	 * nPixels -- the number of pixels
+	 *
+	 * XXX: Also add a function that modifies the current alpha with the given alpha, i.e., premultiply them?
+	 */
+	virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+
+
+	/**
 	 * Adjust the brightness and contrast of a series of pixels as told by
 	 * brightness [-100;100]
 	 * contrast [-100;100]
@@ -312,6 +324,9 @@ private:
 
 	vKisProfileSP m_profiles;
 	QStringList m_profileFilenames;
+
+	Q_INT32 m_alphaPos;
+	Q_INT32 m_alphaSize;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_H_

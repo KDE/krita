@@ -40,7 +40,6 @@
 #include <qpopupmenu.h>
 #include <qvaluelist.h>
 #include <qstringlist.h>
-#include <qcolor.h>
 
 // KDE
 #include <dcopobject.h>
@@ -102,6 +101,7 @@
 #include "kis_profile.h"
 #include "kis_transaction.h"
 #include "kis_layerbox.h"
+#include "kis_color.h"
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
@@ -181,8 +181,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 	m_dcop = 0;
 
-	m_fg = Qt::black;
-	m_bg = Qt::white;
+	m_fg = KisColor(Qt::black);
+	m_bg = KisColor(Qt::white);
 
 
 	m_brush = 0;
@@ -1518,26 +1518,26 @@ void KisView::gradientActivated(KisResource *gradient)
 	}
 }
 
-void KisView::setBGColor(const QColor& c)
+void KisView::setBGColor(const KisColor& c)
 {
 	emit bgColorChanged(c);
 	m_bg = c;
 	notify();
 }
 
-void KisView::setFGColor(const QColor& c)
+void KisView::setFGColor(const KisColor& c)
 {
 	emit fgColorChanged(c);
 	m_fg = c;
 	notify();
 }
 
-void KisView::slotSetFGColor(const QColor& c)
+void KisView::slotSetFGColor(const KisColor& c)
 {
 	setFGColor(c);
 }
 
-void KisView::slotSetBGColor(const QColor& c)
+void KisView::slotSetBGColor(const KisColor& c)
 {
 	setBGColor(c);
 }
@@ -2613,12 +2613,12 @@ KisImageSP KisView::currentImg() const
 	return m_current;
 }
 
-QColor KisView::bgColor() const
+KisColor KisView::bgColor() const
 {
 	return m_bg;
 }
 
-QColor KisView::fgColor() const
+KisColor KisView::fgColor() const
 {
 	return m_fg;
 }

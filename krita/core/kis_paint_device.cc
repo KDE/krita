@@ -41,7 +41,7 @@
 #include "kis_transform_visitor.h"
 #include "kis_profile.h"
 #include "kis_canvas_controller.h"
-
+#include "kis_color.h"
 
 namespace {
 
@@ -817,25 +817,57 @@ void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
 
 bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity)
 {
-  KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
-
-  Q_UINT8 *pix = iter.rawData();
-
-  if (!pix) return false;
-
-  colorStrategy() -> toQColor(pix, c, opacity, m_profile);
-
-  return true;
+	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
+	
+	Q_UINT8 *pix = iter.rawData();
+	
+	if (!pix) return false;
+ 
+	colorStrategy() -> toQColor(pix, c, opacity, m_profile);
+	
+	return true;
 }
 
+
+bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KisColor * kc)
+{
+	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
+	
+	Q_UINT8 *pix = iter.rawData();
+	
+	if (!pix) return false;
+
+	kc->setColor(pix, m_colorStrategy, m_profile);
+
+	return true;
+}
+	
 bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity)
 {
-  KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
+	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
 
-  colorStrategy() -> nativeColor(c, opacity, iter.rawData(), m_profile);
+	colorStrategy() -> nativeColor(c, opacity, iter.rawData(), m_profile);
 
-  return true;
+	return true;
 }
+
+bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc)
+{
+	Q_UINT8 * pix;
+	if (kc.colorStrategy() != m_colorStrategy) {
+		KisColor kc2 (kc, m_colorStrategy, m_profile);
+		pix = kc2.data();
+	}
+	else {
+		pix = kc.data();
+	}
+
+	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
+	memcpy(iter.rawData(), pix, m_colorStrategy->pixelSize());
+
+	return true;
+}
+	
 
 Q_INT32 KisPaintDevice::numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY)
 {

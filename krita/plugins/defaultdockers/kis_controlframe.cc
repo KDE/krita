@@ -38,6 +38,7 @@
 #include "kis_brush.h"
 #include "kis_pattern.h"
 #include "kis_gradient.h"
+#include "kis_color.h"
 
 KisControlFrame::KisControlFrame( QWidget* parent, const char* name )
 	: QFrame( parent, name )

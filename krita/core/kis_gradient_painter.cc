@@ -38,8 +38,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qcolor.h>
-
 #include "kis_brush.h"
 #include "kis_global.h"
 #include "kis_gradient.h"
@@ -481,6 +479,7 @@ KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device) : super(device),
 {
 }
 
+// XXX: Use KisColor here instead of QColor
 bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 				       const KisPoint& gradientVectorEnd,
 				       enumGradientShape shape,
@@ -596,7 +595,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 	if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
 
 		emit notifyProgressStage(this, i18n("Anti-aliasing gradient..."), lastProgressPercent);
-
+		KisStrategyColorSpaceSP cs = layer->colorStrategy();
 		for (int y = starty; y <= endy; y++) {
 			KisHLineIterator iter = layer -> createHLineIterator(startx, y, width, true);
 			for (int x = startx; x <= endx; x++) {
@@ -606,7 +605,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 				QColor thisPixel;
 				QUANTUM thisPixelOpacity;
 
-				layer -> colorStrategy() -> toQColor(iter.rawData(), &thisPixel, &thisPixelOpacity);
+				cs->toQColor(iter.rawData(), &thisPixel, &thisPixelOpacity);
 
 				for (int yOffset = -1; yOffset < 2; yOffset++) {
 					for (int xOffset = -1; xOffset < 2; xOffset++) {
@@ -679,7 +678,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
 					QColor color(red, green,  blue);
 
-					layer -> colorStrategy() -> nativeColor( color, opacity, iter.rawData());
+					cs-> nativeColor( color, opacity, iter.rawData());
 				}
 
 				pixelsProcessed++;

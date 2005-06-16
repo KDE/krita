@@ -44,6 +44,7 @@
 #include "kis_paint_device.h"
 #include "kis_canvas_subject.h"
 #include "kis_button_release_event.h"
+#include "kis_color.h"
 
 KisToolText::KisToolText()
 	: super(i18n("Text"))
@@ -104,7 +105,8 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 				QRgb pixel = image.pixel(x, y);
 				 // use the 'blackness' as alpha :)
 				QUANTUM alpha = 255 - qRed(pixel) * OPACITY_OPAQUE / 255;
-				layer->setPixel(x, y, m_subject->fgColor(), alpha);
+				QColor c = m_subject->fgColor().toQColor();
+				layer->setPixel(x, y, c, alpha);
 			}
 		}
 

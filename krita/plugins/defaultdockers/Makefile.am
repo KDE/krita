@@ -21,7 +21,6 @@ kritadefaultdockers_la_SOURCES = defaultdockers.cc \
 	kis_birdeye_box.cc \
 	kis_brush_chooser.cc \
 	kis_channelview.cc \
-	kis_controlframe.cc \
 	kis_gradient_chooser.cc \
 	kis_palette_widget.cc \
 	kis_pattern_chooser.cc \
@@ -40,7 +39,6 @@ noinst_HEADERS = defaultdockers.h \
 	kis_birdeye_box.h \
 	kis_brush_chooser.h \
 	kis_channelview.h \
-	kis_controlframe.h \
 	kis_gradient_chooser.h \
 	kis_palette_widget.h \
 	kis_pattern_chooser.h \

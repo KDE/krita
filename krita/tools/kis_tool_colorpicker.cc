@@ -33,6 +33,7 @@
 #include "kis_tool_colorpicker.moc"
 #include "kis_button_press_event.h"
 #include "kis_canvas_subject.h"
+#include "kis_color.h"
 
 KisToolColorPicker::KisToolColorPicker()
 {
@@ -56,7 +57,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 		KisImageSP img;
 		KisPaintDeviceSP dev;
 		QPoint pos;
-		QColor c;
+		KisColor c;
 		QUANTUM opacity;
 
 		if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)
@@ -76,12 +77,14 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 			return;
 		}
 
-		if (dev -> pixel(pos.x(), pos.y(), &c, &opacity))
-			if(m_update)
+		if (dev -> pixel(pos.x(), pos.y(), &c)) {
+			if (m_update) {
 				if (e -> button() == QMouseEvent::LeftButton)
 					m_subject -> setFGColor(c);
 				else 
 					m_subject -> setBGColor(c);
+			}
+		}
 	}
 }
 

@@ -50,7 +50,7 @@ public:
 
 public:
 	/**
-	 * Sets the default pixel. Note that this might change every occourance, and it might not, but new data
+	 * Sets the default pixel. Note that this might change every occurrance, and it might not, but new data
 	 * well be initialised with this pixel
 	 */
 	void setDefaultPixel(Q_UINT8 *defPixel) { return ACTUAL_DATAMGR::setDefaultPixel(defPixel); };

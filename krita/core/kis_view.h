@@ -140,9 +140,15 @@ public: // Plugin access API. XXX: This needs redesign.
 	KisSelectionManager * selectionManager() { return m_selectionManager; }
 	KoPaletteManager * paletteManager();
 
+	/**
+	 * Get the profile that this view uses to display itself on
+	 * he monitor.
+	 */
+	KisProfileSP monitorProfile();
+
 signals:
-	void bgColorChanged(const QColor& c);
-	void fgColorChanged(const QColor& c);
+	void bgColorChanged(const KisColor& c);
+	void fgColorChanged(const KisColor& c);
 
 	void brushChanged(KisBrush * brush);
 	void gradientChanged(KisGradient * gradient);
@@ -155,8 +161,8 @@ signals:
 	void cursorLeave();
 
 public slots:
-	void slotSetFGColor(const QColor& c);
-	void slotSetBGColor(const QColor& c);
+	void slotSetFGColor(const KisColor& c);
+	void slotSetBGColor(const KisColor& c);
 
 	void next_layer();
 	void previous_layer();
@@ -201,10 +207,10 @@ private:
 	virtual void attach(KisCanvasObserver *observer);
 	virtual void detach(KisCanvasObserver *observer);
 	virtual void notify();
-	virtual QColor bgColor() const;
-	virtual void setBGColor(const QColor& c);
-	virtual QColor fgColor() const;
-	virtual void setFGColor(const QColor& c);
+	virtual KisColor bgColor() const;
+	virtual void setBGColor(const KisColor& c);
+	virtual KisColor fgColor() const;
+	virtual void setFGColor(const KisColor& c);
 	virtual KisBrush *currentBrush() const;
 	virtual KisPattern *currentPattern() const;
 	virtual KisGradient *currentGradient() const;
@@ -215,6 +221,7 @@ private:
 	virtual KoDocument *document() const;
 	// Sets the specified cursor; returns the previous cursor
 	virtual QCursor setCanvasCursor(const QCursor & cursor);
+	
 
 public:
 
@@ -264,11 +271,6 @@ private:
 
 	void paintView(const KisRect& rc);
 
-	/**
-	 * Get the profile that this view uses to display itself on
-	 * he monitor.
-	 */
-	KisProfileSP monitorProfile();
 
 	/**
 	 * Reset the monitor profile to the new settings.
@@ -413,8 +415,8 @@ private:
 
 	// Current colours, brushes, patterns etc.
 
-	QColor m_fg;
-	QColor m_bg;
+	KisColor m_fg;
+	KisColor m_bg;
 
 	KisBrush *m_brush;
 	KisPattern *m_pattern;

@@ -21,7 +21,6 @@
 #define KIS_PAINTER_H_
 
 #include <qbrush.h>
-#include <qcolor.h>
 #include <qfontinfo.h>
 #include <qfontmetrics.h>
 #include <qpen.h>
@@ -34,10 +33,11 @@
 #include <qstring.h>
 #include <qpainter.h>
 #include <qvaluevector.h>
-
 #include <qcolor.h>
+
 #include <kcommand.h>
 
+#include "kis_color.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
@@ -46,7 +46,10 @@
 #include "kis_filter.h"
 #include "kis_progress_subject.h"
 #include "kis_paintop.h"
+#include "kis_color.h"
+
 #include <koffice_export.h>
+
 class QRect;
 class KisTransaction;
 class KisBrush;
@@ -257,14 +260,15 @@ public:
 	void setPattern(KisPattern * pattern) { m_pattern = pattern; }
 	KisPattern * pattern() const { return m_pattern; }
 
-	void setPaintColor(const QColor& color) {m_paintColor = color; }
-	QColor paintColor() const { return m_paintColor; }
+	void setPaintColor(const KisColor& color) { m_paintColor = color;}
+	KisColor paintColor() const { return m_paintColor; }
 
-	void setBackgroundColor(const QColor& color) {m_backgroundColor = color; }
-	QColor backgroundColor() const { return m_backgroundColor; }
+	void setBackgroundColor(const KisColor& color) {m_backgroundColor = color; }
+	KisColor backgroundColor() const { return m_backgroundColor; }
 
-	void setFillColor(const QColor& color) { m_fillColor = color; }
-	QColor fillColor() const { return m_fillColor; }
+	void setFillColor(const KisColor& color) { m_fillColor = color; }
+	KisColor fillColor() const { return m_fillColor; }
+
 
 	enum FillStyle {
 		FillStyleNone,
@@ -325,9 +329,9 @@ protected:
 
 	QRect m_dirtyRect;
 
-	QColor m_paintColor;
-	QColor m_backgroundColor;
-	QColor m_fillColor;
+	KisColor m_paintColor;
+	KisColor m_backgroundColor;
+	KisColor m_fillColor;
 	FillStyle m_fillStyle;
 	StrokeStyle m_strokeStyle;
 	KisBrush *m_brush;

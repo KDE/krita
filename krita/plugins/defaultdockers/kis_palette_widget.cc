@@ -45,6 +45,7 @@
 #include <kseparator.h>
 #include <kpalette.h>
 #include <kimageeffect.h>
+#include <kis_color.h>
 
 #include <kcolordialog.h>
 #include <kcolordrag.h>
@@ -172,7 +173,7 @@ void KisPaletteWidget::slotColorCellSelected( int col )
 {
 	if (!m_currentPalette || (col >= m_currentPalette->nColors()))
 		return;
-	emit colorSelected( m_currentPalette->getColor(col).color );
+	emit colorSelected( KisColor(m_currentPalette->getColor(col).color) );
 
 }
 
@@ -180,7 +181,7 @@ void KisPaletteWidget::slotColorCellDoubleClicked( int col )
 {
 	if (!m_currentPalette || (col >= m_currentPalette -> nColors()))
 		return;
-	emit colorDoubleClicked( m_currentPalette->getColor(col).color, m_currentPalette->getColor(col).name);
+	emit colorDoubleClicked( KisColor(m_currentPalette->getColor(col).color), m_currentPalette->getColor(col).name);
 }
 
 

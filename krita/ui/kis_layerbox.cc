@@ -277,18 +277,24 @@ void KisLayerBox::slotSetCurrentItem(int n)
 
 void KisLayerBox::setCompositeOp(const KisCompositeOp& compositeOp)
 {
+	m_lst -> cmbComposite -> blockSignals(true);
 	m_lst -> cmbComposite -> setCurrentItem(compositeOp);
+	m_lst -> cmbComposite -> blockSignals(false);
 }
 
 void KisLayerBox::setColorStrategy(const KisStrategyColorSpaceSP colorSpace)
 {
+	m_lst -> cmbComposite -> blockSignals(true);
 	m_lst -> cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());
+	m_lst -> cmbComposite -> blockSignals(false);
 }
 
 // range: 0-100
 void KisLayerBox::setOpacity(int opacity)
 {
+	m_lst -> intOpacity -> blockSignals(true);
 	m_lst -> intOpacity -> setValue(opacity);
+	m_lst -> intOpacity -> blockSignals(false);
 }
 
 

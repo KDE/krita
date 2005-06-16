@@ -23,12 +23,165 @@
 #include "kis_layer.h"
 #include "kis_selection.h"
 #include "kis_painter.h"
+#include "kis_undo_adapter.h"
 
 #define DEBUG_LAYERS 0
 
 #if DEBUG_LAYERS
 static int numLayers = 0;
 #endif
+
+namespace {
+
+	class KisLayerCommand : public KNamedCommand {
+		typedef KNamedCommand super;
+
+	public:
+		KisLayerCommand(const QString& name, KisLayerSP layer);
+		virtual ~KisLayerCommand() {}
+
+		virtual void execute() = 0;
+		virtual void unexecute() = 0;
+
+	protected:
+		void setUndo(bool undo);
+		void notifyPropertyChanged();
+
+		KisLayerSP m_layer;
+	};
+
+	KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :
+		super(name), m_layer(layer)
+	{
+	}
+
+	void KisLayerCommand::setUndo(bool undo)
+	{
+		if (m_layer -> undoAdapter()) {
+			m_layer -> undoAdapter() -> setUndo(undo);
+		}
+	}
+
+	void KisLayerCommand::notifyPropertyChanged()
+	{
+		if (m_layer -> image()) {
+			m_layer -> image() -> notifyLayersChanged();
+			m_layer -> image() -> notify();
+		}
+	}
+
+	class KisLayerLinkedCommand : public KisLayerCommand {
+		typedef KisLayerCommand super;
+
+	public:
+		KisLayerLinkedCommand(KisLayerSP layer, bool oldLinked, bool newLinked);
+
+		virtual void execute();
+		virtual void unexecute();
+
+	private:
+		bool m_oldLinked;
+		bool m_newLinked;
+	};
+
+	KisLayerLinkedCommand::KisLayerLinkedCommand(KisLayerSP layer, bool oldLinked, bool newLinked) :
+		super(i18n("Link Layer"), layer)
+	{
+		m_oldLinked = oldLinked;
+		m_newLinked = newLinked;
+	}
+
+	void KisLayerLinkedCommand::execute()
+	{
+		setUndo(false);
+		m_layer -> setLinked(m_newLinked);
+		notifyPropertyChanged();
+		setUndo(true);
+	}
+
+	void KisLayerLinkedCommand::unexecute()
+	{
+		setUndo(false);
+		m_layer -> setLinked(m_oldLinked);
+		notifyPropertyChanged();
+		setUndo(true);
+	}
+
+	class KisLayerLockedCommand : public KisLayerCommand {
+		typedef KisLayerCommand super;
+
+	public:
+		KisLayerLockedCommand(KisLayerSP layer, bool oldLocked, bool newLocked);
+
+		virtual void execute();
+		virtual void unexecute();
+
+	private:
+		bool m_oldLocked;
+		bool m_newLocked;
+	};
+
+	KisLayerLockedCommand::KisLayerLockedCommand(KisLayerSP layer, bool oldLocked, bool newLocked) :
+		super(i18n("Lock Layer"), layer)
+	{
+		m_oldLocked = oldLocked;
+		m_newLocked = newLocked;
+	}
+
+	void KisLayerLockedCommand::execute()
+	{
+		setUndo(false);
+		m_layer -> setLocked(m_newLocked);
+		notifyPropertyChanged();
+		setUndo(true);
+	}
+
+	void KisLayerLockedCommand::unexecute()
+	{
+		setUndo(false);
+		m_layer -> setLocked(m_oldLocked);
+		notifyPropertyChanged();
+		setUndo(true);
+	}
+
+	class KisLayerOpacityCommand : public KisLayerCommand {
+		typedef KisLayerCommand super;
+
+	public:
+		KisLayerOpacityCommand(KisLayerSP layer, QUANTUM oldOpacity, QUANTUM newOpacity);
+
+		virtual void execute();
+		virtual void unexecute();
+
+	private:
+		QUANTUM m_oldOpacity;
+		QUANTUM m_newOpacity;
+	};
+
+	KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, QUANTUM oldOpacity, QUANTUM newOpacity) :
+		super(i18n("Layer Opacity"), layer)
+	{
+		m_oldOpacity = oldOpacity;
+		m_newOpacity = newOpacity;
+	}
+
+	void KisLayerOpacityCommand::execute()
+	{
+		setUndo(false);
+		m_layer -> setOpacity(m_newOpacity);
+		notifyPropertyChanged();
+		setUndo(true);
+	}
+
+	void KisLayerOpacityCommand::unexecute()
+	{
+		setUndo(false);
+		m_layer -> setOpacity(m_oldOpacity);
+		notifyPropertyChanged();
+		setUndo(true);
+	}
+
+}
 
 KisLayer::KisLayer(KisStrategyColorSpaceSP colorStrategy, const QString& name)
 	: super(colorStrategy, name),
@@ -101,6 +254,11 @@ void KisLayer::setOpacity(QUANTUM val)
 	m_opacity = val;
 }
 
+KNamedCommand *KisLayer::setOpacityCommand(QUANTUM newOpacity)
+{
+	return new KisLayerOpacityCommand(this, opacity(), newOpacity);
+}
+
 bool KisLayer::linked() const
 {
 	return m_linked;
@@ -109,6 +267,11 @@ bool KisLayer::linked() const
 void KisLayer::setLinked(bool l)
 {
 	m_linked = l;
+}
+
+KNamedCommand *KisLayer::setLinkedCommand(bool newLinked)
+{
+	return new KisLayerLinkedCommand(this, linked(), newLinked);
 }
 
 const bool KisLayer::visible() const
@@ -130,5 +293,11 @@ void KisLayer::setLocked(bool l)
 {
 	m_locked = l;
 }
+
+KNamedCommand *KisLayer::setLockedCommand(bool newLocked)
+{
+	return new KisLayerLockedCommand(this, locked(), newLocked);
+}
+
 
 #include "kis_layer.moc"

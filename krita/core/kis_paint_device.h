@@ -81,6 +81,7 @@ public:
 	
 	virtual const bool visible() const;
         virtual void setVisible(bool v);
+	KNamedCommand *setVisibleCommand(bool visible);
 
         bool contains(Q_INT32 x, Q_INT32 y) const;
         bool contains(const QPoint& pt) const;
@@ -247,6 +248,8 @@ public:
 
 	KisCompositeOp compositeOp() { return m_compositeOp; }
 	void setCompositeOp(const KisCompositeOp& compositeOp) { m_compositeOp = compositeOp; }
+
+	KNamedCommand *setCompositeOpCommand(const KisCompositeOp& compositeOp);
 
 	Q_INT32 getX();
 	Q_INT32 getY();

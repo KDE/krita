@@ -45,6 +45,118 @@
 
 namespace {
 
+	class KisPaintDeviceCommand : public KNamedCommand {
+		typedef KNamedCommand super;
+
+	public:
+		KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice);
+		virtual ~KisPaintDeviceCommand() {}
+
+		virtual void execute() = 0;
+		virtual void unexecute() = 0;
+
+	protected:
+		void setUndo(bool undo);
+		void notifyPropertyChanged();
+
+		KisPaintDeviceSP m_paintDevice;
+	};
+
+	KisPaintDeviceCommand::KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice) :
+		super(name), m_paintDevice(paintDevice)
+	{
+	}
+
+	void KisPaintDeviceCommand::setUndo(bool undo)
+	{
+		if (m_paintDevice -> undoAdapter()) {
+			m_paintDevice -> undoAdapter() -> setUndo(undo);
+		}
+	}
+
+	void KisPaintDeviceCommand::notifyPropertyChanged()
+	{
+		if (m_paintDevice -> image()) {
+			m_paintDevice -> image() -> notifyLayersChanged();
+			m_paintDevice -> image() -> notify();
+		}
+	}
+
+	class KisPaintDeviceVisibilityCommand : public KisPaintDeviceCommand {
+		typedef KisPaintDeviceCommand super;
+
+	public:
+		KisPaintDeviceVisibilityCommand(KisPaintDeviceSP paintDevice, bool oldVisibility, bool newVisibility);
+
+		virtual void execute();
+		virtual void unexecute();
+
+	private:
+		bool m_oldVisibility;
+		bool m_newVisibility;
+	};
+
+	KisPaintDeviceVisibilityCommand::KisPaintDeviceVisibilityCommand(KisPaintDeviceSP paintDevice, bool oldVisibility, bool newVisibility) :
+		super(i18n("Layer Visibility"), paintDevice)
+	{
+		m_oldVisibility = oldVisibility;
+		m_newVisibility = newVisibility;
+	}
+
+	void KisPaintDeviceVisibilityCommand::execute()
+	{
+		setUndo(false);
+		m_paintDevice -> setVisible(m_newVisibility);
+		notifyPropertyChanged();
+		setUndo(true);
+	}
+
+	void KisPaintDeviceVisibilityCommand::unexecute()
+	{
+		setUndo(false);
+		m_paintDevice -> setVisible(m_oldVisibility);
+		notifyPropertyChanged();
+		setUndo(true);
+	}
+
+	class KisPaintDeviceCompositeOpCommand : public KisPaintDeviceCommand {
+		typedef KisPaintDeviceCommand super;
+
+	public:
+		KisPaintDeviceCompositeOpCommand(KisPaintDeviceSP paintDevice, const KisCompositeOp& oldCompositeOp, const KisCompositeOp& newCompositeOp);
+
+		virtual void execute();
+		virtual void unexecute();
+
+	private:
+		KisCompositeOp m_oldCompositeOp;
+		KisCompositeOp m_newCompositeOp;
+	};
+
+	KisPaintDeviceCompositeOpCommand::KisPaintDeviceCompositeOpCommand(KisPaintDeviceSP paintDevice, const KisCompositeOp& oldCompositeOp, 
+									   const KisCompositeOp& newCompositeOp) :
+		super(i18n("Layer Composite Mode"), paintDevice)
+	{
+		m_oldCompositeOp = oldCompositeOp;
+		m_newCompositeOp = newCompositeOp;
+	}
+
+	void KisPaintDeviceCompositeOpCommand::execute()
+	{
+		setUndo(false);
+		m_paintDevice -> setCompositeOp(m_newCompositeOp);
+		notifyPropertyChanged();
+		setUndo(true);
+	}
+
+	void KisPaintDeviceCompositeOpCommand::unexecute()
+	{
+		setUndo(false);
+		m_paintDevice -> setCompositeOp(m_oldCompositeOp);
+		notifyPropertyChanged();
+		setUndo(true);
+	}
+
 	class MoveCommand : public KNamedCommand {
 		typedef KNamedCommand super;
 
@@ -122,7 +234,7 @@ namespace {
 		KisConvertLayerTypeCmd(KisUndoAdapter *adapter, KisPaintDeviceSP paintDevice,
 				       KisDataManagerSP beforeData, KisStrategyColorSpaceSP beforeColorSpace, KisProfileSP beforeProfile,
 				       KisDataManagerSP afterData, KisStrategyColorSpaceSP afterColorSpace, KisProfileSP afterProfile
-				       ) : super(i18n("&Convert Layer Type...")) //XXX: fix when string freeze over
+				       ) : super(i18n("Convert Layer Type"))
 			{
 				m_adapter = adapter;
 				m_paintDevice = paintDevice;
@@ -908,5 +1020,14 @@ void KisPaintDevice::setY(Q_INT32 y)
 		m_selection->setY(y);
 }
 
+KNamedCommand *KisPaintDevice::setVisibleCommand(bool newVisibility)
+{
+	return new KisPaintDeviceVisibilityCommand(this, visible(), newVisibility);
+}
+
+KNamedCommand *KisPaintDevice::setCompositeOpCommand(const KisCompositeOp& newCompositeOp)
+{
+	return new KisPaintDeviceCompositeOpCommand(this, compositeOp(), newCompositeOp);
+}
 
 #include "kis_paint_device.moc"

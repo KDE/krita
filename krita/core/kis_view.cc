@@ -1405,15 +1405,16 @@ void KisView::layerCompositeOp(const KisCompositeOp& compositeOp)
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
-	layer -> setCompositeOp(compositeOp);
-	layersUpdated();
-	canvasRefresh();
+	KNamedCommand *cmd = layer -> setCompositeOpCommand(compositeOp);
+	cmd -> execute();
+	undoAdapter() -> addCommand(cmd);
+	//layersUpdated();
+	//canvasRefresh();
 }
 
 // range: 0 - 100
 void KisView::layerOpacity(int opacity)
 {
-
 	kdDebug() << "Opacity set to " << opacity << endl;
 	KisImageSP img = currentImg();
 	if (!img) return;
@@ -1425,9 +1426,12 @@ void KisView::layerOpacity(int opacity)
 	if (opacity > 255)
 		opacity = 255;
 
-	layer -> setOpacity(opacity);
-	layersUpdated();
-	canvasRefresh();
+	KNamedCommand *cmd = layer -> setOpacityCommand(opacity);
+	cmd -> execute();
+	undoAdapter() -> addCommand(cmd);
+
+	//layersUpdated();
+	//canvasRefresh();
 }
 
 
@@ -1883,9 +1887,11 @@ void KisView::layerToggleLinked()
 		KisLayerSP layer = img -> activeLayer();
 
 		if (layer) {
-			layer -> setLinked(!layer -> linked());
-			m_doc -> setModified(true);
-			layersUpdated();
+			KNamedCommand *cmd = layer -> setLinkedCommand(!layer -> linked());
+			cmd -> execute();
+			undoAdapter() -> addCommand(cmd);
+			//m_doc -> setModified(true);
+			//layersUpdated();
 		}
 	}
 }
@@ -2121,11 +2127,13 @@ void KisView::layerToggleVisible()
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
-	layer -> setVisible(!layer -> visible());
-	m_doc -> setModified(true);
-	resizeEvent(0);
-	layersUpdated();
-	canvasRefresh();
+	KNamedCommand *cmd = layer -> setVisibleCommand(!layer -> visible());
+	cmd -> execute();
+	undoAdapter() -> addCommand(cmd);
+	//m_doc -> setModified(true);
+	//resizeEvent(0);
+	//layersUpdated();
+	//canvasRefresh();
 }
 
 void KisView::layerToggleLocked()
@@ -2136,9 +2144,11 @@ void KisView::layerToggleLocked()
 	KisLayerSP layer = img -> activeLayer();
 	if (!layer) return;
 
-	layer -> setLocked(!layer -> locked());
-	m_doc -> setModified(true);
-	layersUpdated();
+	KNamedCommand *cmd = layer -> setLockedCommand(!layer -> locked());
+	cmd -> execute();
+	undoAdapter() -> addCommand(cmd);
+	//m_doc -> setModified(true);
+	//layersUpdated();
 }
 
 void KisView::layerSelected(int n)

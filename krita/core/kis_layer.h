@@ -22,6 +22,8 @@
 #include "kis_types.h"
 #include <koffice_export.h>
 
+class KNamedCommand;
+
 class KRITACORE_EXPORT KisLayer : public KisPaintDevice {
 	typedef KisPaintDevice super;
 
@@ -41,12 +43,15 @@ public:
 public:
 	QUANTUM opacity() const;
 	void setOpacity(QUANTUM val);
+	KNamedCommand *setOpacityCommand(QUANTUM val);
 
 	bool linked() const;
 	void setLinked(bool l);
+	KNamedCommand *setLinkedCommand(bool linked);
 
 	bool locked() const;
 	void setLocked(bool l);
+	KNamedCommand *setLockedCommand(bool locked);
 
 private:
 	QUANTUM m_opacity;

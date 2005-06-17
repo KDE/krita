@@ -58,31 +58,37 @@ public:
 	// Create a KisColor by converting src into another colorspace
 	KisColor(const KisColor &src, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile = 0);
 
-	// Copy constructor
+	// Copy constructor -- deep copies the colors.
 	KisColor(const KisColor & rhs);
 
+	// Effective C++, item 11
 	KisColor &operator=(const KisColor &);
 
+	// For easy memcpy'ing etc.
 	Q_UINT8 * data() const { return m_data; }
 	
 	KisStrategyColorSpaceSP colorStrategy() const { return m_colorStrategy; }
 	
 	KisProfileSP profile() const { return m_profile; } 
 
-	// Replace the existing color data with the specified data.
-	virtual void setColor(Q_UINT8 * data, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0);
-	
-	// To save the user the trouble of doing color->colorStrategy()->toQColor(color->data(), &c, &a, profile
-	virtual void toQColor(QColor *c) const;
-	virtual void toQColor(QColor *c, QUANTUM *opacity) const;
+	// Convert this KisColor to the specified colorspace. If the specified colorspace is the
+	// same as the original colorspace, do nothing. Returns the converted KisColor.
+	void convertTo(KisStrategyColorSpaceSP cs, KisProfileSP profile = 0);
 
-	virtual QColor toQColor() const;
+	// Replace the existing color data with the specified data.
+	void setColor(Q_UINT8 * data, KisStrategyColorSpaceSP colorStrategy = 0, KisProfileSP profile = 0);
+
+	// To save the user the trouble of doing color->colorStrategy()->toQColor(color->data(), &c, &a, profile
+	void toQColor(QColor *c) const;
+	void toQColor(QColor *c, QUANTUM *opacity) const;
+
+	QColor toQColor() const;
 	
 
 #if 0
 	// XXX (bsar): Do we need these?
-	virtual void toLab(float * l, float * a, float * b, float * alpha, KisProfileSP profile = 0);
-	virtual void fromLab(float l, float a, float b, float alpha, KisProfileSP profile = 0);
+	void toLab(float * l, float * a, float * b, float * alpha, KisProfileSP profile = 0);
+	void fromLab(float l, float a, float b, float alpha, KisProfileSP profile = 0);
 #endif	
 private:
 

@@ -117,6 +117,26 @@ KisColor & KisColor::operator=(const KisColor & rhs)
 	return * this;
 }
 
+void KisColor::convertTo(KisStrategyColorSpaceSP cs, KisProfileSP profile)
+{
+	if (m_colorStrategy == cs && m_profile == profile) 
+		return;
+
+	Q_UINT8 * m_data2 = new Q_UINT8[cs->pixelSize()];
+	memset(m_data, 0, m_colorStrategy->pixelSize());
+
+	KisPixel srcPixel = KisPixel(m_data, m_data, m_colorStrategy, m_profile);
+	KisPixel dstPixel = KisPixel(m_data2, m_data2, cs, profile);
+	m_colorStrategy->convertTo(srcPixel, dstPixel);
+
+	delete [] m_data;
+	m_data = m_data2;
+	m_colorStrategy = cs;
+	m_profile = profile;
+
+}
+
+
 void KisColor::setColor(Q_UINT8 * data, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile)
 {
 	delete [] m_data;

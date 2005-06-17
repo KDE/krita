@@ -85,16 +85,16 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
 
 	kdDebug() <<  "Filling rect: " << x1 << ", " << y1 << ", " << w << "," << h << "\n";
 
+	// Make sure we're in the right colorspace  
+
+	
+	KisColor kc2(kc); // get rid of const
+	kc2.convertTo(m_device->colorStrategy(), m_device->profile());
+	Q_UINT8 * data = kc2.data();
+
 	Q_INT32 y;
 	Q_UINT32 depth = m_device->pixelSize();
-	Q_UINT8 * data = kc.data();
-
-	KisStrategyColorSpaceSP cs = m_device->colorStrategy();
-	if (cs != kc.colorStrategy()) {
-		KisColor kc2 = KisColor(kc, cs, m_device->profile());
-		data = kc.data();
-	}
-	cs->setAlpha(data, opacity, 1);
+	m_device->colorStrategy()->setAlpha(data, opacity, 1);
 
 	for (y = y1; y < y1 + h; y++)
 	{

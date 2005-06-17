@@ -110,6 +110,7 @@ KisColor::KisColor(const KisColor & rhs)
 
 KisColor & KisColor::operator=(const KisColor & rhs)
 {
+	delete [] m_data;
 	m_colorStrategy = rhs.colorStrategy();
 	m_profile = rhs.profile();
 	m_data = new Q_UINT8[m_colorStrategy->pixelSize()];

@@ -205,6 +205,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 
 			Q_UINT8 *dstData = m_device -> writablePixel(dstX, dstY);
 			Q_INT32 dstRowStride = m_device -> rowStride(dstX, dstY);
+			
 
 			m_colorStrategy -> bitBlt(dstData,
 						  dstRowStride,
@@ -234,75 +235,83 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 			      const KisCompositeOp &op, 
 			      KisPaintDeviceSP srcdev,
-			      KisSelectionSP selMask,
+			      KisSelectionSP seldev,
 			      QUANTUM opacity,
 			      Q_INT32 sx, Q_INT32 sy, 
 			      Q_INT32 sw, Q_INT32 sh)
 {
 	if (srcdev == 0) return;
 
+	if (seldev == 0) return;
+
 	if (m_device == 0) return;
 
-
-//	kdDebug() << "KisPainter::bltSelectionExt rect "
-//			  << " dx: " << dx
-//			  << " dy: " << dy
-//			  << " sx: " << sx
-//			  << " sy: " << sy
-//			  << " w: " << sw
-//			  << " h " << sh
-//			  << " layer: " << srcdev -> name()
-//			  << " onto: " << m_device -> name()
-//			  << "\n";
-
-	KisSelectionSP selection = selMask;
-
-	if (selection->isTotallyUnselected(QRect(dx, dy, sw, sh))) {
+	if (seldev->isTotallyUnselected(QRect(dx, dy, sw, sh))) {
 //		kdDebug() << "Blitting outside selection rect\n";
 		return;
 	}
 
-//	kdDebug() << "KisPainter::bltSelection selection rect: "
-//			  << " x: " << r.x()
-//			  << " y: " << r.y()
-//			  << " w: " << r.width()
-//			  << " h " << r.height()
-//			  << "\n";
-
 	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();
 
-	// We can only blt one row at a time so these values are irrelevant. They were
-	// used when we accessed tiles directly.
-	Q_INT32 srcRowSize = 0;
-	Q_INT32 dstRowSize = 0;
-	Q_INT32 maskRowSize = 0;
+	Q_INT32 dstY = dy;
+	Q_INT32 srcY = sy;
+	Q_INT32 rowsRemaining = sh;
 
-	for(Q_INT32 i = 0; i < sh; i++)
-	{
-		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, true);
-		KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
-		KisHLineIterator selIter = selection -> createHLineIterator(dx, dy + i, sw, false);
+	while (rowsRemaining > 0) {
 
-		while( ! srcIter.isDone())
-		{
-			m_colorStrategy -> bitBlt(dstIter.rawData(), 
-						dstRowSize,
-						srcCs,
-						srcIter.rawData(),
-						srcRowSize,
-						selIter.rawData(),
-						maskRowSize,
-						opacity,
-						1,
-						1,
-						op,
-						srcProfile,
-						m_profile);
-			++srcIter;
-			++dstIter;
-			++selIter;
+		Q_INT32 dstX = dx;
+		Q_INT32 srcX = sx;
+		Q_INT32 columnsRemaining = sw;
+		Q_INT32 numContiguousDstRows = m_device -> numContiguousRows(dstY, dstX, dstX + sw - 1);
+		Q_INT32 numContiguousSrcRows = srcdev -> numContiguousRows(srcY, srcX, srcX + sw - 1);
+		Q_INT32 numContiguousSelRows = seldev -> numContiguousRows(dstY, dstX, dstX + sw - 1);
+
+		Q_INT32 rows = QMIN(numContiguousDstRows, numContiguousSrcRows); 
+		rows = QMIN(numContiguousSelRows, rows); 
+		rows = QMIN(rows, rowsRemaining);
+
+		while (columnsRemaining > 0) {
+
+			Q_INT32 numContiguousDstColumns = m_device -> numContiguousColumns(dstX, dstY, dstY + rows - 1);
+			Q_INT32 numContiguousSrcColumns = srcdev -> numContiguousColumns(srcX, srcY, srcY + rows - 1);
+			Q_INT32 numContiguousSelColumns = seldev -> numContiguousColumns(dstX, dstY, dstY + rows - 1);
+
+			Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns); 
+			columns = QMIN(numContiguousSelColumns, columns); 
+			columns = QMIN(columns, columnsRemaining);
+
+			Q_UINT8 *dstData = m_device -> writablePixel(dstX, dstY);
+			Q_INT32 dstRowStride = m_device -> rowStride(dstX, dstY);
+			
+			const Q_UINT8 *srcData = srcdev -> pixel(srcX, srcY);
+			Q_INT32 srcRowStride = srcdev -> rowStride(srcX, srcY);
+
+			Q_UINT8 *selData = seldev -> writablePixel(dstX, dstY);
+			Q_INT32 selRowStride = seldev -> rowStride(dstX, dstY);
+
+			m_colorStrategy -> bitBlt(dstData,
+						  dstRowStride,
+						  srcCs,
+						  srcData,
+						  srcRowStride,
+						  selData,
+						  selRowStride,
+						  opacity,
+						  rows,
+						  columns,
+						  op,
+						  srcProfile,
+						  m_profile);
+
+			srcX += columns;
+			dstX += columns;
+			columnsRemaining -= columns;
 		}
+
+		srcY += rows;
+		dstY += rows;
+		rowsRemaining -= rows;
 	}
 }
 
@@ -314,77 +323,14 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 			      Q_INT32 sx, Q_INT32 sy, 
 			      Q_INT32 sw, Q_INT32 sh)
 {
-	if (srcdev == 0) return;
-
 	if (m_device == 0) return;
-
-//	kdDebug() << "KisPainter::bltSelection rect "
-//			  << " dx: " << dx
-//			  << " dy: " << dy
-//			  << " sx: " << sx
-//			  << " sy: " << sy
-//			  << " w: " << sw
-//			  << " h " << sh
-//			  << " layer: " << srcdev -> name()
-//			  << " onto: " << m_device -> name()
-//			  << "\n";
-
 
 	if (!m_device -> hasSelection()) {
 //		kdDebug() << "No selection, doing ordinary blit\n";
 		bitBlt(dx, dy, op, srcdev, opacity, sx, sy, sw, sh);
-		return;
 	}
-
-	KisSelectionSP selection = m_device -> selection();
-
-	if (selection->isTotallyUnselected(QRect(dx, dy, sw, sh))) {
-//		kdDebug() << "Blitting outside selection rect\n";
-		return;
-	}
-
-//	kdDebug() << "KisPainter::bltSelection selection rect: "
-//			  << " x: " << r.x()
-//			  << " y: " << r.y()
-//			  << " w: " << r.width()
-//			  << " h " << r.height()
-//			  << "\n";
-
-	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
-	KisProfileSP srcProfile = srcdev -> profile();
-
-	// We can only blt one row at a time so these values are irrelevant. They were
-	// used when we accessed tiles directly.
-	Q_INT32 srcRowSize = 0;
-	Q_INT32 dstRowSize = 0;
-	Q_INT32 maskRowSize = 0;
-
-	for(Q_INT32 i = 0; i < sh; i++)
-	{
-		KisHLineIterator srcIter = srcdev -> createHLineIterator(sx, sy + i, sw, true);
-		KisHLineIterator dstIter = m_device -> createHLineIterator(dx, dy + i, sw, true);
-		KisHLineIterator selIter = selection -> createHLineIterator(dx, dy + i, sw, false);
-
-		while( ! srcIter.isDone())
-		{
-			m_colorStrategy -> bitBlt(dstIter.rawData(), 
-						dstRowSize,
-						srcCs,
-						srcIter.rawData(),
-						srcRowSize,
-						selIter.rawData(),
-						maskRowSize,
-						opacity,
-						1,
-						1,
-						op,
-						srcProfile,
-						m_profile);
-			++srcIter;
-			++dstIter;
-			++selIter;
-		}
-	}
+	else
+		bltSelection(dx,dy,op,srcdev, m_device -> selection(),opacity,sx,sy,sw,sh);
 }
 
 double KisPainter::paintLine(const KisPoint & pos1,

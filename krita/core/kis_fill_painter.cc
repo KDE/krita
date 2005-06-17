@@ -58,6 +58,7 @@
 #include "kis_pixel.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterator.h"
+#include "kis_color.h"
 
 namespace {
 }
@@ -82,20 +83,25 @@ KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const KisColor& kc, QUANTUM opacity)
 {
 
-	Q_INT32 y;
-        Q_UINT8 src[m_device->pixelSize()]; // XXX: Change QColor to KisColor, then use channelsize from color space
-	Q_UINT32 depth = m_device->pixelSize();
+	kdDebug() <<  "Filling rect: " << x1 << ", " << y1 << ", " << w << "," << h << "\n";
 
-	//XXX: Add a method to set the opacity of a KisColor to KisColor
-	QColor c = kc.toQColor();
-        m_device->colorStrategy()->nativeColor(c, opacity, src, 0);
-	
+	Q_INT32 y;
+	Q_UINT32 depth = m_device->pixelSize();
+	Q_UINT8 * data = kc.data();
+
+	KisStrategyColorSpaceSP cs = m_device->colorStrategy();
+	if (cs != kc.colorStrategy()) {
+		KisColor kc2 = KisColor(kc, cs, m_device->profile());
+		data = kc.data();
+	}
+	cs->setAlpha(data, opacity, 1);
+
 	for (y = y1; y < y1 + h; y++)
 	{
 		KisHLineIterator hiter = m_device->createHLineIterator(x1, y, w, true);
 		while( ! hiter.isDone())
 		{
-			memcpy(hiter.rawData(), src, depth);
+			memcpy(hiter.rawData(), data, depth);
 			++hiter;
 		}
 	}

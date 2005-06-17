@@ -35,10 +35,8 @@
 class KisColor {
 
 public:
-
 	// Create an empty KisColor. It will be valid, but also black and transparent
 	KisColor(); 
-
 	
 	virtual ~KisColor();
 

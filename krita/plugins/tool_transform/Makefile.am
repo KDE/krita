@@ -18,6 +18,7 @@ INCLUDES = -I$(srcdir)/../../core \
 	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../../core/strategy/ $(all_includes)
 
 kritatooltransform_la_SOURCES = \
+	wdg_tool_transform.ui \
 	tool_transform.cc \
 	kis_tool_transform.cc 
 

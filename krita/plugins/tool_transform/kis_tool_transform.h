@@ -28,6 +28,7 @@
 #include <kis_tool_factory.h>
 
 class KisTransaction;
+class WdgToolTransform;
 
 /**
  * Transform tool
@@ -101,7 +102,7 @@ private:
 	double m_clickangle;
 	KisTransaction *m_transaction;
 
-	QWidget * m_optWidget;
+	WdgToolTransform *m_optWidget;
 };
 
 class KisToolTransformFactory : public KisToolFactory {

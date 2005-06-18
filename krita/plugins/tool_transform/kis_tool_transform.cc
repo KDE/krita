@@ -46,6 +46,7 @@
 #include <kis_selection.h>
 
 #include "kis_tool_transform.h"
+#include "wdg_tool_transform.h"
 
 namespace {
 	class TransformCmd : public KisSelectedTransaction {
@@ -482,7 +483,17 @@ void KisToolTransform::transform() {
 
 QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
 {
-	m_optWidget = NULL;
+
+	m_optWidget = new WdgToolTransform(parent);
+	Q_CHECK_PTR(m_optWidget);
+				      
+/*	connect(m_optWidget -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
+
+	connect(m_optWidget -> intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));
+	connect(m_optWidget -> intStartY, SIGNAL(valueChanged(int)), this, SLOT(setStartY(int)));
+	connect(m_optWidget -> intEndX, SIGNAL(valueChanged(int)), this, SLOT(setEndX(int)));
+	connect(m_optWidget -> intEndY, SIGNAL(valueChanged(int)), this, SLOT(setEndY(int)));
+*/
 	return m_optWidget;
 }
 

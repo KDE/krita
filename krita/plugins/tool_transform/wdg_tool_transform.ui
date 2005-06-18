@@ -1,0 +1,185 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgToolTransform</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgToolTransform</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>415</width>
+            <height>92</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Transform</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout11</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout7</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout1</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Move X:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>isbX</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KIntSpinBox">
+                                    <property name="name">
+                                        <cstring>intStartX</cstring>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>1000000000</number>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout2</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Scale X:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>isbWidth</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KIntSpinBox">
+                                    <property name="name">
+                                        <cstring>intEndX</cstring>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>1000000000</number>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout8</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout3</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel3</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Move Y:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>isbY</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KIntSpinBox">
+                                    <property name="name">
+                                        <cstring>intStartY</cstring>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>1000000000</number>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout4</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel4</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Scale Y:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>isbHeight</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KIntSpinBox">
+                                    <property name="name">
+                                        <cstring>intEndY</cstring>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>1000000000</number>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<tabstops>
+    <tabstop>intStartX</tabstop>
+    <tabstop>intStartY</tabstop>
+    <tabstop>intEndX</tabstop>
+    <tabstop>intEndY</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

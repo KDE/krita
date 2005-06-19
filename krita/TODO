@@ -4,6 +4,7 @@ Transform tool
 
 	* It should use filter during scaling
 	* It doesn't handle "infinite" selections
+	* The option widget should work
 
 
 Integration
@@ -45,6 +46,7 @@ Core
 	  the layer they are linked to, these do not store actual
 	  image date, except for an occasional mask)
 	* Mask layers
+	* Layer groups or even better: a hierachy of collapsable folders with layers
 	* Loading and saving of selections
 	* Colorspace-aware difference between pixel function
 	* Anti-aliased filling (requires some simple colorspace

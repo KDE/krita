@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <qframe.h>
-#include <qvbox.h>
+#include <qhbox.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
  
@@ -28,20 +28,19 @@
 KisPreviewDialog::KisPreviewDialog( QWidget *  parent, const char * name, bool modal, const QString &caption)
 	: super (parent, name, modal, caption, Ok | Cancel, Ok)
 {
-	QVBox* layout = new QVBox(this);
+	QHBox* layout = new QHBox(this);
 	layout -> setSpacing( 6 );
+	
+	m_containerFrame = new QFrame( layout, "container" );
 
-	preview = new KisPreviewWidget( layout, "previewWidget" );
-	Q_CHECK_PTR(preview);
-
-	QGroupBox* groupBox = new QGroupBox( caption, layout, "groupBox" );
+	QGroupBox* groupBox = new QGroupBox( "Preview", layout, "groupBox" );
 	groupBox -> setColumnLayout(0, Qt::Vertical );
 	groupBox -> layout()->setSpacing( 6 );
 	groupBox -> layout()->setMargin( 11 );
 	QGridLayout *groupBoxLayout = new QGridLayout( groupBox -> layout(), 1, 1);
-
-	containerFrame = new QFrame( groupBox, "container" );
-	groupBoxLayout -> addWidget( containerFrame, 0 , 0);
+	m_preview = new KisPreviewWidget( groupBox, "previewWidget" );
+	groupBoxLayout -> addWidget( m_preview, 0 , 0);
+	Q_CHECK_PTR(m_preview);
 
 	setMainWidget(layout);
 }

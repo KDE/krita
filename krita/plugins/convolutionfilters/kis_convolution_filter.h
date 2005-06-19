@@ -52,7 +52,7 @@ class KisConvolutionConstFilter : public KisConvolutionFilter {
 		KisConvolutionConstFilter(const KisID& id, KisView * view) : KisConvolutionFilter(id, view) { } ;
 		virtual ~KisConvolutionConstFilter();
 	public:
-		virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+		virtual KisFilterConfiguration* configuration(QWidget*);
 	protected:
 		KisMatrix3x3* m_matrixes;
 };

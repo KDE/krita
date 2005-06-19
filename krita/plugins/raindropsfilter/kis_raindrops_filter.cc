@@ -412,7 +412,7 @@ uchar KisRainDropsFilter::LimitValues (int ColorValue)
         return ((uchar) ColorValue);
 }
 
-KisFilterConfigurationWidget* KisRainDropsFilter::createConfigurationWidget(QWidget* parent)
+QWidget* KisRainDropsFilter::createConfigurationWidget(QWidget* parent)
 {
 	vKisIntegerWidgetParam param;
 	param.push_back( KisIntegerWidgetParam( 1, 200, 80, i18n("Drop size") ) );
@@ -421,7 +421,7 @@ KisFilterConfigurationWidget* KisRainDropsFilter::createConfigurationWidget(QWid
 	return new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisRainDropsFilter::configuration(KisFilterConfigurationWidget* nwidget)
+KisFilterConfiguration* KisRainDropsFilter::configuration(QWidget* nwidget)
 {
 	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
 	if( widget == 0 )

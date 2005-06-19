@@ -1,10 +1,6 @@
-/* ============================================================
- * File  : curveswidget.cpp
- * Author: Gilles Caulier <caulier dot gilles at free.fr>
- * Date  : 2004-12-01
- * Description : 
- * 
+/* ============================================================ 
  * Copyright 2004-2005 by Gilles Caulier
+ * Copyright 2005 by Casper Boemann (reworked to be generic)
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,6 +41,21 @@
 // Local includes.
 
 #include "kcurve.h"
+
+KCurve::KCurve(QWidget *parent, const char *)
+            : QWidget(parent, 0, Qt::WDestructiveClose)
+{
+	m_curves         = new ImageCurves();;
+	m_grab_point     = -1;    
+	m_last           = 0;
+	m_readOnlyMode   = false;
+	m_guideVisible   = false;
+	m_curveType = CURVE_FREE;
+    
+    setMouseTracking(true);
+    setPaletteBackgroundColor(Qt::NoBackground);
+    setMinimumSize(50, 50);
+}
 
 KCurve::KCurve(int w, int h,
                            ImageCurves *curves, QWidget *parent, 
@@ -101,6 +112,7 @@ void KCurve::curveTypeChanged(CurveType curveType)
 		case CURVE_FREE:
 			break;
 	}
+	m_curveType = curveType;
 	
 	repaint(false);             
 	emit signalCurvesChanged();        
@@ -122,8 +134,19 @@ void KCurve::paintEvent( QPaintEvent * )
 	QPainter p1;
 	p1.begin(&pm, this);
 	
-	int curvePrevVal = 0;
+	//  draw background
+	pm.fill();
 	
+	// Draw grid separators.
+	p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+	p1.drawLine(wWidth/3, 0, wWidth/3, wHeight);                 
+	p1.drawLine(2*wWidth/3, 0, 2*wWidth/3, wHeight);                 
+	p1.drawLine(0, wHeight/3, wWidth, wHeight/3);                 
+	p1.drawLine(0, 2*wHeight/3, wWidth, 2*wHeight/3);     
+
+	// Draw curve.
+	int curvePrevVal = 0;
+	p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));	
 	for (x = 0 ; x < wWidth ; x++)
 	{
 		int    i, j;
@@ -134,17 +157,13 @@ void KCurve::paintEvent( QPaintEvent * )
 		
 		curveVal = m_curves->getCurveValue(i);
 		
-		// Drawing curves.   
-		
-		p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));
-		
 		p1.drawLine(x - 1, wHeight - ((curvePrevVal * wHeight) / 256),
 			x,     wHeight - ((curveVal * wHeight) / 256));                             
 		
 		curvePrevVal = curveVal;
 	}
 	
-	// Drawing curves points.
+	// Drawing curve handles.
 	if ( !m_readOnlyMode && m_curveType == CURVE_SMOOTH )
 	{      
 		p1.setPen(QPen::QPen(Qt::red, 3, Qt::SolidLine));
@@ -161,14 +180,7 @@ void KCurve::paintEvent( QPaintEvent * )
 			}
 		}
 	}
-	
-	// Draw grid separators.
-	p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
-	p1.drawLine(wWidth/3, 0, wWidth/3, wHeight);                 
-	p1.drawLine(2*wWidth/3, 0, 2*wWidth/3, wHeight);                 
-	p1.drawLine(0, wHeight/3, wWidth, wHeight/3);                 
-	p1.drawLine(0, 2*wHeight/3, wWidth, 2*wHeight/3);     
-	
+		
 	p1.end();
 	bitBlt(this, 0, 0, &pm);
 }

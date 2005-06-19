@@ -44,8 +44,8 @@ public:
 	static inline KisID id() { return KisID("emboss", i18n("Emboss")); };
 	virtual bool supportsPainting() { return false; }
 public:
-	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+	virtual QWidget* createConfigurationWidget(QWidget* parent);
+	virtual KisFilterConfiguration* configuration(QWidget*);
 private:
 	void Emboss(KisPaintDeviceSP src, const QRect& rect, int d);
 	inline int Lim_Max (int Now, int Up, int Max);

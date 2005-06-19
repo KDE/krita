@@ -156,7 +156,7 @@ void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 
 }
 
-KisFilterConfigurationWidget* KisWSEngineFilter::createConfigurationWidget(QWidget* parent)
+QWidget* KisWSEngineFilter::createConfigurationWidget(QWidget* parent)
 {
 // 	KisWSEngineFilterConfigurationWidget* kefcw = new KisWSEngineFilterConfigurationWidget(this,parent, "");
 // 	kdDebug() << kefcw << endl;
@@ -164,7 +164,7 @@ KisFilterConfigurationWidget* KisWSEngineFilter::createConfigurationWidget(QWidg
 	return 0;
 }
 
-KisFilterConfiguration* KisWSEngineFilter::configuration(KisFilterConfigurationWidget* nwidget)
+KisFilterConfiguration* KisWSEngineFilter::configuration(QWidget* nwidget)
 {
 // 	KisWSEngineFilterConfigurationWidget* widget = (KisWSEngineFilterConfigurationWidget*) nwidget;
 

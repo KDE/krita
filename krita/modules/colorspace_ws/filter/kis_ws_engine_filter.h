@@ -58,8 +58,8 @@ public:
 	virtual bool supportsIncrementalPainting() { return false; }
 
 public:
-	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+	virtual QWidget* createConfigurationWidget(QWidget* parent);
+	virtual KisFilterConfiguration* configuration(QWidget*);
 
 
 private:

@@ -58,8 +58,8 @@ public:
 	static inline KisID id() { return KisID("cimg", i18n("Image Restauration (cimg-based)")); };
 	virtual bool supportsPainting() { return false; }
 public:
-	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+	virtual QWidget* createConfigurationWidget(QWidget* parent);
+	virtual KisFilterConfiguration* configuration(QWidget*);
 
 private:
 

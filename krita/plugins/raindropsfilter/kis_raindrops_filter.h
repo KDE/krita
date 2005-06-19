@@ -48,8 +48,8 @@ public:
 	static inline KisID id() { return KisID("raindrops", i18n("Raindrops")); };
 	virtual bool supportsPainting() { return false; }
 public:
-	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+	virtual QWidget* createConfigurationWidget(QWidget* parent);
+	virtual KisFilterConfiguration* configuration(QWidget*);
 private:
 	void   rainDrops(KisPaintDeviceSP src, const QRect& rect, int DropSize, int Amount, int Coeff);
 	bool** CreateBoolArray (uint Columns, uint Rows);

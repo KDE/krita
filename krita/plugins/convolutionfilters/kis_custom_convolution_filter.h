@@ -41,8 +41,8 @@ public:
 	virtual bool supportsIncrementalPainting() { return true; }
 
 public:
-	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+	virtual QWidget* createConfigurationWidget(QWidget* parent);
+	virtual KisFilterConfiguration* configuration(QWidget*);
 protected:
 	virtual KisMatrix3x3* matrixes() { return m_matrix; };
 private:

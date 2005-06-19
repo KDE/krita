@@ -33,7 +33,6 @@
 #include "kis_id.h"
 #include "koffice_export.h"
 
-class KisFilterConfigurationWidget;
 class KisPreviewDialog;
 
 /**
@@ -81,7 +80,7 @@ public:
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&) = 0;
 
 public:
-	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+	virtual KisFilterConfiguration* configuration(QWidget*);
 
 	// This filter can be used in painting tools as a paint operation
 	virtual bool supportsPainting() = 0;
@@ -107,7 +106,7 @@ public:
 
 	inline const KisID id() const { return m_id; };
 
-	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
+	virtual QWidget* createConfigurationWidget(QWidget* parent);
 
 	virtual void cancel() { m_cancelRequested = true; }
 
@@ -144,7 +143,7 @@ protected:
 
 	KisID m_id;
 	KisView * m_view;
-	KisFilterConfigurationWidget* m_widget;
+	QWidget* m_widget;
 	KisPreviewDialog* m_dialog;
 };
 

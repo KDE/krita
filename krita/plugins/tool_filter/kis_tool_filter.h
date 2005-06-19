@@ -54,7 +54,7 @@ protected:
 
 private:
 	KisFilterSP m_filter;
-	KisFilterConfigurationWidget* m_filterConfigurationWidget;
+	QWidget* m_filterConfigurationWidget;
 	QGridLayout* m_optionLayout;
 	KisCmbIDList * m_cbFilter;
 };

@@ -34,11 +34,11 @@ public:
 	KisPreviewDialog( QWidget* parent = 0, const char* name = 0, bool modal = false, const QString &caption=QString::null);
 	~KisPreviewDialog();
 
-	KisPreviewWidget* previewWidget() { return preview; }
-	QFrame* container() { return containerFrame; }
+	KisPreviewWidget* previewWidget() { return m_preview; }
+	QFrame* container() { return m_containerFrame; }
 private:
-	KisPreviewWidget* preview;
-	QFrame* containerFrame;
+	KisPreviewWidget* m_preview;
+	QFrame* m_containerFrame;
 };
 
 #endif

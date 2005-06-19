@@ -34,7 +34,7 @@ struct KRITA_EXPORT KisDoubleWidgetParam {
 
 typedef std::vector<KisDoubleWidgetParam> vKisDoubleWidgetParam;
 
-class KRITA_EXPORT KisMultiDoubleFilterWidget : public KisFilterConfigurationWidget
+class KRITA_EXPORT KisMultiDoubleFilterWidget : public QWidget
 {
 	Q_OBJECT
 	public:

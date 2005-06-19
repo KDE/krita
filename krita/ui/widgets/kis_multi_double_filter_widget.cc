@@ -35,7 +35,7 @@ KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double nini
 
 }
 
-KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget( KisFilter* nfilter, QWidget * parent, const char * name, const char * caption, vKisDoubleWidgetParam dwparam) : KisFilterConfigurationWidget( nfilter, parent, name )
+KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget( KisFilter* nfilter, QWidget * parent, const char * name, const char * caption, vKisDoubleWidgetParam dwparam) : QWidget( parent, name )
 {
 	Q_INT32 m_nbdoubleWidgets = dwparam.size();
 
@@ -52,7 +52,7 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget( KisFilter* nfilter, QWid
 		m_doubleWidgets[i] -> setRange( dwparam[i].min, dwparam[i].max ); 
 		m_doubleWidgets[i] -> setValue( dwparam[i].initvalue );
 
-		connect(m_doubleWidgets[i], SIGNAL(valueChanged(double)), filter(), SLOT(refreshPreview()));
+		connect(m_doubleWidgets[i], SIGNAL(valueChanged(double)), nfilter, SLOT(refreshPreview()));
 
 		QLabel* lbl = new QLabel(dwparam[i].name+":", this);
 		widgetLayout -> addWidget( lbl, i , 0);

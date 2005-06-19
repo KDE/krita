@@ -36,7 +36,7 @@ struct KisIntegerWidgetParam {
 
 typedef std::vector<KisIntegerWidgetParam> vKisIntegerWidgetParam;
 
-class KRITA_EXPORT KisMultiIntegerFilterWidget : public KisFilterConfigurationWidget
+class KRITA_EXPORT KisMultiIntegerFilterWidget : public QWidget
 {
 	Q_OBJECT
 	public:

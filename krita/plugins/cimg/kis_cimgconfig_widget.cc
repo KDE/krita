@@ -31,7 +31,7 @@
 #include "kis_cimg_filter.h"
 
 KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, const char * name, WFlags f)
-	: KisFilterConfigurationWidget(nfilter, parent, name, f)
+	: QWidget(parent, name, f)
 {
 	m_page = new WdgCImg(this);
 	Q_CHECK_PTR(m_page);
@@ -40,8 +40,8 @@ KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, c
 	Q_CHECK_PTR(l);
 
 	l -> add(m_page);
-	filter() -> setAutoUpdate(false);
-	connect( m_page -> bnRefresh, SIGNAL(clicked()), filter(), SLOT(refreshPreview()));
+	nfilter -> setAutoUpdate(false);
+	//CBRconnect( m_page -> bnRefresh, SIGNAL(clicked()), filter(), SLOT(refreshPreview()));
 }
 
 

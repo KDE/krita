@@ -16,13 +16,23 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "kis_filter_configuration_widget.h"
+#include "kis_bc_filter_widget.h"
+#include "wdg_brightness_contrast.h"
 
-KisFilterConfigurationWidget::KisFilterConfigurationWidget(KisFilter* nfilter, QWidget * parent, const char * name, WFlags f ) :
-	QWidget(parent, name, f),
-	m_filter( nfilter )
+#include <klocale.h>
+#include <qlayout.h>
+
+#include "kis_filter.h"
+
+KisBCFilterWidget::KisBCFilterWidget( KisFilter* nfilter, QWidget * parent, const char * name, const char * caption) : QWidget( parent, name )
 {
+	this->setCaption(caption);
+
+	QGridLayout *widgetLayout = new QGridLayout(this, 1, 1);
+	widgetLayout -> setColStretch ( 1, 1 );
+
+	m_w = new WdgBrightnessContrast(this);
+	widgetLayout -> addWidget( m_w, 0 , 0);
 }
 
-
-#include "kis_filter_configuration_widget.moc"
+#include "kis_bc_filter_widget.moc"

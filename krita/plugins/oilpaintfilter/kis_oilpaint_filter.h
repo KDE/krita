@@ -46,8 +46,8 @@ public:
 	static inline KisID id() { return KisID("oilpaint", i18n("Oilpaint")); };
 	virtual bool supportsPainting() { return true; }
 public:
-	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+	virtual QWidget* createConfigurationWidget(QWidget* parent);
+	virtual KisFilterConfiguration* configuration(QWidget*);
 private:
 	void OilPaint(KisPaintDeviceSP src, int x, int y, int w, int h, int BrushSize, int Smoothness);
 	uint MostFrequentColor(KisPaintDeviceSP, const QRect& bounds, int X, int Y, int Radius, int Intensity);

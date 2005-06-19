@@ -21,7 +21,7 @@
 #include <klocale.h>
 
 #include "kis_brightness_contrast_filter.h"
-#include "kis_multi_integer_filter_widget.h"
+#include "kis_bc_filter_widget.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
@@ -38,25 +38,22 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter(KisView * view ) : KisF
 
 }
 
-KisFilterConfigurationWidget* KisBrightnessContrastFilter::createConfigurationWidget(QWidget* parent)
+QWidget* KisBrightnessContrastFilter::createConfigurationWidget(QWidget* parent)
 {
-	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( -100, 100, 0, i18n("Brightness") ) );
-	param.push_back( KisIntegerWidgetParam( -100, 100, 0, i18n("Contrast") ) );
-	KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
+	KisBCFilterWidget * w = new KisBCFilterWidget(this, parent, id().id().ascii(), id().id().ascii() );
 	Q_CHECK_PTR(w);
 	return w;
 }
 
-KisFilterConfiguration* KisBrightnessContrastFilter::configuration(KisFilterConfigurationWidget* nwidget)
+KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget* nwidget)
 {
-	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
+	KisBCFilterWidget* widget = (KisBCFilterWidget*) nwidget;
 	
 	if ( widget == 0 )
 	{
 		return new KisBrightnessContrastFilterConfiguration( 0, 0 );
 	} else {
-		return new KisBrightnessContrastFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
+		return new KisBrightnessContrastFilterConfiguration( 1, 1 );
 	}
 }
 

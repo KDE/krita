@@ -57,8 +57,8 @@ class KisPerChannelFilter
 public:
 	KisPerChannelFilter(KisView * view, const KisID& id, Type min, Type max, Type initvalue );
 public:
-	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+	virtual QWidget* createConfigurationWidget(QWidget* parent);
+	virtual KisFilterConfiguration* configuration(QWidget*);
 private:
 	Type m_min;
 	Type m_max;
@@ -102,7 +102,7 @@ KisPerChannelFilter<Type, ParamType, WidgetClass>::KisPerChannelFilter(KisView *
 }
 
 template <typename Type, class ParamType, class WidgetClass>
-KisFilterConfigurationWidget* KisPerChannelFilter<Type, ParamType, WidgetClass>::createConfigurationWidget(QWidget* parent)
+QWidget* KisPerChannelFilter<Type, ParamType, WidgetClass>::createConfigurationWidget(QWidget* parent)
 {
 	std::vector<ParamType> param;
 
@@ -121,7 +121,7 @@ KisFilterConfigurationWidget* KisPerChannelFilter<Type, ParamType, WidgetClass>:
 }
 
 template <typename Type, class ParamType, class WidgetClass>
-KisFilterConfiguration* KisPerChannelFilter<Type, ParamType, WidgetClass>::configuration(KisFilterConfigurationWidget* nwidget)
+KisFilterConfiguration* KisPerChannelFilter<Type, ParamType, WidgetClass>::configuration(QWidget* nwidget)
 {
 	WidgetClass* widget = (WidgetClass*)nwidget;
 	KisPerChannelFilterConfiguration<Type>* co = new KisPerChannelFilterConfiguration<Type>( m_nbchannels , colorStrategy()->channels() );

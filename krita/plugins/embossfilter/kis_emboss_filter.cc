@@ -150,16 +150,16 @@ int KisEmbossFilter::Lim_Max (int Now, int Up, int Max)
     return (Up);
 }
 
-KisFilterConfigurationWidget* KisEmbossFilter::createConfigurationWidget(QWidget* parent)
+QWidget* KisEmbossFilter::createConfigurationWidget(QWidget* parent)
 {
 	vKisIntegerWidgetParam param;
 	param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth") ) );
-	KisFilterConfigurationWidget * w = new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
+	QWidget * w = new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
 	Q_CHECK_PTR(w);
 	return w;
 }
 
-KisFilterConfiguration* KisEmbossFilter::configuration(KisFilterConfigurationWidget* nwidget)
+KisFilterConfiguration* KisEmbossFilter::configuration(QWidget* nwidget)
 {
 	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
 	if( widget == 0 )

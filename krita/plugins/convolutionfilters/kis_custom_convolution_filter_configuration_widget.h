@@ -25,7 +25,7 @@
 class KisCustomConvolutionFilterConfigurationBaseWidget;
 class KisMatrixWidget;
 
-class KisCustomConvolutionFilterConfigurationWidget : public KisFilterConfigurationWidget
+class KisCustomConvolutionFilterConfigurationWidget : public QWidget
 {
 	Q_OBJECT
 	public:

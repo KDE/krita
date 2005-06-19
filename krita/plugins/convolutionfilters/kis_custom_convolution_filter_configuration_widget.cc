@@ -35,7 +35,7 @@
 #include "kis_matrix_widget.h"
 
 KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigurationWidget( KisFilter* nfilter, QWidget * parent, const char * name)
-	: KisFilterConfigurationWidget( nfilter, parent, name )
+	: QWidget( parent, name )
 {
 	QGridLayout *widgetLayout = new QGridLayout(this, 2, 1);
 	Q_CHECK_PTR(widgetLayout);
@@ -54,7 +54,7 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
 
 	widgetLayout -> addMultiCellWidget(m_ccfcws, 1, 1, 0, 1);
 
-	connect( bnRefresh, SIGNAL(clicked()), filter(), SLOT(refreshPreview()));
+	connect( bnRefresh, SIGNAL(clicked()), nfilter, SLOT(refreshPreview()));
 	
 }
 

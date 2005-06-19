@@ -585,12 +585,12 @@ bool KisCImgFilter::process()
         return true;
 }
 
-KisFilterConfigurationWidget* KisCImgFilter::createConfigurationWidget(QWidget* parent)
+QWidget* KisCImgFilter::createConfigurationWidget(QWidget* parent)
 {
 	return new KisCImgconfigWidget(this, parent);
 }
 
-KisFilterConfiguration* KisCImgFilter::configuration(KisFilterConfigurationWidget* nwidget)
+KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget)
 {
 	KisCImgconfigWidget * widget = (KisCImgconfigWidget *) nwidget;
 	if( widget == 0 )

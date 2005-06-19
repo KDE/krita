@@ -28,7 +28,6 @@
 #include "kis_filter_registry.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
-#include "kis_filter_configuration_widget.h"
 #include "kis_previewdialog.h"
 #include "kis_previewwidget.h"
 #include "kis_painter.h"
@@ -45,7 +44,7 @@ KisFilter::KisFilter(const KisID& id, KisView * view) :
 {
 }
 
-KisFilterConfiguration* KisFilter::configuration(KisFilterConfigurationWidget*)
+KisFilterConfiguration* KisFilter::configuration(QWidget*)
 {
 	return 0;
 }
@@ -63,7 +62,7 @@ void KisFilter::refreshPreview( )
 	m_dialog->previewWidget() -> slotUpdate();
 }
 
-KisFilterConfigurationWidget* KisFilter::createConfigurationWidget(QWidget* )
+QWidget* KisFilter::createConfigurationWidget(QWidget* )
 {
 	return 0;
 }

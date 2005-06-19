@@ -42,8 +42,8 @@ class KisBrightnessContrastFilter : public KisFilter
 public:
 	KisBrightnessContrastFilter(KisView * view);
 public:
-	virtual KisFilterConfigurationWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(KisFilterConfigurationWidget*);
+	virtual QWidget* createConfigurationWidget(QWidget* parent);
+	virtual KisFilterConfiguration* configuration(QWidget*);
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("brightnesscontrast", i18n("Brightness / Contrast")); };
 	virtual bool supportsPainting() { return true; }

@@ -28,13 +28,13 @@
 class ImageCurves
 {
 public:
-	virtual int getCurveValue(int x);
-	virtual int setCurveValue(int x, int y);
-	virtual void curvesCalculateCurve();
-	virtual QPoint getCurvePoint(int p);
-	virtual void setCurvePoint(int p, QPoint qp);
-	virtual int getCurvePointX(int p);
-	virtual void setCurvePointX(int p, int x);
+	int getCurveValue(int x) {return x;};
+	void setCurveValue(int x, int y) {};
+	void curvesCalculateCurve() {};
+	QPoint getCurvePoint(int p) {return QPoint(0,0);};
+	void setCurvePoint(int p, QPoint qp) {};
+	int getCurvePointX(int p) {return 0;};
+	void setCurvePointX(int p, int x) {};
 };
 
 class KCurve : public QWidget
@@ -53,7 +53,9 @@ public:
 		QWidget *parent=0,                                 // Parent widget instance.
 		bool readOnly=false);                              // If true : widget with full edition mode capabilities.
                                                                     // If false : display curve data only without edition.
-                 
+
+    	KCurve(QWidget *parent, const char *n);
+	
 	~KCurve();
 
     void reset(void);

@@ -16,24 +16,21 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef _KIS_FILTER_CONFIGURATION_WIDGET_H_
-#define _KIS_FILTER_CONFIGURATION_WIDGET_H_
+#ifndef _KIS_MULTI_INTEGER_FILTER_WIDGET_H_
+#define _KIS_MULTI_INTEGER_FILTER_WIDGET_H_
 
-class KisFilter;
-class KisFilterConfiguration;
-
-#include <qwidget.h>
+#include <kis_filter_configuration_widget.h>
 #include "koffice_export.h"
 
-class KRITAUI_EXPORT KisFilterConfigurationWidget : public QWidget {
+class WdgBrightnessContrast;
+
+class KRITA_EXPORT KisBCFilterWidget : public QWidget
+{
 	Q_OBJECT
-public:
-	KisFilterConfigurationWidget ( KisFilter* nfilter, QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
-	virtual ~KisFilterConfigurationWidget() {};
-public:
-	inline KisFilter* filter() { return m_filter; };
-private:
-	KisFilter* m_filter;
+	public:
+		KisBCFilterWidget( KisFilter* nfilter, QWidget * parent, const char * name, const char * caption);
+	private:
+		WdgBrightnessContrast *m_w;
 };
 
 #endif

@@ -65,7 +65,7 @@ KisConvolutionConstFilter::~KisConvolutionConstFilter()
 // 	}
 }
 
-KisFilterConfiguration* KisConvolutionConstFilter::configuration(KisFilterConfigurationWidget*)
+KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*)
 {
 	return new KisConvolutionConfiguration( m_matrixes );
 }

@@ -75,7 +75,6 @@ private:
 
         KisLayerSP m_sourcelayer, m_clippedview;
         KisImageSP m_image;
-        KisUndoAdapter* m_undo;
         QPoint m_startDrag, m_pos;
         double m_zoom;
         bool m_moving;

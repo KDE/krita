@@ -1176,7 +1176,7 @@ KisLayerSP KisDoc::layerAdd(KisImageSP img, KisLayerSP l, Q_INT32 position)
 		return 0;
 
 	setModified(true);
-	img -> pos(l, position);
+	img -> setLayerPosition(l, position);
 
 	if (m_undo)
 		addCommand(new LayerAddCmd(this, this, img, l));
@@ -1193,11 +1193,11 @@ void KisDoc::layerRemove(KisImageSP img, KisLayerSP layer)
 {
 	if (layer) {
 		setModified(true);
-		img -> rm(layer);
 
 		if (m_undo)
 			addCommand(new LayerRmCmd(this, this, img, layer));
 
+		img -> rm(layer);
 		emit layersUpdated(img);
 
 		if (!m_undo)

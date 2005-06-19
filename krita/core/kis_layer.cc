@@ -66,7 +66,6 @@ namespace {
 	{
 		if (m_layer -> image()) {
 			m_layer -> image() -> notifyLayersChanged();
-			m_layer -> image() -> notify();
 		}
 	}
 

@@ -41,12 +41,15 @@ class KisNameServer;
 class KisUndoAdapter;
 class KisPainter;
 class DCOPObject;
+class KisDoc;
+class KCommand;
+class KisCompositeOp;
 
 class KRITACORE_EXPORT KisImage : public QObject, public KShared {
 	Q_OBJECT
 
 public:
-	KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,
+	KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,
 		 KisStrategyColorSpaceSP colorStrategy, const QString& name);
 	KisImage(const KisImage& rhs);
 	virtual ~KisImage();
@@ -127,19 +130,29 @@ public:
 	const KisLayerSP activeLayer() const;
 	KisLayerSP activate(KisLayerSP layer);
 	KisLayerSP activateLayer(Q_INT32 n);
+
 	Q_INT32 index(const KisLayerSP &layer);
+
 	KisLayerSP layer(const QString& name);
 	KisLayerSP layer(Q_UINT32 npos);
 	bool add(KisLayerSP layer, Q_INT32 position);
 	void rm(KisLayerSP layer);
+
 	bool raise(KisLayerSP layer);
 	bool lower(KisLayerSP layer);
 	bool top(KisLayerSP layer);
 	bool bottom(KisLayerSP layer);
-	bool pos(KisLayerSP layer, Q_INT32 position);
+	bool setLayerPosition(KisLayerSP layer, Q_INT32 position);
+
 	Q_INT32 nlayers() const;
 	Q_INT32 nHiddenLayers() const;
 	Q_INT32 nLinkedLayers() const;
+
+	KCommand *raiseLayerCommand(KisLayerSP layer);
+	KCommand *lowerLayerCommand(KisLayerSP layer);
+	KCommand *topLayerCommand(KisLayerSP layer);
+	KCommand *bottomLayerCommand(KisLayerSP layer);
+
 
 	// Merge all visible layers and discard hidden ones.
 	void flatten();
@@ -195,9 +208,10 @@ public slots:
 
 private:
 	KisImage& operator=(const KisImage& rhs);
-	void init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name);
+	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name);
 
 private:
+	KisDoc *m_doc;
 	KoCommandHistory *m_undoHistory;
 	KURL m_uri;
 	QString m_name;

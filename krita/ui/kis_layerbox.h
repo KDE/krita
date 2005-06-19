@@ -57,6 +57,8 @@ public:
         void setTopItem(int n);
         void clear();
         void setSelected(int index);
+	void setUpdatesAndSignalsEnabled(bool enable);
+	void updateAll();
 
 public slots:
 
@@ -89,7 +91,6 @@ private slots:
         void slotAboutToShow();
         void slotShowContextMenu(QListBoxItem *item, const QPoint& pos);
         void slotClicked(QListBoxItem *item, const QPoint& pos);
-        void slotSelectionChanged(QListBoxItem *item);
         void slotDoubleClicked(QListBoxItem* item);
         void slotAddClicked();
         void slotRmClicked();

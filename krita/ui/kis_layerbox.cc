@@ -112,15 +112,13 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
 		SLOT(slotMenuAction(int)));
         connect(m_contextMnu, SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
         connect(mnu, SIGNAL(activated(int)), SLOT(slotMenuAction(int)));
+
 	connect(m_lst -> listLayers, SIGNAL(contextMenuRequested(QListBoxItem *, const QPoint&)), SLOT(slotShowContextMenu(QListBoxItem*, const QPoint&)));
-        connect(m_lst -> listLayers, SIGNAL(pressed(QListBoxItem*)),
-		SLOT(slotSelectionChanged(QListBoxItem*)));
-        connect(m_lst -> listLayers, SIGNAL(clicked(QListBoxItem *, const QPoint&)),
-		SLOT(slotClicked(QListBoxItem*, const QPoint&)));
-        connect(m_lst -> listLayers, SIGNAL(doubleClicked(QListBoxItem*)),
-		SLOT(slotDoubleClicked(QListBoxItem*)));
-        connect(m_lst -> listLayers, SIGNAL(returnPressed(QListBoxItem*)),
-		SLOT(slotDoubleClicked(QListBoxItem*)));
+        connect(m_lst -> listLayers, SIGNAL(clicked(QListBoxItem *, const QPoint&)), SLOT(slotClicked(QListBoxItem*, const QPoint&)));
+        connect(m_lst -> listLayers, SIGNAL(doubleClicked(QListBoxItem*)), SLOT(slotDoubleClicked(QListBoxItem*)));
+        connect(m_lst -> listLayers, SIGNAL(returnPressed(QListBoxItem*)), SLOT(slotDoubleClicked(QListBoxItem*)));
+	connect(m_lst -> listLayers, SIGNAL(highlighted(int)), SIGNAL(itemSelected(int)));
+
         connect(m_lst -> bnAdd, SIGNAL(clicked()), SLOT(slotAddClicked()));
         connect(m_lst -> bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
         connect(m_lst -> bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
@@ -227,25 +225,10 @@ void KisLayerBox::slotShowContextMenu(QListBoxItem *item, const QPoint& pos)
         m_lst -> bnLower -> setEnabled(item != 0);
 }
 
-void KisLayerBox::slotSelectionChanged(QListBoxItem *item)
-{
-        Q_INT32 n;
-
-        if (item) {
-                n = m_lst -> listLayers -> currentItem();
-                slotMenuAction(SELECTION);
-                m_lst -> bnLower -> setEnabled(item && static_cast<Q_UINT32>(n) !=
-					 m_lst -> listLayers -> count() - 1);
-        } else {
-                emit itemSelected(-1);
-        }
-
-        m_lst -> bnDelete -> setEnabled(item != 0);
-        m_lst -> bnRaise -> setEnabled(item && item != m_lst -> listLayers -> item(0));
-}
-
 void KisLayerBox::slotClicked(QListBoxItem *item, const QPoint& pos)
 {
+	//kdDebug() << "slotClicked\n";
+
         int n = m_lst -> listLayers -> currentItem();
 
         if (item) {
@@ -259,10 +242,6 @@ void KisLayerBox::slotClicked(QListBoxItem *item, const QPoint& pos)
 		else if (p -> intersectLockedRect(pos, m))
 			slotMenuAction(LOCKING);
         }
-
-        m_lst -> bnDelete -> setEnabled(item != 0);
-        m_lst -> bnRaise -> setEnabled(item && item != m_lst -> listLayers -> item(0));
-        m_lst -> bnLower -> setEnabled(item && n != -1 && static_cast<uint>(n) != m_lst -> listLayers -> count() - 1);
 }
 
 void KisLayerBox::slotDoubleClicked(QListBoxItem * /*item*/)
@@ -272,7 +251,16 @@ void KisLayerBox::slotDoubleClicked(QListBoxItem * /*item*/)
 
 void KisLayerBox::slotSetCurrentItem(int n)
 {
-        m_lst -> listLayers -> setSelected(n, true);
+	//kdDebug() << "KisLayerBox::slotSetCurrentItem " << n << endl;
+
+	if (n != m_lst -> listLayers -> currentItem()) {
+		m_lst -> listLayers -> setSelected(n, true);
+	} else {
+		//kdDebug() << "Not calling setSelected as is same\n";
+
+	}
+	m_lst -> bnRaise -> setEnabled(n > 0);
+	m_lst -> bnLower -> setEnabled(n < m_lst -> listLayers -> count() - 1);
 }
 
 void KisLayerBox::setCompositeOp(const KisCompositeOp& compositeOp)
@@ -359,8 +347,28 @@ int KisLayerBox::getCurrentItem() const
 
 void KisLayerBox::setSelected(int index)
 {
+	//kdDebug() << "KisLayerBox::setSelected " << index << endl;
+
         m_lst -> listLayers -> setSelected(index, true);
         m_lst -> listLayers -> setCurrentItem(index);
+}
+
+void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
+{
+	setUpdatesEnabled(enable);
+	m_lst -> intOpacity -> setUpdatesEnabled(enable);
+	m_lst -> cmbComposite -> setUpdatesEnabled(enable);
+
+	m_lst -> listLayers -> blockSignals(!enable);
+	m_lst -> intOpacity -> blockSignals(!enable);
+	m_lst -> cmbComposite -> blockSignals(!enable);
+}
+
+void KisLayerBox::updateAll()
+{
+	update();
+	m_lst -> intOpacity -> update();
+	m_lst -> cmbComposite -> update();
 }
 
 // ===========================================================================

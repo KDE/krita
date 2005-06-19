@@ -244,7 +244,6 @@ void KisView::createLayerBox()
 
         connect(m_layerBox, SIGNAL(itemToggleVisible()), this, SLOT(layerToggleVisible()));
         connect(m_layerBox, SIGNAL(itemSelected(int)), this, SLOT(layerSelected(int)));
-        connect(m_layerBox, SIGNAL(itemSelected(int)), SLOT(layerSelected(int)));
         connect(m_layerBox, SIGNAL(itemToggleLinked()), this, SLOT(layerToggleLinked()));
         connect(m_layerBox, SIGNAL(itemToggleLocked()), this, SLOT(layerToggleLocked()));
         connect(m_layerBox, SIGNAL(itemProperties()), this, SLOT(layerProperties()));
@@ -745,6 +744,8 @@ Q_INT32 KisView::vertValue() const
 
 void KisView::paintView(const KisRect& r)
 {
+	//kdDebug() << "paintView" << r << endl;
+
 	KisImageSP img = currentImg();
 
 	if (img) {
@@ -818,6 +819,8 @@ void KisView::updateCanvas(const QRect& rc)
 
 void KisView::updateCanvas(const KisRect& rc)
 {
+	//kdDebug() << "updateCanvas" << rc << endl;
+
 	paintView(rc);
 }
 
@@ -1107,7 +1110,7 @@ void KisView::saveLayerAsImage()
 	KisDoc d;
 	d.prepareForImport();
 
-	KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), l->colorStrategy(), l->name());
+	KisImageSP dst = new KisImage(&d, r.width(), r.height(), l->colorStrategy(), l->name());
 	d.setCurrentImage( dst );
 	KisLayerSP layer = d.layerAdd( dst, l->name(), COMPOSITE_COPY, l->opacity(), l->colorStrategy());
 	if (!layer) return;
@@ -1408,8 +1411,6 @@ void KisView::layerCompositeOp(const KisCompositeOp& compositeOp)
 	KNamedCommand *cmd = layer -> setCompositeOpCommand(compositeOp);
 	cmd -> execute();
 	undoAdapter() -> addCommand(cmd);
-	//layersUpdated();
-	//canvasRefresh();
 }
 
 // range: 0 - 100
@@ -1429,9 +1430,6 @@ void KisView::layerOpacity(int opacity)
 	KNamedCommand *cmd = layer -> setOpacityCommand(opacity);
 	cmd -> execute();
 	undoAdapter() -> addCommand(cmd);
-
-	//layersUpdated();
-	//canvasRefresh();
 }
 
 
@@ -1860,6 +1858,9 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
 void KisView::canvasRefresh()
 {
 	KisRect rc(0, 0, m_canvasPixmap.width(), m_canvasPixmap.height());
+
+	//kdDebug() << "canvasRefresh" << rc << endl;
+
 	paintView(viewToWindow(rc));
 	m_canvas -> repaint();
 }
@@ -1890,8 +1891,6 @@ void KisView::layerToggleLinked()
 			KNamedCommand *cmd = layer -> setLinkedCommand(!layer -> linked());
 			cmd -> execute();
 			undoAdapter() -> addCommand(cmd);
-			//m_doc -> setModified(true);
-			//layersUpdated();
 		}
 	}
 }
@@ -1927,7 +1926,9 @@ void KisView::layerProperties()
 				if (layer -> name() != dlg.getName()
 				    || layer -> opacity() != dlg.getOpacity()
 				    || layer -> compositeOp() != dlg.getCompositeOp())
+				{
 					m_doc -> setLayerProperties(img, layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
+				}
 
 				if (pt.x() != layer->getX() || pt.y() != layer->getY())
 					KisStrategyMove(this).simpleMove(QPoint(layer->getX(), layer->getY()), pt);
@@ -2028,10 +2029,9 @@ void KisView::layerRaise()
 	layer = img -> activeLayer();
 
 	if (layer) {
-		m_doc -> layerRaise(img, layer);
-		layersUpdated();
-		resizeEvent(0);
-		updateCanvas();
+		KCommand *cmd = img -> raiseLayerCommand(layer);
+		cmd -> execute();
+		undoAdapter() -> addCommand(cmd);
 	}
 }
 
@@ -2046,10 +2046,9 @@ void KisView::layerLower()
 	layer = img -> activeLayer();
 
 	if (layer) {
-		m_doc -> layerLower(img, layer);
-		layersUpdated();
-		resizeEvent(0);
-		updateCanvas();
+		KCommand *cmd = img -> lowerLayerCommand(layer);
+		cmd -> execute();
+		undoAdapter() -> addCommand(cmd);
 	}
 }
 
@@ -2059,11 +2058,9 @@ void KisView::layerFront()
 	KisLayerSP layer;
 
 	if (img && (layer = img -> activeLayer())) {
-		img -> top(layer);
-		m_doc -> setModified(true);
-		layersUpdated();
-		resizeEvent(0);
-		updateCanvas();
+		KCommand *cmd = img -> topLayerCommand(layer);
+		cmd -> execute();
+		undoAdapter() -> addCommand(cmd);
 	}
 }
 
@@ -2075,11 +2072,9 @@ void KisView::layerBack()
 	KisLayerSP layer;
 
 	if (img && (layer = img -> activeLayer())) {
-		img -> bottom(layer);
-		m_doc -> setModified(true);
-		layersUpdated();
-		resizeEvent(0);
-		updateCanvas();
+		KCommand *cmd = img -> bottomLayerCommand(layer);
+		cmd -> execute();
+		undoAdapter() -> addCommand(cmd);
 	}
 }
 
@@ -2096,7 +2091,7 @@ void KisView::layersUpdated()
 
 	layerUpdateGUI(img && layer);
 
-        m_layerBox -> setUpdatesEnabled(false);
+	m_layerBox -> setUpdatesAndSignalsEnabled(false);
         m_layerBox -> clear();
 
         if (img) {
@@ -2104,11 +2099,15 @@ void KisView::layersUpdated()
 
                 for (vKisLayerSP_it it = l.begin(); it != l.end(); it++)
                         m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked(), (*it) -> locked());
-                m_layerBox -> slotSetCurrentItem(img -> index(layer));
-                layerSelected( img -> index(layer) );
         }
 
-        m_layerBox -> setUpdatesEnabled(true);	
+	if (img) {
+		layerSelected( img -> index(layer) );
+		m_layerBox -> slotSetCurrentItem(img -> index(layer));
+	}
+
+	m_layerBox -> setUpdatesAndSignalsEnabled(true);
+	m_layerBox -> updateAll();
 
 	notify();
 }
@@ -2130,10 +2129,6 @@ void KisView::layerToggleVisible()
 	KNamedCommand *cmd = layer -> setVisibleCommand(!layer -> visible());
 	cmd -> execute();
 	undoAdapter() -> addCommand(cmd);
-	//m_doc -> setModified(true);
-	//resizeEvent(0);
-	//layersUpdated();
-	//canvasRefresh();
 }
 
 void KisView::layerToggleLocked()
@@ -2147,12 +2142,12 @@ void KisView::layerToggleLocked()
 	KNamedCommand *cmd = layer -> setLockedCommand(!layer -> locked());
 	cmd -> execute();
 	undoAdapter() -> addCommand(cmd);
-	//m_doc -> setModified(true);
-	//layersUpdated();
 }
 
 void KisView::layerSelected(int n)
 {
+	kdDebug() << "layerSelected: " << n << endl;
+
 	KisImageSP img = currentImg();
         if (!img) return;
         KisLayerSP l = img -> layer(n);
@@ -2169,6 +2164,7 @@ void KisView::layerSelected(int n)
         m_layerBox -> setOpacity(opacity);
         m_layerBox -> setColorStrategy(l -> colorStrategy());
         m_layerBox -> setCompositeOp(l -> compositeOp());
+	m_layerBox -> slotSetCurrentItem(n);
 
         updateCanvas();
 }

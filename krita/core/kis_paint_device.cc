@@ -78,7 +78,6 @@ namespace {
 	{
 		if (m_paintDevice -> image()) {
 			m_paintDevice -> image() -> notifyLayersChanged();
-			m_paintDevice -> image() -> notify();
 		}
 	}
 

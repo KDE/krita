@@ -46,7 +46,7 @@
 
 // The View
 KisPreviewView::KisPreviewView(QWidget* parent, const char * name, WFlags f)
-	: QWidget(parent, name, f), m_undo(0), /* seems to work nicely */
+	: QWidget(parent, name, f), /* seems to work nicely */
 	  m_pos(QPoint(0,0)), m_zoom(1.0)
 {
 	m_moving = false;
@@ -89,7 +89,7 @@ void KisPreviewView::setSourceLayer(KisLayerSP lay)
 	Q_INT32 w = static_cast<Q_INT32>(ceil(size().width() / m_zoom));
 	Q_INT32 h = static_cast<Q_INT32>(ceil(size().height() / m_zoom));
 
-	m_image = new KisImage(m_undo, w, h, lay->colorStrategy(), "preview");
+	m_image = new KisImage(0, w, h, lay->colorStrategy(), "preview");
 	Q_CHECK_PTR(m_image);
 
 	m_image -> setProfile(lay -> profile());

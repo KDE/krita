@@ -221,15 +221,143 @@ namespace {
 		KisProfileSP m_afterProfile;
 	};
 
+	class KisImageCommand : public KNamedCommand {
+		typedef KNamedCommand super;
+
+	public:
+		KisImageCommand(const QString& name, KisImageSP image);
+		virtual ~KisImageCommand() {}
+
+		virtual void execute() = 0;
+		virtual void unexecute() = 0;
+
+	protected:
+		void setUndo(bool undo);
+
+		KisImageSP m_image;
+	};
+
+	KisImageCommand::KisImageCommand(const QString& name, KisImageSP image) :
+		super(name), m_image(image)
+	{
+	}
+
+	void KisImageCommand::setUndo(bool undo)
+	{
+		if (m_image -> undoAdapter()) {
+			m_image -> undoAdapter() -> setUndo(undo);
+		}
+	}
+	/*
+	void KisImageCommand::notifyPropertyChanged()
+	{
+		if (m_image -> image()) {
+			m_image -> image() -> notifyImagesChanged();
+			m_image -> image() -> notify();
+		}
+	}
+	*/
+	 /*
+	class LayerAddCmd : public KisImageCommand {
+		typedef KisImageCommand super;
+
+	public:
+		LayerAddCmd(KisImageSP img, KisLayerSP layer) : super(i18n("Add Layer"), img)
+			{
+				m_layer = layer;
+				m_index = img -> index(layer);
+			}
+
+		virtual void execute()
+			{
+				setUndo(false);
+				m_image -> add(m_layer, m_index);
+				setUndo(true);
+			}
+
+		virtual void unexecute()
+			{
+				setUndo(false);
+				m_image -> rm(m_layer);
+				setUndo(true);
+			}
+
+	private:
+		KisLayerSP m_layer;
+		Q_INT32 m_index;
+	};
+
+	class LayerRmCmd : public KisImageCommand {
+		typedef KisImageCommand super;
+
+	public:
+		LayerRmCmd(KisImageSP img, KisLayerSP layer) : super(i18n("Remove Layer"), img)
+			{
+				m_layer = layer;
+				m_index = img -> index(layer);
+			}
+
+		virtual void execute()
+			{
+				setUndo(false);
+				m_image -> rm(m_layer);
+				setUndo(true);
+			}
+
+		virtual void unexecute()
+			{
+				setUndo(false);
+				m_image -> add(m_layer, m_index);
+				setUndo(true);
+			}
+
+	private:
+		KisLayerSP m_layer;
+		Q_INT32 m_index;
+	};
+	*/
+	class KisLayerPositionCommand : public KisImageCommand {
+		typedef KisImageCommand super;
+
+	public:
+		KisLayerPositionCommand(const QString& name, KisImageSP image, KisLayerSP layer, Q_INT32 position) : super(name, image)
+			{
+				m_layer = layer;
+				m_oldPosition = image -> index(layer);
+				m_newPosition = position;
+			}
+
+		virtual void execute()
+			{
+				setUndo(false);
+				m_image -> setLayerPosition(m_layer, m_newPosition);
+				m_image -> notifyLayersChanged();
+				setUndo(true);
+			}
+
+		virtual void unexecute()
+			{
+				setUndo(false);
+				m_image -> setLayerPosition(m_layer, m_oldPosition);
+				m_image -> notifyLayersChanged();
+				setUndo(true);
+			}
+
+	private:
+		KisLayerSP m_layer;
+		Q_INT32 m_oldPosition;
+		Q_INT32 m_newPosition;
+	};
+
 }
 
-KisImage::KisImage(KisUndoAdapter *undoAdapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
+KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
 #if DEBUG_IMAGES
 	numImages++;
 	kdDebug() << "IMAGE " << name << " CREATED total now = " << numImages << endl;
 #endif
-	init(undoAdapter, width, height, colorStrategy, name);
+	init(doc, width, height, colorStrategy, name);
 	setName(name);
         m_dcop = 0L;
 	m_profile = 0;
@@ -243,6 +371,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 #endif
 	m_dcop = 0L;
 	if (this != &rhs) {
+		m_doc = rhs.m_doc;
 		m_undoHistory = rhs.m_undoHistory;
 		m_uri = rhs.m_uri;
 		m_name = QString::null;
@@ -339,12 +468,19 @@ QString KisImage::nextLayerName() const
 	return m_nserver -> name();
 }
 
-void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
+void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
 	Q_ASSERT(colorStrategy != 0);
-	Q_ASSERT(adapter != 0);
 
-	m_adapter = adapter;
+	m_doc = doc;
+
+	if (m_doc != 0) {
+		m_adapter = m_doc -> undoAdapter();
+		Q_ASSERT(m_adapter != 0);
+	} else {
+		m_adapter = 0;
+	}
+
 	m_nserver = new KisNameServer(i18n("Layer %1"), 1);
 	Q_CHECK_PTR(m_nserver);
 	m_name = name;
@@ -864,7 +1000,12 @@ bool KisImage::raise(KisLayerSP layer)
 	if (position <= 0)
 		return false;
 
-	return pos(layer, position - 1);
+	return setLayerPosition(layer, position - 1);
+}
+
+KCommand *KisImage::raiseLayerCommand(KisLayerSP layer)
+{
+	return new KisLayerPositionCommand(i18n("Raise Layer"), this, layer, index(layer) - 1);
 }
 
 bool KisImage::lower(KisLayerSP layer)
@@ -881,7 +1022,12 @@ bool KisImage::lower(KisLayerSP layer)
 	if (position >= size)
 		return false;
 
-	return pos(layer, position + 1);
+	return setLayerPosition(layer, position + 1);
+}
+
+KCommand *KisImage::lowerLayerCommand(KisLayerSP layer)
+{
+	return new KisLayerPositionCommand(i18n("Lower Layer"), this, layer, index(layer) + 1);
 }
 
 bool KisImage::top(KisLayerSP layer)
@@ -896,7 +1042,12 @@ bool KisImage::top(KisLayerSP layer)
 	if (position == 0)
 		return false;
 
-	return pos(layer, 0);
+	return setLayerPosition(layer, 0);
+}
+
+KCommand *KisImage::topLayerCommand(KisLayerSP layer)
+{
+	return new KisLayerPositionCommand(i18n("Layer Top"), this, layer, 0);
 }
 
 bool KisImage::bottom(KisLayerSP layer)
@@ -913,10 +1064,15 @@ bool KisImage::bottom(KisLayerSP layer)
 	if (position >= size - 1)
 		return false;
 
-	return pos(layer, size - 1);
+	return setLayerPosition(layer, size - 1);
 }
 
-bool KisImage::pos(KisLayerSP layer, Q_INT32 position)
+KCommand *KisImage::bottomLayerCommand(KisLayerSP layer)
+{
+	return new KisLayerPositionCommand(i18n("Layer Bottom"), this, layer, nlayers() - 1);
+}
+
+bool KisImage::setLayerPosition(KisLayerSP layer, Q_INT32 position)
 {
 	Q_INT32 old;
 	Q_INT32 nlayers;
@@ -1151,7 +1307,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
 			Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
 			renderToProjection(x, y, w, h);
 			QImage img = m_projection -> convertToQImage(profile, x, y, w, h);
-			if (m_activeLayer -> hasSelection())
+			if (m_activeLayer != 0 && m_activeLayer -> hasSelection())
 				m_activeLayer -> selection()->paintSelection(img, x, y, w, h);
 			
 			if (!img.isNull()) {

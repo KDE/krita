@@ -83,11 +83,11 @@ private:
 	cmsHTRANSFORM m_defaultFromRGB;
 	Q_UINT8 * m_qcolordata;
 
-	static const PIXELTYPE PIXEL_CYAN = 0;
-	static const PIXELTYPE PIXEL_MAGENTA = 1;
-	static const PIXELTYPE PIXEL_YELLOW = 2;
-	static const PIXELTYPE PIXEL_BLACK = 3;
-	static const PIXELTYPE PIXEL_CMYK_ALPHA = 4;
+	static const Q_UINT8 PIXEL_CYAN = 0;
+	static const Q_UINT8 PIXEL_MAGENTA = 1;
+	static const Q_UINT8 PIXEL_YELLOW = 2;
+	static const Q_UINT8 PIXEL_BLACK = 3;
+	static const Q_UINT8 PIXEL_CMYK_ALPHA = 4;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_CMYK_H_

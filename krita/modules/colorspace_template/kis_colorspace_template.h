@@ -85,8 +85,8 @@ protected:
 private:
 	vKisChannelInfoSP m_channels;
 
-	static const PIXELTYPE PIXEL_TEMPLATE = 0;
-	static const PIXELTYPE PIXEL_TEMPLATE_ALPHA = 1;
+	static const Q_UINT8 PIXEL_TEMPLATE = 0;
+	static const Q_UINT8 PIXEL_TEMPLATE_ALPHA = 1;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_TEMPLATESCALE_H_

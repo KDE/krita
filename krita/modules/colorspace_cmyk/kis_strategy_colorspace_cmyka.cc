@@ -168,10 +168,10 @@ QImage KisStrategyColorSpaceCMYKA::convertToQImage(const Q_UINT8 *data, Q_INT32 
 			y = y * ( UINT8_MAX - k) + k;
 
 			// XXX: Temporary copy
-			const PIXELTYPE PIXEL_BLUE = 0;
-			const PIXELTYPE PIXEL_GREEN = 1;
-			const PIXELTYPE PIXEL_RED = 2;
-			const PIXELTYPE PIXEL_ALPHA = 3;
+			const Q_UINT8 PIXEL_BLUE = 0;
+			const Q_UINT8 PIXEL_GREEN = 1;
+			const Q_UINT8 PIXEL_RED = 2;
+			const Q_UINT8 PIXEL_ALPHA = 3;
 
 			*( j + PIXEL_ALPHA ) = *( data + i + PIXEL_CMYK_ALPHA ) ;
 			*( j + PIXEL_RED )   = UINT8_MAX - c;

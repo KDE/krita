@@ -108,7 +108,6 @@ public:
 
 	virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0);
 
-	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
 	virtual vKisChannelInfoSP channels() const;
 	virtual bool alpha() const;
@@ -121,26 +120,38 @@ public:
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
-	virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
 
-	virtual void bitBlt(Q_INT32 stride,
-			    Q_UINT8 *dst,
-			    Q_INT32 dststride,
+	virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
+	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const {};;
+	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
+	
+	virtual KisCompositeOpList userVisiblecompositeOps() const;
+
+protected:
+
+	virtual void bitBlt(Q_UINT8 *dst,
+			    Q_INT32 dstRowSize,
 			    const Q_UINT8 *src,
-			    Q_INT32 srcstride,
+			    Q_INT32 srcRowStride,
+			    const Q_UINT8 *srcAlphaMask,
+			    Q_INT32 maskRowStride,
 			    QUANTUM opacity,
 			    Q_INT32 rows,
 			    Q_INT32 cols,
 			    const KisCompositeOp& op);
 
-	virtual KisCompositeOpList userVisiblecompositeOps() const;
 
-protected:
 	virtual bool convertPixelsTo(const Q_UINT8 * src, KisProfileSP srcProfile,
 				     Q_UINT8 * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
 				     Q_UINT32 numPixels,
 				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
+
+private:
+
+	void compositeOver(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeClear(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
+	void compositeCopy(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
 
 private:
 	vKisChannelInfoSP m_channels;

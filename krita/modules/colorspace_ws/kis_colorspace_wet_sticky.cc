@@ -33,19 +33,19 @@
 #include "kis_image.h"
 #include "kis_colorspace_wet_sticky.h"
 #include "kis_iterators_pixel.h"
+#include "kis_integer_maths.h"
 
 using namespace WetAndSticky;
-
 
 KisColorSpaceWetSticky::KisColorSpaceWetSticky() :
 	KisStrategyColorSpace(KisID("W&S", i18n("Wet & Sticky")), 0, icMaxEnumData)
 {
 
 	// Basic representational definition
-	m_channels.push_back(new KisChannelInfo(i18n("red"), 0, COLOR, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("blue"), 0, COLOR, 1));
 	m_channels.push_back(new KisChannelInfo(i18n("green"), 1, COLOR, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("blue"), 2, COLOR, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 3, COLOR, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("red"), 2, COLOR, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 3, ALPHA, 1));
 
 
 	// Paint definition
@@ -63,6 +63,7 @@ KisColorSpaceWetSticky::KisColorSpaceWetSticky() :
 	m_channels.push_back(new KisChannelInfo(i18n("absorbancy"), 13, SUBSTRATE, 1));
 	m_channels.push_back(new KisChannelInfo(i18n("paint volume"), 14, SUBSTANCE));
 
+	kdDebug() << "Size of cell: " << sizeof(CELL) << " size of paint: " << sizeof(PAINT) << " size of rgba: " << sizeof(RGBA) << "\n";
 }
 
 
@@ -96,6 +97,16 @@ void KisColorSpaceWetSticky::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfi
 	p -> absorbancy = 10;
 	p -> volume = 0;
 
+
+	kdDebug() << "qcolor: "
+		<< " r: " << c.red() << " b: " << c.blue() << " g: " << c.red()
+		<< " native color: (" << p->representation.color.red << ","
+		                      << p->representation.color.green << ","
+		                      << p->representation.color.blue << ","
+		                      << p->representation.alpha << ") "
+		<< ", hls: (" << p->contents.color.hue << ","
+		              << p->contents.color.lightness << ","
+		              << p->contents.color.saturation << ")\n";
 }
 
 void KisColorSpaceWetSticky::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile)
@@ -123,6 +134,17 @@ void KisColorSpaceWetSticky::nativeColor(const QColor& c, QUANTUM opacity, Q_UIN
 	p -> absorbancy = 10;
 	p -> volume = 0;
 
+
+	kdDebug() << "qcolor: "
+		<< " r: " << c.red() << " b: " << c.blue() << " g: " << c.red()
+		<< " native color: (" << p->representation.color.red << ","
+		                      << p->representation.color.green << ","
+		                      << p->representation.color.blue << ","
+		                      << p->representation.alpha << ") "
+		<< ", hls: (" << p->contents.color.hue << ","
+		              << p->contents.color.lightness << ","
+		              << p->contents.color.saturation << ")\n";
+	
 }
 
 void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile)
@@ -133,6 +155,7 @@ void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, KisProfileS
 		    p -> representation.color.green,
 		    p -> representation.color.blue);
 
+	kdDebug() << "Created qcolor: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
 }
 
 void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
@@ -145,6 +168,7 @@ void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *op
 		    p -> representation.color.blue);
 
 	*opacity = p -> representation.alpha;
+	kdDebug() << "Created qcolor: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
 }
 
 
@@ -209,10 +233,10 @@ QImage KisColorSpaceWetSticky::convertToQImage(const Q_UINT8 *data, Q_INT32 widt
 
 	while ( i < width * height) {
 
-		const PIXELTYPE PIXEL_BLUE = 0;
-		const PIXELTYPE PIXEL_GREEN = 1;
-		const PIXELTYPE PIXEL_RED = 2;
-		const PIXELTYPE PIXEL_ALPHA = 3;
+		const Q_UINT8 PIXEL_BLUE = 0;
+		const Q_UINT8 PIXEL_GREEN = 1;
+		const Q_UINT8 PIXEL_RED = 2;
+		const Q_UINT8 PIXEL_ALPHA = 3;
 
 		*( j + PIXEL_ALPHA ) = p -> representation.alpha;
 		*( j + PIXEL_RED )   = p -> representation.color.red;
@@ -231,9 +255,6 @@ bool KisColorSpaceWetSticky::convertPixelsTo(const Q_UINT8 * src, KisProfileSP /
 					     Q_UINT32 numPixels,
 					     Q_INT32 /*renderingIntent*/)
 {
-	kdDebug() << "KisColorSpaceWetSticky::convertPixelsTo\n";
-	// No lcms trickery here. we're representationally basically an 8-bit rgba image.
-
 	Q_INT32 dSize = dstColorStrategy -> pixelSize();
 	Q_INT32 sSize = pixelSize();
 
@@ -264,126 +285,128 @@ void KisColorSpaceWetSticky::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) cons
 }
 
 
-void KisColorSpaceWetSticky::bitBlt(Q_INT32 stride,
-				    Q_UINT8 *dst,
-				    Q_INT32 dststride,
-				    const Q_UINT8 *src,
-				    Q_INT32 srcstride,
-				    QUANTUM opacity,
-				    Q_INT32 rows,
-				    Q_INT32 cols,
-				    const KisCompositeOp& op)
+void KisColorSpaceWetSticky::bitBlt(Q_UINT8 *dst,
+				      Q_INT32 dstRowStride,
+				      const Q_UINT8 *src,
+				      Q_INT32 srcRowStride,
+				      const Q_UINT8 *mask,
+				      Q_INT32 maskRowStride,
+				      QUANTUM opacity,
+				      Q_INT32 rows,
+				      Q_INT32 cols,
+				      const KisCompositeOp& op)
 {
-	Q_INT32 i;
-	Q_INT32 linesize;
-
-	Q_UINT8 *dq;
-	const Q_UINT8 *sq;
-
-	if (rows <= 0 || cols <= 0)
-		return;
 	switch (op.op()) {
-	case COMPOSITE_COPY:
-
-		linesize = stride * sizeof(Q_UINT8) * cols;
-		dq = dst;
-		sq = src;
-		while (rows-- > 0) {
-			memcpy(dq, sq, linesize);
-			dq += dststride;
-			sq += srcstride;
-		}
-		return;
-	case COMPOSITE_CLEAR:
-
-		linesize = stride * sizeof(Q_UINT8) * cols;
-		dq = dst;
-		while (rows-- > 0) {
-			memset(dq, 0, linesize);
-			dq += dststride;
-		}
-		return;
+	case COMPOSITE_UNDEF:
+		// Undefined == no composition
+		break;
 	case COMPOSITE_OVER:
+		compositeOver(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
+		break;
+	case COMPOSITE_COPY:
 	default:
-		if (opacity == OPACITY_TRANSPARENT)
-			return;
-
-		if (opacity != OPACITY_OPAQUE) {
-			while (rows-- > 0) {
-				CELL_PTR d = (CELL_PTR) dst;
-				CELL_PTR s = (CELL_PTR) src;
-
-				for (i = cols; i > 0; i--, d += stride, s += stride) {
-
-					if (s -> representation.alpha == OPACITY_TRANSPARENT)
-						continue;
-
-					int srcAlpha = (s -> representation.alpha * opacity + UINT8_MAX / 2) / UINT8_MAX;
-					int dstAlpha = (s -> representation.alpha * (UINT8_MAX - srcAlpha) + UINT8_MAX / 2) / UINT8_MAX;
-
-					d -> representation.color.red   = (d -> representation.color.red * dstAlpha
-									   + s -> representation.color.red * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
-
-					d -> representation.color.green = (d -> representation.color.green * dstAlpha +
-									   s -> representation.color.green * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
-					d -> representation.color.blue  = (d -> representation.color.blue  * dstAlpha +
-									   s -> representation.color.blue  * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
-
-					d -> representation.alpha = (d -> representation.alpha * (UINT8_MAX - srcAlpha) +
-								      srcAlpha * UINT8_MAX + UINT8_MAX / 2) / UINT8_MAX;
-
-					if (d -> representation.alpha != 0) {
-						d -> representation.color.red = (d -> representation.color.red * UINT8_MAX) / d -> representation.alpha;
-						d -> representation.color.green = (d -> representation.color.green * UINT8_MAX) / d -> representation.alpha;
-						d -> representation.color.blue = (d -> representation.color.blue * UINT8_MAX) / d -> representation.alpha;
-					}
-				}
-
-				dst += dststride;
-				src += srcstride;
-			}
-		}
-		else {
-			while (rows-- > 0) {
-				CELL_PTR d = (CELL_PTR) dst;
-				CELL_PTR s = (CELL_PTR) src;
-
-				for (i = cols; i > 0; i--, d += stride, s += stride) {
-					if (s -> representation.alpha == OPACITY_TRANSPARENT)
-continue;
-
-					if (d -> representation.alpha == OPACITY_TRANSPARENT || s -> representation.alpha == OPACITY_OPAQUE) {
-						memcpy(d, s, stride * sizeof(Q_UINT8));
-						continue;
-					}
-
-					int srcAlpha = s -> representation.alpha;
-					int dstAlpha = (d -> representation.alpha * (UINT8_MAX - srcAlpha) + UINT8_MAX / 2) / UINT8_MAX;
-
-					d -> representation.color.red   = (d -> representation.color.red   * dstAlpha +
-									   s -> representation.color.red   * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
-					d -> representation.color.green = (d -> representation.color.green * dstAlpha +
-									   s -> representation.color.green * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
-					d -> representation.color.blue  = (d -> representation.color.blue  * dstAlpha +
-									   s -> representation.color.blue  * srcAlpha + UINT8_MAX / 2) / UINT8_MAX;
-
-					d -> representation.alpha = (d -> representation.alpha * (UINT8_MAX - srcAlpha) +
-								      srcAlpha * UINT8_MAX + UINT8_MAX / 2) / UINT8_MAX;
-
-					if (d -> representation.alpha != 0) {
-						d -> representation.color.red = (d -> representation.color.red * UINT8_MAX) / d -> representation.alpha;
-						d -> representation.color.green = (d -> representation.color.green * UINT8_MAX) / d -> representation.alpha;
-						d -> representation.color.blue = (d -> representation.color.blue * UINT8_MAX) / d -> representation.alpha;
-					}
-				}
-
-				dst += dststride;
-				src += srcstride;
-			}
-		}
-
+		compositeCopy(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
+		break;
 	}
+
 }
+
+
+void KisColorSpaceWetSticky::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+{
+	// XXX: This is basically the same as with rgb and used to composite layers for representation. Composition for
+	//      painting works differently
+	while (rows > 0) {
+
+		const Q_UINT8 *src = srcRowStart;
+		Q_UINT8 *dst = dstRowStart;
+		const Q_UINT8 *mask = maskRowStart;
+		
+		CELL_PTR dstCell = (CELL_PTR) dst;
+		CELL_PTR srcCell = (CELL_PTR) src;
+
+
+		Q_INT32 columns = numColumns;
+
+		while (columns > 0) {
+
+			Q_UINT8 srcAlpha = srcCell->representation.alpha;
+
+			// apply the alphamask
+			if(mask != 0)
+			{
+				if(*mask != OPACITY_OPAQUE)
+					srcAlpha = UINT8_MULT(srcAlpha, *mask);
+				mask++;
+			}
+			
+			if (srcAlpha != OPACITY_TRANSPARENT) {
+
+				if (opacity != OPACITY_OPAQUE) {
+					srcAlpha = UINT8_MULT(srcCell->representation.alpha, opacity);
+				}
+
+				if (srcAlpha == OPACITY_OPAQUE) {
+					memcpy(dst, src, sizeof(CELL));
+				} else {
+					Q_UINT8 dstAlpha = dstCell->representation.alpha;
+
+					Q_UINT8 srcBlend;
+
+					if (dstAlpha == OPACITY_OPAQUE) {
+						srcBlend = srcAlpha;
+					} else {
+						Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+						dstCell->representation.alpha = newAlpha;
+
+						if (newAlpha != 0) {
+							srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
+						} else {
+							srcBlend = srcAlpha;
+						}
+					}
+
+					if (srcBlend == OPACITY_OPAQUE) {
+						memcpy(dst, src, sizeof(CELL));
+					} else {
+						dstCell->representation.color.red = UINT8_BLEND(srcCell->representation.color.red, dstCell->representation.color.red, srcBlend);
+						dstCell->representation.color.green = UINT8_BLEND(srcCell->representation.color.green, dstCell->representation.color.green, srcBlend);
+						dstCell->representation.color.blue = UINT8_BLEND(srcCell->representation.color.blue, dstCell->representation.color.blue, srcBlend);
+					}
+				}
+			}
+
+			columns--;
+			src += sizeof(CELL);
+			dst += sizeof(CELL);
+		}
+
+		rows--;
+		srcRowStart += srcRowStride;
+		dstRowStart += dstRowStride;
+		
+		if(maskRowStart)
+			maskRowStart += maskRowStride;
+	}
+
+}
+
+void KisColorSpaceWetSticky::compositeCopy(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity)
+{
+	Q_INT32 linesize = sizeof(CELL) * columns;
+	Q_UINT8 *d;
+	const Q_UINT8 *s;
+	d = dst;
+	s = src;
+	
+	while (rows-- > 0) {
+		memcpy(d, s, linesize);
+		d += dstRowStride;
+		s += srcRowStride;
+	}
+
+}
+
 
 KisCompositeOpList KisColorSpaceWetSticky::userVisiblecompositeOps() const
 {

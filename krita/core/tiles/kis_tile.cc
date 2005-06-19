@@ -21,6 +21,7 @@
 #include "kis_global.h"
 #include "kis_tile.h"
 #include "kis_tileddatamanager.h"
+#include "kis_tilemanager.h"
 
 const Q_INT32 KisTile::WIDTH = 64;
 const Q_INT32 KisTile::HEIGHT = 64;
@@ -33,7 +34,12 @@ KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, Q_UINT8 *defPixel)
 	m_nextTile = 0;
 	m_col = col;
 	m_row = row;
+	m_nReadlock = 0;
+	m_writeLock = false;
+
 	allocate();
+	
+	KisTileManager::instance() -> registerTile(this);
 
 	setData(defPixel);
 }
@@ -44,6 +50,9 @@ KisTile::KisTile(KisTile& rhs, Q_INT32 col, Q_INT32 row)
 		m_pixelSize = rhs.m_pixelSize;
 		m_data = 0;
 		m_nextTile = 0;
+		m_nReadlock = 0;
+		m_writeLock = false;
+
 		allocate();
 
 		if (rhs.m_data) {
@@ -52,6 +61,8 @@ KisTile::KisTile(KisTile& rhs, Q_INT32 col, Q_INT32 row)
 
 		m_col = col;
 		m_row = row;
+
+		KisTileManager::instance() -> registerTile(this);
 	}
 }
 
@@ -63,26 +74,37 @@ KisTile::KisTile(KisTile& rhs)
 		m_row = rhs.m_row;
 		m_data = 0;
 		m_nextTile = 0;
+		m_nReadlock = 0;
+		m_writeLock = false;
+
 		allocate();
 
 		if (rhs.m_data) {
 			memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(Q_UINT8));
 		}
+
+		KisTileManager::instance() -> registerTile(this);
 	}
 }
 
-
 KisTile::~KisTile()
 {
+	KisTileManager::instance() -> deregisterTile(this); // goes before the deleting of m_data!
+
 	if (m_data) {
 		delete[] m_data;
 		m_data = 0;
 	}
+	if (readers()) { kdDebug() << "argh, still " << readers() << endl; m_nReadlock /= 0; }
 }
 
 void KisTile::allocate()
 {
 	if (m_data == 0) {
+		if (readers()) {
+			kdDebug() << "arghll, still " << readers() << endl;
+			m_nReadlock /= 0;
+		}
 		m_data = new Q_UINT8[WIDTH * HEIGHT * m_pixelSize];
 		Q_CHECK_PTR(m_data);
 	}
@@ -108,9 +130,27 @@ void KisTile::setData(Q_UINT8 *pixel)
 {
 	Q_UINT8 *dst = m_data;
 	
+	addReader();
 	for(int i=0; i <WIDTH * HEIGHT;i++)
 	{
 		memcpy(dst, pixel, m_pixelSize);
 		dst+=m_pixelSize;
 	}
+	removeReader();
+}
+
+void KisTile::addReader()
+{
+	if (m_nReadlock++ == 0)
+		KisTileManager::instance() -> ensureTileLoaded(this);
+	else if (m_nReadlock < 0) {
+		kdDebug() << m_nReadlock << endl;
+		m_nReadlock /= 0;
+	}
+}
+
+void KisTile::removeReader()
+{
+	if (--m_nReadlock == 0)
+		KisTileManager::instance() -> maySwapTile(this);
 }

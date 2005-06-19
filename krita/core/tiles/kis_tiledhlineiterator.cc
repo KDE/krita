@@ -52,7 +52,38 @@ KisTiledHLineIterator::KisTiledHLineIterator( KisTiledDataManager *ndevice,  Q_I
 	fetchTileData(m_col, m_row);
 	m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 }
-;
+
+KisTiledHLineIterator::KisTiledHLineIterator(const KisTiledHLineIterator& rhs)
+	: KisTiledIterator(rhs)
+{
+	if (this != &rhs) {
+		m_right = rhs.m_right;
+		m_left = rhs.m_left;
+		m_leftCol = rhs.m_leftCol;
+		m_rightCol = rhs.m_rightCol;
+		m_xInTile = rhs.m_xInTile;
+		m_yInTile = rhs.m_yInTile;
+		m_leftInTile = rhs.m_leftInTile;
+		m_rightInTile = rhs.m_rightInTile;
+	}
+}
+
+KisTiledHLineIterator& KisTiledHLineIterator::operator=(const KisTiledHLineIterator& rhs)
+{
+	if (this != &rhs) {
+		KisTiledIterator::operator=(rhs);
+		m_right = rhs.m_right;
+		m_left = rhs.m_left;
+		m_leftCol = rhs.m_leftCol;
+		m_rightCol = rhs.m_rightCol;
+		m_xInTile = rhs.m_xInTile;
+		m_yInTile = rhs.m_yInTile;
+		m_leftInTile = rhs.m_leftInTile;
+		m_rightInTile = rhs.m_rightInTile;
+	}
+	return *this;
+}
+
 KisTiledHLineIterator::~KisTiledHLineIterator( )
 {
 }

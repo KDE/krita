@@ -70,6 +70,51 @@ KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  Q_INT
 	m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 }
 
+KisTiledRectIterator::KisTiledRectIterator(const KisTiledRectIterator& rhs)
+	: KisTiledIterator(rhs)
+{
+	if (this != &rhs) {
+		m_left = rhs.m_left;
+		m_top = rhs.m_top;
+		m_w = rhs.m_w;
+		m_h = rhs.m_h;
+		m_topRow = rhs.m_topRow;
+		m_bottomRow = rhs.m_bottomRow;
+		m_leftCol = rhs.m_leftCol;
+		m_rightCol = rhs.m_rightCol;
+		m_xInTile = rhs.m_xInTile;
+		m_yInTile = rhs.m_yInTile;
+		m_leftInTile = rhs.m_leftInTile;
+		m_rightInTile = rhs.m_rightInTile;
+		m_topInTile = rhs.m_topInTile;
+		m_bottomInTile = rhs.m_bottomInTile;
+		m_beyondEnd = rhs.m_beyondEnd;
+	}
+}
+
+KisTiledRectIterator& KisTiledRectIterator::operator=(const KisTiledRectIterator& rhs)
+{
+	if (this != &rhs) {
+		KisTiledIterator::operator=(rhs);
+		m_left = rhs.m_left;
+		m_top = rhs.m_top;
+		m_w = rhs.m_w;
+		m_h = rhs.m_h;
+		m_topRow = rhs.m_topRow;
+		m_bottomRow = rhs.m_bottomRow;
+		m_leftCol = rhs.m_leftCol;
+		m_rightCol = rhs.m_rightCol;
+		m_xInTile = rhs.m_xInTile;
+		m_yInTile = rhs.m_yInTile;
+		m_leftInTile = rhs.m_leftInTile;
+		m_rightInTile = rhs.m_rightInTile;
+		m_topInTile = rhs.m_topInTile;
+		m_bottomInTile = rhs.m_bottomInTile;
+		m_beyondEnd = rhs.m_beyondEnd;
+	}
+	return *this;
+}
+
 KisTiledRectIterator::~KisTiledRectIterator( )
 {
 }

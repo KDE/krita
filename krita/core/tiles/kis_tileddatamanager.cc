@@ -26,6 +26,7 @@
 #include "kis_tilediterator.h"
 #include "kis_tile.h"
 #include "kis_memento.h"
+#include "kis_tilemanager.h"
 
 /* The data area is divided into tiles each say 64x64 pixels (defined at compiletime)
  * The tiles are laid out in a matrix that can have negative indexes.

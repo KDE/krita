@@ -47,7 +47,8 @@ protected:
 
 public:
 	KisTiledIterator( KisTiledDataManager *ktm);
-
+	KisTiledIterator(const KisTiledIterator&);
+	KisTiledIterator& operator=(const KisTiledIterator&);
 	~KisTiledIterator();
 
 public:
@@ -74,7 +75,8 @@ class KRITACORE_EXPORT KisTiledRectIterator : public KisTiledIterator
 public:
 	/// do not call constructor directly use factory method in KisDataManager instead.
 	KisTiledRectIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32  w, Q_INT32  h, bool writable);
-
+	KisTiledRectIterator(const KisTiledRectIterator&);
+	KisTiledRectIterator& operator=(const KisTiledRectIterator&);
 	~KisTiledRectIterator();
 
 public:
@@ -118,7 +120,8 @@ class KRITACORE_EXPORT KisTiledHLineIterator : public KisTiledIterator
 public:
 	/// do not call constructor directly use factory method in KisDataManager instead.
 	KisTiledHLineIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32 w, bool writable);
-
+	KisTiledHLineIterator(const KisTiledHLineIterator&);
+	KisTiledHLineIterator& operator=(const KisTiledHLineIterator&);
 	~KisTiledHLineIterator();
 
 public:
@@ -163,7 +166,8 @@ class KRITACORE_EXPORT KisTiledVLineIterator : public KisTiledIterator
 public:
 	/// do not call constructor directly use factory method in KisDataManager instead.
 	KisTiledVLineIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32 h, bool writable);
-
+	KisTiledVLineIterator(const KisTiledVLineIterator&);
+	KisTiledVLineIterator& operator=(const KisTiledVLineIterator&);
 	~KisTiledVLineIterator();
 
 public:

@@ -50,7 +50,37 @@ KisTiledVLineIterator::KisTiledVLineIterator( KisTiledDataManager *ndevice,  Q_I
 	fetchTileData(m_col, m_row);
 	m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 }
-;
+
+KisTiledVLineIterator::KisTiledVLineIterator(const KisTiledVLineIterator& rhs)
+	: KisTiledIterator(rhs)
+{
+	if (this != &rhs) {
+		m_bottom = rhs.m_bottom;
+		m_topRow = rhs.m_topRow;
+		m_bottomRow = rhs.m_bottomRow;
+		m_xInTile = rhs.m_xInTile;
+		m_yInTile = rhs.m_yInTile;
+		m_topInTile = rhs.m_topInTile;
+		m_bottomInTile = rhs.m_bottomInTile;
+	}
+}
+
+KisTiledVLineIterator& KisTiledVLineIterator::operator=(const KisTiledVLineIterator& rhs)
+{
+	if (this != &rhs) {
+		KisTiledIterator::operator=(rhs);
+		
+		m_bottom = rhs.m_bottom;
+		m_topRow = rhs.m_topRow;
+		m_bottomRow = rhs.m_bottomRow;
+		m_xInTile = rhs.m_xInTile;
+		m_yInTile = rhs.m_yInTile;
+		m_topInTile = rhs.m_topInTile;
+		m_bottomInTile = rhs.m_bottomInTile;
+	}
+	return *this;
+}
+
 KisTiledVLineIterator::~KisTiledVLineIterator( )
 {
 }

@@ -41,6 +41,9 @@ public:
 	/// Constructor, but use factory method in paint device instead.
 	KisRectIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32  w, Q_INT32  h, bool writable) :
 				ACTUAL_RECTITERATOR((ACTUAL_DATAMGR * )dm, x, y, w, h, writable) {};
+	KisRectIterator(const KisRectIterator& rhs) : ACTUAL_RECTITERATOR(rhs) {}
+	KisRectIterator& operator=(const KisRectIterator& rhs)
+		{ ACTUAL_RECTITERATOR::operator=(rhs); return *this; }
 
 public:	
 	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
@@ -71,6 +74,9 @@ public:
 	/// Constructor, but use factory method in paint device instead.
 	KisHLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32 w, bool writable) :
 				ACTUAL_HLINEITERATOR((ACTUAL_DATAMGR * )dm, x, y, w, writable) {};
+	KisHLineIterator(const KisHLineIterator& rhs) : ACTUAL_HLINEITERATOR(rhs) {}
+	KisHLineIterator& operator=(const KisHLineIterator& rhs)
+		{ ACTUAL_HLINEITERATOR::operator=(rhs); return *this; }
 
 public:	
 	/// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
@@ -110,6 +116,9 @@ public:
 	/// Constructor, but use factory method in paint device instead.
 	KisVLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32  h, bool writable) :
 				ACTUAL_VLINEITERATOR((ACTUAL_DATAMGR * )dm, x, y, h, writable) {};
+	KisVLineIterator(const KisVLineIterator& rhs) : ACTUAL_VLINEITERATOR(rhs) {}
+	KisVLineIterator& operator=(const KisVLineIterator& rhs)
+		{ ACTUAL_VLINEITERATOR::operator=(rhs); return *this; }
 
 public:
 	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy

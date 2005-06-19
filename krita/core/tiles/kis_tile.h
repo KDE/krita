@@ -46,10 +46,16 @@ public:
 	void setNext(KisTile *);
 	KisTile *getNext();
 	void setData(Q_UINT8 *pixel);
+	
+	/// Functions that are needed for locking the tiles into memory for caching
+	void addReader();
+	void removeReader();
+	Q_INT32 readers() { return m_nReadlock; }
 
 	friend class KisTiledIterator;
 	friend class KisTiledDataManager;
 	friend class KisMemento;
+	friend class KisTileManager;
 private:
 	KisTile& operator=(const KisTile&);
 

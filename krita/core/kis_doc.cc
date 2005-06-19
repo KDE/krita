@@ -1405,11 +1405,11 @@ void KisDoc::layerRemove(KisImageSP img, KisLayerSP layer)
 
 	if (layer) {
 		setModified(true);
-		img -> rm(layer);
 
 		if (m_undo)
 			addCommand(new LayerRmCmd(this, this, img, layer));
 
+		img -> rm(layer);
 		emit layersUpdated(img);
 
 		if (!m_undo)

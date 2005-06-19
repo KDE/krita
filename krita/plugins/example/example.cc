@@ -39,8 +39,6 @@
 #include <kis_types.h>
 #include <kis_view.h>
 
-#include "kis_filter_configuration_widget.h"
-
 // #include <kmessagebox.h>
 
 #include "example.h"

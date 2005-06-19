@@ -29,7 +29,6 @@
 #include <klocale.h>
 
 #include <kis_filter.h>
-#include <kis_filter_configuration_widget.h>
 #include <kis_brush.h>
 #include <kis_canvas_subject.h>
 #include <kis_cursor.h>

@@ -16,7 +16,6 @@ INCLUDES  = -I$(srcdir)/../../core/color_strategy \
 
 kritacolorsfilters_la_SOURCES = colorsfilters.cc \
 	kis_perchannel_filter.cc \
-	kis_bc_filter_widget.cc \
 	wdg_brightness_contrast.ui \
 	kis_brightness_contrast_filter.cc
 

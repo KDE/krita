@@ -21,7 +21,7 @@
 #include <klocale.h>
 
 #include "kis_brightness_contrast_filter.h"
-#include "kis_bc_filter_widget.h"
+#include "wdg_brightness_contrast.h"
 #include "kis_strategy_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
@@ -40,14 +40,13 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter(KisView * view ) : KisF
 
 QWidget* KisBrightnessContrastFilter::createConfigurationWidget(QWidget* parent)
 {
-	KisBCFilterWidget * w = new KisBCFilterWidget(this, parent, id().id().ascii(), id().id().ascii() );
-	Q_CHECK_PTR(w);
+	QWidget* w = new WdgBrightnessContrast(parent);
 	return w;
 }
 
 KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget* nwidget)
 {
-	KisBCFilterWidget* widget = (KisBCFilterWidget*) nwidget;
+	WdgBrightnessContrast* widget = (WdgBrightnessContrast*) nwidget;
 	
 	if ( widget == 0 )
 	{

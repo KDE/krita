@@ -48,7 +48,6 @@
 #include <kis_view.h>
 #include <kis_progress_display_interface.h>
 
-#include "kis_filter_configuration_widget.h"
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_oilpaint_filter.h"
 

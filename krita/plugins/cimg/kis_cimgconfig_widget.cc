@@ -25,7 +25,6 @@
 
 #include "knuminput.h"
 
-#include "kis_filter_configuration_widget.h"
 #include "wdg_cimg.h"
 #include "kis_cimgconfig_widget.h"
 #include "kis_cimg_filter.h"

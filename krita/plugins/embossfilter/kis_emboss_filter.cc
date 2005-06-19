@@ -47,7 +47,6 @@
 #include <kis_types.h>
 #include <kis_view.h>
 
-#include "kis_filter_configuration_widget.h"
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_emboss_filter.h"
 

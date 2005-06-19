@@ -22,7 +22,6 @@
 #ifndef _KIS_CIMGCONFIG_WIDGET_
 #define _KIS_CIMGCONFIG_WIDGET_
 
-#include "kis_filter_configuration_widget.h"
 #include "wdg_cimg.h"
 #include "kis_cimg_filter.h"
 

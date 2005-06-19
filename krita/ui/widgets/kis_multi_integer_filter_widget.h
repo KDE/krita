@@ -19,12 +19,12 @@
 #ifndef _KIS_MULTI_INTEGER_FILTER_WIDGET_H_
 #define _KIS_MULTI_INTEGER_FILTER_WIDGET_H_
 
-#include "kis_filter_configuration_widget.h"
 #include <vector> 
 #include <knuminput.h>
 #include "koffice_export.h"
 
 class KIntNumInput;
+class KisFilter;
 
 struct KisIntegerWidgetParam {
 	KRITA_EXPORT KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString nname);
@@ -40,7 +40,7 @@ class KRITA_EXPORT KisMultiIntegerFilterWidget : public QWidget
 {
 	Q_OBJECT
 	public:
-		KisMultiIntegerFilterWidget( KisFilter* nfilter, QWidget * parent, const char * name, const char * caption, vKisIntegerWidgetParam iwparam);
+		KisMultiIntegerFilterWidget( KisFilter* nfilter, QWidget * parent,  const char * name, const char *caption, vKisIntegerWidgetParam iwparam);
 	public:
 		inline Q_INT32 nbValues() { return m_nbintegerWidgets; };
 		inline Q_INT32 valueAt( Q_INT32 i ) { return m_integerWidgets[i]->value(); };

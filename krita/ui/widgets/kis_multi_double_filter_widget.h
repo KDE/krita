@@ -19,10 +19,11 @@
 #ifndef _KIS_MULTI_DOUBLE_FILTER_WIDGET_H_
 #define _KIS_MULTI_DOUBLE_FILTER_WIDGET_H_
 
-#include "kis_filter_configuration_widget.h"
 #include <vector> 
 #include <knuminput.h>
 #include "koffice_export.h"
+
+class KisFilter;
 
 struct KRITA_EXPORT KisDoubleWidgetParam {
 	KisDoubleWidgetParam(  double nmin, double nmax, double ninitvalue, QString nname);

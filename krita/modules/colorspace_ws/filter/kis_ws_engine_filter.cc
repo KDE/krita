@@ -44,7 +44,6 @@
 #include <kis_paint_device.h>
 #include <kis_colorspace_registry.h>
 
-#include "kis_filter_configuration_widget.h"
 #include "kis_ws_engine_filter.h"
 #include "kis_colorspace_wet_sticky.h"
 

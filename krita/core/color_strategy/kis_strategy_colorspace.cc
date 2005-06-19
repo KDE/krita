@@ -93,8 +93,6 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 			  << ", going to convert through RGB!\n";
 	}
 
-	kdDebug () << "Transforming via qcolor\n";
-	
 	Q_INT32 srcPixelSize = pixelSize();
 	Q_INT32 dstPixelSize = dstColorStrategy -> pixelSize();
 
@@ -290,6 +288,7 @@ cmsHTRANSFORM KisStrategyColorSpace::createTransform(KisStrategyColorSpaceSP dst
 
 void KisStrategyColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels)
 {
+
 	Q_INT32 psize = pixelSize();
 	
 	if (m_alphaSize == -1 && m_alphaPos == -1) {

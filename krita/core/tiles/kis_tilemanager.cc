@@ -237,7 +237,7 @@ void KisTileManager::toSwap(TileInfo* info) {
 void KisTileManager::doSwapping() {
 	if (m_currentInMem <= m_maxInMem)
 		return;
-#if 0 // enable this to enable swapping
+#if 1 // enable this to enable swapping
 	Q_INT32 count = QMIN(m_swappableList.size(), m_swappiness);
 
 	for (Q_INT32 i = 0; i < count; i++) {

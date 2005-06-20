@@ -84,7 +84,7 @@ public:
 
 	QColor toQColor() const;
 	
-
+	void dump() const;
 #if 0
 	// XXX (bsar): Do we need these?
 	void toLab(float * l, float * a, float * b, float * alpha, KisProfileSP profile = 0);

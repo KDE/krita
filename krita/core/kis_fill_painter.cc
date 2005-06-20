@@ -83,18 +83,25 @@ KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const KisColor& kc, QUANTUM opacity)
 {
 
-	kdDebug() <<  "Filling rect: " << x1 << ", " << y1 << ", " << w << "," << h << "\n";
-
+	kdDebug() <<  "Filling rect: " << x1 << ", " << y1 << ", " << w << "," << h << " opacity: " << QString().setNum(opacity) << "\n";
 	// Make sure we're in the right colorspace  
-
+	kdDebug() << "Before conversion to " << m_device->colorStrategy()->id().name() << "\n";
+	kc.dump();
 	
 	KisColor kc2(kc); // get rid of const
 	kc2.convertTo(m_device->colorStrategy(), m_device->profile());
 	Q_UINT8 * data = kc2.data();
 
+	kdDebug() << "Converted color: \n";
+	kc2.dump();
+	
 	Q_INT32 y;
 	Q_UINT32 depth = m_device->pixelSize();
 	m_device->colorStrategy()->setAlpha(data, opacity, 1);
+
+
+	kdDebug() << "Alpha set: \n";
+	kc2.dump();
 
 	for (y = y1; y < y1 + h; y++)
 	{

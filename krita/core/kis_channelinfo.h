@@ -45,7 +45,7 @@ public:
 	inline QString name() const { return m_name; };
 	
 	/** 
-	 * returns the position of the channel in the pixel
+	 * returns the position of the first byte of the channel in the pixel
 	 */
 	inline Q_INT32 pos() const { return m_pos; };
 	

@@ -64,9 +64,11 @@ KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisStrategyColorSpaceSP 
 	  m_profile(profile)
 {
 	Q_ASSERT(color.isValid());
-
+	kdDebug() << "Creating color with size: " << colorStrategy->pixelSize() << "\n";
+	
 	m_data = new Q_UINT8[colorStrategy->pixelSize()];
 	memset(m_data, 0, m_colorStrategy->pixelSize());
+	
 	m_colorStrategy->nativeColor(color, alpha, m_data, profile);
 }
 
@@ -120,20 +122,23 @@ KisColor & KisColor::operator=(const KisColor & rhs)
 
 void KisColor::convertTo(KisStrategyColorSpaceSP cs, KisProfileSP profile)
 {
+	kdDebug() << "Our colormodel: " << m_colorStrategy->id().name()
+		  << ", new colormodel: " << cs->id().name() << "\n";
+		  
 	if (m_colorStrategy == cs && m_profile == profile) 
 		return;
 
 	Q_UINT8 * m_data2 = new Q_UINT8[cs->pixelSize()];
 	memset(m_data, 0, m_colorStrategy->pixelSize());
 
-	KisPixel srcPixel = KisPixel(m_data, m_data, m_colorStrategy, m_profile);
-	KisPixel dstPixel = KisPixel(m_data2, m_data2, cs, profile);
-	m_colorStrategy->convertTo(srcPixel, dstPixel);
+	m_colorStrategy->convertPixelsTo(m_data, m_profile, m_data2, cs, profile, 1);
 
 	delete [] m_data;
 	m_data = m_data2;
 	m_colorStrategy = cs;
 	m_profile = profile;
+
+	dump();
 
 }
 
@@ -173,4 +178,33 @@ QColor KisColor::toQColor() const
 	QColor c;
 	toQColor(&c);
 	return c;
+}
+
+void KisColor::dump() const
+{
+	
+	kdDebug() << "KisColor (" << this << "), " << m_colorStrategy->id().name() << "\n";
+	vKisChannelInfoSP channels = m_colorStrategy->channels();
+		
+	vKisChannelInfoSP_cit begin = channels.begin();
+	vKisChannelInfoSP_cit end = channels.end();
+	
+	for (vKisChannelInfoSP_cit it = begin; it != end; ++it)
+	{
+		KisChannelInfoSP ch = (*it);
+		// XXX: setNum always takes a byte.
+		if (ch->size() == sizeof(Q_UINT8)) {
+			// Byte
+			kdDebug() << "Channel (byte): " << ch->name() << ": " << QString().setNum(m_data[ch->pos()]) << "\n";
+		}
+		else if (ch->size() == sizeof(Q_UINT16)) {
+			// Short (may also by an nvidia half)
+			kdDebug() << "Channel (short): " << ch->name() << ": " << QString().setNum((Q_UINT16)m_data[ch->pos()])  << "\n";
+		}
+		else if (ch->size() == sizeof(Q_UINT32)) {
+			// Integer (may also be float... Find out how to distinguish these!)
+			kdDebug() << "Channel (int): " << ch->name() << ": " << QString().setNum((Q_UINT32)m_data[ch->pos()])  << "\n";
+		}
+	}
+	
 }

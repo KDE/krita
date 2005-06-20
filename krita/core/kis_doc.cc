@@ -937,6 +937,7 @@ bool KisDoc::slotNewImage()
 		qApp -> restoreOverrideCursor();
 		QString name;
 		QUANTUM opacity = dlg.backgroundOpacity();
+		kdDebug() << "New image background opacity: " << opacity << "\n";
 		QColor c = dlg.backgroundColor();
 		KisImageSP img;
 		KisLayerSP layer;
@@ -959,14 +960,12 @@ bool KisDoc::slotNewImage()
 		layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
 		Q_CHECK_PTR(layer);
 
- 		// XXX: Use default color here! No need to fill all pixels immediately
- 		// Default color and opacity: don't allocate memory
- 		if ( c.red() != 0 || c.green() != 0 || c.blue() != 0 || opacity != 0) {
- 			KisFillPainter painter;
- 			painter.begin(layer.data());
- 			painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), c, opacity);
- 			painter.end();
- 		}
+		KisFillPainter painter;
+ 		painter.begin(layer.data());
+ 		kdDebug() << "Going to fill layer\n";
+ 		painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), KisColor(c, opacity, cs), opacity);
+ 		painter.end();
+ 		
 		
 		img -> add(layer, -1);
 

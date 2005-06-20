@@ -1300,13 +1300,21 @@ void KisImage::renderToPainter(Q_INT32 x1,
 	Q_INT32 x;
 	Q_INT32 y;
 
+	//kdDebug() << "renderToPainter" << QRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1) << endl;
+
 	// Flatten the layers onto the projection layer of the current image
-	for (y = y1; y <= y2; y += RENDER_HEIGHT - (y % RENDER_HEIGHT)) {
-		for (x = x1; x <= x2; x += RENDER_WIDTH - (x % RENDER_WIDTH)) {
-			Q_INT32 w = QMIN(x2 - x, RENDER_WIDTH);
-			Q_INT32 h = QMIN(y2 - y, RENDER_HEIGHT);
+	for (y = y1; y <= y2; ) {
+
+		Q_INT32 h = QMIN(y2 - y + 1, RENDER_HEIGHT);
+
+		for (x = x1; x <= x2; ) {
+
+			Q_INT32 w = QMIN(x2 - x + 1, RENDER_WIDTH);
+
 			renderToProjection(x, y, w, h);
+
 			QImage img = m_projection -> convertToQImage(profile, x, y, w, h);
+
 			if (m_activeLayer != 0 && m_activeLayer -> hasSelection())
 				m_activeLayer -> selection()->paintSelection(img, x, y, w, h);
 			
@@ -1314,7 +1322,9 @@ void KisImage::renderToPainter(Q_INT32 x1,
 				m_pixmap.convertFromImage(img);
 				painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
 			}
+			x += w;
 		}
+		y += h;
 	}
 }
 

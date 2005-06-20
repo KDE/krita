@@ -1004,10 +1004,10 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfileSP pro
 	Q_INT32 x2;
 	Q_INT32 y2;
 
-	x1 = CLAMP(rect.x(), 0, m_currentImage -> width());
-	y1 = CLAMP(rect.y(), 0, m_currentImage -> height());
-	x2 = CLAMP(rect.x() + rect.width(), 0, m_currentImage -> width());
-	y2 = CLAMP(rect.y() + rect.height(), 0, m_currentImage -> height());
+	x1 = CLAMP(rect.x(), 0, m_currentImage -> width() - 1);
+	y1 = CLAMP(rect.y(), 0, m_currentImage -> height() - 1);
+	x2 = CLAMP(rect.x() + rect.width() - 1, 0, m_currentImage -> width() - 1);
+	y2 = CLAMP(rect.y() + rect.height() - 1, 0, m_currentImage -> height() - 1);
 
 	m_currentImage -> renderToPainter(x1, y1, x2, y2, painter, profile);
 }

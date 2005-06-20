@@ -744,8 +744,6 @@ Q_INT32 KisView::vertValue() const
 
 void KisView::paintView(const KisRect& r)
 {
-	//kdDebug() << "paintView" << r << endl;
-
 	KisImageSP img = currentImg();
 
 	if (img) {
@@ -774,6 +772,8 @@ void KisView::paintView(const KisRect& r)
 			}
 
 			if (!wr.isNull()) {
+
+				//kdDebug() << "paintView wr = " << wr << endl;
 
 				if (zoom() < 1.0 || zoom() > 1.0) {
 					gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
@@ -879,6 +879,8 @@ void KisView::imgUpdateGUI()
 
 void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 {
+	//kdDebug() << "begin zoom\n";
+
 	// Disable updates while we change the scrollbar settings.
 	m_canvas -> setUpdatesEnabled(false);
 	m_hScroll -> setUpdatesEnabled(false);
@@ -2146,7 +2148,7 @@ void KisView::layerToggleLocked()
 
 void KisView::layerSelected(int n)
 {
-	kdDebug() << "layerSelected: " << n << endl;
+	//kdDebug() << "layerSelected: " << n << endl;
 
 	KisImageSP img = currentImg();
         if (!img) return;
@@ -2176,21 +2178,23 @@ void KisView::scrollH(int value)
 	int xShift = m_scrollX - value;
 	m_scrollX = value;
 
-	if (xShift > 0) {
-		bitBlt(&m_canvasPixmap, xShift, 0, &m_canvasPixmap, 0, 0, m_canvasPixmap.width() - xShift, m_canvasPixmap.height());
+	if (m_canvas -> isUpdatesEnabled()) {
+		if (xShift > 0) {
+			bitBlt(&m_canvasPixmap, xShift, 0, &m_canvasPixmap, 0, 0, m_canvasPixmap.width() - xShift, m_canvasPixmap.height());
 
-		KisRect drawRect(0, 0, xShift, m_canvasPixmap.height());
-		paintView(viewToWindow(drawRect));
-		m_canvas -> repaint();
-	}
-	else
-		if (xShift < 0) {
-			bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, -xShift, 0, m_canvasPixmap.width() + xShift, m_canvasPixmap.height());
-
-			KisRect drawRect(m_canvasPixmap.width() + xShift, 0, -xShift, m_canvasPixmap.height());
+			KisRect drawRect(0, 0, xShift, m_canvasPixmap.height());
 			paintView(viewToWindow(drawRect));
 			m_canvas -> repaint();
 		}
+		else
+			if (xShift < 0) {
+				bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, -xShift, 0, m_canvasPixmap.width() + xShift, m_canvasPixmap.height());
+
+				KisRect drawRect(m_canvasPixmap.width() + xShift, 0, -xShift, m_canvasPixmap.height());
+				paintView(viewToWindow(drawRect));
+				m_canvas -> repaint();
+			}
+	}
 }
 
 void KisView::scrollV(int value)
@@ -2200,21 +2204,23 @@ void KisView::scrollV(int value)
 	int yShift = m_scrollY - value;
 	m_scrollY = value;
 
-	if (yShift > 0) {
-		bitBlt(&m_canvasPixmap, 0, yShift, &m_canvasPixmap, 0, 0, m_canvasPixmap.width(), m_canvasPixmap.height() - yShift);
-
-		KisRect drawRect(0, 0, m_canvasPixmap.width(), yShift);
-		paintView(viewToWindow(drawRect));
-		m_canvas -> repaint();
-	}
-	else
-		if (yShift < 0) {
-			bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, 0, -yShift, m_canvasPixmap.width(), m_canvasPixmap.height() + yShift);
-
-			KisRect drawRect(0, m_canvasPixmap.height() + yShift, m_canvasPixmap.width(), -yShift);
+	if (m_canvas -> isUpdatesEnabled()) {
+		if (yShift > 0) {
+			bitBlt(&m_canvasPixmap, 0, yShift, &m_canvasPixmap, 0, 0, m_canvasPixmap.width(), m_canvasPixmap.height() - yShift);
+	
+			KisRect drawRect(0, 0, m_canvasPixmap.width(), yShift);
 			paintView(viewToWindow(drawRect));
 			m_canvas -> repaint();
 		}
+		else
+			if (yShift < 0) {
+				bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, 0, -yShift, m_canvasPixmap.width(), m_canvasPixmap.height() + yShift);
+	
+				KisRect drawRect(0, m_canvasPixmap.height() + yShift, m_canvasPixmap.width(), -yShift);
+				paintView(viewToWindow(drawRect));
+				m_canvas -> repaint();
+			}
+	}
 }
 
 

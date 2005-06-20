@@ -5,6 +5,7 @@ Name[da]=test-farvemodel
 Name[en_GB]=test Colour Model
 Name[es]=Modelo de color de prueba
 Name[ru]=Тестовая цветовая модель
+Name[sv]=Testfärgmodell
 Comment=Color model for 8-bit/channel RGB images
 Comment[bg]=Цветови модел за 8 битови RGB изображения
 Comment[cy]=Model lliw ar gyfer delweddau RGB 8-did/sianel

@@ -156,9 +156,9 @@ void KisDlgCreateImg::fillCmbProfiles(const KisID & s)
 	m_page -> cmbProfile -> clear();
 	m_page -> cmbProfile -> insertItem(i18n("None"));
 
-	kdDebug() << "Colorspace: " << s.id() << "\n";
+	kdDebug() << "fillCmbProfiles::Colorspace: " << s.id() << "\n";
 	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
-	kdDebug() << "Instance: " << cs << "\n";
+	kdDebug() << "fillCmbProfiles:: Colorspace instance: " << cs << "\n";
 
 	if (cs == 0) return;
 

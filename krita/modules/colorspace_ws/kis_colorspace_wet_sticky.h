@@ -34,54 +34,36 @@ namespace WetAndSticky {
 	 * of 1.
 	 */
 
-	typedef struct hls_color {float hue, saturation, lightness; }
-		HLS_COLOR;
-
-	typedef struct rgb_color {Q_UINT8 red; Q_UINT8 green; Q_UINT8 blue;}
-		RGB_COLOR;
-
-
 	enum enumDirection {
-		NORTH,
-		EAST,
-		SOUTH,
-		WEST
-	};
-
-
-	typedef struct paint {
-		HLS_COLOR color;
-		Q_UINT8        liquid_content;  /*  [0,100].  */
-		Q_UINT8        drying_rate;     /*  [0,100].  */
-		Q_UINT8        miscibility;     /*  [0,inf].  */
-	} PAINT, *PAINT_PTR;
-
-
-	typedef struct rgba {
-		RGB_COLOR color;
-		Q_UINT8 alpha;
-	} RGBA, *RGBA_PTR;
-
-
-	/**
-	 * Defines the strength and direction of gravity for a cell.
-	 */
-	typedef struct gravity {
-		enumDirection  direction;
-		Q_UINT8    strength;     /*  [0,Infinity). */
-	} GRAVITY, *GRAVITY_PTR;
-
-
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT,
+	};	
 
 	/**
 	 * Defines the contents and attributes of a cell on the canvas.
 	 */
 	typedef struct cell {
-		RGBA     representation; /* The on-screen representation of this cell. */
-		PAINT    contents;    /* The paint in this cell. */
-		GRAVITY  gravity;     /* This cell's gravity.  */
+		Q_UINT8 blue;
+		Q_UINT8 green;
+		Q_UINT8 red;
+		Q_UINT8 alpha;
+
+		float   hue;
+		float   saturation;
+		float   lightness;
+
+		Q_UINT8 liquid_content;
+		Q_UINT8 drying_rate;
+		Q_UINT8 miscibility;
+
+		enumDirection direction;
+		Q_UINT8 strength;
+		
 		Q_UINT8  absorbancy;  /* How much paint can this cell hold? */
 		Q_UINT8  volume;      /* The volume of paint. */
+		
 	} CELL, *CELL_PTR;
 
 
@@ -124,6 +106,8 @@ public:
 	virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
 	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const {};;
 	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
+
+	virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
 	
 	virtual KisCompositeOpList userVisiblecompositeOps() const;
 

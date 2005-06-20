@@ -34,36 +34,50 @@
 #include "kis_colorspace_wet_sticky.h"
 #include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
+#include "kis_types.h"
+#include "kis_channelinfo.h"
 
 using namespace WetAndSticky;
 
 KisColorSpaceWetSticky::KisColorSpaceWetSticky() :
 	KisStrategyColorSpace(KisID("W&S", i18n("Wet & Sticky")), 0, icMaxEnumData)
 {
-
+	Q_INT32 pos = 0;
+	
 	// Basic representational definition
-	m_channels.push_back(new KisChannelInfo(i18n("blue"), 0, COLOR, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("green"), 1, COLOR, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("red"), 2, COLOR, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 3, ALPHA, 1));
-
+	m_channels.push_back(new KisChannelInfo(i18n("blue"), pos, COLOR, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("green"), ++pos, COLOR, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("red"), ++pos, COLOR, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("alpha"), ++pos, ALPHA, 1));
 
 	// Paint definition
-	m_channels.push_back(new KisChannelInfo(i18n("hue"), 4, COLOR, sizeof(float)));
-	m_channels.push_back(new KisChannelInfo(i18n("saturation"), 5, COLOR, sizeof(float)));
-	m_channels.push_back(new KisChannelInfo(i18n("lightness"), 6, COLOR, sizeof(float)));
-	m_channels.push_back(new KisChannelInfo(i18n("liquid content"), 7, SUBSTANCE, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("drying rate"), 8, SUBSTANCE, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("miscibility"), 9, SUBSTANCE, 1));
-
+	m_channels.push_back(new KisChannelInfo(i18n("hue"), ++pos, COLOR, sizeof(float)));
+	m_channels.push_back(new KisChannelInfo(i18n("saturation"), pos+=sizeof(float) , COLOR, sizeof(float)));
+	m_channels.push_back(new KisChannelInfo(i18n("lightness"), pos+=sizeof(float), COLOR, sizeof(float)));
+	
+	m_channels.push_back(new KisChannelInfo(i18n("liquid content"), pos+=sizeof(float), SUBSTANCE, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("drying rate"), ++pos, SUBSTANCE, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("miscibility"), ++pos, SUBSTANCE, 1));
 
 	// Substrate definition
-	m_channels.push_back(new KisChannelInfo(i18n("gravitational direction"), 11, SUBSTRATE, sizeof(enumDirection)));
-	m_channels.push_back(new KisChannelInfo(i18n("gravitational strength"), 12, SUBSTRATE, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("absorbancy"), 13, SUBSTRATE, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("paint volume"), 14, SUBSTANCE));
+	m_channels.push_back(new KisChannelInfo(i18n("gravitational direction"), ++pos, SUBSTRATE, sizeof(enumDirection)));
+	m_channels.push_back(new KisChannelInfo(i18n("gravitational strength"), pos+=sizeof(enumDirection), SUBSTRATE, 1));
+	
+	m_channels.push_back(new KisChannelInfo(i18n("absorbancy"), ++pos, SUBSTRATE, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("paint volume"), ++pos, SUBSTANCE, 1));
 
-	kdDebug() << "Size of cell: " << sizeof(CELL) << " size of paint: " << sizeof(PAINT) << " size of rgba: " << sizeof(RGBA) << "\n";
+#if 0
+	vKisChannelInfoSP_it it;
+	int i = 0;
+	for (it = m_channels.begin(); it != m_channels.end(); ++it)
+	{
+		KisChannelInfoSP ch = (*it);
+		kdDebug() << "Channel: " << ch->name() << ", " << ch->pos() << ", " << i << "\n";
+		++i;
+	}
+
+	kdDebug() << "Size of cell: " << sizeof(CELL) << "\n";
+#endif
 }
 
 
@@ -80,33 +94,34 @@ void KisColorSpaceWetSticky::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfi
 	g = c.green();
 	b = c.blue();
 
-	p -> representation.color.red = r;
-	p -> representation.color.green = g;
-	p -> representation.color.blue = b;
-	p -> representation.alpha = OPACITY_OPAQUE;
+	p -> red = r;
+	p -> green = g;
+	p -> blue = b;
+	p -> alpha = OPACITY_OPAQUE;
 
-	rgb_to_hls(r, g, b, &p -> contents.color.hue, &p -> contents.color.lightness, &p -> contents.color.saturation);
+	rgb_to_hls(r, g, b, &p->hue, &p->lightness, &p->saturation);
 
-	p -> contents.liquid_content = 0;
-	p -> contents.drying_rate = 0;
-	p -> contents.miscibility = 0;
+	p -> liquid_content = 0;
+	p -> drying_rate = 0;
+	p -> miscibility = 0;
 
-	p -> gravity.direction = SOUTH;
-	p -> gravity.strength = 10;
+	p -> direction = DOWN;
+	p -> strength = 10;
 
 	p -> absorbancy = 10;
 	p -> volume = 0;
 
-
+#if 0
 	kdDebug() << "qcolor: "
 		<< " r: " << c.red() << " b: " << c.blue() << " g: " << c.red()
-		<< " native color: (" << p->representation.color.red << ","
-		                      << p->representation.color.green << ","
-		                      << p->representation.color.blue << ","
-		                      << p->representation.alpha << ") "
-		<< ", hls: (" << p->contents.color.hue << ","
-		              << p->contents.color.lightness << ","
-		              << p->contents.color.saturation << ")\n";
+		<< " native color: (" << QString().setNum(p->red) << ", "
+		                      << QString().setNum(p->green) << ", "
+		                      << QString().setNum(p->blue) << ", "
+		                      << QString().setNum(p->alpha) << ") "
+		<< ", hls: (" << p->hue << ", "
+		              << p->lightness << ", "
+		              << p->saturation << ")\n";
+#endif
 }
 
 void KisColorSpaceWetSticky::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile)
@@ -118,44 +133,44 @@ void KisColorSpaceWetSticky::nativeColor(const QColor& c, QUANTUM opacity, Q_UIN
 	g = c.green();
 	b = c.blue();
 
-	p -> representation.color.red = r;
-	p -> representation.color.green = g;
-	p -> representation.color.blue = b;
-	p -> representation.alpha = opacity;
-	rgb_to_hls(r, g, b, &p -> contents.color.hue, &p -> contents.color.lightness, &p -> contents.color.saturation);
+	p -> red = r;
+	p -> green = g;
+	p -> blue = b;
+	p -> alpha = opacity;
+	rgb_to_hls(r, g, b, &p -> hue, &p -> lightness, &p -> saturation);
 
-	p -> contents.liquid_content = 0;
-	p -> contents.drying_rate = 0;
-	p -> contents.miscibility = 0;
+	p ->liquid_content = 0;
+	p ->drying_rate = 0;
+	p ->miscibility = 0;
 
-	p -> gravity.direction = SOUTH;
-	p -> gravity.strength = 10;
+	p -> direction = DOWN;
+	p -> strength = 10;
 
 	p -> absorbancy = 10;
 	p -> volume = 0;
 
-
+#if 0
 	kdDebug() << "qcolor: "
-		<< " r: " << c.red() << " b: " << c.blue() << " g: " << c.red()
-		<< " native color: (" << p->representation.color.red << ","
-		                      << p->representation.color.green << ","
-		                      << p->representation.color.blue << ","
-		                      << p->representation.alpha << ") "
-		<< ", hls: (" << p->contents.color.hue << ","
-		              << p->contents.color.lightness << ","
-		              << p->contents.color.saturation << ")\n";
-	
+		<< " r: " << c.red() << " b: " << c.blue() << " g: " << c.red() << " opacity: " << opacity
+		<< " native color: (" << QString().setNum(p->red) << ", "
+		                      << QString().setNum(p->green) << ", "
+		                      << QString().setNum(p->blue) << ", "
+		                      << QString().setNum(p->alpha) << ") "
+		<< ", hls: (" << p->hue << ", "
+		              << p->lightness << ", "
+		              << p->saturation << ")\n";
+#endif	
 }
 
 void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile)
 {
 	CELL_PTR p = (CELL_PTR) src;
 
-	c -> setRgb(p -> representation.color.red,
-		    p -> representation.color.green,
-		    p -> representation.color.blue);
+	c -> setRgb(p -> red,
+		    p -> green,
+		    p -> blue);
 
-	kdDebug() << "Created qcolor: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
+	//kdDebug() << "Created qcolor: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
 }
 
 void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
@@ -163,12 +178,12 @@ void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *op
 
 	CELL_PTR p = (CELL_PTR) src;
 
-	c -> setRgb(p -> representation.color.red,
-		    p -> representation.color.green,
-		    p -> representation.color.blue);
+	c -> setRgb(p -> red,
+		    p -> green,
+		    p -> blue);
 
-	*opacity = p -> representation.alpha;
-	kdDebug() << "Created qcolor: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
+	*opacity = p -> alpha;
+	//kdDebug() << "Created qcolor: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
 }
 
 
@@ -185,6 +200,11 @@ KisPixel KisColorSpaceWetSticky::toKisPixel(Q_UINT8 *src, KisProfileSP profile)
 
 void KisColorSpaceWetSticky::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
+}
+
+void KisColorSpaceWetSticky::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+{
+	((CELL_PTR)pixels)->alpha = alpha;
 }
 
 vKisChannelInfoSP KisColorSpaceWetSticky::channels() const
@@ -238,10 +258,10 @@ QImage KisColorSpaceWetSticky::convertToQImage(const Q_UINT8 *data, Q_INT32 widt
 		const Q_UINT8 PIXEL_RED = 2;
 		const Q_UINT8 PIXEL_ALPHA = 3;
 
-		*( j + PIXEL_ALPHA ) = p -> representation.alpha;
-		*( j + PIXEL_RED )   = p -> representation.color.red;
-		*( j + PIXEL_GREEN ) = p -> representation.color.green;
-		*( j + PIXEL_BLUE )  = p -> representation.color.blue;
+		*( j + PIXEL_ALPHA ) = p -> alpha;
+		*( j + PIXEL_RED )   = p -> red;
+		*( j + PIXEL_GREEN ) = p -> green;
+		*( j + PIXEL_BLUE )  = p -> blue;
 
 		p++;
 		i++;
@@ -265,11 +285,11 @@ bool KisColorSpaceWetSticky::convertPixelsTo(const Q_UINT8 * src, KisProfileSP /
 	while ( i < numPixels ) {
 		cp = (CELL_PTR) (src + i);
 
-		c.setRgb(cp -> representation.color.red,
-			 cp -> representation.color.green,
-			 cp -> representation.color.blue);
+		c.setRgb(cp -> red,
+			 cp -> green,
+			 cp -> blue);
 
-		dstColorStrategy -> nativeColor(c, cp -> representation.alpha, (dst + j), dstProfile);
+		dstColorStrategy -> nativeColor(c, cp -> alpha, (dst + j), dstProfile);
 
 		i += sSize;
 		j += dSize;
@@ -314,7 +334,7 @@ void KisColorSpaceWetSticky::bitBlt(Q_UINT8 *dst,
 
 void KisColorSpaceWetSticky::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
-	// XXX: This is basically the same as with rgb and used to composite layers for representation. Composition for
+	// XXX: This is basically the same as with rgb and used to composite layers for  Composition for
 	//      painting works differently
 	while (rows > 0) {
 
@@ -330,7 +350,7 @@ void KisColorSpaceWetSticky::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
 
 		while (columns > 0) {
 
-			Q_UINT8 srcAlpha = srcCell->representation.alpha;
+			Q_UINT8 srcAlpha = srcCell->alpha;
 
 			// apply the alphamask
 			if(mask != 0)
@@ -342,36 +362,46 @@ void KisColorSpaceWetSticky::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
 			
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
+				kdDebug() << "1\n";
+
 				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = UINT8_MULT(srcCell->representation.alpha, opacity);
+					srcAlpha = UINT8_MULT(srcCell->alpha, opacity);
 				}
 
 				if (srcAlpha == OPACITY_OPAQUE) {
+					kdDebug() << "2\n";
 					memcpy(dst, src, sizeof(CELL));
 				} else {
-					Q_UINT8 dstAlpha = dstCell->representation.alpha;
+					kdDebug() << "3\n";
+					Q_UINT8 dstAlpha = dstCell->alpha;
 
 					Q_UINT8 srcBlend;
 
 					if (dstAlpha == OPACITY_OPAQUE) {
+						kdDebug() << "4\n";
 						srcBlend = srcAlpha;
 					} else {
+						kdDebug() << "5\n";
 						Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-						dstCell->representation.alpha = newAlpha;
+						dstCell->alpha = newAlpha;
 
 						if (newAlpha != 0) {
+							kdDebug() << "6\n";
 							srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 						} else {
+							kdDebug() << "7\n";
 							srcBlend = srcAlpha;
 						}
 					}
 
 					if (srcBlend == OPACITY_OPAQUE) {
+						kdDebug() << "8\n";
 						memcpy(dst, src, sizeof(CELL));
 					} else {
-						dstCell->representation.color.red = UINT8_BLEND(srcCell->representation.color.red, dstCell->representation.color.red, srcBlend);
-						dstCell->representation.color.green = UINT8_BLEND(srcCell->representation.color.green, dstCell->representation.color.green, srcBlend);
-						dstCell->representation.color.blue = UINT8_BLEND(srcCell->representation.color.blue, dstCell->representation.color.blue, srcBlend);
+						kdDebug() << "9\n";
+						dstCell->red = UINT8_BLEND(srcCell->red, dstCell->red, srcBlend);
+						dstCell->green = UINT8_BLEND(srcCell->green, dstCell->green, srcBlend);
+						dstCell->blue = UINT8_BLEND(srcCell->blue, dstCell->blue, srcBlend);
 					}
 				}
 			}

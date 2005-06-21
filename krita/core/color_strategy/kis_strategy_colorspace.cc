@@ -89,8 +89,8 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 		}
 		
 		// kdDebug() << "No transform from "
-			  << srcProfile -> productName() << " to " << dstProfile -> productName()
-			  << ", going to convert through RGB!\n";
+		//	  << srcProfile -> productName() << " to " << dstProfile -> productName()
+		//	  << ", going to convert through RGB!\n";
 	}
 
 	Q_INT32 srcPixelSize = pixelSize();

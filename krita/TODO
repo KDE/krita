@@ -100,7 +100,8 @@ User Interface
 		    - Gradient (nick from Scribus?)
 		    - Histogram (#Boudewijn)
 		    - Modify curves (nick from Perico)
-	* Add previews to all relevant dialogs. (#Bart) 
+	* Add previews to all relevant dialogs. (#Bart)
+	* Improve the preview widget - see mail from June 21 2005
 	* Show which tool is associated with which pointer (mouse, stylus, eraser, other stylusses)
 	* Allow guides to be disabled. Allow diagonal guides (useful
 	  for perspective drawings)

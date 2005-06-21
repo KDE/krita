@@ -88,7 +88,7 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 			return true;
 		}
 		
-		kdDebug() << "No transform from "
+		// kdDebug() << "No transform from "
 			  << srcProfile -> productName() << " to " << dstProfile -> productName()
 			  << ", going to convert through RGB!\n";
 	}
@@ -97,11 +97,12 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 	Q_INT32 dstPixelSize = dstColorStrategy -> pixelSize();
 
 	while (numPixels > 0) {
-
+		// kdDebug() << "Falling back on conversion by qcolor\n";
 		QColor color;
 		QUANTUM opacity;
 
 		toQColor(src, &color, &opacity);
+		// kdDebug() << "QColor created: " << color.red() << ", " << color.green() << ", " << color.blue() << "\n";
 		dstColorStrategy -> nativeColor(color, opacity, dst);
 
 		src += srcPixelSize;

@@ -56,7 +56,9 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 	// XXX: Quick hack: we should use the correct color instead of going via QColor
 	KisProfileSP profile = m_painter -> device() -> profile();
 	KisColor kc = m_painter -> paintColor();
-
+	kdDebug () << "paint color: \n";
+	kc.dump();
+	
 	KisStrategyColorSpaceSP colorStrategy = dab -> colorStrategy();
 
 	Q_INT32 pixelSize = colorStrategy->pixelSize();
@@ -65,9 +67,10 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 	Q_INT32 maskHeight = mask -> height();
 	
 	// Convert the kiscolor to the right colorspace.
-	if (colorStrategy!=kc.colorStrategy()) {
-		kc = KisColor(kc, colorStrategy, profile);
-	}
+	kc.convertTo(colorStrategy, profile);
+
+	kdDebug () << "paint color after conversion: \n";
+	kc.dump();
 	
 	for (int y = 0; y < maskHeight; y++)
 	{

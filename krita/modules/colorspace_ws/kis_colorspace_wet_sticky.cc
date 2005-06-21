@@ -37,6 +37,8 @@
 #include "kis_types.h"
 #include "kis_channelinfo.h"
 
+#define NOWSDEBUG
+
 using namespace WetAndSticky;
 
 KisColorSpaceWetSticky::KisColorSpaceWetSticky() :
@@ -66,7 +68,7 @@ KisColorSpaceWetSticky::KisColorSpaceWetSticky() :
 	m_channels.push_back(new KisChannelInfo(i18n("absorbancy"), ++pos, SUBSTRATE, 1));
 	m_channels.push_back(new KisChannelInfo(i18n("paint volume"), ++pos, SUBSTANCE, 1));
 
-#if 0
+#ifdef WSDEBUG
 	vKisChannelInfoSP_it it;
 	int i = 0;
 	for (it = m_channels.begin(); it != m_channels.end(); ++it)
@@ -111,7 +113,7 @@ void KisColorSpaceWetSticky::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfi
 	p -> absorbancy = 10;
 	p -> volume = 0;
 
-#if 0
+#ifdef WSDEBUG
 	kdDebug() << "qcolor: "
 		<< " r: " << c.red() << " b: " << c.blue() << " g: " << c.red()
 		<< " native color: (" << QString().setNum(p->red) << ", "
@@ -149,7 +151,7 @@ void KisColorSpaceWetSticky::nativeColor(const QColor& c, QUANTUM opacity, Q_UIN
 	p -> absorbancy = 10;
 	p -> volume = 0;
 
-#if 0
+#ifdef WSDEBUG
 	kdDebug() << "qcolor: "
 		<< " r: " << c.red() << " b: " << c.blue() << " g: " << c.red() << " opacity: " << opacity
 		<< " native color: (" << QString().setNum(p->red) << ", "
@@ -169,8 +171,9 @@ void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, KisProfileS
 	c -> setRgb(p -> red,
 		    p -> green,
 		    p -> blue);
-
-	//kdDebug() << "Created qcolor: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
+#ifdef WSDEBUG
+	kdDebug() << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
+#endif
 }
 
 void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
@@ -183,7 +186,9 @@ void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *op
 		    p -> blue);
 
 	*opacity = p -> alpha;
-	//kdDebug() << "Created qcolor: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
+#ifdef WSDEBUG	
+	kdDebug() << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
+#endif
 }
 
 
@@ -336,19 +341,30 @@ void KisColorSpaceWetSticky::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
 {
 	// XXX: This is basically the same as with rgb and used to composite layers for  Composition for
 	//      painting works differently
+	
+	
 	while (rows > 0) {
 
 		const Q_UINT8 *src = srcRowStart;
 		Q_UINT8 *dst = dstRowStart;
 		const Q_UINT8 *mask = maskRowStart;
-		
-		CELL_PTR dstCell = (CELL_PTR) dst;
-		CELL_PTR srcCell = (CELL_PTR) src;
-
 
 		Q_INT32 columns = numColumns;
 
 		while (columns > 0) {
+		
+			CELL_PTR dstCell = (CELL_PTR) dst;
+			CELL_PTR srcCell = (CELL_PTR) src;
+
+#ifdef WSDEBUG
+			kdDebug() << "Source: " << rows << ", " << columns << " color: " <<
+				srcCell->red << ", " << srcCell->blue << ", " << srcCell->green << ", " << srcCell->alpha << ", " << srcCell->volume << "\n";
+
+
+			kdDebug() << "Destination: "  << rows << ", " << columns << " color: " <<
+				dstCell->red << ", " << dstCell->blue << ", " << dstCell->green << ", " << dstCell->alpha << ", " << dstCell->volume << "\n";
+
+#endif
 
 			Q_UINT8 srcAlpha = srcCell->alpha;
 
@@ -362,55 +378,43 @@ void KisColorSpaceWetSticky::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
 			
 			if (srcAlpha != OPACITY_TRANSPARENT) {
 
-				kdDebug() << "1\n";
-
 				if (opacity != OPACITY_OPAQUE) {
 					srcAlpha = UINT8_MULT(srcCell->alpha, opacity);
 				}
 
 				if (srcAlpha == OPACITY_OPAQUE) {
-					kdDebug() << "2\n";
-					memcpy(dst, src, sizeof(CELL));
+					memcpy(dst, src, 3); // XXX: First three bytes for rgb?
 				} else {
-					kdDebug() << "3\n";
 					Q_UINT8 dstAlpha = dstCell->alpha;
 
 					Q_UINT8 srcBlend;
 
 					if (dstAlpha == OPACITY_OPAQUE) {
-						kdDebug() << "4\n";
 						srcBlend = srcAlpha;
 					} else {
-						kdDebug() << "5\n";
 						Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
 						dstCell->alpha = newAlpha;
 
 						if (newAlpha != 0) {
-							kdDebug() << "6\n";
 							srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
 						} else {
-							kdDebug() << "7\n";
 							srcBlend = srcAlpha;
 						}
 					}
 
 					if (srcBlend == OPACITY_OPAQUE) {
-						kdDebug() << "8\n";
-						memcpy(dst, src, sizeof(CELL));
+						memcpy(dst, src, 3); //XXX: First three bytes for rgb?
 					} else {
-						kdDebug() << "9\n";
 						dstCell->red = UINT8_BLEND(srcCell->red, dstCell->red, srcBlend);
 						dstCell->green = UINT8_BLEND(srcCell->green, dstCell->green, srcBlend);
 						dstCell->blue = UINT8_BLEND(srcCell->blue, dstCell->blue, srcBlend);
 					}
 				}
 			}
-
 			columns--;
 			src += sizeof(CELL);
 			dst += sizeof(CELL);
 		}
-
 		rows--;
 		srcRowStart += srcRowStride;
 		dstRowStart += dstRowStride;

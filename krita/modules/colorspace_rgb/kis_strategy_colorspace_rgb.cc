@@ -58,7 +58,7 @@ KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
 
 void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
-	//kdDebug() << "nativeColor called: " << c.red() << ", " << c.green() << ", " << c.blue() << "\n";
+// 	kdDebug() << "nativeColor called: " << c.red() << ", " << c.green() << ", " << c.blue() << "\n";
 	dst[PIXEL_RED] = upscale(c.red());
 	dst[PIXEL_GREEN] = upscale(c.green());
 	dst[PIXEL_BLUE] = upscale(c.blue());
@@ -66,7 +66,7 @@ void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, Q_UINT8 *dst, KisPro
 
 void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
-	//kdDebug() << "nativeColor called with opacity: " << c.red() << ", " << c.green() << ", " << c.blue() << "\n";
+// 	kdDebug() << "nativeColor called with opacity: " << c.red() << ", " << c.green() << ", " << c.blue() << "\n";
 	dst[PIXEL_RED] = upscale(c.red());
 	dst[PIXEL_GREEN] = upscale(c.green());
 	dst[PIXEL_BLUE] = upscale(c.blue());
@@ -76,12 +76,16 @@ void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, Q_U
 void KisStrategyColorSpaceRGB::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
 {
 	c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
+// 	kdDebug() << "RGB::toQColor called: " << c->red() << ", " << c->green() << ", " << c->blue() << "\n";
 }
 
 void KisStrategyColorSpaceRGB::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
 {
+// 	kdDebug() << "src: " << downscale(src[PIXEL_RED]) << ", " << downscale(src[PIXEL_GREEN]) << ", " << downscale(src[PIXEL_BLUE]) << "\n";
+// 	kdDebug() << "src (not scaled down): " << src[PIXEL_RED] << ", " << src[PIXEL_GREEN] << ", " << src[PIXEL_BLUE] << "\n";
 	c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
 	*opacity = src[PIXEL_ALPHA];
+// 	kdDebug() << "RGB::toQColor called: " << c->red() << ", " << c->green() << ", " << c->blue() << ", "  << "\n";
 }
 
 Q_INT8 KisStrategyColorSpaceRGB::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)

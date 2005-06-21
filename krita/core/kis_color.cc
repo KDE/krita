@@ -64,7 +64,6 @@ KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisStrategyColorSpaceSP 
 	  m_profile(profile)
 {
 	Q_ASSERT(color.isValid());
-	kdDebug() << "Creating color with size: " << colorStrategy->pixelSize() << "\n";
 	
 	m_data = new Q_UINT8[colorStrategy->pixelSize()];
 	memset(m_data, 0, m_colorStrategy->pixelSize());
@@ -129,7 +128,7 @@ void KisColor::convertTo(KisStrategyColorSpaceSP cs, KisProfileSP profile)
 		return;
 
 	Q_UINT8 * m_data2 = new Q_UINT8[cs->pixelSize()];
-	memset(m_data, 0, m_colorStrategy->pixelSize());
+	memset(m_data2, 0, m_colorStrategy->pixelSize());
 
 	m_colorStrategy->convertPixelsTo(m_data, m_profile, m_data2, cs, profile, 1);
 
@@ -137,8 +136,6 @@ void KisColor::convertTo(KisStrategyColorSpaceSP cs, KisProfileSP profile)
 	m_data = m_data2;
 	m_colorStrategy = cs;
 	m_profile = profile;
-
-	dump();
 
 }
 

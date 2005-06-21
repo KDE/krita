@@ -1,0 +1,146 @@
+From boud@calcifer.valdyas.org Tue Jun 21 14:26:17 2005
+Return-Path: <kimageshop-bounces-+boud=valdyas.org@kde.org>
+Received: from ktown.kde.org (ktown.kde.org [131.246.103.200])
+	by calcifer.valdyas.org (8.12.7/8.12.7/SuSE Linux 0.6) with SMTP id j5LCQRlQ021703
+	for <boud@valdyas.org>; Tue, 21 Jun 2005 14:26:28 +0200
+Received: (qmail 23437 invoked by uid 72); 21 Jun 2005 12:26:37 -0000
+Received: (qmail 23414 invoked by uid 1055); 21 Jun 2005 12:26:34 -0000
+Delivered-To: kde.org-kimageshop@kde.org
+Received: (qmail 23412 invoked from network); 21 Jun 2005 12:26:34 -0000
+Received: from smtp-vbr14.xs4all.nl (194.109.24.34)
+	by ktown.kde.org with SMTP; 21 Jun 2005 12:26:31 -0000
+Received: from talnus.intra.tryllian.net (office.tryllian.com [62.59.194.226])
+	(authenticated bits=0)
+	by smtp-vbr14.xs4all.nl (8.13.3/8.13.3) with ESMTP id j5LCQVVO033542
+	for <kimageshop@kde.org>; Tue, 21 Jun 2005 14:26:32 +0200 (CEST)
+	(envelope-from boud@valdyas.org)
+From: Boudewijn Rempt <boud@calcifer.valdyas.org>
+Organization: Valdyas.org
+To: "Krayon \(KImageShop\)" <kimageshop@kde.org>
+Date: Tue, 21 Jun 2005 14:26:17 +0200
+User-Agent: KMail/1.8.1
+References: <200506211416.05830.cbr@boemann.dk>
+In-Reply-To: <200506211416.05830.cbr@boemann.dk>
+MIME-Version: 1.0
+Message-Id: <200506211426.17384.boud@valdyas.org>
+X-Virus-Scanned: by XS4ALL Virus Scanner
+Subject: Re: the preview widget
+X-BeenThere: kimageshop@kde.org
+X-Mailman-Version: 2.1.5
+Precedence: list
+Reply-To: "Krayon \(KImageShop\)" <kimageshop@kde.org>
+List-Id: "Krayon \(KImageShop\)" <kimageshop.kde.org>
+List-Unsubscribe: <https://mail.kde.org/mailman/listinfo/kimageshop>,
+	<mailto:kimageshop-request@kde.org?subject=unsubscribe>
+List-Archive: <http://mail.kde.org/pipermail/kimageshop>
+List-Post: <mailto:kimageshop@kde.org>
+List-Help: <mailto:kimageshop-request@kde.org?subject=help>
+List-Subscribe: <https://mail.kde.org/mailman/listinfo/kimageshop>,
+	<mailto:kimageshop-request@kde.org?subject=subscribe>
+Content-Type: multipart/mixed;
+  boundary="===============1891010795=="
+X-Spam-Checker-Version: SpamAssassin 3.0.2 (2004-11-16) on 
+	calcifer.valdyas.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,FORGED_RCVD_HELO 
+	autolearn=no version=3.0.2
+X-UIDL: 5YC!!SZ8!!<'X"!"]1"!
+Status: R
+X-Status: NC
+X-KMail-EncryptionState:  
+X-KMail-SignatureState:  
+X-KMail-MDN-Sent:  
+
+--===============1891010795==
+Content-Type: multipart/signed;
+  boundary="nextPart43061363.Bp4Ilo6nOP";
+  protocol="application/pgp-signature";
+  micalg=pgp-sha1
+Content-Transfer-Encoding: 7bit
+
+--nextPart43061363.Bp4Ilo6nOP
+Content-Type: text/plain;
+  charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+
+On Tuesday 21 June 2005 14:16, Casper Boemann wrote:
+> Hi
+>
+> As you might have noticed I have changed the layout of the preview, to lo=
+ok
+> more like digikam.
+>
+> Now the preview widget itself also needs some updating:
+>  - zoom doesn't exist in the digikam preview - the image is zoomed all out
+>  - that doesn't mean we shouldn't keep the abillity to zoom, but I think
+> default should be zoomed out as in digikam.
+
+Agreed. We should show all of the image in our preview.
+
+>  - the update of the preview seems slow. Is the algorithm as effective as
+> it can be?
+
+No, definitely not. In fact, if I remember correctly, preview copies & rend=
+ers=20
+the complete image. Options are:
+
+* Just preview the active layer, out of context
+* Copy the image, scale it down, and then render it. Cache the scaled-down=
+=20
+thumbnail.
+* Work on the QImage of the rendered image, and apply all filters on that -=
+=2D=20
+for preview, that may be accurate enough.
+
+Note that we want a fast thumbnail preview for in the bird's eye box, too, =
+and=20
+in the variations dialog we need a whole bunch of previews. So I guess the=
+=20
+requirements are:
+
+* Frugal with memory
+* Fast
+* Filters should work on the preview image
+* Zoomable, but initially the complete image/layer is shown
+* Selectable: preview layer/preview image
+
+I have a feeling that this may be hard to achieve...
+
+> This is not something I'm going to do, but I think we should discuss it a=
+nd
+> put it in the TODO.
+
+Definitely.=20
+
+=2D-=20
+Boudewijn Rempt=20
+http://www.valdyas.org/fading/index.cgi
+
+--nextPart43061363.Bp4Ilo6nOP
+Content-Type: application/pgp-signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.5 (GNU/Linux)
+
+iD8DBQBCuAdpdaCcgCmN5d8RAp2hAKDfwdjOxB6EoYaJUuYYJlrculR3yACfcYMJ
+KjDOPxiFJdTsLAU00lJNOGE=
+=1wDD
+-----END PGP SIGNATURE-----
+
+--nextPart43061363.Bp4Ilo6nOP--
+
+--===============1891010795==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+kimageshop mailing list
+kimageshop@kde.org
+https://mail.kde.org/mailman/listinfo/kimageshop
+
+--===============1891010795==--
+
+

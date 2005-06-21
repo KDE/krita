@@ -1,0 +1,2 @@
+Template for plugin paintops. Paint tools use the paintop to determine how
+to deposit their paint on the canvas, exactly.

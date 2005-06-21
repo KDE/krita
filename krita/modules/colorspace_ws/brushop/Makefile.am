@@ -1,0 +1,30 @@
+kde_services_DATA = kritawsbrushpaintop.desktop
+
+# all_includes must remain last!
+INCLUDES = -I$(srcdir)/../../..//core \
+	-I$(srcdir)/../../..//core/color_strategy/ \
+	-I$(srcdir)/../../..//core/resources/ \
+	-I$(srcdir)/../../..//core/tiles \
+	-I$(srcdir)/../../..//core/tool \
+	-I$(srcdir)/../../..//core/paintop \
+	-I$(srcdir)/../../..//ui \
+	-I$(srcdir)/../../..//ui/dialogs \
+	-I$(srcdir)/../../..//ui/widgets \
+	-I../../..//ui/dialogs \
+	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../../..//core/strategy/ $(all_includes)
+
+
+kritawsbrushpaintop_la_SOURCES = \
+	wsbrushpaintop_plugin.cc \
+	kis_wsbrushop.cc
+
+noinst_HEADERS= \
+	wsbrushpaintop_plugin.h \
+	kis_wsbrushop.h
+
+kde_module_LTLIBRARIES = kritawsbrushpaintop.la
+
+kritawsbrushpaintop_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+kritawsbrushpaintop_la_LIBADD =  ../../..//libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+
+kritawsbrushpaintop_la_METASOURCES = AUTO

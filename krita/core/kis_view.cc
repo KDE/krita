@@ -101,6 +101,7 @@
 #include "kis_profile.h"
 #include "kis_transaction.h"
 #include "kis_layerbox.h"
+#include "kis_paintop_box.h"
 #include "kis_color.h"
 
 // Dialog boxes
@@ -188,7 +189,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_brush = 0;
 	m_pattern = 0;
 	m_gradient = 0;
-
+	
 	m_currentGuide = 0;
 
 	m_progress = 0;
@@ -209,6 +210,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	dcopObject();
 
 	createLayerBox();
+	createPaintopBox();
 
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
@@ -262,6 +264,13 @@ void KisView::createLayerBox()
 
 	paletteManager()->addWidget(actionCollection(), m_layerBox, "layerbox", "layerpalette", 0);
 
+}
+
+void KisView::createPaintopBox()
+{
+	m_paintopBox = new KisPaintopBox(this, "paintopbox");
+	m_paintopBox->setCaption(i18n("Brushes and stuff"));
+	paletteManager()->addWidget(actionCollection(), m_paintopBox, "paintopbox", krita::PAINTBOX, INT_MIN, PALETTE_TOOLBOX);
 }
 
 
@@ -1522,6 +1531,18 @@ void KisView::gradientActivated(KisResource *gradient)
 	}
 }
 
+void KisView::paintopActivated(const KisID & paintop)
+{
+	kdDebug() << "paintop activated: " << paintop.name() << "\n";
+	if (paintop.id().isNull() || paintop.id().isEmpty()) {
+		return;
+	}
+	
+	m_paintop = paintop;
+	emit paintopChanged(m_paintop);
+	notify();
+}
+
 void KisView::setBGColor(const KisColor& c)
 {
 	emit bgColorChanged(c);
@@ -2648,6 +2669,11 @@ KisPattern *KisView::currentPattern() const
 KisGradient *KisView::currentGradient() const
 {
 	return m_gradient;
+}
+
+KisID KisView::currentPaintop() const
+{
+	return m_paintop;
 }
 
 double KisView::zoomFactor() const

@@ -35,6 +35,7 @@ libkisui_la_SOURCES = \
     kis_previewdialog.cc \
     kis_selection_options.cc \
     kis_guide.cc \
+    kis_paintop_box.cc \
     wdgmatrix.ui \
     kis_previewwidgetbase.ui \
     wdgselectionoptions.ui \
@@ -67,6 +68,7 @@ noinst_HEADERS = kis_dlg_preferences.h \
     kis_double_widget.h \
     kis_dlg_apply_profile.h \
     kis_guide.h \
+    kis_paintop_box.h \
     wdgmatrix.h \
     kis_previewwidgetbase.h \
     kis_previewdialog.h \

@@ -79,6 +79,7 @@ class KisToolRegistry;
 class KisFilterRegistry;
 class KisCompositeOp;
 class KisLayerBox;
+class KisPaintopBox;
 
 class KRITA_EXPORT KisView
 	: public KoView,
@@ -153,7 +154,8 @@ signals:
 	void brushChanged(KisBrush * brush);
 	void gradientChanged(KisGradient * gradient);
 	void patternChanged(KisPattern * pattern);
-
+	void paintopChanged(KisID paintop);
+	
 	void currentLayerChanged(int layer);
 	
 	void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
@@ -207,17 +209,25 @@ private:
 	virtual void attach(KisCanvasObserver *observer);
 	virtual void detach(KisCanvasObserver *observer);
 	virtual void notify();
+	
 	virtual KisColor bgColor() const;
 	virtual void setBGColor(const KisColor& c);
+
 	virtual KisColor fgColor() const;
 	virtual void setFGColor(const KisColor& c);
+	
 	virtual KisBrush *currentBrush() const;
 	virtual KisPattern *currentPattern() const;
 	virtual KisGradient *currentGradient() const;
+	virtual KisID currentPaintop() const;
+	
 	virtual double zoomFactor() const;
+	
 	virtual KisUndoAdapter *undoAdapter() const;
+	
 	virtual KisCanvasControllerInterface *canvasController() const;
 	virtual KisToolControllerInterface *toolController() const;
+	
 	virtual KoDocument *document() const;
 	// Sets the specified cursor; returns the previous cursor
 	virtual QCursor setCanvasCursor(const QCursor & cursor);
@@ -268,6 +278,7 @@ private:
 
 	void layerUpdateGUI(bool enable);
 	void createLayerBox();
+	void createPaintopBox();
 
 	void paintView(const KisRect& rc);
 
@@ -317,16 +328,24 @@ public slots:
 	void mergeLayer();
 	void mergeLinkedLayers();
 	void saveLayerAsImage();
+	
 	void currentImageUpdated(KisImageSP img);
+	
 	void brushActivated(KisResource *brush);
 	void patternActivated(KisResource *pattern);
 	void gradientActivated(KisResource *gradient);
+	void paintopActivated(const KisID & paintop);
+	
 	void scrollH(int value);
 	void scrollV(int value);
+	
 	void slotInsertImageAsLayer();
+	
 	void imgUpdated(KisImageSP img, const QRect& rc);
 	void imgUpdated(KisImageSP img);
+	
 	void profileChanged(KisProfileSP profile);
+	
 	void slotZoomIn();
 	void slotZoomOut();
 	void slotImageSizeChanged(KisImageSP img, Q_INT32 w, Q_INT32 h);
@@ -412,6 +431,7 @@ private:
 	KisLabelProgress *m_progress;
 
         KisLayerBox *m_layerBox;
+        KisPaintopBox *m_paintopBox;
 
 	// Current colours, brushes, patterns etc.
 
@@ -421,6 +441,8 @@ private:
 	KisBrush *m_brush;
 	KisPattern *m_pattern;
 	KisGradient *m_gradient;
+
+	KisID m_paintop;
 
 	enumInputDevice m_inputDevice;
 	InputDeviceToolMap m_inputDeviceToolMap;

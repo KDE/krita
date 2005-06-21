@@ -1,0 +1,7 @@
+* Add paintopbox to toolbox
+* Make all paint tools use the paintop from the paintop box
+* Add paintop properties palette
+* Add continuously running filters
+* Add filler objects that can fill a given area computationally
+* Add extensible properties for paint devices (to control things like drying)
+* Add default fill hook dependent on colorspace

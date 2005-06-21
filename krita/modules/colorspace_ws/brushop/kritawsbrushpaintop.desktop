@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Wet & Sticky paintbrush paintop
+Comment=Wet & Sticky paintbrush
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritawsbrushpaintop

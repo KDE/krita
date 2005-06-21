@@ -21,6 +21,6 @@ kritawsplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFIC
 
 kritawsplugin_la_METASOURCES = AUTO
 
-SUBDIRS=filter
+SUBDIRS=filter brushop
 
 

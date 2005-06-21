@@ -36,8 +36,6 @@ Colorspace independence (found with the test colorstrategy)
 	* get rid of QUANTUM
 	* Check and double check the cms capabilities: especially the use of
           profiles in the render/convert/edit paths.
-
-
 Core
 
 	* Implement threading for rendering and paint device operations
@@ -107,6 +105,11 @@ User Interface
 	  for perspective drawings)
         * Allow snapping to guides.
         * Create templates for often-used image formats. Add save-as-template
+	* Add menu item to zoom back to 1:1
+	* Make rotate actions consistent between layer and image
+	* Add deselect with rmb?
+	* Move crop rectangle by dragging from within
+	* Allow shape tools to be filled with gradients
 
 	Dockers
 		* Tabs in dockers drag-and-droppable (vector of docker

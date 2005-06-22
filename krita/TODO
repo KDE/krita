@@ -42,7 +42,8 @@ Core
 	* Histogram computations (#Boudewijn)
 	* Adjustment layers (Layers that dynamically apply a filter to
 	  the layer they are linked to, these do not store actual
-	  image date, except for an occasional mask)
+	  image date, except for an occasional mask) These should work on object
+          layers (embedded KOFfice objects), too.
 	* Mask layers
 	* Layer groups or even better: a hierachy of collapsable folders with layers
 	* Loading and saving of selections
@@ -57,6 +58,7 @@ Core
           layer to anything.
 	* Long painter operations (e.g., convolution painter) should use the 
           progressbar and be cancelable.
+        * Add embedding of KOffice objects as layers.
 
 
 File Format:

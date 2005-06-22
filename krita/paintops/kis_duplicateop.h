@@ -37,6 +37,8 @@ public:
 
 	virtual KisPaintOp * createOp(KisPainter * painter);
 	virtual KisID id() { return KisID("duplicate", i18n("duplicate")); }
+	virtual bool userVisible() { return false; }
+	
 };
 
 class KisDuplicateOp : public KisPaintOp {
@@ -47,6 +49,7 @@ public:
 
 	KisDuplicateOp(KisPainter * painter);
 	virtual ~KisDuplicateOp();
+
 
 	void paintAt(const KisPoint &pos,
 		     const double pressure,

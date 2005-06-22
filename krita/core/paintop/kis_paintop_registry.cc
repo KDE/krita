@@ -15,9 +15,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include <qpixmap.h>
 
-#include "kdebug.h"
+#include <kdebug.h>
+#include <kinstance.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
 
+#include "kis_factory.h"
 #include "kis_generic_registry.h"
 #include "kis_types.h"
 #include "kis_paintop_registry.h"
@@ -61,4 +67,38 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, KisPainter * painter)
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, KisPainter * painter) const
 {
 	return paintOp(KisID(id, ""), painter);
+}
+
+bool KisPaintOpRegistry::userVisible(const KisID & id) const
+{
+
+	KisPaintOpFactorySP f = get(id);
+	if (!f) {
+		kdDebug() << "No paintop " << id.id() << "\n";
+		return false;
+	}
+	
+	return f->userVisible();
+	
+}
+
+QPixmap KisPaintOpRegistry::getPixmap(const KisID & id) const
+{
+	KisPaintOpFactorySP f = get(id);
+	
+	if (!f) {
+		kdDebug() << "No paintop " << id.id() << "\n";
+		return QPixmap();
+	}
+
+	QString pname = f->pixmap();
+	
+	if (pname.isEmpty() || pname.isNull() || pname == "") {
+		return QPixmap();
+	}
+	
+	QString fname = KisFactory::global()->dirs()->findResource("kis_images", pname);
+	
+	kdDebug() << "Found pixmap " << fname << " for " << id.id() << "\n";
+	return QPixmap(fname);
 }

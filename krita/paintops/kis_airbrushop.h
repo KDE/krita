@@ -50,6 +50,9 @@ public:
 	KisAirbrushOp(KisPainter * painter);
 	virtual ~KisAirbrushOp();
 
+	// We want to spray even when the pointer doesn't move.
+	virtual bool incremental() { return true; }
+
 	void paintAt(const KisPoint &pos,
 		     const double pressure,
 		     const double /*xTilt*/,

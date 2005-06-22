@@ -20,10 +20,15 @@
 #include <qwidget.h>
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qpixmap.h>
+
+#include <klocale.h>
 
 #include <kis_id.h>
 #include <kis_paintop_registry.h>
 #include <kis_view.h>
+#include <kis_painter.h>
+#include <kis_paintop.h>
 
 #include "kis_paintop_box.h"
 
@@ -31,6 +36,7 @@ KisPaintopBox::KisPaintopBox (KisView * parent, const char * name, WFlags f)
 	: super (parent, name, f),
 	  m_view(parent)
 {
+	setCaption(i18n("Painters toolchest"));
 	m_paintops = new QValueList<KisID>();
 
 	connect(this, SIGNAL(selected(const KisID &)), m_view, SLOT(paintopActivated(const KisID &)));
@@ -39,8 +45,12 @@ KisPaintopBox::KisPaintopBox (KisView * parent, const char * name, WFlags f)
 	// XXX: Let's see... Are all paintops loaded and ready?
 	KisIDList keys = KisPaintOpRegistry::instance()->listKeys();
 	for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
-		addItem(*it);
+		kdDebug() << "Paintop: " << (*it).id() << "\n";
+		if (KisPaintOpRegistry::instance()->userVisible(*it)) {
+			addItem(*it);
+		}
 	}
+	setCurrentItem( m_paintops->findIndex(KisID("paintbrush","")));
 
 }
 	
@@ -52,7 +62,14 @@ KisPaintopBox::~KisPaintopBox()
 void KisPaintopBox::addItem(const KisID & paintop, const QString & /*category*/)
 {
 	m_paintops->append(paintop);
-	insertItem(paintop.name());
+	QPixmap pm = KisPaintOpRegistry::instance()->getPixmap(paintop);
+	if (pm.isNull()) {
+		insertItem(paintop.name());
+	}
+	else {
+		insertItem(pm, paintop.name());
+	}
+	
 }
 
 void KisPaintopBox::slotItemSelected(int index)

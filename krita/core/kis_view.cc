@@ -1534,6 +1534,7 @@ void KisView::gradientActivated(KisResource *gradient)
 void KisView::paintopActivated(const KisID & paintop)
 {
 	kdDebug() << "paintop activated: " << paintop.name() << "\n";
+	
 	if (paintop.id().isNull() || paintop.id().isEmpty()) {
 		return;
 	}
@@ -2673,6 +2674,7 @@ KisGradient *KisView::currentGradient() const
 
 KisID KisView::currentPaintop() const
 {
+	kdDebug() << "Current paintop " << m_paintop.name() << "\n";
 	return m_paintop;
 }
 

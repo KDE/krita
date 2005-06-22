@@ -102,7 +102,7 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
 			painter.setPattern(m_subject -> currentPattern());
 			painter.setOpacity(m_opacity);
 			painter.setCompositeOp(m_compositeOp);
-			KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
+			KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), &painter);
 			painter.setPaintOp(op); // Painter takes ownership
 
 			painter.paintPolygon(m_points);

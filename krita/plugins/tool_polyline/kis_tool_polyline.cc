@@ -99,7 +99,7 @@ void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
 			painter.setBrush(m_subject -> currentBrush());
 			painter.setOpacity(m_opacity);
 			painter.setCompositeOp(m_compositeOp);
-			KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
+			KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), &painter);
 			painter.setPaintOp(op); // Painter takes ownership
 	
 			KisPoint start,end;

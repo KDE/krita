@@ -34,7 +34,7 @@ KisPaintopBox::KisPaintopBox (KisView * parent, const char * name, WFlags f)
 	m_paintops = new QValueList<KisID>();
 
 	connect(this, SIGNAL(selected(const KisID &)), m_view, SLOT(paintopActivated(const KisID &)));
-	connect(this, SIGNAL(selected(int)), this, SLOT(slotItemselected(int)));
+	connect(this, SIGNAL(highlighted(int)), this, SLOT(slotItemSelected(int)));
 
 	// XXX: Let's see... Are all paintops loaded and ready?
 	KisIDList keys = KisPaintOpRegistry::instance()->listKeys();

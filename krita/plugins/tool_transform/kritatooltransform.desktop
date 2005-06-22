@@ -1,6 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Transform Tool
+Name[da]=Transformeringsværktøj
+Name[ga]=Uirlis Trasfhoirmithe
+Name[sv]=Transformeringsverktyg
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritatooltransform

@@ -37,6 +37,7 @@ class KisHLineIteratorPixel : public KisHLineIterator, public KisIteratorPixelTr
 public:
     KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x , Q_INT32 y , Q_INT32 w, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
 
+	~KisHLineIteratorPixel() { delete m_selectionIterator; }
     inline KisHLineIteratorPixel & operator ++() { KisHLineIterator::operator++(); advance(1); return *this;}
 
     /// Advances a number of pixels until it reaches the end of the line
@@ -52,6 +53,7 @@ class KisVLineIteratorPixel : public KisVLineIterator, public KisIteratorPixelTr
 {
 public:
     KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 xpos , Q_INT32 ypos , Q_INT32 height, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
+	~KisVLineIteratorPixel() { delete m_selectionIterator; }
 
     inline KisVLineIteratorPixel & operator ++() { KisVLineIterator::operator++(); advance(1); return *this;}
 
@@ -65,6 +67,7 @@ class KisRectIteratorPixel : public KisRectIterator, public KisIteratorPixelTrai
 {
 public:
     KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
+	~KisRectIteratorPixel() { delete m_selectionIterator; }
 
     inline KisRectIteratorPixel & operator ++() { KisRectIterator::operator++(); advance(1); return *this;}
 

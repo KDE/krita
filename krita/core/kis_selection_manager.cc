@@ -293,14 +293,14 @@ void KisSelectionManager::copy()
 	if (!layer -> hasSelection()) return;
 
 	KisSelectionSP selection = layer -> selection();
+	
 	QRect r = selection -> selectedRect();
-	r = r.normalize();
-
-// 	kdDebug() << "Selection rect: "
-// 		  << r.x() << ", "
-// 		  << r.y() << ", "
-// 		  << r.width() << ", "
-// 		  << r.height() << "\n";
+	
+	kdDebug() << "Selection rect: "
+		  << r.x() << ", "
+		  << r.y() << ", "
+		  << r.width() << ", "
+		  << r.height() << "\n";
 
 	KisPaintDeviceSP clip = new KisPaintDevice(img -> activeDevice() -> colorStrategy(),
 						   "Copy from " + img -> activeDevice() -> name() );

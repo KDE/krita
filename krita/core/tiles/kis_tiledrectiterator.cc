@@ -66,7 +66,8 @@ KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  Q_INT
 	m_xInTile = m_leftInTile;
 	m_yInTile = m_topInTile;
 
-	fetchTileData(m_col, m_row);
+	if( ! m_beyondEnd)
+		fetchTileData(m_col, m_row);
 	m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 }
 

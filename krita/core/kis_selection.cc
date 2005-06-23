@@ -151,15 +151,7 @@ bool KisSelection::isTotallyUnselected(QRect r)
 
 QRect KisSelection::selectedRect()
 {
-	QRect rsel = extent();
-	QRect rlayer = m_parentLayer->extent();
-
-	if (rsel.x() < rlayer.x() || rsel.x() > rlayer.x() + rlayer.width()) rsel.setX(rlayer.x());
-	if (rsel.y() < rlayer.y() || rsel.y() > rlayer.y() + rlayer.height()) rsel.setY(rlayer.y());
-	if (rsel.width() > rlayer.width() || rsel.width() < 0 ) rsel.setWidth(rlayer.width());
-	if (rsel.height() > rlayer.height() || rsel.height() < 0) rsel.setHeight( rlayer.height());
-
-	return rsel;
+	return extent().unite(m_parentLayer->extent());
 }
 
 void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)

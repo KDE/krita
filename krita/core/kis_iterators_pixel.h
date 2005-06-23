@@ -43,6 +43,7 @@ public:
 		  KisIteratorPixelTrait<KisHLineIterator>::operator=(rhs);
 		  m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
 		  return *this; }
+	~KisHLineIteratorPixel() { delete m_selectionIterator; }
 
     inline KisHLineIteratorPixel & operator ++() { KisHLineIterator::operator++(); advance(1); return *this;}
 
@@ -66,6 +67,7 @@ public:
 		  KisIteratorPixelTrait<KisVLineIterator>::operator=(rhs);
 		  m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
 		  return *this; }
+	~KisVLineIteratorPixel() { delete m_selectionIterator; }
 
     inline KisVLineIteratorPixel & operator ++() { KisVLineIterator::operator++(); advance(1); return *this;}
 
@@ -86,6 +88,7 @@ public:
 		  KisIteratorPixelTrait<KisRectIterator>::operator=(rhs);
 		  m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
 		  return *this; }
+	~KisRectIteratorPixel() { delete m_selectionIterator; }
 
     inline KisRectIteratorPixel & operator ++() { KisRectIterator::operator++(); advance(1); return *this;}
 

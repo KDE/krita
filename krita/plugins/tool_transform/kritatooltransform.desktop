@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Transform Tool
 Name[da]=Transformeringsværktøj
+Name[es]=Herramienta para transformar
 Name[ga]=Uirlis Trasfhoirmithe
 Name[sv]=Transformeringsverktyg
 ServiceTypes=Krita/CoreModule

@@ -125,7 +125,6 @@ void KisDockFrameDocker::slotPlaceChanged(QDockWindow::Place p)
 		m_page -> lblCaption -> show();
 		m_page -> bnShade -> show();
 		m_page -> lblCaption -> setText(caption());
-		resize(sizeHint());
 	}
 	else {
 		m_docked = false;
@@ -133,7 +132,6 @@ void KisDockFrameDocker::slotPlaceChanged(QDockWindow::Place p)
 		m_page -> bnShade -> hide();
 		m_page -> tabWidget -> show();
 		m_page -> lblCaption -> setText("");
-		resize(sizeHint());
 	}
 
 }

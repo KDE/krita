@@ -36,7 +36,7 @@ KisPaintopBox::KisPaintopBox (KisView * parent, const char * name, WFlags f)
 	: super (parent, name, f),
 	  m_view(parent)
 {
-	setCaption(i18n("Painters toolchest"));
+	setCaption(i18n("Painter's Toolchest"));
 	m_paintops = new QValueList<KisID>();
 
 	connect(this, SIGNAL(selected(const KisID &)), m_view, SLOT(paintopActivated(const KisID &)));

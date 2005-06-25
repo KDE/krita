@@ -159,6 +159,7 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
 	Q_INT32 x2;
 	uchar *j = img.bits();
 
+#if 1 // blueish monocrome
 	for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
 		KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
 		x2 = 0;
@@ -166,14 +167,61 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
 			Q_UINT8 s = *(it.rawData());
 			if(s!=MAX_SELECTED)
 			{
-				Q_UINT8 gray = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 3;
-				*(j+0) = 20 + gray/2;
-				*(j+1) = 20 + gray/2;
-				*(j+2) = 20 + gray/2;
+				Q_UINT8 invs = MAX_SELECTED - s;
+				
+				Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
+
+				if(s==MAX_SELECTED)
+				{
+					*(j+0) = 165+g ;
+					*(j+1) = 128+g;
+					*(j+2) = 128+g;
+				}
+				else
+				{
+					*(j+0) = (invs*(g+165))>>8 + ((s**(j+0))>>8);
+					 g = (invs*(g+128))>>8;
+					*(j+1) = g + ((s**(j+1))>>8);
+					*(j+2) = g + ((s**(j+2))>>8);
+				}
 			}
 			j+=4;
 			++x2;
 			++it;
 		}
 	}
+#endif
+#if 0 // inverted grayscale with jump at crossing
+	for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
+		KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
+		x2 = 0;
+		while (!it.isDone()) {
+			Q_UINT8 s = *(it.rawData());
+			if(s!=MAX_SELECTED)
+			{
+				Q_UINT8 invs = MAX_SELECTED - s;
+				
+				Q_UINT8 g = 255 - (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 6;
+				if(g<256/3-5)
+					g-=30;
+				if(s==MAX_SELECTED)
+				{
+					*(j+0) = g ;
+					*(j+1) = g;
+					*(j+2) = g;
+				}
+				else
+				{
+					 g = (invs*g)>>8;
+					*(j+0) = g + ((s**(j+0))>>8);
+					*(j+1) = g + ((s**(j+1))>>8);
+					*(j+2) = g + ((s**(j+2))>>8);
+				}
+			}
+			j+=4;
+			++x2;
+			++it;
+		}
+	}
+#endif
 }

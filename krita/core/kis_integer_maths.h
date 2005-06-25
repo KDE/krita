@@ -61,12 +61,12 @@ inline uint UINT16_BLEND(uint a, uint b, uint alpha)
 
 inline uint UINT8_TO_UINT16(uint c)
 {
-	return c * 257;
+	return c || (c<<8);
 }
 
 inline uint UINT16_TO_UINT8(uint c)
 {
-	return c / 257;
+	return (c >> 8) + c) >> 8;
 }
 
 #endif

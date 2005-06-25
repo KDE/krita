@@ -106,11 +106,13 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 	Q_INT32 x,y,left,top,w,h;
         Q_INT32 center, begin, end;	/* filter calculation variables */
 	Q_UINT8 *data;
+	Q_UINT8 pixelSize = src->pixelSize();
 	KisSelectionSP dstSelection;
 	
 	if(src->hasSelection())
 	{
-		src->selection()->exactBounds(left, top, w, h);
+		QRect r = src->selection()->selectedExactRect();
+		r.rect(&left, &top, &w, &h);
 		dstSelection = dst->selection();
 	}
 	else
@@ -138,7 +140,7 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 	// Calculate extra width needed due to shear
 	Q_INT32 extrawidth =0;
 	
-	Q_UINT8 *tmpLine = new Q_UINT8[w*4];
+	Q_UINT8 *tmpLine = new Q_UINT8[w * pixelSize];
 	Q_CHECK_PTR(tmpLine);
 
 	Q_UINT8 *tmpSel = new Q_UINT8[w];
@@ -163,7 +165,7 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 			if(srcIt.isSelected())
 			{
 				data = srcIt.rawData();
-				memcpy(&tmpLine[i*4], data, 4);
+				memcpy(&tmpLine[i*pixelSize], data, pixelSize);
 				
 				// XXX: Find a way to colorstrategy independently set alpha = alpha*(1-selectedness)
 				// but for now this will do
@@ -198,7 +200,7 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 			if(selectedness)
 			{
 				data = dstIt.rawData();
-				memcpy(data, &tmpLine[center*4],  4);
+				memcpy(data, &tmpLine[center*pixelSize],  pixelSize);
 				data = dstSelIt.rawData();
 				*data = selectedness;
 			}
@@ -223,11 +225,13 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 	Q_INT32 x,y,left,top,w,h;
         Q_INT32 center, begin, end;	/* filter calculation variables */
 	Q_UINT8 *data;
+	Q_UINT8 pixelSize = src->pixelSize();
 	KisSelectionSP dstSelection;
 	
 	if(src->hasSelection())
 	{
-		src->selection()->exactBounds(left, top, w, h);
+		QRect r = src->selection()->selectedExactRect();
+		r.rect(&left, &top, &w, &h);
 		dstSelection = dst->selection();
 	}
 	else
@@ -256,7 +260,7 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 	// Calculate extra width needed due to shear
 	Q_INT32 extrawidth =0;
 	
-	Q_UINT8 *tmpLine = new Q_UINT8[h*4];
+	Q_UINT8 *tmpLine = new Q_UINT8[h*pixelSize];
 	Q_UINT8 *tmpSel = new Q_UINT8[h];
 	kdDebug() << "h=" << h << ", tH=" << targetW << endl;
 	
@@ -276,7 +280,7 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 			if(srcIt.isSelected())
 			{
 				data = srcIt.rawData();
-				memcpy(&tmpLine[i*4], data, 4);
+				memcpy(&tmpLine[i*pixelSize], data, pixelSize);
 				
 				// XXX: Find a way to colorstrategy independently set alpha = alpha*(1-selectedness)
 				// but for now this will do
@@ -311,7 +315,7 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 			if(selectedness)
 			{
 				data = dstIt.rawData();
-				memcpy(data, &tmpLine[center*4],  4);
+				memcpy(data, &tmpLine[center*pixelSize], pixelSize);
 				data = dstSelIt.rawData();
 				*data = selectedness;
 			}

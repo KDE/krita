@@ -134,7 +134,8 @@ void KisToolTransform::activate()
 		if(layer->hasSelection())
 		{
 			KisSelectionSP sel = layer->selection();
-			sel->exactBounds(x,y,w,h);
+			QRect r = sel->selectedExactRect();
+			r.rect(&x, &y, &w, &h);
 		}
 		else
 			layer->exactBounds(x,y,w,h);

@@ -3,8 +3,8 @@ Krita TODO
 Transform tool
 
 	* It should use filter during scaling
-	* It doesn't handle "infinite" selections
 	* The option widget should work
+	* It should handle shearing and rotation
 
 
 Integration
@@ -76,7 +76,6 @@ Import/Export
 	  an unsupported filetype. (Still valid).
 	* Photoshop files are not recognized when opened, but there is now an
 	  option in the list of filetypes and that works.
-	* Importing Photoshop files don't get the placement of layers correct
         * Fix gimp XCF import/export (ImageMagick hacking...)
 	* Fix imports to import metadata and image files in non-rgb encodings -> move import
 	  export code to color strategies.

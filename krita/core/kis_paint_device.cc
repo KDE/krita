@@ -304,7 +304,9 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QStr
 	m_pixelSize = colorStrategy -> pixelSize();
 	m_nChannels = colorStrategy -> nChannels();
 
-	Q_UINT8 defPixel[6] = {0,0,0,0,0,0};//XXX should be moved to colorstrategy
+	Q_UINT8 defPixel[m_pixelSize];
+	colorStrategy -> nativeColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
+
 	m_datamanager = new KisDataManager(m_pixelSize, defPixel);
 	Q_CHECK_PTR(m_datamanager);
 	m_extentIsValid = true;
@@ -354,7 +356,9 @@ KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrat
 	m_pixelSize = m_colorStrategy -> pixelSize();
 	m_nChannels = m_colorStrategy -> nChannels();
 
-	Q_UINT8 defPixel[6] = {0,0,0,0,0,0};//XXX should be moved to colorstrategy
+	Q_UINT8 defPixel[m_pixelSize];
+	colorStrategy -> nativeColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
+
 	m_datamanager = new KisDataManager(m_pixelSize, defPixel);
 	Q_CHECK_PTR(m_datamanager);
 	m_extentIsValid = true;

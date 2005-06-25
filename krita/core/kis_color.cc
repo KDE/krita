@@ -43,7 +43,7 @@ KisColor::KisColor(const QColor & color)
 	m_colorStrategy = KisColorSpaceRegistry::instance()->get( KisID("RGBA", ""));
 	m_data = new Q_UINT8[m_colorStrategy->pixelSize()];
 	memset(m_data, 0, m_colorStrategy->pixelSize());
-	m_colorStrategy->nativeColor(color, m_data);
+	m_colorStrategy->nativeColor(color, OPACITY_OPAQUE, m_data);
 	m_profile = 0;
 }
 
@@ -55,7 +55,7 @@ KisColor::KisColor(const QColor & color, KisStrategyColorSpaceSP colorStrategy, 
 	
 	m_data = new Q_UINT8[colorStrategy->pixelSize()];
 	memset(m_data, 0, m_colorStrategy->pixelSize());
-	m_colorStrategy->nativeColor(color, m_data, profile);
+	m_colorStrategy->nativeColor(color, OPACITY_OPAQUE, m_data, profile);
 }
 
 
@@ -196,11 +196,11 @@ void KisColor::dump() const
 		}
 		else if (ch->size() == sizeof(Q_UINT16)) {
 			// Short (may also by an nvidia half)
-			kdDebug() << "Channel (short): " << ch->name() << ": " << QString().setNum((Q_UINT16)m_data[ch->pos()])  << "\n";
+			kdDebug() << "Channel (short): " << ch->name() << ": " << QString().setNum(*((const Q_UINT16 *)(m_data+ch->pos())))  << "\n";
 		}
 		else if (ch->size() == sizeof(Q_UINT32)) {
 			// Integer (may also be float... Find out how to distinguish these!)
-			kdDebug() << "Channel (int): " << ch->name() << ": " << QString().setNum((Q_UINT32)m_data[ch->pos()])  << "\n";
+			kdDebug() << "Channel (int): " << ch->name() << ": " << QString().setNum(*((const Q_UINT32 *)(m_data+ch->pos())))  << "\n";
 		}
 	}
 	

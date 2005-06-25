@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritargbplugin" version="1">
+<Menu name="Image"><text>&amp;Image</text>
+    <Menu name="Mode"><text>&amp;Mode</text>
+            <Action name="convert to RGB(A)"/>
+    </Menu>
+</Menu>
+
+</kpartgui>

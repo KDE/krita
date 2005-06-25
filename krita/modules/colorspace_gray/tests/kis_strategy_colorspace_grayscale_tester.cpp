@@ -48,11 +48,11 @@ void KisStrategyColorSpaceGrayscaleTester::testMixColors()
 	Q_UINT8 pixel2[MAX_CHANNEL_GRAYSCALEA];
 	Q_UINT8 outputPixel[MAX_CHANNEL_GRAYSCALEA];
 
-	pixel1[PIXEL_GRAY] = 255;
-	pixel1[PIXEL_GRAY_ALPHA] = 255;
+	pixel1[KisStrategyColorSpaceGrayscale::PIXEL_GRAY] = 255;
+	pixel1[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA] = 255;
 
-	pixel2[PIXEL_GRAY] = 0;
-	pixel2[PIXEL_GRAY_ALPHA] = 0;
+	pixel2[KisStrategyColorSpaceGrayscale::PIXEL_GRAY] = 0;
+	pixel2[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA] = 0;
 
 	const Q_UINT8 *pixelPtrs[2];
 	Q_UINT8 weights[2];
@@ -65,48 +65,48 @@ void KisStrategyColorSpaceGrayscaleTester::testMixColors()
 
 	cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
 
-	CHECK((int)outputPixel[PIXEL_GRAY], 255);
-	CHECK((int)outputPixel[PIXEL_GRAY_ALPHA], 255);
+	CHECK((int)outputPixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY], 255);
+	CHECK((int)outputPixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA], 255);
 
 	weights[0] = 0;
 	weights[1] = 255;
 
 	cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
 
-	CHECK((int)outputPixel[PIXEL_GRAY], 0);
-	CHECK((int)outputPixel[PIXEL_GRAY_ALPHA], 0);
+	CHECK((int)outputPixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY], 0);
+	CHECK((int)outputPixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA], 0);
 
 	weights[0] = 128;
 	weights[1] = 127;
 
 	cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
 	 
-	CHECK((int)outputPixel[PIXEL_GRAY], 255);
-	CHECK((int)outputPixel[PIXEL_GRAY_ALPHA], 128);
+	CHECK((int)outputPixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY], 255);
+	CHECK((int)outputPixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA], 128);
 
-	pixel1[PIXEL_GRAY] = 200;
-	pixel1[PIXEL_GRAY_ALPHA] = 255;
+	pixel1[KisStrategyColorSpaceGrayscale::PIXEL_GRAY] = 200;
+	pixel1[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA] = 255;
 
-	pixel2[PIXEL_GRAY] = 100;
-	pixel2[PIXEL_GRAY_ALPHA] = 255;
+	pixel2[KisStrategyColorSpaceGrayscale::PIXEL_GRAY] = 100;
+	pixel2[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA] = 255;
 
 	cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
 
-	CHECK((int)outputPixel[PIXEL_GRAY], 150);
-	CHECK((int)outputPixel[PIXEL_GRAY_ALPHA], 255);
+	CHECK((int)outputPixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY], 150);
+	CHECK((int)outputPixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA], 255);
 
-	pixel1[PIXEL_GRAY] = 0;
-	pixel1[PIXEL_GRAY_ALPHA] = 0;
+	pixel1[KisStrategyColorSpaceGrayscale::PIXEL_GRAY] = 0;
+	pixel1[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA] = 0;
 
-	pixel2[PIXEL_GRAY] = 255;
-	pixel2[PIXEL_GRAY_ALPHA] = 254;
+	pixel2[KisStrategyColorSpaceGrayscale::PIXEL_GRAY] = 255;
+	pixel2[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA] = 254;
 
 	weights[0] = 89;
 	weights[1] = 166;
 
 	cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
 
-	CHECK((int)outputPixel[PIXEL_GRAY], 255);
-	CHECK((int)outputPixel[PIXEL_GRAY_ALPHA], 165);
+	CHECK((int)outputPixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY], 255);
+	CHECK((int)outputPixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA], 165);
 }
 

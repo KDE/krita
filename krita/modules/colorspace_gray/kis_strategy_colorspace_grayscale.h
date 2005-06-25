@@ -85,6 +85,8 @@ protected:
 	void compositeErase(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
 
 private:
+	friend class KisStrategyColorSpaceGrayscaleTester;
+
 	vKisChannelInfoSP m_channels;
 
 	static const Q_UINT8 PIXEL_GRAY = 0;

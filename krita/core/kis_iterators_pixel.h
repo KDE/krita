@@ -39,7 +39,8 @@ public:
 	KisHLineIteratorPixel(const KisHLineIteratorPixel& rhs) : KisHLineIterator(rhs), KisIteratorPixelTrait<KisHLineIterator>(rhs)
 		{ m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety; }
 	KisHLineIteratorPixel& operator=(const KisHLineIteratorPixel& rhs)
-		{ KisHLineIterator::operator=(rhs);
+		{ delete m_selectionIterator;
+		  KisHLineIterator::operator=(rhs);
 		  KisIteratorPixelTrait<KisHLineIterator>::operator=(rhs);
 		  m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
 		  return *this; }
@@ -63,7 +64,8 @@ public:
 	KisVLineIteratorPixel(const KisVLineIteratorPixel& rhs) : KisVLineIterator(rhs), KisIteratorPixelTrait<KisVLineIterator>(rhs)
 		{ m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety; }
 	KisVLineIteratorPixel& operator=(const KisVLineIteratorPixel& rhs)
-		{ KisVLineIterator::operator=(rhs);
+		{ delete m_selectionIterator;
+		  KisVLineIterator::operator=(rhs);
 		  KisIteratorPixelTrait<KisVLineIterator>::operator=(rhs);
 		  m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
 		  return *this; }
@@ -84,7 +86,8 @@ public:
 	KisRectIteratorPixel(const KisRectIteratorPixel& rhs) : KisRectIterator(rhs), KisIteratorPixelTrait<KisRectIterator>(rhs)
 		{ m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety; }
 	KisRectIteratorPixel& operator=(const KisRectIteratorPixel& rhs)
-		{ KisRectIterator::operator=(rhs);
+		{ delete m_selectionIterator;
+		  KisRectIterator::operator=(rhs);
 		  KisIteratorPixelTrait<KisRectIterator>::operator=(rhs);
 		  m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
 		  return *this; }

@@ -34,7 +34,7 @@
  *  Even though the matrix has grown it may still not contain tiles at specific positions. They are created on demand
  */
 
-KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize, Q_UINT8 *defPixel)
+KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defPixel)
 {
 	m_pixelSize = pixelSize;
 
@@ -121,7 +121,7 @@ KisTiledDataManager::~KisTiledDataManager()
 	delete [] m_defPixel;
 }
 
-void KisTiledDataManager::setDefaultPixel(Q_UINT8 *defPixel)
+void KisTiledDataManager::setDefaultPixel(const Q_UINT8 *defPixel)
 {
 	memcpy(m_defPixel, defPixel, m_pixelSize);
 	

@@ -45,7 +45,7 @@ class KoStore;
 class KisDataManager : public ACTUAL_DATAMGR {
 
 public:
-	KisDataManager(Q_UINT32 pixelSize, Q_UINT8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel) {};
+	KisDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel) {};
 	KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm) { };
 
 public:
@@ -53,12 +53,12 @@ public:
 	 * Sets the default pixel. Note that this might change every occurrance, and it might not, but new data
 	 * well be initialised with this pixel
 	 */
-	void setDefaultPixel(Q_UINT8 *defPixel) { return ACTUAL_DATAMGR::setDefaultPixel(defPixel); };
+	void setDefaultPixel(const Q_UINT8 *defPixel) { return ACTUAL_DATAMGR::setDefaultPixel(defPixel); };
 	
 	/**
 	 * Gets the default pixel.
 	 */
-	 Q_UINT8 *defaultPixel() { return ACTUAL_DATAMGR::defaultPixel(); };
+	 const Q_UINT8 *defaultPixel() { return ACTUAL_DATAMGR::defaultPixel(); };
 	
 	/**
 	 * Reguests a memento from the data manager. There is only one memento active

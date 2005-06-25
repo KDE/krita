@@ -51,7 +51,7 @@ class KoStore;
 class KisTiledDataManager : public KShared {
 
 protected:
-	KisTiledDataManager(Q_UINT32 pixelSize, Q_UINT8 *defPixel);
+	KisTiledDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defPixel);
 	~KisTiledDataManager();
 	KisTiledDataManager(const KisTiledDataManager &dm);
 	KisTiledDataManager & operator=(const KisTiledDataManager &dm);
@@ -64,8 +64,8 @@ protected:
 
 protected:
 
-	void setDefaultPixel(Q_UINT8 *defPixel);
-	Q_UINT8 * defaultPixel() { return m_defPixel;};
+	void setDefaultPixel(const Q_UINT8 *defPixel);
+	const Q_UINT8 * defaultPixel() { return m_defPixel;};
 	
 	KisMementoSP getMemento();
 	void rollback(KisMementoSP memento);

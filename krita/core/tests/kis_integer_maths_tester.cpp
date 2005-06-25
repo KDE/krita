@@ -31,6 +31,7 @@ void KisIntegerMathsTester::allTests()
 {
 	UINT8Tests();
 	UINT16Tests();
+	conversionTests();
 }
 
 void KisIntegerMathsTester::UINT8Tests()
@@ -77,5 +78,16 @@ void KisIntegerMathsTester::UINT16Tests()
 	CHECK((int)UINT16_BLEND(65535, 0, 32768), 32768);
 	CHECK((int)UINT16_BLEND(65535, 32768, 32768), 49152);
 	CHECK((int)UINT16_BLEND(32768, 16384, 65535), 32768);
+}
+
+void KisIntegerMathsTester::conversionTests()
+{
+	CHECK((int)UINT8_TO_UINT16(255), 65535);
+	CHECK((int)UINT8_TO_UINT16(0), 0);
+	CHECK((int)UINT8_TO_UINT16(128), 128 * 257);
+
+	CHECK((int)UINT16_TO_UINT8(65535), 255);
+	CHECK((int)UINT16_TO_UINT8(0), 0);
+	CHECK((int)UINT16_TO_UINT8(128 * 257), 128);
 }
 

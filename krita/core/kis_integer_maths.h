@@ -59,5 +59,15 @@ inline uint UINT16_BLEND(uint a, uint b, uint alpha)
 	return UINT16_MULT(a - b, alpha) + b;
 }
 
+inline uint UINT8_TO_UINT16(uint c)
+{
+	return c * 257;
+}
+
+inline uint UINT16_TO_UINT8(uint c)
+{
+	return c / 257;
+}
+
 #endif
 

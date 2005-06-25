@@ -27,6 +27,7 @@ public:
         void allTests();
 	void UINT8Tests();
 	void UINT16Tests();
+	void conversionTests();
 };
 
 #endif

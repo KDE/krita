@@ -158,12 +158,10 @@ void KisStrategyMove::drag(const QPoint& original)
 				return;
 
 			pos -= m_dragStart; // convert to delta
-//			rc.setRect(dev -> x(), dev -> y(), dev -> width(), dev -> height());
+			rc = dev -> extent();
 			dev -> move(dev ->getX() + pos.x(), dev->getY() + pos.y());
-//			rc = rc.unite(QRect(dev->getX(), dev->getY(), dev -> width(), dev -> height()));
-//			rc.setX(QMAX(0, rc.x()));
-//			rc.setY(QMAX(0, rc.y()));
-//			img -> invalidate(rc);
+			rc = rc.unite(dev->extent());
+			
 			m_layerPosition = QPoint(dev ->getX(), dev ->getY());
  			m_dragStart = original;
 #if 0
@@ -172,7 +170,7 @@ void KisStrategyMove::drag(const QPoint& original)
 			rc.setWidth(static_cast<Q_INT32>(rc.width() * m_subject -> zoom()));
 			rc.setHeight(static_cast<Q_INT32>(rc.height() * m_subject -> zoom()));
 #endif
-			m_controller -> updateCanvas(); //rc);
+			m_controller -> updateCanvas(rc);
 		}
 	}
 }

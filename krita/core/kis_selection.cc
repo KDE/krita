@@ -30,7 +30,7 @@
 #include "kis_fill_painter.h"
 #include "kis_colorspace_alpha.h"
 #include "kis_iterators_pixel.h"
-
+#include "kis_integer_maths.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
  	: super(
@@ -159,7 +159,56 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
 	Q_INT32 x2;
 	uchar *j = img.bits();
 
-#if 1 // blueish monocrome
+#if 1 // blueish monocrome with outline
+	for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
+		KisHLineIteratorPixel it = createHLineIterator(x, y2, w+2, false);
+		Q_UINT8 preS = *(it.rawData());
+		++it;
+		x2 = 0;
+		KisHLineIteratorPixel prevLineIt = createHLineIterator(x, y2-1, w, false);
+		KisHLineIteratorPixel nextLineIt = createHLineIterator(x, y2+1, w, false);
+		while (!it.isDone() && x2<w) {
+			Q_UINT8 s = *(it.rawData());
+			++it;
+			if(s!=MAX_SELECTED)
+			{
+				Q_UINT8 invs = MAX_SELECTED - s;
+				
+				Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
+
+				if(s==MIN_SELECTED)
+				{
+					*(j+0) = 165+g ;
+					*(j+1) = 128+g;
+					*(j+2) = 128+g;
+					
+					// now for a simple outline based on 4-connectivity
+					if(preS != MIN_SELECTED
+						|| *(it.rawData()) != MIN_SELECTED
+						|| *(prevLineIt.rawData()) != MIN_SELECTED
+						|| *(nextLineIt.rawData()) != MIN_SELECTED)
+					{
+						*(j+0) = 0;
+						*(j+1) = 0;
+						*(j+2) = 255;
+					}
+				}
+				else
+				{
+					*(j+0) = UINT8_BLEND(*(j+0), g+165, s);
+					*(j+1) = UINT8_BLEND(*(j+1), g+128, s);
+					*(j+2) = UINT8_BLEND(*(j+2), g+128, s);
+				}
+			}
+			j+=4;
+			++x2;
+			preS=s;
+			++prevLineIt;
+			++nextLineIt;
+		}
+	}
+#endif
+#if 0 // blueish monocrome
 	for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
 		KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
 		x2 = 0;
@@ -171,7 +220,7 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
 				
 				Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
 
-				if(s==MAX_SELECTED)
+				if(s==MIN_SELECTED)
 				{
 					*(j+0) = 165+g ;
 					*(j+1) = 128+g;
@@ -179,10 +228,9 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
 				}
 				else
 				{
-					*(j+0) = (invs*(g+165))>>8 + ((s**(j+0))>>8);
-					 g = (invs*(g+128))>>8;
-					*(j+1) = g + ((s**(j+1))>>8);
-					*(j+2) = g + ((s**(j+2))>>8);
+					*(j+0) = UINT8_BLEND(*(j+0), g+165, s);
+					*(j+1) = UINT8_BLEND(*(j+1), g+128, s);
+					*(j+2) = UINT8_BLEND(*(j+2), g+128, s);
 				}
 			}
 			j+=4;
@@ -204,7 +252,7 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
 				Q_UINT8 g = 255 - (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 6;
 				if(g<256/3-5)
 					g-=30;
-				if(s==MAX_SELECTED)
+				if(s==MIN_SELECTED)
 				{
 					*(j+0) = g ;
 					*(j+1) = g;

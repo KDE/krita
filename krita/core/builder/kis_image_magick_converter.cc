@@ -64,10 +64,10 @@ namespace {
 	 */
 	KisStrategyColorSpaceSP getColorSpaceForColorType(ColorspaceType type) {
 		if (type == GRAYColorspace) {
-			KisColorSpaceRegistry::instance() -> get(KisID("CMYK", ""));
+			return KisColorSpaceRegistry::instance() -> get(KisID("GRAYA", ""));
 		}
 		else if (type == CMYKColorspace) {
-			return KisColorSpaceRegistry::instance() -> get(KisID("GRAYA", ""));
+			return KisColorSpaceRegistry::instance() -> get(KisID("CMYK", ""));
 		}
 		else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {
 			return KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));

@@ -71,6 +71,7 @@ public:
 	QColor maskColor() { return m_maskColor; }
 
 	QRect selectedRect();
+	QRect selectedExactRect();
 	
 	void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 	

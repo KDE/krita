@@ -154,6 +154,11 @@ QRect KisSelection::selectedRect()
 	return extent().unite(m_parentLayer->extent());
 }
 
+QRect KisSelection::selectedExactRect()
+{
+	return exactBounds().unite(m_parentLayer->exactBounds());
+}
+
 void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
 	Q_INT32 x2;

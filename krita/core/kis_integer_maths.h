@@ -66,7 +66,7 @@ inline uint UINT8_TO_UINT16(uint c)
 
 inline uint UINT16_TO_UINT8(uint c)
 {
-	return (c >> 8) + c) >> 8;
+	return ((c >> 8) + c) >> 8;
 }
 
 #endif

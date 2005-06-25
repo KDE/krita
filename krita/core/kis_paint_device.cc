@@ -307,6 +307,7 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QStr
 	Q_UINT8 defPixel[6] = {0,0,0,0,0,0};//XXX should be moved to colorstrategy
 	m_datamanager = new KisDataManager(m_pixelSize, defPixel);
 	Q_CHECK_PTR(m_datamanager);
+	m_extentIsValid = true;
 
 	m_visible = true;
 	m_owner = 0;
@@ -356,7 +357,7 @@ KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrat
 	Q_UINT8 defPixel[6] = {0,0,0,0,0,0};//XXX should be moved to colorstrategy
 	m_datamanager = new KisDataManager(m_pixelSize, defPixel);
 	Q_CHECK_PTR(m_datamanager);
-
+	m_extentIsValid = true;
 }
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(rhs)
@@ -368,6 +369,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
 			m_datamanager = new KisDataManager(*rhs.m_datamanager);
 			Q_CHECK_PTR(m_datamanager);
 		}
+		m_extentIsValid = rhs.m_extentIsValid;
                 m_visible = rhs.m_visible;
                 m_x = rhs.m_x;
                 m_y = rhs.m_y;
@@ -439,6 +441,15 @@ QRect KisPaintDevice::extent() const
 	return QRect(x, y, w, h);
 }
 
+bool KisPaintDevice::extentIsValid() const
+{
+	return m_extentIsValid;
+}
+
+void KisPaintDevice::setExtentIsValid(bool isValid)
+{
+	m_extentIsValid = isValid;
+}
 
 void KisPaintDevice::exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h)
 {

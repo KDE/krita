@@ -173,6 +173,23 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 // 			  << " layer: " << srcdev -> name()
 // 			  << " onto: " << m_device -> name()
 // 			  << "\n";
+	QRect srcRect = QRect(sx, sy, sw, sh);
+
+	if (srcdev -> extentIsValid()) {
+		srcRect &= srcdev -> extent();
+	}
+
+	if (srcRect.isEmpty()) {
+		return;
+	}
+
+	dx += srcRect.x() - sx;
+	dy += srcRect.y() - sy;
+
+	sx = srcRect.x();
+	sy = srcRect.y();
+	sw = srcRect.width();
+	sh = srcRect.height();
 
 	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();
@@ -250,6 +267,24 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 //		kdDebug() << "Blitting outside selection rect\n";
 		return;
 	}
+
+	QRect srcRect = QRect(sx, sy, sw, sh);
+
+	if (srcdev -> extentIsValid()) {
+		srcRect &= srcdev -> extent();
+	}
+
+	if (srcRect.isEmpty()) {
+		return;
+	}
+
+	dx += srcRect.x() - sx;
+	dy += srcRect.y() - sy;
+
+	sx = srcRect.x();
+	sy = srcRect.y();
+	sw = srcRect.width();
+	sh = srcRect.height();
 
 	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();

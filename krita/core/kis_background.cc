@@ -50,6 +50,7 @@ KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*
 			++hiter;
 		}
 	}
+	setExtentIsValid(false);
 }
 
 KisBackground::~KisBackground()

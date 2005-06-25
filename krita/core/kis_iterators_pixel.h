@@ -39,12 +39,11 @@ public:
 	KisHLineIteratorPixel(const KisHLineIteratorPixel& rhs) : KisHLineIterator(rhs), KisIteratorPixelTrait<KisHLineIterator>(rhs)
 		{ m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety; }
 	KisHLineIteratorPixel& operator=(const KisHLineIteratorPixel& rhs)
-		{ delete m_selectionIterator;
+		{
 		  KisHLineIterator::operator=(rhs);
 		  KisIteratorPixelTrait<KisHLineIterator>::operator=(rhs);
 		  m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
 		  return *this; }
-	~KisHLineIteratorPixel() { delete m_selectionIterator; }
 
     inline KisHLineIteratorPixel & operator ++() { KisHLineIterator::operator++(); advance(1); return *this;}
 
@@ -64,12 +63,11 @@ public:
 	KisVLineIteratorPixel(const KisVLineIteratorPixel& rhs) : KisVLineIterator(rhs), KisIteratorPixelTrait<KisVLineIterator>(rhs)
 		{ m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety; }
 	KisVLineIteratorPixel& operator=(const KisVLineIteratorPixel& rhs)
-		{ delete m_selectionIterator;
+		{
 		  KisVLineIterator::operator=(rhs);
 		  KisIteratorPixelTrait<KisVLineIterator>::operator=(rhs);
 		  m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
 		  return *this; }
-	~KisVLineIteratorPixel() { delete m_selectionIterator; }
 
     inline KisVLineIteratorPixel & operator ++() { KisVLineIterator::operator++(); advance(1); return *this;}
 
@@ -86,12 +84,11 @@ public:
 	KisRectIteratorPixel(const KisRectIteratorPixel& rhs) : KisRectIterator(rhs), KisIteratorPixelTrait<KisRectIterator>(rhs)
 		{ m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety; }
 	KisRectIteratorPixel& operator=(const KisRectIteratorPixel& rhs)
-		{ delete m_selectionIterator;
+		{
 		  KisRectIterator::operator=(rhs);
 		  KisIteratorPixelTrait<KisRectIterator>::operator=(rhs);
 		  m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety;
 		  return *this; }
-	~KisRectIteratorPixel() { delete m_selectionIterator; }
 
     inline KisRectIteratorPixel & operator ++() { KisRectIterator::operator++(); advance(1); return *this;}
 

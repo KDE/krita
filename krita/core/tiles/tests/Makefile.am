@@ -9,6 +9,6 @@ kunittest_kis_tiled_data_tester_la_SOURCES = kis_tiled_data_tester.cpp
 kunittest_kis_tiled_data_tester_la_LIBADD = -lkunittest ../../../libkritacommon.la
 kunittest_kis_tiled_data_tester_la_LDFLAGS = -module $(KDE_CHECK_PLUGIN) $(all_libraries)
 
-check-local:
+check-local: kunittest_kis_tiled_data_tester.la
 	kunittestmodrunner
 

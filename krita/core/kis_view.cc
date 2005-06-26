@@ -218,8 +218,7 @@ KisView::~KisView()
 {
 	delete m_dcop;
 	delete m_dockerManager;
-
-
+	delete m_selectionManager;
 }
 
 DCOPObject* KisView::dcopObject()

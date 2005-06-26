@@ -41,46 +41,55 @@ class KisScaleFilterStrategy {
 		virtual ~KisScaleFilterStrategy() {}
 
 		virtual double valueAt(double t) const = 0;
+                double support() { return supportVal;};
+	protected:
+		double supportVal;
 };
 
 class KisSimpleScaleFilterStrategy : public KisScaleFilterStrategy {
 	public:
-		virtual ~KisSimpleScaleFilterStrategy() {}
+		KisSimpleScaleFilterStrategy() {supportVal = 1.0;}
+                virtual ~KisSimpleScaleFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
 };
 
 class KisBoxScaleFilterStrategy : public KisScaleFilterStrategy {
 	public:
-		virtual ~KisBoxScaleFilterStrategy() {}
+		KisBoxScaleFilterStrategy() {supportVal = 0.5;}
+                virtual ~KisBoxScaleFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
 };
 
 class KisTriangleScaleFilterStrategy : public KisScaleFilterStrategy {
 	public:
-		virtual ~KisTriangleScaleFilterStrategy() {}
+		KisTriangleScaleFilterStrategy() {supportVal = 1.0;}
+                virtual ~KisTriangleScaleFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
 };
 
 class KisBellScaleFilterStrategy : public KisScaleFilterStrategy {
 	public:
-		virtual ~KisBellScaleFilterStrategy() {}
+		KisBellScaleFilterStrategy() {supportVal = 1.5;}
+                virtual ~KisBellScaleFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
 };
 
 class KisBSplineScaleFilterStrategy : public KisScaleFilterStrategy {
 	public:
-		virtual ~KisBSplineScaleFilterStrategy() {}
+		KisBSplineScaleFilterStrategy() {supportVal = 2.0;}
+                virtual ~KisBSplineScaleFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
 };
 
 class KisLanczos3ScaleFilterStrategy : public KisScaleFilterStrategy {
 	public:
-		virtual ~KisLanczos3ScaleFilterStrategy() {}
+		KisLanczos3ScaleFilterStrategy() {supportVal = 3.0;}
+                virtual ~KisLanczos3ScaleFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
         private:
@@ -89,7 +98,8 @@ class KisLanczos3ScaleFilterStrategy : public KisScaleFilterStrategy {
 
 class KisMitchellScaleFilterStrategy : public KisScaleFilterStrategy {
 	public:
-		virtual ~KisMitchellScaleFilterStrategy() {}
+		KisMitchellScaleFilterStrategy() {supportVal = 2.0;}
+                virtual ~KisMitchellScaleFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
 };

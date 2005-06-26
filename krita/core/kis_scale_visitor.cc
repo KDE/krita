@@ -99,15 +99,6 @@ double KisMitchellScaleFilterStrategy::valueAt(double t) const {
 
 void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, enumFilterType filterType)
 {
-        //define filter supports
-        const double filter_support=1.0;
-        const double box_support=0.5;
-        const double triangle_support=1.0;
-        const double bell_support=1.5;
-        const double B_spline_support=2.0;
-        const double Lanczos3_support=3.0;
-        const double Mitchell_support=2.0;
-
         double fwidth = 0;
 
         KisScaleFilterStrategy *filterStrategy = 0;
@@ -115,34 +106,28 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         switch(filterType){
                 case BOX_FILTER:
                         filterStrategy = new KisBoxScaleFilterStrategy();
-                        fwidth=box_support;
                         break;
                 case TRIANGLE_FILTER:
                         filterStrategy = new KisTriangleScaleFilterStrategy();
-                        fwidth=triangle_support;
                         break;
                 case BELL_FILTER:
                         filterStrategy = new KisBellScaleFilterStrategy();
-                        fwidth=bell_support;
                         break;
                 case B_SPLINE_FILTER:
                         filterStrategy = new KisBSplineScaleFilterStrategy();
-                        fwidth=B_spline_support;
                         break;
                 case FILTER:
                         filterStrategy = new KisSimpleScaleFilterStrategy();
-                        fwidth=filter_support;
                         break;
                 case LANCZOS3_FILTER:
                         filterStrategy = new KisLanczos3ScaleFilterStrategy();
-                        fwidth=Lanczos3_support;
                         break;
                 case MITCHELL_FILTER:
                         filterStrategy = new KisMitchellScaleFilterStrategy();
-                        fwidth=Mitchell_support;
                         break;
         }
 
+        fwidth = filterStrategy->support();
 
         // target image data
         Q_INT32 targetW;

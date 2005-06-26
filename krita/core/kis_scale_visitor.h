@@ -1,5 +1,5 @@
 /*
- *  copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  copyright (c) 2004, 2005 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
  *  this program is free software; you can redistribute it and/or modify
  *  it under the terms of the gnu general public license as published by
@@ -108,14 +108,16 @@ class KisScaleVisitor : public KisProgressSubject {
         typedef KisProgressSubject super;  
         
         /* Structs for the image rescaling routine */
-	struct CONTRIB {
-		Q_INT32 m_pixel;
-		double m_weight;
+	class CONTRIB {
+                public:	
+                        Q_INT32 m_pixel;
+                        double m_weight;
 	};
  
-	struct CLIST {
-		Q_INT32  n;  //number of contributors
-		CONTRIB *p; //pointer to list of contributions
+	class CLIST {
+	       public:
+                        Q_INT32  n;  //number of contributors
+                        CONTRIB *p; //pointer to list of contributions
 	};
 
 public:

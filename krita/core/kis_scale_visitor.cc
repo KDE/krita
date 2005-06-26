@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2004, 2005 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -181,7 +181,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
         /* Build y weights */
         /* pre-calculate filter contributions for a column */
-        contribY = (CLIST *)calloc(targetH, sizeof(CLIST));
+        contribY = new CLIST[ targetH ];
         int k;
 
         if(yscale < 1.0)
@@ -191,7 +191,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                 for(int y = 0; y < targetH; y++)
                 {
                         contribY[y].n = 0;
-                        contribY[y].p = (CONTRIB *)calloc((int) (m_width * 2 + 1), sizeof(CONTRIB));
+                        contribY[y].p = new CONTRIB[ (int)(m_width * 2 + 1) ];
+                        
                         center = (double) y / yscale;
                         left = ceil(center - m_width);
                         right = floor(center + m_width);
@@ -213,7 +214,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         } else {
                 for(int y = 0; y < targetH; y++) {
                         contribY[y].n = 0;
-                        contribY[y].p = (CONTRIB *)calloc((int) (fwidth * 2 + 1), sizeof(CONTRIB));
+                        contribY[y].p = new CONTRIB[ (int)(fwidth * 2 + 1) ];
+                        
                         center = (double) y / yscale;
                         left = ceil(center - fwidth);
                         right = floor(center + fwidth);
@@ -271,7 +273,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                                 tmp[y*m_dev -> pixelSize()+channel] = static_cast<QUANTUM>(CLAMP(weight[channel], BLACK_PIXEL, WHITE_PIXEL));
                         }
                 } /* next row in temp column */
-                free(contribX.p);
+                delete[] contribX.p;
 
                 /* The temp column has been built. Now stretch it
                 vertically into dst column. */
@@ -307,8 +309,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
         /* free the memory allocated for vertical filter weights */
         for(int y = 0; y < targetH; y++)
-                free(contribY[y].p);
-        free(contribY);
+                delete[] contribY[y].p;
+        delete[] contribY;
 
         delete filterStrategy;
         delete[] newData;
@@ -346,7 +348,8 @@ int KisScaleVisitor::calc_x_contrib(CLIST *contribX, double xscale, double fwidt
                 fscale = 1.0 / xscale;
 
                 contribX->n = 0;
-                contribX->p = (CONTRIB *)calloc((int) (width * 2 + 1), sizeof(CONTRIB));
+                contribX->p = new CONTRIB[ (int)(width * 2 + 1) ];
+
                 center = (double) x / xscale;
                 left = ceil(center - width);
                 right = floor(center + width);
@@ -370,7 +373,8 @@ int KisScaleVisitor::calc_x_contrib(CLIST *contribX, double xscale, double fwidt
         {
                 /* Expanding image */
                 contribX->n = 0;
-                contribX->p = (CONTRIB *)calloc((int) (fwidth * 2 + 1), sizeof(CONTRIB));
+                contribX->p = new CONTRIB[ (int)(fwidth * 2 + 1) ];
+                
                 center = (double) x / xscale;
                 left = ceil(center - fwidth);
                 right = floor(center + fwidth);

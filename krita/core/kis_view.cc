@@ -228,6 +228,7 @@ KisView::~KisView()
 {
 	delete m_dcop;
 	delete m_paletteManager;
+	delete m_selectionManager;
 }
 
 KoPaletteManager * KisView::paletteManager()

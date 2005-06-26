@@ -383,16 +383,14 @@ KisProfileSP KisView::monitorProfile()
 
 void KisView::resetMonitorProfile()
 {
-	KisConfig cfg;
-	QString monitorProfileName = cfg.monitorProfile();
-
-	m_monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
-//	if (m_monitorProfile) {
-//		kdDebug() << "Monitor profile: " << m_monitorProfile -> productName() << "\n";
-//	} else {
-//		kdDebug() << "Empty monitor profile " << monitorProfileName << "\n";
-//	}
-
+	m_monitorProfile = KisProfile::getScreenProfile();
+	
+	if (m_monitorProfile == 0) {
+		KisConfig cfg;
+		QString monitorProfileName = cfg.monitorProfile();
+		m_monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
+	}
+	
 }
 
 void KisView::setupStatusBar()

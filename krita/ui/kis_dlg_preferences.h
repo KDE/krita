@@ -138,8 +138,10 @@ protected:
 	DirectoriesTab* m_directories;
 	UndoRedoTab* m_undoRedo;
 	ColorSettingsTab* m_colorSettings;
+
 protected slots:
-    void slotDefault();
+
+	void slotDefault();
 
 };
 

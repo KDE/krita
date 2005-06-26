@@ -931,7 +931,7 @@ bool KisDoc::slotNewImage()
 	KisDlgCreateImg dlg(cfg.maxImgWidth(), cfg.defImgWidth(),
 			    cfg.maxImgHeight(), cfg.defImgHeight(),
 			    "RGBA",
-			    "new image from dlg");
+			    i18n("New Image"));
 	qApp -> setOverrideCursor(Qt::ArrowCursor);
 	if (dlg.exec() == QDialog::Accepted) {
 		qApp -> restoreOverrideCursor();

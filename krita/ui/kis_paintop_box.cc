@@ -67,7 +67,7 @@ void KisPaintopBox::addItem(const KisID & paintop, const QString & /*category*/)
 		insertItem(paintop.name());
 	}
 	else {
-		insertItem(pm, paintop.name());
+		insertItem(pm);
 	}
 	
 }

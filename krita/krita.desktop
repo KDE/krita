@@ -63,6 +63,8 @@ GenericName[zu]=I GNU Umboniso Weprogremu Esabisanayo
 MimeType=application/x-krita
 Type=Application
 Icon=krita
+line:
+Categories=Qt;KDE;Office;Graphics;
 X-KDE-NativeMimeType=application/x-krita
 X-KDE-StartupNotify=true
 X-DCOP-ServiceType=Multi

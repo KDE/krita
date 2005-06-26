@@ -177,6 +177,9 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 			if (m_endPos.x() > img -> width())
 				m_endPos.setX(img -> width());
 			if (img) {
+			
+				QCursor oldCursor = m_subject -> setCanvasCursor(KisCursor::waitCursor());
+
 				KisLayerSP layer = img -> activeLayer();
 				bool hasSelection = layer -> hasSelection();
 
@@ -216,6 +219,8 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 
 				layer->emitSelectionChanged();
 				img -> notify(rc);
+				m_subject -> setCanvasCursor(oldCursor);
+
 			}
 		}
 

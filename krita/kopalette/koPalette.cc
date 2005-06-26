@@ -171,16 +171,18 @@ void KoPalette::slotPlaceChanged(QDockWindow::Place p)
 		resize(sizeHint());
 	}
 	else {
-		m_docked = false;
+		if (m_docked) {
 #if 0
-		m_lblCaption -> hide();
-		m_bnShade -> hide();
+			m_lblCaption -> hide();
+			m_bnShade -> hide();
 #endif 
-		m_page-> show();
+			m_page-> show();
 #if 0
-		m_lblCaption -> setText("");
+			m_lblCaption -> setText("");
 #endif
-		resize(sizeHint());
+			resize(sizeHint());
+		}
+		m_docked = false;
 	}
 }
 

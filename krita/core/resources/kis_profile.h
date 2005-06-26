@@ -34,6 +34,9 @@
 #include "kis_resource.h"
 #include "kis_types.h"
 
+
+
+
 //XXX: Profiles should be loaded by the color strategies
 //     and be available only through the color strategy 
 //     that matches the profile's color model
@@ -62,6 +65,11 @@ public:
 	cmsHPROFILE profile() const { return m_profile; }
 	Q_UINT32 colorType() { return m_lcmsColorType; }
 	KisAnnotationSP annotation() const;
+
+public:
+
+	static KisProfileSP getScreenProfile(int screen = -1);
+
 private:
 	bool init();
 	
@@ -76,6 +84,8 @@ private:
 
 	QByteArray m_rawData;
 };
+
+
 
 #endif // KIS_PROFILE_H
 

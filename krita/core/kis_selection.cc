@@ -102,7 +102,7 @@ void KisSelection::select(QRect r)
 	painter.fillRect(r, m_maskColor, MAX_SELECTED);
 	Q_INT32 x, y, w, h;
 	extent(x, y, w, h);
-	kdDebug () << "Selection rect: x:" << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
+	kdDebug () << "Selected rect: x:" << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
 }
 
 void KisSelection::clear(QRect r)

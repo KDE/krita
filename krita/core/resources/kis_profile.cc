@@ -20,6 +20,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+
+
 #include <cfloat>
 #include <cmath>
 #include <config.h>
@@ -35,6 +37,10 @@
 #include "kis_annotation.h"
 
 #include "ksharedptr.h"
+
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+
 
 KisProfile::KisProfile(Q_UINT32 colorType)
 	: super(QString()),
@@ -114,8 +120,6 @@ bool KisProfile::init()
 
 		setValid(true);
 
-
-
 		emit loadComplete(this);
 		return true;
 	}
@@ -138,6 +142,53 @@ KisAnnotationSP KisProfile::annotation() const
 	// XXX we hardcode icc, this is correct for lcms?
 	// XXX productName(), or just "ICC Profile"?
 	return new KisAnnotation("icc", productName(), m_rawData);
+}
+
+KisProfileSP KisProfile::getScreenProfile (int screen)
+{
+
+#ifdef Q_WS_X11
+
+	Atom type;
+	int format;
+	unsigned long nitems;
+	unsigned long bytes_after;
+	Q_UINT8 * str;
+	
+	cmsHPROFILE profile = NULL;
+
+	static Atom icc_atom = XInternAtom( qt_xdisplay(), "_ICC_PROFILE", False );
+
+	if  ( XGetWindowProperty ( qt_xdisplay(),
+					qt_xrootwin( screen ),
+					icc_atom,
+					0,
+					INT_MAX,
+					False,
+					XA_CARDINAL,
+					&type,
+					&format,
+					&nitems,
+					&bytes_after,
+					(unsigned char **) &str)
+				) {
+		if ( nitems )
+ 			profile =
+				cmsOpenProfileFromMem(&str,
+							nitems * sizeof(long));
+		
+		QByteArray bytes (nitems);
+		bytes.assign((char*)str, (Q_UINT32)nitems);
+		
+		return new KisProfile(profile, bytes, TYPE_BGRA_8);
+	} else {
+		kdDebug() << "No profile, not correcting" << endl;
+		return NULL;
+	}
+#else
+	return NULL;
+	
+#endif
 }
 
 #include "kis_profile.moc"

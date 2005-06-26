@@ -70,8 +70,6 @@ File Format:
 
 Import/Export
 
-	* The image magick build should be ported to the fileformat framework
-	  and put in its own plugin (KisFileFormat, KisFileFormatRegistry)
 	* File/Import and File/Export don't warn when exporting to
 	  an unsupported filetype. (Still valid).
 	* Photoshop files are not recognized when opened, but there is now an
@@ -83,8 +81,8 @@ Import/Export
 
 User Interface
 
+	* Enable depth combo now that we have a 16bit/channel colorspace
 	* Rounding in opacity spinner is wrong: what starts out as 100% is actually not OPACITY_MAX...
-
 	* Channels showing (note that we don't do Gimp-type grayscale
 	  mask channels, just showing/hiding the various color
 	  channels.

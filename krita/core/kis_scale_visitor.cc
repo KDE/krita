@@ -156,15 +156,14 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 	Q_CHECK_PTR(pel2);
 
         bool bPelDelta[ m_pixelSize ];
-        ContribList	*contribY;
-        ContribList	contribX;
-        int		nRet = -1;
+        ContribList	*contribX;
+        ContribList	contribY;
         const Q_INT32 BLACK_PIXEL=0;
         const Q_INT32 WHITE_PIXEL=255;
 
 
-        // create intermediate column to hold horizontal dst column zoom
-        QUANTUM * tmp = new QUANTUM[ height * m_pixelSize * sizeof( QUANTUM ) ];
+        // create intermediate row to hold vertical dst row zoom
+        QUANTUM * tmp = new QUANTUM[ width * m_pixelSize * sizeof( QUANTUM ) ];
 	Q_CHECK_PTR(tmp);
 
         //progress info
@@ -172,64 +171,65 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         m_progress -> setSubject(this, true, true);
 	emit notifyProgressStage(this,i18n("Scaling layer..."),0);
 	
-        // Build y weights
-        contribY = new ContribList[ targetH ];
-        for(int y = 0; y < targetH; y++)
-        {
-                calcContrib(&contribY[y], yscale, fwidth, height, filterStrategy, y);
-        }
-
+        // build x weights
+        contribX = new ContribList[ targetW ];
         for(int x = 0; x < targetW; x++)
         {
+                calcContrib(&contribX[x], xscale, fwidth, width, filterStrategy, x);
+        }
+
+        for(int y = 0; y < targetH; y++)
+        {
                 //progress info
-                emit notifyProgress(this,(x * 100) / targetW);
+                emit notifyProgress(this,(y * 100) / targetH);
                 if (m_cancelRequested) {
                         break;
                 }
 
-                calcContrib(&contribX, xscale, fwidth, width, filterStrategy, x);
-                /* Apply horz filter to make dst column in tmp. */
-                for(int y = 0; y < height; y++)
+                // build y weights
+                calcContrib(&contribY, yscale, fwidth, height, filterStrategy, y);
+                /* Apply vert filter to make dst row in tmp. */
+                for(int x = 0; x < width; x++)
                 {
                         for(int channel = 0; channel < m_pixelSize; channel++){
                                 weight[channel] = 0.0;
                                 bPelDelta[channel] = FALSE;
                         }
-                        m_dev -> readBytes(pel, contribX.p[0].m_pixel, y, 1, 1);
-                        for(int srcpos = 0; srcpos < contribX.n; srcpos++)
+                        m_dev -> readBytes(pel, x, contribY.p[0].m_pixel, 1, 1);
+                        for(int srcpos = 0; srcpos < contribY.n; srcpos++)
                         {
-                                if (!(contribX.p[srcpos].m_pixel < 0 || contribX.p[srcpos].m_pixel >= width)){
-                                        m_dev -> readBytes(pel2, contribX.p[srcpos].m_pixel, y, 1, 1);
+                                if (!(contribY.p[srcpos].m_pixel < 0 || contribY.p[srcpos].m_pixel >= height)){
+                                        m_dev -> readBytes(pel2, x, contribY.p[srcpos].m_pixel, 1, 1);
                                         for(int channel = 0; channel < m_pixelSize; channel++)
                                         {
                                                 if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;
-                                                weight[channel] += pel2[channel] * contribX.p[srcpos].m_weight;
+                                                weight[channel] += pel2[channel] * contribY.p[srcpos].m_weight;
                                         }
                                 }
                         }
 
                         for(int channel = 0; channel < m_pixelSize; channel++){
                                 weight[channel] = bPelDelta[channel] ? static_cast<int>(qRound(weight[channel])) : pel[channel];
-                                tmp[ y * m_pixelSize + channel ] = static_cast<QUANTUM>(CLAMP(weight[channel], BLACK_PIXEL, WHITE_PIXEL));
+                                tmp[ x * m_pixelSize + channel ] = static_cast<QUANTUM>(CLAMP(weight[channel], BLACK_PIXEL, WHITE_PIXEL));
                         }
                 } /* next row in temp column */
-                delete[] contribX.p;
+                delete[] contribY.p;
 
                 /* The temp column has been built. Now stretch it
                 vertically into dst column. */
-                for(int y = 0; y < targetH; y++)
+                for(int x = 0; x < targetW; x++)
                 {
                         for(int channel = 0; channel < m_pixelSize; channel++){
                                 weight[channel] = 0.0;
                                 bPelDelta[channel] = FALSE;
-                                pel[channel] = tmp[ contribY[y].p[0].m_pixel * m_pixelSize + channel ];
+                                pel[channel] = tmp[ contribX[x].p[0].m_pixel * m_pixelSize + channel ];
                         }
-                        for(int srcpos = 0; srcpos < contribY[y].n; srcpos++)
+                        for(int srcpos = 0; srcpos < contribX[x].n; srcpos++)
                         {
                                 for(int channel = 0; channel < m_pixelSize; channel++){
-                                        pel2[channel] = tmp[ contribY[y].p[srcpos].m_pixel * m_pixelSize + channel ];
+                                        pel2[channel] = tmp[ contribX[x].p[srcpos].m_pixel * m_pixelSize + channel ];
                                         if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;
-                                        weight[channel] += pel2[channel] * contribY[y].p[srcpos].m_weight;
+                                        weight[channel] += pel2[channel] * contribX[x].p[srcpos].m_weight;
                                 }
                         }
                         for(int channel = 0; channel < m_pixelSize; channel++){
@@ -244,13 +244,12 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         if(!m_cancelRequested){
                 m_dev -> writeBytes( newData, 0, 0, targetW, targetH);
                 m_dev -> crop(0, 0, targetW, targetH);
-                nRet = 0; /* success */
         }
 
-        /* free the memory allocated for vertical filter weights */
-        for(int y = 0; y < targetH; y++)
-                delete[] contribY[y].p;
-        delete[] contribY;
+        /* free the memory allocated for horizontal filter weights */
+        for(int x = 0; x < targetW; x++)
+                delete[] contribX[x].p;
+        delete[] contribX;
 
         delete filterStrategy;
         delete[] newData;
@@ -261,7 +260,6 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         //progress info
         emit notifyProgressDone(this);
 
-        //return nRet;
         return;
 }
 

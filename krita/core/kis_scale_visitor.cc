@@ -135,36 +135,28 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
         Q_INT32 width = m_dev->image()->width();
         Q_INT32 height = m_dev->image()->height();
+        m_pixelSize=m_dev -> pixelSize();
 
         // compute size of target image
-        // (this bit seems to be mostly from QImage.xForm)
-        QWMatrix scale_matrix;
-	scale_matrix.scale(xscale, yscale);
-	scale_matrix = QPixmap::trueMatrix( scale_matrix, width, height );
-        if ( scale_matrix.m11() == 1.0F && scale_matrix.m22() == 1.0F ) {
-//                 kdDebug() << "Identity matrix, do nothing.\n";
+        if ( xscale == 1.0F && yscale == 1.0F ) {
                 return;
         }
-        targetW = qRound( scale_matrix.m11() * width );
-        targetH = qRound( scale_matrix.m22() * height );
-        targetW = QABS( targetW );
-        targetH = QABS( targetH );
-
-        QUANTUM * newData = new QUANTUM[targetW * targetH * m_dev -> pixelSize() * sizeof(QUANTUM)];
+        targetW = QABS( qRound( xscale * width ) );
+        targetH = QABS( qRound( yscale * height ) );
+	
+        QUANTUM * newData = new QUANTUM[targetW * targetH * m_pixelSize * sizeof(QUANTUM)];
 	Q_CHECK_PTR(newData);
 
-        int n;				/* pixel number */
-        double center, left, right;	/* filter calculation variables */
-        double m_width, fscale, weight[m_dev -> pixelSize()];	/* filter calculation variables */
+        double weight[ m_pixelSize ];	/* filter calculation variables */
 
-        QUANTUM *pel = new QUANTUM[m_dev -> pixelSize() * sizeof(QUANTUM)];
+        QUANTUM *pel = new QUANTUM[ m_pixelSize * sizeof(QUANTUM) ];
 	Q_CHECK_PTR(pel);
 
-        QUANTUM *pel2 = new QUANTUM[m_dev -> pixelSize() * sizeof(QUANTUM)];
+        QUANTUM *pel2 = new QUANTUM[ m_pixelSize * sizeof(QUANTUM) ];
 	Q_CHECK_PTR(pel2);
 
-        bool bPelDelta[m_dev -> pixelSize()];
-        ContribList	*contribY;		/* array of contribution lists */
+        bool bPelDelta[ m_pixelSize ];
+        ContribList	*contribY;
         ContribList	contribX;
         int		nRet = -1;
         const Q_INT32 BLACK_PIXEL=0;
@@ -172,22 +164,20 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
 
         // create intermediate column to hold horizontal dst column zoom
-        QUANTUM * tmp = new QUANTUM[height * m_dev -> pixelSize() * sizeof(QUANTUM)];
+        QUANTUM * tmp = new QUANTUM[ height * m_pixelSize * sizeof( QUANTUM ) ];
 	Q_CHECK_PTR(tmp);
 
         //progress info
         m_cancelRequested = false;
         m_progress -> setSubject(this, true, true);
-
+	emit notifyProgressStage(this,i18n("Scaling layer..."),0);
+	
         // Build y weights
         contribY = new ContribList[ targetH ];
         for(int y = 0; y < targetH; y++)
         {
                 calcContrib(&contribY[y], yscale, fwidth, height, filterStrategy, y);
         }
-
-        //progress info
-        emit notifyProgressStage(this,i18n("Scaling layer..."),0);
 
         for(int x = 0; x < targetW; x++)
         {
@@ -201,26 +191,26 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                 /* Apply horz filter to make dst column in tmp. */
                 for(int y = 0; y < height; y++)
                 {
-                        for(int channel = 0; channel < m_dev -> pixelSize(); channel++){
+                        for(int channel = 0; channel < m_pixelSize; channel++){
                                 weight[channel] = 0.0;
                                 bPelDelta[channel] = FALSE;
                         }
                         m_dev -> readBytes(pel, contribX.p[0].m_pixel, y, 1, 1);
-                        for(int xx = 0; xx < contribX.n; xx++)
+                        for(int srcpos = 0; srcpos < contribX.n; srcpos++)
                         {
-                                if (!(contribX.p[xx].m_pixel < 0 || contribX.p[xx].m_pixel >= width)){
-                                        m_dev -> readBytes(pel2, contribX.p[xx].m_pixel, y, 1, 1);
-                                        for(int channel = 0; channel < m_dev -> pixelSize(); channel++)
+                                if (!(contribX.p[srcpos].m_pixel < 0 || contribX.p[srcpos].m_pixel >= width)){
+                                        m_dev -> readBytes(pel2, contribX.p[srcpos].m_pixel, y, 1, 1);
+                                        for(int channel = 0; channel < m_pixelSize; channel++)
                                         {
                                                 if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;
-                                                weight[channel] += pel2[channel] * contribX.p[xx].m_weight;
+                                                weight[channel] += pel2[channel] * contribX.p[srcpos].m_weight;
                                         }
                                 }
                         }
 
-                        for(int channel = 0; channel < m_dev -> pixelSize(); channel++){
+                        for(int channel = 0; channel < m_pixelSize; channel++){
                                 weight[channel] = bPelDelta[channel] ? static_cast<int>(qRound(weight[channel])) : pel[channel];
-                                tmp[y*m_dev -> pixelSize()+channel] = static_cast<QUANTUM>(CLAMP(weight[channel], BLACK_PIXEL, WHITE_PIXEL));
+                                tmp[ y * m_pixelSize + channel ] = static_cast<QUANTUM>(CLAMP(weight[channel], BLACK_PIXEL, WHITE_PIXEL));
                         }
                 } /* next row in temp column */
                 delete[] contribX.p;
@@ -229,22 +219,22 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                 vertically into dst column. */
                 for(int y = 0; y < targetH; y++)
                 {
-                        for(int channel = 0; channel < m_dev -> pixelSize(); channel++){
+                        for(int channel = 0; channel < m_pixelSize; channel++){
                                 weight[channel] = 0.0;
                                 bPelDelta[channel] = FALSE;
-                                pel[channel] = tmp[contribY[y].p[0].m_pixel*m_dev -> pixelSize()+channel];
+                                pel[channel] = tmp[ contribY[y].p[0].m_pixel * m_pixelSize + channel ];
                         }
-                        for(int xx = 0; xx < contribY[y].n; xx++)
+                        for(int srcpos = 0; srcpos < contribY[y].n; srcpos++)
                         {
-                                for(int channel = 0; channel < m_dev -> pixelSize(); channel++){
-                                        pel2[channel] = tmp[contribY[y].p[xx].m_pixel*m_dev -> pixelSize()+channel];
+                                for(int channel = 0; channel < m_pixelSize; channel++){
+                                        pel2[channel] = tmp[ contribY[y].p[srcpos].m_pixel * m_pixelSize + channel ];
                                         if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;
-                                        weight[channel] += pel2[channel] * contribY[y].p[xx].m_weight;
+                                        weight[channel] += pel2[channel] * contribY[y].p[srcpos].m_weight;
                                 }
                         }
-                        for(int channel = 0; channel < m_dev -> pixelSize(); channel++){
+                        for(int channel = 0; channel < m_pixelSize; channel++){
                                 weight[channel] = bPelDelta[channel] ? static_cast<int>(qRound(weight[channel])) : pel[channel];
-                                int currentPos = (y*targetW+x) * m_dev -> pixelSize(); // try to be at least a little efficient
+                                int currentPos = (y*targetW+x) * m_pixelSize; // try to be at least a little efficient
                                 if (weight[channel]<0) newData[currentPos + channel] = 0;
                                 else if (weight[channel]>255) newData[currentPos + channel] = 255;
                                 else newData[currentPos + channel] = (uchar)weight[channel];

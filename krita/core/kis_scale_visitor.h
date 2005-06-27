@@ -109,7 +109,7 @@ class KisScaleVisitor : public KisProgressSubject {
         
         /* Structs for the image rescaling routine */
 	class Contrib {
-                public:	
+                public:
                         Q_INT32 m_pixel;
                         double m_weight;
 	};
@@ -127,7 +127,7 @@ public:
         void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType filterType = MITCHELL_FILTER);
 private:
         KisPaintDevice* m_dev;
-        
+    	Q_INT32 m_pixelSize;    
         
         /**
 	 * calc_x_contrib()

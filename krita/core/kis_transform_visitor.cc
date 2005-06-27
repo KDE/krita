@@ -156,6 +156,7 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 		else
 			targetL = (left) * scale / scaleDenom + dx;
 		
+		// Build a temporary line
 		KisHLineIteratorPixel srcIt = src->createHLineIterator(left, y, w, true);
 		int i = 0;
 		while(!srcIt.isDone())
@@ -271,6 +272,7 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 		else
 			targetT = (top) * scale / scaleDenom + dx;
 		
+		// Build a temporary line
 		KisVLineIteratorPixel srcIt = src->createVLineIterator(x, top, h, true);
 		int i = 0;
 		while(!srcIt.isDone())

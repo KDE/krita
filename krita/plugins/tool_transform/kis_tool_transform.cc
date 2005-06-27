@@ -90,6 +90,14 @@ KisToolTransform::KisToolTransform()
 	m_endPos = QPoint(0, 0);
 	m_optWidget = 0;
 	m_transaction = 0;
+	m_sizeCursors[0] = KisCursor::sizeFDiagCursor();
+	m_sizeCursors[1] = KisCursor::sizeVerCursor();
+	m_sizeCursors[2] = KisCursor::sizeBDiagCursor();
+	m_sizeCursors[3] = KisCursor::sizeHorCursor();
+	m_sizeCursors[4] = KisCursor::sizeFDiagCursor();
+	m_sizeCursors[5] = KisCursor::sizeVerCursor();
+	m_sizeCursors[6] = KisCursor::sizeBDiagCursor();
+	m_sizeCursors[7] = KisCursor::sizeHorCursor();
 }
 
 KisToolTransform::~KisToolTransform()
@@ -220,14 +228,52 @@ void KisToolTransform::buttonPress(KisButtonPressEvent *e)
 	}
 }
 
-int det(QPoint v,QPoint w)
+int KisToolTransform::det(QPoint v,QPoint w)
 {
 	return v.x()*w.y()-v.y()*w.x();
 }
-int distsq(QPoint v,QPoint w)
+int KisToolTransform::distsq(QPoint v,QPoint w)
 {
 	v -= w;
 	return v.x()*v.x() + v.y()*v.y();
+}
+
+void KisToolTransform::setFunctionalCursor()
+{
+	int rotOctant = 8.5 + m_a* 4 / M_PI;
+	switch(m_function)
+	{
+		case MOVE:
+			setCursor(KisCursor::moveCursor());
+			break;
+		case ROTATE:
+			setCursor(KisCursor::crossCursor());
+			break;
+		case TOPLEFTSCALE:
+			setCursor(m_sizeCursors[(0+rotOctant)%8]);
+			break;
+		case TOPSCALE:
+			setCursor(m_sizeCursors[(1+rotOctant)%8]);
+			break;
+		case TOPRIGHTSCALE:
+			setCursor(m_sizeCursors[(2+rotOctant)%8]);
+			break;
+		case RIGHTSCALE:
+			setCursor(m_sizeCursors[(3+rotOctant)%8]);
+			break;
+		case BOTTOMRIGHTSCALE:
+			setCursor(m_sizeCursors[(4+rotOctant)%8]);
+			break;
+		case BOTTOMSCALE:
+			setCursor(m_sizeCursors[(5+rotOctant)%8]);
+			break;
+		case BOTTOMLEFTSCALE:
+			setCursor(m_sizeCursors[(6+rotOctant)%8]);
+			break;
+		case LEFTSCALE:
+			setCursor(m_sizeCursors[(7+rotOctant)%8]);
+			break;
+	}
 }
 
 void KisToolTransform::move(KisMoveEvent *e)
@@ -303,62 +349,36 @@ void KisToolTransform::move(KisMoveEvent *e)
 		}
 		else
 		{
-			m_function = NONE;//ROTATE;
-			
 			if(det(mousePos - topleft, topright - topleft)>0)
-				setCursor(KisCursor::crossCursor());
+				m_function = ROTATE;
 			else if(det(mousePos - topright, bottomright - topright)>0)
-				setCursor(KisCursor::crossCursor());
+				m_function = ROTATE;
 			else if(det(mousePos - bottomright, bottomleft - bottomright)>0)
-				setCursor(KisCursor::crossCursor());
+				m_function = ROTATE;
 			else if(det(mousePos - bottomleft, topleft - bottomleft)>0)
-				setCursor(KisCursor::crossCursor());
+				m_function = ROTATE;
 			else
-			{
-				setCursor(KisCursor::moveCursor());
 				m_function = MOVE;
-			}
 			
+			int rotOctant = 8.5 + m_a* 4 / M_PI;
 			if(distsq(mousePos, m_topleft)<25)
-			{
-				setCursor(KisCursor::sizeFDiagCursor());
 				m_function = TOPLEFTSCALE;
-			}
 			if(distsq(mousePos, (m_topleft + m_topright)/2)<25)
-			{
-				setCursor(KisCursor::sizeVerCursor());
 				m_function = TOPSCALE;
-			}
 			if(distsq(mousePos, m_topright)<25)
-			{
-				setCursor(KisCursor::sizeBDiagCursor());
 				m_function = TOPRIGHTSCALE;
-			}
 			if(distsq(mousePos, (m_topright + m_bottomright)/2)<25)
-			{
-				setCursor(KisCursor::sizeHorCursor());
 				m_function = RIGHTSCALE;
-			}
-			if(distsq(mousePos, m_bottomleft)<25)
-			{
-				setCursor(KisCursor::sizeBDiagCursor());
-				m_function = BOTTOMLEFTSCALE;
-			}
-			if(distsq(mousePos, (m_bottomleft + m_bottomright)/2)<25)
-			{
-				setCursor(KisCursor::sizeVerCursor());
-				m_function = BOTTOMSCALE;
-			}
 			if(distsq(mousePos, m_bottomright)<25)
-			{
-				setCursor(KisCursor::sizeFDiagCursor());
 				m_function = BOTTOMRIGHTSCALE;
-			}
+			if(distsq(mousePos, (m_bottomleft + m_bottomright)/2)<25)
+				m_function = BOTTOMSCALE;
+			if(distsq(mousePos, m_bottomleft)<25)
+				m_function = BOTTOMLEFTSCALE;
 			if(distsq(mousePos, (m_topleft + m_bottomleft)/2)<25)
-			{
-				setCursor(KisCursor::sizeHorCursor());
 				m_function = LEFTSCALE;
-			}
+			
+			setFunctionalCursor();
 		}
 	}
 }
@@ -375,7 +395,7 @@ void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
 	}
 	setCursor(KisCursor::waitCursor());
 	transform();
-	// correct cursor set by moving cursor
+	setFunctionalCursor();
 }
 
 void KisToolTransform::paintOutline()

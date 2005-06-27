@@ -66,6 +66,9 @@ private:
 	double rotY(double x, double y) { return m_sina*x + m_cosa*y;};
 	double invrotX(double x, double y) { return m_cosa*x + m_sina*y;};
 	double invrotY(double x, double y) { return -m_sina*x + m_cosa*y;};
+	int det(QPoint v,QPoint w);
+	int distsq(QPoint v,QPoint w);
+	void setFunctionalCursor();
 
 private slots:
 
@@ -80,6 +83,7 @@ protected slots:
 private:
 	enum function {NONE,ROTATE,MOVE,TOPLEFTSCALE,TOPSCALE,TOPRIGHTSCALE,RIGHTSCALE,
 				BOTTOMRIGHTSCALE, BOTTOMSCALE,BOTTOMLEFTSCALE, LEFTSCALE};
+	QCursor m_sizeCursors[8];
 	function m_function;
 	KisCanvasSubject *m_subject;
 	QPoint m_startPos;

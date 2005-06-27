@@ -108,7 +108,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 				  "paste");
 
 	m_pasteNew =
-		new KAction(i18n("paste into &New image"),
+		new KAction(i18n("Paste into &New Image"),
 				0, 0,
 				this, SLOT(pasteNew()),
 				collection,
@@ -309,7 +309,7 @@ void KisSelectionManager::copy()
 
 	KisSelectionSP selection = layer -> selection();
 	
-	QRect r = selection -> selectedRect();
+	QRect r = selection -> selectedExactRect();
 	
 	kdDebug(DBG_AREA_CORE) << "Selection rect: "
 		  << r.x() << ", "

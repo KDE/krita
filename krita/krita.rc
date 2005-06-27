@@ -9,6 +9,7 @@
   <Action name="copy"/>
   <Action name="copy_merged"/>
   <Action name="paste"/>
+  <Action name="paste_new"/>
   <Action name="clear"/>
   <Separator/>
   <Action name="revert"/>

@@ -57,20 +57,17 @@ KisOilPaintFilter::KisOilPaintFilter(KisView * view) : KisFilter(id(), view)
 
 void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
-	kdDebug() << "Oilpaintfilter 2 called!\n";
 
 	Q_UNUSED(dst);
 
 	Q_INT32 x = rect.x(), y = rect.y();
 	Q_INT32 width = rect.width();
 	Q_INT32 height = rect.height();
-	kdDebug() << "x: " << x << " y: " << y << " width: " << width << " height: " << height << endl;
 
 	//read the filter configuration values from the KisFilterConfiguration object
 	Q_UINT32 brushSize = ((KisOilPaintFilterConfiguration*)configuration)->brushSize();
 	Q_UINT32 smooth = ((KisOilPaintFilterConfiguration*)configuration)->smooth();
 
-	kdDebug() << "brushSize:" << brushSize << " smooth:" << smooth << "\n";
 
 	OilPaint(src, x, y, width, height, brushSize, smooth);
 }

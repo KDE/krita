@@ -423,7 +423,6 @@ void KisBrush::ioResult(KIO::Job * /*job*/)
 	if (m_ownData) {
 		m_data.resize(0); // Save some memory, we're using enough of it as it is.
 	}
- 	//kdDebug() << "Brush: " << &name[0] << " spacing: " << spacing() << "\n";
 	setValid(true);
 	emit loadComplete(this);
 }

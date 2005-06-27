@@ -75,12 +75,14 @@ KisPainter::KisPainter()
 KisPainter::KisPainter(KisPaintDeviceSP device)
 {
 	init();
+	Q_ASSERT(device);
         begin(device);
 }
 
 KisPainter::KisPainter(KisLayerSP device)
 {
 	init();
+	Q_ASSERT(device);
 	begin(device.data());
 }
 
@@ -264,7 +266,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 	if (m_device == 0) return;
 
 	if (seldev->isTotallyUnselected(QRect(dx, dy, sw, sh))) {
-//		kdDebug() << "Blitting outside selection rect\n";
+		// Blitting outside selection rect
 		return;
 	}
 
@@ -361,7 +363,6 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 	if (m_device == 0) return;
 
 	if (!m_device -> hasSelection()) {
-//		kdDebug() << "No selection, doing ordinary blit\n";
 		bitBlt(dx, dy, op, srcdev, opacity, sx, sy, sw, sh);
 	}
 	else
@@ -809,7 +810,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
 		// Currently unsupported, fall through
 	case FillStyleStrokes:
 		// Currently unsupported, fall through
-		kdDebug() << "Unknown or unsupported fill style in fillPolygon\n";
+		kdDebug(DBG_AREA_CORE) << "Unknown or unsupported fill style in fillPolygon\n";
 	case FillStyleForegroundColor:
 		fillPainter.fillRect(boundingRectangle, paintColor(), OPACITY_OPAQUE);
 		break;

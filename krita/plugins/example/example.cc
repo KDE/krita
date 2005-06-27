@@ -52,7 +52,7 @@ KritaExample::KritaExample(QObject *parent, const char *name, const QStringList 
 	setInstance(KritaExampleFactory::instance());
 
 
-	kdDebug() << "Example plugin. Class: "
+	kdDebug(DBG_AREA_PLUGINS) << "Example plugin. Class: "
 		  << className()
 		  << ", Parent: "
 		  << parent -> className()

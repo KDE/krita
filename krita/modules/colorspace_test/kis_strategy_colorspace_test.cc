@@ -196,8 +196,8 @@ QImage KisStrategyColorSpaceTestCS::convertToQImage(const Q_UINT8 *data, Q_INT32
 
 #endif
 
-//   	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
-//   		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
+   	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")"
+   		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
 
 
 	if (srcProfile != 0 && dstProfile != 0) {

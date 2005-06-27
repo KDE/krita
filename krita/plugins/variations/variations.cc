@@ -53,7 +53,7 @@ Variations::Variations(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(VariationsFactory::instance());
 
- 	kdDebug() << "Variations plugin. Class: " 
+ 	kdDebug(DBG_AREA_PLUGINS) << "Variations plugin. Class: " 
  		  << className() 
  		  << ", Parent: " 
  		  << parent -> className()

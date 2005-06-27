@@ -31,7 +31,7 @@
 
 KisToolRegistry::KisToolRegistry()
 {
- 	kdDebug() << " creating a KisToolRegistry" << endl;
+ 	kdDebug(DBG_AREA_REGISTRY) << " creating a KisToolRegistry" << endl;
 }
 
 KisToolRegistry::~KisToolRegistry()

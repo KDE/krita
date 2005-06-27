@@ -124,14 +124,14 @@ private:
 			return;
 		sx = m_rc.x();
 		sy = m_rc.y();
-// 		kdDebug() << "Visiting on: " << dev
-// 			  << " dx: " << dx
-// 			  << " dy: " << dy
-// 			  << " sx: " << sx
-// 			  << " sy: " << sy
-// 			  << " w: " << w
-// 			  << " h " << h
-// 			  << "\n";
+ 		kdDebug(DBG_AREA_RENDER) << "Visiting on: " << dev
+ 			  << " dx: " << dx
+ 			  << " dy: " << dy
+ 			  << " sx: " << sx
+ 			  << " sy: " << sy
+ 			  << " w: " << w
+ 			  << " h " << h
+ 			  << "\n";
 
 		gc.bitBlt(dx, dy, dev -> compositeOp(), dev, opacity, sx, sy, w, h);
 	}

@@ -31,7 +31,7 @@ WSEngineFilterPlugin::WSEngineFilterPlugin(QObject *parent, const char *name, co
 {
         setInstance(WSEngineFilterPluginFactory::instance());
 
-        kdDebug() << "WS engine filter plugin. Class: "
+        kdDebug(DBG_AREA_PLUGINS) << "WS engine filter plugin. Class: "
                 << className()
                 << ", Parent: "
                 << parent -> className()

@@ -56,7 +56,7 @@ ColorspaceConversion::ColorspaceConversion(QObject *parent, const char *name, co
 
 	setInstance(ColorspaceConversionFactory::instance());
 
- 	kdDebug() << "Colorspaceconversion plugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "Colorspaceconversion plugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()
@@ -96,7 +96,6 @@ void ColorspaceConversion::slotImgColorspaceConversion()
 	}
 
 	if (dlgColorspaceConversion -> exec() == QDialog::Accepted) {
-		kdDebug() << "Going to convert image\n";
 		// XXX: Do the rest of the stuff
 		KisID cspace = dlgColorspaceConversion -> m_page -> cmbColorSpaces -> currentItem();
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(cspace);
@@ -130,7 +129,6 @@ void ColorspaceConversion::slotLayerColorspaceConversion()
 	}
 
 	if (dlgColorspaceConversion -> exec() == QDialog::Accepted) {
-		kdDebug() << "Going to convert layer\n";
 		KisID cspace = dlgColorspaceConversion -> m_page -> cmbColorSpaces -> currentItem();
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(cspace);
 		dev -> setProfile(dev -> colorStrategy() -> getProfileByName(dlgColorspaceConversion -> m_page -> cmbSourceProfile -> currentText()));

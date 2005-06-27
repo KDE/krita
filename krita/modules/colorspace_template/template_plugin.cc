@@ -53,7 +53,7 @@ TemplatePlugin::TemplatePlugin(QObject *parent, const char *name, const QStringL
 {
        	setInstance(TemplatePluginFactory::instance());
 
- 	kdDebug() << "TEMPLATE Color model plugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "TEMPLATE Color model plugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

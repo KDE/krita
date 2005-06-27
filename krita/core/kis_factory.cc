@@ -73,7 +73,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 		     KParts::ComponentFactory::createInstanceFromService<KParts::Plugin>
 		     ( service, this, 0, QStringList(), &errCode);
 	    if ( plugin )
-		kdDebug() << "found plugin " << service -> property("Name").toString() << "\n";
+		    kdDebug(DBG_AREA_PLUGINS) << "found plugin " << service -> property("Name").toString() << "\n";
 	}
 
 

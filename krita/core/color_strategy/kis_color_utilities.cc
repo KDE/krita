@@ -31,8 +31,6 @@ Q_UINT8 matchColors(const QColor & c, const QColor & c2, Q_UINT8 fuzziness)
 	rgb_to_hsv(c.red(), c.green(), c.blue(), &h1, &s1, &v1);
 	rgb_to_hsv(c2.red(), c2.green(), c2.blue(), &h2, &s2, &v2);
 
-	//kdDebug() << "Hue 1: " << h1 << ", hue 2: " << h2 << "\n";
-
 	int diff = QMAX(QABS(v1 - v2), QMAX(QABS(s1 - s2), QABS(h1 - h2)));
 
 	if (diff > fuzziness) return 0;
@@ -56,7 +54,6 @@ Q_UINT8 matchColors(const QColor & c, const QColor & c2, Q_UINT8 fuzziness)
 
         if (diff == 0,0) return 255;
 
-	kdDebug() << "Diff: " << QString::number(diff) << "\n";
 	return (Q_UINT8) diff;
 
 #endif

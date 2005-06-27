@@ -70,7 +70,7 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const QColor 
 			if (opacity > OPACITY_TRANSPARENT) {
 
 				Q_UINT8 match = matchColors(c, c2, fuzziness);
-				//kdDebug() << " Match: " << QString::number(match) << ", mode: " << mode << "\n";
+
 				if (mode == SELECTION_ADD) {
 					Q_UINT8 d = *(selIter.rawData());
 					if (d + match > MAX_SELECTED) {
@@ -135,7 +135,6 @@ void KisToolSelectPicker::clear()
 
 void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 {
-	kdDebug() << "button press: " << m_subject << "\n";
 
 	if (m_subject) {
 		KisImageSP img;
@@ -161,7 +160,7 @@ void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 		KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Selection Picker"),dev);
 
 		dev -> pixel(pos.x(), pos.y(), &c, &opacity);
-		kdDebug() << "Going to select colors similar to: " << c.red() << ", " << c.green() << ", "<< c.blue() << "\n";
+
 		if (opacity > OPACITY_TRANSPARENT)
 			selectByColor(dev, dev -> selection(), c, m_fuzziness, m_currentSelectAction);
 		else

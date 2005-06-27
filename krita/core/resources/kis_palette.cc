@@ -149,7 +149,7 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 	QString s = QString::fromUtf8(m_data.data(), m_data.count());
 
 	if (s.isEmpty() || s.isNull() || s.length() < 50) {
-// 		kdDebug() << "Illegal Gimp palette file: " << filename() << "\n";
+ 		kdDebug(DBG_AREA_FILE) << "Illegal Gimp palette file: " << filename() << "\n";
                 setValid(false);
                 emit loadComplete(this);
                 return;
@@ -158,7 +158,7 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 
 	if (s.startsWith("RIFF") || s.startsWith("PAL data"))
 	{
-//		kdDebug() << "PAL format palette file\n";
+		kdDebug(DBG_AREA_FILE) << "PAL format palette file\n";
 		format = FORMAT_PAL;
 	}
 	else if (s.startsWith("GIMP Palette"))
@@ -179,13 +179,13 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 		QColor color;
 		KisPaletteEntry e;
 
-//		kdDebug() << "Gimp format palette file\n";
+		kdDebug(DBG_AREA_FILE) << "Gimp format palette file\n";
 		format = FORMAT_GPL;
 
 		// Read name
 		if (!lines[1].startsWith("Name: ") || !lines[0].startsWith("GIMP") )
 		{
-// 			kdDebug() << "Illegal Gimp palette file: " << filename() << "\n";
+ 			kdDebug(DBG_AREA_FILE) << "Illegal Gimp palette file: " << filename() << "\n";
 			setValid(false);
 			emit loadComplete(this);
 			return;
@@ -204,7 +204,6 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 
 		// Loop over the rest of the lines
 		for (Q_UINT32 i = index; i < lines.size() - 1; i++) {
-// 			kdDebug() << "line: " << lines[i] << "\n";
 			if (lines[i].startsWith("#")) {
 				m_comment += lines[i].mid(1).stripWhiteSpace() + " ";
 			}
@@ -234,7 +233,7 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 		return;
 	}
 	else if (s.length() == 768) {
-// 		kdDebug() << "Photoshop format palette file. Not implemented yet\n";
+ 		kdDebug(DBG_AREA_FILE) << "Photoshop format palette file. Not implemented yet\n";
 		format = FORMAT_ACT;
 	}
 	
@@ -247,20 +246,12 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 
 void KisPalette::add(const KisPaletteEntry & c)
 {
-// 	kdDebug() << "Added: " << c.color.red() << ", " 
-// 		  << c.color.green() << ", " 
-// 		  << c.color.blue() << ", " 
-// 		  << c.name << "\n";
 	m_colors.push_back(c);
 }
 
 void KisPalette::remove(const KisPaletteEntry & c)
 {
 	Q_UNUSED(c);
-// 	QValueVector<KisPaletteEntry>::iterator it = qFind(m_colors.begin(), m_colors.end(), c);
-// 	if (it != m_colors.end()) {
-// 		m_colors.erase(it);
-// 	}
 }
 
 KisPaletteEntry KisPalette::getColor(Q_UINT32 index)

@@ -65,7 +65,7 @@ KritaDefaultDockers::KritaDefaultDockers(QObject *parent, const char *name, cons
 	setInstance(KritaDefaultDockersFactory::instance());
 
 
-	kdDebug() << "DefaultDockers plugin. Class: "
+	kdDebug(DBG_AREA_PLUGINS) << "DefaultDockers plugin. Class: "
 		  << className()
 		  << ", Parent: "
 		  << parent -> className()
@@ -79,10 +79,7 @@ KritaDefaultDockers::KritaDefaultDockers(QObject *parent, const char *name, cons
 	m_view = (KisView*) parent;
 
 	m_paletteManager = m_view->paletteManager();
-
-	if (!m_paletteManager) {
-		kdDebug() << "No palette manager yet!\n";
-	}
+	Q_ASSERT(m_paletteManager);
 
 	m_resourceServer = new KisResourceServer;
 

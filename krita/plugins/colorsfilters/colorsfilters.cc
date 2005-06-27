@@ -58,7 +58,7 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 {
 	setInstance(ColorsFiltersFactory::instance());
 
- 	kdDebug() << "ColorsFilters plugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "ColorsFilters plugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

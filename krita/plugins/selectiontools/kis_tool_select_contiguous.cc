@@ -117,13 +117,14 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 		}
 		
 		switch (m_selectAction) {
-			case SELECTION_ADD:
-				dev -> addSelection(selection);
-				break;
 			case SELECTION_SUBTRACT:
 				dev -> subtractSelection(selection);
 				break;
-			default: kdDebug() << "KisToolSelectContiguous: invalid select action: " << m_selectAction << endl;
+			case SELECTION_ADD:
+			default: 
+				dev -> addSelection(selection);
+				break;
+
 		}
 		
 		m_options -> ensureMaskColor();

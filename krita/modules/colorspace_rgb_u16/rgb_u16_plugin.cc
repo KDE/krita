@@ -39,7 +39,7 @@ RGBU16Plugin::RGBU16Plugin(QObject *parent, const char *name, const QStringList 
 {
 		setInstance(RGBU16PluginFactory::instance());
 
-	kdDebug() << "16-bit integer RGB Color model plugin. Class: "
+	kdDebug(DBG_AREA_PLUGINS) << "16-bit integer RGB Color model plugin. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()

@@ -117,7 +117,7 @@ void KisGradient::ioResult(KIO::Job * /*job*/)
 		numSegmentsText = nameDefinition;
 	}
 
-	//kdDebug() << "Loading gradient: " << name() << endl;
+	kdDebug(DBG_AREA_FILE) << "Loading gradient: " << name() << endl;
 
 	int numSegments;
 	bool ok;
@@ -129,7 +129,7 @@ void KisGradient::ioResult(KIO::Job * /*job*/)
 		return;
 	}
 
-	//kdDebug() << "Number of segments = " << numSegments << endl;
+	kdDebug(DBG_AREA_FILE) << "Number of segments = " << numSegments << endl;
 
 	for (int i = 0; i < numSegments; i++) {
 

@@ -57,7 +57,7 @@ SelectionTools::SelectionTools(QObject *parent, const char *name, const QStringL
 {
        	setInstance(SelectionToolsFactory::instance());
 
- 	kdDebug() << "Selection tools plugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "Selection tools plugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

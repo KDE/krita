@@ -54,7 +54,7 @@ CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
 {
        	setInstance(CMYKPluginFactory::instance());
 
- 	kdDebug() << "CMYK Color model plugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "CMYK Color model plugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

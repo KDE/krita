@@ -29,7 +29,7 @@ KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const char *na
 {
         setInstance(KisOilPaintFilterPluginFactory::instance());
 
-        kdDebug() << "OilPaintFilter plugin. Class: "
+        kdDebug(DBG_AREA_PLUGINS) << "OilPaintFilter plugin. Class: "
                 << className()
                 << ", Parent: "
                 << parent -> className()

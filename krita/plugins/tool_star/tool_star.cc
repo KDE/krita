@@ -49,7 +49,7 @@ ToolStar::ToolStar(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(ToolStarFactory::instance());
 
-	kdDebug() << "Star tool plugin. Class: "
+	kdDebug(DBG_AREA_PLUGINS) << "Star tool plugin. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()

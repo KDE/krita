@@ -53,7 +53,7 @@ WSBrushPaintOpPlugin::WSBrushPaintOpPlugin(QObject *parent, const char *name, co
 {
        	setInstance(WSBrushPaintOpPluginFactory::instance());
 
- 	kdDebug() << "WSBrushPaintOpPlugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "WSBrushPaintOpPlugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

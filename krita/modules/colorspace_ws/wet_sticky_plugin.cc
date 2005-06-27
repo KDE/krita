@@ -52,7 +52,7 @@ WetStickyPlugin::WetStickyPlugin(QObject *parent, const char *name, const QStrin
 {
        	setInstance(WetStickyPluginFactory::instance());
 
- 	kdDebug() << "Wet & Sticky canvas color model plugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "Wet & Sticky canvas color model plugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

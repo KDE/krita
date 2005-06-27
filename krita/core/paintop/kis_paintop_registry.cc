@@ -34,7 +34,6 @@ KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 
 KisPaintOpRegistry::KisPaintOpRegistry()
 {
-// 	kdDebug() << " creating a KisPaintOpRegistry" << endl;
 	Q_ASSERT(KisPaintOpRegistry::m_singleton == 0);
 	KisPaintOpRegistry::m_singleton = this;
 }
@@ -74,7 +73,7 @@ bool KisPaintOpRegistry::userVisible(const KisID & id) const
 
 	KisPaintOpFactorySP f = get(id);
 	if (!f) {
-		kdDebug() << "No paintop " << id.id() << "\n";
+		kdDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
 		return false;
 	}
 	
@@ -87,7 +86,7 @@ QPixmap KisPaintOpRegistry::getPixmap(const KisID & id) const
 	KisPaintOpFactorySP f = get(id);
 	
 	if (!f) {
-		kdDebug() << "No paintop " << id.id() << "\n";
+		kdDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
 		return QPixmap();
 	}
 
@@ -99,6 +98,6 @@ QPixmap KisPaintOpRegistry::getPixmap(const KisID & id) const
 	
 	QString fname = KisFactory::global()->dirs()->findResource("kis_images", pname);
 	
-	kdDebug() << "Found pixmap " << fname << " for " << id.id() << "\n";
+	kdDebug(DBG_AREA_REGISTRY) << "Found pixmap " << fname << " for " << id.id() << "\n";
 	return QPixmap(fname);
 }

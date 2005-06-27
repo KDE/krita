@@ -43,7 +43,7 @@ KritaHistoryDocker::KritaHistoryDocker(QObject *parent, const char *name, const 
 	setInstance(KritaHistoryDockerFactory::instance());
 
 
-	kdDebug() << "HistoryDocker plugin. Class: "
+	kdDebug(DBG_AREA_PLUGINS) << "HistoryDocker plugin. Class: "
 		  << className()
 		  << ", Parent: "
 		  << parent -> className()

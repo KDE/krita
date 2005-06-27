@@ -19,13 +19,16 @@
 #include <qobject.h>
 #include <qapplication.h>
 #include <qclipboard.h>
+#include <qcolor.h>
 
 #include <kdebug.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kstdaction.h>
 
-#include <qcolor.h>
+#include <koDocument.h>
+#include <koMainWindow.h>
+#include <koQueryTrader.h>
 
 #include "kis_clipboard.h"
 #include "kis_types.h"
@@ -54,6 +57,7 @@ KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	  m_copy(0),
 	  m_cut(0),
 	  m_paste(0),
+	  m_pasteNew(0),
 	  m_selectAll(0),
 	  m_deselect(0),
 	  m_clear(0),
@@ -102,6 +106,13 @@ void KisSelectionManager::setup(KActionCollection * collection)
 				  SLOT(paste()),
 				  collection,
 				  "paste");
+
+	m_pasteNew =
+		new KAction(i18n("paste into &New image"),
+				0, 0,
+				this, SLOT(pasteNew()),
+				collection,
+				"paste_new");
 
         m_selectAll =
 		KStdAction::selectAll(this,
@@ -226,13 +237,16 @@ void KisSelectionManager::addSelectionAction(KAction * action)
 
 void KisSelectionManager::updateGUI()
 {
+	Q_ASSERT(m_parent);
+	Q_ASSERT(m_clipboard);
+
 	if (m_parent == 0) {
-		kdDebug() << "Eek, no parent!\n";
+		// "Eek, no parent!
 		return;
 	}
 
 	if (m_clipboard == 0) {
-		kdDebug() << "Eek, no clipboard!\n";
+		// Eek, no clipboard!
 		return;
 	}
 
@@ -244,6 +258,7 @@ void KisSelectionManager::updateGUI()
 	m_copy -> setEnabled(enable);
 	m_cut -> setEnabled(enable);
 	m_paste -> setEnabled(img != 0 && m_clipboard -> hasClip());
+	m_pasteNew -> setEnabled(img != 0 && m_clipboard -> hasClip());
 	m_selectAll -> setEnabled(img != 0);
 	m_deselect -> setEnabled(enable);
 	m_clear -> setEnabled(enable);
@@ -268,7 +283,7 @@ void KisSelectionManager::updateGUI()
 
 void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 {
-	kdDebug() << "KisSelectionManager::imgSelectionChanged\n";
+	kdDebug(DBG_AREA_CORE) << "KisSelectionManager::imgSelectionChanged\n";
         if (img == m_parent -> currentImg()) {
                 updateGUI();
 		m_parent -> updateCanvas();
@@ -296,7 +311,7 @@ void KisSelectionManager::copy()
 	
 	QRect r = selection -> selectedRect();
 	
-	kdDebug() << "Selection rect: "
+	kdDebug(DBG_AREA_CORE) << "Selection rect: "
 		  << r.x() << ", "
 		  << r.y() << ", "
 		  << r.width() << ", "
@@ -335,11 +350,11 @@ void KisSelectionManager::copy()
  		++selectionIt;
 	}
 
-//      kdDebug() << "Selection copied: "
-//                << r.x() << ", "
-//                << r.y() << ", "
-//                << r.width() << ", "
-//                << r.height() << "\n";
+	kdDebug(DBG_AREA_CORE) << "Selection copied: "
+			       << r.x() << ", "
+			       << r.y() << ", "
+			       << r.width() << ", "
+			       << r.height() << "\n";
 
 
  	m_clipboard -> setClip(clip);
@@ -351,9 +366,6 @@ KisLayerSP KisSelectionManager::paste()
 {
         KisImageSP img = m_parent -> currentImg();
         if (!img) return 0;
-
-	KisLayerSP layer = img -> activeLayer();
-	if (!layer) return 0;
 
 	KisPaintDeviceSP clip = m_clipboard -> clip();
 
@@ -390,6 +402,38 @@ KisLayerSP KisSelectionManager::paste()
 	}
 	return 0;
 }
+
+void KisSelectionManager::pasteNew()
+{
+	kdDebug() << "Paste new!\n";
+	
+        KisPaintDeviceSP clip = m_clipboard -> clip();
+	if (!clip) return;
+
+	QRect r = clip->exactBounds();
+	if (r.width() < 1 && r.height() < 1) {
+		// Don't paste empty clips
+		return;
+	}
+
+	const QCString mimetype = KoDocument::readNativeFormatMimeType();
+	KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( mimetype );
+	KisDoc * doc = (KisDoc*) entry.createDoc();
+
+	KisImageSP img = new KisImage(doc, r.width(), r.height(), clip->colorStrategy(), "Pasted");
+	KisLayerSP layer = new KisLayer(img, clip->name(), OPACITY_OPAQUE, clip->colorStrategy());
+	KisPainter p(layer);
+	p.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+	p.end();
+	img->add(layer,0);
+	
+	doc->setCurrentImage( img );
+	KoMainWindow *win = new KoMainWindow( doc->instance() );
+	win->show();
+	win->setRootDocument( doc );
+
+}
+
 
 
 void KisSelectionManager::selectAll()

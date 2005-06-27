@@ -57,7 +57,6 @@ KisRainDropsFilter::KisRainDropsFilter(KisView * view) : KisFilter(id(), view)
 
 void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
-	kdDebug() << "Raindropsfilter 2 called!\n";
 
 	Q_UNUSED(dst);
 
@@ -66,7 +65,6 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 	Q_UINT32 number = ((KisRainDropsFilterConfiguration*)configuration)->number();
 	Q_UINT32 fishEyes = ((KisRainDropsFilterConfiguration*)configuration)->fishEyes();
 
-	kdDebug() << "dropSize:" << dropSize << " number:" << number << " fishEyes:" << fishEyes << "\n";
 
 	rainDrops(src, rect, dropSize, number, fishEyes);
 }

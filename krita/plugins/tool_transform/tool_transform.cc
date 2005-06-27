@@ -49,7 +49,7 @@ ToolTransform::ToolTransform(QObject *parent, const char *name, const QStringLis
 {
 	setInstance(ToolTransformFactory::instance());
 
-	kdDebug() << "Transform tool plugin. Class: "
+	kdDebug(DBG_AREA_PLUGINS) << "Transform tool plugin. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()

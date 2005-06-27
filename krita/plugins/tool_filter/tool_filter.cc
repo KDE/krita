@@ -52,7 +52,7 @@ ToolFilter::ToolFilter(QObject *parent, const char *name, const QStringList &)
 {
        	setInstance(ToolFilterFactory::instance());
 
- 	kdDebug() << "Filter tool plugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "Filter tool plugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

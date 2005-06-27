@@ -197,7 +197,6 @@ void KisLayerBoxItem::toggleLinked()
 inline
 void KisLayerBoxItem::toggleLocked()
 {
-	kdDebug() << "locked toggled!\n";
         m_locked = !m_locked;
 }
 

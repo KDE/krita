@@ -53,7 +53,7 @@ TemplatePaintOpsPlugin::TemplatePaintOpsPlugin(QObject *parent, const char *name
 {
        	setInstance(TemplatePaintOpsPluginFactory::instance());
 
- 	kdDebug() << "TemplatePaintOpsPlugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "TemplatePaintOpsPlugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

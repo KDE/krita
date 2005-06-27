@@ -74,11 +74,11 @@ KisColorSpaceWetSticky::KisColorSpaceWetSticky() :
 	for (it = m_channels.begin(); it != m_channels.end(); ++it)
 	{
 		KisChannelInfoSP ch = (*it);
-		kdDebug() << "Channel: " << ch->name() << ", " << ch->pos() << ", " << i << "\n";
+		kdDebug(DBG_AREA_CMS) << "Channel: " << ch->name() << ", " << ch->pos() << ", " << i << "\n";
 		++i;
 	}
 
-	kdDebug() << "Size of cell: " << sizeof(CELL) << "\n";
+	kdDebug(DBG_AREA_CMS) << "Size of cell: " << sizeof(CELL) << "\n";
 #endif
 }
 
@@ -114,7 +114,7 @@ void KisColorSpaceWetSticky::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfi
 	p -> volume = 0;
 
 #ifdef WSDEBUG
-	kdDebug() << "qcolor: "
+	kdDebug(DBG_AREA_CMS) << "qcolor: "
 		<< " r: " << c.red() << " b: " << c.blue() << " g: " << c.red()
 		<< " native color: (" << QString().setNum(p->red) << ", "
 		                      << QString().setNum(p->green) << ", "
@@ -152,7 +152,7 @@ void KisColorSpaceWetSticky::nativeColor(const QColor& c, QUANTUM opacity, Q_UIN
 	p -> volume = 0;
 
 #ifdef WSDEBUG
-	kdDebug() << "qcolor: "
+	kdDebug(DBG_AREA_CMS) << "qcolor: "
 		<< " r: " << c.red() << " b: " << c.blue() << " g: " << c.red() << " opacity: " << opacity
 		<< " native color: (" << QString().setNum(p->red) << ", "
 		                      << QString().setNum(p->green) << ", "
@@ -172,7 +172,7 @@ void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, KisProfileS
 		    p -> green,
 		    p -> blue);
 #ifdef WSDEBUG
-	kdDebug() << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
+	kdDebug(DBG_AREA_CMS) << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
 #endif
 }
 
@@ -187,7 +187,7 @@ void KisColorSpaceWetSticky::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *op
 
 	*opacity = p -> alpha;
 #ifdef WSDEBUG	
-	kdDebug() << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
+	kdDebug(DBG_AREA_CMS) << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
 #endif
 }
 
@@ -357,11 +357,11 @@ void KisColorSpaceWetSticky::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
 			CELL_PTR srcCell = (CELL_PTR) src;
 
 #ifdef WSDEBUG
-			kdDebug() << "Source: " << rows << ", " << columns << " color: " <<
+			kdDebug(DBG_AREA_CMS) << "Source: " << rows << ", " << columns << " color: " <<
 				srcCell->red << ", " << srcCell->blue << ", " << srcCell->green << ", " << srcCell->alpha << ", " << srcCell->volume << "\n";
 
 
-			kdDebug() << "Destination: "  << rows << ", " << columns << " color: " <<
+			kdDebug(DBG_AREA_CMS) << "Destination: "  << rows << ", " << columns << " color: " <<
 				dstCell->red << ", " << dstCell->blue << ", " << dstCell->green << ", " << dstCell->alpha << ", " << dstCell->volume << "\n";
 
 #endif

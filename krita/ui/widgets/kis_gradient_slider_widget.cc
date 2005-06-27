@@ -117,7 +117,6 @@ void KisGradientSliderWidget::mousePressEvent( QMouseEvent * e )
 	if( ( e->y() < MARGIN || e->y() > height() - MARGIN ) || ( e->x() < MARGIN || e->x() > width() - MARGIN ) || e-> button() != LeftButton )
 		return;
 	double t = (double)(e->x() - MARGIN) / (double)(width() - 2 * MARGIN);
-	kdDebug() << "clicked y=" << e->y() << " x=" << e->x() << " t=" << t << endl;
 	KisGradientSegment* segment = 0;
 	segment = m_autogradientResource -> segmentAt(t);
 	if(segment != 0)

@@ -43,7 +43,6 @@ namespace {
 KisColorSpaceAlpha::KisColorSpaceAlpha() :
 	KisStrategyColorSpace(KisID("ALPHA", i18n("Alpha mask")),  TYPE_GRAY_8, icSigGrayData)
 {
-// 	kdDebug() << "Alpha mask created\n";
 	m_maskColor = Qt::red;
 	m_inverted = false;
 	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 0, ALPHA));
@@ -185,12 +184,6 @@ void KisColorSpaceAlpha::bitBlt(Q_UINT8 *dst,
 				Q_INT32 cols,
 				const KisCompositeOp& op)
 {
-//  	kdDebug() << "KisColorSpaceAlpha::bitBlt. stride: " << stride
-//  		  << ", dststride: " << dststride
-//  		  << ", opacity: " << (Q_UINT8) opacity
-//  		  << ", rows: " << rows
-//  		  << ", cols: " << cols
-//  		  << ", op: " << op << "\n";
 
 	Q_UINT8 *d;
 	const Q_UINT8 *s;

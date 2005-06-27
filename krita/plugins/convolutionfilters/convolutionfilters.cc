@@ -53,7 +53,7 @@ K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFact
 {
        	setInstance(KritaConvolutionFiltersFactory::instance());
 
- 	kdDebug() << "ConvolutionFilters plugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "ConvolutionFilters plugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

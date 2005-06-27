@@ -1,7 +1,7 @@
 /*
 * testcs_plugin.cc -- Part of Krita
 *
-* Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+* Copyright (c) 2004 oudewijn Rempt (boud@valdyas.org)
 * Copyright (c) 2005 Casper Boemann (cbr@boemann.dk)
 *
 *  This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@ TestCSPlugin::TestCSPlugin(QObject *parent, const char *name, const QStringList 
 {
 		setInstance(TestCSPluginFactory::instance());
 
-	kdDebug() << "TestCS Color model plugin. Class: "
+	kdDebug(DBG_AREA_PLUGINS) << "TestCS Color model plugin. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()

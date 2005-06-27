@@ -111,7 +111,7 @@ bool KisToolColorChanger::changeColors(int /*startX*/, int /*startY*/)
 
 // 	QRect ur(left, top, width, height);
 
-// 	kdDebug() << "ur.left() " << ur.left() << "ur.top() "  << ur.top() << endl;
+// 	kdDebug(DBG_AREA_TOOLS) << "ur.left() " << ur.left() << "ur.top() "  << ur.top() << endl;
 
 // 	// prepare for painting with gradient
 // 	if (m_useGradient) {

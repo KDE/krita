@@ -50,7 +50,7 @@ ToolPolygon::ToolPolygon(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(ToolPolygonFactory::instance());
 
-	kdDebug() << "Polygon tool plugin. Class: "
+	kdDebug(DBG_AREA_PLUGINS) << "Polygon tool plugin. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()

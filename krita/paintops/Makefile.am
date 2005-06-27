@@ -23,14 +23,8 @@ kritadefaultpaintops_la_SOURCES = \
 	kis_eraseop.cc \
 	kis_penop.cc
 
-noinst_HEADERS= \
-	defaultpaintops_plugin.h \
-	kis_airbrushop.h \
-	kis_brushop.h \
-	kis_convolveop.h \
-	kis_duplicateop.h \
-	kis_eraseop.h \
-	kis_penop.h
+noinst_HEADERS = defaultpaintops_plugin.h 	kis_airbrushop.h 	kis_brushop.h \
+		kis_convolveop.h 	kis_duplicateop.h 	kis_eraseop.h 	kis_penop.h
 
 kde_module_LTLIBRARIES = kritadefaultpaintops.la
 

@@ -58,7 +58,7 @@ ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(ImageSizeFactory::instance());
 
- 	kdDebug() << "Imagesize plugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "Imagesize plugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

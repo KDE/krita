@@ -28,7 +28,7 @@ KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const char *name, 
 {
         setInstance(KisEmbossFilterPluginFactory::instance());
 
-        kdDebug() << "EmbossFilter plugin. Class: "
+        kdDebug(DBG_AREA_PLUGINS) << "EmbossFilter plugin. Class: "
                 << className()
                 << ", Parent: "
                 << parent -> className()

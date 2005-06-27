@@ -40,7 +40,6 @@ KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
 					  // create a new one, instead
 		name)
 {
-// 	kdDebug() << "Selection created with color space type: " << colorStrategy() -> name() << "\n";
 	m_parentLayer = layer;
 	m_maskColor = Qt::white;
 	m_alpha = KisColorSpaceAlphaSP(dynamic_cast<KisColorSpaceAlpha*> (colorStrategy().data()));
@@ -102,7 +101,7 @@ void KisSelection::select(QRect r)
 	painter.fillRect(r, m_maskColor, MAX_SELECTED);
 	Q_INT32 x, y, w, h;
 	extent(x, y, w, h);
-	kdDebug () << "Selected rect: x:" << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
+	kdDebug (DBG_AREA_CORE) << "Selected rect: x:" << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
 }
 
 void KisSelection::clear(QRect r)

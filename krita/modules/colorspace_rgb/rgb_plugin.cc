@@ -53,7 +53,7 @@ RGBPlugin::RGBPlugin(QObject *parent, const char *name, const QStringList &)
 {
 		setInstance(RGBPluginFactory::instance());
 
-	kdDebug() << "RGB Color model plugin. Class: "
+	kdDebug(DBG_AREA_PLUGINS) << "RGB Color model plugin. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()

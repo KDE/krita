@@ -297,7 +297,7 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QStr
 {
 	Q_ASSERT(colorStrategy != 0);
 	Q_ASSERT(name.isEmpty() == false);
-	if (name.isEmpty()) kdDebug() << "Empty name \n";
+	if (name.isEmpty()) kdDebug(DBG_AREA_CORE) << "Empty name \n";
 	m_x = 0;
 	m_y = 0;
 
@@ -469,7 +469,7 @@ QRect KisPaintDevice::exactBounds()
 	Q_INT32 x, y, w, h, boundX, boundY, boundW, boundH;
 	extent(x, y, w, h);
 
-	kdDebug() << "Extent: " << x << ", " << y << ", " << w << ", " << h << "\n";
+	kdDebug(DBG_AREA_CORE) << "Extent: " << x << ", " << y << ", " << w << ", " << h << "\n";
 	extent(boundX, boundY, boundW, boundH);
 	Q_UINT8 * emptyPixel = new Q_UINT8[m_pixelSize];
 	Q_CHECK_PTR(emptyPixel);
@@ -537,7 +537,7 @@ QRect KisPaintDevice::exactBounds()
 	}
 
 	delete [] emptyPixel;
-	kdDebug() << "Bounds: " << boundX << ", " << boundY << ", " << boundW << ", " << boundH << "\n";
+	kdDebug(DBG_AREA_CORE) << "Bounds: " << boundX << ", " << boundY << ", " << boundW << ", " << boundH << "\n";
 	return QRect(boundX, boundY, boundW, boundH);
 }
 
@@ -668,7 +668,7 @@ void KisPaintDevice::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProf
 	     && dstProfile
 	     && (profile() -> profile() == dstProfile -> profile()) )
 	{
-		kdDebug() << "NOT GOING TO CONVERT!\n";
+		kdDebug(DBG_AREA_CORE) << "NOT GOING TO CONVERT!\n";
 		return;
 	}
 
@@ -800,7 +800,7 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 	Q_CHECK_PTR(data);
 
 	m_datamanager -> readBytes(data, x1, y1, w, h);
-//  	/*kdDebug*/() << m_name << ": convertToQImage. My profile: " << m_profile << ", destination profile: " << dstProfile << "\n";
+  	kdDebug(DBG_AREA_CMS) << m_name << ": convertToQImage. My profile: " << m_profile << ", destination profile: " << dstProfile << "\n";
 	QImage image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
 	delete[] data;
 

@@ -148,7 +148,7 @@ QImage KisStrategyColorSpaceCMYKA::convertToQImage(const Q_UINT8 *data, Q_INT32 
 						   Q_INT32 renderingIntent)
 {
 
-	kdDebug() << "convertToQImage: (" << width << ", " << height << ")\n";
+	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")\n";
 
 	QImage img(width, height, 32, 0, QImage::LittleEndian);
 
@@ -185,7 +185,7 @@ QImage KisStrategyColorSpaceCMYKA::convertToQImage(const Q_UINT8 *data, Q_INT32 
 
         }
 	else {
-		kdDebug() << "Going to transform with profiles\n";
+		kdDebug(DBG_AREA_CMS) << "Going to transform with profiles\n";
 
 		KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
 		convertPixelsTo(const_cast<Q_UINT8 *>(data), srcProfile,

@@ -56,11 +56,11 @@ RotateImage::RotateImage(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(RotateImageFactory::instance());
 
-// 	kdDebug() << "RotateImage plugin. Class: "
-// 		  << className()
-// 		  << ", Parent: "
-// 		  << parent -> className()
-// 		  << "\n";
+ 	kdDebug(DBG_AREA_PLUGINS) << "RotateImage plugin. Class: "
+ 		  << className()
+ 		  << ", Parent: "
+ 		  << parent -> className()
+ 		  << "\n";
 
 
 	if ( !parent->inherits("KisView") )

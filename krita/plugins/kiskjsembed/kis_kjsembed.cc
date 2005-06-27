@@ -61,7 +61,7 @@ KisKJSEmbed::KisKJSEmbed(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(KritaKJSEmbedFactory::instance());
 
-	kdDebug() << "KSJEmbed plugin. Class: "
+	kdDebug(DBG_AREA_PLUGINS) << "KSJEmbed plugin. Class: "
 		  << className()
 		  << ", Parent: "
 		  << parent -> className()
@@ -139,7 +139,7 @@ void KisKJSEmbed::slotLoadScript()
 		Script* script = Script::loadFromFile(m_jsEmbedPart, *it );
 		if(script != 0)
 		{
-			kdDebug() << "KisKJSEmbed::slotLoadScript() script " << *it << " successfully loaded." << endl;
+			kdDebug(DBG_AREA_SCRIPT) << "KisKJSEmbed::slotLoadScript() script " << *it << " successfully loaded." << endl;
 			m_vScripts.push_back( script );
 			m_scriptMenu->insertItem( *it, script, SLOT(execute()) );
 		}

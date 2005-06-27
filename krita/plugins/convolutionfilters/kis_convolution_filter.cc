@@ -58,11 +58,6 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
 
 KisConvolutionConstFilter::~KisConvolutionConstFilter()
 {
-// XXX: Memory leak? Causes bug: http://bugs.kde.org/show_bug.cgi?id=95079
-// 	if (m_matrixes) {
-// 		kdDebug() << "Matrices exist!\n";
-// 		delete m_matrixes;
-// 	}
 }
 
 KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*)

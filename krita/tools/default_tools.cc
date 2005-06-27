@@ -65,7 +65,7 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
 {
        	setInstance(DefaultToolsFactory::instance());
 
- 	kdDebug() << "Default tools plugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "Default tools plugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

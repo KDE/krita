@@ -190,7 +190,7 @@ KisLayer::KisLayer(KisStrategyColorSpaceSP colorStrategy, const QString& name)
 {
 #if DEBUG_LAYERS
 	numLayers++;
-	kdDebug() << "LAYER " << name << " CREATED total now = " << numLayers << endl;
+	kdDebug(DBG_AREA_CORE) << "LAYER " << name << " CREATED total now = " << numLayers << endl;
 #endif
 }
 
@@ -202,7 +202,7 @@ KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity)
 {
 #if DEBUG_LAYERS
 	numLayers++;
-	kdDebug() << "LAYER " << name << " CREATED total now = " << numLayers << endl;
+	kdDebug(DBG_AREA_CORE) << "LAYER " << name << " CREATED total now = " << numLayers << endl;
 #endif
 }
 
@@ -214,7 +214,7 @@ KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisStrat
 {
 #if DEBUG_LAYERS
 	numLayers++;
-	kdDebug() << "LAYER " << name << " CREATED total now = " << numLayers << endl;
+	kdDebug(DBG_AREA_CORE) << "LAYER " << name << " CREATED total now = " << numLayers << endl;
 #endif
 }
 
@@ -222,7 +222,7 @@ KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
 {
 #if DEBUG_LAYERS
 	numLayers++;
-	kdDebug() << "LAYER " << rhs.name() << " copy CREATED total now = " << numLayers << endl;
+	kdDebug(DBG_AREA_CORE) << "LAYER " << rhs.name() << " copy CREATED total now = " << numLayers << endl;
 #endif
 	if (this != &rhs) {
 		m_opacity = rhs.m_opacity;
@@ -239,7 +239,7 @@ KisLayer::~KisLayer()
 {
 #if DEBUG_LAYERS
 	numLayers--;
-	kdDebug() << "LAYER " << name() << " DESTROYED total now = " << numLayers << endl;
+	kdDebug(DBG_AREA_CORE) << "LAYER " << name() << " DESTROYED total now = " << numLayers << endl;
 #endif
 }
 

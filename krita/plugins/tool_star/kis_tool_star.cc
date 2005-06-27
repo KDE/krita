@@ -64,7 +64,6 @@ KisToolStar::~KisToolStar()
 
 void KisToolStar::update (KisCanvasSubject *subject)
 {
-//         kdDebug (40001) << "KisToolStar::update(" << subject << ")" << endl;
         super::update (subject);
         if (m_subject)
             m_currentImage = m_subject->currentImg ();
@@ -72,7 +71,6 @@ void KisToolStar::update (KisCanvasSubject *subject)
 
 void KisToolStar::buttonPress(KisButtonPressEvent *event)
 {
-//         kdDebug (40001) << "KisToolStar::buttonPress" << event->pos () << endl;
 	if (m_currentImage && event -> button() == LeftButton) {
 		m_dragging = true;
 		m_dragStart = event -> pos();
@@ -84,7 +82,6 @@ void KisToolStar::buttonPress(KisButtonPressEvent *event)
 
 void KisToolStar::move(KisMoveEvent *event)
 {
-//         kdDebug (40001) << "KisToolStar::move" << event->pos () << endl;
 	if (m_dragging) {
 		// erase old lines on canvas
 		draw(m_dragStart, m_dragEnd);
@@ -133,7 +130,7 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
 
                 //painter.paintEllipse(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
                 vKisPoint coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
-                //kdDebug() << "Number of points:" << coord.size() << endl;
+
 		painter.paintPolygon(coord);
 		//painter.paintLine(m_dragStart, PRESSURE_DEFAULT, 0, 0, m_dragEnd, PRESSURE_DEFAULT, 0, 0);
                 m_currentImage -> notify( painter.dirtyRect() );
@@ -206,11 +203,9 @@ vKisPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, do
         
         // the radius of the outer edges
         R=sqrt((x-mx)*(x-mx)+(y-my)*(y-my));
-        //kdDebug() << "starCoordinates: Radius R: " << R << endl;
         
         // the radius of the inner edges 
         r=R*m_innerOuterRatio/100.0;
-        //kdDebug() << "starCoordinates: Radius R: " << R << endl;
         
         // the angle
         angle=-atan2((x-mx),(y-my));
@@ -225,9 +220,6 @@ vKisPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, do
                 starCoordinatesArray[2*n+1] = KisPoint(mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle)); 
         }
         
-        for(n=0;n<2*N;n++){
-		//kdDebug() << "starCoordinatesArray: (x,y) " << starCoordinatesArray.point(n)  << endl;
-	}
         return starCoordinatesArray;
 }
 

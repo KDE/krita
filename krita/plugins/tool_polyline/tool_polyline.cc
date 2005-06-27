@@ -49,7 +49,7 @@ ToolPolyline::ToolPolyline(QObject *parent, const char *name, const QStringList 
 {
 	setInstance(ToolPolylineFactory::instance());
 
-	kdDebug() << "Polyline tool plugin. Class: "
+	kdDebug(DBG_AREA_PLUGINS) << "Polyline tool plugin. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()

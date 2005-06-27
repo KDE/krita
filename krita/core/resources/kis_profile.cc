@@ -98,25 +98,22 @@ bool KisProfile::init()
 {
 	if (m_profile) {
 		m_colorSpaceSignature = cmsGetColorSpace(m_profile);
-//  		kdDebug() << "\tColorspaceSignature: " << m_colorSpaceSignature << "\n";
+  		kdDebug(DBG_AREA_CMS) << "\tColorspaceSignature: " << m_colorSpaceSignature << "\n";
 
 		m_deviceClass = cmsGetDeviceClass(m_profile);
 
 		m_productName = cmsTakeProductName(m_profile);
-//  		kdDebug() << "\tProduct name: " << m_productName << "\n";
+  		kdDebug(DBG_AREA_CMS) << "\tProduct name: " << m_productName << "\n";
 
 		m_productDescription = cmsTakeProductDesc(m_profile);
-//  		kdDebug() << "\tDescription: " << m_productDescription << "\n";
+  		kdDebug(DBG_AREA_CMS) << "\tDescription: " << m_productDescription << "\n";
 
 		m_productInfo = cmsTakeProductInfo(m_profile);
-//  		kdDebug() << "\tInfo: " << m_productInfo << "\n";
-// #if (LCMS_MAJOR_VERSION > 1) || (LCMS_MAJOR_VERSION == 1 && LCMS_MINOR_VERSION >= 12)
-//		m_manufacturer = cmsTakeManufacturer(m_profile);
-// 		kdDebug() << "\tManufacturer: " << m_manufacturer << "\n";
-// #endif
-//  		kdDebug() << "\tCopyright: " << cmsTakeCopyright(m_profile) << "\n";
+  		kdDebug(DBG_AREA_CMS) << "\tInfo: " << m_productInfo << "\n";
 
-//  		kdDebug() << "\tModel: " << cmsTakeModel(m_profile) << "\n";
+  		kdDebug(DBG_AREA_CMS) << "\tCopyright: " << cmsTakeCopyright(m_profile) << "\n";
+
+  		kdDebug(DBG_AREA_CMS) << "\tModel: " << cmsTakeModel(m_profile) << "\n";
 
 		setValid(true);
 
@@ -182,7 +179,7 @@ KisProfileSP KisProfile::getScreenProfile (int screen)
 		
 		return new KisProfile(profile, bytes, TYPE_BGRA_8);
 	} else {
-		kdDebug() << "No profile, not correcting" << endl;
+		kdDebug(DBG_AREA_CMS) << "No profile set for X11, not correcting" << endl;
 		return NULL;
 	}
 #else

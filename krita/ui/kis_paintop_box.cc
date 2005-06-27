@@ -45,7 +45,6 @@ KisPaintopBox::KisPaintopBox (KisView * parent, const char * name, WFlags f)
 	// XXX: Let's see... Are all paintops loaded and ready?
 	KisIDList keys = KisPaintOpRegistry::instance()->listKeys();
 	for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
-		kdDebug() << "Paintop: " << (*it).id() << "\n";
 		if (KisPaintOpRegistry::instance()->userVisible(*it)) {
 			addItem(*it);
 		}

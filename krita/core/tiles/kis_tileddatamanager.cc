@@ -217,7 +217,7 @@ void KisTiledDataManager::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h)
 /*
 void printRect(const QString & s, const QRect & r)
 {
-	kdDebug() << "crop: " << s << ": (" << r.x() << "," << r.y() << "," << r.width() << "," << r.height() << ")\n";
+	kdDebug(DBG_AREA_TILES) << "crop: " << s << ": (" << r.x() << "," << r.y() << "," << r.width() << "," << r.height() << ")\n";
 }*/
 
 void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
@@ -239,7 +239,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 		
 		while(tile)
 		{
-			//kdDebug() << "Tile: " << tile -> getCol() << ", " << tile -> getRow() << "\n";
+			kdDebug(DBG_AREA_TILES) << "Tile: " << tile -> getCol() << ", " << tile -> getRow() << "\n";
 			
 			QRect tileRect = QRect(tile -> getCol() * KisTile::WIDTH, tile -> getRow() * KisTile::HEIGHT, KisTile::WIDTH, KisTile::HEIGHT);
 			//printRect("tileRect", tileRect);
@@ -253,7 +253,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 				ensureTileMementoed(tile -> getCol(), tile -> getRow(), tileHash, tile);
 			
 				if (newRect.intersects(tileRect)) {
-					//kdDebug() << "Partially inside, clear the non-intersecting bits\n";
+					//kdDebug(DBG_AREA_TILES) << "Partially inside, clear the non-intersecting bits\n";
 
 					// Create the intersection of the tile and new rect
 					QRect intersection = newRect.intersect(tileRect);
@@ -274,7 +274,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 					tile = tile->getNext();
 				}
 				else {
-					//kdDebug() << "Completely outside, delete this tile. It had already been mementoed\n";
+					//kdDebug(DBG_AREA_TILES) << "Completely outside, delete this tile. It had already been mementoed\n";
 					KisTile *deltile = tile;
 					tile = tile->getNext();
 					

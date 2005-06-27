@@ -620,7 +620,7 @@ void KisView::clearCanvas(const QRect& rc)
 void KisView::setCurrentTool(KisTool *tool)
 {
 	KisTool *oldTool = currentTool();
-	kdDebug() << "option widget for " << tool->name() << ": " << tool->optionWidget() << "\n";
+	kdDebug(DBG_AREA_CORE) << "option widget for " << tool->name() << ": " << tool->optionWidget() << "\n";
 	if (!tool->optionWidget()) {
 		tool->createOptionWidget(0);
 	}
@@ -781,8 +781,6 @@ void KisView::paintView(const KisRect& r)
 
 			if (!wr.isNull()) {
 
-				//kdDebug() << "paintView wr = " << wr << endl;
-
 				if (zoom() < 1.0 || zoom() > 1.0) {
 					gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
 				}
@@ -827,8 +825,6 @@ void KisView::updateCanvas(const QRect& rc)
 
 void KisView::updateCanvas(const KisRect& rc)
 {
-	//kdDebug() << "updateCanvas" << rc << endl;
-
 	paintView(rc);
 }
 
@@ -887,8 +883,6 @@ void KisView::imgUpdateGUI()
 
 void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
 {
-	//kdDebug() << "begin zoom\n";
-
 	// Disable updates while we change the scrollbar settings.
 	m_canvas -> setUpdatesEnabled(false);
 	m_hScroll -> setUpdatesEnabled(false);
@@ -1426,7 +1420,7 @@ void KisView::layerCompositeOp(const KisCompositeOp& compositeOp)
 // range: 0 - 100
 void KisView::layerOpacity(int opacity)
 {
-	kdDebug() << "Opacity set to " << opacity << endl;
+	kdDebug(DBG_AREA_CORE) << "Opacity set to " << opacity << endl;
 	KisImageSP img = currentImg();
 	if (!img) return;
 
@@ -1532,7 +1526,7 @@ void KisView::gradientActivated(KisResource *gradient)
 
 void KisView::paintopActivated(const KisID & paintop)
 {
-	kdDebug() << "paintop activated: " << paintop.name() << "\n";
+	kdDebug(DBG_AREA_CORE) << "paintop activated: " << paintop.name() << "\n";
 	
 	if (paintop.id().isNull() || paintop.id().isEmpty()) {
 		return;
@@ -1593,7 +1587,7 @@ void KisView::print(KPrinter& printer)
 	KisProfileSP printerProfile = KisColorSpaceRegistry::instance() -> getProfileByName(printerProfileName);
 
 	if (printerProfile != 0)
-		kdDebug() << "Printer profile: " << printerProfile -> productName() << "\n";
+		kdDebug(DBG_AREA_CMS) << "Printer profile: " << printerProfile -> productName() << "\n";
 
 	QRect r = img -> bounds();
 	img -> renderToPainter(r.x(), r.y(), r.width(), r.height(), gc, printerProfile);
@@ -1882,8 +1876,6 @@ void KisView::canvasRefresh()
 {
 	KisRect rc(0, 0, m_canvasPixmap.width(), m_canvasPixmap.height());
 
-	//kdDebug() << "canvasRefresh" << rc << endl;
-
 	paintView(viewToWindow(rc));
 	m_canvas -> repaint();
 }
@@ -2169,8 +2161,6 @@ void KisView::layerToggleLocked()
 
 void KisView::layerSelected(int n)
 {
-	//kdDebug() << "layerSelected: " << n << endl;
-
 	KisImageSP img = currentImg();
         if (!img) return;
         KisLayerSP l = img -> layer(n);
@@ -2673,7 +2663,6 @@ KisGradient *KisView::currentGradient() const
 
 KisID KisView::currentPaintop() const
 {
-	kdDebug() << "Current paintop " << m_paintop.name() << "\n";
 	return m_paintop;
 }
 

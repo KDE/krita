@@ -130,14 +130,13 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 	k = bh.header_size;
 
 	if (bh.bytes == 1) {
-// 		kdDebug() << "Loading grayscale pattern " << &name[0] << endl;
 		// Grayscale
 		Q_INT32 val;
 
 		for (Q_UINT32 y = 0; y < bh.height; y++) {
 			for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
 				if (static_cast<Q_UINT32>(k) > m_data.size()) {
-					kdDebug() << "failed in gray\n";
+					kdDebug(DBG_AREA_FILE) << "failed in gray\n";
 					emit ioFailed(this);
 					return;
 				}
@@ -148,14 +147,13 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 			}
 		}
 	} else if (bh.bytes == 2) {
-// 		kdDebug() << "Loading grayscale + alpha pattern " << &name[0] << endl;
 		// Grayscale + A
 		Q_INT32 val;
 		Q_INT32 alpha;
 		for (Q_UINT32 y = 0; y < bh.height; y++) {
 			for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
 				if (static_cast<Q_UINT32>(k + 2) > m_data.size()) {
-					kdDebug() << "failed in grayA\n";
+					kdDebug(DBG_AREA_FILE) << "failed in grayA\n";
 					emit ioFailed(this);
 					return;
 				}
@@ -167,12 +165,11 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 			}
 		}
 	} else if (bh.bytes == 3) {
-// 		kdDebug() << "Loading rgb pattern " << &name[0] << endl;
 		// RGB without alpha
 		for (Q_UINT32 y = 0; y < bh.height; y++) {
 			for (Q_UINT32 x = 0; x < bh.width; x++) {
 				if (static_cast<Q_UINT32>(k + 3) > m_data.size()) {
-					kdDebug() << "failed in RGB\n";
+					kdDebug(DBG_AREA_FILE) << "failed in RGB\n";
 					emit ioFailed(this);
 					return;
 				}
@@ -185,12 +182,11 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 			}
 		}
 	} else if (bh.bytes == 4) {
-// 		kdDebug() << "Loading rgba pattern " << &name[0] << endl;
 		// Has alpha
 		for (Q_UINT32 y = 0; y < bh.height; y++) {
 			for (Q_UINT32 x = 0; x < bh.width; x++) {
 				if (static_cast<Q_UINT32>(k + 4) > m_data.size()) {
-					kdDebug() << "failed in RGBA\n";
+					kdDebug(DBG_AREA_FILE) << "failed in RGBA\n";
 					emit ioFailed(this);
 					return;
 				}
@@ -218,7 +214,6 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 
 	setValid(true);
 
-// 	kdDebug() << "pattern loaded\n";
 	emit loadComplete(this);
 }
 

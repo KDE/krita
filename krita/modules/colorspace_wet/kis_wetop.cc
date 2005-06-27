@@ -63,7 +63,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
 	KisStrategyColorSpaceSP cs = device -> colorStrategy();
 
 	if (cs -> id() != KisID("WET","")) {
-		kdDebug() << "You cannot paint wet paint on dry pixels.\n";
+		kdDebug(DBG_AREA_CMS) << "You cannot paint wet paint on dry pixels.\n";
 	}
 
 	WetPix paint;

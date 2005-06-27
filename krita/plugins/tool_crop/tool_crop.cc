@@ -49,7 +49,7 @@ ToolCrop::ToolCrop(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(ToolCropFactory::instance());
 
-	kdDebug() << "Crop tool plugin. Class: "
+	kdDebug(DBG_AREA_PLUGINS) << "Crop tool plugin. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()

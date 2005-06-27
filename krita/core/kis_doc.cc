@@ -435,7 +435,7 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
 	}
 	
 	for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
-		kdDebug() << "Node: " << node.nodeName() << ", element: " << node.isElement() << "\n";
+		kdDebug(DBG_AREA_FILE) << "Node: " << node.nodeName() << ", element: " << node.isElement() << "\n";
 		if (node.isElement()) {
 			if (node.nodeName() == "IMAGE") {
 				QDomElement elem = node.toElement();
@@ -962,7 +962,6 @@ bool KisDoc::slotNewImage()
 
 		KisFillPainter painter;
  		painter.begin(layer.data());
- 		kdDebug() << "Going to fill layer\n";
  		painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), KisColor(c, opacity, cs), opacity);
  		painter.end();
  		

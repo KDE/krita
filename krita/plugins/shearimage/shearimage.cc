@@ -56,11 +56,11 @@ ShearImage::ShearImage(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(ShearImageFactory::instance());
 
-// 	kdDebug() << "RotateImage plugin. Class: "
-// 		  << className()
-// 		  << ", Parent: "
-// 		  << parent -> className()
-// 		  << "\n";
+ 	kdDebug(DBG_AREA_PLUGINS) << "RotateImage plugin. Class: "
+ 		  << className()
+ 		  << ", Parent: "
+ 		  << parent -> className()
+ 		  << "\n";
 
 	(void) new KAction(i18n("&Shear Image..."), 0, 0, this, SLOT(slotShearImage()), actionCollection(), "shearimage");
 	(void) new KAction(i18n("&Shear Layer..."), 0, 0, this, SLOT(slotShearLayer()), actionCollection(), "shearlayer");

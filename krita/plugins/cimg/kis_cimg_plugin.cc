@@ -29,7 +29,7 @@ KisCImgPlugin::KisCImgPlugin(QObject *parent, const char *name, const QStringLis
 {
         setInstance(KisCImgPluginFactory::instance());
 
-        kdDebug() << "CImg plugin. Class: "
+        kdDebug(DBG_AREA_PLUGINS) << "CImg plugin. Class: "
                 << className()
                 << ", Parent: "
                 << parent -> className()

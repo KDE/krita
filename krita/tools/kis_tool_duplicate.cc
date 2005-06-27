@@ -86,7 +86,6 @@ void KisToolDuplicate::setup(KActionCollection *collection)
 
 void KisToolDuplicate::initPaint(KisEvent *e)
 {
-// 	kdDebug() << "initPaint(const KisPoint & pos)" << endl;
 	if( m_position != QPoint(-1,-1))
 	{
 		if(m_isOffsetNotUptodate)

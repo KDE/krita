@@ -32,7 +32,6 @@ KisClipboard *KisClipboard::m_singleton = 0;
 
 KisClipboard::KisClipboard()
 {
-// 	kdDebug() << " creating a KisClipboard" << endl;
 	Q_ASSERT(KisClipboard::m_singleton == 0);
 	KisClipboard::m_singleton = this;
 

@@ -29,7 +29,7 @@ KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const char *
 {
         setInstance(KisRainDropsFilterPluginFactory::instance());
 
-        kdDebug() << "RainDropFilter plugin. Class: "
+        kdDebug(DBG_AREA_PLUGINS) << "RainDropFilter plugin. Class: "
                 << className()
                 << ", Parent: "
                 << parent -> className()

@@ -121,7 +121,7 @@ KisColor & KisColor::operator=(const KisColor & rhs)
 
 void KisColor::convertTo(KisStrategyColorSpaceSP cs, KisProfileSP profile)
 {
-	kdDebug() << "Our colormodel: " << m_colorStrategy->id().name()
+	kdDebug(DBG_AREA_CMS) << "Our colormodel: " << m_colorStrategy->id().name()
 		  << ", new colormodel: " << cs->id().name() << "\n";
 		  
 	if (m_colorStrategy == cs && m_profile == profile) 
@@ -180,7 +180,7 @@ QColor KisColor::toQColor() const
 void KisColor::dump() const
 {
 	
-	kdDebug() << "KisColor (" << this << "), " << m_colorStrategy->id().name() << "\n";
+	kdDebug(DBG_AREA_CMS) << "KisColor (" << this << "), " << m_colorStrategy->id().name() << "\n";
 	vKisChannelInfoSP channels = m_colorStrategy->channels();
 		
 	vKisChannelInfoSP_cit begin = channels.begin();
@@ -192,15 +192,15 @@ void KisColor::dump() const
 		// XXX: setNum always takes a byte.
 		if (ch->size() == sizeof(Q_UINT8)) {
 			// Byte
-			kdDebug() << "Channel (byte): " << ch->name() << ": " << QString().setNum(m_data[ch->pos()]) << "\n";
+			kdDebug(DBG_AREA_CMS) << "Channel (byte): " << ch->name() << ": " << QString().setNum(m_data[ch->pos()]) << "\n";
 		}
 		else if (ch->size() == sizeof(Q_UINT16)) {
 			// Short (may also by an nvidia half)
-			kdDebug() << "Channel (short): " << ch->name() << ": " << QString().setNum(*((const Q_UINT16 *)(m_data+ch->pos())))  << "\n";
+			kdDebug(DBG_AREA_CMS) << "Channel (short): " << ch->name() << ": " << QString().setNum(*((const Q_UINT16 *)(m_data+ch->pos())))  << "\n";
 		}
 		else if (ch->size() == sizeof(Q_UINT32)) {
 			// Integer (may also be float... Find out how to distinguish these!)
-			kdDebug() << "Channel (int): " << ch->name() << ": " << QString().setNum(*((const Q_UINT32 *)(m_data+ch->pos())))  << "\n";
+			kdDebug(DBG_AREA_CMS) << "Channel (int): " << ch->name() << ": " << QString().setNum(*((const Q_UINT32 *)(m_data+ch->pos())))  << "\n";
 		}
 	}
 	

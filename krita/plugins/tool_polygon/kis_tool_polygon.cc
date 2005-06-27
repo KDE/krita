@@ -62,7 +62,6 @@ KisToolPolygon::~KisToolPolygon()
 
 void KisToolPolygon::update (KisCanvasSubject *subject)
 {
-//         kdDebug (40001) << "KisToolStar::update(" << subject << ")" << endl;
         super::update (subject);
         if (m_subject)
             m_currentImage = m_subject->currentImg ();
@@ -70,7 +69,6 @@ void KisToolPolygon::update (KisCanvasSubject *subject)
 
 void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
 {
-//         kdDebug (40001) << "KisToolStar::buttonPress" << event->pos () << endl;
 	if (m_currentImage) {
 		if (event -> button() == LeftButton) {
 
@@ -122,7 +120,6 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
 
 void KisToolPolygon::move(KisMoveEvent *event)
 {
-//         kdDebug (40001) << "KisToolStar::move" << event->pos () << endl;
 	if (m_dragging) {
 		// erase old lines on canvas
 		draw();

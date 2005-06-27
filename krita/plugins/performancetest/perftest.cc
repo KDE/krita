@@ -80,7 +80,7 @@ PerfTest::PerfTest(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(PerfTestFactory::instance());
 
- 	kdDebug() << "PerfTest plugin. Class: " 
+ 	kdDebug(DBG_AREA_PLUGINS) << "PerfTest plugin. Class: " 
  		  << className() 
  		  << ", Parent: " 
  		  << parent -> className()

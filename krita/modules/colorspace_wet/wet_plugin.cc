@@ -66,7 +66,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
        	setInstance(WetPluginFactory::instance());
 	m_docker = 0;
 
- 	kdDebug() << "Wet Color model plugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "Wet Color model plugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

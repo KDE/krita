@@ -355,7 +355,7 @@ KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisStrategyColor
 {
 #if DEBUG_IMAGES
 	numImages++;
-	kdDebug() << "IMAGE " << name << " CREATED total now = " << numImages << endl;
+	kdDebug(DBG_AREA_CORE) << "IMAGE " << name << " CREATED total now = " << numImages << endl;
 #endif
 	init(doc, width, height, colorStrategy, name);
 	setName(name);
@@ -367,7 +367,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 {
 #if DEBUG_IMAGES
 	numImages++;
-	kdDebug() << "IMAGE " << rhs.m_name << " copy CREATED total now = " << numImages << endl;
+	kdDebug(DBG_AREA_CORE) << "IMAGE " << rhs.m_name << " copy CREATED total now = " << numImages << endl;
 #endif
 	m_dcop = 0L;
 	if (this != &rhs) {
@@ -429,7 +429,7 @@ KisImage::~KisImage()
 {
 #if DEBUG_IMAGES
 	numImages--;
-	kdDebug() << "IMAGE " << name() << " DESTROYED total now = " << numImages << endl;
+	kdDebug(DBG_AREA_CORE) << "IMAGE " << name() << " DESTROYED total now = " << numImages << endl;
 #endif
 	delete m_nserver;
         delete m_dcop;
@@ -503,15 +503,15 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisStrategyColo
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
 {
-// 	kdDebug() << "KisImage::resize. From: ("
-// 		  << width()
-// 		  << ", "
-// 		  << height()
-// 		  << ") to ("
-// 		  << w
-// 		  << ", "
-// 		  << h
-// 		  << ")\n";
+	kdDebug(DBG_AREA_CORE) << "KisImage::resize. From: ("
+ 		  << width()
+ 		  << ", "
+ 		  << height()
+ 		  << ") to ("
+ 		  << w
+ 		  << ", "
+ 		  << h
+ 		  << ")\n";
 
 	if (w != width() || h != height()) {
 		if (m_adapter && m_adapter -> undo()) {
@@ -555,11 +555,11 @@ void KisImage::resize(const QRect& rc, bool cropLayers)
 
 void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype)
 {
-// 	kdDebug() << "KisImage::scale. SX: "
-// 		  << sx
-// 		  << ", SY:"
-// 		  << sy
-// 		  << "\n";
+ 	kdDebug(DBG_AREA_CORE) << "KisImage::scale. SX: "
+ 		  << sx
+ 		  << ", SY:"
+ 		  << sy
+ 		  << "\n";
 
 	if (m_layers.empty()) return; // Nothing to scale
 
@@ -567,10 +567,6 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 	Q_INT32 w, h;
 	w = (Q_INT32)(( width() * sx) + 0.5);
 	h = (Q_INT32)(( height() * sy) + 0.5);
-
-// 	kdDebug() << "Scaling from (" << m_projection -> width()
-// 		  << ", " << m_projection -> height()
-// 		  << "to: (" << w << ", " << h << ")\n";
 
 	if (w != width() || h != height()) {
 
@@ -739,7 +735,7 @@ void KisImage::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP 
 	     && dstProfile 
 	     && (profile() -> profile() == dstProfile -> profile()) )
 	{
-		kdDebug() << "KisImage: NOT GOING TO CONVERT\n";
+		kdDebug(DBG_AREA_CORE) << "KisImage: NOT GOING TO CONVERT\n";
 		return;
 	}
 
@@ -1300,7 +1296,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
 	Q_INT32 x;
 	Q_INT32 y;
 
-	//kdDebug() << "renderToPainter" << QRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1) << endl;
+	kdDebug(DBG_AREA_CORE) << "renderToPainter" << QRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1) << endl;
 
 	// Flatten the layers onto the projection layer of the current image
 	for (y = y1; y <= y2; ) {
@@ -1387,13 +1383,13 @@ KisGuideMgr *KisImage::guides() const
 
 void KisImage::slotSelectionChanged()
 {
- 	kdDebug() << "KisImage::slotSelectionChanged\n";
+ 	kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged\n";
 	emit activeSelectionChanged(KisImageSP(this));
 }
 
 void KisImage::slotSelectionCreated()
 {
- 	kdDebug() << "KisImage::slotSelectionCreated\n";
+ 	kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionCreated\n";
 	notify();
 	emit selectionCreated(KisImageSP(this));
 }

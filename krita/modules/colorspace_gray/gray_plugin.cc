@@ -53,7 +53,7 @@ GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
 {
        	setInstance(GrayPluginFactory::instance());
 
- 	kdDebug() << "GRAY Color model plugin. Class: "
+ 	kdDebug(DBG_AREA_PLUGINS) << "GRAY Color model plugin. Class: "
  		  << className()
  		  << ", Parent: "
  		  << parent -> className()

@@ -100,40 +100,40 @@ void KisHistogram::computeHistogramFor(const KisChannelInfo & channel)
 
 
 void KisHistogram::dump() {
-	kdDebug() << "Histogram\n";
+	kdDebug(DBG_AREA_MATH) << "Histogram\n";
 
 	switch (m_type) {
 	case LINEAR:
-		kdDebug() << "Linear histogram\n";
+		kdDebug(DBG_AREA_MATH) << "Linear histogram\n";
 		break;
 	case LOGARITHMIC:
-		kdDebug() << "Logarithmic histogram\n";
+		kdDebug(DBG_AREA_MATH) << "Logarithmic histogram\n";
 	}
 
-	kdDebug() << "Bins:\n";
+	kdDebug(DBG_AREA_MATH) << "Bins:\n";
         vBins::iterator it;
 	QUANTUM i = 0;
         for( it = m_values.begin(); it != m_values.end(); ++it ) {
-		kdDebug() << "Value "
+		kdDebug(DBG_AREA_MATH) << "Value "
 			  << QString().setNum(i)
 			  << ": "
 			  <<  QString().setNum((*it))
 			  << "\n";
 		i++;
 	}
-	kdDebug() << "\n";
+	kdDebug(DBG_AREA_MATH) << "\n";
 
-	kdDebug() << "Max: " << QString().setNum(m_max) << "\n";
-	kdDebug() << "Min: " << QString().setNum(m_min) << "\n";
-	kdDebug() << "High: " << QString().setNum(m_high) << "\n";
-	kdDebug() << "Low: " << QString().setNum(m_low) << "\n";
-	kdDebug() << "Mean: " << QString().setNum(m_mean) << "\n";
-	kdDebug() << "Median: " << QString().setNum(m_median) << "\n";
-	kdDebug() << "Stddev: " << QString().setNum(m_stddev) << "\n";
-	kdDebug() << "pixels: " << QString().setNum(m_pixels) << "\n";
-	kdDebug() << "count: " << QString().setNum(m_count) << "\n";
-	kdDebug() << "percentile: " << QString().setNum(m_percentile) << "\n";
+	kdDebug(DBG_AREA_MATH) << "Max: " << QString().setNum(m_max) << "\n";
+	kdDebug(DBG_AREA_MATH) << "Min: " << QString().setNum(m_min) << "\n";
+	kdDebug(DBG_AREA_MATH) << "High: " << QString().setNum(m_high) << "\n";
+	kdDebug(DBG_AREA_MATH) << "Low: " << QString().setNum(m_low) << "\n";
+	kdDebug(DBG_AREA_MATH) << "Mean: " << QString().setNum(m_mean) << "\n";
+	kdDebug(DBG_AREA_MATH) << "Median: " << QString().setNum(m_median) << "\n";
+	kdDebug(DBG_AREA_MATH) << "Stddev: " << QString().setNum(m_stddev) << "\n";
+	kdDebug(DBG_AREA_MATH) << "pixels: " << QString().setNum(m_pixels) << "\n";
+	kdDebug(DBG_AREA_MATH) << "count: " << QString().setNum(m_count) << "\n";
+	kdDebug(DBG_AREA_MATH) << "percentile: " << QString().setNum(m_percentile) << "\n";
 
-	kdDebug() << "\n";
+	kdDebug(DBG_AREA_MATH) << "\n";
 
 }

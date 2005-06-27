@@ -68,7 +68,7 @@ KisWSEngineFilter::KisWSEngineFilter(KisView * view) : KisFilter(id(), view)
  */
 QPoint next_cell(Q_UINT32 width, Q_UINT32 height)
 {
-	kdDebug() << "W " << width << ", H " << height << "\n";
+	kdDebug(DBG_AREA_FILTERS) << "W " << width << ", H " << height << "\n";
 
 	return QPoint(random() * width,  random() * height);
 }
@@ -121,7 +121,7 @@ void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 	m_rect = rect;
 
 
-	kdDebug() << "WSEnginefilter called!\n";
+	kdDebug(DBG_AREA_FILTERS) << "WSEnginefilter called!\n";
 	QTime t;
 	t.restart();
 
@@ -138,7 +138,7 @@ void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 
 	Q_UINT32 pixels = 400; //m_cfg -> pixels();
 
-	kdDebug() << "Going to singlestep " << pixels << " pixels.\n";
+	kdDebug(DBG_AREA_FILTERS) << "Going to singlestep " << pixels << " pixels.\n";
 
 	// Determine whether we want an infinite loop
 	if ( pixels == 0 ) {
@@ -151,14 +151,14 @@ void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 			single_step (cs, src, dst, rect, native);
 		}
 	}
-	kdDebug() << "Done in " << t.elapsed() << " ms\n";
+	kdDebug(DBG_AREA_FILTERS) << "Done in " << t.elapsed() << " ms\n";
 
 }
 
 QWidget* KisWSEngineFilter::createConfigurationWidget(QWidget* parent)
 {
 // 	KisWSEngineFilterConfigurationWidget* kefcw = new KisWSEngineFilterConfigurationWidget(this,parent, "");
-// 	kdDebug() << kefcw << endl;
+// 	kdDebug(DBG_AREA_FILTERS) << kefcw << endl;
 // 	return kefcw  ;
 	return 0;
 }

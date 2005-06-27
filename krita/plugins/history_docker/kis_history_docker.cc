@@ -107,7 +107,6 @@ VHistoryItem::VHistoryItem( VCommand* command, VHistoryGroupItem* parent, QListV
 
 void VHistoryItem::init()
 {
-	kdDebug(38000) << "In VHistoryItem::init() : " << m_command->name() << endl;
 	char buffer[64];
 	sprintf( buffer, "%064ld", ++g_lastKey );
 	m_key = buffer;

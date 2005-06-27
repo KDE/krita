@@ -53,20 +53,20 @@ KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
 	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 4, ALPHA));
 
 	if (profileCount() == 0) {
-		kdDebug() << "No profiles loaded!\n";
+		kdDebug(DBG_AREA_CMS) << "No profiles loaded!\n";
 		return;
 	}
 
 	m_defaultProfile = getProfileByName("Adobe CMYK"); // XXX: Do not i18n -- this is from a data file
 	if (m_defaultProfile == 0) {
-		kdDebug() << "No Adobe CMYK!\n";
+		kdDebug(DBG_AREA_CMS) << "No Adobe CMYK!\n";
 		if (profileCount() != 0) {
 			m_defaultProfile = profiles()[0];
 		}
 	}
 
 	if (m_defaultProfile == 0) {
-		kdDebug() << "No default CMYK profile; CMYK will not work!\n";
+		kdDebug(DBG_AREA_CMS) << "No default CMYK profile; CMYK will not work!\n";
 		return;
 	}
 
@@ -169,8 +169,8 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const Q_UINT8 *data, Q_INT32 w
 						  Q_INT32 renderingIntent)
 
 {
-//  	kdDebug() << "convertToQImage: (" << width << ", " << height << ")"
-//  		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
+  	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")"
+  		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
 
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
 	memset(img.bits(), 255, width * height * sizeof(Q_UINT32));
@@ -178,7 +178,7 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const Q_UINT8 *data, Q_INT32 w
 
 
  	if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
-//   		kdDebug() << "Going to use default transform\n";
+   		kdDebug(DBG_AREA_CMS) << "Going to use default transform\n";
 		for (int i = 0; i < height; i++)
 			for (int j = 0; j < width; j++)
  				cmsDoTransform(m_defaultToRGB,
@@ -186,7 +186,7 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const Q_UINT8 *data, Q_INT32 w
 					&(img.scanLine(i)[j*img.bytesPerLine()/width]), 1);
  	}
  	else {
-//   		kdDebug() << "Going to transform with profiles\n";
+   		kdDebug(DBG_AREA_CMS) << "Going to transform with profiles\n";
  		// Do a nice calibrated conversion
 		for (int i = 0; i < height; i++)
 			for (int j = 0; j < width; j++)

@@ -305,14 +305,11 @@ QImage KisColorSpaceWet::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
 	// Clear to white -- the following code actually composits the contents of the
 	// wet pixels with the contents of the image buffer, so they need to be
 	// prepared
-	kdDebug() << "1\n";
 	memset(rgb, 255, width * height * 4);
-	kdDebug() << "2\n";
 	// Composite the two layers in each pixelSize
 
 	Q_INT32 i = 0;
 	while ( i < width * height * (sizeof(WetPix) * 2)) {
-		kdDebug() << "Pixel: " << i << "\n";
 		// First the adsorption layers
 		WetPack * wp = (WetPack*)(data + i);
 		wet_composite(rgb, (WetPix*)data + i + sizeof(WetPix));
@@ -410,17 +407,12 @@ void KisColorSpaceWet::wet_composite(Q_UINT8 *rgb, WetPix * wet)
 	w = wet[0].rw >> 4;
 	d = wet[0].rd >> 4;
 
-	kdDebug() << "1\n";
 
 	ab = wet_render_tab[d];
-
-	kdDebug() << "2\n";
 
 	wa = (w * (ab >> 16) + 0x80) >> 8;
 	r = wa + (((r - wa) * (ab & 0xffff) + 0x4000) >> 15);
 	rgb[0] = r;
-
-	kdDebug() << "3\n";
 	
 	g = rgb[1];
 	w = wet[0].gw >> 4;
@@ -431,8 +423,6 @@ void KisColorSpaceWet::wet_composite(Q_UINT8 *rgb, WetPix * wet)
 	g = wa + (((g - wa) * (ab & 0xffff) + 0x4000) >> 15);
 	rgb[1] = g;
 	
-	kdDebug() << "4\n";
-	
 	b = rgb[2];
 	w = wet[0].bw >> 4;
 	d = wet[0].bd >> 4;
@@ -442,7 +432,6 @@ void KisColorSpaceWet::wet_composite(Q_UINT8 *rgb, WetPix * wet)
 	b = wa + (((b - wa) * (ab & 0xffff) + 0x4000) >> 15);
 	rgb[2] = b;
 
-	kdDebug() << "5\n";
 }
 
 void wet_render_wetness(Q_UINT8 * rgb, Q_INT32 rgb_rowstride, WetPix * pix, Q_INT32 height)

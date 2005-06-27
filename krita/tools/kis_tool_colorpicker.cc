@@ -51,8 +51,6 @@ KisToolColorPicker::~KisToolColorPicker()
 
 void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 {
-	kdDebug() << "button press: " << m_subject << "\n";
-	
 	if (m_subject) {
 		KisImageSP img;
 		KisPaintDeviceSP dev;

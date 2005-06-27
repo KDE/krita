@@ -57,7 +57,7 @@ Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
 {
 	setInstance(HistogramFactory::instance());
 
- 	kdDebug() << "Histogram plugin. Class: " 
+ 	kdDebug(DBG_AREA_PLUGINS) << "Histogram plugin. Class: " 
  		  << className() 
  		  << ", Parent: " 
  		  << parent -> className()

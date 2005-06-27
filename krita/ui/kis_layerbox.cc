@@ -227,8 +227,6 @@ void KisLayerBox::slotShowContextMenu(QListBoxItem *item, const QPoint& pos)
 
 void KisLayerBox::slotClicked(QListBoxItem *item, const QPoint& pos)
 {
-	//kdDebug() << "slotClicked\n";
-
         int n = m_lst -> listLayers -> currentItem();
 
         if (item) {
@@ -251,8 +249,6 @@ void KisLayerBox::slotDoubleClicked(QListBoxItem * /*item*/)
 
 void KisLayerBox::slotSetCurrentItem(int n)
 {
-	//kdDebug() << "KisLayerBox::slotSetCurrentItem " << n << endl;
-
 	if (n != m_lst -> listLayers -> currentItem()) {
 		m_lst -> listLayers -> setSelected(n, true);
 	} else {
@@ -347,8 +343,6 @@ int KisLayerBox::getCurrentItem() const
 
 void KisLayerBox::setSelected(int index)
 {
-	//kdDebug() << "KisLayerBox::setSelected " << index << endl;
-
         m_lst -> listLayers -> setSelected(index, true);
         m_lst -> listLayers -> setCurrentItem(index);
 }

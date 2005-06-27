@@ -62,7 +62,6 @@ KisToolPolyline::~KisToolPolyline()
 
 void KisToolPolyline::update (KisCanvasSubject *subject)
 {
-//         kdDebug (40001) << "KisToolStar::update(" << subject << ")" << endl;
         super::update (subject);
         if (m_subject)
             m_currentImage = m_subject->currentImg ();
@@ -70,7 +69,6 @@ void KisToolPolyline::update (KisCanvasSubject *subject)
 
 void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
 {
-//         kdDebug (40001) << "KisToolStar::buttonPress" << event->pos () << endl;
 	if (m_currentImage) {
 		if (event -> button() == LeftButton) {
 
@@ -130,7 +128,6 @@ void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
 
 void KisToolPolyline::move(KisMoveEvent *event)
 {
-//         kdDebug (40001) << "KisToolStar::move" << event->pos () << endl;
 	if (m_dragging) {
 		// erase old lines on canvas
 		draw();

@@ -69,7 +69,7 @@ QWidget* KisFilter::createConfigurationWidget(QWidget* )
 
 void KisFilter::slotActivated()
 {
-	kdDebug() << "Filter activated: " << m_id.name() << "\n";
+	kdDebug(DBG_AREA_FILTERS) << "Filter activated: " << m_id.name() << "\n";
 	KisImageSP img = m_view -> currentImg();
 	if (!img) return;
 

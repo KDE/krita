@@ -376,7 +376,7 @@ KisLayerBoxItem::KisLayerBoxItem(const QString& label, QListBox *parent,
 void KisLayerBoxItem::init(const QString& label, QListBox *parent,
 			   KisLayerBox::flags f)
 {
-        KIconLoader il;
+        KIconLoader il( "krita" );
 
         m_label = label;
 

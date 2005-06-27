@@ -108,16 +108,16 @@ class KisScaleVisitor : public KisProgressSubject {
         typedef KisProgressSubject super;  
         
         /* Structs for the image rescaling routine */
-	class CONTRIB {
+	class Contrib {
                 public:	
                         Q_INT32 m_pixel;
                         double m_weight;
 	};
  
-	class CLIST {
+	class ContribList {
 	       public:
                         Q_INT32  n;  //number of contributors
-                        CONTRIB *p; //pointer to list of contributions
+                        Contrib *p; //pointer to list of contributions
 	};
 
 public:
@@ -138,9 +138,9 @@ private:
 	 * Returns -1 if error, 0 otherwise.
 	 */
                 
-        int calc_x_contrib(CLIST *contribX, double xcale, double fwidth, int dstwidth, int srcwidth, KisScaleFilterStrategy *filterStrategy, Q_INT32 i);
+        int calcContrib(ContribList *contribX, double cale, double fwidth, int srcwidth, KisScaleFilterStrategy *filterStrategy, Q_INT32 i);
 
-        CLIST * contrib;  //array of contribution lists
+        ContribList * contrib;  //array of contribution lists
 
 	// Implement KisProgressSubject
 	bool m_cancelRequested;

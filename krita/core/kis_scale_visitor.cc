@@ -164,8 +164,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 	Q_CHECK_PTR(pel2);
 
         bool bPelDelta[m_dev -> pixelSize()];
-        CLIST	*contribY;		/* array of contribution lists */
-        CLIST	contribX;
+        ContribList	*contribY;		/* array of contribution lists */
+        ContribList	contribX;
         int		nRet = -1;
         const Q_INT32 BLACK_PIXEL=0;
         const Q_INT32 WHITE_PIXEL=255;
@@ -179,61 +179,11 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         m_cancelRequested = false;
         m_progress -> setSubject(this, true, true);
 
-        /* Build y weights */
-        /* pre-calculate filter contributions for a column */
-        contribY = new CLIST[ targetH ];
-        int k;
-
-        if(yscale < 1.0)
+        // Build y weights
+        contribY = new ContribList[ targetH ];
+        for(int y = 0; y < targetH; y++)
         {
-                m_width = fwidth / yscale;
-                fscale = 1.0 / yscale;
-                for(int y = 0; y < targetH; y++)
-                {
-                        contribY[y].n = 0;
-                        contribY[y].p = new CONTRIB[ (int)(m_width * 2 + 1) ];
-                        
-                        center = (double) y / yscale;
-                        left = ceil(center - m_width);
-                        right = floor(center + m_width);
-                        for(int xx = (int)left; xx <= right; xx++) {
-                                weight[0] = center - (double) xx;
-                                weight[0] = filterStrategy->valueAt(weight[0] / fscale) / fscale;
-                                if(xx < 0) {
-                                        n = -xx;
-                                } else if(xx >= height) {
-                                        n = (height - xx) + height - 1;
-                                } else {
-                                        n = xx;
-                                }
-                                k = contribY[y].n++;
-                                contribY[y].p[k].m_pixel = n;
-                                contribY[y].p[k].m_weight = weight[0];
-                        }
-                }
-        } else {
-                for(int y = 0; y < targetH; y++) {
-                        contribY[y].n = 0;
-                        contribY[y].p = new CONTRIB[ (int)(fwidth * 2 + 1) ];
-                        
-                        center = (double) y / yscale;
-                        left = ceil(center - fwidth);
-                        right = floor(center + fwidth);
-                        for(int xx = (int)left; xx <= right; xx++) {
-                                weight[0] = center - (double) xx;
-                                weight[0] = filterStrategy->valueAt(weight[0]);
-                                if(xx < 0) {
-                                        n = -xx;
-                                } else if(xx >= height) {
-                                        n = (height - xx) + height - 1;
-                                } else {
-                                        n = xx;
-                                }
-                                k = contribY[y].n++;
-                                contribY[y].p[k].m_pixel = n;
-                                contribY[y].p[k].m_weight = weight[0];
-                        }
-                }
+                calcContrib(&contribY[y], yscale, fwidth, height, filterStrategy, y);
         }
 
         //progress info
@@ -247,7 +197,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                         break;
                 }
 
-                calc_x_contrib(&contribX, xscale, fwidth, targetW, width, filterStrategy, x);
+                calcContrib(&contribX, xscale, fwidth, width, filterStrategy, x);
                 /* Apply horz filter to make dst column in tmp. */
                 for(int y = 0; y < height; y++)
                 {
@@ -325,9 +275,9 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         return;
 }
 
-int KisScaleVisitor::calc_x_contrib(CLIST *contribX, double xscale, double fwidth, int /*dstwidth*/, int srcwidth, KisScaleFilterStrategy* filterStrategy, Q_INT32 x)
+int KisScaleVisitor::calcContrib(ContribList *contribX, double scale, double fwidth, int srcwidth, KisScaleFilterStrategy* filterStrategy, Q_INT32 i)
 {
-        //CLIST* contribX: receiver of contrib info
+        //ContribList* contribX: receiver of contrib info
         //double xscale: horizontal zooming scale
         //double fwidth: Filter sampling width
         //int dstwidth: Target bitmap width
@@ -337,32 +287,32 @@ int KisScaleVisitor::calc_x_contrib(CLIST *contribX, double xscale, double fwidt
 
         double width;
         double fscale;
-        double center, left, right;
+        double center, begin, end;
         double weight;
         Q_INT32 k, n;
 
-        if(xscale < 1.0)
+        if(scale < 1.0)
         {
-                /* Shrinking image */
-                width = fwidth / xscale;
-                fscale = 1.0 / xscale;
+                //Shrinking image 
+                width = fwidth / scale;
+                fscale = 1.0 / scale;
 
                 contribX->n = 0;
-                contribX->p = new CONTRIB[ (int)(width * 2 + 1) ];
+                contribX->p = new Contrib[ (int)(width * 2 + 1) ];
 
-                center = (double) x / xscale;
-                left = ceil(center - width);
-                right = floor(center + width);
-                for(int xx = (int)left; xx <= right; ++xx)
+                center = (double) i / scale;
+                begin = ceil(center - width);
+                end = floor(center + width);
+                for(int srcpos = (int)begin; srcpos <= end; ++srcpos)
                 {
-                        weight = center - (double) xx;
+                        weight = center - (double) srcpos;
                         weight = filterStrategy->valueAt(weight / fscale) / fscale;
-                        if(xx < 0)
-                                n = -xx;
-                        else if(xx >= srcwidth)
-                                n = (srcwidth - xx) + srcwidth - 1;
+                        if(srcpos < 0)
+                                n = -srcpos;
+                        else if(srcpos >= srcwidth)
+                                n = (srcwidth - srcpos) + srcwidth - 1;
                         else
-                                n = xx;
+                                n = srcpos;
 
                         k = contribX->n++;
                         contribX->p[k].m_pixel = n;
@@ -371,24 +321,24 @@ int KisScaleVisitor::calc_x_contrib(CLIST *contribX, double xscale, double fwidt
         }
         else
         {
-                /* Expanding image */
+                // Expanding image
                 contribX->n = 0;
-                contribX->p = new CONTRIB[ (int)(fwidth * 2 + 1) ];
+                contribX->p = new Contrib[ (int)(fwidth * 2 + 1) ];
                 
-                center = (double) x / xscale;
-                left = ceil(center - fwidth);
-                right = floor(center + fwidth);
+                center = (double) i / scale;
+                begin = ceil(center - fwidth);
+                end = floor(center + fwidth);
 
-                for(int xx = (int)left; xx <= right; ++xx)
+                for(int srcpos = (int)begin; srcpos <= end; ++srcpos)
                 {
-                        weight = center - (double) xx;
+                        weight = center - (double) srcpos;
                         weight = filterStrategy->valueAt(weight);
-                        if(xx < 0) {
-                                n = -xx;
-                        } else if(xx >= srcwidth) {
-                                n = (srcwidth - xx) + srcwidth - 1;
+                        if(srcpos < 0) {
+                                n = -srcpos;
+                        } else if(srcpos >= srcwidth) {
+                                n = (srcwidth - srcpos) + srcwidth - 1;
                         } else {
-                                n = xx;
+                                n = srcpos;
                         }
                         k = contribX->n++;
                         contribX->p[k].m_pixel = n;

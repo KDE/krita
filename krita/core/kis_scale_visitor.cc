@@ -171,13 +171,25 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 	QUANTUM **tmpRows = new QUANTUM*[ height ];
 	
         //create array of pointers to intermediate rows that are actually used simultaneously and allocate memory for the rows
-        QUANTUM **tmpRowsMem = new QUANTUM*[ (int)(fwidth * 2 + 1) ];
-        for(int i = 0; i < (int)(fwidth * 2 + 1); i++)
-	{
-                tmpRowsMem[i] = new QUANTUM[ width * m_pixelSize ];
-	        Q_CHECK_PTR(tmpRowsMem[i]);
+        QUANTUM **tmpRowsMem;
+        if(yscale < 1.0)
+        {
+                tmpRowsMem = new QUANTUM*[ (int)(fwidth / yscale * 2 + 1) ];
+                for(int i = 0; i < (int)(fwidth / yscale * 2 + 1); i++)
+                {
+                        tmpRowsMem[i] = new QUANTUM[ width * m_pixelSize ];
+                        Q_CHECK_PTR(tmpRowsMem[i]);
+                }
+        } 
+        else 
+        {
+                tmpRowsMem = new QUANTUM*[ (int)(fwidth * 2 + 1) ];
+                for(int i = 0; i < (int)(fwidth * 2 + 1); i++)
+                {
+                        tmpRowsMem[i] = new QUANTUM[ width * m_pixelSize ];
+                        Q_CHECK_PTR(tmpRowsMem[i]);
+                }
         }
-
         //progress info
         m_cancelRequested = false;
         m_progress -> setSubject(this, true, true);
@@ -209,8 +221,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 			if (!(contribY.p[srcpos].m_pixel < 0 || contribY.p[srcpos].m_pixel >= height))
 			{
 				
-				tmpRows[contribY.p[srcpos].m_pixel] = new QUANTUM[ width * m_pixelSize * sizeof( QUANTUM ) ];
-				//tmpRows[ contribY.p[srcpos].m_pixel ] = tmpRowsMem[ srcpos ];
+				//tmpRows[contribY.p[srcpos].m_pixel] = new QUANTUM[ width * m_pixelSize * sizeof( QUANTUM ) ];
+				tmpRows[ contribY.p[srcpos].m_pixel ] = tmpRowsMem[ srcpos ];
 				m_dev -> readBytes(tmpRows[contribY.p[srcpos].m_pixel], 0, contribY.p[srcpos].m_pixel, width, 1);
 			}
 		}
@@ -223,12 +235,9 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                                 bPelDelta[channel] = FALSE;
                         	pel[channel]=tmpRows[contribY.p[0].m_pixel][ x * m_pixelSize + channel ];
 			}
-			//m_dev -> readBytes(pel, x, contribY.p[0].m_pixel, 1, 1);
                         for(int srcpos = 0; srcpos < contribY.n; srcpos++)
                         {
 				if (!(contribY.p[srcpos].m_pixel < 0 || contribY.p[srcpos].m_pixel >= height)){
-                                        //m_dev -> readBytes(pel2, x, contribY.p[srcpos].m_pixel, 1, 1);
-                                        //kdDebug() << "y: " << y << " x: " << x << " contribY.p[srcpos].m_pixel: " << contribY.p[srcpos].m_pixel << endl;
 					for(int channel = 0; channel < m_pixelSize; channel++)
                                         {
                                                 pel2[channel]=tmpRows[contribY.p[srcpos].m_pixel][ x * m_pixelSize + channel ];
@@ -245,19 +254,6 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                 } /* next row in temp column */
                 delete[] contribY.p;
 		
-		//delete the temporary rows
-		for(int srcpos = 0; srcpos < contribY.n; srcpos++)
-		{
-			if (!(contribY.p[srcpos].m_pixel < 0 || contribY.p[srcpos].m_pixel >= height))
-			{
-				if(!tmpRows[contribY.p[srcpos].m_pixel])
-				{	
-					delete[] tmpRows[contribY.p[srcpos].m_pixel];
-				}
-			}
-		}
-                /* The temp column has been built. Now stretch it
-                vertically into dst column. */
                 for(int x = 0; x < targetW; x++)
                 {
                         for(int channel = 0; channel < m_pixelSize; channel++){
@@ -298,6 +294,21 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         delete[] pel2;
         delete[] tmp;
 	
+        if(yscale < 1.0)
+        {
+                for(int i = 0; i < (int)(fwidth / yscale * 2 + 1); i++)
+                {
+                        delete[] tmpRowsMem[i];
+                }
+        } 
+        else 
+        {
+                for(int i = 0; i < (int)(fwidth * 2 + 1); i++)
+                {
+                        delete[] tmpRowsMem[i];
+                }
+        }
+
         //progress info
         emit notifyProgressDone(this);
 

@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <qwmatrix.h>
+#include <qdatetime.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -99,7 +99,8 @@ double KisMitchellScaleFilterStrategy::valueAt(double t) const {
 
 void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, enumFilterType filterType)
 {
-        double fwidth = 0;
+	
+	double fwidth = 0;
 
         KisScaleFilterStrategy *filterStrategy = 0;
 
@@ -144,15 +145,15 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         targetW = QABS( qRound( xscale * width ) );
         targetH = QABS( qRound( yscale * height ) );
 	
-        QUANTUM * newData = new QUANTUM[targetW * targetH * m_pixelSize * sizeof(QUANTUM)];
+        QUANTUM * newData = new QUANTUM[targetW * targetH * m_pixelSize ];
 	Q_CHECK_PTR(newData);
 
         double weight[ m_pixelSize ];	/* filter calculation variables */
 
-        QUANTUM *pel = new QUANTUM[ m_pixelSize * sizeof(QUANTUM) ];
+        QUANTUM *pel = new QUANTUM[ m_pixelSize ];
 	Q_CHECK_PTR(pel);
 
-        QUANTUM *pel2 = new QUANTUM[ m_pixelSize * sizeof(QUANTUM) ];
+        QUANTUM *pel2 = new QUANTUM[ m_pixelSize ];
 	Q_CHECK_PTR(pel2);
 
         bool bPelDelta[ m_pixelSize ];
@@ -163,14 +164,25 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
 
         // create intermediate row to hold vertical dst row zoom
-        QUANTUM * tmp = new QUANTUM[ width * m_pixelSize * sizeof( QUANTUM ) ];
+        QUANTUM * tmp = new QUANTUM[ width * m_pixelSize ];
 	Q_CHECK_PTR(tmp);
+
+	//create array of pointers to intermediate rows
+	QUANTUM **tmpRows = new QUANTUM*[ height ];
+	
+        //create array of pointers to intermediate rows that are actually used simultaneously and allocate memory for the rows
+        QUANTUM **tmpRowsMem = new QUANTUM*[ (int)(fwidth * 2 + 1) ];
+        for(int i = 0; i < (int)(fwidth * 2 + 1); i++)
+	{
+                tmpRowsMem[i] = new QUANTUM[ width * m_pixelSize ];
+	        Q_CHECK_PTR(tmpRowsMem[i]);
+        }
 
         //progress info
         m_cancelRequested = false;
         m_progress -> setSubject(this, true, true);
 	emit notifyProgressStage(this,i18n("Scaling layer..."),0);
-	
+		
         // build x weights
         contribX = new ContribList[ targetW ];
         for(int x = 0; x < targetW; x++)
@@ -178,6 +190,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                 calcContrib(&contribX[x], xscale, fwidth, width, filterStrategy, x);
         }
 
+	QTime starttime = QTime::currentTime ();
+	
         for(int y = 0; y < targetH; y++)
         {
                 //progress info
@@ -188,21 +202,37 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
                 // build y weights
                 calcContrib(&contribY, yscale, fwidth, height, filterStrategy, y);
-                /* Apply vert filter to make dst row in tmp. */
+                
+		//copy pixel data to temporary arrays
+		for(int srcpos = 0; srcpos < contribY.n; srcpos++)
+		{
+			if (!(contribY.p[srcpos].m_pixel < 0 || contribY.p[srcpos].m_pixel >= height))
+			{
+				
+				tmpRows[contribY.p[srcpos].m_pixel] = new QUANTUM[ width * m_pixelSize * sizeof( QUANTUM ) ];
+				//tmpRows[ contribY.p[srcpos].m_pixel ] = tmpRowsMem[ srcpos ];
+				m_dev -> readBytes(tmpRows[contribY.p[srcpos].m_pixel], 0, contribY.p[srcpos].m_pixel, width, 1);
+			}
+		}
+		
+		/* Apply vert filter to make dst row in tmp. */
                 for(int x = 0; x < width; x++)
                 {
                         for(int channel = 0; channel < m_pixelSize; channel++){
                                 weight[channel] = 0.0;
                                 bPelDelta[channel] = FALSE;
-                        }
-                        m_dev -> readBytes(pel, x, contribY.p[0].m_pixel, 1, 1);
+                        	pel[channel]=tmpRows[contribY.p[0].m_pixel][ x * m_pixelSize + channel ];
+			}
+			//m_dev -> readBytes(pel, x, contribY.p[0].m_pixel, 1, 1);
                         for(int srcpos = 0; srcpos < contribY.n; srcpos++)
                         {
-                                if (!(contribY.p[srcpos].m_pixel < 0 || contribY.p[srcpos].m_pixel >= height)){
-                                        m_dev -> readBytes(pel2, x, contribY.p[srcpos].m_pixel, 1, 1);
-                                        for(int channel = 0; channel < m_pixelSize; channel++)
+				if (!(contribY.p[srcpos].m_pixel < 0 || contribY.p[srcpos].m_pixel >= height)){
+                                        //m_dev -> readBytes(pel2, x, contribY.p[srcpos].m_pixel, 1, 1);
+                                        //kdDebug() << "y: " << y << " x: " << x << " contribY.p[srcpos].m_pixel: " << contribY.p[srcpos].m_pixel << endl;
+					for(int channel = 0; channel < m_pixelSize; channel++)
                                         {
-                                                if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;
+                                                pel2[channel]=tmpRows[contribY.p[srcpos].m_pixel][ x * m_pixelSize + channel ];
+						if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;
                                                 weight[channel] += pel2[channel] * contribY.p[srcpos].m_weight;
                                         }
                                 }
@@ -214,7 +244,18 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                         }
                 } /* next row in temp column */
                 delete[] contribY.p;
-
+		
+		//delete the temporary rows
+		for(int srcpos = 0; srcpos < contribY.n; srcpos++)
+		{
+			if (!(contribY.p[srcpos].m_pixel < 0 || contribY.p[srcpos].m_pixel >= height))
+			{
+				if(!tmpRows[contribY.p[srcpos].m_pixel])
+				{	
+					delete[] tmpRows[contribY.p[srcpos].m_pixel];
+				}
+			}
+		}
                 /* The temp column has been built. Now stretch it
                 vertically into dst column. */
                 for(int x = 0; x < targetW; x++)
@@ -256,14 +297,17 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         delete[] pel;
         delete[] pel2;
         delete[] tmp;
-
+	
         //progress info
         emit notifyProgressDone(this);
 
+	QTime stoptime = QTime::currentTime ();
+	kdDebug() << "time needed for scaling: " << starttime.msecsTo ( stoptime )  << "ms" << endl; 
+	
         return;
 }
 
-int KisScaleVisitor::calcContrib(ContribList *contribX, double scale, double fwidth, int srcwidth, KisScaleFilterStrategy* filterStrategy, Q_INT32 i)
+int KisScaleVisitor::calcContrib(ContribList *contrib, double scale, double fwidth, int srcwidth, KisScaleFilterStrategy* filterStrategy, Q_INT32 i)
 {
         //ContribList* contribX: receiver of contrib info
         //double xscale: horizontal zooming scale
@@ -285,8 +329,8 @@ int KisScaleVisitor::calcContrib(ContribList *contribX, double scale, double fwi
                 width = fwidth / scale;
                 fscale = 1.0 / scale;
 
-                contribX->n = 0;
-                contribX->p = new Contrib[ (int)(width * 2 + 1) ];
+                contrib->n = 0;
+                contrib->p = new Contrib[ (int)(width * 2 + 1) ];
 
                 center = (double) i / scale;
                 begin = ceil(center - width);
@@ -302,16 +346,16 @@ int KisScaleVisitor::calcContrib(ContribList *contribX, double scale, double fwi
                         else
                                 n = srcpos;
 
-                        k = contribX->n++;
-                        contribX->p[k].m_pixel = n;
-                        contribX->p[k].m_weight = weight;
+                        k = contrib->n++;
+                        contrib->p[k].m_pixel = n;
+                        contrib->p[k].m_weight = weight;
                 }
         }
         else
         {
                 // Expanding image
-                contribX->n = 0;
-                contribX->p = new Contrib[ (int)(fwidth * 2 + 1) ];
+                contrib->n = 0;
+                contrib->p = new Contrib[ (int)(fwidth * 2 + 1) ];
                 
                 center = (double) i / scale;
                 begin = ceil(center - fwidth);
@@ -328,9 +372,9 @@ int KisScaleVisitor::calcContrib(ContribList *contribX, double scale, double fwi
                         } else {
                                 n = srcpos;
                         }
-                        k = contribX->n++;
-                        contribX->p[k].m_pixel = n;
-                        contribX->p[k].m_weight = weight;
+                        k = contrib->n++;
+                        contrib->p[k].m_pixel = n;
+                        contrib->p[k].m_weight = weight;
                 }
         }
         return 0;

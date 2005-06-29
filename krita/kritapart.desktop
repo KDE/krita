@@ -35,4 +35,6 @@ Type=Service
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-krita
 GenericName=Image object
+GenericName[ga]=Réad íomhá
+GenericName[sv]=Bildobjekt
 Icon=krita

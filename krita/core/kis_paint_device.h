@@ -208,6 +208,11 @@ public:
 	 */
         bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity);
 	bool pixel(Q_INT32 x, Q_INT32 y, KisColor * kc);
+
+	/*
+	 * 
+	 */
+	KisColor pixelAt(Q_INT32 x, Q_INT32 y);
 	
         /**
 	 * Set the specified pixel to the specified color. Note that this

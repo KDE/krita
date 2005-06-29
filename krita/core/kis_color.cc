@@ -71,7 +71,7 @@ KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisStrategyColorSpaceSP 
 	m_colorStrategy->nativeColor(color, alpha, m_data, profile);
 }
 
-KisColor::KisColor(Q_UINT8 * data, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile)
+KisColor::KisColor(const Q_UINT8 * data, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile)
 	: m_colorStrategy(colorStrategy),
 	  m_profile(profile)
 {
@@ -144,7 +144,6 @@ void KisColor::setColor(Q_UINT8 * data, KisStrategyColorSpaceSP colorStrategy, K
 {
 	delete [] m_data;
 	m_data = new Q_UINT8[colorStrategy->pixelSize()];
-	memset(m_data, 0, m_colorStrategy->pixelSize());
 	memcpy(m_data, data, colorStrategy->pixelSize());
 	m_colorStrategy = colorStrategy;
 	m_profile = profile;

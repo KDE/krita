@@ -53,7 +53,7 @@ public:
 	KisColor(const QColor & color, Q_UINT8 alpha, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile = 0);
 	
 	// Create a KisColor using a native color strategy. The data is copied.
-	KisColor(Q_UINT8 * data, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile = 0);
+	KisColor(const Q_UINT8 * data, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile = 0);
 
 	// Create a KisColor by converting src into another colorspace
 	KisColor(const KisColor &src, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile = 0);

@@ -18,16 +18,21 @@ AM_CPPFLAGS = \
 	$(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/../strategy \
 	-I$(srcdir)/../color_strategy \
+	-I$(srcdir)/../../modules/colorspace_rgb \
 	$(all_includes)
 
 # The check_ target makes sure we don't install the modules,
 # $(KDE_CHECK_PLUGIN) assures a shared library is created.
-check_LTLIBRARIES = kunittest_kis_integer_maths_tester.la
+check_LTLIBRARIES = kunittest_kis_integer_maths_tester.la kunittest_kis_image_tester.la
 
 kunittest_kis_integer_maths_tester_la_SOURCES = kis_integer_maths_tester.cpp
 kunittest_kis_integer_maths_tester_la_LIBADD = -lkunittest ../../libkritacommon.la
 kunittest_kis_integer_maths_tester_la_LDFLAGS = -module $(KDE_CHECK_PLUGIN) $(all_libraries)
 
-check-local: kunittest_kis_integer_maths_tester.la
+kunittest_kis_image_tester_la_SOURCES = kis_image_tester.cpp
+kunittest_kis_image_tester_la_LIBADD = -lkunittest ../../libkritacommon.la
+kunittest_kis_image_tester_la_LDFLAGS = -module $(KDE_CHECK_PLUGIN) $(all_libraries)
+
+check-local: kunittest_kis_integer_maths_tester.la kunittest_kis_image_tester.la
 	kunittestmodrunner
 

@@ -968,6 +968,11 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KisColor * kc)
 	return true;
 }
 	
+KisColor KisPaintDevice::pixelAt(Q_INT32 x, Q_INT32 y)
+{
+	return KisColor(m_datamanager -> pixel(x - m_x, y - m_y), m_colorStrategy, m_profile);
+}
+
 bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity)
 {
 	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);

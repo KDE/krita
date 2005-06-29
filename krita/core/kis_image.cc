@@ -1343,6 +1343,26 @@ KisPaintDeviceSP KisImage::mergedImage()
 	return dev;
 }
 
+KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)
+{
+	KisPaintDeviceSP dev = new KisPaintDevice(colorStrategy(), "merged pixel");
+	dev -> setProfile(profile());
+
+	KisPainter gc;
+
+	gc.begin(dev.data());
+
+	if (!m_layers.empty()) {
+		KisFlatten<flattenAllVisible> visitor(x, y, 1, 1);
+
+		visitor(gc, m_layers);
+	}
+
+	gc.end();
+
+	return dev -> pixelAt(x, y);
+}
+
 void KisImage::notify()
 {
 	notify(0, 0, width(), height());

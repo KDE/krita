@@ -44,6 +44,7 @@ class DCOPObject;
 class KisDoc;
 class KCommand;
 class KisCompositeOp;
+class KisColor;
 
 class KRITACORE_EXPORT KisImage : public QObject, public KShared {
 	Q_OBJECT
@@ -121,7 +122,11 @@ public:
 	/** returns a paintdevice that contains the merged layers of this image, within
 	 * the bounds of this image (with the colorspace and profile of this image) */
 	KisPaintDeviceSP mergedImage();
-	
+
+	/*
+	 * Returns the colour of the merged image at pixel (x, y).
+	 */
+	KisColor mergedPixel(Q_INT32 x, Q_INT32 y);
 
 	// Get the active painting device
 	KisPaintDeviceSP activeDevice();

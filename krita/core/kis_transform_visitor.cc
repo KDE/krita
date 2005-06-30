@@ -34,6 +34,23 @@ double KisSimpleFilterStrategy::valueAt(double t) const {
         return(0.0);
 }
 
+Q_UINT32 KisSimpleFilterStrategy::intValueAt(Q_INT32 t) const {
+        /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
+        if(t < 0) t = -t;
+        if(t < 256)
+	{
+	 t =(2 * t - 3*256) * t * t +(256<<16);
+	 
+	 //go from .24 fixed point to .8 fixedpoint (hack only works wit positve numbers)
+	 t = (t+0x8000) >> 16;
+	 
+	 // go from .8 fixed point to 8bitscale. ie t = (t*255)/256;
+	 if(t>=128) return t-1;
+	 return t;
+	}
+        return(0);
+}
+
 double KisBoxFilterStrategy::valueAt(double t) const {
         if((t > -0.5) && (t <= 0.5)) return(1.0);
         return(0.0);
@@ -100,64 +117,81 @@ double KisMitchellFilterStrategy::valueAt(double t) const {
 }
 
 
-void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q_INT32 scale, Q_INT32 scaleDenom, Q_INT32  shear, Q_INT32 dx,   
-				     KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
+void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, Q_INT32  shear, Q_INT32 dx, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
 {
-	Q_INT32 x,y,left,top,w,h;
+	Q_INT32 lineNum,srcStart,firstLine,srcLen,numLines;
         Q_INT32 center, begin, end;	/* filter calculation variables */
 	Q_UINT8 *data;
 	Q_UINT8 pixelSize = src->pixelSize();
 	KisSelectionSP dstSelection;
+	KisStrategyColorSpaceSP cs = src->colorStrategy();
+	Q_INT32 scale;
+	Q_INT32 scaleDenom;
 	
 	if(src->hasSelection())
 	{
 		QRect r = src->selection()->selectedExactRect();
-		r.rect(&left, &top, &w, &h);
+		r.rect(&srcStart, &firstLine, &srcLen, &numLines);
 		dstSelection = dst->selection();
 	}
 	else
 	{
-		src->exactBounds(left, top, w, h);
+		src->exactBounds(srcStart, firstLine, srcLen, numLines);
 		dstSelection = new KisSelection(dst, "dummy"); // essentially a dummy to be deleted
 	}
+	scale = int(floatscale*srcLen);
+	scaleDenom = srcLen;
 		
-	double weight;
-	double fscale;
-	double width = filterStrategy->support();
-	Q_INT32  targetW, targetL;
+	Q_UINT8 *weight = new Q_UINT8[100];
+	const Q_UINT8 *colors[100];
+	Q_INT32 support = int(256 * filterStrategy->support());
+	Q_INT32  dstLen, dstStart;
+	Q_INT32 invfscale = 256;
 	
+	// handle magnification/minification
+	if(abs(scale) < scaleDenom)
+	{
+		support *= scaleDenom;
+		support /= scale;
+		
+		invfscale *= scale;
+		invfscale /= scaleDenom;
+		if(scale < 0) // handle mirroring
+		{
+			support = -support;
+			invfscale = -invfscale;
+		}
+	}
+	
+	// handle mirroring
 	if(scale < 0)
-	{
-		targetW = -w * scale / scaleDenom;
-		fscale = -1.0 / scale;
-	}
+		dstLen = -srcLen * scale / scaleDenom;
 	else
-	{
-		targetW = w * scale / scaleDenom;
-		fscale = 1.0 / scale;
-	}
+		dstLen = srcLen * scale / scaleDenom;
 	
-	// Calculate extra width needed due to shear
-	Q_INT32 extrawidth =0;
 	
-	Q_UINT8 *tmpLine = new Q_UINT8[w * pixelSize];
+	// Calculate extra length needed due to shear
+	Q_INT32 extraLen = (support+256)>>8;
+	
+	Q_UINT8 *tmpLine = new Q_UINT8[(srcLen +2*extraLen)* pixelSize];
 	Q_CHECK_PTR(tmpLine);
 
-	Q_UINT8 *tmpSel = new Q_UINT8[w];
+	Q_UINT8 *tmpSel = new Q_UINT8[srcLen+2*extraLen];
 	Q_CHECK_PTR(tmpSel);
-
-	kdDebug(DBG_AREA_CORE) << "w=" << w << " tW" << targetW << " scale=" << scale << " sDenom=" <<scaleDenom << endl;
-	kdDebug(DBG_AREA_CORE) << "left="<< left << ",dx=" << dx << endl;
 	
-	for(y = top; y < top+h; y++)
+	kdDebug(DBG_AREA_CORE) << "srcLen=" << srcLen << " dstLen" << dstLen << " scale=" << scale << " sDenom=" <<scaleDenom << endl;
+	kdDebug(DBG_AREA_CORE) << "srcStart="<< srcStart << ",dx=" << dx << endl;
+	kdDebug(DBG_AREA_CORE) << "extraLen="<< extraLen << endl;
+	
+	for(lineNum = firstLine; lineNum < firstLine+numLines; lineNum++)
 	{
 		if(scale < 0)
-			targetL = left * scale / scaleDenom - targetW + dx;
+			dstStart = srcStart * scale / scaleDenom - dstLen + dx;
 		else
-			targetL = (left) * scale / scaleDenom + dx;
+			dstStart = (srcStart) * scale / scaleDenom + dx;
 		
 		// Build a temporary line
-		KisHLineIteratorPixel srcIt = src->createHLineIterator(left, y, w, true);
+		KisHLineIteratorPixel srcIt = src->createHLineIterator(srcStart - extraLen, lineNum, srcLen+2*extraLen, true);
 		int i = 0;
 		while(!srcIt.isDone())
 		{
@@ -180,28 +214,43 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 			i++;
 		}
 
-		KisHLineIteratorPixel dstIt = dst->createHLineIterator(targetL, y, targetW, true);
-		KisHLineIteratorPixel dstSelIt = dstSelection->createHLineIterator(targetL, y, targetW, true);
+		KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstStart, lineNum, dstLen, true);
+		KisHLineIteratorPixel dstSelIt = dstSelection->createHLineIterator(dstStart, lineNum, dstLen, true);
 		
 		i=0;
 		while(!dstIt.isDone())
 		{
 			if(scale < 0)
-				center = w + (i * scaleDenom) / scale;
+				center = (srcLen<<8) + (((i * scaleDenom))<<8) / scale;
 			else
-				center = (i * scaleDenom) / scale;
+				center = ((i * scaleDenom)<<8) / scale;
 			
-			begin = ceil(center - width);
-			end = floor(center + width);
+			center += (extraLen<<8);
 			
-			for(int srcpos = (int)begin; srcpos <= end; srcpos++)
-				weight = filterStrategy->valueAt((center - srcpos) / fscale) / fscale;
-
-			Q_UINT8 selectedness = tmpSel[center];
+			// find contributing pixels
+			begin = (256 + center - support)>>8; // takes ceiling by adding 256
+			end = (center + support)>>8; // takes floor
+						
+			Q_UINT8 selectedness = tmpSel[center>>8];
 			if(selectedness)
 			{
+				// calculate weights
+				int num = 0;
+				int sum = 0;
+				//Q_INT32 t = ((center - (srcpos<<8)) * invfscale)>>8;
+				//Q_INT32 dt = (256 * invfscale)>>8;
+				for(int srcpos = begin; srcpos <= end; srcpos++)
+				{
+					Q_UINT32 tmpw = filterStrategy->intValueAt(
+								((center - (srcpos<<8)) * invfscale)>>8) * invfscale;
+					
+					tmpw >>=8;
+					weight[num] = tmpw;
+					colors[num] = &tmpLine[begin*pixelSize];
+					num++;
+				}				
 				data = dstIt.rawData();
-				memcpy(data, &tmpLine[center*pixelSize],  pixelSize);
+				cs->mixColors(colors, weight, num, data);
 				data = dstSelIt.rawData();
 				*data = selectedness;
 			}
@@ -212,68 +261,91 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, Q
 		}
 		
 		//progress info
-		emit notifyProgress(this,((y-top) * 100) / h);
+		emit notifyProgress(this,((lineNum-firstLine) * 100) / numLines);
 		if (m_cancelRequested) {
 			break;
 		}
 	}
 	delete [] tmpLine;
 	delete [] tmpSel;
+	delete [] weight;
 }
 
-void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q_INT32 scale, Q_INT32 scaleDenom, Q_INT32  shear, Q_INT32 dx,   KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
+void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, Q_INT32  shear, Q_INT32 dx, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
 {
-	Q_INT32 x,y,left,top,w,h;
+	Q_INT32 lineNum,srcStart,firstLine,srcLen,numLines;
         Q_INT32 center, begin, end;	/* filter calculation variables */
 	Q_UINT8 *data;
 	Q_UINT8 pixelSize = src->pixelSize();
 	KisSelectionSP dstSelection;
+	KisStrategyColorSpaceSP cs = src->colorStrategy();
+	Q_INT32 scale;
+	Q_INT32 scaleDenom;
 	
 	if(src->hasSelection())
 	{
 		QRect r = src->selection()->selectedExactRect();
-		r.rect(&left, &top, &w, &h);
+		r.rect(&firstLine, &srcStart, &numLines, &srcLen);
 		dstSelection = dst->selection();
 	}
 	else
 	{
-		src->exactBounds(left, top, w, h);
+		src->exactBounds(firstLine, srcStart, numLines, srcLen);
 		dstSelection = new KisSelection(dst, "dummy"); // essentially a dummy to be deleted
 	}
+	scale = int(floatscale*srcLen);
+	scaleDenom = srcLen;
 		
-	double weight;
-	double fscale;
-	double width = filterStrategy->support();
-	Q_INT32  targetW, targetT;
+	Q_UINT8 *weight = new Q_UINT8[100];
+	const Q_UINT8 *colors[100];
+	Q_INT32 support = int(256 * filterStrategy->support());
+	Q_INT32  dstLen, dstStart;
+	Q_INT32 invfscale = 256;
 	
+	// handle magnification/minification
+	if(abs(scale) < scaleDenom)
+	{
+		support *= scaleDenom;
+		support /= scale;
+		
+		invfscale *= scale;
+		invfscale /= scaleDenom;
+		if(scale < 0) // handle mirroring
+		{
+			support = -support;
+			invfscale = -invfscale;
+		}
+	}
+	
+	// handle mirroring
 	if(scale < 0)
-	{
-		// mirroring
-		targetW = -h * scale / scaleDenom;
-		fscale = -1.0 / scale;
-	}
+		dstLen = -srcLen * scale / scaleDenom;
 	else
-	{
-		targetW = h * scale / scaleDenom;
-		fscale = 1.0 / scale;
-	}
+		dstLen = srcLen * scale / scaleDenom;
 	
-	// Calculate extra width needed due to shear
-	Q_INT32 extrawidth =0;
 	
-	Q_UINT8 *tmpLine = new Q_UINT8[h*pixelSize];
-	Q_UINT8 *tmpSel = new Q_UINT8[h];
-	kdDebug(DBG_AREA_CORE) << "h=" << h << ", tH=" << targetW << endl;
+	// Calculate extra length needed due to shear
+	Q_INT32 extraLen = (support+256)>>8;
 	
-	for(x = left; x < left+w; x++)
+	Q_UINT8 *tmpLine = new Q_UINT8[(srcLen +2*extraLen)* pixelSize];
+	Q_CHECK_PTR(tmpLine);
+
+	Q_UINT8 *tmpSel = new Q_UINT8[srcLen+2*extraLen];
+	Q_CHECK_PTR(tmpSel);
+	
+	kdDebug(DBG_AREA_CORE) << "srcLen=" << srcLen << " dstLen" << dstLen << " scale=" << scale << " sDenom=" <<scaleDenom << endl;
+	kdDebug(DBG_AREA_CORE) << "srcStart="<< srcStart << ",dx=" << dx << endl;
+	kdDebug(DBG_AREA_CORE) << "extraLen="<< extraLen << endl;
+	
+	for(lineNum = firstLine; lineNum < firstLine+numLines; lineNum++)
 	{
 		if(scale < 0)
-			targetT = top * scale / scaleDenom - targetW + dx;
+			dstStart = srcStart * scale / scaleDenom - dstLen + dx;
 		else
-			targetT = (top) * scale / scaleDenom + dx;
+			dstStart = (srcStart) * scale / scaleDenom + dx;
 		
 		// Build a temporary line
-		KisVLineIteratorPixel srcIt = src->createVLineIterator(x, top, h, true);
+		KisVLineIteratorPixel srcIt = src->createVLineIterator(lineNum, srcStart - extraLen,  srcLen+2*extraLen, true);
 		int i = 0;
 		while(!srcIt.isDone())
 		{
@@ -296,28 +368,43 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 			i++;
 		}
 
-		KisVLineIteratorPixel dstIt = dst->createVLineIterator(x, targetT, targetW, true);
-		KisVLineIteratorPixel dstSelIt = dstSelection->createVLineIterator(x, targetT, targetW, true);
+		KisVLineIteratorPixel dstIt = dst->createVLineIterator(lineNum, dstStart, dstLen, true);
+		KisVLineIteratorPixel dstSelIt = dstSelection->createVLineIterator(lineNum, dstStart, dstLen, true);
 		
 		i=0;
 		while(!dstIt.isDone())
 		{
 			if(scale < 0)
-				center = h + (i * scaleDenom) / scale;
+				center = (srcLen<<8) + (((i * scaleDenom))<<8) / scale;
 			else
-				center = (i * scaleDenom) / scale;
-				
-			begin = ceil(center - width);
-			end = floor(center + width);
+				center = ((i * scaleDenom)<<8) / scale;
 			
-			for(int srcpos = (int)begin; srcpos <= end; srcpos++)
-				weight = filterStrategy->valueAt((center - srcpos) / fscale) / fscale;
-
-			Q_UINT8 selectedness = tmpSel[center];
+			center += (extraLen<<8);
+			
+			// find contributing pixels
+			begin = (256 + center - support)>>8; // takes ceiling by adding 256
+			end = (center + support)>>8; // takes floor
+						
+			Q_UINT8 selectedness = tmpSel[center>>8];
 			if(selectedness)
 			{
+				// calculate weights
+				int num = 0;
+				int sum = 0;
+				//Q_INT32 t = ((center - (srcpos<<8)) * invfscale)>>8;
+				//Q_INT32 dt = (256 * invfscale)>>8;
+				for(int srcpos = begin; srcpos <= end; srcpos++)
+				{
+					Q_UINT32 tmpw = filterStrategy->intValueAt(
+								((center - (srcpos<<8)) * invfscale)>>8) * invfscale;
+					
+					tmpw >>=8;
+					weight[num] = tmpw;
+					colors[num] = &tmpLine[begin*pixelSize];
+					num++;
+				}				
 				data = dstIt.rawData();
-				memcpy(data, &tmpLine[center*pixelSize], pixelSize);
+				cs->mixColors(colors, weight, num, data);
 				data = dstSelIt.rawData();
 				*data = selectedness;
 			}
@@ -328,13 +415,14 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, Q
 		}
 		
 		//progress info
-		emit notifyProgress(this,((x-left) * 100) / w);
+		emit notifyProgress(this,((lineNum-firstLine) * 100) / numLines);
 		if (m_cancelRequested) {
 			break;
 		}
 	}
 	delete [] tmpLine;
 	delete [] tmpSel;
+	delete [] weight;
 }
 
 void KisTransformVisitor::transform(double  xscale, double  yscale, 
@@ -345,7 +433,7 @@ void KisTransformVisitor::transform(double  xscale, double  yscale,
         double fwidth;
 
         KisFilterStrategy *filterStrategy = 0;
-
+filterType=FILTER;
         switch(filterType){
                 case BOX_FILTER:
                         filterStrategy = new KisBoxFilterStrategy();
@@ -372,16 +460,13 @@ void KisTransformVisitor::transform(double  xscale, double  yscale,
 	
 	fwidth = filterStrategy->support();
 
-	Q_INT32 width = m_dev->image()->width();
-	Q_INT32 height = m_dev->image()->height();
-        
 	m_cancelRequested = false;
 	
 	KisPaintDeviceSP tmpdev = new KisPaintDevice(m_dev->colorStrategy(),"temporary");
-	transformx(m_dev, tmpdev, xscale*width, width, xshear, xtranslate, m_progress, filterStrategy);
+	transformx(m_dev, tmpdev, xscale, xshear, xtranslate, m_progress, filterStrategy);
 	if(m_dev->hasSelection())
 		m_dev->selection()->clear();
-	transformy(tmpdev, m_dev, yscale*height, height, yshear, ytranslate, m_progress, filterStrategy);
+	transformy(tmpdev, m_dev, yscale, yshear, ytranslate, m_progress, filterStrategy);
 	
 	//progress info
         emit notifyProgressDone(this);

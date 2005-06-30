@@ -43,6 +43,7 @@ class KisFilterStrategy {
 		virtual ~KisFilterStrategy() {}
 
 		virtual double valueAt(double t) const = 0;
+		virtual Q_UINT32 intValueAt(Q_INT32 ) const {return 0;};
 		double support() { return supportVal;};
 	protected:
 		double supportVal;
@@ -52,6 +53,7 @@ class KisSimpleFilterStrategy : public KisFilterStrategy {
 	public:
 		KisSimpleFilterStrategy() {supportVal = 1.0;}
 		virtual ~KisSimpleFilterStrategy() {}
+		virtual Q_UINT32 intValueAt(Q_INT32 t) const;
 
 		virtual double valueAt(double t) const;
 };
@@ -116,9 +118,9 @@ public:
 	void visitKisPaintDevice(KisPaintDevice* dev);
 
 	// XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
-	void transformx(KisPaintDevice *src, KisPaintDevice *dst, Q_INT32 scale, Q_INT32 scaleDenom, Q_INT32  shear, Q_INT32 dx,   KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
+	void transformx(KisPaintDevice *src, KisPaintDevice *dst, double xscale, Q_INT32  shear, Q_INT32 dx,   KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
 
-	void transformy(KisPaintDevice *src, KisPaintDevice *dst, Q_INT32 scale, Q_INT32 scaleDenom, Q_INT32  shear, Q_INT32 dy,   KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
+	void transformy(KisPaintDevice *src, KisPaintDevice *dst, double yscale, Q_INT32  shear, Q_INT32 dy,   KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
 
 	void transform(double  xscale, double  yscale, 
 			Q_INT32  xshear, Q_INT32  yshear,

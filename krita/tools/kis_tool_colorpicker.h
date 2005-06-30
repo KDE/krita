@@ -24,12 +24,7 @@
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
 
-class KisCanvasSubject;
-class QWidget;
-class QVBoxLayout;
-class QCheckBox;
-
-
+class ColorPickerOptionsWidget;
 
 class KisToolColorPicker : public KisToolNonPaint {
 
@@ -48,14 +43,15 @@ public:
 	virtual QWidget* optionWidget();
 
 public slots:
-	virtual void slotSetUpdateColor(bool);
+	void slotSetUpdateColor(bool);
+	void slotSetSampleMerged(bool);
 
 private:
+	bool m_updateColor;
+	bool m_sampleMerged;
+
+	ColorPickerOptionsWidget *m_optionsWidget;
 	KisCanvasSubject *m_subject;
-	QWidget *m_optWidget;
-	QVBoxLayout *m_frame;
-	QCheckBox *m_updateColor;
-	bool m_update;
 };
 
 class KisToolColorPickerFactory : public KisToolFactory {

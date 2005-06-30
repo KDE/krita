@@ -24,6 +24,7 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <qcolor.h>
+#include <kmessagebox.h>
 
 #include "kis_cursor.h"
 #include "kis_canvas_subject.h"
@@ -34,54 +35,70 @@
 #include "kis_button_press_event.h"
 #include "kis_canvas_subject.h"
 #include "kis_color.h"
+#include "wdgcolorpicker.h"
 
 KisToolColorPicker::KisToolColorPicker()
 {
 	setName("tool_colorpicker");
 	setCursor(KisCursor::pickerCursor());
+	m_optionsWidget = 0;
 	m_subject = 0;
-	m_optWidget = 0;
-	m_updateColor = 0;
-	m_update = true;
+	m_updateColor = true;
+	m_sampleMerged = true;
 }
 
 KisToolColorPicker::~KisToolColorPicker() 
 {
 }
 
+void KisToolColorPicker::update(KisCanvasSubject *subject)
+{
+	m_subject = subject;
+	super::update(m_subject);
+}
+
 void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 {
 	if (m_subject) {
-		KisImageSP img;
-		KisPaintDeviceSP dev;
-		QPoint pos;
-		KisColor c;
-		QUANTUM opacity;
-
 		if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)
 			return;
 
-		if (!(img = m_subject -> currentImg()))
+		KisImageSP img;
+
+		if (!m_subject || !(img = m_subject -> currentImg()))
 			return;
 
-		dev = img -> activeDevice();
+		KisPaintDeviceSP dev = img -> activeDevice();
 
-		if (!dev || !dev -> visible())
-			return;
+		if (!m_sampleMerged) {
+			if (!dev ) {
+				return;
+			}
+			if (!dev -> visible()) {
+				KMessageBox::information(0, i18n("Cannot pick the color as the active layer is hidden."));
+				return;
+			}
+		}
 
-		pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
+		QPoint pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
 
 		if (!img -> bounds().contains(pos)) {
 			return;
 		}
 
-		if (dev -> pixel(pos.x(), pos.y(), &c)) {
-			if (m_update) {
-				if (e -> button() == QMouseEvent::LeftButton)
-					m_subject -> setFGColor(c);
-				else 
-					m_subject -> setBGColor(c);
-			}
+		KisColor c;
+
+		if (m_sampleMerged) {
+			c = img -> mergedPixel(pos.x(), pos.y());
+		} else {
+			c = dev -> pixelAt(pos.x(), pos.y());
+		}
+
+		if (m_updateColor) {
+			if (e -> button() == QMouseEvent::LeftButton)
+				m_subject -> setFGColor(c);
+			else 
+				m_subject -> setBGColor(c);
 		}
 	}
 }
@@ -97,33 +114,31 @@ void KisToolColorPicker::setup(KActionCollection *collection)
 	}
 }
 
-void KisToolColorPicker::update(KisCanvasSubject *subject)
-{
-	super::update(subject);
-	m_subject = subject;
-}
-
 QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
 {
-	m_optWidget = new QWidget(parent);
-	m_optWidget -> setCaption(i18n("Color Picker"));
+	m_optionsWidget = new ColorPickerOptionsWidget(parent);
 	
-	m_frame = new QVBoxLayout(m_optWidget);
-	m_updateColor = new QCheckBox(i18n("Update current color"),m_optWidget);
-	m_updateColor -> setChecked(m_updateColor);
-	m_frame -> addWidget(m_updateColor);
+	m_optionsWidget -> cbUpdateCurrentColour -> setChecked(m_updateColor);
+	m_optionsWidget -> cbSampleMerged -> setChecked(m_sampleMerged);
 
-	connect(m_updateColor,SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
+	connect(m_optionsWidget -> cbUpdateCurrentColour, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
+	connect(m_optionsWidget -> cbSampleMerged, SIGNAL(toggled(bool)), SLOT(slotSetSampleMerged(bool)));
 
-	return m_optWidget;
+	return m_optionsWidget;
 }
 
 QWidget* KisToolColorPicker::optionWidget()
 {
-	return m_optWidget;
+	return m_optionsWidget;
 }
 
 void KisToolColorPicker::slotSetUpdateColor(bool state)
 {
-	m_update = state;
+	m_updateColor = state;
 }
+
+void KisToolColorPicker::slotSetSampleMerged(bool state)
+{
+	m_sampleMerged = state;
+}
+

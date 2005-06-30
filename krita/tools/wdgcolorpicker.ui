@@ -1,0 +1,51 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>ColorPickerOptionsWidget</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ColorPickerOptionsWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>166</width>
+            <height>68</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Color Picker</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>cbSampleMerged</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Sample Merged</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>cbUpdateCurrentColour</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Update Current Color</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

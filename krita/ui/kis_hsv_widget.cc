@@ -190,9 +190,15 @@ void KisHSVWidget::update(KisCanvasSubject *subject)
 	m_ColorButton->setBackground( m_bgColor.color() );
 	m_ColorButton->blockSignals(false);
 
+	mHIn->blockSignals(true);
+	mSIn->blockSignals(true);
+	mVIn->blockSignals(true);
 	mHIn->setValue(h);
 	mSIn->setValue(s);
 	mVIn->setValue(v);
+	mHIn->blockSignals(false);
+	mSIn->blockSignals(false);
+	mVIn->blockSignals(false);
 
 	m_VSelector->blockSignals(true);
 	m_VSelector->setHue(h);

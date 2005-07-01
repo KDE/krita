@@ -106,11 +106,15 @@ void KisGrayWidget::update(KisCanvasSubject *subject)
 	m_ColorButton->setForeground( m_fgColor );
 	m_ColorButton->setBackground( m_bgColor );
 
+	mIn->blockSignals(true);
+	mSlider->blockSignals(true);
 	double v = color.red() + color.green() + color.blue();
 	v /= 3.0;
 	v = 255.0 - v;
 	mIn->setValue(static_cast<int>(v));
 	mSlider->slotSetValue(static_cast<int>(v));
+	mIn->blockSignals(false);
+	mSlider->blockSignals(false);
 
 	connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));

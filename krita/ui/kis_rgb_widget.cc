@@ -170,6 +170,13 @@ void KisRGBWidget::update(KisCanvasSubject *subject)
 	connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
 	connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 
+	mRSlider->blockSignals(true);
+	mRIn->blockSignals(true);
+	mGSlider->blockSignals(true);
+	mGIn->blockSignals(true);
+	mBSlider->blockSignals(true);
+	mBIn->blockSignals(true);
+	
 	mRSlider->slotSetColor1(QColor(0, g, b));
 	mRSlider->slotSetColor2(QColor(255, g, b));
 	mRSlider->slotSetValue(r);
@@ -184,6 +191,13 @@ void KisRGBWidget::update(KisCanvasSubject *subject)
 	mBSlider->slotSetColor2(QColor(r, g, 255));
 	mBSlider->slotSetValue(b);
 	mBIn->setValue(b);
+	
+	mRSlider->blockSignals(false);
+	mRIn->blockSignals(false);
+	mGSlider->blockSignals(false);
+	mGIn->blockSignals(false);
+	mBSlider->blockSignals(false);
+	mBIn->blockSignals(false);
 }
 
 void KisRGBWidget::slotFGColorSelected(const QColor& c)

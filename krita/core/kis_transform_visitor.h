@@ -29,10 +29,6 @@ class KisHLineIteratorPixel;
 class KisVLineIteratorPixel;
 class KisFilterStrategy;
 
-	template <class iter> iter createIterator(KisPaintDevice *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len);
-	template <> KisHLineIteratorPixel createIterator <KisHLineIteratorPixel> (KisPaintDevice *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len);
-	template <> KisVLineIteratorPixel createIterator<KisVLineIteratorPixel>(KisPaintDevice *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len);
-
 class KisTransformVisitor : public KisProgressSubject {
 	typedef KisProgressSubject super;
 
@@ -45,13 +41,11 @@ public:
 	void transform(double  xscale, double  yscale, 
 		Q_INT32  xshear, Q_INT32  yshear,
 		Q_INT32  xtranslate, Q_INT32  ytranslate,
-		KisProgressDisplayInterface *m_progress, enumFilterType filterType = MITCHELL_FILTER);
+		KisProgressDisplayInterface *progress, enumFilterType filterType = MITCHELL_FILTER);
 
 private:
 	// XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
-	template <class T> void transformPass(KisPaintDevice *src, KisPaintDevice *dst, double xscale, Q_INT32  shear, Q_INT32 dx,   KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
-
-	void transformy(KisPaintDevice *src, KisPaintDevice *dst, double yscale, Q_INT32  shear, Q_INT32 dy,   KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
+	template <class T> void transformPass(KisPaintDevice *src, KisPaintDevice *dst, double xscale, Q_INT32  shear, Q_INT32 dx,   KisFilterStrategy *filterStrategy);
 	
 private:
 	KisPaintDevice* m_dev;

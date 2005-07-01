@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritabumpmap" version="7">
+<MenuBar>
+    <Menu name="Filter"><text>&amp;Filter</text>
+    <Seperator/>
+    <Action name="krita_bumpmap"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

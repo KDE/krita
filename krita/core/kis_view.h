@@ -80,6 +80,7 @@ class KisFilterRegistry;
 class KisCompositeOp;
 class KisLayerBox;
 class KisPaintopBox;
+class KisToolBox;
 
 class KRITA_EXPORT KisView
 	: public KoView,
@@ -279,6 +280,7 @@ private:
 	void layerUpdateGUI(bool enable);
 	void createLayerBox();
 	void createPaintopBox();
+	void createToolBox();
 
 	void paintView(const KisRect& rc);
 
@@ -432,7 +434,8 @@ private:
 
         KisLayerBox *m_layerBox;
         KisPaintopBox *m_paintopBox;
-
+	KisToolBox *m_toolBox;
+	
 	// Current colours, brushes, patterns etc.
 
 	KisColor m_fg;

@@ -538,8 +538,16 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 	KisPainter painter(layer);
 
 	//If the device has a selection only iterate of that selection
-	if( m_device -> hasSelection() )
-		m_device -> selection() -> extent(startx, starty, width, height);
+	QRect r;
+	if( m_device -> hasSelection() ) {
+		r = m_device -> selection() -> selectedExactRect();
+		startx = r.x();
+		starty = r.y();
+		width = r.width();
+		height = r.height();
+	}
+	kdDebug(DBG_AREA_CORE) << "Going to compute gradient for rect: " 
+		<< startx << ", " << starty << ", " << width << ", " << height << "\n";
 
 	Q_INT32 endx = startx + width - 1;
 	Q_INT32 endy = starty + height - 1;

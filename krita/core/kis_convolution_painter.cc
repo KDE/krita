@@ -182,7 +182,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 
 				// Iterate over all contributing pixels that are covered by the kernel
 				// krow = the y position in the kernel matrix
-				for (Q_UINT32 krow = 0; krow <  kh; ++krow) {
+				for (Q_INT32 krow = 0; krow <  kh; ++krow) {
 	
 					// kx = the x position in the kernel matrix
 					int kx = 0;

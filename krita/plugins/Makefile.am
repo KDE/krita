@@ -3,6 +3,7 @@ if use_kjsembed
 endif
 
 SUBDIRS = cimg \
+	bumpmap \
 	example \
 	colorsfilters \
 	colorrange \

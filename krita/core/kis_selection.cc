@@ -169,7 +169,7 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
 	Q_INT32 x2;
 	uchar *j = img.bits();
 
-#if 1 // blueish monocrome with outline
+#if 1 // blueish monochrome with outline
 	for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
 		KisHLineIteratorPixel it = createHLineIterator(x, y2, w+2, false);
 		Q_UINT8 preS = *(it.rawData());

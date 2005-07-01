@@ -23,6 +23,7 @@
 #include <qobject.h>
 
 #include <ksharedptr.h>
+#include <kaction.h>
 
 #include "kis_canvas_observer.h"
 
@@ -42,6 +43,15 @@ class KisPattern;
 class KisButtonPressEvent;
 class KisButtonReleaseEvent;
 class KisMoveEvent;
+
+enum enumToolType {
+	TOOL_FREEHAND = 0, // Freehand drawing tools
+	TOOL_SHAPE = 1,   // Geometric shapes like ellipses and lines
+	TOOL_TRANFORM = 2, // Tools that transform the layer
+	TOOL_CANVAS = 3,   // Tools that affect the canvas: pan, zoom, etc.
+	TOOL_WEIRD = 4,    // Other tools...
+};
+
 
 class KisTool : public QObject, public KisCanvasObserver, public KShared {
 	Q_OBJECT
@@ -72,6 +82,11 @@ public:
 	virtual QWidget* createOptionWidget(QWidget* parent) = 0;
 	virtual QWidget* optionWidget() = 0;
 	KRadioAction *action() const { return m_action; }
+
+	// Methods for integration with karbon-style toolbox
+	virtual Q_UINT32 priority() { return 0; }
+	virtual enumToolType toolType() { return TOOL_FREEHAND; }
+	virtual QString icon() { return m_action->icon(); }
 
 public slots:
 	virtual void activate() = 0;

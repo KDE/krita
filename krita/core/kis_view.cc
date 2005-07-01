@@ -103,6 +103,7 @@
 #include "kis_layerbox.h"
 #include "kis_paintop_box.h"
 #include "kis_color.h"
+#include "kis_toolbox.h"
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
@@ -114,7 +115,6 @@
 
 // Action managers
 #include "kis_selection_manager.h"
-
 #include "koPaletteManager.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
@@ -211,7 +211,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 	createLayerBox();
 	createPaintopBox();
-
+#if 0
+	createToolBox();
+#endif
+	
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
 	connect(m_doc, SIGNAL(currentImageUpdated(KisImageSP)), SLOT(currentImageUpdated(KisImageSP)));
@@ -274,6 +277,12 @@ void KisView::createPaintopBox()
 	paletteManager()->addWidget(actionCollection(), m_paintopBox, "paintopbox", krita::PAINTBOX, INT_MIN, PALETTE_TOOLBOX);
 }
 
+
+void KisView::createToolBox()
+{
+	m_toolBox = new KisToolBox(this, mainWindow(), "toolbox");
+	mainWindow()->moveDockWindow( m_toolBox, Qt::DockLeft, false, 0 );
+}
 
 DCOPObject* KisView::dcopObject()
 {
@@ -1599,7 +1608,17 @@ void KisView::setupTools()
 	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = m_toolRegistry -> createTools(this);
 	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = m_toolRegistry -> createTools(this);
 	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = m_toolRegistry -> createTools(this);
+#if 0
+	KisIDList keys = m_toolRegistry->listKeys();
+	for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
+		KisTool * t = m_toolRegistry->get(*it);
 
+		if (!t) continue;
+
+		m_toolBox->registerTool( t );
+	}
+	m_toolBox->setupTools();
+#endif 	
 	qApp -> installEventFilter(this);
 	m_tabletEventTimer.start();
 }

@@ -4,6 +4,7 @@ Name=Transform Tool
 Name[da]=Transformeringsværktøj
 Name[es]=Herramienta para transformar
 Name[ga]=Uirlis Trasfhoirmithe
+Name[ru]=Преобразование
 Name[sv]=Transformeringsverktyg
 ServiceTypes=Krita/CoreModule
 Type=Service

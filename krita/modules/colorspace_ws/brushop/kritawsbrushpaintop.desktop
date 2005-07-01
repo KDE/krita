@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Wet & Sticky paintbrush paintop
 Name[es]=Brocha paintop mojada y pegajosa
+Name[ru]=Кисть с параметрами влажности и прилипания
 Name[sv]=Målningsoperation med våt och klibbig målarpensel
 Comment=Wet & Sticky paintbrush
 Comment[es]=Brocha mojada y pegajosa
+Comment[ru]=Кисть с параметрами влажности и прилипания
 Comment[sv]=Våt och klibbig målarpensel
 ServiceTypes=Krita/CoreModule
 Type=Service

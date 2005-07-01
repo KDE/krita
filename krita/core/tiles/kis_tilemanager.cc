@@ -53,7 +53,7 @@ KisTileManager::KisTileManager() {
 }
 
 KisTileManager::~KisTileManager() {
-	kdDebug() << "Destructing TileManager: unmapping everything" << endl;
+	kdDebug(DBG_AREA_TILES) << "Destructing TileManager: unmapping everything" << endl;
 
 	if (!m_freeList.empty()) { // Let's see if there is an item in the freelist that fits
 		FreeList::iterator it = m_freeList.begin();
@@ -69,7 +69,7 @@ KisTileManager::~KisTileManager() {
 		m_freeList.clear();
 	}
 
-	kdDebug() << "Destructing TileManager: deleting file" << endl;
+	kdDebug(DBG_AREA_TILES) << "Destructing TileManager: deleting file" << endl;
 	m_tempFile.close();
 	m_tempFile.unlink();
 }
@@ -187,11 +187,11 @@ void KisTileManager::toSwap(TileInfo* info) {
 					delete *it;
 					m_freeList.erase(it);
 
-					kdDebug() << "found in freelist\n";
+					kdDebug(DBG_AREA_TILES) << "found in freelist\n";
 
 					break;
 				} else {
-					kdDebug() << (*it) -> size << " < " << info -> size << endl;
+					kdDebug(DBG_AREA_TILES) << (*it) -> size << " < " << info -> size << endl;
 				}
 				++it;
 			}
@@ -210,7 +210,7 @@ void KisTileManager::toSwap(TileInfo* info) {
 								   m_tempFile.handle(), m_fileSize);
 
 			if (data == (Q_UINT8*)-1) {
-				kdDebug() << "mmap failed: errno is " << errno << "; we're going to crash...\n";
+				kdDebug(DBG_AREA_TILES) << "mmap failed: errno is " << errno << "; we're going to crash...\n";
 			}
 
 			info -> fsize = info -> size;
@@ -248,9 +248,9 @@ void KisTileManager::doSwapping() {
 }
 
 void KisTileManager::printInfo() {
-	kdDebug() << m_bytesInMem << " out of " << m_bytesTotal << " bytes in memory\n";
-	kdDebug() << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
-	kdDebug() << m_swappableList.size() << " elements in the swapable list\n";
-	kdDebug() << m_freeList.size() << " elements in the freelist\n";
-	kdDebug() << endl;
+	kdDebug(DBG_AREA_TILES) << m_bytesInMem << " out of " << m_bytesTotal << " bytes in memory\n";
+	kdDebug(DBG_AREA_TILES) << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
+	kdDebug(DBG_AREA_TILES) << m_swappableList.size() << " elements in the swapable list\n";
+	kdDebug(DBG_AREA_TILES) << m_freeList.size() << " elements in the freelist\n";
+	kdDebug(DBG_AREA_TILES) << endl;
 }

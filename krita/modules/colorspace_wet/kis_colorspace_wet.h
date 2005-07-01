@@ -20,6 +20,7 @@
 
 #include <qcolor.h>
 #include <qstringlist.h>
+#include <qmap.h>
 
 #include "kis_global.h"
 #include "kis_strategy_colorspace.h"
@@ -126,18 +127,20 @@ public:
 
 	virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
 
-	virtual void bitBlt(Q_INT32 stride,
-			    Q_UINT8 *dst,
-			    Q_INT32 dststride,
-			    const Q_UINT8 *src,
-			    Q_INT32 srcstride,
-			    QUANTUM opacity,
-			    Q_INT32 rows,
-			    Q_INT32 cols,
-			    const KisCompositeOp& op);
+	virtual void adjustBrightnessContrast(const Q_UINT8*, Q_UINT8*, Q_INT8, Q_INT8, Q_INT32) const { /* XXX implement? */}
 
 	virtual KisCompositeOpList userVisiblecompositeOps() const;
-
+protected:
+	virtual void bitBlt(Q_UINT8 *dst,
+			Q_INT32 dstRowSize,
+			const Q_UINT8 *src,
+			Q_INT32 srcRowStride,
+			const Q_UINT8 *srcAlphaMask,
+			Q_INT32 maskRowStride,
+			QUANTUM opacity,
+			Q_INT32 rows,
+			Q_INT32 cols,
+			const KisCompositeOp& op);
 private:
 
 	// This was static, but since we have only one instance of the color strategy,
@@ -154,6 +157,7 @@ private:
 	Q_UINT32 * wet_render_tab;
 
 	QStringList m_paintNames;
+	QMap<QRgb, WetPix> m_conversionMap;
 
 };
 

@@ -37,7 +37,10 @@
 #include <koFrameButton.h>
 
 #include <kis_canvas_subject.h>
+#include <kis_colorspace_registry.h>
+#include <kis_color.h>
 
+#include "kis_colorspace_wet.h"
 #include "kis_wet_palette_widget.h"
 
 
@@ -218,15 +221,23 @@ void KisWetPaletteWidget::update(KisCanvasSubject *subject)
 
 void KisWetPaletteWidget::slotFGColorSelected(const QColor& c)
 {
-	if(m_subject)
-		m_subject->setFGColor(c);
+	KisColorSpaceWet* cs = dynamic_cast<KisColorSpaceWet*>(
+			KisColorSpaceRegistry::instance() -> get(KisID("WET", "")).data() );
+	Q_ASSERT(cs);
 
+	WetPack pack;
+	Q_UINT8* data = reinterpret_cast<Q_UINT8*>(&pack);
+	cs -> nativeColor(c, data, 0);
+	KisColor color(data, cs);
+
+	if(m_subject)
+		m_subject->setFGColor(color);
 }
 
 void KisWetPaletteWidget::slotWetnessChanged(int n)
 {
 	if (m_subject) {
-		QColor c = m_subject -> bgColor();
+		QColor c = m_subject -> bgColor().toQColor();
 		m_subject -> setBGColor(QColor(n, c.green(), c.blue()));
 	}
 
@@ -235,7 +246,7 @@ void KisWetPaletteWidget::slotWetnessChanged(int n)
 void KisWetPaletteWidget::slotStrengthChanged(int n)
 {
 	if (m_subject) {
-		QColor c = m_subject -> bgColor();
+		QColor c = m_subject -> bgColor().toQColor();
 		m_subject -> setBGColor(QColor(c.red(), n, c.blue()));
 	}
 

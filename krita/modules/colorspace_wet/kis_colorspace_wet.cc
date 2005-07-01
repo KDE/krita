@@ -154,7 +154,24 @@ KisColorSpaceWet::KisColorSpaceWet() :
 	m_channels.push_back(new KisChannelInfo(i18n("adsorbed myth blue"), 13, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("adsorbed water volume"), 14, SUBSTANCE));
 	m_channels.push_back(new KisChannelInfo(i18n("adsorbed paper height"), 15, SUBSTANCE));
+	
 
+	// we store the conversion in an QRgb (equivalent to unsigned int)
+	// since QColor does not provide an operator<
+	m_conversionMap[qRgb(240, 32, 160)] = m_paintbox[0]; // Quinacridone Rose
+	m_conversionMap[qRgb(159, 88, 43)] = m_paintbox[1]; // Indian Red
+	m_conversionMap[qRgb(254, 220, 64)] = m_paintbox[2]; // Cadmium Yellow
+	m_conversionMap[qRgb(36, 180, 32)] = m_paintbox[3]; // Hookers Green
+	m_conversionMap[qRgb(16, 185, 215)] = m_paintbox[4]; // Cerulean Blue
+	m_conversionMap[qRgb(96, 32, 8)] = m_paintbox[5]; // Burnt Umber
+	m_conversionMap[qRgb(254, 96, 8)] = m_paintbox[6]; // Cadmium Red
+	m_conversionMap[qRgb(255, 136, 8)] = m_paintbox[7]; // Brilliant Orange
+	m_conversionMap[qRgb(240, 199, 8)] = m_paintbox[8]; // Hansa Yellow
+	m_conversionMap[qRgb(96, 170, 130)] = m_paintbox[9]; // Phthalo Green
+	m_conversionMap[qRgb(48, 32, 170)] = m_paintbox[10]; // French Ultramarine
+	m_conversionMap[qRgb(118, 16, 135)] = m_paintbox[11]; // Interference Lilac
+	m_conversionMap[qRgb(254, 254, 254)] = m_paintbox[12]; // Titanium White
+	m_conversionMap[qRgb(64, 64, 74)] = m_paintbox[13]; // Ivory Black
 }
 
 
@@ -164,59 +181,20 @@ KisColorSpaceWet::~KisColorSpaceWet()
 
 void KisColorSpaceWet::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
-	Q_INT32 r, g, b;
-	c.getRgb(&r, &g, &b);
-
-	WetPix * p = (WetPix*)dst;
+	WetPack* p = reinterpret_cast<WetPack*>(dst);
 
 	// Translate the special QCOlors from our paintbox to wetpaint paints.
 	// XXX: Define a class that combines QColor, wet paint color and name.
-	if (r == 240 && g == 32 && b == 160) {
-		// Quinacridone Rose
-		memcpy(dst, &m_paintbox[0], sizeof(WetPix));
-	} else if (r == 159 && g == 88 && b == 43) {
-		// Indian Red
-		memcpy(dst, &m_paintbox[1], sizeof(WetPix));
-	} else if (r == 254 && g == 220  && b == 64) {
-		// Cadmium Yellow
-		memcpy(dst, &m_paintbox[2], sizeof(WetPix));
-	} else if (r == 36 && g == 180 && b == 32) {
-		// Hookers Green
-		memcpy(dst, &m_paintbox[3], sizeof(WetPix));
-	} else if (r == 16 && g == 185 && b == 215) {
-		// Cerulean Blue
-		memcpy(dst, &m_paintbox[4], sizeof(WetPix));
-	} else if (r == 96 && g == 32 && b == 8) {
-		// Burnt Umber
-		memcpy(dst, &m_paintbox[5], sizeof(WetPix));
-	} else if (r ==  254 && g == 96 && b == 8) {
-		// Cadmium Red
-		memcpy(dst, &m_paintbox[6], sizeof(WetPix));
-	} else if (r == 255 && g == 136 && b == 8) {
-		// Brilliant Orange
-		memcpy(dst, &m_paintbox[7], sizeof(WetPix));
-	} else if (r == 240 && g == 199 && b == 8) {
-		// Hansa Yellow
-		memcpy(dst, &m_paintbox[8], sizeof(WetPix));
-	} else if (r == 96 && g == 170 && b == 130) {
-		// Phthalo Green
-		memcpy(dst, &m_paintbox[9], sizeof(WetPix));
-	} else if (r == 48 && g == 32 && b == 170) {
-		// French Ultramarine
-		memcpy(dst, &m_paintbox[10], sizeof(WetPix));
-	} else if (r == 118 && g == 16 && b == 135) {
-		// Interference Lilac
-		memcpy(dst, &m_paintbox[11], sizeof(WetPix));
-	} else if (r == 254 && g == 254 && b == 254) {
-		// Titanium White
-		memcpy(dst, &m_paintbox[12], sizeof(WetPix));
-	} else if (r == 64 && g == 64 && b == 74) {
-		// Ivory Black
-		memcpy(dst, &m_paintbox[13], sizeof(WetPix));
+	if (m_conversionMap.contains(c.rgb())) {
+		(*p).paint = m_conversionMap[c.rgb()];
+		(*p).adsorb = m_conversionMap[c.rgb()]; // or maybe best add water here?
 	} else {
-		// Pure water
-		memcpy(dst, &m_paintbox[14], sizeof(WetPix));
+		kdDebug(DBG_AREA_CMS) << c.red() << " " << c.green() << " " << c.blue() << endl;
+		// water
+		(*p).paint = m_paintbox[14];
+		(*p).adsorb = m_paintbox[14];
 	}
+
 	// XXX: Maybe somehow do something useful with QColor that don't correspond to paint from the paintbox.
 }
 
@@ -278,7 +256,7 @@ Q_INT32 KisColorSpaceWet::nColorChannels() const
 
 Q_INT32 KisColorSpaceWet::nSubstanceChannels() const
 {
-        return 4;
+	return 4;
 }
 
 
@@ -300,7 +278,8 @@ QImage KisColorSpaceWet::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
 
 	QImage img(width, height, 32);
 
-        Q_UINT8 *rgb = (Q_UINT8*) img.bits();
+	Q_UINT8 *rgb = (Q_UINT8*) img.bits();
+	const WetPack* wetData = reinterpret_cast<const WetPack*>(data);
 
 	// Clear to white -- the following code actually composits the contents of the
 	// wet pixels with the contents of the image buffer, so they need to be
@@ -309,15 +288,15 @@ QImage KisColorSpaceWet::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
 	// Composite the two layers in each pixelSize
 
 	Q_INT32 i = 0;
-	while ( i < width * height * (sizeof(WetPix) * 2)) {
+	while ( i < width * height) {
 		// First the adsorption layers
-		WetPack * wp = (WetPack*)(data + i);
-		wet_composite(rgb, (WetPix*)data + i + sizeof(WetPix));
+		WetPack* wp = const_cast<WetPack*>(&wetData[i]); // XXX don't do these things!
+		wet_composite(rgb, &(wp -> adsorb));
 
 		// Then the paint layer (which comes first in our double-packed pixel)
-		wet_composite(rgb,  (WetPix*)data + i);
+		wet_composite(rgb, &(wp -> paint));
 
-		i += (sizeof(WetPix) * 2);
+		i++;
 		rgb += sizeof(Q_UINT32); // Because the QImage is 4 bytes deep.
 
 	}
@@ -339,36 +318,34 @@ void KisColorSpaceWet::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const
 }
 
 
-void KisColorSpaceWet::bitBlt(Q_INT32 stride,
-			      Q_UINT8 *dst,
-			      Q_INT32 dststride,
-			      const Q_UINT8 *src,
-			      Q_INT32 srcstride,
-			      QUANTUM /*opacity*/,
-			      Q_INT32 rows,
-			      Q_INT32 cols,
-			      const KisCompositeOp& /*op*/)
+void KisColorSpaceWet::bitBlt(Q_UINT8 *dst,
+				  Q_INT32 dstRowSize,
+				  const Q_UINT8 *src,
+				  Q_INT32 srcRowStride,
+				  const Q_UINT8 */*srcAlphaMask*/,
+				  Q_INT32 /*maskRowStride*/,
+				  QUANTUM /*opacity*/,
+				  Q_INT32 rows,
+				  Q_INT32 cols,
+				  const KisCompositeOp& /*op*/)
 {
 	if (rows <= 0 || cols <= 0)
 		return;
 
 	Q_UINT8 *d;
 	const Q_UINT8 *s;
-
-	Q_INT32 linesize = stride * sizeof(Q_UINT8) * cols;
-
+	
 	// Just copy the src onto the dst, we don't do fancy things here,
 	// we do those in the paint op, because we need pressure to determine
 	// paint deposition.
-
+	Q_INT32 linesize = sizeof(Q_UINT8) * cols;
 	d = dst;
 	s = src;
 	while (rows-- > 0) {
 		memcpy(d, s, linesize);
-		d += dststride;
-		s += srcstride;
+		d += dstRowSize; // size??
+		s += srcRowStride;
 	}
-
 }
 
 void KisColorSpaceWet::wet_init_render_tab()
@@ -436,44 +413,7 @@ void KisColorSpaceWet::wet_composite(Q_UINT8 *rgb, WetPix * wet)
 
 void wet_render_wetness(Q_UINT8 * rgb, Q_INT32 rgb_rowstride, WetPix * pix, Q_INT32 height)
 {
-//         static int wet_phase = 0;
-//         int x, y;
-//         byte *rgb_line = rgb;
-//         WetPix *wet_line = layer->buf + (y0 * layer->rowstride) + x0;
-//         int highlight;
-//
-//         for (y = 0; y < height; y++) {
-//                 byte *rgb_ptr = rgb_line;
-//                 WetPix *wet_ptr = wet_line;
-//                 for (x = 0; x < width; x++) {
-//                         if (((x + y) & 3) == wet_phase) {
-//                                 highlight = 255 - (wet_ptr[0].w >> 1);
-//                                 if (highlight < 255) {
-//                                         rgb_ptr[0] =
-//                                             255 -
-//                                             (((255 -
-//                                                rgb_ptr[0]) *
-//                                               highlight) >> 8);
-//                                         rgb_ptr[1] =
-//                                             255 -
-//                                             (((255 -
-//                                                rgb_ptr[1]) *
-//                                               highlight) >> 8);
-//                                         rgb_ptr[2] =
-//                                             255 -
-//                                             (((255 -
-//                                                rgb_ptr[2]) *
-//                                               highlight) >> 8);
-//                                 }
-//                         }
-//                         rgb_ptr += 3;
-//                         wet_ptr++;
-//                 }
-//                 rgb_line += rgb_rowstride;
-//                 wet_line += layer->rowstride;
-//         }
-//         wet_phase += 1;
-//         wet_phase &= 3;
+	// XXX do later
 }
 
 KisCompositeOpList KisColorSpaceWet::userVisiblecompositeOps() const

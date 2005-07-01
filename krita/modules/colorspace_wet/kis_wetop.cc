@@ -26,6 +26,7 @@
 #include <kis_painter.h>
 #include <kis_types.h>
 #include <kis_paintop.h>
+#include <kis_iterators_pixel.h>
 
 #include "kis_wetop.h"
 #include "kis_colorspace_wet.h"
@@ -53,31 +54,38 @@ void KisWetOp::paintAt(const KisPoint &pos,
 	if (!m_painter) return;
 
 	if (!m_painter -> device()) return;
-
 	KisPaintDeviceSP device = m_painter -> device();
 
-	// Get the paint
-	double wetness = (double)m_painter -> backgroundColor().red();
-	double strength = (double)m_painter -> backgroundColor().green();
+	int x = pos.floorX(); // XXX subpixel positioning?
+	int y = pos.floorX();
+	int r = 10; // ### radius afaik, but please make configurable (KisBrush or so?)
+	kdDebug(DBG_AREA_CMS) << pressure << endl;
+
+
+	// Get the paint (XXX this is sooo ugly)
+	double wetness = (double)m_painter -> backgroundColor().toQColor().red();
+	double strength = (double)m_painter -> backgroundColor().toQColor().green();
 
 	KisStrategyColorSpaceSP cs = device -> colorStrategy();
 
 	if (cs -> id() != KisID("WET","")) {
 		kdDebug(DBG_AREA_CMS) << "You cannot paint wet paint on dry pixels.\n";
+		return;
 	}
 
-	WetPix paint;
+	KisColor paintColor = m_painter -> paintColor();
+	paintColor.convertTo(cs);
+	WetPack* paintPack = reinterpret_cast<WetPack*>(paintColor.data()); // hopefully this does
+	// nothing, conversions are bad ( wet -> rgb -> wet gives horrible mismatches, due to
+	// the conversion to rgb actually rendering the paint above white
+	WetPix paint = paintPack -> paint;
 
-	cs -> nativeColor(m_painter -> paintColor(), (QUANTUM*)(&paint), 0);
-
-
-
-/*
-	//
+	// Maybe it wouldn't be a bad idea to use a KisBrush in some way here
 	double r_fringe;
 	int x0, y0;
 	int x1, y1;
-	WetPix *wet_line;
+	WetPack currentPack;
+	WetPix currentPix;
 	int xp, yp;
 	double xx, yy, rr;
 	double eff_height;
@@ -89,76 +97,52 @@ void KisWetOp::paintAt(const KisPoint &pos,
 	y0 = floor(y - r_fringe);
 	x1 = ceil(x + r_fringe);
 	y1 = ceil(y + r_fringe);
-	if (x0 < 0)
-		x0 = 0;
-	if (y0 < 0)
-		y0 = 0;
-	if (x1 >= layer->width)
-		x1 = layer->width;
-	if (y1 >= layer->height)
-		y1 = layer->height;
 
-	wet_line = layer->buf + y0 * layer->rowstride;
 	for (yp = y0; yp < y1; yp++) {
-		yy = (yp + 0.5 - y);
+		yy = yp - (double)y; // XXX why + 0.5?
 		yy *= yy;
 		for (xp = x0; xp < x1; xp++) {
-			xx = (xp + 0.5 - x);
+			// XXX this only does something with .paint, and not with adsorb I assume?
+			KisHLineIteratorPixel it = device -> createHLineIterator(xp, yp, 1, true);
+			currentPack = *(reinterpret_cast<WetPack*>(it.rawData()));
+			currentPix = currentPack.paint;
+
+			xx = xp - (double)x; // ditto?
 			xx *= xx;
 			rr = yy + xx;
-			if (rr < r * r)
-				press = pressure * 0.25;
-			else
+			if (rr < r * r) {
+				press = 0.25; //press = pressure * 0.25; // ###
+			} else {
 				press = -1;
-			eff_height =
-			    (wet_line[xp].h + wet_line[xp].w -
-			     192) * (1.0 / 255);
+			}
+			eff_height = (currentPix.h + currentPix.w/* - 192*/) * (1.0 / 255);
 			contact = (press + eff_height) * 0.2;
 			if (contact > 0.5)
-				contact =
-				    1 - 0.5 * exp(-2.0 * contact - 1);
+				contact = 1 - 0.5 * exp(-2.0 * contact - 1);
 			if (contact > 0.0001) {
 				int v;
 				double rnd = rand() * (1.0 / RAND_MAX);
 
-				v = wet_line[xp].rd;
-				wet_line[xp].rd =
-				    floor(v +
-					  (paint->rd * strength -
-					   v) * contact + rnd);
-				v = wet_line[xp].rw;
-				wet_line[xp].rw =
-				    floor(v +
-					  (paint->rw * strength -
-					   v) * contact + rnd);
-				v = wet_line[xp].gd;
-				wet_line[xp].gd =
-				    floor(v +
-					  (paint->gd * strength -
-					   v) * contact + rnd);
-				v = wet_line[xp].gw;
-				wet_line[xp].gw =
-				    floor(v +
-					  (paint->gw * strength -
-					   v) * contact + rnd);
-				v = wet_line[xp].bd;
-				wet_line[xp].bd =
-				    floor(v +
-					  (paint->bd * strength -
-					   v) * contact + rnd);
-				v = wet_line[xp].bw;
-				wet_line[xp].bw =
-				    floor(v +
-					  (paint->bw * strength -
-					   v) * contact + rnd);
-				v = wet_line[xp].w;
-				wet_line[xp].w =
-				    floor(v + (paint->w - v) * contact +
-					  rnd);
-
+				v = currentPix.rd;
+				currentPix.rd = floor(v + (paint.rd * strength - v) * contact + rnd);
+				v = currentPix.rw;
+				currentPix.rw = floor(v + (paint.rw * strength - v) * contact + rnd);
+				v = currentPix.gd;
+				currentPix.gd = floor(v + (paint.gd * strength - v) * contact + rnd);
+				v = currentPix.gw;
+				currentPix.gw = floor(v + (paint.gw * strength - v) * contact + rnd);
+				v = currentPix.bd;
+				currentPix.bd = floor(v + (paint.bd * strength - v) * contact + rnd);
+				v = currentPix.bw;
+				currentPix.bw = floor(v + (paint.bw * strength - v) * contact + rnd);
+				v = currentPix.w;
+				currentPix.w = floor(v + (paint.w - v) * contact + rnd);
+				currentPack.paint = currentPix;
+				*(reinterpret_cast<WetPack*>(it.rawData())) = currentPack;
+				kdDebug() << "was here" << endl;
 			}
 		}
-		wet_line += layer->rowstride;
 	}
-*/
+	
+	m_painter -> addDirtyRect(QRect(x0, y0, x1 - x0, y1 - y0));
 }

@@ -37,8 +37,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kotooldockmanager.h>
-#include <kotooldockbase.h>
+#include <koPaletteManager.h>
 #include <koMainWindow.h>
 
 #include <kis_factory.h>
@@ -49,12 +48,15 @@
 #include <kis_types.h>
 #include <kis_view.h>
 #include <kis_colorspace_registry.h>
-#include <kis_dockframedocker.h>
+#include <kis_tool_registry.h>
+#include <kis_paintop_registry.h>
 #include <kis_canvas_subject.h>
 
 #include "wet_plugin.h"
 #include "kis_wet_palette_widget.h"
 #include "kis_colorspace_wet.h"
+#include "kis_wetop.h"
+#include "kis_tool_wet_brush.h"
 
 typedef KGenericFactory<WetPlugin> WetPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritawetplugin, WetPluginFactory( "kritacore" ) )
@@ -63,8 +65,7 @@ K_EXPORT_COMPONENT_FACTORY( kritawetplugin, WetPluginFactory( "kritacore" ) )
 WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)
 {
-       	setInstance(WetPluginFactory::instance());
-	m_docker = 0;
+	setInstance(WetPluginFactory::instance());
 
  	kdDebug(DBG_AREA_PLUGINS) << "Wet Color model plugin. Class: "
  		  << className()
@@ -77,32 +78,35 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 	{
 		m_colorSpaceWet = new KisColorSpaceWet();
 		Q_CHECK_PTR(m_colorSpaceWet);
+		// colorspace
 		KisColorSpaceRegistry::instance() -> add(m_colorSpaceWet);
+		// wet brush op
+		KisPaintOpRegistry::instance() -> add(new KisWetOpFactory);
 	}
 	else if (parent -> inherits("KisView"))
 	{
 		m_view = dynamic_cast<KisView*>(parent);
-		// Create the wet brush
-		// Create the wet palette
-		m_docker = new KisDockFrameDocker(m_view, "watercolor docker");
-		Q_CHECK_PTR(m_docker);
-		m_docker -> setCaption(i18n("Watercolor Paint Options"));
+		// Create the wet brush paint tool
+		m_view -> toolRegistry() -> add(new KisToolWetBrushFactory( actionCollection() ));
+		
 
-		KisWetPaletteWidget * w = new KisWetPaletteWidget(m_docker);
+		// Create the wet palette
+		KisWetPaletteWidget * w = new KisWetPaletteWidget(m_view);
 		Q_CHECK_PTR(w);
 
 		w -> setCaption(i18n("Paints"));
-		m_docker -> plug(w);
-		m_view -> mainWindow()->addDockWindow( m_docker, DockRight );
+
+		m_view -> paletteManager() -> addWidget(actionCollection(), w,
+			"watercolor docker", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
+		//i18n("Watercolor Paint Options")
+		
 		m_view -> getCanvasSubject() -> attach(w);
-		m_docker -> show();
 	}
 
 }
 
 WetPlugin::~WetPlugin()
 {
-	delete m_docker;
 }
 
 #include "wet_plugin.moc"

@@ -25,7 +25,6 @@
 
 class KisView;
 class KisColorSpaceWet;
-class KisDockFrameDocker;
 
 /**
  * A plugin wrapper around the WET colour space strategy.
@@ -41,7 +40,6 @@ private:
 
 	KisView* m_view;
 	KisStrategyColorSpaceSP m_colorSpaceWet;
-	KisDockFrameDocker * m_docker;
 };
 
 #endif // WET_PLUGIN_H_

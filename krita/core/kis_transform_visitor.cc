@@ -379,7 +379,9 @@ filterType=HERMITE_FILTER;
 	
 	fwidth = filterStrategy->support();
 
-	m_cancelRequested = false;
+        //progress info
+        m_cancelRequested = false;
+        m_progress -> setSubject(this, true, true);
 	
 QTime time;
 time.start();

@@ -21,88 +21,11 @@
 
 #include "kis_types.h"
 #include "kis_progress_subject.h"
+#include "kis_filter_strategy.h"
 
 class KisPaintDevice;
 class KisProgressDisplayInterface;
 
-enum enumFilterType {
-	BOX_FILTER,
-	TRIANGLE_FILTER,
-	BELL_FILTER,
-	B_SPLINE_FILTER,
-	FILTER,
-	LANCZOS3_FILTER,
-	MITCHELL_FILTER
-};
-
-class KisScaleFilterStrategy {
-	public:
-		KisScaleFilterStrategy() {}
-		virtual ~KisScaleFilterStrategy() {}
-
-		virtual double valueAt(double t) const = 0;
-                double support() { return supportVal;};
-	protected:
-		double supportVal;
-};
-
-class KisSimpleScaleFilterStrategy : public KisScaleFilterStrategy {
-	public:
-		KisSimpleScaleFilterStrategy() {supportVal = 1.0;}
-                virtual ~KisSimpleScaleFilterStrategy() {}
-
-		virtual double valueAt(double t) const;
-};
-
-class KisBoxScaleFilterStrategy : public KisScaleFilterStrategy {
-	public:
-		KisBoxScaleFilterStrategy() {supportVal = 0.5;}
-                virtual ~KisBoxScaleFilterStrategy() {}
-
-		virtual double valueAt(double t) const;
-};
-
-class KisTriangleScaleFilterStrategy : public KisScaleFilterStrategy {
-	public:
-		KisTriangleScaleFilterStrategy() {supportVal = 1.0;}
-                virtual ~KisTriangleScaleFilterStrategy() {}
-
-		virtual double valueAt(double t) const;
-};
-
-class KisBellScaleFilterStrategy : public KisScaleFilterStrategy {
-	public:
-		KisBellScaleFilterStrategy() {supportVal = 1.5;}
-                virtual ~KisBellScaleFilterStrategy() {}
-
-		virtual double valueAt(double t) const;
-};
-
-class KisBSplineScaleFilterStrategy : public KisScaleFilterStrategy {
-	public:
-		KisBSplineScaleFilterStrategy() {supportVal = 2.0;}
-                virtual ~KisBSplineScaleFilterStrategy() {}
-
-		virtual double valueAt(double t) const;
-};
-
-class KisLanczos3ScaleFilterStrategy : public KisScaleFilterStrategy {
-	public:
-		KisLanczos3ScaleFilterStrategy() {supportVal = 3.0;}
-                virtual ~KisLanczos3ScaleFilterStrategy() {}
-
-		virtual double valueAt(double t) const;
-        private:
-                double sinc(double x) const; 
-};
-
-class KisMitchellScaleFilterStrategy : public KisScaleFilterStrategy {
-	public:
-		KisMitchellScaleFilterStrategy() {supportVal = 2.0;}
-                virtual ~KisMitchellScaleFilterStrategy() {}
-
-		virtual double valueAt(double t) const;
-};
 
 class KisScaleVisitor : public KisProgressSubject {
         typedef KisProgressSubject super;  
@@ -138,7 +61,7 @@ private:
 	 * Returns -1 if error, 0 otherwise.
 	 */
                 
-        int calcContrib(ContribList *contribX, double cale, double fwidth, int srcwidth, KisScaleFilterStrategy *filterStrategy, Q_INT32 i);
+        int calcContrib(ContribList *contribX, double cale, double fwidth, int srcwidth, KisFilterStrategy *filterStrategy, Q_INT32 i);
 
         ContribList * contrib;  //array of contribution lists
 

@@ -42,6 +42,7 @@ libkritacore_la_SOURCES = kis_color.cc kis_paint_device.cc kis_layer.cc kis_imag
 		KIsImageIface.skel kis_selection_manager.cc kis_scale_visitor.cc kis_transform_visitor.cc \
 		kis_rotate_visitor.cc kis_quantum_operations.cc kis_clipboard.cc \
 		kis_filter.cc kis_filter_registry.cc \
+		kis_filter_strategy.cc \
 		kis_composite_op.cc 
 
 

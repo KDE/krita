@@ -16,8 +16,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <qwmatrix.h>
-
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -26,98 +24,21 @@
 #include "kis_transform_visitor.h"
 #include "kis_progress_display_interface.h"
 #include "kis_iterators_pixel.h"
+#include "kis_filter_strategy.h"
 
-double KisSimpleFilterStrategy::valueAt(double t) const {
-        /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
-        if(t < 0.0) t = -t;
-        if(t < 1.0) return((2.0 * t - 3.0) * t * t + 1.0);
-        return(0.0);
+template <> KisHLineIteratorPixel createIterator <KisHLineIteratorPixel>
+(KisPaintDevice *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len)
+{
+	return dev->createHLineIterator(start, lineNum, len, true);
 }
 
-Q_UINT32 KisSimpleFilterStrategy::intValueAt(Q_INT32 t) const {
-        /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
-        if(t < 0) t = -t;
-        if(t < 256)
-	{
-	 t =(2 * t - 3*256) * t * t +(256<<16);
-	 
-	 //go from .24 fixed point to .8 fixedpoint (hack only works wit positve numbers)
-	 t = (t+0x8000) >> 16;
-	 
-	 // go from .8 fixed point to 8bitscale. ie t = (t*255)/256;
-	 if(t>=128) return t-1;
-	 return t;
-	}
-        return(0);
+template <> KisVLineIteratorPixel createIterator <KisVLineIteratorPixel>
+(KisPaintDevice *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len)
+{
+	return dev->createVLineIterator(lineNum, start, len, true);
 }
 
-double KisBoxFilterStrategy::valueAt(double t) const {
-        if((t > -0.5) && (t <= 0.5)) return(1.0);
-        return(0.0);
-}
-
-double KisTriangleFilterStrategy::valueAt(double t) const {
-        if(t < 0.0) t = -t;
-        if(t < 1.0) return(1.0 - t);
-        return(0.0);
-}
-
-double KisBellFilterStrategy::valueAt(double t) const {
-        if(t < 0) t = -t;
-        if(t < .5) return(.75 - (t * t));
-        if(t < 1.5) {
-                t = (t - 1.5);
-                return(.5 * (t * t));
-        }
-        return(0.0);
-}
-
-double KisBSplineFilterStrategy::valueAt(double t) const {
-        double tt;
-
-        if(t < 0) t = -t;
-        if(t < 1) {
-                tt = t * t;
-                return((.5 * tt * t) - tt + (2.0 / 3.0));
-        } else if(t < 2) {
-                t = 2 - t;
-                return((1.0 / 6.0) * (t * t * t));
-        }
-        return(0.0);
-}
-
-double KisLanczos3FilterStrategy::valueAt(double t) const {
-        if(t < 0) t = -t;
-        if(t < 3.0) return(sinc(t) * sinc(t/3.0));
-        return(0.0);
-}
-
-double KisLanczos3FilterStrategy::sinc(double x) const {
-        const double pi=3.1415926535897932385;
-        x *= pi;
-        if(x != 0) return(sin(x) / x);
-        return(1.0);
-}
-
-double KisMitchellFilterStrategy::valueAt(double t) const {
-        const double B=1.0/3.0;
-        const double C=1.0/3.0;
-        double tt;
-
-        tt = t * t;
-        if(t < 0) t = -t;
-        if(t < 1.0) {
-                t = (((12.0 - 9.0 * B - 6.0 * C) * (t * tt)) + ((-18.0 + 12.0 * B + 6.0 * C) * tt) + (6.0 - 2 * B));
-                return(t / 6.0);
-        } else if(t < 2.0) {
-                t = (((-1.0 * B - 6.0 * C) * (t * tt)) + ((6.0 * B + 30.0 * C) * tt) + ((-12.0 * B - 48.0 * C) * t) + (8.0 * B + 24 * C));
-                return(t / 6.0);
-                }
-        return(0.0);
-}
-
-
-void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, Q_INT32  shear, Q_INT32 dx, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
+template <class T> void KisTransformVisitor::transformPass(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, Q_INT32  shear, Q_INT32 dx, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
 {
 	Q_INT32 lineNum,srcStart,firstLine,srcLen,numLines;
         Q_INT32 center, begin, end;	/* filter calculation variables */
@@ -191,7 +112,7 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, d
 			dstStart = (srcStart) * scale / scaleDenom + dx;
 		
 		// Build a temporary line
-		KisHLineIteratorPixel srcIt = src->createHLineIterator(srcStart - extraLen, lineNum, srcLen+2*extraLen, true);
+		T srcIt = createIterator <T>(src, srcStart - extraLen, lineNum, srcLen+2*extraLen);
 		int i = 0;
 		while(!srcIt.isDone())
 		{
@@ -214,8 +135,8 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, d
 			i++;
 		}
 
-		KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstStart, lineNum, dstLen, true);
-		KisHLineIteratorPixel dstSelIt = dstSelection->createHLineIterator(dstStart, lineNum, dstLen, true);
+		T dstIt = createIterator <T>(dst, dstStart, lineNum, dstLen);
+		T dstSelIt = createIterator <T>(dstSelection, dstStart, lineNum, dstLen);
 		
 		i=0;
 		while(!dstIt.isDone())
@@ -236,7 +157,6 @@ void KisTransformVisitor::transformx(KisPaintDevice *src, KisPaintDevice *dst, d
 			{
 				// calculate weights
 				int num = 0;
-				int sum = 0;
 				//Q_INT32 t = ((center - (srcpos<<8)) * invfscale)>>8;
 				//Q_INT32 dt = (256 * invfscale)>>8;
 				for(int srcpos = begin; srcpos <= end; srcpos++)
@@ -390,7 +310,6 @@ void KisTransformVisitor::transformy(KisPaintDevice *src, KisPaintDevice *dst, d
 			{
 				// calculate weights
 				int num = 0;
-				int sum = 0;
 				//Q_INT32 t = ((center - (srcpos<<8)) * invfscale)>>8;
 				//Q_INT32 dt = (256 * invfscale)>>8;
 				for(int srcpos = begin; srcpos <= end; srcpos++)
@@ -433,7 +352,7 @@ void KisTransformVisitor::transform(double  xscale, double  yscale,
         double fwidth;
 
         KisFilterStrategy *filterStrategy = 0;
-filterType=FILTER;
+filterType=HERMITE_FILTER;
         switch(filterType){
                 case BOX_FILTER:
                         filterStrategy = new KisBoxFilterStrategy();
@@ -447,8 +366,8 @@ filterType=FILTER;
                 case B_SPLINE_FILTER:
                         filterStrategy = new KisBSplineFilterStrategy();
                         break;
-                case FILTER:
-                        filterStrategy = new KisSimpleFilterStrategy();
+                case HERMITE_FILTER:
+                        filterStrategy = new KisHermiteFilterStrategy();
                         break;
                 case LANCZOS3_FILTER:
                         filterStrategy = new KisLanczos3FilterStrategy();
@@ -462,15 +381,21 @@ filterType=FILTER;
 
 	m_cancelRequested = false;
 	
+QTime time;
+time.start();
 	KisPaintDeviceSP tmpdev = new KisPaintDevice(m_dev->colorStrategy(),"temporary");
-	transformx(m_dev, tmpdev, xscale, xshear, xtranslate, m_progress, filterStrategy);
+printf("time taken to create tmp dev %d\n",time.restart());
+	transformPass <KisHLineIteratorPixel>(m_dev, tmpdev, xscale, xshear, xtranslate, m_progress, filterStrategy);
+printf("time taken first pass %d\n",time.restart());
 	if(m_dev->hasSelection())
 		m_dev->selection()->clear();
+printf("time taken to clear selection %d\n",time.restart());
 	transformy(tmpdev, m_dev, yscale, yshear, ytranslate, m_progress, filterStrategy);
-	
+
+printf("time taken second pass %d\n",time.elapsed());
+
 	//progress info
         emit notifyProgressDone(this);
 
-        //return nRet;
         return;
 }

@@ -76,10 +76,12 @@ public slots:
 
 protected:
 	void notifyModified() const;
+	
+protected:
+	KisCanvasSubject *m_subject;
 
 private:
 	QCursor m_cursor;
-	KisCanvasSubject *m_subject;
 	QWidget m_optWidget;
 };
 

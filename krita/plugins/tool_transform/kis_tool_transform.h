@@ -43,8 +43,6 @@ public:
 	KisToolTransform();
 	virtual ~KisToolTransform();
 
-	virtual void update(KisCanvasSubject *subject);
-
 	virtual QWidget* createOptionWidget(QWidget* parent);
 	virtual QWidget* optionWidget();
 
@@ -85,7 +83,6 @@ private:
 				BOTTOMRIGHTSCALE, BOTTOMSCALE,BOTTOMLEFTSCALE, LEFTSCALE};
 	QCursor m_sizeCursors[8];
 	function m_function;
-	KisCanvasSubject *m_subject;
 	QPoint m_startPos;
 	QPoint m_endPos;
 	bool m_selecting;

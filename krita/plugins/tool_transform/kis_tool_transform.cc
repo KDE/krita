@@ -105,13 +105,6 @@ KisToolTransform::~KisToolTransform()
 	delete m_transaction;
 }
 
-void KisToolTransform::update(KisCanvasSubject *subject)
-{
-	m_subject = subject;
-		
-	super::update(m_subject);
-}
-
 void KisToolTransform::clear()
 {
 	KisImageSP img = m_subject -> currentImg();
@@ -484,7 +477,7 @@ void KisToolTransform::transform() {
 	
 	double tx = m_translateX - m_org_cenX * m_scaleX;
 	double ty = m_translateY - m_org_cenY * m_scaleY;
-	KisProgressDisplayInterface *progress = 0;//view() -> progressDisplay();
+	KisProgressDisplayInterface *progress = m_subject->progressDisplay();
 
 	if(m_transaction)
 	{

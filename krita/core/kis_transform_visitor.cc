@@ -224,7 +224,6 @@ void KisTransformVisitor::transform(double  xscale, double  yscale,
         double fwidth;
 
         KisFilterStrategy *filterStrategy = 0;
-filterType=HERMITE_FILTER;
         switch(filterType){
                 case BOX_FILTER:
                         filterStrategy = new KisBoxFilterStrategy();
@@ -254,6 +253,7 @@ filterType=HERMITE_FILTER;
         //progress info
         m_cancelRequested = false;
         progress -> setSubject(this, true, true);
+	
 	
 QTime time;
 time.start();

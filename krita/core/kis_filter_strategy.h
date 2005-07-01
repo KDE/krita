@@ -21,7 +21,7 @@
 #define KIS_FILTER_STRATEGY_H_
 
 #include "kis_types.h"
-
+#include "kis_generic_registry.h"
 
 enum enumFilterType {
 	BOX_FILTER,
@@ -38,7 +38,7 @@ class KisFilterStrategy {
 		KisFilterStrategy() {}
 		virtual ~KisFilterStrategy() {}
 
-		virtual double valueAt(double t) const = 0;
+		virtual double valueAt(double t) const {return 0;};
 		virtual Q_UINT32 intValueAt(Q_INT32 t) const {return Q_UINT32(255*valueAt(255.0*t));};
 		double support() { return supportVal;};
 	protected:
@@ -102,6 +102,22 @@ class KisMitchellFilterStrategy : public KisFilterStrategy {
 		virtual ~KisMitchellFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
+};
+
+class KisFilterStrategyRegistry : public KisGenericRegistry<KisFilterStrategy>
+{
+public:
+	virtual ~KisFilterStrategyRegistry();
+	
+	static KisFilterStrategyRegistry* instance();
+
+private:
+	KisFilterStrategyRegistry();
+ 	KisFilterStrategyRegistry(const KisFilterStrategyRegistry&);
+ 	KisFilterStrategyRegistry operator=(const KisFilterStrategyRegistry&);
+
+private:
+	static KisFilterStrategyRegistry *m_singleton;
 };
 
 #endif // KIS_FILTER_STRATEGY_H_

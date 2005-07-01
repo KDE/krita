@@ -109,3 +109,27 @@ double KisMitchellFilterStrategy::valueAt(double t) const {
                 }
         return(0.0);
 }
+
+KisFilterStrategyRegistry *KisFilterStrategyRegistry::m_singleton = 0;
+
+KisFilterStrategyRegistry::KisFilterStrategyRegistry()
+{
+ 	kdDebug(DBG_AREA_REGISTRY) << " creating a KisFilterStrategyRegistry" << endl;
+	Q_ASSERT(KisFilterStrategyRegistry::m_singleton == 0);
+	KisFilterStrategyRegistry::m_singleton = this;
+}
+
+KisFilterStrategyRegistry::~KisFilterStrategyRegistry()
+{
+}
+
+KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
+{
+	if(KisFilterStrategyRegistry::m_singleton == 0)
+	{
+		KisFilterStrategyRegistry::m_singleton = new KisFilterStrategyRegistry();
+		Q_CHECK_PTR(KisFilterStrategyRegistry::m_singleton);
+	}
+	return KisFilterStrategyRegistry::m_singleton;
+}
+

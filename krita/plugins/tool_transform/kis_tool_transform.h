@@ -70,6 +70,7 @@ private:
 
 private slots:
 
+	void setFilter(int i) { }
 	void setStartX(int x) { m_startPos.setX(x); }
 	void setStartY(int y) { m_startPos.setY(y); }
 	void setEndX(int x) { m_endPos.setX(x); }

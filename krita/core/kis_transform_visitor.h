@@ -47,11 +47,17 @@ private:
 	// XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
 	template <class T> void transformPass(KisPaintDevice *src, KisPaintDevice *dst, double xscale, Q_INT32  shear, Q_INT32 dx,   KisFilterStrategy *filterStrategy);
 	
+	void rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+	void rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+	void rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+
 private:
 	KisPaintDevice* m_dev;
 	// Implement KisProgressSubject
 	bool m_cancelRequested;
 	virtual void cancel() { m_cancelRequested = true; }
+	Q_INT32 m_progressTotalSteps;
+	Q_INT32 m_progressStep;
 };
 
 inline KisTransformVisitor::KisTransformVisitor()

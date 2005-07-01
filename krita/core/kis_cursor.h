@@ -63,6 +63,7 @@ public:
 	static QCursor handCursor();          // hand tool cursor
 	static QCursor openHandCursor();      // Pan tool cursor
 	static QCursor closedHandCursor();    // Pan tool cursor
+	static QCursor rotateCursor();    // Transform tool cursor
 
 private:
 	// Load a cursor from an image file. XPM format seems to work the best.

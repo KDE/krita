@@ -1,6 +1,7 @@
 /*
- *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de> filters
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org> right angle rotators
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +26,79 @@
 #include "kis_progress_display_interface.h"
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
+
+void KisTransformVisitor::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+{
+	dst -> setX(src -> getX());
+	dst -> setY(src -> getY());
+
+	Q_INT32 pixelSize = src -> pixelSize();
+	QRect r = src -> exactBounds();
+	Q_INT32 x = 0;
+
+	for (Q_INT32 y = r.bottom(); y >= r.top(); --y) {
+		KisHLineIteratorPixel hit = src -> createHLineIterator(r.x(), y, r.width(), false);
+		KisVLineIterator vit = dst -> createVLineIterator(r.x() + x, r.y(), r.width(), true);
+
+			while (!hit.isDone()) {
+			if (hit.isSelected())  {
+				memcpy(vit.rawData(), hit.rawData(), pixelSize);
+			}
+			++hit;
+			++vit;
+		}
+		++x;
+	}
+}
+
+void KisTransformVisitor::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+{
+	dst -> setX(src -> getX());
+	dst -> setY(src -> getY());
+
+	Q_INT32 pixelSize = src -> pixelSize();
+	QRect r = src -> exactBounds();
+	Q_INT32 x = 0;
+
+	for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
+		// Read the horizontal line from back to front, write onto the vertical column
+		KisHLineIteratorPixel hit = src -> createHLineIterator(r.x(), y, r.width(), false);
+		KisVLineIterator vit = dst -> createVLineIterator(r.x() + x, r.y(), r.width(), true);
+
+		hit += r.width() - 1;
+		while (!vit.isDone()) {
+			if (hit.isSelected()) {
+				memcpy(vit.rawData(), hit.rawData(), pixelSize);
+			}
+			--hit;
+			++vit;
+		}
+		++x;
+	}
+}
+
+void KisTransformVisitor::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+{
+	dst -> setX(src -> getX());
+	dst -> setY(src -> getY());
+
+	Q_INT32 pixelSize = src -> pixelSize();
+	QRect r = src -> exactBounds();
+
+	for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
+		KisHLineIteratorPixel srcIt = src -> createHLineIterator(r.x(), y, r.width(), false);
+		KisHLineIterator dstIt = dst -> createHLineIterator(r.x(), r.y() + r.bottom() - y, r.width(), true);
+
+		srcIt += r.width() - 1;
+		while (!dstIt.isDone()) {
+			if (srcIt.isSelected())  {
+				memcpy(dstIt.rawData(), srcIt.rawData(), pixelSize);
+			}
+			--srcIt;
+			++dstIt;
+		}
+	}
+}
 
 template <class iter> iter createIterator(KisPaintDevice *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len);
 
@@ -84,6 +158,8 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDevice *src, 
 		dstSelection = new KisSelection(dst, "dummy"); // essentially a dummy to be deleted
 		
 	calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines);
+	
+	m_progressTotalSteps += numLines*srcLen*floatscale;;
 	
 	scale = int(floatscale*srcLen);
 	scaleDenom = srcLen;
@@ -206,7 +282,8 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDevice *src, 
 		}
 		
 		//progress info
-		emit notifyProgress(this,((lineNum-firstLine) * 100) / numLines);
+		m_progressStep += dstLen;
+		emit notifyProgress(this,(m_progressStep * 100) / m_progressTotalSteps);
 		if (m_cancelRequested) {
 			break;
 		}
@@ -224,6 +301,7 @@ void KisTransformVisitor::transform(double  xscale, double  yscale,
         double fwidth;
 
         KisFilterStrategy *filterStrategy = 0;
+	filterType= HERMITE_FILTER;
         switch(filterType){
                 case BOX_FILTER:
                         filterStrategy = new KisBoxFilterStrategy();
@@ -253,7 +331,8 @@ void KisTransformVisitor::transform(double  xscale, double  yscale,
         //progress info
         m_cancelRequested = false;
         progress -> setSubject(this, true, true);
-	
+	m_progressTotalSteps = 0;
+	m_progressStep = 0;
 	
 QTime time;
 time.start();

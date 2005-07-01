@@ -117,6 +117,8 @@ void KisToolTransform::clear()
 	if (m_transaction && img -> undoAdapter()) {
 		img -> undoAdapter() -> addCommand(m_transaction);
 	}
+	else
+		delete m_transaction;
 	m_transaction=0;
 }
 
@@ -240,7 +242,7 @@ void KisToolTransform::setFunctionalCursor()
 			setCursor(KisCursor::moveCursor());
 			break;
 		case ROTATE:
-			setCursor(KisCursor::crossCursor());
+			setCursor(KisCursor::rotateCursor());
 			break;
 		case TOPLEFTSCALE:
 			setCursor(m_sizeCursors[(0+rotOctant)%8]);
@@ -501,6 +503,7 @@ QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
 	m_optWidget = new WdgToolTransform(parent);
 	Q_CHECK_PTR(m_optWidget);
 				      
+	connect(m_optWidget -> filterTypes, SIGNAL(activated(int)), this, SLOT(slotSetFilter(int)));
 /*	connect(m_optWidget -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
 	connect(m_optWidget -> intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));

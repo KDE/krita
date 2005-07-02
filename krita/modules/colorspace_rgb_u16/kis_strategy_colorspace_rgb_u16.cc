@@ -466,7 +466,7 @@ void KisStrategyColorSpaceRGBU16::compositeDivide(Q_UINT8 *dstRowStart, Q_INT32 
 					Q_UINT16 srcColor = src[channel];
 					Q_UINT16 dstColor = dst[channel];
 
-					srcColor = QMIN((dstColor * (UINT16_MAX + 1)) / (1 + srcColor), UINT16_MAX);
+					srcColor = QMIN((dstColor * (UINT16_MAX + 1u) + (srcColor / 2u)) / (1u + srcColor), UINT16_MAX);
 
 					Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
@@ -1442,7 +1442,7 @@ KisCompositeOpList KisStrategyColorSpaceRGBU16::userVisiblecompositeOps() const
 	list.append(KisCompositeOp(COMPOSITE_MULT));
 	//list.append(KisCompositeOp(COMPOSITE_BURN));
 	//list.append(KisCompositeOp(COMPOSITE_DODGE));
-	//list.append(KisCompositeOp(COMPOSITE_DIVIDE));
+	list.append(KisCompositeOp(COMPOSITE_DIVIDE));
 	//list.append(KisCompositeOp(COMPOSITE_SCREEN));
 	//list.append(KisCompositeOp(COMPOSITE_OVERLAY));
 	//list.append(KisCompositeOp(COMPOSITE_DARKEN));

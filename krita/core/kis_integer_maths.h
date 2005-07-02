@@ -19,24 +19,24 @@
 #ifndef KIS_INTEGER_MATHS_H
 #define KIS_INTEGER_MATHS_H
 
-#define UINT8_MAX 255
-#define UINT8_MIN 0
+#define UINT8_MAX 255u
+#define UINT8_MIN 0u
 
-#define UINT16_MAX 65535
-#define UINT16_MIN 0
+#define UINT16_MAX 65535u
+#define UINT16_MIN 0u
 
-#define UINT32_MAX (4294967295U)
-#define UINT32_MIN 0
+#define UINT32_MAX (4294967295u)
+#define UINT32_MIN 0u
 
 inline uint UINT8_MULT(uint a, uint b)
 {
-	uint c = a * b + 0x80;
+	uint c = a * b + 0x80u;
 	return ((c >> 8) + c) >> 8;
 }
 
 inline uint UINT8_DIVIDE(uint a, uint b)
 {
-	uint c = (a * UINT8_MAX + (b / 2)) / b;
+	uint c = (a * UINT8_MAX + (b / 2u)) / b;
 	return c;
 }
 
@@ -47,13 +47,13 @@ inline uint UINT8_BLEND(uint a, uint b, uint alpha)
 
 inline uint UINT16_MULT(uint a, uint b)
 {
-	uint c = a * b + 0x8000;
+	uint c = a * b + 0x8000u;
 	return ((c >> 16) + c) >> 16;
 }
 
 inline uint UINT16_DIVIDE(uint a, uint b)
 {
-	uint c = (a * UINT16_MAX + (b / 2)) / b;
+	uint c = (a * UINT16_MAX + (b / 2u)) / b;
 	return c;
 }
 
@@ -69,7 +69,7 @@ inline uint UINT8_TO_UINT16(uint c)
 
 inline uint UINT16_TO_UINT8(uint c)
 {
-	return c / 257;
+	return c / 257u;
 }
 
 #endif

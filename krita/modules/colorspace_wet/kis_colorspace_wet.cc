@@ -172,6 +172,9 @@ KisColorSpaceWet::KisColorSpaceWet() :
 	m_conversionMap[qRgb(118, 16, 135)] = m_paintbox[11]; // Interference Lilac
 	m_conversionMap[qRgb(254, 254, 254)] = m_paintbox[12]; // Titanium White
 	m_conversionMap[qRgb(64, 64, 74)] = m_paintbox[13]; // Ivory Black
+	
+	m_paintwetness = false;
+	phasebig = 0;
 }
 
 
@@ -295,19 +298,23 @@ QImage KisColorSpaceWet::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
 
 		// Then the paint layer (which comes first in our double-packed pixel)
 		wet_composite(rgb, &(wp -> paint));
+		
+		// XXX pay attention to this comment!!
+		// Display the wet stripes -- this only works if we have at least three scanlines in height,
+		// because otherwise the phase trick won't work.
+		
+		// Because we work in a stateless thing, and we can't just draw this wetness
+		// indication AFTER this (e.g. like the selection), we have to do un nice things:
+		// Because we (hopefully atm!) don't use the height of the paint wetpix, we abuse
+		// that to store a state. It's not perfect, but it works for now...
+		if (m_paintwetness) {
+			wet_render_wetness(rgb, wp);
+		}
 
 		i++;
 		rgb += sizeof(Q_UINT32); // Because the QImage is 4 bytes deep.
 
 	}
-
-	// Display the wet stripes -- this only works if we have at least three scanlines in height,
-	// because otherwise the phase trick won't work.
-
-//         wet_render_wetness(rgb, rgb_rowstride,
-//                            pack->layers[pack->n_layers - 1],
-//                            x0, y0, width, height);
-//
 
 	return img;
 }
@@ -411,9 +418,15 @@ void KisColorSpaceWet::wet_composite(Q_UINT8 *rgb, WetPix * wet)
 
 }
 
-void wet_render_wetness(Q_UINT8 * rgb, Q_INT32 rgb_rowstride, WetPix * pix, Q_INT32 height)
+void KisColorSpaceWet::wet_render_wetness(Q_UINT8 * rgb, WetPack * pack)
 {
-	// XXX do later
+	int highlight = 255 - (pack -> paint.w >> 1);
+
+	if (highlight < 255 && ((phase++) % 3 == 0)) {
+		for (int i = 0; i < 3; i++)
+			rgb[i] = 255 - (((255 - rgb[i]) * highlight) >> 8);
+	}
+	phase &= 3;
 }
 
 KisCompositeOpList KisColorSpaceWet::userVisiblecompositeOps() const

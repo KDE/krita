@@ -79,6 +79,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
 	// nothing, conversions are bad ( wet -> rgb -> wet gives horrible mismatches, due to
 	// the conversion to rgb actually rendering the paint above white
 	WetPix paint = paintPack -> paint;
+	paint.w = wetness * 15;
 
 	// Maybe it wouldn't be a bad idea to use a KisBrush in some way here
 	double r_fringe;

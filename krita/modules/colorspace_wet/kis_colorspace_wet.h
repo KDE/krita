@@ -130,6 +130,10 @@ public:
 	virtual void adjustBrightnessContrast(const Q_UINT8*, Q_UINT8*, Q_INT8, Q_INT8, Q_INT32) const { /* XXX implement? */}
 
 	virtual KisCompositeOpList userVisiblecompositeOps() const;
+	
+	void setPaintWetness(bool b) { m_paintwetness = b; } // XXX this needs better design!
+	bool paintWetness() { return m_paintwetness; }
+	void resetPhase() { phase = phasebig++; phasebig &= 3; }
 protected:
 	virtual void bitBlt(Q_UINT8 *dst,
 			Q_INT32 dstRowSize,
@@ -150,7 +154,7 @@ private:
 	// Convert a single pixel from its wet representation to rgb
 	void wet_composite(Q_UINT8 *rgb, WetPix * wet);
 
-	void wet_render_wetness(Q_UINT8 * rgb, Q_INT32 rgb_rowstride, WetPix * pix, Q_INT32 height);
+	void wet_render_wetness(Q_UINT8 * rgb, WetPack * pack);
 
 private:
 	vKisChannelInfoSP m_channels;
@@ -158,6 +162,9 @@ private:
 
 	QStringList m_paintNames;
 	QMap<QRgb, WetPix> m_conversionMap;
+	
+	bool m_paintwetness;
+	int phase, phasebig;
 
 };
 

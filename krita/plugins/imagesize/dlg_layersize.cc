@@ -56,6 +56,7 @@ DlgLayerSize::DlgLayerSize( QWidget *  parent,
 	Q_CHECK_PTR(m_page);
 	
 	m_page -> cmbFilterType -> setIDList(KisFilterStrategyRegistry::instance() -> listKeys());
+	m_page -> cmbFilterType -> setCurrentText("Mitchell");
 
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());

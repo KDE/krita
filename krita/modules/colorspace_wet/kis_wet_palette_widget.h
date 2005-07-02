@@ -33,6 +33,8 @@ class QColor;
 class QLabel;
 class QSpinBox;
 class QColor;
+class KIntNumInput;
+class KDoubleNumInput;
 
 class KisColorCup : public QPushButton {
 
@@ -79,13 +81,15 @@ protected slots:
 
 	void slotFGColorSelected(const QColor& c);
 	void slotWetnessChanged(int);
-	void slotStrengthChanged(int);
+	void slotStrengthChanged(double);
 
 private:
 	void update(KisCanvasSubject*);
 
 private:
 	KisCanvasSubject *m_subject;
+	KDoubleNumInput* m_strength;
+	KIntNumInput* m_wetness;
 
 
 };

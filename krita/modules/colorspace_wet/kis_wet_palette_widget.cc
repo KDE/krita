@@ -197,18 +197,17 @@ KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : su
 	QHBoxLayout * h1 = new QHBoxLayout(vl, 0, "strength layout");
 	QLabel * label = new QLabel(i18n("Paint strength:"), this);
 	h1 -> addWidget(label);
-	KIntNumInput * n = new KIntNumInput(16, this);
-	connect(n, SIGNAL(valueChanged(int)), this,  SLOT(slotStrengthChanged(int)));
-	n -> setRange(0, 16, true);
-	h1 -> addWidget(n);
+	m_strength = new KDoubleNumInput(0.0, 2.0, 1.0, 0.1, 1, this);
+	connect(m_strength, SIGNAL(valueChanged(double)), this,  SLOT(slotStrengthChanged(double)));
+	h1 -> addWidget(m_strength);
 
 	QHBoxLayout * h2 = new QHBoxLayout(vl, 0, "wet layout");
 	label = new QLabel(i18n("Wetness:"), this);
 	h2 -> addWidget(label);
-	n = new KIntNumInput(16, this);
-	connect(n, SIGNAL(valueChanged(int)), this, SLOT(slotWetnessChanged(int)));
-	n -> setRange(0, 16, true);
-	h2 -> addWidget(n);
+	m_wetness = new KIntNumInput(16, this);
+	connect(m_wetness, SIGNAL(valueChanged(int)), this, SLOT(slotWetnessChanged(int)));
+	m_wetness -> setRange(0, 16, true);
+	h2 -> addWidget(m_wetness);
 
 
 }
@@ -228,6 +227,9 @@ void KisWetPaletteWidget::slotFGColorSelected(const QColor& c)
 	WetPack pack;
 	Q_UINT8* data = reinterpret_cast<Q_UINT8*>(&pack);
 	cs -> nativeColor(c, data, 0);
+	pack.paint.w = 15 * m_wetness -> value();
+	// upscale from double to uint16:
+	pack.paint.h = static_cast<Q_UINT16>(m_strength -> value() * (double)(0xffff/2));
 	KisColor color(data, cs);
 
 	if(m_subject)
@@ -236,20 +238,38 @@ void KisWetPaletteWidget::slotFGColorSelected(const QColor& c)
 
 void KisWetPaletteWidget::slotWetnessChanged(int n)
 {
-	if (m_subject) {
-		QColor c = m_subject -> bgColor().toQColor();
-		m_subject -> setBGColor(QColor(n, c.green(), c.blue()));
-	}
+	if (!m_subject)
+		return;
 
+	KisColorSpaceWet* cs = dynamic_cast<KisColorSpaceWet*>(
+			KisColorSpaceRegistry::instance() -> get(KisID("WET", "")).data() );
+	Q_ASSERT(cs);
+	
+	KisColor color = m_subject -> fgColor();
+	color.convertTo(cs);
+	WetPack pack = *(reinterpret_cast<WetPack*>(color.data()));
+	pack.paint.w = 15 * n;
+	
+	color.setColor(reinterpret_cast<Q_UINT8*>(&pack), cs);
+	m_subject->setFGColor(color);
 }
 
-void KisWetPaletteWidget::slotStrengthChanged(int n)
+void KisWetPaletteWidget::slotStrengthChanged(double n)
 {
-	if (m_subject) {
-		QColor c = m_subject -> bgColor().toQColor();
-		m_subject -> setBGColor(QColor(c.red(), n, c.blue()));
-	}
+	if (!m_subject)
+		return;
 
+	KisColorSpaceWet* cs = dynamic_cast<KisColorSpaceWet*>(
+			KisColorSpaceRegistry::instance() -> get(KisID("WET", "")).data() );
+	Q_ASSERT(cs);
+	
+	KisColor color = m_subject -> fgColor();
+	color.convertTo(cs);
+	WetPack pack = *(reinterpret_cast<WetPack*>(color.data()));
+	pack.paint.h = static_cast<Q_UINT16>(n * (double)(0xffff/2)); // upscale from double to uint16
+
+	color.setColor(reinterpret_cast<Q_UINT8*>(&pack), cs);
+	m_subject->setFGColor(color);
 }
 
 

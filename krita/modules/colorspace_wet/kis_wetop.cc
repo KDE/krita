@@ -61,11 +61,6 @@ void KisWetOp::paintAt(const KisPoint &pos,
 	int r = 10; // ### radius afaik, but please make configurable (KisBrush or so?)
 	kdDebug(DBG_AREA_CMS) << pressure << endl;
 
-
-	// Get the paint (XXX this is sooo ugly)
-	double wetness = (double)m_painter -> backgroundColor().toQColor().red();
-	double strength = (double)m_painter -> backgroundColor().toQColor().green();
-
 	KisStrategyColorSpaceSP cs = device -> colorStrategy();
 
 	if (cs -> id() != KisID("WET","")) {
@@ -75,11 +70,19 @@ void KisWetOp::paintAt(const KisPoint &pos,
 
 	KisColor paintColor = m_painter -> paintColor();
 	paintColor.convertTo(cs);
-	WetPack* paintPack = reinterpret_cast<WetPack*>(paintColor.data()); // hopefully this does
+	// hopefully this does
 	// nothing, conversions are bad ( wet -> rgb -> wet gives horrible mismatches, due to
 	// the conversion to rgb actually rendering the paint above white
+
+	WetPack* paintPack = reinterpret_cast<WetPack*>(paintColor.data());
 	WetPix paint = paintPack -> paint;
-	paint.w = wetness * 15;
+	
+	// Get the paint info (we store the strength in the otherwise unused (?) height field of
+	// the paint
+	double wetness = paint.w;
+	// strength is a double in the 0 - 2 range, but upscaled to Q_UINT16:
+	double strength = 2.0 * static_cast<double>(paint.h) / (double)(0xffff);
+	strength  = strength * (strength + pressure) * 0.5;
 
 	// Maybe it wouldn't be a bad idea to use a KisBrush in some way here
 	double r_fringe;
@@ -126,19 +129,25 @@ void KisWetOp::paintAt(const KisPoint &pos,
 				double rnd = rand() * (1.0 / RAND_MAX);
 
 				v = currentPix.rd;
-				currentPix.rd = floor(v + (paint.rd * strength - v) * contact + rnd);
+				currentPix.rd = CLAMP(floor(v + (paint.rd * strength - v) * contact + rnd),
+									  0, 0xffff);
 				v = currentPix.rw;
-				currentPix.rw = floor(v + (paint.rw * strength - v) * contact + rnd);
+				currentPix.rw = CLAMP(floor(v + (paint.rw * strength - v) * contact + rnd),
+									  0, 0xffff);
 				v = currentPix.gd;
-				currentPix.gd = floor(v + (paint.gd * strength - v) * contact + rnd);
+				currentPix.gd = CLAMP(floor(v + (paint.gd * strength - v) * contact + rnd),
+									  0, 0xffff);
 				v = currentPix.gw;
-				currentPix.gw = floor(v + (paint.gw * strength - v) * contact + rnd);
+				currentPix.gw = CLAMP(floor(v + (paint.gw * strength - v) * contact + rnd),
+									  0, 0xffff);
 				v = currentPix.bd;
-				currentPix.bd = floor(v + (paint.bd * strength - v) * contact + rnd);
+				currentPix.bd = CLAMP(floor(v + (paint.bd * strength - v) * contact + rnd),
+									  0, 0xffff);
 				v = currentPix.bw;
-				currentPix.bw = floor(v + (paint.bw * strength - v) * contact + rnd);
+				currentPix.bw = CLAMP(floor(v + (paint.bw * strength - v) * contact + rnd),
+									  0, 0xffff);
 				v = currentPix.w;
-				currentPix.w = floor(v + (paint.w - v) * contact + rnd);
+				currentPix.w = CLAMP(floor(v + (paint.w - v) * contact + rnd), 0, 0xffff);
 
 				currentPack.paint = currentPix;
 				*(reinterpret_cast<WetPack*>(it.rawData())) = currentPack;

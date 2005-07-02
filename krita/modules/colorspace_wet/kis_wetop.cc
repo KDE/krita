@@ -57,7 +57,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
 	KisPaintDeviceSP device = m_painter -> device();
 
 	int x = pos.floorX(); // XXX subpixel positioning?
-	int y = pos.floorX();
+	int y = pos.floorY();
 	int r = 10; // ### radius afaik, but please make configurable (KisBrush or so?)
 	kdDebug(DBG_AREA_CMS) << pressure << endl;
 
@@ -90,7 +90,6 @@ void KisWetOp::paintAt(const KisPoint &pos,
 	double xx, yy, rr;
 	double eff_height;
 	double press, contact;
-	WetPixDbl wet_tmp, wet_tmp2;
 
 	r_fringe = r + 1;
 	x0 = floor(x - r_fringe);
@@ -111,10 +110,12 @@ void KisWetOp::paintAt(const KisPoint &pos,
 			xx *= xx;
 			rr = yy + xx;
 			if (rr < r * r) {
-				press = 0.25; //press = pressure * 0.25; // ###
+				press = pressure * 0.25;
 			} else {
 				press = -1;
 			}
+
+			// XXX - 192 is probably only useful for paper with a texture...
 			eff_height = (currentPix.h + currentPix.w/* - 192*/) * (1.0 / 255);
 			contact = (press + eff_height) * 0.2;
 			if (contact > 0.5)
@@ -137,9 +138,9 @@ void KisWetOp::paintAt(const KisPoint &pos,
 				currentPix.bw = floor(v + (paint.bw * strength - v) * contact + rnd);
 				v = currentPix.w;
 				currentPix.w = floor(v + (paint.w - v) * contact + rnd);
+
 				currentPack.paint = currentPix;
 				*(reinterpret_cast<WetPack*>(it.rawData())) = currentPack;
-				kdDebug() << "was here" << endl;
 			}
 		}
 	}

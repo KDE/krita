@@ -108,13 +108,13 @@ KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : su
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(159, 88, 64), this);
+	b = new KisColorCup(QColor(159, 88, 43), this);
 	l -> addWidget(b, 0, 1);
 	QToolTip::add(b,i18n("Indian Red"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(254, 220, 76), this);
+	b = new KisColorCup(QColor(254, 220, 64), this);
 	l -> addWidget(b, 0, 2);
 	QToolTip::add(b,i18n("Cadmium Yellow"));
 	b -> setFixedSize(WIDTH, HEIGHT);

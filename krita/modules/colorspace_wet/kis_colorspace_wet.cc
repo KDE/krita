@@ -338,7 +338,7 @@ void KisColorSpaceWet::bitBlt(Q_UINT8 *dst,
 	// Just copy the src onto the dst, we don't do fancy things here,
 	// we do those in the paint op, because we need pressure to determine
 	// paint deposition.
-	Q_INT32 linesize = sizeof(Q_UINT8) * cols;
+	Q_INT32 linesize = pixelSize() * cols;
 	d = dst;
 	s = src;
 	while (rows-- > 0) {

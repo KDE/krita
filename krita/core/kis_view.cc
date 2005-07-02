@@ -1245,7 +1245,7 @@ void KisView::mirrorLayerY()
 	updateCanvas();
 }
 
-void KisView::scaleLayer(double sx, double sy, enumFilterType ftype)
+void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy)
 {
 	if (!currentImg()) return;
 
@@ -1259,7 +1259,7 @@ void KisView::scaleLayer(double sx, double sy, enumFilterType ftype)
 		Q_CHECK_PTR(t);
 	}
 
-	layer -> scale(sx, sy, m_progress, ftype);
+	layer -> scale(sx, sy, m_progress, filterStrategy);
 
 	if (undo) undo -> addCommand(t);
 
@@ -2334,10 +2334,10 @@ void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers)
 	canvasRefresh();
 }
 
-void KisView::scaleCurrentImage(double sx, double sy, enumFilterType ftype)
+void KisView::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy)
 {
 	if (!currentImg()) return;
-	currentImg() -> scale(sx, sy, m_progress, ftype);
+	currentImg() -> scale(sx, sy, m_progress, filterStrategy);
 	m_doc -> setModified(true);
 	resizeEvent(0);
 	layersUpdated();

@@ -41,7 +41,7 @@ public:
 	void transform(double  xscale, double  yscale, 
 		Q_INT32  xshear, Q_INT32  yshear,
 		Q_INT32  xtranslate, Q_INT32  ytranslate,
-		KisProgressDisplayInterface *progress, enumFilterType filterType = MITCHELL_FILTER);
+		KisProgressDisplayInterface *progress, KisFilterStrategy *filter);
 
 private:
 	// XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?

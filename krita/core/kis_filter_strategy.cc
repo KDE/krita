@@ -129,6 +129,13 @@ KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
 	{
 		KisFilterStrategyRegistry::m_singleton = new KisFilterStrategyRegistry();
 		Q_CHECK_PTR(KisFilterStrategyRegistry::m_singleton);
+		m_singleton->add(new KisHermiteFilterStrategy);
+		m_singleton->add(new KisBoxFilterStrategy);
+		m_singleton->add(new KisTriangleFilterStrategy);
+		m_singleton->add(new KisBellFilterStrategy);
+		m_singleton->add(new KisBSplineFilterStrategy);
+		m_singleton->add(new KisLanczos3FilterStrategy);
+		m_singleton->add(new KisMitchellFilterStrategy);
 	}
 	return KisFilterStrategyRegistry::m_singleton;
 }

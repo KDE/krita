@@ -37,6 +37,9 @@ using namespace std;
 #include <knuminput.h>
 #include <kdebug.h>
 
+#include <kis_cmb_idlist.h>
+#include <kis_filter_strategy.h>
+
 #include "dlg_layersize.h"
 #include "wdg_layersize.h"
 
@@ -51,6 +54,8 @@ DlgLayerSize::DlgLayerSize( QWidget *  parent,
 
 	m_page = new WdgLayerSize(this, "layer_size");
 	Q_CHECK_PTR(m_page);
+	
+	m_page -> cmbFilterType -> setIDList(KisFilterStrategyRegistry::instance() -> listKeys());
 
 	setMainWidget(m_page);
 	resize(m_page -> sizeHint());
@@ -138,10 +143,13 @@ Q_INT32 DlgLayerSize::height()
 	return (Q_INT32)qRound(m_page -> intHeight -> value());
 }
 
-Q_INT32 DlgLayerSize::filterType()
+KisFilterStrategy *DlgLayerSize::filterType()
 {
-	return m_page -> cmbFilterType -> currentItem();
+	KisID filterID = m_page -> cmbFilterType -> currentItem();
+	KisFilterStrategy *filter = KisFilterStrategyRegistry::instance() -> get(filterID);
+	return filter;
 }
+
 
 // SLOTS
 

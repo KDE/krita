@@ -25,6 +25,7 @@
 
 #include <kdialogbase.h>
 
+#include "kis_filter_strategy.h"
 #include "wdg_imagesize.h"
 
 /**
@@ -56,7 +57,7 @@ public:
 	bool scale();
 	bool cropLayers();
 	
-	Q_INT32 filterType();
+	KisFilterStrategy *filterType();
 
 private slots:
 

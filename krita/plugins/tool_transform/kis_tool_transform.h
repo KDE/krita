@@ -29,6 +29,8 @@
 
 class KisTransaction;
 class WdgToolTransform;
+class KisID;
+class KisFilterStrategy;
 
 /**
  * Transform tool
@@ -70,7 +72,7 @@ private:
 
 private slots:
 
-	void setFilter(int i) { }
+	void setFilter(const KisID &);
 	void setStartX(int x) { m_startPos.setX(x); }
 	void setStartY(int y) { m_startPos.setY(y); }
 	void setEndX(int x) { m_endPos.setX(x); }
@@ -80,7 +82,7 @@ protected slots:
 	virtual void activate();
 
 private:
-	enum function {NONE,ROTATE,MOVE,TOPLEFTSCALE,TOPSCALE,TOPRIGHTSCALE,RIGHTSCALE,
+	enum function {ROTATE,MOVE,TOPLEFTSCALE,TOPSCALE,TOPRIGHTSCALE,RIGHTSCALE,
 				BOTTOMRIGHTSCALE, BOTTOMSCALE,BOTTOMLEFTSCALE, LEFTSCALE};
 	QCursor m_sizeCursors[8];
 	function m_function;
@@ -103,7 +105,8 @@ private:
 	double m_a;
 	double m_clickangle;
 	KisTransaction *m_transaction;
-
+	KisFilterStrategy *m_filter;
+	
 	WdgToolTransform *m_optWidget;
 };
 

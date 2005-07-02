@@ -44,6 +44,9 @@
 #include <kis_button_release_event.h>
 #include <kis_move_event.h>
 #include <kis_selection.h>
+#include <kis_filter_strategy.h>
+#include <kis_cmb_idlist.h>
+#include <kis_id.h>
 
 #include "kis_tool_transform.h"
 #include "wdg_tool_transform.h"
@@ -215,8 +218,6 @@ void KisToolTransform::buttonPress(KisButtonPressEvent *e)
 					m_clickoffset = e -> pos().floorQPoint() 
 							- QPoint((m_topleft + m_bottomleft)/2);
 					break;
-				case NONE:
-					break;
 			}
 			m_selecting = true;
 		}
@@ -235,7 +236,7 @@ int KisToolTransform::distsq(QPoint v,QPoint w)
 
 void KisToolTransform::setFunctionalCursor()
 {
-	int rotOctant = 8.5 + m_a* 4 / M_PI;
+	int rotOctant = int(8.5 + m_a* 4 / M_PI);
 	switch(m_function)
 	{
 		case MOVE:
@@ -355,7 +356,6 @@ void KisToolTransform::move(KisMoveEvent *e)
 			else
 				m_function = MOVE;
 			
-			int rotOctant = 8.5 + m_a* 4 / M_PI;
 			if(distsq(mousePos, m_topleft)<25)
 				m_function = TOPLEFTSCALE;
 			if(distsq(mousePos, (m_topleft + m_topright)/2)<25)
@@ -474,9 +474,6 @@ void KisToolTransform::transform() {
 	if (!img)
 		return;
 
-	Q_INT32 w = m_endPos.x() - m_startPos.x();
-	Q_INT32 h = m_endPos.y() - m_startPos.y();
-	
 	double tx = m_translateX - m_org_cenX * m_scaleX;
 	double ty = m_translateY - m_org_cenY * m_scaleY;
 	KisProgressDisplayInterface *progress = m_subject->progressDisplay();
@@ -489,7 +486,7 @@ void KisToolTransform::transform() {
 	m_transaction = new TransformCmd(img->activeLayer().data());
 	Q_CHECK_PTR(m_transaction);
 		
-	img->activeLayer()->transform(m_scaleX, m_scaleY, 0, 0, tx, ty, progress);
+	img->activeLayer()->transform(m_scaleX, m_scaleY, 0, 0, int(tx), int(ty), progress, m_filter);
 	
 	QRect rc = img->activeLayer()->extent();
 	rc = rc.normalize();
@@ -497,13 +494,26 @@ void KisToolTransform::transform() {
 	img -> notify(rc);
 }
 
+void KisToolTransform::setFilter(const KisID &filterID)
+{
+	m_filter = KisFilterStrategyRegistry::instance() -> get(filterID);
+}
+
 QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
 {
 
 	m_optWidget = new WdgToolTransform(parent);
 	Q_CHECK_PTR(m_optWidget);
-				      
-	connect(m_optWidget -> filterTypes, SIGNAL(activated(int)), this, SLOT(slotSetFilter(int)));
+	
+	m_optWidget -> cmbFilter -> clear();
+	m_optWidget -> cmbFilter -> setIDList(KisFilterStrategyRegistry::instance() -> listKeys());
+
+	connect(m_optWidget -> cmbFilter, SIGNAL(activated(const KisID &)),
+		this, SLOT(slotSetFilter(const KisID &)));
+
+	KisID filterID = m_optWidget -> cmbFilter -> currentItem();
+	m_filter = KisFilterStrategyRegistry::instance() -> get(filterID);
+	
 /*	connect(m_optWidget -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
 	connect(m_optWidget -> intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));

@@ -31,7 +31,6 @@
 #include "kis_image.h"
 #include "tiles/kis_datamanager.h"
 #include "kis_strategy_colorspace.h"
-#include "kis_scale_visitor.h"
 #include "kis_pixel.h"
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
@@ -44,12 +43,14 @@ class QPoint;
 class KoStore;
 class KisImage;
 class QWMatrix;
-class KisRotateVisitor;
 class KisRectIteratorPixel;
 class KisVLineIteratorPixel;
 class KisHLineIteratorPixel;
 class KNamedCommand;
+class KisRotateVisitor;
+class KisScaleVisitor;
 class KisTransformVisitor;
+class KisFilterStrategy;
 
 /**
  * Class modelled on QPaintDevice.
@@ -288,12 +289,12 @@ public:
 
 	KisUndoAdapter *undoAdapter() const;
 
-	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype=MITCHELL_FILTER);
+	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
         void rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 	void transform(double  xscale, double  yscale, 
 			Q_INT32  xshear, Q_INT32  yshear,
-			Q_INT32  xtranslate, Q_INT32  ytranslate, KisProgressDisplayInterface *m_progress);
+			Q_INT32  xtranslate, Q_INT32  ytranslate, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
 
 	/**
 	 * Mirror the device along the X axis

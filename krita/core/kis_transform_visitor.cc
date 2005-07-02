@@ -296,37 +296,9 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDevice *src, 
 void KisTransformVisitor::transform(double  xscale, double  yscale, 
 				    Q_INT32  xshear, Q_INT32  yshear,
 				    Q_INT32  xtranslate, Q_INT32  ytranslate,
-				    KisProgressDisplayInterface *progress, enumFilterType filterType)
+				    KisProgressDisplayInterface *progress, KisFilterStrategy *filterStrategy)
 {
-        double fwidth;
-
-        KisFilterStrategy *filterStrategy = 0;
-	filterType= HERMITE_FILTER;
-        switch(filterType){
-                case BOX_FILTER:
-                        filterStrategy = new KisBoxFilterStrategy();
-                        break;
-                case TRIANGLE_FILTER:
-                        filterStrategy = new KisTriangleFilterStrategy();
-                        break;
-                case BELL_FILTER:
-                        filterStrategy = new KisBellFilterStrategy();
-                        break;
-                case B_SPLINE_FILTER:
-                        filterStrategy = new KisBSplineFilterStrategy();
-                        break;
-                case HERMITE_FILTER:
-                        filterStrategy = new KisHermiteFilterStrategy();
-                        break;
-                case LANCZOS3_FILTER:
-                        filterStrategy = new KisLanczos3FilterStrategy();
-                        break;
-                case MITCHELL_FILTER:
-                        filterStrategy = new KisMitchellFilterStrategy();
-                        break;
-        }
-	
-	fwidth = filterStrategy->support();
+        double fwidth = filterStrategy->support();
 
         //progress info
         m_cancelRequested = false;

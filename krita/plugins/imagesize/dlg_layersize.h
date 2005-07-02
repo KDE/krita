@@ -28,6 +28,8 @@
 
 #include "wdg_layersize.h"
 
+class KisFilterStrategy;
+
 class DlgLayerSize: public KDialogBase {
 	typedef KDialogBase super;
 	Q_OBJECT
@@ -47,7 +49,7 @@ public:
 	void setHeightPercent(Q_UINT32 h);
 	void setMaximumHeight(Q_UINT32 h);
 	Q_INT32 height();	
-	Q_INT32 filterType();
+	KisFilterStrategy *filterType();
 
 private slots:
 

@@ -26,38 +26,10 @@
 #include "kis_filter_strategy.h"
 
 
-void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, enumFilterType filterType)
+void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
 {
 	
-	double fwidth = 0;
-
-        KisFilterStrategy *filterStrategy = 0;
-
-        switch(filterType){
-                case BOX_FILTER:
-                        filterStrategy = new KisBoxFilterStrategy();
-                        break;
-                case TRIANGLE_FILTER:
-                        filterStrategy = new KisTriangleFilterStrategy();
-                        break;
-                case BELL_FILTER:
-                        filterStrategy = new KisBellFilterStrategy();
-                        break;
-                case B_SPLINE_FILTER:
-                        filterStrategy = new KisBSplineFilterStrategy();
-                        break;
-                case HERMITE_FILTER:
-                        filterStrategy = new KisHermiteFilterStrategy();
-                        break;
-                case LANCZOS3_FILTER:
-                        filterStrategy = new KisLanczos3FilterStrategy();
-                        break;
-                case MITCHELL_FILTER:
-                        filterStrategy = new KisMitchellFilterStrategy();
-                        break;
-        }
-
-        fwidth = filterStrategy->support();
+	double fwidth = filterStrategy->support();
 
         // target image data
         Q_INT32 targetW;

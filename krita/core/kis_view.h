@@ -81,6 +81,7 @@ class KisCompositeOp;
 class KisLayerBox;
 class KisPaintopBox;
 class KisToolBox;
+class KisFilterStrategy;
 
 class KRITA_EXPORT KisView
 	: public KoView,
@@ -175,7 +176,7 @@ public slots:
 	void slotImageProperties();
         void imgResizeToActiveLayer();
 	void resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers = false);
-	void scaleCurrentImage(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
+	void scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy);
         void rotateCurrentImage(double angle);
         void shearCurrentImage(double angleX, double angleY);
 
@@ -185,7 +186,7 @@ public slots:
 	void rotateLayerRight90();
 	void mirrorLayerX();
 	void mirrorLayerY();
-	void scaleLayer(double sx, double sy, enumFilterType ftype = MITCHELL_FILTER);
+	void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
 	void rotateLayer(double angle);
 	void shearLayer(double angleX, double angleY);
 	

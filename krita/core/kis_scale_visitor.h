@@ -21,11 +21,10 @@
 
 #include "kis_types.h"
 #include "kis_progress_subject.h"
-#include "kis_filter_strategy.h"
 
 class KisPaintDevice;
 class KisProgressDisplayInterface;
-
+class KisFilterStrategy;
 
 class KisScaleVisitor : public KisProgressSubject {
         typedef KisProgressSubject super;  
@@ -47,7 +46,7 @@ public:
         KisScaleVisitor();
         ~KisScaleVisitor();
         void visitKisPaintDevice(KisPaintDevice* dev);
-        void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType filterType = MITCHELL_FILTER);
+        void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
 private:
         KisPaintDevice* m_dev;
     	Q_INT32 m_pixelSize;    

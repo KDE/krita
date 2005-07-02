@@ -20,75 +20,83 @@
 #ifndef KIS_FILTER_STRATEGY_H_
 #define KIS_FILTER_STRATEGY_H_
 
+#include <klocale.h>
+
 #include "kis_types.h"
 #include "kis_generic_registry.h"
+#include "kis_id.h"
 
-enum enumFilterType {
-	BOX_FILTER,
-	TRIANGLE_FILTER,
-	BELL_FILTER,
-	B_SPLINE_FILTER,
-	HERMITE_FILTER,
-	LANCZOS3_FILTER,
-	MITCHELL_FILTER
-};
-
-class KisFilterStrategy {
+class KisFilterStrategy
+{
 	public:
-		KisFilterStrategy() {}
+		KisFilterStrategy(KisID id) : m_id(id) {}
 		virtual ~KisFilterStrategy() {}
 
+		KisID id() {return m_id;};
 		virtual double valueAt(double t) const {return 0;};
-		virtual Q_UINT32 intValueAt(Q_INT32 t) const {return Q_UINT32(255*valueAt(255.0*t));};
+		virtual Q_UINT32 intValueAt(Q_INT32 t) const {return Q_UINT32(255*valueAt(t/255.0));};
 		double support() { return supportVal;};
 	protected:
 		double supportVal;
+		KisID m_id;
 };
 
-class KisHermiteFilterStrategy : public KisFilterStrategy {
+class KisHermiteFilterStrategy : public KisFilterStrategy
+{
 	public:
-		KisHermiteFilterStrategy() {supportVal = 1.0;}
+		KisHermiteFilterStrategy() : KisFilterStrategy(KisID("Hermite", i18n("Hermite")))
+			{supportVal = 1.0;}
 		virtual ~KisHermiteFilterStrategy() {}
 		virtual Q_UINT32 intValueAt(Q_INT32 t) const;
 
 		virtual double valueAt(double t) const;
 };
 
-class KisBoxFilterStrategy : public KisFilterStrategy {
+class KisBoxFilterStrategy : public KisFilterStrategy
+{
 	public:
-		KisBoxFilterStrategy() {supportVal = 0.5;}
+		KisBoxFilterStrategy() : KisFilterStrategy(KisID("Box", i18n("Box")))
+			 {supportVal = 0.5;}
 		virtual ~KisBoxFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
 };
 
-class KisTriangleFilterStrategy : public KisFilterStrategy {
+class KisTriangleFilterStrategy : public KisFilterStrategy
+{
 	public:
-		KisTriangleFilterStrategy() {supportVal = 1.0;}
+		KisTriangleFilterStrategy() : KisFilterStrategy(KisID("Triangle", i18n("Triangle aka (bi)linear")))
+			{supportVal = 1.0;}
 		virtual ~KisTriangleFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
 };
 
-class KisBellFilterStrategy : public KisFilterStrategy {
+class KisBellFilterStrategy : public KisFilterStrategy
+{
 	public:
-		KisBellFilterStrategy() {supportVal = 1.5;}
+		KisBellFilterStrategy() : KisFilterStrategy(KisID("Bell", i18n("Bell")))
+			{supportVal = 1.5;}
 		virtual ~KisBellFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
 };
 
-class KisBSplineFilterStrategy : public KisFilterStrategy {
+class KisBSplineFilterStrategy : public KisFilterStrategy
+{
 	public:
-		KisBSplineFilterStrategy() {supportVal = 2.0;}
+		KisBSplineFilterStrategy() : KisFilterStrategy(KisID("BSpline", i18n("BSpline")))
+			{supportVal = 2.0;}
 		virtual ~KisBSplineFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
 };
 
-class KisLanczos3FilterStrategy : public KisFilterStrategy {
+class KisLanczos3FilterStrategy : public KisFilterStrategy
+{
 	public:
-		KisLanczos3FilterStrategy() {supportVal = 3.0;}
+		KisLanczos3FilterStrategy() : KisFilterStrategy(KisID("Lanczos3", i18n("Lanczos3")))
+			{supportVal = 3.0;}
 		virtual ~KisLanczos3FilterStrategy() {}
 
 		virtual double valueAt(double t) const;
@@ -96,15 +104,17 @@ class KisLanczos3FilterStrategy : public KisFilterStrategy {
 		double sinc(double x) const; 
 };
 
-class KisMitchellFilterStrategy : public KisFilterStrategy {
+class KisMitchellFilterStrategy : public KisFilterStrategy
+{
 	public:
-		KisMitchellFilterStrategy() {supportVal = 2.0;}
+		KisMitchellFilterStrategy() : KisFilterStrategy(KisID("Mitchell", i18n("Mitchell")))
+			{supportVal = 2.0;}
 		virtual ~KisMitchellFilterStrategy() {}
 
 		virtual double valueAt(double t) const;
 };
 
-class KisFilterStrategyRegistry : public KisGenericRegistry<KisFilterStrategy>
+class KisFilterStrategyRegistry : public KisGenericRegistry<KisFilterStrategy *>
 {
 public:
 	virtual ~KisFilterStrategyRegistry();

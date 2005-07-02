@@ -45,6 +45,7 @@ class KisDoc;
 class KCommand;
 class KisCompositeOp;
 class KisColor;
+class KisFilterStrategy;
 
 class KRITACORE_EXPORT KisImage : public QObject, public KShared {
 	Q_OBJECT
@@ -82,7 +83,7 @@ public:
 	void resize(Q_INT32 w, Q_INT32 h, bool cropLayers = false);
 	void resize(const QRect& rc, bool cropLayers = false);
 
-	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype = MITCHELL_FILTER);
+	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 

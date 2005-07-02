@@ -553,7 +553,7 @@ void KisImage::resize(const QRect& rc, bool cropLayers)
 	resize(rc.width(), rc.height(), cropLayers);
 }
 
-void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, enumFilterType ftype)
+void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
 {
  	kdDebug(DBG_AREA_CORE) << "KisImage::scale. SX: "
  		  << sx
@@ -582,7 +582,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 				Q_CHECK_PTR(cmd);
 			}
 
-			layer -> scale(sx, sy, m_progress, ftype);
+			layer -> scale(sx, sy, m_progress, filterStrategy);
 
 			if (undoAdapter() -> undo()) {
 				undoAdapter() -> addCommand(cmd);

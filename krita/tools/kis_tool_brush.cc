@@ -59,7 +59,7 @@ void KisToolBrush::initPaint(KisEvent *e)
 {
 	super::initPaint(e);
 
-	KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", painter());
+	KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_painter);
 	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 }
 

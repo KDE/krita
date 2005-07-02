@@ -1296,8 +1296,6 @@ void KisImage::renderToPainter(Q_INT32 x1,
 	Q_INT32 x;
 	Q_INT32 y;
 
-	kdDebug(DBG_AREA_CORE) << "renderToPainter" << QRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1) << endl;
-
 	// Flatten the layers onto the projection layer of the current image
 	for (y = y1; y <= y2; ) {
 

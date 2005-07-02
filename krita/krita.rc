@@ -144,6 +144,13 @@
 <ToolBar name="painting_tools" position="left"><Text>Painting Tools</Text>
 </ToolBar>
 
+<ToolBar name="shape_tools" position="left"><Text>Shape Tools</text>
+</ToolBar>
+
+<ToolBar name="fill_tools" position="left"><Text>Fill Tools</text>
+</ToolBar>
+
+
 <ToolBar name="transform_tools" position="top"><Text>Transformation Tools</Text>
 	<Action name="mirrorLayerX"/>
 	<Action name="mirrorLayerY"/>
@@ -151,13 +158,5 @@
 
 <ToolBar name="selection_tools" position="left"><Text>Selection Tools</Text>
 </ToolBar>
-
-
-
-<Menu name="menuimage_popup">
-  <Action name="rename_current_image_tab"/>
-  <Action name="add_new_image_tab"/>
-  <Action name="remove_current_image_tab"/>
-</Menu>
 
 </kpartgui>

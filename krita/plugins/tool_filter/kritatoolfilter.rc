@@ -2,7 +2,6 @@
 <kpartgui library="kritatoolfilter" version="1">
 
 <ToolBar name="painting_tools" position="top"><Text>Painting Tools</Text>
-<Separator/>
   <Action name="tool_filter"/>
 </ToolBar>
 

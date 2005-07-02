@@ -9,20 +9,24 @@
 </ToolBar>
 
 <ToolBar name="painting_tools" position="left"><Text>Painting Tools</Text>
-  <Action name="tool_pen"/>
+  <!--Action name="tool_pen"/-->
   <Action name="tool_brush"/>
   <Action name="tool_airbrush"/>
-  <Action name="tool_eraser"/>
+  <!--Action name="tool_eraser"/-->
   <Action name="tool_duplicate"/>
   <Action name="tool_filter"/>
   <Action name="tool_stamp"/>
-  <Separator/>
+</ToolBar>
+
+<Toolbar name="shape_tools"><Text>Shape Tools</Text>
   <Action name="tool_line"/>
   <Action name="tool_polyline"/>
   <Action name="tool_polygon"/>
   <Action name="tool_rectangle"/>
   <Action name="tool_ellipse"/>
-  <Separator/>
+</ToolBar>
+
+<ToolBar name="fill_tools"><Text>Fill Tools</Text>
   <Action name="tool_fill"/>
   <Action name="tool_gradient"/>
   <Separator/>

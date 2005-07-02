@@ -31,6 +31,7 @@
 #include <qimage.h>
 #include <qvaluevector.h>
 #include <qmap.h>
+#include <qfile.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -58,16 +59,22 @@ KisPattern::~KisPattern()
 {
 }
 
-bool KisPattern::loadAsync()
+bool KisPattern::load()
 {
-	KIO::Job *job = KIO::get(filename(), false, false);
+	QFile file(filename());
+	file.open(IO_ReadOnly);
+	QByteArray data = file.readAll();
+	if (!data.isEmpty()) {
+		Q_INT32 startPos = m_data.size();
 
-	connect(job, SIGNAL(data(KIO::Job*, const QByteArray&)), this, SLOT(ioData(KIO::Job*, const QByteArray&)));
-	connect(job, SIGNAL(result(KIO::Job*)), SLOT(ioResult(KIO::Job*)));
-	return true;
+		m_data.resize(m_data.size() + data.count());
+		memcpy(&m_data[startPos], data.data(), data.count());
+	}
+	file.close();
+	return init();
 }
 
-bool KisPattern::saveAsync()
+bool KisPattern::save()
 {
 	return false;
 }
@@ -77,17 +84,7 @@ QImage KisPattern::img()
 	return m_img;
 }
 
-void KisPattern::ioData(KIO::Job * /*job*/, const QByteArray& data)
-{
-	if (!data.isEmpty()) {
-		Q_INT32 startPos = m_data.size();
-
-		m_data.resize(m_data.size() + data.count());
-		memcpy(&m_data[startPos], data.data(), data.count());
-	}
-}
-
-void KisPattern::ioResult(KIO::Job * /*job*/)
+bool KisPattern::init()
 {
 	// load Gimp patterns
 	GimpPatternHeader bh;
@@ -95,8 +92,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 	QValueVector<char> name;
 
 	if (sizeof(GimpPatternHeader) > m_data.size()) {
-		emit ioFailed(this);
-		return;
+		return false;
 	}
 
 	memcpy(&bh, &m_data[0], sizeof(GimpPatternHeader));
@@ -108,23 +104,20 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 	bh.magic_number = ntohl(bh.magic_number);
 
 	if (bh.header_size > m_data.size() || bh.header_size == 0) {
-		emit ioFailed(this);
-		return;
+		return false;
 	}
 
 	name.resize(bh.header_size - sizeof(GimpPatternHeader));
 	memcpy(&name[0], &m_data[sizeof(GimpPatternHeader)], name.size());
 
 	if (name[name.size() - 1]) {
-		emit ioFailed(this);
-		return;
+		return false;
 	}
 
 	setName(i18n(&name[0]));
 
 	if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
-		emit ioFailed(this);
-		return;
+		return false;
 	}
 
 	k = bh.header_size;
@@ -137,8 +130,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 			for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
 				if (static_cast<Q_UINT32>(k) > m_data.size()) {
 					kdDebug(DBG_AREA_FILE) << "failed in gray\n";
-					emit ioFailed(this);
-					return;
+					return false;
 				}
 
 				val = m_data[k];
@@ -154,8 +146,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 			for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
 				if (static_cast<Q_UINT32>(k + 2) > m_data.size()) {
 					kdDebug(DBG_AREA_FILE) << "failed in grayA\n";
-					emit ioFailed(this);
-					return;
+					return false;
 				}
 
 				val = m_data[k];
@@ -170,8 +161,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 			for (Q_UINT32 x = 0; x < bh.width; x++) {
 				if (static_cast<Q_UINT32>(k + 3) > m_data.size()) {
 					kdDebug(DBG_AREA_FILE) << "failed in RGB\n";
-					emit ioFailed(this);
-					return;
+					return false;
 				}
 
 				m_img.setPixel(x, y, qRgb(m_data[k],
@@ -187,8 +177,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 			for (Q_UINT32 x = 0; x < bh.width; x++) {
 				if (static_cast<Q_UINT32>(k + 4) > m_data.size()) {
 					kdDebug(DBG_AREA_FILE) << "failed in RGBA\n";
-					emit ioFailed(this);
-					return;
+					return false;
 				}
 
 				m_img.setPixel(x, y, qRgba(m_data[k],
@@ -200,13 +189,11 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 			}
 		}
 	} else {
-		emit ioFailed(this);
-		return;
+		return false;
 	}
 
 	if (m_img.isNull()) {
-		emit ioFailed(this);
-		return;
+		return false;
 	}
 
 	setWidth(m_img.width());
@@ -214,7 +201,7 @@ void KisPattern::ioResult(KIO::Job * /*job*/)
 
 	setValid(true);
 
-	emit loadComplete(this);
+	return true;
 }
 
 KisLayerSP KisPattern::image(KisStrategyColorSpaceSP colorSpace) {
@@ -243,6 +230,26 @@ KisLayerSP KisPattern::image(KisStrategyColorSpaceSP colorSpace) {
 	}
 	m_colorspaces[colorSpace->id().id()] = layer;
 	return layer;
+}
+
+Q_INT32 KisPattern::width() const
+{
+	return m_width;
+}
+
+void KisPattern::setWidth(Q_INT32 w)
+{
+	m_width = w;
+}
+
+Q_INT32 KisPattern::height() const
+{
+	return m_height;
+}
+
+void KisPattern::setHeight(Q_INT32 h)
+{
+	m_height = h;
 }
 
 #include "kis_pattern.moc"

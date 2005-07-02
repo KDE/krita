@@ -218,7 +218,7 @@ void KisStrategyColorSpace::resetProfiles()
 			profile = new KisProfile(*it, colorSpaceType());
 			Q_CHECK_PTR(profile);
 
-			profile -> loadAsync();
+			profile -> load();
 			if (profile -> valid() && profile -> colorSpaceSignature() == m_colorSpaceSignature) {
 
 				m_profiles.push_back(profile);
@@ -237,7 +237,7 @@ void KisStrategyColorSpace::resetProfiles()
 			profile = new KisProfile(d.filePath(*it), colorSpaceType());
 			Q_CHECK_PTR(profile);
 
-			profile -> loadAsync();
+			profile -> load();
 			if (profile -> valid() && profile -> colorSpaceSignature() == m_colorSpaceSignature) {
 
 				m_profiles.push_back(profile);

@@ -57,8 +57,8 @@ public:
 	
 	virtual ~KisBrush();
 
-	virtual bool loadAsync();
-	virtual bool saveAsync();
+	virtual bool load();
+	virtual bool save();
 	virtual QImage img();
 
 	/**
@@ -84,17 +84,17 @@ public:
 	virtual void setUseColorAsMask(bool useColorAsMask) { m_useColorAsMask = useColorAsMask; }
 	virtual bool useColorAsMask() const { return m_useColorAsMask; }
 	virtual bool hasColor() const;
+	Q_INT32 width() const;
+	Q_INT32 height() const;
 
 	virtual enumBrushType brushType() const;
 
 protected:
+	void setWidth(Q_INT32 w);
+	void setHeight(Q_INT32 h);
 	void setImage(const QImage& img);
 	void setBrushType(enumBrushType type) { m_brushType = type; };
 	static double scaleForPressure(double pressure);
-
-private slots:
-	void ioData(KIO::Job *job, const QByteArray& data);
-	void ioResult(KIO::Job *job);
 
 private:
 	class ScaledBrush {
@@ -116,6 +116,8 @@ private:
 		double m_yScale;
 	};
 
+
+	bool init();
 	void createScaledBrushes() const;
 
 	KisAlphaMaskSP scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const;
@@ -138,6 +140,9 @@ private:
 	bool m_hasColor;
 	QImage m_img;
 	mutable QValueVector<ScaledBrush> m_scaledBrushes;
+
+	Q_INT32 m_width;
+	Q_INT32 m_height;
 
 	Q_UINT32 m_header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
 	Q_UINT32 m_version;      /*  brush file version #  */

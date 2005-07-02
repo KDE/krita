@@ -53,6 +53,12 @@
 #include "kis_channelview.h"
 #include "kis_color.h"
 //#include "kis_controlframe.h"
+#include "kis_factory.h"
+#include "kis_pattern.h"
+
+#include "kis_brush_chooser.h"
+#include "kis_pattern_chooser.h"
+#include "kis_gradient_chooser.h"
 
 #include "defaultdockers.h"
 
@@ -80,8 +86,6 @@ KritaDefaultDockers::KritaDefaultDockers(QObject *parent, const char *name, cons
 
 	m_paletteManager = m_view->paletteManager();
 	Q_ASSERT(m_paletteManager);
-
-	m_resourceServer = new KisResourceServer;
 
  	createBirdEyeBox(m_view);
 	
@@ -180,23 +184,34 @@ void KritaDefaultDockers::createPaletteWidget(KisView * view)
 	m_palettewidget = new KisPaletteWidget(view);
         m_palettewidget -> setCaption(i18n("Palettes"));
 
-        connect(m_resourceServer, SIGNAL(loadedPalette(KisResource*)), m_palettewidget, SLOT(slotAddPalette(KisResource*)));
-        m_resourceServer->palettes();
-        connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)), view, SLOT(slotSetFGColor(const KisColor &)));
+	KisResourceServerBase* rServer;
+	rServer = KisFactory::rServerRegistry() -> get("PaletteServer");
+	QValueList<KisResource*> resources = rServer->resources();
+	QValueList<KisResource*>::iterator it;
+	for ( it = resources.begin(); it != resources.end(); ++it )
+		m_palettewidget -> slotAddPalette( *it );
+
+
+	connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)),
+		view, SLOT(slotSetFGColor(const KisColor &)));
 
 	m_paletteManager->addWidget(actionCollection(), m_palettewidget, "palettewidget", krita::COLORBOX);
 }
 
 void KritaDefaultDockers::createPatternWidget(KisView * view)
 {
-	m_patternMediator = new KisResourceMediator(MEDIATE_PATTERNS, m_resourceServer, i18n("Patterns"),
-                                                    view, "pattern chooser", view);
+	KisPatternChooser* patternChooser = new KisPatternChooser(view, "pattern chooser");
+	patternChooser -> setCaption(i18n("Patterns"));
 
-	connect(m_patternMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(patternActivated(KisResource*)));
+	m_patternMediator = new KisResourceMediator( patternChooser, view);
+	connect( m_patternMediator, SIGNAL(activatedResource(KisResource*)),
+		 view, SLOT(patternActivated(KisResource*)));
+
+	KisResourceServerBase* rServer;
+	rServer = KisFactory::rServerRegistry() -> get("PatternServer");
+	m_patternMediator -> connectServer(rServer);
 	
 	m_paletteManager->addWidget(actionCollection(), m_patternMediator->chooserWidget(), "patterns", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
-
-        view -> patternActivated(dynamic_cast<KisPattern*>(m_patternMediator -> currentResource()));
 
 	//KritaDefaultDockers::connect(view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged( KisPattern *)));
 
@@ -204,28 +219,40 @@ void KritaDefaultDockers::createPatternWidget(KisView * view)
 
 void KritaDefaultDockers::createBrushesWidget(KisView * view)
 {
+	KisBrushChooser* brushChooser = new KisBrushChooser(view, "brush_chooser");
+	brushChooser -> setCaption(i18n("Brushes"));
 
-	m_brushMediator = new KisResourceMediator(MEDIATE_BRUSHES, m_resourceServer, i18n("Brushes"),
-                                                  view, "brush_chooser", view);
+	m_brushMediator = new KisResourceMediator( brushChooser, view);
+	connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)),
+		view, SLOT(brushActivated(KisResource*)));
+
+	KisResourceServerBase* rServer;
+	rServer = KisFactory::rServerRegistry() -> get("ImagePipeBrushServer");
+	m_brushMediator -> connectServer(rServer);
+	rServer = KisFactory::rServerRegistry() -> get("BrushServer");
+	m_brushMediator -> connectServer(rServer);
 
 	m_paletteManager->addWidget(actionCollection(), m_brushMediator->chooserWidget(), "brushes", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
 
-        view -> brushActivated(dynamic_cast<KisBrush*>(m_brushMediator -> currentResource()));
-
 	//KritaDefaultDockers::connect(view, SIGNAL(brushChanged(KisBrush *)), this, SLOT(slotBrushChanged( KisBrush *)));
-        KritaDefaultDockers::connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(brushActivated(KisResource*)));
 }
 
 void KritaDefaultDockers::createGradientsWidget(KisView * view)
 {
-	m_gradientMediator = new KisResourceMediator(MEDIATE_GRADIENTS, m_resourceServer, i18n("Gradients"),
-                                                             view, "gradient chooser", view);
+	KisGradientChooser* gradientChooser = new KisGradientChooser(view, "gradient chooser");
+	gradientChooser -> setCaption(i18n("Gradients"));
+
+	m_gradientMediator = new KisResourceMediator( gradientChooser, view);
+	connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)),
+		view, SLOT(gradientActivated(KisResource*)));
+
+	KisResourceServerBase* rServer;
+	rServer = KisFactory::rServerRegistry() -> get("GradientServer");
+	m_gradientMediator -> connectServer(rServer);
 
         m_paletteManager->addWidget(actionCollection(), m_gradientMediator->chooserWidget(), "gradients", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
 
-        view -> gradientActivated(dynamic_cast<KisGradient*>(m_gradientMediator -> currentResource()));
 	//KritaDefaultDockers::connect(view, SIGNAL(gradientChanged(KisGradient *)), this, SLOT(slotGradientChanged( KisGradient *)));
-        KritaDefaultDockers::connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(gradientActivated(KisResource*)));
 
 }
 #if 0

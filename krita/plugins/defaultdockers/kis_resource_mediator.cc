@@ -15,80 +15,39 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <qptrlist.h>
- 
 #include <koIconChooser.h>
 
 #include "kdebug.h"
 
-#include "kis_brush.h"
-#include "kis_pattern.h"
-#include "kis_gradient.h"
-
 #include "kis_icon_item.h"
-#include "kis_brush_chooser.h"
-#include "kis_pattern_chooser.h"
-#include "kis_gradient_chooser.h"
 #include "kis_resource.h"
+#include "kis_itemchooser.h"
 #include "kis_resourceserver.h"
 #include "kis_resource_mediator.h"
 
-KisResourceMediator::KisResourceMediator(Q_INT32 mediateOn,
-					 KisResourceServer *rserver,
-					 const QString& chooserCaption,
-					 QWidget *chooserParent,
-					 const char *chooserName,
+KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
 					 QObject *parent,
-					 const char *name) : super(parent, name)
+					 const char *name) : super(parent, name), m_chooser(chooser)
 {
-	Q_ASSERT(rserver);
+	Q_ASSERT(chooser);
 	m_activeItem = 0;
 
-	if (mediateOn & MEDIATE_BRUSHES) {
-		m_chooser = new KisBrushChooser(chooserParent, chooserName);
-		Q_CHECK_PTR(m_chooser);
-
-		connect(rserver,
-			SIGNAL(loadedBrush(KisResource*)),
-			this,
-			SLOT(resourceServerLoadedResource(KisResource*)));
-
-		connect(rserver,
-			SIGNAL(loadedpipeBrush(KisResource*)),
-			this,
-			SLOT(resourceServerLoadedResource(KisResource*)));
-		rserver -> loadBrushes();
-		rserver -> loadPipeBrushes();
-	}
-	if (mediateOn & MEDIATE_PATTERNS) {
-		m_chooser = new KisPatternChooser(chooserParent, chooserName);
-		Q_CHECK_PTR(m_chooser);
-
-		connect(rserver,
-			SIGNAL(loadedPattern(KisResource*)),
-			this,
-			SLOT(resourceServerLoadedResource(KisResource*)));
-		rserver -> loadPatterns();
-			
-	}
-	if (mediateOn & MEDIATE_GRADIENTS) {
-		m_chooser = new KisGradientChooser(chooserParent, chooserName);
-		Q_CHECK_PTR(m_chooser);
-
-		connect(rserver,
-			SIGNAL(loadedGradient(KisResource*)),
-			this,
-			SLOT(resourceServerLoadedResource(KisResource*)));
-
-		rserver -> loadGradients();
-	}
-
 	connect(m_chooser, SIGNAL(selected(KoIconItem*)), SLOT(setActiveItem(KoIconItem*)));
-	m_chooser -> setCaption(chooserCaption);
 }
 
 KisResourceMediator::~KisResourceMediator()
 {
+}
+
+void KisResourceMediator::connectServer(KisResourceServerBase* rServer)
+{
+	QValueList<KisResource*> resources = rServer->resources();
+	QValueList<KisResource*>::iterator it;
+	for ( it = resources.begin(); it != resources.end(); ++it )
+		rServerAddedResource( *it );
+
+	//connect(rServer, SIGNAL(addedResource(KisResource*)),
+	//	this, SLOT(rServerAddedResource(KisResource*)));
 }
 
 KisResource *KisResourceMediator::currentResource() const
@@ -138,13 +97,13 @@ void KisResourceMediator::setActiveItem(KoIconItem *item)
 	}
 }
 
-void KisResourceMediator::resourceServerLoadedResource(KisResource *resource)
+void KisResourceMediator::rServerAddedResource(KisResource *resource)
 {
 	if (resource && resource -> valid()) {
 		
 		KisIconItem *item = new KisIconItem(resource);
 		Q_CHECK_PTR(item);
-
+		
 		m_items[resource] = item;
 
 		m_chooser -> addItem(item);

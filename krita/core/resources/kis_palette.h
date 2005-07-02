@@ -77,8 +77,8 @@ public:
 
 	virtual ~KisPalette();
 
-	virtual bool loadAsync();
-	virtual bool saveAsync();
+	virtual bool load();
+	virtual bool save();
 	virtual QImage img();
 
 
@@ -89,11 +89,8 @@ public:
 	KisPaletteEntry getColor(Q_UINT32 index);
 	Q_INT32 nColors();
 
-	
-private slots:
-
-	void ioData(KIO::Job *job, const QByteArray& data);
-	void ioResult(KIO::Job *job);
+private:
+	bool init();
 
 private:
 

@@ -88,7 +88,6 @@ private:
         KisGrayWidget *m_graywidget;
         KisPaletteWidget *m_palettewidget;
 
-	KisResourceServer * m_resourceServer;
         KisResourceMediator *m_brushMediator;
         KisResourceMediator *m_patternMediator;
         KisResourceMediator *m_gradientMediator;

@@ -40,11 +40,12 @@
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_dlg_preferences.h"
-#include "kis_resourceserver.h"
 #include "kis_factory.h"
 #include "kis_colorspace_registry.h"
+#include "kis_strategy_colorspace.h"
 #include "kis_id.h"
 #include "kis_cmb_idlist.h"
+#include "kis_profile.h"
 #include "wdgcolorsettings.h"
 
 GeneralTab::GeneralTab( QWidget *_parent, const char *_name )

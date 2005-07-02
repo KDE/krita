@@ -52,8 +52,8 @@ public:
 
 	virtual ~KisProfile();
 
-	virtual bool loadAsync();
-	virtual bool saveAsync();
+	virtual bool load();
+	virtual bool save();
 	virtual QImage img();
 
 	icColorSpaceSignature colorSpaceSignature() const { return m_colorSpaceSignature; }

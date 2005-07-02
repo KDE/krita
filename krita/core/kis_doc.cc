@@ -68,8 +68,6 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_colorspace_registry.h"
 #include "kis_profile.h"
-#include "kis_resource.h"
-#include "kis_resourceserver.h"
 #include "kis_id.h"
 #include "KIsDocIface.h"
 

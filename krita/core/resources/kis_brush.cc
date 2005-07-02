@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <cfloat>
 
+#include <qfile.h>
 #include <qimage.h>
 #include <qpoint.h>
 #include <qvaluevector.h>
@@ -91,7 +92,7 @@ KisBrush::KisBrush(const QString& filename,
 	m_spacing = DEFAULT_SPACING;
 
 	m_data.setRawData(data.data() + dataPos, data.size() - dataPos);
-	ioResult(0);
+	init();
 	m_data.resetRawData(data.data() + dataPos, data.size() - dataPos);
 	dataPos += m_header_size + (width() * height() * m_bytes);
 }
@@ -102,16 +103,127 @@ KisBrush::~KisBrush()
 	m_scaledBrushes.clear();
 }
 
-bool KisBrush::loadAsync()
+bool KisBrush::load()
 {
-	KIO::Job *job = KIO::get(filename(), false, false);
+	QFile file(filename());
+	file.open(IO_ReadOnly);
+	m_data = file.readAll();
+	file.close();
+	return init();
+}
 
-	connect(job, SIGNAL(data(KIO::Job*, const QByteArray&)), this, SLOT(ioData(KIO::Job*, const QByteArray&)));
-	connect(job, SIGNAL(result(KIO::Job*)), SLOT(ioResult(KIO::Job*)));
+bool KisBrush::init()
+{
+	GimpBrushHeader bh;
+
+	if (sizeof(GimpBrushHeader) > m_data.size()) {
+		return false;
+	}
+
+	memcpy(&bh, &m_data[0], sizeof(GimpBrushHeader));
+	bh.header_size = ntohl(bh.header_size);
+	m_header_size = bh.header_size;
+
+	bh.version = ntohl(bh.version);
+	m_version = bh.version;
+
+	bh.width = ntohl(bh.width);
+	bh.height = ntohl(bh.height);
+
+	bh.bytes = ntohl(bh.bytes);
+	m_bytes = bh.bytes;
+
+	bh.magic_number = ntohl(bh.magic_number);
+	m_magic_number = bh.magic_number;
+
+	if (bh.version == 1) {
+		// No spacing in version 1 files so use Gimp default
+		bh.spacing = static_cast<int>(DEFAULT_SPACING * 100);
+	}
+	else {
+		bh.spacing = ntohl(bh.spacing);
+	
+		if (bh.spacing > 1000) {
+			return false;
+		}
+	}
+
+	setSpacing(bh.spacing / 100.0);
+
+	if (bh.header_size > m_data.size() || bh.header_size == 0) {
+		return false;
+	}
+
+	QString name;
+
+	if (bh.version == 1) {
+		// Version 1 has no magic number or spacing, so the name
+		// is at a different offset. Character encoding is undefined.
+		const char *text = &m_data[sizeof(GimpBrushV1Header)];
+		name = QString::fromAscii(text, bh.header_size - sizeof(GimpBrushV1Header));
+	} else {
+		name = QString::fromAscii(&m_data[sizeof(GimpBrushHeader)], bh.header_size - sizeof(GimpBrushHeader));
+	}
+
+	setName(i18n(name.ascii()));
+
+	if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
+		return false;
+	}
+
+	Q_INT32 k = bh.header_size;
+
+	if (bh.bytes == 1) {
+		// Grayscale
+
+		if (static_cast<Q_UINT32>(k + bh.width * bh.height) > m_data.size()) {
+			return false;
+		}
+
+		m_brushType = MASK;
+		m_hasColor = false;
+
+		for (Q_UINT32 y = 0; y < bh.height; y++) {
+			for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
+				Q_INT32 val = 255 - static_cast<uchar>(m_data[k]);
+				m_img.setPixel(x, y, qRgb(val, val, val));
+			}
+		}
+	} else if (bh.bytes == 4) {
+		// RGBA
+
+		if (static_cast<Q_UINT32>(k + (bh.width * bh.height * 4)) > m_data.size()) {
+			return false;
+		}
+
+		m_brushType = IMAGE;
+		m_img.setAlphaBuffer(true);
+		m_hasColor = true;
+
+		for (Q_UINT32 y = 0; y < bh.height; y++) {
+			for (Q_UINT32 x = 0; x < bh.width; x++, k += 4) {
+				m_img.setPixel(x, y, qRgba(m_data[k],
+							   m_data[k+1],
+							   m_data[k+2],
+							   m_data[k+3]));
+			}
+		}
+	} else {
+		return false;
+	}
+
+	setWidth(m_img.width());
+	setHeight(m_img.height());
+	//createScaledBrushes();
+	if (m_ownData) {
+		m_data.resize(0); // Save some memory, we're using enough of it as it is.
+	}
+	setValid(true);
 	return true;
 }
 
-bool KisBrush::saveAsync()
+
+bool KisBrush::save()
 {
 	return false;
 }
@@ -298,133 +410,6 @@ enumBrushType KisBrush::brushType() const
 bool KisBrush::hasColor() const
 {
 	return m_hasColor;
-}
-
-void KisBrush::ioData(KIO::Job * /*job*/, const QByteArray& data)
-{
-	if (!data.isEmpty()) {
-		Q_INT32 startPos = m_data.size();
-
-		m_data.resize(m_data.size() + data.count());
-		memcpy(&m_data[startPos], data.data(), data.count());
-	}
-}
-
-void KisBrush::ioResult(KIO::Job * /*job*/)
-{
-	GimpBrushHeader bh;
-
-	if (sizeof(GimpBrushHeader) > m_data.size()) {
-		emit ioFailed(this);
-		return;
-	}
-
-	memcpy(&bh, &m_data[0], sizeof(GimpBrushHeader));
-	bh.header_size = ntohl(bh.header_size);
-	m_header_size = bh.header_size;
-
-	bh.version = ntohl(bh.version);
-	m_version = bh.version;
-
-	bh.width = ntohl(bh.width);
-	bh.height = ntohl(bh.height);
-
-	bh.bytes = ntohl(bh.bytes);
-	m_bytes = bh.bytes;
-
-	bh.magic_number = ntohl(bh.magic_number);
-	m_magic_number = bh.magic_number;
-
-	if (bh.version == 1) {
-		// No spacing in version 1 files so use Gimp default
-		bh.spacing = static_cast<int>(DEFAULT_SPACING * 100);
-	}
-	else {
-		bh.spacing = ntohl(bh.spacing);
-	
-		if (bh.spacing > 1000) {
-			emit ioFailed(this);
-			return;
-		}
-	}
-
-	setSpacing(bh.spacing / 100.0);
-
-	if (bh.header_size > m_data.size() || bh.header_size == 0) {
-		emit ioFailed(this);
-		return;
-	}
-
-	QString name;
-
-	if (bh.version == 1) {
-		// Version 1 has no magic number or spacing, so the name
-		// is at a different offset. Character encoding is undefined.
-		const char *text = &m_data[sizeof(GimpBrushV1Header)];
-		name = QString::fromAscii(text, bh.header_size - sizeof(GimpBrushV1Header));
-	} else {
-		name = QString::fromAscii(&m_data[sizeof(GimpBrushHeader)], bh.header_size - sizeof(GimpBrushHeader));
-	}
-
-	setName(i18n(name.ascii()));
-
-	if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
-		emit ioFailed(this);
-		return;
-	}
-
-	Q_INT32 k = bh.header_size;
-
-	if (bh.bytes == 1) {
-		// Grayscale
-
-		if (static_cast<Q_UINT32>(k + bh.width * bh.height) > m_data.size()) {
-			emit ioFailed(this);
-			return;
-		}
-
-		m_brushType = MASK;
-		m_hasColor = false;
-
-		for (Q_UINT32 y = 0; y < bh.height; y++) {
-			for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
-				Q_INT32 val = 255 - static_cast<uchar>(m_data[k]);
-				m_img.setPixel(x, y, qRgb(val, val, val));
-			}
-		}
-	} else if (bh.bytes == 4) {
-		// RGBA
-
-		if (static_cast<Q_UINT32>(k + (bh.width * bh.height * 4)) > m_data.size()) {
-			emit ioFailed(this);
-			return;
-		}
-
-		m_brushType = IMAGE;
-		m_img.setAlphaBuffer(true);
-		m_hasColor = true;
-
-		for (Q_UINT32 y = 0; y < bh.height; y++) {
-			for (Q_UINT32 x = 0; x < bh.width; x++, k += 4) {
-				m_img.setPixel(x, y, qRgba(m_data[k],
-							   m_data[k+1],
-							   m_data[k+2],
-							   m_data[k+3]));
-			}
-		}
-	} else {
-		emit ioFailed(this);
-		return;
-	}
-
-	setWidth(m_img.width());
-	setHeight(m_img.height());
-	//createScaledBrushes();
-	if (m_ownData) {
-		m_data.resize(0); // Save some memory, we're using enough of it as it is.
-	}
-	setValid(true);
-	emit loadComplete(this);
 }
 
 void KisBrush::createScaledBrushes() const
@@ -1102,6 +1087,26 @@ void KisBrush::setImage(const QImage& img)
 	m_scaledBrushes.clear();
 
 	setValid(true);
+}
+
+Q_INT32 KisBrush::width() const
+{
+	return m_width;
+}
+
+void KisBrush::setWidth(Q_INT32 w)
+{
+	m_width = w;
+}
+
+Q_INT32 KisBrush::height() const
+{
+	return m_height;
+}
+
+void KisBrush::setHeight(Q_INT32 h)
+{
+	m_height = h;
 }
 
 #include "kis_brush.moc"

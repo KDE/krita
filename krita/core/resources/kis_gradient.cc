@@ -27,6 +27,7 @@
 
 #include <qimage.h>
 #include <qtextstream.h>
+#include <qfile.h>
 
 #include <koColor.h>
 
@@ -60,16 +61,16 @@ KisGradient::~KisGradient()
 	}
 }
 
-bool KisGradient::loadAsync()
+bool KisGradient::load()
 {
-	KIO::Job *job = KIO::get(filename(), false, false);
-
-	connect(job, SIGNAL(data(KIO::Job*, const QByteArray&)), this, SLOT(ioData(KIO::Job*, const QByteArray&)));
-	connect(job, SIGNAL(result(KIO::Job*)), SLOT(ioResult(KIO::Job*)));
-	return true;
+	QFile file(filename());
+	file.open(IO_ReadOnly);
+	m_data = file.readAll();
+	file.close();
+	return init();
 }
 
-bool KisGradient::saveAsync()
+bool KisGradient::save()
 {
 	return false;
 }
@@ -79,17 +80,7 @@ QImage KisGradient::img()
 	return m_img;
 }
 
-void KisGradient::ioData(KIO::Job * /*job*/, const QByteArray& data)
-{
-	if (!data.isEmpty()) {
-		Q_INT32 startPos = m_data.size();
-
-		m_data.resize(m_data.size() + data.count());
-		memcpy(&m_data[startPos], data.data(), data.count());
-	}
-}
-
-void KisGradient::ioResult(KIO::Job * /*job*/)
+bool KisGradient::init()
 {
 	// Gimp gradient files are UTF-8 text files.
 	QTextIStream fileContent(m_data);
@@ -98,8 +89,7 @@ void KisGradient::ioResult(KIO::Job * /*job*/)
 	QString header = fileContent.readLine();
 
 	if (header != "GIMP Gradient") {
-		emit ioFailed(this);
-		return;
+		return false;
 	}
 
 	QString nameDefinition = fileContent.readLine();
@@ -125,8 +115,7 @@ void KisGradient::ioResult(KIO::Job * /*job*/)
 	numSegments = numSegmentsText.toInt(&ok);
 
 	if (!ok || numSegments < 1) {
-		emit ioFailed(this);
-		return;
+		return false;
 	}
 
 	kdDebug(DBG_AREA_FILE) << "Number of segments = " << numSegments << endl;
@@ -171,9 +160,8 @@ void KisGradient::ioResult(KIO::Job * /*job*/)
 		Q_CHECK_PTR(segment);
 
 		if ( !segment -> isValid() ) {
-			emit ioFailed(this);
 			delete segment;
-			return;
+			return false;
 		}
 
 		m_segments.push_back(segment);
@@ -182,10 +170,10 @@ void KisGradient::ioResult(KIO::Job * /*job*/)
 	if (!m_segments.isEmpty()) {
 		m_img = generatePreview(PREVIEW_WIDTH, PREVIEW_HEIGHT);
 		setValid(true);
-		emit loadComplete(this);
+		return true;
 	}
 	else {
-		emit ioFailed(this);
+		return false;
 	}
 }
 

@@ -21,7 +21,7 @@
 #include <qimage.h>
 #include <qobject.h>
 #include <qstring.h>
-#include "kis_global.h"
+//#include "kis_global.h"
 
 /**
  * The KisResource class provides a representation of Krita image resources.  This
@@ -37,7 +37,7 @@ public:
 
 	/**
 	 * Creates a new KisResource object using @p filename.  No file is opened
-	 * in the constructor, you have to call loadAsync.
+	 * in the constructor, you have to call load.
 	 *
 	 * @param filename the file name to save and load from.
 	 */
@@ -46,16 +46,15 @@ public:
 
 public:
 	/**
-	 * Load this resource asynchronously.  The signal loadComplete is emitted when
-	 * the resource has been loaded and valid flag is set to true.
+	 * Load this resource.
 	 */
-	virtual bool loadAsync() = 0;
+	virtual bool load() = 0;
 
 	/**
 	 * Save this resource asynchronously.  The signal saveComplete is emitted when
 	 * the resource has been saved.
 	 */
-	virtual bool saveAsync() = 0;
+	virtual bool save() = 0;
 
 	/**
 	 * Returns a QImage representing this resource.  This image could be null.
@@ -63,25 +62,12 @@ public:
 	virtual QImage img() = 0;
 
 public:
-	bool dirty() const;
-	void setDirty(bool dirt);
 	QString filename() const;
 	void setFilename(const QString& filename);
 	QString name() const;
 	void setName(const QString& name);
 	bool valid() const;
 	void setValid(bool valid);
-	Q_INT32 width() const;
-	Q_INT32 height() const;
-
-protected:
-	void setWidth(Q_INT32 w);
-	void setHeight(Q_INT32 h);
-
-signals:
-	void loadComplete(KisResource *me);
-	void saveComplete(KisResource *me);
-	void ioFailed(KisResource *me);
 
 private:
 	KisResource(const KisResource&);
@@ -90,10 +76,7 @@ private:
 private:
 	QString m_name;
 	QString m_filename;
-	bool m_dirty;
 	bool m_valid;
-	Q_INT32 m_width;
-	Q_INT32 m_height;
 };
 
 #endif // KIS_RESOURCE_H_

@@ -32,6 +32,7 @@
 #include <koIconChooser.h>
 
 #include "kis_resource.h"
+#include "kis_global.h"
 
 class QImage;
 
@@ -238,8 +239,8 @@ public:
 	KisGradient(const QString& file);
 	virtual ~KisGradient();
 
-	virtual bool loadAsync();
-	virtual bool saveAsync();
+	virtual bool load();
+	virtual bool save();
 	virtual QImage img();
 	virtual QImage generatePreview(int width, int height) const;
 
@@ -251,9 +252,9 @@ protected:
 	void setImage(const QImage& img);
 
 	QValueVector<KisGradientSegment *> m_segments;
-private slots:
-	void ioData(KIO::Job *job, const QByteArray& data);
-	void ioResult(KIO::Job *job);
+
+private:
+	bool init();
 
 private:
 	QByteArray m_data;

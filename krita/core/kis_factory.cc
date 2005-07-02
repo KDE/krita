@@ -20,6 +20,9 @@
 #include <config.h>
 #include LCMS_HEADER
 
+#include <qstringlist.h>
+
+#include <kdebug.h>
 #include <kinstance.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -30,7 +33,6 @@
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
 
-
 #include "kis_factory.h"
 #include "kis_aboutdata.h"
 #include "kis_resourceserver.h"
@@ -40,9 +42,16 @@
 #include "kis_tool_registry.h"
 #include "kis_doc.h"
 
+#include "kis_brush.h"
+#include "kis_imagepipe_brush.h"
+#include "kis_gradient.h"
+#include "kis_pattern.h"
+#include "kis_palette.h"
+
 KAboutData* KisFactory::s_aboutData = 0;
 KInstance* KisFactory::s_global = 0;
-KisResourceServer* KisFactory::s_rserver = 0;
+KisResourceServerRegistry* KisFactory::s_rserverRegistry = 0;
+
 
 KisFactory::KisFactory( QObject* parent, const char* name )
 	: KoFactory( parent, name )
@@ -50,8 +59,39 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 	s_aboutData = newKritaAboutData();
 
 	(void)global();
-	s_rserver = new KisResourceServer;
-	Q_CHECK_PTR(s_rserver);
+
+	s_rserverRegistry = new KisResourceServerRegistry();
+
+	QStringList fileExtensions;
+	fileExtensions << "*.gbr";
+	KisResourceServer<KisBrush>* brushServer = new KisResourceServer<KisBrush>("kis_brushes", fileExtensions);
+	Q_CHECK_PTR(brushServer);
+	s_rserverRegistry -> add( KisID( "BrushServer", ""), brushServer );
+
+	fileExtensions.clear();
+	fileExtensions << "*.gih";
+	KisResourceServer<KisImagePipeBrush>* imagePipeBrushServer = new KisResourceServer<KisImagePipeBrush>("kis_brushes", fileExtensions);
+	Q_CHECK_PTR(imagePipeBrushServer);
+	s_rserverRegistry -> add( KisID( "ImagePipeBrushServer", ""), imagePipeBrushServer );
+
+	fileExtensions.clear();
+	fileExtensions << "*.pat";
+	KisResourceServer<KisPattern>* patternServer = new KisResourceServer<KisPattern>("kis_patterns", fileExtensions);
+	Q_CHECK_PTR(patternServer);
+	s_rserverRegistry -> add( KisID( "PatternServer", ""), patternServer );
+
+	fileExtensions.clear();
+	fileExtensions << "*.ggr";
+	KisResourceServer<KisGradient>* gradientServer = new KisResourceServer<KisGradient>("kis_gradients", fileExtensions);
+	Q_CHECK_PTR(gradientServer);
+	s_rserverRegistry -> add( KisID( "GradientServer", ""), gradientServer );
+
+	fileExtensions.clear();
+	fileExtensions << "*.gpl" << "*.pal" << "*.act";
+	KisResourceServer<KisPalette>* paletteServer = new KisResourceServer<KisPalette>("kis_palettes", fileExtensions);
+	Q_CHECK_PTR(paletteServer);
+	s_rserverRegistry -> add( KisID( "PaletteServer", ""), paletteServer );
+
 
 	// Load extension modules and plugins
 //  	KisToolRegistry::instance();
@@ -95,8 +135,8 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
 KisFactory::~KisFactory()
 {
-	delete s_rserver;
-	s_rserver = 0L;
+	delete s_rserverRegistry;
+	s_rserverRegistry = 0L;
 	delete s_aboutData;
 	s_aboutData = 0L;
 	delete s_global;
@@ -173,9 +213,9 @@ KAboutData* KisFactory::aboutData()
 	return s_aboutData;
 }
 
-KisResourceServer* KisFactory::rServer()
+KisResourceServerRegistry* KisFactory::rServerRegistry()
 {
-	return s_rserver;
+	return s_rserverRegistry;
 }
 
 #include "kis_factory.moc"

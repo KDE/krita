@@ -40,8 +40,8 @@ public:
 	KisPattern(const QString& file);
 	virtual ~KisPattern();
 
-	virtual bool loadAsync();
-	virtual bool saveAsync();
+	virtual bool load();
+	virtual bool save();
 	virtual QImage img();
 
 	/**
@@ -50,14 +50,23 @@ public:
 	 **/
 	KisLayerSP image(KisStrategyColorSpaceSP colorSpace);
 
-private slots:
-	void ioData(KIO::Job *job, const QByteArray& data);
-	void ioResult(KIO::Job *job);
+	Q_INT32 width() const;
+	Q_INT32 height() const;
+
+protected:
+	void setWidth(Q_INT32 w);
+	void setHeight(Q_INT32 h);
+
+private:
+	bool init();
 
 private:
 	QByteArray m_data;
 	QImage m_img;
 	QMap<QString, KisLayerSP> m_colorspaces;
+
+	Q_INT32 m_width;
+	Q_INT32 m_height;
 };
 
 #endif

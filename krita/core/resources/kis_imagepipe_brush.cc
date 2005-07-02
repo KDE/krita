@@ -31,6 +31,7 @@
 #include <qimage.h>
 #include <qpoint.h>
 #include <qvaluevector.h>
+#include <qfile.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -54,16 +55,78 @@ KisImagePipeBrush::~KisImagePipeBrush()
 	m_brushes.clear();
 }
 
-bool KisImagePipeBrush::loadAsync()
+bool KisImagePipeBrush::load()
 {
-	KIO::Job *job = KIO::get(filename(), false, false);
+	QFile file(filename());
+	file.open(IO_ReadOnly);
+	m_data = file.readAll();
+	file.close();
+	return init();
+}
 
-	connect(job, SIGNAL(data(KIO::Job*, const QByteArray&)), this, SLOT(ioData(KIO::Job*, const QByteArray&)));
-	connect(job, SIGNAL(result(KIO::Job*)), SLOT(ioResult(KIO::Job*)));
+bool KisImagePipeBrush::init()
+{
+	// XXX: this doesn't correctly load the image pipe brushes yet.
+
+	// XXX: This stuff is in utf-8, too.
+	// The first line contains the name -- this means we look until we arrive at the first newline
+	QValueVector<char> line1;
+
+	Q_UINT32 i = 0;
+
+	while (m_data[i] != '\n' && i < m_data.size()) {
+		line1.append(m_data[i]);
+		i++;
+	}
+	setName(i18n(QString::fromUtf8(&line1[0], i).ascii()));
+
+	i++; // Skip past the first newline
+
+	// The second line contains the number of brushes, separated by a space from the parasite
+
+	// XXX: This stuff is in utf-8, too.
+ 	QValueVector<char> line2;
+ 	while (m_data[i] != '\n' && i < m_data.size()) {
+		line2.append(m_data[i]);
+ 		i++;
+ 	}
+
+	QString paramline = QString::fromUtf8((&line2[0]), line2.size());
+	Q_UINT32 m_numOfBrushes = paramline.left(paramline.find(' ')).toUInt();
+	m_parasite = paramline.mid(paramline.find(' ') + 1);
+	
+	i++; // Skip past the second newline
+
+ 	Q_UINT32 numOfBrushes = 0;
+  	while (numOfBrushes < m_numOfBrushes && i < m_data.size()){
+		KisBrush * brush = new KisBrush(name() + "_" + numOfBrushes,
+						m_data,
+						i);
+		Q_CHECK_PTR(brush);
+
+		m_brushes.append(brush);
+		
+ 		numOfBrushes++;
+ 	}
+
+	if (!m_brushes.isEmpty()) {
+		setValid(true);
+		if (m_brushes.at( 0 ) -> brushType() == MASK) {
+			m_brushType = PIPE_MASK;
+		}
+		else {
+			m_brushType = PIPE_IMAGE;
+		}
+		setSpacing(m_brushes.at(m_brushes.count() - 1) -> spacing());
+		setWidth(m_brushes.at(0) -> width());
+		setHeight(m_brushes.at(0) -> height());
+	}
+
+	m_data.resize(0);
 	return true;
 }
 
-bool KisImagePipeBrush::saveAsync()
+bool KisImagePipeBrush::save()
 {
 	return false;
 }
@@ -141,78 +204,6 @@ bool KisImagePipeBrush::hasColor() const
 	else {
 		return false;
 	}
-}
-
-void KisImagePipeBrush::ioData(KIO::Job * /*job*/, const QByteArray& data)
-{
-	if (!data.isEmpty()) {
-		Q_INT32 startPos = m_data.size();
-
-		m_data.resize(m_data.size() + data.count());
-		memcpy(&m_data[startPos], data.data(), data.count());
-	}
-}
-
-void KisImagePipeBrush::ioResult(KIO::Job * /*job*/)
-{
-	// XXX: this doesn't correctly load the image pipe brushes yet.
-
-	// XXX: This stuff is in utf-8, too.
-	// The first line contains the name -- this means we look until we arrive at the first newline
-	QValueVector<char> line1;
-
-	Q_UINT32 i = 0;
-
-	while (m_data[i] != '\n' && i < m_data.size()) {
-		line1.append(m_data[i]);
-		i++;
-	}
-	setName(i18n(QString::fromUtf8(&line1[0], i).ascii()));
-
-	i++; // Skip past the first newline
-
-	// The second line contains the number of brushes, separated by a space from the parasite
-
-	// XXX: This stuff is in utf-8, too.
- 	QValueVector<char> line2;
- 	while (m_data[i] != '\n' && i < m_data.size()) {
-		line2.append(m_data[i]);
- 		i++;
- 	}
-
-	QString paramline = QString::fromUtf8((&line2[0]), line2.size());
-	Q_UINT32 m_numOfBrushes = paramline.left(paramline.find(' ')).toUInt();
-	m_parasite = paramline.mid(paramline.find(' ') + 1);
-	
-	i++; // Skip past the second newline
-
- 	Q_UINT32 numOfBrushes = 0;
-  	while (numOfBrushes < m_numOfBrushes && i < m_data.size()){
-		KisBrush * brush = new KisBrush(name() + "_" + numOfBrushes,
-						m_data,
-						i);
-		Q_CHECK_PTR(brush);
-
-		m_brushes.append(brush);
-		
- 		numOfBrushes++;
- 	}
-
-	if (!m_brushes.isEmpty()) {
-		setValid(true);
-		if (m_brushes.at( 0 ) -> brushType() == MASK) {
-			m_brushType = PIPE_MASK;
-		}
-		else {
-			m_brushType = PIPE_IMAGE;
-		}
-		setSpacing(m_brushes.at(m_brushes.count() - 1) -> spacing());
-		setWidth(m_brushes.at(0) -> width());
-		setHeight(m_brushes.at(0) -> height());
-	}
-
-	emit loadComplete(this);
-	m_data.resize(0);
 }
 #include "kis_imagepipe_brush.moc"
 

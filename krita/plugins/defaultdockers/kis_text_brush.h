@@ -37,7 +37,7 @@ class KisTextBrushResource : public KisBrush
 			setBrushType(MASK);
 		};
 	public:
-		virtual bool loadAsync() { return false; };
+		virtual bool load() { return false; };
 		void setText(const QString& txt) { m_txt = txt; };
 		void setFont(const QFont& font) { m_font = font; };
 		void updateBrush();

@@ -30,7 +30,7 @@
 
 #include <kis_factory.h>
 #include <kis_colorspace_registry.h>
-#include <kis_resourceserver.h>
+#include "kis_strategy_colorspace.h"
 #include <kis_id.h>
 
 #include "dlg_colorspaceconversion.h"

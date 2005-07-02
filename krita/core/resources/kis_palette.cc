@@ -32,6 +32,7 @@
 #include <qimage.h>
 #include <qpoint.h>
 #include <qvaluevector.h>
+#include <qfile.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -108,16 +109,17 @@ KisPalette::~KisPalette()
 {
 }
 
-bool KisPalette::loadAsync()
+bool KisPalette::load()
 {
-	KIO::Job *job = KIO::get(filename(), false, false);
-
-	connect(job, SIGNAL(data(KIO::Job*, const QByteArray&)), this, SLOT(ioData(KIO::Job*, const QByteArray&)));
-	connect(job, SIGNAL(result(KIO::Job*)), SLOT(ioResult(KIO::Job*)));
-	return true;
+	QFile file(filename());
+	file.open(IO_ReadOnly);
+	m_data = file.readAll();
+	file.close();
+	return init();
 }
 
-bool KisPalette::saveAsync()
+
+bool KisPalette::save()
 {
 	return false;
 }
@@ -132,17 +134,7 @@ Q_INT32 KisPalette::nColors()
 	return m_colors.count();
 }
 
-void KisPalette::ioData(KIO::Job * /*job*/, const QByteArray& data)
-{
-	if (!data.isEmpty()) {
-		Q_INT32 startPos = m_data.size();
-
-		m_data.resize(m_data.size() + data.count());
-		memcpy(&m_data[startPos], data.data(), data.count());
-	}
-}
-
-void KisPalette::ioResult(KIO::Job * /*job*/)
+bool KisPalette::init()
 {
 	enumPaletteType format = FORMAT_UNKNOWN;
 
@@ -150,9 +142,7 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 
 	if (s.isEmpty() || s.isNull() || s.length() < 50) {
  		kdDebug(DBG_AREA_FILE) << "Illegal Gimp palette file: " << filename() << "\n";
-                setValid(false);
-                emit loadComplete(this);
-                return;
+                return false;
         }
 
 
@@ -169,8 +159,7 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 		QStringList lines = QStringList::split("\n", s);
 	
 		if (lines.size() < 3) {
-			setValid(false);
-			return;
+			return false;
 		}
 
 		QString entry, channel, columns;
@@ -186,9 +175,7 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 		if (!lines[1].startsWith("Name: ") || !lines[0].startsWith("GIMP") )
 		{
  			kdDebug(DBG_AREA_FILE) << "Illegal Gimp palette file: " << filename() << "\n";
-			setValid(false);
-			emit loadComplete(this);
-			return;
+			return false;
 		}
 
 		setName(i18n(lines[1].mid(strlen("Name: ")).stripWhiteSpace().ascii()));
@@ -228,19 +215,13 @@ void KisPalette::ioResult(KIO::Job * /*job*/)
 		}
 
 		setValid(true);
-		emit loadComplete(this);
-
-		return;
+		return true;
 	}
 	else if (s.length() == 768) {
  		kdDebug(DBG_AREA_FILE) << "Photoshop format palette file. Not implemented yet\n";
 		format = FORMAT_ACT;
 	}
-	
-	setValid(false);
-	emit loadComplete(this);
-
-
+	return false;
 }
 
 

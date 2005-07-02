@@ -23,18 +23,9 @@
 #include <qwidget.h>
 
 class KoIconItem;
-class KisBrush;
-class KisImagePipeBrush;
-class KisPattern;
-class KisGradient;
 class KisItemChooser;
 class KisIconItem;
 class KisResource;
-class KisResourceServer;
-
-#define	MEDIATE_BRUSHES 1
-#define MEDIATE_PATTERNS 2
-#define MEDIATE_GRADIENTS 4
 
 
 /**
@@ -48,16 +39,13 @@ class KisResourceMediator : public QObject {
 	typedef QObject super;
 
 public:
-	KisResourceMediator(Q_INT32 mediateOn,
-			    KisResourceServer *rserver,
-			    const QString& chooserCaption,
-			    QWidget *chooserParent = 0,
-			    const char *chooserName = 0,
+	KisResourceMediator(KisItemChooser *chooser,
 			    QObject *parent = 0,
 			    const char *name = 0);
 	virtual ~KisResourceMediator();
 
 public:
+	void connectServer(KisResourceServerBase* rServer);
 	KisResource *currentResource() const;
 	KisIconItem *itemFor(KisResource *r) const;
 	KisResource *resourceFor(KoIconItem *item) const;
@@ -70,7 +58,7 @@ signals:
 
 private slots:
 	void setActiveItem(KoIconItem *item);
-	void resourceServerLoadedResource(KisResource *resource);
+	void rServerAddedResource(KisResource *resource);
 
 private:
 	KisItemChooser *m_chooser;

@@ -23,9 +23,13 @@
 
 #include <koFactory.h>
 #include <koffice_export.h>
+#include "kis_generic_registry.h"
+
 class KInstance;
-class KisResourceServer;
+class KisResourceServerBase;
 class KAboutData;
+
+typedef KisGenericRegistry<KisResourceServerBase*> KisResourceServerRegistry;
 
 class KRITACORE_EXPORT KisFactory : public KoFactory
 {
@@ -44,12 +48,12 @@ public:
 
 	static KAboutData        *aboutData();
 	static KInstance         *global();
-	static KisResourceServer *rServer();
+	static KisResourceServerRegistry *rServerRegistry();
 
 private:
 	static KInstance           *s_global;
 	static KAboutData          *s_aboutData;
-	static KisResourceServer   *s_rserver;
+	static KisResourceServerRegistry *s_rserverRegistry;
 };
 
 #endif

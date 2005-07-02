@@ -22,21 +22,10 @@ KisResource::KisResource(const QString& filename)
 {
 	m_filename = filename;
 	m_valid = false;
-	m_dirty = false;
 }
 
 KisResource::~KisResource()
 {
-}
-
-bool KisResource::dirty() const
-{
-	return m_dirty;
-}
-
-void KisResource::setDirty(bool dirt)
-{
-	m_dirty = dirt;
 }
 
 QString KisResource::filename() const
@@ -67,26 +56,6 @@ bool KisResource::valid() const
 void KisResource::setValid(bool valid)
 {
 	m_valid = valid;
-}
-
-Q_INT32 KisResource::width() const
-{
-	return m_width;
-}
-
-void KisResource::setWidth(Q_INT32 w)
-{
-	m_width = w;
-}
-
-Q_INT32 KisResource::height() const
-{
-	return m_height;
-}
-
-void KisResource::setHeight(Q_INT32 h)
-{
-	m_height = h;
 }
 
 #include "kis_resource.moc"

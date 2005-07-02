@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2005 Sven Langkamp <longamp@reallygood.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,96 +23,45 @@
 #define KIS_RESOURCESERVER_H_
 
 #include <qobject.h>
-#include <qptrlist.h>
 #include <qstring.h>
 
-#include "kis_resource.h"
-#include "kis_brush.h"
-#include "kis_imagepipe_brush.h"
-#include "kis_pattern.h"
-#include "kis_gradient.h"
-#include "kis_palette.h"
-#include "kis_types.h"
+class KisResource;
 
-// XXX: Encapsulate resources in shared pointers.
-class KisResourceServer : public QObject {
+class KisResourceServerBase : public QObject {
 	typedef QObject super;
 	Q_OBJECT
 
 public:
-	KisResourceServer();
-	virtual ~KisResourceServer();
-	
+	KisResourceServerBase(QString type, QStringList fileExtensions);
+	virtual ~KisResourceServerBase();
 
-	void loadBrushes();
-	void loadPipeBrushes();
-	void loadPatterns();
-	void loadGradients();
-	void loadPalettes();
+	void loadResources();
+	QValueList<KisResource*> resources();
+
+//signals:
+//	void addedResource(KisResource *res);
+
+protected:
+	virtual KisResource* createResource( QString filename ) = 0;
+
+private:
+	QValueList<KisResource*> m_resources;
+	QStringList m_fileExtensions;
+	QString m_type;
+
+	bool m_loaded;
+
+};
+
+template <class T> class KisResourceServer : public KisResourceServerBase {
+	typedef KisResourceServerBase super;
 
 public:
-	Q_INT32 brushCount() const { return m_brushes.count(); }
-	Q_INT32 pipebrushCount() const { return m_pipebrushes.count(); }
-	Q_INT32 patternCount() const { return m_patterns.count(); }
-	Q_INT32 gradientCount() const { return m_gradients.count(); }
-	Q_INT32 paletteCount() const { return m_palettes.count(); }
-	
-	// XXX (BSAR): Does this mean the the lists are copied for every call?
-	QPtrList<KisResource> brushes();
-	QPtrList<KisResource> pipebrushes();
-	QPtrList<KisResource> patterns();
-	QPtrList<KisResource> gradients();
-	QPtrList<KisResource> palettes();
-
-signals:
-	void loadedBrush(KisResource *br);
-	void loadedpipeBrush(KisResource *br);
-	void loadedPattern(KisResource *pat);
-	void loadedGradient(KisResource *pat);
-	void loadedPalette(KisResource *pal);
-private:
-
-	void loadBrush();
-	void loadpipeBrush();
-	void loadPattern();
-	void loadGradient();
-	void loadPalette();
-
-	KisResourceServer(const KisResourceServer&);
-	KisResourceServer& operator=(const KisResourceServer&);
-
-private slots:
-	void brushLoaded(KisResource *r);
-	void brushLoadFailed(KisResource *br);
-
-	void pipebrushLoaded(KisResource *r);
-	void pipebrushLoadFailed(KisResource *br);
-
-	void patternLoaded(KisResource *r);
-	void patternLoadFailed(KisResource *br);
-
-	void gradientLoaded(KisResource *r);
-	void gradientLoadFailed(KisResource *br);
-
-	void paletteLoaded(KisResource *r);
-	void paletteLoadFailed(KisResource *br);
+	KisResourceServer(QString type, QStringList fileExtensions) :super( type, fileExtensions) {}
+	virtual ~KisResourceServer(){}
 
 private:
-	QPtrList<KisResource> m_brushes;
-	QStringList m_brushFilenames;
-
-	QPtrList<KisResource> m_pipebrushes;
-	QStringList m_pipebrushFilenames;
-
-	QPtrList<KisResource> m_patterns;
-	QStringList m_patternFilenames;
-
-	QPtrList<KisResource> m_gradients;
-	QStringList m_gradientFilenames;
-
-	QPtrList<KisResource> m_palettes;
-	QStringList m_paletteFilenames;
-
+	KisResource* createResource( QString filename ){return new T(filename);}
 };
 
 #endif // KIS_RESOURCESERVER_H_

@@ -67,6 +67,6 @@ class KisAutobrushResource : public KisBrush
 			setBrushType(MASK);
 		};
 	public:
-		virtual bool loadAsync() { return false; };
+		virtual bool load() { return false; };
 };
 #endif // _KIS_AUTOBRUSH_RESOURCE_H_

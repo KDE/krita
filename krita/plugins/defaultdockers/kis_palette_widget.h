@@ -63,6 +63,7 @@ protected slots:
 	void slotColorCellDoubleClicked( int );
 	void slotSetPalette( const QString &_paletteName );
 
+public slots:
 	// Called by the resource server whenever a palette is loaded.
 	void slotAddPalette(KisResource * palette);
 

@@ -61,6 +61,7 @@
 #include <kis_id.h>
 #include <kis_paint_device.h>
 #include <kis_iterators_pixel.h>
+#include "kis_factory.h"
 #include "perftest.h"
 
 #include "dlg_perftest.h"
@@ -447,9 +448,9 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 			p.eraseRect(0, 0, 1000, 1000);
 // 			p.paintEllipse(500, 1000, 100, 0, 0);
 			p.setPaintColor(Qt::yellow);
-			KisResourceServer * r = new KisResourceServer;
+			KisResourceServerBase* r = KisFactory::rServerRegistry() -> get("PatternServer");
 			Q_CHECK_PTR(r);
-			p.setPattern((KisPattern*)r -> patterns().first());
+			p.setPattern((KisPattern*)r -> resources().first());
 			p.setFillThreshold(15);
 			p.setCompositeOp(COMPOSITE_OVER);
 			p.fillPattern(0,0);

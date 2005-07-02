@@ -40,8 +40,8 @@ public:
 	KisImagePipeBrush(const QString& filename);
 	virtual ~KisImagePipeBrush();
 
-	virtual bool loadAsync();
-	virtual bool saveAsync();
+	virtual bool load();
+	virtual bool save();
 
 	/**
 	  @return the next image in the pipe.
@@ -60,12 +60,8 @@ public:
 
 	virtual enumBrushType brushType() const;
 
-private slots:
-	void ioData(KIO::Job *job, const QByteArray& data);
-	void ioResult(KIO::Job *job);
-
 private:
-
+	bool init();
 	void setParasite(const QString& parasite);
 
 	QString m_name;

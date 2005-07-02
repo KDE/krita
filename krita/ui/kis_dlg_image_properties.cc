@@ -35,8 +35,6 @@
 #include "kis_dlg_image_properties.h"
 #include "wdgnewimage.h"
 #include "kis_profile.h"
-#include "kis_resource.h"
-#include "kis_resourceserver.h"
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_config.h"

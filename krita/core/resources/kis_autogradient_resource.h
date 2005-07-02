@@ -82,7 +82,7 @@ public:
 	 */
 	void updatePreview();
 public:
-	virtual bool loadAsync() { return false; };
+	virtual bool load() { return false; };
 };
 
 #endif // _KIS_AUTOGRADIENT_RESOURCE_H_

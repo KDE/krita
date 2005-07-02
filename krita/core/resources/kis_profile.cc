@@ -78,7 +78,7 @@ KisProfile::~KisProfile()
 }
 
 
-bool KisProfile::loadAsync()
+bool KisProfile::load()
 {
 	//cmsErrorAction(LCMS_ERROR_IGNORE);
 
@@ -116,15 +116,12 @@ bool KisProfile::init()
   		kdDebug(DBG_AREA_CMS) << "\tModel: " << cmsTakeModel(m_profile) << "\n";
 
 		setValid(true);
-
-		emit loadComplete(this);
 		return true;
 	}
-	emit ioFailed(this);
-	return true;
+	return false;
 }
 
-bool KisProfile::saveAsync()
+bool KisProfile::save()
 {
 	return false;
 }

@@ -189,7 +189,6 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                 delete[] contribX[x].p;
         delete[] contribX;
 
-        delete filterStrategy;
         delete[] newData;
         delete[] pel;
         delete[] pel2;

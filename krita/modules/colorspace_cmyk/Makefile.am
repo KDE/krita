@@ -18,8 +18,8 @@ INCLUDES  = -I$(srcdir)/../../core \
 
 kde_module_LTLIBRARIES = kritacmykplugin.la
 
-kritacmykplugin_la_SOURCES = cmyk_plugin.cc kis_strategy_colorspace_cmyk.cc kis_strategy_colorspace_cmyka.cc
-noinst_HEADERS = cmyk_plugin.h kis_strategy_colorspace_cmyk.h kis_strategy_colorspace_cmyka.h
+kritacmykplugin_la_SOURCES = cmyk_plugin.cc kis_strategy_colorspace_cmyk.cc
+noinst_HEADERS = cmyk_plugin.h kis_strategy_colorspace_cmyk.h 
 
 kritacmykplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritacmykplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)

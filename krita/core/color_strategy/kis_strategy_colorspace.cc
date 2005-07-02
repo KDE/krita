@@ -30,7 +30,7 @@
 #include "kis_profile.h"
 #include "kis_config.h"
 #include "kis_id.h"
-
+#include "kis_integer_maths.h"
 #include "kis_color_conversions.h"
 
 KisStrategyColorSpace::KisStrategyColorSpace(const KisID& id, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature)
@@ -118,6 +118,43 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 	return true;
 }
 
+namespace {
+	int simpleAdjust(int channel, int brightness, double contrast) {
+	
+		int nd = channel + brightness;
+		nd = (int)(((nd - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2);
+		return QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+		
+	}
+}
+void KisStrategyColorSpace::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels)
+{
+	if (brightness < -100) brightness = -100;
+	if (brightness > 100) brightness = 100;
+	if (contrast < -100) contrast = 100;
+	if (contrast > 100) contrast = 100;
+
+	int psize = pixelSize();
+
+
+	QColor c1, c2;
+	
+	for (int i = 0; i < nPixels; ++i) {
+
+		toQColor(src + (i * psize), &c1);
+
+		double dblContrast = (100.0 + contrast) / 100;
+		dblContrast *= dblContrast;
+
+		// change the brightness
+		c2.setRgb( simpleAdjust(c1.red(), brightness, dblContrast),
+			   simpleAdjust(c1.green(), brightness, dblContrast),
+			   simpleAdjust(c1.blue(), brightness, dblContrast));
+		   
+		nativeColor(c2, dst + (i * psize));
+	}
+}
+
 // BC: should this default be HSV-based?
 Q_INT8 KisStrategyColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src2)
 {
@@ -130,6 +167,53 @@ Q_INT8 KisStrategyColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src
 	rgb_to_hsv(color2.red(), color2.green(), color2.blue(), &h2, &s2, &v2);
 
 	return QMAX(QABS(v1 - v2), QMAX(QABS(s1 - s2), QABS(h1 - h2)));
+}
+
+void KisStrategyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst)
+{
+	Q_UINT32 totalRed = 0, totalGreen = 0, totalBlue = 0, newAlpha = 0;
+
+	QColor c;
+	Q_UINT8 opacity;
+	
+	while (nColors--)
+	{
+		toQColor(*colors, &c, &opacity);
+		
+		Q_UINT32 alphaTimesWeight = UINT8_MULT(opacity, *weights);
+
+		totalRed += c.red() * alphaTimesWeight;
+		totalGreen += c.green() * alphaTimesWeight;
+		totalBlue += c.blue() * alphaTimesWeight;
+		newAlpha += alphaTimesWeight;
+
+		weights++;
+		colors++;
+	}
+
+	Q_ASSERT(newAlpha <= 255);
+
+	if (newAlpha > 0) {
+		totalRed = UINT8_DIVIDE(totalRed, newAlpha);
+		totalGreen = UINT8_DIVIDE(totalGreen, newAlpha);
+		totalBlue = UINT8_DIVIDE(totalBlue, newAlpha);
+	}
+
+	// Divide by 255.
+	totalRed += 0x80;
+	
+	Q_UINT32 dstRed = ((totalRed >> 8) + totalRed) >> 8;
+	Q_ASSERT(dstRed <= 255);
+
+	totalGreen += 0x80;
+	Q_UINT32 dstGreen = ((totalGreen >> 8) + totalGreen) >> 8;
+	Q_ASSERT(dstGreen <= 255);
+
+	totalBlue += 0x80;
+	Q_UINT32 dstBlue = ((totalBlue >> 8) + totalBlue) >> 8;
+	Q_ASSERT(dstBlue <= 255);
+
+	nativeColor(QColor(dstRed, dstGreen, dstBlue), newAlpha, dst);
 }
 
 void KisStrategyColorSpace::bitBlt(Q_UINT8 *dst,

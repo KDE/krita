@@ -49,8 +49,8 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
+#include <kis_colorspace_registry.h>
 
-// #include <kmessagebox.h>
 #include "wdgbumpmap.h"
 #include "bumpmap.h"
 
@@ -88,12 +88,49 @@ KisFilterBumpmap::KisFilterBumpmap(KisView * view) : KisFilter(id(), view)
 {
 }
 
+namespace {
+	/**
+	 * Convert the given bumpmap to a grayscale paint device. Take care of waterlevel;
+	 * but in contrast with the Gimp, there's always an alpha channel in Krita.
+	 */
+	KisPaintDeviceSP createBumpmap(KisPaintDeviceSP orig, Q_UINT8 * lut, Q_INT32 waterlevel)
+	{
+		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance()->get("GRAYA");
+		Q_ASSERT(cs);
+		if (!cs) abort();
+		
+		KisPaintDeviceSP graymap = new KisPaintDevice(cs, "bumpmap");
+		QRect rect = orig->exactBounds();
 
+		KisRectIteratorPixel dstIt = graymap->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+		KisRectIteratorPixel srcIt = orig->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+		
+		bool convert = orig->colorStrategy() != graymap->colorStrategy();
+		KisStrategyColorSpaceSP csOrig = orig->colorStrategy();
+		while( ! srcIt.isDone() )
+		{
+			if (convert) {
+				bool conversionStatus = csOrig->convertPixelsTo(srcIt.rawData(), 0, dstIt.rawData(), cs, 0, 1);
+				Q_ASSERT(conversionStatus);
+			}
+			Q_UINT8 * ptr = dstIt.rawData();
+			// ptr[0] is grayvalue, ptr[1] alpha value --> this needs to be abstracted
+			*ptr = lut[waterlevel + ((ptr[0] -waterlevel) * ptr[1]) / 255];
+			++srcIt;
+			++dstIt;
+		}
 
-void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
+		return graymap;
+		
+	}
+	
+}
+
+void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rect)
 {
 
-#if 0
+	KisBumpmapConfiguration * config = (KisBumpmapConfiguration*)cfg;
+
 	Q_INT32 lx, ly;       /* X and Y components of light vector */
 	Q_INT32 nz2, nzlz;    /* nz^2, nz*lz */
 	Q_INT32 background;   /* Shade for vertical normals */
@@ -115,10 +152,10 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 	lx = cos(azimuth) * cos(elevation) * 255.0;
 	ly = sin(azimuth) * cos(elevation) * 255.0;
 	
-	lz         = sin(elevation) * 255.0;
+	lz = sin(elevation) * 255.0;
 
 	/* Calculate constant Z component of surface normal */
-	nz           = (6 * 255) / config->depth;
+	nz = (6 * 255) / config->depth;
 	nz2  = nz * nz;
 	nzlz = nz * lz;
 
@@ -146,20 +183,26 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 			break;
 			
 		case LINEAR:
-		default:
+			default:
 			lut[i] = i;
 		}
 		
 		if (config->invert)
-			lut[i] = 255 - params->lut[i];
+			lut[i] = 255 - lut[i];
 	}
 
-	// ------------------- Convert the bumpmap layer to grayscale, paying attention to alpha, lookup table and waterlevel
+	
 
-	// 
+	// ------------------- Convert the bumpmap layer to grayscale
+	if (!config->bumpmap) {
+		KisPaintDeviceSP bumpmap = createBumpmap(src, lut, config->waterlevel);
+	}
+	else {
+		KisPaintDeviceSP bumpmap = createBumpmap(config->bumpmap, lut, config->waterlevel);
+	}
+	
 
-
-
+	// ------------------- 
 
 	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
@@ -177,7 +220,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 		++srcIt;
 		++dstIt;
 	}
-#endif
+
 }
 
 QWidget* KisFilterBumpmap::createConfigurationWidget(QWidget* parent) 
@@ -213,18 +256,18 @@ KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w)
 
 KisBumpmapConfiguration::KisBumpmapConfiguration()
 {
-        KisPaintDeviceSP bumpmap = 0; // The layer we use as a bumpmap mask. If zero we'll use the layer we're working on.
-        double  azimuth = 135.0;
-        double  elevation = 45.0;
-        double  depth = 3;
-        Q_INT32 xofs = 0;
-        Q_INT32 yofs = 0;
-        Q_INT32 waterlevel = 0;
-        Q_INT32 ambient = 0;
-        bool    compensate = true;
-        bool    invert = false;
-	bool	tile = true;
-	krita::enumBumpmapType type = krita::LINEAR;
+        bumpmap = 0; // The layer we use as a bumpmap mask. If zero we'll use the layer we're working on.
+        azimuth = 135.0;
+        elevation = 45.0;
+        depth = 3;
+        xofs = 0;
+        yofs = 0;
+        waterlevel = 0;
+        ambient = 0;
+        compensate = true;
+        invert = false;
+	tile = true;
+	type = krita::LINEAR;
 }
 
 

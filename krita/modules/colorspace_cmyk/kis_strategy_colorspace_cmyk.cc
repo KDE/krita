@@ -203,17 +203,20 @@ void KisStrategyColorSpaceCMYK::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) c
 }
 
 
-void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 pixelSize,
-				       Q_UINT8 *dst,
-				       Q_INT32 dstRowStride,
-				       const Q_UINT8 *src,
-				       Q_INT32 srcRowStride,
-				       QUANTUM opacity,
-				       Q_INT32 rows,
-				       Q_INT32 cols,
-				       const KisCompositeOp& op)
+
+void KisStrategyColorSpaceCMYK::bitBlt(Q_UINT8 *dst,
+		    Q_INT32 dstRowStride,
+		    const Q_UINT8 *src,
+		    Q_INT32 srcRowStride,
+		    const Q_UINT8 *srcAlphaMask,
+		    Q_INT32 maskRowStride,
+		    QUANTUM opacity,
+		    Q_INT32 rows,
+		    Q_INT32 cols,
+		    const KisCompositeOp& op)
 {
-	Q_INT32 linesize = pixelSize * sizeof(Q_UINT8) * cols;
+
+	Q_INT32 linesize = pixelSize() * sizeof(Q_UINT8) * cols;
 	Q_UINT8 *d;
 	const Q_UINT8 *s;
 
@@ -243,7 +246,9 @@ void KisStrategyColorSpaceCMYK::bitBlt(Q_INT32 pixelSize,
 	default:
 		compositeOver(dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
 	}
+
 }
+
 
 // XXX: Cut & Paste from colorspace_rgb
 

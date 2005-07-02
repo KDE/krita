@@ -62,15 +62,17 @@ public:
 
 	virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
 
-	virtual void bitBlt(Q_INT32 stride,
-			    Q_UINT8 *dst,
-			    Q_INT32 dststride,
-			    const Q_UINT8 *src,
-			    Q_INT32 srcstride,
-			    QUANTUM opacity,
-			    Q_INT32 rows,
-			    Q_INT32 cols,
-			    const KisCompositeOp& op);
+
+virtual void bitBlt(Q_UINT8 *dst,
+		    Q_INT32 dstRowSize,
+		    const Q_UINT8 *src,
+		    Q_INT32 srcRowStride,
+		    const Q_UINT8 *srcAlphaMask,
+		    Q_INT32 maskRowStride,
+		    QUANTUM opacity,
+		    Q_INT32 rows,
+		    Q_INT32 cols,
+		    const KisCompositeOp& op);
 
 	virtual bool valid() { return m_defaultProfile != 0; }
 
